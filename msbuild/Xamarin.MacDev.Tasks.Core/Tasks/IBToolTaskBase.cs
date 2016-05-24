@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
+using Xamarin.MacDev;
+
 namespace Xamarin.MacDev.Tasks
 {
 	public abstract class IBToolTaskBase : XcodeCompilerToolTask
@@ -34,10 +36,6 @@ namespace Xamarin.MacDev.Tasks
 		}
 
 		protected abstract bool AutoActivateCustomFonts { get; }
-
-		protected bool CanLinkStoryboards {
-			get { return AppleSdkSettings.XcodeVersion.Major >= 7; }
-		}
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, ProcessArgumentBuilder args, ITaskItem[] items)
 		{
@@ -185,10 +183,9 @@ namespace Xamarin.MacDev.Tasks
 
 			var ibtoolManifestDir = Path.Combine (IntermediateOutputPath, ToolName + "-manifests");
 			var ibtoolOutputDir = Path.Combine (IntermediateOutputPath, ToolName);
+			var linkOutputDir = Path.Combine (IntermediateOutputPath, ToolName + "-link");
 			var bundleResources = new List<ITaskItem> ();
 			var outputManifests = new List<ITaskItem> ();
-			var compiled = new List<ITaskItem> ();
-			bool changed = false;
 
 			if (InterfaceDefinitions.Length > 0) {
 				if (AppManifest != null) {
@@ -221,24 +218,21 @@ namespace Xamarin.MacDev.Tasks
 					continue;
 				}
 
-				rpath = Path.Combine (ibtoolOutputDir, bundleName);
-				outputDir = Path.GetDirectoryName (rpath);
-				output = new TaskItem (rpath);
-
-				output.SetMetadata ("LogicalName", bundleName);
-				output.SetMetadata ("Optimize", "false");
-
-				if (Path.GetExtension (bundleName) != ".plist") {
-					// Don't include Watch storyboards that got compiled to plists
-					compiled.Add (output);
-				}
-
 				if (UseCompilationDirectory) {
-					// Note: When using --compilation-directory, we need to specify the output path as the parent directory
-					output = new TaskItem (output);
-					output.ItemSpec = Path.GetDirectoryName (output.ItemSpec);
+					rpath = Path.Combine (ibtoolOutputDir, Path.GetDirectoryName (bundleName));
+					output = new TaskItem (rpath);
+					outputDir = rpath;
+
 					output.SetMetadata ("LogicalName", Path.GetDirectoryName (bundleName));
+				} else {
+					rpath = Path.Combine (ibtoolOutputDir, bundleName);
+					outputDir = Path.GetDirectoryName (rpath);
+					output = new TaskItem (rpath);
+
+					output.SetMetadata ("LogicalName", bundleName);
 				}
+
+				output.SetMetadata ("Optimize", "false");
 
 				if (!string.IsNullOrEmpty (resourceTags))
 					output.SetMetadata ("ResourceTags", resourceTags);
@@ -262,8 +256,6 @@ namespace Xamarin.MacDev.Tasks
 
 						return false;
 					}
-
-					changed = true;
 				} else {
 					Log.LogMessage (MessageImportance.Low, "Skipping `{0}' as the output file, `{1}', is newer.", item.ItemSpec, manifest.ItemSpec);
 				}
@@ -289,40 +281,38 @@ namespace Xamarin.MacDev.Tasks
 				var output = new TaskItem (ibtoolOutputDir);
 				output.SetMetadata ("LogicalName", "");
 
-				if (!CanLinkStoryboards)
-					bundleResources.AddRange (GetCompiledBundleResources (output));
+				bundleResources.AddRange (GetCompiledBundleResources (output));
 			}
 
-			if (CanLinkStoryboards && compiled.Count > 0) {
-				var linkOutputDir = Path.Combine (IntermediateOutputPath, ToolName + "-link");
-				var manifest = new TaskItem (Path.Combine (ibtoolManifestDir, "link"));
-				var output = new TaskItem (linkOutputDir);
+			if (IsWatch2App) {
+				Link = true;
+				if (InterfaceDefinitions.Length > 0) {
+					var linkItems = new List<ITaskItem> ();
+					foreach (var item in InterfaceDefinitions) {
+						var linkInput = new TaskItem (item);
+						linkInput.ItemSpec = Path.Combine (ibtoolOutputDir, Path.GetFileName (item.ItemSpec) + "c");
+						linkItems.Add (linkInput);
+					}
 
-				if (changed) {
-					if (Directory.Exists (output.ItemSpec))
-						Directory.Delete (output.ItemSpec, true);
-
-					if (File.Exists (manifest.ItemSpec))
-						File.Delete (manifest.ItemSpec);
+					var output = new TaskItem (linkOutputDir);
+					var manifest = new TaskItem (Path.Combine (ibtoolManifestDir, "link"));
 
 					Directory.CreateDirectory (Path.GetDirectoryName (manifest.ItemSpec));
 					Directory.CreateDirectory (output.ItemSpec);
 
-					Link = true;
-
-					if (Compile (compiled.ToArray (), output, manifest) != 0) {
+					if (Compile (linkItems.ToArray (), output, manifest) != 0) {
 						if (File.Exists (manifest.ItemSpec))
 							File.Delete (manifest.ItemSpec);
 
 						return false;
 					}
+
+					output = new TaskItem (linkOutputDir);
+					output.SetMetadata ("LogicalName", "");
+					bundleResources.AddRange (GetCompiledBundleResources (output));
+
+					outputManifests.Add (manifest);
 				}
-
-				output = new TaskItem (linkOutputDir);
-				output.SetMetadata ("LogicalName", "");
-
-				bundleResources.AddRange (GetCompiledBundleResources (output));
-				outputManifests.Add (manifest);
 			}
 
 			BundleResources = bundleResources.ToArray ();

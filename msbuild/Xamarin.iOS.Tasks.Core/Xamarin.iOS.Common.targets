@@ -353,7 +353,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			Directories="$(DeviceSpecificIntermediateOutputPath)actool;
 					$(DeviceSpecificIntermediateOutputPath)assetpacks;
 					$(DeviceSpecificIntermediateOutputPath)ibtool;
-					$(DeviceSpecificIntermediateOutputPath)ibtool-link;
 					$(DeviceSpecificIntermediateOutputPath)ibtool-manifests;
 					$(DeviceSpecificIntermediateOutputPath)ipa;
 					$(DeviceSpecificIntermediateOutputPath)metal;

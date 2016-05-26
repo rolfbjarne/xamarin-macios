@@ -1,11 +1,3 @@
-LINKDUMP
-*******
-
-https://bugzilla.xamarin.com/show_bug.cgi?id=35727
-https://gist.githubusercontent.com/ludovic-henry/2ab3dc14c1640ea47ba5/raw/01533181f3f03aa264a39b67757058b5a1766ca4/mono.diff
-https://github.com/mono/mono/pull/2593
-https://github.com/ludovic-henry/mono/commit/12a4f74287b471a9a4e823ba043fbbdb8630570e
-
 Coop GC
 =======
 
@@ -16,7 +8,6 @@ properly.
 http://www.mono-project.com/docs/advanced/runtime/docs/coop-suspend/#gc-unsafe-mode
 https://docs.google.com/presentation/d/1Sa361Ru8ccRRZCm4BN2NUXPf2k5VYYrjqpGKsV1cPnI/edit#slide=id.p
 
-
 Rules
 =====
 
@@ -26,6 +17,19 @@ Rules
 2. When calling code we don't have control over (that can take
    an unbound amount of time), we must switch to GC SAFE mode.
    This includes calling any ObjC selector on any object.
+
+Advice from the runtime people (TODO: need to re-review with this in mind):
+
+> Ludovic Henry [22:10] 
+> also if I can give you some advices for the state transition:
+> - do the GC safe transition only right around where it's actually blocking: for example for a pthread_mutex_lock, don't have the whole function as GC safe, as you don't really control in this function which function calls it, or even any other function that it could call, and for selectors, you only should have the selector witch to GC safe, and if in the calle you need to actually be in GC unsafe, then switch in the callee at the beginning of the function.
+> - do the GC unsafe transition at the beginning of the trampoline/pinvoke/... : by having 99% of the code as unsafe, it's way easier to reason about it: "everything is in unsafe mode, except these tiny bits that are limited to very few things and that we really know what they are doing
+>
+> [22:11] 
+> initially, we were going to have most of the runtime in GC safe mode, but it lead to so many "oh here we can be called in this or that mode", that it was just easier to have the hypothesis "everything in the runtime is run in GC unsafe mode, except these very delimited/predetermined parts" (edited)
+> 
+> [22:12] 
+> and out of a sudden, the only problematic parts are: "where can we enter the runtime, so we can switch to GC unsafe", and that's a much smaller problem than knowing "where in the runtime we should be in which mode at any moment"
 
 Review
 ======
@@ -55,29 +59,24 @@ Pending
 Exceptions
 ----------
 
-Exceptions must be caught when returning from managed code.
+Exceptions must be caught when returning from managed code,
+we can't allow mono unwinding native frames.
 
-* Provide a **exc to mono_runtime_invoke. Then we can either:
+We do this by requiring exception marshaling to be enabled,
+and disallowing "ThrowManaged" as an option.
 
-  1. Convert to NSException, and throw that.
-  2. Abort.
+Also we can't allow Objective-C exceptions to traverse
+managed code
+
+This is done by disallowing "ThrowObjectiveC" as an
+option when marshalling Objectivec-C exceptions.
+
+TODO:
 
 * Somehow handle exceptions when calling into our delegates
   (look at mono_method_get_unmanaged_thunk)
 
-* Review all usages of mono_raise_exception. We have the same
-  choice as before: either convert to NSException, or abort.
-
 * See also mono_method_get_unmanaged_thunk for when invoking delegates.
-
-* Add support for catching ObjC exceptions just before
-  returning to managed code. Installing an unhandled
-  ObjC exception hook is not possible, because we can't
-  throw managed exceptions in native code (we can set
-  a flag that a managed exception should be thrown
-  when returning from native to managed code (on the 
-  n2m boundary), and to do that we need to handle ObjC
-  exceptions in that n2m boundary).
 
 xamarin_invoke_trampoline
 -------------------------
@@ -103,14 +102,6 @@ This is not safe, and must be replaced with safe alternatives:
 
 * icall
 * GCHandle
-
-mono_jit_thread_attach
-----------------------
-
-If a thread is not attached, it will change the state from
-STARTING to RUNNING. If the thread is attached, it will do nothing.
-The caller needs to know when this happens, to be able to react
-accordingly.
 
 Debugging tips
 ==============

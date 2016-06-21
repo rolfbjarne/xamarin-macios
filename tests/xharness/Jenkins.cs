@@ -14,6 +14,7 @@ namespace xharness
 		public Harness Harness;
 		public bool IncludeClassic;
 		public bool IncludeBcl;
+		public bool IncludeMmpTest;
 
 		public LogFiles Logs = new LogFiles ();
 		LogFile SimulatorLoadLog;
@@ -160,6 +161,9 @@ namespace xharness
 
 			foreach (var project in Harness.MacTestProjects) {
 				if (!project.IsExecutableProject)
+					continue;
+
+				if (!IncludeMmpTest && project.Path.Contains ("mmptest"))
 					continue;
 
 				BuildToolTask build;

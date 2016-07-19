@@ -74,6 +74,7 @@ namespace monotouchtestWatchKitExtension
 				runner.Filter = categoryFilter;
 			}
 			runner.Add (GetType ().Assembly);
+			BCL.Tests.TestLoader.AddTestAssemblies (runner);
 			ThreadPool.QueueUserWorkItem ((v) =>
 			{
 				runner.LoadSync ();

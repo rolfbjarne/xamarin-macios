@@ -12,6 +12,19 @@ using MonoTouch.UIKit;
 using MonoTouch.NUnit.UI;
 using NUnit.Framework.Internal.Filters;
 
+namespace BCL.Tests
+{
+	public static partial class TestLoader
+	{
+		static partial void AddTestAssembliesImpl (BaseTouchRunner runner);
+
+		public static void AddTestAssemblies (BaseTouchRunner runner)
+		{
+			AddTestAssembliesImpl (runner);
+		}
+	}
+}
+
 #if !__WATCHOS__
 
 namespace BCL.Tests
@@ -42,6 +55,7 @@ namespace BCL.Tests
 
 			// register every tests included in the main application/assembly
 			runner.Add (System.Reflection.Assembly.GetExecutingAssembly ());
+			TestLoader.AddTestAssemblies (runner);
 
 			window.RootViewController = new UINavigationController (runner.GetViewController ());
 			

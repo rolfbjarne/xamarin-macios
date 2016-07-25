@@ -66,14 +66,23 @@ namespace xharness
 
 		public bool WaitForCompletion (TimeSpan ts)
 		{
-			return stopped.WaitOne (ts);
+			bool rv;
+			var ms = (int) ts.TotalMilliseconds;
+			Console.WriteLine ("{0} WAITING 1 {1}", DateTime.Now, ms);
+			rv = stopped.WaitOne (ms, false);
+			Console.WriteLine ("{0} WAITING 2 {1}: {2}", DateTime.Now, ms, rv);
+			return rv;
 		}
 
 		public void Cancel ()
 		{
 			try {
 				// wait a second just in case more data arrives.
-				if (!stopped.WaitOne (TimeSpan.FromSeconds (1)))
+				bool rv;
+				Console.WriteLine ("CANCELLING 1");
+				rv = stopped.WaitOne (TimeSpan.FromSeconds (1));
+				Console.WriteLine ("CANCELLING 1: {0}", rv);
+				if (!rv)
 					Stop ();
 			} catch {
 				// We might have stopped already, so just ignore any exceptions.

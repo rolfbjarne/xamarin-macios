@@ -372,6 +372,9 @@ namespace xharness
 			args.AppendFormat (" -argument=-app-arg:-hostport:{0}", listener.Port);
 			args.AppendFormat (" -setenv=NUNIT_HOSTPORT={0}", listener.Port);
 
+			foreach (var kvp in Harness.EnvironmentVariables)
+				args.AppendFormat (" -setenv={0}={1}", kvp.Key, kvp.Value);
+
 			bool? success = null;
 			bool timed_out = false;
 
@@ -491,10 +494,22 @@ namespace xharness
 				main_log.WriteLine ("Starting test run");
 				// This will not wait for app completion
 				await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), main_log, TimeSpan.FromMinutes (1));
-				if (listener.WaitForCompletion (TimeSpan.FromMinutes (Harness.Timeout))) {
+
+				var ts = TimeSpan.FromMinutes (Harness.Timeout);
+				var elapsed = new Stopwatch ();
+				elapsed.Start ();
+
+				bool rv;
+				do {
+					rv = listener.WaitForCompletion (TimeSpan.FromMilliseconds (Math.Max (ts.TotalMilliseconds - elapsed.Elapsed.TotalMilliseconds, 1000)));
+					if (!rv)
+						Console.WriteLine ("Timed out after {0}s", elapsed.Elapsed.TotalSeconds);
+				} while (!rv && elapsed.Elapsed < ts);
+				main_log.WriteLine ("{2} Listener result: {0} ts: {1}", rv, ts, DateTime.Now);
+				if (rv) {
 					main_log.WriteLine ("Test run completed");
 				} else {
-					main_log.WriteLine ("Test run did not complete in {0} minutes.", Harness.Timeout);
+					main_log.WriteLine ("Test run did not complete in {0} minutes.", ts.TotalMinutes);
 					listener.Cancel ();
 					success = false;
 					timed_out = true;

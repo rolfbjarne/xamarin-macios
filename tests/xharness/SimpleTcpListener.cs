@@ -45,7 +45,9 @@ namespace xharness
 				try {
 					server.Stop ();
 				} finally {
+					Console.WriteLine ("STOPPING2 1");
 					stopped.Set ();
+					Console.WriteLine ("STOPPING2 2");
 				}
 			}
 		}

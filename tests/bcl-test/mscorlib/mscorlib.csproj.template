@@ -118,6 +118,9 @@
     </Compile>
     <Compile Include="TestLoader.cs" />
   </ItemGroup>
+  <ItemGroup>
+#FILES#
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <EmbeddedResource Include="..\..\..\external\mono\mcs\class\corlib\Test\resources\Resources.es-ES.resx">

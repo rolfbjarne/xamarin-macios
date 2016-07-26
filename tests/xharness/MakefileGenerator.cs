@@ -464,7 +464,8 @@ namespace xharness
 							chunks.Add ("AE");
 							chunks.Add ("FJ");
 							chunks.Add ("KR");
-							chunks.Add ("SZ");
+							chunks.Add ("ST");
+							chunks.Add ("UZ");
 						}
 					}
 					if (chunks.Count > 0) {

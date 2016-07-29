@@ -50,16 +50,25 @@ int output_port;
 int debug_port; 
 char *debug_host = NULL;
 
+enum DebuggingMode
+{
+	DebuggingModeNone,
+	DebuggingModeUsb,
+	DebuggingModeWifi,
+	DebuggingModeHttp,
+};
+
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 static bool debugging_configured = false;
 static bool profiler_configured = false;
 static bool config_timedout = false;
-static bool usb_debugging = false;  
-static const char *connection_mode = "default"; // this is set from the cmd line, can be either 'usb', 'wifi' or 'none'
+static DebuggingMode debugging_mode = DebuggingModeWifi;
+static const char *connection_mode = "default"; // this is set from the cmd line, can be either 'usb', 'wifi', 'http' or 'none'
 
 int monotouch_connect_usb ();
 int monotouch_connect_wifi (NSMutableArray *hosts);
+int xamarin_connect_http (NSMutableArray *hosts);
 int monotouch_debug_listen (int debug_port, int output_port);
 int monotouch_debug_connect (NSMutableArray *hosts, int debug_port, int output_port);
 void monotouch_configure_debugging ();
@@ -69,6 +78,579 @@ bool monotouch_process_connection (int fd);
 
 static struct timeval wait_tv;
 static struct timespec wait_ts;
+
+/*
+ *
+ */
+/*
+@interface XamarinHttpInputStream : NSInputStream {
+	int _0; // _cfinfo
+ 	int _1; // flags
+ 	int _2; // error
+ 	int _3; // *client   0x10
+ 	int _4; // info      0x14
+ 	int _5; // callbacks 0x18
+ 	int _6; // streamLock
+ 	int _7; // previousRunloopsAndModes
+ 	int _8; // queue
+ 	int _9; // ?
+ }
+ 	@property (nonatomic, assign) id _x_delegate;
+	@property (nonatomic) NSStreamStatus streamStatus;
+	@property (readonly, copy) NSError *streamError;
+	@property (nonatomic) void *buffer;
+	-(void) setDelegate: (id<NSStreamDelegate>) delegate;
+	-(id<NSStreamDelegate>) delegate;
+	-(void) scheduleInRunLoop:(NSRunLoop *)aRunLoop forMode:(NSString *)mode;
+	-(void) removeFromRunLoop:(NSRunLoop *)aRunLoop forMode:(NSString *)mode;
+	-(id) propertyForKey:(NSString *)key;
+	-(BOOL) setProperty:(id)property forKey:(NSString *)key;
+@end
+
+static NSInteger const kBufferSize = 32768;
+@implementation XamarinHttpInputStream
+@synthesize streamStatus;
+
+-(void) setDelegate: (id<NSStreamDelegate>) delegate
+{
+	self._x_delegate = delegate;
+}
+
+-(id<NSStreamDelegate>) delegate
+{
+	if (self._x_delegate)
+		return self._x_delegate;
+	return (id<NSStreamDelegate>) self;
+}
+
+-(instancetype) init
+{
+	NSLog (@"XamarinHttpInputStream init");
+    self = [super init];
+    if (self) {
+        _buffer =  malloc(kBufferSize);
+        NSAssert(_buffer, @"Unable to create buffer");
+        memset(_buffer, 0, kBufferSize);
+        // _1 = 1;
+        // _2 = 2;
+        // _3 = 3;
+        // _4 = 4;
+        _5 = 5;
+        _6 = 6;
+        _7 = 7;
+        _8 = 8;
+        _9 = 9;
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+	NSLog (@"XamarinHttpInputStream dealloc");
+    if (_buffer) {
+        free(_buffer);
+        self.buffer = NULL;
+    }
+    [super dealloc];
+}
+
+- (void)open
+{
+	NSLog (@"XamarinHttpInputStream open");
+    self.streamStatus = NSStreamStatusOpen;
+}
+
+- (void)close
+{
+	NSLog (@"XamarinHttpInputStream close");
+    self.streamStatus = NSStreamStatusClosed;
+}
+
+- (NSInteger)read:(uint8_t *)buffer maxLength:(NSUInteger)len
+{
+	NSLog (@"XamarinHttpInputStream: read len 1 maxLength: %i", (int) len);
+	*buffer = 1;
+	return 1;
+
+    // NSUInteger bytesToCopy = MIN(len, kBufferSize);
+    // memcpy(buffer, _buffer, bytesToCopy);
+
+    // return bytesToCopy;
+}
+
+- (BOOL)getBuffer:(uint8_t **)buffer length:(NSUInteger *)len
+{
+	NSLog (@"XamarinHttpInputStream getBuffer");
+    return NO;
+}
+
+- (BOOL)hasBytesAvailable
+{
+	NSLog (@"XamarinHttpInputStream hasBytesAvailable");
+    return self.streamStatus == NSStreamStatusOpen;
+}
+
+- (void)scheduleInRunLoop:(__unused NSRunLoop *)aRunLoop
+                  forMode:(__unused NSString *)mode
+{
+	NSLog (@"scheduleInRunLoop");
+}
+
+- (void)removeFromRunLoop:(__unused NSRunLoop *)aRunLoop
+                  forMode:(__unused NSString *)mode
+{
+	NSLog (@"removeFromRunLoop");
+}
+
+- (void)_scheduleInCFRunLoop:(__unused CFRunLoopRef)aRunLoop
+                     forMode:(__unused CFStringRef)aMode
+{
+	NSLog (@"_scheduleInCFRunLoop");
+}
+
+- (void)_unscheduleFromCFRunLoop:(__unused CFRunLoopRef)aRunLoop
+                         forMode:(__unused CFStringRef)aMode
+{
+	NSLog (@"_unscheduleFromCFRunLoop");
+}
+
+- (BOOL)_setCFClientFlags:(__unused CFOptionFlags)inFlags
+                 callback:(__unused CFReadStreamClientCallBack)inCallback
+                  context:(__unused CFStreamClientContext *)inContext {
+	NSLog (@"_setCFClientFlags");
+    return NO;
+}
+
+-(id) propertyForKey:(NSString *)key
+{
+	NSLog (@"propertyForKey: %@", key);
+	return [super propertyForKey: key];
+}
+
+-(BOOL) setProperty:(id)property forKey:(NSString *)key
+{
+	NSLog (@"setProperty: %@ forKey: %@", property, key);
+	return [super setProperty: property forKey: key];
+}
+@end
+*/
+
+pthread_mutex_t http_data_lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t http_data_condition = PTHREAD_COND_INITIALIZER;
+NSURLSessionConfiguration *http_session_config;
+
+/*
+ * XamarinHttpConnection
+ */
+
+@interface XamarinHttpConnection : NSObject<NSURLSessionDelegate> {
+	NSURLSession *http_session;
+	NSMutableData *http_send_data;
+	NSMutableData *http_recv_data;
+	int http_sockets[2];
+	int http_send_counter;
+}
+	@property (nonatomic, assign) NSInputStream* inputStream;
+	@property void (^completion_handler)(bool);
+	@property (copy) NSString* ip;
+	@property int id;
+
+	-(int) fileDescriptor;
+	-(int) localDescriptor;
+	-(void) reportCompletion: (bool) success;
+
+	-(void) connect: (NSString *) ip port: (int) port completionHandler: (void (^)(bool)) completionHandler;
+	-(void) sendData: (void *) buffer length: (int) length;
+	-(int) recvData: (void *) buffer length: (int) length;
+
+	/* NSURLSessionDelegate */
+	-(void) URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error;
+	-(void) URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler;
+	/* NSURLSessionDataDelegate */
+	-(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler;
+	-(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data;
+
+	/* NSURLSessionTaskDelegate */
+	// -(void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler;
+	-(void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error;
+@end
+
+void *
+x_http_send (void *c)
+{
+	XamarinHttpConnection *connection = (XamarinHttpConnection *) c;
+	int id = connection.id;
+	@autoreleasepool {
+		int fd = connection.localDescriptor;
+		void* buf [1024];
+		do {
+			NSLog (@"%i http send reading to send data to fd=%i", id, fd);
+			errno = 0;
+			int rv = read (fd, buf, 1024);
+			NSLog (@"%i http send read %i bytes from fd=%i; %i=%s", id, rv, fd, errno, strerror (errno));
+			if (rv > 0) {
+				[connection sendData: buf length: rv];
+			} else if (rv == -1) {
+				if (errno == EINTR)
+					continue;
+				NSLog (@"%i http send: %i => %s", id, errno, strerror (errno));
+				break;
+			} else {
+				NSLog (@"%i http send: eof", id);
+				break;
+			}
+		} while (true);
+		NSLog (@"%i http send done", id);
+	}
+	return NULL;
+}
+
+void *
+x_http_recv (void *c)
+{
+	XamarinHttpConnection *connection = (XamarinHttpConnection *) c;
+	int id = connection.id;
+	@autoreleasepool {
+		int fd = connection.localDescriptor;
+		void* buf [1024];
+		do {
+			errno = 0;
+			NSLog (@"%i http recv reading to send data to fd=%i", id, fd);
+			int rv = [connection recvData: buf length: 1024];
+			NSLog (@"%i http recv read %i bytes to %i; %i=%s", id, rv, fd, errno, strerror (errno));
+			if (rv > 0) {
+				int wr;
+				do {
+					wr = write (fd, buf, rv);
+				} while (wr == -1 && errno == EINTR);
+				// FIXME: Continue writing until we've written everything we received
+				NSLog (@"%i http recv wrote %i bytes to %i; %i=%s", id, wr, fd, errno, strerror (errno));
+			} else if (rv == -1) {
+				NSLog (@"%i http recv: %i => %s", id, errno, strerror (errno));
+				break;
+			} else {
+				NSLog (@"%i http recv: eof", id);
+				break;
+			}
+		} while (true);
+		NSLog (@"%i http recv done", id);
+	}
+	return NULL;
+}
+
+int connect_counter = 0;
+
+@implementation XamarinHttpConnection
+-(void) reportCompletion: (bool) success
+{
+	pthread_mutex_lock (&http_data_lock);
+	if (self.completion_handler) {
+		NSLog (@"%i reportCompletion (%i)", self.id, success);
+		self.completion_handler (success);
+		self.completion_handler = NULL; // don't call more than once.
+	}
+	pthread_mutex_unlock (&http_data_lock);
+}
+
+-(int) fileDescriptor
+{
+	return http_sockets [0];	
+}
+
+-(int) localDescriptor
+{
+	return http_sockets [1];
+}
+
+-(void) connect: (NSString *) ip port: (int) port completionHandler: (void (^)(bool)) completionHandler
+{
+	NSLog (@"Connecting to: %@:%i", ip, port);
+	self.completion_handler = completionHandler;
+
+	pthread_mutex_lock (&http_data_lock);
+	self.id = ++connect_counter;
+	http_recv_data = [NSMutableData dataWithCapacity: 1024];
+	pthread_mutex_unlock (&http_data_lock);
+
+	int rv = socketpair (PF_LOCAL, SOCK_STREAM, 0, http_sockets);
+	if (rv != 0) {
+		[self reportCompletion: false];
+		return;
+	}
+
+	NSLog (@"%i Created socket pair: %i, %i", self.id, http_sockets [0], http_sockets [1]);
+
+	pthread_t thr;
+	pthread_create (&thr, NULL, x_http_send, self);
+	pthread_detach (thr);
+	pthread_create (&thr, NULL, x_http_recv, self);
+	pthread_detach (thr);
+
+	if (http_session_config == NULL) {
+		http_session_config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+		http_session_config.allowsCellularAccess = NO;
+		http_session_config.networkServiceType = NSURLNetworkServiceTypeVoIP; // not quite right, but this will wake up the app for incoming network traffic
+		http_session_config.timeoutIntervalForRequest = 60;
+		http_session_config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+		http_session_config.HTTPMaximumConnectionsPerHost = 20;
+	}
+
+	NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+	http_session = [NSURLSession sessionWithConfiguration: http_session_config delegate: self delegateQueue: queue];
+
+	NSURL *downloadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://192.168.2.8:9999/download/%i", self.id]];
+	NSURLSessionDataTask *downloadTask = [http_session dataTaskWithURL: downloadURL];
+	[downloadTask resume];
+
+	NSLog (@"%i Connected to: %@:%i downloadTask: %@", self.id, ip, port, [[downloadTask currentRequest] URL]);
+}
+
+-(void) sendData: (void *)buffer length: (int) length
+{
+	// NSLog (@"%i sendData length: %i", self.id, length);
+	// bool create_request = false;
+	int c;
+	pthread_mutex_lock (&http_data_lock);
+	c = ++http_send_counter;
+	// if (http_send_data == NULL) {
+	// 	http_send_data = [NSMutableData dataWithCapacity: 1024];
+	// 	create_request = true;
+	// }
+	// [http_send_data appendBytes: buffer length: length];
+	pthread_mutex_unlock (&http_data_lock);
+
+
+
+	// if (create_request) {
+		NSURL *uploadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://192.168.2.8:9999/upload/%i/%i", c, self.id]];
+		NSLog (@"%i sendData length: %i url: %@", self.id, length, uploadURL);
+		NSMutableURLRequest *uploadRequest = [[[NSMutableURLRequest alloc] initWithURL: uploadURL] autorelease];
+		uploadRequest.HTTPMethod = @"POST";
+		// NSURLSessionUploadTask *uploadTask = [http_session uploadTaskWithStreamedRequest: uploadRequest];
+		NSURLSessionUploadTask *uploadTask = [http_session uploadTaskWithRequest: uploadRequest fromData: [NSData dataWithBytes: buffer length: length]];
+		[uploadTask resume];
+	// } else {
+	// 	NSLog (@"%i sendData length: %i - not creating request", self.id, length);
+	// }
+}
+
+-(int) recvData: (void *) buffer length: (int) length
+{
+	int rv = 0;
+
+	NSLog (@"%i recvData %p %i", self.id, buffer, length);
+	pthread_mutex_lock (&http_data_lock);
+
+	// Wait until we receive data
+	while ([http_recv_data length] == 0) {
+		pthread_cond_wait (&http_data_condition, &http_data_lock);
+		NSLog (@"%i recvData signaled, length: %i", self.id, (int) [http_recv_data length]);
+	}
+
+	NSLog (@"%i recvData woken", self.id);
+
+	NSUInteger data_length = [http_recv_data length];
+	uint8_t *mutableBytes = (uint8_t *) [http_recv_data mutableBytes];
+	rv = MIN (length, data_length);
+	
+	// Copy the data we've received
+	memcpy (buffer, mutableBytes, rv);
+	// If we have more data left, make sure to move it up in the buffer we have
+	if (data_length > rv) 
+		memmove (mutableBytes, mutableBytes + rv, data_length - rv);
+	http_recv_data.length = data_length - rv;
+
+	pthread_mutex_unlock (&http_data_lock);
+
+	NSLog (@"%i recvData %p %i => %i", self.id, buffer, length, rv);
+
+	return rv;
+}
+
+/* NSURLSessionDataDelegate */
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+	NSLog (@"%i didBecomeInvalidWithError: %@", self.id, error);
+	[self reportCompletion: false];
+}
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+	NSLog (@"%i didReceiveChallenge", self.id);
+}
+
+-(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+{
+	NSLog (@"%i didReceiveResponse: task: %@ url: %@", self.id, dataTask, [[dataTask originalRequest] URL]);
+	completionHandler (NSURLSessionResponseAllow);
+	[self reportCompletion: true];
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+{
+	NSLog (@"%i didReceiveData length: %li %@", self.id, (unsigned long) [data length], data);
+	pthread_mutex_lock (&http_data_lock);
+	[http_recv_data appendData: data];
+	pthread_cond_broadcast (&http_data_condition);
+	NSLog (@"%i didReceiveData length: %li signalled, there is now %li bytes in http_recv_data", self.id, (unsigned long) [data length], (unsigned long) [http_recv_data length]);
+	pthread_mutex_unlock (&http_data_lock);
+}
+
+// /* NSURLSessionTaskDelegate */
+// -(void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
+// {
+// 	NSMutableData *data;
+
+// 	pthread_mutex_lock (&http_data_lock);
+// 	data = http_send_data;
+// 	http_send_data = NULL;
+// 	pthread_mutex_unlock (&http_data_lock);
+
+// 	NSLog (@"%i needNewBodyStream: %@ sending %i bytes", self.id, task, (int) [data length]);
+
+// 	NSInputStream *stream = [NSInputStream inputStreamWithData: data];
+// 	completionHandler (stream);
+// }
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+	NSLog (@"%i didCompleteWithError: %@ task: %@ url: %@", self.id, error, task, [[task originalRequest] URL]);
+}
+@end
+
+// /*
+//  * XamarinSdbHttpTransport
+//  */
+// @interface XamarinSdbHttpTransport : NSObject {
+// 	// const char *url;
+// }
+// -(bool) connect: (const char *) url;
+// -(void) close1;
+// -(void) close2;
+// -(bool) send: (void *) buf length: (int) len;
+// -(int) recv: (void *) buf length: (int) len;
+// @end
+
+// @implementation XamarinSdbHttpTransport
+// {
+// }
+// -(bool) connect: (const char *) url
+// {
+// 	NSLog (@"connect: %s", url);
+// 	return true;
+// }
+// -(void) close1
+// {
+// 	NSLog (@"close1");
+// }
+// -(void) close2
+// {
+// 	NSLog (@"close2");
+// }
+// -(bool) send: (void *) buf length: (int) len
+// {
+
+// 	NSLog (@"send %p %i", buf, len);
+// 	http
+// 	return true;
+// }
+
+// -(int) recv: (void *) buf length: (int) len
+// {
+// 	int rv = 0;
+
+// 	NSLog (@"receiving %p %i", buf, len);
+// 	pthread_mutex_lock (&http_data_lock);
+
+// 	// Wait until we receive data
+// 	while ([http_recv_data length] == 0)
+// 		pthread_cond_wait (&http_data_condition, &http_data_lock);
+
+// 	NSUInteger data_length = [http_recv_data length];
+// 	void *mutableBytes = [http_recv_data mutableBytes];
+// 	rv = MIN (len, data_length);
+	
+// 	// Copy the data we've received
+// 	memcpy (buf, mutableBytes, rv);
+// 	// If we have more data left, make sure to move it up in the buffer we have
+// 	if (data_length > rv) 
+// 		memmove (mutableBytes, mutableBytes + rv, data_length - rv)
+// 	http_recv_data.length = data_length - rv;
+
+// 	pthread_mutex_unlock (&http_data_lock);
+
+// 	NSLog (@"received %p %i => %i", buf, len, rv);
+
+// 	return rv;
+// }
+// @end
+
+// static XamarinSdbHttpTransport *http_transport = NULL;
+
+// static void
+// xamarin_http_connect (const char *address)
+// {
+// 	gboolean shaked;
+
+// 	assert (!http_transport);
+// 	http_transport = [[XamarinSdbHttpTransport alloc] init];
+
+// 	MONO_ENTER_GC_UNSAFE;
+// 	shaked = mono_debugger_agent_transport_handshake ();
+// 	MONO_EXIT_GC_UNSAFE;
+	
+// 	if (!shaked)
+// 		NSLog (@PRODUCT ": Handshake error with IDE.");
+
+// 	return;
+// }
+
+// static void
+// xamarin_http_close1 (void)
+// {
+// 	// shutdown (sdb_fd, SHUT_RD);
+// 	[http_transport close1];
+// }
+
+// static void
+// xamarin_http_close2 (void)
+// {
+// 	// shutdown (sdb_fd, SHUT_RDWR);
+// 	[http_transport close2];
+// }
+
+// static gboolean
+// xamarin_http_send (void *buf, int len)
+// {
+// 	gboolean rv;
+
+// 	if (debugging_configured) {
+// 		MONO_ENTER_GC_SAFE;
+// 		rv = [http_transport send: buf length: len];
+// 		MONO_EXIT_GC_SAFE;
+// 	} else {
+// 		rv = [http_transport send: buf length: len];
+// 	}
+
+// 	return rv;
+// }
+
+
+// static int
+// xamarin_http_recv (void *buf, int len)
+// {
+// 	int rv;
+
+// 	if (debugging_configured) {
+// 		MONO_ENTER_GC_SAFE;
+// 		rv = [http_transport recv: buf length: len];
+// 		MONO_EXIT_GC_SAFE;
+// 	} else {
+// 		rv = [http_transport recv: buf length: len];
+// 	}
+
+// 	return rv;
+// }
 
 
 void
@@ -182,6 +764,15 @@ void monotouch_configure_debugging ()
 	NSString *monodevelop_host;
 	NSString *monotouch_debug_enabled;
 
+	if (!strcmp (connection_mode, "default")) {
+		char *evar = getenv ("__XAMARIN_DEBUG_MODE__");
+		if (evar && *evar) {
+			connection_mode = evar;
+			LOG (PRODUCT ": Found debug mode %s in environment variables\n", connection_mode);
+			unsetenv ("__XAMARIN_DEBUG_MODE__");
+		}
+	}
+	
 	if (!strcmp (connection_mode, "none")) {
 		// nothing to do
 		return;
@@ -311,7 +902,7 @@ void monotouch_configure_debugging ()
 					}
 				} else if (!strncmp ("USB Debugging: ", line, 15) && (connection_mode == NULL || !strcmp (connection_mode, "default"))) {
 #if defined(__arm__) || defined(__aarch64__)
-					usb_debugging = !strncmp ("USB Debugging: 1", line, 16);
+					debugging_mode = !strncmp ("USB Debugging: 1", line, 16) ? DebuggingModeUsb : DebuggingModeWifi;
 #endif
 				} else if (!strncmp ("Port: ", line, 6) && monodevelop_port == -1) {
 					monodevelop_port = strtol (line + 6, NULL, 10);
@@ -328,21 +919,27 @@ void monotouch_configure_debugging ()
 		// connection_mode is set from the command line, and will override any other setting
 		if (connection_mode != NULL) {
 			if (!strcmp (connection_mode, "usb")) {
-				usb_debugging = true;
+				debugging_mode = DebuggingModeUsb;
 			} else if (!strcmp (connection_mode, "wifi")) {
-				usb_debugging = false;
+				debugging_mode = DebuggingModeWifi;
+			} else if (!strcmp (connection_mode, "http")) {
+				debugging_mode = DebuggingModeHttp;
 			}
 		}
+
+		debugging_mode = DebuggingModeHttp; // FIXME!!!
 
 		if (monodevelop_port <= 0) {
 			LOG (PRODUCT ": Invalid IDE Port: %i\n", monodevelop_port);
 		} else {
-			LOG (PRODUCT ": IDE Port: %i Transport: %s\n", monodevelop_port, usb_debugging ? "USB" : "WiFi");
-			if (usb_debugging) {
+			LOG (PRODUCT ": IDE Port: %i Transport: %s\n", monodevelop_port, debugging_mode == DebuggingModeHttp ? "HTTP" : (debugging_mode == DebuggingModeUsb ? "USB" : "WiFi"));
+			if (debugging_mode == DebuggingModeUsb) {
 				rv = monotouch_connect_usb ();
-			} else {
+			} else if (debugging_mode == DebuggingModeWifi) {
 				rv = monotouch_connect_wifi (hosts);
-			} 
+			}  else if (debugging_mode == DebuggingModeHttp) {
+				rv = xamarin_connect_http (hosts);
+			}
 		}
 	}
 
@@ -358,12 +955,16 @@ void sdb_connect (const char *address)
 {
 	gboolean shaked;
 
+	NSLog (@"sdb_connect (%s)", address);
+
 	MONO_ENTER_GC_UNSAFE;
 	shaked = mono_debugger_agent_transport_handshake ();
 	MONO_EXIT_GC_UNSAFE;
 	
 	if (!shaked)
 		NSLog (@PRODUCT ": Handshake error with IDE.");
+
+	NSLog (@"sdb_connect (%s): %i", address, shaked);
 
 	return;
 }
@@ -378,22 +979,30 @@ void sdb_close2 (void)
 	shutdown (sdb_fd, SHUT_RDWR);
 }
 
+int send_counter = 0;
 gboolean send_uninterrupted (int fd, const void *buf, int len)
 {
 	int res;
+
+	NSLog (@"send_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++send_counter, len);
 
 	do {
 		res = send (fd, buf, len, 0);
 	} while (res == -1 && errno == EINTR);
 
+	NSLog (@"send_uninterrupted (fd=%i): counter: %.4i len: %i res: %i", fd, ++send_counter, len, res);
+
 	return res == len;
 }
 
+int recv_counter = 0;
 int recv_uninterrupted (int fd, void *buf, int len)
 {
 	int res;
 	int total = 0;
 	int flags = 0;
+
+	NSLog (@"recv_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++recv_counter, len);
 
 	do { 
 		res = recv (fd, (char *) buf + total, len - total, flags); 
@@ -401,11 +1010,14 @@ int recv_uninterrupted (int fd, void *buf, int len)
 			total += res;
 	} while ((res > 0 && total < len) || (res == -1 && errno == EINTR));
 
+	NSLog (@"recv_uninterrupted (fd=%i): counter: %.4i len: %i total: %i", fd, ++recv_counter, len, total);
+
 	return total;
 }
 
 gboolean sdb_send (void *buf, int len)
 {
+	NSLog (@"sdb_send (fd: %i, %p, %i)", sdb_fd, buf, len);
 	gboolean rv;
 
 	if (debugging_configured) {
@@ -416,6 +1028,8 @@ gboolean sdb_send (void *buf, int len)
 		rv = send_uninterrupted (sdb_fd, buf, len);
 	}
 
+	NSLog (@"sdb_send (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
+
 	return rv;
 }
 
@@ -423,6 +1037,8 @@ gboolean sdb_send (void *buf, int len)
 int sdb_recv (void *buf, int len)
 {
 	int rv;
+
+	NSLog (@"sdb_recv (fd: %i, %p, %i)", sdb_fd, buf, len);
 
 	if (debugging_configured) {
 		MONO_ENTER_GC_SAFE;
@@ -432,7 +1048,73 @@ int sdb_recv (void *buf, int len)
 		rv = recv_uninterrupted (sdb_fd, buf, len);
 	}
 
+	NSLog (@"sdb_recv (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
+
 	return rv;
+}
+
+static XamarinHttpConnection *connected_connection = NULL;
+static NSString *connected_ip = NULL;
+static pthread_cond_t connected_event = PTHREAD_COND_INITIALIZER;
+static pthread_mutex_t connected_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+int
+xamarin_connect_http (NSMutableArray *ips)
+{
+	// COOP: this is at startup and doesn't access managed memory, so we should be in safe mode here.
+	MONO_ASSERT_GC_STARTING;
+	
+	int ip_count = [ips count];
+	NSMutableArray<XamarinHttpConnection *> *connections = NULL;
+
+	if (ip_count == 0) {
+		NSLog (@PRODUCT ": No IPs to connect to.");
+		return 2;
+	}
+	
+	NSLog (@PRODUCT ": Connecting to %i IPs.", ip_count);
+
+	connections = [[[NSMutableArray<XamarinHttpConnection *> alloc] init] autorelease];
+
+	do {
+		pthread_mutex_lock (&connected_mutex);
+		if (connected_connection != NULL) {
+			NSLog (@"Will reconnect");
+			// We've already made sure one IP works, no need to try the others again.
+			[ips removeAllObjects];
+			[ips addObject: connected_ip];
+			connected_connection = NULL;
+		}
+		pthread_mutex_unlock (&connected_mutex);
+
+		for (int i = 0; i < ip_count; i++) {
+			XamarinHttpConnection *connection = [[[XamarinHttpConnection alloc] init] autorelease];
+			connection.ip = [ips objectAtIndex: i];
+			[connections addObject: connection];
+			[connection connect: [ips objectAtIndex: i] port: monodevelop_port completionHandler: ^void (bool success)
+			{
+				NSLog (@"Connected: %@: %i", connection, success);
+				if (success) {
+					pthread_mutex_lock (&connected_mutex);
+					if (connected_connection == NULL) {
+						connected_ip = [connection ip];
+						connected_connection = connection;
+						pthread_cond_signal (&connected_event);
+					}
+					pthread_mutex_unlock (&connected_mutex);
+				}
+			}];
+		}
+
+		NSLog (@"Will wait for connections");
+		pthread_mutex_lock (&connected_mutex);
+		while (connected_connection == NULL)
+			pthread_cond_wait (&connected_event, &connected_mutex);
+		pthread_mutex_unlock (&connected_mutex);
+		NSLog (@"Connection received fd: %i", connected_connection.fileDescriptor);
+	} while (monotouch_process_connection (connected_connection.fileDescriptor));
+
+	return 0;
 }
 
 int monotouch_connect_wifi (NSMutableArray *ips)
@@ -781,6 +1463,7 @@ monotouch_load_debugger ()
 	// main thread only 
 	if (sdb_fd != -1) {
 		DebuggerTransport transport;
+
 		transport.name = "custom_transport";
 		transport.connect = sdb_connect;
 		transport.close1 = sdb_close1;
@@ -790,6 +1473,13 @@ monotouch_load_debugger ()
 
 		mono_debugger_agent_register_transport (&transport);
 	
+		// transport.name = "custom_http_transport";
+		// transport.connect = xamarin_http_connect;
+		// transport.close1 = xamarin_http_close1;
+		// transport.close2 = xamarin_http_close2;
+		// transport.send = xamarin_http_send;
+		// transport.recv = xamarin_http_recv;
+
 		mono_debugger_agent_parse_options ("transport=custom_transport,address=dummy,embedding=1");
 
 		LOG (PRODUCT ": Debugger loaded with custom transport (fd: %i)\n", sdb_fd);
@@ -851,8 +1541,8 @@ monotouch_process_connection (int fd)
 		LOG (PRODUCT ": Processing: '%s'\n", command);
 		
 		if (!strcmp (command, "connect output")) {
-			dup2 (fd, 1);
-			dup2 (fd, 2);
+			// dup2 (fd, 1);
+			// dup2 (fd, 2);
 			return true; 
 		} else if (!strcmp (command, "connect stdout")) {
 			dup2 (fd, 1);

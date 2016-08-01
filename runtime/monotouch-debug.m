@@ -11,6 +11,10 @@
 
 #ifdef DEBUG
 
+//#define LOG_HTTP(...) do { NSLog (@ __VA_ARGS__); } while (0);
+#define LOG_HTTP(...)
+#define LOG_UNINTERRUPTED(...)
+
 #include <UIKit/UIKit.h>
 
 #include <zlib.h>
@@ -128,23 +132,23 @@ x_http_send (void *c)
 		int fd = connection.localDescriptor;
 		void* buf [1024];
 		do {
-			NSLog (@"%i http send reading to send data to fd=%i", id, fd);
+			LOG_HTTP ("%i http send reading to send data to fd=%i", id, fd);
 			errno = 0;
 			int rv = read (fd, buf, 1024);
-			NSLog (@"%i http send read %i bytes from fd=%i; %i=%s", id, rv, fd, errno, strerror (errno));
+			LOG_HTTP ("%i http send read %i bytes from fd=%i; %i=%s", id, rv, fd, errno, strerror (errno));
 			if (rv > 0) {
 				[connection sendData: buf length: rv];
 			} else if (rv == -1) {
 				if (errno == EINTR)
 					continue;
-				NSLog (@"%i http send: %i => %s", id, errno, strerror (errno));
+				LOG_HTTP ("%i http send: %i => %s", id, errno, strerror (errno));
 				break;
 			} else {
-				NSLog (@"%i http send: eof", id);
+				LOG_HTTP ("%i http send: eof", id);
 				break;
 			}
 		} while (true);
-		NSLog (@"%i http send done", id);
+		LOG_HTTP ("%i http send done", id);
 	}
 	return NULL;
 }
@@ -159,25 +163,25 @@ x_http_recv (void *c)
 		void* buf [1024];
 		do {
 			errno = 0;
-			NSLog (@"%i http recv reading to send data to fd=%i", id, fd);
+			LOG_HTTP ("%i http recv reading to send data to fd=%i", id, fd);
 			int rv = [connection recvData: buf length: 1024];
-			NSLog (@"%i http recv read %i bytes to %i; %i=%s", id, rv, fd, errno, strerror (errno));
+			LOG_HTTP ("%i http recv read %i bytes to %i; %i=%s", id, rv, fd, errno, strerror (errno));
 			if (rv > 0) {
 				int wr;
 				do {
 					wr = write (fd, buf, rv);
 				} while (wr == -1 && errno == EINTR);
 				// FIXME: Continue writing until we've written everything we received
-				NSLog (@"%i http recv wrote %i bytes to %i; %i=%s", id, wr, fd, errno, strerror (errno));
+				LOG_HTTP ("%i http recv wrote %i bytes to %i; %i=%s", id, wr, fd, errno, strerror (errno));
 			} else if (rv == -1) {
-				NSLog (@"%i http recv: %i => %s", id, errno, strerror (errno));
+				LOG_HTTP ("%i http recv: %i => %s", id, errno, strerror (errno));
 				break;
 			} else {
-				NSLog (@"%i http recv: eof", id);
+				LOG_HTTP ("%i http recv: eof", id);
 				break;
 			}
 		} while (true);
-		NSLog (@"%i http recv done", id);
+		LOG_HTTP ("%i http recv done", id);
 	}
 	return NULL;
 }
@@ -189,7 +193,7 @@ int connect_counter = 0;
 {
 	pthread_mutex_lock (&http_data_lock);
 	if (self.completion_handler) {
-		NSLog (@"%i reportCompletion (%i)", self.id, success);
+		LOG_HTTP ("%i reportCompletion (%i)", self.id, success);
 		self.completion_handler (success);
 		self.completion_handler = NULL; // don't call more than once.
 	}
@@ -222,7 +226,7 @@ int connect_counter = 0;
 		return;
 	}
 
-	NSLog (@"%i Created socket pair: %i, %i", self.id, http_sockets [0], http_sockets [1]);
+	LOG_HTTP ("%i Created socket pair: %i, %i", self.id, http_sockets [0], http_sockets [1]);
 
 	pthread_t thr;
 	pthread_create (&thr, NULL, x_http_send, self);
@@ -246,52 +250,36 @@ int connect_counter = 0;
 	NSURLSessionDataTask *downloadTask = [http_session dataTaskWithURL: downloadURL];
 	[downloadTask resume];
 
-	NSLog (@"%i Connected to: %@:%i downloadTask: %@", self.id, ip, port, [[downloadTask currentRequest] URL]);
+	LOG_HTTP ("%i Connected to: %@:%i downloadTask: %@", self.id, ip, port, [[downloadTask currentRequest] URL]);
 }
 
 -(void) sendData: (void *)buffer length: (int) length
 {
-	// NSLog (@"%i sendData length: %i", self.id, length);
-	// bool create_request = false;
 	int c;
 	pthread_mutex_lock (&http_data_lock);
 	c = ++http_send_counter;
-	// if (http_send_data == NULL) {
-	// 	http_send_data = [NSMutableData dataWithCapacity: 1024];
-	// 	create_request = true;
-	// }
-	// [http_send_data appendBytes: buffer length: length];
 	pthread_mutex_unlock (&http_data_lock);
 
-
-
-	// if (create_request) {
-		NSURL *uploadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://192.168.2.8:9999/upload/%i/%i", c, self.id]];
-		NSLog (@"%i sendData length: %i url: %@", self.id, length, uploadURL);
-		NSMutableURLRequest *uploadRequest = [[[NSMutableURLRequest alloc] initWithURL: uploadURL] autorelease];
-		uploadRequest.HTTPMethod = @"POST";
-		// NSURLSessionUploadTask *uploadTask = [http_session uploadTaskWithStreamedRequest: uploadRequest];
-		NSURLSessionUploadTask *uploadTask = [http_session uploadTaskWithRequest: uploadRequest fromData: [NSData dataWithBytes: buffer length: length]];
-		[uploadTask resume];
-	// } else {
-	// 	NSLog (@"%i sendData length: %i - not creating request", self.id, length);
-	// }
+	NSURL *uploadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://192.168.2.8:9999/upload/%i/%i", c, self.id]];
+	LOG_HTTP ("%i sendData length: %i url: %@", self.id, length, uploadURL);
+	NSMutableURLRequest *uploadRequest = [[[NSMutableURLRequest alloc] initWithURL: uploadURL] autorelease];
+	uploadRequest.HTTPMethod = @"POST";
+	NSURLSessionUploadTask *uploadTask = [http_session uploadTaskWithRequest: uploadRequest fromData: [NSData dataWithBytes: buffer length: length]];
+	[uploadTask resume];
 }
 
 -(int) recvData: (void *) buffer length: (int) length
 {
 	int rv = 0;
 
-	NSLog (@"%i recvData %p %i", self.id, buffer, length);
+	LOG_HTTP ("%i recvData %p %i", self.id, buffer, length);
 	pthread_mutex_lock (&http_data_lock);
 
 	// Wait until we receive data
-	while ([http_recv_data length] == 0) {
+	while ([http_recv_data length] == 0)
 		pthread_cond_wait (&http_data_condition, &http_data_lock);
-		NSLog (@"%i recvData signaled, length: %i", self.id, (int) [http_recv_data length]);
-	}
 
-	NSLog (@"%i recvData woken", self.id);
+	LOG_HTTP ("%i recvData woken", self.id);
 
 	NSUInteger data_length = [http_recv_data length];
 	uint8_t *mutableBytes = (uint8_t *) [http_recv_data mutableBytes];
@@ -306,7 +294,7 @@ int connect_counter = 0;
 
 	pthread_mutex_unlock (&http_data_lock);
 
-	NSLog (@"%i recvData %p %i => %i", self.id, buffer, length, rv);
+	LOG_HTTP ("%i recvData %p %i => %i", self.id, buffer, length, rv);
 
 	return rv;
 }
@@ -314,35 +302,35 @@ int connect_counter = 0;
 /* NSURLSessionDataDelegate */
 - (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
-	NSLog (@"%i didBecomeInvalidWithError: %@", self.id, error);
+	LOG_HTTP ("%i didBecomeInvalidWithError: %@", self.id, error);
 	[self reportCompletion: false];
 }
 
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
-	NSLog (@"%i didReceiveChallenge", self.id);
+	LOG_HTTP ("%i didReceiveChallenge", self.id);
 }
 
 -(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
-	NSLog (@"%i didReceiveResponse: task: %@ url: %@", self.id, dataTask, [[dataTask originalRequest] URL]);
+	LOG_HTTP ("%i didReceiveResponse: task: %@ url: %@", self.id, dataTask, [[dataTask originalRequest] URL]);
 	completionHandler (NSURLSessionResponseAllow);
 	[self reportCompletion: true];
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
-	NSLog (@"%i didReceiveData length: %li %@", self.id, (unsigned long) [data length], data);
+	LOG_HTTP ("%i didReceiveData length: %li %@", self.id, (unsigned long) [data length], data);
 	pthread_mutex_lock (&http_data_lock);
 	[http_recv_data appendData: data];
 	pthread_cond_broadcast (&http_data_condition);
-	NSLog (@"%i didReceiveData length: %li signalled, there is now %li bytes in http_recv_data", self.id, (unsigned long) [data length], (unsigned long) [http_recv_data length]);
+	LOG_HTTP ("%i didReceiveData length: %li signalled, there is now %li bytes in http_recv_data", self.id, (unsigned long) [data length], (unsigned long) [http_recv_data length]);
 	pthread_mutex_unlock (&http_data_lock);
 }
 
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-	NSLog (@"%i didCompleteWithError: %@ task: %@ url: %@", self.id, error, task, [[task originalRequest] URL]);
+	LOG_HTTP ("%i didCompleteWithError: %@ task: %@ url: %@", self.id, error, task, [[task originalRequest] URL]);
 }
 @end
 
@@ -657,7 +645,7 @@ void sdb_connect (const char *address)
 	if (!shaked)
 		NSLog (@PRODUCT ": Handshake error with IDE.");
 
-	NSLog (@"sdb_connect (%s): %i", address, shaked);
+	NSLog (@"sdb_connect (%s): shaked=%i", address, shaked);
 
 	return;
 }
@@ -677,13 +665,13 @@ gboolean send_uninterrupted (int fd, const void *buf, int len)
 {
 	int res;
 
-	NSLog (@"send_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++send_counter, len);
+	LOG_UNINTERRUPTED ("send_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++send_counter, len);
 
 	do {
 		res = send (fd, buf, len, 0);
 	} while (res == -1 && errno == EINTR);
 
-	NSLog (@"send_uninterrupted (fd=%i): counter: %.4i len: %i res: %i", fd, ++send_counter, len, res);
+	LOG_UNINTERRUPTED ("send_uninterrupted (fd=%i): counter: %.4i len: %i res: %i", fd, ++send_counter, len, res);
 
 	return res == len;
 }
@@ -695,7 +683,7 @@ int recv_uninterrupted (int fd, void *buf, int len)
 	int total = 0;
 	int flags = 0;
 
-	NSLog (@"recv_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++recv_counter, len);
+	LOG_UNINTERRUPTED ("recv_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++recv_counter, len);
 
 	do { 
 		res = recv (fd, (char *) buf + total, len - total, flags); 
@@ -703,14 +691,14 @@ int recv_uninterrupted (int fd, void *buf, int len)
 			total += res;
 	} while ((res > 0 && total < len) || (res == -1 && errno == EINTR));
 
-	NSLog (@"recv_uninterrupted (fd=%i): counter: %.4i len: %i total: %i", fd, ++recv_counter, len, total);
+	LOG_UNINTERRUPTED ("recv_uninterrupted (fd=%i): counter: %.4i len: %i total: %i", fd, ++recv_counter, len, total);
 
 	return total;
 }
 
 gboolean sdb_send (void *buf, int len)
 {
-	NSLog (@"sdb_send (fd: %i, %p, %i)", sdb_fd, buf, len);
+	LOG_UNINTERRUPTED ("sdb_send (fd: %i, %p, %i)", sdb_fd, buf, len);
 	gboolean rv;
 
 	if (debugging_configured) {
@@ -721,7 +709,7 @@ gboolean sdb_send (void *buf, int len)
 		rv = send_uninterrupted (sdb_fd, buf, len);
 	}
 
-	NSLog (@"sdb_send (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
+	LOG_UNINTERRUPTED ("sdb_send (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
 
 	return rv;
 }
@@ -731,7 +719,7 @@ int sdb_recv (void *buf, int len)
 {
 	int rv;
 
-	NSLog (@"sdb_recv (fd: %i, %p, %i)", sdb_fd, buf, len);
+	LOG_UNINTERRUPTED ("sdb_recv (fd: %i, %p, %i)", sdb_fd, buf, len);
 
 	if (debugging_configured) {
 		MONO_ENTER_GC_SAFE;
@@ -741,7 +729,7 @@ int sdb_recv (void *buf, int len)
 		rv = recv_uninterrupted (sdb_fd, buf, len);
 	}
 
-	NSLog (@"sdb_recv (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
+	LOG_UNINTERRUPTED ("sdb_recv (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
 
 	return rv;
 }
@@ -772,7 +760,7 @@ xamarin_connect_http (NSMutableArray *ips)
 	do {
 		pthread_mutex_lock (&connected_mutex);
 		if (connected_connection != NULL) {
-			NSLog (@"Will reconnect");
+			LOG_HTTP ("Will reconnect");
 			// We've already made sure one IP works, no need to try the others again.
 			[ips removeAllObjects];
 			[ips addObject: connected_ip];
@@ -786,7 +774,7 @@ xamarin_connect_http (NSMutableArray *ips)
 			[connections addObject: connection];
 			[connection connect: [ips objectAtIndex: i] port: monodevelop_port completionHandler: ^void (bool success)
 			{
-				NSLog (@"Connected: %@: %i", connection, success);
+				LOG_HTTP ("Connected: %@: %i", connection, success);
 				if (success) {
 					pthread_mutex_lock (&connected_mutex);
 					if (connected_connection == NULL) {
@@ -799,12 +787,12 @@ xamarin_connect_http (NSMutableArray *ips)
 			}];
 		}
 
-		NSLog (@"Will wait for connections");
+		LOG_HTTP ("Will wait for connections");
 		pthread_mutex_lock (&connected_mutex);
 		while (connected_connection == NULL)
 			pthread_cond_wait (&connected_event, &connected_mutex);
 		pthread_mutex_unlock (&connected_mutex);
-		NSLog (@"Connection received fd: %i", connected_connection.fileDescriptor);
+		LOG_HTTP ("Connection received fd: %i", connected_connection.fileDescriptor);
 	} while (monotouch_process_connection (connected_connection.fileDescriptor));
 
 	return 0;
@@ -1234,8 +1222,8 @@ monotouch_process_connection (int fd)
 		LOG (PRODUCT ": Processing: '%s'\n", command);
 		
 		if (!strcmp (command, "connect output")) {
-			// dup2 (fd, 1);
-			// dup2 (fd, 2);
+			dup2 (fd, 1);
+			dup2 (fd, 2);
 			return true; 
 		} else if (!strcmp (command, "connect stdout")) {
 			dup2 (fd, 1);

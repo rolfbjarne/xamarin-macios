@@ -239,14 +239,14 @@ int connect_counter = 0;
 		http_session_config.allowsCellularAccess = NO;
 		http_session_config.networkServiceType = NSURLNetworkServiceTypeVoIP; // not quite right, but this will wake up the app for incoming network traffic
 		http_session_config.timeoutIntervalForRequest = 60;
-		http_session_config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+		http_session_config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData; // do not cache anything
 		http_session_config.HTTPMaximumConnectionsPerHost = 20;
 	}
 
 	NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 	http_session = [NSURLSession sessionWithConfiguration: http_session_config delegate: self delegateQueue: queue];
 
-	NSURL *downloadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://192.168.2.8:9999/download/%i", self.id]];
+	NSURL *downloadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@:%i/download?pid=%i&id=%i", self.ip, monodevelop_port, getpid (), self.id]];
 	NSURLSessionDataTask *downloadTask = [http_session dataTaskWithURL: downloadURL];
 	[downloadTask resume];
 
@@ -260,7 +260,7 @@ int connect_counter = 0;
 	c = ++http_send_counter;
 	pthread_mutex_unlock (&http_data_lock);
 
-	NSURL *uploadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://192.168.2.8:9999/upload/%i/%i", c, self.id]];
+	NSURL *uploadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@:%i/upload?pid=%i&id=%i&upload-id=%i", self.ip, monodevelop_port, getpid (), self.id, c]];
 	LOG_HTTP ("%i sendData length: %i url: %@", self.id, length, uploadURL);
 	NSMutableURLRequest *uploadRequest = [[[NSMutableURLRequest alloc] initWithURL: uploadURL] autorelease];
 	uploadRequest.HTTPMethod = @"POST";

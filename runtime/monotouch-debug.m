@@ -170,7 +170,6 @@ NSURLSessionConfiguration *http_session_config;
 
 @interface XamarinHttpConnection : NSObject<NSURLSessionDelegate> {
 	NSURLSession *http_session;
-	NSMutableData *http_send_data;
 	NSMutableData *http_recv_data;
 	int http_sockets[2];
 	int http_send_counter;

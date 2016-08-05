@@ -11,6 +11,9 @@
 
 #ifdef DEBUG
 
+//#define LOG_UNINTERRUPTED(...) do { NSLog (@ __VA_ARGS__); } while (0);
+#define LOG_UNINTERRUPTED(...)
+
 #include <UIKit/UIKit.h>
 
 #include <zlib.h>
@@ -400,22 +403,30 @@ void sdb_close2 (void)
 	shutdown (sdb_fd, SHUT_RDWR);
 }
 
+int send_counter = 0;
 gboolean send_uninterrupted (int fd, const void *buf, int len)
 {
 	int res;
+
+	LOG_UNINTERRUPTED ("send_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++send_counter, len);
 
 	do {
 		res = send (fd, buf, len, 0);
 	} while (res == -1 && errno == EINTR);
 
+	LOG_UNINTERRUPTED ("send_uninterrupted (fd=%i): counter: %.4i len: %i res: %i", fd, ++send_counter, len, res);
+
 	return res == len;
 }
 
+int recv_counter = 0;
 int recv_uninterrupted (int fd, void *buf, int len)
 {
 	int res;
 	int total = 0;
 	int flags = 0;
+
+	LOG_UNINTERRUPTED ("recv_uninterrupted (fd=%i): counter: %.4i len: %i", fd, ++recv_counter, len);
 
 	do { 
 		res = recv (fd, (char *) buf + total, len - total, flags); 
@@ -423,11 +434,15 @@ int recv_uninterrupted (int fd, void *buf, int len)
 			total += res;
 	} while ((res > 0 && total < len) || (res == -1 && errno == EINTR));
 
+	LOG_UNINTERRUPTED ("recv_uninterrupted (fd=%i): counter: %.4i len: %i total: %i", fd, ++recv_counter, len, total);
+
 	return total;
 }
 
 gboolean sdb_send (void *buf, int len)
 {
+	LOG_UNINTERRUPTED ("sdb_send (fd: %i, %p, %i)", sdb_fd, buf, len);
+	
 	gboolean rv;
 
 	if (debugging_configured) {
@@ -438,6 +453,8 @@ gboolean sdb_send (void *buf, int len)
 		rv = send_uninterrupted (sdb_fd, buf, len);
 	}
 
+	LOG_UNINTERRUPTED ("sdb_send (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
+
 	return rv;
 }
 
@@ -446,6 +463,8 @@ int sdb_recv (void *buf, int len)
 {
 	int rv;
 
+	LOG_UNINTERRUPTED ("sdb_recv (fd: %i, %p, %i)", sdb_fd, buf, len);
+
 	if (debugging_configured) {
 		MONO_ENTER_GC_SAFE;
 		rv = recv_uninterrupted (sdb_fd, buf, len);
@@ -453,6 +472,8 @@ int sdb_recv (void *buf, int len)
 	} else {
 		rv = recv_uninterrupted (sdb_fd, buf, len);
 	}
+
+	LOG_UNINTERRUPTED ("sdb_recv (fd: %i, %p, %i): %i", sdb_fd, buf, len, rv);
 
 	return rv;
 }

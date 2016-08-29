@@ -195,7 +195,6 @@ NSURLSessionConfiguration *http_session_config;
 	-(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data;
 
 	/* NSURLSessionTaskDelegate */
-	// -(void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler;
 	-(void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error;
 @end
 
@@ -244,11 +243,19 @@ xamarin_http_recv (void *c)
 			LOG_HTTP ("%i http recv read %i bytes to %i; %i=%s", id, rv, fd, errno, strerror (errno));
 			if (rv > 0) {
 				int wr;
-				do {
-					wr = write (fd, buf, rv);
-				} while (wr == -1 && errno == EINTR);
-				// FIXME: Continue writing until we've written everything we received
-				LOG_HTTP ("%i http recv wrote %i bytes to %i; %i=%s", id, wr, fd, errno, strerror (errno));
+				int total = rv;
+				int left = rv;
+				while (left > 0) {
+					do {
+						wr = write (fd, buf + total - left, left);
+					} while (wr == -1 && errno == EINTR);
+					left -= wr;
+					LOG_HTTP ("%i http recv wrote %i bytes to %i; %i=%s; %i bytes left", id, wr, fd, errno, strerror (errno), left);
+					if (wr == -1 && errno != EINTR) {
+						LOG_HTTP ("%i http recv error occured: %i = %s", id, errno, strerror (errno));
+						break;
+					}
+				}
 			} else if (rv == -1) {
 				LOG_HTTP ("%i http recv: %i => %s", id, errno, strerror (errno));
 				break;

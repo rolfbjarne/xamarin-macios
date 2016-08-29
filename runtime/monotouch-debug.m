@@ -713,8 +713,6 @@ void monotouch_configure_debugging ()
 			}
 		}
 
-		debugging_mode = DebuggingModeHttp; // FIXME!!!
-
 		if (monodevelop_port <= 0) {
 			LOG (PRODUCT ": Invalid IDE Port: %i\n", monodevelop_port);
 		} else {
@@ -747,9 +745,6 @@ void sdb_connect (const char *address)
 	shaked = mono_debugger_agent_transport_handshake ();
 	MONO_EXIT_GC_UNSAFE;
 	
-	if (!shaked)
-		NSLog (@PRODUCT ": Handshake error with IDE.");
-
 	NSLog (@"sdb_connect (%s): shaked=%i", address, shaked);
 
 	return;

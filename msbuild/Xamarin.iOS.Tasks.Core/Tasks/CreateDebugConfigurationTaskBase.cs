@@ -22,7 +22,7 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public bool DebugOverWiFi { get; set; }
 
-		public string DebuggerHosts { get; set; }
+		public string DebugIPAddresses { get; set; }
 
 		[Required]
 		public string DebuggerPort { get; set; }
@@ -35,44 +35,15 @@ namespace Xamarin.iOS.Tasks
 		public override bool Execute ()
 		{
 			var path = Path.Combine (AppBundleDir, "MonoTouchDebugConfiguration.txt");
-			var ips = new List<IPAddress> ();
 
 			Log.LogTaskName ("CreateDebugConfiguration");
 			Log.LogTaskProperty ("AppBundleDir", AppBundleDir);
 			Log.LogTaskProperty ("DebugOverWiFi", DebugOverWiFi);
-			Log.LogTaskProperty ("DebuggerHosts", DebuggerHosts);
+			Log.LogTaskProperty ("DebugIPAddresses", DebugIPAddresses);
 			Log.LogTaskProperty ("DebuggerPort", DebuggerPort);
 			Log.LogTaskProperty ("SdkIsSimulator", SdkIsSimulator);
 
-			if (SdkIsSimulator) {
-				ips.Add (IPAddress.Loopback);
-			} else if (DebugOverWiFi) {
-				string[] hosts = null;
-
-				if (!string.IsNullOrEmpty (DebuggerHosts))
-					hosts = DebuggerHosts.Split (new [] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-				if (hosts == null || hosts.Length == 0) {
-					try {
-						ips.AddRange (Dns.GetHostEntry (Dns.GetHostName ()).AddressList);
-					} catch {
-						Log.LogError ("Could not resolve host IPs for WiFi debugger settings");
-						return false;
-					}
-				} else {
-					foreach (var host in hosts) {
-						IPAddress ip;
-
-						if (IPAddress.TryParse (host, out ip))
-							ips.Add (ip);
-					}
-				}
-
-				if (ips == null || ips.Count == 0) {
-					Log.LogError ("This machine does not have any network adapters. This is required when debugging or profiling on device over WiFi.");
-					return false;
-				}
-			}
+			var ips = DebugIPAddresses?.Split (new char [] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
 			try {
 				using (var stream = new FileStream (path, FileMode.Create, FileAccess.Write)) {

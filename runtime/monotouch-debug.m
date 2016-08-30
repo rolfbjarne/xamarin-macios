@@ -35,6 +35,7 @@
 #include <objc/objc.h>
 #include <objc/runtime.h>
 #include <sys/shm.h>
+#include <libkern/OSAtomic.h>
 
 #include "xamarin/xamarin.h"
 #include "runtime-internal.h"
@@ -82,9 +83,8 @@ bool monotouch_process_connection (int fd);
 static struct timeval wait_tv;
 static struct timespec wait_ts;
 
-pthread_mutex_t http_data_lock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t http_data_condition = PTHREAD_COND_INITIALIZER;
-NSURLSessionConfiguration *http_session_config;
+static NSURLSessionConfiguration *http_session_config = NULL;
+static volatile int http_connect_counter = 0;
 
 /*
  * XamarinHttpConnection
@@ -165,17 +165,13 @@ NSURLSessionConfiguration *http_session_config;
  *    upload-id, so that mlaunch can order them properly, because http
  *    requests may not reach the desktop in the same order they were sent.
  *
- * Performance improvements:
- *  *) We create more threads than we need, we can 
  */
 
 @interface XamarinHttpConnection : NSObject<NSURLSessionDelegate> {
 	NSURLSession *http_session;
-	NSMutableData *http_recv_data;
 	int http_sockets[2];
-	int http_send_counter;
+	volatile int http_send_counter;
 }
-	@property (nonatomic, assign) NSInputStream* inputStream;
 	@property void (^completion_handler)(bool);
 	@property (copy) NSString* ip;
 	@property int id;
@@ -186,11 +182,11 @@ NSURLSessionConfiguration *http_session_config;
 
 	-(void) connect: (NSString *) ip port: (int) port completionHandler: (void (^)(bool)) completionHandler;
 	-(void) sendData: (void *) buffer length: (int) length;
-	-(int) recvData: (void *) buffer length: (int) length;
 
 	/* NSURLSessionDelegate */
 	-(void) URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error;
 	-(void) URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler;
+
 	/* NSURLSessionDataDelegate */
 	-(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler;
 	-(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data;
@@ -199,90 +195,45 @@ NSURLSessionConfiguration *http_session_config;
 	-(void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error;
 @end
 
-void *
+static void *
 xamarin_http_send (void *c)
 {
 	XamarinHttpConnection *connection = (XamarinHttpConnection *) c;
-	int id = connection.id;
 	@autoreleasepool {
 		int fd = connection.localDescriptor;
 		void* buf [1024];
 		do {
-			LOG_HTTP ("%i http send reading to send data to fd=%i", id, fd);
+			LOG_HTTP ("%i http send reading to send data to fd=%i", connection.id, fd);
 			errno = 0;
 			int rv = read (fd, buf, 1024);
-			LOG_HTTP ("%i http send read %i bytes from fd=%i; %i=%s", id, rv, fd, errno, strerror (errno));
+			LOG_HTTP ("%i http send read %i bytes from fd=%i; %i=%s", connection.id, rv, fd, errno, strerror (errno));
 			if (rv > 0) {
 				[connection sendData: buf length: rv];
 			} else if (rv == -1) {
 				if (errno == EINTR)
 					continue;
-				LOG_HTTP ("%i http send: %i => %s", id, errno, strerror (errno));
+				LOG_HTTP ("%i http send: %i => %s", connection.id, errno, strerror (errno));
 				break;
 			} else {
-				LOG_HTTP ("%i http send: eof", id);
+				LOG_HTTP ("%i http send: eof", connection.id);
 				break;
 			}
 		} while (true);
-		LOG_HTTP ("%i http send done", id);
+		LOG_HTTP ("%i http send done", connection.id);
 	}
 	return NULL;
 }
-
-void *
-xamarin_http_recv (void *c)
-{
-	XamarinHttpConnection *connection = (XamarinHttpConnection *) c;
-	int id = connection.id;
-	@autoreleasepool {
-		int fd = connection.localDescriptor;
-		void* buf [1024];
-		do {
-			errno = 0;
-			LOG_HTTP ("%i http recv reading to send data to fd=%i", id, fd);
-			int rv = [connection recvData: buf length: 1024];
-			LOG_HTTP ("%i http recv read %i bytes to %i; %i=%s", id, rv, fd, errno, strerror (errno));
-			if (rv > 0) {
-				int wr;
-				int total = rv;
-				int left = rv;
-				while (left > 0) {
-					do {
-						wr = write (fd, buf + total - left, left);
-					} while (wr == -1 && errno == EINTR);
-					left -= wr;
-					LOG_HTTP ("%i http recv wrote %i bytes to %i; %i=%s; %i bytes left", id, wr, fd, errno, strerror (errno), left);
-					if (wr == -1 && errno != EINTR) {
-						LOG_HTTP ("%i http recv error occured: %i = %s", id, errno, strerror (errno));
-						break;
-					}
-				}
-			} else if (rv == -1) {
-				LOG_HTTP ("%i http recv: %i => %s", id, errno, strerror (errno));
-				break;
-			} else {
-				LOG_HTTP ("%i http recv: eof", id);
-				break;
-			}
-		} while (true);
-		LOG_HTTP ("%i http recv done", id);
-	}
-	return NULL;
-}
-
-int connect_counter = 0;
 
 @implementation XamarinHttpConnection
 -(void) reportCompletion: (bool) success
 {
-	pthread_mutex_lock (&http_data_lock);
 	if (self.completion_handler) {
 		LOG_HTTP ("%i reportCompletion (%i)", self.id, success);
 		self.completion_handler (success);
 		self.completion_handler = NULL; // don't call more than once.
 	}
-	pthread_mutex_unlock (&http_data_lock);
 }
+
 
 -(int) fileDescriptor
 {
@@ -299,10 +250,7 @@ int connect_counter = 0;
 	LOG_HTTP ("Connecting to: %@:%i", ip, port);
 	self.completion_handler = completionHandler;
 
-	pthread_mutex_lock (&http_data_lock);
-	self.id = ++connect_counter;
-	http_recv_data = [NSMutableData dataWithCapacity: 1024];
-	pthread_mutex_unlock (&http_data_lock);
+	self.id = OSAtomicIncrement32Barrier (&http_connect_counter);
 
 	int rv = socketpair (PF_LOCAL, SOCK_STREAM, 0, http_sockets);
 	if (rv != 0) {
@@ -314,8 +262,6 @@ int connect_counter = 0;
 
 	pthread_t thr;
 	pthread_create (&thr, NULL, xamarin_http_send, self);
-	pthread_detach (thr);
-	pthread_create (&thr, NULL, xamarin_http_recv, self);
 	pthread_detach (thr);
 
 	if (http_session_config == NULL) {
@@ -337,12 +283,9 @@ int connect_counter = 0;
 	LOG_HTTP ("%i Connected to: %@:%i downloadTask: %@", self.id, ip, port, [[downloadTask currentRequest] URL]);
 }
 
--(void) sendData: (void *)buffer length: (int) length
+-(void) sendData: (void *) buffer length: (int) length
 {
-	int c;
-	pthread_mutex_lock (&http_data_lock);
-	c = ++http_send_counter;
-	pthread_mutex_unlock (&http_data_lock);
+	int c = OSAtomicIncrement32Barrier (&http_send_counter);
 
 	NSURL *uploadURL = [NSURL URLWithString: [NSString stringWithFormat: @"http://%@:%i/upload?pid=%i&id=%i&upload-id=%i", self.ip, monodevelop_port, getpid (), self.id, c]];
 	LOG_HTTP ("%i sendData length: %i url: %@", self.id, length, uploadURL);
@@ -352,72 +295,57 @@ int connect_counter = 0;
 	[uploadTask resume];
 }
 
--(int) recvData: (void *) buffer length: (int) length
-{
-	int rv = 0;
-
-	LOG_HTTP ("%i recvData %p %i", self.id, buffer, length);
-	pthread_mutex_lock (&http_data_lock);
-
-	// Wait until we receive data
-	while ([http_recv_data length] == 0)
-		pthread_cond_wait (&http_data_condition, &http_data_lock);
-
-	LOG_HTTP ("%i recvData woken", self.id);
-
-	NSUInteger data_length = [http_recv_data length];
-	uint8_t *mutableBytes = (uint8_t *) [http_recv_data mutableBytes];
-	rv = MIN (length, data_length);
-	
-	// Copy the data we've received
-	memcpy (buffer, mutableBytes, rv);
-	// If we have more data left, make sure to move it up in the buffer we have
-	if (data_length > rv) 
-		memmove (mutableBytes, mutableBytes + rv, data_length - rv);
-	http_recv_data.length = data_length - rv;
-
-	pthread_mutex_unlock (&http_data_lock);
-
-	LOG_HTTP ("%i recvData %p %i => %i", self.id, buffer, length, rv);
-
-	return rv;
-}
-
 /* NSURLSessionDataDelegate */
-- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+-(void) URLSession: (NSURLSession *) session didBecomeInvalidWithError: (NSError *) error
 {
 	LOG_HTTP ("%i didBecomeInvalidWithError: %@", self.id, error);
 	[self reportCompletion: false];
 }
 
-- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+-(void) URLSession: (NSURLSession *) session didReceiveChallenge: (NSURLAuthenticationChallenge *) challenge  completionHandler: (void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential)) completionHandler
 {
 	LOG_HTTP ("%i didReceiveChallenge", self.id);
 }
 
--(void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+-(void) URLSession: (NSURLSession *) session dataTask: (NSURLSessionDataTask *) dataTask didReceiveResponse: (NSURLResponse *) response completionHandler: (void (^)(NSURLSessionResponseDisposition disposition)) completionHandler
 {
 	LOG_HTTP ("%i didReceiveResponse: task: %@ url: %@", self.id, dataTask, [[dataTask originalRequest] URL]);
 	completionHandler (NSURLSessionResponseAllow);
 	[self reportCompletion: true];
 }
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+-(void) URLSession: (NSURLSession *) session dataTask: (NSURLSessionDataTask *) dataTask didReceiveData: (NSData *) data
 {
-	// The IDE sent data to us.
+	// We got data from the IDE.
 	LOG_HTTP ("%i didReceiveData length: %li %@", self.id, (unsigned long) [data length], data);
-	pthread_mutex_lock (&http_data_lock);
-	[http_recv_data appendData: data];
-	pthread_cond_broadcast (&http_data_condition);
-	LOG_HTTP ("%i didReceiveData length: %li signalled, there is now %li bytes in http_recv_data", self.id, (unsigned long) [data length], (unsigned long) [http_recv_data length]);
-	pthread_mutex_unlock (&http_data_lock);
+
+	[data enumerateByteRangesUsingBlock: ^(const void *bytes, NSRange byteRange, BOOL *stop) {
+		int fd = self.localDescriptor;
+		int wr;
+		NSUInteger total = byteRange.length;
+		NSUInteger left = total;
+		while (left > 0) {
+			do {
+				wr = write (fd, bytes, left);
+			} while (wr == -1 && errno == EINTR);
+			if (wr > 0) {
+				left -= wr;
+				LOG_HTTP ("%i didReceiveData wrote %i/%u bytes to %i; %i bytes left", self.id, wr, total, fd, left);
+			} else if (wr == 0) {
+				LOG_HTTP ("%i didReceiveData no data written.", self.id);
+			} else {
+				LOG_HTTP ("%i didReceiveData error occured: %i = %s", self.id, errno, strerror (errno));
+				break;
+			}
+		}
+	}];
 }
 
--(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+-(void) URLSession: (NSURLSession *) session task: (NSURLSessionTask *) task didCompleteWithError: (NSError *) error
 {
 	LOG_HTTP ("%i didCompleteWithError: %@ task: %@ url: %@", self.id, error, task, [[task originalRequest] URL]);
 }
-@end
+@end /* XamarinHttpConnection */
 
 void
 monotouch_set_connection_mode (const char *mode)

@@ -739,14 +739,10 @@ void sdb_connect (const char *address)
 {
 	gboolean shaked;
 
-	NSLog (@"sdb_connect (%s)", address);
-
 	MONO_ENTER_GC_UNSAFE;
 	shaked = mono_debugger_agent_transport_handshake ();
 	MONO_EXIT_GC_UNSAFE;
 	
-	NSLog (@"sdb_connect (%s): shaked=%i", address, shaked);
-
 	return;
 }
 

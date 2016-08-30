@@ -112,7 +112,7 @@ NSURLSessionConfiguration *http_session_config;
  * other socket that transforms recv/send calls into http requests.
  *
  * A complication is that there doesn't seem to be a way to create
- * a streaming http upload using NSUrlSesssion, the data to upload
+ * a streaming http upload using NSUrlSession, the data to upload
  * must be known when creating the request. This means that we need
  * to create a new http request for every write on the socket done
  * by mono/sdb.
@@ -142,7 +142,7 @@ NSURLSessionConfiguration *http_session_config;
  *    http tunnel. This involves a different port, so mlaunch
  *    will change the arguments/environment variables that are
  *    passed to the app to reflect the different port. mlaunch
- *    will also make enable the 'http' mode.
+ *    will also enable the 'http' mode.
  * c) The app will launch on device, and create the app side of
  *    the http tunnel.
  * c) When the app connects to the IDE, an HTTP GET request is sent.
@@ -164,6 +164,9 @@ NSURLSessionConfiguration *http_session_config;
  *    GET request. The request also includes a monotonically increasing
  *    upload-id, so that mlaunch can order them properly, because http
  *    requests may not reach the desktop in the same order they were sent.
+ *
+ * Performance improvements:
+ *  *) We create more threads than we need, we can 
  */
 
 @interface XamarinHttpConnection : NSObject<NSURLSessionDelegate> {
@@ -293,7 +296,7 @@ int connect_counter = 0;
 
 -(void) connect: (NSString *) ip port: (int) port completionHandler: (void (^)(bool)) completionHandler
 {
-	NSLog (@"Connecting to: %@:%i", ip, port);
+	LOG_HTTP ("Connecting to: %@:%i", ip, port);
 	self.completion_handler = completionHandler;
 
 	pthread_mutex_lock (&http_data_lock);
@@ -401,6 +404,7 @@ int connect_counter = 0;
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
+	// The IDE sent data to us.
 	LOG_HTTP ("%i didReceiveData length: %li %@", self.id, (unsigned long) [data length], data);
 	pthread_mutex_lock (&http_data_lock);
 	[http_recv_data appendData: data];

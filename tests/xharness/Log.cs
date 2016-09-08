@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Text;
 
 namespace xharness
 {
@@ -23,7 +24,7 @@ namespace xharness
 
 		protected abstract void WriteImpl (string value);
 
-		public virtual StreamReader GetReader ()
+		public virtual TextReader GetReader ()
 		{
 			throw new NotSupportedException ();
 		}
@@ -100,7 +101,7 @@ namespace xharness
 			}
 		}
 
-		public override StreamReader GetReader ()
+		public override TextReader GetReader ()
 		{
 			return new StreamReader (new FileStream (Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 		}
@@ -133,7 +134,7 @@ namespace xharness
 			}
 		}
 
-		public override StreamReader GetReader ()
+		public override TextReader GetReader ()
 		{
 			return new StreamReader (new FileStream (path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 		}
@@ -200,9 +201,11 @@ namespace xharness
 
 	public class ConsoleLog : Log
 	{
+		readonly ConsoleWriter writer = new ConsoleWriter ();
+
 		protected override void WriteImpl (string value)
 		{
-			Console.Write (value);
+			GetWriter ().Write (value);
 		}
 
 		public override string FullPath {
@@ -213,7 +216,57 @@ namespace xharness
 
 		public override TextWriter GetWriter ()
 		{
-			return Console.Out;
+			return writer;
+		}
+
+		public override TextReader GetReader ()
+		{
+			return new StringReader (writer.CapturedText.ToString ());
+		}
+
+		class ConsoleWriter : TextWriter
+		{
+			readonly StringBuilder sb = new StringBuilder ();
+			public StringBuilder CapturedText {
+				get {
+					return sb;
+				}
+			}
+
+			public override Encoding Encoding {
+				get {
+					return Console.Out.Encoding;
+				}
+			}
+
+			public override void Write (char value)
+			{
+				sb.Append (value);
+				Console.Out.Write (value);
+			}
+
+			public override void Write (string value)
+			{
+				sb.Append (value);
+				Console.Out.Write (value);
+			}
+
+			public override void WriteLine ()
+			{
+				sb.AppendLine ();
+				Console.Out.WriteLine ();
+			}
+
+			public override void WriteLine (string value)
+			{
+				sb.AppendLine (value);
+				Console.Out.WriteLine (value);
+			}
+
+			public override void Flush ()
+			{
+				Console.Out.Flush ();
+			}
 		}
 	}
 

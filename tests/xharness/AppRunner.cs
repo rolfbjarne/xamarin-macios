@@ -436,7 +436,7 @@ namespace xharness
 					// find pid
 					var pid = -1;
 					using (var reader = run_log.GetReader ()) {
-						while (!reader.EndOfStream) {
+						while (reader.Peek () != -1) {
 							var line = reader.ReadLine ();
 							if (line.StartsWith ("Application launched. PID = ", StringComparison.Ordinal)) {
 								var pidstr = line.Substring ("Application launched. PID = ".Length);

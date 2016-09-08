@@ -468,7 +468,7 @@ function toggleContainerVisibility (containerName)
 										var summary = string.Empty;
 										try {
 											using (var reader = log.GetReader ()) {
-												while (!reader.EndOfStream) {
+												while (reader.Peek () != -1) {
 													string line = reader.ReadLine ();
 													if (line.StartsWith ("Tests run:", StringComparison.Ordinal)) {
 														summary = line;
@@ -486,7 +486,7 @@ function toggleContainerVisibility (containerName)
 										var errors = new HashSet<string> ();
 										try {
 											using (var reader = log.GetReader ()) {
-												while (!reader.EndOfStream) {
+												while (reader.Peek () != -1) {
 													string line = reader.ReadLine ().Trim ();
 													if (line.Contains (": error"))
 														errors.Add (line);

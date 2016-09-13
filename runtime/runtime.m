@@ -2158,6 +2158,16 @@ xamarin_insert_dllmap ()
 #endif // defined (__i386__) || defined (__x86_64__)
 }
 
+bool
+xamarin_install_chained_signal_handler (int signal, const struct sigaction *handler, struct sigaction *previous_handler)
+{
+#if TARGET_OS_WATCH
+	return false; // mono doesn't handle signals on watchOS.
+#else
+	return mono_runtime_install_chained_signal_handler (signal, handler, previous_handler);
+#endif
+}
+
 void
 xamarin_printf (const char *format, ...)
 {

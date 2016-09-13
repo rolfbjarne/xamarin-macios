@@ -551,6 +551,11 @@
 			"const char *", "option"
 		),
 
+		new Export (true, "gboolean", "mono_runtime_install_chained_signal_handler",
+			"int", "signal",
+			"const struct sigaction *", "handler",
+			"struct sigaction *", "previous_handler"),
+
 		#endregion
 
 		#region utils/logger.h

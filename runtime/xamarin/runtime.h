@@ -152,6 +152,7 @@ void			xamarin_process_nsexception_using_mode (NSException *ns_exception, bool t
 void			xamarin_process_managed_exception (MonoObject *exc);
 void			xamarin_process_managed_exception_gchandle (guint32 gchandle);
 void			xamarin_throw_product_exception (int code, const char *message);
+bool			xamarin_install_chained_signal_handler (int signal, const struct sigaction *handler, struct sigaction *previous_handler);
 
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
 

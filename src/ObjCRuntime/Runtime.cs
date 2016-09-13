@@ -1335,6 +1335,20 @@ namespace XamCore.ObjCRuntime {
 
 		[DllImport (Constants.libSystemLibrary)]
 		unsafe extern internal static void memcpy (byte * target, byte * source, nint n);
+
+
+		public struct SigAction
+		{
+			public IntPtr Handler; // 
+			public uint Mask; // sa_mask => sigset_t => __darwin_sigset_t => uint32_t
+			public int Flags; // sa_flags => int
+		}
+
+		public static bool InstallSignalHandler (int signal, SigAction handler, out SigAction previous_handler)
+		{
+			previous_handler = default (SigAction);
+			return xamarin_install_chained_signal_handler (signal, ref handler, out previous_handler);
+		}
 	}
 		
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

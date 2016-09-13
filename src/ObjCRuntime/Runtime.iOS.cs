@@ -126,6 +126,10 @@ namespace XamCore.ObjCRuntime {
 			xamarin_start_wwan (uri.ToString ());
 		}
 #endif // !TVOS && !WATCH
+
+		[DllImport ("__Internal")]
+		static extern bool xamarin_install_chained_signal_handler (int signal, ref SigAction handler, out SigAction previous_handler);
+
 #endif // !COREBUILD
 	}
 

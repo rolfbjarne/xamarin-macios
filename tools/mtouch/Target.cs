@@ -381,7 +381,6 @@ namespace Xamarin.Bundler
 				// by default we keep the code to ensure we're executing on the UI thread (for UI code) for debug builds
 				// but this can be overridden to either (a) remove it from debug builds or (b) keep it in release builds
 				EnsureUIThread = App.ThreadCheck.HasValue ? App.ThreadCheck.Value : App.EnableDebug,
-				OldRegistrar = (App.Registrar == RegistrarMode.LegacyDynamic || App.Registrar == RegistrarMode.LegacyStatic),
 				DebugBuild = App.EnableDebug,
 				Arch = Is64Build ? 8 : 4,
 				IsDualBuild = App.IsDualBuild,
@@ -664,11 +663,6 @@ namespace Xamarin.Bundler
 		public void SelectStaticRegistrar ()
 		{
 			switch (App.Registrar) {
-			case RegistrarMode.LegacyStatic:
-			case RegistrarMode.Legacy:
-			case RegistrarMode.LegacyDynamic:
-				StaticRegistrar = new OldStaticRegistrar ();
-				break;
 			case RegistrarMode.Static:
 			case RegistrarMode.Dynamic:
 			case RegistrarMode.Default:
@@ -690,7 +684,7 @@ namespace Xamarin.Bundler
 
 			// The static registrar.
 			List<string> registration_methods = null;
-			if (App.Registrar == RegistrarMode.Static || App.Registrar == RegistrarMode.LegacyStatic) {
+			if (App.Registrar == RegistrarMode.Static) {
 				var registrar_m = Path.Combine (ArchDirectory, "registrar.m");
 				var registrar_h = Path.Combine (ArchDirectory, "registrar.h");
 				if (!Application.IsUptodate (Assemblies.Select (v => v.FullPath), new string[] { registrar_m, registrar_h })) {

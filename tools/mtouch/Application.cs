@@ -66,11 +66,8 @@ namespace Xamarin.Bundler {
 
 	public enum RegistrarMode {
 		Default,
-		Legacy,
 		Dynamic,
 		Static,
-		LegacyStatic,
-		LegacyDynamic,
 	}
 
 	public enum BuildTarget {
@@ -869,12 +866,6 @@ namespace Xamarin.Bundler {
 		
 		void SelectRegistrar ()
 		{
-			if (IsUnified) {
-				// The old registrars are not implemented when using Xamarin.iOS.dll.
-				if (Registrar == RegistrarMode.LegacyStatic || Registrar == RegistrarMode.LegacyDynamic || Registrar == RegistrarMode.Legacy)
-					throw new MonoTouchException (38, true, "The legacy registrars (--registrar:legacy|legacystatic|legacydynamic) are not supported with the Unified API.");
-			}
-
 			// If the default values are changed, remember to update CanWeSymlinkTheApplication
 			// and main.m (default value for xamarin_use_old_dynamic_registrar must match).
 			if (Driver.enable_generic_nsobject && Registrar != RegistrarMode.Default)
@@ -885,12 +876,6 @@ namespace Xamarin.Bundler {
 					Registrar = RegistrarMode.Static;
 				} else { /* if (app.IsSimulatorBuild) */
 					Registrar = RegistrarMode.Dynamic;
-				}
-			} else if (Registrar == RegistrarMode.Legacy) {
-				if (IsDeviceBuild) {
-					Registrar = RegistrarMode.LegacyStatic;
-				} else { /* if (app.IsSimulatorBuild) */
-					Registrar = RegistrarMode.LegacyDynamic;
 				}
 			}
 

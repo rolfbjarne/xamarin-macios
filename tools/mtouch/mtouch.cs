@@ -649,12 +649,7 @@ namespace Xamarin.Bundler
 
 					if (App.EnableLLVMOnlyBitCode)
 						sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_LLVMONLY);");
-
-					if (app.Registrar == RegistrarMode.LegacyDynamic || app.Registrar == RegistrarMode.LegacyStatic)
-						sw.WriteLine ("\txamarin_use_old_dynamic_registrar = TRUE;");
-					else
-						sw.WriteLine ("\txamarin_use_old_dynamic_registrar = FALSE;");
-
+					
 					if (registration_methods != null) {
 						for (int i = 0; i < registration_methods.Count; i++) {
 							sw.Write ("\t");
@@ -927,7 +922,7 @@ namespace Xamarin.Bundler
 			if (environment_variables.Count > 0)
 				return false;
 
-			if (app.Registrar == RegistrarMode.Static || app.Registrar == RegistrarMode.LegacyStatic || app.Registrar == RegistrarMode.LegacyDynamic)
+			if (app.Registrar == RegistrarMode.Static)
 				return false;
 
 			// The default exception marshalling differs between release and debug mode, but we
@@ -1276,17 +1271,6 @@ namespace Xamarin.Bundler
 						break;
 					case "default":
 						app.Registrar = RegistrarMode.Default;
-						break;
-					case "legacy":
-						app.Registrar = RegistrarMode.Legacy;
-						break;
-					case "legacystatic":
-					case "oldstatic":
-						app.Registrar = RegistrarMode.LegacyStatic;
-						break;
-					case "legacydynamic":
-					case "olddynamic":
-						app.Registrar = RegistrarMode.LegacyDynamic;
 						break;
 					default:
 						throw new MonoTouchException (20, true, "The valid options for '{0}' are '{1}'.", "--registrar", "static, dynamic or default");

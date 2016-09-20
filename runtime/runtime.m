@@ -47,9 +47,6 @@ bool xamarin_debug_mode = true;
 bool xamarin_debug_mode = false;
 #endif
 bool xamarin_disable_lldb_attach = false;
-// true if either OldDynamic or OldStatic (since the static registrar still needs
-// a dynamic registrar available too).
-bool xamarin_use_old_dynamic_registrar = false;
 #if DEBUG
 bool xamarin_init_mono_debug = true;
 #else
@@ -136,7 +133,7 @@ struct Trampolines {
 
 enum InitializationFlags : int {
 	/* unused									= 0x01,*/
-	InitializationFlagsUseOldDynamicRegistrar	= 0x02,
+	/* unused									= 0x02,*/
 	InitializationFlagsDynamicRegistrar			= 0x04,
 	/* unused									= 0x08,*/
 	InitializationFlagsIsSimulator				= 0x10,
@@ -1188,8 +1185,6 @@ xamarin_initialize ()
 
 	memset (&options, 0, sizeof (options));
 	options.size = sizeof (options);
-	if (xamarin_use_new_assemblies && xamarin_use_old_dynamic_registrar)
-		options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsUseOldDynamicRegistrar);
 #if MONOTOUCH && (defined(__i386__) || defined (__x86_64__))
 	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsSimulator);
 #endif

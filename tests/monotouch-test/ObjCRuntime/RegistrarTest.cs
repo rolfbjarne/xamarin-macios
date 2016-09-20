@@ -225,9 +225,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void TestInheritedStaticMethods ()
 		{
-			if ((CurrentRegistrar & Registrars.AllNew) == 0)
-				Assert.Ignore ("This test only passes with the new registrars.");
-
 			// bug #6170
 			int rv;
 
@@ -420,9 +417,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void TestNonVirtualProperty ()
 		{
-			if (CurrentRegistrar == Registrars.OldDynamic)
-				Assert.Ignore ("This test does not pass with the legacy dynamic registrar.");
-
 			using (var obj = new DerivedRegistrar1 ()) {
 				Assert.IsTrue (Messaging.bool_objc_msgSend (obj.Handle, Selector.GetHandle ("b1")));
 			}
@@ -431,9 +425,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void TestGeneric ()
 		{
-			if ((CurrentRegistrar & Registrars.AllNew) == 0)
-				Assert.Ignore ("Generic NSObjects are only supported with the new registrars.");
-
 			var g1 = new GenericTestClass<string> ();
 			var g2 = new GenericTestClass<object> ();
 			var g3 = new DerivedGenericTestClass<string> ();
@@ -475,9 +466,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void TestNestedGenericType ()
 		{
-			if ((CurrentRegistrar & Registrars.AllNew) == 0)
-				Assert.Ignore ("Generic NSObjects are only supported with the new registrars.");
-
 			var foo = new NestedParent<NSObject>.Nested ();
 			var obj = new NSObject ();
 			Messaging.void_objc_msgSend_IntPtr (foo.Handle, Selector.GetHandle ("foo:"), obj.Handle);
@@ -488,9 +476,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void TestInstanceMethodOnOpenGenericType ()
 		{
-			if ((CurrentRegistrar & Registrars.AllNew) == 0)
-				Assert.Ignore ("Generic NSObjects are only supported with the new registrars.");
-
 			{
 				var foo = new Open<NSSet, string> ();
 
@@ -1176,9 +1161,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void TestRegisteredName ()
 		{
-			if ((CurrentRegistrar & Registrars.AllNew) == 0)
-				Assert.Ignore ("This test only works with the new registrars (because of the generic types used here)");
-
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_ConstrainedGenericType_1", new Class (typeof(ConstrainedGenericType<>)).Name);
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_ConstrainedGenericType_1", new Class (typeof(ConstrainedGenericType<NSSet>)).Name);
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_NestedParent_1_Nested", new Class (typeof(NestedParent<NSObject>.Nested)).Name);

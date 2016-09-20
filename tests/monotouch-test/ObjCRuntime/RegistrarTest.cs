@@ -434,7 +434,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			if ((CurrentRegistrar & Registrars.AllNew) == 0)
 				Assert.Ignore ("Generic NSObjects are only supported with the new registrars.");
 
-#if !OLDSTATICREGISTRAR
 			var g1 = new GenericTestClass<string> ();
 			var g2 = new GenericTestClass<object> ();
 			var g3 = new DerivedGenericTestClass<string> ();
@@ -471,7 +470,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			Messaging.void_objc_msgSend (handle, Selector.GetHandle ("release"));
 
 			Assert.DoesNotThrow (() => new Closed (), "Created managed closed instance");
-#endif
 		}
 
 		[Test]
@@ -480,13 +478,11 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			if ((CurrentRegistrar & Registrars.AllNew) == 0)
 				Assert.Ignore ("Generic NSObjects are only supported with the new registrars.");
 
-#if !OLDSTATICREGISTRAR
 			var foo = new NestedParent<NSObject>.Nested ();
 			var obj = new NSObject ();
 			Messaging.void_objc_msgSend_IntPtr (foo.Handle, Selector.GetHandle ("foo:"), obj.Handle);
 			obj.Dispose ();
 			foo.Dispose ();
-#endif
 		}
 
 		[Test]
@@ -495,7 +491,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			if ((CurrentRegistrar & Registrars.AllNew) == 0)
 				Assert.Ignore ("Generic NSObjects are only supported with the new registrars.");
 
-#if !OLDSTATICREGISTRAR
 			{
 				var foo = new Open<NSSet, string> ();
 
@@ -595,14 +590,12 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				view.Dispose ();
 				foo.Dispose ();
 			}
-#endif
 		}
 
 #if !__WATCHOS__
 		[Test]
 		public void TestGenericUIView ()
 		{
-#if !OLDSTATICREGISTRAR
 			using (var iview = new NullableIntView (new RectangleF (0, 0, 100, 100))) {
 				using (var strview = new StringView (new RectangleF (0, 0, 100, 100))) {
 					Messaging.void_objc_msgSend_RectangleF (iview.Handle, Selector.GetHandle ("drawRect:"), RectangleF.Empty);
@@ -613,7 +606,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					Assert.AreEqual ("StringView", strview.TypeName, "string typename");
 				}
 			}
-#endif
 		}
 #endif // !__WATCHOS__
 
@@ -967,12 +959,10 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				pnt2.X = pnt.X;
 				pnt2.Y = pnt.Y;
 			}
-#if !OLDSTATICREGISTRAR
 #if !__WATCHOS__
 			[Export ("arrayOfINativeObject")]
 			public IUIKeyInput[] NativeObjects { get { return null; } }
 #endif // !__WATCHOS__
-#endif
 		}
 
 #if !__TVOS__ && !__WATCHOS__
@@ -1074,7 +1064,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			}
 		}
 
-#if !OLDSTATICREGISTRAR
 		[Register ("Open_1")]
 		class Open<T> : NSObject {}
 		class Closed : Open<NSSet>
@@ -1183,7 +1172,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				return base.GetTypeFullName ();
 			}
 		}
-#endif // !OLDSTATICREGISTRAR
 
 		[Test]
 		public void TestRegisteredName ()
@@ -1191,14 +1179,12 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			if ((CurrentRegistrar & Registrars.AllNew) == 0)
 				Assert.Ignore ("This test only works with the new registrars (because of the generic types used here)");
 
-#if !OLDSTATICREGISTRAR
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_ConstrainedGenericType_1", new Class (typeof(ConstrainedGenericType<>)).Name);
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_ConstrainedGenericType_1", new Class (typeof(ConstrainedGenericType<NSSet>)).Name);
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_NestedParent_1_Nested", new Class (typeof(NestedParent<NSObject>.Nested)).Name);
 			Assert.AreEqual ("UnderlyingEnumValues", new Class (typeof(UnderlyingEnumValues)).Name);
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_Nested1_Dummy", new Class (typeof(Nested1.Dummy)).Name);
 			Assert.AreEqual ("MonoTouchFixtures_ObjCRuntime_RegistrarTest_C", new Class (typeof (C)).Name);
-#endif
 		}
 
 		void ThrowsICEIfDebug (TestDelegate code, string message, bool execute_release_mode = true)
@@ -1217,7 +1203,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		{
 			IntPtr value;
 
-#if !OLDSTATICREGISTRAR
 			using (var obj = new ConstrainedGenericType<NSSet> ()) {
 				using (var view = new NSSet ()) {
 					using (var nsobj = new NSObject ()) {
@@ -1290,7 +1275,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					}
 				}
 			}
-#endif // !OLDSTATICREGISTRAR
 		}
 
 #if !__WATCHOS__
@@ -1406,7 +1390,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 #endif // !__WATCHOS__
 #endif // !__TVOS__
 
-#if !OLDSTATICREGISTRAR
 		class ConstrainedGenericType<T> : NSObject where T: NSObject
 		{
 			[Export ("m1:")]
@@ -1558,8 +1541,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Adopts ("NSCoding")]
 		public class ConformsToProtocolTestClass<T> : NSObject where T: NSObject {
 		}
-
-#endif // !OLDSTATICREGISTRAR
 
 		[Register ("UnderlyingEnumValues")]
 		class UnderlyingEnumValues : NSObject 

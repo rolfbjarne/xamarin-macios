@@ -384,7 +384,6 @@ namespace Xamarin.Bundler
 				DebugBuild = App.EnableDebug,
 				Arch = Is64Build ? 8 : 4,
 				IsDualBuild = App.IsDualBuild,
-				Unified = App.IsUnified,
 				DumpDependencies = App.LinkerDumpDependencies,
 				RuntimeOptions = App.RuntimeOptions,
 				MarshalNativeExceptionsState = !App.RequiresPInvokeWrappers ? null : new PInvokeWrapperGenerator ()
@@ -699,7 +698,7 @@ namespace Xamarin.Bundler
 				RegistrarTask.Create (compile_tasks, Abis, this, registrar_m);
 			}
 
-			if (App.Registrar == RegistrarMode.Dynamic && App.IsSimulatorBuild && App.LinkMode == LinkMode.None && App.IsUnified) {
+			if (App.Registrar == RegistrarMode.Dynamic && App.IsSimulatorBuild && App.LinkMode == LinkMode.None) {
 				if (registration_methods == null)
 					registration_methods = new List<string> ();
 
@@ -965,12 +964,10 @@ namespace Xamarin.Bundler
 			try {
 				var launcher = new StringBuilder ();
 				launcher.Append (Path.Combine (Driver.MonoTouchDirectory, "bin", "simlauncher"));
-				if (App.IsUnified) {
-					if (Is32Build)
-						launcher.Append ("32");
-					else if (Is64Build)
-						launcher.Append ("64");
-				}
+				if (Is32Build)
+					launcher.Append ("32");
+				else if (Is64Build)
+					launcher.Append ("64");
 				launcher.Append ("-sgen");
 				File.Copy (launcher.ToString (), Executable);
 			} catch (MonoTouchException) {

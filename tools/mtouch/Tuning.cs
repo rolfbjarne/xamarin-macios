@@ -30,7 +30,6 @@ namespace MonoTouch.Tuner {
 		public bool DebugBuild { get; set; }
 		public int Arch { get; set; }
 		public bool IsDualBuild { get; set; }
-		public bool Unified { get; set; }
 		public bool DumpDependencies { get; set; }
 		internal PInvokeWrapperGenerator MarshalNativeExceptionsState { get; set; }
 		internal RuntimeOptions RuntimeOptions { get; set; }

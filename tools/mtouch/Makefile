@@ -139,7 +139,7 @@ $(MONO_CECIL_DLL): $(CECIL_PATH)/Mono.Cecil.csproj
 $(MONO_CECIL_MDB_DLL): $(MONO_CECIL_DLL) $(CECIL_PATH)/symbols/mdb/Mono.Cecil.Mdb.csproj
 	$(Q_XBUILD) cd $(CECIL_PATH) && $(SYSTEM_XBUILD) /p:Configuration=$(CECIL_CONFIG) symbols/mdb/Mono.Cecil.Mdb.csproj $(XBUILD_VERBOSITY)
 
-SIMLAUNCHERS = simlauncher-sgen simlauncher32-sgen simlauncher64-sgen
+SIMLAUNCHERS = simlauncher32-sgen simlauncher64-sgen
 
 monotouch-fixes.i386.dylib: monotouch-fixes.c Makefile
 	$(SIMULATOR_CCOMPILE) -DDEBUG -Wl,-headerpad_max_install_names -g -dynamiclib -gdwarf-2 -I$(TOP)/runtime/.libs -L$(TOP)/runtime/.libs $(SIMULATOR86_CFLAGS) monotouch-fixes.c -o $@ -Wall
@@ -290,7 +290,6 @@ simlauncher$(5)$(1): simlauncher.m $(TOP)/runtime/.libs/ios/libxamarin.a $(BUILD
 
 endef
 
-$(eval $(call SimlauncherTemplate,-sgen,$(BUILD_DESTDIR)/simulator86/lib/libmono-profiler-log.a -u _mono_profiler_startup,sgen,86,))
 $(eval $(call SimlauncherTemplate,-sgen,$(BUILD_DESTDIR)/simulator86/lib/libmono-profiler-log.a -u _mono_profiler_startup -DXAMCORE_2_0 Xamarin.iOS.registrar.ios.a,sgen,86,32))
 $(eval $(call SimlauncherTemplate,-sgen,$(BUILD_DESTDIR)/simulator64/lib/libmono-profiler-log.a -u _mono_profiler_startup -DXAMCORE_2_0 Xamarin.iOS.registrar.ios.a,sgen,64,64))
 

@@ -34,7 +34,9 @@ bool xamarin_detect_unified_build = true;
 // no automatic detection for XI, mtouch should do the right thing in the generated main.
 bool xamarin_detect_unified_build = false;
 #endif
+#if MONOMAC
 bool xamarin_use_new_assemblies = false;
+#endif
 #if MONOTOUCH && DEBUG && (defined (__i386__) || defined (__x86_64__))
 bool xamarin_gc_pump = true;
 #else

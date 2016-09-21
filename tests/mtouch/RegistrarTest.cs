@@ -779,7 +779,7 @@ class H : G {
 
 		void Verify (R registrars, string code, bool success, params string [] expected_messages)
 		{
-			VerifyWithXcode (registrars,  MTouch.Profile.Classic, code, success, Configuration.xcode_root, Configuration.sdk_version, expected_messages);
+			VerifyWithXcode (registrars,  MTouch.Profile.Unified, code, success, Configuration.xcode_root, Configuration.sdk_version, expected_messages);
 		}
 
 		void Verify (R registrars, MTouch.Profile profile, string code, bool success, params string [] expected_messages)
@@ -799,7 +799,7 @@ class H : G {
 
 		void VerifyWithXcode (R registrars, string code, bool success, string xcode, string sdk_version, params string [] expected_messages)
 		{
-			VerifyWithXcode (registrars, MTouch.Profile.Classic, code, success, xcode, sdk_version, expected_messages);
+			VerifyWithXcode (registrars, MTouch.Profile.Unified, code, success, xcode, sdk_version, expected_messages);
 		}
 
 		void VerifyWithXcode (R registrars, MTouch.Profile profile, string code, bool success, string xcode, string sdk_version, params string [] expected_messages)
@@ -823,17 +823,10 @@ class H : G {
 using System;
 using System.Collections.Generic;";
 
-					if (profile != MTouch.Profile.Classic) {
-						header += @"
+					header += @"
 using Foundation;
 using UIKit;
 using ObjCRuntime;";
-					} else {
-						header += @"
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-using MonoTouch.ObjCRuntime;";
-					}
 
 					header += @"
 class Test {
@@ -1333,7 +1326,7 @@ class CTP4 : CTP3 {
 				if (sdk_version == null)
 					sdk_version = MTouch.GetSdkVersion (profile);
 
-				return ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("{0} {10} {1} --sdk {2} -targetver {2} --abi={9} {3} --sdkroot {4} --cache {5} --nolink {7} --debug -r:{6} --target-framework:{8}", exe, app, sdk_version, extra_args, xcode, cache, MTouch.GetBaseLibrary (profile), profile != MTouch.Profile.Classic ? string.Empty : "--nosign", MTouch.GetTargetFramework (profile), MTouch.GetArchitecture (profile, target), target == MTouch.Target.Sim ? "-sim" : "-dev"), hide_output: false);
+				return ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("{0} {10} {1} --sdk {2} -targetver {2} --abi={9} {3} --sdkroot {4} --cache {5} --nolink {7} --debug -r:{6} --target-framework:{8}", exe, app, sdk_version, extra_args, xcode, cache, MTouch.GetBaseLibrary (profile), string.Empty, MTouch.GetTargetFramework (profile), MTouch.GetArchitecture (profile, target), target == MTouch.Target.Sim ? "-sim" : "-dev"), hide_output: false);
 			} finally {
 				Directory.Delete (path, true);
 			}
@@ -1341,7 +1334,7 @@ class CTP4 : CTP3 {
 
 		// Compile the filename with mcs
 		// Does not clean up anything.
-		static void Compile (string filename, MTouch.Profile profile = MTouch.Profile.Classic)
+		static void Compile (string filename, MTouch.Profile profile = MTouch.Profile.Unified)
 		{			
 			StringBuilder output = new StringBuilder ();
 			using (var p = new Process ()) {

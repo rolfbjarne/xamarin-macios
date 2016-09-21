@@ -113,7 +113,7 @@ namespace MTouchTests
 		public enum Config { Debug, Release }
 		public enum PackageMdb { Default, WithMdb, WoutMdb }
 		public enum MSym { Default, WithMSym, WoutMSym }
-		public enum Profile { Classic, Unified, TVOS, WatchOS }
+		public enum Profile { Unified, TVOS, WatchOS }
 
 		[Test]
 		// Simulator
@@ -194,7 +194,7 @@ namespace MTouchTests
 			try {
 				var exe = CompileTestAppExecutable (testDir);
 
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --executable=CustomExecutable -v -v -v --nosign --nofastsim --nolink --sim {0} -sdk " + Configuration.sdk_version + " {1} -debug --fastdev", app, exe));
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --executable=CustomExecutable -v -v -v --nofastsim --nolink --sim {0} -sdk " + Configuration.sdk_version + " {1} -debug --fastdev", app, exe));
 				Assert.That (File.Exists (Path.Combine (app, "CustomExecutable")), "1");
 				Assert.That (!File.Exists (Path.Combine (app, "testApp")), "2");
 			} finally {
@@ -282,16 +282,10 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic, Profile.Unified)]
-		[TestCase (Profile.Classic, Profile.TVOS)]
-		[TestCase (Profile.Classic, Profile.WatchOS)]
-		[TestCase (Profile.Unified, Profile.Classic)]
 		[TestCase (Profile.Unified, Profile.TVOS)]
 		[TestCase (Profile.Unified, Profile.WatchOS)]
-		[TestCase (Profile.TVOS, Profile.Classic)]
 		[TestCase (Profile.TVOS, Profile.Unified)]
 		[TestCase (Profile.TVOS, Profile.WatchOS)]
-		[TestCase (Profile.WatchOS, Profile.Classic)]
 		[TestCase (Profile.WatchOS, Profile.Unified)]
 		[TestCase (Profile.WatchOS, Profile.TVOS)]
 		public void MT0041 (Profile profile, Profile other)
@@ -384,16 +378,10 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic, Profile.Unified)]
-		[TestCase (Profile.Classic, Profile.TVOS)]
-		[TestCase (Profile.Classic, Profile.WatchOS)]
-		[TestCase (Profile.Unified, Profile.Classic)]
 		[TestCase (Profile.Unified, Profile.TVOS)]
 		[TestCase (Profile.Unified, Profile.WatchOS)]
-		[TestCase (Profile.TVOS, Profile.Classic)]
 		[TestCase (Profile.TVOS, Profile.Unified)]
 		[TestCase (Profile.TVOS, Profile.WatchOS)]
-		[TestCase (Profile.WatchOS, Profile.Classic)]
 		[TestCase (Profile.WatchOS, Profile.Unified)]
 		[TestCase (Profile.WatchOS, Profile.TVOS)]
 		public void MT0034 (Profile exe_profile, Profile dll_profile)
@@ -408,14 +396,14 @@ namespace MTouchTests
 				var dllCode = @"public class TestLib {
 	public TestLib ()
 	{
-		System.Console.WriteLine (typeof (%PROFILE_NAMESPACE%Foundation.NSObject).ToString ());
+		System.Console.WriteLine (typeof (Foundation.NSObject).ToString ());
 	}
 }";
 
 				var exeCode = @"public class TestApp { 
 	static void Main () 
 	{
-		System.Console.WriteLine (typeof (%PROFILE_NAMESPACE%Foundation.NSObject).ToString ());
+		System.Console.WriteLine (typeof (Foundation.NSObject).ToString ());
 		System.Console.WriteLine (new TestLib ());
 	}
 }";
@@ -429,28 +417,6 @@ namespace MTouchTests
 				Assert.AreEqual (1, mtouch.Execute (MTouchAction.BuildSim), "build");
 				var dllBase = Path.GetFileName (GetBaseLibrary (dll_profile));
 				mtouch.AssertError (34, string.Format ("Cannot reference '{0}' in a {1} project - it is implicitly referenced by 'testLib, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null'.", dllBase, GetPlatformName (exe_profile)));
-			}
-		}
-
-		[Test]
-		public void MT0037 ()
-		{
-			var testDir = GetTempDirectory ();
-			var app = Path.Combine (testDir, "testApp.app");
-			Directory.CreateDirectory (app);
-
-			try {
-				var exe = CompileTestAppExecutable (testDir);
-
-				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --dev {0} -sdk " + Configuration.sdk_version + " --targetver 3.1 --abi=arm64 {1} -debug -r:{2}", app, exe, Configuration.MonoTouchDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0037: monotouch.dll is not 64-bit compatible. Either reference Xamarin.iOS.dll, or do not build for a 64-bit architecture [(]ARM64 or x86_64[)].\n");
-
-				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --dev {0} -sdk " + Configuration.sdk_version + " --targetver 3.1 --abi=x86_64 {1} -debug -r:{2}", app, exe, Configuration.MonoTouchDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0037: monotouch.dll is not 64-bit compatible. Either reference Xamarin.iOS.dll, or do not build for a 64-bit architecture [(]ARM64 or x86_64[)].\n");
-			} finally {
-				Directory.Delete (testDir, true);
 			}
 		}
 
@@ -579,7 +545,7 @@ namespace MTouchTests
 				var exe = CompileTestAppExecutable (testDir);
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --nosign --sim {0} -sdk {4} --targetver {4} --framework /foo/bar/zap.framework -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
+					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --sim {0} -sdk {4} --targetver {4} --framework /foo/bar/zap.framework -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
 					"Xamarin.iOS .* using framework:.*\nerror MT0064: Xamarin.iOS only supports embedded frameworks with Unified projects.\n");
 			} finally {
 				Directory.Delete (testDir, true);
@@ -597,7 +563,7 @@ namespace MTouchTests
 				var exe = CompileTestAppExecutable (testDir);
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --nosign --dev {0} -sdk {4} -r:{2} {1} --abi armv7k", app, exe, Configuration.MonoTouchDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
+					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --dev {0} -sdk {4} -r:{2} {1} --abi armv7k", app, exe, Configuration.MonoTouchDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
 					"Xamarin.iOS .* using framework:.*\n" +
 					"error MT0075: Invalid architecture 'ARMv7k' for iOS projects. Valid architectures are: ARMv7, ARMv7.Thumb, ARMv7.LLVM, ARMv7.LLVM.Thumb, ARMv7s, ARMv7s.Thumb, ARMv7s.LLVM, ARMv7s.LLVM.Thumb");
 			} finally {
@@ -619,13 +585,13 @@ namespace MTouchTests
 				var exe = CompileTestAppExecutable (testDir, profile: MTouch.Profile.WatchOS);
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --nosign --dev {0} -sdk {4} -r:{2} {1} --target-framework Xamarin.WatchOS,v1.0", app, exe, Configuration.XamarinWatchOSDll, Configuration.xcode_root, Configuration.watchos_sdk_version), hide_output: false),
+					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --dev {0} -sdk {4} -r:{2} {1} --target-framework Xamarin.WatchOS,v1.0", app, exe, Configuration.XamarinWatchOSDll, Configuration.xcode_root, Configuration.watchos_sdk_version), hide_output: false),
 					"error MT0076: No architecture specified .using the --abi argument.. An architecture is required for Xamarin.WatchOS projects.");
 				
 				exe = CompileTestAppExecutable (testDir, profile: MTouch.Profile.TVOS);
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --nosign --dev {0} -sdk {4} -r:{2} {1} --target-framework Xamarin.TVOS,v1.0", app, exe, Configuration.XamarinTVOSDll, Configuration.xcode_root, Configuration.tvos_sdk_version), hide_output: false),
+					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --dev {0} -sdk {4} -r:{2} {1} --target-framework Xamarin.TVOS,v1.0", app, exe, Configuration.XamarinTVOSDll, Configuration.xcode_root, Configuration.tvos_sdk_version), hide_output: false),
 					"error MT0076: No architecture specified .using the --abi argument.. An architecture is required for Xamarin.TVOS projects.");
 			} finally {
 				Directory.Delete (testDir, true);
@@ -646,7 +612,7 @@ namespace MTouchTests
 				var exe = CompileTestAppExecutable (testDir, profile: MTouch.Profile.WatchOS);
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --nosign --dev {0} -sdk {4} -r:{2} {1} --target-framework Xamarin.WatchOS,v1.0 --abi armv7k", app, exe, Configuration.XamarinWatchOSDll, Configuration.xcode_root, Configuration.watchos_sdk_version), hide_output: false),
+					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --dev {0} -sdk {4} -r:{2} {1} --target-framework Xamarin.WatchOS,v1.0 --abi armv7k", app, exe, Configuration.XamarinWatchOSDll, Configuration.xcode_root, Configuration.watchos_sdk_version), hide_output: false),
 					"error MT0077: WatchOS projects must be extensions.");
 			} finally {
 				Directory.Delete (testDir, true);
@@ -657,7 +623,6 @@ namespace MTouchTests
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] MT0077 interferring.
 		[TestCase (Profile.Unified)]
-		[TestCase (Profile.Classic)]
 		public void MT0085 (Profile profile)
 		{
 			using (var mtouch = new MTouchTool ()) {
@@ -685,7 +650,6 @@ namespace MTouchTests
 		[Test]
 		[TestCase (Profile.TVOS, "tvOS")]
 		[TestCase (Profile.Unified, "iOS")]
-		[TestCase (Profile.Classic, "iOS")]
 		public void MT0091 (Profile profile, string name)
 		{
 			// Any old Xcode would do.
@@ -737,8 +701,8 @@ namespace MTouchTests
 </dict>
 </plist>
 ");
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --sim {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.sdk_version), hide_output: false);
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --dev {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.sdk_version), hide_output: false);
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.sdk_version), hide_output: false);
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.sdk_version), hide_output: false);
 			} finally {
 				Directory.Delete (testDir, true);
 			}
@@ -754,11 +718,7 @@ namespace MTouchTests
 		{
 			string fn;
 
-			if (profile == Profile.Classic) {
-				fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", GetConfiguration (profile), "bindings-test.dll");
-			} else {
-				fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", "Any CPU", GetConfiguration (profile), "bindings-test.dll");
-			}
+			fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", GetConfiguration (profile), "bindings-test.dll");
 
 			if (!File.Exists (fn)) {
 				var csproj = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bindings-test" + GetProjectSuffix (profile) + ".csproj");
@@ -771,8 +731,6 @@ namespace MTouchTests
 		public static string GetBaseLibrary (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
-				return Configuration.MonoTouchDll;
 			case Profile.Unified:
 				return Configuration.XamarinIOSDll;
 			case Profile.TVOS:
@@ -793,8 +751,6 @@ namespace MTouchTests
 		static string GetConfiguration (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
-				return "Debug";
 			case Profile.Unified:
 				return "Debug-unified";
 			case Profile.TVOS:
@@ -809,8 +765,6 @@ namespace MTouchTests
 		public static string GetTargetFramework (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
-				return "MonoTouch,v1.0";
 			case Profile.Unified:
 				return "Xamarin.iOS,v1.0";
 			case Profile.TVOS:
@@ -825,7 +779,6 @@ namespace MTouchTests
 		public static string GetDeviceArchitecture (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
 			case Profile.Unified:
 				return "armv7";
 			case Profile.TVOS:
@@ -840,7 +793,6 @@ namespace MTouchTests
 		public static string GetSimulatorArchitecture (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
 			case Profile.Unified:
 			case Profile.WatchOS:
 				return "i386";
@@ -859,8 +811,6 @@ namespace MTouchTests
 		static string GetPlatformName (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
-				return "MonoTouch";
 			case Profile.Unified:
 				return "Xamarin.iOS";
 			case Profile.TVOS:
@@ -875,8 +825,6 @@ namespace MTouchTests
 		static string GetProjectSuffix (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
-				return string.Empty;
 			case Profile.Unified:
 				return string.Empty;
 			case Profile.TVOS:
@@ -891,7 +839,6 @@ namespace MTouchTests
 		public static string GetSdkVersion (Profile profile)
 		{
 			switch (profile) {
-			case Profile.Classic:
 			case Profile.Unified:
 				return Configuration.sdk_version;
 			case Profile.TVOS:
@@ -916,7 +863,7 @@ namespace MTouchTests
 				var exe = CompileTestAppExecutable (testDir);
 				var bin = Path.Combine (app, Path.GetFileNameWithoutExtension (exe));
 
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + "  -v -v -v --nosign --sim {0} -sdk " + Configuration.sdk_version + " {1} -debug", app, exe));
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + "  -v -v -v --sim {0} -sdk " + Configuration.sdk_version + " {1} -debug", app, exe));
 
 				var load_commands = ExecutionHelper.Execute ("otool", "-l \"" + bin + "\"");
 				Asserts.DoesNotContain ("SafariServices", load_commands, "SafariServices");
@@ -929,7 +876,6 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -959,7 +905,6 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -989,7 +934,6 @@ namespace MTouchTests
 		}
 		
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1018,7 +962,6 @@ namespace MTouchTests
 		}
 		
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1048,7 +991,6 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1076,7 +1018,6 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1095,7 +1036,6 @@ namespace MTouchTests
 		}
 		
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1117,7 +1057,6 @@ namespace MTouchTests
 		}
 		
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1142,7 +1081,6 @@ namespace MTouchTests
 		}
 
 		[Test]
-		[TestCase (Profile.Classic)]
 		[TestCase (Profile.Unified)]
 		[TestCase (Profile.TVOS)]
 		//[TestCase (Profile.WatchOS)] // needs testing improvement
@@ -1187,41 +1125,6 @@ namespace MTouchTests
 			}
 		}
 
-		[Test]
-		[TestCase (Target.Dev, "armv7")]
-		[TestCase (Target.Dev, "armv7s")]
-		[TestCase (Target.Dev, "armv7,armv7s")]
-		[TestCase (Target.Sim, "i386")]
-		public void Architectures_Classic (Target target, string abi)
-		{
-			using (var mtouch = new MTouchTool ()) {
-				mtouch.CreateTemporaryApp ();
-
-				mtouch.Abi = abi;
-
-				var bin = Path.Combine (mtouch.AppPath, Path.GetFileNameWithoutExtension (mtouch.Executable));
-
-				Assert.AreEqual (0, mtouch.Execute (target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim));
-				VerifyArchitectures (bin, abi, abi.Split (','));
-			}
-		}
-
-		[Test]
-		public void Architectures_Classic_Invalid ()
-		{
-			using (var mtouch = new MTouchTool ()) {
-				mtouch.CreateTemporaryApp ();
-
-				mtouch.Abi = "armv6";
-				Assert.AreEqual (1, mtouch.Execute (MTouchTests.MTouchAction.BuildDev));
-				mtouch.AssertError ("MT", 15, "Invalid ABI: armv6. Supported ABIs are: i386, x86_64, armv7, armv7+llvm, armv7+llvm+thumb2, armv7s, armv7s+llvm, armv7s+llvm+thumb2, armv7k, armv7k+llvm, arm64 and arm64+llvm.");
-
-				mtouch.Abi = "armv7";
-				Assert.AreEqual (1, mtouch.Execute (MTouchAction.BuildSim));
-				mtouch.AssertError ("MT", 75, "Invalid architecture 'ARMv7' for iOS projects. Valid architectures are: i386");
-			}
-		}
-			
 		[Test]
 		[TestCase (Target.Dev, "armv7")]
 		[TestCase (Target.Dev, "armv7s")]
@@ -1323,25 +1226,6 @@ namespace MTouchTests
 		{
 			var testDir = GetTempDirectory ();
 			var app = Path.Combine (testDir, "testApp.app");
-			Directory.CreateDirectory (app);
-
-			try {
-				var exe = CompileTestAppExecutable (testDir);
-				var bin = Path.Combine (app, Path.GetFileNameWithoutExtension (exe));
-				var common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --sim {0} -sdk " + Configuration.sdk_version + " --abi=i386 {1} -debug ", app, exe);
-				var compat_args = common_args + " -r:" + Configuration.MonoTouchDll;
-
-				ExecutionHelper.Execute (TestTarget.ToolPath, compat_args);
-				VerifyGC (bin, false, "compat/default");
-
-				ExecutionHelper.Execute (TestTarget.ToolPath, compat_args + " --sgen");
-				VerifyGC (bin, false, "compat/sgen");
-
-				ExecutionHelper.Execute (TestTarget.ToolPath, compat_args + " --boehm");
-				VerifyGC (bin, false, "compat/boehm");
-			} finally {
-				Directory.Delete (testDir, true);
-			}
 
 			Directory.CreateDirectory (app);
 			try {
@@ -1448,7 +1332,7 @@ namespace MTouchTests
 			try {
 				var exe = CompileTestAppExecutable (testDir);
 				var bin = Path.Combine (app, Path.GetFileNameWithoutExtension (exe));
-				var common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --dev {0} -sdk {2} {1} -debug", app, exe, Configuration.sdk_version);
+				var common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk {2} {1} -debug", app, exe, Configuration.sdk_version);
 
 				// fully linked + llvm (+thumb) + default registrar (currently llvm fails to build with clang, so we should transparently switch to gcc in this case)
 				ExecuteWithStats (bin, common_args + " --registrar:static --abi:armv7+llvm");
@@ -1473,7 +1357,7 @@ namespace MTouchTests
 				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:olddynamic");
 
 				// non-linked device build
-				common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --sim {0} -sdk {2} {1} -debug", app, exe, Configuration.sdk_version);
+				common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk {2} {1} -debug", app, exe, Configuration.sdk_version);
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:static");
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:oldstatic");
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:dynamic");
@@ -1527,7 +1411,7 @@ public class TestApp {
 ",
 					"-r:" + bindingLib);
 				var bin = Path.Combine (app, Path.GetFileNameWithoutExtension (exe));
-				var args = string.Format ("-sdkroot {4} --nosign -sdk {2} {1} -debug --cache {0} -v -v -v -v -r:{3} -dev {5} " + linker_flag, 
+				var args = string.Format ("-sdkroot {4} -sdk {2} {1} -debug --cache {0} -v -v -v -v -r:{3} -dev {5} " + linker_flag, 
 					cache, exe, Configuration.sdk_version, bindingLib, Configuration.xcode_root, app);
 				
 				// each variation is tested twice so that we don't break when everything is found in the cache the second time around.
@@ -1587,7 +1471,7 @@ public class TestApp {
 ",
 					"-r:" + bindingLib);
 				var bin = Path.Combine (app, Path.GetFileNameWithoutExtension (exe));
-				var common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign -sdk {2} {1} -debug --cache {0} -v -v -v -v --registrar:static -r:{3}", 
+				var common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " -sdk {2} {1} -debug --cache {0} -v -v -v -v --registrar:static -r:{3}", 
 					cache, exe, Configuration.sdk_version, bindingLib);
 
 				var variations = new string [] {
@@ -1632,10 +1516,10 @@ public class TestApp {
 
 				var exe = CompileTestAppExecutable (testDir);
 
-				output = ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {2} --nosign --dev {0} -sdk {3} --force --abi=armv7,armv7s {1} -debug", app, exe, Configuration.xcode_root, Configuration.sdk_version));
+				output = ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {2} --dev {0} -sdk {3} --force --abi=armv7,armv7s {1} -debug", app, exe, Configuration.xcode_root, Configuration.sdk_version));
 				Asserts.DoesNotContain ("ld: warning:", output, "#a");
 
-				output = ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {2} --nosign --dev {0} -sdk {3} --force --abi=armv7        {1} -debug --gcc_flags={4}", app, exe, Configuration.xcode_root, Configuration.sdk_version, Quote (Path.Combine (Configuration.SourceRoot, "tests/test-libraries/.libs/ios/libtest.armv7s.a"))));
+				output = ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {2} --dev {0} -sdk {3} --force --abi=armv7        {1} -debug --gcc_flags={4}", app, exe, Configuration.xcode_root, Configuration.sdk_version, Quote (Path.Combine (Configuration.SourceRoot, "tests/test-libraries/.libs/ios/libtest.armv7s.a"))));
 				Asserts.Contains ("libtest.armv7s.a, file was built for archive which is not the architecture being linked (armv7)", output, "#b");
 			} finally {
 				Directory.Delete (testDir, true);
@@ -1654,7 +1538,7 @@ public class TestApp {
 			try {
 				var exe = CompileTestAppExecutable (testDir);
 
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --dev {0} -sdk " + Configuration.sdk_version + " --targetver 7.0 --abi=armv7s {1} -debug --gcc_flags -all_load", app, exe));
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk " + Configuration.sdk_version + " --targetver 7.0 --abi=armv7s {1} -debug --gcc_flags -all_load", app, exe));
 
 			} finally {
 				Directory.Delete (testDir, true);
@@ -1676,7 +1560,7 @@ public class TestApp {
 					var exe = CompileTestAppExecutable (testDir);
 					var cache = Path.Combine (testDir, "mtouch-cache");
 
-					var args = string.Format ("{3} -sdkroot " + Configuration.xcode_root + " --nosign --dev {0} -sdk " + Configuration.sdk_version + " --targetver 7.0 --abi=armv7 {1} --cache={2}", app, exe, cache, linker);
+					var args = string.Format ("{3} -sdkroot " + Configuration.xcode_root + " --dev {0} -sdk " + Configuration.sdk_version + " --targetver 7.0 --abi=armv7 {1} --cache={2}", app, exe, cache, linker);
 					ExecutionHelper.Execute (TestTarget.ToolPath, args);
 					File.Delete (Path.Combine (app, "testApp")); // This will force the final native link to succeed, while everything before has been cached.
 					ExecutionHelper.Execute (TestTarget.ToolPath, args);
@@ -1700,7 +1584,7 @@ public class TestApp {
 				var exe = CompileTestAppExecutable (testDir);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --debug --nosign --nolink --sim {0} -sdk " + Configuration.sdk_version + " --abi=i386 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.MonoTouchDll);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --debug --nolink --sim {0} -sdk " + Configuration.sdk_version + " --abi=i386 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.MonoTouchDll);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\nerror MT1015: Failed to create the executable '.*/testApp.app/testApp': .*/testApp.app/testApp is a directory\n");
 			} finally {
@@ -1722,7 +1606,7 @@ public class TestApp {
 				var exe = CompileTestAppExecutable (testDir);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3} ", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3} ", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\nerror MT1016: Failed to create the NOTICE file because a directory already exists with the same name.\n");
 			} finally {
@@ -1747,7 +1631,7 @@ public class TestApp {
 				var exe = CompileTestAppExecutable (testDir);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\nerror MT1017: Failed to create the NOTICE file: Access to the path \".*/testApp.app/NOTICE\" is denied.\n");
 			} finally {
@@ -1948,7 +1832,7 @@ class Test {
 				var exe = CompileTestAppExecutable (testDir, code);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nosign --nolink --sim {0} -sdk {4} -targetver {4} --abi=i386 {1} --cache={2} --r:{3} -nofastsim", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --sim {0} -sdk {4} -targetver {4} --abi=i386 {1} --cache={2} --r:{3} -nofastsim", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\n" +
 					"Process exited with code 1.*\n" +
@@ -2184,18 +2068,14 @@ class Test {
 			return CompileTestAppExecutable (targetDirectory, code, extraArg, profile: MTouch.Profile.Unified);
 		}
 
-		public static string CompileTestAppExecutable (string targetDirectory, string code = null, string extraArg = "", Profile profile = Profile.Classic)
+		public static string CompileTestAppExecutable (string targetDirectory, string code = null, string extraArg = "", Profile profile = Profile.Unified)
 		{
 			string cs = Path.Combine (targetDirectory, "testApp.cs");
 			string exe = Path.Combine (targetDirectory, "testApp.exe");
 			var root_library = GetBaseLibrary (profile);
 
 			if (code == null) {
-				if (profile != Profile.Classic) {
-					code = "public class TestApp { static void Main () { System.Console.WriteLine (typeof (ObjCRuntime.Runtime).ToString ()); } }";
-				} else {
-					code = "public class TestApp { static void Main () { System.Console.WriteLine (typeof (MonoTouch.ObjCRuntime.Runtime).ToString ()); } }";
-				}
+				code = "public class TestApp { static void Main () { System.Console.WriteLine (typeof (ObjCRuntime.Runtime).ToString ()); } }";
 			}
 
 			File.WriteAllText (cs, code);
@@ -2265,7 +2145,6 @@ using MonoTouch.ObjCRuntime;
 
 		void CompileCSharpCode (Profile profile, string code, string outputPath, params string[] additional_arguments)
 		{
-			code = code.Replace ("%PROFILE_NAMESPACE%", profile == Profile.Classic ? "MonoTouch." : string.Empty);
 			var tmpFile = Path.GetTempFileName ();
 			try {
 				File.WriteAllText (tmpFile, code);
@@ -2289,7 +2168,7 @@ using MonoTouch.ObjCRuntime;
 		}
 
 		static Dictionary<Profile, string> compiled_linkwith_apps = new Dictionary<Profile, string> ();
-		public static string CompileTestAppExecutableLinkWith (string targetDirectory, Profile profile = Profile.Classic)
+		public static string CompileTestAppExecutableLinkWith (string targetDirectory, Profile profile = Profile.Unified)
 		{
 			string compiled_linkwith_app;
 			if (compiled_linkwith_apps.TryGetValue (profile, out compiled_linkwith_app) && File.Exists (compiled_linkwith_app))
@@ -2297,17 +2176,16 @@ using MonoTouch.ObjCRuntime;
 
 			string cs = Path.Combine (targetDirectory, "testApp.cs");
 			string exe = Path.Combine (targetDirectory, "testApp" + GetProjectSuffix (profile) + ".exe");
-			string ns_prefix = profile == Profile.Classic ? "MonoTouch." : string.Empty;
-			File.WriteAllText (cs, string.Format (@"
+			File.WriteAllText (cs, @"
 using System;
-public class TestApp {{
+public class TestApp {
 	static void Main ()
-	{{
-		Console.WriteLine (typeof ({0}UIKit.UIWindow).ToString ());
+	{
+		Console.WriteLine (typeof (UIKit.UIWindow).ToString ());
 		Console.WriteLine (Bindings.Test.CFunctions.theUltimateAnswer ());
 		Console.WriteLine (typeof (Bindings.Test.UltimateMachine).ToString ());
-	}}
- }}", ns_prefix));
+	}
+ }");
 
 			string output;
 			var args = new StringBuilder ();

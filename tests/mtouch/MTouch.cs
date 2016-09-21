@@ -1340,28 +1340,20 @@ namespace MTouchTests
 				
 				// non-linked device build
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:oldstatic");
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:dynamic");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:olddynamic");
 
 				// sdk device build
 				ExecuteWithStats (bin, common_args + " --compiler:clang --linksdkonly --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --linksdkonly --registrar:oldstatic");
 				ExecuteWithStats (bin, common_args + " --compiler:clang --linksdkonly --registrar:dynamic");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --linksdkonly --registrar:olddynamic");
-				
+
 				// fully linked device build
 				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:oldstatic");
 				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:dynamic");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:olddynamic");
 
 				// non-linked device build
 				common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk {2} {1} -debug", app, exe, Configuration.sdk_version);
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:oldstatic");
 				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:dynamic");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:olddynamic");
 			} finally {
 				Directory.Delete (testDir, true);
 			}

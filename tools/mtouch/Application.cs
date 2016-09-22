@@ -134,8 +134,6 @@ namespace Xamarin.Bundler {
 		public bool Is32Build { get { return IsArchEnabled (Abi.Arch32Mask); } } // If we're targetting a 32 bit arch.
 		public bool Is64Build { get { return IsArchEnabled (Abi.Arch64Mask); } } // If we're targetting a 64 bit arch.
 		public bool IsDualBuild { get { return Is32Build && Is64Build; } } // if we're building both a 32 and a 64 bit version.
-		//public bool IsUnified { get { return !IsClassic; } } // this is true for watch
-		//public bool IsClassic { get { return Driver.TargetFramework.Identifier == "MonoTouch"; } }
 		public bool IsLLVM { get { return IsArchEnabled (Abi.LLVM); } }
 
 		public List<Target> Targets = new List<Target> ();
@@ -584,15 +582,12 @@ namespace Xamarin.Bundler {
 		bool implicit_monotouch_reference;
 		public void SetDefaultFramework ()
 		{
-			// If no target framework was specified, check if we're referencing Xamarin.iOS.dll or monotouch.dll,
+			// If no target framework was specified, check if we're referencing Xamarin.iOS.dll,
 			// and then deduce the target framework.
 			if (!Driver.HasTargetFramework) {
 				foreach (var reference in References) {
 					var name = Path.GetFileName (reference);
 					switch (name) {
-					case "monotouch.dll":
-						Driver.TargetFramework = TargetFramework.MonoTouch_1_0;
-						break;
 					case "Xamarin.iOS.dll":
 						Driver.TargetFramework = TargetFramework.Xamarin_iOS_1_0;
 						break;
@@ -606,11 +601,11 @@ namespace Xamarin.Bundler {
 				}
 			}
 
-			// Still nothing. Default to monotouch.dll.
+			// Still nothing. Default to Xamarin.iOS.dll.
 			if (!Driver.HasTargetFramework) {
 				implicit_monotouch_reference = true;
-				Driver.TargetFramework = TargetFramework.MonoTouch_1_0;
-				References.Add (Path.Combine (Driver.PlatformFrameworkDirectory, "monotouch.dll"));
+				Driver.TargetFramework = TargetFramework.Xamarin_iOS_1_0;
+				References.Add (Path.Combine (Driver.PlatformFrameworkDirectory, "Xamarin.iOS.dll"));
 			}
 		}
 
@@ -620,7 +615,7 @@ namespace Xamarin.Bundler {
 				throw new MonoTouchException (7, true, "The root assembly '{0}' does not exist", RootAssembly);
 
 			if (implicit_monotouch_reference)
-				ErrorHelper.Warning (42, "No reference to either monotouch.dll or Xamarin.iOS.dll was found. A reference to monotouch.dll will be added.");
+				ErrorHelper.Warning (42, "No reference to Xamarin.iOS.dll was found. A reference to Xamarin.iOS.dll will be added.");
 			
 			// Add a reference to the platform assembly if none has been added, and check that we're not referencing
 			// any platform assemblies from another platform.
@@ -631,7 +626,6 @@ namespace Xamarin.Bundler {
 					platformAssemblyReference = true;
 				} else {
 					switch (name) {
-					case "monotouch":
 					case "Xamarin.iOS":
 					case "Xamarin.TVOS":
 					case "Xamarin.WatchOS":

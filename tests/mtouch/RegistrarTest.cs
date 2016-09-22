@@ -13,16 +13,14 @@ namespace MTouchTests
 	[TestFixture]
 	public class Registrar
 	{
+		[Flags]
 		enum R {
-			OldStatic = 1,
-			OldDynamic = 2,
 			Static = 4,
 			Dynamic = 8,
-			AllOld = OldStatic | OldDynamic,
 			AllNew = Static | Dynamic,
-			All = AllOld | AllNew,
-			AllStatic = OldStatic | Static,
-			AllDynamic = OldDynamic | Dynamic,
+			All = AllNew,
+			AllStatic = Static,
+			AllDynamic = Dynamic,
 		}
 
 		[Test]
@@ -102,8 +100,6 @@ class Foo : NSObject {
 				".*/Test.cs(.*): error MT4136: The registrar cannot marshal the parameter type 'System.Attribute' of the parameter 'attribute' in the method 'Foo.Bar9(System.Attribute)'",
 				".*/Test.cs(.*): error MT4104: The registrar cannot marshal the return value of type `System.Object[]` in the method `Foo.get_Bar11()`.",
 				".*/Test.cs(.*): error MT4136: The registrar cannot marshal the parameter type 'System.Object[]' of the parameter 'value' in the method 'Foo.set_Bar11(System.Object[])'");
-
-			Verify (R.OldStatic, code, false, "error MT4111: The registrar cannot build a signature for type `System.Object' in method `Foo.get_Bar10`.");
 		}
 
 		[Test]
@@ -127,13 +123,9 @@ class DateMembers : NSObject {
 
 			Verify (R.Static, code, false, 
 				".*/Test.cs(.*): error MT4138: The registrar cannot marshal the property type 'System.DateTime' of the property 'DateMembers.F4'.",
-				".*/Test.cs(.*): error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F1`. Use `MonoTouch.Foundation.NSDate` instead.",
-				".*/Test.cs(.*): error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F2`. Use `MonoTouch.Foundation.NSDate` instead.",
-				".*/Test.cs(.*): error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F3`. Use `MonoTouch.Foundation.NSDate` instead.");
-			Verify (R.OldStatic, code, false,
-				"error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.set_F4`. Use `MonoTouch.Foundation.NSDate` instead.",
-				"error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F1`. Use `MonoTouch.Foundation.NSDate` instead.",
-				"error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F3`. Use `MonoTouch.Foundation.NSDate` instead.");
+				".*/Test.cs(.*): error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F1`. Use `Foundation.NSDate` instead.",
+				".*/Test.cs(.*): error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F2`. Use `Foundation.NSDate` instead.",
+				".*/Test.cs(.*): error MT4102: The registrar found an invalid type `System.DateTime` in signature for method `DateMembers.F3`. Use `Foundation.NSDate` instead.");
 		}
 
 		[Test]
@@ -156,7 +148,6 @@ class ArgCount : NSObject {
 				".*/Test.cs(.*): error MT4117: The registrar found a signature mismatch in the method 'ArgCount.F1' - the selector 'F1' indicates the method takes 0 parameters, while the managed method has 1 parameters.",
 				".*/Test.cs(.*): error MT4117: The registrar found a signature mismatch in the method 'ArgCount.F2' - the selector 'F2:' indicates the method takes 1 parameters, while the managed method has 0 parameters.",
 				".*/Test.cs(.*): error MT4140: The registrar found a signature mismatch in the method 'ArgCount.F3' - the selector 'F3' indicates the variadic method takes 1 parameters, while the managed method has 0 parameters.");
-			Verify (R.OldStatic, code, true);
 		}
 
 		[Test]
@@ -176,7 +167,6 @@ class ArgCount : NSObject {
 ";
 
 			Verify (R.Static, code, false, ".*/Test.cs(.*): error MT4123: The type of the variadic parameter in the variadic function 'F3(System.Int32)' must be System.IntPtr.");
-			Verify (R.OldStatic, code, true);
 		}
 
 		[Test]
@@ -231,8 +221,6 @@ class MyObjectErr : NSObject, IFoo1, IFoo2
 				"error MT4134: Your application is using the 'ContactsUI' framework, which isn't included in the iOS SDK you're using to build your app (this framework was introduced in iOS 9.0, while you're building with the iOS 8.0 SDK.) This configuration is only supported with the legacy registrar (pass --registrar:legacy as an additional mtouch argument in your project's iOS Build option to select). Alternatively select a newer SDK in your app's iOS Build options.",
 				"error MT4134: Your application is using the 'ReplayKit' framework, which isn't included in the iOS SDK you're using to build your app (this framework was introduced in iOS 9.0, while you're building with the iOS 8.0 SDK.) This configuration is only supported with the legacy registrar (pass --registrar:legacy as an additional mtouch argument in your project's iOS Build option to select). Alternatively select a newer SDK in your app's iOS Build options.",
 				"error MT4134: Your application is using the 'WatchConnectivity' framework, which isn't included in the iOS SDK you're using to build your app (this framework was introduced in iOS 9.0, while you're building with the iOS 8.0 SDK.) This configuration is only supported with the legacy registrar (pass --registrar:legacy as an additional mtouch argument in your project's iOS Build option to select). Alternatively select a newer SDK in your app's iOS Build options.");
-			VerifyWithXcode (R.OldStatic, string.Empty, true, Configuration.xcode6_root, "8.0",
-				"warning MT0079: The recommended Xcode version for Xamarin.iOS .* is Xcode .* or later. The current Xcode version .found in " + Configuration.xcode6_root + ". is 6.*.");
 		}
 
 		[Test]
@@ -240,9 +228,6 @@ class MyObjectErr : NSObject, IFoo1, IFoo2
 		{
 			var code = @"
 class C : NSObject {
-	[Export ()]
-	public void Foo () {}
-
 	[Export (null)]
 	public void Bar () {}
 
@@ -250,7 +235,6 @@ class C : NSObject {
 	public void Zap () {}
 }";
 			Verify (R.Static, code, false, 
-				".*Test.cs(.*): error MT4135: The member 'C.Foo' has an Export attribute without a selector. A selector is required.",
 				".*Test.cs(.*): error MT4135: The member 'C.Bar' has an Export attribute without a selector. A selector is required.",
 				".*Test.cs(.*): error MT4135: The member 'C.Zap' has an Export attribute without a selector. A selector is required.");
 		}
@@ -266,7 +250,6 @@ class C : NSObject {
 ";
 			Verify (R.Static, code, false, 
 				".*/Test.cs(.*): error MT4138: The registrar cannot marshal the property type 'System.Object' of the property 'C.Foo'.");
-			Verify (R.OldStatic, code, false, "error MT4111: The registrar cannot build a signature for type `System.Object' in method `C.get_Foo`.");
 		}
 
 		[Test]
@@ -284,7 +267,6 @@ class C : NSObject {
 			Verify (R.Static, code, false, 
 				".*/Test.cs(.*): error MT4139: The registrar cannot marshal the property type 'System.Object' of the property 'C.P1'. Properties with the .Connect. attribute must have a property type of NSObject (or a subclass of NSObject).",
 				".*/Test.cs(.*): error MT4139: The registrar cannot marshal the property type 'System.Int32' of the property 'C.P2'. Properties with the .Connect. attribute must have a property type of NSObject (or a subclass of NSObject).");
-			Verify (R.OldStatic, code, true);
 		}
 
 		[Test]
@@ -305,7 +287,6 @@ class C : NSObject {
 			Verify (R.Static, code, false,
 				".*/Test.cs(.*): error MT4141: Cannot register the selector 'retain' on the member 'C.Retain' because Xamarin.iOS implicitly registers this selector.",
 				".*/Test.cs(.*): error MT4141: Cannot register the selector 'release' on the member 'C.Release' because Xamarin.iOS implicitly registers this selector.");
-			Verify (R.OldStatic, code, true);
 		}
 
 		[Test]
@@ -321,9 +302,7 @@ class C : NSObject {
 	void NativeEnum1 (Foo foo) {}
 }
 ";
-			VerifyDual (R.Static, code, false, "error MT4145: Invalid enum 'Foo': enums with the [Native] attribute must have a underlying enum type of either 'long' or 'ulong'.");
-
-			Verify (R.Static, code, true);
+			VerifyWithXode (R.Static, code, false, "error MT4145: Invalid enum 'Foo': enums with the [Native] attribute must have a underlying enum type of either 'long' or 'ulong'.");
 		}
 
 		[Test]
@@ -334,8 +313,7 @@ class C : NSObject {
 class C : NSObject {
 }
 ";
-			VerifyDual (R.Static, code, true, "warning MT4146: The Name parameter of the Registrar attribute on the class 'C' contains an invalid character: ' ' (0x20)");
-			Verify (R.Static, code, true, "warning MT4146: The Name parameter of the Registrar attribute on the class 'C' contains an invalid character: ' ' (0x20)");
+			VerifyWithXode (R.Static, code, true, "warning MT4146: The Name parameter of the Registrar attribute on the class 'C' contains an invalid character: ' ' (0x20)");
 		}
 
 		[Test]
@@ -351,10 +329,7 @@ interface IProtocol2 {
 	void M<T> ();
 }
 ";
-			VerifyDual (R.Static, code, false,
-				"error MT4148: The registrar found a generic protocol: 'IProtocol`1'. Exporting generic protocols is not supported.",
-				"error MT4113: The registrar found a generic method: 'IProtocol2.M()'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				"error MT4148: The registrar found a generic protocol: 'IProtocol`1'. Exporting generic protocols is not supported.",
 				"error MT4113: The registrar found a generic method: 'IProtocol2.M()'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes");
 		}
@@ -370,10 +345,8 @@ public static class Category
 	public static void Foo (this int bar) {}
 }
 ";
-			VerifyDual (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				".*/Test.cs(.*): error MT4149: Cannot register the extension method 'Category.Foo' because the type of the first parameter ('System.Int32') does not match the category type ('Foundation.NSString').");
-			Verify (R.Static, code, false,
-				".*/Test.cs(.*): error MT4149: Cannot register the extension method 'Category.Foo' because the type of the first parameter ('System.Int32') does not match the category type ('MonoTouch.Foundation.NSString').");
 		}
 
 		[Test]
@@ -385,9 +358,7 @@ public static class Category
 {
 }
 ";
-			VerifyDual (R.Static, code, false,
-				"error MT4150: Cannot register the type 'Category' because the category type 'System.String' in its Category attribute does not inherit from NSObject.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				"error MT4150: Cannot register the type 'Category' because the category type 'System.String' in its Category attribute does not inherit from NSObject.");
 		}
 
@@ -400,9 +371,7 @@ public static class Category
 {
 }
 ";
-			VerifyDual (R.Static, code, false,
-				"error MT4151: Cannot register the type 'Category' because the Type property in its Category attribute isn't set.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				"error MT4151: Cannot register the type 'Category' because the Type property in its Category attribute isn't set.");
 		}
 
@@ -420,10 +389,7 @@ public class Category2 : INativeObject
 	public IntPtr Handle { get { return IntPtr.Zero; } }
 }
 ";
-			VerifyDual (R.Static, code, false,
-				"error MT4152: Cannot register the type 'Category1' as a category because it implements INativeObject or subclasses NSObject.",
-				"error MT4152: Cannot register the type 'Category2' as a category because it implements INativeObject or subclasses NSObject.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				"error MT4152: Cannot register the type 'Category1' as a category because it implements INativeObject or subclasses NSObject.",
 				"error MT4152: Cannot register the type 'Category2' as a category because it implements INativeObject or subclasses NSObject.");
 		}
@@ -437,9 +403,7 @@ public class Category<T>
 {
 }
 ";
-			VerifyDual (R.Static, code, false,
-				"error MT4153: Cannot register the type 'Category`1' as a category because it's generic.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				"error MT4153: Cannot register the type 'Category`1' as a category because it's generic.");
 		}
 
@@ -454,9 +418,7 @@ public class Category
 	public static void Foo<T> () {}
 }
 ";
-			VerifyDual (R.Static, code, false,
-				".*/Test.cs(.*): error MT4154: Cannot register the method 'Category.Foo' as a category method because it's generic.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				".*/Test.cs(.*): error MT4154: Cannot register the method 'Category.Foo' as a category method because it's generic.");
 		}
 
@@ -475,9 +437,7 @@ public class Category2
 {
 }
 ";
-			VerifyDual (R.Static, code, false,
-				"error MT4156: Cannot register two categories ('Category2, Test' and 'Category1, Test') with the same native name ('C')");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				"error MT4156: Cannot register two categories ('Category2, Test' and 'Category1, Test') with the same native name ('C')");
 		}
 
@@ -495,9 +455,7 @@ public class Category
 	public Category () {}
 }
 ";
-			VerifyDual (R.Static, code, false,
-				".*/Test.cs(.*): error MT4158: Cannot register the constructor Category..ctor() in the category Category because constructors in categories are not supported.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				".*/Test.cs(.*): error MT4158: Cannot register the constructor Category..ctor() in the category Category because constructors in categories are not supported.");
 		}
 			
@@ -512,9 +470,7 @@ public class Category
 	public void Foo () {}
 }
 ";
-			VerifyDual (R.Static, code, false,
-				".*/Test.cs(.*): error MT4159: Cannot register the method 'Category.Foo' as a category method because category methods must be static.");
-			Verify (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				".*/Test.cs(.*): error MT4159: Cannot register the method 'Category.Foo' as a category method because category methods must be static.");
 		}
 
@@ -530,13 +486,10 @@ public class TestInvalidChar : NSObject
 	public void AbC () {}
 }
 ";
-			VerifyDual (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				".*/Test.cs(.*): error MT4160: Invalid character ' ' (0x20) found in selector 'xy z' for 'TestInvalidChar.XyZ()'",
 				".*/Test.cs(.*): error MT4160: Invalid character '\t' (0x9) found in selector 'ab\tc' for 'TestInvalidChar.AbC()'"
 				);
-			Verify (R.Static, code, false,
-				".*/Test.cs(.*): error MT4160: Invalid character ' ' (0x20) found in selector 'xy z' for 'TestInvalidChar.XyZ()'",
-				".*/Test.cs(.*): error MT4160: Invalid character '\t' (0x9) found in selector 'ab\tc' for 'TestInvalidChar.AbC()'");
 		}
 
 		[Test]
@@ -570,7 +523,7 @@ public struct FooD { public NSObject Obj; }
 public struct FooE { public NSObject Obj; }
 public struct FooF { public NSObject Obj; }
 ";
-			VerifyDual (R.Static, code, false,
+			VerifyWithXode (R.Static, code, false,
 				".*/Test.cs(.*): error MT4161: The registrar found an unsupported structure 'FooA': All fields in a structure must also be structures (field 'Obj' with type 'Foundation.NSObject' is not a structure).",
 				".*/Test.cs(.*): error MT4161: The registrar found an unsupported structure 'FooB': All fields in a structure must also be structures (field 'Obj' with type 'Foundation.NSObject' is not a structure).",
 				".*/Test.cs(.*): error MT4161: The registrar found an unsupported structure 'FooC': All fields in a structure must also be structures (field 'Obj' with type 'Foundation.NSObject' is not a structure).",
@@ -754,12 +707,12 @@ class D : C {
 }
 
 class E : NSObject {
-	[Export ()]
+	[Export (""foo"")]
 	string Foo { get; set; }
 }
 
 class F : E {
-	[Export ()]
+	[Export (""foo"")]
 	string Foo { get; set; }
 }
 
@@ -792,7 +745,7 @@ class H : G {
 			VerifyWithXcode (registrars,  profile, code, success, Configuration.xcode_root, MTouch.GetSdkVersion (profile), target, expected_messages);
 		}
 
-		void VerifyDual (R registrars, string code, bool success, params string [] expected_messages)
+		void VerifyWithXode (R registrars, string code, bool success, params string [] expected_messages)
 		{
 			VerifyWithXcode (registrars, MTouch.Profile.Unified, code, success, Configuration.xcode_root, Configuration.sdk_version, expected_messages);
 		}
@@ -813,7 +766,7 @@ class H : G {
 				if ((registrars & value) == 0)
 					continue;
 
-				if (value != R.Dynamic && value != R.Static && value != R.OldDynamic && value != R.OldStatic)
+				if (value != R.Dynamic && value != R.Static)
 					continue;
 
 				string result = string.Empty;
@@ -821,14 +774,11 @@ class H : G {
 				try {
 					var header = @"
 using System;
-using System.Collections.Generic;";
-
-					header += @"
+using System.Collections.Generic;
 using Foundation;
 using UIKit;
-using ObjCRuntime;";
+using ObjCRuntime;
 
-					header += @"
 class Test {
 	static void Main () { Console.WriteLine (typeof (NSObject)); }
 }";
@@ -903,12 +853,6 @@ class Closed : Open<UIView> {}
 class Generic2<T> : NSObject where T: struct {}
 class Generic3<T> : NSObject where T: System.IConvertible {}
 ";
-			// here we're testing the warnings for the old static registrar.
-			Verify (R.OldStatic, code, true, 
-				"warning MT4112: The registrar found a generic type: Open`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4112: The registrar found a generic type: Generic2`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4112: The registrar found a generic type: Generic3`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information."
-				);
 
 			// and the lack of warnings/errors in the new static registrar.
 			Verify (R.Static, code, true);
@@ -933,16 +877,6 @@ class Generic3<T> : NSObject where T: System.IConvertible {}
 				".*Test.cs.*: error MT4132: The registrar found an invalid generic return type 'V' in the property 'Open`2.FooZap'. The return type must have an 'NSObject' constraint.",
 				".*Test.cs.*: error MT4132: The registrar found an invalid generic return type 'V' in the property 'Open`2.Bar'. The return type must have an 'NSObject' constraint.",
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'V' in the parameter arg of the method 'Open`2.Foo(V)'. The generic parameter must have an 'NSObject' constraint.");
-			Verify (R.OldStatic, code, false, 
-				"warning MT4112: The registrar found a generic type: Open`2. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`2.get_FooZap'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`2.get_Bar'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`2.set_Bar'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`2.Foo'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4104: The registrar cannot marshal the return value for type `V` in signature for method `Open`2.get_FooZap`.",
-				"error MT4104: The registrar cannot marshal the return value for type `V` in signature for method `Open`2.get_Bar`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `V` in signature for method `Open`2.set_Bar`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `V` in signature for method `Open`2.Foo`.");
 		}
 
 		[Test]
@@ -966,10 +900,6 @@ class Open<U> : NSObject
 				".*Test.cs.*: error MT4131: The registrar cannot export static properties in generic classes ('Open`1.Zap').",
 				".*Test.cs.*: error MT4130: The registrar cannot export static methods in generic classes ('Open`1.Foo()').",
 				".*Test.cs.*: error MT4130: The registrar cannot export static methods in generic classes ('Open`1.Foo(U)').");
-			Verify (R.OldStatic, code, false, 
-				"warning MT4112: The registrar found a generic type: Open`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.Foo'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4105: The registrar cannot marshal the parameter of type `U` in signature for method `Open`1.Foo`.");
 		}
 
 		[Test]
@@ -987,11 +917,6 @@ class Open<U> : NSObject
 ";
 			Verify (R.Static, code, false, 
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'T' in the parameter foo of the method 'Parent`1/Nested.Foo(T)'. The generic parameter must have an 'NSObject' constraint.");
-
-			Verify (R.OldStatic, code, false,
-				"warning MT4112: The registrar found a generic type: Parent`1/Nested. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Parent`1/Nested.Foo'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4105: The registrar cannot marshal the parameter of type `T` in signature for method `Parent`1/Nested.Foo`.");
 		}
 
 		[Test]
@@ -1012,12 +937,6 @@ class Open<U> : NSObject
 
 			Verify (R.Static, code, false,
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'T' in the parameter t of the method 'GenericTestClass`1.Arg1(T)'. The generic parameter must have an 'NSObject' constraint.");
-			Verify (R.OldStatic, code, false,
-				"warning MT4112: The registrar found a generic type: GenericTestClass`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'GenericTestClass`1.Arg1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'GenericTestClass`1.Arg1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4105: The registrar cannot marshal the parameter of type `T` in signature for method `GenericTestClass`1.Arg1`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `T` in signature for method `DerivedClosed.Arg1`.");
 		}
 
 		[Test]
@@ -1033,10 +952,6 @@ class Open<U> : NSObject
 
 			Verify (R.Static, code, false, 
 				".*Test.cs.*: error MT4136: The registrar cannot marshal the parameter type 'System.Collections.Generic.List`1<U>' of the parameter 'arg' in the method 'Open`1.Bar(System.Collections.Generic.List`1<U>)'");
-			Verify (R.OldStatic, code, false,
-				"warning MT4112: The registrar found a generic type: Open`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.Bar'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4108: The registrar cannot get the ObjectiveC type for managed type `System.Collections.Generic.List`1`.");
 		}
 
 		[Test]
@@ -1093,27 +1008,6 @@ class Open<U> : NSObject
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'System.Collections.Generic.List`1<System.Collections.Generic.List`1<System.Collections.Generic.List`1<System.Collections.Generic.List`1<U>>>>' in the parameter f of the method 'Open`1.FooZap(System.Collections.Generic.List`1<System.Collections.Generic.List`1<System.Collections.Generic.List`1<System.Collections.Generic.List`1<U>>>>)'. The generic parameter must have an 'NSObject' constraint.",
 				".*Test.cs.*: error MT4129: The registrar found an invalid generic return type 'System.Collections.Generic.List`1<System.Collections.Generic.List`1<U>>' in the method 'Open`1.ZapBoo()'. The generic return type must have an 'NSObject' constraint."
 				);
-			Verify (R.OldStatic, code, false, 
-				"warning MT4112: The registrar found a generic type: Open`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.get_BarZap'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.get_F1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.set_F1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.get_F2'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.Bar'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.XyZ'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.ZapBar'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.FooZap'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'Open`1.ZapBoo'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4104: The registrar cannot marshal the return value for type `U` in signature for method `Open`1.get_BarZap`.",
-				"error MT4104: The registrar cannot marshal the return value for type `U` in signature for method `Open`1.get_F1`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `U` in signature for method `Open`1.set_F1`.",
-				"error MT4104: The registrar cannot marshal the return value for type `System.Collections.Generic.List`1<System.Collections.Generic.List`1<U>>` in signature for method `Open`1.get_F2`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `U` in signature for method `Open`1.Bar`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `U[]` in signature for method `Open`1.Zap`.",
-				"error MT4104: The registrar cannot marshal the return value for type `U` in signature for method `Open`1.XyZ`.",
-				"error MT4104: The registrar cannot marshal the return value for type `System.Action`1<U>` in signature for method `Open`1.ZapBar`.",
-				"error MT4108: The registrar cannot get the ObjectiveC type for managed type `System.Collections.Generic.List`1`.",
-				"error MT4104: The registrar cannot marshal the return value for type `System.Collections.Generic.List`1<System.Collections.Generic.List`1<U>>` in signature for method `Open`1.ZapBoo`.");
 		}
 
 		[Test]
@@ -1133,10 +1027,6 @@ class Open<U> : NSObject
 			Verify (R.Static, code, false, 
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'U&' in the parameter arg of the method 'Open`1.Bar(U&)'. The generic parameter must have an 'NSObject' constraint.",
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'U[]&' in the parameter arg of the method 'Open`1.Zap(U[]&)'. The generic parameter must have an 'NSObject' constraint.");
-			Verify (R.OldStatic, code, false, 
-				"warning MT4112: The registrar found a generic type: Open`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4105: The registrar cannot marshal the parameter of type `U&` in signature for method `Open`1.Bar`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `U[]&` in signature for method `Open`1.Zap`.");
 		}
 
 		[Test]
@@ -1152,11 +1042,6 @@ class GenericMethodClass : NSObject {
 
 }
 ";
-			Verify (R.OldStatic, str1, false, 
-				"warning MT4113: The registrar found a generic method: 'GenericMethodClass.Foo'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'GenericMethodClass.GenericMethod'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4105: The registrar cannot marshal the parameter of type `T` in signature for method `GenericMethodClass.GenericMethod`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `T` in signature for method `GenericMethodClass.Foo`.");
 			Verify (R.Static, str1, false, 
 				".*Test.cs.*: error MT4113: The registrar found a generic method: 'GenericMethodClass.GenericMethod(T)'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes",
 				".*Test.cs.*: error MT4113: The registrar found a generic method: 'GenericMethodClass.Foo(T)'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes"
@@ -1227,23 +1112,6 @@ class NullableGenericTestClass<T> : NSObject where T: struct
 				".*Test.cs.*: error MT4128: The registrar found an invalid generic parameter type 'System.Nullable`1<T>' in the parameter foo of the method 'NullableGenericTestClass`1.T2(System.Nullable`1<T>)'. The generic parameter must have an 'NSObject' constraint.",
 				".*Test.cs.*: error MT4129: The registrar found an invalid generic return type 'T' in the method 'NullableGenericTestClass`1.T3()'. The generic return type must have an 'NSObject' constraint.",
 				".*Test.cs.*: error MT4136: The registrar cannot marshal the parameter type 'System.Nullable`1<T>' of the parameter 'foo' in the method 'NullableGenericTestClass`1..ctor(System.Nullable`1<T>)'");
-
-			Verify (R.OldStatic, str1, false,
-				"warning MT4112: The registrar found a generic type: NullableGenericTestClass`1. Registering generic types with ObjectiveC is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.", 
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1..ctor'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.", 
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1.Z1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1.Z2'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1.Z3'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1.T1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1.T2'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'NullableGenericTestClass`1.T3'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4105: The registrar cannot marshal the parameter of type `System.Nullable`1` in signature for method `NullableGenericTestClass`1..ctor`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `System.Nullable`1` in signature for method `NullableGenericTestClass`1.Z1`.",
-				"error MT4104: The registrar cannot marshal the return value for type `Z` in signature for method `NullableGenericTestClass`1.Z2`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `Z` in signature for method `NullableGenericTestClass`1.Z3`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `T` in signature for method `NullableGenericTestClass`1.T1`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `System.Nullable`1` in signature for method `NullableGenericTestClass`1.T2`.",
-				"error MT4104: The registrar cannot marshal the return value for type `T` in signature for method `NullableGenericTestClass`1.T3`.");
 		}
 
 		[Test]
@@ -1267,14 +1135,6 @@ class G : NSObject {
 				".*Test.cs.*: error MT4113: The registrar found a generic method: 'G.Foo1(System.Int32)'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes",
 				".*Test.cs.*: error MT4113: The registrar found a generic method: 'G.Foo2(System.Int32)'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes",
 				".*Test.cs.*: error MT4113: The registrar found a generic method: 'G.Foo3(X)'. Exporting generic methods is not supported, and will lead to random behavior and/or crashes");
-			Verify (R.OldStatic, code, false,
-				"warning MT4113: The registrar found a generic method: 'G.Foo1'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'G.Foo2'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"warning MT4113: The registrar found a generic method: 'G.Foo3'. Exporting generic methods is not supported with the legacy registrar, and will lead to random behavior and/or crashes. Please remove any --registrar arguments passed as additional mtouch arguments in your project's iOS Build options. See http://docs.xamarin.com/guides/ios/advanced_topics/registrar for more information.",
-				"error MT4104: The registrar cannot marshal the return value for type `X` in signature for method `G.Foo1`.",
-				"error MT4104: The registrar cannot marshal the return value for type `X` in signature for method `G.Foo2`.",
-				"error MT4105: The registrar cannot marshal the parameter of type `X` in signature for method `G.Foo3`."
-				);
 		}
 
 		[Test]
@@ -1299,7 +1159,6 @@ class CTP4 : CTP3 {
 }
 ";
 			Verify (R.Static, code, true);
-			Verify (R.OldStatic, code, true);
 		}
 
 #region Helper functions

@@ -1073,6 +1073,7 @@ pump_gc (void *context)
 }
 #endif /* DEBUG */
 
+#if MONOMAC
 static void
 detect_product_assembly ()
 {
@@ -1099,6 +1100,7 @@ detect_product_assembly ()
 		xamarin_use_new_assemblies = false;
 	}
 }
+#endif
 
 static void
 log_callback (const char *log_domain, const char *log_level, const char *message, mono_bool fatal, void *user_data)
@@ -1149,7 +1151,9 @@ xamarin_initialize ()
 	mono_trace_set_print_handler (print_callback);
 	mono_trace_set_printerr_handler (print_callback);
 
+#if MONOMAC
 	detect_product_assembly ();
+#endif
 
 	MonoGCFinalizerCallbacks gc_callbacks;
 	gc_callbacks.version = MONO_GC_FINALIZER_EXTENSION_VERSION;
@@ -1933,6 +1937,7 @@ xamarin_get_use_sgen ()
 	return true;
 }
 
+#if MONOMAC
 void
 xamarin_set_is_unified (bool value)
 {
@@ -1943,6 +1948,7 @@ xamarin_set_is_unified (bool value)
 	xamarin_use_new_assemblies = value;
 	xamarin_detect_unified_build = false;
 }
+#endif
 
 bool
 xamarin_get_is_unified ()

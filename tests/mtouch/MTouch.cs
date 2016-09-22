@@ -249,32 +249,6 @@ namespace MTouchTests
 					"error MT0016: The option '--armv7' has been deprecated.\n" +
 					"error MT0016: The option '--noregistrar' has been deprecated.\n" +
 					"error MT0016: The option '--unsupported--enable-generics-in-registrar' has been deprecated.\n");
-
-
-				exe = CompileTestAppExecutable (testDir);
-				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("--sdkroot {5} --dev {0} {1} -r:{2} {3} --sdk {4}", app, exe, Configuration.MonoTouchDll, args, Configuration.sdk_version, Configuration.xcode_root), hide_output: false),
-					"Xamarin.iOS .* using framework:.*\n" +
-					"warning MT0016: The option '--dir' has been deprecated.\n" +
-					"warning MT0016: The option '--dir' has been deprecated.\n" +
-					"warning MT0016: The option '--crossprefix' has been deprecated.\n" +
-					"warning MT0016: The option '--libdir' has been deprecated.\n" +
-					"warning MT0016: The option '-n' has been deprecated.\n" +
-					"warning MT0016: The option '--keeptemp' has been deprecated.\n" +
-					"warning MT0016: The option '--main' has been deprecated.\n" +
-					"warning MT0016: The option '--mapinject' has been deprecated.\n" +
-					"warning MT0016: The option '--displayname' has been deprecated.\n" +
-					"warning MT0016: The option '--mainnib' has been deprecated.\n" +
-					"warning MT0016: The option '--certificate' has been deprecated.\n" +
-					"warning MT0016: The option '--llvm' has been deprecated.\n" +
-					"warning MT0016: The option '--thumb' has been deprecated.\n" +
-					"warning MT0016: The option '--armv7' has been deprecated.\n" +
-					"warning MT0016: The option '--noregistrar' has been deprecated.\n" +
-					"warning MT0016: The option '--unsupported--enable-generics-in-registrar' has been deprecated.\n" +
-					"error MT0022: The options '--unsupported--enable-generics-in-registrar' and '--registrar' are not compatible.\n"
-				);
-
-
 			} finally {
 				Directory.Delete (testDir, true);
 			}
@@ -307,6 +281,7 @@ namespace MTouchTests
 		{
 			using (var mtouch = new MTouchTool ()) {
 				mtouch.CreateTemporaryApp ();
+				mtouch.ImplicitlyReferencePlatformAssembly = true;
 				Assert.AreEqual (0, mtouch.Execute (MTouchAction.BuildSim));
 				mtouch.AssertError (42, "No reference to either monotouch.dll or Xamarin.iOS.dll was found. A reference to monotouch.dll will be added.");
 			}
@@ -421,7 +396,7 @@ namespace MTouchTests
 		}
 
 		[Test]
-		public void MT0038 ()
+		public void MT0020 ()
 		{
 			var testDir = GetTempDirectory ();
 			var app = Path.Combine (testDir, "testApp.app");
@@ -432,23 +407,23 @@ namespace MTouchTests
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
 					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk " + Configuration.sdk_version + " --registrar:oldstatic --targetver 6.0 --abi=arm64 {1} -debug -r:{2} ", app, exe, Configuration.XamarinIOSDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0038: The legacy registrars [(]--registrar:legacy|legacystatic|legacydynamic[)] are not supported with the Unified API.\n");
+					"error MT0020: The valid options for '--registrar' are 'static, dynamic or default'.\n");
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
 					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk " + Configuration.sdk_version + " --registrar:olddynamic --targetver 6.0 --abi=x86_64 {1} -debug -r:{2}", app, exe, Configuration.XamarinIOSDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0038: The legacy registrars [(]--registrar:legacy|legacystatic|legacydynamic[)] are not supported with the Unified API.\n");
+					"error MT0020: The valid options for '--registrar' are 'static, dynamic or default'.\n");
 					
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
 					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk " + Configuration.sdk_version + " --registrar:legacy --targetver 6.0 --abi=x86_64 {1} -debug -r:{2}", app, exe, Configuration.XamarinIOSDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0038: The legacy registrars [(]--registrar:legacy|legacystatic|legacydynamic[)] are not supported with the Unified API.\n");
+					"error MT0020: The valid options for '--registrar' are 'static, dynamic or default'.\n");
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
 					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk " + Configuration.sdk_version + " --registrar:legacystatic --targetver 6.0 --abi=x86_64 {1} -debug -r:{2}", app, exe, Configuration.XamarinIOSDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0038: The legacy registrars [(]--registrar:legacy|legacystatic|legacydynamic[)] are not supported with the Unified API.\n");
+					"error MT0020: The valid options for '--registrar' are 'static, dynamic or default'.\n");
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
 					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk " + Configuration.sdk_version + " --registrar:legacydynamic --targetver 6.0 --abi=x86_64 {1} -debug -r:{2}", app, exe, Configuration.XamarinIOSDll)),
-					"Xamarin.iOS .* using framework:.*\nerror MT0038: The legacy registrars [(]--registrar:legacy|legacystatic|legacydynamic[)] are not supported with the Unified API.\n");
+					"error MT0020: The valid options for '--registrar' are 'static, dynamic or default'.\n");
 			} finally {
 				Directory.Delete (testDir, true);
 			}
@@ -535,24 +510,6 @@ namespace MTouchTests
 		}
 
 		[Test]
-		public void MT0064 ()
-		{
-			var testDir = GetTempDirectory ();
-			var app = Path.Combine (testDir, "testApp.app");
-			Directory.CreateDirectory (app);
-
-			try {
-				var exe = CompileTestAppExecutable (testDir);
-
-				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --sim {0} -sdk {4} --targetver {4} --framework /foo/bar/zap.framework -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
-					"Xamarin.iOS .* using framework:.*\nerror MT0064: Xamarin.iOS only supports embedded frameworks with Unified projects.\n");
-			} finally {
-				Directory.Delete (testDir, true);
-			}
-		}
-
-		[Test]
 		public void MT0075 ()
 		{
 			var testDir = GetTempDirectory ();
@@ -563,7 +520,7 @@ namespace MTouchTests
 				var exe = CompileTestAppExecutable (testDir);
 
 				Asserts.ThrowsPattern<TestExecutionException> (() =>
-					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --dev {0} -sdk {4} -r:{2} {1} --abi armv7k", app, exe, Configuration.MonoTouchDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
+					ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot {3} --dev {0} -sdk {4} -r:{2} {1} --abi armv7k", app, exe, Configuration.XamarinIOSDll, Configuration.xcode_root, Configuration.sdk_version), hide_output: false),
 					"Xamarin.iOS .* using framework:.*\n" +
 					"error MT0075: Invalid architecture 'ARMv7k' for iOS projects. Valid architectures are: ARMv7, ARMv7.Thumb, ARMv7.LLVM, ARMv7.LLVM.Thumb, ARMv7s, ARMv7s.Thumb, ARMv7s.LLVM, ARMv7s.LLVM.Thumb");
 			} finally {
@@ -701,8 +658,8 @@ namespace MTouchTests
 </dict>
 </plist>
 ");
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.sdk_version), hide_output: false);
-				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.MonoTouchDll, Configuration.sdk_version), hide_output: false);
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.XamarinIOSDll, Configuration.sdk_version), hide_output: false);
+				ExecutionHelper.Execute (TestTarget.ToolPath, string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk {3} --targetver {3} --extension -r:{2} {1}", app, exe, Configuration.XamarinIOSDll, Configuration.sdk_version), hide_output: false);
 			} finally {
 				Directory.Delete (testDir, true);
 			}
@@ -718,7 +675,11 @@ namespace MTouchTests
 		{
 			string fn;
 
-			fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", GetConfiguration (profile), "bindings-test.dll");
+			if (profile == Profile.Unified) {
+				fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", GetConfiguration (profile), "bindings-test.dll");
+			} else {
+				fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", "Any CPU", GetConfiguration (profile), "bindings-test.dll");
+			}
 
 			if (!File.Exists (fn)) {
 				var csproj = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bindings-test" + GetProjectSuffix (profile) + ".csproj");
@@ -1384,7 +1345,7 @@ int dummy_field = 0;
 				// var nativeLib = CompileNativeLibrary (testDir, nativeCode);
 				var extraCode = @"
 public class BindingApp {
-	[MonoTouch.Foundation.Field (""dummy_field"", ""__Internal"")]
+	[Foundation.Field (""dummy_field"", ""__Internal"")]
 	public static string DummyField { get { return null; } }
 
 	[System.Runtime.InteropServices.DllImport (""__Internal"")]
@@ -1395,7 +1356,7 @@ public class BindingApp {
 				var exe = CompileTestAppExecutable (testDir, @"
 public class TestApp { 
 	static void Main () {
-		System.Console.WriteLine (typeof (MonoTouch.UIKit.UIWindow).ToString ());
+		System.Console.WriteLine (typeof (UIKit.UIWindow).ToString ());
 		System.Console.WriteLine (BindingApp.DummyField);
 		BindingApp.DummyMethod ();
 	}
@@ -1446,7 +1407,7 @@ int dummy_field = 0;
 				// var nativeLib = CompileNativeLibrary (testDir, nativeCode);
 				var extraCode = @"
 public class BindingApp {
-	[MonoTouch.Foundation.Field (""dummy_field"", ""__Internal"")]
+	[Foundation.Field (""dummy_field"", ""__Internal"")]
 	public static string DummyField { get { return null; } }
 
 	[System.Runtime.InteropServices.DllImport (""__Internal"")]
@@ -1457,7 +1418,7 @@ public class BindingApp {
 				var exe = CompileTestAppExecutable (testDir, @"
 public class TestApp { 
 	static void Main () {
-		System.Console.WriteLine (typeof (MonoTouch.UIKit.UIWindow).ToString ());
+		System.Console.WriteLine (typeof (UIKit.UIWindow).ToString ());
 	}
 }
 ",
@@ -1576,7 +1537,7 @@ public class TestApp {
 				var exe = CompileTestAppExecutable (testDir);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --debug --nolink --sim {0} -sdk " + Configuration.sdk_version + " --abi=i386 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.MonoTouchDll);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --debug --nolink --sim {0} -sdk " + Configuration.sdk_version + " --abi=i386 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.XamarinIOSDll);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\nerror MT1015: Failed to create the executable '.*/testApp.app/testApp': .*/testApp.app/testApp is a directory\n");
 			} finally {
@@ -1598,7 +1559,7 @@ public class TestApp {
 				var exe = CompileTestAppExecutable (testDir);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3} ", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3} ", app, exe, cache, Configuration.XamarinIOSDll, Configuration.sdk_version);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\nerror MT1016: Failed to create the NOTICE file because a directory already exists with the same name.\n");
 			} finally {
@@ -1623,7 +1584,7 @@ public class TestApp {
 				var exe = CompileTestAppExecutable (testDir);
 				var cache = Path.Combine (testDir, "mtouch-cache");
 
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
+				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --dev {0} -sdk {4} -targetver {4} --abi=armv7 {1} --cache={2} --r:{3}", app, exe, cache, Configuration.XamarinIOSDll, Configuration.sdk_version);
 				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
 					"Xamarin.iOS .* using framework:.*\nerror MT1017: Failed to create the NOTICE file: Access to the path \".*/testApp.app/NOTICE\" is denied.\n");
 			} finally {
@@ -1743,7 +1704,7 @@ public class TestApp {
 		}
 
 		[Test]
-		public void MT5211_UnifiedApp ()
+		public void MT5211 ()
 		{
 			var testDir = GetTempDirectory ();
 
@@ -1788,55 +1749,6 @@ class Test {
 				mtouch.AssertErrorPattern ("MT", 5210, "Native linking failed, undefined symbol: _OBJC_METACLASS_._Inexistent. Please verify that all the necessary frameworks have been referenced and native libraries are properly linked in.");
 				mtouch.AssertErrorPattern ("MT", 5211, "Native linking failed, undefined Objective-C class: Inexistent. The symbol ._OBJC_CLASS_._Inexistent. could not be found in any of the libraries or frameworks linked with your application.");
 				mtouch.AssertErrorPattern ("MT", 5202, "Native linking failed. Please review the build log.");
-			} finally {
-				Directory.Delete (testDir, true);
-			}
-		}
-
-		[Test]
-		public void MT5214 ()
-		{
-			var testDir = GetTempDirectory ();
-			var app = Path.Combine (testDir, "testApp.app");
-			Directory.CreateDirectory (app);
-
-			try {
-				var code = @"
-using System;
-using System.Runtime.InteropServices;
-
-namespace UIKit {
-}
-
-namespace MonoTouch.UIKit {
-class Test {
-	[DllImport (""__Internal"")]
-	public static extern void InexistentFunc ();
-
-	static void Main ()
-	{
-		Console.WriteLine (typeof (UIWindow));
-	}
-	
-}
-}
-";
-				var exe = CompileTestAppExecutable (testDir, code);
-				var cache = Path.Combine (testDir, "mtouch-cache");
-
-				var args = string.Format ("-sdkroot " + Configuration.xcode_root + " --nolink --sim {0} -sdk {4} -targetver {4} --abi=i386 {1} --cache={2} --r:{3} -nofastsim", app, exe, cache, Configuration.MonoTouchDll, Configuration.sdk_version);
-				Asserts.ThrowsPattern<TestExecutionException> (() => ExecutionHelper.Execute (TestTarget.ToolPath, args, hide_output: false), 
-					"Xamarin.iOS .* using framework:.*\n" +
-					"Process exited with code 1.*\n" +
-					"/Applications/.*clang.*\n" +
-					"Undefined symbols.*\n" +
-					".*_InexistentFunc.*\n" +
-					".*command line option.*\n" +
-					".*ld: symbol.*not found.*\n" +
-					".*clang: error.*\n" +
-					"\n" +
-					"error MT5214: Native linking failed, undefined symbol: _InexistentFunc. This symbol was referenced by the managed member MonoTouch.UIKit.Test.InexistentFunc. Please verify that all the necessary frameworks have been referenced and native libraries linked.\n" +
-					"error MT5202: Native linking failed. Please review the build log.\n");
 			} finally {
 				Directory.Delete (testDir, true);
 			}
@@ -2094,7 +2006,7 @@ class Test {
 			if (linkWith == null) {
 				linkWith = @"
 using System;
-using MonoTouch.ObjCRuntime;
+using ObjCRuntime;
 
 [assembly: LinkWith (""{0}"", LinkTarget.ArmV7, ForceLoad = true, SmartLink = true)]
 ";

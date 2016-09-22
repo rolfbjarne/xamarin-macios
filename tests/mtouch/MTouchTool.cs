@@ -75,7 +75,7 @@ namespace MTouchTests
 
 		// These are a bit smarter
 		public MTouch.Profile Profile = MTouch.Profile.Unified;
-
+		public bool ImplicitlyReferencePlatformAssembly;
 		static XmlDocument device_list_cache;
 
 		List<string> directories_to_delete;
@@ -185,7 +185,7 @@ namespace MTouchTests
 				// do nothing
 			} else if (!string.IsNullOrEmpty (TargetFramework)) {
 				sb.Append (" --target-framework ").Append (TargetFramework);
-			} else {
+			} else if (!ImplicitlyReferencePlatformAssembly) {
 				// make the implicit default the way tests have been running until now, and at the same time the very minimum to make apps build.
 				switch (Profile) {
 				case MTouch.Profile.Unified:

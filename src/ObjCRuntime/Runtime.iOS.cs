@@ -128,7 +128,7 @@ namespace XamCore.ObjCRuntime {
 #endif // !TVOS && !WATCH
 
 		[DllImport ("__Internal")]
-		static extern bool xamarin_install_chained_signal_handler (int signal, ref SigAction handler, out SigAction previous_handler);
+		static extern bool xamarin_enable_current_signal_handler (int signal);
 
 #endif // !COREBUILD
 	}

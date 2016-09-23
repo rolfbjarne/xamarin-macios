@@ -1337,17 +1337,30 @@ namespace XamCore.ObjCRuntime {
 		unsafe extern internal static void memcpy (byte * target, byte * source, nint n);
 
 
-		public struct SigAction
+		//public struct SigAction
+		//{
+		//	public IntPtr Handler; // 
+		//	public uint Mask; // sa_mask => sigset_t => __darwin_sigset_t => uint32_t
+		//	public int Flags; // sa_flags => int
+		//}
+
+		//public static bool InstallSignalHandler (int signal, SigAction handler, out SigAction previous_handler)
+		//{
+		//	previous_handler = default (SigAction);
+		//	return xamarin_install_chained_signal_handler (signal, ref handler, out previous_handler);
+		//}
+
+		public enum Signal
 		{
-			public IntPtr Handler; // 
-			public uint Mask; // sa_mask => sigset_t => __darwin_sigset_t => uint32_t
-			public int Flags; // sa_flags => int
+			SIGILL = 4,
+			SIGFPE = 8,
+			SIGBUS = 10,
+			SIGSEGV = 11,
 		}
 
-		public static bool InstallSignalHandler (int signal, SigAction handler, out SigAction previous_handler)
+		public static bool EnableCurrentSignalHandler (Signal signal)
 		{
-			previous_handler = default (SigAction);
-			return xamarin_install_chained_signal_handler (signal, ref handler, out previous_handler);
+			return xamarin_enable_current_signal_handler ((int) signal);
 		}
 	}
 		

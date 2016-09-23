@@ -2159,12 +2159,18 @@ xamarin_insert_dllmap ()
 }
 
 bool
-xamarin_install_chained_signal_handler (int signal, const struct sigaction *handler, struct sigaction *previous_handler)
+xamarin_enable_current_signal_handler (int signal)
 {
 #if TARGET_OS_WATCH
 	return false; // mono doesn't handle signals on watchOS.
 #else
-	return mono_runtime_install_chained_signal_handler (signal, handler, previous_handler);
+	struct sigaction current;
+	if (sigaction (signal, NULL, &current) != 0) {
+		PRINT (PRODUCT "Could not fetch current signal: %s", strerror (errno));
+		return false;
+	}
+	mono_runtime_install_chained_signal_handler (signal, &current, NULL);
+	return true;
 #endif
 }
 

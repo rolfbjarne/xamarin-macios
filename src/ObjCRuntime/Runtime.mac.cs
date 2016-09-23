@@ -55,14 +55,14 @@ namespace XamCore.ObjCRuntime {
 		delegate void initialize_func ();
 		delegate void set_bool_func (bool value);
 		unsafe delegate sbyte *get_sbyteptr_func ();
-		delegate bool install_chained_signal_handler_func (int signal, ref SigAction handler, out SigAction previous_handler);
+		delegate bool install_chained_signal_handler_func (int signal);
 
 		static volatile bool originalWorkingDirectoryIsSet;
 		static string originalWorkingDirectory;
 
-		static bool xamarin_install_chained_signal_handler (int signal, ref SigAction handler, out SigAction previous_handler)
+		static bool xamarin_enable_current_signal_handler (int signal)
 		{
-			return LookupInternalFunction<install_chained_signal_handler_func> ("xamarin_install_chained_signal_handler") (signal, ref handler, out previous_handler);
+			return LookupInternalFunction<install_chained_signal_handler_func> ("xamarin_enable_current_signal_handler") (signal);
 		}
 
 		public unsafe static string OriginalWorkingDirectory {

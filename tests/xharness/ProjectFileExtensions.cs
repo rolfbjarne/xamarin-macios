@@ -32,6 +32,7 @@ namespace xharness
 		}
 
 		static string[] eqsplitter = new string[] { "==" };
+		static string[] orsplitter = new string[] { " Or " };
 		static char[] pipesplitter = new char[] { '|' };
 		static char[] trimchars = new char[] { '\'', ' ' };
 
@@ -114,15 +115,21 @@ namespace xharness
 			var conditionValue = condition.Value;
 			conditionValue = conditionValue.Replace ("$(Configuration)", configuration).Replace ("$(Platform)", platform);
 
-			var eqsplit = conditionValue.Split (eqsplitter, StringSplitOptions.None);
-			if (eqsplit.Length != 2) {
-				Console.WriteLine ("Could not parse condition; {0}", conditionValue);
-				return false;
+			var orsplits = conditionValue.Split (orsplitter, StringSplitOptions.None);
+			foreach (var orsplit in orsplits) {
+				var eqsplit = orsplit.Split (eqsplitter, StringSplitOptions.None);
+				if (eqsplit.Length != 2) {
+					Console.WriteLine ("Could not parse condition; {0}", conditionValue);
+					return false;
+				}
+
+				var left = eqsplit [0].Trim (trimchars);
+				var right = eqsplit [1].Trim (trimchars);
+				if (left == right)
+					return true;
 			}
 
-			var left = eqsplit [0].Trim (trimchars);
-			var right = eqsplit [1].Trim (trimchars);
-			return left == right;
+			return false;
 		}
 
 		public static string GetOutputPath (this XmlDocument csproj, string platform, string configuration)
@@ -369,6 +376,7 @@ namespace xharness
 				case "armv7":
 				case "armv7s":
 				case "arm64":
+				case "armv7, arm64":
 					n.InnerText = device_arch;
 					break;
 				default:

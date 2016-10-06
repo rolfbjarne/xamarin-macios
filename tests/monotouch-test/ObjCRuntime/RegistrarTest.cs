@@ -1646,18 +1646,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			}
 		}
 
-		[Test]
-		public void Test_Sd ()
-		{
-			using (var tc = new ObjCRegistrarTest ()) {
-				Assert.AreEqual (0, tc.Sd ().d1, "1");
-				Verify (tc, PSd1: new Sd () ); 
-				tc.PSd = new Sd () { d1 = 1.23 };
-				Assert.AreEqual (1.23, tc.Sd ().d1, "2");
-				Verify (tc, PSd1: new Sd () { d1 = 1.23 }); 
-			}
-		}
-
 		void Verify (ObjCRegistrarTest obj, string msg = null,
 			int? Pi1 = null,
 			int? Pi2 = null,
@@ -1698,7 +1686,10 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			Siid? PSiid1 = null,
 			Sd? PSd1 = null,
-			Sf? PSf1 = null)
+			Sf? PSf1 = null,
+			Sddd? PSddd = null,
+			Sdddd? PSdddd = null
+			)
 		{
 			if (Pi1.HasValue)
 				Assert.AreEqual (obj.Pi1, Pi1.Value, "Pi1");
@@ -1781,6 +1772,12 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			if (PSf1.HasValue)
 				Assert.AreEqual (obj.PSf, PSf1.Value, "PSf1");
+
+			if (PSddd.HasValue)
+				Assert.AreEqual (obj.PSddd, PSddd.Value, "PSddd");
+
+			if (PSdddd.HasValue)
+				Assert.AreEqual (obj.PSdddd, PSdddd.Value, "PSdddd");
 		}
 
 		public class TestClass : ObjCRegistrarTest

@@ -2360,6 +2360,48 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
+	bool IsHomogeneousAggregateSmallEnough (Type t, int members)
+	{
+		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5516-L5519
+		return members <= 4;
+	}
+
+	bool IsHomogeneousAggregateBaseType (Type t)
+	{
+		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5500-L5514
+		if (t == typeof (float) || t == typeof (double))
+			return true;
+
+		return false;
+	}
+
+	bool IsHomogeneousAggregate (List<Type> fieldTypes)
+	{
+#if WATCH
+		// Very simplified version of https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L4051
+		// since C# supports a lot less types than clang does.
+
+		if (fieldTypes.Count == 0)
+			return false;
+
+		if (!IsHomogeneousAggregateSmallEnough (fieldTypes [0], fieldTypes.Count))
+			return false;
+
+		if (!IsHomogeneousAggregateBaseType (fieldTypes [0]))
+			return false;
+
+		for (int i = 1; i < fieldTypes.Count; i++) {
+			if (fieldTypes [0] != fieldTypes [i])
+				return false;
+		}
+
+		return true;
+#else
+		// The implemented logic above is only valid (and used) for armv7k, so throw an exception if we end up here for other platforms
+		throw new NotImplementedException ();
+#endif
+	}
+
 	bool ArmNeedStret (MethodInfo mi)
 	{
 		Type t = mi.ReturnType;
@@ -2368,12 +2410,42 @@ public partial class Generator : IMemberGatherer {
 		if (!t.IsValueType || t.IsEnum || assembly)
 			return false;
 
+		var fieldTypes = new List<Type> ();
+		var size = GetValueTypeSize (t, fieldTypes, false);
 #if WATCH
 		// According to clang watchOS passes arguments bigger than 16 bytes by reference.
 		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5248-L5250
 		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5542-L5543
-		if (GetValueTypeSize (t, false) <= 16)
+		if (size <= 16) {
+			//Console.WriteLine ("Not stret: {0}", t);
 			return false;
+		}
+
+		// Except homogeneous aggregates, which are not stret either.
+		if (IsHomogeneousAggregate (fieldTypes)) {
+			Console.WriteLine ("Homogeneous: {0} Size: {1}", t, size);
+			return false;
+		}
+
+		Console.WriteLine ("Still stret: {0} Size: {1}", t, size);
+#else
+		if (size <= 4 && fieldTypes.Count == 1) {
+			switch (fieldTypes [0].FullName) {
+				case "System.Char":
+				case "System.Byte":
+				case "System.SByte":
+				case "System.UInt16":
+				case "System.Int16":
+				case "System.UInt32":
+				case "System.Int32":
+				case "System.IntPtr":
+				case "System.nuint":
+				case "System.uint":
+					Console.WriteLine ("ARM  not stret: {0}: {1}", t, string.Join (";", fieldTypes.Select ((v) => v.FullName).ToArray ()));
+					return false;
+				// floating-point types are stret
+			}
+		}
 #endif
 
 		return true;
@@ -2386,7 +2458,8 @@ public partial class Generator : IMemberGatherer {
 		if (!t.IsValueType || t.IsEnum || t.Assembly == typeof (object).Assembly)
 			return false;
 
-		return GetValueTypeSize (t, false) > 8;
+		var fieldTypes = new List<Type> ();
+		return GetValueTypeSize (t, fieldTypes, false) > 8;
 	}
 
 	bool X86_64NeedStret (MethodInfo mi)
@@ -2396,32 +2469,43 @@ public partial class Generator : IMemberGatherer {
 		if (!t.IsValueType || t.IsEnum || t.Assembly == typeof (object).Assembly)
 			return false;
 
-		return GetValueTypeSize (t, true) > 16;
+		var fieldTypes = new List<Type> ();
+		return GetValueTypeSize (t, fieldTypes, true) > 16;
 	}
 
-	public static int GetValueTypeSize (Type type, bool is_64_bits)
+	public static int GetValueTypeSize (Type type, List<Type> fieldTypes, bool is_64_bits)
 	{
 		switch (type.FullName) {
 		case "System.Char":
 		case "System.Boolean":
 		case "System.SByte":
-		case "System.Byte": return 1;
+		case "System.Byte":
+			fieldTypes.Add (type);
+			return 1;
 		case "System.Int16":
-		case "System.UInt16": return 2;
+		case "System.UInt16":
+			fieldTypes.Add (type);
+			return 2;
 		case "System.Single":
 		case "System.Int32":
-		case "System.UInt32": return 4;
+		case "System.UInt32":
+			fieldTypes.Add (type);
+			return 4;
 		case "System.Double":
-		case "System.Int64": 
-		case "System.UInt64": return 8;
+		case "System.Int64":
+		case "System.UInt64":
+			fieldTypes.Add (type);
+			return 8;
 		case "System.IntPtr":
 		case "System.nfloat":
 		case "System.nuint":
-		case "System.nint": return is_64_bits ? 8 : 4;
+		case "System.nint":
+			fieldTypes.Add (type);
+			return is_64_bits ? 8 : 4;
 		default:
 			int size = 0;
 			foreach (var field in type.GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
-				int s = GetValueTypeSize (field.FieldType, is_64_bits);
+				int s = GetValueTypeSize (field.FieldType, fieldTypes, is_64_bits);
 				if (s == -1)
 					return -1;
 				size += s;

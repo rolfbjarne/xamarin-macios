@@ -15,7 +15,7 @@ static class C {
 		// Arm64 is never stret
 	}
 
-	// X86: structs > 8
+	// X86: structs > 8 + structs with 3 members.
 	// X64: structs > 16
 	// ARM32: all structs, except those matching an integral platform type (i.e. a struct with a single int, but not a struct with a single float).
 	// ARM64: never
@@ -23,10 +23,10 @@ static class C {
 	// the numbers below are bitmasks of Architecture values.
 	static string [] structs_and_stret =  {
 		/* integral types */
-		"c:0", "cc:4", "ccc:4",  "cccc:4",
-		"s:0", "ss:4", "sss:4",  "ssss:4",
-		"i:0", "ii:4", "iii:7",  "iiii:7",  "iiiii:15",
-		"l:4", "ll:5", "lll:13", "llll:15", "lllll:15",
+		"c:0", "cc:4", "ccc:5",  "cccc:4",
+		"s:0", "ss:4", "sss:5",  "ssss:4",
+		"i:0", "ii:4", "iii:5",  "iiii:5",  "iiiii:15",
+		"l:4", "ll:5", "lll:15", "llll:15", "lllll:15",
 		/* floating point types */
 		"f:4", "ff:4", "fff:5", "ffff:5",  "fffff:15",
 		"d:4", "dd:5", "ddd:7", "dddd:7",  "ddddd:15",
@@ -120,7 +120,7 @@ static class C {
 		// matching the structure you want to check, and then backtrack until
 		// you see either an objc_msgSend or objc_msgSend_stret call, and you
 		// have your answer.
-#if false
+#if true
 		w.AppendLine ("extern \"C\" {");
 		foreach (var s in structs)
 			w.AppendLine ($"void _____________________________________{s} (struct S{s} x)  __attribute__ ((optnone)) {{ }}");

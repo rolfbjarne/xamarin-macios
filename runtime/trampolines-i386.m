@@ -105,6 +105,9 @@ marshal_return_value (void *context, const char *type, size_t size, void *vvalue
 			void *unboxed = mono_object_unbox (value);
 			memcpy ((void *) it->stret, unboxed, size);
 			break;
+		} else if ((it->state->type & Tramp_Stret) == Tramp_Stret) {
+			memcpy ((void *) it->stret, mono_object_unbox (value), size);
+			break;
 		}
 	
 		if (size > 4 && size <= 8) {

@@ -2416,18 +2416,13 @@ public partial class Generator : IMemberGatherer {
 		// According to clang watchOS passes arguments bigger than 16 bytes by reference.
 		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5248-L5250
 		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5542-L5543
-		if (size <= 16) {
-			//Console.WriteLine ("Not stret: {0}", t);
+		if (size <= 16)
 			return false;
-		}
 
 		// Except homogeneous aggregates, which are not stret either.
-		if (IsHomogeneousAggregate (fieldTypes)) {
-			Console.WriteLine ("Homogeneous: {0} Size: {1}", t, size);
+		if (IsHomogeneousAggregate (fieldTypes))
 			return false;
-		}
 
-		Console.WriteLine ("Still stret: {0} Size: {1}", t, size);
 #else
 		if (size <= 4 && fieldTypes.Count == 1) {
 			switch (fieldTypes [0].FullName) {
@@ -2441,7 +2436,6 @@ public partial class Generator : IMemberGatherer {
 				case "System.IntPtr":
 				case "System.nuint":
 				case "System.uint":
-					Console.WriteLine ("ARM  not stret: {0}: {1}", t, string.Join (";", fieldTypes.Select ((v) => v.FullName).ToArray ()));
 					return false;
 				// floating-point types are stret
 			}
@@ -2459,7 +2453,15 @@ public partial class Generator : IMemberGatherer {
 			return false;
 
 		var fieldTypes = new List<Type> ();
-		return GetValueTypeSize (t, fieldTypes, false) > 8;
+		var size = GetValueTypeSize (t, fieldTypes, false);
+
+		if (size > 8)
+			return true;
+
+		if (fieldTypes.Count == 3)
+			return true;
+
+		return false;
 	}
 
 	bool X86_64NeedStret (MethodInfo mi)

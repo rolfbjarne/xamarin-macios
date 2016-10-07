@@ -592,7 +592,7 @@ namespace XamCore.Registrar {
 							} else {
 								if (size > 8) {
 									trampoline = isStaticTrampoline ? Trampoline.X86_DoubleABI_StaticStretTrampoline : Trampoline.X86_DoubleABI_StretTrampoline;
-								} else {
+								} else if (size == 8) {
 									trampoline = isStaticTrampoline ? Trampoline.StaticLong : Trampoline.Long;
 								}
 							}

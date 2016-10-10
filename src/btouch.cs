@@ -62,7 +62,7 @@ class BindingTouch {
 #if XAMCORE_2_0
 	static string baselibdll = Path.Combine (GetSDKRoot (), "lib/mono/Xamarin.iOS/Xamarin.iOS.dll");
 #else
-	static string baselibdll = Path.Combine (GetSDKRoot (), "lib/mono/2.1/monotouch.dll");
+	#error XI/Classic is no more
 #endif
 	static string tool_name = "btouch";
 	static string compiler = Path.Combine (GetSDKRoot (), "bin/smcs");

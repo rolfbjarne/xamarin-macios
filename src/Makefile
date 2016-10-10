@@ -15,7 +15,6 @@ TVOS_BUILD_DIR=build/tvos
 
 PMCS_EXE=$(TOP)/src/build/common/pmcs.exe
 
-include $(TOP)/opentk/Makefile.include
 include $(TOP)/tools/pmcs/Makefile.frag
 
 #
@@ -24,7 +23,6 @@ include $(TOP)/tools/pmcs/Makefile.frag
 #
 IOS_WARNINGS_THAT_YOU_SHOULD_FIX=108
 
-include ./OpenGLES/Makefile.include
 include ./OpenGLES/Makefile-1.0.include
 include ./Makefile.generator
 
@@ -46,9 +44,9 @@ IOS_SOURCES += $(IOS_EXTRA_SOURCES)
 
 IOS_GENERATOR_FLAGS = -inline-selectors -d:IOS -process-enums
 IOS_DEFINES = -define:IPHONE -define:IOS -define:MONOTOUCH -d:NET_2_0 -d:__IOS__ $(APPLETLS_DEFINES)
-IOS_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
 IOS_PMCS = $(IOS_BUILD_DIR)/pmcs
-IOS_BMONO = MONO_PATH=$(IOS_LIBDIR) $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-mono
+IOS_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
+IOS_BMONO = MONO_PATH=$(IOS_LIBDIR)/repl $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-mono
 
 $(IOS_BUILD_DIR)/Constants.cs: Constants.iOS.cs.in Makefile
 	$(Q) mkdir -p $(IOS_BUILD_DIR)
@@ -128,7 +126,7 @@ $(eval $(call IOS_GENERATOR_template,native,--ns=ObjCRuntime -new-style,native))
 define IOS_TARGETS_template
 IOS_VARIANTS_TARGETS += $(IOS_BUILD_DIR)/$(1)/$(3)
 
-# monotouch.dll | Xamarin.iOS.dll
+# Xamarin.iOS.dll
 $(IOS_BUILD_DIR)/$(1)/$(3): $$(IOS_SOURCES) $(IOS_BUILD_DIR)/$(4)/generated_sources $(PRODUCT_KEY_PATH)
 	@mkdir -p $(IOS_BUILD_DIR)/$(1)
 	$$(call Q_PROF_PMCS,ios/$(1)) PMCS_PROFILE=$(5) $$(IOS_PMCS) -out:$$@ -target:library -debug -unsafe -optimize \
@@ -141,7 +139,6 @@ $(IOS_BUILD_DIR)/$(1)/$(3).mdb: $(IOS_BUILD_DIR)/$(1)/$(3)
 
 endef
 
-$(eval $(call IOS_TARGETS_template,compat,--ns=MonoTouch.ObjCRuntime,monotouch.dll,compat,compat-ios))
 $(eval $(call IOS_TARGETS_template,native-32,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,native,native-32))
 $(eval $(call IOS_TARGETS_template,native-64,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,native,native-64))
 
@@ -168,17 +165,8 @@ $(IOS_BUILD_DIR)/$(1)/$(5): $$(IOS_TOUCHUNIT_SOURCES) $(IOS_BUILD_DIR)/$(1)/$(4)
 
 $(IOS_BUILD_DIR)/$(1)/$(5).mdb: $(IOS_BUILD_DIR)/$(1)/$(5)
 	@touch $(IOS_BUILD_DIR)/$(1)/$(5).mdb
-
-# System.Drawing
-# not installed or shipped yet - must be compiled manually using "make System.Drawing.dll"
-$(IOS_BUILD_DIR)/$(1)/System.Drawing.dll: $$(IOS_SYSTEM_DRAWING_SOURCES) monotouch.dll $(PRODUCT_KEY_PATH)
-	$$(call Q_PROF_MCS,ios/$(1)) $$(IOS_CSC) -out:$$@ -target:library -debug \
-		-keyfile:$(PRODUCT_KEY_PATH) -r:$(IOS_BUILD_DIR)/$(1)/$(3) $(6) \
-		-nowarn:114,169,414,1635 $$(IOS_DEFINES) \
-		$$(IOS_SYSTEM_DRAWING_SOURCES)
 endef
 
-$(eval $(call IOS_LIBS_template,compat,--ns=MonoTouch.ObjCRuntime,monotouch.dll,MonoTouch.Dialog-1.dll,MonoTouch.NUnitLite.dll))
 $(eval $(call IOS_LIBS_template,reference,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,MonoTouch.Dialog-1.dll,MonoTouch.NUnitLite.dll,-define:XAMCORE_2_0 -define:__UNIFIED__))
 
 $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll: $(IOS_BUILD_DIR)/native-64/Xamarin.iOS.dll
@@ -197,22 +185,18 @@ $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll.mdb: $(IOS_BUILD_DIR)/reference/Xamar
 	$(Q) cp $< $<.mdb .
 
 #
-# System.Drawing.Primitives special handling as it has dependency on monotouch.dll/Xamarin.iOS.dll
+# System.Drawing.Primitives special handling as it has dependency on Xamarin.iOS.dll
 # hence we cannot built it as part of Mono BCL
 #
-
-$(MONO_PATH)/mcs/class/lib/monotouch/compat_Facades/System.Drawing.Primitives.dll: $(IOS_BUILD_DIR)/compat/monotouch.dll
-	$(call Q_PROF_MCS,ios/compat) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/Facades/System.Drawing.Primitives PROFILE=monotouch LIBRARY_SUBDIR=compat_Facades    EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(IOS_BUILD_DIR)/compat/monotouch.dll)"
-	@touch $@
 
 $(MONO_PATH)/mcs/class/lib/monotouch/reference_Facades/System.Drawing.Primitives.dll: $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll
 	$(call Q_PROF_MCS,ios/unified) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/Facades/System.Drawing.Primitives PROFILE=monotouch LIBRARY_SUBDIR=reference_Facades EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll)"
 	@touch $@
 
-$(IOS_BUILD_DIR)/%/Facades/System.Drawing.Primitives.dll: $(MONO_PATH)/mcs/class/lib/monotouch/%_Facades/System.Drawing.Primitives.dll | $(IOS_BUILD_DIR)/compat/Facades $(IOS_BUILD_DIR)/reference/Facades
+$(IOS_BUILD_DIR)/%/Facades/System.Drawing.Primitives.dll: $(MONO_PATH)/mcs/class/lib/monotouch/%_Facades/System.Drawing.Primitives.dll | $(IOS_BUILD_DIR)/reference/Facades
 	$(Q) cp $< $@
 
-.SECONDARY: $(IOS_BUILD_DIR)/reference/Facades/System.Drawing.Primitives.dll $(IOS_BUILD_DIR)/compat/Facades/System.Drawing.Primitives.dll
+.SECONDARY: $(IOS_BUILD_DIR)/reference/Facades/System.Drawing.Primitives.dll
 
 #
 # System.Net.Http is special
@@ -237,10 +221,6 @@ IOS_EXTRA_SYSTEM_NET_HTTP_FILES = \
 	$(abspath $(TOP)/src/ObjCRuntime/RuntimeOptions.cs) \
 
 # build (into custom LIBRARY_SUBDIR)
-$(MONO_PATH)/mcs/class/lib/monotouch/compat/System.Net.Http.dll:    $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) $(MONO_PATH)/mcs/class/lib/monotouch/System.Net.Http.dll $(IOS_BUILD_DIR)/compat/monotouch.dll 
-	$(call Q_PROF_MCS,ios/compat) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/System.Net.Http PROFILE=monotouch LIBRARY_SUBDIR=compat    EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(IOS_BUILD_DIR)/compat/monotouch.dll)      $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) -D:XAMARIN_MODERN -d:SYSTEM_NET_HTTP"
-	$(Q) touch $@
-
 $(MONO_PATH)/mcs/class/lib/monotouch/reference/System.Net.Http.dll: $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) $(MONO_PATH)/mcs/class/lib/monotouch/System.Net.Http.dll $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll
 	$(call Q_PROF_MCS,ios/unified) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/System.Net.Http PROFILE=monotouch LIBRARY_SUBDIR=reference EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll) $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) -D:XAMCORE_2_0 -D:XAMARIN_MODERN -D:SYSTEM_NET_HTTP -D:UNIFIED"
 	$(Q) touch $@
@@ -248,21 +228,18 @@ $(MONO_PATH)/mcs/class/lib/monotouch/reference/System.Net.Http.dll: $(IOS_EXTRA_
 $(MONO_PATH)/mcs/class/lib/monotouch/reference/System.Net.Http.dll.mdb: $(MONO_PATH)/mcs/class/lib/monotouch/reference/System.Net.Http.dll
 	@touch $@
 
-$(MONO_PATH)/mcs/class/lib/monotouch/compat/System.Net.Http.dll.mdb: $(MONO_PATH)/mcs/class/lib/monotouch/compat/System.Net.Http.dll
-	@touch $@
-
-# sign dll (one target for both compat+reference)
+# sign dll
 $(IOS_BUILD_DIR)/%/System.Net.Http.dll: $(MONO_PATH)/mcs/class/lib/monotouch/%/System.Net.Http.dll
 	$(Q) cp $< $@
 	$(call Q_PROF_SN,ios/$@) MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -R $@ $(PRODUCT_KEY_PATH)
 
-# mdb rebase (one target for both compat+reference)
-$(IOS_BUILD_DIR)/%/System.Net.Http.dll.mdb: $(MONO_PATH)/mcs/class/lib/monotouch/%/System.Net.Http.dll.mdb | $(IOS_BUILD_DIR)/compat $(IOS_BUILD_DIR)/reference
+# mdb rebase
+$(IOS_BUILD_DIR)/%/System.Net.Http.dll.mdb: $(MONO_PATH)/mcs/class/lib/monotouch/%/System.Net.Http.dll.mdb | $(IOS_BUILD_DIR)/reference
 	@# mdb-rebase the mdb
 	$(Q) cp $< $@
 	$(call Q_PROF_GEN,ios/$*) $(MDB_REBASE) -i $(abspath $(MONO_PATH))/ -o $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/src/mono/ $@
 
-.SECONDARY: $(IOS_BUILD_DIR)/reference/System.Net.Http.dll $(IOS_BUILD_DIR)/compat/System.Net.Http.dll
+.SECONDARY: $(IOS_BUILD_DIR)/reference/System.Net.Http.dll
 
 clean-local::
 	rm -rf build
@@ -270,8 +247,6 @@ clean-local::
 
 IOS_TARGETS_DIRS += \
 	$(IOS_BUILD_DIR)                                           \
-	$(IOS_BUILD_DIR)/compat                                    \
-	$(IOS_BUILD_DIR)/compat/Facades                            \
 	$(IOS_BUILD_DIR)/reference                                 \
 	$(IOS_BUILD_DIR)/reference/Facades                         \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin                      \
@@ -279,32 +254,13 @@ IOS_TARGETS_DIRS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS     \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/32bits               \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/64bits               \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1             \
 
 IOS_TARGETS += \
 	xamios.csproj                                                                  \
-	monotouch.dll                                                                  \
-	MonoTouch.Dialog-1.dll                                                         \
-	MonoTouch.NUnitLite.dll                                                        \
 	MonoTouch.NUnitLite.csproj                                                     \
 	MonoTouch.Dialog-1.csproj                                                      \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/Version                                      \
 	$(PMCS_MONOTOUCH_INSTALL_TARGETS)                                              \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/System.Net.Http.dll             \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/System.Net.Http.dll.mdb         \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/monotouch.dll                   \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/monotouch.dll.mdb               \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/Facades/System.Drawing.Primitives.dll     \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/OpenTK.dll                      \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/OpenTK.dll.mdb                  \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/OpenTK.dll.config               \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/OpenTK-1.0.dll                  \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/OpenTK-1.0.dll.mdb              \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/OpenTK-1.0.dll.config           \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/MonoTouch.Dialog-1.dll          \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/MonoTouch.Dialog-1.dll.mdb      \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/MonoTouch.NUnitLite.dll         \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/MonoTouch.NUnitLite.dll.mdb     \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/Xamarin.iOS.dll         \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/Xamarin.iOS.dll.mdb     \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/Facades/System.Drawing.Primitives.dll     \
@@ -321,18 +277,6 @@ IOS_TARGETS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/32bits/Xamarin.iOS.dll.mdb               \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/64bits/Xamarin.iOS.dll                   \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/64bits/Xamarin.iOS.dll.mdb               \
-
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.dll: $(IOS_BUILD_DIR)/compat/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
-	$(Q) install -m 0755 $< $@
-
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/Facades/%.dll: $(IOS_BUILD_DIR)/compat/Facades/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/Facades
-	$(Q) install -m 0755 $< $@
-
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.mdb: $(IOS_BUILD_DIR)/compat/%.mdb | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
-	$(Q) install -m 0644 $< $@
-
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.config: $(IOS_BUILD_DIR)/compat/%.config | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
-	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/share/doc/MonoTouch/%: api-diffs/% | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/share/doc/MonoTouch
 	$(Q) install -m 0644 $< $@

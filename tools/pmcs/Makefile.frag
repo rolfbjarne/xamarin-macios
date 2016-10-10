@@ -16,7 +16,6 @@ $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/lib/pmcs/profiles/%: $(TOP)/tools/pmcs/profil
 PMCS_MONOTOUCH_INSTALL_TARGETS = \
 	$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/bin/pmcs \
 	$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/lib/pmcs/pmcs.exe \
-	$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/lib/pmcs/profiles/classic \
 	$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/lib/pmcs/profiles/unified
 
 PMCS_SOURCES =                                                  \

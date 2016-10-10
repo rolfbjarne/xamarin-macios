@@ -15,17 +15,12 @@ IOS_TARGETS_DIRS +=                              \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch \
 
 IOS_TARGETS +=                                                          \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch.exe             \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch-native.exe      \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/%: %.in | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
 	$(Q_GEN) sed 's!@MONOTOUCH_PREFIX@!$(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX))!g' $*.in > $@
 	$(Q) chmod +x $@
-
-$(IOS_BUILD_DIR)/btouch.exe: $(IOS_BUILD_DIR)/compat/monotouch.dll $(GENERATOR_SOURCES) Makefile.generator
-	$(call Q_PROF_PMCS,ios/compat) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-ios" -compiler:$(IOS_CSC) -global-replace:"^XamCore=MonoTouch" -debug -define:NOTYPECONVERTER -define:IOS,NET_4_0             -out:$@ $(GENERATOR_SOURCES) -r:$<
 
 $(IOS_BUILD_DIR)/btouch-native.exe: $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll $(GENERATOR_SOURCES) Makefile.generator
 	$(call Q_PROF_PMCS,ios/native) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="         -debug -define:NOTYPECONVERTER -define:IOS,NET_4_0,XAMCORE_2_0 -out:$@ $(GENERATOR_SOURCES) -r:$<

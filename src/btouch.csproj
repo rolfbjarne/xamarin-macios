@@ -21,7 +21,7 @@
     <ConsolePause>False</ConsolePause>
     <EnvironmentVariables>
       <EnvironmentVariables>
-        <Variable name="MONO_PATH" value="/Developer/MonoTouch/usr/lib/mono/2.1/" />
+        <Variable name="MONO_PATH" value="/Developer/MonoTouch/usr/lib/mono/Xamarin.iOS/" />
       </EnvironmentVariables>
     </EnvironmentVariables>
   </PropertyGroup>

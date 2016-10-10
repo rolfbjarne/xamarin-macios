@@ -2348,187 +2348,6 @@ public partial class Generator : IMemberGatherer {
 		       need_stret ? (aligned ? "IntPtr" : "out " + FormatTypeUsedIn (ns.CoreObjCRuntime, mi.ReturnType)) + " retval, " : "");
 	}
 
-	bool IsMagicType (Type t)
-	{
-		switch (t.Name) {
-		case "nint":
-		case "nuint":
-		case "nfloat":
-			return t.Assembly == typeof (NSObject).Assembly;
-		default:
-			return t.Assembly == typeof (object).Assembly;
-		}
-	}
-
-	bool IsHomogeneousAggregateSmallEnough (Type t, int members)
-	{
-		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5516-L5519
-		return members <= 4;
-	}
-
-	bool IsHomogeneousAggregateBaseType (Type t)
-	{
-		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5500-L5514
-		if (t == typeof (float) || t == typeof (double))
-			return true;
-
-		return false;
-	}
-
-	bool IsHomogeneousAggregate (List<Type> fieldTypes)
-	{
-#if WATCH
-		// Very simplified version of https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L4051
-		// since C# supports a lot less types than clang does.
-
-		if (fieldTypes.Count == 0)
-			return false;
-
-		if (!IsHomogeneousAggregateSmallEnough (fieldTypes [0], fieldTypes.Count))
-			return false;
-
-		if (!IsHomogeneousAggregateBaseType (fieldTypes [0]))
-			return false;
-
-		for (int i = 1; i < fieldTypes.Count; i++) {
-			if (fieldTypes [0] != fieldTypes [i])
-				return false;
-		}
-
-		return true;
-#else
-		// The implemented logic above is only valid (and used) for armv7k, so throw an exception if we end up here for other platforms
-		throw new NotImplementedException ();
-#endif
-	}
-
-	bool ArmNeedStret (MethodInfo mi)
-	{
-		Type t = mi.ReturnType;
-
-		bool assembly = Compat ? t.Assembly == typeof (object).Assembly : IsMagicType (t);
-		if (!t.IsValueType || t.IsEnum || assembly)
-			return false;
-
-		var fieldTypes = new List<Type> ();
-		var size = GetValueTypeSize (t, fieldTypes, false);
-#if WATCH
-		// According to clang watchOS passes arguments bigger than 16 bytes by reference.
-		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5248-L5250
-		// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5542-L5543
-		if (size <= 16)
-			return false;
-
-		// Except homogeneous aggregates, which are not stret either.
-		if (IsHomogeneousAggregate (fieldTypes))
-			return false;
-
-#else
-		if (size <= 4 && fieldTypes.Count == 1) {
-			switch (fieldTypes [0].FullName) {
-				case "System.Char":
-				case "System.Byte":
-				case "System.SByte":
-				case "System.UInt16":
-				case "System.Int16":
-				case "System.UInt32":
-				case "System.Int32":
-				case "System.IntPtr":
-				case "System.nuint":
-				case "System.uint":
-					return false;
-				// floating-point types are stret
-			}
-		}
-#endif
-
-		return true;
-	}
-
-	bool X86NeedStret (MethodInfo mi)
-	{
-		Type t = mi.ReturnType;
-		
-		if (!t.IsValueType || t.IsEnum || t.Assembly == typeof (object).Assembly)
-			return false;
-
-		var fieldTypes = new List<Type> ();
-		var size = GetValueTypeSize (t, fieldTypes, false);
-
-		if (size > 8)
-			return true;
-
-		if (fieldTypes.Count == 3)
-			return true;
-
-		return false;
-	}
-
-	bool X86_64NeedStret (MethodInfo mi)
-	{
-		Type t = mi.ReturnType;
-
-		if (!t.IsValueType || t.IsEnum || t.Assembly == typeof (object).Assembly)
-			return false;
-
-		var fieldTypes = new List<Type> ();
-		return GetValueTypeSize (t, fieldTypes, true) > 16;
-	}
-
-	public static int GetValueTypeSize (Type type, List<Type> fieldTypes, bool is_64_bits)
-	{
-		switch (type.FullName) {
-		case "System.Char":
-		case "System.Boolean":
-		case "System.SByte":
-		case "System.Byte":
-			fieldTypes.Add (type);
-			return 1;
-		case "System.Int16":
-		case "System.UInt16":
-			fieldTypes.Add (type);
-			return 2;
-		case "System.Single":
-		case "System.Int32":
-		case "System.UInt32":
-			fieldTypes.Add (type);
-			return 4;
-		case "System.Double":
-		case "System.Int64":
-		case "System.UInt64":
-			fieldTypes.Add (type);
-			return 8;
-		case "System.IntPtr":
-		case "System.nfloat":
-		case "System.nuint":
-		case "System.nint":
-			fieldTypes.Add (type);
-			return is_64_bits ? 8 : 4;
-		default:
-			int size = 0;
-			foreach (var field in type.GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
-				int s = GetValueTypeSize (field.FieldType, fieldTypes, is_64_bits);
-				if (s == -1)
-					return -1;
-				size += s;
-			}
-			return size;
-		}
-	}
-
-	bool NeedStret (MethodInfo mi)
-	{
-		if (Compat)
-			return ArmNeedStret (mi) || X86NeedStret (mi);
-
-		bool no_arm_stret = X86NeedStret (mi) || X86_64NeedStret (mi);
-
-		if (OnlyDesktop)
-			return no_arm_stret;
-
-		return no_arm_stret || ArmNeedStret (mi);
-	}
-
 	bool IsNativeEnum (Type type)
 	{
 		return type.IsEnum && HasAttribute (type, typeof (NativeAttribute));
@@ -2569,12 +2388,12 @@ public partial class Generator : IMemberGatherer {
 
 		try {
 			if (Compat) {
-				bool arm_stret = ArmNeedStret (mi);
+				bool arm_stret = Stret.ArmNeedStret (mi);
 				bool is_aligned = HasAttribute (mi, typeof (AlignAttribute));
 				RegisterMethod (arm_stret, mi, MakeSig (mi, arm_stret, arm_stret && is_aligned), arm_stret && is_aligned);
 				RegisterMethod (arm_stret, mi, MakeSuperSig (mi, arm_stret, arm_stret && is_aligned), arm_stret && is_aligned);
 
-				bool x86_stret = X86NeedStret (mi);
+				bool x86_stret = Stret.X86NeedStret (mi);
 				if (x86_stret != arm_stret){
 					RegisterMethod (x86_stret, mi, MakeSig (mi, x86_stret, x86_stret && is_aligned), x86_stret && is_aligned);
 					RegisterMethod (x86_stret, mi, MakeSuperSig (mi, x86_stret, x86_stret && is_aligned), x86_stret && is_aligned);
@@ -2591,7 +2410,7 @@ public partial class Generator : IMemberGatherer {
 					RegisterMethod (false, mi, MakeSig (mi, false, enum_mode: mode), false, mode);
 					RegisterMethod (false, mi, MakeSuperSig (mi, false, enum_mode: mode), false, mode);
 
-					if (NeedStret (mi)) {
+					if (Stret.NeedStret (mi)) {
 						RegisterMethod (true, mi, MakeSig (mi, true, enum_mode: mode), false, mode);
 						RegisterMethod (true, mi, MakeSuperSig (mi, true, enum_mode: mode), false, mode);
 
@@ -4181,8 +4000,8 @@ public partial class Generator : IMemberGatherer {
 			return;
 		}
 
-		bool arm_stret = ArmNeedStret (mi);
-		bool x86_stret = X86NeedStret (mi);
+		bool arm_stret = Stret.ArmNeedStret (mi);
+		bool x86_stret = Stret.X86NeedStret (mi);
 		bool aligned = HasAttribute (mi, typeof(AlignAttribute));
 
 		if (OnlyDesktop){
@@ -4208,9 +4027,9 @@ public partial class Generator : IMemberGatherer {
 
 	void GenerateNewStyleInvoke (bool supercall, MethodInfo mi, MemberInformation minfo, string selector, string[] args, bool assign_to_temp, Type category_type)
 	{
-		bool arm_stret = ArmNeedStret (mi);
-		bool x86_stret = X86NeedStret (mi);
-		bool x64_stret = X86_64NeedStret (mi);
+		bool arm_stret = Stret.ArmNeedStret (mi);
+		bool x86_stret = Stret.X86NeedStret (mi);
+		bool x64_stret = Stret.X86_64NeedStret (mi);
 		bool dual_enum = HasNativeEnumInSignature (mi);
 		bool is_stret_multi = arm_stret || x86_stret || x64_stret;
 		bool need_multi_path = is_stret_multi || dual_enum;
@@ -4642,7 +4461,7 @@ public partial class Generator : IMemberGatherer {
 
 		bool use_temp_return  =
 			minfo.is_return_release ||
-			(mi.Name != "Constructor" && (NeedStret (mi) || disposes.Length > 0 || postget != null) && mi.ReturnType != typeof (void)) ||
+			(mi.Name != "Constructor" && (Stret.NeedStret (mi) || disposes.Length > 0 || postget != null) && mi.ReturnType != typeof (void)) ||
 			(HasAttribute (mi, typeof (FactoryAttribute))) ||
 			((body_options & BodyOption.NeedsTempReturn) == BodyOption.NeedsTempReturn) ||
 			(mi.ReturnType.IsSubclassOf (typeof (Delegate))) ||

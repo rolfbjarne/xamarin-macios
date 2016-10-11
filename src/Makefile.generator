@@ -53,7 +53,7 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch: Makefile.generator
 	$(Q) chmod +x $@
 
 $(WATCH_BUILD_DIR)/bwatch.exe: $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.dll $(GENERATOR_SOURCES) Makefile.generator
-	$(call Q_PROF_PMCS,watch) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/watch" -compiler:$(SYSTEM_MCS) -nostdlib -r:mscorlib -lib:$(WATCH_LIBDIR)/repl -global-replace:"^XamCore.=" -debug $(GENERATOR_DEFINES) -define:NOTYPECONVERTER -define:NET_4_0,XAMCORE_2_0,XAMCORE_3_0 -d:WATCH -d:NO_SYSTEM_DRAWING -out:$@ $(GENERATOR_SOURCES) -r:$<
+	$(call Q_PROF_PMCS,watch) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/watch" -compiler:$(SYSTEM_MCS) -nostdlib -r:mscorlib -lib:$(WATCH_LIBDIR)/repl -global-replace:"^XamCore.=" -debug $(GENERATOR_DEFINES) -define:NOTYPECONVERTER -define:NET_4_0,XAMCORE_2_0,XAMCORE_3_0 -d:WATCH -d:__WATCHOS__ -d:NO_SYSTEM_DRAWING -out:$@ $(GENERATOR_SOURCES) -r:$<
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/%.exe: $(WATCH_BUILD_DIR)/%.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch
 	$(Q) install -m 0755 $< $@
@@ -75,7 +75,7 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv: Makefile.generator
 	$(Q) chmod +x $@
 
 $(TVOS_BUILD_DIR)/btv.exe: $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.dll $(GENERATOR_SOURCES) Makefile.generator
-	$(call Q_PROF_PMCS,tvos) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/tvos" -compiler:$(SYSTEM_MCS) -nostdlib -r:mscorlib.dll -lib:$(TVOS_LIBDIR)/repl -global-replace:"^XamCore.=" -debug $(GENERATOR_DEFINES) -define:NOTYPECONVERTER -define:NET_4_0,XAMCORE_2_0,XAMCORE_3_0 -d:TVOS -out:$@ $(GENERATOR_SOURCES) -r:$<
+	$(call Q_PROF_PMCS,tvos) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/tvos" -compiler:$(SYSTEM_MCS) -nostdlib -r:mscorlib.dll -lib:$(TVOS_LIBDIR)/repl -global-replace:"^XamCore.=" -debug $(GENERATOR_DEFINES) -define:NOTYPECONVERTER -define:NET_4_0,XAMCORE_2_0,XAMCORE_3_0 -d:TVOS -d:__TVOS__ -out:$@ $(GENERATOR_SOURCES) -r:$<
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btv/%.exe: $(TVOS_BUILD_DIR)/%.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btv
 	$(Q) install -m 0755 $< $@

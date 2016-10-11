@@ -36,7 +36,7 @@ static class C {
 		"iiff:5", // 16 bytes
 		"id:5", "di:5", // 16 bytes
 		"iid:5", // 16 bytes
-		"idi:7", // 16 bytes on i386 and 24 bytes on x86_64 (due to alignment)
+		"idi:15", // 16 bytes on i386 and 24 bytes on x86_64 (due to alignment)
 		"ddi:15", // 24 bytes
 		"didi:15", // 24 bytes on 32-bit arch, 32 bytes on 64-bit arch
 		"idid:15", // 24 bytes on 32-bit arch, 32 bytes on 64-bit arch

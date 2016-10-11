@@ -215,7 +215,7 @@ namespace XamCore.ObjCRuntime
 			case "System.Double":
 			case "System.Int64":
 			case "System.UInt64":
-				type_size = 4;
+				type_size = 8;
 				break;
 			case "System.IntPtr":
 			case "System.nfloat":

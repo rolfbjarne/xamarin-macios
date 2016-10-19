@@ -11,7 +11,12 @@
 
 using System;
 using System.Collections.Generic;
+#if IKVM
+using IKVM.Reflection;
+using Type=IKVM.Reflection.Type;
+#else
 using System.Reflection;
+#endif
 using System.Runtime.InteropServices;
 
 using XamCore.Foundation;

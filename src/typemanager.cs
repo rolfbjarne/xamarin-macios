@@ -66,6 +66,11 @@ public static class AttributeManager
 		return attribute.GetType ();
 #endif
 	}
+
+	public static Type GetAttributeType (System.Type type)
+	{
+		throw new System.NotImplementedException ();
+	}
 }
 
 public static class TypeManager {
@@ -86,8 +91,11 @@ public static class TypeManager {
 	public static Type System_nfloat { get; set; }
 	public static Type System_Void { get; set; }
 	public static Type System_String { get; set; }
+	public static Type System_String_Array { get; set; }
+	public static Type System_Delegate { get; set; }
 
 	public static Type NSObject { get; set; }
+	public static Type INativeObject { get; set; }
 
 	public static Type LinkWithAttribute { get; set; }
 	public static Type BaseTypeAttribute { get; set; }
@@ -98,9 +106,17 @@ public static class TypeManager {
 	public static Type FlagsAttribute { get; set; }
 	public static Type AbstractAttribute { get; set; }
 	public static Type NativeAttribute { get; set; }
-	public static Type StrongDictionaryAttribute { get; set; }
+	public static Type BlockCallbackAttribute { get; set; }
+	public static Type CCallbackAttribute { get; set; }
+	public static Type NullAllowedAttribute { get; set; }
+	public static Type OutAttribute { get; set; }
+	public static Type BindAttribute { get; set; }
+	public static Type MarshalNativeExceptionsAttribute { get; set; }
+	public static Type TargetAttribute { get; set; }
 
 	public static Type DictionaryContainerType { get; set; }
+
+	public static Type AudioBuffers { get; set; }
 
 	public static bool IsSubclassOf (Type base_class, Type derived_class)
 	{

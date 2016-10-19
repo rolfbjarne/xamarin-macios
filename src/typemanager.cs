@@ -1,3 +1,31 @@
+
+#if !__WATCHOS__
+#define AUDIOTOOLBOX
+#define AUDIOUNIT
+#define COREMEDIA
+#define MEDIATOOLBOX
+#endif
+
+#if __IOS__ || __TVOS__
+#define AUDIOTOOLBOX_MUSICSEQUENCE
+#endif
+
+#if !__TVOS__ && !__WATCHOS__ && !MONOMAC
+#define ADDRESSBOOK
+#endif
+
+#if !__TVOS__ && !__WATCHOS__
+#define COREMIDI
+#endif
+
+#if !__WATCHOS__
+#define COREVIDEO
+#endif
+
+#if MONOMAC
+#define OPENGL
+#endif
+
 #if IKVM
 using IKVM.Reflection;
 using Type=IKVM.Reflection.Type;
@@ -12,29 +40,36 @@ using System.Runtime.InteropServices;
 
 using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
 
+
 using XamCore.CoreGraphics;
 using XamCore.Foundation;
 #if !__UNIFIED__
 using XamCore;
 #endif
 using XamCore.ObjCRuntime;
-#if !__WATCHOS__
+#if COREMEDIA
 using XamCore.CoreMedia;
 #endif
 using XamCore.CoreFoundation;
 using XamCore.Security;
 using XamCore.AVFoundation;
+#if COREVIDEO
 using XamCore.CoreVideo;
+#endif
 using XamCore.AudioToolbox;
-#if !__WATCHOS__
+#if AUDIOUNIT
 using XamCore.AudioUnit;
+#endif
+#if MEDIATOOLBOX
 using XamCore.MediaToolbox;
 #endif
-#if !__TVOS__ && !__WATCHOS__
+#if ADDRESSBOOK
 using XamCore.AddressBook;
+#endif
+#if COREMIDI
 using XamCore.CoreMidi;
 #endif
-#if MONOMAC
+#if OPENGL
 using XamCore.OpenGL;
 #endif
 #endif
@@ -77,24 +112,36 @@ public static class AttributeManager
 			return false;
 
 		foreach (var attrib in attribs) {
-			var attribType = GetAttributeType ((Attribute) attrib);
+			var attribType = GetAttributeType ((System.Attribute) attrib);
 			for (int t = 0; t < any_attribute_type.Length; t++) {
-				if (TypeManager.IsSubclassOf (any_attribute_type [t], attribType))
+				if (any_attribute_type [t] == attribType) {
+					//System.Console.WriteLine ("Has exact attribute: {0}", provider);
 					return true;
+				}
+				if (TypeManager.IsSubclassOf (any_attribute_type [t], attribType)) {
+					//System.Console.WriteLine ("Has attribute: {0}", provider);
+					return true;
+				} else {
+					//System.Console.WriteLine ("Attribute check: {0} {1} is not of {2}", provider, any_attribute_type [t], attribType);
+				}
 			}
 		}
-
+		//System.Console.WriteLine ("No attribute: {0}", provider);
 		return false;
 	}
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type, bool inherits = false)
 	{
 		var attribs = GetCustomAttributes (provider, inherits);
-		if (attribs == null || attribs.Length == 0)
+		if (attribs == null || attribs.Length == 0) {
+			//Console.WriteLine ("No {0} for {1}", attribute_type, provider);
 			return false;
+		}
 
 		foreach (var attrib in attribs) {
 			var attribType = GetAttributeType ((Attribute) attrib);
+			if (attribute_type == attribType)
+				return true;
 			if (TypeManager.IsSubclassOf (attribute_type, attribType))
 				return true;
 		}
@@ -122,7 +169,11 @@ public static class AttributeManager
 
 	public static Type GetAttributeType (System.Type type)
 	{
+#if IKVM
 		throw new System.NotImplementedException ();
+#else
+		return type;
+#endif
 	}
 }
 
@@ -156,12 +207,6 @@ public static class TypeManager {
 	public static Type Class;
 	public static Type Protocol;
 	public static Type Constants;
-//	 (
-//#if XAMCORE_2_0
-//		XamCore.ObjCRuntime.Constants);
-//#else
-//		XamCore.Constants);
-//#endif
 
 	public static Type LinkWithAttribute { get; set; }
 	public static Type BaseTypeAttribute { get; set; }
@@ -276,6 +321,7 @@ public static class TypeManager {
 	public static Type AURenderEventEnumerator;
 	public static Type CFRunLoop;
 	public static Type AudioUnit;
+
 #if __UNIFIED__
 	public static Type CGRect;
 	public static Type CGPoint;
@@ -294,7 +340,7 @@ public static class TypeManager {
 #if IKVM
 		throw new System.NotImplementedException ();
 #else
-		return derived_class.IsSubclassOf (base_class);
+		return base_class.IsSubclassOf (derived_class);
 #endif
 	}
 
@@ -303,6 +349,7 @@ public static class TypeManager {
 #if IKVM
 
 #else
+	System_Object = typeof (object);
 	System_Int32 = typeof (int);
 	System_Int64 = typeof (long);
 	System_UInt32 = typeof (uint);
@@ -416,14 +463,14 @@ public static class TypeManager {
 
 	DictionaryContainerType = typeof (DictionaryContainerType);
 
-#if !__WATCHOS__
+#if AUDIOTOOLBOX
 	AudioBuffers = typeof (AudioBuffers);
-#endif
-
-#if !MONOMAC && !__WATCHOS__
+#if AUDIOTOOLBOX_MUSICSEQUENCE
 	MusicSequence = typeof (MusicSequence);
 #endif
-#if !__WATCHOS__
+#endif
+
+#if COREMEDIA
 	CMSampleBuffer = typeof (CMSampleBuffer);
 	CMTimebase = typeof (CMTimebase);
 	CMClock = typeof (CMClock);
@@ -435,25 +482,26 @@ public static class TypeManager {
 	CGImage = typeof (CGImage);
 	CGColorSpace = typeof (CGColorSpace);
 	DispatchQueue = typeof (DispatchQueue);
-#if !__TVOS__ && !__WATCHOS__
+#if COREMIDI
 	MidiEndpoint = typeof (MidiEndpoint);
+#endif
+#if ADDRESSBOOK
 	ABAddressBook = typeof (ABAddressBook);
 	ABPerson = typeof (ABPerson);
 	ABRecord = typeof (ABRecord);
 #endif
 
 	NSZone = typeof (NSZone);
-#if !__WATCHOS__
+#if MEDIATOOLBOX
 	MTAudioProcessingTap = typeof (MTAudioProcessingTap);
 #endif
-#if !__WATCHOS__
+#if COREVIDEO
 	CVImageBuffer = typeof (CVImageBuffer);
 	CVPixelBufferPool = typeof (CVPixelBufferPool);
 	CVPixelBuffer = typeof (CVPixelBuffer);
 #endif
 	CGLayer = typeof (CGLayer);
-#if !__WATCHOS__
-	// CoreMedia
+#if COREMEDIA
 	CMTime = typeof (CMTime);
 	CMFormatDescription = typeof (CMFormatDescription);
 	CMAudioFormatDescription = typeof (CMAudioFormatDescription);
@@ -462,13 +510,10 @@ public static class TypeManager {
 	SecIdentity = typeof (SecIdentity);
 	SecTrust = typeof (SecTrust);
 	SecAccessControl = typeof (SecAccessControl);
-#if !__WATCHOS__
-	// AudioUnit
+#if AUDIOUNIT
 	AudioComponent = typeof (AudioComponent);
 	AURenderEventEnumerator = typeof (AURenderEventEnumerator);
-#if !__TVOS__ && !MONOMAC
-	AudioUnit = typeof (AudioUnit);
-#endif
+	AudioUnit = typeof (XamCore.AudioUnit.AudioUnit);
 #endif
 
 	// CoreFoundation
@@ -486,7 +531,7 @@ public static class TypeManager {
 
 	ProbePresenceAttribute = typeof (ProbePresenceAttribute);
 	AVCaptureWhiteBalanceGains = typeof (AVCaptureWhiteBalanceGains);
-#if MONOMAC
+#if OPENGL
 	CGLContext = typeof (CGLContext);
 	CGLPixelFormat = typeof (CGLPixelFormat);
 #endif
@@ -501,7 +546,11 @@ public static class TypeManager {
 
 	public static Type GetUnderlyingEnumType (Type type)
 	{
+#if IKVM
 		throw new System.NotImplementedException ();
+#else
+		return Enum.GetUnderlyingType (type);
+#endif
 	}
 
 	public static bool IsEnumValueDefined (Type type, object value)

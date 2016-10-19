@@ -92,6 +92,7 @@ public static class ReflectionExtensions {
 	public static Type GetBaseType (Type type)
 	{
 		BaseTypeAttribute bta = GetBaseTypeAttribute (type);
+		//Console.WriteLine ("{0} bta: {1} bta.BaseType: {2} TypeManager.System_Object: {3}", type, bta, bta?.BaseType, TypeManager.System_Object);
 		Type base_type = bta != null ?  bta.BaseType : TypeManager.System_Object;
 
 		return base_type;
@@ -139,6 +140,7 @@ public static class ReflectionExtensions {
 		string owrap;
 		string nwrap;
 
+		//Console.WriteLine ("T: {0} Parent: {1}", type, parent_type);
 		if (parent_type != TypeManager.NSObject) {
 			if (AttributeManager.HasAttribute (parent_type, TypeManager.ModelAttribute, false)) {
 				foreach (PropertyInfo pinfo in parent_type.GetProperties (flags)) {
@@ -1640,7 +1642,7 @@ public partial class Generator : IMemberGatherer {
 		//
 		public static implicit operator MarshalType (Type type)
 		{
-			Console.WriteLine ("MarshalType {0}", type);
+			//Console.WriteLine ("MarshalType {0}", type);
 			return new MarshalType (type);
 		}
 	}
@@ -1809,7 +1811,7 @@ public partial class Generator : IMemberGatherer {
 		if (IsNativeType (mai.Type))
 			return PrimitiveType (mai.Type, formatted);
 
-		if (mai.Type == TypeManager.StrongDictionaryAttribute){
+		if (mai.Type == TypeManager.System_String){
 			if (mai.PlainString)
 				return "string";
 
@@ -2390,6 +2392,7 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (HasAttribute (mi, TypeManager.WrapAttribute))
 			return;
+		//Console.WriteLine ("Declaring invoker: {0}.{1}", mi.DeclaringType.FullName, mi.Name);
 
 		try {
 			if (Compat) {
@@ -2645,7 +2648,7 @@ public partial class Generator : IMemberGatherer {
 		foreach (Type t in types){
 			if (SkipGenerationOfType (t))
 				continue;
-
+			//Console.WriteLine ("G: {0}", t);
 			// We call lookup to build the hierarchy graph
 			GeneratedType.Lookup (t);
 			
@@ -3521,7 +3524,7 @@ public partial class Generator : IMemberGatherer {
 		// we must avoid duplication of availability so we will only print
 		// if the property has no Availability
 		bool propHasNoInfo = !AttributeManager.HasAttribute (minfo.property, TypeManager.AvailabilityBaseAttribute, true)
-		                          && !AttributeManager.HasAttribute (minfo.property.GetGetMethod (), TypeManager.AvailabilityBaseAttribute, true);
+		                          && (minfo.property.GetGetMethod () == null || !AttributeManager.HasAttribute (minfo.property.GetGetMethod (), TypeManager.AvailabilityBaseAttribute, true));
 
 		if (isInlined && propHasNoInfo)
 			PrintPlatformAttributes (minfo.property.DeclaringType);
@@ -6905,7 +6908,7 @@ public partial class Generator : IMemberGatherer {
 				print ("}\n");
 				print ("public static {0}{1} GetAppearance<T> () where T: {2} {{", parent_implements_appearance ? "new " : "", appearance_type_name, TypeName);
 				indent++;
-				print ("return new {0} (global::{1}.IntPtr_objc_msgSend (Class.GetHandle (TypeManager.T), {2}));", appearance_type_name, ns.Messaging, InlineSelectors ? ns.CoreObjCRuntime + ".Selector.GetHandle (\"appearance\")" : "UIAppearance.SelectorAppearance");
+				print ("return new {0} (global::{1}.IntPtr_objc_msgSend (Class.GetHandle (typeof (T)), {2}));", appearance_type_name, ns.Messaging, InlineSelectors ? ns.CoreObjCRuntime + ".Selector.GetHandle (\"appearance\")" : "UIAppearance.SelectorAppearance");
 				indent--;
 				print ("}\n");
 				print ("public static {0}{1} AppearanceWhenContainedIn (params Type [] containers)", parent_implements_appearance ? "new " : "", appearance_type_name);
@@ -6929,13 +6932,13 @@ public partial class Generator : IMemberGatherer {
 
 				print ("public static {0}{1} GetAppearance<T> (UITraitCollection traits) where T: {2} {{", parent_implements_appearance ? "new " : "", appearance_type_name, TypeName);
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (Class.GetHandle (TypeManager.T), traits));", appearance_type_name);
+				print ("return new {0} (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), traits));", appearance_type_name);
 				indent--;
 				print ("}\n");
 
 				print ("public static {0}{1} GetAppearance<T> (UITraitCollection traits, params Type [] containers) where T: {2}{{", parent_implements_appearance ? "new " : "", appearance_type_name, TypeName);
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (Class.GetHandle (TypeManager.T), containers));", appearance_type_name);
+				print ("return new {0} (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), containers));", appearance_type_name);
 				indent--;
 				print ("}\n");
 

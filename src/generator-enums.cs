@@ -10,8 +10,13 @@ using Type=IKVM.Reflection.Type;
 using System.Reflection;
 #endif
 
+#if IKVM
 using XamCore.Foundation;
 using XamCore.ObjCRuntime;
+#else
+using XamCore.Foundation;
+using XamCore.ObjCRuntime;
+#endif
 
 // If the enum is used to represent error code then this attribute can be used to
 // generate an extension type that will return the associated error domain based

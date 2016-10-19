@@ -19,7 +19,9 @@ using System.Reflection;
 #endif
 using System.Runtime.InteropServices;
 
+#if !IKVM
 using XamCore.Foundation;
+#endif
 
 namespace XamCore.ObjCRuntime
 {

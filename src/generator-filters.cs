@@ -8,7 +8,9 @@ using Type=IKVM.Reflection.Type;
 using System.Reflection;
 #endif
 
+#if !IKVM
 using XamCore.Foundation;
+#endif
 
 [AttributeUsage (AttributeTargets.Interface)]
 public class CoreImageFilterAttribute : Attribute {

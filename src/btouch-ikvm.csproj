@@ -8,13 +8,13 @@
     <ProjectGuid>{D2EE02C0-9BFD-477D-AC92-4DE2D8490790}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>src</RootNamespace>
-    <AssemblyName>btouch</AssemblyName>
+    <AssemblyName>generator-ikvm</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
-    <OutputPath>build\ios</OutputPath>
+    <OutputPath>build\ios\native</OutputPath>
     <DefineConstants>DEBUG;IPHONE;IOS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -23,7 +23,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
-    <OutputPath>build\ios</OutputPath>
+    <OutputPath>build\ios\native</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>True</Externalconsole>
@@ -37,6 +37,7 @@
     <CscToolExe>$(MSBuildProjectDirectory)\ikvm.sh</CscToolExe>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="attributes.cs" />
     <Compile Include="btouch.cs" />
     <Compile Include="error.cs" />
     <Compile Include="generator.cs" />

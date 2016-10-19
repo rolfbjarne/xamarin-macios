@@ -9,11 +9,24 @@ IKVM_REFLECTION_SOURCES = \
 	$(MONO_PATH)/external/ikvm/reflect/Reader/*.cs \
 	$(MONO_PATH)/external/ikvm/reflect/Writer/*.cs \
 	$(MONO_PATH)/external/ikvm/reflect/Impl/ITypeOwner.cs \
-	$(MONO_PATH)/external/ikvm/reflect/Impl/SymbolSupport.cs
+	$(MONO_PATH)/external/ikvm/reflect/Impl/SymbolSupport.cs \
+	$(TOP)/src/ObjCRuntime/AlphaAttribute.cs \
+	$(TOP)/src/ObjCRuntime/ArgumentSemantic.cs \
+	$(TOP)/src/ObjCRuntime/PlatformAvailability2.cs \
+	$(TOP)/src/ObjCRuntime/LinkWithAttribute.cs \
+	$(TOP)/src/ObjCRuntime/NativeAttribute.cs \
+	$(TOP)/src/ObjCRuntime/Registrar.core.cs \
+	$(TOP)/src/Foundation/ProtocolAttribute.cs \
+	$(TOP)/src/Foundation/FieldAttribute.cs \
+	$(TOP)/src/Foundation/AdviceAttribute.cs \
+	$(TOP)/src/Foundation/ExportAttribute.cs \
+	$(TOP)/src/Foundation/RegisterAttribute.cs \
+	$(TOP)/src/Foundation/PreserveAttribute.cs \
 
 IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
 
 GENERATOR_SOURCES =                                             \
+	$(TOP)/src/attributes.cs                           \
 	$(TOP)/src/btouch.cs                               \
 	$(TOP)/src/error.cs                                \
 	$(TOP)/src/generator.cs                            \
@@ -33,8 +46,8 @@ endif
 
 # test target
 ikvm:
-	$(Q) rm -f ./build/ios/native/generator.exe
-	$(MAKE) ./build/ios/native/generator.exe USE_IKVM=1
+	$(Q) rm -f ./build/ios/native/generator-ikvm.exe
+	$(MAKE) ./build/ios/native/generator-ikvm.exe USE_IKVM=ikvm
 
 #
 # Xamarin.iOS (btouch)
@@ -62,6 +75,15 @@ $(IOS_BUILD_DIR)/btouch-native.exe: $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll $
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(IOS_BUILD_DIR)/native/attributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="        -out:$@ -debug attributes.cs -target:library
+
+$(IOS_BUILD_DIR)/native/generator-ikvm.exe: $(GENERATOR_SOURCES)
+	mcs -out:$@ -debug -unsafe \
+		$(IOS_DEFINES) \
+		$(GENERATOR_DEFINES)             \
+		$(GENERATOR_SOURCES)
 
 #
 # Xamarin.Watch (bwatch)

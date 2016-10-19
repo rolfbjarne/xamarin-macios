@@ -139,7 +139,7 @@ public static class AttributeManager
 		}
 
 		foreach (var attrib in attribs) {
-			var attribType = GetAttributeType ((Attribute) attrib);
+			var attribType = GetAttributeType ((System.Attribute) attrib);
 			if (attribute_type == attribType)
 				return true;
 			if (TypeManager.IsSubclassOf (attribute_type, attribType))

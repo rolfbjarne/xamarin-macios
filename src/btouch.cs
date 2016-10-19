@@ -39,11 +39,15 @@ using System.Text;
 using Mono.Options;
 using System.Runtime.InteropServices;
 
+#if IKVM
+using XamCore.ObjCRuntime;
+#else
 #if !MONOMAC
 using XamCore.ObjCRuntime;
 using XamCore.Foundation;
 #else
 using XamCore.Foundation;
+#endif
 #endif
 
 class BindingTouch {

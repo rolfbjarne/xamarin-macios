@@ -54,6 +54,10 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
+#if IKVM
+using XamCore.Foundation;
+using XamCore.ObjCRuntime;
+#else
 using XamCore.CoreFoundation;
 using XamCore.CoreGraphics;
 using XamCore.ObjCRuntime;
@@ -81,6 +85,7 @@ using XamCore.MediaToolbox;
 #endif
 
 using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
+#endif
 
 public static class ReflectionExtensions {
 	public static BaseTypeAttribute GetBaseTypeAttribute (Type type)
@@ -318,7 +323,8 @@ public static class StringExtensions
 //
 
 [AttributeUsage (AttributeTargets.ReturnValue | AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-public class ForcedTypeAttribute : Attribute {
+public class ForcedTypeAttribute : Attribute
+{
 	public ForcedTypeAttribute (bool owns = false)
 	{
 		Owns = owns;
@@ -340,7 +346,8 @@ public class ForcedTypeAttribute : Attribute {
 //
 // To protocolize newer versions, use [Protocolize (3)] for XAMCORE_3_0, [Protocolize (4)] for XAMCORE_4_0, etc
 //
-public class ProtocolizeAttribute : Attribute {
+public class ProtocolizeAttribute : Attribute
+{
 	public ProtocolizeAttribute ()
 	{
 		Version = 2;
@@ -355,11 +362,13 @@ public class ProtocolizeAttribute : Attribute {
 }
 
 // Used to mark if a type is not a wrapper type.
-public class SyntheticAttribute : Attribute {
+public class SyntheticAttribute : Attribute
+{
 	public SyntheticAttribute () { }
 }
 
-public class NeedsAuditAttribute : Attribute {
+public class NeedsAuditAttribute : Attribute
+{
 	public NeedsAuditAttribute (string reason)
 	{
 		Reason = reason;
@@ -368,10 +377,12 @@ public class NeedsAuditAttribute : Attribute {
 	public string Reason { get; set; }
 }
 
-public class MarshalNativeExceptionsAttribute : Attribute {
+public class MarshalNativeExceptionsAttribute : Attribute
+{
 }
 
-public class RetainListAttribute : Attribute {
+public class RetainListAttribute : Attribute
+{
 	public RetainListAttribute (bool doadd, string name)
 	{
 		Add = doadd;
@@ -382,7 +393,8 @@ public class RetainListAttribute : Attribute {
 	public bool Add { get; set; }
 }
 
-public class RetainAttribute : Attribute {
+public class RetainAttribute : Attribute
+{
 	public RetainAttribute ()
 	{
 	}
@@ -394,11 +406,13 @@ public class RetainAttribute : Attribute {
 	public string WrapName { get; set; }
 }
 
-public class ReleaseAttribute : Attribute {
+public class ReleaseAttribute : Attribute
+{
 }
 
-[AttributeUsage(AttributeTargets.All, AllowMultiple=true)]
-public class PostGetAttribute : Attribute {
+[AttributeUsage (AttributeTargets.All, AllowMultiple = true)]
+public class PostGetAttribute : Attribute
+{
 	public PostGetAttribute (string name)
 	{
 		MethodName = name;
@@ -426,10 +440,11 @@ public class PostGetAttribute : Attribute {
 		var ea = AttributeManager.GetCustomAttributes (p, TypeManager.ExportAttribute, false);
 		var sem = (ea [0] as ExportAttribute).ArgumentSemantic;
 		return (sem != ArgumentSemantic.Assign && sem != ArgumentSemantic.Weak); // also cover UnsafeUnretained
-	} 
+	}
 }
 
-public class BaseTypeAttribute : Attribute {
+public class BaseTypeAttribute : Attribute
+{
 	public BaseTypeAttribute (Type t)
 	{
 		BaseType = t;
@@ -452,7 +467,8 @@ public class BaseTypeAttribute : Attribute {
 //
 // Used for methods that invoke other targets, not this.Handle
 //
-public class BindAttribute : Attribute {
+public class BindAttribute : Attribute
+{
 	public BindAttribute (string sel)
 	{
 		Selector = sel;
@@ -463,7 +479,8 @@ public class BindAttribute : Attribute {
 	public bool Virtual { get; set; }
 }
 
-public class WrapAttribute : Attribute {
+public class WrapAttribute : Attribute
+{
 	public WrapAttribute (string methodname)
 	{
 		MethodName = methodname;
@@ -475,23 +492,27 @@ public class WrapAttribute : Attribute {
 // This attribute is a convenience shorthand for settings the
 // [EditorBrowsable (EditorBrowsableState.Advanced)] flags
 //
-public class AdvancedAttribute : Attribute {
-	public AdvancedAttribute () {}
+public class AdvancedAttribute : Attribute
+{
+	public AdvancedAttribute () { }
 }
 
 // When applied instructs the generator to call Release on the returned objects
 // this happens when factory methods in Objetive-C return objects with refcount=1
-public class FactoryAttribute : Attribute {
-	public FactoryAttribute () {}
+public class FactoryAttribute : Attribute
+{
+	public FactoryAttribute () { }
 }
 
 // When applied, it instructs the generator to not use NSStrings for marshalling.
-public class PlainStringAttribute : Attribute {
-	public PlainStringAttribute () {}
+public class PlainStringAttribute : Attribute
+{
+	public PlainStringAttribute () { }
 }
 
-public class AutoreleaseAttribute : Attribute {
-	public AutoreleaseAttribute () {}
+public class AutoreleaseAttribute : Attribute
+{
+	public AutoreleaseAttribute () { }
 }
 
 // When applied, the generator generates a check for the Handle being valid on the main object, to
@@ -504,8 +525,9 @@ public class AutoreleaseAttribute : Attribute {
 //
 // This would invalidate "foo" and force the code to return to a destroyed/freed
 // object
-public class CheckDisposedAttribute : Attribute {
-	public CheckDisposedAttribute () {}
+public class CheckDisposedAttribute : Attribute
+{
+	public CheckDisposedAttribute () { }
 }
 
 //
@@ -515,39 +537,46 @@ public class CheckDisposedAttribute : Attribute {
 // Not supported for Unified API; use [Category] support instead for
 // Objective-C categories (which will create extension methods).
 //
-public class TargetAttribute : Attribute {
-	public TargetAttribute () {}
+public class TargetAttribute : Attribute
+{
+	public TargetAttribute () { }
 }
 
-public class ProxyAttribute : Attribute {
-	public ProxyAttribute () {}
+public class ProxyAttribute : Attribute
+{
+	public ProxyAttribute () { }
 }
 
 // When applied to a member, generates the member as static
-public class StaticAttribute : Attribute {
-	public StaticAttribute () {}
+public class StaticAttribute : Attribute
+{
+	public StaticAttribute () { }
 }
 
 // When applied to a type generate a partial class even if the type does not subclasss NSObject
 // useful for Core* types that declare Fields
-public class PartialAttribute : Attribute {
-	public PartialAttribute () {}
+public class PartialAttribute : Attribute
+{
+	public PartialAttribute () { }
 }
 
 // flags the backing field for the property to with .NET's [ThreadStatic] property
-public class IsThreadStaticAttribute : Attribute {
-	public IsThreadStaticAttribute () {}
+public class IsThreadStaticAttribute : Attribute
+{
+	public IsThreadStaticAttribute () { }
 }
 
 // When applied to a member, generates the member as static
 // and passes IntPtr.Zero or null if the parameter is null
-public class NullAllowedAttribute : Attribute {
-	public NullAllowedAttribute () {}
+public class NullAllowedAttribute : Attribute
+{
+	public NullAllowedAttribute () { }
 }
 
 // When applied to a method or property, flags the resulting generated code as internal
-public class InternalAttribute : Attribute {
-	public InternalAttribute () {}
+public class InternalAttribute : Attribute
+{
+	public InternalAttribute () { }
 }
 
 // This is a conditional "Internal" method, that flags methods as internal only when
@@ -555,12 +584,14 @@ public class InternalAttribute : Attribute {
 //
 // In addition, UnifiedInternal members automatically get an underscore after their name
 // so [UnifiedInternal] void Foo(); becomes "Foo_()"
-public class UnifiedInternalAttribute : Attribute {
-	public UnifiedInternalAttribute () {}
+public class UnifiedInternalAttribute : Attribute
+{
+	public UnifiedInternalAttribute () { }
 }
 
 // When applied to a method or property, flags the resulting generated code as internal
-public sealed class ProtectedAttribute : Attribute {
+public sealed class ProtectedAttribute : Attribute
+{
 }
 
 // When this attribute is applied to the interface definition it will
@@ -568,11 +599,13 @@ public sealed class ProtectedAttribute : Attribute {
 // still instantiate object of this class internally from your
 // extension file, but it just wont be accessible to users of your
 // class.
-public class PrivateDefaultCtorAttribute : DefaultCtorVisibilityAttribute {
-	public PrivateDefaultCtorAttribute () : base (Visibility.Private) {}
+public class PrivateDefaultCtorAttribute : DefaultCtorVisibilityAttribute
+{
+	public PrivateDefaultCtorAttribute () : base (Visibility.Private) { }
 }
 
-public enum Visibility {
+public enum Visibility
+{
 	Public,
 	Protected,
 	Internal,
@@ -584,7 +617,8 @@ public enum Visibility {
 // When this attribute is applied to the interface definition it will
 // flag the default ctor with the corresponding visibility (or disabled
 // altogether if Visibility.Disabled is used).
-public class DefaultCtorVisibilityAttribute : Attribute {
+public class DefaultCtorVisibilityAttribute : Attribute
+{
 	public DefaultCtorVisibilityAttribute (Visibility visibility)
 	{
 		this.Visibility = visibility;
@@ -595,8 +629,9 @@ public class DefaultCtorVisibilityAttribute : Attribute {
 
 // When this attribute is applied to the interface definition it will
 // prevent the generator from producing the default constructor.
-public class DisableDefaultCtorAttribute : DefaultCtorVisibilityAttribute {
-	public DisableDefaultCtorAttribute () : base (Visibility.Disabled) {}
+public class DisableDefaultCtorAttribute : DefaultCtorVisibilityAttribute
+{
+	public DisableDefaultCtorAttribute () : base (Visibility.Disabled) { }
 }
 
 //
@@ -604,33 +639,39 @@ public class DisableDefaultCtorAttribute : DefaultCtorVisibilityAttribute {
 // backing field.   See bugzilla #3359 and Assistly 7032 for some
 // background information
 //
-public class TransientAttribute : Attribute {
-	public TransientAttribute () {}
+public class TransientAttribute : Attribute
+{
+	public TransientAttribute () { }
 }
 
 // Used for mandatory methods that must be implemented in a [Model].
-[AttributeUsage(AttributeTargets.Method|AttributeTargets.Property|AttributeTargets.Interface, AllowMultiple=true)]
-public class AbstractAttribute : Attribute {
-	public AbstractAttribute () {} 
+[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Interface, AllowMultiple = true)]
+public class AbstractAttribute : Attribute
+{
+	public AbstractAttribute () { }
 }
 
 // Used for mandatory methods that must be implemented in a [Model].
-public class OverrideAttribute : Attribute {
-	public OverrideAttribute () {} 
+public class OverrideAttribute : Attribute
+{
+	public OverrideAttribute () { }
 }
 
 // Makes the result use the `new' attribtue
-public class NewAttribute : Attribute {
-	public NewAttribute () {} 
+public class NewAttribute : Attribute
+{
+	public NewAttribute () { }
 }
 
 // Makes the result sealed
-public class SealedAttribute : Attribute {
-	public SealedAttribute () {} 
+public class SealedAttribute : Attribute
+{
+	public SealedAttribute () { }
 }
 
 // Flags the object as being thread safe
-public class ThreadSafeAttribute : Attribute {
+public class ThreadSafeAttribute : Attribute
+{
 	public ThreadSafeAttribute (bool safe = true)
 	{
 		Safe = safe;
@@ -640,7 +681,8 @@ public class ThreadSafeAttribute : Attribute {
 }
 
 // Marks a struct parameter/return value as requiring a certain alignment.
-public class AlignAttribute : Attribute {
+public class AlignAttribute : Attribute
+{
 	public int Align { get; set; }
 	public AlignAttribute (int align)
 	{
@@ -662,8 +704,9 @@ public class AlignAttribute : Attribute {
 //
 // Indicates that this array should be turned into a params
 //
-[AttributeUsage(AttributeTargets.Parameter, AllowMultiple=false)]
-public class ParamsAttribute : Attribute {
+[AttributeUsage (AttributeTargets.Parameter, AllowMultiple = false)]
+public class ParamsAttribute : Attribute
+{
 }
 
 //
@@ -671,10 +714,10 @@ public class ParamsAttribute : Attribute {
 // declaration to specify what kind of bridge needs to be provided on
 // callback.   Either a Block style setup, or a C-style setup
 //
-[AttributeUsage(AttributeTargets.Parameter, AllowMultiple=false)]
+[AttributeUsage (AttributeTargets.Parameter, AllowMultiple = false)]
 public class BlockCallbackAttribute : Attribute { }
 
-[AttributeUsage(AttributeTargets.Parameter, AllowMultiple=false)]
+[AttributeUsage (AttributeTargets.Parameter, AllowMultiple = false)]
 public class CCallbackAttribute : Attribute { }
 
 
@@ -691,13 +734,14 @@ public class CCallbackAttribute : Attribute { }
 // If you do not specify it, it will use NSNotificationCenter.DefaultCenter,
 // you would typically use this to specify the code needed to get to it.
 //
-[AttributeUsage(AttributeTargets.Property, AllowMultiple=true)]
-public class NotificationAttribute : Attribute {
+[AttributeUsage (AttributeTargets.Property, AllowMultiple = true)]
+public class NotificationAttribute : Attribute
+{
 	public NotificationAttribute (Type t) { Type = t; }
 	public NotificationAttribute (Type t, string notificationCenter) { Type = t; NotificationCenter = notificationCenter; }
 	public NotificationAttribute (string notificationCenter) { NotificationCenter = notificationCenter; }
-	public NotificationAttribute () {}
-	
+	public NotificationAttribute () { }
+
 	public Type Type { get; set; }
 	public string NotificationCenter { get; set; }
 }
@@ -708,12 +752,14 @@ public class NotificationAttribute : Attribute {
 // the key, instead of extracting a value out of the
 // userInfo dictionary
 //
-[AttributeUsage(AttributeTargets.Property, AllowMultiple=true)]
-public class ProbePresenceAttribute : Attribute {
-	public ProbePresenceAttribute () {}
+[AttributeUsage (AttributeTargets.Property, AllowMultiple = true)]
+public class ProbePresenceAttribute : Attribute
+{
+	public ProbePresenceAttribute () { }
 }
 
-public class EventArgsAttribute : Attribute {
+public class EventArgsAttribute : Attribute
+{
 	public EventArgsAttribute (string s)
 	{
 		ArgName = s;
@@ -745,7 +791,8 @@ public class EventArgsAttribute : Attribute {
 //     [Export ("foo"), DelegateName ("GetBoolean"), DefaultValue (false)]
 //     bool Confirm (Some source);
 //
-public class DelegateNameAttribute : Attribute {
+public class DelegateNameAttribute : Attribute
+{
 	public DelegateNameAttribute (string s)
 	{
 		Name = s;
@@ -773,7 +820,8 @@ public class DelegateNameAttribute : Attribute {
 //	Func<bool> Confirmation { get; set; }
 //
 //
-public class DelegateApiNameAttribute : Attribute {
+public class DelegateApiNameAttribute : Attribute
+{
 	public DelegateApiNameAttribute (string apiName)
 	{
 		Name = apiName;
@@ -782,7 +830,8 @@ public class DelegateApiNameAttribute : Attribute {
 	public string Name { get; set; }
 }
 
-public class EventNameAttribute : Attribute {
+public class EventNameAttribute : Attribute
+{
 	public EventNameAttribute (string s)
 	{
 		EvtName = s;
@@ -790,21 +839,26 @@ public class EventNameAttribute : Attribute {
 	public string EvtName { get; set; }
 }
 
-public class DefaultValueAttribute : Attribute {
-	public DefaultValueAttribute (object o){
+public class DefaultValueAttribute : Attribute
+{
+	public DefaultValueAttribute (object o)
+	{
 		Default = o;
 	}
 	public object Default { get; set; }
 }
 
-public class DefaultValueFromArgumentAttribute : Attribute {
-	public DefaultValueFromArgumentAttribute (string s){
+public class DefaultValueFromArgumentAttribute : Attribute
+{
+	public DefaultValueFromArgumentAttribute (string s)
+	{
 		Argument = s;
 	}
 	public string Argument { get; set; }
 }
 
-public class NoDefaultValueAttribute : Attribute {
+public class NoDefaultValueAttribute : Attribute
+{
 }
 
 // Attribute used to mark those methods that will be ignored when
@@ -813,7 +867,8 @@ public class NoDefaultValueAttribute : Attribute {
 // 1. when there are overloaded methods. This means that we can mark
 //    the default overload to be used in the events.
 // 2. whe some of the methods should not be exposed as events.
-public class IgnoredInDelegateAttribute : Attribute {
+public class IgnoredInDelegateAttribute : Attribute
+{
 }
 
 // Apply to strings parameters that are merely retained or assigned,
@@ -827,8 +882,9 @@ public class IgnoredInDelegateAttribute : Attribute {
 //
 // This forced the generator to create an NSString before calling the
 // API instead of using the fast string marshalling code.
-public class DisableZeroCopyAttribute : Attribute {
-	public DisableZeroCopyAttribute () {}
+public class DisableZeroCopyAttribute : Attribute
+{
+	public DisableZeroCopyAttribute () { }
 }
 
 // Apply this attribute to methods that need a custom binding method.
@@ -854,7 +910,8 @@ public class DisableZeroCopyAttribute : Attribute {
 // This is only for internal use (for now at least).
 //
 [AttributeUsage (AttributeTargets.Method)]
-public class MarshalDirectiveAttribute : Attribute {
+public class MarshalDirectiveAttribute : Attribute
+{
 	public string NativePrefix { get; set; }
 	public string NativeSuffix { get; set; }
 	public string Library { get; set; }
@@ -880,12 +937,14 @@ public class MarshalDirectiveAttribute : Attribute {
 // In the ZeroCopy case it is a problem because we pass handles to stack-allocated
 // strings that stop existing after the invocation is over.
 //
-[AttributeUsage(AttributeTargets.Assembly|AttributeTargets.Method|AttributeTargets.Interface, AllowMultiple=true)]
-public class ZeroCopyStringsAttribute : Attribute {
+[AttributeUsage (AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Interface, AllowMultiple = true)]
+public class ZeroCopyStringsAttribute : Attribute
+{
 }
 
-[AttributeUsage(AttributeTargets.Method|AttributeTargets.Property, AllowMultiple=true)]
-public class SnippetAttribute : Attribute {
+[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = true)]
+public class SnippetAttribute : Attribute
+{
 	public SnippetAttribute (string s)
 	{
 		Code = s;
@@ -896,30 +955,34 @@ public class SnippetAttribute : Attribute {
 //
 // PreSnippet code is inserted after the parameters have been validated/marshalled
 // 
-public class PreSnippetAttribute : SnippetAttribute {
-	public PreSnippetAttribute (string s) : base (s) {}
+public class PreSnippetAttribute : SnippetAttribute
+{
+	public PreSnippetAttribute (string s) : base (s) { }
 }
 
 //
 // PrologueSnippet code is inserted before any code is generated
 // 
-public class PrologueSnippetAttribute : SnippetAttribute {
-	public PrologueSnippetAttribute (string s) : base (s) {}
+public class PrologueSnippetAttribute : SnippetAttribute
+{
+	public PrologueSnippetAttribute (string s) : base (s) { }
 }
 
 //
 // PostSnippet code is inserted before returning, before paramters are disposed/released
 // 
-public class PostSnippetAttribute : SnippetAttribute {
-	public PostSnippetAttribute (string s) : base (s) {}
+public class PostSnippetAttribute : SnippetAttribute
+{
+	public PostSnippetAttribute (string s) : base (s) { }
 }
 
 //
 // Code to run from a generated Dispose method
 //
-[AttributeUsage(AttributeTargets.Interface, AllowMultiple=true)]
-public class DisposeAttribute : SnippetAttribute {
-	public DisposeAttribute (string s) : base (s) {}
+[AttributeUsage (AttributeTargets.Interface, AllowMultiple = true)]
+public class DisposeAttribute : SnippetAttribute
+{
+	public DisposeAttribute (string s) : base (s) { }
 }
 
 //
@@ -929,9 +992,10 @@ public class DisposeAttribute : SnippetAttribute {
 // the UIApperance proxies, so we must label all the options.   This will be a list that
 // is organically grown as we find them
 //
-[AttributeUsage (AttributeTargets.Property|AttributeTargets.Method, AllowMultiple=false)]
-public class AppearanceAttribute : Attribute {
-	public AppearanceAttribute () {}
+[AttributeUsage (AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false)]
+public class AppearanceAttribute : Attribute
+{
+	public AppearanceAttribute () { }
 }
 
 //
@@ -941,10 +1005,11 @@ public class AppearanceAttribute : Attribute {
 // This allows the Foo.set_XXX to exists but throw an exception 
 // but derived classes would then override the property
 //
-[AttributeUsage (AttributeTargets.Method, AllowMultiple=false)]
-public class NotImplementedAttribute : Attribute {
-	public NotImplementedAttribute () {}
-	public NotImplementedAttribute (string message) {Message=message;}
+[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
+public class NotImplementedAttribute : Attribute
+{
+	public NotImplementedAttribute () { }
+	public NotImplementedAttribute (string message) { Message = message; }
 	public string Message { get; set; }
 }
 
@@ -961,9 +1026,10 @@ public class NotImplementedAttribute : Attribute {
 //     [Export ("method_in_the_objective_c_category")]
 //     void ThisWillBecome_a_c_sharp_extension_method_in_class_UIViewExtensions ();
 // }
-[AttributeUsage (AttributeTargets.Interface, AllowMultiple=false)]
-public class CategoryAttribute : Attribute {
-	public CategoryAttribute () {}
+[AttributeUsage (AttributeTargets.Interface, AllowMultiple = false)]
+public class CategoryAttribute : Attribute
+{
+	public CategoryAttribute () { }
 }
 
 //
@@ -974,7 +1040,8 @@ public class CategoryAttribute : Attribute {
 // from the IDE
 //
 [AttributeUsage (AttributeTargets.Constructor | AttributeTargets.Method)]
-public class DesignatedInitializerAttribute : Attribute {
+public class DesignatedInitializerAttribute : Attribute
+{
 	public DesignatedInitializerAttribute ()
 	{
 	}
@@ -992,23 +1059,26 @@ public class DesignatedInitializerAttribute : Attribute {
 //[Export ("saveAccount:withCompletionHandler:")] [Async]
 //void SaveAccount (ACAccount account, ACAccountStoreSaveCompletionHandler completionHandler);
 // }
-[AttributeUsage (AttributeTargets.Method, AllowMultiple=false)]
-public class AsyncAttribute : Attribute {
+[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
+public class AsyncAttribute : Attribute
+{
 
 	//This will automagically generate the async method.
 	//This works with 4 kinds of callbacks: (), (NSError), (result), (result, NSError)
-	public AsyncAttribute () {}
+	public AsyncAttribute () { }
 
 	//This works with 2 kinds of callbacks: (...) and (..., NSError).
 	//Parameters are passed in order to a constructor in resultType
-	public AsyncAttribute (Type resultType) {
+	public AsyncAttribute (Type resultType)
+	{
 		ResultType = resultType;
 	}
 
 	//This works with 2 kinds of callbacks: (...) and (..., NSError).
 	//Parameters are passed in order to a result type that is automatically created if size > 1
 	//The generated method is named after the @methodName
-	public AsyncAttribute (string methodName) {
+	public AsyncAttribute (string methodName)
+	{
 		MethodName = methodName;
 	}
 
@@ -1053,8 +1123,9 @@ public class AsyncAttribute : Attribute {
 //	    BarOptions BarDictionary { get; set; }
 //  }
 //
-[AttributeUsage (AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple=false)]
-public class StrongDictionaryAttribute : Attribute {
+[AttributeUsage (AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
+public class StrongDictionaryAttribute : Attribute
+{
 	public StrongDictionaryAttribute ()
 	{
 	}
@@ -1071,9 +1142,10 @@ public class StrongDictionaryAttribute : Attribute {
 // When this attribtue is applied to a property, currently it merely adds
 // a DebuggerBrowsable(Never) to the property, to prevent a family of crashes
 //
-[AttributeUsage (AttributeTargets.Property, AllowMultiple=false)]
-public class OptionalImplementationAttribute : Attribute {
-	public OptionalImplementationAttribute () {}
+[AttributeUsage (AttributeTargets.Property, AllowMultiple = false)]
+public class OptionalImplementationAttribute : Attribute
+{
+	public OptionalImplementationAttribute () { }
 }
 
 //
@@ -1081,10 +1153,12 @@ public class OptionalImplementationAttribute : Attribute {
 // time but when you need the final binding assembly to include your own
 // custom implementation
 //
-[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property, AllowMultiple=false)]
-public class ManualAttribute : Attribute {
-	public ManualAttribute () {}
+[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
+public class ManualAttribute : Attribute
+{
+	public ManualAttribute () { }
 }
+
 
 //
 // Used to encapsulate flags about types in either the parameter or the return value

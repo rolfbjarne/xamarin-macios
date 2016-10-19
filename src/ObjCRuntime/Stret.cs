@@ -73,10 +73,15 @@ namespace XamCore.ObjCRuntime
 			case "nfloat":
 				if (t.Namespace != "System")
 					return false;
+#if X_GENERATOR
+				return t.Assembly == TypeManager.NSObject.Assembly;
+#else
 				return t.Assembly == typeof (NSObject).Assembly;
-			default:
-				return t.Assembly == typeof (object).Assembly;
+#endif
 			}
+#endif
+#if X_GENERATOR
+			return t.Assembly == TypeManager.System_Object.Assembly;
 #else
 			return t.Assembly == typeof (object).Assembly;
 #endif
@@ -173,7 +178,11 @@ namespace XamCore.ObjCRuntime
 			if (type.IsExplicitLayout) {
 				// Find the maximum of "field size + field offset" for each field.
 				foreach (var field in type.GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
+#if X_GENERATOR
+					var fieldOffset = (FieldOffsetAttribute) AttributeManager.GetCustomAttribute (field, TypeManager.FieldOffsetAttribute);
+#else
 					var fieldOffset = (FieldOffsetAttribute) Attribute.GetCustomAttribute (field, typeof (FieldOffsetAttribute));
+#endif
 					var elementSize = 0;
 					GetValueTypeSize (type, field.FieldType, fieldTypes, is_64_bits, ref elementSize, ref maxElementSize);
 					size = Math.Max (size, elementSize + fieldOffset.Value);
@@ -241,7 +250,11 @@ namespace XamCore.ObjCRuntime
 
 			// composite struct
 			foreach (var field in type.GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
+#if X_GENERATOR
+				var marshalAs = (MarshalAsAttribute) AttributeManager.GetCustomAttribute (field, TypeManager.MarshalAsAttribute);
+#else
 				var marshalAs = (MarshalAsAttribute) Attribute.GetCustomAttribute (field, typeof (MarshalAsAttribute));
+#endif
 				if (marshalAs == null) {
 					GetValueTypeSize (original_type, field.FieldType, field_types, is_64_bits, ref size, ref max_element_size);
 					continue;

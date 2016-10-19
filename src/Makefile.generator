@@ -20,6 +20,7 @@ GENERATOR_SOURCES =                                             \
 	$(TOP)/src/generator-enums.cs                      \
 	$(TOP)/src/generator-filters.cs                    \
 	$(TOP)/src/ObjCRuntime/Stret.cs                    \
+	$(TOP)/src/typemanager.cs                          \
 	$(MONO_PATH)/mcs/class/Mono.Options/Mono.Options/Options.cs \
 
 # IKVM also defines GENERATOR :(

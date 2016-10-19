@@ -1720,7 +1720,7 @@ public partial class Generator : IMemberGatherer {
 
 	bool IsNativeType (Type pt)
 	{
-		return (pt == typeof (int) || pt == typeof (long) || pt == typeof (byte) || pt == typeof (short));
+		return (pt == TypeManager.System_Int32 || pt == TypeManager.System_Int64 || pt == TypeManager.System_Byte || pt == TypeManager.System_Int16);
 	}
 
 	public string PrimitiveType (Type t, bool formatted = false, EnumMode enum_mode = EnumMode.Compat)
@@ -1736,16 +1736,16 @@ public partial class Generator : IMemberGatherer {
 
 #if XAMCORE_2_0
 			if (HasAttribute (enumType, typeof (NativeAttribute))) {
-				if (t != typeof (long) && t != typeof (ulong))
+				if (t != TypeManager.System_Int64 && t != TypeManager.System_UInt64)
 					throw new BindingException (1026, true,
 						"`{0}`: Enums attributed with [{1}] must have an underlying type of `long` or `ulong`",
 						enumType.FullName, typeof (NativeAttribute).FullName);
 
 				if (enum_mode == EnumMode.Bit32) {
-					if (t == typeof (long)) {
-						t = typeof (int);
-					} else if (t == typeof (ulong)) {
-						t = typeof (uint);
+					if (t == TypeManager.System_Int64) {
+						t = TypeManager.System_Int32;
+					} else if (t == TypeManager.System_UInt64) {
+						t = TypeManager.System_UInt32;
 					}
 				} else if (enum_mode == EnumMode.Bit64) {
 					// Nothing to do
@@ -1756,15 +1756,15 @@ public partial class Generator : IMemberGatherer {
 #endif
 		}
 
-		if (t == typeof (int))
+		if (t == TypeManager.System_Int32)
 			return "int";
-		if (t == typeof (short))
+		if (t == TypeManager.System_Int16)
 			return "short";
-		if (t == typeof (byte))
+		if (t == TypeManager.System_Byte)
 			return "byte";
-		if (t == typeof (float))
+		if (t == TypeManager.System_Float)
 			return "float";
-		if (t == typeof (bool))
+		if (t == TypeManager.System_Boolean)
 			return "bool";
 
 		return formatted ? FormatType (null, t) : t.Name;
@@ -2001,7 +2001,7 @@ public partial class Generator : IMemberGatherer {
 				}
 				if (nt.IsValueType){
 					string marshal = string.Empty;
-					if (nt == typeof (bool))
+					if (nt == TypeManager.System_Boolean)
 						marshal = "[System.Runtime.InteropServices.MarshalAs (System.Runtime.InteropServices.UnmanagedType.I1)] ";
 					pars.AppendFormat ("{3}{0} {1} {2}", pi.IsOut ? "out" : "ref", FormatType (null, nt), pi.Name.GetSafeParamName (), marshal);
 					invoke.AppendFormat ("{0} {1}", pi.IsOut ? "out" : "ref", pi.Name.GetSafeParamName ());
@@ -2362,9 +2362,9 @@ public partial class Generator : IMemberGatherer {
 	string GetNativeEnumType (Type type)
 	{
 		var underlyingEnumType = Enum.GetUnderlyingType (type);
-		if (typeof (long) == underlyingEnumType) {
+		if (TypeManager.System_Int64 == underlyingEnumType) {
 			return "nint";
-		} else if (typeof (ulong) == underlyingEnumType) {
+		} else if (TypeManager.System_UInt64 == underlyingEnumType) {
 			return "nuint";
 		} else {
 			throw new BindingException (1029, "Internal error: invalid enum type '{0}'", type);
@@ -3134,28 +3134,28 @@ public partial class Generator : IMemberGatherer {
 						castToEnum = "(" + FormatType (dictType, pi.PropertyType) + "?)";
 					}
 					if (pi.PropertyType.IsValueType){
-						if (pi.PropertyType == typeof (bool)){
+						if (pi.PropertyType == TypeManager.System_Boolean){
 							getter = "{1} GetBoolValue ({0})";
 							setter = "SetBooleanValue ({0}, {1}value)";
-						} else if (fetchType == typeof (int)){
+						} else if (fetchType == TypeManager.System_Int32){
 							getter = "{1} GetInt32Value ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-						} else if (fetchType == typeof (nint)){
+						} else if (fetchType == TypeManager.System_nint){
 							getter = "{1} GetNIntValue ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-						} else if (fetchType ==  typeof (long)){
+						} else if (fetchType ==  TypeManager.System_Int64){
 							getter = "{1} GetLongValue ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-						} else if (pi.PropertyType == typeof(float)){
+						} else if (pi.PropertyType == TypeManager.System_Float){
 							getter = "{1} GetFloatValue ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-						} else if (pi.PropertyType == typeof (double)){
+						} else if (pi.PropertyType == TypeManager.System_Double){
 							getter = "{1} GetDoubleValue ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-						} else if (fetchType == typeof (uint)){
+						} else if (fetchType == TypeManager.System_UInt32){
 							getter = "{1} GetUInt32Value ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-						} else if (fetchType == typeof (nuint)){
+						} else if (fetchType == TypeManager.System_nuint){
 							getter = "{1} GetNUIntValue ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
 #if XAMCORE_2_0
@@ -3362,9 +3362,9 @@ public partial class Generator : IMemberGatherer {
 						print ("return NSArray.ArrayFromHandle<{0}> (value);", RenderType (propertyType.GetElementType ()));
 					} else if (IsWrappedType (propertyType)){
 						print ("return Runtime.GetNSObject<{0}> (value);", RenderType (propertyType));
-					} else if (propertyType == typeof (double))
+					} else if (propertyType == TypeManager.System_Double)
 						print (GenerateNSNumber ("", "DoubleValue"));
-					else if (propertyType == typeof (float))
+					else if (propertyType == TypeManager.System_Float)
 						print (GenerateNSNumber ("", "FloatValue"));
 					else if (fullname == "System.Drawing.PointF")
 						print (GenerateNSValue ("PointFValue"));
@@ -3388,27 +3388,27 @@ public partial class Generator : IMemberGatherer {
 						Type underlying = propertyType.IsEnum ? Enum.GetUnderlyingType (propertyType) : propertyType;
 						string cast = propertyType.IsEnum ? "(" + propertyType.FullName + ") " : "";
 					
-						if (underlying == typeof (int))
+						if (underlying == TypeManager.System_Int32)
 							print (GenerateNSNumber (cast, "Int32Value"));
-						else if (underlying == typeof (uint))
+						else if (underlying == TypeManager.System_UInt32)
 							print (GenerateNSNumber (cast, "UInt32Value"));
-						else if (underlying == typeof (long))
+						else if (underlying == TypeManager.System_Int64)
 							print (GenerateNSNumber (cast, "Int64Value"));
-						else if (underlying == typeof (ulong))
+						else if (underlying == TypeManager.System_UInt64)
 							print (GenerateNSNumber (cast, "UInt64Value"));
-						else if (underlying == typeof (short))
+						else if (underlying == TypeManager.System_Int16)
 							print (GenerateNSNumber (cast, "Int16Value"));
-						else if (underlying == typeof (ushort))
+						else if (underlying == TypeManager.System_UInt16)
 							print (GenerateNSNumber (cast, "UInt16Value"));
-						else if (underlying == typeof (sbyte))
+						else if (underlying == TypeManager.System_SByte)
 							print (GenerateNSNumber (cast, "SByteValue"));
-						else if (underlying == typeof (byte))
+						else if (underlying == TypeManager.System_Byte)
 							print (GenerateNSNumber (cast, "ByteValue"));
-						else if (underlying == typeof (bool))
+						else if (underlying == TypeManager.System_Boolean)
 							print (GenerateNSNumber (cast, "BoolValue"));
-						else if (underlying == typeof (nint))
+						else if (underlying == TypeManager.System_nint)
 							print (GenerateNSNumber (cast, "NIntValue"));
-						else if (underlying == typeof (nuint))
+						else if (underlying == TypeManager.System_nuint)
 							print (GenerateNSNumber (cast, "NUIntValue"));
 						else
 							throw new BindingException (1011, true, "Do not know how to extract type {0}/{1} from an NSDictionary", propertyType, underlying);
@@ -3611,15 +3611,15 @@ public partial class Generator : IMemberGatherer {
 
 		if (type == typeof (void))
 			return "void";
-		if (type == typeof (int))
+		if (type == TypeManager.System_Int32)
 			return "int";
-		if (type == typeof (short))
+		if (type == TypeManager.System_Int16)
 			return "short";
-		if (type == typeof (byte))
+		if (type == TypeManager.System_Byte)
 			return "byte";
-		if (type == typeof (float))
+		if (type == TypeManager.System_Float)
 			return "float";
-		if (type == typeof (bool))
+		if (type == TypeManager.System_Boolean)
 			return "bool";
 		if (type == typeof (string))
 			return "string";
@@ -3851,7 +3851,7 @@ public partial class Generator : IMemberGatherer {
 		if (IsNativeEnum (mi.ReturnType) && enum_mode == EnumMode.Bit32) {
 			// Check if we got UInt32.MaxValue, which should probably be UInt64.MaxValue (if the enum
 			// in question actually has that value at least).
-			var type = Enum.GetUnderlyingType (mi.ReturnType) == typeof (ulong) ? "ulong" : "long";
+			var type = Enum.GetUnderlyingType (mi.ReturnType) == TypeManager.System_UInt64 ? "ulong" : "long";
 			var itype = type == "ulong" ? "uint" : "int";
 			var value = Enum.ToObject (mi.ReturnType, type == "ulong" ? (object) ulong.MaxValue : (object) long.MaxValue);
 			if (Array.IndexOf (Enum.GetValues (mi.ReturnType), value) >= 0) {
@@ -6387,17 +6387,17 @@ public partial class Generator : IMemberGatherer {
 						print ("_{0} = Runtime.GetNSObject<NSArray> (Dlfcn.GetIndirect (Libraries.{2}.Handle, \"{1}\"));", field_pi.Name, fieldAttr.SymbolName, library_name);
 						indent--;
 						print ("return _{0};", field_pi.Name);
-					} else if (field_pi.PropertyType == typeof (int)){
+					} else if (field_pi.PropertyType == TypeManager.System_Int32){
 						print ("return Dlfcn.GetInt32 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType == typeof (double)){
+					} else if (field_pi.PropertyType == TypeManager.System_Double){
 						print ("return Dlfcn.GetDouble (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType == typeof (float)){
+					} else if (field_pi.PropertyType == TypeManager.System_Float){
 						print ("return Dlfcn.GetFloat (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType == typeof (IntPtr)){
+					} else if (field_pi.PropertyType == TypeManager.System_IntPtr){
 						print ("return Dlfcn.GetIntPtr (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType.FullName == "System.Drawing.SizeF"){
 						print ("return Dlfcn.GetSizeF (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType == typeof (long)){
+					} else if (field_pi.PropertyType == TypeManager.System_Int64){
 						print ("return Dlfcn.GetInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 #if !WATCH
 					} else
@@ -6410,11 +6410,11 @@ public partial class Generator : IMemberGatherer {
 						       FormatType (type, field_pi.PropertyType.Namespace, field_pi.PropertyType.Name));
 #endif
 #if XAMCORE_2_0
-					} else if (field_pi.PropertyType == typeof (nint)) {
+					} else if (field_pi.PropertyType == TypeManager.System_nint) {
 						print ("return Dlfcn.GetNInt (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType == typeof (nuint)) {
+					} else if (field_pi.PropertyType == TypeManager.System_nuint) {
 						print ("return Dlfcn.GetNUInt (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType == typeof (nfloat)) {
+					} else if (field_pi.PropertyType == TypeManager.System_nfloat) {
 						print ("return Dlfcn.GetNFloat (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == typeof (CGSize)){
 						print ("return Dlfcn.GetCGSize (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
@@ -6434,28 +6434,28 @@ public partial class Generator : IMemberGatherer {
 						PrintPreserveAttribute (field_pi.GetSetMethod ());
 						print ("set {");
 						indent++;
-						if (field_pi.PropertyType == typeof (int)) {
+						if (field_pi.PropertyType == TypeManager.System_Int32) {
 							print ("Dlfcn.SetInt32 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType == typeof (double)) {
+						} else if (field_pi.PropertyType == TypeManager.System_Double) {
 							print ("Dlfcn.SetDouble (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType == typeof (float)) {
+						} else if (field_pi.PropertyType == TypeManager.System_Float) {
 							print ("Dlfcn.SetFloat (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType == typeof (IntPtr)) {
+						} else if (field_pi.PropertyType == TypeManager.System_IntPtr) {
 							print ("Dlfcn.SetIntPtr (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType.FullName == "System.Drawing.SizeF") {
 							print ("Dlfcn.SetSizeF (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType == typeof (long)) {
+						} else if (field_pi.PropertyType == TypeManager.System_Int64) {
 							print ("Dlfcn.SetInt64 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == typeof (NSString)){
 							print ("Dlfcn.SetString (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType.Name == "NSArray"){
 							print ("Dlfcn.SetArray (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 #if XAMCORE_2_0
-						} else if (field_pi.PropertyType == typeof (nint)) {
+						} else if (field_pi.PropertyType == TypeManager.System_nint) {
 							print ("Dlfcn.SetNInt (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType == typeof (nuint)) {
+						} else if (field_pi.PropertyType == TypeManager.System_nuint) {
 							print ("Dlfcn.SetNUInt (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType == typeof (nfloat)) {
+						} else if (field_pi.PropertyType == TypeManager.System_nfloat) {
 							print ("Dlfcn.SetNFloat (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == typeof (CGSize)) {
 							print ("Dlfcn.SetCGSize (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);

@@ -6,6 +6,67 @@ using System.Reflection;
 using Type=System.Type;
 #endif
 
+public static class AttributeManager
+{
+	public static System.Attribute [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits = false)
+	{
+#if IKVM
+		return CustomAttributeData.GetCustomAttributes (provider, type);
+#else
+		return (System.Attribute []) provider.GetCustomAttributes (type, inherits);
+#endif
+	}
+
+	public static System.Attribute [] GetCustomAttributes (ICustomAttributeProvider provider, bool inherits = false)
+	{
+#if IKVM
+		return CustomAttributeData.GetCustomAttributes (provider);
+#else
+		return (System.Attribute []) provider.GetCustomAttributes (inherits);
+#endif
+	}
+
+	public static bool HasAttribute (ICustomAttributeProvider provider, bool inherits, params Type [] any_attribute_type)
+	{
+		var attribs = GetCustomAttributes (provider, inherits);
+		if (attribs == null || attribs.Length == 0)
+			return false;
+
+		foreach (var attrib in attribs) {
+			var attribType = GetAttributeType (attrib);
+			for (int t = 0; t < any_attribute_type.Length; t++) {
+				if (TypeManager.IsSubclassOf (any_attribute_type [t], attribType))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type, bool inherits = false)
+	{
+		var attribs = GetCustomAttributes (provider, inherits);
+		if (attribs == null || attribs.Length == 0)
+			return false;
+
+		foreach (var attrib in attribs) {
+			var attribType = GetAttributeType (attrib);
+			if (TypeManager.IsSubclassOf (attrib, attribType))
+				return true;
+		}
+
+		return false;
+	}
+
+	public static Type GetAttributeType (System.Attribute attribute)
+	{
+#if IKVM
+		throw new NotImplementedException ();
+#else
+		return attribute.GetType ();
+#endif
+	}
+}
 
 public static class TypeManager {
 	public static Type System_Int32 { get; set; }
@@ -23,6 +84,28 @@ public static class TypeManager {
 	public static Type System_nint { get; set; }
 	public static Type System_nuint { get; set; }
 	public static Type System_nfloat { get; set; }
+	public static Type System_Void { get; set; }
+	public static Type System_String { get; set; }
+
+	public static Type NSObject { get; set; }
+
+	public static Type LinkWithAttribute { get; set; }
+	public static Type BaseTypeAttribute { get; set; }
+	public static Type ProtocolAttribute { get; set; }
+	public static Type StaticAttribute { get; set; }
+	public static Type PartialAttribute { get; set; }
+	public static Type StrongDictionaryAttribute { get; set; }
+	public static Type FlagsAttribute { get; set; }
+	public static Type AbstractAttribute { get; set; }
+	public static Type NativeAttribute { get; set; }
+	public static Type StrongDictionaryAttribute { get; set; }
+
+	public static Type DictionaryContainerType { get; set; }
+
+	public static bool IsSubclassOf (Type base_class, Type derived_class)
+	{
+		throw new System.NotImplementedException ();
+	}
 
 	static TypeManager ()
 	{
@@ -47,5 +130,10 @@ public static class TypeManager {
 	System_nfloat = typeof (System.nfloat);
 #endif
 #endif
+	}
+
+	public static Type GetUnderlyingEnumType (Type type)
+	{
+		throw new System.NotImplementedException ();
 	}
 }

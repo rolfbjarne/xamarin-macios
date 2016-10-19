@@ -63,7 +63,7 @@ public partial class Generator {
 
 	public void GenerateFilter (Type type)
 	{
-		var is_abstract = HasAttribute (type, typeof (AbstractAttribute));
+		var is_abstract = HasAttribute (type, TypeManager.AbstractAttribute);
 		var filter = GetAttribute<CoreImageFilterAttribute> (type);
 		var base_type = GetAttribute<BaseTypeAttribute> (type);
 		var type_name = type.Name;

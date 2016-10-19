@@ -27,7 +27,12 @@
 using System;
 using System.IO;
 using System.Linq;
+#if IKVM
+using IKVM.Reflection;
+using Type=IKVM.Reflection.Type;
+#else
 using System.Reflection;
+#endif
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -42,7 +47,10 @@ using XamCore.Foundation;
 #endif
 
 class BindingTouch {
-	static Type CoreObject = typeof (XamCore.Foundation.NSObject);
+#if IKVM
+	static Universe universe = new Universe(UniverseOptions.EnableFunctionPointers | UniverseOptions.ResolveMissingMembers | UniverseOptions.DisablePseudoCustomAttributeRetrieval);
+#endif
+	static Type CoreObject = TypeManager.NSObject;
 #if MONOMAC
 	static string baselibdll = "MonoMac.dll";
 	static string tool_name = "bmac";
@@ -334,7 +342,11 @@ class BindingTouch {
 
 			Assembly api;
 			try {
+#if IKVM
+				api = universe.LoadFile (tmpass);
+#else
 				api = Assembly.LoadFrom (tmpass);
+#endif
 			} catch (Exception e) {
 				if (verbose)
 					Console.WriteLine (e);
@@ -345,7 +357,11 @@ class BindingTouch {
 
 			Assembly baselib;
 			try {
+#if IKVM
+				baselib = universe.LoadFile (baselibdll);
+#else
 				baselib = Assembly.LoadFrom (baselibdll);
+#endif
 			} catch (Exception e){
 				if (verbose)
 					Console.WriteLine (e);
@@ -358,7 +374,7 @@ class BindingTouch {
 #endif
 				
 #if !MONOMAC
-			foreach (object attr in api.GetCustomAttributes (typeof (LinkWithAttribute), true)) {
+			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true)) {
 				LinkWithAttribute linkWith = (LinkWithAttribute) attr;
 				
 				if (!linkwith.Contains (linkWith.LibraryName)) {
@@ -371,7 +387,11 @@ class BindingTouch {
 			foreach (var r in references) {
 				if (File.Exists (r)) {
 					try {
+#if IKVM
+						universe.Load (r);
+#else
 						Assembly.LoadFrom (r);
+#endif
 					} catch (Exception ex) {
 						ErrorHelper.Show (new BindingException (1104, false, "Could not load the referenced library '{0}': {1}.", r, ex.Message));
 					}
@@ -382,12 +402,9 @@ class BindingTouch {
 			var  strong_dictionaries = new List<Type> ();
 			foreach (var t in api.GetTypes ()){
 				if ((process_enums && t.IsEnum) ||
-				    t.GetCustomAttributes (typeof (BaseTypeAttribute), true).Length > 0 ||
-				    t.GetCustomAttributes (typeof (ProtocolAttribute), true).Length > 0 ||
-				    t.GetCustomAttributes (typeof (StaticAttribute), true).Length > 0 ||
-				    t.GetCustomAttributes (typeof (PartialAttribute), true).Length > 0)
+				    AttributeManager.HasAttribute (t, true, TypeManager.BaseTypeAttribute, TypeManager.ProtocolAttribute, TypeManager.StaticAttribute, TypeManager.PartialAttribute))
 					types.Add (t);
-				if (t.GetCustomAttributes (typeof (StrongDictionaryAttribute), true).Length > 0)
+				if (AttributeManager.HasAttribute (t, TypeManager.StrongDictionaryAttribute, true))
 					strong_dictionaries.Add (t);
 			}
 

@@ -3,7 +3,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if IKVM
+using IKVM.Reflection;
+using Type=IKVM.Reflection.Type;
+#else
 using System.Reflection;
+#endif
+
 using XamCore.Foundation;
 using XamCore.ObjCRuntime;
 
@@ -60,7 +66,7 @@ public partial class Generator {
 	//	- call/emit PrintPlatformAttributes on the type
 	void GenerateEnum (Type type)
 	{
-		if (HasAttribute (type, typeof (FlagsAttribute)))
+		if (HasAttribute (type, TypeManager.FlagsAttribute))
 			print ("[Flags]");
 
 		var native = GetAttribute<NativeAttribute> (type);
@@ -74,7 +80,7 @@ public partial class Generator {
 		var fields = new Dictionary<FieldInfo, FieldAttribute> ();
 		Tuple<FieldInfo, FieldAttribute> null_field = null;
 		Tuple<FieldInfo, FieldAttribute> default_symbol = null;
-		print ("public enum {0} : {1} {{", type.Name, GetCSharpTypeName (Enum.GetUnderlyingType (type)));
+		print ("public enum {0} : {1} {{", type.Name, GetCSharpTypeName (TypeManager.GetUnderlyingEnumType (type)));
 		indent++;
 		foreach (var f in type.GetFields ()) {
 			// skip value__ field 

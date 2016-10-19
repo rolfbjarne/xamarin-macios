@@ -88,7 +88,7 @@ namespace XamCore.Foundation {
 
 		public static readonly NSString Empty = new NSString (String.Empty);
 
-#if GENERATOR && !MONOMAC
+#if X_GENERATOR && !MONOMAC
 		public NSString (IntPtr handle) : base (handle) {
 		}
 #endif

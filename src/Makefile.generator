@@ -1,4 +1,18 @@
 
+USE_IKVM=
+
+IKVM_REFLECTION_SOURCES = \
+	$(MONO_PATH)/mcs/class/Mono.Security/Mono.Security.Cryptography/CryptoConvert.cs \
+	$(MONO_PATH)/external/ikvm/reflect/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Emit/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Metadata/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Reader/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Writer/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Impl/ITypeOwner.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Impl/SymbolSupport.cs
+
+IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
+
 GENERATOR_SOURCES =                                             \
 	$(TOP)/src/btouch.cs                               \
 	$(TOP)/src/error.cs                                \
@@ -8,7 +22,18 @@ GENERATOR_SOURCES =                                             \
 	$(TOP)/src/ObjCRuntime/Stret.cs                    \
 	$(MONO_PATH)/mcs/class/Mono.Options/Mono.Options/Options.cs \
 
-GENERATOR_DEFINES = -d:GENERATOR -d:NET_4_0
+# IKVM also defines GENERATOR :(
+GENERATOR_DEFINES = -d:X_GENERATOR -d:NET_4_0
+
+ifdef USE_IKVM
+GENERATOR_DEFINES += $(IKVM_REFLECTION_FLAGS) -d:IKVM
+GENERATOR_SOURCES += $(IKVM_REFLECTION_SOURCES)
+endif
+
+# test target
+ikvm:
+	$(Q) rm -f ./build/ios/native/generator.exe
+	$(MAKE) ./build/ios/native/generator.exe USE_IKVM=1
 
 #
 # Xamarin.iOS (btouch)

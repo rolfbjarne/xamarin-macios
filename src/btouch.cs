@@ -52,9 +52,9 @@ using XamCore.Foundation;
 
 class BindingTouch {
 #if IKVM
-	static Universe universe = new Universe(UniverseOptions.EnableFunctionPointers | UniverseOptions.ResolveMissingMembers | UniverseOptions.DisablePseudoCustomAttributeRetrieval);
+	public static Universe universe;
 #endif
-	static Type CoreObject = TypeManager.NSObject;
+	static Type CoreObject { get { return TypeManager.NSObject; } }
 #if MONOMAC
 	static string baselibdll = "MonoMac.dll";
 	static string tool_name = "bmac";
@@ -79,6 +79,11 @@ class BindingTouch {
 	static string tool_name = "btouch";
 	static string compiler = Path.Combine (GetSDKRoot (), "bin/smcs");
 	static string net_sdk = null;
+#elif IKVM
+	static string baselibdll = "";
+	static string tool_name = "";
+	static string compiler = "mcs";
+	static string net_sdk = null;
 #else
 #error Unknown platform
 #endif
@@ -89,6 +94,10 @@ class BindingTouch {
 #else
 	static bool buildNewStyle = false;
 #endif
+#endif
+
+#if IKVM
+	static string target_framework;
 #endif
 
 	public static string ToolName {
@@ -184,6 +193,9 @@ class BindingTouch {
 #if !XAMCORE_2_0
 			{ "a", "Include alpha bindings", v => alpha = true },
 #endif
+#if IKVM
+			{ "target-framework=", "Sets the target framework", v => target_framework = v },
+#endif
 			{ "outdir=", "Sets the output directory for the temporary binding files", v => { basedir = v; }},
 			{ "o|out=", "Sets the name of the output library", v => outfile = v },
 			{ "tmpdir=", "Sets the working directory for temp files", v => { tmpdir = v; delete_temp = false; }},
@@ -261,6 +273,30 @@ class BindingTouch {
 			return 0;
 		}
 
+#if IKVM
+		if (string.IsNullOrEmpty (target_framework))
+			throw new BindingException (9999, "Target framework is required.");
+
+		PlatformName platform;
+		switch (target_framework) {
+		case "Xamarin.iOS,v1.0":
+			platform = PlatformName.iOS;
+			break;
+		case "Xamarin.tvOS,v1.0":
+			platform = PlatformName.TvOS;
+			break;
+		case "Xamarin.watchOS,v1.0":
+			platform = PlatformName.WatchOS;
+			break;
+		case "Xamarin.macOS,v1.0":
+			platform = PlatformName.MacOSX;
+			break;
+		default:
+			throw new BindingException (9999, $"Unknown target framework: {target_framework}.");
+		}
+		Generator.CurrentPlatform = platform;
+#endif
+
 		if (sources.Count > 0) {
 			api_sources.Insert (0, Quote (sources [0]));
 			for (int i = 1; i < sources.Count; i++)
@@ -310,7 +346,7 @@ class BindingTouch {
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
 #if IKVM
-			cargs.Append ("-r:build/ios/native/Xamarin.iOS.Attributes.dll ");
+			cargs.Append ("-r:build/ios/native/Xamarin.iOS.BindingAttributes.dll ");
 #else
 			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
 #endif
@@ -347,6 +383,32 @@ class BindingTouch {
 				Console.WriteLine ("{0}: API binding contains errors.", tool_name);
 				return 1;
 			}
+
+#if IKVM
+			universe = new Universe (UniverseOptions.EnableFunctionPointers | UniverseOptions.ResolveMissingMembers | /*UniverseOptions.DisablePseudoCustomAttributeRetrieval | */UniverseOptions.MetadataOnly);
+			universe.AssemblyResolve += (object sender, IKVM.Reflection.ResolveEventArgs resolve_args) => 
+			{
+				var root = "/work/maccore/ikvm-generator/xamarin-macios/_ios-build/";
+				var fw = "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS";
+
+
+				var name = resolve_args.Name;
+				if (!name.EndsWith (".dll", StringComparison.Ordinal))
+					name += ".dll";
+				string fn;
+				if (name == "Xamarin.iOS.BindingAttributes.dll") {
+					fn = Path.Combine (root + "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/btouch", name);
+				} else if (!binding_third_party && name == "Xamarin.iOS.dll") {
+					fn = "/work/maccore/ikvm-generator/xamarin-macios/src/build/ios/native/core.dll";
+				} else {
+					fn = Path.Combine (root + fw, name);
+				}
+				if (File.Exists (fn))
+					return universe.LoadFile (fn);
+				Console.WriteLine ("Could not find: {0}", resolve_args.Name);
+				return null;
+			};
+#endif
 
 			Assembly api;
 			try {
@@ -396,7 +458,7 @@ class BindingTouch {
 				if (File.Exists (r)) {
 					try {
 #if IKVM
-						universe.Load (r);
+						universe.LoadFile (r);
 #else
 						Assembly.LoadFrom (r);
 #endif

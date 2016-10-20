@@ -119,7 +119,7 @@ public static class ReflectionExtensions {
 	//
 	public static bool IsUnavailable (this ICustomAttributeProvider provider)
 	{
-		return AttributeManager.GetCustomAttributes (provider, true)
+		return AttributeManager.GetCustomAttributes (provider, TypeManager.AvailabilityBaseAttribute, true)
 			.OfType<AvailabilityBaseAttribute> ()
 			.Any (attr => attr.AvailabilityKind == AvailabilityKind.Unavailable &&
 				attr.Platform == Generator.CurrentPlatform);
@@ -127,7 +127,7 @@ public static class ReflectionExtensions {
 	
 	public static AvailabilityBaseAttribute GetAvailability (this ICustomAttributeProvider attrProvider, AvailabilityKind availabilityKind)
 	{
-		return AttributeManager.GetCustomAttributes (attrProvider, true)
+		return AttributeManager.GetCustomAttributes (attrProvider, TypeManager.AvailabilityBaseAttribute, true)
 			.OfType<AvailabilityBaseAttribute> ()
 			.FirstOrDefault (attr =>
 				attr.AvailabilityKind == availabilityKind &&
@@ -793,18 +793,33 @@ public partial class Generator : IMemberGatherer {
 	public bool Compat;
 	public bool SkipSystemDrawing;
 
+	string ApplicationClassName {
+		get {
+			switch (CurrentPlatform) {
+			case PlatformName.iOS:
+			case PlatformName.TvOS:
+			case PlatformName.WatchOS:
+				return "UIApplication";
+			case PlatformName.MacOSX:
+				return "NSApplication";
+			default:
+				throw new PlatformNotSupportedException (CurrentPlatform.ToString ());
+			}
+		}
+	}
+
 #if MONOMAC
 	public const PlatformName CurrentPlatform = PlatformName.MacOSX;
-	const string ApplicationClassName = "NSApplication";
 #elif WATCH
 	public const PlatformName CurrentPlatform = PlatformName.WatchOS;
-	const string ApplicationClassName = "UIApplication";
 #elif TVOS
 	public const PlatformName CurrentPlatform = PlatformName.TvOS;
-	const string ApplicationClassName = "UIApplication";
-#else
+#elif IOS
 	public const PlatformName CurrentPlatform = PlatformName.iOS;
-	const string ApplicationClassName = "UIApplication";
+#elif IKVM
+	public static PlatformName CurrentPlatform;
+#else
+	#error Unknown platform
 #endif
 
 	// Static version of the above (!Compat) field, set on each Go invocation, needed because some static
@@ -1401,7 +1416,7 @@ public partial class Generator : IMemberGatherer {
 
 	public object GetAttribute (ICustomAttributeProvider mi, Type t)
 	{
-		Attribute [] a = AttributeManager.GetCustomAttributes (mi, t, true);
+		var a = AttributeManager.GetCustomAttributes (mi, t, true);
 		if (a.Length > 0)
 			return a [0];
 		return null;
@@ -1412,7 +1427,7 @@ public partial class Generator : IMemberGatherer {
 		if (mi == null)
 			return null;
 
-		Attribute [] a = AttributeManager.GetCustomAttributes (mi, AttributeManager.GetAttributeType (typeof (T)), true);
+		var a = AttributeManager.GetCustomAttributes (mi, AttributeManager.GetAttributeType (typeof (T)), true);
 		if (a.Length > 0)
 			return (T) a [0];
 		return null;
@@ -1692,7 +1707,7 @@ public partial class Generator : IMemberGatherer {
 	static ExportAttribute ToSetter (ExportAttribute ea, PropertyInfo pinfo)
 	{
 #if IKVM
-		throw new NotImplementedException ();
+		return ea.ToSetter (pinfo);
 #else
 		return ea.ToSetter (pinfo);
 #endif
@@ -1701,7 +1716,7 @@ public partial class Generator : IMemberGatherer {
 	static ExportAttribute ToGetter (ExportAttribute ea, PropertyInfo pinfo)
 	{
 #if IKVM
-		throw new NotImplementedException ();
+		return ea.ToGetter (pinfo);
 #else
 		return ea.ToGetter (pinfo);
 #endif
@@ -1740,7 +1755,7 @@ public partial class Generator : IMemberGatherer {
 	bool SkipGenerationOfType (Type t)
 	{
 #if !XAMCORE_2_0
-		if (HasAttribute (t, TypeManager.AlphaAttribute) && Alpha == false)
+		if (Compat && !Alpha && HasAttribute (t, TypeManager.AlphaAttribute))
 			return true;
 #endif
 
@@ -1860,7 +1875,7 @@ public partial class Generator : IMemberGatherer {
 			
 			foreach (var pi in GetTypeContractProperties (t)){
 #if !XAMCORE_2_0
-				if (HasAttribute (pi, TypeManager.AlphaAttribute) && Alpha == false)
+				if (Compat && !Alpha && HasAttribute (pi, TypeManager.AlphaAttribute))
 					continue;
 #endif
 
@@ -1917,7 +1932,7 @@ public partial class Generator : IMemberGatherer {
 					continue;
 
 #if !XAMCORE_2_0
-				if (HasAttribute (mi, TypeManager.AlphaAttribute) && Alpha == false)
+				if (Compat && !Alpha && HasAttribute (mi, TypeManager.AlphaAttribute))
 					continue;
 #endif
 				if (mi.IsUnavailable ())
@@ -2003,7 +2018,7 @@ public partial class Generator : IMemberGatherer {
 
 			foreach (var pi in t.GatherProperties (BindingFlags.Instance | BindingFlags.Public)){
 #if !XAMCORE_2_0
-				if (HasAttribute (pi, TypeManager.AlphaAttribute) && Alpha == false)
+				if (Compat && !Alpha && HasAttribute (pi, TypeManager.AlphaAttribute))
 					continue;
 #endif
 				if (pi.IsUnavailable ())
@@ -5434,7 +5449,7 @@ public partial class Generator : IMemberGatherer {
 #endif
 
 #if !XAMCORE_2_0
-				if (HasAttribute (mi, TypeManager.AlphaAttribute) && Alpha == false)
+				if (Compat && !Alpha && HasAttribute (mi, TypeManager.AlphaAttribute))
 					continue;
 #endif
 
@@ -5498,7 +5513,7 @@ public partial class Generator : IMemberGatherer {
 			foreach (var pi in GetTypeContractProperties (type).OrderBy (p => p.Name, StringComparer.Ordinal)) {
 
 #if !XAMCORE_2_0
-				if (HasAttribute (pi, TypeManager.AlphaAttribute) && Alpha == false)
+				if (Compat && !Alpha && HasAttribute (pi, TypeManager.AlphaAttribute))
 					continue;
 #endif
 
@@ -6404,7 +6419,7 @@ public partial class Generator : IMemberGatherer {
 		if (customAttrs.OfType<IgnoredInDelegateAttribute> ().Any ())
 			return true;
 #if !XAMCORE_2_0
-		if (customAttrs.OfType<AlphaAttribute> ().Any ())
+		if (Compat && customAttrs.OfType<AlphaAttribute> ().Any ())
 			return true;
 #endif
 

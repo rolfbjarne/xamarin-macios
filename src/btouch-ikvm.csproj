@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>build\ios\native</OutputPath>
-    <DefineConstants>DEBUG;IPHONE;IOS</DefineConstants>
+    <DefineConstants>DEBUG;IKVM;X_GENERATOR;NET_4_0;NO_AUTHENTICODE;STATIC;NO_SYMBOL_WRITER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -33,20 +33,35 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <CscToolExe>$(MSBuildProjectDirectory)\ikvm.sh</CscToolExe>
-  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="attributes.cs" />
-    <Compile Include="btouch.cs" />
-    <Compile Include="error.cs" />
-    <Compile Include="generator.cs" />
-    <Compile Include="generator-enums.cs" />
-    <Compile Include="generator-filters.cs" />
-    <Compile Include="typemanager.cs" />
-    <Compile Include="ObjCRuntime/Stret.cs" />
-    <Compile Include="..\external\mono\mcs\class\Mono.Options\Mono.Options\Options.cs">
-      <Link>Options.cs</Link>
-    </Compile>
+    <Compile Include="..\src\attributes.cs" />
+    <Compile Include="..\src\btouch.cs" />
+    <Compile Include="..\src\error.cs" />
+    <Compile Include="..\src\generator.cs" />
+    <Compile Include="..\src\generator-enums.cs" />
+    <Compile Include="..\src\generator-filters.cs" />
+    <Compile Include="..\src\ObjCRuntime\Stret.cs" />
+    <Compile Include="..\src\typemanager.cs" />
+    <Compile Include="..\external\mono\mcs\class\Mono.Options\Mono.Options\Options.cs" />
+    <Compile Include="..\external\mono\mcs\class\Mono.Security\Mono.Security.Cryptography\CryptoConvert.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\*.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\Emit\*.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\Metadata\*.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\Reader\*.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\Writer\*.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\Impl\ITypeOwner.cs" />
+    <Compile Include="..\external\mono\external\ikvm\reflect\Impl\SymbolSupport.cs" />
+    <Compile Include="..\src\ObjCRuntime\AlphaAttribute.cs" />
+    <Compile Include="..\src\ObjCRuntime\ArgumentSemantic.cs" />
+    <Compile Include="..\src\ObjCRuntime\PlatformAvailability2.cs" />
+    <Compile Include="..\src\ObjCRuntime\LinkWithAttribute.cs" />
+    <Compile Include="..\src\ObjCRuntime\NativeAttribute.cs" />
+    <Compile Include="..\src\ObjCRuntime\Registrar.core.cs" />
+    <Compile Include="..\src\Foundation\ProtocolAttribute.cs" />
+    <Compile Include="..\src\Foundation\FieldAttribute.cs" />
+    <Compile Include="..\src\Foundation\AdviceAttribute.cs" />
+    <Compile Include="..\src\Foundation\ExportAttribute.cs" />
+    <Compile Include="..\src\Foundation\RegisterAttribute.cs" />
+    <Compile Include="..\src\Foundation\PreserveAttribute.cs" />
   </ItemGroup>
 </Project>

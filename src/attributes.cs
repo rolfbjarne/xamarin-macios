@@ -710,24 +710,24 @@ public class NotImplementedAttribute : Attribute
 	public string Message { get; set; }
 }
 
-//
-// Apply this attribute to a class to add methods that in Objective-c
-// are added as categories
-//
-// Use the BaseType attribute to reference which class this is extending
-//
-// Like this:
-//   [Category]
-//   [BaseType (TypeManager.UIView)]
-//   interface UIViewExtensions {
-//     [Export ("method_in_the_objective_c_category")]
-//     void ThisWillBecome_a_c_sharp_extension_method_in_class_UIViewExtensions ();
+// //
+// // Apply this attribute to a class to add methods that in Objective-c
+// // are added as categories
+// //
+// // Use the BaseType attribute to reference which class this is extending
+// //
+// // Like this:
+// //   [Category]
+// //   [BaseType (TypeManager.UIView)]
+// //   interface UIViewExtensions {
+// //     [Export ("method_in_the_objective_c_category")]
+// //     void ThisWillBecome_a_c_sharp_extension_method_in_class_UIViewExtensions ();
+// // }
+// [AttributeUsage (AttributeTargets.Interface, AllowMultiple = false)]
+// public class CategoryAttribute : Attribute
+// {
+// 	public CategoryAttribute () { }
 // }
-[AttributeUsage (AttributeTargets.Interface, AllowMultiple = false)]
-public class CategoryAttribute : Attribute
-{
-	public CategoryAttribute () { }
-}
 
 //
 // Apply this attribute when an `init*` selector is decorated with NS_DESIGNATED_INITIALIZER

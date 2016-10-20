@@ -46,8 +46,17 @@ endif
 
 # test target
 ikvm:
+	$(MAKE) btouch-ikvm.csproj
 	$(Q) rm -f ./build/ios/native/generator-ikvm.exe
-	$(MAKE) ./build/ios/native/generator-ikvm.exe USE_IKVM=ikvm
+	$(MAKE) ./build/ios/native/generator-ikvm.exe $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll USE_IKVM=ikvm
+
+btouch-ikvm.csproj: btouch-ikvm.csproj.in Makefile.generator
+ifdef USE_IKVM
+	@sed -e 's^<!--%FILES%-->^$(foreach file,$(subst /,\\,$(GENERATOR_SOURCES)),<Compile Include="$(file)"/>)^' $< | xmllint --format - > $@
+else
+	@echo skipping project generator
+endif
+
 
 #
 # Xamarin.iOS (btouch)
@@ -59,6 +68,7 @@ IOS_TARGETS_DIRS +=                              \
 IOS_TARGETS +=                                                          \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch.exe             \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch-native.exe      \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
 
@@ -76,7 +86,11 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(I
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
-$(IOS_BUILD_DIR)/native/Xamarin.iOS.Attributes.dll: attributes.cs Makefile.generator
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.dll: $(IOS_BUILD_DIR)/native/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
+	$(Q) install -m 0755 $< $@
+	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll: attributes.cs Makefile.generator
 	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="        -out:$@ -debug attributes.cs -target:library
 
 $(IOS_BUILD_DIR)/native/generator-ikvm.exe: $(GENERATOR_SOURCES) $(IOS_BUILD_DIR)/native/Xamarin.iOS.Attributes.dll

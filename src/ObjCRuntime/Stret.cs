@@ -27,7 +27,7 @@ namespace XamCore.ObjCRuntime
 {
 	class Stret
 	{
-#if __WATCHOS__
+#if __WATCHOS__ || IKVM
 		static bool IsHomogeneousAggregateSmallEnough_Armv7k (Type t, int members)
 		{
 			// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5516-L5519
@@ -37,8 +37,13 @@ namespace XamCore.ObjCRuntime
 		static bool IsHomogeneousAggregateBaseType_Armv7k (Type t)
 		{
 			// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5500-L5514
+#if IKVM
+			if (t == TypeManager.System_Float || t == TypeManager.System_Double || t == TypeManager.System_nfloat)
+				return true;
+#else
 			if (t == typeof (float) || t == typeof (double) || t == typeof (nfloat))
 				return true;
+#endif
 
 			return false;
 		}
@@ -68,7 +73,7 @@ namespace XamCore.ObjCRuntime
 
 		static bool IsMagicTypeOrCorlibType (Type t)
 		{
-#if __UNIFIED__
+#if __UNIFIED__ || IKVM
 			switch (t.Name) {
 			case "nint":
 			case "nuint":
@@ -91,6 +96,53 @@ namespace XamCore.ObjCRuntime
 
 		public static bool ArmNeedStret (MethodInfo mi)
 		{
+#if IKVM
+			switch (Generator.CurrentPlatform) {
+			case PlatformName.TvOS:
+			case PlatformName.MacOSX:
+				return false;
+			case PlatformName.iOS:
+			case PlatformName.WatchOS:
+				Type t = mi.ReturnType;
+
+				if (!t.IsValueType || t.IsEnum || IsMagicTypeOrCorlibType (t))
+					return false;
+
+				var fieldTypes = new List<Type> ();
+				var size = GetValueTypeSize (t, fieldTypes, false);
+
+				if (Generator.CurrentPlatform == PlatformName.WatchOS) {
+					if (size <= 16)
+						return false;
+
+					if (IsHomogeneousAggregate_Armv7k (fieldTypes))
+						return false;
+				} else if (Generator.CurrentPlatform == PlatformName.iOS) {
+					if (size <= 4 && fieldTypes.Count == 1) {
+						switch (fieldTypes [0].FullName) {
+						case "System.Char":
+						case "System.Byte":
+						case "System.SByte":
+						case "System.UInt16":
+						case "System.Int16":
+						case "System.UInt32":
+						case "System.Int32":
+						case "System.IntPtr":
+						case "System.nuint":
+						case "System.uint":
+							return false;
+							// floating-point types are stret
+						}
+					}
+				} else {
+					throw new PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
+				}
+
+				return true;
+			default:
+				throw new PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
+			}
+#else
 #if MONOMAC || __TVOS__
 			return false;
 #else
@@ -136,6 +188,7 @@ namespace XamCore.ObjCRuntime
 
 			return true;
 #endif // MONOMAC
+#endif // IKVM
 		}
 
 		public static bool X86NeedStret (MethodInfo mi)

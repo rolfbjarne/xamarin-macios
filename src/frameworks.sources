@@ -1425,6 +1425,7 @@ SHARED_CORE_SOURCES = \
 	ObjCRuntime/AlphaAttribute.cs \
 	ObjCRuntime/ArgumentSemantic.cs \
 	ObjCRuntime/Blocks.cs \
+	ObjCRuntime/CategoryAttribute.cs \
 	ObjCRuntime/Class.cs \
 	ObjCRuntime/INativeObject.cs \
 	ObjCRuntime/LinkWithAttribute.cs \

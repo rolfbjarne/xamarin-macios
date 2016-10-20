@@ -26,7 +26,10 @@
 #define OPENGL
 #endif
 
+using System.Collections.Generic;
+
 #if IKVM
+using System.Diagnostics.Contracts;
 using IKVM.Reflection;
 using Type=IKVM.Reflection.Type;
 #else
@@ -79,17 +82,120 @@ public static class AttributeManager
 	public static System.Attribute GetCustomAttribute (MemberInfo provider, Type type)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
+		// FIXME: improve perf here.
+		var list = GetCustomAttributes (provider, type, false);
+		if (list.Length == 0)
+			return null;
+		if (list.Length > 1)
+			throw new System.Reflection.AmbiguousMatchException ();
+		return (System.Attribute) list [0];
 #else
 		return System.Attribute.GetCustomAttribute (provider, type);
 #endif
 	}
 
-	public static System.Attribute [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)
+	static object [] EmptyAttributes = new object [0];
+
+	static System.Attribute CreateAttributeInstance (CustomAttributeData attribute)
+	{
+		var attribType = typeof (TypeManager).Assembly.GetType (attribute.AttributeType.FullName);
+		if (attribType == null)
+			attribType = typeof (TypeManager).Assembly.GetType ("XamCore." + attribute.AttributeType.FullName);
+		if (attribType == null)
+			attribType = System.Type.GetType (attribute.AttributeType.AssemblyQualifiedName);
+		if (attribType == null)
+			throw new System.NotImplementedException ();
+		var constructorArguments = new object [attribute.ConstructorArguments.Count];
+
+		for (int i = 0; i < constructorArguments.Length; i++)
+			constructorArguments [i] = attribute.ConstructorArguments [i].Value;
+		
+		var parameters = attribute.Constructor.GetParameters ();
+		var ctorTypes = new System.Type [parameters.Length];
+		for (int i = 0; i < ctorTypes.Length; i++) {
+			var paramType = parameters [i].ParameterType;
+			switch (paramType.FullName) {
+			case "System.Type":
+				ctorTypes [i] = typeof (Type);
+				break;
+			default:
+				ctorTypes [i] = typeof (TypeManager).Assembly.GetType ("XamCore." + parameters [i].ParameterType.FullName);
+				if (ctorTypes [i] == null) {
+					ctorTypes [i] = System.Type.GetType (parameters [i].ParameterType.AssemblyQualifiedName);
+					if (ctorTypes [i] == null)
+						ctorTypes [i] = System.Type.GetType (parameters [i].ParameterType.FullName);
+				}
+				break;
+			}
+			if (ctorTypes [i] == null)
+				throw new System.NotImplementedException ();
+		}
+		var ctor = attribType.GetConstructor (ctorTypes);
+		if (ctor == null)
+			throw new System.NotImplementedException ();
+		var instance = ctor.Invoke (constructorArguments);
+
+		for (int i = 0; i < attribute.NamedArguments.Count; i++) {
+			var arg = attribute.NamedArguments [i];
+			var value = arg.TypedValue.Value;
+			if (arg.TypedValue.ArgumentType == TypeManager.System_String_Array) {
+				var typed_values = (CustomAttributeTypedArgument []) arg.TypedValue.Value;
+				var arr = new string [typed_values.Length];
+				for (int a = 0; a < arr.Length; a++)
+					arr [a] = (string) typed_values [a].Value;
+				value = arr;
+			} else if (arg.TypedValue.ArgumentType.FullName == "System.Type[]") {
+				var typed_values = (CustomAttributeTypedArgument []) arg.TypedValue.Value;
+				var arr = new Type [typed_values.Length];
+				for (int a = 0; a < arr.Length; a++)
+					arr [a] = (Type) typed_values [a].Value;
+				value = arr;
+			} else if (arg.TypedValue.ArgumentType.IsArray) {
+				throw new System.NotImplementedException ();
+			}
+			if (arg.IsField) {
+				attribType.GetField (arg.MemberName).SetValue (instance, value);
+			} else {
+				attribType.GetProperty (arg.MemberName).SetValue (instance, value, new object [] { });
+			}
+		}
+
+		return (System.Attribute) instance;
+	}
+
+	static object [] FilterAttributes (IList<CustomAttributeData> attributes, Type type)
+	{
+		if (attributes == null || attributes.Count == 0)
+			return EmptyAttributes;
+
+		if (type == null) {
+			var rv = new System.Attribute [attributes.Count];
+			for (int i = 0; i < attributes.Count; i++)
+				rv [i] = CreateAttributeInstance (attributes [i]);
+			return rv;
+		}
+
+		List<System.Attribute> list = null;
+		for (int i = 0; i < attributes.Count; i++) {
+			var attrib = attributes [i];
+			if (attrib.AttributeType != type && !TypeManager.IsSubclassOf (type, attrib.AttributeType))
+				continue;
+
+			if (list == null)
+				list = new List<System.Attribute> ();
+			list.Add (CreateAttributeInstance (attributes [i]));
+		}
+
+		if (list != null)
+			return list.ToArray ();
+
+		return EmptyAttributes;
+	}
+
+	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
-		//return CustomAttributeData.GetCustomAttributes (provider, type);
+		return FilterAttributes (GetIKVMAttributes (provider), type);
 #else
 		return (System.Attribute []) provider.GetCustomAttributes (type, inherits);
 #endif
@@ -98,8 +204,7 @@ public static class AttributeManager
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, bool inherits)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
-		//return CustomAttributeData.GetCustomAttributes ((MemberInfo) provider);
+		return FilterAttributes (GetIKVMAttributes (provider), null);
 #else
 		return provider.GetCustomAttributes (inherits);
 #endif
@@ -107,6 +212,24 @@ public static class AttributeManager
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, bool inherits, params Type [] any_attribute_type)
 	{
+#if IKVM
+		var attribs = GetIKVMAttributes (provider);
+		if (attribs == null || attribs.Count == 0)
+			return false;
+
+		for (int i = 0; i < attribs.Count; i++) {
+			var attrib = attribs [i];
+			var attribType = attrib.AttributeType;
+			for (int t = 0; t < any_attribute_type.Length; t++) {
+				if (any_attribute_type [t] == attribType)
+					return true;
+				
+				if (TypeManager.IsSubclassOf (any_attribute_type [t], attribType))
+					return true;
+			}
+		}
+
+#else
 		var attribs = GetCustomAttributes (provider, inherits);
 		if (attribs == null || attribs.Length == 0)
 			return false;
@@ -126,12 +249,44 @@ public static class AttributeManager
 				}
 			}
 		}
+#endif
 		//System.Console.WriteLine ("No attribute: {0}", provider);
 		return false;
 	}
 
+#if IKVM
+	static IList<CustomAttributeData> GetIKVMAttributes (ICustomAttributeProvider provider)
+	{
+		var member = provider as MemberInfo;
+		if (member != null)
+			return CustomAttributeData.GetCustomAttributes (member);
+		var assembly = provider as Assembly;
+		if (assembly != null)
+			return CustomAttributeData.GetCustomAttributes (assembly);
+		var pinfo = provider as ParameterInfo;
+		if (pinfo != null)
+			return CustomAttributeData.GetCustomAttributes (pinfo);
+		throw new System.NotImplementedException ();
+	}
+#endif
+
 	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type, bool inherits = false)
 	{
+#if IKVM
+		var attribs = GetIKVMAttributes (provider);
+		if (attribs == null || attribs.Count == 0)
+			return false;
+
+		for (int i = 0; i < attribs.Count; i++) {
+			var attrib = attribs [i];
+			if (attrib.AttributeType == attribute_type)
+				return true;
+			if (TypeManager.IsSubclassOf (attribute_type, attrib.AttributeType))
+				return true;
+		}
+
+		return false;
+#else
 		var attribs = GetCustomAttributes (provider, inherits);
 		if (attribs == null || attribs.Length == 0) {
 			//Console.WriteLine ("No {0} for {1}", attribute_type, provider);
@@ -147,6 +302,7 @@ public static class AttributeManager
 		}
 
 		return false;
+#endif
 	}
 
 	public static Type GetAttributeType (System.Attribute attribute)
@@ -161,6 +317,7 @@ public static class AttributeManager
 	public static ICustomAttributeProvider GetReturnTypeCustomAttributes (MethodInfo method)
 	{
 #if IKVM
+		return method.ReturnParameter;
 		throw new System.NotImplementedException ();
 #else
 		return method.ReturnTypeCustomAttributes;
@@ -170,7 +327,17 @@ public static class AttributeManager
 	public static Type GetAttributeType (System.Type type)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
+		var asm = TypeManager.binding_attribute_assembly;
+		var name = type.FullName;
+		if (name.StartsWith ("XamCore.", System.StringComparison.Ordinal))
+			name = name.Substring (8);
+		var rv = asm.GetType (name);
+		if (rv == null) {
+			rv = TypeManager.platform_assembly.GetType (name);
+		}
+		if (rv == null)
+			throw new System.NotImplementedException ();
+		return rv;
 #else
 		return type;
 #endif
@@ -322,7 +489,7 @@ public static class TypeManager {
 	public static Type CFRunLoop;
 	public static Type AudioUnit;
 
-#if __UNIFIED__
+#if __UNIFIED__ || IKVM
 	public static Type CGRect;
 	public static Type CGPoint;
 	public static Type CGSize;
@@ -338,17 +505,202 @@ public static class TypeManager {
 	public static bool IsSubclassOf (Type base_class, Type derived_class)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
+		return base_class.IsSubclassOf (derived_class);
 #else
 		return base_class.IsSubclassOf (derived_class);
 #endif
 	}
 
+	static Type LookupType (Assembly assembly, string @namespace, string name)
+	{
+#if IKVM
+		Type rv;
+		if (string.IsNullOrEmpty (@namespace)) {
+			rv = assembly.GetType (name);
+		} else {
+			rv = assembly.GetType (@namespace + "." + name);
+		}
+		if (rv == null)
+			System.Console.WriteLine ("Could not load the type: {0}{1}", string.IsNullOrEmpty (@namespace) ? string.Empty : @namespace + ".", name);
+		return rv;
+#else
+		throw new System.NotImplementedException ();
+#endif
+	}
+
+#if IKVM
+	static Assembly mscorlib;
+	static Assembly system;
+	internal static Assembly platform_assembly;
+	internal static Assembly binding_attribute_assembly;
+#endif
+
 	static TypeManager ()
 	{
 #if IKVM
+		mscorlib = BindingTouch.universe.Load ("mscorlib.dll");
+		system = BindingTouch.universe.Load ("System.dll");
+		platform_assembly = BindingTouch.universe.Load ("Xamarin.iOS.dll");
+		binding_attribute_assembly = BindingTouch.universe.Load ("Xamarin.iOS.BindingAttributes.dll");
 
-#else
+		/* Types from mscorlib.dll */
+		System_Object = LookupType (mscorlib, "System", "Object");
+		System_Int32 = LookupType (mscorlib, "System", "Int32");
+		System_Int64 = LookupType (mscorlib, "System", "Int64");
+		System_UInt32 = LookupType (mscorlib, "System", "UInt32");
+		System_UInt64 = LookupType (mscorlib, "System", "UInt64");
+		System_Int16 = LookupType (mscorlib, "System", "Int16");
+		System_UInt16 = LookupType (mscorlib, "System", "UInt16");
+		System_Byte = LookupType (mscorlib, "System", "Byte");
+		System_SByte = LookupType (mscorlib, "System", "SByte");
+		System_Double = LookupType (mscorlib, "System", "Double");
+		System_Float = LookupType (mscorlib, "System", "Single");
+		System_Boolean = LookupType (mscorlib, "System", "Boolean");
+		System_IntPtr = LookupType (mscorlib, "System", "IntPtr");
+		System_Void = LookupType (mscorlib, "System", "Void");
+		System_String = LookupType (mscorlib, "System", "String");
+		System_String_Array = System_String.MakeArrayType ();
+		System_Delegate = LookupType (mscorlib, "System", "Delegate");
+		System_Attribute = LookupType (mscorlib, "System", "Attribute");
+
+		FlagsAttribute = LookupType (mscorlib, "System", "FlagsAttribute");
+		ObsoleteAttribute = LookupType (mscorlib, "System", "ObsoleteAttribute");
+		ParamArrayAttribute = LookupType (mscorlib, "System", "ParamArrayAttribute");
+		FieldOffsetAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "FieldOffsetAttribute");
+		MarshalAsAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "MarshalAsAttribute");
+		OutAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "OutAttribute");
+		DebuggerDisplayAttribute = LookupType (mscorlib, "System.Diagnostics", "DebuggerDisplayAttribute");
+		DebuggerBrowsableAttribute = LookupType (mscorlib, "System.Diagnostics", "DebuggerBrowsableAttribute");
+
+		/* Types from System.dll */
+		EditorBrowsableAttribute = LookupType (system, "System.ComponentModel", "EditorBrowsableAttribute");
+
+		/* Attribute types from the platform assembly (Xamarin.*.dll) */
+		System_nint = LookupType (platform_assembly, "System", "nint");
+		System_nuint = LookupType (platform_assembly, "System", "nuint");
+		System_nfloat = LookupType (platform_assembly, "System", "nfloat");
+		LinkWithAttribute = LookupType (platform_assembly, "ObjCRuntime", "LinkWithAttribute");
+		ProtocolAttribute = LookupType (platform_assembly, "Foundation", "ProtocolAttribute");
+		NativeAttribute = LookupType (platform_assembly, "ObjCRuntime", "NativeAttribute");
+		ExportAttribute = LookupType (platform_assembly, "Foundation", "ExportAttribute");
+		FieldAttribute = LookupType (platform_assembly, "Foundation", "FieldAttribute");
+		AvailabilityBaseAttribute = LookupType (platform_assembly, "ObjCRuntime", "AvailabilityBaseAttribute");
+		RegisterAttribute = LookupType (platform_assembly, "Foundation", "RegisterAttribute");
+		ModelAttribute = LookupType (platform_assembly, "Foundation", "ModelAttribute");
+		CategoryAttribute = LookupType (platform_assembly, "ObjCRuntime", "CategoryAttribute");
+
+		/* Binding-only attributes, from the binding attribute assembly (Xamarin.*.BindingAttributes.dll) */
+		AbstractAttribute = LookupType (binding_attribute_assembly, "", "AbstractAttribute");
+		BlockCallbackAttribute = LookupType (binding_attribute_assembly, "", "BlockCallbackAttribute");
+		CCallbackAttribute = LookupType (binding_attribute_assembly, "", "CCallbackAttribute");
+		NullAllowedAttribute = LookupType (binding_attribute_assembly, "", "NullAllowedAttribute");
+		BindAttribute = LookupType (binding_attribute_assembly, "", "BindAttribute");
+		MarshalNativeExceptionsAttribute = LookupType (binding_attribute_assembly, "", "MarshalNativeExceptionsAttribute");
+		StaticAttribute = LookupType (binding_attribute_assembly, "", "StaticAttribute");
+		PartialAttribute = LookupType (binding_attribute_assembly, "", "PartialAttribute");
+		StrongDictionaryAttribute = LookupType (binding_attribute_assembly, "", "StrongDictionaryAttribute");
+		AlignAttribute = LookupType (binding_attribute_assembly, "", "AlignAttribute");
+		BaseTypeAttribute = LookupType (binding_attribute_assembly, "", "BaseTypeAttribute");
+		ManualAttribute = LookupType (binding_attribute_assembly, "", "ManualAttribute");
+		RetainAttribute = LookupType (binding_attribute_assembly, "", "RetainAttribute");
+		AsyncAttribute = LookupType (binding_attribute_assembly, "", "AsyncAttribute");
+		NotImplementedAttribute = LookupType (binding_attribute_assembly, "", "NotImplementedAttribute");
+		ZeroCopyStringsAttribute = LookupType (binding_attribute_assembly, "", "ZeroCopyStringsAttribute");
+		CoreImageFilterAttribute = LookupType (binding_attribute_assembly, "", "CoreImageFilterAttribute");
+		AdvancedAttribute = LookupType (binding_attribute_assembly, "", "AdvancedAttribute");
+		AppearanceAttribute = LookupType (binding_attribute_assembly, "", "AppearanceAttribute");
+		NotificationAttribute = LookupType (binding_attribute_assembly, "", "NotificationAttribute");
+		NoDefaultValueAttribute = LookupType (binding_attribute_assembly, "", "NoDefaultValueAttribute");
+		CheckDisposedAttribute = LookupType (binding_attribute_assembly, "", "CheckDisposedAttribute");
+		EventNameAttribute = LookupType (binding_attribute_assembly, "", "EventNameAttribute");
+		DelegateApiNameAttribute = LookupType (binding_attribute_assembly, "", "DelegateApiNameAttribute");
+		EventArgsAttribute = LookupType (binding_attribute_assembly, "", "EventArgsAttribute");
+		DelegateNameAttribute = LookupType (binding_attribute_assembly, "", "DelegateNameAttribute");
+		DefaultValueAttribute = LookupType (binding_attribute_assembly, "", "DefaultValueAttribute");
+		DefaultValueFromArgumentAttribute = LookupType (binding_attribute_assembly, "", "DefaultValueFromArgumentAttribute");
+		DisposeAttribute = LookupType (binding_attribute_assembly, "", "DisposeAttribute");
+		InternalAttribute = LookupType (binding_attribute_assembly, "", "InternalAttribute");
+		UnifiedInternalAttribute = LookupType (binding_attribute_assembly, "", "UnifiedInternalAttribute");
+		ProtectedAttribute = LookupType (binding_attribute_assembly, "", "ProtectedAttribute");
+		OverrideAttribute = LookupType (binding_attribute_assembly, "", "OverrideAttribute");
+		NewAttribute = LookupType (binding_attribute_assembly, "", "NewAttribute");
+		SealedAttribute = LookupType (binding_attribute_assembly, "", "SealedAttribute");
+		AutoreleaseAttribute = LookupType (binding_attribute_assembly, "", "AutoreleaseAttribute");
+		DisableZeroCopyAttribute = LookupType (binding_attribute_assembly, "", "DisableZeroCopyAttribute");
+		PlainStringAttribute = LookupType (binding_attribute_assembly, "", "PlainStringAttribute");
+		ReleaseAttribute = LookupType (binding_attribute_assembly, "", "ReleaseAttribute");
+		AlphaAttribute = LookupType (binding_attribute_assembly, "", "AlphaAttribute");
+		OptionalImplementationAttribute = LookupType (binding_attribute_assembly, "", "OptionalImplementationAttribute");
+		ProbePresenceAttribute = LookupType (binding_attribute_assembly, "", "ProbePresenceAttribute");
+		TargetAttribute = LookupType (binding_attribute_assembly, "", "TargetAttribute");
+		WrapAttribute = LookupType (binding_attribute_assembly, "", "WrapAttribute");
+		TransientAttribute = LookupType (binding_attribute_assembly, "", "TransientAttribute");
+		IsThreadStaticAttribute = LookupType (binding_attribute_assembly, "", "IsThreadStaticAttribute");
+		CoreImageFilterPropertyAttribute = LookupType (binding_attribute_assembly, "", "CoreImageFilterPropertyAttribute");
+		ProtocolizeAttribute = LookupType (binding_attribute_assembly, "", "ProtocolizeAttribute");
+		ParamsAttribute = LookupType (binding_attribute_assembly, "", "ParamsAttribute");
+		PrologueSnippetAttribute = LookupType (binding_attribute_assembly, "", "PrologueSnippetAttribute");
+		PreSnippetAttribute = LookupType (binding_attribute_assembly, "", "PreSnippetAttribute");
+		PostGetAttribute = LookupType (binding_attribute_assembly, "", "PostGetAttribute");
+		FactoryAttribute = LookupType (binding_attribute_assembly, "", "FactoryAttribute");
+		SyntheticAttribute = LookupType (binding_attribute_assembly, "", "SyntheticAttribute");
+		ProxyAttribute = LookupType (binding_attribute_assembly, "", "ProxyAttribute");
+		PostSnippetAttribute = LookupType (binding_attribute_assembly, "", "PostSnippetAttribute");
+		ThreadSafeAttribute = LookupType (binding_attribute_assembly, "", "ThreadSafeAttribute");
+		DesignatedInitializerAttribute = LookupType (binding_attribute_assembly, "", "DesignatedInitializerAttribute");
+
+
+		/* Types from the platform assembly (Xamarin.*.dll) */
+		INativeObject = LookupType (platform_assembly, "ObjCRuntime", "INativeObject");
+		Selector = LookupType (platform_assembly, "ObjCRuntime", "Selector");
+		BlockLiteral = LookupType (platform_assembly, "ObjCRuntime", "BlockLiteral");
+		Class = LookupType (platform_assembly, "ObjCRuntime", "Class");
+		Protocol = LookupType (platform_assembly, "ObjCRuntime", "Protocol");
+		Constants = LookupType (platform_assembly, "ObjCRuntime", "Constants");
+		AudioBuffers = LookupType (platform_assembly, "AudioToolbox", "AudioBuffers");
+		MusicSequence = LookupType (platform_assembly, "AudioToolbox", "MusicSequence");
+		AudioComponent = LookupType (platform_assembly, "AudioUnit", "AudioComponent");
+		AURenderEventEnumerator = LookupType (platform_assembly, "AudioUnit", "AURenderEventEnumerator");
+		AudioUnit = LookupType (platform_assembly, "AudioUnit", "AudioUnit");
+		CMSampleBuffer = LookupType (platform_assembly, "CoreMedia", "CMSampleBuffer");
+		CMTimebase = LookupType (platform_assembly, "CoreMedia", "CMTimebase");
+		CMClock = LookupType (platform_assembly, "CoreMedia", "CMClock");
+		CMFormatDescription = LookupType (platform_assembly, "CoreMedia", "CMFormatDescription");
+		CMAudioFormatDescription = LookupType (platform_assembly, "CoreMedia", "CMAudioFormatDescription");
+		CMVideoFormatDescription = LookupType (platform_assembly, "CoreMedia", "CMVideoFormatDescription");
+		CMTime = LookupType (platform_assembly, "CoreMedia", "CMTime");
+		CGColor = LookupType (platform_assembly, "CoreGraphics", "CGColor");
+		CGPath = LookupType (platform_assembly, "CoreGraphics", "CGPath");
+		CGGradient = LookupType (platform_assembly, "CoreGraphics", "CGGradient");
+		CGContext = LookupType (platform_assembly, "CoreGraphics", "CGContext");
+		CGImage = LookupType (platform_assembly, "CoreGraphics", "CGImage");
+		CGColorSpace = LookupType (platform_assembly, "CoreGraphics", "CGColorSpace");
+		CGRect = LookupType (platform_assembly, "CoreGraphics", "CGRect");
+		CGPoint = LookupType (platform_assembly, "CoreGraphics", "CGPoint");
+		CGSize = LookupType (platform_assembly, "CoreGraphics", "CGSize");
+		CGLayer = LookupType (platform_assembly, "CoreGraphics", "CGLayer");
+		DispatchQueue = LookupType (platform_assembly, "CoreFoundation", "DispatchQueue");
+		CFRunLoop = LookupType (platform_assembly, "CoreFoundation", "CFRunLoop");
+		MidiEndpoint = LookupType (platform_assembly, "CoreMidi", "MidiEndpoint");
+		NSZone = LookupType (platform_assembly, "Foundation", "NSZone");
+		NSObject = LookupType (platform_assembly, "Foundation", "NSObject");
+		NSString = LookupType (platform_assembly, "Foundation", "NSString");
+		DictionaryContainerType = LookupType (platform_assembly, "Foundation", "DictionaryContainer");
+		ABAddressBook = LookupType (platform_assembly, "AddressBook", "ABAddressBook");
+		ABPerson = LookupType (platform_assembly, "AddressBook", "ABPerson");
+		ABRecord = LookupType (platform_assembly, "AddressBook", "ABRecord");
+		MTAudioProcessingTap = LookupType (platform_assembly, "MediaToolbox", "MTAudioProcessingTap");
+		CVPixelBuffer = LookupType (platform_assembly, "CoreVideo", "CVPixelBuffer");
+		CVImageBuffer = LookupType (platform_assembly, "CoreVideo", "CVImageBuffer");
+		CVPixelBufferPool = LookupType (platform_assembly, "CoreVideo", "CVPixelBufferPool");
+		SecIdentity = LookupType (platform_assembly, "Security", "SecIdentity");
+		SecTrust = LookupType (platform_assembly, "Security", "SecTrust");
+		SecAccessControl = LookupType (platform_assembly, "Security", "SecAccessControl");
+		AVCaptureWhiteBalanceGains = LookupType (platform_assembly, "AVFoundation", "AVCaptureWhiteBalanceGains");
+		CGLContext = LookupType (platform_assembly, "OpenGL", "CGLContext");
+		CGLPixelFormat = LookupType (platform_assembly, "OpenGL", "CGLPixelFormat");
+
+#else // IKVM
 	System_Object = typeof (object);
 	System_Int32 = typeof (int);
 	System_Int64 = typeof (long);
@@ -547,7 +899,7 @@ public static class TypeManager {
 	public static Type GetUnderlyingEnumType (Type type)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
+		return type.GetEnumUnderlyingType ();
 #else
 		return Enum.GetUnderlyingType (type);
 #endif
@@ -556,7 +908,9 @@ public static class TypeManager {
 	public static bool IsEnumValueDefined (Type type, object value)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
+		var rv = type.IsEnumDefined (value);
+		System.Console.WriteLine ("IsEnumValueDefined ({0}, {1}) => {2}", type, value, rv);
+		return rv;
 #else
 		var enumValue = System.Enum.ToObject (type, value);
 		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;

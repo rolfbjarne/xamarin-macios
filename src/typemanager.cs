@@ -290,13 +290,16 @@ public static class AttributeManager
 #if IKVM
 		return FilterAttributes<T> (GetIKVMAttributes (provider));
 #else
-		return (T[]) provider.GetCustomAttributes (typeof (T), inherits);ge
+		return (T[]) provider.GetCustomAttributes (typeof (T), inherits);
 #endif
 	}
 
 
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)
 	{
+		if (type == null)
+			throw new System.ArgumentNullException (nameof (type));
+
 #if IKVM
 		return FilterAttributes (GetIKVMAttributes (provider), type);
 #else
@@ -526,7 +529,9 @@ public static class TypeManager {
 	public static Type BlockCallbackAttribute { get; set; }
 	public static Type CCallbackAttribute { get; set; }
 	public static Type NullAllowedAttribute { get; set; }
+#if !IKVM
 	public static Type OutAttribute { get; set; }
+#endif
 	public static Type BindAttribute { get; set; }
 	public static Type MarshalNativeExceptionsAttribute { get; set; }
 	public static Type TargetAttribute { get; set; }
@@ -643,11 +648,7 @@ public static class TypeManager {
 
 	public static bool IsSubclassOf (Type base_class, Type derived_class)
 	{
-#if IKVM
-		return base_class.IsSubclassOf (derived_class);
-#else
-		return base_class.IsSubclassOf (derived_class);
-#endif
+		return derived_class.IsSubclassOf (base_class);
 	}
 
 	static Type LookupType (Assembly assembly, string @namespace, string name)
@@ -656,7 +657,7 @@ public static class TypeManager {
 		Type rv;
 		var lookup = name;
 		if (!string.IsNullOrEmpty (@namespace)) {
-			if (Generator.UnifiedAPI || assembly != TypeManager.platform_assembly || @namespace == "System") {
+			if (BindingTouch.Unified || assembly != TypeManager.platform_assembly || @namespace == "System") {
 				lookup = @namespace + "." + name;
 			} else if (@namespace == BindingTouch.NamespaceManager.Prefix) {
 				lookup = @namespace + "." + name;
@@ -722,7 +723,7 @@ public static class TypeManager {
 		ParamArrayAttribute = LookupType (mscorlib, "System", "ParamArrayAttribute");
 		FieldOffsetAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "FieldOffsetAttribute");
 		MarshalAsAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "MarshalAsAttribute");
-		OutAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "OutAttribute");
+		//OutAttribute = LookupType (mscorlib, "System.Runtime.InteropServices", "OutAttribute");
 		DebuggerDisplayAttribute = LookupType (mscorlib, "System.Diagnostics", "DebuggerDisplayAttribute");
 		DebuggerBrowsableAttribute = LookupType (mscorlib, "System.Diagnostics", "DebuggerBrowsableAttribute");
 
@@ -730,9 +731,11 @@ public static class TypeManager {
 		EditorBrowsableAttribute = LookupType (system, "System.ComponentModel", "EditorBrowsableAttribute");
 
 		/* Attribute types from the platform assembly (Xamarin.*.dll) */
-		System_nint = LookupType (platform_assembly, "System", "nint");
-		System_nuint = LookupType (platform_assembly, "System", "nuint");
-		System_nfloat = LookupType (platform_assembly, "System", "nfloat");
+		if (BindingTouch.Unified) {
+			System_nint = LookupType (platform_assembly, "System", "nint");
+			System_nuint = LookupType (platform_assembly, "System", "nuint");
+			System_nfloat = LookupType (platform_assembly, "System", "nfloat");
+		}
 		LinkWithAttribute = LookupType (platform_assembly, "ObjCRuntime", "LinkWithAttribute");
 		ProtocolAttribute = LookupType (platform_assembly, "Foundation", "ProtocolAttribute");
 		NativeAttribute = LookupType (platform_assembly, "ObjCRuntime", "NativeAttribute");
@@ -741,7 +744,9 @@ public static class TypeManager {
 		AvailabilityBaseAttribute = LookupType (platform_assembly, "ObjCRuntime", "AvailabilityBaseAttribute");
 		RegisterAttribute = LookupType (platform_assembly, "Foundation", "RegisterAttribute");
 		ModelAttribute = LookupType (platform_assembly, "Foundation", "ModelAttribute");
-		AlphaAttribute = LookupType (platform_assembly, "ObjCRuntime", "AlphaAttribute");
+
+		if (!BindingTouch.Unified)
+			AlphaAttribute = LookupType (platform_assembly, "ObjCRuntime", "AlphaAttribute");
 
 		/* Binding-only attributes, from the binding attribute assembly (Xamarin.*.BindingAttributes.dll) */
 		CategoryAttribute = LookupType (binding_attribute_assembly, "", "CategoryAttribute");
@@ -810,7 +815,7 @@ public static class TypeManager {
 		BlockLiteral = LookupType (platform_assembly, "ObjCRuntime", "BlockLiteral");
 		Class = LookupType (platform_assembly, "ObjCRuntime", "Class");
 		Protocol = LookupType (platform_assembly, "ObjCRuntime", "Protocol");
-		Constants = LookupType (platform_assembly, Generator.UnifiedAPI ? "ObjCRuntime" : BindingTouch.NamespaceManager.Prefix, "Constants");
+		Constants = LookupType (platform_assembly, BindingTouch.Unified ? "ObjCRuntime" : BindingTouch.NamespaceManager.Prefix, "Constants");
 		AudioBuffers = LookupType (platform_assembly, "AudioToolbox", "AudioBuffers");
 		MusicSequence = LookupType (platform_assembly, "AudioToolbox", "MusicSequence");
 		AudioComponent = LookupType (platform_assembly, "AudioUnit", "AudioComponent");
@@ -829,9 +834,11 @@ public static class TypeManager {
 		CGContext = LookupType (platform_assembly, "CoreGraphics", "CGContext");
 		CGImage = LookupType (platform_assembly, "CoreGraphics", "CGImage");
 		CGColorSpace = LookupType (platform_assembly, "CoreGraphics", "CGColorSpace");
-		CGRect = LookupType (platform_assembly, "CoreGraphics", "CGRect");
-		CGPoint = LookupType (platform_assembly, "CoreGraphics", "CGPoint");
-		CGSize = LookupType (platform_assembly, "CoreGraphics", "CGSize");
+		if (BindingTouch.Unified) {
+			CGRect = LookupType (platform_assembly, "CoreGraphics", "CGRect");
+			CGPoint = LookupType (platform_assembly, "CoreGraphics", "CGPoint");
+			CGSize = LookupType (platform_assembly, "CoreGraphics", "CGSize");
+		}
 		CGLayer = LookupType (platform_assembly, "CoreGraphics", "CGLayer");
 		DispatchQueue = LookupType (platform_assembly, "CoreFoundation", "DispatchQueue");
 		CFRunLoop = LookupType (platform_assembly, "CoreFoundation", "CFRunLoop");
@@ -851,8 +858,11 @@ public static class TypeManager {
 		SecTrust = LookupType (platform_assembly, "Security", "SecTrust");
 		SecAccessControl = LookupType (platform_assembly, "Security", "SecAccessControl");
 		AVCaptureWhiteBalanceGains = LookupType (platform_assembly, "AVFoundation", "AVCaptureWhiteBalanceGains");
-		CGLContext = LookupType (platform_assembly, "OpenGL", "CGLContext");
-		CGLPixelFormat = LookupType (platform_assembly, "OpenGL", "CGLPixelFormat");
+
+		if (Generator.CurrentPlatform == XamCore.ObjCRuntime.PlatformName.MacOSX) {
+			CGLContext = LookupType (platform_assembly, "OpenGL", "CGLContext");
+			CGLPixelFormat = LookupType (platform_assembly, "OpenGL", "CGLPixelFormat");
+		}
 
 #else // IKVM
 	System_Object = typeof (object);
@@ -1068,5 +1078,14 @@ public static class TypeManager {
 		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;
 
 #endif
-		}
+	}
+
+	public static string GetEnumFullName (Type type, object value)
+	{
+#if IKVM
+		return type.FullName + "." + type.GetEnumName (value);
+#else
+		return value.GetType ().FullName + "." + value;
+#endif
+	}
 }

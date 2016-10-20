@@ -94,6 +94,11 @@ class BindingTouch {
 #else
 	static bool buildNewStyle = false;
 #endif
+	public static bool Unified {
+		get {
+			return buildNewStyle;
+		}
+	}
 #endif
 
 	static List<string> libs = new List<string> ();
@@ -119,8 +124,9 @@ class BindingTouch {
 		}
 	}
 
-	public static NamespaceManager NamespaceManager { get; private set; }
 #endif
+
+	public static NamespaceManager NamespaceManager { get; private set; }
 
 	public static string ToolName {
 		get { return tool_name; }
@@ -533,9 +539,10 @@ class BindingTouch {
 #if !(IOS || MONOMAC)
 			GC.KeepAlive (baselib); // Fixes a compiler warning (unused variable).
 #endif
-				
+
 #if !MONOMAC
-			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true)) {
+			var attrs = AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true);
+			foreach (object attr in attrs) {
 				LinkWithAttribute linkWith = (LinkWithAttribute) attr;
 				
 				if (!linkwith.Contains (linkWith.LibraryName)) {
@@ -654,6 +661,7 @@ class BindingTouch {
 		return 0;
 	}
 
+#if IKVM
 	public static string LocateAssembly (string name)
 	{
 		foreach (var asm in universe.GetAssemblies ()) {
@@ -672,6 +680,7 @@ class BindingTouch {
 
 		throw new FileNotFoundException (name);
 	}
+#endif
 
 	static string GetWorkDir ()
 	{

@@ -314,7 +314,7 @@ public class MarshalInfo {
 		ZeroCopyStringMarshal = (Type == TypeManager.System_String) && PlainString == false && !Generator.HasAttribute (pi, TypeManager.DisableZeroCopyAttribute) && Generator.SharedGenerator.type_wants_zero_copy;
 		if (ZeroCopyStringMarshal && Generator.HasAttribute (mi, TypeManager.DisableZeroCopyAttribute))
 			ZeroCopyStringMarshal = false;
-		IsOut = Generator.HasAttribute (pi, TypeManager.OutAttribute);		
+		IsOut = Generator.IsOutParameter (pi);
 	}
 
 	// Used to return values
@@ -950,12 +950,12 @@ public partial class Generator : IMemberGatherer {
 			return "void";
 
 		if (t.IsEnum) {
-#if XAMCORE_2_0
+#if XAMCORE_2_0 || IKVM
 			var enumType = t;
 #endif
 			t = TypeManager.GetUnderlyingEnumType (t);
 
-#if XAMCORE_2_0
+#if XAMCORE_2_0 || IKVM
 			if (HasAttribute (enumType, TypeManager.NativeAttribute)) {
 				if (t != TypeManager.System_Int64 && t != TypeManager.System_UInt64)
 					throw new BindingException (1026, true,
@@ -1372,7 +1372,7 @@ public partial class Generator : IMemberGatherer {
 		// Handle (out ValeuType foo)
 		//
 		if (pi.ParameterType.IsByRef && pi.ParameterType.GetElementType ().IsValueType){
-			return (HasAttribute (pi, TypeManager.OutAttribute) ? "out " : "ref ") + pi.Name.GetSafeParamName ();
+			return (IsOutParameter (pi) ? "out " : "ref ") + pi.Name.GetSafeParamName ();
 		}
 
 		if (pi.ParameterType.IsSubclassOf (TypeManager.System_Delegate)){
@@ -1437,7 +1437,16 @@ public partial class Generator : IMemberGatherer {
 	{
 		return GetAttribute (mi, TypeManager.BindAttribute) as BindAttribute;
 	}
-	
+
+	public static bool IsOutParameter (ParameterInfo pi)
+	{
+#if IKVM
+		return pi.IsOut;
+#else
+		return HasAttribute (pi, TypeManager.OutAttribute);
+#endif
+	}
+
 	public static bool HasAttribute (ICustomAttributeProvider i, Type t, Attribute [] attributes = null)
 	{
 		if (attributes == null)
@@ -3026,7 +3035,7 @@ public partial class Generator : IMemberGatherer {
 				sb.Append ("[Transient] ");
 			
 			if (parType.IsByRef){
-				string reftype = HasAttribute (pi, TypeManager.OutAttribute) ? "out " : "ref ";
+				string reftype = IsOutParameter (pi) ? "out " : "ref ";
 				sb.Append (reftype);
 				parType = parType.GetElementType ();
 			}
@@ -5369,7 +5378,7 @@ public partial class Generator : IMemberGatherer {
 						}
 						// old monotouch.dll (and MonoMac.dll, XamMac.dll) always included this .ctor even if the
 						// type did not conform to NSCopying. That made the .ctor throw a (native) exception and crash
-#if XAMCORE_2_0
+#if XAMCORE_2_0 || IKVM
 						var compat = false;
 #else
 						var compat = true;
@@ -6655,8 +6664,11 @@ public partial class Generator : IMemberGatherer {
 		if (def is bool)
 			return (bool) def ? "true" : "false";
 
-		if (def is Enum)
-			return def.GetType ().FullName + "." + def;
+		if (mi.ReturnType.IsEnum) {
+			if (def is string)
+				return def;
+			return TypeManager.GetEnumFullName (mi.ReturnType, def);
+		}
 
 		return def;
 	}

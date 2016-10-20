@@ -166,9 +166,6 @@ endef
 $(eval $(call IOS_GENERATOR_IKVM_template,classic,"--target-framework=MonoTouch;v1.0"   --ns=MonoTouch.ObjCRuntime -p,compat-ios,monotouch))
 $(eval $(call IOS_GENERATOR_IKVM_template,unified,"--target-framework=Xamarin.iOS;v1.0" --ns=ObjCRuntime -new-style  ,native,Xamarin.iOS))
 
-
-
-
 define IOS_TARGETS_template
 IOS_VARIANTS_TARGETS += $(IOS_BUILD_DIR)/$(1)/$(3)
 
@@ -188,6 +185,37 @@ endef
 $(eval $(call IOS_TARGETS_template,compat,--ns=MonoTouch.ObjCRuntime,monotouch.dll,compat,compat-ios))
 $(eval $(call IOS_TARGETS_template,native-32,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,native,native-32))
 $(eval $(call IOS_TARGETS_template,native-64,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,native,native-64))
+
+define IOS_TARGETS_IKVM_template
+IOS_VARIANTS_IKVM_TARGETS += $(IOS_BUILD_DIR)/$(1)/$(3)
+
+# monotouch.dll | Xamarin.iOS.dll
+$(IOS_BUILD_DIR)/$(1)/$(3): $$(IOS_SOURCES) $(IOS_BUILD_DIR)/$(4)/generated_sources $(PRODUCT_KEY_PATH)
+	@mkdir -p $(IOS_BUILD_DIR)/$(1)
+	$$(call Q_PROF_PMCS,ios/$(1)) PMCS_PROFILE=$(5) $$(IOS_PMCS) -out:$$@ -target:library -debug -unsafe -optimize \
+		-keyfile:$(PRODUCT_KEY_PATH) $$(IOS_DEFINES) \
+		-nowarn:219,618,114,414,1635,3021,$$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		$$(IOS_SOURCES) @$(IOS_BUILD_DIR)/$(4)/generated_sources
+
+$(IOS_BUILD_DIR)/$(1)/$(3).mdb: $(IOS_BUILD_DIR)/$(1)/$(3)
+	@touch $(IOS_BUILD_DIR)/$(1)/$(3).mdb
+
+zz:: $(IOS_BUILD_DIR)/$(1)/$(3)
+
+endef
+
+aa: $(IOS_BUILD_DIR)/native/generated_sources $(IOS_BUILD_DIR)/unified/generated_sources
+	sed 's/unified/xxx/g' build/ios/unified/generated_sources > unified.list
+	sed 's/native/xxx/g' build/ios/native/generated_sources > native.list
+	diff -u native.list unified.list
+	rm -f source.diff
+	-diff -ur /work/maccore/ikvm-generator/xamarin-macios/src/build/ios/native /work/maccore/ikvm-generator/xamarin-macios/src/build/ios/unified > source.diff
+	wc source.diff
+
+$(eval $(call IOS_TARGETS_IKVM_template,classic,--ns=MonoTouch.ObjCRuntime,monotouch.dll,classic,compat-ios))
+$(eval $(call IOS_TARGETS_IKVM_template,unified-32,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,unified,native-32))
+$(eval $(call IOS_TARGETS_IKVM_template,unified-64,--ns=ObjCRuntime -new-style,Xamarin.iOS.dll,unified,native-64))
+
 
 define IOS_LIBS_template
 IOS_VARIANTS_TARGETS += $(addprefix $(IOS_BUILD_DIR)/$(1)/,$(4) $(5))

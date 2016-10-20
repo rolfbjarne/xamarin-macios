@@ -212,7 +212,7 @@ namespace XamCore.ObjCRuntime
 
 		public static bool X86_64NeedStret (MethodInfo mi)
 		{
-#if __UNIFIED__
+#if __UNIFIED__ || IKVM
 			Type t = mi.ReturnType;
 
 			if (!t.IsValueType || t.IsEnum || IsMagicTypeOrCorlibType (t))
@@ -354,7 +354,7 @@ namespace XamCore.ObjCRuntime
 			if (X86NeedStret (mi))
 				return true;
 
-#if __UNIFIED__
+#if __UNIFIED__ || IKVM
 			if (X86_64NeedStret (mi))
 				return true;
 #endif

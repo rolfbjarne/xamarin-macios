@@ -309,7 +309,11 @@ class BindingTouch {
 #endif
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
-			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs ()[0]).Append (' ');
+#if IKVM
+			cargs.Append ("-r:build/ios/native/Xamarin.iOS.Attributes.dll ");
+#else
+			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
+#endif
 			cargs.Append (refs).Append (' ');
 			if (unsafef)
 				cargs.Append ("-unsafe ");

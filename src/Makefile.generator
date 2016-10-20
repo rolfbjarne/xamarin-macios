@@ -76,10 +76,10 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(I
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
-$(IOS_BUILD_DIR)/native/attributes.dll: attributes.cs Makefile.generator
+$(IOS_BUILD_DIR)/native/Xamarin.iOS.Attributes.dll: attributes.cs Makefile.generator
 	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="        -out:$@ -debug attributes.cs -target:library
 
-$(IOS_BUILD_DIR)/native/generator-ikvm.exe: $(GENERATOR_SOURCES)
+$(IOS_BUILD_DIR)/native/generator-ikvm.exe: $(GENERATOR_SOURCES) $(IOS_BUILD_DIR)/native/Xamarin.iOS.Attributes.dll
 	mcs -out:$@ -debug -unsafe \
 		$(IOS_DEFINES) \
 		$(GENERATOR_DEFINES)             \

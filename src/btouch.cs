@@ -408,6 +408,11 @@ class BindingTouch {
 				Console.WriteLine ("Could not find: {0}", resolve_args.Name);
 				return null;
 			};
+
+			System.AppDomain.CurrentDomain.AssemblyLoad += (sender, load_args) =>
+			{
+				Console.WriteLine ("Loaded: {0}", load_args.LoadedAssembly.FullName);
+			};
 #endif
 
 			Assembly api;

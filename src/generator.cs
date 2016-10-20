@@ -809,13 +809,13 @@ public partial class Generator : IMemberGatherer {
 	}
 
 #if MONOMAC
-	public const PlatformName CurrentPlatform = PlatformName.MacOSX;
+	public static PlatformName CurrentPlatform = PlatformName.MacOSX;
 #elif WATCH
-	public const PlatformName CurrentPlatform = PlatformName.WatchOS;
+	public static PlatformName CurrentPlatform = PlatformName.WatchOS;
 #elif TVOS
-	public const PlatformName CurrentPlatform = PlatformName.TvOS;
+	public static PlatformName CurrentPlatform = PlatformName.TvOS;
 #elif IOS
-	public const PlatformName CurrentPlatform = PlatformName.iOS;
+	public static PlatformName CurrentPlatform = PlatformName.iOS;
 #elif IKVM
 	public static PlatformName CurrentPlatform;
 #else
@@ -1463,15 +1463,6 @@ public partial class Generator : IMemberGatherer {
 		if (owningProperty != null && HasAttribute (owningProperty, TypeManager.MarshalNativeExceptionsAttribute))
 			return true;
 
-		return false;
-	}
-
-	public static bool HasAttribute (ICustomAttributeProvider i, string type_name, bool inherit = false)
-	{
-		foreach (var attr in AttributeManager.GetCustomAttributes (i, inherit)) {
-			if (attr.GetType ().Name == type_name)
-				return true;
-		}
 		return false;
 	}
 
@@ -2393,7 +2384,7 @@ public partial class Generator : IMemberGatherer {
 						} else if (fetchType == TypeManager.System_nuint){
 							getter = "{1} GetNUIntValue ({0})";
 							setter = "SetNumberValue ({0}, {1}value)";
-#if XAMCORE_2_0
+#if XAMCORE_2_0 || IKVM
 						} else if (fetchType == TypeManager.CGRect){
 							getter = "{1} GetCGRectValue ({0})";
 							setter = "SetCGRectValue ({0}, {1}value)";
@@ -2728,7 +2719,7 @@ public partial class Generator : IMemberGatherer {
 		if (mi == null)
 			return;
 
-		foreach (var availability in AttributeManager.GetCustomAttributes (mi, true).OfType<AvailabilityBaseAttribute> ())
+		foreach (var availability in AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi, true))
 			print (availability.ToString ());
 	}
 
@@ -3687,9 +3678,9 @@ public partial class Generator : IMemberGatherer {
 		// However we want them even if ImplementsAppearance is true (i.e. the original type needs them)
 		if (!is_appearance) {
 			if (HasAttribute (mi, TypeManager.PostGetAttribute))
-				postget = ((PostGetAttribute []) AttributeManager.GetCustomAttributes (mi, TypeManager.PostGetAttribute, true));
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (mi, true);
 			else if (propInfo != null)
-				postget = ((PostGetAttribute []) AttributeManager.GetCustomAttributes (propInfo, TypeManager.PostGetAttribute, true));
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (propInfo, true);
 
 			if (postget != null && postget.Length == 0)
 				postget = null;
@@ -4664,7 +4655,7 @@ public partial class Generator : IMemberGatherer {
 
 				var del = mi.DeclaringType;
 
-				if (HasAttribute (mi.DeclaringType, "MonoNativeFunctionWrapper"))
+				if (AttributeManager.HasAttribute (mi.DeclaringType, "MonoNativeFunctionWrapper"))
 					print ("[MonoNativeFunctionWrapper]\n");
 
 				print ("public delegate {0} {1} ({2});",
@@ -5666,7 +5657,7 @@ public partial class Generator : IMemberGatherer {
 						print ("return *(({3} *) Dlfcn.dlsym (Libraries.{2}.Handle, \"{1}\"));", field_pi.Name, fieldAttr.SymbolName, library_name,
 						       FormatType (type, field_pi.PropertyType.Namespace, field_pi.PropertyType.Name));
 #endif
-#if XAMCORE_2_0
+#if XAMCORE_2_0 || IKVM
 					} else if (field_pi.PropertyType == TypeManager.System_nint) {
 						print ("return Dlfcn.GetNInt (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == TypeManager.System_nuint) {
@@ -5707,7 +5698,7 @@ public partial class Generator : IMemberGatherer {
 							print ("Dlfcn.SetString (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType.Name == "NSArray"){
 							print ("Dlfcn.SetArray (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-#if XAMCORE_2_0
+#if XAMCORE_2_0 || IKVM
 						} else if (field_pi.PropertyType == TypeManager.System_nint) {
 							print ("Dlfcn.SetNInt (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == TypeManager.System_nuint) {

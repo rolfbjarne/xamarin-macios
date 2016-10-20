@@ -22,6 +22,7 @@ IKVM_REFLECTION_SOURCES = \
 	$(TOP)/src/Foundation/ExportAttribute.cs \
 	$(TOP)/src/Foundation/RegisterAttribute.cs \
 	$(TOP)/src/Foundation/PreserveAttribute.cs \
+	$(TOP)/src/ObjCRuntime/CategoryAttribute.cs \
 
 IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
 
@@ -64,11 +65,13 @@ endif
 
 IOS_TARGETS_DIRS +=                              \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator \
 
 IOS_TARGETS +=                                                          \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator/Xamarin.iOS.BindingAttributes.dll \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator/monotouch.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch.exe             \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch-native.exe      \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
 
@@ -86,12 +89,15 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(I
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.dll: $(IOS_BUILD_DIR)/native/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator/%.dll: $(IOS_BUILD_DIR)/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
-$(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll: attributes.cs Makefile.generator
-	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="        -out:$@ -debug attributes.cs -target:library
+$(IOS_BUILD_DIR)/Xamarin.iOS.BindingAttributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="          -out:$@ -debug attributes.cs -target:library
+
+$(IOS_BUILD_DIR)/monotouch.BindingAttributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-ios" -compiler:$(IOS_CSC) -global-replace:"^XamCore.=MonoTouch" -out:$@ -debug attributes.cs -target:library
 
 $(IOS_BUILD_DIR)/native/generator-ikvm.exe: $(GENERATOR_SOURCES) $(IOS_BUILD_DIR)/native/Xamarin.iOS.Attributes.dll
 	mcs -out:$@ -debug -unsafe \
@@ -107,6 +113,7 @@ WATCH_TARGETS_DIRS +=                            \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch \
 
 WATCH_TARGETS +=                                                        \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator/Xamarin.WatchOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/bwatch.exe             \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch                        \
 
@@ -121,6 +128,9 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/%.exe: $(WATCH_BUILD_DIR)/%.exe | $
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
+$(IOS_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/watch" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
+
 # #
 # # Xamarin.TVOS (btv)
 # #
@@ -129,6 +139,7 @@ TVOS_TARGETS_DIRS +=                          \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btv \
 
 TVOS_TARGETS +=                                                  \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/generator/Xamarin.TVOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btv/btv.exe            \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv                    \
 
@@ -143,14 +154,20 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btv/%.exe: $(TVOS_BUILD_DIR)/%.exe | $(IOS
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
+$(IOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/tvos" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
+
 #
 # Xamarin.Mac (bmac)
 #
 
 MAC_TARGETS_DIRS +=                                     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/generator \
 
 MAC_TARGETS += \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/generator/Xamarin.Mac.BindingAttributes.dll \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/generator/XamMac.BindingAttributes.dll \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bmac                     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/bmac-full.exe       \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/bmac-mobile.exe     \
@@ -168,5 +185,15 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bmac: bmac | $(MAC_DESTDIR)$(MAC_
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/%.exe: $(MAC_BUILD_DIR)/%.exe | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/generator/%.dll: $(MAC_BUILD_DIR)/%.dll | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/generator
+	$(Q) install -m 0755 $< $@
+	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(MAC_BUILD_DIR)/Xamarin.Mac.BindingAttributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/mobile" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
+
+$(MAC_BUILD_DIR)/XamMac.BindingAttributes.dll: attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-mac" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
 
 .SECONDARY: $(foreach profile,full compat mobile,$(MAC_BUILD_DIR)/bmac-$(profile).exe)

@@ -37,7 +37,7 @@ using System.Reflection;
 using Type=System.Type;
 
 using System;
-using System.ComponentModel;
+//using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -94,21 +94,53 @@ public static class AttributeManager
 #endif
 	}
 
+#if IKVM
 	static object [] EmptyAttributes = new object [0];
+
+	static System.Type ConvertType (Type type)
+	{
+		System.Type rv;
+		if (type.Assembly == TypeManager.mscorlib) {
+			rv = typeof (int).Assembly.GetType (type.FullName);
+		} else if (type.Assembly == TypeManager.system) {
+			rv = typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly.GetType (type.FullName);
+		} else if (type.Assembly == TypeManager.binding_attribute_assembly) {
+			rv = typeof (TypeManager).Assembly.GetType (type.FullName);
+		} else if (type.Assembly == TypeManager.platform_assembly) {
+			rv = typeof (TypeManager).Assembly.GetType ("XamCore." + type.FullName);
+		} else {
+			throw new System.NotImplementedException ();
+		}
+		if (rv == null)
+			throw new System.NotImplementedException ();
+		return rv;
+	}
 
 	static System.Attribute CreateAttributeInstance (CustomAttributeData attribute)
 	{
-		var attribType = typeof (TypeManager).Assembly.GetType (attribute.AttributeType.FullName);
-		if (attribType == null)
-			attribType = typeof (TypeManager).Assembly.GetType ("XamCore." + attribute.AttributeType.FullName);
-		if (attribType == null)
-			attribType = System.Type.GetType (attribute.AttributeType.AssemblyQualifiedName);
-		if (attribType == null)
-			throw new System.NotImplementedException ();
+		System.Type attribType = ConvertType (attribute.AttributeType);
+
 		var constructorArguments = new object [attribute.ConstructorArguments.Count];
 
-		for (int i = 0; i < constructorArguments.Length; i++)
-			constructorArguments [i] = attribute.ConstructorArguments [i].Value;
+		for (int i = 0; i < constructorArguments.Length; i++) {
+			var value = attribute.ConstructorArguments [i].Value;
+			switch (attribute.ConstructorArguments [i].ArgumentType.FullName) {
+			case "System.Type":
+				if (value != null) {
+					if (attribType.Assembly == typeof (TypeManager).Assembly) {
+						constructorArguments [i] = value;
+					} else {
+						constructorArguments [i] = System.Type.GetType (((Type) value).FullName);
+					}
+					if (constructorArguments [i] == null)
+						throw new System.NotImplementedException ();
+				}
+				break;
+			default:
+				constructorArguments [i] = value;
+				break;
+			}
+		}
 		
 		var parameters = attribute.Constructor.GetParameters ();
 		var ctorTypes = new System.Type [parameters.Length];
@@ -116,15 +148,14 @@ public static class AttributeManager
 			var paramType = parameters [i].ParameterType;
 			switch (paramType.FullName) {
 			case "System.Type":
-				ctorTypes [i] = typeof (Type);
+				if (attribType.Assembly == typeof (TypeManager).Assembly) {
+					ctorTypes [i] = typeof (Type);
+				} else {
+					ctorTypes [i] = typeof (System.Type);
+				}
 				break;
 			default:
-				ctorTypes [i] = typeof (TypeManager).Assembly.GetType ("XamCore." + parameters [i].ParameterType.FullName);
-				if (ctorTypes [i] == null) {
-					ctorTypes [i] = System.Type.GetType (parameters [i].ParameterType.AssemblyQualifiedName);
-					if (ctorTypes [i] == null)
-						ctorTypes [i] = System.Type.GetType (parameters [i].ParameterType.FullName);
-				}
+				ctorTypes [i] = ConvertType (paramType);
 				break;
 			}
 			if (ctorTypes [i] == null)
@@ -192,6 +223,40 @@ public static class AttributeManager
 		return EmptyAttributes;
 	}
 
+	static T [] FilterAttributes<T> (IList<CustomAttributeData> attributes) where T: System.Attribute
+	{
+		if (attributes == null || attributes.Count == 0)
+			return new T [0]; // FIXME: ugh
+
+		var type = GetAttributeType (typeof (T));
+		List<T> list = null;
+		for (int i = 0; i < attributes.Count; i++) {
+			var attrib = attributes [i];
+			if (attrib.AttributeType != type && !TypeManager.IsSubclassOf (type, attrib.AttributeType))
+				continue;
+
+			if (list == null)
+				list = new List<T> ();
+			list.Add ((T) CreateAttributeInstance (attributes [i]));
+		}
+
+		if (list != null)
+			return list.ToArray ();
+
+		return new T [0]; // FIXME: ugh
+	}
+#endif
+
+	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider, bool inherits) where T: System.Attribute
+	{
+#if IKVM
+		return FilterAttributes<T> (GetIKVMAttributes (provider));
+#else
+		return (T []) provider.GetCustomAttributes (inherits);
+#endif
+	}
+
+
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)
 	{
 #if IKVM
@@ -208,6 +273,22 @@ public static class AttributeManager
 #else
 		return provider.GetCustomAttributes (inherits);
 #endif
+	}
+
+	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name, bool inherit = false)
+	{
+#if IKVM
+		var attribs = GetIKVMAttributes (provider);
+		for (int i = 0; i < attribs.Count; i++)
+			if (attribs [i].AttributeType.Name == type_name)
+				return true;
+#else
+		foreach (var attr in AttributeManager.GetCustomAttributes (provider, inherit)) {
+			if (attr.GetType ().Name == type_name)
+				return true;
+		}
+#endif
+		return false;
 	}
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, bool inherits, params Type [] any_attribute_type)
@@ -308,7 +389,21 @@ public static class AttributeManager
 	public static Type GetAttributeType (System.Attribute attribute)
 	{
 #if IKVM
-		throw new System.NotImplementedException ();
+		Type rv;
+		if (attribute.GetType ().Assembly == typeof (AbstractAttribute).Assembly) {
+			rv = TypeManager.binding_attribute_assembly.GetType (attribute.GetType ().FullName);
+			if (rv == null) {
+				var name = attribute.GetType ().FullName;
+				if (name.StartsWith ("XamCore.", System.StringComparison.Ordinal))
+					name = name.Substring (8);
+				rv = TypeManager.platform_assembly.GetType (name);
+			}
+		} else {
+			throw new System.NotImplementedException ();
+		}
+		if (rv == null)
+			throw new System.NotImplementedException ();
+		return rv;
 #else
 		return attribute.GetType ();
 #endif
@@ -529,8 +624,8 @@ public static class TypeManager {
 	}
 
 #if IKVM
-	static Assembly mscorlib;
-	static Assembly system;
+	internal static Assembly mscorlib;
+	internal static Assembly system;
 	internal static Assembly platform_assembly;
 	internal static Assembly binding_attribute_assembly;
 #endif
@@ -807,7 +902,7 @@ public static class TypeManager {
 
 	FieldOffsetAttribute = typeof (FieldOffsetAttribute);
 	MarshalAsAttribute = typeof (MarshalAsAttribute);
-	EditorBrowsableAttribute = typeof (EditorBrowsableAttribute);
+	EditorBrowsableAttribute = typeof (System.ComponentModel.EditorBrowsableAttribute);
 	OptionalImplementationAttribute = typeof (OptionalImplementationAttribute);
 	DebuggerDisplayAttribute = typeof (DebuggerDisplayAttribute);
 	DebuggerBrowsableAttribute = typeof (DebuggerBrowsableAttribute);
@@ -908,9 +1003,7 @@ public static class TypeManager {
 	public static bool IsEnumValueDefined (Type type, object value)
 	{
 #if IKVM
-		var rv = type.IsEnumDefined (value);
-		System.Console.WriteLine ("IsEnumValueDefined ({0}, {1}) => {2}", type, value, rv);
-		return rv;
+		return type.IsEnumDefined (value);
 #else
 		var enumValue = System.Enum.ToObject (type, value);
 		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;

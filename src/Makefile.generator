@@ -190,10 +190,16 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/generator/%.dll: $(MAC_BUILD_DIR)
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
-$(MAC_BUILD_DIR)/Xamarin.Mac.BindingAttributes.dll: attributes.cs Makefile.generator
+$(MAC_BUILD_DIR)/full/Xamarin.Mac.BindingAttributes.dll: attributes.cs Makefile.generator
+	mkdir -p $(dir $@)
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/full" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
+
+$(MAC_BUILD_DIR)/mobile/Xamarin.Mac.BindingAttributes.dll: attributes.cs Makefile.generator
+	mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/mobile" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
 
-$(MAC_BUILD_DIR)/XamMac.BindingAttributes.dll: attributes.cs Makefile.generator
-	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-mac" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=" -out:$@ -debug attributes.cs -target:library
+$(MAC_BUILD_DIR)/compat/XamMac.BindingAttributes.dll: attributes.cs Makefile.generator
+	mkdir -p $(dir $@)
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-mac" -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.=MonoMac" -out:$@ -debug attributes.cs -target:library
 
 .SECONDARY: $(foreach profile,full compat mobile,$(MAC_BUILD_DIR)/bmac-$(profile).exe)

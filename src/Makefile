@@ -205,9 +205,6 @@ zz:: $(IOS_BUILD_DIR)/$(1)/$(3)
 endef
 
 aa: $(IOS_BUILD_DIR)/native/generated_sources $(IOS_BUILD_DIR)/unified/generated_sources
-	sed 's/unified/xxx/g' build/ios/unified/generated_sources > unified.list
-	sed 's/native/xxx/g' build/ios/native/generated_sources > native.list
-	diff -u native.list unified.list
 	rm -f source.diff
 	-diff -ur /work/maccore/ikvm-generator/xamarin-macios/src/build/ios/native /work/maccore/ikvm-generator/xamarin-macios/src/build/ios/unified > source.diff
 	wc source.diff
@@ -561,6 +558,45 @@ endef
 $(eval $(call MAC_GENERATOR_template,compat,--ns=MonoMac.ObjCRuntime,-r:/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5/System.Drawing.dll,,$(SYSTEM_MONO),compat-mac))
 $(eval $(call MAC_GENERATOR_template,full,--ns=ObjCRuntime -unified-full-profile,-d:NO_SYSTEM_DRAWING,,$(SYSTEM_MONO),full,-d:NO_SYSTEM_DRAWING))
 $(eval $(call MAC_GENERATOR_template,mobile,--ns=ObjCRuntime -unified-mobile-profile,$(SHARED_SYSTEM_DRAWING_SOURCES),-nostdlib -r:mscorlib.dll -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac,$(TOP)/builds/install/mono-mac64,mobile))
+
+
+define MAC_GENERATOR_IKVM_template
+$(MAC_BUILD_DIR)/$(1)/bootstrap/$(9).dll: $(MAC_BUILD_DIR)/$(1)/pmcs $(MAC_CORE_SOURCES) frameworks.sources
+	mkdir -p $$(dir $$@)
+	$$(call Q_PROF_PMCS,mac/$(1)) PMCS_PROFILE=$(6) $(MAC_BUILD_DIR)/$(1)/pmcs \
+		-out:$$@ -target:library -debug -unsafe -nowarn:3021,612,618,1635 \
+		$$(MAC_BOOTSTRAP_DEFINES) \
+		$(3) \
+		-keyfile:$(SN_KEY) \
+		$$(MAC_CORE_SOURCES)
+
+$(MAC_BUILD_DIR)/$(1)-ikvm/generated-sources: $(IOS_BUILD_DIR)/generator-ikvm.exe $(MAC_APIS) $(MAC_BUILD_DIR)/$(1)/$(9).BindingAttributes.dll $(MAC_BUILD_DIR)/$(1)/bootstrap/$(9).dll
+	mkdir -p $$(dir $$@)
+	$$(call Q_PROF_GEN,mac/$(1)) PMCS_PROFILE=$(6) $(SYSTEM_MONO) --debug $$< \
+		-d:MONOMAC \
+		-d:XAMARIN_MAC \
+		-compiler:$(MAC_BUILD_DIR)/$(1)/pmcs \
+		-process-enums \
+		-native-exception-marshalling \
+		-core \
+		-sourceonly:$$@ \
+		-tmpdir:$$(@D) \
+		-baselib:$(MAC_BUILD_DIR)/$(1)/bootstrap/$(9).dll \
+		-d:NO_SYSTEM_DRAWING \
+		-binding-attributes-lib=$(MAC_BUILD_DIR)/$(1)/$(9).BindingAttributes.dll \
+		-target-framework=$(10) \
+		$(2) \
+		$(3) \
+		$(MAC_APIS) \
+		-v
+
+mg:: $(MAC_BUILD_DIR)/$(1)-ikvm/generated-sources
+
+endef
+
+$(eval $(call MAC_GENERATOR_IKVM_template,compat,--ns=MonoMac.ObjCRuntime,-lib:/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5 -r:/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5/System.Drawing.dll,,$(SYSTEM_MONO),compat-mac,,,XamMac,"XamMac;v1.0"))
+$(eval $(call MAC_GENERATOR_IKVM_template,full,--ns=ObjCRuntime,-lib:/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5 -d:NO_SYSTEM_DRAWING,,$(SYSTEM_MONO),full,-d:NO_SYSTEM_DRAWING,,Xamarin.Mac,".NETFramework;v4.5"))
+$(eval $(call MAC_GENERATOR_IKVM_template,mobile,--ns=ObjCRuntime,-lib:$(MONO_PATH)/mcs/class/lib/xammac $(SHARED_SYSTEM_DRAWING_SOURCES),-nostdlib -r:mscorlib.dll -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac,$(TOP)/builds/install/mono-mac64,mobile,,,Xamarin.Mac,"Xamarin.Mac;v2.0"))
 
 define MAC_TARGETS_template
 $(MAC_BUILD_DIR)/$(1)/$(3): $(MAC_BUILD_DIR)/$(4)/generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(MAC_CLASSIC_SOURCES) $(SN_KEY)

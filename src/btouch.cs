@@ -301,6 +301,14 @@ class BindingTouch {
 			return 0;
 		}
 
+			/* Create namespace manager */
+			bool addSystemDrawingReferences =
+#if NO_SYSTEM_DRAWING
+				true;
+#else
+				false;
+#endif
+
 #if IKVM
 		if (string.IsNullOrEmpty (target_framework))
 			throw new BindingException (9999, "Target framework is required.");
@@ -311,18 +319,32 @@ class BindingTouch {
 		case "MonoTouch;v1.0":
 			platform = PlatformName.iOS;
 			buildNewStyle = false;
+			addSystemDrawingReferences = false;
 			break;
 		case "Xamarin.iOS;v1.0":
 			platform = PlatformName.iOS;
+			addSystemDrawingReferences = false;
 			break;
 		case "Xamarin.TVOS;v1.0":
 			platform = PlatformName.TvOS;
+			addSystemDrawingReferences = false;
 			break;
 		case "Xamarin.WatchOS;v1.0":
 			platform = PlatformName.WatchOS;
+			addSystemDrawingReferences = true;
 			break;
-		case "Xamarin.MacOS;v1.0":
+		case "Xamarin.Mac;v2.0":
 			platform = PlatformName.MacOSX;
+			addSystemDrawingReferences = false;
+			break;
+		case ".NETFramework;v4.5":
+			platform = PlatformName.MacOSX;
+			addSystemDrawingReferences = true;
+			break;
+		case "XamMac;v1.0":
+			platform = PlatformName.MacOSX;
+			addSystemDrawingReferences = false;
+			buildNewStyle = false;
 			break;
 		default:
 			throw new BindingException (9999, $"Unknown target framework: {target_framework}.");
@@ -453,30 +475,6 @@ class BindingTouch {
 			{
 				Console.WriteLine ("Loaded: {0}", load_args.LoadedAssembly.FullName);
 			};
-#endif
-
-			/* Create namespace manager */
-			bool addSystemDrawingReferences =
-#if NO_SYSTEM_DRAWING
-				true;
-#else
-				false;
-#endif
-
-#if IKVM
-			switch (Generator.CurrentPlatform) {
-			case PlatformName.iOS:
-			case PlatformName.TvOS:
-				addSystemDrawingReferences = false;
-				break;
-			case PlatformName.MacOSX:
-				throw new System.NotImplementedException (); // depends
-			case PlatformName.WatchOS:
-				addSystemDrawingReferences = true;
-				break;
-			default:
-				throw new PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
-			}
 #endif
 
 			string nsPrefix = null;

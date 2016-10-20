@@ -1,6 +1,4 @@
 
-USE_IKVM=
-
 IKVM_REFLECTION_SOURCES = \
 	$(MONO_PATH)/mcs/class/Mono.Security/Mono.Security.Cryptography/CryptoConvert.cs \
 	$(MONO_PATH)/external/ikvm/reflect/*.cs \
@@ -40,24 +38,22 @@ GENERATOR_SOURCES =                                             \
 # IKVM also defines GENERATOR :(
 GENERATOR_DEFINES = -d:X_GENERATOR -d:NET_4_0
 
-ifdef USE_IKVM
-GENERATOR_DEFINES += $(IKVM_REFLECTION_FLAGS) -d:IKVM
-GENERATOR_SOURCES += $(IKVM_REFLECTION_SOURCES)
-endif
+GENERATOR_IKVM_SOURCES = $(GENERATOR_SOURCES) $(IKVM_REFLECTION_SOURCES)
+GENERATOR_IKVM_DEFINES = $(GENERATOR_DEFINES) $(IKVM_REFLECTION_FLAGS) -d:IKVM
+
+# ifdef USE_IKVM
+# GENERATOR_SOURCES := $(GENERATOR_IKVM_SOURCES)
+# GENERATOR_DEFINES := $(GENERATOR_IVKM_DEFINES)
+# endif
 
 # test target
 ikvm:
+	$(Q) rm -f ./build/ios/generator-ikvm.exe
 	$(MAKE) btouch-ikvm.csproj
-	$(Q) rm -f ./build/ios/native/generator-ikvm.exe
-	$(MAKE) ./build/ios/native/generator-ikvm.exe $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll USE_IKVM=ikvm
+	$(MAKE) ./build/ios/generator-ikvm.exe
 
 btouch-ikvm.csproj: btouch-ikvm.csproj.in Makefile.generator
-ifdef USE_IKVM
-	@sed -e 's^<!--%FILES%-->^$(foreach file,$(subst /,\\,$(GENERATOR_SOURCES)),<Compile Include="$(file)"/>)^' $< | xmllint --format - > $@
-else
-	@echo skipping project generator
-endif
-
+	@sed -e 's^<!--%FILES%-->^$(foreach file,$(subst /,\\,$(GENERATOR_IKVM_SOURCES)),<Compile Include="$(file)"/>)^' $< | xmllint --format - > $@
 
 #
 # Xamarin.iOS (btouch)
@@ -99,11 +95,8 @@ $(IOS_BUILD_DIR)/Xamarin.iOS.BindingAttributes.dll: attributes.cs Makefile.gener
 $(IOS_BUILD_DIR)/monotouch.BindingAttributes.dll: attributes.cs Makefile.generator
 	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-ios" -compiler:$(IOS_CSC) -global-replace:"^XamCore.=MonoTouch" -out:$@ -debug attributes.cs -target:library
 
-$(IOS_BUILD_DIR)/native/generator-ikvm.exe: $(GENERATOR_SOURCES) $(IOS_BUILD_DIR)/native/Xamarin.iOS.Attributes.dll
-	mcs -out:$@ -debug -unsafe \
-		$(IOS_DEFINES) \
-		$(GENERATOR_DEFINES)             \
-		$(GENERATOR_SOURCES)
+$(IOS_BUILD_DIR)/generator-ikvm.exe: $(GENERATOR_IKVM_SOURCES) Makefile.generator
+	$(Q) $(SYSTEM_MCS) -out:$@ -debug -unsafe $(GENERATOR_IKVM_DEFINES) $(GENERATOR_IKVM_SOURCES)
 
 #
 # Xamarin.Watch (bwatch)

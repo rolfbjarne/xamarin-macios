@@ -130,6 +130,45 @@ endef
 $(eval $(call IOS_GENERATOR_template,compat,--ns=MonoTouch.ObjCRuntime -p,compat-ios))
 $(eval $(call IOS_GENERATOR_template,native,--ns=ObjCRuntime -new-style,native))
 
+define IOS_GENERATOR_IKVM_template
+# Bootstrap version of the platform assembly
+$(IOS_BUILD_DIR)/bootstrap/$(4).dll: $$(IOS_PMCS) $$(IOS_CORE_SOURCES) frameworks.sources
+	@mkdir -p $(IOS_BUILD_DIR)/bootstrap
+	$$(call Q_PROF_PMCS,ios/bootstrap) PMCS_PROFILE=$(3) $$(IOS_PMCS) -out:$$@ -target:library -debug -unsafe \
+		-nowarn:219,618,114,414,1635,3021,$$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		-define:COREBUILD $$(IOS_DEFINES) \
+		-keyfile:$(PRODUCT_KEY_PATH) \
+		$$(IOS_CORE_SOURCES)
+
+# generated_sources
+$(IOS_BUILD_DIR)/$(1)/generated_sources: $(IOS_BUILD_DIR)/generator-ikvm.exe $(IOS_BUILD_DIR)/bootstrap/$(4).dll $$(IOS_APIS) build/ios/$(4).BindingAttributes.dll
+	@mkdir -p $(IOS_BUILD_DIR)/$(1)
+	$$(call Q_PROF_GEN,ios/$(1)) PMCS_PROFILE=$(3) $$(SYSTEM_MONO) --debug $(IOS_BUILD_DIR)/generator-ikvm.exe \
+		$$(IOS_GENERATOR_FLAGS) \
+		-core \
+		-sourceonly=$$@ \
+		-compiler=$$(IOS_PMCS) \
+		-nostdlib -noconfig \
+		-no-mono-path \
+		-tmpdir=$(IOS_BUILD_DIR)/$(1) \
+		-baselib=$(IOS_BUILD_DIR)/bootstrap/$(4).dll \
+		-lib:$$(MONO_PATH)/mcs/class/lib/monotouch \
+		-r=$$(MONO_PATH)/mcs/class/lib/monotouch/System.dll \
+		-native-exception-marshalling \
+		-binding-attributes-lib=build/ios/$(4).BindingAttributes.dll \
+		$(2) \
+		$$(IOS_APIS)
+
+xy:: $(IOS_BUILD_DIR)/bootstrap/$(4).dll
+yy:: $(IOS_BUILD_DIR)/$(1)/generated_sources
+endef
+
+$(eval $(call IOS_GENERATOR_IKVM_template,classic,"--target-framework=MonoTouch;v1.0"   --ns=MonoTouch.ObjCRuntime -p,compat-ios,monotouch))
+$(eval $(call IOS_GENERATOR_IKVM_template,unified,"--target-framework=Xamarin.iOS;v1.0" --ns=ObjCRuntime -new-style  ,native,Xamarin.iOS))
+
+
+
+
 define IOS_TARGETS_template
 IOS_VARIANTS_TARGETS += $(IOS_BUILD_DIR)/$(1)/$(3)
 

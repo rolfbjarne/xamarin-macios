@@ -2,7 +2,7 @@
 // Alpha attribute
 //
 
-#if !XAMCORE_2_0
+#if !XAMCORE_2_0 || IKVM
 
 using System;
 

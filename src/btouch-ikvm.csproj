@@ -63,5 +63,6 @@
     <Compile Include="..\src\Foundation\ExportAttribute.cs" />
     <Compile Include="..\src\Foundation\RegisterAttribute.cs" />
     <Compile Include="..\src\Foundation\PreserveAttribute.cs" />
+    <Compile Include="..\src\ObjCRuntime\CategoryAttribute.cs" />
   </ItemGroup>
 </Project>

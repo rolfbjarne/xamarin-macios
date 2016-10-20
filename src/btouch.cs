@@ -88,7 +88,7 @@ class BindingTouch {
 #error Unknown platform
 #endif
 	static char shellQuoteChar;
-#if IOS || MONOMAC
+#if IOS || MONOMAC || IKVM
 #if XAMCORE_2_0
 	static bool buildNewStyle = true;
 #else
@@ -96,8 +96,30 @@ class BindingTouch {
 #endif
 #endif
 
+	static List<string> libs = new List<string> ();
+
 #if IKVM
 	static string target_framework;
+	static string binding_attributes_lib;
+
+	public static string ProductAssemblyName {
+		get {
+			switch (Generator.CurrentPlatform) {
+			case PlatformName.iOS:
+				return buildNewStyle ? "Xamarin.iOS" : "monotouch";
+			case PlatformName.TvOS:
+				return "Xamarin.TVOS";
+			case PlatformName.WatchOS:
+				return "Xamarin.WatchOS";
+			case PlatformName.MacOSX:
+				return buildNewStyle ? "Xamarin.Mac" : "XamMac";
+			default:
+				throw new PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
+			}
+		}
+	}
+
+	public static NamespaceManager NamespaceManager { get; private set; }
 #endif
 
 	public static string ToolName {
@@ -172,7 +194,6 @@ class BindingTouch {
 		var linkwith = new List<string> ();
 #endif
 		var references = new List<string> ();
-		var libs = new List<string> ();
 		var api_sources = new List<string> ();
 		var core_sources = new List<string> ();
 		var extra_sources = new List<string> ();
@@ -195,6 +216,7 @@ class BindingTouch {
 #endif
 #if IKVM
 			{ "target-framework=", "Sets the target framework", v => target_framework = v },
+			{ "binding-attributes-lib=", "Sets the assembly that contains the binding attributes.", v => binding_attributes_lib = v },
 #endif
 			{ "outdir=", "Sets the output directory for the temporary binding files", v => { basedir = v; }},
 			{ "o|out=", "Sets the name of the output library", v => outfile = v },
@@ -209,7 +231,7 @@ class BindingTouch {
 			{ "core", "Use this to build monotouch.dll", v => binding_third_party = false },
 #endif
 			{ "r=", "Adds a reference", v => references.Add (v) },
-			{ "lib=", "Adds the directory to the search path for the compiler", v => libs.Add (Quote (v)) },
+			{ "lib=", "Adds the directory to the search path for the compiler", v => libs.Add (v) },
 			{ "compiler=", "Sets the compiler to use", v => compiler = v },
 			{ "sdk=", "Sets the .NET SDK to use", v => net_sdk = v },
 #if MONOMAC
@@ -278,17 +300,22 @@ class BindingTouch {
 			throw new BindingException (9999, "Target framework is required.");
 
 		PlatformName platform;
+		buildNewStyle = true;
 		switch (target_framework) {
-		case "Xamarin.iOS,v1.0":
+		case "MonoTouch;v1.0":
+			platform = PlatformName.iOS;
+			buildNewStyle = false;
+			break;
+		case "Xamarin.iOS;v1.0":
 			platform = PlatformName.iOS;
 			break;
-		case "Xamarin.tvOS,v1.0":
+		case "Xamarin.tvOS;v1.0":
 			platform = PlatformName.TvOS;
 			break;
-		case "Xamarin.watchOS,v1.0":
+		case "Xamarin.watchOS;v1.0":
 			platform = PlatformName.WatchOS;
 			break;
-		case "Xamarin.macOS,v1.0":
+		case "Xamarin.macOS;v1.0":
 			platform = PlatformName.MacOSX;
 			break;
 		default:
@@ -328,7 +355,6 @@ class BindingTouch {
 				refs += " ";
 			refs += "-r:" + Quote (r);
 		}
-		string paths = (libs.Count > 0 ? "-lib:" + String.Join (" -lib:", libs.ToArray ()) : "");
 
 		try {
 			var tmpass = Path.Combine (tmpdir, "temp.dll");
@@ -346,7 +372,7 @@ class BindingTouch {
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
 #if IKVM
-			cargs.Append ("-r:build/ios/native/Xamarin.iOS.BindingAttributes.dll ");
+			cargs.Append ("-r:").Append (Quote (binding_attributes_lib)).Append (' ');
 #else
 			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
 #endif
@@ -356,7 +382,8 @@ class BindingTouch {
 			cargs.Append ("-r:").Append (Quote (baselibdll)).Append (' ');
 			foreach (var def in defines)
 				cargs.Append ("-define:").Append (def).Append (' ');
-			cargs.Append (paths).Append (' ');
+			foreach (var lib in libs)
+				cargs.Append ("-lib:").Append (Quote (lib)).Append (' ');
 			if (nostdlib)
 				cargs.Append ("-nostdlib ");
 			foreach (var qs in api_sources)
@@ -391,7 +418,14 @@ class BindingTouch {
 				var root = "/work/maccore/ikvm-generator/xamarin-macios/_ios-build/";
 				var fw = "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS";
 
-
+ 				foreach (var lib in libs) {
+					var path = Path.Combine (lib, resolve_args.Name);
+					if (File.Exists (path))
+						return universe.LoadFile (path);
+					path += ".dll";
+					if (File.Exists (path))
+						return universe.LoadFile (path);
+				}
 				var name = resolve_args.Name;
 				if (!name.EndsWith (".dll", StringComparison.Ordinal))
 					name += ".dll";
@@ -413,6 +447,58 @@ class BindingTouch {
 			{
 				Console.WriteLine ("Loaded: {0}", load_args.LoadedAssembly.FullName);
 			};
+#endif
+
+			/* Create namespace manager */
+			bool addSystemDrawingReferences =
+#if NO_SYSTEM_DRAWING
+				true;
+#else
+				false;
+#endif
+
+			string nsPrefix = null;
+#if IKVM
+			switch (Generator.CurrentPlatform) {
+			case PlatformName.iOS:
+				nsPrefix = buildNewStyle ? null : "MonoTouch";
+				break;
+			case PlatformName.MacOSX:
+				nsPrefix = buildNewStyle ? null : "MonoMac";
+				break;
+			case PlatformName.TvOS:
+			case PlatformName.WatchOS:
+				break;
+			default:
+				throw new PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
+			}
+#elif MONOMAC
+			nsPrefix = buildNewStyle ? null : "MonoMac";
+#elif IOS
+			nsPrefix = buildNewStyle ? null : "MonoTouch";
+#elif XAMCORE_2_0
+			nsPrefix = null;
+#endif
+
+			NamespaceManager = new NamespaceManager (
+				nsPrefix,
+				ns == null ? firstApiDefinitionName : ns,
+				addSystemDrawingReferences
+			);
+
+#if IKVM
+			if (string.IsNullOrEmpty (binding_attributes_lib))
+				throw new BindingException (0000, "--binding-attribute-lib is required.");
+			
+			try {
+				universe.LoadFile (binding_attributes_lib);
+			} catch (Exception e) {
+				if (verbose)
+					Console.WriteLine (e);
+
+				Console.Error.WriteLine ("Error loading attribute assembly from {0}", binding_attributes_lib);
+				return 1;
+			}
 #endif
 
 			Assembly api;
@@ -483,26 +569,7 @@ class BindingTouch {
 					strong_dictionaries.Add (t);
 			}
 
-			bool addSystemDrawingReferences =
-#if NO_SYSTEM_DRAWING
-				true;
-#else
-				false;
-#endif
-
-			var nsManager = new NamespaceManager (
-#if MONOMAC
-				buildNewStyle ? null : "MonoMac",
-#elif IOS
-				buildNewStyle ? null : "MonoTouch",
-#else
-				null,
-#endif
-				ns == null ? firstApiDefinitionName : ns,
-				addSystemDrawingReferences
-			);
-
-			var g = new Generator (nsManager, public_mode, external, debug, types.ToArray (), strong_dictionaries.ToArray ()){
+			var g = new Generator (NamespaceManager, public_mode, external, debug, types.ToArray (), strong_dictionaries.ToArray ()){
 				BindThirdPartyLibrary = binding_third_party,
 				CoreNSObject = CoreObject,
 				BaseDir = basedir != null ? basedir : tmpdir,
@@ -510,7 +577,7 @@ class BindingTouch {
 #if MONOMAC
 				OnlyDesktop = true,
 #endif
-#if IOS || MONOMAC
+#if IOS || MONOMAC || IKVM
 				Compat = !buildNewStyle,
 #else
 				Compat = false,
@@ -522,9 +589,10 @@ class BindingTouch {
 				SkipSystemDrawing = addSystemDrawingReferences
 			};
 
-#if IOS || MONOMAC
+#if IOS || MONOMAC || IKVM
 			if (!buildNewStyle && !binding_third_party) {
-				foreach (var mi in baselib.GetType (nsManager.CoreObjCRuntime + ".Messaging").GetMethods ()){
+				var type = baselib.GetType (NamespaceManager.CoreObjCRuntime + ".Messaging");
+				foreach (var mi in type.GetMethods ()){
 					if (mi.Name.IndexOf ("_objc_msgSend") != -1)
 						g.RegisterMethodName (mi.Name);
 				}
@@ -584,6 +652,25 @@ class BindingTouch {
 				Directory.Delete (tmpdir, true);
 		}
 		return 0;
+	}
+
+	public static string LocateAssembly (string name)
+	{
+		foreach (var asm in universe.GetAssemblies ()) {
+			if (asm.GetName ().Name == name)
+				return asm.Location;
+		}
+
+		foreach (var lib in libs) {
+			var path = Path.Combine (lib, name);
+			if (File.Exists (path))
+				return path;
+			path += ".dll";
+			if (File.Exists (path))
+				return path;
+		}
+
+		throw new FileNotFoundException (name);
 	}
 
 	static string GetWorkDir ()

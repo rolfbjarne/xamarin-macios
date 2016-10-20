@@ -107,7 +107,45 @@ public static class AttributeManager
 		} else if (type.Assembly == TypeManager.binding_attribute_assembly) {
 			rv = typeof (TypeManager).Assembly.GetType (type.FullName);
 		} else if (type.Assembly == TypeManager.platform_assembly) {
-			rv = typeof (TypeManager).Assembly.GetType ("XamCore." + type.FullName);
+			var prefix = BindingTouch.NamespaceManager.Prefix;
+			var n = type.FullName;
+			if (!string.IsNullOrEmpty (prefix) && type.Namespace.StartsWith (prefix, System.StringComparison.Ordinal)) {
+				n = "XamCore." + n.Substring (prefix.Length + 1);
+			} else {
+				n = "XamCore." + n;
+			}
+			rv = typeof (TypeManager).Assembly.GetType (n);
+		} else {
+			throw new System.NotImplementedException ();
+		}
+		if (rv == null)
+			throw new System.NotImplementedException ();
+		return rv;
+	}
+
+	static Type ConvertType (System.Type type)
+	{
+		Type rv;
+		if (type.Assembly == /* mscorlib */ typeof (int).Assembly) {
+			rv = TypeManager.mscorlib.GetType (type.FullName);
+		} else if (type.Assembly == /* System */ typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly) {
+			rv = TypeManager.system.GetType (type.FullName);
+		} else if (type.Assembly == typeof (TypeManager).Assembly) {
+			rv = TypeManager.binding_attribute_assembly.GetType (type.FullName);
+			if (rv == null) {
+				string fullname;
+				if (type.Namespace?.StartsWith ("XamCore.", System.StringComparison.Ordinal) == true) {
+					var prefix = BindingTouch.NamespaceManager.Prefix;
+					if (!string.IsNullOrEmpty (prefix)) {
+						fullname = prefix + "." + type.FullName.Substring (8);
+					} else {
+						fullname = type.FullName.Substring (8);
+					}
+				} else {
+					fullname = type.FullName;
+				}
+				rv = TypeManager.platform_assembly.GetType (fullname);
+			}
 		} else {
 			throw new System.NotImplementedException ();
 		}
@@ -252,7 +290,7 @@ public static class AttributeManager
 #if IKVM
 		return FilterAttributes<T> (GetIKVMAttributes (provider));
 #else
-		return (T[]) provider.GetCustomAttributes (typeof (T), inherits);
+		return (T[]) provider.GetCustomAttributes (typeof (T), inherits);ge
 #endif
 	}
 
@@ -388,25 +426,26 @@ public static class AttributeManager
 
 	public static Type GetAttributeType (System.Attribute attribute)
 	{
-#if IKVM
-		Type rv;
-		if (attribute.GetType ().Assembly == typeof (AbstractAttribute).Assembly) {
-			rv = TypeManager.binding_attribute_assembly.GetType (attribute.GetType ().FullName);
-			if (rv == null) {
-				var name = attribute.GetType ().FullName;
-				if (name.StartsWith ("XamCore.", System.StringComparison.Ordinal))
-					name = name.Substring (8);
-				rv = TypeManager.platform_assembly.GetType (name);
-			}
-		} else {
-			throw new System.NotImplementedException ();
-		}
-		if (rv == null)
-			throw new System.NotImplementedException ();
-		return rv;
-#else
-		return attribute.GetType ();
-#endif
+		return GetAttributeType (attribute.GetType ());
+//#if IKVM
+//		Type rv;
+//		if (attribute.GetType ().Assembly == typeof (AbstractAttribute).Assembly) {
+//			rv = TypeManager.binding_attribute_assembly.GetType (attribute.GetType ().FullName);
+//			if (rv == null) {
+//				var name = attribute.GetType ().FullName;
+//				if (name.StartsWith ("XamCore.", System.StringComparison.Ordinal))
+//					name = name.Substring (8);
+//				rv = TypeManager.platform_assembly.GetType (name);
+//			}
+//		} else {
+//			throw new System.NotImplementedException ();
+//		}
+//		if (rv == null)
+//			throw new System.NotImplementedException ();
+//		return rv;
+//#else
+//		return attribute.GetType ();
+//#endif
 	}
 
 	public static ICustomAttributeProvider GetReturnTypeCustomAttributes (MethodInfo method)
@@ -422,17 +461,22 @@ public static class AttributeManager
 	public static Type GetAttributeType (System.Type type)
 	{
 #if IKVM
-		var asm = TypeManager.binding_attribute_assembly;
-		var name = type.FullName;
-		if (name.StartsWith ("XamCore.", System.StringComparison.Ordinal))
-			name = name.Substring (8);
-		var rv = asm.GetType (name);
-		if (rv == null) {
-			rv = TypeManager.platform_assembly.GetType (name);
-		}
-		if (rv == null)
-			throw new System.NotImplementedException ();
-		return rv;
+		return ConvertType (type);
+		//var asm = TypeManager.binding_attribute_assembly;
+		//var name = type.FullName;
+		//if (name.StartsWith ("XamCore.", System.StringComparison.Ordinal)) {
+		//	name = name.Substring (8);
+		//	var prefix = BindingTouch.NamespaceManager.Prefix;
+		//	if (!string.IsNullOrEmpty (prefix))
+		//		name = prefix + "." + name;
+		//}
+		//var rv = asm.GetType (name);
+		//if (rv == null) {
+		//	rv = TypeManager.platform_assembly.GetType (name);
+		//}
+		//if (rv == null)
+		//	throw new System.NotImplementedException ();
+		//return rv;
 #else
 		return type;
 #endif
@@ -610,13 +654,28 @@ public static class TypeManager {
 	{
 #if IKVM
 		Type rv;
-		if (string.IsNullOrEmpty (@namespace)) {
-			rv = assembly.GetType (name);
-		} else {
-			rv = assembly.GetType (@namespace + "." + name);
+		var lookup = name;
+		if (!string.IsNullOrEmpty (@namespace)) {
+			if (Generator.UnifiedAPI || assembly != TypeManager.platform_assembly || @namespace == "System") {
+				lookup = @namespace + "." + name;
+			} else if (@namespace == BindingTouch.NamespaceManager.Prefix) {
+				lookup = @namespace + "." + name;
+			} else {
+				switch (Generator.CurrentPlatform) {
+				case XamCore.ObjCRuntime.PlatformName.MacOSX:
+					lookup = "MonoMac." + @namespace + "." + name;
+					break;
+				case XamCore.ObjCRuntime.PlatformName.iOS:
+					lookup = "MonoTouch." + @namespace + "." + name;
+					break;
+				default:
+					throw new System.PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
+				}
+			}
 		}
+		rv = assembly.GetType (lookup);
 		if (rv == null)
-			System.Console.WriteLine ("Could not load the type: {0}{1}", string.IsNullOrEmpty (@namespace) ? string.Empty : @namespace + ".", name);
+			System.Console.WriteLine ("Could not load the type: {0}{1} (looked up: {2} in {3})", string.IsNullOrEmpty (@namespace) ? string.Empty : @namespace + ".", name, lookup, assembly);
 		return rv;
 #else
 		throw new System.NotImplementedException ();
@@ -633,10 +692,10 @@ public static class TypeManager {
 	static TypeManager ()
 	{
 #if IKVM
-		mscorlib = BindingTouch.universe.Load ("mscorlib.dll");
-		system = BindingTouch.universe.Load ("System.dll");
-		platform_assembly = BindingTouch.universe.Load ("Xamarin.iOS.dll");
-		binding_attribute_assembly = BindingTouch.universe.Load ("Xamarin.iOS.BindingAttributes.dll");
+		mscorlib = BindingTouch.universe.LoadFile (BindingTouch.LocateAssembly ("mscorlib"));
+		system = BindingTouch.universe.LoadFile (BindingTouch.LocateAssembly ("System"));
+		platform_assembly = BindingTouch.universe.LoadFile (BindingTouch.LocateAssembly (BindingTouch.ProductAssemblyName));
+		binding_attribute_assembly = BindingTouch.universe.LoadFile (BindingTouch.LocateAssembly (BindingTouch.ProductAssemblyName + ".BindingAttributes"));
 
 		/* Types from mscorlib.dll */
 		System_Object = LookupType (mscorlib, "System", "Object");
@@ -682,9 +741,10 @@ public static class TypeManager {
 		AvailabilityBaseAttribute = LookupType (platform_assembly, "ObjCRuntime", "AvailabilityBaseAttribute");
 		RegisterAttribute = LookupType (platform_assembly, "Foundation", "RegisterAttribute");
 		ModelAttribute = LookupType (platform_assembly, "Foundation", "ModelAttribute");
-		CategoryAttribute = LookupType (platform_assembly, "ObjCRuntime", "CategoryAttribute");
+		AlphaAttribute = LookupType (platform_assembly, "ObjCRuntime", "AlphaAttribute");
 
 		/* Binding-only attributes, from the binding attribute assembly (Xamarin.*.BindingAttributes.dll) */
+		CategoryAttribute = LookupType (binding_attribute_assembly, "", "CategoryAttribute");
 		AbstractAttribute = LookupType (binding_attribute_assembly, "", "AbstractAttribute");
 		BlockCallbackAttribute = LookupType (binding_attribute_assembly, "", "BlockCallbackAttribute");
 		CCallbackAttribute = LookupType (binding_attribute_assembly, "", "CCallbackAttribute");
@@ -724,7 +784,6 @@ public static class TypeManager {
 		DisableZeroCopyAttribute = LookupType (binding_attribute_assembly, "", "DisableZeroCopyAttribute");
 		PlainStringAttribute = LookupType (binding_attribute_assembly, "", "PlainStringAttribute");
 		ReleaseAttribute = LookupType (binding_attribute_assembly, "", "ReleaseAttribute");
-		AlphaAttribute = LookupType (binding_attribute_assembly, "", "AlphaAttribute");
 		OptionalImplementationAttribute = LookupType (binding_attribute_assembly, "", "OptionalImplementationAttribute");
 		ProbePresenceAttribute = LookupType (binding_attribute_assembly, "", "ProbePresenceAttribute");
 		TargetAttribute = LookupType (binding_attribute_assembly, "", "TargetAttribute");
@@ -751,7 +810,7 @@ public static class TypeManager {
 		BlockLiteral = LookupType (platform_assembly, "ObjCRuntime", "BlockLiteral");
 		Class = LookupType (platform_assembly, "ObjCRuntime", "Class");
 		Protocol = LookupType (platform_assembly, "ObjCRuntime", "Protocol");
-		Constants = LookupType (platform_assembly, "ObjCRuntime", "Constants");
+		Constants = LookupType (platform_assembly, Generator.UnifiedAPI ? "ObjCRuntime" : BindingTouch.NamespaceManager.Prefix, "Constants");
 		AudioBuffers = LookupType (platform_assembly, "AudioToolbox", "AudioBuffers");
 		MusicSequence = LookupType (platform_assembly, "AudioToolbox", "MusicSequence");
 		AudioComponent = LookupType (platform_assembly, "AudioUnit", "AudioComponent");

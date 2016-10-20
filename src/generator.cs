@@ -1754,7 +1754,7 @@ public partial class Generator : IMemberGatherer {
 			return true;
 
 		if (Compat)
-			return AttributeManager.GetCustomAttributes (t, true)
+			return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (t, true)
 				.OfType<AvailabilityBaseAttribute> ()
 				.Any (attr => attr.AvailabilityKind == AvailabilityKind.Introduced &&
 					attr.Platform == Generator.CurrentPlatform &&

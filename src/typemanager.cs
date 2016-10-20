@@ -247,12 +247,12 @@ public static class AttributeManager
 	}
 #endif
 
-	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider, bool inherits) where T: System.Attribute
+	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider, bool inherits) where T : System.Attribute
 	{
 #if IKVM
 		return FilterAttributes<T> (GetIKVMAttributes (provider));
 #else
-		return (T []) provider.GetCustomAttributes (inherits);
+		return (T[]) provider.GetCustomAttributes (typeof (T), inherits);
 #endif
 	}
 

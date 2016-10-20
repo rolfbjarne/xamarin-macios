@@ -679,56 +679,57 @@ public class NamespaceManager
 #endif
 		};
 
-		ImplicitNamespaces = new HashSet<string> {
-			"System",
-			"System.Runtime.CompilerServices",
-			"System.Runtime.InteropServices",
-			"System.Diagnostics",
-			"System.ComponentModel",
-			"System.Threading.Tasks",
-			Get ("CoreFoundation"),
-			Get ("Foundation"),
-			Get ("ObjCRuntime"),
-			Get ("CoreGraphics"),
-			Get ("SceneKit"),
-#if !WATCH
-			Get ("AudioUnit"),
-			Get ("CoreAnimation"),
-#endif
-			Get ("CoreLocation"),
-#if !WATCH
-			Get ("CoreVideo"),
-			Get ("CoreMedia"),
-			Get ("Security"),
-			Get ("AVFoundation"),
-#endif
-#if MONOMAC
-			Get ("OpenGL"),
-			Get ("QTKit"),
-			Get ("AppKit"),
-			Get ("CloudKit"),
-#else
-#if !WATCH && !TVOS
-			Get ("CoreMotion"),
-			Get ("MapKit"),
-#endif
-			Get ("UIKit"),
-#if !WATCH
-#if !TVOS
-			Get ("NewsstandKit"),
-#endif
-			Get ("GLKit"),
-#if !TVOS
-			Get ("QuickLook"),
-			Get ("AddressBook")
-#endif
-#endif
-#endif
-		};
-#if !(WATCH || (MONOMAC && !XAMCORE_2_0)) // ModelIO and Metal are 64-bit only, and not on watch
-		ImplicitNamespaces.Add (Get ("ModelIO"));
-		ImplicitNamespaces.Add (Get ("Metal"));
-#endif
+		ImplicitNamespaces = new HashSet<string> ();
+		ImplicitNamespaces.Add ("System");
+		ImplicitNamespaces.Add ("System.Runtime.CompilerServices");
+		ImplicitNamespaces.Add ("System.Runtime.InteropServices");
+		ImplicitNamespaces.Add ("System.Diagnostics");
+		ImplicitNamespaces.Add ("System.ComponentModel");
+		ImplicitNamespaces.Add ("System.Threading.Tasks");
+		ImplicitNamespaces.Add (Get ("CoreFoundation"));
+		ImplicitNamespaces.Add (Get ("Foundation"));
+		ImplicitNamespaces.Add (Get ("ObjCRuntime"));
+		ImplicitNamespaces.Add (Get ("CoreGraphics"));
+		ImplicitNamespaces.Add (Get ("SceneKit"));
+		if (Generator.CurrentPlatform != PlatformName.WatchOS) {
+			ImplicitNamespaces.Add (Get ("AudioUnit"));
+			ImplicitNamespaces.Add (Get ("CoreAnimation"));
+		}
+		ImplicitNamespaces.Add (Get ("CoreLocation"));
+		if (Generator.CurrentPlatform != PlatformName.WatchOS) {
+			ImplicitNamespaces.Add (Get ("CoreVideo"));
+			ImplicitNamespaces.Add (Get ("CoreMedia"));
+			ImplicitNamespaces.Add (Get ("Security"));
+			ImplicitNamespaces.Add (Get ("AVFoundation"));
+		}
+		if (Generator.CurrentPlatform == PlatformName.MacOSX) {
+			ImplicitNamespaces.Add (Get ("OpenGL"));
+			ImplicitNamespaces.Add (Get ("QTKit"));
+			ImplicitNamespaces.Add (Get ("AppKit"));
+			ImplicitNamespaces.Add (Get ("CloudKit"));
+		} else {
+			if (Generator.CurrentPlatform != PlatformName.WatchOS && Generator.CurrentPlatform != PlatformName.TvOS) {
+				ImplicitNamespaces.Add (Get ("CoreMotion"));
+				ImplicitNamespaces.Add (Get ("MapKit"));
+			}
+			ImplicitNamespaces.Add (Get ("UIKit"));
+			if (Generator.CurrentPlatform != PlatformName.WatchOS) {
+				if (Generator.CurrentPlatform != PlatformName.TvOS) {
+					ImplicitNamespaces.Add (Get ("NewsstandKit"));
+				}
+				ImplicitNamespaces.Add (Get ("GLKit"));
+				if (Generator.CurrentPlatform != PlatformName.TvOS) {
+					ImplicitNamespaces.Add (Get ("QuickLook"));
+					ImplicitNamespaces.Add (Get ("AddressBook"));
+				}
+			}
+		}
+
+		// ModelIO and Metal are 64-bit only, and not on watch
+		if (Generator.CurrentPlatform != PlatformName.WatchOS && !(Generator.CurrentPlatform == PlatformName.MacOSX && BindingTouch.Unified)) {
+			ImplicitNamespaces.Add (Get ("ModelIO"));
+			ImplicitNamespaces.Add (Get ("Metal"));
+		}
 
 		// These are both types and namespaces
 		NamespacesThatConflictWithTypes = new HashSet<string> {
@@ -956,7 +957,7 @@ public partial class Generator : IMemberGatherer {
 			t = TypeManager.GetUnderlyingEnumType (t);
 
 #if XAMCORE_2_0 || IKVM
-			if (HasAttribute (enumType, TypeManager.NativeAttribute)) {
+			if (BindingTouch.Unified && HasAttribute (enumType, TypeManager.NativeAttribute)) {
 				if (t != TypeManager.System_Int64 && t != TypeManager.System_UInt64)
 					throw new BindingException (1026, true,
 						"`{0}`: Enums attributed with [{1}] must have an underlying type of `long` or `ulong`",
@@ -1772,69 +1773,69 @@ public partial class Generator : IMemberGatherer {
 		return false;
 	}
 
+	void AddMarshalType (MarshalType mt)
+	{
+		marshal_types.Add (mt);
+	}
+
 	public void Go ()
 	{
 		UnifiedAPI = !Compat;
-		marshal_types.AddRange (new MarshalType [] {
-			new MarshalType (TypeManager.NSObject, create: "Runtime.GetNSObject ("),
-			new MarshalType (TypeManager.Selector, create: "Selector.FromHandle ("),
-			new MarshalType (TypeManager.BlockLiteral, "BlockLiteral", "{0}", "THIS_IS_BROKEN"),
-#if !MONOMAC && !WATCH
-			new MarshalType (TypeManager.MusicSequence, create: "global::XamCore.AudioToolbox.MusicSequence.Lookup ("),
-#endif
-			TypeManager.CGColor,
-			TypeManager.CGPath,
-			TypeManager.CGGradient,
-			TypeManager.CGContext,
-			TypeManager.CGImage,
-			TypeManager.Class,
-			TypeManager.CFRunLoop,
-			TypeManager.CGColorSpace,
-			TypeManager.DispatchQueue,
-#if !WATCH
-			TypeManager.Protocol,
-#if !TVOS
-			TypeManager.MidiEndpoint,
-#endif
-			TypeManager.CMTimebase,
-			TypeManager.CMClock,
-#endif
-			TypeManager.NSZone,
-#if MONOMAC
-			TypeManager.CGLContext,
-			TypeManager.CGLPixelFormat,
-			TypeManager.CVImageBuffer,
-			new MarshalType (TypeManager.MTAudioProcessingTap, create: ((UnifiedAPI ? "MediaToolbox" : "MonoMac.MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")),
-#elif !WATCH
-#if !TVOS
-			TypeManager.ABAddressBook,
-			new MarshalType (TypeManager.ABPerson, create: "(ABPerson) ABRecord.FromHandle("),
-			new MarshalType (TypeManager.ABRecord, create: "ABRecord.FromHandle("),
-#endif
-			new MarshalType (TypeManager.MTAudioProcessingTap, create: ((UnifiedAPI ? "MediaToolbox" : "MonoTouch.MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")),
-#endif
-#if !WATCH
-			TypeManager.CVPixelBuffer,
-#endif
-			TypeManager.CGLayer,
-#if !WATCH
-			TypeManager.CMSampleBuffer,
-			TypeManager.CVImageBuffer,
-			TypeManager.CVPixelBufferPool,
-			TypeManager.AudioComponent,
-			new MarshalType (TypeManager.CMFormatDescription, create: "CMFormatDescription.Create ("),
-			TypeManager.CMAudioFormatDescription,
-			TypeManager.CMVideoFormatDescription,
-			TypeManager.AudioUnit,
-#endif
-			TypeManager.SecIdentity,
-			TypeManager.SecTrust,
-			TypeManager.SecAccessControl,
-#if !WATCH
-			TypeManager.AudioBuffers,
-			TypeManager.AURenderEventEnumerator,
-#endif
-		});
+		AddMarshalType (new MarshalType (TypeManager.NSObject, create: "Runtime.GetNSObject ("));
+		AddMarshalType (new MarshalType (TypeManager.Selector, create: "Selector.FromHandle ("));
+		AddMarshalType (new MarshalType (TypeManager.BlockLiteral, "BlockLiteral", "{0}", "THIS_IS_BROKEN"));
+		if (CurrentPlatform != PlatformName.MacOSX && CurrentPlatform != PlatformName.WatchOS)
+			AddMarshalType (new MarshalType (TypeManager.MusicSequence, create: "global::XamCore.AudioToolbox.MusicSequence.Lookup ("));
+		AddMarshalType (TypeManager.CGColor);
+		AddMarshalType (TypeManager.CGPath);
+		AddMarshalType (TypeManager.CGGradient);
+		AddMarshalType (TypeManager.CGContext);
+		AddMarshalType (TypeManager.CGImage);
+		AddMarshalType (TypeManager.Class);
+		AddMarshalType (TypeManager.CFRunLoop);
+		AddMarshalType (TypeManager.CGColorSpace);
+		AddMarshalType (TypeManager.DispatchQueue);
+		if (CurrentPlatform != PlatformName.WatchOS) {
+			AddMarshalType (TypeManager.Protocol);
+			if (CurrentPlatform != PlatformName.TvOS)
+				AddMarshalType (TypeManager.MidiEndpoint);
+			AddMarshalType (TypeManager.CMTimebase);
+			AddMarshalType (TypeManager.CMClock);
+		}
+		AddMarshalType (TypeManager.NSZone);
+		if (CurrentPlatform == PlatformName.MacOSX) {
+			AddMarshalType (TypeManager.CGLContext);
+			AddMarshalType (TypeManager.CGLPixelFormat);
+			AddMarshalType (TypeManager.CVImageBuffer);
+			AddMarshalType (new MarshalType (TypeManager.MTAudioProcessingTap, create: ((UnifiedAPI ? "MediaToolbox" : "MonoMac.MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")));
+		} else if (CurrentPlatform != PlatformName.WatchOS) {
+			if (CurrentPlatform != PlatformName.TvOS) {
+				AddMarshalType (TypeManager.ABAddressBook);
+				AddMarshalType (new MarshalType (TypeManager.ABPerson, create: "(ABPerson) ABRecord.FromHandle("));
+				AddMarshalType (new MarshalType (TypeManager.ABRecord, create: "ABRecord.FromHandle("));
+			}
+			AddMarshalType (new MarshalType (TypeManager.MTAudioProcessingTap, create: ((UnifiedAPI ? "MediaToolbox" : "MonoTouch.MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")));
+		}
+		if (CurrentPlatform != PlatformName.WatchOS)
+			AddMarshalType (TypeManager.CVPixelBuffer);
+		AddMarshalType (TypeManager.CGLayer);
+		if (CurrentPlatform != PlatformName.WatchOS) {
+			AddMarshalType (TypeManager.CMSampleBuffer);
+			AddMarshalType (TypeManager.CVImageBuffer);
+			AddMarshalType (TypeManager.CVPixelBufferPool);
+			AddMarshalType (TypeManager.AudioComponent);
+			AddMarshalType (new MarshalType (TypeManager.CMFormatDescription, create: "CMFormatDescription.Create ("));
+			AddMarshalType (TypeManager.CMAudioFormatDescription);
+			AddMarshalType (TypeManager.CMVideoFormatDescription);
+			AddMarshalType (TypeManager.AudioUnit);
+		}
+		AddMarshalType (TypeManager.SecIdentity);
+		AddMarshalType (TypeManager.SecTrust);
+		AddMarshalType (TypeManager.SecAccessControl);
+		if (CurrentPlatform != PlatformName.WatchOS) {
+			AddMarshalType (TypeManager.AudioBuffers);
+			AddMarshalType (TypeManager.AURenderEventEnumerator);
+		}
 
 		init_binding_type = String.Format ("IsDirectBinding = GetType ().Assembly == global::{0}.this_assembly;", ns.Messaging);
 

@@ -315,13 +315,13 @@ class BindingTouch {
 		case "Xamarin.iOS;v1.0":
 			platform = PlatformName.iOS;
 			break;
-		case "Xamarin.tvOS;v1.0":
+		case "Xamarin.TVOS;v1.0":
 			platform = PlatformName.TvOS;
 			break;
-		case "Xamarin.watchOS;v1.0":
+		case "Xamarin.WatchOS;v1.0":
 			platform = PlatformName.WatchOS;
 			break;
-		case "Xamarin.macOS;v1.0":
+		case "Xamarin.MacOS;v1.0":
 			platform = PlatformName.MacOSX;
 			break;
 		default:
@@ -461,6 +461,22 @@ class BindingTouch {
 				true;
 #else
 				false;
+#endif
+
+#if IKVM
+			switch (Generator.CurrentPlatform) {
+			case PlatformName.iOS:
+			case PlatformName.TvOS:
+				addSystemDrawingReferences = false;
+				break;
+			case PlatformName.MacOSX:
+				throw new System.NotImplementedException (); // depends
+			case PlatformName.WatchOS:
+				addSystemDrawingReferences = true;
+				break;
+			default:
+				throw new PlatformNotSupportedException (Generator.CurrentPlatform.ToString ());
+			}
 #endif
 
 			string nsPrefix = null;

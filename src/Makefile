@@ -782,6 +782,14 @@ $(WATCH_BUILD_DIR)/watch/core.dll: $(WATCH_PMCS) $(WATCHOS_CORE_SOURCES) framewo
 		$(WATCH_DEFINES)     \
 		$(WATCHOS_CORE_SOURCES)
 
+$(WATCH_BUILD_DIR)/bootstrap/Xamarin.WatchOS.dll: $(WATCH_PMCS) $(WATCHOS_CORE_SOURCES) frameworks.sources | $(WATCH_BUILD_DIR)/bootstrap
+	$(call Q_PROF_PMCS,watch) PMCS_PROFILE=watch $(WATCH_PMCS) -out:$@ -target:library -debug -unsafe \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		-define:COREBUILD    \
+		-keyfile:$(PRODUCT_KEY_PATH) \
+		$(WATCH_DEFINES)     \
+		$(WATCHOS_CORE_SOURCES)
+
 # generator.exe
 $(WATCH_BUILD_DIR)/watch/generator.exe: $(GENERATOR_SOURCES) $(WATCH_BUILD_DIR)/watch/core.dll
 	$(call Q_PROF_PMCS,watch) PMCS_PROFILE=watch $(WATCH_PMCS) -out:$@ -debug -unsafe \
@@ -809,11 +817,39 @@ $(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_BUILD_DIR)/watch/generator.e
 		--ns:ObjCRuntime                                         \
 		$(WATCHOS_APIS)                                            \
 
+# generated_sources
+$(WATCH_BUILD_DIR)/watch-ikvm/generated_sources: $(IOS_BUILD_DIR)/generator-ikvm.exe $(WATCHOS_APIS) $(WATCH_BUILD_DIR)/bootstrap/Xamarin.WatchOS.dll $(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll
+	$(call Q_PROF_GEN,watch) PMCS_PROFILE=watch $(SYSTEM_MONO) --debug $(IOS_BUILD_DIR)/generator-ikvm.exe \
+		-inline-selectors                                        \
+		-process-enums                                           \
+		-core                                                    \
+		-sourceonly=$@                                           \
+		-compiler=$(WATCH_PMCS)                                    \
+		-nostdlib -noconfig                                      \
+		-no-mono-path                                            \
+		-tmpdir=$(WATCH_BUILD_DIR)/watch-ikvm                    \
+		-baselib=$(WATCH_BUILD_DIR)/bootstrap/Xamarin.WatchOS.dll               \
+		-lib=$(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch \
+		-r=$(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch/System.dll \
+		-binding-attributes-lib=$(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll \
+		-ns=MonoTouch.ObjCRuntime                                \
+		-native-exception-marshalling                            \
+		-d:WATCH                                                 \
+		--ns:ObjCRuntime                                         \
+		$(WATCHOS_APIS)                                            \
+		--target-framework="Xamarin.WatchOS;v1.0"                   \
+
 $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.dll: $(WATCHOS_SOURCES) $(WATCH_BUILD_DIR)/watch/generated_sources $(PRODUCT_KEY_PATH) | $(WATCH_BUILD_DIR)/watch-32
 	$(call Q_PROF_PMCS,watch) PMCS_PROFILE=watch-32 $(WATCH_PMCS) -out:$@ -target:library -debug -unsafe -optimize \
 		-keyfile:$(PRODUCT_KEY_PATH) $(WATCH_DEFINES) \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		$(WATCHOS_SOURCES) @$(WATCH_BUILD_DIR)/watch/generated_sources
+
+$(WATCH_BUILD_DIR)/watch-ikvm/Xamarin.WatchOS.dll: $(WATCHOS_SOURCES) $(WATCH_BUILD_DIR)/watch-ikvm/generated_sources $(PRODUCT_KEY_PATH) | $(WATCH_BUILD_DIR)/watch-ikvm
+	$(call Q_PROF_PMCS,watch) PMCS_PROFILE=watch-32 $(WATCH_PMCS) -out:$@ -target:library -debug -unsafe -optimize \
+		-keyfile:$(PRODUCT_KEY_PATH) $(WATCH_DEFINES) \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		$(WATCHOS_SOURCES) @$(WATCH_BUILD_DIR)/watch-ikvm/generated_sources
 
 $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.dll.mdb: $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.dll
 	@touch $@
@@ -865,6 +901,12 @@ $(WATCH_BUILD_DIR)/reference/System.Net.Http.dll.mdb: $(WATCH_MONO_PATH)/mcs/cla
 	$(Q) cp $< $@
 	$(call Q_PROF_GEN,watch) $(MDB_REBASE) -i $(abspath $(WATCH_MONO_PATH))/ -o $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/src/mono/ $@
 
+xy:: $(WATCH_BUILD_DIR)/bootstrap/Xamarin.WatchOS.dll
+yy:: $(WATCH_BUILD_DIR)/watch-ikvm/generated_sources
+zz:: $(WATCH_BUILD_DIR)/watch-ikvm/Xamarin.WatchOS.dll
+
+wz: $(WATCH_BUILD_DIR)/watch-ikvm/Xamarin.WatchOS.dll
+
 .SECONDARY: $(WATCH_BUILD_DIR)/reference/System.Net.Http.dll
 
 xamwatch.csproj: xamwatch.tmpl.csproj Makefile $(wildcard $(TOP)/*.sources)
@@ -882,6 +924,8 @@ clean-watch:
 WATCH_TARGETS_DIRS +=                                          \
 	$(WATCH_BUILD_DIR)                                         \
 	$(WATCH_BUILD_DIR)/watch                                   \
+	$(WATCH_BUILD_DIR)/watch-ikvm                              \
+	$(WATCH_BUILD_DIR)/bootstrap                               \
 	$(WATCH_BUILD_DIR)/watch-32                                \
 	$(WATCH_BUILD_DIR)/reference                               \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS \
@@ -980,6 +1024,14 @@ $(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_BUILD_DIR)/pmcs $(TVOS_CORE_SOURCES) fra
 		$(TVOS_DEFINES)     \
 		$(TVOS_CORE_SOURCES)
 
+$(TVOS_BUILD_DIR)/bootstrap/Xamarin.TVOS.dll: $(TVOS_BUILD_DIR)/pmcs $(TVOS_CORE_SOURCES) frameworks.sources Makefile | $(TVOS_BUILD_DIR)/bootstrap
+	$(call Q_PROF_PMCS,tvos) PMCS_PROFILE=tvos $(TVOS_BUILD_DIR)/pmcs -out:$@ -target:library -debug -unsafe \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		-define:COREBUILD    \
+		-keyfile:$(PRODUCT_KEY_PATH) \
+		$(TVOS_DEFINES)     \
+		$(TVOS_CORE_SOURCES)
+
 # generator.exe
 $(TVOS_BUILD_DIR)/tvos/generator.exe: $(GENERATOR_SOURCES) $(TVOS_BUILD_DIR)/tvos/core.dll
 	$(call Q_PROF_PMCS,tvos) PMCS_PROFILE=tvos $(TVOS_BUILD_DIR)/pmcs --keep -out:$@ -debug -unsafe \
@@ -1007,11 +1059,44 @@ $(TVOS_BUILD_DIR)/tvos/generated_sources: $(TVOS_BUILD_DIR)/tvos/generator.exe $
 		--ns:ObjCRuntime                                         \
 		$(TVOS_APIS)                                            \
 
+# generated_sources
+$(TVOS_BUILD_DIR)/tvos-ikvm/generated_sources: $(IOS_BUILD_DIR)/generator-ikvm.exe $(TVOS_APIS) $(TVOS_BUILD_DIR)/bootstrap/Xamarin.TVOS.dll $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll
+	$(call Q_PROF_GEN,tvos) PMCS_PROFILE=tvos $(SYSTEM_MONO) --debug $(IOS_BUILD_DIR)/generator-ikvm.exe \
+		-inline-selectors                                        \
+		-process-enums                                           \
+		-core                                                    \
+		-sourceonly=$@                                           \
+		-compiler=$(TVOS_PMCS)                                    \
+		-nostdlib -noconfig                                      \
+		-no-mono-path                                            \
+		-tmpdir=$(TVOS_BUILD_DIR)/tvos-ikvm                      \
+		-baselib=$(TVOS_BUILD_DIR)/bootstrap/Xamarin.TVOS.dll               \
+		-lib=$(MONO_PATH)/mcs/class/lib/monotouch_tv           \
+		-r=$(MONO_PATH)/mcs/class/lib/monotouch_tv/System.dll \
+		-binding-attributes-lib=$(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll \
+		-ns=MonoTouch.ObjCRuntime                                \
+		-native-exception-marshalling                            \
+		-d:TVOS                                                  \
+		--ns:ObjCRuntime                                         \
+		$(TVOS_APIS)                                             \
+		--target-framework="Xamarin.TVOS;v1.0"                   \
+
+
+xy:: $(TVOS_BUILD_DIR)/bootstrap/Xamarin.TVOS.dll
+yy:: $(TVOS_BUILD_DIR)/tvos-ikvm/generated_sources
+zz:: $(TVOS_BUILD_DIR)/tvos-ikvm/Xamarin.TVOS.dll
+
 $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.dll: $(TVOS_SOURCES) $(TVOS_BUILD_DIR)/tvos/generated_sources $(PRODUCT_KEY_PATH) | $(TVOS_BUILD_DIR)/tvos-64
 	$(call Q_PROF_PMCS,tvos) PMCS_PROFILE=tvos-64 $(TVOS_PMCS) -out:$@ -target:library -debug -unsafe -optimize \
 		-keyfile:$(PRODUCT_KEY_PATH) $(TVOS_DEFINES) \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		$(TVOS_SOURCES) @$(TVOS_BUILD_DIR)/tvos/generated_sources
+
+$(TVOS_BUILD_DIR)/tvos-ikvm/Xamarin.TVOS.dll: $(TVOS_SOURCES) $(TVOS_BUILD_DIR)/tvos-ikvm/generated_sources $(PRODUCT_KEY_PATH) | $(TVOS_BUILD_DIR)/tvos-ikvm
+	$(call Q_PROF_PMCS,tvos) PMCS_PROFILE=tvos-64 $(TVOS_PMCS) -out:$@ -target:library -debug -unsafe -optimize \
+		-keyfile:$(PRODUCT_KEY_PATH) $(TVOS_DEFINES) \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		$(TVOS_SOURCES) @$(TVOS_BUILD_DIR)/tvos-ikvm/generated_sources
 
 $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.dll.mdb: $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.dll
 	@touch $@
@@ -1102,6 +1187,8 @@ clean-tvos:
 TVOS_TARGETS_DIRS +=                                          \
 	$(TVOS_BUILD_DIR)                                         \
 	$(TVOS_BUILD_DIR)/tvos                                    \
+	$(TVOS_BUILD_DIR)/bootstrap                               \
+	$(TVOS_BUILD_DIR)/tvos-ikvm                               \
 	$(TVOS_BUILD_DIR)/tvos-64                                 \
 	$(TVOS_BUILD_DIR)/reference                               \
 	$(TVOS_BUILD_DIR)/reference/Facades                       \

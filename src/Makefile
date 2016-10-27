@@ -616,6 +616,25 @@ $(eval $(call MAC_TARGETS_template,mobile-64,--ns=ObjCRuntime -unified-mobile-pr
 $(eval $(call MAC_TARGETS_template,full-32,--ns=ObjCRuntime -unified-full-profile,Xamarin.Mac.dll,full,-r:System.Net.Http -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5 $(MAC_CFNETWORK_SOURCES) $(MAC_MODERNHTTP_SOURCES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__,full-32))
 $(eval $(call MAC_TARGETS_template,full-64,--ns=ObjCRuntime -unified-full-profile,Xamarin.Mac.dll,full,-r:System.Net.Http -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5 $(MAC_CFNETWORK_SOURCES) $(MAC_MODERNHTTP_SOURCES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__,full-64))
 
+define MAC_TARGETS_IKVM_template
+$(MAC_BUILD_DIR)/$(1)-ikvm/$(3): $(MAC_BUILD_DIR)/$(4)-ikvm/generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(MAC_CLASSIC_SOURCES) $(SN_KEY)
+	@mkdir -p $(MAC_BUILD_DIR)/$(1)
+	$$(call Q_PROF_PMCS,mac/$(1)) PMCS_PROFILE=$(6) $(MAC_BUILD_DIR)/$(4)/pmcs \
+		-out:$$@ -target:library -debug -unsafe \
+		$$(MAC_COMMON_DEFINES),OBJECT_REF_TRACKING \
+		-keyfile:$(SN_KEY) \
+		-nowarn:3021,1635,612,618,0219,0414,$(MAC_WARNINGS_TO_FIX) \
+		$(5) \
+		@$$< $$(MAC_SOURCES)
+endef
+
+$(eval $(call MAC_TARGETS_IKVM_template,compat,--ns=MonoMac.ObjCRuntime,XamMac.dll,compat,-r:System.Drawing -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5 $(MAC_CLASSIC_SOURCES),compat-mac))
+$(eval $(call MAC_TARGETS_IKVM_template,mobile-32,--ns=ObjCRuntime -unified-mobile-profile,Xamarin.Mac.dll,mobile,-r:System.Net.Http -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac $(MAC_CFNETWORK_SOURCES) $(MAC_MODERNHTTP_SOURCES) $(SHARED_SYSTEM_DRAWING_SOURCES) $(APPLETLS_DEFINES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__,mobile-32))
+$(eval $(call MAC_TARGETS_IKVM_template,mobile-64,--ns=ObjCRuntime -unified-mobile-profile,Xamarin.Mac.dll,mobile,-r:System.Net.Http -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac $(MAC_CFNETWORK_SOURCES) $(MAC_MODERNHTTP_SOURCES) $(SHARED_SYSTEM_DRAWING_SOURCES) $(APPLETLS_DEFINES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__,mobile-64))
+$(eval $(call MAC_TARGETS_IKVM_template,full-32,--ns=ObjCRuntime -unified-full-profile,Xamarin.Mac.dll,full,-r:System.Net.Http -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5 $(MAC_CFNETWORK_SOURCES) $(MAC_MODERNHTTP_SOURCES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__,full-32))
+$(eval $(call MAC_TARGETS_IKVM_template,full-64,--ns=ObjCRuntime -unified-full-profile,Xamarin.Mac.dll,full,-r:System.Net.Http -lib:$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5 $(MAC_CFNETWORK_SOURCES) $(MAC_MODERNHTTP_SOURCES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__,full-64))
+
+
 $(MAC_BUILD_DIR)/%-reference/Xamarin.Mac.dll: $(MAC_BUILD_DIR)/%-64/Xamarin.Mac.dll
 	@mkdir -p $(@D)
 	$(Q) cp $^ $@

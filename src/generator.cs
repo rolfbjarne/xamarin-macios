@@ -725,10 +725,19 @@ public class NamespaceManager
 			}
 		}
 
-		// ModelIO and Metal are 64-bit only, and not on watch
-		if (Generator.CurrentPlatform != PlatformName.WatchOS && !(Generator.CurrentPlatform == PlatformName.MacOSX && BindingTouch.Unified)) {
+		// ModelIO and Metal are 64-bit only on Mac, and not on watch
+		switch (Generator.CurrentPlatform) {
+		case PlatformName.iOS:
+		case PlatformName.TvOS:
 			ImplicitNamespaces.Add (Get ("ModelIO"));
 			ImplicitNamespaces.Add (Get ("Metal"));
+			break;
+		case PlatformName.MacOSX:
+			if (BindingTouch.Unified) {
+				ImplicitNamespaces.Add (Get ("ModelIO"));
+				ImplicitNamespaces.Add (Get ("Metal"));
+			}
+			break;
 		}
 
 		// These are both types and namespaces

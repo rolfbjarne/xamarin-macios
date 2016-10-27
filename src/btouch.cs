@@ -88,7 +88,6 @@ class BindingTouch {
 #error Unknown platform
 #endif
 	static char shellQuoteChar;
-#if IOS || MONOMAC || IKVM
 #if XAMCORE_2_0
 	static bool buildNewStyle = true;
 #else
@@ -99,7 +98,6 @@ class BindingTouch {
 			return buildNewStyle;
 		}
 	}
-#endif
 
 	static List<string> libs = new List<string> ();
 
@@ -597,12 +595,10 @@ class BindingTouch {
 				ZeroCopyStrings = zero_copy,
 #if MONOMAC
 				OnlyDesktop = true,
+#elif IKVM
+				OnlyDesktop = Generator.CurrentPlatform == PlatformName.MacOSX,
 #endif
-#if IOS || MONOMAC || IKVM
 				Compat = !buildNewStyle,
-#else
-				Compat = false,
-#endif
 #if !XAMCORE_2_0
 				Alpha = alpha,
 #endif

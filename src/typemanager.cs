@@ -1080,12 +1080,20 @@ public static class TypeManager {
 #endif
 	}
 
-	public static string GetEnumFullName (Type type, object value)
+	public static object GetEnumFullName (Type type, object value)
 	{
 #if IKVM
-		return type.FullName + "." + type.GetEnumName (value);
+		var name = type.GetEnumName (value);
+		if (string.IsNullOrEmpty (name)) {
+			return "(" + type.FullName + ") " + value;
+		} else {
+			return type.FullName + "." + name;
+		}
 #else
-		return value.GetType ().FullName + "." + value;
+		if (value is Enum)
+			return value.GetType ().FullName + "." + value;
+		else
+			return value;
 #endif
 	}
 }

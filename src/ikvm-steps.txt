@@ -1,0 +1,4 @@
+* Remove all platform #ifdefs.
+* Replace all typeof (X) with TypeManager.X
+* Move attributes to own file & attributes dll.
+* Move attribute handling to separate ikvm/reflection-agnostic class.

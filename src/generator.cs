@@ -38,6 +38,63 @@
 //   * Add support for wrapping "ref" and "out" NSObjects (WrappedTypes)
 //     Typically this is necessary for things like NSError.
 //
+
+#define HAVE_AVFOUNDATION
+#define HAVE_GAMEKIT
+
+#if IOS || TVOS || MONOMAC
+#define HAVE_AUDIOUNIT
+#define HAVE_COREANIMATION
+#define HAVE_COREMEDIA
+#define HAVE_COREVIDEO
+#define HAVE_MEDIATOOLBOX
+#define HAVE_SECURITY
+#define HAVE_AUDIOTOOLBOX
+#if IOS || TVOS
+#define HAVE_AUDIOTOOLBOX_MUSICSEQUENCE
+#endif
+#endif
+
+#if IOS || MONOMAC
+#define HAVE_COREMIDI
+#endif
+
+#if MONOMAC
+#define HAVE_APPKIT
+#define HAVE_CLOUDKIT
+#define HAVE_OPENGL
+#define HAVE_QTKIT
+#endif
+
+#if IOS || TVOS || WATCH
+#define HAVE_UIKIT
+#endif
+
+#if IOS || TVOS
+#define HAVE_PHOTOSUI
+#define HAVE_GLKIT
+#endif
+
+#if IOS
+#define HAVE_ADDRESSBOOK
+#define HAVE_ADDRESSBOOKUI
+#define HAVE_COREMOTION
+#define HAVE_EVENTKITUI
+#define HAVE_HEALTHKITUI
+#define HAVE_IAD
+#define HAVE_MAPKIT
+#define HAVE_MESSAGEUI
+#define HAVE_NEWSSTANDKIT
+#define HAVE_QUICKLOOK
+#define HAVE_TWITTER
+#endif
+
+#if IOS || TVOS || (XAMCORE_2_0 && MONOMAC)
+// ModelIO and Metal are 64-bit only, and not on watch
+#define HAVE_MODELIO
+#define HAVE_METAL
+#endif
+
 using System;
 using System.Linq;
 using System.Collections;
@@ -54,25 +111,32 @@ using XamCore.CoreGraphics;
 using XamCore.ObjCRuntime;
 using XamCore.Foundation;
 using XamCore.Security;
-#if !WATCH
+#if HAVE_COREMEDIA
 using XamCore.CoreMedia;
+#endif
+#if HAVE_COREVIDEO
 using XamCore.CoreVideo;
-#if !TVOS
+#endif
+#if HAVE_COREMIDI
 using XamCore.CoreMidi;
 #endif
+#if HAVE_AUDIOTOOLBOX
 using XamCore.AudioToolbox;
+#endif
+#if HAVE_AUDIOUNIT
 using XamCore.AudioUnit;
+#endif
+#if HAVE_AVFOUNDATION
 using XamCore.AVFoundation;
 #endif
-
-#if MONOMAC
+#if HAVE_OPENGL
 using XamCore.OpenGL;
-using XamCore.MediaToolbox;
-#elif !WATCH
-#if !TVOS
-using XamCore.AddressBook;
 #endif
+#if HAVE_MEDIATOOLBOX
 using XamCore.MediaToolbox;
+#endif
+#if HAVE_ADDRESSBOOK
+using XamCore.AddressBook;
 #endif
 
 using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
@@ -648,25 +712,44 @@ public class NamespaceManager
 		};
 
 		UINamespaces = new HashSet<string> {
-#if MONOMAC
-			Get ("AppKit")
-#else
+#if HAVE_APPKIT
+			Get ("AppKit"),
+#endif
+#if HAVE_UIKIT
 			Get ("UIKit"),
-#if !WATCH
+#endif
+#if HAVE_TWITTER
 			Get ("Twitter"),
+#endif
+#if HAVE_GAMEKIT && !MONOMAC && !WATCH
 			Get ("GameKit"),
+#endif
+#if HAVE_NEWSSTANDKIT
 			Get ("NewsstandKit"),
+#endif
+#if HAVE_IAD
 			Get ("iAd"),
+#endif
+#if HAVE_QUICKLOOK
 			Get ("QuickLook"),
+#endif
+#if HAVE_EVENTKITUI
 			Get ("EventKitUI"),
+#endif
+#if HAVE_ADDRESSBOOKUI
 			Get ("AddressBookUI"),
-#if !TVOS
+#endif
+#if HAVE_MAPKIT
 			Get ("MapKit"),
 #endif
+#if HAVE_MESSAGEUI
 			Get ("MessageUI"),
-			Get ("PhotosUI"),
-			Get ("HealthKitUI"),
 #endif
+#if HAVE_PHOTOSUI
+			Get ("PhotosUI"),
+#endif
+#if HAVE_HEALTHKITUI
+			Get ("HealthKitUI"),
 #endif
 		};
 
@@ -682,42 +765,63 @@ public class NamespaceManager
 			Get ("ObjCRuntime"),
 			Get ("CoreGraphics"),
 			Get ("SceneKit"),
-#if !WATCH
+#if HAVE_AUDIOUNIT
 			Get ("AudioUnit"),
+#endif
+#if HAVE_COREANIMATION
 			Get ("CoreAnimation"),
 #endif
 			Get ("CoreLocation"),
-#if !WATCH
+#if HAVE_COREVIDEO
 			Get ("CoreVideo"),
+#endif
+#if HAVE_COREMEDIA
 			Get ("CoreMedia"),
+#endif
+#if HAVE_SECURITY
 			Get ("Security"),
+#endif
+#if HAVE_AVFOUNDATION && !WATCH
 			Get ("AVFoundation"),
 #endif
-#if MONOMAC
+#if HAVE_OPENGL
 			Get ("OpenGL"),
+#endif
+#if HAVE_QTKIT
 			Get ("QTKit"),
+#endif
+#if HAVE_APPKIT
 			Get ("AppKit"),
+#endif
+#if HAVE_CLOUDKIT
 			Get ("CloudKit"),
-#else
-#if !WATCH && !TVOS
+#endif
+#if HAVE_COREMOTION
 			Get ("CoreMotion"),
+#endif
+#if HAVE_MAPKIT
 			Get ("MapKit"),
 #endif
+#if HAVE_UIKIT
 			Get ("UIKit"),
-#if !WATCH
-#if !TVOS
+#endif
+#if HAVE_NEWSSTANDKIT
 			Get ("NewsstandKit"),
 #endif
+#if HAVE_GLKIT
 			Get ("GLKit"),
-#if !TVOS
+#endif
+#if HAVE_QUICKLOOK
 			Get ("QuickLook"),
+#endif
+#if HAVE_ADDRESSBOOK
 			Get ("AddressBook")
 #endif
-#endif
-#endif
 		};
-#if !(WATCH || (MONOMAC && !XAMCORE_2_0)) // ModelIO and Metal are 64-bit only, and not on watch
+#if HAVE_MODELIO
 		ImplicitNamespaces.Add (Get ("ModelIO"));
+#endif
+#if HAVE_METAL
 		ImplicitNamespaces.Add (Get ("Metal"));
 #endif
 
@@ -882,7 +986,7 @@ public partial class Generator : IMemberGatherer {
 	string basedir;
 	HashSet<string> generated_files = new HashSet<string> ();
 	public Type CoreNSObject = typeof (NSObject);
-#if !WATCH
+#if HAVE_COREMEDIA
 	public Type SampleBufferType = typeof (CMSampleBuffer);
 #endif
 
@@ -1204,13 +1308,15 @@ public partial class Generator : IMemberGatherer {
 				continue;
 			}
 
-#if !WATCH
+#if HAVE_COREMEDIA
 			// special case (false) so it needs to be before the _real_ INativeObject check
 			if (pi.ParameterType == SampleBufferType){
 				pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
 				invoke.AppendFormat ("{0} == IntPtr.Zero ? null : new CMSampleBuffer ({0}, false)", pi.Name.GetSafeParamName ());
 				continue;
 			}
+#endif
+#if HAVE_AUDIOTOOLBOX
 			if (pi.ParameterType == typeof (AudioBuffers)){
 				pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
 				invoke.AppendFormat ("new global::{0}AudioToolbox.AudioBuffers ({1})", Generator.UnifiedAPI ? "" : "MonoTouch.", pi.Name.GetSafeParamName ());
@@ -1751,7 +1857,7 @@ public partial class Generator : IMemberGatherer {
 			new MarshalType (typeof (NSObject), create: "Runtime.GetNSObject ("),
 			new MarshalType (typeof (Selector), create: "Selector.FromHandle ("),
 			new MarshalType (typeof (BlockLiteral), "BlockLiteral", "{0}", "THIS_IS_BROKEN"),
-#if !MONOMAC && !WATCH
+#if HAVE_AUDIOTOOLBOX_MUSICSEQUENCE
 			new MarshalType (typeof (MusicSequence), create: "global::XamCore.AudioToolbox.MusicSequence.Lookup ("),
 #endif
 			typeof (CGColor),
@@ -1763,46 +1869,54 @@ public partial class Generator : IMemberGatherer {
 			typeof (CFRunLoop),
 			typeof (CGColorSpace),
 			typeof (DispatchQueue),
-#if !WATCH
 			typeof (Protocol),
-#if !TVOS
+#if HAVE_COREMIDI
 			typeof (MidiEndpoint),
 #endif
+#if HAVE_COREMEDIA
 			typeof (CMTimebase),
 			typeof (CMClock),
 #endif
 			typeof (NSZone),
-#if MONOMAC
+#if HAVE_OPENGL
 			typeof (CGLContext),
 			typeof (CGLPixelFormat),
 			typeof (CVImageBuffer),
-			new MarshalType (typeof (MTAudioProcessingTap), create: ((UnifiedAPI ? "MediaToolbox" : "MonoMac.MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")),
-#elif !WATCH
-#if !TVOS
+#endif
+#if HAVE_MEDIATOOLBOX
+			new MarshalType (typeof (MTAudioProcessingTap), create: (NamespaceManager.Get ("MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")),
+#endif
+#if HAVE_ADDRESSBOOK
 			typeof (ABAddressBook),
 			new MarshalType (typeof (ABPerson), create: "(ABPerson) ABRecord.FromHandle("),
 			new MarshalType (typeof (ABRecord), create: "ABRecord.FromHandle("),
 #endif
-			new MarshalType (typeof (MTAudioProcessingTap), create: ((UnifiedAPI ? "MediaToolbox" : "MonoTouch.MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")),
-#endif
-#if !WATCH
+#if HAVE_COREVIDEO
 			typeof (CVPixelBuffer),
 #endif
 			typeof (CGLayer),
-#if !WATCH
+#if HAVE_COREMEDIA
 			typeof (CMSampleBuffer),
+#endif
+#if HAVE_COREVIDEO
 			typeof (CVImageBuffer),
 			typeof (CVPixelBufferPool),
+#endif
+#if HAVE_AUDIOUNIT
 			typeof (AudioComponent),
+#endif
+#if HAVE_COREMEDIA
 			new MarshalType (typeof (CMFormatDescription), create: "CMFormatDescription.Create ("),
 			typeof (CMAudioFormatDescription),
 			typeof (CMVideoFormatDescription),
+#endif
+#if HAVE_AUDIOUNIT
 			typeof (XamCore.AudioUnit.AudioUnit),
 #endif
 			typeof (SecIdentity),
 			typeof (SecTrust),
 			typeof (SecAccessControl),
-#if !WATCH
+#if HAVE_AUDIOUNIT
 			typeof (AudioBuffers),
 			typeof (AURenderEventEnumerator),
 #endif
@@ -2363,7 +2477,7 @@ public partial class Generator : IMemberGatherer {
 							getter = "{1} GetCGPointValue ({0})";
 							setter = "SetCGPointValue ({0}, {1}value)";
 #endif // XAMCORE_2_0
-#if !WATCH
+#if HAVE_COREMEDIA
 						} else if (fetchType == typeof (CMTime)){
 							getter = "{1} GetCMTimeValue ({0})";
 							setter = "SetCMTimeValue ({0}, {1}value)";
@@ -5593,7 +5707,7 @@ public partial class Generator : IMemberGatherer {
 						print ("return Dlfcn.GetSizeF (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == typeof (long)){
 						print ("return Dlfcn.GetInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-#if !WATCH
+#if HAVE_COREMEDIA && HAVE_AVFOUNDATION
 					} else
 						//
 						// Handle various blittable value types here

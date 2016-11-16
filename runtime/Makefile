@@ -75,6 +75,10 @@ MONOTOUCH_LIBS =               \
 	libxamarin.dylib           \
 	libxamarin-debug.dylib     \
 
+MONOTOUCH_FRAMEWORKS =  \
+	Xamarin             \
+	Xamarin-debug       \
+
 MONOTOUCH_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_SOURCES) $(MONOTOUCH_SOURCES))) zlib-helper
 MONOTOUCH_I386_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_I386_SOURCES)))
 MONOTOUCH_X86_64_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_X86_64_SOURCES)))
@@ -91,20 +95,29 @@ $(2)_SOURCE_STEMS  = $(MONOTOUCH_SOURCE_STEMS)
 $(2)_X86_64_SOURCE_STEMS = $(MONOTOUCH_X86_64_SOURCE_STEMS)
 $(2)_I386_SOURCE_STEMS = $(MONOTOUCH_I386_SOURCE_STEMS)
 $(2)_LIBRARIES     = $(MONOTOUCH_LIBS)
+$(2)_FRAMEWORKS    = $(MONOTOUCH_FRAMEWORKS)
 $(2)_ARCHITECTURES = $(3)
 
 RUNTIME_$(2)_TARGETS_DIRS +=                                        \
+	$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework \
+	$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin-debug.framework \
 	$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib             \
 	$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/include/xamarin \
+	$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework \
+	$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin-debug.framework \
 	$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/lib                    \
 	$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/include/xamarin        \
 
 RUNTIME_$(2)_TARGETS +=                                                                                \
+	$$(foreach file,$$($(2)_FRAMEWORKS),$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/$$(file).framework/$$(file))   \
+	$$(foreach file,$$($(2)_FRAMEWORKS),$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/$$(file).framework/Info.plist) \
 	$$(foreach file,$$($(2)_LIBRARIES),$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib/$$(file))   \
 	$(foreach file,$(SHIPPED_HEADERS),$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/include/$(file)) \
 
 ifdef INCLUDE_DEVICE
 RUNTIME_$(2)_TARGETS +=                                                                                \
+	$$(foreach file,$$($(2)_FRAMEWORKS),$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/$$(file).framework/$$(file))   \
+	$$(foreach file,$$($(2)_FRAMEWORKS),$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/$$(file).framework/Info.plist) \
 	$$(foreach file,$$($(2)_LIBRARIES),$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/lib/$$(file))          \
 	$(foreach file,$(SHIPPED_HEADERS),$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/include/$(file))        \
 
@@ -113,9 +126,27 @@ endif
 $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib/%.a: .libs/$(1)/%.a | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib
 	$(Q) install -m 0644 $$< $$@
 
+$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework/Xamarin: .libs/$(1)/libxamarin.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework
+	$(Q) install -m 0755 $$< $$@
+
+$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin-debug.framework/Xamarin-debug: .libs/$(1)/libxamarin-debug.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin-debug.framework
+	$(Q) install -m 0755 $$< $$@
+
+$(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/%.framework/Info.plist: Xamarin.framework-$(1).Info.plist | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework
+	$(Q) sed 's/@BUNDLE_EXECUTABLE@/$$*/' $$< > $$@
+
 ifdef INCLUDE_DEVICE
 $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/lib/%.a: .libs/$(1)/%.a | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/lib
 	$(Q) install -m 0644 $$< $$@
+
+$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework/Xamarin: .libs/$(1)/libxamarin.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework
+	$(Q) install -m 0755 $$< $$@
+
+$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin-debug.framework/Xamarin-debug: .libs/$(1)/libxamarin-debug.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin-debug.framework
+	$(Q) install -m 0755 $$< $$@
+
+$(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/%.framework/Info.plist: Xamarin.framework-$(1).Info.plist | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework
+	$(Q) sed 's/@BUNDLE_EXECUTABLE@/$$*/' $$< > $$@
 endif
 
 $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib/%.dylib: .libs/$(1)/%.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib

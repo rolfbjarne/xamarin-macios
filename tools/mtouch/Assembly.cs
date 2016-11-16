@@ -11,27 +11,132 @@ using Mono.Cecil;
 using Xamarin.Utils;
 
 namespace Xamarin.Bundler {
+	public enum AssemblyBuildTarget
+	{
+		StaticObject,
+		DynamicLibrary,
+		Framework,
+	}
+
+	abstract class AssemblyTarget
+	{
+		public string Name;
+		public Target Target { get { return Assemblies [0].Target; } }
+		public List<Assembly> Assemblies = new List<Assembly> ();
+		public abstract void CreateTasks (List<BuildTask> tasks, Abi abi);
+
+		public string ComputedBaseName {
+			get {
+				switch (Name) {
+				case "@all":
+				case "@rest":
+					return Path.GetFileNameWithoutExtension (Target.App.AssemblyName);
+				case null:
+				case "":
+					if (Assemblies.Count != 1)
+						throw new Exception ();
+					return Path.GetFileNameWithoutExtension (Assemblies [0].FileName);
+				default:
+					return Name;
+				}
+			}
+		}
+	}
+
+	class AssemblyFrameworkTarget : AssemblyTarget
+	{
+		public override void CreateTasks (List<BuildTask> tasks, Abi abi)
+		{
+		}
+	}
+
+	class AssemblyDynamicLibraryTarget : AssemblyTarget
+	{
+		public string OutputPath;
+
+		public override void CreateTasks (List<BuildTask> tasks, Abi abi)
+		{
+			var arch = abi.AsArchString ();
+			var linker_inputs = new List<string> ();
+			foreach (var a in Assemblies) {
+				linker_inputs.AddRange (a.AotInfos [abi].ObjectFiles);
+				linker_inputs.AddRange (a.AotInfos [abi].BitcodeFiles);
+			}
+			var computedName = ComputedBaseName;
+			var linker_output = Path.Combine (Target.BuildDirectory, "lib" + computedName + "." + arch + ".dylib");
+			var install_name = "lib" + computedName + ".dylib";
+
+			var compiler_flags = new CompilerFlags () {
+				Target = Target,
+				Inputs = new List<string> (linker_inputs),
+			};
+			foreach (var a in Assemblies) {
+				compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
+				compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
+				compiler_flags.AddOtherFlags (a.LinkerFlags);
+			}
+			compiler_flags.LinkWithMono (true);
+			compiler_flags.LinkWithXamarin (true);
+			if (Target.GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+				compiler_flags.AddFramework ("UIKit");
+			compiler_flags.LinkWithPInvokes (abi);
+
+			// Check if we really need to 
+			var outputs = new string [] { linker_output };
+			if (Application.IsUptodate (compiler_flags.Inputs, outputs))
+				return;
+			Application.TryDelete (outputs);
+
+			tasks.Add (new LinkTask ()
+			{
+				Target = Target,
+				AssemblyName = install_name,
+				Abi = abi,
+				InputFiles = linker_inputs,
+				OutputFile = linker_output,
+				InstallName = install_name,
+				CompilerFlags = compiler_flags,
+				SharedLibrary = true,
+			});
+
+			OutputPath = linker_output;
+		}
+	}
+
+	public class AotInfo
+	{
+		public List<string> BitcodeFiles = new List<string> (); // .bc files produced by the AOT compiler
+		public List<string> AsmFiles = new List<string> (); // .s files produced by the AOT compiler.
+		public List<string> AotDataFiles = new List<string> (); // .aotdata files produced by the AOT compiler
+		public List<string> ObjectFiles = new List<string> (); // .o files produced by the AOT compiler
+	}
+
 	public partial class Assembly
 	{
+		public AssemblyBuildTarget BuildTarget;
+		public string BuildTargetName;
+
 		public List<string> Satellites;
-		List<string> dylibs;
-		public string Dylib;
 
-		public List<string> AotDataFiles = new List<string> ();
+		public Dictionary<Abi, AotInfo> AotInfos = new Dictionary<Abi, AotInfo> ();
 
-		HashSet<string> dependencies;
+		HashSet<string> dependency_map;
+		bool has_dependency_map;
 
-		public IEnumerable<string> Dylibs {
-			get { return dylibs; }
+		public HashSet<string> DependencyMap {
+			get {
+				return dependency_map;
+			}
 		}
 
 		// Recursively list all the assemblies the specified assembly depends on.
 		HashSet<string> ComputeDependencies (List<Exception> warnings)
 		{
-			if (dependencies != null)
-				return dependencies;
+			if (dependency_map != null)
+				return dependency_map;
 
-			dependencies = new HashSet<string> ();
+			dependency_map = new HashSet<string> ();
+			has_dependency_map = true;
 
 			foreach (var ar in AssemblyDefinition.MainModule.AssemblyReferences) {
 				var found = false;
@@ -46,21 +151,28 @@ namespace Xamarin.Bundler {
 
 					if (a.AssemblyDefinition.Name.Name == ar.Name) {
 						// gotcha
-						if (!dependencies.Contains (a.FullPath)) {
-							dependencies.Add (a.FullPath);
-							dependencies.UnionWith (a.ComputeDependencies (warnings));
+						if (!dependency_map.Contains (a.FullPath)) {
+							dependency_map.Add (a.FullPath);
+							dependency_map.UnionWith (a.ComputeDependencies (warnings));
 						}
 						found = true;
 						break;
 					}
 				}
 
-				if (!found)
+				if (!found) {
 					warnings.Add (new MonoTouchException (3005, false, "The dependency '{0}' of the assembly '{1}' was not found. Please review the project's references.",
-					                                      ar.FullName, AssemblyDefinition.FullName));
+														  ar.FullName, AssemblyDefinition.FullName));
+					has_dependency_map = true;
+				}
 			}
 
-			return dependencies;
+			return dependency_map;
+		}
+
+		public void ComputeDependencyMap (List<Exception> exceptions)
+		{
+			ComputeDependencies (exceptions);
 		}
 
 		// returns false if the assembly was not copied (because it was already up-to-date).
@@ -171,187 +283,289 @@ namespace Xamarin.Bundler {
 			return copied;
 		}
 
-		IEnumerable<BuildTask> CreateCompileTasks (string s, string asm_infile, string llvm_infile, Abi abi)
-		{
-			var compile_tasks = new BuildTasks ();
-			if (asm_infile != null) {
-				var task = CreateCompileTask (s, asm_infile, abi);
-				if (task != null)
-					compile_tasks.Add (task);
-			}
+		//IEnumerable<BuildTask> CreateLinkTasks (string s, string asm_infile, string llvm_infile, Abi abi)
+		//{
+		//	var compile_tasks = new BuildTasks ();
+		//	if (asm_infile != null) {
+		//		var task = CreateLinkTask (s, asm_infile, abi);
+		//		if (task != null)
+		//			compile_tasks.Add (task);
+		//	}
 
-			if (llvm_infile != null) {
-				var taskllvm = CreateCompileTask (s, llvm_infile, abi);
-				if (taskllvm != null)
-					compile_tasks.Add (taskllvm);
-			}
-			return compile_tasks.Count > 0 ? compile_tasks : null;
-		}
+		//	if (llvm_infile != null) {
+		//		var taskllvm = CreateLinkTask (s, llvm_infile, abi);
+		//		if (taskllvm != null)
+		//			compile_tasks.Add (taskllvm);
+		//	}
+		//	return compile_tasks.Count > 0 ? compile_tasks : null;
+		//}
 
-		IEnumerable<BuildTask> CreateManagedToAssemblyTasks (string s, Abi abi, string build_dir)
+		/*
+		 * Runs the AOT compiler, creating one of the following:
+		 *     [not llvm]     => .s           + .aotdata
+		 *     [is llvm-only] => .bc          + .aotdata
+		 *     [is llvm]      => 
+		 *          [is llvm creating assembly code] => .s + -llvm.s + .aotdata
+		 *          [is llvm creating object code]   => .s + -llvm.o + .aotdata
+		 */
+		public void CreateAOTTask (List<BuildTask> tasks, Abi abi)
 		{
+			var build_dir = Target.BuildDirectory;
+			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
 			var arch = abi.AsArchString ();
-			var asm_dir = Cache.Location;
-			var asm = Path.Combine (asm_dir, Path.GetFileName (s)) + "." + arch + ".s";
-			var llvm_asm = Path.Combine (asm_dir, Path.GetFileName (s)) + "." + arch + "-llvm.s";
-			var data = Path.Combine (asm_dir, Path.GetFileNameWithoutExtension (s)) + "." + arch + ".aotdata";
-			string llvm_ofile, llvm_aot_ofile = "";
+			var asm = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + ".s";
+			var aot_data = Path.Combine (Cache.Location, Path.GetFileNameWithoutExtension (assembly_path)) + "." + arch + ".aotdata";
+			var llvm_aot_ofile = "";
+			var asm_output = "";
 			var is_llvm = (abi & Abi.LLVM) == Abi.LLVM;
-			bool assemble_llvm = is_llvm && Driver.LLVMAsmWriter;
 
-			if (!File.Exists (s))
-				throw new MonoTouchException (3004, true, "Could not AOT the assembly '{0}' because it doesn't exist.", s);
+			if (!File.Exists (assembly_path))
+				throw new MonoTouchException (3004, true, "Could not AOT the assembly '{0}' because it doesn't exist.", assembly_path);
 
-			HashSet<string> dependencies = null;
-			List<string> deps = null;
+			List<string> dependencies = new List<string> ();
 			List<string> outputs = new List<string> ();
-			var warnings = new List<Exception> ();
 
-			dependencies = ComputeDependencies (warnings);
-
-			if (warnings.Count > 0) {
-				ErrorHelper.Show (warnings);
-				ErrorHelper.Warning (3006, "Could not compute a complete dependency map for the project. This will result in slower build times because Xamarin.iOS can't properly detect what needs to be rebuilt (and what does not need to be rebuilt). Please review previous warnings for more details.");
-			} else {
-				deps = new List<string> (dependencies.ToArray ());
-				deps.Add (s);
-				deps.Add (Driver.GetAotCompiler (Target.Is64Build));
-			}
+			var aotInfo = new AotInfo ();
+			AotInfos.Add (abi, aotInfo);
 
 			if (App.EnableLLVMOnlyBitCode) {
-				//
 				// In llvm-only mode, the AOT compiler emits a .bc file and no .s file for JITted code
-				//
-				llvm_ofile = Path.Combine (asm_dir, Path.GetFileName (s)) + "." + arch + ".bc";
-				outputs.Add (llvm_ofile);
-				llvm_aot_ofile = llvm_ofile;
+				llvm_aot_ofile = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + ".bc";
+				aotInfo.BitcodeFiles.Add (llvm_aot_ofile);
+			} else if (is_llvm) {
+				if (Driver.LLVMAsmWriter) {
+					llvm_aot_ofile = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + "-llvm.s";
+					aotInfo.AsmFiles.Add (llvm_aot_ofile);
+				} else {
+					llvm_aot_ofile = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + "-llvm.o";
+					aotInfo.ObjectFiles.Add (llvm_aot_ofile);
+				}
+				asm_output = asm;
 			} else {
-				llvm_ofile = Path.Combine (asm_dir, Path.GetFileName (s)) + "." + arch + "-llvm.o";
-				outputs.Add (asm);
+				asm_output = asm;
+			}
 
-				if (is_llvm) {
-					if (assemble_llvm) {
-						llvm_aot_ofile = llvm_asm;
-					} else {
-						llvm_aot_ofile = llvm_ofile;
-						Target.LinkWith (llvm_ofile);
-					}
-					outputs.Add (llvm_aot_ofile);
+			if (!string.IsNullOrEmpty (asm_output))
+				aotInfo.AsmFiles.Add (asm_output);
+			aotInfo.AotDataFiles.Add (aot_data);
+
+			outputs.AddRange (aotInfo.AotDataFiles);
+			outputs.AddRange (aotInfo.AsmFiles);
+			outputs.AddRange (aotInfo.BitcodeFiles);
+			outputs.AddRange (aotInfo.ObjectFiles);
+
+			// Check if the output is up-to-date
+			if (has_dependency_map) { // We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
+				dependencies.AddRange (dependency_map);
+				dependencies.Add (assembly_path);
+				dependencies.Add (Driver.GetAotCompiler (Target.Is64Build));
+				if (Application.IsUptodate (dependencies, outputs)) {
+					Driver.Log (3, "Target(s) {0} up-to-date.", string.Join (", ", outputs.ToArray ()));
+					return;
 				}
 			}
 
-			if (deps != null && Application.IsUptodate (deps, outputs)) {
-				Driver.Log (3, "Target {0} is up-to-date.", asm);
-				if (App.EnableLLVMOnlyBitCode)
-					return CreateCompileTasks (s, null, llvm_ofile, abi);
-				else
-					return CreateCompileTasks (s, asm, assemble_llvm ? llvm_asm : null, abi);
-			} else {
-				Application.TryDelete (asm); // otherwise the next task might not detect that it will have to rebuild.
-				Application.TryDelete (llvm_asm);
-				Application.TryDelete (llvm_ofile);
-				Driver.Log (3, "Target {0} needs to be rebuilt.", asm);
-			}
-
+			Application.TryDelete (outputs); // otherwise the next task might not detect that it has to rebuild.
+			Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", outputs.ToArray ()));
+		
+			// Output is not up-to-date, so we must run the AOT compiler.
 			var aotCompiler = Driver.GetAotCompiler (Target.Is64Build);
-			var aotArgs = Driver.GetAotArguments (s, abi, build_dir, asm, llvm_aot_ofile, data);
-			Driver.Log (3, "Aot compiler: {0} {1}", aotCompiler, aotArgs);
-
-			AotDataFiles.Add (data);
-
-			IEnumerable<BuildTask> nextTasks;
-			if (App.EnableLLVMOnlyBitCode)
-				nextTasks = CreateCompileTasks (s, null, llvm_ofile, abi);
-			else
-				nextTasks = CreateCompileTasks (s, asm, assemble_llvm ? llvm_asm : null, abi);
-
-			return new BuildTask [] { new AOTTask ()
-				{
-					AssemblyName = s,
-					ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (s)),
-					NextTasks = nextTasks
-				}
-			};
+			var aotArgs = Driver.GetAotArguments (assembly_path, abi, build_dir, asm_output, llvm_aot_ofile, aot_data);
+			tasks.Add (new AOTTask ()
+			{
+				AssemblyName = assembly_path,
+				ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
+			});
 		}
 
-		// The input file is either a .s or a .bc file
-		BuildTask CreateCompileTask (string assembly_name, string infile_path, Abi abi)
+		public void ConvertToBitcodeTask (List<BuildTask> tasks, Abi abi)
 		{
-			var ext = App.FastDev ? "dylib" : "o";
-			var ofile = Path.ChangeExtension (infile_path, ext);
-			var install_name = string.Empty;
+			// Converts .s into bitcode (.ll).
 
-			if (App.FastDev) {
-				if (dylibs == null)
-					dylibs = new List<string> ();
-				dylibs.Add (ofile);
-				install_name = "lib" + Path.GetFileName (assembly_name) + ".dylib";
-			} else {
-				Target.LinkWith (ofile);
-			}
+			if (!App.EnableAsmOnlyBitCode)
+				return;
 
-			if (Application.IsUptodate (new string [] { infile_path, Driver.CompilerPath }, new string [] { ofile })) {
-				Driver.Log (3, "Target {0} is up-to-date.", ofile);
-				return null;
-			} else {
-				Application.TryDelete (ofile); // otherwise the next task might not detect that it will have to rebuild.
-				Driver.Log (3, "Target {0} needs to be rebuilt.", ofile);
-			}
+			var info = AotInfos [abi];
+			foreach (var asm in info.AsmFiles) {
+				var input = asm;
+				var output = asm + ".ll";
 
-			var compiler_flags = new CompilerFlags () { Target = Target };
+				info.BitcodeFiles.Add (output);
 
-			BuildTask bitcode_task = null;
-			BuildTask link_task = null;
-			string link_task_input, link_language = "";
+				if (Application.IsUptodate (input, output))
+					continue;
 
-			if (App.EnableAsmOnlyBitCode) {
-				link_task_input = infile_path + ".ll";
-				link_language = "";
-				// linker_flags.Add (" -fembed-bitcode");
-
-				bitcode_task = new BitCodeify () {
-					Input = infile_path,
-					OutputFile = link_task_input,
+				Application.TryDelete (output);
+				tasks.Add (new BitCodeify ()
+				{
+					Input = input,
+					OutputFile = output,
 					Platform = App.Platform,
 					Abi = abi,
 					DeploymentTarget = App.DeploymentTarget,
-				};
-			} else {
-				link_task_input = infile_path;
-				if (infile_path.EndsWith (".s", StringComparison.Ordinal))
-					link_language = "assembler";
+				});
 			}
-
-			if (App.FastDev) {
-				compiler_flags.AddFrameworks (Frameworks, WeakFrameworks);
-				compiler_flags.AddLinkWith (LinkWith, ForceLoad);
-				compiler_flags.LinkWithMono ();
-				compiler_flags.LinkWithXamarin ();
-				compiler_flags.AddOtherFlags (LinkerFlags);
-				if (Target.GetEntryPoints ().ContainsKey ("UIApplicationMain"))
-					compiler_flags.AddFramework ("UIKit");
-				compiler_flags.LinkWithPInvokes (abi);
-			}
-
-			link_task = new LinkTask ()
-			{
-				Target = Target,
-				AssemblyName = assembly_name,
-				Abi = abi,
-				InputFile = link_task_input,
-				OutputFile = ofile,
-				InstallName = install_name,
-				CompilerFlags = compiler_flags,
-				SharedLibrary = App.FastDev,
-				Language = link_language,
-			};
-
-			if (bitcode_task != null) {
-				bitcode_task.NextTasks = new BuildTask[] { link_task };
-				return bitcode_task;
-			}
-			return link_task;
 		}
+
+		//IEnumerable<BuildTask> CreateManagedToAssemblyTasks (string assembly_path, Abi abi, string build_dir)
+		//{
+		//	var arch = abi.AsArchString ();
+		//	var cache_dir = Cache.Location;
+		//	var asm = Path.Combine (cache_dir, Path.GetFileName (assembly_path)) + "." + arch + ".s";
+		//	var llvm_asm = Path.Combine (cache_dir, Path.GetFileName (assembly_path)) + "." + arch + "-llvm.s";
+		//	var aot_data = Path.Combine (cache_dir, Path.GetFileNameWithoutExtension (assembly_path)) + "." + arch + ".aotdata";
+		//	string llvm_ofile, llvm_aot_ofile = "";
+		//	var is_llvm = (abi & Abi.LLVM) == Abi.LLVM;
+		//	bool assemble_llvm = is_llvm && Driver.LLVMAsmWriter;
+
+		//	if (!File.Exists (assembly_path))
+		//		throw new MonoTouchException (3004, true, "Could not AOT the assembly '{0}' because it doesn't exist.", assembly_path);
+
+		//	HashSet<string> dependencies = null;
+		//	List<string> deps = null;
+		//	List<string> outputs = new List<string> ();
+		//	var warnings = new List<Exception> ();
+
+		//	dependencies = ComputeDependencies (warnings);
+
+		//	if (warnings.Count > 0) {
+		//		ErrorHelper.Show (warnings);
+		//		ErrorHelper.Warning (3006, "Could not compute a complete dependency map for the project. This will result in slower build times because Xamarin.iOS can't properly detect what needs to be rebuilt (and what does not need to be rebuilt). Please review previous warnings for more details.");
+		//	} else {
+		//		deps = new List<string> (dependencies.ToArray ());
+		//		deps.Add (assembly_path);
+		//		deps.Add (Driver.GetAotCompiler (Target.Is64Build));
+		//	}
+
+		//	if (App.EnableLLVMOnlyBitCode) {
+		//		//
+		//		// In llvm-only mode, the AOT compiler emits a .bc file and no .s file for JITted code
+		//		//
+		//		llvm_ofile = Path.Combine (cache_dir, Path.GetFileName (assembly_path)) + "." + arch + ".bc";
+		//		outputs.Add (llvm_ofile);
+		//		llvm_aot_ofile = llvm_ofile;
+		//	} else {
+		//		llvm_ofile = Path.Combine (cache_dir, Path.GetFileName (assembly_path)) + "." + arch + "-llvm.o";
+		//		outputs.Add (asm);
+
+		//		if (is_llvm) {
+		//			if (assemble_llvm) {
+		//				llvm_aot_ofile = llvm_asm;
+		//			} else {
+		//				llvm_aot_ofile = llvm_ofile;
+		//				Target.LinkWith (llvm_ofile);
+		//			}
+		//			outputs.Add (llvm_aot_ofile);
+		//		}
+		//	}
+
+		//	if (deps != null && Application.IsUptodate (deps, outputs)) {
+		//		Driver.Log (3, "Target(s) {0} is up-to-date.", string.Join (", ", outputs.ToArray ()));
+		//		if (App.EnableLLVMOnlyBitCode)
+		//			return CreateLinkTasks (assembly_path, null, llvm_ofile, abi);
+		//		else
+		//			return CreateLinkTasks (assembly_path, asm, assemble_llvm ? llvm_asm : null, abi);
+		//	} else {
+		//		Application.TryDelete (outputs); // otherwise the next task might not detect that it will have to rebuild.
+		//		Driver.Log (3, "Target(s) {0} needs to be rebuilt.", string.Join (", ", outputs.ToArray ()));
+		//	}
+
+		//	var aotCompiler = Driver.GetAotCompiler (Target.Is64Build);
+		//	var aotArgs = Driver.GetAotArguments (assembly_path, abi, build_dir, asm, llvm_aot_ofile, aot_data);
+		//	Driver.Log (3, "Aot compiler: {0} {1}", aotCompiler, aotArgs);
+
+		//	AotDataFiles.Add (aot_data);
+
+		//	IEnumerable<BuildTask> nextTasks;
+		//	if (App.EnableLLVMOnlyBitCode)
+		//		nextTasks = CreateLinkTasks (assembly_path, null, llvm_ofile, abi);
+		//	else
+		//		nextTasks = CreateLinkTasks (assembly_path, asm, assemble_llvm ? llvm_asm : null, abi);
+
+		//	return new BuildTask [] { new AOTTask ()
+		//		{
+		//			AssemblyName = assembly_path,
+		//			ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
+		//			NextTasks = nextTasks
+		//		}
+		//	};
+		//}
+
+		//// The input file is either a .s or a .bc file
+		//// The output is an object file (.dylib or .o file).
+		//BuildTask CreateLinkTask (string assembly_name, string infile_path, Abi abi)
+		//{
+		//	var ext = BuildTarget == AssemblyBuildTarget.DynamicLibrary ? "dylib" : "o";
+		//	var ofile = Path.ChangeExtension (infile_path, ext);
+		//	var install_name = string.Empty;
+
+		//	object_files.Add (ofile);
+
+		//	if (BuildTarget == AssemblyBuildTarget.DynamicLibrary)
+		//		install_name = "lib" + Path.GetFileName (assembly_name) + ".dylib";
+
+		//	if (Application.IsUptodate (new string [] { infile_path, Driver.CompilerPath }, new string [] { ofile })) {
+		//		Driver.Log (3, "Target {0} is up-to-date.", ofile);
+		//		return null;
+		//	} else {
+		//		Application.TryDelete (ofile); // otherwise the next task might not detect that it will have to rebuild.
+		//		Driver.Log (3, "Target {0} needs to be rebuilt.", ofile);
+		//	}
+
+		//	var compiler_flags = new CompilerFlags () { Target = Target };
+
+		//	BuildTask bitcode_task = null;
+		//	BuildTask link_task = null;
+		//	string link_task_input, link_language = "";
+
+		//	if (App.EnableAsmOnlyBitCode) {
+		//		link_task_input = infile_path + ".ll";
+		//		link_language = "";
+		//		// linker_flags.Add (" -fembed-bitcode");
+
+		//		bitcode_task = new BitCodeify () {
+		//			Input = infile_path,
+		//			OutputFile = link_task_input,
+		//			Platform = App.Platform,
+		//			Abi = abi,
+		//			DeploymentTarget = App.DeploymentTarget,
+		//		};
+		//	} else {
+		//		link_task_input = infile_path;
+		//		if (infile_path.EndsWith (".s", StringComparison.Ordinal))
+		//			link_language = "assembler";
+		//	}
+
+		//	if (BuildTarget == AssemblyBuildTarget.DynamicLibrary) {
+		//		compiler_flags.AddFrameworks (Frameworks, WeakFrameworks);
+		//		compiler_flags.AddLinkWith (LinkWith, ForceLoad);
+		//		compiler_flags.LinkWithMono ();
+		//		compiler_flags.LinkWithXamarin ();
+		//		compiler_flags.AddOtherFlags (LinkerFlags);
+		//		if (Target.GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+		//			compiler_flags.AddFramework ("UIKit");
+		//		compiler_flags.LinkWithPInvokes (abi);
+		//	}
+
+		//	link_task = new LinkTask ()
+		//	{
+		//		Target = Target,
+		//		AssemblyName = assembly_name,
+		//		Abi = abi,
+		//		InputFile = link_task_input,
+		//		OutputFile = ofile,
+		//		InstallName = install_name,
+		//		CompilerFlags = compiler_flags,
+		//		SharedLibrary = App.FastDev,
+		//		Language = link_language,
+		//	};
+
+		//	if (bitcode_task != null) {
+		//		bitcode_task.NextTasks = new BuildTask[] { link_task };
+		//		return bitcode_task;
+		//	}
+		//	return link_task;
+		//}
 
 		public bool CanSymLinkForApplication ()
 		{
@@ -393,19 +607,21 @@ namespace Xamarin.Bundler {
 			return symlink_failed;
 		}
 
-		public void CreateCompilationTasks (BuildTasks tasks, string build_dir, IEnumerable<Abi> abis)
-		{
-			var assembly = Path.Combine (build_dir, FileName);
+		//public void CreateCompilationTasks (BuildTasks tasks, string build_dir, IEnumerable<Abi> abis)
+		//{
+		//	var assembly = Path.Combine (build_dir, FileName);
 
-			if (App.FastDev)
-				Dylib = Path.Combine (App.AppDirectory, Driver.Quote ("lib" + Path.GetFileName (FullPath) + ".dylib"));
+		//	//if (BuildTarget == AssemblyBuildTarget.DynamicLibrary)
+		//	//	ObjectFile = Path.Combine (App.AppDirectory, Driver.Quote ("lib" + Path.GetFileName (FullPath) + ".dylib"));
+		//	//else if (BuildTarget == AssemblyBuildTarget.Framework)
+		//	//	ObjectFile = Path.Combine (App.AppDirectory, Driver.Quote ("lib" + Path.GetFileName (FullPath) + ".o"));
 
-			foreach (var abi in abis) {
-				var task = CreateManagedToAssemblyTasks (assembly, abi, build_dir);
-				if (task != null)
-					tasks.AddRange (task);
-			}
-		}
+		//	foreach (var abi in abis) {
+		//		var task = CreateManagedToAssemblyTasks (assembly, abi, build_dir);
+		//		if (task != null)
+		//			tasks.AddRange (task);
+		//	}
+		//}
 
 		public void LoadAssembly (string filename)
 		{

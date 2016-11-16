@@ -81,29 +81,33 @@ namespace Xamarin.Utils
 			OtherFlags.UnionWith (flags);
 		}
 
-		public void LinkWithMono ()
+		public void LinkWithMono (bool dylib)
 		{
 			// link with the exact path to libmono
 			if (Application.UseMonoFramework.Value) {
 				AddFramework (Path.Combine (Driver.ProductFrameworksDirectory, "Mono.framework"));
 			} else {
-				AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.LibMono));
+				AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.GetLibMono (dylib)));
 			}
 		}
 
-		public void LinkWithXamarin ()
+		public void LinkWithXamarin (bool dylib)
 		{
-			AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.LibXamarin));
+			AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.GetLibXamarin (dylib)));
 			AddFramework ("Foundation");
 			AddOtherFlag ("-lz");
 		}
 
 		public void LinkWithPInvokes (Abi abi)
 		{
-			if (!Driver.App.FastDev || !Driver.App.RequiresPInvokeWrappers)
+			if (!Driver.App.RequiresPInvokeWrappers)
+				return;
+			
+			if (!(Driver.App.HasDynamicLibraries || Driver.App.HasFrameworks))
 				return;
 
 			AddOtherFlag (Path.Combine (Cache.Location, "libpinvokes." + abi.AsArchString () + ".dylib"));
+			AddInput (Path.Combine (Cache.Location, "libpinvokes." + abi.AsArchString () + ".dylib"));
 		}
 
 		public void AddFramework (string framework)

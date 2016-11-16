@@ -107,7 +107,6 @@ namespace Xamarin.Bundler {
 		public bool IsExtension;
 		public List<string> Extensions = new List<string> (); // A list of the extensions this app contains.
 
-		public bool FastDev;
 		public string RegistrarOutputLibrary;
 
 		public bool? EnablePie;
@@ -154,6 +153,100 @@ namespace Xamarin.Bundler {
 
 		List<Abi> abis;
 		HashSet<Abi> all_architectures; // all Abis used in the app, including extensions.
+
+		Dictionary<string, Tuple<AssemblyBuildTarget, string>> assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> ();
+
+		public bool OnlyStaticLibraries {
+			get {
+				return assembly_build_targets.All ((abt) => abt.Value.Item1 == AssemblyBuildTarget.StaticObject);
+			}
+		}
+
+		public bool HasDynamicLibraries {
+			get {
+				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
+			}
+		}
+
+		public bool HasFrameworks {
+			get {
+				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.Framework);
+			}
+		}
+
+		public void AddAssemblyBuildTarget (string value)
+		{
+			var eq_index = value.IndexOf ('=');
+			if (eq_index == -1)
+				throw ErrorHelper.CreateError (10, "Could not parse the command line arguments: --assembly-build-target={0}", value);
+
+			var assembly_name = value.Substring (0, eq_index);
+			string target, name;
+
+			var eq_index2 = value.IndexOf ('=', eq_index + 1);
+			if (eq_index2 == -1) {
+				target = value.Substring (eq_index + 1);
+				name = assembly_name;
+			} else {
+				target = value.Substring (eq_index + 1, eq_index2 - eq_index - 1);
+				name = value.Substring (eq_index2 + 1);
+			}
+
+			Console.WriteLine ($"Parsed '{value}' to assembly_name={assembly_name} target={target} name={name}");
+
+			if (assembly_build_targets.ContainsKey (assembly_name))
+				throw new Exception ();
+
+			AssemblyBuildTarget build_target;
+			switch (target) {
+			case "staticobject":
+				build_target = AssemblyBuildTarget.StaticObject;
+				break;
+			case "dynamiclibrary":
+				build_target = AssemblyBuildTarget.DynamicLibrary;
+				break;
+			case "framework":
+				build_target = AssemblyBuildTarget.Framework;
+				break;
+			default:
+				throw ErrorHelper.CreateError (10, "Could not parse the command line arguments: --assembly-build-target={0}", value);
+			}
+
+			assembly_build_targets [assembly_name] = new Tuple<AssemblyBuildTarget, string> (build_target, name);
+		}
+
+		void SelectAssemblyBuildTargets ()
+		{
+			if (IsSimulatorBuild)
+				return;
+			
+			if (assembly_build_targets.Count == 0)
+				assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, "@all"));
+
+			Tuple<AssemblyBuildTarget, string> all = null;
+			Tuple<AssemblyBuildTarget, string> rest = null;
+			
+			if (assembly_build_targets.TryGetValue ("@all", out all) && assembly_build_targets.Count != 1)
+				throw new Exception ();
+			assembly_build_targets.TryGetValue ("@rest", out rest);
+
+			foreach (var target in Targets) {
+				foreach (var assembly in target.Assemblies) {
+					Tuple<AssemblyBuildTarget, string> build_target;
+
+					if (all != null)
+						build_target = all;
+					else if (!assembly_build_targets.TryGetValue (assembly.FileName, out build_target))
+						build_target = rest;
+
+					if (build_target == null)
+						throw new Exception ();
+
+					assembly.BuildTarget = build_target.Item1;
+					assembly.BuildTargetName = build_target.Item2;
+				}
+			}
+		}
 
 		public void SetDlsymOption (string asm, bool dlsym)
 		{
@@ -739,7 +832,7 @@ namespace Xamarin.Bundler {
 				throw new MonoTouchException (74, true, "Xamarin.iOS {0} does not support a deployment target of {1} for {3} (the maximum is {2}). Please select an older deployment target in your project's Info.plist or upgrade to a newer version of Xamarin.iOS.", Constants.Version, DeploymentTarget, Xamarin.SdkVersions.GetVersion (Platform), PlatformName);
 			}
 
-			if (Platform == ApplePlatform.iOS && FastDev && DeploymentTarget.Major < 8) {
+			if (Platform == ApplePlatform.iOS && (HasDynamicLibraries || HasFrameworks) && DeploymentTarget.Major < 8) {
 				ErrorHelper.Warning (78, "Incremental builds are enabled with a deployment target < 8.0 (currently {0}). This is not supported (the resulting application will not launch on iOS 9), so the deployment target will be set to 8.0.", DeploymentTarget);
 				DeploymentTarget = new Version (8, 0);
 			}
@@ -878,12 +971,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		void ManagedLink ()
-		{
-			foreach (var target in Targets)
-				target.ManagedLink ();
-		}
-
 		void BuildApp ()
 		{
 			foreach (var target in Targets)	{
@@ -924,6 +1011,8 @@ namespace Xamarin.Bundler {
 				}
 			}
 
+			SelectAssemblyBuildTargets ();
+
 			foreach (var target in Targets) {
 				if (target.CanWeSymlinkTheApplication ())
 					continue;
@@ -957,25 +1046,26 @@ namespace Xamarin.Bundler {
 		void BuildFatSharedLibraries ()
 		{
 			// Create shared fat libraries.
-			if (!FastDev)
+			if (!HasDynamicLibraries && !HasFrameworks)
 				return;
 
 			var hash = new Dictionary<string, List<string>> ();
 			foreach (var target in Targets) {
-				foreach (var a in target.Assemblies) {
-					List<string> dylibs;
+				throw new NotImplementedException ();
+				//foreach (var a in target.Assemblies) {
+				//	List<string> dylibs;
 
-					if (a.Dylibs == null || a.Dylibs.Count () == 0)
-						continue;
+				//	if (a.ObjectFiles == null || a.ObjectFiles.Count () == 0)
+				//		continue;
 
-					if (!hash.TryGetValue (a.Dylib, out dylibs)) {
-						dylibs = new List<string> ();
-						hash [a.Dylib] = dylibs;
-					}
-					dylibs.AddRange (a.Dylibs);
+				//	if (!hash.TryGetValue (a.ObjectFile, out dylibs)) {
+				//		dylibs = new List<string> ();
+				//		hash [a.ObjectFile] = dylibs;
+				//	}
+				//	dylibs.AddRange (a.ObjectFiles);
 
-					target.LinkWith (a.Dylib);
-				}
+				//	target.LinkWith (a.ObjectFile);
+				//}
 
 				foreach (var dylib in target.LibrariesToShip) {
 					List<string> dylibs;
@@ -1010,13 +1100,14 @@ namespace Xamarin.Bundler {
 			if (!IsDeviceBuild)
 				return;
 
-			foreach (var target in Targets) {
-				foreach (var a in target.Assemblies) {
-					foreach (var data in a.AotDataFiles) {
-						Application.UpdateFile (data, Path.Combine (target.AppTargetDirectory, Path.GetFileName (data)));
-					}
-				}
-			}
+			throw new NotImplementedException ();
+			//foreach (var target in Targets) {
+			//	foreach (var a in target.Assemblies) {
+			//		foreach (var data in a.AotInfo.AotDataFiles) {
+			//			Application.UpdateFile (data, Path.Combine (target.AppTargetDirectory, Path.GetFileName (data)));
+			//		}
+			//	}
+			//}
 		}
 
 		public static void CopyMSymData (string src, string dest)
@@ -1056,9 +1147,9 @@ namespace Xamarin.Bundler {
 
 		void BuildFinalExecutable ()
 		{
-			if (FastDev) {
+			if (HasDynamicLibraries || HasFrameworks) {
 				var libdir = Path.Combine (Driver.ProductSdkDirectory, "usr", "lib");
-				var libmono_name = LibMono;
+				var libmono_name = GetLibMono (true);
 				if (!UseMonoFramework.Value) {
 					var libmono_target = Path.Combine (AppDirectory, libmono_name);
 					var libmono_source = Path.Combine (libdir, libmono_name);
@@ -1071,8 +1162,8 @@ namespace Xamarin.Bundler {
 					Application.UpdateFile (libprofiler_source, libprofiler_target);
 
 				// Copy libXamarin.dylib to the app
-				var libxamarin_target = Path.Combine (AppDirectory, LibXamarin);
-				Application.UpdateFile (Path.Combine (Driver.MonoTouchLibDirectory, LibXamarin), libxamarin_target);
+				var libxamarin_target = Path.Combine (AppDirectory, GetLibXamarin (true));
+				Application.UpdateFile (Path.Combine (Driver.MonoTouchLibDirectory, GetLibXamarin (true)), libxamarin_target);
 
 				if (UseMonoFramework.Value) {
 					if (EnableProfiling)
@@ -1196,23 +1287,21 @@ namespace Xamarin.Bundler {
 			Driver.CalculateCompilerPath ();
 		}
 
-		public string LibMono {
-			get {
-				if (FastDev) {
-					return "libmonosgen-2.0.dylib";
-				} else {
-					return "libmonosgen-2.0.a";
-				}
+		public string GetLibMono (bool dylib)
+		{
+			if (dylib) {
+				return "libmonosgen-2.0.dylib";
+			} else {
+				return "libmonosgen-2.0.a";
 			}
 		}
 
-		public string LibXamarin {
-			get {
-				if (FastDev) {
-					return EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib";
-				} else {
-					return EnableDebug ? "libxamarin-debug.a" : "libxamarin.a";
-				}
+		public string GetLibXamarin (bool dylib)
+		{
+			if (dylib) {
+				return EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib";
+			} else {
+				return EnableDebug ? "libxamarin-debug.a" : "libxamarin.a";
 			}
 		}
 
@@ -1790,7 +1879,7 @@ namespace Xamarin.Bundler {
 		protected override void Build ()
 		{
 			if (Compile () != 0)
-				throw new MonoTouchException (5103, true, "Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com", InputFile);
+				throw new MonoTouchException (5103, true, "Failed to compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", InputFiles.ToArray ()));
 		}
 	}
 
@@ -1802,10 +1891,14 @@ namespace Xamarin.Bundler {
 				Create (tasks, abi, target, ifile);
 		}
 
+		// The library (.a/.framework/.dylib) that contains the P/Invokes must be loaded before any AOT-compiled library
+		// (because P/Invokes might be direct references).
+		// That means libxamarin.dylib must be a framework.
 		public static void Create (List<BuildTask> tasks, Abi abi, Target target, string ifile)
 		{
 			var arch = abi.AsArchString ();
-			var ext = Driver.App.FastDev ? ".dylib" : ".o";
+			var is_framework = Driver.App.HasFrameworks;
+			var is_shared_library = is_framework || Driver.App.HasDynamicLibraries;
 			var ofile = Path.Combine (Cache.Location, "lib" + Path.GetFileNameWithoutExtension (ifile) + "." + arch + ext);
 
 			if (!Application.IsUptodate (ifile, ofile)) {
@@ -1815,13 +1908,17 @@ namespace Xamarin.Bundler {
 					Abi = abi,
 					InputFile = ifile,
 					OutputFile = ofile,
-					SharedLibrary = Driver.App.FastDev,
+					SharedLibrary = is_shared_library,
 					Language = "objective-c++",
 				};
-				if (Driver.App.FastDev) {
-					task.InstallName = "lib" + Path.GetFileNameWithoutExtension (ifile) + ext;
+				if (is_shared_library) {
+					if (is_framework) {
+						task.InstallName = "lib" + Path.GetFileNameWithoutExtension (ifile) + ".dylib";
+					} else {
+						task.InstallName = string.Format ("@rpath/{0}.framework/{0}", Path.GetFileNameWithoutExtension (ifile));
+					}
 					task.CompilerFlags.AddFramework ("Foundation");
-					task.CompilerFlags.LinkWithXamarin ();
+					task.CompilerFlags.LinkWithXamarin (is_shared_library);
 				}
 				tasks.Add (task);
 			} else {
@@ -1915,12 +2012,21 @@ namespace Xamarin.Bundler {
 		public Target Target;
 		public Application App { get { return Target.App; } }
 		public bool SharedLibrary;
-		public string InputFile;
+		public List<string> InputFiles;
 		public string OutputFile;
 		public Abi Abi;
 		public string AssemblyName;
 		public string InstallName;
 		public string Language;
+
+		public string InputFile {
+			set {
+				if (InputFiles != null)
+					throw new Exception ();
+				InputFiles = new List<string> ();
+				InputFiles.Add (value);
+			}
+		}
 
 		CompilerFlags compiler_flags;
 		public CompilerFlags CompilerFlags {
@@ -1948,12 +2054,12 @@ namespace Xamarin.Bundler {
 				flags.AddOtherFlag ("-mthumb");
 		}
 
-		public static void GetCompilerFlags (CompilerFlags flags, string ifile, string language = null)
+		public static void GetCompilerFlags (CompilerFlags flags, bool is_assembler, string language = null)
 		{
-			if (string.IsNullOrEmpty (ifile) || !ifile.EndsWith (".s", StringComparison.Ordinal))
+			if (!is_assembler)
 				flags.AddOtherFlag ("-gdwarf-2");
 
-			if (!string.IsNullOrEmpty (ifile) && !ifile.EndsWith (".s", StringComparison.Ordinal)) {
+			if (!is_assembler) {
 				if (string.IsNullOrEmpty (language) || !language.Contains ("++")) {
 					// error: invalid argument '-std=c99' not allowed with 'C++/ObjC++'
 					flags.AddOtherFlag ("-std=c99");
@@ -1964,9 +2070,9 @@ namespace Xamarin.Bundler {
 			flags.AddOtherFlag ("-Qunused-arguments"); // don't complain about unused arguments (clang reports -std=c99 and -Isomething as unused).
 		}
 		
-		public static void GetSimulatorCompilerFlags (CompilerFlags flags, string ifile, Application app, string language = null)
+		public static void GetSimulatorCompilerFlags (CompilerFlags flags, bool is_assembler, Application app, string language = null)
 		{
-			GetCompilerFlags (flags, ifile, language);
+			GetCompilerFlags (flags, is_assembler, language);
 
 			if (Driver.SDKVersion == new Version ())
 				throw new MonoTouchException (25, true, "No SDK version was provided. Please add --sdk=X.Y to specify which iOS SDK should be used to build your application.");
@@ -1998,9 +2104,9 @@ namespace Xamarin.Bundler {
 				flags.AddDefine (defines.Replace (" ", String.Empty));
 		}
 		
-		void GetDeviceCompilerFlags (CompilerFlags flags, string ifile)
+		void GetDeviceCompilerFlags (CompilerFlags flags, bool is_assembler)
 		{
-			GetCompilerFlags (flags, ifile, Language);
+			GetCompilerFlags (flags, is_assembler, Language);
 			
 			flags.AddOtherFlag ($"-m{Driver.TargetMinSdkName}-version-min={App.DeploymentTarget.ToString ()}");
 
@@ -2017,7 +2123,7 @@ namespace Xamarin.Bundler {
 			flags.AddOtherFlag ("-shared");
 			if (!App.EnableMarkerOnlyBitCode)
 				flags.AddOtherFlag ("-read_only_relocs suppress");
-			flags.LinkWithMono ();
+			flags.LinkWithMono (true);
 			flags.AddOtherFlag ("-install_name " + Driver.Quote ($"@executable_path/{install_name}"));
 			flags.AddOtherFlag ("-fapplication-extension"); // fixes this: warning MT5203: Native linking warning: warning: linking against dylib not safe for use in application extensions: [..]/actionextension.dll.arm64.dylib
 		}
@@ -2040,10 +2146,11 @@ namespace Xamarin.Bundler {
 
 		public int Compile ()
 		{
+			var is_assembler = InputFiles.Count > 0 && InputFiles [0].EndsWith (".s", StringComparison.Ordinal);
 			if (App.IsDeviceBuild) {
-				GetDeviceCompilerFlags (CompilerFlags, InputFile);
+				GetDeviceCompilerFlags (CompilerFlags, is_assembler);
 			} else {
-				GetSimulatorCompilerFlags (CompilerFlags, InputFile, App, Language);
+				GetSimulatorCompilerFlags (CompilerFlags, is_assembler, App, Language);
 			}
 
 			if (App.EnableBitCode)
@@ -2064,7 +2171,8 @@ namespace Xamarin.Bundler {
 			if (!string.IsNullOrEmpty (Language))
 				CompilerFlags.AddOtherFlag ($"-x {Language}");
 
-			CompilerFlags.AddOtherFlag (Driver.Quote (InputFile));
+			foreach (var input in InputFiles)
+				CompilerFlags.AddOtherFlag (Driver.Quote (input));
 
 			var rv = Driver.RunCommand (Driver.CompilerPath, CompilerFlags.ToString (), null, null);
 			

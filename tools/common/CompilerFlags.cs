@@ -81,19 +81,36 @@ namespace Xamarin.Utils
 			OtherFlags.UnionWith (flags);
 		}
 
-		public void LinkWithMono (bool dylib)
+		public void LinkWithMono ()
 		{
-			// link with the exact path to libmono
-			if (Application.UseMonoFramework.Value) {
-				AddFramework (Path.Combine (Driver.ProductFrameworksDirectory, "Mono.framework"));
-			} else {
-				AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.GetLibMono (dylib)));
+			var mode = Target.App.LibMonoLinkMode;
+			switch (mode) {
+			case AssemblyBuildTarget.DynamicLibrary:
+			case AssemblyBuildTarget.StaticObject:
+				AddLinkWith (Application.GetLibMono (mode));
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddFramework (Application.GetLibMono (mode));
+				break;
+			default:
+				throw new Exception ();
 			}
 		}
 
-		public void LinkWithXamarin (bool dylib)
+		public void LinkWithXamarin ()
 		{
-			AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.GetLibXamarin (dylib)));
+			var mode = Target.App.LibXamarinLinkMode;
+			switch (mode) {
+			case AssemblyBuildTarget.DynamicLibrary:
+			case AssemblyBuildTarget.StaticObject:
+				AddLinkWith (Application.GetLibXamarin (mode));
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddFramework (Application.GetLibXamarin (mode));
+				break;
+			default:
+				throw new Exception ();
+			}
 			AddFramework ("Foundation");
 			AddOtherFlag ("-lz");
 		}
@@ -102,12 +119,21 @@ namespace Xamarin.Utils
 		{
 			if (!Driver.App.RequiresPInvokeWrappers)
 				return;
-			
-			if (!(Driver.App.HasDynamicLibraries || Driver.App.HasFrameworks))
-				return;
 
-			AddOtherFlag (Path.Combine (Cache.Location, "libpinvokes." + abi.AsArchString () + ".dylib"));
-			AddInput (Path.Combine (Cache.Location, "libpinvokes." + abi.AsArchString () + ".dylib"));
+			var mode = Driver.App.LibPInvokesLinkMode;
+			switch (mode) {
+			case AssemblyBuildTarget.StaticObject:
+				AddOtherFlag (Path.Combine (Cache.Location, abi.AsArchString (), "libpinvokes.a"));
+				break;
+			case AssemblyBuildTarget.DynamicLibrary:
+				AddOtherFlag (Path.Combine (Cache.Location, abi.AsArchString (), "libpinvokes.dylib"));
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddFramework (Path.Combine (Cache.Location, abi.AsArchString (), "Xamarin.PInvokes.framework"));
+				break;
+			default:
+				throw new Exception ();
+			}
 		}
 
 		public void AddFramework (string framework)
@@ -247,6 +273,12 @@ namespace Xamarin.Utils
 			var args = new StringBuilder ();
 			WriteArguments (args);
 			return args.ToString ();
+		}
+
+		public void PopulateInputs ()
+		{
+			var args = new StringBuilder ();
+			WriteArguments (args);
 		}
 	}
 }

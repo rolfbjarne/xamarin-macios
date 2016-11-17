@@ -18,12 +18,13 @@ namespace Xamarin.Bundler {
 		Framework,
 	}
 
-	abstract class AssemblyTarget
+	class AssemblyDynamicLibraryTarget
 	{
 		public string Name;
 		public Target Target { get { return Assemblies [0].Target; } }
 		public List<Assembly> Assemblies = new List<Assembly> ();
-		public abstract void CreateTasks (List<BuildTask> tasks, Abi abi);
+		public string OutputPath;
+		public bool IsFramework;
 
 		public string ComputedBaseName {
 			get {
@@ -41,30 +42,19 @@ namespace Xamarin.Bundler {
 				}
 			}
 		}
-	}
 
-	class AssemblyFrameworkTarget : AssemblyTarget
-	{
-		public override void CreateTasks (List<BuildTask> tasks, Abi abi)
-		{
-		}
-	}
-
-	class AssemblyDynamicLibraryTarget : AssemblyTarget
-	{
-		public string OutputPath;
-
-		public override void CreateTasks (List<BuildTask> tasks, Abi abi)
+		public void CreateTasks (List<BuildTask> tasks, Abi abi)
 		{
 			var arch = abi.AsArchString ();
 			var linker_inputs = new List<string> ();
 			foreach (var a in Assemblies) {
+				linker_inputs.AddRange (a.AotInfos [abi].AsmFiles);
 				linker_inputs.AddRange (a.AotInfos [abi].ObjectFiles);
 				linker_inputs.AddRange (a.AotInfos [abi].BitcodeFiles);
 			}
 			var computedName = ComputedBaseName;
-			var linker_output = Path.Combine (Target.BuildDirectory, "lib" + computedName + "." + arch + ".dylib");
-			var install_name = "lib" + computedName + ".dylib";
+			var install_name = IsFramework ? "@rpath/" + computedName : "lib" + computedName + ".dylib";
+			var linker_output = Path.Combine (Cache.Location, arch, "lib" + computedName + ".dylib");
 
 			var compiler_flags = new CompilerFlags () {
 				Target = Target,
@@ -75,14 +65,15 @@ namespace Xamarin.Bundler {
 				compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
 				compiler_flags.AddOtherFlags (a.LinkerFlags);
 			}
-			compiler_flags.LinkWithMono (true);
-			compiler_flags.LinkWithXamarin (true);
+			compiler_flags.LinkWithMono ();
+			compiler_flags.LinkWithXamarin ();
 			if (Target.GetEntryPoints ().ContainsKey ("UIApplicationMain"))
 				compiler_flags.AddFramework ("UIKit");
 			compiler_flags.LinkWithPInvokes (abi);
 
 			// Check if we really need to 
 			var outputs = new string [] { linker_output };
+			compiler_flags.PopulateInputs ();
 			if (Application.IsUptodate (compiler_flags.Inputs, outputs))
 				return;
 			Application.TryDelete (outputs);
@@ -313,11 +304,14 @@ namespace Xamarin.Bundler {
 			var build_dir = Target.BuildDirectory;
 			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
 			var arch = abi.AsArchString ();
-			var asm = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + ".s";
-			var aot_data = Path.Combine (Cache.Location, Path.GetFileNameWithoutExtension (assembly_path)) + "." + arch + ".aotdata";
+			var output_dir = Path.Combine (Cache.Location, arch);
+			var asm = Path.Combine (output_dir, Path.GetFileName (assembly_path)) + ".s";
+			var aot_data = Path.Combine (output_dir, Path.GetFileNameWithoutExtension (assembly_path)) + "." + arch + ".aotdata";
 			var llvm_aot_ofile = "";
 			var asm_output = "";
 			var is_llvm = (abi & Abi.LLVM) == Abi.LLVM;
+
+			Directory.CreateDirectory (output_dir);
 
 			if (!File.Exists (assembly_path))
 				throw new MonoTouchException (3004, true, "Could not AOT the assembly '{0}' because it doesn't exist.", assembly_path);
@@ -330,14 +324,14 @@ namespace Xamarin.Bundler {
 
 			if (App.EnableLLVMOnlyBitCode) {
 				// In llvm-only mode, the AOT compiler emits a .bc file and no .s file for JITted code
-				llvm_aot_ofile = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + ".bc";
+				llvm_aot_ofile = Path.Combine (output_dir, Path.GetFileName (assembly_path)) + ".bc";
 				aotInfo.BitcodeFiles.Add (llvm_aot_ofile);
 			} else if (is_llvm) {
 				if (Driver.LLVMAsmWriter) {
-					llvm_aot_ofile = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + "-llvm.s";
+					llvm_aot_ofile = Path.Combine (output_dir, Path.GetFileName (assembly_path)) + "-llvm.s";
 					aotInfo.AsmFiles.Add (llvm_aot_ofile);
 				} else {
-					llvm_aot_ofile = Path.Combine (Cache.Location, Path.GetFileName (assembly_path)) + "." + arch + "-llvm.o";
+					llvm_aot_ofile = Path.Combine (output_dir, Path.GetFileName (assembly_path)) + "-llvm.o";
 					aotInfo.ObjectFiles.Add (llvm_aot_ofile);
 				}
 				asm_output = asm;

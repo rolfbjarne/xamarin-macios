@@ -127,10 +127,16 @@ $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/usr/lib/%.a: .libs/$(1)/%.a | $(IOS_
 	$(Q) install -m 0644 $$< $$@
 
 $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework/Xamarin: .libs/$(1)/libxamarin.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework
-	$(Q) install -m 0755 $$< $$@
+	$(Q) cp $$< $$@.tmp
+	$(Q) install_name_tool -id @rpath/$$(notdir $$@).framework/$$(notdir $$@) $$@.tmp
+	$(Q) install_name_tool -change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono $$@.tmp
+	$(Q) mv $$@.tmp $$@
 
 $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin-debug.framework/Xamarin-debug: .libs/$(1)/libxamarin-debug.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin-debug.framework
-	$(Q) install -m 0755 $$< $$@
+	$(Q) cp $$< $$@.tmp
+	$(Q) install_name_tool -id @rpath/$$(notdir $$@).framework/$$(notdir $$@) $$@.tmp
+	$(Q) install_name_tool -change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono $$@.tmp
+	$(Q) mv $$@.tmp $$@
 
 $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/%.framework/Info.plist: Xamarin.framework-$(1).Info.plist | $(IOS_DESTDIR)$$(XAMARIN_$(4)SIMULATOR_SDK)/Frameworks/Xamarin.framework
 	$(Q) sed 's/@BUNDLE_EXECUTABLE@/$$*/' $$< > $$@
@@ -140,10 +146,16 @@ $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/usr/lib/%.a: .libs/$(1)/%.a | $(IOS_DESTDIR
 	$(Q) install -m 0644 $$< $$@
 
 $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework/Xamarin: .libs/$(1)/libxamarin.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework
-	$(Q) install -m 0755 $$< $$@
+	$(Q) cp $$< $$@.tmp
+	$(Q) install_name_tool -id @rpath/$$(notdir $$@).framework/$$(notdir $$@) $$@.tmp
+	$(Q) install_name_tool -change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono $$@.tmp
+	$(Q) mv $$@.tmp $$@
 
 $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin-debug.framework/Xamarin-debug: .libs/$(1)/libxamarin-debug.dylib | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin-debug.framework
-	$(Q) install -m 0755 $$< $$@
+	$(Q) cp $$< $$@.tmp
+	$(Q) install_name_tool -id @rpath/$$(notdir $$@).framework/$$(notdir $$@) $$@.tmp
+	$(Q) install_name_tool -change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono $$@.tmp
+	$(Q) mv $$@.tmp $$@
 
 $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/%.framework/Info.plist: Xamarin.framework-$(1).Info.plist | $(IOS_DESTDIR)$$(XAMARIN_$(5)OS_SDK)/Frameworks/Xamarin.framework
 	$(Q) sed 's/@BUNDLE_EXECUTABLE@/$$*/' $$< > $$@

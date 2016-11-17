@@ -37,7 +37,7 @@ namespace Xamarin.Bundler
 		// Note that each 'Target' can have multiple abis: armv7+armv7s for instance.
 		public List<Abi> Abis;
 
-		Dictionary<string, List<string>> bundle_files = new Dictionary<string, List<string>> ();
+		public Dictionary<string, List<string>> BundleFiles = new Dictionary<string, List<string>> ();
 
 		CompilerFlags linker_flags;
 
@@ -58,19 +58,43 @@ namespace Xamarin.Bundler
 		public bool Is32Build { get { return Application.IsArchEnabled (Abis, Abi.Arch32Mask); } } // If we're targetting a 32 bit arch for this target.
 		public bool Is64Build { get { return Application.IsArchEnabled (Abis, Abi.Arch64Mask); } } // If we're targetting a 64 bit arch for this target.
 
-		List<string> link_with_and_ship = new List<string> ();
-		public IEnumerable<string> LibrariesToShip { get { return link_with_and_ship; } }
-
 		public void AddToBundle (string source, string bundle_path = null)
 		{
 			List<string> sources;
 
-			if (bundle_path == null)
-				bundle_path = Path.GetFileName (source);
+			if (bundle_path == null) {
+				if (source.EndsWith (".framework", StringComparison.Ordinal)) {
+					var bundle_name = Path.GetFileNameWithoutExtension (source);
+					bundle_path = $"Frameworks/{bundle_name}.framework/{bundle_name}";
+					source = Path.Combine (source, bundle_name);
+				} else {
+					bundle_path = Path.GetFileName (source);
+				}
+			}
 
-			if (!bundle_files.TryGetValue (bundle_path, out sources))
-				bundle_files [bundle_path] = sources = new List<string> ();
+			if (!BundleFiles.TryGetValue (bundle_path, out sources))
+				BundleFiles [bundle_path] = sources = new List<string> ();
 			sources.Add (source);
+		}
+
+		public void LinkWithStaticLibrary (string path)
+		{
+			linker_flags.AddLinkWith (path);
+		}
+
+		public void LinkWithStaticLibrary (IEnumerable<string> paths)
+		{
+			linker_flags.AddLinkWith (paths);
+		}
+
+		public void LinkWithFramework (string path)
+		{
+			linker_flags.AddFramework (path);
+		}
+
+		public void LinkWithDynamicLibrary (string path)
+		{
+			linker_flags.AddLinkWith (path);
 		}
 
 		PInvokeWrapperGenerator pinvoke_state;
@@ -139,6 +163,7 @@ namespace Xamarin.Bundler
 			}
 
 			linker_flags = new CompilerFlags ();
+			linker_flags.Target = this;
 		}
 
 		// This is to load the symbols for all assemblies, so that we can give better error messages
@@ -729,6 +754,8 @@ namespace Xamarin.Bundler
 					var a = sortedAssemblies [i];
 					switch (a.BuildTarget) {
 					case AssemblyBuildTarget.StaticObject:
+						LinkWithStaticLibrary (a.AotInfos [abi].ObjectFiles);
+						LinkWithStaticLibrary (a.AotInfos [abi].BitcodeFiles);
 						break; // No need to do anything else.
 					case AssemblyBuildTarget.Framework:
 					case AssemblyBuildTarget.DynamicLibrary:
@@ -750,7 +777,12 @@ namespace Xamarin.Bundler
 				foreach (var dylib_target in dylib_targets.Values) {
 					Driver.Log (5, "Building {0} with {1}", dylib_target.Name, string.Join (", ", dylib_target.Assemblies.Select ((arg1) => Path.GetFileNameWithoutExtension (arg1.FileName)).ToArray ()));
 					dylib_target.CreateTasks (compile_tasks, abi);
-					AddToBundle (dylib_target.OutputPath);
+					if (dylib_target.IsFramework) {
+						AddToBundle (dylib_target.OutputPath, $"Frameworks/{dylib_target.ComputedBaseName}.framework/{dylib_target.ComputedBaseName}");
+					} else {
+						AddToBundle (dylib_target.OutputPath);
+					}
+					LinkWithDynamicLibrary (dylib_target.OutputPath);
 				}
 
 				compile_tasks.ExecuteInParallel (); // REMOVE
@@ -853,7 +885,7 @@ namespace Xamarin.Bundler
 			// Collect all LinkWith flags and frameworks from all assemblies.
 			foreach (var a in Assemblies) {
 				linker_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
-				if (!(App.HasDynamicLibraries || App.HasFrameworks) || App.IsSimulatorBuild)
+				if (App.OnlyStaticLibraries || App.IsSimulatorBuild)
 					linker_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
 				linker_flags.AddOtherFlags (a.LinkerFlags);
 			}
@@ -884,7 +916,9 @@ namespace Xamarin.Bundler
 				CompileTask.GetSimulatorCompilerFlags (linker_flags, false, App);
 			}
 			linker_flags.LinkWithMono ();
+			AddToBundle (App.GetLibMono (App.LibMonoLinkMode));
 			linker_flags.LinkWithXamarin ();
+			AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode));
 
 			linker_flags.AddOtherFlag ($"-o {Driver.Quote (Executable)}");
 
@@ -934,6 +968,7 @@ namespace Xamarin.Bundler
 				} else {
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
 					linker_flags.AddLinkWith (libprofiler);
+					AddToBundle (libprofiler);
 				}
 			}
 

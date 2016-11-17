@@ -31,7 +31,7 @@ namespace Xamarin.Bundler {
 				switch (Name) {
 				case "@all":
 				case "@rest":
-					return Path.GetFileNameWithoutExtension (Target.App.AssemblyName);
+					return Path.GetFileNameWithoutExtension (Target.App.AssemblyName) + "X";
 				case null:
 				case "":
 					if (Assemblies.Count != 1)
@@ -53,8 +53,8 @@ namespace Xamarin.Bundler {
 				linker_inputs.AddRange (a.AotInfos [abi].BitcodeFiles);
 			}
 			var computedName = ComputedBaseName;
-			var install_name = IsFramework ? "@rpath/" + computedName : "lib" + computedName + ".dylib";
-			var linker_output = Path.Combine (Cache.Location, arch, "lib" + computedName + ".dylib");
+			var install_name = IsFramework ? $"@rpath/{computedName}.framework/{computedName}" : $"@executable_path/lib{computedName}.dylib";
+			var linker_output = Path.Combine (Cache.Location, arch, $"lib{computedName}.dylib");
 
 			var compiler_flags = new CompilerFlags () {
 				Target = Target,
@@ -71,6 +71,8 @@ namespace Xamarin.Bundler {
 				compiler_flags.AddFramework ("UIKit");
 			compiler_flags.LinkWithPInvokes (abi);
 
+			OutputPath = linker_output;
+
 			// Check if we really need to 
 			var outputs = new string [] { linker_output };
 			compiler_flags.PopulateInputs ();
@@ -81,7 +83,7 @@ namespace Xamarin.Bundler {
 			tasks.Add (new LinkTask ()
 			{
 				Target = Target,
-				AssemblyName = install_name,
+				AssemblyName = computedName,
 				Abi = abi,
 				InputFiles = linker_inputs,
 				OutputFile = linker_output,
@@ -89,8 +91,6 @@ namespace Xamarin.Bundler {
 				CompilerFlags = compiler_flags,
 				SharedLibrary = true,
 			});
-
-			OutputPath = linker_output;
 		}
 	}
 

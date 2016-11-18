@@ -800,7 +800,7 @@ xamarin_open_assembly (const char *name)
 		assembly = mono_assembly_open (name, NULL);
 		if (assembly == NULL) {
 			PRINT (PRODUCT ": Could not find the required assembly '%s' in the app. This is usually fixed by cleaning and rebuilding your project; if that doesn't work, please file a bug report: http://bugzilla.xamarin.com", name);
-			exit (1);
+			abort ();
 		}
 		return assembly;
 	}
@@ -829,19 +829,19 @@ xamarin_open_assembly (const char *name)
 			return assembly;
 		
 		PRINT (PRODUCT ": Could not find the assembly '%s' in the app nor as an already loaded assembly. This is usually fixed by cleaning and rebuilding your project; if that doesn't work, please file a bug report: http://bugzilla.xamarin.com", name);
-		exit (1);
+		abort ();
 	}
 #endif
 
 	if (!xamarin_file_exists (path)) {
 		PRINT (PRODUCT ": Could not find the assembly '%s' in the app. This is usually fixed by cleaning and rebuilding your project; if that doesn't work, please file a bug report: http://bugzilla.xamarin.com", name);
-		exit (1);
+		abort ();
 	}
 
 	assembly = mono_assembly_open (path, NULL);
 	if (assembly == NULL) {
 		PRINT (PRODUCT ": Could not find the required assembly '%s' in the app. This is usually fixed by cleaning and rebuilding your project; if that doesn't work, please file a bug report: http://bugzilla.xamarin.com", name);
-		exit (1);
+		abort ();
 	}
 		
 	return assembly;

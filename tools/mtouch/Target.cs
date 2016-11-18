@@ -162,8 +162,7 @@ namespace Xamarin.Bundler
 				}
 			}
 
-			linker_flags = new CompilerFlags ();
-			linker_flags.Target = this;
+			linker_flags = new CompilerFlags (this);
 		}
 
 		// This is to load the symbols for all assemblies, so that we can give better error messages
@@ -746,43 +745,93 @@ namespace Xamarin.Bundler
 					throw new Exception ();
 			}
 
+			// Group the assemblies according to their target name, and build them all.
+			var grouped = sortedAssemblies.GroupBy ((arg) => arg.BuildTargetName);
 			foreach (var abi in Abis) {
-				var dylib_targets = new Dictionary<string, AssemblyDynamicLibraryTarget> ();
+				foreach (var @group in grouped) {
+					var name = @group.Key;
+					var assemblies = @group.AsEnumerable ().ToArray ();
 
-				// Collect the assemblies to put in each dylib/framework.
-				for (int i = 0; i < sortedAssemblies.Count; i++) {
-					var a = sortedAssemblies [i];
-					switch (a.BuildTarget) {
+					Driver.Log (5, "Building {0} with {1}", name, string.Join (", ", assemblies.Select ((arg1) => Path.GetFileNameWithoutExtension (arg1.FileName)).ToArray ()));
+
+					// We ensure elsewhere that all assemblies in a group have the same build target.
+					var build_target = assemblies [0].BuildTarget;
+					string install_name;
+					string compiler_output;
+					var compiler_flags = new CompilerFlags (this);
+
+					foreach (var a in assemblies) {
+						compiler_flags.AddSourceFiles (a.AotInfos [abi].AsmFiles);
+						compiler_flags.AddSourceFiles (a.AotInfos [abi].ObjectFiles);
+						compiler_flags.AddSourceFiles (a.AotInfos [abi].BitcodeFiles);
+					}
+
+					var arch = abi.AsArchString ();
+					switch (build_target) {
 					case AssemblyBuildTarget.StaticObject:
-						LinkWithStaticLibrary (a.AotInfos [abi].ObjectFiles);
-						LinkWithStaticLibrary (a.AotInfos [abi].BitcodeFiles);
-						break; // No need to do anything else.
-					case AssemblyBuildTarget.Framework:
+						install_name = null;
+						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.o");
+						break;
 					case AssemblyBuildTarget.DynamicLibrary:
-						AssemblyDynamicLibraryTarget assembly_target;
-						if (!dylib_targets.TryGetValue (a.BuildTargetName, out assembly_target))
-							dylib_targets [a.BuildTargetName] = assembly_target = new AssemblyDynamicLibraryTarget ()
-							{
-								Name = a.BuildTargetName,
-								IsFramework = a.BuildTarget == AssemblyBuildTarget.Framework,
-							};
-						assembly_target.Assemblies.Add (a);
+						install_name = $"@executable_path/lib{name}.dylib";
+						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib");
+						break;
+					case AssemblyBuildTarget.Framework:
+						install_name = $"@rpath/{name}.framework/{name}";
+						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib"); // frameworks are almost identical to dylibs, so this is expected.
 						break;
 					default:
 						throw new Exception ();
 					}
-				}
 
-				// Build the dylibs and frameworks.
-				foreach (var dylib_target in dylib_targets.Values) {
-					Driver.Log (5, "Building {0} with {1}", dylib_target.Name, string.Join (", ", dylib_target.Assemblies.Select ((arg1) => Path.GetFileNameWithoutExtension (arg1.FileName)).ToArray ()));
-					dylib_target.CreateTasks (compile_tasks, abi);
-					if (dylib_target.IsFramework) {
-						AddToBundle (dylib_target.OutputPath, $"Frameworks/{dylib_target.ComputedBaseName}.framework/{dylib_target.ComputedBaseName}");
-					} else {
-						AddToBundle (dylib_target.OutputPath);
+					if (build_target != AssemblyBuildTarget.StaticObject) {
+						foreach (var a in assemblies) {
+							compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
+							compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
+							compiler_flags.AddOtherFlags (a.LinkerFlags);
+						}
+						compiler_flags.LinkWithMono ();
+						compiler_flags.LinkWithXamarin ();
+						if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+							compiler_flags.AddFramework ("UIKit");
+						compiler_flags.LinkWithPInvokes (abi);
 					}
-					LinkWithDynamicLibrary (dylib_target.OutputPath);
+
+					// Check if we really need to 
+					var outputs = new string [] { compiler_output };
+					compiler_flags.PopulateInputs ();
+					if (!Application.IsUptodate (compiler_flags.Inputs, outputs)) {
+						Application.TryDelete (outputs);
+						compile_tasks.Add (new LinkTask ()
+						{
+							Target = this,
+							AssemblyName = name,
+							Abi = abi,
+							OutputFile = compiler_output,
+							InstallName = install_name,
+							CompilerFlags = compiler_flags,
+							Language = "assembler",
+							SharedLibrary = build_target != AssemblyBuildTarget.StaticObject,
+						});
+					} else {
+						Driver.Log ("Target {0} is up-to-date.", compiler_output);
+					}
+
+					switch (build_target) {
+					case AssemblyBuildTarget.StaticObject:
+						LinkWithStaticLibrary (compiler_output);
+						break;
+					case AssemblyBuildTarget.DynamicLibrary:
+						AddToBundle (compiler_output);
+						LinkWithDynamicLibrary (compiler_output);
+						break;
+					case AssemblyBuildTarget.Framework:
+						AddToBundle (compiler_output, $"Frameworks/{name}.framework/{name}");
+						LinkWithDynamicLibrary (compiler_output);
+						break;
+					default:
+						throw new Exception ();
+					}
 				}
 
 				compile_tasks.ExecuteInParallel (); // REMOVE
@@ -916,9 +965,11 @@ namespace Xamarin.Bundler
 				CompileTask.GetSimulatorCompilerFlags (linker_flags, false, App);
 			}
 			linker_flags.LinkWithMono ();
-			AddToBundle (App.GetLibMono (App.LibMonoLinkMode));
+			if (App.LibMonoLinkMode != AssemblyBuildTarget.StaticObject)
+				AddToBundle (App.GetLibMono (App.LibMonoLinkMode));
 			linker_flags.LinkWithXamarin ();
-			AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode));
+			if (App.LibXamarinLinkMode != AssemblyBuildTarget.StaticObject)
+				AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode));
 
 			linker_flags.AddOtherFlag ($"-o {Driver.Quote (Executable)}");
 
@@ -1108,7 +1159,6 @@ namespace Xamarin.Bundler
 						if (Application.IsUptodate (file, output)) {
 							Driver.Log (3, "Target '{0}' is up-to-date", output);
 						} else {
-							Driver.Log (1, "Stripping assembly {0}", file);
 							Driver.FileDelete (output);
 							Stripper.Process (file, output);
 						}

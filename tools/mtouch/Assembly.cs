@@ -18,82 +18,6 @@ namespace Xamarin.Bundler {
 		Framework,
 	}
 
-	class AssemblyDynamicLibraryTarget
-	{
-		public string Name;
-		public Target Target { get { return Assemblies [0].Target; } }
-		public List<Assembly> Assemblies = new List<Assembly> ();
-		public string OutputPath;
-		public bool IsFramework;
-
-		public string ComputedBaseName {
-			get {
-				switch (Name) {
-				case "@all":
-				case "@rest":
-					return Path.GetFileNameWithoutExtension (Target.App.AssemblyName) + "X";
-				case null:
-				case "":
-					if (Assemblies.Count != 1)
-						throw new Exception ();
-					return Path.GetFileNameWithoutExtension (Assemblies [0].FileName);
-				default:
-					return Name;
-				}
-			}
-		}
-
-		public void CreateTasks (List<BuildTask> tasks, Abi abi)
-		{
-			var arch = abi.AsArchString ();
-			var linker_inputs = new List<string> ();
-			foreach (var a in Assemblies) {
-				linker_inputs.AddRange (a.AotInfos [abi].AsmFiles);
-				linker_inputs.AddRange (a.AotInfos [abi].ObjectFiles);
-				linker_inputs.AddRange (a.AotInfos [abi].BitcodeFiles);
-			}
-			var computedName = ComputedBaseName;
-			var install_name = IsFramework ? $"@rpath/{computedName}.framework/{computedName}" : $"@executable_path/lib{computedName}.dylib";
-			var linker_output = Path.Combine (Cache.Location, arch, $"lib{computedName}.dylib");
-
-			var compiler_flags = new CompilerFlags () {
-				Target = Target,
-				Inputs = new List<string> (linker_inputs),
-			};
-			foreach (var a in Assemblies) {
-				compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
-				compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
-				compiler_flags.AddOtherFlags (a.LinkerFlags);
-			}
-			compiler_flags.LinkWithMono ();
-			compiler_flags.LinkWithXamarin ();
-			if (Target.GetEntryPoints ().ContainsKey ("UIApplicationMain"))
-				compiler_flags.AddFramework ("UIKit");
-			compiler_flags.LinkWithPInvokes (abi);
-
-			OutputPath = linker_output;
-
-			// Check if we really need to 
-			var outputs = new string [] { linker_output };
-			compiler_flags.PopulateInputs ();
-			if (Application.IsUptodate (compiler_flags.Inputs, outputs))
-				return;
-			Application.TryDelete (outputs);
-
-			tasks.Add (new LinkTask ()
-			{
-				Target = Target,
-				AssemblyName = computedName,
-				Abi = abi,
-				InputFiles = linker_inputs,
-				OutputFile = linker_output,
-				InstallName = install_name,
-				CompilerFlags = compiler_flags,
-				SharedLibrary = true,
-			});
-		}
-	}
-
 	public class AotInfo
 	{
 		public List<string> BitcodeFiles = new List<string> (); // .bc files produced by the AOT compiler
@@ -167,14 +91,21 @@ namespace Xamarin.Bundler {
 		}
 
 		// returns false if the assembly was not copied (because it was already up-to-date).
-		public bool CopyAssembly (string source, string target, bool copy_mdb = true)
+		public bool CopyAssembly (string source, string target, bool copy_mdb = true, bool strip = false)
 		{
 			var copied = false;
 
 			try {
-				if (!Application.IsUptodate (source, target) && !Cache.CompareAssemblies (source, target)) {
+				if (!Application.IsUptodate (source, target) && (strip || !Cache.CompareAssemblies (source, target))) {
 					copied = true;
-					Application.CopyFile (source, target);
+					if (strip) {
+						Driver.FileDelete (target);
+						MonoTouch.Tuner.Stripper.Process (source, target);
+					} else {
+						Application.CopyFile (source, target);
+					}
+				} else {
+					Driver.Log (3, "Target '{0}' is up-to-date.", target);
 				}
 
 				// Update the mdb even if the assembly didn't change.
@@ -243,8 +174,13 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		// this will copy the assembly and all the related files:
+		// * debug file (.mdb)
+		// * config file (.config)
+		// * satellite assemblies (<language id>/.dll)
+		// * aot data
 		// returns false if the assembly was not copied (because it was already up-to-date).
-		public bool CopyToDirectory (string directory, bool reload = true, bool check_case = false, bool only_copy = false, bool copy_mdb = true)
+		public bool CopyToDirectory (string directory, bool reload = true, bool check_case = false, bool only_copy = false, bool copy_mdb = true, bool strip = false)
 		{
 			var target = Path.Combine (directory, FileName);
 
@@ -259,7 +195,7 @@ namespace Xamarin.Bundler {
 
 			// our Copy code deletes the target (so copy'ing over itself is a bad idea)
 			if (directory != Path.GetDirectoryName (FullPath))
-				copied = CopyAssembly (FullPath, target, copy_mdb: copy_mdb);
+				copied = CopyAssembly (FullPath, target, copy_mdb: copy_mdb, strip: strip);
 
 			CopySatellitesToDirectory (directory);
 
@@ -270,6 +206,9 @@ namespace Xamarin.Bundler {
 					FullPath = target;
 				}
 			}
+
+			foreach (var aotdata in AotInfos.Values.SelectMany ((info) => info.AotDataFiles))
+				Application.UpdateFile (aotdata, Path.Combine (directory, Path.GetFileName (aotdata)));
 
 			return copied;
 		}

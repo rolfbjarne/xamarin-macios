@@ -191,7 +191,11 @@ namespace Xamarin.Bundler {
 			var eq_index2 = value.IndexOf ('=', eq_index + 1);
 			if (eq_index2 == -1) {
 				target = value.Substring (eq_index + 1);
-				name = assembly_name;
+				if (assembly_name == "@all" || assembly_name == "@rest") {
+					name = string.Empty;
+				} else {
+					name = assembly_name;
+				}
 			} else {
 				target = value.Substring (eq_index + 1, eq_index2 - eq_index - 1);
 				name = value.Substring (eq_index2 + 1);
@@ -224,9 +228,10 @@ namespace Xamarin.Bundler {
 		{
 			if (IsSimulatorBuild)
 				return;
-			
+
+			// By default every assemblies is compiled to a static object.
 			if (assembly_build_targets.Count == 0)
-				assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, "@all"));
+				assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, ""));
 
 			Tuple<AssemblyBuildTarget, string> all = null;
 			Tuple<AssemblyBuildTarget, string> rest = null;
@@ -248,7 +253,25 @@ namespace Xamarin.Bundler {
 						throw new Exception ();
 
 					assembly.BuildTarget = build_target.Item1;
-					assembly.BuildTargetName = build_target.Item2;
+					// We set the build target name to include the extension
+					// So that for instance for System.dll, we'd end up with a System.dll.framework
+					// (this way it doesn't clash with system's System.framework).
+					assembly.BuildTargetName = string.IsNullOrEmpty (build_target.Item2) ? Path.GetFileName (assembly.FileName) : build_target.Item2;
+				}
+
+				var grouped = target.Assemblies.GroupBy ((a) => a.BuildTargetName);
+				foreach (var @group in grouped) {
+					var assemblies = @group.AsEnumerable ().ToArray ();
+
+					// Check that all assemblies in a group have the same build target
+					for (int i = 1; i < assemblies.Length; i++) {
+						if (assemblies [0].BuildTarget != assemblies [i].BuildTarget)
+							throw new Exception ();
+					}
+
+					// Check that static objects must consist of only one assembly
+					if (assemblies.Length != 1 && assemblies [0].BuildTarget == AssemblyBuildTarget.StaticObject)
+						throw new Exception ();
 				}
 			}
 		}
@@ -658,12 +681,12 @@ namespace Xamarin.Bundler {
 			SelectNativeCompiler ();
 			BuildApp ();
 			WriteNotice ();
-			CopyAotData ();
 			BuildBundle ();
 			BuildDsymDirectory ();
 			BuildMSymDirectory ();
 			StripNativeCode ();
-			StripManagedCode ();
+			BundleAssemblies ();
+			//StripManagedCode ();
 			GenerateRuntimeOptions ();
 
 			if (Cache.IsCacheTemporary) {
@@ -1056,22 +1079,6 @@ namespace Xamarin.Bundler {
 				Driver.WriteIfDifferent (Path.Combine (AppDirectory, "NOTICE"), sb.ToString ());
 			} catch (Exception ex) {
 				throw new MonoTouchException (1017, true, ex, "Failed to create the NOTICE file: {0}", ex.Message);
-			}
-		}
-
-		void CopyAotData ()
-		{
-			if (!IsDeviceBuild)
-				return;
-
-			foreach (var target in Targets) {
-				foreach (var a in target.Assemblies) {
-					foreach (var info in a.AotInfos.Values) {
-						foreach (var data in info.AotDataFiles) {
-							Application.UpdateFile (data, Path.Combine (target.AppTargetDirectory, Path.GetFileName (data)));
-						}
-					}
-				}
 			}
 		}
 
@@ -1642,59 +1649,97 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public void StripManagedCode ()
+		public void BundleAssemblies ()
 		{
-			foreach (var target in Targets)
-				target.StripManagedCode ();
+			var strip = ManagedStrip && IsDeviceBuild && !EnableDebug && !PackageMdb;
 
-			// deduplicate assemblies between the .monotouch-32 and .monotouch-64 directories
-			if (IsDualBuild && IsDeviceBuild)
-				DeduplicateDir ("..", Targets [0].AppTargetDirectory, Targets [1].AppTargetDirectory);
-		}
+			var grouped = Targets.SelectMany ((Target arg) => arg.Assemblies).GroupBy ((Assembly arg) => arg.FileName);
+			foreach (var @group in grouped) {
+				var filename = @group.Key;
+				var assemblies = @group.AsEnumerable ().ToArray ();
+				var build_target = assemblies [0].BuildTarget;
+				var target_name = assemblies [0].BuildTargetName;
+				var size_specific = assemblies.Length > 1 && !Cache.CompareAssemblies (assemblies [0].FullPath, assemblies [1].FullPath, true, true);
 
-		void DeduplicateDir (string base_dir, string d1, string d2)
-		{
-			foreach (var f1 in Directory.GetFileSystemEntries (d1)) {
-				var f2 = Path.Combine (d2, Path.GetFileName (f1));
-				if (Directory.Exists (f1))
-					DeduplicateDir (Path.Combine (base_dir, ".."), f1, f2);
-				else
-					DeduplicateFile (base_dir, f1, f2);
+				// Determine where to put the assembly
+				switch (build_target) {
+				case AssemblyBuildTarget.StaticObject:
+				case AssemblyBuildTarget.DynamicLibrary:
+					if (size_specific) {
+						assemblies [0].CopyToDirectory (assemblies [0].Target.AppTargetDirectory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+						assemblies [1].CopyToDirectory (assemblies [1].Target.AppTargetDirectory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					} else {
+						assemblies [0].CopyToDirectory (AppDirectory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					}
+					break;
+				case AssemblyBuildTarget.Framework:
+					var resource_directory = Path.Combine (AppDirectory, "Frameworks", $"{target_name}.framework", "Resources");
+					if (size_specific) {
+						assemblies [0].CopyToDirectory (Path.Combine (resource_directory, Path.GetFileName (assemblies [0].Target.AppTargetDirectory)), copy_mdb: PackageMdb, strip: strip, only_copy: true);
+						assemblies [1].CopyToDirectory (Path.Combine (resource_directory, Path.GetFileName (assemblies [1].Target.AppTargetDirectory)), copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					} else {
+						assemblies [0].CopyToDirectory (resource_directory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					}
+					break;
+				default:
+					throw new Exception ();
+				}
 			}
 		}
 
-		void DeduplicateFile (string base_dir, string f1, string f2)
-		{
-			if (!File.Exists (f2))
-				return;
+		//public void StripManagedCode ()
+		//{
+		//	foreach (var target in Targets)
+		//		target.StripManagedCode ();
 
-			if (Driver.IsSymlink (f2))
-				return; // Already determined to be identical from a previous build.
+		//	// deduplicate assemblies between the .monotouch-32 and .monotouch-64 directories
+		//	if (IsDualBuild && IsDeviceBuild)
+		//		DeduplicateDir ("..", Targets [0].AppTargetDirectory, Targets [1].AppTargetDirectory);
+		//}
 
-			bool equal;
-			var ext = Path.GetExtension (f1).ToUpperInvariant ();
-			var is_assembly = ext == ".EXE" || ext == ".DLL";
+		//void DeduplicateDir (string base_dir, string d1, string d2)
+		//{
+		//	foreach (var f1 in Directory.GetFileSystemEntries (d1)) {
+		//		var f2 = Path.Combine (d2, Path.GetFileName (f1));
+		//		if (Directory.Exists (f1))
+		//			DeduplicateDir (Path.Combine (base_dir, ".."), f1, f2);
+		//		else
+		//			DeduplicateFile (base_dir, f1, f2);
+		//	}
+		//}
 
-			if (is_assembly) {
-				equal = Cache.CompareAssemblies (f1, f2, true, true);
-				if (!equal)
-					Driver.Log (1, "Assemblies {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
-			} else {
-				equal = Cache.CompareFiles (f1, f2, true);
-				if (!equal)
-					Driver.Log (1, "Targets {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
-			}
-			if (!equal)
-				return;
+		//void DeduplicateFile (string base_dir, string f1, string f2)
+		//{
+		//	if (!File.Exists (f2))
+		//		return;
 
-			var dest = Path.Combine (base_dir, f1.Substring (AppDirectory.Length + 1));
-			Driver.FileDelete (f2);
-			if (!Driver.Symlink (dest, f2)) {
-				File.Copy (f1, f2);
-			} else {
-				Driver.Log (1, "Targets {0} and {1} found to be identical, the later has been replaced with a symlink to the former.", f1, f2);
-			}
-		}
+		//	if (Driver.IsSymlink (f2))
+		//		return; // Already determined to be identical from a previous build.
+
+		//	bool equal;
+		//	var ext = Path.GetExtension (f1).ToUpperInvariant ();
+		//	var is_assembly = ext == ".EXE" || ext == ".DLL";
+
+		//	if (is_assembly) {
+		//		equal = Cache.CompareAssemblies (f1, f2, true, true);
+		//		if (!equal)
+		//			Driver.Log (1, "Assemblies {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
+		//	} else {
+		//		equal = Cache.CompareFiles (f1, f2, true);
+		//		if (!equal)
+		//			Driver.Log (1, "Targets {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
+		//	}
+		//	if (!equal)
+		//		return;
+
+		//	var dest = Path.Combine (base_dir, f1.Substring (AppDirectory.Length + 1));
+		//	Driver.FileDelete (f2);
+		//	if (!Driver.Symlink (dest, f2)) {
+		//		File.Copy (f1, f2);
+		//	} else {
+		//		Driver.Log (1, "Targets {0} and {1} found to be identical, the later has been replaced with a symlink to the former.", f1, f2);
+		//	}
+		//}
 
 		public void GenerateRuntimeOptions ()
 		{
@@ -1953,17 +1998,20 @@ namespace Xamarin.Bundler {
 			} else {
 				Driver.Log (3, "Target '{0}' is up-to-date.", ifile);
 			}
-			
+
+			var compiler_flags = new CompilerFlags (target);
+			compiler_flags.AddSourceFile (ifile);
+
 			if (!Application.IsUptodate (ifile, ofile)) {
 				var main = new MainTask ()
 				{
 					Target = target,
 					Abi = abi,
 					AssemblyName = assemblyName,
-					InputFile = ifile,
 					OutputFile = ofile,
 					SharedLibrary = false,
 					Language = "objective-c++",
+					CompilerFlags = compiler_flags,
 				};
 				main.CompilerFlags.AddDefine ("MONOTOUCH");
 				tasks.Add (main);
@@ -1977,7 +2025,7 @@ namespace Xamarin.Bundler {
 		protected override void Build ()
 		{
 			if (Compile () != 0)
-				throw new MonoTouchException (5103, true, "Failed to compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", InputFiles.ToArray ()));
+				throw new MonoTouchException (5103, true, "Failed to compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
 		}
 	}
 
@@ -2153,25 +2201,27 @@ namespace Xamarin.Bundler {
 		public Target Target;
 		public Application App { get { return Target.App; } }
 		public bool SharedLibrary;
-		public List<string> InputFiles;
 		public string OutputFile;
 		public Abi Abi;
 		public string AssemblyName;
 		public string InstallName;
 		public string Language;
 
+		public bool IsAssembler {
+			get {
+				return Language == "assembler";
+			}
+		}
+
 		public string InputFile {
 			set {
-				if (InputFiles != null)
-					throw new Exception ();
-				InputFiles = new List<string> ();
-				InputFiles.Add (value);
+				CompilerFlags.AddSourceFile (value);
 			}
 		}
 
 		CompilerFlags compiler_flags;
 		public CompilerFlags CompilerFlags {
-			get { return compiler_flags ?? (compiler_flags = new CompilerFlags () { Target = Target }); }
+			get { return compiler_flags ?? (compiler_flags = new CompilerFlags (Target)); }
 			set { compiler_flags = value; }
 		}
 
@@ -2287,11 +2337,10 @@ namespace Xamarin.Bundler {
 
 		public int Compile ()
 		{
-			var is_assembler = InputFiles.Count > 0 && InputFiles [0].EndsWith (".s", StringComparison.Ordinal);
 			if (App.IsDeviceBuild) {
-				GetDeviceCompilerFlags (CompilerFlags, is_assembler);
+				GetDeviceCompilerFlags (CompilerFlags, IsAssembler);
 			} else {
-				GetSimulatorCompilerFlags (CompilerFlags, is_assembler, App, Language);
+				GetSimulatorCompilerFlags (CompilerFlags, IsAssembler, App, Language);
 			}
 
 			if (App.EnableBitCode)
@@ -2311,9 +2360,6 @@ namespace Xamarin.Bundler {
 
 			if (!string.IsNullOrEmpty (Language))
 				CompilerFlags.AddOtherFlag ($"-x {Language}");
-
-			foreach (var input in InputFiles)
-				CompilerFlags.AddOtherFlag (Driver.Quote (input));
 
 			var rv = Driver.RunCommand (Driver.CompilerPath, CompilerFlags.ToString (), null, null);
 			

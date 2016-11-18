@@ -19,12 +19,18 @@ namespace Xamarin.Utils
 		public HashSet<string> OtherFlags; // X
 		public HashSet<string> Defines; // -DX
 		public HashSet<string> UnresolvedSymbols; // -u X
+		public HashSet<string> SourceFiles; // X, added to Inputs
 
 		// Here we store a list of all the file-system based inputs
 		// to the compiler. This is used when determining if the
 		// compiler needs to be called in the first place (dependency
 		// tracking).
 		public List<string> Inputs;
+
+		public CompilerFlags (Target target)
+		{
+			this.Target = target;
+		}
 
 		public void ReferenceSymbol (string symbol)
 		{
@@ -62,6 +68,20 @@ namespace Xamarin.Utils
 
 			foreach (var lib in libraries)
 				AddLinkWith (lib, force_load);
+		}
+
+		public void AddSourceFile (string file)
+		{
+			if (SourceFiles == null)
+				SourceFiles = new HashSet<string> ();
+			SourceFiles.Add (file);
+		}
+
+		public void AddSourceFiles (IEnumerable<string> files)
+		{
+			if (SourceFiles == null)
+				SourceFiles = new HashSet<string> ();
+			SourceFiles.UnionWith (files);
 		}
 
 		public void AddOtherFlag (string flag)
@@ -233,6 +253,13 @@ namespace Xamarin.Utils
 				foreach (var symbol in UnresolvedSymbols)
 					args.Append (" -u _").Append (symbol);
 			}
+
+			if (SourceFiles != null) {
+				foreach (var src in SourceFiles) {
+					args.Append (' ').Append (Driver.Quote (src));
+					AddInput (src);
+				}
+			}
 		}
 
 		void ProcessFrameworksForArguments (StringBuilder args)
@@ -279,6 +306,7 @@ namespace Xamarin.Utils
 		public void PopulateInputs ()
 		{
 			var args = new StringBuilder ();
+			Inputs = new List<string> ();
 			WriteArguments (args);
 		}
 	}

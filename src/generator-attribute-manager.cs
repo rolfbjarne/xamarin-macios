@@ -3,11 +3,12 @@ using System.Reflection;
 
 public static class AttributeManager
 {
-	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type, bool inherit = false)
+	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type, bool inherit = false /* REMOVE */)
 	{
-		if (provider == null)
+		if (provider == null) {
+			Console.WriteLine ("Null provider getting {0}", type.FullName);
 			return null;
-
+		}
 		var pi = provider as ParameterInfo;
 		if (pi != null)
 			return Attribute.GetCustomAttribute (pi, type, inherit);
@@ -20,7 +21,7 @@ public static class AttributeManager
 		throw new BindingException (1051, true, "Internal error: Don't know how to get attributes for {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", provider.GetType ().FullName);
 	}
 
-	public static T GetCustomAttribute <T> (ICustomAttributeProvider provider, bool inherit = false) where T: System.Attribute
+	public static T GetCustomAttribute <T> (ICustomAttributeProvider provider, bool inherit = false /* REMOVE */) where T: System.Attribute
 	{
 		return (T) GetCustomAttribute (provider, typeof (T), inherit);
 	}
@@ -67,8 +68,18 @@ public static class AttributeManager
 		return true;
 	}
 
+	public static Type GetAttributeType (System.Attribute attribute)
+	{
+		return GetAttributeType (attribute.GetType ());
+	}
+
 	public static ICustomAttributeProvider GetReturnTypeCustomAttributes (MethodInfo method)
 	{
 		return method.ReturnTypeCustomAttributes;
+	}
+
+	public static Type GetAttributeType (System.Type type)
+	{
+		return type;
 	}
 }

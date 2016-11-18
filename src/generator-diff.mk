@@ -18,4 +18,7 @@ generator-diff:
 	@$(.generated_copy)
 	@cd generator-reference && git diff
 
+generator-copy-diff:
+	@$(.generated_copy)
+
 .PHONY: generator-reference generator-diff

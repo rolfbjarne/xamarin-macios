@@ -139,6 +139,11 @@ class BindingTouch {
 			if (string.IsNullOrEmpty (sdkRoot))
 				sdkRoot = "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current";
 			return sdkRoot;
+		case PlatformName.MacOSX:
+			var macSdkRoot = Environment.GetEnvironmentVariable ("XamarinMacFrameworkRoot");
+			if (string.IsNullOrEmpty (macSdkRoot))
+				macSdkRoot = "/Library/Frameworks/Xamarin.Mac.framework/Versions/Current";
+			return macSdkRoot;
 		default:
 			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
 		}
@@ -357,7 +362,7 @@ class BindingTouch {
 			}
 			GC.KeepAlive (baselib); // Fixes a compiler warning (unused variable).
 				
-			foreach (object attr in api.GetCustomAttributes (TypeManager.LinkWithAttribute, true)) {
+			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true)) {
 				LinkWithAttribute linkWith = (LinkWithAttribute) attr;
 				
 				if (!linkwith.Contains (linkWith.LibraryName)) {
@@ -380,12 +385,12 @@ class BindingTouch {
 			var  strong_dictionaries = new List<Type> ();
 			foreach (var t in api.GetTypes ()){
 				if ((process_enums && t.IsEnum) ||
-				    t.GetCustomAttributes (TypeManager.BaseTypeAttribute, true).Length > 0 ||
-				    t.GetCustomAttributes (TypeManager.ProtocolAttribute, true).Length > 0 ||
-				    t.GetCustomAttributes (TypeManager.StaticAttribute, true).Length > 0 ||
-				    t.GetCustomAttributes (TypeManager.PartialAttribute, true).Length > 0)
+				    AttributeManager.HasAttribute (t, TypeManager.BaseTypeAttribute, true) ||
+				    AttributeManager.HasAttribute (t, TypeManager.ProtocolAttribute, true) ||
+				    AttributeManager.HasAttribute (t, TypeManager.StaticAttribute, true) ||
+				    AttributeManager.HasAttribute (t, TypeManager.PartialAttribute, true))
 					types.Add (t);
-				if (t.GetCustomAttributes (TypeManager.StrongDictionaryAttribute, true).Length > 0)
+				if (AttributeManager.HasAttribute (t, TypeManager.StrongDictionaryAttribute, true))
 					strong_dictionaries.Add (t);
 			}
 

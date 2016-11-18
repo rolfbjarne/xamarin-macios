@@ -2261,10 +2261,13 @@ bool
 xamarin_locate_assembly_resource (const char *assembly_name, const char *culture, const char *resource, char *path, int pathlen)
 {
 	char root [1024];
-
-	const char *app_path = [[[NSBundle mainBundle] bundlePath] UTF8String];
-
 	char aname [256];
+	const char *app_path;
+
+	LOG (PRODUCT ": Locating the resource '%s' for the assembly '%s' (culture: '%s').", resource, assembly_name, culture);
+
+	app_path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+
 	xamarin_get_assembly_name_without_extension (assembly_name, aname, sizeof (aname));
 
 	// First check if the directory is explicitly set. This directory is relative to the app bundle.
@@ -2273,23 +2276,24 @@ xamarin_locate_assembly_resource (const char *assembly_name, const char *culture
 	if (explicit_location) {
 		snprintf (root, sizeof (root), "%s/%s", app_path, explicit_location);
 		if (xamarin_locate_assembly_resource_for_root (root, culture, resource, path, pathlen)) {
-			LOG (PRODUCT ": Located resource %s successfully from explicit path %s: %s\n", resource, explicit_location, path);
+			LOG (PRODUCT ": Located resource '%s' from explicit path '%s': %s\n", resource, explicit_location, path);
 			return true;
 		}
 		// If we have an explicit location, then that's where the assembly must be.
-		xamarin_assertion_message ("Could not find the assembly '%s' (culture: '%s') in the %s.", assembly_name, culture, root);
+		LOG (PRODUCT ": Could not find the resource '%s' for the assembly '%s' (culture: '%s') in the explicit path '%s'.", resource, assembly_name, culture, explicit_location);
+		return false;
 	}
 
 	// The root app directory
 	if (xamarin_locate_assembly_resource_for_root (app_path, culture, resource, path, pathlen)) {
-		LOG (PRODUCT ": Located resource %s successfully from app bundle: %s\n", resource, path);
+		LOG (PRODUCT ": Located resource '%s' from app bundle: %s\n", resource, path);
 		return true;
 	}
 
 	// Then in a framework named as the assembly
 	snprintf (root, sizeof (root), "%s/Frameworks/%s.framework/%s.framework/MonoBundle", app_path, aname, aname);
 	if (xamarin_locate_assembly_resource_for_root (root, culture, resource, path, pathlen)) {
-		LOG (PRODUCT ": Located resource %s successfully from framework %s: %s\n", resource, aname, path);
+		LOG (PRODUCT ": Located resource '%s' from framework '%s': %s\n", resource, aname, path);
 		return true;
 	}
 

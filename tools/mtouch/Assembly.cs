@@ -213,23 +213,6 @@ namespace Xamarin.Bundler {
 			return copied;
 		}
 
-		//IEnumerable<BuildTask> CreateLinkTasks (string s, string asm_infile, string llvm_infile, Abi abi)
-		//{
-		//	var compile_tasks = new BuildTasks ();
-		//	if (asm_infile != null) {
-		//		var task = CreateLinkTask (s, asm_infile, abi);
-		//		if (task != null)
-		//			compile_tasks.Add (task);
-		//	}
-
-		//	if (llvm_infile != null) {
-		//		var taskllvm = CreateLinkTask (s, llvm_infile, abi);
-		//		if (taskllvm != null)
-		//			compile_tasks.Add (taskllvm);
-		//	}
-		//	return compile_tasks.Count > 0 ? compile_tasks : null;
-		//}
-
 		/*
 		 * Runs the AOT compiler, creating one of the following:
 		 *     [not llvm]     => .s           + .aotdata
@@ -245,7 +228,7 @@ namespace Xamarin.Bundler {
 			var arch = abi.AsArchString ();
 			var output_dir = Path.Combine (Cache.Location, arch);
 			var asm = Path.Combine (output_dir, Path.GetFileName (assembly_path)) + ".s";
-			var aot_data = Path.Combine (output_dir, Path.GetFileNameWithoutExtension (assembly_path)) + "." + arch + ".aotdata";
+			var aot_data = Path.Combine (output_dir, Path.GetFileNameWithoutExtension (assembly_path)) + ".aotdata." + arch;
 			var llvm_aot_ofile = "";
 			var asm_output = "";
 			var is_llvm = (abi & Abi.LLVM) == Abi.LLVM;
@@ -539,22 +522,6 @@ namespace Xamarin.Bundler {
 
 			return symlink_failed;
 		}
-
-		//public void CreateCompilationTasks (BuildTasks tasks, string build_dir, IEnumerable<Abi> abis)
-		//{
-		//	var assembly = Path.Combine (build_dir, FileName);
-
-		//	//if (BuildTarget == AssemblyBuildTarget.DynamicLibrary)
-		//	//	ObjectFile = Path.Combine (App.AppDirectory, Driver.Quote ("lib" + Path.GetFileName (FullPath) + ".dylib"));
-		//	//else if (BuildTarget == AssemblyBuildTarget.Framework)
-		//	//	ObjectFile = Path.Combine (App.AppDirectory, Driver.Quote ("lib" + Path.GetFileName (FullPath) + ".o"));
-
-		//	foreach (var abi in abis) {
-		//		var task = CreateManagedToAssemblyTasks (assembly, abi, build_dir);
-		//		if (task != null)
-		//			tasks.AddRange (task);
-		//	}
-		//}
 
 		public void LoadAssembly (string filename)
 		{

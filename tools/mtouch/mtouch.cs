@@ -623,6 +623,8 @@ namespace Xamarin.Bundler
 			var assembly_externs = new StringBuilder ();
 			var assembly_aot_modules = new StringBuilder ();
 			var register_assemblies = new StringBuilder ();
+			var assembly_location = new StringBuilder ();
+			var assembly_location_count = 0;
 			var enable_llvm = (abi & Abi.LLVM) != 0;
 
 			register_assemblies.AppendLine ("\tguint32 exception_gchandle = 0;");
@@ -640,11 +642,32 @@ namespace Xamarin.Bundler
 				}
 			}
 
+			if ((abi & Abi.SimulatorArchMask) == 0) {
+				var frameworks = assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
+				                           .OrderBy ((a) => Path.GetFileNameWithoutExtension (a.FileName), StringComparer.Ordinal);
+				foreach (var asm_fw in frameworks) {
+					var asm_name = Path.GetFileNameWithoutExtension (asm_fw.FileName);
+					if (asm_fw.BuildTargetName == asm_name)
+						continue; // this is deduceable
+					assembly_location.AppendFormat ("\t{{ \"{0}\", \"Frameworks/{1}.framework/MonoBundle\" }},\n", asm_name, asm_fw.BuildTargetName);
+					assembly_location_count++;
+				}
+			}
+
 			try {
 				StringBuilder sb = new StringBuilder ();
 				using (var sw = new StringWriter (sb)) {
 					sw.WriteLine ("#include \"xamarin/xamarin.h\"");
-					// Trial builds are only executable in the next 24 hours
+
+					if (assembly_location.Length > 0) {
+						sw.WriteLine ();
+						sw.WriteLine ("struct AssemblyLocation assembly_location_entries [] = {");
+						sw.WriteLine (assembly_location);
+						sw.WriteLine ("};");
+
+						sw.WriteLine ();
+						sw.WriteLine ("struct AssemblyLocations assembly_locations = {{ {0}, assembly_location_entries }};", assembly_location_count);
+					}
 					
 					sw.WriteLine ();
 					sw.WriteLine (assembly_externs);
@@ -688,7 +711,10 @@ namespace Xamarin.Bundler
 
 					if (App.EnableLLVMOnlyBitCode)
 						sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_LLVMONLY);");
-					
+
+					if (assembly_location.Length > 0)
+						sw.WriteLine ("\txamarin_set_assembly_directories (&assembly_locations);");
+
 					if (registration_methods != null) {
 						for (int i = 0; i < registration_methods.Count; i++) {
 							sw.Write ("\t");

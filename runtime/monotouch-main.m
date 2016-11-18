@@ -39,7 +39,11 @@ xamarin_load_aot_data (MonoAssembly *assembly, int size, gpointer user_data, voi
 	MonoAssemblyName *assembly_name = mono_assembly_get_name (assembly);
 	const char *aname = mono_assembly_name_get_name (assembly_name);
 	xamarin_get_assembly_name_without_extension (aname, name, sizeof (name));
+
+	LOG (PRODUCT ": Looking for aot data for assembly '%s'.", name);
+
 	strlcat (name, ".aotdata", sizeof (name));
+
 	bool found = xamarin_locate_assembly_resource_for_name (assembly_name, name, path, sizeof (path));
 
 	if (!found) {
@@ -62,7 +66,7 @@ xamarin_load_aot_data (MonoAssembly *assembly, int size, gpointer user_data, voi
 
 	close (fd);
 
-	LOG (PRODUCT ": Loaded aot data for %s successfully.\n", name);
+	LOG (PRODUCT ": Loaded aot data for %s.\n", name);
 
 	*out_handle = ptr;
 

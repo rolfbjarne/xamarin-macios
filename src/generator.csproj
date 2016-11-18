@@ -39,15 +39,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="error.cs">
-      <Link>error.cs</Link>
-    </Compile>
-    <Compile Include="generator.cs">
-      <Link>generator.cs</Link>
-    </Compile>
-    <Compile Include="btouch.cs">
-      <Link>btouch.cs</Link>
-    </Compile>
+    <Compile Include="error.cs" />
+    <Compile Include="generator.cs" />
+    <Compile Include="btouch.cs" />
+    <Compile Include="generator-attributes.cs" />
+    <Compile Include="generator-attribute-manager.cs" />
+    <Compile Include="generator-enums.cs" />
+    <Compile Include="generator-filters.cs" />
     <Compile Include="..\external\mono\mcs\class\Mono.Options\Mono.Options\Options.cs">
       <Link>Options.cs</Link>
     </Compile>

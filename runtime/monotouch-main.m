@@ -33,36 +33,36 @@ xamarin_load_aot_data (MonoAssembly *assembly, int size, gpointer user_data, voi
 {
 	// COOP: This is a callback called by the AOT runtime, I believe we don't have to change the GC mode here (even though it accesses managed memory).
 	*out_handle = NULL;
-	
-	const char *name = mono_assembly_name_get_name (mono_assembly_get_name (assembly));
-	char *path;
-	const char *pattern;
-	
-	if (xamarin_use_new_assemblies) {
-		pattern = "%s/" ARCH_SUBDIR "/%s.%s.aotdata";
-	} else {
-		pattern = "%s/%s.%s.aotdata";
-	}
-	path = xamarin_strdup_printf (pattern, [[[NSBundle mainBundle] bundlePath] UTF8String], name, xamarin_arch_name);
-	
-	int fd = open (path, O_RDONLY);
-	if (fd < 0) {
-		LOG (PRODUCT ": Could not load the aot data for %s from %s: %s\n", name, path, strerror (errno));
-		xamarin_free (path);
+
+	char path [1024];
+	char name [1024];
+	MonoAssemblyName *assembly_name = mono_assembly_get_name (assembly);
+	const char *aname = mono_assembly_name_get_name (assembly_name);
+	xamarin_get_assembly_name_without_extension (aname, name, sizeof (name));
+	strlcat (name, ".aotdata", sizeof (name));
+	bool found = xamarin_locate_assembly_resource_for_name (assembly_name, name, path, sizeof (path));
+
+	if (!found) {
+		LOG (PRODUCT ": Could not find the aot data for %s.\n", aname)
 		return NULL;
 	}
-	xamarin_free (path);
+
+	int fd = open (path, O_RDONLY);
+	if (fd < 0) {
+		LOG (PRODUCT ": Could not load the aot data for %s from %s: %s\n", aname, path, strerror (errno));
+		return NULL;
+	}
 
 	void *ptr = mmap (NULL, size, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
 	if (ptr == MAP_FAILED) {
-		LOG (PRODUCT ": Could not map the aot file for %s: %s\n", name, strerror (errno));
+		LOG (PRODUCT ": Could not map the aot file for %s: %s\n", aname, strerror (errno));
 		close (fd);
 		return NULL;
 	}
-	
+
 	close (fd);
 
-	//LOG (PRODUCT ": Loaded aot data for %s successfully.\n", name);
+	LOG (PRODUCT ": Loaded aot data for %s successfully.\n", name);
 
 	*out_handle = ptr;
 
@@ -79,7 +79,7 @@ xamarin_free_aot_data (MonoAssembly *assembly, int size, gpointer user_data, voi
 /*
 This hook avoids the gazillion of filesystem probes we do as part of assembly loading.
 */
-MonoAssembly*
+static MonoAssembly*
 assembly_preload_hook (MonoAssemblyName *aname, char **assemblies_path, void* user_data)
 {
 	// COOP: This is a callback called by the AOT runtime, I belive we don't have to change the GC mode here.
@@ -87,59 +87,50 @@ assembly_preload_hook (MonoAssemblyName *aname, char **assemblies_path, void* us
 	char path [1024];
 	const char *name = mono_assembly_name_get_name (aname);
 	const char *culture = mono_assembly_name_get_culture (aname);
+
+	LOG (PRODUCT ": Looking for assembly '%s' (culture: '%s')\n", name, culture);
+
 	int len = strlen (name);
 	int has_extension = len > 3 && name [len - 4] == '.' && (!strcmp ("exe", name + (len - 3)) || !strcmp ("dll", name + (len - 3)));
 	bool dual_check = false;
 
 	// add extensions if required.
-	strncpy (filename, name, 1024);
-	if (!has_extension) {	
+	strlcpy (filename, name, sizeof (filename));
+	if (!has_extension) {
 		// Figure out if we need to append 'dll' or 'exe'
 		if (xamarin_executable_name != NULL) {
 			// xamarin_executable_name already has the ".exe", so only compare the rest of the filename.
 			if (culture == NULL && !strncmp (xamarin_executable_name, filename, strlen (xamarin_executable_name) - 4)) {
-				strcat (filename, ".exe");
+				strlcat (filename, ".exe", sizeof (filename));
 			} else {
-				strcat (filename, ".dll");
+				strlcat (filename, ".dll", sizeof (filename));
 			}
 		} else {
 			// we need to check both :|
 			dual_check = true;
 			// start with .dll
-			strcat (filename, ".dll");
+			strlcat (filename, ".dll", sizeof (filename));
 		}
 	}
 
 	if (culture == NULL)
 		culture = "";
 
-do_second_check:
-	if (xamarin_use_new_assemblies) {
-		snprintf (path, sizeof (path), "%s/" ARCH_SUBDIR "/%s/%s", xamarin_get_bundle_path (), culture, filename);
-
-		if (xamarin_file_exists (path)) {
-			// fprintf (stderr, "MonoTouch: loading %s\n", path);
-			return mono_assembly_open (path, NULL);
-		}
-	}
-			
-	snprintf (path, sizeof (path), "%s/%s/%s", xamarin_get_bundle_path (), culture, filename);
-
-	if (xamarin_file_exists (path)) {
-		// fprintf (stderr, "MonoTouch: loading %s\n", path);
-		return mono_assembly_open (path, NULL);
-	}
-
-	if (dual_check) {
-		dual_check = false;
+	bool found = xamarin_locate_assembly_resource_for_name (aname, filename, path, sizeof (path));
+	if (!found && dual_check) {
 		filename [strlen (filename) - 4] = 0;
-		strcat (filename, ".exe");
-		goto do_second_check;
+		strlcat (filename, ".exe", sizeof (filename));
+		found = xamarin_locate_assembly_resource_for_name (aname, filename, path, sizeof (path));
 	}
 
-	//fprintf (stderr, "MonoTouch: unable to find %s\n", name);
+	if (!found) {
+		LOG (PRODUCT ": Unable to locate assembly '%s' (culture: '%s')\n", name, culture);
+		return NULL;
+	}
 
-	return NULL;
+	LOG (PRODUCT ": Found assembly '%s' (culture: '%s'): %s\n", name, culture, path);
+
+	return mono_assembly_open (path, NULL);
 }
 
 #ifdef DEBUG_LAUNCH_TIME

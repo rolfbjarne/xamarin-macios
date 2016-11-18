@@ -1145,56 +1145,69 @@ namespace Xamarin.Bundler {
 			//	}
 			//}
 
-			var bundle_files = new Dictionary<string, HashSet<string>> ();
-
-			// Collect files to bundle from every target
-			foreach (var target in Targets) {
-				foreach (var kvp in target.BundleFiles) {
-					HashSet<string> files;
-					if (!bundle_files.TryGetValue (kvp.Key, out files))
-						bundle_files [kvp.Key] = files = new HashSet<string> ();
-					files.UnionWith (kvp.Value);
-				}
-			}
+			var bundle_files = new Dictionary<string, BundleFileInfo> ();
 
 			// Make sure we bundle Mono.framework if we need to.
 			if (PackageMonoFramework == true) {
-				HashSet<string> files;
-				var name = "Frameworks/Mono.framework/Mono";
-				if (!bundle_files.TryGetValue (name, out files))
-					bundle_files [name] = files = new HashSet<string> ();
-				files.Add (GetLibMono (AssemblyBuildTarget.Framework));
+				BundleFileInfo info;
+				var name = "Frameworks/Mono.framework";
+				bundle_files [name] = info = new BundleFileInfo ();
+				info.Sources.Add (GetLibMono (AssemblyBuildTarget.Framework));
+			}
+
+			// Collect files to bundle from every target
+			if (Targets.Count == 1) {
+				bundle_files = Targets [0].BundleFiles;
+			} else {
+				foreach (var target in Targets) {
+					foreach (var kvp in target.BundleFiles) {
+						BundleFileInfo info;
+						if (!bundle_files.TryGetValue (kvp.Key, out info))
+							bundle_files [kvp.Key] = info = new BundleFileInfo () { DylibToFramework = kvp.Value.DylibToFramework };
+						info.Sources.UnionWith (kvp.Value.Sources);
+					}
+				}
 			}
 
 			foreach (var kvp in bundle_files) {
 				var name = kvp.Key;
+				var info = kvp.Value;
 				var targetPath = Path.Combine (AppDirectory, name);
-				var targetDirectory = Path.GetDirectoryName (targetPath);
-				var isFramework = targetDirectory.EndsWith (".framework", StringComparison.Ordinal);
-				var files = kvp.Value;
-				if (!IsUptodate (files, new string [] { targetPath })) {
-					Directory.CreateDirectory (targetDirectory);
-					if (files.Count == 1) {
-						UpdateFile (files.First (), targetPath);
-					} else {
-						var sb = new StringBuilder ();
-						foreach (var lib in files) {
-							sb.Append (Driver.Quote (lib));
-							sb.Append (' ');
+				var files = info.Sources;
+
+				if (Directory.Exists (files.First ())) {
+					if (files.Count != 1)
+						throw new Exception (); // can't merge directories
+					if (info.DylibToFramework)
+						throw new Exception (); // doesn't make sense
+					UpdateDirectory (files.First (), Path.GetDirectoryName (targetPath));
+				} else {
+					var targetDirectory = Path.GetDirectoryName (targetPath);
+					if (!IsUptodate (files, new string [] { targetPath })) {
+						Directory.CreateDirectory (targetDirectory);
+						if (files.Count == 1) {
+							CopyFile (files.First (), targetPath);
+						} else {
+							var sb = new StringBuilder ();
+							foreach (var lib in files) {
+								sb.Append (Driver.Quote (lib));
+								sb.Append (' ');
+							}
+							sb.Append ("-create -output ");
+							sb.Append (Driver.Quote (targetPath));
+							Driver.RunLipo (sb.ToString ());
 						}
-						sb.Append ("-create -output ");
-						sb.Append (Driver.Quote (targetPath));
-						Driver.RunLipo (sb.ToString ());
-					}
-					if (isFramework) {
-						var bundleName = Path.GetFileName (name);
-						CreateFrameworkInfoPList (Path.Combine (targetDirectory, "Info.plist"), bundleName, BundleId + ".frameworks." + bundleName, bundleName);
+						if (LibMonoLinkMode == AssemblyBuildTarget.Framework)
+							Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
+					} else {
+						Driver.Log (3, "Target '{0}' is up-to-date.", targetPath);
 					}
 
-					if (LibMonoLinkMode == AssemblyBuildTarget.Framework)
-						Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
-				} else {
-					Driver.Log (3, "Target '{0}' is up-to-date.", targetPath);
+					if (info.DylibToFramework) {
+						var bundleName = Path.GetFileName (name);
+						CreateFrameworkInfoPList (Path.Combine (targetDirectory, "Info.plist"), bundleName, BundleId + Path.GetFileNameWithoutExtension (bundleName), bundleName);
+					}
+
 				}
 			}
 
@@ -1274,10 +1287,6 @@ namespace Xamarin.Bundler {
 				cmd.Append (Driver.Quote (target.Executable));
 				cmd.Append (' ');
 			}
-			cmd.Append ("-create -output ");
-			cmd.Append (Driver.Quote (Executable));
-			Driver.RunLipo (cmd.ToString ());
-
 		}
 			
 		public void ExtractNativeLinkInfo ()
@@ -1673,7 +1682,10 @@ namespace Xamarin.Bundler {
 					}
 					break;
 				case AssemblyBuildTarget.Framework:
-					var resource_directory = Path.Combine (AppDirectory, "Frameworks", $"{target_name}.framework", "Resources");
+					// Put our resources in a subdirectory in the framework
+					// But don't use 'Resources', because the app ends up being undeployable:
+					// "PackageInspectionFailed: Failed to load Info.plist from bundle at path /private/var/installd/Library/Caches/com.apple.mobile.installd.staging/temp.CR0vmK/extracted/testapp.app/Frameworks/TestApp.framework"
+					var resource_directory = Path.Combine (AppDirectory, "Frameworks", $"{target_name}.framework", "MonoBundle");
 					if (size_specific) {
 						assemblies [0].CopyToDirectory (Path.Combine (resource_directory, Path.GetFileName (assemblies [0].Target.AppTargetDirectory)), copy_mdb: PackageMdb, strip: strip, only_copy: true);
 						assemblies [1].CopyToDirectory (Path.Combine (resource_directory, Path.GetFileName (assemblies [1].Target.AppTargetDirectory)), copy_mdb: PackageMdb, strip: strip, only_copy: true);

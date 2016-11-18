@@ -21,6 +21,12 @@ using XamCore.Registrar;
 
 namespace Xamarin.Bundler
 {
+	public class BundleFileInfo
+	{
+		public HashSet<string> Sources = new HashSet<string> ();
+		public bool DylibToFramework;
+	}
+
 	public partial class Target {
 		public string TargetDirectory;
 		public string AppTargetDirectory;
@@ -37,7 +43,7 @@ namespace Xamarin.Bundler
 		// Note that each 'Target' can have multiple abis: armv7+armv7s for instance.
 		public List<Abi> Abis;
 
-		public Dictionary<string, List<string>> BundleFiles = new Dictionary<string, List<string>> ();
+		public Dictionary<string, BundleFileInfo> BundleFiles = new Dictionary<string, BundleFileInfo> ();
 
 		CompilerFlags linker_flags;
 
@@ -58,23 +64,24 @@ namespace Xamarin.Bundler
 		public bool Is32Build { get { return Application.IsArchEnabled (Abis, Abi.Arch32Mask); } } // If we're targetting a 32 bit arch for this target.
 		public bool Is64Build { get { return Application.IsArchEnabled (Abis, Abi.Arch64Mask); } } // If we're targetting a 64 bit arch for this target.
 
-		public void AddToBundle (string source, string bundle_path = null)
+		public void AddToBundle (string source, string bundle_path = null, bool dylib_to_framework_conversion = false)
 		{
-			List<string> sources;
+			BundleFileInfo info;
 
 			if (bundle_path == null) {
 				if (source.EndsWith (".framework", StringComparison.Ordinal)) {
 					var bundle_name = Path.GetFileNameWithoutExtension (source);
-					bundle_path = $"Frameworks/{bundle_name}.framework/{bundle_name}";
-					source = Path.Combine (source, bundle_name);
+					bundle_path = $"Frameworks/{bundle_name}.framework";
 				} else {
 					bundle_path = Path.GetFileName (source);
 				}
 			}
 
-			if (!BundleFiles.TryGetValue (bundle_path, out sources))
-				BundleFiles [bundle_path] = sources = new List<string> ();
-			sources.Add (source);
+			if (!BundleFiles.TryGetValue (bundle_path, out info))
+				BundleFiles [bundle_path] = info = new BundleFileInfo () { DylibToFramework = dylib_to_framework_conversion };
+			if (info.DylibToFramework != dylib_to_framework_conversion)
+				throw new Exception (); // internal error.
+			info.Sources.Add (source);
 		}
 
 		public void LinkWithStaticLibrary (string path)
@@ -826,7 +833,7 @@ namespace Xamarin.Bundler
 						LinkWithDynamicLibrary (compiler_output);
 						break;
 					case AssemblyBuildTarget.Framework:
-						AddToBundle (compiler_output, $"Frameworks/{name}.framework/{name}");
+						AddToBundle (compiler_output, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
 						LinkWithDynamicLibrary (compiler_output);
 						break;
 					default:

@@ -141,6 +141,11 @@ class BindingTouch {
 			if (string.IsNullOrEmpty (sdkRoot))
 				sdkRoot = "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current";
 			return sdkRoot;
+		case PlatformName.MacOSX:
+			var macSdkRoot = Environment.GetEnvironmentVariable ("XamarinMacFrameworkRoot");
+			if (string.IsNullOrEmpty (macSdkRoot))
+				macSdkRoot = "/Library/Frameworks/Xamarin.Mac.framework/Versions/Current";
+			return macSdkRoot;
 		default:
 			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
 		}

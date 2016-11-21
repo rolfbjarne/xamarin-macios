@@ -24,7 +24,7 @@ namespace Xamarin.Tests
 	//	public int LineNumber;
 	}
 
-	class Tool
+	abstract class Tool
 	{
 		StringBuilder output = new StringBuilder ();
 
@@ -46,9 +46,11 @@ namespace Xamarin.Tests
 			}
 		}
 
+		protected abstract string ToolPath { get; }
+
 		public int Execute (string arguments, params string [] args)
 		{
-			return Execute (Configuration.MtouchPath, arguments, args);
+			return Execute (ToolPath, arguments, args);
 		}
 
 		public int Execute (string toolPath, string arguments, params string [] args)
@@ -182,6 +184,15 @@ namespace Xamarin.Tests
 		public static void Build (string project, string configuration = "Debug", string platform = "iPhoneSimulator", string verbosity = null, TimeSpan? timeout = null)
 		{
 			ExecutionHelper.Execute (ToolPath, string.Format ("/p:Configuration={0} /p:Platform={1} {2} \"{3}\"", configuration, platform, verbosity == null ? string.Empty : "/verbosity:" + verbosity, project), timeout: timeout);
+		}
+	}
+
+	class XHarness
+	{
+		public static string ToolPath {
+			get {
+				return Path.Combine (Configuration.SourceRoot, "tests", "xharness", "xharness.exe");
+			}
 		}
 	}
 

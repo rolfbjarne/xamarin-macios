@@ -15,6 +15,7 @@ namespace Xamarin
 		BuildDev,
 		BuildSim,
 		LaunchSim,
+		LaunchDev,
 	}
 
 	public enum MTouchLinker
@@ -68,6 +69,7 @@ namespace Xamarin
 		public string AppPath;
 		public string Cache;
 		public string Device; // --device
+		public string DevName; // --devname
 		public MTouchLinker Linker;
 		public bool? NoFastSim;
 		public MTouchRegistrar Registrar;
@@ -76,6 +78,7 @@ namespace Xamarin
 		public List<string> AppExtensions = new List<string> ();
 		public List<string> Frameworks = new List<string> ();
 		public string HttpMessageHandler;
+		public Dictionary<string, string> SetEnv = new Dictionary<string, string> ();
 #pragma warning restore 649
 
 		// These are a bit smarter
@@ -83,7 +86,13 @@ namespace Xamarin
 		public bool NoPlatformAssemblyReference;
 		static XmlDocument device_list_cache;
 
-		List<string> directories_to_delete;
+		Cache cache;
+
+		protected override string ToolPath {
+			get {
+				return Configuration.MtouchPath;
+			}
+		}
 
 		public class DeviceInfo
 		{
@@ -118,7 +127,7 @@ namespace Xamarin
 
 		public int Execute (MTouchAction action)
 		{
-			return Execute (BuildArguments (action));
+			return Execute (ComputeArguments (action));
 		}
 
 		public void AssertExecute (MTouchAction action, string message = null)
@@ -131,7 +140,74 @@ namespace Xamarin
 			NUnit.Framework.Assert.AreEqual (1, Execute (action), message);
 		}
 
-		string BuildArguments (MTouchAction action)
+		public void AssertExecuteUnitTests (MTouchAction action, string message = null)
+		{
+		}
+
+		string ComputeArguments (MTouchAction action)
+		{
+			switch (action) {
+			case MTouchAction.BuildSim:
+			case MTouchAction.BuildDev:
+				return ComputeBuildArguments (action);
+			case MTouchAction.LaunchSim:
+			case MTouchAction.LaunchDev:
+				return ComputeLaunchArguments (action);
+			case MTouchAction.None:
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		string ComputeLaunchArguments (MTouchAction action)
+		{
+			var sb = new StringBuilder ();
+
+			if (AppPath == null)
+				throw new Exception ("No AppPath specified.");
+			
+			switch (action) {
+			case MTouchAction.None:
+				break;
+			case MTouchAction.LaunchDev:
+				MTouch.AssertDeviceAvailable ();
+				sb.Append (" --launchdev ").Append (MTouch.Quote (AppPath));
+				break;
+			case MTouchAction.LaunchSim:
+				sb.Append (" --launchsim ").Append (MTouch.Quote (AppPath));
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+
+			if (SdkRoot == None) {
+				// do nothing
+			} else if (!string.IsNullOrEmpty (SdkRoot)) {
+				sb.Append (" --sdkroot ").Append (MTouch.Quote (SdkRoot));
+			} else {
+				sb.Append (" --sdkroot ").Append (MTouch.Quote (Configuration.xcode_root));
+			}
+
+			sb.Append (" ").Append (GetVerbosity ());
+
+			if (Sdk == None) {
+				// do nothing	
+			} else if (!string.IsNullOrEmpty (Sdk)) {
+				sb.Append (" --sdk ").Append (Sdk);
+			} else {
+				sb.Append (" --sdk ").Append (MTouch.GetSdkVersion (Profile));
+			}
+
+			if (!string.IsNullOrEmpty (Device))
+				sb.Append (" --device:").Append (MTouch.Quote (Device));
+
+			if (!string.IsNullOrEmpty (DevName))
+				sb.Append (" --devname:").Append (MTouch.Quote (DevName));
+
+			return sb.ToString ();
+		}
+
+		string ComputeBuildArguments (MTouchAction action)
 		{
 			var sb = new StringBuilder ();
 			var isDevice = false;
@@ -151,12 +227,6 @@ namespace Xamarin
 				if (AppPath == null)
 					throw new Exception ("No AppPath specified.");
 				sb.Append (" --sim ").Append (MTouch.Quote (AppPath));
-				break;
-			case MTouchAction.LaunchSim:
-				isDevice = false;
-				if (AppPath == null)
-					throw new Exception ("No AppPath specified.");
-				sb.Append (" --launchsim ").Append (MTouch.Quote (AppPath));
 				break;
 			default:
 				throw new NotImplementedException ();
@@ -538,11 +608,9 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 
 		public string CreateTemporaryDirectory ()
 		{
-			var tmpDir = MTouch.GetTempDirectory ();
-			if (directories_to_delete == null)
-				directories_to_delete = new List<string> ();
-			directories_to_delete.Add (tmpDir);
-			return tmpDir;
+			if (cache == null)
+				cache = new Xamarin.Cache ();
+			return cache.CreateTemporaryDirectory ();
 		}
 
 		public void CreateTemporaryApp_LinkWith ()
@@ -569,10 +637,7 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 
 		void IDisposable.Dispose ()
 		{
-			if (directories_to_delete != null) {
-				foreach (var dir in directories_to_delete)
-					Directory.Delete (dir, true);
-			}
+			cache?.Dispose ();
 		}
 	}
 }

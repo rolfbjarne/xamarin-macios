@@ -27,6 +27,7 @@ namespace Xamarin
 		public MLaunchAction Action = MLaunchAction.Sim;
 		public MTouch.Profile Profile = MTouch.Profile.Unified;
 
+
 		string GetVerbosity ()
 		{
 			if (Verbosity == 0)
@@ -34,6 +35,12 @@ namespace Xamarin
 			if (Verbosity > 0)
 				return new string ('-', Verbosity).Replace ("-", "-v ");
 			return new string ('-', -Verbosity).Replace ("-", "-q ");
+		}
+
+		protected override string ToolPath {
+			get {
+				return Configuration.MlaunchPath;
+			}
 		}
 
 		public int Execute ()

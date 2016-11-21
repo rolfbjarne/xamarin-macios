@@ -25,7 +25,7 @@ namespace Xamarin.Tests {
 namespace Xamarin
 {
 	[TestFixture]
-	public class MTouch
+	public partial class MTouch
 	{
 		[Test]
 		[TestCase ("single", "-sdkroot {2} -v -v -v -v --dev {0} -sdk {3} --targetver 6.0 {1} -r:{4} --cache={5}/cache")]

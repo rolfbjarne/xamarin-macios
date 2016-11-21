@@ -19,12 +19,18 @@ namespace Xamarin.Utils
 		public HashSet<string> OtherFlags; // X
 		public HashSet<string> Defines; // -DX
 		public HashSet<string> UnresolvedSymbols; // -u X
+		public HashSet<string> SourceFiles; // X, added to Inputs
 
 		// Here we store a list of all the file-system based inputs
 		// to the compiler. This is used when determining if the
 		// compiler needs to be called in the first place (dependency
 		// tracking).
 		public List<string> Inputs;
+
+		public CompilerFlags (Target target)
+		{
+			this.Target = target;
+		}
 
 		public void ReferenceSymbol (string symbol)
 		{
@@ -64,6 +70,20 @@ namespace Xamarin.Utils
 				AddLinkWith (lib, force_load);
 		}
 
+		public void AddSourceFile (string file)
+		{
+			if (SourceFiles == null)
+				SourceFiles = new HashSet<string> ();
+			SourceFiles.Add (file);
+		}
+
+		public void AddSourceFiles (IEnumerable<string> files)
+		{
+			if (SourceFiles == null)
+				SourceFiles = new HashSet<string> ();
+			SourceFiles.UnionWith (files);
+		}
+
 		public void AddOtherFlag (string flag)
 		{
 			if (OtherFlags == null)
@@ -83,27 +103,57 @@ namespace Xamarin.Utils
 
 		public void LinkWithMono ()
 		{
-			// link with the exact path to libmono
-			if (Application.UseMonoFramework.Value) {
-				AddFramework (Path.Combine (Driver.ProductFrameworksDirectory, "Mono.framework"));
-			} else {
-				AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.LibMono));
+			var mode = Target.App.LibMonoLinkMode;
+			switch (mode) {
+			case AssemblyBuildTarget.DynamicLibrary:
+			case AssemblyBuildTarget.StaticObject:
+				AddLinkWith (Application.GetLibMono (mode));
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddFramework (Application.GetLibMono (mode));
+				break;
+			default:
+				throw new Exception ();
 			}
 		}
 
 		public void LinkWithXamarin ()
 		{
-			AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, Application.LibXamarin));
+			var mode = Target.App.LibXamarinLinkMode;
+			switch (mode) {
+			case AssemblyBuildTarget.DynamicLibrary:
+			case AssemblyBuildTarget.StaticObject:
+				AddLinkWith (Application.GetLibXamarin (mode));
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddFramework (Application.GetLibXamarin (mode));
+				break;
+			default:
+				throw new Exception ();
+			}
 			AddFramework ("Foundation");
 			AddOtherFlag ("-lz");
 		}
 
 		public void LinkWithPInvokes (Abi abi)
 		{
-			if (!Driver.App.FastDev || !Driver.App.RequiresPInvokeWrappers)
+			if (!Driver.App.RequiresPInvokeWrappers)
 				return;
 
-			AddOtherFlag (Path.Combine (Cache.Location, "libpinvokes." + abi.AsArchString () + ".dylib"));
+			var mode = Driver.App.LibPInvokesLinkMode;
+			switch (mode) {
+			case AssemblyBuildTarget.StaticObject:
+				AddOtherFlag (Path.Combine (Cache.Location, abi.AsArchString (), "libpinvokes.a"));
+				break;
+			case AssemblyBuildTarget.DynamicLibrary:
+				AddOtherFlag (Path.Combine (Cache.Location, abi.AsArchString (), "libpinvokes.dylib"));
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddFramework (Path.Combine (Cache.Location, abi.AsArchString (), "Xamarin.PInvokes.framework"));
+				break;
+			default:
+				throw new Exception ();
+			}
 		}
 
 		public void AddFramework (string framework)
@@ -203,6 +253,13 @@ namespace Xamarin.Utils
 				foreach (var symbol in UnresolvedSymbols)
 					args.Append (" -u _").Append (symbol);
 			}
+
+			if (SourceFiles != null) {
+				foreach (var src in SourceFiles) {
+					args.Append (' ').Append (Driver.Quote (src));
+					AddInput (src);
+				}
+			}
 		}
 
 		void ProcessFrameworksForArguments (StringBuilder args)
@@ -242,7 +299,15 @@ namespace Xamarin.Utils
 		{
 			var args = new StringBuilder ();
 			WriteArguments (args);
-			return args.ToString ();
+			return args.ToString ().Trim (); // #47205
+			//return args.ToString ();
+		}
+
+		public void PopulateInputs ()
+		{
+			var args = new StringBuilder ();
+			Inputs = new List<string> ();
+			WriteArguments (args);
 		}
 	}
 }

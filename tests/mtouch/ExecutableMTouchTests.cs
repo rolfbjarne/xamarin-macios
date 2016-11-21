@@ -38,7 +38,7 @@ namespace Xamarin
 					xharness.Configuration = "Debug";
 					xharness.LogDirectory = cache.CreateTemporaryDirectory ();
 					xharness.Target = "ios-simulator-64";
-					Assert.AreEqual (xharness.Run (project.ProjectPath), "run");
+					Assert.AreEqual (0, xharness.Run (project.ProjectPath), "run");
 				}
 			}
 		}

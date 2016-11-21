@@ -44,6 +44,7 @@ namespace Xamarin
 
 			sb.Append (" --logdirectory ").Append (MTouch.Quote (LogDirectory));
 			sb.Append (" --configuration ").Append (Configuration);
+			sb.Append (" --verbose");
 			return Execute (sb.ToString ());
 		}
 

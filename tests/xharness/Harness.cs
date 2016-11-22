@@ -39,6 +39,7 @@ namespace xharness
 		}
 
 		public List<TestProject> IOSTestProjects { get; set; } = new List<TestProject> ();
+		public List<string> IOSTestApps { get; set; } = new List<string> ();
 		public List<TestProject> MacTestProjects { get; set; } = new List<TestProject> ();
 		public List<string> BclTests { get; set; } = new List<string> ();
 
@@ -448,6 +449,18 @@ namespace xharness
 				var runner = new AppRunner () {
 					Harness = this,
 					ProjectFile = project.Path,
+					MainLog = HarnessLog,
+				};
+				var rv = runner.RunAsync ().Result;
+				if (rv != 0)
+					return rv;
+			}
+
+			foreach (var app in IOSTestApps) {
+				var runner = new AppRunner ()
+				{
+					Harness = this,
+					AppPath = app,
 					MainLog = HarnessLog,
 				};
 				var rv = runner.RunAsync ().Result;

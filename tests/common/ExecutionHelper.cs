@@ -20,12 +20,13 @@ namespace Xamarin.Tests
 		public int Number;
 		public string PrefixedNumber { get { return Prefix + Number.ToString (); } }
 		public string Message;
-	//	public string Filename;
-	//	public int LineNumber;
+		//	public string Filename;
+		//	public int LineNumber;
 	}
 
 	abstract class Tool
 	{
+		public bool Verbose;
 		StringBuilder output = new StringBuilder ();
 
 		List<string> output_lines;
@@ -60,7 +61,7 @@ namespace Xamarin.Tests
 
 			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output);
 
-			if (rv != 0) {
+			if (rv != 0 || Verbose) {
 				if (output.Length > 0)
 					Console.WriteLine (output);
 			}
@@ -128,7 +129,7 @@ namespace Xamarin.Tests
 
 			if (messages.Any ((msg) => Regex.IsMatch (msg.Message, messagePattern)))
 				return;
-			
+
 			var details = messages.Where ((msg) => msg.Prefix == prefix && msg.Number == number && !Regex.IsMatch (msg.Message, messagePattern)).Select ((msg) => string.Format ("\tThe message '{0}' did not match the pattern '{1}'.", msg.Message, messagePattern));
 			Assert.Fail (string.Format ("The error '{0}{1:0000}: {2}' was not found in the output:\n{3}", prefix, number, messagePattern, string.Join ("\n", details.ToArray ())));
 		}
@@ -175,15 +176,23 @@ namespace Xamarin.Tests
 	class XBuild
 	{
 		public static string ToolPath {
-			get
-			{
+			get {
 				return "/Library/Frameworks/Mono.framework/Commands/xbuild";
 			}
 		}
 
 		public static void Build (string project, string configuration = "Debug", string platform = "iPhoneSimulator", string verbosity = null, TimeSpan? timeout = null)
 		{
-			ExecutionHelper.Execute (ToolPath, string.Format ("/p:Configuration={0} /p:Platform={1} {2} \"{3}\"", configuration, platform, verbosity == null ? string.Empty : "/verbosity:" + verbosity, project), timeout: timeout);
+			var env = new Dictionary<string, string> ();
+
+			env ["MD_APPLE_SDK_ROOT"] = Path.GetDirectoryName (Path.GetDirectoryName (Configuration.xcode_root));
+#if MONOTOUCH
+			env ["MD_MTOUCH_SDK_ROOT"] = Configuration.SdkRootXI;
+			env ["XBUILD_FRAMEWORK_FOLDERS_PATH"] = Configuration.TargetDirectoryXI;
+			env ["MSBuildExtensionsPath"] = Configuration.MSBuildExtensionsPathXI;
+#endif
+
+			ExecutionHelper.Execute (ToolPath, string.Format ("/p:Configuration={0} /p:Platform={1} {2} \"{3}\"", configuration, platform, verbosity == null ? string.Empty : "/verbosity:" + verbosity, project), timeout: timeout, environmentVariables: env);
 		}
 	}
 

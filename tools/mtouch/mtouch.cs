@@ -1431,7 +1431,7 @@ namespace Xamarin.Bundler
 			{ "xamarin-framework-directory=", "The framework directory", v => { mtouch_dir = v; }, true },
 			{ "assembly-build-target=", "Specifies how to compile assemblies to native code. Possible values: 'staticobject' (default), 'dynamiclibrary' (same as --fastdev), 'framework'. " +"" +
 					"Each option also takes an assembly and a potential name (defaults to the name of the assembly). Example: --assembly-build-target=mscorlib.dll=framework[=name]." +
-					"There are two special names: '@all' and '@rest': --assembly-build-target=@all|@reset=framework[=name].", v =>
+					"There are three special names: '@all' and '@sdk': --assembly-build-target=@all|@sdk=framework[=name].", v =>
 					{
 						app.AddAssemblyBuildTarget (v);
 					}, true /* hidden for now */

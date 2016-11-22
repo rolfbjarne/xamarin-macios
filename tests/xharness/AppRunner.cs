@@ -30,6 +30,7 @@ namespace xharness
 	{
 		public Harness Harness;
 		public string ProjectFile;
+		public string AppPath;
 
 		public TestExecutingResult Result { get; private set; }
 
@@ -458,11 +459,26 @@ namespace xharness
 			args.AppendFormat (" -argument=-app-arg:-hostport:{0}", listener.Port);
 			args.AppendFormat (" -setenv=NUNIT_HOSTPORT={0}", listener.Port);
 
+			listener.StartAsync ();
+
+			var cancellation_source = new CancellationTokenSource ();
+			var timed_out = false;
+
+			ThreadPool.QueueUserWorkItem ((v) =>
+			{
+				if (!listener.WaitForConnection (TimeSpan.FromMinutes (Harness.LaunchTimeout))) {
+					cancellation_source.Cancel ();
+					main_log.WriteLine ("Test launch timed out after {0} minute(s).", Harness.LaunchTimeout);
+					timed_out = true;
+				} else {
+					main_log.WriteLine ("Test run started");
+				}
+			});
+
 			foreach (var kvp in Harness.EnvironmentVariables)
 				args.AppendFormat (" -setenv={0}={1}", kvp.Key, kvp.Value);
 
 			bool? success = null;
-			bool timed_out = false;
 			bool launch_failure = false;
 
 			if (isSimulator) {
@@ -512,19 +528,8 @@ namespace xharness
 
 				await crash_reports.StartCaptureAsync ();
 
-				listener.StartAsync ();
 				main_log.WriteLine ("Starting test run");
 
-				var cancellation_source = new CancellationTokenSource ();
-				ThreadPool.QueueUserWorkItem ((v) => {
-					if (!listener.WaitForConnection (TimeSpan.FromMinutes (Harness.LaunchTimeout))) {
-						cancellation_source.Cancel ();
-						main_log.WriteLine ("Test launch timed out after {0} minute(s).", Harness.LaunchTimeout);
-						timed_out = true;
-					} else {
-						main_log.WriteLine ("Test run started");
-					}
-				});
 				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), run_log, TimeSpan.FromMinutes (Harness.Timeout), cancellation_token: cancellation_source.Token);
 				if (result.TimedOut) {
 					timed_out = true;
@@ -580,10 +585,10 @@ namespace xharness
 				args.Append (" --launchdev");
 				args.AppendFormat (" \"{0}\" ", launchAppPath);
 
-				var waits_for_exit = false;
 				if (mode == "watchos") {
 					args.Append (" --attach-native-debugger"); // this prevents the watch from backgrounding the app.
-					waits_for_exit = true;
+				} else {
+					args.Append (" --wait-for-exit");
 				}
 				
 				AddDeviceName (args);
@@ -598,19 +603,19 @@ namespace xharness
 
 				await crash_reports.StartCaptureAsync ();
 
-				listener.StartAsync ();
 				main_log.WriteLine ("Starting test run");
 
-				double launch_timeout = waits_for_exit ? Harness.Timeout : 1;
-				double listener_timeout = waits_for_exit ? 0.2 : Harness.Timeout;
-				await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), main_log, TimeSpan.FromMinutes (launch_timeout));
-				if (listener.WaitForCompletion (TimeSpan.FromMinutes (listener_timeout))) {
-					main_log.WriteLine ("Test run completed");
-				} else {
-					main_log.WriteLine ("Test run did not complete in {0} minutes.", Harness.Timeout);
-					listener.Cancel ();
-					success = false;
+				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), main_log, TimeSpan.FromMinutes (Harness.Timeout), cancellation_token: cancellation_source.Token);
+				if (result.TimedOut) {
 					timed_out = true;
+					success = false;
+					main_log.WriteLine ("Test run timed out after {0} minute(s).", Harness.Timeout);
+				} else if (result.Succeeded) {
+					main_log.WriteLine ("Test run completed");
+					success = true;
+				} else {
+					main_log.WriteLine ("Test run failed");
+					success = false;
 				}
 
 				logdev.StopCapture ();

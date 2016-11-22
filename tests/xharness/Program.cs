@@ -29,6 +29,12 @@ namespace xharness
 						harness.IOSTestProjects.Add (new TestProject (v));
 					}
 				},
+				{ "runapp=", "Executes an app.", (v) =>
+					{
+						harness.Action = HarnessAction.Run;
+						harness.IOSTestApps.Add (v);
+					}
+				},
 				{ "install=", "Installs a project.", (v) =>
 					{
 						harness.Action = HarnessAction.Install;

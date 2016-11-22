@@ -191,7 +191,7 @@ namespace Xamarin.Bundler {
 			var eq_index2 = value.IndexOf ('=', eq_index + 1);
 			if (eq_index2 == -1) {
 				target = value.Substring (eq_index + 1);
-				if (assembly_name == "@all" || assembly_name == "@rest") {
+				if (assembly_name == "@all" || assembly_name == "@sdk") {
 					name = string.Empty;
 				} else {
 					name = assembly_name;
@@ -235,19 +235,23 @@ namespace Xamarin.Bundler {
 
 			Tuple<AssemblyBuildTarget, string> all = null;
 			Tuple<AssemblyBuildTarget, string> rest = null;
+			Tuple<AssemblyBuildTarget, string> sdk = null;
 			
 			if (assembly_build_targets.TryGetValue ("@all", out all) && assembly_build_targets.Count != 1)
 				throw new Exception ();
-			assembly_build_targets.TryGetValue ("@rest", out rest);
+			assembly_build_targets.TryGetValue ("@sdk", out sdk);
 
 			foreach (var target in Targets) {
 				foreach (var assembly in target.Assemblies) {
 					Tuple<AssemblyBuildTarget, string> build_target;
 
-					if (all != null)
-						build_target = all;
-					else if (!assembly_build_targets.TryGetValue (assembly.FileName, out build_target))
-						build_target = rest;
+					if (assembly_build_targets.TryGetValue (assembly.FileName, out build_target)) {
+						// nothing to do
+					} else if (sdk != null && Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (assembly.FileName))) {
+						build_target = sdk;
+					} else {
+						build_target = all ?? rest;
+					}
 
 					if (build_target == null)
 						throw new Exception ();

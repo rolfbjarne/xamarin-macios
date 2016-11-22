@@ -17,6 +17,7 @@ namespace Xamarin
 
 		public void Dispose ()
 		{
+			return;
 			if (directories_to_delete != null) {
 				foreach (var dir in directories_to_delete)
 					Directory.Delete (dir, true);

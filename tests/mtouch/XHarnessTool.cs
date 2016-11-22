@@ -27,11 +27,11 @@ namespace Xamarin
 			}
 		}
 
-		public int Run (string project_file)
+		public int Run (string project_directory)
 		{
 			var sb = new StringBuilder ();
 			sb.Append (MTouch.Quote (XHarnessPath));
-			sb.Append (" --run ").Append (MTouch.Quote (project_file));
+			sb.Append (" --run ").Append (MTouch.Quote (project_directory));
 			sb.Append (" --target ").Append (Target);
 
 			if (SdkRoot == MTouchTool.None) {
@@ -48,6 +48,26 @@ namespace Xamarin
 			return Execute (sb.ToString ());
 		}
 
+		public int Install (string project_file)
+		{
+			var sb = new StringBuilder ();
+			sb.Append (MTouch.Quote (XHarnessPath));
+			sb.Append (" --install ").Append (MTouch.Quote (project_file));
+			sb.Append (" --target ").Append (Target);
+
+			if (SdkRoot == MTouchTool.None) {
+				// do nothing
+			} else if (!string.IsNullOrEmpty (SdkRoot)) {
+				sb.Append (" --sdkroot ").Append (MTouch.Quote (SdkRoot));
+			} else {
+				sb.Append (" --sdkroot ").Append (MTouch.Quote (Xamarin.Tests.Configuration.xcode_root));
+			}
+
+			sb.Append (" --logdirectory ").Append (MTouch.Quote (LogDirectory));
+			sb.Append (" --configuration ").Append (Configuration);
+			sb.Append (" --verbose");
+			return Execute (sb.ToString ());
+		}
 		void IDisposable.Dispose ()
 		{
 		}

@@ -783,6 +783,20 @@ namespace Xamarin
 			}
 		}
 
+		public static string GetMinSdkVersion (Profile profile)
+		{
+			switch (profile) {
+			case Profile.Unified:
+				return "6.0";
+			case Profile.TVOS:
+				return "9.0";
+			case Profile.WatchOS:
+				return "2.0";
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
 		[Test]
 		public void LinkAll_Frameworks ()
 		{

@@ -18,6 +18,8 @@ namespace Xamarin
 		public string MTouchArch_Simulator;
 		public string MTouchArch_Device;
 		public string MTouchLink;
+		public bool MTouchProfiling;
+		public bool MTouchUseLlvm;
 		public List<string> References = new List<string> () { "System", "System.Xml", "System.Core" };
 		public List<string> Files = new List<string> ();
 		public List<ProjectFile> ProjectReferences = new List<ProjectFile> ();
@@ -60,6 +62,8 @@ namespace Xamarin
 			sb.WriteLine ($@"    <MtouchLink>{MTouchLink}</MtouchLink>");
 			sb.WriteLine ($@"    <MtouchExtraArgs>{MTouchExtraArgs}</MtouchExtraArgs>");
 			sb.WriteLine ($@"    <MtouchDebug>{MTouchDebug}</MtouchDebug>");
+			sb.WriteLine ($@"    <MtouchProfiling>{MTouchProfiling}</MtouchProfiling>");
+			sb.WriteLine ($@"    <MtouchUseLlvm>{MTouchUseLlvm}</MtouchUseLlvm>");
 			sb.WriteLine ($@"  </PropertyGroup>");
 			sb.WriteLine ($@"  <PropertyGroup Condition="" '$(Platform)' == 'iPhoneSimulator' "">");
 			sb.WriteLine ($@"    <MtouchArch>{MTouchArch_Simulator}</MtouchArch>");
@@ -181,7 +185,7 @@ public partial class AppDelegate : UIApplicationDelegate
 			sb.WriteLine ($@"	<key>CFBundleName</key>");
 			sb.WriteLine ($@"	<string>{name}</string>");
 			sb.WriteLine ($@"	<key>MinimumOSVersion</key>");
-			sb.WriteLine ($@"	<string>{MTouch.GetSdkVersion (Profile)}</string>");
+			sb.WriteLine ($@"	<string>{MTouch.GetMinSdkVersion (Profile)}</string>");
 			sb.WriteLine ($@"	<key>UIDeviceFamily</key>");
 			sb.WriteLine ($@"	<array>");
 			switch (Profile) {

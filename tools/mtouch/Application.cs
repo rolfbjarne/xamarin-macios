@@ -226,35 +226,41 @@ namespace Xamarin.Bundler {
 
 		void SelectAssemblyBuildTargets ()
 		{
+			Tuple<AssemblyBuildTarget, string> all = null;
+			Tuple<AssemblyBuildTarget, string> sdk = null;
+			List<Exception> exceptions = null;
+
 			if (IsSimulatorBuild)
 				return;
 
 			// By default every assemblies is compiled to a static object.
-			if (assembly_build_targets.Count == 0)
-				assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, ""));
+			if (this.assembly_build_targets.Count == 0)
+				this.assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, ""));
 
-			Tuple<AssemblyBuildTarget, string> all = null;
-			Tuple<AssemblyBuildTarget, string> rest = null;
-			Tuple<AssemblyBuildTarget, string> sdk = null;
-			
-			if (assembly_build_targets.TryGetValue ("@all", out all) && assembly_build_targets.Count != 1)
-				throw new Exception ();
-			assembly_build_targets.TryGetValue ("@sdk", out sdk);
+			this.assembly_build_targets.TryGetValue ("@all", out all);
+			this.assembly_build_targets.TryGetValue ("@sdk", out sdk);
 
 			foreach (var target in Targets) {
+				var assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> (this.assembly_build_targets);
+
 				foreach (var assembly in target.Assemblies) {
 					Tuple<AssemblyBuildTarget, string> build_target;
+					var asm_name = Path.GetFileNameWithoutExtension (assembly.FileName);
 
-					if (assembly_build_targets.TryGetValue (assembly.FileName, out build_target)) {
-						// nothing to do
-					} else if (sdk != null && Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (assembly.FileName))) {
+					if (assembly_build_targets.TryGetValue (asm_name, out build_target)) {
+						assembly_build_targets.Remove (asm_name);
+					} else if (sdk != null && Profile.IsSdkAssembly (asm_name)) {
 						build_target = sdk;
 					} else {
-						build_target = all ?? rest;
+						build_target = all;
 					}
 
-					if (build_target == null)
-						throw new Exception ();
+					if (build_target == null) {
+						if (exceptions == null)
+							exceptions = new List<Exception> ();
+						exceptions.Add (ErrorHelper.CreateError (98, "No assembly build target was specified for '{0}'.", Path.GetFileNameWithoutExtension (assembly.FileName)));
+						continue;
+					}
 
 					assembly.BuildTarget = build_target.Item1;
 					// We set the build target name to include the extension
@@ -262,6 +268,18 @@ namespace Xamarin.Bundler {
 					// (this way it doesn't clash with system's System.framework).
 					assembly.BuildTargetName = string.IsNullOrEmpty (build_target.Item2) ? Path.GetFileName (assembly.FileName) : build_target.Item2;
 				}
+
+				foreach (var abt in assembly_build_targets) {
+					if (abt.Key == "@all" || abt.Key == "@sdk")
+						continue;
+
+					if (exceptions == null)
+						exceptions = new List<Exception> ();
+					exceptions.Add (ErrorHelper.CreateError (99, "The assembly build target '{0}' did not match any assemblies.", abt.Key));
+				}
+
+				if (exceptions != null)
+					continue;
 
 				var grouped = target.Assemblies.GroupBy ((a) => a.BuildTargetName);
 				foreach (var @group in grouped) {
@@ -278,6 +296,10 @@ namespace Xamarin.Bundler {
 						throw new Exception ();
 				}
 			}
+
+
+			if (exceptions != null)
+				throw new AggregateException (exceptions);
 		}
 
 		public void SetDlsymOption (string asm, bool dlsym)

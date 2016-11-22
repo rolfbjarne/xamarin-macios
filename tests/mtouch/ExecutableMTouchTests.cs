@@ -41,9 +41,9 @@ namespace Xamarin
 		[TestCase (Profile.WatchOS, "armv7k", true, "--assembly-build-target=@all=dynamiclibrary", true)]
 
 		// debug build building to frameworks and profiling enabled
-		[TestCase (Profile.Unified, "armv7,arm64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@rest=framework", true)]
-		[TestCase (Profile.TVOS, "arm64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@rest=framework", true)]
-		[TestCase (Profile.WatchOS, "armv7k", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@rest=framework", true)]
+		[TestCase (Profile.Unified, "armv7,arm64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
+		[TestCase (Profile.TVOS, "arm64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
+		[TestCase (Profile.WatchOS, "armv7k", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
 
 		// release builds using static objects
 		[TestCase (Profile.Unified, "armv7,arm64", false, "--assembly-build-target=@all=staticobject", false)]
@@ -51,9 +51,9 @@ namespace Xamarin
 		[TestCase (Profile.WatchOS, "armv7k", false, "--assembly-build-target=@all=staticobject", false)]
 
 		// release builds using frameworks
-		[TestCase (Profile.Unified, "armv7,arm64",false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@rest=framework", false)]
-		[TestCase (Profile.TVOS, "arm64", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@rest=framework", false)]
-		[TestCase (Profile.WatchOS, "armv7k", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@rest=framework", false)]
+		[TestCase (Profile.Unified, "armv7,arm64",false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
+		[TestCase (Profile.TVOS, "arm64", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
+		[TestCase (Profile.WatchOS, "armv7k", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
 
 		public void BuildTest (
 			Profile profile,
@@ -71,14 +71,17 @@ namespace Xamarin
 				project.ProjectPath = Path.Combine (dir, nameof (BuildTest) + ".csproj");
 				project.Profile = profile;
 				project.MTouchArch_Device = architecture;
-				switch (profile) {
-				case Profile.Unified:
+				switch (architecture) {
+				case "armv7,arm64":
+				case "armv7s,arm64":
+				case "armv7,armv7s,arm64":
 					project.MTouchArch_Simulator = "i386,x86_64";
 					break;
-				case Profile.TVOS:
+				case "arm64":
 					project.MTouchArch_Simulator = "x86_64";
 					break;
-				case Profile.WatchOS:
+				case "armv7":
+				case "armv7k":
 					project.MTouchArch_Simulator = "i386";
 					break;
 				default:
@@ -87,11 +90,11 @@ namespace Xamarin
 				project.MTouchProfiling = profiling;
 				project.MTouchDebug = debug;
 				project.MTouchUseLlvm = llvm;
-				project.MTouchExtraArgs = build_target;
+				project.MTouchExtraArgs = build_target  + " -vvvvvv";
 				project.GenerateInfoPlist ();
 				project.GenerateUnitTestProject ();
 
-				XBuild.Build (project.ProjectPath, platform: "iPhone");
+				XBuild.Build (project.ProjectPath, platform: "iPhone", verbosity: "diagnostic");
 
 				using (var xharness = new XHarnessTool ()) {
 					xharness.Configuration = "Debug";

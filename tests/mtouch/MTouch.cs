@@ -632,6 +632,25 @@ namespace Xamarin
 		}
 
 		[Test]
+		public void MT0098_99 ()
+		{
+			using (var mtouch = new MTouchTool ()) {
+				mtouch.CreateTemporaryApp ();
+				mtouch.Linker = MTouchLinker.DontLink; // the MT0098 check happens after linking, but before AOT-compiling, so not linking makes the test faster.
+				mtouch.AssemblyBuildTargets.Add ("mscorlib=framework");
+				mtouch.AssemblyBuildTargets.Add ("dummy=framework");
+				mtouch.AssertExecuteFailure (MTouchAction.BuildDev, "build");
+				mtouch.AssertError (98, "No assembly build target was specified for 'testApp'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'System'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'System.Xml'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'System.Core'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'Mono.Dynamic.Interpreter'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'Xamarin.iOS'.");
+				mtouch.AssertError (99, "The assembly build target 'dummy' did not match any assemblies.");
+			}
+		}
+
+		[Test]
 		public void ExtensionBuild ()
 		{
 			using (var mtouch = new MTouchTool ()) {

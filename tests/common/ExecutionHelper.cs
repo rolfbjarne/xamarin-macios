@@ -188,7 +188,7 @@ namespace Xamarin.Tests
 			env ["MD_APPLE_SDK_ROOT"] = Path.GetDirectoryName (Path.GetDirectoryName (Configuration.xcode_root));
 #if MONOTOUCH
 			env ["MD_MTOUCH_SDK_ROOT"] = Configuration.SdkRootXI;
-			env ["XBUILD_FRAMEWORK_FOLDERS_PATH"] = Configuration.TargetDirectoryXI;
+			env ["XBUILD_FRAMEWORK_FOLDERS_PATH"] = Configuration.XBuildFrameworkFoldersPathXI;
 			env ["MSBuildExtensionsPath"] = Configuration.MSBuildExtensionsPathXI;
 #endif
 

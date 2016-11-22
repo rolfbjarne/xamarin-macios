@@ -84,6 +84,7 @@ namespace Xamarin
 		// These are a bit smarter
 		public MTouch.Profile Profile = MTouch.Profile.Unified;
 		public bool NoPlatformAssemblyReference;
+		public List<string> AssemblyBuildTargets = new List<string> ();
 		static XmlDocument device_list_cache;
 
 		Cache cache;
@@ -372,6 +373,9 @@ namespace Xamarin
 
 			if (!string.IsNullOrEmpty (Device))
 				sb.Append (" --device:").Append (MTouch.Quote (Device));
+
+			foreach (var abt in AssemblyBuildTargets)
+				sb.Append (" --assembly-build-target ").Append (MTouch.Quote (abt));
 
 			return sb.ToString ();
 		}

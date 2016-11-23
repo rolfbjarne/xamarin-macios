@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>mtouch</AssemblyName>
     <RootNamespace>mtouch</RootNamespace>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -319,6 +320,7 @@
     <Compile Include="..\linker\RemoveUserResourcesSubStep.cs">
       <Link>Xamarin.Linker\RemoveUserResourcesSubStep.cs</Link>
     </Compile>
+    <Compile Include="common\Tasks.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

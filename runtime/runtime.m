@@ -2229,6 +2229,14 @@ xamarin_locate_assembly_resource_for_root (const char *root, const char *culture
 	}
 
 #if !MONOMAC
+	// pointer-size subdirectory with arch-specific extension
+	if (snprintf (path, pathlen, "%s/%s/%s.%s", root, ARCH_SUBDIR, resource, xamarin_arch_name) < 0) {
+		LOG (PRODUCT ": Failed to construct path for resource: %s (5): %s", resource, strerror (errno));
+		return false;
+	} else if (xamarin_file_exists (path)) {
+		return true;
+	}
+
 	// pointer-size subdirectory
 	if (snprintf (path, pathlen, "%s/%s/%s", root, ARCH_SUBDIR, resource) < 0) {
 		LOG (PRODUCT ": Failed to construct path for resource: %s (5): %s", resource, strerror (errno));

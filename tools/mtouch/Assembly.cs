@@ -20,6 +20,7 @@ namespace Xamarin.Bundler {
 
 	public class AotInfo
 	{
+		public AOTTask Task;
 		public List<string> BitcodeFiles = new List<string> (); // .bc files produced by the AOT compiler
 		public List<string> AsmFiles = new List<string> (); // .s files produced by the AOT compiler.
 		public List<string> AotDataFiles = new List<string> (); // .aotdata files produced by the AOT compiler
@@ -100,6 +101,7 @@ namespace Xamarin.Bundler {
 					copied = true;
 					if (strip) {
 						Driver.FileDelete (target);
+						Directory.CreateDirectory (Path.GetDirectoryName (target));
 						MonoTouch.Tuner.Stripper.Process (source, target);
 					} else {
 						Application.CopyFile (source, target);
@@ -221,7 +223,7 @@ namespace Xamarin.Bundler {
 		 *          [is llvm creating assembly code] => .s + -llvm.s + .aotdata
 		 *          [is llvm creating object code]   => .s + -llvm.o + .aotdata
 		 */
-		public void CreateAOTTask (List<BuildTask> tasks, Abi abi)
+		public AOTTask CreateAOTTask (Abi abi)
 		{
 			var build_dir = Target.BuildDirectory;
 			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
@@ -270,57 +272,33 @@ namespace Xamarin.Bundler {
 			outputs.AddRange (aotInfo.BitcodeFiles);
 			outputs.AddRange (aotInfo.ObjectFiles);
 
+			var aotCompiler = Driver.GetAotCompiler (Target.Is64Build);
+			var aotArgs = Driver.GetAotArguments (assembly_path, abi, build_dir, asm_output, llvm_aot_ofile, aot_data);
+			var task = new AOTTask
+			{
+				AssemblyName = assembly_path,
+				ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
+			};
+
 			// Check if the output is up-to-date
+			var uptodate = false;
 			if (has_dependency_map) { // We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
 				dependencies.AddRange (dependency_map);
 				dependencies.Add (assembly_path);
 				dependencies.Add (Driver.GetAotCompiler (Target.Is64Build));
-				if (Application.IsUptodate (dependencies, outputs)) {
-					Driver.Log (3, "Target(s) {0} up-to-date.", string.Join (", ", outputs.ToArray ()));
-					return;
-				}
+				uptodate = Application.IsUptodate (dependencies, outputs);
 			}
 
-			Application.TryDelete (outputs); // otherwise the next task might not detect that it has to rebuild.
-			Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", outputs.ToArray ()));
-		
-			// Output is not up-to-date, so we must run the AOT compiler.
-			var aotCompiler = Driver.GetAotCompiler (Target.Is64Build);
-			var aotArgs = Driver.GetAotArguments (assembly_path, abi, build_dir, asm_output, llvm_aot_ofile, aot_data);
-			tasks.Add (new AOTTask ()
-			{
-				AssemblyName = assembly_path,
-				ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
-			});
-		}
-
-		public void ConvertToBitcodeTask (List<BuildTask> tasks, Abi abi)
-		{
-			// Converts .s into bitcode (.ll).
-
-			if (!App.EnableAsmOnlyBitCode)
-				return;
-
-			var info = AotInfos [abi];
-			foreach (var asm in info.AsmFiles) {
-				var input = asm;
-				var output = asm + ".ll";
-
-				info.BitcodeFiles.Add (output);
-
-				if (Application.IsUptodate (input, output))
-					continue;
-
-				Application.TryDelete (output);
-				tasks.Add (new BitCodeify ()
-				{
-					Input = input,
-					OutputFile = output,
-					Platform = App.Platform,
-					Abi = abi,
-					DeploymentTarget = App.DeploymentTarget,
-				});
+			if (uptodate) {
+				Driver.Log (3, "Target(s) {0} up-to-date.", string.Join (", ", outputs.ToArray ()));
+				task.SetCompleted ();
+			} else {
+				Application.TryDelete (outputs); // otherwise the next task might not detect that it has to rebuild.
+				Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", outputs.ToArray ()));
 			}
+
+			aotInfo.Task = task;
+			return task;
 		}
 
 		//IEnumerable<BuildTask> CreateManagedToAssemblyTasks (string assembly_path, Abi abi, string build_dir)

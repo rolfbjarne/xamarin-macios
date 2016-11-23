@@ -20,6 +20,7 @@ namespace Xamarin
 		public string MTouchLink;
 		public bool MTouchProfiling;
 		public bool MTouchUseLlvm;
+		public bool MTouchEnableBitcode;
 		public List<string> References = new List<string> () { "System", "System.Xml", "System.Core" };
 		public List<string> Files = new List<string> ();
 		public List<ProjectFile> ProjectReferences = new List<ProjectFile> ();
@@ -30,15 +31,21 @@ namespace Xamarin
 			string suffix;
 			string target_framework_identifier;
 			string project_type_guids;
-		
+			string target_type;
 
 			switch (Profile) {
 			case MTouch.Profile.Unified:
 				suffix = "ios";
 				target_framework_identifier = "Xamarin.iOS";
 				project_type_guids = "{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";
+				target_type = "iOS";
 				break;
 			case MTouch.Profile.TVOS:
+				suffix = "tvos";
+				target_framework_identifier = "Xamarin.TVOS";
+				project_type_guids = "{06FA79CB-D6CD-4721-BB4B-1BD202089C55};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";
+				target_type = "tvOS";
+				break;
 			case MTouch.Profile.WatchOS:
 			default:
 				throw new NotImplementedException ();
@@ -54,8 +61,8 @@ namespace Xamarin
 			sb.WriteLine ($@"    <TargetFrameworkIdentifier>{target_framework_identifier}</TargetFrameworkIdentifier>");
 			sb.WriteLine ($@"    <OutputType>Exe</OutputType>");
 			sb.WriteLine ($@"    <AssemblyName>{System.IO.Path.GetFileNameWithoutExtension (ProjectPath)}</AssemblyName>");
-			sb.WriteLine ($@"    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)-{suffix}</IntermediateOutputPath>");
-			sb.WriteLine ($@"    <OutputPath>bin\$(Platform)\$(Configuration)-{suffix}</OutputPath>");
+			sb.WriteLine ($@"    <IntermediateOutputPath>obj\$(Platform)\{suffix}</IntermediateOutputPath>");
+			sb.WriteLine ($@"    <OutputPath>bin\$(Platform)\{suffix}</OutputPath>");
 			sb.WriteLine ($@"    <DebugSymbols>True</DebugSymbols>");
 			sb.WriteLine ($@"    <DebugType>full</DebugType>");
 			sb.WriteLine ($@"    <Optimize>False</Optimize>");
@@ -64,6 +71,7 @@ namespace Xamarin
 			sb.WriteLine ($@"    <MtouchDebug>{MTouchDebug}</MtouchDebug>");
 			sb.WriteLine ($@"    <MtouchProfiling>{MTouchProfiling}</MtouchProfiling>");
 			sb.WriteLine ($@"    <MtouchUseLlvm>{MTouchUseLlvm}</MtouchUseLlvm>");
+			sb.WriteLine ($@"    <MtouchEnableBitcode>{MTouchEnableBitcode}</MtouchEnableBitcode>");
 			sb.WriteLine ($@"  </PropertyGroup>");
 			sb.WriteLine ($@"  <PropertyGroup Condition="" '$(Platform)' == 'iPhoneSimulator' "">");
 			sb.WriteLine ($@"    <MtouchArch>{MTouchArch_Simulator}</MtouchArch>");
@@ -85,7 +93,7 @@ namespace Xamarin
 			foreach (var f in Files)
 				sb.WriteLine ($@"    <Compile Include=""{f}"" />");
 			sb.WriteLine ($@"  </ItemGroup>");
-			sb.WriteLine ($@"  <Import Project=""$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets"" />");
+			sb.WriteLine ($@"  <Import Project=""$(MSBuildExtensionsPath)\Xamarin\{target_type}\Xamarin.{target_type}.CSharp.targets"" />");
 			if (ProjectReferences.Count > 0) {
 				sb.WriteLine ($@"  <ItemGroup>");
 				foreach (var pr in ProjectReferences) {

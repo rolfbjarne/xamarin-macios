@@ -17,43 +17,44 @@ namespace Xamarin
 	[TestFixture]
 	public partial class MTouch
 	{
-
+		
 		// test reduction criteria:
 		// iOS builds are fat, since tvOS/watchOS won't be (i.e. tvOS/watchOS tests single-arch, iOS multi-arch).
-		// debug builds have profiling enabled, release builds doesn't.
-		// release builds have llvm enabled.
-		// release builds doesn't have incremental builds enabled
+		// debug builds have profiling enabled, release builds don't.
+		// release builds have llvm enabled (debug builds haven't).
+		// release builds doesn't have incremental builds enabled (some debug builds have).
 		[Test]
 
 		// standard debug build
-		[TestCase (Profile.Unified, "armv7,arm64", false, "--assembly-build-target=@all=staticobject", true)]
-		[TestCase (Profile.TVOS, "arm64", false, "--assembly-build-target=@all=staticobject", true)]
-		[TestCase (Profile.WatchOS, "arm7k", false, "--assembly-build-target=@all=staticobject", true)]
+		[TestCase (Profile.Unified, "ARMv7, ARM64", false, "--assembly-build-target=@all=staticobject", true)]
+		[TestCase (Profile.TVOS, "ARM64", false, "--assembly-build-target=@all=staticobject", true)]
+		[TestCase (Profile.WatchOS, "ARMv7k", false, "--assembly-build-target=@all=staticobject", true)]
 
 		// debug build with profiling enabled
-		[TestCase (Profile.Unified, "armv7,arm64", true, "--assembly-build-target=@all=staticobject", true)]
-		[TestCase (Profile.TVOS, "arm64", true, "--assembly-build-target=@all=staticobject", true)]
-		[TestCase (Profile.WatchOS, "armv7k", true, "--assembly-build-target=@all=staticobject", true)]
+		[TestCase (Profile.Unified, "ARMv7, ARM64", true, "--assembly-build-target=@all=staticobject", true)]
+		[TestCase (Profile.TVOS, "ARM64", true, "--assembly-build-target=@all=staticobject", true)]
+		[TestCase (Profile.WatchOS, "ARMv7k", true, "--assembly-build-target=@all=staticobject", true)]
 
 		// debug build building to dylibs (incremental builds) and profiling enabled.
-		[TestCase (Profile.Unified, "armv7,arm64", true, "--assembly-build-target=@all=dynamiclibrary", true)]
-		[TestCase (Profile.TVOS, "arm64", true, "--assembly-build-target=@all=dynamiclibrary", true)]
-		[TestCase (Profile.WatchOS, "armv7k", true, "--assembly-build-target=@all=dynamiclibrary", true)]
+		[TestCase (Profile.Unified, "ARMv7, ARM64", true, "--assembly-build-target=@all=dynamiclibrary", true)]
+		[TestCase (Profile.TVOS, "ARM64", true, "--assembly-build-target=@all=dynamiclibrary", true)]
+		[TestCase (Profile.WatchOS, "ARMv7k", true, "--assembly-build-target=@all=dynamiclibrary", true)]
 
 		// debug build building to frameworks and profiling enabled
-		[TestCase (Profile.Unified, "armv7,arm64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
-		[TestCase (Profile.TVOS, "arm64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
-		[TestCase (Profile.WatchOS, "armv7k", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
+		[TestCase (Profile.Unified, "ARMv7, ARM64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
+		[TestCase (Profile.TVOS, "ARM64", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
+		[TestCase (Profile.WatchOS, "ARMv7k", true, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", true)]
 
 		// release builds using static objects
-		[TestCase (Profile.Unified, "armv7,arm64", false, "--assembly-build-target=@all=staticobject", false)]
-		[TestCase (Profile.TVOS, "arm64", false, "--assembly-build-target=@all=staticobject", false)]
-		[TestCase (Profile.WatchOS, "armv7k", false, "--assembly-build-target=@all=staticobject", false)]
+		[TestCase (Profile.Unified, "ARMv7, ARM64", false, "--assembly-build-target=@all=staticobject", false)]
+		[TestCase (Profile.TVOS, "ARM64", false, "--assembly-build-target=@all=staticobject", false)]
+		[TestCase (Profile.WatchOS, "ARMv7k", false, "--assembly-build-target=@all=staticobject", false)]
 
 		// release builds using frameworks
-		[TestCase (Profile.Unified, "armv7,arm64",false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
-		[TestCase (Profile.TVOS, "arm64", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
-		[TestCase (Profile.WatchOS, "armv7k", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
+		[TestCase (Profile.Unified, "ARMv7, ARM64",false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
+		[TestCase (Profile.Unified, "ARMv7", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)] // this exposes an llvm bug (I think?). Selectors end up not being unique, causing "Selector.GetHandle" to return invalid values.
+		[TestCase (Profile.TVOS, "ARM64", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
+		[TestCase (Profile.WatchOS, "ARMv7k", false, "--assembly-build-target=@sdk=framework=Xamarin.Sdk --assembly-build-target=@all=framework", false)]
 
 		public void BuildTest (
 			Profile profile,
@@ -64,6 +65,7 @@ namespace Xamarin
 		)
 		{
 			bool llvm = !debug;
+			bool bitcode = !debug && profile != Profile.Unified;
 
 			using (var cache = new Cache ()) {
 				var dir = cache.CreateTemporaryDirectory ();
@@ -72,16 +74,16 @@ namespace Xamarin
 				project.Profile = profile;
 				project.MTouchArch_Device = architecture;
 				switch (architecture) {
-				case "armv7,arm64":
-				case "armv7s,arm64":
-				case "armv7,armv7s,arm64":
-					project.MTouchArch_Simulator = "i386,x86_64";
+				case "ARMv7, ARM64":
+				case "ARMv7s,ARM64":
+				case "ARMv7,ARMv7s,ARM64":
+					project.MTouchArch_Simulator = "i386, x86_64";
 					break;
-				case "arm64":
+				case "ARM64":
 					project.MTouchArch_Simulator = "x86_64";
 					break;
-				case "armv7":
-				case "armv7k":
+				case "ARMv7":
+				case "ARMv7k":
 					project.MTouchArch_Simulator = "i386";
 					break;
 				default:
@@ -91,6 +93,7 @@ namespace Xamarin
 				project.MTouchDebug = debug;
 				project.MTouchUseLlvm = llvm;
 				project.MTouchExtraArgs = build_target  + " -vvvvvv";
+				project.MTouchEnableBitcode = bitcode;
 				project.GenerateInfoPlist ();
 				project.GenerateUnitTestProject ();
 

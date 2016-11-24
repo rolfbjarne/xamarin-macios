@@ -716,6 +716,7 @@ namespace Xamarin.Bundler {
 			CompilePInvokeWrappers (build_tasks);
 			BuildApp (build_tasks);
 
+			build_tasks.Dump ();
 			build_tasks.Execute ();
 
 			// TODO: make more of the below actions parallelizable.
@@ -1106,7 +1107,7 @@ namespace Xamarin.Bundler {
 					continue;
 
 				target.ComputeLinkerFlags ();
-				target.Compile (build_tasks);
+				target.Compile ();
 				target.NativeLink (build_tasks);
 			}
 		}
@@ -2049,13 +2050,9 @@ namespace Xamarin.Bundler {
 
 	internal class PinvokesTask : CompileTask
 	{
-		public static void Create (List<BuildTask> tasks, IEnumerable<Abi> abis, Target target, string ifile)
-		{
-			foreach (var abi in abis)
-				Create (tasks, abi, target, ifile);
-		}
+		public bool IsFramework;
 
-		public static void Create (List<BuildTask> tasks, Abi abi, Target target, string ifile)
+		public static PinvokesTask Create (Abi abi, Target target, string ifile)
 		{
 			var arch = abi.AsArchString ();
 			string ofile;
@@ -2066,6 +2063,8 @@ namespace Xamarin.Bundler {
 				ofile = Path.Combine (Cache.Location, arch, "libpinvokes.a");
 				break;
 			case AssemblyBuildTarget.DynamicLibrary:
+				ofile = Path.Combine (Cache.Location, arch, "Xamarin.PInvokes.framework", "Xamarin.PInvokes");
+				break;
 			case AssemblyBuildTarget.Framework:
 				ofile = Path.Combine (Cache.Location, arch, "libpinvokes.dylib");
 				break;
@@ -2081,6 +2080,7 @@ namespace Xamarin.Bundler {
 				OutputFile = ofile,
 				SharedLibrary = mode != AssemblyBuildTarget.StaticObject,
 				Language = "objective-c++",
+				IsFramework = mode == AssemblyBuildTarget.Framework,
 			};
 			if (pinvoke_task.SharedLibrary) {
 				if (mode == AssemblyBuildTarget.Framework) {
@@ -2091,53 +2091,25 @@ namespace Xamarin.Bundler {
 				pinvoke_task.CompilerFlags.AddFramework ("Foundation");
 				pinvoke_task.CompilerFlags.LinkWithXamarin ();
 			}
-			tasks.Add (pinvoke_task);
 
-			if (Application.IsUptodate (ifile, ofile)) {
-				pinvoke_task.SetCompleted ();
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
-			}
-
-			if (mode == AssemblyBuildTarget.Framework) {
-				var create_framework = new ConvertSharedLibraryToFrameworkTask ()
-				{
-					Target = target,
-					SharedLibraryPath = ofile,
-					OutputPath = Path.GetDirectoryName (ofile),
-					FrameworkName = "Xamarin.PInvokes",
-				};
-				create_framework.AddDependency (pinvoke_task);
-				tasks.Add (create_framework);
-			}
+			return pinvoke_task;
 		}
 
 		protected async override Task ExecuteAsync ()
 		{
+			CompilerFlags.PopulateInputs ();
+			if (Application.IsUptodate (CompilerFlags.Inputs, new string [] { OutputFile })) {
+				Driver.Log (3, "Target '{0}' is up-to-date.", OutputFile);
+			}
+
 			if (await CompileAsync () != 0)
 				throw new MonoTouchException (4002, true, "Failed to compile the generated code for P/Invoke methods. Please file a bug report at http://bugzilla.xamarin.com");
-		}
-	}
-
-	internal class ConvertSharedLibraryToFrameworkTask : BuildTask
-	{
-		public Target Target;
-		public string SharedLibraryPath;
-		public string OutputPath;
-		public string FrameworkName;
-
-		protected override Task ExecuteAsync ()
-		{
-			var fw_dir = Path.Combine (OutputPath, FrameworkName + ".framework");
-			Directory.CreateDirectory (fw_dir);
-
-			var fw_src = SharedLibraryPath;
-			var fw_dst = Path.Combine (fw_dir, FrameworkName);
-			Application.UpdateFile (fw_src, fw_dst);
-
-			var plist_path = Path.Combine (fw_dir, "Info.plist");
-			Target.App.CreateFrameworkInfoPList (plist_path, FrameworkName, Driver.App.BundleId + ".frameworks." + FrameworkName, FrameworkName);
-
-			return Task.CompletedTask;
+			
+			if (IsFramework) {
+				var plist_path = Path.Combine (Path.GetDirectoryName (OutputFile), "Info.plist");
+				var fw_name = Path.GetFileNameWithoutExtension (OutputFile);
+				Target.App.CreateFrameworkInfoPList (plist_path, fw_name, Driver.App.BundleId + ".frameworks." + fw_name, fw_name);
+			}
 		}
 	}
 
@@ -2181,10 +2153,25 @@ namespace Xamarin.Bundler {
 	}
 
 	public class AOTTask : ProcessTask {
+		public Assembly Assembly;
 		public string AssemblyName;
+		public List<string> Outputs;
 
 		protected async override Task ExecuteAsync ()
 		{
+			// Check if the output is up-to-date
+			List<string> dependencies = new List<string> ();
+			if (Assembly.HasDependencyMap) { // We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
+				dependencies.AddRange (Assembly.DependencyMap);
+				dependencies.Add (AssemblyName);
+				dependencies.Add (Driver.GetAotCompiler (Assembly.Target.Is64Build));
+				if (Application.IsUptodate (dependencies, Outputs)) {
+					Driver.Log (3, "Target(s) {0} up-to-date.", string.Join (", ", Outputs.ToArray ()));
+					return;
+				}
+			}
+
+			Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", Outputs.ToArray ()));
 			var exit_code = await StartAsync ();
 
 			if (exit_code == 0)
@@ -2203,6 +2190,11 @@ namespace Xamarin.Bundler {
 			}
 
 			throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
+		}
+
+		public override string ToString ()
+		{
+			return Path.GetFileName (AssemblyName);
 		}
 	}
 
@@ -2257,12 +2249,17 @@ namespace Xamarin.Bundler {
 				Target.AdjustDylibs ();
 			Driver.Watch ("Native Link", 1);
 		}
+
+		public override string ToString ()
+		{
+			return Path.GetFileName (OutputFile);
+		}
 	}
 
 	public class LinkTask : CompileTask {
 		protected override Task ExecuteAsync ()
 		{
-			CompilerFlags.Prepare ();
+			CompilerFlags.PopulateInputs ();
 			if (Application.IsUptodate (CompilerFlags.Inputs, new string [] { OutputFile })) {
 				Driver.Log ("Target {0} is up-to-date.", OutputFile);
 				return Task.CompletedTask;
@@ -2406,11 +2403,18 @@ namespace Xamarin.Bundler {
 
 		protected override async Task ExecuteAsync ()
 		{
+			CompilerFlags.PopulateInputs ();
+
+			if (Application.IsUptodate (CompilerFlags.Inputs, new string [] { OutputFile })) {
+				Driver.Log (3, "Target '{0}' is up-to-date", OutputFile);
+				return;
+			}
+
 			if (await CompileAsync () != 0)
 				throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
 		}
 
-		public async Task<int> CompileAsync ()
+		protected async Task<int> CompileAsync ()
 		{
 			if (App.IsDeviceBuild) {
 				GetDeviceCompilerFlags (CompilerFlags, IsAssembler);
@@ -2440,6 +2444,13 @@ namespace Xamarin.Bundler {
 			
 			return rv;
 		}
+
+		public override string ToString ()
+		{
+			if (compiler_flags == null)
+				return Path.GetFileName (OutputFile);
+			return string.Join (", ", compiler_flags.SourceFiles.Select ((arg) => Path.GetFileName (arg)).ToArray ());
+		}
 	}
 
 	public class BitCodeify : BuildTask {
@@ -2457,6 +2468,11 @@ namespace Xamarin.Bundler {
 			}
 			
 			new BitcodeConverter (Input, OutputFile, Platform, Abi, DeploymentTarget).Convert ();
+		}
+
+		public override string ToString ()
+		{
+			return Path.GetFileName (Input);
 		}
 	}
 }

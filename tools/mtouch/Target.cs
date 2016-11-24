@@ -45,6 +45,7 @@ namespace Xamarin.Bundler
 
 		public Dictionary<string, BundleFileInfo> BundleFiles = new Dictionary<string, BundleFileInfo> ();
 
+		Dictionary<Abi, CompileTask> pinvoke_tasks = new Dictionary<Abi, CompileTask> ();
 		List<CompileTask> link_with_task_output = new List<CompileTask> ();
 		CompilerFlags linker_flags;
 
@@ -93,6 +94,12 @@ namespace Xamarin.Bundler
 				LinkWithStaticLibrary (task.OutputFile);
 			}
 			link_with_task_output.Add (task);
+		}
+
+		public void LinkWithTaskOutput (IEnumerable<CompileTask> tasks)
+		{
+			foreach (var t in tasks)
+				LinkWithTaskOutput (t);
 		}
 
 		public void LinkWithStaticLibrary (string path)
@@ -700,15 +707,11 @@ namespace Xamarin.Bundler
 				state.End ();
 			}
 
-			PinvokesTask.Create (build_tasks, Abis, this, state.SourcePath);
-
-			//if (App.FastDev) {
-			// In this case assemblies must link with the resulting dylib,
-			// so we can't compile the pinvoke dylib in parallel with later
-			// stuff.
-			// FIXME: the dylib targets must add this target as a dependency.
-			// compile_tasks.ExecuteInParallel ();
-			//}
+			foreach (var abi in Abis) {
+				var t = PinvokesTask.Create (abi, this, state.SourcePath);
+				pinvoke_tasks.Add (abi, t);
+				build_tasks.Add (t);
+			}
 		}
 
 		public void SelectStaticRegistrar ()
@@ -725,14 +728,14 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		void AOTCompile (BuildTasks build_tasks)
+		void AOTCompile ()
 		{
 			if (App.IsSimulatorBuild)
 				return;
 
 			foreach (var a in Assemblies) {
 				foreach (var abi in Abis) {
-					build_tasks.Add (a.CreateAOTTask (abi));
+					a.CreateAOTTask (abi);
 				}
 			}
 
@@ -772,62 +775,55 @@ namespace Xamarin.Bundler
 					string install_name;
 					string compiler_output;
 					var compiler_flags = new CompilerFlags (this);
-					var link_dependencies = new List<BuildTask> ();
+					var link_dependencies = new List<CompileTask> ();
 					var infos = assemblies.Select ((asm) => asm.AotInfos [abi]);
 					var aottasks = infos.Select ((info) => info.Task);
 
-					// If we have more than one source file, we have to compile each of them to object files first.
+					// We have to compile any source files to object files before we can link.
 					var sources = infos.SelectMany ((info) => info.AsmFiles);
 					if (sources.Count () > 0) {
-						var skip_compile = sources.Count () == 1; // only one source file: we can skip the compile task, clang will compile & link in one go in the link task.
 						foreach (var src in sources) {
-							// We might have to convert to bitcode assembly (.ll) first
+							// We might have to convert .s to bitcode assembly (.ll) first
+							var assembly = src;
 							BitCodeify bitcode_task = null;
 							if (App.EnableAsmOnlyBitCode) {
 								bitcode_task = new BitCodeify ()
 								{
-									Input = src,
-									OutputFile = src + ".ll",
+									Input = assembly,
+									OutputFile = Path.ChangeExtension (assembly, ".ll"),
 									Platform = App.Platform,
 									Abi = abi,
 									DeploymentTarget = App.DeploymentTarget,
+									Dependencies = aottasks,
 								};
-								bitcode_task.AddDependency (aottasks);
-								build_tasks.Add (bitcode_task);
+								assembly = bitcode_task.OutputFile;
 							}
-							if (bitcode_task != null)
-								link_dependencies.Add (bitcode_task);
 
-							if (!skip_compile) {
-								var compile_task = new CompileTask
-								{
-									Target = this,
-									SharedLibrary = false,
-									InputFile = bitcode_task?.OutputFile ?? src,
-									OutputFile = Path.ChangeExtension ((bitcode_task?.OutputFile ?? src), ".o"),
-									Abi = abi,
-									Language = bitcode_task == null ? null : "assembler",
-								};
-								if (bitcode_task != null)
-									compile_task.AddDependency (bitcode_task);
-								link_dependencies.Add (compile_task);
-
-								compiler_flags.AddLinkWith (compile_task.OutputFile);
-							}
+							// Compile assembly code (either .s or .ll) to object file
+							var compile_task = new CompileTask
+							{
+								Target = this,
+								SharedLibrary = false,
+								InputFile = assembly,
+								OutputFile = Path.ChangeExtension (assembly, ".o"),
+								Abi = abi,
+								Language = bitcode_task != null ? null : "assembler",
+								Dependency = bitcode_task,
+								Dependencies = aottasks,
+							};
+							link_dependencies.Add (compile_task);
 						}
-					}
-
-					foreach (var info in infos) {
-						compiler_flags.AddLinkWith (info.ObjectFiles);
-						compiler_flags.AddLinkWith (info.BitcodeFiles);
 					}
 
 					var arch = abi.AsArchString ();
 					switch (build_target) {
 					case AssemblyBuildTarget.StaticObject:
-						install_name = null;
-						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.o");
-						break;
+						LinkWithTaskOutput (link_dependencies); // Any .s or .ll files from the AOT compiler (compiled to object files)
+						foreach (var info in infos) {
+							LinkWithStaticLibrary (info.ObjectFiles);
+							LinkWithStaticLibrary (info.BitcodeFiles);
+						}
+						continue; // no linking to do here.
 					case AssemblyBuildTarget.DynamicLibrary:
 						install_name = $"@executable_path/lib{name}.dylib";
 						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib");
@@ -840,20 +836,25 @@ namespace Xamarin.Bundler
 						throw new Exception ();
 					}
 
-					if (build_target != AssemblyBuildTarget.StaticObject) {
-						foreach (var a in assemblies) {
-							compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
-							compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
-							compiler_flags.AddOtherFlags (a.LinkerFlags);
-						}
-						compiler_flags.LinkWithMono ();
-						compiler_flags.LinkWithXamarin ();
-						if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
-							compiler_flags.AddFramework ("UIKit");
-						compiler_flags.LinkWithPInvokes (abi);
+					foreach (var info in infos) {
+						compiler_flags.AddLinkWith (info.ObjectFiles);
+						compiler_flags.AddLinkWith (info.BitcodeFiles);
 					}
 
-					// Check if we really need to 
+					foreach (var task in link_dependencies)
+						compiler_flags.AddLinkWith (task.OutputFile);
+
+					foreach (var a in assemblies) {
+						compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
+						compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
+						compiler_flags.AddOtherFlags (a.LinkerFlags);
+					}
+					compiler_flags.LinkWithMono ();
+					compiler_flags.LinkWithXamarin ();
+					if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+						compiler_flags.AddFramework ("UIKit");
+					compiler_flags.LinkWithPInvokes (abi);
+
 					var link_task = new LinkTask ()
 					{
 						Target = this,
@@ -862,13 +863,14 @@ namespace Xamarin.Bundler
 						OutputFile = compiler_output,
 						InstallName = install_name,
 						CompilerFlags = compiler_flags,
-						Language = "assembler",
+						Language = compiler_output.EndsWith (".s", StringComparison.Ordinal) ? "assembler" : null,
 						SharedLibrary = build_target != AssemblyBuildTarget.StaticObject,
 					};
 					link_task.AddDependency (link_dependencies);
 					link_task.AddDependency (aottasks);
 
-					build_tasks.Add (link_task);
+					// FIXME: add dependency on all dependent assemblies
+
 
 					switch (build_target) {
 					case AssemblyBuildTarget.StaticObject:
@@ -889,7 +891,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public void Compile (BuildTasks build_tasks)
+		public void Compile ()
 		{
 			// Compute the dependency map, and show warnings if there are any problems.
 			List<Exception> exceptions = new List<Exception> ();
@@ -901,7 +903,7 @@ namespace Xamarin.Bundler
 			}
 
 			// Compile the managed assemblies into object files, frameworks or shared libraries
-			AOTCompile (build_tasks);
+			AOTCompile ();
 
 			List<string> registration_methods = new List<string> ();
 
@@ -922,7 +924,6 @@ namespace Xamarin.Bundler
 						OutputFile = Path.Combine (Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
 					};
 
-					build_tasks.Add (registrar_task);
 					LinkWithTaskOutput (registrar_task);
 				}
 
@@ -967,7 +968,6 @@ namespace Xamarin.Bundler
 					OutputFile = ofile,
 					RegistrationMethods = registration_methods,
 				};
-				build_tasks.Add (main_task);
 				LinkWithTaskOutput (main_task);
 			}
 

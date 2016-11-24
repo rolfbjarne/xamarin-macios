@@ -39,6 +39,12 @@ namespace Xamarin.Bundler {
 		HashSet<string> dependency_map;
 		bool has_dependency_map;
 
+		public bool HasDependencyMap {
+			get {
+				return has_dependency_map;
+			}
+		}
+
 		public HashSet<string> DependencyMap {
 			get {
 				return dependency_map;
@@ -223,7 +229,7 @@ namespace Xamarin.Bundler {
 		 *          [is llvm creating assembly code] => .s + -llvm.s + .aotdata
 		 *          [is llvm creating object code]   => .s + -llvm.o + .aotdata
 		 */
-		public AOTTask CreateAOTTask (Abi abi)
+		public void CreateAOTTask (Abi abi)
 		{
 			var build_dir = Target.BuildDirectory;
 			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
@@ -240,7 +246,6 @@ namespace Xamarin.Bundler {
 			if (!File.Exists (assembly_path))
 				throw new MonoTouchException (3004, true, "Could not AOT the assembly '{0}' because it doesn't exist.", assembly_path);
 
-			List<string> dependencies = new List<string> ();
 			List<string> outputs = new List<string> ();
 
 			var aotInfo = new AotInfo ();
@@ -276,29 +281,13 @@ namespace Xamarin.Bundler {
 			var aotArgs = Driver.GetAotArguments (assembly_path, abi, build_dir, asm_output, llvm_aot_ofile, aot_data);
 			var task = new AOTTask
 			{
+				Assembly = this,
 				AssemblyName = assembly_path,
 				ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
+				Outputs = outputs,
 			};
 
-			// Check if the output is up-to-date
-			var uptodate = false;
-			if (has_dependency_map) { // We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
-				dependencies.AddRange (dependency_map);
-				dependencies.Add (assembly_path);
-				dependencies.Add (Driver.GetAotCompiler (Target.Is64Build));
-				uptodate = Application.IsUptodate (dependencies, outputs);
-			}
-
-			if (uptodate) {
-				Driver.Log (3, "Target(s) {0} up-to-date.", string.Join (", ", outputs.ToArray ()));
-				task.SetCompleted ();
-			} else {
-				Application.TryDelete (outputs); // otherwise the next task might not detect that it has to rebuild.
-				Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", outputs.ToArray ()));
-			}
-
 			aotInfo.Task = task;
-			return task;
 		}
 
 		//IEnumerable<BuildTask> CreateManagedToAssemblyTasks (string assembly_path, Abi abi, string build_dir)

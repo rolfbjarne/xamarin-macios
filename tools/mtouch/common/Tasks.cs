@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace Xamarin.Bundler
 			semaphore.Release ();
 		}
 
-		void ExecuteBuildTasks (SingleThreadedSynchronizationContext context)
+		void ExecuteBuildTasks (SingleThreadedSynchronizationContext context, List<Exception> exceptions)
 		{
 			Task [] tasks = new Task [Count];
 
@@ -38,8 +39,13 @@ namespace Xamarin.Bundler
 			
 			Task.Factory.StartNew (async () =>
 			{
-				await Task.WhenAll (tasks);
-				context.SetCompleted ();
+				try {
+					await Task.WhenAll (tasks);
+				} catch (Exception e) {
+					exceptions.Add (e);
+				} finally {
+					context.SetCompleted ();
+				}
 			}, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext ());
 		}
 
@@ -49,13 +55,48 @@ namespace Xamarin.Bundler
 				return;
 
 			var savedContext = SynchronizationContext.Current;
+			var exceptions = new List<Exception> ();
 			try {
 				var context = new SingleThreadedSynchronizationContext ();
 				SynchronizationContext.SetSynchronizationContext (context);
-				ExecuteBuildTasks (context);
+				ExecuteBuildTasks (context, exceptions);
 				context.Run ();
 			} finally {
 				SynchronizationContext.SetSynchronizationContext (savedContext);
+			}
+			if (exceptions.Count > 0)
+				throw new AggregateException (exceptions);
+		}
+
+		public void Dump (bool dot = true)
+		{
+			if (dot) {
+				Console.WriteLine ("digraph build {");
+			} else {
+				Console.WriteLine ("{0} build tasks.", Count);
+			}
+			foreach (var task in this)
+				DumpTask (task, 0, dot);
+			if (dot)
+				Console.WriteLine ("}");
+		}
+
+		void DumpTask (BuildTask task, int indent, bool dot)
+		{
+			if (dot) {
+				Console.WriteLine ("    X{0} [label=\"{1}\"];", task.ID, task.ToString ());
+				foreach (var t in task.Dependencies) {
+					Console.WriteLine ("    X{0} -> X{1};", t.ID, task.ID);
+					DumpTask (t, indent + 1, dot);
+				}
+			} else {
+				if (task.Dependencies.Any ()) {
+					Console.WriteLine ($"{new string (' ', indent * 4)}#{task.ID}: {task}. {task.Dependencies.Count ()} dependencies:");
+					foreach (var t in task.Dependencies)
+						DumpTask (t, indent + 1, dot);
+				} else {
+					Console.WriteLine ($"{new string (' ', indent * 4)}#{task.ID}: {task}.");
+				}
 			}
 		}
 	}
@@ -63,7 +104,7 @@ namespace Xamarin.Bundler
 	public abstract class BuildTask
 	{
 		static int counter;
-		int ID = counter++;
+		public readonly int ID = counter++;
 
 		TaskCompletionSource<bool> started_task = new TaskCompletionSource<bool> ();
 		TaskCompletionSource<bool> completion_task = new TaskCompletionSource<bool> ();
@@ -73,17 +114,22 @@ namespace Xamarin.Bundler
 			get {
 				return dependencies;
 			}
+			set {
+				dependencies.AddRange (value);
+			}
+		}
+
+		public BuildTask Dependency {
+			set {
+				if (value != null)
+					dependencies.Add (value);
+			}
 		}
 
 		public Task CompletionTask {
 			get {
 				return completion_task.Task;
 			}
-		}
-
-		public void SetCompleted ()
-		{
-			completion_task.SetResult (true);
 		}
 
 		public void AddDependency (params BuildTask [] dependencies)
@@ -101,23 +147,33 @@ namespace Xamarin.Bundler
 		public async Task Execute (BuildTasks build_tasks)
 		{
 			if (started_task.TrySetResult (true)) {
-				Console.WriteLine ("Launching task #{1}: {0}", GetType ().Name, ID);
-				foreach (var dep in Dependencies) {
-					Console.WriteLine ("Task #{1} ({0}) is waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
-					await dep.Execute (build_tasks);
-					Console.WriteLine ("Task #{1} ({0}) done waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
-				}
-				Console.WriteLine ("Task #{1} ({0})'s dependencies are complete.", GetType ().Name, ID);
-				await build_tasks.AcquireSemaphore ();
 				var watch = new System.Diagnostics.Stopwatch ();
-				watch.Start ();
-				Console.WriteLine ("Executing task #{1}: {0}", GetType ().Name, ID);
-				await ExecuteAsync ();
-				Console.WriteLine ("Completed task #{1}: {0} in {2} s", GetType ().Name, ID, watch.Elapsed.TotalSeconds);
-				SetCompleted ();
-				build_tasks.ReleaseSemaphore ();
+				try {
+					Console.WriteLine ("Launching task #{1}: {0}", GetType ().Name, ID);
+					foreach (var dep in Dependencies) {
+						Console.WriteLine ("Task #{1} ({0}) is waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
+						await dep.Execute (build_tasks);
+						Console.WriteLine ("Task #{1} ({0}) done waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
+					}
+					Console.WriteLine ("Task #{1} ({0})'s dependencies are complete.", GetType ().Name, ID);
+					await build_tasks.AcquireSemaphore ();
+					try {
+						Console.WriteLine ("Executing task #{1}: {0}", GetType ().Name, ID);
+						watch.Start ();
+						await ExecuteAsync ();
+						watch.Stop ();
+						Console.WriteLine ("Completed task #{1}: {0} in {2} s", GetType ().Name, ID, watch.Elapsed.TotalSeconds);
+						completion_task.SetResult (true);
+					} finally {
+						build_tasks.ReleaseSemaphore ();
+					}
+				} catch (Exception e) {
+					Console.WriteLine ("Completed task #{1}: {0} in {2} s with exception: {3}", GetType ().Name, ID, watch.Elapsed.TotalSeconds, e.Message);
+					completion_task.SetException (e);
+					throw;
+				}
 			} else {
-				Console.WriteLine ("Waitind for started task #{1}: {0}", GetType ().Name, ID);
+				Console.WriteLine ("Waiting for started task #{1}: {0}", GetType ().Name, ID);
 				await completion_task.Task;
 				Console.WriteLine ("Waited for started task #{1}: {0}", GetType ().Name, ID);
 			}
@@ -131,6 +187,11 @@ namespace Xamarin.Bundler
 		protected virtual void Execute ()
 		{
 			throw new Exception ("Either Execute or ExecuteAsync must be overridden.");
+		}
+
+		public override string ToString ()
+		{
+			return GetType ().Name;
 		}
 	}
 
@@ -151,9 +212,9 @@ namespace Xamarin.Bundler
 		public int Run ()
 		{
 			int counter = 0;
-			Tuple<SendOrPostCallback, object> item;
 
-			while ((item = queue.Take ()) != null) {
+			while (!queue.IsCompleted) {
+				var item = queue.Take ();
 				counter++;
 				item.Item1 (item.Item2);
 			}

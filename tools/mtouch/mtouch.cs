@@ -1298,21 +1298,7 @@ namespace Xamarin.Bundler
 			{ "stderr=", "Redirect the standard error for the simulated application to the specified file [DEPRECATED]", v => { }, true },
 			{ "stdout=", "Redirect the standard output for the simulated application to the specified file [DEPRECATED]", v => { }, true },
 			{ "sdkroot=", "Specify the location of Apple SDKs, default to 'xcode-select' value.", v => sdk_root = v },
-			{ "crashreporting-api-key=", "Specify the Crashlytics API key to use (which will also enable Crashlytics support). [Deprecated].", v =>
-				{
-					throw new MonoTouchException (16, true, "The option '{0}' has been deprecated.", "--crashreporting-api-key");
-				}, true
-			},
-			{ "crashreporting-delay=", "Specify the delay before Crashlytics should process crash reports in the backgorund. [Deprecated].", v =>
-				{
-					throw new MonoTouchException (16, true, "The option '{0}' has been deprecated.", "--crashreporting-delay");
-				}, true
-			},
-			{ "crashreporting-console-poll-interval=", "Specify how often (in milliseconds) to poll the Device Console for new messages to be copied to crash reports (set to 0 to disable). Disabled by default. [Deprecated].", v =>
-				{
-					throw new MonoTouchException (16, true, "The option '{0}' has been deprecated.", "--crashreporting-console-poll-interval");
-				}, true
-			},
+
 			{ "no-xcode-version-check", "Ignores the Xcode version check.", v => { xcode_version_check = false; }, true /* This is a non-documented option. Please discuss any customers running into the xcode version check on the maciosdev@ list before giving this option out to customers. */ },
 			{ "mono:", "Comma-separated list of options for how the Mono runtime should be included. Possible values: 'static' (link statically), 'framework' (linked as a user framework), '[no-]package-framework' (if the Mono.framework should be copied to the app bundle or not. The default value is 'framework' for extensions, and main apps if the app targets iOS 8.0 or later and contains extensions, otherwise 'static'. The Mono.framework will be copied to the app bundle if mtouch detects it's needed, but this may be overridden if the default values for 'framework' vs 'static' is overwridden.", v =>
 				{

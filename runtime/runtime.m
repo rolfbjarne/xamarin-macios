@@ -2274,7 +2274,7 @@ xamarin_locate_assembly_resource (const char *assembly_name, const char *culture
 
 	LOG (PRODUCT ": Locating the resource '%s' for the assembly '%s' (culture: '%s').", resource, assembly_name, culture);
 
-	app_path = [[[NSBundle mainBundle] bundlePath] UTF8String];
+	app_path = xamarin_get_bundle_path ();
 
 	xamarin_get_assembly_name_without_extension (assembly_name, aname, sizeof (aname));
 

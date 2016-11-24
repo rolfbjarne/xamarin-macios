@@ -30,7 +30,9 @@ namespace Xamarin
 		public int Run (string project_directory)
 		{
 			var sb = new StringBuilder ();
+			sb.Append ("--debug ");
 			sb.Append (MTouch.Quote (XHarnessPath));
+			sb.Append (" --rootdir ").Append (MTouch.Quote (Path.Combine (Xamarin.Tests.Configuration.SourceRoot, "tests")));
 			sb.Append (" --run ").Append (MTouch.Quote (project_directory));
 			sb.Append (" --target ").Append (Target);
 
@@ -51,7 +53,9 @@ namespace Xamarin
 		public int Install (string project_file)
 		{
 			var sb = new StringBuilder ();
+			sb.Append ("--debug ");
 			sb.Append (MTouch.Quote (XHarnessPath));
+			sb.Append (" --rootdir ").Append (MTouch.Quote (Path.Combine (Xamarin.Tests.Configuration.SourceRoot, "tests")));
 			sb.Append (" --install ").Append (MTouch.Quote (project_file));
 			sb.Append (" --target ").Append (Target);
 

@@ -61,9 +61,10 @@ namespace xharness
 			var pid = process.Id;
 			process.Kill ();
 			if (!streamEnds.Wait (TimeSpan.FromSeconds (0.5))) {
-				AppRunner.kill (pid, 9);
-				if (!streamEnds.Wait (TimeSpan.FromSeconds (5))) {
-					Harness.Log ("Could not kill 'mtouch --logdev' process in 5 seconds.");
+				Harness.Log ("Could not kill 'mtouch --logdev' process nicely in 0.5 seconds. Terminating pid {0}...", pid);
+				ProcessHelper.kill (pid, 9);
+				if (!streamEnds.Wait (TimeSpan.FromSeconds (1))) {
+					Harness.Log ("Could not kill 'mtouch --logdev' process in 1 second.");
 				}
 			}
 			process.Dispose ();

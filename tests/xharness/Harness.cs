@@ -133,6 +133,12 @@ namespace xharness
 			}
 		}
 
+		public string MtouchPath {
+			get {
+				return Path.Combine (IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current", "bin", "mtouch");
+			}
+		}
+
 		string mlaunch;
 		public string MlaunchPath {
 			get {
@@ -146,6 +152,12 @@ namespace xharness
 					}
 
 					string path = string.Empty;
+
+					// check next to mtouch
+					path = Path.Combine (Path.GetDirectoryName (MtouchPath), "mlaunch");
+					if (File.Exists (path))
+						return mlaunch = path;
+
 					Log ("Could not find mlaunch locally, will try downloading it.");
 					try {
 						path = DownloadMlaunch ();
@@ -201,7 +213,7 @@ namespace xharness
 			}
 		}
 
-		void AutoConfigureCommon ()
+		void LoadConfig ()
 		{
 			ParseConfigFiles ();
 			var src_root = Path.GetDirectoryName (RootDirectory);
@@ -237,8 +249,6 @@ namespace xharness
 			//TestProjects.Add (Path.GetFullPath (Path.Combine (RootDirectory, "bcl-test/" + p + "/" + p + ".csproj")));
 
 			// BclTests.AddRange (bcl_suites);
-
-			AutoConfigureCommon ();
 		}
 
 		void AutoConfigureIOS ()
@@ -270,14 +280,12 @@ namespace xharness
 			WatchOSContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "watchos/Container"));
 			WatchOSAppTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "watchos/App"));
 			WatchOSExtensionTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "watchos/Extension"));
-
-			AutoConfigureCommon ();
 		}
 
-		static Dictionary<string, string> make_config = new Dictionary<string, string> ();
-		static IEnumerable<string> FindConfigFiles (string name)
+		Dictionary<string, string> make_config = new Dictionary<string, string> ();
+		IEnumerable<string> FindConfigFiles (string name)
 		{
-			var dir = Environment.CurrentDirectory;
+			var dir = RootDirectory;
 			while (dir != "/") {
 				var file = Path.Combine (dir, name);
 				if (File.Exists (file))
@@ -286,20 +294,20 @@ namespace xharness
 			}
 		}
 
-		static void ParseConfigFiles ()
+		void ParseConfigFiles ()
 		{
 			ParseConfigFiles (FindConfigFiles ("test.config"));
 			ParseConfigFiles (FindConfigFiles ("Make.config.local"));
 			ParseConfigFiles (FindConfigFiles ("Make.config"));
 		}
 
-		static void ParseConfigFiles (IEnumerable<string> files)
+		void ParseConfigFiles (IEnumerable<string> files)
 		{
 			foreach (var file in files)
 				ParseConfigFile (file);
 		}
 
-		static void ParseConfigFile (string file)
+		void ParseConfigFile (string file)
 		{
 			if (string.IsNullOrEmpty (file))
 				return;
@@ -528,6 +536,7 @@ namespace xharness
 
 		public int Execute ()
 		{
+			LoadConfig ();
 			switch (Action) {
 			case HarnessAction.Configure:
 				return Configure ();

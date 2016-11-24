@@ -246,8 +246,6 @@ namespace Xamarin.Bundler {
 			if (!File.Exists (assembly_path))
 				throw new MonoTouchException (3004, true, "Could not AOT the assembly '{0}' because it doesn't exist.", assembly_path);
 
-			List<string> outputs = new List<string> ();
-
 			var aotInfo = new AotInfo ();
 			AotInfos.Add (abi, aotInfo);
 
@@ -272,11 +270,6 @@ namespace Xamarin.Bundler {
 				aotInfo.AsmFiles.Add (asm_output);
 			aotInfo.AotDataFiles.Add (aot_data);
 
-			outputs.AddRange (aotInfo.AotDataFiles);
-			outputs.AddRange (aotInfo.AsmFiles);
-			outputs.AddRange (aotInfo.BitcodeFiles);
-			outputs.AddRange (aotInfo.ObjectFiles);
-
 			var aotCompiler = Driver.GetAotCompiler (Target.Is64Build);
 			var aotArgs = Driver.GetAotArguments (assembly_path, abi, build_dir, asm_output, llvm_aot_ofile, aot_data);
 			var task = new AOTTask
@@ -284,7 +277,7 @@ namespace Xamarin.Bundler {
 				Assembly = this,
 				AssemblyName = assembly_path,
 				ProcessStartInfo = Driver.CreateStartInfo (aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
-				Outputs = outputs,
+				AotInfo = aotInfo,
 			};
 
 			aotInfo.Task = task;

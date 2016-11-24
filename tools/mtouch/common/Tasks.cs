@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,34 +69,70 @@ namespace Xamarin.Bundler
 				throw new AggregateException (exceptions);
 		}
 
-		public void Dump (bool dot = true)
+		public void Dot ()
 		{
-			if (dot) {
-				Console.WriteLine ("digraph build {");
-			} else {
-				Console.WriteLine ("{0} build tasks.", Count);
-			}
-			foreach (var task in this)
-				DumpTask (task, 0, dot);
-			if (dot)
-				Console.WriteLine ("}");
-		}
+			var nodes = new HashSet<string> ();
+			var queue = new Queue<BuildTask> (this);
+			var input_nodes = new HashSet<string> ();
+			var action_nodes = new HashSet<string> ();
+			var output_nodes = new HashSet<string> ();
+			var all_nodes = new HashSet<string> ();
 
-		void DumpTask (BuildTask task, int indent, bool dot)
-		{
-			if (dot) {
-				Console.WriteLine ("    X{0} [label=\"{1}\"];", task.ID, task.ToString ());
-				foreach (var t in task.Dependencies) {
-					Console.WriteLine ("    X{0} -> X{1};", t.ID, task.ID);
-					DumpTask (t, indent + 1, dot);
+			while (queue.Count > 0) {
+				var task = queue.Dequeue ();
+				foreach (var d in task.Dependencies)
+					queue.Enqueue (d);
+
+				var action_node = $"X{task.ID}";
+				nodes.Add ($"{action_node} [label=\"{task.GetType ().Name.Replace ("Task", "")}\", shape=box]");
+				all_nodes.Add ($"X{task.ID}");
+				action_nodes.Add (action_node);
+
+				var inputs = task.Inputs.ToArray ();
+				for (int i = 0; i < inputs.Length; i++) {
+					var node = $"\"{Path.GetFileName (inputs [i])}\"";
+					all_nodes.Add (node);
+					input_nodes.Add (node);
+					nodes.Add ($"{node} -> {action_node}");
 				}
-			} else {
-				if (task.Dependencies.Any ()) {
-					Console.WriteLine ($"{new string (' ', indent * 4)}#{task.ID}: {task}. {task.Dependencies.Count ()} dependencies:");
-					foreach (var t in task.Dependencies)
-						DumpTask (t, indent + 1, dot);
+
+				var outputs = task.Outputs.ToArray ();
+				for (int i = 0; i < outputs.Length; i++) {
+					var node = $"\"{Path.GetFileName (outputs [i])}\"";
+					all_nodes.Add (node);
+					output_nodes.Add (node);
+					nodes.Add ($"{action_node} -> {node}");
+				}
+			}
+
+			var dotPath = Path.Combine (Cache.Location, "build.dot");
+			using (var writer = new StreamWriter (dotPath)) {
+				writer.WriteLine ("digraph build {");
+				writer.WriteLine ("\trankdir=LR;");
+				foreach (var node in nodes)
+					writer.WriteLine ("\t{0};", node);
+
+				writer.Write ("\t{rank = same; ");
+				foreach (var end_node in output_nodes.Except (input_nodes)) {
+					writer.Write (end_node);
+					writer.Write ("; ");
+				}
+				writer.WriteLine ("}");
+
+				writer.WriteLine ("}");
+			}
+			Driver.Log ("Created dot file: {0}", dotPath);
+			var pngPath = Path.ChangeExtension (dotPath, ".png");
+			using (var dot = System.Diagnostics.Process.Start ("dot", $"-Tpng {Driver.Quote (dotPath)} -o {Driver.Quote (pngPath)}")) {
+				dot.WaitForExit ();
+				if (dot.ExitCode == 0) {
+					using (var open = System.Diagnostics.Process.Start ("open", Driver.Quote (pngPath))) {
+						open.WaitForExit ();
+						if (open.ExitCode != 0)
+							Driver.Log ("Failed to open image file.");
+					}
 				} else {
-					Console.WriteLine ($"{new string (' ', indent * 4)}#{task.ID}: {task}.");
+					Driver.Log ("Failed to generate image file.");
 				}
 			}
 		}
@@ -109,6 +146,23 @@ namespace Xamarin.Bundler
 		TaskCompletionSource<bool> started_task = new TaskCompletionSource<bool> ();
 		TaskCompletionSource<bool> completion_task = new TaskCompletionSource<bool> ();
 		List<BuildTask> dependencies = new List<BuildTask> ();
+
+		// A list of input files (not a list of all the dependencies that would make this task rebuild).
+		public abstract IEnumerable<string> Inputs { get; }
+		// A list of all the files that causes the task to rebuild.
+		public virtual IEnumerable<string> FileDependencies {
+			get {
+				return Inputs;
+			}
+		}
+		// A list of files that this task outputs.
+		public abstract IEnumerable<string> Outputs { get; }
+
+		public virtual bool IsUptodate {
+			get {
+				return Application.IsUptodate (FileDependencies, Outputs);
+			}
+		}
 
 		public IEnumerable<BuildTask> Dependencies {
 			get {
@@ -155,17 +209,27 @@ namespace Xamarin.Bundler
 						await dep.Execute (build_tasks);
 						Console.WriteLine ("Task #{1} ({0}) done waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
 					}
-					Console.WriteLine ("Task #{1} ({0})'s dependencies are complete.", GetType ().Name, ID);
-					await build_tasks.AcquireSemaphore ();
-					try {
-						Console.WriteLine ("Executing task #{1}: {0}", GetType ().Name, ID);
-						watch.Start ();
-						await ExecuteAsync ();
-						watch.Stop ();
-						Console.WriteLine ("Completed task #{1}: {0} in {2} s", GetType ().Name, ID, watch.Elapsed.TotalSeconds);
+					if (IsUptodate) {
+						if (Outputs.Count () > 1) {
+							Driver.Log (3, "Targets '{0}' are up-to-date.", string.Join ("', '", Outputs.ToArray ()));
+						} else {
+							Driver.Log (3, "Target '{0}' is up-to-date.", Outputs.First () );
+						}
 						completion_task.SetResult (true);
-					} finally {
-						build_tasks.ReleaseSemaphore ();
+					} else {
+						Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", Outputs.ToArray ()));
+						Console.WriteLine ("Task #{1} ({0})'s dependencies are complete.", GetType ().Name, ID);
+						await build_tasks.AcquireSemaphore ();
+						try {
+							Console.WriteLine ("Executing task #{1}: {0}", GetType ().Name, ID);
+							watch.Start ();
+							await ExecuteAsync ();
+							watch.Stop ();
+							Console.WriteLine ("Completed task #{1}: {0} in {2} s", GetType ().Name, ID, watch.Elapsed.TotalSeconds);
+							completion_task.SetResult (true);
+						} finally {
+							build_tasks.ReleaseSemaphore ();
+						}
 					}
 				} catch (Exception e) {
 					Console.WriteLine ("Completed task #{1}: {0} in {2} s with exception: {3}", GetType ().Name, ID, watch.Elapsed.TotalSeconds, e.Message);

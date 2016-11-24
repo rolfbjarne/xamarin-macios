@@ -711,11 +711,17 @@ namespace Xamarin.Bundler {
 			// which are then executed at the end.
 			build_tasks = new BuildTasks ();
 
+			Driver.Watch ("Generating build tasks", 1);
+
 			CompilePInvokeWrappers (build_tasks);
 			BuildApp (build_tasks);
 
-			build_tasks.Dump ();
+			Driver.Watch ("Generated build tasks", 1);
+
+			build_tasks.Dot ();
 			build_tasks.Execute ();
+
+			Driver.Watch ("Executed build tasks", 1);
 
 			// TODO: make more of the below actions parallelizable.
 			BuildBundle ();
@@ -1990,45 +1996,44 @@ namespace Xamarin.Bundler {
 		}
 	}
 
-	internal class MainTask : CompileTask {
+	class GenerateMainTask : BuildTask
+	{
+		public Target Target;
+		public Abi Abi;
 		public string MainM;
 		public IList<string> RegistrationMethods;
 
-		void GenerateMain ()
-		{
-			var assemblies = Target.Assemblies;
-			var files = assemblies.Select (v => v.FullPath);
-
-			if (Application.IsUptodate (files, new string [] { MainM })) {
-				Driver.Log (3, "Target '{0}' is up-to-date.", MainM);
-				return;
+		public override IEnumerable<string> Inputs {
+			get {
+				foreach (var asm in Target.Assemblies)
+					yield return asm.FullPath;
 			}
-
-			Driver.GenerateMain (assemblies, Target.App.AssemblyName, Abi, MainM, RegistrationMethods);
 		}
 
-		async Task CompileMainAsync ()
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return MainM;
+			}
+		}
+
+		protected override void Execute ()
+		{
+			Driver.GenerateMain (Target.Assemblies, Target.App.AssemblyName, Abi, MainM, RegistrationMethods);
+		}
+	}
+
+	class CompileMainTask : CompileTask {
+		public CompileMainTask ()
 		{
 			Language = "objective-c++";
 			SharedLibrary = false;
-			AssemblyName = Target.App.AssemblyName;
-
-			CompilerFlags.AddSourceFile (MainM);
 			CompilerFlags.AddDefine ("MONOTOUCH");
-				
-			if (Application.IsUptodate (MainM, OutputFile)) {
-				Driver.Log (3, "Target '{0}' is up-to-date.", OutputFile);
-				return;
-			}
-
-			if (await CompileAsync () != 0)
-				throw new MonoTouchException (5103, true, "Failed to compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
 		}
 
 		protected async override Task ExecuteAsync ()
 		{
-			GenerateMain ();
-			await CompileMainAsync ();
+			if (await CompileAsync () != 0)
+				throw new MonoTouchException (5103, true, "Failed to compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
 		}
 	}
 
@@ -2097,65 +2102,100 @@ namespace Xamarin.Bundler {
 		}
 	}
 
-	class RegistrarTask : CompileTask {
+	class RunRegistrarTask : BuildTask
+	{
+		public Target Target;
 		public string RegistrarM;
 		public string RegistrarH;
 
-		void RunRegistrar ()
-		{
-			if (Application.IsUptodate (Target.Assemblies.Select (v => v.FullPath), new string [] { RegistrarM, RegistrarH })) {
-				Driver.Log (3, "Target '{0}' is up-to-date.", RegistrarM);
-				return;
+		public override IEnumerable<string> Inputs {
+			get {
+				foreach (var asm in Target.Assemblies)
+					yield return asm.FullPath;
 			}
+		}
 
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return RegistrarH;
+				yield return RegistrarM;
+			}
+		}
+
+		protected override void Execute ()
+		{
 			Target.StaticRegistrar.Generate (Target.Assemblies.Select ((a) => a.AssemblyDefinition), RegistrarH, RegistrarM);
 		}
+	}
 
-		async Task CompileRegistrarAsync ()
-		{
+	class CompileRegistrarTask : CompileTask {
+		public string RegistrarM;
+		public string RegistrarH;
 
-			if (Driver.IsUsingClang) {
-				// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
-				// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
-				CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
-			}
-
-			if (Application.IsUptodate (new string [] { RegistrarM, RegistrarH }, new string [] { OutputFile })) {
-				Driver.Log (3, "Target '{0}' is up-to-date.", OutputFile);
-				return;
-			}
-
-			if (await CompileAsync () != 0)
-				throw new MonoTouchException (4109, true, "Failed to compile the generated registrar code. Please file a bug report at http://bugzilla.xamarin.com");
+		public CompileRegistrarTask ()
+		{ 
+			// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
+			// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
+			CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
 		}
 
-		protected override async Task ExecuteAsync ()
+		public override IEnumerable<string> Inputs {
+			get {
+				yield return RegistrarH;
+				yield return RegistrarM;
+			}
+		}
+
+		protected override void CompilationFailed (int exitCode)
 		{
-			RunRegistrar ();
-			await CompileRegistrarAsync ();
+			throw ErrorHelper.CreateError (4109, "Failed to compile the generated registrar code. Please file a bug report at http://bugzilla.xamarin.com");
 		}
 	}
 
 	public class AOTTask : ProcessTask {
 		public Assembly Assembly;
+		public AotInfo AotInfo;
 		public string AssemblyName;
-		public List<string> Outputs;
+
+		List<string> inputs;
+
+		public override IEnumerable<string> Outputs {
+			get {
+				return AotInfo.AotDataFiles
+							  .Union (AotInfo.AsmFiles)
+							  .Union (AotInfo.BitcodeFiles)
+							  .Union (AotInfo.ObjectFiles);
+			}
+		}
+
+		public override IEnumerable<string> Inputs {
+			get {
+				yield return Assembly.FullPath;
+			}
+		}
+
+		public override IEnumerable<string> FileDependencies {
+			get {
+				if (inputs == null) {
+					inputs = new List<string> ();
+					if (Assembly.HasDependencyMap)
+						inputs.AddRange (Assembly.DependencyMap);
+					inputs.Add (AssemblyName);
+					inputs.Add (Driver.GetAotCompiler (Assembly.Target.Is64Build));
+				}
+				return inputs;
+			}
+		}
+
+		public override bool IsUptodate {
+			get {
+				// We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
+				return Assembly.HasDependencyMap && base.IsUptodate;
+			}
+		}
 
 		protected async override Task ExecuteAsync ()
 		{
-			// Check if the output is up-to-date
-			List<string> dependencies = new List<string> ();
-			if (Assembly.HasDependencyMap) { // We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
-				dependencies.AddRange (Assembly.DependencyMap);
-				dependencies.Add (AssemblyName);
-				dependencies.Add (Driver.GetAotCompiler (Assembly.Target.Is64Build));
-				if (Application.IsUptodate (dependencies, Outputs)) {
-					Driver.Log (3, "Target(s) {0} up-to-date.", string.Join (", ", Outputs.ToArray ()));
-					return;
-				}
-			}
-
-			Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", Outputs.ToArray ()));
 			var exit_code = await StartAsync ();
 
 			if (exit_code == 0)
@@ -2188,15 +2228,21 @@ namespace Xamarin.Bundler {
 		public string OutputFile;
 		public CompilerFlags CompilerFlags;
 
+		public override IEnumerable<string> Inputs {
+			get {
+				CompilerFlags.PopulateInputs ();
+				return CompilerFlags.Inputs;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return OutputFile;
+			}
+		}
+
 		protected override void Execute ()
 		{
-			CompilerFlags.PopulateInputs ();
-			if (Application.IsUptodate (CompilerFlags.Inputs, new string [] { OutputFile })) {
-				Target.cached_executable = true;
-				Driver.Log (3, "Target '{0}' is up-to-date.", OutputFile);
-				return;
-			}
-
 			// always show the native linker warnings since many of them turn out to be very important
 			// and very hard to diagnose otherwise when hidden from the build output. Ref: bug #2430
 			var linker_errors = new List<Exception> ();
@@ -2262,6 +2308,19 @@ namespace Xamarin.Bundler {
 		public string AssemblyName;
 		public string InstallName;
 		public string Language;
+
+		public override IEnumerable<string> Inputs {
+			get {
+				CompilerFlags.PopulateInputs ();
+				return CompilerFlags.Inputs;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return OutputFile;
+			}
+		}
 
 		public bool IsAssembler {
 			get {
@@ -2387,15 +2446,14 @@ namespace Xamarin.Bundler {
 
 		protected override async Task ExecuteAsync ()
 		{
-			CompilerFlags.PopulateInputs ();
+			int exitCode = await CompileAsync ();
+			if (exitCode != 0)
+				CompilationFailed (exitCode);
+		}
 
-			if (Application.IsUptodate (CompilerFlags.Inputs, new string [] { OutputFile })) {
-				Driver.Log (3, "Target '{0}' is up-to-date", OutputFile);
-				return;
-			}
-
-			if (await CompileAsync () != 0)
-				throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
+		protected virtual void CompilationFailed (int exitCode)
+		{
+			throw ErrorHelper.CreateError (5105, "Could not compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
 		}
 
 		protected async Task<int> CompileAsync ()
@@ -2431,26 +2489,33 @@ namespace Xamarin.Bundler {
 
 		public override string ToString ()
 		{
-			if (compiler_flags == null)
+			if (compiler_flags == null || compiler_flags.SourceFiles == null)
 				return Path.GetFileName (OutputFile);
 			return string.Join (", ", compiler_flags.SourceFiles.Select ((arg) => Path.GetFileName (arg)).ToArray ());
 		}
 	}
 
-	public class BitCodeify : BuildTask {
+	public class BitCodeifyTask : BuildTask {
 		public string Input { get; set; }
 		public string OutputFile { get; set; }
 		public ApplePlatform Platform { get; set; }
 		public Abi Abi { get; set; }
 		public Version DeploymentTarget { get; set; }
 
+		public override IEnumerable<string> Inputs {
+			get {
+				yield return Input;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return OutputFile;
+			}
+		}
+
 		protected override void Execute ()
 		{
-			if (Application.IsUptodate (Input, OutputFile)) {
-				Driver.Log (1, "Target '{0}' is up-to-date.", OutputFile);
-				return;
-			}
-			
 			new BitcodeConverter (Input, OutputFile, Platform, Abi, DeploymentTarget).Convert ();
 		}
 

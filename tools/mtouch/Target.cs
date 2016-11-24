@@ -785,9 +785,9 @@ namespace Xamarin.Bundler
 						foreach (var src in sources) {
 							// We might have to convert .s to bitcode assembly (.ll) first
 							var assembly = src;
-							BitCodeify bitcode_task = null;
+							BitCodeifyTask bitcode_task = null;
 							if (App.EnableAsmOnlyBitCode) {
-								bitcode_task = new BitCodeify ()
+								bitcode_task = new BitCodeifyTask ()
 								{
 									Input = assembly,
 									OutputFile = Path.ChangeExtension (assembly, ".ll"),
@@ -909,10 +909,18 @@ namespace Xamarin.Bundler
 
 			// The static registrar.
 			if (App.Registrar == RegistrarMode.Static) {
+				var registrar_m = Path.Combine (ArchDirectory, "registrar.m");
+				var registrar_h = Path.Combine (ArchDirectory, "registrar.h");
+
+				var run_registrar_task = new RunRegistrarTask
+				{
+					Target = this,
+					RegistrarM = registrar_m,
+					RegistrarH = registrar_h,
+				};
+
 				foreach (var abi in Abis) {
-					var registrar_m = Path.Combine (ArchDirectory, "registrar.m");
-					var registrar_h = Path.Combine (ArchDirectory, "registrar.h");
-					var registrar_task = new RegistrarTask
+					var registrar_task = new CompileRegistrarTask
 					{
 						Target = this,
 						Abi = abi,
@@ -922,6 +930,7 @@ namespace Xamarin.Bundler
 						Language = "objective-c++",
 						InputFile = registrar_m,
 						OutputFile = Path.Combine (Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
+						Dependency = run_registrar_task,
 					};
 
 					LinkWithTaskOutput (registrar_task);
@@ -957,16 +966,20 @@ namespace Xamarin.Bundler
 			// The main method.
 			foreach (var abi in Abis) {
 				var arch = abi.AsArchString ();
-				var ofile = Path.Combine (Cache.Location, arch, "main.o");
-
-				var main_task = new MainTask
+				var generate_main_task = new GenerateMainTask ()
 				{
 					Target = this,
 					Abi = abi,
-					AssemblyName = App.AssemblyName,
 					MainM = Path.Combine (Cache.Location, arch, "main.m"),
-					OutputFile = ofile,
 					RegistrationMethods = registration_methods,
+				};
+				var main_task = new CompileMainTask
+				{
+					Target = this,
+					Abi = abi,
+					OutputFile = Path.Combine (Cache.Location, arch, "main.o"),
+					InputFile = generate_main_task.MainM,
+					Dependency = generate_main_task,
 				};
 				LinkWithTaskOutput (main_task);
 			}

@@ -1012,9 +1012,6 @@ namespace Xamarin.Bundler {
 		{
 			// If the default values are changed, remember to update CanWeSymlinkTheApplication
 			// and main.m (default value for xamarin_use_old_dynamic_registrar must match).
-			if (Driver.enable_generic_nsobject && Registrar != RegistrarMode.Default)
-				throw new MonoTouchException (22, true, "The options '--unsupported--enable-generics-in-registrar' and '--registrar' are not compatible.");
-
 			if (Registrar == RegistrarMode.Default) {
 				if (IsDeviceBuild) {
 					Registrar = RegistrarMode.Static;

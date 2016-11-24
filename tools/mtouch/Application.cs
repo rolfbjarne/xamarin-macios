@@ -136,15 +136,6 @@ namespace Xamarin.Bundler {
 
 		public List<Target> Targets = new List<Target> ();
 
-		//
-		// Bundle config
-		//
-		public string BundleDisplayName;
-		public string BundleId = "com.yourcompany.sample";
-		public string MainNib = "MainWindow";
-		public string Icon;
-		public string CertificateName;
-
 		public string UserGccFlags;
 
 		// If we didn't link the final executable because the existing binary is up-to-date.
@@ -305,6 +296,13 @@ namespace Xamarin.Bundler {
 				if (dict == null)
 					return null;
 				return dict.GetString ("NSExtensionPointIdentifier");
+			}
+		}
+
+
+		public string BundleId {
+			get {
+				return GetStringFromInfoPList ("CFBundleIdentifier");
 			}
 		}
 
@@ -701,14 +699,6 @@ namespace Xamarin.Bundler {
 			if (Platform == ApplePlatform.iOS && FastDev && DeploymentTarget.Major < 8) {
 				ErrorHelper.Warning (78, "Incremental builds are enabled with a deployment target < 8.0 (currently {0}). This is not supported (the resulting application will not launch on iOS 9), so the deployment target will be set to 8.0.", DeploymentTarget);
 				DeploymentTarget = new Version (8, 0);
-			}
-
-			if (Driver.classic_only_arguments.Count > 0) {
-				var exceptions = new List<Exception> ();
-				foreach (var deprecated in Driver.classic_only_arguments) {
-					exceptions.Add (new MonoTouchException (16, true, "The option '{0}' has been deprecated.", deprecated));
-				}
-				ErrorHelper.Show (exceptions);
 			}
 
 			if (!package_mdb.HasValue) {
@@ -1656,11 +1646,8 @@ namespace Xamarin.Bundler {
 
 		protected int Start ()
 		{
-			if (Driver.Verbosity > 0 || Driver.DryRun)
+			if (Driver.Verbosity > 0)
 				Console.WriteLine (Command);
-			
-			if (Driver.DryRun)
-				return 0;
 			
 			var info = ProcessStartInfo;
 			var stdout_completed = new ManualResetEvent (false);

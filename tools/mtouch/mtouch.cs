@@ -126,7 +126,6 @@ namespace Xamarin.Bundler
 		static Version sdk_version = new Version ();
 		static string compiler = string.Empty;
 		static string compiler_path;
-		public static bool enable_generic_nsobject = false;
 		static bool xcode_version_check = true;
 
 		//
@@ -1325,7 +1324,6 @@ namespace Xamarin.Bundler
 				},
 				true /* this is an internal option */
 			},
-			{ "unsupported--enable-generics-in-registrar", "[Deprecated]", v => { enable_generic_nsobject = true; classic_only_arguments.Add ("--unsupported--enable-generics-in-registrar"); }, true },
 			{ "stderr=", "Redirect the standard error for the simulated application to the specified file [DEPRECATED]", v => { }, true },
 			{ "stdout=", "Redirect the standard output for the simulated application to the specified file [DEPRECATED]", v => { }, true },
 			{ "sdkroot=", "Specify the location of Apple SDKs, default to 'xcode-select' value.", v => sdk_root = v },

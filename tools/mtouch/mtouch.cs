@@ -143,11 +143,8 @@ namespace Xamarin.Bundler
 		static string aot_args = "static,asmonly,direct-icalls,";
 		static string aot_other_args = "";
 		static int verbose = GetDefaultVerbosity ();
-		static bool dry_run = false;
 		static bool? debug_track;
 		static Dictionary<string, string> environment_variables = new Dictionary<string, string> ();
-
-		public static List<string> classic_only_arguments = new List<string> (); // list of deprecated arguments, which (if used) will cause errors in Unified profile)
 
 		static int Jobs;
 		public static int Concurrency {
@@ -202,10 +199,6 @@ namespace Xamarin.Bundler
 
 		public static int Verbosity {
 			get { return verbose; }
-		}
-
-		public static bool DryRun {
-			get { return dry_run; }
 		}
 
 		public static bool Force {
@@ -1134,8 +1127,6 @@ namespace Xamarin.Bundler
 			{ "h|?|help", "Displays the help", v => SetAction (Action.Help) },
 			{ "version", "Output version information and exit.", v => SetAction (Action.Version) },
 			{ "j|jobs=", "The level of concurrency. Default is the number of processors.", v => Jobs = int.Parse (v) },
-			{ "d|dir=", "Output directory for the results (Used for partial builds) [Deprecated]", v => { output_dir = v; classic_only_arguments.Add ("--dir"); }, true },
-			{ "cp=|crossprefix=", "Specifies the Mono cross compiler prefix [Deprecated]", v => { cross_prefix = v; classic_only_arguments.Add ("--crossprefix"); }, true },
 			{ "f|force", "Forces the recompilation of code, regardless of timestamps", v=>force = true },
 			{ "cache=", "Specify the directory where object files will be cached", v => Cache.Location = v },
 			{ "aot=", "Arguments to the static compiler",
@@ -1149,18 +1140,12 @@ namespace Xamarin.Bundler
 				}
 			},
 			{ "gsharedvt:", "Generic sharing for value-types - always enabled [Deprecated]", v => {} },
-			{ "libdir", "Directories that contains the assemblies to use for compiling [Deprecated]", v => { classic_only_arguments.Add ("--libdir"); }, true },
 			{ "v", "Verbose", v => verbose++ },
 			{ "q", "Quiet", v => verbose-- },
-			{ "n", "Dry run [Deprecated]", v => { dry_run = true; classic_only_arguments.Add ("-n"); }, true },
-			{ "keeptemp", "[Deprecated]", v => { classic_only_arguments.Add ("--keeptemp"); }, true /* deprecated, hide it for the future, but don't show errors if it's present */ },
 			{ "time", v => watch_level++ },
 			{ "executable=", "Specifies the native executable name to output", v => app.ExecutableName = v },
-			{ "m|main=", "Specifies the name of the main startup file, defaults to main.m [Deprecated]", v => { classic_only_arguments.Add ("--main"); }, true },
-			{ "nomanifest", "Do not generate PkgInfo and Info.plist [Deprecated in the Unified API]", v => { classic_only_arguments.Add ("--nomanifest"); } },
 			{ "nofastsim", "Do not run the simulator fast-path build", v => fast_sim = false },
 			{ "nolink", "Do not link the assemblies", v => app.LinkMode = LinkMode.None },
-			{ "mapinject", "[Deprecated]", v => { classic_only_arguments.Add ("--mapinject"); }, true },
 			{ "nodebugtrack", "Disable debug tracking of object resurrection bugs", v => debug_track = false },
 			{ "debugtrack:", "Enable debug tracking of object resurrection bugs (enabled by default for the simulator)", v => { debug_track = ParseBool (v, "--debugtrack"); } },
 			{ "linkerdumpdependencies", "Dump linker dependencies for linker-analyzer tool", v => app.LinkerDumpDependencies = true },
@@ -1180,21 +1165,12 @@ namespace Xamarin.Bundler
 					}
 				} },
 			{ "dsym:", "Turn on (default for device) or off (default for simulator) .dSYM symbols.", v => app.BuildDSym = ParseBool (v, "dsym") },
-			{ "nosign", "Do not sign the application [Deprecated in the Unified API]", v => { classic_only_arguments.Add ("--nosign"); } },
 			{ "dlsym:", "Use dlsym to resolve pinvokes in AOT compiled assemblies", v => app.ParseDlsymOptions (v) },
 			{ "r|ref=", "Add an assembly to the resolver", v => app.References.Add (v) },
 			{ "gcc_flags=", "Set flags to be passed along to gcc at link time", v => app.UserGccFlags = v },
 			{ "framework=", "Link with the specified framework. This can either be a system framework (like 'UIKit'), or it can be a path to a custom framework ('/path/to/My.framework'). In the latter case the entire 'My.framework' directory is copied into the app as well.", (v) => app.Frameworks.Add (v) },
 			{ "weak-framework=", "Weak link with the specified framework. This can either be a system framework (like 'UIKit'), or it can be a path to a custom framework ('/path/to/My.framework'). In the latter case the entire 'My.framework' directory is copied into the app as well.", (v) => app.Frameworks.Add (v) },	
 
-			//
-			// Bundle configuration
-			//
-			{ "displayname=", "Specifies the display name [Deprecated]", v => { app.BundleDisplayName = v; classic_only_arguments.Add ("--displayname"); }, true },
-			{ "bundleid=", "Specifies the bundle identifier (com.foo.exe) [Deprecated]", v => { app.BundleId = v; classic_only_arguments.Add ("--bundleid"); }, true },
-			{ "mainnib=", "Specifies the name of the main Nib file to load [Deprecated]", v => { app.MainNib = v; classic_only_arguments.Add ("--mainnib"); }, true },
-			{ "icon=", "Specifies the name of the icon to use [Deprecated]", v => { app.Icon = v; classic_only_arguments.Add ("--icon"); }, true },
-				
 			// What we do
 			{ "sim=", "Compile for the Simulator, specify the output directory for code", v =>
 				{
@@ -1209,7 +1185,6 @@ namespace Xamarin.Bundler
 					app.BuildTarget = BuildTarget.Device;
 				}
 			},
-			{ "c|certificate=", "The Code Signing certificate for the application [Deprecated]", v => { app.CertificateName = v; classic_only_arguments.Add ("--certificate"); }, true },
 			// Configures the tooling used to build code.
 			{ "sdk=", "Specifies the name of the SDK to compile against (version, for example \"3.2\")",
 				v => {
@@ -1290,9 +1265,6 @@ namespace Xamarin.Bundler
 				},
 				true // do not show the option anymore
 			},
-			{ "llvm", "Enable the LLVM compiler [Deprecated, use --abi instead]", v => { app.ParseAbi ("armv7+llvm"); classic_only_arguments.Add ("--llvm"); }, true },
-			{ "thumb", "Enable LLVM-Thumb support [Deprecated, use --abi instead]", v => { app.ParseAbi ("armv7+llvm+thumb2"); classic_only_arguments.Add ("--thumb"); }, true },
-			{ "armv7", "Enable ARMv7 support [Deprecated, use --abi instead]", v => { app.ParseAbi ("armv7"); classic_only_arguments.Add ("--armv7"); }, true },
 			{ "abi=", "Comma-separated list of ABIs to target. Currently supported: armv7, armv7+llvm, armv7+llvm+thumb2, armv7s, armv7s+llvm, armv7s+llvm+thumb2, arm64, arm64+llvm, i386, x86_64", v => app.ParseAbi (v) },
 			{ "override-abi=", "Override any previous abi. Only used for testing.", v => { app.ClearAbi (); app.ParseAbi (v); }, true }, // Temporary command line arg until XS has better support for 64bit architectures.
 			{ "cxx", "Enable C++ support", v => { app.EnableCxx = true; }},
@@ -1319,7 +1291,6 @@ namespace Xamarin.Bundler
 			{ "extension", v => app.IsExtension = true },
 			{ "app-extension=", "The path of app extensions that are included in the app. This must be specified once for each app extension.", v => app.Extensions.Add (v), true /* MSBuild-internal for now */ },
 			{ "profiling:", "Enable profiling", v => app.EnableProfiling = ParseBool (v, "profiling") },
-			{ "noregistrar", "Disable the optimized class registrar [Deprecated, use --registrar:dynamic instead]", v => { app.Registrar = RegistrarMode.Dynamic; classic_only_arguments.Add ("--noregistrar"); }, true},
 			{ "registrar:", "Specify the registrar to use (dynamic, static or default (dynamic in the simulator, static on device))", v =>
 				{
 					var split = v.Split ('=');

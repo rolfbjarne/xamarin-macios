@@ -132,6 +132,7 @@ namespace Xamarin.Bundler
 		// Output generation
 		static bool fast_sim = true;
 		static bool force = false;
+		static bool dot;
 		static bool? llvm_asmwriter;
 		static string cross_prefix = Environment.GetEnvironmentVariable ("MONO_CROSS_PREFIX");
 		static string extra_args = Environment.GetEnvironmentVariable ("MTOUCH_ENV_OPTIONS");
@@ -150,6 +151,12 @@ namespace Xamarin.Bundler
 		public static int Concurrency {
 			get {
 				return Jobs == 0 ? Environment.ProcessorCount : Jobs;
+			}
+		}
+
+		public static bool Dot {
+			get {
+				return dot;
 			}
 		}
 
@@ -1128,6 +1135,7 @@ namespace Xamarin.Bundler
 			{ "version", "Output version information and exit.", v => SetAction (Action.Version) },
 			{ "j|jobs=", "The level of concurrency. Default is the number of processors.", v => Jobs = int.Parse (v) },
 			{ "f|force", "Forces the recompilation of code, regardless of timestamps", v=>force = true },
+			{ "dot:", "Generate a dot file to visualize the build tree.", v => dot = true },
 			{ "cache=", "Specify the directory where object files will be cached", v => Cache.Location = v },
 			{ "aot=", "Arguments to the static compiler",
 				v => aot_args = v + (v.EndsWith (",", StringComparison.Ordinal) ? String.Empty : ",") + aot_args

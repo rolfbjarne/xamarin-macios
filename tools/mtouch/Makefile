@@ -111,6 +111,7 @@ MTOUCH_SOURCES = \
 	mtouch.cs		\
 	$(TOP)/tools/common/PInvokeWrapperGenerator.cs	\
 	$(TOP)/tools/common/TargetFramework.cs	\
+	$(TOP)/tools/common/Tasks.cs		\
 	$(TOP)/tools/common/StaticRegistrar.cs	\
 	$(TOP)/src/ObjCRuntime/Registrar.core.cs	\
 	$(TOP)/src/ObjCRuntime/Registrar.cs	\
@@ -429,6 +430,12 @@ ifdef INCLUDE_IOS
 install-local:: $(TARGETS)
 all-local:: $(TARGETS)
 endif
+
+mtouch: \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/mtouch                                          \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mtouch/mtouch.exe                               \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mtouch/Mono.Cecil.dll                           \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mtouch/Mono.Cecil.Mdb.dll
 
 clean-local::
 	rm -Rf bin obj

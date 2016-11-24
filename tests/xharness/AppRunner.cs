@@ -680,7 +680,7 @@ namespace xharness
 		}
 
 		[DllImport ("/usr/lib/libc.dylib")]
-		static extern void kill (int pid, int sig);
+		internal static extern void kill (int pid, int sig);
 
 		async Task KillPidAsync (Log log, int pid, TimeSpan kill_separation, TimeSpan timeout, string type)
 		{

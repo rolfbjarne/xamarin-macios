@@ -718,7 +718,8 @@ namespace Xamarin.Bundler {
 
 			Driver.Watch ("Generated build tasks", 1);
 
-			build_tasks.Dot ();
+			if (Driver.Dot)
+				build_tasks.Dot ();
 			build_tasks.Execute ();
 
 			Driver.Watch ("Executed build tasks", 1);
@@ -2287,15 +2288,9 @@ namespace Xamarin.Bundler {
 	}
 
 	public class LinkTask : CompileTask {
-		protected override Task ExecuteAsync ()
+		protected override void CompilationFailed (int exitCode)
 		{
-			CompilerFlags.PopulateInputs ();
-			if (Application.IsUptodate (CompilerFlags.Inputs, new string [] { OutputFile })) {
-				Driver.Log ("Target {0} is up-to-date.", OutputFile);
-				return Task.CompletedTask;
-			}
-
-			return base.ExecuteAsync ();
+			throw ErrorHelper.CreateError (5216, "Native linking failed for '{0}'. Please file a bug report at http://bugzilla.xamarin.com", OutputFile);
 		}
 	}
 
@@ -2427,7 +2422,7 @@ namespace Xamarin.Bundler {
 				throw new ArgumentNullException (nameof (install_name));
 
 			flags.AddOtherFlag ("-shared");
-			if (!App.EnableMarkerOnlyBitCode)
+			if (!App.EnableMarkerOnlyBitCode && !App.EnableAsmOnlyBitCode)
 				flags.AddOtherFlag ("-read_only_relocs suppress");
 			flags.LinkWithMono ();
 			flags.AddOtherFlag ("-install_name " + Driver.Quote (install_name));

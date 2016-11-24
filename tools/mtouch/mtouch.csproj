@@ -320,7 +320,7 @@
     <Compile Include="..\linker\RemoveUserResourcesSubStep.cs">
       <Link>Xamarin.Linker\RemoveUserResourcesSubStep.cs</Link>
     </Compile>
-    <Compile Include="common\Tasks.cs" />
+    <Compile Include="..\common\Tasks.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
@@ -361,4 +361,7 @@
       <LogicalName>Info.plist.tmpl</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <Target Name="AfterBuild">
+    <Exec Command="make mtouch" />
+  </Target>
 </Project>

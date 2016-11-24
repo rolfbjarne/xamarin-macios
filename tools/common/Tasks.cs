@@ -78,19 +78,26 @@ namespace Xamarin.Bundler
 			var output_nodes = new HashSet<string> ();
 			var all_nodes = new HashSet<string> ();
 
+			var render_file = new Func<string, string> ((v) =>
+			{
+				if (Path.GetDirectoryName (v).EndsWith (".framework", StringComparison.Ordinal))
+					return Path.GetFileName (Path.GetDirectoryName (v));
+				return Path.GetFileName (v);
+			});
+
 			while (queue.Count > 0) {
 				var task = queue.Dequeue ();
 				foreach (var d in task.Dependencies)
 					queue.Enqueue (d);
 
-				var action_node = $"X{task.ID}";
+				var action_node = $"\"{task.GetType ().Name}{task.ID}\"";
 				nodes.Add ($"{action_node} [label=\"{task.GetType ().Name.Replace ("Task", "")}\", shape=box]");
 				all_nodes.Add ($"X{task.ID}");
 				action_nodes.Add (action_node);
 
 				var inputs = task.Inputs.ToArray ();
 				for (int i = 0; i < inputs.Length; i++) {
-					var node = $"\"{Path.GetFileName (inputs [i])}\"";
+					var node = $"\"{render_file (inputs [i])}\"";
 					all_nodes.Add (node);
 					input_nodes.Add (node);
 					nodes.Add ($"{node} -> {action_node}");
@@ -98,7 +105,7 @@ namespace Xamarin.Bundler
 
 				var outputs = task.Outputs.ToArray ();
 				for (int i = 0; i < outputs.Length; i++) {
-					var node = $"\"{Path.GetFileName (outputs [i])}\"";
+					var node = $"\"{render_file (outputs [i])}\"";
 					all_nodes.Add (node);
 					output_nodes.Add (node);
 					nodes.Add ($"{action_node} -> {node}");
@@ -112,29 +119,34 @@ namespace Xamarin.Bundler
 				foreach (var node in nodes)
 					writer.WriteLine ("\t{0};", node);
 
-				writer.Write ("\t{rank = same; ");
-				foreach (var end_node in output_nodes.Except (input_nodes)) {
-					writer.Write (end_node);
-					writer.Write ("; ");
-				}
-				writer.WriteLine ("}");
+				// make all the final nodes line up on the right
+				//writer.Write ("\t{rank = same; ");
+				//foreach (var end_node in output_nodes.Except (input_nodes)) {
+				//	writer.Write (end_node);
+				//	writer.Write ("; ");
+				//}
+				//writer.WriteLine ("}");
+
+				// make all the final nodes a different color
+				foreach (var end_node in output_nodes.Except (input_nodes))
+					writer.WriteLine ($"\t{end_node} [fillcolor = \"lightblue\"; style = \"filled\"; ];");
 
 				writer.WriteLine ("}");
 			}
 			Driver.Log ("Created dot file: {0}", dotPath);
-			var pngPath = Path.ChangeExtension (dotPath, ".png");
-			using (var dot = System.Diagnostics.Process.Start ("dot", $"-Tpng {Driver.Quote (dotPath)} -o {Driver.Quote (pngPath)}")) {
-				dot.WaitForExit ();
-				if (dot.ExitCode == 0) {
-					using (var open = System.Diagnostics.Process.Start ("open", Driver.Quote (pngPath))) {
-						open.WaitForExit ();
-						if (open.ExitCode != 0)
-							Driver.Log ("Failed to open image file.");
-					}
-				} else {
-					Driver.Log ("Failed to generate image file.");
-				}
-			}
+			//var pngPath = Path.ChangeExtension (dotPath, ".png");
+			//using (var dot = System.Diagnostics.Process.Start ("dot", $"-Tpng {Driver.Quote (dotPath)} -o {Driver.Quote (pngPath)}")) {
+			//	dot.WaitForExit ();
+			//	if (dot.ExitCode == 0) {
+			//		using (var open = System.Diagnostics.Process.Start ("open", Driver.Quote (pngPath))) {
+			//			open.WaitForExit ();
+			//			if (open.ExitCode != 0)
+			//				Driver.Log ("Failed to open image file.");
+			//		}
+			//	} else {
+			//		Driver.Log ("Failed to generate image file.");
+			//	}
+			//}
 		}
 	}
 

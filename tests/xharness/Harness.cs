@@ -278,9 +278,9 @@ namespace xharness
 
 			BclTests.AddRange (bcl_suites);
 
-			WatchOSContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "watchos/Container"));
-			WatchOSAppTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "watchos/App"));
-			WatchOSExtensionTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "watchos/Extension"));
+			WatchOSContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "template/WatchContainer"));
+			WatchOSAppTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "template/WatchApp"));
+			WatchOSExtensionTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "template/WatchExtension"));
 		}
 
 		static Dictionary<string, string> make_config = new Dictionary<string, string> ();

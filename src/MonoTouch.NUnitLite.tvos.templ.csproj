@@ -12,6 +12,7 @@
     <AssemblyName>MonoTouch.NUnitLite</AssemblyName>
     <UseMSBuildEngine>True</UseMSBuildEngine>
     <OutputPath>build\tvos\reference</OutputPath>
+    <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

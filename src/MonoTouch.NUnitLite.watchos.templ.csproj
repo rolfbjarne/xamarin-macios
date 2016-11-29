@@ -13,6 +13,7 @@
     <UseMSBuildEngine>True</UseMSBuildEngine>
     <DefineConstants>XAMCORE_2_0;__UNIFIED__;__WATCHOS__</DefineConstants>
     <OutputPath>build\watch\reference</OutputPath>
+    <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

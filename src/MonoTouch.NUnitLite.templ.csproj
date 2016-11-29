@@ -13,6 +13,7 @@
     <UseMSBuildEngine>True</UseMSBuildEngine>
     <DefineConstants>XAMCORE_2_0</DefineConstants>
     <OutputPath>build\ios\reference</OutputPath>
+    <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

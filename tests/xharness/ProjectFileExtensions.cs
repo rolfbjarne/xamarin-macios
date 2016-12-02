@@ -348,7 +348,13 @@ namespace xharness
 		public static void FixTestLibrariesReferences (this XmlDocument csproj, string platform)
 		{
 			var nodes = csproj.SelectNodes ("//*[local-name() = 'ObjcBindingNativeLibrary' or local-name() = 'ObjcBindingNativeFramework']");
-			var test_libraries = new string [] { "libtest.a", "XTest.framework", "XStaticArTest.framework", "XStaticObjectTest.framework" };
+			var test_libraries = new string [] {
+				"libtest.a",
+				"libtest2.a",
+				"XTest.framework",
+				"XStaticArTest.framework",
+				"XStaticObjectTest.framework"
+			};
 			foreach (XmlNode node in nodes) {
 				var includeAttribute = node.Attributes ["Include"];
 				if (includeAttribute != null) {
@@ -420,9 +426,12 @@ namespace xharness
 		{
 			var import = csproj.SelectSingleNode ("/*/*/*[local-name() = 'None' and @Include = 'Info.plist']");
 			import.Attributes ["Include"].Value = "Info" + suffix + ".plist";
-			var logicalName = csproj.CreateElement ("LogicalName", MSBuild_Namespace);
+			var logicalName = import.SelectSingleNode ("./*[local-name() = 'LogicalName']");
+			if (logicalName == null) {
+				logicalName = csproj.CreateElement ("LogicalName", MSBuild_Namespace);
+				import.AppendChild (logicalName);
+			}
 			logicalName.InnerText = "Info.plist";
-			import.AppendChild (logicalName);
 		}
 
 		public static string GetInfoPListInclude (this XmlDocument csproj)

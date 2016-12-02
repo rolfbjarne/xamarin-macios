@@ -13,7 +13,7 @@ namespace Xamarin.Bundler {
 	//					MT0002	Could not parse the environment variable '{0}'.
 	//					MT0003	Application name '{0}.exe' conflicts with an SDK or product assembly (.dll) name.
 	//					MT0004	<unused>
-	//					MT0005	The output directory '{0}' does not exist
+	//					MT0005	<unused>
 	//					MT0006	There is no devel platform at '{0}', use --platform=PLAT to specify the SDK
 	//					MT0007	The root assembly '{0}' does not exist
 	//					MT0008	You should provide one root assembly only, found {0} assemblies: '{1}'
@@ -104,6 +104,7 @@ namespace Xamarin.Bundler {
 	//					MT0095 Aot files could not be copied to the destination directory.
 	//					MT0096 No reference to Xamarin.iOS.dll was found.
 	//					MT0097 <used by mmp>
+	//					MT0098	No assembly build target was specified for '{0}'.
 	// MT1xxx	file copy / symlinks (project related)
 	//			MT10xx	installer.cs / mtouch.cs
 	//					MT1001	Could not find an application at the specified directory: {0}
@@ -138,6 +139,7 @@ namespace Xamarin.Bundler {
 	//					MT1030	Launching applications on device using a bundle identifier is deprecated. Please pass the full path to the bundle to launch.
 	//					MT1031	Could not launch the app '{0}' on the device '{1}' because the device is locked. Please unlock the device and try again.
 	//		Warning			MT1032	This application executable might be too large ({0} MB) to execute on device. If bitcode was enabled you might want to disable it for development, it is only required to submit applications to Apple.
+	//					MT1033	Could not uninstall the application '{0}' from the device '{1}': {2}
 	//			MT11xx	DebugService.cs
 	//					MT1101	Could not start app: {0}
 	//					MT1102	Could not attach to the app (to kill it): {0}
@@ -296,6 +298,7 @@ namespace Xamarin.Bundler {
 	//					MT5102	Failed to assemble the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//					MT5103	Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//					MT5104  Could not find neither the '{0}' nor the '{1}' compiler. Please install Xcode 'Command-Line Tools' component
+	//					MT5105	Could not compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//			MT52xx	linking
 	//					MT5201	Native linking failed. Please review the build log and the user flags provided to gcc: {0}
 	//					MT5202	Native linking failed. Please review the build log.
@@ -308,6 +311,7 @@ namespace Xamarin.Bundler {
 	//					MT5213	Duplicate symbol in: {0} (Location related to previous error)
 	//					MT5214	Native linking failed, undefined symbol: {0}. This symbol was referenced by the managed member {1}.{2}. Please verify that all the necessary frameworks have been referenced and native libraries linked.
 	//		Warning		MT5215	References to '{0}' might require additional -framework=XXX or -lXXX instructions to the native linker
+	//					MT5216	Native linking failed for {0}. Please file a bug report at http://bugzilla.xamarin.com
 	//			MT53xx	other tools
 	//					MT5301	Missing 'strip' tool. Please install Xcode 'Command-Line Tools' component
 	//					MT5302	Missing 'dsymutil' tool. Please install Xcode 'Command-Line Tools' component

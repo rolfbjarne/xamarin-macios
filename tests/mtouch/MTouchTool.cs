@@ -15,6 +15,7 @@ namespace Xamarin
 		BuildDev,
 		BuildSim,
 		LaunchSim,
+		LaunchDev,
 	}
 
 	public enum MTouchLinker
@@ -68,6 +69,7 @@ namespace Xamarin
 		public string AppPath;
 		public string Cache;
 		public string Device; // --device
+		public string DevName; // --devname
 		public MTouchLinker Linker;
 		public bool? NoFastSim;
 		public MTouchRegistrar Registrar;
@@ -78,14 +80,20 @@ namespace Xamarin
 		public string HttpMessageHandler;
 		public bool? PackageMdb;
 		public bool? MSym;
+		public Dictionary<string, string> SetEnv = new Dictionary<string, string> ();
 #pragma warning restore 649
 
 		// These are a bit smarter
-		public MTouch.Profile Profile = MTouch.Profile.iOS;
+		public Profile Profile = Profile.iOS;
 		public bool NoPlatformAssemblyReference;
+		public List<string> AssemblyBuildTargets = new List<string> ();
 		static XmlDocument device_list_cache;
 
-		List<string> directories_to_delete;
+		protected override string ToolPath {
+			get {
+				return Configuration.MtouchPath;
+			}
+		}
 
 		public class DeviceInfo
 		{
@@ -120,7 +128,7 @@ namespace Xamarin
 
 		public int Execute (MTouchAction action)
 		{
-			return Execute (BuildArguments (action));
+			return Execute (ComputeArguments (action));
 		}
 
 		public void AssertExecute (MTouchAction action, string message = null)
@@ -133,7 +141,74 @@ namespace Xamarin
 			NUnit.Framework.Assert.AreEqual (1, Execute (action), message);
 		}
 
-		string BuildArguments (MTouchAction action)
+		public void AssertExecuteUnitTests (MTouchAction action, string message = null)
+		{
+		}
+
+		string ComputeArguments (MTouchAction action)
+		{
+			switch (action) {
+			case MTouchAction.BuildSim:
+			case MTouchAction.BuildDev:
+				return ComputeBuildArguments (action);
+			case MTouchAction.LaunchSim:
+			case MTouchAction.LaunchDev:
+				return ComputeLaunchArguments (action);
+			case MTouchAction.None:
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		string ComputeLaunchArguments (MTouchAction action)
+		{
+			var sb = new StringBuilder ();
+
+			if (AppPath == null)
+				throw new Exception ("No AppPath specified.");
+			
+			switch (action) {
+			case MTouchAction.None:
+				break;
+			case MTouchAction.LaunchDev:
+				MTouch.AssertDeviceAvailable ();
+				sb.Append (" --launchdev ").Append (MTouch.Quote (AppPath));
+				break;
+			case MTouchAction.LaunchSim:
+				sb.Append (" --launchsim ").Append (MTouch.Quote (AppPath));
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+
+			if (SdkRoot == None) {
+				// do nothing
+			} else if (!string.IsNullOrEmpty (SdkRoot)) {
+				sb.Append (" --sdkroot ").Append (MTouch.Quote (SdkRoot));
+			} else {
+				sb.Append (" --sdkroot ").Append (MTouch.Quote (Configuration.xcode_root));
+			}
+
+			sb.Append (" ").Append (GetVerbosity ());
+
+			if (Sdk == None) {
+				// do nothing	
+			} else if (!string.IsNullOrEmpty (Sdk)) {
+				sb.Append (" --sdk ").Append (Sdk);
+			} else {
+				sb.Append (" --sdk ").Append (MTouch.GetSdkVersion (Profile));
+			}
+
+			if (!string.IsNullOrEmpty (Device))
+				sb.Append (" --device:").Append (MTouch.Quote (Device));
+
+			if (!string.IsNullOrEmpty (DevName))
+				sb.Append (" --devname:").Append (MTouch.Quote (DevName));
+
+			return sb.ToString ();
+		}
+
+		string ComputeBuildArguments (MTouchAction action)
 		{
 			var sb = new StringBuilder ();
 			var isDevice = false;
@@ -153,12 +228,6 @@ namespace Xamarin
 				if (AppPath == null)
 					throw new Exception ("No AppPath specified.");
 				sb.Append (" --sim ").Append (MTouch.Quote (AppPath));
-				break;
-			case MTouchAction.LaunchSim:
-				isDevice = false;
-				if (AppPath == null)
-					throw new Exception ("No AppPath specified.");
-				sb.Append (" --launchsim ").Append (MTouch.Quote (AppPath));
 				break;
 			default:
 				throw new NotImplementedException ();
@@ -230,11 +299,11 @@ namespace Xamarin
 			} else if (!NoPlatformAssemblyReference) {
 				// make the implicit default the way tests have been running until now, and at the same time the very minimum to make apps build.
 				switch (Profile) {
-				case MTouch.Profile.iOS:
+				case Profile.iOS:
 					sb.Append (" -r:").Append (MTouch.Quote (Configuration.XamarinIOSDll));
 					break;
-				case MTouch.Profile.tvOS:
-				case MTouch.Profile.watchOS:
+				case Profile.tvOS:
+				case Profile.watchOS:
 					sb.Append (" --target-framework ").Append (MTouch.GetTargetFramework (Profile));
 					sb.Append (" -r:").Append (MTouch.Quote (MTouch.GetBaseLibrary (Profile)));
 					break;
@@ -247,12 +316,12 @@ namespace Xamarin
 				sb.Append (" --abi ").Append (Abi);
 			} else {
 				switch (Profile) {
-				case MTouch.Profile.iOS:
+				case Profile.iOS:
 					break; // not required
-				case MTouch.Profile.tvOS:
+				case Profile.tvOS:
 					sb.Append (isDevice ? " --abi arm64" : " --abi x86_64");
 					break;
-				case MTouch.Profile.watchOS:
+				case Profile.watchOS:
 					sb.Append (isDevice ? " --abi armv7k" : " --abi i386");
 					break;
 				default:
@@ -311,6 +380,9 @@ namespace Xamarin
 			if (!string.IsNullOrEmpty (Device))
 				sb.Append (" --device:").Append (MTouch.Quote (Device));
 
+			foreach (var abt in AssemblyBuildTargets)
+				sb.Append (" --assembly-build-target ").Append (MTouch.Quote (abt));
+
 			return sb.ToString ();
 		}
 
@@ -364,12 +436,12 @@ namespace Xamarin
 			}
 		}
 
-		string CreatePlist (MTouch.Profile profile, string appName)
+		string CreatePlist (Profile profile, string appName)
 		{
 			string plist = null;
 
 			switch (profile) {
-			case MTouch.Profile.iOS:
+			case Profile.iOS:
 				plist = string.Format (@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <!DOCTYPE plist PUBLIC ""-//Apple//DTD PLIST 1.0//EN"" ""http://www.apple.com/DTDs/PropertyList-1.0.dtd"">
 <plist version=""1.0"">
@@ -398,7 +470,7 @@ namespace Xamarin
 </plist>
 ", appName, MTouch.GetSdkVersion (Profile));
 				break;
-			case MTouch.Profile.tvOS:
+			case Profile.tvOS:
 				plist = string.Format (@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <!DOCTYPE plist PUBLIC ""-//Apple//DTD PLIST 1.0//EN"" ""http://www.apple.com/DTDs/PropertyList-1.0.dtd"">
 <plist version=""1.0"">
@@ -546,11 +618,7 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 
 		public string CreateTemporaryDirectory ()
 		{
-			var tmpDir = MTouch.GetTempDirectory ();
-			if (directories_to_delete == null)
-				directories_to_delete = new List<string> ();
-			directories_to_delete.Add (tmpDir);
-			return tmpDir;
+			return Xamarin.Cache.CreateTemporaryDirectory ();
 		}
 
 		public void CreateTemporaryApp_LinkWith ()
@@ -577,10 +645,6 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 
 		void IDisposable.Dispose ()
 		{
-			if (directories_to_delete != null) {
-				foreach (var dir in directories_to_delete)
-					Directory.Delete (dir, true);
-			}
 		}
 	}
 }

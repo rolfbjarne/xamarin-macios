@@ -21,6 +21,12 @@ using XamCore.Registrar;
 
 namespace Xamarin.Bundler
 {
+	public class BundleFileInfo
+	{
+		public HashSet<string> Sources = new HashSet<string> ();
+		public bool DylibToFramework;
+	}
+
 	public partial class Target {
 		public string TargetDirectory;
 		public string AppTargetDirectory;
@@ -37,10 +43,11 @@ namespace Xamarin.Bundler
 		// Note that each 'Target' can have multiple abis: armv7+armv7s for instance.
 		public List<Abi> Abis;
 
-		// This is a list of native libraries to into the final executable.
-		// All the native libraries are included here (this means all the libraries
-		// that were AOTed from managed code, main, registrar, extra static libraries, etc).
-		List<string> link_with = new List<string> ();
+		public Dictionary<string, BundleFileInfo> BundleFiles = new Dictionary<string, BundleFileInfo> ();
+
+		Dictionary<Abi, CompileTask> pinvoke_tasks = new Dictionary<Abi, CompileTask> ();
+		List<CompileTask> link_with_task_output = new List<CompileTask> ();
+		CompilerFlags linker_flags;
 
 		// If we didn't link because the existing (cached) assemblyes are up-to-date.
 		bool cached_link;
@@ -48,7 +55,7 @@ namespace Xamarin.Bundler
 		// If any assemblies were updated (only set to false if the linker is disabled and no assemblies were modified).
 		bool any_assembly_updated = true;
 
-		BuildTasks compile_tasks = new BuildTasks ();
+		//BuildTasks compile_tasks = new BuildTasks ();
 
 		// If we didn't link the final executable because the existing binary is up-to-date.
 		public bool cached_executable; 
@@ -59,8 +66,92 @@ namespace Xamarin.Bundler
 		public bool Is32Build { get { return Application.IsArchEnabled (Abis, Abi.Arch32Mask); } } // If we're targetting a 32 bit arch for this target.
 		public bool Is64Build { get { return Application.IsArchEnabled (Abis, Abi.Arch64Mask); } } // If we're targetting a 64 bit arch for this target.
 
-		List<string> link_with_and_ship = new List<string> ();
-		public IEnumerable<string> LibrariesToShip { get { return link_with_and_ship; } }
+		// This is a list of all the architectures we need to build, which may include any architectures
+		// in any extensions (but not the main app).
+		List<Abi> all_architectures;
+		public List<Abi> AllArchitectures {
+			get {
+				if (all_architectures == null) {
+					all_architectures = new List<Abi> ();
+					var mask = Is32Build ? Abi.Arch32Mask : Abi.Arch64Mask;
+					foreach (var abi in App.AllArchitectures) {
+						var a = abi & mask;
+						if (a != 0)
+							all_architectures.Add (a);
+					}
+				}
+				return all_architectures;
+			}
+		}
+
+		List<Abi> GetArchitectures (AssemblyBuildTarget build_target)
+		{
+			switch (build_target) {
+			case AssemblyBuildTarget.StaticObject:
+			case AssemblyBuildTarget.DynamicLibrary:
+				return Abis;
+			case AssemblyBuildTarget.Framework:
+				return AllArchitectures;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public void AddToBundle (string source, string bundle_path = null, bool dylib_to_framework_conversion = false)
+		{
+			BundleFileInfo info;
+
+			if (bundle_path == null) {
+				if (source.EndsWith (".framework", StringComparison.Ordinal)) {
+					var bundle_name = Path.GetFileNameWithoutExtension (source);
+					bundle_path = $"Frameworks/{bundle_name}.framework";
+				} else {
+					bundle_path = Path.GetFileName (source);
+				}
+			}
+
+			if (!BundleFiles.TryGetValue (bundle_path, out info))
+				BundleFiles [bundle_path] = info = new BundleFileInfo () { DylibToFramework = dylib_to_framework_conversion };
+			if (info.DylibToFramework != dylib_to_framework_conversion)
+				throw new Exception (); // internal error.
+			info.Sources.Add (source);
+		}
+
+		public void LinkWithTaskOutput (CompileTask task)
+		{
+			if (task.SharedLibrary) {
+				LinkWithDynamicLibrary (task.OutputFile);
+			} else {
+				LinkWithStaticLibrary (task.OutputFile);
+			}
+			link_with_task_output.Add (task);
+		}
+
+		public void LinkWithTaskOutput (IEnumerable<CompileTask> tasks)
+		{
+			foreach (var t in tasks)
+				LinkWithTaskOutput (t);
+		}
+
+		public void LinkWithStaticLibrary (string path)
+		{
+			linker_flags.AddLinkWith (path);
+		}
+
+		public void LinkWithStaticLibrary (IEnumerable<string> paths)
+		{
+			linker_flags.AddLinkWith (paths);
+		}
+
+		public void LinkWithFramework (string path)
+		{
+			linker_flags.AddFramework (path);
+		}
+
+		public void LinkWithDynamicLibrary (string path)
+		{
+			linker_flags.AddLinkWith (path);
+		}
 
 		PInvokeWrapperGenerator pinvoke_state;
 		PInvokeWrapperGenerator MarshalNativeExceptionsState {
@@ -110,20 +201,24 @@ namespace Xamarin.Bundler
 					ProductAssembly = ad;
 			}
 
+			Driver.Log ("Computing list of assemblies in...");
+			var watch = System.Diagnostics.Stopwatch.StartNew ();
 			ComputeListOfAssemblies ();
+			Driver.Log ("Computed list of assemblies in {0}s", watch.Elapsed.TotalSeconds);
 
 			if (App.LinkMode == LinkMode.None && App.I18n != I18nAssemblies.None)
 				AddI18nAssemblies ();
 
-			// an extension is a .dll and it would match itself
-			if (App.IsExtension)
-				return;
+			linker_flags = new CompilerFlags (this);
 
-			var root_wo_ext = Path.GetFileNameWithoutExtension (App.RootAssembly);
-			foreach (var assembly in Assemblies) {
-				if (!assembly.FullPath.EndsWith (".exe", StringComparison.OrdinalIgnoreCase)) {
-					if (root_wo_ext == Path.GetFileNameWithoutExtension (assembly.FullPath))
-						throw new MonoTouchException (23, true, "Application name '{0}.exe' conflicts with another user assembly.", root_wo_ext);
+			// an extension is a .dll and it would match itself
+			if (!App.IsExtension) {
+				var root_wo_ext = Path.GetFileNameWithoutExtension (App.RootAssembly);
+				foreach (var assembly in Assemblies) {
+					if (!assembly.FullPath.EndsWith (".exe", StringComparison.OrdinalIgnoreCase)) {
+						if (root_wo_ext == Path.GetFileNameWithoutExtension (assembly.FullPath))
+							throw new MonoTouchException (23, true, "Application name '{0}.exe' conflicts with another user assembly.", root_wo_ext);
+					}
 				}
 			}
 		}
@@ -276,9 +371,9 @@ namespace Xamarin.Bundler
 				ComputeListOfAssemblies (assemblies, reference_assembly, exceptions);
 			}
 
-			// Custom Attribute metadata can include references to other assemblies, e.g. [X (typeof (Y)], 
-			// but it is not reflected in AssemblyReferences :-( ref: #37611
-			// so we must scan every custom attribute to look for System.Type
+			//// Custom Attribute metadata can include references to other assemblies, e.g. [X (typeof (Y)], 
+			//// but it is not reflected in AssemblyReferences :-( ref: #37611
+			//// so we must scan every custom attribute to look for System.Type
 			GetCustomAttributeReferences (assembly, assemblies, exceptions);
 			GetCustomAttributeReferences (main, assemblies, exceptions);
 			if (main.HasTypes) {
@@ -616,25 +711,6 @@ namespace Xamarin.Bundler
 
 			ManagedLink ();
 
-			if (App.RequiresPInvokeWrappers) {
-				// Write P/Invokes
-				var state = MarshalNativeExceptionsState;
-				if (state.Started) {
-					// The generator is 'started' by the linker, which means it may not
-					// be started if the linker was not executed due to re-using cached results.
-					state.End ();
-				}
-				
-				PinvokesTask.Create (compile_tasks, Abis, this, state.SourcePath);
-
-				if (App.FastDev) {
-					// In this case assemblies must link with the resulting dylib,
-					// so we can't compile the pinvoke dylib in parallel with later
-					// stuff.
-					compile_tasks.ExecuteInParallel ();
-				}
-			}
-
 			// Now the assemblies are in PreBuildDirectory.
 
 			foreach (var a in Assemblies) {
@@ -651,6 +727,71 @@ namespace Xamarin.Bundler
 			Frameworks.ExceptWith (WeakFrameworks);
 		}
 
+		public void CompilePInvokeWrappers ()
+		{
+			if (!App.RequiresPInvokeWrappers)
+				return;
+		
+			// Write P/Invokes
+			var state = MarshalNativeExceptionsState;
+			if (state.Started) {
+				// The generator is 'started' by the linker, which means it may not
+				// be started if the linker was not executed due to re-using cached results.
+				state.End ();
+			}
+
+			var ifile = state.SourcePath;
+			var mode = App.LibPInvokesLinkMode;
+			foreach (var abi in GetArchitectures (mode)) {
+				var arch = abi.AsArchString ();
+				string ofile;
+
+				switch (mode) {
+				case AssemblyBuildTarget.StaticObject:
+					ofile = Path.Combine (Cache.Location, arch, "libpinvokes.a");
+					break;
+				case AssemblyBuildTarget.DynamicLibrary:
+					ofile = Path.Combine (Cache.Location, arch, "libpinvokes.dylib");
+					break;
+				case AssemblyBuildTarget.Framework:
+					ofile = Path.Combine (Cache.Location, arch, "Xamarin.PInvokes.framework", "Xamarin.PInvokes");
+
+					var plist_path = Path.Combine (Path.GetDirectoryName (ofile), "Info.plist");
+					var fw_name = Path.GetFileNameWithoutExtension (ofile);
+					App.CreateFrameworkInfoPList (plist_path, fw_name, Driver.App.BundleId + ".frameworks." + fw_name, fw_name);
+					break;
+				default:
+					throw new Exception ();
+				}
+
+				var pinvoke_task = new PinvokesTask ()
+				{
+					Target = this,
+					Abi = abi,
+					InputFile = ifile,
+					OutputFile = ofile,
+					SharedLibrary = mode != AssemblyBuildTarget.StaticObject,
+					Language = "objective-c++",
+				};
+				if (pinvoke_task.SharedLibrary) {
+					if (mode == AssemblyBuildTarget.Framework) {
+						var name = Path.GetFileNameWithoutExtension (ifile);
+						pinvoke_task.InstallName = $"@rpath/{name}.framework/{name}";
+						AddToBundle (pinvoke_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
+					} else {
+						pinvoke_task.InstallName = $"@executable_path/{Path.GetFileName (ofile)}";
+						AddToBundle (pinvoke_task.OutputFile);
+					}
+					pinvoke_task.CompilerFlags.AddFramework ("Foundation");
+					pinvoke_task.CompilerFlags.LinkWithXamarin ();
+				}
+
+				pinvoke_tasks.Add (abi, pinvoke_task);
+
+				LinkWithTaskOutput (pinvoke_task);
+			}
+		}
+
 		public void SelectStaticRegistrar ()
 		{
 			switch (App.Registrar) {
@@ -665,35 +806,283 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public void Compile ()
+		void AOTCompile ()
 		{
-			// Compile the managed assemblies into object files or shared libraries
-			if (App.IsDeviceBuild) {
-				foreach (var a in Assemblies)
-					a.CreateCompilationTasks (compile_tasks, BuildDirectory, Abis);
+			if (App.IsSimulatorBuild)
+				return;
+
+			foreach (var a in Assemblies) {
+				foreach (var abi in GetArchitectures (a.BuildTarget)) {
+					a.CreateAOTTask (abi);
+				}
 			}
 
+			// Group the assemblies according to their target name, and build them all.
+			var grouped = Assemblies.GroupBy ((arg) => arg.BuildTargetName);
+			foreach (var @group in grouped) {
+				var name = @group.Key;
+				var assemblies = @group.AsEnumerable ().ToArray ();
+				// We ensure elsewhere that all assemblies in a group have the same build target.
+				var build_target = assemblies [0].BuildTarget;
+
+				foreach (var abi in GetArchitectures (build_target)) {
+					Driver.Log (5, "Building {0} from {1}", name, string.Join (", ", assemblies.Select ((arg1) => Path.GetFileNameWithoutExtension (arg1.FileName)).ToArray ()));
+
+					string install_name;
+					string compiler_output;
+					var compiler_flags = new CompilerFlags (this);
+					var link_dependencies = new List<CompileTask> ();
+					var infos = assemblies.Select ((asm) => asm.AotInfos [abi]);
+					var aottasks = infos.Select ((info) => info.Task);
+
+					// We have to compile any source files to object files before we can link.
+					var sources = infos.SelectMany ((info) => info.AsmFiles);
+					if (sources.Count () > 0) {
+						foreach (var src in sources) {
+							// We might have to convert .s to bitcode assembly (.ll) first
+							var assembly = src;
+							BitCodeifyTask bitcode_task = null;
+							if (App.EnableAsmOnlyBitCode) {
+								bitcode_task = new BitCodeifyTask ()
+								{
+									Input = assembly,
+									OutputFile = Path.ChangeExtension (assembly, ".ll"),
+									Platform = App.Platform,
+									Abi = abi,
+									DeploymentTarget = App.DeploymentTarget,
+									Dependencies = aottasks,
+								};
+								assembly = bitcode_task.OutputFile;
+							}
+
+							// Compile assembly code (either .s or .ll) to object file
+							var compile_task = new CompileTask
+							{
+								Target = this,
+								SharedLibrary = false,
+								InputFile = assembly,
+								OutputFile = Path.ChangeExtension (assembly, ".o"),
+								Abi = abi,
+								Language = bitcode_task != null ? null : "assembler",
+								Dependency = bitcode_task,
+								Dependencies = aottasks,
+							};
+							link_dependencies.Add (compile_task);
+						}
+					}
+
+					var arch = abi.AsArchString ();
+					switch (build_target) {
+					case AssemblyBuildTarget.StaticObject:
+						LinkWithTaskOutput (link_dependencies); // Any .s or .ll files from the AOT compiler (compiled to object files)
+						foreach (var info in infos) {
+							LinkWithStaticLibrary (info.ObjectFiles);
+							LinkWithStaticLibrary (info.BitcodeFiles);
+						}
+						continue; // no linking to do here.
+					case AssemblyBuildTarget.DynamicLibrary:
+						install_name = $"@executable_path/lib{name}.dylib";
+						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib");
+						break;
+					case AssemblyBuildTarget.Framework:
+						install_name = $"@rpath/{name}.framework/{name}";
+						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib"); // frameworks are almost identical to dylibs, so this is expected.
+						break;
+					default:
+						throw new Exception ();
+					}
+
+					CompileTask pinvoke_task;
+					if (pinvoke_tasks.TryGetValue (abi, out pinvoke_task))
+						link_dependencies.Add (pinvoke_task);
+
+					foreach (var info in infos) {
+						compiler_flags.AddLinkWith (info.ObjectFiles);
+						compiler_flags.AddLinkWith (info.BitcodeFiles);
+					}
+
+					foreach (var task in link_dependencies)
+						compiler_flags.AddLinkWith (task.OutputFile);
+
+					foreach (var a in assemblies) {
+						compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
+						compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
+						compiler_flags.AddOtherFlags (a.LinkerFlags);
+					}
+					compiler_flags.LinkWithMono ();
+					compiler_flags.LinkWithXamarin ();
+					if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+						compiler_flags.AddFramework ("UIKit");
+
+					var link_task = new LinkTask ()
+					{
+						Target = this,
+						AssemblyName = name,
+						Abi = abi,
+						OutputFile = compiler_output,
+						InstallName = install_name,
+						CompilerFlags = compiler_flags,
+						Language = compiler_output.EndsWith (".s", StringComparison.Ordinal) ? "assembler" : null,
+						SharedLibrary = build_target != AssemblyBuildTarget.StaticObject,
+					};
+					link_task.AddDependency (link_dependencies);
+					link_task.AddDependency (aottasks);
+
+					switch (build_target) {
+					case AssemblyBuildTarget.StaticObject:
+						LinkWithTaskOutput (link_task);
+						break;
+					case AssemblyBuildTarget.DynamicLibrary:
+						AddToBundle (link_task.OutputFile);
+						LinkWithTaskOutput (link_task);
+						break;
+					case AssemblyBuildTarget.Framework:
+						AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
+						LinkWithTaskOutput (link_task);
+						break;
+					default:
+						throw new Exception ();
+					}
+
+					foreach (var info in infos)
+						info.LinkTask = link_task;
+				}
+			}
+
+			if (Assemblies.All ((arg) => arg.HasDependencyMap)) {
+				var dict = Assemblies.ToDictionary ((arg) => Path.GetFileNameWithoutExtension (arg.FileName));
+				foreach (var asm in Assemblies) {
+					if (!asm.HasDependencyMap)
+						continue;
+
+					if (asm.BuildTarget == AssemblyBuildTarget.StaticObject)
+						continue;
+
+					if (Profile.IsSdkAssembly (asm.AssemblyDefinition) || Profile.IsProductAssembly (asm.AssemblyDefinition)) {
+						Console.WriteLine ("SDK assembly, so skipping assembly dependency checks: {0}", Path.GetFileNameWithoutExtension (asm.FileName));
+						continue;
+					}
+
+					HashSet<Assembly> dependent_assemblies = new HashSet<Assembly> ();
+					foreach (var dep in asm.DependencyMap) {
+						Assembly dependentAssembly;
+						if (!dict.TryGetValue (Path.GetFileNameWithoutExtension (dep), out dependentAssembly)) {
+							Console.WriteLine ("Could not find dependency '{0}' of '{1}'", dep, asm.Identity);
+							continue;
+						}
+						if (asm == dependentAssembly)
+							continue; // huh?
+						
+						// Nothing can depend on anything in our SDK, nor does our SDK depend on anything else in our SDK
+						// So we can remove any SDK dependency
+						if (Profile.IsSdkAssembly (dependentAssembly.AssemblyDefinition) || Profile.IsProductAssembly (dependentAssembly.AssemblyDefinition)) {
+							Console.WriteLine ("SDK assembly, so not a dependency of anything: {0}", Path.GetFileNameWithoutExtension (dependentAssembly.FileName));
+							continue;
+						}
+
+						if (!dependentAssembly.HasLinkWithAttributes) {
+							Console.WriteLine ("Assembly {0} does not have LinkWith attributes, so there's nothing we can depend on.", dependentAssembly.Identity);
+							continue;
+						}
+
+						if (dependentAssembly.BuildTargetName == asm.BuildTargetName) {
+							Console.WriteLine ("{0} is a dependency of {1}, but both are being built into the same target, so no dependency added.", Path.GetFileNameWithoutExtension (dep), Path.GetFileNameWithoutExtension (asm.FileName));
+							continue;
+						}
+
+						Console.WriteLine ("Added {0} as a dependency of {1}", Path.GetFileNameWithoutExtension (dep), Path.GetFileNameWithoutExtension (asm.FileName));
+						dependent_assemblies.Add (dependentAssembly);
+					}
+					foreach (var abi in GetArchitectures (asm.BuildTarget)) {
+						var target_task = asm.AotInfos [abi].LinkTask;
+						var dependent_tasks = dependent_assemblies.Select ((v) => v.AotInfos [abi].LinkTask);
+
+						var stack = new Stack<BuildTask> ();
+						foreach (var dep in dependent_tasks) {
+							stack.Clear ();
+							stack.Push (target_task);
+							if (target_task == dep || IsCircularTask (target_task, stack, dep)) {
+								Console.WriteLine ("Found circular task.");
+								Console.WriteLine ("Task {0} (with output {1}) depends on:", target_task.GetType ().Name, target_task.Outputs.First ());
+								stack = new Stack<BuildTask> (stack.Reverse ());
+								while (stack.Count > 0) {
+									var node = stack.Pop ();
+									Console.WriteLine ("   -> {0} (Output: {1})", node.GetType ().Name, node.Outputs.First ());
+								}
+							} else {
+								target_task.AddDependency (dep);
+								target_task.CompilerFlags.AddLinkWith (dep.OutputFile);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		bool IsCircularTask (BuildTask root, Stack<BuildTask> stack, BuildTask task)
+		{
+			stack.Push (task);
+
+			foreach (var d in task?.Dependencies) {
+				if (stack.Contains (d))
+					return true;
+				if (IsCircularTask (root, stack, d))
+					return true;
+			}
+			stack.Pop ();
+
+			return false;
+		}
+
+		public void Compile ()
+		{
+			// Compute the dependency map, and show warnings if there are any problems.
+			List<Exception> exceptions = new List<Exception> ();
+			foreach (var a in Assemblies)
+				a.ComputeDependencyMap (exceptions);
+			if (exceptions.Count > 0) {
+				ErrorHelper.Show (exceptions);
+				ErrorHelper.Warning (3006, "Could not compute a complete dependency map for the project. This will result in slower build times because Xamarin.iOS can't properly detect what needs to be rebuilt (and what does not need to be rebuilt). Please review previous warnings for more details.");
+			}
+
+			// Compile the managed assemblies into object files, frameworks or shared libraries
+			AOTCompile ();
+
+			List<string> registration_methods = new List<string> ();
+
 			// The static registrar.
-			List<string> registration_methods = null;
 			if (App.Registrar == RegistrarMode.Static) {
 				var registrar_m = Path.Combine (ArchDirectory, "registrar.m");
 				var registrar_h = Path.Combine (ArchDirectory, "registrar.h");
-				if (!Application.IsUptodate (Assemblies.Select (v => v.FullPath), new string[] { registrar_m, registrar_h })) {
-					StaticRegistrar.Generate (Assemblies.Select ((a) => a.AssemblyDefinition), registrar_h, registrar_m);
-					registration_methods = new List<string> ();
-					registration_methods.Add ("xamarin_create_classes");
-					Driver.Watch ("Registrar", 1);
-				} else {
-					Driver.Log (3, "Target '{0}' is up-to-date.", registrar_m);
+
+				var run_registrar_task = new RunRegistrarTask
+				{
+					Target = this,
+					RegistrarM = registrar_m,
+					RegistrarH = registrar_h,
+				};
+
+				foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
+					var registrar_task = new CompileRegistrarTask
+					{
+						Target = this,
+						Abi = abi,
+						RegistrarM = registrar_m,
+						RegistrarH = registrar_h,
+						SharedLibrary = false,
+						Language = "objective-c++",
+						InputFile = registrar_m,
+						OutputFile = Path.Combine (Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
+						Dependency = run_registrar_task,
+					};
+
+					LinkWithTaskOutput (registrar_task);
 				}
 
-				RegistrarTask.Create (compile_tasks, Abis, this, registrar_m);
+				registration_methods.Add ("xamarin_create_classes");
 			}
 
 			if (App.Registrar == RegistrarMode.Dynamic && App.IsSimulatorBuild && App.LinkMode == LinkMode.None) {
-				if (registration_methods == null)
-					registration_methods = new List<string> ();
-
 				string method;
 				string library;
 				switch (App.Platform) {
@@ -714,52 +1103,65 @@ namespace Xamarin.Bundler
 				}
 
 				registration_methods.Add (method);
-				link_with.Add (Path.Combine (Driver.ProductSdkDirectory, "usr", "lib", library));
+				linker_flags.AddLinkWith (Path.Combine (Driver.MonoTouchLibDirectory, library));
 			}
 
 			// The main method.
-			foreach (var abi in Abis)
-				MainTask.Create (compile_tasks, this, abi, Assemblies, App.AssemblyName, registration_methods);
-
-			// Start compiling.
-			compile_tasks.ExecuteInParallel ();
-
-			if (App.FastDev) {
-				foreach (var a in Assemblies) {
-					if (a.Dylibs == null)
-						continue;
-					foreach (var dylib in a.Dylibs)
-						LinkWith (dylib);
-				}
+			foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
+				var arch = abi.AsArchString ();
+				var generate_main_task = new GenerateMainTask ()
+				{
+					Target = this,
+					Abi = abi,
+					MainM = Path.Combine (Cache.Location, arch, "main.m"),
+					RegistrationMethods = registration_methods,
+				};
+				var main_task = new CompileMainTask
+				{
+					Target = this,
+					Abi = abi,
+					OutputFile = Path.Combine (Cache.Location, arch, "main.o"),
+					InputFile = generate_main_task.MainM,
+					Dependency = generate_main_task,
+				};
+				LinkWithTaskOutput (main_task);
 			}
 
 			Driver.Watch ("Compile", 1);
 		}
 
-		public void NativeLink ()
+		public void NativeLink (BuildTasks build_tasks)
 		{
 			if (!string.IsNullOrEmpty (App.UserGccFlags))
 				App.DeadStrip = false;
 			if (App.EnableLLVMOnlyBitCode)
 				App.DeadStrip = false;
 
-			var compiler_flags = new CompilerFlags () { Target = this };
-
 			// Get global frameworks
-			compiler_flags.AddFrameworks (App.Frameworks, App.WeakFrameworks);
-			compiler_flags.AddFrameworks (Frameworks, WeakFrameworks);
+			linker_flags.AddFrameworks (App.Frameworks, App.WeakFrameworks);
+			linker_flags.AddFrameworks (Frameworks, WeakFrameworks);
 
 			// Collect all LinkWith flags and frameworks from all assemblies.
 			foreach (var a in Assemblies) {
-				compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
-				if (!App.FastDev || App.IsSimulatorBuild)
-					compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
-				compiler_flags.AddOtherFlags (a.LinkerFlags);
+				linker_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
+				if (a.BuildTarget == AssemblyBuildTarget.StaticObject)
+					linker_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
+				linker_flags.AddOtherFlags (a.LinkerFlags);
+
+				if (a.BuildTarget == AssemblyBuildTarget.StaticObject) {
+					foreach (var abi in GetArchitectures (a.BuildTarget)) {
+						AotInfo info;
+						if (!a.AotInfos.TryGetValue (abi, out info))
+							continue;
+						linker_flags.AddLinkWith (info.BitcodeFiles);
+						linker_flags.AddLinkWith (info.ObjectFiles);
+					}
+				}
 			}
 
 			var bitcode = App.EnableBitCode;
 			if (bitcode)
-				compiler_flags.AddOtherFlag (App.EnableMarkerOnlyBitCode ? "-fembed-bitcode-marker" : "-fembed-bitcode");
+				linker_flags.AddOtherFlag (App.EnableMarkerOnlyBitCode ? "-fembed-bitcode-marker" : "-fembed-bitcode");
 			
 			if (App.EnablePie.HasValue && App.EnablePie.Value && (App.DeploymentTarget < new Version (4, 2)))
 				ErrorHelper.Error (28, "Cannot enable PIE (-pie) when targeting iOS 4.1 or earlier. Please disable PIE (-pie:false) or set the deployment target to at least iOS 4.2");
@@ -769,27 +1171,30 @@ namespace Xamarin.Bundler
 
 			if (App.Platform == ApplePlatform.iOS) {
 				if (App.EnablePie.Value && (App.DeploymentTarget >= new Version (4, 2))) {
-					compiler_flags.AddOtherFlag ("-Wl,-pie");
+					linker_flags.AddOtherFlag ("-Wl,-pie");
 				} else {
-					compiler_flags.AddOtherFlag ("-Wl,-no_pie");
+					linker_flags.AddOtherFlag ("-Wl,-no_pie");
 				}
 			}
 
-			CompileTask.GetArchFlags (compiler_flags, Abis);
+			CompileTask.GetArchFlags (linker_flags, Abis);
 			if (App.IsDeviceBuild) {
-				compiler_flags.AddOtherFlag ($"-m{Driver.TargetMinSdkName}-version-min={App.DeploymentTarget}");
-				compiler_flags.AddOtherFlag ($"-isysroot {Driver.Quote (Driver.FrameworkDirectory)}");
+				linker_flags.AddOtherFlag ($"-m{Driver.TargetMinSdkName}-version-min={App.DeploymentTarget}");
+				linker_flags.AddOtherFlag ($"-isysroot {Driver.Quote (Driver.FrameworkDirectory)}");
 			} else {
-				CompileTask.GetSimulatorCompilerFlags (compiler_flags, null, App);
+				CompileTask.GetSimulatorCompilerFlags (linker_flags, false, App);
 			}
-			compiler_flags.LinkWithMono ();
-			compiler_flags.LinkWithXamarin ();
+			linker_flags.LinkWithMono ();
+			if (App.LibMonoLinkMode != AssemblyBuildTarget.StaticObject)
+				AddToBundle (App.GetLibMono (App.LibMonoLinkMode));
+			linker_flags.LinkWithXamarin ();
+			if (App.LibXamarinLinkMode != AssemblyBuildTarget.StaticObject)
+				AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode));
 
-			compiler_flags.AddLinkWith (link_with);
-			compiler_flags.AddOtherFlag ($"-o {Driver.Quote (Executable)}");
+			linker_flags.AddOtherFlag ($"-o {Driver.Quote (Executable)}");
 
-			compiler_flags.AddOtherFlag ("-lz");
-			compiler_flags.AddOtherFlag ("-liconv");
+			linker_flags.AddOtherFlag ("-lz");
+			linker_flags.AddOtherFlag ("-liconv");
 
 			bool need_libcpp = false;
 			if (App.EnableBitCode)
@@ -798,21 +1203,21 @@ namespace Xamarin.Bundler
 			need_libcpp = true;
 #endif
 			if (need_libcpp)
-				compiler_flags.AddOtherFlag ("-lc++");
+				linker_flags.AddOtherFlag ("-lc++");
 
 			// allow the native linker to remove unused symbols (if the caller was removed by the managed linker)
 			if (!bitcode) {
 				foreach (var entry in GetRequiredSymbols ()) {
 					// Note that we include *all* (__Internal) p/invoked symbols here
 					// We also include any fields from [Field] attributes.
-					compiler_flags.ReferenceSymbol (entry);
+					linker_flags.ReferenceSymbol (entry);
 				}
 			}
 
 			string mainlib;
 			if (App.IsWatchExtension) {
 				mainlib = "libwatchextension.a";
-				compiler_flags.AddOtherFlag (" -e _xamarin_watchextension_main");
+				linker_flags.AddOtherFlag (" -e _xamarin_watchextension_main");
 			} else if (App.IsTVExtension) {
 				mainlib = "libtvextension.a";
 			} else if (App.IsExtension) {
@@ -822,80 +1227,47 @@ namespace Xamarin.Bundler
 			}
 			var libdir = Path.Combine (Driver.ProductSdkDirectory, "usr", "lib");
 			var libmain = Path.Combine (libdir, mainlib);
-			compiler_flags.AddLinkWith (libmain, true);
+			linker_flags.AddLinkWith (libmain, true);
 
 			if (App.EnableProfiling) {
 				string libprofiler;
-				if (App.FastDev) {
-					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
-					compiler_flags.AddLinkWith (libprofiler);
-				} else {
+				if (App.OnlyStaticLibraries) {
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.a");
-					compiler_flags.AddLinkWith (libprofiler);
+					linker_flags.AddLinkWith (libprofiler);
 					if (!App.EnableBitCode)
-						compiler_flags.ReferenceSymbol ("mono_profiler_startup_log");
+						linker_flags.ReferenceSymbol ("mono_profiler_startup_log");
+				} else {
+					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
+					linker_flags.AddLinkWith (libprofiler);
+					AddToBundle (libprofiler);
 				}
 			}
 
 			if (!string.IsNullOrEmpty (App.UserGccFlags))
-				compiler_flags.AddOtherFlag (App.UserGccFlags);
+				linker_flags.AddOtherFlag (App.UserGccFlags);
 
 			if (App.DeadStrip)
-				compiler_flags.AddOtherFlag ("-dead_strip");
+				linker_flags.AddOtherFlag ("-dead_strip");
 
 			if (App.IsExtension) {
 				if (App.Platform == ApplePlatform.iOS && Driver.XcodeVersion.Major < 7) {
-					compiler_flags.AddOtherFlag ("-lpkstart");
-					compiler_flags.AddOtherFlag ($"-F {Driver.Quote (Path.Combine (Driver.FrameworkDirectory, "System/Library/PrivateFrameworks"))} -framework PlugInKit");
+					linker_flags.AddOtherFlag ("-lpkstart");
+					linker_flags.AddOtherFlag ($"-F {Driver.Quote (Path.Combine (Driver.FrameworkDirectory, "System/Library/PrivateFrameworks"))} -framework PlugInKit");
 				}
-				compiler_flags.AddOtherFlag ("-fapplication-extension");
+				linker_flags.AddOtherFlag ("-fapplication-extension");
 			}
 
-			compiler_flags.Inputs = new List<string> ();
-			var flags = compiler_flags.ToString (); // This will populate Inputs.
-
-			if (!Application.IsUptodate (compiler_flags.Inputs, new string [] { Executable } )) {
-				// always show the native linker warnings since many of them turn out to be very important
-				// and very hard to diagnose otherwise when hidden from the build output. Ref: bug #2430
-				var linker_errors = new List<Exception> ();
-				var output = new StringBuilder ();
-				var code = Driver.RunCommand (Driver.CompilerPath, flags, null, output);
-
-				Application.ProcessNativeLinkerOutput (this, output.ToString (), link_with, linker_errors, code != 0);
-
-				if (code != 0) {
-					// if the build failed - it could be because of missing frameworks / libraries we identified earlier
-					foreach (var assembly in Assemblies) {
-						if (assembly.UnresolvedModuleReferences == null)
-							continue;
-						
-						foreach (var mr in assembly.UnresolvedModuleReferences) {
-							// TODO: add more diagnose information on the warnings
-							var name = Path.GetFileNameWithoutExtension (mr.Name);
-							linker_errors.Add (new MonoTouchException (5215, false, "References to '{0}' might require additional -framework=XXX or -lXXX instructions to the native linker", name));
-						}
-					}
-					// mtouch does not validate extra parameters given to GCC when linking (--gcc_flags)
-					if (!String.IsNullOrEmpty (App.UserGccFlags))
-						linker_errors.Add (new MonoTouchException (5201, true, "Native linking failed. Please review the build log and the user flags provided to gcc: {0}", App.UserGccFlags));
-					linker_errors.Add (new MonoTouchException (5202, true, "Native linking failed. Please review the build log.", App.UserGccFlags));
-				}
-				ErrorHelper.Show (linker_errors);
-			} else {
-				cached_executable = true;
-				Driver.Log (3, "Target '{0}' is up-to-date.", Executable);
-			}
-			// the native linker can prefer private (and existing) over public (but non-existing) framework when weak_framework are used
-			// on an iOS target version where the framework does not exists, e.g. targeting iOS6 for JavaScriptCore added in iOS7 results in
-			// /System/Library/PrivateFrameworks/JavaScriptCore.framework/JavaScriptCore instead of
-			// /System/Library/Frameworks/JavaScriptCore.framework/JavaScriptCore
-			// more details in https://bugzilla.xamarin.com/show_bug.cgi?id=31036
-			if (WeakFrameworks.Count > 0)
-				AdjustDylibs ();
-			Driver.Watch ("Native Link", 1);
+			var link_task = new NativeLinkTask ()
+			{
+				Target = this,
+				OutputFile = Executable,
+				CompilerFlags = linker_flags,
+			};
+			link_task.AddDependency (link_with_task_output);
+			build_tasks.Add (link_task);
 		}
 
-		void AdjustDylibs ()
+		public void AdjustDylibs ()
 		{
 			var sb = new StringBuilder ();
 			foreach (var dependency in Xamarin.MachO.GetNativeDependencies (Executable)) {
@@ -955,18 +1327,6 @@ namespace Xamarin.Bundler
 				Console.WriteLine ("Application ({0}) was built using fast-path for simulator.", string.Join (", ", Abis.ToArray ()));
 		}
 
-		// Thread-safe
-		public void LinkWith (string native_library)
-		{
-			lock (link_with)
-				link_with.Add (native_library);
-		}
-
-		public void LinkWithAndShip (string dylib)
-		{
-			link_with_and_ship.Add (dylib);
-		}
-
 		public void StripManagedCode ()
 		{
 			var strip = false;
@@ -985,7 +1345,6 @@ namespace Xamarin.Bundler
 						if (Application.IsUptodate (file, output)) {
 							Driver.Log (3, "Target '{0}' is up-to-date", output);
 						} else {
-							Driver.Log (1, "Stripping assembly {0}", file);
 							Driver.FileDelete (output);
 							Stripper.Process (file, output);
 						}

@@ -16,6 +16,7 @@ namespace xharness
 		Configure,
 		Run,
 		Install,
+		Uninstall,
 		Jenkins,
 	}
 
@@ -39,6 +40,7 @@ namespace xharness
 		}
 
 		public List<TestProject> IOSTestProjects { get; set; } = new List<TestProject> ();
+		public List<string> IOSTestApps { get; set; } = new List<string> ();
 		public List<MacTestProject> MacTestProjects { get; set; } = new List<MacTestProject> ();
 		public List<string> BclTests { get; set; } = new List<string> ();
 
@@ -254,8 +256,8 @@ namespace xharness
 
 		void AutoConfigureIOS ()
 		{
-			var test_suites = new string [] { "monotouch-test", "framework-test", "mini" };
-			var library_projects = new string [] { "BundledResources", "EmbeddedResources", "bindings-test", "bindings-framework-test" };
+			var test_suites = new string [] { "monotouch-test", "framework-test", "mini", "interdependent-binding-projects" };
+			var library_projects = new string [] { "BundledResources", "EmbeddedResources", "bindings-test", "bindings-test2", "bindings-framework-test" };
 			var fsharp_test_suites = new string [] { "fsharp" };
 			var fsharp_library_projects = new string [] { "fsharplibrary" };
 			var bcl_suites = new string [] { "mscorlib", "System", "System.Core", "System.Data", "System.Net.Http", "System.Numerics", "System.Runtime.Serialization", "System.Transactions", "System.Web.Services", "System.Xml", "System.Xml.Linq", "Mono.Security", "System.ComponentModel.DataAnnotations", "System.Json", "System.ServiceModel.Web", "Mono.Data.Sqlite" };
@@ -283,10 +285,10 @@ namespace xharness
 			WatchOSExtensionTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchExtension"));
 		}
 
-		static Dictionary<string, string> make_config = new Dictionary<string, string> ();
-		static IEnumerable<string> FindConfigFiles (string name)
+		Dictionary<string, string> make_config = new Dictionary<string, string> ();
+		IEnumerable<string> FindConfigFiles (string name)
 		{
-			var dir = Environment.CurrentDirectory;
+			var dir = RootDirectory;
 			while (dir != "/") {
 				var file = Path.Combine (dir, name);
 				if (File.Exists (file))
@@ -295,20 +297,20 @@ namespace xharness
 			}
 		}
 
-		static void ParseConfigFiles ()
+		void ParseConfigFiles ()
 		{
 			ParseConfigFiles (FindConfigFiles ("test.config"));
 			ParseConfigFiles (FindConfigFiles ("Make.config.local"));
 			ParseConfigFiles (FindConfigFiles ("Make.config"));
 		}
 
-		static void ParseConfigFiles (IEnumerable<string> files)
+		void ParseConfigFiles (IEnumerable<string> files)
 		{
 			foreach (var file in files)
 				ParseConfigFile (file);
 		}
 
-		static void ParseConfigFile (string file)
+		void ParseConfigFile (string file)
 		{
 			if (string.IsNullOrEmpty (file))
 				return;
@@ -456,6 +458,25 @@ namespace xharness
 			return 0;
 		}
 
+		public int Uninstall ()
+		{
+			if (HarnessLog == null)
+				HarnessLog = new ConsoleLog ();
+
+			foreach (var project in IOSTestProjects) {
+				var runner = new AppRunner ()
+				{
+					Harness = this,
+					ProjectFile = project.Path,
+					MainLog = HarnessLog,
+				};
+				var rv = runner.Uninstall (HarnessLog);
+				if (rv != 0)
+					return rv;
+			}
+			return 0;
+		}
+
 		public int Run ()
 		{
 			if (HarnessLog == null)
@@ -465,6 +486,18 @@ namespace xharness
 				var runner = new AppRunner () {
 					Harness = this,
 					ProjectFile = project.Path,
+					MainLog = HarnessLog,
+				};
+				var rv = runner.RunAsync ().Result;
+				if (rv != 0)
+					return rv;
+			}
+
+			foreach (var app in IOSTestApps) {
+				var runner = new AppRunner ()
+				{
+					Harness = this,
+					AppPath = app,
 					MainLog = HarnessLog,
 				};
 				var rv = runner.RunAsync ().Result;
@@ -540,6 +573,8 @@ namespace xharness
 				return Run ();
 			case HarnessAction.Install:
 				return Install ();
+			case HarnessAction.Uninstall:
+				return Uninstall ();
 			case HarnessAction.Jenkins:
 				return Jenkins ();
 			default:

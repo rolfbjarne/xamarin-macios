@@ -58,7 +58,6 @@ namespace Xamarin.Bundler {
 		public MarshalManagedExceptionMode MarshalManagedExceptions;
 		public bool IsDefaultMarshalManagedExceptionMode;
 		public string RootAssembly;
-		public string RegistrarOutputLibrary;
 
 		public bool RequiresPInvokeWrappers {
 			get {
@@ -362,6 +361,12 @@ namespace Xamarin.Bundler {
 					File.Delete (path);
 			} catch {
 			}
+		}
+
+		public static void TryDelete (IEnumerable<string> paths)
+		{
+			foreach (var path in paths)
+				TryDelete (path);
 		}
 
 		public void InitializeCommon ()

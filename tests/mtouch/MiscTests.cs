@@ -17,6 +17,7 @@ namespace Xamarin.Tests
 		[Test]
 		public void InvalidStructOffset ()
 		{
+			Assert.Fail ();
 			MTouch.AssertDeviceAvailable ();
 
 			var str = "invalid struct offset";

@@ -132,6 +132,7 @@ namespace Xamarin.Bundler
 		// Output generation
 		static bool fast_sim = true;
 		static bool force = false;
+		static bool dot;
 		static bool? llvm_asmwriter;
 		static string cross_prefix = Environment.GetEnvironmentVariable ("MONO_CROSS_PREFIX");
 		static string extra_args = Environment.GetEnvironmentVariable ("MTOUCH_ENV_OPTIONS");
@@ -150,6 +151,12 @@ namespace Xamarin.Bundler
 		public static int Concurrency {
 			get {
 				return Jobs == 0 ? Environment.ProcessorCount : Jobs;
+			}
+		}
+
+		public static bool Dot {
+			get {
+				return dot;
 			}
 		}
 
@@ -206,7 +213,7 @@ namespace Xamarin.Bundler
 			set { force = value; }
 		}
 
-		static string Platform {
+		public static string Platform {
 			get {
 				switch (app.Platform) {
 				case ApplePlatform.iOS:
@@ -501,6 +508,16 @@ namespace Xamarin.Bundler
 			}
 		}
 
+		/// <summary>
+		/// Gets the aot arguments.
+		/// </summary>
+		/// <returns>The aot arguments.</returns>
+		/// <param name="filename">Filename.</param>
+		/// <param name="abi">Abi.</param>
+		/// <param name="outputDir">Output dir.</param>
+		/// <param name="outputFile">The path to the .s output file. Not created in llvm-only mode.</param>
+		/// <param name="llvmOutputFile">The path to the llvm output file.</param>
+		/// <param name="dataFile">The path to the .aotdata output file.</param>
 		public static string GetAotArguments (string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile)
 		{
 			string fname = Path.GetFileName (filename);
@@ -605,6 +622,8 @@ namespace Xamarin.Bundler
 			var assembly_externs = new StringBuilder ();
 			var assembly_aot_modules = new StringBuilder ();
 			var register_assemblies = new StringBuilder ();
+			var assembly_location = new StringBuilder ();
+			var assembly_location_count = 0;
 			var enable_llvm = (abi & Abi.LLVM) != 0;
 
 			register_assemblies.AppendLine ("\tguint32 exception_gchandle = 0;");
@@ -622,11 +641,32 @@ namespace Xamarin.Bundler
 				}
 			}
 
+			if ((abi & Abi.SimulatorArchMask) == 0) {
+				var frameworks = assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
+				                           .OrderBy ((a) => Path.GetFileNameWithoutExtension (a.FileName), StringComparer.Ordinal);
+				foreach (var asm_fw in frameworks) {
+					var asm_name = Path.GetFileNameWithoutExtension (asm_fw.FileName);
+					if (asm_fw.BuildTargetName == asm_name)
+						continue; // this is deduceable
+					assembly_location.AppendFormat ("\t{{ \"{0}\", \"Frameworks/{1}.framework/MonoBundle\" }},\n", asm_name, asm_fw.BuildTargetName);
+					assembly_location_count++;
+				}
+			}
+
 			try {
 				StringBuilder sb = new StringBuilder ();
 				using (var sw = new StringWriter (sb)) {
 					sw.WriteLine ("#include \"xamarin/xamarin.h\"");
-					// Trial builds are only executable in the next 24 hours
+
+					if (assembly_location.Length > 0) {
+						sw.WriteLine ();
+						sw.WriteLine ("struct AssemblyLocation assembly_location_entries [] = {");
+						sw.WriteLine (assembly_location);
+						sw.WriteLine ("};");
+
+						sw.WriteLine ();
+						sw.WriteLine ("struct AssemblyLocations assembly_locations = {{ {0}, assembly_location_entries }};", assembly_location_count);
+					}
 					
 					sw.WriteLine ();
 					sw.WriteLine (assembly_externs);
@@ -670,7 +710,10 @@ namespace Xamarin.Bundler
 
 					if (App.EnableLLVMOnlyBitCode)
 						sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_LLVMONLY);");
-					
+
+					if (assembly_location.Length > 0)
+						sw.WriteLine ("\txamarin_set_assembly_directories (&assembly_locations);");
+
 					if (registration_methods != null) {
 						for (int i = 0; i < registration_methods.Count; i++) {
 							sw.Write ("\t");
@@ -1092,6 +1135,7 @@ namespace Xamarin.Bundler
 			{ "version", "Output version information and exit.", v => SetAction (Action.Version) },
 			{ "j|jobs=", "The level of concurrency. Default is the number of processors.", v => Jobs = int.Parse (v) },
 			{ "f|force", "Forces the recompilation of code, regardless of timestamps", v=>force = true },
+			{ "dot:", "Generate a dot file to visualize the build tree.", v => dot = true },
 			{ "cache=", "Specify the directory where object files will be cached", v => Cache.Location = v },
 			{ "aot=", "Arguments to the static compiler",
 				v => aot_args = v + (v.EndsWith (",", StringComparison.Ordinal) ? String.Empty : ",") + aot_args
@@ -1235,7 +1279,7 @@ namespace Xamarin.Bundler
 			{ "enable-repl:", "Enable REPL support (simulator and not linking only)", v => { app.EnableRepl = ParseBool (v, "enable-repl"); }, true /* this is a hidden option until we've actually used it and made sure it works as expected */ },
 			{ "pie:", "Enable (default) or disable PIE (Position Independent Executable).", v => { app.EnablePie = ParseBool (v, "pie"); }},
 			{ "compiler=", "Specify the Objective-C compiler to use (valid values are gcc, g++, clang, clang++ or the full path to a GCC-compatible compiler).", v => { compiler = v; }},
-			{ "fastdev", "Build an app that supports fastdev (this app will only work when launched using Xamarin Studio)", v => { app.FastDev = true; }},
+			{ "fastdev", "Build an app that supports fastdev (this app will only work when launched using Xamarin Studio)", v => { app.AddAssemblyBuildTarget ("@all=dynamiclibrary"); }},
 			{ "force-thread-check", "Keep UI thread checks inside (even release) builds", v => { app.ThreadCheck = true; }},
 			{ "disable-thread-check", "Remove UI thread checks inside (even debug) builds", v => { app.ThreadCheck = false; }},
 			{ "debug:", "Generate debug code in Mono for the specified assembly (set to 'all' to generate debug code for all assemblies, the default is to generate debug code for user assemblies only)",
@@ -1348,6 +1392,13 @@ namespace Xamarin.Bundler
 			},
 			{ "tls-provider=", "Specify the default TLS provider", v => { tls_provider = v; }},
 			{ "xamarin-framework-directory=", "The framework directory", v => { mtouch_dir = v; }, true },
+			{ "assembly-build-target=", "Specifies how to compile assemblies to native code. Possible values: 'staticobject' (default), 'dynamiclibrary' (same as --fastdev), 'framework'. " +"" +
+					"Each option also takes an assembly and a potential name (defaults to the name of the assembly). Example: --assembly-build-target=mscorlib.dll=framework[=name]." +
+					"There are three special names: '@all' and '@sdk': --assembly-build-target=@all|@sdk=framework[=name].", v =>
+					{
+						app.AddAssemblyBuildTarget (v);
+					}, true /* hidden for now */
+			},
 		};
 
 			AddSharedOptions (os);
@@ -1459,7 +1510,7 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (6, true, "There is no devel platform at {0}, use --platform=PLAT to specify the SDK", PlatformDirectory);
 
 			if (!Directory.Exists (output_dir))
-				throw new MonoTouchException (5, true, "The output directory '{0}' does not exist", output_dir);
+				Directory.CreateDirectory (output_dir);
 
 			if (assemblies.Count != 1) {
 				var exceptions = new List<Exception> ();

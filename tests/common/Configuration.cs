@@ -230,6 +230,54 @@ namespace Xamarin.Tests
 			}
 		}
 
+		public static string TargetDirectoryXI {
+			get {
+				return Path.Combine (RootPath, "_ios-build");
+			}
+		}
+
+		public static string TargetDirectoryXM {
+			get {
+				return Path.Combine (RootPath, "mac-build");
+			}
+		}
+
+		public static string XBuildFrameworkFoldersPathXI {
+			get { 
+				return Path.Combine (TargetDirectoryXI, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks"); ;
+			}
+		}
+
+		public static string XBuildFrameworkFoldersPathXM {
+			get {
+				return Path.Combine (TargetDirectoryXM, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
+			}
+		}
+
+		public static string MSBuildExtensionsPathXI {
+			get {
+				return Path.Combine (TargetDirectoryXI, "Library", "Frameworks", "Mono.framework", "External", "xbuild"); ;
+			}
+		}
+
+		public static string MSBuildExtensionsPathXM {
+			get {
+				return Path.Combine (TargetDirectoryXM, "Library", "Frameworks", "Mono.framework", "External", "xbuild"); ;
+			}
+		}
+
+		public static string SdkRootXI {
+			get {
+				return Path.Combine (TargetDirectoryXI, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
+			}
+		}
+
+		public static string SdkRootXM {
+			get {
+				return Path.Combine (TargetDirectoryXM, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
+			}
+		}
+
 		public static string BinDirXI {
 			get {
 				return Path.Combine (RootPath, "_ios-build", "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current", "bin");

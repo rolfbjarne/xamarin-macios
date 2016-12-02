@@ -350,14 +350,18 @@ namespace xharness
 			var nodes = csproj.SelectNodes ("//*[local-name() = 'ObjcBindingNativeLibrary']");
 			foreach (XmlNode node in nodes) {
 				var includeAttribute = node.Attributes ["Include"];
-				if (includeAttribute != null)
+				if (includeAttribute != null) {
 					includeAttribute.Value = includeAttribute.Value.Replace ("test-libraries\\.libs\\ios\\libtest.a", "test-libraries\\.libs\\" + platform + "\\libtest.a");
+					includeAttribute.Value = includeAttribute.Value.Replace ("test-libraries\\.libs\\ios\\libtest2.a", "test-libraries\\.libs\\" + platform + "\\libtest2.a");
+				}
 			}
 			nodes = csproj.SelectNodes ("//*[local-name() = 'Target' and @Name = 'BeforeBuild']");
 			foreach (XmlNode node in nodes) {
 				var outputsAttribute = node.Attributes ["Outputs"];
-				if (outputsAttribute != null)
+				if (outputsAttribute != null) {
 					outputsAttribute.Value = outputsAttribute.Value.Replace ("test-libraries\\.libs\\ios\\libtest.a", "test-libraries\\.libs\\" + platform + "\\libtest.a");
+					outputsAttribute.Value = outputsAttribute.Value.Replace ("test-libraries\\.libs\\ios\\libtest2.a", "test-libraries\\.libs\\" + platform + "\\libtest2.a");
+				}
 			}
 		}
 
@@ -415,9 +419,12 @@ namespace xharness
 		{
 			var import = csproj.SelectSingleNode ("/*/*/*[local-name() = 'None' and @Include = 'Info.plist']");
 			import.Attributes ["Include"].Value = "Info" + suffix + ".plist";
-			var logicalName = csproj.CreateElement ("LogicalName", MSBuild_Namespace);
+			var logicalName = import.SelectSingleNode ("./*[local-name() = 'LogicalName']");
+			if (logicalName == null) {
+				logicalName = csproj.CreateElement ("LogicalName", MSBuild_Namespace);
+				import.AppendChild (logicalName);
+			}
 			logicalName.InnerText = "Info.plist";
-			import.AppendChild (logicalName);
 		}
 
 		public static string GetInfoPListInclude (this XmlDocument csproj)

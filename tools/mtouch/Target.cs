@@ -66,6 +66,37 @@ namespace Xamarin.Bundler
 		public bool Is32Build { get { return Application.IsArchEnabled (Abis, Abi.Arch32Mask); } } // If we're targetting a 32 bit arch for this target.
 		public bool Is64Build { get { return Application.IsArchEnabled (Abis, Abi.Arch64Mask); } } // If we're targetting a 64 bit arch for this target.
 
+		// This is a list of all the architectures we need to build, which may include any architectures
+		// in any extensions (but not the main app).
+		List<Abi> all_architectures;
+		public List<Abi> AllArchitectures {
+			get {
+				if (all_architectures == null) {
+					all_architectures = new List<Abi> ();
+					var mask = Is32Build ? Abi.Arch32Mask : Abi.Arch64Mask;
+					foreach (var abi in App.AllArchitectures) {
+						var a = abi & mask;
+						if (a != 0)
+							all_architectures.Add (a);
+					}
+				}
+				return all_architectures;
+			}
+		}
+
+		List<Abi> GetArchitectures (AssemblyBuildTarget build_target)
+		{
+			switch (build_target) {
+			case AssemblyBuildTarget.StaticObject:
+			case AssemblyBuildTarget.DynamicLibrary:
+				return Abis;
+			case AssemblyBuildTarget.Framework:
+				return AllArchitectures;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
 		public void AddToBundle (string source, string bundle_path = null, bool dylib_to_framework_conversion = false)
 		{
 			BundleFileInfo info;
@@ -170,7 +201,10 @@ namespace Xamarin.Bundler
 					ProductAssembly = ad;
 			}
 
+			Driver.Log ("Computing list of assemblies in...");
+			var watch = System.Diagnostics.Stopwatch.StartNew ();
 			ComputeListOfAssemblies ();
+			Driver.Log ("Computed list of assemblies in {0}s", watch.Elapsed.TotalSeconds);
 
 			if (App.LinkMode == LinkMode.None && App.I18n != I18nAssemblies.None)
 				AddI18nAssemblies ();
@@ -337,9 +371,9 @@ namespace Xamarin.Bundler
 				ComputeListOfAssemblies (assemblies, reference_assembly, exceptions);
 			}
 
-			// Custom Attribute metadata can include references to other assemblies, e.g. [X (typeof (Y)], 
-			// but it is not reflected in AssemblyReferences :-( ref: #37611
-			// so we must scan every custom attribute to look for System.Type
+			//// Custom Attribute metadata can include references to other assemblies, e.g. [X (typeof (Y)], 
+			//// but it is not reflected in AssemblyReferences :-( ref: #37611
+			//// so we must scan every custom attribute to look for System.Type
 			GetCustomAttributeReferences (assembly, assemblies, exceptions);
 			GetCustomAttributeReferences (main, assemblies, exceptions);
 			if (main.HasTypes) {
@@ -707,11 +741,11 @@ namespace Xamarin.Bundler
 			}
 
 			var ifile = state.SourcePath;
-			foreach (var abi in Abis) {
+			var mode = App.LibPInvokesLinkMode;
+			foreach (var abi in GetArchitectures (mode)) {
 				var arch = abi.AsArchString ();
 				string ofile;
 
-				var mode = App.LibPInvokesLinkMode;
 				switch (mode) {
 				case AssemblyBuildTarget.StaticObject:
 					ofile = Path.Combine (Cache.Location, arch, "libpinvokes.a");
@@ -778,22 +812,22 @@ namespace Xamarin.Bundler
 				return;
 
 			foreach (var a in Assemblies) {
-				foreach (var abi in Abis) {
+				foreach (var abi in GetArchitectures (a.BuildTarget)) {
 					a.CreateAOTTask (abi);
 				}
 			}
 
 			// Group the assemblies according to their target name, and build them all.
 			var grouped = Assemblies.GroupBy ((arg) => arg.BuildTargetName);
-			foreach (var abi in Abis) {
-				foreach (var @group in grouped) {
-					var name = @group.Key;
-					var assemblies = @group.AsEnumerable ().ToArray ();
+			foreach (var @group in grouped) {
+				var name = @group.Key;
+				var assemblies = @group.AsEnumerable ().ToArray ();
+				// We ensure elsewhere that all assemblies in a group have the same build target.
+				var build_target = assemblies [0].BuildTarget;
 
+				foreach (var abi in GetArchitectures (build_target)) {
 					Driver.Log (5, "Building {0} from {1}", name, string.Join (", ", assemblies.Select ((arg1) => Path.GetFileNameWithoutExtension (arg1.FileName)).ToArray ()));
 
-					// We ensure elsewhere that all assemblies in a group have the same build target.
-					var build_target = assemblies [0].BuildTarget;
 					string install_name;
 					string compiler_output;
 					var compiler_flags = new CompilerFlags (this);
@@ -959,7 +993,7 @@ namespace Xamarin.Bundler
 						Console.WriteLine ("Added {0} as a dependency of {1}", Path.GetFileNameWithoutExtension (dep), Path.GetFileNameWithoutExtension (asm.FileName));
 						dependent_assemblies.Add (dependentAssembly);
 					}
-					foreach (var abi in Abis) {
+					foreach (var abi in GetArchitectures (asm.BuildTarget)) {
 						var target_task = asm.AotInfos [abi].LinkTask;
 						var dependent_tasks = dependent_assemblies.Select ((v) => v.AotInfos [abi].LinkTask);
 
@@ -1028,7 +1062,7 @@ namespace Xamarin.Bundler
 					RegistrarH = registrar_h,
 				};
 
-				foreach (var abi in Abis) {
+				foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
 					var registrar_task = new CompileRegistrarTask
 					{
 						Target = this,
@@ -1073,7 +1107,7 @@ namespace Xamarin.Bundler
 			}
 
 			// The main method.
-			foreach (var abi in Abis) {
+			foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
 				var arch = abi.AsArchString ();
 				var generate_main_task = new GenerateMainTask ()
 				{
@@ -1115,7 +1149,7 @@ namespace Xamarin.Bundler
 				linker_flags.AddOtherFlags (a.LinkerFlags);
 
 				if (a.BuildTarget == AssemblyBuildTarget.StaticObject) {
-					foreach (var abi in Abis) {
+					foreach (var abi in GetArchitectures (a.BuildTarget)) {
 						AotInfo info;
 						if (!a.AotInfos.TryGetValue (abi, out info))
 							continue;

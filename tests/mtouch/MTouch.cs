@@ -2417,7 +2417,7 @@ public class TestApp {
 				Assert.Fail (text.ToString ());
 		}
 
-		static List<string> GetArchitectures (string file)
+		public static List<string> GetArchitectures (string file)
 		{
 			var result = new List<string> ();
 

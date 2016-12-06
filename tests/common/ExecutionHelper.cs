@@ -197,7 +197,7 @@ namespace Xamarin.Tests
 		public string Config = "Debug";
 		public string Platform = "iPhoneSimulator";
 		public string Verbosity = "diagnostic";
-		public string IntermediateOutputPath;
+		public string BaseIntermediateOutputPath;
 		public Dictionary<string, string> Properties = new Dictionary<string, string> ();
 		public TimeSpan? Timeout;
 
@@ -213,8 +213,10 @@ namespace Xamarin.Tests
 
 		public string Build ()
 		{
-			if (string.IsNullOrEmpty (IntermediateOutputPath))
-				IntermediateOutputPath = Cache.CreateTemporaryDirectory () + "/";
+			if (string.IsNullOrEmpty (BaseIntermediateOutputPath))
+				BaseIntermediateOutputPath = Cache.CreateTemporaryDirectory ();
+			if (BaseIntermediateOutputPath [BaseIntermediateOutputPath.Length - 1] != '/')
+				BaseIntermediateOutputPath += "/";
 			
 			return RunTarget ("Build");
 		}
@@ -274,8 +276,8 @@ namespace Xamarin.Tests
 			sb.Append ($"/p:Configuration={Config} ");
 			sb.Append ($"/p:Platform={Platform} ");
 			sb.Append ($"/verbosity:{Verbosity} ");
-			if (!string.IsNullOrEmpty (IntermediateOutputPath) && !Properties.ContainsKey ("IntermediateOutputPath"))
-				Properties ["IntermediateOutputPath"] = IntermediateOutputPath;
+			if (!string.IsNullOrEmpty (BaseIntermediateOutputPath) && !Properties.ContainsKey ("BaseIntermediateOutputPath"))
+				Properties ["BaseIntermediateOutputPath"] = BaseIntermediateOutputPath;
 			foreach (var prop in Properties) {
 				sb.Append ($"/p:'{prop.Key}={prop.Value}' ");
 				if (prop.Value.IndexOfAny (new char [] { ':', ';', '=' }) >= 0)

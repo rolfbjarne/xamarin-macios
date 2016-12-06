@@ -58,7 +58,6 @@ namespace Xamarin.Bundler {
 		public MarshalManagedExceptionMode MarshalManagedExceptions;
 		public bool IsDefaultMarshalManagedExceptionMode;
 		public string RootAssembly;
-		public string RegistrarOutputLibrary;
 
 		public bool RequiresPInvokeWrappers {
 			get {

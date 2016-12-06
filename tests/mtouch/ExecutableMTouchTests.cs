@@ -62,6 +62,91 @@ namespace Xamarin
 				throw new NotImplementedException ();
 			}
 		}
+
+		static void AddArchitectures (ProjectFile project, HashSet<string> architectures, bool recursive)
+		{
+			if ((project.Architectures & Architecture.ARM64) == Architecture.ARM64)
+				architectures.Add ("arm64");
+			if ((project.Architectures & Architecture.ARMv7) == Architecture.ARMv7)
+				architectures.Add ("armv7");
+			if ((project.Architectures & Architecture.ARMv7s) == Architecture.ARMv7s)
+				architectures.Add ("armv7s");
+			if ((project.Architectures & Architecture.ARMv7k) == Architecture.ARMv7k)
+				architectures.Add ("armv7k");
+
+			if (recursive) {
+				foreach (var ext in project.ProjectReferences) {
+					AddArchitectures (ext, architectures, recursive);
+				}
+			}
+		}
+
+		public static void AssertExecutableArchitectures (this ProjectFile project)
+		{
+			var outputPath = project.GetOutputPath ("iPhone", "Debug");
+			var apps = Directory.GetDirectories (outputPath, "*.app");
+			if (apps.Length != 1)
+				throw new Exception ($"Found {apps.Length} .app directories when exactly 1 was expected.");
+
+			var app_expected_architectures = new HashSet<string> ();
+			AddArchitectures (project, app_expected_architectures, project.MTouchExtraArgs.Contains ("framework"));
+
+			var executable = Path.Combine (apps [0], Path.GetFileNameWithoutExtension (apps [0]));
+			if (!File.Exists (executable))
+				throw new Exception ($"Executable {executable} does not exist.");
+			Assert.That (MTouch.GetArchitectures (executable), Is.EquivalentTo (app_expected_architectures), $"executable architectures: {executable}");
+
+
+			var fws = Path.Combine (apps [0], "Frameworks");
+			if (Directory.Exists (fws)) {
+				var executables = new List<string> ();
+				var frameworks = Directory.GetDirectories (fws, "*.framework");
+				foreach (var framework in frameworks) {
+					var name = Path.GetFileNameWithoutExtension (framework);
+					executable = Path.Combine (framework, name);
+					if (!File.Exists (executable))
+						throw new Exception ($"Framework {executable} does not exist.");
+					executables.Add (executable);
+				}
+
+				var all_expected_architectures = new HashSet<string> ();
+				AddArchitectures (project, all_expected_architectures, true);
+				foreach (var exec in executables) {
+					var architectures = MTouch.GetArchitectures (exec);
+					Assert.That (architectures, Is.EquivalentTo (all_expected_architectures), $"architectures: {exec}");
+				}
+			}
+		}
+
+		static Dictionary<string, DateTime> CaptureFilesWithTimestamps (string path)
+		{
+			var dict = new Dictionary<string, DateTime> ();
+
+			foreach (var file in Directory.GetFiles (path, "*", SearchOption.AllDirectories))
+				dict.Add (file, File.GetLastWriteTime (file));
+
+			return dict;
+		}
+
+		public static void AssertFastRebuild (this ProjectFile project, string platform = "iPhone", string configuration = "Debug" )
+		{
+			var timestamps = CaptureFilesWithTimestamps (Directory.GetDirectories (project.GetOutputPath (platform, configuration), "*.app") [0]);
+			var watch = Stopwatch.StartNew ();
+			File.SetLastWriteTimeUtc (project.ProjectPath, DateTime.UtcNow); // Touch the project file.
+			project.BuildDevice ();
+			watch.Stop ();
+			foreach (var kvp in timestamps) {
+				switch (Path.GetExtension (kvp.Key)) {
+				case ".exe":
+				case ".mdb":
+					continue;
+				}
+				Assert.AreEqual (kvp.Value, File.GetLastWriteTime (kvp.Key), $"Timestamp: {kvp.Key}");
+			}
+			var projectCount = 1 + project.ProjectReferences.Length;
+			// 10s per project is *very generous*, and we should take much less than that.
+			Assert.That (watch.Elapsed.TotalSeconds, Is.LessThan (10 * projectCount), "Rebuild shouldn't take more than 10 seconds per project.");
+		}
 	}
 
 	[TestFixture]
@@ -137,6 +222,7 @@ namespace Xamarin
 				SetData (project);
 
 				// create any extension projects
+				var project_references = new List<ProjectFile> ();
 				foreach (var extension in Extensions) {
 					var ext_project = new ProjectFile
 					{
@@ -149,24 +235,20 @@ namespace Xamarin
 						var app_project = new ProjectFile
 						{
 							ProjectType = ProjectType.WatchKit2App,
+							ProjectReferences = new ProjectFile [] { ext_project },
 						};
 
-						app_project.AddProjectReference (ext_project);
-						project.AddProjectReference (app_project);
+						project_references.Add (app_project);
 						break;
 					case ProjectType.TodayExtension:
-						project.AddProjectReference (ext_project);
+						project_references.Add (ext_project);
 						break;
 					default:
 						throw new NotImplementedException ();
 					}
 				}
+				project.ProjectReferences = project_references.ToArray ();
 				return project;
-			}
-
-			public void AssertFrameworkArchitectures ()
-			{
-				project.TargetDirectory
 			}
 		}
 
@@ -224,6 +306,9 @@ namespace Xamarin
 			var project = data.CreateProjectFile ();
 			project.Generate ();
 			project.BuildDevice ();
+			project.AssertExecutableArchitectures ();
+			project.AssertFastRebuild ();
+
 			project.RunDevice ();
 		}
 
@@ -307,6 +392,30 @@ namespace Xamarin
 			Assert.AreEqual (0, xharness.UninstallDevice (), "uninstall");
 			Assert.AreEqual (0, xharness.InstallDevice (), "install");
 			Assert.AreEqual (0, xharness.RunDevice (timeout: TimeSpan.FromMinutes (5)), "run");
+		}
+
+		[Test]
+		public void FatMonoFrameworkWithFatExtensionAndSimpleApp ()
+		{
+			var project = new ProjectFile
+			{
+				Architectures = Architecture.ARM64,
+				ProjectType = ProjectType.iOSApp,
+				ProjectReferences = new ProjectFile []
+				{
+					new ProjectFile
+					{
+						Architectures = Architecture.ARM64 | Architecture.ARMv7,
+						ProjectType = ProjectType.TodayExtension,
+					},
+				}
+			};
+
+			project.Generate ();
+			project.BuildDevice ();
+			project.AssertExecutableArchitectures ();
+
+			project.RunDevice ();
 		}
 	}
 }

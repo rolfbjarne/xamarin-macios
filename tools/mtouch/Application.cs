@@ -780,6 +780,20 @@ namespace Xamarin.Bundler {
 			if (Profile.IsSdkAssembly (root_wo_ext) || Profile.IsProductAssembly (root_wo_ext))
 				throw new MonoTouchException (3, true, "Application name '{0}.exe' conflicts with an SDK or product assembly (.dll) name.", root_wo_ext);
 
+			if (!IsDualBuild && !IsExtension) {
+				// There might be other/more architectures in extensions than in the main app.
+				// If we're building frameworks, we need to build for all architectures, including any in extensions.
+				if (assembly_build_targets.Any ((v) => v.Value.Item1 == AssemblyBuildTarget.Framework)) {
+					foreach (var abi in AllArchitectures) {
+						if (!abis.Contains (abi)) {
+							abis.Add (abi);
+							Console.WriteLine ("Added architecture: {0} because an extension targets it.", abi);
+							// FIXME: check llvm as well. LLVM should probably either be on or off for all architectures.
+						}
+					}
+				}
+			}
+
 			if (IsDualBuild) {
 				var target32 = new Target (this);
 				var target64 = new Target (this);
@@ -1223,7 +1237,12 @@ namespace Xamarin.Bundler {
 						throw new Exception (); // can't lipo directories
 					if (info.DylibToFramework)
 						throw new Exception (); // doesn't make sense
-					UpdateDirectory (files.First (), Path.GetDirectoryName (targetPath));
+					var framework_src = files.First ();
+					UpdateDirectory (framework_src, Path.GetDirectoryName (targetPath));
+					if (IsDeviceBuild) {
+						// Remove architectures we don't care about.
+						MachO.SelectArchitectures (Path.Combine (targetPath, Path.GetFileNameWithoutExtension (framework_src)), AllArchitectures);
+					}
 				} else {
 					var targetDirectory = Path.GetDirectoryName (targetPath);
 					if (!IsUptodate (files, new string [] { targetPath })) {
@@ -1253,65 +1272,6 @@ namespace Xamarin.Bundler {
 
 				}
 			}
-
-			//// Copy frameworks to the app bundle.
-			//if (!IsExtension || IsWatchExtension) {
-			//	var all_frameworks = new HashSet<string> ();
-			//	all_frameworks.UnionWith (Frameworks);
-			//	all_frameworks.UnionWith (WeakFrameworks);
-			//	foreach (var t in Targets) {
-			//		all_frameworks.UnionWith (t.Frameworks);
-			//		all_frameworks.UnionWith (t.WeakFrameworks);
-			//		foreach (var a in t.Assemblies) {
-			//			if (a.Frameworks != null)
-			//				all_frameworks.UnionWith (a.Frameworks);
-			//			if (a.WeakFrameworks != null)
-			//				all_frameworks.UnionWith (a.WeakFrameworks);
-			//		}
-			//	}
-					
-			//	if (PackageMonoFramework.Value) {
-			//		// We may have to copy the Mono framework to the bundle even if we're not linking with it.
-			//		all_frameworks.Add (Path.Combine (Driver.ProductSdkDirectory, "Frameworks", "Mono.framework"));
-			//	}
-				
-			//	foreach (var appex in Extensions) {
-			//		var f_path = Path.Combine (appex, "..", "frameworks.txt");
-			//		if (!File.Exists (f_path))
-			//			continue;
-
-			//		foreach (var fw in File.ReadAllLines (f_path)) {
-			//			Driver.Log (3, "Copying {0} to the app's Frameworks directory because it's used by the extension {1}", fw, Path.GetFileName (appex));
-			//			all_frameworks.Add (fw);
-			//		}
-			//	}
-
-			//	foreach (var fw in all_frameworks) {
-			//		if (!fw.EndsWith (".framework", StringComparison.Ordinal))
-			//			continue;
-			//		if (!Xamarin.MachO.IsDynamicFramework (Path.Combine (fw, Path.GetFileNameWithoutExtension (fw)))) {
-			//			// We can have static libraries camouflaged as frameworks. We don't want those copied to the app.
-			//			Driver.Log (1, "The framework {0} is a framework of static libraries, and will not be copied into the app.", fw);
-			//			continue;
-			//		}
-
-			//		if (!File.Exists (Path.Combine (fw, "Info.plist")))
-			//			throw ErrorHelper.CreateError (1304, "The embedded framework '{0}' in {1} is invalid: it does not contain an Info.plist.", Path.GetFileNameWithoutExtension (fw), fw);
-					
-			//		Application.UpdateDirectory (fw, Path.Combine (AppDirectory, "Frameworks"));
-			//		if (IsDeviceBuild) {
-			//			// Remove architectures we don't care about.
-			//			Xamarin.MachO.SelectArchitectures (Path.Combine (AppDirectory, "Frameworks", Path.GetFileName (fw), Path.GetFileNameWithoutExtension (fw)), AllArchitectures);
-			//		}
-			//	}
-			//} else {
-			//	if (!IsWatchExtension) {
-			//		// In extensions we need to save a list of the frameworks we need so that the main app can get them.
-			//		var all_frameworks = Frameworks.Union (WeakFrameworks);
-			//		if (all_frameworks.Count () > 0)
-			//			Driver.WriteIfDifferent (Path.Combine (Path.GetDirectoryName (AppDirectory), "frameworks.txt"), string.Join ("\n", all_frameworks.ToArray ()));
-			//	}
-			//}
 
 			// If building a fat app, we need to lipo the two different executables we have together
 			if (IsDeviceBuild) {
@@ -1745,60 +1705,6 @@ namespace Xamarin.Bundler {
 				}
 			}
 		}
-
-		//public void StripManagedCode ()
-		//{
-		//	foreach (var target in Targets)
-		//		target.StripManagedCode ();
-
-		//	// deduplicate assemblies between the .monotouch-32 and .monotouch-64 directories
-		//	if (IsDualBuild && IsDeviceBuild)
-		//		DeduplicateDir ("..", Targets [0].AppTargetDirectory, Targets [1].AppTargetDirectory);
-		//}
-
-		//void DeduplicateDir (string base_dir, string d1, string d2)
-		//{
-		//	foreach (var f1 in Directory.GetFileSystemEntries (d1)) {
-		//		var f2 = Path.Combine (d2, Path.GetFileName (f1));
-		//		if (Directory.Exists (f1))
-		//			DeduplicateDir (Path.Combine (base_dir, ".."), f1, f2);
-		//		else
-		//			DeduplicateFile (base_dir, f1, f2);
-		//	}
-		//}
-
-		//void DeduplicateFile (string base_dir, string f1, string f2)
-		//{
-		//	if (!File.Exists (f2))
-		//		return;
-
-		//	if (Driver.IsSymlink (f2))
-		//		return; // Already determined to be identical from a previous build.
-
-		//	bool equal;
-		//	var ext = Path.GetExtension (f1).ToUpperInvariant ();
-		//	var is_assembly = ext == ".EXE" || ext == ".DLL";
-
-		//	if (is_assembly) {
-		//		equal = Cache.CompareAssemblies (f1, f2, true, true);
-		//		if (!equal)
-		//			Driver.Log (1, "Assemblies {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
-		//	} else {
-		//		equal = Cache.CompareFiles (f1, f2, true);
-		//		if (!equal)
-		//			Driver.Log (1, "Targets {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
-		//	}
-		//	if (!equal)
-		//		return;
-
-		//	var dest = Path.Combine (base_dir, f1.Substring (AppDirectory.Length + 1));
-		//	Driver.FileDelete (f2);
-		//	if (!Driver.Symlink (dest, f2)) {
-		//		File.Copy (f1, f2);
-		//	} else {
-		//		Driver.Log (1, "Targets {0} and {1} found to be identical, the later has been replaced with a symlink to the former.", f1, f2);
-		//	}
-		//}
 
 		public void GenerateRuntimeOptions ()
 		{

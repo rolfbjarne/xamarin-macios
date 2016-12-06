@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 using Xamarin.Tests;
 
@@ -13,6 +14,7 @@ namespace Xamarin
 	public class ProjectFile
 	{
 		public string TargetDirectory = Cache.CreateTemporaryDirectory ();
+		public string BaseIntermediateOutputPath = "obj-" + DateTime.UtcNow.ToString ("o");
 		public string TemplateDirectory;
 		public ProjectFile ContainerProject;
 		public string Guid = System.Guid.NewGuid ().ToString ();
@@ -33,30 +35,44 @@ namespace Xamarin
 
 		public ProjectFile [] ProjectReferences = new ProjectFile [0];
 
+		public string GetOutputPath (string platform, string configuration)
+		{
+			var doc = new XmlDocument ();
+			doc.Load (ProjectPath);
+			var outputPath = doc.SelectNodes ("//*[local-name() = 'OutputPath']") [0].InnerText;
+			outputPath = outputPath.Replace ("/iPhoneSimulator/", "/{Platform}/");
+			outputPath = outputPath.Replace ("/iPhone/", "/{Platform}/");
+			outputPath = outputPath.Replace ("$(Platform)", platform);
+			outputPath = outputPath.Replace ("$(Configuration)", configuration);
+			outputPath = outputPath.Replace ('\\', Path.DirectorySeparatorChar);
+			return Path.Combine (Path.GetDirectoryName (ProjectPath), outputPath);
+		}
+
 		void SetArchitectureString ()
 		{
 			string sim;
 			string dev;
 
-			switch (Architectures) {
-			case Architecture.Default:
+			if (Architectures == Architecture.Default) {
 				switch (ProjectType) {
 				case ProjectType.iOSApp:
-				case ProjectType.TodayExtension:
 					throw new Exception ("iOS apps must specifiy architecture");
+				case ProjectType.TodayExtension:
+					Architectures = Architecture.Dual;
+					break;
 				case ProjectType.tvOSApp:
-					sim = "x86_64";
-					dev = "ARM64";
+					Architectures = Architecture.ARM64;
 					break;
 				case ProjectType.WatchKit2App:
 				case ProjectType.WatchKit2Extension:
-					sim = "i386";
-					dev = "ARMv7k";
+					Architectures = Architecture.ARMv7k;
 					break;
 				default:
 					throw new NotImplementedException ();
 				}
-				break;
+			}
+
+			switch (Architectures) {
 			case Architecture.ARMv7 | Architecture.ARMv7s:
 				dev = "ARMv7, ARMv7s";
 				sim = "i386, x86_64";
@@ -91,12 +107,6 @@ namespace Xamarin
 
 			MTouchArch_Simulator = sim;
 			MTouchArch_Device = dev;
-		}
-
-		public void AddProjectReference (ProjectFile project)
-		{
-			//ProjectReferences.Add (project);
-			project.ContainerProject = this;
 		}
 
 		string GetMSBuildPath (string path, bool is_dir = true)
@@ -258,8 +268,10 @@ namespace Tests {
 			SetArchitectureString ();
 			SetProjectPath ();
 
-			foreach (var reference in ProjectReferences)
+			foreach (var reference in ProjectReferences) {
+				reference.ContainerProject = this;
 				reference.Generate ();
+			}
 
 			CopyTemplateProject ();
 		}
@@ -271,7 +283,15 @@ namespace Tests {
 
 		public void Build (string platform = "iPhone", string configuration = "Debug", string verbosity = "diagnostic")
 		{
-			XBuild.Build (ProjectPath, platform: platform, configuration: configuration, verbosity: "diagnostic");
+			var build = new BuildTool ()
+			{
+				BaseIntermediateOutputPath = BaseIntermediateOutputPath,
+				ProjectPath = ProjectPath,
+				Config = configuration,
+				Platform = platform,
+				Verbosity = verbosity,
+			};
+			build.Build ();
 		}
 
 		bool HasWatchOSExtension {

@@ -89,7 +89,7 @@ namespace Xamarin
 				throw new Exception ($"Found {apps.Length} .app directories when exactly 1 was expected.");
 
 			var app_expected_architectures = new HashSet<string> ();
-			AddArchitectures (project, app_expected_architectures, project.MTouchExtraArgs.Contains ("framework"));
+			AddArchitectures (project, app_expected_architectures, project.MTouchExtraArgs?.Contains ("framework") == true);
 
 			var executable = Path.Combine (apps [0], Path.GetFileNameWithoutExtension (apps [0]));
 			if (!File.Exists (executable))
@@ -135,16 +135,33 @@ namespace Xamarin
 			File.SetLastWriteTimeUtc (project.ProjectPath, DateTime.UtcNow); // Touch the project file.
 			project.BuildDevice ();
 			watch.Stop ();
+			var failures = new List<string> ();
 			foreach (var kvp in timestamps) {
 				switch (Path.GetExtension (kvp.Key)) {
-				case ".exe":
+				case ".dll":
 				case ".mdb":
+				case ".exe":
+					var fn = Path.GetFileName (kvp.Key);
+					if (kvp.Key.EndsWith ($"{fn}.framework/{fn}", StringComparison.Ordinal)) {
+						// This isn't an assembly, but a native executable.
+						// https://bugzilla.xamarin.com/show_bug.cgi?id=49097
+						continue;
+					}
+					break;
+				default:
+					// https://bugzilla.xamarin.com/show_bug.cgi?id=49097
 					continue;
 				}
-				Assert.AreEqual (kvp.Value, File.GetLastWriteTime (kvp.Key), $"Timestamp: {kvp.Key}");
+				var actual = File.GetLastWriteTime (kvp.Key);
+				if (kvp.Value == actual)
+					continue;
+				failures.Add ($"{kvp.Key}\n\tExpected: {kvp.Value}\n\tActual: {actual}");
 			}
+			if (failures.Count > 0)
+				Assert.Fail (string.Join ("\n", failures.ToArray ()));
 			var projectCount = 1 + project.ProjectReferences.Length;
 			// 10s per project is *very generous*, and we should take much less than that.
+			// See also: https://bugzilla.xamarin.com/show_bug.cgi?id=49087
 			Assert.That (watch.Elapsed.TotalSeconds, Is.LessThan (10 * projectCount), "Rebuild shouldn't take more than 10 seconds per project.");
 		}
 	}

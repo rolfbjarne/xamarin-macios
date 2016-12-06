@@ -229,7 +229,8 @@ namespace Xamarin.Tests
 				// MSBuild doesn't do this automatically :(
 				var paths = new HashSet<string> ();
 				GetReferencedProjectPaths (ProjectPath, paths);
-				foreach (var path in paths) {
+				foreach (var p in paths) {
+					var path = p.Replace ('\\', '/');
 					Console.WriteLine ("Cleaning referenced project: {0}", path);
 					var tool = new BuildTool ();
 					tool.ProjectPath = path;
@@ -249,7 +250,7 @@ namespace Xamarin.Tests
 			var xml = new XmlDocument ();
 			xml.Load (project_path);
 			foreach (XmlNode node in xml.SelectNodes ("//*[local-name() = 'ProjectReference']/@Include")) {
-				var full_path = Path.GetFullPath (Path.Combine (Path.GetDirectoryName (project_path), node.InnerText));
+				var full_path = Path.GetFullPath (Path.Combine (Path.GetDirectoryName (project_path), node.InnerText.Replace ('\\', '/')));
 				if (paths.Add (full_path))
 					GetReferencedProjectPaths (full_path, paths);
 			}

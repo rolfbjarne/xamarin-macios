@@ -59,7 +59,7 @@ namespace Xamarin.Bundler {
 		public HashSet<string> Frameworks = new HashSet<string> ();
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
 		public List<string> LinkerFlags = new List<string> (); // list of extra linker flags
-		public List<string> LinkWith = new List<string> (); // list of paths to native libraries to link with, from LinkWith attributes
+		public List<string> LinkWith = new List<string> (); // list of paths to native static libraries to link with, from LinkWith attributes
 		public HashSet<ModuleReference> UnresolvedModuleReferences;
 		public bool HasLinkWithAttributes { get; private set; }
 

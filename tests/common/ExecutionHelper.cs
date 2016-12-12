@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Diagnostics;
+using System.Xml;
 
 using NUnit.Framework;
 
@@ -24,8 +25,9 @@ namespace Xamarin.Tests
 	//	public int LineNumber;
 	}
 
-	class Tool
+	abstract class Tool
 	{
+		public bool Verbose;
 		StringBuilder output = new StringBuilder ();
 
 		List<string> output_lines;
@@ -46,9 +48,11 @@ namespace Xamarin.Tests
 			}
 		}
 
+		protected abstract string ToolPath { get; }
+
 		public int Execute (string arguments, params string [] args)
 		{
-			return Execute (Configuration.MtouchPath, arguments, args);
+			return Execute (ToolPath, arguments, args);
 		}
 
 		public int Execute (string toolPath, string arguments, params string [] args)
@@ -56,9 +60,9 @@ namespace Xamarin.Tests
 			output.Clear ();
 			output_lines = null;
 
-			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output);
+			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output, Timeout);
 
-			if (rv != 0) {
+			if (rv != 0 || Verbose) {
 				if (output.Length > 0)
 					Console.WriteLine (output);
 			}
@@ -126,7 +130,7 @@ namespace Xamarin.Tests
 
 			if (messages.Any ((msg) => Regex.IsMatch (msg.Message, messagePattern)))
 				return;
-			
+
 			var details = messages.Where ((msg) => msg.Prefix == prefix && msg.Number == number && !Regex.IsMatch (msg.Message, messagePattern)).Select ((msg) => string.Format ("\tThe message '{0}' did not match the pattern '{1}'.", msg.Message, messagePattern));
 			Assert.Fail (string.Format ("The error '{0}{1:0000}: {2}' was not found in the output:\n{3}", prefix, number, messagePattern, string.Join ("\n", details.ToArray ())));
 		}
@@ -172,16 +176,127 @@ namespace Xamarin.Tests
 
 	class XBuild
 	{
-		public static string ToolPath {
-			get
+		public static void Build (string project, string configuration = "Debug", string platform = "iPhoneSimulator", string verbosity = null, TimeSpan? timeout = null)
+		{
+			var build = new BuildTool ()
 			{
-				return "/Library/Frameworks/Mono.framework/Commands/xbuild";
+				ProjectPath = project,
+				Config = configuration,
+				Platform = platform,
+				Verbosity = verbosity,
+				Timeout = timeout,
+			};
+			build.Build ();
+		}
+	}
+
+	class BuildTool
+	{
+		public bool UseMSBuild;
+		public string ProjectPath;
+		public string Config = "Debug";
+		public string Platform = "iPhoneSimulator";
+		public string Verbosity = "diagnostic";
+		public string BaseIntermediateOutputPath;
+		public Dictionary<string, string> Properties = new Dictionary<string, string> ();
+		public TimeSpan? Timeout;
+
+		string ToolPath {
+			get {
+				if (UseMSBuild) {
+					return "/Library/Frameworks/Mono.framework/Commands/msbuild";
+				} else {
+					return "/Library/Frameworks/Mono.framework/Commands/xbuild";
+				}
 			}
 		}
 
-		public static void Build (string project, string configuration = "Debug", string platform = "iPhoneSimulator", string verbosity = null, TimeSpan? timeout = null)
+		public string Build ()
 		{
-			ExecutionHelper.Execute (ToolPath, string.Format ("/p:Configuration={0} /p:Platform={1} {2} \"{3}\"", configuration, platform, verbosity == null ? string.Empty : "/verbosity:" + verbosity, project), timeout: timeout);
+			if (string.IsNullOrEmpty (BaseIntermediateOutputPath))
+				BaseIntermediateOutputPath = Cache.CreateTemporaryDirectory ();
+			if (BaseIntermediateOutputPath [BaseIntermediateOutputPath.Length - 1] != '/')
+				BaseIntermediateOutputPath += "/";
+			
+			return RunTarget ("Build");
+		}
+
+		public string Clean (bool recursive = true)
+		{
+			var rv = RunTarget ("Clean");
+
+			if (recursive) {
+				// MSBuild doesn't do this automatically :(
+				var paths = new HashSet<string> ();
+				GetReferencedProjectPaths (ProjectPath, paths);
+				foreach (var p in paths) {
+					var path = p.Replace ('\\', '/');
+					Console.WriteLine ("Cleaning referenced project: {0}", path);
+					var tool = new BuildTool ();
+					tool.ProjectPath = path;
+					tool.Config = Config;
+					tool.Platform = Platform;
+					tool.Verbosity = Verbosity;
+					tool.Timeout = Timeout;
+					tool.Clean (false);
+				}
+			}
+
+			return rv;
+		}
+
+		static void GetReferencedProjectPaths (string project_path, HashSet<string> paths)
+		{
+			var xml = new XmlDocument ();
+			xml.Load (project_path);
+			foreach (XmlNode node in xml.SelectNodes ("//*[local-name() = 'ProjectReference']/@Include")) {
+				var full_path = Path.GetFullPath (Path.Combine (Path.GetDirectoryName (project_path), node.InnerText.Replace ('\\', '/')));
+				if (paths.Add (full_path))
+					GetReferencedProjectPaths (full_path, paths);
+			}
+		}
+
+		string RunTarget (string target)
+		{
+			var env = new Dictionary<string, string> ();
+
+			env ["MD_APPLE_SDK_ROOT"] = Path.GetDirectoryName (Path.GetDirectoryName (Configuration.xcode_root));
+#if MONOTOUCH
+			env ["MD_MTOUCH_SDK_ROOT"] = Configuration.SdkRootXI;
+			env ["XBUILD_FRAMEWORK_FOLDERS_PATH"] = Configuration.XBuildFrameworkFoldersPathXI;
+			env ["MSBuildExtensionsPath"] = Configuration.MSBuildExtensionsPathXI;
+#else
+			env ["XamarinMacFrameworkRoot"] = Configuration.SdkRootXM;
+			env ["XAMMAC_FRAMEWORK_PATH"] = Configuration.SdkRootXM;
+			env ["XBUILD_FRAMEWORK_FOLDERS_PATH"] = Configuration.XBuildFrameworkFoldersPathXM;
+			env ["MSBuildExtensionsPath"] = Configuration.MSBuildExtensionsPathXM;
+#endif
+
+			var sb = new StringBuilder ();
+			sb.Append ($"/t:{target} ");
+			sb.Append ($"/p:Configuration={Config} ");
+			sb.Append ($"/p:Platform={Platform} ");
+			sb.Append ($"/verbosity:{Verbosity} ");
+			if (!string.IsNullOrEmpty (BaseIntermediateOutputPath) && !Properties.ContainsKey ("BaseIntermediateOutputPath"))
+				Properties ["BaseIntermediateOutputPath"] = BaseIntermediateOutputPath;
+			foreach (var prop in Properties) {
+				sb.Append ($"/p:'{prop.Key}={prop.Value}' ");
+				if (prop.Value.IndexOfAny (new char [] { ':', ';', '=' }) >= 0)
+					UseMSBuild = true; // xbuild can't parse /p=name=value where value contains equal signs.
+			}
+
+			sb.Append (MTouch.Quote (ProjectPath));
+
+			return ExecutionHelper.Execute (ToolPath, sb.ToString (), timeout: Timeout ?? TimeSpan.FromMinutes (10), environmentVariables: env);
+		}
+	}
+
+	class XHarness
+	{
+		public static string ToolPath {
+			get {
+				return Path.Combine (Configuration.SourceRoot, "tests", "xharness", "xharness.exe");
+			}
 		}
 	}
 

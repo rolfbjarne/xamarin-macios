@@ -29,6 +29,14 @@ namespace Xamarin
 	public enum PackageMdb { Default, WithMdb, WoutMdb }
 	public enum MSym { Default, WithMSym, WoutMSym }
 	public enum Profile { iOS, tvOS, watchOS }
+	public enum ProjectType
+	{
+		iOSApp,
+		tvOSApp,
+		WatchKit2App,
+		WatchKit2Extension,
+		TodayExtension,
+	}
 
 	[TestFixture]
 	public class MTouch
@@ -571,6 +579,25 @@ namespace Xamarin
 		}
 
 		[Test]
+		public void MT0098_99 ()
+		{
+			using (var mtouch = new MTouchTool ()) {
+				mtouch.CreateTemporaryApp ();
+				mtouch.Linker = MTouchLinker.DontLink; // the MT0098 check happens after linking, but before AOT-compiling, so not linking makes the test faster.
+				mtouch.AssemblyBuildTargets.Add ("mscorlib=framework");
+				mtouch.AssemblyBuildTargets.Add ("dummy=framework");
+				mtouch.AssertExecuteFailure (MTouchAction.BuildDev, "build");
+				mtouch.AssertError (98, "No assembly build target was specified for 'testApp'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'System'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'System.Xml'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'System.Core'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'Mono.Dynamic.Interpreter'.");
+				mtouch.AssertError (98, "No assembly build target was specified for 'Xamarin.iOS'.");
+				mtouch.AssertError (99, "The assembly build target 'dummy' did not match any assemblies.");
+			}
+		}
+
+		[Test]
 		public void ExtensionBuild ()
 		{
 			using (var mtouch = new MTouchTool ()) {
@@ -694,7 +721,7 @@ namespace Xamarin
 			}
 		}
 
-		static string GetProjectSuffix (Profile profile)
+		public static string GetProjectSuffix (Profile profile)
 		{
 			switch (profile) {
 			case Profile.iOS:
@@ -717,6 +744,36 @@ namespace Xamarin
 				return Configuration.tvos_sdk_version;
 			case Profile.watchOS:
 				return Configuration.watchos_sdk_version;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public static string GetMinSdkVersion (Profile profile)
+		{
+			switch (profile) {
+			case Profile.iOS:
+				return "6.0";
+			case Profile.tvOS:
+				return "9.0";
+			case Profile.watchOS:
+				return "2.0";
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public static Profile GetProfileForProjectType (ProjectType projectType)
+		{
+			switch (projectType) {
+			case ProjectType.iOSApp:
+			case ProjectType.TodayExtension:
+				return Profile.iOS;
+			case ProjectType.tvOSApp:
+				return Profile.tvOS;
+			case ProjectType.WatchKit2App:
+			case ProjectType.WatchKit2Extension:
+				return Profile.watchOS;
 			default:
 				throw new NotImplementedException ();
 			}
@@ -2327,7 +2384,7 @@ public class TestApp {
 				Assert.Fail (text.ToString ());
 		}
 
-		static List<string> GetArchitectures (string file)
+		public static List<string> GetArchitectures (string file)
 		{
 			var result = new List<string> ();
 

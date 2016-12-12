@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Xamarin.MacDev;
 using Xamarin.Utils;
@@ -31,202 +32,208 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		protected int Start ()
+		protected Task<int> StartAsync ()
 		{
-			if (Driver.Verbosity > 0)
-				Console.WriteLine (Command);
+			return Task.Run (() =>
+			{
+				if (Driver.Verbosity > 0)
+					Console.WriteLine (Command);
 
-			var info = ProcessStartInfo;
-			var stdout_completed = new ManualResetEvent (false);
-			var stderr_completed = new ManualResetEvent (false);
+				var info = ProcessStartInfo;
+				var stdout_completed = new ManualResetEvent (false);
+				var stderr_completed = new ManualResetEvent (false);
 
-			Output = new StringBuilder ();
+				Output = new StringBuilder ();
 
-			using (var p = Process.Start (info)) {
-				p.OutputDataReceived += (sender, e) =>
-				{
-					if (e.Data != null) {
-						lock (Output)
-							Output.AppendLine (e.Data);
-					} else {
-						stdout_completed.Set ();
-					}
-				};
+				using (var p = Process.Start (info)) {
+					p.OutputDataReceived += (sender, e) =>
+					{
+						if (e.Data != null) {
+							lock (Output)
+								Output.AppendLine (e.Data);
+						} else {
+							stdout_completed.Set ();
+						}
+					};
 
-				p.ErrorDataReceived += (sender, e) =>
-				{
-					if (e.Data != null) {
-						lock (Output)
-							Output.AppendLine (e.Data);
-					} else {
-						stderr_completed.Set ();
-					}
-				};
+					p.ErrorDataReceived += (sender, e) =>
+					{
+						if (e.Data != null) {
+							lock (Output)
+								Output.AppendLine (e.Data);
+						} else {
+							stderr_completed.Set ();
+						}
+					};
 
-				p.BeginOutputReadLine ();
-				p.BeginErrorReadLine ();
+					p.BeginOutputReadLine ();
+					p.BeginErrorReadLine ();
 
-				p.WaitForExit ();
+					p.WaitForExit ();
 
-				stderr_completed.WaitOne (TimeSpan.FromSeconds (1));
-				stdout_completed.WaitOne (TimeSpan.FromSeconds (1));
+					stderr_completed.WaitOne (TimeSpan.FromSeconds (1));
+					stdout_completed.WaitOne (TimeSpan.FromSeconds (1));
 
-				GC.Collect (); // Workaround for: https://bugzilla.xamarin.com/show_bug.cgi?id=43462#c14
+					GC.Collect (); // Workaround for: https://bugzilla.xamarin.com/show_bug.cgi?id=43462#c14
 
-				if (p.ExitCode != 0)
+					if (Driver.Verbosity >= 2 && Output.Length > 0)
+						Console.Error.WriteLine (Output.ToString ());
+
 					return p.ExitCode;
-
-				if (Driver.Verbosity >= 2 && Output.Length > 0)
-					Console.Error.WriteLine (Output.ToString ());
-			}
-
-			return 0;
-		}
-	}
-
-	internal class MainTask : CompileTask
-	{
-		public static void Create (List<BuildTask> tasks, Target target, Abi abi, IEnumerable<Assembly> assemblies, string assemblyName, IList<string> registration_methods)
-		{
-			var app = target.App;
-			var arch = abi.AsArchString ();
-			var ofile = Path.Combine (app.Cache.Location, "main." + arch + ".o");
-			var ifile = Path.Combine (app.Cache.Location, "main." + arch + ".m");
-
-			var files = assemblies.Select (v => v.FullPath);
-
-			if (!Application.IsUptodate (files, new string [] { ifile })) {
-				Driver.GenerateMain (target.App, assemblies, assemblyName, abi, ifile, registration_methods);
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ifile);
-			}
-
-			if (!Application.IsUptodate (ifile, ofile)) {
-				var main = new MainTask ()
-				{
-					Target = target,
-					Abi = abi,
-					AssemblyName = assemblyName,
-					InputFile = ifile,
-					OutputFile = ofile,
-					SharedLibrary = false,
-					Language = "objective-c++",
-				};
-				main.CompilerFlags.AddDefine ("MONOTOUCH");
-				tasks.Add (main);
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
-			}
-
-			target.LinkWith (ofile);
-		}
-
-		protected override void Build ()
-		{
-			if (Compile () != 0)
-				throw new MonoTouchException (5103, true, "Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com", InputFile);
-		}
-	}
-
-	internal class PinvokesTask : CompileTask
-	{
-		public static void Create (List<BuildTask> tasks, IEnumerable<Abi> abis, Target target, string ifile)
-		{
-			foreach (var abi in abis)
-				Create (tasks, abi, target, ifile);
-		}
-
-		public static void Create (List<BuildTask> tasks, Abi abi, Target target, string ifile)
-		{
-			var arch = abi.AsArchString ();
-			var ext = target.App.FastDev ? ".dylib" : ".o";
-			var ofile = Path.Combine (target.App.Cache.Location, "lib" + Path.GetFileNameWithoutExtension (ifile) + "." + arch + ext);
-
-			if (!Application.IsUptodate (ifile, ofile)) {
-				var task = new PinvokesTask ()
-				{
-					Target = target,
-					Abi = abi,
-					InputFile = ifile,
-					OutputFile = ofile,
-					SharedLibrary = target.App.FastDev,
-					Language = "objective-c++",
-				};
-				if (target.App.FastDev) {
-					task.InstallName = "lib" + Path.GetFileNameWithoutExtension (ifile) + ext;
-					task.CompilerFlags.AddFramework ("Foundation");
-					task.CompilerFlags.LinkWithXamarin ();
 				}
-				tasks.Add (task);
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
-			}
-
-			target.LinkWith (ofile);
-			target.LinkWithAndShip (ofile);
-		}
-
-		protected override void Build ()
-		{
-			if (Compile () != 0)
-				throw new MonoTouchException (4002, true, "Failed to compile the generated code for P/Invoke methods. Please file a bug report at http://bugzilla.xamarin.com");
+			});
 		}
 	}
 
-	internal class RegistrarTask : CompileTask
+	class GenerateMainTask : BuildTask
 	{
-		public static void Create (List<BuildTask> tasks, IEnumerable<Abi> abis, Target target, string ifile)
-		{
-			foreach (var abi in abis)
-				Create (tasks, abi, target, ifile);
+		public Target Target;
+		public Abi Abi;
+		public string MainM;
+		public IList<string> RegistrationMethods;
+
+		public override IEnumerable<string> Inputs {
+			get {
+				foreach (var asm in Target.Assemblies)
+					yield return asm.FullPath;
+			}
 		}
 
-		public static void Create (List<BuildTask> tasks, Abi abi, Target target, string ifile)
-		{
-			var app = target.App;
-			var arch = abi.AsArchString ();
-			var ofile = Path.Combine (app.Cache.Location, Path.GetFileNameWithoutExtension (ifile) + "." + arch + ".o");
-
-			if (!Application.IsUptodate (ifile, ofile)) {
-				tasks.Add (new RegistrarTask ()
-				{
-					Target = target,
-					Abi = abi,
-					InputFile = ifile,
-					OutputFile = ofile,
-					SharedLibrary = false,
-					Language = "objective-c++",
-				});
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return MainM;
 			}
-
-			target.LinkWith (ofile);
 		}
 
-		protected override void Build ()
+		protected override void Execute ()
 		{
-			if (Driver.IsUsingClang (App)) {
-				// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
-				// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
-				CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
-			}
+			Driver.GenerateMain (Target.App, Target.Assemblies, Target.App.AssemblyName, Abi, MainM, RegistrationMethods);
+		}
+	}
 
-			if (Compile () != 0)
-				throw new MonoTouchException (4109, true, "Failed to compile the generated registrar code. Please file a bug report at http://bugzilla.xamarin.com");
+	class CompileMainTask : CompileTask
+	{
+		public CompileMainTask ()
+		{
+			Language = "objective-c++";
+			SharedLibrary = false;
+			CompilerFlags.AddDefine ("MONOTOUCH");
+		}
+
+		protected async override Task ExecuteAsync ()
+		{
+			if (await CompileAsync () != 0)
+				throw ErrorHelper.CreateError (5103, "Failed to compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
+		}
+	}
+
+	class PinvokesTask : CompileTask
+	{
+		protected override void CompilationFailed (int exitCode)
+		{
+			throw ErrorHelper.CreateError (4002, "Failed to compile the generated code for P/Invoke methods. Please file a bug report at http://bugzilla.xamarin.com");
+		}
+	}
+
+	class RunRegistrarTask : BuildTask
+	{
+		public Target Target;
+		public string RegistrarM;
+		public string RegistrarH;
+
+		public override IEnumerable<string> Inputs {
+			get {
+				foreach (var asm in Target.Assemblies)
+					yield return asm.FullPath;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return RegistrarH;
+				yield return RegistrarM;
+			}
+		}
+
+		protected override void Execute ()
+		{
+			Target.StaticRegistrar.Generate (Target.Assemblies.Select ((a) => a.AssemblyDefinition), RegistrarH, RegistrarM);
+		}
+	}
+
+	class CompileRegistrarTask : CompileTask
+	{
+		public string RegistrarM;
+		public string RegistrarH;
+
+		public CompileRegistrarTask ()
+		{
+			// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
+			// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
+			CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
+		}
+
+		public override IEnumerable<string> Inputs {
+			get {
+				yield return RegistrarH;
+				yield return RegistrarM;
+			}
+		}
+
+		protected override void CompilationFailed (int exitCode)
+		{
+			throw ErrorHelper.CreateError (4109, "Failed to compile the generated registrar code. Please file a bug report at http://bugzilla.xamarin.com");
 		}
 	}
 
 	public class AOTTask : ProcessTask
 	{
+		public Assembly Assembly;
+		public AotInfo AotInfo;
 		public string AssemblyName;
 		public bool AddBitcodeMarkerSection;
 		public string AssemblyPath; // path to the .s file.
 
-		// executed with Parallel.ForEach
-		protected override void Build ()
+		List<string> inputs;
+
+		public override IEnumerable<string> Outputs {
+			get {
+				return AotInfo.AotDataFiles
+							  .Union (AotInfo.AsmFiles)
+							  .Union (AotInfo.BitcodeFiles)
+							  .Union (AotInfo.ObjectFiles);
+			}
+		}
+
+		public override IEnumerable<string> Inputs {
+			get {
+				yield return Assembly.FullPath;
+			}
+		}
+
+		public override IEnumerable<string> FileDependencies {
+			get {
+				if (inputs == null) {
+					inputs = new List<string> ();
+					if (Assembly.HasDependencyMap)
+						inputs.AddRange (Assembly.DependencyMap);
+					inputs.Add (AssemblyName);
+					inputs.Add (Driver.GetAotCompiler (Assembly.App, Assembly.Target.Is64Build));
+				}
+				return inputs;
+			}
+		}
+
+		public override bool IsUptodate {
+			get {
+				// We can only check dependencies if we know the assemblies this assembly depend on (otherwise always rebuild).
+				return Assembly.HasDependencyMap && base.IsUptodate;
+			}
+		}
+
+		protected async override Task ExecuteAsync ()
 		{
-			var exit_code = base.Start ();
+			var exit_code = await StartAsync ();
 
 			if (exit_code == 0) {
 				if (AddBitcodeMarkerSection)
@@ -244,19 +251,92 @@ namespace Xamarin.Bundler
 				List<Exception> exceptions = new List<Exception> ();
 				foreach (var line in Output.ToString ().Split ('\n')) {
 					if (line.StartsWith ("AOT restriction: Method '", StringComparison.Ordinal) && line.Contains ("must be static since it is decorated with [MonoPInvokeCallback]")) {
-						exceptions.Add (new MonoTouchException (3002, true, line));
+						exceptions.Add (ErrorHelper.CreateError (3002, line));
 					}
 				}
 				if (exceptions.Count > 0)
 					throw new AggregateException (exceptions.ToArray ());
 			}
 
-			throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
+			throw ErrorHelper.CreateError (3001, "Could not AOT the assembly '{0}'", AssemblyName);
+		}
+
+		public override string ToString ()
+		{
+			return Path.GetFileName (AssemblyName);
+		}
+	}
+
+	public class NativeLinkTask : BuildTask
+	{
+		public Target Target;
+		public string OutputFile;
+		public CompilerFlags CompilerFlags;
+
+		public override IEnumerable<string> Inputs {
+			get {
+				CompilerFlags.PopulateInputs ();
+				return CompilerFlags.Inputs;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return OutputFile;
+			}
+		}
+
+		protected override async Task ExecuteAsync ()
+		{
+			// always show the native linker warnings since many of them turn out to be very important
+			// and very hard to diagnose otherwise when hidden from the build output. Ref: bug #2430
+			var linker_errors = new List<Exception> ();
+			var output = new StringBuilder ();
+			var code = await Driver.RunCommandAsync (Target.App.CompilerPath, CompilerFlags.ToString (), null, output);
+
+			Application.ProcessNativeLinkerOutput (Target, output.ToString (), new string [] { /* FIXME */ }, linker_errors, code != 0);
+
+			if (code != 0) {
+				// if the build failed - it could be because of missing frameworks / libraries we identified earlier
+				foreach (var assembly in Target.Assemblies) {
+					if (assembly.UnresolvedModuleReferences == null)
+						continue;
+
+					foreach (var mr in assembly.UnresolvedModuleReferences) {
+						// TODO: add more diagnose information on the warnings
+						var name = Path.GetFileNameWithoutExtension (mr.Name);
+						linker_errors.Add (new MonoTouchException (5215, false, "References to '{0}' might require additional -framework=XXX or -lXXX instructions to the native linker", name));
+					}
+				}
+				// mtouch does not validate extra parameters given to GCC when linking (--gcc_flags)
+				if (!String.IsNullOrEmpty (Target.App.UserGccFlags))
+					linker_errors.Add (new MonoTouchException (5201, true, "Native linking failed. Please review the build log and the user flags provided to gcc: {0}", Target.App.UserGccFlags));
+				linker_errors.Add (new MonoTouchException (5202, true, "Native linking failed. Please review the build log.", Target.App.UserGccFlags));
+			}
+			ErrorHelper.Show (linker_errors);
+
+			// the native linker can prefer private (and existing) over public (but non-existing) framework when weak_framework are used
+			// on an iOS target version where the framework does not exists, e.g. targeting iOS6 for JavaScriptCore added in iOS7 results in
+			// /System/Library/PrivateFrameworks/JavaScriptCore.framework/JavaScriptCore instead of
+			// /System/Library/Frameworks/JavaScriptCore.framework/JavaScriptCore
+			// more details in https://bugzilla.xamarin.com/show_bug.cgi?id=31036
+			if (Target.WeakFrameworks.Count > 0)
+				Target.AdjustDylibs ();
+			Driver.Watch ("Native Link", 1);
+		}
+
+		public override string ToString ()
+		{
+			return Path.GetFileName (OutputFile);
 		}
 	}
 
 	public class LinkTask : CompileTask
 	{
+		protected override void CompilationFailed (int exitCode)
+		{
+			throw ErrorHelper.CreateError (5216, "Native linking failed for '{0}'. Please file a bug report at http://bugzilla.xamarin.com", OutputFile);
+		}
 	}
 
 	public class CompileTask : BuildTask
@@ -264,16 +344,40 @@ namespace Xamarin.Bundler
 		public Target Target;
 		public Application App { get { return Target.App; } }
 		public bool SharedLibrary;
-		public string InputFile;
 		public string OutputFile;
 		public Abi Abi;
 		public string AssemblyName;
 		public string InstallName;
 		public string Language;
 
+		public override IEnumerable<string> Inputs {
+			get {
+				CompilerFlags.PopulateInputs ();
+				return CompilerFlags.Inputs;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return OutputFile;
+			}
+		}
+
+		public bool IsAssembler {
+			get {
+				return Language == "assembler";
+			}
+		}
+
+		public string InputFile {
+			set {
+				CompilerFlags.AddSourceFile (value);
+			}
+		}
+
 		CompilerFlags compiler_flags;
 		public CompilerFlags CompilerFlags {
-			get { return compiler_flags ?? (compiler_flags = new CompilerFlags () { Target = Target }); }
+			get { return compiler_flags ?? (compiler_flags = new CompilerFlags (Target)); }
 			set { compiler_flags = value; }
 		}
 
@@ -297,12 +401,12 @@ namespace Xamarin.Bundler
 				flags.AddOtherFlag ("-mthumb");
 		}
 
-		public static void GetCompilerFlags (Application app, CompilerFlags flags, string ifile, string language = null)
+		public static void GetCompilerFlags (Application app, CompilerFlags flags, bool is_assembler, string language = null)
 		{
-			if (string.IsNullOrEmpty (ifile) || !ifile.EndsWith (".s", StringComparison.Ordinal))
+			if (!is_assembler)
 				flags.AddOtherFlag ("-gdwarf-2");
 
-			if (!string.IsNullOrEmpty (ifile) && !ifile.EndsWith (".s", StringComparison.Ordinal)) {
+			if (!is_assembler) {
 				if (string.IsNullOrEmpty (language) || !language.Contains ("++")) {
 					// error: invalid argument '-std=c99' not allowed with 'C++/ObjC++'
 					flags.AddOtherFlag ("-std=c99");
@@ -313,9 +417,9 @@ namespace Xamarin.Bundler
 			flags.AddOtherFlag ("-Qunused-arguments"); // don't complain about unused arguments (clang reports -std=c99 and -Isomething as unused).
 		}
 
-		public static void GetSimulatorCompilerFlags (CompilerFlags flags, string ifile, Application app, string language = null)
+		public static void GetSimulatorCompilerFlags (CompilerFlags flags, bool is_assembler, Application app, string language = null)
 		{
-			GetCompilerFlags (app, flags, ifile, language);
+			GetCompilerFlags (app, flags, is_assembler, language);
 
 			string sim_platform = Driver.GetPlatformDirectory (app);
 			string plist = Path.Combine (sim_platform, "Info.plist");
@@ -344,9 +448,9 @@ namespace Xamarin.Bundler
 				flags.AddDefine (defines.Replace (" ", String.Empty));
 		}
 
-		void GetDeviceCompilerFlags (CompilerFlags flags, string ifile)
+		void GetDeviceCompilerFlags (CompilerFlags flags, bool is_assembler)
 		{
-			GetCompilerFlags (App, flags, ifile, Language);
+			GetCompilerFlags (App, flags, is_assembler, Language);
 
 			flags.AddOtherFlag ($"-m{Driver.GetTargetMinSdkName (App)}-version-min={App.DeploymentTarget.ToString ()}");
 		}
@@ -357,10 +461,10 @@ namespace Xamarin.Bundler
 				throw new ArgumentNullException (nameof (install_name));
 
 			flags.AddOtherFlag ("-shared");
-			if (!App.EnableMarkerOnlyBitCode)
+			if (!App.EnableMarkerOnlyBitCode && !App.EnableAsmOnlyBitCode)
 				flags.AddOtherFlag ("-read_only_relocs suppress");
 			flags.LinkWithMono ();
-			flags.AddOtherFlag ("-install_name " + Driver.Quote ($"@executable_path/{install_name}"));
+			flags.AddOtherFlag ("-install_name " + Driver.Quote (install_name));
 			flags.AddOtherFlag ("-fapplication-extension"); // fixes this: warning MT5203: Native linking warning: warning: linking against dylib not safe for use in application extensions: [..]/actionextension.dll.arm64.dylib
 		}
 
@@ -374,18 +478,24 @@ namespace Xamarin.Bundler
 			flags.AddOtherFlag (App.EnableMarkerOnlyBitCode ? "-fembed-bitcode-marker" : "-fembed-bitcode");
 		}
 
-		protected override void Build ()
+		protected override async Task ExecuteAsync ()
 		{
-			if (Compile () != 0)
-				throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
+			int exitCode = await CompileAsync ();
+			if (exitCode != 0)
+				CompilationFailed (exitCode);
 		}
 
-		public int Compile ()
+		protected virtual void CompilationFailed (int exitCode)
+		{
+			throw ErrorHelper.CreateError (5106, "Could not compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
+		}
+
+		protected async Task<int> CompileAsync ()
 		{
 			if (App.IsDeviceBuild) {
-				GetDeviceCompilerFlags (CompilerFlags, InputFile);
+				GetDeviceCompilerFlags (CompilerFlags, IsAssembler);
 			} else {
-				GetSimulatorCompilerFlags (CompilerFlags, InputFile, App, Language);
+				GetSimulatorCompilerFlags (CompilerFlags, IsAssembler, App, Language);
 			}
 
 			if (App.EnableBitCode)
@@ -406,15 +516,22 @@ namespace Xamarin.Bundler
 			if (!string.IsNullOrEmpty (Language))
 				CompilerFlags.AddOtherFlag ($"-x {Language}");
 
-			CompilerFlags.AddOtherFlag (Driver.Quote (InputFile));
+			Directory.CreateDirectory (Path.GetDirectoryName (OutputFile));
 
-			var rv = Driver.RunCommand (App.CompilerPath, CompilerFlags.ToString (), null, null);
+			var rv = await Driver.RunCommandAsync (App.CompilerPath, CompilerFlags.ToString (), null, null);
 
 			return rv;
 		}
+
+		public override string ToString ()
+		{
+			if (compiler_flags == null || compiler_flags.SourceFiles == null)
+				return Path.GetFileName (OutputFile);
+			return string.Join (", ", compiler_flags.SourceFiles.Select ((arg) => Path.GetFileName (arg)).ToArray ());
+		}
 	}
 
-	public class BitCodeify : BuildTask
+	public class BitCodeifyTask : BuildTask
 	{
 		public string Input { get; set; }
 		public string OutputFile { get; set; }
@@ -422,9 +539,26 @@ namespace Xamarin.Bundler
 		public Abi Abi { get; set; }
 		public Version DeploymentTarget { get; set; }
 
-		protected override void Build ()
+		public override IEnumerable<string> Inputs {
+			get {
+				yield return Input;
+			}
+		}
+
+		public override IEnumerable<string> Outputs {
+			get {
+				yield return OutputFile;
+			}
+		}
+
+		protected override void Execute ()
 		{
 			new BitcodeConverter (Input, OutputFile, Platform, Abi, DeploymentTarget).Convert ();
+		}
+
+		public override string ToString ()
+		{
+			return Path.GetFileName (Input);
 		}
 	}
 }

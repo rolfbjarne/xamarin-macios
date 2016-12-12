@@ -278,7 +278,7 @@ namespace Xamarin.Utils
 		{
 			var args = new StringBuilder ();
 			WriteArguments (args);
-			return args.ToString ();
+			return args.ToString ().Trim (); // Trim because of #47205, otherwise XS crashes.
 		}
 
 		public void PopulateInputs ()

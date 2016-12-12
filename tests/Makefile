@@ -221,7 +221,11 @@ endif
 #XI
 ifdef INCLUDE_IOS
 wrench-mtouch:
-	cd mtouch && $(MAKE)
+	cd mtouch && $(MAKE) WHERE_CONDTION="--where '(cat != LongRunning) && (cat != RequiresDevice)'"
+	git clean -xfdq
+
+qa-mtouch:
+	cd mtouch && $(MAKE) WHERE_CONDTION="--where '(cat == LongRunning) || (cat == RequiresDevice)'"
 	git clean -xfdq
 
 wrench-btouch:

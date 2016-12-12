@@ -1459,7 +1459,7 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (6, true, "There is no devel platform at {0}, use --platform=PLAT to specify the SDK", PlatformDirectory);
 
 			if (!Directory.Exists (output_dir))
-				throw new MonoTouchException (5, true, "The output directory '{0}' does not exist", output_dir);
+				Directory.CreateDirectory (output_dir);
 
 			if (assemblies.Count != 1) {
 				var exceptions = new List<Exception> ();

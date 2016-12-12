@@ -369,6 +369,12 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public static void TryDelete (IEnumerable<string> paths)
+		{
+			foreach (var path in paths)
+				TryDelete (path);
+		}
+
 		public void InitializeCommon ()
 		{
 			if (Platform == ApplePlatform.WatchOS && EnableCoopGC.HasValue && !EnableCoopGC.Value)

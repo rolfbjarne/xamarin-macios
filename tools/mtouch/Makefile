@@ -111,6 +111,7 @@ MTOUCH_SOURCES = \
 	mtouch.cs		\
 	$(TOP)/tools/common/PInvokeWrapperGenerator.cs	\
 	$(TOP)/tools/common/TargetFramework.cs	\
+	$(TOP)/tools/common/BuildTasks.cs		\
 	$(TOP)/tools/common/StaticRegistrar.cs	\
 	$(TOP)/src/ObjCRuntime/Registrar.core.cs	\
 	$(TOP)/src/ObjCRuntime/Registrar.cs	\
@@ -121,6 +122,7 @@ MTOUCH_SOURCES = \
 	Target.cs		\
 	SdkVersions.cs \
 	BitcodeConverter.cs	\
+	BuildTasks.mtouch.cs		\
 	$(TOP)/tools/common/Application.cs \
 	$(TOP)/tools/common/Assembly.cs \
 	$(TOP)/tools/common/Target.cs \

@@ -160,6 +160,156 @@ namespace Xamarin.Bundler {
 		List<Abi> abis;
 		HashSet<Abi> all_architectures; // all Abis used in the app, including extensions.
 
+		BuildTasks build_tasks;
+
+		Dictionary<string, Tuple<AssemblyBuildTarget, string>> assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> ();
+
+		public AssemblyBuildTarget LibMonoLinkMode = AssemblyBuildTarget.StaticObject;
+		public AssemblyBuildTarget LibXamarinLinkMode = AssemblyBuildTarget.StaticObject;
+		public AssemblyBuildTarget LibPInvokesLinkMode => LibXamarinLinkMode;
+		public AssemblyBuildTarget LibRegistrarLinkMode => LibXamarinLinkMode;
+
+		public bool OnlyStaticLibraries {
+			get {
+				return assembly_build_targets.All ((abt) => abt.Value.Item1 == AssemblyBuildTarget.StaticObject);
+			}
+		}
+
+		public bool HasDynamicLibraries {
+			get {
+				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
+			}
+		}
+
+		public bool HasFrameworks {
+			get {
+				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.Framework);
+			}
+		}
+
+		public void AddAssemblyBuildTarget (string value)
+		{
+			var eq_index = value.IndexOf ('=');
+			if (eq_index == -1)
+				throw ErrorHelper.CreateError (10, "Could not parse the command line arguments: --assembly-build-target={0}", value);
+
+			var assembly_name = value.Substring (0, eq_index);
+			string target, name;
+
+			var eq_index2 = value.IndexOf ('=', eq_index + 1);
+			if (eq_index2 == -1) {
+				target = value.Substring (eq_index + 1);
+				if (assembly_name == "@all" || assembly_name == "@sdk") {
+					name = string.Empty;
+				} else {
+					name = assembly_name;
+				}
+			} else {
+				target = value.Substring (eq_index + 1, eq_index2 - eq_index - 1);
+				name = value.Substring (eq_index2 + 1);
+			}
+
+			if (assembly_build_targets.ContainsKey (assembly_name))
+				throw ErrorHelper.CreateError (101, "The assembly '{0}' is specified multiple times in --assembly-build-target arguments.", assembly_name);
+
+			AssemblyBuildTarget build_target;
+			switch (target) {
+			case "staticobject":
+				build_target = AssemblyBuildTarget.StaticObject;
+				break;
+			case "dynamiclibrary":
+				build_target = AssemblyBuildTarget.DynamicLibrary;
+				break;
+			case "framework":
+				build_target = AssemblyBuildTarget.Framework;
+				break;
+			default:
+				throw ErrorHelper.CreateError (10, "Could not parse the command line arguments: --assembly-build-target={0}", value);
+			}
+
+			assembly_build_targets [assembly_name] = new Tuple<AssemblyBuildTarget, string> (build_target, name);
+		}
+
+		void SelectAssemblyBuildTargets ()
+		{
+			Tuple<AssemblyBuildTarget, string> all = null;
+			Tuple<AssemblyBuildTarget, string> sdk = null;
+			List<Exception> exceptions = null;
+
+			if (IsSimulatorBuild)
+				return;
+
+			// By default each assemblies is compiled to a static object.
+			if (assembly_build_targets.Count == 0)
+				assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, ""));
+
+			assembly_build_targets.TryGetValue ("@all", out all);
+			assembly_build_targets.TryGetValue ("@sdk", out sdk);
+
+			foreach (var target in Targets) {
+				var asm_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> (assembly_build_targets);
+
+				foreach (var assembly in target.Assemblies) {
+					Tuple<AssemblyBuildTarget, string> build_target;
+					var asm_name = assembly.Identity;
+
+					if (asm_build_targets.TryGetValue (asm_name, out build_target)) {
+						asm_build_targets.Remove (asm_name);
+					} else if (sdk != null && Profile.IsSdkAssembly (asm_name)) {
+						build_target = sdk;
+					} else {
+						build_target = all;
+					}
+
+					if (build_target == null) {
+						if (exceptions == null)
+							exceptions = new List<Exception> ();
+						exceptions.Add (ErrorHelper.CreateError (98, "No assembly build target was specified for '{0}'.", assembly.Identity));
+						continue;
+					}
+
+					assembly.BuildTarget = build_target.Item1;
+					// The default build target name is the assembly's filename, including the extension,
+					// so that for instance for System.dll, we'd end up with a System.dll.framework
+					// (this way it doesn't clash with the system's System.framework).
+					assembly.BuildTargetName = string.IsNullOrEmpty (build_target.Item2) ? Path.GetFileName (assembly.FileName) : build_target.Item2;
+				}
+
+				foreach (var abt in asm_build_targets) {
+					if (abt.Key == "@all" || abt.Key == "@sdk")
+						continue;
+
+					if (exceptions == null)
+						exceptions = new List<Exception> ();
+					exceptions.Add (ErrorHelper.CreateError (99, "The assembly build target '{0}' did not match any assemblies.", abt.Key));
+				}
+
+				if (exceptions != null)
+					continue;
+
+				var grouped = target.Assemblies.GroupBy ((a) => a.BuildTargetName);
+				foreach (var @group in grouped) {
+					var assemblies = @group.AsEnumerable ().ToArray ();
+
+					// Check that all assemblies in a group have the same build target
+					for (int i = 1; i < assemblies.Length; i++) {
+						if (assemblies [0].BuildTarget != assemblies [i].BuildTarget)
+							throw ErrorHelper.CreateError (102, "The assemblies '{0}' and '{1}' have the same target name ('{2}'), but different targets ('{3}' and '{4}').",
+														   assemblies [0].Identity, assemblies [1].Identity, assemblies [0].BuildTargetName, assemblies [0].BuildTarget, assemblies [1].BuildTarget);
+					}
+
+					// Check that static objects must consist of only one assembly
+					if (assemblies.Length != 1 && assemblies [0].BuildTarget == AssemblyBuildTarget.StaticObject)
+						throw ErrorHelper.CreateError (103, "The static object '{0}' contains more than one assembly ('{1}'), but each static object must correspond with exactly one assembly.",
+													   assemblies [0].BuildTargetName, string.Join ("', '", assemblies.Select ((a) => a.Identity).ToArray ()));
+				}
+			}
+
+
+			if (exceptions != null)
+				throw new AggregateException (exceptions);
+		}
+
 		public void SetDlsymOption (string asm, bool dlsym)
 		{
 			if (DlsymAssemblies == null)
@@ -530,15 +680,31 @@ namespace Xamarin.Bundler {
 			SelectRegistrar ();
 			ExtractNativeLinkInfo ();
 			SelectNativeCompiler ();
-			BuildApp ();
-			WriteNotice ();
-			BuildFatSharedLibraries ();
-			CopyAotData ();
-			BuildFinalExecutable ();
+			ProcessAssemblies ();
+
+			// Everything that can be parallelized is put into a list of tasks,
+			// which are then executed at the end.
+			build_tasks = new BuildTasks ();
+
+			Driver.Watch ("Generating build tasks", 1);
+			CompilePInvokeWrappers ();
+			BuildApp (build_tasks);
+
+			if (Driver.Dot)
+				build_tasks.Dot (Path.Combine (Cache.Location, "build.dot"));
+
+			Driver.Watch ("Building build tasks", 1);
+			build_tasks.Execute ();
+
+			// TODO: make more of the below actions parallelizable.
+
+			BuildBundle ();
 			BuildDsymDirectory ();
 			BuildMSymDirectory ();
 			StripNativeCode ();
-			StripManagedCode ();
+			BundleAssemblies ();
+
+			WriteNotice ();
 			GenerateRuntimeOptions ();
 
 			if (Cache.IsCacheTemporary) {
@@ -626,6 +792,20 @@ namespace Xamarin.Bundler {
 			if (Profile.IsSdkAssembly (root_wo_ext) || Profile.IsProductAssembly (root_wo_ext))
 				throw new MonoTouchException (3, true, "Application name '{0}.exe' conflicts with an SDK or product assembly (.dll) name.", root_wo_ext);
 
+			if (!IsDualBuild && !IsExtension) {
+				// There might be other/more architectures in extensions than in the main app.
+				// If we're building frameworks, we need to build for all architectures, including any in extensions.
+				if (HasFrameworks) {
+					foreach (var abi in AllArchitectures) {
+						if (abis.Contains (abi))
+							continue;
+						
+						abis.Add (abi);
+						ErrorHelper.Warning (104, "There is at least one extension that builds for '{0}'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.", abi.AsString ());
+					}
+				}
+			}
+
 			if (IsDualBuild) {
 				var target32 = new Target (this);
 				var target64 = new Target (this);
@@ -711,7 +891,7 @@ namespace Xamarin.Bundler {
 				throw new MonoTouchException (74, true, "Xamarin.iOS {0} does not support a deployment target of {1} for {3} (the maximum is {2}). Please select an older deployment target in your project's Info.plist or upgrade to a newer version of Xamarin.iOS.", Constants.Version, DeploymentTarget, Xamarin.SdkVersions.GetVersion (Platform), PlatformName);
 			}
 
-			if (Platform == ApplePlatform.iOS && FastDev && DeploymentTarget.Major < 8) {
+			if (Platform == ApplePlatform.iOS && (HasDynamicLibraries || HasFrameworks) && DeploymentTarget.Major < 8) {
 				ErrorHelper.Warning (78, "Incremental builds are enabled with a deployment target < 8.0 (currently {0}). This is not supported (the resulting application will not launch on iOS 9), so the deployment target will be set to 8.0.", DeploymentTarget);
 				DeploymentTarget = new Version (8, 0);
 			}
@@ -793,6 +973,18 @@ namespace Xamarin.Bundler {
 			if (LinkMode == LinkMode.None && SdkVersion < SdkVersions.GetVersion (Platform))
 				throw ErrorHelper.CreateError (91, "This version of Xamarin.iOS requires the {0} {1} SDK (shipped with Xcode {2}) when the managed linker is disabled. Either upgrade Xcode, or enable the managed linker.", PlatformName, SdkVersions.GetVersion (Platform), SdkVersions.Xcode);
 
+			if (HasFrameworks || UseMonoFramework.Value) {
+				LibMonoLinkMode = AssemblyBuildTarget.Framework;
+			} else if (HasDynamicLibraries) {
+				LibMonoLinkMode = AssemblyBuildTarget.DynamicLibrary;
+			}
+
+			if (HasFrameworks) {
+				LibXamarinLinkMode = AssemblyBuildTarget.Framework;
+			} else if (HasDynamicLibraries) {
+				LibXamarinLinkMode = AssemblyBuildTarget.DynamicLibrary;
+			}
+
 			Namespaces.Initialize ();
 
 			InitializeCommon ();
@@ -839,15 +1031,10 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		void ManagedLink ()
+		void ProcessAssemblies ()
 		{
-			foreach (var target in Targets)
-				target.ManagedLink ();
-		}
-
-		void BuildApp ()
-		{
-			foreach (var target in Targets)	{
+			// This can be parallelized once we determine the linker doesn't use any static state.
+			foreach (var target in Targets) {
 				if (target.CanWeSymlinkTheApplication ()) {
 					target.Symlink ();
 				} else {
@@ -884,6 +1071,17 @@ namespace Xamarin.Bundler {
 					Driver.CopyAssembly (f1, f2);
 				}
 			}
+		}
+
+		void CompilePInvokeWrappers ()
+		{
+			foreach (var target in Targets)
+				target.CompilePInvokeWrappers ();
+		}
+
+		void BuildApp (BuildTasks build_tasks)
+		{
+			SelectAssemblyBuildTargets (); // This must be done after the linker has run, since the linker may bring in more assemblies than only those referenced explicitly.
 
 			foreach (var target in Targets) {
 				if (target.CanWeSymlinkTheApplication ())
@@ -891,7 +1089,7 @@ namespace Xamarin.Bundler {
 
 				target.ComputeLinkerFlags ();
 				target.Compile ();
-				target.NativeLink ();
+				target.NativeLink (build_tasks);
 			}
 		}
 
@@ -912,71 +1110,6 @@ namespace Xamarin.Bundler {
 				Driver.WriteIfDifferent (Path.Combine (AppDirectory, "NOTICE"), sb.ToString ());
 			} catch (Exception ex) {
 				throw new MonoTouchException (1017, true, ex, "Failed to create the NOTICE file: {0}", ex.Message);
-			}
-		}
-
-		void BuildFatSharedLibraries ()
-		{
-			// Create shared fat libraries.
-			if (!FastDev)
-				return;
-
-			var hash = new Dictionary<string, List<string>> ();
-			foreach (var target in Targets) {
-				foreach (var a in target.Assemblies) {
-					List<string> dylibs;
-
-					if (a.Dylibs == null || a.Dylibs.Count () == 0)
-						continue;
-
-					if (!hash.TryGetValue (a.Dylib, out dylibs)) {
-						dylibs = new List<string> ();
-						hash [a.Dylib] = dylibs;
-					}
-					dylibs.AddRange (a.Dylibs);
-
-					target.LinkWith (a.Dylib);
-				}
-
-				foreach (var dylib in target.LibrariesToShip) {
-					List<string> dylibs;
-					var targetName = Path.GetFileNameWithoutExtension (Path.GetFileNameWithoutExtension (dylib)) + Path.GetExtension (dylib);
-					var targetPath = Path.Combine (AppDirectory, targetName);
-					if (!hash.TryGetValue (targetPath, out dylibs))
-						hash [targetPath] = dylibs = new List<string> ();
-					dylibs.Add (dylib);
-				}
-			}
-
-			foreach (var kvp in hash) {
-				var dylib = kvp.Key;
-				var dylibs = kvp.Value;
-				if (!Application.IsUptodate (dylibs, new string [] { dylib })) {
-					var cmd = new StringBuilder ();
-					foreach (var lib in dylibs) {
-						cmd.Append (Driver.Quote (lib));
-						cmd.Append (' ');
-					}
-					cmd.Append ("-create -output ");
-					cmd.Append (Driver.Quote (dylib));
-					Driver.RunLipo (cmd.ToString ());
-				} else {
-					Driver.Log (3, "Target '{0}' is up-to-date.", dylib);
-				}
-			}
-		}
-
-		void CopyAotData ()
-		{
-			if (!IsDeviceBuild)
-				return;
-
-			foreach (var target in Targets) {
-				foreach (var a in target.Assemblies) {
-					foreach (var data in a.AotDataFiles) {
-						Application.UpdateFile (data, Path.Combine (target.AppTargetDirectory, Path.GetFileName (data)));
-					}
-				}
 			}
 		}
 
@@ -1015,54 +1148,64 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		void BuildFinalExecutable ()
+		void BuildBundle ()
 		{
-			if (FastDev) {
-				var libdir = Path.Combine (Driver.GetProductSdkDirectory (this), "usr", "lib");
-				var libmono_name = LibMono;
-				if (!UseMonoFramework.Value) {
-					var libmono_target = Path.Combine (AppDirectory, libmono_name);
-					var libmono_source = Path.Combine (libdir, libmono_name);
-					Application.UpdateFile (libmono_source, libmono_target);
-				}
+			Driver.Watch ("Building app bundle", 1);
 
-				var libprofiler_target = Path.Combine (AppDirectory, "libmono-profiler-log.dylib");
-				var libprofiler_source = Path.Combine (libdir, "libmono-profiler-log.dylib");
-				if (EnableProfiling)
-					Application.UpdateFile (libprofiler_source, libprofiler_target);
+			var bundle_files = new Dictionary<string, BundleFileInfo> ();
 
-				// Copy libXamarin.dylib to the app
-				var libxamarin_target = Path.Combine (AppDirectory, LibXamarin);
-				Application.UpdateFile (Path.Combine (Driver.GetMonoTouchLibDirectory (this), LibXamarin), libxamarin_target);
+			// Make sure we bundle Mono.framework if we need to.
+			if (PackageMonoFramework == true) {
+				BundleFileInfo info;
+				var name = "Frameworks/Mono.framework";
+				bundle_files [name] = info = new BundleFileInfo ();
+				info.Sources.Add (GetLibMono (AssemblyBuildTarget.Framework));
+			}
 
-				if (UseMonoFramework.Value) {
-					if (EnableProfiling)
-						Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (libprofiler_target));
-					Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (libxamarin_target));
+			// Collect files to bundle from every target
+			if (Targets.Count == 1) {
+				bundle_files = Targets [0].BundleFiles;
+			} else {
+				foreach (var target in Targets) {
+					foreach (var kvp in target.BundleFiles) {
+						BundleFileInfo info;
+						if (!bundle_files.TryGetValue (kvp.Key, out info))
+							bundle_files [kvp.Key] = info = new BundleFileInfo () { DylibToFramework = kvp.Value.DylibToFramework };
+						info.Sources.UnionWith (kvp.Value.Sources);
+					}
 				}
 			}
 
+			// And from ourselves
+			var all_assemblies = Targets.SelectMany ((v) => v.Assemblies);
+			var all_frameworks = Frameworks.Concat (all_assemblies.SelectMany ((v) => v.Frameworks));
+			var all_weak_frameworks = WeakFrameworks.Concat (all_assemblies.SelectMany ((v) => v.WeakFrameworks));
+			foreach (var fw in all_frameworks.Concat (all_weak_frameworks)) {
+				BundleFileInfo info;
+				if (!Path.GetFileName (fw).EndsWith (".framework", StringComparison.Ordinal))
+					continue;
+				var key = $"Frameworks/{Path.GetFileName (fw)}";
+				if (!bundle_files.TryGetValue (key, out info))
+					bundle_files [key] = info = new BundleFileInfo ();
+				info.Sources.Add (fw);
+			}
+
 			// Copy frameworks to the app bundle.
-			if (!IsExtension || IsWatchExtension) {
-				var all_frameworks = new HashSet<string> ();
-				all_frameworks.UnionWith (Frameworks);
-				all_frameworks.UnionWith (WeakFrameworks);
-				foreach (var t in Targets) {
-					all_frameworks.UnionWith (t.Frameworks);
-					all_frameworks.UnionWith (t.WeakFrameworks);
-					foreach (var a in t.Assemblies) {
-						if (a.Frameworks != null)
-							all_frameworks.UnionWith (a.Frameworks);
-						if (a.WeakFrameworks != null)
-							all_frameworks.UnionWith (a.WeakFrameworks);
-					}
+			if (IsExtension && !IsWatchExtension) {
+				// In extensions we need to save a list of the frameworks we need so that the main app can bundle them.
+				var sb = new StringBuilder ();
+				foreach (var key in bundle_files.Keys.ToArray ()) {
+					if (!Path.GetFileName (key).EndsWith (".framework", StringComparison.Ordinal))
+						continue;
+					var value = bundle_files [key];
+					foreach (var src in value.Sources)
+						sb.AppendLine ($"{key}:{src}");
+					bundle_files.Remove (key);
 				}
-					
-				if (PackageMonoFramework.Value) {
-					// We may have to copy the Mono framework to the bundle even if we're not linking with it.
-					all_frameworks.Add (Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", "Mono.framework"));
-				}
-				
+				if (sb.Length > 0)
+					Driver.WriteIfDifferent (Path.Combine (Path.GetDirectoryName (AppDirectory), "frameworks.txt"), sb.ToString ());
+			} else {
+				// Load any frameworks extensions saved just above
 				foreach (var appex in Extensions) {
 					var f_path = Path.Combine (appex, "..", "frameworks.txt");
 					if (!File.Exists (f_path))
@@ -1070,64 +1213,92 @@ namespace Xamarin.Bundler {
 
 					foreach (var fw in File.ReadAllLines (f_path)) {
 						Driver.Log (3, "Copying {0} to the app's Frameworks directory because it's used by the extension {1}", fw, Path.GetFileName (appex));
-						all_frameworks.Add (fw);
+						var colon = fw.IndexOf (':');
+						if (colon == -1)
+							throw new Exception ();
+						var key = fw.Substring (0, colon);
+						var name = fw.Substring (colon + 1);
+						BundleFileInfo info;
+						if (!bundle_files.TryGetValue (key, out info))
+							bundle_files [key] = info = new BundleFileInfo ();
+						info.Sources.Add (name);
+						if (name.EndsWith (".dylib", StringComparison.Ordinal))
+							info.DylibToFramework = true;
 					}
 				}
+			}
 
-				foreach (var fw in all_frameworks) {
-					if (!fw.EndsWith (".framework", StringComparison.Ordinal))
-						continue;
-					if (!Xamarin.MachO.IsDynamicFramework (Path.Combine (fw, Path.GetFileNameWithoutExtension (fw)))) {
-						// We can have static libraries camouflaged as frameworks. We don't want those copied to the app.
-						Driver.Log (1, "The framework {0} is a framework of static libraries, and will not be copied into the app.", fw);
-						continue;
+			foreach (var kvp in bundle_files) {
+				var name = kvp.Key;
+				var info = kvp.Value;
+				var targetPath = Path.Combine (AppDirectory, name);
+				var files = info.Sources;
+
+				if (Directory.Exists (files.First ())) {
+					if (files.Count != 1)
+						throw ErrorHelper.CreateError (99, "Internal error: 'can't lipo directories'. Please file a bug report with a test case (http://bugzilla.xamarin.com).");
+					if (info.DylibToFramework)
+						throw ErrorHelper.CreateError (99, "Internal error: 'can't convert frameworks to frameworks'. Please file a bug report with a test case (http://bugzilla.xamarin.com).");
+					var framework_src = files.First ();
+					var framework_filename = Path.Combine (framework_src, Path.GetFileNameWithoutExtension (framework_src));
+					if (!MachO.IsDynamicFramework (framework_filename)) {
+						Driver.Log (1, "The framework {0} is a framework of static libraries, and will not be copied to the app.", framework_src);
+					} else {
+						UpdateDirectory (framework_src, Path.GetDirectoryName (targetPath));
+						if (IsDeviceBuild) {
+							// Remove architectures we don't care about.
+							MachO.SelectArchitectures (Path.Combine (targetPath, Path.GetFileNameWithoutExtension (framework_src)), AllArchitectures);
+						}
+					}
+				} else {
+					var targetDirectory = Path.GetDirectoryName (targetPath);
+					if (!IsUptodate (files, new string [] { targetPath })) {
+						Directory.CreateDirectory (targetDirectory);
+						if (files.Count == 1) {
+							CopyFile (files.First (), targetPath);
+						} else {
+							var sb = new StringBuilder ();
+							foreach (var lib in files) {
+								sb.Append (Driver.Quote (lib));
+								sb.Append (' ');
+							}
+							sb.Append ("-create -output ");
+							sb.Append (Driver.Quote (targetPath));
+							Driver.RunLipo (sb.ToString ());
+						}
+						if (LibMonoLinkMode == AssemblyBuildTarget.Framework)
+							Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
+					} else {
+						Driver.Log (3, "Target '{0}' is up-to-date.", targetPath);
 					}
 
-					if (!File.Exists (Path.Combine (fw, "Info.plist")))
-						throw ErrorHelper.CreateError (1304, "The embedded framework '{0}' in {1} is invalid: it does not contain an Info.plist.", Path.GetFileNameWithoutExtension (fw), fw);
-					
-					Application.UpdateDirectory (fw, Path.Combine (AppDirectory, "Frameworks"));
-					if (IsDeviceBuild) {
-						// Remove architectures we don't care about.
-						Xamarin.MachO.SelectArchitectures (Path.Combine (AppDirectory, "Frameworks", Path.GetFileName (fw), Path.GetFileNameWithoutExtension (fw)), AllArchitectures);
+					if (info.DylibToFramework) {
+						var bundleName = Path.GetFileName (name);
+						CreateFrameworkInfoPList (Path.Combine (targetDirectory, "Info.plist"), bundleName, BundleId + Path.GetFileNameWithoutExtension (bundleName), bundleName);
 					}
 				}
-			} else {
-				if (!IsWatchExtension) {
-					// In extensions we need to save a list of the frameworks we need so that the main app can get them.
-					var all_frameworks = Frameworks.Union (WeakFrameworks);
-					if (all_frameworks.Count () > 0)
-						Driver.WriteIfDifferent (Path.Combine (Path.GetDirectoryName (AppDirectory), "frameworks.txt"), string.Join ("\n", all_frameworks.ToArray ()));
+			}
+
+			// If building a fat app, we need to lipo the two different executables we have together
+			if (IsDeviceBuild) {
+				if (IsDualBuild) {
+					if (IsUptodate (new string [] { Targets [0].Executable, Targets [1].Executable }, new string [] { Executable })) {
+						cached_executable = true;
+						Driver.Log (3, "Target '{0}' is up-to-date.", Executable);
+					} else {
+						var cmd = new StringBuilder ();
+						foreach (var target in Targets) {
+							cmd.Append (Driver.Quote (target.Executable));
+							cmd.Append (' ');
+						}
+						cmd.Append ("-create -output ");
+						cmd.Append (Driver.Quote (Executable));
+						Driver.RunLipo (cmd.ToString ());
+					}
+				} else {
+					cached_executable = Targets [0].CachedExecutable;
 				}
 			}
-
-			if (IsSimulatorBuild || !IsDualBuild) {
-				if (IsDeviceBuild)
-					cached_executable = Targets [0].cached_executable;
-				return;
-			}
-
-			if (IsSimulatorBuild || !IsDualBuild) {
-				if (IsDeviceBuild)
-					cached_executable = Targets [0].cached_executable;
-				return;
-			}
-
-			if (IsUptodate (new string [] { Targets [0].Executable, Targets [1].Executable }, new string [] { Executable })) {
-				cached_executable = true;
-				Driver.Log (3, "Target '{0}' is up-to-date.", Executable);
-				return;
-			}
-
-			var cmd = new StringBuilder ();
-			foreach (var target in Targets) {
-				cmd.Append (Driver.Quote (target.Executable));
-				cmd.Append (' ');
-			}
-			cmd.Append ("-create -output ");
-			cmd.Append (Driver.Quote (Executable));
-			Driver.RunLipo (cmd.ToString ());
-
 		}
 			
 		public void ExtractNativeLinkInfo ()
@@ -1157,30 +1328,38 @@ namespace Xamarin.Bundler {
 			Driver.CalculateCompilerPath (this);
 		}
 
-		public string LibMono {
-			get {
-				if (FastDev) {
-					return "libmonosgen-2.0.dylib";
-				} else {
-					return "libmonosgen-2.0.a";
-				}
+		public string GetLibMono (AssemblyBuildTarget build_target)
+		{
+			switch (build_target) {
+			case AssemblyBuildTarget.StaticObject:
+				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), "libmonosgen-2.0.a");
+			case AssemblyBuildTarget.DynamicLibrary:
+				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), "libmonosgen-2.0.dylib");
+			case AssemblyBuildTarget.Framework:
+				return Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", "Mono.framework");
+			default:
+				throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
 			}
 		}
 
-		public string LibXamarin {
-			get {
-				if (FastDev) {
-					return EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib";
-				} else {
-					return EnableDebug ? "libxamarin-debug.a" : "libxamarin.a";
-				}
+		public string GetLibXamarin (AssemblyBuildTarget build_target)
+		{
+			switch (build_target) {
+			case AssemblyBuildTarget.StaticObject:
+				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), EnableDebug ? "libxamarin-debug.a" : "libxamarin.a");
+			case AssemblyBuildTarget.DynamicLibrary:
+				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib");
+			case AssemblyBuildTarget.Framework:
+				return Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", EnableDebug ? "Xamarin-debug.framework" : "Xamarin.framework");
+			default:
+				throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
 			}
 		}
 
-		public void NativeLink ()
+		public void NativeLink (BuildTasks build_tasks)
 		{
 			foreach (var target in Targets)
-				target.NativeLink ();
+				target.NativeLink (build_tasks);
 		}
 		
 		// this will filter/remove warnings that are not helpful (e.g. complaining about non-matching armv6-6 then armv7-6 on fat binaries)
@@ -1480,68 +1659,55 @@ namespace Xamarin.Bundler {
 			if (IsDualBuild) {
 				bool cached = true;
 				foreach (var target in Targets)
-					cached &= target.cached_executable;
+					cached &= target.CachedExecutable;
 				if (!cached)
 					StripNativeCode (Executable);
 			} else {
 				foreach (var target in Targets) {
-					if (!target.cached_executable)
+					if (!target.CachedExecutable)
 						StripNativeCode (target.Executable);
 				}
 			}
 		}
 
-		public void StripManagedCode ()
+		public void BundleAssemblies ()
 		{
-			foreach (var target in Targets)
-				target.StripManagedCode ();
+			var strip = ManagedStrip && IsDeviceBuild && !EnableDebug && !PackageMdb;
 
-			// deduplicate assemblies between the .monotouch-32 and .monotouch-64 directories
-			if (IsDualBuild && IsDeviceBuild)
-				DeduplicateDir ("..", Targets [0].AppTargetDirectory, Targets [1].AppTargetDirectory);
-		}
+			var grouped = Targets.SelectMany ((Target t) => t.Assemblies).GroupBy ((Assembly asm) => asm.Identity);
+			foreach (var @group in grouped) {
+				var filename = @group.Key;
+				var assemblies = @group.AsEnumerable ().ToArray ();
+				var build_target = assemblies [0].BuildTarget;
+				var size_specific = assemblies.Length > 1 && !Cache.CompareAssemblies (assemblies [0].FullPath, assemblies [1].FullPath, true, true);
 
-		void DeduplicateDir (string base_dir, string d1, string d2)
-		{
-			foreach (var f1 in Directory.GetFileSystemEntries (d1)) {
-				var f2 = Path.Combine (d2, Path.GetFileName (f1));
-				if (Directory.Exists (f1))
-					DeduplicateDir (Path.Combine (base_dir, ".."), f1, f2);
-				else
-					DeduplicateFile (base_dir, f1, f2);
-			}
-		}
-
-		void DeduplicateFile (string base_dir, string f1, string f2)
-		{
-			if (!File.Exists (f2))
-				return;
-
-			if (Driver.IsSymlink (f2))
-				return; // Already determined to be identical from a previous build.
-
-			bool equal;
-			var ext = Path.GetExtension (f1).ToUpperInvariant ();
-			var is_assembly = ext == ".EXE" || ext == ".DLL";
-
-			if (is_assembly) {
-				equal = Cache.CompareAssemblies (f1, f2, true, true);
-				if (!equal)
-					Driver.Log (1, "Assemblies {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
-			} else {
-				equal = Cache.CompareFiles (f1, f2, true);
-				if (!equal)
-					Driver.Log (1, "Targets {0} and {1} not found to be identical, cannot replace one with a symlink to the other.", f1, f2);
-			}
-			if (!equal)
-				return;
-
-			var dest = Path.Combine (base_dir, f1.Substring (AppDirectory.Length + 1));
-			Driver.FileDelete (f2);
-			if (!Driver.Symlink (dest, f2)) {
-				File.Copy (f1, f2);
-			} else {
-				Driver.Log (1, "Targets {0} and {1} found to be identical, the later has been replaced with a symlink to the former.", f1, f2);
+				// Determine where to put the assembly
+				switch (build_target) {
+				case AssemblyBuildTarget.StaticObject:
+				case AssemblyBuildTarget.DynamicLibrary:
+					if (size_specific) {
+						assemblies [0].CopyToDirectory (assemblies [0].Target.AppTargetDirectory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+						assemblies [1].CopyToDirectory (assemblies [1].Target.AppTargetDirectory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					} else {
+						assemblies [0].CopyToDirectory (AppDirectory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					}
+					break;
+				case AssemblyBuildTarget.Framework:
+					// Put our resources in a subdirectory in the framework
+					// But don't use 'Resources', because the app ends up being undeployable:
+					// "PackageInspectionFailed: Failed to load Info.plist from bundle at path /private/var/installd/Library/Caches/com.apple.mobile.installd.staging/temp.CR0vmK/extracted/testapp.app/Frameworks/TestApp.framework"
+					var target_name = assemblies [0].BuildTargetName;
+					var resource_directory = Path.Combine (AppDirectory, "Frameworks", $"{target_name}.framework", "MonoBundle");
+					if (size_specific) {
+						assemblies [0].CopyToDirectory (Path.Combine (resource_directory, Path.GetFileName (assemblies [0].Target.AppTargetDirectory)), copy_mdb: PackageMdb, strip: strip, only_copy: true);
+						assemblies [1].CopyToDirectory (Path.Combine (resource_directory, Path.GetFileName (assemblies [1].Target.AppTargetDirectory)), copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					} else {
+						assemblies [0].CopyToDirectory (resource_directory, copy_mdb: PackageMdb, strip: strip, only_copy: true);
+					}
+					break;
+				default:
+					throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
+				}
 			}
 		}
 
@@ -1588,457 +1754,80 @@ namespace Xamarin.Bundler {
 			}
 			args.Append (is_weak ? " -weak_framework " : " -framework ").Append (Driver.Quote (name));
 		}
-	}
 
-	public class BuildTasks : List<BuildTask>
-	{
-		static void Execute (List<BuildTask> added, BuildTask v)
+		public void CreateFrameworkInfoPList (string output_path, string framework_name, string bundle_identifier, string bundle_name)
 		{
-			var next = v.Execute ();
-			if (next != null) {
-				lock (added)
-					added.AddRange (next);
+			var sb = new StringBuilder ();
+			sb.AppendLine ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			sb.AppendLine ("<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">");
+			sb.AppendLine ("<plist version=\"1.0\">");
+			sb.AppendLine ("<dict>");
+			sb.AppendLine ("        <key>CFBundleDevelopmentRegion</key>");
+			sb.AppendLine ("        <string>en</string>");
+			sb.AppendLine ("        <key>CFBundleIdentifier</key>");
+			sb.AppendLine ($"        <string>{bundle_identifier}</string>");
+			sb.AppendLine ("        <key>CFBundleInfoDictionaryVersion</key>");
+			sb.AppendLine ("        <string>6.0</string>");
+			sb.AppendLine ("        <key>CFBundleName</key>");
+			sb.AppendLine ($"        <string>{bundle_name}</string>");
+			sb.AppendLine ("        <key>CFBundlePackageType</key>");
+			sb.AppendLine ("        <string>FMWK</string>");
+			sb.AppendLine ("        <key>CFBundleShortVersionString</key>");
+			sb.AppendLine ("        <string>1.0</string>");
+			sb.AppendLine ("        <key>CFBundleSignature</key>");
+			sb.AppendLine ("        <string>????</string>");
+			sb.AppendLine ("        <key>CFBundleVersion</key>");
+			sb.AppendLine ("        <string>1.0</string>");
+			sb.AppendLine ("        <key>NSPrincipalClass</key>");
+			sb.AppendLine ("        <string></string>");
+			sb.AppendLine ("        <key>CFBundleExecutable</key>");
+			sb.AppendLine ($"        <string>{framework_name}</string>");
+			sb.AppendLine ("        <key>BuildMachineOSBuild</key>");
+			sb.AppendLine ("        <string>13F34</string>");
+			sb.AppendLine ("        <key>CFBundleSupportedPlatforms</key>");
+			sb.AppendLine ("        <array>");
+			sb.AppendLine ($"                <string>{Driver.GetPlatform (this)}</string>");
+			sb.AppendLine ("        </array>");
+			sb.AppendLine ("        <key>DTCompiler</key>");
+			sb.AppendLine ("        <string>com.apple.compilers.llvm.clang.1_0</string>");
+			sb.AppendLine ("        <key>DTPlatformBuild</key>");
+			sb.AppendLine ("        <string>12D508</string>");
+			sb.AppendLine ("        <key>DTPlatformName</key>");
+			sb.AppendLine ($"        <string>{Driver.GetPlatform (this).ToLowerInvariant ()}</string>");
+			sb.AppendLine ("        <key>DTPlatformVersion</key>");
+			sb.AppendLine ($"        <string>{SdkVersions.GetVersion (Platform)}</string>");
+			sb.AppendLine ("        <key>DTSDKBuild</key>");
+			sb.AppendLine ("        <string>12D508</string>");
+			sb.AppendLine ("        <key>DTSDKName</key>");
+			sb.AppendLine ($"        <string>{Driver.GetPlatform (this)}{SdkVersion}</string>");
+			sb.AppendLine ("        <key>DTXcode</key>");
+			sb.AppendLine ("        <string>0620</string>");
+			sb.AppendLine ("        <key>DTXcodeBuild</key>");
+			sb.AppendLine ("        <string>6C131e</string>");
+			sb.AppendLine ("        <key>MinimumOSVersion</key>");
+			sb.AppendLine ($"        <string>{DeploymentTarget.ToString ()}</string>");
+			sb.AppendLine ("        <key>UIDeviceFamily</key>");
+			sb.AppendLine ("        <array>");
+			switch (Platform) {
+			case ApplePlatform.iOS:
+				sb.AppendLine ("                <integer>1</integer>");
+				sb.AppendLine ("                <integer>2</integer>");
+				break;
+			case ApplePlatform.TVOS:
+				sb.AppendLine ("                <integer>3</integer>");
+				break;
+			case ApplePlatform.WatchOS:
+				sb.AppendLine ("                <integer>4</integer>");
+				break;
+			default:
+				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in Xamarin.iOS; please file a bug report at http://bugzilla.xamarin.com with a test case.", Platform);
 			}
-		}
+			sb.AppendLine ("        </array>");
 
-		public void ExecuteInParallel ()
-		{
-			if (Count == 0)
-				return;
+			sb.AppendLine ("</dict>");
+			sb.AppendLine ("</plist>");
 
-			var build_list = new List<BuildTask> (this);
-			var added = new List<BuildTask> ();
-			while (build_list.Count > 0) {
-				added.Clear ();
-				Parallel.ForEach (build_list, new ParallelOptions () { MaxDegreeOfParallelism = Driver.Concurrency }, (v) => {
-					Execute (added, v);
-				});
-				build_list.Clear ();
-				build_list.AddRange (added);
-			}
-
-			Clear ();
-		}
-	}
-
-	public abstract class BuildTask
-	{
-		public IEnumerable<BuildTask> NextTasks;
-
-		protected abstract void Build ();
-
-		public IEnumerable<BuildTask> Execute ()
-		{
-			Build ();
-			return NextTasks;
-		}
-
-		public virtual bool IsUptodate ()
-		{
-			return false;
-		}
-	}
-
-	public abstract class ProcessTask : BuildTask
-	{
-		public ProcessStartInfo ProcessStartInfo;
-		protected StringBuilder Output;
-		
-		protected string Command {
-			get {
-				var result = new StringBuilder ();
-				if (ProcessStartInfo.EnvironmentVariables.ContainsKey ("MONO_PATH")) {
-					result.Append ("MONO_PATH=");
-					result.Append (ProcessStartInfo.EnvironmentVariables ["MONO_PATH"]);
-					result.Append (' ');
-				}
-				result.Append (ProcessStartInfo.FileName);
-				result.Append (' ');
-				result.Append (ProcessStartInfo.Arguments);
-				return result.ToString ();
-			}
-		}
-
-		protected int Start ()
-		{
-			if (Driver.Verbosity > 0)
-				Console.WriteLine (Command);
-			
-			var info = ProcessStartInfo;
-			var stdout_completed = new ManualResetEvent (false);
-			var stderr_completed = new ManualResetEvent (false);
-
-			Output = new StringBuilder ();
-
-			using (var p = Process.Start (info)) {
-				p.OutputDataReceived += (sender, e) => {
-					if (e.Data != null) {
-						lock (Output)
-							Output.AppendLine (e.Data);
-					} else {
-						stdout_completed.Set ();
-					}
-				};
-				
-				p.ErrorDataReceived += (sender, e) => {
-					if (e.Data != null) {
-						lock (Output)
-							Output.AppendLine (e.Data);
-					} else {
-						stderr_completed.Set ();
-					}
-				};
-				
-				p.BeginOutputReadLine ();
-				p.BeginErrorReadLine ();
-				
-				p.WaitForExit ();
-				
-				stderr_completed.WaitOne (TimeSpan.FromSeconds (1));
-				stdout_completed.WaitOne (TimeSpan.FromSeconds (1));
-
-				GC.Collect (); // Workaround for: https://bugzilla.xamarin.com/show_bug.cgi?id=43462#c14
-
-				if (p.ExitCode != 0)
-					return p.ExitCode;
-
-				if (Driver.Verbosity >= 2 && Output.Length > 0)
-					Console.Error.WriteLine (Output.ToString ());
-			}
-
-			return 0;
-		}
-	}
-
-	internal class MainTask : CompileTask {
-		public static void Create (List<BuildTask> tasks, Target target, Abi abi, IEnumerable<Assembly> assemblies, string assemblyName, IList<string> registration_methods)
-		{
-			var app = target.App;
-			var arch = abi.AsArchString ();
-			var ofile = Path.Combine (app.Cache.Location, "main." + arch + ".o");
-			var ifile = Path.Combine (app.Cache.Location, "main." + arch + ".m");
-
-			var files = assemblies.Select (v => v.FullPath);
-
-			if (!Application.IsUptodate (files, new string [] { ifile })) {
-				Driver.GenerateMain (target.App, assemblies, assemblyName, abi, ifile, registration_methods);
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ifile);
-			}
-			
-			if (!Application.IsUptodate (ifile, ofile)) {
-				var main = new MainTask ()
-				{
-					Target = target,
-					Abi = abi,
-					AssemblyName = assemblyName,
-					InputFile = ifile,
-					OutputFile = ofile,
-					SharedLibrary = false,
-					Language = "objective-c++",
-				};
-				main.CompilerFlags.AddDefine ("MONOTOUCH");
-				tasks.Add (main);
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
-			}
-			
-			target.LinkWith (ofile);
-		}
-
-		protected override void Build ()
-		{
-			if (Compile () != 0)
-				throw new MonoTouchException (5103, true, "Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com", InputFile);
-		}
-	}
-
-	internal class PinvokesTask : CompileTask
-	{
-		public static void Create (List<BuildTask> tasks, IEnumerable<Abi> abis, Target target, string ifile)
-		{
-			foreach (var abi in abis)
-				Create (tasks, abi, target, ifile);
-		}
-
-		public static void Create (List<BuildTask> tasks, Abi abi, Target target, string ifile)
-		{
-			var arch = abi.AsArchString ();
-			var ext = target.App.FastDev ? ".dylib" : ".o";
-			var ofile = Path.Combine (target.App.Cache.Location, "lib" + Path.GetFileNameWithoutExtension (ifile) + "." + arch + ext);
-
-			if (!Application.IsUptodate (ifile, ofile)) {
-				var task = new PinvokesTask ()
-				{
-					Target = target,
-					Abi = abi,
-					InputFile = ifile,
-					OutputFile = ofile,
-					SharedLibrary = target.App.FastDev,
-					Language = "objective-c++",
-				};
-				if (target.App.FastDev) {
-					task.InstallName = "lib" + Path.GetFileNameWithoutExtension (ifile) + ext;
-					task.CompilerFlags.AddFramework ("Foundation");
-					task.CompilerFlags.LinkWithXamarin ();
-				}
-				tasks.Add (task);
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
-			}
-
-			target.LinkWith (ofile);
-			target.LinkWithAndShip (ofile);
-		}
-
-		protected override void Build ()
-		{
-			if (Compile () != 0)
-				throw new MonoTouchException (4002, true, "Failed to compile the generated code for P/Invoke methods. Please file a bug report at http://bugzilla.xamarin.com");
-		}
-	}
-
-	internal class RegistrarTask : CompileTask {
-		public static void Create (List<BuildTask> tasks, IEnumerable<Abi> abis, Target target, string ifile)
-		{
-			foreach (var abi in abis)
-				Create (tasks, abi, target, ifile);
-		}
-
-		public static void Create (List<BuildTask> tasks, Abi abi, Target target, string ifile)
-		{
-			var app = target.App;
-			var arch = abi.AsArchString ();
-			var ofile = Path.Combine (app.Cache.Location, Path.GetFileNameWithoutExtension (ifile) + "." + arch + ".o");
-
-			if (!Application.IsUptodate (ifile, ofile)) {
-				tasks.Add (new RegistrarTask ()
-				{
-					Target = target,
-					Abi = abi,
-					InputFile = ifile,
-					OutputFile = ofile,
-					SharedLibrary = false,
-					Language = "objective-c++",
-				});
-			} else {
-				Driver.Log (3, "Target '{0}' is up-to-date.", ofile);
-			}
-			
-			target.LinkWith (ofile);
-		}
-
-		protected override void Build ()
-		{
-			if (Driver.IsUsingClang (App)) {
-				// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
-				// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
-				CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
-			}
-
-			if (Compile () != 0)
-				throw new MonoTouchException (4109, true, "Failed to compile the generated registrar code. Please file a bug report at http://bugzilla.xamarin.com");
-		}
-	}
-
-	public class AOTTask : ProcessTask {
-		public string AssemblyName;
-
-		// executed with Parallel.ForEach
-		protected override void Build ()
-		{
-			var exit_code = base.Start ();
-
-			if (exit_code == 0)
-				return;
-
-			Console.Error.WriteLine ("AOT Compilation exited with code {0}, command:\n{1}{2}", exit_code, Command, Output.Length > 0 ? ("\n" + Output.ToString ()) : string.Empty);
-			if (Output.Length > 0) {
-				List<Exception> exceptions = new List<Exception> ();
-				foreach (var line in Output.ToString ().Split ('\n')) {
-					if (line.StartsWith ("AOT restriction: Method '", StringComparison.Ordinal) && line.Contains ("must be static since it is decorated with [MonoPInvokeCallback]")) {
-						exceptions.Add (new MonoTouchException (3002, true, line));
-					}
-				}
-				if (exceptions.Count > 0)
-					throw new AggregateException (exceptions.ToArray ());
-			}
-
-			throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
-		}
-	}
-
-	public class LinkTask : CompileTask {
-	}
-
-	public class CompileTask : BuildTask {
-		public Target Target;
-		public Application App { get { return Target.App; } }
-		public bool SharedLibrary;
-		public string InputFile;
-		public string OutputFile;
-		public Abi Abi;
-		public string AssemblyName;
-		public string InstallName;
-		public string Language;
-
-		CompilerFlags compiler_flags;
-		public CompilerFlags CompilerFlags {
-			get { return compiler_flags ?? (compiler_flags = new CompilerFlags () { Target = Target }); }
-			set { compiler_flags = value; }
-		}
-
-		public static void GetArchFlags (CompilerFlags flags, params Abi [] abis)
-		{
-			GetArchFlags (flags, (IEnumerable<Abi>) abis);
-		}
-
-		public static void GetArchFlags (CompilerFlags flags, IEnumerable<Abi> abis)
-		{
-			bool enable_thumb = false;
-
-			foreach (var abi in abis) {
-				var arch = abi.AsArchString ();
-				flags.AddOtherFlag ($"-arch {arch}");
-
-				enable_thumb |= (abi & Abi.Thumb) != 0;
-			}
-
-			if (enable_thumb)
-				flags.AddOtherFlag ("-mthumb");
-		}
-
-		public static void GetCompilerFlags (Application app, CompilerFlags flags, string ifile, string language = null)
-		{
-			if (string.IsNullOrEmpty (ifile) || !ifile.EndsWith (".s", StringComparison.Ordinal))
-				flags.AddOtherFlag ("-gdwarf-2");
-
-			if (!string.IsNullOrEmpty (ifile) && !ifile.EndsWith (".s", StringComparison.Ordinal)) {
-				if (string.IsNullOrEmpty (language) || !language.Contains ("++")) {
-					// error: invalid argument '-std=c99' not allowed with 'C++/ObjC++'
-					flags.AddOtherFlag ("-std=c99");
-				}
-				flags.AddOtherFlag ($"-I{Driver.Quote (Path.Combine (Driver.GetProductSdkDirectory (app), "usr", "include"))}");
-			}
-			flags.AddOtherFlag ($"-isysroot {Driver.Quote (Driver.GetFrameworkDirectory (app))}");
-			flags.AddOtherFlag ("-Qunused-arguments"); // don't complain about unused arguments (clang reports -std=c99 and -Isomething as unused).
-		}
-		
-		public static void GetSimulatorCompilerFlags (CompilerFlags flags, string ifile, Application app, string language = null)
-		{
-			GetCompilerFlags (app, flags, ifile, language);
-
-			string sim_platform = Driver.GetPlatformDirectory (app);
-			string plist = Path.Combine (sim_platform, "Info.plist");
-
-			var dict = Driver.FromPList (plist);
-			var dp = dict.Get<PDictionary> ("DefaultProperties");
-			if (dp.GetString ("GCC_OBJC_LEGACY_DISPATCH") == "YES")
-					flags.AddOtherFlag ("-fobjc-legacy-dispatch");
-			string objc_abi = dp.GetString ("OBJC_ABI_VERSION");
-			if (!String.IsNullOrWhiteSpace (objc_abi))
-				flags.AddOtherFlag ($"-fobjc-abi-version={objc_abi}");
-			
-			plist = Path.Combine (Driver.GetFrameworkDirectory (app), "SDKSettings.plist");
-			string min_prefix = app.CompilerPath.Contains ("clang") ? Driver.GetTargetMinSdkName (app) : "iphoneos";
-			dict = Driver.FromPList (plist);
-			dp = dict.Get<PDictionary> ("DefaultProperties");
-			if (app.DeploymentTarget == new Version ()) {
-				string target = dp.GetString ("IPHONEOS_DEPLOYMENT_TARGET");
-				if (!String.IsNullOrWhiteSpace (target))
-					flags.AddOtherFlag ($"-m{min_prefix}-version-min={target}");
-			} else {
-				flags.AddOtherFlag ($"-m{min_prefix}-version-min={app.DeploymentTarget}");
-			}
-			string defines = dp.GetString ("GCC_PRODUCT_TYPE_PREPROCESSOR_DEFINITIONS");
-			if (!String.IsNullOrWhiteSpace (defines))
-				flags.AddDefine (defines.Replace (" ", String.Empty));
-		}
-		
-		void GetDeviceCompilerFlags (CompilerFlags flags, string ifile)
-		{
-			GetCompilerFlags (App, flags, ifile, Language);
-			
-			flags.AddOtherFlag ($"-m{Driver.GetTargetMinSdkName (App)}-version-min={App.DeploymentTarget.ToString ()}");
-
-			if (App.EnableLLVMOnlyBitCode)
-				// The AOT compiler doesn't optimize the bitcode so clang will do it
-				flags.AddOtherFlag ("-O2 -fexceptions");
-		}
-		
-		void GetSharedCompilerFlags (CompilerFlags flags, string install_name)
-		{
-			if (string.IsNullOrEmpty (install_name))
-				throw new ArgumentNullException (nameof (install_name));
-
-			flags.AddOtherFlag ("-shared");
-			if (!App.EnableMarkerOnlyBitCode)
-				flags.AddOtherFlag ("-read_only_relocs suppress");
-			flags.LinkWithMono ();
-			flags.AddOtherFlag ("-install_name " + Driver.Quote ($"@executable_path/{install_name}"));
-			flags.AddOtherFlag ("-fapplication-extension"); // fixes this: warning MT5203: Native linking warning: warning: linking against dylib not safe for use in application extensions: [..]/actionextension.dll.arm64.dylib
-		}
-		
-		void GetStaticCompilerFlags (CompilerFlags flags)
-		{
-			flags.AddOtherFlag ("-c");
-		}
-
-		void GetBitcodeCompilerFlags (CompilerFlags flags)
-		{
-			flags.AddOtherFlag (App.EnableMarkerOnlyBitCode ? "-fembed-bitcode-marker" : "-fembed-bitcode");
-		}
-
-		protected override void Build ()
-		{
-			if (Compile () != 0)
-				throw new MonoTouchException (3001, true, "Could not AOT the assembly '{0}'", AssemblyName);
-		}
-
-		public int Compile ()
-		{
-			if (App.IsDeviceBuild) {
-				GetDeviceCompilerFlags (CompilerFlags, InputFile);
-			} else {
-				GetSimulatorCompilerFlags (CompilerFlags, InputFile, App, Language);
-			}
-
-			if (App.EnableBitCode)
-				GetBitcodeCompilerFlags (CompilerFlags);
-			GetArchFlags(CompilerFlags, Abi);
-
-			if (SharedLibrary) {
-				GetSharedCompilerFlags (CompilerFlags, InstallName);
-			} else {
-				GetStaticCompilerFlags (CompilerFlags);
-			}
-
-			if (App.EnableDebug)
-				CompilerFlags.AddDefine ("DEBUG");
-
-			CompilerFlags.AddOtherFlag ($"-o {Driver.Quote (OutputFile)}");
-
-			if (!string.IsNullOrEmpty (Language))
-				CompilerFlags.AddOtherFlag ($"-x {Language}");
-
-			CompilerFlags.AddOtherFlag (Driver.Quote (InputFile));
-
-			var rv = Driver.RunCommand (App.CompilerPath, CompilerFlags.ToString (), null, null);
-			
-			return rv;
-		}
-	}
-
-	public class BitCodeify : BuildTask {
-		public string Input { get; set; }
-		public string OutputFile { get; set; }
-		public ApplePlatform Platform { get; set; }
-		public Abi Abi { get; set; }
-		public Version DeploymentTarget { get; set; }
-
-		protected override void Build ()
-		{
-			new BitcodeConverter (Input, OutputFile, Platform, Abi, DeploymentTarget).Convert ();
+			Driver.WriteIfDifferent (output_path, sb.ToString ());
 		}
 	}
 }

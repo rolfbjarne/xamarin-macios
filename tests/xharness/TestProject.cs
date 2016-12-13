@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+
 namespace xharness
 {
 	public class TestProject
@@ -16,6 +18,36 @@ namespace xharness
 			Path = path;
 			IsExecutableProject = isExecutableProject;
 			GenerateVariations = generateVariations;
+		}
+
+		public TestProject AsTvOSProject ()
+		{
+			var clone = Clone ();
+			clone.Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (Path), System.IO.Path.GetFileNameWithoutExtension (Path) + "-tvos" + System.IO.Path.GetExtension (Path));
+			return clone;
+		}
+
+		public TestProject AsWatchOSProject ()
+		{
+			var clone = Clone ();
+			clone.Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (Path), System.IO.Path.GetFileNameWithoutExtension (Path) + "-watchos" + System.IO.Path.GetExtension (Path));
+			return clone;
+		}
+
+		public bool IsBclTest {
+			get {
+				return Path.Contains ("bcl-test");
+			}
+		}
+
+		protected virtual TestProject Clone ()
+		{
+			return new TestProject ()
+			{
+				Path = Path,
+				IsExecutableProject = IsExecutableProject,
+				GenerateVariations = GenerateVariations,
+			};
 		}
 	}
 

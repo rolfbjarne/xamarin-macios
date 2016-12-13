@@ -40,7 +40,6 @@ namespace xharness
 		}
 
 		public List<TestProject> IOSTestProjects { get; set; } = new List<TestProject> ();
-		public List<string> IOSTestApps { get; set; } = new List<string> ();
 		public List<MacTestProject> MacTestProjects { get; set; } = new List<MacTestProject> ();
 		public List<string> BclTests { get; set; } = new List<string> ();
 
@@ -228,7 +227,7 @@ namespace xharness
 			MAC_DESTDIR = make_config ["MAC_DESTDIR"];
 			IOS_DESTDIR = make_config ["IOS_DESTDIR"];
 		}
-		 
+
 		void AutoConfigureMac ()
 		{
 			var test_suites = new string[] { "apitest", "dontlink-mac" }; 
@@ -451,9 +450,9 @@ namespace xharness
 					ProjectFile = project.Path,
 					MainLog = HarnessLog,
 				};
-				var rv = runner.Install (HarnessLog);
-				if (rv != 0)
-					return rv;
+				var rv = runner.InstallAsync ().Result;
+				if (!rv.Succeeded)
+					return rv.ExitCode;
 			}
 			return 0;
 		}
@@ -470,9 +469,9 @@ namespace xharness
 					ProjectFile = project.Path,
 					MainLog = HarnessLog,
 				};
-				var rv = runner.Uninstall (HarnessLog);
-				if (rv != 0)
-					return rv;
+				var rv = runner.UninstallAsync ().Result;
+				if (!rv.Succeeded)
+					return rv.ExitCode;
 			}
 			return 0;
 		}
@@ -493,17 +492,6 @@ namespace xharness
 					return rv;
 			}
 
-			foreach (var app in IOSTestApps) {
-				var runner = new AppRunner ()
-				{
-					Harness = this,
-					AppPath = app,
-					MainLog = HarnessLog,
-				};
-				var rv = runner.RunAsync ().Result;
-				if (rv != 0)
-					return rv;
-			}
 			return 0;
 		}
 

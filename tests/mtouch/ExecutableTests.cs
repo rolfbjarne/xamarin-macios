@@ -229,7 +229,7 @@ namespace Xamarin
 				project.MTouchProfiling = Profiling;
 				project.MTouchDebug = Debug;
 				project.MTouchUseLlvm = !Debug;
-				project.MTouchExtraArgs = BuildTarget.AsString () + " -vvvvvv --dot";
+				project.MTouchExtraArgs = BuildTarget.AsString ();
 				project.MTouchEnableBitcode = !Debug && ProjectType != ProjectType.iOSApp;
 				if (project.ProjectType == ProjectType.iOSApp || project.ProjectType == ProjectType.tvOSApp)
 					project.MinimumOSVersion = MinimumOSVersion;
@@ -333,34 +333,34 @@ namespace Xamarin
 		}
 
 		[Test]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
-		public void RunMonoTouchTest (Profile profile, AssemblyBuildTarget build_target)
+		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single, "Debug64")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		public void RunMonoTouchTest (Profile profile, AssemblyBuildTarget build_target, string configuration)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "monotouch-test", "monotouch-test" + MTouch.GetProjectSuffix (profile) + ".csproj"),
-				Config = "Debug",
+				Config = configuration,
 				Platform = "iPhone",
 				Timeout = TimeSpan.FromMinutes (5),
 				Properties = { { "MtouchExtraArgs", extra_args } },
@@ -380,34 +380,34 @@ namespace Xamarin
 		}
 
 		[Test]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
-		public void RunDontLink (Profile profile, AssemblyBuildTarget build_target)
+		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single, "Debug64")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		public void RunDontLink (Profile profile, AssemblyBuildTarget build_target, string configuration)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/dont link", "dont link" + MTouch.GetProjectSuffix (profile) + ".csproj"),
-				Config = "Debug",
+				Config = configuration,
 				Platform = "iPhone",
 				Timeout = TimeSpan.FromMinutes (15),
 				Properties = { { "MtouchExtraArgs", extra_args } },
@@ -427,34 +427,34 @@ namespace Xamarin
 		}
 
 		[Test]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
-		public void RunLinkSdk (Profile profile, AssemblyBuildTarget build_target)
+		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single, "Debug64")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		public void RunLinkSdk (Profile profile, AssemblyBuildTarget build_target, string configuration)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/link sdk", "link sdk" + MTouch.GetProjectSuffix (profile) + ".csproj"),
-				Config = "Debug",
+				Config = configuration,
 				Platform = "iPhone",
 				Timeout = TimeSpan.FromMinutes (5),
 				Properties = { { "MtouchExtraArgs", extra_args } },
@@ -474,34 +474,34 @@ namespace Xamarin
 		}
 
 		[Test]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
-		public void RunLinkAll (Profile profile, AssemblyBuildTarget build_target)
+		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_All, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Single, "Debug64")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_All, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestStaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk_RestSingleFramework, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single, "Debug")]
+		public void RunLinkAll (Profile profile, AssemblyBuildTarget build_target, string configuration)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/link all", "link all" + MTouch.GetProjectSuffix (profile) + ".csproj"),
-				Config = "Debug",
+				Config = configuration,
 				Platform = "iPhone",
 				Timeout = TimeSpan.FromMinutes (5),
 				Properties = { { "MtouchExtraArgs", extra_args } },
@@ -521,22 +521,22 @@ namespace Xamarin
 		}
 
 		[Test]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary)]
-		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk)]
-		public void InterdependentBindingProjects (Profile profile, AssemblyBuildTarget build_target)
+		[TestCase (Profile.iOS, AssemblyBuildTarget.StaticObject, "Debug32")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.DynamicLibrary, "Debug64")]
+		[TestCase (Profile.iOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.tvOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.StaticObject, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.DynamicLibrary, "Debug")]
+		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk, "Debug")]
+		public void InterdependentBindingProjects (Profile profile, AssemblyBuildTarget build_target, string configuration)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv --dot";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "interdependent-binding-projects", "interdependent-binding-projects" + MTouch.GetProjectSuffix (profile) + ".csproj"),
-				Config = "Debug",
+				Config = configuration,
 				Platform = "iPhone",
 				Timeout = TimeSpan.FromMinutes (5),
 				Properties = { { "MtouchExtraArgs", extra_args } },

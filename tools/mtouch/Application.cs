@@ -1210,7 +1210,7 @@ namespace Xamarin.Bundler {
 						throw ErrorHelper.CreateError (99, "Internal error: 'can't convert frameworks to frameworks'. Please file a bug report with a test case (http://bugzilla.xamarin.com).");
 					var framework_src = files.First ();
 					var framework_filename = Path.Combine (framework_src, Path.GetFileNameWithoutExtension (framework_src));
-					if (MachO.IsDynamicFramework (framework_filename)) {
+					if (!MachO.IsDynamicFramework (framework_filename)) {
 						Driver.Log (1, "The framework {0} is a framework of static libraries, and will not be copied to the app.", framework_src);
 					} else {
 						UpdateDirectory (framework_src, Path.GetDirectoryName (targetPath));

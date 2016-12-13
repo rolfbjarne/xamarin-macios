@@ -9,6 +9,7 @@ using System.Xml;
 
 using Xamarin;
 using Xamarin.Tests;
+using xharness;
 
 using NUnit.Framework;
 
@@ -450,10 +451,14 @@ namespace Xamarin
 		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single, "Debug")]
 		public void RunLinkSdk (Profile profile, AssemblyBuildTarget build_target, string configuration)
 		{
-			var extra_args = build_target.AsString ();
+			var csproj = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/link sdk", "link sdk" + MTouch.GetProjectSuffix (profile) + ".csproj");
+			var doc = new XmlDocument ();
+			doc.Load (csproj);
+			var existing_extra_args = doc.GetExtraMtouchArgs ("iPhone", configuration);
+			var extra_args = build_target.AsString () + " " + existing_extra_args;
 			var build = new BuildTool ()
 			{
-				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/link sdk", "link sdk" + MTouch.GetProjectSuffix (profile) + ".csproj"),
+				ProjectPath = csproj,
 				Config = configuration,
 				Platform = "iPhone",
 				Timeout = TimeSpan.FromMinutes (5),

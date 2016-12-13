@@ -51,6 +51,9 @@
     <Compile Include="ProjectFile.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="XHarnessTool.cs" />
+    <Compile Include="..\xharness\ProjectFileExtensions.cs">
+      <Link>ProjectFileExtensions.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -282,6 +282,18 @@ namespace xharness
 			}
 		}
 
+		public static string GetExtraMtouchArgs (this XmlDocument csproj, string platform, string configuration)
+		{
+			var mtouchExtraArgs = csproj.SelectNodes ("//*[local-name() = 'MtouchExtraArgs']");
+			foreach (XmlNode mea in mtouchExtraArgs) {
+				if (!IsNodeApplicable (mea, platform, configuration))
+					continue;
+				return mea.InnerText;
+			}
+
+			return string.Empty;
+		}
+
 		public static void SetMtouchUseLlvm (this XmlDocument csproj, bool value, string platform, string configuration)
 		{
 			SetNode (csproj, "MtouchUseLlvm", true ? "true" : "false", platform, configuration);

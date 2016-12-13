@@ -229,7 +229,7 @@ namespace Xamarin
 				project.MTouchProfiling = Profiling;
 				project.MTouchDebug = Debug;
 				project.MTouchUseLlvm = !Debug;
-				project.MTouchExtraArgs = BuildTarget.AsString () + " -vvvvvv --dot";
+				project.MTouchExtraArgs = BuildTarget.AsString ();
 				project.MTouchEnableBitcode = !Debug && ProjectType != ProjectType.iOSApp;
 				if (project.ProjectType == ProjectType.iOSApp || project.ProjectType == ProjectType.tvOSApp)
 					project.MinimumOSVersion = MinimumOSVersion;
@@ -356,7 +356,7 @@ namespace Xamarin
 		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
 		public void RunMonoTouchTest (Profile profile, AssemblyBuildTarget build_target)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "monotouch-test", "monotouch-test" + MTouch.GetProjectSuffix (profile) + ".csproj"),
@@ -403,7 +403,7 @@ namespace Xamarin
 		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
 		public void RunDontLink (Profile profile, AssemblyBuildTarget build_target)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/dont link", "dont link" + MTouch.GetProjectSuffix (profile) + ".csproj"),
@@ -450,7 +450,7 @@ namespace Xamarin
 		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
 		public void RunLinkSdk (Profile profile, AssemblyBuildTarget build_target)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/link sdk", "link sdk" + MTouch.GetProjectSuffix (profile) + ".csproj"),
@@ -497,7 +497,7 @@ namespace Xamarin
 		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Single)]
 		public void RunLinkAll (Profile profile, AssemblyBuildTarget build_target)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool ()
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "linker-ios/link all", "link all" + MTouch.GetProjectSuffix (profile) + ".csproj"),
@@ -532,7 +532,7 @@ namespace Xamarin
 		[TestCase (Profile.watchOS, AssemblyBuildTarget.Framework_Sdk)]
 		public void InterdependentBindingProjects (Profile profile, AssemblyBuildTarget build_target)
 		{
-			var extra_args = build_target.AsString () + " -vvvvvvvvvv --dot";
+			var extra_args = build_target.AsString ();
 			var build = new BuildTool
 			{
 				ProjectPath = Path.Combine (Configuration.SourceRoot, "tests", "interdependent-binding-projects", "interdependent-binding-projects" + MTouch.GetProjectSuffix (profile) + ".csproj"),

@@ -51,6 +51,22 @@ namespace xharness
 		string device_name;
 		string companion_device_name;
 
+		string configuration;
+		public string Configuration {
+			get { return configuration ?? Harness.Configuration; }
+			set { configuration = value; }
+		}
+
+		public string DeviceName {
+			get { return device_name; }
+			set { device_name = value; }
+		}
+
+		public string CompanionDeviceName {
+			get { return companion_device_name; }
+			set { companion_device_name = value; }
+		}
+
 		public bool isExtension {
 			get {
 				return extension.HasValue;
@@ -161,14 +177,8 @@ namespace xharness
 			}
 			device_name = selected_data.Name;
 
-			if (mode == "watchos") {
-				var companion = devs.ConnectedDevices.Where ((v) => v.DeviceIdentifier == selected_data.CompanionIdentifier);
-				if (companion.Count () == 0)
-					throw new Exception ($"Could not find the companion device for '{selected_data.Name}'");
-				else if (companion.Count () > 1)
-					main_log.WriteLine ("Found {0} companion devices for {1}?!?", companion.Count (), selected_data.Name);
-				companion_device_name = companion.First ().Name;
-			}
+			if (mode == "watchos")
+				companion_device_name = devs.FindCompanionDevice (main_log, selected_data).Name;
 		}
 
 		bool initialized;
@@ -235,7 +245,7 @@ namespace xharness
 				throw new Exception (string.Format ("Unknown target: {0}", Harness.Target));
 			}
 
-			appPath = Path.Combine (Path.GetDirectoryName (ProjectFile), csproj.GetOutputPath (platform, Harness.Configuration).Replace ('\\', '/'), appName + (isExtension ? ".appex" : ".app"));
+			appPath = Path.Combine (Path.GetDirectoryName (ProjectFile), csproj.GetOutputPath (platform, Configuration).Replace ('\\', '/'), appName + (isExtension ? ".appex" : ".app"));
 			if (!Directory.Exists (appPath))
 				throw new Exception (string.Format ("The app directory {0} does not exist. This is probably a bug in the test harness.", appPath));
 
@@ -246,7 +256,7 @@ namespace xharness
 			}
 		}
 
-		public int Install (Log log)
+		public async Task<ProcessExecutionResult> InstallAsync ()
 		{
 			Initialize ();
 
@@ -270,11 +280,10 @@ namespace xharness
 			if (mode == "watchos")
 				args.Append (" --device ios,watchos");
 
-			var rv = ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), log, TimeSpan.FromMinutes (mode == "watchos" ? 15 : 1)).Result;
-			return rv.Succeeded ? 0 : 1;
+			return await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), main_log, TimeSpan.FromMinutes (mode == "watchos" ? 15 : 3));
 		}
 
-		public int Uninstall (Log log)
+		public async Task<ProcessExecutionResult> UninstallAsync ()
 		{
 			Initialize ();
 
@@ -295,8 +304,7 @@ namespace xharness
 			args.AppendFormat (" \"{0}\" ", bundle_identifier);
 			AddDeviceName (args, companion_device_name ?? device_name);
 
-			var rv = ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), log, TimeSpan.FromMinutes (mode == "watchos" ? 15 : 1)).Result;
-			return rv.Succeeded ? 0 : 1;
+			return await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), main_log, TimeSpan.FromMinutes (1));
 		}
 
 		bool ensure_clean_simulator_state = true;
@@ -656,7 +664,7 @@ namespace xharness
 				
 				AddDeviceName (args);
 
-				device_system_log = Logs.CreateStream (LogDirectory, "device.log", "Device log");
+				device_system_log = Logs.CreateStream (LogDirectory, $"device-{device_name}-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Device log");
 				var logdev = new DeviceLogCapturer () {
 					Harness =  Harness,
 					Log = device_system_log,

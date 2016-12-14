@@ -220,10 +220,10 @@ namespace xharness
 		public bool Supports64Bits;
 	}
 
-	public class SimDevice
+	public class SimDevice : IDevice
 	{
-		public string UDID;
-		public string Name;
+		public string UDID { get; set; }
+		public string Name { get; set; }
 		public string SimRuntime;
 		public string SimDeviceType;
 		public string DataPath;
@@ -390,7 +390,12 @@ namespace xharness
 
 		public List<Device> ConnectedDevices = new List<Device> ();
 
-		public async Task LoadAsync (Log log)
+		public void RemoveLockedDevices ()
+		{
+			ConnectedDevices.RemoveAll ((d) => d.IsLocked);
+		}
+
+		public async Task LoadAsync (Log log, bool extra_data = false)
 		{
 			if (ConnectedDevices.Count > 0)
 				return;
@@ -399,14 +404,17 @@ namespace xharness
 			try {
 				using (var process = new Process ()) {
 					process.StartInfo.FileName = Harness.MlaunchPath;
-					process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listdev={1} --output-format=xml", Harness.XcodeRoot, tmpfile);
-					await process.RunAsync (log, false);
+					process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listdev={1} {2} --output-format=xml", Harness.XcodeRoot, tmpfile, extra_data ? "--list-extra-data" : string.Empty);
+					var rv = await process.RunAsync (log, false);
+					if (!rv.Succeeded)
+						throw new Exception ("Failed to list devices.");
+						
 
 					var doc = new XmlDocument ();
 					doc.LoadWithoutNetworkAccess (tmpfile);
 
 					foreach (XmlNode dev in doc.SelectNodes ("/MTouch/Device")) {
-						ConnectedDevices.Add (new Device ()
+						Device d = new Device
 						{
 							DeviceIdentifier = dev.SelectSingleNode ("DeviceIdentifier")?.InnerText,
 							DeviceClass = dev.SelectSingleNode ("DeviceClass")?.InnerText,
@@ -414,23 +422,163 @@ namespace xharness
 							Name = dev.SelectSingleNode ("Name")?.InnerText,
 							BuildVersion = dev.SelectSingleNode ("BuildVersion")?.InnerText,
 							ProductVersion = dev.SelectSingleNode ("ProductVersion")?.InnerText,
-						});
+							ProductType = dev.SelectSingleNode ("ProductType")?.InnerText,
+						};
+						bool.TryParse (dev.SelectSingleNode ("IsLocked")?.InnerText, out d.IsLocked);
+						ConnectedDevices.Add (d);
 					}
 				}
 			} finally {
 				File.Delete (tmpfile);
 			}
 		}
+
+		public Device FindCompanionDevice (Log log, Device device)
+		{
+			var companion = ConnectedDevices.Where ((v) => v.DeviceIdentifier == device.CompanionIdentifier);
+			if (companion.Count () == 0)
+				throw new Exception ($"Could not find the companion device for '{device.Name}'");
+
+			if (companion.Count () > 1)
+				log.WriteLine ("Found {0} companion devices for {1}?!?", companion.Count (), device.Name);
+
+			return companion.First ();
+		}
 	}
 
-	public class Device
+	public enum Architecture
+	{
+		ARMv6,
+		ARMv7,
+		ARMv7k,
+		ARMv7s,
+		ARM64,
+		i386,
+		x86_64,
+	}
+
+	public enum DevicePlatform
+	{
+		iOS,
+		tvOS,
+		watchOS,
+	}
+
+	public class Device : IDevice
 	{
 		public string DeviceIdentifier;
 		public string DeviceClass;
 		public string CompanionIdentifier;
-		public string Name;
+		public string Name { get; set; }
 		public string BuildVersion;
 		public string ProductVersion;
+		public string ProductType;
+		public bool IsLocked;
+
+		public string UDID { get { return DeviceIdentifier; } set { DeviceIdentifier = value; } }
+
+		public DevicePlatform DevicePlatform {
+			get {
+				switch (DeviceClass) {
+				case "iPhone":
+				case "iPod":
+				case "iPad":
+					return DevicePlatform.iOS;
+				case "AppleTV":
+					return DevicePlatform.tvOS;
+				case "Watch":
+					return DevicePlatform.watchOS;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+		}
+		
+		public bool Supports64Bit {
+			get { return Architecture == Architecture.ARM64; }
+		}
+
+		public Architecture Architecture {
+			get {
+				var model = ProductType;
+
+				// https://www.theiphonewiki.com/wiki/Models
+				if (model.StartsWith ("iPhone", StringComparison.Ordinal)) {
+					var identifier = model.Substring ("iPhone".Length);
+					var values = identifier.Split (',');
+
+					switch (values [0]) {
+					case "1": // iPhone (1) and iPhone 3G (2)
+						return Architecture.ARMv6;
+					case "2": // iPhone 3GS (1)
+					case "3": // iPhone 4 (1-3)
+					case "4": // iPhone 4S (1)
+						return Architecture.ARMv7;
+					case "5": // iPhone 5 (1-2) and iPhone 5c (3-4)
+						return Architecture.ARMv7s;
+					case "6": // iPhone 5s (1-2)
+					case "7": // iPhone 6+ (1) and iPhone 6 (2)
+					case "8": // iPhone 6s (1), iPhone 6s+ (2), iPhoneSE (4)
+					case "9": // iPhone 7 (1,3) and iPhone 7+ (2,4)
+					default:
+						return Architecture.ARM64;
+					}
+				}
+
+				// https://www.theiphonewiki.com/wiki/List_of_iPads
+				if (model.StartsWith ("iPad", StringComparison.Ordinal)) {
+					var identifier = model.Substring ("iPad".Length);
+					var values = identifier.Split (',');
+
+					switch (values [0]) {
+					case "1": // iPad (1)
+					case "2": // iPad 2 (1-4) and iPad Mini (5-7)
+					case "3": // iPad 3 (1-3) and iPad 4 (4-6)
+						return Architecture.ARMv7;
+					case "4": // iPad Air (1-3), iPad Mini 2 (4-6) and iPad Mini 3 (7-9)
+					case "5": // iPad Air 2 (3-4)
+					case "6": // iPad Pro 9.7-inch (3-4), iPad Pro 12.9-inch (7-8)
+					default:
+						return Architecture.ARM64;
+					}
+				}
+
+				// https://www.theiphonewiki.com/wiki/List_of_iPod_touches
+				if (model.StartsWith ("iPod", StringComparison.Ordinal)) {
+					var identifier = model.Substring ("iPod".Length);
+					var values = identifier.Split (',');
+
+					switch (values [0]) {
+					case "1": // iPod touch (1)
+					case "2": // iPod touch 2G (1)
+						return Architecture.ARMv6;
+					case "3": // iPod touch 3G (1)
+					case "4": // iPod touch 4G (1)
+					case "5": // iPod touch 5G (1)
+						return Architecture.ARMv7;
+					case "7": // iPod touch 6G (1)
+					default:
+						return Architecture.ARM64;
+					}
+				}
+
+				// https://www.theiphonewiki.com/wiki/List_of_Apple_Watches
+				if (model.StartsWith ("Watch", StringComparison.Ordinal))
+					return Architecture.ARMv7k;
+
+				// https://www.theiphonewiki.com/wiki/List_of_Apple_TVs
+				if (model.StartsWith ("AppleTV", StringComparison.Ordinal))
+					return Architecture.ARM64;
+
+				throw new NotImplementedException ();
+			}
+		}
+	}
+
+	interface IDevice
+	{
+		string Name { get; set; }
+		string UDID { get; set; }
 	}
 }
 

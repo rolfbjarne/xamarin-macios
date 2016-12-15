@@ -24,7 +24,7 @@ namespace xharness
 		public bool IncludeMtouch;
 		public bool IncludeBtouch;
 		public bool IncludeMacBindingProject;
-		public bool IncludeSimulator = true;
+		public bool IncludeSimulator = false;
 		public bool IncludeLongRunningDevice = true;
 
 		public Logs Logs = new Logs ();
@@ -974,11 +974,19 @@ setInterval(autorefresh, 1000);
 					}
 				}
 
-				if (buildingQueuedTests.Any ())
-					writer.WriteLine ($"<h3>{buildingQueuedTests.Count ()} tests in build queue.</h3>");
+				if (buildingQueuedTests.Any ()) {
+					writer.WriteLine ($"<h3>{buildingQueuedTests.Count ()} tests in build queue:</h3>");
+					foreach (var test in buildingQueuedTests) {
+						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a><br />");
+					}
+				}
 
-				if (runningQueuedTests.Any ())
-					writer.WriteLine ($"<h3>{runningQueuedTests.Count ()} tests in run queue.</h3>");
+				if (runningQueuedTests.Any ()) {
+					writer.WriteLine ($"<h3>{runningQueuedTests.Count ()} tests in run queue:</h3>");
+					foreach (var test in runningQueuedTests) {
+						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a><br />");
+					}
+				}
 				writer.WriteLine ("</div>");
 
 				writer.WriteLine ("<div id='test-list' style='float:left'>");
@@ -1880,6 +1888,14 @@ setInterval(autorefresh, 1000);
 			} else {
 				try {
 					ExecutionResult = (ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Running;
+					if (BuildTask.NotStarted)
+						await BuildTask.RunAsync ();
+					if (!BuildTask.Succeeded) {
+						ExecutionResult = TestExecutingResult.BuildFailure;
+						return;
+					}
+					if (runner == null)
+						await PrepareSimulatorAsync ();
 					await runner.RunAsync ();
 					ExecutionResult = runner.Result;
 				} catch (Exception ex) {

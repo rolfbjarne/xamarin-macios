@@ -12,6 +12,8 @@ namespace xharness
 {
 	public class Jenkins
 	{
+		bool populating = true;
+
 		public Harness Harness;
 		public bool IncludeClassicMac = false;
 		public bool IncludeBcl;
@@ -51,7 +53,7 @@ namespace xharness
 				foreach (var device in devices) {
 					Resource res;
 					if (!device_resources.TryGetValue (device.UDID, out res))
-						device_resources.Add (device.UDID, res = new Resource (device.UDID, 1));
+						device_resources.Add (device.UDID, res = new Resource (device.UDID, 1, device.Name));
 					resources.Add (res);
 				}
 			}
@@ -381,10 +383,8 @@ namespace xharness
 					SpecifyConfiguration = false,
 					Platform = TestPlatform.iOS,
 				};
-				var nunitExecution = new NUnitExecuteTask ()
+				var nunitExecution = new NUnitExecuteTask (build)
 				{
-					Jenkins = this,
-					BuildTask = build,
 					TestLibrary = Path.Combine (Harness.RootDirectory, "..", "msbuild", "tests", "bin", "Xamarin.iOS.Tasks.Tests.dll"),
 					TestExecutable = Path.Combine (Harness.RootDirectory, "..", "packages", "NUnit.Runners.2.6.4", "tools", "nunit-console.exe"),
 					WorkingDirectory = Path.Combine (Harness.RootDirectory, "..", "packages", "NUnit.Runners.2.6.4", "tools", "lib"),
@@ -417,14 +417,7 @@ namespace xharness
 					build.ProjectPlatform = "x86";
 					build.SpecifyPlatform = false;
 					build.SpecifyConfiguration = false;
-					var exec = new MacExecuteTask () {
-						Platform = build.Platform,
-						Jenkins = this,
-						BuildTask = build,
-						ProjectFile = build.ProjectFile,
-						ProjectConfiguration = build.ProjectConfiguration,
-						ProjectPlatform = build.ProjectPlatform,
-					};
+					var exec = new MacExecuteTask (build);
 					if (IncludeClassicMac)
 						Tasks.Add (exec);
 
@@ -450,10 +443,8 @@ namespace xharness
 					Target = "dependencies",
 					WorkingDirectory = Path.GetFullPath (Path.Combine (Harness.RootDirectory, "mtouch")),
 				};
-				var nunitExecution = new NUnitExecuteTask ()
+				var nunitExecution = new NUnitExecuteTask (build)
 				{
-					Jenkins = this,
-					BuildTask = build,
 					TestLibrary = Path.Combine (Harness.RootDirectory, "mtouch", "bin", "Debug", "mtouch.dll"),
 					TestExecutable = Path.Combine (Harness.RootDirectory, "..", "packages", "NUnit.ConsoleRunner.3.5.0", "tools", "nunit3-console.exe"),
 					WorkingDirectory = Path.Combine (Harness.RootDirectory, "mtouch", "bin", "Debug"),
@@ -507,17 +498,7 @@ namespace xharness
 				SpecifyConfiguration = task.BuildTask.SpecifyConfiguration,
 			};
 
-			var execute = new MacExecuteTask ()
-			{
-				Platform = build.Platform,
-				Jenkins = build.Jenkins,
-				ProjectFile = build.ProjectFile,
-				ProjectConfiguration = build.ProjectConfiguration,
-				ProjectPlatform = build.ProjectPlatform,
-				BuildTask = build,
-			};
-
-			return execute;
+			return new MacExecuteTask (build);
 		}
 
 		public int Run ()
@@ -535,6 +516,7 @@ namespace xharness
 				{
 					await SimDevice.KillEverythingAsync (MainLog);
 					await PopulateTasksAsync ();
+					populating = false;
 				}).Wait ();
 				GenerateReport ();
 				if (!IsServerMode) {
@@ -788,11 +770,13 @@ namespace xharness
 			}
 
 			var allTasks = new List<TestTask> ();
-			allTasks.AddRange (allExecuteTasks);
-			allTasks.AddRange (allSimulatorTasks);
-			allTasks.AddRange (allNUnitTasks);
-			allTasks.AddRange (allMakeTasks);
-			allTasks.AddRange (allDeviceTasks);
+			if (!populating) {
+				allTasks.AddRange (allExecuteTasks);
+				allTasks.AddRange (allSimulatorTasks);
+				allTasks.AddRange (allNUnitTasks);
+				allTasks.AddRange (allMakeTasks);
+				allTasks.AddRange (allDeviceTasks);
+			}
 
 			var failedTests = allTasks.Where ((v) => v.Failed);
 			var unfinishedTests = allTasks.Where ((v) => !v.Finished);
@@ -805,8 +789,8 @@ namespace xharness
 			using (var writer = new StreamWriter (stream)) {
 				writer.WriteLine ("<!DOCTYPE html>");
 				writer.WriteLine ("<html onkeypress='keyhandler(event)'>");
-				if (IsServerMode && allTasks.Count == 0)
-					writer.WriteLine ("<meta http-equiv=\"refresh\" content=\"5\">");
+				if (IsServerMode && populating)
+					writer.WriteLine ("<meta http-equiv=\"refresh\" content=\"1\">");
 				writer.WriteLine ("<title>Test results</title>");
 				writer.WriteLine (@"<script type='text/javascript'>
 function toggleLogVisibility (logName)
@@ -963,14 +947,18 @@ setInterval(autorefresh, 1000);
 				if (buildingTests.Any ()) {
 					writer.WriteLine ($"<h3>{buildingTests.Count ()} building tests:</h3>");
 					foreach (var test in buildingTests) {
-						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a><br />");
+						var runTask = test as RunTestTask;
+						var buildDuration = string.Empty;
+						if (runTask != null)
+							buildDuration = runTask.BuildTask.Duration.ToString ();
+						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a> {buildDuration}<br />");
 					}
 				}
 
 				if (runningTests.Any ()) {
 					writer.WriteLine ($"<h3>{runningTests.Count ()} running tests:</h3>");
 					foreach (var test in runningTests) {
-						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a><br />");
+						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a> {test.Duration.ToString ()} {test.ProgressMessage}<br />");
 					}
 				}
 
@@ -986,6 +974,12 @@ setInterval(autorefresh, 1000);
 					foreach (var test in runningQueuedTests) {
 						writer.WriteLine ($"<a href='#test_{test.TestName}'>{test.TestName} ({test.Mode})</a><br />");
 					}
+				}
+
+				if (device_resources.Count > 0) {
+					writer.WriteLine ($"<h3>Devices:</h3>");
+					foreach (var dr in device_resources.Values.OrderBy ((v) => v.Description, StringComparer.OrdinalIgnoreCase))
+						writer.WriteLine ($"{dr.Description} - {dr.Users} user{dr.Users != 1 ? "s" : string.Empty}<br />");
 				}
 				writer.WriteLine ("</div>");
 
@@ -1015,11 +1009,12 @@ setInterval(autorefresh, 1000);
 					writer.WriteLine ("</h2>");
 					writer.WriteLine ("<div id='test_container_{0}' style='display: {1}'>", group.Key.Replace (' ', '-'), defaultHide ? "none" : "block");
 					foreach (var test in group) {
+						var runTest = test as RunTestTask;
 						string state;
 						state = test.ExecutionResult.ToString ();
 						var log_id = id_counter++;
 						var logs = test.AggregatedLogs;
-						var hasDetails = test.Duration.Ticks > 0 || logs.Count () > 0;
+
 						if (!singleTask) {
 							writer.Write ($"{test.Mode} (<span id='x{id_counter++}' class='autorefreshable'><span style='color: {GetTestColor (test)}'>{state}</span></span>) ");
 							writer.Write ($"<a id='button_{log_id}' href=\"javascript: toggleLogVisibility ('{log_id}');\">Show details</a> ");
@@ -1028,46 +1023,58 @@ setInterval(autorefresh, 1000);
 							writer.WriteLine ("<br />");
 							writer.WriteLine ("<div id='logs_{0}' class='autorefreshable' style='display: none; padding-bottom: 10px; padding-top: 10px; padding-left: 20px;'>", log_id);
 						}
-						if (hasDetails) {
+
+						if (!string.IsNullOrEmpty (test.FailureMessage))
+							writer.WriteLine ($"Failure: {System.Web.HttpUtility.HtmlEncode (test.FailureMessage).Replace ("\n", "<br />")} <br />");
+						var progressMessage = test.ProgressMessage;
+						if (!string.IsNullOrEmpty (progressMessage))
+							writer.WriteLine (progressMessage + "<br />");
+						if (runTest != null) {
+							if (runTest.BuildTask.Duration.Ticks > 0)
+								writer.WriteLine ($"Build duration: {runTest.BuildTask.Duration} <br />");
 							if (test.Duration.Ticks > 0)
-								writer.WriteLine ("Duration: {0} <br />", test.Duration);
-							if (logs.Count () > 0) {
-								foreach (var log in logs) {
-									log.Flush ();
-									writer.WriteLine ("<a href='{0}' type='text/plain'>{1}</a><br />", log.FullPath.Substring (LogDirectory.Length + 1), log.Description);
-									if (log.Description == "Test log") {
-										var summary = string.Empty;
-										try {
-											using (var reader = log.GetReader ()) {
-												while (!reader.EndOfStream) {
-													string line = reader.ReadLine ();
-													if (line.StartsWith ("Tests run:", StringComparison.Ordinal)) {
-														summary = line;
-													} else if (line.Trim ().StartsWith ("[FAIL]", StringComparison.Ordinal)) {
-														writer.WriteLine ("<span style='padding-left: 20px;'>{0}</span><br />", line.Trim ());
-													}
+								writer.WriteLine ($"Run duration: {test.Duration} <br />");
+						} else {
+							if (test.Duration.Ticks > 0)
+								writer.WriteLine ($"Duration: {test.Duration} <br />");
+						}
+							
+						if (logs.Count () > 0) {
+							foreach (var log in logs) {
+								log.Flush ();
+								writer.WriteLine ("<a href='{0}' type='text/plain'>{1}</a><br />", log.FullPath.Substring (LogDirectory.Length + 1), log.Description);
+								if (log.Description == "Test log") {
+									var summary = string.Empty;
+									try {
+										using (var reader = log.GetReader ()) {
+											while (!reader.EndOfStream) {
+												string line = reader.ReadLine ();
+												if (line.StartsWith ("Tests run:", StringComparison.Ordinal)) {
+													summary = line;
+												} else if (line.Trim ().StartsWith ("[FAIL]", StringComparison.Ordinal)) {
+													writer.WriteLine ("<span style='padding-left: 20px;'>{0}</span><br />", line.Trim ());
 												}
 											}
-											if (!string.IsNullOrEmpty (summary))
-												writer.WriteLine ("<span style='padding-left: 15px;'>{0}</span><br />", summary);
-										} catch (Exception ex) {
-											writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
 										}
-									} else if (log.Description == "Build log") {
-										var errors = new HashSet<string> ();
-										try {
-											using (var reader = log.GetReader ()) {
-												while (!reader.EndOfStream) {
-													string line = reader.ReadLine ().Trim ();
-													if (line.Contains (": error"))
-														errors.Add (line);
-												}
+										if (!string.IsNullOrEmpty (summary))
+											writer.WriteLine ("<span style='padding-left: 15px;'>{0}</span><br />", summary);
+									} catch (Exception ex) {
+										writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
+									}
+								} else if (log.Description == "Build log") {
+									var errors = new HashSet<string> ();
+									try {
+										using (var reader = log.GetReader ()) {
+											while (!reader.EndOfStream) {
+												string line = reader.ReadLine ().Trim ();
+												if (line.Contains (": error"))
+													errors.Add (line);
 											}
-											foreach (var error in errors)
-												writer.WriteLine ("<span style='padding-left: 15\tpx;'>{0}</span> <br />", error);
-										} catch (Exception ex) {
-											writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
 										}
+										foreach (var error in errors)
+											writer.WriteLine ("<span style='padding-left: 15\tpx;'>{0}</span> <br />", error);
+									} catch (Exception ex) {
+										writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
 									}
 								}
 							}
@@ -1095,7 +1102,7 @@ setInterval(autorefresh, 1000);
 		public string ProjectConfiguration;
 		public string ProjectPlatform;
 
-		Stopwatch duration = new Stopwatch ();
+		protected Stopwatch duration = new Stopwatch ();
 		public TimeSpan Duration { 
 			get {
 				return duration.Elapsed;
@@ -1112,6 +1119,17 @@ setInterval(autorefresh, 1000);
 				Jenkins.GenerateReport ();
 			}
 		}
+
+		string failure_message;
+		public string FailureMessage {
+			get { return failure_message; }
+			protected set {
+				failure_message = value;
+				MainLog.WriteLine (failure_message);
+			}
+		}
+
+		public virtual string ProgressMessage { get; }
 
 		public bool NotStarted { get { return (ExecutionResult & TestExecutingResult.StateMask) == TestExecutingResult.NotStarted; } }
 		public bool InProgress { get { return (ExecutionResult & TestExecutingResult.InProgress) == TestExecutingResult.InProgress; } }
@@ -1132,6 +1150,7 @@ setInterval(autorefresh, 1000);
 		public bool HarnessException { get { return (ExecutionResult & TestExecutingResult.HarnessException) == TestExecutingResult.HarnessException; } }
 
 		public virtual string Mode { get; set; }
+		public virtual string Variation { get; set; }
 
 		string test_name;
 		public virtual string TestName {
@@ -1280,6 +1299,36 @@ setInterval(autorefresh, 1000);
 				throw new NotImplementedException ();
 			}
 		}
+
+		// This method will set (and clear) the Waiting flag correctly while waiting on a resource
+		// It will also pause the duration.
+		public async Task<IAcquiredResource> NotifyBlockingWaitAsync (Task<IAcquiredResource> task)
+		{
+			var rv = new BlockingWait ();
+
+			// Stop the timer while we're waiting for a resource
+			duration.Stop ();
+			ExecutionResult = ExecutionResult | TestExecutingResult.Waiting;
+			rv.Wrapped = await task;
+			ExecutionResult = ExecutionResult & ~TestExecutingResult.Waiting;
+			duration.Start ();
+			rv.OnDispose = duration.Stop;
+			return rv;
+		}
+
+		class BlockingWait : IAcquiredResource, IDisposable
+		{
+			public IAcquiredResource Wrapped;
+			public Action OnDispose;
+
+			public Resource Resource { get { return Wrapped.Resource; } }
+
+			public void Dispose ()
+			{
+				OnDispose ();
+				Wrapped.Dispose ();
+			}
+		}
 	}
 
 	abstract class BuildToolTask : TestTask
@@ -1297,7 +1346,8 @@ setInterval(autorefresh, 1000);
 	{
 		protected override async Task ExecuteAsync ()
 		{
-			using (var resource = await Jenkins.DesktopResource.AcquireConcurrentAsync ()) {
+			ExecutionResult = TestExecutingResult.Building;
+			using (var resource = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireConcurrentAsync ())) {
 				using (var xbuild = new Process ()) {
 					xbuild.StartInfo.FileName = "/Applications/Xamarin Studio.app/Contents/MacOS/mdtool";
 					var args = new StringBuilder ();
@@ -1341,7 +1391,7 @@ setInterval(autorefresh, 1000);
 
 		protected override async Task ExecuteAsync ()
 		{
-			using (var resource = await Jenkins.DesktopResource.AcquireConcurrentAsync ()) {
+			using (var resource = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireConcurrentAsync ())) {
 				using (var make = new Process ()) {
 					make.StartInfo.FileName = "make";
 					make.StartInfo.WorkingDirectory = WorkingDirectory;
@@ -1379,9 +1429,8 @@ setInterval(autorefresh, 1000);
 	{
 		protected override async Task ExecuteAsync ()
 		{
-			ExecutionResult = TestExecutingResult.BuildQueued;
-			using (var resource = await Jenkins.DesktopResource.AcquireExclusiveAsync ()) {
-				ExecutionResult = TestExecutingResult.Building;
+			ExecutionResult = TestExecutingResult.Building;
+			using (var resource = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireExclusiveAsync ())) {
 				using (var xbuild = new Process ()) {
 					xbuild.StartInfo.FileName = "xbuild";
 					var args = new StringBuilder ();
@@ -1421,15 +1470,18 @@ setInterval(autorefresh, 1000);
 		}
 	}
 
-
-	class NUnitExecuteTask : TestTask
+	class NUnitExecuteTask : RunTestTask
 	{
-		public BuildToolTask BuildTask;
 		public string TestLibrary;
 		public string TestExecutable;
 		public string WorkingDirectory;
 		public bool ProduceHtmlReport = true;
 		public TimeSpan Timeout = TimeSpan.FromMinutes (10);
+
+		public NUnitExecuteTask (BuildToolTask build_task)
+			: base (build_task)
+		{
+		}
 
 		public bool IsNUnit3 {
 			get {
@@ -1451,18 +1503,9 @@ setInterval(autorefresh, 1000);
 			}
 		}
 
-		protected override async Task ExecuteAsync ()
+		protected override async Task RunTestAsync ()
 		{
-			ExecutionResult = TestExecutingResult.Building;
-			await BuildTask.RunAsync ();
-			if (!BuildTask.Succeeded) {
-				ExecutionResult = TestExecutingResult.BuildFailure;
-				return;
-			}
-
-			ExecutionResult = TestExecutingResult.Built;
-
-			using (var resource = await Jenkins.DesktopResource.AcquireConcurrentAsync ()) {
+			using (var resource = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireConcurrentAsync ())) {
 				var xmlLog = Logs.CreateFile ("XML log", Path.Combine (LogDirectory, "log.xml"));
 				var log = Logs.CreateStream (LogDirectory, "execute.txt", "Execution log");
 				using (var proc = new Process ()) {
@@ -1529,8 +1572,13 @@ setInterval(autorefresh, 1000);
 		}
 	}
 
-	abstract class MacTask : TestTask
+	abstract class MacTask : RunTestTask
 	{
+		public MacTask (BuildToolTask build_task)
+			: base (build_task)
+		{
+		}
+
 		public override string Mode {
 			get {
 				switch (Platform) {
@@ -1559,7 +1607,11 @@ setInterval(autorefresh, 1000);
 	class MacExecuteTask : MacTask
 	{
 		public string Path;
-		public BuildToolTask BuildTask;
+
+		public MacExecuteTask (BuildToolTask build_task)
+			: base (build_task)
+		{ 
+		}
 
 		public override IEnumerable<Log> AggregatedLogs {
 			get {
@@ -1567,17 +1619,8 @@ setInterval(autorefresh, 1000);
 			}
 		}
 
-		protected override async Task ExecuteAsync ()
+		protected override async Task RunTestAsync ()
 		{
-			ExecutionResult = TestExecutingResult.Building;
-			await BuildTask.RunAsync ();
-			if (!BuildTask.Succeeded) {
-				ExecutionResult = TestExecutingResult.BuildFailure;
-				return;
-			}
-
-			ExecutionResult = TestExecutingResult.Built;
-
 			var projectDir = System.IO.Path.GetDirectoryName (ProjectFile);
 			var name = System.IO.Path.GetFileName (projectDir);
 			if (string.Equals ("mac", name, StringComparison.OrdinalIgnoreCase))
@@ -1599,7 +1642,7 @@ setInterval(autorefresh, 1000);
 			}
 			Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (ProjectFile), "bin", BuildTask.ProjectPlatform, BuildTask.ProjectConfiguration + suffix, name + ".app", "Contents", "MacOS", name);
 
-			using (var resource = await Jenkins.DesktopResource.AcquireConcurrentAsync ()) {
+			using (var resource = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireConcurrentAsync ())) {
 				using (var proc = new Process ()) {
 					proc.StartInfo.FileName = Path;
 					Jenkins.MainLog.WriteLine ("Executing {0} ({1})", TestName, Mode);
@@ -1636,11 +1679,63 @@ setInterval(autorefresh, 1000);
 		}
 	}
 
-	abstract class RunXITask<TDevice> : TestTask where TDevice: class, IDevice
+	abstract class RunTestTask : TestTask
+	{
+		public readonly BuildToolTask BuildTask;
+
+		public RunTestTask (BuildToolTask build_task)
+		{
+			this.BuildTask = build_task;
+
+			Jenkins = build_task.Jenkins;
+			ProjectFile = build_task.ProjectFile;
+			Platform = build_task.Platform;
+			ProjectConfiguration = build_task.ProjectConfiguration;
+		}
+
+		public override TestExecutingResult ExecutionResult {
+			get {
+				// When building, the result is the build result.
+				if ((BuildTask.ExecutionResult & (TestExecutingResult.InProgress | TestExecutingResult.Waiting)) != 0)
+					return (BuildTask.ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Building;
+				return base.ExecutionResult;
+			}
+			set {
+				base.ExecutionResult = value;
+			}
+		}
+
+		public async Task<bool> BuildAsync ()
+		{
+			if (Finished)
+				return true;
+			
+			ExecutionResult = TestExecutingResult.Building;
+			await BuildTask.RunAsync ();
+			ExecutionResult = BuildTask.Succeeded ? TestExecutingResult.Built : TestExecutingResult.BuildFailure;
+			return BuildTask.Succeeded;
+		}
+
+		protected override async Task ExecuteAsync ()
+		{
+			if (Finished)
+				return;
+
+			if (!await BuildAsync ())
+				return;
+
+			ExecutionResult = TestExecutingResult.Running;
+			duration.Restart (); // don't count the build time.
+			await RunTestAsync ();
+		}
+
+		protected abstract Task RunTestAsync ();
+	}
+
+	abstract class RunXITask<TDevice> : RunTestTask where TDevice: class, IDevice
 	{
 		TDevice device;
 		TDevice companion_device;
-		public readonly XBuildTask BuildTask;
 		public AppRunnerTarget AppRunnerTarget;
 
 		protected AppRunner runner;
@@ -1659,41 +1754,11 @@ setInterval(autorefresh, 1000);
 			get { return runner.BundleIdentifier; }
 		}
 
-		public override TestExecutingResult ExecutionResult {
-			get {
-				// When building, the result is the build result.
-				if ((BuildTask.ExecutionResult & (TestExecutingResult.InProgress | TestExecutingResult.Waiting)) != 0)
-					return (BuildTask.ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Building;
-				return base.ExecutionResult;
-			}
-			set {
-				base.ExecutionResult = value;
-			}
-		}
-
-		public RunXITask (XBuildTask build_task, TDevice device = null, TDevice companion_device = null)
+		public RunXITask (BuildToolTask build_task, TDevice device = null, TDevice companion_device = null)
+			: base (build_task)
 		{
 			this.device = device;
 			this.companion_device = companion_device;
-			this.BuildTask = build_task;
-
-			Jenkins = build_task.Jenkins;
-			ProjectFile = build_task.ProjectFile;
-			Platform = build_task.Platform;
-			ProjectConfiguration = build_task.ProjectConfiguration;
-		}
-
-		public async Task BuildAsync ()
-		{
-			if (Finished)
-				return;
-			ExecutionResult |= TestExecutingResult.Building;
-			await BuildTask.RunAsync ();
-			if (BuildTask.Succeeded) {
-				ExecutionResult = (ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Built;
-			} else {
-				ExecutionResult = (ExecutionResult & ~(TestExecutingResult.InProgressMask | TestExecutingResult.StateMask)) | TestExecutingResult.BuildFailure;
-			}
 		}
 
 		public override void Reset ()
@@ -1704,7 +1769,10 @@ setInterval(autorefresh, 1000);
 
 		public override IEnumerable<Log> AggregatedLogs {
 			get {
-				return base.AggregatedLogs.Union (BuildTask.Logs);
+				var rv = base.AggregatedLogs.Union (BuildTask.Logs);
+				if (runner != null)
+					rv = rv.Union (runner.Logs);
+				return rv;
 			}
 		}
 
@@ -1734,6 +1802,31 @@ setInterval(autorefresh, 1000);
 	{
 		IEnumerable<Device> device_candidates;
 
+		object lock_obj = new object ();
+		Log install_log;
+		public override string ProgressMessage {
+			get {
+				StreamReader reader;
+				lock (lock_obj)
+					reader = install_log?.GetReader ();
+				
+				if (reader == null)
+					return base.ProgressMessage;
+
+				using (reader) {
+					var lines = reader.ReadToEnd ().Split ('\n');
+					for (int i = lines.Length - 1; i >= 0; i--) {
+						var idx = lines [i].IndexOf ("PercentComplete:", StringComparison.Ordinal);
+						if (idx == -1)
+							continue;
+						return "Install: " + lines [i].Substring (idx + "PercentComplete:".Length + 1) + "%";
+					}
+				}
+
+				return base.ProgressMessage;
+			}
+		}
+
 		public RunDeviceTask (XBuildTask build_task, IEnumerable<Device> device_candidates)
 			: base (build_task)
 		{
@@ -1749,28 +1842,13 @@ setInterval(autorefresh, 1000);
 			}
 		}
 
-		protected override async Task ExecuteAsync ()
+		protected override async Task RunTestAsync ()
 		{
 			Jenkins.MainLog.WriteLine ("Running '{0}' on device (candidates: '{1}')", ProjectFile, string.Join ("', '", device_candidates.Select ((v) => v.Name).ToArray ()));
 
-			if (Finished)
-				return;
-
-			if (Harness.DryRun) {
-				Jenkins.MainLog.WriteLine ("<running app on device>");
-				return;
-			}
-
-			await BuildAsync ();
-			if (!BuildTask.Succeeded) {
-				ExecutionResult = TestExecutingResult.BuildFailure;
-				return;
-			}
-
-			ExecutionResult = TestExecutingResult.RunQueued;
-			using (var device_resource = await Jenkins.GetDeviceResources (device_candidates).AcquireAnyConcurrentAsync ()) {
-				ExecutionResult = TestExecutingResult.Running;
-
+			var install_log = Logs.CreateStream (LogDirectory, $"install-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Install log");
+			var uninstall_log = Logs.CreateStream (LogDirectory, $"uninstall-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Uninstall log");
+			using (var device_resource = await NotifyBlockingWaitAsync (Jenkins.GetDeviceResources (device_candidates).AcquireAnyConcurrentAsync ())) {
 				try {
 					// Set the device we acquired.
 					Device = device_candidates.First ((d) => d.UDID == device_resource.Resource.Name);
@@ -1783,36 +1861,51 @@ setInterval(autorefresh, 1000);
 						ProjectFile = ProjectFile,
 						Target = AppRunnerTarget,
 						LogDirectory = LogDirectory,
-						MainLog = Logs.CreateStream (LogDirectory, "run-" + Device.UDID + ".log", "Run log"),
+						MainLog = install_log,
 						DeviceName = Device.Name,
 						CompanionDeviceName = CompanionDevice?.Name,
 						Configuration = ProjectConfiguration,
 					};
 
+					// Sometimes devices can't upgrade (depending on what has changed), so make sure to uninstall any existing apps first.
+					runner.MainLog = uninstall_log;
 					var uninstall_result = await runner.UninstallAsync ();
 					if (!uninstall_result.Succeeded) {
-						MainLog.WriteLine ($"Uninstall failed, exit code: {uninstall_result.ExitCode}.");
+						FailureMessage = $"Uninstall failed, exit code: {uninstall_result.ExitCode}.";
 						ExecutionResult = TestExecutingResult.Failed;
-					} else {
+						return;
+					}
+
+					// Install the app
+					lock (lock_obj)
+						this.install_log = install_log;
+					try {
+						runner.MainLog = install_log;
 						var install_result = await runner.InstallAsync ();
 						if (!install_result.Succeeded) {
-							MainLog.WriteLine ($"Install failed, exit code: {install_result.ExitCode}.");
+							FailureMessage = $"Install failed, exit code: {install_result.ExitCode}.";
 							ExecutionResult = TestExecutingResult.Failed;
-						} else {
-							await runner.RunAsync ();
-							ExecutionResult = runner.Result;
+							return;
 						}
+					} finally {
+						lock (lock_obj)
+							this.install_log = null;
 					}
+
+					// Run the app
+					runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Run log");
+					await runner.RunAsync ();
+					ExecutionResult = runner.Result;
 				} catch (Exception ex) {
-					MainLog.WriteLine ("Test {0} failed: {1}", Path.GetFileName (ProjectFile), ex);
+					FailureMessage = $"Harness exception for '{TestName}': {ex.Message}";
 					ExecutionResult = TestExecutingResult.HarnessException;
 				} finally {
+					// Uninstall again, so that we don't leave junk behind and fill up the device.
+					runner.MainLog = uninstall_log;
 					var uninstall_result = await runner.UninstallAsync ();
 					if (!uninstall_result.Succeeded)
 						MainLog.WriteLine ($"Post-run uninstall failed, exit code: {uninstall_result.ExitCode} (this won't affect the test result)");
 				}
-				if (runner != null)
-					Logs.AddRange (runner.Logs);
 			}
 		}
 
@@ -1876,34 +1969,27 @@ setInterval(autorefresh, 1000);
 			return Task.FromResult (true);
 		}
 
-		protected override async Task ExecuteAsync ()
+		protected override async Task RunTestAsync ()
 		{
 			Jenkins.MainLog.WriteLine ("Running XI on '{0}' ({2}) for {1}", Device.Name, ProjectFile, Device.UDID);
 
-			if (Finished)
-				return;
-
-			if (Harness.DryRun) {
-				Jenkins.MainLog.WriteLine ("<running app in simulator>");
-			} else {
-				try {
-					ExecutionResult = (ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Running;
-					if (BuildTask.NotStarted)
-						await BuildTask.RunAsync ();
-					if (!BuildTask.Succeeded) {
-						ExecutionResult = TestExecutingResult.BuildFailure;
-						return;
-					}
-					if (runner == null)
-						await PrepareSimulatorAsync ();
-					await runner.RunAsync ();
-					ExecutionResult = runner.Result;
-				} catch (Exception ex) {
-					MainLog.WriteLine ("Test {0} failed: {1}", Path.GetFileName (ProjectFile), ex);
-					ExecutionResult = TestExecutingResult.HarnessException;
+			try {
+				ExecutionResult = (ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Running;
+				if (BuildTask.NotStarted)
+					await BuildTask.RunAsync ();
+				if (!BuildTask.Succeeded) {
+					ExecutionResult = TestExecutingResult.BuildFailure;
+					return;
 				}
-				Logs.AddRange (runner.Logs);
+				if (runner == null)
+					await PrepareSimulatorAsync ();
+				await runner.RunAsync ();
+				ExecutionResult = runner.Result;
+			} catch (Exception ex) {
+				MainLog.WriteLine ("Test {0} failed: {1}", Path.GetFileName (ProjectFile), ex);
+				ExecutionResult = TestExecutingResult.HarnessException;
 			}
+			Logs.AddRange (runner.Logs);
 		}
 
 		protected override string XIMode {
@@ -1984,16 +2070,20 @@ setInterval(autorefresh, 1000);
 	class Resource
 	{
 		public string Name;
+		public string Description;
 		ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> queue = new ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> ();
 		ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> exclusive_queue = new ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> ();
 		int users;
 		int max_concurrent_users = 1;
 		bool exclusive;
 
-		public Resource (string name, int max_concurrent_users = 1)
+		public int Users => users;
+
+		public Resource (string name, int max_concurrent_users = 1, string description = null)
 		{
 			this.Name = name;
 			this.max_concurrent_users = max_concurrent_users;
+			this.Description = description ?? name;
 		}
 
 		public Task<IAcquiredResource> AcquireConcurrentAsync ()
@@ -2042,6 +2132,7 @@ setInterval(autorefresh, 1000);
 				}
 			}
 		}
+
 		class AcquiredResource : IAcquiredResource
 		{
 			Resource resource;

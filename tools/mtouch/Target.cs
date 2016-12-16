@@ -47,6 +47,7 @@ namespace Xamarin.Bundler
 
 		Dictionary<Abi, CompileTask> pinvoke_tasks = new Dictionary<Abi, CompileTask> ();
 		List<CompileTask> link_with_task_output = new List<CompileTask> ();
+		List<AOTTask> aot_dependencies = new List<AOTTask> ();
 		CompilerFlags linker_flags;
 
 		// If we didn't link because the existing (cached) assemblyes are up-to-date.
@@ -821,7 +822,7 @@ namespace Xamarin.Bundler
 				var build_target = assemblies [0].BuildTarget;
 
 				foreach (var abi in GetArchitectures (build_target)) {
-					Driver.Log (3, "Building {0} from {1}", name, string.Join (", ", assemblies.Select ((arg1) => Path.GetFileNameWithoutExtension (arg1.FileName)).ToArray ()));
+					Driver.Log (3, "Building {0} from {1}", name, string.Join (", ", assemblies.Select ((arg1) => Path.GetFileName (arg1.FileName)).ToArray ()));
 
 					string install_name;
 					string compiler_output;
@@ -864,6 +865,8 @@ namespace Xamarin.Bundler
 							};
 							link_dependencies.Add (compile_task);
 						}
+					} else {
+						aot_dependencies.AddRange (aottasks);
 					}
 
 					var arch = abi.AsArchString ();
@@ -1271,6 +1274,7 @@ namespace Xamarin.Bundler
 				CompilerFlags = linker_flags,
 			};
 			link_task.AddDependency (link_with_task_output);
+			link_task.AddDependency (aot_dependencies);
 			build_tasks.Add (link_task);
 		}
 

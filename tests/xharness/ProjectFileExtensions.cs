@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace xharness
@@ -460,10 +461,22 @@ namespace xharness
 			throw new Exception ("Could not find Info.plist include");
 		}
 
+		public static IEnumerable<string> GetProjectReferences (this XmlDocument csproj)
+		{
+			var nodes = csproj.SelectNodes ("//*[local-name() = 'ProjectReference']");
+			foreach (XmlNode node in nodes)
+				yield return node.Attributes ["Include"].Value;
+		}
+
 		public static void SetProjectReferenceValue (this XmlDocument csproj, string projectInclude, string node, string value)
 		{
 			var nameNode = csproj.SelectSingleNode ("//*[local-name() = 'ProjectReference' and @Include = '" + projectInclude + "']/*[local-name() = '" + node + "']");
 			nameNode.InnerText = value;
+		}
+
+		public static void SetProjectReferenceInclude (this XmlDocument csproj, string projectInclude, string value)
+		{
+			csproj.SelectSingleNode ($"//*[local-name() = 'ProjectReference' and @Include = '{projectInclude}']").Attributes ["Include"].Value = value;
 		}
 
 		public static void CreateProjectReferenceValue (this XmlDocument csproj, string existingInclude, string path, string guid, string name)
@@ -564,6 +577,62 @@ namespace xharness
 			}
 
 			throw new Exception ("Configuration not found.");
+		}
+
+		public static void ResolveAllPaths (this XmlDocument csproj, string project_path)
+		{
+			var dir = System.IO.Path.GetDirectoryName (project_path);
+			var nodes_with_paths = new string []
+			{
+				"AssemblyOriginatorKeyFile", "CodesignEntitlements", 
+			};
+			var attributes_with_paths = new string [] []
+			{
+				new string [] { "None", "Include" },
+				new string [] { "Compile", "Include" },
+				new string [] { "ProjectReference", "Include" },
+				new string [] { "InterfaceDefinition", "Include" },
+				new string [] { "BundleResource", "Include" },
+				new string [] { "EmbeddedResource", "Include" },
+				new string [] { "ImageAsset", "Include" },
+				new string [] { "GeneratedTestInput", "Include" },
+				new string [] { "GeneratedTestOutput", "Include" },
+				new string [] { "Content", "Include" },
+				new string [] { "ObjcBindingApiDefinition", "Include" },
+				new string [] { "ObjcBindingCoreSource", "Include" },
+				new string [] { "ObjcBindingNativeLibrary", "Include" },
+			};
+			Func<string, string> convert = (input) =>
+			{
+				input = input.Replace ('\\', '/'); // make unix-style
+				input = System.IO.Path.GetFullPath (System.IO.Path.Combine (dir, input));
+				input = input.Replace ('/', '\\'); // make windows-style again
+				return input;
+			};
+
+			foreach (var key in nodes_with_paths) {
+				var nodes = csproj.SelectNodes ($"//*[local-name() = '{key}']");
+				foreach (XmlNode node in nodes)
+					node.InnerText = convert (node.InnerText);
+			}
+			foreach (var kvp in attributes_with_paths) {
+				var element = kvp [0];
+				var attrib = kvp [1];
+				var nodes = csproj.SelectNodes ($"//*[local-name() = '{element}' and @{attrib}]");
+				foreach (XmlNode node in nodes) {
+					var a = node.Attributes [attrib];
+					// Fix any default LogicalName values (but don't change existing ones).
+					var ln = node.SelectSingleNode ("./*[local-name() = 'LogicalName']");
+					var link = node.SelectSingleNode ("./*[local-name() = 'Link']");
+					if (ln == null && link == null) {
+						ln = csproj.CreateElement ("LogicalName", MSBuild_Namespace);
+						node.AppendChild (ln);
+						ln.InnerText = a.Value;
+					}
+
+					a.Value = convert (a.Value);
+				}
+			}
 		}
 	}
 }

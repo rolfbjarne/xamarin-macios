@@ -193,7 +193,7 @@ namespace xharness
 			appName = csproj.GetAssemblyName ();
 			var info_plist_path = csproj.GetInfoPListInclude ();
 			var info_plist = new XmlDocument ();
-			info_plist.LoadWithoutNetworkAccess (Path.Combine (Path.GetDirectoryName (ProjectFile), info_plist_path));
+			info_plist.LoadWithoutNetworkAccess (Path.Combine (Path.GetDirectoryName (ProjectFile), info_plist_path.Replace ('\\', '/')));
 			bundle_identifier = info_plist.GetCFBundleIdentifier ();
 
 			var extensionPointIdentifier = info_plist.GetNSExtensionPointIdentifier ();

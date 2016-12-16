@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 namespace xharness
 {
 	public class TestProject
 	{
+		XmlDocument xml;
+
 		public string Path;
 		public bool IsExecutableProject;
 		public bool GenerateVariations = true;
@@ -34,6 +38,16 @@ namespace xharness
 			return clone;
 		}
 
+		public XmlDocument Xml {
+			get {
+				if (xml == null) {
+					xml = new XmlDocument ();
+					xml.LoadWithoutNetworkAccess (Path);
+				}
+				return xml;
+			}
+		}
+
 		public bool IsBclTest {
 			get {
 				return Path.Contains ("bcl-test");
@@ -48,6 +62,26 @@ namespace xharness
 				IsExecutableProject = IsExecutableProject,
 				GenerateVariations = GenerateVariations,
 			};
+		}
+
+		internal TestProject CreateCopy (TestTask test)
+		{
+			var directory = Xamarin.Cache.CreateTemporaryDirectory (test.TestName);
+			Directory.CreateDirectory (directory);
+			var doc = new XmlDocument ();
+			doc.LoadWithoutNetworkAccess (Path);
+			doc.ResolveAllPaths (Path);
+
+			foreach (var pr in doc.GetProjectReferences ()) {
+				var tp = new TestProject (pr.Replace ('\\', '/'));
+				tp = tp.CreateCopy (test);
+				doc.SetProjectReferenceInclude (pr, tp.Path.Replace ('/', '\\'));
+			}
+
+			var rv = Clone ();
+			rv.Path = System.IO.Path.Combine (directory, System.IO.Path.GetFileName (Path));
+			doc.Save (rv.Path);
+			return rv;
 		}
 	}
 

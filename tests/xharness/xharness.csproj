@@ -73,6 +73,7 @@
     <Compile Include="..\mtouch\Cache.cs">
       <Link>Cache.cs</Link>
     </Compile>
+    <Compile Include="ExtensionTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\jenkins\nunit-summary.xslt">

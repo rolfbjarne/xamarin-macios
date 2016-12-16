@@ -81,16 +81,20 @@ namespace xharness
 				throw new Exception ("Could not find a condition attribute.");
 		}
 
-		public static void SetOutputPath (this XmlDocument csproj, string value)
+		public static void SetOutputPath (this XmlDocument csproj, string value, bool expand = true)
 		{
 			var nodes = csproj.SelectNodes ("/*/*/*[local-name() = 'OutputPath']");
 			if (nodes.Count == 0)
 				throw new Exception ("Could not find node OutputPath");
 			foreach (XmlNode n in nodes) {
-				// OutputPath needs to be expanded, otherwise Xamarin Studio isn't able to launch the project.
-				string platform, configuration;
-				ParseConditions (n, out platform, out configuration);
-				n.InnerText = value.Replace ("$(Platform)", platform).Replace ("$(Configuration)", configuration);
+				if (expand) {
+					// OutputPath needs to be expanded, otherwise Xamarin Studio isn't able to launch the project.
+					string platform, configuration;
+					ParseConditions (n, out platform, out configuration);
+					n.InnerText = value.Replace ("$(Platform)", platform).Replace ("$(Configuration)", configuration);
+				} else {
+					n.InnerText = value;
+				}
 			}
 		}
 
@@ -236,6 +240,21 @@ namespace xharness
 			linkElement.InnerText = link;
 			node.AppendChild (linkElement);
 			item_group.AppendChild (node);
+		}
+
+		public static void FixCompileInclude (this XmlDocument csproj, string include, string newInclude)
+		{
+			csproj.SelectSingleNode ($"//*[local-name() = 'Compile' and @Include = '{include}']").Attributes ["Include"].Value = newInclude;
+		}
+
+		public static void AddInterfaceDefinition (this XmlDocument csproj, string include)
+		{
+			var itemGroup = csproj.CreateItemGroup ();
+			var id = csproj.CreateElement ("InterfaceDefinition", MSBuild_Namespace);
+			var attrib = csproj.CreateAttribute ("Include");
+			attrib.Value = include;
+			id.Attributes.Append (attrib);
+			itemGroup.AppendChild (id);
 		}
 
 		public static void SetImport (this XmlDocument csproj, string value)
@@ -502,6 +521,14 @@ namespace xharness
 				csproj.SelectSingleNode ("//*[local-name() = 'Project']").AppendChild (itemGroup);
 			}
 			itemGroup.AppendChild (projectReferenceNode);
+		}
+
+		static XmlNode CreateItemGroup (this XmlDocument csproj)
+		{
+			var lastItemGroup = csproj.SelectSingleNode ("//*[local-name() = 'ItemGroup'][last()]");
+			var newItemGroup = csproj.CreateElement ("ItemGroup", MSBuild_Namespace);
+			lastItemGroup.ParentNode.InsertAfter (newItemGroup, lastItemGroup);
+			return newItemGroup;
 		}
 
 		public static void AddAdditionalDefines (this XmlDocument csproj, string value)

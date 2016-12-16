@@ -140,10 +140,7 @@ namespace xharness
 
 				if (!IncludeBcl && project.IsBclTest)
 					continue;
-
-				if (!project.Path.Contains ("all"))
-					continue;
-
+				
 				if (IncludeiOS) {
 					var build64 = new XBuildTask
 					{
@@ -228,6 +225,8 @@ namespace xharness
 					if (!string.IsNullOrEmpty (mtouch_extra_args))
 						clone.Xml.AddExtraMtouchArgs (mtouch_extra_args, task.ProjectPlatform, configuration);
 					clone.Xml.SetNode ("MTouchProfiling", test_data.Profiling ? "True" : "False", task.ProjectPlatform, configuration);
+					if (!test_data.Debug)
+						clone.Xml.SetMtouchUseLlvm (true, task.ProjectPlatform, configuration);
 					clone.Xml.Save (clone.Path);
 
 					var build = new XBuildTask

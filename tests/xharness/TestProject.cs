@@ -38,6 +38,13 @@ namespace xharness
 			return clone;
 		}
 
+		public TestProject AsTodayExtensionProject ()
+		{
+			var clone = Clone ();
+			clone.Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (Path), System.IO.Path.GetFileNameWithoutExtension (Path) + "-today" + System.IO.Path.GetExtension (Path));
+			return clone;
+		}
+
 		public XmlDocument Xml {
 			get {
 				if (xml == null) {

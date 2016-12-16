@@ -241,7 +241,7 @@ namespace xharness
 			writer.WriteLine ("\t$(Q) if test -e \".$@-failure.stamp\"; then cat \".$@-failure.stamp\"; rm \".$@-failure.stamp\"; exit 1; fi");
 		}
 
-		public static void CreateMakefile (Harness harness, IEnumerable<UnifiedTarget> unified_targets, IEnumerable<TVOSTarget> tvos_targets, IEnumerable<WatchOSTarget> watchos_targets)
+		public static void CreateMakefile (Harness harness, IEnumerable<UnifiedTarget> unified_targets, IEnumerable<TVOSTarget> tvos_targets, IEnumerable<WatchOSTarget> watchos_targets, IEnumerable<TodayExtensionTarget> today_targets)
 		{
 			var makefile = Path.Combine (harness.RootDirectory, "Makefile.inc");
 			using (var writer = new StreamWriter (makefile, false, new UTF8Encoding (false))) {
@@ -254,6 +254,7 @@ namespace xharness
 				allTargets.AddRange (unified_targets);
 				allTargets.AddRange (tvos_targets);
 				allTargets.AddRange (watchos_targets);
+				allTargets.AddRange (today_targets);
 
 				// build/[install/]run targets for specific test projects.
 				foreach (var target in allTargets) {

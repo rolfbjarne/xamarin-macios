@@ -39,7 +39,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="MainInterface.storyboard" />
+    <InterfaceDefinition Include="TodayView.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />

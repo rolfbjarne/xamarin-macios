@@ -19,6 +19,7 @@ namespace xharness
 		public bool IncludeBcl;
 		public bool IncludeMac = false;
 		public bool IncludeiOS = true;
+		public bool IncludeiOSExtensions = true;
 		public bool IncludetvOS = true;
 		public bool IncludewatchOS = true;
 		public bool IncludeMmpTest;
@@ -163,6 +164,19 @@ namespace xharness
 					rv.Add (new RunDeviceTask (build32, Devices.ConnectedDevices.Where ((dev) => dev.DevicePlatform == DevicePlatform.iOS)));
 				}
 
+				if (IncludeiOSExtensions) {
+					var todayProject = project.AsTodayExtensionProject ();
+					var build = new XBuildTask
+					{
+						Jenkins = this,
+						TestProject = todayProject,
+						ProjectConfiguration = "Debug64",
+						ProjectPlatform = "iPhone",
+						Platform = TestPlatform.iOS_TodayExtension64,
+					};
+					rv.Add (new RunDeviceTask (build, Devices.ConnectedDevices.Where ((dev) => dev.DevicePlatform == DevicePlatform.iOS && dev.Supports64Bit)));
+				}
+
 				if (IncludetvOS) {
 					var tvOSProject = project.AsTvOSProject ();
 					var build = new XBuildTask
@@ -214,7 +228,7 @@ namespace xharness
 				// building the same (dependent) project simultaneously (and they can
 				// stomp on eachother).
 				// FIXME: we should really do this for simulator builds as well.
-				task.TestProject = task.TestProject.CreateCopy (task);
+				task.TestProject = task.BuildTask.TestProject = task.TestProject.CreateCopy (task);
 
 				foreach (var test_data in assembly_build_targets) {
 					var variation = test_data.Variation;
@@ -847,6 +861,16 @@ namespace xharness
 				writer.WriteLine ("<html onkeypress='keyhandler(event)'>");
 				if (IsServerMode && populating)
 					writer.WriteLine ("<meta http-equiv=\"refresh\" content=\"1\">");
+				writer.WriteLine (@"<head>
+<style>
+.pdiv { display: table; padding-top: 10px; }
+.p1 { font-size: 1.5em; }
+.p2 { font-size: 1.25em; }
+.p3 { font-size: 1em; }
+.expander { display: table-cell; height: 100%; padding-right: 6px; text-align: center; vertical-align: middle; min-width: 10px; }
+.runall { font-size: 75%; }
+</style>
+</head>");
 				writer.WriteLine ("<title>Test results</title>");
 				writer.WriteLine (@"<script type='text/javascript'>
 function toggleLogVisibility (logName)
@@ -855,22 +879,22 @@ function toggleLogVisibility (logName)
 	var logs = document.getElementById ('logs_' + logName);
 	if (logs.style.display == 'none') {
 		logs.style.display = 'block';
-		button.innerText = 'Hide details';
+		button.innerText = '-';
 	} else {
 		logs.style.display = 'none';
-		button.innerText = 'Show details';
+		button.innerText = '+';
 	}
 }
-function toggleContainerVisibility (containerName)
+function toggleContainerVisibility2 (containerName)
 {
-	var button = document.getElementById ('button_container_' + containerName);
-	var div = document.getElementById ('test_container_' + containerName);
+	var button = document.getElementById ('button_container2_' + containerName);
+	var div = document.getElementById ('test_container2_' + containerName);
 	if (div.style.display == 'none') {
 		div.style.display = 'block';
-		button.innerText = 'Hide';
+		button.innerText = '-';
 	} else {
 		div.style.display = 'none';
-		button.innerText = 'Show';
+		button.innerText = '+';
 	}
 }
 function quit ()
@@ -959,9 +983,14 @@ function autoshowdetailsmessage (input_id, message_id)
 	var message_div = document.getElementById (message_id);
 	var txt = input_div.innerText.trim ();
 	if (txt == '') {
-		message_div.style.display = 'none';
+		message_div.style.opacity = 0;
 	} else {
-		message_div.style.display = 'inline';
+		message_div.style.opacity = 1;
+		if (input_div.style.display == 'block') {
+			message_div.innerText = '-';
+		} else {
+			message_div.innerText = '+';
+		}
 	}
 }
 </script>");
@@ -1059,36 +1088,35 @@ function autoshowdetailsmessage (input_id, message_id)
 
 				writer.WriteLine ("<div id='test-list' style='float:left'>");
 				foreach (var group in allTasks.GroupBy ((TestTask v) => v.TestName).OrderBy ((v) => v.Key, StringComparer.Ordinal)) {
-					// Create a collection of all non-ignored tests in the group (unless all tests were ignored).
-					var relevantGroup = group.Where ((v) => v.ExecutionResult != TestExecutingResult.Ignored);
-					if (!relevantGroup.Any ())
-						relevantGroup = group;
-					var results = relevantGroup
-						.GroupBy ((v) => v.ExecutionResult)
-						.Select ((v) => v.First ()) // GroupBy + Select = Distinct (lambda)
-						.OrderBy ((v) => v.ID)
-						.Select ((v) => $"<span style='color: {GetTestColor (v)}'>{v.ExecutionResult.ToString ()}</span>")
-						.ToArray ();
 					var defaultHide = group.All ((v) => v.Succeeded);
-					var defaultHideMessage = defaultHide ? "Show" : "Hide";
 					var singleTask = group.Count () == 1;
 					var groupId = group.Key.Replace (' ', '-');
-					writer.Write ($"<h2 id='test_{groupId}' class='autorefreshable'>{group.Key} ({string.Join ("; ", results)})");
-					writer.Write ("<small>");
-					writer.Write ($" <a id='button_container_{groupId}' href=\"javascript: toggleContainerVisibility ('{groupId}');\">{defaultHideMessage}</a>");
-					if (IsServerMode) {
-						writer.WriteLine ($" <a href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all tests</a>");
-					}
-					writer.Write ("</small>");
-					writer.WriteLine ("</h2>");
-					writer.WriteLine ("<div id='test_container_{0}' style='display: {1}; margin-left: 20px;'>", group.Key.Replace (' ', '-'), defaultHide ? "none" : "block");
 
+					// Test header
+					writer.Write ($"<div class='pdiv'>");
+					writer.Write ($"<span id='button_container2_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>-</span>");
+					writer.Write ($"<span id='x{id_counter++}' class='p1 autorefreshable'>{group.Key}{RenderTextStates (group)}");
+					if (IsServerMode) {
+						writer.Write ($" <a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all</a>");
+					}
+					writer.Write ("</span>");
+					writer.WriteLine ("</div>");
+
+					// Test data
+					writer.WriteLine ("<div id='test_container2_{0}' style='display: {1}; margin-left: 20px;'>", group.Key.Replace (' ', '-'), defaultHide ? "none" : "block");
 					var groupedByMode = group.GroupBy ((v) => v.Mode);
 					foreach (var modeGroup in groupedByMode) {
 						var multipleModes = modeGroup.Count () > 1;
 						if (multipleModes) {
-							writer.WriteLine ($"<h3>{modeGroup.Key} <small><a href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run</a></small></h3>");
-							writer.WriteLine ("<div style='margin-left: 20px;'>");
+							var modeGroupId = id_counter++.ToString ();
+							writer.Write ($"<div class='pdiv'>");
+							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>-</span>");
+							writer.Write ($"<span id='x{id_counter++}' class='p2 autorefreshable'>{modeGroup.Key}{RenderTextStates (modeGroup)} <a class='runall' href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
+							writer.WriteLine ("</div>");
+
+							//writer.WriteLine ($"<h3>{modeGroup.Key} <small><a href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run</a></small></h3>");
+
+							writer.WriteLine ($"<div id='test_container2_{modeGroupId}' style='margin-left: 20px;'>");
 						}
 						foreach (var test in modeGroup.OrderBy ((v) => v.Variation, StringComparer.OrdinalIgnoreCase)) {
 							var runTest = test as RunTestTask;
@@ -1103,12 +1131,14 @@ function autoshowdetailsmessage (input_id, message_id)
 								title = test.Mode;
 							}
 							if (!singleTask) {
-								writer.Write ($"{title} (<span id='x{id_counter++}' class='autorefreshable'><span style='color: {GetTestColor (test)}'>{state}</span></span>) ");
-								writer.Write ($"<a id='button_{log_id}' href=\"javascript: toggleLogVisibility ('{log_id}');\" style='display: {IsServerMode ? "none" : "inline"};'>Show details</a> ");
+								writer.Write ($"<div class='pdiv'>");
+								writer.Write ($"<span id='button_{log_id}' class='expander' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>&nbsp;</span>");
+								writer.Write ($"<span id='x{id_counter++}' class='p3 autorefreshable'>{title} (<span style='color: {GetTestColor (test)}'>{state}</span>)");
 								if (IsServerMode && !test.InProgress && !test.Waiting)
-									writer.Write ($"<a href='javascript:runtest ({test.ID})'>Run</a> ");
-								writer.WriteLine ("<br />");
-								writer.WriteLine ("<div id='logs_{0}' class='autorefreshable' data-onautorefresh='autoshowdetailsmessage(\"logs_{0}\", \"button_{0}\");' style='display: none; padding-bottom: 10px; padding-top: 10px; padding-left: 20px;'>", log_id);
+									writer.Write ($" <a class='runall' href='javascript:runtest ({test.ID})'>Run</a> ");
+								writer.Write ("</span>");
+								writer.WriteLine ("</div>");
+								writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable' data-onautorefresh='autoshowdetailsmessage(\"logs_{log_id}\", \"button_{log_id}\");' style='display: none; padding-bottom: 10px; padding-top: 10px; padding-left: 30px;'>");
 							}
 
 							if (!string.IsNullOrEmpty (test.FailureMessage))
@@ -1181,6 +1211,22 @@ function autoshowdetailsmessage (input_id, message_id)
 				writer.WriteLine ("</body>");
 				writer.WriteLine ("</html>");
 			}
+		}
+
+		string RenderTextStates (IEnumerable<TestTask> tests)
+		{
+			// Create a collection of all non-ignored tests in the group (unless all tests were ignored).
+			var relevantGroup = tests.Where ((v) => v.ExecutionResult != TestExecutingResult.Ignored && v.ExecutionResult != TestExecutingResult.NotStarted);
+			if (!relevantGroup.Any ())
+				return string.Empty;
+			
+			var results = relevantGroup
+				.GroupBy ((v) => v.ExecutionResult)
+				.Select ((v) => v.First ()) // GroupBy + Select = Distinct (lambda)
+				.OrderBy ((v) => v.ID)
+				.Select ((v) => $"<span style='color: {GetTestColor (v)}'>{v.ExecutionResult.ToString ()}</span>")
+				.ToArray ();
+			return " (" + string.Join ("; ", results) + ")";
 		}
 	}
 
@@ -1272,6 +1318,8 @@ function autoshowdetailsmessage (input_id, message_id)
 						return rv.Substring (0, rv.Length - 5);
 					} else if (rv.EndsWith ("-unified", StringComparison.Ordinal)) {
 						return rv.Substring (0, rv.Length - 8);
+					} else if (rv.EndsWith ("-today", StringComparison.Ordinal)) {
+						return rv.Substring (0, rv.Length - 6);
 					} else {
 						return rv;
 					}
@@ -1370,6 +1418,7 @@ function autoshowdetailsmessage (input_id, message_id)
 			case TestPlatform.iOS_Unified:
 			case TestPlatform.iOS_Unified32:
 			case TestPlatform.iOS_Unified64:
+			case TestPlatform.iOS_TodayExtension64:
 			case TestPlatform.tvOS:
 			case TestPlatform.watchOS:
 				process.StartInfo.EnvironmentVariables ["MD_APPLE_SDK_ROOT"] = Harness.XcodeRoot;
@@ -1891,6 +1940,7 @@ function autoshowdetailsmessage (input_id, message_id)
 
 		public override string Mode {
 			get {
+				
 				switch (Platform) {
 				case TestPlatform.tvOS:
 				case TestPlatform.watchOS:
@@ -1899,13 +1949,15 @@ function autoshowdetailsmessage (input_id, message_id)
 					return "iOS Unified 32-bits - " + XIMode;
 				case TestPlatform.iOS_Unified64:
 					return "iOS Unified 64-bits - " + XIMode;
+				case TestPlatform.iOS_TodayExtension64:
+					return "iOS Unified Today Extension 64-bits - " + XIMode;
 				case TestPlatform.iOS_Unified:
 					throw new NotImplementedException ();
 				default:
 					throw new NotImplementedException ();
 				}
 			}
-			set { throw new NotSupportedException (); }
+			set { throw new NotImplementedException (); }
 		}
 
 		protected abstract string XIMode { get; }
@@ -2314,6 +2366,7 @@ function autoshowdetailsmessage (input_id, message_id)
 		iOS_Unified,
 		iOS_Unified32,
 		iOS_Unified64,
+		iOS_TodayExtension64,
 		tvOS,
 		watchOS,
 

@@ -102,8 +102,8 @@ namespace xharness
 
 			switch (OutputType) {
 			case "Exe":
-				TodayExtensionProjectPath = Path.Combine (TargetDirectory, Path.GetFileNameWithoutExtension (TemplateProjectPath) + "-today-extension.csproj");
-				TodayContainerProjectPath = Path.Combine (TargetDirectory, Path.GetFileNameWithoutExtension (TemplateProjectPath) + "-today.csproj");
+				TodayExtensionProjectPath = Path.Combine (TargetDirectory, Path.GetFileNameWithoutExtension (TemplateProjectPath) + "-today-extension." + ProjectFileExtension);
+				TodayContainerProjectPath = Path.Combine (TargetDirectory, Path.GetFileNameWithoutExtension (TemplateProjectPath) + "-today." + ProjectFileExtension);
 				CreateTodayExtensionProject ();
 				CreateTodayContainerProject ();
 				break;

@@ -82,7 +82,7 @@ namespace xharness
 			info_plist.AddPListKeyValuePair ("NSExtension", "dict", 
 @"
         <key>NSExtensionMainStoryboard</key>
-        <string>MainInterface</string>
+        <string>TodayView</string>
         <key>NSExtensionPointIdentifier</key>
         <string>com.apple.widget-extension</string>
     ");

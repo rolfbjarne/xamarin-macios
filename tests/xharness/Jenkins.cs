@@ -1093,8 +1093,8 @@ function autoshowdetailsmessage (input_id, message_id)
 					var groupId = group.Key.Replace (' ', '-');
 
 					// Test header
-					writer.Write ($"<div class='pdiv'>");
-					writer.Write ($"<span id='button_container2_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>-</span>");
+					writer.Write ($"<div class='pdiv' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>");
+					writer.Write ($"<span id='button_container2_{groupId}' class='expander'>-</span>");
 					writer.Write ($"<span id='x{id_counter++}' class='p1 autorefreshable'>{group.Key}{RenderTextStates (group)}");
 					if (IsServerMode) {
 						writer.Write ($" <a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all</a>");
@@ -1109,8 +1109,8 @@ function autoshowdetailsmessage (input_id, message_id)
 						var multipleModes = modeGroup.Count () > 1;
 						if (multipleModes) {
 							var modeGroupId = id_counter++.ToString ();
-							writer.Write ($"<div class='pdiv'>");
-							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>-</span>");
+							writer.Write ($"<div class='pdiv' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>");
+							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander'>-</span>");
 							writer.Write ($"<span id='x{id_counter++}' class='p2 autorefreshable'>{modeGroup.Key}{RenderTextStates (modeGroup)} <a class='runall' href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
 							writer.WriteLine ("</div>");
 
@@ -1131,8 +1131,8 @@ function autoshowdetailsmessage (input_id, message_id)
 								title = test.Mode;
 							}
 							if (!singleTask) {
-								writer.Write ($"<div class='pdiv'>");
-								writer.Write ($"<span id='button_{log_id}' class='expander' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>&nbsp;</span>");
+								writer.Write ($"<div class='pdiv' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>");
+								writer.Write ($"<span id='button_{log_id}' class='expander'>&nbsp;</span>");
 								writer.Write ($"<span id='x{id_counter++}' class='p3 autorefreshable'>{title} (<span style='color: {GetTestColor (test)}'>{state}</span>)");
 								if (IsServerMode && !test.InProgress && !test.Waiting)
 									writer.Write ($" <a class='runall' href='javascript:runtest ({test.ID})'>Run</a> ");
@@ -1999,13 +1999,24 @@ function autoshowdetailsmessage (input_id, message_id)
 		{
 			this.device_candidates = device_candidates;
 
-			var project = Path.GetFileNameWithoutExtension (ProjectFile);
-			if (project.EndsWith ("-tvos", StringComparison.Ordinal)) {
-				AppRunnerTarget = AppRunnerTarget.Device_tvOS;
-			} else if (project.EndsWith ("-watchos", StringComparison.Ordinal)) {
-				AppRunnerTarget = AppRunnerTarget.Device_watchOS;
-			} else {
+			switch (build_task.Platform) {
+			case TestPlatform.iOS:
+			case TestPlatform.iOS_Unified:
+			case TestPlatform.iOS_Unified32:
+			case TestPlatform.iOS_Unified64:
 				AppRunnerTarget = AppRunnerTarget.Device_iOS;
+				break;
+			case TestPlatform.iOS_TodayExtension64:
+				AppRunnerTarget = AppRunnerTarget.Device_iOS;
+				break;
+			case TestPlatform.tvOS:
+				AppRunnerTarget = AppRunnerTarget.Device_tvOS;
+				break;
+			case TestPlatform.watchOS:
+				AppRunnerTarget = AppRunnerTarget.Device_watchOS;
+				break;
+			default:
+				throw new NotImplementedException ();
 			}
 		}
 
@@ -2022,7 +2033,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					if (Platform == TestPlatform.watchOS)
 						CompanionDevice = Jenkins.Devices.FindCompanionDevice (Jenkins.MainLog, Device);
 					Jenkins.MainLog.WriteLine ("Acquired device '{0}' for '{1}'", Device.Name, ProjectFile);
-					                           
+
 					runner = new AppRunner
 					{
 						Harness = Harness,
@@ -2063,7 +2074,29 @@ function autoshowdetailsmessage (input_id, message_id)
 					// Run the app
 					runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Run log");
 					await runner.RunAsync ();
-					ExecutionResult = runner.Result;
+
+					if (runner.Result == TestExecutingResult.Succeeded && Platform == TestPlatform.iOS_TodayExtension64) {
+						// For the today extension, the main app is just a single test.
+						// This is because running the today extension will not wake up the device,
+						// nor will it close & reopen the today app (but launching the main app
+						// will do both of these things, preparing the device for launching the today extension).
+
+						AppRunner todayRunner = new AppRunner
+						{
+							Harness = Harness,
+							ProjectFile = TestProject.GetTodayExtension ().Path,
+							Target = AppRunnerTarget,
+							LogDirectory = LogDirectory,
+							MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Extension run log"),
+							DeviceName = Device.Name,
+							CompanionDeviceName = CompanionDevice?.Name,
+							Configuration = ProjectConfiguration,
+						};
+						await todayRunner.RunAsync ();
+						ExecutionResult = todayRunner.Result;
+					} else {
+						ExecutionResult = runner.Result;
+					}
 				} catch (Exception ex) {
 					FailureMessage = $"Harness exception for '{TestName}': {ex.Message}";
 					ExecutionResult = TestExecutingResult.HarnessException;

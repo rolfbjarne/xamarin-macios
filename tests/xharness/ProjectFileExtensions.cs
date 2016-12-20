@@ -487,6 +487,14 @@ namespace xharness
 				yield return node.Attributes ["Include"].Value;
 		}
 
+		public static IEnumerable<string> GetExtensionProjectReferences (this XmlDocument csproj)
+		{
+			var nodes = csproj.SelectNodes ("//*[local-name() = 'ProjectReference']");
+			foreach (XmlNode node in nodes) {
+				if (node.SelectSingleNode ("./*[local-name () = 'IsAppExtension']") != null)
+					yield return node.Attributes ["Include"].Value;
+			}
+		}
 		public static void SetProjectReferenceValue (this XmlDocument csproj, string projectInclude, string node, string value)
 		{
 			var nameNode = csproj.SelectSingleNode ("//*[local-name() = 'ProjectReference' and @Include = '" + projectInclude + "']/*[local-name() = '" + node + "']");

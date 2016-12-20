@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace xharness
@@ -43,6 +44,20 @@ namespace xharness
 			var clone = Clone ();
 			clone.Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (Path), System.IO.Path.GetFileNameWithoutExtension (Path) + "-today" + System.IO.Path.GetExtension (Path));
 			return clone;
+		}
+
+		// Get the referenced today extension project (if any)
+		public TestProject GetTodayExtension ()
+		{
+			var extensions = Xml.GetExtensionProjectReferences ().ToArray ();
+			if (!extensions.Any ())
+				return null;
+			if (extensions.Count () != 1)
+				throw new NotImplementedException ();
+			return new TestProject
+			{
+				Path = System.IO.Path.GetFullPath (System.IO.Path.Combine (System.IO.Path.GetDirectoryName (Path), extensions.First ().Replace ('\\', '/'))),
+			};
 		}
 
 		public XmlDocument Xml {

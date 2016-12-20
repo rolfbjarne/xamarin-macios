@@ -868,7 +868,7 @@ namespace xharness
 .p2 { font-size: 1.25em; }
 .p3 { font-size: 1em; }
 .expander { display: table-cell; height: 100%; padding-right: 6px; text-align: center; vertical-align: middle; min-width: 10px; }
-.runall { font-size: 75%; }
+.runall { font-size: 75%; margin-left: 3px; }
 </style>
 </head>");
 				writer.WriteLine ("<title>Test results</title>");
@@ -1093,13 +1093,11 @@ function autoshowdetailsmessage (input_id, message_id)
 					var groupId = group.Key.Replace (' ', '-');
 
 					// Test header
-					writer.Write ($"<div class='pdiv' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>");
-					writer.Write ($"<span id='button_container2_{groupId}' class='expander'>-</span>");
-					writer.Write ($"<span id='x{id_counter++}' class='p1 autorefreshable'>{group.Key}{RenderTextStates (group)}");
-					if (IsServerMode) {
-						writer.Write ($" <a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all</a>");
-					}
-					writer.Write ("</span>");
+					writer.Write ($"<div class='pdiv'>");
+					writer.Write ($"<span id='button_container2_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>-</span>");
+					writer.Write ($"<span id='x{id_counter++}' class='p1 autorefreshable' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>{group.Key}{RenderTextStates (group)}</span>");
+					if (IsServerMode)
+						writer.Write ($" <span><a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
 					writer.WriteLine ("</div>");
 
 					// Test data
@@ -1109,12 +1107,11 @@ function autoshowdetailsmessage (input_id, message_id)
 						var multipleModes = modeGroup.Count () > 1;
 						if (multipleModes) {
 							var modeGroupId = id_counter++.ToString ();
-							writer.Write ($"<div class='pdiv' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>");
-							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander'>-</span>");
-							writer.Write ($"<span id='x{id_counter++}' class='p2 autorefreshable'>{modeGroup.Key}{RenderTextStates (modeGroup)} <a class='runall' href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
+							writer.Write ($"<div class='pdiv'>");
+							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>-</span>");
+							writer.Write ($"<span id='x{id_counter++}' class='p2 autorefreshable' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>{modeGroup.Key}{RenderTextStates (modeGroup)}</span>");
+							writer.Write ($" <span><a class='runall' href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
 							writer.WriteLine ("</div>");
-
-							//writer.WriteLine ($"<h3>{modeGroup.Key} <small><a href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run</a></small></h3>");
 
 							writer.WriteLine ($"<div id='test_container2_{modeGroupId}' style='margin-left: 20px;'>");
 						}
@@ -1131,12 +1128,11 @@ function autoshowdetailsmessage (input_id, message_id)
 								title = test.Mode;
 							}
 							if (!singleTask) {
-								writer.Write ($"<div class='pdiv' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>");
-								writer.Write ($"<span id='button_{log_id}' class='expander'>&nbsp;</span>");
-								writer.Write ($"<span id='x{id_counter++}' class='p3 autorefreshable'>{title} (<span style='color: {GetTestColor (test)}'>{state}</span>)");
+								writer.Write ($"<div class='pdiv'>");
+								writer.Write ($"<span id='button_{log_id}' class='expander' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>&nbsp;</span>");
+								writer.Write ($"<span id='x{id_counter++}' class='p3 autorefreshable' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>{title} (<span style='color: {GetTestColor (test)}'>{state}</span>) </span>");
 								if (IsServerMode && !test.InProgress && !test.Waiting)
-									writer.Write ($" <a class='runall' href='javascript:runtest ({test.ID})'>Run</a> ");
-								writer.Write ("</span>");
+									writer.Write ($" <span><a class='runall' href='javascript:runtest ({test.ID})'>Run</a></span> ");
 								writer.WriteLine ("</div>");
 								writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable' data-onautorefresh='autoshowdetailsmessage(\"logs_{log_id}\", \"button_{log_id}\");' style='display: none; padding-bottom: 10px; padding-top: 10px; padding-left: 30px;'>");
 							}
@@ -1162,7 +1158,7 @@ function autoshowdetailsmessage (input_id, message_id)
 							if (logs.Count () > 0) {
 								foreach (var log in logs) {
 									log.Flush ();
-									writer.WriteLine ("<a href='{0}' type='text/plain'>{1}</a><br />", log.FullPath.Substring (LogDirectory.Length + 1), log.Description);
+									writer.WriteLine ("<a href='{0}' type='text/plain'>{1}</a><br />", System.Web.HttpUtility.UrlPathEncode (log.FullPath.Substring (LogDirectory.Length + 1)), log.Description);
 									if (log.Description == "Test log") {
 										var summary = string.Empty;
 										try {
@@ -1256,7 +1252,6 @@ function autoshowdetailsmessage (input_id, message_id)
 			}
 			set {
 				execution_result = value;
-				Jenkins.GenerateReport ();
 			}
 		}
 
@@ -1366,8 +1361,6 @@ function autoshowdetailsmessage (input_id, message_id)
 			
 			ExecutionResult = (ExecutionResult & ~TestExecutingResult.StateMask) | TestExecutingResult.InProgress;
 
-			Jenkins.GenerateReport ();
-
 			duration.Start ();
 
 			try {
@@ -1384,8 +1377,6 @@ function autoshowdetailsmessage (input_id, message_id)
 			} finally {
 				duration.Stop ();
 			}
-
-			Jenkins.GenerateReport ();
 		}
 
 		public virtual void Reset ()
@@ -1601,7 +1592,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					log.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);
 					if (!Harness.DryRun) {
 						try {
-							var timeout = TimeSpan.FromMinutes (5);
+							var timeout = TimeSpan.FromMinutes (15);
 							var result = await xbuild.RunAsync (log, true, timeout);
 							if (result.TimedOut) {
 								ExecutionResult = TestExecutingResult.TimedOut;
@@ -1901,6 +1892,7 @@ function autoshowdetailsmessage (input_id, message_id)
 		public AppRunnerTarget AppRunnerTarget;
 
 		protected AppRunner runner;
+		protected AppRunner additional_runner;
 
 		public TDevice Device {
 			get { return device; }
@@ -1934,6 +1926,8 @@ function autoshowdetailsmessage (input_id, message_id)
 				var rv = base.AggregatedLogs.Union (BuildTask.Logs);
 				if (runner != null)
 					rv = rv.Union (runner.Logs);
+				if (additional_runner != null)
+					rv = rv.Union (additional_runner.Logs);
 				return rv;
 			}
 		}
@@ -2092,6 +2086,7 @@ function autoshowdetailsmessage (input_id, message_id)
 							CompanionDeviceName = CompanionDevice?.Name,
 							Configuration = ProjectConfiguration,
 						};
+						additional_runner = todayRunner;
 						await todayRunner.RunAsync ();
 						ExecutionResult = todayRunner.Result;
 					} else {

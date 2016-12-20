@@ -321,6 +321,7 @@ namespace Xamarin
 			new RunAppTestData (ProjectType.tvOSApp, false, AssemblyBuildTarget.Framework_Sdk, false),
 		};
 
+		[Ignore ("about to die")]
 		[TestCaseSource (nameof (Data))]
 		public void RunAppTest (RunAppTestData data)
 		{

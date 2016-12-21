@@ -56,4 +56,7 @@ namespace MonoTouch.Twitter { internal class x {} }
 namespace MonoTouch.UIKit { internal class x {} }
 namespace MonoTouch.Utils { internal class x {} }
 namespace MonoTouch.iAd { internal class x {} }
+namespace MonoMac.Metal { internal class x {} }
+namespace MonoMac.ModelIO { internal class x {} }
+namespace MonoMac.GLKit { internal class x {} }
 #endif

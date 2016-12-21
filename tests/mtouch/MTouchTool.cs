@@ -81,6 +81,7 @@ namespace Xamarin
 		public bool? PackageMdb;
 		public bool? MSym;
 		public Dictionary<string, string> SetEnv = new Dictionary<string, string> ();
+		public List<string> InvalidArguments = new List<string> ();
 #pragma warning restore 649
 
 		// These are a bit smarter
@@ -144,13 +145,13 @@ namespace Xamarin
 		string ComputeArguments (MTouchAction action)
 		{
 			switch (action) {
+				case MTouchAction.None:
 			case MTouchAction.BuildSim:
 			case MTouchAction.BuildDev:
 				return ComputeBuildArguments (action);
 			case MTouchAction.LaunchSim:
 			case MTouchAction.LaunchDev:
 				return ComputeLaunchArguments (action);
-			case MTouchAction.None:
 			default:
 				throw new NotImplementedException ();
 			}
@@ -308,7 +309,9 @@ namespace Xamarin
 				}
 			}
 
-			if (!string.IsNullOrEmpty (Abi)) {
+			if (Abi == None) {
+				// add nothing
+			} else if (!string.IsNullOrEmpty (Abi)) {
 				sb.Append (" --abi ").Append (Abi);
 			} else {
 				switch (Profile) {
@@ -378,6 +381,9 @@ namespace Xamarin
 
 			foreach (var abt in AssemblyBuildTargets)
 				sb.Append (" --assembly-build-target ").Append (MTouch.Quote (abt));
+
+			foreach (var ia in InvalidArguments)
+				sb.Append (" ").Append (ia);
 
 			return sb.ToString ();
 		}

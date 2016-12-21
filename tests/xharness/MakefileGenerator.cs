@@ -279,7 +279,7 @@ namespace xharness
 					if (!target.IsExe)
 						continue;
 
-					var make_escaped_suffix = "-" + target.GetMakeSuffix ();
+					var make_escaped_suffix = target.GetMakeSuffix ();
 					var make_escaped_name = target.GetMakeName ();
 
 					if (target is TodayExtensionTarget)

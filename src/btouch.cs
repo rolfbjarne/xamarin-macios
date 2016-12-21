@@ -160,6 +160,20 @@ class BindingTouch {
 			throw ErrorHelper.CreateError (70, "Invalid target framework: {0}. Valid target frameworks are: {1}.", target_framework.Value, string.Join (" ", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ()).ToArray ()));
 	}
 
+	public static string NamespacePlatformPrefix {
+		get {
+			switch (CurrentPlatform) {
+			case PlatformName.MacOSX:
+				return Unified ? null : "MonoMac";
+			case PlatformName.iOS:
+				return Unified ? null : "MonoTouch";
+			default:
+				return null;
+			}
+
+		}
+	}
+
 	static int Main2 (string [] args)
 	{
 		bool show_help = false;
@@ -394,19 +408,6 @@ class BindingTouch {
 					strong_dictionaries.Add (t);
 			}
 
-			string nsManagerPrefix;
-			switch (CurrentPlatform) {
-			case PlatformName.MacOSX:
-				nsManagerPrefix = Unified ? null : "MonoMac";
-				break;
-			case PlatformName.iOS:
-				nsManagerPrefix = Unified ? null : "MonoTouch";
-				break;
-			default:
-				nsManagerPrefix = null;
-				break;
-			}
-
 			if (CurrentPlatform == PlatformName.MacOSX && Unified) {
 				if (!target_framework.HasValue)
 					throw ErrorHelper.CreateError (86, "A target framework (--target-framework) must be specified when building for Xamarin.Mac.");
@@ -414,7 +415,7 @@ class BindingTouch {
 			}
 
 			var nsManager = new NamespaceManager (
-				nsManagerPrefix,
+				NamespacePlatformPrefix,
 				ns == null ? firstApiDefinitionName : ns,
 				skipSystemDrawing
 			);

@@ -39,62 +39,6 @@
 //     Typically this is necessary for things like NSError.
 //
 
-#define HAVE_AVFOUNDATION
-#define HAVE_GAMEKIT
-
-#if IOS || TVOS || MONOMAC
-#define HAVE_AUDIOUNIT
-#define HAVE_COREANIMATION
-#define HAVE_COREMEDIA
-#define HAVE_COREVIDEO
-#define HAVE_MEDIATOOLBOX
-#define HAVE_SECURITY
-#define HAVE_AUDIOTOOLBOX
-#if IOS || TVOS
-#define HAVE_AUDIOTOOLBOX_MUSICSEQUENCE
-#endif
-#endif
-
-#if IOS || MONOMAC
-#define HAVE_COREMIDI
-#endif
-
-#if MONOMAC
-#define HAVE_APPKIT
-#define HAVE_CLOUDKIT
-#define HAVE_OPENGL
-#define HAVE_QTKIT
-#endif
-
-#if IOS || TVOS || WATCH
-#define HAVE_UIKIT
-#endif
-
-#if IOS || TVOS
-#define HAVE_PHOTOSUI
-#define HAVE_GLKIT
-#endif
-
-#if IOS
-#define HAVE_ADDRESSBOOK
-#define HAVE_ADDRESSBOOKUI
-#define HAVE_COREMOTION
-#define HAVE_EVENTKITUI
-#define HAVE_HEALTHKITUI
-#define HAVE_IAD
-#define HAVE_MAPKIT
-#define HAVE_MESSAGEUI
-#define HAVE_NEWSSTANDKIT
-#define HAVE_QUICKLOOK
-#define HAVE_TWITTER
-#endif
-
-#if IOS || TVOS || (XAMCORE_2_0 && MONOMAC)
-// ModelIO and Metal are 64-bit only, and not on watch
-#define HAVE_MODELIO
-#define HAVE_METAL
-#endif
-
 using System;
 using System.Linq;
 using System.Collections;
@@ -111,33 +55,6 @@ using XamCore.CoreGraphics;
 using XamCore.ObjCRuntime;
 using XamCore.Foundation;
 using XamCore.Security;
-#if HAVE_COREMEDIA
-using XamCore.CoreMedia;
-#endif
-#if HAVE_COREVIDEO
-using XamCore.CoreVideo;
-#endif
-#if HAVE_COREMIDI
-using XamCore.CoreMidi;
-#endif
-#if HAVE_AUDIOTOOLBOX
-using XamCore.AudioToolbox;
-#endif
-#if HAVE_AUDIOUNIT
-using XamCore.AudioUnit;
-#endif
-#if HAVE_AVFOUNDATION
-using XamCore.AVFoundation;
-#endif
-#if HAVE_OPENGL
-using XamCore.OpenGL;
-#endif
-#if HAVE_MEDIATOOLBOX
-using XamCore.MediaToolbox;
-#endif
-#if HAVE_ADDRESSBOOK
-using XamCore.AddressBook;
-#endif
 
 using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
 
@@ -708,45 +625,32 @@ public class NamespaceManager
 		};
 
 		UINamespaces = new HashSet<string> ();
-#if HAVE_APPKIT
-		UINamespaces.Add (Get ("AppKit"));
-#endif
-#if HAVE_UIKIT
-		UINamespaces.Add (Get ("UIKit"));
-#endif
-#if HAVE_TWITTER
-		UINamespaces.Add (Get ("Twitter"));
-#endif
-#if HAVE_GAMEKIT && !MONOMAC && !WATCH
-		UINamespaces.Add (Get ("GameKit"));
-#endif
-#if HAVE_NEWSSTANDKIT
-		UINamespaces.Add (Get ("NewsstandKit"));
-#endif
-#if HAVE_IAD
-		UINamespaces.Add (Get ("iAd"));
-#endif
-#if HAVE_QUICKLOOK
-		UINamespaces.Add (Get ("QuickLook"));
-#endif
-#if HAVE_EVENTKITUI
-		UINamespaces.Add (Get ("EventKitUI"));
-#endif
-#if HAVE_ADDRESSBOOKUI
-		UINamespaces.Add (Get ("AddressBookUI"));
-#endif
-#if HAVE_MAPKIT
-		UINamespaces.Add (Get ("MapKit"));
-#endif
-#if HAVE_MESSAGEUI
-		UINamespaces.Add (Get ("MessageUI"));
-#endif
-#if HAVE_PHOTOSUI
-		UINamespaces.Add (Get ("PhotosUI"));
-#endif
-#if HAVE_HEALTHKITUI
-		UINamespaces.Add (Get ("HealthKitUI"));
-#endif
+		if (Frameworks.HaveAppKit)
+			UINamespaces.Add (Get ("AppKit"));
+		if (Frameworks.HaveUIKit)
+			UINamespaces.Add (Get ("UIKit"));
+		if (Frameworks.HaveTwitter)
+			UINamespaces.Add (Get ("Twitter"));
+		if (Frameworks.HaveGameKit)
+			UINamespaces.Add (Get ("GameKit"));
+		if (Frameworks.HaveNewsstandKit)
+			UINamespaces.Add (Get ("NewsstandKit"));
+		if (Frameworks.HaveiAd)
+			UINamespaces.Add (Get ("iAd"));
+		if (Frameworks.HaveQuickLook)
+			UINamespaces.Add (Get ("QuickLook"));
+		if (Frameworks.HaveEventKitUI)
+			UINamespaces.Add (Get ("EventKitUI"));
+		if (Frameworks.HaveAddressBookUI)
+			UINamespaces.Add (Get ("AddressBookUI"));
+		if (Frameworks.HaveMapKit)
+			UINamespaces.Add (Get ("MapKit"));
+		if (Frameworks.HaveMessageUI)
+			UINamespaces.Add (Get ("MessageUI"));
+		if (Frameworks.HavePhotosUI)
+			UINamespaces.Add (Get ("PhotosUI"));
+		if (Frameworks.HaveHealthKitUI)
+			UINamespaces.Add (Get ("HealthKitUI"));
 
 		ImplicitNamespaces = new HashSet<string> ();
 		ImplicitNamespaces.Add ("System");
@@ -760,65 +664,47 @@ public class NamespaceManager
 		ImplicitNamespaces.Add (Get ("ObjCRuntime"));
 		ImplicitNamespaces.Add (Get ("CoreGraphics"));
 		ImplicitNamespaces.Add (Get ("SceneKit"));
-#if HAVE_AUDIOUNIT
-		ImplicitNamespaces.Add (Get ("AudioUnit"));
-#endif
-#if HAVE_COREANIMATION
-		ImplicitNamespaces.Add (Get ("CoreAnimation"));
-#endif
-		ImplicitNamespaces.Add (Get ("CoreLocation"));
-#if HAVE_COREVIDEO
-		ImplicitNamespaces.Add (Get ("CoreVideo"));
-#endif
-#if HAVE_COREMEDIA
-		ImplicitNamespaces.Add (Get ("CoreMedia"));
-#endif
-#if HAVE_SECURITY
-		ImplicitNamespaces.Add (Get ("Security"));
-#endif
-#if HAVE_AVFOUNDATION && !WATCH
-		ImplicitNamespaces.Add (Get ("AVFoundation"));
-#endif
-#if HAVE_OPENGL
-		ImplicitNamespaces.Add (Get ("OpenGL"));
-#endif
-#if HAVE_QTKIT
-		ImplicitNamespaces.Add (Get ("QTKit"));
-#endif
-#if HAVE_APPKIT
-		ImplicitNamespaces.Add (Get ("AppKit"));
-#endif
-#if HAVE_CLOUDKIT
-		ImplicitNamespaces.Add (Get ("CloudKit"));
-#endif
-#if HAVE_COREMOTION
-		ImplicitNamespaces.Add (Get ("CoreMotion"));
-#endif
-#if HAVE_MAPKIT
-		ImplicitNamespaces.Add (Get ("MapKit"));
-#endif
-#if HAVE_UIKIT
-		ImplicitNamespaces.Add (Get ("UIKit"));
-#endif
-#if HAVE_NEWSSTANDKIT
-		ImplicitNamespaces.Add (Get ("NewsstandKit"));
-#endif
-#if HAVE_GLKIT
-		ImplicitNamespaces.Add (Get ("GLKit"));
-#endif
-#if HAVE_QUICKLOOK
-		ImplicitNamespaces.Add (Get ("QuickLook"));
-#endif
-#if HAVE_ADDRESSBOOK
-		ImplicitNamespaces.Add (Get ("AddressBook"));
-#endif
+		if (Frameworks.HaveAudioUnit)
+			ImplicitNamespaces.Add (Get ("AudioUnit"));
+		if (Frameworks.HaveCoreAnimation)
+			ImplicitNamespaces.Add (Get ("CoreAnimation"));
+		if (Frameworks.HaveCoreLocation)
+			ImplicitNamespaces.Add (Get ("CoreLocation"));
+		if (Frameworks.HaveCoreVideo)
+			ImplicitNamespaces.Add (Get ("CoreVideo"));
+		if (Frameworks.HaveCoreMedia)
+			ImplicitNamespaces.Add (Get ("CoreMedia"));
+		if (Frameworks.HaveSecurity)
+			ImplicitNamespaces.Add (Get ("Security"));
+		if (Frameworks.HaveAVFoundation)
+			ImplicitNamespaces.Add (Get ("AVFoundation"));
+		if (Frameworks.HaveOpenGL)
+			ImplicitNamespaces.Add (Get ("OpenGL"));
+		if (Frameworks.HaveQTKit)
+			ImplicitNamespaces.Add (Get ("QTKit"));
+		if (Frameworks.HaveAppKit)
+			ImplicitNamespaces.Add (Get ("AppKit"));
+		if (Frameworks.HaveCloudKit)
+			ImplicitNamespaces.Add (Get ("CloudKit"));
+		if (Frameworks.HaveCoreMotion)
+			ImplicitNamespaces.Add (Get ("CoreMotion"));
+		if (Frameworks.HaveMapKit)
+			ImplicitNamespaces.Add (Get ("MapKit"));
+		if (Frameworks.HaveUIKit)
+			ImplicitNamespaces.Add (Get ("UIKit"));
+		if (Frameworks.HaveNewsstandKit)
+			ImplicitNamespaces.Add (Get ("NewsstandKit"));
+		if (Frameworks.HaveGLKit)
+			ImplicitNamespaces.Add (Get ("GLKit"));
+		if (Frameworks.HaveQuickLook)
+			ImplicitNamespaces.Add (Get ("QuickLook"));
+		if (Frameworks.HaveAddressBook)
+			ImplicitNamespaces.Add (Get ("AddressBook"));
 
-#if HAVE_MODELIO
-		ImplicitNamespaces.Add (Get ("ModelIO"));
-#endif
-#if HAVE_METAL
-		ImplicitNamespaces.Add (Get ("Metal"));
-#endif
+		if (Frameworks.HaveModelIO)
+			ImplicitNamespaces.Add (Get ("ModelIO"));
+		if (Frameworks.HaveMetal)
+			ImplicitNamespaces.Add (Get ("Metal"));
 
 		// These are both types and namespaces
 		NamespacesThatConflictWithTypes = new HashSet<string> {
@@ -850,6 +736,33 @@ public class NamespaceManager
 
 public enum EnumMode {
 	Compat, Bit32, Bit64, NativeBits
+}
+
+public partial class Frameworks {
+	static HashSet<string> frameworks;
+	static bool GetValue (string framework)
+	{
+		if (frameworks == null) {
+			switch (Generator.CurrentPlatform) {
+			case PlatformName.iOS:
+				frameworks = iosframeworks;
+				break;
+			case PlatformName.WatchOS:
+				frameworks = watchosframeworks;
+				break;
+			case PlatformName.TvOS:
+				frameworks = tvosframeworks;
+				break;
+			case PlatformName.MacOSX:
+				frameworks = macosframeworks;
+				break;
+			default:
+				throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", Generator.CurrentPlatform);
+			}
+		}
+
+		return frameworks.Contains (framework);
+	}
 }
 
 public partial class Generator : IMemberGatherer {
@@ -981,9 +894,7 @@ public partial class Generator : IMemberGatherer {
 	string basedir;
 	HashSet<string> generated_files = new HashSet<string> ();
 	public Type CoreNSObject = TypeManager.NSObject;
-#if HAVE_COREMEDIA
 	public Type SampleBufferType = TypeManager.CMSampleBuffer;
-#endif
 
 	static string CoreImageMap {
 		get {
@@ -1306,21 +1217,22 @@ public partial class Generator : IMemberGatherer {
 				continue;
 			}
 
-#if HAVE_COREMEDIA
-			// special case (false) so it needs to be before the _real_ INativeObject check
-			if (pi.ParameterType == SampleBufferType){
-				pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
-				invoke.AppendFormat ("{0} == IntPtr.Zero ? null : new CMSampleBuffer ({0}, false)", pi.Name.GetSafeParamName ());
-				continue;
+			if (Frameworks.HaveCoreMedia) {
+				// special case (false) so it needs to be before the _real_ INativeObject check
+				if (pi.ParameterType == SampleBufferType){
+					pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
+					invoke.AppendFormat ("{0} == IntPtr.Zero ? null : new CMSampleBuffer ({0}, false)", pi.Name.GetSafeParamName ());
+					continue;
+				}
 			}
-#endif
-#if HAVE_AUDIOTOOLBOX
-			if (pi.ParameterType == TypeManager.AudioBuffers){
-				pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
-				invoke.AppendFormat ("new global::{0}AudioToolbox.AudioBuffers ({1})", Generator.UnifiedAPI ? "" : "MonoTouch.", pi.Name.GetSafeParamName ());
-				continue;
+
+			if (Frameworks.HaveAudioToolbox) {
+				if (pi.ParameterType == TypeManager.AudioBuffers){
+					pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
+					invoke.AppendFormat ("new global::{0}AudioToolbox.AudioBuffers ({1})", Generator.UnifiedAPI ? "" : "MonoTouch.", pi.Name.GetSafeParamName ());
+					continue;
+				}
 			}
-#endif
 
 			if (TypeManager.INativeObject.IsAssignableFrom (pi.ParameterType)) {
 				pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
@@ -1825,9 +1737,8 @@ public partial class Generator : IMemberGatherer {
 		marshal_types.Add (new MarshalType (TypeManager.NSObject, create: "Runtime.GetNSObject ("));
 		marshal_types.Add (new MarshalType (TypeManager.Selector, create: "Selector.FromHandle ("));
 		marshal_types.Add (new MarshalType (TypeManager.BlockLiteral, "BlockLiteral", "{0}", "THIS_IS_BROKEN"));
-#if HAVE_AUDIOTOOLBOX_MUSICSEQUENCE
-		marshal_types.Add (new MarshalType (TypeManager.MusicSequence, create: "global::XamCore.AudioToolbox.MusicSequence.Lookup ("));
-#endif
+		if (TypeManager.MusicSequence != null)
+			marshal_types.Add (new MarshalType (TypeManager.MusicSequence, create: "global::XamCore.AudioToolbox.MusicSequence.Lookup ("));
 		marshal_types.Add (TypeManager.CGColor);
 		marshal_types.Add (TypeManager.CGPath);
 		marshal_types.Add (TypeManager.CGGradient);
@@ -1838,56 +1749,51 @@ public partial class Generator : IMemberGatherer {
 		marshal_types.Add (TypeManager.CGColorSpace);
 		marshal_types.Add (TypeManager.DispatchQueue);
 		marshal_types.Add (TypeManager.Protocol);
-#if HAVE_COREMIDI
-		marshal_types.Add (TypeManager.MidiEndpoint);
-#endif
-#if HAVE_COREMEDIA
-		marshal_types.Add (TypeManager.CMTimebase);
-		marshal_types.Add (TypeManager.CMClock);
-#endif
+		if (Frameworks.HaveCoreMidi)
+			marshal_types.Add (TypeManager.MidiEndpoint);
+		if (Frameworks.HaveCoreMedia) {
+			marshal_types.Add (TypeManager.CMTimebase);
+			marshal_types.Add (TypeManager.CMClock);
+		}
 		marshal_types.Add (TypeManager.NSZone);
-#if HAVE_OPENGL
-		marshal_types.Add (TypeManager.CGLContext);
-		marshal_types.Add (TypeManager.CGLPixelFormat);
-		marshal_types.Add (TypeManager.CVImageBuffer);
-#endif
-#if HAVE_MEDIATOOLBOX
-		marshal_types.Add (new MarshalType (TypeManager.MTAudioProcessingTap, create: (NamespaceManager.Get ("MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")));
-#endif
-#if HAVE_ADDRESSBOOK
-		marshal_types.Add (TypeManager.ABAddressBook);
-		marshal_types.Add (new MarshalType (TypeManager.ABPerson, create: "(ABPerson) ABRecord.FromHandle("));
-		marshal_types.Add (new MarshalType (TypeManager.ABRecord, create: "ABRecord.FromHandle("));
-#endif
-#if HAVE_COREVIDEO
-		marshal_types.Add (TypeManager.CVPixelBuffer);
-#endif
+		if (Frameworks.HaveOpenGL) {
+			marshal_types.Add (TypeManager.CGLContext);
+			marshal_types.Add (TypeManager.CGLPixelFormat);
+			marshal_types.Add (TypeManager.CVImageBuffer);
+		}
+		if (Frameworks.HaveMediaToolbox)
+			marshal_types.Add (new MarshalType (TypeManager.MTAudioProcessingTap, create: (NamespaceManager.Get ("MediaToolbox") + ".MTAudioProcessingTap.FromHandle(")));
+		if (Frameworks.HaveAddressBook) {
+			marshal_types.Add (TypeManager.ABAddressBook);
+			marshal_types.Add (new MarshalType (TypeManager.ABPerson, create: "(ABPerson) ABRecord.FromHandle("));
+			marshal_types.Add (new MarshalType (TypeManager.ABRecord, create: "ABRecord.FromHandle("));
+		}
+		if (Frameworks.HaveCoreVideo)
+			marshal_types.Add (TypeManager.CVPixelBuffer);
 		marshal_types.Add (TypeManager.CGLayer);
-#if HAVE_COREMEDIA
-		marshal_types.Add (TypeManager.CMSampleBuffer);
-#endif
-#if HAVE_COREVIDEO
-		marshal_types.Add (TypeManager.CVImageBuffer);
-		marshal_types.Add (TypeManager.CVPixelBufferPool);
-#endif
-#if HAVE_AUDIOUNIT
-		marshal_types.Add (TypeManager.AudioComponent);
-#endif
-#if HAVE_COREMEDIA
-		marshal_types.Add (new MarshalType (TypeManager.CMFormatDescription, create: "CMFormatDescription.Create ("));
-		marshal_types.Add (TypeManager.CMAudioFormatDescription);
-		marshal_types.Add (TypeManager.CMVideoFormatDescription);
-#endif
-#if HAVE_AUDIOUNIT
-		marshal_types.Add (TypeManager.AudioUnit);
-#endif
+		if (Frameworks.HaveCoreMedia)
+			marshal_types.Add (TypeManager.CMSampleBuffer);
+
+		if (Frameworks.HaveCoreVideo) {
+			marshal_types.Add (TypeManager.CVImageBuffer);
+			marshal_types.Add (TypeManager.CVPixelBufferPool);
+		}
+		if (Frameworks.HaveAudioUnit)
+			marshal_types.Add (TypeManager.AudioComponent);
+		if (Frameworks.HaveCoreMedia) {
+			marshal_types.Add (new MarshalType (TypeManager.CMFormatDescription, create: "CMFormatDescription.Create ("));
+			marshal_types.Add (TypeManager.CMAudioFormatDescription);
+			marshal_types.Add (TypeManager.CMVideoFormatDescription);
+		}
+		if (Frameworks.HaveAudioUnit)
+			marshal_types.Add (TypeManager.AudioUnit);
 		marshal_types.Add (TypeManager.SecIdentity);
 		marshal_types.Add (TypeManager.SecTrust);
 		marshal_types.Add (TypeManager.SecAccessControl);
-#if HAVE_AUDIOUNIT
-		marshal_types.Add (TypeManager.AudioBuffers);
-		marshal_types.Add (TypeManager.AURenderEventEnumerator);
-#endif
+		if (Frameworks.HaveAudioUnit) {
+			marshal_types.Add (TypeManager.AudioBuffers);
+			marshal_types.Add (TypeManager.AURenderEventEnumerator);
+		}
 
 		init_binding_type = String.Format ("IsDirectBinding = GetType ().Assembly == global::{0}.this_assembly;", ns.Messaging);
 
@@ -2436,11 +2342,9 @@ public partial class Generator : IMemberGatherer {
 						} else if (UnifiedAPI && fetchType == TypeManager.CoreGraphics_CGPoint){
 							getter = "{1} GetCGPointValue ({0})";
 							setter = "SetCGPointValue ({0}, {1}value)";
-#if HAVE_COREMEDIA
-						} else if (fetchType == TypeManager.CMTime){
+						} else if (Frameworks.HaveCoreMedia && fetchType == TypeManager.CMTime){
 							getter = "{1} GetCMTimeValue ({0})";
 							setter = "SetCMTimeValue ({0}, {1}value)";
-#endif // !WATCH
 						} else {
 							throw new BindingException (1031, true,
 										    "Limitation: can not automatically create strongly typed dictionary for " +
@@ -5666,16 +5570,14 @@ public partial class Generator : IMemberGatherer {
 						print ("return Dlfcn.GetSizeF (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == TypeManager.System_Int64){
 						print ("return Dlfcn.GetInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-#if HAVE_COREMEDIA && HAVE_AVFOUNDATION
 					} else
 						//
 						// Handle various blittable value types here
 						//
-						if (field_pi.PropertyType == TypeManager.CMTime ||
-						   field_pi.PropertyType == TypeManager.AVCaptureWhiteBalanceGains){
+						if (Frameworks.HaveCoreMedia && Frameworks.HaveAVFoundation && (field_pi.PropertyType == TypeManager.CMTime ||
+						   field_pi.PropertyType == TypeManager.AVCaptureWhiteBalanceGains)) {
 						print ("return *(({3} *) Dlfcn.dlsym (Libraries.{2}.Handle, \"{1}\"));", field_pi.Name, fieldAttr.SymbolName, library_name,
 						       FormatType (type, field_pi.PropertyType.Namespace, field_pi.PropertyType.Name));
-#endif
 					} else if (UnifiedAPI && field_pi.PropertyType == TypeManager.System_nint) {
 						print ("return Dlfcn.GetNInt (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (UnifiedAPI && field_pi.PropertyType == TypeManager.System_nuint) {
@@ -6877,8 +6779,35 @@ public static class TypeManager {
 	public static Type CGLContext;
 	public static Type CGLPixelFormat;
 
+	// static Assembly corlib_assembly;
+	static Assembly platform_assembly;
+	// static Assembly binding_assembly;
+
+	static Type Lookup (Assembly assembly, string @namespace, string @typename, bool inexistentOK = false)
+	{
+		string fullname;
+		string nsManagerPrefix = BindingTouch.NamespacePlatformPrefix;
+		if (!string.IsNullOrEmpty (nsManagerPrefix))
+			nsManagerPrefix += ".";
+
+		if (string.IsNullOrEmpty (@namespace)) {
+			fullname = nsManagerPrefix + @typename;
+		} else {
+			fullname = nsManagerPrefix + @namespace + "." + @typename;
+		}
+
+		var rv = assembly.GetType (fullname);
+		if (rv == null && !inexistentOK)
+			throw new Exception ($"Could not find the type: {fullname} in the assembly {assembly}.");
+		return rv;
+	}
+
 	static TypeManager ()
 	{
+		// corlib_assembly = typeof (object).Assembly;
+		platform_assembly = typeof (NSObject).Assembly;
+		// binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+
 		/* corlib */
 		System_Object = typeof (object);
 		System_Int32 = typeof (int);
@@ -6908,11 +6837,11 @@ public static class TypeManager {
 		Class = typeof (Class);
 		Protocol = typeof (Protocol);
 
-	#if __UNIFIED__
-		Constants = typeof (XamCore.ObjCRuntime.Constants);
-	#else
-		Constants = typeof (XamCore.Constants);
-	#endif
+		if (Generator.UnifiedAPI) {
+			Constants = Lookup (platform_assembly, "ObjCRuntime", "Constants");
+		} else {
+			Constants = Lookup (platform_assembly, "", "Constants");
+		}
 
 		/* attributes */
 		LinkWithAttribute = typeof (LinkWithAttribute);
@@ -6995,18 +6924,17 @@ public static class TypeManager {
 
 		DictionaryContainerType = typeof (DictionaryContainerType);
 
-	#if HAVE_AUDIOTOOLBOX
-		AudioBuffers = typeof (AudioBuffers);
-	#if HAVE_AUDIOTOOLBOX_MUSICSEQUENCE
-		MusicSequence = typeof (MusicSequence);
-	#endif
-	#endif
+		if (Frameworks.HaveAudioToolbox) {
+			AudioBuffers = Lookup (platform_assembly, "AudioToolbox", "AudioBuffers");
+			MusicSequence = Lookup (platform_assembly, "AudioToolbox", "MusicSequence", true /* may not be found */);
+		}
 
-	#if HAVE_COREMEDIA
-		CMSampleBuffer = typeof (CMSampleBuffer);
-		CMTimebase = typeof (CMTimebase);
-		CMClock = typeof (CMClock);
-	#endif
+		if (Frameworks.HaveCoreMedia) {
+			CMSampleBuffer = Lookup (platform_assembly, "CoreMedia", "CMSampleBuffer");
+			CMTimebase = Lookup (platform_assembly, "CoreMedia", "CMTimebase");
+			CMClock = Lookup (platform_assembly, "CoreMedia", "CMClock");
+		}
+
 		CGColor = typeof (CGColor);
 		CGPath = typeof (CGPath);
 		CGGradient = typeof (CGGradient);
@@ -7014,62 +6942,69 @@ public static class TypeManager {
 		CGImage = typeof (CGImage);
 		CGColorSpace = typeof (CGColorSpace);
 		DispatchQueue = typeof (DispatchQueue);
-	#if HAVE_COREMIDI
-		MidiEndpoint = typeof (MidiEndpoint);
-	#endif
-	#if HAVE_ADDRESSBOOK
-		ABAddressBook = typeof (ABAddressBook);
-		ABPerson = typeof (ABPerson);
-		ABRecord = typeof (ABRecord);
-	#endif
+
+		if (Frameworks.HaveCoreMidi)
+			MidiEndpoint = Lookup (platform_assembly, "CoreMidi", "MidiEndpoint");
+
+		if (Frameworks.HaveAddressBook) {
+			ABAddressBook = Lookup (platform_assembly, "AddressBook", "ABAddressBook");
+			ABPerson = Lookup (platform_assembly, "AddressBook", "ABPerson");
+			ABRecord = Lookup (platform_assembly, "AddressBook", "ABRecord");
+		}
 
 		NSZone = typeof (NSZone);
-	#if HAVE_MEDIATOOLBOX
-		MTAudioProcessingTap = typeof (MTAudioProcessingTap);
-	#endif
-	#if HAVE_COREVIDEO
-		CVImageBuffer = typeof (CVImageBuffer);
-		CVPixelBufferPool = typeof (CVPixelBufferPool);
-		CVPixelBuffer = typeof (CVPixelBuffer);
-	#endif
+
+		if (Frameworks.HaveMediaToolbox)
+			MTAudioProcessingTap = Lookup (platform_assembly, "MediaToolbox", "MTAudioProcessingTap");
+
+		if (Frameworks.HaveCoreVideo) {
+			CVImageBuffer = Lookup (platform_assembly, "CoreVideo", "CVImageBuffer");
+			CVPixelBufferPool = Lookup (platform_assembly, "CoreVideo", "CVPixelBufferPool");
+			CVPixelBuffer = Lookup (platform_assembly, "CoreVideo", "CVPixelBuffer");
+		}
+
 		CGLayer = typeof (CGLayer);
-	#if HAVE_COREMEDIA
-		CMTime = typeof (CMTime);
-		CMFormatDescription = typeof (CMFormatDescription);
-		CMAudioFormatDescription = typeof (CMAudioFormatDescription);
-		CMVideoFormatDescription = typeof (CMVideoFormatDescription);
-	#endif
+
+		if (Frameworks.HaveCoreMedia) {
+			CMTime = Lookup (platform_assembly, "CoreMedia", "CMTime");
+			CMFormatDescription = Lookup (platform_assembly, "CoreMedia", "CMFormatDescription");
+			CMAudioFormatDescription = Lookup (platform_assembly, "CoreMedia", "CMAudioFormatDescription");
+			CMVideoFormatDescription = Lookup (platform_assembly, "CoreMedia", "CMVideoFormatDescription");
+		}
+
 		SecIdentity = typeof (SecIdentity);
 		SecTrust = typeof (SecTrust);
 		SecAccessControl = typeof (SecAccessControl);
-	#if HAVE_AUDIOUNIT
-		AudioComponent = typeof (AudioComponent);
-		AURenderEventEnumerator = typeof (AURenderEventEnumerator);
-		AudioUnit = typeof (XamCore.AudioUnit.AudioUnit);
-	#endif
+
+		if (Frameworks.HaveAudioUnit) {
+			AudioComponent = Lookup (platform_assembly, "AudioUnit", "AudioComponent");
+			AURenderEventEnumerator = Lookup (platform_assembly, "AudioUnit", "AURenderEventEnumerator");
+			AudioUnit = Lookup (platform_assembly, "AudioUnit", "AudioUnit");
+		}
 
 		// CoreFoundation
 		CFRunLoop = typeof (CFRunLoop);
 
-	#if __UNIFIED__
-		CoreGraphics_CGRect = typeof (CGRect);
-		CoreGraphics_CGPoint = typeof (CGPoint);
-		CoreGraphics_CGSize = typeof (CGSize);
-	#endif
+		if (Generator.UnifiedAPI) {
+			CoreGraphics_CGRect = Lookup (platform_assembly, "CoreGraphics", "CGRect");
+			CoreGraphics_CGPoint = Lookup (platform_assembly, "CoreGraphics", "CGPoint");
+			CoreGraphics_CGSize = Lookup (platform_assembly, "CoreGraphics", "CGSize");
+		}
 
 		NSString = typeof (NSString);
 
 		ProbePresenceAttribute = typeof (ProbePresenceAttribute);
-		AVCaptureWhiteBalanceGains = typeof (AVCaptureWhiteBalanceGains);
-	#if HAVE_OPENGL
-		CGLContext = typeof (CGLContext);
-		CGLPixelFormat = typeof (CGLPixelFormat);
-	#endif
+		AVCaptureWhiteBalanceGains = typeof (XamCore.AVFoundation.AVCaptureWhiteBalanceGains);
 
-	#if __UNIFIED__
-		System_nint = typeof (System.nint);
-		System_nuint = typeof (System.nuint);
-		System_nfloat = typeof (System.nfloat);
-	#endif
+		if (Frameworks.HaveOpenGL) {
+			CGLContext = Lookup (platform_assembly, "OpenGL", "CGLContext");
+			CGLPixelFormat = Lookup (platform_assembly, "OpenGL", "CGLPixelFormat");
+		}
+
+		if (Generator.UnifiedAPI) {
+			System_nint = Lookup (platform_assembly, "System", "nint");
+			System_nuint = Lookup (platform_assembly, "System", "nuint");
+			System_nfloat = Lookup (platform_assembly, "System", "nfloat");
+		}
 	}
 }

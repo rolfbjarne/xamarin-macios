@@ -42,61 +42,68 @@ namespace Xamarin
 	public class MTouch
 	{
 		[Test]
-		[TestCase ("single", "-sdkroot {2} -v -v -v -v --dev {0} -sdk {3} --targetver 6.0 {1} -r:{4} --cache={5}/cache")]
-		[TestCase ("dual",   "-sdkroot {2} -v -v -v -v --dev {0} -sdk {3} --targetver 6.0 {1} -r:{4} --cache={5}/cache --abi=armv7,arm64")]
-		[TestCase ("llvm",   "-sdkroot {2} -v -v -v -v --dev {0} -sdk {3} --targetver 6.0 {1} -r:{4} --cache={5}/cache --abi=armv7+llvm")]
-		[TestCase ("debug",  "-sdkroot {2} -v -v -v -v --dev {0} -sdk {3} --targetver 6.0 {1} -r:{4} --cache={5}/cache --debug")]
-		public void RebuildTest (string name, string format)
+		[TestCase ("single", "",                   false)]
+		[TestCase ("dual",   "armv7,arm64", false)]
+		[TestCase ("llvm",   "armv7+llvm",  false)]
+		[TestCase ("debug",  "",                   true)]
+		public void RebuildTest (string name, string abi, bool debug)
 		{
 			AssertDeviceAvailable ();
 
-			var testDir = GetTempDirectory ();
-			var app = Path.Combine (testDir, "testApp.app");
-			DateTime dt = DateTime.MinValue;
+			using (var mtouch = new MTouchTool ()) {
+				var codeA = "public class TestApp1 { static void Main () { System.Console.WriteLine (typeof (ObjCRuntime.Runtime).ToString ()); } }";
+				var codeB = "public class TestApp2 { static void Main () { System.Console.WriteLine (typeof (ObjCRuntime.Runtime).ToString ()); } }";
+				mtouch.CreateTemporaryApp (code: codeA);
+				mtouch.CreateTemporaryCacheDirectory ();
+				mtouch.Abi = abi;
+				mtouch.Debug = debug;
+				mtouch.TargetVer = "6.0";
+				DateTime dt = DateTime.MinValue;
 
-			Action<string, IEnumerable<string>> checkNotModified = (filename, skip) => {
-				var failed = new List<string> ();
-				var files = Directory.EnumerateFiles (app, "*", SearchOption.AllDirectories);
-				foreach (var file in files) {
-					if (skip != null && skip.Contains (Path.GetFileName (file)))
-						continue;
-					var info = new FileInfo (file);
-					if (info.LastWriteTime > dt) {
-						failed.Add (string.Format ("{0} is modified, timestamp: {1}", file, info.LastWriteTime));
-					} else {
-						Console.WriteLine ("{0} not modified", file);
+				Action<string, IEnumerable<string>> checkNotModified = (filename, skip) =>
+				{
+					var failed = new List<string> ();
+					var files = Directory.EnumerateFiles (mtouch.AppPath, "*", SearchOption.AllDirectories);
+					foreach (var file in files) {
+						if (skip != null && skip.Contains (Path.GetFileName (file)))
+							continue;
+						var info = new FileInfo (file);
+						if (info.LastWriteTime > dt) {
+							failed.Add (string.Format ("{0} is modified, timestamp: {1}", file, info.LastWriteTime));
+						} else {
+							Console.WriteLine ("{0} not modified", file);
+						}
 					}
-				}
-				Assert.IsEmpty (failed, filename);
-			};
+					Assert.IsEmpty (failed, filename);
+				};
 
-			Directory.CreateDirectory (app);
-			try {
-				var exe = CompileUnifiedTestAppExecutable (testDir);
-				var args = string.Format (format, app, exe, Configuration.xcode_root, Configuration.sdk_version, Configuration.XamarinIOSDll, testDir);
-				ExecutionHelper.Execute (TestTarget.ToolPath, args);
+				mtouch.DSym = false; // we don't need the dSYMs for this test, so disable them to speed up the test.
+				mtouch.MSym = false; // we don't need the mSYMs for this test, so disable them to speed up the test.
+				mtouch.AssertExecute (MTouchAction.BuildDev, "first build");
+				Console.WriteLine ("first build done");
+
 				dt = DateTime.Now;
 				System.Threading.Thread.Sleep (1000); // make sure all new timestamps are at least a second older.
-				ExecutionHelper.Execute (TestTarget.ToolPath, args);
+
+				mtouch.AssertExecute (MTouchAction.BuildDev, "second build");
+				Console.WriteLine ("second build done");
 
 				checkNotModified (name, null);
 
 				// Test that a rebuild (where something changed, in this case the .exe)
 				// actually work. We compile with custom code to make sure it's different
 				// from the previous exe we built.
-				var subDir = Path.Combine (testDir, "other");
-				Directory.CreateDirectory (subDir);
-				var exe2 = CompileUnifiedTestAppExecutable (subDir, 
-					/* the code here only changes the class name (default: 'TestApp' changed to 'TestApp2') to minimize the related
+				var subDir = Cache.CreateTemporaryDirectory ();
+				var exe2 = CompileUnifiedTestAppExecutable (subDir,
+					/* the code here only changes the class name (default: 'TestApp1' changed to 'TestApp2') to minimize the related
 					 * changes (there should be no changes in Xamarin.iOS.dll nor mscorlib.dll, even after linking) */
-					code: "public class TestApp2 { static void Main () { System.Console.WriteLine (typeof (ObjCRuntime.Runtime).ToString ()); } }");
-				File.Copy (exe2, exe, true);
-				ExecutionHelper.Execute (TestTarget.ToolPath, args);
+					code: codeB);
+				File.Copy (exe2, mtouch.Executable, true);
 
-				var skip = new string [] { "testApp", "testApp.exe", "testApp.armv7.aotdata", "testApp.arm64.aotdata" };
-				checkNotModified (name + "-rebuilt", skip);
-			} finally {
-				Directory.Delete (testDir, true);
+				mtouch.AssertExecute (MTouchAction.BuildDev, "third build");
+
+				var skipFiles = new string [] { "testApp", "testApp.exe", "testApp.aotdata.armv7", "testApp.aotdata.arm64" };
+				checkNotModified (name + "-rebuilt", skipFiles);
 			}
 		}
 

@@ -344,8 +344,12 @@ namespace Xamarin.Tests
 				psi.UseShellExecute = false;
 				psi.RedirectStandardError = true;
 				psi.RedirectStandardOutput = true;
-				foreach (System.Collections.DictionaryEntry envvar in psi.EnvironmentVariables)
+				foreach (System.Collections.DictionaryEntry envvar in psi.EnvironmentVariables) {
+					var current = System.Environment.GetEnvironmentVariable ((string) envvar.Key);
+					if (current == (string) envvar.Value)
+						continue;
 					Console.Write ($"{envvar.Key}={MTouch.Quote ((string) envvar.Value)} ");
+				}
 				Console.WriteLine ("{0} {1}", psi.FileName, psi.Arguments);
 				using (var p = new Process ()) {
 					p.StartInfo = psi;

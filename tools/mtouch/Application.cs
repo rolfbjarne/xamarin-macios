@@ -1159,6 +1159,15 @@ namespace Xamarin.Bundler {
 				}
 			}
 
+			// And from ourselves
+			foreach (var fw in Frameworks.Concat (WeakFrameworks)) {
+				BundleFileInfo info;
+				var key = $"Frameworks/{Path.GetFileName (fw)}";
+				if (!bundle_files.TryGetValue (key, out info))
+					bundle_files [key] = info = new BundleFileInfo ();
+				info.Sources.Add (fw);
+			}
+
 			// Copy frameworks to the app bundle.
 			if (IsExtension && !IsWatchExtension) {
 				// In extensions we need to save a list of the frameworks we need so that the main app can bundle them.
@@ -1265,7 +1274,7 @@ namespace Xamarin.Bundler {
 						Driver.RunLipo (cmd.ToString ());
 					}
 				} else {
-					cached_executable = Targets [0].cached_executable;
+					cached_executable = Targets [0].CachedExecutable;
 				}
 			}
 		}
@@ -1628,12 +1637,12 @@ namespace Xamarin.Bundler {
 			if (IsDualBuild) {
 				bool cached = true;
 				foreach (var target in Targets)
-					cached &= target.cached_executable;
+					cached &= target.CachedExecutable;
 				if (!cached)
 					StripNativeCode (Executable);
 			} else {
 				foreach (var target in Targets) {
-					if (!target.cached_executable)
+					if (!target.CachedExecutable)
 						StripNativeCode (target.Executable);
 				}
 			}

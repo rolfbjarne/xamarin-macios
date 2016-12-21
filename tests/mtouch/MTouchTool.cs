@@ -80,6 +80,7 @@ namespace Xamarin
 		public string HttpMessageHandler;
 		public bool? PackageMdb;
 		public bool? MSym;
+		public bool? DSym;
 		public Dictionary<string, string> SetEnv = new Dictionary<string, string> ();
 		public List<string> InvalidArguments = new List<string> ();
 #pragma warning restore 649
@@ -265,6 +266,9 @@ namespace Xamarin
 
 			if (MSym.HasValue)
 				sb.Append (" --msym:").Append (MSym.Value ? "true" : "false");
+
+			if (DSym.HasValue)
+				sb.Append (" --dsym:").Append (DSym.Value ? "true" : "false");
 
 			if (Extension == true)
 				sb.Append (" --extension");

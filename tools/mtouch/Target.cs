@@ -49,6 +49,7 @@ namespace Xamarin.Bundler
 		List<CompileTask> link_with_task_output = new List<CompileTask> ();
 		List<AOTTask> aot_dependencies = new List<AOTTask> ();
 		CompilerFlags linker_flags;
+		NativeLinkTask link_task;
 
 		// If we didn't link because the existing (cached) assemblyes are up-to-date.
 		bool cached_link;
@@ -56,14 +57,21 @@ namespace Xamarin.Bundler
 		// If any assemblies were updated (only set to false if the linker is disabled and no assemblies were modified).
 		bool any_assembly_updated = true;
 
-		// If we didn't link the final executable because the existing binary is up-to-date.
-		public bool cached_executable; 
-
 		// If the assemblies were symlinked.
 		public bool Symlinked;
 
 		public bool Is32Build { get { return Application.IsArchEnabled (Abis, Abi.Arch32Mask); } } // If we're targetting a 32 bit arch for this target.
 		public bool Is64Build { get { return Application.IsArchEnabled (Abis, Abi.Arch64Mask); } } // If we're targetting a 64 bit arch for this target.
+
+		// If we didn't link the final executable because the existing binary is up-to-date.
+		public bool CachedExecutable {
+			get {
+				if (link_task == null)
+					return false;
+				
+				return !link_task.Rebuilt;
+			}
+		}
 
 		// This is a list of all the architectures we need to build, which may include any architectures
 		// in any extensions (but not the main app).
@@ -1267,7 +1275,7 @@ namespace Xamarin.Bundler
 				linker_flags.AddOtherFlag ("-fapplication-extension");
 			}
 
-			var link_task = new NativeLinkTask ()
+			link_task = new NativeLinkTask ()
 			{
 				Target = this,
 				OutputFile = Executable,

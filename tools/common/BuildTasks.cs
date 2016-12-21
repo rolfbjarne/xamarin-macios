@@ -173,13 +173,21 @@ namespace Xamarin.Bundler
 		public readonly int ID = counter++;
 
 		TaskCompletionSource<bool> started_task = new TaskCompletionSource<bool> ();
-		TaskCompletionSource<bool> completed_task = new TaskCompletionSource<bool> ();
+		TaskCompletionSource<bool> completed_task = new TaskCompletionSource<bool> (); // The value determines whether the target was rebuilt (not up-to-date) or not.
 		List<BuildTask> dependencies = new List<BuildTask> ();
 
 		[System.Diagnostics.Conditional ("LOG_TASK")]
 		void Log (string format, params object [] args)
 		{
 			Console.WriteLine (format, args);
+		}
+
+		public bool Rebuilt {
+			get {
+				if (!completed_task.Task.IsCompleted)
+					throw new InvalidOperationException ();
+				return completed_task.Task.Result;
+			}
 		}
 
 		// A list of input files (not a list of all the dependencies that would make this task rebuild).
@@ -252,7 +260,7 @@ namespace Xamarin.Bundler
 						} else {
 							Driver.Log (3, "Target '{0}' is up-to-date.", Outputs.First () );
 						}
-						completed_task.SetResult (true);
+						completed_task.SetResult (false);
 					} else {
 						Driver.Log (3, "Target(s) {0} must be rebuilt.", string.Join (", ", Outputs.ToArray ()));
 						Log ("Task #{1} ({0})'s dependencies are complete.", GetType ().Name, ID);

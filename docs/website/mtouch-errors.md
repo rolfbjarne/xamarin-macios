@@ -365,9 +365,62 @@ A last-straw solution would be to use a different version of Xamarin.iOS, one th
 
 <h3><a name="MT0096"/>MT0096: No reference to Xamarin.iOS.dll was found.</h3>
 
-<h3><a name="MT0099"/>Internal error *. Please file a bug report with a test case (http://bugzilla.xamarin.com).</h3>
+<!-- MT0097: used by mmp -->
+
+<h3><a name="MT0098"/>MT0098: No assembly build target was specified for '*'.</h3>
+
+When specifying the assembly build target using --assembly-build-target, every assembly in the app must have a build target assigned.
+
+This error is reported when the assembly mentioned in the error message does not have an assembly build target assigned.
+
+See the documentation about --assembly-build-target for further information.
+
+<h3><a name="MT0099"/>MT0099: Internal error *. Please file a bug report with a test case (http://bugzilla.xamarin.com).</h3>
+
+This error message is reported when an internal consistency check in Xamarin.iOS fails.
 
 This indicates a bug in Xamarin.iOS; please file a bug report at [http://bugzilla.xamarin.com](https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS) with a test case.
+
+<h3><a name="MT0100"/>Invalid assembly build target: '*'. Please file a bug report with a test case (http://bugzilla.xamarin.com).</h3>
+
+This error message is reported when an internal consistency check in Xamarin.iOS fails.
+
+This is always a bug in Xamarin.iOS; please file a bug report at [http://bugzilla.xamarin.com](https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS) with a test case.
+
+<h3><a name="MT0101"/>The assembly '*' is specified multiple times in --assembly-build-target arguments.</h3>
+
+The assembly mentioned in the error message is specified multiple times in --assembly-build-target arguments. Please make sure each assembly is only mentioned once.
+
+<h3><a name="MT0102"/>The assemblies '*' and '*' have the same target name ('*'), but different targets ('*' and '*').</h3>
+
+The assemblies mentioned in the error message have conflicting build targets.
+
+For example:
+
+    --assembly-build-target:Assembly1.dll=framework=MyBinary --assembly-build-target:Assembly2.dll=dynamiclibrary=MyBinary
+
+This example is trying to create both a dynamic library and a framework with the same make (`MyBinary`).
+
+<h3><a name="MT0103"/>The static object '*' contains more than one assembly ('*'), but each static object must correspond with exactly one assembly.</h3>
+
+The assemblies mentioned in the error message are all compiled to a single static object. This is not allowed, every assembly must be compiled to a different static object.
+
+For example:
+
+    --assembly-build-target:Assembly1.dll=staticobject=MyBinary --assembly-build-target:Assembly2.dll=staticobject=MyBinary
+
+This example tries to build a static object (`MyBinary`) comprised of two assemblies (`Assembly1.dll` and `Assembly2.dll`), which is not allowed.
+
+<h3><a name="MT0104"/>There is at least one extension that builds for '*'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.</h3>
+
+When compiling assemblies to user frameworks, the frameworks must contain the CPU architectures used in both the container app and all extensions.
+
+For example:
+
+* The container app is a 64-bit only app (ARM64).
+* There's an extension that targets both ARMv7 and ARM64.
+
+In this case all the frameworks in the container app must also build for ARMv7, otherwise the extension won't work on 32-bit devices.
 
 # MT1xxx: Project related error messages
 

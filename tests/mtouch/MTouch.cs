@@ -1048,6 +1048,7 @@ namespace Xamarin
 
 				var bin = Path.Combine (mtouch.AppPath, Path.GetFileNameWithoutExtension (mtouch.Executable));
 
+				mtouch.Timeout = TimeSpan.FromMinutes (5);
 				Assert.AreEqual (0, mtouch.Execute (target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim));
 
 				VerifyArchitectures (bin, abi, abi.Replace ("+llvm", string.Empty).Split (','));
@@ -1106,7 +1107,7 @@ namespace Xamarin
 				mtouch.CreateTemporaryApp ();
 				      
 				var bin = Path.Combine (mtouch.AppPath, Path.GetFileNameWithoutExtension (mtouch.Executable));
-
+				mtouch.Timeout = TimeSpan.FromMinutes (5);
 				Assert.AreEqual (0, mtouch.Execute (target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim), "build");
 				VerifyArchitectures (bin,  "arch",  target == Target.Dev ? "arm64" : "x86_64");
 			}

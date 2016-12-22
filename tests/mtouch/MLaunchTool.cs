@@ -36,6 +36,12 @@ namespace Xamarin
 			return new string ('-', -Verbosity).Replace ("-", "-q ");
 		}
 
+		protected override string ToolPath {
+			get {
+				return Configuration.MlaunchPath;
+			}
+		}
+
 		public int Execute ()
 		{
 			return Execute (Configuration.MlaunchPath, BuildArguments ());

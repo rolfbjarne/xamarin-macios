@@ -938,6 +938,7 @@ namespace Xamarin
 				Linker = MTouchLinker.DontLink,
 			}) {
 				mtouch.CreateTemporaryApp_LinkWith ();
+				mtouch.Timeout = TimeSpan.FromMinutes (10);
 				Assert.AreEqual (0, mtouch.Execute (MTouchAction.BuildDev), "build 1");
 			}
 		}
@@ -955,6 +956,7 @@ namespace Xamarin
 				FastDev = true,
 				References = new string [] { GetBindingsLibrary (profile) },
 			}) {
+				mtouch.Timeout = TimeSpan.FromMinutes (10);
 				mtouch.CreateTemporaryApp_LinkWith ();
 
 				// --fastdev w/all link
@@ -1158,13 +1160,6 @@ namespace Xamarin
 			}
 		}
 
-		void ExecuteWithStats (string binary, string arguments)
-		{
-			ExecutionHelper.Execute (TestTarget.ToolPath, arguments);
-			var fi = new FileInfo (binary);
-			Console.WriteLine ("Binary Size: {0} bytes = {1} kb", fi.Length, fi.Length / 1024);
-		}
-
 		string ReplaceExtraArgs (string contents, string replace)
 		{
 			return ReplaceCsprojData (contents, "MtouchExtraArgs", replace);
@@ -1235,41 +1230,34 @@ namespace Xamarin
 		}
 
 		[Test]
-		public void Registrar ()
+		// fully linked + llvm (+thumb) + default registrar
+		[TestCase (Target.Dev, MTouchLinker.Unspecified, MTouchRegistrar.Static, "armv7+llvm")]
+		[TestCase (Target.Dev, MTouchLinker.Unspecified, MTouchRegistrar.Static, "armv7+llvm+thumb2")]
+		// non-linked device build
+		[TestCase (Target.Dev, MTouchLinker.DontLink, MTouchRegistrar.Static, "")]
+		[TestCase (Target.Dev, MTouchLinker.DontLink, MTouchRegistrar.Dynamic, "")]
+		// sdk device build
+		[TestCase (Target.Dev, MTouchLinker.LinkSdk, MTouchRegistrar.Static, "")]
+		[TestCase (Target.Dev, MTouchLinker.LinkSdk, MTouchRegistrar.Dynamic, "")]
+		// fully linked device build
+		[TestCase (Target.Dev, MTouchLinker.Unspecified, MTouchRegistrar.Static, "")]
+		[TestCase (Target.Dev, MTouchLinker.Unspecified, MTouchRegistrar.Dynamic, "")]
+		// non-linked simulator build
+		[TestCase (Target.Sim, MTouchLinker.DontLink, MTouchRegistrar.Static, "")]
+		[TestCase (Target.Sim, MTouchLinker.DontLink, MTouchRegistrar.Dynamic, "")]
+		public void Registrar (Target target, MTouchLinker linker, MTouchRegistrar registrar, string abi)
 		{
 			AssertDeviceAvailable ();
 
-			var testDir = GetTempDirectory ();
-			var app = Path.Combine (testDir, "testApp.app");
-			Directory.CreateDirectory (app);
-			
-			try {
-				var exe = CompileTestAppExecutable (testDir);
-				var bin = Path.Combine (app, Path.GetFileNameWithoutExtension (exe));
-				var common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --dev {0} -sdk {2} {1} -debug -r:{3}", app, exe, Configuration.sdk_version, Configuration.XamarinIOSDll);
-
-				// fully linked + llvm (+thumb) + default registrar (currently llvm fails to build with clang, so we should transparently switch to gcc in this case)
-				ExecuteWithStats (bin, common_args + " --registrar:static --abi:armv7+llvm");
-				ExecuteWithStats (bin, common_args + " --registrar:static --abi:armv7+llvm+thumb2");
-				
-				// non-linked device build
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:dynamic");
-
-				// sdk device build
-				ExecuteWithStats (bin, common_args + " --compiler:clang --linksdkonly --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --linksdkonly --registrar:dynamic");
-
-				// fully linked device build
-				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --registrar:dynamic");
-
-				// non-linked device build
-				common_args = string.Format ("-sdkroot " + Configuration.xcode_root + " --sim {0} -sdk {2} {1} -debug -r:{3}", app, exe, Configuration.sdk_version, Configuration.XamarinIOSDll);
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:static");
-				ExecuteWithStats (bin, common_args + " --compiler:clang --nolink --registrar:dynamic");
-			} finally {
-				Directory.Delete (testDir, true);
+			using (var mtouch = new MTouchTool ()) {
+				mtouch.CreateTemporaryApp ();
+				mtouch.Linker = linker;
+				mtouch.Registrar = registrar;
+				mtouch.Abi = abi;
+				mtouch.Timeout = TimeSpan.FromMinutes (5);
+				mtouch.AssertExecute (target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim, "build");
+				var fi = new FileInfo (mtouch.NativeExecutablePath);
+				Console.WriteLine ("Binary Size: {0} bytes = {1} kb", fi.Length, fi.Length / 1024);
 			}
 		}
 

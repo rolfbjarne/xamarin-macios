@@ -217,6 +217,17 @@ namespace Xamarin.iOS.Tasks
 				Assert.IsTrue (File.Exists (v) || Directory.Exists (v), "Expected file: {0} does not exist", v);
 		}
 
+		public void TestFilesExists (string [] baseDirs, string [] files)
+		{
+
+			if (baseDirs.Length == 0) {
+				TestFilesExists (baseDirs [0], files);
+			} else {
+				foreach (var file in files)
+					Assert.IsTrue (baseDirs.Select (s => File.Exists (Path.Combine (s, file))).Any (v => v), $"Expected file: {file} does not exist in any of the directories: {string.Join (", ", baseDirs)}");
+			}
+		}
+
 		public void TestStoryboardC (string path) 
 		{
 			Assert.IsTrue (Directory.Exists (path), "Storyboard {0} does not exist", path);

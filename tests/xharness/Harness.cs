@@ -49,6 +49,8 @@ namespace xharness
 		public string WatchOSContainerTemplate { get; set; }
 		public string WatchOSAppTemplate { get; set; }
 		public string WatchOSExtensionTemplate { get; set; }
+		public string TodayContainerTemplate { get; set; }
+		public string TodayExtensionTemplate { get; set; }
 		public string MONO_PATH { get; set; } // Use same name as in Makefiles, so that a grep finds it.
 		public string WATCH_MONO_PATH { get; set; } // Use same name as in Makefiles, so that a grep finds it.
 		public string TVOS_MONO_PATH { get; set; } // Use same name as in Makefiles, so that a grep finds it.
@@ -227,7 +229,7 @@ namespace xharness
 			MAC_DESTDIR = make_config ["MAC_DESTDIR"];
 			IOS_DESTDIR = make_config ["IOS_DESTDIR"];
 		}
-		 
+
 		void AutoConfigureMac ()
 		{
 			var test_suites = new string[] { "apitest", "dontlink-mac" }; 
@@ -255,8 +257,8 @@ namespace xharness
 
 		void AutoConfigureIOS ()
 		{
-			var test_suites = new string [] { "monotouch-test", "framework-test", "mini" };
-			var library_projects = new string [] { "BundledResources", "EmbeddedResources", "bindings-test", "bindings-framework-test" };
+			var test_suites = new string [] { "monotouch-test", "framework-test", "mini", "interdependent-binding-projects" };
+			var library_projects = new string [] { "BundledResources", "EmbeddedResources", "bindings-test", "bindings-test2", "bindings-framework-test" };
 			var fsharp_test_suites = new string [] { "fsharp" };
 			var fsharp_library_projects = new string [] { "fsharplibrary" };
 			var bcl_suites = new string [] { "mscorlib", "System", "System.Core", "System.Data", "System.Net.Http", "System.Numerics", "System.Runtime.Serialization", "System.Transactions", "System.Web.Services", "System.Xml", "System.Xml.Linq", "Mono.Security", "System.ComponentModel.DataAnnotations", "System.Json", "System.ServiceModel.Web", "Mono.Data.Sqlite" };
@@ -282,12 +284,15 @@ namespace xharness
 			WatchOSContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchContainer"));
 			WatchOSAppTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchApp"));
 			WatchOSExtensionTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchExtension"));
+
+			TodayContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates", "TodayContainer"));
+			TodayExtensionTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates", "TodayExtension"));
 		}
 
-		static Dictionary<string, string> make_config = new Dictionary<string, string> ();
-		static IEnumerable<string> FindConfigFiles (string name)
+		Dictionary<string, string> make_config = new Dictionary<string, string> ();
+		IEnumerable<string> FindConfigFiles (string name)
 		{
-			var dir = Environment.CurrentDirectory;
+			var dir = RootDirectory;
 			while (dir != "/") {
 				var file = Path.Combine (dir, name);
 				if (File.Exists (file))
@@ -296,20 +301,20 @@ namespace xharness
 			}
 		}
 
-		static void ParseConfigFiles ()
+		void ParseConfigFiles ()
 		{
 			ParseConfigFiles (FindConfigFiles ("test.config"));
 			ParseConfigFiles (FindConfigFiles ("Make.config.local"));
 			ParseConfigFiles (FindConfigFiles ("Make.config"));
 		}
 
-		static void ParseConfigFiles (IEnumerable<string> files)
+		void ParseConfigFiles (IEnumerable<string> files)
 		{
 			foreach (var file in files)
 				ParseConfigFile (file);
 		}
 
-		static void ParseConfigFile (string file)
+		void ParseConfigFile (string file)
 		{
 			if (string.IsNullOrEmpty (file))
 				return;
@@ -399,6 +404,7 @@ namespace xharness
 			var unified_targets = new List<UnifiedTarget> ();
 			var tvos_targets = new List<TVOSTarget> ();
 			var watchos_targets = new List<WatchOSTarget> ();
+			var today_targets = new List<TodayExtensionTarget> ();
 
 			RootDirectory = Path.GetFullPath (RootDirectory).TrimEnd ('/');
 
@@ -432,11 +438,20 @@ namespace xharness
 				};
 				unified.Execute ();
 				unified_targets.Add (unified);
+
+				var today = new TodayExtensionTarget
+				{
+					TemplateProjectPath = file,
+					Harness = this,
+				};
+				today.Execute ();
+				today_targets.Add (today);
 			}
 
 			SolutionGenerator.CreateSolution (this, watchos_targets, "watchos");
 			SolutionGenerator.CreateSolution (this, tvos_targets, "tvos");
-			MakefileGenerator.CreateMakefile (this, unified_targets, tvos_targets, watchos_targets);
+			SolutionGenerator.CreateSolution (this, today_targets, "today");
+			MakefileGenerator.CreateMakefile (this, unified_targets, tvos_targets, watchos_targets, today_targets);
 		}
 
 		public int Install ()
@@ -450,9 +465,9 @@ namespace xharness
 					ProjectFile = project.Path,
 					MainLog = HarnessLog,
 				};
-				var rv = runner.Install (HarnessLog);
-				if (rv != 0)
-					return rv;
+				var rv = runner.InstallAsync ().Result;
+				if (!rv.Succeeded)
+					return rv.ExitCode;
 			}
 			return 0;
 		}
@@ -469,9 +484,9 @@ namespace xharness
 					ProjectFile = project.Path,
 					MainLog = HarnessLog,
 				};
-				var rv = runner.Uninstall (HarnessLog);
-				if (rv != 0)
-					return rv;
+				var rv = runner.UninstallAsync ().Result;
+				if (!rv.Succeeded)
+					return rv.ExitCode;
 			}
 			return 0;
 		}
@@ -491,6 +506,7 @@ namespace xharness
 				if (rv != 0)
 					return rv;
 			}
+
 			return 0;
 		}
 

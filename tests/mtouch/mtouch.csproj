@@ -48,6 +48,12 @@
     <Compile Include="TimingTests.cs" />
     <Compile Include="MLaunchTool.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="ExecutableTests.cs" />
+    <Compile Include="ProjectFile.cs" />
+    <Compile Include="XHarnessTool.cs" />
+    <Compile Include="..\xharness\ProjectFileExtensions.cs">
+      <Link>ProjectFileExtensions.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

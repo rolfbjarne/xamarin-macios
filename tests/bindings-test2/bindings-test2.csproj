@@ -5,15 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E40B0B77-3467-4891-9117-7AF8F248E306}</ProjectGuid>
+    <ProjectGuid>{F88FA3CF-B8EF-4CC7-9A2C-BC59DC7B4F22}</ProjectGuid>
     <ProjectTypeGuids>{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>bindingstest</RootNamespace>
+    <RootNamespace>bindingstest2</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>bindings-framework-test</AssemblyName>
+    <AssemblyName>bindings-test2</AssemblyName>
+    <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkIdentifier>Xamarin.iOS</TargetFrameworkIdentifier>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)-unified</IntermediateOutputPath>
     <DefineConstants>XAMCORE_2_0</DefineConstants>
   </PropertyGroup>
@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Any CPU\$(Configuration)-unified</OutputPath>
-    <DefineConstants>DEBUG;FRAMEWORK_TEST;;$(DefineConstants)</DefineConstants>
+    <DefineConstants>DO_NOT_REMOVE;DEBUG;;$(DefineConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -31,50 +31,61 @@
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\Any CPU\$(Configuration)-unified</OutputPath>
-    <DefineConstants>DO_NOT_REMOVE;FRAMEWORK_TEST;$(DefineConstants)</DefineConstants>
+    <DefineConstants>DO_NOT_REMOVE;$(DefineConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="MonoTouch.NUnitLite" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+    <ObjcBindingApiDefinition Include="ApiProtocol.cs" />
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
   <ItemGroup>
-    <ObjcBindingNativeFramework Include="..\..\tests\test-libraries\.libs\ios\XTest.framework">
-      <Link>XTest.framework</Link>
-    </ObjcBindingNativeFramework>
-    <ObjcBindingNativeFramework Include="..\..\tests\test-libraries\.libs\ios\XStaticObjectTest.framework">
-      <Link>XStaticObjectTest.framework</Link>
-    </ObjcBindingNativeFramework>
-    <ObjcBindingNativeFramework Include="..\..\tests\test-libraries\.libs\ios\XStaticArTest.framework">
-      <Link>XStaticArTest.framework</Link>
-    </ObjcBindingNativeFramework>
+    <ObjcBindingNativeLibrary Include="..\..\tests\test-libraries\.libs\ios\libtest2.a">
+      <Link>libtest2.a</Link>
+    </ObjcBindingNativeLibrary>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XTest.framework.linkwith.cs">
-      <DependentUpon>XTest.framework</DependentUpon>
+    <Compile Include="libtest2.linkwith.cs">
+      <DependentUpon>libtest2.a</DependentUpon>
     </Compile>
+    <Compile Include="BindingTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\tests\test-libraries\libframework.m">
-      <Link>libframework.m</Link>
+    <None Include="..\..\tests\test-libraries\libtest2.m">
+      <Link>libtest2.m</Link>
     </None>
-    <None Include="..\..\tests\test-libraries\libframework.h">
-      <Link>libframework.h</Link>
+    <None Include="..\..\tests\test-libraries\libtest2.h">
+      <Link>libtest2.h</Link>
     </None>
   </ItemGroup>
-  <Target Name="BeforeBuild" Inputs="..\..\tests\test-libraries\libframework.m" Outputs="..\..\tests\test-libraries\.libs\ios\XTest.framework ..\..\tests\test-libraries\.libs\ios\XSharedObjectTest.framework ..\..\tests\test-libraries\.libs\ios\XSharedARTest.framework">
+  <ItemGroup>
+    <GeneratedTestInput Include="..\..\tests\test-libraries\*.m" />
+    <GeneratedTestInput Include="..\..\tests\test-libraries\*.h" />
+    <GeneratedTestInput Include="..\..\tests\test-libraries\*.cs" />
+    <GeneratedTestInput Include="..\..\tests\test-libraries\Makefile" />
+    <GeneratedTestOutput Include="..\..\tests\test-libraries\.libs\ios\libtest2.a" />
+  </ItemGroup>
+  <Target Name="BeforeBuild" Inputs="@(GeneratedTestInput)" Outputs="@(GeneratedTestOutput)">
     <Exec Command="make -j8 -C ..\..\tests\test-libraries" />
   </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\bindings-test\bindings-test.csproj">
+      <Project>{48585BC2-D604-4CF2-A827-D887BEA51FD6}</Project>
+      <Name>bindings-test</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

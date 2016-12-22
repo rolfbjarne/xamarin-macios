@@ -16,7 +16,7 @@
 	branch = master
 [submodule "external/Touch.Unit"]
 	path = external/Touch.Unit
-	url = ../../rolfbjarne/Touch.Unit.git
+	url = ../../spouliot/Touch.Unit.git
 	branch = master
 [submodule "external/opentk"]
 	path = external/opentk

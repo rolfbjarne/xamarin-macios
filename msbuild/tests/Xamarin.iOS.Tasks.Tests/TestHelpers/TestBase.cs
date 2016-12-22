@@ -55,10 +55,7 @@ namespace Xamarin.iOS.Tasks
 			if (config == "Debug")
 				coreFiles.Add (managedExe + ".mdb");
 
-			if (platform == "iPhone")
-				coreFiles.Add (Path.Combine ("..", nativeExe));
-			else
-				coreFiles.Add (nativeExe);
+			coreFiles.Add (nativeExe);
 
 			return coreFiles.ToArray ();
 		}
@@ -220,7 +217,7 @@ namespace Xamarin.iOS.Tasks
 		public void TestFilesExists (string [] baseDirs, string [] files)
 		{
 
-			if (baseDirs.Length == 0) {
+			if (baseDirs.Length == 1) {
 				TestFilesExists (baseDirs [0], files);
 			} else {
 				foreach (var file in files)

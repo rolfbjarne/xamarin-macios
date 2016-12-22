@@ -1160,8 +1160,13 @@ namespace Xamarin.Bundler {
 			}
 
 			// And from ourselves
-			foreach (var fw in Frameworks.Concat (WeakFrameworks)) {
+			var all_assemblies = Targets.SelectMany ((v) => v.Assemblies);
+			var all_frameworks = Frameworks.Concat (all_assemblies.SelectMany ((v) => v.Frameworks));
+			var all_weak_frameworks = WeakFrameworks.Concat (all_assemblies.SelectMany ((v) => v.WeakFrameworks));
+			foreach (var fw in all_frameworks.Concat (all_weak_frameworks)) {
 				BundleFileInfo info;
+				if (!Path.GetFileName (fw).EndsWith (".framework", StringComparison.Ordinal))
+					continue;
 				var key = $"Frameworks/{Path.GetFileName (fw)}";
 				if (!bundle_files.TryGetValue (key, out info))
 					bundle_files [key] = info = new BundleFileInfo ();

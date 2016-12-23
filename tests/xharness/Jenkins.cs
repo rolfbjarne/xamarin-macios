@@ -869,6 +869,7 @@ namespace xharness
 .p3 { font-size: 1em; }
 .expander { display: table-cell; height: 100%; padding-right: 6px; text-align: center; vertical-align: middle; min-width: 10px; }
 .runall { font-size: 75%; margin-left: 3px; }
+.logs { padding-bottom: 10px; padding-top: 10px; padding-left: 30px; }
 </style>
 </head>");
 				writer.WriteLine ("<title>Test results</title>");
@@ -877,7 +878,7 @@ function toggleLogVisibility (logName)
 {
 	var button = document.getElementById ('button_' + logName);
 	var logs = document.getElementById ('logs_' + logName);
-	if (logs.style.display == 'none') {
+	if (logs.style.display == 'none' && logs.innerText.trim () != '') {
 		logs.style.display = 'block';
 		button.innerText = '-';
 	} else {
@@ -993,8 +994,18 @@ function autoshowdetailsmessage (input_id, message_id)
 		}
 	}
 }
+
+function oninitialload ()
+{
+	var autorefreshable = document.getElementsByClassName (""autorefreshable"");
+	for (var i = 0; i < autorefreshable.length; i++) {
+		var evt = autorefreshable [i].getAttribute (""data-onautorefresh"");
+		if (evt != '')
+			eval (evt);
+	}
+}
 </script>");
-				writer.WriteLine ("<body>");
+				writer.WriteLine ("<body onload='oninitialload ();'>");
 
 				if (IsServerMode) {
 					writer.WriteLine ("<div id='quit' style='position:absolute; top: 20px; right: 20px;'><a href='javascript:quit()'>Quit</a></div>");
@@ -1088,32 +1099,31 @@ function autoshowdetailsmessage (input_id, message_id)
 
 				writer.WriteLine ("<div id='test-list' style='float:left'>");
 				foreach (var group in allTasks.GroupBy ((TestTask v) => v.TestName).OrderBy ((v) => v.Key, StringComparer.Ordinal)) {
-					var defaultHide = group.All ((v) => v.Succeeded);
 					var singleTask = group.Count () == 1;
 					var groupId = group.Key.Replace (' ', '-');
 
 					// Test header
 					writer.Write ($"<div class='pdiv'>");
-					writer.Write ($"<span id='button_container2_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>-</span>");
+					writer.Write ($"<span id='button_container2_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>+</span>");
 					writer.Write ($"<span id='x{id_counter++}' class='p1 autorefreshable' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>{group.Key}{RenderTextStates (group)}</span>");
 					if (IsServerMode)
 						writer.Write ($" <span><a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
 					writer.WriteLine ("</div>");
 
 					// Test data
-					writer.WriteLine ("<div id='test_container2_{0}' style='display: {1}; margin-left: 20px;'>", group.Key.Replace (' ', '-'), defaultHide ? "none" : "block");
+					writer.WriteLine ($"<div id='test_container2_{groupId}' style='display: none; margin-left: 20px;'>");
 					var groupedByMode = group.GroupBy ((v) => v.Mode);
 					foreach (var modeGroup in groupedByMode) {
 						var multipleModes = modeGroup.Count () > 1;
 						if (multipleModes) {
 							var modeGroupId = id_counter++.ToString ();
 							writer.Write ($"<div class='pdiv'>");
-							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>-</span>");
+							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>+</span>");
 							writer.Write ($"<span id='x{id_counter++}' class='p2 autorefreshable' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>{modeGroup.Key}{RenderTextStates (modeGroup)}</span>");
 							writer.Write ($" <span><a class='runall' href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
 							writer.WriteLine ("</div>");
 
-							writer.WriteLine ($"<div id='test_container2_{modeGroupId}' style='margin-left: 20px;'>");
+							writer.WriteLine ($"<div id='test_container2_{modeGroupId}' style='display: none; margin-left: 20px;'>");
 						}
 						foreach (var test in modeGroup.OrderBy ((v) => v.Variation, StringComparer.OrdinalIgnoreCase)) {
 							var runTest = test as RunTestTask;
@@ -1134,7 +1144,7 @@ function autoshowdetailsmessage (input_id, message_id)
 								if (IsServerMode && !test.InProgress && !test.Waiting)
 									writer.Write ($" <span><a class='runall' href='javascript:runtest ({test.ID})'>Run</a></span> ");
 								writer.WriteLine ("</div>");
-								writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable' data-onautorefresh='autoshowdetailsmessage(\"logs_{log_id}\", \"button_{log_id}\");' style='display: none; padding-bottom: 10px; padding-top: 10px; padding-left: 30px;'>");
+								writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable logs' data-onautorefresh='autoshowdetailsmessage(\"logs_{log_id}\", \"button_{log_id}\");' style='display: none;'>");
 							}
 
 							if (!string.IsNullOrEmpty (test.FailureMessage))
@@ -1212,7 +1222,13 @@ function autoshowdetailsmessage (input_id, message_id)
 		string RenderTextStates (IEnumerable<TestTask> tests)
 		{
 			// Create a collection of all non-ignored tests in the group (unless all tests were ignored).
-			var relevantGroup = tests.Where ((v) => v.ExecutionResult != TestExecutingResult.Ignored && v.ExecutionResult != TestExecutingResult.NotStarted);
+			var allIgnored = tests.All ((v) => v.ExecutionResult == TestExecutingResult.Ignored);
+			IEnumerable<TestTask> relevantGroup;
+			if (allIgnored) {
+				relevantGroup = tests;
+			} else {
+				relevantGroup = tests.Where ((v) => v.ExecutionResult != TestExecutingResult.Ignored && v.ExecutionResult != TestExecutingResult.NotStarted);
+			}
 			if (!relevantGroup.Any ())
 				return string.Empty;
 			
@@ -1287,6 +1303,12 @@ function autoshowdetailsmessage (input_id, message_id)
 		public virtual string Mode { get; set; }
 		public virtual string Variation { get; set; }
 
+		protected static string Timestamp {
+			get {
+				return $"{DateTime.Now:yyyyMMdd_HHmmss}";
+			}
+		}
+
 		string test_name;
 		public virtual string TestName {
 			get {
@@ -1334,7 +1356,7 @@ function autoshowdetailsmessage (input_id, message_id)
 		public Log MainLog {
 			get {
 				if (test_log == null)
-					test_log = Logs.CreateStream (LogDirectory, "main.log", "Main log");
+					test_log = Logs.CreateStream (LogDirectory, $"main-{Timestamp}.log", "Main log");
 				return test_log;
 			}
 		}
@@ -1372,7 +1394,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					throw new Exception ("Result not set!");
 			} catch (Exception e) {
 				ExecutionResult = TestExecutingResult.Failed;
-				using (var log = Logs.CreateStream (LogDirectory, "execution-failure.log", "Execution failure"))
+				using (var log = Logs.CreateStream (LogDirectory, $"execution-failure-{Timestamp}.log", "Execution failure"))
 					log.WriteLine (e.ToString ());
 			} finally {
 				duration.Stop ();
@@ -1491,7 +1513,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					xbuild.StartInfo.Arguments = args.ToString ();
 					Jenkins.MainLog.WriteLine ("Building {0} ({1})", TestName, Mode);
 					SetEnvironmentVariables (xbuild);
-					var log = Logs.CreateStream (LogDirectory, "build-" + Platform + ".txt", "Build log");
+					var log = Logs.CreateStream (LogDirectory, $"build-{Platform}-{Timestamp}.txt", "Build log");
 					foreach (string key in xbuild.StartInfo.EnvironmentVariables.Keys)
 						log.WriteLine ("{0}={1}", key, xbuild.StartInfo.EnvironmentVariables [key]);
 					log.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);
@@ -1532,7 +1554,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					make.StartInfo.Arguments = Target;
 					Jenkins.MainLog.WriteLine ("Making {0} in {1}", Target, WorkingDirectory);
 					SetEnvironmentVariables (make);
-					var log = Logs.CreateStream (LogDirectory, "make-" + Platform + ".txt", "Build log");
+					var log = Logs.CreateStream (LogDirectory, $"make-{Platform}-{Timestamp}.txt", "Build log");
 					foreach (string key in make.StartInfo.EnvironmentVariables.Keys)
 						log.WriteLine ("{0}={1}", key, make.StartInfo.EnvironmentVariables [key]);
 					log.WriteLine ("{0} {1}", make.StartInfo.FileName, make.StartInfo.Arguments);
@@ -1586,7 +1608,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					xbuild.StartInfo.Arguments = args.ToString ();
 					Jenkins.MainLog.WriteLine ("Building {0} ({1})", TestName, Mode);
 					SetEnvironmentVariables (xbuild);
-					var log = Logs.CreateStream (LogDirectory, $"build-{Platform}-{DateTime.Now:yyyyMMdd_HHmmss}.txt", "Build log");
+					var log = Logs.CreateStream (LogDirectory, $"build-{Platform}-{Timestamp}.txt", "Build log");
 					foreach (string key in xbuild.StartInfo.EnvironmentVariables.Keys)
 						log.WriteLine ("{0}={1}", key, xbuild.StartInfo.EnvironmentVariables [key]);
 					log.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);
@@ -1650,7 +1672,7 @@ function autoshowdetailsmessage (input_id, message_id)
 		{
 			using (var resource = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireConcurrentAsync ())) {
 				var xmlLog = Logs.CreateFile ("XML log", Path.Combine (LogDirectory, "log.xml"));
-				var log = Logs.CreateStream (LogDirectory, "execute.txt", "Execution log");
+				var log = Logs.CreateStream (LogDirectory, $"execute-{Timestamp}.txt", "Execution log");
 				using (var proc = new Process ()) {
 
 					proc.StartInfo.WorkingDirectory = WorkingDirectory;
@@ -1690,7 +1712,7 @@ function autoshowdetailsmessage (input_id, message_id)
 
 				if (ProduceHtmlReport) {
 					try {
-						var output = Logs.CreateStream (LogDirectory, "Log.html", "HTML log");
+						var output = Logs.CreateStream (LogDirectory, $"Log-{Timestamp}.html", "HTML log");
 						using (var srt = new StringReader (File.ReadAllText (Path.Combine (Harness.RootDirectory, "HtmlTransform.xslt")))) {
 							using (var sri = xmlLog.GetReader ()) {
 								using (var xrt = System.Xml.XmlReader.Create (srt)) {
@@ -1789,7 +1811,7 @@ function autoshowdetailsmessage (input_id, message_id)
 				using (var proc = new Process ()) {
 					proc.StartInfo.FileName = Path;
 					Jenkins.MainLog.WriteLine ("Executing {0} ({1})", TestName, Mode);
-					var log = Logs.CreateStream (LogDirectory, "execute-" + Platform + ".txt", "Execution log");
+					var log = Logs.CreateStream (LogDirectory, $"execute-{Platform}-{Timestamp}.txt", "Execution log");
 					log.WriteLine ("{0} {1}", proc.StartInfo.FileName, proc.StartInfo.Arguments);
 					if (!Harness.DryRun) {
 						ExecutionResult = TestExecutingResult.Running;
@@ -1874,6 +1896,10 @@ function autoshowdetailsmessage (input_id, message_id)
 			if (Finished)
 				return;
 
+			VerifyRun ();
+			if (Finished)
+				return;
+
 			if (!await BuildAsync ())
 				return;
 
@@ -1883,6 +1909,7 @@ function autoshowdetailsmessage (input_id, message_id)
 		}
 
 		protected abstract Task RunTestAsync ();
+		protected virtual void VerifyRun () { }
 	}
 
 	abstract class RunXITask<TDevice> : RunTestTask where TDevice: class, IDevice
@@ -1988,6 +2015,16 @@ function autoshowdetailsmessage (input_id, message_id)
 			}
 		}
 
+		protected override void VerifyRun ()
+		{
+			base.VerifyRun ();
+
+			if (!DeviceCandidates.Any ()) {
+				ExecutionResult = TestExecutingResult.Ignored;
+				FailureMessage = "No applicable devices found.";
+			}
+		}
+
 		public RunDeviceTask (XBuildTask build_task, IEnumerable<Device> device_candidates)
 			: base (build_task)
 		{
@@ -2018,8 +2055,8 @@ function autoshowdetailsmessage (input_id, message_id)
 		{
 			Jenkins.MainLog.WriteLine ("Running '{0}' on device (candidates: '{1}')", ProjectFile, string.Join ("', '", device_candidates.Select ((v) => v.Name).ToArray ()));
 
-			var install_log = Logs.CreateStream (LogDirectory, $"install-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Install log");
-			var uninstall_log = Logs.CreateStream (LogDirectory, $"uninstall-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Uninstall log");
+			var install_log = Logs.CreateStream (LogDirectory, $"install-{Timestamp}.log", "Install log");
+			var uninstall_log = Logs.CreateStream (LogDirectory, $"uninstall-{Timestamp}.log", "Uninstall log");
 			using (var device_resource = await NotifyBlockingWaitAsync (Jenkins.GetDeviceResources (device_candidates).AcquireAnyConcurrentAsync ())) {
 				try {
 					// Set the device we acquired.
@@ -2066,7 +2103,7 @@ function autoshowdetailsmessage (input_id, message_id)
 					}
 
 					// Run the app
-					runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Run log");
+					runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log");
 					await runner.RunAsync ();
 
 					if (runner.Result == TestExecutingResult.Succeeded && Platform == TestPlatform.iOS_TodayExtension64) {
@@ -2081,7 +2118,7 @@ function autoshowdetailsmessage (input_id, message_id)
 							ProjectFile = TestProject.GetTodayExtension ().Path,
 							Target = AppRunnerTarget,
 							LogDirectory = LogDirectory,
-							MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{DateTime.Now:yyyyMMdd_HHmmss}.log", "Extension run log"),
+							MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log"),
 							DeviceName = Device.Name,
 							CompanionDeviceName = CompanionDevice?.Name,
 							Configuration = ProjectConfiguration,
@@ -2157,7 +2194,7 @@ function autoshowdetailsmessage (input_id, message_id)
 				EnsureCleanSimulatorState = clean_state,
 				Target = AppRunnerTarget,
 				LogDirectory = LogDirectory,
-				MainLog = Logs.CreateStream (LogDirectory, "run-" + Device.UDID + ".log", "Run log"),
+				MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log"),
 			};
 			runner.Simulators = Simulators;
 			runner.Initialize ();

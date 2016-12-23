@@ -33,4 +33,5 @@ mac-test-package
 logs
 *.mSYM
 *.generated.cs
+x86
 

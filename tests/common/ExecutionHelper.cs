@@ -433,7 +433,7 @@ namespace Xamarin.Tests
 			if (environmentVariables != null) {
 				var envs = psi.EnvironmentVariables;
 				foreach (var kvp in environmentVariables) {
-					envs.Add (kvp.Key, kvp.Value);
+					envs [kvp.Key] = kvp.Value;
 				}
 			}
 

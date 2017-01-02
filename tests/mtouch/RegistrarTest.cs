@@ -732,7 +732,7 @@ class H : G {
 
 		void Verify (R registrars, Profile profile, string code, bool success, params string [] expected_messages)
 		{
-			Verify (registrars, profile, code, success, Target.Dev, expected_messages);
+			Verify (registrars, profile, code, success, Target.Sim, expected_messages);
 		}
 
 		void Verify (R registrars, Profile profile, string code, bool success, Target target, params string [] expected_messages)
@@ -752,7 +752,7 @@ class H : G {
 
 		void VerifyWithXcode (R registrars, Profile profile, string code, bool success, string xcode, string sdk_version, params string [] expected_messages)
 		{
-			VerifyWithXcode (registrars, profile, code, success, xcode, sdk_version, Target.Dev, expected_messages);
+			VerifyWithXcode (registrars, profile, code, success, xcode, sdk_version, Target.Sim, expected_messages);
 		}
 
 		void VerifyWithXcode (R registrars, Profile profile, string code, bool success, string xcode, string sdk_version, Target target, params string [] expected_messages)

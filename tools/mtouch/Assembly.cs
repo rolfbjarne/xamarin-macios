@@ -230,7 +230,7 @@ namespace Xamarin.Bundler {
 			var build_dir = Target.BuildDirectory;
 			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
 			var arch = abi.AsArchString ();
-			var output_dir = Path.Combine (Cache.Location, arch);
+			var output_dir = Path.Combine (App.Cache.Location, arch);
 			var asm = Path.Combine (output_dir, Path.GetFileName (assembly_path)) + ".s";
 			var aot_data = Path.Combine (output_dir, Path.GetFileNameWithoutExtension (assembly_path)) + ".aotdata." + arch;
 			var llvm_aot_ofile = "";

@@ -279,7 +279,7 @@ namespace Xamarin.Bundler
 			if (entry_points != null)  
 				return entry_points.Keys;
 
-			var cache_location = Path.Combine (Cache.Location, "entry-points.txt");
+			var cache_location = Path.Combine (App.Cache.Location, "entry-points.txt");
 			if (cached_link || !any_assembly_updated) {
 				entry_points = new Dictionary<string, MemberReference> ();
 				foreach (var ep in File.ReadAllLines (cache_location))
@@ -754,13 +754,13 @@ namespace Xamarin.Bundler
 
 				switch (mode) {
 				case AssemblyBuildTarget.StaticObject:
-					ofile = Path.Combine (Cache.Location, arch, "libpinvokes.a");
+					ofile = Path.Combine (App.Cache.Location, arch, "libpinvokes.a");
 					break;
 				case AssemblyBuildTarget.DynamicLibrary:
-					ofile = Path.Combine (Cache.Location, arch, "libpinvokes.dylib");
+					ofile = Path.Combine (App.Cache.Location, arch, "libpinvokes.dylib");
 					break;
 				case AssemblyBuildTarget.Framework:
-					ofile = Path.Combine (Cache.Location, arch, "Xamarin.PInvokes.framework", "Xamarin.PInvokes");
+					ofile = Path.Combine (App.Cache.Location, arch, "Xamarin.PInvokes.framework", "Xamarin.PInvokes");
 
 					var plist_path = Path.Combine (Path.GetDirectoryName (ofile), "Info.plist");
 					var fw_name = Path.GetFileNameWithoutExtension (ofile);
@@ -890,11 +890,11 @@ namespace Xamarin.Bundler
 						continue; // no linking to do here.
 					case AssemblyBuildTarget.DynamicLibrary:
 						install_name = $"@executable_path/lib{name}.dylib";
-						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib");
+						compiler_output = Path.Combine (App.Cache.Location, arch, $"lib{name}.dylib");
 						break;
 					case AssemblyBuildTarget.Framework:
 						install_name = $"@rpath/{name}.framework/{name}";
-						compiler_output = Path.Combine (Cache.Location, arch, $"lib{name}.dylib"); // frameworks are almost identical to dylibs, so this is expected.
+						compiler_output = Path.Combine (App.Cache.Location, arch, $"lib{name}.dylib"); // frameworks are almost identical to dylibs, so this is expected.
 						break;
 					default:
 						throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
@@ -1092,7 +1092,7 @@ namespace Xamarin.Bundler
 						SharedLibrary = false,
 						Language = "objective-c++",
 						InputFile = registrar_m,
-						OutputFile = Path.Combine (Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
+						OutputFile = Path.Combine (App.Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
 						Dependency = run_registrar_task,
 					};
 
@@ -1133,14 +1133,14 @@ namespace Xamarin.Bundler
 				{
 					Target = this,
 					Abi = abi,
-					MainM = Path.Combine (Cache.Location, arch, "main.m"),
+					MainM = Path.Combine (App.Cache.Location, arch, "main.m"),
 					RegistrationMethods = registration_methods,
 				};
 				var main_task = new CompileMainTask
 				{
 					Target = this,
 					Abi = abi,
-					OutputFile = Path.Combine (Cache.Location, arch, "main.o"),
+					OutputFile = Path.Combine (App.Cache.Location, arch, "main.o"),
 					InputFile = generate_main_task.MainM,
 					Dependency = generate_main_task,
 				};

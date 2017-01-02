@@ -29,8 +29,16 @@ namespace XamCore.ObjCRuntime
 		static bool IsHomogeneousAggregateBaseType_Armv7k (Type t)
 		{
 			// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5500-L5514
-			if (t == typeof (float) || t == typeof (double) || t == typeof (nfloat))
+			if (t == typeof (float) || t == typeof (double))
 				return true;
+
+#if BGENERATOR
+			if (t.Name == "nfloat" && t.Namespace == "System" && t.Assembly == TypeManager.PlatformAssembly)
+				return true;
+#else
+			if (t == typeof (nfloat))
+				return true;
+#endif
 
 			return false;
 		}
@@ -65,7 +73,11 @@ namespace XamCore.ObjCRuntime
 			case "nfloat":
 				if (t.Namespace != "System")
 					return false;
+#if BGENERATOR
+				return t.Assembly == TypeManager.PlatformAssembly;
+#else
 				return t.Assembly == typeof (NSObject).Assembly;
+#endif
 			default:
 				return t.Assembly == typeof (object).Assembly;
 			}

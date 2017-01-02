@@ -1017,7 +1017,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		static int Main2 (string [] args)
+		static Application ParseArguments (string [] args)
 		{
 			var app = new Application ();
 			var assemblies = new List<string> ();
@@ -1032,7 +1032,8 @@ namespace Xamarin.Bundler
 			string tls_provider = null;
 			string http_message_handler = null;
 
-			var os = new OptionSet () {
+			OptionSet os = null;
+			os = new OptionSet () {
 			{ "h|?|help", "Displays the help", v => SetAction (Action.Help) },
 			{ "version", "Output version information and exit.", v => SetAction (Action.Version) },
 			{ "f|force", "Forces the recompilation of code, regardless of timestamps", v=>force = true },
@@ -1314,22 +1315,52 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (10, true, e, "Could not parse the command line arguments: {0}", e);
 			}
 
-			if (watch_level > 0) {
-				watch = new Stopwatch ();
-				watch.Start ();
-			}
-
 			if (action == Action.Help) {
 				ShowHelp (os);
-				return 0;
+				return null;
 			} else if (action == Action.Version) {
 				Console.Write ("mtouch {0}.{1}", Constants.Version, Constants.Revision);
 				Console.WriteLine ();
-				return 0;
+				return null;
 			}
 
 			app.SetDefaultFramework ();
 			app.SetDefaultAbi ();
+
+			app.RuntimeOptions = RuntimeOptions.Create (app, http_message_handler, tls_provider);
+
+			if (assemblies.Count != 1) {
+				var exceptions = new List<Exception> ();
+				for (int i = assemblies.Count - 1; i >= 0; i--) {
+					if (assemblies [i].StartsWith ("-", StringComparison.Ordinal)) {
+						exceptions.Add (new MonoTouchException (18, true, "Unknown command line argument: '{0}'", assemblies [i]));
+						assemblies.RemoveAt (i);
+					}
+				}
+				if (assemblies.Count > 1) {
+					exceptions.Add (new MonoTouchException (8, true, "You should provide one root assembly only, found {0} assemblies: '{1}'", assemblies.Count, string.Join ("', '", assemblies.ToArray ())));
+				} else if (assemblies.Count == 0) {
+					exceptions.Add (new MonoTouchException (17, true, "You should provide a root assembly."));
+				}
+
+				throw new AggregateException (exceptions);
+			}
+			app.RootAssembly = assemblies [0];
+
+			return app;
+		}
+
+		static int Main2 (string[] args)
+		{
+			var app = ParseArguments (args);
+
+			if (app == null)
+				return 0;
+			
+			if (watch_level > 0) {
+				watch = new Stopwatch ();
+				watch.Start ();
+			}
 
 			if (app.EnableDebug && app.IsLLVM)
 				ErrorHelper.Warning (3003, "Debugging is not supported when building with LLVM. Debugging has been disabled.");
@@ -1337,23 +1368,7 @@ namespace Xamarin.Bundler
 			if (!app.IsLLVM && (app.EnableAsmOnlyBitCode || app.EnableLLVMOnlyBitCode))
 				ErrorHelper.Error (3008, "Bitcode support requires the use of LLVM (--abi=arm64+llvm etc.)");
 
-			if (app.EnableDebug) {
-				if (!app.DebugTrack.HasValue) {
-					app.DebugTrack = app.IsSimulatorBuild;
-				}
-			} else {
-				if (app.DebugTrack.HasValue) {
-					ErrorHelper.Warning (32, "The option '--debugtrack' is ignored unless '--debug' is also specified.");
-				}
-				app.DebugTrack = false;
-			}
-
-			if (app.EnableAsmOnlyBitCode)
-				app.LLVMAsmWriter = true;
-
 			ErrorHelper.Verbosity = verbose;
-
-			app.RuntimeOptions = RuntimeOptions.Create (app, http_message_handler, tls_provider);
 
 			ValidateXcode ();
 
@@ -1416,23 +1431,6 @@ namespace Xamarin.Bundler
 			if (!Directory.Exists (app.AppDirectory))
 				Directory.CreateDirectory (app.AppDirectory);
 
-			if (assemblies.Count != 1) {
-				var exceptions = new List<Exception> ();
-				for (int i = assemblies.Count - 1; i >= 0; i--) {
-					if (assemblies [i].StartsWith ("-", StringComparison.Ordinal)) {
-						exceptions.Add (new MonoTouchException (18, true, "Unknown command line argument: '{0}'", assemblies [i]));
-						assemblies.RemoveAt (i);
-					}
-				}
-				if (assemblies.Count > 1) {
-					exceptions.Add (new MonoTouchException (8, true, "You should provide one root assembly only, found {0} assemblies: '{1}'", assemblies.Count, string.Join ("', '", assemblies.ToArray ())));
-				} else if (assemblies.Count == 0) {
-					exceptions.Add (new MonoTouchException (17, true, "You should provide a root assembly."));
-				}
-
-				throw new AggregateException (exceptions);
-			}
-
 			if (app.EnableRepl && app.BuildTarget != BuildTarget.Simulator)
 				throw new MonoTouchException (29, true, "REPL (--enable-repl) is only supported in the simulator (--sim)");
 
@@ -1444,11 +1442,34 @@ namespace Xamarin.Bundler
 
 			Watch ("Setup", 1);
 
-			app.RootAssembly = assemblies [0];
 			if (action == Action.RunRegistrar) {
 				app.RunRegistrar ();
 			} else {
-				app.Build ();
+				if (app.IsExtension && !app.IsWatchExtension) {
+					var sb = new StringBuilder ();
+					foreach (var arg in args)
+						sb.AppendLine (arg);
+					File.WriteAllText (Path.Combine (Path.GetDirectoryName (app.AppDirectory), "build-arguments.txt"), sb.ToString ());
+				} else {
+					foreach (var appex in app.Extensions) {
+						var f_path = Path.Combine (appex, "..", "build-arguments.txt");
+						if (!File.Exists (f_path))
+							continue;
+						Action app_action;
+						app.AppExtensions.Add (ParseArguments (File.ReadAllLines (f_path), out app_action));
+						if (app_action != Action.Build)
+							throw ErrorHelper.CreateError (99, "Internal error: Extension build action is '{0}' when it should be 'Build'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", app_action);
+					}
+
+					foreach (var appex in app.AppExtensions) {
+						Log ("Building {0}...", appex.BundleId);
+						appex.Build ();
+					}
+
+					if (app.AppExtensions.Count > 0)
+						Log ("Building {0}...", app.BundleId);
+					app.Build ();
+				}
 			}
 
 			return 0;

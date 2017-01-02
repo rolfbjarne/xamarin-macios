@@ -113,8 +113,6 @@ namespace Xamarin.Bundler
 			LaunchWatchApp,
 		}
 
-		static Action action;
-
 		static bool xcode_version_check = true;
 
 		//
@@ -339,7 +337,7 @@ namespace Xamarin.Bundler
 			return output.ToString ().Trim ();
 		}
 
-		static void ValidateXcode ()
+		static void ValidateXcode (Action action)
 		{
 			// Allow a few actions, since these seem to always work no matter the Xcode version.
 			var accept_any_xcode_version = action == Action.ListDevices || action == Action.ListCrashReports || action == Action.ListApps || action == Action.LogDev;
@@ -994,32 +992,11 @@ namespace Xamarin.Bundler
 			return 0;
 		}
 
-		static void SetAction (Action value)
+		static Application ParseArguments (string [] args, out Action a)
 		{
-			switch (action) {
-			case Action.None:
-				action = value;
-				break;
-			case Action.KillApp:
-				if (value == Action.LaunchDevice) {
-					action = Action.KillAndLaunch;
-					break;
-				}
-				goto default;
-			case Action.LaunchDevice:
-				if (value == Action.KillApp) {
-					action = Action.KillAndLaunch;
-					break;
-				}
-				goto default;
-			default:
-				throw new MonoTouchException (19, true, "Only one --[log|install|kill|launch]dev or --[launch|debug|list]sim option can be used.");
-			}
-		}
-
-		static Application ParseArguments (string [] args)
-		{
+			var action = Action.None;
 			var app = new Application ();
+
 			var assemblies = new List<string> ();
 
 			if (extra_args != null) {
@@ -1031,6 +1008,29 @@ namespace Xamarin.Bundler
 
 			string tls_provider = null;
 			string http_message_handler = null;
+
+			Action<Action> SetAction = (Action value) =>
+			{
+				switch (action) {
+				case Action.None:
+					action = value;
+					break;
+				case Action.KillApp:
+					if (value == Action.LaunchDevice) {
+						action = Action.KillAndLaunch;
+						break;
+					}
+					goto default;
+				case Action.LaunchDevice:
+					if (value == Action.KillApp) {
+						action = Action.KillAndLaunch;
+						break;
+					}
+					goto default;
+				default:
+					throw new MonoTouchException (19, true, "Only one --[log|install|kill|launch]dev or --[launch|debug|list]sim option can be used.");
+				}
+			};
 
 			OptionSet os = null;
 			os = new OptionSet () {
@@ -1315,6 +1315,8 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (10, true, e, "Could not parse the command line arguments: {0}", e);
 			}
 
+			a = action;
+
 			if (action == Action.Help) {
 				ShowHelp (os);
 				return null;
@@ -1352,7 +1354,8 @@ namespace Xamarin.Bundler
 
 		static int Main2 (string[] args)
 		{
-			var app = ParseArguments (args);
+			Action action;
+			var app = ParseArguments (args, out action);
 
 			if (app == null)
 				return 0;
@@ -1370,7 +1373,7 @@ namespace Xamarin.Bundler
 
 			ErrorHelper.Verbosity = verbose;
 
-			ValidateXcode ();
+			ValidateXcode (action);
 
 			switch (action) {
 			/* Device actions */

@@ -74,7 +74,7 @@ namespace Xamarin.Bundler
 				throw new AggregateException (exceptions);
 		}
 
-		public void Dot ()
+		public void Dot (string file)
 		{
 			var nodes = new HashSet<string> ();
 			var queue = new Queue<BuildTask> (this);
@@ -126,8 +126,7 @@ namespace Xamarin.Bundler
 				}
 			}
 
-			var dotPath = Path.Combine (Cache.Location, "build.dot");
-			using (var writer = new StreamWriter (dotPath)) {
+			using (var writer = new StreamWriter (file)) {
 				writer.WriteLine ("digraph build {");
 				writer.WriteLine ("\trankdir=LR;");
 				foreach (var node in nodes)
@@ -150,7 +149,7 @@ namespace Xamarin.Bundler
 
 				writer.WriteLine ("}");
 			}
-			Driver.Log ("Created dot file: {0}", dotPath);
+			Driver.Log ("Created dot file: {0}", file);
 			//var pngPath = Path.ChangeExtension (dotPath, ".png");
 			//using (var dot = System.Diagnostics.Process.Start ("dot", $"-Tpng {Driver.Quote (dotPath)} -o {Driver.Quote (pngPath)}")) {
 			//	dot.WaitForExit ();

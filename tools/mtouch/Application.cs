@@ -757,6 +757,20 @@ namespace Xamarin.Bundler {
 
 		void Initialize ()
 		{
+			if (EnableDebug) {
+				if (!DebugTrack.HasValue) {
+					DebugTrack = IsSimulatorBuild;
+				}
+			} else {
+				if (DebugTrack.HasValue) {
+					ErrorHelper.Warning (32, "The option '--debugtrack' is ignored unless '--debug' is also specified.");
+				}
+				DebugTrack = false;
+			}
+
+			if (EnableAsmOnlyBitCode)
+				LLVMAsmWriter = true;
+
 			if (!File.Exists (RootAssembly))
 				throw new MonoTouchException (7, true, "The root assembly '{0}' does not exist", RootAssembly);
 			

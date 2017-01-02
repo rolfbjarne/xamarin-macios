@@ -1379,20 +1379,6 @@ namespace Xamarin.Bundler
 			if (!app.IsLLVM && (app.EnableAsmOnlyBitCode || app.EnableLLVMOnlyBitCode))
 				ErrorHelper.Error (3008, "Bitcode support requires the use of LLVM (--abi=arm64+llvm etc.)");
 
-			if (app.EnableDebug) {
-				if (!app.DebugTrack.HasValue) {
-					app.DebugTrack = app.IsSimulatorBuild;
-				}
-			} else {
-				if (app.DebugTrack.HasValue) {
-					ErrorHelper.Warning (32, "The option '--debugtrack' is ignored unless '--debug' is also specified.");
-				}
-				app.DebugTrack = false;
-			}
-
-			if (app.EnableAsmOnlyBitCode)
-				app.LLVMAsmWriter = true;
-
 			ErrorHelper.Verbosity = verbose;
 
 			ValidateXcode (action);
@@ -1480,12 +1466,21 @@ namespace Xamarin.Bundler
 						var f_path = Path.Combine (appex, "..", "build-arguments.txt");
 						if (!File.Exists (f_path))
 							continue;
-						app.AppExtensions.Add (ParseArguments (File.ReadAllLines (f_path)));
+						Action app_action;
+						app.AppExtensions.Add (ParseArguments (File.ReadAllLines (f_path), out app_action));
+						if (app_action != Action.Build)
+							throw ErrorHelper.CreateError (99, "Internal error: Extension build action is '{0}' when it should be 'Build'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", app_action);
 					}
 
-					foreach (var appex in app.AppExtensions)
+					foreach (var appex in app.AppExtensions) {
+						Log ("Building {0}...", appex.BundleId);
+						appex.SetDefaultFramework ();
+						appex.SetDefaultAbi ();
 						appex.Build ();
+					}
 
+					if (app.AppExtensions.Count > 0)
+						Log ("Building {0}...", app.BundleId);
 					app.Build ();
 				}
 			}

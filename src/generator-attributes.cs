@@ -1,9 +1,6 @@
 using System;
 using System.Reflection;
 
-using XamCore.Foundation;
-using XamCore.ObjCRuntime;
-
 //
 // ForcedTypeAttribute
 //
@@ -840,12 +837,8 @@ public class CoreImageFilterAttribute : Attribute {
 		// default is public - will be skipped for abstract types
 		DefaultCtorVisibility = MethodAttributes.Public;
 
-		// since it was not generated code we never fixed the .ctor(IntPtr) visibility for unified
-		if (Generator.XamcoreVersion >= 3) {
-			IntPtrCtorVisibility = MethodAttributes.FamORAssem;
-		} else {
-			IntPtrCtorVisibility = MethodAttributes.Public;
-		}
+		IntPtrCtorVisibility = MethodAttributes.PrivateScope;
+
 		// not needed by default, automaticly `protected` if the type is abstract
 		StringCtorVisibility = MethodAttributes.PrivateScope;
 	}

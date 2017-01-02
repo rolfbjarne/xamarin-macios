@@ -1024,7 +1024,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		static int Main2 (string [] args)
+		static Application ParseArguments (string [] args)
 		{
 			var app = new Application ();
 			var assemblies = new List<string> ();
@@ -1039,7 +1039,8 @@ namespace Xamarin.Bundler
 			string tls_provider = null;
 			string http_message_handler = null;
 
-			var os = new OptionSet () {
+			OptionSet os = null;
+			os = new OptionSet () {
 			{ "h|?|help", "Displays the help", v => SetAction (Action.Help) },
 			{ "version", "Output version information and exit.", v => SetAction (Action.Version) },
 			{ "j|jobs=", "The level of concurrency. Default is the number of processors.", v => Jobs = int.Parse (v) },
@@ -1322,18 +1323,48 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (10, true, e, "Could not parse the command line arguments: {0}", e);
 			}
 
-			if (watch_level > 0) {
-				watch = new Stopwatch ();
-				watch.Start ();
-			}
-
 			if (action == Action.Help) {
 				ShowHelp (os);
-				return 0;
+				return null;
 			} else if (action == Action.Version) {
 				Console.Write ("mtouch {0}.{1}", Constants.Version, Constants.Revision);
 				Console.WriteLine ();
+				return null;
+			}
+
+			app.RuntimeOptions = RuntimeOptions.Create (app, http_message_handler, tls_provider);
+
+			if (assemblies.Count != 1) {
+				var exceptions = new List<Exception> ();
+				for (int i = assemblies.Count - 1; i >= 0; i--) {
+					if (assemblies [i].StartsWith ("-", StringComparison.Ordinal)) {
+						exceptions.Add (new MonoTouchException (18, true, "Unknown command line argument: '{0}'", assemblies [i]));
+						assemblies.RemoveAt (i);
+					}
+				}
+				if (assemblies.Count > 1) {
+					exceptions.Add (new MonoTouchException (8, true, "You should provide one root assembly only, found {0} assemblies: '{1}'", assemblies.Count, string.Join ("', '", assemblies.ToArray ())));
+				} else if (assemblies.Count == 0) {
+					exceptions.Add (new MonoTouchException (17, true, "You should provide a root assembly."));
+				}
+
+				throw new AggregateException (exceptions);
+			}
+			app.RootAssembly = assemblies [0];
+
+			return app;
+		}
+
+		static int Main2 (string[] args)
+		{
+			var app = ParseArguments (args);
+
+			if (app == null)
 				return 0;
+			
+			if (watch_level > 0) {
+				watch = new Stopwatch ();
+				watch.Start ();
 			}
 
 			app.SetDefaultFramework ();
@@ -1360,8 +1391,6 @@ namespace Xamarin.Bundler
 				app.LLVMAsmWriter = true;
 
 			ErrorHelper.Verbosity = verbose;
-
-			app.RuntimeOptions = RuntimeOptions.Create (app, http_message_handler, tls_provider);
 
 			ValidateXcode ();
 
@@ -1424,23 +1453,6 @@ namespace Xamarin.Bundler
 			if (!Directory.Exists (app.AppDirectory))
 				Directory.CreateDirectory (app.AppDirectory);
 
-			if (assemblies.Count != 1) {
-				var exceptions = new List<Exception> ();
-				for (int i = assemblies.Count - 1; i >= 0; i--) {
-					if (assemblies [i].StartsWith ("-", StringComparison.Ordinal)) {
-						exceptions.Add (new MonoTouchException (18, true, "Unknown command line argument: '{0}'", assemblies [i]));
-						assemblies.RemoveAt (i);
-					}
-				}
-				if (assemblies.Count > 1) {
-					exceptions.Add (new MonoTouchException (8, true, "You should provide one root assembly only, found {0} assemblies: '{1}'", assemblies.Count, string.Join ("', '", assemblies.ToArray ())));
-				} else if (assemblies.Count == 0) {
-					exceptions.Add (new MonoTouchException (17, true, "You should provide a root assembly."));
-				}
-
-				throw new AggregateException (exceptions);
-			}
-
 			if (app.EnableRepl && app.BuildTarget != BuildTarget.Simulator)
 				throw new MonoTouchException (29, true, "REPL (--enable-repl) is only supported in the simulator (--sim)");
 
@@ -1452,11 +1464,27 @@ namespace Xamarin.Bundler
 
 			Watch ("Setup", 1);
 
-			app.RootAssembly = assemblies [0];
 			if (action == Action.RunRegistrar) {
 				app.RunRegistrar ();
 			} else {
-				app.Build ();
+				if (app.IsExtension) {
+					var sb = new StringBuilder ();
+					foreach (var arg in args)
+						sb.AppendLine (Quote (arg));
+					File.WriteAllText (Path.Combine (Path.GetDirectoryName (app.AppDirectory), "build-arguments.txt"), sb.ToString ());
+				} else {
+					foreach (var appex in app.Extensions) {
+						var f_path = Path.Combine (appex, "..", "build-arguments.txt");
+						if (!File.Exists (f_path))
+							continue;
+						app.AppExtensions.Add (ParseArguments (File.ReadAllLines (f_path)));
+					}
+
+					foreach (var appex in app.AppExtensions)
+						appex.Build ();
+
+					app.Build ();
+				}
 			}
 
 			return 0;

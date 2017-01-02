@@ -248,11 +248,15 @@ namespace Xamarin.Bundler
 				var watch = new System.Diagnostics.Stopwatch ();
 				try {
 					Log ("Launching task #{1}: {0}", GetType ().Name, ID);
-					foreach (var dep in Dependencies) {
-						Log ("Task #{1} ({0}) is waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
-						await dep.Execute (build_tasks);
-						Log ("Task #{1} ({0}) done waiting for task #{2} ({3}).", GetType ().Name, ID, dep.ID, dep.GetType ().Name);
-					}
+					var deps = Dependencies.ToArray ();
+					var dep_tasks = new Task [deps.Length];
+					for (int i = 0; i < deps.Length; i++)
+						dep_tasks [i] = deps [i].Execute (build_tasks);
+					Log ("Task #{1} ({0}) is waiting for dependencies to complete.", GetType ().Name, ID);
+					await Task.WhenAll (dep_tasks);
+					Log ("Task #{1} ({0}) done waiting for dependencies.", GetType ().Name, ID);
+
+					// We must execute dependencies before checking if we're up-to-date.
 					if (IsUptodate) {
 						if (Outputs.Count () > 1) {
 							Driver.Log (3, "Targets '{0}' are up-to-date.", string.Join ("', '", Outputs.ToArray ()));

@@ -14,6 +14,8 @@
     <DefineConstants>NUNITLITE;CLR_4_0;NET_4_5;XAMCORE_2_0</DefineConstants>
     <OutputPath>build\ios\reference</OutputPath>
     <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\product.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Debug32' Or '$(Configuration)' == 'Debug64' ">
     <DebugSymbols>true</DebugSymbols>

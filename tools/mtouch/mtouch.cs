@@ -1334,6 +1334,9 @@ namespace Xamarin.Bundler
 				return null;
 			}
 
+			app.SetDefaultFramework ();
+			app.SetDefaultAbi ();
+
 			app.RuntimeOptions = RuntimeOptions.Create (app, http_message_handler, tls_provider);
 
 			if (assemblies.Count != 1) {
@@ -1370,28 +1373,11 @@ namespace Xamarin.Bundler
 				watch.Start ();
 			}
 
-			app.SetDefaultFramework ();
-			app.SetDefaultAbi ();
-
 			if (app.EnableDebug && app.IsLLVM)
 				ErrorHelper.Warning (3003, "Debugging is not supported when building with LLVM. Debugging has been disabled.");
 
 			if (!app.IsLLVM && (app.EnableAsmOnlyBitCode || app.EnableLLVMOnlyBitCode))
 				ErrorHelper.Error (3008, "Bitcode support requires the use of LLVM (--abi=arm64+llvm etc.)");
-
-			if (app.EnableDebug) {
-				if (!app.DebugTrack.HasValue) {
-					app.DebugTrack = app.IsSimulatorBuild;
-				}
-			} else {
-				if (app.DebugTrack.HasValue) {
-					ErrorHelper.Warning (32, "The option '--debugtrack' is ignored unless '--debug' is also specified.");
-				}
-				app.DebugTrack = false;
-			}
-
-			if (app.EnableAsmOnlyBitCode)
-				app.LLVMAsmWriter = true;
 
 			ErrorHelper.Verbosity = verbose;
 
@@ -1470,22 +1456,29 @@ namespace Xamarin.Bundler
 			if (action == Action.RunRegistrar) {
 				app.RunRegistrar ();
 			} else {
-				if (app.IsExtension) {
+				if (app.IsExtension && !app.IsWatchExtension) {
 					var sb = new StringBuilder ();
 					foreach (var arg in args)
-						sb.AppendLine (Quote (arg));
+						sb.AppendLine (arg);
 					File.WriteAllText (Path.Combine (Path.GetDirectoryName (app.AppDirectory), "build-arguments.txt"), sb.ToString ());
 				} else {
 					foreach (var appex in app.Extensions) {
 						var f_path = Path.Combine (appex, "..", "build-arguments.txt");
 						if (!File.Exists (f_path))
 							continue;
-						app.AppExtensions.Add (ParseArguments (File.ReadAllLines (f_path)));
+						Action app_action;
+						app.AppExtensions.Add (ParseArguments (File.ReadAllLines (f_path), out app_action));
+						if (app_action != Action.Build)
+							throw ErrorHelper.CreateError (99, "Internal error: Extension build action is '{0}' when it should be 'Build'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", app_action);
 					}
 
-					foreach (var appex in app.AppExtensions)
+					foreach (var appex in app.AppExtensions) {
+						Log ("Building {0}...", appex.BundleId);
 						appex.Build ();
+					}
 
+					if (app.AppExtensions.Count > 0)
+						Log ("Building {0}...", app.BundleId);
 					app.Build ();
 				}
 			}

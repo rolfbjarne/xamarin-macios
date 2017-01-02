@@ -402,6 +402,7 @@ namespace Xamarin
 		public void MT0060 ()
 		{
 			using (var mtouch = new MTouchTool ()) {
+				mtouch.CreateTemporaryApp ();
 				mtouch.EnvironmentVariables = new Dictionary<string, string> { { "DEVELOPER_DIR", "/dir/that/does/not/exist" } };
 				mtouch.SdkRoot = MTouchTool.None;
 				mtouch.AssertExecuteFailure (MTouchAction.None, "build");
@@ -419,6 +420,7 @@ namespace Xamarin
 		public void MT0061 ()
 		{
 			using (var mtouch = new MTouchTool ()) {
+				mtouch.CreateTemporaryApp ();
 				mtouch.SdkRoot = MTouchTool.None;
 				mtouch.AssertExecuteFailure (MTouchAction.None, "build");
 				mtouch.AssertWarningPattern (61, "No Xcode.app specified .using --sdkroot., using the system Xcode as reported by 'xcode-select --print-path': .*");

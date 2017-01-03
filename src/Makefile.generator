@@ -16,6 +16,43 @@ GENERATOR_SOURCES =                                             \
 GENERATOR_DEFINES = -d:BGENERATOR -d:NET_4_0
 
 #
+# IKVM
+#
+
+IKVM_REFLECTION_SOURCES = \
+	$(MONO_PATH)/mcs/class/Mono.Security/Mono.Security.Cryptography/CryptoConvert.cs \
+	$(MONO_PATH)/external/ikvm/reflect/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Emit/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Metadata/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Reader/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Writer/*.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Impl/ITypeOwner.cs \
+	$(MONO_PATH)/external/ikvm/reflect/Impl/SymbolSupport.cs \
+	$(TOP)/src/ObjCRuntime/AlphaAttribute.cs \
+	$(TOP)/src/ObjCRuntime/ArgumentSemantic.cs \
+	$(TOP)/src/ObjCRuntime/PlatformAvailability2.cs \
+	$(TOP)/src/ObjCRuntime/LinkWithAttribute.cs \
+	$(TOP)/src/ObjCRuntime/NativeAttribute.cs \
+	$(TOP)/src/ObjCRuntime/Registrar.core.cs \
+	$(TOP)/src/Foundation/ProtocolAttribute.cs \
+	$(TOP)/src/Foundation/FieldAttribute.cs \
+	$(TOP)/src/Foundation/AdviceAttribute.cs \
+	$(TOP)/src/Foundation/ExportAttribute.cs \
+	$(TOP)/src/Foundation/RegisterAttribute.cs \
+	$(TOP)/src/Foundation/PreserveAttribute.cs \
+
+IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
+
+ikvm: common/bgen.exe
+
+build/common/bgen.exe: $(IKVM_REFLECTION_SOURCES) Makefile.generator
+	mkdir -p build/common
+	$(SYSTEM_MCS) -out:$@ $(IKVM_REFLECTION_FLAGS) $(GENERATOR_DEFINES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_SOURCES) -d:IKVM
+
+btouch-ikvm.csproj: btouch-ikvm.csproj.in Makefile.generator
+	@sed -e 's^<!--%FILES%-->^$(foreach file,$(subst /,\\,$(IKVM_REFLECTION_SOURCES) $(GENERATOR_SOURCES)),<Compile Include="$(file)"/>)^' $< | xmllint --format - > $@
+
+#
 # Common
 #
 
@@ -32,6 +69,7 @@ IOS_TARGETS_DIRS +=                              \
 IOS_TARGETS +=                                                          \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch.exe             \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch-native.exe      \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
 
@@ -48,6 +86,13 @@ $(IOS_BUILD_DIR)/btouch-native.exe: $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll $
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.dll: $(IOS_BUILD_DIR)/native/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
+	$(Q) install -m 0755 $< $@
+	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll: generator-attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/native"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.="        -out:$@ -debug generator-attributes.cs -target:library
 
 #
 # Xamarin.Watch (bwatch)

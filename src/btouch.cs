@@ -375,7 +375,7 @@ class BindingTouch {
 				Console.Error.WriteLine ("Error loading base library {0}", baselibdll);
 				return 1;
 			}
-			GC.KeepAlive (baselib); // Fixes a compiler warning (unused variable).
+			TypeManager.PlatformAssembly = baselib;
 				
 			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true)) {
 				LinkWithAttribute linkWith = (LinkWithAttribute) attr;

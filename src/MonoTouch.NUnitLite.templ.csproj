@@ -11,11 +11,12 @@
     <RootNamespace></RootNamespace>
     <AssemblyName>MonoTouch.NUnitLite</AssemblyName>
     <UseMSBuildEngine>True</UseMSBuildEngine>
-    <DefineConstants>NUNITLITE;CLR_4_0;NET_4_5;XAMCORE_2_0</DefineConstants>
+    <DefineConstants>NUNITLITE;CLR_4_0;NET_4_5;XAMCORE_2_0;MONOTOUCH</DefineConstants>
     <OutputPath>build\ios\reference</OutputPath>
     <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\product.snk</AssemblyOriginatorKeyFile>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Debug32' Or '$(Configuration)' == 'Debug64' ">
     <DebugSymbols>true</DebugSymbols>

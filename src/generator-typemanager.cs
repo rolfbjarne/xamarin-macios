@@ -318,11 +318,15 @@ public static class TypeManager {
 
 	public static void Initialize (Assembly api)
 	{
+#if IKVM
+		throw new NotImplementedException ();
+#else
 		api_assembly = api;
 		corlib_assembly = typeof (object).Assembly;
 		system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
 		platform_assembly = typeof (NSObject).Assembly;
 		binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+#endif
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

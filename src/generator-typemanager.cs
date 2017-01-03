@@ -317,10 +317,14 @@ public static class TypeManager {
 
 	static TypeManager ()
 	{
+#if IKVM
+		throw new NotImplementedException ();
+#else
 		corlib_assembly = typeof (object).Assembly;
 		system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
 		platform_assembly = typeof (NSObject).Assembly;
 		binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+#endif
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

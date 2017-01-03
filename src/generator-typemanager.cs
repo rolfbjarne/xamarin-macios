@@ -1,8 +1,14 @@
 
 using System;
+#if IKVM
+using IKVM.Reflection;
+using Type = IKVM.Reflection.Type;
+#else
 using System.Reflection;
+#endif
 
-public static class TypeManager {
+public static class TypeManager
+{
 	public static Type System_Attribute;
 	public static Type System_Boolean;
 	public static Type System_Byte;
@@ -182,6 +188,14 @@ public static class TypeManager {
 	static Assembly platform_assembly;
 	static Assembly binding_assembly;
 
+	public static Assembly SystemAssembly {
+		get { return system_assembly; }
+	}
+
+	public static Assembly BindingAssembly {
+		get { return binding_assembly; }
+	}
+
 	public static Assembly CorlibAssembly {
 		get { return corlib_assembly; }
 	}
@@ -191,6 +205,13 @@ public static class TypeManager {
 		set { platform_assembly = value; }
 	}
 
+#if IKVM
+	public static bool IsSubclassOf (Type base_class, Type derived_class)
+	{
+		return derived_class.IsSubclassOf (base_class);
+	}
+#endif
+
 	static Type Lookup (Assembly assembly, string @namespace, string @typename, bool inexistentOK = false)
 	{
 		string fullname;
@@ -198,7 +219,7 @@ public static class TypeManager {
 
 		if (assembly == platform_assembly || assembly == api_assembly)
 			nsManagerPrefix = BindingTouch.NamespacePlatformPrefix;
-		
+
 		if (!string.IsNullOrEmpty (nsManagerPrefix))
 			nsManagerPrefix += ".";
 
@@ -214,13 +235,81 @@ public static class TypeManager {
 		return rv;
 	}
 
-	public static void Initialize (Assembly api)
+	public static Type GetUnderlyingEnumType (Type type)
+	{
+#if IKVM
+		return type.GetEnumUnderlyingType ();
+#else
+		return Enum.GetUnderlyingType (type);
+#endif
+	}
+
+	public static Type GetUnderlyingNullableType (Type type)
+	{
+#if IKVM
+		if (!type.IsConstructedGenericType)
+			return null;
+
+		var gt = type.GetGenericTypeDefinition ();
+		if (gt.Assembly != CorlibAssembly)
+			return null;
+
+		if (gt.Namespace != "System")
+			return null;
+
+		if (gt.Name != "Nullable`1")
+			return null;
+
+		return type.GenericTypeArguments [0];
+#else
+		return Nullable.GetUnderlyingType (type);
+#endif
+	}
+
+	public static bool IsEnumValueDefined (Type type, object value)
+	{
+#if IKVM
+		return type.IsEnumDefined (value);
+#else
+		var enumValue = System.Enum.ToObject (type, value);
+		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;
+
+#endif
+	}
+
+	public static bool IsOutParameter (ParameterInfo pi)
+	{
+#if IKVM
+		return pi.IsOut;
+#else
+		return AttributeManager.HasAttribute (pi, OutAttribute);
+#endif
+	}
+
+	public static object GetEnumFullName (Type type, object value)
+	{
+#if IKVM
+		var name = type.GetEnumName (value);
+		if (string.IsNullOrEmpty (name)) {
+			return "(" + type.FullName + ") " + value;
+		} else {
+			return type.FullName + "." + name;
+		}
+#else
+		if (value is Enum)
+			return value.GetType ().FullName + "." + value;
+		else
+			return value;
+#endif
+	}
+
+	public static void Initialize (Assembly api, Assembly corlib, Assembly system, Assembly platform, Assembly binding)
 	{
 		api_assembly = api;
-		corlib_assembly = typeof (object).Assembly;
-		system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
-		platform_assembly = typeof (XamCore.Foundation.NSObject).Assembly;
-		binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+		corlib_assembly = corlib;
+		system_assembly = system;
+		platform_assembly = platform;
+		binding_assembly = binding;
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

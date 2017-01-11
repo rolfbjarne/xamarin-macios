@@ -1194,7 +1194,7 @@ function oninitialload ()
 								foreach (var log in logs) {
 									log.Flush ();
 									writer.WriteLine ("<a href='{0}' type='text/plain'>{1}</a><br />", System.Web.HttpUtility.UrlPathEncode (log.FullPath.Substring (LogDirectory.Length + 1)), log.Description);
-									if (log.Description == "Test log") {
+									if (log.Description == "Test log" || log.Description == "Execution log") {
 										var summary = string.Empty;
 										try {
 											using (var reader = log.GetReader ()) {

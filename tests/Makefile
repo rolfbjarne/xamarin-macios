@@ -316,8 +316,8 @@ wrench-bcl-sim-%:
 wrench-%:
 	@echo Not here anymore
 
-wrench-jenkins:
-	@$(MAKE) jenkins
+wrench-jenkins: xharness/xharness.exe
+	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests
 
 wrench-xtro:
 	git clean -xfdq

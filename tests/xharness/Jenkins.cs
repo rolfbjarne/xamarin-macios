@@ -208,14 +208,14 @@ namespace xharness
 		{
 			int pull_request;
 
-			if (!int.TryParse (Environment.GetEnvironmentVariable ("ghprbPullId"), out pull_request)) {
+			if (!int.TryParse (Environment.GetEnvironmentVariable ("ghprbPullId"), out pull_request))
 				MainLog.WriteLine ("The environment variable 'ghprbPullId' was not found, so no pull requests will be checked for test selection.");
-				return;
-			}
 
 			// First check if can auto-select any tests based on which files were modified.
 			// This will only enable additional tests, never disable tests.
-			SelectTestsByModifiedFiles (pull_request);
+			if (pull_request > 0)
+				SelectTestsByModifiedFiles (pull_request);
+			
 			// Then we check for labels. Labels are manually set, so those override
 			// whatever we did automatically.
 			SelectTestsByLabel (pull_request);
@@ -286,9 +286,16 @@ namespace xharness
 
 		void SelectTestsByLabel (int pull_request)
 		{
-			var labels = GitHub.GetLabels (Harness, pull_request);
+			IEnumerable<string> labels = Harness.Labels;
 
-			MainLog.WriteLine ("Found {1} label(s) in the pull request #{2}: {0}", string.Join (", ", labels.ToArray ()), labels.Count (), pull_request);
+			if (labels.Any ())
+				MainLog.WriteLine ($"Found {labels.Count ()} lables in command-line arguments: {string.Join (", ", labels.ToArray ())}");
+
+			if (pull_request > 0) {
+				var ghLabels = GitHub.GetLabels (Harness, pull_request);
+				MainLog.WriteLine ("Found {1} label(s) in the pull request #{2}: {0}", string.Join (", ", ghLabels.ToArray ()), ghLabels.Count (), pull_request);
+				labels = labels.Union (ghLabels);
+			}
 
 			// disabled by default
 			SetEnabled (labels, "mtouch", ref IncludeMtouch);

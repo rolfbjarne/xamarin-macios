@@ -61,6 +61,7 @@ namespace xharness
 						harness.EnvironmentVariables [split [0]] = split [1];
 					}
 				},
+				{ "label=", "Set a label. This can be specified multiple times.", (v) => harness.Labels.Add (v) },
 			};
 
 			showHelp = () => {

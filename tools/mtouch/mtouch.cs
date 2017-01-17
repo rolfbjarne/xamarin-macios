@@ -1053,6 +1053,7 @@ namespace Xamarin.Bundler
 			{ "time", v => watch_level++ },
 			{ "executable=", "Specifies the native executable name to output", v => app.ExecutableName = v },
 			{ "nofastsim", "Do not run the simulator fast-path build", v => app.NoFastSim = true },
+			{ "nodevcodeshare", "Do not share native code between extensions and main app.", v => app.NoDevCodeShare = true },
 			{ "nolink", "Do not link the assemblies", v => app.LinkMode = LinkMode.None },
 			{ "nodebugtrack", "Disable debug tracking of object resurrection bugs", v => app.DebugTrack = false },
 			{ "debugtrack:", "Enable debug tracking of object resurrection bugs (enabled by default for the simulator)", v => { app.DebugTrack = ParseBool (v, "--debugtrack"); } },
@@ -1458,14 +1459,7 @@ namespace Xamarin.Bundler
 							throw ErrorHelper.CreateError (99, "Internal error: Extension build action is '{0}' when it should be 'Build'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", app_action);
 					}
 
-					foreach (var appex in app.AppExtensions) {
-						Log ("Building {0}...", appex.BundleId);
-						appex.Build ();
-					}
-
-					if (app.AppExtensions.Count > 0)
-						Log ("Building {0}...", app.BundleId);
-					app.Build ();
+					app.BuildAll ();
 				}
 			} else {
 				throw ErrorHelper.CreateError (99, "Internal error: Invalid action: {0}. Please file a bug report with a test case (http://bugzilla.xamarin.com).", action);

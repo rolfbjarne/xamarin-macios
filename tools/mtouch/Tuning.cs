@@ -35,7 +35,8 @@ namespace MonoTouch.Tuner {
 		internal RuntimeOptions RuntimeOptions { get; set; }
 
 		public MonoTouchLinkContext LinkContext { get; set; }
-		public Application Application { get; set; }
+		public Target Target { get; set; }
+		public Application Application { get { return Target.App; } }
 
 		public static I18nAssemblies ParseI18nAssemblies (string i18n)
 		{
@@ -101,6 +102,7 @@ namespace MonoTouch.Tuner {
 			context.LinkSymbols = options.LinkSymbols;
 			context.OutputDirectory = options.OutputDirectory;
 			context.SetParameter ("debug-build", options.DebugBuild.ToString ());
+			context.StaticRegistrar = options.Target.StaticRegistrar;
 
 			options.LinkContext = context;
 
@@ -223,13 +225,23 @@ namespace MonoTouch.Tuner {
 	}
 
 	public class MonoTouchLinkContext : LinkContext {
-		Dictionary<string, MemberReference> required_symbols;
+		internal XamCore.Registrar.StaticRegistrar StaticRegistrar;
+		Dictionary<string, List<MemberReference>> required_symbols;
 		List<MethodDefinition> marshal_exception_pinvokes;
+		Dictionary<string, TypeDefinition> objectivec_classes;
 
-		public Dictionary<string, MemberReference> RequiredSymbols {
+		public List<MemberReference> GetRequiredSymbolList (string symbol)
+		{
+			List<MemberReference> rv;
+			if (!RequiredSymbols.TryGetValue (symbol, out rv))
+				required_symbols [symbol] = rv = new List<MemberReference> ();
+			return rv;
+		}
+
+		public Dictionary<string, List<MemberReference>> RequiredSymbols {
 			get {
 				if (required_symbols == null)
-					required_symbols = new Dictionary<string, MemberReference> ();
+					required_symbols = new Dictionary<string, List<MemberReference>> ();
 				return required_symbols;
 			}
 		}
@@ -239,6 +251,14 @@ namespace MonoTouch.Tuner {
 				if (marshal_exception_pinvokes == null)
 					marshal_exception_pinvokes = new List<MethodDefinition> ();
 				return marshal_exception_pinvokes;
+			}
+		}
+
+		public Dictionary<string, TypeDefinition> ObjectiveCClasses {
+			get {
+				if (objectivec_classes == null)
+					objectivec_classes = new Dictionary<string, TypeDefinition> ();
+				return objectivec_classes;
 			}
 		}
 

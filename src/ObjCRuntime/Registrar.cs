@@ -2058,7 +2058,7 @@ namespace XamCore.Registrar {
 			return name;
 		}
 
-		protected string GetExportedTypeName (TType type, RegisterAttribute register_attribute)
+		public string GetExportedTypeName (TType type, RegisterAttribute register_attribute)
 		{
 			string name = null;
 			if (register_attribute != null) {

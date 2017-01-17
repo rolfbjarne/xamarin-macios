@@ -22,6 +22,12 @@ namespace MonoTouch.Tuner
 		PInvokeWrapperGenerator state;
 		bool skip_sdk_assemblies;
 
+		public DerivedLinkContext DerivedLinkContext {
+			get {
+				return (DerivedLinkContext) Context;
+			}
+		}
+
 		internal ListExportedSymbols (PInvokeWrapperGenerator state, bool skip_sdk_assemblies = false)
 		{
 			this.state = state;
@@ -65,6 +71,12 @@ namespace MonoTouch.Tuner
 				foreach (var method in type.Methods)
 					ProcessMethod (method);
 			}
+
+			var registerAttribute = DerivedLinkContext.StaticRegistrar.GetRegisterAttribute (type);
+			if (registerAttribute != null && registerAttribute.IsWrapper) {
+				var exportedName = DerivedLinkContext.StaticRegistrar.GetExportedTypeName (type, registerAttribute);
+				DerivedLinkContext.ObjectiveCClasses [exportedName] = type;
+			}
 		}
 
 		void ProcessMethod (MethodDefinition method)
@@ -72,7 +84,7 @@ namespace MonoTouch.Tuner
 			if (method.IsPInvokeImpl && method.HasPInvokeInfo) {
 				var pinfo = method.PInvokeInfo;
 				if (pinfo.Module.Name == "__Internal")
-					((DerivedLinkContext) Context).RequiredSymbols [pinfo.EntryPoint] = method;
+					DerivedLinkContext.GetRequiredSymbolList (pinfo.EntryPoint).Add (method);
 
 				if (state != null) {
 					switch (pinfo.EntryPoint) {
@@ -94,7 +106,7 @@ namespace MonoTouch.Tuner
 				object symbol;
 				// The Field attribute may have been linked away, but we've stored it in an annotation.
 				if (property != null && Context.Annotations.GetCustomAnnotations ("ExportedFields").TryGetValue (property, out symbol)) {
-					((DerivedLinkContext) Context).RequiredSymbols[(string) symbol] = property;
+					DerivedLinkContext.GetRequiredSymbolList ((string) symbol).Add (property);
 				}
 			}
 		}

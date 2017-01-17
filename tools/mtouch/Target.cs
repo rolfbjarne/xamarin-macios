@@ -214,6 +214,13 @@ namespace Xamarin.Bundler
 			if (App.LinkMode == LinkMode.None && App.I18n != I18nAssemblies.None)
 				AddI18nAssemblies ();
 
+			foreach (var asm in Assemblies) {
+				Assembly other;
+				if (HashedAssemblies.TryGetValue (asm.Identity, out other))
+					throw ErrorHelper.CreateError (9999, "The assembly '{0}' is referenced from '{1}' and '{2}'.", asm.Identity, other.FullPath, asm.FullPath);
+				HashedAssemblies.Add (asm.Identity, asm);
+			}
+
 			linker_flags = new CompilerFlags (this);
 
 			// an extension is a .dll and it would match itself
@@ -475,10 +482,10 @@ namespace Xamarin.Bundler
 			return new Assembly (this, assembly);
 		}
 
-		public void LinkAssemblies (string main, ref List<string> assemblies, string output_dir, out MonoTouchLinkContext link_context)
+		public void LinkAssemblies (IEnumerable<string> mains, ref List<string> assemblies, string output_dir, out MonoTouchLinkContext link_context)
 		{
 			if (Driver.Verbosity > 0)
-				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", main, output_dir, App.LinkMode);
+				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", string.Join (", ", mains.ToArray ()), output_dir, App.LinkMode);
 
 			var cache = Resolver.ToResolverCache ();
 			var resolver = cache != null
@@ -488,8 +495,12 @@ namespace Xamarin.Bundler
 			resolver.AddSearchDirectory (Resolver.RootDirectory);
 			resolver.AddSearchDirectory (Resolver.FrameworkDirectory);
 
+			var main_assemblies = new List<AssemblyDefinition> ();
+			foreach (var main in mains)
+				main_assemblies.Add (Resolver.Load (main));
+
 			LinkerOptions = new LinkerOptions {
-				MainAssembly = Resolver.Load (main),
+				MainAssemblies = main_assemblies,
 				OutputDirectory = output_dir,
 				LinkMode = App.LinkMode,
 				Resolver = resolver,
@@ -606,7 +617,7 @@ namespace Xamarin.Bundler
 				assemblies.Add (a.FullPath);
 			var linked_assemblies = new List<string> (assemblies);
 
-			LinkAssemblies (App.RootAssembly, ref linked_assemblies, PreBuildDirectory, out LinkContext);
+			LinkAssemblies (App.RootAssemblies, ref linked_assemblies, PreBuildDirectory, out LinkContext);
 
 			// Remove assemblies that were linked away
 			var removed = new HashSet<string> (assemblies);

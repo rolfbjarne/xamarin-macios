@@ -60,6 +60,7 @@ namespace Xamarin.Bundler {
 		public MarshalManagedExceptionMode MarshalManagedExceptions;
 		public bool IsDefaultMarshalManagedExceptionMode;
 		public string RootAssembly;
+		public List<string> RootAssemblies = new List<string> ();
 		public string RegistrarOutputLibrary;
 
 		public static int Concurrency => Driver.Concurrency;

@@ -118,6 +118,7 @@ namespace Xamarin.Bundler {
 		public bool? PackageMonoFramework;
 
 		public bool NoFastSim;
+		public bool NoDevCodeShare;
 
 		// The list of assemblies that we do generate debugging info for.
 		public bool DebugAll;
@@ -662,23 +663,50 @@ namespace Xamarin.Bundler {
 			return false;
 		}
 
-		public void Build ()
+		public void BuildAll ()
 		{
-			if (Driver.Force) {
-				Driver.Log (3, "A full rebuild has been forced by the command line argument -f.");
-				Cache.Clean ();
-			} else {
-				// this will destroy the cache if invalid, which makes setting Driver.Force to true mostly unneeded
-				// in fact setting it means some actions (like extract native resource) gets duplicate for fat builds
-				Cache.VerifyCache ();
+			var allapps = new List<Application> (AppExtensions);
+			allapps.Add (this);
+
+			allapps.ForEach ((v) =>
+			{
+				if (Driver.Force) {
+					Driver.Log (3, "A full rebuild has been forced by the command line argument -f.");
+					v.Cache.Clean ();
+				} else {
+					// this will destroy the cache if invalid, which makes setting Driver.Force to true mostly unneeded
+					// in fact setting it means some actions (like extract native resource) gets duplicate for fat builds
+					v.Cache.VerifyCache ();
+				}
+
+				v.Initialize ();
+				v.ValidateAbi ();
+				v.SelectRegistrar ();
+				v.ExtractNativeLinkInfo ();
+				v.SelectNativeCompiler ();
+			});
+
+			var code_shares = DetectCodeSharing ();
+
+			RootAssemblies.Add (RootAssembly);
+			if (code_shares != null) {
+				foreach (var cs in code_shares) {
+					// What if the appex references a library that the main app doesn't reference?
+					// Do we need some resolver magic as well?
+					RootAssemblies.Add (cs.RootAssembly);
+				}
 			}
 
-			Initialize ();
-			ValidateAbi ();
-			SelectRegistrar ();
-			ExtractNativeLinkInfo ();
-			SelectNativeCompiler ();
 			ProcessAssemblies ();
+
+			if (code_shares != null) {
+				
+			}
+
+			AppExtensions.ForEach ((v) =>
+			{
+				v.ProcessAssemblies ();
+			});
 
 			// Everything that can be parallelized is put into a list of tasks,
 			// which are then executed at the end.
@@ -750,6 +778,104 @@ namespace Xamarin.Bundler {
 				Driver.TargetFramework = TargetFramework.Xamarin_iOS_1_0;
 				no_framework = true;
 			}
+		}
+
+		List<Application> DetectCodeSharing ()
+		{
+			if (AppExtensions.Count == 0)
+				return null;
+
+			if (!IsDeviceBuild)
+				return null;
+
+			if (NoDevCodeShare) {
+				Driver.Log (2, "Native code sharing has been disabled in the main app, so no code sharing with extensions will occur.");
+				return null;
+			}
+
+			List<Application> candidates = new List<Application> ();
+			foreach (var appex in AppExtensions) {
+				bool applicable = true;
+				// The --assembly-build-target arguments must be identical.
+				// We can probably lift this requirement (at least partially) at some point,
+				// but for now it makes our code simpler.
+				if (assembly_build_targets.Count != appex.assembly_build_targets.Count) {
+					Driver.Log (2, "The extension '{0}' has different --assembly-build-target arguments, and can therefore not share code with the main app.", appex.ExecutableName);
+					continue;
+				}
+
+				foreach (var key in assembly_build_targets.Keys) {
+					Tuple<AssemblyBuildTarget, string> appex_value;
+					if (!appex.assembly_build_targets.TryGetValue (key, out appex_value)) {
+						Driver.Log (2, "The extension '{0}' has different --assembly-build-target arguments, and can therefore not share code with the main app.", appex.ExecutableName);
+						applicable = false;
+						break;
+					}
+
+					var value = assembly_build_targets [key];
+					if (value.Item1 != appex_value.Item1 || value.Item2 != appex_value.Item2) {
+						Driver.Log (2, "The extension '{0}' has different --assembly-build-target arguments, and can therefore not share code with the main app.", appex.ExecutableName);
+						applicable = false;
+						break;
+					}
+				}
+
+				if (!applicable)
+					continue;
+
+				// MONO_GC_PARAMS have to be identical
+				// Unfortunately this excludes today extensions from the code sharing.
+				if (MonoGCParams != appex.MonoGCParams) {
+					Driver.Log (2, "The extension '{0}' has different MONO_GC_PARAMS value, and can therefore not share native code with the main app.", appex.ExecutableName);
+					continue;
+				}
+
+				// All arguments to the AOT compiler must be identical
+				if (AotArguments != appex.AotArguments) {
+					Driver.Log (2, "The extension '{0}' has different arguments to the AOT compiler, and can therefore not share native code with the main app.", appex.ExecutableName);
+					continue;
+				}
+
+				if (AotOtherArguments != appex.AotOtherArguments) {
+					Driver.Log (2, "The extension '{0}' has different other arguments to the AOT compiler, and can therefore not share native code with the main app.", appex.ExecutableName);
+					continue;
+				}
+
+				if (IsLLVM != appex.IsLLVM) {
+					Driver.Log (2, "The extension '{0}' does not have the same LLVM option as the main app (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.ExecutableName, appex.IsLLVM, IsLLVM);
+					continue;
+				}
+
+				if (LinkMode != appex.LinkMode) {
+					Driver.Log (2, "The extension '{0}' does not have the same managed linker option as the main app (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.ExecutableName, appex.LinkMode, LinkMode);
+					continue;
+				}
+
+				var linkskipped_same = !LinkSkipped.Except (appex.LinkSkipped).Any () && !appex.LinkSkipped.Except (LinkSkipped).Any ();
+				if (linkskipped_same) {
+					Driver.Log (2, "The extension '{0}' is asking the managed linker to skip different assemblies than the main app (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.ExecutableName, string.Join (", ", appex.LinkSkipped), string.Join (", ", LinkSkipped));
+					continue;
+				}
+
+				// Check if there aren't referenced assemblies from different sources
+				foreach (var kvp in appex.Targets [0].HashedAssemblies) {
+					Assembly asm;
+					if (!Targets [0].HashedAssemblies.TryGetValue (kvp.Key, out asm))
+						continue; // appex references an assembly the main app doesn't. This is fine.
+					if (asm.FullPath != kvp.Value.FullPath) {
+						applicable = false; // app references an assembly with the same name as the main app, but from a different location. This is not fine. Should we emit a real warning here, or just a log message?
+						Driver.Log (2, "The extension '{0}' is referencing the assembly '{1}' from '{2}', while the main app references it from '{3}', and can therefore not share native code with the main app.", appex.ExecutableName, asm.Identity, kvp.Value.FullPath, asm.FullPath);
+						break;
+					}
+				}
+
+				if (!applicable)
+					continue;
+
+				candidates.Add (appex);
+			}
+
+			return candidates;;
 		}
 
 		void Initialize ()

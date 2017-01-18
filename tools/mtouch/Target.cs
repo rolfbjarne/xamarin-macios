@@ -214,13 +214,6 @@ namespace Xamarin.Bundler
 			if (App.LinkMode == LinkMode.None && App.I18n != I18nAssemblies.None)
 				AddI18nAssemblies ();
 
-			foreach (var asm in Assemblies) {
-				Assembly other;
-				if (HashedAssemblies.TryGetValue (asm.Identity, out other))
-					throw ErrorHelper.CreateError (9999, "The assembly '{0}' is referenced from '{1}' and '{2}'.", asm.Identity, other.FullPath, asm.FullPath);
-				HashedAssemblies.Add (asm.Identity, asm);
-			}
-
 			linker_flags = new CompilerFlags (this);
 
 			// an extension is a .dll and it would match itself
@@ -482,10 +475,13 @@ namespace Xamarin.Bundler
 			return new Assembly (this, assembly);
 		}
 
-		public void LinkAssemblies (IEnumerable<string> mains, ref List<string> assemblies, string output_dir, out MonoTouchLinkContext link_context)
+		public static void LinkAssemblies (Target target, out List<AssemblyDefinition> assemblies, string output_dir)
 		{
+			var Resolver = target.Resolver;
+			var App = target.App;
+
 			if (Driver.Verbosity > 0)
-				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", string.Join (", ", mains.ToArray ()), output_dir, App.LinkMode);
+				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", "?" /*string.Join (", ", mains.ToArray ())*/, output_dir, App.LinkMode);
 
 			var cache = Resolver.ToResolverCache ();
 			var resolver = cache != null
@@ -496,10 +492,11 @@ namespace Xamarin.Bundler
 			resolver.AddSearchDirectory (Resolver.FrameworkDirectory);
 
 			var main_assemblies = new List<AssemblyDefinition> ();
-			foreach (var main in mains)
-				main_assemblies.Add (Resolver.Load (main));
+			main_assemblies.Add (Resolver.Load (target.App.RootAssembly));
+			foreach (var appex in target.App.SharedCodeApps)
+				main_assemblies.Add (Resolver.Load (appex.RootAssembly));
 
-			LinkerOptions = new LinkerOptions {
+			target.LinkerOptions = new LinkerOptions {
 				MainAssemblies = main_assemblies,
 				OutputDirectory = output_dir,
 				LinkMode = App.LinkMode,
@@ -514,15 +511,17 @@ namespace Xamarin.Bundler
 				// but this can be overridden to either (a) remove it from debug builds or (b) keep it in release builds
 				EnsureUIThread = App.ThreadCheck.HasValue ? App.ThreadCheck.Value : App.EnableDebug,
 				DebugBuild = App.EnableDebug,
-				Arch = Is64Build ? 8 : 4,
+				Arch = target.Is64Build ? 8 : 4,
 				IsDualBuild = App.IsDualBuild,
 				DumpDependencies = App.LinkerDumpDependencies,
 				RuntimeOptions = App.RuntimeOptions,
-				MarshalNativeExceptionsState = MarshalNativeExceptionsState,
+				MarshalNativeExceptionsState = target.MarshalNativeExceptionsState,
 				Application = App,
 			};
 
-			MonoTouch.Tuner.Linker.Process (LinkerOptions, out link_context, out assemblies);
+			MonoTouchLinkContext link_context;
+			MonoTouch.Tuner.Linker.Process (target.LinkerOptions, out link_context, out assemblies);
+			target.LinkContext = link_context;
 
 			Driver.Watch ("Link Assemblies", 1);
 		}
@@ -531,11 +530,37 @@ namespace Xamarin.Bundler
 		{
 			var cache_path = Path.Combine (ArchDirectory, "linked-assemblies.txt");
 
-			foreach (var a in Assemblies)
+			var sharingTargets = App.SharedCodeApps.SelectMany ((v) => v.Targets).Where ((v) => v.Is32Build == Is32Build).ToList ();
+			var allTargets = new List<Target> ();
+			allTargets.Add (this); // We want ourselves first in this list.
+			allTargets.AddRange (sharingTargets);
+
+			// All the assemblies included when linking.
+			// This includes any assemblies from appex's we're also linking at the same time.
+			var linkAssemblies = new AssemblyCollection ();
+			linkAssemblies.AddRange (Assemblies);
+
+			foreach (var target in sharingTargets) {
+				var targetAssemblies = target.Assemblies.ToList (); // We need to clone the list of assemblies, since we'll be modifying the original
+				foreach (var asm in targetAssemblies) {
+					Assembly main_asm;
+					if (Assemblies.TryGetValue (asm.Identity, out main_asm)) {
+						// The appex has an assembly that's also present in the main app.
+						// In this case we replace the entire 'Assembly' instance.
+						target.Assemblies [main_asm.Identity] = main_asm;
+					}
+					if (!linkAssemblies.ContainsKey (asm.Identity)) {
+						Driver.Log (1, "Added '{0}' from {1} to the set of assemblies to be linked.", asm.Identity, Path.GetFileNameWithoutExtension (target.App.AppDirectory));
+						linkAssemblies.Add (asm);
+					}
+				}
+			}
+
+			foreach (var a in linkAssemblies)
 				a.CopyToDirectory (LinkDirectory, false, check_case: true);
 
 			// Check if we can use a previous link result.
-			if (!Driver.Force) {
+			if (!Driver.Force && sharingTargets.Count == 0 /* FIXME: caching complicates things a bit :( */ ) {
 				var input = new List<string> ();
 				var output = new List<string> ();
 				var cached_output = new List<string> ();
@@ -546,7 +571,7 @@ namespace Xamarin.Bundler
 					var cached_loaded = new HashSet<string> ();
 					// Only add the previously linked assemblies (and their satellites) as the input/output assemblies.
 					// Do not add assemblies which the linker process removed.
-					foreach (var a in Assemblies) {
+					foreach (var a in linkAssemblies) {
 						if (!cached_output.Contains (a.FullPath))
 							continue;
 						cached_loaded.Add (a.FullPath);
@@ -583,10 +608,10 @@ namespace Xamarin.Bundler
 
 					if (Application.IsUptodate (input, output)) {
 						cached_link = true;
-						for (int i = Assemblies.Count - 1; i >= 0; i--) {
-							var a = Assemblies [i];
+						var currentAssemblies = Assemblies.ToList ();
+						foreach (var a in currentAssemblies) {
 							if (!cached_output.Contains (a.FullPath)) {
-								Assemblies.RemoveAt (i);
+								Assemblies.Remove (Assembly.GetIdentity (a.FullPath));
 								continue;
 							}
 							// Load the cached assembly
@@ -609,56 +634,62 @@ namespace Xamarin.Bundler
 			}
 
 			// Load the assemblies into memory.
-			foreach (var a in Assemblies)
+			foreach (var a in linkAssemblies)
 				a.LoadAssembly (a.FullPath);
 
-			var assemblies = new List<string> ();
-			foreach (var a in Assemblies)
-				assemblies.Add (a.FullPath);
-			var linked_assemblies = new List<string> (assemblies);
+			// Link!
+			List<AssemblyDefinition> output_assemblies;
+			LinkAssemblies (this, out output_assemblies, PreBuildDirectory);
 
-			LinkAssemblies (App.RootAssemblies, ref linked_assemblies, PreBuildDirectory, out LinkContext);
+			// Update (add/remove) list of assemblies in each app, since the linker may have both added and removed assemblies.
+			// The logic for updating assemblies when doing code-sharing is not equivalent to when we're not code sharing
+			// (in particular we don't support xml linker definitions, in which case code-sharing is disabled), so we need
+			// to maintain two paths here.
+			if (sharingTargets.Count == 0) {
+				Assemblies.Update (this, output_assemblies);
+			} else {
+				// For added assemblies we have to determine exactly which apps need which assemblies.
+				// Code sharing is only allowed if there are no linker xml definitions, which means that
+				// we can limit ourselves to iterate over assembly references to create the updated list of assemblies.
+				foreach (var t in allTargets) {
+					// Find the root assembly
+					// Here we assume that 'AssemblyReference.Name' == 'Assembly.Identity'.
+					var rootAssembly = t.Assemblies [Assembly.GetIdentity (t.App.RootAssembly)];
+					var queue = new Queue<string> ();
+					var collectedNames = new HashSet<string> ();
 
-			// Remove assemblies that were linked away
-			var removed = new HashSet<string> (assemblies);
-			removed.ExceptWith (linked_assemblies);
+					// First collect the set of all assemblies in the app.
+					collectedNames.Add (rootAssembly.Identity);
+					foreach (var ar in rootAssembly.AssemblyDefinition.MainModule.AssemblyReferences)
+						queue.Enqueue (ar.Name);
 
-			foreach (var assembly in removed) {
-				for (int i = Assemblies.Count - 1; i >= 0; i--) {
-					var ad = Assemblies [i];
-					if (assembly != ad.FullPath)
-						continue;
+					do {
+						var next = queue.Dequeue ();
+						collectedNames.Add (next);
 
-					Assemblies.RemoveAt (i);
+						var ad = output_assemblies.Single ((AssemblyDefinition v) => v.Name.Name == next);
+						if (ad.MainModule.HasAssemblyReferences) {
+							foreach (var ar in ad.MainModule.AssemblyReferences) {
+								if (!collectedNames.Contains (ar.Name) && !queue.Contains (ar.Name))
+									queue.Enqueue (ar.Name);
+							}
+						}
+					} while (queue.Count > 0);
+
+					// Now update the assembly collection
+					t.Assemblies.Update (t, collectedNames.Select ((v) => output_assemblies.Single ((v2) => v2.Name.Name == v)));
 				}
 			}
 
-			// anything added by the linker will have it's original path
-			var added = new HashSet<string> ();
-			foreach (var assembly in linked_assemblies)
-				added.Add (Path.GetFileName (assembly));
-			var original = new HashSet<string> ();
-			foreach (var assembly in assemblies)
-				original.Add (Path.GetFileName (assembly));
-			added.ExceptWith (original);
-
-			foreach (var assembly in added) {
-				// the linker already copied the assemblies (linked or not) into the output directory
-				// and we must NOT overwrite the linker work with an original (unlinked) assembly
-				string path = Path.Combine (PreBuildDirectory, assembly);
-				var ad = ManifestResolver.Load (path);
-				var a = new Assembly (this, ad);
-				a.CopyToDirectory (PreBuildDirectory);
-				Assemblies.Add (a);
+			// Make the assemblies point to the right path.
+			foreach (var t in allTargets) {
+				foreach (var a in t.Assemblies) {
+					// All these assemblies are in the main app's PreBuildDirectory.
+					a.FullPath = Path.Combine (PreBuildDirectory, a.FileName);
+				}
 			}
 
-			assemblies = linked_assemblies;
-
-			// Make the assemblies point to the right path.
-			foreach (var a in Assemblies)
-				a.FullPath = Path.Combine (PreBuildDirectory, a.FileName);
-
-			File.WriteAllText (cache_path, string.Join ("\n", linked_assemblies));
+			File.WriteAllText (cache_path, string.Join ("\n", output_assemblies.Select ((v) => v.MainModule.FileName)));
 		}
 			
 		public void ProcessAssemblies ()

@@ -529,7 +529,10 @@ namespace xharness
 		{
 			try {
 				Directory.CreateDirectory (LogDirectory);
-				Harness.HarnessLog = MainLog = Logs.CreateStream (LogDirectory, "Harness.log", "Harness log");
+				Log log = Logs.CreateStream (LogDirectory, "Harness.log", "Harness log");
+				if (Harness.InWrench)
+					log = new AggregatedLog (log, new ConsoleLog ());
+				Harness.HarnessLog = MainLog = log;
 				Harness.HarnessLog.Timestamp = true;
 
 				var tasks = new List<Task> ();

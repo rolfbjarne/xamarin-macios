@@ -22,7 +22,7 @@ namespace xharness
 
 		public abstract string FullPath { get; }
 
-		protected abstract void WriteImpl (string value);
+		protected internal abstract void WriteImpl (string value);
 
 		public virtual StreamReader GetReader ()
 		{
@@ -81,7 +81,7 @@ namespace xharness
 			writer.AutoFlush = true;
 		}
 
-		protected override void WriteImpl (string value)
+		protected internal override void WriteImpl (string value)
 		{
 			writer.Write (value);
 		}
@@ -143,7 +143,7 @@ namespace xharness
 			fs = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.Read);
 		}
 
-		protected override void WriteImpl (string value)
+		protected internal override void WriteImpl (string value)
 		{
 			var w = GetWriter ();
 			w.Write (value);
@@ -194,7 +194,7 @@ namespace xharness
 	{
 		StringBuilder captured = new StringBuilder ();
 
-		protected override void WriteImpl (string value)
+		protected override internal void WriteImpl (string value)
 		{
 			captured.Append (value);
 			Console.Write (value);
@@ -302,7 +302,7 @@ namespace xharness
 			Capture ();
 		}
 
-		protected override void WriteImpl (string value)
+		protected internal override void WriteImpl (string value)
 		{
 			throw new InvalidOperationException ();
 		}
@@ -310,6 +310,57 @@ namespace xharness
 		public override string FullPath {
 			get {
 				return Path;
+			}
+		}
+	}
+
+	public class AggregatedLog : Log
+	{
+		Log[] logs;
+
+		public AggregatedLog (params Log [] logs)
+		{
+			this.logs = logs;
+		}
+
+		public override string FullPath {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		protected internal override void WriteImpl (string value)
+		{
+			foreach (var log in logs)
+				log.WriteImpl (value);
+		}
+
+		public override StreamWriter GetWriter ()
+		{
+			return new CustomStreamCapture (this);
+		}
+
+		class CustomStreamCapture : StreamWriter
+		{
+			AggregatedLog log;
+
+			public CustomStreamCapture (AggregatedLog log)
+				: base (new MemoryStream ())
+			{
+				this.log = log;
+			}
+
+			public override void Write (string value)
+			{
+				log.WriteImpl (value);
+			}
+
+			protected override void Dispose (bool disposing)
+			{
+				base.Dispose (disposing);
+
+				if (base.BaseStream.Length != 0)
+					throw new Exception ("CustomStreamCapture didn't capture everything.");
 			}
 		}
 	}

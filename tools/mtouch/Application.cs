@@ -168,6 +168,7 @@ namespace Xamarin.Bundler {
 		public AssemblyBuildTarget LibXamarinLinkMode = AssemblyBuildTarget.StaticObject;
 		public AssemblyBuildTarget LibPInvokesLinkMode => LibXamarinLinkMode;
 		public AssemblyBuildTarget LibRegistrarLinkMode => LibXamarinLinkMode;
+		public bool IsCodeSharing { get; private set; }
 
 		public bool OnlyStaticLibraries {
 			get {
@@ -209,6 +210,10 @@ namespace Xamarin.Bundler {
 				name = value.Substring (eq_index2 + 1);
 			}
 
+			int invalid_idx;
+			if ((invalid_idx = name.IndexOfAny (new char [] { '/', '\\' })) != -1)
+				throw ErrorHelper.CreateError (106, "The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.", name, name [invalid_idx]);
+
 			if (assembly_build_targets.ContainsKey (assembly_name))
 				throw ErrorHelper.CreateError (101, "The assembly '{0}' is specified multiple times in --assembly-build-target arguments.", assembly_name);
 
@@ -222,6 +227,10 @@ namespace Xamarin.Bundler {
 				break;
 			case "framework":
 				build_target = AssemblyBuildTarget.Framework;
+
+				if (name.EndsWith (".framework", StringComparison.Ordinal))
+					name = name.Substring (0, name.Length - ".framework".Length);
+
 				break;
 			default:
 				throw ErrorHelper.CreateError (10, "Could not parse the command line arguments: --assembly-build-target={0}", value);
@@ -439,11 +448,8 @@ namespace Xamarin.Bundler {
 					all_architectures = new HashSet<Abi> ();
 					foreach (var abi in abis)
 						all_architectures.Add (abi & Abi.ArchMask);
-					foreach (var ext in Extensions) {
-						var executable = GetStringFromInfoPList (ext, "CFBundleExecutable");
-						if (string.IsNullOrEmpty (executable))
-							throw ErrorHelper.CreateError (63, "Cannot find the executable in the extension {0} (no CFBundleExecutable entry in its Info.plist)", ext);
-						foreach (var abi in Xamarin.MachO.GetArchitectures (Path.Combine (ext, executable)))
+					foreach (var ext in AppExtensions) {
+						foreach (var abi in ext.Abis)
 							all_architectures.Add (abi);
 					}
 				}
@@ -716,7 +722,9 @@ namespace Xamarin.Bundler {
 
 		void BuildManaged ()
 		{
-			SharedCodeApps.AddRange (DetectCodeSharing ());
+			var sharedApps = DetectCodeSharing ();
+			if (sharedApps?.Count > 0)
+				SharedCodeApps.AddRange (sharedApps);
 
 			ProcessAssemblies ();
 
@@ -949,10 +957,13 @@ namespace Xamarin.Bundler {
 				if (!applicable)
 					continue;
 
+				appex.IsCodeSharing = true;
 				candidates.Add (appex);
 
 				Driver.Log (2, "The main app and the extension '{0}' will share code.", appex.Name);
 			}
+
+			IsCodeSharing = candidates.Count > 0;
 
 			return candidates;
 		}
@@ -1904,6 +1915,9 @@ namespace Xamarin.Bundler {
 				var build_target = assemblies [0].BuildTarget;
 				var size_specific = assemblies.Length > 1 && !Cache.CompareAssemblies (assemblies [0].FullPath, assemblies [1].FullPath, true, true);
 
+				if (IsExtension && !IsWatchExtension && IsCodeSharing)
+					continue; // These resources will be found in the main app.
+
 				// Determine where to put the assembly
 				switch (build_target) {
 				case AssemblyBuildTarget.StaticObject:
@@ -1941,42 +1955,7 @@ namespace Xamarin.Bundler {
 				return;
 
 			RuntimeOptions.Write (AppDirectory);
-		}
-
-		public void ProcessFrameworksForArguments (StringBuilder args, IEnumerable<string> frameworks, IEnumerable<string> weak_frameworks, IList<string> inputs)
-		{
-			bool any_user_framework = false;
-
-			if (frameworks != null) {
-				foreach (var fw in frameworks)
-					ProcessFrameworkForArguments (args, fw, false, inputs, ref any_user_framework);
-			}
-
-			if (weak_frameworks != null) {
-				foreach (var fw in weak_frameworks)
-					ProcessFrameworkForArguments (args, fw, true, inputs, ref any_user_framework);
-			}
-			
-			if (any_user_framework) {
-				args.Append (" -Xlinker -rpath -Xlinker @executable_path/Frameworks");
-				if (IsExtension)
-					args.Append (" -Xlinker -rpath -Xlinker @executable_path/../../Frameworks");
-			}
-
-		}
-
-		public static void ProcessFrameworkForArguments (StringBuilder args, string fw, bool is_weak, IList<string> inputs, ref bool any_user_framework)
-		{
-			var name = Path.GetFileNameWithoutExtension (fw);
-			if (fw.EndsWith (".framework", StringComparison.Ordinal)) {
-				// user framework, we need to pass -F to the linker so that the linker finds the user framework.
-				any_user_framework = true;
-				if (inputs != null)
-					inputs.Add (Path.Combine (fw, name));
-				args.Append (" -F ").Append (Driver.Quote (Path.GetDirectoryName (fw)));
-			}
-			args.Append (is_weak ? " -weak_framework " : " -framework ").Append (Driver.Quote (name));
-		}
+		}	
 
 		public void CreateFrameworkInfoPList (string output_path, string framework_name, string bundle_identifier, string bundle_name)
 		{

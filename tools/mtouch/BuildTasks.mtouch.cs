@@ -275,6 +275,7 @@ namespace Xamarin.Bundler
 		public Target Target;
 		public string OutputFile;
 		public CompilerFlags CompilerFlags;
+		public Dictionary<string, string> InstallNameMappings = new Dictionary<string, string> ();
 
 		public override IEnumerable<string> Inputs {
 			get {

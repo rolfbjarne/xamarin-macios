@@ -131,11 +131,13 @@ namespace Xamarin.Bundler
 				LinkWithTaskOutput (link_task);
 				break;
 			case AssemblyBuildTarget.DynamicLibrary:
-				AddToBundle (link_task.OutputFile);
+				if (!(App.IsExtension && App.IsCodeSharing))
+					AddToBundle (link_task.OutputFile);
 				LinkWithTaskOutput (link_task);
 				break;
 			case AssemblyBuildTarget.Framework:
-				AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
+				if (!(App.IsExtension && App.IsCodeSharing))
+					AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
 				LinkWithTaskOutput (link_task);
 				break;
 			default:
@@ -701,6 +703,9 @@ namespace Xamarin.Bundler
 
 					// Now update the assembly collection
 					t.Assemblies.Update (t, collectedNames.Select ((v) => output_assemblies.Single ((v2) => v2.Name.Name == v)));
+					// And make sure every Target's assembly resolver knows about all the assemblies.
+					foreach (var asm in t.Assemblies)
+						t.Resolver.Add (asm.AssemblyDefinition);
 				}
 			}
 
@@ -1351,7 +1356,11 @@ namespace Xamarin.Bundler
 				} else {
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
 					linker_flags.AddLinkWith (libprofiler);
-					AddToBundle (libprofiler);
+					if (!(App.IsExtension && App.IsCodeSharing)) {
+						AddToBundle (libprofiler);
+					} else {
+						linker_flags.AddOtherFlag ("-dylib_file @executable_path/libmono-profiler-log.dylib:@executable_path/../../libmono-profiler-log.dylib");
+					}
 				}
 			}
 

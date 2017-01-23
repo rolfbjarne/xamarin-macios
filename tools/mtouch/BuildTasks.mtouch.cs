@@ -157,6 +157,9 @@ namespace Xamarin.Bundler
 
 		protected override void Execute ()
 		{
+			Console.WriteLine ("Running the static registrar for:");
+			foreach (var asm in Target.Assemblies)
+				Console.WriteLine ("    {0}", asm.AssemblyDefinition.MainModule.FileName);
 			Target.StaticRegistrar.Generate (Target.Assemblies.Select ((a) => a.AssemblyDefinition), RegistrarH, RegistrarM);
 		}
 	}

@@ -124,6 +124,25 @@ namespace Xamarin.Bundler
 			info.Sources.Add (source);
 		}
 
+		void LinkWithBuildTarget (AssemblyBuildTarget build_target, string name, CompileTask link_task)
+		{
+			switch (build_target) {
+			case AssemblyBuildTarget.StaticObject:
+				LinkWithTaskOutput (link_task);
+				break;
+			case AssemblyBuildTarget.DynamicLibrary:
+				AddToBundle (link_task.OutputFile);
+				LinkWithTaskOutput (link_task);
+				break;
+			case AssemblyBuildTarget.Framework:
+				AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
+				LinkWithTaskOutput (link_task);
+				break;
+			default:
+				throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
+			}
+		}
+
 		public void LinkWithTaskOutput (CompileTask task)
 		{
 			if (task.SharedLibrary) {
@@ -526,8 +545,12 @@ namespace Xamarin.Bundler
 			Driver.Watch ("Link Assemblies", 1);
 		}
 
+		bool linked;
 		public void ManagedLink ()
 		{
+			if (linked)
+				return;
+			
 			var cache_path = Path.Combine (ArchDirectory, "linked-assemblies.txt");
 
 			var sharingTargets = App.SharedCodeApps.SelectMany ((v) => v.Targets).Where ((v) => v.Is32Build == Is32Build).ToList ();
@@ -546,7 +569,7 @@ namespace Xamarin.Bundler
 					Assembly main_asm;
 					if (Assemblies.TryGetValue (asm.Identity, out main_asm)) {
 						// The appex has an assembly that's also present in the main app.
-						// In this case we replace the entire 'Assembly' instance.
+						// In this case we replace the entire Assembly instance in the appex
 						target.Assemblies [main_asm.Identity] = main_asm;
 					}
 					if (!linkAssemblies.ContainsKey (asm.Identity)) {
@@ -706,7 +729,10 @@ namespace Xamarin.Bundler
 >>>>>>> backup
 			}
 
+			// Write to the cache
 			File.WriteAllText (cache_path, string.Join ("\n", output_assemblies.Select ((v) => v.MainModule.FileName)));
+
+			allTargets.ForEach ((v) => v.linked = true);
 		}
 			
 		public void ProcessAssemblies ()
@@ -897,8 +923,17 @@ namespace Xamarin.Bundler
 					string compiler_output;
 					var compiler_flags = new CompilerFlags (this);
 					var link_dependencies = new List<CompileTask> ();
-					var infos = assemblies.Select ((asm) => asm.AotInfos [abi]);
+					var infos = assemblies.Select ((asm) => asm.AotInfos [abi]).ToList ();
 					var aottasks = infos.Select ((info) => info.Task);
+
+					var existingLinkTask = infos.Where ((v) => v.LinkTask != null).Select ((v) => v.LinkTask).ToList ();
+					if (existingLinkTask.Count > 0) {
+						if (existingLinkTask.Count != infos.Count)
+							throw ErrorHelper.CreateError (9999, "Internal consistency error: xyz abc");
+
+						LinkWithBuildTarget (build_target, name, existingLinkTask [0]);
+						continue;
+					}
 
 					// We have to compile any source files to object files before we can link.
 					var sources = infos.SelectMany ((info) => info.AsmFiles);
@@ -1009,21 +1044,7 @@ namespace Xamarin.Bundler
 					link_task.AddDependency (link_dependencies);
 					link_task.AddDependency (aottasks);
 
-					switch (build_target) {
-					case AssemblyBuildTarget.StaticObject:
-						LinkWithTaskOutput (link_task);
-						break;
-					case AssemblyBuildTarget.DynamicLibrary:
-						AddToBundle (link_task.OutputFile);
-						LinkWithTaskOutput (link_task);
-						break;
-					case AssemblyBuildTarget.Framework:
-						AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
-						LinkWithTaskOutput (link_task);
-						break;
-					default:
-						throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
-					}
+					LinkWithBuildTarget (build_target, name, link_task);
 
 					foreach (var info in infos)
 						info.LinkTask = link_task;

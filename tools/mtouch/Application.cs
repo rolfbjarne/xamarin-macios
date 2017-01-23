@@ -390,8 +390,11 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		string mono_gc_params;
 		public string MonoGCParams {
 			get {
+				if (!string.IsNullOrEmpty (mono_gc_params))
+					return mono_gc_params;
 				// Configure sgen to use a small nursery
 				string ret = "nursery-size=512k";
 				if (IsTodayExtension || Platform == ApplePlatform.WatchOS) {
@@ -405,6 +408,9 @@ namespace Xamarin.Bundler {
 				else
 					ret += ",major=marksweep";
 				return ret;
+			}
+			set {
+				mono_gc_params = value;
 			}
 		}
 

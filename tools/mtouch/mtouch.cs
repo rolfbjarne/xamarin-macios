@@ -1158,7 +1158,11 @@ namespace Xamarin.Bundler
 						throw new MonoTouchException (2, true, "Could not parse the environment variable '{0}'", v);
 					string name = v.Substring (0, eq);
 					string value = v.Substring (eq + 1);
-					app.EnvironmentVariables.Add (name, value);
+					if (name == "MONO_GC_PARAMS") {
+						app.MonoGCParams = value;
+					} else {
+						app.EnvironmentVariables.Add (name, value);
+					}
 				}
 			},
 			{ "sgen:", "Enable the SGen garbage collector",

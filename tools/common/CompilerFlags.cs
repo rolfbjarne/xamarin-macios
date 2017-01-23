@@ -30,6 +30,8 @@ namespace Xamarin.Utils
 		public CompilerFlags (Target target)
 		{
 			this.Target = target;
+			if (target == null)
+				throw new ArgumentNullException (nameof (target));
 		}
 
 		public void ReferenceSymbol (string symbol)
@@ -268,6 +270,14 @@ namespace Xamarin.Utils
 				args.Append (" -Xlinker -rpath -Xlinker @executable_path/Frameworks");
 				if (Application.IsExtension)
 					args.Append (" -Xlinker -rpath -Xlinker @executable_path/../../Frameworks");
+			}
+
+			if (Application.HasAnyDynamicLibraries) {
+				if (Application.IsExtension) {
+					args.Append (" -Xlinker -rpath -Xlinker @executable_path/../..");
+				} else {
+					args.Append (" -Xlinker -rpath -Xlinker @executable_path");
+				}
 			}
 		}
 

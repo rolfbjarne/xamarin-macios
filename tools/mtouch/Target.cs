@@ -573,6 +573,7 @@ namespace Xamarin.Bundler
 						// The appex has an assembly that's also present in the main app.
 						// In this case we replace the entire Assembly instance in the appex
 						target.Assemblies [main_asm.Identity] = main_asm;
+						main_asm.IsCodeShared = true;
 					}
 					if (!linkAssemblies.ContainsKey (asm.Identity)) {
 						Driver.Log (1, "Added '{0}' from {1} to the set of assemblies to be linked.", asm.Identity, Path.GetFileNameWithoutExtension (target.App.AppDirectory));
@@ -1194,7 +1195,10 @@ namespace Xamarin.Bundler
 						OutputFile = Path.Combine (App.Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
 						Dependency = run_registrar_task,
 					};
-
+				
+					// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
+					// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
+					registrar_task.CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
 					LinkWithTaskOutput (registrar_task);
 				}
 
@@ -1243,6 +1247,7 @@ namespace Xamarin.Bundler
 					InputFile = generate_main_task.MainM,
 					Dependency = generate_main_task,
 				};
+				main_task.CompilerFlags.AddDefine ("MONOTOUCH");
 				LinkWithTaskOutput (main_task);
 			}
 
@@ -1348,19 +1353,22 @@ namespace Xamarin.Bundler
 
 			if (App.EnableProfiling) {
 				string libprofiler;
-				if (App.OnlyStaticLibraries) {
+				switch (App.LibProfilerLinkMode) {
+				case AssemblyBuildTarget.StaticObject:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.a");
 					linker_flags.AddLinkWith (libprofiler);
 					if (!App.EnableBitCode)
 						linker_flags.ReferenceSymbol ("mono_profiler_startup_log");
-				} else {
+					break;
+				case AssemblyBuildTarget.DynamicLibrary:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
 					linker_flags.AddLinkWith (libprofiler);
 					if (!(App.IsExtension && App.IsCodeSharing)) {
 						AddToBundle (libprofiler);
-					} else {
-						linker_flags.AddOtherFlag ("-dylib_file @executable_path/libmono-profiler-log.dylib:@executable_path/../../libmono-profiler-log.dylib");
 					}
+					break;
+				default:
+					throw new NotImplementedException ();
 				}
 			}
 

@@ -168,6 +168,8 @@ namespace Xamarin.Bundler {
 		public AssemblyBuildTarget LibXamarinLinkMode = AssemblyBuildTarget.StaticObject;
 		public AssemblyBuildTarget LibPInvokesLinkMode => LibXamarinLinkMode;
 		public AssemblyBuildTarget LibRegistrarLinkMode => LibXamarinLinkMode;
+		public AssemblyBuildTarget LibProfilerLinkMode => OnlyStaticLibraries ? AssemblyBuildTarget.StaticObject : AssemblyBuildTarget.DynamicLibrary;
+
 		public bool IsCodeSharing { get; private set; }
 
 		public bool OnlyStaticLibraries {
@@ -179,6 +181,22 @@ namespace Xamarin.Bundler {
 		public bool HasDynamicLibraries {
 			get {
 				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
+			}
+		}
+
+		public bool HasAnyDynamicLibraries {
+			get {
+				if (LibMonoLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibXamarinLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibPInvokesLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibRegistrarLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibProfilerLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				return HasDynamicLibraries;
 			}
 		}
 
@@ -264,7 +282,7 @@ namespace Xamarin.Bundler {
 
 					if (asm_build_targets.TryGetValue (asm_name, out build_target)) {
 						asm_build_targets.Remove (asm_name);
-					} else if (sdk != null && Profile.IsSdkAssembly (asm_name)) {
+					} else if (sdk != null && (Profile.IsSdkAssembly (asm_name) || Profile.IsProductAssembly (asm_name))) {
 						build_target = sdk;
 					} else {
 						build_target = all;
@@ -1500,7 +1518,7 @@ namespace Xamarin.Bundler {
 							Driver.RunLipo (sb.ToString ());
 						}
 						if (LibMonoLinkMode == AssemblyBuildTarget.Framework)
-							Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
+							Driver.XcodeRun ("install_name_tool", "-change @rpath/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
 					} else {
 						Driver.Log (3, "Target '{0}' is up-to-date.", targetPath);
 					}
@@ -1915,8 +1933,13 @@ namespace Xamarin.Bundler {
 				var build_target = assemblies [0].BuildTarget;
 				var size_specific = assemblies.Length > 1 && !Cache.CompareAssemblies (assemblies [0].FullPath, assemblies [1].FullPath, true, true);
 
-				if (IsExtension && !IsWatchExtension && IsCodeSharing)
+				if (IsExtension && assemblies [0].IsCodeShared) {
+					if (!assemblies.All ((v) => v.IsCodeShared))
+						throw ErrorHelper.CreateError (9999, "Internal consistency error.");
 					continue; // These resources will be found in the main app.
+				}
+				if (IsExtension && !assemblies.All ((v) => !v.IsCodeShared))
+					throw ErrorHelper.CreateError (9999, "Internal consistency error.");
 
 				// Determine where to put the assembly
 				switch (build_target) {

@@ -117,7 +117,6 @@ namespace Xamarin.Bundler
 		{
 			Language = "objective-c++";
 			SharedLibrary = false;
-			CompilerFlags.AddDefine ("MONOTOUCH");
 		}
 
 		protected async override Task ExecuteAsync ()
@@ -168,13 +167,6 @@ namespace Xamarin.Bundler
 	{
 		public string RegistrarM;
 		public string RegistrarH;
-
-		public CompileRegistrarTask ()
-		{
-			// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
-			// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
-			CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
-		}
 
 		public override IEnumerable<string> Inputs {
 			get {
@@ -522,6 +514,8 @@ namespace Xamarin.Bundler
 
 			Directory.CreateDirectory (Path.GetDirectoryName (OutputFile));
 
+			if (CompilerFlags.Target == null)
+				throw new Exception ();
 			var rv = await Driver.RunCommandAsync (App.CompilerPath, CompilerFlags.ToString (), null, null);
 
 			return rv;

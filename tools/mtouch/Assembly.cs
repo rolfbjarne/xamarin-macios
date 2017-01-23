@@ -32,6 +32,7 @@ namespace Xamarin.Bundler {
 	{
 		public AssemblyBuildTarget BuildTarget;
 		public string BuildTargetName;
+		public bool IsCodeShared;
 
 		public List<string> Satellites;
 

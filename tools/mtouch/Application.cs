@@ -707,10 +707,6 @@ namespace Xamarin.Bundler {
 
 			ProcessAssemblies ();
 
-			if (SharedCodeApps.Count > 0) {
-				throw new NotImplementedException ();
-			}
-
 			AppExtensions.ForEach ((v) =>
 			{
 				v.ProcessAssemblies ();
@@ -719,8 +715,9 @@ namespace Xamarin.Bundler {
 
 		void BuildNative ()
 		{
-			var allapps = new List<Application> (AppExtensions);
-			allapps.Add (this);
+			var allapps = new List<Application> ();
+			allapps.Add (this); // We need to build the main app first, so that any extensions sharing code can reference frameworks built in the main app.
+			allapps.AddRange (AppExtensions);
 
 			allapps.ForEach ((v) =>
 			{
@@ -820,6 +817,14 @@ namespace Xamarin.Bundler {
 
 			List<Application> candidates = new List<Application> ();
 			foreach (var appex in AppExtensions) {
+				if (appex.IsWatchExtension)
+					continue;
+
+				if (appex.NoDevCodeShare) {
+					Driver.Log (2, "Native code sharing has been disabled in the extension {0}, so no code sharing with the main will occur for this extension.", appex.Name);
+					continue;
+				}
+
 				bool applicable = true;
 				// The --assembly-build-target arguments must be identical.
 				// We can probably lift this requirement (at least partially) at some point,
@@ -851,18 +856,18 @@ namespace Xamarin.Bundler {
 				// MONO_GC_PARAMS have to be identical
 				// Unfortunately this excludes today extensions from the code sharing.
 				if (MonoGCParams != appex.MonoGCParams) {
-					Driver.Log (2, "The extension '{0}' has different MONO_GC_PARAMS value, and can therefore not share native code with the main app.", appex.Name);
+					Driver.Log (2, "The extension '{0}' has different MONO_GC_PARAMS value (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.MonoGCParams, MonoGCParams);
 					continue;
 				}
 
 				// All arguments to the AOT compiler must be identical
 				if (AotArguments != appex.AotArguments) {
-					Driver.Log (2, "The extension '{0}' has different arguments to the AOT compiler, and can therefore not share native code with the main app.", appex.Name);
+					Driver.Log (2, "The extension '{0}' has different arguments to the AOT compiler (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.AotArguments, AotArguments);
 					continue;
 				}
 
 				if (AotOtherArguments != appex.AotOtherArguments) {
-					Driver.Log (2, "The extension '{0}' has different other arguments to the AOT compiler, and can therefore not share native code with the main app.", appex.Name);
+					Driver.Log (2, "The extension '{0}' has different other arguments to the AOT compiler (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.AotOtherArguments, AotOtherArguments);
 					continue;
 				}
 
@@ -894,21 +899,7 @@ namespace Xamarin.Bundler {
 					}
 				}
 
-				// Check if there aren't referenced assemblies from different sources
-				foreach (var kvp in appex.Targets [0].Assemblies.Hashed) {
-					Assembly asm;
-					if (!Targets [0].Assemblies.TryGetValue (kvp.Key, out asm))
-						continue; // appex references an assembly the main app doesn't. This is fine.
-					if (asm.FullPath != kvp.Value.FullPath) {
-						applicable = false; // app references an assembly with the same name as the main app, but from a different location. This is not fine. Should we emit a real warning here, or just a log message?
-						Driver.Log (2, "The extension '{0}' is referencing the assembly '{1}' from '{2}', while the main app references it from '{3}', and can therefore not share native code with the main app.", appex.Name, asm.Identity, kvp.Value.FullPath, asm.FullPath);
-						break;
-					}
-				}
-
-				if (!applicable)
-					continue;
-
+				// Check that the Abis are matching
 				foreach (var abi in appex.Abis) {
 					var matching = abis.FirstOrDefault ((v) => (v & Abi.ArchMask) == (abi & Abi.ArchMask));
 					if (matching == Abi.None) {
@@ -924,10 +915,30 @@ namespace Xamarin.Bundler {
 					}
 				}
 
+				// Check if there aren't referenced assemblies from different sources
+				foreach (var target in Targets) {
+					var appexTarget = appex.Targets.Single ((v) => v.Is32Build == target.Is32Build);
+					foreach (var kvp in appexTarget.Assemblies.Hashed) {
+						Assembly asm;
+						if (!target.Assemblies.TryGetValue (kvp.Key, out asm))
+							continue; // appex references an assembly the main app doesn't. This is fine.
+						if (asm.FullPath != kvp.Value.FullPath) {
+							applicable = false; // app references an assembly with the same name as the main app, but from a different location. This is not fine. Should we emit a real warning here, or just a log message?
+							Driver.Log (2, "The extension '{0}' is referencing the assembly '{1}' from '{2}', while the main app references it from '{3}', and can therefore not share native code with the main app.", appex.Name, asm.Identity, kvp.Value.FullPath, asm.FullPath);
+							break;
+						}
+					}
+				}
+
+				if (!applicable)
+					continue;
+
 				if (!applicable)
 					continue;
 
 				candidates.Add (appex);
+
+				Driver.Log (2, "The main app and the extension '{0}' will share code.", appex.Name);
 			}
 
 			return candidates;

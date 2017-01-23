@@ -379,8 +379,11 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		string mono_gc_params;
 		public string MonoGCParams {
 			get {
+				if (!string.IsNullOrEmpty (mono_gc_params))
+					return mono_gc_params;
 				// Configure sgen to use a small nursery
 				if (IsTodayExtension) {
 					return "nursery-size=512k,soft-heap-limit=8m";
@@ -392,6 +395,9 @@ namespace Xamarin.Bundler {
 				} else {
 					return "nursery-size=512k";
 				}
+			}
+			set {
+				mono_gc_params = value;
 			}
 		}
 

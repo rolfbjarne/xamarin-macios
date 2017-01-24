@@ -32,6 +32,7 @@ namespace Xamarin.Bundler {
 	{
 		public AssemblyBuildTarget BuildTarget;
 		public string BuildTargetName;
+		public bool IsCodeShared;
 
 		public Dictionary<Abi, AotInfo> AotInfos = new Dictionary<Abi, AotInfo> ();
 
@@ -225,6 +226,10 @@ namespace Xamarin.Bundler {
 		 */
 		public void CreateAOTTask (Abi abi)
 		{
+			// Check if we've already created the AOT tasks.
+			if (AotInfos.ContainsKey (abi))
+				return;
+
 			var build_dir = Target.BuildDirectory;
 			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
 			var arch = abi.AsArchString ();

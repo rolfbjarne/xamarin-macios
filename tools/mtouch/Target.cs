@@ -1088,7 +1088,10 @@ namespace Xamarin.Bundler
 						OutputFile = Path.Combine (App.Cache.Location, abi.AsArchString (), Path.GetFileNameWithoutExtension (registrar_m) + ".o"),
 						Dependency = run_registrar_task,
 					};
-
+				
+					// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
+					// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
+					registrar_task.CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
 					LinkWithTaskOutput (registrar_task);
 				}
 
@@ -1137,6 +1140,7 @@ namespace Xamarin.Bundler
 					InputFile = generate_main_task.MainM,
 					Dependency = generate_main_task,
 				};
+				main_task.CompilerFlags.AddDefine ("MONOTOUCH");
 				LinkWithTaskOutput (main_task);
 			}
 

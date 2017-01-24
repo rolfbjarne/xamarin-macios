@@ -698,6 +698,9 @@ namespace Xamarin.Bundler {
 			CompilePInvokeWrappers ();
 			BuildApp (build_tasks);
 
+			if (Driver.Dot)
+				build_tasks.Dot (Path.Combine (Cache.Location, "build.dot"));
+
 			Driver.Watch ("Building build tasks", 1);
 			build_tasks.Execute ();
 

@@ -124,6 +124,27 @@ namespace Xamarin.Bundler
 			info.Sources.Add (source);
 		}
 
+		void LinkWithBuildTarget (AssemblyBuildTarget build_target, string name, CompileTask link_task)
+		{
+			switch (build_target) {
+			case AssemblyBuildTarget.StaticObject:
+				LinkWithTaskOutput (link_task);
+				break;
+			case AssemblyBuildTarget.DynamicLibrary:
+				if (!(App.IsExtension && App.IsCodeSharing))
+					AddToBundle (link_task.OutputFile);
+				LinkWithTaskOutput (link_task);
+				break;
+			case AssemblyBuildTarget.Framework:
+				if (!(App.IsExtension && App.IsCodeSharing))
+					AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
+				LinkWithTaskOutput (link_task);
+				break;
+			default:
+				throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
+			}
+		}
+
 		public void LinkWithTaskOutput (CompileTask task)
 		{
 			if (task.SharedLibrary) {
@@ -475,10 +496,13 @@ namespace Xamarin.Bundler
 			return new Assembly (this, assembly);
 		}
 
-		public void LinkAssemblies (string main, out List<AssemblyDefinition> assemblies, string output_dir, out MonoTouchLinkContext link_context)
+		public static void LinkAssemblies (Target target, out List<AssemblyDefinition> assemblies, string output_dir)
 		{
+			var Resolver = target.Resolver;
+			var App = target.App;
+
 			if (Driver.Verbosity > 0)
-				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", main, output_dir, App.LinkMode);
+				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", "?" /*string.Join (", ", mains.ToArray ())*/, output_dir, App.LinkMode);
 
 			var cache = Resolver.ToResolverCache ();
 			var resolver = cache != null
@@ -488,8 +512,13 @@ namespace Xamarin.Bundler
 			resolver.AddSearchDirectory (Resolver.RootDirectory);
 			resolver.AddSearchDirectory (Resolver.FrameworkDirectory);
 
-			LinkerOptions = new LinkerOptions {
-				MainAssemblies = new [] { Resolver.Load (main) },
+			var main_assemblies = new List<AssemblyDefinition> ();
+			main_assemblies.Add (Resolver.Load (target.App.RootAssembly));
+			foreach (var appex in target.App.SharedCodeApps)
+				main_assemblies.Add (Resolver.Load (appex.RootAssembly));
+
+			target.LinkerOptions = new LinkerOptions {
+				MainAssemblies = main_assemblies,
 				OutputDirectory = output_dir,
 				LinkMode = App.LinkMode,
 				Resolver = resolver,
@@ -503,28 +532,61 @@ namespace Xamarin.Bundler
 				// but this can be overridden to either (a) remove it from debug builds or (b) keep it in release builds
 				EnsureUIThread = App.ThreadCheck.HasValue ? App.ThreadCheck.Value : App.EnableDebug,
 				DebugBuild = App.EnableDebug,
-				Arch = Is64Build ? 8 : 4,
+				Arch = target.Is64Build ? 8 : 4,
 				IsDualBuild = App.IsDualBuild,
 				DumpDependencies = App.LinkerDumpDependencies,
 				RuntimeOptions = App.RuntimeOptions,
-				MarshalNativeExceptionsState = MarshalNativeExceptionsState,
-				Target = this,
+				MarshalNativeExceptionsState = target.MarshalNativeExceptionsState,
+				Target = target,
 			};
 
-			MonoTouch.Tuner.Linker.Process (LinkerOptions, out link_context, out assemblies);
+			MonoTouchLinkContext link_context;
+			MonoTouch.Tuner.Linker.Process (target.LinkerOptions, out link_context, out assemblies);
+			target.LinkContext = link_context;
 
 			Driver.Watch ("Link Assemblies", 1);
 		}
 
+		bool linked;
 		public void ManagedLink ()
 		{
+			if (linked)
+				return;
+			
 			var cache_path = Path.Combine (ArchDirectory, "linked-assemblies.txt");
 
-			foreach (var a in Assemblies)
+			var sharingTargets = App.SharedCodeApps.SelectMany ((v) => v.Targets).Where ((v) => v.Is32Build == Is32Build).ToList ();
+			var allTargets = new List<Target> ();
+			allTargets.Add (this); // We want ourselves first in this list.
+			allTargets.AddRange (sharingTargets);
+
+			// All the assemblies included when linking.
+			// This includes any assemblies from appex's we're also linking at the same time.
+			var linkAssemblies = new AssemblyCollection ();
+			linkAssemblies.AddRange (Assemblies);
+
+			foreach (var target in sharingTargets) {
+				var targetAssemblies = target.Assemblies.ToList (); // We need to clone the list of assemblies, since we'll be modifying the original
+				foreach (var asm in targetAssemblies) {
+					Assembly main_asm;
+					if (Assemblies.TryGetValue (asm.Identity, out main_asm)) {
+						// The appex has an assembly that's also present in the main app.
+						// In this case we replace the entire Assembly instance in the appex
+						target.Assemblies [main_asm.Identity] = main_asm;
+						main_asm.IsCodeShared = true;
+					}
+					if (!linkAssemblies.ContainsKey (asm.Identity)) {
+						Driver.Log (1, "Added '{0}' from {1} to the set of assemblies to be linked.", asm.Identity, Path.GetFileNameWithoutExtension (target.App.AppDirectory));
+						linkAssemblies.Add (asm);
+					}
+				}
+			}
+
+			foreach (var a in linkAssemblies)
 				a.CopyToDirectory (LinkDirectory, false, check_case: true);
 
 			// Check if we can use a previous link result.
-			if (!Driver.Force) {
+			if (!Driver.Force && sharingTargets.Count == 0 /* FIXME: caching complicates things a bit :( */ ) {
 				var input = new List<string> ();
 				var output = new List<string> ();
 				var cached_output = new List<string> ();
@@ -535,7 +597,7 @@ namespace Xamarin.Bundler
 					var cached_loaded = new HashSet<string> ();
 					// Only add the previously linked assemblies (and their satellites) as the input/output assemblies.
 					// Do not add assemblies which the linker process removed.
-					foreach (var a in Assemblies) {
+					foreach (var a in linkAssemblies) {
 						if (!cached_output.Contains (a.FullPath))
 							continue;
 						cached_loaded.Add (a.FullPath);
@@ -597,35 +659,83 @@ namespace Xamarin.Bundler
 			}
 
 			// Load the assemblies into memory.
-			foreach (var a in Assemblies)
+			foreach (var a in linkAssemblies)
 				a.LoadAssembly (a.FullPath);
 
-			List<AssemblyDefinition> linked_assemblies_definitions;
+			// Link!
+			List<AssemblyDefinition> output_assemblies;
+			LinkAssemblies (this, out output_assemblies, PreBuildDirectory);
 
-			LinkAssemblies (App.RootAssembly, out linked_assemblies_definitions, PreBuildDirectory, out LinkContext);
+			// Update (add/remove) list of assemblies in each app, since the linker may have both added and removed assemblies.
+			// The logic for updating assemblies when doing code-sharing is not equivalent to when we're not code sharing
+			// (in particular code sharing is not supported when there are xml linker definitions), so we need
+			// to maintain two paths here.
+			if (sharingTargets.Count == 0) {
+				Assemblies.Update (this, output_assemblies);
+			} else {
+				// For added assemblies we have to determine exactly which apps need which assemblies.
+				// Code sharing is only allowed if there are no linker xml definitions, which means that
+				// we can limit ourselves to iterate over assembly references to create the updated list of assemblies.
+				foreach (var t in allTargets) {
+					// Find the root assembly
+					// Here we assume that 'AssemblyReference.Name' == 'Assembly.Identity'.
+					var rootAssembly = t.Assemblies [Assembly.GetIdentity (t.App.RootAssembly)];
+					var queue = new Queue<string> ();
+					var collectedNames = new HashSet<string> ();
 
-			// Update (add/remove) the assemblies, since the linker may have both added and removed assemblies.
-			Assemblies.Update (this, linked_assemblies_definitions);
+					// First collect the set of all assemblies in the app by walking the assembly references.
+					collectedNames.Add (rootAssembly.Identity);
+					collectedNames.UnionWith (rootAssembly.AssemblyDefinition.MainModule.AssemblyReferences.Select ((ar) => ar.Name));
 
-			// Make the assemblies point to the right path.
-			foreach (var a in Assemblies) {
-				a.FullPath = Path.Combine (PreBuildDirectory, a.FileName);
-				// The linker can copy files (and not update timestamps), and then we run into this sequence:
-				// * We run the linker, nothing changes, so the linker copies 
-				//   all files to the PreBuild directory, with timestamps intact.
-				// * This means that for instance SDK assemblies will have the original
-				//   timestamp from their installed location, and the exe will have the 
-				//   timestamp of when it was built.
-				// * mtouch is executed again for some reason, and none of the input assemblies changed.
-				//   We'll still re-execute the linker, because at least one of the input assemblies
-				//   (the .exe) has a newer timestamp than some of the assemblies in the PreBuild directory.
-				// So here we manually touch all the assemblies we have, to make sure their timestamps
-				// change (this is us saying 'we know these files are up-to-date at this point in time').
-				Driver.Touch (a.GetRelatedFiles ());
+					do {
+						var next = queue.Dequeue ();
+						collectedNames.Add (next);
+
+						var ad = output_assemblies.Single ((AssemblyDefinition v) => v.Name.Name == next);
+						if (ad.MainModule.HasAssemblyReferences) {
+							foreach (var ar in ad.MainModule.AssemblyReferences) {
+								if (!collectedNames.Contains (ar.Name) && !queue.Contains (ar.Name))
+									queue.Enqueue (ar.Name);
+							}
+						}
+					} while (queue.Count > 0);
+
+					// Now update the assembly collection
+					var appexAssemblies = collectedNames.Select ((v) => output_assemblies.Single ((v2) => v2.Name.Name == v));
+					t.Assemblies.Update (t, appexAssemblies);
+					// And make sure every Target's assembly resolver knows about all the assemblies.
+					foreach (var asm in t.Assemblies)
+						t.Resolver.Add (asm.AssemblyDefinition);
+				}
 			}
 
-			List<string> linked_assemblies = linked_assemblies_definitions.Select ((v) => v.MainModule.FileName).ToList ();
-			File.WriteAllText (cache_path, string.Join ("\n", linked_assemblies));
+			// Make the assemblies point to the right path.
+			foreach (var t in allTargets) {
+				foreach (var a in t.Assemblies) {
+					// All these assemblies are in the main app's PreBuildDirectory.
+					a.FullPath = Path.Combine (PreBuildDirectory, a.FileName);
+					// The linker can copy files (and not update timestamps), and then we run into this sequence:
+					// * We run the linker, nothing changes, so the linker copies 
+					//   all files to the PreBuild directory, with timestamps intact.
+					// * This means that for instance SDK assemblies will have the original
+					//   timestamp from their installed location, and the exe will have the 
+					//   timestamp of when it was built.
+					// * mtouch is executed again for some reason, and none of the input assemblies changed.
+					//   We'll still re-execute the linker, because at least one of the input assemblies
+					//   (the .exe) has a newer timestamp than some of the assemblies in the PreBuild directory.
+					// So here we manually touch all the assemblies we have, to make sure their timestamps
+					// change (this is us saying 'we know these files are up-to-date at this point in time').
+					Driver.Touch (a.GetRelatedFiles ());
+				}
+			}
+
+			// Write to the cache
+			File.WriteAllText (cache_path, string.Join ("\n", output_assemblies.Select ((v) => v.MainModule.FileName)));
+
+			// Set the 'linked' flag for the targets sharing code, so that this method can be called
+			// again, and it won't do anything for the appex's sharing code with the main app (but 
+			// will still work for any appex's not sharing code).
+			allTargets.ForEach ((v) => v.linked = true);
 		}
 			
 		public void ProcessAssemblies ()
@@ -816,8 +926,17 @@ namespace Xamarin.Bundler
 					string compiler_output;
 					var compiler_flags = new CompilerFlags (this);
 					var link_dependencies = new List<CompileTask> ();
-					var infos = assemblies.Select ((asm) => asm.AotInfos [abi]);
+					var infos = assemblies.Select ((asm) => asm.AotInfos [abi]).ToList ();
 					var aottasks = infos.Select ((info) => info.Task);
+
+					var existingLinkTask = infos.Where ((v) => v.LinkTask != null).Select ((v) => v.LinkTask).ToList ();
+					if (existingLinkTask.Count > 0) {
+						if (existingLinkTask.Count != infos.Count)
+							throw ErrorHelper.CreateError (9999, "Internal consistency error: xyz abc");
+
+						LinkWithBuildTarget (build_target, name, existingLinkTask [0]);
+						continue;
+					}
 
 					// We have to compile any source files to object files before we can link.
 					var sources = infos.SelectMany ((info) => info.AsmFiles);
@@ -928,21 +1047,7 @@ namespace Xamarin.Bundler
 					link_task.AddDependency (link_dependencies);
 					link_task.AddDependency (aottasks);
 
-					switch (build_target) {
-					case AssemblyBuildTarget.StaticObject:
-						LinkWithTaskOutput (link_task);
-						break;
-					case AssemblyBuildTarget.DynamicLibrary:
-						AddToBundle (link_task.OutputFile);
-						LinkWithTaskOutput (link_task);
-						break;
-					case AssemblyBuildTarget.Framework:
-						AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
-						LinkWithTaskOutput (link_task);
-						break;
-					default:
-						throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
-					}
+					LinkWithBuildTarget (build_target, name, link_task);
 
 					foreach (var info in infos)
 						info.LinkTask = link_task;
@@ -1245,15 +1350,22 @@ namespace Xamarin.Bundler
 
 			if (App.EnableProfiling) {
 				string libprofiler;
-				if (App.OnlyStaticLibraries) {
+				switch (App.LibProfilerLinkMode) {
+				case AssemblyBuildTarget.StaticObject:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.a");
 					linker_flags.AddLinkWith (libprofiler);
 					if (!App.EnableBitCode)
 						linker_flags.ReferenceSymbol ("mono_profiler_startup_log");
-				} else {
+					break;
+				case AssemblyBuildTarget.DynamicLibrary:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
 					linker_flags.AddLinkWith (libprofiler);
-					AddToBundle (libprofiler);
+					if (!(App.IsExtension && App.IsCodeSharing)) {
+						AddToBundle (libprofiler);
+					}
+					break;
+				default:
+					throw new NotImplementedException ();
 				}
 			}
 

@@ -113,6 +113,7 @@ namespace Xamarin.Bundler {
 	//		Warning		MT0104	There is at least one extension that builds for '*'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.
 	//					MT0105	No assembly build target was specified for '{0}'.
 	//					MT0106	The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.
+	//					MT0107	The assemblies '{0}' have different custom LLVM optimizations ({1}), which is not allowed when they are all compiled to a single binary.
 	//					MT0108	The assembly build target '{0}' did not match any assemblies.
 	// MT1xxx	file copy / symlinks (project related)
 	//			MT10xx	installer.cs / mtouch.cs
@@ -317,6 +318,7 @@ namespace Xamarin.Bundler {
 	//					MT5103	Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//					MT5104  Could not find neither the '{0}' nor the '{1}' compiler. Please install Xcode 'Command-Line Tools' component
 	//					MT5105  ** reserved Xamarin.Mac **
+	//					MT5106	Could not compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//			MT52xx	linking
 	//					MT5201	Native linking failed. Please review the build log and the user flags provided to gcc: {0}
 	//					MT5202	Native linking failed. Please review the build log.
@@ -329,6 +331,7 @@ namespace Xamarin.Bundler {
 	//					MT5213	Duplicate symbol in: {0} (Location related to previous error)
 	//					MT5214	Native linking failed, undefined symbol: {0}. This symbol was referenced by the managed member {1}.{2}. Please verify that all the necessary frameworks have been referenced and native libraries linked.
 	//		Warning		MT5215	References to '{0}' might require additional -framework=XXX or -lXXX instructions to the native linker
+	//					MT5216	Native linking failed for {0}. Please file a bug report at http://bugzilla.xamarin.com
 	//			MT53xx	other tools
 	//					MT5301	Missing 'strip' tool. Please install Xcode 'Command-Line Tools' component
 	//					MT5302	Missing 'dsymutil' tool. Please install Xcode 'Command-Line Tools' component

@@ -19,12 +19,20 @@ namespace Xamarin.Utils
 		public HashSet<string> OtherFlags; // X
 		public HashSet<string> Defines; // -DX
 		public HashSet<string> UnresolvedSymbols; // -u X
+		public HashSet<string> SourceFiles; // X, added to Inputs
 
 		// Here we store a list of all the file-system based inputs
 		// to the compiler. This is used when determining if the
 		// compiler needs to be called in the first place (dependency
 		// tracking).
 		public List<string> Inputs;
+
+		public CompilerFlags (Target target)
+		{
+			if (target == null)
+				throw new ArgumentNullException (nameof (target));
+			this.Target = target;
+		}
 
 		public void ReferenceSymbol (string symbol)
 		{
@@ -71,6 +79,13 @@ namespace Xamarin.Utils
 
 			foreach (var lib in libraries)
 				AddLinkWith (lib, force_load);
+		}
+
+		public void AddSourceFile (string file)
+		{
+			if (SourceFiles == null)
+				SourceFiles = new HashSet<string> ();
+			SourceFiles.Add (file);
 		}
 
 		public void AddOtherFlag (string flag)
@@ -122,14 +137,6 @@ namespace Xamarin.Utils
 			}
 			AddFramework ("Foundation");
 			AddOtherFlag ("-lz");
-		}
-
-		public void LinkWithPInvokes (Abi abi)
-		{
-			if (!Application.FastDev || !Application.RequiresPInvokeWrappers)
-				return;
-
-			AddOtherFlag (Path.Combine (Application.Cache.Location, "libpinvokes." + abi.AsArchString () + ".dylib"));
 		}
 
 		public void AddFramework (string framework)
@@ -229,6 +236,13 @@ namespace Xamarin.Utils
 				foreach (var symbol in UnresolvedSymbols)
 					args.Append (" -u ").Append (Driver.Quote ("_" + symbol));
 			}
+
+			if (SourceFiles != null) {
+				foreach (var src in SourceFiles) {
+					args.Append (' ').Append (Driver.Quote (src));
+					AddInput (src);
+				}
+			}
 		}
 
 		void ProcessFrameworksForArguments (StringBuilder args)
@@ -272,6 +286,13 @@ namespace Xamarin.Utils
 			var args = new StringBuilder ();
 			WriteArguments (args);
 			return args.ToString ();
+		}
+
+		public void PopulateInputs ()
+		{
+			var args = new StringBuilder ();
+			Inputs = new List<string> ();
+			WriteArguments (args);
 		}
 	}
 }

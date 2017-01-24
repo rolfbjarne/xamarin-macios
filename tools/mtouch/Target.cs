@@ -1013,25 +1013,27 @@ namespace Xamarin.Bundler
 						compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
 						compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
 						compiler_flags.AddOtherFlags (a.LinkerFlags);
+						if (a.HasLinkWithAttributes && !App.EnableBitCode)
+							compiler_flags.ReferenceSymbols (GetRequiredSymbols (a, true));
 					}
-					compiler_flags.LinkWithMono ();
-					compiler_flags.LinkWithXamarin ();
-					if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
-						compiler_flags.AddFramework ("UIKit");
-
-					if (HasLinkWithAttributes && !App.EnableBitCode)
-						compiler_flags.ReferenceSymbols (GetRequiredSymbols (this, true));
 
 					if (App.EnableLLVMOnlyBitCode) {
 						// The AOT compiler doesn't optimize the bitcode so clang will do it
 						compiler_flags.AddOtherFlag ("-fexceptions");
-						var optimizations = App.GetLLVMOptimizations (this);
-						if (optimizations == null) {
+						var optimizations = assemblies.Select ((a) => App.GetLLVMOptimizations (a)).Where ((opt) => opt != null).Distinct ().ToList ();
+						if (optimizations.Count == 0) {
 							compiler_flags.AddOtherFlag ("-O2");
-						} else if (optimizations.Length > 0) {
-							compiler_flags.AddOtherFlag (optimizations);
+						} else if (optimizations.Count == 1) {
+							compiler_flags.AddOtherFlag (optimizations [0]);
+						} else {
+							throw ErrorHelper.CreateError (107, "The assemblies '{0}' have different custom LLVM optimizations ('{1}'), which is not allowed when they are all compiled to a single binary.", string.Join (", ", assemblies.Select ((v) => v.Identity)), string.Join ("', '", optimizations));
 						}
 					}
+
+					compiler_flags.LinkWithMono ();
+					compiler_flags.LinkWithXamarin ();
+					if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+						compiler_flags.AddFramework ("UIKit");
 
 					var link_task = new LinkTask ()
 					{
@@ -1330,7 +1332,7 @@ namespace Xamarin.Bundler
 			if (!bitcode) {
 				// Note that we include *all* (__Internal) p/invoked symbols here
 				// We also include any fields from [Field] attributes.
-				compiler_flags.ReferenceSymbols (GetRequiredSymbols ());
+				linker_flags.ReferenceSymbols (GetRequiredSymbols ());
 			}
 
 			string mainlib;

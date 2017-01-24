@@ -1255,15 +1255,20 @@ namespace Xamarin.Bundler
 
 			if (App.EnableProfiling) {
 				string libprofiler;
-				if (App.OnlyStaticLibraries) {
+				switch (App.LibProfilerLinkMode) {
+				case AssemblyBuildTarget.StaticObject:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.a");
 					linker_flags.AddLinkWith (libprofiler);
 					if (!App.EnableBitCode)
 						linker_flags.ReferenceSymbol ("mono_profiler_startup_log");
-				} else {
+					break;
+				case AssemblyBuildTarget.DynamicLibrary:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
 					linker_flags.AddLinkWith (libprofiler);
-					AddToBundle (libprofiler);
+					break;
+				case AssemblyBuildTarget.Framework: // We don't ship the profiler as a framework, so this should be impossible.
+				default:
+					throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", App.LibProfilerLinkMode);
 				}
 			}
 

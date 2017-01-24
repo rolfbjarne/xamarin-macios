@@ -106,6 +106,8 @@ namespace Xamarin.Bundler {
 	//					MT0097 <used by mmp>
 	//					MT0098 <used by mmp>
 	//					MT0099	Internal error {0}. Please file a bug report with a test case (http://bugzilla.xamarin.com).
+	//					MT0101	The assembly '*' is specified multiple times in --assembly-build-target arguments.
+	//					MT0106	The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.
 	// MT1xxx	file copy / symlinks (project related)
 	//			MT10xx	installer.cs / mtouch.cs
 	//					MT1001	Could not find an application at the specified directory: {0}

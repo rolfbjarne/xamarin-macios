@@ -34,8 +34,6 @@ namespace Xamarin.Bundler {
 		public string BuildTargetName;
 		public bool IsCodeShared;
 
-		public List<string> Satellites;
-
 		public Dictionary<Abi, AotInfo> AotInfos = new Dictionary<Abi, AotInfo> ();
 
 		HashSet<string> dependency_map;

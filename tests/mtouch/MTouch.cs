@@ -651,6 +651,29 @@ namespace Xamarin
 		}
 
 		[Test]
+		public void MT0104 ()
+		{
+			using (var extension = new MTouchTool ()) {
+				extension.Abi = "armv7,arm64";
+				extension.Linker = MTouchLinker.LinkAll; // fastest.
+				extension.Extension = true;
+				extension.CreateTemporararyServiceExtension ();
+				extension.AssertExecute (MTouchAction.BuildDev, "extension build");
+
+				using (var app = new MTouchTool ()) {
+					app.Abi = "arm64";
+					app.Linker = MTouchLinker.LinkAll; // fastest.
+					app.AppExtensions.Add (extension.AppPath);
+					app.AssemblyBuildTargets.Add ("mscorlib=framework");
+					app.CreateTemporaryApp ();
+					app.AssertExecuteFailure (MTouchAction.BuildDev, "app build");
+					app.AssertWarning (104, "There is at least one extension that builds for 'ARMv7'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.");
+					// There are MT0105 errors as well, those are on purpose to make the test run faster (no need to build the app if we already got the warning we're testing for):
+				}
+			}
+		}
+
+		[Test]
 		public void MT0105 ()
 		{
 			using (var mtouch = new MTouchTool ()) {

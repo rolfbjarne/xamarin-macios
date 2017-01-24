@@ -208,6 +208,10 @@ namespace Xamarin.Bundler {
 				name = value.Substring (eq_index2 + 1);
 			}
 
+			int invalid_idx;
+			if ((invalid_idx = name.IndexOfAny (new char [] { '/', '\\' })) != -1)
+				throw ErrorHelper.CreateError (106, "The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.", name, name [invalid_idx]);
+
 			if (assembly_build_targets.ContainsKey (assembly_name))
 				throw ErrorHelper.CreateError (101, "The assembly '{0}' is specified multiple times in --assembly-build-target arguments.", assembly_name);
 

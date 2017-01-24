@@ -118,6 +118,7 @@ namespace Xamarin.Bundler {
 		public bool? PackageMonoFramework;
 
 		public bool NoFastSim;
+		public bool NoDevCodeShare;
 
 		// The list of assemblies that we do generate debugging info for.
 		public bool DebugAll;
@@ -167,6 +168,9 @@ namespace Xamarin.Bundler {
 		public AssemblyBuildTarget LibXamarinLinkMode = AssemblyBuildTarget.StaticObject;
 		public AssemblyBuildTarget LibPInvokesLinkMode => LibXamarinLinkMode;
 		public AssemblyBuildTarget LibRegistrarLinkMode => LibXamarinLinkMode;
+		public AssemblyBuildTarget LibProfilerLinkMode => OnlyStaticLibraries ? AssemblyBuildTarget.StaticObject : AssemblyBuildTarget.DynamicLibrary;
+
+		public bool IsCodeSharing { get; private set; }
 
 		public bool OnlyStaticLibraries {
 			get {
@@ -177,6 +181,22 @@ namespace Xamarin.Bundler {
 		public bool HasDynamicLibraries {
 			get {
 				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
+			}
+		}
+
+		public bool HasAnyDynamicLibraries {
+			get {
+				if (LibMonoLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibXamarinLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibPInvokesLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibRegistrarLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				if (LibProfilerLinkMode == AssemblyBuildTarget.DynamicLibrary)
+					return true;
+				return HasDynamicLibraries;
 			}
 		}
 
@@ -680,7 +700,20 @@ namespace Xamarin.Bundler {
 			return false;
 		}
 
-		public void Build ()
+		public void BuildAll ()
+		{
+			var allapps = new List<Application> ();
+			allapps.Add (this); // We need to build the main app first, so that any extensions sharing code can reference frameworks built in the main app.
+			allapps.AddRange (AppExtensions);
+
+			allapps.ForEach ((v) => v.BuildInitialize ());
+			DetectCodeSharing ();
+			allapps.ForEach ((v) => v.BuildManaged ());
+			allapps.ForEach ((v) => v.BuildNative ());
+			allapps.ForEach ((v) => v.BuildEnd ());
+		}
+
+		void BuildInitialize ()
 		{
 			if (Driver.Force) {
 				Driver.Log (3, "A full rebuild has been forced by the command line argument -f.");
@@ -696,8 +729,15 @@ namespace Xamarin.Bundler {
 			SelectRegistrar ();
 			ExtractNativeLinkInfo ();
 			SelectNativeCompiler ();
-			ProcessAssemblies ();
+		}
 
+		void BuildManaged ()
+		{
+			ProcessAssemblies ();
+		}
+
+		void BuildNative ()
+		{
 			// Everything that can be parallelized is put into a list of tasks,
 			// which are then executed at the end.
 			build_tasks = new BuildTasks ();
@@ -711,9 +751,11 @@ namespace Xamarin.Bundler {
 
 			Driver.Watch ("Building build tasks", 1);
 			build_tasks.Execute ();
+		}
 
+		void BuildEnd ()
+		{
 			// TODO: make more of the below actions parallelizable.
-
 			BuildBundle ();
 			BuildDsymDirectory ();
 			BuildMSymDirectory ();
@@ -767,6 +809,152 @@ namespace Xamarin.Bundler {
 				// Set a default target framework to show errors in the least confusing order.
 				Driver.TargetFramework = TargetFramework.Xamarin_iOS_1_0;
 				no_framework = true;
+			}
+		}
+
+		void DetectCodeSharing ()
+		{
+			if (AppExtensions.Count == 0)
+				return;
+
+			if (!IsDeviceBuild)
+				return;
+
+			if (NoDevCodeShare) {
+				Driver.Log (2, "Native code sharing has been disabled in the main app, so no code sharing with extensions will occur.");
+				return;
+			}
+
+			List<Application> candidates = new List<Application> ();
+			foreach (var appex in AppExtensions) {
+				if (appex.IsWatchExtension)
+					continue;
+
+				if (appex.NoDevCodeShare) {
+					Driver.Log (2, "Native code sharing has been disabled in the extension {0}, so no code sharing with the main will occur for this extension.", appex.Name);
+					continue;
+				}
+
+				bool applicable = true;
+				// The --assembly-build-target arguments must be identical.
+				// We can probably lift this requirement (at least partially) at some point,
+				// but for now it makes our code simpler.
+				if (assembly_build_targets.Count != appex.assembly_build_targets.Count) {
+					Driver.Log (2, "The extension '{0}' has different --assembly-build-target arguments, and can therefore not share code with the main app.", appex.Name);
+					continue;
+				}
+
+				foreach (var key in assembly_build_targets.Keys) {
+					Tuple<AssemblyBuildTarget, string> appex_value;
+					if (!appex.assembly_build_targets.TryGetValue (key, out appex_value)) {
+						Driver.Log (2, "The extension '{0}' has different --assembly-build-target arguments, and can therefore not share code with the main app.", appex.Name);
+						applicable = false;
+						break;
+					}
+
+					var value = assembly_build_targets [key];
+					if (value.Item1 != appex_value.Item1 || value.Item2 != appex_value.Item2) {
+						Driver.Log (2, "The extension '{0}' has different --assembly-build-target arguments, and can therefore not share code with the main app.", appex.Name);
+						applicable = false;
+						break;
+					}
+				}
+
+				if (!applicable)
+					continue;
+
+				// MONO_GC_PARAMS have to be identical
+				// Unfortunately this excludes today extensions from the code sharing.
+				if (MonoGCParams != appex.MonoGCParams) {
+					Driver.Log (2, "The extension '{0}' has different MONO_GC_PARAMS value (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.MonoGCParams, MonoGCParams);
+					continue;
+				}
+
+				// All arguments to the AOT compiler must be identical
+				if (AotArguments != appex.AotArguments) {
+					Driver.Log (2, "The extension '{0}' has different arguments to the AOT compiler (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.AotArguments, AotArguments);
+					continue;
+				}
+
+				if (AotOtherArguments != appex.AotOtherArguments) {
+					Driver.Log (2, "The extension '{0}' has different other arguments to the AOT compiler (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.AotOtherArguments, AotOtherArguments);
+					continue;
+				}
+
+				if (IsLLVM != appex.IsLLVM) {
+					Driver.Log (2, "The extension '{0}' does not have the same LLVM option as the main app (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.IsLLVM, IsLLVM);
+					continue;
+				}
+
+				if (LinkMode != appex.LinkMode) {
+					Driver.Log (2, "The extension '{0}' does not have the same managed linker option as the main app (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, appex.LinkMode, LinkMode);
+					continue;
+				}
+
+				if (LinkMode != LinkMode.None) {
+					var linkskipped_same = !LinkSkipped.Except (appex.LinkSkipped).Any () && !appex.LinkSkipped.Except (LinkSkipped).Any ();
+					if (!linkskipped_same) {
+						Driver.Log (2, "The extension '{0}' is asking the managed linker to skip different assemblies than the main app (extension: {1}, main app: {2}), and can therefore not share native code with the main app.", appex.Name, string.Join (", ", appex.LinkSkipped), string.Join (", ", LinkSkipped));
+						continue;
+					}
+
+					if (Definitions.Count > 0) {
+						Driver.Log (2, "The app '{0}' has xml definitions for the managed linker ({1}), and can therefore not share native code with the main app.", Name, string.Join (", ", Definitions));
+						continue;
+					}
+
+					if (appex.Definitions.Count > 0) {
+						Driver.Log (2, "The extension '{0}' has xml definitions for the managed linker ({1}), and can therefore not share native code with the main app.", appex.Name, string.Join (", ", appex.Definitions));
+						continue;
+					}
+				}
+
+				// Check that the Abis are matching
+				foreach (var abi in appex.Abis) {
+					var matching = abis.FirstOrDefault ((v) => (v & Abi.ArchMask) == (abi & Abi.ArchMask));
+					if (matching == Abi.None) {
+						// Example: extension has arm64+armv7, while the main app has only arm64.
+						Driver.Log (2, "The extension '{0}' is targeting the abi '{1}' (which the main app is not targeting), and can therefore not share native code with the main app.", appex.Name, abi);
+						applicable = false;
+						break;
+					} else if (matching != abi) {
+						// Example: extension has arm64+llvm, while the main app has only arm64.
+						Driver.Log (2, "The extension '{0}' is targeting the abi '{1}', which is not compatible with the main app's corresponding abi '{2}', and can therefore not share native code with the main app.", appex.Name, abi, matching);
+						applicable = false;
+						break;
+					}
+				}
+
+				// Check if there aren't referenced assemblies from different sources
+				foreach (var target in Targets) {
+					var appexTarget = appex.Targets.Single ((v) => v.Is32Build == target.Is32Build);
+					foreach (var kvp in appexTarget.Assemblies.Hashed) {
+						Assembly asm;
+						if (!target.Assemblies.TryGetValue (kvp.Key, out asm))
+							continue; // appex references an assembly the main app doesn't. This is fine.
+						if (asm.FullPath != kvp.Value.FullPath) {
+							applicable = false; // app references an assembly with the same name as the main app, but from a different location. This is not fine. Should we emit a real warning here, or just a log message?
+							Driver.Log (2, "The extension '{0}' is referencing the assembly '{1}' from '{2}', while the main app references it from '{3}', and can therefore not share native code with the main app.", appex.Name, asm.Identity, kvp.Value.FullPath, asm.FullPath);
+							break;
+						}
+					}
+				}
+
+				if (!applicable)
+					continue;
+
+				if (!applicable)
+					continue;
+
+				appex.IsCodeSharing = true;
+				candidates.Add (appex);
+
+				Driver.Log (2, "The main app and the extension '{0}' will share code.", appex.Name);
+			}
+
+			if (candidates.Count > 0) {
+				SharedCodeApps.AddRange (candidates);
+				IsCodeSharing = true;
 			}
 		}
 
@@ -1716,6 +1904,14 @@ namespace Xamarin.Bundler {
 				var assemblies = @group.AsEnumerable ().ToArray ();
 				var build_target = assemblies [0].BuildTarget;
 				var size_specific = assemblies.Length > 1 && !Cache.CompareAssemblies (assemblies [0].FullPath, assemblies [1].FullPath, true, true);
+
+				if (IsExtension && assemblies [0].IsCodeShared) {
+					if (!assemblies.All ((v) => v.IsCodeShared))
+						throw ErrorHelper.CreateError (9999, "Internal consistency error.");
+					continue; // These resources will be found in the main app.
+				}
+				if (IsExtension && !assemblies.All ((v) => !v.IsCodeShared))
+					throw ErrorHelper.CreateError (9999, "Internal consistency error.");
 
 				// Determine where to put the assembly
 				switch (build_target) {

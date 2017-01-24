@@ -483,6 +483,26 @@ namespace Xamarin.Bundler {
 			set { HashedAssemblies [key] = value; }
 		}
 
+		public void Update (Target target, IEnumerable<AssemblyDefinition> assemblies)
+		{
+			// This function will remove any assemblies not in 'assemblies', and add any new assemblies.
+			var current = new HashSet<string> (HashedAssemblies.Keys);
+			foreach (var assembly in assemblies) {
+				var identity = Assembly.GetIdentity (assembly);
+				if (!current.Remove (identity)) {
+					// new assembly
+					var asm = new Assembly (target, assembly);
+					Add (asm);
+					Driver.Log (1, "The linker added the assembly '{0}' to '{1}'.", asm.Identity, target.App.Name);
+				}
+			}
+
+			foreach (var removed in current) {
+				Driver.Log (1, "The linker linked away the assembly '{0}' from '{1}'.", this [removed].Identity, target.App.Name);
+				Remove (removed);
+			}
+		}
+
 #region Interface implementations
 		IEnumerator IEnumerable.GetEnumerator ()
 		{

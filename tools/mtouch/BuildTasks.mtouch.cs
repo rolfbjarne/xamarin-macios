@@ -301,6 +301,12 @@ namespace Xamarin.Bundler
 		public string InstallName;
 		public string Language;
 
+		public bool IsAssembler {
+			get {
+				return Language == "assembler";
+			}
+		}
+
 		CompilerFlags compiler_flags;
 		public CompilerFlags CompilerFlags {
 			get { return compiler_flags ?? (compiler_flags = new CompilerFlags () { Target = Target }); }
@@ -327,12 +333,12 @@ namespace Xamarin.Bundler
 				flags.AddOtherFlag ("-mthumb");
 		}
 
-		public static void GetCompilerFlags (Application app, CompilerFlags flags, string ifile, string language = null)
+		public static void GetCompilerFlags (Application app, CompilerFlags flags, bool is_assembler, string language = null)
 		{
-			if (string.IsNullOrEmpty (ifile) || !ifile.EndsWith (".s", StringComparison.Ordinal))
+			if (!is_assembler)
 				flags.AddOtherFlag ("-gdwarf-2");
 
-			if (!string.IsNullOrEmpty (ifile) && !ifile.EndsWith (".s", StringComparison.Ordinal)) {
+			if (!is_assembler) {
 				if (string.IsNullOrEmpty (language) || !language.Contains ("++")) {
 					// error: invalid argument '-std=c99' not allowed with 'C++/ObjC++'
 					flags.AddOtherFlag ("-std=c99");
@@ -343,9 +349,9 @@ namespace Xamarin.Bundler
 			flags.AddOtherFlag ("-Qunused-arguments"); // don't complain about unused arguments (clang reports -std=c99 and -Isomething as unused).
 		}
 
-		public static void GetSimulatorCompilerFlags (CompilerFlags flags, string ifile, Application app, string language = null)
+		public static void GetSimulatorCompilerFlags (CompilerFlags flags, bool is_assembler, Application app, string language = null)
 		{
-			GetCompilerFlags (app, flags, ifile, language);
+			GetCompilerFlags (app, flags, is_assembler, language);
 
 			string sim_platform = Driver.GetPlatformDirectory (app);
 			string plist = Path.Combine (sim_platform, "Info.plist");
@@ -374,9 +380,9 @@ namespace Xamarin.Bundler
 				flags.AddDefine (defines.Replace (" ", String.Empty));
 		}
 
-		void GetDeviceCompilerFlags (CompilerFlags flags, string ifile)
+		void GetDeviceCompilerFlags (CompilerFlags flags, bool is_assembler)
 		{
-			GetCompilerFlags (App, flags, ifile, Language);
+			GetCompilerFlags (App, flags, is_assembler, Language);
 
 			flags.AddOtherFlag ($"-m{Driver.GetTargetMinSdkName (App)}-version-min={App.DeploymentTarget.ToString ()}");
 		}
@@ -413,9 +419,9 @@ namespace Xamarin.Bundler
 		public int Compile ()
 		{
 			if (App.IsDeviceBuild) {
-				GetDeviceCompilerFlags (CompilerFlags, InputFile);
+				GetDeviceCompilerFlags (CompilerFlags, IsAssembler);
 			} else {
-				GetSimulatorCompilerFlags (CompilerFlags, InputFile, App, Language);
+				GetSimulatorCompilerFlags (CompilerFlags, IsAssembler, App, Language);
 			}
 
 			if (App.EnableBitCode)

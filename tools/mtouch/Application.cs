@@ -1298,7 +1298,7 @@ namespace Xamarin.Bundler {
 							Driver.RunLipo (sb.ToString ());
 						}
 						if (LibMonoLinkMode == AssemblyBuildTarget.Framework)
-							Driver.XcodeRun ("install_name_tool", "-change @executable_path/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
+							Driver.XcodeRun ("install_name_tool", "-change @rpath/libmonosgen-2.0.dylib @rpath/Mono.framework/Mono " + Driver.Quote (targetPath));
 					} else {
 						Driver.Log (3, "Target '{0}' is up-to-date.", targetPath);
 					}

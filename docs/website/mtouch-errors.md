@@ -403,6 +403,17 @@ For example:
 
 This example tries to build a static object (`MyBinary`) comprised of two assemblies (`Assembly1.dll` and `Assembly2.dll`), which is not allowed.
 
+<h3><a name="MT0104"/>There is at least one extension that builds for '*'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.</h3>
+
+When compiling assemblies to user frameworks, the frameworks must contain the CPU architectures used in both the container app and all extensions.
+
+For example:
+
+* The container app is a 64-bit only app (ARM64).
+* There's an extension that targets both ARMv7 and ARM64.
+
+In this case all the frameworks in the container app must also build for ARMv7, otherwise the extension won't work on 32-bit devices.
+
 <h3><a name="MT0105"/>MT0105: No assembly build target was specified for '*'.</h3>
 
 When specifying the assembly build target using --assembly-build-target, every assembly in the app must have a build target assigned.

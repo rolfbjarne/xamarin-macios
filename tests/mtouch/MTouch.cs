@@ -85,7 +85,7 @@ namespace Xamarin
 				File.Copy (exe2, exe, true);
 				ExecutionHelper.Execute (TestTarget.ToolPath, args);
 
-				var skip = new string [] { "testApp", "testApp.exe", "testApp.armv7.aotdata", "testApp.arm64.aotdata" };
+				var skip = new string [] { "testApp", "testApp.exe", "testApp.aotdata.armv7", "testApp.aotdata.arm64" };
 				checkNotModified (name + "-rebuilt", skip);
 			} finally {
 				Directory.Delete (testDir, true);

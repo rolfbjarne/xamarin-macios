@@ -106,6 +106,13 @@ namespace Xamarin.Bundler {
 	//					MT0097 <used by mmp>
 	//					MT0098 <used by mmp>
 	//					MT0099	Internal error {0}. Please file a bug report with a test case (http://bugzilla.xamarin.com).
+	//					MT0100	Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).
+	//					MT0101	The assembly '*' is specified multiple times in --assembly-build-target arguments.
+	//					MT0102	The assemblies '*' and '*' have the same target name ('*'), but different targets ('*' and '*').
+	//					MT0103	The static object '*' contains more than one assembly ('*'), but each static object must correspond with exactly one assembly.
+	//		Warning		MT0104	There is at least one extension that builds for '*'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.
+	//					MT0105	No assembly build target was specified for '{0}'.
+	//					MT0107	The assemblies '{0}' have different custom LLVM optimizations ({1}), which is not allowed when they are all compiled to a single binary.
 	// MT1xxx	file copy / symlinks (project related)
 	//			MT10xx	installer.cs / mtouch.cs
 	//					MT1001	Could not find an application at the specified directory: {0}
@@ -309,6 +316,7 @@ namespace Xamarin.Bundler {
 	//					MT5103	Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//					MT5104  Could not find neither the '{0}' nor the '{1}' compiler. Please install Xcode 'Command-Line Tools' component
 	//					MT5105  ** reserved Xamarin.Mac **
+	//					MT5106	Could not compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com
 	//			MT52xx	linking
 	//					MT5201	Native linking failed. Please review the build log and the user flags provided to gcc: {0}
 	//					MT5202	Native linking failed. Please review the build log.
@@ -321,6 +329,7 @@ namespace Xamarin.Bundler {
 	//					MT5213	Duplicate symbol in: {0} (Location related to previous error)
 	//					MT5214	Native linking failed, undefined symbol: {0}. This symbol was referenced by the managed member {1}.{2}. Please verify that all the necessary frameworks have been referenced and native libraries linked.
 	//		Warning		MT5215	References to '{0}' might require additional -framework=XXX or -lXXX instructions to the native linker
+	//					MT5216	Native linking failed for {0}. Please file a bug report at http://bugzilla.xamarin.com
 	//			MT53xx	other tools
 	//					MT5301	Missing 'strip' tool. Please install Xcode 'Command-Line Tools' component
 	//					MT5302	Missing 'dsymutil' tool. Please install Xcode 'Command-Line Tools' component

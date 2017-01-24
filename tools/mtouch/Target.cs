@@ -667,7 +667,7 @@ namespace Xamarin.Bundler
 					Driver.Log (3, "Target '{0}' is up-to-date.", registrar_m);
 				}
 
-				RegistrarTask.Create (compile_tasks, Abis, this, registrar_m);
+				CompileRegistrarTask.Create (compile_tasks, Abis, this, registrar_m);
 			}
 
 			if (App.Registrar == RegistrarMode.Dynamic && App.IsSimulatorBuild && App.LinkMode == LinkMode.None) {

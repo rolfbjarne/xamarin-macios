@@ -29,6 +29,8 @@ namespace Xamarin.Utils
 
 		public CompilerFlags (Target target)
 		{
+			if (target == null)
+				throw new ArgumentNullException (nameof (target));
 			this.Target = target;
 		}
 

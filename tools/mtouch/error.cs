@@ -110,6 +110,7 @@ namespace Xamarin.Bundler {
 	//					MT0101	The assembly '*' is specified multiple times in --assembly-build-target arguments.
 	//					MT0102	The assemblies '*' and '*' have the same target name ('*'), but different targets ('*' and '*').
 	//					MT0103	The static object '*' contains more than one assembly ('*'), but each static object must correspond with exactly one assembly.
+	//		Warning		MT0104	There is at least one extension that builds for '*'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.
 	//					MT0105	No assembly build target was specified for '{0}'.
 	//					MT0106	The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.
 	//					MT0108	The assembly build target '{0}' did not match any assemblies.

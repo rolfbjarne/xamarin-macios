@@ -113,6 +113,7 @@ namespace Xamarin.Bundler {
 	//		Warning		MT0104	There is at least one extension that builds for '*'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.
 	//					MT0105	No assembly build target was specified for '{0}'.
 	//					MT0106	The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.
+	//					MT0107	The assemblies '{0}' have different custom LLVM optimizations ({1}), which is not allowed when they are all compiled to a single binary.
 	// MT1xxx	file copy / symlinks (project related)
 	//			MT10xx	installer.cs / mtouch.cs
 	//					MT1001	Could not find an application at the specified directory: {0}

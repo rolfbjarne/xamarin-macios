@@ -682,6 +682,8 @@ namespace Xamarin.Bundler {
 			SelectRegistrar ();
 			ExtractNativeLinkInfo ();
 			SelectNativeCompiler ();
+			ProcessAssemblies ();
+			CompilePInvokeWrappers ();
 			BuildApp ();
 			WriteNotice ();
 			BuildFatSharedLibraries ();
@@ -1037,7 +1039,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		void BuildApp ()
+		void ProcessAssemblies ()
 		{
 			foreach (var target in Targets)	{
 				if (target.CanWeSymlinkTheApplication ()) {
@@ -1076,7 +1078,16 @@ namespace Xamarin.Bundler {
 					Driver.CopyAssembly (f1, f2);
 				}
 			}
+		}
 
+		void CompilePInvokeWrappers ()
+		{
+			foreach (var target in Targets)
+				target.CompilePInvokeWrappers ();
+		}
+
+		void BuildApp ()
+		{
 			SelectAssemblyBuildTargets (); // This must be done after the linker has run, since the linker may bring in more assemblies than only those referenced explicitly.
 
 			foreach (var target in Targets) {

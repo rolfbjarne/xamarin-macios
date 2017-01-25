@@ -159,6 +159,8 @@ namespace Xamarin.Bundler {
 		List<Abi> abis;
 		HashSet<Abi> all_architectures; // all Abis used in the app, including extensions.
 
+		BuildTasks build_tasks;
+
 		Dictionary<string, Tuple<AssemblyBuildTarget, string>> assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> ();
 
 		public AssemblyBuildTarget LibMonoLinkMode = AssemblyBuildTarget.StaticObject;
@@ -683,8 +685,21 @@ namespace Xamarin.Bundler {
 			ExtractNativeLinkInfo ();
 			SelectNativeCompiler ();
 			ProcessAssemblies ();
+
+			// Everything that can be parallelized is put into a list of tasks,
+			// which are then executed at the end. 
+			build_tasks = new BuildTasks ();
+
+			Driver.Watch ("Generating build tasks", 1);
+
 			CompilePInvokeWrappers ();
 			BuildApp ();
+
+			Driver.Watch ("Building build tasks", 1);
+			build_tasks.Execute ();
+
+			// TODO: make more of the below actions parallelizable
+
 			WriteNotice ();
 			BuildFatSharedLibraries ();
 			CopyAotData ();
@@ -1047,6 +1062,7 @@ namespace Xamarin.Bundler {
 
 		void ProcessAssemblies ()
 		{
+			// This can be parallelized once we determine the linker doesn't use any static state.
 			foreach (var target in Targets)	{
 				if (target.CanWeSymlinkTheApplication ()) {
 					target.Symlink ();
@@ -1102,7 +1118,7 @@ namespace Xamarin.Bundler {
 
 				target.ComputeLinkerFlags ();
 				target.Compile ();
-				target.NativeLink ();
+				target.NativeLink (build_tasks);
 			}
 		}
 

@@ -941,14 +941,6 @@ namespace Xamarin.Bundler
 				cached_executable = true;
 				Driver.Log (3, "Target '{0}' is up-to-date.", Executable);
 			}
-			// the native linker can prefer private (and existing) over public (but non-existing) framework when weak_framework are used
-			// on an iOS target version where the framework does not exists, e.g. targeting iOS6 for JavaScriptCore added in iOS7 results in
-			// /System/Library/PrivateFrameworks/JavaScriptCore.framework/JavaScriptCore instead of
-			// /System/Library/Frameworks/JavaScriptCore.framework/JavaScriptCore
-			// more details in https://bugzilla.xamarin.com/show_bug.cgi?id=31036
-			if (WeakFrameworks.Count > 0)
-				AdjustDylibs ();
-			Driver.Watch ("Native Link", 1);
 		}
 
 		public void AdjustDylibs ()

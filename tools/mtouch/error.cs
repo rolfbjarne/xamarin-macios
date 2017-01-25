@@ -115,6 +115,7 @@ namespace Xamarin.Bundler {
 	//					MT0106	The assembly build target name '{0}' is invalid: the character '{1}' is not allowed.
 	//					MT0107	The assemblies '{0}' have different custom LLVM optimizations ({1}), which is not allowed when they are all compiled to a single binary.
 	//					MT0108	The assembly build target '{0}' did not match any assemblies.
+	//		Warning		MT0109	The assembly '{0}' was loaded from a different path than the provided path (provided path: {1}, actual path: {2}).
 	// MT1xxx	file copy / symlinks (project related)
 	//			MT10xx	installer.cs / mtouch.cs
 	//					MT1001	Could not find an application at the specified directory: {0}
@@ -221,6 +222,7 @@ namespace Xamarin.Bundler {
 	//		Warning		MT2015	Invalid HttpMessageHandler `{0}` for watchOS. The only valid value is NSUrlSessionHandler.
 	//		Warning		MT2016  Invalid TlsProvider `{0}` option. The only valid value `{1}` will be used.
 	//					MT2017	The assembly '{0}' is referenced from two different locations: '{1}' and '{2}'.
+	//					MT2018	Can not load the root assembly '{0}'.
 	//					MT202x	Binding Optimizer failed processing `...`.
 	//					MT203x	Removing User Resources failed processing `...`.
 	//					MT204x	Default HttpMessageHandler setter failed processing `...`.

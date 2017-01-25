@@ -21,6 +21,12 @@ using XamCore.Registrar;
 
 namespace Xamarin.Bundler
 {
+	public class BundleFileInfo
+	{
+		public HashSet<string> Sources = new HashSet<string> ();
+		public bool DylibToFramework;
+	}
+	
 	public partial class Target {
 		public string TargetDirectory;
 		public string AppTargetDirectory;
@@ -41,6 +47,8 @@ namespace Xamarin.Bundler
 		// All the native libraries are included here (this means all the libraries
 		// that were AOTed from managed code, main, registrar, extra static libraries, etc).
 		List<string> link_with = new List<string> ();
+
+		public Dictionary<string, BundleFileInfo> BundleFiles = new Dictionary<string, BundleFileInfo> ();
 
 		Dictionary<Abi, CompileTask> pinvoke_tasks = new Dictionary<Abi, CompileTask> ();
 		List<CompileTask> link_with_task_output = new List<CompileTask> ();
@@ -71,6 +79,28 @@ namespace Xamarin.Bundler
 				
 				return !link_task.Rebuilt;
 			}
+		}
+
+		public void AddToBundle (string source, string bundle_path = null, bool dylib_to_framework_conversion = false)
+		{
+			BundleFileInfo info;
+
+			if (bundle_path == null) {
+				if (source.EndsWith (".framework", StringComparison.Ordinal)) {
+					var bundle_name = Path.GetFileNameWithoutExtension (source);
+					bundle_path = $"Frameworks/{bundle_name}.framework";
+				} else {
+					bundle_path = Path.GetFileName (source);
+				}
+			}
+
+			if (!BundleFiles.TryGetValue (bundle_path, out info))
+				BundleFiles [bundle_path] = info = new BundleFileInfo () { DylibToFramework = dylib_to_framework_conversion };
+
+			if (info.DylibToFramework != dylib_to_framework_conversion)
+				throw ErrorHelper.CreateError (99, "Internal error: 'invalid value for framework conversion'. Please file a bug report with a test case (http://bugzilla.xamarin.com).");
+			
+			info.Sources.Add (source);
 		}
 
 		public void LinkWithTaskOutput (CompileTask task)

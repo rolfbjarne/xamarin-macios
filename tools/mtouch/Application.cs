@@ -165,6 +165,7 @@ namespace Xamarin.Bundler {
 
 		public AssemblyBuildTarget LibMonoLinkMode = AssemblyBuildTarget.StaticObject;
 		public AssemblyBuildTarget LibXamarinLinkMode = AssemblyBuildTarget.StaticObject;
+		public AssemblyBuildTarget LibPInvokesLinkMode => LibXamarinLinkMode;
 
 		public bool OnlyStaticLibraries {
 			get {
@@ -1741,6 +1742,81 @@ namespace Xamarin.Bundler {
 				return;
 
 			RuntimeOptions.Write (AppDirectory);
+		}
+
+		public void CreateFrameworkInfoPList (string output_path, string framework_name, string bundle_identifier, string bundle_name)
+		{
+			var sb = new StringBuilder ();
+			sb.AppendLine ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			sb.AppendLine ("<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">");
+			sb.AppendLine ("<plist version=\"1.0\">");
+			sb.AppendLine ("<dict>");
+			sb.AppendLine ("        <key>CFBundleDevelopmentRegion</key>");
+			sb.AppendLine ("        <string>en</string>");
+			sb.AppendLine ("        <key>CFBundleIdentifier</key>");
+			sb.AppendLine ($"        <string>{bundle_identifier}</string>");
+			sb.AppendLine ("        <key>CFBundleInfoDictionaryVersion</key>");
+			sb.AppendLine ("        <string>6.0</string>");
+			sb.AppendLine ("        <key>CFBundleName</key>");
+			sb.AppendLine ($"        <string>{bundle_name}</string>");
+			sb.AppendLine ("        <key>CFBundlePackageType</key>");
+			sb.AppendLine ("        <string>FMWK</string>");
+			sb.AppendLine ("        <key>CFBundleShortVersionString</key>");
+			sb.AppendLine ("        <string>1.0</string>");
+			sb.AppendLine ("        <key>CFBundleSignature</key>");
+			sb.AppendLine ("        <string>????</string>");
+			sb.AppendLine ("        <key>CFBundleVersion</key>");
+			sb.AppendLine ("        <string>1.0</string>");
+			sb.AppendLine ("        <key>NSPrincipalClass</key>");
+			sb.AppendLine ("        <string></string>");
+			sb.AppendLine ("        <key>CFBundleExecutable</key>");
+			sb.AppendLine ($"        <string>{framework_name}</string>");
+			sb.AppendLine ("        <key>BuildMachineOSBuild</key>");
+			sb.AppendLine ("        <string>13F34</string>");
+			sb.AppendLine ("        <key>CFBundleSupportedPlatforms</key>");
+			sb.AppendLine ("        <array>");
+			sb.AppendLine ($"                <string>{Driver.GetPlatform (this)}</string>");
+			sb.AppendLine ("        </array>");
+			sb.AppendLine ("        <key>DTCompiler</key>");
+			sb.AppendLine ("        <string>com.apple.compilers.llvm.clang.1_0</string>");
+			sb.AppendLine ("        <key>DTPlatformBuild</key>");
+			sb.AppendLine ("        <string>12D508</string>");
+			sb.AppendLine ("        <key>DTPlatformName</key>");
+			sb.AppendLine ($"        <string>{Driver.GetPlatform (this).ToLowerInvariant ()}</string>");
+			sb.AppendLine ("        <key>DTPlatformVersion</key>");
+			sb.AppendLine ($"        <string>{SdkVersions.GetVersion (Platform)}</string>");
+			sb.AppendLine ("        <key>DTSDKBuild</key>");
+			sb.AppendLine ("        <string>12D508</string>");
+			sb.AppendLine ("        <key>DTSDKName</key>");
+			sb.AppendLine ($"        <string>{Driver.GetPlatform (this)}{SdkVersion}</string>");
+			sb.AppendLine ("        <key>DTXcode</key>");
+			sb.AppendLine ("        <string>0620</string>");
+			sb.AppendLine ("        <key>DTXcodeBuild</key>");
+			sb.AppendLine ("        <string>6C131e</string>");
+			sb.AppendLine ("        <key>MinimumOSVersion</key>");
+			sb.AppendLine ($"        <string>{DeploymentTarget.ToString ()}</string>");
+			sb.AppendLine ("        <key>UIDeviceFamily</key>");
+			sb.AppendLine ("        <array>");
+			switch (Platform) {
+			case ApplePlatform.iOS:
+				sb.AppendLine ("                <integer>1</integer>");
+				sb.AppendLine ("                <integer>2</integer>");
+				break;
+			case ApplePlatform.TVOS:
+				sb.AppendLine ("                <integer>3</integer>");
+				break;
+			case ApplePlatform.WatchOS:
+				sb.AppendLine ("                <integer>4</integer>");
+				break;
+			default:
+				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in Xamarin.iOS; please file a bug report at http://bugzilla.xamarin.com with a test case.", Platform);
+			}
+			sb.AppendLine ("        </array>");
+
+			sb.AppendLine ("</dict>");
+			sb.AppendLine ("</plist>");
+
+			Driver.WriteIfDifferent (output_path, sb.ToString ());
 		}
 	}
 }

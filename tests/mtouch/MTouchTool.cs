@@ -536,7 +536,7 @@ namespace Xamarin
 				File.WriteAllText (Path.Combine (app, "Info.plist"), CreatePlist (Profile, appName));
 		}
 
-		public void CreateTemporararyServiceExtension (string code = null, string extraArg = null)
+		public void CreateTemporararyServiceExtension (string code = null, string extraCode = null, string extraArg = null)
 		{
 			var testDir = CreateTemporaryDirectory ();
 			var app = Path.Combine (testDir, "testApp.appex");
@@ -550,6 +550,8 @@ public partial class NotificationService : UNNotificationServiceExtension
 	protected NotificationService (System.IntPtr handle) : base (handle) {}
 }";
 			}
+			if (extraCode != null)
+				code += extraCode;
 
 			AppPath = app;
 			RootAssembly = MTouch.CompileTestAppLibrary (testDir, code: code, profile: Profile, extraArg: extraArg);

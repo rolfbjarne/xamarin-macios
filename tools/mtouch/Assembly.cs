@@ -296,17 +296,22 @@ namespace Xamarin.Bundler {
 			else
 				nextTasks = CreateCompileTasks (assembly_path, asm, assemble_llvm ? llvm_asm : null, abi);
 
-			return new BuildTask [] { new AOTTask ()
-				{
-					Assembly = this,
-					AssemblyName = assembly_path,
-					AddBitcodeMarkerSection = App.FastDev && App.EnableMarkerOnlyBitCode,
-					AotOutputs = outputs,
-					AssemblyPath = asm,
-					ProcessStartInfo = Driver.CreateStartInfo (App, aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
-					NextTasks = nextTasks
-				}
+			var aottask = new AOTTask
+			{
+				Assembly = this,
+				AssemblyName = assembly_path,
+				AddBitcodeMarkerSection = App.FastDev && App.EnableMarkerOnlyBitCode,
+				AotOutputs = outputs,
+				AssemblyPath = asm,
+				ProcessStartInfo = Driver.CreateStartInfo (App, aotCompiler, aotArgs, Path.GetDirectoryName (assembly_path)),
 			};
+			if (nextTasks != null && nextTasks.Count () > 0) {
+				foreach (var t in nextTasks)
+					t.AddDependency (aottask);
+				return nextTasks;
+			}
+
+			return new BuildTask [] { aottask };
 		}
 
 		// The input file is either a .s or a .bc file
@@ -394,10 +399,8 @@ namespace Xamarin.Bundler {
 				Language = link_language,
 			};
 
-			if (bitcode_task != null) {
-				bitcode_task.NextTasks = new BuildTask[] { link_task };
-				return bitcode_task;
-			}
+			if (bitcode_task != null)
+				link_task.AddDependency (bitcode_task);
 			return link_task;
 		}
 
@@ -441,7 +444,7 @@ namespace Xamarin.Bundler {
 			return symlink_failed;
 		}
 
-		public void CreateCompilationTasks (BuildTasks tasks, string build_dir, IEnumerable<Abi> abis)
+		public void CreateCompilationTasks (List<BuildTask> tasks, string build_dir, IEnumerable<Abi> abis)
 		{
 			var assembly = Path.Combine (build_dir, FileName);
 

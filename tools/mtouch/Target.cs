@@ -42,13 +42,17 @@ namespace Xamarin.Bundler
 		// that were AOTed from managed code, main, registrar, extra static libraries, etc).
 		List<string> link_with = new List<string> ();
 
+		Dictionary<Abi, CompileTask> pinvoke_tasks = new Dictionary<Abi, CompileTask> ();
+		List<CompileTask> link_with_task_output = new List<CompileTask> ();
+		List<BuildTask> aot_dependencies = new List<BuildTask> ();
+		CompilerFlags linker_flags;
+		NativeLinkTask link_task;
+
 		// If we didn't link because the existing (cached) assemblyes are up-to-date.
 		bool cached_link;
 
 		// If any assemblies were updated (only set to false if the linker is disabled and no assemblies were modified).
 		bool any_assembly_updated = true;
-
-		BuildTasks compile_tasks = new BuildTasks ();
 
 		// If we didn't link the final executable because the existing binary is up-to-date.
 		public bool cached_executable; 
@@ -61,6 +65,26 @@ namespace Xamarin.Bundler
 
 		List<string> link_with_and_ship = new List<string> ();
 		public IEnumerable<string> LibrariesToShip { get { return link_with_and_ship; } }
+
+		public void LinkWithTaskOutput (CompileTask task)
+		{
+			if (task.SharedLibrary) {
+				LinkWithDynamicLibrary (task.OutputFile);
+			} else {
+				LinkWithStaticLibrary (task.OutputFile);
+			}
+			link_with_task_output.Add (task);
+		}
+
+		public void LinkWithStaticLibrary (string path)
+		{
+			linker_flags.AddLinkWith (path);
+		}
+
+		public void LinkWithDynamicLibrary (string path)
+		{
+			linker_flags.AddLinkWith (path);
+		}
 
 		PInvokeWrapperGenerator pinvoke_state;
 		PInvokeWrapperGenerator MarshalNativeExceptionsState {
@@ -115,6 +139,8 @@ namespace Xamarin.Bundler
 
 			if (App.LinkMode == LinkMode.None && App.I18n != I18nAssemblies.None)
 				AddI18nAssemblies ();
+
+			linker_flags = new CompilerFlags (this);
 
 			// an extension is a .dll and it would match itself
 			if (App.IsExtension)
@@ -645,17 +671,9 @@ namespace Xamarin.Bundler
 					pinvoke_task.CompilerFlags.AddFramework ("Foundation");
 					pinvoke_task.CompilerFlags.LinkWithXamarin ();
 				}
-				if (!pinvoke_task.CheckIsUptodate ())
-					compile_tasks.Add (pinvoke_task);
-				LinkWith (ofile);
-				LinkWithAndShip (ofile);
-			}
+				pinvoke_tasks.Add (abi, pinvoke_task);
 
-			if (App.FastDev) {
-				// In this case assemblies must link with the resulting dylib,
-				// so we can't compile the pinvoke dylib in parallel with later
-				// stuff.
-				compile_tasks.ExecuteInParallel ();
+				LinkWithTaskOutput (pinvoke_task);
 			}
 		}
 
@@ -687,7 +705,7 @@ namespace Xamarin.Bundler
 			// Compile the managed assemblies into object files or shared libraries
 			if (App.IsDeviceBuild) {
 				foreach (var a in Assemblies)
-					a.CreateCompilationTasks (compile_tasks, BuildDirectory, Abis);
+					a.CreateCompilationTasks (aot_dependencies, BuildDirectory, Abis);
 			}
 
 			List<string> registration_methods = new List<string> ();
@@ -704,7 +722,6 @@ namespace Xamarin.Bundler
 					RegistrarH = registrar_h,
 				};
 
-				var compile_registrar_tasks = new List<BuildTask> ();
 				foreach (var abi in Abis) {
 					var arch = abi.AsArchString ();
 					var ofile = Path.Combine (App.Cache.Location, arch, Path.GetFileNameWithoutExtension (registrar_m) + ".o");
@@ -720,19 +737,12 @@ namespace Xamarin.Bundler
 						SharedLibrary = false,
 						Language = "objective-c++",
 					};
+					registrar_task.AddDependency (run_registrar_task);
+
 					// This is because iOS has a forward declaration of NSPortMessage, but no actual declaration.
 					// They still use NSPortMessage in other API though, so it can't just be removed from our bindings.
 					registrar_task.CompilerFlags.AddOtherFlag ("-Wno-receiver-forward-class");
-					if (!registrar_task.CheckIsUptodate ())
-						compile_registrar_tasks.Add (registrar_task);
-
-					LinkWith (ofile);
-				}
-				if (!run_registrar_task.CheckIsUptodate ()) {
-					run_registrar_task.NextTasks = compile_registrar_tasks;
-					compile_tasks.Add (run_registrar_task);
-				} else {
-					compile_tasks.AddRange (compile_registrar_tasks);
+					LinkWithTaskOutput (registrar_task);
 				}
 
 				registration_methods.Add ("xamarin_create_classes");
@@ -759,7 +769,7 @@ namespace Xamarin.Bundler
 				}
 
 				registration_methods.Add (method);
-				link_with.Add (Path.Combine (Driver.GetProductSdkDirectory (App), "usr", "lib", library));
+				LinkWithStaticLibrary (Path.Combine (Driver.GetProductSdkDirectory (App), "usr", "lib", library));
 			}
 
 			// The main method.
@@ -784,21 +794,10 @@ namespace Xamarin.Bundler
 					SharedLibrary = false,
 					Language = "objective-c++",
 				};
+				main_task.AddDependency (generate_main_task);
 				main_task.CompilerFlags.AddDefine ("MONOTOUCH");
-				if (generate_main_task.CheckIsUptodate ()) {
-					if (!main_task.CheckIsUptodate ())
-						compile_tasks.Add (main_task);
-				} else {
-					if (!main_task.CheckIsUptodate ())
-						generate_main_task.NextTasks = new [] { main_task };
-					compile_tasks.Add (generate_main_task);
-				}
-
-				LinkWith (main_o);
+				LinkWithTaskOutput (main_task);
 			}
-
-			// Start compiling.
-			compile_tasks.ExecuteInParallel ();
 
 			if (App.FastDev) {
 				foreach (var a in Assemblies) {
@@ -812,14 +811,12 @@ namespace Xamarin.Bundler
 			Driver.Watch ("Compile", 1);
 		}
 
-		public void NativeLink ()
+		public void NativeLink (BuildTasks build_tasks)
 		{
 			if (!string.IsNullOrEmpty (App.UserGccFlags))
 				App.DeadStrip = false;
 			if (App.EnableLLVMOnlyBitCode)
 				App.DeadStrip = false;
-
-			var linker_flags = new CompilerFlags () { Target = this };
 
 			// Get global frameworks
 			linker_flags.AddFrameworks (App.Frameworks, App.WeakFrameworks);
@@ -925,17 +922,15 @@ namespace Xamarin.Bundler
 				linker_flags.AddOtherFlag ("-fapplication-extension");
 			}
 
-			var linker_task = new NativeLinkTask
+			link_task = new NativeLinkTask
 			{
 				Target = this,
 				OutputFile = Executable,
 				CompilerFlags = linker_flags,
 			};
-			if (!linker_task.CheckIsUptodate ()) {
-				linker_task.Link ();
-			} else {
-				cached_executable = true;
-			}
+			link_task.AddDependency (link_with_task_output);
+			link_task.AddDependency (aot_dependencies);
+			build_tasks.Add (link_task);
 		}
 
 		public void AdjustDylibs ()

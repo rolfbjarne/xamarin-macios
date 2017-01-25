@@ -1037,12 +1037,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		void ManagedLink ()
-		{
-			foreach (var target in Targets)
-				target.ManagedLink ();
-		}
-
 		void BuildApp ()
 		{
 			foreach (var target in Targets)	{

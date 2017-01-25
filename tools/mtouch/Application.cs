@@ -1336,13 +1336,13 @@ namespace Xamarin.Bundler {
 
 			if (IsSimulatorBuild || !IsDualBuild) {
 				if (IsDeviceBuild)
-					cached_executable = Targets [0].cached_executable;
+					cached_executable = Targets [0].CachedExecutable;
 				return;
 			}
 
 			if (IsSimulatorBuild || !IsDualBuild) {
 				if (IsDeviceBuild)
-					cached_executable = Targets [0].cached_executable;
+					cached_executable = Targets [0].CachedExecutable;
 				return;
 			}
 
@@ -1716,12 +1716,12 @@ namespace Xamarin.Bundler {
 			if (IsDualBuild) {
 				bool cached = true;
 				foreach (var target in Targets)
-					cached &= target.cached_executable;
+					cached &= target.CachedExecutable;
 				if (!cached)
 					StripNativeCode (Executable);
 			} else {
 				foreach (var target in Targets) {
-					if (!target.cached_executable)
+					if (!target.CachedExecutable)
 						StripNativeCode (target.Executable);
 				}
 			}

@@ -54,9 +54,6 @@ namespace Xamarin.Bundler
 		// If any assemblies were updated (only set to false if the linker is disabled and no assemblies were modified).
 		bool any_assembly_updated = true;
 
-		// If we didn't link the final executable because the existing binary is up-to-date.
-		public bool cached_executable; 
-
 		// If the assemblies were symlinked.
 		public bool Symlinked;
 
@@ -65,6 +62,16 @@ namespace Xamarin.Bundler
 
 		List<string> link_with_and_ship = new List<string> ();
 		public IEnumerable<string> LibrariesToShip { get { return link_with_and_ship; } }
+
+		// If we didn't link the final executable because the existing binary is up-to-date.
+		public bool CachedExecutable {
+			get {
+				if (link_task == null)
+					return false;
+				
+				return !link_task.Rebuilt;
+			}
+		}
 
 		public void LinkWithTaskOutput (CompileTask task)
 		{

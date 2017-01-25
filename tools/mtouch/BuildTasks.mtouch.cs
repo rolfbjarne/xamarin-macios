@@ -98,7 +98,6 @@ namespace Xamarin.Bundler
 		protected override void Build ()
 		{
 			Driver.GenerateMain (Target.App, Target.Assemblies, Target.App.AssemblyName, Abi, MainM, RegistrationMethods);
-
 		}
 	}
 

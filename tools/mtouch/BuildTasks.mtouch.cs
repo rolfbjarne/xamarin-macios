@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Xamarin.MacDev;
 using Xamarin.Utils;
@@ -29,6 +30,11 @@ namespace Xamarin.Bundler
 				result.Append (ProcessStartInfo.Arguments);
 				return result.ToString ();
 			}
+		}
+
+		protected Task<int> StartAsync ()
+		{
+			return Task.Run (() => Start ());
 		}
 
 		protected int Start ()
@@ -170,6 +176,7 @@ namespace Xamarin.Bundler
 	public class AOTTask : ProcessTask
 	{
 		public Assembly Assembly;
+		public AotInfo AotInfo;
 		public string AssemblyName;
 		public bool AddBitcodeMarkerSection;
 		public string AssemblyPath; // path to the .s file.
@@ -178,7 +185,10 @@ namespace Xamarin.Bundler
 
 		public override IEnumerable<string> Outputs {
 			get {
-				return AotOutputs;
+				return AotInfo.AotDataFiles
+							  .Union (AotInfo.AsmFiles)
+							  .Union (AotInfo.BitcodeFiles)
+							  .Union (AotInfo.ObjectFiles);
 			}
 		}
 
@@ -208,10 +218,9 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		// executed with Parallel.ForEach
-		protected override void Execute ()
+		protected async override Task ExecuteAsync ()
 		{
-			var exit_code = base.Start ();
+			var exit_code = await StartAsync ();
 
 			if (exit_code == 0) {
 				if (AddBitcodeMarkerSection)
@@ -259,13 +268,13 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		protected override void Execute ()
+		protected override async Task ExecuteAsync ()
 		{
 			// always show the native linker warnings since many of them turn out to be very important
 			// and very hard to diagnose otherwise when hidden from the build output. Ref: bug #2430
 			var linker_errors = new List<Exception> ();
 			var output = new StringBuilder ();
-			var code = Driver.RunCommand (Target.App.CompilerPath, CompilerFlags.ToString (), null, output);
+			var code = await Driver.RunCommandAsync (Target.App.CompilerPath, CompilerFlags.ToString (), null, output);
 
 			Application.ProcessNativeLinkerOutput (Target, output.ToString (), CompilerFlags.AllLibraries, linker_errors, code != 0);
 
@@ -296,11 +305,6 @@ namespace Xamarin.Bundler
 			if (Target.WeakFrameworks.Count > 0)
 				Target.AdjustDylibs ();
 			Driver.Watch ("Native Link", 1);
-		}
-
-		public void Link ()
-		{
-			Execute ();
 		}
 	}
 
@@ -452,9 +456,9 @@ namespace Xamarin.Bundler
 			flags.AddOtherFlag (App.EnableMarkerOnlyBitCode ? "-fembed-bitcode-marker" : "-fembed-bitcode");
 		}
 
-		protected override void Execute ()
+		protected override async Task ExecuteAsync ()
 		{
-			int exitCode = Compile ();
+			int exitCode = await CompileAsync ();
 			if (exitCode != 0)
 				CompilationFailed (exitCode);
 		}
@@ -464,7 +468,7 @@ namespace Xamarin.Bundler
 			throw ErrorHelper.CreateError (5106, "Could not compile the file(s) '{0}'. Please file a bug report at http://bugzilla.xamarin.com", string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
 		}
 
-		public int Compile ()
+		protected async Task<int> CompileAsync ()
 		{
 			if (App.IsDeviceBuild) {
 				GetDeviceCompilerFlags (CompilerFlags, IsAssembler);
@@ -492,7 +496,7 @@ namespace Xamarin.Bundler
 
 			Directory.CreateDirectory (Path.GetDirectoryName (OutputFile));
 
-			var rv = Driver.RunCommand (App.CompilerPath, CompilerFlags.ToString (), null, null);
+			var rv = await Driver.RunCommandAsync (App.CompilerPath, CompilerFlags.ToString (), null, null);
 
 			return rv;
 		}

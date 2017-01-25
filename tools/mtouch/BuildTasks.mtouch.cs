@@ -180,11 +180,14 @@ namespace Xamarin.Bundler
 		public bool AddBitcodeMarkerSection;
 		public string AssemblyPath; // path to the .s file.
 		List<string> inputs;
-		public IEnumerable<string> AotOutputs;
+		public AotInfo AotInfo;
 
 		public override IEnumerable<string> Outputs {
 			get {
-				return AotOutputs;
+				return AotInfo.AotDataFiles
+							  .Union (AotInfo.AsmFiles)
+							  .Union (AotInfo.BitcodeFiles)
+							  .Union (AotInfo.ObjectFiles);
 			}
 		}
 

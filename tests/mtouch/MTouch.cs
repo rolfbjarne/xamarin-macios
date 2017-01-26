@@ -2253,7 +2253,7 @@ class C {
 			using (var exttool = new MTouchTool ()) {
 				exttool.Profile = Profile.iOS;
 				exttool.CreateTemporaryCacheDirectory ();
-				exttool.Verbosity = 5;
+				exttool.Linker = MTouchLinker.DontLink; // faster
 
 				exttool.Extension = true;
 				exttool.CreateTemporararyServiceExtension ();
@@ -2266,6 +2266,7 @@ class C {
 					apptool.Verbosity = exttool.Verbosity;
 					apptool.CreateTemporaryApp ();
 					apptool.AppExtensions.Add (exttool.AppPath);
+					apptool.Linker = MTouchLinker.DontLink; // faster
 					apptool.AssertExecute (MTouchAction.BuildSim, "build app");
 
 					Assert.IsTrue (Directory.Exists (Path.Combine (apptool.AppPath, "Frameworks", "XTest.framework")), "framework exists");
@@ -2282,7 +2283,7 @@ class C {
 			using (var exttool = new MTouchTool ()) {
 				exttool.Profile = Profile.iOS;
 				exttool.CreateTemporaryCacheDirectory ();
-				exttool.Verbosity = 5;
+				exttool.Linker = MTouchLinker.DontLink; // faster
 
 				exttool.Extension = true;
 				exttool.References = new string []
@@ -2304,6 +2305,7 @@ public partial class NotificationService : UNNotificationServiceExtension
 					apptool.Profile = Profile.iOS;
 					apptool.CreateTemporaryCacheDirectory ();
 					apptool.Verbosity = exttool.Verbosity;
+					apptool.Linker = MTouchLinker.DontLink; // faster
 					apptool.CreateTemporaryApp ();
 					apptool.AppExtensions.Add (exttool.AppPath);
 					apptool.AssertExecute (MTouchAction.BuildSim, "build app");

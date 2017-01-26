@@ -328,6 +328,9 @@ namespace Xamarin.Tests
 					UseMSBuild = true; // xbuild can't parse /p=name=value where value contains equal signs.
 			}
 
+			if (UseMSBuild && !Properties.ContainsKey ("TargetFrameworkRootPath"))
+				sb.Append (MTouch.Quote ($"/p:TargetFrameworkRootPath={env ["XBUILD_FRAMEWORK_FOLDERS_PATH"]}")).Append (' ');
+
 			sb.Append (MTouch.Quote (ProjectPath));
 
 			return ExecutionHelper.Execute (ToolPath, sb.ToString (), timeout: Timeout ?? TimeSpan.FromMinutes (10), environmentVariables: env);

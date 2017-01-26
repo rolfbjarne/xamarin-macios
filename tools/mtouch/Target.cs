@@ -783,6 +783,10 @@ namespace Xamarin.Bundler
 						install_name = $"@rpath/lib{name}.dylib";
 						compiler_output = Path.Combine (App.Cache.Location, arch, $"lib{name}.dylib");
 						break;
+					case AssemblyBuildTarget.Framework:
+						install_name = $"@rpath/{name}.framework/{name}";
+						compiler_output = Path.Combine (App.Cache.Location, arch, $"lib{name}.dylib"); // frameworks are almost identical to dylibs, so this is expected.
+						break;
 					default:
 						throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
 					}

@@ -29,6 +29,14 @@ namespace Xamarin
 	public enum PackageMdb { Default, WithMdb, WoutMdb }
 	public enum MSym { Default, WithMSym, WoutMSym }
 	public enum Profile { iOS, tvOS, watchOS }
+	public enum ProjectType
+	{
+		iOSApp,
+		tvOSApp,
+		WatchKit2App,
+		WatchKit2Extension,
+		TodayExtension,
+	}
 
 	[TestFixture]
 	public class MTouch
@@ -186,7 +194,8 @@ namespace Xamarin
 
 				var appDir = mtouch.AppPath;
 				var msymDir = appDir + ".mSYM";
-				if (is_sim) {
+				var is_dual_asm = !is_sim && extra_mtouch_args.Contains ("--abi") && extra_mtouch_args.Contains (",");
+				if (!is_dual_asm) {
 					Assert.AreEqual (has_mdb, File.Exists (Path.Combine (appDir, "mscorlib.dll.mdb")), "#mdb");
 				} else {
 					Assert.AreEqual (has_mdb, File.Exists (Path.Combine (appDir, ".monotouch-32", "mscorlib.dll.mdb")), "#mdb");
@@ -872,7 +881,7 @@ namespace Xamarin
 			}
 		}
 
-		static string GetProjectSuffix (Profile profile)
+		public static string GetProjectSuffix (Profile profile)
 		{
 			switch (profile) {
 			case Profile.iOS:
@@ -895,6 +904,36 @@ namespace Xamarin
 				return Configuration.tvos_sdk_version;
 			case Profile.watchOS:
 				return Configuration.watchos_sdk_version;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public static string GetMinSdkVersion (Profile profile)
+		{
+			switch (profile) {
+			case Profile.iOS:
+				return "6.0";
+			case Profile.tvOS:
+				return "9.0";
+			case Profile.watchOS:
+				return "2.0";
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public static Profile GetProfileForProjectType (ProjectType projectType)
+		{
+			switch (projectType) {
+			case ProjectType.iOSApp:
+			case ProjectType.TodayExtension:
+				return Profile.iOS;
+			case ProjectType.tvOSApp:
+				return Profile.tvOS;
+			case ProjectType.WatchKit2App:
+			case ProjectType.WatchKit2Extension:
+				return Profile.watchOS;
 			default:
 				throw new NotImplementedException ();
 			}
@@ -1061,6 +1100,7 @@ namespace Xamarin
 				Linker = MTouchLinker.DontLink,
 			}) {
 				mtouch.CreateTemporaryApp_LinkWith ();
+				mtouch.Timeout = TimeSpan.FromMinutes (10);
 				Assert.AreEqual (0, mtouch.Execute (MTouchAction.BuildDev), "build 1");
 			}
 		}
@@ -1078,6 +1118,7 @@ namespace Xamarin
 				FastDev = true,
 				References = new string [] { GetBindingsLibrary (profile) },
 			}) {
+				mtouch.Timeout = TimeSpan.FromMinutes (10);
 				mtouch.CreateTemporaryApp_LinkWith ();
 
 				// --fastdev w/all link
@@ -1171,6 +1212,7 @@ namespace Xamarin
 
 				var bin = Path.Combine (mtouch.AppPath, Path.GetFileNameWithoutExtension (mtouch.RootAssembly));
 
+				mtouch.Timeout = TimeSpan.FromMinutes (5);
 				Assert.AreEqual (0, mtouch.Execute (target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim));
 
 				VerifyArchitectures (bin, abi, abi.Replace ("+llvm", string.Empty).Split (','));
@@ -1230,6 +1272,7 @@ namespace Xamarin
 				      
 				var bin = Path.Combine (mtouch.AppPath, Path.GetFileNameWithoutExtension (mtouch.RootAssembly));
 
+				mtouch.Timeout = TimeSpan.FromMinutes (5);
 				Assert.AreEqual (0, mtouch.Execute (target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim), "build");
 				VerifyArchitectures (bin,  "arch",  target == Target.Dev ? "arm64" : "x86_64");
 			}
@@ -1814,8 +1857,9 @@ class Test {
 				mtouch.CreateTemporaryCacheDirectory ();
 				mtouch.Abi = "armv7,arm64";
 				mtouch.AssertExecute (MTouchAction.BuildDev, "build");
-				var ufe = Mono.Unix.UnixFileSystemInfo.GetFileSystemEntry (Path.Combine (mtouch.AppPath, ".monotouch-32", "testApp.exe"));
-				Assert.IsTrue (ufe.IsSymbolicLink, "testApp.exe IsSymbolicLink");
+				FileAssert.Exists (Path.Combine (mtouch.AppPath, "testApp.exe"));
+				// Don't check for mscorlib.dll, there might be two versions of it (since Xamarin.iOS.dll depends on it), or there might not.
+				FileAssert.Exists (Path.Combine (mtouch.AppPath, ".monotouch-32", "Xamarin.iOS.dll"));
 			}
 		}
 
@@ -2448,7 +2492,7 @@ public class TestApp {
 				Assert.Fail (text.ToString ());
 		}
 
-		static List<string> GetArchitectures (string file)
+		public static List<string> GetArchitectures (string file)
 		{
 			var result = new List<string> ();
 

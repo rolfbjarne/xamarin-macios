@@ -229,9 +229,9 @@ namespace Xamarin.Bundler {
 			// Check if we've already created the AOT tasks.
 			if (AotInfos.ContainsKey (abi))
 				return;
-
-			var build_dir = Target.BuildDirectory;
-			var assembly_path = Path.Combine (build_dir, FileName); // FullPath?
+			
+			var assembly_path = FullPath;
+			var build_dir = Path.GetDirectoryName (assembly_path);
 			var arch = abi.AsArchString ();
 			var asm_dir = Path.Combine (App.Cache.Location, arch);
 			var asm = Path.Combine (asm_dir, Path.GetFileName (assembly_path)) + ".s";

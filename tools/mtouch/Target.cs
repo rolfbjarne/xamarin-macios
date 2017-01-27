@@ -709,11 +709,18 @@ namespace Xamarin.Bundler
 				}
 			}
 
-			// Make the assemblies point to the right path.
+			// Now the assemblies are in PreBuildDirectory, and they need to be in the BuildDirectory for the AOT compiler.
 			foreach (var t in allTargets) {
 				foreach (var a in t.Assemblies) {
 					// All these assemblies are in the main app's PreBuildDirectory.
 					a.FullPath = Path.Combine (PreBuildDirectory, a.FileName);
+
+					// Now copy to the build directory
+					var target = Path.Combine (BuildDirectory, a.FileName);
+					if (!a.CopyAssembly (a.FullPath, target))
+						Driver.Log (3, "Target '{0}' is up-to-date.", target);
+					a.FullPath = target;
+
 					// The linker can copy files (and not update timestamps), and then we run into this sequence:
 					// * We run the linker, nothing changes, so the linker copies 
 					//   all files to the PreBuild directory, with timestamps intact.
@@ -804,15 +811,6 @@ namespace Xamarin.Bundler
 				Directory.CreateDirectory (TargetDirectory);
 
 			ManagedLink ();
-
-			// Now the assemblies are in PreBuildDirectory.
-
-			foreach (var a in Assemblies) {
-				var target = Path.Combine (BuildDirectory, a.FileName);
-				if (!a.CopyAssembly (a.FullPath, target))
-					Driver.Log (3, "Target '{0}' is up-to-date.", target);
-				a.FullPath = target;
-			}
 
 			Driver.GatherFrameworks (this, Frameworks, WeakFrameworks);
 

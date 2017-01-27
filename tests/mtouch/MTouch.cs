@@ -2474,9 +2474,9 @@ public class TestApp {
 			return CompileTestAppCode ("exe", targetDirectory, code, extraArg, profile, appName);
 		}
 
-		public static string CompileTestAppLibrary (string targetDirectory, string code, string extraArg = null, Profile profile = Profile.iOS)
+		public static string CompileTestAppLibrary (string targetDirectory, string code, string extraArg = null, Profile profile = Profile.iOS, string appName = "testApp")
 		{
-			return CompileTestAppCode ("library", targetDirectory, code, extraArg, profile);
+			return CompileTestAppCode ("library", targetDirectory, code, extraArg, profile, appName);
 		}
 
 		public static string CompileTestAppCode (string target, string targetDirectory, string code, string extraArg = "", Profile profile = Profile.iOS, string appName = "testApp")

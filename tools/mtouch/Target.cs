@@ -686,9 +686,7 @@ namespace Xamarin.Bundler
 					var collectedNames = new HashSet<string> ();
 
 					// First collect the set of all assemblies in the app by walking the assembly references.
-					collectedNames.Add (rootAssembly.Identity);
-					collectedNames.UnionWith (rootAssembly.AssemblyDefinition.MainModule.AssemblyReferences.Select ((ar) => ar.Name));
-
+					queue.Enqueue (rootAssembly.Identity);
 					do {
 						var next = queue.Dequeue ();
 						collectedNames.Add (next);

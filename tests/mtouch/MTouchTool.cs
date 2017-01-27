@@ -523,14 +523,20 @@ namespace Xamarin
 			return plist;
 		}
 
-		public void CreateTemporaryApp (bool hasPlist = false, string appName = "testApp", string code = null, string extraArg = "")
+		public void CreateTemporaryApp (bool hasPlist = false, string appName = "testApp", string code = null, string extraArg = "", string extraCode = null)
 		{
-			var testDir = CreateTemporaryDirectory ();
-			var app = Path.Combine (testDir, appName + ".app");
+			string testDir;
+			if (Executable == null) {
+				testDir = CreateTemporaryDirectory ();
+			} else {
+				// We're rebuilding an existing executable, so just reuse that
+				testDir = Path.GetDirectoryName (Executable);
+			}
+			var app = AppPath ?? Path.Combine (testDir, appName + ".app");
 			Directory.CreateDirectory (app);
 
 			AppPath = app;
-			RootAssembly = MTouch.CompileTestAppExecutable (testDir, code, extraArg, Profile, appName);
+			RootAssembly = MTouch.CompileTestAppExecutable (testDir, code, extraArg, Profile, appName, extraCode);
 
 			if (hasPlist)
 				File.WriteAllText (Path.Combine (app, "Info.plist"), CreatePlist (Profile, appName));
@@ -538,8 +544,14 @@ namespace Xamarin
 
 		public void CreateTemporararyServiceExtension (string code = null, string extraCode = null, string extraArg = null)
 		{
-			var testDir = CreateTemporaryDirectory ();
-			var app = Path.Combine (testDir, "testApp.appex");
+			string testDir;
+			if (Executable == null) {
+				testDir = CreateTemporaryDirectory ();
+			} else {
+				// We're rebuilding an existing executable, so just reuse that
+				testDir = Path.GetDirectoryName (Executable);
+			}
+			var app = AppPath ?? Path.Combine (testDir, "testApp.appex");
 			Directory.CreateDirectory (app);
 
 			if (code == null) {
@@ -556,7 +568,7 @@ public partial class NotificationService : UNNotificationServiceExtension
 			AppPath = app;
 			RootAssembly = MTouch.CompileTestAppLibrary (testDir, code: code, profile: Profile, extraArg: extraArg);
 
-			File.WriteAllText (Path.Combine (app, "Info.plist"),
+			var info_plist = 
 $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <!DOCTYPE plist PUBLIC ""-//Apple//DTD PLIST 1.0//EN"" ""http://www.apple.com/DTDs/PropertyList-1.0.dtd"">
 <plist version=""1.0"">
@@ -590,7 +602,10 @@ $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 	</dict>
 </dict>
 </plist>
-");
+";
+			var plist_path = Path.Combine (app, "Info.plist");
+			if (!File.Exists (plist_path) || File.ReadAllText (plist_path) != info_plist)
+				File.WriteAllText (plist_path, info_plist);
 		}
 
 		public void CreateTemporaryWatchKitExtension (string code = null)

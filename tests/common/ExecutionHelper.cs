@@ -64,7 +64,7 @@ namespace Xamarin.Tests
 
 			if (rv != 0 || Verbose) {
 				if (output.Length > 0)
-					Console.WriteLine (output);
+					Console.WriteLine ("\t" + output.ToString ().Replace ("\n", "\n\t"));
 			}
 
 			ParseMessages ();

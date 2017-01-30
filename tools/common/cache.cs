@@ -165,7 +165,8 @@ public class Cache {
 			}
 		} while (true);
 	}
-	
+
+	// FIXME: cache invalidation
 	static string GetArgumentsForCacheData ()
 	{
 		var sb = new StringBuilder ();

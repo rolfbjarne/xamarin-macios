@@ -82,6 +82,7 @@ namespace Xamarin
 		public bool? PackageMdb;
 		public bool? MSym;
 		public bool? DSym;
+		public bool? NoStrip;
 		public string Mono;
 		public string GccFlags;
 		public Dictionary<string, string> SetEnv = new Dictionary<string, string> ();
@@ -267,6 +268,9 @@ namespace Xamarin
 
 			if (PackageMdb.HasValue)
 				sb.Append (" --package-mdb:").Append (PackageMdb.Value ? "true" : "false");
+
+			if (NoStrip.HasValue && NoStrip.Value)
+				sb.Append (" --nostrip");
 
 			if (MSym.HasValue)
 				sb.Append (" --msym:").Append (MSym.Value ? "true" : "false");
@@ -526,11 +530,11 @@ namespace Xamarin
 		public void CreateTemporaryApp (bool hasPlist = false, string appName = "testApp", string code = null, string extraArg = "", string extraCode = null)
 		{
 			string testDir;
-			if (Executable == null) {
+			if (RootAssembly == null) {
 				testDir = CreateTemporaryDirectory ();
 			} else {
 				// We're rebuilding an existing executable, so just reuse that
-				testDir = Path.GetDirectoryName (Executable);
+				testDir = Path.GetDirectoryName (RootAssembly);
 			}
 			var app = AppPath ?? Path.Combine (testDir, appName + ".app");
 			Directory.CreateDirectory (app);
@@ -545,11 +549,11 @@ namespace Xamarin
 		public void CreateTemporararyServiceExtension (string code = null, string extraCode = null, string extraArg = null, string appName = "testServiceExtension")
 		{
 			string testDir;
-			if (Executable == null) {
+			if (RootAssembly == null) {
 				testDir = CreateTemporaryDirectory ();
 			} else {
 				// We're rebuilding an existing executable, so just reuse that
-				testDir = Path.GetDirectoryName (Executable);
+				testDir = Path.GetDirectoryName (RootAssembly);
 			}
 			var app = AppPath ?? Path.Combine (testDir, $"{appName}.appex");
 			Directory.CreateDirectory (app);

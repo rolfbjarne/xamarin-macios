@@ -168,6 +168,7 @@ namespace Xamarin
 				extension.AssemblyBuildTargets.AddRange (assembly_build_targets);
 				extension.DSym = false; // faster test
 				extension.MSym = false; // faster test
+				extension.NoStrip = true; // faster test
 				extension.AssertExecute (MTouchAction.BuildDev, "extension build");
 
 				using (var mtouch = new MTouchTool ()) {
@@ -179,6 +180,7 @@ namespace Xamarin
 					mtouch.AssemblyBuildTargets.AddRange (assembly_build_targets);
 					mtouch.DSym = false; // faster test
 					mtouch.MSym = false; // faster test
+					mtouch.NoStrip = true; // faster test
 
 					mtouch.Verbose = true;
 					mtouch.Verbosity = 20;
@@ -205,26 +207,26 @@ namespace Xamarin
 					};
 
 					mtouch.AssertExecute (MTouchAction.BuildDev, "first build");
-					Console.WriteLine (" **** FIRST BUILD DONE ****");
+					Console.WriteLine ($"{DateTime.Now} **** FIRST BUILD DONE ****");
 
 					timestamp = DateTime.Now;
 					System.Threading.Thread.Sleep (1000); // make sure all new timestamps are at least a second older. HFS+ has a 1s timestamp resolution :(
 
 					mtouch.AssertExecute (MTouchAction.BuildDev, "second build");
-					Console.WriteLine (" **** SECOND BUILD DONE ****");
+					Console.WriteLine ($"{DateTime.Now} **** SECOND BUILD DONE ****");
 
 					assertNotModified (name, null);
 
 					// Touch the extension's executable, nothing should change
-					new FileInfo (extension.Executable).LastWriteTimeUtc = DateTime.UtcNow;
+					new FileInfo (extension.RootAssembly).LastWriteTimeUtc = DateTime.UtcNow;
 					mtouch.AssertExecute (MTouchAction.BuildDev, "touch extension executable");
-					Console.WriteLine (" **** TOUCH EXTENSION EXECUTABLE DONE ****");
+					Console.WriteLine ($"{DateTime.Now} **** TOUCH EXTENSION EXECUTABLE DONE ****");
 					assertNotModified (name, null);
 
 					// Touch the main app's executable, nothing should change
-					new FileInfo (mtouch.Executable).LastWriteTimeUtc = DateTime.UtcNow;
+					new FileInfo (mtouch.RootAssembly).LastWriteTimeUtc = DateTime.UtcNow;
 					mtouch.AssertExecute (MTouchAction.BuildDev, "touch main app executable");
-					Console.WriteLine (" **** TOUCH MAIN APP EXECUTABLE DONE ****");
+					Console.WriteLine ($"{DateTime.Now} **** TOUCH MAIN APP EXECUTABLE DONE ****");
 					assertNotModified (name, null);
 
 					// Test that a rebuild (where something changed, in this case the .exe)
@@ -237,8 +239,8 @@ namespace Xamarin
 					// Rebuild the extension's .exe
 					extension.CreateTemporararyServiceExtension (extraCode: codeB);
 					mtouch.AssertExecute (MTouchAction.BuildDev, "change extension executable");
-					Console.WriteLine (" **** CHANGE EXTENSION EXECUTABLE DONE ****");
-					assertNotModified (name, new [] { "testApp", "testApp.aotdata.armv7", "testApp.dll" } );
+					Console.WriteLine ($"{DateTime.Now} **** CHANGE EXTENSION EXECUTABLE DONE ****");
+					assertNotModified (name, new [] { "testServiceExtension", "testServiceExtension.aotdata.armv7", "testServiceExtension.dll" } );
 
 					timestamp = DateTime.Now;
 					System.Threading.Thread.Sleep (1000); // make sure all new timestamps are at least a second older. HFS+ has a 1s timestamp resolution :(
@@ -246,7 +248,7 @@ namespace Xamarin
 					// Rebuild the main app's .exe
 					mtouch.CreateTemporaryApp (extraCode: codeB);
 					mtouch.AssertExecute (MTouchAction.BuildDev, "change app executable");
-					Console.WriteLine (" **** CHANGE APP EXECUTABLE DONE ****");
+					Console.WriteLine ($"{DateTime.Now} **** CHANGE APP EXECUTABLE DONE ****");
 					assertNotModified (name, new [] { "testApp", "testApp.aotdata.armv7", "testApp.exe" });
 				}
 			}

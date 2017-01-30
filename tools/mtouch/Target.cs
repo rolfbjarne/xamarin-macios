@@ -588,85 +588,98 @@ namespace Xamarin.Bundler
 				a.CopyToDirectory (LinkDirectory, false, check_case: true);
 
 			// Check if we can use a previous link result.
-			if (!Driver.Force && sharingTargets.Count == 0 /* FIXME: caching complicates things a bit :( */ ) {
-				var input = new List<string> ();
-				var output = new List<string> ();
-				var cached_output = new List<string> ();
-
+			var cached_output = new Dictionary<string, List<string>> ();
+			if (!Driver.Force) {
 				if (File.Exists (cache_path)) {
-					cached_output.AddRange (File.ReadAllLines (cache_path));
-
-					var cached_loaded = new HashSet<string> ();
-					// Only add the previously linked assemblies (and their satellites) as the input/output assemblies.
-					// Do not add assemblies which the linker process removed.
-					foreach (var a in linkAssemblies) {
-						if (!cached_output.Contains (a.FullPath))
-							continue;
-						cached_loaded.Add (a.FullPath);
-						input.Add (a.FullPath);
-						output.Add (Path.Combine (PreBuildDirectory, a.FileName));
-						if (File.Exists (a.FullPath + ".mdb")) {
-							// Debug files can change without the assemblies themselves changing
-							// This should also invalidate the cached linker results, since the non-linked mdbs can't be copied.
-							input.Add (a.FullPath + ".mdb");
-							output.Add (Path.Combine (PreBuildDirectory, a.FileName) + ".mdb");
-						}
-						
-						if (a.Satellites != null) {
-							foreach (var s in a.Satellites) {
-								input.Add (s);
-								output.Add (Path.Combine (PreBuildDirectory, Path.GetFileName (Path.GetDirectoryName (s)), Path.GetFileName (s)));
-								// No need to copy satellite mdb files, satellites are resource-only assemblies.
-							}
-						}
-					}
-
-					// The linker might have added assemblies that weren't specified/reachable
-					// from the command line arguments (such as I18N assemblies). Those are not
-					// in the Assemblies list at this point (since we haven't run the linker yet)
-					// so make sure we take those into account as well.
-					var not_loaded = cached_output.Except (cached_loaded);
-					foreach (var path in not_loaded) {
-						input.Add (path);
-						output.Add (Path.Combine (PreBuildDirectory, Path.GetFileName (path)));
-					}
-
-					// Include mtouch here too?
-					// input.Add (Path.Combine (MTouch.MonoTouchDirectory, "usr", "bin", "mtouch"));
-
-					if (Application.IsUptodate (input, output)) {
-						cached_link = true;
-						foreach (var a in Assemblies.ToList ()) {
-							if (!cached_output.Contains (a.FullPath)) {
-								Assemblies.Remove (a);
+					using (var reader = new StreamReader (cache_path)) {
+						string line;
+						while ((line = reader.ReadLine ()) != null) {
+							var colon = line.IndexOf (':');
+							if (colon == -1)
 								continue;
+							var appex = line.Substring (0, colon);
+							var asm = line.Substring (colon + 1);
+							List<string> asms;
+							if (!cached_output.TryGetValue (appex, out asms))
+								cached_output [appex] = asms = new List<string> ();
+							asms.Add (asm);
+						}
+					}
+
+					var cache_valid = true;
+					foreach (var target in allTargets) {
+						List<string> cached_files;
+						if (!cached_output.TryGetValue (target.App.AppDirectory, out cached_files)) {
+							cache_valid = false;
+							Driver.Log (2, $"The cached assemblies are not valid because there are no cached assemblies for {target.App.Name}.");
+							break;
+						}
+
+						var outputs = new List<string> ();
+						var inputs = new List<string> (cached_files);
+						foreach (var input in inputs.ToArray ()) {
+							var output = Path.Combine (PreBuildDirectory, Path.GetFileName (input));
+							outputs.Add (output);
+							if (File.Exists (input + ".mdb")) {
+								// Debug files can change without the assemblies themselves changing
+								// This should also invalidate the cached linker results, since the non-linked mdbs can't be copied.
+								inputs.Add (input + ".mdb");
+								outputs.Add (output + ".mdb");
 							}
-							// Load the cached assembly
-							a.LoadAssembly (Path.Combine (PreBuildDirectory, a.FileName));
-							Driver.Log (3, "Target '{0}' is up-to-date.", a.FullPath);
 						}
 
-						foreach (var path in not_loaded) {
-							var a = new Assembly (this, path);
-							a.LoadAssembly (Path.Combine (PreBuildDirectory, a.FileName));
-							Assemblies.Add (a);
+						if (!cache_valid)
+							break;
+
+						if (!Application.IsUptodate (inputs, outputs)) {
+							Driver.Log (2, $"The cached assemblies are not valid because some of the assemblies in {target.App.Name} are out-of-date.");
+							cache_valid = false;
+							break;
 						}
+					}
 
-						Driver.Watch ("Cached assemblies reloaded", 1);
-						Driver.Log ("Cached assemblies reloaded.");
+					if (cache_valid) {
+						//foreach (var target in allTargets) {
+						//	Driver.Log (2, $"Reloading cached assemblies for {target.App.Name}.");
+						//	var files = cached_output [target.App.AppDirectory];
+						//	var assemblies = new List<Assembly> ();
+						//	foreach (var file in files) {
+						//		Assembly asm;
+						//		if (!target.Assemblies.TryGetValue (Assembly.GetIdentity (file), out asm)) {
+						//			// This is a file the linker loaded in the first run.
+						//			asm = new Assembly (this, file);
+						//		}
+						//		// Load the cached assembly
+						//		asm.LoadAssembly (Path.Combine (PreBuildDirectory, asm.FileName));
+						//		assemblies.Add (asm);
+						//		Driver.Log (3, "Target '{0}' is up-to-date.", asm.FullPath);
+						//	}
+						//	target.Assemblies.Update (target, assemblies.Select ((v) => v.AssemblyDefinition));
+						//}
 
-						return;
+						// FIXME: this doesn't update related files (.config, satellite assemblies) if they were modified.
+						//allTargets.ForEach ((v) => v.linked = true);
+						this.cached_link = cache_valid;
 					}
 				}
 			}
 
-			// Load the assemblies into memory.
-			foreach (var a in linkAssemblies)
-				a.LoadAssembly (a.FullPath);
-
-			// Link!
 			List<AssemblyDefinition> output_assemblies;
-			LinkAssemblies (out output_assemblies, PreBuildDirectory);
+			if (cached_link) {
+				Driver.Log (2, $"Reloading cached assemblies.");
+				output_assemblies = new List<AssemblyDefinition> ();
+				foreach (var file in cached_output.Values.SelectMany ((v) => v).Distinct ())
+					output_assemblies.Add (Resolver.Load (Path.Combine (PreBuildDirectory, Path.GetFileName (file))));
+				Driver.Watch ("Cached assemblies reloaded", 1);
+				Driver.Log ("Cached assemblies reloaded.");
+			} else {
+				// Load the assemblies into memory.
+				foreach (var a in linkAssemblies)
+					a.LoadAssembly (a.FullPath);
+
+				// Link!
+				LinkAssemblies (out output_assemblies, PreBuildDirectory);
+			}
 
 			// Update (add/remove) list of assemblies in each app, since the linker may have both added and removed assemblies.
 			// The logic for updating assemblies when doing code-sharing is not equivalent to when we're not code sharing
@@ -709,17 +722,20 @@ namespace Xamarin.Bundler
 				}
 			}
 
+			// Write the input files to the cache
+			using (var writer = new StreamWriter (cache_path, false)) {
+				foreach (var target in allTargets) {
+					foreach (var asm in target.Assemblies) {
+						writer.WriteLine ($"{target.App.AppDirectory}:{asm.FullPath}");
+					}
+				}
+			}
+
 			// Now the assemblies are in PreBuildDirectory, and they need to be in the BuildDirectory for the AOT compiler.
 			foreach (var t in allTargets) {
 				foreach (var a in t.Assemblies) {
 					// All these assemblies are in the main app's PreBuildDirectory.
 					a.FullPath = Path.Combine (PreBuildDirectory, a.FileName);
-
-					// Now copy to the build directory
-					var target = Path.Combine (BuildDirectory, a.FileName);
-					if (!a.CopyAssembly (a.FullPath, target))
-						Driver.Log (3, "Target '{0}' is up-to-date.", target);
-					a.FullPath = target;
 
 					// The linker can copy files (and not update timestamps), and then we run into this sequence:
 					// * We run the linker, nothing changes, so the linker copies 
@@ -732,12 +748,17 @@ namespace Xamarin.Bundler
 					//   (the .exe) has a newer timestamp than some of the assemblies in the PreBuild directory.
 					// So here we manually touch all the assemblies we have, to make sure their timestamps
 					// change (this is us saying 'we know these files are up-to-date at this point in time').
-					Driver.Touch (a.GetRelatedFiles ());
+					if (!cached_link)
+						Driver.Touch (a.GetRelatedFiles ());
+
+					// Now copy to the build directory
+					var target = Path.Combine (BuildDirectory, a.FileName);
+					if (!a.CopyAssembly (a.FullPath, target))
+						Driver.Log (3, "Target '{0}' is up-to-date.", target);
+					a.FullPath = target;
+
 				}
 			}
-
-			// Write to the cache
-			File.WriteAllText (cache_path, string.Join ("\n", output_assemblies.Select ((v) => v.MainModule.FileName)));
 
 			// Set the 'linked' flag for the targets sharing code, so that this method can be called
 			// again, and it won't do anything for the appex's sharing code with the main app (but 

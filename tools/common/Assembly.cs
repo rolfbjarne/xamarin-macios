@@ -499,6 +499,8 @@ namespace Xamarin.Bundler {
 					var asm = new Assembly (target, assembly);
 					Add (asm);
 					Driver.Log (1, "The linker added the assembly '{0}' to '{1}'.", asm.Identity, target.App.Name);
+				} else {
+					this [identity].AssemblyDefinition = assembly;
 				}
 			}
 

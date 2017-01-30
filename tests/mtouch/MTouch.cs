@@ -240,7 +240,7 @@ namespace Xamarin
 					extension.CreateTemporararyServiceExtension (extraCode: codeB);
 					mtouch.AssertExecute (MTouchAction.BuildDev, "change extension executable");
 					Console.WriteLine ($"{DateTime.Now} **** CHANGE EXTENSION EXECUTABLE DONE ****");
-					assertNotModified (name, new [] { "testServiceExtension", "testServiceExtension.aotdata.armv7", "testServiceExtension.dll" } );
+					assertNotModified (name, new [] { "testServiceExtension", "testServiceExtension.aotdata.armv7", "testServiceExtension.aotdata.arm64", "testServiceExtension.dll" } );
 
 					timestamp = DateTime.Now;
 					System.Threading.Thread.Sleep (1000); // make sure all new timestamps are at least a second older. HFS+ has a 1s timestamp resolution :(
@@ -249,7 +249,7 @@ namespace Xamarin
 					mtouch.CreateTemporaryApp (extraCode: codeB);
 					mtouch.AssertExecute (MTouchAction.BuildDev, "change app executable");
 					Console.WriteLine ($"{DateTime.Now} **** CHANGE APP EXECUTABLE DONE ****");
-					assertNotModified (name, new [] { "testApp", "testApp.aotdata.armv7", "testApp.exe" });
+					assertNotModified (name, new [] { "testApp", "testApp.aotdata.armv7", "testApp.aotdata.arm64", "testApp.exe" });
 				}
 			}
 		}

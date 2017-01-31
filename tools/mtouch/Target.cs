@@ -243,7 +243,7 @@ namespace Xamarin.Bundler
 				if (Path.GetFileNameWithoutExtension (ad.MainModule.FileName) == Driver.GetProductAssembly (App))
 					ProductAssembly = ad;
 
-				if (ad != ProductAssembly && GetRealPath (ad.MainModule.FileName) != GetRealPath (reference))
+				if (ad != ProductAssembly && GetRealPath (ad.MainModule.FileName) != GetRealPath (reference) && !ad.MainModule.FileName.EndsWith (".resources.dll", StringComparison.Ordinal))
 					ErrorHelper.Show (ErrorHelper.CreateWarning (109, "The assembly '{0}' was loaded from a different path than the provided path (provided path: {1}, actual path: {2}).", Path.GetFileName (reference), reference, ad.MainModule.FileName));
 			}
 

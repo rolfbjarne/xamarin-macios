@@ -82,6 +82,7 @@ namespace Xamarin
 		public bool? PackageMdb;
 		public bool? MSym;
 		public bool? DSym;
+		public bool? NoStrip;
 		public string Mono;
 		public string GccFlags;
 		public Dictionary<string, string> SetEnv = new Dictionary<string, string> ();
@@ -267,6 +268,9 @@ namespace Xamarin
 
 			if (PackageMdb.HasValue)
 				sb.Append (" --package-mdb:").Append (PackageMdb.Value ? "true" : "false");
+
+			if (NoStrip.HasValue && NoStrip.Value)
+				sb.Append (" --nostrip");
 
 			if (MSym.HasValue)
 				sb.Append (" --msym:").Append (MSym.Value ? "true" : "false");

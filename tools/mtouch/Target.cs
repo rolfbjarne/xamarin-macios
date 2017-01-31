@@ -517,19 +517,10 @@ namespace Xamarin.Bundler
 			resolver.AddSearchDirectory (Resolver.RootDirectory);
 			resolver.AddSearchDirectory (Resolver.FrameworkDirectory);
 
-			foreach (var appex in sharedCodeTargets) {
-				foreach (System.Collections.DictionaryEntry kvp in appex.Resolver.ToResolverCache ()) {
-					if (!cache.Contains (kvp.Key))
-						cache.Add (kvp.Key, kvp.Value);
-				}
-				resolver.AddSearchDirectory (appex.Resolver.RootDirectory);
-				resolver.AddSearchDirectory (appex.Resolver.FrameworkDirectory);
-			}
-
 			var main_assemblies = new List<AssemblyDefinition> ();
 			main_assemblies.Add (Resolver.Load (App.RootAssembly));
 			foreach (var appex in sharedCodeTargets)
-				main_assemblies.Add (appex.Resolver.Load (appex.App.RootAssembly));
+				main_assemblies.Add (Resolver.Load (appex.App.RootAssembly));
 			
 			if (Driver.Verbosity > 0)
 				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", string.Join (", ", main_assemblies.Select ((v) => v.MainModule.FileName)), output_dir, App.LinkMode);
@@ -576,29 +567,26 @@ namespace Xamarin.Bundler
 			allTargets.Add (this); // We want ourselves first in this list.
 			allTargets.AddRange (sharingTargets);
 
-			// 'linkAssemblies' is all the assemblies included when linking.
-			var linkAssemblies = new AssemblyCollection ();
-			linkAssemblies.AddRange (Assemblies);
-
 			// Include any assemblies from appex's we're sharing code with.
 			foreach (var target in sharingTargets) {
 				var targetAssemblies = target.Assemblies.ToList (); // We need to clone the list of assemblies, since we'll be modifying the original
 				foreach (var asm in targetAssemblies) {
 					Assembly main_asm;
-					if (Assemblies.TryGetValue (asm.Identity, out main_asm)) {
-						// The appex has an assembly that's also present in the main app.
-						// In this case we replace the entire Assembly instance in the appex
-						target.Assemblies [main_asm.Identity] = main_asm;
-						main_asm.IsCodeShared = true;
+					if (!Assemblies.TryGetValue (asm.Identity, out main_asm)) {
+						// The appex has an assembly that's not present in the main app.
+						// Re-load it into the main app.
+						main_asm = new Assembly (this, asm.FullPath);
+						main_asm.LoadAssembly (main_asm.FullPath);
+						Assemblies.Add (main_asm);
+						Driver.Log (1, "Added '{0}' from {1} to the set of assemblies to be linked.", main_asm.Identity, Path.GetFileNameWithoutExtension (target.App.AppDirectory));
 					}
-					if (!linkAssemblies.ContainsKey (asm.Identity)) {
-						Driver.Log (1, "Added '{0}' from {1} to the set of assemblies to be linked.", asm.Identity, Path.GetFileNameWithoutExtension (target.App.AppDirectory));
-						linkAssemblies.Add (asm);
-					}
+					// Use the same AOT information between both Assembly instances.
+					target.Assemblies [main_asm.Identity].AotInfos = main_asm.AotInfos;
+					main_asm.IsCodeShared = true;
 				}
 			}
 
-			foreach (var a in linkAssemblies)
+			foreach (var a in Assemblies)
 				a.CopyToDirectory (LinkDirectory, false, check_case: true);
 
 			// Check if we can use a previous link result.
@@ -653,24 +641,6 @@ namespace Xamarin.Bundler
 					}
 
 					if (cache_valid) {
-						//foreach (var target in allTargets) {
-						//	Driver.Log (2, $"Reloading cached assemblies for {target.App.Name}.");
-						//	var files = cached_output [target.App.AppDirectory];
-						//	var assemblies = new List<Assembly> ();
-						//	foreach (var file in files) {
-						//		Assembly asm;
-						//		if (!target.Assemblies.TryGetValue (Assembly.GetIdentity (file), out asm)) {
-						//			// This is a file the linker loaded in the first run.
-						//			asm = new Assembly (this, file);
-						//		}
-						//		// Load the cached assembly
-						//		asm.LoadAssembly (Path.Combine (PreBuildDirectory, asm.FileName));
-						//		assemblies.Add (asm);
-						//		Driver.Log (3, "Target '{0}' is up-to-date.", asm.FullPath);
-						//	}
-						//	target.Assemblies.Update (target, assemblies.Select ((v) => v.AssemblyDefinition));
-						//}
-
 						// FIXME: this doesn't update related files (.config, satellite assemblies) if they were modified.
 						//allTargets.ForEach ((v) => v.linked = true);
 						this.cached_link = cache_valid;
@@ -688,9 +658,9 @@ namespace Xamarin.Bundler
 				Driver.Log ("Cached assemblies reloaded.");
 			} else {
 				// Load the assemblies into memory.
-				foreach (var a in linkAssemblies)
+				foreach (var a in Assemblies)
 					a.LoadAssembly (a.FullPath);
-
+				
 				// Link!
 				LinkAssemblies (out output_assemblies, PreBuildDirectory, sharingTargets);
 			}

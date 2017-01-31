@@ -499,20 +499,27 @@ namespace Xamarin.Bundler
 			return new Assembly (this, assembly);
 		}
 
-		public void LinkAssemblies (out List<AssemblyDefinition> assemblies, string output_dir)
+		public void LinkAssemblies (out List<AssemblyDefinition> assemblies, string output_dir, IEnumerable<Target> sharedCodeTargets)
 		{
 			var cache = Resolver.ToResolverCache ();
-			var resolver = cache != null
-				? new AssemblyResolver (cache)
-				: new AssemblyResolver ();
+			var resolver = new AssemblyResolver (cache);
 
 			resolver.AddSearchDirectory (Resolver.RootDirectory);
 			resolver.AddSearchDirectory (Resolver.FrameworkDirectory);
 
+			foreach (var appex in sharedCodeTargets) {
+				foreach (System.Collections.DictionaryEntry kvp in appex.Resolver.ToResolverCache ()) {
+					if (!cache.Contains (kvp.Key))
+						cache.Add (kvp.Key, kvp.Value);
+				}
+				resolver.AddSearchDirectory (appex.Resolver.RootDirectory);
+				resolver.AddSearchDirectory (appex.Resolver.FrameworkDirectory);
+			}
+
 			var main_assemblies = new List<AssemblyDefinition> ();
 			main_assemblies.Add (Resolver.Load (App.RootAssembly));
-			foreach (var appex in App.SharedCodeApps)
-				main_assemblies.Add (Resolver.Load (appex.RootAssembly));
+			foreach (var appex in sharedCodeTargets)
+				main_assemblies.Add (appex.Resolver.Load (appex.App.RootAssembly));
 			
 			if (Driver.Verbosity > 0)
 				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", string.Join (", ", main_assemblies.Select ((v) => v.MainModule.FileName)), output_dir, App.LinkMode);
@@ -675,7 +682,7 @@ namespace Xamarin.Bundler
 					a.LoadAssembly (a.FullPath);
 
 				// Link!
-				LinkAssemblies (out output_assemblies, PreBuildDirectory);
+				LinkAssemblies (out output_assemblies, PreBuildDirectory, sharingTargets);
 			}
 
 			// Update (add/remove) list of assemblies in each app, since the linker may have both added and removed assemblies.

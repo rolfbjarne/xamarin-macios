@@ -119,6 +119,7 @@ namespace Xamarin.Bundler {
 
 		public bool NoFastSim;
 		public bool NoDevCodeShare;
+		public bool IsCodeShared { get; private set; }
 
 		// The list of assemblies that we do generate debugging info for.
 		public bool DebugAll;
@@ -285,9 +286,9 @@ namespace Xamarin.Bundler {
 			
 			if (assembly_build_targets.Count == 0) {
 				assembly_build_targets.Add ("@all", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.StaticObject, ""));
-				if (AppExtensions.Count > 0 || (IsExtension && !IsWatchExtension)) {
-					// If we're an app extension (except watch extensions), or an app with extensions,
-					// we default to creating a Xamarin.Sdk.framework for SDK assemblies, and static objects for the rest of the assemblies.
+				if (IsCodeShared) {
+					// If we're sharing code, then we can default to creating a Xamarin.Sdk.framework for SDK assemblies,
+					// and static objects for the rest of the assemblies.
 					assembly_build_targets.Add ("@sdk", new Tuple<AssemblyBuildTarget, string> (AssemblyBuildTarget.Framework, "Xamarin.Sdk"));
 				}
 			}
@@ -1004,6 +1005,8 @@ namespace Xamarin.Bundler {
 					continue;
 
 				candidates.Add (appex);
+				appex.IsCodeShared = true;
+				IsCodeShared = true;
 
 				Driver.Log (2, "The main app and the extension '{0}' will share code.", appex.Name);
 			}

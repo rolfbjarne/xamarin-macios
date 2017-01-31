@@ -275,6 +275,16 @@ namespace Xamarin.Bundler {
 			assembly_build_targets [assembly_name] = new Tuple<AssemblyBuildTarget, string> (build_target, name);
 		}
 
+		public bool ContainsGroupedSdkAssemblyBuildTargets {
+			get {
+				return true;
+				Tuple<AssemblyBuildTarget, string> value;
+				if (!assembly_build_targets.TryGetValue ("@sdk", out value))
+					return false;
+				return !string.IsNullOrEmpty (value.Item2);
+			}
+		}
+
 		void SelectAssemblyBuildTargets ()
 		{
 			Tuple<AssemblyBuildTarget, string> all = null;

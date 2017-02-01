@@ -1363,7 +1363,7 @@ namespace Xamarin.Bundler {
 
 		void WriteNotice ()
 		{
-			if (!IsDeviceBuild)
+			if (!IsDeviceBuild || IsExtension)
 				return;
 
 			if (Directory.Exists (Path.Combine (AppDirectory, "NOTICE")))

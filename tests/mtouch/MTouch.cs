@@ -550,7 +550,7 @@ namespace Xamarin
 					app.CreateTemporaryApp ();
 					app.CreateTemporaryCacheDirectory ();
 					app.AssertExecuteFailure (MTouchAction.BuildSim, "app build");
-					app.AssertError (23, $"The root assembly {extension.Executable} conflicts with another assembly ({dll}).");
+					app.AssertError (23, $"The root assembly {extension.RootAssembly} conflicts with another assembly ({dll}).");
 				}
 			}
 		}

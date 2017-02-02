@@ -158,7 +158,6 @@ namespace Xamarin
 			var codeB = "[Foundation.Preserve] public class TestApp2 { static void X () { System.Console.WriteLine (typeof (ObjCRuntime.Runtime).ToString ()); } }";
 
 			using (var extension = new MTouchTool ()) {
-				extension.Extension = true;
 				extension.CreateTemporaryServiceExtension (extraCode: codeA);
 				extension.CreateTemporaryCacheDirectory ();
 				extension.Abi = abi;
@@ -600,7 +599,6 @@ namespace Xamarin
 				var dll = CompileTestAppCode ("library", tmp, "public class X {}", appName: "testApp");
 
 				extension.Linker = MTouchLinker.DontLink; // fastest.
-				extension.Extension = true;
 				extension.CreateTemporaryServiceExtension (extraArg: $"-r:{Quote (dll)}", extraCode: "class Z { static void Y () { System.Console.WriteLine (typeof (X)); } }", appName: "testApp");
 				extension.CreateTemporaryCacheDirectory ();
 				extension.References = new [] { dll };
@@ -875,7 +873,6 @@ namespace Xamarin
 			using (var extension = new MTouchTool ()) {
 				extension.Abi = "armv7,arm64";
 				extension.Linker = MTouchLinker.LinkAll; // fastest.
-				extension.Extension = true;
 				extension.CreateTemporaryServiceExtension ();
 				extension.AssertExecute (MTouchAction.BuildDev, "extension build");
 
@@ -2189,7 +2186,6 @@ class Test {
 			using (var tool = new MTouchTool ()) {
 				tool.Profile = Profile.watchOS;
 				tool.CreateTemporaryCacheDirectory ();
-				tool.Extension = true;
 				tool.CreateTemporaryWatchKitExtension ();
 
 				tool.FastDev = true;
@@ -2243,8 +2239,6 @@ class C {
 			using (var exttool = new MTouchTool ()) {
 				exttool.Profile = Profile.watchOS;
 				exttool.CreateTemporaryCacheDirectory ();
-
-				exttool.Extension = true;
 				exttool.CreateTemporaryWatchKitExtension ();
 				exttool.Frameworks.Add (Path.Combine (Configuration.SourceRoot, "tests/test-libraries/.libs/watchos/XTest.framework"));
 				exttool.AssertExecute (MTouchAction.BuildSim, "build extension");
@@ -2272,7 +2266,6 @@ class C {
 				exttool.CreateTemporaryCacheDirectory ();
 				exttool.Linker = MTouchLinker.DontLink; // faster
 
-				exttool.Extension = true;
 				exttool.CreateTemporaryServiceExtension ();
 				exttool.Frameworks.Add (Path.Combine (Configuration.SourceRoot, "tests/test-libraries/.libs/ios/XTest.framework"));
 				exttool.AssertExecute (MTouchAction.BuildSim, "build extension");
@@ -2301,7 +2294,6 @@ class C {
 				exttool.CreateTemporaryCacheDirectory ();
 				exttool.Linker = MTouchLinker.DontLink; // faster
 
-				exttool.Extension = true;
 				exttool.References = new string []
 				{
 					GetFrameworksBindingLibrary (exttool.Profile),
@@ -2393,7 +2385,6 @@ public partial class NotificationService : UNNotificationServiceExtension
 			using (var mtouch = new MTouchTool ()) {
 				mtouch.Profile = Profile.watchOS;
 				mtouch.CreateTemporaryWatchKitExtension ();
-				mtouch.Extension = true;
 
 				mtouch.HttpMessageHandler = "HttpClientHandler";
 				mtouch.AssertExecute (MTouchAction.BuildSim);

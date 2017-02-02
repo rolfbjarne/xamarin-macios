@@ -105,7 +105,6 @@ namespace Xamarin
 			using (var tool = new MTouchTool ()) {
 				tool.Profile = Profile.iOS;
 				tool.I18N = I18N.West;
-				tool.Verbosity = 5;
 				tool.Cache = Path.Combine (tool.CreateTemporaryDirectory (), "mtouch-test-cache");
 				tool.CreateTemporaryApp ();
 
@@ -131,7 +130,6 @@ namespace Xamarin
 				mtouch.NoFastSim = true;
 				mtouch.Linker = MTouchLinker.DontLink;
 				mtouch.CreateTemporaryApp ();
-				mtouch.Verbosity = 4;
 				mtouch.CreateTemporaryCacheDirectory ();
 				mtouch.AssertExecute (MTouchAction.BuildSim, "build 1");
 				mtouch.AssertOutputPattern ("Linking .*/testApp.exe into .*/PreBuild using mode 'None'");
@@ -1359,7 +1357,6 @@ namespace Xamarin
 		public void FastSim (Profile profile)
 		{
 			using (var tool = new MTouchTool ()) {
-				tool.Verbosity = 1;
 				tool.Profile = profile;
 				tool.CreateTemporaryApp ();
 				tool.Linker = MTouchLinker.DontLink;
@@ -2141,7 +2138,6 @@ class Test {
 		{
 			using (var tool = new MTouchTool ()) {
 				tool.Profile = profile;
-				tool.Verbosity = 5;
 				tool.Cache = Path.Combine (tool.CreateTemporaryDirectory (), "mtouch-test-cache");
 				tool.CreateTemporaryApp (code: "using UIKit; class C { static void Main (string[] args) { UIApplication.Main (args); } }");
 				tool.FastDev = true;
@@ -2157,7 +2153,6 @@ class Test {
 			using (var tool = new MTouchTool ()) {
 				tool.Profile = Profile.watchOS;
 				tool.CreateTemporaryCacheDirectory ();
-				tool.Verbosity = 5;
 				tool.Extension = true;
 				tool.CreateTemporaryWatchKitExtension ();
 
@@ -2212,7 +2207,6 @@ class C {
 			using (var exttool = new MTouchTool ()) {
 				exttool.Profile = Profile.watchOS;
 				exttool.CreateTemporaryCacheDirectory ();
-				exttool.Verbosity = 5;
 
 				exttool.Extension = true;
 				exttool.CreateTemporaryWatchKitExtension ();
@@ -2222,7 +2216,6 @@ class C {
 				using (var apptool = new MTouchTool ()) {
 					apptool.Profile = Profile.iOS;
 					apptool.CreateTemporaryCacheDirectory ();
-					apptool.Verbosity = exttool.Verbosity;
 					apptool.Linker = MTouchLinker.DontLink; // faster
 					apptool.CreateTemporaryApp ();
 					apptool.AppExtensions.Add (exttool);
@@ -2252,7 +2245,6 @@ class C {
 				using (var apptool = new MTouchTool ()) {
 					apptool.Profile = Profile.iOS;
 					apptool.CreateTemporaryCacheDirectory ();
-					apptool.Verbosity = exttool.Verbosity;
 					apptool.CreateTemporaryApp ();
 					apptool.AppExtensions.Add (exttool);
 					apptool.Linker = MTouchLinker.DontLink; // faster
@@ -2293,7 +2285,6 @@ public partial class NotificationService : UNNotificationServiceExtension
 				using (var apptool = new MTouchTool ()) {
 					apptool.Profile = Profile.iOS;
 					apptool.CreateTemporaryCacheDirectory ();
-					apptool.Verbosity = exttool.Verbosity;
 					apptool.CreateTemporaryApp ();
 					apptool.AppExtensions.Add (exttool);
 					apptool.AssertExecute (MTouchAction.BuildSim, "build app");

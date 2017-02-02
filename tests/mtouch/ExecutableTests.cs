@@ -333,29 +333,5 @@ namespace Xamarin
 
 			project.RunDevice ();
 		}
-		
-		[Test]
-		public void FatMonoFrameworkWithFatExtensionAndSimpleApp ()
-		{
-			var project = new ProjectFile
-			{
-				Architectures = Architecture.ARM64,
-				ProjectType = ProjectType.iOSApp,
-				ProjectReferences = new ProjectFile []
-				{
-					new ProjectFile
-					{
-						Architectures = Architecture.ARM64 | Architecture.ARMv7,
-						ProjectType = ProjectType.TodayExtension,
-					},
-				}
-			};
-
-			project.Generate ();
-			project.BuildDevice ();
-			project.AssertExecutableArchitectures ();
-
-			project.RunDevice ();
-		}
 	}
 }

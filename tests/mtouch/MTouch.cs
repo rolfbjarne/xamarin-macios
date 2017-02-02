@@ -161,7 +161,7 @@ namespace Xamarin
 
 			using (var extension = new MTouchTool ()) {
 				extension.Extension = true;
-				extension.CreateTemporararyServiceExtension (extraCode: codeA);
+				extension.CreateTemporaryServiceExtension (extraCode: codeA);
 				extension.CreateTemporaryCacheDirectory ();
 				extension.Abi = abi;
 				extension.Debug = debug;
@@ -256,7 +256,7 @@ namespace Xamarin
 					// changes (there should be no changes in Xamarin.iOS.dll nor mscorlib.dll, even after linking)
 
 					// Rebuild the extension's .exe
-					extension.CreateTemporararyServiceExtension (extraCode: codeB);
+					extension.CreateTemporaryServiceExtension (extraCode: codeB);
 					mtouch.AssertExecute (MTouchAction.BuildDev, "change extension executable");
 					Console.WriteLine ($"{DateTime.Now} **** CHANGE EXTENSION EXECUTABLE DONE ****");
 					assertNotModified (name, new [] { "testServiceExtension", "testServiceExtension.aotdata.armv7", "testServiceExtension.aotdata.arm64", "testServiceExtension.dll" } );
@@ -604,7 +604,7 @@ namespace Xamarin
 
 				extension.Linker = MTouchLinker.DontLink; // fastest.
 				extension.Extension = true;
-				extension.CreateTemporararyServiceExtension (extraArg: $"-r:{Quote (dll)}", extraCode: "class Z { static void Y () { System.Console.WriteLine (typeof (X)); } }", appName: "testApp");
+				extension.CreateTemporaryServiceExtension (extraArg: $"-r:{Quote (dll)}", extraCode: "class Z { static void Y () { System.Console.WriteLine (typeof (X)); } }", appName: "testApp");
 				extension.CreateTemporaryCacheDirectory ();
 				extension.References = new [] { dll };
 				extension.AssertExecute (MTouchAction.BuildSim, "extension build");
@@ -879,7 +879,7 @@ namespace Xamarin
 				extension.Abi = "armv7,arm64";
 				extension.Linker = MTouchLinker.LinkAll; // fastest.
 				extension.Extension = true;
-				extension.CreateTemporararyServiceExtension ();
+				extension.CreateTemporaryServiceExtension ();
 				extension.AssertExecute (MTouchAction.BuildDev, "extension build");
 
 				using (var app = new MTouchTool ()) {
@@ -2281,7 +2281,7 @@ class C {
 				exttool.Linker = MTouchLinker.DontLink; // faster
 
 				exttool.Extension = true;
-				exttool.CreateTemporararyServiceExtension ();
+				exttool.CreateTemporaryServiceExtension ();
 				exttool.Frameworks.Add (Path.Combine (Configuration.SourceRoot, "tests/test-libraries/.libs/ios/XTest.framework"));
 				exttool.AssertExecute (MTouchAction.BuildSim, "build extension");
 
@@ -2315,7 +2315,7 @@ class C {
 				{
 					GetFrameworksBindingLibrary (exttool.Profile),
 				};
-				exttool.CreateTemporararyServiceExtension (code: @"using UserNotifications;
+				exttool.CreateTemporaryServiceExtension (code: @"using UserNotifications;
 [Foundation.Register (""NotificationService"")]
 public partial class NotificationService : UNNotificationServiceExtension
 {

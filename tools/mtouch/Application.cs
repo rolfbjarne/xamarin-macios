@@ -280,7 +280,6 @@ namespace Xamarin.Bundler {
 
 		public bool ContainsGroupedSdkAssemblyBuildTargets {
 			get {
-				return true;
 				Tuple<AssemblyBuildTarget, string> value;
 				if (!assembly_build_targets.TryGetValue ("@sdk", out value))
 					return false;

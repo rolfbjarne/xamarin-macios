@@ -1087,20 +1087,6 @@ namespace Xamarin.Bundler {
 			if (Profile.IsSdkAssembly (root_wo_ext) || Profile.IsProductAssembly (root_wo_ext))
 				throw new MonoTouchException (3, true, "Application name '{0}.exe' conflicts with an SDK or product assembly (.dll) name.", root_wo_ext);
 
-			if (!IsDualBuild && !IsExtension) {
-				// There might be other/more architectures in extensions than in the main app.
-				// If we're building frameworks, we need to build for all architectures, including any in extensions.
-				if (HasFrameworks) {
-					foreach (var abi in AllArchitectures) {
-						if (abis.Contains (abi))
-							continue;
-						
-						abis.Add (abi);
-						ErrorHelper.Warning (104, "There is at least one extension that builds for '{0}'. The main app must also build for this architecture if assemblies are compiled into frameworks, so it has automatically been enabled.", abi.AsString ());
-					}
-				}
-			}
-
 			if (IsDualBuild) {
 				var target32 = new Target (this);
 				var target64 = new Target (this);

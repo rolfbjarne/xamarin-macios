@@ -170,9 +170,9 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public static bool IsNSObject (this TypeReference type)
+		public static bool IsNSObject (this TypeReference type, DerivedLinkContext link_context)
 		{
-			return type.Resolve ().IsNSObject ();
+			return type.Resolve ().IsNSObject (link_context);
 		}
 
 		// warning: *Is* means does 'type' inherits from MonoTouch.Foundation.NSObject ?

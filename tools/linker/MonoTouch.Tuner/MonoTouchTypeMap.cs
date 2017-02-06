@@ -58,7 +58,7 @@ namespace MonoTouch.Tuner {
 		// and ensure later steps re-use the same, pre-computed, result
 		bool IsNSObject (TypeDefinition type)
 		{
-			if (!type.IsNSObject ())
+			if (!type.IsNSObject (LinkContext))
 				return false;
 			LinkContext.CachedIsNSObject.Add (type);
 			return true;

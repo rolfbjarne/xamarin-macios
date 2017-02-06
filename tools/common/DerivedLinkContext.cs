@@ -13,6 +13,38 @@ namespace Xamarin.Tuner
 		Dictionary<string, List<MemberReference>> required_symbols;
 		Dictionary<string, TypeDefinition> objectivec_classes;
 
+		// SDK candidates - they will be preserved only if the application (not the SDK) uses it
+		List<ICustomAttributeProvider> srs_data_contract = new List<ICustomAttributeProvider> ();
+		List<ICustomAttributeProvider> xml_serialization = new List<ICustomAttributeProvider> ();
+
+		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
+		HashSet<TypeDefinition> needs_isdirectbinding_check = new HashSet<TypeDefinition> ();
+		HashSet<MethodDefinition> generated_code = new HashSet<MethodDefinition> ();
+
+		public HashSet<TypeDefinition> CachedIsNSObject {
+			get { return cached_isnsobject; }
+		}
+
+		public HashSet<TypeDefinition> NeedsIsDirectBindingCheck {
+			get { return needs_isdirectbinding_check; }
+		}
+
+		public HashSet<MethodDefinition> GeneratedCode {
+			get { return generated_code; }
+		}
+
+		public IList<ICustomAttributeProvider> DataContract {
+			get {
+				return srs_data_contract;
+			}
+		}
+
+		public IList<ICustomAttributeProvider> XmlSerialization {
+			get {
+				return xml_serialization;
+			}
+		}
+
 		public List<MemberReference> GetRequiredSymbolList (string symbol)
 		{
 			List<MemberReference> rv;

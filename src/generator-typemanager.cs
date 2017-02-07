@@ -193,6 +193,11 @@ public static class TypeManager {
 	static Assembly platform_assembly;
 	static Assembly binding_assembly;
 
+	public static Assembly PlatformAssembly {
+		get { return platform_assembly; }
+		set { platform_assembly = value; }
+	}
+
 	static Type Lookup (Assembly assembly, string @namespace, string @typename, bool inexistentOK = false)
 	{
 		string fullname;

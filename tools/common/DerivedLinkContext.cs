@@ -17,20 +17,23 @@ namespace Xamarin.Tuner
 		List<ICustomAttributeProvider> srs_data_contract = new List<ICustomAttributeProvider> ();
 		List<ICustomAttributeProvider> xml_serialization = new List<ICustomAttributeProvider> ();
 
-		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
-		HashSet<TypeDefinition> needs_isdirectbinding_check = new HashSet<TypeDefinition> ();
-		HashSet<MethodDefinition> generated_code = new HashSet<MethodDefinition> ();
+		HashSet<TypeDefinition> cached_isnsobject;
+		HashSet<TypeDefinition> needs_isdirectbinding_check;
+		HashSet<MethodDefinition> generated_code;
 
 		public HashSet<TypeDefinition> CachedIsNSObject {
 			get { return cached_isnsobject; }
+			set { cached_isnsobject = value; }
 		}
 
 		public HashSet<TypeDefinition> NeedsIsDirectBindingCheck {
 			get { return needs_isdirectbinding_check; }
+			set { needs_isdirectbinding_check = value; }
 		}
 
 		public HashSet<MethodDefinition> GeneratedCode {
 			get { return generated_code; }
+			set { generated_code = value; }
 		}
 
 		public IList<ICustomAttributeProvider> DataContract {

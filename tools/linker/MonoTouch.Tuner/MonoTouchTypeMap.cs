@@ -21,10 +21,23 @@ using Xamarin.Tuner;
 namespace MonoTouch.Tuner {
 
 	public class MonoTouchTypeMapStep : TypeMapStep {
+		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
+		HashSet<TypeDefinition> needs_isdirectbinding_check = new HashSet<TypeDefinition> ();
+		HashSet<MethodDefinition> generated_code = new HashSet<MethodDefinition> ();
+
 		DerivedLinkContext LinkContext {
 			get {
 				return (DerivedLinkContext) base.Context;
 			}
+		}
+
+		protected override void EndProcess ()
+		{
+			base.EndProcess ();
+
+			LinkContext.CachedIsNSObject = cached_isnsobject;
+			LinkContext.NeedsIsDirectBindingCheck = needs_isdirectbinding_check;
+			LinkContext.GeneratedCode = generated_code;
 		}
 
 		protected override void MapType (TypeDefinition type)
@@ -36,7 +49,7 @@ namespace MonoTouch.Tuner {
 			if (type.HasMethods) {
 				foreach (MethodDefinition m in type.Methods) {
 					if (m.IsGeneratedCode (LinkContext))
-						LinkContext.GeneratedCode.Add (m);
+						generated_code.Add (m);
 				}
 			}
 			
@@ -60,7 +73,7 @@ namespace MonoTouch.Tuner {
 		{
 			if (!type.IsNSObject (LinkContext))
 				return false;
-			LinkContext.CachedIsNSObject.Add (type);
+			cached_isnsobject.Add (type);
 			return true;
 		}
 		
@@ -91,10 +104,10 @@ namespace MonoTouch.Tuner {
 		{
 			// all ancestors must be disallowed
 			// so we can short-circuit the recursion if we already have processed it
-			if (LinkContext.NeedsIsDirectBindingCheck.Contains (type))
+			if (needs_isdirectbinding_check.Contains (type))
 				return;
 			
-			LinkContext.NeedsIsDirectBindingCheck.Add (type);
+			needs_isdirectbinding_check.Add (type);
 			var base_type = type.BaseType;
 			if (base_type != null)
 				NeedsIsDirectBindingCheck (base_type.Resolve ());

@@ -171,8 +171,6 @@ namespace Xamarin
 					mtouch.MSym = false; // faster test
 					mtouch.NoStrip = true; // faster test
 
-					mtouch.Verbose = true;
-
 					var timestamp = DateTime.MinValue;
 
 					Action<string, IEnumerable<string>> assertNotModified = (filename, skip) =>

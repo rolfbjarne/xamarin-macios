@@ -131,6 +131,7 @@ namespace Xamarin
 				mtouch.Linker = MTouchLinker.DontLink;
 				mtouch.CreateTemporaryApp ();
 				mtouch.CreateTemporaryCacheDirectory ();
+				mtouch.Verbosity = 4; // This is required to get the debug output we're testing for
 				mtouch.AssertExecute (MTouchAction.BuildSim, "build 1");
 				mtouch.AssertOutputPattern ("Linking .*/testApp.exe into .*/PreBuild using mode 'None'");
 				mtouch.AssertExecute (MTouchAction.BuildSim, "build 2");
@@ -1355,6 +1356,7 @@ namespace Xamarin
 		public void FastSim (Profile profile)
 		{
 			using (var tool = new MTouchTool ()) {
+				tool.Verbosity = 1; // This is required to get the debug output we're testing for.
 				tool.Profile = profile;
 				tool.CreateTemporaryApp ();
 				tool.Linker = MTouchLinker.DontLink;

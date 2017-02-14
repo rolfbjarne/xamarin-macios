@@ -203,7 +203,7 @@ public static class TypeManager {
 		string fullname;
 		string nsManagerPrefix = null;
 
-		if (assembly == platform_assembly)
+		if (assembly == platform_assembly || assembly == api_assembly)
 			nsManagerPrefix = BindingTouch.NamespacePlatformPrefix;
 		
 		if (!string.IsNullOrEmpty (nsManagerPrefix))

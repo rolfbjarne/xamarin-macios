@@ -1864,6 +1864,10 @@ function oninitialload ()
 
 			foreach (var kvp in Environment)
 				process.StartInfo.EnvironmentVariables [kvp.Key] = kvp.Value;
+
+			process.StartInfo.EnvironmentVariables.Remove ("LD_LIBRARY_PATH");
+			process.StartInfo.EnvironmentVariables.Remove ("PKG_CONFIG_PATH");
+			process.StartInfo.EnvironmentVariables ["PATH"] = "/opt/bin:/usr/local/bin:/Users/rolf/Projects/osx-system-stuff/install/autotools/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/rolf/bin:/Library/PostgreSQL/9.1/bin";
 		}
 
 		protected void AddWrenchLogFiles (StreamReader stream)
@@ -2027,7 +2031,7 @@ function oninitialload ()
 		{
 			using (var resource = await NotifyBlockingWaitAsync ((SupportsParallelBuilds ? Jenkins.DesktopResource.AcquireConcurrentAsync () : Jenkins.DesktopResource.AcquireExclusiveAsync ()))) {
 				using (var xbuild = new Process ()) {
-					xbuild.StartInfo.FileName = "xbuild";
+					xbuild.StartInfo.FileName = "/Library/Frameworks/Mono.framework/Versions/Current/Commands/xbuild";
 					var args = new StringBuilder ();
 					args.Append ("/verbosity:diagnostic ");
 					if (SpecifyPlatform)
@@ -2063,7 +2067,7 @@ function oninitialload ()
 		{
 			// Don't require the desktop resource here, this shouldn't be that resource sensitive
 			using (var xbuild = new Process ()) {
-				xbuild.StartInfo.FileName = "xbuild";
+				xbuild.StartInfo.FileName = "/Library/Frameworks/Mono.framework/Versions/Current/Commands/xbuild";
 				var args = new StringBuilder ();
 				args.Append ("/verbosity:diagnostic ");
 				if (project_platform != null)

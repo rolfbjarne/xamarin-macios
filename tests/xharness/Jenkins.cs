@@ -289,7 +289,7 @@ namespace xharness
 			IEnumerable<string> labels = Harness.Labels;
 
 			if (labels.Any ())
-				MainLog.WriteLine ($"Found {labels.Count ()} lables in command-line arguments: {string.Join (", ", labels.ToArray ())}");
+				MainLog.WriteLine ($"Found {labels.Count ()} labels in command-line arguments: {string.Join (", ", labels.ToArray ())}");
 
 			if (pull_request > 0) {
 				var ghLabels = GitHub.GetLabels (Harness, pull_request);

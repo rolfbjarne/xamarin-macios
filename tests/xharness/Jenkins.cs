@@ -2543,7 +2543,7 @@ function oninitialload ()
 
 			var install_log = Logs.CreateStream (LogDirectory, $"install-{Timestamp}.log", "Install log");
 			var uninstall_log = Logs.CreateStream (LogDirectory, $"uninstall-{Timestamp}.log", "Uninstall log");
-			using (var device_resource = await NotifyBlockingWaitAsync (Jenkins.GetDeviceResources (Candidates).AcquireAnyConcurrentAsync ())) {
+			using (var device_resource = await NotifyBlockingWaitAsync (Jenkins.GetDeviceResources (Candidates).AcquireAnyConcurrentAsync (this))) {
 				try {
 					// Set the device we acquired.
 					Device = Candidates.First ((d) => d.UDID == device_resource.Resource.Name);
@@ -2834,6 +2834,7 @@ function oninitialload ()
 		ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> queue = new ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> ();
 		ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> exclusive_queue = new ConcurrentQueue<TaskCompletionSource<IAcquiredResource>> ();
 		int users;
+		public List<IAcquiredResource> CurrentUsers { get; private set; } = new List<IAcquiredResource> ();
 		int max_concurrent_users = 1;
 		bool exclusive;
 
@@ -2855,27 +2856,31 @@ function oninitialload ()
 			this.Description = description ?? name;
 		}
 
-		public Task<IAcquiredResource> AcquireConcurrentAsync ()
+		public Task<IAcquiredResource> AcquireConcurrentAsync (object tag = null)
 		{
 			lock (queue) {
 				if (!exclusive && users < max_concurrent_users) {
 					users++;
-					return Task.FromResult<IAcquiredResource> (new AcquiredResource (this));
+					var res = new AcquiredResource (this, tag);
+					CurrentUsers.Add (res);
+					return Task.FromResult<IAcquiredResource> (res);
 				} else {
-					var tcs = new TaskCompletionSource<IAcquiredResource> (new AcquiredResource (this));
+					var tcs = new TaskCompletionSource<IAcquiredResource> (new AcquiredResource (this, tag));
 					queue.Enqueue (tcs);
 					return tcs.Task;
 				}
 			}
 		}
 
-		public Task<IAcquiredResource> AcquireExclusiveAsync ()
+		public Task<IAcquiredResource> AcquireExclusiveAsync (object tag = null)
 		{
 			lock (queue) {
 				if (users == 0) {
 					users++;
 					exclusive = true;
-					return Task.FromResult<IAcquiredResource> (new AcquiredResource (this));
+					var res = new AcquiredResource (this, tag);
+					CurrentUsers.Add (res);
+					return Task.FromResult<IAcquiredResource> (res);
 				} else {
 					var tcs = new TaskCompletionSource<IAcquiredResource> (new AcquiredResource (this));
 					exclusive_queue.Enqueue (tcs);
@@ -2884,20 +2889,25 @@ function oninitialload ()
 			}
 		}
 
-		void Release ()
+		void Release (IAcquiredResource resource)
 		{
 			TaskCompletionSource<IAcquiredResource> tcs;
 
 			lock (queue) {
 				users--;
 				exclusive = false;
+				CurrentUsers.Remove (resource);
 				if (queue.TryDequeue (out tcs)) {
 					users++;
-					tcs.SetResult ((IAcquiredResource) tcs.Task.AsyncState);
+					var res = (IAcquiredResource) tcs.Task.AsyncState;
+					CurrentUsers.Add (res);
+					tcs.SetResult (res);
 				} else if (users == 0 && exclusive_queue.TryDequeue (out tcs)) {
 					users++;
 					exclusive = true;
-					tcs.SetResult ((IAcquiredResource) tcs.Task.AsyncState);
+					var res = (IAcquiredResource) tcs.Task.AsyncState;
+					CurrentUsers.Add (res);
+					tcs.SetResult (res);
 				}
 			}
 		}
@@ -2905,18 +2915,21 @@ function oninitialload ()
 		class AcquiredResource : IAcquiredResource
 		{
 			Resource resource;
+			object tag;
 
-			public AcquiredResource (Resource resource)
+			public AcquiredResource (Resource resource, object tag = null)
 			{
 				this.resource = resource;
+				this.tag = tag;
 			}
 
 			void IDisposable.Dispose ()
 			{
-				resource.Release ();
+				resource.Release (this);
 			}
 
 			public Resource Resource { get { return resource; } }
+			public object Tag { get { return tag; } }
 		}
 	}
 
@@ -2934,13 +2947,13 @@ function oninitialload ()
 			this.resources = resources.ToArray ();
 		}
 
-		public Task<IAcquiredResource> AcquireAnyConcurrentAsync ()
+		public Task<IAcquiredResource> AcquireAnyConcurrentAsync (TestTask task)
 		{
 			if (resources.Length == 0)
 				throw new Exception ("No resources");
 
 			if (resources.Length == 1)
-				return resources [0].AcquireConcurrentAsync ();
+				return resources [0].AcquireConcurrentAsync (task);
 
 			// We try to acquire every resource
 			// When the first one succeeds, we set the result to true

@@ -1497,11 +1497,12 @@ function oninitialload ()
 								if (test.Duration.Ticks > 0)
 									writer.WriteLine ($"Run duration: {test.Duration} <br />");
 								var runDeviceTest = runTest as RunDeviceTask;
-								if (runDeviceTest != null) {
-									if (runDeviceTest.Device != null)
-										writer.WriteLine ($"Device: {runDeviceTest.Device.Name}");
-									if (runDeviceTest.CompanionDevice != null)
-										writer.WriteLine ($"Companion device: {runDeviceTest.CompanionDevice.Name}");
+								if (runDeviceTest?.Device != null) {
+									if (runDeviceTest.CompanionDevice != null) {
+										writer.WriteLine ($"Device: {runDeviceTest.Device.Name} ({runDeviceTest.CompanionDevice.Name}) <br />");
+									} else {
+										writer.WriteLine ($"Device: {runDeviceTest.Device.Name} <br />");
+									}
 								}
 							} else {
 								if (test.Duration.Ticks > 0)

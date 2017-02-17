@@ -1277,10 +1277,10 @@ function oninitialload ()
 				var headerColor = "black";
 				if (failedTests.Any ()) {
 					headerColor = "red";
-				} else if (passedTests.Count () != allTasks.Count) {
-					headerColor = "gray";
-				} else {
+				} else if (passedTests.Any ()) {
 					headerColor = "green";
+				} else {
+					headerColor = "gray";
 				}
 
 				writer.Write ($"<span id='x{id_counter++}' class='autorefreshable'>");
@@ -1296,13 +1296,12 @@ function oninitialload ()
 					writer.Write (")");
 				} else if (failedTests.Any ()) {
 					writer.Write ($"<h2 style='color: {headerColor}'>{failedTests.Count ()} tests failed, {passedTests.Count ()} tests passed.");
+				} else if (passedTests.Any ()) {
+					writer.Write ($"<h2 style='color: {headerColor}'>All {passedTests.Count ()} tests passed");
 				} else {
-					writer.Write ($"<h2 style='color: {headerColor}'>All tests passed");
+					writer.Write ($"<h2 style='color: {headerColor}'>No tests selected.");
 				}
 				if (IsServerMode && allTasks.Count > 0) {
-					writer.Write ("<small>");
-					writer.Write (" <a href='javascript:runalltests()'>Run all tests</a>");
-					writer.WriteLine ("</small>");
 					writer.WriteLine (@"</h2></span>
 <ul id='nav'>
 	<li id=""adminmenu"">Select
@@ -1497,6 +1496,13 @@ function oninitialload ()
 								}
 								if (test.Duration.Ticks > 0)
 									writer.WriteLine ($"Run duration: {test.Duration} <br />");
+								var runDeviceTest = runTest as RunDeviceTask;
+								if (runDeviceTest != null) {
+									if (runDeviceTest.Device != null)
+										writer.WriteLine ($"Device: {runDeviceTest.Device.Name}");
+									if (runDeviceTest.CompanionDevice != null)
+										writer.WriteLine ($"Companion device: {runDeviceTest.CompanionDevice.Name}");
+								}
 							} else {
 								if (test.Duration.Ticks > 0)
 									writer.WriteLine ($"Duration: {test.Duration} <br />");
@@ -2950,20 +2956,20 @@ function oninitialload ()
 			this.resources = resources.ToArray ();
 		}
 
-		public Task<IAcquiredResource> AcquireAnyConcurrentAsync (TestTask task)
+		public Task<IAcquiredResource> AcquireAnyConcurrentAsync (object tag = null)
 		{
 			if (resources.Length == 0)
 				throw new Exception ("No resources");
 
 			if (resources.Length == 1)
-				return resources [0].AcquireConcurrentAsync (task);
+				return resources [0].AcquireConcurrentAsync (tag);
 
 			// We try to acquire every resource
 			// When the first one succeeds, we set the result to true
 			// We immediately release any other resources we acquire.
 			var tcs = new TaskCompletionSource<IAcquiredResource> ();
 			for (int i = 0; i < resources.Length; i++) {
-				resources [i].AcquireConcurrentAsync ().ContinueWith ((v) =>
+				resources [i].AcquireConcurrentAsync (tag).ContinueWith ((v) =>
 				{
 					var ar = v.Result;
 					if (!tcs.TrySetResult (ar))

@@ -35,7 +35,6 @@ using Mono.Options;
 using System.Runtime.InteropServices;
 
 using XamCore.ObjCRuntime;
-using XamCore.Foundation;
 using Xamarin.Utils;
 
 class BindingTouch {

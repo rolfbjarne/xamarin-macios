@@ -3,11 +3,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if IKVM
+using IKVM.Reflection;
+using Type = IKVM.Reflection.Type;
+#else
 using System.Reflection;
+#endif
 using XamCore.Foundation;
 using XamCore.ObjCRuntime;
 
-public partial class Generator {
+public partial class Generator
+{
 
 	static string GetCSharpTypeName (Type type)
 	{
@@ -60,7 +66,7 @@ public partial class Generator {
 		var fields = new Dictionary<FieldInfo, FieldAttribute> ();
 		Tuple<FieldInfo, FieldAttribute> null_field = null;
 		Tuple<FieldInfo, FieldAttribute> default_symbol = null;
-		var underlying_type = GetCSharpTypeName (Enum.GetUnderlyingType (type));
+		var underlying_type = GetCSharpTypeName (TypeManager.GetUnderlyingEnumType (type));
 		print ("public enum {0} : {1} {{", type.Name, underlying_type);
 		indent++;
 		foreach (var f in type.GetFields ()) {
@@ -155,7 +161,7 @@ public partial class Generator {
 				print ("}");
 				print ("");
 			}
-			
+
 			print ("public static NSString GetConstant (this {0} self)", type.Name);
 			print ("{");
 			indent++;
@@ -164,7 +170,11 @@ public partial class Generator {
 			var default_symbol_name = default_symbol?.Item2.SymbolName;
 			// more than one enum member can share the same numeric value - ref: #46285
 			foreach (var kvp in fields) {
+#if IKVM
+				throw new NotImplementedException ();
+#else
 				print ("case {0}: // {1}.{2}", Convert.ToInt64 (kvp.Key.GetValue (null)), type.Name, kvp.Key.Name);
+#endif
 				var sn = kvp.Value.SymbolName;
 				if (sn == default_symbol_name)
 					print ("default:");

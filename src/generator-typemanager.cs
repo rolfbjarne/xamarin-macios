@@ -1,17 +1,6 @@
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.InteropServices;
-
-using XamCore.CoreFoundation;
-using XamCore.CoreGraphics;
-using XamCore.ObjCRuntime;
-using XamCore.Foundation;
-using XamCore.Security;
-
-using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
 
 public static class TypeManager {
 	public static Type System_Attribute;
@@ -233,7 +222,7 @@ public static class TypeManager {
 		api_assembly = api;
 		corlib_assembly = typeof (object).Assembly;
 		system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
-		platform_assembly = typeof (NSObject).Assembly;
+		platform_assembly = typeof (XamCore.Foundation.NSObject).Assembly;
 		binding_assembly = typeof (ProtocolizeAttribute).Assembly;
 #endif
 

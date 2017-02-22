@@ -1,8 +1,17 @@
 using System;
-using System.Reflection;
 
-using XamCore.Foundation;
-using XamCore.ObjCRuntime;
+#if IKVM
+using IKVM.Reflection;
+using Type = IKVM.Reflection.Type;
+#else
+using System.Reflection;
+#endif
+
+//
+// All the attributes in this file are compiled into two binaries:
+// * Xamarin.*.Attributes.dll: this assembly references the platform assemblies (mscorlib, etc), and is used when compiling the API definition.
+// * bgen-ikvm.exe: when compiled into the generator itself, the attributes are used as mock objects to load the corresponding attributes from Xamarin.*.Attributes.dll.
+//
 
 //
 // ForcedTypeAttribute
@@ -37,7 +46,8 @@ using XamCore.ObjCRuntime;
 //
 
 [AttributeUsage (AttributeTargets.ReturnValue | AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-public class ForcedTypeAttribute : Attribute {
+public class ForcedTypeAttribute : Attribute
+{
 	public ForcedTypeAttribute (bool owns = false)
 	{
 		Owns = owns;
@@ -81,17 +91,22 @@ public class ForcedTypeAttribute : Attribute {
 // CAScroll is a NSString backed enum, we will fetch the right NSString value and handle the type conversion.
 //
 [AttributeUsage (AttributeTargets.ReturnValue | AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-public class BindAsAttribute : Attribute {
+public class BindAsAttribute : Attribute
+{
 	public BindAsAttribute (Type type)
 	{
 		Type = type;
-		var nullable = type.IsArray ? Nullable.GetUnderlyingType (type.GetElementType ()) : Nullable.GetUnderlyingType (type);
+#if BGENERATOR
+		var nullable = type.IsArray ? TypeManager.GetUnderlyingNullableType (type.GetElementType ()) : TypeManager.GetUnderlyingNullableType (type);
 		IsNullable = nullable != null;
 		IsValueType = IsNullable ? nullable.IsValueType : type.IsValueType;
+#endif
 	}
 	public Type Type;
+#if BGENERATOR
 	internal readonly bool IsNullable;
 	internal readonly bool IsValueType;
+#endif
 }
 
 // Used to flag a type as needing to be turned into a protocol on output for Unified
@@ -843,12 +858,8 @@ public class CoreImageFilterAttribute : Attribute {
 		// default is public - will be skipped for abstract types
 		DefaultCtorVisibility = MethodAttributes.Public;
 
-		// since it was not generated code we never fixed the .ctor(IntPtr) visibility for unified
-		if (Generator.XamcoreVersion >= 3) {
-			IntPtrCtorVisibility = MethodAttributes.FamORAssem;
-		} else {
-			IntPtrCtorVisibility = MethodAttributes.Public;
-		}
+		IntPtrCtorVisibility = MethodAttributes.PrivateScope;
+
 		// not needed by default, automaticly `protected` if the type is abstract
 		StringCtorVisibility = MethodAttributes.PrivateScope;
 	}

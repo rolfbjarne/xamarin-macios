@@ -60,7 +60,6 @@ class BindingTouch
 
 #if IKVM
 	public static Universe universe;
-	static string binding_attributes_lib;
 #endif
 
 	public static string ToolName {
@@ -89,6 +88,27 @@ class BindingTouch
 		} catch (Exception ex) {
 			ErrorHelper.Show (ex);
 			return 1;
+		}
+	}
+
+	static string GetAttributeLibraryPath ()
+	{
+		switch (CurrentPlatform) {
+		case PlatformName.iOS:
+			if (Unified) {
+				return Path.Combine (GetSDKRoot (), "lib", "btouch", "Xamarin.iOS.BindingAttributes.dll");
+			} else {
+				return Path.Combine (GetSDKRoot (), "lib", "btouch", "monotouch.BindingAttributes.dll");
+			}
+		case PlatformName.WatchOS:
+			return Path.Combine (GetSDKRoot (), "lib", "bwatch", "Xamarin.WatchOS.BindingAttributes.dll");
+		case PlatformName.TvOS:
+			return Path.Combine (GetSDKRoot (), "lib", "btv", "Xamarin.TVOS.BindingAttributes.dll");
+		case PlatformName.MacOSX:
+			// depends on target platform
+			throw new NotImplementedException ();
+		default:
+			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
 		}
 	}
 
@@ -241,11 +261,6 @@ class BindingTouch
 			{ "unified-full-profile", "Launches compiler pointing to XM Full Profile", l => { /* no-op*/ }, true },
 			{ "unified-mobile-profile", "Launches compiler pointing to XM Mobile Profile", l => { /* no-op*/ }, true },
 			{ "target-framework=", "Specify target framework to use. Always required, and the currently supported values are: 'MonoTouch,v1.0', 'Xamarin.iOS,v1.0', 'Xamarin.TVOS,v1.0', 'Xamarin.WatchOS,v1.0', 'XamMac,v1.0', 'Xamarin.Mac,Version=v2.0,Profile=Mobile', 'Xamarin.Mac,Version=v4.5,Profile=Full' and 'Xamarin.Mac,Version=v4.5,Profile=System')", v => SetTargetFramework (v) },
-			{ "binding-attributes-lib=", "Sets the assembly that contains the binding attributes.", v =>
-				{
-					binding_attributes_lib = v;
-				}
-			},
 		};
 
 		try {
@@ -340,11 +355,6 @@ class BindingTouch
 		}
 		string paths = (libs.Count > 0 ? "-lib:" + String.Join (" -lib:", libs.ToArray ()) : "");
 
-#if IKVM
-		if (string.IsNullOrEmpty (binding_attributes_lib))
-			throw new BindingException (0000, "--binding-attribute-lib is required.");
-#endif
-
 		try {
 			var tmpass = Path.Combine (tmpdir, "temp.dll");
 
@@ -362,7 +372,7 @@ class BindingTouch
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
 #if IKVM
-			cargs.Append ("-r:").Append (Quote (binding_attributes_lib)).Append (' ');
+			cargs.Append ("-r:").Append (Quote (GetAttributeLibraryPath ())).Append (' ');
 #else
 			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
 #endif
@@ -478,7 +488,7 @@ class BindingTouch
 			corlib_assembly = universe.LoadFile (LocateAssembly ("mscorlib"));
 			system_assembly = universe.LoadFile (LocateAssembly ("System"));;
 			platform_assembly = baselib;
-			binding_assembly = universe.LoadFile (binding_attributes_lib);
+			binding_assembly = universe.LoadFile (GetAttributeLibraryPath ());
 #else
 			corlib_assembly = typeof (object).Assembly;
 			system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;

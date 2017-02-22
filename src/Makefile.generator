@@ -47,7 +47,7 @@ IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
 
 build/common/bgen.exe: $(GENERATOR_SOURCES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_ATTRIBUTE_SOURCES) Makefile.generator
 	@mkdir -p build/common
-	$(Q_GEN) $(SYSTEM_MCS) -out:$@ $(IKVM_REFLECTION_FLAGS) $(GENERATOR_DEFINES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_ATTRIBUTE_SOURCES) $(GENERATOR_SOURCES) -d:IKVM
+	$(Q_GEN) $(SYSTEM_MCS) -debug -out:$@ $(IKVM_REFLECTION_FLAGS) $(GENERATOR_DEFINES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_ATTRIBUTE_SOURCES) $(GENERATOR_SOURCES) -d:IKVM
 
 # The command-line arguments in the csproj are currently kept uo-to-date manually
 btouch-ikvm.csproj: btouch-ikvm.csproj.in Makefile.generator
@@ -87,14 +87,21 @@ build/generator-frameworks.g.cs: frameworks.sources Makefile.generator generate-
 
 IOS_TARGETS_DIRS +=                              \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen   \
 
 IOS_TARGETS +=                                                          \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch.exe             \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/btouch-native.exe      \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/monotouch.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe                 \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bgen                          \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bgen: bgen.in | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
+	$(Q_GEN) sed 's!@BGEN_EXE@!$(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe)!g' bgen.in > $@
+	$(Q) chmod +x $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/%: %.in | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
 	$(Q_GEN) sed 's!@MONOTOUCH_PREFIX@!$(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX))!g' $*.in > $@
@@ -111,6 +118,10 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(I
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.dll: $(IOS_BUILD_DIR)/native/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
+	$(Q) install -m 0755 $< $@
+	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe: build/common/bgen.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
@@ -191,15 +202,22 @@ $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll: generator-attributes.cs Ma
 
 MAC_TARGETS_DIRS +=                                     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen \
 
 MAC_TARGETS += \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bmac                     \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bgen                     \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/bgen.exe            \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/bmac-full.exe       \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/bmac-mobile.exe     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/bmac-compat.exe     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/XamMac.BindingAttributes.dll     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/Xamarin.Mac-full.BindingAttributes.dll     \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/Xamarin.Mac-mobile.BindingAttributes.dll     \
+
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bgen: bgen.in | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin
+	$(Q_GEN) sed 's!@BGEN_EXE@!$(abspath $(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/bgen.exe)!g' bgen.in > $@
+	$(Q) chmod +x $@
 
 $(MAC_BUILD_DIR)/bmac-%.exe: $(MAC_BUILD_DIR)/%-32/Xamarin.Mac.dll $(GENERATOR_SOURCES) $(SN_KEY) Makefile.generator
 	$(call Q_PROF_PMCS,mac/full)   PMCS_PROFILE=$*         $(MAC_BUILD_DIR)/$*/pmcs     -out:$@ -debug $(GENERATOR_DEFINES) -unsafe -keyfile:$(SN_KEY) -r:$< $(GENERATOR_SOURCES)
@@ -215,6 +233,10 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/%.exe: $(MAC_BUILD_DIR)/%.ex
 	$(Q) install -m 0644 $<.mdb $@.mdb
 
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac/%.dll: $(MAC_BUILD_DIR)/%.dll | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bmac
+	$(Q) install -m 0755 $< $@
+	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/%.exe: build/common/bgen.exe | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
 

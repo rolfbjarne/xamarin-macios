@@ -9,6 +9,7 @@ include $(TOP)/src/monotouch-dialog.sources
 include $(TOP)/src/touch-unit.sources
 
 export MD_MTOUCH_SDK_ROOT=$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)
+export XamarinMacFrameworkRoot=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 
 MAC_BUILD_DIR=build/mac
 IOS_BUILD_DIR=build/ios

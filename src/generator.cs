@@ -2528,7 +2528,7 @@ public partial class Generator : IMemberGatherer
 		var constType = TypeManager.Constants;
 		var field = constType.GetFields (BindingFlags.Public | BindingFlags.Static).FirstOrDefault (f => f.Name == libSuffixedName);
 #if IKVM
-		throw new NotImplementedException ();
+		library_path = (string) field?.GetRawConstantValue ();
 #else
 		library_path = (string) field?.GetValue (null);
 #endif
@@ -6919,8 +6919,11 @@ public partial class Generator : IMemberGatherer
 		if (def is bool)
 			return (bool) def ? "true" : "false";
 
-		if (def is Enum)
-			return def.GetType ().FullName + "." + def;
+		if (mi.ReturnType.IsEnum) {
+			if (def is string)
+				return def;
+			return TypeManager.GetEnumFullName (mi.ReturnType, def);
+		}
 
 		return def;
 	}

@@ -76,7 +76,7 @@ class BindingTouch
 
 	static int Main (string [] args)
 	{
-#if !MONOMAC
+#if !MONOMAC && !IKVM
 
 		// for monotouch.dll we're using a the iOS specific mscorlib.dll, which re-routes CWL to NSLog
 		// but that's not what we want for tooling, like the binding generator, so we provide our own
@@ -105,29 +105,53 @@ class BindingTouch
 		case PlatformName.TvOS:
 			return Path.Combine (GetSDKRoot (), "lib", "btv", "Xamarin.TVOS.BindingAttributes.dll");
 		case PlatformName.MacOSX:
-			// depends on target platform
-			throw new NotImplementedException ();
+			if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-full.BindingAttributes.dll");
+			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-full.BindingAttributes.dll");
+			} else if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-mobile.BindingAttributes.dll");
+			} else if (target_framework == TargetFramework.XamMac_1_0) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "XamMAc.BindingAttributes.dll");
+			} else {
+				throw ErrorHelper.CreateError (1043, "Internal error: unknown target framework '{0}'.", target_framework);
+			}
 		default:
 			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
 		}
 	}
 
-	static string GetLibraryPath ()
+	static IEnumerable<string> GetLibraryPaths ()
 	{
 		switch (CurrentPlatform) {
 		case PlatformName.iOS:
 			if (Unified) {
-				return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.iOS");
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.iOS");
 			} else {
-				return Path.Combine (GetSDKRoot (), "lib", "mono", "2.1");
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "2.1");
 			}
+			break;
 		case PlatformName.WatchOS:
-			return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.WatchOS");
+			yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.WatchOS");
+			break;
 		case PlatformName.TvOS:
-			return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.TVOS");
+			yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.TVOS");
+			break;
 		case PlatformName.MacOSX:
-			// depends on target platform
-			throw new NotImplementedException ();
+			if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "4.5");
+			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "4.5");
+				yield return "/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5";
+			} else if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.Mac");
+			} else if (target_framework == TargetFramework.XamMac_1_0) {
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono");
+				yield return "/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5";
+			} else {
+				throw ErrorHelper.CreateError (1043, "Internal error: unknown target framework '{0}'.", target_framework);
+			}
+			break;
 		default:
 			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
 		}
@@ -616,8 +640,9 @@ class BindingTouch
 				return asm.Location;
 		}
 
-		var libs = new List<string> (BindingTouch.libs);
-		libs.Insert (0, GetLibraryPath ());
+		var libs = new List<string> ();
+		libs.AddRange (GetLibraryPaths ());
+		libs.AddRange (BindingTouch.libs);
 
 		foreach (var lib in libs) {
 			var path = Path.Combine (lib, name);
@@ -681,7 +706,7 @@ class BindingTouch
 	}
 }
 
-#if !MONOMAC
+#if !MONOMAC && !IKVM
 internal class UnexceptionalStreamWriter : StreamWriter
 {
 	public UnexceptionalStreamWriter (Stream stream)

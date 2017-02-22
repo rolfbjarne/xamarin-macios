@@ -56,9 +56,11 @@ class BindingTouch
 	static char shellQuoteChar;
 
 	public static bool BindingThirdParty = true;
+	static List<string> libs = new List<string> ();
 
 #if IKVM
 	public static Universe universe;
+	static string binding_attributes_lib;
 #endif
 
 	public static string ToolName {
@@ -87,6 +89,27 @@ class BindingTouch
 		} catch (Exception ex) {
 			ErrorHelper.Show (ex);
 			return 1;
+		}
+	}
+
+	static string GetLibraryPath ()
+	{
+		switch (CurrentPlatform) {
+		case PlatformName.iOS:
+			if (Unified) {
+				return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.iOS");
+			} else {
+				return Path.Combine (GetSDKRoot (), "lib", "mono", "2.1");
+			}
+		case PlatformName.WatchOS:
+			return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.WatchOS");
+		case PlatformName.TvOS:
+			return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.TVOS");
+		case PlatformName.MacOSX:
+			// depends on target platform
+			throw new NotImplementedException ();
+		default:
+			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
 		}
 	}
 
@@ -154,7 +177,6 @@ class BindingTouch
 		var resources = new List<string> ();
 		var linkwith = new List<string> ();
 		var references = new List<string> ();
-		var libs = new List<string> ();
 		var api_sources = new List<string> ();
 		var core_sources = new List<string> ();
 		var extra_sources = new List<string> ();
@@ -219,6 +241,11 @@ class BindingTouch
 			{ "unified-full-profile", "Launches compiler pointing to XM Full Profile", l => { /* no-op*/ }, true },
 			{ "unified-mobile-profile", "Launches compiler pointing to XM Mobile Profile", l => { /* no-op*/ }, true },
 			{ "target-framework=", "Specify target framework to use. Always required, and the currently supported values are: 'MonoTouch,v1.0', 'Xamarin.iOS,v1.0', 'Xamarin.TVOS,v1.0', 'Xamarin.WatchOS,v1.0', 'XamMac,v1.0', 'Xamarin.Mac,Version=v2.0,Profile=Mobile', 'Xamarin.Mac,Version=v4.5,Profile=Full' and 'Xamarin.Mac,Version=v4.5,Profile=System')", v => SetTargetFramework (v) },
+			{ "binding-attributes-lib=", "Sets the assembly that contains the binding attributes.", v =>
+				{
+					binding_attributes_lib = v;
+				}
+			},
 		};
 
 		try {
@@ -313,6 +340,11 @@ class BindingTouch
 		}
 		string paths = (libs.Count > 0 ? "-lib:" + String.Join (" -lib:", libs.ToArray ()) : "");
 
+#if IKVM
+		if (string.IsNullOrEmpty (binding_attributes_lib))
+			throw new BindingException (0000, "--binding-attribute-lib is required.");
+#endif
+
 		try {
 			var tmpass = Path.Combine (tmpdir, "temp.dll");
 
@@ -330,7 +362,7 @@ class BindingTouch
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
 #if IKVM
-			throw new NotImplementedException ();
+			cargs.Append ("-r:").Append (Quote (binding_attributes_lib)).Append (' ');
 #else
 			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
 #endif
@@ -438,7 +470,22 @@ class BindingTouch
 			}
 			TypeManager.PlatformAssembly = baselib;
 
-			TypeManager.Initialize (api);
+			Assembly corlib_assembly;
+			Assembly system_assembly;
+			Assembly platform_assembly;
+			Assembly binding_assembly;
+#if IKVM
+			corlib_assembly = universe.LoadFile (LocateAssembly ("mscorlib"));
+			system_assembly = universe.LoadFile (LocateAssembly ("System"));;
+			platform_assembly = baselib;
+			binding_assembly = universe.LoadFile (binding_attributes_lib);
+#else
+			corlib_assembly = typeof (object).Assembly;
+			system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
+			platform_assembly = typeof (XamCore.Foundation.NSObject).Assembly;
+			binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+#endif
+			TypeManager.Initialize (api, corlib_assembly, system_assembly, platform_assembly, binding_assembly);
 
 			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true)) {
 				LinkWithAttribute linkWith = (LinkWithAttribute) attr;
@@ -550,6 +597,30 @@ class BindingTouch
 		}
 		return 0;
 	}
+
+#if IKVM
+	static string LocateAssembly (string name)
+	{
+		foreach (var asm in universe.GetAssemblies ()) {
+			if (asm.GetName ().Name == name)
+				return asm.Location;
+		}
+
+		var libs = new List<string> (BindingTouch.libs);
+		libs.Insert (0, GetLibraryPath ());
+
+		foreach (var lib in libs) {
+			var path = Path.Combine (lib, name);
+			if (File.Exists (path))
+				return path;
+			path += ".dll";
+			if (File.Exists (path))
+				return path;
+		}
+
+		throw new FileNotFoundException (name);
+	}
+#endif
 
 	static string GetWorkDir ()
 	{

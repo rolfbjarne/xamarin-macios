@@ -1174,7 +1174,7 @@ public partial class Generator : IMemberGatherer
 			return true;
 		// If the above fails it's possible that it comes from another dll (like X.I.dll) so we look for the [Enum]Extensions class existence
 #if IKVM
-		throw new NotImplementedException ();
+		return type.Assembly.FindType (new TypeName (type.Namespace, type.Name + "Extensions")) != null;
 #else
 		return Type.GetType (type.AssemblyQualifiedName.Replace (type.Name, $"{type.Name}Extensions")) != null;
 #endif
@@ -1240,7 +1240,7 @@ public partial class Generator : IMemberGatherer
 			originalType = pi.ParameterType;
 		}
 
-		var retType = TypeManager.GetUnderlyingEnumType (attrib.Type) ?? attrib.Type;
+		var retType = TypeManager.GetUnderlyingNullableType (attrib.Type) ?? attrib.Type;
 		var isNullable = attrib.IsNullable;
 		var isValueType = retType.IsValueType;
 		var isEnum = retType.IsEnum;
@@ -4979,7 +4979,7 @@ public partial class Generator : IMemberGatherer
 			if (m.Name == "Constructor")
 				continue;
 
-			var attrs = AttributeManager.GetCustomAttributes (m, true) as Attribute [];
+			var attrs = AttributeManager.GetCustomAttributes<Attribute> (m, true);
 			AvailabilityBaseAttribute availabilityAttribute = null;
 			bool hasExportAttribute = false;
 			bool hasStaticAttribute = false;
@@ -5013,7 +5013,7 @@ public partial class Generator : IMemberGatherer
 		var list = type.GetProperties (BindingFlags.Public | BindingFlags.Instance);
 
 		foreach (var p in list) {
-			var attrs = AttributeManager.GetCustomAttributes (p, true) as Attribute [];
+			var attrs = AttributeManager.GetCustomAttributes<Attribute> (p, true);
 			AvailabilityBaseAttribute availabilityAttribute = null;
 			bool hasExportAttribute = false;
 			bool hasStaticAttribute = false;

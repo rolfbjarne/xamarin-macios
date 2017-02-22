@@ -28,6 +28,15 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>True</Externalconsole>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <StartAction>Project</StartAction>
+    <StartArguments></StartArguments>
+    <StartWorkingDirectory>%WORKING_DIR%</StartWorkingDirectory>
+    <EnvironmentVariables>
+      <Variable name="MD_MTOUCH_SDK_ROOT" value="%MD_MTOUCH_SDK_ROOT%" />
+      <Variable name="XamarinMacFrameworkRoot" value="%XamarinMacFrameworkRoot%" />
+    </EnvironmentVariables>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'ios-classic' ">
     <StartAction>Project</StartAction>
     <StartArguments>%IOS_CLASSIC_ARGS%</StartArguments>

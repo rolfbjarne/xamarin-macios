@@ -333,15 +333,20 @@ class BindingTouch
 			CurrentPlatform = PlatformName.MacOSX;
 			Unified = false;
 			if (string.IsNullOrEmpty (baselibdll))
-				baselibdll = "MonoMac.dll";
+				baselibdll = Path.Combine (GetSDKRoot (), "lib/mono/XamMac.dll");
 			net_sdk = "4";
 			break;
 		case "xamarin.mac":
 			CurrentPlatform = PlatformName.MacOSX;
 			Unified = true;
 			skipSystemDrawing = target_framework == TargetFramework.Xamarin_Mac_4_5_Full;
-			if (string.IsNullOrEmpty (baselibdll))
-				baselibdll = "MonoMac.dll"; // this doesn't look right.
+			if (string.IsNullOrEmpty (baselibdll)) {
+				if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
+					baselibdll = Path.Combine (GetSDKRoot (), "lib", "reference", "mobile", "Xamarin.Mac.dll");
+				} else {
+					baselibdll = Path.Combine (GetSDKRoot (), "lib", "reference", "full", "Xamarin.Mac.dll");
+				}
+			}
 			net_sdk = "4";
 			break;
 		default:
@@ -350,6 +355,11 @@ class BindingTouch
 
 		if (string.IsNullOrEmpty (compiler))
 			compiler = "/Library/Frameworks/Mono.framework/Commands/mcs";
+
+		if (target_framework == TargetFramework.XamMac_1_0 && !references.Any ((v) => Path.GetFileNameWithoutExtension (v) == "System.Drawing")) {
+			// If we're targeting XM/Classic ensure we have a reference to System.Drawing.dll.
+			references.Add ("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5/System.Drawing.dll");
+		}
 
 		if (sources.Count > 0) {
 			api_sources.Insert (0, Quote (sources [0]));

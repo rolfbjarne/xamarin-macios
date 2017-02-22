@@ -8,6 +8,8 @@ include $(TOP)/src/system-drawing.sources
 include $(TOP)/src/monotouch-dialog.sources
 include $(TOP)/src/touch-unit.sources
 
+export MD_MTOUCH_SDK_ROOT=$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)
+
 MAC_BUILD_DIR=build/mac
 IOS_BUILD_DIR=build/ios
 WATCH_BUILD_DIR=build/watch
@@ -680,6 +682,14 @@ WATCH_DEFINES = -define:IPHONE -define:MONOTOUCH -d:NET_2_0 -d:WATCH -d:XAMCORE_
 WATCH_PMCS = $(WATCH_BUILD_DIR)/pmcs
 WATCH_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
 WATCH_BMONO = MONO_PATH=$(WATCH_LIBDIR)/repl $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch-mono
+ifdef IKVM
+WATCH_GENERATOR=build/common/bgen.exe
+WATCH_GENERATE=$(SYSTEM_MONO) --debug $(WATCH_GENERATOR)
+else
+WATCH_GENERATOR=$(WATCH_BUILD_DIR)/watch/generator.exe
+WATCH_GENERATE=$(WATCH_MONO) --debug $(WATCH_GENERATOR)
+endif
+
 
 WATCHOS_EXTRA_CORE_SOURCES = \
     $(WATCH_BUILD_DIR)/Constants.cs    \
@@ -738,8 +748,8 @@ $(WATCH_BUILD_DIR)/watch/generator.exe: $(GENERATOR_SOURCES) $(WATCH_BUILD_DIR)/
 		$(GENERATOR_DEFINES)                  \
 
 # generated_sources
-$(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_BUILD_DIR)/watch/generator.exe $(WATCHOS_APIS)
-	$(call Q_PROF_GEN,watch) PMCS_PROFILE=watch $(WATCH_BMONO) --debug $(WATCH_BUILD_DIR)/watch/generator.exe \
+$(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_GENERATOR) $(WATCHOS_APIS) $(WATCH_BUILD_DIR)/watch/core.dll $(WATCH_PMCS)
+	$(call Q_PROF_GEN,watch) PMCS_PROFILE=watch $(WATCH_GENERATE) \
 		-inline-selectors                                        \
 		-process-enums                                           \
 		-core                                                    \

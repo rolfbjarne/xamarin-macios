@@ -43,10 +43,8 @@ IKVM_REFLECTION_SOURCES = \
 
 IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
 
-ikvm: common/bgen.exe
-
-build/common/bgen.exe: $(IKVM_REFLECTION_SOURCES) Makefile.generator
-	mkdir -p build/common
+build/common/bgen.exe: $(GENERATOR_SOURCES) $(IKVM_REFLECTION_SOURCES) Makefile.generator
+	@mkdir -p build/common
 	$(SYSTEM_MCS) -out:$@ $(IKVM_REFLECTION_FLAGS) $(GENERATOR_DEFINES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_SOURCES) -d:IKVM
 
 btouch-ikvm.csproj: btouch-ikvm.csproj.in Makefile.generator
@@ -57,6 +55,7 @@ btouch-ikvm.csproj: btouch-ikvm.csproj.in Makefile.generator
 #
 
 build/generator-frameworks.g.cs: frameworks.sources Makefile.generator generate-frameworks.csharp
+	@mkdir -p $(dir $@)
 	@./generate-frameworks.csharp '$(IOS_FRAMEWORKS)' '$(MAC_FRAMEWORKS)' '$(WATCHOS_FRAMEWORKS)' '$(TVOS_FRAMEWORKS)' > $@
 
 #

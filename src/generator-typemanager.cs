@@ -188,6 +188,14 @@ public static class TypeManager
 	static Assembly platform_assembly;
 	static Assembly binding_assembly;
 
+	public static Assembly SystemAssembly {
+		get { return system_assembly; }
+	}
+
+	public static Assembly BindingAssembly {
+		get { return binding_assembly; }
+	}
+
 	public static Assembly CorlibAssembly {
 		get { return corlib_assembly; }
 	}
@@ -196,6 +204,13 @@ public static class TypeManager
 		get { return platform_assembly; }
 		set { platform_assembly = value; }
 	}
+
+#if IKVM
+	public static bool IsSubclassOf (Type base_class, Type derived_class)
+	{
+		return derived_class.IsSubclassOf (base_class);
+	}
+#endif
 
 	static Type Lookup (Assembly assembly, string @namespace, string @typename, bool inexistentOK = false)
 	{
@@ -223,7 +238,7 @@ public static class TypeManager
 	public static Type GetUnderlyingEnumType (Type type)
 	{
 #if IKVM
-		throw new NotImplementedException ();
+		return type.GetEnumUnderlyingType ();
 #else
 		return Enum.GetUnderlyingType (type);
 #endif
@@ -238,17 +253,24 @@ public static class TypeManager
 #endif
 	}
 
-	public static void Initialize (Assembly api)
+	public static bool IsEnumValueDefined (Type type, object value)
 	{
 #if IKVM
-		throw new NotImplementedException ();
+		return type.IsEnumDefined (value);
 #else
-		api_assembly = api;
-		corlib_assembly = typeof (object).Assembly;
-		system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
-		platform_assembly = typeof (XamCore.Foundation.NSObject).Assembly;
-		binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+		var enumValue = System.Enum.ToObject (type, value);
+		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;
+
 #endif
+	}
+
+	public static void Initialize (Assembly api, Assembly corlib, Assembly system, Assembly platform, Assembly binding)
+	{
+		api_assembly = api;
+		corlib_assembly = corlib;
+		system_assembly = system;
+		platform_assembly = platform;
+		binding_assembly = binding;
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

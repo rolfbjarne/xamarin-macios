@@ -103,6 +103,7 @@ WATCH_TARGETS_DIRS +=                            \
 
 WATCH_TARGETS +=                                                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/bwatch.exe             \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/Xamarin.WatchOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch                        \
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch: Makefile.generator
@@ -115,6 +116,14 @@ $(WATCH_BUILD_DIR)/bwatch.exe: $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.dll $
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/%.exe: $(WATCH_BUILD_DIR)/%.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/%.dll: $(WATCH_BUILD_DIR)/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bwatch
+	$(Q) install -m 0755 $< $@
+	$(Q) install -m 0644 $<.mdb $@.mdb
+
+$(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll: generator-attributes.cs Makefile.generator
+	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/watch"     -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.="        -out:$@ -debug generator-attributes.cs -target:library
+
 
 # #
 # # Xamarin.TVOS (btv)

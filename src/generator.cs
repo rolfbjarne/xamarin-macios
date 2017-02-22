@@ -1747,17 +1747,13 @@ public partial class Generator : IMemberGatherer
 
 	public static bool HasAttribute (ICustomAttributeProvider i, Type t, Attribute [] attributes = null)
 	{
-#if IKVM
-		throw new NotImplementedException ();
-#else
 		if (attributes == null)
 			return AttributeManager.HasAttribute (i, t, true);
 		else
 			foreach (var a in attributes)
-				if (a.GetType () == t)
+				if (AttributeManager.GetAttributeType (a) == t)
 					return true;
 		return false;
-#endif
 	}
 
 	public static bool ShouldMarshalNativeExceptions (MethodInfo mi)
@@ -3332,11 +3328,8 @@ public partial class Generator : IMemberGatherer
 			// in question actually has that value at least).
 			var type = TypeManager.GetUnderlyingEnumType (mi.ReturnType) == TypeManager.System_UInt64 ? "ulong" : "long";
 			var itype = type == "ulong" ? "uint" : "int";
-#if IKVM
-			throw new NotImplementedException ();
-#else
-			var value = Enum.ToObject (mi.ReturnType, type == "ulong" ? (object) ulong.MaxValue : (object) long.MaxValue);
-			if (Array.IndexOf (Enum.GetValues (mi.ReturnType), value) >= 0) {
+			var value = type == "ulong" ? (object) ulong.MaxValue : (object) long.MaxValue;
+			if (TypeManager.IsEnumValueDefined (mi.ReturnType, value)) {
 				postproc.AppendFormat ("if (({0}) ret == ({0}) {2}.MaxValue) ret = ({1}) {0}.MaxValue;", type, FormatType (mi.DeclaringType, mi.ReturnType), itype);
 				if (type == "long")
 					postproc.AppendFormat ("else if (({0}) ret == ({0}) {2}.MinValue) ret = ({1}) {0}.MinValue;", type, FormatType (mi.DeclaringType, mi.ReturnType), itype);
@@ -3344,7 +3337,6 @@ public partial class Generator : IMemberGatherer
 				cast_a = "(" + FormatType (mi.DeclaringType, mi.ReturnType) + ") ";
 				cast_b = "";
 			}
-#endif
 		} if (mi.ReturnType.IsEnum){
 			cast_a = "(" + FormatType (mi.DeclaringType, mi.ReturnType) + ") ";
 			cast_b = "";
@@ -3964,9 +3956,9 @@ public partial class Generator : IMemberGatherer
 		// However we want them even if ImplementsAppearance is true (i.e. the original type needs them)
 		if (!is_appearance) {
 			if (HasAttribute (mi, TypeManager.PostGetAttribute))
-				postget = ((PostGetAttribute []) AttributeManager.GetCustomAttributes (mi,TypeManager.PostGetAttribute, true));
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (mi, true);
 			else if (propInfo != null)
-				postget = ((PostGetAttribute []) AttributeManager.GetCustomAttributes (propInfo,TypeManager.PostGetAttribute, true));
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (propInfo, true);
 
 			if (postget != null && postget.Length == 0)
 				postget = null;

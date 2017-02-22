@@ -171,7 +171,7 @@ public partial class Generator
 			// more than one enum member can share the same numeric value - ref: #46285
 			foreach (var kvp in fields) {
 #if IKVM
-				throw new NotImplementedException ();
+				print ("case {0}: // {1}.{2}", Convert.ToInt64 (kvp.Key.GetRawConstantValue ()), type.Name, kvp.Key.Name);
 #else
 				print ("case {0}: // {1}.{2}", Convert.ToInt64 (kvp.Key.GetValue (null)), type.Name, kvp.Key.Name);
 #endif

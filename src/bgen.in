@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+exec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug @BGEN_EXE@ "$@"

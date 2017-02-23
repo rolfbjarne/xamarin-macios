@@ -515,9 +515,7 @@ class BindingTouch
 #endif
 			TypeManager.Initialize (api, corlib_assembly, system_assembly, platform_assembly, binding_assembly);
 
-			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute)) {
-				LinkWithAttribute linkWith = (LinkWithAttribute) attr;
-
+			foreach (var linkWith in AttributeManager.GetCustomAttributes<LinkWithAttribute> (api)) {
 				if (!linkwith.Contains (linkWith.LibraryName)) {
 					Console.Error.WriteLine ("Missing native library {0}, please use `--link-with' to specify the path to this library.", linkWith.LibraryName);
 					return 1;

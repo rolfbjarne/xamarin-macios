@@ -6953,8 +6953,11 @@ public partial class Generator : IMemberGatherer
 		if (def is bool)
 			return (bool) def ? "true" : "false";
 
-		if (def is Enum)
-			return def.GetType ().FullName + "." + def;
+		if (mi.ReturnType.IsEnum) {
+			if (def is string)
+				return def;
+			return TypeManager.GetEnumFullName (mi.ReturnType, def);
+		}
 
 		return def;
 	}

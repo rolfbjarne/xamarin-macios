@@ -292,6 +292,23 @@ public static class TypeManager
 #endif
 	}
 
+	public static object GetEnumFullName (Type type, object value)
+	{
+#if IKVM
+		var name = type.GetEnumName (value);
+		if (string.IsNullOrEmpty (name)) {
+			return "(" + type.FullName + ") " + value;
+		} else {
+			return type.FullName + "." + name;
+		}
+#else
+		if (value is Enum)
+			return value.GetType ().FullName + "." + value;
+		else
+			return value;
+#endif
+	}
+
 	public static void Initialize (Assembly api, Assembly corlib, Assembly system, Assembly platform, Assembly binding)
 	{
 		api_assembly = api;

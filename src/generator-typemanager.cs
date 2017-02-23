@@ -225,7 +225,7 @@ public static class TypeManager
 
 		if (assembly == platform_assembly || assembly == api_assembly)
 			nsManagerPrefix = BindingTouch.NamespacePlatformPrefix;
-		
+
 		if (!string.IsNullOrEmpty (nsManagerPrefix))
 			nsManagerPrefix += ".";
 

@@ -43,7 +43,8 @@ using XamCore.ObjCRuntime;
 using XamCore.Foundation;
 using Xamarin.Utils;
 
-class BindingTouch {
+class BindingTouch
+{
 	static TargetFramework? target_framework;
 	public static PlatformName CurrentPlatform;
 	public static bool Unified;
@@ -65,16 +66,16 @@ class BindingTouch {
 	{
 		Console.WriteLine ("{0} - Mono Objective-C API binder", ToolName);
 		Console.WriteLine ("Usage is:\n {0} [options] apifile1.cs [--api=apifile2.cs [--api=apifile3.cs]] [-s=core1.cs [-s=core2.cs]] [core1.cs [core2.cs]] [-x=extra1.cs [-x=extra2.cs]]", ToolName);
-		
+
 		os.WriteOptionDescriptions (Console.Out);
 	}
-	
+
 	static int Main (string [] args)
 	{
 #if !MONOMAC
 
 		// for monotouch.dll we're using a the iOS specific mscorlib.dll, which re-routes CWL to NSLog
-               // but that's not what we want for tooling, like the binding generator, so we provide our own
+		// but that's not what we want for tooling, like the binding generator, so we provide our own
 		var sw = new UnexceptionalStreamWriter (Console.OpenStandardOutput ()) { AutoFlush = true };
 		Console.SetOut (sw);
 #endif
@@ -160,7 +161,7 @@ class BindingTouch {
 
 		// .NET treats ' as part of the command name when running an app so we must use " on Windows
 		PlatformID pid = Environment.OSVersion.Platform;
-		if (((int)pid != 128 && pid != PlatformID.Unix && pid != PlatformID.MacOSX))
+		if (((int) pid != 128 && pid != PlatformID.Unix && pid != PlatformID.MacOSX))
 			shellQuoteChar = '"'; // Windows
 		else
 			shellQuoteChar = '\''; // !Windows
@@ -193,7 +194,7 @@ class BindingTouch {
 			{ "nostdlib", "Does not reference mscorlib.dll library", l => nostdlib = true },
 			{ "no-mono-path", "Launches compiler with empty MONO_PATH", l => { } },
 			{ "native-exception-marshalling", "Enable the marshalling support for Objective-C exceptions", (v) => { /* no-op */} },
-			{ "inline-selectors:", "If Selector.GetHandle is inlined and does not need to be cached (enabled by default in Xamarin.iOS, disabled in Xamarin.Mac)", 
+			{ "inline-selectors:", "If Selector.GetHandle is inlined and does not need to be cached (enabled by default in Xamarin.iOS, disabled in Xamarin.Mac)",
 				v => inline_selectors = string.Equals ("true", v, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty (v)
 			},
 			{ "process-enums", "Process enums as bindings, not external, types.", v => process_enums = true },
@@ -201,13 +202,13 @@ class BindingTouch {
 				(path, id) => {
 					if (path == null || path.Length == 0)
 						throw new Exception ("-link-with=FILE,ID requires a filename.");
-					
+
 					if (id == null || id.Length == 0)
 						id = Path.GetFileName (path);
-					
+
 					if (linkwith.Contains (id))
 						throw new Exception ("-link-with=FILE,ID cannot assign the same resource id to multiple libraries.");
-					
+
 					resources.Add (string.Format ("-res:{0},{1}", path, id));
 					linkwith.Add (id);
 				}
@@ -219,7 +220,7 @@ class BindingTouch {
 
 		try {
 			sources = os.Parse (args);
-		} catch (Exception e){
+		} catch (Exception e) {
 			Console.Error.WriteLine ("{0}: {1}", ToolName, e.Message);
 			Console.Error.WriteLine ("see {0} --help for more information", ToolName);
 			return 1;
@@ -335,7 +336,7 @@ class BindingTouch {
 			}
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
-			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs ()[0]).Append (' ');
+			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
 			cargs.Append (refs).Append (' ');
 			if (unsafef)
 				cargs.Append ("-unsafe ");
@@ -351,21 +352,22 @@ class BindingTouch {
 				cargs.Append (cs).Append (' ');
 			if (!string.IsNullOrEmpty (Path.GetDirectoryName (baselibdll)))
 				cargs.Append ("-lib:").Append (Path.GetDirectoryName (baselibdll)).Append (' ');
-			
 
-			var si = new ProcessStartInfo (compiler, cargs.ToString ()) {
+
+			var si = new ProcessStartInfo (compiler, cargs.ToString ())
+			{
 				UseShellExecute = false,
 			};
-				
+
 			// HACK: We are calling btouch with forced 2.1 path but we need working mono for compiler
 			si.EnvironmentVariables.Remove ("MONO_PATH");
 
 			if (verbose)
 				Console.WriteLine ("{0} {1}", si.FileName, si.Arguments);
-			
+
 			var p = Process.Start (si);
 			p.WaitForExit ();
-			if (p.ExitCode != 0){
+			if (p.ExitCode != 0) {
 				Console.WriteLine ("{0}: API binding contains errors.", ToolName);
 				return 1;
 			}
@@ -376,7 +378,7 @@ class BindingTouch {
 			} catch (Exception e) {
 				if (verbose)
 					Console.WriteLine (e);
-				
+
 				Console.Error.WriteLine ("Error loading API definition from {0}", tmpass);
 				return 1;
 			}
@@ -384,7 +386,7 @@ class BindingTouch {
 			Assembly baselib;
 			try {
 				baselib = Assembly.LoadFrom (baselibdll);
-			} catch (Exception e){
+			} catch (Exception e) {
 				if (verbose)
 					Console.WriteLine (e);
 
@@ -392,7 +394,7 @@ class BindingTouch {
 				return 1;
 			}
 			GC.KeepAlive (baselib); // Fixes a compiler warning (unused variable).
-				
+
 			TypeManager.Initialize (api);
 
 			foreach (var linkWith in AttributeManager.GetCustomAttributes<LinkWithAttribute> (api)) {

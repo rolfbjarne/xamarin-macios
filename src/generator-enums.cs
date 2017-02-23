@@ -41,7 +41,7 @@ public partial class Generator
 
 	void CopyObsolete (ICustomAttributeProvider provider)
 	{
-		foreach (ObsoleteAttribute oa in AttributeManager.GetCustomAttributes (provider, TypeManager.ObsoleteAttribute))
+		foreach (var oa in AttributeManager.GetCustomAttributes<ObsoleteAttribute> (provider))
 			print ("[Obsolete (\"{0}\", {1})]", oa.Message, oa.IsError ? "true" : "false");
 	}
 

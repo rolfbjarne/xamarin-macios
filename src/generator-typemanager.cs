@@ -167,11 +167,11 @@ public static class TypeManager
 		return Enum.GetUnderlyingType (type);
 	}
 
-	public static void Initialize (Assembly api)
+	public static void Initialize (Assembly api, Assembly corlib, Assembly platform)
 	{
 		api_assembly = api;
-		corlib_assembly = typeof (object).Assembly;
-		platform_assembly = typeof (NSObject).Assembly;
+		corlib_assembly = corlib;
+		platform_assembly = platform;
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

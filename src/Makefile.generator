@@ -36,6 +36,7 @@ GENERATOR_ATTRIBUTE_SOURCES = \
 	$(TOP)/src/ObjCRuntime/LinkWithAttribute.cs \
 	$(TOP)/src/ObjCRuntime/NativeAttribute.cs \
 	$(TOP)/src/ObjCRuntime/Registrar.core.cs \
+	$(TOP)/src/Foundation/ModelAttribute.cs \
 	$(TOP)/src/Foundation/ProtocolAttribute.cs \
 	$(TOP)/src/Foundation/FieldAttribute.cs \
 	$(TOP)/src/Foundation/AdviceAttribute.cs \

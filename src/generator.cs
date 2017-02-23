@@ -3348,8 +3348,8 @@ public partial class Generator : IMemberGatherer
 			// in question actually has that value at least).
 			var type = TypeManager.GetUnderlyingEnumType (mi.ReturnType) == TypeManager.System_UInt64 ? "ulong" : "long";
 			var itype = type == "ulong" ? "uint" : "int";
-			var value = Enum.ToObject (mi.ReturnType, type == "ulong" ? (object) ulong.MaxValue : (object) long.MaxValue);
-			if (Array.IndexOf (Enum.GetValues (mi.ReturnType), value) >= 0) {
+			var value = type == "ulong" ? (object) ulong.MaxValue : (object) long.MaxValue;
+			if (TypeManager.IsEnumValueDefined (mi.ReturnType, value)) {
 				postproc.AppendFormat ("if (({0}) ret == ({0}) {2}.MaxValue) ret = ({1}) {0}.MaxValue;", type, FormatType (mi.DeclaringType, mi.ReturnType), itype);
 				if (type == "long")
 					postproc.AppendFormat ("else if (({0}) ret == ({0}) {2}.MinValue) ret = ({1}) {0}.MinValue;", type, FormatType (mi.DeclaringType, mi.ReturnType), itype);

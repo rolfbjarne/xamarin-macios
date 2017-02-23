@@ -53,26 +53,19 @@ public static class TypeManager
 	public static Type AutoreleaseAttribute;
 	public static Type AvailabilityBaseAttribute;
 	public static Type BaseTypeAttribute;
-	public static Type BindAttribute;
 	public static Type BlockCallbackAttribute;
 	public static Type CategoryAttribute;
 	public static Type CCallbackAttribute;
 	public static Type CheckDisposedAttribute;
 	public static Type CoreImageFilterAttribute;
 	public static Type CoreImageFilterPropertyAttribute;
-	public static Type DebuggerBrowsableAttribute;
-	public static Type DebuggerDisplayAttribute;
-	public static Type DesignatedInitializerAttribute;
 	public static Type DisableZeroCopyAttribute;
-	public static Type DisposeAttribute;
-	public static Type EditorBrowsableAttribute;
 	public static Type ExportAttribute;
 	public static Type FactoryAttribute;
 	public static Type FieldAttribute;
 	public static Type FlagsAttribute;
 	public static Type InternalAttribute;
 	public static Type IsThreadStaticAttribute;
-	public static Type LinkWithAttribute;
 	public static Type ManualAttribute;
 	public static Type MarshalNativeExceptionsAttribute;
 	public static Type ModelAttribute;
@@ -82,8 +75,6 @@ public static class TypeManager
 	public static Type NotificationAttribute;
 	public static Type NotImplementedAttribute;
 	public static Type NullAllowedAttribute;
-	public static Type ObsoleteAttribute;
-	public static Type OptionalImplementationAttribute;
 #if !IKVM
 	static Type OutAttribute;
 #endif
@@ -93,15 +84,10 @@ public static class TypeManager
 	public static Type PartialAttribute;
 	public static Type PlainStringAttribute;
 	public static Type PostGetAttribute;
-	public static Type PostSnippetAttribute;
-	public static Type PreSnippetAttribute;
 	public static Type ProbePresenceAttribute;
-	public static Type PrologueSnippetAttribute;
 	public static Type ProtectedAttribute;
 	public static Type ProtocolAttribute;
-	public static Type ProtocolizeAttribute;
 	public static Type ProxyAttribute;
-	public static Type RegisterAttribute;
 	public static Type ReleaseAttribute;
 	public static Type RetainAttribute;
 	public static Type SealedAttribute;
@@ -109,7 +95,6 @@ public static class TypeManager
 	public static Type StrongDictionaryAttribute;
 	public static Type SyntheticAttribute;
 	public static Type TargetAttribute;
-	public static Type ThreadSafeAttribute;
 	public static Type TransientAttribute;
 	public static Type UnifiedInternalAttribute;
 	public static Type WrapAttribute;
@@ -349,26 +334,19 @@ public static class TypeManager
 		AutoreleaseAttribute = Lookup (binding_assembly, "", "AutoreleaseAttribute");
 		AvailabilityBaseAttribute = Lookup (platform_assembly, "ObjCRuntime", "AvailabilityBaseAttribute");
 		BaseTypeAttribute = Lookup (binding_assembly, "", "BaseTypeAttribute");
-		BindAttribute = Lookup (binding_assembly, "", "BindAttribute");
 		BlockCallbackAttribute = Lookup (binding_assembly, "", "BlockCallbackAttribute");
 		CategoryAttribute = Lookup (binding_assembly, "", "CategoryAttribute");
 		CCallbackAttribute = Lookup (binding_assembly, "", "CCallbackAttribute");
 		CheckDisposedAttribute = Lookup (binding_assembly, "", "CheckDisposedAttribute");
 		CoreImageFilterAttribute = Lookup (binding_assembly, "", "CoreImageFilterAttribute");
 		CoreImageFilterPropertyAttribute = Lookup (binding_assembly, "", "CoreImageFilterPropertyAttribute");
-		DebuggerBrowsableAttribute = Lookup (corlib_assembly, "System.Diagnostics", "DebuggerBrowsableAttribute");
-		DebuggerDisplayAttribute = Lookup (corlib_assembly, "System.Diagnostics", "DebuggerDisplayAttribute");
-		DesignatedInitializerAttribute = Lookup (binding_assembly, "", "DesignatedInitializerAttribute");
 		DisableZeroCopyAttribute = Lookup (binding_assembly, "", "DisableZeroCopyAttribute");
-		DisposeAttribute = Lookup (binding_assembly, "", "DisposeAttribute");
-		EditorBrowsableAttribute = Lookup (system_assembly, "System.ComponentModel", "EditorBrowsableAttribute");
 		ExportAttribute = Lookup (platform_assembly, "Foundation", "ExportAttribute");
 		FactoryAttribute = Lookup (binding_assembly, "", "FactoryAttribute");
 		FieldAttribute = Lookup (platform_assembly, "Foundation", "FieldAttribute");
 		FlagsAttribute = Lookup (corlib_assembly, "System", "FlagsAttribute");
 		InternalAttribute = Lookup (binding_assembly, "", "InternalAttribute");
 		IsThreadStaticAttribute = Lookup (binding_assembly, "", "IsThreadStaticAttribute");
-		LinkWithAttribute = Lookup (platform_assembly, "ObjCRuntime", "LinkWithAttribute");
 		ManualAttribute = Lookup (binding_assembly, "", "ManualAttribute");
 		MarshalNativeExceptionsAttribute = Lookup (binding_assembly, "", "MarshalNativeExceptionsAttribute");
 		ModelAttribute = Lookup (platform_assembly, "Foundation", "ModelAttribute");
@@ -378,8 +356,6 @@ public static class TypeManager
 		NotificationAttribute = Lookup (binding_assembly, "", "NotificationAttribute");
 		NotImplementedAttribute = Lookup (binding_assembly, "", "NotImplementedAttribute");
 		NullAllowedAttribute = Lookup (binding_assembly, "", "NullAllowedAttribute");
-		ObsoleteAttribute = Lookup (corlib_assembly, "System", "ObsoleteAttribute");
-		OptionalImplementationAttribute = Lookup (binding_assembly, "", "OptionalImplementationAttribute");
 #if !IKVM
 		OutAttribute = Lookup (corlib_assembly, "System.Runtime.InteropServices", "OutAttribute");
 #endif
@@ -389,15 +365,10 @@ public static class TypeManager
 		PartialAttribute = Lookup (binding_assembly, "", "PartialAttribute");
 		PlainStringAttribute = Lookup (binding_assembly, "", "PlainStringAttribute");
 		PostGetAttribute = Lookup (binding_assembly, "", "PostGetAttribute");
-		PostSnippetAttribute = Lookup (binding_assembly, "", "PostSnippetAttribute");
-		PreSnippetAttribute = Lookup (binding_assembly, "", "PreSnippetAttribute");
 		ProbePresenceAttribute = Lookup (binding_assembly, "", "ProbePresenceAttribute");
-		PrologueSnippetAttribute = Lookup (binding_assembly, "", "PrologueSnippetAttribute");
 		ProtectedAttribute = Lookup (binding_assembly, "", "ProtectedAttribute");
 		ProtocolAttribute = Lookup (platform_assembly, "Foundation", "ProtocolAttribute");
-		ProtocolizeAttribute = Lookup (binding_assembly, "", "ProtocolizeAttribute");
 		ProxyAttribute = Lookup (binding_assembly, "", "ProxyAttribute");
-		RegisterAttribute = Lookup (platform_assembly, "Foundation", "RegisterAttribute");
 		ReleaseAttribute = Lookup (binding_assembly, "", "ReleaseAttribute");
 		RetainAttribute = Lookup (binding_assembly, "", "RetainAttribute");
 		SealedAttribute = Lookup (binding_assembly, "", "SealedAttribute");
@@ -405,7 +376,6 @@ public static class TypeManager
 		StrongDictionaryAttribute = Lookup (binding_assembly, "", "StrongDictionaryAttribute");
 		SyntheticAttribute = Lookup (binding_assembly, "", "SyntheticAttribute");
 		TargetAttribute = Lookup (binding_assembly, "", "TargetAttribute");
-		ThreadSafeAttribute = Lookup (binding_assembly, "", "ThreadSafeAttribute");
 		TransientAttribute = Lookup (binding_assembly, "", "TransientAttribute");
 		UnifiedInternalAttribute = Lookup (binding_assembly, "", "UnifiedInternalAttribute");
 		WrapAttribute = Lookup (binding_assembly, "", "WrapAttribute");

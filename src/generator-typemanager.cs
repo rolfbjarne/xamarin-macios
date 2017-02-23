@@ -1,7 +1,6 @@
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
+
 #if IKVM
 using IKVM.Reflection;
 using Type = IKVM.Reflection.Type;
@@ -9,14 +8,6 @@ using Type = IKVM.Reflection.Type;
 using System.Reflection;
 #endif
 using System.Runtime.InteropServices;
-
-using XamCore.CoreFoundation;
-using XamCore.CoreGraphics;
-using XamCore.ObjCRuntime;
-using XamCore.Foundation;
-using XamCore.Security;
-
-using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
 
 public static class TypeManager
 {

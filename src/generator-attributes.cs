@@ -7,8 +7,6 @@ using Type = IKVM.Reflection.Type;
 using System.Reflection;
 #endif
 
-using XamCore.Foundation;
-using XamCore.ObjCRuntime;
 
 //
 // ForcedTypeAttribute

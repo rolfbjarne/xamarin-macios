@@ -13,17 +13,6 @@ public static class AttributeManager
 #if IKVM
 	static object [] EmptyAttributes = new object [0];
 
-	static System.Attribute GetCustomAttribute (MemberInfo provider, Type type)
-	{
-		// FIXME: improve perf here.
-		var list = GetCustomAttributes (provider, type, false);
-		if (list.Length == 0)
-			return null;
-		if (list.Length > 1)
-			throw new System.Reflection.AmbiguousMatchException ();
-		return (System.Attribute) list [0];
-	}
-
 	static System.Type ConvertType (Type type)
 	{
 		System.Type rv;
@@ -53,9 +42,9 @@ public static class AttributeManager
 	static Type ConvertType (System.Type type)
 	{
 		Type rv;
-		if (type.Assembly == /* mscorlib */ typeof (int).Assembly) {
+		if (type.Assembly == typeof (int).Assembly) {
 			rv = TypeManager.CorlibAssembly.GetType (type.FullName);
-		} else if (type.Assembly == /* System */ typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly) {
+		} else if (type.Assembly == typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly) {
 			rv = TypeManager.SystemAssembly.GetType (type.FullName);
 		} else if (type.Assembly == typeof (TypeManager).Assembly) {
 			rv = TypeManager.BindingAssembly.GetType (type.FullName);
@@ -211,7 +200,7 @@ public static class AttributeManager
 		return new T [0]; // FIXME: ugh, we end up allocating a lot of empty arrays
 	}
 
-	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider, bool inherits) where T : System.Attribute
+	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
 		return FilterAttributes<T> (GetIKVMAttributes (provider));
 	}
@@ -222,42 +211,6 @@ public static class AttributeManager
 			throw new System.ArgumentNullException (nameof (type));
 
 		return FilterAttributes (GetIKVMAttributes (provider), type);
-	}
-
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, bool inherits)
-	{
-		return FilterAttributes (GetIKVMAttributes (provider), null);
-	}
-
-	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name, bool inherit = false)
-	{
-		var attribs = GetIKVMAttributes (provider);
-		for (int i = 0; i < attribs.Count; i++)
-			if (attribs [i].AttributeType.Name == type_name)
-				return true;
-		return false;
-	}
-
-	static bool HasAttribute (ICustomAttributeProvider provider, bool inherits, params Type [] any_attribute_type)
-	{
-		var attribs = GetIKVMAttributes (provider);
-		if (attribs == null || attribs.Count == 0)
-			return false;
-
-		for (int i = 0; i < attribs.Count; i++) {
-			var attrib = attribs [i];
-			var attribType = attrib.AttributeType;
-			for (int t = 0; t < any_attribute_type.Length; t++) {
-				if (any_attribute_type [t] == attribType)
-					return true;
-
-				if (IsSubclassOf (any_attribute_type [t], attribType))
-					return true;
-			}
-		}
-
-		//System.Console.WriteLine ("No attribute: {0}", provider);
-		return false;
 	}
 
 	static IList<CustomAttributeData> GetIKVMAttributes (ICustomAttributeProvider provider)
@@ -271,7 +224,19 @@ public static class AttributeManager
 		var pinfo = provider as ParameterInfo;
 		if (pinfo != null)
 			return CustomAttributeData.GetCustomAttributes (pinfo);
-		throw new System.NotImplementedException ();
+		var module = provider as Module;
+		if (module != null)
+			return CustomAttributeData.GetCustomAttributes (module);
+		throw new BindingException (1051, true, "Internal error: Don't know how to get attributes for {0}. Please file a bug report (https://bugzilla.xamarin.com) with a test case.", provider.GetType ().FullName);
+	}
+
+	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name, bool inherit = false)
+	{
+		var attribs = GetIKVMAttributes (provider);
+		for (int i = 0; i < attribs.Count; i++)
+			if (attribs [i].AttributeType.Name == type_name)
+				return true;
+		return false;
 	}
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type, bool inherits = false)
@@ -291,6 +256,11 @@ public static class AttributeManager
 		return false;
 	}
 
+	public static bool HasAttribute<T> (ICustomAttributeProvider provider, bool inherits = false) where T : Attribute
+	{
+		return HasAttribute (provider, ConvertType (typeof (T)), inherits);
+	}
+
 	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type, bool inherit = false /* REMOVE */)
 	{
 		var rv = GetCustomAttributes (provider, type, inherit);
@@ -301,21 +271,14 @@ public static class AttributeManager
 		throw new NotImplementedException ();
 	}
 
-	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider, bool inherit = false /* REMOVE */) where T : System.Attribute
+	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
-		var rv = GetCustomAttributes<T> (provider, inherit);
+		var rv = GetCustomAttributes<T> (provider/*, inherit*/);
 		if (rv.Length == 1)
 			return rv [0];
 		if (rv.Length == 0)
 			return null;
 		throw new NotImplementedException ();
-	}
-
-	public static bool HasAttribute<T> (ICustomAttributeProvider provider, bool inherit = false) where T : Attribute
-	{
-		// FIXME: make this faster
-		var attribs = GetCustomAttributes<T> (provider, inherit);
-		return attribs?.Length > 0;
 	}
 
 	public static Type GetAttributeType (System.Attribute attribute)

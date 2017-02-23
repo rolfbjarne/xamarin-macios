@@ -3981,7 +3981,7 @@ public partial class Generator : IMemberGatherer
 			print (sw, convs.ToString ());
 
 		Inject (mi, TypeManager.PreSnippetAttribute);
-		AlignAttribute align = AttributeManager.GetCustomAttribute (mi, TypeManager.AlignAttribute) as AlignAttribute;
+		var align = AttributeManager.GetCustomAttribute<AlignAttribute> (mi);
 
 		PostGetAttribute [] postget = null;
 		// [PostGet] are not needed (and might not be available) when generating methods inside Appearance types
@@ -6824,11 +6824,11 @@ public partial class Generator : IMemberGatherer
 
 	string GetPublicParameterName (ParameterInfo pi)
 	{
-		object [] attrs = AttributeManager.GetCustomAttributes (pi, TypeManager.EventNameAttribute);
+		var attrs = AttributeManager.GetCustomAttributes<EventNameAttribute> (pi);
 		if (attrs.Length == 0)
 			return CamelCase (pi.Name).GetSafeParamName ();
 
-		var a = (EventNameAttribute) attrs [0];
+		var a = attrs [0];
 		return CamelCase (a.EvtName).GetSafeParamName ();
 	}
 	
@@ -6860,7 +6860,7 @@ public partial class Generator : IMemberGatherer
 	Dictionary<string,bool> skipGeneration = new Dictionary<string,bool> ();
 	string GetEventName (MethodInfo mi)
 	{
-		var a = AttributeManager.GetCustomAttribute (mi, TypeManager.EventNameAttribute);
+		var a = AttributeManager.GetCustomAttribute<EventNameAttribute> (mi);
 		if (a == null)
 			return mi.Name;
 		var ea = (EventNameAttribute) a;
@@ -6871,7 +6871,7 @@ public partial class Generator : IMemberGatherer
 	HashSet<string> repeatedDelegateApiNames = new HashSet<string> ();
 	string GetDelegateApiName (MethodInfo mi)
 	{
-		var a = AttributeManager.GetCustomAttribute (mi, TypeManager.DelegateApiNameAttribute);
+		var a = AttributeManager.GetCustomAttribute<DelegateApiNameAttribute> (mi);
 
 		if (repeatedDelegateApiNames.Contains (mi.Name) && a == null)
 			throw new BindingException (1043, true, $"Repeated overload {mi.Name} and no [DelegateApiNameAttribute] provided to generate property name on host class.");
@@ -6892,7 +6892,7 @@ public partial class Generator : IMemberGatherer
 		if (mi.GetParameters ().Length == 1)
 			return "EventArgs";
 		
-		var a = AttributeManager.GetCustomAttribute (mi, TypeManager.EventArgsAttribute);
+		var a = AttributeManager.GetCustomAttribute<EventArgsAttribute> (mi);
 		if (a == null)
 			throw new BindingException (1004, true, "The delegate method {0}.{1} is missing the [EventArgs] attribute (has {2} parameters)", mi.DeclaringType.FullName, mi.Name, mi.GetParameters ().Length);
 
@@ -6912,11 +6912,11 @@ public partial class Generator : IMemberGatherer
 
 	string GetDelegateName (MethodInfo mi)
 	{
-		var a = AttributeManager.GetCustomAttribute (mi, TypeManager.DelegateNameAttribute);
+		Attribute a = AttributeManager.GetCustomAttribute<DelegateNameAttribute> (mi);
 		if (a != null)
 			return ((DelegateNameAttribute) a).Name;
 
-		a = AttributeManager.GetCustomAttribute (mi, TypeManager.EventArgsAttribute);
+		a = AttributeManager.GetCustomAttribute<EventArgsAttribute> (mi);
 		if (a == null)
 			throw new BindingException (1006, true, "The delegate method {0}.{1} is missing the [DelegateName] attribute (or EventArgs)", mi.DeclaringType.FullName, mi.Name);
 
@@ -6926,9 +6926,9 @@ public partial class Generator : IMemberGatherer
 	
 	object GetDefaultValue (MethodInfo mi)
 	{
-		var a = AttributeManager.GetCustomAttribute (mi, TypeManager.DefaultValueAttribute);
+		Attribute a = AttributeManager.GetCustomAttribute<DefaultValueAttribute> (mi);
 		if (a == null){
-			a = AttributeManager.GetCustomAttribute (mi, TypeManager.DefaultValueFromArgumentAttribute);
+			a = AttributeManager.GetCustomAttribute<DefaultValueFromArgumentAttribute> (mi);
 			if (a != null){
 				var fvfa = (DefaultValueFromArgumentAttribute) a;
 				return fvfa.Argument;

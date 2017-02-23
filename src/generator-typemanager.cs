@@ -241,6 +241,28 @@ public static class TypeManager {
 #endif
 	}
 
+	public static Type GetUnderlyingNullableType (Type type)
+	{
+#if IKVM
+		if (!type.IsConstructedGenericType)
+			return null;
+
+		var gt = type.GetGenericTypeDefinition ();
+		if (gt.Assembly != CorlibAssembly)
+			return null;
+
+		if (gt.Namespace != "System")
+			return null;
+
+		if (gt.Name != "Nullable`1")
+			return null;
+
+		return type.GenericTypeArguments [0];
+#else
+		return Nullable.GetUnderlyingType (type);
+#endif
+	}
+
 	public static bool IsOutParameter (ParameterInfo pi)
 	{
 #if IKVM

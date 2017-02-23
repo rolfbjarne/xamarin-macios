@@ -1773,7 +1773,7 @@ public partial class Generator : IMemberGatherer
 			return AttributeManager.HasAttribute (i, t);
 		else
 			foreach (var a in attributes)
-				if (a.GetType () == t)
+				if (AttributeManager.GetAttributeType (a) == t)
 					return true;
 		return false;
 	}

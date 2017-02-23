@@ -103,7 +103,9 @@ public static class TypeManager
 	public static Type NullAllowedAttribute;
 	public static Type ObsoleteAttribute;
 	public static Type OptionalImplementationAttribute;
-	public static Type OutAttribute;
+#if !IKVM
+	static Type OutAttribute;
+#endif
 	public static Type OverrideAttribute;
 	public static Type ParamArrayAttribute;
 	public static Type ParamsAttribute;
@@ -231,6 +233,15 @@ public static class TypeManager
 		return rv;
 	}
 
+	public static bool IsOutParameter (ParameterInfo pi)
+	{
+#if IKVM
+		return pi.IsOut;
+#else
+		return AttributeManager.HasAttribute (pi, OutAttribute);
+#endif
+	}
+
 	public static void Initialize (Assembly api)
 	{
 		api_assembly = api;
@@ -329,7 +340,9 @@ public static class TypeManager
 		NullAllowedAttribute = Lookup (binding_assembly, "", "NullAllowedAttribute");
 		ObsoleteAttribute = Lookup (corlib_assembly, "System", "ObsoleteAttribute");
 		OptionalImplementationAttribute = Lookup (binding_assembly, "", "OptionalImplementationAttribute");
+#if !IKVM
 		OutAttribute = Lookup (corlib_assembly, "System.Runtime.InteropServices", "OutAttribute");
+#endif
 		OverrideAttribute = Lookup (binding_assembly, "", "OverrideAttribute");
 		ParamArrayAttribute = Lookup (corlib_assembly, "System", "ParamArrayAttribute");
 		ParamsAttribute = Lookup (binding_assembly, "", "ParamsAttribute");

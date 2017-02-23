@@ -18,7 +18,8 @@ using XamCore.Security;
 
 using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
 
-public static class TypeManager {
+public static class TypeManager
+{
 	public static Type System_Attribute;
 	public static Type System_Boolean;
 	public static Type System_Byte;

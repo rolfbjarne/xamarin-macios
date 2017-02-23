@@ -2853,12 +2853,12 @@ public partial class Generator : IMemberGatherer
 						print ("return NSString.FromHandle (value);");
 					else if (propertyType == TypeManager.NSString)
 						print ("return new NSString (value);");
-					else if (propertyType == TypeManager.System_String_Array){
+					else if (propertyType == TypeManager.System_String_Array) {
 						print ("return NSArray.StringArrayFromHandle (value);");
 					} else {
 						Type underlying = propertyType.IsEnum ? TypeManager.GetUnderlyingEnumType (propertyType) : propertyType;
 						string cast = propertyType.IsEnum ? "(" + propertyType.FullName + ") " : "";
-					
+
 						if (underlying == TypeManager.System_Int32)
 							print (GenerateNSNumber (cast, "Int32Value"));
 						else if (underlying == TypeManager.System_UInt32)
@@ -3966,7 +3966,7 @@ public partial class Generator : IMemberGatherer
 			(HasAttribute (mi, TypeManager.FactoryAttribute)) ||
 			((body_options & BodyOption.NeedsTempReturn) == BodyOption.NeedsTempReturn) ||
 			(mi.ReturnType.IsSubclassOf (TypeManager.System_Delegate)) ||
-			(HasAttribute (AttributeManager.GetReturnTypeCustomAttributes (mi), TypeManager.ProxyAttribute)) ||
+			     (HasAttribute (AttributeManager.GetReturnTypeCustomAttributes (mi), TypeManager.ProxyAttribute)) ||
 			(!Compat && IsNativeEnum (mi.ReturnType)) ||
 			(mi.Name != "Constructor" && by_ref_processing.Length > 0 && mi.ReturnType != TypeManager.System_Void) ||
 			needsPtrZeroCheck;

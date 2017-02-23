@@ -328,12 +328,12 @@ public static class AttributeManager
 		return (T []) provider.GetCustomAttributes (typeof (T));
 	}
 
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)
+	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type)
 	{
 		if (type == null)
 			throw new System.ArgumentNullException (nameof (type));
 
-		return (System.Attribute []) provider.GetCustomAttributes (type, inherits);
+		return (System.Attribute []) provider.GetCustomAttributes (type);
 	}
 
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, bool inherits)

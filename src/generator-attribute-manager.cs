@@ -205,14 +205,6 @@ public static class AttributeManager
 		return FilterAttributes<T> (GetIKVMAttributes (provider));
 	}
 
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type)
-	{
-		if (type == null)
-			throw new System.ArgumentNullException (nameof (type));
-
-		return FilterAttributes (GetIKVMAttributes (provider), type);
-	}
-
 	static IList<CustomAttributeData> GetIKVMAttributes (ICustomAttributeProvider provider)
 	{
 		var member = provider as MemberInfo;
@@ -318,19 +310,6 @@ public static class AttributeManager
 		return (T []) provider.GetCustomAttributes (typeof (T), false);
 	}
 
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type)
-	{
-		if (type == null)
-			throw new System.ArgumentNullException (nameof (type));
-
-		return (System.Attribute []) provider.GetCustomAttributes (type, false);
-	}
-
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider)
-	{
-		return provider.GetCustomAttributes (false);
-	}
-
 	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
 	{
 		return HasAttribute (provider, typeof (T));
@@ -338,7 +317,7 @@ public static class AttributeManager
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name)
 	{
-		foreach (var attr in AttributeManager.GetCustomAttributes (provider)) {
+		foreach (var attr in provider.GetCustomAttributes (false)) {
 			if (attr.GetType ().Name == type_name)
 				return true;
 		}
@@ -348,7 +327,7 @@ public static class AttributeManager
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type)
 	{
-		var attribs = GetCustomAttributes (provider, attribute_type);
+		var attribs = provider.GetCustomAttributes (attribute_type, false);
 		if (attribs == null || attribs.Length == 0)
 			return false;
 

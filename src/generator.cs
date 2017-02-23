@@ -115,7 +115,7 @@ public static class ReflectionExtensions
 		string nwrap;
 
 		if (parent_type != TypeManager.NSObject) {
-			if (AttributeManager.HasAttribute (parent_type, TypeManager.ModelAttribute, false)) {
+			if (AttributeManager.HasAttribute (parent_type, TypeManager.ModelAttribute)) {
 				foreach (PropertyInfo pinfo in parent_type.GetProperties (flags)) {
 					bool toadd = true;
 					var modelea = Generator.GetExportAttribute (pinfo, out nwrap);
@@ -176,9 +176,9 @@ public static class ReflectionExtensions
 		Type parent_type = GetBaseType (type);
 
 		if (parent_type != TypeManager.NSObject) {
-			if (AttributeManager.HasAttribute (parent_type, TypeManager.ModelAttribute, false))
+			if (AttributeManager.HasAttribute (parent_type, TypeManager.ModelAttribute))
 				foreach (MethodInfo minfo in parent_type.GetMethods ())
-					if (AttributeManager.HasAttribute (minfo, TypeManager.ExportAttribute, false))
+					if (AttributeManager.HasAttribute (minfo, TypeManager.ExportAttribute))
 						methods.Add (minfo);
 		}
 
@@ -280,7 +280,7 @@ public class MarshalInfo
 	// Used for parameters
 	public MarshalInfo (MethodInfo mi, ParameterInfo pi)
 	{
-		PlainString = AttributeManager.HasAttribute (pi, TypeManager.PlainStringAttribute, true);
+		PlainString = AttributeManager.HasAttribute (pi, TypeManager.PlainStringAttribute);
 		Type = pi.ParameterType;
 		ZeroCopyStringMarshal = (Type == TypeManager.System_String) && PlainString == false && !Generator.HasAttribute (pi, (TypeManager.DisableZeroCopyAttribute)) && Generator.SharedGenerator.type_wants_zero_copy;
 		if (ZeroCopyStringMarshal && Generator.HasAttribute (mi, TypeManager.DisableZeroCopyAttribute))
@@ -291,7 +291,7 @@ public class MarshalInfo
 	// Used to return values
 	public MarshalInfo (MethodInfo mi)
 	{
-		PlainString = AttributeManager.HasAttribute (AttributeManager.GetReturnTypeCustomAttributes (mi), TypeManager.PlainStringAttribute, true);
+		PlainString = AttributeManager.HasAttribute (AttributeManager.GetReturnTypeCustomAttributes (mi), TypeManager.PlainStringAttribute);
 		Type = mi.ReturnType;
 	}
 
@@ -403,7 +403,7 @@ public class GeneratedType
 			ParentGenerated.Children.Add (this);
 		}
 
-		if (AttributeManager.HasAttribute (t, TypeManager.CategoryAttribute, true))
+		if (AttributeManager.HasAttribute (t, TypeManager.CategoryAttribute))
 			ImplementsAppearance = false;
 	}
 	public Type Type;
@@ -1046,7 +1046,7 @@ public partial class Generator : IMemberGatherer
 	// Is this type something that derives from DictionaryContainerType (or an interface marked up with StrongDictionary)
 	public bool IsDictionaryContainerType (Type t)
 	{
-		return t.IsSubclassOf (TypeManager.DictionaryContainerType) || (t.IsInterface && AttributeManager.HasAttribute (t, TypeManager.StrongDictionaryAttribute, true));
+		return t.IsSubclassOf (TypeManager.DictionaryContainerType) || (t.IsInterface && AttributeManager.HasAttribute (t, TypeManager.StrongDictionaryAttribute));
 	}
 
 	//
@@ -1744,7 +1744,7 @@ public partial class Generator : IMemberGatherer
 	public static bool HasAttribute (ICustomAttributeProvider i, Type t, Attribute [] attributes = null)
 	{
 		if (attributes == null)
-			return AttributeManager.HasAttribute (i, t, true);
+			return AttributeManager.HasAttribute (i, t);
 		else
 			foreach (var a in attributes)
 				if (AttributeManager.GetAttributeType (a) == t)
@@ -2146,11 +2146,11 @@ public partial class Generator : IMemberGatherer
 						continue;
 
 					// Let properties with the [Field] attribute through as well.
-					if (AttributeManager.HasAttribute (pi, TypeManager.FieldAttribute, true))
+					if (AttributeManager.HasAttribute (pi, TypeManager.FieldAttribute))
 						continue;
 
 
-					if (AttributeManager.HasAttribute (pi, TypeManager.CoreImageFilterPropertyAttribute, true))
+					if (AttributeManager.HasAttribute (pi, TypeManager.CoreImageFilterPropertyAttribute))
 						continue;
 
 					throw new BindingException (1018, true, "No [Export] attribute on property {0}.{1}", t.FullName, pi.Name);
@@ -2686,7 +2686,7 @@ public partial class Generator : IMemberGatherer
 								getter = "GetNSDictionary ({0})";
 							}
 							setter = "SetNativeValue ({0}, value)";
-						} else if (IsDictionaryContainerType (pi.PropertyType) || AttributeManager.HasAttribute (pi, TypeManager.StrongDictionaryAttribute, true)) {
+						} else if (IsDictionaryContainerType (pi.PropertyType) || AttributeManager.HasAttribute (pi, TypeManager.StrongDictionaryAttribute)) {
 							var strType = pi.PropertyType.Name;
 							getter = "GetStrongDictionary<" + strType + ">({0})";
 							setter = "SetNativeValue ({0}, value.Dictionary)";
@@ -2978,8 +2978,8 @@ public partial class Generator : IMemberGatherer
 
 		// we must avoid duplication of availability so we will only print
 		// if the property has no Availability
-		bool propHasNoInfo = !AttributeManager.HasAttribute (minfo.property, TypeManager.AvailabilityBaseAttribute, true)
-															 && (minfo.property.GetGetMethod () == null || !AttributeManager.HasAttribute (minfo.property.GetGetMethod (), TypeManager.AvailabilityBaseAttribute, true));
+		bool propHasNoInfo = !AttributeManager.HasAttribute (minfo.property, TypeManager.AvailabilityBaseAttribute)
+															 && (minfo.property.GetGetMethod () == null || !AttributeManager.HasAttribute (minfo.property.GetGetMethod (), TypeManager.AvailabilityBaseAttribute));
 
 		if (isInlined && propHasNoInfo)
 			PrintPlatformAttributes (minfo.property.DeclaringType);
@@ -5409,9 +5409,9 @@ public partial class Generator : IMemberGatherer
 			this.sw = sw;
 			var category_attribute = AttributeManager.GetCustomAttributes (type, TypeManager.CategoryAttribute);
 			bool is_category_class = category_attribute.Length > 0;
-			bool is_static_class = AttributeManager.HasAttribute (type, TypeManager.StaticAttribute, true) || is_category_class;
-			bool is_partial = AttributeManager.HasAttribute (type,TypeManager.PartialAttribute, true);
-			bool is_model = AttributeManager.HasAttribute (type,TypeManager.ModelAttribute, true);
+			bool is_static_class = AttributeManager.HasAttribute (type, TypeManager.StaticAttribute) || is_category_class;
+			bool is_partial = AttributeManager.HasAttribute (type,TypeManager.PartialAttribute);
+			bool is_model = AttributeManager.HasAttribute (type,TypeManager.ModelAttribute);
 			bool is_protocol = AttributeManager.HasAttribute (type, TypeManager.ProtocolAttribute);
 			bool is_abstract = AttributeManager.HasAttribute (type, TypeManager.AbstractAttribute);
 			bool is_sealed = AttributeManager.HasAttribute (type, TypeManager.SealedAttribute);
@@ -6120,7 +6120,7 @@ public partial class Generator : IMemberGatherer
 						var pars = mi.GetParameters ();
 						int minPars = bta.Singleton ? 0 : 1;
 
-						if (AttributeManager.HasAttribute (mi, TypeManager.NoDefaultValueAttribute, false))
+						if (AttributeManager.HasAttribute (mi, TypeManager.NoDefaultValueAttribute))
 							noDefaultValue.Add (mi);
 
 						if (pars.Length < minPars)
@@ -6215,7 +6215,7 @@ public partial class Generator : IMemberGatherer
 							       sender,
 							       pars.Length == minPars ? "" : String.Format (", {0}", RenderArgs (pars.Skip (1))));
 
-							if (AttributeManager.HasAttribute (mi, TypeManager.NoDefaultValueAttribute, false))
+							if (AttributeManager.HasAttribute (mi, TypeManager.NoDefaultValueAttribute))
 								print ("throw new You_Should_Not_Call_base_In_This_Method ();");
 							else {
 								var def = GetDefaultValue (mi);
@@ -6672,7 +6672,7 @@ public partial class Generator : IMemberGatherer
 			return true;
 
 		// Skip those methods marked to be ignored by the developer
-		return AttributeManager.HasAttribute<IgnoredInDelegateAttribute> (mi, true);
+		return AttributeManager.HasAttribute<IgnoredInDelegateAttribute> (mi);
 	}
 
 	// Safely strips away any Weak from the beginning of either delegate and returns if they match

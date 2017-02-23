@@ -249,7 +249,11 @@ public static class TypeManager
 
 	public static Type GetUnderlyingEnumType (Type type)
 	{
+#if IKVM
+		return type.GetEnumUnderlyingType ();
+#else
 		return Enum.GetUnderlyingType (type);
+#endif
 	}
 
 	public static void Initialize (Assembly api)

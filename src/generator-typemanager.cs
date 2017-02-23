@@ -272,6 +272,17 @@ public static class TypeManager
 #endif
 	}
 
+	public static bool IsEnumValueDefined (Type type, object value)
+	{
+#if IKVM
+		return type.IsEnumDefined (value);
+#else
+		var enumValue = System.Enum.ToObject (type, value);
+		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;
+
+#endif
+	}
+
 	public static object GetConstantValue (FieldInfo fi)
 	{
 #if IKVM

@@ -72,8 +72,19 @@ public static class AttributeManager
 		return true;
 	}
 
+	public static Type GetAttributeType (System.Attribute attribute)
+	{
+		return GetAttributeType (attribute.GetType ());
+	}
+
 	public static ICustomAttributeProvider GetReturnTypeCustomAttributes (MethodInfo method)
 	{
 		return method.ReturnTypeCustomAttributes;
 	}
+
+	public static Type GetAttributeType (System.Type type)
+	{
+		return type;
+	}
+#endif
 }

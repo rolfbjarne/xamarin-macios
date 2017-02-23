@@ -564,7 +564,7 @@ public class MemberInformation
 			selector = export.Selector;
 
 		if (wrap_method != null) {
-			var wrapAtt = AttributeManager.GetCustomAttribute<WrapAttribute> (pi, true);
+			var wrapAtt = AttributeManager.GetCustomAttribute<WrapAttribute> (pi);
 			is_virtual_method = wrapAtt?.IsVirtual ?? false;
 		} else if (is_interface_impl || is_type_sealed)
 			is_virtual_method = false;

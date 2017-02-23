@@ -6242,7 +6242,7 @@ public partial class Generator : IMemberGatherer
 
 						if (!InlineSelectors) {
 							foreach (var mi in noDefaultValue) {
-								var export = AttributeManager.GetCustomAttribute<ExportAttribute> (mi, false);
+								var export = AttributeManager.GetCustomAttribute<ExportAttribute> (mi);
 								print ("static IntPtr sel{0}Handle = Selector.GetHandle (\"{1}\");", mi.Name, export.Selector);
 							}
 							print ("static IntPtr selRespondsToSelector = " + selRespondsToSelector + ";");
@@ -6260,7 +6260,7 @@ public partial class Generator : IMemberGatherer
 						print ("IntPtr selHandle = sel == null ? IntPtr.Zero : sel.Handle;");
 						foreach (var mi in noDefaultValue.OrderBy (m => m.Name, StringComparer.Ordinal)) {
 							if (InlineSelectors) {
-								var export = AttributeManager.GetCustomAttribute<ExportAttribute> (mi, false);
+								var export = AttributeManager.GetCustomAttribute<ExportAttribute> (mi);
 								print ("if (selHandle.Equals (Selector.GetHandle (\"{0}\")))", export.Selector);
 							} else {
 								print ("if (selHandle.Equals (sel{0}Handle))", mi.Name);

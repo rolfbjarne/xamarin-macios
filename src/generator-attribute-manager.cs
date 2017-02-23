@@ -32,10 +32,10 @@ public static class AttributeManager
 			}
 			rv = typeof (TypeManager).Assembly.GetType (n);
 		} else {
-			throw new System.NotImplementedException ();
+			throw ErrorHelper.CreateError (1054, "Internal error: can't convert type '{0}' (unknown assembly). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", type.AssemblyQualifiedName);
 		}
 		if (rv == null)
-			throw new System.NotImplementedException ();
+			throw ErrorHelper.CreateError (1055, "Internal error: failed to convert type '{0}'. Please file a bug report (https://bugzilla.xamarin.com) with a test case.", type.AssemblyQualifiedName);
 		return rv;
 	}
 
@@ -63,10 +63,10 @@ public static class AttributeManager
 				rv = TypeManager.PlatformAssembly.GetType (fullname);
 			}
 		} else {
-			throw new System.NotImplementedException ();
+			throw ErrorHelper.CreateError (1054, "Internal error: can't convert type '{0}' (unknown assembly). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", type.AssemblyQualifiedName);
 		}
 		if (rv == null)
-			throw new System.NotImplementedException ();
+			throw ErrorHelper.CreateError (1055, "Internal error: failed to convert type '{0}'. Please file a bug report (https://bugzilla.xamarin.com) with a test case.", type.AssemblyQualifiedName);
 		return rv;
 	}
 
@@ -87,7 +87,7 @@ public static class AttributeManager
 						constructorArguments [i] = System.Type.GetType (((Type) value).FullName);
 					}
 					if (constructorArguments [i] == null)
-						throw new System.NotImplementedException ();
+						throw ErrorHelper.CreateError (1056, "Internal error: failed to instantiate mock attribute '{0}' (could not convert type constructor argument #{1}). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", attribType.FullName, i + 1); 
 				}
 				break;
 			default:
@@ -113,11 +113,11 @@ public static class AttributeManager
 				break;
 			}
 			if (ctorTypes [i] == null)
-				throw new System.NotImplementedException ();
+				throw ErrorHelper.CreateError (1057, "Internal error: failed to instantiate mock attribute '{0}' (could not convert constructor type #{1} ({2})). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", attribType.FullName, i, paramType.FullName);
 		}
 		var ctor = attribType.GetConstructor (ctorTypes);
 		if (ctor == null)
-			throw new System.NotImplementedException ();
+			throw ErrorHelper.CreateError (1058, "Internal error: could not find a constructor for the mock attribute '{0}'. Please file a bug report (https://bugzilla.xamarin.com) with a test case.", attribType.FullName);
 		var instance = ctor.Invoke (constructorArguments);
 
 		for (int i = 0; i < attribute.NamedArguments.Count; i++) {
@@ -136,12 +136,12 @@ public static class AttributeManager
 					arr [a] = (Type) typed_values [a].Value;
 				value = arr;
 			} else if (arg.TypedValue.ArgumentType.IsArray) {
-				throw new System.NotImplementedException ();
+				throw ErrorHelper.CreateError (1059, "Internal error: failed to instantiate mock attribute '{0}' (unknown type for the named argument #{1} ({2}). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", attribType.FullName, i + 1, arg.MemberName);
 			}
 			if (arg.IsField) {
 				attribType.GetField (arg.MemberName).SetValue (instance, value);
 			} else {
-				attribType.GetProperty (arg.MemberName).SetValue (instance, value, new object [] { });
+				attribType.GetProperty (arg.MemberName).SetValue (instance, value, new object [0]);
 			}
 		}
 
@@ -256,11 +256,27 @@ public static class AttributeManager
 	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
 		var rv = GetCustomAttributes<T> (provider);
+		if (rv == null || rv.Length == 0)
+			return null;
+		
 		if (rv.Length == 1)
 			return rv [0];
-		if (rv.Length == 0)
-			return null;
-		throw new NotImplementedException ();
+		
+		string name = (provider as MemberInfo)?.Name;
+		if (provider is ParameterInfo) {
+			var pi = (ParameterInfo) provider;
+			name = $"the method {pi.Member.DeclaringType.FullName}.{pi.Member.Name}'s parameter #{pi.Position} ({pi.Name})";
+		} else if (provider is MemberInfo) {
+			var mi = (MemberInfo) provider;
+			name = $"the member {mi.DeclaringType.FullName}.{mi.Name}";
+		} else if (provider is Assembly) {
+			name = $"the assembly {((Assembly) provider).FullName}";
+		} else if (provider is Module) {
+			name = $"the module {((Module) provider).FullyQualifiedName}";
+		} else {
+			name = $"the member {provider.ToString ()}";
+		}
+		throw ErrorHelper.CreateError (1059, "Found {0} {1} attributes on {1}. At most one was expected.", rv.Length, typeof (T).FullName, name);
 	}
 
 	public static Type GetAttributeType (System.Attribute attribute)

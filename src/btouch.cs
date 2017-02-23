@@ -331,7 +331,7 @@ class BindingTouch
 			}
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
-			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs ()[0]).Append (' ');
+			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
 			cargs.Append (refs).Append (' ');
 			if (unsafef)
 				cargs.Append ("-unsafe ");

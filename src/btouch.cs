@@ -515,7 +515,7 @@ class BindingTouch
 #endif
 			TypeManager.Initialize (api, corlib_assembly, system_assembly, platform_assembly, binding_assembly);
 
-			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute, true)) {
+			foreach (object attr in AttributeManager.GetCustomAttributes (api, TypeManager.LinkWithAttribute)) {
 				LinkWithAttribute linkWith = (LinkWithAttribute) attr;
 
 				if (!linkwith.Contains (linkWith.LibraryName)) {

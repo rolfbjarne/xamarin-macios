@@ -157,6 +157,17 @@ public static class TypeManager
 		return Nullable.GetUnderlyingType (type);
 	}
 
+	public static bool IsEnumValueDefined (Type type, object value)
+	{
+#if IKVM
+		return type.IsEnumDefined (value);
+#else
+		var enumValue = System.Enum.ToObject (type, value);
+		return System.Array.IndexOf (System.Enum.GetValues (type), enumValue) >= 0;
+
+#endif
+	}
+
 	public static bool IsOutParameter (ParameterInfo pi)
 	{
 		return AttributeManager.HasAttribute<OutAttribute> (pi);

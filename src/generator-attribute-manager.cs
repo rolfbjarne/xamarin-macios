@@ -360,9 +360,9 @@ public static class AttributeManager
 		return (T) GetCustomAttribute (provider, typeof (T));
 	}
 
-	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider, bool inherits) where T : System.Attribute
+	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
-		return (T []) provider.GetCustomAttributes (typeof (T), inherits);
+		return (T []) provider.GetCustomAttributes (typeof (T));
 	}
 
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)

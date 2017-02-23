@@ -89,14 +89,14 @@ public static class ReflectionExtensions
 	//
 	public static bool IsUnavailable (this ICustomAttributeProvider provider)
 	{
-		return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (provider, true)
+		return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (provider)
 			.Any (attr => attr.AvailabilityKind == AvailabilityKind.Unavailable &&
 				attr.Platform == Generator.CurrentPlatform);
 	}
 
 	public static AvailabilityBaseAttribute GetAvailability (this ICustomAttributeProvider attrProvider, AvailabilityKind availabilityKind)
 	{
-		return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (attrProvider, true)
+		return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (attrProvider)
 			.FirstOrDefault (attr =>
 				attr.AvailabilityKind == availabilityKind &&
 					attr.Platform == Generator.CurrentPlatform
@@ -2024,7 +2024,7 @@ public partial class Generator : IMemberGatherer
 			return true;
 
 		if (Compat)
-			return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (t, true)
+			return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (t)
 				.Any (attr => attr.AvailabilityKind == AvailabilityKind.Introduced &&
 					attr.Platform == Generator.CurrentPlatform &&
 					attr.Architecture == PlatformArchitecture.Arch64);
@@ -2964,7 +2964,7 @@ public partial class Generator : IMemberGatherer
 		if (mi == null)
 			return;
 
-		foreach (var availability in AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi, true))
+		foreach (var availability in AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi))
 			print (availability.ToString ());
 	}
 
@@ -3948,9 +3948,9 @@ public partial class Generator : IMemberGatherer
 		// However we want them even if ImplementsAppearance is true (i.e. the original type needs them)
 		if (!is_appearance) {
 			if (HasAttribute (mi, TypeManager.PostGetAttribute))
-				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (mi, true);
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (mi);
 			else if (propInfo != null)
-				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (propInfo, true);
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (propInfo);
 
 			if (postget != null && postget.Length == 0)
 				postget = null;
@@ -4971,7 +4971,7 @@ public partial class Generator : IMemberGatherer
 			if (m.Name == "Constructor")
 				continue;
 
-			var attrs = AttributeManager.GetCustomAttributes<Attribute> (m, true);
+			var attrs = AttributeManager.GetCustomAttributes<Attribute> (m);
 			AvailabilityBaseAttribute availabilityAttribute = null;
 			bool hasExportAttribute = false;
 			bool hasStaticAttribute = false;
@@ -5005,7 +5005,7 @@ public partial class Generator : IMemberGatherer
 		var list = type.GetProperties (BindingFlags.Public | BindingFlags.Instance);
 
 		foreach (var p in list) {
-			var attrs = AttributeManager.GetCustomAttributes<Attribute> (p, true);
+			var attrs = AttributeManager.GetCustomAttributes<Attribute> (p);
 			AvailabilityBaseAttribute availabilityAttribute = null;
 			bool hasExportAttribute = false;
 			bool hasStaticAttribute = false;

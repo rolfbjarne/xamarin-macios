@@ -88,6 +88,38 @@ class BindingTouch
 		}
 	}
 
+#if IKVM
+	static string GetAttributeLibraryPath ()
+	{
+		switch (CurrentPlatform) {
+		case PlatformName.iOS:
+			if (Unified) {
+				return Path.Combine (GetSDKRoot (), "lib", "btouch", "Xamarin.iOS.BindingAttributes.dll");
+			} else {
+				return Path.Combine (GetSDKRoot (), "lib", "btouch", "monotouch.BindingAttributes.dll");
+			}
+		case PlatformName.WatchOS:
+			return Path.Combine (GetSDKRoot (), "lib", "bwatch", "Xamarin.WatchOS.BindingAttributes.dll");
+		case PlatformName.TvOS:
+			return Path.Combine (GetSDKRoot (), "lib", "btv", "Xamarin.TVOS.BindingAttributes.dll");
+		case PlatformName.MacOSX:
+			if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-full.BindingAttributes.dll");
+			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-full.BindingAttributes.dll");
+			} else if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-mobile.BindingAttributes.dll");
+			} else if (target_framework == TargetFramework.XamMac_1_0) {
+				return Path.Combine (GetSDKRoot (), "lib", "bmac", "XamMAc.BindingAttributes.dll");
+			} else {
+				throw ErrorHelper.CreateError (1043, "Internal error: unknown target framework '{0}'.", target_framework);
+			}
+		default:
+			throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", CurrentPlatform);
+		}
+	}
+#endif
+
 	static string GetSDKRoot ()
 	{
 		switch (CurrentPlatform) {
@@ -337,7 +369,11 @@ class BindingTouch
 			}
 			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
+#if IKVM
+			cargs.Append ("-r:").Append (Quote (GetAttributeLibraryPath ())).Append (' ');
+#else
 			cargs.Append ("-r:").Append (Environment.GetCommandLineArgs () [0]).Append (' ');
+#endif
 			cargs.Append (refs).Append (' ');
 			if (unsafef)
 				cargs.Append ("-unsafe ");

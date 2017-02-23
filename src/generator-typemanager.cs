@@ -18,7 +18,8 @@ using XamCore.Security;
 
 using DictionaryContainerType = XamCore.Foundation.DictionaryContainer;
 
-public static class TypeManager {
+public static class TypeManager
+{
 	public static Type System_Attribute;
 	public static Type System_Boolean;
 	public static Type System_Byte;
@@ -214,7 +215,7 @@ public static class TypeManager {
 
 		if (assembly == platform_assembly || assembly == api_assembly)
 			nsManagerPrefix = BindingTouch.NamespacePlatformPrefix;
-		
+
 		if (!string.IsNullOrEmpty (nsManagerPrefix))
 			nsManagerPrefix += ".";
 

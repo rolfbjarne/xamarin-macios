@@ -102,7 +102,9 @@ public static class TypeManager {
 	public static Type NullAllowedAttribute;
 	public static Type ObsoleteAttribute;
 	public static Type OptionalImplementationAttribute;
-	public static Type OutAttribute;
+#if !IKVM
+	static Type OutAttribute;
+#endif
 	public static Type OverrideAttribute;
 	public static Type ParamArrayAttribute;
 	public static Type ParamsAttribute;
@@ -228,6 +230,15 @@ public static class TypeManager {
 		if (rv == null && !inexistentOK)
 			throw new BindingException (1052, true, "Internal error: Could not find the type {0} in the assembly {1}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", fullname, assembly);
 		return rv;
+	}
+
+	public static bool IsOutParameter (ParameterInfo pi)
+	{
+#if IKVM
+		return pi.IsOut;
+#else
+		return AttributeManager.HasAttribute (pi, OutAttribute);
+#endif
 	}
 
 	public static void Initialize (Assembly api)

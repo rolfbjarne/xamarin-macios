@@ -393,7 +393,7 @@ class BindingTouch
 				return 1;
 			}
 			GC.KeepAlive (baselib); // Fixes a compiler warning (unused variable).
-				
+
 			Assembly corlib_assembly = typeof (object).Assembly;
 			Assembly system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
 			Assembly platform_assembly = typeof (XamCore.Foundation.NSObject).Assembly;

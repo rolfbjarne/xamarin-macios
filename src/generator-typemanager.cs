@@ -379,7 +379,9 @@ public static class TypeManager
 		NullAllowedAttribute = Lookup (binding_assembly, "", "NullAllowedAttribute");
 		ObsoleteAttribute = Lookup (corlib_assembly, "System", "ObsoleteAttribute");
 		OptionalImplementationAttribute = Lookup (binding_assembly, "", "OptionalImplementationAttribute");
+#if !IKVM
 		OutAttribute = Lookup (corlib_assembly, "System.Runtime.InteropServices", "OutAttribute");
+#endif
 		OverrideAttribute = Lookup (binding_assembly, "", "OverrideAttribute");
 		ParamArrayAttribute = Lookup (corlib_assembly, "System", "ParamArrayAttribute");
 		ParamsAttribute = Lookup (binding_assembly, "", "ParamsAttribute");

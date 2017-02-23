@@ -315,7 +315,7 @@ public static class AttributeManager
 
 	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
-		return (T []) provider.GetCustomAttributes (typeof (T));
+		return (T []) provider.GetCustomAttributes (typeof (T), false);
 	}
 
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type)
@@ -323,12 +323,12 @@ public static class AttributeManager
 		if (type == null)
 			throw new System.ArgumentNullException (nameof (type));
 
-		return (System.Attribute []) provider.GetCustomAttributes (type);
+		return (System.Attribute []) provider.GetCustomAttributes (type, false);
 	}
 
 	public static object [] GetCustomAttributes (ICustomAttributeProvider provider)
 	{
-		return provider.GetCustomAttributes ();
+		return provider.GetCustomAttributes (false);
 	}
 
 	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute

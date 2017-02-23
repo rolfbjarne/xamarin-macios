@@ -230,7 +230,7 @@ public static class AttributeManager
 		throw new BindingException (1051, true, "Internal error: Don't know how to get attributes for {0}. Please file a bug report (https://bugzilla.xamarin.com) with a test case.", provider.GetType ().FullName);
 	}
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name, bool inherit = false)
+	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name)
 	{
 		var attribs = GetIKVMAttributes (provider);
 		for (int i = 0; i < attribs.Count; i++)
@@ -239,7 +239,7 @@ public static class AttributeManager
 		return false;
 	}
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type, bool inherits = false)
+	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type)
 	{
 		var attribs = GetIKVMAttributes (provider);
 		if (attribs == null || attribs.Count == 0)
@@ -256,9 +256,9 @@ public static class AttributeManager
 		return false;
 	}
 
-	public static bool HasAttribute<T> (ICustomAttributeProvider provider, bool inherits = false) where T : Attribute
+	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
 	{
-		return HasAttribute (provider, ConvertType (typeof (T)), inherits);
+		return HasAttribute (provider, ConvertType (typeof (T)));
 	}
 
 	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
@@ -341,14 +341,14 @@ public static class AttributeManager
 		return provider.GetCustomAttributes ();
 	}
 
-	public static bool HasAttribute<T> (ICustomAttributeProvider provider, bool inherit = false) where T : Attribute
+	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
 	{
-		return HasAttribute (provider, typeof (T), inherit);
+		return HasAttribute (provider, typeof (T));
 	}
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name, bool inherit = false)
+	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name)
 	{
-		foreach (var attr in AttributeManager.GetCustomAttributes (provider, inherit)) {
+		foreach (var attr in AttributeManager.GetCustomAttributes (provider)) {
 			if (attr.GetType ().Name == type_name)
 				return true;
 		}
@@ -356,9 +356,9 @@ public static class AttributeManager
 		return false;
 	}
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type, bool inherits = false)
+	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type)
 	{
-		var attribs = GetCustomAttributes (provider, attribute_type, inherits);
+		var attribs = GetCustomAttributes (provider, attribute_type);
 		if (attribs == null || attribs.Length == 0)
 			return false;
 

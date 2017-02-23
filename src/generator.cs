@@ -5823,7 +5823,7 @@ public partial class Generator : IMemberGatherer
 			
 			if (field_exports.Count != 0){
 				foreach (var field_pi in field_exports.OrderBy (f => f.Name, StringComparer.Ordinal)) {
-					var fieldAttr = AttributeManager.GetCustomAttribute<FieldAttribute> (field_pi, true);
+					var fieldAttr = AttributeManager.GetCustomAttribute<FieldAttribute> (field_pi);
 					string library_name; 
 					string library_path = null;
 

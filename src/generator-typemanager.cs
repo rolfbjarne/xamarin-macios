@@ -232,6 +232,15 @@ public static class TypeManager {
 		return rv;
 	}
 
+	public static Type GetUnderlyingEnumType (Type type)
+	{
+#if IKVM
+		return type.GetEnumUnderlyingType ();
+#else
+		return Enum.GetUnderlyingType (type);
+#endif
+	}
+
 	public static bool IsOutParameter (ParameterInfo pi)
 	{
 #if IKVM

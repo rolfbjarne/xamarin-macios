@@ -261,16 +261,6 @@ public static class AttributeManager
 		return HasAttribute (provider, ConvertType (typeof (T)));
 	}
 
-	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
-	{
-		var rv = GetCustomAttributes (provider, type);
-		if (rv.Length == 0)
-			return null;
-		if (rv.Length == 1)
-			return (System.Attribute) rv [0];
-		throw new NotImplementedException ();
-	}
-
 	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
 		var rv = GetCustomAttributes<T> (provider);
@@ -301,7 +291,7 @@ public static class AttributeManager
 		return derived_class.IsSubclassOf (base_class);
 	}
 #else
-	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
+	static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
 	{
 		if (provider == null)
 			return null;

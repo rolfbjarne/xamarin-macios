@@ -43,7 +43,8 @@ using XamCore.ObjCRuntime;
 //
 
 [AttributeUsage (AttributeTargets.ReturnValue | AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false)]
-public class ForcedTypeAttribute : Attribute {
+public class ForcedTypeAttribute : Attribute
+{
 	public ForcedTypeAttribute (bool owns = false)
 	{
 		Owns = owns;
@@ -87,7 +88,8 @@ public class ForcedTypeAttribute : Attribute {
 // CAScroll is a NSString backed enum, we will fetch the right NSString value and handle the type conversion.
 //
 [AttributeUsage (AttributeTargets.ReturnValue | AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-public class BindAsAttribute : Attribute {
+public class BindAsAttribute : Attribute
+{
 	public BindAsAttribute (Type type)
 	{
 		Type = type;

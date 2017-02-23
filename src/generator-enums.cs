@@ -12,7 +12,8 @@ using System.Reflection;
 using XamCore.Foundation;
 using XamCore.ObjCRuntime;
 
-public partial class Generator {
+public partial class Generator
+{
 
 	static string GetCSharpTypeName (Type type)
 	{
@@ -160,7 +161,7 @@ public partial class Generator {
 				print ("}");
 				print ("");
 			}
-			
+
 			print ("public static NSString GetConstant (this {0} self)", type.Name);
 			print ("{");
 			indent++;

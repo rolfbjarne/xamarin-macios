@@ -201,6 +201,14 @@ public static class TypeManager
 	static Assembly platform_assembly;
 	static Assembly binding_assembly;
 
+	public static Assembly SystemAssembly {
+		get { return system_assembly; }
+	}
+
+	public static Assembly BindingAssembly {
+		get { return binding_assembly; }
+	}
+
 	public static Assembly CorlibAssembly {
 		get { return corlib_assembly; }
 	}
@@ -273,13 +281,13 @@ public static class TypeManager
 #endif
 	}
 
-	public static void Initialize (Assembly api)
+	public static void Initialize (Assembly api, Assembly corlib, Assembly system, Assembly platform, Assembly binding)
 	{
 		api_assembly = api;
-		corlib_assembly = typeof (object).Assembly;
-		system_assembly = typeof (System.ComponentModel.BrowsableAttribute).Assembly;
-		platform_assembly = typeof (NSObject).Assembly;
-		binding_assembly = typeof (ProtocolizeAttribute).Assembly;
+		corlib_assembly = corlib;
+		system_assembly = system;
+		platform_assembly = platform;
+		binding_assembly = binding;
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

@@ -355,9 +355,9 @@ public static class AttributeManager
 		throw new BindingException (1051, true, "Internal error: Don't know how to get attributes for {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", provider.GetType ().FullName);
 	}
 
-	public static T GetCustomAttribute <T> (ICustomAttributeProvider provider, bool inherit = false) where T: System.Attribute
+	public static T GetCustomAttribute <T> (ICustomAttributeProvider provider) where T: System.Attribute
 	{
-		return (T) GetCustomAttribute (provider, typeof (T), inherit);
+		return (T) GetCustomAttribute (provider, typeof (T));
 	}
 
 	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider, bool inherits) where T : System.Attribute

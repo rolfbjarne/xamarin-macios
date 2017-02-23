@@ -2523,7 +2523,7 @@ public partial class Generator : IMemberGatherer
 		var libSuffixedName = $"{library_name}Library";
 		var constType = TypeManager.Constants;
 		var field = constType.GetFields (BindingFlags.Public | BindingFlags.Static).FirstOrDefault (f => f.Name == libSuffixedName);
-		library_path = (string) field?.GetValue (null);
+		library_path = (string) (field ?? TypeManager.GetConstantValue (field));
 		return library_path == null;
 	}
 

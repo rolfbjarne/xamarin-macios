@@ -390,7 +390,9 @@ class BindingTouch
 			}
 			GC.KeepAlive (baselib); // Fixes a compiler warning (unused variable).
 
-			TypeManager.Initialize (api);
+			Assembly corlib_assembly = typeof (object).Assembly;
+			Assembly platform_assembly = typeof (XamCore.Foundation.NSObject).Assembly;
+			TypeManager.Initialize (api, corlib_assembly, platform_assembly);
 
 			foreach (var linkWith in AttributeManager.GetCustomAttributes<LinkWithAttribute> (api)) {
 				if (!linkwith.Contains (linkWith.LibraryName)) {

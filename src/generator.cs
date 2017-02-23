@@ -3948,9 +3948,9 @@ public partial class Generator : IMemberGatherer
 		// However we want them even if ImplementsAppearance is true (i.e. the original type needs them)
 		if (!is_appearance) {
 			if (HasAttribute (mi, TypeManager.PostGetAttribute))
-				postget = ((PostGetAttribute []) AttributeManager.GetCustomAttributes (mi,TypeManager.PostGetAttribute, true));
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (mi, true);
 			else if (propInfo != null)
-				postget = ((PostGetAttribute []) AttributeManager.GetCustomAttributes (propInfo,TypeManager.PostGetAttribute, true));
+				postget = AttributeManager.GetCustomAttributes<PostGetAttribute> (propInfo, true);
 
 			if (postget != null && postget.Length == 0)
 				postget = null;
@@ -4971,7 +4971,7 @@ public partial class Generator : IMemberGatherer
 			if (m.Name == "Constructor")
 				continue;
 
-			var attrs = AttributeManager.GetCustomAttributes (m, true) as Attribute [];
+			var attrs = AttributeManager.GetCustomAttributes<Attribute> (m, true);
 			AvailabilityBaseAttribute availabilityAttribute = null;
 			bool hasExportAttribute = false;
 			bool hasStaticAttribute = false;
@@ -5005,7 +5005,7 @@ public partial class Generator : IMemberGatherer
 		var list = type.GetProperties (BindingFlags.Public | BindingFlags.Instance);
 
 		foreach (var p in list) {
-			var attrs = AttributeManager.GetCustomAttributes (p, true) as Attribute [];
+			var attrs = AttributeManager.GetCustomAttributes<Attribute> (p, true);
 			AvailabilityBaseAttribute availabilityAttribute = null;
 			bool hasExportAttribute = false;
 			bool hasStaticAttribute = false;

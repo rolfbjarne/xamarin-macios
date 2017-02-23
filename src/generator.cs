@@ -61,7 +61,7 @@ public static class ReflectionExtensions
 {
 	public static BaseTypeAttribute GetBaseTypeAttribute (Type type)
 	{
-		return AttributeManager.GetCustomAttribute<BaseTypeAttribute> (type, true);
+		return AttributeManager.GetCustomAttribute<BaseTypeAttribute> (type);
 	}
 
 	public static Type GetBaseType (Type type)

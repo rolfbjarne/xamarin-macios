@@ -205,7 +205,7 @@ public static class AttributeManager
 		return FilterAttributes<T> (GetIKVMAttributes (provider));
 	}
 
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type, bool inherits)
+	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, Type type)
 	{
 		if (type == null)
 			throw new System.ArgumentNullException (nameof (type));
@@ -261,9 +261,9 @@ public static class AttributeManager
 		return HasAttribute (provider, ConvertType (typeof (T)), inherits);
 	}
 
-	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type, bool inherit = false /* REMOVE */)
+	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
 	{
-		var rv = GetCustomAttributes (provider, type, inherit);
+		var rv = GetCustomAttributes (provider, type);
 		if (rv.Length == 0)
 			return null;
 		if (rv.Length == 1)
@@ -273,7 +273,7 @@ public static class AttributeManager
 
 	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
-		var rv = GetCustomAttributes<T> (provider/*, inherit*/);
+		var rv = GetCustomAttributes<T> (provider);
 		if (rv.Length == 1)
 			return rv [0];
 		if (rv.Length == 0)
@@ -301,20 +301,20 @@ public static class AttributeManager
 		return derived_class.IsSubclassOf (base_class);
 	}
 #else
-	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type, bool inherit = false)
+	public static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
 	{
 		if (provider == null)
 			return null;
 
 		var pi = provider as ParameterInfo;
 		if (pi != null)
-			return Attribute.GetCustomAttribute (pi, type, inherit);
+			return Attribute.GetCustomAttribute (pi, type);
 		var mi = provider as MemberInfo;
 		if (mi != null)
-			return Attribute.GetCustomAttribute (mi, type, inherit);
+			return Attribute.GetCustomAttribute (mi, type);
 		var asm = provider as Assembly;
 		if (asm != null)
-			return Attribute.GetCustomAttribute (asm, type, inherit);
+			return Attribute.GetCustomAttribute (asm, type);
 		throw new BindingException (1051, true, "Internal error: Don't know how to get attributes for {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", provider.GetType ().FullName);
 	}
 
@@ -336,9 +336,9 @@ public static class AttributeManager
 		return (System.Attribute []) provider.GetCustomAttributes (type);
 	}
 
-	public static object [] GetCustomAttributes (ICustomAttributeProvider provider, bool inherits)
+	public static object [] GetCustomAttributes (ICustomAttributeProvider provider)
 	{
-		return provider.GetCustomAttributes (inherits);
+		return provider.GetCustomAttributes ();
 	}
 
 	public static bool HasAttribute<T> (ICustomAttributeProvider provider, bool inherit = false) where T : Attribute

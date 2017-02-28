@@ -225,6 +225,11 @@ public static class TypeManager {
 		return rv;
 	}
 
+	public static Type GetUnderlyingEnumType (Type type)
+	{
+		return Enum.GetUnderlyingType (type);
+	}
+
 	public static void Initialize (Assembly api)
 	{
 		api_assembly = api;

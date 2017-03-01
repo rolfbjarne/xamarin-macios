@@ -240,15 +240,6 @@ public static class TypeManager
 #endif
 	}
 
-	public static object GetConstantValue (FieldInfo fi)
-	{
-#if IKVM
-		return fi.GetRawConstantValue ();
-#else
-		return fi.GetValue (null);
-#endif
-	}
-
 	public static bool IsOutParameter (ParameterInfo pi)
 	{
 #if IKVM

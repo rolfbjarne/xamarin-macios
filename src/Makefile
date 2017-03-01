@@ -496,7 +496,7 @@ MAC_compat_GENERATE=$(SYSTEM_MONO) --debug $(MAC_compat_GENERATOR)
 MAC_full_GENERATOR=$(MAC_BUILD_DIR)/full/_bmac.exe
 MAC_full_GENERATE=$(SYSTEM_MONO) --debug $(MAC_full_GENERATOR)
 MAC_mobile_GENERATOR=$(MAC_BUILD_DIR)/mobile/_bmac.exe
-MAC_mobile_GENERATE=$($(TOP)/builds/install/mono-mac64) --debug $(MAC_mobile_GENERATOR)
+MAC_mobile_GENERATE=$(TOP)/builds/install/mono-mac64 --debug $(MAC_mobile_GENERATOR)
 endif
 
 define MAC_GENERATOR_template

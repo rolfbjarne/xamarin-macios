@@ -41,6 +41,7 @@ using Mono.Options;
 using System.Runtime.InteropServices;
 #endif
 
+using XamCore.Foundation;
 using XamCore.ObjCRuntime;
 using Xamarin.Utils;
 
@@ -540,12 +541,12 @@ class BindingTouch
 			var  strong_dictionaries = new List<Type> ();
 			foreach (var t in api.GetTypes ()){
 				if ((process_enums && t.IsEnum) ||
-				    AttributeManager.HasAttribute (t, TypeManager.BaseTypeAttribute) ||
-				    AttributeManager.HasAttribute (t, TypeManager.ProtocolAttribute) ||
-				    AttributeManager.HasAttribute (t, TypeManager.StaticAttribute) ||
-				    AttributeManager.HasAttribute (t, TypeManager.PartialAttribute))
+				    AttributeManager.HasAttribute<BaseTypeAttribute> (t) ||
+				    AttributeManager.HasAttribute<ProtocolAttribute> (t) ||
+				    AttributeManager.HasAttribute<StaticAttribute> (t) ||
+				    AttributeManager.HasAttribute<PartialAttribute> (t))
 					types.Add (t);
-				if (AttributeManager.HasAttribute (t, TypeManager.StrongDictionaryAttribute))
+				if (AttributeManager.HasAttribute<StrongDictionaryAttribute> (t))
 					strong_dictionaries.Add (t);
 			}
 

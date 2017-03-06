@@ -50,7 +50,7 @@ public partial class Generator
 	//	- call/emit PrintPlatformAttributes on the type
 	void GenerateEnum (Type type)
 	{
-		if (AttributeManager.HasAttribute (type, TypeManager.FlagsAttribute))
+		if (AttributeManager.HasAttribute<FlagsAttribute> (type))
 			print ("[Flags]");
 
 		var native = AttributeManager.GetCustomAttribute<NativeAttribute> (type);

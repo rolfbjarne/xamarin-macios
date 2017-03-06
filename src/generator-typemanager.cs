@@ -1,5 +1,7 @@
 
 using System;
+using System.Runtime.InteropServices;
+
 #if IKVM
 using IKVM.Reflection;
 using Type = IKVM.Reflection.Type;
@@ -43,62 +45,6 @@ public static class TypeManager
 	public static Type Selector;
 
 	public static Type Constants;
-
-	/* attributes */
-	public static Type AbstractAttribute;
-	public static Type AdvancedAttribute;
-	public static Type AlignAttribute;
-	public static Type AppearanceAttribute;
-	public static Type AsyncAttribute;
-	public static Type AutoreleaseAttribute;
-	public static Type AvailabilityBaseAttribute;
-	public static Type BaseTypeAttribute;
-	public static Type BlockCallbackAttribute;
-	public static Type CategoryAttribute;
-	public static Type CCallbackAttribute;
-	public static Type CheckDisposedAttribute;
-	public static Type CoreImageFilterAttribute;
-	public static Type CoreImageFilterPropertyAttribute;
-	public static Type DisableZeroCopyAttribute;
-	public static Type ExportAttribute;
-	public static Type FactoryAttribute;
-	public static Type FieldAttribute;
-	public static Type FlagsAttribute;
-	public static Type InternalAttribute;
-	public static Type IsThreadStaticAttribute;
-	public static Type ManualAttribute;
-	public static Type MarshalNativeExceptionsAttribute;
-	public static Type ModelAttribute;
-	public static Type NativeAttribute;
-	public static Type NewAttribute;
-	public static Type NoDefaultValueAttribute;
-	public static Type NotificationAttribute;
-	public static Type NotImplementedAttribute;
-	public static Type NullAllowedAttribute;
-#if !IKVM
-	static Type OutAttribute;
-#endif
-	public static Type OverrideAttribute;
-	public static Type ParamArrayAttribute;
-	public static Type ParamsAttribute;
-	public static Type PartialAttribute;
-	public static Type PlainStringAttribute;
-	public static Type PostGetAttribute;
-	public static Type ProbePresenceAttribute;
-	public static Type ProtectedAttribute;
-	public static Type ProtocolAttribute;
-	public static Type ProxyAttribute;
-	public static Type ReleaseAttribute;
-	public static Type RetainAttribute;
-	public static Type SealedAttribute;
-	public static Type StaticAttribute;
-	public static Type StrongDictionaryAttribute;
-	public static Type SyntheticAttribute;
-	public static Type TargetAttribute;
-	public static Type TransientAttribute;
-	public static Type UnifiedInternalAttribute;
-	public static Type WrapAttribute;
-	public static Type ZeroCopyStringsAttribute;
 
 	/* Different binding types */
 
@@ -245,7 +191,7 @@ public static class TypeManager
 #if IKVM
 		return pi.IsOut;
 #else
-		return AttributeManager.HasAttribute (pi, OutAttribute);
+		return AttributeManager.HasAttribute<OutAttribute> (pi);
 #endif
 	}
 
@@ -324,62 +270,6 @@ public static class TypeManager
 		} else {
 			Constants = Lookup (platform_assembly, "", "Constants");
 		}
-
-		/* attributes */
-		AbstractAttribute = Lookup (binding_assembly, "", "AbstractAttribute");
-		AdvancedAttribute = Lookup (binding_assembly, "", "AdvancedAttribute");
-		AlignAttribute = Lookup (binding_assembly, "", "AlignAttribute");
-		AppearanceAttribute = Lookup (binding_assembly, "", "AppearanceAttribute");
-		AsyncAttribute = Lookup (binding_assembly, "", "AsyncAttribute");
-		AutoreleaseAttribute = Lookup (binding_assembly, "", "AutoreleaseAttribute");
-		AvailabilityBaseAttribute = Lookup (platform_assembly, "ObjCRuntime", "AvailabilityBaseAttribute");
-		BaseTypeAttribute = Lookup (binding_assembly, "", "BaseTypeAttribute");
-		BlockCallbackAttribute = Lookup (binding_assembly, "", "BlockCallbackAttribute");
-		CategoryAttribute = Lookup (binding_assembly, "", "CategoryAttribute");
-		CCallbackAttribute = Lookup (binding_assembly, "", "CCallbackAttribute");
-		CheckDisposedAttribute = Lookup (binding_assembly, "", "CheckDisposedAttribute");
-		CoreImageFilterAttribute = Lookup (binding_assembly, "", "CoreImageFilterAttribute");
-		CoreImageFilterPropertyAttribute = Lookup (binding_assembly, "", "CoreImageFilterPropertyAttribute");
-		DisableZeroCopyAttribute = Lookup (binding_assembly, "", "DisableZeroCopyAttribute");
-		ExportAttribute = Lookup (platform_assembly, "Foundation", "ExportAttribute");
-		FactoryAttribute = Lookup (binding_assembly, "", "FactoryAttribute");
-		FieldAttribute = Lookup (platform_assembly, "Foundation", "FieldAttribute");
-		FlagsAttribute = Lookup (corlib_assembly, "System", "FlagsAttribute");
-		InternalAttribute = Lookup (binding_assembly, "", "InternalAttribute");
-		IsThreadStaticAttribute = Lookup (binding_assembly, "", "IsThreadStaticAttribute");
-		ManualAttribute = Lookup (binding_assembly, "", "ManualAttribute");
-		MarshalNativeExceptionsAttribute = Lookup (binding_assembly, "", "MarshalNativeExceptionsAttribute");
-		ModelAttribute = Lookup (platform_assembly, "Foundation", "ModelAttribute");
-		NativeAttribute = Lookup (platform_assembly, "ObjCRuntime", "NativeAttribute");
-		NewAttribute = Lookup (binding_assembly, "", "NewAttribute");
-		NoDefaultValueAttribute = Lookup (binding_assembly, "", "NoDefaultValueAttribute");
-		NotificationAttribute = Lookup (binding_assembly, "", "NotificationAttribute");
-		NotImplementedAttribute = Lookup (binding_assembly, "", "NotImplementedAttribute");
-		NullAllowedAttribute = Lookup (binding_assembly, "", "NullAllowedAttribute");
-#if !IKVM
-		OutAttribute = Lookup (corlib_assembly, "System.Runtime.InteropServices", "OutAttribute");
-#endif
-		OverrideAttribute = Lookup (binding_assembly, "", "OverrideAttribute");
-		ParamArrayAttribute = Lookup (corlib_assembly, "System", "ParamArrayAttribute");
-		ParamsAttribute = Lookup (binding_assembly, "", "ParamsAttribute");
-		PartialAttribute = Lookup (binding_assembly, "", "PartialAttribute");
-		PlainStringAttribute = Lookup (binding_assembly, "", "PlainStringAttribute");
-		PostGetAttribute = Lookup (binding_assembly, "", "PostGetAttribute");
-		ProbePresenceAttribute = Lookup (binding_assembly, "", "ProbePresenceAttribute");
-		ProtectedAttribute = Lookup (binding_assembly, "", "ProtectedAttribute");
-		ProtocolAttribute = Lookup (platform_assembly, "Foundation", "ProtocolAttribute");
-		ProxyAttribute = Lookup (binding_assembly, "", "ProxyAttribute");
-		ReleaseAttribute = Lookup (binding_assembly, "", "ReleaseAttribute");
-		RetainAttribute = Lookup (binding_assembly, "", "RetainAttribute");
-		SealedAttribute = Lookup (binding_assembly, "", "SealedAttribute");
-		StaticAttribute = Lookup (binding_assembly, "", "StaticAttribute");
-		StrongDictionaryAttribute = Lookup (binding_assembly, "", "StrongDictionaryAttribute");
-		SyntheticAttribute = Lookup (binding_assembly, "", "SyntheticAttribute");
-		TargetAttribute = Lookup (binding_assembly, "", "TargetAttribute");
-		TransientAttribute = Lookup (binding_assembly, "", "TransientAttribute");
-		UnifiedInternalAttribute = Lookup (binding_assembly, "", "UnifiedInternalAttribute");
-		WrapAttribute = Lookup (binding_assembly, "", "WrapAttribute");
-		ZeroCopyStringsAttribute = Lookup (binding_assembly, "", "ZeroCopyStringsAttribute");
 
 		/* Different binding types */
 

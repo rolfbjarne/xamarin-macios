@@ -87,7 +87,7 @@ public static class AttributeManager
 						constructorArguments [i] = System.Type.GetType (((Type) value).FullName);
 					}
 					if (constructorArguments [i] == null)
-						throw ErrorHelper.CreateError (1056, "Internal error: failed to instantiate mock attribute '{0}' (could not convert type constructor argument #{1}). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", attribType.FullName, i + 1); 
+						throw ErrorHelper.CreateError (1056, "Internal error: failed to instantiate mock attribute '{0}' (could not convert type constructor argument #{1}). Please file a bug report (https://bugzilla.xamarin.com) with a test case.", attribType.FullName, i + 1);
 				}
 				break;
 			default:
@@ -182,7 +182,7 @@ public static class AttributeManager
 		if (attributes == null || attributes.Count == 0)
 			return new T [0]; // FIXME: ugh, we end up allocating a lot of empty arrays
 
-		var type = GetAttributeType (typeof (T));
+		var type = ConvertType (typeof (T));
 		List<T> list = null;
 		for (int i = 0; i < attributes.Count; i++) {
 			var attrib = attributes [i];
@@ -231,8 +231,9 @@ public static class AttributeManager
 		return false;
 	}
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type)
+	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
 	{
+		var attribute_type = ConvertType (typeof (T));
 		var attribs = GetIKVMAttributes (provider);
 		if (attribs == null || attribs.Count == 0)
 			return false;
@@ -248,20 +249,15 @@ public static class AttributeManager
 		return false;
 	}
 
-	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
-	{
-		return HasAttribute (provider, ConvertType (typeof (T)));
-	}
-
 	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider) where T : System.Attribute
 	{
 		var rv = GetCustomAttributes<T> (provider);
 		if (rv == null || rv.Length == 0)
 			return null;
-		
+
 		if (rv.Length == 1)
 			return rv [0];
-		
+
 		string name = (provider as MemberInfo)?.Name;
 		if (provider is ParameterInfo) {
 			var pi = (ParameterInfo) provider;
@@ -279,19 +275,9 @@ public static class AttributeManager
 		throw ErrorHelper.CreateError (1059, "Found {0} {1} attributes on {1}. At most one was expected.", rv.Length, typeof (T).FullName, name);
 	}
 
-	public static Type GetAttributeType (System.Attribute attribute)
-	{
-		return GetAttributeType (attribute.GetType ());
-	}
-
 	public static ICustomAttributeProvider GetReturnTypeCustomAttributes (MethodInfo method)
 	{
 		return method.ReturnParameter;
-	}
-
-	public static Type GetAttributeType (System.Type type)
-	{
-		return ConvertType (type);
 	}
 
 	static bool IsSubclassOf (Type base_class, Type derived_class)
@@ -299,26 +285,22 @@ public static class AttributeManager
 		return derived_class.IsSubclassOf (base_class);
 	}
 #else
-	static System.Attribute GetCustomAttribute (ICustomAttributeProvider provider, Type type)
+	public static T GetCustomAttribute<T> (ICustomAttributeProvider provider) where T: System.Attribute
 	{
 		if (provider == null)
 			return null;
 
+		var type = typeof (T);
 		var pi = provider as ParameterInfo;
 		if (pi != null)
-			return Attribute.GetCustomAttribute (pi, type);
+			return (T) Attribute.GetCustomAttribute (pi, type);
 		var mi = provider as MemberInfo;
 		if (mi != null)
-			return Attribute.GetCustomAttribute (mi, type);
+			return (T) Attribute.GetCustomAttribute (mi, type);
 		var asm = provider as Assembly;
 		if (asm != null)
-			return Attribute.GetCustomAttribute (asm, type);
+			return (T) Attribute.GetCustomAttribute (asm, type);
 		throw new BindingException (1051, true, "Internal error: Don't know how to get attributes for {0}. Please file a bug report (http://bugzilla.xamarin.com) with a test case.", provider.GetType ().FullName);
-	}
-
-	public static T GetCustomAttribute <T> (ICustomAttributeProvider provider) where T: System.Attribute
-	{
-		return (T) GetCustomAttribute (provider, typeof (T));
 	}
 
 	public static T [] GetCustomAttributes<T> (ICustomAttributeProvider provider) where T : System.Attribute
@@ -328,7 +310,11 @@ public static class AttributeManager
 
 	public static bool HasAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
 	{
-		return HasAttribute (provider, typeof (T));
+		var attribs = provider.GetCustomAttributes (typeof (T), false);
+		if (attribs == null || attribs.Length == 0)
+			return false;
+
+		return true;
 	}
 
 	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name)
@@ -341,28 +327,9 @@ public static class AttributeManager
 		return false;
 	}
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, Type attribute_type)
-	{
-		var attribs = provider.GetCustomAttributes (attribute_type, false);
-		if (attribs == null || attribs.Length == 0)
-			return false;
-
-		return true;
-	}
-
-	public static Type GetAttributeType (System.Attribute attribute)
-	{
-		return GetAttributeType (attribute.GetType ());
-	}
-
 	public static ICustomAttributeProvider GetReturnTypeCustomAttributes (MethodInfo method)
 	{
 		return method.ReturnTypeCustomAttributes;
-	}
-
-	public static Type GetAttributeType (System.Type type)
-	{
-		return type;
 	}
 #endif
 }

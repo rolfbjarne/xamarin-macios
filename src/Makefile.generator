@@ -109,20 +109,24 @@ IOS_TARGETS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bgen: | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
-	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) \"$$@\"\n" > $@
+	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) \"\$$@\"\n" > $@
 	$(Q) chmod +x $@
 
 ifdef IKVM
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch: | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
-	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=MonoTouch,v1.0 \"$$@\"\n" > $@
+	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=MonoTouch,v1.0 \"\$$@\" \n" > $@
+	$(Q) chmod +x $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native: | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
-	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.iOS,v1.0 \"$$@\"\n" > $@
+	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.iOS,v1.0 \"\$$@\"\n" > $@
+	$(Q) chmod +x $@
 else
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/%: %.in | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
 	$(Q_GEN) sed 's!@MONOTOUCH_PREFIX@!$(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX))!g' $*.in > $@
 	$(Q) chmod +x $@
+endif
 
+ifndef IKVM
 $(IOS_BUILD_DIR)/btouch.exe: $(IOS_BUILD_DIR)/compat/monotouch.dll $(GENERATOR_SOURCES) Makefile.generator
 	$(call Q_PROF_PMCS,ios/compat) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-ios" -compiler:$(IOS_CSC) -global-replace:"^XamCore=MonoTouch" -debug $(GENERATOR_DEFINES) -out:$@ $(GENERATOR_SOURCES) -r:$<
 
@@ -132,7 +136,7 @@ $(IOS_BUILD_DIR)/btouch-native.exe: $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll $
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/%.exe: $(IOS_BUILD_DIR)/%.exe | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
-
+else
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/%.dll: $(IOS_BUILD_DIR)/native/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen
 	$(Q) install -m 0755 $< $@
 	$(Q) install -m 0644 $<.mdb $@.mdb
@@ -148,7 +152,7 @@ $(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll: generator-attributes.
 $(IOS_BUILD_DIR)/native/monotouch.BindingAttributes.dll: generator-attributes.cs Makefile.generator $(PMCS_EXE)
 	$(Q) mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/compat-ios"     -compiler:$(IOS_CSC) -global-replace:"^XamCore.=MonoTouch."        -out:$@ -debug generator-attributes.cs -target:library
-
+endif
 #
 # Xamarin.Watch (bwatch)
 #
@@ -172,7 +176,7 @@ WATCH_TARGETS +=                                                        \
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch: Makefile.generator
 ifdef IKVM
-	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.WatchOS,v1.0 \"$$@\"\n" > $@
+	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.WatchOS,v1.0 \"\$$@\"\n" > $@
 else
 	$(Q_GEN) printf '#!/bin/sh\nMONO_PATH=$(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/repl:$(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/bin/bwatch-mono --debug $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bwatch/bwatch.exe --target-framework=Xamarin.WatchOS,v1.0 "$$@"' > $@
 endif
@@ -218,7 +222,7 @@ TVOS_TARGETS +=                                                  \
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv: Makefile.generator
 ifdef IKVM
-	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.TVOS,v1.0 \"$$@\"\n" > $@
+	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.TVOS,v1.0 \"\$$@\"\n" > $@
 else
 	$(Q_GEN) printf '#!/bin/sh\nMONO_PATH=$(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/repl:$(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/bin/btv-mono --debug $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/btv/btv.exe --target-framework=Xamarin.TVOS,v1.0 "$$@"' > $@
 endif
@@ -271,7 +275,7 @@ MAC_TARGETS += \
 
 ifdef IKVM
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bgen: | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin
-	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/bgen.exe) \"$$@\"\n" > $@
+	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/bgen.exe) \"\$$@\"\n" > $@
 	$(Q) chmod +x $@
 else
 $(MAC_BUILD_DIR)/bmac-%.exe: $(MAC_BUILD_DIR)/%-32/Xamarin.Mac.dll $(GENERATOR_SOURCES) $(SN_KEY) Makefile.generator

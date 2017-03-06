@@ -61,7 +61,7 @@ IOS_BMONO = MONO_PATH=$(IOS_LIBDIR) $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch
 ifdef IKVM
 IOS_GENERATOR=build/common/bgen.exe
 IOS_GENERATE=$(SYSTEM_MONO) --debug $(IOS_GENERATOR)
-IOS_GENERATOR_DEPENDENCIES=$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/monotouch.BindingAttributes.dll $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch/Xamarin.iOS.BindingAttributes.dll
+IOS_GENERATOR_DEPENDENCIES=$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/monotouch.BindingAttributes.dll $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/Xamarin.iOS.BindingAttributes.dll
 IOS_compat_GENERATOR=$(IOS_GENERATOR)
 IOS_compat_GENERATE=$(IOS_GENERATE)
 IOS_native_GENERATOR=$(IOS_GENERATOR)

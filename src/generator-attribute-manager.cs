@@ -148,35 +148,6 @@ public static class AttributeManager
 		return (System.Attribute) instance;
 	}
 
-	static object [] FilterAttributes (IList<CustomAttributeData> attributes, Type type)
-	{
-		if (attributes == null || attributes.Count == 0)
-			return EmptyAttributes;
-
-		if (type == null) {
-			var rv = new System.Attribute [attributes.Count];
-			for (int i = 0; i < attributes.Count; i++)
-				rv [i] = CreateAttributeInstance (attributes [i]);
-			return rv;
-		}
-
-		List<System.Attribute> list = null;
-		for (int i = 0; i < attributes.Count; i++) {
-			var attrib = attributes [i];
-			if (attrib.AttributeType != type && !IsSubclassOf (type, attrib.AttributeType))
-				continue;
-
-			if (list == null)
-				list = new List<System.Attribute> ();
-			list.Add (CreateAttributeInstance (attributes [i]));
-		}
-
-		if (list != null)
-			return list.ToArray ();
-
-		return EmptyAttributes;
-	}
-
 	static T [] FilterAttributes<T> (IList<CustomAttributeData> attributes) where T : System.Attribute
 	{
 		if (attributes == null || attributes.Count == 0)

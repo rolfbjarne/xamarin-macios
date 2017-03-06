@@ -100,23 +100,23 @@ class BindingTouch
 		switch (CurrentPlatform) {
 		case PlatformName.iOS:
 			if (Unified) {
-				return Path.Combine (GetSDKRoot (), "lib", "btouch", "Xamarin.iOS.BindingAttributes.dll");
+				return Path.Combine (GetSDKRoot (), "lib", "bgen", "Xamarin.iOS.BindingAttributes.dll");
 			} else {
-				return Path.Combine (GetSDKRoot (), "lib", "btouch", "monotouch.BindingAttributes.dll");
+				return Path.Combine (GetSDKRoot (), "lib", "bgen", "monotouch.BindingAttributes.dll");
 			}
 		case PlatformName.WatchOS:
-			return Path.Combine (GetSDKRoot (), "lib", "bwatch", "Xamarin.WatchOS.BindingAttributes.dll");
+			return Path.Combine (GetSDKRoot (), "lib", "bgen", "Xamarin.WatchOS.BindingAttributes.dll");
 		case PlatformName.TvOS:
-			return Path.Combine (GetSDKRoot (), "lib", "btv", "Xamarin.TVOS.BindingAttributes.dll");
+			return Path.Combine (GetSDKRoot (), "lib", "bgen", "Xamarin.TVOS.BindingAttributes.dll");
 		case PlatformName.MacOSX:
 			if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
-				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-full.BindingAttributes.dll");
+				return Path.Combine (GetSDKRoot (), "lib", "bgen", "Xamarin.Mac-full.BindingAttributes.dll");
 			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
-				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-full.BindingAttributes.dll");
+				return Path.Combine (GetSDKRoot (), "lib", "bgen", "Xamarin.Mac-full.BindingAttributes.dll");
 			} else if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
-				return Path.Combine (GetSDKRoot (), "lib", "bmac", "Xamarin.Mac-mobile.BindingAttributes.dll");
+				return Path.Combine (GetSDKRoot (), "lib", "bgen", "Xamarin.Mac-mobile.BindingAttributes.dll");
 			} else if (target_framework == TargetFramework.XamMac_1_0) {
-				return Path.Combine (GetSDKRoot (), "lib", "bmac", "XamMAc.BindingAttributes.dll");
+				return Path.Combine (GetSDKRoot (), "lib", "bgen", "XamMAc.BindingAttributes.dll");
 			} else {
 				throw ErrorHelper.CreateError (1043, "Internal error: unknown target framework '{0}'.", target_framework);
 			}

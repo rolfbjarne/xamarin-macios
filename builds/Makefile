@@ -474,6 +474,7 @@ install-local:: install-tools-tvos
 install-tools:: install-tools-tvos
 endif
 
+ifneq ($(WATCH_MONO_PATH),$(MONO_PATH))
 #
 # Xamarin.WatchOS BCL assemblies
 #
@@ -554,6 +555,8 @@ endif
 
 clean-watchbcl:
 	rm -rf watchbcl .stamp-configure-watchbcl watchbcl.config.cache
+
+endif
 
 #
 # Xamarin.iOS/WatchOS/TVOS BCL assemblies
@@ -770,11 +773,19 @@ $(BUILD_DESTDIR)/watchos/bcl/repl/%.dll: $(WATCH_MONO_PATH)/mcs/class/lib/monoto
 	$(Q) cp $< $@
 	$(Q_SN) MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -R $@ $(PRODUCT_KEY_PATH)
 
+ifeq ($(WATCH_MONO_PATH),$(MONO_PATH))
+$(BUILD_DESTDIR)/watchos/bcl/%.mdb: $(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch/%.mdb .stamp-build-tools64 | $(BUILD_DESTDIR)/watchos/bcl
+else
 $(BUILD_DESTDIR)/watchos/bcl/%.mdb: $(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch/%.mdb .stamp-build-watchbcl .stamp-build-tools64 | $(BUILD_DESTDIR)/watchos/bcl
+endif
 	@# mdb-rebase the mdb
 	$(Q) cp $< $@
 
+ifeq ($(WATCH_MONO_PATH),$(MONO_PATH))
+$(BUILD_DESTDIR)/watchos/bcl/repl/%.mdb: $(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch_runtime/%.mdb .stamp-build-tools64 | $(BUILD_DESTDIR)/watchos/bcl/repl
+else
 $(BUILD_DESTDIR)/watchos/bcl/repl/%.mdb: $(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch_runtime/%.mdb .stamp-build-watchbcl .stamp-build-tools64 | $(BUILD_DESTDIR)/watchos/bcl/repl
+endif
 	@# mdb-rebase the mdb
 	$(Q) cp $< $@
 

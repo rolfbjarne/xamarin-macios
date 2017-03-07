@@ -1,0 +1,127 @@
+# Xamarin
+# Build samples
+
+trigger:
+  - sample-tester
+
+variables:
+  debug_filter: '^.*Debug.*$'
+  release_filter: '^.*Release.*$'
+  iphone_filter: '^iPhone$'
+  iphonesimulator_filter: '^iPhoneSimulator$'
+  mac_platform_filter: '^$'
+  name_filter_af: '^[A-Fa-f].*$'
+  name_filter_gr: '^[G-Rg-r].*$'
+  name_filter_rest: '^[^A-Ra-r].*$'
+
+jobs:
+- job: macOS
+  displayName: Build samples
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      # We have rougly 900 tests, which take a while to build for device.
+      # So in that case, we split them in 3 buckets of roughly 300 tests each,
+      # based on the first letter of the project's filename.
+      Debug|iPhone|A-F:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_af)
+      Debug|iPhone|G-R:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_gr)
+      Debug|iPhone|S-Z:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_rest)
+      Debug|iPhoneSimulator:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphonesimulator_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+      Release|iPhone|A-F:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_af)
+      Release|iPhone|G-R:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_gr)
+      Release|iPhone|S-Z:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_rest)
+      Release|iPhoneSimulator:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphonesimulator_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+      Debug|Mac:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(mac_platform_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+      Release|Mac:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(mac_platform_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+
+  pool:
+    vmImage: 'macOS-10.13'
+
+  steps:
+  - checkout: self
+    persistCredentials: true
+
+  - bash: |
+      set -x
+      set -e
+      uname -a
+      ls -la /Library/Frameworks/Xamarin.iOS.framework/Versions || true
+      ls -la /Library/Frameworks/Xamarin.Mac.framework/Versions || true
+      ls -lad /Applications/Xcode*
+      xcode-select -p
+      mono --version || true
+      env | sort
+      git config -l | sort
+      AUTH=$(git config -l | grep AUTHORIZATION | sed 's/.*AUTHORIZATION: //')
+      git config --global http.extraheader "AUTHORIZATION: $AUTH"
+      git config -l | sort
+    displayName: System Info
+
+  # FIXME: this should figure out the exact Xcode version from PROVISION_FROM_COMMIT.
+  - bash: |
+      set -x
+      set -e
+      rm -f /Applications/Xcode.app
+      ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode101.app
+      ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode.app
+      sudo xcode-select -s /Applications/Xcode.app
+      ./system-dependencies.sh --ignore-all --provision-sharpie
+    displayName: Provision some dependencies
+
+  - task: xamops.azdevex.provisionator-task.provisionator@1
+    displayName: Provision more dependencies
+    inputs:
+      provisioning_script: $(System.DefaultWorkingDirectory)/tools/devops/build-samples.csx
+
+  - bash: |
+      set -x
+      set -e
+      ./configure --enable-xamarin
+      # the github auth we use only works with https, so change maccore's url to be https:// instead of git@
+      make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed -e 's/.*:= //' -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
+      ../maccore/tools/install-qa-provisioning-profiles.sh
+    displayName: Provision provisioning profiles
+
+  - bash: |
+      set -x
+      set -e
+      echo 123456789 > ~/.mtouch-verbosity
+      make -C tests test-system.config
+      make -C tests/sampletester TESTS_USE_SYSTEM=1
+    displayName: Run tests
+
+  - task: PublishTestResults@2
+    displayName: Publish test results
+    condition: always()
+    inputs:
+      testResultsFormat: NUnit
+      testResultsFiles: '**/TestResult*.xml'
+      testRunTitle: Sample tests (build)
+      publishRunAttachments: true
+      mergeTestResults: true

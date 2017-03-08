@@ -15,9 +15,17 @@ public abstract class SampleTester
 {
 	public string Repository { get; private set; }
 
-	protected virtual string [][] GetIgnoredSolutions ()
+	Dictionary<string, string> ignored_solutions;
+	Dictionary<string, string> GetIgnoredSolutions ()
 	{
-		return new string [0][];
+		if (ignored_solutions == null)
+			ignored_solutions = GetIgnoredSolutionsImpl ();
+		return ignored_solutions;
+	}
+
+	protected virtual Dictionary<string, string> GetIgnoredSolutionsImpl ()
+	{
+		return new Dictionary<string, string> ();
 	}
 
 	protected SampleTester (string repo)
@@ -87,12 +95,9 @@ public abstract class SampleTester
 
 	void BuildSolution (string solution, string msbuild, string platform, string configuration)
 	{
-		var ignoredSolutions = GetIgnoredSolutions ();
-		for (int i = 0; i<ignoredSolutions.Length; i++) {
-			if (ignoredSolutions [i] [0] != solution)
-				continue;
-			Assert.Ignore (ignoredSolutions [i] [1]);
-		}
+		string ignored_message = "Ignored";
+		if (GetIgnoredSolutions ()?.TryGetValue (solution, out ignored_message) == true)
+			Assert.Ignore (ignored_message);
 
 		solution = Path.Combine (CloneRepo (), solution);
 
@@ -184,33 +189,33 @@ public class IosSampleTester : SampleTester
 		return GetSolutionsImpl (REPO);
 	}
 
-	protected override string [] [] GetIgnoredSolutions ()
+	protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
 	{
-		return new string [] [] {
-			new string [] { "BindingSample/src/sample/Xamarin.XMBindingLibrarySample/Xamarin.XMBindingLibrarySample.sln", "Binding sample solution that depends on a makefile-built binding library. Fix: change the makefile-built binding library to a binding project, and add it as a project reference in the solution", },
-			new string [] { "BouncingGameEmptyiOS/BouncingGame.sln", @"nuget restore fails with: Unable to find version '1.3.1.0' of package 'CocosSharp.PCL.Shared'." },
-			new string [] { "CustomTransitions/CustomTransitions.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Germán Marquez (U3F86JM574)' not found in keychain.", },
-			new string [] { "CustomTransitions/CustomTransitions/CustomTransitions.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Germán Marquez (U3F86JM574)' not found in keychain.", },
-			new string [] { "FileSystemSampleCode/WorkingWithTheFileSystem.sln", @"nuget restore fails with: Unable to find version '7.0.1' of package 'Newtonsoft.Json'." },
-			new string [] { "Location/Location.sln",
+		return new Dictionary<string, string> {
+			{ "BindingSample/src/sample/Xamarin.XMBindingLibrarySample/Xamarin.XMBindingLibrarySample.sln", "Binding sample solution that depends on a makefile-built binding library. Fix: change the makefile-built binding library to a binding project, and add it as a project reference in the solution" },
+			{ "BouncingGameEmptyiOS/BouncingGame.sln", @"nuget restore fails with: Unable to find version '1.3.1.0' of package 'CocosSharp.PCL.Shared'." },
+			{ "CustomTransitions/CustomTransitions.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Germán Marquez (U3F86JM574)' not found in keychain." },
+			{ "CustomTransitions/CustomTransitions/CustomTransitions.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Germán Marquez (U3F86JM574)' not found in keychain." },
+			{ "FileSystemSampleCode/WorkingWithTheFileSystem.sln", @"nuget restore fails with: Unable to find version '7.0.1' of package 'Newtonsoft.Json'." },
+			{ "Location/Location.sln",
 				@"nuget restore fails with: 
 	Unable to find version '0.13.0' of package 'Xamarin.TestCloud.Agent'.
 	Unable to find version '2.6.3' of package 'NUnit'.
 	Unable to find version '0.7.1' of package 'Xamarin.UITest'."
 			},
-			new string [] { "PassKit/PassLibrary/PassLibrary.sln", @"build fails with: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error :   Bundle Resource 'CouponBanana2.pkpass' not found on disk (should be at '/private/tmp/xamarin-macios-sample-builder/repositories/ios-samples/PassKit/PassLibrary/CouponBanana2.pkpass') ", },
-			new string [] { "WalkingGameCompleteiOS/WalkingGame.sln",
+			{ "PassKit/PassLibrary/PassLibrary.sln", @"build fails with: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error :   Bundle Resource 'CouponBanana2.pkpass' not found on disk (should be at '/private/tmp/xamarin-macios-sample-builder/repositories/ios-samples/PassKit/PassLibrary/CouponBanana2.pkpass') " },
+			{ "WalkingGameCompleteiOS/WalkingGame.sln",
 				@"nuget restore fails with:
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.iOS'.
 	Unable to find version '3.2.99.1-Beta' of package 'MonoGame.Framework.Portable'."
 			},
-			new string [] { "WalkingGameEmptyiOS/WalkingGame.sln",
+			{ "WalkingGameEmptyiOS/WalkingGame.sln",
 				@"nuget restore fails with:
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.iOS'.
 	Unable to find version '3.2.99.1-Beta' of package 'MonoGame.Framework.Portable'."
 			},
-			new string [] { "WatchKit/WatchKitCatalog/WatchKitCatalog.sln", @"nuget restore fails with: Unable to find version '6.0.6' of package 'Newtonsoft.Json'." },
-			new string [] { "WorkingWithTables/Part 3 - Customizing a Table's appearance/1 - CellDefaultTable/CellDefaultTable.sln",
+			{ "WatchKit/WatchKitCatalog/WatchKitCatalog.sln", @"nuget restore fails with: Unable to find version '6.0.6' of package 'Newtonsoft.Json'." },
+			{ "WorkingWithTables/Part 3 - Customizing a Table's appearance/1 - CellDefaultTable/CellDefaultTable.sln",
 				@"build fails with:
 	/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/1 - CellDefaultTable/CellDefaultTable.sln: error : Unable to parse condition ""Exists ('/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/1 - CellDefaultTable/before.CellDefaultTable.sln.targets')"" : Invalid punctuation: /
 	/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/1 - CellDefaultTable/CellDefaultTable.sln: Microsoft.Build.BuildEngine.InvalidProjectFileException: Unable to parse condition ""Exists ('/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/1 - CellDefaultTable/before.CellDefaultTable.sln.targets')"" : Invalid punctuation: / ---> Microsoft.Build.BuildEngine.ExpressionParseException: Invalid punctuation: /
@@ -226,7 +231,7 @@ public class IosSampleTester : SampleTester
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseCondition (System.String condition) [0x00007] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseAndEvaluate (System.String condition, Microsoft.Build.BuildEngine.Project context) [0x0000d] in <be39fd865fc6443ba8e0754f0d58cf2f>:0"
 			},
-			new string [] { "WorkingWithTables/Part 3 - Customizing a Table's appearance/2 - CellAccessoryTable/CellAccessoryTable.sln",
+			{ "WorkingWithTables/Part 3 - Customizing a Table's appearance/2 - CellAccessoryTable/CellAccessoryTable.sln",
 				@"build fails with:
 	/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/2 - CellAccessoryTable/CellAccessoryTable.sln: error : Unable to parse condition ""Exists ('/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/2 - CellAccessoryTable/before.CellAccessoryTable.sln.targets')"" : Invalid punctuation: /
 	/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/2 - CellAccessoryTable/CellAccessoryTable.sln: Microsoft.Build.BuildEngine.InvalidProjectFileException: Unable to parse condition ""Exists ('/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/2 - CellAccessoryTable/before.CellAccessoryTable.sln.targets')"" : Invalid punctuation: / ---> Microsoft.Build.BuildEngine.ExpressionParseException: Invalid punctuation: /
@@ -242,7 +247,7 @@ public class IosSampleTester : SampleTester
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseCondition (System.String condition) [0x00007] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseAndEvaluate (System.String condition, Microsoft.Build.BuildEngine.Project context) [0x0000d] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 "
 			},
-			new string [] { "WorkingWithTables/Part 3 - Customizing a Table's appearance/3 - CellCustomTable/CellCustomTable.sln",
+			{ "WorkingWithTables/Part 3 - Customizing a Table's appearance/3 - CellCustomTable/CellCustomTable.sln",
 				@"build fails with:
 	/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/3 - CellCustomTable/CellCustomTable.sln: error : Unable to parse condition ""Exists ('/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/3 - CellCustomTable/before.CellCustomTable.sln.targets')"" : Invalid punctuation: /
 	/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/3 - CellCustomTable/CellCustomTable.sln: Microsoft.Build.BuildEngine.InvalidProjectFileException: Unable to parse condition ""Exists ('/tmp/xamarin-macios-sample-builder/repositories/ios-samples/WorkingWithTables/Part 3 - Customizing a Table's appearance/3 - CellCustomTable/before.CellCustomTable.sln.targets')"" : Invalid punctuation: / ---> Microsoft.Build.BuildEngine.ExpressionParseException: Invalid punctuation: /
@@ -256,14 +261,14 @@ public class IosSampleTester : SampleTester
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseBooleanExpression () [0x00000] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseExpression () [0x00000] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 
 	  at Microsoft.Build.BuildEngine.ConditionParser.ParseCondition (System.String condition) [0x00007] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 
-	  at Microsoft.Build.BuildEngine.ConditionParser.ParseAndEvaluate (System.String condition, Microsoft.Build.BuildEngine.Project context) [0x0000d] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 ",
+	  at Microsoft.Build.BuildEngine.ConditionParser.ParseAndEvaluate (System.String condition, Microsoft.Build.BuildEngine.Project context) [0x0000d] in <be39fd865fc6443ba8e0754f0d58cf2f>:0 "
 			},
-			new string [] { "ios10/ElizaChat/ElizaChat.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Kevin Mullins (46FB3Q72SJ)' not found in keychain.", },
-			new string [] { "ios10/IceCreamBuilder/IceCreamBuilder.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
-			new string [] { "ios9/MultiTask/MultiTask.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Kevin Mullins (46FB3Q72SJ)' not found in keychain.", },
-			new string [] { "ios9/iTravel/iTravel.sln", @"nuget restore fails with: Unable to find version '8.0.2' of package 'Newtonsoft.Json'." },
-			new string [] { "watchOS/WatchConnectivity/WatchConnectivity.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
-			new string [] { "watchOS/WatchKitCatalog/WatchKitCatalog.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
+			{ "ios10/ElizaChat/ElizaChat.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Kevin Mullins (46FB3Q72SJ)' not found in keychain." },
+			{ "ios10/IceCreamBuilder/IceCreamBuilder.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
+			{ "ios9/MultiTask/MultiTask.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Kevin Mullins (46FB3Q72SJ)' not found in keychain." },
+			{ "ios9/iTravel/iTravel.sln", @"nuget restore fails with: Unable to find version '8.0.2' of package 'Newtonsoft.Json'." },
+			{ "watchOS/WatchConnectivity/WatchConnectivity.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
+			{ "watchOS/WatchKitCatalog/WatchKitCatalog.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
 		};
 	}
 }
@@ -281,17 +286,17 @@ public class MacIosSampleTester : SampleTester
 		return GetSolutionsImpl (REPO);
 	}
 
-	protected override string [][] GetIgnoredSolutions ()
+	protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
 	{
-		return new string [][]
+		return new Dictionary<string, string>
 		{
-			new string [] {  "AgentsCatalog/AgentsCatalog.sln", "build error: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Mac/Xamarin.Mac.Common.targets: error : Error executing task ACTool: Method 'Xamarin.MacDev.PObject.Save' not found.", },
-			new string [] { "SceneKitReel/SceneKitReel.sln",
+			{  "AgentsCatalog/AgentsCatalog.sln", "build error: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Mac/Xamarin.Mac.Common.targets: error : Error executing task ACTool: Method 'Xamarin.MacDev.PObject.Save' not found." },
+			{ "SceneKitReel/SceneKitReel.sln",
 				@"Compile errors: 
 xamarin-macios/tests/sampletester/bin/Debug/repositories/mac-ios-samples/SceneKitReel/SceneKitReelShared/GameViewController.cs(1072,4): error CS0103: The name `p3d' does not exist in the current context
 xamarin-macios/tests/sampletester/bin/Debug/repositories/mac-ios-samples/SceneKitReel/SceneKitReelShared/GameViewController.cs(1081,26): error CS0103: The name `p3d' does not exist in the current context"
 			},
-			new string [] { "MetalKitEssentials/MetalKitEssentials.sln", "build error: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Mac/Xamarin.Mac.Common.targets: error : Error executing task ACTool: Method 'Xamarin.MacDev.PObject.Save' not found.", },
+			{ "MetalKitEssentials/MetalKitEssentials.sln", "build error: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Mac/Xamarin.Mac.Common.targets: error : Error executing task ACTool: Method 'Xamarin.MacDev.PObject.Save' not found." },
 		};
 	}
 }
@@ -309,30 +314,31 @@ public class MobileSampleTester : SampleTester
 		return GetSolutionsImpl (REPO);
 	}
 
-	protected override string [] [] GetIgnoredSolutions ()
+protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
 	{
-		return new string [] []
+		return new Dictionary<string, string>
 		{
-			new string [] { "AnalogClock/AnalogClock.sln", "Contains android project(s) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "AsyncAwait/AsyncAwait.sln", "Contains android project(s) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "AsyncAwait/Windows/Windows.sln", "build fails with: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/AsyncAwait/Windows/Windows.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\"." },new string [] { "Azure/GetStartedWithData/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s)" },
-			new string [] { "Azure/GetStartedWithData/iOS/XamarinTodoQuickStart.iOS.sln",
+			{ "AnalogClock/AnalogClock.sln", "Contains android project(s) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "AsyncAwait/AsyncAwait.sln", "Contains android project(s) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "AsyncAwait/Windows/Windows.sln", "build fails with: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/AsyncAwait/Windows/Windows.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\"." },
+			{ "Azure/GetStartedWithData/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s)" },
+			{ "Azure/GetStartedWithData/iOS/XamarinTodoQuickStart.iOS.sln",
 				@"build fails with:
 	TodoItem.cs(2,7): error CS0246: The type or namespace name `Newtonsoft' could not be found. Are you missing an assembly reference?
 	TodoService.cs(9,18): error CS0234: The type or namespace name `WindowsAzure' does not exist in the namespace `Microsoft'. Are you missing an assembly reference?
 	TodoService.cs (20,17): error CS0246: The type or namespace name `MobileServiceClient' could not be found. Are you missing an assembly reference?
 	TodoService.cs(21,17): error CS0246: The type or namespace name `IMobileServiceTable' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "Azure/GetStartedWithPush/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/GetStartedWithPush/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Azure/GetStartedWithPush/iOS/XamarinTodoQuickStart.iOS.sln",
+			{ "Azure/GetStartedWithPush/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/GetStartedWithPush/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Azure/GetStartedWithPush/iOS/XamarinTodoQuickStart.iOS.sln",
 				@"build fails with:
 	TodoItem.cs(2,7): error CS0246: The type or namespace name `Newtonsoft' could not be found. Are you missing an assembly reference?
 	TodoService.cs(5,17): error CS0234: The type or namespace name `WindowsAzure' does not exist in the namespace `Microsoft'. Are you missing an assembly reference?
 	TodoService.cs (15,17): error CS0246: The type or namespace name `MobileServiceClient' could not be found. Are you missing an assembly reference?
 	TodoService.cs(16,17): error CS0246: The type or namespace name `IMobileServiceTable' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "Azure/GetStartedWithUsers/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/GetStartedWithUsers/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Azure/GetStartedWithUsers/iOS/XamarinTodoQuickStart.iOS.sln",
+			{ "Azure/GetStartedWithUsers/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/GetStartedWithUsers/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Azure/GetStartedWithUsers/iOS/XamarinTodoQuickStart.iOS.sln",
 				@"build fails with:
 	TodoItem.cs(2,7): error CS0246: The type or namespace name `Newtonsoft' could not be found. Are you missing an assembly reference?
 	TodoService.cs(5,17): error CS0234: The type or namespace name `WindowsAzure' does not exist in the namespace `Microsoft'. Are you missing an assembly reference?
@@ -341,103 +347,103 @@ public class MobileSampleTester : SampleTester
 	TodoService.cs(18,17): error CS0246: The type or namespace name `IMobileServiceTable' could not be found. Are you missing an assembly reference?
 	TodoService.cs(20,16): error CS0246: The type or namespace name `MobileServiceUser' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "Azure/GettingStarted/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/GettingStarted/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Azure/GettingStarted/iOS/XamarinTodoQuickStart.iOS.sln",
+			{ "Azure/GettingStarted/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/GettingStarted/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Azure/GettingStarted/iOS/XamarinTodoQuickStart.iOS.sln",
 				@"build fails with:
 	TodoItem.cs(2,7): error CS0246: The type or namespace name `Newtonsoft' could not be found. Are you missing an assembly reference?
 	TodoService.cs(5,17): error CS0234: The type or namespace name `WindowsAzure' does not exist in the namespace `Microsoft'. Are you missing an assembly reference?
 	TodoService.cs (14,17): error CS0246: The type or namespace name `MobileServiceClient' could not be found. Are you missing an assembly reference?
 	TodoService.cs(15,17): error CS0246: The type or namespace name `IMobileServiceTable' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "Azure/NotificationHubs/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/NotificationHubs/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Azure/NotificationHubs/iOS/NotificationHubQuickStart.sln",
+			{ "Azure/NotificationHubs/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/NotificationHubs/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Azure/NotificationHubs/iOS/NotificationHubQuickStart.sln",
 				@"build fails with:
 	AppDelegate.cs(6,7): error CS0246: The type or namespace name `WindowsAzure' could not be found. Are you missing an assembly reference?
 	AppDelegate.cs(16,17): error CS0246: The type or namespace name `SBNotificationHub' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "Azure/ValidateModifyData/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/ValidateModifyData/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Azure/ValidateModifyData/iOS/XamarinTodoQuickStart.iOS.sln",
+			{ "Azure/ValidateModifyData/Android/XamarinTodoQuickStart.Android.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Azure/ValidateModifyData/Android/XamarinTodoQuickStart.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Azure/ValidateModifyData/iOS/XamarinTodoQuickStart.iOS.sln",
 				@"build fails with:
 	TodoItem.cs(2,7): error CS0246: The type or namespace name `Newtonsoft' could not be found. Are you missing an assembly reference?
 	TodoService.cs(5,17): error CS0234: The type or namespace name `WindowsAzure' does not exist in the namespace `Microsoft'. Are you missing an assembly reference?
 	TodoService.cs (15,17): error CS0246: The type or namespace name `MobileServiceClient' could not be found. Are you missing an assembly reference?
 	TodoService.cs(16,17): error CS0246: The type or namespace name `IMobileServiceTable' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "BackgroundLocationDemo/BackgroundLocationDemo.sln", "Contains android project(s) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "BackgroundLocationDemo/location.Android/location.Droid.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/BackgroundLocationDemo/location.Android/location.Droid.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "BluetoothLEExplorer/BluetoothLEExplorer.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "BluetoothLEExplorer/Components/mbprogresshud-0.8/samples/MBProgressHUDDemo/MBProgressHUDDemo.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/BluetoothLEExplorer/Components/mbprogresshud-0.8/samples/MBProgressHUDDemo/MBProgressHUDDemo/MBProgressHUDDemo.csproj: error : Target named 'Build' not found in the project." },
-			new string [] { "BluetoothLEExplorer/Components/mbprogresshud-0.9.0/samples/MBProgressHUDDemo-classic/MBProgressHUDDemo-classic.sln", "XI/Classic, must be ported to XI/Unified" },
-			new string [] { "BluetoothLEExplorer/Components/mbprogresshud-0.9.0/samples/MBProgressHUDDemo/MBProgressHUDDemo.sln",
+			{ "BackgroundLocationDemo/BackgroundLocationDemo.sln", "Contains android project(s) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "BackgroundLocationDemo/location.Android/location.Droid.sln", "Contains android project(s) (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/BackgroundLocationDemo/location.Android/location.Droid.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "BluetoothLEExplorer/BluetoothLEExplorer.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "BluetoothLEExplorer/Components/mbprogresshud-0.8/samples/MBProgressHUDDemo/MBProgressHUDDemo.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/BluetoothLEExplorer/Components/mbprogresshud-0.8/samples/MBProgressHUDDemo/MBProgressHUDDemo/MBProgressHUDDemo.csproj: error : Target named 'Build' not found in the project." },
+			{ "BluetoothLEExplorer/Components/mbprogresshud-0.9.0/samples/MBProgressHUDDemo-classic/MBProgressHUDDemo-classic.sln", "XI/Classic, must be ported to XI/Unified" },
+			{ "BluetoothLEExplorer/Components/mbprogresshud-0.9.0/samples/MBProgressHUDDemo/MBProgressHUDDemo.sln",
 				@"build errors:
 	AppDelegate.cs(400,24): error CS0115: `MBProgressHUDDemo.MyNSUrlConnectionDelegete.ReceivedResponse(Foundation.NSUrlConnection, Foundation.NSUrlResponse)' is marked as an override but no suitable method found to override
 	AppDelegate.cs(407,24): error CS0115: `MBProgressHUDDemo.MyNSUrlConnectionDelegete.ReceivedData(Foundation.NSUrlConnection, Foundation.NSData)' is marked as an override but no suitable method found to override
 	AppDelegate.cs(413,24): error CS0115: `MBProgressHUDDemo.MyNSUrlConnectionDelegete.FinishedLoading(Foundation.NSUrlConnection)' is marked as an override but no suitable method found to override"
 			},
-			new string [] { "BouncingGame/BouncingGame.sln", "nuget restore failed: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
-			new string [] { "CCAction/ActionProject.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "CCAudioEngine/CCAudioEngineSample.sln", "nuget restore: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
-			new string [] { "CCDrawNode/CustomRendering.sln", "nuget restore failed: Unable to find version '1.5.0.1' of package 'CocosSharp.PCL.Shared'." },
-			new string [] { "CCRenderTexture/RenderTextureExample.sln", "nuget restore failed: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
-			new string [] { "Camera/Camera.sln", "build error: MainViewController.cs(8,7): error CS0246: The type or namespace name `Xamarin' could not be found. Are you missing an assembly reference?" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln", "wp (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln", "wp8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln", "winrt (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Xamarin.Mobile.iOS.Samples.sln", "XI/Classic, must be ported to XI/Unified" },
-			new string [] { "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln: error : Could not find the project file '/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.csproj'" },
-			new string [] { "CameraMovement3DMG/MonoGame3D.sln",
+			{ "BouncingGame/BouncingGame.sln", "nuget restore failed: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
+			{ "CCAction/ActionProject.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "CCAudioEngine/CCAudioEngineSample.sln", "nuget restore: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
+			{ "CCDrawNode/CustomRendering.sln", "nuget restore failed: Unable to find version '1.5.0.1' of package 'CocosSharp.PCL.Shared'." },
+			{ "CCRenderTexture/RenderTextureExample.sln", "nuget restore failed: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
+			{ "Camera/Camera.sln", "build error: MainViewController.cs(8,7): error CS0246: The type or namespace name `Xamarin' could not be found. Are you missing an assembly reference?" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln", "wp (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln", "wp8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln", "winrt (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Xamarin.Mobile.iOS.Samples.sln", "XI/Classic, must be ported to XI/Unified" },
+			{ "Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln: error : Could not find the project file '/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Camera/Components/xamarin.mobile-0.6.3/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.csproj'" },
+			{ "CameraMovement3DMG/MonoGame3D.sln",
 				@"nuget restore failed:
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.iOS'.
 	Unable to find version '3.3.0.0' of package 'MonoGame.Framework.Android'."
 			},
-			new string [] { "CoinTime/CoinTime.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "ContentControls/AndroidContentControls/AndroidContentControls.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/ContentControls/AndroidContentControls/AndroidContentControls.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "ContentControls/ContentControls.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "DataAccess/Advanced/DataAccess_Adv.sln",
+			{ "CoinTime/CoinTime.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "ContentControls/AndroidContentControls/AndroidContentControls.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/ContentControls/AndroidContentControls/AndroidContentControls.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "ContentControls/ContentControls.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "DataAccess/Advanced/DataAccess_Adv.sln",
 				@"nuget restore failed:
 	Unable to find version '1.1.1' of package 'sqlite-net-pcl'.
 	Unable to find version '0.8.6' of package 'SQLitePCL.raw'."
 			},
-			new string [] { "DataAccess/Basic/DataAccess_Basic.sln",
+			{ "DataAccess/Basic/DataAccess_Basic.sln",
 				@"nuget restore failed:
 	Unable to find version '1.1.1' of package 'sqlite-net-pcl'.
 	Unable to find version '0.8.6' of package 'SQLitePCL.raw'."
 			},
-			new string [] { "DataAccess/Basic/iOS/DataAccess_Basic.sln",
+			{ "DataAccess/Basic/iOS/DataAccess_Basic.sln",
 				@"nuget restore failed:
 	Unable to find version '1.1.1' of package 'sqlite-net-pcl'.
 	Unable to find version '0.8.6' of package 'SQLitePCL.raw'."
 			},
-			new string [] { "EmbeddedResources/EmbeddedResources.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "FruityFalls/FruityFalls.sln", "nuget restore failed: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
-			new string [] { "GLKeysES30/GLKeysES30.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "ModelRenderingMG/MonoGame3D.sln",
+			{ "EmbeddedResources/EmbeddedResources.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "FruityFalls/FruityFalls.sln", "nuget restore failed: Unable to find version '1.7.1.0' of package 'CocosSharp'." },
+			{ "GLKeysES30/GLKeysES30.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "ModelRenderingMG/MonoGame3D.sln",
 				@"nuget restore failed:
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.iOS'.
 	Unable to find version '3.3.0.0' of package 'MonoGame.Framework.Android'."
 			},
-			new string [] { "ModelsAndVertsMG/MonoGame3D.sln",
+			{ "ModelsAndVertsMG/MonoGame3D.sln",
 				@"nuget restore failed:
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.iOS'.
 	Unable to find version '3.3.0.0' of package 'MonoGame.Framework.Android'."
 			},
-			new string [] { "MonoGameTvOs/MonoGameTvOs.sln", "build failure: MTOUCH: error MT4116: Could not register the assembly 'MonoGameTvOs': error MT4118: Cannot register two managed types ('MonoGameTvOs.AppDelegate, MonoGameTvOs' and 'MonoGameTvOs.Application, MonoGameTvOs') with the same native name ('AppDelegate')." },
-			new string [] { "MultiThreading/MultiThreading.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "Notifications/Notifications.sln", @"nuget restore failed: Unable to find version '20.0.0.4' of package 'Xamarin.Android.Support.v4'." },
-			new string [] { "Phoneword/Phoneword.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "Phoneword/Phoneword_Android.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Phoneword/Phoneword_Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Phoneword/Phoneword_Cmd.sln", "? (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Phoneword/Phoneword_Cmd.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Phoneword/Phoneword_Win8.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Phoneword/Phoneword_Win8.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "Phoneword/Phoneword_WP7.sln", "android (!?) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "Profiling/AndroidAsyncImage/AsyncImageAndroid.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Profiling/AndroidAsyncImage/AsyncImageAndroid.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "RazorTodo/RazorNativeTodo/RazorNativeTodo.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "RazorTodo/RazorTodo/RazorTodo.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "SharingCode/NativeShared.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "SoMA/SoMA.sln",
+			{ "MonoGameTvOs/MonoGameTvOs.sln", "build failure: MTOUCH: error MT4116: Could not register the assembly 'MonoGameTvOs': error MT4118: Cannot register two managed types ('MonoGameTvOs.AppDelegate, MonoGameTvOs' and 'MonoGameTvOs.Application, MonoGameTvOs') with the same native name ('AppDelegate')." },
+			{ "MultiThreading/MultiThreading.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "Notifications/Notifications.sln", @"nuget restore failed: Unable to find version '20.0.0.4' of package 'Xamarin.Android.Support.v4'." },
+			{ "Phoneword/Phoneword.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "Phoneword/Phoneword_Android.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Phoneword/Phoneword_Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Phoneword/Phoneword_Cmd.sln", "? (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Phoneword/Phoneword_Cmd.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Phoneword/Phoneword_Win8.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Phoneword/Phoneword_Win8.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "Phoneword/Phoneword_WP7.sln", "android (!?) (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "Profiling/AndroidAsyncImage/AsyncImageAndroid.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/Profiling/AndroidAsyncImage/AsyncImageAndroid.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "RazorTodo/RazorNativeTodo/RazorNativeTodo.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "RazorTodo/RazorTodo/RazorTodo.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "SharingCode/NativeShared.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "SoMA/SoMA.sln",
 				@"build errors:
 	SoMAViewController.cs(5,7): error CS0246: The type or namespace name `Xamarin' could not be found. Are you missing an assembly reference?
 	PhotoScreen.cs(11,7): error CS0246: The type or namespace name `Xamarin' could not be found. Are you missing an assembly reference?
@@ -450,18 +456,18 @@ public class MobileSampleTester : SampleTester
 	PhotoScreen.cs(19,3): error CS0246: The type or namespace name `MediaPickerController' could not be found. Are you missing an assembly reference?
 	PhotoScreen.cs(184,15): error CS0246: The type or namespace name `Service' could not be found. Are you missing an assembly reference?"
 			},
-			new string [] { "SoMA/SoMA_VisualStudio.sln", "XI/Classic, must be ported to XI/Unified" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln", "windows phone (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln", "winrt (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.iOS.Samples/Xamarin.Mobile.iOS.Samples.sln", "XI/Classic, must be ported to XI/Unified" },
-			new string [] { "SoMA/iOS/Components/xamarin.social-1.0.1/samples/Xamarin.Social.Sample.Android/Xamarin.Social.Sample.Android.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.social-1.0.1/samples/Xamarin.Social.Sample.Android/Xamarin.Social.Sample.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "SoMA/iOS/Components/xamarin.social-1.0.1/samples/Xamarin.Social.Sample.iOS/Xamarin.Social.Sample.iOS.sln", "XI/Classic, must be ported to XI/Unified" },
-			new string [] { "SpriteSheetDemo/SpriteSheetDemo.sln",
+			{ "SoMA/SoMA_VisualStudio.sln", "XI/Classic, must be ported to XI/Unified" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/ContactsSample/ContactsSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/GeolocationSample/GeolocationSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/MediaPickerSample/MediaPickerSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.Android.Samples/Xamarin.Mobile.Android.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln", "windows phone (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP.Samples/Xamarin.Mobile.WP.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WP8.Samples/Xamarin.Mobile.WP8.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln", "winrt (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.WinRT.Samples/Xamarin.Mobile.WinRT.Samples.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.iOS.Samples/Xamarin.Mobile.iOS.Samples.sln", "XI/Classic, must be ported to XI/Unified" },
+			{ "SoMA/iOS/Components/xamarin.social-1.0.1/samples/Xamarin.Social.Sample.Android/Xamarin.Social.Sample.Android.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.social-1.0.1/samples/Xamarin.Social.Sample.Android/Xamarin.Social.Sample.Android.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "SoMA/iOS/Components/xamarin.social-1.0.1/samples/Xamarin.Social.Sample.iOS/Xamarin.Social.Sample.iOS.sln", "XI/Classic, must be ported to XI/Unified" },
+			{ "SpriteSheetDemo/SpriteSheetDemo.sln",
 				@"nuget restore failed:
 	Unable to find version '1.7.0.0-pre1' of package 'CocosSharp'.
 	Unable to find version '1.7.0.0-pre1' of package 'CocosSharp.Forms'.
@@ -473,50 +479,50 @@ public class MobileSampleTester : SampleTester
 	Unable to find version '23.0.1.3' of package 'Xamarin.Android.Support.v7.CardView'.
 	Unable to find version '23.0.1.3' of package 'Xamarin.Android.Support.v7.MediaRouter'."
 			},
-			new string [] { "StandardControls/AndroidStandardControls/AndroidStandardControls.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/StandardControls/AndroidStandardControls/AndroidStandardControls.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "TablesLists/AndroidListView/AndroidListView.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/TablesLists/AndroidListView/AndroidListView.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "TablesLists/TablesLists.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "Tasky/Tasky.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "TaskyPortable/TaskyPortable.sln",
+			{ "StandardControls/AndroidStandardControls/AndroidStandardControls.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/StandardControls/AndroidStandardControls/AndroidStandardControls.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "TablesLists/AndroidListView/AndroidListView.sln", "android (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/TablesLists/AndroidListView/AndroidListView.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "TablesLists/TablesLists.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "Tasky/Tasky.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "TaskyPortable/TaskyPortable.sln",
 				@"nuget restore failed:
 	Unable to find version '1.0.11' of package 'sqlite-net-pcl'.
 	Unable to find version '0.8.4' of package 'SQLitePCL.raw_basic'.
 	Unable to find version '0.7.1' of package 'SQLitePCL.raw_basic'."
 			},
-			new string [] { "TaskyPro/Tasky.Win8(deprecated)/TaskyWin8.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/TaskyPro/Tasky.Win8(deprecated)/TaskyWin8.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "TaskyPro/Tasky.Win81/TaskyWin8.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/TaskyPro/Tasky.Win81/TaskyWin8.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
-			new string [] { "TaskyPro/TaskyPro.sln",
+			{ "TaskyPro/Tasky.Win8(deprecated)/TaskyWin8.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/TaskyPro/Tasky.Win8(deprecated)/TaskyWin8.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "TaskyPro/Tasky.Win81/TaskyWin8.sln", "win8 (/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/TaskyPro/Tasky.Win81/TaskyWin8.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\".)" },
+			{ "TaskyPro/TaskyPro.sln",
 				@"nuget restore failed:
 	Unable to find version '1.0.11' of package 'sqlite-net-pcl'.
 	Unable to find version '0.7.1' of package 'SQLitePCL.raw_basic'."
 			},
-			new string [] { "TexturedCubeES30/TexturedCube.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "TipCalc/TipCalc.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "Touch/Touch.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "VisualBasic/TaskyPortableVB/TaskyPortableVB.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/VisualBasic/TaskyPortableVB/TaskyiOS/TaskyiOS.csproj: error : Target named 'Build' not found in the project." },
-			new string [] { "VisualBasic/TaskyPortableVB/TaskyPortableVisualBasicLibrary/TaskyPortableVisualBasicLibrary.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/VisualBasic/TaskyPortableVB/TaskyPortableVisualBasicLibrary/TaskyPortableVisualBasicLibrary.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\"." },
-			new string [] { "VisualBasic/XamarinFormsVB/XamarinFormsVB.sln",
+			{ "TexturedCubeES30/TexturedCube.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "TipCalc/TipCalc.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "Touch/Touch.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "VisualBasic/TaskyPortableVB/TaskyPortableVB.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/VisualBasic/TaskyPortableVB/TaskyiOS/TaskyiOS.csproj: error : Target named 'Build' not found in the project." },
+			{ "VisualBasic/TaskyPortableVB/TaskyPortableVisualBasicLibrary/TaskyPortableVisualBasicLibrary.sln", "build error: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/VisualBasic/TaskyPortableVB/TaskyPortableVisualBasicLibrary/TaskyPortableVisualBasicLibrary.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\"." },
+			{ "VisualBasic/XamarinFormsVB/XamarinFormsVB.sln",
 				@"nuget restore failed:
 	Unable to find version '1.4.4.6392' of package 'Xamarin.Forms'.
 	Unable to find version '22.2.1.0' of package 'Xamarin.Android.Support.v4'."
 			},
-			new string [] { "WCF-Walkthrough/HelloWorld/HelloWorld.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "WalkingGameMG/WalkingGame.sln",
+			{ "WCF-Walkthrough/HelloWorld/HelloWorld.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "WalkingGameMG/WalkingGame.sln",
 				@"nuget restore failed:
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.iOS'.
 	Unable to find version '3.5.1.1679' of package 'MonoGame.Framework.Android'."
 			},
-			new string [] { "Weather/WeatherApp.sln",
+			{ "Weather/WeatherApp.sln",
 				@"nuget restore failed:
 	Unable to find version '1.1.10' of package 'Microsoft.Bcl'.
 	Unable to find version '1.0.14' of package 'Microsoft.Bcl.Build'.
 	Unable to find version '2.2.29' of package 'Microsoft.Net.Http'."
 			},
-			new string [] { "WebServices/HelloWorld/HelloWorld.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
-			new string [] { "WebServices/WebServiceSamples/RestSample/RestSample.sln", "build fails with: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/WebServices/WebServiceSamples/RestSample/RestSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\"." },
-			new string [] { "WebServices/WebServiceSamples/WebServices.RxNorm/src/WebServices.RxNormSample.sln", "XI/Classic. Must be ported to XI/Unified." },
-			new string [] { "XamarinInsights/Android/XamarinInsightsAndroid.sln", "nuget restore failed: Unable to find version '1.10.4.112' of package 'Xamarin.Insights'." },
-			new string [] { "XamarinInsights/iOS/XamarinInsightsiOS.sln", "nuget restore failed: Unable to find version '1.10.4.112' of package 'Xamarin.Insights'." },
+			{ "WebServices/HelloWorld/HelloWorld.sln", "android (error XA5205: The Android SDK Directory could not be found. Please set via /p:AndroidSdkDirectory.)" },
+			{ "WebServices/WebServiceSamples/RestSample/RestSample.sln", "build fails with: /tmp/xamarin-macios-sample-builder/repositories/mobile-samples/WebServices/WebServiceSamples/RestSample/RestSample.sln: error : Invalid solution configuration and platform: \"Debug|iPhone\"." },
+			{ "WebServices/WebServiceSamples/WebServices.RxNorm/src/WebServices.RxNormSample.sln", "XI/Classic. Must be ported to XI/Unified." },
+			{ "XamarinInsights/Android/XamarinInsightsAndroid.sln", "nuget restore failed: Unable to find version '1.10.4.112' of package 'Xamarin.Insights'." },
+			{ "XamarinInsights/iOS/XamarinInsightsiOS.sln", "nuget restore failed: Unable to find version '1.10.4.112' of package 'Xamarin.Insights'." },
 		};
 	}
 }

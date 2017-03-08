@@ -203,6 +203,7 @@ public class IosSampleTester : SampleTester
 	Unable to find version '2.6.3' of package 'NUnit'.
 	Unable to find version '0.7.1' of package 'Xamarin.UITest'."
 			},
+			{ "Profiling/MemoryDemo/MemoryDemo.sln", @"build fails with: /private/tmp/xamarin-macios-sample-builder/repositories/ios-samples/Profiling/MemoryDemo/MemoryDemo.sln: error : Invalid solution configuration and platform: ""Debug|iPhone""." },
 			{ "PassKit/PassLibrary/PassLibrary.sln", @"build fails with: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error :   Bundle Resource 'CouponBanana2.pkpass' not found on disk (should be at '/private/tmp/xamarin-macios-sample-builder/repositories/ios-samples/PassKit/PassLibrary/CouponBanana2.pkpass') " },
 			{ "WalkingGameCompleteiOS/WalkingGame.sln",
 				@"nuget restore fails with:

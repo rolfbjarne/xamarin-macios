@@ -176,6 +176,7 @@ public abstract class SampleTester
 	}
 }
 
+[Ignore ("skip while configuring")]
 public class IosSampleTester : SampleTester
 {
 	const string REPO = "ios-samples"; // monotouch-samples redirects to ios-samples
@@ -302,6 +303,7 @@ xamarin-macios/tests/sampletester/bin/Debug/repositories/mac-ios-samples/SceneKi
 	}
 }
 
+[Ignore ("skip while configuring")]
 public class MobileSampleTester : SampleTester
 {
 	const string REPO = "mobile-samples";

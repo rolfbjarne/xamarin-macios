@@ -28,18 +28,6 @@ public abstract class SampleTester
 		return new Dictionary<string, string> ();
 	}
 
-	static Version mono_version;
-	static Version MonoVersion {
-		get {
-			if (mono_version == null) {
-				var updateinfo = File.ReadAllText ("/Library/Frameworks/Mono.framework/Versions/Current/updateinfo").Trim ();
-				var version = updateinfo.Substring (updateinfo.IndexOf (' ') + 1);
-				mono_version = new Version (int.Parse (version [0].ToString ()), int.Parse (version.Substring (1, 2)), int.Parse (version.Substring (3, 2)), int.Parse (version.Substring (5, 4)));
-			}
-			return mono_version;
-		}
-	}
-
 	protected SampleTester (string repo)
 	{
 		Repository = repo;
@@ -126,9 +114,6 @@ public abstract class SampleTester
 	[Test]
 	public void BuildSolution ([Values ("xbuild", "msbuild")] string msbuild, [Values ("Debug", "Release")] string configuration, [ValueSource ("GetSolutions")] string solution)
 	{
-		if (msbuild == "msbuild" && MonoVersion < new Version (4, 9))
-			Assert.Ignore ($"Mono {MonoVersion} does not have a functional MSBuild.");
-
 		BuildSolution (solution, msbuild, "iPhone", configuration);
 	}
 

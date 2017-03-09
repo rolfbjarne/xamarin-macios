@@ -111,10 +111,10 @@ public abstract class SampleTester
 		}
 	}
 
-	[TestCaseSource ("GetSolutions")]
-	public void BuildSolution (string solution)
+	[Test]
+	public void BuildSolution ([Values ("xbuild", "msbuild")] string msbuild, [Values ("Debug", "Release")] string configuration, [ValueSource ("GetSolutions")] string solution)
 	{
-		BuildSolution (solution, "xbuild", "iPhone", "Debug");
+		BuildSolution (solution, msbuild, "iPhone", configuration);
 	}
 
 	protected static string RootDirectory {

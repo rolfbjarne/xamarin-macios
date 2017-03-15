@@ -33,13 +33,17 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet">
+      <HintPath>..\..\packages\YamlDotNet.4.1.0\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.cs" />
+    <Compile Include="SampleTester.cs" />
     <Compile Include="MonoTouchBindingTester.cs" />
     <Compile Include="GitHub.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ProcessHelper.cs" />
+    <Compile Include="ComponentsTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

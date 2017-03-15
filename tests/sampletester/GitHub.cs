@@ -71,6 +71,18 @@ public static class GitHub
 		}
 	}
 
+	public static string GetFileContents (string user, string repo, string filename)
+	{
+		using (var client = new WebClient ()) {
+			try {
+				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
+				return client.DownloadString ($"https://raw.githubusercontent.com/{user}/{repo}/master/{filename}");
+			} catch (WebException we) {
+				return $"Failed to load repo {user}/{repo}: {we.Message}";
+			}
+		}
+	}
+
 	public static string CloneRepository (string user, string repo)
 	{
 		var repo_dir = Path.Combine (Configuration.RootDirectory, repo);

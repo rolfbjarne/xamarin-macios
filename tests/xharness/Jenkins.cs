@@ -452,6 +452,7 @@ namespace xharness
 				SpecifyPlatform = false,
 				SpecifyConfiguration = false,
 				Platform = TestPlatform.iOS,
+				RestoreNugets = true,
 			};
 			var nunitExecutioniOSMSBuild = new NUnitExecuteTask (buildiOSMSBuild)
 			{
@@ -2028,6 +2029,8 @@ function oninitialload ()
 
 	class XBuildTask : BuildToolTask
 	{
+		public bool RestoreNugets;
+
 		public bool SupportsParallelBuilds {
 			get {
 				return Platform.ToString ().StartsWith ("Mac", StringComparison.Ordinal);
@@ -2037,6 +2040,28 @@ function oninitialload ()
 		protected override async Task ExecuteAsync ()
 		{
 			using (var resource = await NotifyBlockingWaitAsync ((SupportsParallelBuilds ? Jenkins.DesktopResource.AcquireConcurrentAsync () : Jenkins.DesktopResource.AcquireExclusiveAsync ()))) {
+				var log = Logs.CreateStream (LogDirectory, $"build-{Platform}-{Timestamp}.txt", "Build log");
+				if (RestoreNugets) {
+					using (var nuget = new Process ()) {
+						nuget.StartInfo.FileName = "nuget";
+						nuget.StartInfo.Arguments = $"restore {Harness.Quote (ProjectFile)}";
+						foreach (string key in nuget.StartInfo.EnvironmentVariables.Keys)
+							log.WriteLine ("{0}={1}", key, nuget.StartInfo.EnvironmentVariables [key]);
+						log.WriteLine ("{0} {1}", nuget.StartInfo.FileName, nuget.StartInfo.Arguments);
+						var timeout = TimeSpan.FromMinutes (5);
+						var result = await nuget.RunAsync (log, true, timeout);
+						if (result.TimedOut) {
+							ExecutionResult = TestExecutingResult.TimedOut;
+							log.WriteLine ("Nuget restore timed out after {0} seconds.", timeout.TotalSeconds);
+							return;
+						} else if (!result.Succeeded) {
+							ExecutionResult = TestExecutingResult.Failed;
+							log.WriteLine ("Nuget restore failed.");
+							return;
+						}
+					}
+				}
+
 				using (var xbuild = new Process ()) {
 					xbuild.StartInfo.FileName = "xbuild";
 					var args = new StringBuilder ();
@@ -2049,7 +2074,6 @@ function oninitialload ()
 					xbuild.StartInfo.Arguments = args.ToString ();
 					Jenkins.MainLog.WriteLine ("Building {0} ({1})", TestName, Mode);
 					SetEnvironmentVariables (xbuild);
-					var log = Logs.CreateStream (LogDirectory, $"build-{Platform}-{Timestamp}.txt", "Build log");
 					foreach (string key in xbuild.StartInfo.EnvironmentVariables.Keys)
 						log.WriteLine ("{0}={1}", key, xbuild.StartInfo.EnvironmentVariables [key]);
 					log.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);

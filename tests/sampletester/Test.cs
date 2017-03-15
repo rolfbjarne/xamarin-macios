@@ -33,66 +33,6 @@ public abstract class SampleTester
 		Repository = repo;
 	}
 
-	protected static void AssertRunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, string message)
-	{
-		var exitCode = 0;
-
-		Assert.IsTrue (RunProcess (filename, arguments, out exitCode, timeout, workingDirectory), $"{message} timed out after {timeout.TotalMinutes} minutes");
-		Assert.AreEqual (0, exitCode, $"{message} failed (unexpected exit code)");
-	}
-
-	// runs the process and doesn't care about the result.
-	protected static void RunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory)
-	{
-		int exitCode;
-		RunProcess (filename, arguments, out exitCode, timeout, workingDirectory);
-	}
-
-	// returns false if timed out (in which case exit code is int.MinValue
-	protected static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory)
-	{	
-		var outputDone = new ManualResetEvent (false);
-		var errorDone = new ManualResetEvent (false);
-		using (var xbuild = new Process ()) {
-			xbuild.StartInfo.FileName = filename;
-			xbuild.StartInfo.Arguments = arguments;
-			xbuild.StartInfo.RedirectStandardError = true;
-			xbuild.StartInfo.RedirectStandardOutput = true;
-			xbuild.StartInfo.UseShellExecute = false;
-			xbuild.StartInfo.WorkingDirectory = workingDirectory;
-			xbuild.OutputDataReceived += (sender, e) =>
-			{
-				if (e.Data == null) {
-					outputDone.Set ();
-				} else {
-					Console.WriteLine (e.Data);
-				}
-			};
-			xbuild.ErrorDataReceived += (sender, e) =>
-			{
-				if (e.Data == null) {
-					errorDone.Set ();
-				} else {
-					Console.WriteLine (e.Data);
-				}
-			};
-			Console.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);
-			xbuild.Start ();
-			xbuild.BeginErrorReadLine ();
-			xbuild.BeginOutputReadLine ();
-			var rv = xbuild.WaitForExit ((int) timeout.TotalMilliseconds);
-			if (rv) {
-				outputDone.WaitOne (TimeSpan.FromSeconds (5));
-				errorDone.WaitOne (TimeSpan.FromSeconds (5));
-				exitCode = xbuild.ExitCode;
-			} else {
-				Console.WriteLine ("Command timed out after {0}s", timeout.TotalSeconds);
-				exitCode = int.MinValue;
-			}
-			return rv;
-		}
-	}
-
 	void BuildSolution (string solution, string msbuild, string platform, string configuration)
 	{
 		string ignored_message = "Ignored";
@@ -101,14 +41,7 @@ public abstract class SampleTester
 
 		solution = Path.Combine (CloneRepo (), solution);
 
-		try {
-			AssertRunProcess ("nuget", $"restore \"{solution}\"", TimeSpan.FromMinutes (2), RootDirectory, "nuget restore");
-			AssertRunProcess (msbuild, $"/verbosity:diag /p:Platform={platform} /p:Configuration={configuration} \"{solution}\"", TimeSpan.FromMinutes (5), RootDirectory, "build");
-		} finally {
-			// Clean up after us, since building for device needs a lot of space.
-			// Ignore any failures (since failures here doesn't mean the test failed).
-			RunProcess ("git", "clean -xfdq", TimeSpan.FromSeconds (30), Path.GetDirectoryName (solution));
-		}
+		ProcessHelper.BuildSolution (solution, msbuild, platform, configuration);
 	}
 
 	[Test]
@@ -119,60 +52,18 @@ public abstract class SampleTester
 
 	protected static string RootDirectory {
 		get {
-			// I'd like to clone the samples into a subdirectory that will be cleaned on the bots,
-			// but using a subdirectory in xamarin-macios makes nuget-dependending projects pick
-			// up xamarin-macios' Nuget.Config, which sets the repository path, and the nugets are
-			// restored to location the projects don't expect.
-			// So instead clone the sample repositories into /tmp
-			//return Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), "repositories");
-			return Path.Combine ("/private/tmp/xamarin-macios-sample-builder/repositories");
+			return Configuration.RootDirectory;
 		}
 	}
 
 	protected static string [] GetSolutionsImpl (string repo)
 	{
-		var fn = Path.Combine (RootDirectory, $"{repo}.filelist");
-		if (File.Exists (fn))
-			return File.ReadAllLines (fn);
-		Directory.CreateDirectory (Path.GetDirectoryName (fn));
-
-		using (var client = new WebClient ()) {
-			byte [] data;
-			try {
-				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
-				data = client.DownloadData ($"https://api.github.com/repos/xamarin/{repo}/git/trees/master?recursive=1");
-			} catch (WebException we) {
-				return new string [] { $"Failed to load repo: {we.Message}" };
-			}
-			var reader = JsonReaderWriterFactory.CreateJsonReader (data, new XmlDictionaryReaderQuotas ());
-			var doc = new XmlDocument ();
-			doc.Load (reader);
-			var rv = new List<string> ();
-			foreach (XmlNode node in doc.SelectNodes ("/root/tree/item/path")) {
-				var path = node.InnerText;
-				if (!path.EndsWith (".sln", StringComparison.OrdinalIgnoreCase))
-					continue;
-				rv.Add (node.InnerText);
-			}
-
-			File.WriteAllLines (fn, rv.ToArray ());
-			return rv.ToArray ();
-		}
+		return GitHub.GetSolutions ("xamarin", repo);
 	}
 
 	string CloneRepo ()
 	{
-		var repo_dir = Path.Combine (RootDirectory, Path.GetFileName (Repository));
-
-		Directory.CreateDirectory (RootDirectory);
-
-		if (!Directory.Exists (repo_dir)) {
-			var exitCode = 0;
-			Assert.IsTrue (RunProcess ("git", $"clone git@github.com:xamarin/{Repository}", out exitCode, TimeSpan.FromMinutes (10), RootDirectory), "cloned in 10 minutes");
-			Assert.AreEqual (0, exitCode, "git clone exit code");
-		}
-
-		return repo_dir;
+		return GitHub.CloneRepository ("xamarin", Repository);
 	}
 }
 

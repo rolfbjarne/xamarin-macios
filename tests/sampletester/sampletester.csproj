@@ -36,6 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
+    <Compile Include="MonoTouchBindingTester.cs" />
+    <Compile Include="GitHub.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ProcessHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

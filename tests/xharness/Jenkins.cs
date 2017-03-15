@@ -405,7 +405,6 @@ namespace xharness
 		{
 			// Missing:
 			// api-diff
-			// msbuild tests
 
 			SelectTests ();
 

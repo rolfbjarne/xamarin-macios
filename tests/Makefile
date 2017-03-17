@@ -351,4 +351,4 @@ jenkins: xharness/xharness.exe
 	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT)
 
 jenkins-system: xharness/xharness.exe
-	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=skip-mac-tests,skip-ios-simulator-tests,skip-watchos-tests,skip-tvos-tests,skip-ios-msbuild-tests,run-ios-device-tests
+	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=skip-mac-tests,skip-ios-simulator-tests,skip-watchos-tests,skip-tvos-tests,skip-ios-msbuild-tests,skip-system-permission-tests,run-ios-device-tests

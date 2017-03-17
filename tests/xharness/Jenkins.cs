@@ -29,6 +29,7 @@ namespace xharness
 		public bool IncludeMacBindingProject;
 		public bool IncludeSimulator = true;
 		public bool IncludeDevice;
+		public bool IncludeSystemPermissionTests = true; // tests that require access to system resources (system contacts, photo library, etc) in order to work
 
 		public Logs Logs = new Logs ();
 		public Log MainLog;
@@ -107,6 +108,20 @@ namespace xharness
 			return runtasks;
 		}
 
+		bool IsIncluded (TestProject project)
+		{
+			if (!project.IsExecutableProject)
+				return false;
+
+			if (!IncludeBcl && project.IsBclTest)
+				return false;
+
+			if (!IncludeSystemPermissionTests && project.Name == "introspection")
+				return false;
+
+			return true;
+		}
+
 		async Task<IEnumerable<TestTask>> CreateRunDeviceTasks ()
 		{
 			var rv = new List<RunDeviceTask> ();
@@ -122,11 +137,8 @@ namespace xharness
 			}
 
 			foreach (var project in Harness.IOSTestProjects) {
-				if (!project.IsExecutableProject)
-					continue;
-
 				bool ignored = !IncludeDevice;
-				if (!IncludeBcl && project.IsBclTest)
+				if (!IsIncluded (project))
 					ignored = true;
 				
 				var build64 = new XBuildTask
@@ -384,6 +396,7 @@ namespace xharness
 			SetEnabled (labels, "mac-classic", ref IncludeClassicMac);
 			SetEnabled (labels, "ios-msbuild", ref IncludeiOSMSBuild);
 			SetEnabled (labels, "ios-simulator", ref IncludeSimulator);
+			SetEnabled (labels, "system-permission", ref IncludeSystemPermissionTests);
 		}
 
 		void SetEnabled (HashSet<string> labels, string testname, ref bool value)
@@ -414,14 +427,11 @@ namespace xharness
 			var runSimulatorTasks = new List<RunSimulatorTask> ();
 
 			foreach (var project in Harness.IOSTestProjects) {
-				if (!project.IsExecutableProject)
-					continue;
-
 				bool ignored = false;
 				if (!IncludeSimulator)
 					ignored = true;
 
-				if (!IncludeBcl && project.IsBclTest)
+				if (!IsIncluded (project))
 					ignored = true;
 
 				var ps = new List<Tuple<TestProject, TestPlatform, bool>> ();
@@ -470,14 +480,11 @@ namespace xharness
 			Tasks.Add (nunitExecutioniOSMSBuild);
 			
 			foreach (var project in Harness.MacTestProjects) {
-				if (!project.IsExecutableProject)
-					continue;
-
 				bool ignored = !IncludeMac;
 				if (!IncludeMmpTest && project.Path.Contains ("mmptest"))
 					ignored = true;
 
-				if (!IncludeBcl && project.IsBclTest)
+				if (!IsIncluded (project))
 					ignored = true;
 
 				BuildToolTask build;

@@ -587,7 +587,7 @@ namespace xharness
 			return new MacExecuteTask (build)
 			{
 				Ignored = ignore,
-				TestName = build.TestName,
+				TestName = task.TestName ?? build.TestName,
 			};
 		}
 
@@ -1723,11 +1723,14 @@ function oninitialload ()
 		}
 
 		string test_name;
-		public virtual string TestName {
+		public string TestName {
 			get {
 				if (test_name != null)
 					return test_name;
-				
+
+				if (!string.IsNullOrEmpty (TestProject.Name))
+					return TestProject.Name;
+
 				var rv = Path.GetFileNameWithoutExtension (ProjectFile);
 				switch (Platform) {
 				case TestPlatform.Mac:

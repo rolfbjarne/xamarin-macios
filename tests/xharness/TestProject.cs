@@ -85,6 +85,7 @@ namespace xharness
 				Path = Path,
 				IsExecutableProject = IsExecutableProject,
 				GenerateVariations = GenerateVariations,
+				Name = Name,
 			};
 		}
 

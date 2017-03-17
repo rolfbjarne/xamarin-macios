@@ -45,7 +45,7 @@ public abstract class SampleTester
 	}
 
 	[Test]
-	public void BuildSolution ([Values ("xbuild", "msbuild")] string msbuild, [Values ("Debug", "Release")] string configuration, [ValueSource ("GetSolutions")] string solution)
+	public void BuildSolution ([Values (/*"xbuild", */"msbuild")] string msbuild, [Values ("Debug", "Release")] string configuration, [ValueSource ("GetSolutions")] string solution)
 	{
 		BuildSolution (solution, msbuild, "iPhone", configuration);
 	}

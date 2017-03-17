@@ -2714,6 +2714,7 @@ function oninitialload ()
 						DeviceName = Device.Name,
 						CompanionDeviceName = CompanionDevice?.Name,
 						Configuration = ProjectConfiguration,
+						IncludeSystemPermissionTests = Jenkins.IncludeSystemPermissionTests,
 					};
 
 					// Sometimes devices can't upgrade (depending on what has changed), so make sure to uninstall any existing apps first.
@@ -2765,6 +2766,7 @@ function oninitialload ()
 								DeviceName = Device.Name,
 								CompanionDeviceName = CompanionDevice?.Name,
 								Configuration = ProjectConfiguration,
+								IncludeSystemPermissionTests = Jenkins.IncludeSystemPermissionTests,
 							};
 							additional_runner = todayRunner;
 							await todayRunner.RunAsync ();
@@ -2851,6 +2853,7 @@ function oninitialload ()
 				Target = AppRunnerTarget,
 				LogDirectory = LogDirectory,
 				MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log"),
+				IncludeSystemPermissionTests = Jenkins.IncludeSystemPermissionTests,
 			};
 			runner.Simulators = Simulators;
 			runner.Initialize ();

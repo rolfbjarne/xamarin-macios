@@ -161,6 +161,13 @@ public class IosSampleTester : SampleTester
 			{ "ios9/iTravel/iTravel.sln", @"nuget restore fails with: Unable to find version '8.0.2' of package 'Newtonsoft.Json'." },
 			{ "watchOS/WatchConnectivity/WatchConnectivity.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
 			{ "watchOS/WatchKitCatalog/WatchKitCatalog.sln", @"nuget restore fails with: Unable to find version '9.0.1' of package 'Newtonsoft.Json'." },
+			{ "IntroductionToiCloud/iCloudKeyValue/iCloudKeyValue.sln", @"personal code signing key: iOS code signing key 'iPhone Developer: Craig Dunn (6Q937X2U43)' not found in keychain." },
+			{ "IntroductionToiCloud/iCloudUIDoc/iCloudUIDoc.sln", @"personal code signing key: iOS code signing key 'iPhone Developer: Craig Dunn (6Q937X2U43)' not found in keychain." },
+			{ "ios8/IntroToHealthKit/HKWork.sln", @"personal code signing key: The specified iOS provisioning profile '6303ad69-45e8-4c05-940a-f9c02c8a8de0' could not be found." },
+			{ "SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln", @"/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln.metaproj : error MSB3202: The project file ""/private/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.csproj"" was not found. [/private/tmp/xamarin-macios-sample-builder/repositories/mobile-samples/SoMA/iOS/Components/xamarin.mobile-0.6.2.1/samples/Xamarin.Mobile.iOS.Samples/Geolocation/GeolocationSample.sln]" },
+
+			// seems to only fail with msbuild. I can't repro this locally (but I haven't tried much either).
+			{ "ios8/SceneKitFSharp/FSSceneKit.sln", "/tmp/xamarin-macios-sample-builder/repositories/ios-samples/ios8/SceneKitFSharp/FSSceneKit/FSSceneKitViewController.fs(6,6): error FS0074: The type referenced through 'System.Runtime.CompilerServices.ExtensionAttribute' is defined in an assembly that is not referenced. You must add a reference to assembly 'System.Runtime'. [/private/tmp/xamarin-macios-sample-builder/repositories/ios-samples/ios8/SceneKitFSharp/FSSceneKit/FSSceneKit.fsproj]" },
 		};
 	}
 }

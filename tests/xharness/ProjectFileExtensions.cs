@@ -665,7 +665,6 @@ namespace xharness
 				new string [] { "GeneratedTestOutput", "Include" },
 				new string [] { "TestLibrariesInput", "Include" },
 				new string [] { "TestLibrariesOutput", "Include" },
-				new string [] { "TestLibrariesOutput", "Include" },
 				new string [] { "Content", "Include" },
 				new string [] { "ObjcBindingApiDefinition", "Include" },
 				new string [] { "ObjcBindingCoreSource", "Include" },

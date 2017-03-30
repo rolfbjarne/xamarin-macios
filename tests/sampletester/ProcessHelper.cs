@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Text;
 
 using NUnit.Framework;
 
@@ -10,20 +11,23 @@ public static class ProcessHelper
 	public static void AssertRunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, string message)
 	{
 		var exitCode = 0;
-
-		Assert.IsTrue (RunProcess (filename, arguments, out exitCode, timeout, workingDirectory), $"{message} timed out after {timeout.TotalMinutes} minutes");
+		var output = new StringBuilder ();
+		var rv = RunProcess (filename, arguments, out exitCode, timeout, workingDirectory, output);
+		if ((!rv || exitCode != 0) && output.Length > 0)
+			Console.WriteLine (output);
+		Assert.IsTrue (rv, $"{message} timed out after {timeout.TotalMinutes} minutes");
 		Assert.AreEqual (0, exitCode, $"{message} failed (unexpected exit code)");
 	}
 
 	// runs the process and doesn't care about the result.
-	public static void RunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory)
+	public static void RunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, StringBuilder output = null)
 	{
 		int exitCode;
-		RunProcess (filename, arguments, out exitCode, timeout, workingDirectory);
+		RunProcess (filename, arguments, out exitCode, timeout, workingDirectory, output);
 	}
 
 	// returns false if timed out (in which case exit code is int.MinValue
-	public static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory)
+	public static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory, StringBuilder output = null)
 	{
 		var outputDone = new ManualResetEvent (false);
 		var errorDone = new ManualResetEvent (false);
@@ -39,7 +43,12 @@ public static class ProcessHelper
 				if (e.Data == null) {
 					outputDone.Set ();
 				} else {
-					Console.WriteLine (e.Data);
+					if (output != null) {
+						lock (output)
+							output.AppendLine (e.Data);
+					} else {
+						Console.WriteLine (e.Data);
+					}
 				}
 			};
 			xbuild.ErrorDataReceived += (sender, e) =>
@@ -47,7 +56,12 @@ public static class ProcessHelper
 				if (e.Data == null) {
 					errorDone.Set ();
 				} else {
-					Console.WriteLine (e.Data);
+					if (output != null) {
+						lock (output)
+							output.AppendLine (e.Data);
+					} else {
+						Console.WriteLine (e.Data);
+					}
 				}
 			};
 			Console.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);

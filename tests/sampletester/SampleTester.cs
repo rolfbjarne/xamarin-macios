@@ -200,6 +200,27 @@ xamarin-macios/tests/sampletester/bin/Debug/repositories/mac-ios-samples/SceneKi
 	}
 }
 
+public class XamarinFormsSampleTester : SampleTester
+{
+	const string REPO = "xamarin-forms-samples";
+	public XamarinFormsSampleTester ()
+		: base (REPO)
+	{
+	}
+
+	static string [] GetSolutions ()
+	{
+		return GetSolutionsImpl (REPO);
+	}
+
+	protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
+	{
+		return new Dictionary<string, string>
+		{
+		};
+	}
+}
+
 public class MobileSampleTester : SampleTester
 {
 	const string REPO = "mobile-samples";
@@ -213,7 +234,7 @@ public class MobileSampleTester : SampleTester
 		return GetSolutionsImpl (REPO);
 	}
 
-protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
+	protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
 	{
 		return new Dictionary<string, string>
 		{

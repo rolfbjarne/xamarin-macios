@@ -97,6 +97,7 @@ public abstract class ComponentsTester
 	}
 }
 
+[Ignore ("")]
 public class XamarinComponentsTester : ComponentsTester
 {
 	const string REPO = "XamarinComponents";
@@ -168,6 +169,7 @@ public class XamarinComponentsTester : ComponentsTester
 	}
 }
 
+[Ignore ("")]
 public class FacebookComponentsTester : ComponentsTester
 {
 	const string REPO = "FacebookComponents";
@@ -190,6 +192,7 @@ public class FacebookComponentsTester : ComponentsTester
 	}
 }
 
+[Ignore ("")]
 public class GoogleApisForiOSComponentsTester : ComponentsTester
 {
 	const string REPO = "GoogleApisForiOSComponents";

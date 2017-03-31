@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
-[Ignore ("")]
 public class PrebuiltAppTester : SampleTester
 {
 	const string REPO = "prebuilt-apps";

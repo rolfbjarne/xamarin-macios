@@ -2,7 +2,6 @@
 
 using NUnit.Framework;
 
-[Ignore ("")]
 public class IosSampleTester : SampleTester
 {
 	const string REPO = "ios-samples"; // monotouch-samples redirects to ios-samples

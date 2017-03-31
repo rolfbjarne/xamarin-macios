@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
-[Ignore ("")]
 public class MobileSampleTester : SampleTester
 {
 	const string REPO = "mobile-samples";

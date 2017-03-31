@@ -44,6 +44,12 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="ComponentsTester.cs" />
+    <Compile Include="MobileSampleTester.cs" />
+    <Compile Include="XamarinFormsSampleTester.cs" />
+    <Compile Include="PrebuiltAppTester.cs" />
+    <Compile Include="MacSampleTester.cs" />
+    <Compile Include="MacIosSampleTester.cs" />
+    <Compile Include="IosSampleTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

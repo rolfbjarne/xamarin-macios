@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
+[Ignore ("")]
 public class MacSampleTester : SampleTester
 {
 	const string REPO = "mac-samples";

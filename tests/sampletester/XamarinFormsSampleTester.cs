@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
+[Ignore ("")]
 public class XamarinFormsSampleTester : SampleTester
 {
 	const string REPO = "xamarin-forms-samples";

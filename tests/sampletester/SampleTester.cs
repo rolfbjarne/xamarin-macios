@@ -58,7 +58,7 @@ public abstract class SampleTester
 
 	protected static string [] GetSolutionsImpl (string repo)
 	{
-		return GitHub.GetSolutions ("xamarin", repo);
+		return new string [] { GitHub.GetSolutions ("xamarin", repo) [0] };
 	}
 
 	string CloneRepo ()

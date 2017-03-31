@@ -11,7 +11,6 @@ using System.Xml;
 using NUnit.Framework;
 
 [TestFixture]
-[Ignore ("")]
 public class MonoTouchBindingTester
 {
 	public string Repository { get; private set; } = "monotouch-bindings";

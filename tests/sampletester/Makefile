@@ -20,7 +20,7 @@ all-local::
 
 run-tests:
 	@rm -f .failed-stamp
-	$(SYSTEM_MONO) --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml);format=nunit2" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
+	$(SYSTEM_MONO) --debug --trace=E:all $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml);format=nunit2" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
 	@# Create an html file and tell MonkeyWrench to upload it (if we're running there)
 	@[[ -z "$$BUILD_REPOSITORY" ]] || \
 		( xsltproc $(TOP)/tests/HtmlTransform.xslt TestResult.xml  > index.html && \

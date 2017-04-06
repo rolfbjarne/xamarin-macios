@@ -486,6 +486,8 @@ namespace Xamarin.Bundler {
 
 		public BitCodeMode BitCodeMode { get; set; }
 
+		public bool Embeddinator { get; set; }
+
 		public bool EnableAsmOnlyBitCode { get { return BitCodeMode == BitCodeMode.ASMOnly; } }
 		public bool EnableLLVMOnlyBitCode { get { return BitCodeMode == BitCodeMode.LLVMOnly; } }
 		public bool EnableMarkerOnlyBitCode { get { return BitCodeMode == BitCodeMode.MarkerOnly; } }
@@ -1303,6 +1305,9 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (91, "This version of Xamarin.iOS requires the {0} {1} SDK (shipped with Xcode {2}). Either upgrade Xcode to get the required header files or set the managed linker behaviour to Link Framework SDKs Only (to try to avoid the new APIs).", PlatformName, SdkVersions.GetVersion (Platform), SdkVersions.Xcode);
 
 			Namespaces.Initialize ();
+
+			if (Embeddinator)
+				RootAssemblies.Add (Path.Combine (Driver.GetPlatformFrameworkDirectory (this), Driver.GetProductAssembly (this) + ".dll"));
 
 			InitializeCommon ();
 

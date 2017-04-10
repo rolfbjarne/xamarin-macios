@@ -165,7 +165,9 @@ namespace Xamarin.Bundler {
 
 		public AssemblyBuildTarget LibMonoLinkMode {
 			get {
-				if (HasFrameworks || UseMonoFramework.Value) {
+				if (Embeddinator) {
+					return AssemblyBuildTarget.StaticObject;
+				} else if (HasFrameworks || UseMonoFramework.Value) {
 					return AssemblyBuildTarget.Framework;
 				} else if (HasDynamicLibraries) {
 					return AssemblyBuildTarget.DynamicLibrary;
@@ -176,7 +178,9 @@ namespace Xamarin.Bundler {
 		}
 		public AssemblyBuildTarget LibXamarinLinkMode {
 			get {
-				if (HasFrameworks) {
+				if (Embeddinator) {
+					return AssemblyBuildTarget.StaticObject;
+				} else if (HasFrameworks) {
 					return AssemblyBuildTarget.Framework;
 				} else if (HasDynamicLibraries) {
 					return AssemblyBuildTarget.DynamicLibrary;
@@ -1419,7 +1423,16 @@ namespace Xamarin.Bundler {
 			if (!IsDeviceBuild || IsExtension)
 				return;
 
-			if (Directory.Exists (Path.Combine (AppDirectory, "NOTICE")))
+			if (Embeddinator)
+				return;
+
+			WriteNotice (AppDirectory);
+		}
+
+		void WriteNotice (string directory)
+		{
+			var path = Path.Combine (directory, "NOTICE");
+			if (Directory.Exists (path))
 				throw new MonoTouchException (1016, true, "Failed to create the NOTICE file because a directory already exists with the same name.");
 
 			try {
@@ -1428,7 +1441,7 @@ namespace Xamarin.Bundler {
 				sb.Append ("Xamarin built applications contain open source software.  ");
 				sb.Append ("For detailed attribution and licensing notices, please visit...");
 				sb.AppendLine ().AppendLine ().Append ("http://xamarin.com/mobile-licensing").AppendLine ();
-				Driver.WriteIfDifferent (Path.Combine (AppDirectory, "NOTICE"), sb.ToString ());
+				Driver.WriteIfDifferent (path, sb.ToString ());
 			} catch (Exception ex) {
 				throw new MonoTouchException (1017, true, ex, "Failed to create the NOTICE file: {0}", ex.Message);
 			}
@@ -1585,6 +1598,7 @@ namespace Xamarin.Bundler {
 					if (info.DylibToFramework) {
 						var bundleName = Path.GetFileName (name);
 						CreateFrameworkInfoPList (Path.Combine (targetDirectory, "Info.plist"), bundleName, BundleId + Path.GetFileNameWithoutExtension (bundleName), bundleName);
+						CreateFrameworkNotice (targetDirectory);
 					}
 				}
 			}
@@ -2038,6 +2052,14 @@ namespace Xamarin.Bundler {
 				return;
 
 			RuntimeOptions.Write (AppDirectory);
+		}
+
+		public void CreateFrameworkNotice (string output_path)
+		{
+			if (!Embeddinator)
+				return;
+
+			WriteNotice (output_path);
 		}
 
 		public void CreateFrameworkInfoPList (string output_path, string framework_name, string bundle_identifier, string bundle_name)

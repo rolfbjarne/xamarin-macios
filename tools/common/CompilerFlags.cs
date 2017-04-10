@@ -130,6 +130,7 @@ namespace Xamarin.Utils
 			default:
 				throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", mode);
 			}
+			AddOtherFlag ("-liconv");
 		}
 
 		public void LinkWithXamarin ()

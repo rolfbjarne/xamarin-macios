@@ -1485,6 +1485,25 @@ namespace XamCore.Registrar {
 				var pAttr = GetProtocolAttribute (type);
 				isInformalProtocol = pAttr.IsInformal;
 				isProtocol = true;
+
+				//Console.WriteLine ("{0}: {1}", type.Name, isInformalProtocol);
+				if (isInformalProtocol && type.Name == "ICALayerDelegate") {
+					switch (App.Platform) {
+					case Xamarin.Utils.ApplePlatform.iOS:
+					case Xamarin.Utils.ApplePlatform.TVOS:
+						isInformalProtocol = App.SdkVersion.Major < 10;
+						break;
+					case Xamarin.Utils.ApplePlatform.WatchOS:
+						isInformalProtocol = App.SdkVersion.Major < 3;
+						break;
+					case Xamarin.Utils.ApplePlatform.MacOSX:
+						isInformalProtocol = App.SdkVersion < new Version (10, 12);
+						break;
+					default:
+						throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in Xamarin.iOS; please file a bug report at http://bugzilla.xamarin.com with a test case.", App.Platform);
+					}
+					//Console.WriteLine ("{0}: {1}", type.Name, isInformalProtocol);
+				}
 			}
 
 			// make sure the base type is already registered

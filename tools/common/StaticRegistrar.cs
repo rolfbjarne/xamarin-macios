@@ -3356,6 +3356,9 @@ namespace XamCore.Registrar {
 				}
 			}
 
+			if (App.Embeddinator)
+				body.WriteLine ("xamarin_embeddinator_initialize ();");
+
 			body.WriteLine ("MONO_ASSERT_GC_SAFE;");
 			body.WriteLine ("MONO_THREAD_ATTACH;"); // COOP: this will switch to GC_UNSAFE
 			body.WriteLine ();

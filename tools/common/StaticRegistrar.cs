@@ -3782,6 +3782,9 @@ namespace XamCore.Registrar {
 			methods.WriteLine ($"#include \"{Path.GetFileName (header_path)}\"");
 			methods.StringBuilder.AppendLine ("extern \"C\" {");
 
+			if (App.Embeddinator)
+				methods.WriteLine ("void xamarin_embeddinator_initialize ();");
+			
 			Specialize (sb);
 
 			methods.StringBuilder.AppendLine ("} /* extern \"C\" */");

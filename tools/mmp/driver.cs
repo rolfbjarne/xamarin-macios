@@ -553,23 +553,34 @@ namespace Xamarin.Bundler {
 
 		static void ValidateXcode ()
 		{
-			var plist_path = Path.Combine (Path.GetDirectoryName (DeveloperDirectory), "version.plist");
 			if (xcode_version == null) {
+				// Check what kind of path we got
+				if (File.Exists (Path.Combine (sdk_root, "Contents", "MacOS", "Xcode"))) {
+					// path to the Xcode.app
+					sdk_root = Path.Combine (sdk_root, "Contents", "Developer");
+				} else if (File.Exists (Path.Combine (sdk_root, "..", "MacOS", "Xcode"))) {
+					// path to Contents/Developer
+					sdk_root = Path.GetFullPath (Path.Combine (sdk_root, "..", "..", "Contents", "Developer"));
+				} else {
+					throw ErrorHelper.CreateError (57, "Cannot determine the path to Xcode.app from the sdk root '{0}'. Please specify the full path to the Xcode.app bundle.", sdk_root);
+				}
+
+				var plist_path = Path.Combine (Path.GetDirectoryName (DeveloperDirectory), "version.plist");
 				if (File.Exists (plist_path)) {
 					bool nextElement = false;
 					XmlReaderSettings settings = new XmlReaderSettings ();
 					settings.DtdProcessing = DtdProcessing.Ignore;
 					using (XmlReader reader = XmlReader.Create (plist_path, settings)) {
-						while (reader.Read()) {
+						while (reader.Read ()) {
 							// We want the element after CFBundleShortVersionString
 							if (reader.NodeType == XmlNodeType.Element) {
 								if (reader.Name == "key") {
-									if (reader.ReadElementContentAsString() == "CFBundleShortVersionString")
+									if (reader.ReadElementContentAsString () == "CFBundleShortVersionString")
 										nextElement = true;
 								}
 								if (nextElement && reader.Name == "string") {
 									nextElement = false;
-									xcode_version = new Version (reader.ReadElementContentAsString());
+									xcode_version = new Version (reader.ReadElementContentAsString ());
 								}
 							}
 						}
@@ -730,7 +741,7 @@ namespace Xamarin.Bundler {
 				GatherAssemblies ();
 				CheckReferences ();
 
-				if (!is_extension && !resolved_assemblies.Exists (f => Path.GetExtension (f).ToLower () == ".exe"))
+				if (!is_extension && !resolved_assemblies.Exists (f => Path.GetExtension (f).ToLower () == ".exe") && !App.Embeddinator)
 					throw new MonoMacException (79, true, "No executable was copied into the app bundle.  Please contact 'support@xamarin.com'", "");
 
 				// i18n must be dealed outside linking too (e.g. bug 11448)
@@ -1196,6 +1207,8 @@ namespace Xamarin.Bundler {
 				var args = new StringBuilder ();
 				if (App.EnableDebug)
 					args.Append ("-g ");
+				if (App.Embeddinator)
+					args.Append ($"-shared -install_name \"@rpath/Frameworks/{App.Name}.framework/{App.Name}\" ");
 				args.Append ("-mmacosx-version-min=").Append (App.DeploymentTarget.ToString ()).Append (' ');
 				args.Append ("-arch ").Append (arch).Append (' ');
 				if (arch == "x86_64")
@@ -1664,19 +1677,42 @@ namespace Xamarin.Bundler {
 
 		/* Currently we clobber any existing files, perhaps we should error and have a -force flag */
 		static void CreateDirectoriesIfNeeded () {
-			App.AppDirectory = Path.Combine (output_dir, string.Format("{0}.{1}", app_name, is_extension ? "appex" : "app"));
-
-			contents_dir = Path.Combine (App.AppDirectory, "Contents");
-			macos_dir = Path.Combine (contents_dir, "MacOS");
-			frameworks_dir = Path.Combine (contents_dir, "Frameworks");
-			resources_dir = Path.Combine (contents_dir, "Resources");
-			mmp_dir = Path.Combine (contents_dir, BundleName);
+			if (App.Embeddinator) {
+				App.AppDirectory = Path.Combine (output_dir, app_name + ".framework");
+				contents_dir = Path.Combine (App.AppDirectory, "Versions", "A");
+				macos_dir = contents_dir;
+				frameworks_dir = Path.Combine (contents_dir, "Frameworks");
+				resources_dir = Path.Combine (contents_dir, "Resources");
+				mmp_dir = Path.Combine (resources_dir, BundleName);
+			} else {
+				App.AppDirectory = Path.Combine (output_dir, string.Format ("{0}.{1}", app_name, is_extension ? "appex" : "app"));
+				contents_dir = Path.Combine (App.AppDirectory, "Contents");
+				macos_dir = Path.Combine (contents_dir, "MacOS");
+				frameworks_dir = Path.Combine (contents_dir, "Frameworks");
+				resources_dir = Path.Combine (contents_dir, "Resources");
+				mmp_dir = Path.Combine (contents_dir, BundleName);
+			}
 
 			CreateDirectoryIfNeeded (App.AppDirectory);
 			CreateDirectoryIfNeeded (contents_dir);
 			CreateDirectoryIfNeeded (macos_dir);
 			CreateDirectoryIfNeeded (resources_dir);
 			CreateDirectoryIfNeeded (mmp_dir);
+
+			if (App.Embeddinator) {
+				CreateSymlink (Path.Combine (App.AppDirectory, "Versions", "Current"), "A");
+				CreateSymlink (Path.Combine (App.AppDirectory, app_name), $"Versions/Current/{app_name}");
+				CreateSymlink (Path.Combine (App.AppDirectory, "Resources"), "Versions/Current/Resources");
+				CreateSymlink (Path.Combine (App.AppDirectory, "Headers"), "Versions/Current/Headers");
+			}
+		}
+
+		// Mono.Unix can't create symlinks to relative paths, it insists on the target to a full path before creating the symlink.
+		static void CreateSymlink (string file, string target)
+		{
+			var rv = symlink (target, file);
+			if (rv != 0)
+				throw ErrorHelper.CreateError (9999, $"Could not create symlink '{file}' -> '{target}': error {Marshal.GetLastWin32Error ()}");
 		}
 
 		static void CreateDirectoryIfNeeded (string dir) {

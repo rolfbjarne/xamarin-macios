@@ -245,10 +245,14 @@ namespace XamCore.ObjCRuntime {
 		{
 		}
 
-		static string GetFileName (string app_dir)
+		string GetFileName (string app_dir)
 		{
 #if MONOMAC
-			return Path.Combine (app_dir, "Contents", "Resources", "runtime-options.plist");
+			if (Driver.App.Embeddinator) {
+				return Path.Combine (app_dir, "Versions", "A", "Resources", "runtime-options.plist");
+			} else {
+				return Path.Combine (app_dir, "Contents", "Resources", "runtime-options.plist");
+			}
 #else
 			return Path.Combine (app_dir, "runtime-options.plist");
 #endif

@@ -103,6 +103,12 @@ namespace XamCore.ObjCRuntime {
 			IsSimulator				= 0x10,
 		}
 
+		internal enum LaunchMode : int {
+			App = 0,
+			Extension = 1,
+			Embedded = 2,
+		}
+
 		[StructLayout (LayoutKind.Sequential)]
 		internal unsafe struct InitializationOptions {
 			public int Size;
@@ -112,6 +118,7 @@ namespace XamCore.ObjCRuntime {
 			public MTRegistrationMap *RegistrationMap;
 			public MarshalObjectiveCExceptionMode MarshalObjectiveCExceptionMode;
 			public MarshalManagedExceptionMode MarshalManagedExceptionMode;
+			public LaunchMode LaunchMode;
 			IntPtr AssemblyLocations;
 
 			public bool IsSimulator {

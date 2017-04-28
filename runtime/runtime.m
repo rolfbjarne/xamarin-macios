@@ -1227,7 +1227,9 @@ xamarin_get_bundle_path ()
 	char *result;
 
 #if MONOMAC
-	if (xamarin_custom_bundle_name != nil)
+	if (xamarin_launch_mode == XamarinLaunchModeEmbedded)
+		bundle_path = [[[NSBundle bundleForClass: [XamarinAssociatedObject class]] bundlePath] stringByAppendingPathComponent: @"Versions/Current/Resources/MonoBundle"];
+	else if (xamarin_custom_bundle_name != nil)
 		bundle_path = [[main_bundle bundlePath] stringByAppendingPathComponent:[@"Contents/" stringByAppendingString:xamarin_custom_bundle_name]];
 	else
 		bundle_path = [[main_bundle bundlePath] stringByAppendingPathComponent:@"Contents/MonoBundle"];

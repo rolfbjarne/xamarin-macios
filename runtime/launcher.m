@@ -311,7 +311,13 @@ update_environment (xamarin_initialize_data *data)
 
 	// 3) Ensure the following environment variables are set: [...]
 	NSString *res_dir = [data->app_dir stringByAppendingPathComponent: @"Contents/Resources"];
-	NSString *monobundle_dir = [data->app_dir stringByAppendingPathComponent: @"Contents/MonoBundle"];
+	NSString *monobundle_dir;
+
+	if (data->launch_mode == XamarinLaunchModeEmbedded) {
+		monobundle_dir = [data->app_dir stringByAppendingPathComponent: @"Resources/MonoBundle"];
+	} else {
+		monobundle_dir = [data->app_dir stringByAppendingPathComponent: @"Contents/MonoBundle"];
+	}
 
 #ifdef DYNAMIC_MONO_RUNTIME
 	NSString *bin_dir = [data->app_dir stringByAppendingPathComponent: @"Contents/MacOS"];
@@ -379,7 +385,14 @@ app_initialize (xamarin_initialize_data *data)
 
 	bool mkbundle = xamarin_get_is_mkbundle ();
 
-	data->app_dir = [[NSBundle mainBundle] bundlePath]; // this is good until the autorelease pool releases the bundlePath string.
+	NSBundle *bundle;
+
+	if (data->launch_mode == XamarinLaunchModeEmbedded) {
+		bundle = [NSBundle bundleForClass: [XamarinAssociatedObject class]];
+	} else {
+		bundle = [NSBundle mainBundle];
+	}
+	data->app_dir = [bundle bundlePath]; // this is good until the autorelease pool releases the bundlePath string.
 
 	// 1) If found, call the custom initialization function (xamarin_custom_initialize)
 	xamarin_custom_initialize_func init = (xamarin_custom_initialize_func) dlsym (RTLD_MAIN_ONLY, "xamarin_app_initialize");

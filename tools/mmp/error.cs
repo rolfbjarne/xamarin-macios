@@ -39,6 +39,8 @@ namespace Xamarin.Bundler {
 	//					MM0098	AOT compilation is only available on Unified
 	//					MM0099	Internal error {0}. Please file a bug report with a test case (http://bugzilla.xamarin.com).
 	// MM1xxx	file copy / symlinks (project related)
+	//			MM10xx	mmp.cs
+	//					MM1034	Could not create symlink '{file}' -> '{target}': error {number}
 	//			MM14xx	Product assemblies
 	//					MM1401	The required '{0}' assembly is missing from the references
 	//					MM1402	The assembly '{0}' is not compatible with this tool

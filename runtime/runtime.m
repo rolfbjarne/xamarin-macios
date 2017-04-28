@@ -76,7 +76,7 @@ bool xamarin_is_gc_coop = false;
 #endif
 enum MarshalObjectiveCExceptionMode xamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionModeDefault;
 enum MarshalManagedExceptionMode xamarin_marshal_managed_exception_mode = MarshalManagedExceptionModeDefault;
-bool xamarin_is_extension = false;
+enum XamarinLaunchMode xamarin_launch_mode = XamarinLaunchModeApp;
 
 /* Callbacks */
 
@@ -139,6 +139,7 @@ struct InitializationOptions {
 	struct MTRegistrationMap* RegistrationData;
 	enum MarshalObjectiveCExceptionMode MarshalObjectiveCExceptionMode;
 	enum MarshalManagedExceptionMode MarshalManagedExceptionMode;
+	enum XamarinLaunchMode LaunchMode;
 	struct AssemblyLocations* AssemblyLocations;
 };
 
@@ -1189,6 +1190,7 @@ xamarin_initialize ()
 	options.Trampolines = &trampolines;
 	options.MarshalObjectiveCExceptionMode = xamarin_marshal_objectivec_exception_mode;
 	options.MarshalManagedExceptionMode = xamarin_marshal_managed_exception_mode;
+	options.LaunchMode = xamarin_launch_mode;
 
 	params [0] = &options;
 
@@ -2346,7 +2348,7 @@ xamarin_locate_assembly_resource (const char *assembly_name, const char *culture
 	}
 
 	// Then in the container app's root directory (for extensions)
-	if (xamarin_is_extension) {
+	if (xamarin_launch_mode == XamarinLaunchModeExtension) {
 		snprintf (root, sizeof (root), "../..");
 		if (xamarin_locate_assembly_resource_for_root (root, culture, resource, path, pathlen)) {
 			LOG_RESOURCELOOKUP (PRODUCT ": Located resource '%s' from container app bundle '%s': %s\n", resource, aname, path);

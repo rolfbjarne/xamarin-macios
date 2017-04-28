@@ -83,12 +83,12 @@ namespace XamCore.ObjCRuntime {
 
 		static IntPtr runtime_library;
 
-		internal static T LookupInternalFunction<T> (string name) where T: class
+		internal unsafe static T LookupInternalFunction<T> (string name) where T: class
 		{
 			IntPtr rv;
 
 			if (runtime_library == IntPtr.Zero) {
-				runtime_library = new IntPtr (-5 /* RTLD_MAIN_ONLY */);
+				runtime_library = new IntPtr (Runtime.options->LaunchMode != LaunchMode.Embedded ? -5 /* RTLD_MAIN */ : -2 /* RTLD_DEFAULT */);
 				rv = Dlfcn.dlsym (runtime_library, name);
 				if (rv == IntPtr.Zero) {
 					runtime_library = Dlfcn.dlopen ("libxammac.dylib", 0);

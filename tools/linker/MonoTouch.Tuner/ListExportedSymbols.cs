@@ -79,7 +79,7 @@ namespace MonoTouch.Tuner
 			if (method.IsPInvokeImpl && method.HasPInvokeInfo) {
 				var pinfo = method.PInvokeInfo;
 				if (pinfo.Module.Name == "__Internal")
-					DerivedLinkContext.GetRequiredSymbolList (pinfo.EntryPoint).Add (method);
+					DerivedLinkContext.RequiredSymbols [pinfo.EntryPoint].Members.Add (method);
 
 				if (state != null) {
 					switch (pinfo.EntryPoint) {
@@ -101,7 +101,7 @@ namespace MonoTouch.Tuner
 				object symbol;
 				// The Field attribute may have been linked away, but we've stored it in an annotation.
 				if (property != null && Context.Annotations.GetCustomAnnotations ("ExportedFields").TryGetValue (property, out symbol)) {
-					DerivedLinkContext.GetRequiredSymbolList ((string) symbol).Add (property);
+					DerivedLinkContext.RequiredSymbols [(string) symbol].Members.Add (property);
 				}
 			}
 		}

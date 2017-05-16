@@ -284,10 +284,14 @@ IOS_EXTRA_SYSTEM_NET_HTTP_FILES = \
 
 # build (into custom LIBRARY_SUBDIR)
 $(MONO_PATH)/mcs/class/lib/monotouch/compat/System.Net.Http.dll:    $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) $(MONO_PATH)/mcs/class/lib/monotouch/System.Net.Http.dll $(IOS_BUILD_DIR)/compat/monotouch.dll 
+	@# mono's Makefile does not detect changes in any files in $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES), so make sure the dll is rebuilt if our Make detects that a rebuild is needed
+	$(Q) touch $(MONO_PATH)/mcs/class/System.Net.Http/Assembly/AssemblyInfo.cs
 	$(call Q_PROF_CSC,ios/compat) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/System.Net.Http PROFILE=monotouch LIBRARY_SUBDIR=compat   MONOTOUCH_MCS_FLAGS=$(IOS_MCS_FLAGS) EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(IOS_BUILD_DIR)/compat/monotouch.dll)      $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) -D:XAMARIN_MODERN -d:SYSTEM_NET_HTTP"
 	$(Q) touch $@
 
 $(MONO_PATH)/mcs/class/lib/monotouch/reference/System.Net.Http.dll: $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) $(MONO_PATH)/mcs/class/lib/monotouch/System.Net.Http.dll $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll
+	@# mono's Makefile does not detect changes in any files in $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES), so make sure the dll is rebuilt if our Make detects that a rebuild is needed
+	$(Q) touch $(MONO_PATH)/mcs/class/System.Net.Http/Assembly/AssemblyInfo.cs
 	$(call Q_PROF_CSC,ios/unified) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/System.Net.Http PROFILE=monotouch LIBRARY_SUBDIR=reference MONOTOUCH_MCS_FLAGS=$(IOS_MCS_FLAGS) EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll) $(IOS_EXTRA_SYSTEM_NET_HTTP_FILES) -D:XAMCORE_2_0 -D:XAMARIN_MODERN -D:SYSTEM_NET_HTTP -D:UNIFIED -D:__UNIFIED__"
 	$(Q) touch $@
 
@@ -881,6 +885,8 @@ WATCH_EXTRA_SYSTEM_NET_HTTP_FILES = \
 
 # build (into custom LIBRARY_SUBDIR)
 $(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch/reference/System.Net.Http.dll: $(WATCH_EXTRA_SYSTEM_NET_HTTP_FILES) $(WATCH_MONO_PATH)/mcs/class/lib/monotouch_watch/System.Net.Http.dll $(WATCH_BUILD_DIR)/reference/Xamarin.WatchOS.dll
+	@# mono's Makefile does not detect changes in any files in $(WATCH_EXTRA_SYSTEM_NET_HTTP_FILES), so make sure the dll is rebuilt if our Make detects that a rebuild is needed
+	$(Q) touch $(MONO_PATH)/mcs/class/System.Net.Http/Assembly/AssemblyInfo.cs
 	$(call Q_PROF_CSC,watch) $(MAKE) $(if $(V),,-s) -C $(WATCH_MONO_PATH)/mcs/class/System.Net.Http PROFILE=monotouch_watch LIBRARY_SUBDIR=reference MONOTOUCH_MCS_FLAGS=$(IOS_MCS_FLAGS) EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(WATCH_BUILD_DIR)/reference/Xamarin.WatchOS.dll) $(WATCH_EXTRA_SYSTEM_NET_HTTP_FILES) -D:XAMCORE_2_0 -D:XAMCORE_3_0 -D:XAMARIN_MODERN -D:SYSTEM_NET_HTTP -D:UNIFIED -D:__UNIFIED__"
 	$(Q) touch $@
 
@@ -1116,6 +1122,8 @@ TVOS_EXTRA_SYSTEM_NET_HTTP_FILES = \
 
 # build (into custom LIBRARY_SUBDIR)
 $(MONO_PATH)/mcs/class/lib/monotouch_tv/reference/System.Net.Http.dll: $(TVOS_EXTRA_SYSTEM_NET_HTTP_FILES) $(MONO_PATH)/mcs/class/lib/monotouch_tv/System.Net.Http.dll $(TVOS_BUILD_DIR)/reference/Xamarin.TVOS.dll
+	@# mono's Makefile does not detect changes in any files in $(TVOS_EXTRA_SYSTEM_NET_HTTP_FILES), so make sure the dll is rebuilt if our Make detects that a rebuild is needed
+	$(Q) touch $(MONO_PATH)/mcs/class/System.Net.Http/Assembly/AssemblyInfo.cs
 	$(call Q_PROF_CSC,tvos) $(MAKE) $(if $(V),,-s) -C $(MONO_PATH)/mcs/class/System.Net.Http PROFILE=monotouch_tv LIBRARY_SUBDIR=reference MONOTOUCH_MCS_FLAGS=$(IOS_MCS_FLAGS) EXTRA_LIB_MCS_FLAGS="-r:$(abspath $(TVOS_BUILD_DIR)/reference/Xamarin.TVOS.dll) $(TVOS_EXTRA_SYSTEM_NET_HTTP_FILES) -D:XAMCORE_2_0 -D:XAMCORE_3_0 -D:XAMARIN_MODERN -D:SYSTEM_NET_HTTP -D:UNIFIED -D:__UNIFIED__"
 	$(Q) touch $@
 

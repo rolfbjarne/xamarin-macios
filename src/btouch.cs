@@ -456,7 +456,7 @@ class BindingTouch {
 				if (!string.IsNullOrEmpty (net_sdk))
 					cargs.Append ("-sdk:").Append (net_sdk).Append (' ');
 			}
-			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
+			cargs.Append ("-debug:portable -unsafe -target:library -nowarn:436").Append (' ');
 			cargs.Append ("-out:").Append (Quote (tmpass)).Append (' ');
 #if IKVM
 			cargs.Append ("-r:").Append (Quote (GetAttributeLibraryPath ())).Append (' ');

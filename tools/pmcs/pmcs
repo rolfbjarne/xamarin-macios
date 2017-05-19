@@ -48,5 +48,5 @@ fi
 
 mono --debug "$pmcs" \
 	-profile:"$profile" \
-	-compiler:/Library/Frameworks/Mono.framework/Versions/Current/bin/mcs \
+	-compiler:/Library/Frameworks/Mono.framework/Versions/Current/bin/csc \
 	"$@"

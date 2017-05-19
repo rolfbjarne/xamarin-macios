@@ -97,7 +97,7 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/Version: Version.in $(TOP)/Make.config
 	$(Q) sed "s/@VERSION@/$(IOS_PACKAGE_VERSION)/g" Version.in > $@
 
 $(IOS_PMCS): pmcs.in $(PMCS_EXE) | $(IOS_BUILD_DIR)
-	$(call Q_PROF_GEN,ios) sed -e 's|@MCS@|$(SYSTEM_MCS) -lib:$(IOS_LIBDIR) -nostdlib -r:mscorlib.dll|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $< > $@
+	$(call Q_PROF_GEN,ios) sed -e 's|@MCS@|$(SYSTEM_CSC) -nostdlib -noconfig -r:$(IOS_LIBDIR)/mscorlib.dll -r:$(IOS_LIBDIR)/System.dll -r:$(IOS_LIBDIR)/System.Xml.dll -r:$(IOS_LIBDIR)/System.Core.dll|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $< > $@
 	$(Q) chmod +x $@
 
 # filled by TARGETS_template below
@@ -122,7 +122,7 @@ define IOS_GENERATOR_template
 # core.dll
 $(IOS_BUILD_DIR)/$(1)/core.dll: $$(IOS_PMCS) $$(IOS_CORE_SOURCES) frameworks.sources
 	@mkdir -p $(IOS_BUILD_DIR)/$(1)
-	$$(call Q_PROF_PMCS,ios/$(1)) PMCS_PROFILE=$(3) $$(IOS_PMCS) -out:$$@ -target:library -debug -unsafe \
+	$$(call Q_PROF_PMCS,ios/$(1)) PMCS_PROFILE=$(3) $$(IOS_PMCS) -out:$$@ -target:library -debug:portable -unsafe \
 		-r:$(IOS_LIBDIR)/Mono.Security.dll \
 		-nowarn:219,618,114,414,1635,3021,$$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		-define:COREBUILD $$(IOS_DEFINES) \
@@ -522,7 +522,7 @@ endif
 
 define MAC_GENERATOR_template
 $(MAC_BUILD_DIR)/$(1)/pmcs: pmcs.in $(PMCS_EXE) Makefile | $(MAC_BUILD_DIR)/$(1)
-	$$(call Q_PROF_GEN,mac/$(1)) sed -e 's|@MCS@|$(SYSTEM_MCS) $(4)|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $$< > $$@
+	$$(call Q_PROF_GEN,mac/$(1)) sed -e 's|@MCS@|$(SYSTEM_CSC) $(4)|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $$< > $$@
 	$(Q) chmod +x $$@
 
 $(MAC_BUILD_DIR)/$(1)/core.dll: $(MAC_BUILD_DIR)/$(1)/pmcs $(MAC_CORE_SOURCES) frameworks.sources
@@ -605,7 +605,7 @@ $(MAC_BUILD_DIR)/mobile/Facades/netstandard.dll: $(MONO_PATH)/mcs/class/lib/xamm
 	$(Q) cp $< $@
 
 $(MAC_BUILD_DIR)/compat/XamMac.CFNetwork.dll: $(MAC_CFNETWORK_SOURCES) $(MAC_BUILD_DIR)/compat/XamMac.dll $(SN_KEY)
-	$(call Q_PROF_PMCS,mac/compat) PMCS_PROFILE=compat-mac $(MAC_BUILD_DIR)/compat/pmcs -sdk:4.5 -out:$@ -target:library -debug \
+	$(call Q_PROF_PMCS,mac/compat) PMCS_PROFILE=compat-mac $(MAC_BUILD_DIR)/compat/pmcs -out:$@ -target:library -debug \
 		$(MAC_COMMON_DEFINES) \
 		-keyfile:$(SN_KEY) \
 		-nowarn:$(MAC_WARNINGS_TO_FIX) \
@@ -795,12 +795,12 @@ $(WATCH_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in $(TOP)/Make.co
 	$(Q) rm -f $@.tmp
 	$(Q) touch $@
 
-$(WATCH_PMCS): $(TOP)/src/pmcs.in $(PMCS_EXE) | $(WATCH_BUILD_DIR)
-	$(call Q_PROF_GEN,watch) sed -e 's|@MCS@|$(SYSTEM_MCS) -lib:$(WATCH_LIBDIR)/repl -nostdlib -r:mscorlib.dll|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $< > $@
+$(WATCH_PMCS): $(TOP)/src/pmcs.in $(PMCS_EXE) Makefile | $(WATCH_BUILD_DIR)
+	$(call Q_PROF_GEN,watch) sed -e 's|@MCS@|$(SYSTEM_CSC) -nostdlib -noconfig -v -r:$(WATCH_LIBDIR)/repl/mscorlib.dll -r:$(WATCH_LIBDIR)/repl/System.dll -r:$(WATCH_LIBDIR)/repl/System.Xml.dll -r:$(WATCH_LIBDIR)/repl/System.Core.dll|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $< > $@
 	$(Q) chmod +x $@
 
 $(WATCH_BUILD_DIR)/watch/core.dll: $(WATCH_PMCS) $(WATCHOS_CORE_SOURCES) frameworks.sources | $(WATCH_BUILD_DIR)/watch
-	$(call Q_PROF_PMCS,watch) PMCS_PROFILE=watch $(WATCH_PMCS) -out:$@ -target:library -debug -unsafe \
+	$(call Q_PROF_PMCS,watch) PMCS_PROFILE=watch $(WATCH_PMCS) -v -out:$@ -target:library -debug:portable -unsafe \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		-define:COREBUILD    \
 		$(WATCH_DEFINES)     \
@@ -1013,11 +1013,11 @@ $(TVOS_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in $(TOP)/Make.con
 	$(Q) touch $@
 
 $(TVOS_PMCS): $(TOP)/src/pmcs.in $(PMCS_EXE) | $(TVOS_BUILD_DIR)
-	$(call Q_PROF_GEN,tvos) sed -e 's|@MCS@|$(SYSTEM_MCS) -lib:$(TVOS_LIBDIR)/repl -nostdlib -r:mscorlib.dll|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $< > $@
+	$(call Q_PROF_GEN,tvos) sed -e 's|@MCS@|$(SYSTEM_CSC) -nostdlib -noconfig -r:$(TVOS_LIBDIR)/repl/mscorlib.dll -r:$(TVOS_LIBDIR)/repl/System.dll -r:$(TVOS_LIBDIR)/repl/System.Xml.dll -r:$(TVOS_LIBDIR)/repl/System.Core.dll|g' -e 's|@PMCS@|$(abspath $(PMCS_EXE))|g' < $< > $@
 	$(Q) chmod +x $@
 
 $(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_BUILD_DIR)/pmcs $(TVOS_CORE_SOURCES) frameworks.sources Makefile | $(TVOS_BUILD_DIR)/tvos
-	$(call Q_PROF_PMCS,tvos) PMCS_PROFILE=tvos $(TVOS_BUILD_DIR)/pmcs -out:$@ -target:library -debug -unsafe \
+	$(call Q_PROF_PMCS,tvos) PMCS_PROFILE=tvos $(TVOS_BUILD_DIR)/pmcs -out:$@ -target:library -debug:portable -unsafe \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		-define:COREBUILD    \
 		$(TVOS_DEFINES)     \
@@ -1225,7 +1225,7 @@ $(COMMON_TARGET_DIRS):
 	$(Q) mkdir -p $@
 
 $(PMCS_EXE): $(PMCS_SOURCES) | build/common
-	$(Q_MCS) $(SYSTEM_MCS) -unsafe -debug -out:$@ -r:Mono.CompilerServices.SymbolWriter $+
+	$(Q_MCS) $(SYSTEM_CSC) -unsafe -debug:portable -out:$@ -d:WINDOWS_BUILD $+
 
 install-local:: $(INSTALL_TARGETS)
 all-local:: $(ALL_TARGETS)

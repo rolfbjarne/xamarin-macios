@@ -5,7 +5,7 @@ $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/bin/pmcs: $(TOP)/tools/pmcs/pmcs
 
 $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/lib/pmcs/pmcs.exe: $(PMCS_EXE)
 	$(Q) install -d $(dir $@)
-	$(Q) install -m 644 $^ $^.mdb $(dir $@)
+	$(Q) install -m 644 $^ $($^:.dll=.pdb) $(dir $@)
 
 $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/lib/pmcs/profiles:
 	$(Q) mkdir -p $@

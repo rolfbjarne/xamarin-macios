@@ -3074,7 +3074,11 @@ public class TestApp {
 				mtouch.GccFlags = o;
 				mtouch.Abi = "x86_64";
 				mtouch.Linker = MTouchLinker.DontLink;
-				mtouch.AssertExecute (MTouchAction.BuildSim);
+				mtouch.AssertExecuteFailure (MTouchAction.BuildSim, "first build");
+				mtouch.AssertWarningPattern (5217, "Native linking possibly failed because the linker command line was too long .[0-9]* characters..");
+
+				mtouch.CustomArguments = new string [] { "--unresolved-externals-as-code" };
+				mtouch.AssertExecute (MTouchAction.BuildSim, "second build");
 			}
 		}
 

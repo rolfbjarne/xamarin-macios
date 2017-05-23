@@ -1052,8 +1052,11 @@ namespace Xamarin.Bundler
 						compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
 						compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
 						compiler_flags.AddOtherFlags (a.LinkerFlags);
-						if (a.HasLinkWithAttributes && !App.EnableBitCode)
+						if (a.HasLinkWithAttributes && !App.EnableBitCode) {
+							if (App.UnresolvedExternalsAsCode.Value)
+								throw new NotImplementedException ();
 							compiler_flags.ReferenceSymbols (GetRequiredSymbols (a, true));
+						}
 					}
 					if (App.Embeddinator) {
 						if (!string.IsNullOrEmpty (App.UserGccFlags))
@@ -1198,7 +1201,7 @@ namespace Xamarin.Bundler
 			foreach (var symbol in symbols) {
 				switch (symbol.Type) {
 				case SymbolType.Function:
-					sb.Append ("static extern void * ").Append (symbol.Name).AppendLine (";");
+					sb.Append ("extern void * ").Append (symbol.Name).AppendLine (";");
 					break;
 				case SymbolType.ObjectiveCClass:
 					sb.AppendLine ($"interface {symbol.ObjectiveCName} : NSObject @end");
@@ -1214,10 +1217,10 @@ namespace Xamarin.Bundler
 			foreach (var symbol in symbols) {
 				switch (symbol.Type) {
 				case SymbolType.Function:
-					sb.Append ($"\tvalue = {symbol.Name};");
+					sb.AppendLine ($"\tvalue = {symbol.Name};");
 					break;
 				case SymbolType.ObjectiveCClass:
-					sb.Append ($"\tvalue = [{symbol.ObjectiveCName} class];");
+					sb.AppendLine ($"\tvalue = [{symbol.ObjectiveCName} class];");
 					break;
 				default:
 					throw new Exception ();
@@ -1347,21 +1350,23 @@ namespace Xamarin.Bundler
 			}
 
 			// Symbol requirements
-			var reference_m = Path.Combine (App.Cache.Location, "reference.m");
-			GenerateReferencingSources (reference_m, GetRequiredSymbols ());
-			if (File.Exists (reference_m)) {
-				foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
-					var arch = abi.AsArchString ();
-					var reference_o = Path.Combine (App.Cache.Location, arch, "reference.o");
-					var compile_task = new CompileMainTask {
-						Target = this,
-						Abi = abi,
-						InputFile = reference_m,
-						OutputFile = reference_o,
-						SharedLibrary = false,
-						Language = "objective-c",
-					};
-					LinkWithTaskOutput (compile_task);
+			if (App.UnresolvedExternalsAsCode.Value) {
+				var reference_m = Path.Combine (App.Cache.Location, "reference.m");
+				GenerateReferencingSources (reference_m, GetRequiredSymbols ());
+				if (File.Exists (reference_m)) {
+					foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
+						var arch = abi.AsArchString ();
+						var reference_o = Path.Combine (App.Cache.Location, arch, "reference.o");
+						var compile_task = new CompileMainTask {
+							Target = this,
+							Abi = abi,
+							InputFile = reference_m,
+							OutputFile = reference_o,
+							SharedLibrary = false,
+							Language = "objective-c",
+						};
+						LinkWithTaskOutput (compile_task);
+					}
 				}
 			}
 
@@ -1449,7 +1454,7 @@ namespace Xamarin.Bundler
 				linker_flags.AddOtherFlag ("-lc++");
 
 			// allow the native linker to remove unused symbols (if the caller was removed by the managed linker)
-			if (!bitcode) {
+			if (!App.UnresolvedExternalsAsCode.Value) {
 				// Note that we include *all* (__Internal) p/invoked symbols here
 				// We also include any fields from [Field] attributes.
 				linker_flags.ReferenceSymbols (GetRequiredSymbols ());

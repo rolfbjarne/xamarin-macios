@@ -79,7 +79,7 @@ namespace MonoTouch.Tuner
 			if (method.IsPInvokeImpl && method.HasPInvokeInfo) {
 				var pinfo = method.PInvokeInfo;
 				if (pinfo.Module.Name == "__Internal")
-					DerivedLinkContext.RequiredSymbols [pinfo.EntryPoint].Members.Add (method);
+					DerivedLinkContext.RequiredSymbols.AddFunction (pinfo.EntryPoint).Members.Add (method);
 
 				if (state != null) {
 					switch (pinfo.EntryPoint) {

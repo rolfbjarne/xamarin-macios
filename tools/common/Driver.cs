@@ -21,8 +21,7 @@ namespace Xamarin.Bundler {
 	public partial class Driver {
 		static void AddSharedOptions (Application app, Mono.Options.OptionSet options)
 		{
-			options.Add ("warnaserror:", "An optional comma-separated list of warning codes that should be reported as errors (if no warnings are specified all warnings are reported as errors).", v =>
-			{
+			options.Add ("warnaserror:", "An optional comma-separated list of warning codes that should be reported as errors (if no warnings are specified all warnings are reported as errors).", v => {
 				try {
 					if (!string.IsNullOrEmpty (v)) {
 						foreach (var code in v.Split (new char [] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -34,8 +33,7 @@ namespace Xamarin.Bundler {
 					ErrorHelper.Error (26, ex, "Could not parse the command line argument '{0}': {1}", "--warnaserror", ex.Message);
 				}
 			});
-			options.Add ("nowarn:", "An optional comma-separated list of warning codes to ignore (if no warnings are specified all warnings are ignored).", v =>
-			{
+			options.Add ("nowarn:", "An optional comma-separated list of warning codes to ignore (if no warnings are specified all warnings are ignored).", v => {
 				try {
 					if (!string.IsNullOrEmpty (v)) {
 						foreach (var code in v.Split (new char [] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -101,6 +99,9 @@ namespace Xamarin.Bundler {
 			options.Add ("embeddinator", "Enables Embeddinator targetting mode.", v => {
 				app.Embeddinator = true;
 			}, true);
+			options.Add ("unresolved-externals-as-code:", "Force dynamically loaded symbols to be found by the native linker by generating code that uses them (instead of passing -u <symbol> to the linker). This is on by default when using bitcode.", (v) => {
+				app.UnresolvedExternalsAsCode = ParseBool (v, "unresolved-externals-as-code");
+			});
 		}
 
 		static int Jobs;

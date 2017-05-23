@@ -449,6 +449,8 @@ No action is required on your part, this message is purely informational.
 
 For further information see bug #[51710](https://bugzilla.xamarin.com/show_bug.cgi?id=51710).
 
+This warning is not reported anymore.
+
 <h3><a name="MT0111"/>MT0111: Bitcode has been enabled because this version of Xamarin.iOS does not support building watchOS projects using LLVM without enabling bitcode.</h3>
 
 Bitcode has been enabled automatically because this version of Xamarin.iOS does not support building watchOS projects using LLVM without enabling bitcode.
@@ -531,6 +533,8 @@ For instance: this condition occurs when an extension builds for ARMv7+llvm+thum
 * because the container app is referencing the assembly '*' from '*', while the extension references it from '*'.
 
 Native code sharing requires that all the projects that share code use the same versions for all assemblies.
+
+<!-- 0114 - 0124: free to use -->
 
 <h3><a name="MT0125"/>MT0125: The --assembly-build-target command-line argument is ignored in the simulator.</h3>
 
@@ -1638,6 +1642,17 @@ This is a warning, indicating that a P/Invoke was detected to reference the libr
 This error is reported when linking the output from the AOT compiler.
 
 This error most likely indicates a bug in Xamarin.iOS. Please file a bug report at [http://bugzilla.xamarin.com](https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS).
+
+<h3><a name="MT5217"/>MT5217: Native linking possibly failed because the linker command line was too long (* characters).</h3>
+
+Native linking failed, and it's possible it was because the linker command was too long.
+
+This may be because Xamarin.iOS detected many symbols that must be kept.
+
+* Enable the linker
+* Reduce the number of P/Invokes
+* Rewrite the P/Invokes to have smaller names.
+* Add --unresolved-externals-as-code to the additional mtouch arguments in the project's iOS Build options. With this option, Xamarin.iOS will generate code that references these symbols instead of passing these symbols as command-line arguments to the linker. 
 
 ### MT53xx: Other tools
 

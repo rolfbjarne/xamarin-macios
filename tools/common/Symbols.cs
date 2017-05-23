@@ -49,9 +49,14 @@ namespace Xamarin.Bundler
 			store.Add (symbol.Name, symbol);
 		}
 
-		public void AddFunction (string name)
+		public Symbol AddFunction (string name)
 		{
-			Add (new Symbol { Name = name, Type = SymbolType.Function });
+			Symbol rv = Find (name);
+			if (rv == null) {
+				rv = new Symbol { Name = name, Type = SymbolType.Function };
+				Add (rv);
+			}
+			return rv;
 		}
 
 		public IEnumerator<Symbol> GetEnumerator ()

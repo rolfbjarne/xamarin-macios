@@ -19,15 +19,18 @@ using PlatformException = Xamarin.Bundler.MonoMacException;
 using PlatformResolver = Xamarin.Bundler.MonoMacResolver;
 #endif
 
-namespace Xamarin.Bundler {
+namespace Xamarin.Bundler
+{
 
 	[Flags]
-	public enum RegistrarOptions {
+	public enum RegistrarOptions
+	{
 		Default = 0,
 		Trace = 1,
 	}
 
-	public enum LinkMode {
+	public enum LinkMode
+	{
 		None,
 		SDKOnly,
 		All,
@@ -42,6 +45,7 @@ namespace Xamarin.Bundler {
 		internal RuntimeOptions RuntimeOptions;
 		public RegistrarMode Registrar = RegistrarMode.Default;
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;
+		public bool? UnresolvedExternalsAsCode;
 
 		public HashSet<string> Frameworks = new HashSet<string> ();
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
@@ -66,10 +70,10 @@ namespace Xamarin.Bundler {
 		public static int Concurrency => Driver.Concurrency;
 		public Version DeploymentTarget;
 		public Version SdkVersion;
-	
+
 		public bool Embeddinator { get; set; }
 
-		public Application (string[] arguments)
+		public Application (string [] arguments)
 		{
 			Cache = new Cache (arguments);
 		}
@@ -115,7 +119,7 @@ namespace Xamarin.Bundler {
 				return false;
 
 			var tfi = new FileInfo (target);
-			
+
 			if (!tfi.Exists) {
 				Driver.Log (3, "Target '{0}' does not exist.", target);
 				return false;
@@ -140,11 +144,11 @@ namespace Xamarin.Bundler {
 		public static void RemoveResource (ModuleDefinition module, string name)
 		{
 			for (int i = 0; i < module.Resources.Count; i++) {
-				EmbeddedResource embedded = module.Resources[i] as EmbeddedResource;
-				
+				EmbeddedResource embedded = module.Resources [i] as EmbeddedResource;
+
 				if (embedded == null || embedded.Name != name)
 					continue;
-				
+
 				module.Resources.RemoveAt (i);
 				break;
 			}
@@ -177,11 +181,11 @@ namespace Xamarin.Bundler {
 		public static void ExtractResource (ModuleDefinition module, string name, string path, bool remove)
 		{
 			for (int i = 0; i < module.Resources.Count; i++) {
-				EmbeddedResource embedded = module.Resources[i] as EmbeddedResource;
-				
+				EmbeddedResource embedded = module.Resources [i] as EmbeddedResource;
+
 				if (embedded == null || embedded.Name != name)
 					continue;
-				
+
 				string dirname = Path.GetDirectoryName (path);
 				if (!Directory.Exists (dirname))
 					Directory.CreateDirectory (dirname);
@@ -189,15 +193,16 @@ namespace Xamarin.Bundler {
 				using (Stream ostream = File.OpenWrite (path)) {
 					embedded.GetResourceStream ().CopyTo (ostream);
 				}
-				
+
 				if (remove)
 					module.Resources.RemoveAt (i);
-				
+
 				break;
 			}
 		}
 
-		enum CopyFileFlags : uint {
+		enum CopyFileFlags : uint
+		{
 			ACL = 1 << 0,
 			Stat = 1 << 1,
 			Xattr = 1 << 2,
@@ -213,24 +218,28 @@ namespace Xamarin.Bundler {
 			Nofollow = NoFollow_Src | NoFollow_Dst,
 		}
 
-		enum CopyFileState : uint {
+		enum CopyFileState : uint
+		{
 			StatusCB = 6,
 		}
 
-		enum CopyFileStep {
+		enum CopyFileStep
+		{
 			Start = 1,
 			Finish = 2,
 			Err = 3,
 			Progress = 4,
 		}
 
-		enum CopyFileResult {
+		enum CopyFileResult
+		{
 			Continue = 0,
 			Skip = 1,
 			Quit = 2,
 		}
 
-		enum CopyFileWhat {
+		enum CopyFileWhat
+		{
 			Error = 0,
 			File = 1,
 			Dir = 2,
@@ -274,7 +283,7 @@ namespace Xamarin.Bundler {
 
 		static CopyFileResult CopyFileCallback (CopyFileWhat what, CopyFileStep stage, IntPtr state, string source, string target, IntPtr ctx)
 		{
-//			Console.WriteLine ("CopyFileCallback ({0}, {1}, 0x{2}, {3}, {4}, 0x{5})", what, stage, state.ToString ("x"), source, target, ctx.ToString ("x"));
+			//			Console.WriteLine ("CopyFileCallback ({0}, {1}, 0x{2}, {3}, {4}, 0x{5})", what, stage, state.ToString ("x"), source, target, ctx.ToString ("x"));
 			switch (what) {
 			case CopyFileWhat.File:
 				if (!IsUptodate (source, target)) {
@@ -432,6 +441,19 @@ namespace Xamarin.Bundler {
 				}
 				IsDefaultMarshalManagedExceptionMode = true;
 			}
+
+			if (!UnresolvedExternalsAsCode.HasValue) {
+#if MONOTOUCH
+				UnresolvedExternalsAsCode = EnableBitCode;
+#else
+				UnresolvedExternalsAsCode = false;
+#endif
+			}
+
+#if MONOTOUCH
+			if (EnableBitCode && UnresolvedExternalsAsCode.Value)
+				throw new Exception ("required");
+#endif
 		}
 
 		public void RunRegistrar ()

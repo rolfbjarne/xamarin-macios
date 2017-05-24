@@ -4,13 +4,14 @@ using Mono.Cecil;
 using Mono.Linker;
 
 using XamCore.Registrar;
+using Xamarin.Bundler;
 
 namespace Xamarin.Tuner
 {
 	public class DerivedLinkContext : LinkContext
 	{
 		internal StaticRegistrar StaticRegistrar;
-		Dictionary<string, List<MemberReference>> required_symbols;
+		Symbols required_symbols;
 		Dictionary<string, TypeDefinition> objectivec_classes;
 
 		// SDK candidates - they will be preserved only if the application (not the SDK) uses it
@@ -48,18 +49,10 @@ namespace Xamarin.Tuner
 			}
 		}
 
-		public List<MemberReference> GetRequiredSymbolList (string symbol)
-		{
-			List<MemberReference> rv;
-			if (!RequiredSymbols.TryGetValue (symbol, out rv))
-				required_symbols [symbol] = rv = new List<MemberReference> ();
-			return rv;
-		}
-
-		public Dictionary<string, List<MemberReference>> RequiredSymbols {
+		public Symbols RequiredSymbols {
 			get {
 				if (required_symbols == null)
-					required_symbols = new Dictionary<string, List<MemberReference>> ();
+					required_symbols = new Symbols ();
 				return required_symbols;
 			}
 		}

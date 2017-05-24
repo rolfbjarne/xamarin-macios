@@ -290,39 +290,38 @@ namespace Xamarin.Bundler
 			return assemblies;
 		}
 
-		Dictionary<string, List<MemberReference>> entry_points;
-		public IDictionary<string, List<MemberReference>> GetEntryPoints ()
+		Symbols entry_points;
+		public Symbols GetEntryPoints ()
 		{
 			if (entry_points == null)
 				GetRequiredSymbols ();
 			return entry_points;
 		}
 
-		public IEnumerable<string> GetRequiredSymbols ()
+		public Symbols GetRequiredSymbols ()
 		{
 			if (entry_points != null)  
-				return entry_points.Keys;
+				return entry_points;
 
 			var cache_location = Path.Combine (App.Cache.Location, "entry-points.txt");
 			if (cached_link || !any_assembly_updated) {
-				entry_points = new Dictionary<string, List<MemberReference>> ();
-				foreach (var ep in File.ReadAllLines (cache_location))
-					entry_points.Add (ep, null);
+				entry_points = new Symbols ();
+				entry_points.Load (cache_location);
 			} else {
 				if (LinkContext == null) {
 					// This happens when using the simlauncher and the msbuild tasks asked for a list
 					// of symbols (--symbollist). In that case just produce an empty list, since the
 					// binary shouldn't end up stripped anyway.
-					entry_points = new Dictionary<string, List<MemberReference>> ();
+					entry_points = new Symbols ();
 				} else {
 					entry_points = LinkContext.RequiredSymbols;
 					if (App.IsCodeShared) {
 						// Remove symbols from assemblies from extensions that were linked together with the main app.
-						var filtered_entry_points = new Dictionary<string, List<MemberReference>> ();
+						var filtered_entry_points = new Symbols ();
 						foreach (var ep in entry_points) {
-							var filtered = ep.Value.Where ((v) => Assemblies.ContainsKey (Assembly.GetIdentity (v.Module.FileName))).ToList ();
+							var filtered = ep.Members.Where ((v) => Assemblies.ContainsKey (Assembly.GetIdentity (v.Module.FileName))).ToList ();
 							if (filtered.Count > 0)
-								filtered_entry_points.Add (ep.Key, filtered);
+								filtered_entry_points.Add (new Symbol { Name = ep.Name, Type = ep.Type, Members = filtered });
 						}
 						entry_points = filtered_entry_points;
 					}
@@ -330,47 +329,42 @@ namespace Xamarin.Bundler
 				
 				// keep the debugging helper in debugging binaries only
 				if (App.EnableDebug && !App.EnableBitCode)
-					entry_points.Add ("mono_pmip", null);
+					entry_points.AddFunction ("mono_pmip");
 
 				if (App.IsSimulatorBuild) {
-					entry_points.Add ("xamarin_dyn_objc_msgSend", null);
-					entry_points.Add ("xamarin_dyn_objc_msgSendSuper", null);
-					entry_points.Add ("xamarin_dyn_objc_msgSend_stret", null);
-					entry_points.Add ("xamarin_dyn_objc_msgSendSuper_stret", null);
+					entry_points.AddFunction ("xamarin_dyn_objc_msgSend");
+					entry_points.AddFunction ("xamarin_dyn_objc_msgSendSuper");
+					entry_points.AddFunction ("xamarin_dyn_objc_msgSend_stret");
+					entry_points.AddFunction ("xamarin_dyn_objc_msgSendSuper_stret");
 				}
 
-				File.WriteAllText (cache_location, string.Join ("\n", entry_points.Keys.ToArray ()));
+
+				entry_points.Save (cache_location);
 			}
-			return entry_points.Keys;
+			return entry_points;
 		}
 
-		public IEnumerable<string> GetRequiredSymbols (Assembly assembly, bool includeObjectiveCClasses)
+		public IEnumerable<Symbol> GetRequiredSymbols (Assembly assembly, bool includeObjectiveCClasses)
 		{
 			if (entry_points == null)
 				GetRequiredSymbols ();
 
 			foreach (var ep in entry_points) {
-				if (ep.Value == null)
+				if (ep.Members == null)
 					continue;
-				foreach (var mr in ep.Value) {
+
+				foreach (var mr in ep.Members) {
 					if (mr.Module.Assembly == assembly.AssemblyDefinition)
-						yield return ep.Key;
+						yield return ep;
 				}
 			}
 
 			if (includeObjectiveCClasses) {
 				foreach (var kvp in LinkContext.ObjectiveCClasses) {
 					if (kvp.Value.Module.Assembly == assembly.AssemblyDefinition)
-						yield return $"OBJC_CLASS_$_{kvp.Key}";
+						yield return new Symbol { ObjectiveCName = kvp.Key, Type = SymbolType.ObjectiveCClass };
 				}
 			}
-		}
-
-		public List<MemberReference> GetMembersForSymbol (string symbol)
-		{
-			List<MemberReference> rv = null;
-			entry_points?.TryGetValue (symbol, out rv);
-			return rv;
 		}
 
 		//
@@ -1077,8 +1071,11 @@ namespace Xamarin.Bundler
 						compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
 						compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
 						compiler_flags.AddOtherFlags (a.LinkerFlags);
-						if (a.HasLinkWithAttributes && !App.EnableBitCode)
+						if (a.HasLinkWithAttributes && !App.EnableBitCode) {
+							if (App.UnresolvedExternalsAsCode.Value)
+								throw new NotImplementedException ();
 							compiler_flags.ReferenceSymbols (GetRequiredSymbols (a, true));
+						}
 					}
 					if (App.Embeddinator) {
 						if (!string.IsNullOrEmpty (App.UserGccFlags))
@@ -1086,7 +1083,7 @@ namespace Xamarin.Bundler
 					}
 					compiler_flags.LinkWithMono ();
 					compiler_flags.LinkWithXamarin ();
-					if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+					if (GetEntryPoints ().Contains ("UIApplicationMain"))
 						compiler_flags.AddFramework ("UIKit");
 
 					if (App.EnableLLVMOnlyBitCode) {
@@ -1210,6 +1207,50 @@ namespace Xamarin.Bundler
 			}
 		}
 
+		void GenerateReferencingSources (string path, Symbols symbols)
+		{
+			if (symbols.Count == 0) {
+				if (File.Exists (path))
+					File.Delete (path);
+				return;
+			}
+			
+			var sb = new StringBuilder ();
+
+			foreach (var symbol in symbols) {
+				switch (symbol.Type) {
+				case SymbolType.Function:
+					sb.Append ("extern void * ").Append (symbol.Name).AppendLine (";");
+					break;
+				case SymbolType.ObjectiveCClass:
+					sb.AppendLine ($"interface {symbol.ObjectiveCName} : NSObject @end");
+					break;
+				default:
+					throw new Exception ();
+				}
+			}
+			sb.AppendLine ("static void __symbol_referencer () __attribute__ ((unused)) __attribute__ ((optnone));");
+			sb.AppendLine ("void __symbol_referencer ()");
+			sb.AppendLine ("{");
+			sb.AppendLine ("\tvoid *value;");
+			foreach (var symbol in symbols) {
+				switch (symbol.Type) {
+				case SymbolType.Function:
+					sb.AppendLine ($"\tvalue = {symbol.Name};");
+					break;
+				case SymbolType.ObjectiveCClass:
+					sb.AppendLine ($"\tvalue = [{symbol.ObjectiveCName} class];");
+					break;
+				default:
+					throw new Exception ();
+				}
+			}
+			sb.AppendLine ("}");
+			sb.AppendLine ();
+
+			Driver.WriteIfDifferent (path, sb.ToString ());
+		}
+
 		bool IsCircularTask (BuildTask root, Stack<BuildTask> stack, BuildTask task)
 		{
 			stack.Push (task);
@@ -1327,6 +1368,27 @@ namespace Xamarin.Bundler
 				LinkWithTaskOutput (main_task);
 			}
 
+			// Symbol requirements
+			if (App.UnresolvedExternalsAsCode.Value) {
+				var reference_m = Path.Combine (App.Cache.Location, "reference.m");
+				GenerateReferencingSources (reference_m, GetRequiredSymbols ());
+				if (File.Exists (reference_m)) {
+					foreach (var abi in GetArchitectures (AssemblyBuildTarget.StaticObject)) {
+						var arch = abi.AsArchString ();
+						var reference_o = Path.Combine (App.Cache.Location, arch, "reference.o");
+						var compile_task = new CompileMainTask {
+							Target = this,
+							Abi = abi,
+							InputFile = reference_m,
+							OutputFile = reference_o,
+							SharedLibrary = false,
+							Language = "objective-c",
+						};
+						LinkWithTaskOutput (compile_task);
+					}
+				}
+			}
+
 			// Compile the managed assemblies into object files, frameworks or shared libraries
 			AOTCompile ();
 
@@ -1411,7 +1473,7 @@ namespace Xamarin.Bundler
 				linker_flags.AddOtherFlag ("-lc++");
 
 			// allow the native linker to remove unused symbols (if the caller was removed by the managed linker)
-			if (!bitcode) {
+			if (!App.UnresolvedExternalsAsCode.Value) {
 				// Note that we include *all* (__Internal) p/invoked symbols here
 				// We also include any fields from [Field] attributes.
 				linker_flags.ReferenceSymbols (GetRequiredSymbols ());

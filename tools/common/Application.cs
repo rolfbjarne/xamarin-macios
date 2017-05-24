@@ -45,6 +45,7 @@ namespace Xamarin.Bundler {
 		internal RuntimeOptions RuntimeOptions;
 		public RegistrarMode Registrar = RegistrarMode.Default;
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;
+		public bool? UnresolvedExternalsAsCode;
 
 		public HashSet<string> Frameworks = new HashSet<string> ();
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
@@ -435,6 +436,19 @@ namespace Xamarin.Bundler {
 				}
 				IsDefaultMarshalManagedExceptionMode = true;
 			}
+
+			if (!UnresolvedExternalsAsCode.HasValue) {
+#if MONOTOUCH
+				UnresolvedExternalsAsCode = EnableBitCode;
+#else
+				UnresolvedExternalsAsCode = false;
+#endif
+			}
+
+#if MONOTOUCH
+			if (EnableBitCode && UnresolvedExternalsAsCode.Value)
+				throw ErrorHelper.CreateError (114, "Disabling referencing external symbols using code (--unresolved-externals-as-code:false) is not allowed when bitcode is enabled.");
+#endif
 		}
 
 		public void RunRegistrar ()

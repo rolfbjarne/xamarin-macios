@@ -101,6 +101,9 @@ namespace Xamarin.Bundler {
 			options.Add ("embeddinator", "Enables Embeddinator targetting mode.", v => {
 				app.Embeddinator = true;
 			}, true);
+			options.Add ("unresolved-externals-as-code:", "Force dynamically loaded symbols to be found by the native linker by generating code that uses them (instead of passing -u <symbol> to the linker). This is on by default when using bitcode.", (v) => {
+				app.UnresolvedExternalsAsCode = ParseBool (v, "unresolved-externals-as-code");
+			});
 		}
 
 		static int Jobs;

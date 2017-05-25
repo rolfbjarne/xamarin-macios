@@ -11,6 +11,7 @@ namespace Xamarin.Bundler
 	{
 		Function,
 		ObjectiveCClass,
+		Field,
 	}
 
 	public class Symbol
@@ -49,6 +50,28 @@ namespace Xamarin.Bundler
 			store.Add (symbol.Name, symbol);
 		}
 
+		public Symbol AddObjectiveCClass (string class_name)
+		{
+			var symbol = new Symbol {
+				Type = SymbolType.ObjectiveCClass,
+				ObjectiveCName = class_name,
+			};
+			var existing = Find (symbol.Name);
+			if (existing != null)
+				return existing;
+			return symbol;
+		}
+
+		public Symbol AddField (string name)
+		{
+			Symbol rv = Find (name);
+			if (rv == null) {
+				rv = new Symbol { Name = name, Type = SymbolType.Field };
+				Add (rv);
+			}
+			return rv;
+		}
+
 		public Symbol AddFunction (string name)
 		{
 			Symbol rv = Find (name);
@@ -57,6 +80,14 @@ namespace Xamarin.Bundler
 				Add (rv);
 			}
 			return rv;
+		}
+
+		public void Remove (Func<Symbol, bool> condition)
+		{
+			foreach (var symbol in this) {
+				if (condition (symbol))
+					store.Remove (symbol.Name);
+			}
 		}
 
 		public IEnumerator<Symbol> GetEnumerator ()

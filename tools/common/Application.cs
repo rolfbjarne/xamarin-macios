@@ -446,7 +446,7 @@ namespace Xamarin.Bundler {
 			}
 
 #if MONOTOUCH
-			if (EnableBitCode && UnresolvedExternalsAsCode.Value)
+			if (EnableBitCode && !UnresolvedExternalsAsCode.Value)
 				throw ErrorHelper.CreateError (114, "Disabling referencing external symbols using code (--unresolved-externals-as-code:false) is not allowed when bitcode is enabled.");
 #endif
 		}

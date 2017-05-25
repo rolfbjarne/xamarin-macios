@@ -12,7 +12,6 @@ namespace Xamarin.Tuner
 	{
 		internal StaticRegistrar StaticRegistrar;
 		Symbols required_symbols;
-		Dictionary<string, TypeDefinition> objectivec_classes;
 
 		// SDK candidates - they will be preserved only if the application (not the SDK) uses it
 		List<ICustomAttributeProvider> srs_data_contract = new List<ICustomAttributeProvider> ();
@@ -57,14 +56,6 @@ namespace Xamarin.Tuner
 			}
 		}
 
-		public Dictionary<string, TypeDefinition> ObjectiveCClasses {
-			get {
-				if (objectivec_classes == null)
-					objectivec_classes = new Dictionary<string, TypeDefinition> ();
-				return objectivec_classes;
-			}
-		}
-		
 		public DerivedLinkContext (Pipeline pipeline, AssemblyResolver resolver)
 			: base (pipeline, resolver)
 		{

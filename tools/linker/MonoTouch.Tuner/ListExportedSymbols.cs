@@ -70,7 +70,7 @@ namespace MonoTouch.Tuner
 			var registerAttribute = DerivedLinkContext.StaticRegistrar?.GetRegisterAttribute (type);
 			if (registerAttribute != null && registerAttribute.IsWrapper && !DerivedLinkContext.StaticRegistrar.HasProtocolAttribute (type)) {
 				var exportedName = DerivedLinkContext.StaticRegistrar.GetExportedTypeName (type, registerAttribute);
-				DerivedLinkContext.ObjectiveCClasses [exportedName] = type;
+				DerivedLinkContext.RequiredSymbols.AddObjectiveCClass (exportedName).Members.Add (type);
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace MonoTouch.Tuner
 				object symbol;
 				// The Field attribute may have been linked away, but we've stored it in an annotation.
 				if (property != null && Context.Annotations.GetCustomAnnotations ("ExportedFields").TryGetValue (property, out symbol)) {
-					DerivedLinkContext.RequiredSymbols [(string) symbol].Members.Add (property);
+					DerivedLinkContext.RequiredSymbols.AddField ((string) symbol).Members.Add (property);
 				}
 			}
 		}

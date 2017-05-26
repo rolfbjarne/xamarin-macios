@@ -217,7 +217,11 @@ namespace Xamarin.Bundler {
 				}
 
 				// keep the debugging helper in debugging binaries only
-				if (App.EnableDebug)
+				var has_mono_pmip = App.EnableDebug;
+#if MMP
+				has_mono_pmip &= !Driver.IsUnifiedFullSystemFramework;
+#endif
+				if (has_mono_pmip)
 					dynamic_symbols.AddFunction ("mono_pmip");
 
 				bool has_dyn_msgSend;

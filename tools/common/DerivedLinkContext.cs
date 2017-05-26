@@ -11,6 +11,7 @@ namespace Xamarin.Tuner
 	public class DerivedLinkContext : LinkContext
 	{
 		internal StaticRegistrar StaticRegistrar;
+		internal Target Target;
 		Symbols required_symbols;
 
 		// SDK candidates - they will be preserved only if the application (not the SDK) uses it

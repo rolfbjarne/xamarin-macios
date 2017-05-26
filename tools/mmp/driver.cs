@@ -660,6 +660,7 @@ namespace Xamarin.Bundler {
 
 		static void Pack (IList<string> unprocessed)
 		{
+			var exceptions = new List<Exception> ();
 			string fx_dir = null;
 			string root_assembly = null;
 			var native_libs = new Dictionary<string, List<MethodDefinition>> ();
@@ -676,8 +677,6 @@ namespace Xamarin.Bundler {
 			
 			if (no_executable) {
 				if (unprocessed.Count != 0) {
-					var exceptions = new List<Exception> ();
-
 					CheckForUnknownCommandLineArguments (exceptions, unprocessed);
 
 					exceptions.Add (new MonoMacException (50, true, "You cannot provide a root assembly if --no-root-assembly is passed, found {0} assemblies: '{1}'", unprocessed.Count, string.Join ("', '", unprocessed.ToArray ())));
@@ -692,8 +691,6 @@ namespace Xamarin.Bundler {
 					app_name = Path.GetFileNameWithoutExtension (output_dir);
 			} else {
 				if (unprocessed.Count != 1) {
-					var exceptions = new List<Exception> ();
-
 					CheckForUnknownCommandLineArguments (exceptions, unprocessed);
 
 					if (unprocessed.Count > 1) {
@@ -808,15 +805,18 @@ namespace Xamarin.Bundler {
 			Watch ("Copy Dependencies", 1);
 
 			// MDK check
-			var ret = Compile ();
+			var ret = Compile (exceptions);
 			Watch ("Compile", 1);
 			if (ret != 0) {
-				if (ret == 1)
-					throw new MonoMacException (5109, true, "Native linking failed with error code 1.  Check build log for details.");
-				if (ret == 69)
-					throw new MonoMacException (5308, true, "Xcode license agreement may not have been accepted.  Please launch Xcode.");
-				// if not then the compilation really failed
-				throw new MonoMacException (5103, true, String.Format ("Failed to compile. Error code - {0}. Please file a bug report at http://bugzilla.xamarin.com", ret));
+				if (ret == 1) {
+					exceptions.Add (ErrorHelper.CreateError (5109, "Native linking failed with error code 1.  Check build log for details."));
+				} else if (ret == 69) {
+					exceptions.Add (ErrorHelper.CreateError (5308, "Xcode license agreement may not have been accepted.  Please launch Xcode."));
+				} else {
+					// if not then the compilation really failed
+					exceptions.Add (ErrorHelper.CreateError (5103, String.Format ("Failed to compile. Error code - {0}. Please file a bug report at http://bugzilla.xamarin.com", ret)));
+				}
+				throw new AggregateException (exceptions);
 			}
 			if (frameworks_copied_to_bundle_dir) {
 				int install_ret = XcodeRun ("install_name_tool", string.Format ("{0} -add_rpath @loader_path/../Frameworks", Quote (AppPath)));
@@ -1149,7 +1149,7 @@ namespace Xamarin.Bundler {
 			frameworks_copied_to_bundle_dir = true;
 		}
 
-		static int Compile ()
+		static int Compile (List<Exception> exceptions)
 		{
 			int ret = 1;
 
@@ -1352,7 +1352,10 @@ namespace Xamarin.Bundler {
 				File.WriteAllText (main, mainSource);
 				args.Append (Quote (main));
 
-				ret = XcodeRun ("clang", args.ToString (), null);
+				var output = new StringBuilder ();
+				ret = XcodeRun ("clang", args.ToString (), output);
+
+				Application.ProcessNativeLinkerOutput (BuildTarget, output.ToString (), new string [0], exceptions, ret != 0);
 			} catch (Win32Exception e) {
 				throw new MonoMacException (5103, true, e, "Failed to compile the file '{0}'. Please file a bug report at http://bugzilla.xamarin.com", "driver");
 			}

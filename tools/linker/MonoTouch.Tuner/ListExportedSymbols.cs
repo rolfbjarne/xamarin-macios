@@ -67,8 +67,27 @@ namespace MonoTouch.Tuner
 					ProcessMethod (method);
 			}
 
+			AddRequiredObjectiveCType (type);
+		}
+
+		void AddRequiredObjectiveCType (TypeDefinition type)
+		{
 			var registerAttribute = DerivedLinkContext.StaticRegistrar?.GetRegisterAttribute (type);
-			if (registerAttribute != null && registerAttribute.IsWrapper && !DerivedLinkContext.StaticRegistrar.HasProtocolAttribute (type)) {
+			if (registerAttribute == null)
+				return;
+
+			if (!registerAttribute.IsWrapper)
+				return;
+
+			if (DerivedLinkContext.StaticRegistrar.HasProtocolAttribute (type))
+				return;
+
+			Assembly asm;
+			bool has_linkwith_attributes = false;
+			if (DerivedLinkContext.Target.Assemblies.TryGetValue (type.Module.Assembly, out asm))
+				has_linkwith_attributes = asm.HasLinkWithAttributes;
+
+			if (has_linkwith_attributes) {
 				var exportedName = DerivedLinkContext.StaticRegistrar.GetExportedTypeName (type, registerAttribute);
 				DerivedLinkContext.RequiredSymbols.AddObjectiveCClass (exportedName).AddMember (type);
 			}

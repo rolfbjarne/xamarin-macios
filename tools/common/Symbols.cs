@@ -32,7 +32,22 @@ namespace Xamarin.Bundler
 			}
 		}
 		public string ObjectiveCName;
-		public List<MemberReference> Members = new List<MemberReference> ();
+
+		List<MemberReference> members = new List<MemberReference> ();
+		public IEnumerable<MemberReference> Members { get { return members; } }
+
+		public HashSet<AssemblyDefinition> Assemblies { get; private set; } = new HashSet<AssemblyDefinition> ();
+
+		public void AddMember (MemberReference member)
+		{
+			members.Add (member);
+			Assemblies.Add (member.Module.Assembly);
+		}
+
+		public void AddAssembly (AssemblyDefinition assembly)
+		{
+			Assemblies.Add (assembly);
+		}
 	}
 
 	public class Symbols : IEnumerable<Symbol>
@@ -59,6 +74,7 @@ namespace Xamarin.Bundler
 			var existing = Find (symbol.Name);
 			if (existing != null)
 				return existing;
+			Add (symbol);
 			return symbol;
 		}
 
@@ -118,15 +134,27 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public void Load (string filename)
+		public void Load (string filename, Target target)
 		{
 			using (var reader = new StreamReader (filename)) {
 				string line;
+				Symbol current = null;
 				while ((line = reader.ReadLine ()) != null) {
-					var eq = line.IndexOf ('=');
-					var typestr = line.Substring (0, eq);
-					var name = line.Substring (eq + 1);
-					Add (new Symbol { Name = name, Type = (SymbolType)Enum.Parse (typeof (SymbolType), typestr) });
+					if (line.Length == 0)
+						continue;
+					if (line [0] == '\t') {
+						var asm = line.Substring (1);
+						Assembly assembly;
+						if (!target.Assemblies.TryGetValue (Assembly.GetIdentity (asm), out assembly))
+							throw ErrorHelper.CreateError (99, $"Internal error: serialized assembly {asm} for symbol {current.Name}, but no such assembly loaded. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+						current.AddAssembly (assembly.AssemblyDefinition);
+					} else {
+						var eq = line.IndexOf ('=');
+						var typestr = line.Substring (0, eq);
+						var name = line.Substring (eq + 1);
+						current = new Symbol { Name = name, Type = (SymbolType) Enum.Parse (typeof (SymbolType), typestr) };
+						Add (current);
+					}
 				}
 			}
 		}
@@ -134,8 +162,11 @@ namespace Xamarin.Bundler
 		public void Save (string filename)
 		{
 			using (var writer = new StreamWriter (filename)) {
-				foreach (var symbol in store.Values)
+				foreach (var symbol in store.Values) {
 					writer.WriteLine ("{0}={1}", symbol.Type, symbol.Name);
+					foreach (var asm in symbol.Assemblies)
+						writer.WriteLine ($"\t{asm.MainModule.FileName}");
+				}
 			}
 		}
 	}

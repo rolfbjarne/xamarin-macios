@@ -108,6 +108,7 @@ namespace MonoTouch.Tuner {
 				}
 
 				assembly = ModuleDefinition.ReadModule (fileName, CreateParameters (fileName)).Assembly;
+				Console.WriteLine ($"Loaded {fileName} in {GetType ().FullName}");
 			}
 			catch (Exception e) {
 				throw new MonoTouchException (9, true, e, "Error while loading assemblies: {0}", fileName);

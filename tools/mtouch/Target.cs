@@ -1,4 +1,4 @@
-﻿// Copyright 2013--2014 Xamarin Inc. All rights reserved.
+﻿﻿// Copyright 2013--2014 Xamarin Inc. All rights reserved.
 
 using System;
 using System.Collections.Generic;
@@ -291,14 +291,14 @@ namespace Xamarin.Bundler
 		}
 
 		Symbols entry_points;
-		public Symbols GetEntryPoints ()
+
+		public Symbols GetAllSymbols ()
 		{
-			if (entry_points == null)
-				GetRequiredSymbols ();
+			CollectAllSymbols ();
 			return entry_points;
 		}
 
-		public Symbols CollectRequiredSymbols ()
+		public Symbols CollectAllSymbols ()
 		{
 			if (entry_points != null)  
 				return entry_points;
@@ -306,7 +306,7 @@ namespace Xamarin.Bundler
 			var cache_location = Path.Combine (App.Cache.Location, "entry-points.txt");
 			if (cached_link || !any_assembly_updated) {
 				entry_points = new Symbols ();
-				entry_points.Load (cache_location);
+				entry_points.Load (cache_location, this);
 			} else {
 				if (LinkContext == null) {
 					// This happens when using the simlauncher and the msbuild tasks asked for a list
@@ -380,14 +380,17 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public IEnumerable<Symbol> GetRequiredSymbols (Assembly assembly = null)
+		public Symbols GetRequiredSymbols (Assembly assembly = null)
 		{
-			CollectRequiredSymbols ();
+			CollectAllSymbols ();
 
+			Symbols filtered = new Symbols ();
 			foreach (var ep in entry_points) {
-				if (IsRequiredSymbol (ep, assembly))
-					yield return ep;
+				if (IsRequiredSymbol (ep, assembly)) {
+					filtered.Add (ep);
+				}
 			}
+			return filtered ?? entry_points;
 		}
 
 		//
@@ -1097,7 +1100,10 @@ namespace Xamarin.Bundler
 						if (a.HasLinkWithAttributes) {
 							var symbols = GetRequiredSymbols (a);
 							if (App.UnresolvedExternalsAsCode.Value) {
-								var tasks = GenerateReferencingSources (Path.Combine (App.Cache.Location, Path.GetFileNameWithoutExtension (a.FullPath) + "-unresolved-externals.m"), symbols); 
+								var tasks = GenerateReferencingSource (Path.Combine (App.Cache.Location, Path.GetFileNameWithoutExtension (a.FullPath) + "-unresolved-externals.m"), symbols);
+								foreach (var task in tasks)
+									compiler_flags.AddLinkWith (task.OutputFile);
+								link_dependencies.AddRange (tasks);
 							} else {
 								compiler_flags.ReferenceSymbols (symbols);
 							}
@@ -1109,7 +1115,7 @@ namespace Xamarin.Bundler
 					}
 					compiler_flags.LinkWithMono ();
 					compiler_flags.LinkWithXamarin ();
-					if (GetEntryPoints ().Contains ("UIApplicationMain"))
+					if (GetAllSymbols ().Contains ("UIApplicationMain"))
 						compiler_flags.AddFramework ("UIKit");
 
 					if (App.EnableLLVMOnlyBitCode) {
@@ -1233,7 +1239,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		IEnumerable<CompileTask> GenerateReferencingSources (string reference_m, IEnumerable<Symbol> symbols)
+		IEnumerable<CompileTask> GenerateReferencingSource (string reference_m, IEnumerable<Symbol> symbols)
 		{
 			if (!symbols.Any ()) {
 				if (File.Exists (reference_m))
@@ -1242,33 +1248,35 @@ namespace Xamarin.Bundler
 			}
 			
 			var sb = new StringBuilder ();
-
+			sb.AppendLine ("#import <Foundation/Foundation.h>");
 			foreach (var symbol in symbols) {
 				switch (symbol.Type) {
 				case SymbolType.Function:
+				case SymbolType.Field:
 					sb.Append ("extern void * ").Append (symbol.Name).AppendLine (";");
 					break;
 				case SymbolType.ObjectiveCClass:
-					sb.AppendLine ($"interface {symbol.ObjectiveCName} : NSObject @end");
+					sb.AppendLine ($"@interface {symbol.ObjectiveCName} : NSObject @end");
 					break;
 				default:
-					throw new Exception ();
+					throw ErrorHelper.CreateError (99, $"Internal error: invalid symbol type {symbol.Type} for {symbol.Name}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 				}
 			}
-			sb.AppendLine ("static void __symbol_referencer () __attribute__ ((unused)) __attribute__ ((optnone));");
-			sb.AppendLine ("void __symbol_referencer ()");
+			sb.AppendLine ("static void __xamarin_symbol_referencer () __attribute__ ((used)) __attribute__ ((optnone));");
+			sb.AppendLine ("void __xamarin_symbol_referencer ()");
 			sb.AppendLine ("{");
 			sb.AppendLine ("\tvoid *value;");
 			foreach (var symbol in symbols) {
 				switch (symbol.Type) {
 				case SymbolType.Function:
+				case SymbolType.Field:
 					sb.AppendLine ($"\tvalue = {symbol.Name};");
 					break;
 				case SymbolType.ObjectiveCClass:
 					sb.AppendLine ($"\tvalue = [{symbol.ObjectiveCName} class];");
 					break;
 				default:
-					throw new Exception ();
+					throw ErrorHelper.CreateError (99, $"Internal error: invalid symbol type {symbol.Type} for {symbol.Name}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 				}
 			}
 			sb.AppendLine ("}");
@@ -1497,7 +1505,7 @@ namespace Xamarin.Bundler
 			// We also include any fields from [Field] attributes.
 			var required_symbols = GetRequiredSymbols ();
 			if (App.UnresolvedExternalsAsCode.Value) {
-				LinkWithTaskOutput (GenerateReferencingSources (Path.Combine (App.Cache.Location, "reference.m"), required_symbols));
+				LinkWithTaskOutput (GenerateReferencingSource (Path.Combine (App.Cache.Location, "reference.m"), required_symbols));
 			} else {
 				linker_flags.ReferenceSymbols (required_symbols);
 			}

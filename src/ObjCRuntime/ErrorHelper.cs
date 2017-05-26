@@ -95,6 +95,11 @@ namespace XamCore.ObjCRuntime {
 			return new ProductException (code, true, message, args);
 		}
 
+		public static ProductException Create (int code, bool error, string message, params object [] args)
+		{
+			return new ProductException (code, error, message, args);
+		}
+
 #if (MTOUCH || MMP) && !MMP_TEST && !WIN32
 		public static void SetLocation (Application app, ProductException ex, Mono.Cecil.MethodDefinition method)
 		{

@@ -500,5 +500,117 @@ namespace Xamarin.Bundler {
 			var registrar = new XamCore.Registrar.StaticRegistrar (this);
 			registrar.GenerateSingleAssembly (resolvedAssemblies, Path.ChangeExtension (registrar_m, "h"), registrar_m, Path.GetFileNameWithoutExtension (RootAssembly));
 		}
+
+		// this will filter/remove warnings that are not helpful (e.g. complaining about non-matching armv6-6 then armv7-6 on fat binaries)
+		// and turn the remaining of the warnings into MT5203 that the IDE will be able to report as real warnings (not just logs)
+		// it will also look for symbol-not-found errors and try to provide useful error messages.
+		public static void ProcessNativeLinkerOutput (Target target, string output, IEnumerable<string> inputs, List<Exception> errors, bool error)
+		{
+			List<string> lines = new List<string> (output.Split (new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+
+			// filter
+			for (int i = 0; i < lines.Count; i++) {
+				string line = lines [i];
+
+				if (errors.Count > 100)
+					return;
+
+				if (line.Contains ("ld: warning: ignoring file ") && 
+					line.Contains ("file was built for") && 
+					line.Contains ("which is not the architecture being linked") &&
+				// Only ignore warnings related to the object files we've built ourselves (assemblies, main.m, registrar.m)
+					inputs.Any ((v) => line.Contains (v))) {
+					continue;
+				} else if (line.Contains ("ld: symbol(s) not found for architecture") && errors.Count > 0) {
+					continue;
+				} else if (line.Contains ("clang: error: linker command failed with exit code 1")) {
+					continue;
+				} else if (line.Contains ("was built for newer iOS version (5.1.1) than being linked (5.1)")) {
+					continue;
+				}
+
+				if (line.Contains ("Undefined symbols for architecture")) {
+					while (++i < lines.Count) {
+						line = lines [i];
+						if (!line.EndsWith (", referenced from:", StringComparison.Ordinal))
+							break;
+
+						var symbol = line.Replace (", referenced from:", "").Trim ('\"', ' ');
+						if (symbol.StartsWith ("_OBJC_CLASS_$_", StringComparison.Ordinal)) {
+							errors.Add (ErrorHelper.Create (5211, error, 
+																"Native linking failed, undefined Objective-C class: {0}. The symbol '{1}' could not be found in any of the libraries or frameworks linked with your application.",
+							                                    symbol.Replace ("_OBJC_CLASS_$_", ""), symbol));
+						} else {
+							var members = target.GetAllSymbols ().Find (symbol.Substring (1))?.Members;
+							if (members != null && members.Any ()) {
+								var member = members.First (); // Just report the first one.
+								// Neither P/Invokes nor fields have IL, so we can't find the source code location.
+								errors.Add (ErrorHelper.Create (5214, error,
+									"Native linking failed, undefined symbol: {0}. " +
+									"This symbol was referenced by the managed member {1}.{2}. " +
+									"Please verify that all the necessary frameworks have been referenced and native libraries linked.",
+									symbol, member.DeclaringType.FullName, member.Name));
+							} else {
+								errors.Add (ErrorHelper.Create (5210, error, 
+							                                    "Native linking failed, undefined symbol: {0}. " +
+																"Please verify that all the necessary frameworks have been referenced and native libraries are properly linked in.",
+							                                    symbol));
+							}
+						}
+
+						// skip all subsequent lines related to the same error.
+						// we skip all subsequent lines with more indentation than the initial line.
+						var indent = GetIndentation (line);
+						while (i + 1 < lines.Count) {
+							line = lines [i + 1];
+							if (GetIndentation (lines [i + 1]) <= indent)
+								break;
+							i++;
+						}
+					}
+				} else if (line.StartsWith ("duplicate symbol", StringComparison.Ordinal) && line.EndsWith (" in:", StringComparison.Ordinal)) {
+					var symbol = line.Replace ("duplicate symbol ", "").Replace (" in:", "").Trim ();
+					errors.Add (ErrorHelper.Create (5212, error, "Native linking failed, duplicate symbol: '{0}'.", symbol));
+
+					var indent = GetIndentation (line);
+					while (i + 1 < lines.Count) {
+						line = lines [i + 1];
+						if (GetIndentation (lines [i + 1]) <= indent)
+							break;
+						i++;
+						errors.Add (ErrorHelper.Create (5213, error, "Duplicate symbol in: {0} (Location related to previous error)", line.Trim ()));
+					}
+				} else {
+					if (line.StartsWith ("ld: ", StringComparison.Ordinal))
+						line = line.Substring (4);
+
+					line = line.Trim ();
+
+					if (error) {
+						errors.Add (ErrorHelper.Create (5209, error, "Native linking error: {0}", line));
+					} else {
+						errors.Add (ErrorHelper.Create (5203, error, "Native linking warning: {0}", line));
+					}
+				}
+			}
+		}
+
+		static int GetIndentation (string line)
+		{
+			int rv = 0;
+			if (line.Length == 0)
+				return 0;
+
+			while (true) {
+				switch (line [rv]) {
+				case ' ':
+				case '\t':
+					rv++;
+					break;
+				default:
+					return rv;
+				}
+			};
+		}
 	}
 }

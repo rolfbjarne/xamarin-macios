@@ -3201,7 +3201,7 @@ public class TestApp {
 				mtouch.AssertExecuteFailure (MTouchAction.BuildSim, "first build");
 				mtouch.AssertWarningPattern (5217, "Native linking possibly failed because the linker command line was too long .[0-9]* characters..");
 
-				mtouch.CustomArguments = new string [] { "--unresolved-externals-as-code" };
+				mtouch.CustomArguments = new string [] { "--dynamic-symbol-mode=code" };
 				mtouch.AssertExecute (MTouchAction.BuildSim, "second build");
 			}
 		}

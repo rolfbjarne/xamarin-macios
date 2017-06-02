@@ -787,5 +787,13 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 		void IDisposable.Dispose ()
 		{
 		}
+
+		protected override string ToolPath {
+			get { return Configuration.MtouchPath; }
+		}
+
+		protected override string MessagePrefix {
+			get { return "MT"; }
+		}
 	}
 }

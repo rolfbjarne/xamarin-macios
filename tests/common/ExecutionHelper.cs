@@ -24,7 +24,7 @@ namespace Xamarin.Tests
 	//	public int LineNumber;
 	}
 
-	class Tool
+	abstract class Tool
 	{
 		StringBuilder output = new StringBuilder ();
 
@@ -34,6 +34,7 @@ namespace Xamarin.Tests
 
 		public Dictionary<string, string> EnvironmentVariables { get; set; }
 		public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds (60);
+		public string WorkingDirectory;
 
 		public IEnumerable<ToolMessage> Messages { get { return messages; } }
 		public List<string> OutputLines {
@@ -48,7 +49,7 @@ namespace Xamarin.Tests
 
 		public int Execute (string arguments, params string [] args)
 		{
-			return Execute (Configuration.MtouchPath, arguments, args);
+			return Execute (ToolPath, arguments, args);
 		}
 
 		public int Execute (string toolPath, string arguments, params string [] args)
@@ -56,7 +57,7 @@ namespace Xamarin.Tests
 			output.Clear ();
 			output_lines = null;
 
-			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output);
+			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output, workingDirectory: WorkingDirectory);
 
 			if (rv != 0) {
 				if (output.Length > 0)
@@ -75,6 +76,7 @@ namespace Xamarin.Tests
 			foreach (var l in output.ToString ().Split ('\n')) {
 				var line = l;
 				var msg = new ToolMessage ();
+
 				if (line.StartsWith ("error ", StringComparison.Ordinal)) {
 					msg.IsError = true;
 					line = line.Substring (6);
@@ -87,9 +89,16 @@ namespace Xamarin.Tests
 				}
 				if (line.Length < 7)
 					continue; // something else
+				
 				msg.Prefix = line.Substring (0, 2);
 				if (!int.TryParse (line.Substring (2, 4), out msg.Number))
 					continue; // something else
+
+				line = line.Substring (6);
+				var toolName = MessageToolName;
+				if (toolName != null && line.StartsWith (toolName + ": ", StringComparison.Ordinal))
+					line = line.Substring (toolName.Length + 2);
+				
 				msg.Message = line.Substring (8);
 
 				messages.Add (msg);
@@ -116,7 +125,7 @@ namespace Xamarin.Tests
 
 		public void AssertErrorPattern (int number, string messagePattern)
 		{
-			AssertErrorPattern ("MT", number, messagePattern);
+			AssertErrorPattern (MessagePrefix, number, messagePattern);
 		}
 
 		public void AssertErrorPattern (string prefix, int number, string messagePattern)
@@ -133,7 +142,7 @@ namespace Xamarin.Tests
 
 		public void AssertError (int number, string message)
 		{
-			AssertError ("MT", number, message);
+			AssertError (MessagePrefix, number, message);
 		}
 
 		public void AssertError (string prefix, int number, string message)
@@ -150,7 +159,7 @@ namespace Xamarin.Tests
 
 		public void AssertWarningPattern (int number, string messagePattern)
 		{
-			AssertWarningPattern ("MT", number, messagePattern);
+			AssertWarningPattern (MessagePrefix, number, messagePattern);
 		}
 
 		public void AssertWarningPattern (string prefix, int number, string messagePattern)
@@ -167,7 +176,7 @@ namespace Xamarin.Tests
 
 		public void AssertWarning (int number, string message)
 		{
-			AssertWarning ("MT", number, message);
+			AssertWarning (MessagePrefix, number, message);
 		}
 
 		public void AssertWarning (string prefix, int number, string message)
@@ -217,6 +226,10 @@ namespace Xamarin.Tests
 			foreach (var line in OutputLines)
 				action (line);
 		}
+
+		protected abstract string ToolPath { get; }
+		protected abstract string MessagePrefix { get; }
+		protected virtual string MessageToolName { get { return null; } }
 	}
 
 	class XBuild
@@ -314,7 +327,7 @@ namespace Xamarin.Tests
 			return rv;
 		}
 
-		public static int Execute (string fileName, string arguments, Dictionary<string, string> environmentVariables, StringBuilder stdout, StringBuilder stderr, TimeSpan? timeout = null)
+		public static int Execute (string fileName, string arguments, Dictionary<string, string> environmentVariables, StringBuilder stdout, StringBuilder stderr, TimeSpan? timeout = null, string workingDirectory = null)
 		{
 			if (stdout == null)
 				stdout = new StringBuilder ();
@@ -324,6 +337,8 @@ namespace Xamarin.Tests
 			var psi = new ProcessStartInfo ();
 			psi.FileName = fileName;
 			psi.Arguments = arguments;
+			if (!string.IsNullOrEmpty (workingDirectory))
+				psi.WorkingDirectory = workingDirectory;
 			if (environmentVariables != null) {
 				var envs = psi.EnvironmentVariables;
 				foreach (var kvp in environmentVariables) {

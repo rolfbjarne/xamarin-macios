@@ -320,3 +320,6 @@ $(MAC_BUILD_DIR)/Xamarin.Mac-%.BindingAttributes.dll: generator-attributes.cs Ma
 	$(Q) mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_MONO) --debug $(PMCS_EXE) -profile:"$(TOP)/src/pmcs-profiles/$*"     -compiler:$(SYSTEM_MCS) -global-replace:"^XamCore.="        -out:$@ -debug generator-attributes.cs -target:library
 endif
+
+bgen: $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/bgen.exe $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe
+	

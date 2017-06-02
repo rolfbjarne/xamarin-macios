@@ -121,6 +121,40 @@ namespace Xamarin
 		}
 
 		[Test]
+		[TestCase ("arm64+llvm", "arm64")]
+		[TestCase ("arm64", "arm64+llvm")]
+		public void CodeSharingExtensionMixedLLVM (string container_abi, string extension_abi)
+		{
+			// Build app + extension, where llvm is enabled in one, but not the other.
+			// This is also building the sdk to a framework
+			using (var extension = new MTouchTool ()) {
+				extension.CreateTemporaryServiceExtension ();
+				extension.CreateTemporaryCacheDirectory ();
+				extension.Abi = extension_abi;
+				extension.AssemblyBuildTargets.Add ("@sdk=framework=Xamarin.Sdk");
+				extension.AssemblyBuildTargets.Add ("@all=staticobject");
+				extension.DSym = false; // faster test
+				extension.MSym = false; // faster test
+				extension.NoStrip = true; // faster test
+				extension.AssertExecute (MTouchAction.BuildDev, "extension build");
+
+				using (var mtouch = new MTouchTool ()) {
+					mtouch.AppExtensions.Add (extension);
+					mtouch.CreateTemporaryApp ();
+					mtouch.CreateTemporaryCacheDirectory ();
+					mtouch.Abi = container_abi; // container builds for llvm, extension does not.
+					mtouch.AssemblyBuildTargets.Add ("@sdk=framework=Xamarin.Sdk");
+					mtouch.AssemblyBuildTargets.Add ("@all=staticobject");
+					mtouch.DSym = false; // faster test
+					mtouch.MSym = false; // faster test
+					mtouch.NoStrip = true; // faster test
+
+					mtouch.AssertExecute (MTouchAction.BuildDev, "container build");
+				}
+			}
+		}
+
+		[Test]
 		[TestCase ("single", "",                   false)]
 		[TestCase ("dual",   "armv7,arm64", false)]
 		[TestCase ("llvm",   "armv7+llvm",  false)]

@@ -512,8 +512,13 @@ namespace Xamarin.Bundler {
 					foreach (var abi in abis)
 						all_architectures.Add (abi);
 					foreach (var ext in AppExtensions) {
-						foreach (var abi in ext.Abis)
+						foreach (var abi in ext.Abis) {
+							if (all_architectures.Contains (abi | Abi.LLVM))
+								continue; // Don't add an llvm-disabled architecture if we already have an llvm-enabled architecture
+							if (all_architectures.Contains (abi & ~Abi.LLVM))
+								continue; // Don't add a llvm-enabled architecture if we already have an llvm-disabled architecture
 							all_architectures.Add (abi);
+						}
 					}
 				}
 				return all_architectures;

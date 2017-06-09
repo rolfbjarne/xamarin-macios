@@ -216,6 +216,7 @@ namespace Xamarin.Bundler {
 			NoFollow_Dst = 1 << 19,
 			Unlink = 1 << 21,
 			Nofollow = NoFollow_Src | NoFollow_Dst,
+			Clone = 1 << 24,
 		}
 
 		enum CopyFileState : uint {
@@ -269,7 +270,7 @@ namespace Xamarin.Bundler {
 			try {
 				CopyFileCallbackDelegate del = CopyFileCallback;
 				copyfile_state_set (state, CopyFileState.StatusCB, Marshal.GetFunctionPointerForDelegate (del));
-				int rv = copyfile (source, target, state, CopyFileFlags.Data | CopyFileFlags.Recursive | CopyFileFlags.Nofollow);
+				int rv = copyfile (source, target, state, CopyFileFlags.Data | CopyFileFlags.Recursive | CopyFileFlags.Nofollow | CopyFileFlags.Clone);
 				if (rv != 0)
 					throw ErrorHelper.CreateError (1022, "Could not copy the directory '{0}' to '{1}': {2}", source, target, Target.strerror (Marshal.GetLastWin32Error ()));
 			} finally {

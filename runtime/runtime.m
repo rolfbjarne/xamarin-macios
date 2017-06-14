@@ -90,8 +90,11 @@ xamarin_extension_main_callback xamarin_extension_main = NULL;
 
 /* Local variable */
 
+static MonoImage      *platform_image;
 static MonoClass      *inativeobject_class;
 static MonoClass      *nsobject_class;
+static MonoClass      *nsvalue_class;
+static MonoClass      *nsnumber_class;
 
 static pthread_mutex_t framework_peer_release_lock;
 static MonoGHashTable *xamarin_wrapper_hash;
@@ -370,6 +373,24 @@ xamarin_is_class_array (MonoClass *cls)
 	MONO_ASSERT_GC_UNSAFE;
 	
 	return mono_class_is_subclass_of (cls, mono_get_array_class (), false);
+}
+
+bool
+xamarin_is_class_nsnumber (MonoClass *cls)
+{
+	// COOP: Reading managed data, must be in UNSAFE mode
+	MONO_ASSERT_GC_UNSAFE;
+
+	return mono_class_is_subclass_of (cls, nsnumber_class, false);
+}
+
+bool
+xamarin_is_class_nsvalue (MonoClass *cls)
+{
+	// COOP: Reading managed data, must be in UNSAFE mode
+	MONO_ASSERT_GC_UNSAFE;
+
+	return mono_class_is_subclass_of (cls, nsvalue_class, false);
 }
 
 #define MANAGED_REF_BIT (1 << 31)
@@ -1154,7 +1175,6 @@ xamarin_initialize ()
 	
 	MonoClass *runtime_class;
 	MonoAssembly *assembly = NULL;
-	MonoImage *image;
 	MonoMethod *runtime_initialize;
 	void* params[2];
 	const char *product_dll = NULL;
@@ -1199,14 +1219,16 @@ xamarin_initialize ()
 
 	if (!assembly)
 		xamarin_assertion_message ("Failed to load %s.", product_dll);
-	image = mono_assembly_get_image (assembly);
+	platform_image = mono_assembly_get_image (assembly);
 
 	const char *objcruntime = xamarin_use_new_assemblies ? "ObjCRuntime" : PRODUCT_COMPAT_NAMESPACE ".ObjCRuntime";
 	const char *foundation = xamarin_use_new_assemblies ? "Foundation" : PRODUCT_COMPAT_NAMESPACE ".Foundation";
 
-	runtime_class = get_class_from_name (image, objcruntime, "Runtime");
-	inativeobject_class = get_class_from_name (image, objcruntime, "INativeObject");
-	nsobject_class = get_class_from_name (image, foundation, "NSObject");
+	runtime_class = get_class_from_name (platform_image, objcruntime, "Runtime");
+	inativeobject_class = get_class_from_name (platform_image, objcruntime, "INativeObject");
+	nsobject_class = get_class_from_name (platform_image, foundation, "NSObject");
+	nsnumber_class = get_class_from_name (platform_image, foundation, "NSNumber");
+	nsvalue_class = get_class_from_name (platform_image, foundation, "NSValue");
 
 	mono_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_release_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_release_managed_ref", (const void *) xamarin_release_managed_ref);
 	mono_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_create_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_create_managed_ref", (const void *) xamarin_create_managed_ref);
@@ -1293,10 +1315,19 @@ xamarin_set_bundle_path (const char *path)
 	x_bundle_path = strdup (path);
 }
 
+void *
+xamarin_calloc (size_t size)
+{
+	// COOP: no managed memory access: any mode
+	return calloc (size, 1);
+}
+
 void
 xamarin_free (void *ptr)
 {
 	// COOP: no managed memory access: any mode
+	// We use this method to free memory returned by mono,
+	// which means we have to use the free function mono expects.
 	if (ptr)
 		free (ptr);
 }
@@ -2423,6 +2454,46 @@ xamarin_find_assembly_directory (const char *assembly_name)
 
 	return entry ? entry->location : NULL;
 }
+
+// bool
+// xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoType **original_type)
+// {
+// 	// COOP: Reads managed memory, needs to be in UNSAFE mode
+// 	MONO_ASSERT_GC_UNSAFE;
+
+// 	MonoCustomAttrInfo *attribs;
+
+// 	/* This method is called quite often (most native->managed method calls that returns a value or has a parameter) */
+// 	/* This is why we lookup the attribute in native code: to avoid switching to managed unless there actually is */
+// 	/* a BindAs attribute on the parameter in question */
+
+// 	*original_type = NULL;
+
+// 	attribs = mono_custom_attrs_from_param (method, parameter);
+// 	if (!attribs)
+// 		return false;
+
+// 	bool rv = false;
+// 	if (attribs->num_attrs) {
+// 		static MonoClass *bindas_klass = NULL;
+// 		static MonoMethod *get_original_type_method = NULL;
+
+// 		if (bindas_klass) {
+// 			const char *objcruntime = xamarin_use_new_assemblies ? "ObjCRuntime" : PRODUCT_COMPAT_NAMESPACE ".ObjCRuntime";
+// 			bindas_klass = get_class_from_name (platform_image, objcruntime, "BindAsAttribute");
+// 			get_original_type_method = mono_class_get_method_from_name (bindas_klass, "get_OriginalMethod", 0);
+// 		}
+
+// 		MonoObject *bind_as_attribute = mono_custom_attrs_get_attr (attribs, bindas_klass);
+// 		if (bind_as_attribute) {
+// 			MonoReflectionType *reflection_type = (MonoReflectionType *) mono_runtime_invoke (get_original_type_method, bind_as_attribute, NULL, NULL /* FIXME: exception */);
+// 			if (reflection_type)
+// 				*original_type = mono_reflection_type_get_type (reflection_type);
+// 		}
+// 	}
+// 	mono_custom_attrs_free (attribs);
+// 	return rv;
+// }
 
 /*
  * Object unregistration:

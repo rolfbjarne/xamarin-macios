@@ -5,6 +5,25 @@
 #include <objc/runtime.h>
 #include <objc/message.h>
 
+#include "frameworks.h"
+
+#include <CoreGraphics/CoreGraphics.h>
+#include <CoreLocation/CoreLocation.h>
+#if HAVE_COREANIMATION
+#include <QuartzCore/QuartzCore.h>
+#endif
+#if HAVE_UIKIT
+#include <UIKit/UIKit.h>
+#endif
+#if HAVE_MAPKIT
+#include <MapKit/MapKit.h>
+#endif
+#if HAVE_COREMEDIA
+#include <CoreMedia/CoreMedia.h>
+#endif
+#include <AVFoundation/AVFoundation.h>
+#include <SceneKit/SceneKit.h>
+
 #include "xamarin/xamarin.h"
 #include "runtime-internal.h"
 #include "trampolines-internal.h"
@@ -48,7 +67,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 		if (has_nsobject) {
 			self = xamarin_invoke_objc_method_implementation (self, sel, (IMP) xamarin_ctor_trampoline);
-			marshal_return_value (context, "|", sizeof (id), self, NULL, false, NULL, &exception_gchandle);
+			marshal_return_value (context, "|", sizeof (id), self, NULL, false, NULL, NULL, &exception_gchandle);
 			xamarin_process_managed_exception_gchandle (exception_gchandle);
 			return;
 		}
@@ -58,6 +77,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 	// pre-prolog
 	SList *dispose_list = NULL;
+	SList *free_list = NULL;
 	int num_arg;
 	NSMethodSignature *sig;
 
@@ -70,7 +90,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 	// prolog
 	MonoObject *mthis = NULL;
-	MethodDescription desc;
+	MethodDescription *desc = NULL;
 	MonoMethod *method;
 	MonoMethodSignature *msig;
 	int semantic;
@@ -87,18 +107,24 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	int i;
 	int mofs = 0;
 
+	int desc_arg_count = num_arg + 2; /* 1 for the return value + 1 if this is a category instance method */
+	size_t desc_size = desc_arg_count * sizeof (BindAsData) + sizeof (MethodDescription);
+	desc = (MethodDescription *) xamarin_calloc (desc_size);
+	desc->bindas_count = desc_arg_count;
+	free_list = s_list_prepend (free_list, desc);
+
 	if (is_ctor || is_static) {
-		desc = xamarin_get_method_for_selector ([self class], sel, &exception_gchandle);
+		xamarin_get_method_for_selector ([self class], sel, desc, &exception_gchandle);
 	} else {
-		desc = xamarin_get_method_and_object_for_selector ([self class], sel, self, &mthis, &exception_gchandle);
+		xamarin_get_method_and_object_for_selector ([self class], sel, self, &mthis, desc, &exception_gchandle);
 	}
 	if (exception_gchandle != 0)
 		goto exception_handling;
 
-	method = xamarin_get_reflection_method_method (desc.method);
+	method = xamarin_get_reflection_method_method (desc->method);
 	msig = mono_method_signature (method);
-	semantic = desc.semantic & ArgumentSemanticMask;
-	isCategoryInstance = (desc.semantic & ArgumentSemanticCategoryInstance) == ArgumentSemanticCategoryInstance;
+	semantic = desc->semantic & ArgumentSemanticMask;
+	isCategoryInstance = (desc->semantic & ArgumentSemanticCategoryInstance) == ArgumentSemanticCategoryInstance;
 
 	frame_length = [sig frameLength] - (sizeof (void *) * (isCategoryInstance ? 1 : 2));
 	arg_frame = (void **) alloca (frame_length);
@@ -360,6 +386,10 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							arg_ptrs [i + mofs] = xamarin_get_delegate_for_block_parameter (method, i, id_arg, &exception_gchandle);
 							if (exception_gchandle != 0)
 								goto exception_handling;
+						} else if (desc->bindas [i + 1].original_type != NULL) {
+							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (id_arg, mono_reflection_type_get_type (desc->bindas [i + 1].original_type), p, method, &exception_gchandle, (void **) &free_list);
+							if (exception_gchandle != 0)
+								goto exception_handling;
 						} else {
 							if (semantic == ArgumentSemanticCopy) {
 								id_arg = [id_arg copy];
@@ -531,9 +561,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	ret_type = [sig methodReturnType];
 	ret_type = xamarin_skip_encoding_flags (ret_type);
 	if (is_ctor) {
-		marshal_return_value (context, "|", sizeof (id), self, mono_signature_get_return_type (msig), (desc.semantic & ArgumentSemanticRetainReturnValue) != 0, method, &exception_gchandle);
+		marshal_return_value (context, "|", sizeof (id), self, mono_signature_get_return_type (msig), (desc->semantic & ArgumentSemanticRetainReturnValue) != 0, method, desc, &exception_gchandle);
 	} else if (*ret_type != 'v') {
-		marshal_return_value (context, ret_type, [sig methodReturnLength], retval, mono_signature_get_return_type (msig), (desc.semantic & ArgumentSemanticRetainReturnValue) != 0, method, &exception_gchandle);
+		marshal_return_value (context, ret_type, [sig methodReturnLength], retval, mono_signature_get_return_type (msig), (desc->semantic & ArgumentSemanticRetainReturnValue) != 0, method, desc, &exception_gchandle);
 	}
 
 exception_handling:
@@ -559,6 +589,14 @@ exception_handling:
 		}
 		s_list_free (dispose_list);
 	}
+	if (free_list) {
+		SList *list = free_list;
+		while (list) {
+			xamarin_free (list->data);
+			list = list->next;
+		}
+		s_list_free (free_list);
+	}
 
 	MONO_THREAD_DETACH; // COOP: This will switch to GC_SAFE
 
@@ -567,4 +605,300 @@ exception_handling:
 	} else {
 		xamarin_process_managed_exception (exception);
 	}
+}
+
+void *
+xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle, /*SList*/ void **free_list)
+{
+	// COOP: Reads managed memory, needs to be in UNSAFE mode
+	MONO_ASSERT_GC_UNSAFE;
+
+	// This method is a mirror of StaticRegistrar.GenerateConversionToManaged
+	// These methods must be kept in sync.
+
+	void *ptr = NULL;
+	void *convertedValue = NULL;
+	MonoClass *inputClass = NULL, *outputClass = NULL, *underlyingClass = NULL;
+	bool isNullable = false;
+	char *to_name = NULL;
+
+	inputClass = mono_class_from_mono_type (inputType);;
+	outputClass = mono_class_from_mono_type (outputType);
+	isNullable = mono_class_is_nullable (outputClass);
+	underlyingClass = isNullable ? mono_class_get_nullable_param (outputClass) : outputClass;
+
+	to_name = xamarin_class_get_full_name (underlyingClass, exception_gchandle);
+	if (*exception_gchandle != 0)
+		goto exception_handling;
+
+	if (xamarin_is_class_nsnumber (inputClass)) {
+		NSNumber *number = (NSNumber *) value;
+
+		// Template to avoid c&p errors
+		#define NSNUMBER_TEMPLATE(n_type, m_type, selector) \
+			} else if (!strcmp (to_name, m_type)) { \
+				n_type *valueptr = (n_type *) xamarin_calloc (sizeof (n_type)); \
+				*valueptr = [number selector]; \
+				ptr = valueptr;
+		// End template
+
+		if (false) {
+			// template is else ifs, so we need to start with a manual if
+		NSNUMBER_TEMPLATE (int8_t, "System.SByte", charValue)
+		NSNUMBER_TEMPLATE (uint8_t, "System.Byte", unsignedCharValue)
+		NSNUMBER_TEMPLATE (int16_t, "System.Int16", shortValue)
+		NSNUMBER_TEMPLATE (uint16_t, "System.UInt16", unsignedShortValue)
+		NSNUMBER_TEMPLATE (int32_t, "System.Int32", intValue)
+		NSNUMBER_TEMPLATE (uint32_t, "System.UInt32", unsignedIntValue)
+		NSNUMBER_TEMPLATE (int64_t, "System.Int64", longLongValue)
+		NSNUMBER_TEMPLATE (uint64_t, "System.UInt64", unsignedLongLongValue)
+		NSNUMBER_TEMPLATE (NSInteger, "System.nint", integerValue)
+		NSNUMBER_TEMPLATE (NSUInteger, "System.nuint", unsignedIntegerValue)
+		NSNUMBER_TEMPLATE (float, "System.Single", floatValue)
+		NSNUMBER_TEMPLATE (double, "System.Double", doubleValue)
+#if __POINTER_WIDTH__ == 32
+		NSNUMBER_TEMPLATE (CGFloat, "System.nfloat", floatValue)
+#elif __POINTER_WIDTH__ == 64
+		NSNUMBER_TEMPLATE (CGFloat, "System.nfloat", doubleValue)
+#else
+		#error Invalid pointer size.
+#endif
+		NSNUMBER_TEMPLATE (BOOL, "System.Boolean", boolValue)
+		} else {
+			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
+			goto exception_handling;
+		}
+#undef NSNUMBER_TEMPLATE
+	} else if (xamarin_is_class_nsvalue (inputClass)) {
+		NSValue *valueobj = (NSValue *) value;
+
+		// Template to avoid c&p errors
+		#define NSVALUE_TEMPLATE(n_type, m_type, selector) \
+			} else if (!strcmp (to_name, m_type)) { \
+				n_type *valueptr = (n_type *) xamarin_calloc (sizeof (n_type)); \
+				*valueptr = [valueobj selector]; \
+				ptr = valueptr;
+		// End template
+
+		if (xamarin_use_new_assemblies && !strncmp (to_name, "MonoMac.", 8)) {
+			char *tmp_to_name = xamarin_strdup_printf ("%s", to_name + 8);
+			xamarin_free (to_name);
+			to_name = tmp_to_name;
+		}
+
+		if (false) {
+			// template is else ifs, so we need to start with a manual if
+		NSVALUE_TEMPLATE (NSRange, "Foundation.NSRange", rangeValue)
+#if HAVE_UIKIT // Yep, these CoreGraphics-looking category method is defined in UIKit.
+		NSVALUE_TEMPLATE (CGAffineTransform, "CoreGraphics.CGAffineTransform", CGAffineTransformValue);
+		NSVALUE_TEMPLATE (CGPoint, "CoreGraphics.CGPoint", CGPointValue)
+		NSVALUE_TEMPLATE (CGRect, "CoreGraphics.CGRect", CGRectValue)
+		NSVALUE_TEMPLATE (CGSize, "CoreGraphics.CGSize", CGSizeValue)
+		NSVALUE_TEMPLATE (CGVector, "CoreGraphics.CGVector", CGVectorValue)
+#endif
+#if HAVE_COREANIMATION
+		NSVALUE_TEMPLATE (CATransform3D, "CoreAnimation.CATransform3D", CATransform3DValue)
+#endif
+#if HAVE_MAPKIT // Yep, this is defined in MapKit.
+		NSVALUE_TEMPLATE (CLLocationCoordinate2D, "CoreLocation.CLLocationCoordinate2D", MKCoordinateValue)
+#endif
+#if HAVE_COREMEDIA
+		NSVALUE_TEMPLATE (CMTime, "CoreMedia.CMTime", CMTimeValue)
+		NSVALUE_TEMPLATE (CMTimeMapping, "CoreMedia.CMTimeMapping", CMTimeMappingValue)
+		NSVALUE_TEMPLATE (CMTimeRange, "CoreMedia.CMTimeRange", CMTimeRangeValue)
+#endif
+#if HAVE_MAPKIT
+		NSVALUE_TEMPLATE (MKCoordinateSpan, "MapKit.MKCoordinateSpan", MKCoordinateSpanValue)
+#endif
+		NSVALUE_TEMPLATE (SCNMatrix4, "SceneKit.SCNMatrix4", SCNMatrix4Value)
+		NSVALUE_TEMPLATE (SCNVector3, "SceneKit.SCNVector3", SCNVector3Value)
+		NSVALUE_TEMPLATE (SCNVector4, "SceneKit.SCNVector4", SCNVector4Value)
+#if HAVE_UIKIT
+		NSVALUE_TEMPLATE (UIEdgeInsets, "UIKit.UIEdgeInsets", UIEdgeInsetsValue)
+		NSVALUE_TEMPLATE (UIOffset, "UIKit.UIOffset", UIOffsetValue)
+#endif
+		} else {
+			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
+			goto exception_handling;
+		}
+#undef NSVALUE_TEMPLATE
+	} else {
+		*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
+		goto exception_handling;
+	}
+
+	if (isNullable) {
+		// for nullable values, we must return a boxed value type
+		convertedValue = mono_value_box (mono_domain_get (), underlyingClass, (void *) ptr);
+	} else {
+		// for normal value types, we must return a pointer to the value type
+		convertedValue = ptr;
+	}
+
+	// Make sure the pointer we allocated is freed
+	*(SList **) free_list = s_list_prepend (*(SList **) free_list, ptr);
+
+exception_handling:
+	xamarin_free (to_name);
+
+	return convertedValue;
+}
+
+id
+xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle)
+{
+	// This method is a mirror of StaticRegistrar.GenerateConversionToNative
+	// These methods must be kept in sync.
+
+	id convertedValue = NULL;
+	MonoClass *inputClass = NULL, *outputClass = NULL, *underlyingClass = NULL;
+	bool isNullable = false;
+	char *to_name = NULL;
+
+	inputClass = mono_class_from_mono_type (inputType);;
+	outputClass = mono_class_from_mono_type (outputType);
+	isNullable = mono_class_is_nullable (inputClass);
+	underlyingClass = isNullable ? mono_class_get_nullable_param (inputClass) : inputClass;
+
+	to_name = xamarin_class_get_full_name (underlyingClass, exception_gchandle);
+	if (*exception_gchandle != 0)
+		goto exception_handling;
+
+	if (xamarin_is_class_nsnumber (outputClass)) {
+		if (!strcmp (to_name, "System.SByte")) {
+			convertedValue = [NSNumber numberWithChar: *(int8_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.Byte")) {
+			convertedValue = [NSNumber numberWithUnsignedChar: *(uint8_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.Int16")) {
+			convertedValue = [NSNumber numberWithShort: *(int16_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.UInt16")) {
+			convertedValue = [NSNumber numberWithUnsignedShort: *(uint16_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.Int32")) {
+			convertedValue = [NSNumber numberWithInt: *(int32_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.UInt32")) {
+			convertedValue = [NSNumber numberWithUnsignedInt: *(uint32_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.Int64")) {
+			convertedValue = [NSNumber numberWithLongLong: *(int64_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.UInt64")) {
+			convertedValue = [NSNumber numberWithUnsignedLongLong: *(uint64_t *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.nint")) {
+			convertedValue = [NSNumber numberWithInteger: *(NSInteger *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.nuint")) {
+			convertedValue = [NSNumber numberWithUnsignedInteger: *(NSUInteger *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.Single")) {
+			convertedValue = [NSNumber numberWithFloat: *(float *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.Double")) {
+			convertedValue = [NSNumber numberWithDouble: *(double *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "System.nfloat")) {
+#if __POINTER_WIDTH__ == 32
+			convertedValue = [NSNumber numberWithFloat: *(float *) mono_object_unbox (value)];
+#elif __POINTER_WIDTH__ == 64
+			convertedValue = [NSNumber numberWithDouble: *(double *) mono_object_unbox (value)];
+#else
+#error Invalid pointer size.
+#endif
+		} else if (!strcmp (to_name, "System.Boolean")) {
+			convertedValue = [NSNumber numberWithBool: *(BOOL *) mono_object_unbox (value)];
+		} else {
+			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
+			goto exception_handling;
+		}
+#undef NSNUMBER_TEMPLATE
+	} else if (xamarin_is_class_nsvalue (outputClass)) {
+		if (xamarin_use_new_assemblies && !strncmp (to_name, "MonoMac.", 8)) {
+			char *tmp_to_name = xamarin_strdup_printf ("%s", to_name + 8);
+			xamarin_free (to_name);
+			to_name = tmp_to_name;
+		}
+
+		if (!strcmp (to_name, "Foundation.NSRange")) {
+			convertedValue = [NSValue valueWithRange: *(NSRange *) mono_object_unbox (value)];
+#if HAVE_UIKIT // yep, these CoreGraphics-looking category methods are defined in UIKit
+		} else if (!strcmp (to_name, "CoreGraphics.CGAffineTransform")) {
+			convertedValue = [NSValue valueWithCGAffineTransform: *(CGAffineTransform *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "CoreGraphics.CGPoint")) {
+			convertedValue = [NSValue valueWithCGPoint: *(CGPoint *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "CoreGraphics.CGRect")) {
+			convertedValue = [NSValue valueWithCGRect: *(CGRect *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "CoreGraphics.CGSize")) {
+			convertedValue = [NSValue valueWithCGSize: *(CGSize *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "CoreGraphics.CGVector")) {
+			convertedValue = [NSValue valueWithCGVector: *(CGVector *) mono_object_unbox (value)];
+#endif
+#if HAVE_COREANIMATION
+		} else if (!strcmp (to_name, "CoreAnimation.CATransform3D")) {
+			convertedValue = [NSValue valueWithCATransform3D: *(CATransform3D *) mono_object_unbox (value)];
+#endif
+#if HAVE_MAPKIT // Yep, this is defined in MapKit.
+		} else if (!strcmp (to_name, "CoreLocation.CLLocationCoordinate2D")) {
+			convertedValue = [NSValue valueWithMKCoordinate: *(CLLocationCoordinate2D *) mono_object_unbox (value)];
+#endif
+#if HAVE_COREMEDIA
+		} else if (!strcmp (to_name, "CoreMedia.CMTime")) {
+			convertedValue = [NSValue valueWithCMTime: *(CMTime *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "CoreMedia.CMTimeMapping")) {
+			convertedValue = [NSValue valueWithCMTimeMapping: *(CMTimeMapping *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "CoreMedia.CMTimeRange")) {
+			convertedValue = [NSValue valueWithCMTimeRange: *(CMTimeRange *) mono_object_unbox (value)];
+#endif
+#if HAVE_MAPKIT
+		} else if (!strcmp (to_name, "MapKit.MKCoordinateSpan")) {
+			convertedValue = [NSValue valueWithMKCoordinateSpan: *(MKCoordinateSpan *) mono_object_unbox (value)];
+#endif
+		} else if (!strcmp (to_name, "SceneKit.SCNMatrix4")) {
+			convertedValue = [NSValue valueWithSCNMatrix4: *(SCNMatrix4 *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "SceneKit.SCNVector3")) {
+			convertedValue = [NSValue valueWithSCNVector3: *(SCNVector3 *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "SceneKit.SCNVector4")) {
+			convertedValue = [NSValue valueWithSCNVector4: *(SCNVector4 *) mono_object_unbox (value)];
+#if HAVE_UIKIT
+		} else if (!strcmp (to_name, "UIKit.UIEdgeInsets")) {
+			convertedValue = [NSValue valueWithUIEdgeInsets: *(UIEdgeInsets *) mono_object_unbox (value)];
+		} else if (!strcmp (to_name, "UIKit.UIOffset")) {
+			convertedValue = [NSValue valueWithUIOffset: *(UIOffset *) mono_object_unbox (value)];
+#endif
+		} else {
+			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
+			goto exception_handling;
+		}
+#undef NSVALUE_TEMPLATE
+	} else {
+		*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
+		goto exception_handling;
+	}
+
+exception_handling:
+	xamarin_free (to_name);
+
+	return convertedValue;
+}
+
+guint32
+xamarin_create_bindas_exception (MonoType *inputType, MonoType *outputType, MonoMethod *method)
+{
+	guint32 exception_gchandle;
+	char *to_name = NULL;
+	char *from_name = NULL;
+	char *method_full_name = NULL;
+	char *msg = NULL;
+
+	// throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+	from_name = xamarin_type_get_full_name (inputType, &exception_gchandle);
+	if (exception_gchandle != 0)
+		goto exception_handling;
+	to_name = xamarin_type_get_full_name (outputType, &exception_gchandle);
+	if (exception_gchandle != 0)
+		goto exception_handling;
+
+	method_full_name = mono_method_full_name (method, TRUE);
+	msg = xamarin_strdup_printf ("Internal error: can't convert from '%s' to '%s' in %s. Please file a bug report with a test case (https://bugzilla.xamarin.com).",
+										from_name, to_name, method_full_name);
+	exception_gchandle = mono_gchandle_new ((MonoObject *) xamarin_create_exception (msg), false);
+
+exception_handling:
+	xamarin_free (to_name);
+	xamarin_free (from_name);
+	xamarin_free (method_full_name);
+	xamarin_free (msg);
+	return exception_gchandle;
 }

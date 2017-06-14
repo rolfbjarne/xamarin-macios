@@ -556,10 +556,10 @@ namespace XamCore.ObjCRuntime {
 			return ((Selector) ObjectWrapper.Convert (sel)).Handle;
 		}
 
-		static UnmanagedMethodDescription GetMethodForSelector (IntPtr cls, IntPtr sel)
+		static void GetMethodForSelector (IntPtr cls, IntPtr sel, IntPtr desc)
 		{
 			// This is called by the old registrar code.
-			return Registrar.GetMethodDescription (Class.Lookup (cls), sel);
+			Registrar.GetMethodDescription (Class.Lookup (cls), sel, desc);
 		}
 
 		static IntPtr GetNSObjectWrapped (IntPtr ptr)
@@ -675,9 +675,9 @@ namespace XamCore.ObjCRuntime {
 			return parameters [parameter].IsOut;
 		}
 
-		static UnmanagedMethodDescription GetMethodAndObjectForSelector (IntPtr klass, IntPtr sel, IntPtr obj, ref IntPtr mthis)
+		static void GetMethodAndObjectForSelector (IntPtr klass, IntPtr sel, IntPtr obj, ref IntPtr mthis, IntPtr desc)
 		{
-			return Registrar.GetMethodDescriptionAndObject (Class.Lookup (klass), sel, obj, ref mthis);
+			Registrar.GetMethodDescriptionAndObject (Class.Lookup (klass), sel, obj, ref mthis, desc);
 		}
 
 		static int CreateProductException (int code, string msg)

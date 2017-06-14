@@ -54,6 +54,15 @@ char *xamarin_get_mono_runtime_build_info (); // returns NULL if libmono couldn'
 /* utils/mono-publib.h */
 #define MONO_API
 typedef int32_t	mono_bool;
+typedef uint8_t mono_byte;
+
+#ifndef MONO_ZERO_LEN_ARRAY
+#ifdef __GNUC__
+#define MONO_ZERO_LEN_ARRAY 0
+#else
+#define MONO_ZERO_LEN_ARRAY 1
+#endif
+#endif
 
 /* metadata/image.h */
 typedef struct _MonoAssembly MonoAssembly;
@@ -169,6 +178,21 @@ typedef void  (*MonoUnhandledExceptionFunc)         (MonoObject *exc, gpointer u
 
 typedef unsigned char* (*MonoLoadAotDataFunc)          (MonoAssembly *assembly, int size, gpointer user_data, void **out_handle);
 typedef void  (*MonoFreeAotDataFunc)          (MonoAssembly *assembly, int size, gpointer user_data, void *handle);
+
+/* metadata/reflection.h */
+
+typedef struct {
+	MonoMethod *ctor;
+	uint32_t     data_size;
+	const mono_byte* data;
+} MonoCustomAttrEntry;
+
+typedef struct {
+	int num_attrs;
+	int cached;
+	MonoImage *image;
+	MonoCustomAttrEntry attrs [MONO_ZERO_LEN_ARRAY];
+} MonoCustomAttrInfo;
 
 /*
  * From internal headers

@@ -84,8 +84,18 @@ struct MTRegistrationMap {
 };
 
 typedef struct {
+	MonoReflectionType *original_type;
+} BindAsData;
+
+typedef struct {
 	MonoReflectionMethod *method;
 	int32_t semantic;
+	int32_t bindas_count; // The number of elements available in the bindas_types array.
+	// An array of BindAs original types. Element 0 is for the return value,
+	// the rest are for parameters (parameters start at 1 even for void methods).
+	// The array must contain space for the return value and all the parameters,
+	// even for those that don't have BindAs attributes (the original_type entry will be NULL).
+	BindAsData bindas[];
 } MethodDescription;
 
 // This has a managed equivalent in NSObject2.cs
@@ -122,6 +132,8 @@ int				xamarin_objc_type_size (const char *type);
 bool			xamarin_is_class_nsobject (MonoClass *cls);
 bool			xamarin_is_class_inativeobject (MonoClass *cls);
 bool			xamarin_is_class_array (MonoClass *cls);
+bool			xamarin_is_class_nsnumber (MonoClass *cls);
+bool			xamarin_is_class_nsvalue (MonoClass *cls);
 MonoType *		xamarin_get_parameter_type (MonoMethod *managed_method, int index);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr (id self, bool owns, MonoType* type, guint32 *exception_gchandle);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr_created (id self, bool owns, MonoType *type, int32_t *created, guint32 *exception_gchandle);
@@ -136,8 +148,10 @@ void			xamarin_rethrow_managed_exception (guint32 original_gchandle, guint32 *ex
 MonoException *	xamarin_create_exception (const char *msg);
 id				xamarin_get_handle (MonoObject *obj, guint32 *exception_gchandle);
 char *			xamarin_strdup_printf (const char *msg, ...);
+void *			xamarin_calloc (size_t size);
 void			xamarin_free (void *ptr);
 MonoMethod *	xamarin_get_reflection_method_method (MonoReflectionMethod *method);
+// bool			xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoType **original_type);
 void			xamarin_framework_peer_lock ();
 void			xamarin_framework_peer_unlock ();
 bool			xamarin_file_exists (const char *path);
@@ -182,6 +196,9 @@ void			xamarin_throw_product_exception (int code, const char *message);
 NSString *		xamarin_print_all_exceptions (MonoObject *exc);
 
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
+id				xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle);
+void *			xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle, /*SList*/ void **free_list);
+guint32			xamarin_create_bindas_exception (MonoType *inputType, MonoType *outputType, MonoMethod *method);
 
 bool			xamarin_is_managed_exception_marshaling_disabled ();
 
@@ -225,7 +242,7 @@ MonoObject*					xamarin_get_class							(Class ptr, guint32 *exception_gchandle)
 MonoObject*					xamarin_get_selector						(SEL ptr, guint32 *exception_gchandle);
 Class						xamarin_get_class_handle					(MonoObject *obj, guint32 *exception_gchandle);
 SEL							xamarin_get_selector_handle					(MonoObject *obj, guint32 *exception_gchandle);
-MethodDescription			xamarin_get_method_for_selector				(Class cls, SEL sel, guint32 *exception_gchandle);
+void						xamarin_get_method_for_selector				(Class cls, SEL sel, MethodDescription *desc, guint32 *exception_gchandle);
 bool						xamarin_has_nsobject 						(id obj, guint32 *exception_gchandle);
 MonoObject*					xamarin_get_nsobject 						(id obj, guint32 *exception_gchandle);
 id							xamarin_get_handle_for_inativeobject		(MonoObject *obj, guint32 *exception_gchandle);
@@ -239,7 +256,7 @@ MonoObject*					xamarin_get_nsobject_with_type				(id obj, void *type, int32_t *
 void						xamarin_dispose								(MonoObject *mobj, guint32 *exception_gchandle);
 bool	 					xamarin_is_parameter_transient				(MonoReflectionMethod *method, int parameter /* 0-based */, guint32 *exception_gchandle);
 bool						xamarin_is_parameter_out                    (MonoReflectionMethod *method, int parameter /* 0-based */, guint32 *exception_gchandle);
-MethodDescription			xamarin_get_method_and_object_for_selector	(Class cls, SEL sel, id self, MonoObject **mthis, guint32 *exception_gchandle);
+void						xamarin_get_method_and_object_for_selector	(Class cls, SEL sel, id self, MonoObject **mthis, MethodDescription *desc, guint32 *exception_gchandle);
 guint32 					xamarin_create_product_exception_for_error	(int code, const char *message, guint32 *exception_gchandle);
 
 #ifdef __cplusplus

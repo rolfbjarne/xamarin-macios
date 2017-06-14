@@ -85,6 +85,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 #if !MONOMAC
+
 		[Test]
 		public void TestProperties ()
 		{

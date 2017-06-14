@@ -209,6 +209,49 @@ namespace XamCore.Registrar {
 			return assembly.GetTypes ();
 		}
 
+		protected override BindAsAttribute GetNativeTypeAttribute (MethodBase method, int parameter_index)
+		{
+			ICustomAttributeProvider provider;
+
+			if (method == null)
+				return null;
+
+			var minfo = method as MethodInfo;
+			if (minfo != null) {
+				minfo = minfo.GetBaseDefinition ();
+				if (parameter_index == -1) {
+					provider = minfo.ReturnTypeCustomAttributes;
+				} else {
+					provider = minfo.GetParameters () [parameter_index];
+				}
+			} else {
+				var cinfo = method as ConstructorInfo;
+				if (parameter_index == -1) {
+					throw new Exception ();
+				} else {
+					provider = cinfo.GetParameters () [parameter_index];
+				}
+			}
+
+			var attribs = provider.GetCustomAttributes (typeof (BindAsAttribute), false);
+			if (attribs.Length == 0)
+				return null;
+
+			if (attribs.Length != 1)
+				throw new AmbiguousMatchException ();
+
+			return (BindAsAttribute) attribs [0];
+		}
+
+		protected override Type GetNullableType (Type type)
+		{
+			if (!type.IsGenericType)
+				return null;
+			if (type.GetGenericTypeDefinition () != typeof (Nullable<>))
+				return null;
+			return type.GetGenericArguments () [0];
+		}
+
 		protected override ConnectAttribute GetConnectAttribute (PropertyInfo property)
 		{
 			return SharedDynamic.GetOneAttribute<ConnectAttribute> (property);
@@ -809,25 +852,25 @@ namespace XamCore.Registrar {
 				custom_type_map [type] = null;
 		}
 
-		public UnmanagedMethodDescription GetMethodDescriptionAndObject (Type type, IntPtr selector, IntPtr obj, ref IntPtr mthis)
+		public void GetMethodDescriptionAndObject (Type type, IntPtr selector, IntPtr obj, ref IntPtr mthis, IntPtr desc)
 		{
 			var sel = new Selector (selector);
 			var res = GetMethodNoThrow (type, type, sel.Name);
 			if (res == null)
 				throw ErrorHelper.CreateError (8006, "Failed to find the selector '{0}' on the type '{1}'", sel.Name, type.FullName);
 
-			var md = res.MethodDescription;
-
-			if (md.IsInstanceCategory) {
+			if (res.IsInstanceCategory) {
 				mthis = IntPtr.Zero;
 			} else {
 				var nsobj = Runtime.GetNSObject (obj, Runtime.MissingCtorResolution.ThrowConstructor1NotFound, true);
 				mthis = ObjectWrapper.Convert (nsobj);
-				if (res.Method.ContainsGenericParameters)
-					return new MethodDescription (FindClosedMethod (nsobj.GetType (), res.Method), res.ArgumentSemantic).GetUnmanagedDescription ();
+				if (res.Method.ContainsGenericParameters) {
+					res.WriteUnmanagedDescription (desc, FindClosedMethod (nsobj.GetType (), res.Method));
+					return;
+				}
 			}
 
-			return md.GetUnmanagedDescription ();
+			res.WriteUnmanagedDescription (desc);
 		}
 
 		internal static MethodInfo FindClosedMethod (Type closed_type, MethodBase open_method)
@@ -856,7 +899,7 @@ namespace XamCore.Registrar {
 			throw ErrorHelper.CreateError (8003, "Failed to find the closed generic method '{0}' on the type '{1}'.", open_method.Name, closed_type.FullName);
 		}
 
-		public UnmanagedMethodDescription GetMethodDescription (Type type, IntPtr selector)
+		public void GetMethodDescription (Type type, IntPtr selector, IntPtr desc)
 		{
 			var sel = new Selector (selector);
 			var res = GetMethodNoThrow (type, type, sel.Name);
@@ -865,7 +908,7 @@ namespace XamCore.Registrar {
 			if (type.IsGenericType && res.Method is ConstructorInfo)
 				throw ErrorHelper.CreateError (4133, "Cannot construct an instance of the type '{0}' from Objective-C because the type is generic.", type.FullName);
 
-			return res.MethodDescription.GetUnmanagedDescription ();
+			res.WriteUnmanagedDescription (desc);
 		}
 
 		ObjCMethod GetMethodNoThrow (Type original_type, Type type, string selector)

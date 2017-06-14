@@ -1481,6 +1481,50 @@ namespace XamCore.Registrar {
 			return null;
 		}
 
+		protected override BindAsAttribute GetNativeTypeAttribute (MethodDefinition method, int parameter_index)
+		{
+			CustomAttribute attrib;
+
+			if (method == null)
+				return null;
+
+			method = GetBaseMethodInTypeHierarchy (method);
+
+			if (!SharedStatic.TryGetAttributeImpl (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
+				return null;
+
+			TypeDefinition originalType = null;
+			if (attrib.HasFields) {
+				foreach (var field in attrib.Fields) {
+					switch (field.Name) {
+					case "OriginalType":
+						originalType = ((TypeReference) field.Argument.Value)?.Resolve ();
+						break;
+					default:
+						throw ErrorHelper.CreateError (4124, "Invalid BindAsAttribute found on '{0}.{1}': unknown field {2}. Please file a bug report at https://bugzilla.xamarin.com", method.DeclaringType.FullName, method.Name, field.Name);
+					}
+				}
+			}
+
+			switch (attrib.ConstructorArguments.Count) {
+			case 1:
+				var t1 = (TypeReference) attrib.ConstructorArguments [0].Value;
+				return new BindAsAttribute (t1 != null ? t1.Resolve () : null) { OriginalType = originalType };
+			default:
+				throw ErrorHelper.CreateError (4124, "Invalid BindAsAttribute found on '{0}.{1}'. Please file a bug report at https://bugzilla.xamarin.com", method.DeclaringType.FullName, method.Name);
+			}
+		}
+
+		protected override TypeReference GetNullableType (TypeReference type)
+		{
+			var git = type as GenericInstanceType;
+			if (git == null)
+				return null;
+			if (!git.GetElementType ().Is ("System", "Nullable`1"))
+				return null;
+			return git.GenericArguments [0];
+		}
+
 		protected override ConnectAttribute GetConnectAttribute (PropertyDefinition property)
 		{
 			CustomAttribute attrib;
@@ -2132,7 +2176,7 @@ namespace XamCore.Registrar {
 
 			sb.Append ((method.IsStatic && !method.IsCategoryInstance) ? '+' : '-');
 			sb.Append ('(');
-			sb.Append (isCtor ? "id" : this.ToObjCParameterType (method.ReturnType, GetDescriptiveMethodName (method.Method), exceptions, method.Method));
+			sb.Append (isCtor ? "id" : this.ToObjCParameterType (method.NativeReturnType, GetDescriptiveMethodName (method.Method), exceptions, method.Method));
 			sb.Append (')');
 
 			var split = method.Selector.Split (':');
@@ -2147,7 +2191,7 @@ namespace XamCore.Registrar {
 					sb.Append (split [i]);
 					sb.Append (':');
 					sb.Append ('(');
-					sb.Append (ToObjCParameterType (method.Parameters [i + indexOffset], method.DescriptiveMethodName, exceptions, method.Method));
+					sb.Append (ToObjCParameterType (method.NativeParameters [i + indexOffset], method.DescriptiveMethodName, exceptions, method.Method));
 					sb.Append (')');
 					sb.AppendFormat ("p{0}", i);
 				}
@@ -2710,7 +2754,7 @@ namespace XamCore.Registrar {
 			}
 
 			var rettype = string.Empty;
-			var returntype = method.Method.ReturnType;
+			var returntype = method.ReturnType;
 			var isStatic = method.IsStatic;
 			var isInstanceCategory = method.IsCategoryInstance;
 			var isCtor = false;
@@ -2734,7 +2778,7 @@ namespace XamCore.Registrar {
 			case Trampoline.X86_DoubleABI_StretTrampoline:
 			case Trampoline.StaticStret:
 			case Trampoline.Stret:
-				switch (returntype.FullName) {
+				switch (method.NativeReturnType.FullName) {
 				case "System.Int64":
 					rettype = "long long";
 					break;
@@ -2748,7 +2792,7 @@ namespace XamCore.Registrar {
 					rettype = "double";
 					break;
 				default:
-					rettype = ToObjCParameterType (returntype, descriptiveMethodName, exceptions, method.Method);
+					rettype = ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method);
 					break;
 				}
 				break;
@@ -2893,7 +2937,8 @@ namespace XamCore.Registrar {
 				var param = method.Method.Parameters [i];
 				var paramBase = baseMethod.Parameters [i];
 				var type = method.Parameters [i];
-				var objctype = ToObjCParameterType (type, descriptiveMethodName, exceptions, method.Method);
+				var nativetype = method.NativeParameters [i];
+				var objctype = ToObjCParameterType (nativetype, descriptiveMethodName, exceptions, method.Method);
 				var original_objctype = objctype;
 				var isRef = type.IsByReference;
 				var isOut = param.IsOut || paramBase.IsOut;
@@ -2902,7 +2947,12 @@ namespace XamCore.Registrar {
 				var td = type.Resolve ();
 				var isVariadic = i + 1 == num_arg && method.IsVariadic;
 
-				if (isRef) {
+				if (type != nativetype) {
+					GenerateConversionToManaged (nativetype, type, setup_call_stack, descriptiveMethodName, ref exceptions, method, $"p{i}", $"arg_ptrs [{i}]", $"mono_class_from_mono_type (xamarin_get_parameter_type (managed_method, {i}))");
+					if (isRef || isOut)
+						throw new Exception ();
+					continue;
+				} else if (isRef) {
 					type = type.GetElementType ();
 					td = type.Resolve ();
 					original_objctype = ToObjCParameterType (type, descriptiveMethodName, exceptions,  method.Method);
@@ -3273,7 +3323,9 @@ namespace XamCore.Registrar {
 				var type = returntype.Resolve () ?? returntype;
 				var retain = method.RetainReturnValue;
 
-				if (returntype.IsValueType) {
+				if (returntype != method.NativeReturnType) {
+					GenerateConversionToNative (returntype, method.NativeReturnType, setup_return, descriptiveMethodName, ref exceptions, method, "retval", "res");
+				} else if (returntype.IsValueType) {
 					setup_return.AppendLine ("res = *({0} *) mono_object_unbox ((MonoObject *) retval);", rettype);
 				} else if (isArray) {
 					var elementType = ((ArrayType) returntype).ElementType;
@@ -3301,7 +3353,7 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("goto exception_handling;");
 						setup_return.AppendLine ("}");
 					} else {
-						throw ErrorHelper.CreateError (App, 4111, method.Method, "The registrar cannot build a signature for type `{0}' in method `{1}`.", returntype.FullName, descriptiveMethodName);
+						throw ErrorHelper.CreateError (App, 4111, method.Method, "The registrar cannot build a signature for type `{0}' in method `{1}`.", method.NativeReturnType.FullName, descriptiveMethodName);
 					}
 					
 					setup_return.AppendLine ("}");
@@ -3472,8 +3524,8 @@ namespace XamCore.Registrar {
 
 			var objc_signature = new StringBuilder ().Append (rettype).Append (":");
 			if (method.Method.HasParameters) {
-				for (int i = 0; i < method.Method.Parameters.Count; i++)
-					objc_signature.Append (ToObjCParameterType (method.Method.Parameters [i].ParameterType, descriptiveMethodName, exceptions, method.Method)).Append (":");
+				for (int i = 0; i < method.NativeParameters.Length; i++)
+					objc_signature.Append (ToObjCParameterType (method.NativeParameters [i], descriptiveMethodName, exceptions, method.Method)).Append (":");
 			}
 
 			Body existing;
@@ -3494,9 +3546,9 @@ namespace XamCore.Registrar {
 				if (merge_bodies) {
 					methods.Append ("static ");
 					methods.Append (rettype).Append (" ").Append (b.Name).Append (" (id self, SEL _cmd, MonoMethod **managed_method_ptr");
-					var pcount = method.Method.HasParameters ? method.Method.Parameters.Count : 0;
+					var pcount = method.Method.HasParameters ? method.NativeParameters.Length : 0;
 					for (int i = (isInstanceCategory ? 1 : 0); i < pcount; i++) {
-						methods.Append (", ").Append (ToObjCParameterType (method.Method.Parameters [i].ParameterType, descriptiveMethodName, exceptions, method.Method));
+						methods.Append (", ").Append (ToObjCParameterType (method.NativeParameters [i], descriptiveMethodName, exceptions, method.Method));
 						methods.Append (" ").Append ("p").Append (i.ToString ());
 					}
 					if (isCtor)
@@ -3561,6 +3613,288 @@ namespace XamCore.Registrar {
 			} else {
 				sb.WriteLine (body);
 			}
+		}
+
+		void GenerateConversionToManaged (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string parameterClass)
+		{
+			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
+			// These methods must be kept in sync.
+
+			var nullableType = GetNullableType (outputType);
+			var isNullable = nullableType != null;
+			var underlyingType = nullableType ?? outputType;
+
+			if (isNullable)
+				sb.AppendLine ($"if ({inputName}) {{");
+
+			var nativeElementType = ToObjCParameterType (underlyingType, descriptiveMethodName, exceptions, method.Method);
+			var tmpName = $"{inputName}__tmp";
+			body_setup.AppendLine ($"{nativeElementType} {tmpName};");
+
+			if (inputType.Is (Foundation, "NSNumber")) {
+				switch (underlyingType.FullName) {
+				case "System.SByte":
+					sb.AppendLine ($"{tmpName} = [{inputName} charValue];");
+					break;
+				case "System.Byte":
+					sb.AppendLine ($"{tmpName} = [{inputName} unsignedCharValue];");
+					break;
+				case "System.Int16":
+					sb.AppendLine ($"{tmpName} = [{inputName} shortValue];");
+					break;
+				case "System.UInt16":
+					sb.AppendLine ($"{tmpName} = [{inputName} unsignedShortValue];");
+					break;
+				case "System.Int32":
+					sb.AppendLine ($"{tmpName} = [{inputName} intValue];");
+					break;
+				case "System.UInt32":
+					sb.AppendLine ($"{tmpName} = [{inputName} unsignedIntValue];");
+					break;
+				case "System.Int64":
+					sb.AppendLine ($"{tmpName} = [{inputName} longLongValue];");
+					break;
+				case "System.UInt64":
+					sb.AppendLine ($"{tmpName} = [{inputName} unsignedLongLongValue];");
+					break;
+				case "System.nint":
+					sb.AppendLine ($"{tmpName} = [{inputName} integerValue];");
+					break;
+				case "System.nuint":
+					sb.AppendLine ($"{tmpName} = [{inputName} unsignedIntegerValue];");
+					break;
+				case "System.Single":
+					sb.AppendLine ($"{tmpName} = [{inputName} floatValue];");
+					break;
+				case "System.Double":
+					sb.AppendLine ($"{tmpName} = [{inputName} doubleValue];");
+					break;
+				case "System.nfloat":
+					sb.AppendLine ("#if __POINTER_WIDTH__ == 32");
+					sb.AppendLine ($"{tmpName} = [{inputName} floatValue];");
+					sb.AppendLine ("#elif __POINTER_WIDTH__ == 64");
+					sb.AppendLine ($"{tmpName} = [{inputName} doubleValue];");
+					sb.AppendLine ("#else");
+					sb.AppendLine ("#error Invalid pointer size. Please file a bug at https://bugzilla.xamarin.com with a test project.");
+					sb.AppendLine ("#endif");
+					break;
+				case "System.Boolean":
+					sb.AppendLine ($"{tmpName} = [{inputName} boolValue];");
+					break;
+				default:
+					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+				}
+			} else if (inputType.Is (Foundation, "NSValue")) {
+				var underlyingTypeName = underlyingType.FullName;
+
+				// Remove 'MonoMac.' namespace prefix to make switch smaller
+				if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+					underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
+
+				switch (underlyingTypeName) {
+				case "Foundation.NSRange":
+					sb.AppendLine ($"{tmpName} = [{inputName} rangeValue];");
+					break;
+				case "CoreGraphics.CGAffineTransform":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGAffineTransformValue];");
+					break;
+				case "CoreGraphics.CGPoint":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGPointValue];");
+					break;
+				case "CoreGraphics.CGRect":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGRectValue];");
+					break;
+				case "CoreGraphics.CGSize":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGSizeValue];");
+					break;
+				case "CoreGraphics.CGVector":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGVectorValue];");
+					break;
+				case "CoreAnimation.CATransform3D":
+					sb.AppendLine ($"{tmpName} = [{inputName} CATransform3DValue];");
+					break;
+				case "CoreLocation.CLLocationCoordinate2D":
+					sb.AppendLine ($"{tmpName} = [{inputName} MKCoordinateValue];");
+					break;
+				case "CoreMedia.CMTime":
+					sb.AppendLine ($"{tmpName} = [{inputName} CMTimeValue];");
+					break;
+				case "CoreMedia.CMTimeMapping":
+					sb.AppendLine ($"{tmpName} = [{inputName} CMTimeMappingValue];");
+					break;
+				case "CoreMedia.CMTimeRange":
+					sb.AppendLine ($"{tmpName} = [{inputName} CMTimeRangeValue];");
+					break;
+				case "MapKit.MKCoordinateSpan":
+					sb.AppendLine ($"{tmpName} = [{inputName} MKCoordinateSpanValue];");
+					break;
+				case "SceneKit.SCNMatrix4":
+					sb.AppendLine ($"{tmpName} = [{inputName} SCNMatrix4Value];");
+					break;
+				case "SceneKit.SCNVector3":
+					sb.AppendLine ($"{tmpName} = [{inputName} SCNVector3Value];");
+					break;
+				case "SceneKit.SCNVector4":
+					sb.AppendLine ($"{tmpName} = [{inputName} SCNVector4Value];");
+					break;
+				case "UIKit.UIEdgeInsets":
+					sb.AppendLine ($"{tmpName} = [{inputName} UIEdgeInsetsValue];");
+					break;
+				case "UIKit.UIOffset":
+					sb.AppendLine ($"{tmpName} = [{inputName} UIOffsetValue];");
+					break;
+				default:
+					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+				}
+			} else {
+				throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+			}
+
+			if (isNullable) {
+				sb.AppendLine ($"{outputName} = mono_value_box (mono_domain_get (), mono_class_get_nullable_param ({parameterClass}), (void *) &{tmpName});");
+				sb.AppendLine ("} else {");
+				sb.AppendLine ($"{outputName} = NULL;");
+				sb.AppendLine ("}");
+			} else {
+				sb.AppendLine ($"{outputName} = &{tmpName};");
+			}
+		}
+
+		void GenerateConversionToNative (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName)
+		{
+			// This is a mirror of the native method xamarin_generate_conversion_to_native (for the dynamic registrar).
+			// These methods must be kept in sync.
+
+			var nullableType = GetNullableType (inputType);
+			var isNullable = nullableType != null;
+			var underlyingType = nullableType ?? inputType;
+
+			if (isNullable)
+				sb.AppendLine ($"if ({inputName}) {{");
+
+			var nativeElementType = ToObjCParameterType (underlyingType, descriptiveMethodName, exceptions, method.Method);
+
+			if (outputType.Is (Foundation, "NSNumber")) {
+				switch (underlyingType.FullName) {
+				case "System.SByte":
+					sb.AppendLine ("{1} = [NSNumber numberWithChar: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Byte":
+					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedChar: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Int16":
+					sb.AppendLine ("{1} = [NSNumber numberWithShort: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.UInt16":
+					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedShort: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Int32":
+					sb.AppendLine ("{1} = [NSNumber numberWithInt: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.UInt32":
+					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedInt: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Int64":
+					sb.AppendLine ("{1} = [NSNumber numberWithLongLong: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.UInt64":
+					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedLongLong: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.nint":
+					sb.AppendLine ("{1} = [NSNumber numberWithInteger: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.nuint":
+					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedInteger: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Single":
+					sb.AppendLine ("{1} = [NSNumber numberWithFloat: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Double":
+					sb.AppendLine ("{1} = [NSNumber numberWithDouble: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.nfloat":
+					sb.AppendLine ("#if __POINTER_WIDTH__ == 32");
+					sb.AppendLine ("{1} = [NSNumber numberWithFloat: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					sb.AppendLine ("#elif __POINTER_WIDTH__ == 64");
+					sb.AppendLine ("{1} = [NSNumber numberWithDouble: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					sb.AppendLine ("#else");
+					sb.AppendLine ("#error Invalid pointer size. Please file a bug at https://bugzilla.xamarin.com with a test project.");
+					sb.AppendLine ("#endif");
+					break;
+				case "System.Boolean":
+					sb.AppendLine ("{1} = [NSNumber numberWithBool: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				default:
+					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+				}
+			} else if (outputType.Is (Foundation, "NSValue")) {
+				var underlyingTypeName = underlyingType.FullName;
+
+				// Remove 'MonoMac.' namespace prefix to make switch smaller
+				if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+					underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
+
+				switch (underlyingTypeName) {
+				case "Foundation.NSRange":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithRange: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGAffineTransform":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGAffineTransform: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGPoint":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGPoint: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGRect":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGRect: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGSize":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGSize: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGVector":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGVector: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreAnimation.CATransform3D":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCATransform3D: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreLocation.CLLocationCoordinate2D":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithMKCoordinate: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreMedia.CMTime":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCMTime: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreMedia.CMTimeMapping":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCMTimeMapping: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreMedia.CMTimeRange":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCMTimeRange: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "MapKit.MKCoordinateSpan":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithMKCoordinateSpan: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "SceneKit.SCNMatrix4":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNMatrix4: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "SceneKit.SCNVector3":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNVector3: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "SceneKit.SCNVector4":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNVector4: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "UIKit.UIEdgeInsets":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithUIEdgeInsets: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "UIKit.UIOffset":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithUIOffset: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				default:
+					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+				}
+			} else {
+				throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+			}
+
+			if (isNullable)
+				sb.AppendLine ("}");
 		}
 
 		class Body {
@@ -3853,6 +4187,17 @@ namespace XamCore.Registrar {
 		public string Name { get; set; }
 		public bool IsInformal { get; set; }
 		public Version FormalSinceVersion { get; set; }
+	}
+
+	class BindAsAttribute : Attribute
+	{
+		public BindAsAttribute (TypeDefinition type)
+		{
+			this.Type = type;
+		}
+
+		public TypeDefinition Type { get; set; }
+		public TypeDefinition OriginalType { get; set; }
 	}
 
 	public sealed class ProtocolMemberAttribute : Attribute {

@@ -7,6 +7,7 @@ using System.Drawing;
 using ObjCRuntime;
 using Foundation;
 using UIKit;
+using CoreGraphics;
 #else
 using MonoTouch.ObjCRuntime;
 using MonoTouch.Foundation;
@@ -202,7 +203,6 @@ namespace Bindings.Test {
 
 		[Export ("idAsIntPtr:")]
 		void IdAsIntPtr (IntPtr id);
-
 	}
 
 	[BaseType (typeof (NSObject))]

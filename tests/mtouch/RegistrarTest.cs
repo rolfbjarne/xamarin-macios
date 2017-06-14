@@ -699,6 +699,68 @@ class X : ReplayKit.RPBroadcastControllerDelegate
 		}
 
 		[Test]
+		public void MT4169 ()
+		{
+			using (var mtouch = new MTouchTool ()) {
+				var code = @"
+				namespace NS {
+					using System;
+					using Foundation;
+					using ObjCRuntime;
+					class X : NSObject {
+						[Export (""a:"")]
+						void A ([BindAs (typeof (ConsoleColor), OriginalType = typeof (NSNumber))] ConsoleColor value) {}
+						[Export (""b:"")]
+						void B ([BindAs (typeof (ConsoleColor?), OriginalType = typeof (NSNumber))] ConsoleColor? value) {}
+						[Export (""c:"")]
+						void C ([BindAs (typeof (int[]), OriginalType = typeof (NSNumber[]))] int[] value) {}
+						[Export (""d:"")]
+						void D ([BindAs (typeof (int?[]), OriginalType = typeof (NSNumber[]))] int?[] value) {}
+						[Export (""e:"")]
+						void E ([BindAs (typeof (int), OriginalType = typeof (NSNumber))] ref int value) {}
+						[Export (""f:"")]
+						void F ([BindAs (typeof (int), OriginalType = typeof (NSNumber))] out int value) { throw new NotImplementedException (); }
+						[Export (""g:"")]
+						void E ([BindAs (typeof (int[,]), OriginalType = typeof (NSNumber[,]))] int[,] value) {}
+					}
+				}";
+				mtouch.Linker = MTouchLinker.DontLink; // faster
+				mtouch.Registrar = MTouchRegistrar.Static;
+				mtouch.CreateTemporaryApp (extraCode: code, extraArg: "-debug");
+				mtouch.AssertExecuteFailure (MTouchAction.BuildSim, "build");
+				mtouch.AssertError (4169, "The registrar can't convert from 'System.ConsoleColor' to 'Foundation.NSNumber' for the parameter 'value' in the method NS.X.A.", "testApp.cs", 8);
+				mtouch.AssertError (4169, "The registrar can't convert from 'System.Nullable`1<System.ConsoleColor>' to 'Foundation.NSNumber' for the parameter 'value' in the method NS.X.B.", "testApp.cs", 10);
+			}
+		}
+
+		[Test]
+		public void MT4170 ()
+		{
+			using (var mtouch = new MTouchTool ()) {
+				var code = @"
+				namespace NS {
+					using System;
+					using Foundation;
+					using ObjCRuntime;
+					class X : NSObject {
+						[Export (""a"")]
+						[return: BindAs (typeof (ConsoleColor), OriginalType = typeof (NSNumber))] 
+						ConsoleColor A () { throw new NotImplementedException (); }
+						[Export (""b"")]
+						[return: BindAs (typeof (ConsoleColor?), OriginalType = typeof (NSNumber))] 
+						ConsoleColor? B () { throw new NotImplementedException (); }
+					}
+				}";
+				mtouch.Linker = MTouchLinker.DontLink; // faster
+				mtouch.Registrar = MTouchRegistrar.Static;
+				mtouch.CreateTemporaryApp (extraCode: code, extraArg: "-debug");
+				mtouch.AssertExecuteFailure (MTouchAction.BuildSim, "build");
+				mtouch.AssertError (4170, "The registrar can't convert from 'System.ConsoleColor' to 'Foundation.NSNumber' for the return value in the method NS.X.A.", "testApp.cs", 9);
+				mtouch.AssertError (4170, "The registrar can't convert from 'System.Nullable`1<System.ConsoleColor>' to 'Foundation.NSNumber' for the return value in the method NS.X.B.", "testApp.cs", 12);
+			}
+		}
+
+		[Test]
 		public void NoWarnings ()
 		{
 			using (var mtouch = new MTouchTool ()) {

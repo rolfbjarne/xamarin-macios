@@ -1267,14 +1267,14 @@ public partial class Generator : IMemberGatherer {
 			}
 			temp = string.Format ("{3}NSValue.From{0} ({2}{1});", typeStr, denullify, parameterName, nullCheck);
 		} else if (originalType == TypeManager.NSString && IsSmartEnum (retType)) {
-			temp = string.Format ("{1}{0}.GetConstant ();", denullify, parameterName);
+			temp = $"{parameterName}.GetConstant ();";
 		} else if (originalType.IsArray) {
 			var arrType = originalType.GetElementType ();
 			var arrRetType = TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) ?? retType.GetElementType ();
 			var valueConverter = string.Empty;
 
 			if (arrType == TypeManager.NSString)
-				valueConverter = $"o{denullify}.GetConstant (), {parameterName});";
+				valueConverter = $"o.GetConstant (), {parameterName});";
 			else if (arrType == TypeManager.NSNumber) {
 				var cast = arrRetType.IsEnum ? "(int)" : string.Empty;
 				valueConverter = $"new NSNumber ({cast}o{denullify}), {parameterName});";
@@ -1387,7 +1387,7 @@ public partial class Generator : IMemberGatherer {
 						throw new BindingException (1049, true, GetBindAsExceptionString ("unbox", retType.Name, originalReturnType.Name, "container", minfo.mi.Name));
 				}
 				else
-					throw new BindingException (1049, true, GetBindAsExceptionString ("unbox", retType.Name, originalReturnType.Name, "container", minfo.mi.Name));
+					throw new BindingException (1049, true, GetBindAsExceptionString ("unbox ", retType.Name, originalReturnType.Name, "container", minfo.mi.Name));
 			}
 			if (isNullable)
 				append = $"?{append}";
@@ -1402,21 +1402,21 @@ public partial class Generator : IMemberGatherer {
 			if (isNullable)
 				append = $"?{append}";
 		} else if (originalReturnType == TypeManager.NSString && IsSmartEnum (retType)) {
-			append = $"{FormatType (retType.DeclaringType, retType)}Extensions.GetValue (";
+			append = $"{FormatType (retType.DeclaringType, retType)}Extensions.{(isNullable ? "GetNullableValue" : "GetValue")} (";
 		} else if (originalReturnType.IsArray) {
 			var arrType = originalReturnType.GetElementType ();
 			var arrIsNullable = TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) != null;
 			var arrRetType = arrIsNullable ? TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) : retType.GetElementType ();
 			var valueFetcher = string.Empty;
 			if (arrType == TypeManager.NSString)
-				append = $"ptr => {{\n\tusing (var str = Runtime.GetNSObject<NSString> (ptr)) {{\n\t\treturn {FormatType (arrRetType.DeclaringType, arrRetType)}Extensions.GetValue (str);\n\t}}\n}}";
+				append = $"ptr => {{\n\tusing (var str = Runtime.GetNSObject<NSString> (ptr)) {{\n\t\treturn {FormatType (arrRetType.DeclaringType, arrRetType)}Extensions.{(isNullable ? "GetNullableValue" : "GetValue")} (str);\n\t}}\n}}";
 			else if (arrType == TypeManager.NSNumber) {
 				if (NSNumberReturnMap.TryGetValue (arrRetType, out valueFetcher) || arrRetType.IsEnum) {
 					var getterStr = string.Format ("{0}{1}", arrIsNullable ? "?" : string.Empty, arrRetType.IsEnum ? ".Int32Value" : valueFetcher);
 					append = string.Format ("ptr => {{\n\tusing (var num = Runtime.GetNSObject<NSNumber> (ptr)) {{\n\t\treturn ({1}) num{0};\n\t}}\n}}", getterStr, FormatType (arrRetType.DeclaringType, arrRetType));
 				}
 				else
-					throw new BindingException (1049, true, GetBindAsExceptionString ("unbox", retType.Name, arrType.Name, "array", minfo.mi.Name));
+					throw new BindingException (1049, true, GetBindAsExceptionString ("unbox" , retType.Name, arrType.Name, "array", minfo.mi.Name));
 			} else if (arrType == TypeManager.NSValue) {
 				if (arrRetType.Name == "RectangleF" || arrRetType.Name == "SizeF" || arrRetType.Name == "PointF")
 					valueFetcher = $"{(arrIsNullable ? "?" : string.Empty)}.{arrRetType.Name}Value";
@@ -1952,12 +1952,12 @@ public partial class Generator : IMemberGatherer {
 
 		try {
 			if (Compat) {
-				bool arm_stret = Stret.ArmNeedStret (mi);
+				bool arm_stret = Stret.ArmNeedStret (mi.ReturnType);
 				bool is_aligned = AttributeManager.HasAttribute<AlignAttribute> (mi);
 				RegisterMethod (arm_stret, mi, MakeSig (mi, arm_stret, arm_stret && is_aligned), arm_stret && is_aligned);
 				RegisterMethod (arm_stret, mi, MakeSuperSig (mi, arm_stret, arm_stret && is_aligned), arm_stret && is_aligned);
 
-				bool x86_stret = Stret.X86NeedStret (mi);
+				bool x86_stret = Stret.X86NeedStret (mi.ReturnType);
 				if (x86_stret != arm_stret){
 					RegisterMethod (x86_stret, mi, MakeSig (mi, x86_stret, x86_stret && is_aligned), x86_stret && is_aligned);
 					RegisterMethod (x86_stret, mi, MakeSuperSig (mi, x86_stret, x86_stret && is_aligned), x86_stret && is_aligned);
@@ -3548,8 +3548,8 @@ public partial class Generator : IMemberGatherer {
 			return;
 		}
 
-		bool arm_stret = Stret.ArmNeedStret (mi);
-		bool x86_stret = Stret.X86NeedStret (mi);
+		bool arm_stret = Stret.ArmNeedStret (mi.ReturnType);
+		bool x86_stret = Stret.X86NeedStret (mi.ReturnType);
 		bool aligned = AttributeManager.HasAttribute<AlignAttribute> (mi);
 
 		if (CurrentPlatform == PlatformName.MacOSX) {
@@ -3575,9 +3575,9 @@ public partial class Generator : IMemberGatherer {
 
 	void GenerateNewStyleInvoke (bool supercall, MethodInfo mi, MemberInformation minfo, string selector, string[] args, bool assign_to_temp, Type category_type)
 	{
-		bool arm_stret = Stret.ArmNeedStret (mi);
-		bool x86_stret = Stret.X86NeedStret (mi);
-		bool x64_stret = Stret.X86_64NeedStret (mi);
+		bool arm_stret = Stret.ArmNeedStret (mi.ReturnType);
+		bool x86_stret = Stret.X86NeedStret (mi.ReturnType);
+		bool x64_stret = Stret.X86_64NeedStret (mi.ReturnType);
 		bool dual_enum = HasNativeEnumInSignature (mi);
 		bool is_stret_multi = arm_stret || x86_stret || x64_stret;
 		bool need_multi_path = is_stret_multi || dual_enum;
@@ -3928,7 +3928,7 @@ public partial class Generator : IMemberGatherer {
 	bool CheckNeedStret (MethodInfo mi)
 	{
 		try {
-			return Stret.NeedStret (mi);
+			return Stret.NeedStret (mi.ReturnType);
 		}
 		catch (TypeLoadException ex) {
 			throw new BindingException (0001, true, $"The .NET runtime could not load the {mi.ReturnType.Name} type. Message: {ex.Message}");

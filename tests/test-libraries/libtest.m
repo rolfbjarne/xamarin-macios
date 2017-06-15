@@ -199,6 +199,27 @@ static UltimateMachine *shared;
 	{
 		// Nothing to do here.
 	}
+
+
+	-(NSValue *) getCGPointValue
+	{
+		return self.PCGPointValue;
+	}
+
+	-(void) setCGPointValue: (NSValue *) value
+	{
+		self.PCGPointValue = value;
+	}
+
+	-(NSNumber *) getByteNumber
+	{
+		return self.PByteNumber;
+	}
+
+	-(void) setByteNumber: (NSNumber *) value
+	{
+		self.PByteNumber = value;
+	}
 @end
 
 @implementation ObjCExceptionTest

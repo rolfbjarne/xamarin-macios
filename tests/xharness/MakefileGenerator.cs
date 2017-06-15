@@ -267,7 +267,7 @@ namespace xharness
 
 		public static void CreateMakefile (Harness harness, IEnumerable<UnifiedTarget> unified_targets, IEnumerable<TVOSTarget> tvos_targets, IEnumerable<WatchOSTarget> watchos_targets, IEnumerable<TodayExtensionTarget> today_targets)
 		{
-			var executeSim32 = !harness.InWrench; // Waiting for iOS 10.3 simulator to be installed on wrench
+			var executeSim32 = true;
 			var makefile = Path.Combine (harness.RootDirectory, "Makefile.inc");
 			using (var writer = new StreamWriter (makefile, false, new UTF8Encoding (false))) {
 				writer.WriteLine (".stamp-configure-projects: Makefile xharness/xharness.exe");

@@ -86,6 +86,37 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 #if !MONOMAC
 		[Test]
+		public void TestBindAs ()
+		{
+			using (var obj = new ObjCRegistrarTest ()) {
+				Assert.IsNull (obj.PCGPointValue, "initial null property");
+				Assert.IsNull (obj.GetCGPointValue (), "initial null method");
+				var pnt = new CGPoint (1, 2);
+				obj.SetCGPointValue (png);
+				Assert.AreEqual (pnt, obj.PCGPointValue, "after set property");
+				Assert.AreEqual (pnt, obj.GetCGPointValue (), "after set method");
+				obj.SetCGPointValue (null);
+				Assert.IsNull (obj.PCGPointValue, "after set null property");
+				Assert.IsNull (obj.GetCGPointValue (), "after set null method");
+				pnt = new CGPoint (-1.23, -3.14);
+				obj.PCGPointValue = pnt;
+				Assert.AreEqual (pnt, obj.PCGPointValue, "after property set property");
+				Assert.AreEqual (pnt, obj.GetCGPointValue (), "after property set method");
+			}
+		}
+
+		class BindAsTestClass : ObjCRegistrarTest
+		{
+			public override byte? GetByteNumber ()
+			{
+			}
+
+			public override void SetByteNumber (byte? value)
+			{
+			}
+		}
+
+		[Test]
 		public void TestProperties ()
 		{
 			RegistrarTestClass obj = new RegistrarTestClass ();

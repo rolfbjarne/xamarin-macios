@@ -138,7 +138,7 @@ namespace Bindings.Test {
 		[Export ("Pc5")]
 		sbyte Pc5 { get; set; }
 
-		[Export ("PPCGPointValue")]
+		[Export ("PCGPointValue")]
 		NSValue PCGPointValue { get; set; }
 
 		[Export ("V")]
@@ -212,14 +212,14 @@ namespace Bindings.Test {
 		NSValue GetCGPointValue ();
 
 		[Export ("setCGPointValue:")]
-		void SetCGPointValue ([BindAs (typeof (CGPoint?)) NSValue value);
+		void SetCGPointValue ([BindAs (typeof (CGPoint?))] NSValue value);
 
 		[Export ("getByteNumber")]
 		[return: BindAs (typeof (byte?))]
 		NSNumber GetByteNumber ();
 
 		[Export ("setByteNumber:")]
-		void SetByteNumber ([BindAs (typeof (byte?)) NSNumber value);
+		void SetByteNumber ([BindAs (typeof (byte?))] NSNumber value);
 	}
 
 	[BaseType (typeof (NSObject))]

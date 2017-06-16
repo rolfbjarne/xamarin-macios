@@ -55,9 +55,6 @@ typedef unsigned int (^RegistrarTestBlock) (unsigned int magic);
 	@property char Pc4;
 	@property char Pc5;
 
-	@property (copy) NSValue *PCGPointValue;
-	@property (copy) NSNumber *PByteNumber;
-
 #include "libtest.properties.h"
 
 	-(void) V;
@@ -89,11 +86,7 @@ typedef unsigned int (^RegistrarTestBlock) (unsigned int magic);
 
 	-(void) idAsIntPtr: (id)p1;
 
-	-(NSValue *) getCGPointValue;
-	-(void) setCGPointValue: (NSValue *) value;
-
-	-(NSNumber *) getByteNumber;
-	-(void) setByteNumber: (NSNumber *) value;
+#include "libtest.methods.h"
 
 @end
 

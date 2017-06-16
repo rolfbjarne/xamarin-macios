@@ -1481,6 +1481,25 @@ namespace XamCore.Registrar {
 			return null;
 		}
 
+		protected override NativeTypeAttribute GetNativeTypeAttribute (MethodDefinition method, int parameter_index)
+		{
+			CustomAttribute attrib;
+
+			if (method == null)
+				return null;
+
+			if (!SharedStatic.TryGetAttributeImpl (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "NativeTypeAttribute", out attrib))
+				return null;
+
+			switch (attrib.ConstructorArguments.Count) {
+			case 1:
+				var t1 = (TypeReference) attrib.ConstructorArguments [0].Value;
+				return new NativeTypeAttribute (t1 != null ? t1.Resolve () : null);
+			default:
+				throw ErrorHelper.CreateError (4124, "Invalid NativeTypeAttribute found on '{0}.{1}'. Please file a bug report at https://bugzilla.xamarin.com", method.DeclaringType.FullName, method.Name);
+			}
+		}
+
 		protected override ConnectAttribute GetConnectAttribute (PropertyDefinition property)
 		{
 			CustomAttribute attrib;
@@ -2132,7 +2151,7 @@ namespace XamCore.Registrar {
 
 			sb.Append ((method.IsStatic && !method.IsCategoryInstance) ? '+' : '-');
 			sb.Append ('(');
-			sb.Append (isCtor ? "id" : this.ToObjCParameterType (method.ReturnType, GetDescriptiveMethodName (method.Method), exceptions, method.Method));
+			sb.Append (isCtor ? "id" : this.ToObjCParameterType (method.NativeReturnType, GetDescriptiveMethodName (method.Method), exceptions, method.Method));
 			sb.Append (')');
 
 			var split = method.Selector.Split (':');
@@ -2711,6 +2730,7 @@ namespace XamCore.Registrar {
 
 			var rettype = string.Empty;
 			var returntype = method.Method.ReturnType;
+			var nativereturntype = method.NativeReturnType;
 			var isStatic = method.IsStatic;
 			var isInstanceCategory = method.IsCategoryInstance;
 			var isCtor = false;
@@ -2734,7 +2754,7 @@ namespace XamCore.Registrar {
 			case Trampoline.X86_DoubleABI_StretTrampoline:
 			case Trampoline.StaticStret:
 			case Trampoline.Stret:
-				switch (returntype.FullName) {
+				switch (nativereturntype.FullName) {
 				case "System.Int64":
 					rettype = "long long";
 					break;
@@ -2748,7 +2768,7 @@ namespace XamCore.Registrar {
 					rettype = "double";
 					break;
 				default:
-					rettype = ToObjCParameterType (returntype, descriptiveMethodName, exceptions, method.Method);
+					rettype = ToObjCParameterType (nativereturntype, descriptiveMethodName, exceptions, method.Method);
 					break;
 				}
 				break;
@@ -3273,7 +3293,14 @@ namespace XamCore.Registrar {
 				var type = returntype.Resolve () ?? returntype;
 				var retain = method.RetainReturnValue;
 
-				if (returntype.IsValueType) {
+				if (returntype != nativereturntype) {
+					Console.WriteLine ("hey!");
+					if (nativereturntype.Is (Foundation, "NSNumber")) {
+					} else if (nativereturntype.Is (Foundation, "NSValue")) {
+					} else {
+						throw new Exception ();
+					}
+				} else if (returntype.IsValueType) {
 					setup_return.AppendLine ("res = *({0} *) mono_object_unbox ((MonoObject *) retval);", rettype);
 				} else if (isArray) {
 					var elementType = ((ArrayType) returntype).ElementType;
@@ -3301,7 +3328,7 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("goto exception_handling;");
 						setup_return.AppendLine ("}");
 					} else {
-						throw ErrorHelper.CreateError (App, 4111, method.Method, "The registrar cannot build a signature for type `{0}' in method `{1}`.", returntype.FullName, descriptiveMethodName);
+						throw ErrorHelper.CreateError (App, 4111, method.Method, "The registrar cannot build a signature for type `{0}' in method `{1}`.", nativereturntype.FullName, descriptiveMethodName);
 					}
 					
 					setup_return.AppendLine ("}");
@@ -3853,6 +3880,16 @@ namespace XamCore.Registrar {
 		public string Name { get; set; }
 		public bool IsInformal { get; set; }
 		public Version FormalSinceVersion { get; set; }
+	}
+
+	class NativeTypeAttribute : Attribute
+	{
+		public NativeTypeAttribute (TypeDefinition type)
+		{
+			this.Type = type;
+		}
+
+		public TypeDefinition Type { get; set; }
 	}
 
 	public sealed class ProtocolMemberAttribute : Attribute {

@@ -209,6 +209,40 @@ namespace XamCore.Registrar {
 			return assembly.GetTypes ();
 		}
 
+		protected override NativeTypeAttribute GetNativeTypeAttribute (MethodBase method, int parameter_index)
+		{
+			ICustomAttributeProvider provider;
+
+			if (method == null)
+				return null;
+
+			var minfo = method as MethodInfo;
+			if (minfo != null) {
+				minfo = minfo.GetBaseDefinition ();
+				if (parameter_index == -1) {
+					provider = minfo.ReturnTypeCustomAttributes;
+				} else {
+					provider = minfo.GetParameters () [parameter_index];
+				}
+			} else {
+				var cinfo = method as ConstructorInfo;
+				if (parameter_index == -1) {
+					throw new Exception ();
+				} else {
+					provider = cinfo.GetParameters () [parameter_index];
+				}
+			}
+
+			var attribs = provider.GetCustomAttributes (typeof (NativeTypeAttribute), false);
+			if (attribs.Length == 0)
+				return null;
+
+			if (attribs.Length != 1)
+				throw new AmbiguousMatchException ();
+
+			return (NativeTypeAttribute) attribs [0];
+		}
+
 		protected override ConnectAttribute GetConnectAttribute (PropertyInfo property)
 		{
 			return SharedDynamic.GetOneAttribute<ConnectAttribute> (property);

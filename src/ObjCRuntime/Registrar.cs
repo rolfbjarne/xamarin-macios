@@ -477,6 +477,7 @@ namespace XamCore.Registrar {
 #endif
 			TType[] parameters;
 			TType return_type;
+			TType native_return_type;
 
 			public ObjCMethod (Registrar registrar, ObjCType declaringType, TMethod method)
 				: base (registrar, declaringType)
@@ -562,6 +563,24 @@ namespace XamCore.Registrar {
 				}
 				set {
 					return_type = value;
+					native_return_type = null;
+				}
+			}
+
+			public TType NativeReturnType {
+				get {
+					if (native_return_type == null) {
+						var nativeTypeAttrib = Registrar.GetNativeTypeAttribute (Method, -1);
+						if (nativeTypeAttrib == null) {
+							native_return_type = ReturnType;
+						} else {
+							native_return_type = nativeTypeAttrib.Type;
+						}
+					}
+					return native_return_type;
+				}
+				set {
+					native_return_type = value;
 				}
 			}
 
@@ -619,10 +638,10 @@ namespace XamCore.Registrar {
 	#error unknown architecture
 #endif
 					var is_static_trampoline = IsStatic && !IsCategoryInstance;
-					var is_value_type = Registrar.IsValueType (ReturnType) && !Registrar.IsEnum (ReturnType);
+					var is_value_type = Registrar.IsValueType (NativeReturnType) && !Registrar.IsEnum (NativeReturnType);
 
-					if (is_value_type && Registrar.IsGenericType (ReturnType))
-						throw Registrar.CreateException (4104, Method, "The registrar cannot marshal the return value of type `{0}` in the method `{1}.{2}`.", Registrar.GetTypeFullName (ReturnType), Registrar.GetTypeFullName (DeclaringType.Type), Registrar.GetDescriptiveMethodName (Method));
+					if (is_value_type && Registrar.IsGenericType (NativeReturnType))
+						throw Registrar.CreateException (4104, Method, "The registrar cannot marshal the return value of type `{0}` in the method `{1}.{2}`.", Registrar.GetTypeFullName (NativeReturnType), Registrar.GetTypeFullName (DeclaringType.Type), Registrar.GetDescriptiveMethodName (Method));
 					
 					if (is_stret) {
 						if (Registrar.IsSimulatorOrDesktop && !Registrar.Is64Bits) {
@@ -823,6 +842,7 @@ namespace XamCore.Registrar {
 		protected abstract List<AvailabilityBaseAttribute> GetAvailabilityAttributes (TType obj); // must only return attributes for the current platform.
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
+		protected abstract NativeTypeAttribute GetNativeTypeAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
 		protected abstract bool IsValueType (TType type);
@@ -1117,8 +1137,8 @@ namespace XamCore.Registrar {
 
 		void VerifyInSdk (ref List<Exception> exceptions, ObjCMethod method)
 		{
-			if (method.HasReturnType || (method.Method != null && !method.IsConstructor && method.ReturnType != null))
-				VerifyTypeInSDK (ref exceptions, method.ReturnType, returnTypeOf: method);
+			if (method.HasReturnType || (method.Method != null && !method.IsConstructor && method.NativeReturnType != null))
+				VerifyTypeInSDK (ref exceptions, method.NativeReturnType, returnTypeOf: method);
 
 			if (method.HasParameters || (method.Method != null && method.Parameters != null)) {
 				foreach (var p in method.Parameters)
@@ -2027,7 +2047,7 @@ namespace XamCore.Registrar {
 			if (is_ctor) {
 				signature.Append ('@');
 			} else {
-				var ReturnType = Method != null ? GetReturnType (Method) : method.ReturnType;
+				var ReturnType = Method != null ? GetReturnType (Method) : method.NativeReturnType;
 				signature.Append (ToSignature (ReturnType, member, ref success));
 				if (!success)
 					throw CreateException (4104, Method, "The registrar cannot marshal the return value of type `{0}` in the method `{1}.{2}`.", GetTypeFullName (ReturnType), GetTypeFullName (DeclaringType), GetDescriptiveMethodName (Method));

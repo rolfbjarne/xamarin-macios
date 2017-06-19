@@ -1517,6 +1517,10 @@ The Objective-C name for the type in question is not a valid Objective-C identif
 
 Please use a valid Objective-C identifier.
 
+<h3><a name="MT4169"/>MT4169: The registrar can't convert from '{native type}' to '{managed type}' for the parameter '{parameter name}' in the method {method}.</h3>
+
+<h3><a name="MT4170"/>MT4170: The registrar can't convert from '{managed type}' to '{native type}' for the return value in the method {method}.</h3>
+
 # MT5xxx: GCC and toolchain error messages
 
 ### MT51xx: Compilation

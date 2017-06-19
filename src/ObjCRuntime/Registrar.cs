@@ -476,6 +476,7 @@ namespace XamCore.Registrar {
 			MethodDescription? methodDescription;
 #endif
 			TType[] parameters;
+			TType[] native_parameters;
 			TType return_type;
 			TType native_return_type;
 
@@ -546,7 +547,76 @@ namespace XamCore.Registrar {
 				}
 				set {
 					parameters = value;
+					native_parameters = null;
 				}
+			}
+
+			public TType [] NativeParameters {
+				get {
+					if (native_parameters == null && Parameters != null) {
+						native_parameters = new TType [parameters.Length];
+						for (int i = 0; i < parameters.Length; i++) {
+							var originalType = Registrar.GetNativeTypeAttribute (Method, i)?.OriginalType;
+							if (originalType != null) {
+								if (!IsValidToManagedTypeConversion (originalType, parameters [i]))
+									throw Registrar.CreateException (4169, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (parameters [i])}' to '{originalType.FullName}' for the parameter '{Registrar.GetParameterName (Method, i)}' in the method {DescriptiveMethodName}.");
+								native_parameters [i] = originalType;
+							} else {
+								native_parameters [i] = parameters [i];
+							}
+						}
+					}
+					return native_parameters;
+				}
+			}
+
+			bool IsValidToManagedTypeConversion (TType inputType, TType outputType)
+			{
+				if (Registrar.Is (inputType, Foundation, "NSNumber")) {
+					var outputName = Registrar.GetTypeFullName (outputType);
+					switch (outputName) {
+					case "System.Byte":
+					case "System.SByte":
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+					case "System.Int64":
+					case "System.UInt64":
+					case "System.nint":
+					case "System.nuint":
+					case "System.Single":
+					case "System.Double":
+					case "System.nfloat":
+					case "System.Boolean":
+					case "System.Nullable`1<System.Byte>":
+					case "System.Nullable`1<System.SByte>":
+					case "System.Nullable`1<System.Int16>":
+					case "System.Nullable`1<System.UInt16>":
+					case "System.Nullable`1<System.Int32>":
+					case "System.Nullable`1<System.UInt32>":
+					case "System.Nullable`1<System.Int64>":
+					case "System.Nullable`1<System.UInt64>":
+					case "System.Nullable`1<System.nint>":
+					case "System.Nullable`1<System.nuint>":
+					case "System.Nullable`1<System.Single>":
+					case "System.Nullable`1<System.Double>":
+					case "System.Nullable`1<System.nfloat>":
+					case "System.Nullable`1<System.Boolean>":
+						return true;
+					default:
+						return false;
+					}
+				} else if (Registrar.Is (inputType, Foundation, "NSValue")) {
+					return false; // NIEX
+				} else {
+					return false;
+				}
+			}
+
+			bool IsValidToNativeTypeConversion (TType inputType, TType outputType)
+			{
+				return IsValidToManagedTypeConversion (inputType: outputType, outputType: inputType);
 			}
 
 			public bool HasReturnType {
@@ -570,17 +640,16 @@ namespace XamCore.Registrar {
 			public TType NativeReturnType {
 				get {
 					if (native_return_type == null) {
-						var nativeTypeAttrib = Registrar.GetNativeTypeAttribute (Method, -1);
-						if (nativeTypeAttrib == null) {
-							native_return_type = ReturnType;
+						var originalType = Registrar.GetNativeTypeAttribute (Method, -1)?.OriginalType;
+						if (originalType != null) {
+							if (!IsValidToManagedTypeConversion (originalType, ReturnType))
+								throw Registrar.CreateException (4170, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (ReturnType)}' to '{originalType.FullName}' for the return value in the method {DescriptiveMethodName}.");
+							native_return_type = originalType;
 						} else {
-							native_return_type = nativeTypeAttrib.Type;
+							native_return_type = ReturnType;
 						}
 					}
 					return native_return_type;
-				}
-				set {
-					native_return_type = value;
 				}
 			}
 
@@ -842,7 +911,7 @@ namespace XamCore.Registrar {
 		protected abstract List<AvailabilityBaseAttribute> GetAvailabilityAttributes (TType obj); // must only return attributes for the current platform.
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
-		protected abstract NativeTypeAttribute GetNativeTypeAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
+		protected abstract BindAsAttribute GetNativeTypeAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
 		protected abstract bool IsValueType (TType type);

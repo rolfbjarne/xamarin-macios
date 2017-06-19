@@ -209,7 +209,7 @@ namespace XamCore.Registrar {
 			return assembly.GetTypes ();
 		}
 
-		protected override NativeTypeAttribute GetNativeTypeAttribute (MethodBase method, int parameter_index)
+		protected override BindAsAttribute GetNativeTypeAttribute (MethodBase method, int parameter_index)
 		{
 			ICustomAttributeProvider provider;
 
@@ -233,14 +233,14 @@ namespace XamCore.Registrar {
 				}
 			}
 
-			var attribs = provider.GetCustomAttributes (typeof (NativeTypeAttribute), false);
+			var attribs = provider.GetCustomAttributes (typeof (BindAsAttribute), false);
 			if (attribs.Length == 0)
 				return null;
 
 			if (attribs.Length != 1)
 				throw new AmbiguousMatchException ();
 
-			return (NativeTypeAttribute) attribs [0];
+			return (BindAsAttribute) attribs [0];
 		}
 
 		protected override ConnectAttribute GetConnectAttribute (PropertyInfo property)

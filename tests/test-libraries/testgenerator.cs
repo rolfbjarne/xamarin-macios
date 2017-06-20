@@ -54,7 +54,6 @@ static class C {
 		public string Managed;
 		public string Native;
 		public string ManagedCondition;
-		public string NativeCondition;
 		public string ManagedNewExpression;
 		public string Map;
 		public string MapFrom;
@@ -74,7 +73,7 @@ static class C {
 		new BindAsData { Managed = "nint", Native = "NSInteger", ManagedNewExpression = "((nint) 1)", Map = ".NIntValue" },
 		new BindAsData { Managed = "nuint", Native = "NSUInteger", ManagedNewExpression = "((nuint) 1)", Map = ".NUIntValue" },
 		new BindAsData { Managed = "nfloat", Native = "NSFloat", ManagedNewExpression = "((nfloat) 1)", Map = ".NFloatValue" },
-		new BindAsData { Managed = "Boolean", Native = "BOOL", ManagedNewExpression = "true" },
+		new BindAsData { Managed = "Boolean", Native = "BOOL", ManagedNewExpression = "true", Map = ".BoolValue" },
 	};
 	static BindAsData[] bindas_nsvalue = new [] {
 		new BindAsData { Managed = "CGAffineTransform", Native = "CGAffineTransform", ManagedNewExpression = "new CGAffineTransform (1, 2, 3, 4, 5, 6)", Map = ".CGAffineTransformValue", MapFrom = "FromCGAffineTransform" },
@@ -92,8 +91,7 @@ static class C {
 		new BindAsData { Managed = "MKCoordinateSpan", Native = "MKCoordinateSpan", ManagedCondition = "XAMCORE_2_0", ManagedNewExpression = "new MKCoordinateSpan (33, 34)", Map = ".CoordinateSpanValue", MapFrom = "FromMKCoordinateSpan" },
 		new BindAsData { Managed = "CMTimeRange", Native = "CMTimeRange", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */, ManagedNewExpression = "new CMTimeRange { Duration = new CMTime (37, 38), Start = new CMTime (39, 40) }", Map = ".CMTimeRangeValue", MapFrom = "FromCMTimeRange"  },
 		new BindAsData { Managed = "CMTime", Native = "CMTime", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */,  ManagedNewExpression = "new CMTime (35, 36)", Map = ".CMTimeValue", MapFrom = "FromCMTime"  },
-		// BI1049: bgen: Could not unbox type CMTimeMapping from NSValue container used on GetCMTimeMappingValueNonNullable member decorated with [BindAs].
-		// new BindAsData { Managed = "CMTimeMapping", Native = "CMTimeMapping", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */, Map = ".CMTimeMappingValue", MapFrom = "FromCMTimeMapping"  },
+		new BindAsData { Managed = "CMTimeMapping", Native = "CMTimeMapping", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */, ManagedNewExpression = "new CMTimeMapping { Source = new CMTimeRange { Duration = new CMTime (42, 43), Start = new CMTime (44, 45) } }", Map = ".CMTimeMappingValue", MapFrom = "FromCMTimeMapping"  },
 		new BindAsData { Managed = "CATransform3D", Native = "CATransform3D", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreAnimation */, ManagedNewExpression = "new CATransform3D { m11 = 41 }", Map = ".CATransform3DValue", MapFrom = "FromCATransform3D"  },
 	};
 

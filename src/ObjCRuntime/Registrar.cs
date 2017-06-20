@@ -572,8 +572,12 @@ namespace XamCore.Registrar {
 
 			bool IsValidToManagedTypeConversion (TType inputType, TType outputType)
 			{
+				var outputName = Registrar.GetTypeFullName (outputType);
+				// Remove nullability, for all types we support the value type and its nullable variant
+				if (outputName.StartsWith ("System.Nullable`1<", StringComparison.Ordinal) && outputName.EndsWith (">", StringComparison.Ordinal))
+					outputName = outputName.Substring ("System.Nullable`1<".Length, outputName.Length - "System.Nullable`1<".Length - 1);
+				
 				if (Registrar.Is (inputType, Foundation, "NSNumber")) {
-					var outputName = Registrar.GetTypeFullName (outputType);
 					switch (outputName) {
 					case "System.Byte":
 					case "System.SByte":
@@ -589,26 +593,37 @@ namespace XamCore.Registrar {
 					case "System.Double":
 					case "System.nfloat":
 					case "System.Boolean":
-					case "System.Nullable`1<System.Byte>":
-					case "System.Nullable`1<System.SByte>":
-					case "System.Nullable`1<System.Int16>":
-					case "System.Nullable`1<System.UInt16>":
-					case "System.Nullable`1<System.Int32>":
-					case "System.Nullable`1<System.UInt32>":
-					case "System.Nullable`1<System.Int64>":
-					case "System.Nullable`1<System.UInt64>":
-					case "System.Nullable`1<System.nint>":
-					case "System.Nullable`1<System.nuint>":
-					case "System.Nullable`1<System.Single>":
-					case "System.Nullable`1<System.Double>":
-					case "System.Nullable`1<System.nfloat>":
-					case "System.Nullable`1<System.Boolean>":
 						return true;
 					default:
 						return false;
 					}
 				} else if (Registrar.Is (inputType, Foundation, "NSValue")) {
-					return false; // NIEX
+					// Remove 'MonoMac.' namespace prefix to make switch smaller
+					if (!Registrar.IsDualBuild && outputName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+						outputName = outputName.Substring ("MonoMac.".Length);
+					
+					switch (outputName) {
+					case "CoreAnimation.CATransform3D":
+					case "CoreGraphics.CGAffineTransform":
+					case "CoreGraphics.CGPoint":
+					case "CoreGraphics.CGRect":
+					case "CoreGraphics.CGSize":
+					case "CoreGraphics.CGVector":
+					case "CoreLocation.CLLocationCoordinate2D":
+					case "CoreMedia.CMTime":
+					case "CoreMedia.CMTimeMapping":
+					case "CoreMedia.CMTimeRange":
+					case "MapKit.MKCoordinateSpan":
+					case "Foundation.NSRange":
+					case "SceneKit.SCNMatrix4":
+					case "SceneKit.SCNVector3":
+					case "SceneKit.SCNVector4":
+					case "UIKit.UIEdgeInsets":
+					case "UIKit.UIOffset":
+						return true;
+					default:
+						return false;
+					}
 				} else {
 					return false;
 				}

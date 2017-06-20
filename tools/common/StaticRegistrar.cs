@@ -1488,6 +1488,8 @@ namespace XamCore.Registrar {
 			if (method == null)
 				return null;
 
+			method = GetBaseMethodInTypeHierarchy (method);
+
 			if (!SharedStatic.TryGetAttributeImpl (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
@@ -2742,8 +2744,7 @@ namespace XamCore.Registrar {
 			}
 
 			var rettype = string.Empty;
-			var returntype = method.Method.ReturnType;
-			var nativereturntype = method.NativeReturnType;
+			var returntype = method.ReturnType;
 			var isStatic = method.IsStatic;
 			var isInstanceCategory = method.IsCategoryInstance;
 			var isCtor = false;
@@ -2767,7 +2768,7 @@ namespace XamCore.Registrar {
 			case Trampoline.X86_DoubleABI_StretTrampoline:
 			case Trampoline.StaticStret:
 			case Trampoline.Stret:
-				switch (nativereturntype.FullName) {
+				switch (method.NativeReturnType.FullName) {
 				case "System.Int64":
 					rettype = "long long";
 					break;
@@ -2781,7 +2782,7 @@ namespace XamCore.Registrar {
 					rettype = "double";
 					break;
 				default:
-					rettype = ToObjCParameterType (nativereturntype, descriptiveMethodName, exceptions, method.Method);
+					rettype = ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method);
 					break;
 				}
 				break;
@@ -3312,8 +3313,8 @@ namespace XamCore.Registrar {
 				var type = returntype.Resolve () ?? returntype;
 				var retain = method.RetainReturnValue;
 
-				if (returntype != nativereturntype) {
-					GenerateConversionToNative (returntype, nativereturntype, setup_return, descriptiveMethodName, ref exceptions, method, "retval", "res");
+				if (returntype != method.NativeReturnType) {
+					GenerateConversionToNative (returntype, method.NativeReturnType, setup_return, descriptiveMethodName, ref exceptions, method, "retval", "res");
 				} else if (returntype.IsValueType) {
 					setup_return.AppendLine ("res = *({0} *) mono_object_unbox ((MonoObject *) retval);", rettype);
 				} else if (isArray) {
@@ -3342,7 +3343,7 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("goto exception_handling;");
 						setup_return.AppendLine ("}");
 					} else {
-						throw ErrorHelper.CreateError (App, 4111, method.Method, "The registrar cannot build a signature for type `{0}' in method `{1}`.", nativereturntype.FullName, descriptiveMethodName);
+						throw ErrorHelper.CreateError (App, 4111, method.Method, "The registrar cannot build a signature for type `{0}' in method `{1}`.", method.NativeReturnType.FullName, descriptiveMethodName);
 					}
 					
 					setup_return.AppendLine ("}");
@@ -3656,7 +3657,7 @@ namespace XamCore.Registrar {
 				case "System.Double":
 					sb.AppendLine ($"{tmpName} = [{inputName} doubleValue];");
 					break;
-				case "System.float":
+				case "System.nfloat":
 					sb.AppendLine ("#if __POINTER_WIDTH__ == 32");
 					sb.AppendLine ($"{tmpName} = [{inputName} floatValue];");
 					sb.AppendLine ("#elif __POINTER_WIDTH__ == 64");
@@ -3672,7 +3673,67 @@ namespace XamCore.Registrar {
 					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 				}
 			} else if (inputType.Is (Foundation, "NSValue")) {
-				throw new NotImplementedException ();
+				var underlyingTypeName = underlyingType.FullName;
+
+				// Remove 'MonoMac.' namespace prefix to make switch smaller
+				if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+					underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
+				
+				switch (underlyingTypeName) {
+				case "CoreAnimation.CATransform3D":
+					sb.AppendLine ($"{tmpName} = [{inputName} CATransform3DValue];");
+					break;
+				case "CoreGraphics.CGAffineTransform":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGAffineTransformValue];");
+					break;
+				case "CoreGraphics.CGPoint":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGPointValue];");
+					break;
+				case "CoreGraphics.CGRect":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGRectValue];");
+					break;
+				case "CoreGraphics.CGSize":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGSizeValue];");
+					break;
+				case "CoreGraphics.CGVector":
+					sb.AppendLine ($"{tmpName} = [{inputName} CGVectorValue];");
+					break;
+				case "CoreLocation.CLLocationCoordinate2D":
+					sb.AppendLine ($"{tmpName} = [{inputName} MKCoordinateValue];");
+					break;
+				case "CoreMedia.CMTime":
+					sb.AppendLine ($"{tmpName} = [{inputName} CMTimeValue];");
+					break;
+				case "CoreMedia.CMTimeMapping":
+					sb.AppendLine ($"{tmpName} = [{inputName} CMTimeMappingValue];");
+					break;
+				case "CoreMedia.CMTimeRange":
+					sb.AppendLine ($"{tmpName} = [{inputName} CMTimeRangeValue];");
+					break;
+				case "MapKit.MKCoordinateSpan":
+					sb.AppendLine ($"{tmpName} = [{inputName} MKCoordinateSpanValue];");
+					break;
+				case "Foundation.NSRange":
+					sb.AppendLine ($"{tmpName} = [{inputName} rangeValue];");
+					break;
+				case "SceneKit.SCNMatrix4":
+					sb.AppendLine ($"{tmpName} = [{inputName} SCNMatrix4Value];");
+					break;
+				case "SceneKit.SCNVector3":
+					sb.AppendLine ($"{tmpName} = [{inputName} SCNVector3Value];");
+					break;
+				case "SceneKit.SCNVector4":
+					sb.AppendLine ($"{tmpName} = [{inputName} SCNVector4Value];");
+					break;
+				case "UIKit.UIEdgeInsets":
+					sb.AppendLine ($"{tmpName} = [{inputName} UIEdgeInsetsValue];");
+					break;
+				case "UIKit.UIOffset":
+					sb.AppendLine ($"{tmpName} = [{inputName} UIOffsetValue];");
+					break;
+				default:
+					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+				}
 			} else {
 				throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 			}
@@ -3737,7 +3798,7 @@ namespace XamCore.Registrar {
 				case "System.Double":
 					sb.AppendLine ("{1} = [NSNumber numberWithDouble: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
 					break;
-				case "System.float":
+				case "System.nfloat":
 					sb.AppendLine ("#if __POINTER_WIDTH__ == 32");
 					sb.AppendLine ("{1} = [NSNumber numberWithFloat: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
 					sb.AppendLine ("#elif __POINTER_WIDTH__ == 64");
@@ -3753,7 +3814,67 @@ namespace XamCore.Registrar {
 					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 				}
 			} else if (outputType.Is (Foundation, "NSValue")) {
-				throw new NotImplementedException ();
+				var underlyingTypeName = underlyingType.FullName;
+
+				// Remove 'MonoMac.' namespace prefix to make switch smaller
+				if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+					underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
+
+				switch (underlyingTypeName) {
+				case "CoreAnimation.CATransform3D":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCATransform3D: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGAffineTransform":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGAffineTransform: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGPoint":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGPoint: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGRect":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGRect: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGSize":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGSize: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreGraphics.CGVector":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCGVector: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreLocation.CLLocationCoordinate2D":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithMKCoordinate: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreMedia.CMTime":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCMTime: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreMedia.CMTimeMapping":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCMTimeMapping: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "CoreMedia.CMTimeRange":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCMTimeRange: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "MapKit.MKCoordinateSpan":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithMKCoordinateSpan: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "Foundation.NSRange":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithRange: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "SceneKit.SCNMatrix4":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNMatrix4: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "SceneKit.SCNVector3":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNVector3: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "SceneKit.SCNVector4":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNVector4: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "UIKit.UIEdgeInsets":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithUIEdgeInsets: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				case "UIKit.UIOffset":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithUIOffset: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
+				default:
+					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+				}
 			} else {
 				throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 			}

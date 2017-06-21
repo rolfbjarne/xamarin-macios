@@ -1515,6 +1515,16 @@ namespace XamCore.Registrar {
 			}
 		}
 
+		protected override TypeReference GetNullableType (TypeReference type)
+		{
+			var git = type as GenericInstanceType;
+			if (git == null)
+				return null;
+			if (!git.GetElementType ().Is ("System", "Nullable`1"))
+				return null;
+			return git.GenericArguments [0];
+		}
+
 		protected override ConnectAttribute GetConnectAttribute (PropertyDefinition property)
 		{
 			CustomAttribute attrib;
@@ -3607,14 +3617,14 @@ namespace XamCore.Registrar {
 
 		void GenerateConversionToManaged (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string parameterClass)
 		{
-			bool isNullable = false;
-			var underlyingType = outputType;
-			var git = underlyingType as GenericInstanceType;
-			if (git != null && git.Resolve ().FullName == "System.Nullable`1") {
-				isNullable = true;
-				underlyingType = git.GenericArguments [0];
+			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
+			var nullableType = GetNullableType (outputType);
+			var isNullable = nullableType != null;
+			var underlyingType = nullableType ?? outputType;
+
+			if (isNullable)
 				sb.AppendLine ($"if ({inputName}) {{");
-			}
+
 			var nativeElementType = ToObjCParameterType (underlyingType, descriptiveMethodName, exceptions, method.Method);
 			var tmpName = $"{inputName}__tmp";
 			body_setup.AppendLine ($"{nativeElementType} {tmpName};");
@@ -3750,14 +3760,13 @@ namespace XamCore.Registrar {
 
 		void GenerateConversionToNative (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName)
 		{
-			bool isNullable = false;
-			var underlyingType = inputType;
-			var git = underlyingType as GenericInstanceType;
-			if (git != null && git.Resolve ().FullName == "System.Nullable`1") {
-				isNullable = true;
-				underlyingType = git.GenericArguments [0];
+			var nullableType = GetNullableType (inputType);
+			var isNullable = nullableType != null;
+			var underlyingType = nullableType ?? inputType;
+
+			if (isNullable)
 				sb.AppendLine ($"if ({inputName}) {{");
-			}
+
 			var nativeElementType = ToObjCParameterType (underlyingType, descriptiveMethodName, exceptions, method.Method);
 
 			if (outputType.Is (Foundation, "NSNumber")) {

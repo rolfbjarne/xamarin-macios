@@ -19,6 +19,9 @@
 #define LOGZ(...)
 #endif
 
+static int xamarin_create_bindas_exception (const char *msg, MonoType *in_type, MonoType *out_type, MonoMethod *method);
+static void xamarin_generate_conversion_to_managed (MonoType *inputType, MonoType *outputType, MonoMethod *method, int *exception_gchandle);
+
 void
 xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_func iterator, marshal_return_value_func marshal_return_value, void *context)
 {
@@ -280,6 +283,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 				case _C_ID: {
 					id id_arg = (id) arg;
 					MonoClass *p_klass = mono_class_from_mono_type (p);
+					MonoClass *native_type = NULL;
 					if (p_klass == mono_get_intptr_class ()) {
 						arg_frame [ofs] = id_arg;
 						arg_ptrs [i + mofs] = &arg_frame [frameofs];
@@ -358,6 +362,12 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							arg_ptrs [i + mofs] = obj;
 						} else if (mono_class_is_delegate (p_klass)) {
 							arg_ptrs [i + mofs] = xamarin_get_delegate_for_block_parameter (method, i, id_arg, &exception_gchandle);
+							if (exception_gchandle != 0)
+								goto exception_handling;
+						} else if (xamarin_get_bind_as_attribute (method, i + 1, &native_type)) {
+							gint32 vt_size = mono_class_value_size (mono_class_from_mono_type (native_type), NULL);
+							void *vt_ptr = alloca (vt_size);
+							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (p, native_type, method, &exception_gchandle);
 							if (exception_gchandle != 0)
 								goto exception_handling;
 						} else {
@@ -567,4 +577,84 @@ exception_handling:
 	} else {
 		xamarin_process_managed_exception (exception);
 	}
+}
+
+static void *
+xamarin_generate_conversion_to_managed (MonoType *inputType, MonoType *outputType, MonoMethod *method, int *exception_gchandle)
+{
+	void *value = NULL;
+	char *to_name = NULL;
+	MonoClass *inputClass = NULL;
+
+	inputClass = mono_class_from_mono_type (inputType);
+	to_name = xamarin_type_get_full_name (outputType, &exception_gchandle);
+
+	// This is a mirror of StaticRegistrar.GenerateConversionToManaged
+	if (xamarin_is_class_nsnumber (inputClass)) {
+		switch (p) {
+		case "System.Byte":
+		case "System.SByte":
+		case "System.Int16":
+		case "System.UInt16":
+		case "System.Int32":
+		case "System.UInt32":
+		case "System.Int64":
+		case "System.UInt64":
+		case "System.nint":
+		case "System.nuint":
+		case "System.Single":
+		case "System.Double":
+		case "System.nfloat":
+		case "System.Boolean":
+			g_assert (!"not implemented");
+			break;
+		default:
+			*exception_gchandle = xamarin_create_bindas_exception (inputType, p, method);
+			goto exception_handling;
+		}
+	} else if (xamarin_is_class_nsvalue (inputClass)) {
+		switch (p) {
+		default:
+			*exception_gchandle = xamarin_create_bindas_exception (inputType, p, method);
+			goto exception_handling;
+		}
+	} else {
+		*exception_gchandle = xamarin_create_bindas_exception (inputType, p, method);
+		goto exception_handling;
+	}
+
+exception_handling:
+	xamarin_free (to_name);
+
+	return value;
+}
+
+static int
+xamarin_create_bindas_exception (const char *msg, MonoType *in_type, MonoType *out_type, MonoMethod *method)
+{
+	int exception_gchandle;
+	char *to_name = NULL;
+	char *from_name = NULL;
+	char *method_full_name = NULL;
+	char *msg = NULL;
+
+	throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+	to_name = xamarin_type_get_full_name (native_type, &exception_gchandle);
+	if (exception_gchandle != 0)
+		goto exception_handling;
+	from_name = xamarin_type_get_full_name (p, &exception_gchandle);
+	if (exception_gchandle != 0)
+		goto exception_handling;
+
+	method_full_name = mono_method_full_name (method, TRUE);
+	msg = xamarin_strdup_printf ("Internal error: can't convert from '%s' to '%s' in %s. Please file a bug report with a test case (https://bugzilla.xamarin.com).",
+										i + 1, to_name, sel_getName (sel), method_full_name);
+	exception_gchandle = mono_gchandle_new (xamarin_create_exception (msg), false);
+
+exception_handling:
+	xamarin_free (to_name);
+	xamarin_free (from_name);
+	xamarin_free (method_full_name);
+	xamarin_free (msg);
+	return exception_gchandle;
 }

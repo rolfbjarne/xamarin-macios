@@ -572,13 +572,11 @@ namespace XamCore.Registrar {
 
 			bool IsValidToManagedTypeConversion (TType inputType, TType outputType)
 			{
-				var outputName = Registrar.GetTypeFullName (outputType);
-				// Remove nullability, for all types we support the value type and its nullable variant
-				if (outputName.StartsWith ("System.Nullable`1<", StringComparison.Ordinal) && outputName.EndsWith (">", StringComparison.Ordinal))
-					outputName = outputName.Substring ("System.Nullable`1<".Length, outputName.Length - "System.Nullable`1<".Length - 1);
-				
+				var nullableType = Registrar.GetNullableType (outputType);
+				var outputTypeName = Registrar.GetTypeFullName (nullableType ?? outputType);
+
 				if (Registrar.Is (inputType, Foundation, "NSNumber")) {
-					switch (outputName) {
+					switch (outputTypeName) {
 					case "System.Byte":
 					case "System.SByte":
 					case "System.Int16":
@@ -599,10 +597,10 @@ namespace XamCore.Registrar {
 					}
 				} else if (Registrar.Is (inputType, Foundation, "NSValue")) {
 					// Remove 'MonoMac.' namespace prefix to make switch smaller
-					if (!Registrar.IsDualBuild && outputName.StartsWith ("MonoMac.", StringComparison.Ordinal))
-						outputName = outputName.Substring ("MonoMac.".Length);
+					if (!Registrar.IsDualBuild && outputTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+						outputTypeName = outputTypeName.Substring ("MonoMac.".Length);
 					
-					switch (outputName) {
+					switch (outputTypeName) {
 					case "CoreAnimation.CATransform3D":
 					case "CoreGraphics.CGAffineTransform":
 					case "CoreGraphics.CGPoint":
@@ -927,6 +925,7 @@ namespace XamCore.Registrar {
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract BindAsAttribute GetNativeTypeAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
+		protected abstract TType GetNullableType (TType type); // For T? returns T. For T returns null.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
 		protected abstract bool IsValueType (TType type);

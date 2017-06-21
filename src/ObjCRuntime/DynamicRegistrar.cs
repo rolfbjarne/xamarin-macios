@@ -243,6 +243,15 @@ namespace XamCore.Registrar {
 			return (BindAsAttribute) attribs [0];
 		}
 
+		protected override Type GetNullableType (Type type)
+		{
+			if (!type.IsGenericType)
+				return null;
+			if (type.GetGenericTypeDefinition () != typeof (Nullable<>))
+				return null;
+			return type.GetGenericArguments () [0];
+		}
+
 		protected override ConnectAttribute GetConnectAttribute (PropertyInfo property)
 		{
 			return SharedDynamic.GetOneAttribute<ConnectAttribute> (property);

@@ -1315,10 +1315,19 @@ xamarin_set_bundle_path (const char *path)
 	x_bundle_path = strdup (path);
 }
 
+void *
+xamarin_malloc (size_t size)
+{
+	// COOP: no managed memory access: any mode
+	return malloc (size);
+}
+
 void
 xamarin_free (void *ptr)
 {
 	// COOP: no managed memory access: any mode
+	// We use this method to free memory returned by mono,
+	// which means we have to use the free function mono expects.
 	if (ptr)
 		free (ptr);
 }
@@ -2447,7 +2456,7 @@ xamarin_find_assembly_directory (const char *assembly_name)
 }
 
 bool
-xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoClass **original_type)
+xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoType **original_type)
 {
 	// COOP: Reads managed memory, needs to be in UNSAFE mode
 	MONO_ASSERT_GC_UNSAFE;
@@ -2477,10 +2486,9 @@ xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: retu
 
 		MonoObject *bind_as_attribute = mono_custom_attrs_get_attr (attribs, bindas_klass);
 		if (bind_as_attribute) {
-
-			MonoType *original_tp = (MonoType *) mono_runtime_invoke (get_original_type_method, bind_as_attribute, NULL, NULL /* FIXME: exception */);
-			if (original_tp)
-				*original_type = mono_class_from_mono_type (original_tp);
+			MonoReflectionType *reflection_type = (MonoReflectionType *) mono_runtime_invoke (get_original_type_method, bind_as_attribute, NULL, NULL /* FIXME: exception */);
+			if (reflection_type)
+				*original_type = mono_reflection_type_get_type (reflection_type);
 		}
 	}
 	mono_custom_attrs_free (attribs);

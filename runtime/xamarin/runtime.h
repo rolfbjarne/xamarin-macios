@@ -122,7 +122,7 @@ int				xamarin_objc_type_size (const char *type);
 bool			xamarin_is_class_nsobject (MonoClass *cls);
 bool			xamarin_is_class_inativeobject (MonoClass *cls);
 bool			xamarin_is_class_array (MonoClass *cls);
-bool			xamarin_is_class_nsumber (MonoClass *cls);
+bool			xamarin_is_class_nsnumber (MonoClass *cls);
 bool			xamarin_is_class_nsvalue (MonoClass *cls);
 MonoType *		xamarin_get_parameter_type (MonoMethod *managed_method, int index);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr (id self, bool owns, MonoType* type, guint32 *exception_gchandle);
@@ -138,9 +138,10 @@ void			xamarin_rethrow_managed_exception (guint32 original_gchandle, guint32 *ex
 MonoException *	xamarin_create_exception (const char *msg);
 id				xamarin_get_handle (MonoObject *obj, guint32 *exception_gchandle);
 char *			xamarin_strdup_printf (const char *msg, ...);
+void *			xamarin_malloc (size_t size);
 void			xamarin_free (void *ptr);
 MonoMethod *	xamarin_get_reflection_method_method (MonoReflectionMethod *method);
-void			xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoClass **original_type);
+bool			xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoType **original_type);
 void			xamarin_framework_peer_lock ();
 void			xamarin_framework_peer_unlock ();
 bool			xamarin_file_exists (const char *path);
@@ -185,6 +186,9 @@ void			xamarin_throw_product_exception (int code, const char *message);
 NSString *		xamarin_print_all_exceptions (MonoObject *exc);
 
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
+id				xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle);
+void *			xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle, /*SList*/ void **free_list);
+guint32			xamarin_create_bindas_exception (MonoType *inputType, MonoType *outputType, MonoMethod *method);
 
 bool			xamarin_is_managed_exception_marshaling_disabled ();
 

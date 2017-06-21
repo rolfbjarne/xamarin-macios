@@ -3618,6 +3618,8 @@ namespace XamCore.Registrar {
 		void GenerateConversionToManaged (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string parameterClass)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
+			// These methods must be kept in sync.
+
 			var nullableType = GetNullableType (outputType);
 			var isNullable = nullableType != null;
 			var underlyingType = nullableType ?? outputType;
@@ -3631,11 +3633,11 @@ namespace XamCore.Registrar {
 
 			if (inputType.Is (Foundation, "NSNumber")) {
 				switch (underlyingType.FullName) {
-				case "System.Byte":
-					sb.AppendLine ($"{tmpName} = [{inputName} unsignedCharValue];");
-					break;
 				case "System.SByte":
 					sb.AppendLine ($"{tmpName} = [{inputName} charValue];");
+					break;
+				case "System.Byte":
+					sb.AppendLine ($"{tmpName} = [{inputName} unsignedCharValue];");
 					break;
 				case "System.Int16":
 					sb.AppendLine ($"{tmpName} = [{inputName} shortValue];");
@@ -3688,10 +3690,10 @@ namespace XamCore.Registrar {
 				// Remove 'MonoMac.' namespace prefix to make switch smaller
 				if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 					underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
-				
+
 				switch (underlyingTypeName) {
-				case "CoreAnimation.CATransform3D":
-					sb.AppendLine ($"{tmpName} = [{inputName} CATransform3DValue];");
+				case "Foundation.NSRange":
+					sb.AppendLine ($"{tmpName} = [{inputName} rangeValue];");
 					break;
 				case "CoreGraphics.CGAffineTransform":
 					sb.AppendLine ($"{tmpName} = [{inputName} CGAffineTransformValue];");
@@ -3708,6 +3710,9 @@ namespace XamCore.Registrar {
 				case "CoreGraphics.CGVector":
 					sb.AppendLine ($"{tmpName} = [{inputName} CGVectorValue];");
 					break;
+				case "CoreAnimation.CATransform3D":
+					sb.AppendLine ($"{tmpName} = [{inputName} CATransform3DValue];");
+					break;
 				case "CoreLocation.CLLocationCoordinate2D":
 					sb.AppendLine ($"{tmpName} = [{inputName} MKCoordinateValue];");
 					break;
@@ -3722,9 +3727,6 @@ namespace XamCore.Registrar {
 					break;
 				case "MapKit.MKCoordinateSpan":
 					sb.AppendLine ($"{tmpName} = [{inputName} MKCoordinateSpanValue];");
-					break;
-				case "Foundation.NSRange":
-					sb.AppendLine ($"{tmpName} = [{inputName} rangeValue];");
 					break;
 				case "SceneKit.SCNMatrix4":
 					sb.AppendLine ($"{tmpName} = [{inputName} SCNMatrix4Value];");
@@ -3760,6 +3762,9 @@ namespace XamCore.Registrar {
 
 		void GenerateConversionToNative (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName)
 		{
+			// This is a mirror of the native method xamarin_generate_conversion_to_native (for the dynamic registrar).
+			// These methods must be kept in sync.
+
 			var nullableType = GetNullableType (inputType);
 			var isNullable = nullableType != null;
 			var underlyingType = nullableType ?? inputType;
@@ -3771,11 +3776,11 @@ namespace XamCore.Registrar {
 
 			if (outputType.Is (Foundation, "NSNumber")) {
 				switch (underlyingType.FullName) {
-				case "System.Byte":
-					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedChar: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
-					break;
 				case "System.SByte":
 					sb.AppendLine ("{1} = [NSNumber numberWithChar: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
+					break;
+				case "System.Byte":
+					sb.AppendLine ("{1} = [NSNumber numberWithUnsignedChar: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
 					break;
 				case "System.Int16":
 					sb.AppendLine ("{1} = [NSNumber numberWithShort: *({0} *) mono_object_unbox ({2})];", nativeElementType, outputName, inputName);
@@ -3830,8 +3835,8 @@ namespace XamCore.Registrar {
 					underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
 
 				switch (underlyingTypeName) {
-				case "CoreAnimation.CATransform3D":
-					sb.AppendLine ($"{outputName} = [NSValue valueWithCATransform3D: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+				case "Foundation.NSRange":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithRange: *({nativeElementType} *) mono_object_unbox ({inputName})];");
 					break;
 				case "CoreGraphics.CGAffineTransform":
 					sb.AppendLine ($"{outputName} = [NSValue valueWithCGAffineTransform: *({nativeElementType} *) mono_object_unbox ({inputName})];");
@@ -3848,6 +3853,9 @@ namespace XamCore.Registrar {
 				case "CoreGraphics.CGVector":
 					sb.AppendLine ($"{outputName} = [NSValue valueWithCGVector: *({nativeElementType} *) mono_object_unbox ({inputName})];");
 					break;
+				case "CoreAnimation.CATransform3D":
+					sb.AppendLine ($"{outputName} = [NSValue valueWithCATransform3D: *({nativeElementType} *) mono_object_unbox ({inputName})];");
+					break;
 				case "CoreLocation.CLLocationCoordinate2D":
 					sb.AppendLine ($"{outputName} = [NSValue valueWithMKCoordinate: *({nativeElementType} *) mono_object_unbox ({inputName})];");
 					break;
@@ -3862,9 +3870,6 @@ namespace XamCore.Registrar {
 					break;
 				case "MapKit.MKCoordinateSpan":
 					sb.AppendLine ($"{outputName} = [NSValue valueWithMKCoordinateSpan: *({nativeElementType} *) mono_object_unbox ({inputName})];");
-					break;
-				case "Foundation.NSRange":
-					sb.AppendLine ($"{outputName} = [NSValue valueWithRange: *({nativeElementType} *) mono_object_unbox ({inputName})];");
 					break;
 				case "SceneKit.SCNMatrix4":
 					sb.AppendLine ($"{outputName} = [NSValue valueWithSCNMatrix4: *({nativeElementType} *) mono_object_unbox ({inputName})];");

@@ -76,6 +76,12 @@
 		new Export ("MonoType *", "mono_class_get_type",
 			"MonoClass *", "klass"
 		),
+		#endregion
+
+		#region metadata/class-internals.h
+		new Export ("gboolean", "mono_class_is_nullable",
+			"MonoClass *", "klass"
+		),
 
 		new Export ("MonoClass *", "mono_class_get_nullable_param",
 			"MonoClass *", "klass"
@@ -371,6 +377,9 @@
 			"MonoClass *", "attr_klass"
 		),
 
+		new Export ("MonoType *", "mono_reflection_type_get_type",
+			"MonoReflectionType *", "reftype"
+		),
 		#endregion
 
 		#region metadata/metadata.h

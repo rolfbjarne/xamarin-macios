@@ -59,7 +59,11 @@ xamarin_marshal_return_value (MonoType *mtype, const char *type, MonoObject *ret
 		}
 		case _C_ID: {
 			MonoClass *r_klass = mono_object_get_class ((MonoObject *) retval);
-			if (r_klass == mono_get_string_class ()) {
+			MonoType *native_type = NULL;
+
+			if (xamarin_get_bind_as_attribute (method, 0, &native_type)) {
+				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), native_type, method, exception_gchandle);
+			} else if (r_klass == mono_get_string_class ()) {
 				char *str = mono_string_to_utf8 ((MonoString *) retval);
 				NSString *rv = [[NSString alloc] initWithUTF8String:str];
 

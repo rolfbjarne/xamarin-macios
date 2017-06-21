@@ -472,9 +472,6 @@ namespace XamCore.Registrar {
 			Trampoline trampoline;
 			bool? is_static;
 			bool? is_ctor;
-#if !MMP && !MTOUCH
-			MethodDescription? methodDescription;
-#endif
 			TType[] parameters;
 			TType[] native_parameters;
 			TType return_type;
@@ -521,14 +518,55 @@ namespace XamCore.Registrar {
 			}
 
 #if !MMP && !MTOUCH
-			public MethodDescription MethodDescription {
+			// The ArgumentSemantic enum is public, and
+			// I don't want to add another enum value there which
+			// is just an internal implementation detail, so just
+			// use a constant instead. Eventually we'll use an internal
+			// enum instead.
+			const int RetainReturnValueFlag = 1 << 10;
+			const int InstanceCategoryFlag = 1 << 11;
+
+			internal bool IsInstanceCategory {
 				get {
-					if (!methodDescription.HasValue) {
-						// This should never be called from the static registrar
-						methodDescription = new MethodDescription ((System.Reflection.MethodBase) (object) Method, ArgumentSemantic);
-					}
-					
-					return methodDescription.Value;
+					return DynamicRegistrar.HasThisAttributeImpl (Method);
+				}
+			}
+
+			internal void WriteUnmanagedDescription (IntPtr desc)
+			{
+				WriteUnmanagedDescription (desc, (System.Reflection.MethodBase) (object) Method);
+			}
+
+			internal void WriteUnmanagedDescription (IntPtr desc, System.Reflection.MethodBase method_base)
+			{
+				var semantic = ArgumentSemantic;
+				var minfo = method_base as System.Reflection.MethodInfo;
+				var retainReturnValue = minfo != null && minfo.GetBaseDefinition ().ReturnTypeCustomAttributes.IsDefined (typeof (ReleaseAttribute), false);
+				var instanceCategory = minfo != null && DynamicRegistrar.HasThisAttributeImpl (minfo);
+
+				// bitfields and a default value of -1 don't go very well together.
+				if (semantic == ArgumentSemantic.None)
+					semantic = ArgumentSemantic.Assign;
+
+				if (retainReturnValue)
+					semantic |= (ArgumentSemantic) (RetainReturnValueFlag);
+				if (instanceCategory)
+					semantic |= (ArgumentSemantic) (InstanceCategoryFlag);
+
+				var bindas_count = Marshal.ReadInt32 (desc + IntPtr.Size + 4);
+				if (bindas_count < 1 + Parameters.Length)
+					throw ErrorHelper.CreateError (8018, $"Internal consistency error: BindAs array is not big enough (expected at least {1 + parameters.Length} elements, got {bindas_count} elements). Please file a bug report at https://bugzilla.xamarin.com.");
+
+				Marshal.WriteIntPtr (desc, ObjectWrapper.Convert (method_base));
+				desc += IntPtr.Size;
+				Marshal.WriteInt32 (desc, (int) semantic);
+
+				if (ReturnType != NativeReturnType)
+					Marshal.WriteIntPtr (desc + IntPtr.Size + 8, ObjectWrapper.Convert (NativeReturnType));
+				for (int i = 0; i < NativeParameters.Length; i++) {
+					if (parameters [i] == native_parameters [i])
+						continue;
+					Marshal.WriteIntPtr (desc + IntPtr.Size + 8 + IntPtr.Size * (i + 1), ObjectWrapper.Convert (native_parameters [i]));
 				}
 			}
 #endif

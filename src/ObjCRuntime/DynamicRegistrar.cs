@@ -852,25 +852,25 @@ namespace XamCore.Registrar {
 				custom_type_map [type] = null;
 		}
 
-		public UnmanagedMethodDescription GetMethodDescriptionAndObject (Type type, IntPtr selector, IntPtr obj, ref IntPtr mthis)
+		public void GetMethodDescriptionAndObject (Type type, IntPtr selector, IntPtr obj, ref IntPtr mthis, IntPtr desc)
 		{
 			var sel = new Selector (selector);
 			var res = GetMethodNoThrow (type, type, sel.Name);
 			if (res == null)
 				throw ErrorHelper.CreateError (8006, "Failed to find the selector '{0}' on the type '{1}'", sel.Name, type.FullName);
 
-			var md = res.MethodDescription;
-
-			if (md.IsInstanceCategory) {
+			if (res.IsInstanceCategory) {
 				mthis = IntPtr.Zero;
 			} else {
 				var nsobj = Runtime.GetNSObject (obj, Runtime.MissingCtorResolution.ThrowConstructor1NotFound, true);
 				mthis = ObjectWrapper.Convert (nsobj);
-				if (res.Method.ContainsGenericParameters)
-					return new MethodDescription (FindClosedMethod (nsobj.GetType (), res.Method), res.ArgumentSemantic).GetUnmanagedDescription ();
+				if (res.Method.ContainsGenericParameters) {
+					res.WriteUnmanagedDescription (desc, FindClosedMethod (nsobj.GetType (), res.Method));
+					return;
+				}
 			}
 
-			return md.GetUnmanagedDescription ();
+			res.WriteUnmanagedDescription (desc);
 		}
 
 		internal static MethodInfo FindClosedMethod (Type closed_type, MethodBase open_method)
@@ -899,7 +899,7 @@ namespace XamCore.Registrar {
 			throw ErrorHelper.CreateError (8003, "Failed to find the closed generic method '{0}' on the type '{1}'.", open_method.Name, closed_type.FullName);
 		}
 
-		public UnmanagedMethodDescription GetMethodDescription (Type type, IntPtr selector)
+		public void GetMethodDescription (Type type, IntPtr selector, IntPtr desc)
 		{
 			var sel = new Selector (selector);
 			var res = GetMethodNoThrow (type, type, sel.Name);
@@ -908,7 +908,7 @@ namespace XamCore.Registrar {
 			if (type.IsGenericType && res.Method is ConstructorInfo)
 				throw ErrorHelper.CreateError (4133, "Cannot construct an instance of the type '{0}' from Objective-C because the type is generic.", type.FullName);
 
-			return res.MethodDescription.GetUnmanagedDescription ();
+			res.WriteUnmanagedDescription (desc);
 		}
 
 		ObjCMethod GetMethodNoThrow (Type original_type, Type type, string selector)

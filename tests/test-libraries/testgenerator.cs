@@ -541,7 +541,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ();
 
 			w.AppendLine ($"\t\t\t\tvalue = null;");
-			w.AppendLine ($"\t\t\t\tobj.Set{v.Managed}NumberNullable (value.Value);");
+			w.AppendLine ($"\t\t\t\tobj.Set{v.Managed}NumberNullable (value);");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.P{v.Managed}Number, \"null property after setting null value\");");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.P{v.Managed}NumberNullable, \"nullable null property after setting null value\");");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.Get{v.Managed}NumberNullable (), \"null method after setting null value\");");
@@ -621,7 +621,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ();
 
 			w.AppendLine ($"\t\t\t\tvalue = null;");
-			w.AppendLine ($"\t\t\t\tobj.Set{v.Managed}ValueNullable (value.Value);");
+			w.AppendLine ($"\t\t\t\tobj.Set{v.Managed}ValueNullable (value);");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.P{v.Managed}Value, \"null property after setting null value\");");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.P{v.Managed}ValueNullable, \"nullable null property after setting null value\");");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.Get{v.Managed}ValueNullable (), \"null method after setting null value\");");

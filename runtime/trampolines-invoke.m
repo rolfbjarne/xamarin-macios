@@ -67,7 +67,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 		if (has_nsobject) {
 			self = xamarin_invoke_objc_method_implementation (self, sel, (IMP) xamarin_ctor_trampoline);
-			marshal_return_value (context, "|", sizeof (id), self, NULL, false, NULL, &exception_gchandle);
+			marshal_return_value (context, "|", sizeof (id), self, NULL, false, NULL, NULL, &exception_gchandle);
 			xamarin_process_managed_exception_gchandle (exception_gchandle);
 			return;
 		}
@@ -90,7 +90,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 	// prolog
 	MonoObject *mthis = NULL;
-	MethodDescription desc;
+	MethodDescription *desc = NULL;
 	MonoMethod *method;
 	MonoMethodSignature *msig;
 	int semantic;
@@ -107,18 +107,23 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	int i;
 	int mofs = 0;
 
+	size_t desc_size = (num_arg + 1) * sizeof (BindAsData) + sizeof (MethodDescription);
+	desc = (MethodDescription *) xamarin_calloc (desc_size);
+	desc->bindas_count = num_arg + 1;
+	free_list = s_list_prepend (free_list, desc);
+
 	if (is_ctor || is_static) {
-		desc = xamarin_get_method_for_selector ([self class], sel, &exception_gchandle);
+		xamarin_get_method_for_selector ([self class], sel, desc, &exception_gchandle);
 	} else {
-		desc = xamarin_get_method_and_object_for_selector ([self class], sel, self, &mthis, &exception_gchandle);
+		xamarin_get_method_and_object_for_selector ([self class], sel, self, &mthis, desc, &exception_gchandle);
 	}
 	if (exception_gchandle != 0)
 		goto exception_handling;
 
-	method = xamarin_get_reflection_method_method (desc.method);
+	method = xamarin_get_reflection_method_method (desc->method);
 	msig = mono_method_signature (method);
-	semantic = desc.semantic & ArgumentSemanticMask;
-	isCategoryInstance = (desc.semantic & ArgumentSemanticCategoryInstance) == ArgumentSemanticCategoryInstance;
+	semantic = desc->semantic & ArgumentSemanticMask;
+	isCategoryInstance = (desc->semantic & ArgumentSemanticCategoryInstance) == ArgumentSemanticCategoryInstance;
 
 	frame_length = [sig frameLength] - (sizeof (void *) * (isCategoryInstance ? 1 : 2));
 	arg_frame = (void **) alloca (frame_length);
@@ -300,7 +305,6 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 				case _C_ID: {
 					id id_arg = (id) arg;
 					MonoClass *p_klass = mono_class_from_mono_type (p);
-					MonoType *native_type = NULL;
 					if (p_klass == mono_get_intptr_class ()) {
 						arg_frame [ofs] = id_arg;
 						arg_ptrs [i + mofs] = &arg_frame [frameofs];
@@ -381,8 +385,8 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							arg_ptrs [i + mofs] = xamarin_get_delegate_for_block_parameter (method, i, id_arg, &exception_gchandle);
 							if (exception_gchandle != 0)
 								goto exception_handling;
-						} else if (xamarin_get_bind_as_attribute (method, i + 1, &native_type)) {
-							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (id_arg, p, native_type, method, &exception_gchandle, (void **) &free_list);
+						} else if (desc->bindas [i + 1].original_type != NULL) {
+							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (id_arg, p, desc->bindas [i + 1].original_type, method, &exception_gchandle, (void **) &free_list);
 							if (exception_gchandle != 0)
 								goto exception_handling;
 						} else {
@@ -556,9 +560,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	ret_type = [sig methodReturnType];
 	ret_type = xamarin_skip_encoding_flags (ret_type);
 	if (is_ctor) {
-		marshal_return_value (context, "|", sizeof (id), self, mono_signature_get_return_type (msig), (desc.semantic & ArgumentSemanticRetainReturnValue) != 0, method, &exception_gchandle);
+		marshal_return_value (context, "|", sizeof (id), self, mono_signature_get_return_type (msig), (desc->semantic & ArgumentSemanticRetainReturnValue) != 0, method, desc, &exception_gchandle);
 	} else if (*ret_type != 'v') {
-		marshal_return_value (context, ret_type, [sig methodReturnLength], retval, mono_signature_get_return_type (msig), (desc.semantic & ArgumentSemanticRetainReturnValue) != 0, method, &exception_gchandle);
+		marshal_return_value (context, ret_type, [sig methodReturnLength], retval, mono_signature_get_return_type (msig), (desc->semantic & ArgumentSemanticRetainReturnValue) != 0, method, desc, &exception_gchandle);
 	}
 
 exception_handling:
@@ -632,7 +636,7 @@ xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType 
 		// Template to avoid c&p errors
 		#define NSNUMBER_TEMPLATE(n_type, m_type, selector) \
 			} else if (!strcmp (to_name, m_type)) { \
-				n_type *valueptr = (n_type *) xamarin_malloc (sizeof (n_type)); \
+				n_type *valueptr = (n_type *) xamarin_calloc (sizeof (n_type)); \
 				*valueptr = [number selector]; \
 				ptr = valueptr;
 		// End template
@@ -670,7 +674,7 @@ xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType 
 		// Template to avoid c&p errors
 		#define NSVALUE_TEMPLATE(n_type, m_type, selector) \
 			} else if (!strcmp (to_name, m_type)) { \
-				n_type *valueptr = (n_type *) xamarin_malloc (sizeof (n_type)); \
+				n_type *valueptr = (n_type *) xamarin_calloc (sizeof (n_type)); \
 				*valueptr = [valueobj selector]; \
 				ptr = valueptr;
 		// End template

@@ -254,8 +254,13 @@ function install_specific_xcode () {
 		sudo $XCODE_DEVELOPER_ROOT/usr/bin/xcodebuild -license accept
 	fi
 
-	if is_at_least_version $XCODE_VERSION 8.0; then
+	PKGS=
+	if is_at_least_version $XCODE_VERSION 9.0; then
+		PKGS="MobileDevice.pkg MobileDeviceDevelopment.pkg XcodeExtensionSupport.pkg XcodeSystemResources.pkg"
+	elif is_at_least_version $XCODE_VERSION 8.0; then
 		PKGS="MobileDevice.pkg MobileDeviceDevelopment.pkg XcodeSystemResources.pkg"
+	fi
+	if test -n $PKGS; then
 		for pkg in $PKGS; do
 			if test -f "$XCODE_DEVELOPER_ROOT/../Resources/Packages/$pkg"; then
 				log "Installing $pkg"

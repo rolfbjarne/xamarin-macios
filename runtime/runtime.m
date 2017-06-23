@@ -2455,46 +2455,6 @@ xamarin_find_assembly_directory (const char *assembly_name)
 	return entry ? entry->location : NULL;
 }
 
-// bool
-// xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoType **original_type)
-// {
-// 	// COOP: Reads managed memory, needs to be in UNSAFE mode
-// 	MONO_ASSERT_GC_UNSAFE;
-
-// 	MonoCustomAttrInfo *attribs;
-
-// 	/* This method is called quite often (most native->managed method calls that returns a value or has a parameter) */
-// 	/* This is why we lookup the attribute in native code: to avoid switching to managed unless there actually is */
-// 	/* a BindAs attribute on the parameter in question */
-
-// 	*original_type = NULL;
-
-// 	attribs = mono_custom_attrs_from_param (method, parameter);
-// 	if (!attribs)
-// 		return false;
-
-// 	bool rv = false;
-// 	if (attribs->num_attrs) {
-// 		static MonoClass *bindas_klass = NULL;
-// 		static MonoMethod *get_original_type_method = NULL;
-
-// 		if (bindas_klass) {
-// 			const char *objcruntime = xamarin_use_new_assemblies ? "ObjCRuntime" : PRODUCT_COMPAT_NAMESPACE ".ObjCRuntime";
-// 			bindas_klass = get_class_from_name (platform_image, objcruntime, "BindAsAttribute");
-// 			get_original_type_method = mono_class_get_method_from_name (bindas_klass, "get_OriginalMethod", 0);
-// 		}
-
-// 		MonoObject *bind_as_attribute = mono_custom_attrs_get_attr (attribs, bindas_klass);
-// 		if (bind_as_attribute) {
-// 			MonoReflectionType *reflection_type = (MonoReflectionType *) mono_runtime_invoke (get_original_type_method, bind_as_attribute, NULL, NULL /* FIXME: exception */);
-// 			if (reflection_type)
-// 				*original_type = mono_reflection_type_get_type (reflection_type);
-// 		}
-// 	}
-// 	mono_custom_attrs_free (attribs);
-// 	return rv;
-// }
-
 /*
  * Object unregistration:
  *

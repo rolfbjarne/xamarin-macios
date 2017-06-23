@@ -151,7 +151,6 @@ char *			xamarin_strdup_printf (const char *msg, ...);
 void *			xamarin_calloc (size_t size);
 void			xamarin_free (void *ptr);
 MonoMethod *	xamarin_get_reflection_method_method (MonoReflectionMethod *method);
-// bool			xamarin_get_bind_as_attribute (MonoMethod *method, uint32_t parameter /* 0: return type, 1+ parameters */, MonoType **original_type);
 void			xamarin_framework_peer_lock ();
 void			xamarin_framework_peer_unlock ();
 bool			xamarin_file_exists (const char *path);

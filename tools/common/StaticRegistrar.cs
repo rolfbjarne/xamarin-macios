@@ -1481,7 +1481,7 @@ namespace XamCore.Registrar {
 			return null;
 		}
 
-		protected override BindAsAttribute GetNativeTypeAttribute (MethodDefinition method, int parameter_index)
+		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
 			CustomAttribute attrib;
 

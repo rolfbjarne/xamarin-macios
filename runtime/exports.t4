@@ -363,20 +363,6 @@
 			"MonoType *", "type"
 		),
 
-		new Export ("MonoCustomAttrInfo *", "mono_custom_attrs_from_param",
-			"MonoMethod *", "method",
-			"int32_t", "param"
-		),
-
-		new Export ("void", "mono_custom_attrs_free",
-			"MonoCustomAttrInfo *", "ainfo"
-		),
-
-		new Export ("MonoObject *", "mono_custom_attrs_get_attr",
-			"MonoCustomAttrInfo *", "ainfo",
-			"MonoClass *", "attr_klass"
-		),
-
 		new Export ("MonoType *", "mono_reflection_type_get_type",
 			"MonoReflectionType *", "reftype"
 		),

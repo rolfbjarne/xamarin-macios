@@ -209,7 +209,7 @@ namespace XamCore.Registrar {
 			return assembly.GetTypes ();
 		}
 
-		protected override BindAsAttribute GetNativeTypeAttribute (MethodBase method, int parameter_index)
+		protected override BindAsAttribute GetBindAsAttribute (MethodBase method, int parameter_index)
 		{
 			ICustomAttributeProvider provider;
 

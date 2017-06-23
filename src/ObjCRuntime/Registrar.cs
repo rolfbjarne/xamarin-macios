@@ -748,9 +748,9 @@ namespace XamCore.Registrar {
 					is_stret = IntPtr.Size == 8 ? Stret.X86_64NeedStret (mi) : Stret.X86NeedStret (mi);
 #elif __IOS__
 					if (Runtime.Arch == Arch.DEVICE) {
-						is_stret = IntPtr.Size == 4 && Stret.ArmNeedStret (mi);
+						is_stret = IntPtr.Size == 4 && Stret.ArmNeedStret (NativeReturnType);
 					} else {
-						is_stret = IntPtr.Size == 4 ? Stret.X86NeedStret (mi) : Stret.X86_64NeedStret (mi);
+						is_stret = IntPtr.Size == 4 ? Stret.X86NeedStret (NativeReturnType) : Stret.X86_64NeedStret (NativeReturnType);
 					}
 #elif __TVOS__
 					is_stret = Runtime.Arch == Arch.SIMULATOR && Stret.X86_64NeedStret (mi);

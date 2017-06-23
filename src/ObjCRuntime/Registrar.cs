@@ -593,7 +593,7 @@ namespace XamCore.Registrar {
 					if (native_parameters == null && Parameters != null) {
 						native_parameters = new TType [parameters.Length];
 						for (int i = 0; i < parameters.Length; i++) {
-							var originalType = Registrar.GetNativeTypeAttribute (Method, i)?.OriginalType;
+							var originalType = Registrar.GetBindAsAttribute (Method, i)?.OriginalType;
 							if (originalType != null) {
 								if (!IsValidToManagedTypeConversion (originalType, parameters [i]))
 									throw Registrar.CreateException (4169, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (parameters [i])}' to '{originalType.FullName}' for the parameter '{Registrar.GetParameterName (Method, i)}' in the method {DescriptiveMethodName}.");
@@ -690,7 +690,7 @@ namespace XamCore.Registrar {
 			public TType NativeReturnType {
 				get {
 					if (native_return_type == null) {
-						var originalType = Registrar.GetNativeTypeAttribute (Method, -1)?.OriginalType;
+						var originalType = Registrar.GetBindAsAttribute (Method, -1)?.OriginalType;
 						if (originalType != null) {
 							if (!IsValidToManagedTypeConversion (originalType, ReturnType))
 								throw Registrar.CreateException (4170, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (ReturnType)}' to '{originalType.FullName}' for the return value in the method {DescriptiveMethodName}.");
@@ -961,7 +961,7 @@ namespace XamCore.Registrar {
 		protected abstract List<AvailabilityBaseAttribute> GetAvailabilityAttributes (TType obj); // must only return attributes for the current platform.
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
-		protected abstract BindAsAttribute GetNativeTypeAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
+		protected abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
 		protected abstract TType GetNullableType (TType type); // For T? returns T. For T returns null.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);

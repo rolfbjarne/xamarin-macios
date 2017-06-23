@@ -61,7 +61,7 @@ xamarin_marshal_return_value (MonoType *mtype, const char *type, MonoObject *ret
 			MonoClass *r_klass = mono_object_get_class ((MonoObject *) retval);
 
 			if (desc && desc->bindas [0].original_type != NULL) {
-				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), desc->bindas [0].original_type, method, exception_gchandle);
+				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), mono_reflection_type_get_type (desc->bindas [0].original_type), method, exception_gchandle);
 			} else if (r_klass == mono_get_string_class ()) {
 				char *str = mono_string_to_utf8 ((MonoString *) retval);
 				NSString *rv = [[NSString alloc] initWithUTF8String:str];

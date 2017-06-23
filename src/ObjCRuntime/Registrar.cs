@@ -555,13 +555,12 @@ namespace XamCore.Registrar {
 
 				var bindas_count = Marshal.ReadInt32 (desc + IntPtr.Size + 4);
 				if (bindas_count < 1 + Parameters.Length)
-					throw ErrorHelper.CreateError (8018, $"Internal consistency error: BindAs array is not big enough (expected at least {1 + parameters.Length} elements, got {bindas_count} elements). Please file a bug report at https://bugzilla.xamarin.com.");
+					throw ErrorHelper.CreateError (8018, $"Internal consistency error: BindAs array is not big enough (expected at least {1 + parameters.Length} elements, got {bindas_count} elements) for {method_base.DeclaringType.FullName + "." + method_base.Name}. Please file a bug report at https://bugzilla.xamarin.com.");
 
 				Marshal.WriteIntPtr (desc, ObjectWrapper.Convert (method_base));
-				desc += IntPtr.Size;
-				Marshal.WriteInt32 (desc, (int) semantic);
+				Marshal.WriteInt32 (desc + IntPtr.Size, (int) semantic);
 
-				if (ReturnType != NativeReturnType)
+				if (!IsConstructor && ReturnType != NativeReturnType)
 					Marshal.WriteIntPtr (desc + IntPtr.Size + 8, ObjectWrapper.Convert (NativeReturnType));
 				for (int i = 0; i < NativeParameters.Length; i++) {
 					if (parameters [i] == native_parameters [i])
@@ -825,7 +824,7 @@ namespace XamCore.Registrar {
 
 			string ComputeSignature ()
 			{
-				return Registrar.ComputeSignature (DeclaringType.Type, Method, this, IsCategoryInstance);
+				return Registrar.ComputeSignature (DeclaringType.Type, null, this, IsCategoryInstance);
 			}
 
 			public override string ToString ()
@@ -2180,7 +2179,7 @@ namespace XamCore.Registrar {
 			if (Method != null) {
 				parameters = GetParameters (Method);
 			} else {
-				parameters = method.Parameters;
+				parameters = method.NativeParameters;
 			}
 
 			if (parameters != null) {
@@ -2305,10 +2304,6 @@ namespace XamCore.Registrar {
 			case "System.DateTime":
 				throw CreateException (4102, member, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsDualBuild ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", member.FullName);
 			}
-
-			// We use BindAsAttribute to wrap NSNumber/NSValue into more accurate Nullable<T> types
-			if (typeFullName != null && typeFullName.Contains ("Nullable"))
-				return "@";
 
 			if (Is (type, ObjCRuntime, "Selector"))
 				return ":";

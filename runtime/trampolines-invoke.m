@@ -107,9 +107,10 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	int i;
 	int mofs = 0;
 
-	size_t desc_size = (num_arg + 1) * sizeof (BindAsData) + sizeof (MethodDescription);
+	int desc_arg_count = num_arg + 2; /* 1 for the return value + 1 if this is a category instance method */
+	size_t desc_size = desc_arg_count * sizeof (BindAsData) + sizeof (MethodDescription);
 	desc = (MethodDescription *) xamarin_calloc (desc_size);
-	desc->bindas_count = num_arg + 1;
+	desc->bindas_count = desc_arg_count;
 	free_list = s_list_prepend (free_list, desc);
 
 	if (is_ctor || is_static) {
@@ -386,7 +387,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							if (exception_gchandle != 0)
 								goto exception_handling;
 						} else if (desc->bindas [i + 1].original_type != NULL) {
-							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (id_arg, p, desc->bindas [i + 1].original_type, method, &exception_gchandle, (void **) &free_list);
+							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (id_arg, mono_reflection_type_get_type (desc->bindas [i + 1].original_type), p, method, &exception_gchandle, (void **) &free_list);
 							if (exception_gchandle != 0)
 								goto exception_handling;
 						} else {
@@ -756,14 +757,14 @@ xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, M
 
 	inputClass = mono_class_from_mono_type (inputType);;
 	outputClass = mono_class_from_mono_type (outputType);
-	isNullable = mono_class_is_nullable (outputClass);
+	isNullable = mono_class_is_nullable (inputClass);
 	underlyingClass = isNullable ? mono_class_get_nullable_param (inputClass) : inputClass;
 
 	to_name = xamarin_class_get_full_name (underlyingClass, exception_gchandle);
 	if (*exception_gchandle != 0)
 		goto exception_handling;
 
-	if (xamarin_is_class_nsnumber (inputClass)) {
+	if (xamarin_is_class_nsnumber (outputClass)) {
 		if (!strcmp (to_name, "System.SByte")) {
 			convertedValue = [NSNumber numberWithChar: *(int8_t *) mono_object_unbox (value)];
 		} else if (!strcmp (to_name, "System.Byte")) {
@@ -803,7 +804,7 @@ xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, M
 			goto exception_handling;
 		}
 #undef NSNUMBER_TEMPLATE
-	} else if (xamarin_is_class_nsvalue (inputClass)) {
+	} else if (xamarin_is_class_nsvalue (outputClass)) {
 		if (xamarin_use_new_assemblies && !strncmp (to_name, "MonoMac.", 8)) {
 			char *tmp_to_name = xamarin_strdup_printf ("%s", to_name + 8);
 			xamarin_free (to_name);

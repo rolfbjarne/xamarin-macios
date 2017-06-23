@@ -84,7 +84,7 @@ struct MTRegistrationMap {
 };
 
 typedef struct {
-	MonoType *original_type;
+	MonoReflectionType *original_type;
 } BindAsData;
 
 typedef struct {

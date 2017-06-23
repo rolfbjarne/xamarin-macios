@@ -477,7 +477,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ();
 		}
 
-		w.AppendLine ("\t\tclass BindAsTestClassGenerated : ObjCRegistrarTest {");
+		w.AppendLine ("\t\tinternal class BindAsTestClassGenerated : ObjCRegistrarTest {");
 
 		w.AppendLine ("\t\t\t// BindAs: NSNumber");
 		foreach (var v in bindas_nsnumber) {
@@ -570,7 +570,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			w.AppendLine ($"\t\t\t\tobj.{v.Managed}Number = null;");
 			w.AppendLine ($"\t\t\t\tMessaging.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle (\"set{v.Managed}NumberNonNullable:\"), new NSNumber (value).Handle);");
-			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value, obj.{v.Managed}Number, \"after setting B\");");
+			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value, obj.{v.Managed}Number.Value, \"after setting B\");");
 			w.AppendLine ();
 
 			w.AppendLine ($"\t\t\t\tobj.{v.Managed}Number = null;");

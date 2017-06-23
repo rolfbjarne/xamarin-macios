@@ -742,9 +742,9 @@ namespace XamCore.Registrar {
 					var mi = (System.Reflection.MethodInfo) Method;
 					bool is_stret;
 #if __WATCHOS__
-					is_stret = Runtime.Arch == Arch.DEVICE ? Stret.ArmNeedStret (mi) : Stret.X86NeedStret (mi);
+					is_stret = Runtime.Arch == Arch.DEVICE ? Stret.ArmNeedStret (NativeReturnType) : Stret.X86NeedStret (NativeReturnType);
 #elif MONOMAC
-					is_stret = IntPtr.Size == 8 ? Stret.X86_64NeedStret (mi) : Stret.X86NeedStret (mi);
+					is_stret = IntPtr.Size == 8 ? Stret.X86_64NeedStret (NativeReturnType) : Stret.X86NeedStret (NativeReturnType);
 #elif __IOS__
 					if (Runtime.Arch == Arch.DEVICE) {
 						is_stret = IntPtr.Size == 4 && Stret.ArmNeedStret (NativeReturnType);
@@ -752,7 +752,7 @@ namespace XamCore.Registrar {
 						is_stret = IntPtr.Size == 4 ? Stret.X86NeedStret (NativeReturnType) : Stret.X86_64NeedStret (NativeReturnType);
 					}
 #elif __TVOS__
-					is_stret = Runtime.Arch == Arch.SIMULATOR && Stret.X86_64NeedStret (mi);
+					is_stret = Runtime.Arch == Arch.SIMULATOR && Stret.X86_64NeedStret (NativeReturnType);
 #else
 	#error unknown architecture
 #endif

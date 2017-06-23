@@ -308,6 +308,7 @@ namespace Bindings.Test {
 			w.AppendLine ("\t\t[Sealed]");
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Number\")]");
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?))]");
+			w.AppendLine ($"\t\t[NullAllowed] // This should be the default");
 			w.AppendLine ($"\t\tNSNumber P{v.Managed}NumberNullable {{ get; set; }}");
 
 			w.AppendLine ();
@@ -318,11 +319,12 @@ namespace Bindings.Test {
 			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"get{v.Managed}NumberNonNullable\")]");
 			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
+			w.AppendLine ($"\t\t[return: NullAllowed] // This should be the default");
 			w.AppendLine ($"\t\tNSNumber Get{v.Managed}NumberNonNullable ();");
 
 			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"set{v.Managed}NumberNullable:\")]");
-			w.AppendLine ($"\t\tvoid Set{v.Managed}NumberNullable ([BindAs (typeof ({v.Managed}?))] NSNumber value);");
+			w.AppendLine ($"\t\tvoid Set{v.Managed}NumberNullable ([BindAs (typeof ({v.Managed}?))] [NullAllowed /* this should be the default */] NSNumber value);");
 
 			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"set{v.Managed}NumberNonNullable:\")]");
@@ -351,6 +353,7 @@ namespace Bindings.Test {
 			w.AppendLine ("\t\t[Sealed]");
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Value\")]");
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?))]");
+			w.AppendLine ($"\t\t[NullAllowed] // This should be the default");
 			w.AppendLine ($"\t\tNSValue P{v.Managed}ValueNullable {{ get; set; }}");
 
 			w.AppendLine ();
@@ -361,11 +364,12 @@ namespace Bindings.Test {
 			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"get{v.Managed}ValueNonNullable\")]");
 			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
+			w.AppendLine ($"\t\t[return: NullAllowed] // This should be the default");
 			w.AppendLine ($"\t\tNSValue Get{v.Managed}ValueNonNullable ();");
 
 			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"set{v.Managed}ValueNullable:\")]");
-			w.AppendLine ($"\t\tvoid Set{v.Managed}ValueNullable ([BindAs (typeof ({v.Managed}?))] NSValue value);");
+			w.AppendLine ($"\t\tvoid Set{v.Managed}ValueNullable ([BindAs (typeof ({v.Managed}?))] [NullAllowed /* this should be the default */] NSValue value);");
 
 			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"set{v.Managed}ValueNonNullable:\")]");

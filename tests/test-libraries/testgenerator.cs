@@ -86,13 +86,13 @@ static class C {
 		new BindAsData { Managed = "CGPoint", Native = "CGPoint", ManagedCondition = "XAMCORE_2_0", ManagedNewExpression = "new CGPoint (19, 20)", Map = ".CGPointValue", MapFrom = "FromCGPoint" },
 		new BindAsData { Managed = "CGSize", Native = "CGSize", ManagedCondition = "XAMCORE_2_0", ManagedNewExpression = "new CGSize (21, 22)", Map = ".CGSizeValue", MapFrom = "FromCGSize" },
 		new BindAsData { Managed = "CGRect", Native = "CGRect", ManagedCondition = "XAMCORE_2_0", ManagedNewExpression = "new CGRect (23, 24, 25, 26)", Map = ".CGRectValue", MapFrom = "FromCGRect" },
-		new BindAsData { Managed = "UIEdgeInsets", Native = "UIEdgeInsets", ManagedCondition = "__IOS__ || __WATCHOS__ || __TVOS__" /* Have UIKit */, ManagedNewExpression = "new UIEdgeInsets (27, 28, 29, 30)", Map = ".UIEdgeInsetsValue", MapFrom = "FromUIEdgeInsets" },
-		new BindAsData { Managed = "UIOffset", Native = "UIOffset", ManagedCondition = "__IOS__ || __WATCHOS__ || __TVOS__" /* Have UIKit */, ManagedNewExpression = "new UIOffset (31, 32)", Map = ".UIOffsetValue", MapFrom = "FromUIOffset" },
-		new BindAsData { Managed = "MKCoordinateSpan", Native = "MKCoordinateSpan", ManagedCondition = "XAMCORE_2_0", ManagedNewExpression = "new MKCoordinateSpan (33, 34)", Map = ".CoordinateSpanValue", MapFrom = "FromMKCoordinateSpan" },
-		new BindAsData { Managed = "CMTimeRange", Native = "CMTimeRange", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */, ManagedNewExpression = "new CMTimeRange { Duration = new CMTime (37, 38), Start = new CMTime (39, 40) }", Map = ".CMTimeRangeValue", MapFrom = "FromCMTimeRange"  },
-		new BindAsData { Managed = "CMTime", Native = "CMTime", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */,  ManagedNewExpression = "new CMTime (35, 36)", Map = ".CMTimeValue", MapFrom = "FromCMTime"  },
-		new BindAsData { Managed = "CMTimeMapping", Native = "CMTimeMapping", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreMedia */, ManagedNewExpression = "new CMTimeMapping { Source = new CMTimeRange { Duration = new CMTime (42, 43), Start = new CMTime (44, 45) } }", Map = ".CMTimeMappingValue", MapFrom = "FromCMTimeMapping"  },
-		new BindAsData { Managed = "CATransform3D", Native = "CATransform3D", ManagedCondition = "__IOS__ || __MACOS__ || __TVOS__" /* HaveCoreAnimation */, ManagedNewExpression = "new CATransform3D { m11 = 41 }", Map = ".CATransform3DValue", MapFrom = "FromCATransform3D"  },
+		new BindAsData { Managed = "UIEdgeInsets", Native = "UIEdgeInsets", ManagedCondition = "HAVE_UIKIT", ManagedNewExpression = "new UIEdgeInsets (27, 28, 29, 30)", Map = ".UIEdgeInsetsValue", MapFrom = "FromUIEdgeInsets" },
+		new BindAsData { Managed = "UIOffset", Native = "UIOffset", ManagedCondition = "HAVE_UIKIT", ManagedNewExpression = "new UIOffset (31, 32)", Map = ".UIOffsetValue", MapFrom = "FromUIOffset" },
+		new BindAsData { Managed = "MKCoordinateSpan", Native = "MKCoordinateSpan", ManagedCondition = "HAVE_MAPKIT", ManagedNewExpression = "new MKCoordinateSpan (33, 34)", Map = ".CoordinateSpanValue", MapFrom = "FromMKCoordinateSpan" },
+		new BindAsData { Managed = "CMTimeRange", Native = "CMTimeRange", ManagedCondition = "HAVE_COREMEDIA", ManagedNewExpression = "new CMTimeRange { Duration = new CMTime (37, 38), Start = new CMTime (39, 40) }", Map = ".CMTimeRangeValue", MapFrom = "FromCMTimeRange"  },
+		new BindAsData { Managed = "CMTime", Native = "CMTime", ManagedCondition = "HAVE_COREMEDIA",  ManagedNewExpression = "new CMTime (35, 36)", Map = ".CMTimeValue", MapFrom = "FromCMTime"  },
+		new BindAsData { Managed = "CMTimeMapping", Native = "CMTimeMapping", ManagedCondition = "HAVE_COREMEDIA", ManagedNewExpression = "new CMTimeMapping { Source = new CMTimeRange { Duration = new CMTime (42, 43), Start = new CMTime (44, 45) } }", Map = ".CMTimeMappingValue", MapFrom = "FromCMTimeMapping"  },
+		new BindAsData { Managed = "CATransform3D", Native = "CATransform3D", ManagedCondition = "HAVE_COREANIMATION", ManagedNewExpression = "new CATransform3D { m11 = 41 }", Map = ".CATransform3DValue", MapFrom = "FromCATransform3D"  },
 	};
 
 	static string GetNativeName (char t)
@@ -258,7 +258,21 @@ static class C {
 	{
 		var w = new StringBuilder ();
 
-		w.AppendLine (@"using System;
+		w.AppendLine (@"
+#if __IOS__ || __MACOS__ || __TVOS__
+#define HAVE_COREMEDIA
+#endif
+#if __IOS__ || __MACOS__ || __TVOS__
+#define HAVE_COREANIMATION
+#endif
+#if __IOS__ || __WATCHOS__ || __TVOS__
+#define HAVE_UIKIT
+#endif
+#if XAMCORE_2_0
+#define HAVE_MAPKIT
+#endif
+
+using System;
 #if !__WATCHOS__
 using System.Drawing;
 #endif
@@ -266,13 +280,21 @@ using System.Drawing;
 #if __UNIFIED__
 using ObjCRuntime;
 using Foundation;
-using UIKit;
 using CoreGraphics;
 using SceneKit;
 using CoreLocation;
+#if HAVE_MAPKIT
 using MapKit;
+#endif
+#if HAVE_COREMEDIA
 using CoreMedia;
+#endif
+#if HAVE_COREANIMATION
 using CoreAnimation;
+#endif
+#if HAVE_UIKIT
+using UIKit;
+#endif
 #else
 using MonoTouch.ObjCRuntime;
 using MonoTouch.Foundation;
@@ -519,6 +541,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		w.AppendLine ("\t\t}");
 
 		foreach (var v in bindas_nsnumber) {
+			if (v.ManagedCondition != null)
+				w.AppendLine ($"#if {v.ManagedCondition}");
+
 			w.AppendLine ("\t\t[Test]");
 			w.AppendLine ($"\t\tpublic void NSNumberBindAs_{v.Managed}_Bindings ()");
 			w.AppendLine ("\t\t{");
@@ -594,11 +619,18 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value, number{v.Map}, \"getter C\");");
 			w.AppendLine ($"\t\t\t}}");
 			w.AppendLine ("\t\t}");
+
+			if  (v.ManagedCondition != null)
+				w.AppendLine ("#endif");
+
 			w.AppendLine ();
 		}
 
 
 		foreach (var v in bindas_nsvalue) {
+			if (v.ManagedCondition != null)
+				w.AppendLine ($"#if {v.ManagedCondition}");
+			
 			w.AppendLine ("\t\t[Test]");
 			w.AppendLine ($"\t\tpublic void NSValueBindAs_{v.Managed}_Bindings ()");
 			w.AppendLine ("\t\t{");
@@ -674,6 +706,10 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value, Value{v.Map}, \"getter C\");");
 			w.AppendLine ($"\t\t\t}}");
 			w.AppendLine ("\t\t}");
+
+			if (v.ManagedCondition != null)
+				w.AppendLine ("#endif");
+			
 			w.AppendLine ();
 		}
 

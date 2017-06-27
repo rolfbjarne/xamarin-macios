@@ -254,51 +254,60 @@ static class C {
 		File.WriteAllText ("libtest.methods.m", w.ToString ());
 	}
 
-	static void WriteApiDefinition ()
+	static void WriteFrameworkDefines (StringBuilder w)
 	{
-		var w = new StringBuilder ();
-
 		w.AppendLine (@"
 #if __TVOS__ || __WATCHOS__
 #define BUG_57764
 #endif
-#if __IOS__ || __MACOS__ || __TVOS__
-#if !BUG_57764
-#define HAVE_COREMEDIA
-#endif
-#endif
+
 #if __IOS__ || __MACOS__ || __TVOS__
 #if !BUG_57764
 #define HAVE_COREANIMATION
 #endif
 #endif
+
+#if __IOS__ || __MACOS__ || __TVOS__
+#if !BUG_57764
+#define HAVE_COREMEDIA
+#endif
+#endif
+
 #if __IOS__ || __WATCHOS__ || __TVOS__
 #define HAVE_UIKIT
 #endif
+
 #if XAMCORE_2_0
 #define HAVE_MAPKIT
-#endif
+#endif");
+		
+	}
 
+	static void WriteApiDefinition ()
+	{
+		var w = new StringBuilder ();
+		WriteFrameworkDefines (w);
+		w.AppendLine (@"
 using System;
 #if !__WATCHOS__
 using System.Drawing;
 #endif
 
 #if __UNIFIED__
-using ObjCRuntime;
-using Foundation;
-using CoreGraphics;
-using SceneKit;
-using CoreLocation;
-#if HAVE_MAPKIT
-using MapKit;
-#endif
-#if HAVE_COREMEDIA
-using CoreMedia;
-#endif
 #if HAVE_COREANIMATION
 using CoreAnimation;
 #endif
+using CoreGraphics;
+using CoreLocation;
+#if HAVE_COREMEDIA
+using CoreMedia;
+#endif
+using Foundation;
+#if HAVE_MAPKIT
+using MapKit;
+#endif
+using ObjCRuntime;
+using SceneKit;
 #if HAVE_UIKIT
 using UIKit;
 #endif
@@ -456,18 +465,27 @@ namespace Bindings.Test
 	{
 		var w = new StringBuilder ();
 
+		WriteFrameworkDefines (w);
 		w.AppendLine (@"
 using System;
 #if XAMCORE_2_0
-using Foundation;
-using ObjCRuntime;
-using CoreLocation;
-using SceneKit;
-using CoreGraphics;
-using MapKit;
-using CoreMedia;
-using UIKit;
+#if HAVE_COREANIMATION
 using CoreAnimation;
+#endif
+using CoreGraphics;
+using CoreLocation;
+#if HAVE_COREMEDIA
+using CoreMedia;
+#endif
+using Foundation;
+#if HAVE_MAPKIT
+using MapKit;
+#endif
+using ObjCRuntime;
+using SceneKit;
+#if HAVE_UIKIT
+using UIKit;
+#endif
 using MonoTouchException=ObjCRuntime.RuntimeException;
 using NativeException=Foundation.MonoTouchException;
 #else

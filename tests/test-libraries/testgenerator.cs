@@ -95,6 +95,10 @@ static class C {
 		new BindAsData { Managed = "CATransform3D", Native = "CATransform3D", ManagedCondition = "HAVE_COREANIMATION", ManagedNewExpression = "new CATransform3D { m11 = 41 }", Map = ".CATransform3DValue", MapFrom = "FromCATransform3D"  },
 	};
 
+	static BindAsData [] bindas_nsstring = new [] {
+		new BindAsData { Managed = "AVMediaTypes" },
+	};
+
 	static string GetNativeName (char t)
 	{
 		switch (t) {
@@ -294,6 +298,7 @@ using System.Drawing;
 #endif
 
 #if __UNIFIED__
+using AVFoundation;
 #if HAVE_COREANIMATION
 using CoreAnimation;
 #endif
@@ -333,15 +338,29 @@ namespace Bindings.Test {
 			if (v.ManagedCondition != null)
 				w.AppendLine ($"#if {v.ManagedCondition}");
 
+			// no BindAs
+
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Number\")]");
 			w.AppendLine ($"\t\tNSNumber P{v.Managed}Number {{ get; set; }}");
 
+			// plain value
 			w.AppendLine ();
 			w.AppendLine ("\t\t[Sealed]");
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Number\")]");
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}))]");
 			w.AppendLine ($"\t\tNSNumber P{v.Managed}NumberNonNullable {{ get; set; }}");
 
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"get{v.Managed}NumberNonNullable\")]");
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
+			w.AppendLine ($"\t\t[return: NullAllowed] // This should be the default");
+			w.AppendLine ($"\t\tNSNumber Get{v.Managed}NumberNonNullable ();");
+			
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"set{v.Managed}NumberNonNullable:\")]");
+			w.AppendLine ($"\t\tvoid Set{v.Managed}NumberNonNullable ([BindAs (typeof ({v.Managed}))] NSNumber value);");
+
+			// nullable value
 			w.AppendLine ();
 			w.AppendLine ("\t\t[Sealed]");
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Number\")]");
@@ -355,18 +374,74 @@ namespace Bindings.Test {
 			w.AppendLine ($"\t\tNSNumber Get{v.Managed}NumberNullable ();");
 
 			w.AppendLine ();
-			w.AppendLine ($"\t\t[Export (\"get{v.Managed}NumberNonNullable\")]");
-			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
-			w.AppendLine ($"\t\t[return: NullAllowed] // This should be the default");
-			w.AppendLine ($"\t\tNSNumber Get{v.Managed}NumberNonNullable ();");
-
-			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"set{v.Managed}NumberNullable:\")]");
 			w.AppendLine ($"\t\tvoid Set{v.Managed}NumberNullable ([BindAs (typeof ({v.Managed}?))] [NullAllowed /* this should be the default */] NSNumber value);");
 
+			// ref/out plain value is not supported (error BI1048: bgen: Unsupported type Boolean decorated with [BindAs])
+			// ref/out nullable value is not supported (error BI1048: bgen: Unsupported type Boolean decorated with [BindAs])
+
+			// array of plain value
 			w.AppendLine ();
-			w.AppendLine ($"\t\t[Export (\"set{v.Managed}NumberNonNullable:\")]");
-			w.AppendLine ($"\t\tvoid Set{v.Managed}NumberNonNullable ([BindAs (typeof ({v.Managed}))] NSNumber value);");
+			w.AppendLine ("\t\t[Sealed]");
+			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Array\")]");
+			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[]))]");
+			w.AppendLine ($"\t\tNSNumber[] P{v.Managed}ArrayValue {{ get; set; }}");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"get{v.Managed}Array\")]");
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}[]))]");
+			w.AppendLine ($"\t\tNSNumber[] Get{v.Managed}ArrayValue ();");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"set{v.Managed}Array:\")]");
+			w.AppendLine ($"\t\tvoid Set{v.Managed}Array ([BindAs (typeof ({v.Managed}[]))] NSNumber[] value);");
+
+			// multidimensional array of plain value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57795
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}Multi1Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[,]))]");
+			//w.AppendLine ($"\t\tNSNumber[,] P{v.Managed}Multi1ArrayValue {{ get; set; }}");
+
+			// BI1048: bgen: Unsupported type Boolean[][] decorated with [BindAs]
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}Multi2Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[][]))]");
+			//w.AppendLine ($"\t\tNSNumber[][] P{v.Managed}Multi2ArrayValue {{ get; set; }}");
+
+			// array of nullable value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57797
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}NullableArray\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[]))]");
+			//w.AppendLine ($"\t\tNSNumber[] P{v.Managed}NullableArrayValue {{ get; set; }}");
+
+			//w.AppendLine ();
+			//w.AppendLine ($"\t\t[Export (\"get{v.Managed}NullableArray\")]");
+			//w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}?[]))]");
+			//w.AppendLine ($"\t\tNSNumber[] Get{v.Managed}NullableArrayValue ();");
+
+			//w.AppendLine ();
+			//w.AppendLine ($"\t\t[Export (\"set{v.Managed}NullableArray:\")]");
+			//w.AppendLine ($"\t\tvoid Set{v.Managed}NullableArray ([BindAs (typeof ({v.Managed}?[]))] NSNumber[] value);");
+
+			// multidimensional array of nullable value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57797
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}NullableMulti1Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[,]))]");
+			//w.AppendLine ($"\t\tNSNumber[,] P{v.Managed}NullableMulti1ArrayValue {{ get; set; }}");
+
+			// BI1048: bgen: Unsupported type Nullable`1[][] decorated with [BindAs]
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}NullableMulti2Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[][]))]");
+			//w.AppendLine ($"\t\tNSNumber[][] P{v.Managed}NullableMulti2ArrayValue {{ get; set; }}");
 
 			if (v.ManagedCondition != null)
 				w.AppendLine ("#endif");
@@ -378,9 +453,12 @@ namespace Bindings.Test {
 			if (v.ManagedCondition != null)
 				w.AppendLine ($"#if {v.ManagedCondition}");
 
+			// no BindAs
+
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Value\")]");
 			w.AppendLine ($"\t\tNSValue P{v.Managed}Value {{ get; set; }}");
 
+			// plain value
 			w.AppendLine ();
 			w.AppendLine ("\t\t[Sealed]");
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Value\")]");
@@ -388,7 +466,19 @@ namespace Bindings.Test {
 			w.AppendLine ($"\t\tNSValue P{v.Managed}ValueNonNullable {{ get; set; }}");
 
 			w.AppendLine ();
-			w.AppendLine ("\t\t[Sealed]");
+			w.AppendLine ($"\t\t[Export (\"get{v.Managed}ValueNonNullable\")]");
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
+			w.AppendLine ($"\t\t[return: NullAllowed] // This should be the default");
+			w.AppendLine ($"\t\tNSValue Get{v.Managed}ValueNonNullable ();");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"set{v.Managed}ValueNonNullable:\")]");
+			w.AppendLine ($"\t\tvoid Set{v.Managed}ValueNonNullable ([BindAs (typeof ({v.Managed}))] NSValue value);");
+
+			// nullable
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Sealed]");
 			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Value\")]");
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?))]");
 			w.AppendLine ($"\t\t[NullAllowed] // This should be the default");
@@ -400,23 +490,166 @@ namespace Bindings.Test {
 			w.AppendLine ($"\t\tNSValue Get{v.Managed}ValueNullable ();");
 
 			w.AppendLine ();
-			w.AppendLine ($"\t\t[Export (\"get{v.Managed}ValueNonNullable\")]");
-			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
-			w.AppendLine ($"\t\t[return: NullAllowed] // This should be the default");
-			w.AppendLine ($"\t\tNSValue Get{v.Managed}ValueNonNullable ();");
-
-			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"set{v.Managed}ValueNullable:\")]");
 			w.AppendLine ($"\t\tvoid Set{v.Managed}ValueNullable ([BindAs (typeof ({v.Managed}?))] [NullAllowed /* this should be the default */] NSValue value);");
 
+			// ref/out plain value is not supported (error BI1048: bgen: Unsupported type CATransform3D decorated with [BindAs])
+			// ref/out nullable value is not supported (error BI1048: bgen: Unsupported type CATransform3D decorated with [BindAs])
+
+			// array of plain value
 			w.AppendLine ();
-			w.AppendLine ($"\t\t[Export (\"set{v.Managed}ValueNonNullable:\")]");
-			w.AppendLine ($"\t\tvoid Set{v.Managed}ValueNonNullable ([BindAs (typeof ({v.Managed}))] NSValue value);");
+			w.AppendLine ("\t\t[Sealed]");
+			w.AppendLine ($"\t\t[Export (\"P{v.Managed}Array\")]");
+			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[]))]");
+			w.AppendLine ($"\t\tNSValue[] P{v.Managed}ArrayValue {{ get; set; }}");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"get{v.Managed}Array\")]");
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}[]))]");
+			w.AppendLine ($"\t\tNSValue[] Get{v.Managed}ArrayValue ();");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t[Export (\"set{v.Managed}Array:\")]");
+			w.AppendLine ($"\t\tvoid Set{v.Managed}Array ([BindAs (typeof ({v.Managed}[]))] NSValue[] value);");
+
+			// multidimensional array of plain value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57795
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}Multi1Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[,]))]");
+			//w.AppendLine ($"\t\tNSValue[,] P{v.Managed}Multi1ArrayValue {{ get; set; }}");
+
+			// BI1048: bgen: Unsupported type CATransform3D[][] decorated with [BindAs]
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}Multi2Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[][]))]");
+			//w.AppendLine ($"\t\tNSValue[][] P{v.Managed}Multi2ArrayValue {{ get; set; }}");
+
+			// array of nullable value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57797
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}NullableArray\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[]))]");
+			//w.AppendLine ($"\t\tNSValue[] P{v.Managed}NullableArrayValue {{ get; set; }}");
+
+			//w.AppendLine ();
+			//w.AppendLine ($"\t\t[Export (\"get{v.Managed}NullableArray\")]");
+			//w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}?[]))]");
+			//w.AppendLine ($"\t\tNSValue[] Get{v.Managed}NullableArrayValue ();");
+
+			//w.AppendLine ();
+			//w.AppendLine ($"\t\t[Export (\"set{v.Managed}NullableArray:\")]");
+			//w.AppendLine ($"\t\tvoid Set{v.Managed}NullableArray ([BindAs (typeof ({v.Managed}?[]))] NSValue[] value);");
+
+			// multidimensional array of nullable value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57797
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}NullableMulti1Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[,]))]");
+			//w.AppendLine ($"\t\tNSValue[,] P{v.Managed}NullableMulti1ArrayValue {{ get; set; }}");
+
+			// BI1048: bgen: Unsupported type Nullable`1[][] decorated with [BindAs]
+			//w.AppendLine ();
+			//w.AppendLine ("\t\t[Sealed]");
+			//w.AppendLine ($"\t\t[Export (\"P{v.Managed}NullableMulti2Array\")]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[][]))]");
+			//w.AppendLine ($"\t\tNSValue[][] P{v.Managed}NullableMulti2ArrayValue {{ get; set; }}");
+
 
 			if (v.ManagedCondition != null)
 				w.AppendLine ("#endif");
 			w.AppendLine ();
 		}
+
+		w.AppendLine ("\t\t// BindAs: NSString");
+		foreach (var v in bindas_nsstring) {
+			if (v.ManagedCondition != null)
+				w.AppendLine ($"#if {v.ManagedCondition}");
+			// plain value
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}))]");
+			w.AppendLine ($"\t\t[Export (\"getStrong{v.Managed}Value\")]");
+			w.AppendLine ($"\t\tNSString GetStrong{v.Managed}Value ();");
+
+			w.AppendLine ($"\t\t[Export (\"setStrong{v.Managed}Value:\")]");
+			w.AppendLine ($"\t\tvoid SetStrong{v.Managed}Value ([BindAs (typeof ({v.Managed}))] NSString value);");
+
+			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}))]");
+			w.AppendLine ($"\t\t[Export (\"strong{v.Managed}Property\")]");
+			w.AppendLine ($"\t\tNSString Strong{v.Managed}Property {{ get; set; }}");
+			w.AppendLine ();
+
+			// nullable
+			w.AppendLine ($"\t\t[return: NullAllowed]");
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}?))]");
+			w.AppendLine ($"\t\t[Export (\"getStrongNullable{v.Managed}Value\")]");
+			w.AppendLine ($"\t\tNSString GetStrongNullable{v.Managed}Value ();");
+
+			w.AppendLine ($"\t\t[Export (\"setStrongNullable{v.Managed}Value:\")]");
+			w.AppendLine ($"\t\tvoid SetStrongNullable{v.Managed}Value ([NullAllowed] [BindAs (typeof ({v.Managed}?))] NSString value);");
+
+			w.AppendLine ($"\t\t[NullAllowed]");
+			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?))]");
+			w.AppendLine ($"\t\t[Export (\"strongNullable{v.Managed}Property\")]");
+			w.AppendLine ($"\t\tNSString StrongNullable{v.Managed}Property {{ get; set; }}");
+
+			w.AppendLine ();
+
+			// array of plain value
+			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}[]))]");
+			w.AppendLine ($"\t\t[Export (\"getStrong{v.Managed}Values\")]");
+			w.AppendLine ($"\t\tNSString[] GetStrong{v.Managed}Values ();");
+
+			w.AppendLine ($"\t\t[Export (\"setStrong{v.Managed}Values:\")]");
+			w.AppendLine ($"\t\tvoid SetStrong{v.Managed}Values ([BindAs (typeof ({v.Managed}[]))] NSString[] value);");
+
+			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[]))]");
+			w.AppendLine ($"\t\t[Export (\"strong{v.Managed}Properties\")]");
+			w.AppendLine ($"\t\tNSString[] Strong{v.Managed}Properties {{ get; set; }}");
+			
+			w.AppendLine ();
+
+			// array of nullable values
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57797
+			//w.AppendLine ($"\t\t[return: NullAllowed]");
+			//w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}?[]))]");
+			//w.AppendLine ($"\t\t[Export (\"getStrongNullable{v.Managed}Values\")]");
+			//w.AppendLine ($"\t\tNSString[] GetStrongNullable{v.Managed}Values ();");
+
+			//w.AppendLine ($"\t\t[Export (\"setStrongNullable{v.Managed}Values\")]");
+			//w.AppendLine ($"\t\tvoid SetStrongNullable{v.Managed}Values ([NullAllowed] [BindAs (typeof ({v.Managed}?[]))] NSString[] value);");
+
+			//w.AppendLine ($"\t\t[NullAllowed]");
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[]))]");
+			//w.AppendLine ($"\t\t[Export (\"strongNullable{v.Managed}Properties:\")]");
+			//w.AppendLine ($"\t\tNSString[] StrongNullable{v.Managed}Properties {{ get; set; }}");
+			//w.AppendLine ();
+
+			// multidimensional array of plain value
+			// https://bugzilla.xamarin.com/show_bug.cgi?id=57795
+			//w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}[,]))]");
+			//w.AppendLine ($"\t\t[Export (\"getStrong{v.Managed}ValuesMulti\")]");
+			//w.AppendLine ($"\t\tNSString[,] GetStrong{v.Managed}ValuesMulti ();");
+
+			//w.AppendLine ($"\t\t[Export (\"setStrong{v.Managed}ValuesMulti:\")]");
+			//w.AppendLine ($"\t\tvoid SetStrong{v.Managed}ValuesMulti ([BindAs (typeof ({v.Managed}[]))] NSString[,] value);");
+
+			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[,]))]");
+			//w.AppendLine ($"\t\t[Export (\"strong{v.Managed}PropertiesMulti:\")]");
+			//w.AppendLine ($"\t\tNSString[,] Strong{v.Managed}PropertiesMulti {{ get; set; }}");
+
+			w.AppendLine ();
+
+			if (v.ManagedCondition != null)
+				w.AppendLine ("#endif");
+			w.AppendLine ();
+		}
+
+
+		// multi-dimensional array of plain value
 
 		w.AppendLine (@"	}
 }");

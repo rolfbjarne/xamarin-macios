@@ -712,6 +712,16 @@ class X : ReplayKit.RPBroadcastControllerDelegate
 						void A ([BindAs (typeof (ConsoleColor), OriginalType = typeof (NSNumber))] ConsoleColor value) {}
 						[Export (""b:"")]
 						void B ([BindAs (typeof (ConsoleColor?), OriginalType = typeof (NSNumber))] ConsoleColor? value) {}
+						[Export (""c:"")]
+						void C ([BindAs (typeof (int[]), OriginalType = typeof (NSNumber[]))] int[] value) {}
+						[Export (""d:"")]
+						void D ([BindAs (typeof (int?[]), OriginalType = typeof (NSNumber[]))] int?[] value) {}
+						[Export (""e:"")]
+						void E ([BindAs (typeof (int), OriginalType = typeof (NSNumber))] ref int value) {}
+						[Export (""f:"")]
+						void F ([BindAs (typeof (int), OriginalType = typeof (NSNumber))] out int value) { throw new NotImplementedException (); }
+						[Export (""g:"")]
+						void E ([BindAs (typeof (int[,]), OriginalType = typeof (NSNumber[,]))] int[,] value) {}
 					}
 				}";
 				mtouch.Linker = MTouchLinker.DontLink; // faster

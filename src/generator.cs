@@ -1266,8 +1266,11 @@ public partial class Generator : IMemberGatherer {
 					throw new BindingException (1049, true, GetBindAsExceptionString ("box", retType.Name, originalType.Name, "container", minfo?.mi?.Name ?? pi?.Name));
 			}
 			temp = string.Format ("{3}NSValue.From{0} ({2}{1});", typeStr, denullify, parameterName, nullCheck);
-		} else if (originalType == TypeManager.NSString && IsSmartEnum (retType)) {
-			temp = string.Format ("{1}{0}.GetConstant ();", denullify, parameterName);
+		} else if (originalType == TypeManager.NSString) {
+			if (IsSmartEnum (retType))
+				temp = string.Format ("{1}{0}.GetConstant ();", denullify, parameterName);
+			else
+				throw new BindingException (9999, true, "Unsupported type {0} decorated with [BindAs]", retType.Name);
 		} else if (originalType.IsArray) {
 			var arrType = originalType.GetElementType ();
 			var arrRetType = TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) ?? retType.GetElementType ();
@@ -1401,8 +1404,11 @@ public partial class Generator : IMemberGatherer {
 			}
 			if (isNullable)
 				append = $"?{append}";
-		} else if (originalReturnType == TypeManager.NSString && IsSmartEnum (retType)) {
-			append = $"{FormatType (retType.DeclaringType, retType)}Extensions.GetValue (";
+		} else if (originalReturnType == TypeManager.NSString) {
+			if (IsSmartEnum (retType))
+				append = $"{FormatType (retType.DeclaringType, retType)}Extensions.GetValue (";
+			else
+				throw new BindingException (9999, true, "Unsupported type {0} decorated with [BindAs]", retType.Name);
 		} else if (originalReturnType.IsArray) {
 			var arrType = originalReturnType.GetElementType ();
 			var arrIsNullable = TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) != null;

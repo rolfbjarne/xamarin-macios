@@ -1071,7 +1071,7 @@ namespace XamCore.Registrar {
 				var parameters = GetParameters (m);
 				if (parameters?.Length != 1)
 					continue;
-				if (AreEqual (parameters [0], type))
+				if (!AreEqual (parameters [0], type))
 					continue;
 				getConstantMethod = m;
 				break;
@@ -1081,7 +1081,7 @@ namespace XamCore.Registrar {
 
 			var getValueMethods = FindMethods (extension, "GetValue");
 			foreach (var m in getValueMethods) {
-				if (AreEqual (GetReturnType (m), type))
+				if (!AreEqual (GetReturnType (m), type))
 					continue;
 				var parameters = GetParameters (m);
 				if (parameters?.Length != 1)

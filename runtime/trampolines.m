@@ -1055,8 +1055,11 @@ xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_
 		return [NSArray array];
 
 	buf = (id *) malloc (sizeof (id) * length);
+	MonoClass *element_class = mono_class_get_element_class (mono_object_get_class ((MonoObject *) array));
+	int element_size = mono_class_value_size (element_class, NULL);
+	char *ptr = (char *) mono_array_addr_with_size (array, element_size, 0);
 	for (int i = 0; i < length; i++) {
-		MonoObject *value = mono_array_get ((MonoArray *) array, MonoObject *, i);
+		MonoObject *value = mono_value_box (mono_domain_get (), element_class, ptr + element_size * i);
 		buf [i] = convert (value, exception_gchandle);
 		if (*exception_gchandle != 0)
 			goto exception_handling;
@@ -1094,7 +1097,7 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 	}
 
 exception_handling:
-	xamarin_free (ptr);
+	xamarin_free (valueptr);
 
 	return rv;
 }

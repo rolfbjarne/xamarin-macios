@@ -308,6 +308,32 @@ namespace XamCore.ObjCRuntime {
 			return Marshal.GetFunctionPointerForDelegate (d);
 		}
 
+		// value_handle: GCHandle to a (smart) enum value
+		static IntPtr ConvertSmartEnumToNSString (IntPtr value_handle)
+		{
+			var value = GCHandle.FromIntPtr (value_handle);
+			var smart_type = value.GetType ();
+			MethodBase getConstantMethod, getValueMethod;
+			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))
+				throw ErrorHelper.CreateError (8999, "no extension type for smart enum");
+			var rv = (NSString) ((MethodInfo) getConstantMethod).Invoke (null, new object [] { value });
+			return rv.Handle;
+		}
+
+
+		// value: native NSString *
+		// returns: GCHandle to a (smart) enum value
+		static IntPtr ConvertNSStringToSmartEnum (IntPtr value, IntPtr type)
+		{
+			var smart_type = (Type)ObjectWrapper.Convert (type);
+			var str = GetNSObject<NSString> (value);
+			MethodBase getConstantMethod, getValueMethod;
+			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))
+				throw ErrorHelper.CreateError (8999, "no extension type for smart enum");
+			var rv = ((MethodInfo) getValueMethod).Invoke (null, new object [] { str });
+			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+		}
+
 #region Wrappers for delegate callbacks
 		static void RegisterNSObject (IntPtr managed_obj, IntPtr native_obj)
 		{

@@ -673,7 +673,7 @@ namespace XamCore.Registrar {
 						return false;
 					}
 				} else if (Registrar.Is (underlyingInputType, Foundation, "NSString")) {
-					return Registrar.IsStrongEnum (underlyingOutputType);
+					return Registrar.IsSmartEnum (underlyingOutputType);
 				} else {
 					return false;
 				}
@@ -1006,7 +1006,7 @@ namespace XamCore.Registrar {
 		protected abstract Exception CreateException (int code, Exception innerException, TMethod method, string message, params object[] args);
 		protected abstract Exception CreateException (int code, Exception innerException, TType type, string message, params object [] args);
 		protected abstract string PlatformName { get; }
-		protected abstract TType FindType (TType relative, string @namespace, string name);
+		public abstract TType FindType (TType relative, string @namespace, string name);
 		protected abstract IEnumerable<TMethod> FindMethods (TType type, string name); // will return null if nothing was found
 		protected abstract TProperty FindProperty (TType type, string name); // will return null if nothing was found
 
@@ -1046,13 +1046,13 @@ namespace XamCore.Registrar {
 			return GetBindAsAttribute (FindProperty (method.DeclaringType.Type, method.MethodName.Substring (4)));
 		}
 
-		bool IsStrongEnum (TType type)
+		bool IsSmartEnum (TType type)
 		{
 			TMethod getConstant, getValue;
-			return IsStrongEnum (type, out getConstant, out getValue);
+			return IsSmartEnum (type, out getConstant, out getValue);
 		}
 
-		bool IsStrongEnum (TType type, out TMethod getConstantMethod, out TMethod getValueMethod)
+		public bool IsSmartEnum (TType type, out TMethod getConstantMethod, out TMethod getValueMethod)
 		{
 			getConstantMethod = null;
 			getValueMethod = null;

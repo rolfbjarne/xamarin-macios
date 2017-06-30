@@ -96,7 +96,7 @@ static class C {
 	};
 
 	static BindAsData [] bindas_nsstring = new [] {
-		new BindAsData { Managed = "AVMediaTypes", ManagedNewExpression = "AVMediaTypes.Video" },
+		new BindAsData { Managed = "AVMediaTypes", ManagedNewExpression = "AVMediaTypes.Audio" },
 	};
 
 	static string GetNativeName (char t)
@@ -209,7 +209,6 @@ static class C {
 		w.AppendLine ();
 		foreach (var v in bindas_nsstring) {
 			w.AppendLine ($"\t@property (retain) NSString *PSmart{v.Managed}Property;");
-			w.AppendLine ($"\t@property (retain) NSString *PSmartNullable{v.Managed}Property;");
 			w.AppendLine ($"\t@property (retain) NSArray<NSString*> * PSmart{v.Managed}Properties;");
 		}
 		File.WriteAllText ("libtest.properties.h", w.ToString ());
@@ -304,8 +303,8 @@ static class C {
 			w.AppendLine ();
 
 			// nullable
-			w.AppendLine ($"\t-(NSString *) getSmartNullable{v.Managed}Value {{ return self.PSmartNullable{v.Managed}Property; }}");
-			w.AppendLine ($"\t-(void) setSmartNullable{v.Managed}Value: (NSString *) value {{ self.PSmartNullable{v.Managed}Property = value; }}");
+			w.AppendLine ($"\t-(NSString *) getSmartNullable{v.Managed}Value {{ return self.PSmart{v.Managed}Property; }}");
+			w.AppendLine ($"\t-(void) setSmartNullable{v.Managed}Value: (NSString *) value {{ self.PSmart{v.Managed}Property = value; }}");
 			w.AppendLine ();
 
 			// array of plain value
@@ -1253,9 +1252,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			w.AppendLine ($"\t\t\t\t{v.Managed}? value = default ({v.Managed});");
 			w.AppendLine ($"\t\t\t\tobj.SetSmartNullable{v.Managed}Value (value);");
-			w.AppendLine ($"\t\t\t\tAssert.Throws<ArgumentNullException> (() => {{ Console.WriteLine (obj.PSmart{v.Managed}Property); }}, \"zero property after setting default value\");");
-			w.AppendLine ($"\t\t\t\tAssert.Throws<ArgumentNullException> (() => {{ Console.WriteLine (obj.GetSmart{v.Managed}Value ()); }}, \"non-nullable property after setting default value\");");
-			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.GetSmartNullable{v.Managed}Value (), \"nullable get method after setting default value\");");
+			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value.Value, obj.PSmart{v.Managed}Property, \"zero property after setting default value\");");
+			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value.Value, obj.GetSmart{v.Managed}Value (), \"non-nullable property after setting default value\");");
+			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value, obj.GetSmartNullable{v.Managed}Value (), \"nullable get method after setting default value\");");
 			w.AppendLine ();
 
 			w.AppendLine ($"\t\t\t\tvalue = {v.ManagedNewExpression};");
@@ -1265,9 +1264,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ($"\t\t\t\tAssert.AreEqual (value.Value, obj.GetSmart{v.Managed}Value (), \"non-nullable get method after setting custom value\");");
 			w.AppendLine ();
 
-			w.AppendLine ($"\t\t\t\tvalue = null;");
+			w.AppendLine ($"\t\t\t\tvalue = null;");	
 			w.AppendLine ($"\t\t\t\tobj.SetSmartNullable{v.Managed}Value (value);");
-			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.PSmart{v.Managed}Property, \"null property after setting null value\");");
+			w.AppendLine ($"\t\t\t\tAssert.Throws<ArgumentNullException> (() => {{ Console.WriteLine (obj.PSmart{v.Managed}Property); }}, \"null property after setting null value\");");
 			w.AppendLine ($"\t\t\t\tAssert.Throws<ArgumentNullException> (() => {{ Console.WriteLine (obj.GetSmart{v.Managed}Value ()); }}, \"non-nullable method after setting null value\");");
 			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.GetSmartNullable{v.Managed}Value (), \"null method after setting null value\");");
 			w.AppendLine ($"\t\t\t}}");
@@ -1286,7 +1285,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			w.AppendLine ($"\t\t\t\tobj.PSmart{v.Managed}Property = {v.ManagedNewExpression};");
 			w.AppendLine ($"\t\t\t\tMessaging.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle (\"setSmartNullable{v.Managed}Value:\"), IntPtr.Zero);");
-			w.AppendLine ($"\t\t\t\tAssert.IsNull (obj.PSmart{v.Managed}Property, \"null after re-setting null\");");
+			w.AppendLine ($"\t\t\t\tAssert.Throws<InvalidOperationException> (() => {{ Console.WriteLine (obj.PSmart{v.Managed}Property); }}, \"null after re-setting null\");");
 			w.AppendLine ();
 
 			w.AppendLine ($"\t\t\t\tvar value = {v.ManagedNewExpression};");
@@ -1303,7 +1302,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			w.AppendLine ($"\t\t\t\tobj.PSmart{v.Managed}Property = 0;");
 			w.AppendLine ($"\t\t\t\tvar Value = Runtime.GetNSObject<NSString> (Messaging.IntPtr_objc_msgSend (obj.Handle, Selector.GetHandle (\"getSmartNullable{v.Managed}Value\")));");
-			w.AppendLine ($"\t\t\t\tAssert.IsNull (Value, \"null from getter A\");");
+			w.AppendLine ($"\t\t\t\tAssert.AreEqual (default ({v.Managed}).GetConstant ().ToString (), Value.ToString (), \"zero from getter A\");");
 			w.AppendLine ();
 
 			w.AppendLine ($"\t\t\t\tvalue = {v.ManagedNewExpression};");

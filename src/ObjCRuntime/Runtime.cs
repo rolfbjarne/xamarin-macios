@@ -309,6 +309,7 @@ namespace XamCore.ObjCRuntime {
 		}
 
 		// value_handle: GCHandle to a (smart) enum value
+		// returns: a handle to a native NSString *
 		static IntPtr ConvertSmartEnumToNSString (IntPtr value_handle)
 		{
 			var value = GCHandle.FromIntPtr (value_handle).Target;
@@ -317,12 +318,13 @@ namespace XamCore.ObjCRuntime {
 			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))
 				throw ErrorHelper.CreateError (8999, "no extension type for smart enum");
 			var rv = (NSString) ((MethodInfo) getConstantMethod).Invoke (null, new object [] { value });
+			rv.DangerousRetain ().DangerousAutorelease ();
 			return rv.Handle;
 		}
 
 
 		// value: native NSString *
-		// returns: GCHandle to a (smart) enum value
+		// returns: GCHandle to a (smart) enum value. Caller must free the GCHandle.
 		static IntPtr ConvertNSStringToSmartEnum (IntPtr value, IntPtr type)
 		{
 			var smart_type = (Type) ObjectWrapper.Convert (type);

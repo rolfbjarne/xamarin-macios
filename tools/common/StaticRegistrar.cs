@@ -596,7 +596,7 @@ namespace XamCore.Registrar {
 			return list;
 		}
 
-		protected override TypeReference FindType (TypeReference relative, string @namespace, string name)
+		public override TypeReference FindType (TypeReference relative, string @namespace, string name)
 		{
 			return relative.Resolve ().Module.GetType (@namespace, name);
 		}
@@ -3854,16 +3854,24 @@ namespace XamCore.Registrar {
 			} else {
 				throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 			}
+			var classVariableName = $"{inputName}_conv_class";
+			body_setup.AppendLine ($"MonoClass *{classVariableName} = NULL;");
+			sb.AppendLine ($"{classVariableName} = {managedClassExpression};");
 			if (isManagedArray) {
-				sb.AppendLine ($"{outputName} = xamarin_convert_nsarray_to_managed_with_func ({inputName}, {managedClassExpression}, (xamarin_id_to_managed_func) {func}, &exception_gchandle);");
+				sb.AppendLine ($"{outputName} = xamarin_convert_nsarray_to_managed_with_func ({inputName}, {classVariableName}, (xamarin_id_to_managed_func) {func}, &exception_gchandle);");
 				sb.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 			} else {
 				var tmpName = $"{inputName}_conv_tmp";
 				body_setup.AppendLine ($"{nativeTypeName} {tmpName};");
 				if (isManagedNullable) {
-					sb.AppendLine ($"{outputName} = mono_value_box (mono_domain_get (), {managedClassExpression}, {func} ({inputName}, &{tmpName}));");
+					var tmpName2 = $"{inputName}_conv_ptr";
+					body_setup.AppendLine ($"void *{tmpName2} = NULL;");
+					sb.AppendLine ($"{tmpName2} = {func} ({inputName}, &{tmpName}, {classVariableName}, &exception_gchandle);");
+					sb.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
+					sb.AppendLine ($"{outputName} = mono_value_box (mono_domain_get (), {classVariableName}, {tmpName2});");
 				} else {
-					sb.AppendLine ($"{outputName} = {func} ({inputName}, &{tmpName});");
+					sb.AppendLine ($"{outputName} = {func} ({inputName}, &{tmpName}, {classVariableName}, &exception_gchandle);");
+					sb.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 				}
 			}
 
@@ -3914,10 +3922,10 @@ namespace XamCore.Registrar {
 
 			if (isManagedArray) {
 				sb.AppendLine ($"{outputName} = xamarin_convert_managed_to_nsarray_with_func ((MonoArray *) {inputName}, (xamarin_managed_to_id_func) {func}, &exception_gchandle);");
-				sb.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 			} else {
-				sb.AppendLine ($"{outputName} = {func} ({inputName});");
+				sb.AppendLine ($"{outputName} = {func} ({inputName}, &exception_gchandle);");
 			}
+			sb.AppendLine ($"if (exception_gchandle != 0) goto exception_handling;");
 
 			if (isManagedNullable || isManagedArray)
 				sb.AppendLine ("}");

@@ -190,7 +190,7 @@ namespace XamCore.Registrar {
 			return type.GetProperty (name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 		}
 
-		protected override Type FindType (Type relative, string @namespace, string name)
+		public override Type FindType (Type relative, string @namespace, string name)
 		{
 			foreach (var type in relative.Assembly.GetTypes ()) {
 				if (type.Namespace == @namespace && type.Name == name)

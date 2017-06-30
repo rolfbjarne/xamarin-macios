@@ -178,6 +178,27 @@ namespace XamCore.Registrar {
 				throw exceptions.Count == 1 ? exceptions [0] : new AggregateException (exceptions);
 		}
 
+		protected override IEnumerable<MethodBase> FindMethods (Type type, string name)
+		{
+			foreach (var method in type.GetMethods (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+				if (method.Name == name)
+					yield return method;
+		}
+
+		protected override PropertyInfo FindProperty (Type type, string name)
+		{
+			return type.GetProperty (name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+		}
+
+		protected override Type FindType (Type relative, string @namespace, string name)
+		{
+			foreach (var type in relative.Assembly.GetTypes ()) {
+				if (type.Namespace == @namespace && type.Name == name)
+					return type;
+			}
+			return null;
+		}
+
 		protected override int GetValueTypeSize (Type type)
 		{
 			return Marshal.SizeOf (type);
@@ -209,6 +230,11 @@ namespace XamCore.Registrar {
 			return assembly.GetTypes ();
 		}
 
+		protected override BindAsAttribute GetBindAsAttribute (PropertyInfo property)
+		{
+			return property?.GetCustomAttribute<BindAsAttribute> (false);
+		}
+
 		protected override BindAsAttribute GetBindAsAttribute (MethodBase method, int parameter_index)
 		{
 			ICustomAttributeProvider provider;
@@ -238,7 +264,7 @@ namespace XamCore.Registrar {
 				return null;
 
 			if (attribs.Length != 1)
-				throw new AmbiguousMatchException ();
+				throw new AmbiguousMatchException (/* FIXME */);
 
 			return (BindAsAttribute) attribs [0];
 		}
@@ -576,6 +602,14 @@ namespace XamCore.Registrar {
 		protected override bool IsDelegate (Type type)
 		{
 			return type.IsSubclassOf (typeof (System.Delegate));
+		}
+
+		protected override bool IsNullable (Type type)
+		{
+			if (!type.IsGenericType)
+				return false;
+
+			return type.GetGenericTypeDefinition () == typeof (Nullable<>);
 		}
 
 		protected override bool IsEnum (Type type, out bool isNativeEnum)

@@ -593,7 +593,7 @@ namespace XamCore.Registrar {
 					if (native_parameters == null && Parameters != null) {
 						native_parameters = new TType [parameters.Length];
 						for (int i = 0; i < parameters.Length; i++) {
-							var originalType = Registrar.GetBindAsAttribute (Method, i)?.OriginalType;
+							var originalType = Registrar.GetBindAsAttribute (this, i)?.OriginalType;
 							if (originalType != null) {
 								if (!IsValidToManagedTypeConversion (originalType, parameters [i]))
 									throw Registrar.CreateException (4169, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (parameters [i])}' to '{originalType.FullName}' for the parameter '{Registrar.GetParameterName (Method, i)}' in the method {DescriptiveMethodName}.");
@@ -610,9 +610,22 @@ namespace XamCore.Registrar {
 			bool IsValidToManagedTypeConversion (TType inputType, TType outputType)
 			{
 				var nullableType = Registrar.GetNullableType (outputType);
-				var outputTypeName = Registrar.GetTypeFullName (nullableType ?? outputType);
+				var isNullable = nullableType != null;
+				var isArray = Registrar.IsArray (outputType);
 
-				if (Registrar.Is (inputType, Foundation, "NSNumber")) {
+				TType underlyingOutputType = outputType;
+				TType underlyingInputType = inputType;
+				if (isNullable) {
+					underlyingOutputType = nullableType;
+				} else if (isArray) {
+					if (!Registrar.IsArray (inputType))
+						return false;
+					underlyingOutputType = Registrar.GetElementType (outputType);
+					underlyingInputType = Registrar.GetElementType (inputType);
+				}
+				var outputTypeName = Registrar.GetTypeFullName (underlyingOutputType);
+
+				if (Registrar.Is (underlyingInputType, Foundation, "NSNumber")) {
 					switch (outputTypeName) {
 					case "System.Byte":
 					case "System.SByte":
@@ -632,11 +645,11 @@ namespace XamCore.Registrar {
 					default:
 						return false;
 					}
-				} else if (Registrar.Is (inputType, Foundation, "NSValue")) {
+				} else if (Registrar.Is (underlyingInputType, Foundation, "NSValue")) {
 					// Remove 'MonoMac.' namespace prefix to make switch smaller
 					if (!Registrar.IsDualBuild && outputTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 						outputTypeName = outputTypeName.Substring ("MonoMac.".Length);
-					
+
 					switch (outputTypeName) {
 					case "CoreAnimation.CATransform3D":
 					case "CoreGraphics.CGAffineTransform":
@@ -659,6 +672,8 @@ namespace XamCore.Registrar {
 					default:
 						return false;
 					}
+				} else if (Registrar.Is (underlyingInputType, Foundation, "NSString")) {
+					return Registrar.IsStrongEnum (underlyingOutputType);
 				} else {
 					return false;
 				}
@@ -690,13 +705,17 @@ namespace XamCore.Registrar {
 			public TType NativeReturnType {
 				get {
 					if (native_return_type == null) {
-						var originalType = Registrar.GetBindAsAttribute (Method, -1)?.OriginalType;
-						if (originalType != null) {
-							if (!IsValidToManagedTypeConversion (originalType, ReturnType))
-								throw Registrar.CreateException (4170, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (ReturnType)}' to '{originalType.FullName}' for the return value in the method {DescriptiveMethodName}.");
-							native_return_type = originalType;
-						} else {
+						if (Registrar.Is (ReturnType, "System", "Void")) {
 							native_return_type = ReturnType;
+						} else {
+							var originalType = Registrar.GetBindAsAttribute (this, -1)?.OriginalType;
+							if (originalType != null) {
+								if (!IsValidToManagedTypeConversion (originalType, ReturnType))
+									throw Registrar.CreateException (4170, Method, $"The registrar can't convert from '{Registrar.GetTypeFullName (ReturnType)}' to '{originalType.FullName}' for the return value in the method {DescriptiveMethodName}.");
+								native_return_type = originalType;
+							} else {
+								native_return_type = ReturnType;
+							}
 						}
 					}
 					return native_return_type;
@@ -962,12 +981,14 @@ namespace XamCore.Registrar {
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
+		protected abstract BindAsAttribute GetBindAsAttribute (TProperty property);
 		protected abstract TType GetNullableType (TType type); // For T? returns T. For T returns null.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
 		protected abstract bool IsValueType (TType type);
 		protected abstract bool IsArray (TType type);
 		protected abstract bool IsEnum (TType type, out bool isNativeEnum);
+		protected abstract bool IsNullable (TType type);
 		protected abstract bool IsDelegate (TType type);
 		protected abstract bool IsGenericType (TType type);
 		protected abstract bool IsGenericMethod (TMethod method);
@@ -985,6 +1006,9 @@ namespace XamCore.Registrar {
 		protected abstract Exception CreateException (int code, Exception innerException, TMethod method, string message, params object[] args);
 		protected abstract Exception CreateException (int code, Exception innerException, TType type, string message, params object [] args);
 		protected abstract string PlatformName { get; }
+		protected abstract TType FindType (TType relative, string @namespace, string name);
+		protected abstract IEnumerable<TMethod> FindMethods (TType type, string name); // will return null if nothing was found
+		protected abstract TProperty FindProperty (TType type, string name); // will return null if nothing was found
 
 		protected abstract string GetAssemblyName (TAssembly assembly);
 		protected abstract string GetTypeFullName (TType type);
@@ -1004,10 +1028,73 @@ namespace XamCore.Registrar {
 			IsDualBuild = IsDualBuildImpl;
 		}
 
-		bool IsEnum (TType type)
+		protected bool IsEnum (TType type)
 		{
 			bool dummy;
 			return IsEnum (type, out dummy);
+		}
+
+		public BindAsAttribute GetBindAsAttribute (ObjCMethod method, int parameter_index)
+		{
+			var attrib = GetBindAsAttribute (method.Method, parameter_index);
+			if (attrib != null)
+				return attrib;
+
+			if (!method.IsPropertyAccessor)
+				return null;
+
+			return GetBindAsAttribute (FindProperty (method.DeclaringType.Type, method.MethodName.Substring (4)));
+		}
+
+		bool IsStrongEnum (TType type)
+		{
+			TMethod getConstant, getValue;
+			return IsStrongEnum (type, out getConstant, out getValue);
+		}
+
+		bool IsStrongEnum (TType type, out TMethod getConstantMethod, out TMethod getValueMethod)
+		{
+			getConstantMethod = null;
+			getValueMethod = null;
+
+			if (!IsEnum (type))
+				return false;
+
+			var extension = FindType (type, type.Namespace, type.Name + "Extensions");
+			if (extension == null)
+				return false;
+
+			var getConstantMethods = FindMethods (extension, "GetConstant");
+			foreach (var m in getConstantMethods) {
+				if (!Is (GetReturnType (m), Foundation, "NSString"))
+					continue;
+				var parameters = GetParameters (m);
+				if (parameters?.Length != 1)
+					continue;
+				if (AreEqual (parameters [0], type))
+					continue;
+				getConstantMethod = m;
+				break;
+			}
+			if (getConstantMethod == null)
+				return false;
+
+			var getValueMethods = FindMethods (extension, "GetValue");
+			foreach (var m in getValueMethods) {
+				if (AreEqual (GetReturnType (m), type))
+					continue;
+				var parameters = GetParameters (m);
+				if (parameters?.Length != 1)
+					continue;
+				if (!Is (parameters [0], Foundation, "NSString"))
+					continue;
+				getValueMethod = m;
+				break;
+			}
+			if (getValueMethod == null)
+				return false;
+
+			return true;
 		}
 
 		protected string GetMemberName (ObjCMember member)
@@ -1193,6 +1280,11 @@ namespace XamCore.Registrar {
 				return IsNSObject (baseType);
 
 			return false;
+		}
+
+		protected virtual bool AreEqual (TType a, TType b)
+		{
+			return a == b;
 		}
 
 		protected bool Is (TType type, string @namespace, string name)

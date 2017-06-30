@@ -25,7 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
     <MtouchDebug>True</MtouchDebug>
-    <MtouchExtraArgs>-v -v -v -v --registrar:static</MtouchExtraArgs>
+    <MtouchExtraArgs>-v -v -v -v</MtouchExtraArgs>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <MtouchArch>x86_64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>

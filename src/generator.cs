@@ -1268,7 +1268,7 @@ public partial class Generator : IMemberGatherer {
 			temp = string.Format ("{3}NSValue.From{0} ({2}{1});", typeStr, denullify, parameterName, nullCheck);
 		} else if (originalType == TypeManager.NSString) {
 			if (IsSmartEnum (retType))
-				temp = string.Format ("{1}{0}.GetConstant ();", denullify, parameterName);
+				temp = $"{parameterName}.GetConstant ();";
 			else
 				throw new BindingException (9999, true, "Unsupported type {0} decorated with [BindAs]", retType.Name);
 		} else if (originalType.IsArray) {
@@ -1277,7 +1277,7 @@ public partial class Generator : IMemberGatherer {
 			var valueConverter = string.Empty;
 
 			if (arrType == TypeManager.NSString)
-				valueConverter = $"o{denullify}.GetConstant (), {parameterName});";
+				valueConverter = $"o.GetConstant (), {parameterName});";
 			else if (arrType == TypeManager.NSNumber) {
 				var cast = arrRetType.IsEnum ? "(int)" : string.Empty;
 				valueConverter = $"new NSNumber ({cast}o{denullify}), {parameterName});";
@@ -1406,7 +1406,7 @@ public partial class Generator : IMemberGatherer {
 				append = $"?{append}";
 		} else if (originalReturnType == TypeManager.NSString) {
 			if (IsSmartEnum (retType))
-				append = $"{FormatType (retType.DeclaringType, retType)}Extensions.GetValue (";
+				append = $"{FormatType (retType.DeclaringType, retType)}Extensions.{(isNullable ? "GetNullableValue" : "GetValue")} (";
 			else
 				throw new BindingException (9999, true, "Unsupported type {0} decorated with [BindAs]", retType.Name);
 		} else if (originalReturnType.IsArray) {
@@ -1415,7 +1415,7 @@ public partial class Generator : IMemberGatherer {
 			var arrRetType = arrIsNullable ? TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) : retType.GetElementType ();
 			var valueFetcher = string.Empty;
 			if (arrType == TypeManager.NSString)
-				append = $"ptr => {{\n\tusing (var str = Runtime.GetNSObject<NSString> (ptr)) {{\n\t\treturn {FormatType (arrRetType.DeclaringType, arrRetType)}Extensions.GetValue (str);\n\t}}\n}}";
+				append = $"ptr => {{\n\tusing (var str = Runtime.GetNSObject<NSString> (ptr)) {{\n\t\treturn {FormatType (arrRetType.DeclaringType, arrRetType)}Extensions.{(isNullable ? "GetNullableValue" : "GetValue")} (str);\n\t}}\n}}";
 			else if (arrType == TypeManager.NSNumber) {
 				if (NSNumberReturnMap.TryGetValue (arrRetType, out valueFetcher) || arrRetType.IsEnum) {
 					var getterStr = string.Format ("{0}{1}", arrIsNullable ? "?" : string.Empty, arrRetType.IsEnum ? ".Int32Value" : valueFetcher);

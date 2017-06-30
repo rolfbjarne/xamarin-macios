@@ -165,6 +165,13 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 			iterator (IteratorIterate, context, type, size, &arg, &exception_gchandle);
 			if (exception_gchandle != 0)
 				goto exception_handling;
+			if (desc->bindas [i + 1].original_type != NULL) {
+				arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed ((id) arg, mono_reflection_type_get_type (desc->bindas [i + 1].original_type), p, method, &exception_gchandle, (void **) &free_list);
+				if (exception_gchandle != 0)
+					goto exception_handling;
+				ofs++;
+				continue;
+			}
 			switch (type [0]) {
 				case _C_PTR: {
 					switch (type [1]) {
@@ -365,10 +372,6 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							arg_ptrs [i + mofs] = obj;
 						} else if (mono_class_is_delegate (p_klass)) {
 							arg_ptrs [i + mofs] = xamarin_get_delegate_for_block_parameter (method, i, id_arg, &exception_gchandle);
-							if (exception_gchandle != 0)
-								goto exception_handling;
-						} else if (desc->bindas [i + 1].original_type != NULL) {
-							arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed (id_arg, mono_reflection_type_get_type (desc->bindas [i + 1].original_type), p, method, &exception_gchandle, (void **) &free_list);
 							if (exception_gchandle != 0)
 								goto exception_handling;
 						} else {

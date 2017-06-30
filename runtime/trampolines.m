@@ -654,11 +654,11 @@ xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, M
 	if (value) {
 		xamarin_managed_to_id_func func;
 		if (xamarin_is_class_nsnumber (underlyingNativeType)) {
-			func = xamarin_get_managed_to_nsnumber_func (managedType, method, exception_gchandle);
+			func = xamarin_get_managed_to_nsnumber_func (underlyingManagedType, method, exception_gchandle);
 		} else if (xamarin_is_class_nsvalue (underlyingNativeType)) {
-			func = xamarin_get_managed_to_nsvalue_func (managedType, method, exception_gchandle);
+			func = xamarin_get_managed_to_nsvalue_func (underlyingManagedType, method, exception_gchandle);
 		} else if (xamarin_is_class_nsstring (underlyingNativeType)) {
-			func = xamarin_get_smart_enum_to_nsstring_func (managedType, method, exception_gchandle);
+			func = xamarin_get_smart_enum_to_nsstring_func (underlyingManagedType, method, exception_gchandle);
 		} else {
 			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
 			goto exception_handling;
@@ -723,11 +723,11 @@ xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType 
 	if (value) {
 		xamarin_id_to_managed_func func;
 		if (xamarin_is_class_nsnumber (underlyingNativeType)) {
-			func = xamarin_get_nsnumber_to_managed_func (managedType, method, exception_gchandle);
+			func = xamarin_get_nsnumber_to_managed_func (underlyingManagedType, method, exception_gchandle);
 		} else if (xamarin_is_class_nsvalue (underlyingNativeType)) {
-			func = xamarin_get_nsvalue_to_managed_func (managedType, method, exception_gchandle);
+			func = xamarin_get_nsvalue_to_managed_func (underlyingManagedType, method, exception_gchandle);
 		} else if (xamarin_is_class_nsstring (underlyingNativeType)) {
-			func = xamarin_get_nsstring_to_smart_enum_func (managedType, method, exception_gchandle);
+			func = xamarin_get_nsstring_to_smart_enum_func (underlyingManagedType, method, exception_gchandle);
 		} else {
 			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
 			goto exception_handling;
@@ -740,13 +740,13 @@ xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType 
 			if (*exception_gchandle != 0)
 				goto exception_handling;
 		} else {
-			convertedValue = func (value, NULL, managedType, exception_gchandle);
+			convertedValue = func (value, NULL, underlyingManagedType, exception_gchandle);
 			if (*exception_gchandle != 0)
 				goto exception_handling;
 			*(SList **) free_list = s_list_prepend (*(SList **) free_list, convertedValue);
 
 			if (isManagedNullable)
-				convertedValue = mono_value_box (mono_domain_get (), managedType, convertedValue);
+				convertedValue = mono_value_box (mono_domain_get (), underlyingManagedType, convertedValue);
 		}
 	}
 
@@ -1089,7 +1089,7 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 	int element_size = mono_class_value_size (element_class, NULL);
 	char *ptr = (char *) mono_array_addr_with_size (rv, element_size, 0);
 	for (int i = 0; i < length; i++) {
-		valueptr = convert ([array objectAtIndex: i], valueptr, managedType, exception_gchandle);
+		valueptr = convert ([array objectAtIndex: i], valueptr, element_class, exception_gchandle);
 		if (*exception_gchandle != 0)
 			goto exception_handling;
 		memcpy (ptr, valueptr, element_size);

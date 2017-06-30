@@ -134,6 +134,7 @@ bool			xamarin_is_class_inativeobject (MonoClass *cls);
 bool			xamarin_is_class_array (MonoClass *cls);
 bool			xamarin_is_class_nsnumber (MonoClass *cls);
 bool			xamarin_is_class_nsvalue (MonoClass *cls);
+bool			xamarin_is_class_nsstring (MonoClass *cls);
 MonoType *		xamarin_get_parameter_type (MonoMethod *managed_method, int index);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr (id self, bool owns, MonoType* type, guint32 *exception_gchandle);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr_created (id self, bool owns, MonoType *type, int32_t *created, guint32 *exception_gchandle);
@@ -195,9 +196,8 @@ void			xamarin_throw_product_exception (int code, const char *message);
 NSString *		xamarin_print_all_exceptions (MonoObject *exc);
 
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
-id				xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle);
-void *			xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType *outputType, MonoMethod *method, guint32 *exception_gchandle, /*SList*/ void **free_list);
-guint32			xamarin_create_bindas_exception (MonoType *inputType, MonoType *outputType, MonoMethod *method);
+MonoClass *		xamarin_get_nsnumber_class ();
+MonoClass *		xamarin_get_nsvalue_class ();
 
 bool			xamarin_is_managed_exception_marshaling_disabled ();
 

@@ -195,13 +195,23 @@ static class C {
 			w.AppendLine ($"\t@property struct S{s} PS{s};");
 
 		w.AppendLine ();
-		foreach (var v in bindas_nsnumber)
+		foreach (var v in bindas_nsnumber) {
 			w.AppendLine ($"\t@property (retain) NSNumber* P{v.Managed}Number;");
+			w.AppendLine ($"\t@property (retain) NSArray<NSNumber*> * P{v.Managed}Array;");
+		}
 
 		w.AppendLine ();
-		foreach (var v in bindas_nsvalue)
+		foreach (var v in bindas_nsvalue) {
 			w.AppendLine ($"\t@property (retain) NSValue* P{v.Managed}Value;");
+			w.AppendLine ($"\t@property (retain) NSArray<NSValue*> * P{v.Managed}Array;");
+		}
 
+		w.AppendLine ();
+		foreach (var v in bindas_nsstring) {
+			w.AppendLine ($"\t@property (retain) NSString *PStrong{v.Managed}Property;");
+			w.AppendLine ($"\t@property (retain) NSString *PStrongNullable{v.Managed}Property;");
+			w.AppendLine ($"\t@property (retain) NSArray<NSString*> * PStrong{v.Managed}Properties;");
+		}
 		File.WriteAllText ("libtest.properties.h", w.ToString ());
 	}
 
@@ -217,14 +227,39 @@ static class C {
 			w.AppendLine ($"\t-(NSNumber *) get{v.Managed}NumberNullable;");
 			w.AppendLine ($"\t-(void) set{v.Managed}NumberNullable: (NSNumber *) value;");
 			w.AppendLine ();
+			w.AppendLine ($"\t-(NSArray<NSNumber *> *) get{v.Managed}Array;");
+			w.AppendLine ($"\t-(void) set{v.Managed}Array: (NSArray<NSNumber *> *) value;");
+			w.AppendLine ();
 		}
 
 		w.AppendLine ();
 		foreach (var v in bindas_nsvalue) {
 			w.AppendLine ($"\t-(NSValue *) get{v.Managed}ValueNonNullable;");
 			w.AppendLine ($"\t-(void) set{v.Managed}ValueNonNullable: (NSValue *) value;");
+			w.AppendLine ();
 			w.AppendLine ($"\t-(NSValue *) get{v.Managed}ValueNullable;");
 			w.AppendLine ($"\t-(void) set{v.Managed}ValueNullable: (NSValue *) value;");
+			w.AppendLine ();
+			w.AppendLine ($"\t-(NSArray<NSValue *> *) get{v.Managed}Array;");
+			w.AppendLine ($"\t-(void) set{v.Managed}Array: (NSArray<NSValue *> *) value;");
+			w.AppendLine ();
+		}
+
+		w.AppendLine ();
+		foreach (var v in bindas_nsstring) {
+			// plain value
+			w.AppendLine ($"\t-(NSString *) getStrong{v.Managed}Value;");
+			w.AppendLine ($"\t-(void) setStrong{v.Managed}Value: (NSString *) value;");
+			w.AppendLine ();
+
+			// nullable
+			w.AppendLine ($"\t-(NSString *) getStrongNullable{v.Managed}Value;");
+			w.AppendLine ($"\t-(void) setStrongNullable{v.Managed}Value: (NSString *) value;");
+			w.AppendLine ();
+
+			// array of plain value
+			w.AppendLine ($"\t-(NSArray<NSString *> *) getStrong{v.Managed}Values;");
+			w.AppendLine ($"\t-(void) setStrong{v.Managed}Values: (NSArray<NSString *> *) value;");
 			w.AppendLine ();
 		}
 
@@ -243,6 +278,9 @@ static class C {
 			w.AppendLine ($"\t-(NSNumber *) get{v.Managed}NumberNullable {{ return self.P{v.Managed}Number; }}");
 			w.AppendLine ($"\t-(void) set{v.Managed}NumberNullable: (NSNumber *) value {{ self.P{v.Managed}Number = value; }}");
 			w.AppendLine ();
+			w.AppendLine ($"\t-(NSArray<NSNumber *> *) get{v.Managed}Array {{ return self.P{v.Managed}Array; }}");
+			w.AppendLine ($"\t-(void) set{v.Managed}Array: (NSArray<NSNumber *> *) value {{ self.P{v.Managed}Array = value; }}");
+			w.AppendLine ();
 		}
 
 		w.AppendLine ();
@@ -252,6 +290,27 @@ static class C {
 			w.AppendLine ();
 			w.AppendLine ($"\t-(NSValue *) get{v.Managed}ValueNullable {{ return self.P{v.Managed}Value; }}");
 			w.AppendLine ($"\t-(void) set{v.Managed}ValueNullable: (NSValue *) value {{ self.P{v.Managed}Value = value; }}");
+			w.AppendLine ();
+			w.AppendLine ($"\t-(NSArray<NSValue *> *) get{v.Managed}Array {{ return self.P{v.Managed}Array; }}");
+			w.AppendLine ($"\t-(void) set{v.Managed}Array: (NSArray<NSValue *> *) value {{ self.P{v.Managed}Array = value; }}");
+			w.AppendLine ();
+		}
+
+		w.AppendLine ();
+		foreach (var v in bindas_nsstring) {
+			// plain value
+			w.AppendLine ($"\t-(NSString *) getStrong{v.Managed}Value {{ return self.PStrong{v.Managed}Property; }}");
+			w.AppendLine ($"\t-(void) setStrong{v.Managed}Value: (NSString *) value {{ self.PStrong{v.Managed}Property = value; }}");
+			w.AppendLine ();
+
+			// nullable
+			w.AppendLine ($"\t-(NSString *) getStrongNullable{v.Managed}Value {{ return self.PStrongNullable{v.Managed}Property; }}");
+			w.AppendLine ($"\t-(void) setStrongNullable{v.Managed}Value: (NSString *) value {{ self.PStrongNullable{v.Managed}Property = value; }}");
+			w.AppendLine ();
+
+			// array of plain value
+			w.AppendLine ($"\t-(NSArray<NSString *> *) getStrong{v.Managed}Values {{ return self.PStrong{v.Managed}Properties; }}");
+			w.AppendLine ($"\t-(void) setStrong{v.Managed}Values: (NSArray<NSString *> *) value {{ self.PStrong{v.Managed}Properties = value; }}");
 			w.AppendLine ();
 		}
 
@@ -574,74 +633,80 @@ namespace Bindings.Test {
 			w.AppendLine ($"\t\t[Export (\"getStrong{v.Managed}Value\")]");
 			w.AppendLine ($"\t\tNSString GetStrong{v.Managed}Value ();");
 
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"setStrong{v.Managed}Value:\")]");
 			w.AppendLine ($"\t\tvoid SetStrong{v.Managed}Value ([BindAs (typeof ({v.Managed}))] NSString value);");
 
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}))]");
 			w.AppendLine ($"\t\t[Export (\"strong{v.Managed}Property\")]");
 			w.AppendLine ($"\t\tNSString Strong{v.Managed}Property {{ get; set; }}");
-			w.AppendLine ();
 
 			// nullable
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[return: NullAllowed]");
 			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}?))]");
 			w.AppendLine ($"\t\t[Export (\"getStrongNullable{v.Managed}Value\")]");
 			w.AppendLine ($"\t\tNSString GetStrongNullable{v.Managed}Value ();");
 
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"setStrongNullable{v.Managed}Value:\")]");
 			w.AppendLine ($"\t\tvoid SetStrongNullable{v.Managed}Value ([NullAllowed] [BindAs (typeof ({v.Managed}?))] NSString value);");
 
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[NullAllowed]");
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?))]");
 			w.AppendLine ($"\t\t[Export (\"strongNullable{v.Managed}Property\")]");
 			w.AppendLine ($"\t\tNSString StrongNullable{v.Managed}Property {{ get; set; }}");
 
-			w.AppendLine ();
-
 			// array of plain value
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}[]))]");
 			w.AppendLine ($"\t\t[Export (\"getStrong{v.Managed}Values\")]");
 			w.AppendLine ($"\t\tNSString[] GetStrong{v.Managed}Values ();");
 
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[Export (\"setStrong{v.Managed}Values:\")]");
 			w.AppendLine ($"\t\tvoid SetStrong{v.Managed}Values ([BindAs (typeof ({v.Managed}[]))] NSString[] value);");
 
+			w.AppendLine ();
 			w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[]))]");
 			w.AppendLine ($"\t\t[Export (\"strong{v.Managed}Properties\")]");
 			w.AppendLine ($"\t\tNSString[] Strong{v.Managed}Properties {{ get; set; }}");
-			
-			w.AppendLine ();
 
 			// array of nullable values
 			// https://bugzilla.xamarin.com/show_bug.cgi?id=57797
+			//w.AppendLine ();
 			//w.AppendLine ($"\t\t[return: NullAllowed]");
 			//w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}?[]))]");
 			//w.AppendLine ($"\t\t[Export (\"getStrongNullable{v.Managed}Values\")]");
 			//w.AppendLine ($"\t\tNSString[] GetStrongNullable{v.Managed}Values ();");
 
+			//w.AppendLine ();
 			//w.AppendLine ($"\t\t[Export (\"setStrongNullable{v.Managed}Values\")]");
 			//w.AppendLine ($"\t\tvoid SetStrongNullable{v.Managed}Values ([NullAllowed] [BindAs (typeof ({v.Managed}?[]))] NSString[] value);");
 
+			//w.AppendLine ();
 			//w.AppendLine ($"\t\t[NullAllowed]");
 			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}?[]))]");
 			//w.AppendLine ($"\t\t[Export (\"strongNullable{v.Managed}Properties:\")]");
 			//w.AppendLine ($"\t\tNSString[] StrongNullable{v.Managed}Properties {{ get; set; }}");
-			//w.AppendLine ();
 
 			// multidimensional array of plain value
 			// https://bugzilla.xamarin.com/show_bug.cgi?id=57795
+			//w.AppendLine ();
 			//w.AppendLine ($"\t\t[return: BindAs (typeof ({v.Managed}[,]))]");
 			//w.AppendLine ($"\t\t[Export (\"getStrong{v.Managed}ValuesMulti\")]");
 			//w.AppendLine ($"\t\tNSString[,] GetStrong{v.Managed}ValuesMulti ();");
 
+			//w.AppendLine ();
 			//w.AppendLine ($"\t\t[Export (\"setStrong{v.Managed}ValuesMulti:\")]");
 			//w.AppendLine ($"\t\tvoid SetStrong{v.Managed}ValuesMulti ([BindAs (typeof ({v.Managed}[]))] NSString[,] value);");
 
+			//w.AppendLine ();
 			//w.AppendLine ($"\t\t[BindAs (typeof ({v.Managed}[,]))]");
 			//w.AppendLine ($"\t\t[Export (\"strong{v.Managed}PropertiesMulti:\")]");
 			//w.AppendLine ($"\t\tNSString[,] Strong{v.Managed}PropertiesMulti {{ get; set; }}");
-
-			w.AppendLine ();
 
 			if (v.ManagedCondition != null)
 				w.AppendLine ("#endif");
@@ -702,6 +767,7 @@ namespace Bindings.Test
 		w.AppendLine (@"
 using System;
 #if XAMCORE_2_0
+using AVFoundation;
 #if HAVE_COREANIMATION
 using CoreAnimation;
 #endif
@@ -775,6 +841,12 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ($"\t\t\tpublic override void Set{v.Managed}NumberNullable ({v.Managed}? value) {{ _{v.Managed} = value; }}");
 			w.AppendLine ($"\t\t\tpublic override void Set{v.Managed}NumberNonNullable ({v.Managed} value) {{ _{v.Managed} = value; }}");
 
+			w.AppendLine ();
+			w.AppendLine ($"\t\t\t{v.Managed}[] _{v.Managed}ArrayValue;");
+			w.AppendLine ($"\t\t\tpublic {v.Managed}[] {v.Managed}ArrayValue {{ get {{ return _{v.Managed}ArrayValue; }} set {{ _{v.Managed}ArrayValue = value; }} }}");
+			w.AppendLine ($"\t\t\tpublic override {v.Managed}[] Get{v.Managed}ArrayValue () {{ return _{v.Managed}ArrayValue; }}");
+			w.AppendLine ($"\t\t\tpublic override void Set{v.Managed}Array ({v.Managed}[] value) {{ _{v.Managed}ArrayValue = value; }}");
+
 			if (v.ManagedCondition != null)
 				w.AppendLine ("#endif");
 			w.AppendLine ();
@@ -791,6 +863,35 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			w.AppendLine ($"\t\t\tpublic override {v.Managed} Get{v.Managed}ValueNonNullable () {{ return _{v.Managed}.Value; }}");
 			w.AppendLine ($"\t\t\tpublic override void Set{v.Managed}ValueNullable ({v.Managed}? value) {{ _{v.Managed} = value; }}");
 			w.AppendLine ($"\t\t\tpublic override void Set{v.Managed}ValueNonNullable ({v.Managed} value) {{ _{v.Managed} = value; }}");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t\t{v.Managed}[] _{v.Managed}ArrayValue;");
+			w.AppendLine ($"\t\t\tpublic {v.Managed}[] {v.Managed}ArrayValue {{ get {{ return _{v.Managed}ArrayValue; }} set {{ _{v.Managed}ArrayValue = value; }} }}");
+			w.AppendLine ($"\t\t\tpublic override {v.Managed}[] Get{v.Managed}ArrayValue () {{ return _{v.Managed}ArrayValue; }}");
+			w.AppendLine ($"\t\t\tpublic override void Set{v.Managed}Array ({v.Managed}[] value) {{ _{v.Managed}ArrayValue = value; }}");
+
+			if (v.ManagedCondition != null)
+				w.AppendLine ("#endif");
+			w.AppendLine ();
+		}
+
+		w.AppendLine ("\t\t\t// BindAs: NSString");
+		foreach (var v in bindas_nsstring) {
+			if (v.ManagedCondition != null)
+				w.AppendLine ($"#if {v.ManagedCondition}");
+
+			w.AppendLine ($"\t\t\t{v.Managed}? _{v.Managed};");
+			w.AppendLine ($"\t\t\tpublic {v.Managed}? {v.Managed}Value {{ get {{ return _{v.Managed}; }} set {{ _{v.Managed} = value; }} }}");
+			w.AppendLine ($"\t\t\tpublic override {v.Managed} GetStrong{v.Managed}Value () {{ return _{v.Managed}.Value; }}");
+			w.AppendLine ($"\t\t\tpublic override {v.Managed}? GetStrongNullable{v.Managed}Value () {{ return _{v.Managed}; }}");
+			w.AppendLine ($"\t\t\tpublic override void SetStrong{v.Managed}Value ({v.Managed} value) {{ _{v.Managed} = value; }}");
+			w.AppendLine ($"\t\t\tpublic override void SetStrongNullable{v.Managed}Value ({v.Managed}? value) {{ _{v.Managed} = value; }}");
+
+			w.AppendLine ();
+			w.AppendLine ($"\t\t\t{v.Managed}[] _{v.Managed}ArrayValue;");
+			w.AppendLine ($"\t\t\tpublic {v.Managed}[] {v.Managed}ArrayValue {{ get {{ return _{v.Managed}ArrayValue; }} set {{ _{v.Managed}ArrayValue = value; }} }}");
+			w.AppendLine ($"\t\t\tpublic override {v.Managed}[] GetStrong{v.Managed}Values () {{ return _{v.Managed}ArrayValue; }}");
+			w.AppendLine ($"\t\t\tpublic override void SetStrong{v.Managed}Values ({v.Managed}[] value) {{ _{v.Managed}ArrayValue = value; }}");
 
 			if (v.ManagedCondition != null)
 				w.AppendLine ("#endif");
@@ -1222,7 +1323,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			Environment.CurrentDirectory = Path.GetDirectoryName (Environment.CurrentDirectory);
 
 		/* native code */
-		WriteLibTestStructH ();
+			WriteLibTestStructH ();
 		WriteLibTestDecompileM ();
 		WriteLibTestPropertiesH ();
 		WriteLibTestMethodsH ();

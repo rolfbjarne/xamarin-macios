@@ -95,6 +95,7 @@ static MonoClass      *inativeobject_class;
 static MonoClass      *nsobject_class;
 static MonoClass      *nsvalue_class;
 static MonoClass      *nsnumber_class;
+static MonoClass      *nsstring_class;
 
 static pthread_mutex_t framework_peer_release_lock;
 static MonoGHashTable *xamarin_wrapper_hash;
@@ -243,8 +244,12 @@ xamarin_get_parameter_type (MonoMethod *managed_method, int index)
 	void *iter = NULL;
 	MonoType *p = NULL;
 	
-	for (int i = 0; i < index + 1; i++)
-		p = mono_signature_get_params (msig, &iter);
+	if (index == -1) {
+		p = mono_signature_get_return_type (msig);
+	} else {
+		for (int i = 0; i < index + 1; i++)
+			p = mono_signature_get_params (msig, &iter);
+	}
 	
 	return p;
 }
@@ -348,6 +353,18 @@ void xamarin_framework_peer_unlock ()
 	pthread_mutex_unlock (&framework_peer_release_lock);
 }
 
+MonoClass *
+xamarin_get_nsvalue_class ()
+{
+	return nsvalue_class;
+}
+
+MonoClass *
+xamarin_get_nsnumber_class ()
+{
+	return nsnumber_class;
+}
+
 bool
 xamarin_is_class_nsobject (MonoClass *cls)
 {
@@ -391,6 +408,15 @@ xamarin_is_class_nsvalue (MonoClass *cls)
 	MONO_ASSERT_GC_UNSAFE;
 
 	return mono_class_is_subclass_of (cls, nsvalue_class, false);
+}
+
+bool
+xamarin_is_class_nsstring (MonoClass *cls)
+{
+	// COOP: Reading managed data, must be in UNSAFE mode
+	MONO_ASSERT_GC_UNSAFE;
+
+	return mono_class_is_subclass_of (cls, nsstring_class, false);
 }
 
 #define MANAGED_REF_BIT (1 << 31)
@@ -1229,6 +1255,7 @@ xamarin_initialize ()
 	nsobject_class = get_class_from_name (platform_image, foundation, "NSObject");
 	nsnumber_class = get_class_from_name (platform_image, foundation, "NSNumber");
 	nsvalue_class = get_class_from_name (platform_image, foundation, "NSValue");
+	nsstring_class = get_class_from_name (platform_image, foundation, "NSString");
 
 	mono_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_release_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_release_managed_ref", (const void *) xamarin_release_managed_ref);
 	mono_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_create_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_create_managed_ref", (const void *) xamarin_create_managed_ref);

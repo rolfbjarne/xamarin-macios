@@ -1010,13 +1010,8 @@ namespace XamCore.Registrar {
 
 			if (a == null ^ b == null)
 				return false;
-
-			var tdA = a.Resolve ();
-			var tdB = b.Resolve ();
-			if (tdA != tdB)
-				return false;
-
-			return false;
+			
+			return SharedStatic.TypeMatch (a, b);
 		}
 
 		protected override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
@@ -3836,8 +3831,10 @@ namespace XamCore.Registrar {
 					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 				underlyingNativeType = GetElementType (nativeType);
 				underlyingManagedType = GetElementType (managedType);
+				managedClassExpression = $"mono_class_get_element_class ({managedClassExpression})";
 			} else if (isManagedNullable) {
 				underlyingManagedType = GetNullableType (managedType);
+				managedClassExpression = $"mono_class_get_nullable_param ({managedClassExpression})";
 			}
 
 			if (isManagedNullable || isManagedArray)
@@ -3875,8 +3872,11 @@ namespace XamCore.Registrar {
 				}
 			}
 
-			if (isManagedNullable || isManagedArray)
-				sb.AppendLine ("}");
+			if (isManagedNullable || isManagedArray) {
+				sb.AppendLine ($"}} else {{");
+				sb.AppendLine ($"{outputName} = NULL;");
+				sb.AppendLine ($"}}");
+			}
 		}
 
 		void GenerateConversionToNative (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string managedClassExpression)
@@ -3902,8 +3902,10 @@ namespace XamCore.Registrar {
 					throw ErrorHelper.CreateError (99, $"Internal error: can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 				underlyingNativeType = GetElementType (nativeType);
 				underlyingManagedType = GetElementType (managedType);
+				managedClassExpression = $"mono_class_get_element_class ({managedClassExpression})";
 			} else if (isManagedNullable) {
 				underlyingManagedType = GetNullableType (managedType);
+				managedClassExpression = $"mono_class_get_nullable_param ({managedClassExpression})";
 			}
 
 			if (isManagedNullable || isManagedArray)
@@ -3927,8 +3929,11 @@ namespace XamCore.Registrar {
 			}
 			sb.AppendLine ($"if (exception_gchandle != 0) goto exception_handling;");
 
-			if (isManagedNullable || isManagedArray)
-				sb.AppendLine ("}");
+			if (isManagedNullable || isManagedArray) {
+				sb.AppendLine ($"}} else {{");
+				sb.AppendLine ($"{outputName} = NULL;");
+				sb.AppendLine ($"}}");
+			}
 		}
 
 		class Body {

@@ -311,7 +311,7 @@ namespace XamCore.ObjCRuntime {
 		// value_handle: GCHandle to a (smart) enum value
 		static IntPtr ConvertSmartEnumToNSString (IntPtr value_handle)
 		{
-			var value = GCHandle.FromIntPtr (value_handle);
+			var value = GCHandle.FromIntPtr (value_handle).Target;
 			var smart_type = value.GetType ();
 			MethodBase getConstantMethod, getValueMethod;
 			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))
@@ -325,7 +325,7 @@ namespace XamCore.ObjCRuntime {
 		// returns: GCHandle to a (smart) enum value
 		static IntPtr ConvertNSStringToSmartEnum (IntPtr value, IntPtr type)
 		{
-			var smart_type = (Type)ObjectWrapper.Convert (type);
+			var smart_type = (Type) ObjectWrapper.Convert (type);
 			var str = GetNSObject<NSString> (value);
 			MethodBase getConstantMethod, getValueMethod;
 			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))

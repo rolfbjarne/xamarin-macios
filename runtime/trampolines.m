@@ -736,7 +736,7 @@ xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType 
 			goto exception_handling;
 
 		if (isManagedArray) {
-			convertedValue = xamarin_convert_nsarray_to_managed_with_func (value, managedType, func, exception_gchandle);
+			convertedValue = xamarin_convert_nsarray_to_managed_with_func (value, underlyingManagedType, func, exception_gchandle);
 			if (*exception_gchandle != 0)
 				goto exception_handling;
 		} else {
@@ -1073,23 +1073,22 @@ exception_handling:
 }
 
 MonoArray *
-xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managedType, xamarin_id_to_managed_func convert, guint32 *exception_gchandle)
+xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managedElementType, xamarin_id_to_managed_func convert, guint32 *exception_gchandle)
 {
 	if (array == NULL)
 		return NULL;
 
 	int length = [array count];
-	MonoClass *element_class = mono_class_get_element_class (managedType);
-	MonoArray *rv = mono_array_new (mono_domain_get (), element_class, length);
+	MonoArray *rv = mono_array_new (mono_domain_get (), managedElementType, length);
 
 	if (length == 0)
 		return rv;
 
 	void *valueptr = NULL;
-	int element_size = mono_class_value_size (element_class, NULL);
+	int element_size = mono_class_value_size (managedElementType, NULL);
 	char *ptr = (char *) mono_array_addr_with_size (rv, element_size, 0);
 	for (int i = 0; i < length; i++) {
-		valueptr = convert ([array objectAtIndex: i], valueptr, element_class, exception_gchandle);
+		valueptr = convert ([array objectAtIndex: i], valueptr, managedElementType, exception_gchandle);
 		if (*exception_gchandle != 0)
 			goto exception_handling;
 		memcpy (ptr, valueptr, element_size);

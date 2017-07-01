@@ -316,7 +316,7 @@ namespace XamCore.ObjCRuntime {
 			var smart_type = value.GetType ();
 			MethodBase getConstantMethod, getValueMethod;
 			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))
-				throw ErrorHelper.CreateError (8999, "no extension type for smart enum");
+				throw ErrorHelper.CreateError (8024, $"Could not find the extension type '{smart_type.FullName}Extensions' for the smart enum '{smart_type.FullName}'. Please file a bug at https://bugzilla.xamarin.com.");
 			var rv = (NSString) ((MethodInfo) getConstantMethod).Invoke (null, new object [] { value });
 			rv.DangerousRetain ().DangerousAutorelease ();
 			return rv.Handle;
@@ -331,7 +331,7 @@ namespace XamCore.ObjCRuntime {
 			var str = GetNSObject<NSString> (value);
 			MethodBase getConstantMethod, getValueMethod;
 			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))
-				throw ErrorHelper.CreateError (8999, "no extension type for smart enum");
+				throw ErrorHelper.CreateError (8024, $"Could not find the extension type '{smart_type.FullName}Extensions' for the smart enum '{smart_type.FullName}'. Please file a bug at https://bugzilla.xamarin.com.");
 			var rv = ((MethodInfo) getValueMethod).Invoke (null, new object [] { str });
 			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
 		}

@@ -2218,3 +2218,8 @@ This indicates a bug in Xamarin.iOS. Please file a bug at [http://bugzilla.xamar
 <h3><a name="MT8023"/>MT8023: An instance object is required to construct a closed generic method for the open generic method: * (token reference: *). Please file a bug report at http://bugzilla.xamarin.com.</h3>
 
 This indicates a bug in Xamarin.iOS. Please file a bug at [http://bugzilla.xamarin.com](https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS).
+
+<h3><a name="MT8024"/>MT8024: Could not find the extension type '{extension_type_name}' for the smart enum '{smart_enum}'. Please file a bug at https://bugzilla.xamarin.com.</h3>
+
+This indicates a bug in Xamarin.iOS. Please file a bug at [http://bugzilla.xamarin.com](https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS).
+

@@ -319,20 +319,12 @@ static class C {
 	static void WriteFrameworkDefines (StringBuilder w)
 	{
 		w.AppendLine (@"
-#if __TVOS__ || __WATCHOS__
-#define BUG_57764
-#endif
-
 #if __IOS__ || __MACOS__ || __TVOS__
-#if !BUG_57764
 #define HAVE_COREANIMATION
 #endif
-#endif
 
 #if __IOS__ || __MACOS__ || __TVOS__
-#if !BUG_57764
 #define HAVE_COREMEDIA
-#endif
 #endif
 
 #if __IOS__ || __WATCHOS__ || __TVOS__

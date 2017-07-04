@@ -637,6 +637,15 @@ namespace xharness
 				if (IsServerMode)
 					tasks.Add (RunTestServer ());
 
+				if (Harness.InJenkins) {
+					Task.Factory.StartNew (async () => {
+						while (true) {
+							Console.WriteLine ("Still running tests. Please be patient.");
+							await Task.Delay (TimeSpan.FromMinutes (10));
+						}
+					});
+				}
+
 				Task.Run (async () =>
 				{
 					await SimDevice.KillEverythingAsync (MainLog);

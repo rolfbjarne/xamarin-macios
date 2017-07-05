@@ -181,6 +181,7 @@
       <Link>ReflectionTest.cs</Link>
     </Compile>
     <Compile Include="SerializationTest.cs" />
+    <Compile Include="SmartEnumTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BundledResources\BundledResources.csproj">

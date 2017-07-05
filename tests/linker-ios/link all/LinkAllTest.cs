@@ -533,5 +533,10 @@ namespace LinkAll {
 			var fqn = typeof (NSObject).AssemblyQualifiedName.Replace ("Foundation.NSObject", "Security.Tls.AppleTlsProvider");
 			Assert.Null (Type.GetType (fqn), "Should NOT be included (no SslStream or Socket support)");
 		}
+
+		[Test]
+		public void SmartEnum ()
+		{
+		}
 	}
 }

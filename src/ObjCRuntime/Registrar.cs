@@ -1121,6 +1121,8 @@ namespace XamCore.Registrar {
 			lock (lock_obj) {
 				// We can end up overwriting an existing entry, if another thread got
 				// here first. That's not a problem.
+				if (smart_enums == null)
+					smart_enums = new Dictionary<TType, Tuple<TMethod, TMethod>> ();
 				smart_enums [type] = new Tuple<TMethod, TMethod> (getConstantMethod, getValueMethod);
 			}
 

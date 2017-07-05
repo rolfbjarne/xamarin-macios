@@ -9,7 +9,6 @@ using Xamarin.Tuner;
 namespace Xamarin.Linker {
 
 	public static class MobileExtensions {
-
 		public static bool HasCustomAttribute (this ICustomAttributeProvider provider, string @namespace, string name)
 		{
 			if (provider == null || !provider.HasCustomAttributes)

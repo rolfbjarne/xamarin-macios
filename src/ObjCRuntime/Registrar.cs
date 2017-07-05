@@ -104,6 +104,7 @@ namespace XamCore.Registrar {
 #if MTOUCH || MMP
 		public Application App { get; protected set; }
 #endif
+		object lock_obj = new object ();
 
 		Dictionary<TAssembly, object> assemblies = new Dictionary<TAssembly, object> (); // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
 		// locking: all accesses must lock 'types'.
@@ -117,6 +118,9 @@ namespace XamCore.Registrar {
 		// this is used to check if multiple categories are registered with the same name.
 		// locking: all accesses must lock 'categories_map'.
 		Dictionary<string, TType> categories_map = new Dictionary<string, TType> ();
+		// this is used to cache the smart enum conversion methods for each type.
+		// locking: all accesses must lock 'lock_obj'.
+		Dictionary<TType, Tuple<TMethod, TMethod>> smart_enums;
 		TMethod conforms_to_protocol;
 		TMethod invoke_conforms_to_protocol;
 
@@ -1069,6 +1073,17 @@ namespace XamCore.Registrar {
 			if (!IsEnum (type))
 				return false;
 
+			Tuple<TMethod, TMethod> pair;
+			lock (lock_obj) {
+				if (smart_enums != null && smart_enums.TryGetValue (type, out pair)) {
+					if (pair == null)
+						return false;
+					getConstantMethod = pair.Item1;
+					getValueMethod = pair.Item2;
+					return true;
+				}
+			}
+
 			var extension = FindType (type, type.Namespace, type.Name + "Extensions");
 			if (extension == null)
 				return false;
@@ -1102,6 +1117,14 @@ namespace XamCore.Registrar {
 			}
 			if (getValueMethod == null)
 				return false;
+
+			lock (lock_obj) {
+				// We can end up overwriting an existing entry, if another thread got
+				// here first. That's not a problem.
+				if (smart_enums == null)
+					smart_enums = new Dictionary<TType, Tuple<TMethod, TMethod>> ();
+				smart_enums [type] = new Tuple<TMethod, TMethod> (getConstantMethod, getValueMethod);
+			}
 
 			return true;
 		}

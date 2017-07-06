@@ -1268,7 +1268,7 @@ public partial class Generator : IMemberGatherer {
 			temp = string.Format ("{3}NSValue.From{0} ({2}{1});", typeStr, denullify, parameterName, nullCheck);
 		} else if (originalType == TypeManager.NSString && IsSmartEnum (retType)) {
 			temp = isNullable ? $"{parameterName} == null ? null : " : string.Empty;
-			temp += $"{FormatType (retType.DeclaringType, retType)}Extensions.GetConstant ({parameterName});";
+			temp += $"{FormatType (retType.DeclaringType, retType)}Extensions.GetConstant ({parameterName}{denullify});";
 		} else if (originalType.IsArray) {
 			var arrType = originalType.GetElementType ();
 			var arrRetType = TypeManager.GetUnderlyingNullableType (retType.GetElementType ()) ?? retType.GetElementType ();

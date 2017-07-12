@@ -491,6 +491,10 @@
 			"const char *", "runtime_version"
 		),
 
+		new Export ("MonoDomain *", "mono_jit_init",
+			"const char *", "file"
+		),
+
 		new Export ("int", "mono_jit_exec",
 			"MonoDomain *", "domain",
 			"MonoAssembly *", "assembly",
@@ -512,6 +516,10 @@
 		),
 
 		new Export ("void", "mono_set_signal_chaining",
+			"mono_bool", "chain_signals"
+		),
+
+		new Export ("void", "mono_set_crash_chaining",
 			"mono_bool", "chain_signals"
 		),
 

@@ -98,7 +98,7 @@ namespace Xamarin.Bundler {
 		}
 
 		// returns false if the assembly was not copied (because it was already up-to-date).
-		public bool CopyAssembly (string source, string target, bool copy_mdb = true, bool strip = false)
+		public bool CopyAssembly (string source, string target, bool copy_debug_symbols = true, bool strip = false)
 		{
 			var copied = false;
 
@@ -116,9 +116,15 @@ namespace Xamarin.Bundler {
 					Driver.Log (3, "Target '{0}' is up-to-date.", target);
 				}
 
-				// Update the mdb even if the assembly didn't change.
-				if (copy_mdb && File.Exists (source + ".mdb"))
-					Application.UpdateFile (source + ".mdb", target + ".mdb", true);
+				// Update the debug symbols file even if the assembly didn't change.
+				if (copy_debug_symbols) {
+					if (File.Exists (source + ".mdb"))
+						Application.UpdateFile (source + ".mdb", target + ".mdb", true);
+
+					var spdb = Path.ChangeExtension (source, "pdb");
+					if (File.Exists (spdb))
+						Application.UpdateFile (spdb, Path.ChangeExtension (target, "pdb"), true);
+				}
 
 				CopyConfigToDirectory (Path.GetDirectoryName (target));
 			} catch (Exception e) {
@@ -128,13 +134,17 @@ namespace Xamarin.Bundler {
 			return copied;
 		}
 
-		public void CopyMdbToDirectory (string directory)
+		public void CopyDebugSymbolsToDirectory (string directory)
 		{
 			string mdb_src = FullPath + ".mdb";
 			if (File.Exists (mdb_src)) {
 				string mdb_target = Path.Combine (directory, FileName + ".mdb");
 				Application.UpdateFile (mdb_src, mdb_target);
 			}
+
+			var spdb = Path.ChangeExtension (FullPath, "pdb");
+			if (File.Exists (spdb))
+				Application.UpdateFile (spdb, Path.Combine (directory, Path.ChangeExtension (FileName, "pdb")), true);
 		}
 		
 		public void CopyMSymToDirectory (string directory)
@@ -162,16 +172,19 @@ namespace Xamarin.Bundler {
 			string config_src = FullPath + ".config";
 			if (File.Exists (config_src)) {
 				string config_target = Path.Combine (directory, FileName + ".config");
-				Application.UpdateFile (config_src, config_target);
+				Application.UpdateFile (config_src, config_target, true);
 			}
 		}
 
-		// this will copy (and optionally strip) the assembly and all the related files:
+		// this will copy (and optionally strip) the assembly and almost all the related files:
 		// * debug file (.mdb)
 		// * config file (.config)
 		// * satellite assemblies (<language id>/.dll)
-		// * aot data
-		public void CopyToDirectory (string directory, bool reload = true, bool check_case = false, bool only_copy = false, bool copy_mdb = true, bool strip = false)
+		//
+		// Aot data is copied separately, because we might want to copy aot data 
+		// even if we don't want to copy the assembly (if 32/64-bit assemblies are identical, 
+		// only one is copied, but we still want the aotdata for both).
+		public void CopyToDirectory (string directory, bool reload = true, bool check_case = false, bool only_copy = false, bool copy_debug_symbols = true, bool strip = false)
 		{
 			var target = Path.Combine (directory, FileName);
 
@@ -184,7 +197,7 @@ namespace Xamarin.Bundler {
 
 			// our Copy code deletes the target (so copy'ing over itself is a bad idea)
 			if (directory != Path.GetDirectoryName (FullPath))
-				CopyAssembly (FullPath, target, copy_mdb: copy_mdb, strip: strip);
+				CopyAssembly (FullPath, target, copy_debug_symbols: copy_debug_symbols, strip: strip);
 
 			CopySatellitesToDirectory (directory);
 
@@ -195,7 +208,10 @@ namespace Xamarin.Bundler {
 					FullPath = target;
 				}
 			}
+		}
 
+		public void CopyAotDataFilesToDirectory (string directory)
+		{
 			foreach (var aotdata in AotInfos.Values.SelectMany ((info) => info.AotDataFiles))
 				Application.UpdateFile (aotdata, Path.Combine (directory, Path.GetFileName (aotdata)));
 		}

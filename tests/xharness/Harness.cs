@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using Xamarin.Utils;
 
 namespace xharness
 {
@@ -173,7 +174,7 @@ namespace xharness
 					Log ("Extracting mlaunch...");
 					using (var p = new Process ()) {
 						p.StartInfo.FileName = "unzip";
-						p.StartInfo.Arguments = $"-d {Quote (tmp_extraction_dir)} {Quote (local_zip)}";
+						p.StartInfo.Arguments = $"-d {StringUtils.Quote (tmp_extraction_dir)} {StringUtils.Quote (local_zip)}";
 						Log ("{0} {1}", p.StartInfo.FileName, p.StartInfo.Arguments);
 						p.Start ();
 						p.WaitForExit ();
@@ -206,6 +207,7 @@ namespace xharness
 					var filename = Path.GetFullPath (Path.Combine (IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current", "bin", "mlaunch"));
 					if (File.Exists (filename)) {
 						Log ("Found mlaunch: {0}", filename);
+						Environment.SetEnvironmentVariable ("MLAUNCH_PATH", filename);
 						return mlaunch = filename;
 					}
 
@@ -218,6 +220,7 @@ namespace xharness
 					}
 					if (File.Exists (filename)) {
 						Log ("Found mlaunch: {0}", filename);
+						Environment.SetEnvironmentVariable ("MLAUNCH_PATH", filename);
 						return mlaunch = filename;
 					}
 
@@ -227,6 +230,7 @@ namespace xharness
 					filename = "/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch";
 					if (File.Exists (filename)) {
 						Log ("Found mlaunch: {0}", filename);
+						Environment.SetEnvironmentVariable ("MLAUNCH_PATH", filename);
 						return mlaunch = filename;
 					}
 
@@ -235,25 +239,6 @@ namespace xharness
 
 				return mlaunch;
 			}
-		}
-
-		public static string Quote (string f)
-		{
-			if (f.IndexOf (' ') == -1 && f.IndexOf ('\'') == -1 && f.IndexOf (',') == -1)
-				return f;
-
-			var s = new StringBuilder ();
-
-			s.Append ('"');
-			foreach (var c in f) {
-				if (c == '"' || c == '\\')
-					s.Append ('\\');
-
-				s.Append (c);
-			}
-			s.Append ('"');
-
-			return s.ToString ();
 		}
 
 		void LoadConfig ()
@@ -276,13 +261,23 @@ namespace xharness
 		{
 			var test_suites = new [] { new { ProjectFile = "apitest", Name = "apitest" }, new { ProjectFile = "dontlink-mac", Name = "dont link" } };
 			foreach (var p in test_suites)
-				MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, p.ProjectFile + "/" + p.ProjectFile + ".csproj"))) { Name = p.Name });
+				MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, p.ProjectFile + "/" + p.ProjectFile + ".sln"))) { Name = p.Name });
 			
-			MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "introspection", "Mac", "introspection-mac.csproj")), skipXMVariations : true) { Name = "introspection" });
+			MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "introspection", "Mac", "introspection-mac.csproj")), skipXMVariations: true) { Name = "introspection" });
 
-			var hard_coded_test_suites = new [] { new { ProjectFile = "mmptest", Name = "mmptest" }, new { ProjectFile = "msbuild-mac", Name = "MSBuild tests" }, new { ProjectFile = "xammac_tests", Name = "xammac tests" } };
-			foreach (var p in hard_coded_test_suites)
-				MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, p.ProjectFile + "/" + p.ProjectFile + ".csproj")), generateVariations: false) { Name = p.Name });
+			var hard_coded_test_suites = new [] {
+				new { ProjectFile = "mmptest", Name = "mmptest", IsNUnit = true, Configurations = (string[]) null },
+				new { ProjectFile = "msbuild-mac", Name = "MSBuild tests", IsNUnit = false, Configurations = (string[]) null },
+				new { ProjectFile = "xammac_tests", Name = "xammac tests", IsNUnit = false, Configurations = new string [] { "Debug", "Release" }},
+			};
+			foreach (var p in hard_coded_test_suites) {
+				MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, p.ProjectFile + "/" + p.ProjectFile + ".csproj")), generateVariations: false) {
+					Name = p.Name,
+					IsNUnitProject = p.IsNUnit,
+					SolutionPath = Path.GetFullPath (Path.Combine (RootDirectory, "tests-mac.sln")),
+					Configurations = p.Configurations,
+				});
+			}
 
 			var bcl_suites = new string[] { "mscorlib", "System", "System.Core", "System.Data", "System.Net.Http", "System.Numerics", "System.Runtime.Serialization", "System.Transactions", "System.Web.Services", "System.Xml", "System.Xml.Linq", "Mono.Security", "System.ComponentModel.DataAnnotations", "System.Json", "System.ServiceModel.Web", "Mono.Data.Sqlite" };
 			foreach (var p in bcl_suites) {
@@ -392,7 +387,7 @@ namespace xharness
 			}
  
 			foreach (var proj in MacTestProjects.Where ((v) => v.GenerateVariations)) {
-				var file = proj.Path;
+				var file = Path.ChangeExtension (proj.Path, "csproj");
  				if (!File.Exists (file))
  					throw new FileNotFoundException (file);
 
@@ -402,6 +397,7 @@ namespace xharness
 					{
 						TemplateProjectPath = file,
 						Harness = this,
+						IsNUnitProject = proj.IsNUnitProject,
 					};
 					unifiedMobile.Execute ();
 					unified_targets.Add (unifiedMobile);
@@ -431,6 +427,7 @@ namespace xharness
 				{
  					TemplateProjectPath = file,
  					Harness = this,
+					IsNUnitProject = proj.IsNUnitProject,
  				};
 				unifiedMobile.Execute ();
 				hardcoded_unified_targets.Add (unifiedMobile);
@@ -741,7 +738,7 @@ namespace xharness
 
 			var symbolicated = new LogFile ("Symbolicated crash report", Path.ChangeExtension (report.Path, ".symbolicated.log"));
 			var environment = new Dictionary<string, string> { { "DEVELOPER_DIR", Path.Combine (XcodeRoot, "Contents", "Developer") } };
-			var rv = await ProcessHelper.ExecuteCommandAsync (symbolicatecrash, Quote (report.Path), symbolicated, TimeSpan.FromMinutes (1), environment);
+			var rv = await ProcessHelper.ExecuteCommandAsync (symbolicatecrash, StringUtils.Quote (report.Path), symbolicated, TimeSpan.FromMinutes (1), environment);
 			if (rv.Succeeded) {;
 				log.WriteLine ("Symbolicated {0} successfully.", report.Path);
 				return symbolicated;
@@ -763,10 +760,10 @@ namespace xharness
 				var tmp = Path.GetTempFileName ();
 				try {
 					var sb = new StringBuilder ();
-					sb.Append (" --list-crash-reports=").Append (Quote (tmp));
-					sb.Append (" --sdkroot ").Append (Quote (XcodeRoot));
+					sb.Append (" --list-crash-reports=").Append (StringUtils.Quote (tmp));
+					sb.Append (" --sdkroot ").Append (StringUtils.Quote (XcodeRoot));
 					if (!string.IsNullOrEmpty (device))
-						sb.Append (" --devname ").Append (Quote (device));
+						sb.Append (" --devname ").Append (StringUtils.Quote (device));
 					var result = await ProcessHelper.ExecuteCommandAsync (MlaunchPath, sb.ToString (), log, TimeSpan.FromMinutes (1));
 					if (result.Succeeded)
 						rv.UnionWith (File.ReadAllLines (tmp));
@@ -824,11 +821,11 @@ namespace xharness
 						foreach (var file in end_crashes) {
 							var crash_report_target = Logs.CreateFile ("Crash report: " + Path.GetFileName (file), Path.Combine (LogDirectory, Path.GetFileName (file)));
 							var sb = new StringBuilder ();
-							sb.Append (" --download-crash-report=").Append (Harness.Quote (file));
-							sb.Append (" --download-crash-report-to=").Append (Harness.Quote (crash_report_target.Path));
-							sb.Append (" --sdkroot ").Append (Harness.Quote (Harness.XcodeRoot));
+							sb.Append (" --download-crash-report=").Append (StringUtils.Quote (file));
+							sb.Append (" --download-crash-report-to=").Append (StringUtils.Quote (crash_report_target.Path));
+							sb.Append (" --sdkroot ").Append (StringUtils.Quote (Harness.XcodeRoot));
 							if (!string.IsNullOrEmpty (DeviceName))
-								sb.Append (" --devname ").Append (Harness.Quote (DeviceName));
+								sb.Append (" --devname ").Append (StringUtils.Quote (DeviceName));
 							var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, sb.ToString (), Log, TimeSpan.FromMinutes (1));
 							if (result.Succeeded) {
 								Log.WriteLine ("Downloaded crash report {0} to {1}", file, crash_report_target.Path);

@@ -408,6 +408,8 @@ namespace LinkAll {
 		{
 			// that will bring OpenTK-1.0 into the .app
 			OpenTK.WindowState state = OpenTK.WindowState.Normal;
+			// Compiler optimization (roslyn release) can remove the variable, which removes OpenTK-1.dll from the app and fail the test
+			Assert.That (state, Is.EqualTo (OpenTK.WindowState.Normal), "normal");
 
 			var gl = Type.GetType ("OpenTK.Graphics.ES11.GL, OpenTK-1.0", false);
 			Assert.NotNull (gl, "ES11/GL");
@@ -446,9 +448,12 @@ namespace LinkAll {
 
 		string GetField (object o, string s)
 		{
-			var f = o.GetType ().GetField (s, BindingFlags.Instance | BindingFlags.NonPublic);
-			if (f == null)
+			var type = o.GetType ();
+			var f1 = type.GetField (s, BindingFlags.Instance | BindingFlags.NonPublic);
+			var f2 = type.GetField (s + "i__Field", BindingFlags.Instance | BindingFlags.NonPublic);
+			if (f1 == null && f2 == null)
 				return s;
+
 			//Console.WriteLine (f.GetValue (o));
 			return null;
 		}
@@ -526,11 +531,7 @@ namespace LinkAll {
 		{
 			// make test work for classic (monotouch) and unified (iOS, tvOS and watchOS)
 			var fqn = typeof (NSObject).AssemblyQualifiedName.Replace ("Foundation.NSObject", "Security.Tls.AppleTlsProvider");
-#if __WATCHOS__
 			Assert.Null (Type.GetType (fqn), "Should NOT be included (no SslStream or Socket support)");
-#else
-			Assert.NotNull (Type.GetType (fqn), "Should be included");
-#endif
 		}
 	}
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using Xamarin.Utils;
 
 namespace xharness
 {
@@ -25,13 +26,13 @@ namespace xharness
 		public IEnumerable<SimDevice> AvailableDevices => available_devices;
 		public IEnumerable<SimDevicePair> AvailableDevicePairs => available_device_pairs;
 
-		public Task LoadAsync (Log log)
+		public async Task LoadAsync (Log log)
 		{
 			if (loaded)
-				return Task.CompletedTask;
+				return;
 			loaded = true;
 
-			Task.Run (async () =>
+			await Task.Run (async () =>
 			{
 				var tmpfile = Path.GetTempFileName ();
 				try {
@@ -98,8 +99,6 @@ namespace xharness
 					File.Delete (tmpfile);
 				}
 			});
-
-			return Task.CompletedTask;
 		}
 
 		public async Task<SimDevice []> FindAsync (AppRunnerTarget target, Log log)
@@ -117,7 +116,7 @@ namespace xharness
 				simulator_runtime = "com.apple.CoreSimulator.SimRuntime.iOS-" + Xamarin.SdkVersions.iOS.Replace ('.', '-');
 				break;
 			case AppRunnerTarget.Simulator_iOS64:
-				simulator_devicetypes = new string [] { "com.apple.CoreSimulator.SimDeviceType.iPhone-5s" };
+				simulator_devicetypes = new string [] { "com.apple.CoreSimulator.SimDeviceType.iPhone-6" };
 				simulator_runtime = "com.apple.CoreSimulator.SimRuntime.iOS-" + Xamarin.SdkVersions.iOS.Replace ('.', '-');
 				break;
 			case AppRunnerTarget.Simulator_iOS:
@@ -353,7 +352,7 @@ namespace xharness
 
 			var to_kill = new string [] { "iPhone Simulator", "iOS Simulator", "Simulator", "Simulator (Watch)", "com.apple.CoreSimulator.CoreSimulatorService" };
 
-			await ProcessHelper.ExecuteCommandAsync ("killall", "-9 " + string.Join (" ", to_kill.Select ((v) => Harness.Quote (v)).ToArray ()), log, TimeSpan.FromSeconds (10));
+			await ProcessHelper.ExecuteCommandAsync ("killall", "-9 " + string.Join (" ", to_kill.Select ((v) => StringUtils.Quote (v)).ToArray ()), log, TimeSpan.FromSeconds (10));
 
 			foreach (var dir in new string [] {
 				Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile), "Library", "Saved Application State", "com.apple.watchsimulator.savedState"),
@@ -397,7 +396,7 @@ namespace xharness
 				failure = false;
 				foreach (var bundle_identifier in bundle_identifiers) {
 					var sql = new System.Text.StringBuilder ();
-					sql.Append (Harness.Quote (TCC_db));
+					sql.Append (StringUtils.Quote (TCC_db));
 					sql.Append (" \"");
 					foreach (var service in sim_services) {
 						sql.AppendFormat ("INSERT INTO access VALUES('{0}','{1}',0,1,0,NULL,NULL);", service, bundle_identifier);
@@ -431,7 +430,7 @@ namespace xharness
 					simulator_app = Path.Combine (Harness.XcodeRoot, "Contents", "Developer", "Applications", "iOS Simulator.app");
 			}
 
-			await ProcessHelper.ExecuteCommandAsync ("open", "-a " + Harness.Quote (simulator_app) + " --args -CurrentDeviceUDID " + UDID, log, TimeSpan.FromSeconds (15));
+			await ProcessHelper.ExecuteCommandAsync ("open", "-a " + StringUtils.Quote (simulator_app) + " --args -CurrentDeviceUDID " + UDID, log, TimeSpan.FromSeconds (15));
 		}
 
 		public async Task PrepareSimulatorAsync (Log log, params string[] bundle_identifiers)

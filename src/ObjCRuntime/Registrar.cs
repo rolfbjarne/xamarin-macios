@@ -67,6 +67,19 @@ using ProductException=MonoMac.RuntimeException;
 // This file cannot use any cecil code, since it's also compiled into monotouch.dll
 //
 
+#if MONOMAC
+namespace XamCore.ObjCRuntime
+{
+	public delegate void AssemblyRegistrationHandler (object sender, AssemblyRegistrationEventArgs args);
+
+	public class AssemblyRegistrationEventArgs : EventArgs
+	{
+		public bool Register { get; set; }
+		public System.Reflection.AssemblyName AssemblyName { get; internal set; }
+	}
+}
+#endif
+
 namespace XamCore.Registrar {
 	static class Shared {
 		
@@ -173,7 +186,9 @@ namespace XamCore.Registrar {
 				}
 			}
 
-			static char[] invalidSelectorCharacters = new char[] { ' ', '\t' };
+			// This list is duplicated in tests/mtouch/RegistrarTest.cs.
+			// Update that list whenever this list is updated.
+			static char[] invalidSelectorCharacters = new char[] { ' ', '\t', '?', '\\', '!', '|', '@', '"', '\'', '%', '&', '/', '(', ')', '=', '^', '[', ']', '{', '}', ',', '.', ';', '-', '\n' };
 			void VerifySelector (ObjCMethod method, ref List<Exception> exceptions)
 			{
 				if (method.Method == null)
@@ -263,7 +278,7 @@ namespace XamCore.Registrar {
 				VerifyIsNotKeyword (ref exceptions, property);
 			}
 
-			static bool IsObjectiveCKeyword (string name)
+			public static bool IsObjectiveCKeyword (string name)
 			{
 				switch (name) {
 				case "auto":
@@ -751,6 +766,8 @@ namespace XamCore.Registrar {
 #if !MTOUCH && !MMP
 			public int Size;
 			public byte Alignment;
+#else
+			public bool IsPrivate;
 #endif
 			public string FieldType;
 			public bool IsProperty;
@@ -1418,6 +1435,18 @@ namespace XamCore.Registrar {
 			return objcType;
 		}
 			
+		protected bool SupportsModernObjectiveC {
+			get {
+#if MTOUCH || MONOTOUCH
+				return true;
+#elif MMP
+				return App.Is64Build;
+#elif MONOMAC
+				return IntPtr.Size == 8;
+#endif
+			}
+		}
+
 		// This method is not thread-safe wrt 'types', and must be called with
 		// a lock held on 'types'.
 		ObjCType RegisterTypeUnsafe (TType type, ref List<Exception> exceptions)
@@ -1458,6 +1487,11 @@ namespace XamCore.Registrar {
 				var pAttr = GetProtocolAttribute (type);
 				isInformalProtocol = pAttr.IsInformal;
 				isProtocol = true;
+
+#if MMP || MTOUCH
+				if (pAttr.FormalSinceVersion != null && pAttr.FormalSinceVersion > App.SdkVersion)
+					isInformalProtocol = !isInformalProtocol;
+#endif
 			}
 
 			// make sure the base type is already registered
@@ -1487,6 +1521,9 @@ namespace XamCore.Registrar {
 
 			if (!objcType.IsWrapper && objcType.BaseType != null)
 				VerifyTypeInSDK (ref exceptions, objcType.BaseType.Type, baseTypeOf: objcType.Type);
+
+			if (ObjCType.IsObjectiveCKeyword (objcType.ExportedName))
+				AddException (ref exceptions, ErrorHelper.CreateError (4168, $"Cannot register the type '{GetTypeFullName (type)}' because its Objective-C name '{objcType.ExportedName}' is an Objective-C keyword. Please use a different name."));
 
 			// make sure all the protocols this type implements are registered
 			if (objcType.Protocols != null) {
@@ -1580,6 +1617,7 @@ namespace XamCore.Registrar {
 							DeclaringType = objcType,
 							FieldType = "XamarinObject",// "^v", // void*
 							Name = "__monoObjectGCHandle",
+							IsPrivate = SupportsModernObjectiveC,
 						}, ref exceptions);
 					}
 #endif

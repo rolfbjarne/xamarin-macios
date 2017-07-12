@@ -1,5 +1,5 @@
 ifdef ENABLE_XAMARIN
-NEEDED_MACCORE_VERSION := 5aca47d09bfd13f2cea370ac01dc2d9d371acb2c
+NEEDED_MACCORE_VERSION := 7cc095bfd20d77e43a4ceed3c0e91ff546b743a9
 NEEDED_MACCORE_BRANCH := master
 
 MACCORE_DIRECTORY := maccore
@@ -25,7 +25,7 @@ check-$(1)::
 				if test x$$(RESET_VERSIONS) != "x"; then \
 					make reset-$(1) || exit 1; \
 				else \
-					echo "Your $(1) version is out of date, please run 'make reset-$(1)' (found $($(2)_VERSION), expected $(NEEDED_$(2)_VERSION))"; \
+					echo "Your $(1) version is out of date, please run 'make reset-$(1)' (found $($(2)_VERSION), expected $(NEEDED_$(2)_VERSION)). Alternatively export IGNORE_$(2)_VERSION=1 to skip this check."; \
 					test -z "$(BUILD_REVISION)" || $(MAKE) test-$(1); \
 					touch .check-versions-failure; \
 				fi; \
@@ -34,7 +34,7 @@ check-$(1)::
 					test -z "$(BUILD_REVISION)" || $(MAKE) test-$(1); \
 					make reset-$(1) || exit 1; \
 				else \
-					echo "Your $(1) branch is out of date, please run 'make reset-$(1)' (found $($(2)_BRANCH), expected $(NEEDED_$(2)_BRANCH))"; \
+					echo "Your $(1) branch is out of date, please run 'make reset-$(1)' (found $($(2)_BRANCH), expected $(NEEDED_$(2)_BRANCH)). Alternatively export IGNORE_$(2)_VERSION=1 to skip this check."; \
 					touch .check-versions-failure; \
 				fi; \
 			else \

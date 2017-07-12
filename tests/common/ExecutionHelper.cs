@@ -20,11 +20,20 @@ namespace Xamarin.Tests
 		public int Number;
 		public string PrefixedNumber { get { return Prefix + Number.ToString (); } }
 		public string Message;
-	//	public string Filename;
-	//	public int LineNumber;
+		public string FileName;
+		public int LineNumber;
+
+		public override string ToString ()
+		{
+			if (string.IsNullOrEmpty (FileName)) {
+				return String.Format ("{0} {3}{1:0000}: {2}", IsError ? "error" : "warning", Number, Message, Prefix);
+			} else {
+				return String.Format ("{3}({4}): {0} {5}{1:0000}: {2}", IsError ? "error" : "warning", Number, Message, FileName, LineNumber, Prefix);
+			}
+		}
 	}
 
-	class Tool
+	abstract class Tool
 	{
 		StringBuilder output = new StringBuilder ();
 
@@ -34,9 +43,10 @@ namespace Xamarin.Tests
 
 		public Dictionary<string, string> EnvironmentVariables { get; set; }
 		public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds (60);
+		public string WorkingDirectory;
 
 		public IEnumerable<ToolMessage> Messages { get { return messages; } }
-		List<string> OutputLines {
+		public List<string> OutputLines {
 			get {
 				if (output_lines == null) {
 					output_lines = new List<string> ();
@@ -48,20 +58,28 @@ namespace Xamarin.Tests
 
 		public int Execute (string arguments, params string [] args)
 		{
-			return Execute (Configuration.MtouchPath, arguments, args);
+			return Execute (ToolPath, arguments, false, args);
+		}
+
+		public int Execute (string arguments, bool always_show_output, params string [] args)
+		{
+			return Execute (ToolPath, arguments, always_show_output, args);
 		}
 
 		public int Execute (string toolPath, string arguments, params string [] args)
 		{
+			return Execute (toolPath, arguments, false, args);
+		}
+
+		public int Execute (string toolPath, string arguments, bool always_show_output, params string [] args)
+		{
 			output.Clear ();
 			output_lines = null;
 
-			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output);
+			var rv = ExecutionHelper.Execute (toolPath, string.Format (arguments, args), EnvironmentVariables, output, output, workingDirectory: WorkingDirectory);
 
-			if (rv != 0) {
-				if (output.Length > 0)
-					Console.WriteLine ("\t" + output.ToString ().Replace ("\n", "\n\t"));
-			}
+			if ((rv != 0 || always_show_output) && output.Length > 0)
+				Console.WriteLine ("\t" + output.ToString ().Replace ("\n", "\n\t"));
 
 			ParseMessages ();
 
@@ -75,7 +93,17 @@ namespace Xamarin.Tests
 			foreach (var l in output.ToString ().Split ('\n')) {
 				var line = l;
 				var msg = new ToolMessage ();
-				if (line.StartsWith ("error ", StringComparison.Ordinal)) {
+				var origin = string.Empty;
+				if (line.Contains (": error ")) {
+					msg.IsError = true;
+					var idx = line.IndexOf (": error ", StringComparison.Ordinal);
+					origin = line.Substring (0, idx);
+					line = line.Substring (idx + ": error ".Length);
+				} else if (line.Contains (": warning ")) {
+					var idx = line.IndexOf (": warning ", StringComparison.Ordinal);
+					origin = line.Substring (0, idx);
+					line = line.Substring (idx + ": warning ".Length);
+				} else if (line.StartsWith ("error ", StringComparison.Ordinal)) {
 					msg.IsError = true;
 					line = line.Substring (6);
 				} else if (line.StartsWith ("warning ", StringComparison.Ordinal)) {
@@ -87,10 +115,31 @@ namespace Xamarin.Tests
 				}
 				if (line.Length < 7)
 					continue; // something else
+				
 				msg.Prefix = line.Substring (0, 2);
 				if (!int.TryParse (line.Substring (2, 4), out msg.Number))
 					continue; // something else
-				msg.Message = line.Substring (8);
+
+				line = line.Substring (8);
+				var toolName = MessageToolName;
+				if (toolName != null && line.StartsWith (toolName + ": ", StringComparison.Ordinal))
+					line = line.Substring (toolName.Length + 2);
+
+				msg.Message = line;
+
+				if (!string.IsNullOrEmpty (origin)) {
+					var idx = origin.IndexOf ('(');
+					if (idx > 0) {
+						var closing = origin.IndexOf (')');
+						var number = 0;
+						if (!int.TryParse (origin.Substring (idx + 1, closing - idx - 1), out number))
+							continue;
+						msg.LineNumber = number;
+						msg.FileName = origin.Substring (0, idx);
+					} else {
+						msg.FileName = origin;
+					}
+				}
 
 				messages.Add (msg);
 			}
@@ -116,7 +165,7 @@ namespace Xamarin.Tests
 
 		public void AssertErrorPattern (int number, string messagePattern)
 		{
-			AssertErrorPattern ("MT", number, messagePattern);
+			AssertErrorPattern (MessagePrefix, number, messagePattern);
 		}
 
 		public void AssertErrorPattern (string prefix, int number, string messagePattern)
@@ -131,26 +180,51 @@ namespace Xamarin.Tests
 			Assert.Fail (string.Format ("The error '{0}{1:0000}: {2}' was not found in the output:\n{3}", prefix, number, messagePattern, string.Join ("\n", details.ToArray ())));
 		}
 
-		public void AssertError (int number, string message)
+		public void AssertError (int number, string message, string filename = null, int? linenumber = null)
 		{
-			AssertError ("MT", number, message);
+			AssertError (MessagePrefix, number, message, filename, linenumber);
 		}
 
-		public void AssertError (string prefix, int number, string message)
+		public void AssertError (string prefix, int number, string message, string filename = null, int? linenumber = null)
 		{
 			if (!messages.Any ((msg) => msg.Prefix == prefix && msg.Number == number))
 				Assert.Fail (string.Format ("The error '{0}{1:0000}' was not found in the output.", prefix, number));
 
-			if (messages.Any ((msg) => msg.Message == message))
-				return;
+			var matches = messages.Where ((msg) => msg.Message == message);
+			if (!matches.Any ()) {
+				var details = messages.
+				                      Where ((msg) => msg.Prefix == prefix && msg.Number == number && msg.Message != message).
+				                      Select ((msg) => string.Format ("\tMessage #{2} did not match:\n\t\tactual:   '{0}'\n\t\texpected: '{1}'", msg.Message, message, messages.IndexOf (msg) + 1));
+				Assert.Fail (string.Format ("The error '{0}{1:0000}: {2}' was not found in the output:\n{3}", prefix, number, message, string.Join ("\n", details.ToArray ())));
+			}
 
-			var details = messages.Where ((msg) => msg.Prefix == prefix && msg.Number == number && msg.Message != message).Select ((msg) => string.Format ("\tMessage #{2} did not match:\n\t\tactual:   '{0}'\n\t\texpected: '{1}'", msg.Message, message, messages.IndexOf (msg) + 1));
-			Assert.Fail (string.Format ("The error '{0}{1:0000}: {2}' was not found in the output:\n{3}", prefix, number, message, string.Join ("\n", details.ToArray ())));
+			if (filename != null) {
+				var hasDirectory = filename.IndexOf (Path.DirectorySeparatorChar) > -1;
+				if (!matches.Any ((v) => {
+					if (hasDirectory) {
+						// Check the entire path
+						return filename == v.FileName;
+					} else {
+						// Don't compare the directory unless one was specified.
+						return filename == Path.GetFileName (v.FileName);
+					}
+				})) {
+					var details = matches.Select ((msg) => string.Format ("\tMessage #{2} did not contain expected filename:\n\t\tactual:   '{0}'\n\t\texpected: '{1}'", hasDirectory ? msg.FileName : Path.GetFileName (msg.FileName), filename, messages.IndexOf (msg) + 1));
+					Assert.Fail (string.Format ($"The filename '{filename}' was not found in the output for the error {prefix}{number:X4}: {message}:\n{string.Join ("\n", details.ToArray ())}"));
+				}
+			}
+
+			if (linenumber != null) {
+				if (!matches.Any ((v) => linenumber.Value == v.LineNumber)) {
+					var details = matches.Select ((msg) => string.Format ("\tMessage #{2} did not contain expected line number:\n\t\tactual:   '{0}'\n\t\texpected: '{1}'", msg.LineNumber, linenumber, messages.IndexOf (msg) + 1));
+					Assert.Fail (string.Format ($"The linenumber '{linenumber.Value}' was not found in the output for the error {prefix}{number:X4}: {message}:\n{string.Join ("\n", details.ToArray ())}"));
+				}
+			}
 		}
 
 		public void AssertWarningPattern (int number, string messagePattern)
 		{
-			AssertWarningPattern ("MT", number, messagePattern);
+			AssertWarningPattern (MessagePrefix, number, messagePattern);
 		}
 
 		public void AssertWarningPattern (string prefix, int number, string messagePattern)
@@ -167,7 +241,7 @@ namespace Xamarin.Tests
 
 		public void AssertWarning (int number, string message)
 		{
-			AssertWarning ("MT", number, message);
+			AssertWarning (MessagePrefix, number, message);
 		}
 
 		public void AssertWarning (string prefix, int number, string message)
@@ -211,6 +285,16 @@ namespace Xamarin.Tests
 			if (!HasOutputPattern (linePattern))
 				Assert.Fail (string.Format ("The output does not contain the line '{0}'", linePattern));
 		}
+
+		public void ForAllOutputLines (Action<string> action)
+		{
+			foreach (var line in OutputLines)
+				action (line);
+		}
+
+		protected abstract string ToolPath { get; }
+		protected abstract string MessagePrefix { get; }
+		protected virtual string MessageToolName { get { return null; } }
 	}
 
 	class XBuild
@@ -308,7 +392,7 @@ namespace Xamarin.Tests
 			return rv;
 		}
 
-		public static int Execute (string fileName, string arguments, Dictionary<string, string> environmentVariables, StringBuilder stdout, StringBuilder stderr, TimeSpan? timeout = null)
+		public static int Execute (string fileName, string arguments, Dictionary<string, string> environmentVariables, StringBuilder stdout, StringBuilder stderr, TimeSpan? timeout = null, string workingDirectory = null)
 		{
 			if (stdout == null)
 				stdout = new StringBuilder ();
@@ -318,6 +402,8 @@ namespace Xamarin.Tests
 			var psi = new ProcessStartInfo ();
 			psi.FileName = fileName;
 			psi.Arguments = arguments;
+			if (!string.IsNullOrEmpty (workingDirectory))
+				psi.WorkingDirectory = workingDirectory;
 			if (environmentVariables != null) {
 				var envs = psi.EnvironmentVariables;
 				foreach (var kvp in environmentVariables) {

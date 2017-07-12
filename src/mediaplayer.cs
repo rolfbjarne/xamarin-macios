@@ -51,20 +51,28 @@ namespace XamCore.MediaPlayer {
 
 #if XAMCORE_2_0
 	}
-
-	[NoMac]
-	[NoTV]
+#if MONOMAC || TVOS
+	[Mac (10,12,2, onlyOn64: true)]
+	[Static]
+#else
 	[BaseType (typeof (MPMediaEntity))]
+#endif
 	interface MPMediaItem {
 #endif
+
+#if !MONOMAC
 		[Since (4,2)]
+		[NoMac]
+		[NoTV]
 		[Export ("persistentIDPropertyForGroupingType:")][Static]
 		string GetPersistentIDProperty (MPMediaGrouping groupingType);
 
 		[Since (4,2)]
+		[NoMac]
+		[NoTV]
 		[Export ("titlePropertyForGroupingType:")][Static]
 		string GetTitleProperty (MPMediaGrouping groupingType);
-
+#endif
 		[Since (3,0)]
 		[Field ("MPMediaItemPropertyPersistentID")]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
@@ -249,6 +257,11 @@ namespace XamCore.MediaPlayer {
 		[Field ("MPMediaItemPropertyDateAdded")]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		NSString DateAddedProperty { get; }
+
+		[iOS (10,3)]
+		[Field ("MPMediaItemPropertyPlaybackStoreID")]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		NSString PlaybackStoreIDProperty { get; }
 	}
 
 	[Mac (10,12,2, onlyOn64: true)]
@@ -1132,6 +1145,11 @@ namespace XamCore.MediaPlayer {
 		[Static, Export ("applicationMusicPlayer")]
 		MPMusicPlayerController ApplicationMusicPlayer { get; }
 
+		[iOS (10,3)]
+		[Static]
+		[Export ("applicationQueuePlayer")]
+		MPMusicPlayerApplicationController ApplicationQueuePlayer { get; }
+
 		[Static, Export ("iPodMusicPlayer")]
 		[Availability (Deprecated = Platform.iOS_8_0, Message="Use SystemMusicPlayer starting with iOS 8.0")]
 		MPMusicPlayerController iPodMusicPlayer { get; }
@@ -1173,6 +1191,14 @@ namespace XamCore.MediaPlayer {
 		[iOS (10,1)]
 		[Export ("setQueueWithDescriptor:")]
 		void SetQueue (MPMusicPlayerQueueDescriptor descriptor);
+
+		[iOS (10,3)]
+		[Export ("prependQueueDescriptor:")]
+		void Prepend (MPMusicPlayerQueueDescriptor descriptor);
+
+		[iOS (10,3)]
+		[Export ("appendQueueDescriptor:")]
+		void Append (MPMusicPlayerQueueDescriptor descriptor);
 
 		[iOS (10,1)]
 		[Async]
@@ -1351,6 +1377,7 @@ namespace XamCore.MediaPlayer {
 		NSString PropertyDefaultPlaybackRate { get; }
 
 		[iOS (9,0)]
+		[TV (10,0)]
 		[Internal]
 		[Field ("MPNowPlayingInfoPropertyAvailableLanguageOptions")]
 		NSString PropertyAvailableLanguageOptions { get; }
@@ -1389,6 +1416,11 @@ namespace XamCore.MediaPlayer {
 		[TV (10,0)]
 		[Field ("MPNowPlayingInfoPropertyIsLiveStream")]
 		NSString PropertyIsLiveStream { get; }
+
+		[iOS (10,3)]
+		[TV (10,2)]
+		[Field ("MPNowPlayingInfoPropertyAssetURL")]
+		NSString PropertyAssetUrl { get; }
 	}
 
 	[Mac (10,12,2, onlyOn64: true)]
@@ -2022,6 +2054,45 @@ namespace XamCore.MediaPlayer {
 
 		[Export ("setEndTime:forItemWithStoreID:")]
 		void SetEndTime (double endTime, string storeID);
+	}
+
+	[NoTV]
+	[NoMac]
+	[iOS (10,3)]
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface MPMusicPlayerControllerQueue
+	{
+		[Export ("items", ArgumentSemantic.Copy)]
+		MPMediaItem[] Items { get; }
+
+		[Field ("MPMusicPlayerControllerQueueDidChangeNotification")]
+		[Notification]
+		NSString DidChangeNotification { get; }
+	}
+
+	[NoTV]
+	[NoMac]
+	[iOS (10,3)]
+	[BaseType (typeof(MPMusicPlayerControllerQueue))]
+	interface MPMusicPlayerControllerMutableQueue
+	{
+		[Export ("insertQueueDescriptor:afterItem:")]
+		void InsertAfter (MPMusicPlayerQueueDescriptor queueDescriptor, [NullAllowed] MPMediaItem item);
+
+		[Export ("removeItem:")]
+		void RemoveItem (MPMediaItem item);
+	}
+
+	[NoTV]
+	[NoMac]
+	[iOS (10,3)]
+	[BaseType (typeof(MPMusicPlayerController))]
+	interface MPMusicPlayerApplicationController
+	{
+		[Async]
+		[Export ("performQueueTransaction:completionHandler:")]
+		void Perform (Action<MPMusicPlayerControllerMutableQueue> queueTransaction, Action<MPMusicPlayerControllerQueue, NSError> completionHandler);
 	}
 #endif
 }

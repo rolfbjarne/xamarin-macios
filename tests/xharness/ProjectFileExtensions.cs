@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Xamarin.Utils;
 
 namespace xharness
 {
@@ -140,15 +141,38 @@ namespace xharness
 
 		public static string GetOutputPath (this XmlDocument csproj, string platform, string configuration)
 		{
-			var nodes = csproj.SelectNodes ("/*/*/*[local-name() = 'OutputPath']");
+			return GetElementValue (csproj, platform, configuration, "OutputPath");
+		}
+
+		static string GetElementValue (this XmlDocument csproj, string platform, string configuration, string elementName)
+		{
+			var nodes = csproj.SelectNodes ($"/*/*/*[local-name() = '{elementName}']");
 			if (nodes.Count == 0)
-				throw new Exception ("Could not find node OutputPath");
-			
+				throw new Exception ($"Could not find node {elementName}");
 			foreach (XmlNode n in nodes) {
 				if (IsNodeApplicable (n, platform, configuration))
 					return n.InnerText.Replace ("$(Platform)", platform).Replace ("$(Configuration)", configuration);
 			}
-			throw new Exception ("Could not find OutputPath");
+			throw new Exception ($"Could not find {elementName}");
+		}
+
+		public static string GetOutputAssemblyPath (this XmlDocument csproj, string platform, string configuration)
+		{
+			var outputPath = GetOutputPath (csproj, platform, configuration);
+			var assemblyName = GetElementValue (csproj, platform, configuration, "AssemblyName");
+			var outputType = GetElementValue (csproj, platform, configuration, "OutputType");
+			string extension;
+			switch (outputType.ToLowerInvariant ()) {
+			case "library":
+				extension = "dll";
+				break;
+			case "exe":
+				extension = "exe";
+				break;
+			default:
+				throw new NotImplementedException (outputType);
+			}
+			return outputPath + "\\" + assemblyName + "." + extension; // MSBuild-style paths.
 		}
 
 		public static void SetIntermediateOutputPath (this XmlDocument csproj, string value)
@@ -556,7 +580,7 @@ namespace xharness
 		public static void AddAdditionalDefines (this XmlDocument csproj, string value)
 		{
 			var mainPropertyGroup = csproj.SelectSingleNode ("//*[local-name() = 'PropertyGroup' and not(@Condition)]");
-			var mainDefine = mainPropertyGroup.SelectSingleNode ("/*[local-name() = 'DefineConstants']");
+			var mainDefine = mainPropertyGroup.SelectSingleNode ("*[local-name() = 'DefineConstants']");
 			if (mainDefine == null) {
 				mainDefine = csproj.CreateElement ("DefineConstants", MSBuild_Namespace);
 				mainDefine.InnerText = value;
@@ -694,7 +718,7 @@ namespace xharness
 			foreach (var key in nodes_with_variables) {
 				var nodes = csproj.SelectElementNodes (key);
 				foreach (var node in nodes) {
-					node.InnerText = node.InnerText.Replace ("${ProjectDir}", Harness.Quote (System.IO.Path.GetDirectoryName (project_path)));
+					node.InnerText = node.InnerText.Replace ("${ProjectDir}", StringUtils.Quote (System.IO.Path.GetDirectoryName (project_path)));
 				}
 			}
 			foreach (var kvp in attributes_with_paths) {

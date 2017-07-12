@@ -131,11 +131,6 @@ namespace XamCore.ObjCRuntime {
 			Runtime.Registrar.Register (type, ref exceptions);
 		}
 
-		internal static Dictionary <IntPtr, MethodDescription> GetMethods (Type t)
-		{
-			return Runtime.Registrar.GetMethods (t);
-		}
-
 		internal unsafe static Type FindType (IntPtr @class, out bool is_custom_type)
 		{
 			var map = Runtime.options->RegistrationMap;
@@ -272,7 +267,7 @@ namespace XamCore.ObjCRuntime {
 				return asm;
 			}
 
-			throw ErrorHelper.CreateError (8019, $"Could not find the assembly ${assembly_name} in the loaded assemblies.");
+			throw ErrorHelper.CreateError (8019, $"Could not find the assembly {assembly_name} in the loaded assemblies.");
 		}
 
 		/*

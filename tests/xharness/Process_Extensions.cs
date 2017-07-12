@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Utils;
 
 namespace xharness
 {
@@ -91,7 +92,7 @@ namespace xharness
 						StdoutStream.Flush ();
 					}
 				} else {
-					stdout_completion.SetResult (true);
+					stdout_completion.TrySetResult (true);
 				}
 			};
 
@@ -103,7 +104,7 @@ namespace xharness
 						StderrStream.Flush ();
 					}
 				} else {
-					stderr_completion.SetResult (true);
+					stderr_completion.TrySetResult (true);
 				}
 			};
 
@@ -134,6 +135,9 @@ namespace xharness
 					process.WaitForExit ();
 				}
 				exit_completion.TrySetResult (true);
+				Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
+				stderr_completion.TrySetResult (false);
+				stdout_completion.TrySetResult (false);
 			}) {
 				IsBackground = true,
 			}.Start ();
@@ -173,7 +177,7 @@ namespace xharness
 							commands.AppendLine ("detach");
 							commands.AppendLine ("quit");
 							dbg.StartInfo.FileName = "/usr/bin/lldb";
-							dbg.StartInfo.Arguments = $"--source {Harness.Quote (template)}";
+							dbg.StartInfo.Arguments = $"--source {StringUtils.Quote (template)}";
 							File.WriteAllText (template, commands.ToString ());
 
 							log.WriteLine ($"Printing backtrace for pid={pid}");

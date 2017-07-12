@@ -8,6 +8,7 @@ using System.Linq;
 using Mono.Cecil;
 using MonoTouch.Tuner;
 using XamCore.ObjCRuntime;
+using Xamarin.Utils;
 
 #if MONOTOUCH
 using PlatformException = Xamarin.Bundler.MonoTouchException;
@@ -87,7 +88,8 @@ namespace Xamarin.Bundler {
 
 			symbols_loaded = false;
 			try {
-				if (File.Exists (FullPath + ".mdb")) {
+				var pdb = Path.ChangeExtension (FullPath, ".pdb");
+				if (File.Exists (pdb) || File.Exists (FullPath + ".mdb")) {
 					AssemblyDefinition.MainModule.ReadSymbols ();
 					symbols_loaded = true;
 				}
@@ -215,7 +217,7 @@ namespace Xamarin.Bundler {
 							if (!Directory.Exists (path))
 								Directory.CreateDirectory (path);
 
-							if (Driver.RunCommand ("/usr/bin/unzip", string.Format ("-u -o -d {0} {1}", Driver.Quote (path), Driver.Quote (zipPath))) != 0)
+							if (Driver.RunCommand ("/usr/bin/unzip", string.Format ("-u -o -d {0} {1}", StringUtils.Quote (path), StringUtils.Quote (zipPath))) != 0)
 								throw ErrorHelper.CreateError (1303, "Could not decompress the native framework '{0}' from '{1}'. Please review the build log for more information from the native 'unzip' command.", libraryName, zipPath);
 						}
 
@@ -334,7 +336,11 @@ namespace Xamarin.Bundler {
 				
 				foreach (var mr in m.ModuleReferences) {
 					string name = mr.Name;
+					if (string.IsNullOrEmpty (name))
+						continue; // obfuscated assemblies.
+					
 					string file = Path.GetFileNameWithoutExtension (name);
+
 					switch (file) {
 					// special case
 					case "__Internal":
@@ -384,7 +390,27 @@ namespace Xamarin.Bundler {
 						if (Frameworks.Add ("OpenAL"))
 							Driver.Log (3, "Linking with the framework OpenAL because {0} is referenced by a module reference in {1}", file, FileName);
 						break;
+#if MONOMAC
+					case "PrintCore":
+						if (Frameworks.Add ("ApplicationServices"))
+							Driver.Log (3, "Linking with the framework ApplicationServices because {0} is referenced by a module reference in {1}", file, FileName);
+						break;
+					case "SearchKit":
+						if (Frameworks.Add ("CoreServices"))
+							Driver.Log (3, "Linking with the framework CoreServices because {0} is referenced by a module reference in {1}", file, FileName);
+						break;
+					case "CFNetwork":
+						if (Frameworks.Add ("CoreServices"))
+							Driver.Log (3, "Linking with the framework CoreServices because {0} is referenced by a module reference in {1}", file, FileName);
+						break;
+#endif
 					default:
+#if MONOMAC
+						string path = Path.GetDirectoryName (name);
+						if (!path.StartsWith ("/System/Library/Frameworks", StringComparison.Ordinal))
+							continue;
+#endif
+
 						// detect frameworks
 						int f = name.IndexOf (".framework/", StringComparison.Ordinal);
 						if (f > 0) {
@@ -478,9 +504,37 @@ namespace Xamarin.Bundler {
 		}
 	}
 
+	public sealed class NormalizedStringComparer : IEqualityComparer<string>
+	{
+		public static readonly NormalizedStringComparer OrdinalIgnoreCase = new NormalizedStringComparer (StringComparer.OrdinalIgnoreCase);
+
+		StringComparer comparer;
+
+		public NormalizedStringComparer (StringComparer comparer)
+		{
+			this.comparer = comparer;
+		}
+
+		public bool Equals (string x, string y)
+		{
+			// From what I gather it doesn't matter which normalization form
+			// is used, but I chose Form D because HFS normalizes to Form D.
+			if (x != null)
+				x = x.Normalize (System.Text.NormalizationForm.FormD);
+			if (y != null)
+				y = y.Normalize (System.Text.NormalizationForm.FormD);
+			return comparer.Equals (x, y);
+		}
+
+		public int GetHashCode (string obj)
+		{
+			return comparer.GetHashCode (obj?.Normalize (System.Text.NormalizationForm.FormD));
+		}
+	}
+
 	public class AssemblyCollection : IEnumerable<Assembly>
 	{
-		Dictionary<string, Assembly> HashedAssemblies = new Dictionary<string, Assembly> (StringComparer.OrdinalIgnoreCase);
+		Dictionary<string, Assembly> HashedAssemblies = new Dictionary<string, Assembly> (NormalizedStringComparer.OrdinalIgnoreCase);
 
 		public void Add (Assembly assembly)
 		{
@@ -509,6 +563,16 @@ namespace Xamarin.Bundler {
 		public bool TryGetValue (string identity, out Assembly assembly)
 		{
 			return HashedAssemblies.TryGetValue (identity, out assembly);
+		}
+
+		public bool TryGetValue (AssemblyDefinition asm, out Assembly assembly)
+		{
+			return HashedAssemblies.TryGetValue (Assembly.GetIdentity (asm), out assembly);
+		}
+
+		public bool Contains (AssemblyDefinition asm)
+		{
+			return HashedAssemblies.ContainsKey (Assembly.GetIdentity (asm));
 		}
 
 		public bool ContainsKey (string identity)

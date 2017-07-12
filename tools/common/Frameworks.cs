@@ -17,30 +17,35 @@ public class Frameworks : Dictionary <string, Framework>
 {
 	public void Add (string @namespace, int major_version)
 	{
-		Add (@namespace, @namespace, major_version, 0, 0);
+		Add (@namespace, @namespace, new Version (major_version, 0));
 	}
 
 	public void Add (string @namespace, string framework, int major_version)
 	{
-		Add (@namespace, framework, major_version, 0, 0);
+		Add (@namespace, framework, new Version (major_version, 0));
 	}
 
 	public void Add (string @namespace, int major_version, int minor_version)
 	{
-		Add (@namespace, @namespace, major_version, minor_version, 0);
+		Add (@namespace, @namespace, new Version (major_version, minor_version));
 	}
 
 	public void Add (string @namespace, string framework, int major_version, int minor_version)
 	{
-		Add(@namespace, framework, major_version, minor_version, 0);
+		Add (@namespace, framework, new Version (major_version, minor_version));
 	}
 
 	public void Add (string @namespace, string framework, int major_version, int minor_version, int build_version)
 	{
+		Add (@namespace, framework, new Version (major_version, minor_version, build_version));
+	}
+
+	public void Add (string @namespace, string framework, Version version)
+	{
 		var fr = new Framework () {
 			Namespace = Driver.IsUnified ? @namespace : XamCore.Registrar.Registrar.CompatNamespace + "." + @namespace,
 			Name = framework,
-			Version = new Version (major_version, minor_version, build_version)
+			Version = version
 		};
 		base.Add (fr.Namespace, fr);
 	}
@@ -242,42 +247,43 @@ public class Frameworks : Dictionary <string, Framework>
 	}
 
 	static Frameworks watch_frameworks;
-	public static Frameworks WatchFrameworks {
-		get {
-			if (watch_frameworks == null) {
-				watch_frameworks = new Frameworks {
-					// The CFNetwork framework is in the SDK, but there are no headers inside the framework, so don't enable yet.
-					// { "CFNetwork", "CFNetwork", 2 },
-					{ "ClockKit", "ClockKit", 2 },
-					{ "Contacts", "Contacts", 2 },
-					{ "CoreData", "CoreData", 2 },
-					{ "CoreFoundation", "CoreFoundation", 2 },
-					{ "CoreGraphics", "CoreGraphics", 2 },
-					{ "CoreLocation", "CoreLocation", 2 },
-					{ "CoreMotion", "CoreMotion", 2 },
-					{ "EventKit", "EventKit", 2 },
-					{ "Foundation", "Foundation", 2 },
-					{ "HealthKit", "HealthKit", 2 },
-					{ "HomeKit", "HomeKit", 2 },
-					{ "ImageIO", "ImageIO", 2 },
-					{ "MapKit", "MapKit", 2 },
-					{ "MobileCoreServices", "MobileCoreServices", 2 },
-					{ "PassKit", "PassKit", 2 },
-					{ "Security", "Security", 2 },
-					{ "UIKit", "UIKit", 2 },
-					{ "WatchConnectivity", "WatchConnectivity", 2 },
-					{ "WatchKit", "WatchKit", 2 },
+	public static Frameworks GetwatchOSFrameworks (Application app)
+	{
+		if (watch_frameworks == null) {
+			watch_frameworks = new Frameworks {
+				// The CFNetwork framework is in the SDK, but there are no headers inside the framework, so don't enable yet.
+				// { "CFNetwork", "CFNetwork", 2 },
+				{ "ClockKit", "ClockKit", 2 },
+				{ "Contacts", "Contacts", 2 },
+				{ "CoreData", "CoreData", 2 },
+				{ "CoreFoundation", "CoreFoundation", 2 },
+				{ "CoreGraphics", "CoreGraphics", 2 },
+				{ "CoreLocation", "CoreLocation", 2 },
+				{ "CoreMotion", "CoreMotion", 2 },
+				{ "EventKit", "EventKit", 2 },
+				{ "Foundation", "Foundation", 2 },
+				{ "HealthKit", "HealthKit", 2 },
+				{ "HomeKit", "HomeKit", 2 },
+				{ "ImageIO", "ImageIO", 2 },
+				{ "MapKit", "MapKit", 2 },
+				{ "MobileCoreServices", "MobileCoreServices", 2 },
+				{ "PassKit", "PassKit", 2 },
+				{ "Security", "Security", 2 },
+				{ "UIKit", "UIKit", 2 },
+				{ "WatchConnectivity", "WatchConnectivity", 2 },
+				{ "WatchKit", "WatchKit", 2 },
 
-					//{ "AVFoundation", "AVFoundation", 3 },
-					{ "CloudKit", "CloudKit", 3 },
-					{ "GameKit", "GameKit", 3 },
-					{ "SceneKit", "SceneKit", 3 },
-					{ "SpriteKit", "SpriteKit", 3 },
-					{ "UserNotifications", "UserNotifications", 3 },
-				};
-			}
-			return watch_frameworks;
+				// AVFoundation was introduced in 3.0, but the simulator SDK was broken until 3.2.
+				{ "AVFoundation", "AVFoundation", 3, app.IsSimulatorBuild ? 2 : 0 },
+				{ "CloudKit", "CloudKit", 3 },
+				{ "GameKit", "GameKit", 3 },
+				{ "SceneKit", "SceneKit", 3 },
+				{ "SpriteKit", "SpriteKit", 3 },
+				{ "UserNotifications", "UserNotifications", 3 },
+				{ "Intents", "Intents", 3,2 },
+			};
 		}
+		return watch_frameworks;
 	}
 
 	static Frameworks tvos_frameworks;
@@ -337,6 +343,7 @@ public class Frameworks : Dictionary <string, Framework>
 					{ "ReplayKit", "ReplayKit", 10 },
 					{ "UserNotifications", "UserNotifications", 10 },
 					{ "VideoSubscriberAccount", "VideoSubscriberAccount", 10 },
+					{ "VideoToolbox", "VideoToolbox", 10,2 },
 				};
 			}
 			return tvos_frameworks;

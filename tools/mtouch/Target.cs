@@ -48,14 +48,9 @@ namespace Xamarin.Bundler
 		Dictionary<Abi, CompileTask> pinvoke_tasks = new Dictionary<Abi, CompileTask> ();
 		List<CompileTask> link_with_task_output = new List<CompileTask> ();
 		List<AOTTask> aot_dependencies = new List<AOTTask> ();
+		List<LinkTask> embeddinator_tasks = new List<LinkTask> ();
 		CompilerFlags linker_flags;
 		NativeLinkTask link_task;
-
-		// If we didn't link because the existing (cached) assemblyes are up-to-date.
-		bool cached_link;
-
-		// If any assemblies were updated (only set to false if the linker is disabled and no assemblies were modified).
-		bool any_assembly_updated = true;
 
 		// If the assemblies were symlinked.
 		public bool Symlinked;
@@ -84,7 +79,7 @@ namespace Xamarin.Bundler
 					foreach (var abi in App.AllArchitectures) {
 						var a = abi & mask;
 						if (a != 0)
-							all_architectures.Add (a);
+							all_architectures.Add (abi);
 					}
 				}
 				return all_architectures;
@@ -133,12 +128,12 @@ namespace Xamarin.Bundler
 				LinkWithTaskOutput (link_task);
 				break;
 			case AssemblyBuildTarget.DynamicLibrary:
-				if (!(App.IsExtension && assemblies.Any ((asm) => asm.IsCodeShared)))
+				if (!(!App.HasFrameworksDirectory && assemblies.Any ((asm) => asm.IsCodeShared)))
 					AddToBundle (link_task.OutputFile);
 				LinkWithTaskOutput (link_task);
 				break;
 			case AssemblyBuildTarget.Framework:
-				if (!(App.IsExtension && assemblies.Any ((asm) => asm.IsCodeShared)))
+				if (!(!App.HasFrameworksDirectory && assemblies.Any ((asm) => asm.IsCodeShared)))
 					AddToBundle (link_task.OutputFile, $"Frameworks/{name}.framework/{name}", dylib_to_framework_conversion: true);
 				LinkWithTaskOutput (link_task);
 				break;
@@ -220,10 +215,14 @@ namespace Xamarin.Bundler
 			if (corlib == null)
 				throw new MonoTouchException (2006, true, "Can not load mscorlib.dll from: '{0}'. Please reinstall Xamarin.iOS.", corlib_path);
 
-			var root = ManifestResolver.Load (App.RootAssembly);
-			if (root == null) {
-				// We check elsewhere that the path exists, so I'm not sure how we can get into this.
-				throw ErrorHelper.CreateError (2019, "Can not load the root assembly '{0}'.", App.RootAssembly);
+			var roots = new List<AssemblyDefinition> ();
+			foreach (var root_assembly in App.RootAssemblies) {
+				var root = ManifestResolver.Load (root_assembly);
+				if (root == null) {
+					// We check elsewhere that the path exists, so I'm not sure how we can get into this.
+					throw ErrorHelper.CreateError (2019, "Can not load the root assembly '{0}'.", root_assembly);
+				}
+				roots.Add (root);
 			}
 
 			foreach (var reference in App.References) {
@@ -231,9 +230,10 @@ namespace Xamarin.Bundler
 				if (ad == null)
 					throw new MonoTouchException (2002, true, "Can not resolve reference: {0}", reference);
 
-				if (ad.MainModule.FileName == root.MainModule.FileName) {
-					// If we asked the manifest resolver for assembly X and got back the root assembly, it means the requested assembly has the same identity as the root assembly, which is not allowed.
-					throw ErrorHelper.CreateError (23, "The root assembly {0} conflicts with another assembly ({1}).", root.MainModule.FileName, reference);
+				var root_assembly = roots.FirstOrDefault ((v) => v.MainModule.FileName == ad.MainModule.FileName);
+				if (root_assembly != null) {
+					// If we asked the manifest resolver for assembly X and got back a root assembly, it means the requested assembly has the same identity as the root assembly, which is not allowed.
+					throw ErrorHelper.CreateError (23, "The root assembly {0} conflicts with another assembly ({1}).", root_assembly.MainModule.FileName, reference);
 				}
 				
 				if (ad.MainModule.Runtime > TargetRuntime.Net_4_0)
@@ -284,98 +284,6 @@ namespace Xamarin.Bundler
 			return assemblies;
 		}
 
-		public void ComputeLinkerFlags ()
-		{
-			foreach (var a in Assemblies)
-				a.ComputeLinkerFlags ();
-
-			if (App.Platform != ApplePlatform.WatchOS && App.Platform != ApplePlatform.TVOS)
-				Frameworks.Add ("CFNetwork"); // required by xamarin_start_wwan
-		}
-
-		Dictionary<string, List<MemberReference>> entry_points;
-		public IDictionary<string, List<MemberReference>> GetEntryPoints ()
-		{
-			if (entry_points == null)
-				GetRequiredSymbols ();
-			return entry_points;
-		}
-
-		public IEnumerable<string> GetRequiredSymbols ()
-		{
-			if (entry_points != null)  
-				return entry_points.Keys;
-
-			var cache_location = Path.Combine (App.Cache.Location, "entry-points.txt");
-			if (cached_link || !any_assembly_updated) {
-				entry_points = new Dictionary<string, List<MemberReference>> ();
-				foreach (var ep in File.ReadAllLines (cache_location))
-					entry_points.Add (ep, null);
-			} else {
-				if (LinkContext == null) {
-					// This happens when using the simlauncher and the msbuild tasks asked for a list
-					// of symbols (--symbollist). In that case just produce an empty list, since the
-					// binary shouldn't end up stripped anyway.
-					entry_points = new Dictionary<string, List<MemberReference>> ();
-				} else {
-					entry_points = LinkContext.RequiredSymbols;
-					if (App.IsCodeShared) {
-						// Remove symbols from assemblies from extensions that were linked together with the main app.
-						var filtered_entry_points = new Dictionary<string, List<MemberReference>> ();
-						foreach (var ep in entry_points) {
-							var filtered = ep.Value.Where ((v) => Assemblies.ContainsKey (Assembly.GetIdentity (v.Module.FileName))).ToList ();
-							if (filtered.Count > 0)
-								filtered_entry_points.Add (ep.Key, filtered);
-						}
-						entry_points = filtered_entry_points;
-					}
-				}
-				
-				// keep the debugging helper in debugging binaries only
-				if (App.EnableDebug && !App.EnableBitCode)
-					entry_points.Add ("mono_pmip", null);
-
-				if (App.IsSimulatorBuild) {
-					entry_points.Add ("xamarin_dyn_objc_msgSend", null);
-					entry_points.Add ("xamarin_dyn_objc_msgSendSuper", null);
-					entry_points.Add ("xamarin_dyn_objc_msgSend_stret", null);
-					entry_points.Add ("xamarin_dyn_objc_msgSendSuper_stret", null);
-				}
-
-				File.WriteAllText (cache_location, string.Join ("\n", entry_points.Keys.ToArray ()));
-			}
-			return entry_points.Keys;
-		}
-
-		public IEnumerable<string> GetRequiredSymbols (Assembly assembly, bool includeObjectiveCClasses)
-		{
-			if (entry_points == null)
-				GetRequiredSymbols ();
-
-			foreach (var ep in entry_points) {
-				if (ep.Value == null)
-					continue;
-				foreach (var mr in ep.Value) {
-					if (mr.Module.Assembly == assembly.AssemblyDefinition)
-						yield return ep.Key;
-				}
-			}
-
-			if (includeObjectiveCClasses) {
-				foreach (var kvp in LinkContext.ObjectiveCClasses) {
-					if (kvp.Value.Module.Assembly == assembly.AssemblyDefinition)
-						yield return $"OBJC_CLASS_$_{kvp.Key}";
-				}
-			}
-		}
-
-		public List<MemberReference> GetMembersForSymbol (string symbol)
-		{
-			List<MemberReference> rv = null;
-			entry_points?.TryGetValue (symbol, out rv);
-			return rv;
-		}
-
 		//
 		// Gets a flattened list of all the assemblies pulled by the root assembly
 		//
@@ -383,10 +291,31 @@ namespace Xamarin.Bundler
 		{
 			var exceptions = new List<Exception> ();
 			var assemblies = new HashSet<string> ();
+			var cache_file = Path.Combine (this.ArchDirectory, "assembly-references.txt");
+
+			if (File.Exists (cache_file)) {
+				assemblies.UnionWith (File.ReadAllLines (cache_file));
+				// Check if any of the referenced assemblies changed after we cached the complete set of references
+				if (Application.IsUptodate (assemblies, new string [] { cache_file })) {
+					// Load all the assemblies in the cached list of assemblies
+					foreach (var assembly in assemblies) {
+						var ad = ManifestResolver.Load (assembly);
+						var asm = new Assembly (this, ad);
+						asm.ComputeSatellites ();
+						this.Assemblies.Add (asm);
+					}
+					return;
+				}
+
+				// We must manually find all the references.
+				assemblies.Clear ();
+			}
 
 			try {
-				var assembly = ManifestResolver.Load (App.RootAssembly);
-				ComputeListOfAssemblies (assemblies, assembly, exceptions);
+				foreach (var root in App.RootAssemblies) {
+					var assembly = ManifestResolver.Load (root);
+					ComputeListOfAssemblies (assemblies, assembly, exceptions);
+				}
 			} catch (MonoTouchException mte) {
 				exceptions.Add (mte);
 			} catch (Exception e) {
@@ -398,6 +327,10 @@ namespace Xamarin.Bundler
 
 			if (exceptions.Count > 0)
 				throw new AggregateException (exceptions);
+
+			// Cache all the assemblies we found.
+			Directory.CreateDirectory (Path.GetDirectoryName (cache_file));
+			File.WriteAllLines (cache_file, assemblies);
 		}
 
 		void ComputeListOfAssemblies (HashSet<string> assemblies, AssemblyDefinition assembly, List<Exception> exceptions)
@@ -409,6 +342,7 @@ namespace Xamarin.Bundler
 			if (assemblies.Contains (fqname))
 				return;
 
+			PrintAssemblyReferences (assembly);
 			assemblies.Add (fqname);
 
 			var asm = new Assembly (this, assembly);
@@ -431,6 +365,9 @@ namespace Xamarin.Bundler
 				var reference_assembly = ManifestResolver.Resolve (reference);
 				ComputeListOfAssemblies (assemblies, reference_assembly, exceptions);
 			}
+
+			if (Profile.IsSdkAssembly (assembly) || Profile.IsProductAssembly (assembly))
+				return; // We know there are no new assembly references from attributes in assemblies we ship
 
 			// Custom Attribute metadata can include references to other assemblies, e.g. [X (typeof (Y)], 
 			// but it is not reflected in AssemblyReferences :-( ref: #37611
@@ -518,9 +455,12 @@ namespace Xamarin.Bundler
 			resolver.AddSearchDirectory (Resolver.FrameworkDirectory);
 
 			var main_assemblies = new List<AssemblyDefinition> ();
-			main_assemblies.Add (Resolver.Load (App.RootAssembly));
-			foreach (var appex in sharedCodeTargets)
-				main_assemblies.Add (Resolver.Load (appex.App.RootAssembly));
+			foreach (var root in App.RootAssemblies)
+				main_assemblies.Add (Resolver.Load (root));
+			foreach (var appex in sharedCodeTargets) {
+				foreach (var root in appex.App.RootAssemblies)
+					main_assemblies.Add (Resolver.Load (root));
+			}
 			
 			if (Driver.Verbosity > 0)
 				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", string.Join (", ", main_assemblies.Select ((v) => v.MainModule.FileName)), output_dir, App.LinkMode);
@@ -630,6 +570,11 @@ namespace Xamarin.Bundler
 								inputs.Add (input + ".mdb");
 								outputs.Add (output + ".mdb");
 							}
+							var pdb = Path.ChangeExtension (input, "pdb");
+							if (File.Exists (pdb)) {
+								inputs.Add (pdb);
+								outputs.Add (Path.ChangeExtension (output, "pdb"));
+							}
 							if (File.Exists (input + ".config")) {
 								// If a config file changes, then the AOT-compiled output can be different,
 								// so make sure to take config files into account as well.
@@ -689,12 +634,15 @@ namespace Xamarin.Bundler
 				foreach (var t in allTargets) {
 					// Find the root assembly
 					// Here we assume that 'AssemblyReference.Name' == 'Assembly.Identity'.
-					var rootAssembly = t.Assemblies [Assembly.GetIdentity (t.App.RootAssembly)];
+					var rootAssemblies = new List<Assembly> ();
+					foreach (var root in t.App.RootAssemblies)
+						rootAssemblies.Add (t.Assemblies [Assembly.GetIdentity (root)]);
 					var queue = new Queue<string> ();
 					var collectedNames = new HashSet<string> ();
 
 					// First collect the set of all assemblies in the app by walking the assembly references.
-					queue.Enqueue (rootAssembly.Identity);
+					foreach (var root in rootAssemblies)
+						queue.Enqueue (root.Identity);
 					do {
 						var next = queue.Dequeue ();
 						collectedNames.Add (next);
@@ -762,6 +710,12 @@ namespace Xamarin.Bundler
 						Driver.Touch (a.FullPath);
 						if (File.Exists (a.FullPath + ".mdb"))
 							Driver.Touch (a.FullPath + ".mdb");
+						var pdb = Path.ChangeExtension (a.FullPath, "pdb");
+						if (File.Exists (pdb))
+							Driver.Touch (pdb);
+						var config = a.FullPath + ".config";
+						if (File.Exists (config))
+							Driver.Touch (config);
 					}
 
 					// Now copy to the build directory
@@ -845,16 +799,15 @@ namespace Xamarin.Bundler
 
 			ManagedLink ();
 
-			Driver.GatherFrameworks (this, Frameworks, WeakFrameworks);
-
-			// Make sure there are no duplicates between frameworks and weak frameworks.
-			// Keep the weak ones.
-			Frameworks.ExceptWith (WeakFrameworks);
+			GatherFrameworks ();
 		}
 
 		public void CompilePInvokeWrappers ()
 		{
 			if (!App.RequiresPInvokeWrappers)
+				return;
+
+			if (!App.HasFrameworksDirectory && App.IsCodeShared)
 				return;
 
 			// Write P/Invokes
@@ -1024,7 +977,7 @@ namespace Xamarin.Bundler
 						break;
 					case AssemblyBuildTarget.Framework:
 						install_name = $"@rpath/{name}.framework/{name}";
-						compiler_output = Path.Combine (App.Cache.Location, arch, $"lib{name}.dylib"); // frameworks are almost identical to dylibs, so this is expected.
+						compiler_output = Path.Combine (App.Cache.Location, arch, name);
 						break;
 					default:
 						throw ErrorHelper.CreateError (100, "Invalid assembly build target: '{0}'. Please file a bug report with a test case (http://bugzilla.xamarin.com).", build_target);
@@ -1046,12 +999,32 @@ namespace Xamarin.Bundler
 						compiler_flags.AddFrameworks (a.Frameworks, a.WeakFrameworks);
 						compiler_flags.AddLinkWith (a.LinkWith, a.ForceLoad);
 						compiler_flags.AddOtherFlags (a.LinkerFlags);
-						if (a.HasLinkWithAttributes && !App.EnableBitCode)
-							compiler_flags.ReferenceSymbols (GetRequiredSymbols (a, true));
+						if (a.HasLinkWithAttributes) {
+							var symbols = GetRequiredSymbols (a);
+							switch (App.SymbolMode) {
+							case SymbolMode.Ignore:
+								break;
+							case SymbolMode.Code:
+								var tasks = GenerateReferencingSource (Path.Combine (App.Cache.Location, Path.GetFileNameWithoutExtension (a.FullPath) + "-unresolved-externals.m"), symbols);
+								foreach (var task in tasks)
+									compiler_flags.AddLinkWith (task.OutputFile);
+								link_dependencies.AddRange (tasks);
+								break;
+							case SymbolMode.Linker:
+								compiler_flags.ReferenceSymbols (symbols);
+								break;
+							default:
+								throw ErrorHelper.CreateError (99, $"Internal error: invalid symbol mode: {App.SymbolMode}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
+							}
+						}
+					}
+					if (App.Embeddinator) {
+						if (!string.IsNullOrEmpty (App.UserGccFlags))
+							compiler_flags.AddOtherFlag (App.UserGccFlags);
 					}
 					compiler_flags.LinkWithMono ();
 					compiler_flags.LinkWithXamarin ();
-					if (GetEntryPoints ().ContainsKey ("UIApplicationMain"))
+					if (GetAllSymbols ().Contains ("UIApplicationMain"))
 						compiler_flags.AddFramework ("UIKit");
 
 					if (App.EnableLLVMOnlyBitCode) {
@@ -1079,6 +1052,12 @@ namespace Xamarin.Bundler
 					};
 					link_task.AddDependency (link_dependencies);
 					link_task.AddDependency (aottasks);
+
+					if (App.Embeddinator) {
+						link_task.AddDependency (link_with_task_output);
+						link_task.CompilerFlags.AddLinkWith (link_with_task_output.Select ((v) => v.OutputFile));
+						embeddinator_tasks.Add (link_task);
+					}
 
 					LinkWithBuildTarget (build_target, name, link_task, assemblies);
 
@@ -1195,9 +1174,6 @@ namespace Xamarin.Bundler
 				ErrorHelper.Warning (3006, "Could not compute a complete dependency map for the project. This will result in slower build times because Xamarin.iOS can't properly detect what needs to be rebuilt (and what does not need to be rebuilt). Please review previous warnings for more details.");
 			}
 
-			// Compile the managed assemblies into object files, frameworks or shared libraries
-			AOTCompile ();
-
 			List<string> registration_methods = new List<string> ();
 
 			// The static registrar.
@@ -1289,11 +1265,19 @@ namespace Xamarin.Bundler
 				LinkWithTaskOutput (main_task);
 			}
 
+			// Compile the managed assemblies into object files, frameworks or shared libraries
+			AOTCompile ();
+
 			Driver.Watch ("Compile", 1);
 		}
 
 		public void NativeLink (BuildTasks build_tasks)
 		{
+			if (App.Embeddinator && App.IsDeviceBuild) {
+				build_tasks.AddRange (embeddinator_tasks);
+				return;
+			}
+
 			if (!string.IsNullOrEmpty (App.UserGccFlags))
 				App.DeadStrip = false;
 			if (App.EnableLLVMOnlyBitCode)
@@ -1342,7 +1326,7 @@ namespace Xamarin.Bundler
 			CompileTask.GetArchFlags (linker_flags, Abis);
 			if (App.IsDeviceBuild) {
 				linker_flags.AddOtherFlag ($"-m{Driver.GetTargetMinSdkName (App)}-version-min={App.DeploymentTarget}");
-				linker_flags.AddOtherFlag ($"-isysroot {Driver.Quote (Driver.GetFrameworkDirectory (App))}");
+				linker_flags.AddOtherFlag ($"-isysroot {StringUtils.Quote (Driver.GetFrameworkDirectory (App))}");
 			} else {
 				CompileTask.GetSimulatorCompilerFlags (linker_flags, false, App);
 			}
@@ -1353,10 +1337,7 @@ namespace Xamarin.Bundler
 			if (App.LibXamarinLinkMode != AssemblyBuildTarget.StaticObject)
 				AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode));
 
-			linker_flags.AddOtherFlag ($"-o {Driver.Quote (Executable)}");
-
-			linker_flags.AddOtherFlag ("-lz");
-			linker_flags.AddOtherFlag ("-liconv");
+			linker_flags.AddOtherFlag ($"-o {StringUtils.Quote (Executable)}");
 
 			bool need_libcpp = false;
 			if (App.EnableBitCode)
@@ -1368,26 +1349,40 @@ namespace Xamarin.Bundler
 				linker_flags.AddOtherFlag ("-lc++");
 
 			// allow the native linker to remove unused symbols (if the caller was removed by the managed linker)
-			if (!bitcode) {
-				// Note that we include *all* (__Internal) p/invoked symbols here
-				// We also include any fields from [Field] attributes.
+			// Note that we include *all* (__Internal) p/invoked symbols here
+			// We also include any fields from [Field] attributes.
+			switch (App.SymbolMode) {
+			case SymbolMode.Ignore:
+				break;
+			case SymbolMode.Code:
+				LinkWithTaskOutput (GenerateReferencingSource (Path.Combine (App.Cache.Location, "reference.m"), GetRequiredSymbols ()));
+				break;
+			case SymbolMode.Linker:
 				linker_flags.ReferenceSymbols (GetRequiredSymbols ());
+				break;
+			default:
+				throw ErrorHelper.CreateError (99, $"Internal error: invalid symbol mode: {App.SymbolMode}. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 			}
 
-			string mainlib;
-			if (App.IsWatchExtension) {
-				mainlib = "libwatchextension.a";
-				linker_flags.AddOtherFlag (" -e _xamarin_watchextension_main");
-			} else if (App.IsTVExtension) {
-				mainlib = "libtvextension.a";
-			} else if (App.IsExtension) {
-				mainlib = "libextension.a";
-			} else {
-				mainlib = "libapp.a";
-			}
 			var libdir = Path.Combine (Driver.GetProductSdkDirectory (App), "usr", "lib");
-			var libmain = Path.Combine (libdir, mainlib);
-			linker_flags.AddLinkWith (libmain, true);
+			if (App.Embeddinator) {
+				linker_flags.AddOtherFlag ("-shared");
+				linker_flags.AddOtherFlag ($"-install_name {StringUtils.Quote ($"@rpath/{App.ExecutableName}.framework/{App.ExecutableName}")}");
+			} else {
+				string mainlib;
+				if (App.IsWatchExtension) {
+					mainlib = "libwatchextension.a";
+					linker_flags.AddOtherFlag (" -e _xamarin_watchextension_main");
+				} else if (App.IsTVExtension) {
+					mainlib = "libtvextension.a";
+				} else if (App.IsExtension) {
+					mainlib = "libextension.a";
+				} else {
+					mainlib = "libapp.a";
+				}
+				var libmain = Path.Combine (libdir, mainlib);
+				linker_flags.AddLinkWith (libmain, true);
+			}
 
 			if (App.EnableProfiling) {
 				string libprofiler;
@@ -1395,7 +1390,7 @@ namespace Xamarin.Bundler
 				case AssemblyBuildTarget.DynamicLibrary:
 					libprofiler = Path.Combine (libdir, "libmono-profiler-log.dylib");
 					linker_flags.AddLinkWith (libprofiler);
-					if (!App.IsExtension || App.IsWatchExtension)
+					if (App.HasFrameworksDirectory)
 						AddToBundle (libprofiler);
 					break;
 				case AssemblyBuildTarget.StaticObject:
@@ -1419,7 +1414,7 @@ namespace Xamarin.Bundler
 			if (App.IsExtension) {
 				if (App.Platform == ApplePlatform.iOS && Driver.XcodeVersion.Major < 7) {
 					linker_flags.AddOtherFlag ("-lpkstart");
-					linker_flags.AddOtherFlag ($"-F {Driver.Quote (Path.Combine (Driver.GetFrameworkDirectory (App), "System/Library/PrivateFrameworks"))} -framework PlugInKit");
+					linker_flags.AddOtherFlag ($"-F {StringUtils.Quote (Path.Combine (Driver.GetFrameworkDirectory (App), "System/Library/PrivateFrameworks"))} -framework PlugInKit");
 				}
 				linker_flags.AddOtherFlag ("-fapplication-extension");
 			}
@@ -1445,7 +1440,7 @@ namespace Xamarin.Bundler
 				sb.Append (" -change ").Append (dependency).Append (' ').Append (fixed_dep);
 			}
 			if (sb.Length > 0) {
-				var quoted_name = Driver.Quote (Executable);
+				var quoted_name = StringUtils.Quote (Executable);
 				sb.Append (' ').Append (quoted_name);
 				Driver.XcodeRun ("install_name_tool", sb.ToString ());
 				sb.Clear ();

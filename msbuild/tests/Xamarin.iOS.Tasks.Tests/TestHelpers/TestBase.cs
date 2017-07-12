@@ -49,11 +49,11 @@ namespace Xamarin.iOS.Tasks
 
 			coreFiles.Add ("mscorlib.dll");
 			if (config == "Debug")
-				coreFiles.Add ("mscorlib.dll.mdb");
+				coreFiles.Add ("mscorlib.pdb");
 
 			coreFiles.Add (managedExe);
 			if (config == "Debug")
-				coreFiles.Add (managedExe + ".mdb");
+				coreFiles.Add (Path.ChangeExtension (managedExe, ".pdb"));
 
 			coreFiles.Add (nativeExe);
 
@@ -276,7 +276,7 @@ namespace Xamarin.iOS.Tasks
 		{
 			path = Path.Combine (TempDir, path);
 			Directory.CreateDirectory (Path.GetDirectoryName (path));
-			using (new FileStream (path, FileMode.CreateNew));
+			using (new FileStream (path, FileMode.CreateNew)) {}
 			return path;
 		}
 

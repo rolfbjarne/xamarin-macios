@@ -68,6 +68,7 @@ LINKER_SOURCES = \
 	$(LINKER_DIR)/MonoTouch.Tuner/ProcessExportedFields.cs	\
 	$(LINKER_DIR)/MonoTouch.Tuner/RemoveAttributes.cs		\
 	$(LINKER_DIR)/MonoTouch.Tuner/RemoveCode.cs			\
+	$(LINKER_DIR)/MonoTouch.Tuner/RemoveBitcodeIncompatibleCodeStep.cs			\
 	$(LINKER_DIR)/MonoTouch.Tuner/SealerSubStep.cs	\
 	$(TOP)/tools/linker/ApplyPreserveAttribute.cs 		\
 	$(TOP)/tools/linker/BaseProfile.cs			\

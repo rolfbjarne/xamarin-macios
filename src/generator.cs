@@ -478,7 +478,7 @@ public class MemberInformation
 		// To avoid a warning, we should determine whether we should insert a "new" in the 
 		// declaration.  If this is an inlined method, then we need to see if this was
 		// also inlined in any of the base classes.
-		if (mi.DeclaringType != type){
+		if (mi.DeclaringType != type && !is_ctor){
 			for (var baseType = ReflectionExtensions.GetBaseType (type); baseType != null && baseType != TypeManager.System_Object; baseType = ReflectionExtensions.GetBaseType (baseType)){
 				foreach (var baseMethod in gather.GetTypeContractMethods (baseType)){
 					if (baseMethod.DeclaringType != baseType && baseMethod ==  mi){
@@ -3238,7 +3238,7 @@ public partial class Generator : IMemberGatherer {
 		var mi = minfo.method;
 		var category_class = minfo.category_extension_type;
 		StringBuilder sb = new StringBuilder ();
-		string name = minfo.is_ctor ? GetGeneratedTypeName (mi.DeclaringType) : is_async ? GetAsyncName (mi) : mi.Name;
+		string name = minfo.is_ctor ? GetGeneratedTypeName (minfo.type) : is_async ? GetAsyncName (mi) : mi.Name;
 
 		// Some codepaths already write preservation info
 		PrintAttributes (minfo.mi, preserve:!alreadyPreserved, advice:true);
@@ -4258,13 +4258,13 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (source.IsEnum)
 			yield break;
-		foreach (var method in source.GatherMethods (BindingFlags.Public | BindingFlags.Instance))
+		foreach (var method in source.GatherMethods (BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
 			yield return method;
 		foreach (var parent in source.GetInterfaces ()){
 			// skip case where the interface implemented comes from an already built assembly (e.g. monotouch.dll)
 			// e.g. Dispose won't have an [Export] since it's present to satisfy System.IDisposable
 			if (parent.FullName != "System.IDisposable") {
-				foreach (var method in parent.GatherMethods (BindingFlags.Public | BindingFlags.Instance)) {
+				foreach (var method in parent.GatherMethods (BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)) {
 					yield return method;
 				}
 			}
@@ -5058,7 +5058,7 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	IEnumerable<MethodInfo> SelectProtocolMethods (Type type, bool? @static = null, bool? required = null)
+	IEnumerable<MethodInfo> SelectProtocolMethods (Type type, bool? @static = null, bool? required = null, bool includeConstructors = false)
 	{
 		var list = type.GetMethods (BindingFlags.Public | BindingFlags.Instance);
 
@@ -5066,8 +5066,11 @@ public partial class Generator : IMemberGatherer {
 			if (m.IsSpecialName)
 				continue;
 
-			if (m.Name == "Constructor")
+			if (m.Name == "Constructor") {
+				if (includeConstructors)
+					yield return m;
 				continue;
+			}
 
 			var attrs = AttributeManager.GetCustomAttributes<Attribute> (m);
 			AvailabilityBaseAttribute availabilityAttribute = null;
@@ -5173,11 +5176,11 @@ public partial class Generator : IMemberGatherer {
 		
 		ifaces = ifaces.Where ((v) => IsProtocolInterface (v, false));
 
-		allProtocolMethods.AddRange (SelectProtocolMethods (type));
+		allProtocolMethods.AddRange (SelectProtocolMethods (type, includeConstructors: true));
 		allProtocolProperties.AddRange (SelectProtocolProperties (type));
 
-		var requiredInstanceMethods = allProtocolMethods.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
-		var optionalInstanceMethods = allProtocolMethods.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
+		var requiredInstanceMethods = allProtocolMethods.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v) && v.Name != "Constructor").ToList ();
+		var optionalInstanceMethods = allProtocolMethods.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v) && v.Name != "Constructor");
 		var requiredInstanceProperties = allProtocolProperties.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
 		var optionalInstanceProperties = allProtocolProperties.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
 		var requiredInstanceAsyncMethods = requiredInstanceMethods.Where (m => AttributeManager.HasAttribute<AsyncAttribute> (m)).ToList ();
@@ -5905,9 +5908,30 @@ public partial class Generator : IMemberGatherer {
 			
 			var bound_methods = new HashSet<MemberInformation> (); // List of methods bound on the class itself (not via protocols)
 			var generated_methods = new List<MemberInformation> (); // All method that have been generated
+			var contractMethods = GetTypeContractMethods (type);
 			foreach (var mi in GetTypeContractMethods (type).OrderByDescending (m => m.Name == "Constructor").ThenBy (m => m.Name, StringComparer.Ordinal)) {
-				if (mi.IsSpecialName || (mi.Name == "Constructor" && type != mi.DeclaringType))
+				if (mi.IsSpecialName)
 					continue;
+
+				if (mi.Name == "Constructor" && type != mi.DeclaringType) {
+					if (!IsProtocol (mi.DeclaringType))
+						continue;
+					if (mi.DeclaringType.Name == "NSCoding") {
+						// We're hardcoding inclusion of NSCoding's constructors elsewhere.
+						// So here we're hardcoding exclusion of NSCoding's constructors, to avoid touching too much code.
+						continue;
+					}
+					Console.WriteLine ($"Inlining constructor '({string.Join (", ", mi.GetParameters ().Select ((v) => FormatType (type, v.ParameterType)))})' in type {type.FullName} from protocol {mi.DeclaringType.FullName}");
+					Console.WriteLine ("Full list:");
+					foreach (var cm in GetTypeContractMethods (mi.DeclaringType))
+						Console.WriteLine ($"  M: {cm.Name}");
+					foreach (var cm in GetTypeContractProperties (mi.DeclaringType))
+						Console.WriteLine ($"  P: {cm.Name}");
+				}
+
+				if (type != mi.DeclaringType && mi.IsStatic) {
+					Console.WriteLine ($"Inlining static member '{mi.DeclaringType.FullName}.{mi.Name} ({string.Join (", ", mi.GetParameters ().Select ((v) => FormatType (type, v.ParameterType)))})' into type {type.FullName}.");
+				}
 
 				if (mi.IsUnavailable ())
 					continue;
@@ -5923,14 +5947,18 @@ public partial class Generator : IMemberGatherer {
 				} else {
 					// don't inject a protocol method if the class already
 					// implements the same method.
-					if (bound_methods.Contains (minfo))
+					if (bound_methods.Contains (minfo)) {
+						Console.WriteLine ($"Already implemented: {minfo.type?.FullName}.{minfo.mi?.Name} in type {type.FullName}");
 						continue;
+					}
 
 					var protocolsThatHaveThisMethod = GetTypeContractMethods (type).Where (x => { var sel = GetSelector (x); return sel != null && sel == minfo.selector; } );
 					if (protocolsThatHaveThisMethod.Count () > 1) {
 						// If multiple protocols have this method and we haven't generated a copy yet
-						if (generated_methods.Any (x => x.selector == minfo.selector))
+						if (generated_methods.Any (x => x.selector == minfo.selector)) {
+							Console.WriteLine ($"Already implemented protocol: {minfo.type?.FullName}.{minfo.mi?.Name} {minfo.selector} in type {type.FullName}");
 							continue;
+						}
 
 						// Verify all of the versions have the same arguments / return value
 						// And just generate the first one (us)
@@ -5968,6 +5996,10 @@ public partial class Generator : IMemberGatherer {
 
 			foreach (var pi in GetTypeContractProperties (type).OrderBy (p => p.Name, StringComparer.Ordinal)) {
 
+				if (type != pi.DeclaringType && AttributeManager.HasAttribute<StaticAttribute> (pi)) {
+					Console.WriteLine ($"Inlining static property '{pi.DeclaringType.FullName}.{pi.Name}' into type {type.FullName}.");
+				}
+
 				if (pi.IsUnavailable ())
 					continue;
 
@@ -5988,8 +6020,10 @@ public partial class Generator : IMemberGatherer {
 				} else {
 					// don't inject a protocol property if the class already
 					// implements the same property.
-					if (bound_properties.Contains (pi.Name))
+					if (bound_properties.Contains (pi.Name)) {
+						Console.WriteLine ($"Not inlining the property {pi.Name} from the protocol {pi.DeclaringType.FullName} because the class {type.FullName} already contains this property.");
 						continue;
+					}
 
 					var protocolsThatHaveThisProp = GetTypeContractProperties (type).Where (x => x.Name == pi.Name);
 					if (protocolsThatHaveThisProp.Count () > 1) {

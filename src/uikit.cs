@@ -4657,7 +4657,7 @@ namespace XamCore.UIKit {
 	// returns NIL handle causing exceptions in further calls, e.g. ToString
 	// Objective-C exception thrown.  Name: NSInvalidArgumentException Reason: *** -CGColor not defined for the UIColor <UIPlaceholderColor: 0x114f5ad0>; need to first convert colorspace.
 	[DisableDefaultCtor]
-	interface UIColor : NSSecureCoding, NSCopying {
+	interface UIColor : NSSecureCoding, NSCopying, NSItemProviderReading {
 		[Export ("colorWithWhite:alpha:")][Static]
 		UIColor FromWhiteAlpha (nfloat white, nfloat alpha);
 
@@ -4676,16 +4676,6 @@ namespace XamCore.UIKit {
 		[return: NullAllowed]
 		UIColor FromName (string name);
 
-		// From the NSItemProviderReading protocol, a special constructor.
-		[iOS (11,0), NoWatch, NoTV]
-		[Export ("initWithItemProviderData:typeIdentifier:error:")]
-		IntPtr Constructor (NSData providerData, string typeIdentifier, out NSError outError);
-
-		// From the NSItemProviderReading protocol, a static method.
-		[Static]
-		[iOS (11,0), NoWatch, NoTV]
-		[Export ("readableTypeIdentifiersForItemProvider", ArgumentSemantic.Copy)]
-		string[] ReadableTypeIdentifiersForItemProvider { get; }
 #if !WATCH
 		[iOS (11,0)]
 		[Static]
@@ -6906,7 +6896,7 @@ namespace XamCore.UIKit {
 #endif // !WATCH
 
 	[BaseType (typeof (NSObject))]
-	interface UIImage : NSSecureCoding
+	interface UIImage : NSSecureCoding, NSItemProviderReading
 #if !WATCH
 		, UIAccessibility, UIAccessibilityIdentification
 #endif // !WATCH
@@ -6960,17 +6950,6 @@ namespace XamCore.UIKit {
 		UIImage FromImage (CIImage image);
 #endif // !WATCH
 
-		// From the NSItemProviderReading protocol, a special constructor.
-		[Export ("initWithItemProviderData:typeIdentifier:error:")]
-		[iOS (11,0), NoWatch, NoTV]
-		IntPtr Constructor (NSData providerData, string typeIdentifier, out NSError outError);
-
-		// From the NSItemProviderReading protocol, a static method.
-		[Static]
-		[iOS (11,0), NoWatch, NoTV]
-		[Export ("readableTypeIdentifiersForItemProvider", ArgumentSemantic.Copy)]
-		string[] ReadableTypeIdentifiersForItemProvider { get; }
-	
 		[Export ("renderingMode")]
 		[ThreadSafe]
 		[Since (7,0)]

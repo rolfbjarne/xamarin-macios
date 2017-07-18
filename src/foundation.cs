@@ -167,7 +167,7 @@ namespace XamCore.Foundation
 
 	[Since (3,2)]
 	[BaseType (typeof (NSObject))]
-	partial interface NSAttributedString : NSCoding, NSMutableCopying, NSSecureCoding
+	partial interface NSAttributedString : NSCoding, NSMutableCopying, NSSecureCoding, NSItemProviderReading
 	#if MONOMAC
 		, NSPasteboardReading, NSPasteboardWriting
 	#endif
@@ -240,17 +240,6 @@ namespace XamCore.Foundation
 		[Wrap ("this (data, options == null ? null : options.Dictionary, out resultDocumentAttributes, ref error)")]
 		IntPtr Constructor (NSData data, NSAttributedStringDocumentAttributes options, out NSDictionary resultDocumentAttributes, ref NSError error);
 
-		// From the NSItemProviderReading protocol, a special constructor.
-		[Export ("initWithItemProviderData:typeIdentifier:error:")]
-		[iOS (11,0), NoWatch, NoTV, Mac(10,13)]
-		IntPtr Constructor (NSData providerData, string typeIdentifier, out NSError outError);
-
-		// From the NSItemProviderReading protocol, a static method.
-		[Static]
-		[Export ("readableTypeIdentifiersForItemProvider", ArgumentSemantic.Copy)]
-		[iOS (11,0), NoWatch, NoTV, Mac(10,13)]
-		string[] ReadableTypeIdentifiersForItemProvider { get; }
-		
 		[Since (7,0)]
 		[Export ("dataFromRange:documentAttributes:error:")]
 		NSData GetDataFromRange (NSRange range, NSDictionary attributes, ref NSError error);
@@ -8823,9 +8812,9 @@ namespace XamCore.Foundation
 		// user needs to manually [Export] the selector on a static method, like
 		// they do for the "layer" property on CALayer subclasses.
 		//
-		//[Static, Abstract]
-		//[Export ("readableTypeIdentifiersForItemProvider", ArgumentSemantic.Copy)]
-		//string[] ReadableTypeIdentifiersForItemProvider { get; }
+		[Static, Abstract]
+		[Export ("readableTypeIdentifiersForItemProvider", ArgumentSemantic.Copy)]
+		string[] ReadableTypeIdentifiersForItemProvider { get; }
 
 		//
 		// This is a constructor that various classes must implement
@@ -8833,9 +8822,9 @@ namespace XamCore.Foundation
 		// for user-defined implementations of this interface, we are going to
 		// need to something special
 		//
-		//[Abstract]
-		//[Export ("initWithItemProviderData:typeIdentifier:error:")]
-		//INSItemProviderReading CreateFrom (NSData providerData, string typeIdentifier, [NullAllowed] NSError outError);
+		[Abstract]
+		[Export ("initWithItemProviderData:typeIdentifier:error:")]
+		IntPtr Constructor (NSData providerData, string typeIdentifier, [NullAllowed] out NSError outError);
 	}
 
 #if XAMCORE_2_0

@@ -2738,6 +2738,7 @@ function oninitialload ()
 					if (!Failed) {
 						// Run the app
 						runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log");
+						runner.MainLog.Timestamp = true;
 						await runner.RunAsync ();
 
 						if (!string.IsNullOrEmpty (runner.FailureMessage))
@@ -2836,8 +2837,7 @@ function oninitialload ()
 				CompanionDevice = Jenkins.Simulators.FindCompanionDevice (Jenkins.SimulatorLoadLog, Device);
 
 			var clean_state = false;//Platform == TestPlatform.tvOS;
-			runner = new AppRunner ()
-			{
+			runner = new AppRunner () {
 				Harness = Harness,
 				ProjectFile = ProjectFile,
 				EnsureCleanSimulatorState = clean_state,
@@ -2889,6 +2889,7 @@ function oninitialload ()
 				return;
 			}
 			using (var resource = await NotifyBlockingWaitAsync (AcquireResourceAsync ())) {
+				ExecutionResult = (ExecutionResult & ~TestExecutingResult.InProgressMask) | TestExecutingResult.Running;
 				if (runner == null)
 					await SelectSimulatorAsync ();
 				await runner.RunAsync ();

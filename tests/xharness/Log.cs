@@ -29,7 +29,7 @@ namespace xharness
 			throw new NotSupportedException ();
 		}
 
-		public virtual StreamWriter GetWriter ()
+		public virtual TextWriter GetWriter ()
 		{
 			throw new NotSupportedException ();
 		}
@@ -70,7 +70,7 @@ namespace xharness
 	public class LogFile : Log
 	{
 		public string Path;
-		StreamWriter writer;
+		TextWriter writer;
 
 		public LogFile (string description, string path, bool append = true)
 			: base (description)
@@ -78,7 +78,7 @@ namespace xharness
 			Path = path;
 
 			writer = new StreamWriter (new FileStream (Path, append ? FileMode.Append : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read));
-			writer.AutoFlush = true;
+			writer = TextWriter.Synchronized (writer);
 		}
 
 		protected override void WriteImpl (string value)
@@ -97,7 +97,7 @@ namespace xharness
 			return new StreamReader (new FileStream (Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 		}
 
-		public override StreamWriter GetWriter ()
+		public override TextWriter GetWriter ()
 		{
 			return writer;
 		}
@@ -116,23 +116,16 @@ namespace xharness
 	public class LogStream : Log
 	{
 		string path;
-		FileStream fs;
-		StreamWriter writer;
-
-		public FileStream FileStream {
-			get {
-				return fs;
-			}
-		}
+		TextWriter writer;
 
 		public override StreamReader GetReader ()
 		{
 			return new StreamReader (new FileStream (path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 		}
 
-		public override StreamWriter GetWriter ()
+		public override TextWriter GetWriter ()
 		{
-			return writer ?? (writer = new StreamWriter (fs) { AutoFlush = true });
+			return writer;
 		}
 
 		public LogStream (string description, string path)
@@ -140,7 +133,9 @@ namespace xharness
 		{
 			this.path = path;
 
-			fs = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.Read);
+			var fs = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.Read);
+			writer = new StreamWriter (fs);
+			writer = TextWriter.Synchronized (writer);
 		}
 
 		protected override void WriteImpl (string value)
@@ -157,11 +152,6 @@ namespace xharness
 			if (writer != null) {
 				writer.Dispose ();
 				writer = null;
-			}
-
-			if (fs != null) {
-				fs.Dispose ();
-				fs = null;
 			}
 		}
 
@@ -206,7 +196,7 @@ namespace xharness
 			}
 		}
 
-		public override StreamWriter GetWriter ()
+		public override TextWriter GetWriter ()
 		{
 			return new StreamWriter (Console.OpenStandardOutput ());
 		}
@@ -276,6 +266,9 @@ namespace xharness
 			var availableLength = currentLength - startPosition;
 			if (availableLength <= capturedLength)
 				return; // We've captured before, and nothing new as added since last time.
+
+			if (length == 0)
+				return; // Nothing was captured
 
 			// Capture at most 1k more
 			availableLength = Math.Min (availableLength, length + 1024);

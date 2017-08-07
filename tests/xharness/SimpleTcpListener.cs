@@ -57,10 +57,14 @@ namespace xharness
 			int i;
 			int total = 0;
 			NetworkStream stream = client.GetStream ();
-			var fs = OutputWriter.BaseStream;
+			var decoder = Encoding.UTF8.GetDecoder ();
+			var charBuffer = new char [buffer.Length];
 			while ((i = stream.Read (buffer, 0, buffer.Length)) != 0) {
-				fs.Write (buffer, 0, i);
-				fs.Flush ();
+				var charCount = decoder.GetCharCount (buffer, 0, i);
+				if (charCount >= charBuffer.Length)
+					charBuffer = new char [charCount];
+				var decoded = decoder.GetChars (buffer, 0, i, charBuffer, 0);
+				Log.Write (charBuffer, 0, decoded);
 				total += i;
 			}
 

@@ -32,7 +32,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Project</StartAction>
-    <StartArguments>--verbose --jenkins --autoconf --rootdir /work/maccore/xcode9/xamarin-macios/tests --sdkroot /Applications/Xcode9-beta4.app/Contents/Developer</StartArguments>
+    <StartArguments>--verbose --jenkins:server --autoconf --rootdir /work/maccore/xcode9/xamarin-macios/tests --sdkroot /Applications/Xcode9-beta4.app/Contents/Developer</StartArguments>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -9,7 +9,7 @@ namespace xharness
 {
 	public abstract class SimpleListener : IDisposable
 	{
-		StreamWriter output_writer;
+		TextWriter output_writer;
 		string xml_data;
 
 		TaskCompletionSource<bool> stopped = new TaskCompletionSource<bool> ();
@@ -26,7 +26,7 @@ namespace xharness
 		protected abstract void Start ();
 		protected abstract void Stop ();
 
-		public StreamWriter OutputWriter {
+		public TextWriter OutputWriter {
 			get {
 				return output_writer;
 			}

@@ -509,6 +509,7 @@ namespace xharness
 
 			ThreadPool.QueueUserWorkItem ((v) =>
 			{
+				main_log.WriteLine ("Watiting for connection from device");
 				if (!listener.WaitForConnection (TimeSpan.FromMinutes (Harness.LaunchTimeout))) {
 					cancellation_source.Cancel ();
 					main_log.WriteLine ("Test launch timed out after {0} minute(s).", Harness.LaunchTimeout);

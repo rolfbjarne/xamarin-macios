@@ -9,7 +9,7 @@ namespace xharness
 	public abstract class Log : TextWriter
 	{
 		public string Description;
-		public bool Timestamp;
+		public bool Timestamp = true;
 
 		protected Log ()
 		{

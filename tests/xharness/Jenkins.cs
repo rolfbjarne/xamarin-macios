@@ -1898,9 +1898,10 @@ function oninitialload ()
 				execute_task = ExecuteAsync ();
 				await execute_task;
 
+				var x = ExecutionResult;
 				ExecutionResult = (ExecutionResult & ~TestExecutingResult.StateMask) | TestExecutingResult.Finished;
 				if ((ExecutionResult & ~TestExecutingResult.StateMask) == 0)
-					throw new Exception ("Result not set!");
+					throw new Exception ("Result not set! " + x);
 			} catch (Exception e) {
 				using (var log = Logs.CreateStream (LogDirectory, $"execution-failure-{Timestamp}.log", "Execution failure")) {
 					ExecutionResult = TestExecutingResult.HarnessException;

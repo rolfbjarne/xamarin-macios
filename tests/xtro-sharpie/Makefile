@@ -14,7 +14,7 @@ clean-local::
 	rm -rf *os*.pch*
 	
 bin/Debug/xtro-sharpie.exe ./bin/Debug/xtro-plugin.dll build:
-	xbuild
+	$(Q_BUILD) msbuild $(XBUILD_VERBOSITY) xtro-sharpie.sln
 
 	
 XIOS ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/git/lib/64bits/Xamarin.iOS.dll
@@ -22,8 +22,8 @@ XIOS_GL ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/C
 XIOS_ARCH = arm64
 XIOS_PCH = iphoneos$(IOS_SDK_VERSION)-$(XIOS_ARCH).pch
 
-run-ios: build $(XIOS_PCH)
-	$(MONO) bin/Debug/xtro-sharpie.exe $(XIOS_PCH) $(XIOS) $(XIOS_GL) | sort > ios.results
+ios.results run-ios: build $(XIOS_PCH)
+	$(MONO) bin/Debug/xtro-sharpie.exe $(abspath $(XIOS_PCH)) $(abspath $(XIOS)) $(abspath $(XIOS_GL)) | sort > ios.results
 
 sharpie-ios: build $(XIOS_PCH)
 	sharpie ./bin/Debug/xtro-plugin.dll extro $(XIOS_PCH) $(XIOS) $(XIOS_GL) | sort > ios.results
@@ -36,8 +36,8 @@ XWATCHOS ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/
 XWATCHOS_ARCH = armv7
 XWATCHOS_PCH = watchos$(WATCH_SDK_VERSION)-$(XWATCHOS_ARCH).pch
 
-run-watchos: build $(XWATCHOS_PCH)
-	$(MONO) bin/Debug/xtro-sharpie.exe $(XWATCHOS_PCH) $(XWATCHOS) | sort > watchos.results
+watchos.results run-watchos: build $(XWATCHOS_PCH)
+	$(MONO) bin/Debug/xtro-sharpie.exe $(abspath $(XWATCHOS_PCH)) $(abspath $(XWATCHOS)) | sort > watchos.results
 
 sharpie-watchos: build $(XWATCHOS_PCH)
 	sharpie ./bin/Debug/xtro-plugin.dll extro $(XWATCHOS_PCH) $(XWATCHOS) | sort > watchos.results
@@ -51,7 +51,7 @@ XTVOS_GL ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/
 XTVOS_ARCH = arm64
 XTVOS_PCH = appletvos$(TVOS_SDK_VERSION)-$(XTVOS_ARCH).pch
 
-run-tvos: build $(XTVOS_PCH)
+tvos.results run-tvos: build $(XTVOS_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XTVOS_PCH) $(XTVOS) $(XTVOS_GL) | sort > tvos.results
 
 sharpie-tvos: build $(XTVOS_PCH)
@@ -65,34 +65,34 @@ XMAC ?= $(TOP)/_mac-build/Library/Frameworks/Xamarin.Mac.framework/Versions/git/
 XMAC_ARCH = x86_64
 XMAC_PCH = macosx$(OSX_SDK_VERSION)-$(XMAC_ARCH).pch
 
-run-osx: build $(XMAC_PCH)
+osx.results run-osx: build $(XMAC_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XMAC_PCH) $(XMAC) | sort > osx.results
 
 sharpie-osx: build $(XMAC_PCH)
 	sharpie ./bin/Debug/xtro-plugin.dll extro $(XMAC_PCH) $(XMAC) | sort > osx.results
 
 $(XMAC_PCH):
-	sharpie sdk-db -s macosx$(OSX_SDK_VERSION) -a $(XMAC_ARCH) -x InputMethodKit
+	sharpie sdk-db -s macosx$(OSX_SDK_VERSION) -a $(XMAC_ARCH) -x InputMethodKit -x AVFoundation -x AVKit -x MediaPlayer
 
 preclassify: ios.results osx.results
 	@comm -12 ios.results osx.results > common.unclassified.tmp
 
-classify-ios: preclassify 
+classify-ios: preclassify ios.results
 	@sort ios.ignore ios.pending common.ignore common.pending > ios.skip.tmp
 	@comm -23 ios.results common.unclassified.tmp > ios.unclassified.tmp
 	@comm -23 ios.unclassified.tmp ios.skip.tmp > ios.unclassified
 
-classify-tvos: preclassify 
+classify-tvos: preclassify tvos.results
 	@sort tvos.ignore tvos.pending ios.ignore ios.pending common.ignore common.pending > tvos.skip.tmp
 	@comm -23 tvos.results common.unclassified.tmp > tvos.unclassified.tmp
 	@comm -23 tvos.unclassified.tmp tvos.skip.tmp > tvos.unclassified
 
-classify-watchos: preclassify 
+classify-watchos: preclassify watchos.results
 	@sort watchos.ignore watchos.pending common.ignore common.pending > watchos.skip.tmp
 	@comm -23 watchos.results common.unclassified.tmp > watchos.unclassified.tmp
 	@comm -23 watchos.unclassified.tmp watchos.skip.tmp > watchos.unclassified
 
-classify-osx: preclassify 
+classify-osx: preclassify osx.results
 	@sort osx.ignore osx.pending common.ignore common.pending > osx.skip.tmp
 	@comm -23 osx.results common.unclassified.tmp > osx.unclassified.tmp
 	@comm -23 osx.unclassified.tmp osx.skip.tmp > osx.unclassified

@@ -424,7 +424,9 @@ public class MemberInformation
 	public readonly MemberInfo mi;
 	public readonly Type type;
 	public readonly Type category_extension_type;
-	public readonly bool is_abstract, is_protected, is_internal, is_unified_internal, is_override, is_new, is_sealed, is_static, is_thread_static, is_autorelease, is_wrapper, is_forced;
+	public bool is_abstract;
+	public bool is_static;
+	public readonly bool is_protected, is_internal, is_unified_internal, is_override, is_new, is_sealed, is_thread_static, is_autorelease, is_wrapper, is_forced;
 	public readonly bool is_type_sealed, ignore_category_static_warnings, is_basewrapper_protocol_method;
 	public readonly Generator.ThreadCheck threadCheck;
 	public bool is_unsafe, is_virtual_method, is_export, is_category_extension, is_variadic, is_interface_impl, is_extension_method, is_appearance, is_model, is_ctor;
@@ -432,6 +434,8 @@ public class MemberInformation
 	public bool protocolize;
 	public string selector, wrap_method, is_forced_owns;
 	public bool is_bindAs => Generator.HasBindAsAttribute (mi);
+	public string name;
+	public bool is_protocol_extension_ctor;
 
 	public MethodInfo method { get { return (MethodInfo) mi; } }
 	public PropertyInfo property { get { return (PropertyInfo) mi; } }
@@ -588,7 +592,7 @@ public class MemberInformation
 
 		if (is_sealed) {
 			mods += "";
-		} else if (is_static || is_category_extension || is_extension_method) {
+		} else if (is_static || is_category_extension || is_extension_method || is_protocol_extension_ctor) {
 			mods += "static ";
 		} else if (is_abstract) {
 			mods += "abstract ";
@@ -3238,12 +3242,17 @@ public partial class Generator : IMemberGatherer {
 		var mi = minfo.method;
 		var category_class = minfo.category_extension_type;
 		StringBuilder sb = new StringBuilder ();
-		string name = minfo.is_ctor ? GetGeneratedTypeName (minfo.type) : is_async ? GetAsyncName (mi) : mi.Name;
+		string name = minfo.name;
+		if (name == null)
+			name = minfo.is_ctor ? GetGeneratedTypeName (minfo.type) : is_async ? GetAsyncName (mi) : mi.Name;
 
 		// Some codepaths already write preservation info
 		PrintAttributes (minfo.mi, preserve:!alreadyPreserved, advice:true);
 
-		if (!minfo.is_ctor && !is_async){
+		if (minfo.is_protocol_extension_ctor) {
+			sb.Append (FormatType (mi.DeclaringType, mi.DeclaringType, true));
+			sb.Append (' ');
+		} else if (!minfo.is_ctor && !is_async){
 			var prefix = "";
 			if (UnifiedAPI && !BindThirdPartyLibrary){
 				var hasReturnTypeProtocolize = Protocolize (AttributeManager.GetReturnTypeCustomAttributes (minfo.method));
@@ -3292,11 +3301,14 @@ public partial class Generator : IMemberGatherer {
 			sb.Append ("I" + mi.DeclaringType.Name);
 			sb.Append (" This");
 			comma = true;
-		} else if (category_class != null){
+		} else if (category_class != null) {
 			sb.Append ("this ");
-//			Console.WriteLine ("Gto {0} and {1}", mi.DeclaringType, category_class);
+			//			Console.WriteLine ("Gto {0} and {1}", mi.DeclaringType, category_class);
 			sb.Append (FormatType (mi.DeclaringType, category_class));
 			sb.Append (" This");
+			comma = true;
+		} else if (minfo.is_protocol_extension_ctor) {
+			sb.Append ("Type type");
 			comma = true;
 		}
 		MakeSignatureFromParameterInfo (comma, sb, mi, minfo.type, parameters);
@@ -3403,10 +3415,10 @@ public partial class Generator : IMemberGatherer {
 				cast_a = "(" + FormatType (mi.DeclaringType, mi.ReturnType) + ") ";
 				cast_b = "";
 			}
-		} if (mi.ReturnType.IsEnum){
+		} if (mi.ReturnType.IsEnum) {
 			cast_a = "(" + FormatType (mi.DeclaringType, mi.ReturnType) + ") ";
 			cast_b = "";
-		} else if (LookupMarshal (mai.Type, out mt)){
+		} else if (LookupMarshal (mai.Type, out mt)) {
 			if (mt.HasCustomCreate) {
 				cast_a = mt.CreateFromRet;
 				cast_b = mt.ClosingCreate;
@@ -3414,6 +3426,9 @@ public partial class Generator : IMemberGatherer {
 				cast_a = string.Empty;
 				cast_b = string.Empty;
 			}
+		} else if (minfo.is_protocol_extension_ctor) {
+			cast_a = "Runtime.GetINativeObject<" + FormatType (mi.DeclaringType, mi.DeclaringType, true) + "> (";
+			cast_b = ", true)";
 		} else if (IsWrappedType (mi.ReturnType)){
 			// protocol support means we can return interfaces and, as far as .NET knows, they might not be NSObject
 			if (IsProtocolInterface (mi.ReturnType)) {
@@ -3514,8 +3529,12 @@ public partial class Generator : IMemberGatherer {
 			selector_field = SelectorField (selector);
 		}
 
+		if (minfo.is_protocol_extension_ctor) {
+			target_name = string.Empty;
+			handle = "global::" + ns.Messaging + ".IntPtr_objc_msgSend (Class.GetHandle (type), Selector.GetHandle (\"alloc\"))";
+		}
 
-		if (stret){
+		if (stret) {
 			string ret_val = aligned ? "aligned_ret" : "out ret";
 			if (minfo.is_static)
 				print ("{0} ({5}, class_ptr, {3}{4});", sig, "/*unusued*/", "/*unusued*/", selector_field, args, ret_val);
@@ -3525,7 +3544,7 @@ public partial class Generator : IMemberGatherer {
 			if (aligned)
 				print ("aligned_assigned = true;");
 		} else {
-			bool returns = mi.ReturnType != TypeManager.System_Void && mi.Name != "Constructor";
+			bool returns = mi.ReturnType != TypeManager.System_Void && (mi.Name != "Constructor" || minfo.is_protocol_extension_ctor);
 			string cast_a = "", cast_b = "";
 			StringBuilder postproc = new StringBuilder ();
 
@@ -3883,10 +3902,15 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	void GenerateArgumentChecks (MethodInfo mi, bool null_allowed_override, PropertyInfo propInfo = null)
+	void GenerateArgumentChecks (MethodInfo mi, bool null_allowed_override, PropertyInfo propInfo = null, MemberInformation minfo = null)
 	{
 		if (null_allowed_override)
 			return;
+
+		if (minfo.is_protocol_extension_ctor) {
+			print ("if (type == null)");
+			print ("\tthrow new ArgumentNullException (nameof (type));");
+		}
 
 		foreach (var pi in mi.GetParameters ()) {
 			var needs_null_check = ParameterNeedsNullCheck (pi, mi, propInfo);
@@ -3983,7 +4007,7 @@ public partial class Generator : IMemberGatherer {
 
 		Inject<PrologueSnippetAttribute> (mi);
 
-		GenerateArgumentChecks (mi, null_allowed_override, propInfo);
+		GenerateArgumentChecks (mi, null_allowed_override, propInfo, minfo);
 
 		// Collect all strings that can be fast-marshalled
 		List<string> stringParameters = CollectFastStringMarshalParameters (mi);
@@ -4054,6 +4078,7 @@ public partial class Generator : IMemberGatherer {
 
 		bool use_temp_return  =
 			minfo.is_return_release ||
+			minfo.is_protocol_extension_ctor ||
 			(mi.Name != "Constructor" && (CheckNeedStret (mi) || disposes.Length > 0 || postget != null) && mi.ReturnType != TypeManager.System_Void) ||
 			(AttributeManager.HasAttribute<FactoryAttribute> (mi)) ||
 			((body_options & BodyOption.NeedsTempReturn) == BodyOption.NeedsTempReturn) ||
@@ -4079,7 +4104,9 @@ public partial class Generator : IMemberGatherer {
 			} else if (minfo.is_bindAs) {
 				var bindAsAttrib = GetBindAsAttribute (minfo.mi);
 				print ("{0} ret;", FormatType (bindAsAttrib.Type.DeclaringType, GetCorrectGenericType (bindAsAttrib.Type)));
-			} else
+			} else if (minfo.is_protocol_extension_ctor) {
+				print ("{0} ret;", FormatType (minfo.type, minfo.type, true));
+			} else 
 				print ("{0} ret;", FormatType (mi.DeclaringType, GetCorrectGenericType (mi.ReturnType))); //  = new {0} ();"
 		}
 		
@@ -4100,6 +4127,8 @@ public partial class Generator : IMemberGatherer {
 				} else {
 					GenerateInvoke (false, mi, minfo, sel, argsArray, needs_temp, category_type);
 				}
+			} else if (minfo.is_protocol_extension_ctor) {
+				GenerateInvoke (false, mi, minfo, sel, argsArray, needs_temp, category_type);
 			} else {
 				if (BindThirdPartyLibrary && mi.Name == "Constructor"){
 					print (init_binding_type);
@@ -4955,7 +4984,7 @@ public partial class Generator : IMemberGatherer {
 
 
 		if (!is_abstract){
-			if (minfo.is_ctor) {
+			if (minfo.is_ctor && !minfo.is_protocol_extension_ctor) {
 				indent++;
 				print (": {0}", minfo.wrap_method == null ? "base (NSObjectFlag.Empty)" : minfo.wrap_method);
 				indent--;
@@ -5184,6 +5213,7 @@ public partial class Generator : IMemberGatherer {
 		var requiredInstanceProperties = allProtocolProperties.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
 		var optionalInstanceProperties = allProtocolProperties.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
 		var requiredInstanceAsyncMethods = requiredInstanceMethods.Where (m => AttributeManager.HasAttribute<AsyncAttribute> (m)).ToList ();
+		var allConstructors = allProtocolMethods.Where ((v) => v.Name == "Constructor");
 
 		PrintAttributes (type, platform:true, preserve:true, advice:true);
 		print ("[Protocol (Name = \"{1}\", WrapperType = typeof ({0}Wrapper){2}{3})]", 
@@ -5345,7 +5375,7 @@ public partial class Generator : IMemberGatherer {
 		// avoid (for unified) all the metadata for empty static classes, we can introduce them later when required
 		bool include_extensions = false;
 		if (UnifiedAPI) {
-			include_extensions = optionalInstanceMethods.Any () || optionalInstanceProperties.Any () || requiredInstanceAsyncMethods.Any ();
+			include_extensions = optionalInstanceMethods.Any () || optionalInstanceProperties.Any () || requiredInstanceAsyncMethods.Any () || allConstructors.Any ();
 		} else {
 			include_extensions = true;
 		}
@@ -5354,6 +5384,16 @@ public partial class Generator : IMemberGatherer {
 			PrintAttributes (type, preserve:true, advice:true);
 			print ("{1} static partial class {0}_Extensions {{", TypeName, class_visibility);
 			indent++;
+
+			foreach (var ctor in allConstructors) {
+				var minfo = new MemberInformation (this, ctor, type, null);
+				minfo.name = "CreateInstance";
+				minfo.is_abstract = false;
+				minfo.is_protocol_extension_ctor = true;
+				//minfo.is_static = true;
+				GenerateMethod (minfo);
+			}
+
 			foreach (var mi in optionalInstanceMethods)
 				GenerateMethod (type, mi, false, null, false, false, true);
 

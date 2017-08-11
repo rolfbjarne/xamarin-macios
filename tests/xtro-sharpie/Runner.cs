@@ -18,14 +18,15 @@ namespace Extrospection {
 		public void Execute (string pchFile, IEnumerable<string> assemblyNames)
 		{
 			var managed_reader = new AssemblyReader () {
-				new DesignatedInitializerCheck (),
-				new DllImportCheck (),
-				new EnumCheck (),
-				new FieldCheck (), // very noisy now, some stuff are still manually bound / harder to detect
-				new ObjCInterfaceCheck (),
-				new ObjCProtocolCheck (),
-				new SelectorCheck (),
-//				new ListNative (), // for debug
+				//new DesignatedInitializerCheck (),
+				//new DllImportCheck (),
+				//new EnumCheck (),
+				//new FieldCheck (), // very noisy now, some stuff are still manually bound / harder to detect
+				//new ObjCInterfaceCheck (),
+				//new ObjCProtocolCheck (),
+				//new SelectorCheck (),
+				new SimdCheck (),
+				//new ListNative (), // for debug
 			};
 			foreach (var assemblyName in assemblyNames) {
 				var name = Path.GetFileNameWithoutExtension (assemblyName);
@@ -193,18 +194,19 @@ namespace Extrospection {
 		
 		public override void VisitDecl (Decl decl)
 		{
-			if (decl is FunctionDecl)
+			if (decl is FunctionDecl) {
 				;
-			else if (decl is VarDecl)
+			} else if (decl is VarDecl) {
 				;
-			else if (decl is ObjCProtocolDecl)
+			} else if (decl is ObjCProtocolDecl) {
 				;
-			else if (decl is ObjCInterfaceDecl)
+			} else if (decl is ObjCInterfaceDecl) {
 				;
-			else if (decl is EnumDecl)
+			} else if (decl is EnumDecl) {
 				;
-			else
+			} else {
 				Console.WriteLine ("{0}\t{1}", decl, decl.GetType ().Name);
+			}
 		}
 	}
 }

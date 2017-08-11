@@ -1497,6 +1497,7 @@ SHARED_CORE_SOURCES = \
 	ObjCRuntime/Registrar.core.cs \
 	ObjCRuntime/Selector.cs \
 	Simd/MatrixFloat4x4.cs \
+	Simd/MatrixFloat3x3.cs \
 
 SHARED_SOURCES = \
 	../runtime/Delegates.generated.cs \

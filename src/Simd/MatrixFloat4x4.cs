@@ -40,7 +40,12 @@ namespace Simd
 		public VectorFloat4 Column2;
 		public VectorFloat4 Column3;
 
-		public readonly static MatrixFloat4x4 Identity = new MatrixFloat4x4 (VectorFloat4.UnitX, VectorFloat4.UnitY, VectorFloat4.UnitZ, VectorFloat4.UnitW);
+		public readonly static MatrixFloat4x4 Identity = new MatrixFloat4x4 {
+			M11 = 1f,
+			M22 = 1f,
+			M33 = 1f,
+			M44 = 1f,
+		};
 
 		public MatrixFloat4x4 (VectorFloat4 column0, VectorFloat4 column1, VectorFloat4 column2, VectorFloat4 column3)
 		{
@@ -51,26 +56,42 @@ namespace Simd
 		}
 
 		public MatrixFloat4x4 (
-			float m00, float m01, float m02, float m03,
-			float m10, float m11, float m12, float m13,
-			float m20, float m21, float m22, float m23,
-			float m30, float m31, float m32, float m33)
+			float m11, float m12, float m13, float m14,
+			float m21, float m22, float m23, float m24,
+			float m31, float m32, float m33, float m34,
+			float m41, float m42, float m43, float m44)
 		{
-			Column0 = new VectorFloat4 (m00, m10, m20, m30);
-			Column1 = new VectorFloat4 (m01, m11, m21, m31);
-			Column2 = new VectorFloat4 (m02, m12, m22, m32);
-			Column3 = new VectorFloat4 (m03, m13, m23, m33);
+			Column0.X = m11;
+			Column0.Y = m21;
+			Column0.Z = m31;
+			Column0.W = m41;
+			Column1.X = m12;
+			Column1.Y = m22;
+			Column1.Z = m32;
+			Column1.W = m42;
+			Column2.X = m13;
+			Column2.Y = m23;
+			Column2.Z = m33;
+			Column2.W = m43;
+			Column3.X = m14;
+			Column3.Y = m24;
+			Column3.Z = m34;
+			Column3.W = m44;
 		}
 
 		public float Determinant {
 			get {
-				return
-					Row0.X * Row1.Y * Row2.Z * Row3.W - Row0.X * Row1.Y * Row2.W * Row3.Z + Row0.X * Row1.Z * Row2.W * Row3.Y - Row0.X * Row1.Z * Row2.Y * Row3.W
-				  + Row0.X * Row1.W * Row2.Y * Row3.Z - Row0.X * Row1.W * Row2.Z * Row3.Y - Row0.Y * Row1.Z * Row2.W * Row3.X + Row0.Y * Row1.Z * Row2.X * Row3.W
-				  - Row0.Y * Row1.W * Row2.X * Row3.Z + Row0.Y * Row1.W * Row2.Z * Row3.X - Row0.Y * Row1.X * Row2.Z * Row3.W + Row0.Y * Row1.X * Row2.W * Row3.Z
-				  + Row0.Z * Row1.W * Row2.X * Row3.Y - Row0.Z * Row1.W * Row2.Y * Row3.X + Row0.Z * Row1.X * Row2.Y * Row3.W - Row0.Z * Row1.X * Row2.W * Row3.Y
-				  + Row0.Z * Row1.Y * Row2.W * Row3.X - Row0.Z * Row1.Y * Row2.X * Row3.W - Row0.W * Row1.X * Row2.Y * Row3.Z + Row0.W * Row1.X * Row2.Z * Row3.Y
-				  - Row0.W * Row1.Y * Row2.Z * Row3.X + Row0.W * Row1.Y * Row2.X * Row3.Z - Row0.W * Row1.Z * Row2.X * Row3.Y + Row0.W * Row1.Z * Row2.Y * Row3.X;
+				float a = Column2.Z * Column3.W - Column3.Z * Column2.W;
+				float b = Column1.Z * Column3.W - Column3.Z * Column1.W;
+				float c = Column1.Z * Column2.W - Column2.Z * Column1.W;
+				float d = Column0.Z * Column3.W - Column3.Z * Column0.W;
+				float e = Column0.Z * Column2.W - Column2.Z * Column0.W;
+				float f = Column0.Z * Column1.W - Column1.Z * Column0.W;
+
+				return Column0.X * (Column1.Y * a - Column2.Y * b + Column3.Y * c) -
+					   Column1.X * (Column0.Y * a - Column2.Y * d + Column3.Y * e) +
+					   Column2.X * (Column0.Y * b - Column1.Y * d + Column3.Y * f) -
+					   Column3.X * (Column0.Y * c - Column1.Y * e + Column2.Y * f);
 			}
 		}
 
@@ -136,9 +157,49 @@ namespace Simd
 			this = Invert (this);
 		}
 
+		// FIXME: check which OS versions this was introduced in.
+		// Introduced in Yosemite (not present in Mavericks)
+		[DllImport ("/usr/lib/system/libsystem_m.dylib", EntryPoint = "__invert_f4")]
+		public static extern MatrixFloat4x4 Invert (MatrixFloat4x4 matrix);
+
+		public void Invert (ref MatrixFloat4x4 result)
+		{
+			result = Invert (this);
+		}
+
 		public void Transpose ()
 		{
 			this = Transpose (this);
+		}
+
+		public static MatrixFloat4x4 Transpose (MatrixFloat4x4 mat)
+		{
+			MatrixFloat4x4 result;
+			Transpose (ref mat, out result);
+			return result;
+		}
+
+		public static void Transpose (ref MatrixFloat4x4 mat, out MatrixFloat4x4 result)
+		{
+			result.Column0.X = mat.Column0.X;
+			result.Column0.Y = mat.Column1.X;
+			result.Column0.Z = mat.Column2.X;
+			result.Column0.W = mat.Column3.X;
+
+			result.Column1.X = mat.Column0.Y;
+			result.Column1.Y = mat.Column1.Y;
+			result.Column1.Z = mat.Column2.Y;
+			result.Column1.W = mat.Column3.Y;
+
+			result.Column2.X = mat.Column0.Z;
+			result.Column2.Y = mat.Column1.Z;
+			result.Column2.Z = mat.Column2.Z;
+			result.Column2.W = mat.Column3.Z;
+
+			result.Column3.X = mat.Column0.W;
+			result.Column3.Y = mat.Column1.W;
+			result.Column3.Z = mat.Column2.W;
+			result.Column3.W = mat.Column3.W;
 		}
 
 		public static MatrixFloat4x4 Multiply (MatrixFloat4x4 left, MatrixFloat4x4 right)
@@ -150,45 +211,30 @@ namespace Simd
 
 		public static void Multiply (ref MatrixFloat4x4 left, ref MatrixFloat4x4 right, out MatrixFloat4x4 result)
 		{
-			result = new MatrixFloat4x4 (
-				left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31 + left.M14 * right.M41,
-				left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32 + left.M14 * right.M42,
-				left.M11 * right.M13 + left.M12 * right.M23 + left.M13 * right.M33 + left.M14 * right.M43,
-				left.M11 * right.M14 + left.M12 * right.M24 + left.M13 * right.M34 + left.M14 * right.M44,
-				left.M21 * right.M11 + left.M22 * right.M21 + left.M23 * right.M31 + left.M24 * right.M41,
-				left.M21 * right.M12 + left.M22 * right.M22 + left.M23 * right.M32 + left.M24 * right.M42,
-				left.M21 * right.M13 + left.M22 * right.M23 + left.M23 * right.M33 + left.M24 * right.M43,
-				left.M21 * right.M14 + left.M22 * right.M24 + left.M23 * right.M34 + left.M24 * right.M44,
-				left.M31 * right.M11 + left.M32 * right.M21 + left.M33 * right.M31 + left.M34 * right.M41,
-				left.M31 * right.M12 + left.M32 * right.M22 + left.M33 * right.M32 + left.M34 * right.M42,
-				left.M31 * right.M13 + left.M32 * right.M23 + left.M33 * right.M33 + left.M34 * right.M43,
-				left.M31 * right.M14 + left.M32 * right.M24 + left.M33 * right.M34 + left.M34 * right.M44,
-				left.M41 * right.M11 + left.M42 * right.M21 + left.M43 * right.M31 + left.M44 * right.M41,
-				left.M41 * right.M12 + left.M42 * right.M22 + left.M43 * right.M32 + left.M44 * right.M42,
-				left.M41 * right.M13 + left.M42 * right.M23 + left.M43 * right.M33 + left.M44 * right.M43,
-				left.M41 * right.M14 + left.M42 * right.M24 + left.M43 * right.M34 + left.M44 * right.M44);
-		}
+			result.Column0.X = left.Column0.X * right.Column0.X + left.Column1.X * right.Column0.Y + left.Column2.X * right.Column0.Z + left.Column3.X * right.Column0.W;
+			result.Column1.X = left.Column0.X * right.Column1.X + left.Column1.X * right.Column1.Y + left.Column2.X * right.Column1.Z + left.Column3.X * right.Column1.W;
+			result.Column2.X = left.Column0.X * right.Column2.X + left.Column1.X * right.Column2.Y + left.Column2.X * right.Column2.Z + left.Column3.X * right.Column2.W;
+			result.Column3.X = left.Column0.X * right.Column3.X + left.Column1.X * right.Column3.Y + left.Column2.X * right.Column3.Z + left.Column3.X * right.Column3.W;
 
-		[DllImport ("/usr/lib/system/libsystem_m.dylib", EntryPoint = "__invert_f4")]
-		static extern MatrixFloat4x4 Invert (MatrixFloat4x4 matrix);
+			result.Column0.Y = left.Column0.Y * right.Column0.X + left.Column1.Y * right.Column0.Y + left.Column2.Y * right.Column0.Z + left.Column3.Y * right.Column0.W;
+			result.Column1.Y = left.Column0.Y * right.Column1.X + left.Column1.Y * right.Column1.Y + left.Column2.Y * right.Column1.Z + left.Column3.Y * right.Column1.W;
+			result.Column2.Y = left.Column0.Y * right.Column2.X + left.Column1.Y * right.Column2.Y + left.Column2.Y * right.Column2.Z + left.Column3.Y * right.Column2.W;
+			result.Column3.Y = left.Column0.Y * right.Column3.X + left.Column1.Y * right.Column3.Y + left.Column2.Y * right.Column3.Z + left.Column3.Y * right.Column3.W;
 
-		public static MatrixFloat4x4 Transpose (MatrixFloat4x4 mat)
-		{
-			return new MatrixFloat4x4 (mat.Row0, mat.Row1, mat.Row2, mat.Row3);
-		}
+			result.Column0.Z = left.Column0.Z * right.Column0.X + left.Column1.Z * right.Column0.Y + left.Column2.Z * right.Column0.Z + left.Column3.Z * right.Column0.W;
+			result.Column1.Z = left.Column0.Z * right.Column1.X + left.Column1.Z * right.Column1.Y + left.Column2.Z * right.Column1.Z + left.Column3.Z * right.Column1.W;
+			result.Column2.Z = left.Column0.Z * right.Column2.X + left.Column1.Z * right.Column2.Y + left.Column2.Z * right.Column2.Z + left.Column3.Z * right.Column2.W;
+			result.Column3.Z = left.Column0.Z * right.Column3.X + left.Column1.Z * right.Column3.Y + left.Column2.Z * right.Column3.Z + left.Column3.Z * right.Column3.W;
 
-		public static void Transpose (ref MatrixFloat4x4 mat, out MatrixFloat4x4 result)
-		{
-			result = new MatrixFloat4x4 ();
-			result.Row0 = mat.Column0;
-			result.Row1 = mat.Column1;
-			result.Row2 = mat.Column2;
-			result.Row3 = mat.Column3;
+			result.Column0.W = left.Column0.W * right.Column0.X + left.Column1.W * right.Column0.Y + left.Column2.W * right.Column0.Z + left.Column3.W * right.Column0.W;
+			result.Column1.W = left.Column0.W * right.Column1.X + left.Column1.W * right.Column1.Y + left.Column2.W * right.Column1.Z + left.Column3.W * right.Column1.W;
+			result.Column2.W = left.Column0.W * right.Column2.X + left.Column1.W * right.Column2.Y + left.Column2.W * right.Column2.Z + left.Column3.W * right.Column2.W;
+			result.Column3.W = left.Column0.W * right.Column3.X + left.Column1.W * right.Column3.Y + left.Column2.W * right.Column3.Z + left.Column3.W * right.Column3.W;
 		}
 
 		public static MatrixFloat4x4 operator * (MatrixFloat4x4 left, MatrixFloat4x4 right)
 		{
-			return MatrixFloat4x4.Multiply (left, right);
+			return Multiply (left, right);
 		}
 
 		public static bool operator == (MatrixFloat4x4 left, MatrixFloat4x4 right)

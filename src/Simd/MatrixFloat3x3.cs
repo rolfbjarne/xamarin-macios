@@ -59,13 +59,19 @@ namespace Simd
 		}
 
 		public MatrixFloat3x3 (
-			float m00, float m01, float m02,
-			float m10, float m11, float m12,
-			float m20, float m21, float m22)
+			float m11, float m12, float m13,
+			float m21, float m22, float m23,
+			float m31, float m32, float m33)
 		{
-			Column0 = new VectorFloat3 (m00, m10, m20);
-			Column1 = new VectorFloat3 (m01, m11, m21);
-			Column2 = new VectorFloat3 (m02, m12, m22);
+			Column0.X = m11;
+			Column0.Y = m21;
+			Column0.Z = m31;
+			Column1.X = m12;
+			Column1.Y = m22;
+			Column1.Z = m32;
+			Column2.X = m13;
+			Column2.Y = m23;
+			Column2.Z = m33;
 			dummy0 = 0;
 			dummy1 = 0;
 			dummy2 = 0;
@@ -74,9 +80,9 @@ namespace Simd
 		public float Determinant {
 			get {
 				return 
-					M11 * (M22 * M33 - M23 * M32) - 
-					M12 * (M21 * M33 - M23 * M31) + 
-					M13 * (M21 * M32 - M22 * M31);
+					Column0.X * (Column1.Y * Column2.Z - Column2.Y * Column1.Z) - 
+					Column1.X * (Column0.X * Column2.Z - Column2.Y * Column0.Z) + 
+					Column2.X * (Column0.X * Column1.Z - Column1.Y * Column0.Z);
 			}
 		}
 
@@ -122,34 +128,13 @@ namespace Simd
 			this = Invert (this);
 		}
 
+		[DllImport ("/usr/lib/system/libsystem_m.dylib", EntryPoint = "__invert_f3")]
+		public static extern MatrixFloat3x3 Invert (MatrixFloat3x3 matrix);
+
 		public void Transpose ()
 		{
 			this = Transpose (this);
 		}
-
-		public static MatrixFloat3x3 Multiply (MatrixFloat3x3 left, MatrixFloat3x3 right)
-		{
-			MatrixFloat3x3 result;
-			Multiply (ref left, ref right, out result);
-			return result;
-		}
-
-		public static void Multiply (ref MatrixFloat3x3 left, ref MatrixFloat3x3 right, out MatrixFloat3x3 result)
-		{
-			result = new MatrixFloat3x3 (
-				left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31,
-				left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32,
-				left.M11 * right.M13 + left.M12 * right.M23 + left.M13 * right.M33,
-				left.M21 * right.M11 + left.M22 * right.M21 + left.M23 * right.M31,
-				left.M21 * right.M12 + left.M22 * right.M22 + left.M23 * right.M32,
-				left.M21 * right.M13 + left.M22 * right.M23 + left.M23 * right.M33,
-				left.M31 * right.M11 + left.M32 * right.M21 + left.M33 * right.M31,
-				left.M31 * right.M12 + left.M32 * right.M22 + left.M33 * right.M32,
-				left.M31 * right.M13 + left.M32 * right.M23 + left.M33 * right.M33);
-		}
-
-		[DllImport ("/usr/lib/system/libsystem_m.dylib", EntryPoint = "__invert_f3")]
-		static extern MatrixFloat3x3 Invert (MatrixFloat3x3 matrix);
 
 		public static MatrixFloat3x3 Transpose (MatrixFloat3x3 mat)
 		{
@@ -164,9 +149,34 @@ namespace Simd
 			result.Row2 = mat.Column2;
 		}
 
+		public static MatrixFloat3x3 Multiply (MatrixFloat3x3 left, MatrixFloat3x3 right)
+		{
+			MatrixFloat3x3 result;
+			Multiply (ref left, ref right, out result);
+			return result;
+		}
+
+		public static void Multiply (ref MatrixFloat3x3 left, ref MatrixFloat3x3 right, out MatrixFloat3x3 result)
+		{
+			result.Column0.X = left.Column0.X * right.Column0.X + left.Column1.X * right.Column0.Y + left.Column2.X * right.Column0.Z;
+			result.Column1.X = left.Column0.X * right.Column1.X + left.Column1.X * right.Column1.Y + left.Column2.X * right.Column1.Z;
+			result.Column2.X = left.Column0.X * right.Column2.X + left.Column1.X * right.Column2.Y + left.Column2.X * right.Column2.Z;
+			result.dummy0 = 0;
+
+			result.Column0.Y = left.Column0.Y * right.Column0.X + left.Column1.Y * right.Column0.Y + left.Column2.Y * right.Column0.Z;
+			result.Column1.Y = left.Column0.Y * right.Column1.X + left.Column1.Y * right.Column1.Y + left.Column2.Y * right.Column1.Z;
+			result.Column2.Y = left.Column0.Y * right.Column2.X + left.Column1.Y * right.Column2.Y + left.Column2.Y * right.Column2.Z;
+			result.dummy1 = 0;
+
+			result.Column0.Z = left.Column0.Z * right.Column0.X + left.Column1.Z * right.Column0.Y + left.Column2.Z * right.Column0.Z;
+			result.Column1.Z = left.Column0.Z * right.Column1.X + left.Column1.Z * right.Column1.Y + left.Column2.Z * right.Column1.Z;
+			result.Column2.Z = left.Column0.Z * right.Column2.X + left.Column1.Z * right.Column2.Y + left.Column2.Z * right.Column2.Z;
+			result.dummy2 = 0;
+		}
+
 		public static MatrixFloat3x3 operator * (MatrixFloat3x3 left, MatrixFloat3x3 right)
 		{
-			return MatrixFloat3x3.Multiply (left, right);
+			return Multiply (left, right);
 		}
 
 		public static bool operator == (MatrixFloat3x3 left, MatrixFloat3x3 right)
@@ -181,8 +191,8 @@ namespace Simd
 
 		public static explicit operator global::OpenTK.Matrix3 (MatrixFloat3x3 value)
 		{
-			return new global::OpenTK.Matrix3 (value.M11, value.M21, value.M31,
-											   value.M21, value.M22, value.M32,
+			return new global::OpenTK.Matrix3 (value.M11, value.M12, value.M13,
+											   value.M21, value.M22, value.M23,
 											   value.M31, value.M32, value.M33);
 		}
 

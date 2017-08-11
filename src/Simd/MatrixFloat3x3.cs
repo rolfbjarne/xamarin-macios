@@ -81,8 +81,8 @@ namespace Simd
 			get {
 				return 
 					Column0.X * (Column1.Y * Column2.Z - Column2.Y * Column1.Z) - 
-					Column1.X * (Column0.X * Column2.Z - Column2.Y * Column0.Z) + 
-					Column2.X * (Column0.X * Column1.Z - Column1.Y * Column0.Z);
+					Column1.X * (Column0.Y * Column2.Z - Column2.Y * Column0.Z) + 
+					Column2.X * (Column0.Y * Column1.Z - Column1.Y * Column0.Z);
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace Simd
 
 		public static explicit operator MatrixFloat3x3 (global::OpenTK.Matrix3 value)
 		{
-			return new MatrixFloat3x3 (value.R0C0, value.R0C1, value.R0C1,
+			return new MatrixFloat3x3 (value.R0C0, value.R0C1, value.R0C2,
 									   value.R1C0, value.R1C1, value.R1C2,
 									   value.R2C0, value.R2C1, value.R2C2);
 		}

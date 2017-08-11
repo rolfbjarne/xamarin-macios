@@ -129,7 +129,7 @@ public static class Asserts
 		AreEqual (expected.R0C2, actual.M13, message + " (M13)");
 		AreEqual (expected.R1C0, actual.M21, message + " (M21)");
 		AreEqual (expected.R1C1, actual.M22, message + " (M22)");
-		AreEqual (expected.R1C2, actual.M21, message + " (M21)");
+		AreEqual (expected.R1C2, actual.M23, message + " (M23)");
 		AreEqual (expected.R2C0, actual.M31, message + " (M31)");
 		AreEqual (expected.R2C1, actual.M32, message + " (M32)");
 		AreEqual (expected.R2C2, actual.M33, message + " (M33)");
@@ -142,7 +142,7 @@ public static class Asserts
 		AreEqual (expected.M13, actual.R0C2, message + " (M13)");
 		AreEqual (expected.M21, actual.R1C0, message + " (M21)");
 		AreEqual (expected.M22, actual.R1C1, message + " (M22)");
-		AreEqual (expected.M21, actual.R1C2, message + " (M21)");
+		AreEqual (expected.M23, actual.R1C2, message + " (M23)");
 		AreEqual (expected.M31, actual.R2C0, message + " (M31)");
 		AreEqual (expected.M32, actual.R2C1, message + " (M32)");
 		AreEqual (expected.M33, actual.R2C2, message + " (M33)");

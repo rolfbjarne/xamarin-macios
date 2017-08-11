@@ -239,7 +239,7 @@ namespace MonoTouchFixtures.Simd
 			var inputSimdL = (MatrixFloat3x3) inputL;
 			var inputSimdR = (MatrixFloat3x3) inputR;
 			Matrix3 expected;
-			Matrix3.Multiply (ref inputL, ref inputR, out expected);
+			Matrix3.Multiply (ref inputR, ref inputL, out expected); // OpenTK.Matrix3 got left/right mixed up...
 			var actual = MatrixFloat3x3.Multiply (inputSimdL, inputSimdR);
 
 			Asserts.AreEqual (expected, actual, "multiply");
@@ -255,7 +255,7 @@ namespace MonoTouchFixtures.Simd
 			Matrix3 expected;
 			MatrixFloat3x3 actual;
 
-			Matrix3.Multiply (ref inputL, ref inputR, out expected);
+			Matrix3.Multiply (ref inputR, ref inputL, out expected); // OpenTK.Matrix3 got left/right mixed up...
 			MatrixFloat3x3.Multiply (ref inputSimdL, ref inputSimdR, out actual);
 
 			Asserts.AreEqual (expected, actual, "multiply");
@@ -270,7 +270,7 @@ namespace MonoTouchFixtures.Simd
 			var inputSimdL = (MatrixFloat3x3) inputL;
 			var inputSimdR = (MatrixFloat3x3) inputR;
 			Matrix3 expected;
-			Matrix3.Multiply (ref inputL, ref inputR, out expected);
+			Matrix3.Multiply (ref inputR, ref inputL, out expected); // OpenTK.Matrix3 got left/right mixed up...
 			var actual = inputSimdL * inputSimdR;
 
 			Asserts.AreEqual (expected, actual, "multiply");
@@ -351,10 +351,9 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void ToStringTest ()
 		{
-			var expected = GetTestMatrix ();
-			var actual = (MatrixFloat3x3) expected;
+			var actual = new MatrixFloat3x3 (1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-			Assert.AreEqual (expected.ToString (), actual.ToString (), "tostring");
+			Assert.AreEqual ("(1, 2, 3)\n(4, 5, 6)\n(7, 8, 9)", actual.ToString (), "tostring");
 		}
 
 		// GetHashCode doesn't have to be identical, so no need to test
@@ -398,6 +397,9 @@ namespace MonoTouchFixtures.Simd
 		// these have been tested to not produce accumulative computational differences.
 		// 
 		static Matrix3 [] test_matrices = new [] {
+			new Matrix3 (3, 5, 7, 11, 13, 17, 19, 23, 29),
+			new Matrix3 (5, 7, 11, 13, 17, 19, 23, 29, 31),
+			new Matrix3 (7, 11, 13, 17, 19, 23, 29, 31, 37),
 			new Matrix3 (0.1532144f, 0.5451511f, 0.2004739f, 0.8351463f, 0.9884372f, 0.1313103f, 0.3327205f, 0.01164342f, 0.6563147f),
 			new Matrix3 (0.7717745f, 0.559364f, 0.00918373f, 0.6579159f, 0.123461f, 0.9993145f, 0.5487496f, 0.2823398f, 0.9710717f),
 			new Matrix3 (0.2023053f, 0.4701468f, 0.6618567f, 0.7685714f, 0.8561344f, 0.009231919f, 0.6150167f, 0.7542298f, 0.550727f),
@@ -433,7 +435,7 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void Determinant ()
 		{
-			var iterations = 100000 * Multiplier;
+			var iterations = 1000000 * Multiplier;
 
 			var input = GetTestMatrix ();
 			var watch = Stopwatch.StartNew ();
@@ -456,7 +458,7 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void Ctor_Elements ()
 		{
-			var iterations = 100000 * Multiplier;
+			var iterations = 1000000 * Multiplier;
 
 			Matrix3 input;
 			var watch = Stopwatch.StartNew ();
@@ -477,7 +479,7 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void Multiply_ByRef ()
 		{
-			var iterations = 100000 * Multiplier;
+			var iterations = 1000000 * Multiplier;
 
 			var input_a = GetTestMatrix ();
 			var input_b = GetTestMatrix ();

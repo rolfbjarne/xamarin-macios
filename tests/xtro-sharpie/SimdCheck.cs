@@ -11,18 +11,24 @@ namespace Extrospection
 
 	class SimdCheck : BaseVisitor
 	{
-		static Dictionary<string, MethodDefinition> methods = new Dictionary<string, MethodDefinition> ();
-
-		static MethodDefinition GetMethod (ObjCMethodDecl decl)
+		Dictionary<string, MethodDefinition> methods = new Dictionary<string, MethodDefinition> ();
+		MethodDefinition GetMethod (ObjCMethodDecl decl)
 		{
 			MethodDefinition md;
 			methods.TryGetValue (decl.GetName (), out md);
 			return md;
 		}
 
+		public override void End ()
+		{
+			base.End ();
+
+			foreach (var t in simd_types.Where ((v) => v.Value).OrderBy ((v) => v.Key))
+				Console.WriteLine ("SIMD type: {0}", t.Key);
+		}
+
 		public override void VisitManagedMethod (MethodDefinition method)
 		{
-			
 			var type = method.DeclaringType;
 			if (!type.IsNested && type.IsNotPublic)
 				return;
@@ -39,8 +45,6 @@ namespace Extrospection
 			if (!MightHaveSimdType (method))
 				return;
 			
-			//Console.WriteLine ($"{method}");
-
 			var key = method.GetName ();
 			if (key == null) {
 				Console.WriteLine ("-- simd skipping -- {0}", method);
@@ -66,16 +70,27 @@ namespace Extrospection
 
 		bool MightBeSimdType (TypeReference td)
 		{
-			return td.Name == "Matrix4" || td.Name == "Matrix3";
+			switch (td.Name) {
+			case "MDLAxisAlignedBoundingBox":
+			case "MDLVoxelIndexExtent":
+			case "Matrix3":
+			case "Matrix4":
+			case "GKBox":
+			case "GKQuad":
+			case "GKTriangle":
+				return true;
+			default:
+				return false;
+			}
 		}
 
-		bool ContainsSimdTypes (ObjCMethodDecl decl)
+		bool ContainsSimdTypes (ObjCMethodDecl decl, ref string simd_type)
 		{
-			if (IsSimdType (decl.ReturnQualType))
+			if (IsSimdType (decl.ReturnQualType, ref simd_type))
 				return true;
 
 			foreach (var param in decl.Parameters) {
-				if (IsSimdType (param.QualType))
+				if (IsSimdType (param.QualType, ref simd_type))
 					return true;
 			}
 
@@ -84,57 +99,47 @@ namespace Extrospection
 
 
 		Dictionary<string, bool> simd_types = new Dictionary<string, bool> ();
-		bool IsSimdType (QualType type)
+		bool IsSimdType (QualType type, ref string simd_type)
 		{
-			var str = type.CanonicalQualType.ToString ();
+			var str = type.ToString ();
+			simd_type = str;
 			bool rv;
 			if (simd_types.TryGetValue (str, out rv))
 				return rv;
 
+			if (str.Contains ("MDL_EXPORT_CPPCLASS"))
+				Console.WriteLine ("STOP");
+
 			switch (str) {
-			case "GKTriangle":
-			case "GKBox":
-				return false; // we probably need to fix these :(
-			case "GKQuad":
-				return false; // need to look into this
+			case "const MPSImageHistogramInfo *":
 			case "MPSImageHistogramInfo *":
 			case "MPSImageHistogramInfo":
 				return false; // it really is, but we've defined it correctly (with OpenTK.Vector4)
 			default:
 				var t = type.CanonicalQualType.Type;
 
-				if (t is AttributedType) {
-					var at = (AttributedType) t;
-					t = at.ModifiedType.Type;
-				}
-
-				if ( t is Clang.Ast.PointerType) {
+				if (t is Clang.Ast.PointerType) {
 					var pt = (Clang.Ast.PointerType) t;
 					t = pt.PointeeQualType.Type;
+				}
+
+				if (t.Kind == TypeKind.ExtVector) {
+					simd_types [str] = true;
+					return true;
 				}
 
 				var r = (t as RecordType)?.Decl;
 
 				if (r != null) {
-					//Console.WriteLine (r);
-					//Console.WriteLine ("Attributes: {0}", r.Attrs.Count ());
-					//Console.WriteLine ("Identifier: {0}", r.Identifier);
-					//Console.WriteLine ("Fields: {0}", r.Fields.Count ());
 					foreach (var f in r.Fields) {
-						//Console.WriteLine (f);
 						var qt = f.QualType.CanonicalQualType.Type;
 						if (qt.Kind == TypeKind.ExtVector) {
-							Console.WriteLine ("Detected that {0} is an ExtVector", str);
 							simd_types [str] = true;
 							return true;
 						}
 						var at = qt as ConstantArrayType;
-						//Console.WriteLine (qt);
 						if (at != null) {
-							//Console.WriteLine (at.ElementType);
-							//Console.WriteLine (at.ElementType.Type.Kind);
 							if (at.ElementType.Type.Kind == TypeKind.ExtVector) {
-								Console.WriteLine ("Detected that {0} is an ExtVector", str);
 								simd_types [str] = true;
 								return true;
 							}
@@ -142,16 +147,22 @@ namespace Extrospection
 					}
 				}
 
-				if (str.StartsWith ("simd_", StringComparison.Ordinal))
-					throw new NotImplementedException (str);//?
-
-				//Console.WriteLine ("Detected that {0} is NOT an ExtVector", str);
+				if (str.Contains ("simd"))
+					throw new NotImplementedException (str);
 
 				simd_types [str] = false;
 
 				return false;
 			}
 		}
+
+		//public override void VisitObjCInterfaceDecl (ObjCInterfaceDecl decl, VisitKind visitKind)
+		//{
+		//	base.VisitObjCInterfaceDecl (decl, visitKind);
+
+		//	if (decl.Attrs.Count () != 0 || decl.Annotations.Count () != 0)
+		//		Console.WriteLine ($"{decl.Name} has {decl.Attrs.Count ()} attrs and {decl.Annotations.Count ()} annotations");
+		//}
 
 		public override void VisitObjCMethodDecl (ObjCMethodDecl decl, VisitKind visitKind)
 		{
@@ -162,22 +173,49 @@ namespace Extrospection
 			if (!decl.IsAvailable () || !(decl.DeclContext as Decl).IsAvailable ())
 				return;
 
-			var contains = ContainsSimdTypes (decl);
+			var parentClass = decl.DeclContext as Decl;
+			var attrs = decl.Attrs.ToList ();
+			if (parentClass != null)
+				attrs.AddRange (parentClass.Attrs);
+			var is_new = false;
+			foreach (var attr in attrs) {
+				var av_attr = attr as AvailabilityAttr;
+				if (av_attr == null)
+					continue;
+				if (av_attr.Platform.Name != "ios")
+					continue;
+				if (av_attr.Introduced.Major >= 11) {
+					is_new = true;
+					break;
+				}
+			}
+
+			var simd_type = string.Empty;
+			var contains = ContainsSimdTypes (decl, ref simd_type);
 
 			var method = GetMethod (decl);
-			// don't report missing [DesignatedInitializer] for types that are not bound - that's a different problem
 			if (method == null) {
-				if (contains)
-					Console.WriteLine ("-- found simd type in native signature, not no equivalent managed function marked: {0}", decl);
+				if (contains) {
+					if (is_new) {
+						//Console.WriteLine ($"-- iOS 11 -- found simd type '{simd_type}' in native signature, but no equivalent managed function found: {decl}");
+					} else {
+						Console.WriteLine ($"-- found simd type '{simd_type}' in native signature, but no equivalent managed function found: {decl} (selector: {decl.Selector} name: {decl.GetName ()})");
+					}
+				}
 				return;
 			}
 
 			if (!contains) {
-				Console.WriteLine ("-- Simd-lookalike in signature, but not a simd type -- {0}", method);
+				//Console.WriteLine ("-- Simd-lookalike in signature, but not a simd type -- {0}", method);
 				return;
 			}
 
-			Console.WriteLine ("-- simd type in signature, has a simd type -- {0}", method);
+			if (method.IsObsolete ()) {
+				Console.WriteLine ($"-- OBSOLETE simd type '{simd_type}' in signature, has a simd type -- {method}");
+				return;
+			}
+
+			Console.WriteLine ($"-- simd type '{simd_type}' in signature, has a simd type -- {method}");
 		}
 	}
 }

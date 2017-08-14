@@ -242,5 +242,30 @@ namespace Extrospection {
 		{
 			return self.Selector.ToString () ?? (self.IsPropertyAccessor ? self.Name : null);
 		}
+
+		public static bool IsObsolete (this ICustomAttributeProvider provider)
+		{
+			if (!provider.HasCustomAttributes)
+				return false;
+
+			foreach (var attrib in provider.CustomAttributes) {
+				var attribType = attrib.Constructor.DeclaringType;
+				if (attribType.Namespace == "System" && attribType.Name == "ObsoleteAttribute")
+					return true;
+			}
+
+			var method = (provider as MethodReference)?.Resolve ();
+			if (method != null && method.IsSpecialName && method.DeclaringType.HasProperties) {
+				if (method.Name.StartsWith ("get_", StringComparison.Ordinal) || method.Name.StartsWith ("set_", StringComparison.Ordinal)) {
+					var propName = method.Name.Substring (4);
+					foreach (var prop in method.DeclaringType.Properties) {
+						if (prop.Name == propName)
+							return IsObsolete (prop);
+					}
+				}
+			}
+
+			return false;
+		}
 	}
 }

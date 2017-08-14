@@ -37,8 +37,8 @@ namespace Simd
 	{
 		public VectorFloat2 Column0;
 		public VectorFloat2 Column1;
-	
-		public readonly static MatrixFloat2x3 Identity = new MatrixFloat2x3 (VectorFloat2.UnitX, VectorFloat2.UnitY);
+
+		public readonly static MatrixFloat2x2 Identity = new MatrixFloat2x2 (VectorFloat2.UnitX, VectorFloat2.UnitY);
 
 		public MatrixFloat2x2 (VectorFloat2 column0, VectorFloat2 column1)
 		{
@@ -58,7 +58,7 @@ namespace Simd
 
 		public float Determinant {
 			get {
-				return Column0.X * Column1.Y - Column1.X * Column0.Y
+				return Column0.X * Column1.Y - Column1.X * Column0.Y;
 			}
 		}
 
@@ -139,13 +139,13 @@ namespace Simd
 			return !left.Equals (right);
 		}
 
-		public static explicit operator global::OpenTK.Matrix3 (MatrixFloat2x2 value)
+		public static explicit operator global::OpenTK.Matrix2 (MatrixFloat2x2 value)
 		{
-			return new global::OpenTK.Matrix3 (value.M11, value.M12,
+			return new global::OpenTK.Matrix2 (value.M11, value.M12,
 											   value.M21, value.M22);
 		}
 
-		public static explicit operator MatrixFloat2x2 (global::OpenTK.Matrix3 value)
+		public static explicit operator MatrixFloat2x2 (global::OpenTK.Matrix2 value)
 		{
 			return new MatrixFloat2x2 (value.R0C0, value.R0C1,
 									   value.R1C0, value.R1C1);

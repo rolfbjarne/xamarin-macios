@@ -189,6 +189,10 @@ namespace Extrospection {
 						if (ca.HasConstructorArguments)
 							return (ca.ConstructorArguments [0].Value as string);
 						return self.Name;
+					} else if (ca.Constructor.DeclaringType.Name == "ProtocolAttribute") {
+						if (ca.HasConstructorArguments)
+							return (ca.ConstructorArguments [0].Value as string);
+						return self.Name;
 					}
 				}
 			}
@@ -235,6 +239,15 @@ namespace Extrospection {
 				if (ca.Constructor.DeclaringType.Name == "ExportAttribute")
 					return ca.ConstructorArguments [0].Value as string;
 			}
+
+			var prop = FindProperty (self);
+			if (prop != null && prop.HasCustomAttributes) {
+				foreach (var ca in prop.CustomAttributes) {
+					if (ca.Constructor.DeclaringType.Name == "ExportAttribute")
+						Console.WriteLine (prop);
+				}
+			}
+
 			return null;
 		}
 
@@ -245,27 +258,44 @@ namespace Extrospection {
 
 		public static bool IsObsolete (this ICustomAttributeProvider provider)
 		{
-			if (!provider.HasCustomAttributes)
-				return false;
-
-			foreach (var attrib in provider.CustomAttributes) {
-				var attribType = attrib.Constructor.DeclaringType;
-				if (attribType.Namespace == "System" && attribType.Name == "ObsoleteAttribute")
-					return true;
-			}
-
-			var method = (provider as MethodReference)?.Resolve ();
-			if (method != null && method.IsSpecialName && method.DeclaringType.HasProperties) {
-				if (method.Name.StartsWith ("get_", StringComparison.Ordinal) || method.Name.StartsWith ("set_", StringComparison.Ordinal)) {
-					var propName = method.Name.Substring (4);
-					foreach (var prop in method.DeclaringType.Properties) {
-						if (prop.Name == propName)
-							return IsObsolete (prop);
-					}
+			if (provider.HasCustomAttributes) {
+				foreach (var attrib in provider.CustomAttributes) {
+					var attribType = attrib.Constructor.DeclaringType;
+					if (attribType.Namespace == "System" && attribType.Name == "ObsoleteAttribute")
+						return true;
 				}
 			}
 
+			// If we're a property accessor, check the property as well.
+			var prop = FindProperty (provider as MethodReference);
+			if (prop != null)
+				return IsObsolete (prop);
+
 			return false;
+		}
+
+		public static PropertyDefinition FindProperty (this MethodReference method)
+		{
+			var def = method?.Resolve ();
+			if (def == null)
+				return null;
+
+			if (!def.IsSpecialName)
+				return null;
+
+			if (!def.DeclaringType.HasProperties)
+				return null;
+
+			if (!method.Name.StartsWith ("get_", StringComparison.Ordinal) && !method.Name.StartsWith ("set_", StringComparison.Ordinal))
+				return null;
+
+			var propName = method.Name.Substring (4);
+			foreach (var prop in def.DeclaringType.Properties) {
+				if (prop.Name == propName)
+					return prop;
+			}
+
+			return null;
 		}
 	}
 }

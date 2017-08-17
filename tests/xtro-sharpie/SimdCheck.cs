@@ -32,21 +32,20 @@ namespace Extrospection
 		{
 			base.End ();
 
-			foreach (var t in simd_types.Where ((v) => v.Value).OrderBy ((v) => v.Key))
-				Console.WriteLine ("SIMD type: {0}", t.Key);
-			Console.WriteLine ($"A- Found {potentially_broken_methods.Count} potentially broken methods:");
-			foreach (var t in potentially_broken_methods)
-				Console.WriteLine ($"B-     {t.Key} => {t.Value.DeclaringType.FullName}: {t.Value.FullName}");
-			Console.WriteLine ($"C- Found {correct_methods.Count} correct methods:");
-			foreach (var t in correct_methods)
-				Console.WriteLine ($"D-     {t.Key} => {t.Value.DeclaringType.FullName}: {t.Value.FullName}");
+			//foreach (var t in simd_types.Where ((v) => v.Value).OrderBy ((v) => v.Key))
+			//	Console.WriteLine ("SIMD type: {0}", t.Key);
+			//Console.WriteLine ($"A- Found {potentially_broken_methods.Count} potentially broken methods:");
+			//foreach (var t in potentially_broken_methods)
+			//	Console.WriteLine ($"B-     {t.Key} => {t.Value.DeclaringType.FullName}: {t.Value.FullName}");
+			//Console.WriteLine ($"C- Found {correct_methods.Count} correct methods:");
+			//foreach (var t in correct_methods)
+				//Console.WriteLine ($"D-     {t.Key} => {t.Value.DeclaringType.FullName}: {t.Value.FullName}");
 		}
 
 		public override void VisitManagedMethod (MethodDefinition method)
 		{
 			var type = method.DeclaringType;
-			if (method.Name.Contains ("MatrixFloat4x4Value"))
-				Console.WriteLine ("stop");
+
 			if (!type.IsNested && type.IsNotPublic)
 				return;
 
@@ -243,6 +242,14 @@ namespace Extrospection
 			}
 		}
 
+		public override void VisitObjCPropertyDecl (ObjCPropertyDecl decl)
+		{
+			base.VisitObjCPropertyDecl (decl);
+
+			if (decl.ToString ().Contains ("GKAgent3D"))
+				Console.WriteLine (decl.Getter.Selector);
+		}
+
 		public override void VisitObjCMethodDecl (ObjCMethodDecl decl, VisitKind visitKind)
 		{
 			if (visitKind != VisitKind.Enter)
@@ -290,7 +297,7 @@ namespace Extrospection
 				var correct = GetCorrectMethod (decl);
 				if (correct != null) {
 					// This method is correctly bound using managed Simd types.
-					Console.WriteLine ($"-- the managed method {correct} was correctly bound (native function: {decl}).");
+					//Console.WriteLine ($"-- the managed method {correct} was correctly bound (native function: {decl}).");
 				} else {
 					// Could not map the native method to a managed method.
 					if (is_new) {
@@ -299,12 +306,21 @@ namespace Extrospection
 					} else {
 						// This needs investigation, to see why the native method couldn't be mapped.
 						switch (simd_type) {
+						case "const vector_float2 * _Nullable":
 						case "vector_float2":
+						case "vector_float3 * _Nonnull":
+						case "vector_float2 * _Nonnull":
+						case "const vector_float2 * _Nonnull":
 						case "vector_float3":
+						case "vector_float4":
+						case "vector_double2":
+						case "vector_double3":
 						case "vector_int2":
+						case "const MPSImageHistogramInfo * _Nonnull":
 							break; // we don't care about these types (yet)
-						default;
-							Console.WriteLine ($"-- mapping failure for {decl} (selector: {decl.Selector} name {decl.GetName ()}. Simd type found: '{simd_type}'");
+						default:
+							Console.WriteLine ($"!simd-mapping-failure! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature.'");
+							break;
 						}
 					}
 				}
@@ -312,8 +328,8 @@ namespace Extrospection
 			}
 
 			if (method.IsObsolete ()) {
-				// We have a potentiall broken managed method, but it's obsolete. That's fine.
-				Console.WriteLine ($"-- OBSOLETE simd type '{simd_type}' in signature, has a simd type -- {method}");
+				// We have a potentially broken managed method, but it's obsolete. That's fine.
+				//Console.WriteLine ($"-- OBSOLETE simd type '{simd_type}' in signature, has a simd type -- {method}");
 				return;
 			}
 

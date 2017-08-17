@@ -68,6 +68,10 @@
 ## part of category GKScore_Deprecated
 !missing-selector! GKScore::playerID not bound
 
+# GameplayKit
+
+# Bound as GKAgent3D.Rotation3x3
+!simd-mapping-failure! GKAgent3D::rotation: could not find a managed method (selector:  name: GKAgent3D::. Found the simd type 'matrix_float3x3' in the native signature.'
 
 # Intents
 

@@ -1758,6 +1758,7 @@ namespace XamCore.SpriteKit {
 		[Obsolete ("Use the '(string, MatrixFloat2x2)' overload instead.")]
 		[iOS (10,0)][Mac (10,12)]
 		[TV (10,0)]
+		[Sealed]
 		[Export ("initWithName:matrixFloat2x2:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 #if WATCH
@@ -1784,6 +1785,7 @@ namespace XamCore.SpriteKit {
 		[Obsolete ("Use the '(string, MatrixFloat3x3)' overload instead.")]
 		[iOS (10,0)][Mac (10,12)]
 		[TV (10,0)]
+		[Sealed]
 		[Export ("initWithName:matrixFloat3x3:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 #if WATCH
@@ -1813,6 +1815,7 @@ namespace XamCore.SpriteKit {
 		[iOS (10,0)][Mac (10,12)]
 		[TV (10,0)]
 		[Export ("initWithName:matrixFloat4x4:")]
+		[Sealed]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 #if WATCH
 		IntPtr Constructor (string name, Matrix4 value);
@@ -1921,8 +1924,8 @@ namespace XamCore.SpriteKit {
 #endif
 		[iOS (10,0)][Mac (10,12)]
 		[TV (10,0)]
-		[Export ("MatrixFloat2x2Value", ArgumentSemantic.Assign)]
-		Matrix2 FloatMatrix2x2Value {
+		[Export ("matrixFloat2x2Value", ArgumentSemantic.Assign)]
+		MatrixFloat2x2 MatrixFloat2x2Value {
 			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;
 			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] set;
 		}

@@ -537,6 +537,7 @@ namespace XamCore.ModelIO {
 
 
 #if !XAMCORE_4_0
+		[Sealed]
 		[Export ("initWithName:semantic:matrix4x4:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		IntPtr Constructor (string name, MDLMaterialSemantic semantic, MatrixFloat4x4 value);
@@ -1669,6 +1670,7 @@ namespace XamCore.ModelIO {
 		IntPtr Constructor (Matrix4 matrix);
 
 #if !XAMCORE_4_0
+		[Sealed]
 		[Export ("initWithMatrix:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		IntPtr Constructor (MatrixFloat4x4 matrix);
@@ -1685,6 +1687,7 @@ namespace XamCore.ModelIO {
 		IntPtr Constructor (Matrix4 matrix, bool resetsTransform);
 
 #if !XAMCORE_4_0
+		[Sealed]
 		[iOS (10,0), Mac (10,12), TV (10,0)]
 		[Export ("initWithMatrix:resetsTransform:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

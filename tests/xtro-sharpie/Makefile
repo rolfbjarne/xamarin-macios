@@ -37,7 +37,7 @@ XWATCHOS_ARCH = armv7
 XWATCHOS_PCH = watchos$(WATCH_SDK_VERSION)-$(XWATCHOS_ARCH).pch
 
 watchos.results run-watchos: build $(XWATCHOS_PCH)
-	$(MONO) bin/Debug/xtro-sharpie.exe $(XWATCHOS_PCH) $(XWATCHOS) | sort > watchos.results
+	$(MONO) bin/Debug/xtro-sharpie.exe $(abspath $(XWATCHOS_PCH)) $(abspath $(XWATCHOS)) | sort > watchos.results
 
 sharpie-watchos: build $(XWATCHOS_PCH)
 	sharpie ./bin/Debug/xtro-plugin.dll extro $(XWATCHOS_PCH) $(XWATCHOS) | sort > watchos.results

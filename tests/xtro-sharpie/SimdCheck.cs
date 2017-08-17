@@ -125,6 +125,7 @@ namespace Extrospection
 			switch (td.Name) {
 			case "MDLAxisAlignedBoundingBox":
 			case "MDLVoxelIndexExtent":
+			case "Matrix2":
 			case "Matrix3":
 			case "Matrix4":
 			case "GKBox":
@@ -200,7 +201,9 @@ namespace Extrospection
 			case "const MPSImageHistogramInfo *":
 			case "MPSImageHistogramInfo *":
 			case "MPSImageHistogramInfo":
-				return false; // it really is, but we've defined it correctly (with OpenTK.Vector4)
+				// The managed definition is identical to the native definition,
+				// so this is not a type we care about.
+				return false;
 			default:
 				var t = type.CanonicalQualType.Type;
 
@@ -317,9 +320,10 @@ namespace Extrospection
 						case "vector_double3":
 						case "vector_int2":
 						case "const MPSImageHistogramInfo * _Nonnull":
+						case "simd_quatf":
 							break; // we don't care about these types (yet)
 						default:
-							Console.WriteLine ($"!simd-mapping-failure! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature.'");
+							Console.WriteLine ($"!simd-mapping-failure! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature.");
 							break;
 						}
 					}

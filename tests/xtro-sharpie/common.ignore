@@ -179,6 +179,28 @@
 !incorrect-protocol-member! MDLMeshBufferZone::allocator is REQUIRED and should be abstract
 !incorrect-protocol-member! MDLMeshBufferZone::capacity is REQUIRED and should be abstract
 
+## MDLTransformComponent is a protocol, which makes mapping non-trivial because the only place that has the required information is in the protocol's ProtocolMember attributes.
+
+## This selector does not have a fixed version with the correct
+## Simd matrix, because it's a static member in a protocol, so creating an
+## extension method doesn't make much sense.
+!simd-mapping-failure! MDLTransformComponent::globalTransformWithObject:atTime:: could not find a managed method (selector: globalTransformWithObject:atTime: name: +MDLTransformComponent::globalTransformWithObject:atTime:. Found the simd type 'matrix_float4x4' in the native signature.
+
+## A Simd-fixed version exists as an extension method in the protocol interface (MDLTransformComponent_Extensions.GetLocalTransform4x4)
+!simd-mapping-failure! MDLTransformComponent::localTransformAtTime:: could not find a managed method (selector: localTransformAtTime: name: MDLTransformComponent::localTransformAtTime:. Found the simd type 'matrix_float4x4' in the native signature.
+
+## A Simd-fixed version exists as an extension method: MDLTransformComponent_Extensions.GetMatrix4x4
+!simd-mapping-failure! MDLTransformComponent::matrix: could not find a managed method (selector:  name: MDLTransformComponent::matrix. Found the simd type 'matrix_float4x4' in the native signature.
+
+## A Simd-fixed version exists as an extension method: MDLTransformComponent_Extensions.SetMatrix4x4
+!simd-mapping-failure! MDLTransformComponent::setMatrix:: could not find a managed method (selector: setMatrix: name: MDLTransformComponent::setMatrix:. Found the simd type 'matrix_float4x4' in the native signature.
+
+## A Simd-fixed version exists as an extension method: MDLTransformComponent_Extensions.SetLocalTransform
+!simd-mapping-failure! MDLTransformComponent::setLocalTransform:: could not find a managed method (selector: setLocalTransform: name: MDLTransformComponent::setLocalTransform:. Found the simd type 'matrix_float4x4' in the native signature.
+
+## A Simd-fixed version exists as an extension method: MDLTransformComponent_Extensions.SetLocalTransform
+!simd-mapping-failure! MDLTransformComponent::setLocalTransform:forTime:: could not find a managed method (selector: setLocalTransform:forTime: name: MDLTransformComponent::setLocalTransform:forTime:. Found the simd type 'matrix_float4x4' in the native signature.
+
 
 # Security
 

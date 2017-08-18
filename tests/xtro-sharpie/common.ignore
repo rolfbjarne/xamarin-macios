@@ -255,3 +255,8 @@
 !missing-enum! PDFTextAnnotationIconType not bound
 !missing-enum! PDFWidgetCellState not bound
 !missing-enum! PDFWidgetControlType not bound
+
+## /usr/include/simd/extern.h
+!unknown-pinvoke! __invert_f2 bound
+!unknown-pinvoke! __invert_f3 bound
+!unknown-pinvoke! __invert_f4 bound

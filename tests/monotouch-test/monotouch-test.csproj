@@ -647,6 +647,8 @@
     <Compile Include="PassKit\LabeledValueTest.cs" />
     <Compile Include="System.Net.Http\MessageHandlers.cs" />
     <Compile Include="AVFoundation\PlayerItemVideoOutputTest.cs" />
+    <Compile Include="Simd\MatrixFloat4x4Test.cs" />
+    <Compile Include="Simd\MatrixFloat3x3Test.cs" />
     <Compile Include="mono\ConfigTest.cs" />
     <Compile Include="OpenGLES\EAGLContext.cs" />
     <Compile Include="CoreText\CTParagraphStyleTests.cs" />
@@ -725,6 +727,7 @@
     <Folder Include="System.Net.Http\" />
     <Folder Include="OpenGLES\" />
     <Folder Include="HomeKit\" />
+    <Folder Include="Simd\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AudioToolbox\1.caf" />

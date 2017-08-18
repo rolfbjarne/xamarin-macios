@@ -57,7 +57,7 @@ osx.results run-osx: build $(XMAC_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XMAC_PCH) $(XMAC) | sort > osx.results
 
 $(XMAC_PCH):
-	sharpie sdk-db -s macosx$(OSX_SDK_VERSION) -a $(XMAC_ARCH) -x InputMethodKit
+	sharpie sdk-db -s macosx$(OSX_SDK_VERSION) -a $(XMAC_ARCH) -x InputMethodKit -x AVFoundation -x AVKit -x MediaPlayer
 
 preclassify: ios.results osx.results
 	@comm -12 ios.results osx.results > common.unclassified.tmp

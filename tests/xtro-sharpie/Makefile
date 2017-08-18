@@ -6,17 +6,14 @@ include $(TOP)/Make.config
 MONO ?= mono64 --debug
 
 all-local:: run-ios run-osx run-watchos run-tvos classify
-	
-sharpie: sharpie-ios sharpie-osx sharpie-watchos sharpie-tvos classify
 
 clean-local::
 	rm -f ios.results osx.results watchos.results tvos.results *.tmp
 	rm -rf *os*.pch*
-	
-bin/Debug/xtro-sharpie.exe ./bin/Debug/xtro-plugin.dll build:
+
+bin/Debug/xtro-sharpie.exe build:
 	$(Q_BUILD) msbuild $(XBUILD_VERBOSITY) xtro-sharpie.sln
 
-	
 XIOS ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/git/lib/64bits/Xamarin.iOS.dll
 XIOS_GL ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/OpenTK-1.0.dll
 XIOS_ARCH = arm64
@@ -24,9 +21,6 @@ XIOS_PCH = iphoneos$(IOS_SDK_VERSION)-$(XIOS_ARCH).pch
 
 ios.results run-ios: build $(XIOS_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XIOS_PCH) $(XIOS) $(XIOS_GL) | sort > ios.results
-
-sharpie-ios: build $(XIOS_PCH)
-	sharpie ./bin/Debug/xtro-plugin.dll extro $(XIOS_PCH) $(XIOS) $(XIOS_GL) | sort > ios.results
 
 $(XIOS_PCH):
 	sharpie sdk-db -s iphoneos$(IOS_SDK_VERSION) -a $(XIOS_ARCH)
@@ -38,9 +32,6 @@ XWATCHOS_PCH = watchos$(WATCH_SDK_VERSION)-$(XWATCHOS_ARCH).pch
 
 watchos.results run-watchos: build $(XWATCHOS_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XWATCHOS_PCH) $(XWATCHOS) | sort > watchos.results
-
-sharpie-watchos: build $(XWATCHOS_PCH)
-	sharpie ./bin/Debug/xtro-plugin.dll extro $(XWATCHOS_PCH) $(XWATCHOS) | sort > watchos.results
 
 $(XWATCHOS_PCH):
 	sharpie sdk-db -s watchos$(WATCH_SDK_VERSION) -a $(XWATCHOS_ARCH)
@@ -54,9 +45,6 @@ XTVOS_PCH = appletvos$(TVOS_SDK_VERSION)-$(XTVOS_ARCH).pch
 tvos.results run-tvos: build $(XTVOS_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XTVOS_PCH) $(XTVOS) $(XTVOS_GL) | sort > tvos.results
 
-sharpie-tvos: build $(XTVOS_PCH)
-	sharpie ./bin/Debug/xtro-plugin.dll extro $(XTVOS_PCH) $(XTVOS) $(XTVOS_GL) | sort > tvos.results
-
 $(XTVOS_PCH):
 	sharpie sdk-db -s appletvos$(TVOS_SDK_VERSION) -a $(XTVOS_ARCH)
 
@@ -67,9 +55,6 @@ XMAC_PCH = macosx$(OSX_SDK_VERSION)-$(XMAC_ARCH).pch
 
 osx.results run-osx: build $(XMAC_PCH)
 	$(MONO) bin/Debug/xtro-sharpie.exe $(XMAC_PCH) $(XMAC) | sort > osx.results
-
-sharpie-osx: build $(XMAC_PCH)
-	sharpie ./bin/Debug/xtro-plugin.dll extro $(XMAC_PCH) $(XMAC) | sort > osx.results
 
 $(XMAC_PCH):
 	sharpie sdk-db -s macosx$(OSX_SDK_VERSION) -a $(XMAC_ARCH) -x InputMethodKit -x AVFoundation -x AVKit -x MediaPlayer

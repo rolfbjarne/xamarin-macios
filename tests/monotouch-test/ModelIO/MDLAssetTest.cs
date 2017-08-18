@@ -36,7 +36,6 @@ using NUnit.Framework;
 
 namespace MonoTouchFixtures.ModelIO
 {
-
 	[TestFixture]
 	// we want the test to be available if we use the linker
 	[Preserve (AllMembers = true)]

@@ -18,13 +18,13 @@ namespace Extrospection {
 		public void Execute (string pchFile, IEnumerable<string> assemblyNames)
 		{
 			var managed_reader = new AssemblyReader () {
-				new DesignatedInitializerCheck (),
-				new DllImportCheck (),
-				new EnumCheck (),
-				new FieldCheck (), // very noisy now, some stuff are still manually bound / harder to detect
-				new ObjCInterfaceCheck (),
-				new ObjCProtocolCheck (),
-				new SelectorCheck (),
+				//new DesignatedInitializerCheck (),
+				//new DllImportCheck (),
+				//new EnumCheck (),
+				//new FieldCheck (), // very noisy now, some stuff are still manually bound / harder to detect
+				//new ObjCInterfaceCheck (),
+				//new ObjCProtocolCheck (),
+				//new SelectorCheck (),
 				new SimdCheck (),
 //				new ListNative (), // for debug
 			};

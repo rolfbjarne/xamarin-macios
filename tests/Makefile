@@ -379,6 +379,9 @@ runner: xharness/xharness.exe
 vsts-device-tests: xharness/xharness.exe
 	$(Q) ulimit -n 4096 && $(SYSTEM_MONO) --debug $(CURDIR)/$< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=skip-mac-tests,skip-ios-simulator-tests,skip-ios-msbuild-tests,skip-system-permission-tests,run-ios-device-tests,run-bcl-tests,run-ios-extensions-tests --markdown-summary=$(CURDIR)/TestSummary.md $(TESTS_PERIODIC_COMMAND)
 
+vsts-build-samples:
+	$(MAKE) -C sampletester
+
 ifdef ENABLE_XAMARIN
 wrench-launch-external wrench-report-external:
 	$(MAKE) -C $(MACCORE_PATH)/tests/external $@

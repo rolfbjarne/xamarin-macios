@@ -19,27 +19,32 @@ namespace Extrospection
 			public string Managed;
 			public string InvalidManaged;
 			public bool RequiresMarshalDirective;
+			public bool x86_64;
+			public bool i384;
 		}
 
 		static Dictionary<string, NativeSimdInfo> type_mapping = new Dictionary<string, NativeSimdInfo> () {
 			{ "matrix_double2x2", new NativeSimdInfo { Managed ="MatrixDouble2x2", InvalidManaged = "Matrix2d" }},
 			{ "matrix_double3x3", new NativeSimdInfo { Managed = "MatrixDouble3x3", InvalidManaged = "Matrix3d" }},
-			{ "matrix_double4x4", new NativeSimdInfo { Managed = "MatrixDouble4x4", InvalidManaged = "Matrix4d" }},
-			{ "matrix_float2x2", new NativeSimdInfo { Managed = "MatrixFloat2x2", InvalidManaged = "Matrix2" }},
-			{ "matrix_float3x3", new NativeSimdInfo { Managed = "MatrixFloat3x3", InvalidManaged = "Matrix3" }},
-			{ "matrix_float4x3", new NativeSimdInfo { Managed = "MatrixFloat4x3" }},
-			{ "matrix_float4x4", new NativeSimdInfo { Managed = "MatrixFloat4x4", InvalidManaged = "Matrix4" }},
-			{ "simd_quatd", new NativeSimdInfo { Managed = "Quaternion4d" }},
-			{ "simd_quatf", new NativeSimdInfo { Managed = "Quaternion4" }},
-			{ "vector_double2", new NativeSimdInfo { Managed = "Vector2d" }},
-			{ "vector_double3", new NativeSimdInfo { Managed = "Vector3d" }},
-			{ "vector_double4", new NativeSimdInfo { Managed = "Vector4d" }},
-			{ "vector_float2", new NativeSimdInfo { Managed = "Vector2" }},
-			{ "vector_float3", new NativeSimdInfo { Managed = "Vector3", RequiresMarshalDirective = true }},
-			{ "vector_float4", new NativeSimdInfo { Managed = "Vector4", RequiresMarshalDirective = true }},
-			{ "vector_int2", new NativeSimdInfo { Managed = "Vector2i" }},
-			{ "vector_uint2", new NativeSimdInfo { Managed = "Vector2i" }},
-			{ "vector_uint3", new NativeSimdInfo { Managed = "Vector3i" }},
+			{ "matrix_double4x4", new NativeSimdInfo { Managed = "MatrixDouble4x4", InvalidManaged = "Matrix4d", x86_64 = false, }},
+			{ "matrix_float2x2", new NativeSimdInfo { Managed = "MatrixFloat2x2", InvalidManaged = "Matrix2", x86_64 = false, }},
+			{ "matrix_float3x3", new NativeSimdInfo { Managed = "MatrixFloat3x3", InvalidManaged = "Matrix3", x86_64 = false, }},
+			{ "matrix_float4x3", new NativeSimdInfo { Managed = "MatrixFloat4x3", x86_64 = false, }},
+			{ "matrix_float4x4", new NativeSimdInfo { Managed = "MatrixFloat4x4", InvalidManaged = "Matrix4", x86_64 = false, }},
+			{ "simd_quatd", new NativeSimdInfo { Managed = "Quaternion4d", x86_64 = false, }},
+			{ "simd_quatf", new NativeSimdInfo { Managed = "Quaternion4", x86_64 = true, }},
+			{ "vector_double2", new NativeSimdInfo { Managed = "Vector2d", x86_64 = true, }},
+			{ "vector_double3", new NativeSimdInfo { Managed = "Vector3d", x86_64 = false, }},
+			{ "vector_double4", new NativeSimdInfo { Managed = "Vector4d", x86_64 = false, }},
+			{ "vector_float2", new NativeSimdInfo { Managed = "Vector2", x86_64 = true, }},
+			{ "vector_float3", new NativeSimdInfo { Managed = "Vector3", RequiresMarshalDirective = true, x86_64 = true, }},
+			{ "vector_float4", new NativeSimdInfo { Managed = "Vector4", RequiresMarshalDirective = true, x86_64 = true, }},
+			{ "vector_int2", new NativeSimdInfo { Managed = "Vector2i", x86_64 = true, }},
+			{ "vector_int3", new NativeSimdInfo { Managed = "Vector3i", x86_64 = true, }},
+			{ "vector_int4", new NativeSimdInfo { Managed = "Vector4i", x86_64 = true, }},
+			{ "vector_uint2", new NativeSimdInfo { Managed = "Vector2i", x86_64 = true, }},
+			{ "vector_uint3", new NativeSimdInfo { Managed = "Vector3i", x86_64 = true, }},
+			{ "vector_uint4", new NativeSimdInfo { Managed = "Vector4i", x86_64 = true, }},
 			// simd_floatX is typedefed to vector_floatX
 			{ "simd_float2", new NativeSimdInfo { Managed = "Vector2" }},
 			{ "simd_float3", new NativeSimdInfo { Managed = "Vector3" }},

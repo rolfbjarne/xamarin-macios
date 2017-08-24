@@ -40,15 +40,15 @@ namespace Simd
 		 * with dummy fields.
 		 * See top of /usr/include/simd/matrix_types.h for more information. */
 		public float M11;
-		public float M12;
-		public float M13;
-		float dummy0;
 		public float M21;
-		public float M22;
-		public float M23;
-		float dummy1;
 		public float M31;
+		float dummy0;
+		public float M12;
+		public float M22;
 		public float M32;
+		float dummy1;
+		public float M13;
+		public float M23;
 		public float M33;
 		float dummy2;
 
@@ -100,72 +100,6 @@ namespace Simd
 					M11 * (M22 * M33 - M23 * M32) -
 					M12 * (M21 * M33 - M23 * M31) +
 					M13 * (M21 * M32 - M22 * M31);
-			}
-		}
-
-		public VectorFloat3 Row0 {
-			get { 
-				return new VectorFloat3 (M11, M12, M13); 
-			}
-			set {
-				M11 = value.X;
-				M12 = value.Y;
-				M13 = value.Z;
-			}
-		}
-
-		public VectorFloat3 Row1 {
-			get { 
-				return new VectorFloat3 (M21, M22, M23); 
-			}
-			set {
-				M21 = value.X;
-				M22 = value.Y;
-				M23 = value.Z;
-			}
-		}
-
-		public VectorFloat3 Row2 {
-			get {
-				return new VectorFloat3 (M31, M32, M33);
-			}
-			set {
-				M31 = value.X;
-				M32 = value.Y;
-				M33 = value.Z;
-			}
-		}
-
-		public VectorFloat3 Column0 {
-			get {
-				return new VectorFloat3 (M11, M21, M31);
-			}
-			set {
-				M11 = value.X;
-				M21 = value.Y;
-				M31 = value.Z;
-			}
-		}
-
-		public VectorFloat3 Column1 {
-			get {
-				return new VectorFloat3 (M12, M22, M32);
-			}
-			set {
-				M12 = value.X;
-				M22 = value.Y;
-				M32 = value.Z;
-			}
-		}
-
-		public VectorFloat3 Column2 {
-			get {
-				return new VectorFloat3 (M13, M23, M33);
-			}
-			set {
-				M13 = value.X;
-				M23 = value.Y;
-				M33 = value.Z;
 			}
 		}
 
@@ -259,7 +193,10 @@ namespace Simd
 
 		public override string ToString ()
 		{
-			return String.Format ("{0}\n{1}\n{2}", Row0, Row1, Row2);
+			return
+				$"({M11}, {M12}, {M13})\n" +
+				$"({M21}, {M22}, {M23})\n" +
+				$"({M31}, {M32}, {M33})";
 		}
 
 		public override int GetHashCode ()

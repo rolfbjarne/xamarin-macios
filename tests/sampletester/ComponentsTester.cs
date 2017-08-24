@@ -46,8 +46,10 @@ public abstract class ComponentsTester
 	void BuildComponentImpl (string component)
 	{
 		string ignored_message = "Ignored";
-		if (GetIgnoredComponents ()?.TryGetValue (component, out ignored_message) == true)
+		if (GetIgnoredComponents ()?.TryGetValue (component, out ignored_message) == true) {
+			Console.WriteLine ($"Ignored: {ignored_message}");
 			Assert.Ignore (ignored_message);
+		}
 
 		var repo_path = GitHub.CloneRepository ("xamarin", Repository);
 		var info = Components.Single ((v) => v.Name == component);

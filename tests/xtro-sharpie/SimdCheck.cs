@@ -18,33 +18,76 @@ namespace Extrospection
 		{
 			public string Managed;
 			public string InvalidManaged;
-			public bool RequiresMarshalDirective;
-			public bool x86_64;
-			public bool i384;
+			public bool NoMarshalDirectiveRequired;
 		}
+
+		/*
+		 * Extensive testing if MarshalDirective is required gives the matrix below.
+		 * 
+		 * Any character except a dash means a MarshalDirective is needed.
+		 * In a result-triple (---), for each character which isn't a dash:
+		 * * First character means parameter passing doesn't work
+		 * * Second character means return value doesn't work
+		 * * Third character means the test crashed.
+		 * * - If the character is X, it means the test was hardcoded to not run because it caused the test program to crash unrecoverably.
+		 * The actual character doesn't mean anything (condition: either dash (ok) or not (not ok).
+		 * 
+		 * According to these results, only matrix_double3x3 and matrix_double4x4 are not broken on at least one architecture.
+		 *
+		 *  
+
+                          x86_64   i386  armv7 armv7k  arm64
+GKBox                        ---    F--    ---    ---    FFF
+GKQuad                       ---    ---    ---    ---    FFF
+GKTriangle                   ---    ---    ---    ---    FFF
+matrix_double2x2             ---    ---    ---    ---    FFF
+matrix_double3x3             ---    ---    ---    ---    ---
+matrix_double4x4             ---    ---    ---    ---    ---
+matrix_float2x2              ---    ---    ---    ---    FFF
+matrix_float3x3              ---    ---    ---    FF-    FFF
+matrix_float4x3              ---    ---    ---    FF-    FFF
+matrix_float4x4              ---    ---    ---    FF-    FFF
+MDLAxisAlignedBoundingBox    ---    F--    ---    ---    FFF
+MDLVoxelIndex                -FF    -FF    FFF    ---    -FF
+MDLVoxelIndexExtent          ---    F--    ---    ---    FFF
+MPSImageHistogramInfo        ---    F--    ---    ---    ---
+simd_quatd                   ---    ---    ---    XXX    ---
+simd_quatf                   F--    F--    ---    ---    F--
+vector_double2               F--    FFF    FFF    ---    F--
+vector_double3               -FF    ---    ---    XXX    ---
+vector_double4               -FF    F--    ---    XXX    ---
+vector_float2                ---    ---    FFF    ---    FFF
+vector_float3                F--    FFF    FFF    ---    F--
+vector_float4                F--    FFF    FFF    ---    F--
+vector_int2                  FFF    ---    FFF    -F-    -FF
+vector_int3                  -FF    -FF    FFF    -F-    -FF
+vector_int4                  -FF    -FF    FFF    -F-    -FF
+
+		 * 
+		 */
 
 		static Dictionary<string, NativeSimdInfo> type_mapping = new Dictionary<string, NativeSimdInfo> () {
 			{ "matrix_double2x2", new NativeSimdInfo { Managed ="MatrixDouble2x2", InvalidManaged = "Matrix2d" }},
-			{ "matrix_double3x3", new NativeSimdInfo { Managed = "MatrixDouble3x3", InvalidManaged = "Matrix3d" }},
-			{ "matrix_double4x4", new NativeSimdInfo { Managed = "MatrixDouble4x4", InvalidManaged = "Matrix4d", x86_64 = false, }},
-			{ "matrix_float2x2", new NativeSimdInfo { Managed = "MatrixFloat2x2", InvalidManaged = "Matrix2", x86_64 = false, }},
-			{ "matrix_float3x3", new NativeSimdInfo { Managed = "MatrixFloat3x3", InvalidManaged = "Matrix3", x86_64 = false, }},
-			{ "matrix_float4x3", new NativeSimdInfo { Managed = "MatrixFloat4x3", x86_64 = false, }},
-			{ "matrix_float4x4", new NativeSimdInfo { Managed = "MatrixFloat4x4", InvalidManaged = "Matrix4", x86_64 = false, }},
-			{ "simd_quatd", new NativeSimdInfo { Managed = "Quaternion4d", x86_64 = false, }},
-			{ "simd_quatf", new NativeSimdInfo { Managed = "Quaternion4", x86_64 = true, }},
-			{ "vector_double2", new NativeSimdInfo { Managed = "Vector2d", x86_64 = true, }},
-			{ "vector_double3", new NativeSimdInfo { Managed = "Vector3d", x86_64 = false, }},
-			{ "vector_double4", new NativeSimdInfo { Managed = "Vector4d", x86_64 = false, }},
-			{ "vector_float2", new NativeSimdInfo { Managed = "Vector2", x86_64 = true, }},
-			{ "vector_float3", new NativeSimdInfo { Managed = "Vector3", RequiresMarshalDirective = true, x86_64 = true, }},
-			{ "vector_float4", new NativeSimdInfo { Managed = "Vector4", RequiresMarshalDirective = true, x86_64 = true, }},
-			{ "vector_int2", new NativeSimdInfo { Managed = "Vector2i", x86_64 = true, }},
-			{ "vector_int3", new NativeSimdInfo { Managed = "Vector3i", x86_64 = true, }},
-			{ "vector_int4", new NativeSimdInfo { Managed = "Vector4i", x86_64 = true, }},
-			{ "vector_uint2", new NativeSimdInfo { Managed = "Vector2i", x86_64 = true, }},
-			{ "vector_uint3", new NativeSimdInfo { Managed = "Vector3i", x86_64 = true, }},
-			{ "vector_uint4", new NativeSimdInfo { Managed = "Vector4i", x86_64 = true, }},
+			{ "matrix_double3x3", new NativeSimdInfo { Managed = "MatrixDouble3x3", InvalidManaged = "Matrix3d", NoMarshalDirectiveRequired = true }},
+			{ "matrix_double4x4", new NativeSimdInfo { Managed = "MatrixDouble4x4", InvalidManaged = "Matrix4d", NoMarshalDirectiveRequired = true }},
+			{ "matrix_float2x2", new NativeSimdInfo { Managed = "MatrixFloat2x2", InvalidManaged = "Matrix2", }},
+			{ "matrix_float3x3", new NativeSimdInfo { Managed = "MatrixFloat3x3", InvalidManaged = "Matrix3", }},
+			{ "matrix_float4x3", new NativeSimdInfo { Managed = "MatrixFloat4x3", }},
+			{ "matrix_float4x4", new NativeSimdInfo { Managed = "MatrixFloat4x4", InvalidManaged = "Matrix4", }},
+			{ "simd_quatd", new NativeSimdInfo { Managed = "Quaternion4d", }},
+			{ "simd_quatf", new NativeSimdInfo { Managed = "Quaternion4", }},
+			{ "vector_double2", new NativeSimdInfo { Managed = "Vector2d", }},
+			{ "vector_double3", new NativeSimdInfo { Managed = "Vector3d", }},
+			{ "vector_double4", new NativeSimdInfo { Managed = "Vector4d", }},
+			{ "vector_float2", new NativeSimdInfo { Managed = "Vector2", }},
+			{ "vector_float3", new NativeSimdInfo { Managed = "Vector3", }},
+			{ "vector_float4", new NativeSimdInfo { Managed = "Vector4", }},
+			{ "vector_int2", new NativeSimdInfo { Managed = "Vector2i", }},
+			{ "vector_int3", new NativeSimdInfo { Managed = "Vector3i", }},
+			{ "vector_int4", new NativeSimdInfo { Managed = "Vector4i", }},
+			{ "vector_uint2", new NativeSimdInfo { Managed = "Vector2i", }},
+			{ "vector_uint3", new NativeSimdInfo { Managed = "Vector3i", }},
+			{ "vector_uint4", new NativeSimdInfo { Managed = "Vector4i", }},
 			// simd_floatX is typedefed to vector_floatX
 			{ "simd_float2", new NativeSimdInfo { Managed = "Vector2" }},
 			{ "simd_float3", new NativeSimdInfo { Managed = "Vector3" }},
@@ -59,14 +102,14 @@ namespace Extrospection
 			// match the native definition (missing the padding).
 			// Right now we're marshalling this struct manually ([MarshalDirective]),
 			// so managed code should get correct results.
-			{ "GKBox", new NativeSimdInfo { Managed = "GKBox", RequiresMarshalDirective = true }},
+			{ "GKBox", new NativeSimdInfo { Managed = "GKBox", }},
 			// The native definition is 'vector_float3 points[3]' - an array of three vector_float3.
 			// In this case each element uses 16 bytes (4 floats) due to padding.
 			// The managed definition is just an array of Vector3, but luckily
 			// it's a private field, so we can improve this later. Right now we're marshalling
 			// this struct manually ([MarshalDirective]), so managed code should get correct
 			// results.
-			{ "GKTriangle", new NativeSimdInfo { Managed = "GKTriangle", RequiresMarshalDirective = true }},
+			{ "GKTriangle", new NativeSimdInfo { Managed = "GKTriangle", }},
 			// This is a 'vector_int4, represented by a Vector4i in managed code,
 			// which means it's matching the native definition.
 			{ "MDLVoxelIndex", new NativeSimdInfo { Managed = "MDLVoxelIndex" }},
@@ -75,7 +118,7 @@ namespace Extrospection
 			// In managed code this is a struct of two Vector3, so it's *not* matching
 			// the native definition. However, since we're manually marshalling this type
 			// (using [MarshalDirective]), managed code doesn't get incorrect results.
-			{ "MDLAxisAlignedBoundingBox", new NativeSimdInfo { Managed = "MDLAxisAlignedBoundingBox", RequiresMarshalDirective = true }},
+			{ "MDLAxisAlignedBoundingBox", new NativeSimdInfo { Managed = "MDLAxisAlignedBoundingBox", }},
 			// The managed definition is identical to the native definition,
 			// so this is not a type we care about.
 			{ "MPSImageHistogramInfo", new NativeSimdInfo { Managed = "MPSImageHistogramInfo" }},
@@ -232,7 +275,7 @@ namespace Extrospection
 			var str = Undecorate (type.ToString ());
 
 			if (type_mapping.TryGetValue (str, out var info)) {
-				requires_marshal_directive |= info.RequiresMarshalDirective;
+				requires_marshal_directive |= !info.NoMarshalDirectiveRequired;
 				simd_type = str;
 				return true;
 			}

@@ -131,7 +131,10 @@ namespace XamCore.ModelIO {
 		MDLAxisAlignedBoundingBox GetBoundingBox (double atTime);
 
 		[Export ("boundingBox")]
-		MDLAxisAlignedBoundingBox BoundingBox { get; }
+		MDLAxisAlignedBoundingBox BoundingBox {
+			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
+			get;
+		}
 
 		[Export ("frameInterval")]
 		double FrameInterval { get; set; }
@@ -1992,6 +1995,7 @@ namespace XamCore.ModelIO {
 		IntPtr Constructor (MDLAsset asset, int divisions, float patchRadius);
 
 		[Export ("initWithData:boundingBox:voxelExtent:")]
+		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		IntPtr Constructor (NSData voxelData, MDLAxisAlignedBoundingBox boundingBox, float voxelExtent);
 		
 		[Export ("meshUsingAllocator:")]
@@ -2024,6 +2028,7 @@ namespace XamCore.ModelIO {
 
 		[Export ("voxelsWithinExtent:")]
 		[return: NullAllowed]
+		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NSData GetVoxels (MDLVoxelIndexExtent withinExtent);
 
 		[Export ("voxelIndices")]
@@ -2055,10 +2060,16 @@ namespace XamCore.ModelIO {
 		nuint Count { get; }
 
 		[Export ("voxelIndexExtent")]
-		MDLVoxelIndexExtent VoxelIndexExtent { get; }
+		MDLVoxelIndexExtent VoxelIndexExtent {
+			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
+			get;
+		}
 
 		[Export ("boundingBox")]
-		MDLAxisAlignedBoundingBox BoundingBox { get; }
+		MDLAxisAlignedBoundingBox BoundingBox {
+			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
+			get;
+		}
 
 		[iOS (10,0)]
 		[Mac (10,12)]

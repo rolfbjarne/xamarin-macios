@@ -157,7 +157,9 @@ namespace XamCore.MetalPerformanceShaders {
 		bool ZeroHistogram { get; set; }
 
 		[Export ("histogramInfo")]
-		MPSImageHistogramInfo HistogramInfo { get; }
+		MPSImageHistogramInfo HistogramInfo {
+			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;
+		}
 
 		// Could not initialize an instance of the type 'MetalPerformanceShaders.MPSImageHistogram': the native 'initWithDevice:' method returned nil.
 //		[Export ("initWithDevice:")]
@@ -165,6 +167,10 @@ namespace XamCore.MetalPerformanceShaders {
 
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
+		// This requires manual marshaling because even if the memory layout for MPSImageHistogramInfo is identical between
+		// managed and native, the fact that the native struct has a Simd element means that the element has alignment
+		// requirements managed code doesn't necessarily follow (managed code might pass a pointer to a struct with the wrong alignment).
+		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		IntPtr Constructor (IMTLDevice device, ref MPSImageHistogramInfo histogramInfo);
 
 		[Export ("encodeToCommandBuffer:sourceTexture:histogram:histogramOffset:")]
@@ -180,10 +186,16 @@ namespace XamCore.MetalPerformanceShaders {
 	interface MPSImageHistogramEqualization {
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
+		// This requires manual marshaling because even if the memory layout for MPSImageHistogramInfo is identical between
+		// managed and native, the fact that the native struct has a Simd element means that the element has alignment
+		// requirements managed code doesn't necessarily follow (managed code might pass a pointer to a struct with the wrong alignment).
+		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		IntPtr Constructor (IMTLDevice device, ref MPSImageHistogramInfo histogramInfo);
 
 		[Export ("histogramInfo")]
-		MPSImageHistogramInfo HistogramInfo { get; }
+		MPSImageHistogramInfo HistogramInfo {
+			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;
+		}
 
 		[Export ("encodeTransformToCommandBuffer:sourceTexture:histogram:histogramOffset:")]
 		void EncodeTransformToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer histogram, nuint histogramOffset);
@@ -195,10 +207,16 @@ namespace XamCore.MetalPerformanceShaders {
 	interface MPSImageHistogramSpecification {
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
+		// This requires manual marshaling because even if the memory layout for MPSImageHistogramInfo is identical between
+		// managed and native, the fact that the native struct has a Simd element means that the element has alignment
+		// requirements managed code doesn't necessarily follow (managed code might pass a pointer to a struct with the wrong alignment).
+		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		IntPtr Constructor (IMTLDevice device, ref MPSImageHistogramInfo histogramInfo);
 
 		[Export ("histogramInfo")]
-		MPSImageHistogramInfo HistogramInfo { get; }
+		MPSImageHistogramInfo HistogramInfo {
+			[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;
+		}
 
 		[Export ("encodeTransformToCommandBuffer:sourceTexture:sourceHistogram:sourceHistogramOffset:desiredHistogram:desiredHistogramOffset:")]
 		void EncodeTransformToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer sourceHistogram, nuint sourceHistogramOffset, IMTLBuffer desiredHistogram, nuint desiredHistogramOffset);

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
@@ -11,23 +13,33 @@ public static class ProcessHelper
 	public static void AssertRunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, string message)
 	{
 		var exitCode = 0;
-		var output = new StringBuilder ();
+		var output = new List<string> ();
 		var rv = RunProcess (filename, arguments, out exitCode, timeout, workingDirectory, output);
-		if ((!rv || exitCode != 0) && output.Length > 0)
-			Console.WriteLine (output);
-		Assert.IsTrue (rv, $"{message} timed out after {timeout.TotalMinutes} minutes");
-		Assert.AreEqual (0, exitCode, $"{message} failed (unexpected exit code)");
+		var errors = new List<string> ();
+		var errorMessage = "";
+		if ((!rv || exitCode != 0) && output.Count > 0) {
+			var regex = new Regex ("error[::space::]:", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			foreach (var line in output) {
+				if (regex.IsMatch (line) && !errors.Contains (line))
+					errors.Add (line);
+				Console.WriteLine (line);
+			}
+			if (errors.Count > 0)
+				errorMessage = "\n\t" + string.Join ("\n\t", errors);
+		}
+		Assert.IsTrue (rv, $"{message} timed out after {timeout.TotalMinutes} minutes{errorMessage}");
+		Assert.AreEqual (0, exitCode, $"{message} failed (unexpected exit code){errorMessage}");
 	}
 
 	// runs the process and doesn't care about the result.
-	public static void RunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, StringBuilder output = null)
+	public static void RunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, List<string> output = null)
 	{
 		int exitCode;
 		RunProcess (filename, arguments, out exitCode, timeout, workingDirectory, output);
 	}
 
 	// returns false if timed out (in which case exit code is int.MinValue
-	public static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory, StringBuilder output = null)
+	public static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory, List<string> output = null)
 	{
 		var outputDone = new ManualResetEvent (false);
 		var errorDone = new ManualResetEvent (false);
@@ -45,7 +57,7 @@ public static class ProcessHelper
 				} else {
 					if (output != null) {
 						lock (output)
-							output.AppendLine (e.Data);
+							output.Add (e.Data);
 					} else {
 						Console.WriteLine (e.Data);
 					}
@@ -58,7 +70,7 @@ public static class ProcessHelper
 				} else {
 					if (output != null) {
 						lock (output)
-							output.AppendLine (e.Data);
+							output.Add (e.Data);
 					} else {
 						Console.WriteLine (e.Data);
 					}

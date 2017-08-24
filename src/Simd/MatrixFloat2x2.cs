@@ -22,7 +22,7 @@ SOFTWARE.
  */
 
 /*
- * This represents the native matrix_float3x3 type, which has a column-major layout
+ * This represents the native matrix_float2x2 type, which has a column-major layout
  */
 
 using System;
@@ -35,53 +35,36 @@ namespace Simd
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MatrixFloat2x2 : IEquatable<MatrixFloat2x2>
 	{
-		public VectorFloat2 Column0;
-		public VectorFloat2 Column1;
+		public float M11;
+		public float M21;
+		public float M12;
+		public float M22;
 
 		public readonly static MatrixFloat2x2 Identity = new MatrixFloat2x2 (VectorFloat2.UnitX, VectorFloat2.UnitY);
 
 		public MatrixFloat2x2 (VectorFloat2 column0, VectorFloat2 column1)
 		{
-			Column0 = column0;
-			Column1 = column1;
+			M11 = column0.X;
+			M21 = column0.Y;
+			M12 = column1.X;
+			M22 = column1.Y;
 		}
 
 		public MatrixFloat2x2 (
 			float m11, float m12,
 			float m21, float m22)
 		{
-			Column0.X = m11;
-			Column0.Y = m21;
-			Column1.X = m12;
-			Column1.Y = m22;
+			M11 = m11;
+			M21 = m21;
+			M12 = m12;
+			M22 = m22;
 		}
 
 		public float Determinant {
 			get {
-				return Column0.X * Column1.Y - Column1.X * Column0.Y;
+				return M11 * M22 - M21 * M12;
 			}
 		}
-
-		public VectorFloat2 Row0 {
-			get { return new VectorFloat2 (Column0.X, Column1.X); }
-			set {
-				Column0.X = value.X;
-				Column1.X = value.Y;
-			}
-		}
-
-		public VectorFloat2 Row1 {
-			get { return new VectorFloat2 (Column0.Y, Column1.Y); }
-			set {
-				Column0.Y = value.X;
-				Column1.Y = value.Y;
-			}
-		}
-
-		public float M11 { get { return Column0.X; } set { Column0.X = value; } }
-		public float M12 { get { return Column1.X; } set { Column1.X = value; } }
-		public float M21 { get { return Column0.Y; } set { Column0.Y = value; } }
-		public float M22 { get { return Column1.Y; } set { Column1.Y = value; } }
 
 		public void Invert ()
 		{
@@ -98,14 +81,15 @@ namespace Simd
 
 		public static MatrixFloat2x2 Transpose (MatrixFloat2x2 mat)
 		{
-			return new MatrixFloat2x2 (mat.Row0, mat.Row1);
+			return new MatrixFloat2x2 (mat.M11, mat.M21, mat.M12, mat.M22);
 		}
 
 		public static void Transpose (ref MatrixFloat2x2 mat, out MatrixFloat2x2 result)
 		{
-			result = new MatrixFloat2x2 ();
-			result.Row0 = mat.Column0;
-			result.Row1 = mat.Column1;
+			result.M11 = mat.M11;
+			result.M12 = mat.M21;
+			result.M21 = mat.M12;
+			result.M22 = mat.M22;
 		}
 
 		public static MatrixFloat2x2 Multiply (MatrixFloat2x2 left, MatrixFloat2x2 right)
@@ -117,11 +101,11 @@ namespace Simd
 
 		public static void Multiply (ref MatrixFloat2x2 left, ref MatrixFloat2x2 right, out MatrixFloat2x2 result)
 		{
-			result.Column0.X = left.Column0.X * right.Column0.X + left.Column1.X * right.Column0.Y;
-			result.Column1.X = left.Column0.X * right.Column1.X + left.Column1.X * right.Column1.Y;
+			result.M11 = left.M11 * right.M11 + left.M12 * right.M21;
+			result.M12 = left.M11 * right.M12 + left.M12 * right.M22;
 
-			result.Column0.Y = left.Column0.Y * right.Column0.X + left.Column1.Y * right.Column0.Y;
-			result.Column1.Y = left.Column0.Y * right.Column1.X + left.Column1.Y * right.Column1.Y;
+			result.M21 = left.M21 * right.M11 + left.M22 * right.M21;
+			result.M22 = left.M21 * right.M12 + left.M22 * right.M22;
 		}
 
 		public static MatrixFloat2x2 operator * (MatrixFloat2x2 left, MatrixFloat2x2 right)
@@ -153,12 +137,12 @@ namespace Simd
 
 		public override string ToString ()
 		{
-			return String.Format ("{0}\n{1}", Row0, Row1);
+			return $"({M11}, {M12})\n({M21}, {M22})";
 		}
 
 		public override int GetHashCode ()
 		{
-			return Column0.GetHashCode () ^ Column1.GetHashCode ();
+			return M11.GetHashCode () ^ M12.GetHashCode () ^ M21.GetHashCode () ^ M22.GetHashCode ();
 		}
 
 		public override bool Equals (object obj)
@@ -172,8 +156,10 @@ namespace Simd
 		public bool Equals (MatrixFloat2x2 other)
 		{
 			return
-				Column0 == other.Column0 &&
-				Column1 == other.Column1;
+				M11 == other.M11 &&
+				M12 == other.M12 &&
+				M21 == other.M21 &&
+				M22 == other.M22;
 		}
 	}
 }

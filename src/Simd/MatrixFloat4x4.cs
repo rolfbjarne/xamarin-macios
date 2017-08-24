@@ -35,10 +35,25 @@ namespace Simd
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MatrixFloat4x4 : IEquatable<MatrixFloat4x4>
 	{
-		public VectorFloat4 Column0;
-		public VectorFloat4 Column1;
-		public VectorFloat4 Column2;
-		public VectorFloat4 Column3;
+		public float M11;
+		public float M21;
+		public float M31;
+		public float M41;
+
+		public float M12;
+		public float M22;
+		public float M32;
+		public float M42;
+
+		public float M13;
+		public float M23;
+		public float M33;
+		public float M43;
+
+		public float M14;
+		public float M24;
+		public float M34;
+		public float M44;
 
 		public readonly static MatrixFloat4x4 Identity = new MatrixFloat4x4 {
 			M11 = 1f,
@@ -49,10 +64,22 @@ namespace Simd
 
 		public MatrixFloat4x4 (VectorFloat4 column0, VectorFloat4 column1, VectorFloat4 column2, VectorFloat4 column3)
 		{
-			Column0 = column0;
-			Column1 = column1;
-			Column2 = column2;
-			Column3 = column3;
+			M11 = column0.X;
+			M21 = column0.Y;
+			M31 = column0.Z;
+			M41 = column0.W;
+			M12 = column1.X;
+			M22 = column1.Y;
+			M32 = column1.Z;
+			M42 = column1.W;
+			M13 = column2.X;
+			M23 = column2.Y;
+			M33 = column2.Z;
+			M43 = column2.W;
+			M14 = column3.X;
+			M24 = column3.Y;
+			M34 = column3.Z;
+			M44 = column3.W;
 		}
 
 		public MatrixFloat4x4 (
@@ -61,96 +88,39 @@ namespace Simd
 			float m31, float m32, float m33, float m34,
 			float m41, float m42, float m43, float m44)
 		{
-			Column0.X = m11;
-			Column0.Y = m21;
-			Column0.Z = m31;
-			Column0.W = m41;
-			Column1.X = m12;
-			Column1.Y = m22;
-			Column1.Z = m32;
-			Column1.W = m42;
-			Column2.X = m13;
-			Column2.Y = m23;
-			Column2.Z = m33;
-			Column2.W = m43;
-			Column3.X = m14;
-			Column3.Y = m24;
-			Column3.Z = m34;
-			Column3.W = m44;
+			M11 = m11;
+			M21 = m21;
+			M31 = m31;
+			M41 = m41;
+			M12 = m12;
+			M22 = m22;
+			M32 = m32;
+			M42 = m42;
+			M13 = m13;
+			M23 = m23;
+			M33 = m33;
+			M43 = m43;
+			M14 = m14;
+			M24 = m24;
+			M34 = m34;
+			M44 = m44;
 		}
 
 		public float Determinant {
 			get {
-				float a = Column2.Z * Column3.W - Column3.Z * Column2.W;
-				float b = Column1.Z * Column3.W - Column3.Z * Column1.W;
-				float c = Column1.Z * Column2.W - Column2.Z * Column1.W;
-				float d = Column0.Z * Column3.W - Column3.Z * Column0.W;
-				float e = Column0.Z * Column2.W - Column2.Z * Column0.W;
-				float f = Column0.Z * Column1.W - Column1.Z * Column0.W;
+				float a = M33 * M44 - M34 * M43;
+				float b = M32 * M44 - M34 * M42;
+				float c = M32 * M43 - M33 * M42;
+				float d = M31 * M44 - M34 * M41;
+				float e = M31 * M43 - M33 * M41;
+				float f = M31 * M42 - M32 * M41;
 
-				return Column0.X * (Column1.Y * a - Column2.Y * b + Column3.Y * c) -
-					   Column1.X * (Column0.Y * a - Column2.Y * d + Column3.Y * e) +
-					   Column2.X * (Column0.Y * b - Column1.Y * d + Column3.Y * f) -
-					   Column3.X * (Column0.Y * c - Column1.Y * e + Column2.Y * f);
+				return M11 * (M22 * a - M23 * b + M24 * c) -
+						 M12 * (M21 * a - M23 * d + M24 * e) +
+						 M13 * (M21 * b - M22 * d + M24 * f) -
+						 M14 * (M21 * c - M22 * e + M23 * f);
 			}
 		}
-
-		public VectorFloat4 Row0 {
-			get { return new VectorFloat4 (Column0.X, Column1.X, Column2.X, Column3.X); }
-			set {
-				Column0.X = value.X;
-				Column1.X = value.Y;
-				Column2.X = value.Z;
-				Column3.X = value.W;
-			}
-		}
-
-		public VectorFloat4 Row1 {
-			get { return new VectorFloat4 (Column0.Y, Column1.Y, Column2.Y, Column3.Y); }
-			set {
-				Column0.Y = value.X;
-				Column1.Y = value.Y;
-				Column2.Y = value.Z;
-				Column3.Y = value.W;
-			}
-		}
-
-		public VectorFloat4 Row2 {
-			get { return new VectorFloat4 (Column0.Z, Column1.Z, Column2.Z, Column3.Z); }
-			set {
-				Column0.Z = value.X;
-				Column1.Z = value.Y;
-				Column2.Z = value.Z;
-				Column3.Z = value.W;
-			}
-		}
-
-		public VectorFloat4 Row3 {
-			get { return new VectorFloat4 (Column0.W, Column1.W, Column2.W, Column3.W); }
-			set {
-				Column0.W = value.X;
-				Column1.W = value.Y;
-				Column2.W = value.Z;
-				Column3.W = value.W;
-			}
-		}
-
-		public float M11 { get { return Column0.X; } set { Column0.X = value; } }
-		public float M12 { get { return Column1.X; } set { Column1.X = value; } }
-		public float M13 { get { return Column2.X; } set { Column2.X = value; } }
-		public float M14 { get { return Column3.X; } set { Column3.X = value; } }
-		public float M21 { get { return Column0.Y; } set { Column0.Y = value; } }
-		public float M22 { get { return Column1.Y; } set { Column1.Y = value; } }
-		public float M23 { get { return Column2.Y; } set { Column2.Y = value; } }
-		public float M24 { get { return Column3.Y; } set { Column3.Y = value; } }
-		public float M31 { get { return Column0.Z; } set { Column0.Z = value; } }
-		public float M32 { get { return Column1.Z; } set { Column1.Z = value; } }
-		public float M33 { get { return Column2.Z; } set { Column2.Z = value; } }
-		public float M34 { get { return Column3.Z; } set { Column3.Z = value; } }
-		public float M41 { get { return Column0.W; } set { Column0.W = value; } }
-		public float M42 { get { return Column1.W; } set { Column1.W = value; } }
-		public float M43 { get { return Column2.W; } set { Column2.W = value; } }
-		public float M44 { get { return Column3.W; } set { Column3.W = value; } }
 
 		public void Invert ()
 		{
@@ -181,25 +151,25 @@ namespace Simd
 
 		public static void Transpose (ref MatrixFloat4x4 mat, out MatrixFloat4x4 result)
 		{
-			result.Column0.X = mat.Column0.X;
-			result.Column0.Y = mat.Column1.X;
-			result.Column0.Z = mat.Column2.X;
-			result.Column0.W = mat.Column3.X;
+			result.M11 = mat.M11;
+			result.M21 = mat.M12;
+			result.M31 = mat.M13;
+			result.M41 = mat.M14;
 
-			result.Column1.X = mat.Column0.Y;
-			result.Column1.Y = mat.Column1.Y;
-			result.Column1.Z = mat.Column2.Y;
-			result.Column1.W = mat.Column3.Y;
+			result.M12 = mat.M21;
+			result.M22 = mat.M22;
+			result.M32 = mat.M23;
+			result.M42 = mat.M24;
 
-			result.Column2.X = mat.Column0.Z;
-			result.Column2.Y = mat.Column1.Z;
-			result.Column2.Z = mat.Column2.Z;
-			result.Column2.W = mat.Column3.Z;
+			result.M13 = mat.M31;
+			result.M23 = mat.M32;
+			result.M33 = mat.M33;
+			result.M43 = mat.M34;
 
-			result.Column3.X = mat.Column0.W;
-			result.Column3.Y = mat.Column1.W;
-			result.Column3.Z = mat.Column2.W;
-			result.Column3.W = mat.Column3.W;
+			result.M14 = mat.M41;
+			result.M24 = mat.M42;
+			result.M34 = mat.M43;
+			result.M44 = mat.M44;
 		}
 
 		public static MatrixFloat4x4 Multiply (MatrixFloat4x4 left, MatrixFloat4x4 right)
@@ -211,25 +181,25 @@ namespace Simd
 
 		public static void Multiply (ref MatrixFloat4x4 left, ref MatrixFloat4x4 right, out MatrixFloat4x4 result)
 		{
-			result.Column0.X = left.Column0.X * right.Column0.X + left.Column1.X * right.Column0.Y + left.Column2.X * right.Column0.Z + left.Column3.X * right.Column0.W;
-			result.Column1.X = left.Column0.X * right.Column1.X + left.Column1.X * right.Column1.Y + left.Column2.X * right.Column1.Z + left.Column3.X * right.Column1.W;
-			result.Column2.X = left.Column0.X * right.Column2.X + left.Column1.X * right.Column2.Y + left.Column2.X * right.Column2.Z + left.Column3.X * right.Column2.W;
-			result.Column3.X = left.Column0.X * right.Column3.X + left.Column1.X * right.Column3.Y + left.Column2.X * right.Column3.Z + left.Column3.X * right.Column3.W;
+			result.M11 = left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31 + left.M14 * right.M41;
+			result.M12 = left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32 + left.M14 * right.M42;
+			result.M13 = left.M11 * right.M13 + left.M12 * right.M23 + left.M13 * right.M33 + left.M14 * right.M43;
+			result.M14 = left.M11 * right.M14 + left.M12 * right.M24 + left.M13 * right.M34 + left.M14 * right.M44;
 
-			result.Column0.Y = left.Column0.Y * right.Column0.X + left.Column1.Y * right.Column0.Y + left.Column2.Y * right.Column0.Z + left.Column3.Y * right.Column0.W;
-			result.Column1.Y = left.Column0.Y * right.Column1.X + left.Column1.Y * right.Column1.Y + left.Column2.Y * right.Column1.Z + left.Column3.Y * right.Column1.W;
-			result.Column2.Y = left.Column0.Y * right.Column2.X + left.Column1.Y * right.Column2.Y + left.Column2.Y * right.Column2.Z + left.Column3.Y * right.Column2.W;
-			result.Column3.Y = left.Column0.Y * right.Column3.X + left.Column1.Y * right.Column3.Y + left.Column2.Y * right.Column3.Z + left.Column3.Y * right.Column3.W;
+			result.M21 = left.M21 * right.M11 + left.M22 * right.M21 + left.M23 * right.M31 + left.M24 * right.M41;
+			result.M22 = left.M21 * right.M12 + left.M22 * right.M22 + left.M23 * right.M32 + left.M24 * right.M42;
+			result.M23 = left.M21 * right.M13 + left.M22 * right.M23 + left.M23 * right.M33 + left.M24 * right.M43;
+			result.M24 = left.M21 * right.M14 + left.M22 * right.M24 + left.M23 * right.M34 + left.M24 * right.M44;
 
-			result.Column0.Z = left.Column0.Z * right.Column0.X + left.Column1.Z * right.Column0.Y + left.Column2.Z * right.Column0.Z + left.Column3.Z * right.Column0.W;
-			result.Column1.Z = left.Column0.Z * right.Column1.X + left.Column1.Z * right.Column1.Y + left.Column2.Z * right.Column1.Z + left.Column3.Z * right.Column1.W;
-			result.Column2.Z = left.Column0.Z * right.Column2.X + left.Column1.Z * right.Column2.Y + left.Column2.Z * right.Column2.Z + left.Column3.Z * right.Column2.W;
-			result.Column3.Z = left.Column0.Z * right.Column3.X + left.Column1.Z * right.Column3.Y + left.Column2.Z * right.Column3.Z + left.Column3.Z * right.Column3.W;
+			result.M31 = left.M31 * right.M11 + left.M32 * right.M21 + left.M33 * right.M31 + left.M34 * right.M41;
+			result.M32 = left.M31 * right.M12 + left.M32 * right.M22 + left.M33 * right.M32 + left.M34 * right.M42;
+			result.M33 = left.M31 * right.M13 + left.M32 * right.M23 + left.M33 * right.M33 + left.M34 * right.M43;
+			result.M34 = left.M31 * right.M14 + left.M32 * right.M24 + left.M33 * right.M34 + left.M34 * right.M44;
 
-			result.Column0.W = left.Column0.W * right.Column0.X + left.Column1.W * right.Column0.Y + left.Column2.W * right.Column0.Z + left.Column3.W * right.Column0.W;
-			result.Column1.W = left.Column0.W * right.Column1.X + left.Column1.W * right.Column1.Y + left.Column2.W * right.Column1.Z + left.Column3.W * right.Column1.W;
-			result.Column2.W = left.Column0.W * right.Column2.X + left.Column1.W * right.Column2.Y + left.Column2.W * right.Column2.Z + left.Column3.W * right.Column2.W;
-			result.Column3.W = left.Column0.W * right.Column3.X + left.Column1.W * right.Column3.Y + left.Column2.W * right.Column3.Z + left.Column3.W * right.Column3.W;
+			result.M41 = left.M41 * right.M11 + left.M42 * right.M21 + left.M43 * right.M31 + left.M44 * right.M41;
+			result.M42 = left.M41 * right.M12 + left.M42 * right.M22 + left.M43 * right.M32 + left.M44 * right.M42;
+			result.M43 = left.M41 * right.M13 + left.M42 * right.M23 + left.M43 * right.M33 + left.M44 * right.M43;
+			result.M44 = left.M41 * right.M14 + left.M42 * right.M24 + left.M43 * right.M34 + left.M44 * right.M44;
 		}
 
 		public static MatrixFloat4x4 operator * (MatrixFloat4x4 left, MatrixFloat4x4 right)
@@ -249,7 +219,11 @@ namespace Simd
 
 		public static explicit operator global::OpenTK.Matrix4 (MatrixFloat4x4 value)
 		{
-			return new global::OpenTK.Matrix4 (value.Row0, value.Row1, value.Row2, value.Row3);
+			return new global::OpenTK.Matrix4 (
+				value.M11, value.M12, value.M13, value.M14,
+				value.M21, value.M22, value.M23, value.M24,
+				value.M31, value.M32, value.M33, value.M34,
+				value.M41, value.M42, value.M43, value.M44);
 		}
 
 		public static explicit operator MatrixFloat4x4 (global::OpenTK.Matrix4 value)
@@ -259,12 +233,20 @@ namespace Simd
 
 		public override string ToString ()
 		{
-			return String.Format ("{0}\n{1}\n{2}\n{3}", Row0, Row1, Row2, Row3);
+			return
+				$"({M11}, {M12}, {M13}, {M14})\n" +
+				$"({M21}, {M22}, {M23}, {M24})\n" +
+				$"({M31}, {M32}, {M33}, {M34})\n" +
+				$"({M41}, {M42}, {M43}, {M44})";
 		}
 
 		public override int GetHashCode ()
 		{
-			return Column0.GetHashCode () ^ Column1.GetHashCode () ^ Column2.GetHashCode () ^ Column3.GetHashCode ();
+			return
+				M11.GetHashCode () ^ M12.GetHashCode () ^ M13.GetHashCode () ^ M14.GetHashCode () ^
+				M21.GetHashCode () ^ M22.GetHashCode () ^ M23.GetHashCode () ^ M24.GetHashCode () ^
+				M31.GetHashCode () ^ M32.GetHashCode () ^ M33.GetHashCode () ^ M34.GetHashCode () ^
+				M41.GetHashCode () ^ M42.GetHashCode () ^ M43.GetHashCode () ^ M44.GetHashCode ();
 		}
 
 		public override bool Equals (object obj)
@@ -278,10 +260,10 @@ namespace Simd
 		public bool Equals (MatrixFloat4x4 other)
 		{
 			return
-				Column0 == other.Column0 &&
-				Column1 == other.Column1 &&
-				Column2 == other.Column2 &&
-				Column3 == other.Column3;
+				M11 == other.M11 && M12 == other.M12 && M13 == other.M13 && M14 == other.M14 &&
+				M21 == other.M21 && M22 == other.M22 && M23 == other.M23 && M24 == other.M24 &&
+				M31 == other.M31 && M32 == other.M32 && M33 == other.M33 && M34 == other.M34 &&
+				M41 == other.M41 && M42 == other.M42 && M43 == other.M43 && M44 == other.M44;
 		}
 	}
 }

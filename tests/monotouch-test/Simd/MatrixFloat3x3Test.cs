@@ -54,47 +54,9 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void Determinant ()
 		{
-			for (int i = 0; i < 20000; i++) { // FIXME: remove loop
-				var expected = GetTestMatrix ();
-				var actual = (MatrixFloat3x3) expected;
-				Assert.AreEqual (expected.Determinant, actual.Determinant, 0.000001f, "determinant " + i.ToString () + "\n" + actual);
-			}
-		}
-
-		[Test]
-		public void Rows ()
-		{
 			var expected = GetTestMatrix ();
 			var actual = (MatrixFloat3x3) expected;
-			Asserts.AreEqual (expected.GetRow0 (), actual.Row0, "row0 getter");
-			Asserts.AreEqual (expected.GetRow1 (), actual.Row1, "row1 getter");
-			Asserts.AreEqual (expected.GetRow2 (), actual.Row2, "row2 getter");
-
-			var newExpected = GetTestMatrix ();
-			actual.Row0 = newExpected.GetRow0 ();
-			actual.Row1 = newExpected.GetRow1 ();
-			actual.Row2 = newExpected.GetRow2 ();
-			Asserts.AreEqual (newExpected.GetRow0 (), actual.Row0, "row0 setter");
-			Asserts.AreEqual (newExpected.GetRow1 (), actual.Row1, "row1 setter");
-			Asserts.AreEqual (newExpected.GetRow2 (), actual.Row2, "row2 setter");
-		}
-
-		[Test]
-		public void Columns ()
-		{
-			var expected = GetTestMatrix ();
-			var actual = (MatrixFloat3x3) expected;
-			Asserts.AreEqual (expected.GetColumn0 (), actual.Column0, "column0 getter");
-			Asserts.AreEqual (expected.GetColumn1 (), actual.Column1, "column1 getter");
-			Asserts.AreEqual (expected.GetColumn2 (), actual.Column2, "column2 getter");
-
-			var newExpected = GetTestMatrix ();
-			actual.Column0 = newExpected.GetColumn0 ();
-			actual.Column1 = newExpected.GetColumn1 ();
-			actual.Column2 = newExpected.GetColumn2 ();
-			Asserts.AreEqual (newExpected.GetColumn0 (), actual.Column0, "column0 setter");
-			Asserts.AreEqual (newExpected.GetColumn1 (), actual.Column1, "column1 setter");
-			Asserts.AreEqual (newExpected.GetColumn2 (), actual.Column2, "column2 setter");
+			Assert.AreEqual (expected.Determinant, actual.Determinant, 0.000001f, "determinant\n" + actual);
 		}
 
 		[Test]
@@ -137,53 +99,29 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void InvertInstance ()
 		{
-			// FIXME: remove loop
-			for (int i = 0; i < 1000; i++) {
-				// Matrix3 doesn't have an Invert method, so we compare against the definition of matrix inversion:
-				// multiplying a matrix with its inverse yields the identity matrix.
-				var original = (MatrixFloat3x3) GetTestMatrix ();
-				var inverted = original;
+			// Matrix3 doesn't have an Invert method, so we compare against the definition of matrix inversion:
+			// multiplying a matrix with its inverse yields the identity matrix.
+			var original = (MatrixFloat3x3) GetTestMatrix ();
+			var inverted = original;
 
-				inverted.Invert ();
+			inverted.Invert ();
 
-				var actual = original * inverted;
+			var actual = original * inverted;
 
-				Asserts.AreEqual (MatrixFloat3x3.Identity, actual, 0.0001f, "invert " + i.ToString () + "\n" + actual + "\nDeterminate: " + actual.Determinant);
-			}
+			Asserts.AreEqual (MatrixFloat3x3.Identity, actual, 0.0001f, "invert\n" + actual + "\nDeterminate: " + actual.Determinant);
 		}
 
 		[Test]
 		public void InvertStatic ()
 		{
-			// FIXME: remove loop
-			for (int i = 0; i < 1000; i++) {
-				 // Matrix3 doesn't have an Invert method, so we compare against the definition of matrix inversion:
-				 // multiplying a matrix with its inverse yields the identity matrix.
-				var original = (MatrixFloat3x3) GetTestMatrix ();
-				var inverted = MatrixFloat3x3.Invert (original);
+			// Matrix3 doesn't have an Invert method, so we compare against the definition of matrix inversion:
+			// multiplying a matrix with its inverse yields the identity matrix.
+			var original = (MatrixFloat3x3) GetTestMatrix ();
+			var inverted = MatrixFloat3x3.Invert (original);
 
-				var actual = original * inverted;
+			var actual = original * inverted;
 
-				Asserts.AreEqual (MatrixFloat3x3.Identity, actual, 0.0001f, "invert " + i.ToString () + "\n" + actual + "\nDeterminate: " + actual.Determinant);
-			}
-		}
-
-		float MaxDiff (MatrixFloat3x3 a, MatrixFloat3x3 b) // FIXME: RemoVE
-		{
-			float max = 0;
-			max = Math.Max (max, Math.Abs (a.M11 - b.M11));
-			max = Math.Max (max, Math.Abs (a.M12 - b.M12));
-			max = Math.Max (max, Math.Abs (a.M13 - b.M13));
-
-			max = Math.Max (max, Math.Abs (a.M21 - b.M21));
-			max = Math.Max (max, Math.Abs (a.M22 - b.M22));
-			max = Math.Max (max, Math.Abs (a.M23 - b.M23));
-
-			max = Math.Max (max, Math.Abs (a.M31 - b.M31));
-			max = Math.Max (max, Math.Abs (a.M32 - b.M32));
-			max = Math.Max (max, Math.Abs (a.M33 - b.M33));
-
-			return max;
+			Asserts.AreEqual (MatrixFloat3x3.Identity, actual, 0.0001f, "invert\n" + actual + "\nDeterminate: " + actual.Determinant);
 		}
 
 		[Test]

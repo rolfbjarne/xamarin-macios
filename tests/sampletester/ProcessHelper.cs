@@ -18,14 +18,14 @@ public static class ProcessHelper
 		var errors = new List<string> ();
 		var errorMessage = "";
 		if ((!rv || exitCode != 0) && output.Count > 0) {
-			var regex = new Regex ("error[::space::]:", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			var regex = new Regex (@"error\s*(MSB....)?(CS....)?:", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 			foreach (var line in output) {
 				if (regex.IsMatch (line) && !errors.Contains (line))
 					errors.Add (line);
 				Console.WriteLine (line);
 			}
 			if (errors.Count > 0)
-				errorMessage = "\n\t" + string.Join ("\n\t", errors);
+				errorMessage = "\n\t[Summary of errors from the build output below]\n\t" + string.Join ("\n\t", errors);
 		}
 		Assert.IsTrue (rv, $"{message} timed out after {timeout.TotalMinutes} minutes{errorMessage}");
 		Assert.AreEqual (0, exitCode, $"{message} failed (unexpected exit code){errorMessage}");

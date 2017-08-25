@@ -4,6 +4,28 @@
 #include <zlib.h>
 #include "libtest.h"
 
+extern "C" {
+#define GET_MATRIX_VALUE(etype, rank, packed) etype test_matrix_##etype##rank##x##rank##_get_value (matrix_##etype##rank##x##rank *value, int row, int column) { return (*((simd_packed_##etype##packed *) &value->columns [column])) [row]; }
+#define GET_VECTOR_VALUE(etype, rank, packed) etype test_vector_##etype##rank##_get_value (vector_##etype##rank *value, int index) { return (*((simd_packed_##etype##packed *) value)) [index] ;}
+
+GET_MATRIX_VALUE(float, 2, 2);
+GET_MATRIX_VALUE(float, 3, 4);
+GET_MATRIX_VALUE(float, 4, 4);
+GET_MATRIX_VALUE(double, 2, 2);
+GET_MATRIX_VALUE(double, 3, 4);
+GET_MATRIX_VALUE(double, 4, 4);
+
+GET_VECTOR_VALUE(int, 2, 2);
+GET_VECTOR_VALUE(int, 3, 4);
+GET_VECTOR_VALUE(int, 4, 4);
+GET_VECTOR_VALUE(float, 2, 2);
+GET_VECTOR_VALUE(float, 3, 4);
+GET_VECTOR_VALUE(float, 4, 4);
+GET_VECTOR_VALUE(double, 2, 2);
+GET_VECTOR_VALUE(double, 3, 4);
+GET_VECTOR_VALUE(double, 4, 4);
+}
+
 int
 theUltimateAnswer ()
 {

@@ -11,6 +11,8 @@ namespace Extrospection
 
 	class SimdCheck : BaseVisitor
 	{
+		const bool strict = false;
+
 		// A dictionary of native type -> managed type mapping.
 		// If there are multiple managed types for a native type, the first is the correct one,
 		// any subsequent types are invalid.
@@ -170,7 +172,7 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 			if (method.IsPrivate || method.IsAssembly || method.IsFamilyAndAssembly)
 				return; // Don't care about non-visible types
 
-			if (type.Namespace == "Simd" || type.Namespace == "OpenTK")
+			if (type.Namespace == "Simd" || type.Namespace.StartsWith ("OpenTK", StringComparison.Ordinal))
 				return; // We're assuming everything in the Simd and OpenTK namespaces can be ignored (the former because it's correctly written, the latter because it doesn't map to native simd types).
 
 			if (method.HasCustomAttributes && method.CustomAttributes.Where ((v) => v.Constructor.DeclaringType.Name == "ExtensionAttribute").Any ())
@@ -184,16 +186,17 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 				if (method.IsObsolete ())
 					return; // Don't care about obsolete API.
 
-				if (contains_simd_types) {
+				if (contains_simd_types && strict) {
 					// We can't map this method to a native function.
-					Console.WriteLine ($"!simd-can't-map! {method}");
+					Console.WriteLine ($"!simd-can't-map-managed! {method}");
 				}
 				return;
 			}
 
 			ManagedSimdInfo existing;
 			if (managed_methods.TryGetValue (key, out existing)) {
-				Console.WriteLine ($"!simd-double-mapping! same key '{key}' for both '{existing.Method}' and '{method}'");
+				if (strict)
+					Console.WriteLine ($"!simd-double-mapping! same key '{key}' for both '{existing.Method}' and '{method}'");
 			} else {
 				managed_methods [key] = new ManagedSimdInfo {
 					Method = method, ContainsInvalidMappingForSimd = invalid_simd_type
@@ -427,7 +430,9 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 				case "simd_quatf":
 					break; // we don't care about these types (yet)
 				default:
-					Console.WriteLine ($"!simd-mapping-failure! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature (new in iOS 11: {is_new}).");
+					if (!strict && is_new)
+						return;
+					Console.WriteLine ($"!simd-can't-map-native! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature.");
 					break;
 				}
 				return;

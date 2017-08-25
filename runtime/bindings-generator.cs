@@ -2022,7 +2022,7 @@ namespace Xamarin.BindingMethods.Generator
 					ReturnType = Types.MatrixFloat2x2,
 				}
 			);
-
+			
 			data.Add (
 				new FunctionData {
 					Comment = " // IntPtr func (IntPtr, ref MPSImageHistogramInfo)",
@@ -2212,7 +2212,7 @@ namespace Xamarin.BindingMethods.Generator
 					},
 				}
 			);
-
+			
 			data.Add (
 				new FunctionData {
 					Comment = " // MatrixFloat4x4 func (Int64, CGSize, nfloat, nfloat)",
@@ -2227,7 +2227,7 @@ namespace Xamarin.BindingMethods.Generator
 					},
 				}
 			);
-
+			
 			data.Add (
 				new FunctionData {
 					Comment = " // MatrixFloat4x4 func (double)",
@@ -2291,6 +2291,59 @@ namespace Xamarin.BindingMethods.Generator
 				}
 			);
 
+			data.Add (
+				new FunctionData {
+					Comment = " // MPSImageHistogramInfo func ()",
+					Prefix = "simd__",
+					Variants = Variants.All,
+					ReturnType = Types.MPSImageHistogramInfo,
+				}
+			);
+
+			data.Add (
+				new FunctionData {
+					Comment = " // IntPtr func (IntPtr, ref MPSImageHistogramInfo)",
+					Prefix = "simd__",
+					Variants = Variants.NonStret,
+					ReturnType = Types.IntPtr,
+					Parameters = new ParameterData [] {
+						new ParameterData { TypeData = Types.IntPtr },
+						new ParameterData { TypeData = Types.MPSImageHistogramInfo, IsRef = true },
+					},
+				}
+			);
+
+			data.Add (
+				new FunctionData {
+					Comment = " // MDLVoxelIndexExtent func ()",
+					Prefix = "simd__",
+					Variants = Variants.All,
+					ReturnType = Types.MDLVoxelIndexExtent,
+				}
+			);
+
+			data.Add (
+				new FunctionData {
+					Comment = " // void func (MDLVoxelIndexExtent)",
+					Prefix = "simd__",
+					Variants = Variants.NonStret,
+					Parameters = new ParameterData [] {
+						new ParameterData { TypeData = Types.MDLVoxelIndexExtent },
+					},
+				}
+			);
+
+			data.Add (
+				new FunctionData {
+					Comment = " // IntPtr func (MDLVoxelIndexExtent)",
+					Prefix = "simd__",
+					Variants = Variants.NonStret,
+					ReturnType = Types.IntPtr,
+					Parameters = new ParameterData [] {
+						new ParameterData { TypeData = Types.MDLVoxelIndexExtent },
+					},
+				}
+			);
 			// We must expand functions with native types to their actual type as well.
 			for (int i = data.Count - 1; i >= 0; i--) {
 				if (!data [i].HasNativeType)
@@ -3180,8 +3233,13 @@ namespace Xamarin.BindingMethods.Generator
 				IsX64Stret = true,
 			};
 
+<<<<<<< HEAD
 			public static TypeData MDLVoxelIndexExtent2 = new TypeData {
 				ManagedType = "MDLVoxelIndexExtent2",
+=======
+			public static TypeData MDLVoxelIndexExtent = new TypeData {
+				ManagedType = "MDLVoxelIndexExtent",
+>>>>>>> marshaldirectivefixes
 				NativeType = "MDLVoxelIndexExtent",
 				NativeWrapperType = "struct MDLVoxelIndexExtentWrapper",
 				RequireMarshal = true,
@@ -3229,7 +3287,6 @@ namespace Xamarin.BindingMethods.Generator
 			default:
 				return this;
 			}
-
 		}
 	}
 

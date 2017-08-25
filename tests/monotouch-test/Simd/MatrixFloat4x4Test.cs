@@ -52,53 +52,10 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void Determinant ()
 		{
-			for (int i = 0; i < 20000; i++) { // FIXME: remove loop
-				var expected = GetTestMatrix ();
-				var actual = (MatrixFloat4x4) expected;
-				Assert.AreEqual (expected.Determinant, actual.Determinant, 0.000001f, "determinant " + i.ToString () + "\n" + actual);
-			}
-		}
-
-		[Test]
-		public void Rows ()
-		{
 			var expected = GetTestMatrix ();
 			var actual = (MatrixFloat4x4) expected;
-			Asserts.AreEqual (expected.Row0, actual.Row0, "row0 getter");
-			Asserts.AreEqual (expected.Row1, actual.Row1, "row1 getter");
-			Asserts.AreEqual (expected.Row2, actual.Row2, "row2 getter");
-			Asserts.AreEqual (expected.Row3, actual.Row3, "row3 getter");
+			Assert.AreEqual (expected.Determinant, actual.Determinant, 0.000001f, "determinant\n" + actual);
 
-			var newExpected = GetTestMatrix ();
-			actual.Row0 = newExpected.Row0;
-			actual.Row1 = newExpected.Row1;
-			actual.Row2 = newExpected.Row2;
-			actual.Row3 = newExpected.Row3;
-			Asserts.AreEqual (newExpected.Row0, actual.Row0, "row0 setter");
-			Asserts.AreEqual (newExpected.Row1, actual.Row1, "row1 setter");
-			Asserts.AreEqual (newExpected.Row2, actual.Row2, "row2 setter");
-			Asserts.AreEqual (newExpected.Row3, actual.Row3, "row3 setter");
-		}
-
-		[Test]
-		public void Columns ()
-		{
-			var expected = GetTestMatrix ();
-			var actual = (MatrixFloat4x4) expected;
-			Asserts.AreEqual (expected.Column0, actual.Column0, "column0 getter");
-			Asserts.AreEqual (expected.Column1, actual.Column1, "column1 getter");
-			Asserts.AreEqual (expected.Column2, actual.Column2, "column2 getter");
-			Asserts.AreEqual (expected.Column3, actual.Column3, "column3 getter");
-
-			var newExpected = GetTestMatrix ();
-			actual.Column0 = newExpected.Column0;
-			actual.Column1 = newExpected.Column1;
-			actual.Column2 = newExpected.Column2;
-			actual.Column3 = newExpected.Column3;
-			Asserts.AreEqual (newExpected.Column0, actual.Column0, "column0 setter");
-			Asserts.AreEqual (newExpected.Column1, actual.Column1, "column1 setter");
-			Asserts.AreEqual (newExpected.Column2, actual.Column2, "column2 setter");
-			Asserts.AreEqual (newExpected.Column3, actual.Column3, "column3 setter");
 		}
 
 		[Test]
@@ -162,59 +119,29 @@ namespace MonoTouchFixtures.Simd
 		[Test]
 		public void InvertInstance ()
 		{
-			for (int i = 0; i < 1000; i++) {
-				var expected = GetTestMatrix ();
-				var actual = (MatrixFloat4x4) expected;
+			var expected = GetTestMatrix ();
+			var actual = (MatrixFloat4x4) expected;
 
-				expected.Invert ();
-				actual.Invert ();
+			expected.Invert ();
+			actual.Invert ();
 
-				// Matrix4 uses a managed Invert algorithm, while MatrixFloat4x4 P/Invokes a native implementation.
-				// This means the results won't necessarily be 100% identical, so we're comparing with a delta value.
-				Asserts.AreEqual (expected, actual, 0.0001f, "invert " + i.ToString () + "\n" + expected + "\n" + actual + "\nDeterminate: " + actual.Determinant);
-			}
+			// Matrix4 uses a managed Invert algorithm, while MatrixFloat4x4 P/Invokes a native implementation.
+			// This means the results won't necessarily be 100% identical, so we're comparing with a delta value.
+			Asserts.AreEqual (expected, actual, 0.0001f, "invert\n" + expected + "\n" + actual + "\nDeterminate: " + actual.Determinant);
 		}
 
 		[Test]
 		public void InvertStatic ()
 		{
-			for (int i = 0; i < 1000; i++) {
-				var input = GetTestMatrix ();
-				var input_simd = (MatrixFloat4x4) input;
+			var input = GetTestMatrix ();
+			var input_simd = (MatrixFloat4x4) input;
 
-				var expected = Matrix4.Invert (input);
-				var actual = MatrixFloat4x4.Invert (input_simd);
+			var expected = Matrix4.Invert (input);
+			var actual = MatrixFloat4x4.Invert (input_simd);
 
-				// Matrix4 uses a managed Invert algorithm, while MatrixFloat4x4 P/Invokes a native implementation.
-				// This means the results won't necessarily be 100% identical, so we're comparing with a delta value.
-				Asserts.AreEqual (expected, actual, 0.0001f, "invert " + i.ToString () + "\n" + expected + "\n" + actual + "\nDeterminate: " + actual.Determinant);
-			}
-		}
-
-		float MaxDiff (MatrixFloat4x4 a, MatrixFloat4x4 b) // FIXME: REMOVE
-		{
-			float max = 0;
-			max = Math.Max (max, Math.Abs (a.M11 - b.M11));
-			max = Math.Max (max, Math.Abs (a.M12 - b.M12));
-			max = Math.Max (max, Math.Abs (a.M13 - b.M13));
-			max = Math.Max (max, Math.Abs (a.M14 - b.M14));
-
-			max = Math.Max (max, Math.Abs (a.M21 - b.M21));
-			max = Math.Max (max, Math.Abs (a.M22 - b.M22));
-			max = Math.Max (max, Math.Abs (a.M23 - b.M23));
-			max = Math.Max (max, Math.Abs (a.M24 - b.M24));
-
-			max = Math.Max (max, Math.Abs (a.M31 - b.M31));
-			max = Math.Max (max, Math.Abs (a.M32 - b.M32));
-			max = Math.Max (max, Math.Abs (a.M33 - b.M33));
-			max = Math.Max (max, Math.Abs (a.M34 - b.M34));
-
-			max = Math.Max (max, Math.Abs (a.M41 - b.M41));
-			max = Math.Max (max, Math.Abs (a.M42 - b.M42));
-			max = Math.Max (max, Math.Abs (a.M43 - b.M43));
-			max = Math.Max (max, Math.Abs (a.M44 - b.M44));
-
-			return max;
+			// Matrix4 uses a managed Invert algorithm, while MatrixFloat4x4 P/Invokes a native implementation.
+			// This means the results won't necessarily be 100% identical, so we're comparing with a delta value.
+			Asserts.AreEqual (expected, actual, 0.0001f, "invert\n" + expected + "\n" + actual + "\nDeterminate: " + actual.Determinant);
 		}
 
 		[Test]

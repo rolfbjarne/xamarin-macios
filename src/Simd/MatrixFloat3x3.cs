@@ -129,11 +129,11 @@ namespace Simd
 			result.M11 = mat.M11;
 			result.M21 = mat.M12;
 			result.M31 = mat.M13;
-			result.M21 = mat.M12;
+			result.M12 = mat.M21;
 			result.M22 = mat.M22;
-			result.M23 = mat.M32;
-			result.M31 = mat.M13;
 			result.M32 = mat.M23;
+			result.M13 = mat.M31;
+			result.M23 = mat.M32;
 			result.M33 = mat.M33;
 		}
 

@@ -50,6 +50,11 @@ public static class ProcessHelper
 			xbuild.StartInfo.RedirectStandardOutput = true;
 			xbuild.StartInfo.UseShellExecute = false;
 			xbuild.StartInfo.WorkingDirectory = workingDirectory;
+			// XS sets XCODE_DEVELOPER_DIR_PATH, which breaks pretty much everything 
+			// if it doesn't match what xcode-select reports, so clear it.
+			xbuild.StartInfo.EnvironmentVariables ["XCODE_DEVELOPER_DIR_PATH"] = null;
+			// Make sure we use the Xcode specified in this repository.
+			xbuild.StartInfo.EnvironmentVariables ["DEVELOPER_DIR"] = Configuration.XcodeLocation;
 			xbuild.OutputDataReceived += (sender, e) =>
 			{
 				if (e.Data == null) {

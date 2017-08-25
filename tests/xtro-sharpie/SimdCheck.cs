@@ -264,9 +264,14 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 				}
 			}
 
-			simd_type = type.ToString ();
-			if (!rv && simd_type.Contains ("simd"))
-				Console.WriteLine ($"!simd-unknown-type! Could not detect that {simd_type} is a Simd type, but its name contains 'simd'.");
+			var typeName = type.ToString ();
+
+			if (!rv && typeName.Contains ("simd"))
+				Console.WriteLine ($"!simd-unknown-type! Could not detect that {typeName} is a Simd type, but its name contains 'simd'.");
+			
+			if (rv)
+				simd_type = typeName;
+			
 			return rv;
 		}
 

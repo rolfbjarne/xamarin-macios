@@ -11,7 +11,8 @@ namespace Extrospection
 
 	class SimdCheck : BaseVisitor
 	{
-		const bool strict = false;
+		bool very_strict = false;
+		bool strict = false;
 
 		// A dictionary of native type -> managed type mapping.
 		// If there are multiple managed types for a native type, the first is the correct one,
@@ -20,7 +21,6 @@ namespace Extrospection
 		{
 			public string Managed;
 			public string InvalidManaged;
-			public bool NoMarshalDirectiveRequired;
 		}
 
 		/*
@@ -70,8 +70,8 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 
 		static Dictionary<string, NativeSimdInfo> type_mapping = new Dictionary<string, NativeSimdInfo> () {
 			{ "matrix_double2x2", new NativeSimdInfo { Managed ="MatrixDouble2x2", InvalidManaged = "Matrix2d" }},
-			{ "matrix_double3x3", new NativeSimdInfo { Managed = "MatrixDouble3x3", InvalidManaged = "Matrix3d", NoMarshalDirectiveRequired = true }},
-			{ "matrix_double4x4", new NativeSimdInfo { Managed = "MatrixDouble4x4", InvalidManaged = "Matrix4d", NoMarshalDirectiveRequired = true }},
+			{ "matrix_double3x3", new NativeSimdInfo { Managed = "MatrixDouble3x3", InvalidManaged = "Matrix3d" }},
+			{ "matrix_double4x4", new NativeSimdInfo { Managed = "MatrixDouble4x4", InvalidManaged = "Matrix4d" }},
 			{ "matrix_float2x2", new NativeSimdInfo { Managed = "MatrixFloat2x2", InvalidManaged = "Matrix2", }},
 			{ "matrix_float3x3", new NativeSimdInfo { Managed = "MatrixFloat3x3", InvalidManaged = "Matrix3", }},
 			{ "matrix_float4x3", new NativeSimdInfo { Managed = "MatrixFloat4x3", }},
@@ -102,8 +102,7 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 			// In this case each element uses 16 bytes (4 floats) due to padding.
 			// The managed definition is two Vector3 fields, and does *not*
 			// match the native definition (missing the padding).
-			// Right now we're marshalling this struct manually ([MarshalDirective]),
-			// so managed code should get correct results.
+			// It still works because we're marshalling this struct manually ([MarshalDirective]).
 			{ "GKBox", new NativeSimdInfo { Managed = "GKBox", }},
 			// The native definition is 'vector_float3 points[3]' - an array of three vector_float3.
 			// In this case each element uses 16 bytes (4 floats) due to padding.
@@ -145,20 +144,6 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 		}
 		Dictionary<string, ManagedSimdInfo> managed_methods = new Dictionary<string, ManagedSimdInfo> ();
 
-		public override void End ()
-		{
-			base.End ();
-
-			//foreach (var t in simd_types.Where ((v) => v.Value).OrderBy ((v) => v.Key))
-				//Console.WriteLine ("SIMD type: {0}", t.Key);
-			//Console.WriteLine ($"A- Found {potentially_broken_methods.Count} potentially broken methods:");
-			//foreach (var t in potentially_broken_methods)
-			//	Console.WriteLine ($"B-     {t.Key} => {t.Value.DeclaringType.FullName}: {t.Value.FullName}");
-			//Console.WriteLine ($"C- Found {correct_methods.Count} correct methods:");
-			//foreach (var t in correct_methods)
-			//Console.WriteLine ($"D-     {t.Key} => {t.Value.DeclaringType.FullName}: {t.Value.FullName}");
-		}
-
 		public override void VisitManagedMethod (MethodDefinition method)
 		{
 			var type = method.DeclaringType;
@@ -186,7 +171,7 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 				if (method.IsObsolete ())
 					return; // Don't care about obsolete API.
 
-				if (contains_simd_types && strict) {
+				if (contains_simd_types && very_strict) {
 					// We can't map this method to a native function.
 					Console.WriteLine ($"!simd-can't-map-managed! {method}");
 				}
@@ -195,7 +180,7 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 
 			ManagedSimdInfo existing;
 			if (managed_methods.TryGetValue (key, out existing)) {
-				if (strict)
+				if (very_strict)
 					Console.WriteLine ($"!simd-double-mapping! same key '{key}' for both '{existing.Method}' and '{method}'");
 			} else {
 				managed_methods [key] = new ManagedSimdInfo {
@@ -283,7 +268,7 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 			var str = Undecorate (type.ToString ());
 
 			if (type_mapping.TryGetValue (str, out var info)) {
-				requires_marshal_directive |= !info.NoMarshalDirectiveRequired;
+				requires_marshal_directive = true;
 				simd_type = str;
 				return true;
 			}
@@ -375,25 +360,6 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 			if (!decl.IsAvailable () || !(decl.DeclContext as Decl).IsAvailable ())
 				return;
 
-			// Check if this API is new in iOS 11 (helps printing more useful
-			// debug info, we might run into API that hasn't been bound).
-			var parentClass = decl.DeclContext as Decl;
-			var attrs = decl.Attrs.ToList ();
-			if (parentClass != null)
-				attrs.AddRange (parentClass.Attrs);
-			var is_new = false;
-			foreach (var attr in attrs) {
-				var av_attr = attr as AvailabilityAttr;
-				if (av_attr == null)
-					continue;
-				if (av_attr.Platform.Name != "ios")
-					continue;
-				if (av_attr.Introduced.Major >= 11) {
-					is_new = true;
-					break;
-				}
-			}
-
 			var simd_type = string.Empty;
 			var requires_marshal_directive = false;
 			var native_simd = ContainsSimdTypes (decl, ref simd_type, ref requires_marshal_directive);
@@ -415,26 +381,30 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 			if (method == null) {
 				// Could not map the native method to a managed method.
 				// This needs investigation, to see why the native method couldn't be mapped.
-				switch (simd_type) {
-				case "const vector_float2 * _Nullable":
-				case "vector_float2":
-				case "vector_float3 * _Nonnull":
-				case "vector_float2 * _Nonnull":
-				case "const vector_float2 * _Nonnull":
-				case "vector_float3":
-				case "vector_float4":
-				case "vector_double2":
-				case "vector_double3":
-				case "vector_int2":
-				case "const MPSImageHistogramInfo * _Nonnull":
-				case "simd_quatf":
-					break; // we don't care about these types (yet)
-				default:
-					if (!strict && is_new)
-						return;
-					Console.WriteLine ($"!simd-can't-map-native! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature.");
-					break;
+
+				// Check if this is new API, in which case it probably couldn't be mapped because we haven't bound it.
+				var is_new = false;
+				var attrs = decl.Attrs.ToList ();
+				var parentClass = decl.DeclContext as Decl;
+				if (parentClass != null)
+					attrs.AddRange (parentClass.Attrs);
+
+				foreach (var attr in attrs) {
+					var av_attr = attr as AvailabilityAttr;
+					if (av_attr == null)
+						continue;
+					if (av_attr.Platform.Name != "ios")
+						continue;
+					if (av_attr.Introduced.Major >= 11) {
+						is_new = true;
+						break;
+					}
 				}
+				if (is_new && !very_strict)
+					return;
+				if (!strict)
+					return;
+				Console.WriteLine ($"!simd-can't-map-native! {decl}: could not find a managed method (selector: {decl.Selector} name: {decl.GetName ()}. Found the simd type '{simd_type}' in the native signature.");
 				return;
 			}
 
@@ -447,7 +417,6 @@ vector_int4                  -FF    -FF    FFF    -F-    -FF
 
 			if (method.IsObsolete ()) {
 				// We have a potentially broken managed method, but it's obsolete. That's fine.
-				//Console.WriteLine ($"-- OBSOLETE simd type '{simd_type}' in signature, has a simd type -- {method}");
 				return;
 			}
 

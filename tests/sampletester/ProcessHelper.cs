@@ -102,7 +102,14 @@ public static class ProcessHelper
 	{
 		try {
 			AssertRunProcess ("nuget", $"restore \"{solution}\"", TimeSpan.FromMinutes (2), Configuration.RootDirectory, "nuget restore");
-			AssertRunProcess (msbuild, $"/verbosity:diag /p:Platform={platform} /p:Configuration={configuration} \"{solution}\"", TimeSpan.FromMinutes (5), Configuration.RootDirectory, "build");
+			var sb = new StringBuilder ();
+			sb.Append ("/verbosity:diag ");
+			if (!string.IsNullOrEmpty (platform))
+				sb.Append ($" /p:Platform={platform}");
+			if (!string.IsNullOrEmpty (configuration))
+				sb.Append ($" /p:Configuration={configuration}");
+			sb.Append ($" \"{solution}\"");
+			AssertRunProcess (msbuild, sb.ToString (), TimeSpan.FromMinutes (5), Configuration.RootDirectory, "build");
 		} finally {
 			// Clean up after us, since building for device needs a lot of space.
 			// Ignore any failures (since failures here doesn't mean the test failed).

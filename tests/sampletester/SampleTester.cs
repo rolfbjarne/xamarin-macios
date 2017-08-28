@@ -28,6 +28,12 @@ public abstract class SampleTester
 		return new Dictionary<string, string> ();
 	}
 
+	protected virtual string Platform {
+		get {
+			return "iPhone";
+		}
+	}
+
 	protected SampleTester (string repo)
 	{
 		Repository = repo;
@@ -47,7 +53,7 @@ public abstract class SampleTester
 	[Test]
 	public void BuildSolution ([Values (/*"xbuild", */"msbuild")] string msbuild, [Values ("Debug"/*, "Release"*/)] string configuration, [ValueSource ("GetSolutions")] string solution)
 	{
-		BuildSolution (solution, msbuild, "iPhone", configuration);
+		BuildSolution (solution, msbuild, Platform, configuration);
 	}
 
 	protected static string RootDirectory {

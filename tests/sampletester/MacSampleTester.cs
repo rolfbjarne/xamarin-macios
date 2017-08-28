@@ -9,6 +9,12 @@ public class MacSampleTester : SampleTester
 	{
 	}
 
+	protected override string Platform {
+		get {
+			return string.Empty;
+		}
+	}
+
 	static string [] GetSolutions ()
 	{
 		return GetSolutionsImpl (REPO);

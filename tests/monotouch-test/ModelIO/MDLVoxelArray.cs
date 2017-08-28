@@ -59,13 +59,21 @@ namespace MonoTouchFixtures.ModelIO
 				using (var obj = new MDLVoxelArray (data, box, 1.0f)) {
 					Asserts.AreEqual (box, obj.BoundingBox, "BoundingBox");
 
-					var extents = new MDLVoxelIndexExtent (
-						new Vector4 (1, 2, 3, 4),
-						new Vector4 (5, 6, 7, 8));
+					var extents = new MDLVoxelIndexExtent2 (
+						new Vector4i (1, 2, 3, 4),
+						new Vector4i (5, 6, 7, 8));
 					var voxels = obj.GetVoxels (extents);
 					Assert.IsNull (voxels, "GetVoxels");
-					extents = obj.VoxelIndexExtent;
-					Assert.Fail ("ASSERT EXTENTS");
+
+					extents = obj.VoxelIndexExtent2;
+					Asserts.AreEqual (-1, extents.MaximumExtent.X, "MaxX");
+					Asserts.AreEqual (-1, extents.MaximumExtent.Y, "MaxY");
+					Asserts.AreEqual (-1, extents.MaximumExtent.Z, "MaxZ");
+					Asserts.AreEqual (0, extents.MaximumExtent.W, "MaxW");
+					Asserts.AreEqual (0, extents.MinimumExtent.X, "MinX");
+					Asserts.AreEqual (0, extents.MinimumExtent.Y, "MinY");
+					Asserts.AreEqual (0, extents.MinimumExtent.Z, "MinZ");
+					Asserts.AreEqual (0, extents.MinimumExtent.W, "MinW");
 				}
 			}
 		}

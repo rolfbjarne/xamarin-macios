@@ -2006,32 +2006,32 @@ namespace Xamarin.BindingMethods.Generator
 
 			data.Add (
 				new FunctionData {
-					Comment = " // MDLVoxelIndexExtent func ()",
+					Comment = " // MDLVoxelIndexExtent2 func ()",
 					Prefix = "simd__",
 					Variants = Variants.All,
-					ReturnType = Types.MDLVoxelIndexExtent,
+					ReturnType = Types.MDLVoxelIndexExtent2,
 				}
 			);
 
 			data.Add (
 				new FunctionData {
-					Comment = " // void func (MDLVoxelIndexExtent)",
+					Comment = " // void func (MDLVoxelIndexExtent2)",
 					Prefix = "simd__",
 					Variants = Variants.NonStret,
 					Parameters = new ParameterData [] {
-						new ParameterData { TypeData = Types.MDLVoxelIndexExtent },
+						new ParameterData { TypeData = Types.MDLVoxelIndexExtent2 },
 					},
 				}
 			);
 
 			data.Add (
 				new FunctionData {
-					Comment = " // IntPtr func (MDLVoxelIndexExtent)",
+					Comment = " // IntPtr func (MDLVoxelIndexExtent2)",
 					Prefix = "simd__",
 					Variants = Variants.NonStret,
 					ReturnType = Types.IntPtr,
 					Parameters = new ParameterData [] {
-						new ParameterData { TypeData = Types.MDLVoxelIndexExtent },
+						new ParameterData { TypeData = Types.MDLVoxelIndexExtent2 },
 					},
 				}
 			);
@@ -2154,7 +2154,7 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("\t{0}{2}maxPixelValue.c = {1}.maxPixelValue [2];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}maxPixelValue.d = {1}.maxPixelValue [3];", managedVariable, nativeVariable, accessor);
 				break;
-			case "MDLVoxelIndexExtent":
+			case "MDLVoxelIndexExtent2":
 				writer.WriteLine ("\t{0}{2}minimumExtent.a = {1}.minimumExtent [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}minimumExtent.b = {1}.minimumExtent [1];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}minimumExtent.c = {1}.minimumExtent [2];", managedVariable, nativeVariable, accessor);
@@ -2270,7 +2270,7 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("\t{0}.maxPixelValue [2] = {1}{2}maxPixelValue.c;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0}.maxPixelValue [3] = {1}{2}maxPixelValue.d;", nativeVariable, managedVariable, accessor);
 				break;
-			case "MDLVoxelIndexExtent":
+			case "MDLVoxelIndexExtent2":
 				writer.WriteLine ("\t{0}.minimumExtent [0] = {1}{2}minimumExtent.a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0}.minimumExtent [1] = {1}{2}minimumExtent.b;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0}.minimumExtent [2] = {1}{2}minimumExtent.c;", nativeVariable, managedVariable, accessor);
@@ -2893,8 +2893,8 @@ namespace Xamarin.BindingMethods.Generator
 				IsX64Stret = true,
 			};
 
-			public static TypeData MDLVoxelIndexExtent = new TypeData {
-				ManagedType = "MDLVoxelIndexExtent",
+			public static TypeData MDLVoxelIndexExtent2 = new TypeData {
+				ManagedType = "MDLVoxelIndexExtent2",
 				NativeType = "MDLVoxelIndexExtent",
 				NativeWrapperType = "struct MDLVoxelIndexExtentWrapper",
 				RequireMarshal = true,

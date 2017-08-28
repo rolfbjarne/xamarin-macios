@@ -30,6 +30,7 @@ namespace MonoTouchFixtures.MetalPerformanceShaders
 			TestRuntime.AssertXcodeVersion (7, 0);
 
 			MPSImageHistogramInfo info = new MPSImageHistogramInfo ();
+			info.NumberOfHistogramEntries = 256;
 			using (var obj = new MPSImageHistogram (MTLDevice.SystemDefault, ref info)) {
 				var rv = obj.HistogramInfo;
 				Asserts.AreEqual (info, rv, "HistogramForAlpha");

@@ -57,7 +57,7 @@ namespace MonoTouchFixtures.Security {
 		static SecTrustResult Evaluate (SecTrust trust, bool expect_recoverable = false)
 		{
 			SecTrustResult result = SecTrustResult.Deny;
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 1; i++) {
 				result = trust.Evaluate ();
 				if (result != SecTrustResult.RecoverableTrustFailure || expect_recoverable)
 					return result;

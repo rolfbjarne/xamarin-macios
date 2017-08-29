@@ -362,6 +362,7 @@ namespace MonoTouchFixtures.Simd
 
 	[TestFixture]
 	[Preserve (AllMembers = true)]
+	[Ignore ("No need to always run perf test")]
 	public class MatrixFloat3x3PerfTest
 	{
 		int Multiplier {

@@ -157,7 +157,6 @@ public static class Asserts
 		AreEqual (expected.M21, actual.R1C0, message + " (M21)");
 		AreEqual (expected.M22, actual.R1C1, message + " (M22)");
 	}
->>>>>>> matrxifixes
 
 	public static void AreEqual (MatrixFloat3x3 expected, MatrixFloat3x3 actual, string message)
 	{

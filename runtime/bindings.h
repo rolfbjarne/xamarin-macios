@@ -167,7 +167,7 @@ struct Matrix3f {
 };
 
 struct MatrixFloat3x3 {
-	Vector3f columns [3];
+	Vector4f columns [3];
 };
 
 struct Matrix4f {

@@ -12,6 +12,14 @@ unexport XBUILD_FRAMEWORK_FOLDERS_PATH
 unexport MSBuildExtensionsPath
 endif
 
+ifneq ('$(MAC_DESTDIR)','')
+export XAMMAC_FRAMEWORK_PATH=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current
+export XamarinMacFrameworkRoot=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current
+else
+unexport XAMMAC_FRAMEWORK_PATH
+unexport XamarinMacFrameworkRoot
+endif
+
 NUNIT_MSBUILD_DIR=$(TOP)/packages/NUnit.ConsoleRunner.3.5.0/tools/
 
 all-local::

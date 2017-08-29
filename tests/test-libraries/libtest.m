@@ -3,6 +3,7 @@
 #include <objc/runtime.h>
 #include <zlib.h>
 #include "libtest.h"
+#include <simd/simd.h>
 
 extern "C" {
 #define GET_MATRIX_VALUE(etype, rank, packed) etype test_matrix_##etype##rank##x##rank##_get_value (matrix_##etype##rank##x##rank *value, int row, int column) { return (*((simd_packed_##etype##packed *) &value->columns [column])) [row]; }

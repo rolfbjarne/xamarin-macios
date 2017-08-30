@@ -93,8 +93,17 @@ public static class GitHub
 			var exitCode = 0;
 			Assert.IsTrue (ProcessHelper.RunProcess ("git", $"clone git@github.com:{user}/{repo}", out exitCode, TimeSpan.FromMinutes (10), Configuration.RootDirectory), "cloned in 10 minutes");
 			Assert.AreEqual (0, exitCode, "git clone exit code");
+		} else {
+			CleanRepository (repo_dir);
 		}
 
 		return repo_dir;
+	}
+
+	public static void CleanRepository (string directory, bool submodules = true)
+	{
+		ProcessHelper.RunProcess ("git", "clean -xffdq", TimeSpan.FromSeconds (30), directory);
+		if (submodules)
+			ProcessHelper.RunProcess ("git", "submodule foreach --recursive 'clean -xffdq'", TimeSpan.FromSeconds (60), directory);
 	}
 }

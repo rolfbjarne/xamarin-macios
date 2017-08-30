@@ -113,7 +113,7 @@ public static class ProcessHelper
 		} finally {
 			// Clean up after us, since building for device needs a lot of space.
 			// Ignore any failures (since failures here doesn't mean the test failed).
-			RunProcess ("git", "clean -xfdq", TimeSpan.FromSeconds (30), Path.GetDirectoryName (solution));
+			GitHub.CleanRepository (Path.GetDirectoryName (solution), false);
 		}
 	}
 
@@ -124,7 +124,7 @@ public static class ProcessHelper
 		} finally {
 			// Clean up after us, since building for device needs a lot of space.
 			// Ignore any failures (since failures here doesn't mean the test failed).
-			RunProcess ("git", "clean -xfdq", TimeSpan.FromSeconds (30), Path.GetDirectoryName (makefile));
+			GitHub.CleanRepository (Path.GetDirectoryName (makefile), false);
 		}
 	}
 }

@@ -14,4 +14,8 @@ fi
 LOG=$1
 
 mkdir -p split
-csplit -k -n 4 -f split/log "$LOG" '/ => /' '{9999}'
+if [[ "$LOG" == *.zip ]]; then
+	unzip -p "$LOG" 1_Build.txt | csplit -k -n 4 -f split/log - '/ => /' '{9999}'
+else
+	csplit -k -n 4 -f split/log "$LOG" '/ => /' '{9999}'
+fi

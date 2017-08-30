@@ -96,6 +96,14 @@ public static class Asserts
 		AreEqual (expected.Column3, actual.Column3, message + " (Col3)");
 	}
 
+	public static void AreEqual (Matrix4 expected, Matrix4 actual, float delta, string message)
+	{
+		AreEqual (expected.Column0, actual.Column0, delta, message + " (Col0)");
+		AreEqual (expected.Column1, actual.Column1, delta, message + " (Col1)");
+		AreEqual (expected.Column2, actual.Column2, delta, message + " (Col2)");
+		AreEqual (expected.Column3, actual.Column3, delta, message + " (Col3)");
+	}
+
 	public static void AreEqual (Vector2i expected, Vector2i actual, string message)
 	{
 		Assert.AreEqual (expected.X, actual.X, message + " (X)");

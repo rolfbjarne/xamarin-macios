@@ -30,6 +30,8 @@ using MonoTouch.ModelIO;
 using MonoTouch.ObjCRuntime;
 #endif
 using OpenTK;
+using Simd;
+using Bindings.Test;
 using NUnit.Framework;
 
 namespace MonoTouchFixtures.ModelIO {
@@ -120,6 +122,31 @@ namespace MonoTouchFixtures.ModelIO {
 				obj.Rotation = V3;
 				Asserts.AreEqual (V3, obj.Rotation, "Rotation 2");
 			}
+
+			var m4 = new Matrix4 (
+				4, 0, 0, 0,
+				0, 3, 0, 0,
+				0, 0, 2, 0,
+				2, 3, 4, 1);
+			using (var obj = new MDLTransform (m4)) {
+				Asserts.AreEqual (Vector3.Zero, obj.Rotation, "Rotation 3");
+				Asserts.AreEqual (new Vector3 (4, 3, 2), obj.Scale, "Scale 3");
+				Asserts.AreEqual (new Vector3 (2, 3, 4), obj.Translation, "Translation 3");
+				Asserts.AreEqual (m4, obj.Matrix, 0.0001f, "Matrix 3");
+			}
+
+			var m4x4 = new MatrixFloat4x4 (
+				4, 0, 0, 2,
+				0, 3, 0, 3,
+				0, 0, 2, 4,
+				0, 0, 0, 1);
+			using (var obj = new MDLTransform (m4x4)) {
+				Asserts.AreEqual (Vector3.Zero, obj.Rotation, "Rotation 4");
+				Asserts.AreEqual (new Vector3 (4, 3, 2), obj.Scale, "Scale 4");
+				Asserts.AreEqual (new Vector3 (2, 3, 4), obj.Translation, "Translation 4");
+				Asserts.AreEqual (m4x4, obj.GetMatrix4x4 (), 0.0001f, "Matrix4x4 4");
+				Asserts.AreEqual (m4x4, CFunctions.GetMatrixFloat4x4 (obj, "matrix"), 0.0001f, "Matrix4x4-native 4");
+			}
 		}
 			
 		[Test]
@@ -131,6 +158,7 @@ namespace MonoTouchFixtures.ModelIO {
 			using (var obj = new MDLTransform (matrix)) {
 				obj.SetScale (V3, 0);
 				Asserts.AreEqual (V3, obj.GetScale (0), "ScaleAtTime");
+				Assert.Fail ("ADD 4x4 test");
 			}
 		}
 
@@ -143,6 +171,7 @@ namespace MonoTouchFixtures.ModelIO {
 			using (var obj = new MDLTransform (matrix)) {
 				obj.SetTranslation (V3, 0);
 				Asserts.AreEqual (V3, obj.GetTranslation (0), "TranslationAtTime");
+				Assert.Fail ("ADD 4x4 test");
 			}
 		}
 
@@ -155,6 +184,11 @@ namespace MonoTouchFixtures.ModelIO {
 			using (var obj = new MDLTransform (matrix)) {
 				obj.SetRotation (V3, 0);
 				Asserts.AreEqual (V3, obj.GetRotation (0), "RotationAtTime");
+				Assert.Fail ("ADD 4x4 test");
+
+
+				Assert.Fail ("ADD 4x4 test SETMATRIX4x4");
+				Assert.Fail ("ADD 4x4 test ALL OF SPRITEKIT");
 			}
 		}
 	}

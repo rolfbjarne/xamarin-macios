@@ -56,7 +56,7 @@ public abstract class ComponentsTester
 		try {
 			ProcessHelper.AssertRunProcess ("sh", $"{Path.Combine (repo_path, "build.sh")} -t samples", TimeSpan.FromMinutes (15), Path.GetDirectoryName (Path.Combine (repo_path, info.BuildScript)), "build");
 		} finally {
-			ProcessHelper.RunProcess ("git", "clean -xfd", TimeSpan.FromMinutes (1), Path.Combine (repo_path, info.BuildScript));
+			GitHub.CleanRepository (Path.Combine (repo_path, info.BuildScript), false);
 		}
 	}
 

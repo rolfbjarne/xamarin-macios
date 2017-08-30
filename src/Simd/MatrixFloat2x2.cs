@@ -66,14 +66,6 @@ namespace Simd
 			}
 		}
 
-		public void Invert ()
-		{
-			this = Invert (this);
-		}
-
-		[DllImport ("/usr/lib/system/libsystem_m.dylib", EntryPoint = "__invert_f2")]
-		public static extern MatrixFloat2x2 Invert (MatrixFloat2x2 matrix);
-
 		public void Transpose ()
 		{
 			this = Transpose (this);

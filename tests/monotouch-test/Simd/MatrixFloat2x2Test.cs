@@ -79,34 +79,6 @@ namespace MonoTouchFixtures.Simd
 		}
 
 		[Test]
-		public void InvertInstance ()
-		{
-			// Matrix2 doesn't have an Invert method, so we compare against the definition of matrix inversion:
-			// multiplying a matrix with its inverse yields the identity matrix.
-			var original = (MatrixFloat2x2) GetTestMatrix ();
-			var inverted = original;
-
-			inverted.Invert ();
-
-			var actual = original * inverted;
-
-			Asserts.AreEqual (MatrixFloat2x2.Identity, actual, 0.0001f, "invert\n" + actual + "\nDeterminate: " + actual.Determinant);
-		}
-
-		[Test]
-		public void InvertStatic ()
-		{
-			// Matrix2 doesn't have an Invert method, so we compare against the definition of matrix inversion:
-			// multiplying a matrix with its inverse yields the identity matrix.
-			var original = (MatrixFloat2x2) GetTestMatrix ();
-			var inverted = MatrixFloat2x2.Invert (original);
-
-			var actual = original * inverted;
-
-			Asserts.AreEqual (MatrixFloat2x2.Identity, actual, 0.0001f, "invert\n" + actual + "\nDeterminate: " + actual.Determinant);
-		}
-
-		[Test]
 		public void TransposeInstance ()
 		{
 			var expected = GetTestMatrix ();

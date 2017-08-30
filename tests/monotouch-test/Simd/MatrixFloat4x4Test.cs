@@ -117,34 +117,6 @@ namespace MonoTouchFixtures.Simd
 		}
 
 		[Test]
-		public void InvertInstance ()
-		{
-			var expected = GetTestMatrix ();
-			var actual = (MatrixFloat4x4) expected;
-
-			expected.Invert ();
-			actual.Invert ();
-
-			// Matrix4 uses a managed Invert algorithm, while MatrixFloat4x4 P/Invokes a native implementation.
-			// This means the results won't necessarily be 100% identical, so we're comparing with a delta value.
-			Asserts.AreEqual (expected, actual, 0.0001f, "invert\n" + expected + "\n" + actual + "\nDeterminate: " + actual.Determinant);
-		}
-
-		[Test]
-		public void InvertStatic ()
-		{
-			var input = GetTestMatrix ();
-			var input_simd = (MatrixFloat4x4) input;
-
-			var expected = Matrix4.Invert (input);
-			var actual = MatrixFloat4x4.Invert (input_simd);
-
-			// Matrix4 uses a managed Invert algorithm, while MatrixFloat4x4 P/Invokes a native implementation.
-			// This means the results won't necessarily be 100% identical, so we're comparing with a delta value.
-			Asserts.AreEqual (expected, actual, 0.0001f, "invert\n" + expected + "\n" + actual + "\nDeterminate: " + actual.Determinant);
-		}
-
-		[Test]
 		public void TransposeInstance ()
 		{
 			var expected = GetTestMatrix ();
@@ -449,52 +421,6 @@ namespace MonoTouchFixtures.Simd
 			var watch_simd = Stopwatch.StartNew ();
 			for (int i = 0; i < iterations; i++)
 				MatrixFloat4x4.Multiply (ref input_simd_a, ref input_simd_b, out result_simd);
-			watch_simd.Stop ();
-
-			Console.WriteLine ($"MatrixFloat4x4 implementation is {watch.ElapsedTicks / (double) watch_simd.ElapsedTicks}x faster ({watch_simd.ElapsedMilliseconds}ms vs {watch.ElapsedMilliseconds}ms).");
-			Assert.That (watch_simd.ElapsedTicks, Is.LessThan (watch.ElapsedTicks), "faster");
-		}
-
-		[Test]
-		public void Invert_Instance ()
-		{
-			var iterations = 100000 * Multiplier;
-
-			var matrix = GetTestMatrix ();
-			Matrix4 dummy = new Matrix4 ();
-			var watch = Stopwatch.StartNew ();
-			for (int i = 0; i < iterations; i++)
-				matrix.Invert (ref dummy);
-			watch.Stop ();
-
-			var matrix_simd4 = (MatrixFloat4x4) matrix;
-			MatrixFloat4x4 dummy_simd = new MatrixFloat4x4 ();
-			var watch_simd = Stopwatch.StartNew ();
-			for (int i = 0; i < iterations; i++)
-				matrix_simd4.Invert (ref dummy_simd);
-			watch_simd.Stop ();
-
-			Console.WriteLine ($"MatrixFloat4x4 implementation is {watch.ElapsedTicks / (double) watch_simd.ElapsedTicks}x faster ({watch_simd.ElapsedMilliseconds}ms vs {watch.ElapsedMilliseconds}ms).");
-			Assert.That (watch_simd.ElapsedTicks, Is.LessThan (watch.ElapsedTicks), "faster");
-		}
-
-		[Test]
-		public void Invert_Static ()
-		{
-			var iterations = 100000 * Multiplier;
-
-			var matrix = GetTestMatrix ();
-			Matrix4 dummy = new Matrix4 ();
-			var watch = Stopwatch.StartNew ();
-			for (int i = 0; i < iterations; i++)
-				dummy = Matrix4.Invert (matrix);
-			watch.Stop ();
-
-			var matrix_simd4 = (MatrixFloat4x4) matrix;
-			MatrixFloat4x4 dummy_simd = new MatrixFloat4x4 ();
-			var watch_simd = Stopwatch.StartNew ();
-			for (int i = 0; i < iterations; i++)
-				dummy_simd = MatrixFloat4x4.Invert (matrix_simd4);
 			watch_simd.Stop ();
 
 			Console.WriteLine ($"MatrixFloat4x4 implementation is {watch.ElapsedTicks / (double) watch_simd.ElapsedTicks}x faster ({watch_simd.ElapsedMilliseconds}ms vs {watch.ElapsedMilliseconds}ms).");

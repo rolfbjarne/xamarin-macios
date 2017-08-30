@@ -122,21 +122,6 @@ namespace Simd
 			}
 		}
 
-		public void Invert ()
-		{
-			this = Invert (this);
-		}
-
-		// FIXME: check which OS versions this was introduced in.
-		// Introduced in Yosemite (not present in Mavericks)
-		[DllImport ("/usr/lib/system/libsystem_m.dylib", EntryPoint = "__invert_f4")]
-		public static extern MatrixFloat4x4 Invert (MatrixFloat4x4 matrix);
-
-		public void Invert (ref MatrixFloat4x4 result)
-		{
-			result = Invert (this);
-		}
-
 		public void Transpose ()
 		{
 			this = Transpose (this);

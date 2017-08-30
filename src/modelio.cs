@@ -1844,6 +1844,9 @@ namespace XamCore.ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		Matrix4 GetLocalTransform (double atTime);
 
+#if !XAMCORE_4_0
+		[Obsolete ("Use 'CreateGlobalTransform4x4' instead.")]
+#endif
 		[Static]
 		[Export ("globalTransformWithObject:atTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

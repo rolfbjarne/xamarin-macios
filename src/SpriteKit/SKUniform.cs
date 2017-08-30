@@ -205,13 +205,13 @@ namespace XamCore.SpriteKit {
 		{
 			get {
 				if (CheckSystemVersion ())
-					return (Matrix2) MatrixFloat2x2Value;
+					return (Matrix2) MatrixFloat2x2.Transpose (MatrixFloat2x2Value);
 				else
 					return _FloatMatrix2Value;
 			}
 			set {
 				if (CheckSystemVersion ())
-					MatrixFloat2x2Value = (MatrixFloat2x2) value;
+					MatrixFloat2x2Value = MatrixFloat2x2.Transpose ((MatrixFloat2x2) value);
 				else
 					_FloatMatrix2Value = value;
 			}
@@ -232,13 +232,13 @@ namespace XamCore.SpriteKit {
 		{
 			get {
 				if (CheckSystemVersion ())
-					return (Matrix3) MatrixFloat3x3Value;
+					return (Matrix3) MatrixFloat3x3.Transpose (MatrixFloat3x3Value);
 				else
 					return _FloatMatrix3Value;
 			}
 			set {
 				if (CheckSystemVersion ())
-					MatrixFloat3x3Value = (MatrixFloat3x3) value;
+					MatrixFloat3x3Value = MatrixFloat3x3.Transpose ((MatrixFloat3x3) value);
 				else
 					_FloatMatrix3Value = value;
 			}
@@ -259,13 +259,13 @@ namespace XamCore.SpriteKit {
 		{
 			get {
 				if (CheckSystemVersion ())
-					return (Matrix4) MatrixFloat4x4Value;
+					return (Matrix4) MatrixFloat4x4.Transpose (MatrixFloat4x4Value);
 				else
 					return _FloatMatrix4Value;
 			}
 			set {
 				if (CheckSystemVersion ())
-					MatrixFloat4x4Value = (MatrixFloat4x4) value;
+					MatrixFloat4x4Value = MatrixFloat4x4.Transpose ((MatrixFloat4x4) value);
 				else
 					_FloatMatrix4Value = value;
 			}

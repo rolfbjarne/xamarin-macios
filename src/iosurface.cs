@@ -18,7 +18,7 @@ namespace XamCore.IOSurface {
 
 	[Static]
 	[Internal]
-	[iOS (10,0), Mac (10,12)]
+	[iOS (11,0), Mac (10,12)]
 	interface IOSurfacePropertyKey {
 		[Field ("IOSurfacePropertyAllocSizeKey")]
 		NSString AllocSizeKey { get; }

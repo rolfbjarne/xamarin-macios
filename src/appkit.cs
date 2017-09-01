@@ -1264,7 +1264,7 @@ namespace XamCore.AppKit {
 
 		[Mac (10,13)]
 		[Export ("appendBezierPathWithCGGlyph:inFont:")]
-		void AppendBezierPathWithCGGlyph (CGGlyph glyph, NSFont font);
+		void AppendPathWithCGGlyph (CGGlyph glyph, NSFont font);
 
 		[Mac (10,13)]
 		[Export ("appendBezierPathWithCGGlyphs:count:inFont:")]

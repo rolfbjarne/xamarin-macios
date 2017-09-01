@@ -17734,7 +17734,7 @@ namespace XamCore.UIKit {
 #endregion
 
 	[TV (11,0), iOS (11,0)]
-	[Protocol, Model]
+	[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface UIDataSourceTranslating {
 		[Abstract]

@@ -49,6 +49,7 @@ using XamCore.CoreFoundation;
 using XamCore.CoreGraphics;
 using XamCore.CoreVideo;
 using XamCore.ImageIO;
+using Simd;
 using System;
 
 using OpenTK;
@@ -181,7 +182,7 @@ namespace XamCore.AVFoundation {
 
 		[iOS (11, 0), Mac (10, 13)]
 		[Field ("AVMediaTypeDepthData")]
-		AVMediaTypeDepthData = 10,
+		DepthData = 10,
 	}
 
 #if !XAMCORE_4_0
@@ -302,6 +303,80 @@ namespace XamCore.AVFoundation {
 
 		[NullAllowed, Export ("cameraCalibrationData")]
 		AVCameraCalibrationData CameraCalibrationData { get; }
+	}
+
+	[NoTV, iOS (11, 0), NoWatch, NoMac]
+	[BaseType (typeof (NSObject))]
+	interface AVCapturePhoto {
+		[Export ("timestamp")]
+		CMTime Timestamp { get; }
+
+		[Export ("isRawPhoto")]
+		bool RawPhoto { get; }
+
+		[Export ("pixelBuffer")]
+		[NullAllowed]
+		CVPixelBuffer PixelBuffer { get; }
+
+		[Export ("previewPixelBuffer")]
+		[NullAllowed]
+		CVPixelBuffer PreviewPixelBuffer { get; }
+
+		[Export ("embeddedThumbnailPhotoFormat")]
+		[NullAllowed]
+		NSDictionary<NSString, NSObject> EmbeddedThumbnailPhotoFormat { get; }
+
+		[Export ("depthData")]
+		[NullAllowed]
+		AVDepthData DepthData { get; }
+
+		[Export ("metadata")]
+		NSDictionary<NSString, NSObject> Metadata { get; }
+
+		[Export ("cameraCalibrationData")]
+		[NullAllowed]
+		AVCameraCalibrationData CameraCalibrationData { get; }
+
+		[Export ("resolvedSettings")]
+		AVCaptureResolvedPhotoSettings ResolvedSettings { get; }
+
+		[Export ("photoCount")]
+		nint PhotoCount { get; }
+
+		[Export ("sourceDeviceType")]
+		AVCaptureDeviceType SourceDeviceType { get; }
+
+		// AVCapturePhotoConversions category
+
+		[Export ("fileDataRepresentation")]
+		[NullAllowed]
+		NSData GetFileDataRepresentation ();
+
+		[NullAllowed]
+		[Export ("fileDataRepresentationWithReplacementMetadata:replacementEmbeddedThumbnailPhotoFormat:replacementEmbeddedThumbnailPixelBuffer:replacementDepthData:")]
+		NSData GetFileDataRepresentation ([NullAllowed] NSDictionary<NSString, NSObject> replacementMetadata, [NullAllowed] NSDictionary<NSString, NSObject> replacementEmbeddedThumbnailPhotoFormat, [NullAllowed] CVPixelBuffer replacementEmbeddedThumbnailPixelBuffer, [NullAllowed] AVDepthData replacementDepthData);
+
+		[Export ("CGImageRepresentation")]
+		[NullAllowed]
+		CGImage ToCGImage ();
+
+		[Export ("previewCGImageRepresentation")]
+		[NullAllowed]
+		CGImage PreviewToCGImage ();
+
+		// AVCapturePhotoBracketedCapture category
+
+#if !MONOMAC
+		[Export ("bracketSettings")]
+		[NullAllowed]
+		AVCaptureBracketedStillImageSettings BracketedSettings { get; }
+#endif
+
+		[Export ("sequenceCount")]
+		nint SequenceCount { get; }
+
+		[Export ("lensStabilizationStatus")]
+		AVCaptureLensStabilizationStatus LensStabilizationStatus { get; }
 	}
 
 	// values are manually given since not some are platform specific
@@ -7869,15 +7944,13 @@ namespace XamCore.AVFoundation {
 	interface AVCameraCalibrationData
 	{
 		[Export ("intrinsicMatrix")]
-		Matrix3 GetIntrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;}
+		MatrixFloat3x3 IntrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
 
 		[Export ("intrinsicMatrixReferenceDimensions")]
 		CGSize IntrinsicMatrixReferenceDimensions { get; }
 
-		/*
 		[Export ("extrinsicMatrix")]
-		Matrix4 GetExtrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;}; // should be a matrix 4x3
-		*/
+		MatrixFloat4x3 ExtrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
 
 		[Export ("pixelSize")]
 		float PixelSize { get; }
@@ -8912,6 +8985,82 @@ namespace XamCore.AVFoundation {
 		[iOS (10, 2)]
 		[Export ("autoDualCameraFusionEnabled")]
 		bool AutoDualCameraFusionEnabled { [Bind ("isAutoDualCameraFusionEnabled")] get; set; }
+
+		[iOS (11,0)]
+		[Static]
+		[Export ("photoSettingsWithRawPixelFormatType:rawFileType:processedFormat:processedFileType:")]
+		AVCapturePhotoSettings FromRawPixelFormatType (uint rawPixelFormatType, [NullAllowed] NSString rawFileType, [NullAllowed] NSDictionary<NSString, NSObject> processedFormat, [NullAllowed] NSString processedFileType);
+
+		[iOS (11,0)]
+		[Static]
+		[Wrap ("FromRawPixelFormatType (rawPixelFormatType, rawFileType.GetConstant (), processedFormat, processedFileType.GetConstant ())")]
+		AVCapturePhotoSettings FromRawPixelFormatType (uint rawPixelFormatType, AVFileTypes rawFileType, [NullAllowed] NSDictionary<NSString, NSObject> processedFormat, AVFileTypes processedFileType);
+
+		[iOS (11, 0)]
+		[NullAllowed, Export ("processedFileType")]
+		NSString WeakProcessedFileType { get; }
+
+		[iOS (11, 0)]
+		[Wrap ("AVFileTypesExtensions.GetValue (WeakProcessedFileType)")]
+		AVFileTypes ProcessedFileType { get; }
+
+		[iOS (11, 0)]
+		[NullAllowed, Export ("rawFileType")]
+		NSString WeakRawFileType { get; }
+
+		[iOS (11, 0)]
+		[Wrap ("AVFileTypesExtensions.GetValue (WeakRawFileType)")]
+		AVFileTypes RawFileType { get; }
+
+		[iOS (11, 0)]
+		[Export ("dualCameraDualPhotoDeliveryEnabled")]
+		bool DualCameraDualPhotoDeliveryEnabled { [Bind ("isDualCameraDualPhotoDeliveryEnabled")] get; set; }
+
+		[iOS (11, 0)]
+		[Export ("depthDataDeliveryEnabled")]
+		bool DepthDataDeliveryEnabled { [Bind ("isDepthDataDeliveryEnabled")] get; set; }
+
+		[iOS (11, 0)]
+		[Export ("embedsDepthDataInPhoto")]
+		bool EmbedsDepthDataInPhoto { get; set; }
+
+		[iOS (11, 0)]
+		[Export ("depthDataFiltered")]
+		bool DepthDataFiltered { [Bind ("isDepthDataFiltered")] get; set; }
+
+		[iOS (11, 0)]
+		[Export ("cameraCalibrationDataDeliveryEnabled")]
+		bool CameraCalibrationDataDeliveryEnabled { [Bind ("isCameraCalibrationDataDeliveryEnabled")] get; set; }
+
+		[iOS (11, 0)]
+		[Export ("metadata", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSObject> Metadata { get; set; }
+
+		[iOS (11, 0)]
+		[Export ("livePhotoVideoCodecType")]
+		string LivePhotoVideoCodecType { get; set; }
+
+		// @property (copy, nonatomic) NSArray<AVMetadataItem *> * _Null_unspecified livePhotoMovieMetadata;
+		[Export ("livePhotoMovieMetadata", ArgumentSemantic.Copy)]
+		AVMetadataItem[] LivePhotoMovieMetadata { get; set; }
+
+		// @property (readonly, nonatomic) NSArray<NSNumber *> * _Nonnull availablePreviewPhotoPixelFormatTypes;
+		[Export ("availablePreviewPhotoPixelFormatTypes")]
+		NSNumber[] AvailablePreviewPhotoPixelFormatTypes { get; }
+
+		// @property (copy, nonatomic) NSDictionary<NSString *,id> * _Nullable previewPhotoFormat;
+		[NullAllowed, Export ("previewPhotoFormat", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSObject> PreviewPhotoFormat { get; set; }
+
+		// @property (readonly, nonatomic) NSArray<AVVideoCodecType> * _Nonnull availableEmbeddedThumbnailPhotoCodecTypes __attribute__((availability(ios, introduced=11.0)));
+		[iOS (11, 0)]
+		[Export ("availableEmbeddedThumbnailPhotoCodecTypes")]
+		string[] AvailableEmbeddedThumbnailPhotoCodecTypes { get; }
+
+		// @property (copy, nonatomic) NSDictionary<NSString *,id> * _Nullable embeddedThumbnailPhotoFormat __attribute__((availability(ios, introduced=11.0)));
+		[iOS (11, 0)]
+		[NullAllowed, Export ("embeddedThumbnailPhotoFormat", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSObject> EmbeddedThumbnailPhotoFormat { get; set; }
 	}
 	
 #if !MONOMAC
@@ -9076,6 +9225,14 @@ namespace XamCore.AVFoundation {
 		[iOS (10, 2)]
 		[Export ("dualCameraFusionSupported")]
 		bool DualCameraFusionSupported { [Bind ("isDualCameraFusionSupported")] get; }
+
+		[iOS (11, 0)]
+		[Export ("depthDataDeliverySupported")]
+		bool DepthDataDeliverySupported { [Bind ("isDepthDataDeliverySupported")] get; }
+
+		[iOS (11, 0)]
+		[Export ("depthDataDeliveryEnabled")]
+		bool DepthDataDeliveryEnabled { [Bind ("isDepthDataDeliveryEnabled")] get; set; }
 
 	}
 #endif

@@ -676,6 +676,8 @@
     <Compile Include="ModelIO\MDLTransformComponentTest.cs" />
     <Compile Include="ModelIO\MDLCameraTest.cs" />
     <Compile Include="ModelIO\MDLStereoscopicCameraTest.cs" />
+    <Compile Include="Simd\MatrixFloat4x3Test.cs" />
+    <Compile Include="AVFoundation\AVCameraCalibrationDataTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

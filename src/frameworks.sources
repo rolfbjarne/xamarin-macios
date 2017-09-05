@@ -1527,6 +1527,7 @@ SHARED_CORE_SOURCES = \
 	ObjCRuntime/Selector.cs \
 	Simd/MatrixFloat2x2.cs \
 	Simd/MatrixFloat3x3.cs \
+	Simd/MatrixFloat4x3.cs \
 	Simd/MatrixFloat4x4.cs \
 
 SHARED_SOURCES = \

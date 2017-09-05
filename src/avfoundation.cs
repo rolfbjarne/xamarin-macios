@@ -49,6 +49,7 @@ using XamCore.CoreFoundation;
 using XamCore.CoreGraphics;
 using XamCore.CoreVideo;
 using XamCore.ImageIO;
+using Simd;
 using System;
 
 using OpenTK;
@@ -302,6 +303,78 @@ namespace XamCore.AVFoundation {
 
 		[NullAllowed, Export ("cameraCalibrationData")]
 		AVCameraCalibrationData CameraCalibrationData { get; }
+	}
+
+	[NoTV, iOS (11, 0), NoWatch, NoMac]
+	[BaseType (typeof (NSObject))]
+	interface AVCapturePhoto {
+		[Export ("timestamp")]
+		CMTime Timestamp { get; }
+
+		[Export ("isRawPhoto")]
+		bool RawPhoto { get; }
+
+		[Export ("pixelBuffer")]
+		[NullAllowed]
+		CVPixelBuffer PixelBuffer { get; }
+
+		[Export ("previewPixelBuffer")]
+		[NullAllowed]
+		CVPixelBuffer PreviewPixelBuffer { get; }
+
+		[Export ("embeddedThumbnailPhotoFormat")]
+		[NullAllowed]
+		NSDictionary<NSString, NSObject> EmbeddedThumbnailPhotoFormat { get; }
+
+		[Export ("depthData")]
+		[NullAllowed]
+		AVDepthData DepthData { get; }
+
+		[Export ("metadata")]
+		NSDictionary<NSString, NSObject> Metadata { get; }
+
+		[Export ("cameraCalibrationData")]
+		[NullAllowed]
+		AVCameraCalibrationData CameraCalibrationData { get; }
+
+		[Export ("resolvedSettings")]
+		AVCaptureResolvedPhotoSettings ResolvedSettings { get; }
+
+		[Export ("photoCount")]
+		nint PhotoCount { get; }
+
+		[Export ("sourceDeviceType")]
+		AVCaptureDeviceType SourceDeviceType { get; }
+
+		// AVCapturePhotoConversions category
+
+		[Export ("fileDataRepresentation")]
+		[NullAllowed]
+		NSData GetFileDataRepresentation ();
+
+		[NullAllowed]
+		[Export ("fileDataRepresentationWithReplacementMetadata:replacementEmbeddedThumbnailPhotoFormat:replacementEmbeddedThumbnailPixelBuffer:replacementDepthData:")]
+		NSData GetFileDataRepresentation ([NullAllowed] NSDictionary<NSString, NSObject> replacementMetadata, [NullAllowed] NSDictionary<NSString, NSObject> replacementEmbeddedThumbnailPhotoFormat, [NullAllowed] CVPixelBuffer replacementEmbeddedThumbnailPixelBuffer, [NullAllowed] AVDepthData replacementDepthData);
+
+		[Export ("CGImageRepresentation")]
+		[NullAllowed]
+		CGImage ToCGImage ();
+
+		[Export ("previewCGImageRepresentation")]
+		[NullAllowed]
+		CGImage PreviewToCGImage ();
+
+		// AVCapturePhotoBracketedCapture category
+
+		[Export ("bracketSettings")]
+		[NullAllowed]
+		AVCaptureBracketedStillImageSettings BracketedSettings { get; }
+
+		[Export ("sequenceCount")]
+		nint SequenceCount { get; }
+
+		[Export ("lensStabilizationStatus")]
+		AVCaptureLensStabilizationStatus LensStabilizationStatus { get; }
 	}
 
 	// values are manually given since not some are platform specific
@@ -7868,15 +7941,13 @@ namespace XamCore.AVFoundation {
 	interface AVCameraCalibrationData
 	{
 		[Export ("intrinsicMatrix")]
-		Matrix3 GetIntrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;}
+		MatrixFloat3x3 GetIntrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;}
 
 		[Export ("intrinsicMatrixReferenceDimensions")]
 		CGSize IntrinsicMatrixReferenceDimensions { get; }
 
-		/*
 		[Export ("extrinsicMatrix")]
-		Matrix4 GetExtrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get;}; // should be a matrix 4x3
-		*/
+		MatrixFloat4x3 GetExtrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
 
 		[Export ("pixelSize")]
 		float PixelSize { get; }

@@ -2317,6 +2317,7 @@ namespace Xamarin.BindingMethods.Generator
 			case "Vector3i":
 			case "Vector3":
 			case "NVector3":
+			case "NVector3d":
 				writer.WriteLine ("\t{0}{2}a = {1} [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}b = {1} [1];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}c = {1} [2];", managedVariable, nativeVariable, accessor);
@@ -2355,6 +2356,7 @@ namespace Xamarin.BindingMethods.Generator
 				break;
 			case "Matrix4":
 			case "NMatrix4":
+			case "NMatrix4d":
 				writer.WriteLine ("\tfor (int i = 0; i < 4; i++) {");
 				writer.WriteLine ("\t\t{0}{2}columns [i].a = {1}.columns [i] [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t\t{0}{2}columns [i].b = {1}.columns [i] [1];", managedVariable, nativeVariable, accessor);
@@ -2438,6 +2440,7 @@ namespace Xamarin.BindingMethods.Generator
 			case "Vector3i":
 			case "Vector3":
 			case "NVector3":
+			case "NVector3d":
 				writer.WriteLine ("\t{0} [0] = {1}{2}a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0} [1] = {1}{2}b;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0} [2] = {1}{2}c;", nativeVariable, managedVariable, accessor);
@@ -2475,6 +2478,7 @@ namespace Xamarin.BindingMethods.Generator
 				break;
 			case "Matrix4":
 			case "NMatrix4":
+			case "NMatrix4d":
 				writer.WriteLine ("\tfor (int i = 0; i < 4; i++) {");
 				writer.WriteLine ("\t\t{0}.columns [i][0] = {1}{2}columns [i].a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t\t{0}.columns [i][1] = {1}{2}columns [i].b;", nativeVariable, managedVariable, accessor);
@@ -2980,14 +2984,32 @@ namespace Xamarin.BindingMethods.Generator
 				NativeWrapperType = "struct Vector2d",
 				RequireMarshal = true
 			};
+			public static TypeData VectorDouble2 = new TypeData {
+				ManagedType = "VectorDouble2",
+				NativeType = "vector_double2",
+				NativeWrapperType = "struct Vector2d",
+				RequireMarshal = true,
+			};
 			public static TypeData Vector3d = new TypeData {
 				ManagedType = "Vector3d",
 				NativeType = "vector_double3",
 				NativeWrapperType = "struct Vector3d",
 				RequireMarshal = true,
 			};
+			public static TypeData VectorDouble3 = new TypeData {
+				ManagedType = "VectorDouble3",
+				NativeType = "vector_double3",
+				NativeWrapperType = "struct Vector3d",
+				RequireMarshal = true,
+			};
 			public static TypeData Vector4d = new TypeData {
 				ManagedType = "Vector4d",
+				NativeType = "vector_double4",
+				NativeWrapperType = "struct Vector4d",
+				RequireMarshal = true,
+			};
+			public static TypeData VectorDouble4 = new TypeData {
+				ManagedType = "VectorDouble4",
 				NativeType = "vector_double4",
 				NativeWrapperType = "struct Vector4d",
 				RequireMarshal = true,
@@ -3041,6 +3063,15 @@ namespace Xamarin.BindingMethods.Generator
 				ManagedType = "NMatrix4",
 				NativeType = "matrix_float4x4",
 				NativeWrapperType = "struct NMatrix4",
+				RequireMarshal = true,
+				IsARMStret = true,
+				IsX86Stret = true,
+				IsX64Stret = true,
+			};
+			public static TypeData MatrixDouble4x4 = new TypeData {
+				ManagedType = "MatrixDouble4x4",
+				NativeType = "matrix_double4x4",
+				NativeWrapperType = "struct MatrixDouble4x4",
 				RequireMarshal = true,
 				IsARMStret = true,
 				IsX86Stret = true,

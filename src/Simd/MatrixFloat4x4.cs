@@ -28,35 +28,35 @@ using System.Runtime.InteropServices;
 namespace OpenTK
 {
     /// <summary>
-    /// Represents a 4x4 Matrix identical to the native matrix_float4 type.
+    /// Represents a 4x4 Matrix
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct SimdMatrix4 : IEquatable<SimdMatrix4>
+    public struct Matrix4 : IEquatable<Matrix4>
     {
         #region Fields
 
         /// <summary>
-        /// Leftmost column of the matrix
+        /// Top row of the matrix
         /// </summary>
-        public Vector4 Column0;
+        public Vector4 Row0;
         /// <summary>
-        /// 2nd column of the matrix
+        /// 2nd row of the matrix
         /// </summary>
-        public Vector4 Column1;
+        public Vector4 Row1;
         /// <summary>
-        /// 3rd column of the matrix
+        /// 3rd row of the matrix
         /// </summary>
-        public Vector4 Column2;
+        public Vector4 Row2;
         /// <summary>
-        /// Bottom column of the matrix
+        /// Bottom row of the matrix
         /// </summary>
-        public Vector4 Column3;
+        public Vector4 Row3;
  
         /// <summary>
         /// The identity matrix
         /// </summary>
-        public static SimdMatrix4 Identity = new SimdMatrix4 (Vector4.UnitX, Vector4.UnitY, Vector4.UnitZ, Vector4.UnitW);
+        public static Matrix4 Identity = new Matrix4(Vector4.UnitX, Vector4.UnitY, Vector4.UnitZ, Vector4.UnitW);
 
         #endregion
 
@@ -69,9 +69,8 @@ namespace OpenTK
         /// <param name="row1">Second row of the matrix</param>
         /// <param name="row2">Third row of the matrix</param>
         /// <param name="row3">Bottom row of the matrix</param>
-        public SimdMatrix4 (Vector4 row0, Vector4 row1, Vector4 row2, Vector4 row3)
+        public Matrix4(Vector4 row0, Vector4 row1, Vector4 row2, Vector4 row3)
         {
-			this = new SimdMatrix4 ();
             Row0 = row0;
             Row1 = row1;
             Row2 = row2;
@@ -97,13 +96,12 @@ namespace OpenTK
         /// <param name="m31">Second item of the fourth row of the matrix.</param>
         /// <param name="m32">Third item of the fourth row of the matrix.</param>
         /// <param name="m33">Fourth item of the fourth row of the matrix.</param>
-        public SimdMatrix4 (
+        public Matrix4(
             float m00, float m01, float m02, float m03,
             float m10, float m11, float m12, float m13,
             float m20, float m21, float m22, float m23,
             float m30, float m31, float m32, float m33)
-		{
-			this = new SimdMatrix4 ();
+        {
             Row0 = new Vector4(m00, m01, m02, m03);
             Row1 = new Vector4(m10, m11, m12, m13);
             Row2 = new Vector4(m20, m21, m22, m23);
@@ -136,138 +134,114 @@ namespace OpenTK
         /// <summary>
         /// The first column of this matrix
         /// </summary>
-        public Vector4 Row0
+        public Vector4 Column0
         {
-			get { return new Vector4 (Column0.X, Column1.X, Column2.X, Column3.X); }
-			set {
-				Column0.X = value.X;
-				Column1.X = value.Y;
-				Column2.X = value.Z;
-				Column3.X = value.W;
-			}
+            get { return new Vector4(Row0.X, Row1.X, Row2.X, Row3.X); }
         }
 
         /// <summary>
         /// The second column of this matrix
         /// </summary>
-        public Vector4 Row1
+        public Vector4 Column1
         {
-            get { return new Vector4(Column0.Y, Column1.Y, Column2.Y, Column3.Y); }
-			set {
-				Column0.Y = value.X;
-				Column1.Y = value.Y;
-				Column2.Y = value.Z;
-				Column3.Y = value.W;
-			}
+            get { return new Vector4(Row0.Y, Row1.Y, Row2.Y, Row3.Y); }
         }
 
         /// <summary>
         /// The third column of this matrix
         /// </summary>
-        public Vector4 Row2
+        public Vector4 Column2
         {
-			get { return new Vector4 (Column0.Z, Column1.Z, Column2.Z, Column3.Z); }
-			set {
-				Column0.Z = value.X;
-				Column1.Z = value.Y;
-				Column2.Z = value.Z;
-				Column3.Z = value.W;
-			}
+            get { return new Vector4(Row0.Z, Row1.Z, Row2.Z, Row3.Z); }
         }
 
         /// <summary>
         /// The fourth column of this matrix
         /// </summary>
-        public Vector4 Row3
+        public Vector4 Column3
         {
-            get { return new Vector4(Column0.W, Column1.W, Column2.W, Column3.W); }
-			set {
-				Column0.W = value.X;
-				Column1.W = value.Y;
-				Column2.W = value.Z;
-				Column3.W = value.W;
-			}
+            get { return new Vector4(Row0.W, Row1.W, Row2.W, Row3.W); }
         }
 
         /// <summary>
         /// Gets or sets the value at row 1, column 1 of this instance.
         /// </summary>
-        public float M11 { get { return Column0.X; } set { Column0.X = value; } }
+        public float M11 { get { return Row0.X; } set { Row0.X = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 1, column 2 of this instance.
         /// </summary>
-        public float M12 { get { return Column1.X; } set { Column1.X = value; } }
+        public float M12 { get { return Row0.Y; } set { Row0.Y = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 1, column 3 of this instance.
         /// </summary>
-        public float M13 { get { return Column2.X; } set { Column2.X = value; } }
+        public float M13 { get { return Row0.Z; } set { Row0.Z = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 1, column 4 of this instance.
         /// </summary>
-        public float M14 { get { return Column3.X; } set { Column3.X = value; } }
+        public float M14 { get { return Row0.W; } set { Row0.W = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 2, column 1 of this instance.
         /// </summary>
-        public float M21 { get { return Column0.Y; } set { Column0.Y = value; } }
+        public float M21 { get { return Row1.X; } set { Row1.X = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 2, column 2 of this instance.
         /// </summary>
-        public float M22 { get { return Column1.Y; } set { Column1.Y = value; } }
+        public float M22 { get { return Row1.Y; } set { Row1.Y = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 2, column 3 of this instance.
         /// </summary>
-        public float M23 { get { return Column2.Y; } set { Column2.Y = value; } }
+        public float M23 { get { return Row1.Z; } set { Row1.Z = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 2, column 4 of this instance.
         /// </summary>
-        public float M24 { get { return Column3.Y; } set { Column3.Y = value; } }
+        public float M24 { get { return Row1.W; } set { Row1.W = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 3, column 1 of this instance.
         /// </summary>
-        public float M31 { get { return Column0.Z; } set { Column0.Z = value; } }
+        public float M31 { get { return Row2.X; } set { Row2.X = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 3, column 2 of this instance.
         /// </summary>
-        public float M32 { get { return Column1.Z; } set { Column1.Z = value; } }
+        public float M32 { get { return Row2.Y; } set { Row2.Y = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 3, column 3 of this instance.
         /// </summary>
-		public float M33 { get { return Column2.Z; } set { Column2.Z = value; } }
+        public float M33 { get { return Row2.Z; } set { Row2.Z = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 3, column 4 of this instance.
         /// </summary>
-        public float M34 { get { return Column3.Z; } set { Column3.Z = value; } }
+        public float M34 { get { return Row2.W; } set { Row2.W = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 4, column 1 of this instance.
         /// </summary>
-        public float M41 { get { return Column0.W; } set { Column0.W = value; } }
+        public float M41 { get { return Row3.X; } set { Row3.X = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 4, column 2 of this instance.
         /// </summary>
-        public float M42 { get { return Column1.W; } set { Column1.W = value; } }
+        public float M42 { get { return Row3.Y; } set { Row3.Y = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 4, column 3 of this instance.
         /// </summary>
-        public float M43 { get { return Column2.W; } set { Column2.W = value; } }
+        public float M43 { get { return Row3.Z; } set { Row3.Z = value; } }
 
         /// <summary>
         /// Gets or sets the value at row 4, column 4 of this instance.
         /// </summary>
-        public float M44 { get { return Column3.W; } set { Column3.W = value; } }
+        public float M44 { get { return Row3.W; } set { Row3.W = value; } }
 
         #endregion
 
@@ -280,7 +254,7 @@ namespace OpenTK
         /// </summary>
         public void Invert()
         {
-            this = SimdMatrix4.Invert(this);
+            this = Matrix4.Invert(this);
         }
 
         #endregion
@@ -292,7 +266,7 @@ namespace OpenTK
         /// </summary>
         public void Transpose()
         {
-            this = SimdMatrix4.Transpose(this);
+            this = Matrix4.Transpose(this);
         }
 
         #endregion
@@ -309,7 +283,7 @@ namespace OpenTK
         /// <param name="axis">The axis to rotate about.</param>
         /// <param name="angle">Angle in radians to rotate counter-clockwise (looking in the direction of the given axis).</param>
         /// <param name="result">A matrix instance.</param>
-        public static void CreateFromAxisAngle(Vector3 axis, float angle, out SimdMatrix4 result)
+        public static void CreateFromAxisAngle(Vector3 axis, float angle, out Matrix4 result)
         {
             float cos = (float)System.Math.Cos(-angle);
             float sin = (float)System.Math.Sin(-angle);
@@ -317,7 +291,7 @@ namespace OpenTK
 
             axis.Normalize();
 
-            result = new SimdMatrix4(t * axis.X * axis.X + cos, t * axis.X * axis.Y - sin * axis.Z, t * axis.X * axis.Z + sin * axis.Y, 0.0f,
+            result = new Matrix4(t * axis.X * axis.X + cos, t * axis.X * axis.Y - sin * axis.Z, t * axis.X * axis.Z + sin * axis.Y, 0.0f,
                                  t * axis.X * axis.Y + sin * axis.Z, t * axis.Y * axis.Y + cos, t * axis.Y * axis.Z - sin * axis.X, 0.0f,
                                  t * axis.X * axis.Z - sin * axis.Y, t * axis.Y * axis.Z + sin * axis.X, t * axis.Z * axis.Z + cos, 0.0f,
                                  0, 0, 0, 1);
@@ -329,9 +303,9 @@ namespace OpenTK
         /// <param name="axis">The axis to rotate about.</param>
         /// <param name="angle">Angle in radians to rotate counter-clockwise (looking in the direction of the given axis).</param>
         /// <returns>A matrix instance.</returns>
-        public static SimdMatrix4 CreateFromAxisAngle(Vector3 axis, float angle)
+        public static Matrix4 CreateFromAxisAngle(Vector3 axis, float angle)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateFromAxisAngle(axis, angle, out result);
             return result;
         }
@@ -344,13 +318,12 @@ namespace OpenTK
         /// Builds a rotation matrix for a rotation around the x-axis.
         /// </summary>
         /// <param name="angle">The counter-clockwise angle in radians.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateRotationX(float angle, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateRotationX(float angle, out Matrix4 result)
         {
             float cos = (float)System.Math.Cos(angle);
             float sin = (float)System.Math.Sin(angle);
 
-			result = new SimdMatrix4 ();
             result.Row0 = Vector4.UnitX;
             result.Row1 = new Vector4(0.0f, cos, sin, 0.0f);
             result.Row2 = new Vector4(0.0f, -sin, cos, 0.0f);
@@ -361,10 +334,10 @@ namespace OpenTK
         /// Builds a rotation matrix for a rotation around the x-axis.
         /// </summary>
         /// <param name="angle">The counter-clockwise angle in radians.</param>
-        /// <returns>The resulting SimdMatrix4 instance.</returns>
-        public static SimdMatrix4 CreateRotationX(float angle)
+        /// <returns>The resulting Matrix4 instance.</returns>
+        public static Matrix4 CreateRotationX(float angle)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateRotationX(angle, out result);
             return result;
         }
@@ -373,13 +346,12 @@ namespace OpenTK
         /// Builds a rotation matrix for a rotation around the y-axis.
         /// </summary>
         /// <param name="angle">The counter-clockwise angle in radians.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateRotationY(float angle, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateRotationY(float angle, out Matrix4 result)
         {
             float cos = (float)System.Math.Cos(angle);
             float sin = (float)System.Math.Sin(angle);
 
-			result = new SimdMatrix4 ();
             result.Row0 = new Vector4(cos, 0.0f, -sin, 0.0f);
             result.Row1 = Vector4.UnitY;
             result.Row2 = new Vector4(sin, 0.0f, cos, 0.0f);
@@ -390,10 +362,10 @@ namespace OpenTK
         /// Builds a rotation matrix for a rotation around the y-axis.
         /// </summary>
         /// <param name="angle">The counter-clockwise angle in radians.</param>
-        /// <returns>The resulting SimdMatrix4 instance.</returns>
-        public static SimdMatrix4 CreateRotationY(float angle)
+        /// <returns>The resulting Matrix4 instance.</returns>
+        public static Matrix4 CreateRotationY(float angle)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateRotationY(angle, out result);
             return result;
         }
@@ -402,13 +374,12 @@ namespace OpenTK
         /// Builds a rotation matrix for a rotation around the z-axis.
         /// </summary>
         /// <param name="angle">The counter-clockwise angle in radians.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateRotationZ(float angle, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateRotationZ(float angle, out Matrix4 result)
         {
             float cos = (float)System.Math.Cos(angle);
             float sin = (float)System.Math.Sin(angle);
 
-			result = new SimdMatrix4 ();
             result.Row0 = new Vector4(cos, sin, 0.0f, 0.0f);
             result.Row1 = new Vector4(-sin, cos, 0.0f, 0.0f);
             result.Row2 = Vector4.UnitZ;
@@ -419,10 +390,10 @@ namespace OpenTK
         /// Builds a rotation matrix for a rotation around the z-axis.
         /// </summary>
         /// <param name="angle">The counter-clockwise angle in radians.</param>
-        /// <returns>The resulting SimdMatrix4 instance.</returns>
-        public static SimdMatrix4 CreateRotationZ(float angle)
+        /// <returns>The resulting Matrix4 instance.</returns>
+        public static Matrix4 CreateRotationZ(float angle)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateRotationZ(angle, out result);
             return result;
         }
@@ -437,8 +408,8 @@ namespace OpenTK
         /// <param name="x">X translation.</param>
         /// <param name="y">Y translation.</param>
         /// <param name="z">Z translation.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateTranslation(float x, float y, float z, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateTranslation(float x, float y, float z, out Matrix4 result)
         {
             result = Identity;
             result.Row3 = new Vector4(x, y, z, 1);
@@ -448,8 +419,8 @@ namespace OpenTK
         /// Creates a translation matrix.
         /// </summary>
         /// <param name="vector">The translation vector.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateTranslation(ref Vector3 vector, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateTranslation(ref Vector3 vector, out Matrix4 result)
         {
             result = Identity;
             result.Row3 = new Vector4(vector.X, vector.Y, vector.Z, 1);
@@ -461,10 +432,10 @@ namespace OpenTK
         /// <param name="x">X translation.</param>
         /// <param name="y">Y translation.</param>
         /// <param name="z">Z translation.</param>
-        /// <returns>The resulting SimdMatrix4 instance.</returns>
-        public static SimdMatrix4 CreateTranslation(float x, float y, float z)
+        /// <returns>The resulting Matrix4 instance.</returns>
+        public static Matrix4 CreateTranslation(float x, float y, float z)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateTranslation(x, y, z, out result);
             return result;
         }
@@ -473,10 +444,10 @@ namespace OpenTK
         /// Creates a translation matrix.
         /// </summary>
         /// <param name="vector">The translation vector.</param>
-        /// <returns>The resulting SimdMatrix4 instance.</returns>
-        public static SimdMatrix4 CreateTranslation(Vector3 vector)
+        /// <returns>The resulting Matrix4 instance.</returns>
+        public static Matrix4 CreateTranslation(Vector3 vector)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateTranslation(vector.X, vector.Y, vector.Z, out result);
             return result;
         }
@@ -492,8 +463,8 @@ namespace OpenTK
         /// <param name="height">The height of the projection volume.</param>
         /// <param name="zNear">The near edge of the projection volume.</param>
         /// <param name="zFar">The far edge of the projection volume.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateOrthographic(float width, float height, float zNear, float zFar, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateOrthographic(float width, float height, float zNear, float zFar, out Matrix4 result)
         {
             CreateOrthographicOffCenter(-width / 2, width / 2, -height / 2, height / 2, zNear, zFar, out result);
         }
@@ -505,10 +476,10 @@ namespace OpenTK
         /// <param name="height">The height of the projection volume.</param>
         /// <param name="zNear">The near edge of the projection volume.</param>
         /// <param name="zFar">The far edge of the projection volume.</param>
-        /// <rereturns>The resulting SimdMatrix4 instance.</rereturns>
-        public static SimdMatrix4 CreateOrthographic(float width, float height, float zNear, float zFar)
+        /// <rereturns>The resulting Matrix4 instance.</rereturns>
+        public static Matrix4 CreateOrthographic(float width, float height, float zNear, float zFar)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateOrthographicOffCenter(-width / 2, width / 2, -height / 2, height / 2, zNear, zFar, out result);
             return result;
         }
@@ -526,10 +497,10 @@ namespace OpenTK
         /// <param name="top">The top edge of the projection volume.</param>
         /// <param name="zNear">The near edge of the projection volume.</param>
         /// <param name="zFar">The far edge of the projection volume.</param>
-        /// <param name="result">The resulting SimdMatrix4 instance.</param>
-        public static void CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNear, float zFar, out SimdMatrix4 result)
+        /// <param name="result">The resulting Matrix4 instance.</param>
+        public static void CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNear, float zFar, out Matrix4 result)
         {
-            result = new SimdMatrix4();
+            result = new Matrix4();
 
             float invRL = 1 / (right - left);
             float invTB = 1 / (top - bottom);
@@ -554,10 +525,10 @@ namespace OpenTK
         /// <param name="top">The top edge of the projection volume.</param>
         /// <param name="zNear">The near edge of the projection volume.</param>
         /// <param name="zFar">The far edge of the projection volume.</param>
-        /// <returns>The resulting SimdMatrix4 instance.</returns>
-        public static SimdMatrix4 CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNear, float zFar)
+        /// <returns>The resulting Matrix4 instance.</returns>
+        public static Matrix4 CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNear, float zFar)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreateOrthographicOffCenter(left, right, bottom, top, zNear, zFar, out result);
             return result;
         }
@@ -584,7 +555,7 @@ namespace OpenTK
         /// <item>zNear is larger than zFar</item>
         /// </list>
         /// </exception>
-        public static void CreatePerspectiveFieldOfView(float fovy, float aspect, float zNear, float zFar, out SimdMatrix4 result)
+        public static void CreatePerspectiveFieldOfView(float fovy, float aspect, float zNear, float zFar, out Matrix4 result)
         {
             if (fovy <= 0 || fovy > Math.PI)
                 throw new ArgumentOutOfRangeException("fovy");
@@ -623,9 +594,9 @@ namespace OpenTK
         /// <item>zNear is larger than zFar</item>
         /// </list>
         /// </exception>
-        public static SimdMatrix4 CreatePerspectiveFieldOfView(float fovy, float aspect, float zNear, float zFar)
+        public static Matrix4 CreatePerspectiveFieldOfView(float fovy, float aspect, float zNear, float zFar)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreatePerspectiveFieldOfView(fovy, aspect, zNear, zFar, out result);
             return result;
         }
@@ -652,7 +623,7 @@ namespace OpenTK
         /// <item>zNear is larger than zFar</item>
         /// </list>
         /// </exception>
-        public static void CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float zNear, float zFar, out SimdMatrix4 result)
+        public static void CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float zNear, float zFar, out Matrix4 result)
         {
             if (zNear <= 0)
                 throw new ArgumentOutOfRangeException("zNear");
@@ -668,7 +639,7 @@ namespace OpenTK
             float c = -(zFar + zNear) / (zFar - zNear);
             float d = -(2.0f * zFar * zNear) / (zFar - zNear);
             
-            result = new SimdMatrix4(x, 0, 0,  0,
+            result = new Matrix4(x, 0, 0,  0,
                                  0, y, 0,  0,
                                  a, b, c, -1,
                                  0, 0, d,  0);
@@ -692,9 +663,9 @@ namespace OpenTK
         /// <item>zNear is larger than zFar</item>
         /// </list>
         /// </exception>
-        public static SimdMatrix4 CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float zNear, float zFar)
+        public static Matrix4 CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float zNear, float zFar)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             CreatePerspectiveOffCenter(left, right, bottom, top, zNear, zFar, out result);
             return result;
         }
@@ -709,9 +680,9 @@ namespace OpenTK
         /// Builds a translation matrix.
         /// </summary>
         /// <param name="trans">The translation vector.</param>
-        /// <returns>A new SimdMatrix4 instance.</returns>
+        /// <returns>A new Matrix4 instance.</returns>
         [Obsolete("Use CreateTranslation instead.")]
-        public static SimdMatrix4 Translation(Vector3 trans)
+        public static Matrix4 Translation(Vector3 trans)
         {
             return Translation(trans.X, trans.Y, trans.Z);
         }
@@ -724,9 +695,9 @@ namespace OpenTK
         /// <param name="z">Z translation</param>
         /// <returns>A Translation matrix</returns>
         [Obsolete("Use CreateTranslation instead.")]
-        public static SimdMatrix4 Translation(float x, float y, float z)
+        public static Matrix4 Translation(float x, float y, float z)
         {
-            SimdMatrix4 result = Identity;
+            Matrix4 result = Identity;
             result.Row3 = new Vector4(x, y, z, 1.0f);
             return result;
         }
@@ -742,7 +713,7 @@ namespace OpenTK
         /// </summary>
         /// <param name="scale">Single scale factor for x,y and z axes</param>
         /// <returns>A scaling matrix</returns>
-        public static SimdMatrix4 Scale(float scale)
+        public static Matrix4 Scale(float scale)
         {
             return Scale(scale, scale, scale);
         }
@@ -752,7 +723,7 @@ namespace OpenTK
         /// </summary>
         /// <param name="scale">Scale factors for x,y and z axes</param>
         /// <returns>A scaling matrix</returns>
-        public static SimdMatrix4 Scale(Vector3 scale)
+        public static Matrix4 Scale(Vector3 scale)
         {
             return Scale(scale.X, scale.Y, scale.Z);
         }
@@ -764,9 +735,9 @@ namespace OpenTK
         /// <param name="y">Scale factor for y-axis</param>
         /// <param name="z">Scale factor for z-axis</param>
         /// <returns>A scaling matrix</returns>
-        public static SimdMatrix4 Scale(float x, float y, float z)
+        public static Matrix4 Scale(float x, float y, float z)
         {
-			SimdMatrix4 result = new SimdMatrix4 ();
+            Matrix4 result;
             result.Row0 = Vector4.UnitX * x;
             result.Row1 = Vector4.UnitY * y;
             result.Row2 = Vector4.UnitZ * z;
@@ -784,12 +755,12 @@ namespace OpenTK
         /// <param name="angle">angle in radians to rotate counter-clockwise around the x-axis</param>
         /// <returns>A rotation matrix</returns>
         [Obsolete("Use CreateRotationX instead.")]
-        public static SimdMatrix4 RotateX(float angle)
+        public static Matrix4 RotateX(float angle)
         {
             float cos = (float)System.Math.Cos(angle);
             float sin = (float)System.Math.Sin(angle);
 
-            SimdMatrix4 result = new SimdMatrix4 ();
+            Matrix4 result;
             result.Row0 = Vector4.UnitX;
             result.Row1 = new Vector4(0.0f, cos, sin, 0.0f);
             result.Row2 = new Vector4(0.0f, -sin, cos, 0.0f);
@@ -803,12 +774,12 @@ namespace OpenTK
         /// <param name="angle">angle in radians to rotate counter-clockwise around the y-axis</param>
         /// <returns>A rotation matrix</returns>
         [Obsolete("Use CreateRotationY instead.")]
-        public static SimdMatrix4 RotateY(float angle)
+        public static Matrix4 RotateY(float angle)
         {
             float cos = (float)System.Math.Cos(angle);
             float sin = (float)System.Math.Sin(angle);
 
-			SimdMatrix4 result = new SimdMatrix4 ();
+            Matrix4 result;
             result.Row0 = new Vector4(cos, 0.0f, -sin, 0.0f);
             result.Row1 = Vector4.UnitY;
             result.Row2 = new Vector4(sin, 0.0f, cos, 0.0f);
@@ -822,12 +793,12 @@ namespace OpenTK
         /// <param name="angle">angle in radians to rotate counter-clockwise around the z-axis</param>
         /// <returns>A rotation matrix</returns>
         [Obsolete("Use CreateRotationZ instead.")]
-        public static SimdMatrix4 RotateZ(float angle)
+        public static Matrix4 RotateZ(float angle)
         {
             float cos = (float)System.Math.Cos(angle);
             float sin = (float)System.Math.Sin(angle);
 
-			SimdMatrix4 result = new SimdMatrix4 ();
+            Matrix4 result;
             result.Row0 = new Vector4(cos, sin, 0.0f, 0.0f);
             result.Row1 = new Vector4(-sin, cos, 0.0f, 0.0f);
             result.Row2 = Vector4.UnitZ;
@@ -842,7 +813,7 @@ namespace OpenTK
         /// <param name="angle">angle in radians to rotate counter-clockwise (looking in the direction of the given axis)</param>
         /// <returns>A rotation matrix</returns>
         [Obsolete("Use CreateFromAxisAngle instead.")]
-        public static SimdMatrix4 Rotate(Vector3 axis, float angle)
+        public static Matrix4 Rotate(Vector3 axis, float angle)
         {
             float cos = (float)System.Math.Cos(-angle);
             float sin = (float)System.Math.Sin(-angle);
@@ -850,7 +821,7 @@ namespace OpenTK
 
             axis.Normalize();
 
-			SimdMatrix4 result = new SimdMatrix4 ();
+            Matrix4 result;
             result.Row0 = new Vector4(t * axis.X * axis.X + cos, t * axis.X * axis.Y - sin * axis.Z, t * axis.X * axis.Z + sin * axis.Y, 0.0f);
             result.Row1 = new Vector4(t * axis.X * axis.Y + sin * axis.Z, t * axis.Y * axis.Y + cos, t * axis.Y * axis.Z - sin * axis.X, 0.0f);
             result.Row2 = new Vector4(t * axis.X * axis.Z - sin * axis.Y, t * axis.Y * axis.Z + sin * axis.X, t * axis.Z * axis.Z + cos, 0.0f);
@@ -863,7 +834,7 @@ namespace OpenTK
         /// </summary>
         /// <param name="q">the quaternion</param>
         /// <returns>A rotation matrix</returns>
-        public static SimdMatrix4 Rotate(Quaternion q)
+        public static Matrix4 Rotate(Quaternion q)
         {
             Vector3 axis;
             float angle;
@@ -881,19 +852,19 @@ namespace OpenTK
         /// <param name="eye">Eye (camera) position in world space</param>
         /// <param name="target">Target position in world space</param>
         /// <param name="up">Up vector in world space (should not be parallel to the camera direction, that is target - eye)</param>
-        /// <returns>A SimdMatrix4 that transforms world space to camera space</returns>
-        public static SimdMatrix4 LookAt(Vector3 eye, Vector3 target, Vector3 up)
+        /// <returns>A Matrix4 that transforms world space to camera space</returns>
+        public static Matrix4 LookAt(Vector3 eye, Vector3 target, Vector3 up)
         {
             Vector3 z = Vector3.Normalize(eye - target);
             Vector3 x = Vector3.Normalize(Vector3.Cross(up, z));
             Vector3 y = Vector3.Normalize(Vector3.Cross(z, x));
 
-            SimdMatrix4 rot = new SimdMatrix4(new Vector4(x.X, y.X, z.X, 0.0f),
+            Matrix4 rot = new Matrix4(new Vector4(x.X, y.X, z.X, 0.0f),
                                         new Vector4(x.Y, y.Y, z.Y, 0.0f),
                                         new Vector4(x.Z, y.Z, z.Z, 0.0f),
                                         Vector4.UnitW);
 
-            SimdMatrix4 trans = SimdMatrix4.CreateTranslation(-eye);
+            Matrix4 trans = Matrix4.CreateTranslation(-eye);
 
             return trans * rot;
         }
@@ -910,8 +881,8 @@ namespace OpenTK
         /// <param name="upX">Up vector in world space (should not be parallel to the camera direction, that is target - eye)</param>
         /// <param name="upY">Up vector in world space (should not be parallel to the camera direction, that is target - eye)</param>
         /// <param name="upZ">Up vector in world space (should not be parallel to the camera direction, that is target - eye)</param>
-        /// <returns>A SimdMatrix4 that transforms world space to camera space</returns>
-        public static SimdMatrix4 LookAt(float eyeX, float eyeY, float eyeZ, float targetX, float targetY, float targetZ, float upX, float upY, float upZ)
+        /// <returns>A Matrix4 that transforms world space to camera space</returns>
+        public static Matrix4 LookAt(float eyeX, float eyeY, float eyeZ, float targetX, float targetY, float targetZ, float upX, float upY, float upZ)
         {
             return LookAt(new Vector3(eyeX, eyeY, eyeZ), new Vector3(targetX, targetY, targetZ), new Vector3(upX, upY, upZ));
         }
@@ -927,12 +898,12 @@ namespace OpenTK
         /// <param name="far">Distance to the far clip plane</param>
         /// <returns>A projection matrix that transforms camera space to raster space</returns>
         [Obsolete("Use CreatePerspectiveOffCenter instead.")]
-        public static SimdMatrix4 Frustum(float left, float right, float bottom, float top, float near, float far)
+        public static Matrix4 Frustum(float left, float right, float bottom, float top, float near, float far)
         {
             float invRL = 1.0f / (right - left);
             float invTB = 1.0f / (top - bottom);
             float invFN = 1.0f / (far - near);
-            return new SimdMatrix4(new Vector4(2.0f * near * invRL, 0.0f, 0.0f, 0.0f),
+            return new Matrix4(new Vector4(2.0f * near * invRL, 0.0f, 0.0f, 0.0f),
                                new Vector4(0.0f, 2.0f * near * invTB, 0.0f, 0.0f),
                                new Vector4((right + left) * invRL, (top + bottom) * invTB, -(far + near) * invFN, -1.0f),
                                new Vector4(0.0f, 0.0f, -2.0f * far * near * invFN, 0.0f));
@@ -947,7 +918,7 @@ namespace OpenTK
         /// <param name="far">Distance to the far clip plane</param>
         /// <returns>A projection matrix that transforms camera space to raster space</returns>
         [Obsolete("Use CreatePerspectiveFieldOfView instead.")]
-        public static SimdMatrix4 Perspective(float fovy, float aspect, float near, float far)
+        public static Matrix4 Perspective(float fovy, float aspect, float near, float far)
         {
             float yMax = near * (float)System.Math.Tan(0.5f * fovy);
             float yMin = -yMax;
@@ -967,9 +938,9 @@ namespace OpenTK
         /// <param name="left">The left operand of the multiplication.</param>
         /// <param name="right">The right operand of the multiplication.</param>
         /// <returns>A new instance that is the result of the multiplication</returns>
-        public static SimdMatrix4 Mult(SimdMatrix4 left, SimdMatrix4 right)
+        public static Matrix4 Mult(Matrix4 left, Matrix4 right)
         {
-            SimdMatrix4 result;
+            Matrix4 result;
             Mult(ref left, ref right, out result);
             return result;
         }
@@ -980,9 +951,9 @@ namespace OpenTK
         /// <param name="left">The left operand of the multiplication.</param>
         /// <param name="right">The right operand of the multiplication.</param>
         /// <param name="result">A new instance that is the result of the multiplication</param>
-        public static void Mult(ref SimdMatrix4 left, ref SimdMatrix4 right, out SimdMatrix4 result)
+        public static void Mult(ref Matrix4 left, ref Matrix4 right, out Matrix4 result)
         {
-            result = new SimdMatrix4 (
+            result = new Matrix4(
                 left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31 + left.M14 * right.M41,
                 left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32 + left.M14 * right.M42,
                 left.M11 * right.M13 + left.M12 * right.M23 + left.M13 * right.M33 + left.M14 * right.M43,
@@ -1010,8 +981,8 @@ namespace OpenTK
         /// </summary>
         /// <param name="mat">The matrix to invert</param>
         /// <returns>The inverse of the given matrix if it has one, or the input if it is singular</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the SimdMatrix4 is singular.</exception>
-        public static SimdMatrix4 Invert(SimdMatrix4 mat)
+        /// <exception cref="InvalidOperationException">Thrown if the Matrix4 is singular.</exception>
+        public static Matrix4 Invert(Matrix4 mat)
         {
             int[] colIdx = { 0, 0, 0, 0 };
             int[] rowIdx = { 0, 0, 0, 0 };
@@ -1124,9 +1095,9 @@ namespace OpenTK
         /// </summary>
         /// <param name="mat">The matrix to transpose</param>
         /// <returns>The transpose of the given matrix</returns>
-        public static SimdMatrix4 Transpose(SimdMatrix4 mat)
+        public static Matrix4 Transpose(Matrix4 mat)
         {
-            return new SimdMatrix4 (mat.Column0, mat.Column1, mat.Column2, mat.Column3);
+            return new Matrix4(mat.Column0, mat.Column1, mat.Column2, mat.Column3);
         }
 
 
@@ -1135,9 +1106,8 @@ namespace OpenTK
         /// </summary>
         /// <param name="mat">The matrix to transpose</param>
         /// <param name="result">The result of the calculation</param>
-        public static void Transpose(ref SimdMatrix4 mat, out SimdMatrix4 result)
-		{
-			result = new SimdMatrix4 ();
+        public static void Transpose(ref Matrix4 mat, out Matrix4 result)
+        {
             result.Row0 = mat.Column0;
             result.Row1 = mat.Column1;
             result.Row2 = mat.Column2;
@@ -1155,10 +1125,10 @@ namespace OpenTK
         /// </summary>
         /// <param name="left">left-hand operand</param>
         /// <param name="right">right-hand operand</param>
-        /// <returns>A new SimdMatrix44 which holds the result of the multiplication</returns>
-        public static SimdMatrix4 operator *(SimdMatrix4 left, SimdMatrix4 right)
+        /// <returns>A new Matrix44 which holds the result of the multiplication</returns>
+        public static Matrix4 operator *(Matrix4 left, Matrix4 right)
         {
-            return SimdMatrix4.Mult(left, right);
+            return Matrix4.Mult(left, right);
         }
 
         /// <summary>
@@ -1167,7 +1137,7 @@ namespace OpenTK
         /// <param name="left">The first instance.</param>
         /// <param name="right">The second instance.</param>
         /// <returns>True, if left equals right; false otherwise.</returns>
-        public static bool operator ==(SimdMatrix4 left, SimdMatrix4 right)
+        public static bool operator ==(Matrix4 left, Matrix4 right)
         {
             return left.Equals(right);
         }
@@ -1178,20 +1148,10 @@ namespace OpenTK
         /// <param name="left">The first instance.</param>
         /// <param name="right">The second instance.</param>
         /// <returns>True, if left does not equal right; false otherwise.</returns>
-        public static bool operator !=(SimdMatrix4 left, SimdMatrix4 right)
+        public static bool operator !=(Matrix4 left, Matrix4 right)
         {
             return !left.Equals(right);
         }
-
-		public static explicit operator Matrix4 (SimdMatrix4 matrix)
-		{
-			return new Matrix4 (matrix.Row0, matrix.Row1, matrix.Row2, matrix.Row3);
-		}
-
-		public static explicit operator SimdMatrix4 (Matrix4 matrix)
-		{
-			return new SimdMatrix4 (matrix.Row0, matrix.Row1, matrix.Row2, matrix.Row3);
-		}
 
         #endregion
 
@@ -1200,7 +1160,7 @@ namespace OpenTK
         #region public override string ToString()
 
         /// <summary>
-        /// Returns a System.String that represents the current SimdMatrix44.
+        /// Returns a System.String that represents the current Matrix44.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -1232,10 +1192,10 @@ namespace OpenTK
         /// <returns>True if the instances are equal; false otherwise.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is SimdMatrix4))
+            if (!(obj is Matrix4))
                 return false;
 
-            return this.Equals((SimdMatrix4)obj);
+            return this.Equals((Matrix4)obj);
         }
 
         #endregion
@@ -1244,12 +1204,12 @@ namespace OpenTK
 
         #endregion
 
-        #region IEquatable<SimdMatrix4> Members
+        #region IEquatable<Matrix4> Members
 
         /// <summary>Indicates whether the current matrix is equal to another matrix.</summary>
         /// <param name="other">An matrix to compare with this matrix.</param>
         /// <returns>true if the current matrix is equal to the matrix parameter; otherwise, false.</returns>
-        public bool Equals(SimdMatrix4 other)
+        public bool Equals(Matrix4 other)
         {
             return
                 Row0 == other.Row0 &&

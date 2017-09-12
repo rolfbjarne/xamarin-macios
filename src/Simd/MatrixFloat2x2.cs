@@ -32,18 +32,18 @@ namespace OpenTK
     #pragma warning disable 3019
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct SimdMatrix2 : IEquatable<SimdMatrix2>
+    public struct Matrix2 : IEquatable<Matrix2>
     {
         #region Fields & Access
 
         /// <summary>Row 0, Column 0</summary>
         public float R0C0;
 
-        /// <summary>Row 1, Column 0</summary>
-        public float R1C0;
-
         /// <summary>Row 0, Column 1</summary>
         public float R0C1;
+
+        /// <summary>Row 1, Column 0</summary>
+        public float R1C0;
 
         /// <summary>Row 1, Column 1</summary>
         public float R1C1;
@@ -134,7 +134,7 @@ namespace OpenTK
         /// <summary>Converts the matrix into an IntPtr.</summary>
         /// <param name="matrix">The matrix to convert.</param>
         /// <returns>An IntPtr for the matrix.</returns>
-        public static explicit operator IntPtr(SimdMatrix2 matrix)
+        public static explicit operator IntPtr(Matrix2 matrix)
         {
             unsafe
             {
@@ -146,7 +146,7 @@ namespace OpenTK
         /// <param name="matrix">The matrix to convert.</param>
         /// <returns>A float* for the matrix.</returns>
         [CLSCompliant(false)]
-        unsafe public static explicit operator float*(SimdMatrix2 matrix)
+        unsafe public static explicit operator float*(Matrix2 matrix)
         {
             return &matrix.R0C0;
         }
@@ -154,7 +154,7 @@ namespace OpenTK
         /// <summary>Converts the matrix into an array of floats.</summary>
         /// <param name="matrix">The matrix to convert.</param>
         /// <returns>An array of floats for the matrix.</returns>
-        public static explicit operator float[](SimdMatrix2 matrix)
+        public static explicit operator float[](Matrix2 matrix)
         {
             return new float[4]
             {
@@ -171,7 +171,7 @@ namespace OpenTK
 
         /// <summary>Constructs left matrix with the same components as the given matrix.</summary>
         /// <param name="vector">The matrix whose components to copy.</param>
-        public SimdMatrix2(ref SimdMatrix2 matrix)
+        public Matrix2(ref Matrix2 matrix)
         {
             this.R0C0 = matrix.R0C0;
             this.R0C1 = matrix.R0C1;
@@ -184,7 +184,7 @@ namespace OpenTK
         /// <param name="r0c1">The value for row 0 column 1.</param>
         /// <param name="r1c0">The value for row 1 column 0.</param>
         /// <param name="r1c1">The value for row 1 column 1.</param>
-        public SimdMatrix2
+        public Matrix2
         (
             float r0c0,
             float r0c1,
@@ -200,7 +200,7 @@ namespace OpenTK
 
         /// <summary>Constructs left matrix from the given array of float-precision floating-point numbers.</summary>
         /// <param name="floatArray">The array of floats for the components of the matrix.</param>
-        public SimdMatrix2(float[] floatArray)
+        public Matrix2(float[] floatArray)
         {
             if (floatArray == null || floatArray.GetLength(0) < 9) throw new MissingFieldException();
 
@@ -215,10 +215,10 @@ namespace OpenTK
         #region Equality
 
         /// <summary>Indicates whether the current matrix is equal to another matrix.</summary>
-        /// <param name="matrix">The OpenTK.SimdMatrix2 structure to compare with.</param>
+        /// <param name="matrix">The OpenTK.Matrix2 structure to compare with.</param>
         /// <returns>true if the current matrix is equal to the matrix parameter; otherwise, false.</returns>
         [CLSCompliant(false)]
-        public bool Equals(SimdMatrix2 matrix)
+        public bool Equals(Matrix2 matrix)
         {
             return
                 R0C0 == matrix.R0C0 &&
@@ -228,9 +228,9 @@ namespace OpenTK
         }
 
         /// <summary>Indicates whether the current matrix is equal to another matrix.</summary>
-        /// <param name="matrix">The OpenTK.SimdMatrix2 structure to compare to.</param>
+        /// <param name="matrix">The OpenTK.Matrix2 structure to compare to.</param>
         /// <returns>true if the current matrix is equal to the matrix parameter; otherwise, false.</returns>
-        public bool Equals(ref SimdMatrix2 matrix)
+        public bool Equals(ref Matrix2 matrix)
         {
             return
                 R0C0 == matrix.R0C0 &&
@@ -243,7 +243,7 @@ namespace OpenTK
         /// <param name="left">The left-hand operand.</param>
         /// <param name="right">The right-hand operand.</param>
         /// <returns>true if the current matrix is equal to the matrix parameter; otherwise, false.</returns>
-        public static bool Equals(ref SimdMatrix2 left, ref SimdMatrix2 right)
+        public static bool Equals(ref Matrix2 left, ref Matrix2 right)
         {
             return
                 left.R0C0 == right.R0C0 &&
@@ -253,10 +253,10 @@ namespace OpenTK
         }
 
         /// <summary>Indicates whether the current matrix is approximately equal to another matrix.</summary>
-        /// <param name="matrix">The OpenTK.SimdMatrix2 structure to compare with.</param>
+        /// <param name="matrix">The OpenTK.Matrix2 structure to compare with.</param>
         /// <param name="tolerance">The limit below which the matrices are considered equal.</param>
         /// <returns>true if the current matrix is approximately equal to the matrix parameter; otherwise, false.</returns>
-        public bool EqualsApprox(ref SimdMatrix2 matrix, float tolerance)
+        public bool EqualsApprox(ref Matrix2 matrix, float tolerance)
         {
             return
                 System.Math.Abs(R0C0 - matrix.R0C0) <= tolerance &&
@@ -270,7 +270,7 @@ namespace OpenTK
         /// <param name="right">The right-hand operand.</param>
         /// <param name="tolerance">The limit below which the matrices are considered equal.</param>
         /// <returns>true if the current matrix is approximately equal to the matrix parameter; otherwise, false.</returns>
-        public static bool EqualsApprox(ref SimdMatrix2 left, ref SimdMatrix2 right, float tolerance)
+        public static bool EqualsApprox(ref Matrix2 left, ref Matrix2 right, float tolerance)
         {
             return
                 System.Math.Abs(left.R0C0 - right.R0C0) <= tolerance &&
@@ -286,7 +286,7 @@ namespace OpenTK
 
         /// <summary>Add left matrix to this matrix.</summary>
         /// <param name="matrix">The matrix to add.</param>
-        public void Add(ref SimdMatrix2 matrix)
+        public void Add(ref Matrix2 matrix)
         {
             R0C0 = R0C0 + matrix.R0C0;
             R0C1 = R0C1 + matrix.R0C1;
@@ -297,7 +297,7 @@ namespace OpenTK
         /// <summary>Add left matrix to this matrix.</summary>
         /// <param name="matrix">The matrix to add.</param>
         /// <param name="result">The resulting matrix of the addition.</param>
-        public void Add(ref SimdMatrix2 matrix, out SimdMatrix2 result)
+        public void Add(ref Matrix2 matrix, out Matrix2 result)
         {
             result.R0C0 = R0C0 + matrix.R0C0;
             result.R0C1 = R0C1 + matrix.R0C1;
@@ -309,7 +309,7 @@ namespace OpenTK
         /// <param name="matrix">The matrix on the matrix side of the equation.</param>
         /// <param name="right">The matrix on the right side of the equation</param>
         /// <param name="result">The resulting matrix of the addition.</param>
-        public static void Add(ref SimdMatrix2 left, ref SimdMatrix2 right, out SimdMatrix2 result)
+        public static void Add(ref Matrix2 left, ref Matrix2 right, out Matrix2 result)
         {
             result.R0C0 = left.R0C0 + right.R0C0;
             result.R0C1 = left.R0C1 + right.R0C1;
@@ -320,7 +320,7 @@ namespace OpenTK
 
         /// <summary>Subtract left matrix from this matrix.</summary>
         /// <param name="matrix">The matrix to subtract.</param>
-        public void Subtract(ref SimdMatrix2 matrix)
+        public void Subtract(ref Matrix2 matrix)
         {
             R0C0 = R0C0 - matrix.R0C0;
             R0C1 = R0C1 - matrix.R0C1;
@@ -331,7 +331,7 @@ namespace OpenTK
         /// <summary>Subtract matrix from this matrix.</summary>
         /// <param name="matrix">The matrix to subtract.</param>
         /// <param name="result">The resulting matrix of the subtraction.</param>
-        public void Subtract(ref SimdMatrix2 matrix, out SimdMatrix2 result)
+        public void Subtract(ref Matrix2 matrix, out Matrix2 result)
         {
             result.R0C0 = R0C0 - matrix.R0C0;
             result.R0C1 = R0C1 - matrix.R0C1;
@@ -343,7 +343,7 @@ namespace OpenTK
         /// <param name="matrix">The matrix on the matrix side of the equation.</param>
         /// <param name="right">The matrix on the right side of the equation</param>
         /// <param name="result">The resulting matrix of the subtraction.</param>
-        public static void Subtract(ref SimdMatrix2 left, ref SimdMatrix2 right, out SimdMatrix2 result)
+        public static void Subtract(ref Matrix2 left, ref Matrix2 right, out Matrix2 result)
         {
             result.R0C0 = left.R0C0 - right.R0C0;
             result.R0C1 = left.R0C1 - right.R0C1;
@@ -354,7 +354,7 @@ namespace OpenTK
 
         /// <summary>Multiply left martix times this matrix.</summary>
         /// <param name="matrix">The matrix to multiply.</param>
-        public void Multiply(ref SimdMatrix2 matrix)
+        public void Multiply(ref Matrix2 matrix)
         {
             float r0c0 = matrix.R0C0 * R0C0 + matrix.R0C1 * R1C0;
             float r0c1 = matrix.R0C0 * R0C1 + matrix.R0C1 * R1C1;
@@ -372,7 +372,7 @@ namespace OpenTK
         /// <summary>Multiply matrix times this matrix.</summary>
         /// <param name="matrix">The matrix to multiply.</param>
         /// <param name="result">The resulting matrix of the multiplication.</param>
-        public void Multiply(ref SimdMatrix2 matrix, out SimdMatrix2 result)
+        public void Multiply(ref Matrix2 matrix, out Matrix2 result)
         {
             result.R0C0 = matrix.R0C0 * R0C0 + matrix.R0C1 * R1C0;
             result.R0C1 = matrix.R0C0 * R0C1 + matrix.R0C1 * R1C1;
@@ -384,7 +384,7 @@ namespace OpenTK
         /// <param name="matrix">The matrix on the matrix side of the equation.</param>
         /// <param name="right">The matrix on the right side of the equation</param>
         /// <param name="result">The resulting matrix of the multiplication.</param>
-        public static void Multiply(ref SimdMatrix2 left, ref SimdMatrix2 right, out SimdMatrix2 result)
+        public static void Multiply(ref Matrix2 left, ref Matrix2 right, out Matrix2 result)
         {
             result.R0C0 = right.R0C0 * left.R0C0 + right.R0C1 * left.R1C0;
             result.R0C1 = right.R0C0 * left.R0C1 + right.R0C1 * left.R1C1;
@@ -406,7 +406,7 @@ namespace OpenTK
         /// <summary>Multiply matrix times this matrix.</summary>
         /// <param name="matrix">The matrix to multiply.</param>
         /// <param name="result">The resulting matrix of the multiplication.</param>
-        public void Multiply(float scalar, out SimdMatrix2 result)
+        public void Multiply(float scalar, out Matrix2 result)
         {
             result.R0C0 = scalar * R0C0;
             result.R0C1 = scalar * R0C1;
@@ -418,7 +418,7 @@ namespace OpenTK
         /// <param name="matrix">The matrix on the matrix side of the equation.</param>
         /// <param name="right">The matrix on the right side of the equation</param>
         /// <param name="result">The resulting matrix of the multiplication.</param>
-        public static void Multiply(ref SimdMatrix2 matrix, float scalar, out SimdMatrix2 result)
+        public static void Multiply(ref Matrix2 matrix, float scalar, out Matrix2 result)
         {
             result.R0C0 = scalar * matrix.R0C0;
             result.R0C1 = scalar * matrix.R0C1;
@@ -427,21 +427,6 @@ namespace OpenTK
         }
 
 
-		public static explicit operator Matrix2 (SimdMatrix2 matrix)
-		{
-			return new Matrix2 (
-				matrix.R0C0, matrix.R0C1,
-				matrix.R1C0, matrix.R1C1
-			);
-		}
-
-		public static explicit operator SimdMatrix2 (Matrix2 matrix)
-		{
-			return new SimdMatrix2 (
-				matrix.R0C0, matrix.R0C1,
-				matrix.R1C0, matrix.R1C1
-			);
-		}
         #endregion
 
         #region Functions
@@ -458,14 +443,14 @@ namespace OpenTK
         {
             MathHelper.Swap(ref R0C1, ref R1C0);
         }
-        public void Transpose(out SimdMatrix2 result)
+        public void Transpose(out Matrix2 result)
         {
             result.R0C0 = R0C0;
             result.R0C1 = R1C0;
             result.R1C0 = R0C1;
             result.R1C1 = R1C1;
         }
-        public static void Transpose(ref SimdMatrix2 matrix, out SimdMatrix2 result)
+        public static void Transpose(ref Matrix2 matrix, out Matrix2 result)
         {
             result.R0C0 = matrix.R0C0;
             result.R0C1 = matrix.R1C0;
@@ -483,7 +468,7 @@ namespace OpenTK
             vector.Y = R1C0 * vector.X + R1C1 * vector.Y;
             vector.X = x;
         }
-        public static void Transform(ref SimdMatrix2 matrix, ref Vector2 vector)
+        public static void Transform(ref Matrix2 matrix, ref Vector2 vector)
         {
             float x = matrix.R0C0 * vector.X + matrix.R0C1 * vector.Y;
             vector.Y = matrix.R1C0 * vector.X + matrix.R1C1 * vector.Y;
@@ -494,7 +479,7 @@ namespace OpenTK
             result.X = R0C0 * vector.X + R0C1 * vector.Y;
             result.Y = R1C0 * vector.X + R1C1 * vector.Y;
         }
-        public static void Transform(ref SimdMatrix2 matrix, ref Vector2 vector, out Vector2 result)
+        public static void Transform(ref Matrix2 matrix, ref Vector2 vector, out Vector2 result)
         {
             result.X = matrix.R0C0 * vector.X + matrix.R0C1 * vector.Y;
             result.Y = matrix.R1C0 * vector.X + matrix.R1C1 * vector.Y;
@@ -515,7 +500,7 @@ namespace OpenTK
             R0C0 = r0c0;
             R0C1 = r0c1;
         }
-        public void Rotate(float angle, out SimdMatrix2 result)
+        public void Rotate(float angle, out Matrix2 result)
         {
             float angleRadians = MathHelper.DegreesToRadians (angle);
             float sin = (float)System.Math.Sin(angleRadians);
@@ -526,7 +511,7 @@ namespace OpenTK
             result.R1C0 = cos * R1C0 + sin * R0C0;
             result.R1C1 = cos * R1C1 + sin * R0C1;
         }
-        public static void Rotate(ref SimdMatrix2 matrix, float angle, out SimdMatrix2 result)
+        public static void Rotate(ref Matrix2 matrix, float angle, out Matrix2 result)
         {
             float angleRadians = MathHelper.DegreesToRadians (angle);
             float sin = (float)System.Math.Sin(angleRadians);
@@ -537,7 +522,7 @@ namespace OpenTK
             result.R1C0 = cos * matrix.R1C0 + sin * matrix.R0C0;
             result.R1C1 = cos * matrix.R1C1 + sin * matrix.R0C1;
         }
-        public static void RotateMatrix(float angle, out SimdMatrix2 result)
+        public static void RotateMatrix(float angle, out Matrix2 result)
         {
             float angleRadians = MathHelper.DegreesToRadians(angle);
             float sin = (float)System.Math.Sin(angleRadians);
@@ -554,14 +539,14 @@ namespace OpenTK
         #region Constants
 
         /// <summary>The identity matrix.</summary>
-        public static readonly SimdMatrix2 Identity = new SimdMatrix2
+        public static readonly Matrix2 Identity = new Matrix2
         (
             1, 0,
             0, 1
         );
 
         /// <summary>A matrix of all zeros.</summary>
-        public static readonly SimdMatrix2 Zero = new SimdMatrix2
+        public static readonly Matrix2 Zero = new Matrix2
         (
             0, 0,
             0, 0

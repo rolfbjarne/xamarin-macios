@@ -11,7 +11,9 @@ using System;
 using XamCore.Foundation;
 using XamCore.ObjCRuntime;
 
-using Simd;
+using MatrixFloat2x2 = global::OpenTK.SimdMatrix2;
+using MatrixFloat3x3 = global::OpenTK.SimdMatrix3;
+using MatrixFloat4x4 = global::OpenTK.SimdMatrix4;
 
 using Vector2 = global::OpenTK.Vector2;
 using Vector3 = global::OpenTK.Vector3;

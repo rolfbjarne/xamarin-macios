@@ -13,10 +13,12 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Simd
+using VectorFloat3 = global::OpenTK.SimdVector3;
+
+namespace OpenTK
 {
 	[StructLayout (LayoutKind.Sequential)]
-	public struct MatrixFloat3x3 : IEquatable<MatrixFloat3x3>
+	public struct SimdMatrix3 : IEquatable<SimdMatrix3>
 	{
 		/* Due to memory alignment, vectors of length 3 are 
 		 * represented as vectors of length 4, so we pad here
@@ -35,14 +37,14 @@ namespace Simd
 		public float M33;
 		float dummy2;
 
-		public readonly static MatrixFloat3x3 Identity = new MatrixFloat3x3 
+		public readonly static SimdMatrix3 Identity = new SimdMatrix3 
 		{
 			M11 = 1f,
 			M22 = 1f,
 			M33 = 1f,
 		};
 
-		public MatrixFloat3x3 (VectorFloat3 column0, VectorFloat3 column1, VectorFloat3 column2)
+		public SimdMatrix3 (VectorFloat3 column0, VectorFloat3 column1, VectorFloat3 column2)
 		{
 			M11 = column0.X;
 			M21 = column0.Y;
@@ -58,7 +60,7 @@ namespace Simd
 			dummy2 = 0;
 		}
 
-		public MatrixFloat3x3 (global::OpenTK.Vector3 column0, global::OpenTK.Vector3 column1, global::OpenTK.Vector3 column2)
+		public SimdMatrix3 (global::OpenTK.Vector3 column0, global::OpenTK.Vector3 column1, global::OpenTK.Vector3 column2)
 		{
 			M11 = column0.X;
 			M21 = column0.Y;
@@ -74,7 +76,7 @@ namespace Simd
 			dummy2 = 0;
 		}
 
-		public MatrixFloat3x3 (
+		public SimdMatrix3 (
 			float m11, float m12, float m13,
 			float m21, float m22, float m23,
 			float m31, float m32, float m33)
@@ -107,14 +109,14 @@ namespace Simd
 			this = Transpose (this);
 		}
 
-		public static MatrixFloat3x3 Transpose (MatrixFloat3x3 mat)
+		public static SimdMatrix3 Transpose (SimdMatrix3 mat)
 		{
-			MatrixFloat3x3 result = new MatrixFloat3x3 ();
+			SimdMatrix3 result = new SimdMatrix3 ();
 			Transpose (ref mat, out result);
 			return result;
 		}
 
-		public static void Transpose (ref MatrixFloat3x3 mat, out MatrixFloat3x3 result)
+		public static void Transpose (ref SimdMatrix3 mat, out SimdMatrix3 result)
 		{
 			result.M11 = mat.M11;
 			result.M21 = mat.M12;
@@ -130,14 +132,14 @@ namespace Simd
 			result.dummy2 = 0;
 		}
 
-		public static MatrixFloat3x3 Multiply (MatrixFloat3x3 left, MatrixFloat3x3 right)
+		public static SimdMatrix3 Multiply (SimdMatrix3 left, SimdMatrix3 right)
 		{
-			MatrixFloat3x3 result;
+			SimdMatrix3 result;
 			Multiply (ref left, ref right, out result);
 			return result;
 		}
 
-		public static void Multiply (ref MatrixFloat3x3 left, ref MatrixFloat3x3 right, out MatrixFloat3x3 result)
+		public static void Multiply (ref SimdMatrix3 left, ref SimdMatrix3 right, out SimdMatrix3 result)
 		{
 			result.M11 = left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31;
 			result.M12 = left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32;
@@ -155,22 +157,22 @@ namespace Simd
 			result.dummy2 = 0;
 		}
 
-		public static MatrixFloat3x3 operator * (MatrixFloat3x3 left, MatrixFloat3x3 right)
+		public static SimdMatrix3 operator * (SimdMatrix3 left, SimdMatrix3 right)
 		{
 			return Multiply (left, right);
 		}
 
-		public static bool operator == (MatrixFloat3x3 left, MatrixFloat3x3 right)
+		public static bool operator == (SimdMatrix3 left, SimdMatrix3 right)
 		{
 			return left.Equals (right);
 		}
 
-		public static bool operator != (MatrixFloat3x3 left, MatrixFloat3x3 right)
+		public static bool operator != (SimdMatrix3 left, SimdMatrix3 right)
 		{
 			return !left.Equals (right);
 		}
 
-		public static explicit operator global::OpenTK.Matrix3 (MatrixFloat3x3 value)
+		public static explicit operator global::OpenTK.Matrix3 (SimdMatrix3 value)
 		{
 			return new global::OpenTK.Matrix3 (
 				value.M11, value.M12, value.M13,
@@ -178,9 +180,9 @@ namespace Simd
 				value.M31, value.M32, value.M33);
 		}
 
-		public static explicit operator MatrixFloat3x3 (global::OpenTK.Matrix3 value)
+		public static explicit operator SimdMatrix3 (global::OpenTK.Matrix3 value)
 		{
-			return new MatrixFloat3x3 (
+			return new SimdMatrix3 (
 				value.R0C0, value.R0C1, value.R0C2,
 				value.R1C0, value.R1C1, value.R1C2,
 				value.R2C0, value.R2C1, value.R2C2);
@@ -204,13 +206,13 @@ namespace Simd
 
 		public override bool Equals (object obj)
 		{
-			if (!(obj is MatrixFloat3x3))
+			if (!(obj is SimdMatrix3))
 				return false;
 
-			return Equals ((MatrixFloat3x3) obj);
+			return Equals ((SimdMatrix3) obj);
 		}
 
-		public bool Equals (MatrixFloat3x3 other)
+		public bool Equals (SimdMatrix3 other)
 		{
 			return
 				M11 == other.M11 && M12 == other.M12 && M13 == other.M13 &&

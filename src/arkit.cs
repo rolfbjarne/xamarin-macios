@@ -21,9 +21,9 @@ using XamCore.SpriteKit;
 using XamCore.SceneKit;
 using XamCore.UIKit;
 
-using Vector3 = global::Simd.VectorFloat3;
-using Matrix3 = global::Simd.MatrixFloat3x3;
-using Matrix4 = global::Simd.MatrixFloat4x4;
+using Vector3 = global::OpenTK.SimdVector3;
+using Matrix3 = global::OpenTK.SimdMatrix3;
+using Matrix4 = global::OpenTK.SimdMatrix4;
 
 namespace XamCore.ARKit {
 

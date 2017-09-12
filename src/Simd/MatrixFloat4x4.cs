@@ -13,10 +13,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Simd
+namespace OpenTK
 {
 	[StructLayout (LayoutKind.Sequential)]
-	public struct MatrixFloat4x4 : IEquatable<MatrixFloat4x4>
+	public struct SimdMatrix4 : IEquatable<SimdMatrix4>
 	{
 		public float M11;
 		public float M21;
@@ -38,14 +38,14 @@ namespace Simd
 		public float M34;
 		public float M44;
 
-		public readonly static MatrixFloat4x4 Identity = new MatrixFloat4x4 {
+		public readonly static SimdMatrix4 Identity = new SimdMatrix4 {
 			M11 = 1f,
 			M22 = 1f,
 			M33 = 1f,
 			M44 = 1f,
 		};
 
-		public MatrixFloat4x4 (VectorFloat4 column0, VectorFloat4 column1, VectorFloat4 column2, VectorFloat4 column3)
+		public SimdMatrix4 (global::OpenTK.Vector4 column0, global::OpenTK.Vector4 column1, global::OpenTK.Vector4 column2, global::OpenTK.Vector4 column3)
 		{
 			M11 = column0.X;
 			M21 = column0.Y;
@@ -65,27 +65,7 @@ namespace Simd
 			M44 = column3.W;
 		}
 
-		public MatrixFloat4x4 (global::OpenTK.Vector4 column0, global::OpenTK.Vector4 column1, global::OpenTK.Vector4 column2, global::OpenTK.Vector4 column3)
-		{
-			M11 = column0.X;
-			M21 = column0.Y;
-			M31 = column0.Z;
-			M41 = column0.W;
-			M12 = column1.X;
-			M22 = column1.Y;
-			M32 = column1.Z;
-			M42 = column1.W;
-			M13 = column2.X;
-			M23 = column2.Y;
-			M33 = column2.Z;
-			M43 = column2.W;
-			M14 = column3.X;
-			M24 = column3.Y;
-			M34 = column3.Z;
-			M44 = column3.W;
-		}
-
-		public MatrixFloat4x4 (
+		public SimdMatrix4 (
 			float m11, float m12, float m13, float m14,
 			float m21, float m22, float m23, float m24,
 			float m31, float m32, float m33, float m34,
@@ -131,14 +111,14 @@ namespace Simd
 			this = Transpose (this);
 		}
 
-		public static MatrixFloat4x4 Transpose (MatrixFloat4x4 mat)
+		public static SimdMatrix4 Transpose (SimdMatrix4 mat)
 		{
-			MatrixFloat4x4 result;
+			SimdMatrix4 result;
 			Transpose (ref mat, out result);
 			return result;
 		}
 
-		public static void Transpose (ref MatrixFloat4x4 mat, out MatrixFloat4x4 result)
+		public static void Transpose (ref SimdMatrix4 mat, out SimdMatrix4 result)
 		{
 			result.M11 = mat.M11;
 			result.M21 = mat.M12;
@@ -161,14 +141,14 @@ namespace Simd
 			result.M44 = mat.M44;
 		}
 
-		public static MatrixFloat4x4 Multiply (MatrixFloat4x4 left, MatrixFloat4x4 right)
+		public static SimdMatrix4 Multiply (SimdMatrix4 left, SimdMatrix4 right)
 		{
-			MatrixFloat4x4 result;
+			SimdMatrix4 result;
 			Multiply (ref left, ref right, out result);
 			return result;
 		}
 
-		public static void Multiply (ref MatrixFloat4x4 left, ref MatrixFloat4x4 right, out MatrixFloat4x4 result)
+		public static void Multiply (ref SimdMatrix4 left, ref SimdMatrix4 right, out SimdMatrix4 result)
 		{
 			result.M11 = left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31 + left.M14 * right.M41;
 			result.M12 = left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32 + left.M14 * right.M42;
@@ -191,22 +171,22 @@ namespace Simd
 			result.M44 = left.M41 * right.M14 + left.M42 * right.M24 + left.M43 * right.M34 + left.M44 * right.M44;
 		}
 
-		public static MatrixFloat4x4 operator * (MatrixFloat4x4 left, MatrixFloat4x4 right)
+		public static SimdMatrix4 operator * (SimdMatrix4 left, SimdMatrix4 right)
 		{
 			return Multiply (left, right);
 		}
 
-		public static bool operator == (MatrixFloat4x4 left, MatrixFloat4x4 right)
+		public static bool operator == (SimdMatrix4 left, SimdMatrix4 right)
 		{
 			return left.Equals (right);
 		}
 
-		public static bool operator != (MatrixFloat4x4 left, MatrixFloat4x4 right)
+		public static bool operator != (SimdMatrix4 left, SimdMatrix4 right)
 		{
 			return !left.Equals (right);
 		}
 
-		public static explicit operator global::OpenTK.Matrix4 (MatrixFloat4x4 value)
+		public static explicit operator global::OpenTK.Matrix4 (SimdMatrix4 value)
 		{
 			return new global::OpenTK.Matrix4 (
 				value.M11, value.M12, value.M13, value.M14,
@@ -215,9 +195,9 @@ namespace Simd
 				value.M41, value.M42, value.M43, value.M44);
 		}
 
-		public static explicit operator MatrixFloat4x4 (global::OpenTK.Matrix4 value)
+		public static explicit operator SimdMatrix4 (global::OpenTK.Matrix4 value)
 		{
-			return new MatrixFloat4x4 (value.Column0, value.Column1, value.Column2, value.Column3);
+			return new SimdMatrix4 (value.Column0, value.Column1, value.Column2, value.Column3);
 		}
 
 		public override string ToString ()
@@ -240,13 +220,13 @@ namespace Simd
 
 		public override bool Equals (object obj)
 		{
-			if (!(obj is MatrixFloat4x4))
+			if (!(obj is SimdMatrix4))
 				return false;
 
-			return Equals ((MatrixFloat4x4) obj);
+			return Equals ((SimdMatrix4) obj);
 		}
 
-		public bool Equals (MatrixFloat4x4 other)
+		public bool Equals (SimdMatrix4 other)
 		{
 			return
 				M11 == other.M11 && M12 == other.M12 && M13 == other.M13 && M14 == other.M14 &&

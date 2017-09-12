@@ -32,7 +32,12 @@ using MonoTouch.ModelIO;
 using MonoTouch.ObjCRuntime;
 #endif
 using OpenTK;
-using Simd;
+
+using MatrixFloat2x2 = global::OpenTK.SimdMatrix2;
+using MatrixFloat3x3 = global::OpenTK.SimdMatrix3;
+using MatrixFloat4x4 = global::OpenTK.SimdMatrix4;
+using VectorFloat3 = global::OpenTK.SimdVector3;
+
 using Bindings.Test;
 using NUnit.Framework;
 

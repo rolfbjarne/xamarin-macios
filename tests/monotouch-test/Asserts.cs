@@ -10,7 +10,10 @@ using MetalPerformanceShaders;
 using MonoTouch.ModelIO;
 #endif
 using OpenTK;
-using Simd;
+using MatrixFloat2x2 = global::OpenTK.SimdMatrix2;
+using MatrixFloat3x3 = global::OpenTK.SimdMatrix3;
+using MatrixFloat4x4 = global::OpenTK.SimdMatrix4;
+using VectorFloat3 = global::OpenTK.SimdVector3;
 using NUnit.Framework;
 
 public static class Asserts
@@ -31,24 +34,6 @@ public static class Asserts
 	}
 
 	public static void AreEqual (Vector2 expected, Vector2 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-	}
-
-	public static void AreEqual (Vector2 expected, VectorFloat2 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-	}
-
-	public static void AreEqual (VectorFloat2 expected, Vector2 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-	}
-
-	public static void AreEqual (VectorFloat2 expected, VectorFloat2 actual, string message)
 	{
 		Assert.AreEqual (expected.X, actual.X, message + " (X)");
 		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
@@ -104,39 +89,7 @@ public static class Asserts
 		Assert.AreEqual (expected.W, actual.W, message + " (W)");
 	}
 
-	public static void AreEqual (Vector4 expected, VectorFloat4 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, message + " (W)");
-	}
-
-	public static void AreEqual (VectorFloat4 expected, Vector4 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, message + " (W)");
-	}
-
-	public static void AreEqual (VectorFloat4 expected, VectorFloat4 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, message + " (W)");
-	}
-
 	public static void AreEqual (Vector4 expected, Vector4 actual, float delta, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, delta, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, delta, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, delta, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, delta, message + " (W)");
-	}
-
-	public static void AreEqual (VectorFloat4 expected, VectorFloat4 actual, float delta, string message)
 	{
 		Assert.AreEqual (expected.X, actual.X, delta, message + " (X)");
 		Assert.AreEqual (expected.Y, actual.Y, delta, message + " (Y)");
@@ -208,29 +161,6 @@ public static class Asserts
 		Assert.AreEqual (expected.W, actual.W, message + " (W)");
 	}
 
-	public static void AreEqual (Vector4i expected, VectorInt4 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, message + " (W)");
-	}
-
-	public static void AreEqual (VectorInt4 expected, Vector4i actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, message + " (W)");
-	}
-
-	public static void AreEqual (VectorInt4 expected, VectorInt4 actual, string message)
-	{
-		Assert.AreEqual (expected.X, actual.X, message + " (X)");
-		Assert.AreEqual (expected.Y, actual.Y, message + " (Y)");
-		Assert.AreEqual (expected.Z, actual.Z, message + " (Z)");
-		Assert.AreEqual (expected.W, actual.W, message + " (W)");
-	}
 #if !__WATCHOS__
 	public static void AreEqual (MDLAxisAlignedBoundingBox expected, MDLAxisAlignedBoundingBox actual, string message)
 	{

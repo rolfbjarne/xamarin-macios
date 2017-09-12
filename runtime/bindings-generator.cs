@@ -2310,14 +2310,13 @@ namespace Xamarin.BindingMethods.Generator
 			case "Vector2d":
 			case "Vector2i":
 			case "Vector2":
-			case "VectorFloat2":
 				writer.WriteLine ("\t{0}{2}a = {1} [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}b = {1} [1];", managedVariable, nativeVariable, accessor);
 				break;
 			case "Vector3d":
 			case "Vector3i":
 			case "Vector3":
-			case "VectorFloat3":
+			case "SimdVector3":
 				writer.WriteLine ("\t{0}{2}a = {1} [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}b = {1} [1];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t{0}{2}c = {1} [2];", managedVariable, nativeVariable, accessor);
@@ -2325,7 +2324,6 @@ namespace Xamarin.BindingMethods.Generator
 			case "Vector4d":
 			case "Vector4i":
 			case "Vector4":
-			case "VectorFloat4":
 				if (type.NativeType == "vector_float3") {
 					writer.WriteLine ("\t{0}{2}a = {1} [0];", managedVariable, nativeVariable, accessor);
 					writer.WriteLine ("\t{0}{2}b = {1} [1];", managedVariable, nativeVariable, accessor);
@@ -2341,14 +2339,14 @@ namespace Xamarin.BindingMethods.Generator
 				}
 				break;
 			case "Matrix2":
-			case "MatrixFloat2x2":
+			case "SimdMatrix2":
 				writer.WriteLine ("\tfor (int i = 0; i < 2; i++) {");
 				writer.WriteLine ("\t\t{0}{2}columns [i].a = {1}.columns [i] [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t\t{0}{2}columns [i].b = {1}.columns [i] [1];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t}");
 				break;
 			case "Matrix3":
-			case "MatrixFloat3x3":
+			case "SimdMatrix3":
 				writer.WriteLine ("\tfor (int i = 0; i < 3; i++) {");
 				writer.WriteLine ("\t\t{0}{2}columns [i].a = {1}.columns [i] [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t\t{0}{2}columns [i].b = {1}.columns [i] [1];", managedVariable, nativeVariable, accessor);
@@ -2356,7 +2354,7 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("\t}");
 				break;
 			case "Matrix4":
-			case "MatrixFloat4x4":
+			case "SimdMatrix4":
 				writer.WriteLine ("\tfor (int i = 0; i < 4; i++) {");
 				writer.WriteLine ("\t\t{0}{2}columns [i].a = {1}.columns [i] [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t\t{0}{2}columns [i].b = {1}.columns [i] [1];", managedVariable, nativeVariable, accessor);
@@ -2433,14 +2431,13 @@ namespace Xamarin.BindingMethods.Generator
 			case "Vector2d":
 			case "Vector2i":
 			case "Vector2":
-			case "VectorFloat2":
 				writer.WriteLine ("\t{0} [0] = {1}{2}a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0} [1] = {1}{2}b;", nativeVariable, managedVariable, accessor);
 				break;
 			case "Vector3d":
 			case "Vector3i":
 			case "Vector3":
-			case "VectorFloat3":
+			case "SimdVector3":
 				writer.WriteLine ("\t{0} [0] = {1}{2}a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0} [1] = {1}{2}b;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t{0} [2] = {1}{2}c;", nativeVariable, managedVariable, accessor);
@@ -2448,7 +2445,6 @@ namespace Xamarin.BindingMethods.Generator
 			case "Vector4d":
 			case "Vector4i":
 			case "Vector4":
-			case "VectorFloat4":
 				if (type.NativeType == "vector_float3") {
 					writer.WriteLine ("\t{0} [0] = {1}{2}a;", nativeVariable, managedVariable, accessor);
 					writer.WriteLine ("\t{0} [1] = {1}{2}b;", nativeVariable, managedVariable, accessor);
@@ -2463,14 +2459,14 @@ namespace Xamarin.BindingMethods.Generator
 				}
 				break;
 			case "Matrix2":
-			case "MatrixFloat2x2":
+			case "SimdMatrix2":
 				writer.WriteLine ("\tfor (int i = 0; i < 2; i++) {");
 				writer.WriteLine ("\t\t{0}.columns [i][0] = {1}{2}columns [i].a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t\t{0}.columns [i][1] = {1}{2}columns [i].b;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t}");
 				break;
 			case "Matrix3":
-			case "MatrixFloat3x3":
+			case "SimdMatrix3":
 				writer.WriteLine ("\tfor (int i = 0; i < 3; i++) {");
 				writer.WriteLine ("\t\t{0}.columns [i][0] = {1}{2}columns [i].a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t\t{0}.columns [i][1] = {1}{2}columns [i].b;", nativeVariable, managedVariable, accessor);
@@ -2478,7 +2474,7 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("\t}");
 				break;
 			case "Matrix4":
-			case "MatrixFloat4x4":
+			case "SimdMatrix4":
 				writer.WriteLine ("\tfor (int i = 0; i < 4; i++) {");
 				writer.WriteLine ("\t\t{0}.columns [i][0] = {1}{2}columns [i].a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t\t{0}.columns [i][1] = {1}{2}columns [i].b;", nativeVariable, managedVariable, accessor);
@@ -2935,13 +2931,6 @@ namespace Xamarin.BindingMethods.Generator
 				RequireMarshal = true,
 				IsX86Stret = true,
 			};
-			public static TypeData VectorFloat2 = new TypeData {
-				ManagedType = "VectorFloat2",
-				NativeType = "vector_float2",
-				NativeWrapperType = "struct Vector2f",
-				RequireMarshal = true,
-				IsX86Stret = true,
-			};
 			public static TypeData Vector3 = new TypeData {
 				ManagedType = "Vector3",
 				NativeType = "vector_float3",
@@ -2949,19 +2938,13 @@ namespace Xamarin.BindingMethods.Generator
 				RequireMarshal = true,
 			};
 			public static TypeData VectorFloat3 = new TypeData {
-				ManagedType = "VectorFloat3",
+				ManagedType = "SimdVector3",
 				NativeType = "vector_float3",
 				NativeWrapperType = "struct Vector4f", // Yes, Vector4f, since VectorFloat3 has 4 floats.
 				RequireMarshal = true,
 			};
 			public static TypeData Vector4 = new TypeData {
 				ManagedType = "Vector4",
-				NativeType = "vector_float4",
-				NativeWrapperType = "struct Vector4f",
-				RequireMarshal = true,
-			};
-			public static TypeData VectorFloat4 = new TypeData {
-				ManagedType = "VectorFloat4",
 				NativeType = "vector_float4",
 				NativeWrapperType = "struct Vector4f",
 				RequireMarshal = true,
@@ -3019,7 +3002,7 @@ namespace Xamarin.BindingMethods.Generator
 				IsX64Stret = false,
 			};
 			public static TypeData MatrixFloat2x2 = new TypeData {
-				ManagedType = "MatrixFloat2x2",
+				ManagedType = "SimdMatrix2",
 				NativeType = "matrix_float2x2",
 				NativeWrapperType = "struct MatrixFloat2x2",
 				RequireMarshal = true,
@@ -3037,7 +3020,7 @@ namespace Xamarin.BindingMethods.Generator
 				IsX64Stret = true,
 			};
 			public static TypeData MatrixFloat3x3 = new TypeData {
-				ManagedType = "MatrixFloat3x3",
+				ManagedType = "SimdMatrix3",
 				NativeType = "matrix_float3x3",
 				NativeWrapperType = "struct MatrixFloat3x3",
 				RequireMarshal = true,
@@ -3055,7 +3038,7 @@ namespace Xamarin.BindingMethods.Generator
 				IsX64Stret = true,
 			};
 			public static TypeData MatrixFloat4x4 = new TypeData {
-				ManagedType = "MatrixFloat4x4",
+				ManagedType = "SimdMatrix4",
 				NativeType = "matrix_float4x4",
 				NativeWrapperType = "struct MatrixFloat4x4",
 				RequireMarshal = true,

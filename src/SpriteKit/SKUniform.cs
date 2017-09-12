@@ -17,9 +17,9 @@ using Vector4 = global::OpenTK.Vector4;
 using Matrix2 = global::OpenTK.Matrix2;
 using Matrix3 = global::OpenTK.Matrix3;
 using Matrix4 = global::OpenTK.Matrix4;
-using MatrixFloat2x2 = global::OpenTK.SimdMatrix2;
-using MatrixFloat3x3 = global::OpenTK.SimdMatrix3;
-using MatrixFloat4x4 = global::OpenTK.SimdMatrix4;
+using MatrixFloat2x2 = global::OpenTK.NMatrix2;
+using MatrixFloat3x3 = global::OpenTK.NMatrix3;
+using MatrixFloat4x4 = global::OpenTK.NMatrix4;
 
 #if (XAMCORE_2_0 || !MONOMAC) && !WATCH
 namespace XamCore.SpriteKit {

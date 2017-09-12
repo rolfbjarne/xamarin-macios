@@ -6,7 +6,7 @@ using Foundation;
 using ObjCRuntime;
 
 using OpenTK;
-using MatrixFloat2x2 = global::OpenTK.SimdMatrix2;
+using MatrixFloat2x2 = global::OpenTK.NMatrix2;
 
 using NUnit.Framework;
 

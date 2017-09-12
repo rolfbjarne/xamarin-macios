@@ -8,9 +8,9 @@ using Foundation;
 using ObjCRuntime;
 #endif
 
-using MatrixFloat2x2 = global::OpenTK.SimdMatrix2;
-using MatrixFloat3x3 = global::OpenTK.SimdMatrix3;
-using MatrixFloat4x4 = global::OpenTK.SimdMatrix4;
+using MatrixFloat2x2 = global::OpenTK.NMatrix2;
+using MatrixFloat3x3 = global::OpenTK.NMatrix3;
+using MatrixFloat4x4 = global::OpenTK.NMatrix4;
 
 namespace Bindings.Test
 {

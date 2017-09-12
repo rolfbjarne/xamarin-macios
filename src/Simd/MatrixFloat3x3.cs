@@ -13,12 +13,12 @@
 using System;
 using System.Runtime.InteropServices;
 
-using VectorFloat3 = global::OpenTK.SimdVector3;
+using VectorFloat3 = global::OpenTK.NVector3;
 
 namespace OpenTK
 {
 	[StructLayout (LayoutKind.Sequential)]
-	public struct SimdMatrix3 : IEquatable<SimdMatrix3>
+	public struct NMatrix3 : IEquatable<NMatrix3>
 	{
 		/* Due to memory alignment, vectors of length 3 are 
 		 * represented as vectors of length 4, so we pad here
@@ -37,46 +37,14 @@ namespace OpenTK
 		public float R2C2;
 		float dummy2;
 
-		public readonly static SimdMatrix3 Identity = new SimdMatrix3 
+		public readonly static NMatrix3 Identity = new NMatrix3 
 		{
 			R0C0 = 1f,
 			R1C1 = 1f,
 			R2C2 = 1f,
 		};
 
-		public SimdMatrix3 (VectorFloat3 column0, VectorFloat3 column1, VectorFloat3 column2)
-		{
-			R0C0 = column0.X;
-			R1C0 = column0.Y;
-			R2C0 = column0.Z;
-			R0C1 = column1.X;
-			R1C1 = column1.Y;
-			R2C1 = column1.Z;
-			R0C2 = column2.X;
-			R1C2 = column2.Y;
-			R2C2 = column2.Z;
-			dummy0 = 0;
-			dummy1 = 0;
-			dummy2 = 0;
-		}
-
-		public SimdMatrix3 (global::OpenTK.Vector3 column0, global::OpenTK.Vector3 column1, global::OpenTK.Vector3 column2)
-		{
-			R0C0 = column0.X;
-			R1C0 = column0.Y;
-			R2C0 = column0.Z;
-			R0C1 = column1.X;
-			R1C1 = column1.Y;
-			R2C1 = column1.Z;
-			R0C2 = column2.X;
-			R1C2 = column2.Y;
-			R2C2 = column2.Z;
-			dummy0 = 0;
-			dummy1 = 0;
-			dummy2 = 0;
-		}
-
-		public SimdMatrix3 (
+		public NMatrix3 (
 			float r0c0, float r0c1, float r0c2,
 			float r1c0, float r1c1, float r1c2,
 			float r2c0, float r2c1, float r2c2)
@@ -109,14 +77,14 @@ namespace OpenTK
 			this = Transpose (this);
 		}
 
-		public static SimdMatrix3 Transpose (SimdMatrix3 mat)
+		public static NMatrix3 Transpose (NMatrix3 mat)
 		{
-			SimdMatrix3 result = new SimdMatrix3 ();
+			NMatrix3 result = new NMatrix3 ();
 			Transpose (ref mat, out result);
 			return result;
 		}
 
-		public static void Transpose (ref SimdMatrix3 mat, out SimdMatrix3 result)
+		public static void Transpose (ref NMatrix3 mat, out NMatrix3 result)
 		{
 			result.R0C0 = mat.R0C0;
 			result.R1C0 = mat.R0C1;
@@ -132,14 +100,14 @@ namespace OpenTK
 			result.dummy2 = 0;
 		}
 
-		public static SimdMatrix3 Multiply (SimdMatrix3 left, SimdMatrix3 right)
+		public static NMatrix3 Multiply (NMatrix3 left, NMatrix3 right)
 		{
-			SimdMatrix3 result;
+			NMatrix3 result;
 			Multiply (ref left, ref right, out result);
 			return result;
 		}
 
-		public static void Multiply (ref SimdMatrix3 left, ref SimdMatrix3 right, out SimdMatrix3 result)
+		public static void Multiply (ref NMatrix3 left, ref NMatrix3 right, out NMatrix3 result)
 		{
 			result.R0C0 = left.R0C0 * right.R0C0 + left.R0C1 * right.R1C0 + left.R0C2 * right.R2C0;
 			result.R0C1 = left.R0C0 * right.R0C1 + left.R0C1 * right.R1C1 + left.R0C2 * right.R2C1;
@@ -157,22 +125,22 @@ namespace OpenTK
 			result.dummy2 = 0;
 		}
 
-		public static SimdMatrix3 operator * (SimdMatrix3 left, SimdMatrix3 right)
+		public static NMatrix3 operator * (NMatrix3 left, NMatrix3 right)
 		{
 			return Multiply (left, right);
 		}
 
-		public static bool operator == (SimdMatrix3 left, SimdMatrix3 right)
+		public static bool operator == (NMatrix3 left, NMatrix3 right)
 		{
 			return left.Equals (right);
 		}
 
-		public static bool operator != (SimdMatrix3 left, SimdMatrix3 right)
+		public static bool operator != (NMatrix3 left, NMatrix3 right)
 		{
 			return !left.Equals (right);
 		}
 
-		public static explicit operator global::OpenTK.Matrix3 (SimdMatrix3 value)
+		public static explicit operator global::OpenTK.Matrix3 (NMatrix3 value)
 		{
 			return new global::OpenTK.Matrix3 (
 				value.R0C0, value.R0C1, value.R0C2,
@@ -180,9 +148,9 @@ namespace OpenTK
 				value.R2C0, value.R2C1, value.R2C2);
 		}
 
-		public static explicit operator SimdMatrix3 (global::OpenTK.Matrix3 value)
+		public static explicit operator NMatrix3 (global::OpenTK.Matrix3 value)
 		{
-			return new SimdMatrix3 (
+			return new NMatrix3 (
 				value.R0C0, value.R0C1, value.R0C2,
 				value.R1C0, value.R1C1, value.R1C2,
 				value.R2C0, value.R2C1, value.R2C2);
@@ -206,13 +174,13 @@ namespace OpenTK
 
 		public override bool Equals (object obj)
 		{
-			if (!(obj is SimdMatrix3))
+			if (!(obj is NMatrix3))
 				return false;
 
-			return Equals ((SimdMatrix3) obj);
+			return Equals ((NMatrix3) obj);
 		}
 
-		public bool Equals (SimdMatrix3 other)
+		public bool Equals (NMatrix3 other)
 		{
 			return
 				R0C0 == other.R0C0 && R0C1 == other.R0C1 && R0C2 == other.R0C2 &&

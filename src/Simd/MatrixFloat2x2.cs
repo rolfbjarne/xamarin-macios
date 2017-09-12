@@ -16,26 +16,18 @@ using System.Runtime.InteropServices;
 namespace OpenTK
 {
 	[StructLayout (LayoutKind.Sequential)]
-	public struct SimdMatrix2 : IEquatable<SimdMatrix2>
+	public struct NMatrix2 : IEquatable<NMatrix2>
 	{
 		public float R0C0;
 		public float R1C0;
 		public float R0C1;
 		public float R1C1;
 
-		public readonly static SimdMatrix2 Identity = new SimdMatrix2 (
+		public readonly static NMatrix2 Identity = new NMatrix2 (
 			1, 0,
 			0, 1);
 
-		public SimdMatrix2 (global::OpenTK.Vector2 column0, global::OpenTK.Vector2 column1)
-		{
-			R0C0 = column0.X;
-			R1C0 = column0.Y;
-			R0C1 = column1.X;
-			R1C1 = column1.Y;
-		}
-
-		public SimdMatrix2 (
+		public NMatrix2 (
 			float r0c0, float r0c1,
 			float r1c0, float r1c1)
 		{
@@ -56,12 +48,12 @@ namespace OpenTK
 			this = Transpose (this);
 		}
 
-		public static SimdMatrix2 Transpose (SimdMatrix2 mat)
+		public static NMatrix2 Transpose (NMatrix2 mat)
 		{
-			return new SimdMatrix2 (mat.R0C0, mat.R1C0, mat.R0C1, mat.R1C1);
+			return new NMatrix2 (mat.R0C0, mat.R1C0, mat.R0C1, mat.R1C1);
 		}
 
-		public static void Transpose (ref SimdMatrix2 mat, out SimdMatrix2 result)
+		public static void Transpose (ref NMatrix2 mat, out NMatrix2 result)
 		{
 			result.R0C0 = mat.R0C0;
 			result.R0C1 = mat.R1C0;
@@ -69,14 +61,14 @@ namespace OpenTK
 			result.R1C1 = mat.R1C1;
 		}
 
-		public static SimdMatrix2 Multiply (SimdMatrix2 left, SimdMatrix2 right)
+		public static NMatrix2 Multiply (NMatrix2 left, NMatrix2 right)
 		{
-			SimdMatrix2 result;
+			NMatrix2 result;
 			Multiply (ref left, ref right, out result);
 			return result;
 		}
 
-		public static void Multiply (ref SimdMatrix2 left, ref SimdMatrix2 right, out SimdMatrix2 result)
+		public static void Multiply (ref NMatrix2 left, ref NMatrix2 right, out NMatrix2 result)
 		{
 			result.R0C0 = left.R0C0 * right.R0C0 + left.R0C1 * right.R1C0;
 			result.R0C1 = left.R0C0 * right.R0C1 + left.R0C1 * right.R1C1;
@@ -85,31 +77,31 @@ namespace OpenTK
 			result.R1C1 = left.R1C0 * right.R0C1 + left.R1C1 * right.R1C1;
 		}
 
-		public static SimdMatrix2 operator * (SimdMatrix2 left, SimdMatrix2 right)
+		public static NMatrix2 operator * (NMatrix2 left, NMatrix2 right)
 		{
 			return Multiply (left, right);
 		}
 
-		public static bool operator == (SimdMatrix2 left, SimdMatrix2 right)
+		public static bool operator == (NMatrix2 left, NMatrix2 right)
 		{
 			return left.Equals (right);
 		}
 
-		public static bool operator != (SimdMatrix2 left, SimdMatrix2 right)
+		public static bool operator != (NMatrix2 left, NMatrix2 right)
 		{
 			return !left.Equals (right);
 		}
 
-		public static explicit operator global::OpenTK.Matrix2 (SimdMatrix2 value)
+		public static explicit operator global::OpenTK.Matrix2 (NMatrix2 value)
 		{
 			return new global::OpenTK.Matrix2 (
 				value.R0C0, value.R0C1,
 				value.R1C0, value.R1C1);
 		}
 
-		public static explicit operator SimdMatrix2 (global::OpenTK.Matrix2 value)
+		public static explicit operator NMatrix2 (global::OpenTK.Matrix2 value)
 		{
-			return new SimdMatrix2 (
+			return new NMatrix2 (
 				value.R0C0, value.R0C1,
 				value.R1C0, value.R1C1);
 		}
@@ -126,13 +118,13 @@ namespace OpenTK
 
 		public override bool Equals (object obj)
 		{
-			if (!(obj is SimdMatrix2))
+			if (!(obj is NMatrix2))
 				return false;
 
-			return Equals ((SimdMatrix2) obj);
+			return Equals ((NMatrix2) obj);
 		}
 
-		public bool Equals (SimdMatrix2 other)
+		public bool Equals (NMatrix2 other)
 		{
 			return
 				R0C0 == other.R0C0 &&

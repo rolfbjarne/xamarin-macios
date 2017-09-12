@@ -18,10 +18,10 @@ namespace OpenTK
 	[StructLayout (LayoutKind.Sequential)]
 	public struct SimdMatrix2 : IEquatable<SimdMatrix2>
 	{
-		public float M11;
-		public float M21;
-		public float M12;
-		public float M22;
+		public float R0C0;
+		public float R1C0;
+		public float R0C1;
+		public float R1C1;
 
 		public readonly static SimdMatrix2 Identity = new SimdMatrix2 (
 			1, 0,
@@ -29,25 +29,25 @@ namespace OpenTK
 
 		public SimdMatrix2 (global::OpenTK.Vector2 column0, global::OpenTK.Vector2 column1)
 		{
-			M11 = column0.X;
-			M21 = column0.Y;
-			M12 = column1.X;
-			M22 = column1.Y;
+			R0C0 = column0.X;
+			R1C0 = column0.Y;
+			R0C1 = column1.X;
+			R1C1 = column1.Y;
 		}
 
 		public SimdMatrix2 (
-			float m11, float m12,
-			float m21, float m22)
+			float r0c0, float r0c1,
+			float r1c0, float r1c1)
 		{
-			M11 = m11;
-			M21 = m21;
-			M12 = m12;
-			M22 = m22;
+			R0C0 = r0c0;
+			R1C0 = r1c0;
+			R0C1 = r0c1;
+			R1C1 = r1c1;
 		}
 
 		public float Determinant {
 			get {
-				return M11 * M22 - M21 * M12;
+				return R0C0 * R1C1 - R1C0 * R0C1;
 			}
 		}
 
@@ -58,15 +58,15 @@ namespace OpenTK
 
 		public static SimdMatrix2 Transpose (SimdMatrix2 mat)
 		{
-			return new SimdMatrix2 (mat.M11, mat.M21, mat.M12, mat.M22);
+			return new SimdMatrix2 (mat.R0C0, mat.R1C0, mat.R0C1, mat.R1C1);
 		}
 
 		public static void Transpose (ref SimdMatrix2 mat, out SimdMatrix2 result)
 		{
-			result.M11 = mat.M11;
-			result.M12 = mat.M21;
-			result.M21 = mat.M12;
-			result.M22 = mat.M22;
+			result.R0C0 = mat.R0C0;
+			result.R0C1 = mat.R1C0;
+			result.R1C0 = mat.R0C1;
+			result.R1C1 = mat.R1C1;
 		}
 
 		public static SimdMatrix2 Multiply (SimdMatrix2 left, SimdMatrix2 right)
@@ -78,11 +78,11 @@ namespace OpenTK
 
 		public static void Multiply (ref SimdMatrix2 left, ref SimdMatrix2 right, out SimdMatrix2 result)
 		{
-			result.M11 = left.M11 * right.M11 + left.M12 * right.M21;
-			result.M12 = left.M11 * right.M12 + left.M12 * right.M22;
+			result.R0C0 = left.R0C0 * right.R0C0 + left.R0C1 * right.R1C0;
+			result.R0C1 = left.R0C0 * right.R0C1 + left.R0C1 * right.R1C1;
 
-			result.M21 = left.M21 * right.M11 + left.M22 * right.M21;
-			result.M22 = left.M21 * right.M12 + left.M22 * right.M22;
+			result.R1C0 = left.R1C0 * right.R0C0 + left.R1C1 * right.R1C0;
+			result.R1C1 = left.R1C0 * right.R0C1 + left.R1C1 * right.R1C1;
 		}
 
 		public static SimdMatrix2 operator * (SimdMatrix2 left, SimdMatrix2 right)
@@ -103,8 +103,8 @@ namespace OpenTK
 		public static explicit operator global::OpenTK.Matrix2 (SimdMatrix2 value)
 		{
 			return new global::OpenTK.Matrix2 (
-				value.M11, value.M12,
-				value.M21, value.M22);
+				value.R0C0, value.R0C1,
+				value.R1C0, value.R1C1);
 		}
 
 		public static explicit operator SimdMatrix2 (global::OpenTK.Matrix2 value)
@@ -116,12 +116,12 @@ namespace OpenTK
 
 		public override string ToString ()
 		{
-			return $"({M11}, {M12})\n({M21}, {M22})";
+			return $"({R0C0}, {R0C1})\n({R1C0}, {R1C1})";
 		}
 
 		public override int GetHashCode ()
 		{
-			return M11.GetHashCode () ^ M12.GetHashCode () ^ M21.GetHashCode () ^ M22.GetHashCode ();
+			return R0C0.GetHashCode () ^ R0C1.GetHashCode () ^ R1C0.GetHashCode () ^ R1C1.GetHashCode ();
 		}
 
 		public override bool Equals (object obj)
@@ -135,10 +135,10 @@ namespace OpenTK
 		public bool Equals (SimdMatrix2 other)
 		{
 			return
-				M11 == other.M11 &&
-				M12 == other.M12 &&
-				M21 == other.M21 &&
-				M22 == other.M22;
+				R0C0 == other.R0C0 &&
+				R0C1 == other.R0C1 &&
+				R1C0 == other.R1C0 &&
+				R1C1 == other.R1C1;
 		}
 	}
 }

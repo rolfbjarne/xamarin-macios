@@ -181,7 +181,7 @@ namespace XamCore.AVFoundation {
 
 		[iOS (11, 0), Mac (10, 13)]
 		[Field ("AVMediaTypeDepthData")]
-		AVMediaTypeDepthData = 10,
+		DepthData = 10,
 	}
 
 #if !XAMCORE_4_0
@@ -12167,4 +12167,19 @@ namespace XamCore.AVFoundation {
 		AVContentKeyResponse Create (NSData keyData, [NullAllowed] NSData initializationVector);
 	}
 
+	[TV (11,0), NoWatch, Mac (10,13), iOS (11,0)]
+	[DisableDefaultCtor]
+	[BaseType (typeof(NSObject))]
+	interface AVRouteDetector {
+		[Notification]
+		[TV (11, 0), NoWatch, Mac (10, 13), iOS (11, 0)]
+		[Field ("AVRouteDetectorMultipleRoutesDetectedDidChangeNotification")]
+		NSString MultipleRoutesDetectedDidChange { get; }
+
+		[Export ("routeDetectionEnabled")]
+		bool RouteDetectionEnabled { [Bind ("isRouteDetectionEnabled")] get; set; }
+
+		[Export ("multipleRoutesDetected")]
+		bool MultipleRoutesDetected { get; }
+	}
 }

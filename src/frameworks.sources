@@ -606,11 +606,6 @@ EVENTKITUI_SOURCES = \
 EXTERNALACCESSORY_API_SOURCES = \
 	ExternalAccessory/EAEnums.cs \
 
-# FileProvider
-
-FILEPROVIDER_SOURCES = \
-	FileProvider/NSFileProviderItemIdentifierExtensions.cs \
-
 # FinderSync
 
 FINDERSYNC_CORE_SOURCES = \
@@ -1533,17 +1528,12 @@ SHARED_CORE_SOURCES = \
 	ObjCRuntime/Protocol.cs \
 	ObjCRuntime/Registrar.core.cs \
 	ObjCRuntime/Selector.cs \
+	Simd/MatrixDouble4x4.cs \
 	Simd/MatrixFloat2x2.cs \
 	Simd/MatrixFloat3x3.cs \
 	Simd/MatrixFloat4x4.cs \
-	Simd/VectorFloat2.cs \
-	Simd/VectorFloat3.cs \
-	Simd/VectorFloat4.cs \
-	Simd/VectorInt4.cs \
-	Simd/MatrixDouble4x4.cs \
-	Simd/VectorDouble2.cs \
 	Simd/VectorDouble3.cs \
-	Simd/VectorDouble4.cs \
+	Simd/VectorFloat3.cs \
 
 SHARED_SOURCES = \
 	../runtime/Delegates.generated.cs \

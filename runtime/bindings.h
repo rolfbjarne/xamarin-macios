@@ -159,7 +159,7 @@ struct Matrix2f {
 	Vector2f columns [2];
 };
 
-struct MatrixFloat2x2 {
+struct NMatrix2 {
 	Vector2f columns [2];
 };
 
@@ -167,7 +167,7 @@ struct Matrix3f {
 	Vector3f columns [3];
 };
 
-struct MatrixFloat3x3 {
+struct NMatrix3 {
 	Vector4f columns [3];
 };
 
@@ -175,7 +175,7 @@ struct Matrix4f {
 	Vector4f columns [4];
 };
 
-struct MatrixFloat4x4 {
+struct NMatrix4 {
 	Vector4f columns [4];
 };
 

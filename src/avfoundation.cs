@@ -49,7 +49,6 @@ using XamCore.CoreFoundation;
 using XamCore.CoreGraphics;
 using XamCore.CoreVideo;
 using XamCore.ImageIO;
-using Simd;
 using System;
 
 using OpenTK;
@@ -7870,13 +7869,13 @@ namespace XamCore.AVFoundation {
 	interface AVCameraCalibrationData
 	{
 		[Export ("intrinsicMatrix")]
-		MatrixFloat3x3 IntrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
+		NMatrix3 IntrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
 
 		[Export ("intrinsicMatrixReferenceDimensions")]
 		CGSize IntrinsicMatrixReferenceDimensions { get; }
 
 		[Export ("extrinsicMatrix")]
-		MatrixFloat4x3 ExtrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
+		NMatrix4x3 ExtrinsicMatrix { [MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")] get; }
 
 		[Export ("pixelSize")]
 		float PixelSize { get; }

@@ -2289,10 +2289,10 @@ namespace Xamarin.BindingMethods.Generator
 
 			data.Add (
 				new FunctionData {
-					Comment = " // MatrixFloat4x3 func ()",
+					Comment = " // NMatrix4x3 func ()",
 					Prefix = "simd__",
 					Variants = Variants.All,
-					ReturnType = Types.MatrixFloat4x3,
+					ReturnType = Types.NMatrix4x3,
 				}
 			);
 
@@ -2371,7 +2371,7 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("\t\t{0}{2}columns [i].d = {1}.columns [i] [3];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t}");
 				break;
-			case "MatrixFloat4x3":
+			case "NMatrix4x3":
 				writer.WriteLine ("\tfor (int i = 0; i < 4; i++) {");
 				writer.WriteLine ("\t\t{0}{2}columns [i].a = {1}.columns [i] [0];", managedVariable, nativeVariable, accessor);
 				writer.WriteLine ("\t\t{0}{2}columns [i].b = {1}.columns [i] [1];", managedVariable, nativeVariable, accessor);
@@ -2498,7 +2498,7 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("\t\t{0}.columns [i][3] = {1}{2}columns [i].d;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t}");
 				break;
-			case "MatrixFloat4x3":
+			case "NMatrix4x3":
 				writer.WriteLine ("\tfor (int i = 0; i < 4; i++) {");
 				writer.WriteLine ("\t\t{0}.columns [i][0] = {1}{2}columns [i].a;", nativeVariable, managedVariable, accessor);
 				writer.WriteLine ("\t\t{0}.columns [i][1] = {1}{2}columns [i].b;", nativeVariable, managedVariable, accessor);
@@ -3069,10 +3069,10 @@ namespace Xamarin.BindingMethods.Generator
 				IsX86Stret = true,
 				IsX64Stret = true,
 			};
-			public static TypeData MatrixFloat4x3 = new TypeData {
-				ManagedType = "MatrixFloat4x3",
+			public static TypeData NMatrix4x3 = new TypeData {
+				ManagedType = "NMatrix4x3",
 				NativeType = "matrix_float4x3",
-				NativeWrapperType = "struct MatrixFloat4x3",
+				NativeWrapperType = "struct NMatrix4x3",
 				RequireMarshal = true,
 				IsARMStret = true,
 				IsX86Stret = true,

@@ -179,7 +179,7 @@ struct NMatrix4 {
 	Vector4f columns [4];
 };
 
-struct MatrixFloat4x3 {
+struct NMatrix4x3 {
 	// Use Vector4f here, since the managed version has padding to match accordingly.
 	Vector4f columns [4];
 };

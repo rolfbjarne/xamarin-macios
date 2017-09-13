@@ -14,10 +14,10 @@ using System.Runtime.InteropServices;
 
 using VectorFloat4=global::OpenTK.Vector4;
 
-namespace Simd
+namespace OpenTK
 {
 	[StructLayout (LayoutKind.Sequential)]
-	public struct MatrixFloat4x3 : IEquatable<MatrixFloat4x3>
+	public struct NMatrix4x3 : IEquatable<NMatrix4x3>
 	{
 		public float M11;
 		public float M21;
@@ -39,7 +39,7 @@ namespace Simd
 		public float M34;
 		float dummy4;
 
-		public MatrixFloat4x3 (
+		public NMatrix4x3 (
 			float m11, float m12, float m13, float m14,
 			float m21, float m22, float m23, float m24,
 			float m31, float m32, float m33, float m34)
@@ -62,12 +62,12 @@ namespace Simd
 			dummy4 = 0;
 		}
 
-		public static bool operator == (MatrixFloat4x3 left, MatrixFloat4x3 right)
+		public static bool operator == (NMatrix4x3 left, NMatrix4x3 right)
 		{
 			return left.Equals (right);
 		}
 
-		public static bool operator != (MatrixFloat4x3 left, MatrixFloat4x3 right)
+		public static bool operator != (NMatrix4x3 left, NMatrix4x3 right)
 		{
 			return !left.Equals (right);
 		}
@@ -90,13 +90,13 @@ namespace Simd
 
 		public override bool Equals (object obj)
 		{
-			if (!(obj is MatrixFloat4x3))
+			if (!(obj is NMatrix4x3))
 				return false;
 
-			return Equals ((MatrixFloat4x3) obj);
+			return Equals ((NMatrix4x3) obj);
 		}
 
-		public bool Equals (MatrixFloat4x3 other)
+		public bool Equals (NMatrix4x3 other)
 		{
 			return
 				M11 == other.M11 && M12 == other.M12 && M13 == other.M13 && M14 == other.M14 &&

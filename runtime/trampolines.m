@@ -1004,7 +1004,7 @@ xamarin_get_nsvalue_converter (MonoClass *managedType, MonoMethod *method, bool 
 		func = to_managed ? (void *) xamarin_nsvalue_to_cgsize : (void *) xamarin_cgsize_to_nsvalue;
 	} else if (!strcmp (fullname, "CoreGraphics.CGVector")) {
 		func = to_managed ? (void *) xamarin_nsvalue_to_cgvector : (void *) xamarin_cgvector_to_nsvalue;
-	} else if (!strcmp (fullname, "Foundation.NSDirectionalEdgeInsets")) {
+	} else if (!strcmp (fullname, "UIKit.NSDirectionalEdgeInsets")) {
 		func = to_managed ? (void *) xamarin_nsvalue_to_nsdirectionaledgeinsets : (void *) xamarin_nsdirectionaledgeinsets_to_nsvalue;
 #endif
 #if HAVE_COREANIMATION

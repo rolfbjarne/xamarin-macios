@@ -63,7 +63,20 @@ $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/updateinfo: Make.config.inc
 
 $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/Versions.plist: Versions-ios.plist.in Makefile $(TOP)/Make.config versions-check.csharp
 	$(Q) ./versions-check.csharp $< "$(MIN_IOS_SDK_VERSION)" "$(IOS_SDK_VERSION)" "$(MIN_TVOS_SDK_VERSION)" "$(TVOS_SDK_VERSION)" "$(MIN_WATCH_OS_VERSION)" "$(WATCH_SDK_VERSION)" "$(MIN_OSX_SDK_VERSION)" "$(OSX_SDK_VERSION)"
-	$(Q_GEN) sed -e 's/@XCODE_VERSION@/$(XCODE_VERSION)/g' $< > $@
+	$(Q_GEN) sed \
+		-e 's/@XCODE_VERSION@/$(XCODE_VERSION)/g' \
+		-e 's/@DTXcode@/$(shell /usr/libexec/PlistBuddy -c 'Print :DTXcode' $(XCODE_DEVELOPER_ROOT)/../../Contents/Info.plist)/g' \
+		-e 's/@DTXcodeBuild@/$(shell /usr/libexec/PlistBuddy -c 'Print :DTXcodeBuild' $(XCODE_DEVELOPER_ROOT)/../../Contents/Info.plist)/g' \
+		-e 's/@DTPlatformBuild_IOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' $(XCODE_DEVELOPER_ROOT)/Platforms/iPhoneOS.platform/version.plist)/g' \
+		-e 's/@DTSDKName_IOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :CanonicalName' $(XCODE_DEVELOPER_ROOT)/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/SDKSettings.plist)/g' \
+		-e 's/@DTPlatformVersion_IOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :AdditionalInfo:DTPlatformVersion' $(XCODE_DEVELOPER_ROOT)/Platforms/iPhoneOS.platform/Info.plist)/g' \
+		-e 's/@DTPlatformBuild_TVOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' $(XCODE_DEVELOPER_ROOT)/Platforms/AppleTVOS.platform/version.plist)/g' \
+		-e 's/@DTSDKName_TVOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :CanonicalName' $(XCODE_DEVELOPER_ROOT)/Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS.sdk/SDKSettings.plist)/g' \
+		-e 's/@DTPlatformVersion_TVOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :AdditionalInfo:DTPlatformVersion' $(XCODE_DEVELOPER_ROOT)/Platforms/AppleTVOS.platform/Info.plist)/g' \
+		-e 's/@DTPlatformBuild_WATCHOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :ProductBuildVersion' $(XCODE_DEVELOPER_ROOT)/Platforms/WatchOS.platform/version.plist)/g' \
+		-e 's/@DTSDKName_WATCHOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :CanonicalName' $(XCODE_DEVELOPER_ROOT)/Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/SDKSettings.plist)/g' \
+		-e 's/@DTPlatformVersion_WATCHOS@/$(shell /usr/libexec/PlistBuddy -c 'Print :AdditionalInfo:DTPlatformVersion' $(XCODE_DEVELOPER_ROOT)/Platforms/WatchOS.platform/Info.plist)/g' \
+		$< > $@
 
 ifdef INCLUDE_IOS
 TARGETS += $(IOS_TARGETS)

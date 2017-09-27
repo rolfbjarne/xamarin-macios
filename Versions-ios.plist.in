@@ -49,6 +49,40 @@
 	</dict>
 	<key>RecommendedXcodeVersion</key>
 	<string>@XCODE_VERSION@</string>
+	<key>XcodeData</key>
+	<dict>
+		<key>DTXcode</key>
+		<string>@DTXcode@</string>
+		<key>DTXcodeBuild</key>
+		<string>@DTXcodeBuild@</string>
+		<key>iOS</key>
+		<dict>
+			<key>DTPlatformBuild</key>
+			<string>@DTPlatformBuild_IOS@</string>
+			<key>DTSDKName</key>
+			<string>@DTSDKName_IOS@</string>
+			<key>DTPlatformVersion</key>
+			<string>@DTPlatformVersion_IOS@</string>
+		</dict>
+		<key>tvOS</key>
+		<dict>
+			<key>DTPlatformBuild</key>
+			<string>@DTPlatformBuild_TVOS@</string>
+			<key>DTSDKName</key>
+			<string>@DTSDKName_TVOS@</string>
+			<key>DTPlatformVersion</key>
+			<string>@DTPlatformVersion_TVOS@</string>
+		</dict>
+		<key>watchOS</key>
+		<dict>
+			<key>DTPlatformBuild</key>
+			<string>@DTPlatformBuild_WATCHOS@</string>
+			<key>DTSDKName</key>
+			<string>@DTSDKName_WATCHOS@</string>
+			<key>DTPlatformVersion</key>
+			<string>@DTPlatformVersion_WATCHOS@</string>
+		</dict>
+	</dict>
 	<key>MinExtensionVersion</key>
 	<dict>
 		<key>iOS</key>

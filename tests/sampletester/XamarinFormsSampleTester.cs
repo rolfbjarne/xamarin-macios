@@ -20,4 +20,9 @@ public class XamarinFormsSampleTester : SampleTester
 		{
 		};
 	}
+
+	// msbuild Xuzzle.sln /verbosity:diag /p:Platform=iPhone /p:Configuration=Debug "/t:Platforms\\Xuzzle_iOS"
+	Dictionary<string, string> sln_to_proj = new Dictionary<string, string> {
+		{ "Xuzzle.sln", "Platforms\\Xuzzle_iOS" },
+	};
 }

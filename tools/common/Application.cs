@@ -43,6 +43,7 @@ namespace Xamarin.Bundler {
 		public bool DeadStrip = true;
 		public bool EnableDebug;
 		internal RuntimeOptions RuntimeOptions;
+		public Optimizations Optimizations = new Optimizations ();
 		public RegistrarMode Registrar = RegistrarMode.Default;
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;
 		public SymbolMode SymbolMode;
@@ -77,6 +78,12 @@ namespace Xamarin.Bundler {
 		public Application (string[] arguments)
 		{
 			Cache = new Cache (arguments);
+		}
+
+		public bool DynamicRegistrationSupported {
+			get {
+				return Optimizations.RemoveDynamicRegistrar.Value != true;
+			}
 		}
 
 		// This is just a name for this app to show in log/error messages, etc.

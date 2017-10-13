@@ -81,6 +81,11 @@ namespace MonoTouch.Tuner {
 
 		protected override TypeDefinition MarkType (TypeReference reference)
 		{
+			//if (reference != null) {
+			//	Console.WriteLine ($"MarkType: {reference.FullName}");
+			//	if (reference.Name == "CustomAudioUnitFactory")
+			//		Console.WriteLine ("STOP");
+			//}
 			TypeDefinition type = base.MarkType (reference);
 			if (type == null)
 				return null;

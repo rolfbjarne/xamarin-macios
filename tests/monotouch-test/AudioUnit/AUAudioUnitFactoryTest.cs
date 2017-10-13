@@ -19,7 +19,8 @@ using AudioUnit;
 namespace MonoTouchFixtures.AudioUnit {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
-	public class AUAudioUnitFactoryTest {
+	public class AUAudioUnitFactoryTest
+	{
 		[Test]
 		public void CreateAudioUnit ()
 		{
@@ -47,7 +48,8 @@ namespace MonoTouchFixtures.AudioUnit {
 			}
 		}
 
-		public class CustomAudioUnitFactory : NSObject, IAUAudioUnitFactory {
+		public class CustomAudioUnitFactory : NSObject, IAUAudioUnitFactory
+		{
 			public AUAudioUnit CreateAudioUnit (AudioComponentDescription desc, out NSError error)
 			{
 				var audioUnit = new AUAudioUnit (desc, out error);

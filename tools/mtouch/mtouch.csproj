@@ -348,6 +348,12 @@
     <Compile Include="..\common\StringUtils.cs">
       <Link>StringUtils.cs</Link>
     </Compile>
+    <Compile Include="..\linker\RemoveDynamicRegistrar.cs">
+      <Link>Xamarin.Linker\RemoveDynamicRegistrar.cs</Link>
+    </Compile>
+    <Compile Include="..\linker\RemoveProtocolStep.cs">
+      <Link>Xamarin.Linker\RemoveProtocolStep.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

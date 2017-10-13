@@ -89,6 +89,9 @@ LINKER_SOURCES = \
 	$(TOP)/tools/linker/MobileResolveMainAssemblyStep.cs	\
 	$(TOP)/tools/linker/MobileSweepStep.cs			\
 	$(TOP)/tools/linker/ObjCExtensions.cs			\
+	$(TOP)/tools/linker/OptimizeBlockSetupStep.cs \
+	$(TOP)/tools/linker/RemoveDynamicRegistrar.cs \
+	$(TOP)/tools/linker/RemoveProtocolStep.cs	\
 	$(TOP)/tools/linker/RemoveUserResourcesSubStep.cs \
 
 

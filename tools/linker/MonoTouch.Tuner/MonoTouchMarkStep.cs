@@ -182,5 +182,22 @@ namespace MonoTouch.Tuner {
 				break;
 			}
 		}
+
+		protected override void MarkInterfaceImplementation (TypeDefinition type, InterfaceImplementation iface)
+		{
+			var ignore = true;
+
+			if (!type.IsNSObject (LinkContext))
+				ignore = false;
+			else if (!iface.InterfaceType.Resolve ().HasCustomAttribute (LinkContext, Namespaces.Foundation, "ProtocolAttribute"))
+				ignore = false;
+
+			if (ignore) {
+				Console.WriteLine ($"Not marking interface {iface.InterfaceType.FullName} implemented by {type.FullName}");
+				return;
+			}
+			
+			base.MarkInterfaceImplementation (type, iface);
+		}
 	}
 }

@@ -941,12 +941,21 @@ namespace Xamarin.Bundler
 			return 0;
 		}
 
+		public static void Dump (string msg, params string[] extra)
+		{
+			//var t = ((global::Mono.Cecil.TypeDefinitionCollection) Xamarin.Bundler.Driver.Application.Targets [0].Assemblies ["Xamarin.iOS"].AssemblyDefinition.MainModule.Types).GetType ("ObjCRuntime", "Trampolines").NestedTypes [1470];
+			//Console.WriteLine ($"{msg} {t.FullName}: {t.CustomAttributes.Count} {string.Join (", ", extra)}");
+			//if (t.CustomAttributes.Count < 2)
+				//Console.WriteLine ("STOP");
+		}
+
+		public static Application Application;
 		static Application ParseArguments (string [] args, out Action a)
 		{
 			var action = Action.None;
 			var app = new Application (args);
 			var assemblies = new List<string> ();
-
+			Application = app;
 			if (extra_args != null) {
 				var l = new List<string> (args);
 				foreach (var s in extra_args.Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries))

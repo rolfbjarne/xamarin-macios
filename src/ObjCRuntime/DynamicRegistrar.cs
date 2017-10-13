@@ -76,7 +76,7 @@ namespace XamCore.Registrar {
 
 	class DynamicRegistrar : Registrar {
 		Dictionary<IntPtr, ObjCType> type_map;
-		Dictionary <string, object> registered_assemblies; // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
+		static Dictionary<string, object> registered_assemblies; // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
 
 		// custom_type_map can be accessed from multiple threads, and at the
 		// same time mutated by the registrar, so any accesses needs to be locked
@@ -98,7 +98,7 @@ namespace XamCore.Registrar {
 			return registered_assemblies != null && registered_assemblies.ContainsKey (GetAssemblyName (assembly));
 		}
 
-		public void SetAssemblyRegistered (string assembly)
+		public static void SetAssemblyRegistered (string assembly)
 		{
 			if (registered_assemblies == null)
 				registered_assemblies = new Dictionary<string, object> ();
@@ -986,9 +986,9 @@ namespace XamCore.Registrar {
 					bool is_custom_type;
 					var tp = Class.FindType (@class, out is_custom_type);
 					if (tp != null) {
-						type = RegisterType (tp);
-						if (is_custom_type)
-							AddCustomType (tp);
+						//type = RegisterType (tp);
+						//if (is_custom_type)
+							//AddCustomType (tp);
 						return tp;
 					}
 

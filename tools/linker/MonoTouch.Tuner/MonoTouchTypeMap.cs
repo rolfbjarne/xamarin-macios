@@ -22,8 +22,7 @@ namespace MonoTouch.Tuner {
 
 	public class MonoTouchTypeMapStep : TypeMapStep {
 		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
-		HashSet<TypeDefinition> needs_isdirectbinding_check = new HashSet<TypeDefinition> ();
-		HashSet<MethodDefinition> generated_code = new HashSet<MethodDefinition> ();
+		Dictionary<TypeDefinition, bool?> isdirectbinding_value = new Dictionary<TypeDefinition, bool?> ();
 
 		DerivedLinkContext LinkContext {
 			get {
@@ -31,36 +30,78 @@ namespace MonoTouch.Tuner {
 			}
 		}
 
+		protected override void ProcessAssembly (AssemblyDefinition assembly)
+		{
+			LinkContext.DynamicRegistrationSupported |= FindRuntimeConnectMethodReferences (assembly);
+
+			base.ProcessAssembly (assembly);
+		}
+
+		// We need to know if anybody calls Runtime.ConnectMethod before marking everything,
+		// since we'll be able to optimize a lot of code away if Runtime.ConnectMethod is not used.
+		bool FindRuntimeConnectMethodReferences (AssemblyDefinition assembly)
+		{
+#if MONOMAC && !XAMCORE_2_0
+			// Disable removing the dynamic registrar for XM/Classic to simplify the code a little bit.
+			return true;
+#else
+			if (LinkContext.Target.App.Registrar != Xamarin.Bundler.RegistrarMode.Static)
+				return true;
+
+			if (Profile.IsProductAssembly (assembly) || Profile.IsSdkAssembly (assembly)) {
+				// We know that the assemblies we ship don't use Runtime.ConnectMethod.
+				return false;
+			}
+
+			// Check if the assembly is referencing our product assembly
+			var hasProductReference = false;
+			foreach (var ar in assembly.MainModule.AssemblyReferences) {
+				if (Profile.IsProductAssembly (ar.Name)) {
+					hasProductReference = true;
+					break;
+				}
+			}
+			// Can't use Runtime.ConnectMethod if not referencing the containing assembly
+			if (!hasProductReference)
+				return false;
+
+			// Check if the assembly references the method.
+			foreach (var mr in assembly.MainModule.GetMemberReferences ()) {
+				if (mr.Name != "ConnectMethod")
+					continue;
+				if (mr.DeclaringType == null)
+					continue;
+				if (mr.DeclaringType.Name != "Runtime")
+					continue;
+				if (mr.DeclaringType.Namespace != "ObjCRuntime")
+					continue;
+				if (!Profile.IsProductAssembly (mr.Module.Assembly))
+					continue;
+				return true;
+			}
+
+			return false;
+#endif
+		}
+
 		protected override void EndProcess ()
 		{
 			base.EndProcess ();
 
 			LinkContext.CachedIsNSObject = cached_isnsobject;
-			LinkContext.NeedsIsDirectBindingCheck = needs_isdirectbinding_check;
-			LinkContext.GeneratedCode = generated_code;
+			LinkContext.NeedsIsDirectBindingCheck = isdirectbinding_value;
 		}
 
 		protected override void MapType (TypeDefinition type)
 		{
 			base.MapType (type);
 
-			// we'll remove [GeneratedCode] in RemoveAttribute but we need this information later
-			// when processing Dispose methods in MonoTouchMarkStep
-			if (type.HasMethods) {
-				foreach (MethodDefinition m in type.Methods) {
-					if (m.IsGeneratedCode (LinkContext))
-						generated_code.Add (m);
-				}
-			}
-			
 			// additional checks for NSObject to check if the type is a *generated* bindings
 			// bonus: we cache, for every type, whether or not it inherits from NSObject (very useful later)
 			if (!IsNSObject (type))
 				return;
 			
-			// if not, it's a user type, the IsDirectBinding check is required by all ancestors
-			if (!IsGeneratedBindings (type, LinkContext))
-				NeedsIsDirectBindingCheck (type);
+			SetIsDirectBindingValue (type);
 #if DEBUG
 			else
 				Console.WriteLine ("{0} does NOT needs IsDirectBinding check", type);
@@ -100,17 +141,22 @@ namespace MonoTouch.Tuner {
 			return false;
 		}
 		
-		void NeedsIsDirectBindingCheck (TypeDefinition type)
+		void SetIsDirectBindingValue (TypeDefinition type)
 		{
-			// all ancestors must be disallowed
-			// so we can short-circuit the recursion if we already have processed it
-			if (needs_isdirectbinding_check.Contains (type))
-				return;
-			
-			needs_isdirectbinding_check.Add (type);
-			var base_type = type.BaseType;
-			if (base_type != null)
-				NeedsIsDirectBindingCheck (base_type.Resolve ());
+			if (type.IsSealed) {
+				isdirectbinding_value [type] = true;
+			} else if (type.IsAbstract) {
+				isdirectbinding_value [type] = false;
+			} else if (!isdirectbinding_value.ContainsKey (type)) {
+				isdirectbinding_value [type] = true; // Let's try 'true' first, any derived classes will clear it if needed
+				// we must clear the IsDirectBinding for any superclasses (unless they're abstract, in which case IsDirectBinding can stay as 'false')
+				var base_type = type.BaseType.Resolve ();
+				while (base_type != null && IsNSObject (base_type)) {
+					if (!base_type.IsAbstract)
+						isdirectbinding_value [base_type] = null;	
+					base_type = base_type.BaseType.Resolve ();
+				}
+			}
 		}
 	}
 }

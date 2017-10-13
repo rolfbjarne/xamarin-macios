@@ -95,6 +95,7 @@ namespace XamCore.ObjCRuntime {
 			public IntPtr set_gchandle_tramp;
 		}
 
+		[Flags]
 		internal enum InitializationFlags : int {
 			/* unused               = 0x01 */
 			/* unused				= 0x02,*/
@@ -135,6 +136,15 @@ namespace XamCore.ObjCRuntime {
 		}
 
 		internal static unsafe InitializationOptions* options;
+
+		internal static bool DynamicRegistrationSupported {
+			get {
+				// The linker will rewrite this property to return 'false' if:
+				// * The static registrar is selected
+				// * No Runtime.ConnectMethod overloads are used anywhere.
+				return true;
+			}
+		}
 
 		internal static bool Initialized {
 			get { return initialized; }
@@ -1432,6 +1442,26 @@ namespace XamCore.ObjCRuntime {
 
 		[DllImport (Constants.libSystemLibrary)]
 		unsafe extern internal static void memcpy (byte * target, byte * source, nint n);
+
+		// This function will try to compare a native UTF8 string to a managed string without creating a temporary managed string for the native UTF8 string.
+		// Currently this only works if the UTF8 string only contains single-byte characters.
+		internal static bool StringEquals (IntPtr utf8, string str)
+		{
+			// The vast majority of strings we compare fall within the single-byte UTF8 range, so optimize for this
+			unsafe {
+				byte* c = (byte*) utf8;
+				for (int i = 0; i < str.Length; i++) {
+					byte b = c [i];
+					if (b > 0x7F) {
+						// This string is a multibyte UTF8 string, so go the slow route and convert it to a managed string before comparison
+						return string.Equals (Marshal.PtrToStringUTF8 (utf8), str);
+					}
+					if (b != (short) str [i])
+						return false;
+				}
+				return c [str.Length] == 0;
+			}
+		}
 	}
 		
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

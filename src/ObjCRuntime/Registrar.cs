@@ -31,12 +31,12 @@ using TProperty=Mono.Cecil.PropertyDefinition;
 using TField=Mono.Cecil.FieldDefinition;
 using R=XamCore.Registrar.Registrar;
 #else
-using TAssembly=System.Reflection.Assembly;
-using TType=System.Type;
-using TMethod=System.Reflection.MethodBase;
-using TProperty=System.Reflection.PropertyInfo;
-using TField=System.Reflection.FieldInfo;
-using R=XamCore.ObjCRuntime.Runtime;
+using TAssembly = System.Reflection.Assembly;
+using TType = System.Type;
+using TMethod = System.Reflection.MethodBase;
+using TProperty = System.Reflection.PropertyInfo;
+using TField = System.Reflection.FieldInfo;
+using R = XamCore.ObjCRuntime.Runtime;
 #endif
 
 #if MONOTOUCH
@@ -45,7 +45,7 @@ using Xamarin.Bundler;
 using ProductException=Xamarin.Bundler.MonoTouchException;
 #else
 #if XAMCORE_2_0
-using ProductException=ObjCRuntime.RuntimeException;
+using ProductException = ObjCRuntime.RuntimeException;
 #else
 using ProductException=MonoTouch.RuntimeException;
 #endif
@@ -80,9 +80,11 @@ namespace XamCore.ObjCRuntime
 }
 #endif
 
-namespace XamCore.Registrar {
-	static class Shared {
-		
+namespace XamCore.Registrar
+{
+	static class Shared
+	{
+
 		public static ProductException GetMT4127 (TMethod impl, List<TMethod> ifaceMethods)
 		{
 			var msg = new System.Text.StringBuilder ();
@@ -100,13 +102,14 @@ namespace XamCore.Registrar {
 		}
 	}
 
-	abstract partial class Registrar {
+	abstract partial class Registrar
+	{
 #if MTOUCH || MMP
 		public Application App { get; protected set; }
 #endif
 
 		Dictionary<TAssembly, object> assemblies = new Dictionary<TAssembly, object> (); // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
-		// locking: all accesses must lock 'types'.
+												 // locking: all accesses must lock 'types'.
 		Dictionary<TType, ObjCType> types = new Dictionary<TType, ObjCType> ();
 		// this is used to check if multiple types are registered with the same name.
 		// locking: all accesses must lock 'type_map'.
@@ -120,7 +123,19 @@ namespace XamCore.Registrar {
 		TMethod conforms_to_protocol;
 		TMethod invoke_conforms_to_protocol;
 
-		public static bool IsDualBuild { get; private set; }
+#if MONOMAC
+#if MMP
+		public static bool IsUnified { get { return Xamarin.Bundler.Driver.IsUnified; } }
+#else
+#if XAMCORE_2_0
+		public const bool IsUnified = true;
+#else
+		public const bool IsUnified = false;
+#endif // XAMCORE_2_0
+#endif // MMP
+#else
+		public const bool IsUnified = true;
+#endif // MONOMAC
 
 		public IEnumerable<TAssembly> GetAssemblies ()
 		{
@@ -670,7 +685,7 @@ namespace XamCore.Registrar {
 				} else if (Registrar.Is (underlyingInputType, Foundation, "NSValue")) {
 #if MMP || MONOMAC
 					// Remove 'MonoMac.' namespace prefix to make switch smaller
-					if (!Registrar.IsDualBuild && outputTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+					if (!Registrar.IsUnified && outputTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 						outputTypeName = outputTypeName.Substring ("MonoMac.".Length);
 #endif
 
@@ -804,7 +819,7 @@ namespace XamCore.Registrar {
 #elif __TVOS__
 					is_stret = Runtime.Arch == Arch.SIMULATOR && Stret.X86_64NeedStret (NativeReturnType);
 #else
-	#error unknown architecture
+#error unknown architecture
 #endif
 					var is_static_trampoline = IsStatic && !IsCategoryInstance;
 					var is_value_type = Registrar.IsValueType (NativeReturnType) && !Registrar.IsEnum (NativeReturnType);
@@ -1047,7 +1062,6 @@ namespace XamCore.Registrar {
 		protected abstract bool IsCorlibType (TType type);
 		protected abstract bool IsSimulatorOrDesktop { get; }
 		protected abstract bool Is64Bits { get; }
-		protected abstract bool IsDualBuildImpl { get; }
 		protected abstract Exception CreateException (int code, Exception innerException, TMethod method, string message, params object[] args);
 		protected abstract Exception CreateException (int code, Exception innerException, TType type, string message, params object [] args);
 		protected abstract string PlatformName { get; }
@@ -1067,11 +1081,6 @@ namespace XamCore.Registrar {
 		// This is just to support the single-file/partial build registration
 		// used for Xamarin.iOS.dll.
 		protected virtual bool LaxMode { get { return false; } }
-
-		public Registrar ()
-		{
-			IsDualBuild = IsDualBuildImpl;
-		}
 
 		protected bool IsArray (TType type)
 		{
@@ -1185,26 +1194,26 @@ namespace XamCore.Registrar {
 
 		internal static string Foundation {
 			get {
-				return IsDualBuild ? "Foundation" : CompatNamespace + ".Foundation";
+				return IsUnified ? "Foundation" : CompatNamespace + ".Foundation";
 			}
 		}
 
 		internal static string ObjCRuntime {
 			get {
-				return IsDualBuild ? "ObjCRuntime" : CompatNamespace + ".ObjCRuntime";
+				return IsUnified ? "ObjCRuntime" : CompatNamespace + ".ObjCRuntime";
 			}
 		}
 
 		internal static string CoreAnimation {
 			get {
-				return IsDualBuild ? "CoreAnimation" : CompatNamespace + ".CoreAnimation";
+				return IsUnified ? "CoreAnimation" : CompatNamespace + ".CoreAnimation";
 			}
 		}
 
 #if MONOMAC
 		internal static string AppKit {
 			get {
-				return IsDualBuild ? "AppKit" : CompatNamespace + ".AppKit";
+				return IsUnified ? "AppKit" : CompatNamespace + ".AppKit";
 			}
 		}
 #endif
@@ -1258,7 +1267,7 @@ namespace XamCore.Registrar {
 
 		internal string PlatformAssembly {
 			get {
-				return IsDualBuild ? DualAssemblyName : CompatAssemblyName;
+				return IsUnified ? DualAssemblyName : CompatAssemblyName;
 			}
 		}
 
@@ -2319,10 +2328,9 @@ namespace XamCore.Registrar {
 
 		public string ComputeSignature (TType DeclaringType, TMethod Method, ObjCMember member = null, bool isCategoryInstance = false, bool isBlockSignature = false)
 		{
-			var success = true;
-			var signature = new StringBuilder ();
 			bool is_ctor;
 			var method = member as ObjCMethod;
+			TType return_type = null;
 
 			if (Method != null) {
 				is_ctor = IsConstructor (Method);
@@ -2330,16 +2338,8 @@ namespace XamCore.Registrar {
 				is_ctor = method.IsConstructor;
 			}
 
-			if (is_ctor) {
-				signature.Append ('@');
-			} else {
-				var ReturnType = Method != null ? GetReturnType (Method) : method.NativeReturnType;
-				signature.Append (ToSignature (ReturnType, member, ref success));
-				if (!success)
-					throw CreateException (4104, Method ?? method.Method, "The registrar cannot marshal the return value of type `{0}` in the method `{1}.{2}`.", GetTypeFullName (ReturnType), GetTypeFullName (DeclaringType), GetDescriptiveMethodName (Method ?? method.Method));
-			}
-
-			signature.Append (isBlockSignature ? "@?" : "@:");
+			if (!is_ctor)
+				return_type = Method != null ? GetReturnType (Method) : method.NativeReturnType;
 
 			TType[] parameters;
 			if (Method != null) {
@@ -2347,6 +2347,26 @@ namespace XamCore.Registrar {
 			} else {
 				parameters = method.NativeParameters;
 			}
+
+			return ComputeSignature (DeclaringType, is_ctor, return_type, parameters, Method, member, isCategoryInstance, isBlockSignature);
+		}
+
+		public string ComputeSignature (TType declaring_type, bool is_ctor, TType return_type, TType [] parameters, TMethod mi = null, ObjCMember member = null, bool isCategoryInstance = false, bool isBlockSignature = false)
+		{
+			var success = true;
+			var signature = new StringBuilder ();
+			if (mi == null)
+				mi = (member as ObjCMethod)?.Method;
+			
+			if (is_ctor) {
+				signature.Append ('@');
+			} else {
+				signature.Append (ToSignature (return_type, member, ref success));
+				if (!success)
+					throw CreateException (4104, mi, "The registrar cannot marshal the return value of type `{0}` in the method `{1}.{2}`.", GetTypeFullName (return_type), GetTypeFullName (declaring_type), GetDescriptiveMethodName (mi));
+			}
+
+			signature.Append (isBlockSignature ? "@?" : "@:");
 
 			if (parameters != null) {
 				for (int i = 0; i < parameters.Length; i++) {
@@ -2360,15 +2380,13 @@ namespace XamCore.Registrar {
 						signature.Append (ToSignature (type, member, ref success));
 					}
 					if (!success) {
-						var mi = Method ?? method.Method;
 						throw CreateException (4136, mi, "The registrar cannot marshal the parameter type '{0}' of the parameter '{1}' in the method '{2}.{3}'",
-							GetTypeFullName (GetParameters (mi) [i]), GetParameterName (mi, i), GetTypeFullName (DeclaringType), GetDescriptiveMethodName (mi));
+							GetTypeFullName (parameters [i]), GetParameterName (mi, i), GetTypeFullName (declaring_type), GetDescriptiveMethodName (mi));
 					}
 				}
 			}
 			return signature.ToString ();
 		}
-
 		protected string ToSignature (TType type, ObjCMember member, bool forProperty = false)
 		{
 			bool success = true;
@@ -2455,11 +2473,11 @@ namespace XamCore.Registrar {
 			case "System.Double": return "d";
 			case "System.Boolean":
 				// map managed 'bool' to ObjC BOOL = 'unsigned char' in OSX and 32bit iOS architectures and 'bool' in 64bit iOS architectures
-				#if MONOMAC
+#if MONOMAC
 				return "c";
-				#else
+#else
 				return Is64Bits ? "B" : "c";
-				#endif
+#endif
 			case "System.Void": return "v";
 			case "System.String":
 				return forProperty ? "@\"NSString\"" : "@";
@@ -2470,7 +2488,7 @@ namespace XamCore.Registrar {
 			case "System.nfloat":
 				return Is64Bits ? "d" : "f";
 			case "System.DateTime":
-				throw CreateException (4102, member, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsDualBuild ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", member.FullName);
+				throw CreateException (4102, member, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsUnified ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", member.FullName);
 			}
 
 			if (Is (type, ObjCRuntime, "Selector"))

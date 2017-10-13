@@ -19,17 +19,18 @@ using XamCore.ObjCRuntime;
 using XamCore.UIKit;
 #endif
 
-namespace XamCore.Registrar {
+namespace XamCore.Registrar
+{
 	// Somewhere to put shared code between the old and the new dynamic registrars.
 	// Putting code in either of those classes will increase the executable size,
 	// since unused code will be pulled in by the linker.
-	static class SharedDynamic {
+	static class SharedDynamic
+	{
 		public static Dictionary<MethodBase, List<MethodBase>> PrepareInterfaceMethodMapping (Type type)
 		{
 			Dictionary<MethodBase, List<MethodBase>> rv = null;
-			var ifaces = type.FindInterfaces ((v, o) =>
-			                                  {
-				var attribs = v.GetCustomAttributes (typeof(ProtocolAttribute), true);
+			var ifaces = type.FindInterfaces ((v, o) => {
+				var attribs = v.GetCustomAttributes (typeof (ProtocolAttribute), true);
 				return attribs != null && attribs.Length > 0;
 			}, null);
 
@@ -55,7 +56,7 @@ namespace XamCore.Registrar {
 
 			return rv;
 		}
-		
+
 		public static T GetOneAttribute<T> (ICustomAttributeProvider provider) where T : Attribute
 		{
 			var attribs = provider.GetCustomAttributes (typeof (T), false);
@@ -74,7 +75,8 @@ namespace XamCore.Registrar {
 		}
 	}
 
-	class DynamicRegistrar : Registrar {
+	class DynamicRegistrar : Registrar
+	{
 		Dictionary<IntPtr, ObjCType> type_map;
 		static Dictionary<string, object> registered_assemblies; // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
 
@@ -83,14 +85,14 @@ namespace XamCore.Registrar {
 		// so that it's not queried and mutated at the same time from multiple threads.
 		// Note that the registrar is already making sure it's not _mutated_ from
 		// multiple threads at the same time.
-		Dictionary <Type, object> custom_type_map; // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
+		Dictionary<Type, object> custom_type_map; // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
 
 		protected object lock_obj = new object ();
 
 		public DynamicRegistrar ()
 		{
 			type_map = new Dictionary<IntPtr, ObjCType> (Runtime.IntPtrEqualityComparer);
-			custom_type_map = new Dictionary <Type, object> (Runtime.TypeEqualityComparer);
+			custom_type_map = new Dictionary<Type, object> (Runtime.TypeEqualityComparer);
 		}
 
 		protected override bool SkipRegisterAssembly (Assembly assembly)
@@ -141,24 +143,6 @@ namespace XamCore.Registrar {
 		protected override bool Is64Bits {
 			get {
 				return IntPtr.Size == 8;
-			}
-		}
-
-		protected override bool IsDualBuildImpl {
-			get {
-				return NSObject.PlatformAssembly.GetName ().Name == 
-#if MONOMAC
-					"Xamarin.Mac";
-#elif TVOS
-					"Xamarin.TVOS";
-#elif WATCH
-					"Xamarin.WatchOS";
-#elif IOS
-					"Xamarin.iOS";
-#else
-	#error unknown platform
-					"unknown platform";
-#endif
 			}
 		}
 
@@ -352,7 +336,7 @@ namespace XamCore.Registrar {
 #elif MONOMAC
 				return "Mac";
 #else
-	#error No platform
+#error No platform
 #endif
 			}
 		}
@@ -621,7 +605,7 @@ namespace XamCore.Registrar {
 		{
 			isNativeEnum = false;
 			if (type.IsEnum)
-				isNativeEnum = IsDualBuildImpl && type.IsDefined (typeof (NativeAttribute), false);
+				isNativeEnum = IsUnified && type.IsDefined (typeof (NativeAttribute), false);
 			return type.IsEnum;
 		}
 

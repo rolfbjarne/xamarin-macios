@@ -85,20 +85,6 @@ namespace XamCore.ObjCRuntime {
 
 		unsafe void SetupBlock (Delegate trampoline, Delegate userDelegate, bool safe)
 		{
-			isa = block_class;
-			invoke = Marshal.GetFunctionPointerForDelegate (trampoline);
-			object delegates;
-			if (safe) {
-				delegates = new Tuple<Delegate, Delegate> (trampoline, userDelegate);
-			} else {
-				delegates = userDelegate;
-			}
-			local_handle = (IntPtr) GCHandle.Alloc (delegates);
-			global_handle = IntPtr.Zero;
-			flags = BlockFlags.BLOCK_HAS_COPY_DISPOSE | BlockFlags.BLOCK_HAS_SIGNATURE;
-
-			/* FIXME: support stret blocks */
-
 			// We need to get the signature of the target method, so that we can compute
 			// the ObjC signature correctly (the generated method that's actually
 			// invoked by native code does not have enough type information to compute
@@ -117,12 +103,31 @@ namespace XamCore.ObjCRuntime {
 				blockSignature = false;
 			}
 
+			var signature = Runtime.ComputeSignature (userMethod, blockSignature);
+			SetupBlockImpl (trampoline, userDelegate, safe, signature);
+		}
+
+		unsafe void SetupBlockImpl (Delegate trampoline, Delegate userDelegate, bool safe, string signature)
+		{
+			isa = block_class;
+			invoke = Marshal.GetFunctionPointerForDelegate (trampoline);
+			object delegates;
+			if (safe) {
+				delegates = new Tuple<Delegate, Delegate> (trampoline, userDelegate);
+			} else {
+				delegates = userDelegate;
+			}
+			local_handle = (IntPtr) GCHandle.Alloc (delegates);
+			global_handle = IntPtr.Zero;
+			flags = BlockFlags.BLOCK_HAS_COPY_DISPOSE | BlockFlags.BLOCK_HAS_SIGNATURE;
+
+			/* FIXME: support stret blocks */
+
 			// we allocate one big block of memory, the first part is the BlockDescriptor, 
 			// the second part is the signature string (no need to allocate a second time
 			// for the signature if we can avoid it). One descriptor is allocated for every 
 			// Block; this is potentially something the static registrar can fix, since it
 			// should know every possible trampoline signature.
-			var signature = Runtime.ComputeSignature (userMethod, blockSignature);
 			var bytes = System.Text.Encoding.UTF8.GetBytes (signature);
 			var desclen = sizeof (XamarinBlockDescriptor) + bytes.Length + 1 /* null character */;
 			var descptr = Marshal.AllocHGlobal (desclen);

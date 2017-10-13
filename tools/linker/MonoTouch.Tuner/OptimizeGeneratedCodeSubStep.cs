@@ -4,6 +4,7 @@ using Mono.Tuner;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Xamarin.Linker;
+using Xamarin.Bundler;
 
 namespace MonoTouch.Tuner {
 	
@@ -33,6 +34,23 @@ namespace MonoTouch.Tuner {
 
 		public bool IsDualBuild {
 			get { return Options.IsDualBuild; }
+		}
+
+		MethodDefinition setupblock_def;
+		MethodReference GetBlockSetupImpl (MethodDefinition caller)
+		{
+			if (setupblock_def == null) {
+				var type = LinkContext.Target.ProductAssembly.MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				foreach (var method in type.Methods) {
+					if (method.Name != "SetupBlockImpl")
+						continue;
+					setupblock_def = method;
+					break;
+				}
+				if (setupblock_def == null)
+					throw new NotImplementedException ();
+			}
+			return caller.Module.ImportReference (setupblock_def);
 		}
 
 		LinkerOptions Options { get; set; }
@@ -77,7 +95,7 @@ namespace MonoTouch.Tuner {
 			for (int i = 0; i < instructions.Count; i++) {
 				switch (instructions [i].OpCode.Code) {
 				case Code.Call:
-					ProcessCalls (method, i);
+					i += ProcessCalls (method, i);
 					break;
 				case Code.Ldsfld:
 					ProcessLoadStaticField (method, i);
@@ -90,21 +108,118 @@ namespace MonoTouch.Tuner {
 				}
 			}
 		}
-		
-		void ProcessCalls (MethodDefinition caller, int i)
+
+		TypeReference InflateType (GenericInstanceType git, TypeReference type)
+		{
+			var gt = type as GenericParameter;
+			if (gt != null)
+				return git.GenericArguments [gt.Position];
+			if (type is TypeSpecification)
+				throw new NotImplementedException ();
+			return type;
+		}
+
+		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition method)
+		{
+			var git = inflatedDeclaringType as GenericInstanceType;
+			if (git == null)
+				return method;
+			var mr = new MethodReference (method.Name, InflateType (git, method.ReturnType), git);
+			if (method.HasParameters) {
+				for (int i = 0; i < method.Parameters.Count; i++) {
+					var p = new ParameterDefinition (method.Parameters [i].Name, method.Parameters [i].Attributes, InflateType (git, method.Parameters [i].ParameterType));
+					mr.Parameters.Add (p);
+				}
+			}
+			return mr;
+		}
+
+		// returns the number of instructions added (if positive) or removed (if negative)
+		int ProcessCalls (MethodDefinition caller, int i)
 		{
 			var instructions = caller.Body.Instructions;
 			Instruction ins = instructions [i];
 			var mr = ins.Operand as MethodReference;
 			// if it could not be resolved to a definition then it won't be NSObject
 			if (mr == null)
-				return;
+				return 0;
 
 			switch (mr.Name) {
+			case "SetupBlock":
+			case "SetupBlockUnsafe":
+				if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "BlockLiteral"))
+					return 0;
+				var prev = ins.Previous;
+				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected previous instruction to be Pop0, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected previous instruction to be Push1, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				}
+				prev = prev.Previous;
+				TypeDefinition delegateType = null;
+
+				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Pop0, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Push1, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				} else if (prev.OpCode.Code == Code.Ldsfld) {
+					delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType.Resolve ();
+				} else {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Ldsfld, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				}
+
+				TypeReference userDelegateType = null;
+				foreach (var attrib in delegateType.CustomAttributes) {
+					var attribType = attrib.Constructor.DeclaringType;
+					if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
+						continue;
+					userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
+					break;
+				}
+				bool blockSignature;
+				MethodReference userMethod = null;
+				if (userDelegateType != null) {
+					var userDelegateTypeDefinition = userDelegateType.Resolve ();
+					MethodDefinition userMethodDefinition = null;
+					foreach (var method in userDelegateTypeDefinition.Methods) {
+						if (method.Name != "Invoke")
+							continue;
+						userMethodDefinition = method;
+						break;
+					}
+					if (userMethodDefinition == null)
+						throw new NotImplementedException ();
+					blockSignature = true;
+					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+				} else {
+					throw new NotImplementedException ();
+				}
+				string signature;
+				try {
+					var parameters = new TypeReference [userMethod.Parameters.Count];
+					for (int p = 0; p < parameters.Length; p++)
+						parameters [p] = userMethod.Parameters [p].ParameterType;
+					signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, isBlockSignature: blockSignature);
+				} catch (Exception e) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: {2}", caller, i, e.Message);
+					signature = "BROKEN SIGNATURE"; // FIXME: fix the broken binding
+				}
+
+				instructions.Insert (i, Instruction.Create (OpCodes.Ldstr, signature));
+				instructions.Insert (i, Instruction.Create (mr.Name == "SetupBlockUnsafe" ? OpCodes.Ldc_I4_0 : OpCodes.Ldc_I4_1));
+				ins.Operand = GetBlockSetupImpl (caller);
+
+				Driver.Log (1, "Optimized {0} at index {1}", caller, i);
+				return 2;
 			case "IsNewRefcountEnabled":
 				// note: calling IsNSObject would check inheritance (time consuming)
 				if (!mr.DeclaringType.Is (Namespaces.Foundation, "NSObject"))
-					return;
+					return 0;
 
 				Nop (ins);							// call bool MonoTouch.Foundation.NSObject::IsNewRefcountEnabled()
 				ins = instructions [++i];			// brtrue IL_x
@@ -119,7 +234,7 @@ namespace MonoTouch.Tuner {
 				break;
 			case "EnsureUIThread":
 				if (EnsureUIThread || !mr.DeclaringType.Is (Namespaces.UIKit, "UIApplication"))
-					return;
+					return 0;
 #if DEBUG
 				Console.WriteLine ("\t{0} EnsureUIThread {1}", caller, EnsureUIThread);
 #endif						
@@ -127,16 +242,16 @@ namespace MonoTouch.Tuner {
 				break;
 			case "get_Size":
 				if (!ApplyIntPtrSizeOptimization)
-					return;
+					return 0;
 				// This will optimize code of following code:
 				// if (IntPtr.Size == 8) { ... } else { ... }
 
 				// only if we're linking bindings with architecture specific code paths
 				if (!mr.DeclaringType.Is ("System", "IntPtr"))
-					return;
+					return 0;
 
 				if (!(ins.Next.OpCode == OpCodes.Ldc_I4_8 && (ins.Next.Next.OpCode == OpCodes.Bne_Un || ins.Next.Next.OpCode == OpCodes.Bne_Un_S)))
-					return;
+					return 0;
 #if DEBUG
 				Console.WriteLine ("\t{0} get_Size {1} bits", caller, Arch * 8);
 #endif
@@ -187,15 +302,17 @@ namespace MonoTouch.Tuner {
 			case "get_IsDirectBinding":
 				// Unified use a property (getter) to check the condition (while Classic used a field)
 				if (isdirectbinding_check_required)
-					return;
+					return 0;
 				if (!mr.DeclaringType.Is (Namespaces.Foundation, "NSObject"))
-					return;
+					return 0;
 #if DEBUG
 				Console.WriteLine ("NSObject.get_IsDirectBinding called inside {0}", caller);
 #endif
 				ProcessIsDirectBinding (caller, ins);
 				break;
 			}
+
+			return 0;
 		}
 
 		static bool IsField (Instruction ins, string nspace, string type, string field)

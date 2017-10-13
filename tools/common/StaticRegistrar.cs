@@ -204,37 +204,15 @@ namespace XamCore.Registrar {
 		}
 	}
 
-	static class SharedStatic {
+	static class SharedStatic
+	{
 		public static bool IsPlatformType (this TypeReference type, string @namespace, string name)
 		{
-			if (Registrar.IsDualBuild) {
+			if (Registrar.IsUnified) {
 				return type.Is (@namespace, name);
 			} else {
 				return type.Is (Registrar.CompatNamespace + "." + @namespace, name);
 			}
-		}
-
-		public static bool TryGetAttributeImpl (ICustomAttributeProvider provider, string @namespace, string attributeName, out CustomAttribute attribute)
-		{
-			attribute = null;
-			if (!provider.HasCustomAttributes)
-				return false;
-
-			foreach (CustomAttribute custom_attribute in provider.CustomAttributes) {
-				if (!custom_attribute.Constructor.DeclaringType.Is (@namespace, attributeName))
-					continue;
-
-				attribute = custom_attribute;
-				return true;
-			}
-
-			return false;
-		}
-
-		public static bool HasAttribute (ICustomAttributeProvider provider, string @namespace, string attributeName)
-		{
-			CustomAttribute attrib;
-			return TryGetAttributeImpl (provider,  @namespace, attributeName, out attrib);
 		}
 
 		public static bool TypeMatch (IModifierType a, IModifierType b)
@@ -312,8 +290,11 @@ namespace XamCore.Registrar {
 
 			return true;
 		}
+	}
 
-		static void CollectInterfaces (ref List<TypeDefinition> ifaces, TypeDefinition type)
+	class StaticRegistrar : Registrar
+	{
+		void CollectInterfaces (ref List<TypeDefinition> ifaces, TypeDefinition type)
 		{
 			if (type == null)
 				return;
@@ -341,7 +322,7 @@ namespace XamCore.Registrar {
 			}
 		}
 
-		public static Dictionary<MethodDefinition, List<MethodDefinition>> PrepareInterfaceMethodMapping (TypeReference type)
+		public Dictionary<MethodDefinition, List<MethodDefinition>> PrepareInterfaceMethodMapping (TypeReference type)
 		{
 			TypeDefinition td = type.Resolve ();
 			List<TypeDefinition> ifaces = null;
@@ -501,7 +482,7 @@ namespace XamCore.Registrar {
 				return false;
 			}
 
-			var type = tr.Resolve ();
+			var type = tr.GetElementType ().Resolve ();
 			while (type != null) {
 				if (type.HasInterfaces) {
 					foreach (var iface in type.Interfaces)
@@ -514,9 +495,7 @@ namespace XamCore.Registrar {
 
 			return tr.Is (Registrar.ObjCRuntime, Registrar.StringConstants.INativeObject);
 		}
-	}
 
-	class StaticRegistrar : Registrar{
 		public Target Target { get; private set; }
 		public bool IsSingleAssembly { get { return !string.IsNullOrEmpty (single_assembly); } }
 
@@ -540,6 +519,51 @@ namespace XamCore.Registrar {
 					availability_annotations = LinkContext?.Annotations?.GetCustomAnnotations ("Availability");
 				return availability_annotations;
 			}
+		}
+
+		IEnumerable<ICustomAttribute> GetCustomAttributes (ICustomAttributeProvider provider, string @namespace, string name, bool inherits = false)
+		{
+			var dict = LinkContext?.Annotations?.GetCustomAnnotations (name);
+			object annotations = null;
+
+			if (dict?.TryGetValue (provider, out annotations) == true) {
+				var attributes = (IEnumerable<ICustomAttribute>) annotations;
+				foreach (var attrib in attributes) {
+					if (IsAttributeMatch (attrib, @namespace, name, inherits))
+						yield return attrib;
+				}
+			}
+
+			if (provider.HasCustomAttributes) {
+				foreach (var attrib in provider.CustomAttributes) {
+					if (IsAttributeMatch (attrib, @namespace, name, inherits))
+					    yield return attrib;
+				}
+			}
+		}
+
+		public bool TryGetAttribute (ICustomAttributeProvider provider, string @namespace, string attributeName, out ICustomAttribute attribute)
+		{
+			attribute = null;
+
+			foreach (var custom_attribute in GetCustomAttributes (provider, @namespace, attributeName)) {
+				attribute = custom_attribute;
+				return true;
+			}
+
+			return false;
+		}
+
+		public bool HasAttribute (ICustomAttributeProvider provider, string @namespace, string name, bool inherits = false)
+		{
+			return GetCustomAttributes (provider, @namespace, name, inherits).Any ();
+		}
+
+		bool IsAttributeMatch (ICustomAttribute attribute, string @namespace, string name, bool inherits)
+		{
+			if (inherits)
+				return attribute.AttributeType.Inherits (@namespace, name);
+			return attribute.AttributeType.Is (@namespace, name);
 		}
 
 		void Init (Application app)
@@ -658,15 +682,13 @@ namespace XamCore.Registrar {
 
 		protected override bool HasReleaseAttribute (MethodDefinition method)
 		{
-			CustomAttribute attrib;
 			method = GetBaseMethodInTypeHierarchy (method);
-			return SharedStatic.TryGetAttributeImpl (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute, out attrib);
+			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);
 		}
 
 		protected override bool HasThisAttribute (MethodDefinition method)
 		{
-			CustomAttribute attrib;
-			return SharedStatic.TryGetAttributeImpl (method, "System.Runtime.CompilerServices", "ExtensionAttribute", out attrib);
+			return HasAttribute (method, "System.Runtime.CompilerServices", "ExtensionAttribute");
 		}
 
 #if MTOUCH
@@ -690,16 +712,6 @@ namespace XamCore.Registrar {
 				if (IsSingleAssembly)
 					return App.Is64Build;
 				return Target.Is64Build;
-			}
-		}
-
-		protected override bool IsDualBuildImpl {
-			get {
-#if MMP
-				return Xamarin.Bundler.Driver.IsUnified;
-#else
-				return true;
-#endif
 			}
 		}
 
@@ -930,7 +942,7 @@ namespace XamCore.Registrar {
 		protected override bool IsDelegate (TypeReference tr)
 		{
 			var type = tr.Resolve ();
-			return SharedStatic.IsDelegate (type);
+			return IsDelegate (type);
 		}
 
 		protected override bool IsValueType (TypeReference type)
@@ -941,7 +953,7 @@ namespace XamCore.Registrar {
 
 		bool IsNativeEnum (TypeDefinition td)
 		{
-			return IsDualBuild && SharedStatic.HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
+			return IsUnified && HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 		}
 
 		protected override bool IsNullable (TypeReference type)
@@ -1081,7 +1093,7 @@ namespace XamCore.Registrar {
 
 		protected override bool IsINativeObject (TypeReference tr)
 		{
-			return SharedStatic.IsNativeObject (tr);
+			return IsNativeObject (tr);
 		}
 
 		protected override TypeReference GetBaseType (TypeReference tr)
@@ -1095,7 +1107,7 @@ namespace XamCore.Registrar {
 				}
 				return null;
 			}
-			var type = tr.Resolve ();
+			var type = tr.GetElementType ().Resolve ();
 			if (type.BaseType == null)
 				return null;
 
@@ -1110,7 +1122,7 @@ namespace XamCore.Registrar {
 		protected override TypeReference GetEnumUnderlyingType (TypeReference tr)
 		{
 			var type = tr.Resolve ();
-			return SharedStatic.GetEnumUnderlyingType (type);
+			return GetEnumUnderlyingType (type);
 		}
 
 		protected override TypeReference[] GetParameters (MethodDefinition method)
@@ -1149,18 +1161,18 @@ namespace XamCore.Registrar {
 
 		protected override bool TryGetAttribute (TypeReference type, string attributeNamespace, string attributeType, out object attribute)
 		{
-			CustomAttribute attrib;
-			bool res = SharedStatic.TryGetAttributeImpl (type.Resolve (), attributeNamespace, attributeType, out attrib);
+			ICustomAttribute attrib;
+			bool res = TryGetAttribute (type.Resolve (), attributeNamespace, attributeType, out attrib);
 			attribute = attrib;
 			return res;
 		}
 
 		public override RegisterAttribute GetRegisterAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 			RegisterAttribute rv = null;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.RegisterAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.RegisterAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments) {
@@ -1204,10 +1216,10 @@ namespace XamCore.Registrar {
 
 		protected override CategoryAttribute GetCategoryAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 			string name = null;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), ObjCRuntime, StringConstants.CategoryAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), ObjCRuntime, StringConstants.CategoryAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments)
@@ -1243,9 +1255,9 @@ namespace XamCore.Registrar {
 
 		protected override ProtocolAttribute GetProtocolAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasProperties)
@@ -1287,13 +1299,7 @@ namespace XamCore.Registrar {
 		{
 			var td = type.Resolve ();
 
-			if (!td.HasCustomAttributes)
-				yield break;
-
-			foreach (var ca in td.CustomAttributes) {
-				if (!ca.Constructor.DeclaringType.Is (Foundation, StringConstants.ProtocolMemberAttribute))
-					continue;
-
+			foreach (var ca in GetCustomAttributes (td, Foundation, StringConstants.ProtocolMemberAttribute)) {
 				var rv = new ProtocolMemberAttribute ();
 				foreach (var prop in ca.Properties) {
 					switch (prop.Name) {
@@ -1354,12 +1360,7 @@ namespace XamCore.Registrar {
 			}
 		}
 
-		void CollectAvailabilityAttributes (IEnumerable<CustomAttribute> attributes, ref List<AvailabilityBaseAttribute> list)
-		{
-			CollectAvailabilityAttributes (attributes.Select ((v) => new Tuple<CustomAttribute, TypeReference> (v, v.Constructor.DeclaringType)), ref list);
-		}
-
-		void CollectAvailabilityAttributes (IEnumerable<Tuple<CustomAttribute, TypeReference>> attributes, ref List<AvailabilityBaseAttribute> list)
+		void CollectAvailabilityAttributes (IEnumerable<ICustomAttribute> attributes, ref List<AvailabilityBaseAttribute> list)
 		{
 			PlatformName currentPlatform;
 #if MTOUCH
@@ -1381,8 +1382,8 @@ namespace XamCore.Registrar {
 #endif
 
 			foreach (var tuple in attributes) {
-				var ca = tuple.Item1;
-				var caType = tuple.Item2;
+				var ca = tuple;
+				var caType = tuple.AttributeType;
 				if (caType.Namespace != ObjCRuntime)
 					continue;
 				
@@ -1511,7 +1512,7 @@ namespace XamCore.Registrar {
 			if (AvailabilityAnnotations != null) {
 				object attribObjects;
 				if (AvailabilityAnnotations.TryGetValue (td, out attribObjects))
-					CollectAvailabilityAttributes ((List<Tuple<CustomAttribute, TypeReference>>) attribObjects, ref rv);
+					CollectAvailabilityAttributes ((IEnumerable<ICustomAttribute>) attribObjects, ref rv);
 			}
 
 			return rv;
@@ -1524,14 +1525,14 @@ namespace XamCore.Registrar {
 
 		protected override Dictionary<MethodDefinition, List<MethodDefinition>> PrepareMethodMapping (TypeReference type)
 		{
-			return SharedStatic.PrepareInterfaceMethodMapping (type);
+			return PrepareInterfaceMethodMapping (type);
 		}
 
 		protected override TypeReference GetProtocolAttributeWrapperType (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
 				return null;
 
 			if (attrib.HasProperties) {
@@ -1546,14 +1547,14 @@ namespace XamCore.Registrar {
 
 		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
 			if (property == null)
 				return null;
 
 			property = GetBasePropertyInTypeHierarchy (property);
 
-			if (!SharedStatic.TryGetAttributeImpl (property, ObjCRuntime, "BindAsAttribute", out attrib))
+			if (!TryGetAttribute (property, ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
 			return CreateBindAsAttribute (attrib, property);
@@ -1561,20 +1562,20 @@ namespace XamCore.Registrar {
 
 		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
 			if (method == null)
 				return null;
 
 			method = GetBaseMethodInTypeHierarchy (method);
 
-			if (!SharedStatic.TryGetAttributeImpl (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
+			if (!TryGetAttribute (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
 			return CreateBindAsAttribute (attrib, method);
 		}
 
-		static BindAsAttribute CreateBindAsAttribute (CustomAttribute attrib, IMemberDefinition member)
+		static BindAsAttribute CreateBindAsAttribute (ICustomAttribute attrib, IMemberDefinition member)
 		{
 			TypeReference originalType = null;
 			if (attrib.HasFields) {
@@ -1610,9 +1611,9 @@ namespace XamCore.Registrar {
 
 		protected override ConnectAttribute GetConnectAttribute (PropertyDefinition property)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!SharedStatic.TryGetAttributeImpl (property, Foundation, StringConstants.ConnectAttribute, out attrib))
+			if (!TryGetAttribute (property, Foundation, StringConstants.ConnectAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments)
@@ -1626,16 +1627,13 @@ namespace XamCore.Registrar {
 			}
 		}
 
-		static ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
+		ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
 		{
 			bool is_variadic = false;
 			var attribute = GetExportAttribute (candidate);
 
 			if (attribute == null)
 				return null;
-
-			if (attribute.Constructor.Parameters.Count != attribute.ConstructorArguments.Count)
-				throw ErrorHelper.CreateError (4124, "Invalid ExportAttribute found on '{0}.{1}'. Please file a bug report at http://bugzilla.xamarin.com", candidate.DeclaringType.FullName, candidate.Name);
 
 			if (attribute.HasProperties) {
 				foreach (var prop in attribute.Properties) {
@@ -1662,16 +1660,9 @@ namespace XamCore.Registrar {
 		}
 
 		// [Export] is not sealed anymore - so we cannot simply compare strings
-		static CustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
+		ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
 		{
-			if (!candidate.HasCustomAttributes)
-				return null;
-			
-			foreach (CustomAttribute ca in candidate.CustomAttributes) {
-				if (ca.Constructor.DeclaringType.Inherits (Foundation, StringConstants.ExportAttribute))
-					return ca;
-			}
-			return null;
+			return GetCustomAttributes (candidate, Foundation, StringConstants.ExportAttribute, true).FirstOrDefault ();
 		}
 		
 		PropertyDefinition GetBasePropertyInTypeHierarchy (PropertyDefinition property)
@@ -1795,7 +1786,7 @@ namespace XamCore.Registrar {
 			if (aname != PlatformAssembly)
 				return false;
 				
-			if (IsDualBuild) {
+			if (IsUnified) {
 				return Driver.GetFrameworks (App).ContainsKey (type.Namespace);
 			} else {
 				return type.Namespace.StartsWith (CompatNamespace + ".", StringComparison.Ordinal);
@@ -1838,7 +1829,7 @@ namespace XamCore.Registrar {
 			}
 
 			// Strip off the 'MonoTouch.' prefix
-			if (!IsDualBuild)
+			if (!IsUnified)
 				ns = type.Namespace.Substring (ns.IndexOf ('.') + 1);
 			
 			CheckNamespace (ns, exceptions);
@@ -2185,7 +2176,7 @@ namespace XamCore.Registrar {
 				CheckNamespace ("CoreGraphics", exceptions);
 				return "CGFloat";
 			case "System.DateTime":
-				throw ErrorHelper.CreateError (4102, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsDualBuild ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", descriptiveMethodName);
+				throw ErrorHelper.CreateError (4102, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsUnified ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", descriptiveMethodName);
 			case "ObjCRuntime.Selector":
 			case CompatNamespace + ".ObjCRuntime.Selector": return "SEL";
 			case "ObjCRuntime.Class":
@@ -2201,8 +2192,8 @@ namespace XamCore.Registrar {
 						return GetExportedTypeName (td) + " *";
 					}
 				} else if (td.IsEnum) {
-					if (IsDualBuild && SharedStatic.HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute)) {
-						switch (SharedStatic.GetEnumUnderlyingType (td).FullName) {
+					if (IsUnified && HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute)) {
+						switch (GetEnumUnderlyingType (td).FullName) {
 						case "System.Int64":
 							return "NSInteger";
 						case "System.UInt64":
@@ -2213,7 +2204,7 @@ namespace XamCore.Registrar {
 						}
 					}
 
-					return ToObjCParameterType (SharedStatic.GetEnumUnderlyingType (td), descriptiveMethodName, exceptions, inMethod);
+					return ToObjCParameterType (GetEnumUnderlyingType (td), descriptiveMethodName, exceptions, inMethod);
 				} else if (td.IsValueType) {
 					if (IsPlatformType (td)) {
 						CheckNamespace (td, exceptions);
@@ -2221,7 +2212,7 @@ namespace XamCore.Registrar {
 					}
 					return CheckStructure (td, descriptiveMethodName, inMethod);
 				} else {
-					return SharedStatic.ToObjCType (td);
+					return ToObjCType (td);
 				}
 			}
 		}
@@ -2387,7 +2378,7 @@ namespace XamCore.Registrar {
 		static bool IsMetalType (ObjCType type)
 		{
 			var ns = type.Type.Namespace;
-			if (!IsDualBuild)
+			if (!IsUnified)
 				ns = ns.Substring (CompatNamespace.Length + 1);
 
 			switch (ns) {
@@ -3061,8 +3052,8 @@ namespace XamCore.Registrar {
 					original_objctype = ToObjCParameterType (type, descriptiveMethodName, exceptions,  method.Method);
 					objctype = ToObjCParameterType (type, descriptiveMethodName, exceptions, method.Method) + "*";
 				} else if (td.IsEnum) {
-					type = SharedStatic.GetEnumUnderlyingType (td);
-					isNativeEnum = IsDualBuild && SharedStatic.HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
+					type = GetEnumUnderlyingType (td);
+					isNativeEnum = IsUnified && HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 					td = type.Resolve ();
 				}
 
@@ -3198,7 +3189,7 @@ namespace XamCore.Registrar {
 						if (elementType.FullName == "System.String") {
 							setup_call_stack.AppendLine ("NSString *sv = (NSString *) [arr objectAtIndex: j];", i);
 							setup_call_stack.AppendLine ("mono_array_set (marr, MonoString *, j, mono_string_new (mono_domain_get (), [sv UTF8String]));", i);
-						} else if (IsNSObject (elementType) || (elementType.Namespace == "System" && elementType.Name == "Object") || (isNativeObject = SharedStatic.IsNativeObject (elementType))) {
+						} else if (IsNSObject (elementType) || (elementType.Namespace == "System" && elementType.Name == "Object") || (isNativeObject = IsNativeObject (elementType))) {
 							setup_call_stack.AppendLine ("NSObject *nobj = [arr objectAtIndex: j];");
 							setup_call_stack.AppendLine ("MonoObject *mobj{0} = NULL;", i);
 							setup_call_stack.AppendLine ("if (nobj) {");
@@ -3293,14 +3284,14 @@ namespace XamCore.Registrar {
 							setup_call_stack.AppendLine ("}");
 							setup_call_stack.AppendLine ("arg_ptrs [{0}] = mobj{0};", i);
 
-							if (SharedStatic.HasAttribute (paramBase, ObjCRuntime, StringConstants.TransientAttribute)) {
+							if (HasAttribute (paramBase, ObjCRuntime, StringConstants.TransientAttribute)) {
 								copyback.AppendLine ("if (created{0}) {{", i);
 								copyback.AppendLine ("xamarin_dispose (mobj{0}, &exception_gchandle);", i);
 								copyback.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 								copyback.AppendLine ("}");
 							}
 						}
-					} else if (SharedStatic.IsNativeObject (td)) {
+					} else if (IsNativeObject (td)) {
 						TypeDefinition nativeObjType = td;
 
 						if (td.IsInterface) {
@@ -3493,7 +3484,7 @@ namespace XamCore.Registrar {
 					} else if (type.IsPlatformType ("ObjCRuntime", "Class")) {
 						setup_return.AppendLine ("res = xamarin_get_class_handle (retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
-					} else if (SharedStatic.IsNativeObject (type)) {
+					} else if (IsNativeObject (type)) {
 						setup_return.AppendLine ("{0} retobj;", rettype);
 						setup_return.AppendLine ("retobj = xamarin_get_handle_for_inativeobject ((MonoObject *) retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
@@ -3512,7 +3503,7 @@ namespace XamCore.Registrar {
 							setup_return.AppendLine ("[nsstr autorelease];");
 						setup_return.AppendLine ("mono_free (str);");
 						setup_return.AppendLine ("res = nsstr;");
-					} else if (SharedStatic.IsDelegate (type.Resolve ())) {
+					} else if (IsDelegate (type.Resolve ())) {
 						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else {
@@ -3774,7 +3765,7 @@ namespace XamCore.Registrar {
 
 #if MMP
 			// Remove 'MonoMac.' namespace prefix to make switch smaller
-			if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+			if (!Registrar.IsUnified && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 				underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
 #endif
 
@@ -3808,7 +3799,7 @@ namespace XamCore.Registrar {
 
 #if MMP
 			// Remove 'MonoMac.' namespace prefix to make switch smaller
-			if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+			if (!Registrar.IsUnified && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 				underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
 #endif
 
@@ -4270,6 +4261,7 @@ namespace XamCore.Registrar {
 
 		protected override bool SkipRegisterAssembly (AssemblyDefinition assembly)
 		{
+				
 			if (assembly.HasCustomAttributes) {
 				foreach (var ca in assembly.CustomAttributes) {
 					var t = ca.AttributeType.Resolve ();

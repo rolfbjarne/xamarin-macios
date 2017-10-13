@@ -218,7 +218,8 @@ namespace XamCore.ObjCRuntime {
 
 			NSObjectClass = NSObject.Initialize ();
 
-			Registrar = new DynamicRegistrar ();
+			if (DynamicRegistrationSupported)
+				Registrar = new DynamicRegistrar ();
 			RegisterDelegates (options);
 			Class.Initialize (options);
 			InitializePlatform (options);

@@ -83,6 +83,7 @@ namespace Mono.Tuner
 
 			var runtime_type = product_assembly.MainModule.GetType ("ObjCRuntime", "Runtime");
 			ProcessMethods (runtime_type.Methods.Where ((v) => v.Name == "RegisterDelegates"));
+			ProcessMethods (runtime_type.Methods.Where ((v) => v.Name == "Initialize"));
 
 			var get_DynamicRegistrationSupported = runtime_type.Methods.First ((v) => v.Name == "get_DynamicRegistrationSupported");
 			var instructions = get_DynamicRegistrationSupported.Body.Instructions;

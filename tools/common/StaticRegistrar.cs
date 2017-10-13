@@ -204,37 +204,15 @@ namespace XamCore.Registrar {
 		}
 	}
 
-	static class SharedStatic {
+	static class SharedStatic
+	{
 		public static bool IsPlatformType (this TypeReference type, string @namespace, string name)
 		{
-			if (Registrar.IsDualBuild) {
+			if (Registrar.IsUnified) {
 				return type.Is (@namespace, name);
 			} else {
 				return type.Is (Registrar.CompatNamespace + "." + @namespace, name);
 			}
-		}
-
-		public static bool TryGetAttributeImpl (ICustomAttributeProvider provider, string @namespace, string attributeName, out CustomAttribute attribute)
-		{
-			attribute = null;
-			if (!provider.HasCustomAttributes)
-				return false;
-
-			foreach (CustomAttribute custom_attribute in provider.CustomAttributes) {
-				if (!custom_attribute.Constructor.DeclaringType.Is (@namespace, attributeName))
-					continue;
-
-				attribute = custom_attribute;
-				return true;
-			}
-
-			return false;
-		}
-
-		public static bool HasAttribute (ICustomAttributeProvider provider, string @namespace, string attributeName)
-		{
-			CustomAttribute attrib;
-			return TryGetAttributeImpl (provider,  @namespace, attributeName, out attrib);
 		}
 
 		public static bool TypeMatch (IModifierType a, IModifierType b)
@@ -312,8 +290,11 @@ namespace XamCore.Registrar {
 
 			return true;
 		}
+	}
 
-		static void CollectInterfaces (ref List<TypeDefinition> ifaces, TypeDefinition type)
+	class StaticRegistrar : Registrar
+	{
+		void CollectInterfaces (ref List<TypeDefinition> ifaces, TypeDefinition type)
 		{
 			if (type == null)
 				return;
@@ -328,6 +309,9 @@ namespace XamCore.Registrar {
 				var itd = iface.InterfaceType.Resolve ();
 				CollectInterfaces (ref ifaces, itd);
 
+				if (itd == null)
+					Console.WriteLine ("STOP");
+
 				if (!HasAttribute (itd, Registrar.Foundation, Registrar.StringConstants.ProtocolAttribute))
 					continue;
 
@@ -341,12 +325,15 @@ namespace XamCore.Registrar {
 			}
 		}
 
-		public static Dictionary<MethodDefinition, List<MethodDefinition>> PrepareInterfaceMethodMapping (TypeReference type)
+		public Dictionary<MethodDefinition, List<MethodDefinition>> PrepareInterfaceMethodMapping (TypeReference type)
 		{
 			TypeDefinition td = type.Resolve ();
 			List<TypeDefinition> ifaces = null;
 			List<MethodDefinition> iface_methods;
 			Dictionary<MethodDefinition, List<MethodDefinition>> rv = null;
+
+			if (type.Name.Contains ("CustomAudioUnitFactory"))
+				Console.WriteLine ("STOP");
 
 			CollectInterfaces (ref ifaces, td);
 
@@ -355,6 +342,13 @@ namespace XamCore.Registrar {
 
 			iface_methods = new List<MethodDefinition> ();
 			foreach (var iface in ifaces) {
+				var storedMethods = LinkContext?.GetProtocolMethods (iface.Resolve ());
+				if (storedMethods?.Count > 0) {
+					Console.WriteLine ("YAY");
+					foreach (var imethod in storedMethods)
+						if (!iface_methods.Contains (imethod))
+							iface_methods.Add (imethod);
+				}
 				if (!iface.HasMethods)
 					continue;
 
@@ -501,7 +495,7 @@ namespace XamCore.Registrar {
 				return false;
 			}
 
-			var type = tr.Resolve ();
+			var type = tr.GetElementType ().Resolve ();
 			while (type != null) {
 				if (type.HasInterfaces) {
 					foreach (var iface in type.Interfaces)
@@ -514,9 +508,7 @@ namespace XamCore.Registrar {
 
 			return tr.Is (Registrar.ObjCRuntime, Registrar.StringConstants.INativeObject);
 		}
-	}
 
-	class StaticRegistrar : Registrar{
 		public Target Target { get; private set; }
 		public bool IsSingleAssembly { get { return !string.IsNullOrEmpty (single_assembly); } }
 
@@ -528,7 +520,7 @@ namespace XamCore.Registrar {
 		readonly Version MacOSTenTwelveVersion = new Version (10,12);
 #endif
 
-		public Mono.Linker.LinkContext LinkContext {
+		public Xamarin.Tuner.DerivedLinkContext LinkContext {
 			get {
 				return Target?.LinkContext;
 			}
@@ -540,6 +532,51 @@ namespace XamCore.Registrar {
 					availability_annotations = LinkContext?.Annotations?.GetCustomAnnotations ("Availability");
 				return availability_annotations;
 			}
+		}
+
+		IEnumerable<ICustomAttribute> GetCustomAttributes (ICustomAttributeProvider provider, string @namespace, string name, bool inherits = false)
+		{
+			var dict = LinkContext?.Annotations?.GetCustomAnnotations (name);
+			object annotations = null;
+
+			if (dict?.TryGetValue (provider, out annotations) == true) {
+				var attributes = (IEnumerable<ICustomAttribute>) annotations;
+				foreach (var attrib in attributes) {
+					if (IsAttributeMatch (attrib, @namespace, name, inherits))
+						yield return attrib;
+				}
+			}
+
+			if (provider.HasCustomAttributes) {
+				foreach (var attrib in provider.CustomAttributes) {
+					if (IsAttributeMatch (attrib, @namespace, name, inherits))
+					    yield return attrib;
+				}
+			}
+		}
+
+		public bool TryGetAttribute (ICustomAttributeProvider provider, string @namespace, string attributeName, out ICustomAttribute attribute)
+		{
+			attribute = null;
+
+			foreach (var custom_attribute in GetCustomAttributes (provider, @namespace, attributeName)) {
+				attribute = custom_attribute;
+				return true;
+			}
+
+			return false;
+		}
+
+		public bool HasAttribute (ICustomAttributeProvider provider, string @namespace, string name, bool inherits = false)
+		{
+			return GetCustomAttributes (provider, @namespace, name, inherits).Any ();
+		}
+
+		bool IsAttributeMatch (ICustomAttribute attribute, string @namespace, string name, bool inherits)
+		{
+			if (inherits)
+				return attribute.AttributeType.Inherits (@namespace, name);
+			return attribute.AttributeType.Is (@namespace, name);
 		}
 
 		void Init (Application app)
@@ -658,15 +695,13 @@ namespace XamCore.Registrar {
 
 		protected override bool HasReleaseAttribute (MethodDefinition method)
 		{
-			CustomAttribute attrib;
 			method = GetBaseMethodInTypeHierarchy (method);
-			return SharedStatic.TryGetAttributeImpl (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute, out attrib);
+			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);
 		}
 
 		protected override bool HasThisAttribute (MethodDefinition method)
 		{
-			CustomAttribute attrib;
-			return SharedStatic.TryGetAttributeImpl (method, "System.Runtime.CompilerServices", "ExtensionAttribute", out attrib);
+			return HasAttribute (method, "System.Runtime.CompilerServices", "ExtensionAttribute");
 		}
 
 #if MTOUCH
@@ -690,16 +725,6 @@ namespace XamCore.Registrar {
 				if (IsSingleAssembly)
 					return App.Is64Build;
 				return Target.Is64Build;
-			}
-		}
-
-		protected override bool IsDualBuildImpl {
-			get {
-#if MMP
-				return Xamarin.Bundler.Driver.IsUnified;
-#else
-				return true;
-#endif
 			}
 		}
 
@@ -930,7 +955,7 @@ namespace XamCore.Registrar {
 		protected override bool IsDelegate (TypeReference tr)
 		{
 			var type = tr.Resolve ();
-			return SharedStatic.IsDelegate (type);
+			return IsDelegate (type);
 		}
 
 		protected override bool IsValueType (TypeReference type)
@@ -941,7 +966,7 @@ namespace XamCore.Registrar {
 
 		bool IsNativeEnum (TypeDefinition td)
 		{
-			return IsDualBuild && SharedStatic.HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
+			return IsUnified && HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 		}
 
 		protected override bool IsNullable (TypeReference type)
@@ -996,6 +1021,18 @@ namespace XamCore.Registrar {
 			for (int i = 0; i < td.Interfaces.Count; i++)
 				rv [i] = td.Interfaces [i].InterfaceType.Resolve ();
 			return rv;
+		}
+
+		protected override TypeReference[] GetLinkedAwayInterfaces(TypeReference type)
+		{
+			List<TypeDefinition> linkedAwayInterfaces = null;
+			if (LinkContext?.ProtocolImplementations?.TryGetValue (type.Resolve (), out linkedAwayInterfaces) != true)
+				return null;
+
+			if (linkedAwayInterfaces.Count == 0)
+				return null;
+
+			return linkedAwayInterfaces.ToArray ();
 		}
 
 		protected override TypeReference GetGenericTypeDefinition (TypeReference type)
@@ -1081,7 +1118,7 @@ namespace XamCore.Registrar {
 
 		protected override bool IsINativeObject (TypeReference tr)
 		{
-			return SharedStatic.IsNativeObject (tr);
+			return IsNativeObject (tr);
 		}
 
 		protected override TypeReference GetBaseType (TypeReference tr)
@@ -1095,7 +1132,7 @@ namespace XamCore.Registrar {
 				}
 				return null;
 			}
-			var type = tr.Resolve ();
+			var type = tr.GetElementType ().Resolve ();
 			if (type.BaseType == null)
 				return null;
 
@@ -1110,7 +1147,7 @@ namespace XamCore.Registrar {
 		protected override TypeReference GetEnumUnderlyingType (TypeReference tr)
 		{
 			var type = tr.Resolve ();
-			return SharedStatic.GetEnumUnderlyingType (type);
+			return GetEnumUnderlyingType (type);
 		}
 
 		protected override TypeReference[] GetParameters (MethodDefinition method)
@@ -1149,18 +1186,18 @@ namespace XamCore.Registrar {
 
 		protected override bool TryGetAttribute (TypeReference type, string attributeNamespace, string attributeType, out object attribute)
 		{
-			CustomAttribute attrib;
-			bool res = SharedStatic.TryGetAttributeImpl (type.Resolve (), attributeNamespace, attributeType, out attrib);
+			ICustomAttribute attrib;
+			bool res = TryGetAttribute (type.Resolve (), attributeNamespace, attributeType, out attrib);
 			attribute = attrib;
 			return res;
 		}
 
 		public override RegisterAttribute GetRegisterAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 			RegisterAttribute rv = null;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.RegisterAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.RegisterAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments) {
@@ -1204,10 +1241,10 @@ namespace XamCore.Registrar {
 
 		protected override CategoryAttribute GetCategoryAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 			string name = null;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), ObjCRuntime, StringConstants.CategoryAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), ObjCRuntime, StringConstants.CategoryAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments)
@@ -1243,9 +1280,9 @@ namespace XamCore.Registrar {
 
 		protected override ProtocolAttribute GetProtocolAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasProperties)
@@ -1258,7 +1295,7 @@ namespace XamCore.Registrar {
 					rv.Name = (string) prop.Argument.Value;
 					break;
 				case "WrapperType":
-					rv.WrapperType = (TypeDefinition) prop.Argument.Value;
+					rv.WrapperType = ((TypeReference) prop.Argument.Value).Resolve ();
 					break;
 				case "IsInformal":
 					rv.IsInformal = (bool) prop.Argument.Value;
@@ -1287,13 +1324,7 @@ namespace XamCore.Registrar {
 		{
 			var td = type.Resolve ();
 
-			if (!td.HasCustomAttributes)
-				yield break;
-
-			foreach (var ca in td.CustomAttributes) {
-				if (!ca.Constructor.DeclaringType.Is (Foundation, StringConstants.ProtocolMemberAttribute))
-					continue;
-
+			foreach (var ca in GetCustomAttributes (td, Foundation, StringConstants.ProtocolMemberAttribute)) {
 				var rv = new ProtocolMemberAttribute ();
 				foreach (var prop in ca.Properties) {
 					switch (prop.Name) {
@@ -1354,12 +1385,7 @@ namespace XamCore.Registrar {
 			}
 		}
 
-		void CollectAvailabilityAttributes (IEnumerable<CustomAttribute> attributes, ref List<AvailabilityBaseAttribute> list)
-		{
-			CollectAvailabilityAttributes (attributes.Select ((v) => new Tuple<CustomAttribute, TypeReference> (v, v.Constructor.DeclaringType)), ref list);
-		}
-
-		void CollectAvailabilityAttributes (IEnumerable<Tuple<CustomAttribute, TypeReference>> attributes, ref List<AvailabilityBaseAttribute> list)
+		void CollectAvailabilityAttributes (IEnumerable<ICustomAttribute> attributes, ref List<AvailabilityBaseAttribute> list)
 		{
 			PlatformName currentPlatform;
 #if MTOUCH
@@ -1381,8 +1407,8 @@ namespace XamCore.Registrar {
 #endif
 
 			foreach (var tuple in attributes) {
-				var ca = tuple.Item1;
-				var caType = tuple.Item2;
+				var ca = tuple;
+				var caType = tuple.AttributeType;
 				if (caType.Namespace != ObjCRuntime)
 					continue;
 				
@@ -1511,7 +1537,7 @@ namespace XamCore.Registrar {
 			if (AvailabilityAnnotations != null) {
 				object attribObjects;
 				if (AvailabilityAnnotations.TryGetValue (td, out attribObjects))
-					CollectAvailabilityAttributes ((List<Tuple<CustomAttribute, TypeReference>>) attribObjects, ref rv);
+					CollectAvailabilityAttributes ((IEnumerable<ICustomAttribute>) attribObjects, ref rv);
 			}
 
 			return rv;
@@ -1524,14 +1550,14 @@ namespace XamCore.Registrar {
 
 		protected override Dictionary<MethodDefinition, List<MethodDefinition>> PrepareMethodMapping (TypeReference type)
 		{
-			return SharedStatic.PrepareInterfaceMethodMapping (type);
+			return PrepareInterfaceMethodMapping (type);
 		}
 
 		protected override TypeReference GetProtocolAttributeWrapperType (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!SharedStatic.TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
 				return null;
 
 			if (attrib.HasProperties) {
@@ -1546,14 +1572,14 @@ namespace XamCore.Registrar {
 
 		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
 			if (property == null)
 				return null;
 
 			property = GetBasePropertyInTypeHierarchy (property);
 
-			if (!SharedStatic.TryGetAttributeImpl (property, ObjCRuntime, "BindAsAttribute", out attrib))
+			if (!TryGetAttribute (property, ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
 			return CreateBindAsAttribute (attrib, property);
@@ -1561,20 +1587,20 @@ namespace XamCore.Registrar {
 
 		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
 			if (method == null)
 				return null;
 
 			method = GetBaseMethodInTypeHierarchy (method);
 
-			if (!SharedStatic.TryGetAttributeImpl (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
+			if (!TryGetAttribute (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
 			return CreateBindAsAttribute (attrib, method);
 		}
 
-		static BindAsAttribute CreateBindAsAttribute (CustomAttribute attrib, IMemberDefinition member)
+		static BindAsAttribute CreateBindAsAttribute (ICustomAttribute attrib, IMemberDefinition member)
 		{
 			TypeReference originalType = null;
 			if (attrib.HasFields) {
@@ -1610,9 +1636,9 @@ namespace XamCore.Registrar {
 
 		protected override ConnectAttribute GetConnectAttribute (PropertyDefinition property)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!SharedStatic.TryGetAttributeImpl (property, Foundation, StringConstants.ConnectAttribute, out attrib))
+			if (!TryGetAttribute (property, Foundation, StringConstants.ConnectAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments)
@@ -1626,16 +1652,13 @@ namespace XamCore.Registrar {
 			}
 		}
 
-		static ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
+		ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
 		{
 			bool is_variadic = false;
 			var attribute = GetExportAttribute (candidate);
 
 			if (attribute == null)
 				return null;
-
-			if (attribute.Constructor.Parameters.Count != attribute.ConstructorArguments.Count)
-				throw ErrorHelper.CreateError (4124, "Invalid ExportAttribute found on '{0}.{1}'. Please file a bug report at http://bugzilla.xamarin.com", candidate.DeclaringType.FullName, candidate.Name);
 
 			if (attribute.HasProperties) {
 				foreach (var prop in attribute.Properties) {
@@ -1662,16 +1685,9 @@ namespace XamCore.Registrar {
 		}
 
 		// [Export] is not sealed anymore - so we cannot simply compare strings
-		static CustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
+		ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
 		{
-			if (!candidate.HasCustomAttributes)
-				return null;
-			
-			foreach (CustomAttribute ca in candidate.CustomAttributes) {
-				if (ca.Constructor.DeclaringType.Inherits (Foundation, StringConstants.ExportAttribute))
-					return ca;
-			}
-			return null;
+			return GetCustomAttributes (candidate, Foundation, StringConstants.ExportAttribute, true).FirstOrDefault ();
 		}
 		
 		PropertyDefinition GetBasePropertyInTypeHierarchy (PropertyDefinition property)
@@ -1791,11 +1807,11 @@ namespace XamCore.Registrar {
 			if (type.IsNested)
 				return false;
 
-			var aname = type.Module.Assembly.Name.Name;
+			var aname = type.Module?.Assembly?.Name?.Name;
 			if (aname != PlatformAssembly)
 				return false;
 				
-			if (IsDualBuild) {
+			if (IsUnified) {
 				return Driver.GetFrameworks (App).ContainsKey (type.Namespace);
 			} else {
 				return type.Namespace.StartsWith (CompatNamespace + ".", StringComparison.Ordinal);
@@ -1838,7 +1854,7 @@ namespace XamCore.Registrar {
 			}
 
 			// Strip off the 'MonoTouch.' prefix
-			if (!IsDualBuild)
+			if (!IsUnified)
 				ns = type.Namespace.Substring (ns.IndexOf ('.') + 1);
 			
 			CheckNamespace (ns, exceptions);
@@ -2189,7 +2205,7 @@ namespace XamCore.Registrar {
 				CheckNamespace ("CoreGraphics", exceptions);
 				return "CGFloat";
 			case "System.DateTime":
-				throw ErrorHelper.CreateError (4102, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsDualBuild ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", descriptiveMethodName);
+				throw ErrorHelper.CreateError (4102, "The registrar found an invalid type `{0}` in signature for method `{2}`. Use `{1}` instead.", "System.DateTime", IsUnified ? "Foundation.NSDate" : CompatNamespace + ".Foundation.NSDate", descriptiveMethodName);
 			case "ObjCRuntime.Selector":
 			case CompatNamespace + ".ObjCRuntime.Selector": return "SEL";
 			case "ObjCRuntime.Class":
@@ -2205,8 +2221,8 @@ namespace XamCore.Registrar {
 						return GetExportedTypeName (td) + " *";
 					}
 				} else if (td.IsEnum) {
-					if (IsDualBuild && SharedStatic.HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute)) {
-						switch (SharedStatic.GetEnumUnderlyingType (td).FullName) {
+					if (IsUnified && HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute)) {
+						switch (GetEnumUnderlyingType (td).FullName) {
 						case "System.Int64":
 							return "NSInteger";
 						case "System.UInt64":
@@ -2217,7 +2233,7 @@ namespace XamCore.Registrar {
 						}
 					}
 
-					return ToObjCParameterType (SharedStatic.GetEnumUnderlyingType (td), descriptiveMethodName, exceptions, inMethod);
+					return ToObjCParameterType (GetEnumUnderlyingType (td), descriptiveMethodName, exceptions, inMethod);
 				} else if (td.IsValueType) {
 					if (IsPlatformType (td)) {
 						CheckNamespace (td, exceptions);
@@ -2225,7 +2241,7 @@ namespace XamCore.Registrar {
 					}
 					return CheckStructure (td, descriptiveMethodName, inMethod);
 				} else {
-					return SharedStatic.ToObjCType (td);
+					return ToObjCType (td);
 				}
 			}
 		}
@@ -2345,8 +2361,13 @@ namespace XamCore.Registrar {
 			}
 
 			var td = type.Resolve ();
-			if (td != null)
-				sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+			if (td != null) {
+				if (td.Module == null) {
+					sb.Append (", TypeWasLinkedAwayFIXME"); // FIXME
+				} else {
+					sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+				}
+			}
 
 			return sb.ToString ();
 		}
@@ -2391,7 +2412,7 @@ namespace XamCore.Registrar {
 		static bool IsMetalType (ObjCType type)
 		{
 			var ns = type.Type.Namespace;
-			if (!IsDualBuild)
+			if (!IsUnified)
 				ns = ns.Substring (CompatNamespace.Length + 1);
 
 			switch (ns) {
@@ -2404,6 +2425,14 @@ namespace XamCore.Registrar {
 			}
 		}
 
+		List<Tuple<TypeReference, ObjCType>> skipped_types = new List<Tuple<TypeReference, ObjCType>> ();
+		protected override void OnSkipType (TypeReference type, ObjCType registered_type)
+		{
+			base.OnSkipType (type, registered_type);
+
+			skipped_types.Add (new Tuple<TypeReference, ObjCType> (type, registered_type));
+		}
+
 		void Specialize (AutoIndentStringBuilder sb)
 		{
 			List<Exception> exceptions = new List<Exception> ();
@@ -2411,6 +2440,8 @@ namespace XamCore.Registrar {
 
 			var map = new AutoIndentStringBuilder (1);
 			var map_init = new AutoIndentStringBuilder ();
+			var protocol_map = new Dictionary<uint, Tuple<ObjCType, string[]>> ();
+			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
 
 			var i = 0;
 			
@@ -2487,14 +2518,16 @@ namespace XamCore.Registrar {
 
 				skip.Clear ();
 
+				uint token_ref = uint.MaxValue;
 				if (!@class.IsProtocol && !@class.IsModel && !@class.IsCategory) {
 					if (!isPlatformType)
 						customTypeCount++;
 					
 					CheckNamespace (@class, exceptions);
+					token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
 					map.AppendLine ("{{ NULL, 0x{1:X} /* '{0}' => '{2}' */ }},", 
 									@class.ExportedName,
-									CreateTokenReference (@class.Type, TokenType.TypeDef), 
+									token_ref, 
 									GetAssemblyQualifiedName (@class.Type));
 
 					bool use_dynamic;
@@ -2527,8 +2560,30 @@ namespace XamCore.Registrar {
 					}
 
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
+
+					if (!@class.IsWrapper) {
+						if (@class.Protocols != null) {
+							var protocols = new string [@class.Protocols.Length];
+							for (int p = 0; p < @class.Protocols.Length; p++)
+								protocols [p] = @class.Protocols [p].ProtocolName;
+							protocol_map [token_ref] = new Tuple<ObjCType, string []> (@class, protocols);
+						}
+						// FIXME: included protocols from Adopts attributes
+					}
+
 				}
 
+
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+					if (@class.ProtocolWrapperType.Module == null) {
+						// The protocol was linked away
+						Console.WriteLine ($"Linked away protocol wrapper type {@class.ProtocolWrapperType.FullName} for {@class.Type.FullName}");
+					} else {
+						if (token_ref == uint.MaxValue)
+							token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
+						protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+					}
+				}
 				if (@class.IsWrapper && isPlatformType)
 					continue;
 
@@ -2731,6 +2786,14 @@ namespace XamCore.Registrar {
 			map.AppendLine ("};");
 			map.AppendLine ();
 
+			if (skipped_types.Count > 0) {
+				map.AppendLine ("static const MTManagedClassMap __xamarin_skipped_map [] = {");
+				foreach (var skipped in skipped_types.OrderBy ((v) => CreateTokenReference (v.Item1, TokenType.TypeDef)))
+					map.AppendLine ("{{ 0x{0:X}, 0x{1:X} /* '{2}' => '{3}' */ }},", CreateTokenReference (skipped.Item1, TokenType.TypeDef), CreateTokenReference (skipped.Item2.Type, TokenType.TypeDef), skipped.Item1.FullName, skipped.Item2.Type.FullName);
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
 			map.AppendLine ("static const char *__xamarin_registration_assemblies []= {");
 			int count = 0;
 			foreach (var assembly in registered_assemblies) {
@@ -2745,19 +2808,48 @@ namespace XamCore.Registrar {
 			map.AppendLine ("};");
 			map.AppendLine ();
 
-			map.AppendLine ("static struct MTFullTokenReference __xamarin_token_references [] = {");
-			map.AppendLine (full_token_references);
-			map.AppendLine ("};");
-			map.AppendLine ();
+			if (full_token_reference_count > 0) {
+				map.AppendLine ("static const struct MTFullTokenReference __xamarin_token_references [] = {");
+				map.AppendLine (full_token_references);
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_map.Count > 0) {
+				var ordered_protocols = protocol_map.OrderBy ((v) => v.Key);
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("const char *__xamarin_protocols_{0}[] = {{ \"{1}\" }};", EncodeNonAsciiCharacters (p.Value.Item1.ExportedName), string.Join ("\", \"", p.Value.Item2));
+				map.AppendLine ("static const MTProtocolMap __xamarin_protocol_map [] = {");
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("{{ 0x{0:X}, {1}, __xamarin_protocols_{2} }},", p.Key, p.Value.Item2.Length, EncodeNonAsciiCharacters (p.Value.Item1.ExportedName));
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_wrapper_map.Count > 0) {
+				var ordered = protocol_wrapper_map.OrderBy ((v) => v.Key);
+				map.AppendLine ("static const MTProtocolWrapperMap __xamarin_protocol_wrapper_map [] = {");
+				foreach (var p in ordered) {
+					map.AppendLine ("{{ 0x{0:X} /* {1} */, 0x{2:X} /* {3} */ }},", p.Key, p.Value.Item1.Name, p.Value.Item2, p.Value.Item1.ProtocolWrapperType.Name);
+				}
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
 
 			map.AppendLine ("static struct MTRegistrationMap __xamarin_registration_map = {");
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
-			map.AppendLine ("__xamarin_token_references,");
+			map.AppendLine (protocol_map.Count == 0 ? "NULL," : "__xamarin_protocol_map,");
+			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
+			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
+			map.AppendLine (skipped_types.Count == 0 ? "NULL," : "__xamarin_skipped_map,");
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", customTypeCount);
-			map.AppendLine ("{0}", full_token_reference_count);
+			map.AppendLine ("{0},", protocol_map.Count);
+			map.AppendLine ("{0},", protocol_wrapper_map.Count);
+			map.AppendLine ("{0},", full_token_reference_count);
+			map.AppendLine ("{0}", skipped_types.Count);
 			map.AppendLine ("};");
 
 
@@ -3065,8 +3157,8 @@ namespace XamCore.Registrar {
 					original_objctype = ToObjCParameterType (type, descriptiveMethodName, exceptions,  method.Method);
 					objctype = ToObjCParameterType (type, descriptiveMethodName, exceptions, method.Method) + "*";
 				} else if (td.IsEnum) {
-					type = SharedStatic.GetEnumUnderlyingType (td);
-					isNativeEnum = IsDualBuild && SharedStatic.HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
+					type = GetEnumUnderlyingType (td);
+					isNativeEnum = IsUnified && HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 					td = type.Resolve ();
 				}
 
@@ -3202,7 +3294,7 @@ namespace XamCore.Registrar {
 						if (elementType.FullName == "System.String") {
 							setup_call_stack.AppendLine ("NSString *sv = (NSString *) [arr objectAtIndex: j];", i);
 							setup_call_stack.AppendLine ("mono_array_set (marr, MonoString *, j, mono_string_new (mono_domain_get (), [sv UTF8String]));", i);
-						} else if (IsNSObject (elementType) || (elementType.Namespace == "System" && elementType.Name == "Object") || (isNativeObject = SharedStatic.IsNativeObject (elementType))) {
+						} else if (IsNSObject (elementType) || (elementType.Namespace == "System" && elementType.Name == "Object") || (isNativeObject = IsNativeObject (elementType))) {
 							setup_call_stack.AppendLine ("NSObject *nobj = [arr objectAtIndex: j];");
 							setup_call_stack.AppendLine ("MonoObject *mobj{0} = NULL;", i);
 							setup_call_stack.AppendLine ("if (nobj) {");
@@ -3297,14 +3389,14 @@ namespace XamCore.Registrar {
 							setup_call_stack.AppendLine ("}");
 							setup_call_stack.AppendLine ("arg_ptrs [{0}] = mobj{0};", i);
 
-							if (SharedStatic.HasAttribute (paramBase, ObjCRuntime, StringConstants.TransientAttribute)) {
+							if (HasAttribute (paramBase, ObjCRuntime, StringConstants.TransientAttribute)) {
 								copyback.AppendLine ("if (created{0}) {{", i);
 								copyback.AppendLine ("xamarin_dispose (mobj{0}, &exception_gchandle);", i);
 								copyback.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 								copyback.AppendLine ("}");
 							}
 						}
-					} else if (SharedStatic.IsNativeObject (td)) {
+					} else if (IsNativeObject (td)) {
 						TypeDefinition nativeObjType = td;
 
 						if (td.IsInterface) {
@@ -3492,12 +3584,12 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("mt_dummy_use (retval);");
 						setup_return.AppendLine ("res = retobj;");
 					} else if (type.IsPlatformType ("ObjCRuntime", "Selector")) {
-						setup_return.AppendLine ("res = xamarin_get_selector_handle (retval, &exception_gchandle);");
+						setup_return.AppendLine ("res = (SEL) xamarin_get_handle_for_inativeobject (retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else if (type.IsPlatformType ("ObjCRuntime", "Class")) {
-						setup_return.AppendLine ("res = xamarin_get_class_handle (retval, &exception_gchandle);");
+						setup_return.AppendLine ("res = (Class) xamarin_get_handle_for_inativeobject (retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
-					} else if (SharedStatic.IsNativeObject (type)) {
+					} else if (IsNativeObject (type)) {
 						setup_return.AppendLine ("{0} retobj;", rettype);
 						setup_return.AppendLine ("retobj = xamarin_get_handle_for_inativeobject ((MonoObject *) retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
@@ -3516,8 +3608,10 @@ namespace XamCore.Registrar {
 							setup_return.AppendLine ("[nsstr autorelease];");
 						setup_return.AppendLine ("mono_free (str);");
 						setup_return.AppendLine ("res = nsstr;");
-					} else if (SharedStatic.IsDelegate (type.Resolve ())) {
-						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, &exception_gchandle);");
+					} else if (IsDelegate (type.Resolve ())) {
+						var delegateMethod = type.Resolve ().GetMethods ().First ((v) => v.Name == "Invoke");
+						var signature = ComputeSignature (delegateMethod.DeclaringType, delegateMethod, method, isBlockSignature: true);
+						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, \"{0}\", &exception_gchandle);", signature);
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else {
 						throw ErrorHelper.CreateError (4104, 
@@ -3778,7 +3872,7 @@ namespace XamCore.Registrar {
 
 #if MMP
 			// Remove 'MonoMac.' namespace prefix to make switch smaller
-			if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+			if (!Registrar.IsUnified && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 				underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
 #endif
 
@@ -3812,7 +3906,7 @@ namespace XamCore.Registrar {
 
 #if MMP
 			// Remove 'MonoMac.' namespace prefix to make switch smaller
-			if (!Registrar.IsDualBuild && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
+			if (!Registrar.IsUnified && underlyingTypeName.StartsWith ("MonoMac.", StringComparison.Ordinal))
 				underlyingTypeName = underlyingTypeName.Substring ("MonoMac.".Length);
 #endif
 
@@ -4018,7 +4112,17 @@ namespace XamCore.Registrar {
 			return rv;
 		}
 
+		Dictionary<Tuple<MemberReference, TokenType>, uint> token_ref_cache = new Dictionary<Tuple<MemberReference, TokenType>, uint> ();
 		uint CreateTokenReference (MemberReference member, TokenType implied_type)
+		{
+			var key = new Tuple<MemberReference, TokenType> (member, implied_type);
+			uint rv;
+			if (!token_ref_cache.TryGetValue (key, out rv))
+				token_ref_cache [key] = rv = CreateTokenReference2 (member, implied_type);
+			return rv;
+		}
+
+		uint CreateTokenReference2 (MemberReference member, TokenType implied_type)
 		{
 			var token = member.MetadataToken;
 
@@ -4274,6 +4378,7 @@ namespace XamCore.Registrar {
 
 		protected override bool SkipRegisterAssembly (AssemblyDefinition assembly)
 		{
+				
 			if (assembly.HasCustomAttributes) {
 				foreach (var ca in assembly.CustomAttributes) {
 					var t = ca.AttributeType.Resolve ();

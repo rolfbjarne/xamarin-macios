@@ -81,6 +81,11 @@ namespace MonoTouch.Tuner {
 
 		protected override TypeDefinition MarkType (TypeReference reference)
 		{
+			//if (reference != null) {
+			//	Console.WriteLine ($"MarkType: {reference.FullName}");
+			//	if (reference.Name == "CustomAudioUnitFactory")
+			//		Console.WriteLine ("STOP");
+			//}
 			TypeDefinition type = base.MarkType (reference);
 			if (type == null)
 				return null;
@@ -181,6 +186,36 @@ namespace MonoTouch.Tuner {
 				}
 				break;
 			}
+		}
+
+		protected override void MarkInterfaceImplementation (TypeDefinition type, InterfaceImplementation iface)
+		{
+			if (!LinkContext.DynamicRegistrationSupported) {
+				// If we don't have to support dynamic registration, we can remove interfaces that represent protocols.
+				// This also means that we can't mark interface types .. FIXME more desc
+				var mark = false;
+
+				var isProtocol = type.IsNSObject (LinkContext) && iface.InterfaceType.Resolve ().HasCustomAttribute (LinkContext, Namespaces.Foundation, "ProtocolAttribute");
+
+				if (IgnoreScope (type.Scope)) {
+					// We're not linking the current assembly, which means the interface should be marked.
+					mark = true;
+				} else if (!isProtocol) {
+					// We only skip interfaces that represent protocols.
+					mark = true;
+				}
+
+				if (isProtocol)
+					LinkContext.StoreProtocolMethods (iface.InterfaceType.Resolve ());
+
+				if (!mark) {
+					Console.WriteLine ($"Not marking interface {iface.InterfaceType.FullName} implemented by {type.FullName}");
+					return;
+				}
+			}
+
+
+			base.MarkInterfaceImplementation (type, iface);
 		}
 	}
 }

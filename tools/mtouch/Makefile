@@ -91,6 +91,9 @@ LINKER_SOURCES = \
 	$(TOP)/tools/linker/MobileResolveMainAssemblyStep.cs	\
 	$(TOP)/tools/linker/MobileSweepStep.cs			\
 	$(TOP)/tools/linker/ObjCExtensions.cs			\
+	$(TOP)/tools/linker/OptimizeBlockSetupStep.cs \
+	$(TOP)/tools/linker/RemoveDynamicRegistrar.cs \
+	$(TOP)/tools/linker/RemoveProtocolStep.cs	\
 	$(TOP)/tools/linker/RemoveUserResourcesSubStep.cs \
 
 
@@ -137,6 +140,7 @@ MTOUCH_SOURCES = \
 	$(TOP)/tools/common/DerivedLinkContext.cs \
 	$(TOP)/tools/common/Target.cs \
 	$(TOP)/tools/common/CompilerFlags.cs \
+    $(TOP)/tools/common/Optimizations.cs \
 	$(TOP)/src/Foundation/ExportAttribute.cs \
 	$(TOP)/src/Foundation/ConnectAttribute.cs \
 	$(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/PListObject.cs \

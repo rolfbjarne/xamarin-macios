@@ -10,12 +10,16 @@ namespace MonoTouch.Tuner {
 
 	public static class Extensions {
 		
-		public static bool IsDirectBindingCheckRequired (this TypeDefinition type, DerivedLinkContext link_context)
+		public static bool? GetIsDirectBindingConstant (this TypeDefinition type, DerivedLinkContext link_context)
 		{
-			if (link_context.NeedsIsDirectBindingCheck == null)
-				return true;
+			if (link_context?.NeedsIsDirectBindingCheck == null)
+				return null;
 			
-			return link_context.NeedsIsDirectBindingCheck.Contains (type);
+			bool? value;
+			if (link_context.NeedsIsDirectBindingCheck.TryGetValue (type, out value))
+				return value;
+			Console.WriteLine ($"No IsDirectBinding constant for {type}?");
+			return null;
 		}
 
 		public static bool IsPlatformType (this TypeReference type, string @namespace, string name)

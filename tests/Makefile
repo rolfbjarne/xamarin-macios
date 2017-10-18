@@ -317,7 +317,11 @@ wrench-%:
 	@echo Not here anymore
 
 wrench-jenkins: xharness/xharness.exe
-	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests
+	$(Q) rm -f $@-failed.stamp
+	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests || touch $@-failed.stamp
+	@echo "@MonkeyWrench: SetSummary: TODO"
+	@echo "@MonkeyWrench: AddHiddenDirectory: $(abspath ../jenkins-results/tests/)"
+	$(Q) if test -e $@-failed.stamp; then rm -f $@-failed.stamp; exit 1; fi
 
 wrench-xtro:
 	git clean -xfdq

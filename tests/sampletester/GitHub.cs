@@ -97,7 +97,7 @@ public static class GitHub
 				scrambler = (string v) => v?.Replace (auth, "******");
 				auth += "@";
 			}
-			Assert.IsTrue (ProcessHelper.RunProcess ("git", $"clone https://{auth}github.com:{user}/{repo}", out exitCode, TimeSpan.FromMinutes (10), Configuration.RootDirectory, scrambler: scrambler), "cloned in 10 minutes");
+			Assert.IsTrue (ProcessHelper.RunProcess ("git", $"clone https://{auth}github.com/{user}/{repo}", out exitCode, TimeSpan.FromMinutes (10), Configuration.RootDirectory, scrambler: scrambler), "cloned in 10 minutes");
 			Assert.AreEqual (0, exitCode, "git clone exit code");
 		} else {
 			CleanRepository (repo_dir);

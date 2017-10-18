@@ -91,7 +91,13 @@ public static class GitHub
 
 		if (!Directory.Exists (repo_dir)) {
 			var exitCode = 0;
-			Assert.IsTrue (ProcessHelper.RunProcess ("git", $"clone git@github.com:{user}/{repo}", out exitCode, TimeSpan.FromMinutes (10), Configuration.RootDirectory), "cloned in 10 minutes");
+			var auth = Environment.GetEnvironmentVariable ("GITHUB_AUTH_TOKEN") ?? string.Empty;
+			Func<string, string> scrambler = (string v) => v;
+			if (!string.IsNullOrEmpty (auth)) {
+				scrambler = (string v) => v?.Replace (auth, "******");
+				auth += "@";
+			}
+			Assert.IsTrue (ProcessHelper.RunProcess ("git", $"clone https://{auth}github.com:{user}/{repo}", out exitCode, TimeSpan.FromMinutes (10), Configuration.RootDirectory, scrambler: scrambler), "cloned in 10 minutes");
 			Assert.AreEqual (0, exitCode, "git clone exit code");
 		} else {
 			CleanRepository (repo_dir);

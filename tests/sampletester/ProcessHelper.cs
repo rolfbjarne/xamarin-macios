@@ -39,8 +39,11 @@ public static class ProcessHelper
 	}
 
 	// returns false if timed out (in which case exit code is int.MinValue
-	public static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory, List<string> output = null)
+	public static bool RunProcess (string filename, string arguments, out int exitCode, TimeSpan timeout, string workingDirectory, List<string> output = null, Func<string, string> scrambler = null)
 	{
+		if (scrambler == null)
+			scrambler = (string v) => v;
+
 		var outputDone = new ManualResetEvent (false);
 		var errorDone = new ManualResetEvent (false);
 		using (var xbuild = new Process ()) {
@@ -60,11 +63,12 @@ public static class ProcessHelper
 				if (e.Data == null) {
 					outputDone.Set ();
 				} else {
+					var data = scrambler (e.Data);
 					if (output != null) {
 						lock (output)
-							output.Add (e.Data);
+							output.Add (data);
 					} else {
-						Console.WriteLine (e.Data);
+						Console.WriteLine (data);
 					}
 				}
 			};
@@ -73,15 +77,16 @@ public static class ProcessHelper
 				if (e.Data == null) {
 					errorDone.Set ();
 				} else {
+					var data = scrambler (e.Data);
 					if (output != null) {
 						lock (output)
-							output.Add (e.Data);
+							output.Add (data);
 					} else {
-						Console.WriteLine (e.Data);
+						Console.WriteLine (data);
 					}
 				}
 			};
-			Console.WriteLine ("{0} {1}", xbuild.StartInfo.FileName, xbuild.StartInfo.Arguments);
+			Console.WriteLine (scrambler ($"{xbuild.StartInfo.FileName} {xbuild.StartInfo.Arguments}"));
 			xbuild.Start ();
 			xbuild.BeginErrorReadLine ();
 			xbuild.BeginOutputReadLine ();

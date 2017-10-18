@@ -553,8 +553,8 @@ namespace xharness
 						args.Append (" --stdout=").Append (StringUtils.Quote (stderr_tty));
 						args.Append (" --stderr=").Append (StringUtils.Quote (stderr_tty));
 					} else {
-						var stdout_log = Logs.CreateFile ("Standard output", Path.Combine (LogDirectory, "stdout.log"));
-						var stderr_log = Logs.CreateFile ("Standard error", Path.Combine (LogDirectory, "stderr.log"));
+						var stdout_log = Logs.CreateFile ("Standard output", Path.Combine (LogDirectory, $"stdout-{TestTask.Timestamp}.log"));
+						var stderr_log = Logs.CreateFile ("Standard error", Path.Combine (LogDirectory, $"stderr-{TestTask.Timestamp}.log"));
 						args.Append (" --stdout=").Append (StringUtils.Quote (stdout_log.FullPath));
 						args.Append (" --stderr=").Append (StringUtils.Quote (stderr_log.FullPath));
 					}
@@ -568,7 +568,7 @@ namespace xharness
 
 					var log = new CaptureLog (sim.SystemLog, entire_file: Harness.Action != HarnessAction.Jenkins)
 					{
-						Path = Path.Combine (LogDirectory, sim.Name + ".log"),
+						Path = Path.Combine (LogDirectory, $"{sim.Name}-{TestTask.Timestamp}.log"),
 						Description = isCompanion ? "System log (companion)" : "System log",
 					};
 					log.StartCapture ();

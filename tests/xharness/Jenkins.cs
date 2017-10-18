@@ -1783,7 +1783,7 @@ function oninitialload ()
 		public virtual string Mode { get; set; }
 		public virtual string Variation { get; set; }
 
-		protected static string Timestamp {
+		internal protected static string Timestamp {
 			get {
 				return $"{DateTime.Now:yyyyMMdd_HHmmss}";
 			}
@@ -2280,7 +2280,7 @@ function oninitialload ()
 		protected override async Task RunTestAsync ()
 		{
 			using (var resource = await NotifyAndAcquireDesktopResourceAsync ()) {
-				var xmlLog = Logs.CreateFile ("XML log", Path.Combine (LogDirectory, "log.xml"));
+				var xmlLog = Logs.CreateFile ("XML log", Path.Combine (LogDirectory, $"log-{Timestamp}.xml"));
 				var log = Logs.CreateStream (LogDirectory, $"execute-{Timestamp}.txt", "Execution log");
 				using (var proc = new Process ()) {
 

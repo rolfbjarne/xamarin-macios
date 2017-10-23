@@ -50,6 +50,7 @@
     <Compile Include="MacSampleTester.cs" />
     <Compile Include="MacIosSampleTester.cs" />
     <Compile Include="IosSampleTester.cs" />
+    <Compile Include="BaseTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

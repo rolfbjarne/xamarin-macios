@@ -11,9 +11,12 @@ using System.Xml;
 using NUnit.Framework;
 
 [TestFixture]
-public class MonoTouchBindingTester
+public class MonoTouchBindingTester : BaseTester
 {
-	public string Repository { get; private set; } = "monotouch-bindings";
+	public MonoTouchBindingTester ()
+	{
+		base.Repository = "monotouch-bindings";	
+	}
 
 	Dictionary<string, string> ignored_bindings;
 	Dictionary<string, string> GetIgnoredBindings ()

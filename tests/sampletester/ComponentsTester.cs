@@ -12,10 +12,8 @@ using System.Xml;
 using NUnit.Framework;
 
 [TestFixture]
-public abstract class ComponentsTester
+public abstract class ComponentsTester : BaseTester
 {
-	public string Repository { get; private set; }
-
 	List<BuildInfo> components;
 	List<BuildInfo> Components {
 		get {

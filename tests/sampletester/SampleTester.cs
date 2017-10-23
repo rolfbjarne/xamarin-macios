@@ -11,10 +11,8 @@ using System.Xml;
 using NUnit.Framework;
 
 [TestFixture]
-public abstract class SampleTester
+public abstract class SampleTester : BaseTester
 {
-	public string Repository { get; private set; }
-
 	Dictionary<string, string> ignored_solutions;
 	Dictionary<string, string> GetIgnoredSolutions ()
 	{
@@ -37,14 +35,6 @@ public abstract class SampleTester
 	protected SampleTester (string repo)
 	{
 		Repository = repo;
-	}
-
-	[SetUp]
-	public void Setup ()
-	{
-		var samplerepo = Environment.GetEnvironmentVariable ("XAMARIN_SAMPLEREPOSITORY");
-		if (!string.IsNullOrEmpty (samplerepo) && !string.Equals (Repository, samplerepo, StringComparison.OrdinalIgnoreCase))
-			Assert.Ignore ($"This repository has been ignored, because it doesn't match the XAMARIN_SAMPLEREPOSITORY environment variable ({samplerepo}).");
 	}
 
 	void BuildSolution (string solution, string msbuild, string platform, string configuration)

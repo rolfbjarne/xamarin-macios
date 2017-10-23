@@ -39,6 +39,14 @@ public abstract class SampleTester
 		Repository = repo;
 	}
 
+	[SetUp]
+	public void Setup ()
+	{
+		var samplerepo = Environment.GetEnvironmentVariable ("XAMARIN_SAMPLEREPOSITORY");
+		if (!string.IsNullOrEmpty (samplerepo) && !string.Equals (Repository, samplerepo, StringComparison.OrdinalIgnoreCase))
+			Assert.Ignore ($"This repository has been ignored, because it doesn't match the XAMARIN_SAMPLEREPOSITORY environment variable ({samplerepo}).");
+	}
+
 	void BuildSolution (string solution, string msbuild, string platform, string configuration)
 	{
 		string ignored_message = "Ignored";

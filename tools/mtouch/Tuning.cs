@@ -149,7 +149,7 @@ namespace MonoTouch.Tuner {
 			sub.Add (new OptimizeGeneratedCodeSubStep (options));
 			sub.Add (new RemoveUserResourcesSubStep (options));
 			// OptimizeGeneratedCodeSubStep and RemoveUserResourcesSubStep needs [GeneratedCode] so it must occurs before RemoveAttributes
-			sub.Add (new RemoveAttributes ());
+			//sub.Add (new RemoveAttributes ());
 			// http://bugzilla.xamarin.com/show_bug.cgi?id=1408
 			if (options.LinkAway)
 				sub.Add (new RemoveCode (options));
@@ -196,6 +196,10 @@ namespace MonoTouch.Tuner {
 				pipeline.AppendStep (new MonoTouchTypeMapStep ());
 
 				pipeline.AppendStep (GetSubSteps (options));
+
+				var attribRemover = new SubStepDispatcher ();
+				attribRemover.Add (new RemoveAttributes ());
+				pipeline.AppendStep (attribRemover);
 
 				pipeline.AppendStep (new PreserveCode (options));
 

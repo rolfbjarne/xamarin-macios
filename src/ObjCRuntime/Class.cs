@@ -48,7 +48,7 @@ namespace XamCore.ObjCRuntime {
 
 		public Class (Type type)
 		{
-			this.handle = Class.Register (type);
+			this.handle = GetClassHandle (type);
 		}
 
 		public Class (IntPtr handle)

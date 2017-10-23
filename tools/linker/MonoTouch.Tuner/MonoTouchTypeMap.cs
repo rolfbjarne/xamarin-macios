@@ -22,7 +22,7 @@ namespace MonoTouch.Tuner {
 
 	public class MonoTouchTypeMapStep : TypeMapStep {
 		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
-		HashSet<TypeDefinition> needs_isdirectbinding_check = new HashSet<TypeDefinition> ();
+		Dictionary<TypeDefinition, bool?> isdirectbinding_value = new Dictionary<TypeDefinition, bool?> ();
 		HashSet<MethodDefinition> generated_code = new HashSet<MethodDefinition> ();
 
 		DerivedLinkContext LinkContext {
@@ -36,7 +36,7 @@ namespace MonoTouch.Tuner {
 			base.EndProcess ();
 
 			LinkContext.CachedIsNSObject = cached_isnsobject;
-			LinkContext.NeedsIsDirectBindingCheck = needs_isdirectbinding_check;
+			LinkContext.NeedsIsDirectBindingCheck = isdirectbinding_value;
 			LinkContext.GeneratedCode = generated_code;
 		}
 
@@ -58,9 +58,7 @@ namespace MonoTouch.Tuner {
 			if (!IsNSObject (type))
 				return;
 			
-			// if not, it's a user type, the IsDirectBinding check is required by all ancestors
-			if (!IsGeneratedBindings (type, LinkContext))
-				NeedsIsDirectBindingCheck (type);
+			SetIsDirectBindingValue (type);
 #if DEBUG
 			else
 				Console.WriteLine ("{0} does NOT needs IsDirectBinding check", type);
@@ -100,17 +98,22 @@ namespace MonoTouch.Tuner {
 			return false;
 		}
 		
-		void NeedsIsDirectBindingCheck (TypeDefinition type)
+		void SetIsDirectBindingValue (TypeDefinition type)
 		{
-			// all ancestors must be disallowed
-			// so we can short-circuit the recursion if we already have processed it
-			if (needs_isdirectbinding_check.Contains (type))
-				return;
-			
-			needs_isdirectbinding_check.Add (type);
-			var base_type = type.BaseType;
-			if (base_type != null)
-				NeedsIsDirectBindingCheck (base_type.Resolve ());
+			if (type.IsSealed) {
+				isdirectbinding_value [type] = true;
+			} else if (type.IsAbstract) {
+				isdirectbinding_value [type] = false;
+			} else if (!isdirectbinding_value.ContainsKey (type)) {
+				isdirectbinding_value [type] = true; // Let's try 'true' first, any derived classes will clear it if needed
+				// we must clear the IsDirectBinding for any superclasses (unless they're abstract, in which case IsDirectBinding can stay as 'false')
+				var base_type = type.BaseType.Resolve ();
+				while (base_type != null && IsNSObject (base_type)) {
+					if (!base_type.IsAbstract)
+						isdirectbinding_value [base_type] = null;	
+					base_type = base_type.BaseType.Resolve ();
+				}
+			}
 		}
 	}
 }

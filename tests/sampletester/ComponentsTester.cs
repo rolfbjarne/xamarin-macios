@@ -37,8 +37,8 @@ public abstract class ComponentsTester : BaseTester
 	}
 
 	protected ComponentsTester (string repo)
+		: base (repo)
 	{
-		Repository = repo;
 	}
 
 	void BuildComponentImpl (string component)
@@ -97,6 +97,7 @@ public abstract class ComponentsTester : BaseTester
 	}
 }
 
+[Category (REPO)]
 public class XamarinComponentsTester : ComponentsTester
 {
 	const string REPO = "XamarinComponents";
@@ -168,6 +169,7 @@ public class XamarinComponentsTester : ComponentsTester
 	}
 }
 
+[Category (REPO)]
 public class FacebookComponentsTester : ComponentsTester
 {
 	const string REPO = "FacebookComponents";
@@ -190,6 +192,7 @@ public class FacebookComponentsTester : ComponentsTester
 	}
 }
 
+[Category (REPO)]
 public class GoogleApisForiOSComponentsTester : ComponentsTester
 {
 	const string REPO = "GoogleApisForiOSComponents";

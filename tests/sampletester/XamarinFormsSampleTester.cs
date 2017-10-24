@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
+[Category (CATEGORY)]
 public class XamarinFormsSampleTester : SampleTester
 {
 	const string REPO = "xamarin-forms-samples";
+	const string CATEGORY = "xamarinformssamples"; // categories can't contain dashes
 	public XamarinFormsSampleTester ()
 		: base (REPO)
 	{

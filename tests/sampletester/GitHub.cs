@@ -22,7 +22,16 @@ public static class GitHub
 				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
 				data = client.DownloadData ($"https://api.github.com/repos/{user}/{repo}/git/trees/master?recursive=1");
 			} catch (WebException we) {
-				return new string [] { $"Failed to load {user}/{repo}: {we.Message}" };
+				string rsp = we.Message;
+				try {
+					foreach (var header in we.Response.Headers.AllKeys)
+						rsp += $"\n{header}={we.Response.Headers [header]}";
+					using (var webreader = new StreamReader (we.Response.GetResponseStream ()))
+						rsp += "\n" + webreader.ReadToEnd ();
+				} catch {
+				}
+
+				return new string [] { $"Failed to load {user}/{repo}: {rsp}" };
 			}
 			var reader = JsonReaderWriterFactory.CreateJsonReader (data, new XmlDictionaryReaderQuotas ());
 			var doc = new XmlDocument ();

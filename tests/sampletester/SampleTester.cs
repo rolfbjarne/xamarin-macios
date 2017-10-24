@@ -60,9 +60,13 @@ public abstract class SampleTester : BaseTester
 		}
 	}
 
+	static Dictionary<string, string []> solutions = new Dictionary<string, string []> ();
 	protected static string [] GetSolutionsImpl (string repo)
 	{
-		return GitHub.GetSolutions ("xamarin", repo);
+		string [] rv;
+		if (!solutions.TryGetValue (repo, out rv))
+			solutions [repo] = rv = GitHub.GetSolutions ("xamarin", repo);
+		return rv;
 	}
 
 	string CloneRepo ()

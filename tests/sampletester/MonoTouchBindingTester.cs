@@ -11,14 +11,18 @@ using System.Xml;
 using NUnit.Framework;
 
 [TestFixture]
+[Category (CATEGORY)]
 public class MonoTouchBindingTester : BaseTester
 {
+	public const string REPO = "monotouch-bindings";
+	const string CATEGORY = "monotouchbindings"; // categories can't contain dashes
+
 	public MonoTouchBindingTester ()
+		: base (REPO)
 	{
-		base.Repository = "monotouch-bindings";	
 	}
 
-	Dictionary<string, string> ignored_bindings;
+	Dictionary<string, string> ignored_bindings; 
 	Dictionary<string, string> GetIgnoredBindings ()
 	{
 		if (ignored_bindings == null)

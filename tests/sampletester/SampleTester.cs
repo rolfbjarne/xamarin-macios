@@ -33,8 +33,8 @@ public abstract class SampleTester : BaseTester
 	}
 
 	protected SampleTester (string repo)
+		: base (repo)
 	{
-		Repository = repo;
 	}
 
 	void BuildSolution (string solution, string msbuild, string platform, string configuration)

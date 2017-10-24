@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
+[Category (CATEGORY)]
 public class MobileSampleTester : SampleTester
 {
 	const string REPO = "mobile-samples";
+	const string CATEGORY = "mobilesamples"; // categories can't contain dashes
 	public MobileSampleTester ()
 		: base (REPO)
 	{

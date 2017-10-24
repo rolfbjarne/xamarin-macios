@@ -2,9 +2,11 @@
 
 using NUnit.Framework;
 
+[Category (CATEGORY)]
 public class IosSampleTester : SampleTester
 {
 	const string REPO = "ios-samples"; // monotouch-samples redirects to ios-samples
+	const string CATEGORY = "iossamples"; // categories can't contain dashes
 	public IosSampleTester ()
 		: base (REPO)
 	{

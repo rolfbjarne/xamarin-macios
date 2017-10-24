@@ -27,9 +27,13 @@ all-local::
 	$(MAKE) build
 	$(MAKE) run-tests
 
+ifneq ($(TEST_CATEGORY),)
+WHERE_CONDITION=/where "cat == $(TEST_CATEGORY)"
+endif
+
 run-tests:
 	@rm -f .failed-stamp
-	mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml);format=nunit2" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
+	mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(WHERE_CONDITION) $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml);format=nunit2" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
 	@# Create an html file and tell MonkeyWrench to upload it (if we're running there)
 	@[[ -z "$$BUILD_REPOSITORY" ]] || \
 		( xsltproc $(TOP)/tests/HtmlTransform.xslt TestResult.xml  > index.html && \

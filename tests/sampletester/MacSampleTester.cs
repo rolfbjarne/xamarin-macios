@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 
+[Category (CATEGORY)]
 public class MacSampleTester : SampleTester
 {
 	const string REPO = "mac-samples";
+	const string CATEGORY = "macsamples"; // categories can't contain dashes
 	public MacSampleTester ()
 		: base (REPO)
 	{

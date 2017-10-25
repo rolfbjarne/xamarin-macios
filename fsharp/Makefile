@@ -1,5 +1,6 @@
 TOP=..
 include $(TOP)/Make.config
+include $(TOP)/mk/colors.mk
 
 FSHARP_FILES:=$(shell git --git-dir=$(FSHARP_PATH)/.git --work-tree=$(FSHARP_PATH) ls-tree --full-tree -r HEAD --name-only | sed 's_^\(.*\)_$(FSHARP_PATH)/\1_' | sed 's/ /\\ /g')
 
@@ -10,12 +11,74 @@ FSHARP_TARGET_FILES =   \
 	FSharp.Core.sigdata \
 	FSharp.Core.xml     \
 
-BIN_DIR=$(FSHARP_PATH)/lib/release
-IOS_BIN_DIR = $(FSHARP_PATH)/lib/release/monotouch
-WATCH_BIN_DIR = $(FSHARP_PATH)/lib/release/xamarinwatchos
-TVOS_BIN_DIR = $(FSHARP_PATH)/lib/release/xamarintvos
-MAC_MOBILE_BIN_DIR = $(FSHARP_PATH)/lib/release/xamarinmacmobile
-MAC_45_BIN_DIR = $(FSHARP_PATH)/lib/release/xamarinmacfull
+#
+# Binary cache support
+#
+
+# Hash the information needed to make sure we don't use an out-of-date cache (fsharp commit hash + md5 of this makefile, excluding the ARTIFACT_MD5 and ARTIFACT_ZIP_URL lines)
+ARTIFACT_HASH=$(shell cd $(FSHARP_PATH) && git log -1 --pretty=%H)-$(shell grep -v -e '^ARTIFACT_MD5=' -e '^ARTIFACT_ZIP_URL=' $(CURDIR)/Makefile | md5 -q)
+ARTIFACT_DIR=$(CURDIR)/binary-cache/$(ARTIFACT_HASH)
+ARTIFACT_ZIP_NAME=$(CURDIR)/$(ARTIFACT_HASH).zip
+ARTIFACT_ZIP_URL=https://dl.xamarin.com/uploads/4i4qhtjyt5j/$(ARTIFACT_HASH).zip
+ARTIFACT_MD5=4e84194249d1f749e08cc072b9ca1ce1
+
+# We try to download the binary artifact, and store the download result
+# (success/failure) in a generated makefile so that we don't retry failed
+# downloads on every build.
+# This can be overridden by setting FSHARP_USE_BINARY_CACHE=0, which will a source build.
+ifneq ($(FSHARP_USE_BINARY_CACHE),0)
+-include .$(ARTIFACT_HASH).g.inc
+.$(ARTIFACT_HASH).g.inc:
+	@echo "Attempting to download binary cache..."
+	@if curl -fLO $(ARTIFACT_ZIP_URL) $(if $(V),-v,) >& curl.log; then \
+		if [[ x$(ARTIFACT_MD5) != x`md5 -q $(ARTIFACT_ZIP_NAME)` ]]; then \
+			echo "$(COLOR_RED)Successfully downloaded the binary cache from $(ARTIFACT_ZIP_URL), but the MD5 did not match (expected $(ARTIFACT_MD5), got `md5 -q $(ARTIFACT_ZIP_NAME)`)$(COLOR_CLEAR)"; \
+			rm -f $(ARTIFACT_ZIP_NAME); \
+			echo "FSHARP_USE_BINARY_CACHE=0" > $@.tmp; \
+		else \
+			echo "$(COLOR_GREEN)Using binary cache downloaded from $(ARTIFACT_ZIP_URL).$(COLOR_CLEAR)"; \
+			echo "FSHARP_USE_BINARY_CACHE=1" > $@.tmp; \
+		fi \
+	else \
+		echo "$(COLOR_RED)Could not download binary cache from $(ARTIFACT_ZIP_URL):$(COLOR_CLEAR)"; \
+		cat curl.log | sed 's/^/    /'; \
+		echo "$(COLOR_GRAY)Will build from source instead$(COLOR_CLEAR)"; \
+		echo "FSHARP_USE_BINARY_CACHE=0" > $@.tmp; \
+	fi
+	@mv $@.tmp $@
+endif
+
+ifeq ($(FSHARP_USE_BINARY_CACHE),1)
+ORIGIN_DIR=$(ARTIFACT_DIR)
+
+$(ORIGIN_DIR): $(ARTIFACT_ZIP_NAME)
+	@echo Extracting binary cache...
+	@mkdir -p $@
+	@unzip -d $@ $(if $(V),,-qq)  $<
+	@echo Extraction complete.
+else
+ORIGIN_DIR=$(FSHARP_PATH)
+endif
+
+create-build-cache:
+	rm -Rf $(ARTIFACT_DIR)
+	mkdir -p $(ARTIFACT_DIR)
+	rsync -avm --include LICENSE --include '*/' --include 'lib/release/*/*' --exclude '*' $(FSHARP_PATH)/ $(ARTIFACT_DIR)
+	rm -f $(ARTIFACT_ZIP_NAME)
+	cd $(ARTIFACT_DIR) && zip -9r $(abspath $(ARTIFACT_ZIP_NAME)) .
+	sed -i '' "s/^ARTIFACT_MD5=.*$$/ARTIFACT_MD5=`md5 -q $(abspath $(ARTIFACT_ZIP_NAME))`/" Makefile
+	echo "Created: $(abspath $(ARTIFACT_ZIP_NAME))"
+
+#
+# Build
+#
+
+BIN_DIR=$(ORIGIN_DIR)/lib/release
+IOS_BIN_DIR = $(BIN_DIR)/monotouch
+WATCH_BIN_DIR = $(BIN_DIR)/xamarinwatchos
+TVOS_BIN_DIR = $(BIN_DIR)/xamarintvos
+MAC_MOBILE_BIN_DIR = $(BIN_DIR)/xamarinmacmobile
+MAC_45_BIN_DIR = $(BIN_DIR)/xamarinmacfull
 
 # Xamarin.iOS
 
@@ -30,7 +93,7 @@ IOS_FSHARP_DIRECTORIES =                                   \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1         \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/LICENSE-fsharp: $(ORIGIN_DIR)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.dll: build/monotouch/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
@@ -39,7 +102,7 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.dll: build/monotouch/%.dll | $(
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%: $(IOS_BIN_DIR)/% | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
 	$(Q) install -m 0644 $< $@
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/LICENSE-fsharp: $(ORIGIN_DIR)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/%.dll: build/monotouch/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
@@ -59,7 +122,7 @@ WATCH_FSHARP_DIRECTORIES =                                     \
 	build/xamarinwatchos                                       \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/LICENSE-fsharp: $(ORIGIN_DIR)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/%.dll: build/xamarinwatchos/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
@@ -79,7 +142,7 @@ TVOS_FSHARP_DIRECTORIES =                                   \
 	build/xamarintvos                                       \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/LICENSE-fsharp: $(ORIGIN_DIR)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/%.dll: build/xamarintvos/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
@@ -104,7 +167,7 @@ MAC_FSHARP_DIRECTORIES =                                            \
 
 ## XM full
 
-$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/LICENSE-fsharp: $(ORIGIN_DIR)/LICENSE | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5
 	$(Q) install -m 0644 $< $@
 
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/%.dll: build/xamarinmacfull/%.dll | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5
@@ -115,7 +178,7 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/%: $(MAC_45_BIN_DIR)/% |
 
 ## XM mobile
 
-$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/LICENSE-fsharp: $(ORIGIN_DIR)/LICENSE | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac
 	$(Q) install -m 0644 $< $@
 
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/%.dll: build/xamarinmacmobile/%.dll | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac
@@ -156,11 +219,16 @@ build/%.dll: $(BIN_DIR)/%.dll | build/monotouch build/xamarinmacmobile build/xam
 	$(Q) cp $< $@
 	$(Q_SN) MONO_CFG_DIR="$(TOP)" sn -q -R "$@" "$(PRODUCT_KEY_PATH)"
 
+ifeq ($(FSHARP_USE_BINARY_CACHE),1)
+build.stamp: $(ORIGIN_DIR)
+	@echo Copying files from binary cache.
+else
 build.stamp: export XBUILD_FRAMEWORK_FOLDERS_PATH=$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks
 build.stamp: export MSBuildExtensionsPath=$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild
 build.stamp: $(FSHARP_FILES) $(FSHARP_PATH)/Makefile
 	$(MAKE) -C $(FSHARP_PATH)/src/fsharp build-proto
 	$(MAKE) -C $(FSHARP_PATH)/src/fsharp $(FSHARP_BUILD_TARGETS)
+endif
 	$(Q) touch $@
 
 $(FSHARP_TARGETS): build.stamp

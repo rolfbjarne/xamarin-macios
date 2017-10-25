@@ -1,2 +1,7 @@
 build.stamp
+binary-cache
+*.zip
+*.g.inc
+curl.log
+*.stamp
 

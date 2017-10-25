@@ -192,7 +192,7 @@ namespace MonoTouch.Tuner {
 			pipeline.AppendStep (new ProcessExportedFields ());
 
 			if (options.LinkMode != LinkMode.None) {
-				pipeline.AppendStep (new RemoveDynamicRegistrar ());
+				//pipeline.AppendStep (new RemoveDynamicRegistrar ());
 				pipeline.AppendStep (new MonoTouchTypeMapStep ());
 
 				pipeline.AppendStep (GetSubSteps (options));
@@ -208,6 +208,7 @@ namespace MonoTouch.Tuner {
 				pipeline.AppendStep (new MonoTouchMarkStep ());
 				pipeline.AppendStep (new MonoTouchSweepStep (options));
 				pipeline.AppendStep (new CleanStep ());
+				//pipeline.AppendStep (new RemoveProtocolStep ());
 
 				if (!options.DebugBuild)
 					pipeline.AppendStep (GetPostLinkOptimizations (options));

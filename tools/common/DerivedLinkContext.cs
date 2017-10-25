@@ -20,7 +20,8 @@ namespace Xamarin.Tuner
 
 		HashSet<TypeDefinition> cached_isnsobject;
 		Dictionary<TypeDefinition, bool?> needs_isdirectbinding_check;
-		HashSet<MethodDefinition> generated_code;
+
+		public bool DynamicRegistrationSupported { get; set; }
 
 		public HashSet<TypeDefinition> CachedIsNSObject {
 			get { return cached_isnsobject; }
@@ -30,11 +31,6 @@ namespace Xamarin.Tuner
 		public Dictionary<TypeDefinition, bool?> NeedsIsDirectBindingCheck {
 			get { return needs_isdirectbinding_check; }
 			set { needs_isdirectbinding_check = value; }
-		}
-
-		public HashSet<MethodDefinition> GeneratedCode {
-			get { return generated_code; }
-			set { generated_code = value; }
 		}
 
 		public IList<ICustomAttributeProvider> DataContract {
@@ -60,6 +56,15 @@ namespace Xamarin.Tuner
 		public DerivedLinkContext (Pipeline pipeline, AssemblyResolver resolver)
 			: base (pipeline, resolver)
 		{
+		}
+
+		public List<ICustomAttribute> GetCustomAttributes (ICustomAttributeProvider provider, string attribute_namespace, string attribute_name)
+		{
+			var annotations = Annotations?.GetCustomAnnotations (attribute_name);
+			object storage = null;
+			if (annotations?.TryGetValue (provider, out storage) != true)
+				return null;
+			return (List<ICustomAttribute>) storage;
 		}
 	}
 }

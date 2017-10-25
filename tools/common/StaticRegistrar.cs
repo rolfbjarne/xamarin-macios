@@ -2398,6 +2398,8 @@ namespace XamCore.Registrar {
 
 			var map = new AutoIndentStringBuilder (1);
 			var map_init = new AutoIndentStringBuilder ();
+			var protocol_map = new Dictionary<uint, Tuple<ObjCType, string[]>> ();
+			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
 
 			var i = 0;
 			
@@ -2474,14 +2476,16 @@ namespace XamCore.Registrar {
 
 				skip.Clear ();
 
+				uint token_ref = uint.MaxValue;
 				if (!@class.IsProtocol && !@class.IsModel && !@class.IsCategory) {
 					if (!isPlatformType)
 						customTypeCount++;
 					
 					CheckNamespace (@class, exceptions);
+					token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
 					map.AppendLine ("{{ NULL, 0x{1:X} /* '{0}' => '{2}' */ }},", 
 									@class.ExportedName,
-									CreateTokenReference (@class.Type, TokenType.TypeDef), 
+									token_ref, 
 									GetAssemblyQualifiedName (@class.Type));
 
 					bool use_dynamic;
@@ -2514,8 +2518,25 @@ namespace XamCore.Registrar {
 					}
 
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
+
+					if (!@class.IsWrapper) {
+						if (@class.Protocols != null) {
+							var protocols = new string [@class.Protocols.Length];
+							for (int p = 0; p < @class.Protocols.Length; p++)
+								protocols [p] = @class.Protocols [p].ProtocolName;
+							protocol_map [token_ref] = new Tuple<ObjCType, string []> (@class, protocols);
+						}
+						// FIXME: included protocols from Adopts attributes
+					}
+
 				}
 
+
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+					if (token_ref == uint.MaxValue)
+						token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
+					protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+				}
 				if (@class.IsWrapper && isPlatformType)
 					continue;
 
@@ -2732,18 +2753,45 @@ namespace XamCore.Registrar {
 			map.AppendLine ("};");
 			map.AppendLine ();
 
-			map.AppendLine ("static struct MTFullTokenReference __xamarin_token_references [] = {");
-			map.AppendLine (full_token_references);
-			map.AppendLine ("};");
-			map.AppendLine ();
+			if (full_token_reference_count > 0) {
+				map.AppendLine ("static const struct MTFullTokenReference __xamarin_token_references [] = {");
+				map.AppendLine (full_token_references);
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_map.Count > 0) {
+				var ordered_protocols = protocol_map.OrderBy ((v) => v.Key);
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("const char *__xamarin_protocols_{0}[] = {{ \"{1}\" }};", EncodeNonAsciiCharacters (p.Value.Item1.ExportedName), string.Join ("\", \"", p.Value.Item2));
+				map.AppendLine ("static const MTProtocolMap __xamarin_protocol_map [] = {");
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("{{ 0x{0:X}, {1}, __xamarin_protocols_{2} }},", p.Key, p.Value.Item2.Length, EncodeNonAsciiCharacters (p.Value.Item1.ExportedName));
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_wrapper_map.Count > 0) {
+				var ordered = protocol_wrapper_map.OrderBy ((v) => v.Key);
+				map.AppendLine ("static const MTProtocolWrapperMap __xamarin_protocol_wrapper_map [] = {");
+				foreach (var p in ordered) {
+					map.AppendLine ("{{ 0x{0:X} /* {1} */, 0x{2:X} /* {3} */ }},", p.Key, p.Value.Item1.Name, p.Value.Item2, p.Value.Item1.ProtocolWrapperType.Name);
+				}
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
 
 			map.AppendLine ("static struct MTRegistrationMap __xamarin_registration_map = {");
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
-			map.AppendLine ("__xamarin_token_references,");
+			map.AppendLine (protocol_map.Count == 0 ? "NULL," : "__xamarin_protocol_map,");
+			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
+			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", customTypeCount);
+			map.AppendLine ("{0},", protocol_map.Count);
+			map.AppendLine ("{0},", protocol_wrapper_map.Count);
 			map.AppendLine ("{0}", full_token_reference_count);
 			map.AppendLine ("};");
 
@@ -3479,10 +3527,10 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("mt_dummy_use (retval);");
 						setup_return.AppendLine ("res = retobj;");
 					} else if (type.IsPlatformType ("ObjCRuntime", "Selector")) {
-						setup_return.AppendLine ("res = xamarin_get_selector_handle (retval, &exception_gchandle);");
+						setup_return.AppendLine ("res = (SEL) xamarin_get_handle_for_inativeobject (retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else if (type.IsPlatformType ("ObjCRuntime", "Class")) {
-						setup_return.AppendLine ("res = xamarin_get_class_handle (retval, &exception_gchandle);");
+						setup_return.AppendLine ("res = (Class) xamarin_get_handle_for_inativeobject (retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else if (IsNativeObject (type)) {
 						setup_return.AppendLine ("{0} retobj;", rettype);
@@ -4005,7 +4053,17 @@ namespace XamCore.Registrar {
 			return rv;
 		}
 
+		Dictionary<Tuple<MemberReference, TokenType>, uint> token_ref_cache = new Dictionary<Tuple<MemberReference, TokenType>, uint> ();
 		uint CreateTokenReference (MemberReference member, TokenType implied_type)
+		{
+			var key = new Tuple<MemberReference, TokenType> (member, implied_type);
+			uint rv;
+			if (!token_ref_cache.TryGetValue (key, out rv))
+				token_ref_cache [key] = rv = CreateTokenReference2 (member, implied_type);
+			return rv;
+		}
+
+		uint CreateTokenReference2 (MemberReference member, TokenType implied_type)
 		{
 			var token = member.MetadataToken;
 

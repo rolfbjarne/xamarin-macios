@@ -23,12 +23,65 @@ namespace MonoTouch.Tuner {
 	public class MonoTouchTypeMapStep : TypeMapStep {
 		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
 		Dictionary<TypeDefinition, bool?> isdirectbinding_value = new Dictionary<TypeDefinition, bool?> ();
-		HashSet<MethodDefinition> generated_code = new HashSet<MethodDefinition> ();
 
 		DerivedLinkContext LinkContext {
 			get {
 				return (DerivedLinkContext) base.Context;
 			}
+		}
+
+		protected override void ProcessAssembly (AssemblyDefinition assembly)
+		{
+			LinkContext.DynamicRegistrationSupported |= FindRuntimeConnectMethodReferences (assembly);
+
+			base.ProcessAssembly (assembly);
+		}
+
+		// We need to know if anybody calls Runtime.ConnectMethod before marking everything,
+		// since we'll be able to optimize a lot of code away if Runtime.ConnectMethod is not used.
+		bool FindRuntimeConnectMethodReferences (AssemblyDefinition assembly)
+		{
+#if MONOMAC && !XAMCORE_2_0
+			// Disable removing the dynamic registrar for XM/Classic to simplify the code a little bit.
+			return true;
+#else
+			if (LinkContext.Target.App.Registrar != Xamarin.Bundler.RegistrarMode.Static)
+				return true;
+
+			if (Profile.IsProductAssembly (assembly) || Profile.IsSdkAssembly (assembly)) {
+				// We know that the assemblies we ship don't use Runtime.ConnectMethod.
+				return false;
+			}
+
+			// Check if the assembly is referencing our product assembly
+			var hasProductReference = false;
+			foreach (var ar in assembly.MainModule.AssemblyReferences) {
+				if (Profile.IsProductAssembly (ar.Name)) {
+					hasProductReference = true;
+					break;
+				}
+			}
+			// Can't use Runtime.ConnectMethod if not referencing the containing assembly
+			if (!hasProductReference)
+				return false;
+
+			// Check if the assembly references the method.
+			foreach (var mr in assembly.MainModule.GetMemberReferences ()) {
+				if (mr.Name != "ConnectMethod")
+					continue;
+				if (mr.DeclaringType == null)
+					continue;
+				if (mr.DeclaringType.Name != "Runtime")
+					continue;
+				if (mr.DeclaringType.Namespace != "ObjCRuntime")
+					continue;
+				if (!Profile.IsProductAssembly (mr.Module.Assembly))
+					continue;
+				return true;
+			}
+
+			return false;
+#endif
 		}
 
 		protected override void EndProcess ()
@@ -37,22 +90,12 @@ namespace MonoTouch.Tuner {
 
 			LinkContext.CachedIsNSObject = cached_isnsobject;
 			LinkContext.NeedsIsDirectBindingCheck = isdirectbinding_value;
-			LinkContext.GeneratedCode = generated_code;
 		}
 
 		protected override void MapType (TypeDefinition type)
 		{
 			base.MapType (type);
 
-			// we'll remove [GeneratedCode] in RemoveAttribute but we need this information later
-			// when processing Dispose methods in MonoTouchMarkStep
-			if (type.HasMethods) {
-				foreach (MethodDefinition m in type.Methods) {
-					if (m.IsGeneratedCode (LinkContext))
-						generated_code.Add (m);
-				}
-			}
-			
 			// additional checks for NSObject to check if the type is a *generated* bindings
 			// bonus: we cache, for every type, whether or not it inherits from NSObject (very useful later)
 			if (!IsNSObject (type))

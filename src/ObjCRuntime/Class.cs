@@ -96,6 +96,7 @@ namespace XamCore.ObjCRuntime {
 			return GetClassHandle (type);
 		}
 
+		[LinkerOptimize] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		static IntPtr GetClassHandle (Type type)
 		{
 			bool is_custom_type;
@@ -103,7 +104,7 @@ namespace XamCore.ObjCRuntime {
 			if (rv != IntPtr.Zero)
 				return rv;
 
-			// The linker will remove this condition (and the subsequent method call) if the static registrar is used.
+			// The linker will remove this condition (and the subsequent method call) if possible
 			if (Runtime.DynamicRegistrationSupported)
 				return Register (type);
 
@@ -138,6 +139,7 @@ namespace XamCore.ObjCRuntime {
 			return LookupClass (klass, throw_on_error);
 		}
 
+		[LinkerOptimize] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		static Type LookupClass (IntPtr klass, bool throw_on_error)
 		{
 			bool is_custom_type;
@@ -145,7 +147,7 @@ namespace XamCore.ObjCRuntime {
 			if (tp != null)
 				return tp;
 
-			// The linker will remove this condition (and the subsequent method call) if the static registrar is used.
+			// The linker will remove this condition (and the subsequent method call) if possible
 			if (Runtime.DynamicRegistrationSupported)
 				return Runtime.Registrar.Lookup (klass, throw_on_error);
 
@@ -359,9 +361,67 @@ namespace XamCore.ObjCRuntime {
 			throw ErrorHelper.CreateError (8019, $"Could not find the assembly {Marshal.PtrToStringUTF8 (assembly_name)} in the loaded assemblies.");
 		}
 
+		internal unsafe static uint GetTokenReference (Type type)
+		{
+			var asm_name = type.Module.Assembly.GetName ().Name;
+
+			// First check if there's a full token reference to this type
+			var token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
+			if (token != uint.MaxValue)
+				return token;
+
+			// If type.Module.MetadataToken != 1, then the token must be a full token, which is not the case because we've already checked, so throw an exception.
+			if (type.Module.MetadataToken != 1)
+				throw ErrorHelper.CreateError (9999, $"Could not find the module ({type.Module.FullyQualifiedName}) with MetadataToken {type.Module.MetadataToken} for the type ({type.FullName}).");
+			
+			var map = Runtime.options->RegistrationMap;
+
+			// Find the assembly index in our list of registered assemblies.
+			int assembly_index = -1;
+			for (int i = 0; i < map->assembly_count; i++) {
+				var name_ptr = Marshal.ReadIntPtr (map->assembly, (int) i * IntPtr.Size);
+				if (Runtime.StringEquals (name_ptr, asm_name)) {
+					assembly_index = i;
+					break;
+				}
+			}
+			// If the assembly isn't registered, then the token must be a full token (which it isn't, because we've already checked).
+			if (assembly_index == -1)
+				throw ErrorHelper.CreateError (9999, $"Could not find the assembly ({asm_name}) for the type ({type.FullName}) in the list of registered assemblies.");
+
+			if (assembly_index > 127)
+				throw ErrorHelper.CreateError (9999, $"Expected to find a full token reference for the assembly ({asm_name}) for type ({type.FullName}), since its index ({assembly_index}) is > 127.");
+
+			return (uint) ((type.MetadataToken << 8) + (assembly_index << 1));
+			
+		}
+
+		// Look for the specified metadata token in the table of full token references.
+		static unsafe uint GetFullTokenReference (string assembly_name, int module_token, int metadata_token)
+		{
+			var map = Runtime.options->RegistrationMap;
+			for (int i = 0; i < map->full_token_reference_count; i++) {
+				var ptr = map->full_token_references + (i * IntPtr.Size + 8);
+				var asm_ptr = Marshal.ReadIntPtr (ptr);
+				var token = Marshal.ReadInt32 (ptr + IntPtr.Size + 4);
+				if (token != metadata_token)
+					continue;
+				var mod_token = Marshal.ReadInt32 (ptr + IntPtr.Size);
+				if (mod_token != module_token)
+					continue;
+				if (!Runtime.StringEquals (asm_ptr, assembly_name))
+					continue;
+
+				return (uint) i;
+			}
+
+			return uint.MaxValue;
+		}
+
 		/*
 		Type must have been previously registered.
 		*/
+		[LinkerOptimize] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 #if !XAMCORE_2_0 && !MONOTOUCH // Accidently exposed this to public, can't break API
 		public
 #else
@@ -373,6 +433,7 @@ namespace XamCore.ObjCRuntime {
 			var @class = FindClass (type, out is_custom_type);
 			if (@class != IntPtr.Zero)
 				return is_custom_type;
+			// The linker will remove this condition (and the subsequent method call) if possible
 			if (Runtime.DynamicRegistrationSupported)
 				return Runtime.Registrar.IsCustomType (type);
 			// FIXME: add tests, failing and working.

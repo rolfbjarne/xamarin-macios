@@ -95,20 +95,6 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("Class", "IntPtr", "xamarin_get_class_handle",
-			"MonoObject *", "IntPtr", "obj"
-		) {
-			WrappedManagedFunction = "GetClassHandle",
-			OnlyDynamicUsage = false,
-		},
-
-		new XDelegate ("SEL", "IntPtr", "xamarin_get_selector_handle",
-			"MonoObject *", "IntPtr", "obj"
-		) {
-			WrappedManagedFunction = "GetSelectorHandle",
-			OnlyDynamicUsage = true,
-		},
-
 		new XDelegate ("void", "void", "xamarin_get_method_for_selector",
 			"Class", "IntPtr", "cls",
 			"SEL", "IntPtr", "sel",
@@ -176,7 +162,7 @@
 			"unsigned int", "uint", "token_ref"
 		) {
 			WrappedManagedFunction = "GetGenericMethodFromToken",
-			OnlyDynamicUsage = true,
+			OnlyDynamicUsage = false,
 		},
 
 		new XDelegate ("MonoObject *", "IntPtr", "xamarin_get_inative_object_static",
@@ -202,7 +188,7 @@
 			"MonoObject *", "IntPtr", "mobj"
 		) {
 			WrappedManagedFunction = "Dispose",
-			OnlyDynamicUsage = true,
+			OnlyDynamicUsage = false,
 		},
 
 		new XDelegate ("bool", "bool", "xamarin_is_parameter_transient",

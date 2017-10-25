@@ -10,6 +10,7 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 
 using Xamarin.Bundler;
+using Xamarin.Linker;
 using Xamarin.Tuner;
 
 namespace Mono.Tuner
@@ -28,6 +29,7 @@ namespace Mono.Tuner
 
 		protected override void ProcessAssembly (AssemblyDefinition assembly)
 		{
+			Console.WriteLine ($"Processing {assembly.MainModule.FullyQualifiedName}");
 			if (uses_runtime_connectmethod)
 				return;
 
@@ -41,11 +43,14 @@ namespace Mono.Tuner
 				return;
 			}
 
-			if (Profile.IsProductAssembly (assembly)) {
-				product_assembly = assembly;
+			if (Profile.IsProductAssembly (assembly) || Profile.IsSdkAssembly (assembly)) {
+				// We know that the assemblies we ship don't use Runtime.ConnectMethod.
+				if (assembly.FullName == LinkContext.Target.ProductAssembly.FullName)
+					product_assembly = assembly;
 				return;
 			}
 
+			// Check if the assembly is referencing our product assembly.
 			var hasProductReference = false;
 			foreach (var ar in assembly.MainModule.AssemblyReferences) {
 				if (Profile.IsProductAssembly (ar.Name)) {
@@ -77,7 +82,7 @@ namespace Mono.Tuner
 		{
 			if (uses_runtime_connectmethod)
 				return;
-
+			
 			if (product_assembly == null)
 				return; // huh? this shouldn't happen
 

@@ -23,16 +23,17 @@ namespace Xamarin.Linker
 			switch (attr_type.Name) {
 			case "AdoptsAttribute":
 			case "BlockProxyAttribute":
+			case "LinkerOptimizeAttribute":
 			case "NativeAttribute":
 			case "ReleaseAttribute":
 			case "UserDelegateTypeAttribute":
-				return attr_type.Namespace == Namespaces.ObjCRuntime && LinkContext.Target.App.Registrar == Bundler.RegistrarMode.Static; // FIXME: check for IsDynamicSupported instead.
+				return attr_type.Namespace == Namespaces.ObjCRuntime && !LinkContext.DynamicRegistrationSupported;
 			case "ExportAttribute":
 			case "ModelAttribute":
 			case "RegisterAttribute":
 			case "ProtocolAttribute":
 			case "ProtocolMemberAttribute":
-				return attr_type.Namespace == Namespaces.Foundation && LinkContext.Target.App.Registrar == Bundler.RegistrarMode.Static; // FIXME: check for IsDynamicSupported instead.
+				return attr_type.Namespace == Namespaces.Foundation && !LinkContext.DynamicRegistrationSupported;
 			case "AdviceAttribute":
 			case "FieldAttribute":
 			case "PreserveAttribute":       // the ApplyPreserveAttribute substep is executed before this
@@ -87,6 +88,12 @@ namespace Xamarin.Linker
 				case "RegisterAttribute":
 				case "ProtocolAttribute":
 				case "ProtocolMemberAttribute":
+					StoreAttributeAsAnnotation (attr_type.Name, provider, attribute);
+					break;
+				}
+			} else if (attr_type.Namespace == "System.Runtime.CompilerServices") {
+				switch (attr_type.Name) {
+				case "CompilerGeneratedAttribute":
 					StoreAttributeAsAnnotation (attr_type.Name, provider, attribute);
 					break;
 				}

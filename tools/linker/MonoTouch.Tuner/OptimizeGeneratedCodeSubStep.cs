@@ -63,7 +63,7 @@ namespace MonoTouch.Tuner
 		protected override void Process (AssemblyDefinition assembly)
 		{
 			// The "get_Size" is a performance (over size) optimization.
-			// It always makes sense for plaftorm assemblies because:
+			// It always makes sense for platform assemblies because:
 			// * Xamarin.TVOS.dll only ship the 64 bits code paths (all 32 bits code is extra weight better removed)
 			// * Xamarin.WatchOS.dll only ship the 32 bits code paths (all 64 bits code is extra weight better removed)
 			// * Xamarin.iOS.dll  ship different 32/64 bits versions of the assembly anyway (nint... support)
@@ -80,7 +80,7 @@ namespace MonoTouch.Tuner
 
 		protected override void Process (TypeDefinition type)
 		{
-			if (!HasGeneratedCode)
+			if (!HasOptimizableCode)
 				return;
 
 			isdirectbinding_constant = type.IsNSObject (LinkContext) ? type.GetIsDirectBindingConstant (LinkContext) : null;
@@ -89,14 +89,21 @@ namespace MonoTouch.Tuner
 
 		protected override void Process (MethodDefinition method)
 		{
-			if (method.DeclaringType.Name == "UIApplicationDelegate")
-				Console.WriteLine ("STOP");
-			// special processing on generated methods from NSObject-inherited types
-			// it would be too risky to apply on user-generated code
-			if (!method.HasBody || !method.IsGeneratedCode (LinkContext) || (!IsExtensionType && !IsExport (method)))
+			if (!method.HasBody)
 				return;
-			if (method.Name == "get_Bounds" && method.DeclaringType.Name == "UIScreen")
-				Console.WriteLine ("STOP");
+
+			if (method.IsOptimizableCode (LinkContext)) {
+				// We optimize methods that have the [LinkerOptimize] attribute,
+			} else if (method.IsGeneratedCode (LinkContext) && (IsExtensionType || IsExport (method))) {
+				// or that have the [GeneratedCodeAttribute] and is either an extension type or an exported method
+			} else {
+				// but it would be too risky to apply on user-generated code
+				Console.WriteLine ($"Not optimizable: {method.FullName}");
+				if (method.Name == "LookupClass" && method.DeclaringType.Name == "Class")
+					Console.WriteLine ("STA");
+				return; 
+			}
+
 			var instructions = method.Body.Instructions;
 			for (int i = 0; i < instructions.Count; i++) {
 				switch (instructions [i].OpCode.Code) {
@@ -305,6 +312,15 @@ namespace MonoTouch.Tuner
 #endif
 				ProcessIsDirectBinding (caller, ins, isdirectbinding_constant.Value);
 				break;
+			case "get_DynamicRegistrationSupported":
+				if (LinkContext.DynamicRegistrationSupported)
+					return 0;
+				
+				if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "Runtime"))
+					return 0;
+				
+				ProcessIsDynamicSupported (caller, ins, false);
+				break;
 			}
 
 			return 0;
@@ -316,6 +332,25 @@ namespace MonoTouch.Tuner
 			if (fr.Name != field)
 				return false;
 			return fr.DeclaringType.Is (nspace, type);
+		}
+
+		void ProcessIsDynamicSupported (MethodDefinition caller, Instruction ins, bool value)
+		{
+			const string operation = "inline Runtime.IsDynamicSupported";
+			if (!ValidateInstruction (caller, ins, operation, Code.Call))
+				return;
+
+			var insBranch = ins.Next;
+			if (!InlineBranchCondition (caller, operation, insBranch, value))
+				return;
+
+			// Clearing the branch succeeded, so clear the condition too
+			Nop (ins);           // call void ObjCRuntime.Runtime::get_IsDynamicSupported()
+
+#if TRACE
+			Console.WriteLine ($"{caller} after inlining Runtime.IsDynamicSupported=false:");
+			Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
+#endif
 		}
 
 		// https://app.asana.com/0/77259014252/77812690163
@@ -405,6 +440,8 @@ namespace MonoTouch.Tuner
 		//    insTrueLast: IL_2
 		//    insFalseFirst: IL_4
 		//    insFalseLast: IL_5
+		// 
+		// The ins*Last instructions will be null if this is a condition without an 'else' block.
 		static bool GetBranchRange (MethodDefinition caller, Instruction insBranch, string operation, out Instruction insTrueFirst, out Instruction insTrueLast, out Instruction insFalseFirst, out Instruction insFalseLast)
 		{
 			insTrueFirst = null;
@@ -440,8 +477,14 @@ namespace MonoTouch.Tuner
 				}
 				endTarget = caller.Body.ExceptionHandlers [0].TryEnd;
 				break;
+			case Code.Call:
+			case Code.Stsfld:
+				// condition without 'else' clause
+				// there are a lot more instructions that can go into this case statement, but keep a whitelist for now.
+				endTarget = null;
+				break;
 			default:
-				throw new NotImplementedException ();
+				throw new NotImplementedException (branchTarget.Previous.ToString ());
 			}
 			switch (insBranch.OpCode.Code) {
 			case Code.Brfalse:
@@ -492,6 +535,11 @@ namespace MonoTouch.Tuner
 			Instruction first = !constantValue ? insTrueFirst : insFalseFirst;
 			Instruction last = !constantValue ? insTrueLast : insFalseLast;
 
+			if (last == null) {
+				// This is a condition without an 'else' block, and the 'else' block is the one we'd remove, which means there's nothing to do.
+				return true;
+			}
+			
 			// We have the information we need, now we can start clearing instructions
 			Nop (insBranch);
 			Instruction current = first;

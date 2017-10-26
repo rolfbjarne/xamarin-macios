@@ -292,7 +292,6 @@ wrench-mac-%:
 endif
 
 wrench-msbuild:
-	$(MAKE) -C $(TOP)/msbuild test-xml
 	@echo Not here anymore
 
 wrench-docs:

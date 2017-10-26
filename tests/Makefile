@@ -274,8 +274,7 @@ wrench-mac-api:
 	@echo Not here anymore
 
 wrench-mac-mmptest:
-	$(Q) $(MAKE) -C mmptest/regression
-	git clean -xfdq
+	@echo Not here anymore
 
 wrench-mac-msbuild:
 	@echo Not here anymore

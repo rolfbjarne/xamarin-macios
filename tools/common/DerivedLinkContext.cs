@@ -21,6 +21,8 @@ namespace Xamarin.Tuner
 		HashSet<TypeDefinition> cached_isnsobject;
 		Dictionary<TypeDefinition, bool?> needs_isdirectbinding_check;
 
+		public Dictionary<TypeDefinition, List<TypeDefinition>> ProtocolImplementations { get; private set; } = new Dictionary<TypeDefinition, List<TypeDefinition>> ();
+
 		public bool DynamicRegistrationSupported { get; set; }
 
 		public HashSet<TypeDefinition> CachedIsNSObject {

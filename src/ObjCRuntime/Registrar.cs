@@ -1013,6 +1013,7 @@ namespace XamCore.Registrar
 		protected abstract bool ContainsPlatformReference (TAssembly assembly); // returns true if the assembly is monotouch.dll too.
 		protected abstract TType GetBaseType (TType type); // for generic parameters it returns the first specific class constraint.
 		protected abstract TType[] GetInterfaces (TType type); // may return interfaces from base classes as well. May return null if no interfaces found.
+		protected virtual TType [] GetLinkedAwayInterfaces (TType type) { return null; } // may NOT return interfaces from base classes as well. May return null if no interfaces found.
 		protected abstract TMethod GetBaseMethod (TMethod method);
 		protected abstract TType[] GetParameters (TMethod method);
 		protected abstract string GetParameterName (TMethod method, int parameter_index);
@@ -1603,6 +1604,8 @@ namespace XamCore.Registrar
 			// return interfaces from all base classes as well.
 			// We only want the interfaces declared on this type.
 
+			// Additionally it may return interface implementations that were linked away.
+
 			// This function will return arrays with null entries.
 
 			var type = objcType.Type;
@@ -1634,18 +1637,34 @@ namespace XamCore.Registrar
 		ObjCType [] GetProtocols (ObjCType type, ref List<Exception> exceptions)
 		{
 			var interfaces = GetInterfacesImpl (type);
-			if (interfaces == null || interfaces.Length == 0)
-				return null;
-
-			var protocolList = new List<ObjCType> (interfaces.Length);
-			for (int i = 0; i < interfaces.Length; i++) {
-				if (interfaces [i] == null)
-					continue;
-				var baseP = RegisterTypeUnsafe (interfaces [i], ref exceptions);
-				if (baseP != null)
-					protocolList.Add (baseP);
+			List<ObjCType> protocolList = null;
+			if (interfaces?.Length > 0) {
+				protocolList = new List<ObjCType> (interfaces.Length);
+				for (int i = 0; i < interfaces.Length; i++) {
+					if (interfaces [i] == null)
+						continue;
+					var baseP = RegisterTypeUnsafe (interfaces [i], ref exceptions);
+					if (baseP != null)
+						protocolList.Add (baseP);
+				}
 			}
-			if (protocolList.Count == 0)
+			var linkedAwayInterfaces = GetLinkedAwayInterfaces (type.Type);
+			if (linkedAwayInterfaces?.Length > 0) {
+				foreach (var iface in linkedAwayInterfaces) {
+					var objcType = new ObjCType () {
+						Registrar = this,
+						Type = iface,
+						IsProtocol = true,
+					};
+#if MMP || MTOUCH
+					objcType.ProtocolWrapperType = GetProtocolAttributeWrapperType (objcType.Type);
+					objcType.IsWrapper = objcType.ProtocolWrapperType != null;
+#endif
+
+					protocolList.Add (objcType);
+				}
+			}
+			if (protocolList == null || protocolList.Count == 0)
 				return null;
 			return protocolList.ToArray ();
 		}

@@ -507,7 +507,7 @@ namespace XamCore.Registrar {
 		readonly Version MacOSTenTwelveVersion = new Version (10,12);
 #endif
 
-		public Mono.Linker.LinkContext LinkContext {
+		public Xamarin.Tuner.DerivedLinkContext LinkContext {
 			get {
 				return Target?.LinkContext;
 			}
@@ -1008,6 +1008,18 @@ namespace XamCore.Registrar {
 			for (int i = 0; i < td.Interfaces.Count; i++)
 				rv [i] = td.Interfaces [i].InterfaceType.Resolve ();
 			return rv;
+		}
+
+		protected override TypeReference[] GetLinkedAwayInterfaces(TypeReference type)
+		{
+			List<TypeDefinition> linkedAwayInterfaces = null;
+			if (LinkContext?.ProtocolImplementations?.TryGetValue (type.Resolve (), out linkedAwayInterfaces) != true)
+				return null;
+
+			if (linkedAwayInterfaces.Count == 0)
+				return null;
+
+			return linkedAwayInterfaces.ToArray ();
 		}
 
 		protected override TypeReference GetGenericTypeDefinition (TypeReference type)
@@ -1782,7 +1794,7 @@ namespace XamCore.Registrar {
 			if (type.IsNested)
 				return false;
 
-			var aname = type.Module.Assembly.Name.Name;
+			var aname = type.Module?.Assembly?.Name?.Name;
 			if (aname != PlatformAssembly)
 				return false;
 				

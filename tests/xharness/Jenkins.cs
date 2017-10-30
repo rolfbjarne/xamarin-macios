@@ -2923,7 +2923,7 @@ function oninitialload ()
 
 					if (!Failed) {
 						// Run the app
-						runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log");
+						runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log", true);
 						await runner.RunAsync ();
 
 						if (!string.IsNullOrEmpty (runner.FailureMessage))
@@ -2943,7 +2943,7 @@ function oninitialload ()
 								ProjectFile = TestProject.GetTodayExtension ().Path,
 								Target = AppRunnerTarget,
 								LogDirectory = LogDirectory,
-								MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log"),
+								MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log", true),
 								DeviceName = Device.Name,
 								CompanionDeviceName = CompanionDevice?.Name,
 								Configuration = ProjectConfiguration,
@@ -3033,7 +3033,7 @@ function oninitialload ()
 				EnsureCleanSimulatorState = clean_state,
 				Target = AppRunnerTarget,
 				LogDirectory = LogDirectory,
-				MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log"),
+				MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log", true),
 				IncludeSystemPermissionTests = Jenkins.IncludeSystemPermissionTests,
 			};
 			runner.Simulators = Simulators;

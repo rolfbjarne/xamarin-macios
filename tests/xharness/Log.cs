@@ -174,11 +174,12 @@ namespace xharness
 
 	public class Logs : List<Log>
 	{
-		public LogStream CreateStream (string directory, string filename, string name)
+		public LogStream CreateStream (string directory, string filename, string name, bool timestamp = false)
 		{
 			Directory.CreateDirectory (directory);
 			var rv = new LogStream (name, Path.GetFullPath (Path.Combine (directory, filename)));
 			Add (rv);
+			rv.Timestamp = timestamp;
 			return rv;
 		}
 

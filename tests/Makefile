@@ -316,7 +316,7 @@ wrench-%:
 
 wrench-jenkins: xharness/xharness.exe
 	$(Q) rm -f $@-failed.stamp
-	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests --markdown-summary=$(CURDIR)/TestSummary.md || touch $@-failed.stamp
+	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests --markdown-summary=$(CURDIR)/TestSummary.md $(TESTS_UPLOAD_COMMAND) || touch $@-failed.stamp
 	@echo "@MonkeyWrench: SetSummary: $(cat $(CURDIR)/TestSummary.md | awk 1 ORS='<br/>')"
 	$(Q) if test -e $@-failed.stamp; then rm -f $@-failed.stamp; exit 1; fi
 

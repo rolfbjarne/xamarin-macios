@@ -691,6 +691,27 @@ namespace xharness
 			throw new NotImplementedException ();
 		}
 
+		async Task ExecuteUploadCommandAsync (Log upload_log)
+		{
+			//await Task.Delay (Harness.UploadInterval);
+			upload_log.WriteLine ($"Starting upload task with interval {Harness.UploadInterval.TotalMinutes} minutes.");
+			while (true) {
+				var watch = Stopwatch.StartNew ();
+				using (var process = new Process ()) {
+					process.StartInfo.FileName = Harness.UploadCommand;
+					process.StartInfo.Arguments = Harness.UploadCommandArguments;
+					var rv = await process.RunAsync (upload_log, null);
+					if (!rv.Succeeded)
+						upload_log.WriteLine ($"Upload failed with exit code {rv.ExitCode} (Timed out: {rv.TimedOut})");
+				}
+				var ticksLeft = watch.ElapsedTicks - Harness.UploadInterval.Ticks;
+				if (ticksLeft < 0)
+					ticksLeft = Harness.UploadInterval.Ticks;
+				var wait = TimeSpan.FromTicks (ticksLeft);
+				await Task.Delay (wait);
+			}
+		}
+
 		public int Run ()
 		{
 			try {
@@ -712,6 +733,11 @@ namespace xharness
 							Console.WriteLine ("Still running tests. Please be patient.");
 						}
 					});
+				}
+				if (!string.IsNullOrEmpty (Harness.UploadCommand)) {
+					var upload_log = Logs.CreateFile ("Upload log", Path.Combine (LogDirectory, "Upload.log"), false);
+					upload_log.Timestamp = true;
+					Task.Run (async () => await ExecuteUploadCommandAsync (upload_log));
 				}
 
 				Task.Run (async () =>

@@ -67,6 +67,9 @@ namespace xharness
 					}
 				},
 				{ "markdown-summary=", "The path where a summary (in Markdown format) will be written.", (v) => harness.MarkdownSummaryPath = v },
+				{ "upload-command=", "A command to execute to upload/update the Html Report.", (v) => harness.UploadCommand = v },
+				{ "upload-command-arguments=", "Arguments to the command to execute to upload/update the Html Report.", (v) => harness.UploadCommandArguments = v },
+				{ "upload-interval=", "An interval (in minutes) between every attempt to execute the upload command.", (v) => harness.UploadInterval = TimeSpan.FromMinutes (double.Parse (v)) },
 			};
 
 			showHelp = () => {

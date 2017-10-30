@@ -89,6 +89,9 @@ namespace xharness
 		public string JenkinsConfiguration { get; set; }
 		public Dictionary<string, string> EnvironmentVariables { get; set; } = new Dictionary<string, string> ();
 		public string MarkdownSummaryPath { get; set; }
+		public string UploadCommand { get; set; }
+		public string UploadCommandArguments { get; set; }
+		public TimeSpan UploadInterval { get; set; }
 
 		public Harness ()
 		{

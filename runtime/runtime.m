@@ -103,6 +103,9 @@ static MonoGHashTable *xamarin_wrapper_hash;
 
 static bool initialize_started = FALSE;
 
+static SwiftGetStrongRetainCount xamarin_get_strong_retain_count_swift = NULL;
+// We don't care about weak RC (yet at least)
+
 #include "delegates.inc"
 
 /* Keep Trampolines, InitializationFlags and InitializationOptions in sync with Runtime.cs */
@@ -797,6 +800,17 @@ gc_register_toggleref (MonoObject *obj, id self, bool isCustomType)
 	}
 }
 
+// Our Swift bindings must P/Invoke this method for every Swift object (in a constructor).
+void
+xamarin_register_swift_object (MonoObject *obj)
+{
+	if ((xamarin_get_nsobject_flags (obj) & NSObjectFlagsIsSwiftObject) != NSObjectFlagsIsSwiftObject) {
+		LOG (PRODUCT ": object %p is not a swift object.");
+		return;
+	}
+	mono_gc_toggleref_add (obj, TRUE);
+}
+
 static MonoToggleRefStatus
 gc_toggleref_callback (MonoObject *object)
 {
@@ -807,18 +821,33 @@ gc_toggleref_callback (MonoObject *object)
 	uint8_t flags = xamarin_get_nsobject_flags (object);
 	bool disposed = (flags & NSObjectFlagsDisposed) == NSObjectFlagsDisposed;
 	bool has_managed_ref = (flags & NSObjectFlagsHasManagedRef) == NSObjectFlagsHasManagedRef;
+	bool is_swift_object = (flags & NSObjectFlagsIsSwiftObject) == NSObjectFlagsIsSwiftObject;
 
-	if (disposed || !has_managed_ref) {
-		res = MONO_TOGGLE_REF_DROP; /* Already disposed, we don't need the managed object around */
-	} else {
+	if (is_swift_object) {
 		handle = xamarin_get_nsobject_handle (object);
-		if (handle == NULL) { /* This shouldn't really happen */
+		if (handle == NULL) /* This shouldn't really happen */
 			return MONO_TOGGLE_REF_DROP;
+
+		int rc = xamarin_get_strong_retain_count_swift (handle);
+		int weak_rc = (disposed || !has_managed_ref) ? 0 : 1;
+		if (rc == weak_rc) {
+			res = MONO_TOGGLE_REF_WEAK;
 		} else {
-			if ([handle retainCount] == 1)
-				res = MONO_TOGGLE_REF_WEAK;
-			else
-				res = MONO_TOGGLE_REF_STRONG;
+			res = MONO_TOGGLE_REF_STRONG;
+		}
+	} else {
+		if (disposed || !has_managed_ref) {
+			res = MONO_TOGGLE_REF_DROP; /* Already disposed, we don't need the managed object around */
+		} else {
+			handle = xamarin_get_nsobject_handle (object);
+			if (handle == NULL) { /* This shouldn't really happen */
+				return MONO_TOGGLE_REF_DROP;
+			} else {
+				if ([handle retainCount] == 1)
+					res = MONO_TOGGLE_REF_WEAK;
+				else
+					res = MONO_TOGGLE_REF_STRONG;
+			}
 		}
 	}
 
@@ -2723,6 +2752,13 @@ xamarin_is_managed_exception_marshaling_disabled ()
 #else
 	return false;
 #endif
+}
+
+void
+xamarin_set_swift_rc_callbacks (SwiftGetStrongRetainCount swift_get_strong_retain_count, SwiftGetWeakRetainCount swift_get_weak_retain_count)
+{
+	xamarin_get_strong_retain_count_swift = swift_get_strong_retain_count;
+	// We don't care about weak rc (yet at least).
 }
 
 /*

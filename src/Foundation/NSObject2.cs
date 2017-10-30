@@ -79,6 +79,7 @@ namespace XamCore.Foundation {
 			RegisteredToggleRef = 8,
 			InFinalizerQueue = 16,
 			HasManagedRef = 32,
+			IsSwiftObject = 64,
 		}
 
 		bool disposed { 

@@ -221,8 +221,8 @@ void			xamarin_install_log_callbacks ();
  * Stable API.
  */
 
-typedef int32_t (*SwiftGetStrongRetainCount) (void *obj);
-typedef int32_t (*SwiftGetWeakRetainCount)   (void *obj);
+typedef size_t (*SwiftGetStrongRetainCount) (void *obj);
+typedef size_t (*SwiftGetWeakRetainCount)   (void *obj);
 void            xamarin_set_swift_rc_callbacks (SwiftGetStrongRetainCount swift_get_strong_retain_count, SwiftGetWeakRetainCount swift_get_weak_retain_count);
 void            xamarin_register_swift_object (MonoObject *obj);
 

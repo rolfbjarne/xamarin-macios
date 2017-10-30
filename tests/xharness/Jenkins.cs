@@ -551,13 +551,13 @@ namespace xharness
 							TestName = project.Name,
 						};
 					}
-					exec.Variation = configurations.Length > 1 ? config : null;
+					exec.Variation = configurations.Length > 1 ? config : project.TargetFrameworkFlavor.ToString ();
 					Tasks.Add (exec);
 
 					if (project.GenerateVariations) {
 						Tasks.Add (CloneExecuteTask (exec, TestPlatform.Mac_Unified, "-unified", ignored));
 						Tasks.Add (CloneExecuteTask (exec, TestPlatform.Mac_Unified32, "-unified-32", ignored));
-						if (!project.SkipXMVariations) {
+						if (project.GenerateFull) {
 							Tasks.Add (CloneExecuteTask (exec, TestPlatform.Mac_UnifiedXM45, "-unifiedXM45", ignored));
 							Tasks.Add (CloneExecuteTask (exec, TestPlatform.Mac_UnifiedXM45_32, "-unifiedXM45-32", ignored));
 						}

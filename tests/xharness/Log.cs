@@ -65,6 +65,29 @@ namespace xharness
 				return System.Text.Encoding.UTF8;
 			}
 		}
+
+		public static Log CreateAggregatedLog (params Log [] logs)
+		{
+			return new AggregatedLog (logs);
+		}
+
+		class AggregatedLog : Log
+		{
+			Log [] logs;
+
+			public AggregatedLog (params Log [] logs)
+			{
+				this.logs = logs;
+			}
+
+			public override string FullPath => throw new NotImplementedException ();
+
+			protected override void WriteImpl (string value)
+			{
+				foreach (var log in logs)
+					log.WriteImpl (value);
+			}
+		}
 	}
 
 	public class LogFile : Log
@@ -317,6 +340,23 @@ namespace xharness
 			get {
 				return Path;
 			}
+		}
+	}
+
+	public class CallbackLog : Log
+	{
+		public Action<string> OnWrite;
+
+		public CallbackLog (Action<string> onWrite)
+		{
+			OnWrite = onWrite;
+		}
+
+		public override string FullPath => throw new NotImplementedException ();
+
+		protected override void WriteImpl (string value)
+		{
+			OnWrite (value);
 		}
 	}
 }

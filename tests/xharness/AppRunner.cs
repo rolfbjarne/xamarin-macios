@@ -690,7 +690,23 @@ namespace xharness
 
 				main_log.WriteLine ("Starting test run");
 
-				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), main_log, TimeSpan.FromMinutes (Harness.Timeout), cancellation_token: cancellation_source.Token);
+				bool waitedForExit = true;
+				var callbackLog = new CallbackLog ((v) => {
+					waitedForExit &= v?.Contains ("MT1111: ") != true;
+				});
+				var runLog = Log.CreateAggregatedLog (callbackLog, main_log);
+				var timeout = TimeSpan.FromMinutes (Harness.Timeout);
+				var timeoutWatch = Stopwatch.StartNew ();
+				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), runLog, timeout, cancellation_token: cancellation_source.Token);
+
+				if (!waitedForExit && !result.TimedOut) {
+					// mlaunch couldn't wait for exit for some reason. Let's assume the app exits when the test listener completes.
+					main_log.WriteLine ("Waiting for listener to complete, since mlaunch won't tell.");
+					if (!await listener.CompletionTask.TimeoutAfter (timeout - timeoutWatch.Elapsed)) {
+						result.TimedOut = true;
+					}
+				}
+
 				if (result.TimedOut) {
 					timed_out = true;
 					success = false;

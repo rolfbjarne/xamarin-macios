@@ -74,6 +74,16 @@ namespace Xamarin.Bundler {
 	
 		public bool Embeddinator { get; set; }
 
+#if !MMP
+		public bool DynamicRegistrationSupported {
+			get {
+				if (!Targets.All ((v) => v.LinkContext.DynamicRegistrationSupported == Targets [0].LinkContext.DynamicRegistrationSupported))
+					throw ErrorHelper.CreateError (9999, "FIXME //FIXME"); // FIXME
+				return Targets [0].LinkContext.DynamicRegistrationSupported;
+			}	
+		}
+#endif
+
 		public Application (string[] arguments)
 		{
 			Cache = new Cache (arguments);

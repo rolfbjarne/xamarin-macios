@@ -18,6 +18,7 @@ namespace XamCore.Security {
 			IntPtr /* void (^completionHandler)( CFErrorRef error) ) */ completionHandler);
 			
 		[UnmanagedFunctionPointerAttribute (CallingConvention.Cdecl)]
+		[UserDelegateType (typeof (global::System.Action<NSError>))]
 		internal delegate void DActionArity1V12 (IntPtr block, IntPtr obj);
 		
 		// This class bridges native block invocations that call into C#
@@ -34,6 +35,7 @@ namespace XamCore.Security {
 			} 
 		} 
 
+		[LinkerOptimize]
 		public static void AddSharedWebCredential (string domainName, string account, string password, Action<NSError> handler)
 		{
 			if (domainName == null)
@@ -69,6 +71,7 @@ namespace XamCore.Security {
 			IntPtr /* void (^completionHandler)( CFArrayRef credentials, CFErrorRef error) */ completionHandler);
 
 		[UnmanagedFunctionPointerAttribute (CallingConvention.Cdecl)]
+		[UserDelegateType (typeof (global::System.Action<NSArray, NSError>))]
 		internal delegate void ArrayErrorAction (IntPtr block, IntPtr array, IntPtr err);
 
 		//
@@ -87,6 +90,7 @@ namespace XamCore.Security {
 			}
 		}
 
+		[LinkerOptimize]
 		public static void RequestSharedWebCredential (string domainName, string account, Action<string[], NSError> handler)
 		{
 			// do not check domain an account because they can be null

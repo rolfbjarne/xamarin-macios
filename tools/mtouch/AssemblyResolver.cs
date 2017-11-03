@@ -72,7 +72,7 @@ namespace MonoTouch.Tuner {
 			parameters.AssemblyResolver = this;
 			parameters.InMemory = new FileInfo (path).Length < 1024 * 1024 * 100; // 100 MB.
 			//parameters.ReadSymbols = true;
-			parameters.SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false);
+			//parameters.SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false);
 			return parameters;
 		}
 

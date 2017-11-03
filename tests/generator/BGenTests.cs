@@ -29,5 +29,15 @@ namespace GeneratorTests
 			bgen.AssertExecute ("build");
 			bgen.AssertNoWarnings ();
 		}
+
+		[Test]
+		public void PropertyRedefinitionMac ()
+		{
+			var bgen = new BGenTool ();
+			bgen.Profile = Profile.macClassic;
+			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", "property-redefination-mac.cs")));
+			bgen.AssertExecute ("build");
+			bgen.AssertNoWarnings ();
+		}
 	}
 }

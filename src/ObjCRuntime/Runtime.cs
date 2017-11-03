@@ -156,7 +156,9 @@ namespace XamCore.ObjCRuntime {
 
 		internal static bool DynamicRegistrationSupported {
 			get {
-				// The linker will rewrite this property to return 'false' if:
+				// The linker will turn calls to this property into a constant, and for if blocks remove the resulting dead code.
+				//
+				// The value is false if both these conditions are true:
 				// * The static registrar is selected
 				// * No Runtime.ConnectMethod overloads are used anywhere.
 				return true;

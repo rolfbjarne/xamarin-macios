@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using Mono.Cecil;
 using Mono.Linker;
@@ -23,7 +24,7 @@ namespace Xamarin.Tuner
 
 		public Dictionary<TypeDefinition, List<TypeDefinition>> ProtocolImplementations { get; private set; } = new Dictionary<TypeDefinition, List<TypeDefinition>> ();
 
-		public bool DynamicRegistrationSupported { get; set; }
+		public bool DynamicRegistrationSupported { get; set; } = true;
 
 		public HashSet<TypeDefinition> CachedIsNSObject {
 			get { return cached_isnsobject; }
@@ -67,6 +68,23 @@ namespace Xamarin.Tuner
 			if (annotations?.TryGetValue (provider, out storage) != true)
 				return null;
 			return (List<ICustomAttribute>) storage;
+		}
+
+		public void StoreProtocolMethods (TypeDefinition type)
+		{
+			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
+			object value;
+			if (!attribs.TryGetValue (type, out value))
+				attribs [type] = type.Methods.ToArray (); // Make a copy of the collection.
+		}
+
+		public IList<MethodDefinition> GetProtocolMethods (TypeDefinition type)
+		{
+			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
+			object value;
+			if (attribs.TryGetValue (type, out value))
+				return (MethodDefinition []) value;
+			return null;
 		}
 	}
 }

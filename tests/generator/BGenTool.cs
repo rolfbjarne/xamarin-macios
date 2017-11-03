@@ -27,6 +27,7 @@ namespace Xamarin.Tests
 		public List<string> ApiDefinitions = new List<string> ();
 		public string [] Defines;
 		public string TmpDirectory;
+		public string WarnAsError; // Set to empty string to pass /warnaserror, set to non-empty string to pass /warnaserror:<nonemptystring>
 
 		protected override string ToolPath { get { return Configuration.BGenPath; } }
 		protected override string MessagePrefix { get { return "BI"; } }
@@ -79,6 +80,12 @@ namespace Xamarin.Tests
 					sb.Append (" -d ").Append (StringUtils.Quote (d));
 			}
 
+			if (WarnAsError != null) {
+				sb.Append (" --warnaserror");
+				if (WarnAsError.Length > 0)
+					sb.Append (":").Append (StringUtils.Quote (WarnAsError));
+			}
+
 			return sb.ToString ();
 		}
 
@@ -116,8 +123,10 @@ namespace Xamarin.Tests
 				return new string [] { "MONOMAC", "XAMCORE_2_0" };
 			case Profile.macClassic:
 				return new string [] { "MONOMAC" };
+			case Profile.iOS:
+				return new string [] { "IOS", "XAMCORE_2_0" };
 			default:
-				throw new NotImplementedException ();
+				throw new NotImplementedException (profile.ToString ());
 			}
 		}
 	}

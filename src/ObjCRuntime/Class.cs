@@ -143,9 +143,13 @@ namespace XamCore.ObjCRuntime {
 		static Type LookupClass (IntPtr klass, bool throw_on_error)
 		{
 			bool is_custom_type;
-			var tp = FindType (klass, out is_custom_type);
-			if (tp != null)
-				return tp;
+			var find_class = klass;
+			do {
+				var tp = FindType (find_class, out is_custom_type);
+				if (tp != null)
+					return tp;
+				find_class = class_getSuperclass (find_class);
+			} while (find_class != IntPtr.Zero);
 
 			// The linker will remove this condition (and the subsequent method call) if possible
 			if (Runtime.DynamicRegistrationSupported)

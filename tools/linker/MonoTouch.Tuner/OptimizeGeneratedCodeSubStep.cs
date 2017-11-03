@@ -468,7 +468,7 @@ namespace MonoTouch.Tuner
 				break;
 			case Code.Ret:
 				endTarget = branchTarget;
-				while (endTarget.OpCode.Code != Code.Ret)
+				while (endTarget.OpCode.FlowControl != FlowControl.Return && endTarget.OpCode.FlowControl != FlowControl.Throw)
 					endTarget = endTarget.Next;
 				//endTarget = caller.Body.Instructions [caller.Body.Instructions.Count - 1];
 				//endTarget = endTarget.Previous;

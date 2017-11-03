@@ -24,7 +24,7 @@ namespace Xamarin.Tuner
 
 		public Dictionary<TypeDefinition, List<TypeDefinition>> ProtocolImplementations { get; private set; } = new Dictionary<TypeDefinition, List<TypeDefinition>> ();
 
-		public bool DynamicRegistrationSupported { get; set; } = true;
+		public bool DynamicRegistrationSupported { get; set; }
 
 		public HashSet<TypeDefinition> CachedIsNSObject {
 			get { return cached_isnsobject; }
@@ -74,16 +74,20 @@ namespace Xamarin.Tuner
 		{
 			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
 			object value;
-			if (!attribs.TryGetValue (type, out value))
+			if (!attribs.TryGetValue (type, out value)) {
 				attribs [type] = type.Methods.ToArray (); // Make a copy of the collection.
+				System.Console.WriteLine ($"Stored protocol methods for {type.FullName}");
+			}
 		}
 
 		public IList<MethodDefinition> GetProtocolMethods (TypeDefinition type)
 		{
 			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
 			object value;
-			if (attribs.TryGetValue (type, out value))
+			if (attribs.TryGetValue (type, out value)) {
+				System.Console.WriteLine ($"Got protocol methods for {type.FullName}");
 				return (MethodDefinition []) value;
+			}
 			return null;
 		}
 	}

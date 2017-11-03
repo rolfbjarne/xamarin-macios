@@ -3591,6 +3591,7 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("mono_free (str);");
 						setup_return.AppendLine ("res = nsstr;");
 					} else if (IsDelegate (type.Resolve ())) {
+						// FIXME: THIS NEEDS STATICFICATION CAN'T CALL xamarin_get_block_for_delegate WHEN DYN REG ISN?T AVAILBLE:
 						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, &exception_gchandle);");
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else {

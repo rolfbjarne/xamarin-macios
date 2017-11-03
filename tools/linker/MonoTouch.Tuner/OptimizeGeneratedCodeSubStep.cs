@@ -43,11 +43,12 @@ namespace MonoTouch.Tuner
 		MethodReference GetBlockSetupImpl (MethodDefinition caller)
 		{
 			if (setupblock_def == null) {
-				var type = LinkContext.Target.ProductAssembly.MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.Target.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (method.Name != "SetupBlockImpl")
 						continue;
 					setupblock_def = method;
+					setupblock_def.IsPublic = true;
 					break;
 				}
 				if (setupblock_def == null)
@@ -98,9 +99,7 @@ namespace MonoTouch.Tuner
 				// or that have the [GeneratedCodeAttribute] and is either an extension type or an exported method
 			} else {
 				// but it would be too risky to apply on user-generated code
-				Console.WriteLine ($"Not optimizable: {method.FullName}");
-				if (method.Name == "LookupClass" && method.DeclaringType.Name == "Class")
-					Console.WriteLine ("STA");
+				//Console.WriteLine ($"Not optimizable: {method.FullName}");
 				return; 
 			}
 
@@ -305,6 +304,7 @@ namespace MonoTouch.Tuner
 				// Unified use a property (getter) to check the condition (while Classic used a field)
 				if (!isdirectbinding_constant.HasValue)
 					return 0;
+				//return 0;
 				if (!mr.DeclaringType.Is (Namespaces.Foundation, "NSObject"))
 					return 0;
 #if DEBUG
@@ -467,8 +467,11 @@ namespace MonoTouch.Tuner
 				endTarget = endTarget.Previous;
 				break;
 			case Code.Ret:
-				endTarget = caller.Body.Instructions [caller.Body.Instructions.Count - 1];
-				endTarget = endTarget.Previous;
+				endTarget = branchTarget;
+				while (endTarget.OpCode.Code != Code.Ret)
+					endTarget = endTarget.Next;
+				//endTarget = caller.Body.Instructions [caller.Body.Instructions.Count - 1];
+				//endTarget = endTarget.Previous;
 				break;
 			case Code.Leave:
 				if (caller.Body.ExceptionHandlers.Count != 1) {
@@ -539,7 +542,32 @@ namespace MonoTouch.Tuner
 				// This is a condition without an 'else' block, and the 'else' block is the one we'd remove, which means there's nothing to do.
 				return true;
 			}
-			
+
+			// Check if there are other branch instructions into the instructions that will be removed
+			var instructions = caller.Body.Instructions;
+			for (int i = 0; i < instructions.Count; i++) {
+				var ins = instructions [i];
+				if (ins == insBranch)
+					continue;
+				if (ins.Offset >= first.Offset && ins.Offset <= last.Offset)
+					continue;
+				//if (ins.Offset > last.Offset)
+					//continue;
+
+				switch (ins.OpCode.FlowControl) {
+				case FlowControl.Branch:
+				case FlowControl.Cond_Branch:
+					var target = (Instruction) ins.Operand;
+					if (target.Offset >= first.Offset && target.Offset <= last.Offset) {
+						Console.WriteLine ($"Could not {operation} in {caller.FullName} because there's a branch instruction that branches into the section of to-be-removed code.\n\tFirst instruction to be removed: {first}\n\tLast instruction to be removed: {last}\n\tBranch instruction: {ins}\n\tBranching to: {target}");
+						return false;
+					}
+					break;
+				default:
+					continue;
+				}
+			}
+
 			// We have the information we need, now we can start clearing instructions
 			Nop (insBranch);
 			Instruction current = first;
@@ -549,6 +577,7 @@ namespace MonoTouch.Tuner
 					break;
 				current = current.Next;
 			} while (true);
+
 			return true;
 		}
 	}

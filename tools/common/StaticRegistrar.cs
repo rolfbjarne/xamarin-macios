@@ -309,6 +309,9 @@ namespace XamCore.Registrar {
 				var itd = iface.InterfaceType.Resolve ();
 				CollectInterfaces (ref ifaces, itd);
 
+				if (itd == null)
+					Console.WriteLine ("STOP");
+
 				if (!HasAttribute (itd, Registrar.Foundation, Registrar.StringConstants.ProtocolAttribute))
 					continue;
 
@@ -329,6 +332,9 @@ namespace XamCore.Registrar {
 			List<MethodDefinition> iface_methods;
 			Dictionary<MethodDefinition, List<MethodDefinition>> rv = null;
 
+			if (type.Name.Contains ("CustomAudioUnitFactory"))
+				Console.WriteLine ("STOP");
+
 			CollectInterfaces (ref ifaces, td);
 
 			if (ifaces == null)
@@ -336,6 +342,13 @@ namespace XamCore.Registrar {
 
 			iface_methods = new List<MethodDefinition> ();
 			foreach (var iface in ifaces) {
+				var storedMethods = LinkContext?.GetProtocolMethods (iface.Resolve ());
+				if (storedMethods?.Count > 0) {
+					Console.WriteLine ("YAY");
+					foreach (var imethod in storedMethods)
+						if (!iface_methods.Contains (imethod))
+							iface_methods.Add (imethod);
+				}
 				if (!iface.HasMethods)
 					continue;
 
@@ -1282,7 +1295,7 @@ namespace XamCore.Registrar {
 					rv.Name = (string) prop.Argument.Value;
 					break;
 				case "WrapperType":
-					rv.WrapperType = (TypeDefinition) prop.Argument.Value;
+					rv.WrapperType = ((TypeReference) prop.Argument.Value).Resolve ();
 					break;
 				case "IsInformal":
 					rv.IsInformal = (bool) prop.Argument.Value;
@@ -2344,8 +2357,13 @@ namespace XamCore.Registrar {
 			}
 
 			var td = type.Resolve ();
-			if (td != null)
-				sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+			if (td != null) {
+				if (td.Module == null) {
+					sb.Append (", TypeWasLinkedAwayFIXME"); // FIXME
+				} else {
+					sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+				}
+			}
 
 			return sb.ToString ();
 		}
@@ -2545,9 +2563,14 @@ namespace XamCore.Registrar {
 
 
 				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
-					if (token_ref == uint.MaxValue)
-						token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
-					protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+					if (@class.ProtocolWrapperType.Module == null) {
+						// The protocol was linked away
+						Console.WriteLine ($"Linked away protocol wrapper type {@class.ProtocolWrapperType.FullName} for {@class.Type.FullName}");
+					} else {
+						if (token_ref == uint.MaxValue)
+							token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
+						protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+					}
 				}
 				if (@class.IsWrapper && isPlatformType)
 					continue;

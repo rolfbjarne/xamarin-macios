@@ -143,17 +143,31 @@ namespace MonoTouch.Tuner {
 		
 		void SetIsDirectBindingValue (TypeDefinition type)
 		{
-			if (type.IsSealed) {
-				isdirectbinding_value [type] = true;
-			} else if (type.IsAbstract) {
+			if (isdirectbinding_value.ContainsKey (type))
+				return;
+			
+			var registerAttribute = LinkContext.StaticRegistrar.GetRegisterAttribute (type);
+			var isWrapperType = registerAttribute?.IsWrapper == true || registerAttribute?.SkipRegistration == true;
+			var clearSuperclasses = false;
+			if (!isWrapperType) {
 				isdirectbinding_value [type] = false;
+				Console.WriteLine ($"Setting IsDirectBinding=false for {type.FullName} because the type is not a wrapper type.");
+				// We must clear IsDirectBinding for any superclasses.
+				clearSuperclasses = true;
+			} else if (type.IsSealed) {
+				isdirectbinding_value [type] = true;
+				Console.WriteLine ($"Setting IsDirectBinding=true for {type.FullName} because the type is sealed wrapper type.");
 			} else if (!isdirectbinding_value.ContainsKey (type)) {
-				isdirectbinding_value [type] = true; // Let's try 'true' first, any derived classes will clear it if needed
-				// we must clear the IsDirectBinding for any superclasses (unless they're abstract, in which case IsDirectBinding can stay as 'false')
+				isdirectbinding_value [type] = true; // Let's try 'true' first, any derived non-wrapper classes will clear it if needed
+				Console.WriteLine ($"Setting IsDirectBinding=true for {type.FullName} because the type is a wrapper type.");
+			}
+
+			if (clearSuperclasses) {
 				var base_type = type.BaseType.Resolve ();
 				while (base_type != null && IsNSObject (base_type)) {
-					if (!base_type.IsAbstract)
-						isdirectbinding_value [base_type] = null;	
+					if (isdirectbinding_value.ContainsKey (base_type) && isdirectbinding_value [base_type] != null)
+						Console.WriteLine ($"Setting IsDirectBinding=null for {base_type.FullName} because the type contains a derived non-wrapper type ({type.FullName}).");
+					isdirectbinding_value [base_type] = null;
 					base_type = base_type.BaseType.Resolve ();
 				}
 			}

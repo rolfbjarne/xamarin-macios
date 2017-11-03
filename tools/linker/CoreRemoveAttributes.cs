@@ -28,10 +28,10 @@ namespace Xamarin.Linker
 			case "ReleaseAttribute":
 			case "UserDelegateTypeAttribute":
 				return attr_type.Namespace == Namespaces.ObjCRuntime && !LinkContext.DynamicRegistrationSupported;
-			case "ExportAttribute":
-			case "ModelAttribute":
-			case "RegisterAttribute":
-			case "ProtocolAttribute":
+			//case "ExportAttribute":
+			//case "ModelAttribute":
+			//case "RegisterAttribute":
+			//case "ProtocolAttribute":
 			case "ProtocolMemberAttribute":
 				return attr_type.Namespace == Namespaces.Foundation && !LinkContext.DynamicRegistrationSupported;
 			case "AdviceAttribute":
@@ -83,9 +83,9 @@ namespace Xamarin.Linker
 				}
 			} else if (attr_type.Namespace == Namespaces.Foundation) {
 				switch (attr_type.Name) {
-				case "ExportAttribute":
-				case "ModelAttribute":
-				case "RegisterAttribute":
+				//case "ExportAttribute":
+				//case "ModelAttribute":
+				//case "RegisterAttribute":
 				case "ProtocolAttribute":
 				case "ProtocolMemberAttribute":
 					StoreAttributeAsAnnotation (attr_type.Name, provider, attribute);

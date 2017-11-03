@@ -24,7 +24,7 @@ MAC_GENERATOR = $(MAC_CURRENT_DIR)/bin/bgen
 MAC_CLASSIC_GENERATOR = $(MAC_CURRENT_DIR)/bin/bgen --target-framework=XamMac,v1.0
 MAC_FULL_GENERATOR    = $(MAC_CURRENT_DIR)/bin/bgen --target-framework=Xamarin.Mac,Version=v4.5,Profile=Full
 MAC_MOBILE_GENERATOR  = $(MAC_CURRENT_DIR)/bin/bgen --target-framework=Xamarin.Mac,Version=v2.0,Profile=Mobile
-MAC_TESTS = bmac-with-hyphen-in-name property-redefination-mac NSApplicationPublicEnsureMethods protocol-duplicate-abstract
+MAC_TESTS = property-redefination-mac NSApplicationPublicEnsureMethods protocol-duplicate-abstract
 MAC_CUSTOM_TESTS = bug31788
 
 ALL_TESTS = 

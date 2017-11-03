@@ -11,43 +11,59 @@ namespace GeneratorTests
 	public class BGenTests
 	{
 		[Test]
-		public void BMac_Smoke ()
+		[TestCase (Profile.macClassic)]
+		[TestCase (Profile.macFull)]
+		[TestCase (Profile.macModern)]
+		public void BMac_Smoke (Profile profile)
+		{
+			BuildFile (profile, "bmac_smoke.cs");
+		}
+
+		[Test]
+		[TestCase (Profile.macClassic)]
+		[TestCase (Profile.macFull)]
+		[TestCase (Profile.macModern)]
+		public void BMac_With_Hyphen_In_Name (Profile profile)
+		{
+			BuildFile (profile, "bmac-with-hyphen-in-name.cs");
+		}
+
+		[Test]
+		[TestCase (Profile.macClassic)]
+		[TestCase (Profile.macFull)]
+		[TestCase (Profile.macModern)]
+		public void PropertyRedefinitionMac (Profile profile)
+		{
+			BuildFile (profile, "property-redefination-mac.cs");
+		}
+
+		[Test]
+		[TestCase (Profile.macClassic)]
+		[TestCase (Profile.macFull)]
+		[TestCase (Profile.macModern)]
+		public void NSApplicationPublicEnsureMethods (Profile profile)
+		{
+			BuildFile (profile, "NSApplicationPublicEnsureMethods.cs");
+		}
+
+		[Test]
+		[TestCase (Profile.macClassic)]
+		[TestCase (Profile.macFull)]
+		[TestCase (Profile.macModern)]
+		public void ProtocolDuplicateAbstract (Profile profile)
+		{
+			BuildFile (profile, "protocol-duplicate-abstract.cs");
+		}
+
+		void BuildFile (Profile profile, string filename)
 		{
 			var bgen = new BGenTool ();
-			bgen.Profile = Profile.macClassic;
-			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", "bmac_smoke.cs")));
+			bgen.Profile = profile;
+			bgen.Defines = BGenTool.GetDefaultDefines (profile);
+			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", filename)));
 			bgen.AssertExecute ("build");
 			bgen.AssertNoWarnings ();
 		}
 
-		[Test]
-		public void BMac_With_Hyphen_In_Name ()
-		{
-			var bgen = new BGenTool ();
-			bgen.Profile = Profile.macClassic;
-			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", "bmac-with-hyphen-in-name.cs")));
-			bgen.AssertExecute ("build");
-			bgen.AssertNoWarnings ();
-		}
-
-		[Test]
-		public void PropertyRedefinitionMac ()
-		{
-			var bgen = new BGenTool ();
-			bgen.Profile = Profile.macClassic;
-			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", "property-redefination-mac.cs")));
-			bgen.AssertExecute ("build");
-			bgen.AssertNoWarnings ();
-		}
-
-		[Test]
-		public void NSApplicationPublicEnsureMethods ()
-		{
-			var bgen = new BGenTool ();
-			bgen.Profile = Profile.macClassic;
-			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", "NSApplicationPublicEnsureMethods.cs")));
-			bgen.AssertExecute ("build");
-			bgen.AssertNoWarnings ();
-		}
 	}
 }

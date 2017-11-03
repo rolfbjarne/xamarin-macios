@@ -82,7 +82,7 @@ namespace Xamarin.Tests
 
 		public void AssertExecute (string message)
 		{
-			Assert.AreEqual (0, Execute (BuildArguments ()), message);
+			Assert.AreEqual (0, Execute (BuildArguments (), always_show_output: true), message);
 		}
 
 		public void AssertExecuteError (string message)

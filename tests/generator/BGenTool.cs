@@ -25,6 +25,7 @@ namespace Xamarin.Tests
 		public Profile Profile;
 
 		public List<string> ApiDefinitions = new List<string> ();
+		public string [] Defines;
 		public string TmpDirectory;
 
 		protected override string ToolPath { get { return Configuration.BGenPath; } }
@@ -73,6 +74,11 @@ namespace Xamarin.Tests
 			if (!string.IsNullOrEmpty (TmpDirectory))
 				sb.Append (" --tmpdir=").Append (StringUtils.Quote (TmpDirectory));
 
+			if (Defines != null) {
+				foreach (var d in Defines)
+					sb.Append (" -d ").Append (StringUtils.Quote (d));
+			}
+
 			return sb.ToString ();
 		}
 
@@ -99,6 +105,20 @@ namespace Xamarin.Tests
 			File.WriteAllText (api, api_definition);
 			ApiDefinitions.Add (api);
 			WorkingDirectory = TmpDirectory;
+		}
+
+		public static string [] GetDefaultDefines (Profile profile)
+		{
+			switch (profile) {
+			case Profile.macFull:
+			case Profile.macModern:
+			case Profile.macSystem:
+				return new string [] { "MONOMAC", "XAMCORE_2_0" };
+			case Profile.macClassic:
+				return new string [] { "MONOMAC" };
+			default:
+				throw new NotImplementedException ();
+			}
 		}
 	}
 }

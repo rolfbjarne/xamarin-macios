@@ -39,5 +39,15 @@ namespace GeneratorTests
 			bgen.AssertExecute ("build");
 			bgen.AssertNoWarnings ();
 		}
+
+		[Test]
+		public void NSApplicationPublicEnsureMethods ()
+		{
+			var bgen = new BGenTool ();
+			bgen.Profile = Profile.macClassic;
+			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", "NSApplicationPublicEnsureMethods.cs")));
+			bgen.AssertExecute ("build");
+			bgen.AssertNoWarnings ();
+		}
 	}
 }

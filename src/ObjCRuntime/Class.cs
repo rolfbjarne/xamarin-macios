@@ -184,34 +184,16 @@ namespace XamCore.ObjCRuntime {
 				return IntPtr.Zero;
 			}
 
+			if (type.IsGenericType)
+				type = type.GetGenericTypeDefinition ();
+
+			// FIXME: binary search
 			var asm_name = type.Assembly.GetName ().Name;
 			var mod_token = type.Module.MetadataToken;
 			var type_token = type.MetadataToken & ~0x02000000;
 			for (int i = 0; i < map->map_count; i++) {
 				var token_reference = map->map [i].type_reference;
-				IntPtr assembly_name;
-				if ((token_reference & 0x1) == 0x1) {
-					// full token reference
-					var entry = Runtime.options->RegistrationMap->full_token_references + (IntPtr.Size + 8) * (int) (token_reference >> 1);
-					var token = (uint) Marshal.ReadInt32 (entry + IntPtr.Size + 4);
-					if (type_token != token)
-						continue;
-
-					var module_token = (uint) Marshal.ReadInt32 (entry + IntPtr.Size);
-					if (mod_token != module_token)
-						continue;
-
-					assembly_name = Marshal.ReadIntPtr (entry);
-				} else {
-					// packed token reference
-					if (token_reference >> 8 != type_token)
-						continue;
-
-					var assembly_index = (token_reference >> 1) & 0x7F;
-					assembly_name = Marshal.ReadIntPtr (map->assembly, (int) assembly_index * IntPtr.Size);
-				}
-
-				if (!Runtime.StringEquals (assembly_name, asm_name))
+				if (!CompareTokenReference (asm_name, mod_token, type_token, token_reference))
 					continue;
 
 				var rv = map->map [i].handle;
@@ -220,10 +202,53 @@ namespace XamCore.ObjCRuntime {
 #endif
 				is_custom_type = i >= (map->map_count - map->custom_type_count);
 				return rv;
+			}
 
+			for (int i = 0; i < map->skipped_map_count; i++) {
+				var token_reference = map->skipped_map [i].skipped_reference;
+				if (!CompareTokenReference (asm_name, mod_token, type_token, token_reference))
+					continue;
+
+				var actual_reference = map->skipped_map [i].actual_reference;
+				for (int k = 0; k < map->map_count; k++) {
+					if (map->map [k].type_reference != actual_reference)
+						continue;
+					is_custom_type = k >= (map->map_count - map->custom_type_count);
+					return map->map [k].handle;
+				}
+				throw ErrorHelper.CreateError (9999, "This should not happen, if something's in the skipped map, it should be in the normal map too.");
 			}
 
 			return IntPtr.Zero;
+		}
+
+		unsafe static bool CompareTokenReference (string asm_name, int mod_token, int type_token, uint token_reference)
+		{
+			var map = Runtime.options->RegistrationMap;
+
+			IntPtr assembly_name;
+			if ((token_reference & 0x1) == 0x1) {
+				// full token reference
+				var entry = Runtime.options->RegistrationMap->full_token_references + (IntPtr.Size + 8) * (int) (token_reference >> 1);
+				var token = (uint) Marshal.ReadInt32 (entry + IntPtr.Size + 4);
+				if (type_token != token)
+					return false;
+
+				var module_token = (uint) Marshal.ReadInt32 (entry + IntPtr.Size);
+				if (mod_token != module_token)
+					return false;
+
+				assembly_name = Marshal.ReadIntPtr (entry);
+			} else {
+				// packed token reference
+				if (token_reference >> 8 != type_token)
+					return false;
+
+				var assembly_index = (token_reference >> 1) & 0x7F;
+				assembly_name = Marshal.ReadIntPtr (map->assembly, (int) assembly_index * IntPtr.Size);
+			}
+
+			return Runtime.StringEquals (assembly_name, asm_name);
 		}
 
 		internal unsafe static Type FindType (IntPtr @class, out bool is_custom_type)

@@ -87,9 +87,15 @@ namespace MonoTouch.Tuner
 			isdirectbinding_constant = type.IsNSObject (LinkContext) ? type.GetIsDirectBindingConstant (LinkContext) : null;
 			base.Process (type);
 		}
-
+		/*
+		 * Unable to compile method 'Foundation.NSObject[] Foundation.NSDictionary:KeysForObject (Foundation.NSObject)' due to: 'Invalid IL code in Foundation.NSDictionary:KeysForObject (Foundation.NSObject): IL_004b: brfalse   IL_0056
+		 * Unable to compile method 'Foundation.NSObject[] Foundation.NSDictionary:ObjectsForKeys (Foundation.NSArray,Foundation.NSObject)' due to: 'Invalid IL code in Foundation.NSDictionary:ObjectsForKeys (Foundation.NSArray,Foundation.NSObject): IL_0064: brfalse   IL_006f
+		 */
 		protected override void Process (MethodDefinition method)
 		{
+			if (method.DeclaringType.Name == "HKAnchoredObjectQuery")
+				Console.WriteLine ("STOP");
+
 			if (!method.HasBody)
 				return;
 
@@ -190,7 +196,7 @@ namespace MonoTouch.Tuner
 					return 0;
 				}
 				prev = prev.Previous;
-				TypeDefinition delegateType = null;
+				TypeReference delegateType = null;
 
 				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
 					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Pop0, but got {2}", caller, i, prev.OpCode);
@@ -199,21 +205,23 @@ namespace MonoTouch.Tuner
 					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Push1, but got {2}", caller, i, prev.OpCode);
 					return 0;
 				} else if (prev.OpCode.Code == Code.Ldsfld) {
-					delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType.Resolve ();
+					delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType;
 				} else {
 					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Ldsfld, but got {2}", caller, i, prev.OpCode);
 					return 0;
 				}
 
 				TypeReference userDelegateType = null;
-				foreach (var attrib in delegateType.CustomAttributes) {
+				var delegateTypeDefinition = delegateType.Resolve ();
+				foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
 					var attribType = attrib.Constructor.DeclaringType;
 					if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
 						continue;
 					userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
 					break;
 				}
-				bool blockSignature;
+				bool blockSignature = false;
+				string signature = null;
 				MethodReference userMethod = null;
 				if (userDelegateType != null) {
 					var userDelegateTypeDefinition = userDelegateType.Resolve ();
@@ -228,26 +236,29 @@ namespace MonoTouch.Tuner
 						throw new NotImplementedException ();
 					blockSignature = true;
 					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+				} else if (delegateType.Is ("System", "Action`1") && (delegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
+					signature = "v@?";
 				} else {
 					Driver.Log (0, "Failed to optimize {0} at index {1}: could not find the UserDelegateTypeAttribute on {2}", caller, i, delegateType.FullName);
 					return 0;
 				}
-				string signature;
-				try {
-					var parameters = new TypeReference [userMethod.Parameters.Count];
-					for (int p = 0; p < parameters.Length; p++)
-						parameters [p] = userMethod.Parameters [p].ParameterType;
-					signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, isBlockSignature: blockSignature);
-				} catch (Exception e) {
-					Driver.Log (1, "Failed to optimize {0} at index {1}: {2}", caller, i, e.Message);
-					signature = "BROKEN SIGNATURE"; // FIXME: fix the broken binding
+				if (signature == null) {
+					try {
+						var parameters = new TypeReference [userMethod.Parameters.Count];
+						for (int p = 0; p < parameters.Length; p++)
+							parameters [p] = userMethod.Parameters [p].ParameterType;
+						signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, isBlockSignature: blockSignature);
+					} catch (Exception e) {
+						Driver.Log (1, "Failed to optimize {0} at index {1}: {2}", caller, i, e.Message);
+						signature = "BROKEN SIGNATURE"; // FIXME: fix the broken binding
+					}
 				}
 
 				instructions.Insert (i, Instruction.Create (OpCodes.Ldstr, signature));
 				instructions.Insert (i, Instruction.Create (mr.Name == "SetupBlockUnsafe" ? OpCodes.Ldc_I4_0 : OpCodes.Ldc_I4_1));
 				ins.Operand = GetBlockSetupImpl (caller);
 
-				Driver.Log (1, "Optimized {0} at index {1} with delegate type {2}", caller, i, delegateType.FullName);
+				Driver.Log (1, "Optimized {0} at index {1} with delegate type {2} and signature {3}", caller, i, delegateType.FullName, signature);
 
 				return 2;
 			case "IsNewRefcountEnabled":

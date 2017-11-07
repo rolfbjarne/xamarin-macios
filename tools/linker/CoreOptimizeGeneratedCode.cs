@@ -74,6 +74,9 @@ namespace Xamarin.Linker {
 		// code itself is not tool/compiler generated
 		static protected bool IsExport (ICustomAttributeProvider provider)
 		{
+			var method = (provider as MethodReference)?.Resolve ();
+			if (method.IsConstructor)
+				return true; // Constructors may not always have Export attributes
 			return provider.HasCustomAttribute (Namespaces.Foundation, "ExportAttribute");
 		}
 

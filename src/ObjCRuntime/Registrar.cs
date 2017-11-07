@@ -999,6 +999,7 @@ namespace XamCore.Registrar
 		}
 
 		protected virtual void OnRegisterType (ObjCType type) {}
+		protected virtual void OnSkipType (TType type, ObjCType registered_type) { }
 		protected virtual void OnReloadType (ObjCType type) {}
 		protected virtual void OnRegisterProtocol (ObjCType type) {}
 		protected virtual void OnRegisterCategory (ObjCType type, ref List<Exception> exceptions) {}
@@ -1837,8 +1838,10 @@ namespace XamCore.Registrar
 			}
 
 			var register_attribute = GetRegisterAttribute (type);
-			if (register_attribute != null && register_attribute.SkipRegistration)
+			if (register_attribute != null && register_attribute.SkipRegistration) {
+				OnSkipType (type, baseObjCType);
 				return baseObjCType;
+			}
 
 			objcType = new ObjCType () {
 				Registrar = this,

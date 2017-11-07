@@ -60,18 +60,27 @@ namespace XamCore.ObjCRuntime {
 			public MTProtocolMap* protocol_map;
 			public MTProtocolWrapperMap* protocol_wrapper_map;
 			public IntPtr full_token_references; /* array of MTFullTokenReference */
+			public MTManagedClassMap* skipped_map;
 			public int assembly_count;
 			public int map_count;
 			public int custom_type_count;
 			public int protocol_count;
 			public int protocol_wrapper_count;
 			public int full_token_reference_count;
+			public int skipped_map_count;
 		}
 
 		[StructLayout (LayoutKind.Sequential, Pack = 1)]
 		internal struct MTClassMap {
 			public IntPtr handle;
 			public uint type_reference;
+		}
+
+		[StructLayout (LayoutKind.Sequential, Pack = 1)]
+		internal struct MTManagedClassMap
+		{
+			public uint skipped_reference; // implied token type: TypeDef
+			public uint actual_reference; // implied token type: TypeDef
 		}
 
 		[StructLayout (LayoutKind.Sequential, Pack = 1)]
@@ -437,9 +446,9 @@ namespace XamCore.ObjCRuntime {
 			return ObjectWrapper.Convert (CreateBlockProxy ((MethodInfo) ObjectWrapper.Convert (method), block));
 		}
 			
-		static IntPtr CreateDelegateProxy (IntPtr method, IntPtr @delegate)
+		static IntPtr CreateDelegateProxy (IntPtr method, IntPtr @delegate, IntPtr signature)
 		{
-			return BlockLiteral.GetBlockForDelegate ((MethodInfo) ObjectWrapper.Convert (method), ObjectWrapper.Convert (@delegate));
+			return BlockLiteral.GetBlockForDelegate ((MethodInfo) ObjectWrapper.Convert (method), ObjectWrapper.Convert (@delegate), Marshal.PtrToStringAuto (signature));
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

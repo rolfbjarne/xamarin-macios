@@ -233,7 +233,8 @@ namespace XamCore.ObjCRuntime {
 			return descriptor->copy_helper == ((BlockDescriptor *) literal->block_descriptor)->copy_helper;
 		}
 
-		internal static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate)
+		[LinkerOptimize]
+		internal static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate, string signature)
 		{
 			if (@delegate == null)
 				return IntPtr.Zero;
@@ -268,7 +269,15 @@ namespace XamCore.ObjCRuntime {
 			// call _Block_copy, which will create a heap-allocated block
 			// with the proper reference count.
 			BlockLiteral block = new BlockLiteral ();
-			block.SetupBlock ((Delegate) handlerDelegate, (Delegate) @delegate);
+			if (signature == null) {
+				if (Runtime.DynamicRegistrationSupported) {
+					block.SetupBlock ((Delegate) handlerDelegate, (Delegate) @delegate);
+				} else {
+					throw ErrorHelper.CreateError (8888, "Can't calculate signature for " + @delegate.GetType ().FullName);
+				}
+			} else {
+				block.SetupBlockImpl ((Delegate) handlerDelegate, (Delegate) @delegate, true, signature);
+			}
 			var rv = _Block_copy (ref block);
 			block.CleanupBlock ();
 			return rv;

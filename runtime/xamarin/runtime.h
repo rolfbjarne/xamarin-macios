@@ -73,6 +73,11 @@ typedef struct __attribute__((packed)) {
 } MTClassMap;
 
 typedef struct __attribute__((packed)) {
+	uint32_t /* MTTokenReference */ skipped_reference;
+	uint32_t /* MTTokenReference */ actual_reference;
+} MTManagedClassMap;
+
+typedef struct __attribute__((packed)) {
 	uint32_t /* MTTokenReference */ token; // Token to a class)
 	uint32_t protocol_count; // Number of protocols
 	const char * const * protocols;
@@ -91,12 +96,14 @@ struct MTRegistrationMap {
 	const MTProtocolMap *protocols; // array of MTProtocolMap, sorted ascending by token
 	const MTProtocolWrapperMap *protocol_wrappers; // array of MTProtocolWrapperMap, sorted ascending by protocol_token
 	const MTFullTokenReference *full_token_references;
+	const MTManagedClassMap *skipped_map;
 	int assembly_count;
 	int map_count;
 	int custom_type_count;
 	int protocol_count;
 	int protocol_wrapper_count;
 	int full_token_reference_count;
+	int skipped_map_count;
 };
 
 typedef struct {
@@ -157,7 +164,7 @@ MonoType *		xamarin_get_parameter_type (MonoMethod *managed_method, int index);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr (id self, bool owns, MonoType* type, guint32 *exception_gchandle);
 MonoObject *	xamarin_get_nsobject_with_type_for_ptr_created (id self, bool owns, MonoType *type, int32_t *created, guint32 *exception_gchandle);
 int *			xamarin_get_delegate_for_block_parameter (MonoMethod *method, int par, void *nativeBlock, guint32 *exception_gchandle);
-id              xamarin_get_block_for_delegate (MonoMethod *method, MonoObject *delegate, guint32 *exception_gchandle);
+id              xamarin_get_block_for_delegate (MonoMethod *method, MonoObject *delegate, const char *signature, guint32 *exception_gchandle);
 id				xamarin_get_nsobject_handle (MonoObject *obj);
 void			xamarin_set_nsobject_handle (MonoObject *obj, id handle);
 uint8_t         xamarin_get_nsobject_flags (MonoObject *obj);

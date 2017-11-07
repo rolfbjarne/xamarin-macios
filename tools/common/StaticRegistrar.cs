@@ -2425,6 +2425,14 @@ namespace XamCore.Registrar {
 			}
 		}
 
+		List<Tuple<TypeReference, ObjCType>> skipped_types = new List<Tuple<TypeReference, ObjCType>> ();
+		protected override void OnSkipType (TypeReference type, ObjCType registered_type)
+		{
+			base.OnSkipType (type, registered_type);
+
+			skipped_types.Add (new Tuple<TypeReference, ObjCType> (type, registered_type));
+		}
+
 		void Specialize (AutoIndentStringBuilder sb)
 		{
 			List<Exception> exceptions = new List<Exception> ();
@@ -2778,6 +2786,14 @@ namespace XamCore.Registrar {
 			map.AppendLine ("};");
 			map.AppendLine ();
 
+			if (skipped_types.Count > 0) {
+				map.AppendLine ("static const MTManagedClassMap __xamarin_skipped_map [] = {");
+				foreach (var skipped in skipped_types.OrderBy ((v) => CreateTokenReference (v.Item1, TokenType.TypeDef)))
+					map.AppendLine ("{{ 0x{0:X}, 0x{1:X} /* '{2}' => '{3}' */ }},", CreateTokenReference (skipped.Item1, TokenType.TypeDef), CreateTokenReference (skipped.Item2.Type, TokenType.TypeDef), skipped.Item1.FullName, skipped.Item2.Type.FullName);
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
 			map.AppendLine ("static const char *__xamarin_registration_assemblies []= {");
 			int count = 0;
 			foreach (var assembly in registered_assemblies) {
@@ -2826,12 +2842,14 @@ namespace XamCore.Registrar {
 			map.AppendLine (protocol_map.Count == 0 ? "NULL," : "__xamarin_protocol_map,");
 			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
 			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
+			map.AppendLine (skipped_types.Count == 0 ? "NULL," : "__xamarin_skipped_map,");
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", customTypeCount);
 			map.AppendLine ("{0},", protocol_map.Count);
 			map.AppendLine ("{0},", protocol_wrapper_map.Count);
-			map.AppendLine ("{0}", full_token_reference_count);
+			map.AppendLine ("{0},", full_token_reference_count);
+			map.AppendLine ("{0}", skipped_types.Count);
 			map.AppendLine ("};");
 
 
@@ -3591,8 +3609,9 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("mono_free (str);");
 						setup_return.AppendLine ("res = nsstr;");
 					} else if (IsDelegate (type.Resolve ())) {
-						// FIXME: THIS NEEDS STATICFICATION CAN'T CALL xamarin_get_block_for_delegate WHEN DYN REG ISN?T AVAILBLE:
-						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, &exception_gchandle);");
+						var delegateMethod = type.Resolve ().GetMethods ().First ((v) => v.Name == "Invoke");
+						var signature = ComputeSignature (delegateMethod.DeclaringType, delegateMethod, method, isBlockSignature: true);
+						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, \"{0}\", &exception_gchandle);", signature);
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else {
 						throw ErrorHelper.CreateError (4104, 

@@ -222,6 +222,7 @@ namespace GeneratorTests
 			var preserves = allMembers.Sum ((v) => v.CustomAttributes.Count ((ca) => ca.AttributeType.Name == "AdviceAttribute"));
 			Assert.AreEqual (24, preserves, "Advice attribute count"); // If you modified code that generates AdviceAttributes please update the attribute count
 		}
+
 		[Test]
 		public void Bug43579 ()
 		{

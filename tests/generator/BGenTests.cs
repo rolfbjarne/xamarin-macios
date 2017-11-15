@@ -341,7 +341,6 @@ namespace GeneratorTests
 			attribs = MethodAttributes.Public | MethodAttributes.HideBySig;
 			bgen.AssertMethod ("WrapTest.MyFooClass", "FromUrlN", attribs, null, "System.String");
 			bgen.AssertMethod ("WrapTest.MyFooClass", "get_FooNSStringN", attribs | MethodAttributes.SpecialName, "Foundation.NSString");
-
 		}
 
 		BGenTool BuildFile (Profile profile, params string [] filenames)

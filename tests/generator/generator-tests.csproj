@@ -59,6 +59,7 @@
       <Link>StringUtils.cs</Link>
     </Compile>
     <Compile Include="BGenTests.cs" />
+    <Compile Include="Asserts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

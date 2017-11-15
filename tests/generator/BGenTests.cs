@@ -391,7 +391,6 @@ namespace GeneratorTests
 			bgen.AssertMethod ("NoAsyncInternalWrapperTests.MyFooDelegate_Extensions", "RequiredMethodAsync", attribs, "System.Threading.Tasks.Task", "NoAsyncInternalWrapperTests.IMyFooDelegate", "System.Int32");
 		}
 
-
 		[Test]
 		public void NoAsyncWarningCS0219 ()
 		{

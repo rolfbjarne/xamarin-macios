@@ -262,7 +262,7 @@ namespace GeneratorTests
 			BuildFile (Profile.iOS, "multiple-api-definitions2-a.cs", "multiple-api-definitions2-b.cs");
 		}
 
-		BGenTool BuildFile (Profile profile, params string[] filenames)
+		BGenTool BuildFile (Profile profile, params string [] filenames)
 		{
 			return BuildFile (profile, true, filenames);
 		}

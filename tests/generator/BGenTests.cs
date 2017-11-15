@@ -209,7 +209,7 @@ namespace GeneratorTests
 				Asserts.DoesNotThrowExceptions (method, type.FullName);
 		}
 
-		void BuildFile (Profile profile, string filename)
+		BGenTool BuildFile (Profile profile, string filename)
 		{
 			var bgen = new BGenTool ();
 			bgen.Profile = profile;
@@ -217,6 +217,7 @@ namespace GeneratorTests
 			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", filename)));
 			bgen.AssertExecute ("build");
 			bgen.AssertNoWarnings ();
+			return bgen;
 		}
 	}
 }

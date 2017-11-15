@@ -186,9 +186,10 @@ namespace Xamarin.Tests
 		{
 			LoadAssembly ();
 
-			var t = assembly.MainModule.Types.FirstOrDefault ((v) => v.FullName == fullname);
+			var allTypes = assembly.MainModule.GetTypes ().ToArray ();
+			var t = allTypes.FirstOrDefault ((v) => v.FullName == fullname);
 			if (t == null)
-				Assert.Fail ($"No type named '{fullname}' in the generated assembly. {message}");
+				Assert.Fail ($"No type named '{fullname}' in the generated assembly. {message}\nList of types:\n\t{string.Join ("\n\t", allTypes.Select ((v) => v.FullName))}");
 			if (attributes != null)
 				Assert.AreEqual (attributes.Value, t.Attributes, $"Incorrect attributes for type {fullname}.");
 		}

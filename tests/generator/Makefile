@@ -21,14 +21,10 @@ IOS_CUSTOM_TESTS = forum54078 desk63279 desk79124 multiple-api-definitions1 mult
 
 MAC_CURRENT_DIR=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 MAC_CLASSIC_GENERATOR = $(MAC_CURRENT_DIR)/bin/bgen --target-framework=XamMac,v1.0
-MAC_CUSTOM_TESTS = bug31788
 
 ALL_TESTS = 
 ifdef INCLUDE_IOS
 ALL_TESTS += $(IOS_TESTS) $(IOS_CUSTOM_TESTS)
-endif
-ifdef INCLUDE_MAC
-ALL_TESTS += $(MAC_CUSTOM_TESTS)
 endif
 
 all-local:: $(ALL_TESTS) run-unit-tests
@@ -53,13 +49,6 @@ classNameCollision:
 	@rm -Rf $@.tmpdir
 	@mkdir -p $@.tmpdir
 	$(if $(V),,@echo "$@";) $(IOS_GENERATOR) $@.cs -s:classNameCollision-enum.cs -tmpdir=$@.tmpdir 
-
-bug31788:
-	@rm -Rf $@.tmpdir
-	@mkdir -p $@.tmpdir
-	$(if $(V),,@echo "$@";) $(MAC_CLASSIC_GENERATOR) --sourceonly:$@.source -tmpdir=$@.tmpdir $@.cs
-	@grep -q xamarin_IntPtr_objc_msgSend bug31788.tmpdir/Test/MarshalOnProperty.g.cs
-	@grep -q xamarin_IntPtr_objc_msgSend bug31788.tmpdir/Test/MarshalInProperty.g.cs
 
 desk63279:
 	$(if $(V),,@echo "$@";) $(IOS_GENERATOR) desk63279A.cs desk63279B.cs

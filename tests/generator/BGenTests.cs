@@ -75,11 +75,10 @@ namespace GeneratorTests
 		{
 			var bgen = new BGenTool ();
 			bgen.Profile = profile;
-			bgen.Defines = BGenTool.GetDefaultDefines (profile);
+			bgen.Defines = BGenTool.GetDefaultDefines (bgen.Profile);
 			bgen.CreateTemporaryBinding (File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", filename)));
 			bgen.AssertExecute ("build");
 			bgen.AssertNoWarnings ();
 		}
-
 	}
 }

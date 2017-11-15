@@ -36,6 +36,7 @@ namespace Xamarin.Tests
 		public string TmpDirectory;
 		public string WarnAsError; // Set to empty string to pass /warnaserror, set to non-empty string to pass /warnaserror:<nonemptystring>
 		public string NoWarn; // Set to empty string to pass /nowarn, set to non-empty string to pass /nowarn:<nonemptystring>
+		public string SourceOnly;
 
 		protected override string ToolPath { get { return Configuration.BGenPath; } }
 		protected override string MessagePrefix { get { return "BI"; } }
@@ -117,6 +118,9 @@ namespace Xamarin.Tests
 				if (NoWarn.Length > 0)
 					sb.Append (":").Append (StringUtils.Quote (NoWarn));
 			}
+
+			if (!string.IsNullOrEmpty (SourceOnly))
+				sb.Append (" --sourceonly:").Append (StringUtils.Quote (SourceOnly));
 
 			return sb.ToString ();
 		}

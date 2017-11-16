@@ -354,6 +354,9 @@
     <Compile Include="..\linker\RemoveProtocolStep.cs">
       <Link>Xamarin.Linker\RemoveProtocolStep.cs</Link>
     </Compile>
+    <Compile Include="..\common\Optimizations.cs">
+      <Link>external\Optimizations.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

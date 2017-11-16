@@ -39,6 +39,13 @@ namespace MonoTouch.Tuner
 			get { return Options.IsDualBuild; }
 		}
 
+		public bool InlineSetupBlock {
+			get {
+				// Enabled by default always.
+				return LinkContext.App.Optimizations.InlineSetupBlock != false;
+			}
+		}
+
 		MethodDefinition setupblock_def;
 		MethodReference GetBlockSetupImpl (MethodDefinition caller)
 		{
@@ -75,7 +82,12 @@ namespace MonoTouch.Tuner
 			// For non-fat apps (the AppStore allows 64bits only iOS apps) then it's better to be applied
 			//
 			// TODO: we could make this an option "optimize for size vs optimize for speed" in the future
-			ApplyIntPtrSizeOptimization = ((Profile.Current as BaseProfile).ProductAssembly == assembly.Name.Name) || !IsDualBuild;
+			if (LinkContext.App.Optimizations.InlineIntPtrSize.HasValue) {
+				ApplyIntPtrSizeOptimization = LinkContext.App.Optimizations.InlineIntPtrSize.Value;
+			} else {
+				ApplyIntPtrSizeOptimization = ((Profile.Current as BaseProfile).ProductAssembly == assembly.Name.Name) || !IsDualBuild;
+			}
+
 			base.Process (assembly);
 		}
 
@@ -93,9 +105,6 @@ namespace MonoTouch.Tuner
 		 */
 		protected override void Process (MethodDefinition method)
 		{
-			if (method.DeclaringType.Name == "HKAnchoredObjectQuery")
-				Console.WriteLine ("STOP");
-
 			if (!method.HasBody)
 				return;
 
@@ -184,6 +193,8 @@ namespace MonoTouch.Tuner
 			switch (mr.Name) {
 			case "SetupBlock":
 			case "SetupBlockUnsafe":
+				if (!InlineSetupBlock)
+					return 0;
 				if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "BlockLiteral"))
 					return 0;
 

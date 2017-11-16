@@ -42,6 +42,7 @@ namespace Xamarin.Bundler {
 		public string AppDirectory = ".";
 		public bool DeadStrip = true;
 		public bool EnableDebug;
+		public Optimizations Optimizations = new Optimizations ();
 		internal RuntimeOptions RuntimeOptions;
 		public RegistrarMode Registrar = RegistrarMode.Default;
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;

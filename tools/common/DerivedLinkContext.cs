@@ -26,6 +26,12 @@ namespace Xamarin.Tuner
 
 		public bool DynamicRegistrationSupported { get; set; }
 
+		public Application App {
+			get {
+				return Target.App;
+			}
+		}
+
 		public HashSet<TypeDefinition> CachedIsNSObject {
 			get { return cached_isnsobject; }
 			set { cached_isnsobject = value; }

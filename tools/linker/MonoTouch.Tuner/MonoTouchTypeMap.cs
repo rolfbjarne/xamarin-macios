@@ -15,6 +15,7 @@ using Mono.Cecil;
 using Mono.Linker.Steps;
 using Mono.Tuner;
 
+using Xamarin.Bundler;
 using Xamarin.Linker;
 using Xamarin.Tuner;
 
@@ -32,24 +33,51 @@ namespace MonoTouch.Tuner {
 
 		protected override void ProcessAssembly (AssemblyDefinition assembly)
 		{
-			LinkContext.DynamicRegistrationSupported |= FindRuntimeConnectMethodReferences (assembly);
+			LinkContext.DynamicRegistrationSupported |= RequiresDynamicRegistrar (assembly);
 
 			base.ProcessAssembly (assembly);
 		}
 
-		// We need to know if anybody calls Runtime.ConnectMethod before marking everything,
-		// since we'll be able to optimize a lot of code away if Runtime.ConnectMethod is not used.
-		bool FindRuntimeConnectMethodReferences (AssemblyDefinition assembly)
+		// If certain conditions are met, we can optimize away the code for the dynamic registrar..
+		bool RequiresDynamicRegistrar (AssemblyDefinition assembly)
 		{
 #if MONOMAC && !XAMCORE_2_0
 			// Disable removing the dynamic registrar for XM/Classic to simplify the code a little bit.
 			return true;
 #else
-			if (LinkContext.Target.App.Registrar != Xamarin.Bundler.RegistrarMode.Static)
+			if (LinkContext.Target.App.Registrar != RegistrarMode.Static)
 				return true;
 
+			// Req 1: Nobody must call Runtime.ConnectMethod.
+			if (HasProductMethodReference (assembly, "ObjCRuntime", "Runtime", "ConnectMethod")) {
+				Driver.Log (4, "Can't optimize away the dynamic registrar, because {0} references Runtime.ConnectMethod.", assembly.FullName);
+				return true;
+			}
+
+			// Req 2: Nobody must call BlockLiteral.SetupBlock[Unsafe].
+			//
+			// Fortunately the linker is able to rewrite calls to SetupBlock[Unsafe] to call
+			// SetupBlockImpl (which doesn't need the dynamic registrar), which means we only have
+			// to look in assemblies that aren't linked.
+			if (LinkContext.Annotations.GetAction (assembly) != Mono.Linker.AssemblyAction.Link) {
+				if (HasProductMethodReference (assembly, "ObjCRuntime", "BlockLiteral", "SetupBlock")) {
+					Driver.Log (4, "Can't optimize away the dynamic registrar, because {0} references BlockLiteral.SetupBlock.", assembly.FullName);
+					return true;
+				}
+				if (HasProductMethodReference (assembly, "ObjCRuntime", "BlockLiteral", "SetupBlockImpl")) {
+					Driver.Log (4, "Can't optimize away the dynamic registrar, because {0} references BlockLiteral.SetupBlockImpl.", assembly.FullName);
+					return true;
+				}
+			}
+
+			return false;
+#endif
+		}
+
+		bool HasProductMethodReference (AssemblyDefinition assembly, string @namespace, string type_name, string method_name)
+		{
 			if (Profile.IsProductAssembly (assembly) || Profile.IsSdkAssembly (assembly)) {
-				// We know that the assemblies we ship don't use Runtime.ConnectMethod.
+				// We know that the assemblies we ship don't use the methods we're looking for.
 				return false;
 			}
 
@@ -61,27 +89,28 @@ namespace MonoTouch.Tuner {
 					break;
 				}
 			}
-			// Can't use Runtime.ConnectMethod if not referencing the containing assembly
+
+			// Can't use reference a product method if not referencing the product assembly.
 			if (!hasProductReference)
 				return false;
 
 			// Check if the assembly references the method.
 			foreach (var mr in assembly.MainModule.GetMemberReferences ()) {
-				if (mr.Name != "ConnectMethod")
+				if (mr.Name != method_name)
 					continue;
 				if (mr.DeclaringType == null)
 					continue;
-				if (mr.DeclaringType.Name != "Runtime")
+				if (mr.DeclaringType.Name != type_name)
 					continue;
-				if (mr.DeclaringType.Namespace != "ObjCRuntime")
+				if (mr.DeclaringType.Namespace != @namespace)
 					continue;
 				if (!Profile.IsProductAssembly (mr.Module.Assembly))
 					continue;
+
 				return true;
 			}
 
 			return false;
-#endif
 		}
 
 		protected override void EndProcess ()

@@ -319,7 +319,8 @@ wrench-jenkins: xharness/xharness.exe
 	$(Q) ulimit -n 4096 && $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests,skip-ios-device-tests --markdown-summary=$(abspath $(CURDIR))/TestSummary.md $(TESTS_PERIODIC_COMMAND) || touch $@-failed.stamp
 	@echo "@MonkeyWrench: SetSummary: <br/>`cat $(abspath $(CURDIR))/TestSummary.md | awk 1 ORS='<br/>'`"
 	@echo "@MonkeyWrench: AddFile: $(abspath $(CURDIR))/TestSummary.md"
-	$(Q) if test -e $@-failed.stamp; then EC=`cat $@-failed.stamp`; rm -f $@-failed.stamp; exit $$EC; fi
+	if test -e $@-failed.stamp; then EC=`cat $@-failed.stamp`; rm -f $@-failed.stamp; exit $$EC; fi
+	echo "testing if exited"
 
 wrench-xtro:
 	git clean -xfdq

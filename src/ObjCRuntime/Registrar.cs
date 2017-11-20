@@ -1651,7 +1651,11 @@ namespace XamCore.Registrar
 			}
 			var linkedAwayInterfaces = GetLinkedAwayInterfaces (type.Type);
 			if (linkedAwayInterfaces?.Length > 0) {
+				if (protocolList == null)
+					protocolList = new List<ObjCType> ();
 				foreach (var iface in linkedAwayInterfaces) {
+					if (!HasProtocolAttribute (iface))
+						continue;
 					var objcType = new ObjCType () {
 						Registrar = this,
 						Type = iface,
@@ -2328,10 +2332,10 @@ namespace XamCore.Registrar
 				lock (this.types) {
 					foreach (TType type in types) {
 						//Trace (" Checking {0}", GetTypeFullName (type));
-						if (HasModelAttribute (type)) {
-							Trace ("{0} is a model: not registering it", GetTypeFullName (type));
-							continue;
-						}
+						//if (HasModelAttribute (type)) {
+						//	Trace ("{0} is a model: not registering it", GetTypeFullName (type));
+						//	continue;
+						//}
 
 						RegisterTypeUnsafe (type, ref exceptions);
 					}

@@ -332,9 +332,6 @@ namespace XamCore.Registrar {
 			List<MethodDefinition> iface_methods;
 			Dictionary<MethodDefinition, List<MethodDefinition>> rv = null;
 
-			if (type.Name.Contains ("CustomAudioUnitFactory"))
-				Console.WriteLine ("STOP");
-
 			CollectInterfaces (ref ifaces, td);
 
 			if (ifaces == null)
@@ -344,7 +341,6 @@ namespace XamCore.Registrar {
 			foreach (var iface in ifaces) {
 				var storedMethods = LinkContext?.GetProtocolMethods (iface.Resolve ());
 				if (storedMethods?.Count > 0) {
-					Console.WriteLine ("YAY");
 					foreach (var imethod in storedMethods)
 						if (!iface_methods.Contains (imethod))
 							iface_methods.Add (imethod);
@@ -1570,6 +1566,22 @@ namespace XamCore.Registrar {
 			return null;
 		}
 
+		IEnumerable<AdoptsAttribute> GetAdoptsAttributes (TypeDefinition type)
+		{
+			foreach (var ca in GetCustomAttributes (type, ObjCRuntime, "AdoptsAttribute")) {
+				var attrib = new AdoptsAttribute ();
+				switch (ca.ConstructorArguments.Count) {
+				case 1:
+					attrib.ProtocolType = (string) ca.ConstructorArguments [0].Value;
+					break;
+				default:
+					throw ErrorHelper.CreateError (4124, "Invalid AdoptsAttribute found on '{0}': expected 1 constructor arguments, got {1}. Please file a bug report at https://bugzilla.xamarin.com", type.FullName, 1, ca.ConstructorArguments.Count);
+				}
+				yield return attrib;
+			}
+
+		}
+
 		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
 			ICustomAttribute attrib;
@@ -1958,8 +1970,8 @@ namespace XamCore.Registrar {
 				goto default;
 			case "GameKit":
 #if !MONOMAC
-				if (IsSimulator && App.Platform == Xamarin.Utils.ApplePlatform.WatchOS)
-					return; // No headers provided for watchOS/simulator.
+				//if (IsSimulator && App.Platform == Xamarin.Utils.ApplePlatform.WatchOS)
+					//return; // No headers provided for watchOS/simulator.
 #endif
 				goto default;
 			case "WatchKit":
@@ -1971,7 +1983,7 @@ namespace XamCore.Registrar {
 				header.WriteLine ("#import <WatchKit/WatchKit.h>");
 				namespaces.Add ("UIKit");
 				return;
-			case "CoreNFC":
+			//case "CoreNFC":
 			case "DeviceCheck":
 #if !MONOMAC
 				if (IsSimulator)
@@ -2440,7 +2452,7 @@ namespace XamCore.Registrar {
 
 			var map = new AutoIndentStringBuilder (1);
 			var map_init = new AutoIndentStringBuilder ();
-			var protocol_map = new Dictionary<uint, Tuple<ObjCType, string[]>> ();
+			var protocol_map = new Dictionary<uint, Tuple<ObjCType, List<string>>> ();
 			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
 
 			var i = 0;
@@ -2519,7 +2531,7 @@ namespace XamCore.Registrar {
 				skip.Clear ();
 
 				uint token_ref = uint.MaxValue;
-				if (!@class.IsProtocol && !@class.IsModel && !@class.IsCategory) {
+				if (!@class.IsProtocol && !@class.IsCategory) {
 					if (!isPlatformType)
 						customTypeCount++;
 					
@@ -2562,13 +2574,20 @@ namespace XamCore.Registrar {
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
 
 					if (!@class.IsWrapper) {
-						if (@class.Protocols != null) {
-							var protocols = new string [@class.Protocols.Length];
-							for (int p = 0; p < @class.Protocols.Length; p++)
-								protocols [p] = @class.Protocols [p].ProtocolName;
-							protocol_map [token_ref] = new Tuple<ObjCType, string []> (@class, protocols);
+						List<string> protocols = null;
+						var adopts = GetAdoptsAttributes (@class.Type.Resolve ()).ToArray ();
+
+						if (@class.Protocols != null || adopts.Length > 0) {
+							protocols = new List<string> (@class.Protocols?.Length ?? 0 + adopts.Length);
+							protocol_map [token_ref] = new Tuple<ObjCType, List<string>> (@class, protocols);
 						}
-						// FIXME: included protocols from Adopts attributes
+
+						if (@class.Protocols != null) {
+							for (int p = 0; p < @class.Protocols.Length; p++)
+								protocols.Add (@class.Protocols [p].ProtocolName);
+						}
+						foreach (var adopt in adopts)
+							protocols.Add (adopt.ProtocolType);
 					}
 
 				}
@@ -2590,8 +2609,8 @@ namespace XamCore.Registrar {
 				if (@class.Methods == null && isPlatformType && !@class.IsProtocol && !@class.IsCategory)
 					continue;
 
-				if (@class.IsModel)
-					continue;
+				//if (@class.IsModel)
+					//continue;
 
 				CheckNamespace (@class, exceptions);
 				if (@class.BaseType != null)
@@ -2752,6 +2771,14 @@ namespace XamCore.Registrar {
 				iface.WriteLine ();
 
 				if (!is_protocol && !@class.IsWrapper) {
+					var hasClangDiagnostic = @class.IsModel;
+					if (hasClangDiagnostic)
+						sb.WriteLine ("#pragma clang diagnostic push");
+					if (@class.IsModel) {
+						sb.WriteLine ("#pragma clang diagnostic ignored \"-Wprotocol\"");
+						sb.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-protocol-property-synthesis\"");
+						sb.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-property-implementation\"");
+					}
 					if (@class.IsCategory) {
 						sb.WriteLine ("@implementation {0} ({1})", EncodeNonAsciiCharacters (@class.BaseType.ExportedName), @class.CategoryName);
 					} else {
@@ -2778,6 +2805,8 @@ namespace XamCore.Registrar {
 					}
 					sb.Unindent ();
 					sb.WriteLine ("@end");
+					if (hasClangDiagnostic)
+						sb.AppendLine ("#pragma clang diagnostic pop");
 				}
 				sb.WriteLine ();
 			}
@@ -2821,7 +2850,7 @@ namespace XamCore.Registrar {
 					map.AppendLine ("const char *__xamarin_protocols_{0}[] = {{ \"{1}\" }};", EncodeNonAsciiCharacters (p.Value.Item1.ExportedName), string.Join ("\", \"", p.Value.Item2));
 				map.AppendLine ("static const MTProtocolMap __xamarin_protocol_map [] = {");
 				foreach (var p in ordered_protocols)
-					map.AppendLine ("{{ 0x{0:X}, {1}, __xamarin_protocols_{2} }},", p.Key, p.Value.Item2.Length, EncodeNonAsciiCharacters (p.Value.Item1.ExportedName));
+					map.AppendLine ("{{ 0x{0:X}, {1}, __xamarin_protocols_{2} }},", p.Key, p.Value.Item2.Count, EncodeNonAsciiCharacters (p.Value.Item1.ExportedName));
 				map.AppendLine ("};");
 				map.AppendLine ();
 			}
@@ -4457,5 +4486,10 @@ namespace XamCore.Registrar {
 		public string Name { get; set; }
 		public bool IsWrapper { get; set; }
 		public bool SkipRegistration { get; set; }
+	}
+
+	class AdoptsAttribute : Attribute
+	{
+		public string ProtocolType { get; set; }
 	}
 }

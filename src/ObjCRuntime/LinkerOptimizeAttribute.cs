@@ -7,6 +7,6 @@ using System.Runtime.InteropServices;
 
 namespace XamCore.ObjCRuntime {
 
-	[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
-	internal class LinkerOptimizeAttribute : Attribute { }
+	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field, AllowMultiple = false)]
+	public class LinkerOptimizeAttribute : Attribute { }
 }

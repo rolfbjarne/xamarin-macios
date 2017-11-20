@@ -14,6 +14,7 @@ namespace MonoTouch.Tuner
 	{
 
 		bool? isdirectbinding_constant;
+		static bool trace;
 
 		public OptimizeGeneratedCodeSubStep (LinkerOptions options)
 		{
@@ -99,10 +100,7 @@ namespace MonoTouch.Tuner
 			isdirectbinding_constant = type.IsNSObject (LinkContext) ? type.GetIsDirectBindingConstant (LinkContext) : null;
 			base.Process (type);
 		}
-		/*
-		 * Unable to compile method 'Foundation.NSObject[] Foundation.NSDictionary:KeysForObject (Foundation.NSObject)' due to: 'Invalid IL code in Foundation.NSDictionary:KeysForObject (Foundation.NSObject): IL_004b: brfalse   IL_0056
-		 * Unable to compile method 'Foundation.NSObject[] Foundation.NSDictionary:ObjectsForKeys (Foundation.NSArray,Foundation.NSObject)' due to: 'Invalid IL code in Foundation.NSDictionary:ObjectsForKeys (Foundation.NSArray,Foundation.NSObject): IL_0064: brfalse   IL_006f
-		 */
+
 		protected override void Process (MethodDefinition method)
 		{
 			if (!method.HasBody)
@@ -117,6 +115,8 @@ namespace MonoTouch.Tuner
 				//Console.WriteLine ($"Not optimizable: {method.FullName}");
 				return; 
 			}
+
+			trace = method.Name == "ConnectMethod";
 
 			var instructions = method.Body.Instructions;
 			for (int i = 0; i < instructions.Count; i++) {
@@ -288,9 +288,10 @@ namespace MonoTouch.Tuner
 			case "EnsureUIThread":
 				if (EnsureUIThread || !mr.DeclaringType.Is (Namespaces.UIKit, "UIApplication"))
 					return 0;
-#if DEBUG
-				Console.WriteLine ("\t{0} EnsureUIThread {1}", caller, EnsureUIThread);
-#endif
+
+				if (trace)
+					Console.WriteLine ("\t{0} EnsureUIThread {1}", caller, EnsureUIThread);
+
 				Nop (ins);                                                              // call void MonoTouch.UIKit.UIApplication::EnsureUIThread()
 				break;
 			case "get_Size":
@@ -303,9 +304,8 @@ namespace MonoTouch.Tuner
 				if (!mr.DeclaringType.Is ("System", "IntPtr"))
 					return 0;
 
-#if DEBUG
-				Console.WriteLine ("\t{0} get_Size {1} bits", caller, Arch * 8);
-#endif
+				if (trace)
+					Console.WriteLine ("\t{0} get_Size {1} bits", caller, Arch * 8);
 
 				const string operation = "inline IntPtr.Size";
 				if (!ValidateInstruction (caller, ins.Next, operation, Code.Ldc_I4_8))
@@ -329,9 +329,9 @@ namespace MonoTouch.Tuner
 				//return 0;
 				if (!mr.DeclaringType.Is (Namespaces.Foundation, "NSObject"))
 					return 0;
-#if DEBUG
-				Console.WriteLine ("NSObject.get_IsDirectBinding called inside {0}", caller);
-#endif
+				if (trace)
+					Console.WriteLine ("NSObject.get_IsDirectBinding called inside {0}", caller);
+
 				ProcessIsDirectBinding (caller, ins, isdirectbinding_constant.Value);
 				break;
 			case "get_DynamicRegistrationSupported":
@@ -369,10 +369,10 @@ namespace MonoTouch.Tuner
 			// Clearing the branch succeeded, so clear the condition too
 			Nop (ins);           // call void ObjCRuntime.Runtime::get_IsDynamicSupported()
 
-#if TRACE
-			Console.WriteLine ($"{caller} after inlining Runtime.IsDynamicSupported=false:");
-			Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
-#endif
+			if (trace) {
+				Console.WriteLine ($"{caller} after inlining Runtime.IsDynamicSupported=false:");
+				Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
+			}
 		}
 
 		// https://app.asana.com/0/77259014252/77812690163
@@ -382,9 +382,10 @@ namespace MonoTouch.Tuner
 			Instruction ins = instructions [i];
 			if (!IsField (ins, Namespaces.ObjCRuntime, "Runtime", "Arch"))
 				return;
-#if DEBUG
-			Console.WriteLine ("Runtime.Arch checked inside {0}", caller);
-#endif
+
+			if (trace)
+				Console.WriteLine ("Runtime.Arch checked inside {0}", caller);
+
 			if (!ValidateInstruction (caller, ins, "inline Runtime.Arch", Code.Ldsfld))
 				return;
 
@@ -414,10 +415,10 @@ namespace MonoTouch.Tuner
 			Nop (ins.Previous);  // ldarg.0
 			Nop (ins);           // call System.Boolean Foundation.NSObject::get_IsDirectBinding()
 
-#if TRACE
-			Console.WriteLine ($"{caller} after inlining IsDirectBinding={value}:");
-			Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
-#endif
+			if (trace) {
+				Console.WriteLine ($"{caller} after inlining IsDirectBinding={value}:");
+				Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
+			}
 		}
 
 
@@ -466,6 +467,8 @@ namespace MonoTouch.Tuner
 		// The ins*Last instructions will be null if this is a condition without an 'else' block.
 		static bool GetBranchRange (MethodDefinition caller, Instruction insBranch, string operation, out Instruction insTrueFirst, out Instruction insTrueLast, out Instruction insFalseFirst, out Instruction insFalseLast)
 		{
+			if (trace)
+				Console.WriteLine ("STP");
 			insTrueFirst = null;
 			insTrueLast = null;
 			insFalseFirst = null;
@@ -477,10 +480,10 @@ namespace MonoTouch.Tuner
 			var branchTarget = (Instruction) insBranch.Operand;
 			Instruction endTarget;
 
-#if TRACE
-			Console.WriteLine ($"{caller}");
-			Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
-#endif
+			if (trace) {
+				Console.WriteLine ($"{caller}");
+				Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
+			}
 
 			switch (branchTarget.Previous.OpCode.Code) {
 			case Code.Br:
@@ -489,6 +492,8 @@ namespace MonoTouch.Tuner
 				endTarget = endTarget.Previous;
 				break;
 			case Code.Ret:
+			case Code.Throw:
+			case Code.Rethrow:
 				endTarget = branchTarget;
 				while (endTarget.OpCode.FlowControl != FlowControl.Return && endTarget.OpCode.FlowControl != FlowControl.Throw)
 					endTarget = endTarget.Next;
@@ -500,7 +505,7 @@ namespace MonoTouch.Tuner
 					Driver.Log (1, "Could not {3} call in {0} at offset {1} because there are not exactly 1 exception handlers (found {2})", caller, insBranch.Offset, caller.Body.ExceptionHandlers.Count, operation);
 					return false;
 				}
-				endTarget = caller.Body.ExceptionHandlers [0].TryEnd;
+				endTarget = caller.Body.ExceptionHandlers [0].TryEnd.Previous;
 				break;
 			case Code.Call:
 			case Code.Stsfld:
@@ -529,18 +534,19 @@ namespace MonoTouch.Tuner
 				insTrueLast = endTarget;
 				break;
 			default:
-				throw new NotImplementedException ();
+				throw new NotImplementedException (insBranch.ToString ());
 			}
 
-#if TRACE
-			Console.WriteLine ($"Branch at offset {insBranch.Offset}:");
-			Console.WriteLine ($"    True branch first/last:");
-			Console.WriteLine ($"        {insTrueFirst}");
-			Console.WriteLine ($"        {insTrueLast}");
-			Console.WriteLine ($"    False branch first/last:");
-			Console.WriteLine ($"        {insFalseFirst}");
-			Console.WriteLine ($"        {insFalseLast}");
-#endif
+			if (trace) {
+				Console.WriteLine ($"Branch at offset {insBranch.Offset}:");
+				Console.WriteLine ($"    True branch first/last:");
+				Console.WriteLine ($"        {insTrueFirst}");
+				Console.WriteLine ($"        {insTrueLast}");
+				Console.WriteLine ($"    False branch first/last:");
+				Console.WriteLine ($"        {insFalseFirst}");
+				Console.WriteLine ($"        {insFalseLast}");
+			}
+
 			return true;
 
 		}

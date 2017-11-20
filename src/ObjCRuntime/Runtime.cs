@@ -160,7 +160,7 @@ namespace XamCore.ObjCRuntime {
 
 		internal static unsafe InitializationOptions* options;
 
-		internal static bool DynamicRegistrationSupported {
+		public static bool DynamicRegistrationSupported {
 			get {
 				// The linker will turn calls to this property into a constant, and for if blocks remove the resulting dead code.
 				//
@@ -1393,7 +1393,8 @@ namespace XamCore.ObjCRuntime {
 
 			ConnectMethod (type, method, new ExportAttribute (selector.Name));
 		}
-			
+
+		[LinkerOptimize]
 		public static void ConnectMethod (Type type, MethodInfo method, ExportAttribute export)
 		{
 			if (type == null)
@@ -1404,6 +1405,9 @@ namespace XamCore.ObjCRuntime {
 
 			if (export == null)
 				throw new ArgumentNullException ("export");
+
+			if (!DynamicRegistrationSupported)
+				throw ErrorHelper.CreateError (8025, "Runtime.ConnectMethod is not supported when the dynamic registrar has been linked away.");
 
 			Registrar.RegisterMethod (type, method, export);
 		}

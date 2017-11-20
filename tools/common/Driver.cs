@@ -126,7 +126,7 @@ namespace Xamarin.Bundler {
 			options.Add ("root-assembly:", "Specifies any root assemblies. There must be at least one root assembly, usually the main executable.", (v) => {
 				app.RootAssemblies.Add (v);
 			});
-			options.Add ("optimize=", "A comma-delimited list of optimizations to enable/disable. Example: --optimize=+remove-uithread-checks will make the linker the UI thread checks. Use 'all' to enable or disable all optimizations.\n" +
+			options.Add ("linker-optimize=", "A comma-delimited list of optimizations to enable/disable. Example: --optimize=+remove-uithread-checks will make the linker remove the UI thread checks. Use 'all' to enable or disable all optimizations.\n" +
 					"Available optimizations:\n" +
 					"    remove-uithread-checks: By default enabled for release builds. Remove all UI Thread checks (makes the app smaller, and slightly faster at runtime).\n" +
 					"    remove-dynamic-registrar: By default enabled when the static registrar is enabled. Removes the dynamic registrar (makes the app smaller).\n" +

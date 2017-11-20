@@ -392,6 +392,9 @@ namespace XamCore.ObjCRuntime {
 
 		internal unsafe static uint GetTokenReference (Type type)
 		{
+			if (type.IsGenericType)
+				type = type.GetGenericTypeDefinition ();
+
 			var asm_name = type.Module.Assembly.GetName ().Name;
 
 			// First check if there's a full token reference to this type

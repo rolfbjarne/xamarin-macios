@@ -80,20 +80,16 @@ namespace Xamarin.Tuner
 		{
 			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
 			object value;
-			if (!attribs.TryGetValue (type, out value)) {
-				attribs [type] = type.Methods.ToArray (); // Make a copy of the collection.
-				System.Console.WriteLine ($"Stored protocol methods for {type.FullName}");
-			}
+			if (!attribs.TryGetValue (type, out value))
+				attribs [type] = type.Methods.ToArray (); // Make a copy of the collection, since the linker may remove methods from it.
 		}
 
 		public IList<MethodDefinition> GetProtocolMethods (TypeDefinition type)
 		{
 			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
 			object value;
-			if (attribs.TryGetValue (type, out value)) {
-				System.Console.WriteLine ($"Got protocol methods for {type.FullName}");
+			if (attribs.TryGetValue (type, out value))
 				return (MethodDefinition []) value;
-			}
 			return null;
 		}
 	}

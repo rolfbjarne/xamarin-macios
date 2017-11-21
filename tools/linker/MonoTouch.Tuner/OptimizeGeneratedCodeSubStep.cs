@@ -1,4 +1,5 @@
 // Copyright 2012-2014, 2016 Xamarin Inc. All rights reserved.
+//#define TRACE
 using System;
 using Mono.Tuner;
 using Mono.Cecil;
@@ -9,7 +10,6 @@ using Xamarin.Bundler;
 namespace MonoTouch.Tuner {
 	
 	public class OptimizeGeneratedCodeSubStep : CoreOptimizeGeneratedCode {
-		
 		public OptimizeGeneratedCodeSubStep (LinkerOptions options)
 			: base (options)
 		{

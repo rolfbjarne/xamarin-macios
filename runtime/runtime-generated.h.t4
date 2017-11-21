@@ -5,21 +5,21 @@
 // Authors:
 //   Rolf Bjarne Kvinge <rolf@xamarin.com>
 //
-// Copyright 2013-2014 Xamarin Inc.
+// Copyright 2017 Microsoft Inc.
 //
 <#@ include file="delegates.t4" #>
 
-#ifndef __DELAGATES_H__
-#define __DELAGATES_H__
+#ifndef __RUNTIME_GENERATED_H__
+#define __RUNTIME_GENERATED_H__
 
-#include "xamarin/xamarin.h"
+#include "xamarin.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 <# foreach (var d in delegates) {
-		if (!d.OnlyDynamicUsage)
+		if (d.OnlyDynamicUsage)
 			continue;
 #>
 <#= d.CReturnType #>
@@ -31,4 +31,4 @@ extern "C" {
 } /* extern "C" */
 #endif
 
-#endif /* __DELAGATES_H__ */
+#endif /* __RUNTIME_GENERATED_H__ */

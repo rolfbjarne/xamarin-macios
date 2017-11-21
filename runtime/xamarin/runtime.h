@@ -18,6 +18,7 @@
 
 #include "main.h"
 #include "mono-runtime.h"
+#include "runtime-generated.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,16 +73,38 @@ typedef struct __attribute__((packed)) {
 	uint32_t /* MTTokenReference */ type_reference;
 } MTClassMap;
 
+typedef struct __attribute__((packed)) {
+	uint32_t /* MTTokenReference */ skipped_reference;
+	uint32_t /* MTTokenReference */ actual_reference;
+} MTManagedClassMap;
+
+typedef struct __attribute__((packed)) {
+	uint32_t /* MTTokenReference */ token; // Token to a class)
+	uint32_t protocol_count; // Number of protocols
+	const char * const * protocols;
+} MTProtocolMap;
+
+typedef struct __attribute__((packed)) {
+	uint32_t protocol_token;
+	uint32_t wrapper_token;
+} MTProtocolWrapperMap;
+
 struct MTRegistrationMap;
 
 struct MTRegistrationMap {
 	const char **assembly;
 	MTClassMap *map;
-	MTFullTokenReference *full_token_references;
+	const MTProtocolMap *protocols; // array of MTProtocolMap, sorted ascending by token
+	const MTProtocolWrapperMap *protocol_wrappers; // array of MTProtocolWrapperMap, sorted ascending by protocol_token
+	const MTFullTokenReference *full_token_references;
+	const MTManagedClassMap *skipped_map;
 	int assembly_count;
 	int map_count;
 	int custom_type_count;
+	int protocol_count;
+	int protocol_wrapper_count;
 	int full_token_reference_count;
+	int skipped_map_count;
 };
 
 typedef struct {

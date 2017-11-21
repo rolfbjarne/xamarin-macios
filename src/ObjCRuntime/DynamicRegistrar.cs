@@ -986,9 +986,9 @@ namespace Registrar {
 					bool is_custom_type;
 					var tp = Class.FindType (@class, out is_custom_type);
 					if (tp != null) {
-						type = RegisterType (tp);
-						if (is_custom_type)
-							AddCustomType (tp);
+						//type = RegisterType (tp);
+						//if (is_custom_type)
+							//AddCustomType (tp);
 						return tp;
 					}
 

@@ -215,29 +215,6 @@ namespace Registrar {
 			}
 		}
 
-		public static bool TryGetAttributeImpl (ICustomAttributeProvider provider, string @namespace, string attributeName, out CustomAttribute attribute)
-		{
-			attribute = null;
-			if (!provider.HasCustomAttributes)
-				return false;
-
-			foreach (CustomAttribute custom_attribute in provider.CustomAttributes) {
-				if (!custom_attribute.Constructor.DeclaringType.Is (@namespace, attributeName))
-					continue;
-
-				attribute = custom_attribute;
-				return true;
-			}
-
-			return false;
-		}
-
-		public static bool HasAttribute (ICustomAttributeProvider provider, string @namespace, string attributeName)
-		{
-			CustomAttribute attrib;
-			return TryGetAttributeImpl (provider,  @namespace, attributeName, out attrib);
-		}
-
 		public static bool TypeMatch (IModifierType a, IModifierType b)
 		{
 			if (!TypeMatch (a.ModifierType, b.ModifierType))
@@ -314,7 +291,7 @@ namespace Registrar {
 			return true;
 		}
 
-		static void CollectInterfaces (ref List<TypeDefinition> ifaces, TypeDefinition type)
+		void CollectInterfaces (ref List<TypeDefinition> ifaces, TypeDefinition type)
 		{
 			if (type == null)
 				return;
@@ -342,7 +319,7 @@ namespace Registrar {
 			}
 		}
 
-		public static Dictionary<MethodDefinition, List<MethodDefinition>> PrepareInterfaceMethodMapping (TypeReference type)
+		public Dictionary<MethodDefinition, List<MethodDefinition>> PrepareInterfaceMethodMapping (TypeReference type)
 		{
 			TypeDefinition td = type.Resolve ();
 			List<TypeDefinition> ifaces = null;
@@ -356,6 +333,12 @@ namespace Registrar {
 
 			iface_methods = new List<MethodDefinition> ();
 			foreach (var iface in ifaces) {
+				var storedMethods = LinkContext?.GetProtocolMethods (iface.Resolve ());
+				if (storedMethods?.Count > 0) {
+					foreach (var imethod in storedMethods)
+						if (!iface_methods.Contains (imethod))
+							iface_methods.Add (imethod);
+				}
 				if (!iface.HasMethods)
 					continue;
 
@@ -502,7 +485,7 @@ namespace Registrar {
 				return false;
 			}
 
-			var type = tr.Resolve ();
+			var type = tr.GetElementType ().Resolve ();
 			while (type != null) {
 				if (type.HasInterfaces) {
 					foreach (var iface in type.Interfaces)
@@ -539,6 +522,51 @@ namespace Registrar {
 					availability_annotations = LinkContext?.GetAllCustomAttributes ("Availability");
 				return availability_annotations;
 			}
+		}
+
+		IEnumerable<ICustomAttribute> GetCustomAttributes (ICustomAttributeProvider provider, string @namespace, string name, bool inherits = false)
+		{
+			var dict = LinkContext?.Annotations?.GetCustomAnnotations (name);
+			object annotations = null;
+
+			if (dict?.TryGetValue (provider, out annotations) == true) {
+				var attributes = (IEnumerable<ICustomAttribute>) annotations;
+				foreach (var attrib in attributes) {
+					if (IsAttributeMatch (attrib, @namespace, name, inherits))
+						yield return attrib;
+				}
+			}
+
+			if (provider.HasCustomAttributes) {
+				foreach (var attrib in provider.CustomAttributes) {
+					if (IsAttributeMatch (attrib, @namespace, name, inherits))
+						yield return attrib;
+				}
+			}
+		}
+
+		public bool TryGetAttribute (ICustomAttributeProvider provider, string @namespace, string attributeName, out ICustomAttribute attribute)
+		{
+			attribute = null;
+
+			foreach (var custom_attribute in GetCustomAttributes (provider, @namespace, attributeName)) {
+				attribute = custom_attribute;
+				return true;
+			}
+
+			return false;
+		}
+
+		public bool HasAttribute (ICustomAttributeProvider provider, string @namespace, string name, bool inherits = false)
+		{
+			return GetCustomAttributes (provider, @namespace, name, inherits).Any ();
+		}
+
+		bool IsAttributeMatch (ICustomAttribute attribute, string @namespace, string name, bool inherits)
+		{
+			if (inherits)
+				return attribute.AttributeType.Inherits (@namespace, name);
+			return attribute.AttributeType.Is (@namespace, name);
 		}
 
 		void Init (Application app)
@@ -657,15 +685,13 @@ namespace Registrar {
 
 		protected override bool HasReleaseAttribute (MethodDefinition method)
 		{
-			CustomAttribute attrib;
 			method = GetBaseMethodInTypeHierarchy (method);
-			return TryGetAttributeImpl (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute, out attrib);
+			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);
 		}
 
 		protected override bool HasThisAttribute (MethodDefinition method)
 		{
-			CustomAttribute attrib;
-			return TryGetAttributeImpl (method, "System.Runtime.CompilerServices", "ExtensionAttribute", out attrib);
+			return HasAttribute (method, "System.Runtime.CompilerServices", "ExtensionAttribute");
 		}
 
 #if MTOUCH
@@ -1006,6 +1032,18 @@ namespace Registrar {
 			return rv;
 		}
 
+		protected override TypeReference [] GetLinkedAwayInterfaces (TypeReference type)
+		{
+			List<TypeDefinition> linkedAwayInterfaces = null;
+			if (LinkContext?.ProtocolImplementations?.TryGetValue (type.Resolve (), out linkedAwayInterfaces) != true)
+				return null;
+
+			if (linkedAwayInterfaces.Count == 0)
+				return null;
+
+			return linkedAwayInterfaces.ToArray ();
+		}
+
 		protected override TypeReference GetGenericTypeDefinition (TypeReference type)
 		{
 			var git = type as GenericInstanceType;
@@ -1103,7 +1141,7 @@ namespace Registrar {
 				}
 				return null;
 			}
-			var type = tr.Resolve ();
+			var type = tr.GetElementType ().Resolve ();
 			if (type.BaseType == null)
 				return null;
 
@@ -1157,18 +1195,18 @@ namespace Registrar {
 
 		protected override bool TryGetAttribute (TypeReference type, string attributeNamespace, string attributeType, out object attribute)
 		{
-			CustomAttribute attrib;
-			bool res = TryGetAttributeImpl (type.Resolve (), attributeNamespace, attributeType, out attrib);
+			ICustomAttribute attrib;
+			bool res = TryGetAttribute (type.Resolve (), attributeNamespace, attributeType, out attrib);
 			attribute = attrib;
 			return res;
 		}
 
 		public override RegisterAttribute GetRegisterAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 			RegisterAttribute rv = null;
 
-			if (!TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.RegisterAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.RegisterAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments) {
@@ -1212,10 +1250,10 @@ namespace Registrar {
 
 		protected override CategoryAttribute GetCategoryAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 			string name = null;
 
-			if (!TryGetAttributeImpl (type.Resolve (), ObjCRuntime, StringConstants.CategoryAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), ObjCRuntime, StringConstants.CategoryAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments)
@@ -1251,9 +1289,9 @@ namespace Registrar {
 
 		protected override ProtocolAttribute GetProtocolAttribute (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasProperties)
@@ -1266,7 +1304,7 @@ namespace Registrar {
 					rv.Name = (string) prop.Argument.Value;
 					break;
 				case "WrapperType":
-					rv.WrapperType = (TypeDefinition) prop.Argument.Value;
+					rv.WrapperType = ((TypeReference) prop.Argument.Value).Resolve ();
 					break;
 				case "IsInformal":
 					rv.IsInformal = (bool) prop.Argument.Value;
@@ -1295,13 +1333,7 @@ namespace Registrar {
 		{
 			var td = type.Resolve ();
 
-			if (!td.HasCustomAttributes)
-				yield break;
-
-			foreach (var ca in td.CustomAttributes) {
-				if (!ca.Constructor.DeclaringType.Is (Foundation, StringConstants.ProtocolMemberAttribute))
-					continue;
-
+			foreach (var ca in GetCustomAttributes (td, Foundation, StringConstants.ProtocolMemberAttribute)) {
 				var rv = new ProtocolMemberAttribute ();
 				foreach (var prop in ca.Properties) {
 					switch (prop.Name) {
@@ -1531,9 +1563,9 @@ namespace Registrar {
 
 		protected override TypeReference GetProtocolAttributeWrapperType (TypeReference type)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!TryGetAttributeImpl (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
+			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out attrib))
 				return null;
 
 			if (attrib.HasProperties) {
@@ -1546,16 +1578,32 @@ namespace Registrar {
 			return null;
 		}
 
+		IEnumerable<AdoptsAttribute> GetAdoptsAttributes (TypeDefinition type)
+		{
+			foreach (var ca in GetCustomAttributes (type, ObjCRuntime, "AdoptsAttribute")) {
+				var attrib = new AdoptsAttribute ();
+				switch (ca.ConstructorArguments.Count) {
+				case 1:
+					attrib.ProtocolType = (string) ca.ConstructorArguments [0].Value;
+					break;
+				default:
+					throw ErrorHelper.CreateError (4124, "Invalid AdoptsAttribute found on '{0}': expected 1 constructor arguments, got {1}. Please file a bug report at https://bugzilla.xamarin.com", type.FullName, 1, ca.ConstructorArguments.Count);
+				}
+				yield return attrib;
+			}
+
+		}
+
 		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
 			if (property == null)
 				return null;
 
 			property = GetBasePropertyInTypeHierarchy (property);
 
-			if (!TryGetAttributeImpl (property, ObjCRuntime, "BindAsAttribute", out attrib))
+			if (!TryGetAttribute (property, ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
 			return CreateBindAsAttribute (attrib, property);
@@ -1563,20 +1611,20 @@ namespace Registrar {
 
 		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
 			if (method == null)
 				return null;
 
 			method = GetBaseMethodInTypeHierarchy (method);
 
-			if (!TryGetAttributeImpl (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
+			if (!TryGetAttribute (parameter_index == -1 ? (ICustomAttributeProvider) method.MethodReturnType : method.Parameters [parameter_index], ObjCRuntime, "BindAsAttribute", out attrib))
 				return null;
 
 			return CreateBindAsAttribute (attrib, method);
 		}
 
-		static BindAsAttribute CreateBindAsAttribute (CustomAttribute attrib, IMemberDefinition member)
+		static BindAsAttribute CreateBindAsAttribute (ICustomAttribute attrib, IMemberDefinition member)
 		{
 			TypeReference originalType = null;
 			if (attrib.HasFields) {
@@ -1612,9 +1660,9 @@ namespace Registrar {
 
 		protected override ConnectAttribute GetConnectAttribute (PropertyDefinition property)
 		{
-			CustomAttribute attrib;
+			ICustomAttribute attrib;
 
-			if (!TryGetAttributeImpl (property, Foundation, StringConstants.ConnectAttribute, out attrib))
+			if (!TryGetAttribute (property, Foundation, StringConstants.ConnectAttribute, out attrib))
 				return null;
 
 			if (!attrib.HasConstructorArguments)
@@ -1628,16 +1676,13 @@ namespace Registrar {
 			}
 		}
 
-		static ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
+		ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
 		{
 			bool is_variadic = false;
 			var attribute = GetExportAttribute (candidate);
 
 			if (attribute == null)
 				return null;
-
-			if (attribute.Constructor.Parameters.Count != attribute.ConstructorArguments.Count)
-				throw ErrorHelper.CreateError (4124, "Invalid ExportAttribute found on '{0}.{1}'. Please file a bug report at http://bugzilla.xamarin.com", candidate.DeclaringType.FullName, candidate.Name);
 
 			if (attribute.HasProperties) {
 				foreach (var prop in attribute.Properties) {
@@ -1664,16 +1709,9 @@ namespace Registrar {
 		}
 
 		// [Export] is not sealed anymore - so we cannot simply compare strings
-		static CustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
+		ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
 		{
-			if (!candidate.HasCustomAttributes)
-				return null;
-			
-			foreach (CustomAttribute ca in candidate.CustomAttributes) {
-				if (ca.Constructor.DeclaringType.Inherits (Foundation, StringConstants.ExportAttribute))
-					return ca;
-			}
-			return null;
+			return GetCustomAttributes (candidate, Foundation, StringConstants.ExportAttribute, true).FirstOrDefault ();
 		}
 
 		PropertyDefinition GetBasePropertyInTypeHierarchy (PropertyDefinition property)
@@ -1793,7 +1831,7 @@ namespace Registrar {
 			if (type.IsNested)
 				return false;
 
-			var aname = type.Module.Assembly.Name.Name;
+			var aname = type.Module?.Assembly?.Name?.Name;
 			if (aname != PlatformAssembly)
 				return false;
 				
@@ -1935,12 +1973,12 @@ namespace Registrar {
 			case "Metal":
 			case "MetalKit":
 			case "MetalPerformanceShaders": // https://trello.com/c/mrjkAO9U/518-metal-simulator
-				// #error Metal Simulator is currently unsupported
-				// this framework is _officially_ not available on the simulator (in iOS8)
-#if !MONOMAC
-				if (IsSimulator)
-					return;
-#endif
+							// #error Metal Simulator is currently unsupported
+							// this framework is _officially_ not available on the simulator (in iOS8)
+							//#if !MONOMAC
+							//				if (IsSimulator)
+							//					return;
+							//#endif
 				goto default;
 			case "GameKit":
 #if !MONOMAC
@@ -2346,8 +2384,13 @@ namespace Registrar {
 			}
 
 			var td = type.Resolve ();
-			if (td != null)
-				sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+			if (td != null) {
+				if (td.Module == null) {
+					sb.Append (", TypeWasLinkedAwayFIXME"); // FIXME
+				} else {
+					sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+				}
+			}
 
 			return sb.ToString ();
 		}
@@ -2392,17 +2435,27 @@ namespace Registrar {
 		static bool IsMetalType (ObjCType type)
 		{
 			var ns = type.Type.Namespace;
+#if MONOMAC
 			if (!IsDualBuild)
 				ns = ns.Substring (CompatNamespace.Length + 1);
+#endif
 
 			switch (ns) {
-			case "Metal":
-			case "MetalKit":
+			//case "Metal":
+			//case "MetalKit":
 			case "MetalPerformanceShaders":
 				return true;
 			default:
 				return false;
 			}
+		}
+
+		List<Tuple<TypeReference, ObjCType>> skipped_types = new List<Tuple<TypeReference, ObjCType>> ();
+		protected override void OnSkipType (TypeReference type, ObjCType registered_type)
+		{
+			base.OnSkipType (type, registered_type);
+
+			skipped_types.Add (new Tuple<TypeReference, ObjCType> (type, registered_type));
 		}
 
 		void Specialize (AutoIndentStringBuilder sb)
@@ -2412,6 +2465,8 @@ namespace Registrar {
 
 			var map = new AutoIndentStringBuilder (1);
 			var map_init = new AutoIndentStringBuilder ();
+			var protocol_map = new Dictionary<uint, Tuple<ObjCType, List<string>>> ();
+			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
 
 			var i = 0;
 			
@@ -2488,14 +2543,16 @@ namespace Registrar {
 
 				skip.Clear ();
 
+				uint token_ref = uint.MaxValue;
 				if (!@class.IsProtocol && !@class.IsCategory) {
 					if (!isPlatformType)
 						customTypeCount++;
 					
 					CheckNamespace (@class, exceptions);
+					token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
 					map.AppendLine ("{{ NULL, 0x{1:X} /* '{0}' => '{2}' */ }},", 
 									@class.ExportedName,
-									CreateTokenReference (@class.Type, TokenType.TypeDef), 
+									token_ref, 
 									GetAssemblyQualifiedName (@class.Type));
 
 					bool use_dynamic;
@@ -2528,8 +2585,36 @@ namespace Registrar {
 					}
 
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
+
+					if (!@class.IsWrapper) {
+						List<string> protocols = null;
+						var adopts = GetAdoptsAttributes (@class.Type.Resolve ()).ToArray ();
+
+						if (@class.Protocols != null || adopts.Length > 0) {
+							protocols = new List<string> (@class.Protocols?.Length ?? 0 + adopts.Length);
+							protocol_map [token_ref] = new Tuple<ObjCType, List<string>> (@class, protocols);
+						}
+
+						if (@class.Protocols != null) {
+							for (int p = 0; p < @class.Protocols.Length; p++)
+								protocols.Add (@class.Protocols [p].ProtocolName);
+						}
+						foreach (var adopt in adopts)
+							protocols.Add (adopt.ProtocolType);
+					}
 				}
 
+
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+					if (@class.ProtocolWrapperType.Module == null) {
+						// The protocol was linked away
+						Console.WriteLine ($"Linked away protocol wrapper type {@class.ProtocolWrapperType.FullName} for {@class.Type.FullName}");
+					} else {
+						if (token_ref == uint.MaxValue)
+							token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
+						protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+					}
+				}
 				if (@class.IsWrapper && isPlatformType)
 					continue;
 
@@ -2739,6 +2824,14 @@ namespace Registrar {
 			map.AppendLine ("};");
 			map.AppendLine ();
 
+			if (skipped_types.Count > 0) {
+				map.AppendLine ("static const MTManagedClassMap __xamarin_skipped_map [] = {");
+				foreach (var skipped in skipped_types.OrderBy ((v) => CreateTokenReference (v.Item1, TokenType.TypeDef)))
+					map.AppendLine ("{{ 0x{0:X}, 0x{1:X} /* '{2}' => '{3}' */ }},", CreateTokenReference (skipped.Item1, TokenType.TypeDef), CreateTokenReference (skipped.Item2.Type, TokenType.TypeDef), skipped.Item1.FullName, skipped.Item2.Type.FullName);
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
 			map.AppendLine ("static const char *__xamarin_registration_assemblies []= {");
 			int count = 0;
 			foreach (var assembly in registered_assemblies) {
@@ -2753,19 +2846,48 @@ namespace Registrar {
 			map.AppendLine ("};");
 			map.AppendLine ();
 
-			map.AppendLine ("static struct MTFullTokenReference __xamarin_token_references [] = {");
-			map.AppendLine (full_token_references);
-			map.AppendLine ("};");
-			map.AppendLine ();
+			if (full_token_reference_count > 0) {
+				map.AppendLine ("static const struct MTFullTokenReference __xamarin_token_references [] = {");
+				map.AppendLine (full_token_references);
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_map.Count > 0) {
+				var ordered_protocols = protocol_map.OrderBy ((v) => v.Key);
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("const char *__xamarin_protocols_{0}[] = {{ \"{1}\" }};", EncodeNonAsciiCharacters (p.Value.Item1.ExportedName), string.Join ("\", \"", p.Value.Item2));
+				map.AppendLine ("static const MTProtocolMap __xamarin_protocol_map [] = {");
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("{{ 0x{0:X}, {1}, __xamarin_protocols_{2} }},", p.Key, p.Value.Item2.Count, EncodeNonAsciiCharacters (p.Value.Item1.ExportedName));
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_wrapper_map.Count > 0) {
+				var ordered = protocol_wrapper_map.OrderBy ((v) => v.Key);
+				map.AppendLine ("static const MTProtocolWrapperMap __xamarin_protocol_wrapper_map [] = {");
+				foreach (var p in ordered) {
+					map.AppendLine ("{{ 0x{0:X} /* {1} */, 0x{2:X} /* {3} */ }},", p.Key, p.Value.Item1.Name, p.Value.Item2, p.Value.Item1.ProtocolWrapperType.Name);
+				}
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
 
 			map.AppendLine ("static struct MTRegistrationMap __xamarin_registration_map = {");
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
-			map.AppendLine ("__xamarin_token_references,");
+			map.AppendLine (protocol_map.Count == 0 ? "NULL," : "__xamarin_protocol_map,");
+			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
+			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
+			map.AppendLine (skipped_types.Count == 0 ? "NULL," : "__xamarin_skipped_map,");
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", customTypeCount);
-			map.AppendLine ("{0}", full_token_reference_count);
+			map.AppendLine ("{0},", protocol_map.Count);
+			map.AppendLine ("{0},", protocol_wrapper_map.Count);
+			map.AppendLine ("{0},", full_token_reference_count);
+			map.AppendLine ("{0}", skipped_types.Count);
 			map.AppendLine ("};");
 
 
@@ -4059,7 +4181,17 @@ namespace Registrar {
 			return rv;
 		}
 
+		Dictionary<Tuple<MemberReference, TokenType>, uint> token_ref_cache = new Dictionary<Tuple<MemberReference, TokenType>, uint> ();
 		uint CreateTokenReference (MemberReference member, TokenType implied_type)
+		{
+			var key = new Tuple<MemberReference, TokenType> (member, implied_type);
+			uint rv;
+			if (!token_ref_cache.TryGetValue (key, out rv))
+				token_ref_cache [key] = rv = CreateTokenReference2 (member, implied_type);
+			return rv;
+		}
+
+		uint CreateTokenReference2 (MemberReference member, TokenType implied_type)
 		{
 			var token = member.MetadataToken;
 
@@ -4394,5 +4526,10 @@ namespace Registrar {
 		public string Name { get; set; }
 		public bool IsWrapper { get; set; }
 		public bool SkipRegistration { get; set; }
+	}
+
+	class AdoptsAttribute : Attribute
+	{
+		public string ProtocolType { get; set; }
 	}
 }

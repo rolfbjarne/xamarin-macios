@@ -17,6 +17,7 @@ namespace Xamarin.Bundler
 #endif
 			"blockliteral-setupblock",
 			"register-protocols",
+			"remove-dynamic-registrar",
 		};
 
 		bool? [] values;
@@ -50,6 +51,11 @@ namespace Xamarin.Bundler
 		public bool? RegisterProtocols {
 			get { return values [6]; }
 			set { values [6] = value; }
+		}
+
+		public bool? RemoveDynamicRegistrar {
+			get { return values [7]; }
+			set { values [7] = value; }
 		}
 
 		public Optimizations ()

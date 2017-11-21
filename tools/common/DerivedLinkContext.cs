@@ -29,6 +29,8 @@ namespace Xamarin.Tuner
 		// Store interfaces the linker has linked away so that the static registrar can access them.
 		public Dictionary<TypeDefinition, List<TypeDefinition>> ProtocolImplementations { get; private set; } = new Dictionary<TypeDefinition, List<TypeDefinition>> ();
 
+		public bool DynamicRegistrationSupported { get { return App.DynamicRegistrationSupported; } }
+
 		public Application App {
 			get {
 				return Target.App;

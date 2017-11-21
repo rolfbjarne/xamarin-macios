@@ -177,6 +177,7 @@ namespace ObjCRuntime {
 #endif
 
 		[Preserve] // called from native - runtime.m.
+		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		unsafe static void Initialize (InitializationOptions* options)
 		{
 #if PROFILE
@@ -1336,6 +1337,15 @@ namespace ObjCRuntime {
 			return ConstructINativeObject<T> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound);
 		}
 
+		static Type FindProtocolWrapperTypeDynamic (Type type)
+		{
+			// need to look up the type from the ProtocolAttribute.
+			var a = type.GetCustomAttributes (typeof (Foundation.ProtocolAttribute), false);
+			var attr = (Foundation.ProtocolAttribute) (a.Length > 0 ? a [0] : null);
+			return attr?.WrapperType;
+		}
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		private static Type FindProtocolWrapperType (Type type)
 		{
 			if (type == null || !type.IsInterface)
@@ -1352,15 +1362,19 @@ namespace ObjCRuntime {
 				}
 			}
 
-			// need to look up the type from the ProtocolAttribute.
-			var a = type.GetCustomAttributes (typeof (Foundation.ProtocolAttribute), false);
+			if (DynamicRegistrationSupported) {
+				// Use a separate method for the logic in FindProtocolWrapperTypeDynamic, because it uses ProtocolAttribute,
+				// and even if the linker is able to remove this chunk of code, it's not able to remove the local
+				// variable (of type ProtocolAttribute), which means the ProtocolAttribute type won't be linked away.
+				// By using a separate method the linker will remove the entire method once the code below is optimized away.
+				var rv = FindProtocolWrapperTypeDynamic (type);
+				if (rv != null)
+					return rv;
+			}
 
-			var attr = (Foundation.ProtocolAttribute) (a.Length > 0 ? a [0] : null);
-			if (attr == null || attr.WrapperType == null)
-				throw ErrorHelper.CreateError (4125, "The registrar found an invalid interface '{0}': " +
-					"The interface must have a Protocol attribute specifying its wrapper type.",
-					type.FullName);
-			return attr.WrapperType;
+			throw ErrorHelper.CreateError (4125, "The registrar found an invalid interface '{0}': " +
+				"The interface must have a Protocol attribute specifying its wrapper type.",
+				type.FullName);
 		}
 
 		[DllImport ("__Internal")]
@@ -1378,7 +1392,8 @@ namespace ObjCRuntime {
 
 			ConnectMethod (type, method, new ExportAttribute (selector.Name));
 		}
-			
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void ConnectMethod (Type type, MethodInfo method, ExportAttribute export)
 		{
 			if (type == null)
@@ -1490,7 +1505,6 @@ namespace ObjCRuntime {
 				return c [str.Length] == 0;
 			}
 		}
-
 	}
 		
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

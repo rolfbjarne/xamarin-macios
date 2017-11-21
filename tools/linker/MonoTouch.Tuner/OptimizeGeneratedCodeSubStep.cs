@@ -1,16 +1,21 @@
 // Copyright 2012-2014, 2016 Xamarin Inc. All rights reserved.
+//#define TRACE
 using System;
 using Mono.Tuner;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Xamarin.Linker;
+using Xamarin.Bundler;
 
-namespace MonoTouch.Tuner {
-	
-	public class OptimizeGeneratedCodeSubStep : CoreOptimizeGeneratedCode {
-		
-		bool isdirectbinding_check_required;
-		
+namespace MonoTouch.Tuner
+{
+
+	public class OptimizeGeneratedCodeSubStep : CoreOptimizeGeneratedCode
+	{
+
+		bool? isdirectbinding_constant;
+		static bool trace;
+
 		public OptimizeGeneratedCodeSubStep (LinkerOptions options)
 		{
 			Options = options;
@@ -18,7 +23,7 @@ namespace MonoTouch.Tuner {
 			Console.WriteLine ("OptimizeGeneratedCodeSubStep Arch {0} Device: {1}, EnsureUiThread: {2}, FAT 32+64 {3}", Arch, Device, EnsureUIThread, IsDualBuild);
 #endif
 		}
-		
+
 		public int Arch {
 			get { return Options.Arch; }
 		}
@@ -26,13 +31,38 @@ namespace MonoTouch.Tuner {
 		public bool Device {
 			get { return Options.Device; }
 		}
-		
+
 		public bool EnsureUIThread {
 			get { return Options.EnsureUIThread; }
 		}
 
 		public bool IsDualBuild {
 			get { return Options.IsDualBuild; }
+		}
+
+		public bool InlineSetupBlock {
+			get {
+				// Enabled by default always.
+				return LinkContext.App.Optimizations.InlineSetupBlock != false;
+			}
+		}
+
+		MethodDefinition setupblock_def;
+		MethodReference GetBlockSetupImpl (MethodDefinition caller)
+		{
+			if (setupblock_def == null) {
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.Target.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				foreach (var method in type.Methods) {
+					if (method.Name != "SetupBlockImpl")
+						continue;
+					setupblock_def = method;
+					setupblock_def.IsPublic = true;
+					break;
+				}
+				if (setupblock_def == null)
+					throw new NotImplementedException ();
+			}
+			return caller.Module.ImportReference (setupblock_def);
 		}
 
 		LinkerOptions Options { get; set; }
@@ -53,31 +83,53 @@ namespace MonoTouch.Tuner {
 			// For non-fat apps (the AppStore allows 64bits only iOS apps) then it's better to be applied
 			//
 			// TODO: we could make this an option "optimize for size vs optimize for speed" in the future
-			ApplyIntPtrSizeOptimization = ((Profile.Current as BaseProfile).ProductAssembly == assembly.Name.Name) || !IsDualBuild;
+			if (LinkContext.App.Optimizations.InlineIntPtrSize.HasValue) {
+				ApplyIntPtrSizeOptimization = LinkContext.App.Optimizations.InlineIntPtrSize.Value;
+			} else {
+				ApplyIntPtrSizeOptimization = ((Profile.Current as BaseProfile).ProductAssembly == assembly.Name.Name) || !IsDualBuild;
+			}
+
 			base.Process (assembly);
 		}
 
 		protected override void Process (TypeDefinition type)
 		{
-			if (!HasGeneratedCode)
+			if (!HasOptimizableCode)
 				return;
 
-			isdirectbinding_check_required = type.IsDirectBindingCheckRequired (LinkContext);
+			isdirectbinding_constant = type.IsNSObject (LinkContext) ? type.GetIsDirectBindingConstant (LinkContext) : null;
 			base.Process (type);
 		}
 
 		protected override void Process (MethodDefinition method)
 		{
-			// special processing on generated methods from NSObject-inherited types
-			// it would be too risky to apply on user-generated code
-			if (!method.HasBody || !method.IsGeneratedCode (LinkContext) || (!IsExtensionType && !IsExport (method)))
+			if (!method.HasBody)
 				return;
-			
+
+			if (method.IsOptimizableCode (LinkContext)) {
+				// We optimize methods that have the [LinkerOptimize] attribute,
+			} else if (method.IsGeneratedCode (LinkContext) && (IsExtensionType || IsExport (method))) {
+				// or that have the [GeneratedCodeAttribute] and is either an extension type or an exported method
+			} else {
+				// but it would be too risky to apply on user-generated code
+				//Console.WriteLine ($"Not optimizable: {method.FullName}");
+				return; 
+			}
+
+			if (!LinkContext.DynamicRegistrationSupported && method.Name == "get_DynamicRegistrationSupported" && method.DeclaringType.Is ("ObjCRuntime", "Runtime")) {
+				// Rewrite to return 'false'
+				var instr = method.Body.Instructions;
+				instr.Clear ();
+				instr.Add (Instruction.Create (OpCodes.Ldc_I4_0));
+				instr.Add (Instruction.Create (OpCodes.Ret));
+				return; // nothing else to do here.
+			}
+
 			var instructions = method.Body.Instructions;
 			for (int i = 0; i < instructions.Count; i++) {
 				switch (instructions [i].OpCode.Code) {
 				case Code.Call:
-					ProcessCalls (method, i);
+					i += ProcessCalls (method, i);
 					break;
 				case Code.Ldsfld:
 					ProcessLoadStaticField (method, i);
@@ -85,112 +137,228 @@ namespace MonoTouch.Tuner {
 				}
 			}
 		}
-		
-		void ProcessCalls (MethodDefinition caller, int i)
+
+		TypeReference InflateType (GenericInstanceType git, TypeReference type)
+		{
+			var gt = type as GenericParameter;
+			if (gt != null)
+				return git.GenericArguments [gt.Position];
+			if (type is TypeSpecification)
+				throw new NotImplementedException ();
+			return type;
+		}
+
+		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition method)
+		{
+			var git = inflatedDeclaringType as GenericInstanceType;
+			if (git == null)
+				return method;
+			var mr = new MethodReference (method.Name, InflateType (git, method.ReturnType), git);
+			if (method.HasParameters) {
+				for (int i = 0; i < method.Parameters.Count; i++) {
+					var p = new ParameterDefinition (method.Parameters [i].Name, method.Parameters [i].Attributes, InflateType (git, method.Parameters [i].ParameterType));
+					mr.Parameters.Add (p);
+				}
+			}
+			return mr;
+		}
+
+		bool IsSubclassed (TypeDefinition type, TypeDefinition byType)
+		{
+			if (byType.Is (type.Namespace, type.Name))
+				return true;
+			if (byType.HasNestedTypes) {
+				foreach (var ns in byType.NestedTypes) {
+					if (IsSubclassed (type, ns))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		bool IsSubclassed (TypeDefinition type)
+		{
+			foreach (var a in context.GetAssemblies ()) {
+				foreach (var s in a.MainModule.Types) {
+					if (IsSubclassed (type, s))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		// returns the number of instructions added (if positive) or removed (if negative)
+		int ProcessCalls (MethodDefinition caller, int i)
 		{
 			var instructions = caller.Body.Instructions;
 			Instruction ins = instructions [i];
 			var mr = ins.Operand as MethodReference;
 			// if it could not be resolved to a definition then it won't be NSObject
 			if (mr == null)
-				return;
+				return 0;
 
 			switch (mr.Name) {
+			case "SetupBlock":
+			case "SetupBlockUnsafe":
+				// This will optimize calls to SetupBlock and SetupBlockUnsafe by calculating the signature for the block
+				// (which both SetupBlock and SetupBlockUnsafe do), and then rewrite the code to call SetupBlockImpl instead
+				// (which takes the block signature as an argument instead of calculating it). This is required when
+				// removing the dynamic registrar, because calculating the block signature is done in the dynamic registrar.
+				if (!InlineSetupBlock)
+					return 0;
+				if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "BlockLiteral"))
+					return 0;
+
+				var prev = ins.Previous;
+				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected previous instruction to be Pop0, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected previous instruction to be Push1, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				}
+				prev = prev.Previous;
+				TypeReference delegateType = null;
+
+				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Pop0, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Push1, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				} else if (prev.OpCode.Code == Code.Ldsfld) {
+					delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType;
+				} else {
+					Driver.Log (1, "Failed to optimize {0} at index {1}: expected second previous instruction to be Ldsfld, but got {2}", caller, i, prev.OpCode);
+					return 0;
+				}
+
+				// Calculate the block signature
+				TypeReference userDelegateType = null;
+				var delegateTypeDefinition = delegateType.Resolve ();
+				foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
+					var attribType = attrib.Constructor.DeclaringType;
+					if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
+						continue;
+					userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
+					break;
+				}
+				bool blockSignature = false;
+				string signature = null;
+				MethodReference userMethod = null;
+				if (userDelegateType != null) {
+					var userDelegateTypeDefinition = userDelegateType.Resolve ();
+					MethodDefinition userMethodDefinition = null;
+					foreach (var method in userDelegateTypeDefinition.Methods) {
+						if (method.Name != "Invoke")
+							continue;
+						userMethodDefinition = method;
+						break;
+					}
+					if (userMethodDefinition == null)
+						throw new NotImplementedException ();
+					blockSignature = true;
+					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+				} else if (delegateType.Is ("System", "Action`1") && (delegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
+					signature = "v@?";
+				} else {
+					Driver.Log (0, "Failed to optimize {0} at index {1}: could not find the UserDelegateTypeAttribute on {2}", caller, i, delegateType.FullName);
+					return 0;
+				}
+				if (signature == null) {
+					try {
+						var parameters = new TypeReference [userMethod.Parameters.Count];
+						for (int p = 0; p < parameters.Length; p++)
+							parameters [p] = userMethod.Parameters [p].ParameterType;
+						signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, isBlockSignature: blockSignature);
+					} catch (Exception e) {
+						Driver.Log (1, "Failed to optimize {0} at index {1}: {2}", caller, i, e.Message);
+						signature = "BROKEN SIGNATURE"; // FIXME: fix the broken binding
+					}
+				}
+
+				instructions.Insert (i, Instruction.Create (OpCodes.Ldstr, signature));
+				instructions.Insert (i, Instruction.Create (mr.Name == "SetupBlockUnsafe" ? OpCodes.Ldc_I4_0 : OpCodes.Ldc_I4_1));
+				ins.Operand = GetBlockSetupImpl (caller);
+
+				Driver.Log (1, "Optimized {0} at index {1} with delegate type {2} and signature {3}", caller, i, delegateType.FullName, signature);
+
+				return 2;
 			case "IsNewRefcountEnabled":
 				// note: calling IsNSObject would check inheritance (time consuming)
 				if (!mr.DeclaringType.Is (Namespaces.Foundation, "NSObject"))
-					return;
+					return 0;
 
-				Nop (ins);							// call bool MonoTouch.Foundation.NSObject::IsNewRefcountEnabled()
-				ins = instructions [++i];			// brtrue IL_x
-				while (ins.OpCode.FlowControl != FlowControl.Cond_Branch)
-					ins = instructions [++i];		// csc debug IL is quite not optimal as can include an _unneeded_ stloc/ldloc[.x] (ref: #32282)
-				Instruction branch_to = (ins.Operand as Instruction);
-				while (ins != branch_to) {
-					//Console.WriteLine ("\t\t{0}", ins.OpCode.Code);
-					Nop (ins);						// for getters: ldarg.0 + ldloc.0 + stfld
-					ins = instructions [++i];		// for setters: ldarg.0 + ldarg.1 + stfld
-				}
+				if (!ValidateInstruction (caller, ins, "inline NSObject.IsNewRefcountEnabled", Code.Call))
+					return 0;
+
+				if (!InlineBranchCondition (caller, "inline NSObject.IsNewRefcountEnabled", ins.Next, true))
+					return 0;
+
+				Nop (ins); // call bool Foundation.NSObject::IsNewRefcountEnabled()
 				break;
 			case "EnsureUIThread":
 				if (EnsureUIThread || !mr.DeclaringType.Is (Namespaces.UIKit, "UIApplication"))
-					return;
-#if DEBUG
-				Console.WriteLine ("\t{0} EnsureUIThread {1}", caller, EnsureUIThread);
-#endif						
-				Nop (ins);								// call void MonoTouch.UIKit.UIApplication::EnsureUIThread()
+					return 0;
+
+				if (trace)
+					Console.WriteLine ("\t{0} EnsureUIThread {1}", caller, EnsureUIThread);
+
+				Nop (ins);                                                              // call void MonoTouch.UIKit.UIApplication::EnsureUIThread()
 				break;
 			case "get_Size":
 				if (!ApplyIntPtrSizeOptimization)
-					return;
+					return 0;
 				// This will optimize code of following code:
 				// if (IntPtr.Size == 8) { ... } else { ... }
 
 				// only if we're linking bindings with architecture specific code paths
 				if (!mr.DeclaringType.Is ("System", "IntPtr"))
-					return;
+					return 0;
 
-				if (!(ins.Next.OpCode == OpCodes.Ldc_I4_8 && (ins.Next.Next.OpCode == OpCodes.Bne_Un || ins.Next.Next.OpCode == OpCodes.Bne_Un_S)))
-					return;
-#if DEBUG
-				Console.WriteLine ("\t{0} get_Size {1} bits", caller, Arch * 8);
-#endif
+				if (trace)
+					Console.WriteLine ("\t{0} get_Size {1} bits", caller, Arch * 8);
 
-				// remove conditon check
-				Nop (ins);								// call int32 [mscorlib]System.IntPtr::get_Size()
-				ins = instructions [++i];
-				if (ins.OpCode.Code != Code.Ldc_I4_8) {
-#if DEBUG
-					Console.WriteLine ("Unexpected code sequence for get_Size: {0}", ins);
-#endif
-					break; // unexpected code sequence, bail out
-				}
-				Nop (ins);								// ldc.i4.8
-				ins = instructions [++i];
-				Instruction bne = (ins.Operand as Instruction);
-				if (ins.OpCode.Code != Code.Bne_Un && ins.OpCode.Code != Code.Bne_Un_S) {
-#if DEBUG
-					Console.WriteLine ("Unexpected code sequence for get_Size: {0}", ins);
-#endif
-					break; // unexpected code sequence, bail out
-				}
-				Nop (ins);								// bne.un XXXX
-				// remove unused branch
-				if (Arch == 8) {
-					ins = bne;
-					var end = bne.Previous.Operand as Instruction;
-#if DEBUG
-					if (end == null)
-						Console.WriteLine ();
-#endif
-					// keep 64 bits branch and remove 32 bits branch
-					while (ins != end && ins.OpCode.Code != Code.Ret && ins.OpCode.Code != Code.Leave && ins.OpCode.Code != Code.Leave_S) {
-						Nop (ins);
-						ins = ins.Next;
-					}
-				} else {
-					// keep 32 bits branch and remove 64 bits branch
-					ins = instructions [++i];
-					bne = bne.Previous;
-					while (ins != bne) {
-						Nop (ins);
-						ins = instructions [++i];
-					}
-					Nop (ins);
-				}
+				const string operation = "inline IntPtr.Size";
+				if (!ValidateInstruction (caller, ins.Next, operation, Code.Ldc_I4_8))
+					return 0;
+
+				var branchInstruction = ins.Next.Next;
+				if (!ValidateInstruction (caller, branchInstruction, operation, Code.Bne_Un, Code.Bne_Un_S))
+					return 0;
+
+				if (!InlineBranchCondition (caller, operation, branchInstruction, Arch == 8))
+					return 0;
+
+				// Clearing the branch succeeded, so clear the condition too
+				Nop (ins);      // call int32 [mscorlib]System.IntPtr::get_Size()
+				Nop (ins.Next); // ldc.i4.8
 				break;
 			case "get_IsDirectBinding":
 				// Unified use a property (getter) to check the condition (while Classic used a field)
-				if (isdirectbinding_check_required)
-					return;
+				if (!isdirectbinding_constant.HasValue)
+					return 0;
+
 				if (!mr.DeclaringType.Is (Namespaces.Foundation, "NSObject"))
-					return;
-#if DEBUG
-				Console.WriteLine ("NSObject.get_IsDirectBinding called inside {0}", caller);
-#endif
-				ProcessIsDirectBinding (caller, ins);
+					return 0;
+
+				if (trace)
+					Console.WriteLine ("NSObject.get_IsDirectBinding called inside {0}", caller);
+
+				ProcessIsDirectBinding (caller, ins, isdirectbinding_constant.Value);
+				break;
+			case "get_DynamicRegistrationSupported":
+				if (LinkContext.DynamicRegistrationSupported)
+					return 0;
+				
+				if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "Runtime"))
+					return 0;
+				
+				ProcessIsDynamicSupported (caller, ins, false);
 				break;
 			}
+
+			return 0;
 		}
 
 		static bool IsField (Instruction ins, string nspace, string type, string field)
@@ -200,7 +368,26 @@ namespace MonoTouch.Tuner {
 				return false;
 			return fr.DeclaringType.Is (nspace, type);
 		}
-				
+
+		void ProcessIsDynamicSupported (MethodDefinition caller, Instruction ins, bool value)
+		{
+			const string operation = "inline Runtime.IsDynamicSupported";
+			if (!ValidateInstruction (caller, ins, operation, Code.Call))
+				return;
+
+			var insBranch = ins.Next;
+			if (!InlineBranchCondition (caller, operation, insBranch, value))
+				return;
+
+			// Clearing the branch succeeded, so clear the condition too
+			Nop (ins);           // call void ObjCRuntime.Runtime::get_IsDynamicSupported()
+
+			if (trace) {
+				Console.WriteLine ($"{caller} after inlining Runtime.IsDynamicSupported=false:");
+				Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
+			}
+		}
+
 		// https://app.asana.com/0/77259014252/77812690163
 		void ProcessLoadStaticField (MethodDefinition caller, int i)
 		{
@@ -208,58 +395,225 @@ namespace MonoTouch.Tuner {
 			Instruction ins = instructions [i];
 			if (!IsField (ins, Namespaces.ObjCRuntime, "Runtime", "Arch"))
 				return;
-#if DEBUG
-			Console.WriteLine ("Runtime.Arch checked inside {0}", caller);
-#endif
-			Nop (ins);									// ldsfld valuetype MonoTouch.ObjCRuntime.Arch MonoTouch.ObjCRuntime::Arch
-			ins = instructions [++i];
-			Instruction branch_to = null;
-			if (Device) {
-				// a direct brtrue IL_x (optimal) or a longer sequence to compare (likely csc without /optimize)
-				while (ins.OpCode.FlowControl != FlowControl.Cond_Branch) {
-					Nop (ins);
-					ins = instructions [++i];
-				}
-				Instruction start = (ins.Operand as Instruction);
-				Nop (ins);								// brtrue IL_x
-				ins = start;
-				branch_to = (ins.Previous.Operand as Instruction);
-			} else {
-				branch_to = (ins.Operand as Instruction);
-			}
-			// remove unused (device or simulator) block
-			while (ins != branch_to) {
-				Nop (ins);
-				ins = ins.Next;
+
+			if (trace)
+				Console.WriteLine ("Runtime.Arch checked inside {0}", caller);
+
+			if (!ValidateInstruction (caller, ins, "inline Runtime.Arch", Code.Ldsfld))
+				return;
+
+			// Runtime.DEVICE = 0
+			// Runtime.SIMULATOR = 1
+			// Simulator: true
+			if (!InlineBranchCondition (caller, "inline Runtime.Arch", ins.Next, !Device))
+				return;
+
+			// Clearing the branch succeeded, so clear the condition too
+			Nop (ins); // ldsfld valuetype ObjCRuntime.Arch ObjCRuntime::Arch
+		}
+
+		static void ProcessIsDirectBinding (MethodDefinition caller, Instruction ins, bool value)
+		{
+			const string operation = "inline IsDirectBinding";
+			if (!ValidateInstruction (caller, ins.Previous, operation, Code.Ldarg_0))
+				return;
+			if (!ValidateInstruction (caller, ins, operation, Code.Call))
+				return;
+
+			var insBranch = ins.Next;
+			if (!InlineBranchCondition (caller, operation, insBranch, value))
+				return;
+
+			// Clearing the branch succeeded, so clear the condition too
+			Nop (ins.Previous);  // ldarg.0
+			Nop (ins);           // call System.Boolean Foundation.NSObject::get_IsDirectBinding()
+
+			if (trace) {
+				Console.WriteLine ($"{caller} after inlining IsDirectBinding={value}:");
+				Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
 			}
 		}
 
-		static void ProcessIsDirectBinding (MethodDefinition caller, Instruction ins)
+
+		static bool ValidateInstruction (MethodDefinition caller, Instruction ins, string operation, Code expected)
 		{
-			Nop (ins.Previous);					// ldarg.0
-			Nop (ins);						// ldfld MonoTouch.Foundation.IsDirectBinding
-			Instruction next = ins.Next;				// brfalse IL_x (SuperHandle processing)
-			Instruction end = null;
-			// unoptimized compiled code can produce a (unneeded) store/load combo
-			while (next.OpCode.FlowControl != FlowControl.Cond_Branch) {
-				Nop (next);
-				next = next.Next;
+			if (ins.OpCode.Code != expected) {
+				Driver.Log (1, "Could not {4} call in {0} at offset {1}, expected {2} got {3}", caller, ins.Offset, expected, ins, operation);
+				return false;
 			}
-			ins = (next.Operand as Instruction).Previous;		// br end (ret)
-			if (ins.OpCode.Code == Code.Ret) {			// if there's not branch but it returns immediately then do not remove the 'ret' instruction
-				ins = ins.Next;
-				end = (ins.Operand as Instruction);		// ret
-			} else if (ins.OpCode.Code == Code.Leave) {		// if there's a try/catch, e.g. for a using like "using (x = new NSAutoreleasePool ())"
-				ins = ins.Next;
-				end = caller.Body.ExceptionHandlers [0].TryEnd;	// leave
-			} else {
-				end = (ins.Operand as Instruction);		// ret
+
+			return true;
+		}
+
+		static bool ValidateInstruction (MethodDefinition caller, Instruction ins, string operation, params Code [] expected)
+		{
+			foreach (var code in expected) {
+				if (ins.OpCode.Code == code)
+					return true;
 			}
-			Nop (next);
-			while (ins != end) {					// remove the 'else' branch
-				Nop (ins);
-				ins = ins.Next;
+
+			Driver.Log (1, "Could not {3} call in {0} at offset {1}, expected {2} got {3}", caller, ins.Offset, expected, ins, operation);
+			return false;
+		}
+
+		// Calculate the code blocks for both the true and false portion of a branch instruction.
+		// Example:
+		//   IL_0  brfalse IL_4
+		//   IL_1  <true code block>
+		//   IL_2  <true code block>
+		//   IL_3  br IL_6
+		//   IL_4  <false code block>
+		//   IL_5  <false code block>
+		//   IL_6  ret
+		// equivalent to the following
+		//   if (condition) {
+		//     <true code block>
+		//   } else {
+		//     <false code block>
+		//   }
+		// return the ranges
+		//    insTrueFirst: IL_1
+		//    insTrueLast: IL_2
+		//    insFalseFirst: IL_4
+		//    insFalseLast: IL_5
+		// 
+		// The ins*Last instructions will be null if this is a condition without an 'else' block.
+		static bool GetBranchRange (MethodDefinition caller, Instruction insBranch, string operation, out Instruction insTrueFirst, out Instruction insTrueLast, out Instruction insFalseFirst, out Instruction insFalseLast)
+		{
+			insTrueFirst = null;
+			insTrueLast = null;
+			insFalseFirst = null;
+			insFalseLast = null;
+
+			if (!ValidateInstruction (caller, insBranch, operation, Code.Brfalse, Code.Brfalse_S, Code.Brtrue, Code.Brtrue_S, Code.Bne_Un, Code.Bne_Un_S))
+				return false;
+
+			var branchTarget = (Instruction) insBranch.Operand;
+			Instruction endTarget;
+
+			if (trace) {
+				Console.WriteLine ($"{caller}");
+				Console.WriteLine (string.Join<Instruction> ("\n", caller.Body.Instructions.ToArray ()));
 			}
+
+			switch (branchTarget.Previous.OpCode.Code) {
+			case Code.Br:
+			case Code.Br_S:
+				endTarget = (Instruction) branchTarget.Previous.Operand;
+				endTarget = endTarget.Previous;
+				break;
+			case Code.Ret:
+			case Code.Throw:
+			case Code.Rethrow:
+				endTarget = branchTarget;
+				while (endTarget.OpCode.FlowControl != FlowControl.Return && endTarget.OpCode.FlowControl != FlowControl.Throw)
+					endTarget = endTarget.Next;
+				break;
+			case Code.Leave:
+				if (caller.Body.ExceptionHandlers.Count != 1) {
+					Driver.Log (1, "Could not {3} call in {0} at offset {1} because there are not exactly 1 exception handlers (found {2})", caller, insBranch.Offset, caller.Body.ExceptionHandlers.Count, operation);
+					return false;
+				}
+				endTarget = caller.Body.ExceptionHandlers [0].TryEnd.Previous;
+				break;
+			case Code.Call:
+			case Code.Stsfld:
+				// condition without 'else' clause
+				// there are a lot more instructions that can go into this case statement, but keep a whitelist for now.
+				endTarget = null;
+				break;
+			default:
+				throw new NotImplementedException (branchTarget.Previous.ToString ());
+			}
+			switch (insBranch.OpCode.Code) {
+			case Code.Brfalse:
+			case Code.Brfalse_S:
+			case Code.Bne_Un:
+			case Code.Bne_Un_S:
+				insTrueFirst = insBranch.Next;
+				insTrueLast = branchTarget.Previous;
+				insFalseFirst = branchTarget;
+				insFalseLast = endTarget;
+				break;
+			case Code.Brtrue:
+			case Code.Brtrue_S:
+				insFalseFirst = insBranch.Next;
+				insFalseLast = branchTarget.Previous;
+				insTrueFirst = branchTarget;
+				insTrueLast = endTarget;
+				break;
+			default:
+				throw new NotImplementedException (insBranch.ToString ());
+			}
+
+			if (trace) {
+				Console.WriteLine ($"Branch at offset {insBranch.Offset}:");
+				Console.WriteLine ($"    True branch first/last:");
+				Console.WriteLine ($"        {insTrueFirst}");
+				Console.WriteLine ($"        {insTrueLast}");
+				Console.WriteLine ($"    False branch first/last:");
+				Console.WriteLine ($"        {insFalseFirst}");
+				Console.WriteLine ($"        {insFalseLast}");
+			}
+
+			return true;
+
+		}
+
+		// This method will clear out (Nop) the non-taken conditional code block, depending on the constant value 'value'.
+		// insBranch must be a conditional branch instruction (brtrue/brfalse).
+		// The caller must clear out the instructions that calculates the value loaded on the stack for the branch instruction.
+		static bool InlineBranchCondition (MethodDefinition caller, string operation, Instruction insBranch, bool constantValue)
+		{
+			Instruction insTrueFirst;
+			Instruction insTrueLast;
+			Instruction insFalseFirst;
+			Instruction insFalseLast;
+			if (!GetBranchRange (caller, insBranch, operation, out insTrueFirst, out insTrueLast, out insFalseFirst, out insFalseLast))
+				return false;
+
+			Instruction first = !constantValue ? insTrueFirst : insFalseFirst;
+			Instruction last = !constantValue ? insTrueLast : insFalseLast;
+
+			if (last == null) {
+				// This is a condition without an 'else' block, and the 'else' block is the one we'd remove, which means there's nothing to do.
+				return true;
+			}
+
+			// Check if there are other branch instructions into the instructions that will be removed
+			var instructions = caller.Body.Instructions;
+			for (int i = 0; i < instructions.Count; i++) {
+				var ins = instructions [i];
+				if (ins == insBranch)
+					continue;
+				if (ins.Offset >= first.Offset && ins.Offset <= last.Offset)
+					continue;
+
+				switch (ins.OpCode.FlowControl) {
+				case FlowControl.Branch:
+				case FlowControl.Cond_Branch:
+					var target = (Instruction) ins.Operand;
+					if (target.Offset >= first.Offset && target.Offset <= last.Offset) {
+						Console.WriteLine ($"Could not {operation} in {caller.FullName} because there's a branch instruction that branches into the section of code to be removed.\n\tFirst instruction to be removed: {first}\n\tLast instruction to be removed: {last}\n\tBranch instruction: {ins}\n\tBranching to: {target}");
+						return false;
+					}
+					break;
+				default:
+					continue;
+				}
+			}
+
+			// We have the information we need, now we can start clearing instructions
+			Nop (insBranch);
+			Instruction current = first;
+			do {
+				Nop (current);
+				if (current == last)
+					break;
+				current = current.Next;
+			} while (true);
+
+			return true;
 		}
 	}
 }

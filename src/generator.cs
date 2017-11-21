@@ -2903,6 +2903,7 @@ public partial class Generator : IMemberGatherer {
 					print ("");
 					// linker will remove the attributes (but it's useful for testing)
 					print ("[CompilerGenerated]");
+					print ("[LinkerOptimize]");
 					print ("{0} {1}{2} {3} {{",
 					       is_internal ? "internal" : "public",
 					       propertyType,
@@ -3029,6 +3030,9 @@ public partial class Generator : IMemberGatherer {
 		for (int i=0; i < tabs; i++)
 			sw.Write ('\t');
 		sw.WriteLine ("[CompilerGenerated]");
+		for (int i = 0; i < tabs; i++)
+			sw.Write ('\t');
+		sw.WriteLine ("[LinkerOptimize]");
 	}
 	
 	public void print_generated_code ()
@@ -4559,6 +4563,7 @@ public partial class Generator : IMemberGatherer {
 				var_name = string.Format ("__mt_{0}_var{1}", pi.Name, minfo.is_static ? "_static" : "");
 
 				print ("[CompilerGenerated]");
+				print ("[LinkerOptimize]");
 
 				if (minfo.is_thread_static)
 					print ("[ThreadStatic]");
@@ -5384,7 +5389,7 @@ public partial class Generator : IMemberGatherer {
 			print_generated_code ();
 			PrintDelegateProxy (minfo);
 			PrintExport (minfo);
-			print ("[Preserve (Conditional = true)]");
+			//print ("[Preserve (Conditional = true)]");
 			if (minfo.is_unsafe)
 				mod = "unsafe ";
 			print ("{0}{1};", mod, MakeSignature (minfo, true));
@@ -5396,7 +5401,7 @@ public partial class Generator : IMemberGatherer {
 			var mod = string.Empty;
 			minfo.is_export = true;
 
-			print ("[Preserve (Conditional = true)]");
+			//print ("[Preserve (Conditional = true)]");
 
 			if (minfo.is_unsafe)
 				mod = "unsafe ";
@@ -6681,6 +6686,7 @@ public partial class Generator : IMemberGatherer {
 				var disposeAttr = AttributeManager.GetCustomAttributes<DisposeAttribute> (type);
 				if (disposeAttr.Length > 0 || instance_fields_to_clear_on_dispose.Count > 0){
 					print ("[CompilerGenerated]");
+					print ("[LinkerOptimize]");
 					print ("protected override void Dispose (bool disposing)");
 					print ("{");
 					indent++;

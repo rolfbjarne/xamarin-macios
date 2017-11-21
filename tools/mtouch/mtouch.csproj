@@ -354,6 +354,9 @@
     <Compile Include="..\common\StringUtils.cs">
       <Link>StringUtils.cs</Link>
     </Compile>
+    <Compile Include="..\common\Optimizations.cs">
+      <Link>external\Optimizations.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

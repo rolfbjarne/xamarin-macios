@@ -45,8 +45,9 @@ namespace MonoTouchFixtures.Security {
 	[TestFixture]
 	// we want the test to be availble if we use the linker
 	[Preserve (AllMembers = true)]
+	[Ignore ("to make the test run much faster")]
 	public class TrustTest {
-
+		
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static nint CFGetRetainCount (IntPtr handle);
 

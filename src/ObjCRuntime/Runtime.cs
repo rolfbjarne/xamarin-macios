@@ -54,17 +54,43 @@ namespace XamCore.ObjCRuntime {
 		internal unsafe struct MTRegistrationMap {
 			public IntPtr assembly;
 			public MTClassMap *map;
+			public MTProtocolMap* protocol_map;
+			public MTProtocolWrapperMap* protocol_wrapper_map;
 			public IntPtr full_token_references; /* array of MTFullTokenReference */
+			public MTManagedClassMap* skipped_map;
 			public int assembly_count;
 			public int map_count;
 			public int custom_type_count;
+			public int protocol_count;
+			public int protocol_wrapper_count;
 			public int full_token_reference_count;
+			public int skipped_map_count;
 		}
 
 		[StructLayout (LayoutKind.Sequential, Pack = 1)]
 		internal struct MTClassMap {
 			public IntPtr handle;
 			public uint type_reference;
+		}
+
+		[StructLayout (LayoutKind.Sequential, Pack = 1)]
+		internal struct MTManagedClassMap
+		{
+			public uint skipped_reference; // implied token type: TypeDef
+			public uint actual_reference; // implied token type: TypeDef
+		}
+
+		[StructLayout (LayoutKind.Sequential, Pack = 1)]
+		internal struct MTProtocolMap {
+			public uint token;
+			public uint protocol_count;
+			public IntPtr protocols; // array of char*.
+		}
+
+		[StructLayout (LayoutKind.Sequential, Pack = 1)]
+		internal struct MTProtocolWrapperMap {
+			public uint protocol_token;
+			public uint wrapper_token;
 		}
 
 		/* Keep Delegates, Trampolines and InitializationOptions in sync with monotouch-glue.m */
@@ -92,6 +118,7 @@ namespace XamCore.ObjCRuntime {
 			public IntPtr set_gchandle_tramp;
 		}
 
+		[Flags]
 		internal enum InitializationFlags : int {
 			/* unused               = 0x01 */
 			/* unused				= 0x02,*/
@@ -156,6 +183,7 @@ namespace XamCore.ObjCRuntime {
 #endif
 
 		[Preserve] // called from native - runtime.m.
+		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		unsafe static void Initialize (InitializationOptions* options)
 		{
 #if PROFILE
@@ -1315,20 +1343,44 @@ namespace XamCore.ObjCRuntime {
 			return ConstructINativeObject<T> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound);
 		}
 
+		static Type FindProtocolWrapperTypeDynamic (Type type)
+		{
+			// need to look up the type from the ProtocolAttribute.
+			var a = type.GetCustomAttributes (typeof (XamCore.Foundation.ProtocolAttribute), false);
+			var attr = (XamCore.Foundation.ProtocolAttribute) (a.Length > 0 ? a [0] : null);
+			return attr?.WrapperType;
+		}
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		private static Type FindProtocolWrapperType (Type type)
 		{
 			if (type == null || !type.IsInterface)
 				return null;
 
-			// need to look up the type from the ProtocolAttribute.
-			var a = type.GetCustomAttributes (typeof (XamCore.Foundation.ProtocolAttribute), false);
+			if (DynamicRegistrationSupported) {
+				// Use a separate method for the logic in FindProtocolWrapperTypeDynamic, because it uses ProtocolAttribute,
+				// and even if the linker is able to remove this chunk of code, it's not able to remove the local
+				// variable (of type ProtocolAttribute), which means the ProtocolAttribute type won't be linked away.
+				// By using a separate method the linker will remove the entire method once the code below is optimized away.
+				var rv = FindProtocolWrapperTypeDynamic (type);
+				if (rv != null)
+					return rv;
+			}
 
-			var attr = (XamCore.Foundation.ProtocolAttribute) (a.Length > 0 ? a [0] : null);
-			if (attr == null || attr.WrapperType == null)
-				throw ErrorHelper.CreateError (4125, "The registrar found an invalid interface '{0}': " +
-					"The interface must have a Protocol attribute specifying its wrapper type.",
-					type.FullName);
-			return attr.WrapperType;
+			var token = Class.GetTokenReference (type);
+			unsafe {
+				var map = options->RegistrationMap;
+				// FIXME: binary search
+				for (int i = 0; i < map->protocol_wrapper_count; i++) {
+					var entry = map->protocol_wrapper_map [i];
+					if (entry.protocol_token == token)
+						return (Type) Class.ResolveTokenReference (entry.wrapper_token, 0x02000000 /* TypeDef */);
+				}
+			}
+
+			throw ErrorHelper.CreateError (4125, "The registrar found an invalid interface '{0}': " +
+				"The interface must have a Protocol attribute specifying its wrapper type.",
+				type.FullName);
 		}
 
 		public static IntPtr GetProtocol (string protocol)
@@ -1343,7 +1395,8 @@ namespace XamCore.ObjCRuntime {
 
 			ConnectMethod (type, method, new ExportAttribute (selector.Name));
 		}
-			
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void ConnectMethod (Type type, MethodInfo method, ExportAttribute export)
 		{
 			if (type == null)
@@ -1455,6 +1508,39 @@ namespace XamCore.ObjCRuntime {
 			}
 		}
 
+		internal static bool ConformsToProtocol (Type type, IntPtr protocol, bool recursive = false)
+		{
+			var token = Class.GetTokenReference (type);
+			unsafe {
+				var map = options->RegistrationMap;
+				for (int i = 0; i < map->protocol_count; i++) {
+					MTProtocolMap pmap = map->protocol_map [i];
+					if (pmap.token != token)
+						continue;
+
+					for (var p = 0; p < pmap.protocol_count; p++) {
+						var pnameptr = Marshal.ReadIntPtr (pmap.protocols, p * IntPtr.Size);
+						var phandle = Protocol.objc_getProtocol (pnameptr);
+						if (phandle == IntPtr.Zero)
+							throw new NotImplementedException (); // FIXME
+						if (phandle == protocol)
+							return true;
+						if (Protocol.protocol_conformsToProtocol (phandle, protocol))
+							return true; // FIXME: add tests
+					}
+
+					break;
+				}
+			}
+
+			if (!recursive)
+				return false;
+
+			if (type == typeof (NSObject))
+				return false;
+
+			return ConformsToProtocol (type.BaseType, protocol, recursive);
+		}
 	}
 		
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

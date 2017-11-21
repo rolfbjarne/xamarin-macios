@@ -45,7 +45,7 @@ using Xamarin.Bundler;
 using ProductException=Xamarin.Bundler.MonoTouchException;
 #else
 #if XAMCORE_2_0
-using ProductException=ObjCRuntime.RuntimeException;
+using ProductException = ObjCRuntime.RuntimeException;
 #else
 using ProductException=MonoTouch.RuntimeException;
 #endif
@@ -100,13 +100,14 @@ namespace Registrar {
 		}
 	}
 
-	abstract partial class Registrar {
+	abstract partial class Registrar
+	{
 #if MTOUCH || MMP
 		public Application App { get; protected set; }
 #endif
 
 		Dictionary<TAssembly, object> assemblies = new Dictionary<TAssembly, object> (); // Use Dictionary instead of HashSet to avoid pulling in System.Core.dll.
-		// locking: all accesses must lock 'types'.
+												 // locking: all accesses must lock 'types'.
 		Dictionary<TType, ObjCType> types = new Dictionary<TType, ObjCType> ();
 		// this is used to check if multiple types are registered with the same name.
 		// locking: all accesses must lock 'type_map'.

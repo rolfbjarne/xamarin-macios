@@ -98,8 +98,8 @@ xamarin_managed_to_id_func xamarin_get_managed_to_nsnumber_func (MonoClass *mana
 xamarin_id_to_managed_func xamarin_get_nsvalue_to_managed_func (MonoClass *managedType, MonoMethod *method, guint32 *exception_gchandle);
 xamarin_managed_to_id_func xamarin_get_managed_to_nsvalue_func (MonoClass *managedType, MonoMethod *method, guint32 *exception_gchandle);
 
-xamarin_id_to_managed_func xamarin_get_nsstring_to_smart_enum_func (MonoClass *managedType, MonoMethod *method, guint32 *exception_gchandle);
-xamarin_managed_to_id_func xamarin_get_smart_enum_to_nsstring_func (MonoClass *managedType, MonoMethod *method, guint32 *exception_gchandle);
+xamarin_id_to_managed_func xamarin_get_nsstring_to_smart_enum_func (MonoClass *managedType, MonoMethod *method, bool static_registrar, guint32 *exception_gchandle);
+xamarin_managed_to_id_func xamarin_get_smart_enum_to_nsstring_func (MonoClass *managedType, MonoMethod *method, bool static_registrar, guint32 *exception_gchandle);
 
 NSArray *   xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_to_id_func convert, guint32 context, guint32 *exception_gchandle);
 MonoArray * xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managedElementType, xamarin_id_to_managed_func convert, guint32 context, guint32 *exception_gchandle);

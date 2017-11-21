@@ -581,6 +581,9 @@ namespace Xamarin.Linker {
 			case "get_IsDirectBinding":
 				ProcessIsDirectBinding (caller, ins);
 				break;
+			case "get_DynamicRegistrationSupported":
+				ProcessIsDynamicSupported (caller, ins);
+				break;
 			case "SetupBlock":
 			case "SetupBlockUnsafe":
 				return ProcessSetupBlock (caller, ins);
@@ -670,9 +673,31 @@ namespace Xamarin.Linker {
 			ins.Operand = null;
 		}
 
+		void ProcessIsDynamicSupported (MethodDefinition caller, Instruction ins)
+		{
+			const string operation = "inline Runtime.IsDynamicSupported";
+
+			if (Optimizations.RemoveDynamicRegistrar != true)
+				return;
+
+			// Verify we're checking the right Runtime.IsDynamicSupported call
+			var mr = ins.Operand as MethodReference;
+			if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "Runtime"))
+				return;
+
+			if (!ValidateInstruction (caller, ins, operation, Code.Call))
+				return;
+
+			// We're fine, inline the Runtime.IsDynamicSupported condition
+			ins.OpCode = LinkContext.DynamicRegistrationSupported ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
+			ins.Operand = null;
+		}
+
 		int ProcessSetupBlock (MethodDefinition caller, Instruction ins)
 		{
-			if (Optimizations.OptimizeBlockLiteralSetupBlock != true)
+			//const string operation = "Inline BlockLiteral.SetupBlock";
+
+			if (Optimizations.InlineSetupBlock != true)
 				return 0;
 
 			// This will optimize calls to SetupBlock and SetupBlockUnsafe by calculating the signature for the block
@@ -862,6 +887,7 @@ namespace Xamarin.Linker {
 
 		MethodDefinition setupblock_def;
 		MethodReference GetBlockSetupImpl (MethodDefinition caller, Instruction ins)
+
 		{
 			if (setupblock_def == null) {
 				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.Target.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");

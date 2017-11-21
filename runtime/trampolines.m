@@ -661,7 +661,7 @@ xamarin_generate_conversion_to_native (MonoObject *value, MonoType *inputType, M
 		} else if (xamarin_is_class_nsvalue (underlyingNativeType)) {
 			func = xamarin_get_managed_to_nsvalue_func (underlyingManagedType, method, exception_gchandle);
 		} else if (xamarin_is_class_nsstring (underlyingNativeType)) {
-			func = xamarin_get_smart_enum_to_nsstring_func (underlyingManagedType, method, exception_gchandle);
+			func = xamarin_get_smart_enum_to_nsstring_func (underlyingManagedType, method, false, exception_gchandle);
 		} else {
 			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
 			goto exception_handling;
@@ -733,7 +733,7 @@ xamarin_generate_conversion_to_managed (id value, MonoType *inputType, MonoType 
 		} else if (xamarin_is_class_nsvalue (underlyingNativeType)) {
 			func = xamarin_get_nsvalue_to_managed_func (underlyingManagedType, method, exception_gchandle);
 		} else if (xamarin_is_class_nsstring (underlyingNativeType)) {
-			func = xamarin_get_nsstring_to_smart_enum_func (underlyingManagedType, method, exception_gchandle);
+			func = xamarin_get_nsstring_to_smart_enum_func (underlyingManagedType, method, false, exception_gchandle);
 		} else {
 			*exception_gchandle = xamarin_create_bindas_exception (inputType, outputType, method);
 			goto exception_handling;
@@ -1155,15 +1155,15 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, gui
 }
 
 xamarin_id_to_managed_func
-xamarin_get_nsstring_to_smart_enum_func (MonoClass *managedType, MonoMethod *method, guint32 *exception_gchandle)
+xamarin_get_nsstring_to_smart_enum_func (MonoClass *managedType, MonoMethod *method, bool static_registrar, guint32 *exception_gchandle)
 {
-	return xamarin_nsstring_to_smart_enum;
+	return (xamarin_id_to_managed_func) (static_registrar ? xamarin_nsstring_to_smart_enum_static : xamarin_nsstring_to_smart_enum);
 }
 
 xamarin_managed_to_id_func
-xamarin_get_smart_enum_to_nsstring_func (MonoClass *managedType, MonoMethod *method, guint32 *exception_gchandle)
+xamarin_get_smart_enum_to_nsstring_func (MonoClass *managedType, MonoMethod *method, bool static_registrar, guint32 *exception_gchandle)
 {
-	return (xamarin_managed_to_id_func) xamarin_smart_enum_to_nsstring;
+	return (xamarin_managed_to_id_func) (static_registrar ? xamarin_smart_enum_to_nsstring_static : xamarin_smart_enum_to_nsstring);
 }
 
 NSArray *

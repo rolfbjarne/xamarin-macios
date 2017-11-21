@@ -123,7 +123,19 @@ namespace XamCore.Registrar
 		TMethod conforms_to_protocol;
 		TMethod invoke_conforms_to_protocol;
 
-		public static bool IsDualBuild { get; private set; }
+#if MONOMAC
+#if MMP
+		public static bool IsDualBuild { get { return Xamarin.Bundler.Driver.IsUnified; } }
+#else
+#if XAMCORE_2_0
+		public const bool IsDualBuild = true;
+#else
+		public const bool IsDualBuild = false;
+#endif // XAMCORE_2_0
+#endif // MMP
+#else
+		public const bool IsDualBuild = true;
+#endif // MONOMAC
 
 		public IEnumerable<TAssembly> GetAssemblies ()
 		{
@@ -145,6 +157,8 @@ namespace XamCore.Registrar
 			public bool IsGeneric;
 #if !MTOUCH && !MMP
 			public IntPtr Handle;
+#else
+			public TType ProtocolWrapperType;
 #endif
 
 			public Dictionary<string, ObjCField> Fields;
@@ -985,6 +999,7 @@ namespace XamCore.Registrar
 		}
 
 		protected virtual void OnRegisterType (ObjCType type) {}
+		protected virtual void OnSkipType (TType type, ObjCType registered_type) { }
 		protected virtual void OnReloadType (ObjCType type) {}
 		protected virtual void OnRegisterProtocol (ObjCType type) {}
 		protected virtual void OnRegisterCategory (ObjCType type, ref List<Exception> exceptions) {}
@@ -999,6 +1014,7 @@ namespace XamCore.Registrar
 		protected abstract bool ContainsPlatformReference (TAssembly assembly); // returns true if the assembly is monotouch.dll too.
 		protected abstract TType GetBaseType (TType type); // for generic parameters it returns the first specific class constraint.
 		protected abstract TType[] GetInterfaces (TType type); // may return interfaces from base classes as well. May return null if no interfaces found.
+		protected virtual TType [] GetLinkedAwayInterfaces (TType type) { return null; } // may NOT return interfaces from base classes as well. May return null if no interfaces found.
 		protected abstract TMethod GetBaseMethod (TMethod method);
 		protected abstract TType[] GetParameters (TMethod method);
 		protected abstract string GetParameterName (TMethod method, int parameter_index);
@@ -1050,7 +1066,6 @@ namespace XamCore.Registrar
 		protected abstract bool IsCorlibType (TType type);
 		protected abstract bool IsSimulatorOrDesktop { get; }
 		protected abstract bool Is64Bits { get; }
-		protected abstract bool IsDualBuildImpl { get; }
 		protected abstract Exception CreateException (int code, Exception innerException, TMethod method, string message, params object[] args);
 		protected abstract Exception CreateException (int code, Exception innerException, TType type, string message, params object [] args);
 		protected abstract string PlatformName { get; }
@@ -1070,11 +1085,6 @@ namespace XamCore.Registrar
 		// This is just to support the single-file/partial build registration
 		// used for Xamarin.iOS.dll.
 		protected virtual bool LaxMode { get { return false; } }
-
-		public Registrar ()
-		{
-			IsDualBuild = IsDualBuildImpl;
-		}
 
 		protected bool IsArray (TType type)
 		{
@@ -1595,6 +1605,8 @@ namespace XamCore.Registrar
 			// return interfaces from all base classes as well.
 			// We only want the interfaces declared on this type.
 
+			// Additionally it may return interface implementations that were linked away.
+
 			// This function will return arrays with null entries.
 
 			var type = objcType.Type;
@@ -1626,18 +1638,38 @@ namespace XamCore.Registrar
 		ObjCType [] GetProtocols (ObjCType type, ref List<Exception> exceptions)
 		{
 			var interfaces = GetInterfacesImpl (type);
-			if (interfaces == null || interfaces.Length == 0)
-				return null;
-
-			var protocolList = new List<ObjCType> (interfaces.Length);
-			for (int i = 0; i < interfaces.Length; i++) {
-				if (interfaces [i] == null)
-					continue;
-				var baseP = RegisterTypeUnsafe (interfaces [i], ref exceptions);
-				if (baseP != null)
-					protocolList.Add (baseP);
+			List<ObjCType> protocolList = null;
+			if (interfaces?.Length > 0) {
+				protocolList = new List<ObjCType> (interfaces.Length);
+				for (int i = 0; i < interfaces.Length; i++) {
+					if (interfaces [i] == null)
+						continue;
+					var baseP = RegisterTypeUnsafe (interfaces [i], ref exceptions);
+					if (baseP != null)
+						protocolList.Add (baseP);
+				}
 			}
-			if (protocolList.Count == 0)
+			var linkedAwayInterfaces = GetLinkedAwayInterfaces (type.Type);
+			if (linkedAwayInterfaces?.Length > 0) {
+				if (protocolList == null)
+					protocolList = new List<ObjCType> ();
+				foreach (var iface in linkedAwayInterfaces) {
+					if (!HasProtocolAttribute (iface))
+						continue;
+					var objcType = new ObjCType () {
+						Registrar = this,
+						Type = iface,
+						IsProtocol = true,
+					};
+#if MMP || MTOUCH
+					objcType.ProtocolWrapperType = GetProtocolAttributeWrapperType (objcType.Type);
+					objcType.IsWrapper = objcType.ProtocolWrapperType != null;
+#endif
+
+					protocolList.Add (objcType);
+				}
+			}
+			if (protocolList == null || protocolList.Count == 0)
 				return null;
 			return protocolList.ToArray ();
 		}
@@ -1810,8 +1842,10 @@ namespace XamCore.Registrar
 			}
 
 			var register_attribute = GetRegisterAttribute (type);
-			if (register_attribute != null && register_attribute.SkipRegistration)
+			if (register_attribute != null && register_attribute.SkipRegistration) {
+				OnSkipType (type, baseObjCType);
 				return baseObjCType;
+			}
 
 			objcType = new ObjCType () {
 				Registrar = this,
@@ -1824,6 +1858,9 @@ namespace XamCore.Registrar
 			objcType.VerifyRegisterAttribute (ref exceptions);
 			objcType.Protocols = GetProtocols (objcType, ref exceptions);
 			objcType.BaseType = isProtocol ? null : (baseObjCType ?? objcType);
+#if MMP || MTOUCH
+			objcType.ProtocolWrapperType = (isProtocol && !isInformalProtocol) ? GetProtocolAttributeWrapperType (objcType.Type) : null;
+#endif
 			objcType.IsWrapper = (isProtocol && !isInformalProtocol) ? (GetProtocolAttributeWrapperType (objcType.Type) != null) : (objcType.RegisterAttribute != null && objcType.RegisterAttribute.IsWrapper);
 
 			if (!objcType.IsWrapper && objcType.BaseType != null)
@@ -2381,7 +2418,6 @@ namespace XamCore.Registrar
 			}
 			return signature.ToString ();
 		}
-
 		protected string ToSignature (TType type, ObjCMember member, bool forProperty = false)
 		{
 			bool success = true;

@@ -554,7 +554,7 @@ namespace Xamarin.Linker {
 				var ins = instructions [i];
 				switch (ins.OpCode.Code) {
 				case Code.Call:
-					ProcessCalls (method, ins);
+					i += ProcessCalls (method, ins);
 					break;
 				case Code.Ldsfld:
 					ProcessLoadStaticField (method, ins);
@@ -565,7 +565,7 @@ namespace Xamarin.Linker {
 			EliminateDeadCode (method);
 		}
 
-		protected virtual void ProcessCalls (MethodDefinition caller, Instruction ins)
+		protected virtual int ProcessCalls (MethodDefinition caller, Instruction ins)
 		{
 			var mr = ins.Operand as MethodReference;
 			switch (mr?.Name) {
@@ -578,7 +578,15 @@ namespace Xamarin.Linker {
 			case "get_IsDirectBinding":
 				ProcessIsDirectBinding (caller, ins);
 				break;
+			case "get_DynamicRegistrationSupported":
+				ProcessIsDynamicSupported (caller, ins);
+				break;
+			case "SetupBlock":
+			case "SetupBlockUnsafe":
+				return ProcessSetupBlock (caller, ins);
 			}
+
+			return 0;
 		}
 
 		protected virtual void ProcessLoadStaticField (MethodDefinition caller, Instruction ins)
@@ -661,5 +669,186 @@ namespace Xamarin.Linker {
 			ins.OpCode = isdirectbinding_constant.Value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
 			ins.Operand = null;
 		}
+
+		void ProcessIsDynamicSupported (MethodDefinition caller, Instruction ins)
+		{
+			const string operation = "inline Runtime.IsDynamicSupported";
+
+			if (Optimizations.RemoveDynamicRegistrar != true)
+				return;
+
+			// Verify we're checking the right Runtime.IsDynamicSupported call
+			var mr = ins.Operand as MethodReference;
+			if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "Runtime"))
+				return;
+
+			if (!ValidateInstruction (caller, ins, operation, Code.Call))
+				return;
+
+			// We're fine, inline the Runtime.IsDynamicSupported condition
+			ins.OpCode = LinkContext.DynamicRegistrationSupported ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
+			ins.Operand = null;
+		}
+
+		int ProcessSetupBlock (MethodDefinition caller, Instruction ins)
+		{
+			//const string operation = "Inline BlockLiteral.SetupBlock";
+
+			if (Optimizations.InlineSetupBlock != true)
+				return 0;
+
+			// This will optimize calls to SetupBlock and SetupBlockUnsafe by calculating the signature for the block
+			// (which both SetupBlock and SetupBlockUnsafe do), and then rewrite the code to call SetupBlockImpl instead
+			// (which takes the block signature as an argument instead of calculating it). This is required when
+			// removing the dynamic registrar, because calculating the block signature is done in the dynamic registrar.
+			var mr = ins.Operand as MethodReference;
+			if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "BlockLiteral"))
+				return 0;
+
+			var prev = ins.Previous;
+			if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Pop0", caller, prev.Next, prev);
+				return 0;
+			} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Push1", caller, prev.Next, prev);
+				return 0;
+			}
+			prev = prev.Previous;
+			TypeReference delegateType = null;
+
+			if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Pop0", caller, prev.Next, prev);
+				return 0;
+			} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Push1", caller, prev.Next, prev);
+				return 0;
+			} else if (prev.OpCode.Code == Code.Ldsfld) {
+				delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType;
+			} else {
+				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Ldsfld", caller, prev.Next, prev);
+				return 0;
+			}
+
+			// Calculate the block signature
+			TypeReference userDelegateType = null;
+			var delegateTypeDefinition = delegateType.Resolve ();
+			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
+				var attribType = attrib.Constructor.DeclaringType;
+				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
+					continue;
+				userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
+				break;
+			}
+			bool blockSignature = false;
+			string signature = null;
+			MethodReference userMethod = null;
+			if (userDelegateType != null) {
+				var userDelegateTypeDefinition = userDelegateType.Resolve ();
+				MethodDefinition userMethodDefinition = null;
+				foreach (var method in userDelegateTypeDefinition.Methods) {
+					if (method.Name != "Invoke")
+						continue;
+					userMethodDefinition = method;
+					break;
+				}
+				if (userMethodDefinition == null)
+					throw new NotImplementedException ();
+				blockSignature = true;
+				userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+			} else if (delegateType.Is ("System", "Action`1") && (delegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
+				signature = "v@?";
+			} else {
+				Driver.Log (0, "Failed to optimize {0}: for instruction '{1}' could not find the UserDelegateTypeAttribute on {2}", caller, ins, delegateType.FullName);
+				return 0;
+			}
+			if (signature == null) {
+				try {
+					var parameters = new TypeReference [userMethod.Parameters.Count];
+					for (int p = 0; p < parameters.Length; p++)
+						parameters [p] = userMethod.Parameters [p].ParameterType;
+					signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, isBlockSignature: blockSignature);
+				} catch (Exception e) {
+					Driver.Log (1, "Failed to optimize {0}: for instruction '{1}': {2}", caller, ins, e.Message);
+					signature = "BROKEN SIGNATURE"; // FIXME: fix the broken binding
+				}
+			}
+
+			var instructions = caller.Body.Instructions;
+			var index = instructions.IndexOf (ins);
+			instructions.Insert (index, Instruction.Create (OpCodes.Ldstr, signature));
+			instructions.Insert (index, Instruction.Create (mr.Name == "SetupBlockUnsafe" ? OpCodes.Ldc_I4_0 : OpCodes.Ldc_I4_1));
+			ins.Operand = GetBlockSetupImpl (caller);
+
+			Driver.Log (1, "Optimized {0} ('{1}') with delegate type {2} and signature {3}", caller, ins, delegateType.FullName, signature);
+			return 2;
+		}
+
+		MethodDefinition setupblock_def;
+		MethodReference GetBlockSetupImpl (MethodDefinition caller)
+		{
+			if (setupblock_def == null) {
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.Target.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				foreach (var method in type.Methods) {
+					if (method.Name != "SetupBlockImpl")
+						continue;
+					setupblock_def = method;
+					setupblock_def.IsPublic = true;
+					break;
+				}
+				if (setupblock_def == null)
+					throw new NotImplementedException ();
+			}
+			return caller.Module.ImportReference (setupblock_def);
+		}
+
+		TypeReference InflateType (GenericInstanceType git, TypeReference type)
+		{
+			var gt = type as GenericParameter;
+			if (gt != null)
+				return git.GenericArguments [gt.Position];
+			if (type is TypeSpecification)
+				throw new NotImplementedException ();
+			return type;
+		}
+
+		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition method)
+		{
+			var git = inflatedDeclaringType as GenericInstanceType;
+			if (git == null)
+				return method;
+			var mr = new MethodReference (method.Name, InflateType (git, method.ReturnType), git);
+			if (method.HasParameters) {
+				for (int i = 0; i < method.Parameters.Count; i++) {
+					var p = new ParameterDefinition (method.Parameters [i].Name, method.Parameters [i].Attributes, InflateType (git, method.Parameters [i].ParameterType));
+					mr.Parameters.Add (p);
+				}
+			}
+			return mr;
+		}
+
+		bool IsSubclassed (TypeDefinition type, TypeDefinition byType)
+		{
+			if (byType.Is (type.Namespace, type.Name))
+				return true;
+			if (byType.HasNestedTypes) {
+				foreach (var ns in byType.NestedTypes) {
+					if (IsSubclassed (type, ns))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		bool IsSubclassed (TypeDefinition type)
+		{
+			foreach (var a in context.GetAssemblies ()) {
+				foreach (var s in a.MainModule.Types) {
+					if (IsSubclassed (type, s))
+						return true;
+				}
+			}
+			return false;
+		}
+
 	}
 }

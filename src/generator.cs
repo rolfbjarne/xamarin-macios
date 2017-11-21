@@ -5436,7 +5436,7 @@ public partial class Generator : IMemberGatherer {
 			print_generated_code ();
 			PrintDelegateProxy (minfo);
 			PrintExport (minfo);
-			print ("[Preserve (Conditional = true)]");
+			//print ("[Preserve (Conditional = true)]");
 			if (minfo.is_unsafe)
 				mod = "unsafe ";
 			print ("{0}{1};", mod, MakeSignature (minfo, true));
@@ -5448,7 +5448,7 @@ public partial class Generator : IMemberGatherer {
 			var mod = string.Empty;
 			minfo.is_export = true;
 
-			print ("[Preserve (Conditional = true)]");
+			//print ("[Preserve (Conditional = true)]");
 
 			if (minfo.is_unsafe)
 				mod = "unsafe ";

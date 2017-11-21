@@ -80,6 +80,16 @@ namespace Xamarin.Bundler {
 			Cache = new Cache (arguments);
 		}
 
+		public bool DynamicRegistrationSupported {
+			get {
+#if MONOMAC // FIXME remove this ifdef
+				return Optimizations.RemoveDynamicRegistrar != true;
+#else
+				return Optimizations.RemoveDynamicRegistrar.Value != true;
+#endif
+			}
+		}
+
 		// This is just a name for this app to show in log/error messages, etc.
 		public string Name {
 			get { return Path.GetFileNameWithoutExtension (AppDirectory); }

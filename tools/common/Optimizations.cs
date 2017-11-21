@@ -16,6 +16,7 @@ namespace Xamarin.Bundler
 			"", // dummy value to make indices match up between XM and XI
 #endif
 			"blockliteral-setupblock",
+			"remove-dynamic-registrar",
 		};
 
 		bool? [] values;
@@ -45,6 +46,10 @@ namespace Xamarin.Bundler
 		public bool? OptimizeBlockLiteralSetupBlock {
 			get { return values [5]; }
 			set { values [5] = value; }
+		}
+		public bool? RemoveDynamicRegistrar {
+			get { return values [6]; }
+			set { values [6] = value; }
 		}
 
 		public Optimizations ()

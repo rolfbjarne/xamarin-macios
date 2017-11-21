@@ -170,8 +170,10 @@ namespace xharness
 		protected override void WriteImpl (string value)
 		{
 			var w = GetWriter ();
-			w.Write (value);
-			w.Flush ();
+			lock (w) {
+				w.Write (value);
+				w.Flush ();
+			}
 		}
 
 		protected override void Dispose (bool disposing)

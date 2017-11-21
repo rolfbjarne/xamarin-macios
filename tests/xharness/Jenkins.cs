@@ -165,7 +165,7 @@ namespace xharness
 
 				switch (test.TestName) {
 				case "monotouch-test":
-					yield return new TestData { Variation = "Debug (dynamic registrar removed)", MTouchExtraArgs = "--linker-optimize=remove-dynamic-registrar", Debug = true, Profiling = false };
+					yield return new TestData { Variation = "Debug (dynamic registrar removed)", MTouchExtraArgs = "--linker-optimize=+remove-dynamic-registrar", Debug = true, Profiling = false };
 					break;
 				}
 				break;
@@ -173,6 +173,7 @@ namespace xharness
 				switch (test.TestName) {
 				case "monotouch-test":
 					yield return new TestData { Variation = "Debug (static registrar)", MTouchExtraArgs = "--registrar:static", Debug = true, Profiling = false };
+					yield return new TestData { Variation = "Debug (static registrar, with dynamic registrar removed)", MTouchExtraArgs = "--registrar:static --linker-optimize=+remove-dynamic-registrar", Debug = true, Profiling = false };
 					break;
 				}
 				break;

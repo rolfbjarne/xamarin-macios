@@ -160,6 +160,7 @@ namespace XamCore.ObjCRuntime {
 
 		internal static unsafe InitializationOptions* options;
 
+		[LinkerOptimize]
 		public static bool DynamicRegistrationSupported {
 			get {
 				// The linker will turn calls to this property into a constant, and for if blocks remove the resulting dead code.
@@ -167,6 +168,7 @@ namespace XamCore.ObjCRuntime {
 				// The value is false if both these conditions are true:
 				// * The static registrar is selected
 				// * No Runtime.ConnectMethod overloads are used anywhere.
+				// * No BlockLiteral.SetupBlock calls anywhere (the linker can rewrite some BlockLiteral.SetupBlock calls so that they do not count, but not always).
 				return true;
 			}
 		}

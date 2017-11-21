@@ -42,8 +42,8 @@ namespace Xamarin.Bundler {
 		public string AppDirectory = ".";
 		public bool DeadStrip = true;
 		public bool EnableDebug;
-		public Optimizations Optimizations = new Optimizations ();
 		internal RuntimeOptions RuntimeOptions;
+		public Optimizations Optimizations = new Optimizations ();
 		public RegistrarMode Registrar = RegistrarMode.Default;
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;
 		public SymbolMode SymbolMode;
@@ -75,19 +75,15 @@ namespace Xamarin.Bundler {
 	
 		public bool Embeddinator { get; set; }
 
-#if !MMP
-		public bool DynamicRegistrationSupported {
-			get {
-				if (!Targets.All ((v) => v.LinkContext.DynamicRegistrationSupported == Targets [0].LinkContext.DynamicRegistrationSupported))
-					throw ErrorHelper.CreateError (9999, "FIXME //FIXME"); // FIXME
-				return Targets [0].LinkContext.DynamicRegistrationSupported;
-			}	
-		}
-#endif
-
 		public Application (string[] arguments)
 		{
 			Cache = new Cache (arguments);
+		}
+
+		public bool DynamicRegistrationSupported {
+			get {
+				return Optimizations.RemoveDynamicRegistrar.Value != true;
+			}
 		}
 
 		// This is just a name for this app to show in log/error messages, etc.

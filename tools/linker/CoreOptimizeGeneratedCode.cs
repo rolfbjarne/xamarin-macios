@@ -55,7 +55,7 @@ namespace Xamarin.Linker {
 				}
 			}
 #if DEBUG
-			if (!HasGeneratedCode)
+			if (!HasOptimizableCode)
 				Console.WriteLine ("Assembly {0} : no [CompilerGeneratedAttribute] present (applying basic optimizations)", assembly);
 #endif
 			// we always apply the step

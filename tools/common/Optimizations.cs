@@ -20,18 +20,22 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (9999, "?");
 
 			bool enabled;
+			string opt;
 			switch (option [0]) {
-			case '+':
-				enabled = true;
-				break;
 			case '-':
 				enabled = false;
+				opt = option.Substring (1);
+				break;
+			case '+':
+				enabled = true;
+				opt = option.Substring (1);
 				break;
 			default:
-				throw ErrorHelper.CreateError (9999, "?");
+				opt = option;
+				enabled = true;
+				break;
 			}
 
-			var opt = option.Substring (1);
 			switch (opt) {
 			case "remove-dynamic-registrar":
 				RemoveDynamicRegistrar = enabled;

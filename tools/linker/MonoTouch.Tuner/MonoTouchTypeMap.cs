@@ -25,6 +25,8 @@ namespace MonoTouch.Tuner {
 		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
 		Dictionary<TypeDefinition, bool?> isdirectbinding_value = new Dictionary<TypeDefinition, bool?> ();
 
+		bool dynamic_registration_support_required;
+
 		DerivedLinkContext LinkContext {
 			get {
 				return (DerivedLinkContext) base.Context;
@@ -33,7 +35,8 @@ namespace MonoTouch.Tuner {
 
 		protected override void ProcessAssembly (AssemblyDefinition assembly)
 		{
-			LinkContext.DynamicRegistrationSupported |= RequiresDynamicRegistrar (assembly);
+			if (!LinkContext.App.Optimizations.RemoveDynamicRegistrar.HasValue)
+				dynamic_registration_support_required |= RequiresDynamicRegistrar (assembly);
 
 			base.ProcessAssembly (assembly);
 		}
@@ -119,6 +122,9 @@ namespace MonoTouch.Tuner {
 
 			LinkContext.CachedIsNSObject = cached_isnsobject;
 			LinkContext.NeedsIsDirectBindingCheck = isdirectbinding_value;
+
+			if (!LinkContext.App.Optimizations.RemoveDynamicRegistrar.HasValue)
+				LinkContext.App.Optimizations.RemoveDynamicRegistrar = !dynamic_registration_support_required;	
 		}
 
 		protected override void MapType (TypeDefinition type)

@@ -136,7 +136,6 @@ namespace MonoTouch.Tuner {
 			context.SetParameter ("debug-build", options.DebugBuild.ToString ());
 			context.StaticRegistrar = options.Target.StaticRegistrar;
 			context.Target = options.Target;
-			context.DynamicRegistrationSupported = options.LinkMode == LinkMode.None;
 			options.LinkContext = context;
 
 			return context;

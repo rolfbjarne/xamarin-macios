@@ -691,8 +691,10 @@ namespace xharness
 				main_log.WriteLine ("Starting test run");
 
 				bool waitedForExit = true;
-				var callbackLog = new CallbackLog ((v) => {
-					waitedForExit &= v?.Contains ("MT1111: ") != true;
+				// We need to check for MT1111 (which means that mlaunch won't wait for the app to exit).
+				var callbackLog = new CallbackLog ((line) => {
+					// MT1111: Application launched successfully, but it's not possible to wait for the app to exit as requested because it's not possible to detect app termination when launching using gdbserver
+					waitedForExit &= line?.Contains ("MT1111: ") != true;
 				});
 				var runLog = Log.CreateAggregatedLog (callbackLog, main_log);
 				var timeout = TimeSpan.FromMinutes (Harness.Timeout);
@@ -720,6 +722,7 @@ namespace xharness
 				}
 
 				logdev.StopCapture ();
+				device_system_log.Dispose ();
 
 				// Upload the system log
 				if (File.Exists (device_system_log.FullPath)) {

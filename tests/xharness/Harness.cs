@@ -89,6 +89,9 @@ namespace xharness
 		public string JenkinsConfiguration { get; set; }
 		public Dictionary<string, string> EnvironmentVariables { get; set; } = new Dictionary<string, string> ();
 		public string MarkdownSummaryPath { get; set; }
+		public string PeriodicCommand { get; set; }
+		public string PeriodicCommandArguments { get; set; }
+		public TimeSpan PeriodicCommandInterval { get; set; }
 
 		public Harness ()
 		{
@@ -243,9 +246,9 @@ namespace xharness
 			MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "introspection", "Mac", "introspection-mac.csproj")), targetFrameworkFlavor: MacFlavors.Modern) { Name = "introspection" });
 
 			var hard_coded_test_suites = new [] {
-				new { ProjectFile = "mmptest", Name = "mmptest", IsNUnit = true, Configurations = (string[]) null },
-				new { ProjectFile = "msbuild-mac", Name = "MSBuild tests", IsNUnit = false, Configurations = (string[]) null },
-				new { ProjectFile = "xammac_tests", Name = "xammac tests", IsNUnit = false, Configurations = new string [] { "Debug", "Release" }},
+				new { ProjectFile = "mmptest", Name = "mmptest", IsNUnit = true, Configurations = (string[]) null, Platform = "x86", },
+				new { ProjectFile = "msbuild-mac", Name = "MSBuild tests", IsNUnit = false, Configurations = (string[]) null, Platform = "x86" },
+				new { ProjectFile = "xammac_tests", Name = "xammac tests", IsNUnit = false, Configurations = new string [] { "Debug", "Release" }, Platform = "AnyCPU" },
 			};
 			foreach (var p in hard_coded_test_suites) {
 				MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, p.ProjectFile + "/" + p.ProjectFile + ".csproj")), generateVariations: false) {
@@ -253,16 +256,39 @@ namespace xharness
 					IsNUnitProject = p.IsNUnit,
 					SolutionPath = Path.GetFullPath (Path.Combine (RootDirectory, "tests-mac.sln")),
 					Configurations = p.Configurations,
+					Platform = p.Platform,
 				});
 			}
 
-			var bcl_suites = new string[] { "mscorlib", "System", "System.Core", "System.Data", "System.Net.Http", "System.Numerics", "System.Runtime.Serialization", "System.Transactions", "System.Web.Services", "System.Xml", "System.Xml.Linq", "Mono.Security", "System.ComponentModel.DataAnnotations", "System.Json", "System.ServiceModel.Web", "Mono.Data.Sqlite" };
+			var bcl_suites = new string[] {
+				"mscorlib",
+				"System",
+				"System.Core",
+				"System.Data",
+				"System.Net.Http",
+				"System.Numerics",
+				"System.Runtime.Serialization",
+				"System.Transactions", "System.Web.Services",
+				"System.Xml",
+				"System.Xml.Linq",
+				"Mono.Security",
+				"System.ComponentModel.DataAnnotations",
+				"System.Json",
+				"System.ServiceModel.Web",
+				"Mono.Data.Sqlite",
+				"Mono.Data.Tds",
+				"System.IO.Compression",
+				"System.IO.Compression.FileSystem",
+				"Mono.CSharp",
+				"System.Security",
+			};
 			foreach (var p in bcl_suites) {
 				foreach (var flavor in new MacFlavors [] { MacFlavors.Full, MacFlavors.Modern }) {
 					var bclTestInfo = new MacBCLTestInfo (this, p, flavor);
 					var bclTestProject = new MacTestProject (bclTestInfo.ProjectPath, targetFrameworkFlavor: flavor, generateVariations: false) {
 						Name = p,
-						BCLInfo = bclTestInfo
+						BCLInfo = bclTestInfo,
+						Platform = "AnyCPU",
 					};
 
 					MacTestProjects.Add (bclTestProject);
@@ -276,9 +302,33 @@ namespace xharness
 			var library_projects = new string [] { "BundledResources", "EmbeddedResources", "bindings-test", "bindings-test2", "bindings-framework-test" };
 			var fsharp_test_suites = new string [] { "fsharp" };
 			var fsharp_library_projects = new string [] { "fsharplibrary" };
-			var bcl_suites = new string [] { "mscorlib", "System", "System.Core", "System.Data", "System.Net.Http", "System.Numerics", "System.Runtime.Serialization", "System.Transactions", "System.Web.Services", "System.Xml", "System.Xml.Linq", "Mono.Security", "System.ComponentModel.DataAnnotations", "System.Json", "System.ServiceModel.Web", "Mono.Data.Sqlite" };
+			var bcl_suites = new string [] {
+				"mscorlib",
+				"System",
+				"System.Core",
+				"System.Data",
+				"System.Net.Http",
+				"System.Numerics",
+				"System.Runtime.Serialization",
+				"System.Transactions",
+				"System.Web.Services",
+				"System.Xml",
+				"System.Xml.Linq",
+				"Mono.Security",
+				"System.ComponentModel.DataAnnotations",
+				"System.Json",
+				"System.ServiceModel.Web",
+				"Mono.Data.Sqlite",
+				"Mono.Data.Tds",
+				"System.IO.Compression",
+				"System.IO.Compression.FileSystem",
+				"Mono.CSharp",
+				"System.Security",
+			};
 			var bcl_skip_watchos = new string [] {
 				"Mono.Security",
+				"Mono.Data.Tds",
+				"Mono.CSharp",
 			};
 			IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "bcl-test/mscorlib/mscorlib-0.csproj")), false));
 			IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "bcl-test/mscorlib/mscorlib-1.csproj")), false));
@@ -409,7 +459,6 @@ namespace xharness
  
 			foreach (var proj in MacTestProjects.Where (v => !v.GenerateVariations)) {
 				var file = proj.Path;
-
 				var unified = new MacUnifiedTarget (proj.GenerateModern, thirtyTwoBit: false, shouldSkipProjectGeneration: true);
 				unified.BCLInfo = proj.BCLInfo;
 				configureTarget (unified, file, proj.IsNUnitProject);
@@ -567,10 +616,11 @@ namespace xharness
 
 		public void LogWrench (string message, params object[] args)
 		{
-			if (!InWrench)
-				return;
+			// Disable this for now, since we're not uploading directly to wrench anymore, but instead using the Html Report.
+			//if (!InWrench)
+			//	return;
 
-			Console.WriteLine (message, args);
+			//Console.WriteLine (message, args);
 		}
 
 		public void LogWrench (string message)

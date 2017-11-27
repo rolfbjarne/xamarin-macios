@@ -71,6 +71,7 @@ namespace xharness
 			return new AggregatedLog (logs);
 		}
 
+		// Log that will duplicate log output to multiple other logs.
 		class AggregatedLog : Log
 		{
 			Log [] logs;
@@ -92,6 +93,8 @@ namespace xharness
 
 	public class LogFile : Log
 	{
+		object lock_obj = new object ();
+		bool append;
 		public string Path;
 		StreamWriter writer;
 
@@ -99,14 +102,14 @@ namespace xharness
 			: base (description)
 		{
 			Path = path;
-
-			writer = new StreamWriter (new FileStream (Path, append ? FileMode.Append : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read));
-			writer.AutoFlush = true;
+			this.append = append;
+			if (!append)
+				File.WriteAllText (path, string.Empty);
 		}
 
 		protected override void WriteImpl (string value)
 		{
-			writer.Write (value);
+			GetWriter ().Write (value);
 		}
 
 		public override string FullPath {
@@ -122,6 +125,12 @@ namespace xharness
 
 		public override StreamWriter GetWriter ()
 		{
+			lock (lock_obj) {
+				if (writer == null) {
+					writer = new StreamWriter (new FileStream (Path, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.Read));
+					writer.AutoFlush = true;
+				}
+			}
 			return writer;
 		}
 
@@ -141,12 +150,6 @@ namespace xharness
 		string path;
 		FileStream fs;
 		StreamWriter writer;
-
-		public FileStream FileStream {
-			get {
-				return fs;
-			}
-		}
 
 		public override StreamReader GetReader ()
 		{
@@ -197,18 +200,17 @@ namespace xharness
 
 	public class Logs : List<Log>
 	{
-		public LogStream CreateStream (string directory, string filename, string name, bool timestamp = false)
+		public LogStream CreateStream (string directory, string filename, string name)
 		{
 			Directory.CreateDirectory (directory);
 			var rv = new LogStream (name, Path.GetFullPath (Path.Combine (directory, filename)));
 			Add (rv);
-			rv.Timestamp = timestamp;
 			return rv;
 		}
 
-		public LogFile CreateFile (string description, string path)
+		public LogFile CreateFile (string description, string path, bool append = true)
 		{
-			var rv = new LogFile (description, path);
+			var rv = new LogFile (description, path, append);
 			Add (rv);
 			return rv;
 		}
@@ -318,6 +320,10 @@ namespace xharness
 						if (read > 0) {
 							writer.Write (buffer, 0, read);
 							availableLength -= read;
+						} else {
+							// There's nothing more to read.
+							// I can't see how we get here, since we calculate the amount to read based on what's available, but it does happen randomly.
+							break;
 						}
 					}
 				}

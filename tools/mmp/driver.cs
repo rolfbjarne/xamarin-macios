@@ -265,9 +265,9 @@ namespace Xamarin.Bundler {
 				{ "minos=", "Minimum supported version of Mac OS X", 
 					v => {
 						try {
-							App.DeploymentTarget = Version.Parse (v);
+							App.DeploymentTarget = StringUtils.ParseVersion (v);
 						} catch (Exception ex) {
-							ErrorHelper.Error (26, ex, "Could not parse the command line argument '{0}': {1}", "-minos", ex.Message);
+							ErrorHelper.Error (26, ex, $"Could not parse the command line argument '-minos:{v}': {ex.Message}");
 						}
 					}
 				},
@@ -314,9 +314,9 @@ namespace Xamarin.Bundler {
 				{ "sdk=", "Specifies the SDK version to compile against (version, for example \"10.9\")",
 					v => {
 						try {
-							App.SdkVersion = Version.Parse (v);
+							App.SdkVersion = StringUtils.ParseVersion (v);
 						} catch (Exception ex) {
-							ErrorHelper.Error (26, ex, "Could not parse the command line argument '{0}': {1}", "-sdk", ex.Message);
+							ErrorHelper.Error (26, ex, $"Could not parse the command line argument '-sdk:{v}': {ex.Message}");
 						}
 					}
 				},
@@ -366,9 +366,8 @@ namespace Xamarin.Bundler {
 
 			AddSharedOptions (App, os);
 
-			IList<string> unprocessed;
 			try {
-				unprocessed = os.Parse (args);
+				App.RootAssemblies.AddRange (os.Parse (args));
 			}
 			catch (MonoMacException) {
 				throw;
@@ -376,6 +375,8 @@ namespace Xamarin.Bundler {
 			catch (Exception e) {
 				throw new MonoMacException (10, true, "Could not parse the command line arguments: {0}", e.Message);
 			}
+
+			Driver.LogArguments (args);
 
 			if (aotOptions == null) {
 				string forceAotVariable = Environment.GetEnvironmentVariable ("XM_FORCE_AOT");
@@ -505,13 +506,12 @@ namespace Xamarin.Bundler {
 
 
 			if (action == Action.RunRegistrar) {
-				App.RootAssemblies.AddRange (unprocessed);
 				App.Registrar = RegistrarMode.Static;
 				App.RunRegistrar ();
 				return;
 			}
 			try {
-				Pack (unprocessed);
+				Pack (App.RootAssemblies);
 			} finally {
 				if (App.Cache.IsCacheTemporary) {
 					// If we used a temporary directory we created ourselves for the cache
@@ -537,7 +537,7 @@ namespace Xamarin.Bundler {
 			// Many Xamarin.Mac references are technically valid, so whitelisting risks breaking working project
 			// However, passing in Mobile / Xamarin.Mac folders and resolving full/4.5 or vice versa is 
 			// far from expected. So catch the common cases if we can
-			string reference = references.FirstOrDefault (x => x.EndsWith ("Xamarin.Mac.dll"));
+			string reference = references.FirstOrDefault (x => x.EndsWith ("Xamarin.Mac.dll", StringComparison.Ordinal));
 			if (reference != null) {
 				bool valid = true;
 				if (IsUnifiedMobile)
@@ -798,6 +798,8 @@ namespace Xamarin.Bundler {
 			ExtractNativeLinkInfo ();
 
 			BuildTarget.StaticRegistrar = new StaticRegistrar (BuildTarget);
+
+			BuildTarget.ValidateAssembliesBeforeLink ();
 
 			if (!no_executable) {
 				foreach (var nr in native_references) {
@@ -1337,7 +1339,7 @@ namespace Xamarin.Bundler {
 
 					if (profiling.HasValue && profiling.Value) {
 						args.Append (StringUtils.Quote (Path.Combine (libdir, "libmono-profiler-log.a"))).Append (' ');
-						args.Append ("-u _mono_profiler_startup_log -lz ");
+						args.Append ("-u _mono_profiler_init_log -lz ");
 					}
 				}
 

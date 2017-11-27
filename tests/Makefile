@@ -12,7 +12,28 @@ MTOUCH=$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/bin/mtouch
 UNIT_SERVER_DIR=$(TOUCH_UNIT_PATH)/Touch.Server
 UNIT_SERVER=$(UNIT_SERVER_DIR)/bin/Debug/Touch.Server.exe
 TEST_SUITES=monotouch-test link\ sdk link\ all dont\ link framework-test mini
-BCL_TEST_SUITES=mscorlib System System.Core System.Data System.Net.Http System.Numerics System.Runtime.Serialization System.Transactions System.Web.Services System.Xml System.Xml.Linq Mono.Security System.ComponentModel.DataAnnotations System.Json System.ServiceModel.Web Mono.Data.Sqlite
+BCL_TEST_SUITES=mscorlib \
+	System \
+	System.Core \
+	System.Data \
+	System.Net.Http \
+	System.Numerics \
+	System.Runtime.Serialization \
+	System.Transactions \
+	System.Web.Services \
+	System.Xml \
+	System.Xml.Linq \
+	Mono.Security \
+	System.ComponentModel.DataAnnotations \
+	System.Json \
+	System.ServiceModel.Web \
+	Mono.Data.Sqlite \
+	Mono.Data.Tds \
+	System.IO.Compression \
+	System.IO.Compression.FileSystem \
+	Mono.CSharp \
+	System.Security \
+
 ALL_TEST_SUITES=$(TEST_SUITES) $(BCL_TEST_SUITES)
 EXEC_UNIT_SERVER=XCODE_DEVELOPER_ROOT=$(XCODE_DEVELOPER_ROOT) MONOTOUCH_ROOT=$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX) $(SYSTEM_MONO) --debug $(UNIT_SERVER)
 
@@ -228,30 +249,102 @@ mac-test-package.zip:
 	@echo Not enabled
 endif
 
-wrench-mtouch wrench-btouch wrench-build-unit-test-dev:
-	@echo Disabled
+#XI
+ifdef INCLUDE_IOS
+wrench-mtouch:
+	@echo Not here anymore
 
+wrench-btouch:
+	@echo Not here anymore
+
+wrench-build-unit-test-dev:
+	@echo Not here anymore
+
+wrench-sim-linksdk:
+	@echo Not here anymore
+
+wrench-sim-linkall:
+	@echo Not here anymore
+
+wrench-sim-dontlink:
+	@echo Not here anymore
+
+else
+wrench-mtouch wrench-btouch wrench-build-unit-test-dev:
+	@echo "iOS tests have been disabled [$@]"
+endif
+
+## XM
+ifdef INCLUDE_MAC
+wrench-mac-dontlink:
+	@echo Not here anymore
+
+wrench-mac-mmp:
+	@echo Now part of wrench-mac-mmptest
+
+wrench-mac-misc:
+	@echo Tests mac-misc tests removed
+
+wrench-mac-apidiff:
+	@echo This is done in the normal api-diff target now.
+
+wrench-mac-drm:
+	@echo "The DRM tests have all been removed."
+
+wrench-mac-api:
+	@echo Not here anymore
+
+wrench-mac-mmptest:
+	@echo Not here anymore
+
+wrench-mac-msbuild:
+	@echo Not here anymore
+
+wrench-mac-binding-project:
+	@echo Not here anymore
+
+wrench-mac-introspection:
+	@echo Not here anymore
+
+else
 wrench-mac-%:
-	@echo Disabled
+	@echo "Mac tests have been disabled [$@]"
+endif
 
 wrench-msbuild:
-	@echo Disabled
+	@echo Not here anymore
 
 wrench-docs:
-	@echo Disabled
+ifdef ENABLE_XAMARIN
+ifdef INCLUDE_IOS
+	$(MAKE) -C $(MACCORE_PATH) update-docs
+else
+	@echo "iOS tests have been disabled [$@]"
+endif
+else
+	@echo "Docs have been disabled [$@]"
+endif
 
 # the wrenchhelper-* targets are generated.
 wrench-sim-%:
-	@echo Disabled
+	@echo Not here anymore
 
 wrench-bcl-sim-%:
-	@echo Disabled
+	@echo Not here anymore
 
 wrench-%:
-	@echo Disabled
+	@echo Not here anymore
+
+wrench-jenkins: xharness/xharness.exe
+	$(Q) rm -f $@-failed.stamp
+	$(Q) ulimit -n 4096 && $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --label run-all-tests,skip-ios-device-tests --markdown-summary=$(abspath $(CURDIR))/TestSummary.md $(TESTS_PERIODIC_COMMAND) || echo "$$?" > $@-failed.stamp
+	@echo "@MonkeyWrench: SetSummary: <br/>`cat $(abspath $(CURDIR))/TestSummary.md | awk 1 ORS='<br/>'`"
+	@echo "@MonkeyWrench: AddFile: $(abspath $(CURDIR))/TestSummary.md"
+	$(Q) if test -e $@-failed.stamp; then EC=`cat $@-failed.stamp`; rm -f $@-failed.stamp; exit $$EC; fi
 
 wrench-xtro:
-	@echo Disabled
+	git clean -xfdq
+	make -C xtro-sharpie wrench
 
 jenkins: xharness/xharness.exe
 	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT)
@@ -264,7 +357,7 @@ runner: xharness/xharness.exe
 # This makefile target will run the device tests using the Xamarin.iOS version
 # installed on the system.
 vsts-device-tests: xharness/xharness.exe
-	$(Q) $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=skip-mac-tests,skip-ios-simulator-tests,skip-ios-msbuild-tests,skip-system-permission-tests,run-ios-device-tests --markdown-summary=$(CURDIR)/TestSummary.md
+	$(Q) ulimit -n 4096 && $(SYSTEM_MONO) --debug $< $(XHARNESS_VERBOSITY) --jenkins --autoconf --rootdir $(CURDIR) --sdkroot $(XCODE_DEVELOPER_ROOT) --use-system:true --label=skip-mac-tests,skip-ios-simulator-tests,skip-ios-msbuild-tests,skip-system-permission-tests,run-ios-device-tests,run-bcl-tests --markdown-summary=$(CURDIR)/TestSummary.md
 
 ifdef ENABLE_XAMARIN
 wrench-launch-external wrench-report-external:

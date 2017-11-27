@@ -500,7 +500,7 @@ namespace xharness
 				Platform = TestPlatform.iOS,
 				TestName = "MSBuild tests",
 				Mode = "iOS",
-				Timeout = TimeSpan.FromMinutes (30),
+				Timeout = TimeSpan.FromMinutes (60),
 				Ignored = !IncludeiOSMSBuild,
 			};
 			Tasks.Add (nunitExecutioniOSMSBuild);
@@ -529,7 +529,7 @@ namespace xharness
 					build.TestProject = project;
 					build.SolutionPath = project.SolutionPath;
 					build.ProjectConfiguration = config;
-					build.ProjectPlatform = "x86";
+					build.ProjectPlatform = project.Platform;
 					build.SpecifyPlatform = false;
 					build.SpecifyConfiguration = build.ProjectConfiguration != "Debug";
 					RunTestTask exec;
@@ -549,6 +549,7 @@ namespace xharness
 							Ignored = ignored || !IncludeClassicMac,
 							BCLTest = project.IsBclTest,
 							TestName = project.Name,
+							IsUnitTest = true,
 						};
 					}
 					exec.Variation = configurations.Length > 1 ? config : project.TargetFrameworkFlavor.ToString ();
@@ -587,17 +588,6 @@ namespace xharness
 			};
 			Tasks.Add (nunitExecutionMTouch);
 
-			var runBTouch = new MakeTask
-			{
-				Jenkins = this,
-				Platform = TestPlatform.iOS,
-				TestName = "BTouch tests",
-				Target = "all",
-				WorkingDirectory = Path.Combine (Harness.RootDirectory, "generator"),
-				Ignored = !IncludeBtouch,
-			};
-			Tasks.Add (runBTouch);
-
 			var buildGenerator = new MakeTask {
 				Jenkins = this,
 				TestProject = new TestProject (Path.GetFullPath (Path.Combine (Harness.RootDirectory, "..", "src", "generator.sln"))),
@@ -626,6 +616,7 @@ namespace xharness
 				Target = "all -j" + Environment.ProcessorCount,
 				WorkingDirectory = Path.Combine (Harness.RootDirectory, "mmptest", "regression"),
 				Ignored = !IncludeMmpTest || !IncludeMac,
+				Timeout = TimeSpan.FromMinutes (30),
 			};
 			run_mmp.Environment.Add ("BUILD_REVISION", "jenkins"); // This will print "@MonkeyWrench: AddFile: <log path>" lines, which we can use to get the log filenames.
 			Tasks.Add (run_mmp);
@@ -648,6 +639,7 @@ namespace xharness
 				Target = "wrench",
 				WorkingDirectory = Path.Combine (Harness.RootDirectory, "xtro-sharpie"),
 				Ignored = !IncludeXtro,
+				Timeout = TimeSpan.FromMinutes (15),
 			};
 			Tasks.Add (runXtroTests);
 
@@ -672,6 +664,7 @@ namespace xharness
 				return new MacExecuteTask (build) {
 					Ignored = ignore,
 					TestName = task.TestName,
+					IsUnitTest = macExec.IsUnitTest,
 				};
 			}
 			var nunit = task as NUnitExecuteTask;
@@ -691,11 +684,35 @@ namespace xharness
 			throw new NotImplementedException ();
 		}
 
+		async Task ExecutePeriodicCommandAsync (Log periodic_loc)
+		{
+			//await Task.Delay (Harness.UploadInterval);
+			periodic_loc.WriteLine ($"Starting periodic task with interval {Harness.PeriodicCommandInterval.TotalMinutes} minutes.");
+			while (true) {
+				var watch = Stopwatch.StartNew ();
+				using (var process = new Process ()) {
+					process.StartInfo.FileName = Harness.PeriodicCommand;
+					process.StartInfo.Arguments = Harness.PeriodicCommandArguments;
+					var rv = await process.RunAsync (periodic_loc, null);
+					if (!rv.Succeeded)
+						periodic_loc.WriteLine ($"Periodic command failed with exit code {rv.ExitCode} (Timed out: {rv.TimedOut})");
+				}
+				var ticksLeft = watch.ElapsedTicks - Harness.PeriodicCommandInterval.Ticks;
+				if (ticksLeft < 0)
+					ticksLeft = Harness.PeriodicCommandInterval.Ticks;
+				var wait = TimeSpan.FromTicks (ticksLeft);
+				await Task.Delay (wait);
+			}
+		}
+
 		public int Run ()
 		{
 			try {
 				Directory.CreateDirectory (LogDirectory);
-				Harness.HarnessLog = MainLog = Logs.CreateStream (LogDirectory, "Harness.log", "Harness log");
+				Log log = Logs.CreateStream (LogDirectory, "Harness.log", "Harness log");
+				if (Harness.InWrench)
+					log = Log.CreateAggregatedLog (log, new ConsoleLog ());
+				Harness.HarnessLog = MainLog = log;
 				Harness.HarnessLog.Timestamp = true;
 
 				var tasks = new List<Task> ();
@@ -709,6 +726,11 @@ namespace xharness
 							Console.WriteLine ("Still running tests. Please be patient.");
 						}
 					});
+				}
+				if (!string.IsNullOrEmpty (Harness.PeriodicCommand)) {
+					var periodic_log = Logs.CreateFile ("Periodic command log", Path.Combine (LogDirectory, "PeriodicCommand.log"), false);
+					periodic_log.Timestamp = true;
+					Task.Run (async () => await ExecutePeriodicCommandAsync (periodic_log));
 				}
 
 				Task.Run (async () =>
@@ -742,10 +764,10 @@ namespace xharness
 
 			// Try and find an unused port
 			int attemptsLeft = 50;
-			int port = 0;
+			int port = 51234; // Try this port first, to try to not vary between runs just because.
 			Random r = new Random ((int) DateTime.Now.Ticks);
 			while (attemptsLeft-- > 0) {
-				var newPort = r.Next (49152, 65535); // The suggested range for dynamic ports is 49152-65535 (IANA)
+				var newPort = port != 0 ? port : r.Next (49152, 65535); // The suggested range for dynamic ports is 49152-65535 (IANA)
 				server.Prefixes.Clear ();
 				server.Prefixes.Add ("http://*:" + newPort + "/");
 				try {
@@ -754,6 +776,7 @@ namespace xharness
 					break;
 				} catch (Exception ex) {
 					MainLog.WriteLine ("Failed to listen on port {0}: {1}", newPort, ex.Message);
+					port = 0;
 				}
 			}
 			MainLog.WriteLine ($"Created server on localhost:{port}");
@@ -1809,6 +1832,28 @@ function oninitialload ()
 										} catch (Exception ex) {
 											writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
 										}
+									} else if (log.Description == "NUnit results") {
+										try {
+											var doc = new System.Xml.XmlDocument ();
+											doc.LoadWithoutNetworkAccess (log.FullPath);
+											var failures = doc.SelectNodes ("//test-case[@result='Error' or @result='Failure']").Cast<System.Xml.XmlNode> ().ToArray ();
+											if (failures.Length > 0) {
+												writer.WriteLine ("<div style='padding-left: 15px;'>");
+												foreach (var failure in failures) {
+													var test_name = failure.Attributes ["name"]?.Value;
+													var message = failure.SelectSingleNode ("failure/message")?.InnerText;
+													writer.Write (System.Web.HttpUtility.HtmlEncode (test_name));
+													if (!string.IsNullOrEmpty (message)) {
+														writer.Write (": ");
+														writer.Write (System.Web.HttpUtility.HtmlEncode (message));
+													}
+													writer.WriteLine ("<br />");
+												}
+												writer.WriteLine ("</div>");
+											}
+										} catch (Exception ex) {
+											writer.WriteLine ($"<span style='padding-left: 15px;'>Could not parse {log.Description}: {System.Web.HttpUtility.HtmlEncode (ex.Message)}</span><br />");
+										}
 									}
 								}
 							}
@@ -2035,6 +2080,7 @@ function oninitialload ()
 					log.WriteLine (FailureMessage);
 				}
 			} finally {
+				MainLog.Dispose ();
 				duration.Stop ();
 			}
 
@@ -2304,6 +2350,7 @@ function oninitialload ()
 					}
 					Jenkins.MainLog.WriteLine ("Built {0} ({1})", TestName, Mode);
 				}
+				log.Dispose ();
 			}
 		}
 	}
@@ -2312,6 +2359,7 @@ function oninitialload ()
 	{
 		public string Target;
 		public string WorkingDirectory;
+		public TimeSpan Timeout = TimeSpan.FromMinutes (5);
 
 		protected override async Task ExecuteAsync ()
 		{
@@ -2322,9 +2370,10 @@ function oninitialload ()
 					make.StartInfo.Arguments = Target;
 					SetEnvironmentVariables (make);
 					var log = Logs.CreateStream (LogDirectory, $"make-{Platform}-{Timestamp}.txt", "Build log");
+					log.Timestamp = true;
 					LogProcessExecution (log, make, "Making {0} in {1}", Target, WorkingDirectory);
 					if (!Harness.DryRun) {
-						var timeout = TimeSpan.FromMinutes (5);
+						var timeout = Timeout;
 						var result = await make.RunAsync (log, true, timeout);
 						if (result.TimedOut) {
 							ExecutionResult = TestExecutingResult.TimedOut;
@@ -2378,6 +2427,8 @@ function oninitialload ()
 					}
 					Jenkins.MainLog.WriteLine ("Built {0} ({1})", TestName, Mode);
 				}
+
+				log.Dispose ();
 			}
 		}
 
@@ -2457,6 +2508,7 @@ function oninitialload ()
 			using (var resource = await NotifyAndAcquireDesktopResourceAsync ()) {
 				var xmlLog = Logs.CreateFile ("XML log", Path.Combine (LogDirectory, "log.xml"));
 				var log = Logs.CreateStream (LogDirectory, $"execute-{Timestamp}.txt", "Execution log");
+				log.Timestamp = true;
 				using (var proc = new Process ()) {
 
 					proc.StartInfo.WorkingDirectory = WorkingDirectory;
@@ -2560,6 +2612,7 @@ function oninitialload ()
 	{
 		public string Path;
 		public bool BCLTest;
+		public bool IsUnitTest;
 
 		public MacExecuteTask (BuildToolTask build_task)
 			: base (build_task)
@@ -2573,6 +2626,12 @@ function oninitialload ()
 					// These tests are not written to support parallel execution
 					// (there are hard coded paths used for instance), so disable
 					// parallel execution for these tests.
+					return false;
+				}
+				if (BCLTest) {
+					// We run the BCL tests in multiple flavors (Full/Modern),
+					// and the BCL tests are not written to support parallel execution,
+					// so disable parallel execution for these tests.
 					return false;
 				}
 
@@ -2607,14 +2666,23 @@ function oninitialload ()
 				suffix = "-unifiedXM45-32";
 				break;
 			}
-			if (BCLTest)
-				Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (ProjectFile), "bin", BuildTask.ProjectConfiguration + suffix, name + "Tests.app", "Contents", "MacOS", name + "Tests");
-			else
+			if (ProjectFile.EndsWith (".sln")) {
 				Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (ProjectFile), "bin", BuildTask.ProjectPlatform, BuildTask.ProjectConfiguration + suffix, name + ".app", "Contents", "MacOS", name);
+			} else {
+				var project = new System.Xml.XmlDocument ();
+				project.LoadWithoutNetworkAccess (ProjectFile);
+				var outputPath = project.GetOutputPath (BuildTask.ProjectPlatform, BuildTask.ProjectConfiguration).Replace ('\\', '/');
+				var assemblyName = project.GetAssemblyName ();
+				Path = System.IO.Path.Combine (System.IO.Path.GetDirectoryName (ProjectFile), outputPath, assemblyName + ".app", "Contents", "MacOS", assemblyName);
+			}
 
 			using (var resource = await NotifyAndAcquireDesktopResourceAsync ()) {
 				using (var proc = new Process ()) {
 					proc.StartInfo.FileName = Path;
+					if (IsUnitTest) {
+						using (var xml = Logs.CreateFile ("NUnit results", System.IO.Path.Combine (LogDirectory, $"test-{Platform}-{Timestamp}.xml"), false))
+							proc.StartInfo.Arguments = $"-result={StringUtils.Quote (xml.FullPath)}";
+					}
 					Jenkins.MainLog.WriteLine ("Executing {0} ({1})", TestName, Mode);
 					var log = Logs.CreateStream (LogDirectory, $"execute-{Platform}-{Timestamp}.txt", "Execution log");
 					log.WriteLine ("{0} {1}", proc.StartInfo.FileName, proc.StartInfo.Arguments);
@@ -2636,7 +2704,7 @@ function oninitialload ()
 								ExecutionResult = TestExecutingResult.Succeeded;
 							} else {
 								ExecutionResult = TestExecutingResult.Failed;
-								FailureMessage = result.ExitCode != 1 ? "Test run crashed." : "Test run failed.";
+								FailureMessage = result.ExitCode != 1 ? $"Test run crashed (exit code: {result.ExitCode})." : "Test run failed.";
 								log.WriteLine (FailureMessage);
 							}
 						} finally {
@@ -2923,7 +2991,7 @@ function oninitialload ()
 
 					if (!Failed) {
 						// Run the app
-						runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log", true);
+						runner.MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log");
 						await runner.RunAsync ();
 
 						if (!string.IsNullOrEmpty (runner.FailureMessage))
@@ -2943,7 +3011,7 @@ function oninitialload ()
 								ProjectFile = TestProject.GetTodayExtension ().Path,
 								Target = AppRunnerTarget,
 								LogDirectory = LogDirectory,
-								MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log", true),
+								MainLog = Logs.CreateStream (LogDirectory, $"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log"),
 								DeviceName = Device.Name,
 								CompanionDeviceName = CompanionDevice?.Name,
 								Configuration = ProjectConfiguration,
@@ -2971,6 +3039,9 @@ function oninitialload ()
 					// Also clean up after us locally.
 					if (Harness.InJenkins || Harness.InWrench || Succeeded)
 						await BuildTask.CleanAsync ();
+
+					uninstall_log.Dispose ();
+					install_log.Dispose ();
 				}
 			}
 		}
@@ -3033,7 +3104,7 @@ function oninitialload ()
 				EnsureCleanSimulatorState = clean_state,
 				Target = AppRunnerTarget,
 				LogDirectory = LogDirectory,
-				MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log", true),
+				MainLog = Logs.CreateStream (LogDirectory, $"run-{Device.UDID}-{Timestamp}.log", "Run log"),
 				IncludeSystemPermissionTests = Jenkins.IncludeSystemPermissionTests,
 			};
 			runner.Simulators = Simulators;

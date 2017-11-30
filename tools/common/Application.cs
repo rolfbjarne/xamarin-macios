@@ -82,6 +82,9 @@ namespace Xamarin.Bundler {
 
 		public bool DynamicRegistrationSupported {
 			get {
+#if MONOMAC // FIXME remove this ifdef
+				return Optimizations.RemoveDynamicRegistrar != true;
+#else
 				return Optimizations.RemoveDynamicRegistrar.Value != true;
 			}
 		}

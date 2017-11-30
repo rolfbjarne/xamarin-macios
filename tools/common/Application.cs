@@ -86,6 +86,7 @@ namespace Xamarin.Bundler {
 				return Optimizations.RemoveDynamicRegistrar != true;
 #else
 				return Optimizations.RemoveDynamicRegistrar.Value != true;
+#endif
 			}
 		}
 

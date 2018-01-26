@@ -1300,6 +1300,13 @@ See https://msdn.microsoft.com/en-us/library/x0w2664k.aspx for more information 
 
 The `[BindingImpl]` attribute on the mentioned member is invalid. The expected format is `[BindingImpl (BindingImplOptions.ValueA | BindingImplOptions.ValueB)]`.
 
+### <a name="MT2106"/>MT2106: Could not optimize the call to BlockLiteral.SetupBlock[Unsafe] in * at offset * because *.
+
+The linker reports this warning when it can't optimize a call to BlockLiteral.SetupBlock or Block.SetupBlockUnsafe.
+
+The message will point to the method that calls BlockLiteral.SetupBlock[Unsafe], and
+it may also give clues as to why the call couldn't be optimized.
+
 # MT3xxx: AOT error messages
 
 <!--

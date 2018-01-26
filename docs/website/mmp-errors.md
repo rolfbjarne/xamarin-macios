@@ -225,6 +225,13 @@ Mixed-mode assemblies can not be processed by the linker.
 
 See https://msdn.microsoft.com/en-us/library/x0w2664k.aspx for more information on mixed-mode assemblies.
 
+### <a name="MM2106"/>MM2106: Could not optimize the call to BlockLiteral.SetupBlock[Unsafe] in * at offset * because *.
+
+The linker reports this warning when it can't optimize a call to BlockLiteral.SetupBlock or Block.SetupBlockUnsafe.
+
+The message will point to the method that calls BlockLiteral.SetupBlock[Unsafe], and
+it may also give clues as to why the call couldn't be optimized.
+
 # MM3xxx: AOT
 
 ## MM30xx: AOT (general) errors

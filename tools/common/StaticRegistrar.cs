@@ -868,6 +868,13 @@ namespace XamCore.Registrar {
 
 		protected override TypeReference GetElementType (TypeReference type)
 		{
+			var ts = type as TypeSpecification;
+			if (ts != null) {
+				// TypeSpecification.GetElementType calls GetElementType on the element type, thus unwinding multiple element types (which we don't want).
+				// By fetching the ElementType property we only unwind one level.
+				// This matches what the dynamic registrar (System.Reflection) does.
+				return ts.ElementType;
+			}
 			return type.GetElementType ();
 		}
 
@@ -3511,7 +3518,12 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("mono_free (str);");
 						setup_return.AppendLine ("res = nsstr;");
 					} else if (IsDelegate (type.Resolve ())) {
-						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, &exception_gchandle);");
+						var signature = "NULL";
+						if (App.Optimizations.OptimizeBlockLiteralSetupBlock == true) {
+							var delegateMethod = type.Resolve ().GetMethods ().First ((v) => v.Name == "Invoke");
+							signature = "\"" + ComputeSignature (delegateMethod.DeclaringType, delegateMethod, method, isBlockSignature: true) + "\"";
+						}
+						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, {0}, &exception_gchandle);", signature);
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else {
 						throw ErrorHelper.CreateError (4104, 

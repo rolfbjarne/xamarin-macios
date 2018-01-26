@@ -138,6 +138,7 @@ namespace Xamarin.Bundler {
 #if MONOTOUCH
 					"    inline-runtime-arch: By default always enabled (requires the linker). Inlines calls to ObjCRuntime.Runtime.Arch to load a constant value. Makes the app smaller, and slightly faster at runtime.\n" +
 #endif
+					"    inline-setupblock-calls: By default enabled when removing the dynamic registrar (this is a required optimization to be able to remove the dynamic registrar). Does some work at build time to avoid doing the same work at runtime (faster at runtime, at the cost of a very small code increase per SetupBlock call, which is compensated for many times over if the dynamic registrar is successfully removed). There may be certain cases where calls to SetupBlock can't be inlined, in which case you'll get a build error if attempting to remove the dynamic registrar (asking you to disable the 'remove dynamic registrar' optimization)\n" +
 					"    inline-intptr-size: By default enabled for builds that target a single architecture (requires the linker). Inlines calls to IntPtr.Size to load a constant value. Makes the app smaller, and slightly faster at runtime.\n",
 					(v) => {
 						app.Optimizations.Parse (v);

@@ -3511,7 +3511,9 @@ namespace XamCore.Registrar {
 						setup_return.AppendLine ("mono_free (str);");
 						setup_return.AppendLine ("res = nsstr;");
 					} else if (IsDelegate (type.Resolve ())) {
-						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, &exception_gchandle);");
+						var delegateMethod = type.Resolve ().GetMethods ().First ((v) => v.Name == "Invoke");
+						var signature = ComputeSignature (delegateMethod.DeclaringType, delegateMethod, method, isBlockSignature: true);
+						setup_return.AppendLine ("res = xamarin_get_block_for_delegate (managed_method, retval, \"{0}\", &exception_gchandle);", signature);
 						setup_return.AppendLine ("if (exception_gchandle != 0) goto exception_handling;");
 					} else {
 						throw ErrorHelper.CreateError (4104, 

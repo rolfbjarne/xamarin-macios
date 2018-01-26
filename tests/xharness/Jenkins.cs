@@ -464,17 +464,28 @@ namespace xharness
 					ps.Add (new Tuple<TestProject, TestPlatform, bool> (project.AsTvOSProject (), TestPlatform.tvOS, ignored || !IncludetvOS));
 				if (!project.SkipwatchOSVariation)
 					ps.Add (new Tuple<TestProject, TestPlatform, bool> (project.AsWatchOSProject (), TestPlatform.watchOS, ignored || !IncludewatchOS));
-				foreach (var pair in ps) {
-					var derived = new XBuildTask () {
-						Jenkins = this,
-						TestProject = pair.Item1,
-						ProjectConfiguration = "Debug",
-						ProjectPlatform = "iPhoneSimulator",
-						Platform = pair.Item2,
-						Ignored = pair.Item3,
-						TestName = project.Name,
-					};
-					runSimulatorTasks.AddRange (CreateRunSimulatorTaskAsync (derived));
+				
+				var configurations = project.Configurations;
+				if (configurations == null)
+					configurations = new string [] { "Debug" };
+				foreach (var config in configurations) {
+					foreach (var pair in ps) {
+						var derived = new XBuildTask () {
+							Jenkins = this,
+							TestProject = pair.Item1,
+							ProjectConfiguration = config,
+							ProjectPlatform = "iPhoneSimulator",
+							Platform = pair.Item2,
+							Ignored = pair.Item3,
+							TestName = project.Name,
+						};
+						var simTasks = CreateRunSimulatorTaskAsync (derived);
+						runSimulatorTasks.AddRange (simTasks);
+						if (configurations.Length > 1) {
+							foreach (var task in simTasks)
+								task.Variation = config;
+						}
+					}
 				}
 			}
 

@@ -31,6 +31,8 @@
     <LinkMode>Full</LinkMode>
     <XamMacArch></XamMacArch>
     <AOTMode>None</AOTMode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <MonoBundlingExtraArgs>--optimize=all</MonoBundlingExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType></DebugType>
@@ -49,6 +51,8 @@
     <HttpClientHandler></HttpClientHandler>
     <XamMacArch></XamMacArch>
     <AOTMode>None</AOTMode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <MonoBundlingExtraArgs>--optimize=all</MonoBundlingExtraArgs>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -65,15 +69,21 @@
     <Compile Include="..\..\..\common\mac\Mac.cs">
       <Link>Mac.cs</Link>
     </Compile>
+    <Compile Include="..\..\BaseOptimizeGeneratedCodeTest.cs" />
     <Compile Include="LinkAllTest.cs" />
     <Compile Include="..\..\..\common\PlatformInfo.cs">
       <Link>PlatformInfo.cs</Link>
     </Compile>
+    <Compile Include="OptimizeGeneratedCodeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\external\guiunit\src\framework\GuiUnit_xammac_mobile.csproj">
       <Project>{EACFD119-769E-4E6C-89B7-A6CE3757C431}</Project>
       <Name>GuiUnit_xammac_mobile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\bindings-test\bindings-test-mac.csproj">
+      <Project>{20BEA313-7E2D-4209-93C0-E4D99C72695A}</Project>
+      <Name>bindings-test-mac</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />

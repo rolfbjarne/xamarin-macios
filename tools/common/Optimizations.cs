@@ -12,7 +12,10 @@ namespace Xamarin.Bundler
 			"inline-intptr-size",
 #if MONOTOUCH
 			"inline-runtime-arch",
+#else
+			"", // dummy value to make indices match up between XM and XI
 #endif
+			"blockliteral-setupblock",
 		};
 
 		bool? [] values;
@@ -39,6 +42,10 @@ namespace Xamarin.Bundler
 			set { values [4] = value; }
 		}
 #endif
+		public bool? OptimizeBlockLiteralSetupBlock {
+			get { return values [5]; }
+			set { values [5] = value; }
+		}
 
 		public Optimizations ()
 		{
@@ -85,6 +92,10 @@ namespace Xamarin.Bundler
 			if (!InlineRuntimeArch.HasValue)
 				InlineRuntimeArch = true;
 #endif
+
+			// We try to optimize calls to BlockLiteral.SetupBlock if the static registrar is enabled
+			if (!OptimizeBlockLiteralSetupBlock.HasValue)
+				OptimizeBlockLiteralSetupBlock = app.Registrar == RegistrarMode.Static;
 
 			if (Driver.Verbosity > 3)
 				Driver.Log (4, "Enabled optimizations: {0}", string.Join (", ", values.Select ((v, idx) => v == true ? opt_names [idx] : string.Empty).Where ((v) => !string.IsNullOrEmpty (v))));

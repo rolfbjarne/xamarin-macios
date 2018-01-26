@@ -3,6 +3,8 @@ using System.IO;
 
 using NUnit.Framework;
 
+using Xamarin.Tests;
+
 namespace Xamarin.Linker
 {
 	[TestFixture]
@@ -19,7 +21,7 @@ namespace Xamarin.Linker
     <type fullname=""System.Reflection.ParameterInfo"" />
   </assembly>
 </linker>");
-				mtouch.Linker = MTouchLinker.LinkAll;
+				mtouch.Linker = LinkerOption.LinkAll;
 				mtouch.XmlDefinitions = new string [] { xml };
 				mtouch.CreateTemporaryApp ();
 				mtouch.AssertExecute (MTouchAction.BuildSim, "build");

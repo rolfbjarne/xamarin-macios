@@ -83,7 +83,7 @@ namespace XamCore.ObjCRuntime {
 		[DllImport ("__Internal")]
 		static extern IntPtr xamarin_get_block_descriptor ();
 
-		unsafe void SetupBlock (Delegate trampoline, Delegate userDelegate, bool safe)
+		void SetupBlock (Delegate trampoline, Delegate userDelegate, bool safe)
 		{
 
 			// We need to get the signature of the target method, so that we can compute
@@ -108,6 +108,9 @@ namespace XamCore.ObjCRuntime {
 			SetupBlockImpl (trampoline, userDelegate, safe, signature);
 		}
 
+		// This method is not to be called manually by user code.
+		// This is enforced by making it private. If the SetupBlock optimization is enabled,
+		// the linker will make it public so that it's callable from optimized user code.
 		unsafe void SetupBlockImpl (Delegate trampoline, Delegate userDelegate, bool safe, string signature)
 		{
 			isa = block_class;

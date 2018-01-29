@@ -2510,6 +2510,9 @@ namespace XamCore.Registrar {
 				}
 			}
 
+			if (IsNullable (type))
+				return ToSignature (GetNullableType (type), member, ref success, forProperty);
+
 			if (IsValueType (type))
 				return ValueTypeSignature (type, member, ref success);
 

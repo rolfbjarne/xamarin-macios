@@ -673,97 +673,95 @@ namespace Xamarin.Linker {
 		{
 			//const string operation = "Inline BlockLiteral.SetupBlock";
 
-			if (Optimizations.InlineSetupBlock != true)
+			if (Optimizations.OptimizeBlockLiteralSetupBlock != true)
 				return 0;
 
 			// This will optimize calls to SetupBlock and SetupBlockUnsafe by calculating the signature for the block
 			// (which both SetupBlock and SetupBlockUnsafe do), and then rewrite the code to call SetupBlockImpl instead
-			// (which takes the block signature as an argument instead of calculating it). This is required when
-			// removing the dynamic registrar, because calculating the block signature is done in the dynamic registrar.
+			// (which takes the block signature as an argument instead of calculating it). This is required to
+			// remove the dynamic registrar, because calculating the block signature is done in the dynamic registrar.
 			var mr = ins.Operand as MethodReference;
 			if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "BlockLiteral"))
 				return 0;
 
-			var prev = ins.Previous;
-			if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
-				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Pop0", caller, prev.Next, prev);
-				return 0;
-			} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
-				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Push1", caller, prev.Next, prev);
-				return 0;
-			}
-			prev = prev.Previous;
-			TypeReference delegateType = null;
-
-			if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
-				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Pop0", caller, prev.Next, prev);
-				return 0;
-			} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
-				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Push1", caller, prev.Next, prev);
-				return 0;
-			} else if (prev.OpCode.Code == Code.Ldsfld) {
-				delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType;
-			} else {
-				Driver.Log (1, "Failed to optimize {0}': for instruction '{1}' expected previous instruction '{2}' to be Ldsfld", caller, prev.Next, prev);
-				return 0;
-			}
-
-			// Calculate the block signature
-			TypeReference userDelegateType = null;
-			var delegateTypeDefinition = delegateType.Resolve ();
-			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
-				var attribType = attrib.Constructor.DeclaringType;
-				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
-					continue;
-				userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
-				break;
-			}
-			bool blockSignature = false;
 			string signature = null;
-			MethodReference userMethod = null;
-			if (userDelegateType != null) {
-				var userDelegateTypeDefinition = userDelegateType.Resolve ();
-				MethodDefinition userMethodDefinition = null;
-				foreach (var method in userDelegateTypeDefinition.Methods) {
-					if (method.Name != "Invoke")
+			TypeReference delegateType = null;
+			try {
+				var prev = ins.Previous;
+				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's pop stack behavior was {3} (expected Pop0).", caller, ins.Offset, prev.Offset, prev.OpCode.StackBehaviourPop));
+					return 0;
+				} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's push stack behavior was {3} (expected Push1).", caller, ins.Offset, prev.Offset, prev.OpCode.StackBehaviourPush));
+					return 0;
+				}
+				prev = prev.Previous;
+
+				if (prev.OpCode.Code == Code.Ldsfld) {
+					delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType;
+				} else {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because expected an earlier (at index {2}) instruction to be Ldsfld, but it was `{3}`.", caller, ins.Offset, prev.Offset, prev));
+					return 0;
+				}
+
+				// Calculate the block signature
+				TypeReference userDelegateType = null;
+				var delegateTypeDefinition = delegateType.Resolve ();
+				foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
+					var attribType = attrib.Constructor.DeclaringType;
+					if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
 						continue;
-					userMethodDefinition = method;
+					userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
 					break;
 				}
-				if (userMethodDefinition == null)
-					throw new NotImplementedException ();
-				blockSignature = true;
-				userMethod = InflateMethod (userDelegateType, userMethodDefinition);
-			} else if (delegateType.Is ("System", "Action`1") && (delegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
-				signature = "v@?";
-			} else {
-				Driver.Log (0, "Failed to optimize {0}: for instruction '{1}' could not find the UserDelegateTypeAttribute on {2}", caller, ins, delegateType.FullName);
-				return 0;
-			}
-			if (signature == null) {
-				try {
+				bool blockSignature = false;
+				MethodReference userMethod = null;
+				if (userDelegateType != null) {
+					var userDelegateTypeDefinition = userDelegateType.Resolve ();
+					MethodDefinition userMethodDefinition = null;
+					foreach (var method in userDelegateTypeDefinition.Methods) {
+						if (method.Name != "Invoke")
+							continue;
+						userMethodDefinition = method;
+						break;
+					}
+					if (userMethodDefinition == null)
+						throw new NotImplementedException ();
+					blockSignature = true;
+					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+				} else if (delegateType.Is ("System", "Action`1") && (delegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
+					// This is a quite common signature, so just hardcode it.
+					signature = "v@?";
+				} else {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because no [UserDelegateType] attribute could be found on {2}.", caller, ins.Offset, delegateType.FullName));
+					return 0;
+				}
+				if (signature == null) {
 					var parameters = new TypeReference [userMethod.Parameters.Count];
 					for (int p = 0; p < parameters.Length; p++)
 						parameters [p] = userMethod.Parameters [p].ParameterType;
-					signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, isBlockSignature: blockSignature);
-				} catch (Exception e) {
-					Driver.Log (1, "Failed to optimize {0}: for instruction '{1}': {2}", caller, ins, e.Message);
-					signature = "BROKEN SIGNATURE"; // FIXME: fix the broken binding
+					signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, userMethod.Resolve (), isBlockSignature: blockSignature);
 				}
+			} catch (Exception e) {
+				ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, e, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1}: {2}.", caller, ins.Offset, e.Message));
+				return 0;
 			}
 
+			// We got the information we need: rewrite the IL.
 			var instructions = caller.Body.Instructions;
 			var index = instructions.IndexOf (ins);
+			// Inject the extra arguments
 			instructions.Insert (index, Instruction.Create (OpCodes.Ldstr, signature));
 			instructions.Insert (index, Instruction.Create (mr.Name == "SetupBlockUnsafe" ? OpCodes.Ldc_I4_0 : OpCodes.Ldc_I4_1));
-			ins.Operand = GetBlockSetupImpl (caller);
+			// Change the call to call SetupBlockImpl instead
+			ins.Operand = GetBlockSetupImpl (caller, ins);
 
-			Driver.Log (1, "Optimized {0} ('{1}') with delegate type {2} and signature {3}", caller, ins, delegateType.FullName, signature);
+			//Driver.Log (4, "Optimized call to BlockLiteral.SetupBlock in {0} at offset {1} with delegate type {2} and signature {3}", caller, ins.Offset, delegateType.FullName, signature);
 			return 2;
 		}
 
 		MethodDefinition setupblock_def;
-		MethodReference GetBlockSetupImpl (MethodDefinition caller)
+		MethodReference GetBlockSetupImpl (MethodDefinition caller, Instruction ins)
 		{
 			if (setupblock_def == null) {
 				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.Target.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
@@ -771,63 +769,35 @@ namespace Xamarin.Linker {
 					if (method.Name != "SetupBlockImpl")
 						continue;
 					setupblock_def = method;
-					setupblock_def.IsPublic = true;
+					setupblock_def.IsPublic = true; // Make sure the method is callable from the optimized code.
 					break;
 				}
 				if (setupblock_def == null)
-					throw new NotImplementedException ();
+					throw ErrorHelper.CreateError (Options.Application, 99, caller, ins, $"Internal error: could not find the method {Namespaces.ObjCRuntime}.BlockLiteral.SetupBlockImpl. Please file a bug report with a test case (https://bugzilla.xamarin.com).");
 			}
 			return caller.Module.ImportReference (setupblock_def);
 		}
 
-		TypeReference InflateType (GenericInstanceType git, TypeReference type)
+		TypeReference InflateType (TypeReference inflatedGenericType, MethodDefinition openMethod, GenericInstanceType git, TypeReference type)
 		{
-			var gt = type as GenericParameter;
-			if (gt != null)
-				return git.GenericArguments [gt.Position];
-			if (type is TypeSpecification)
-				throw new NotImplementedException ();
-			return type;
+
+			return TypeReferenceExtensions.InflateGenericType (git, type);
 		}
 
-		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition method)
+		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition openMethod)
 		{
 			var git = inflatedDeclaringType as GenericInstanceType;
 			if (git == null)
-				return method;
-			var mr = new MethodReference (method.Name, InflateType (git, method.ReturnType), git);
-			if (method.HasParameters) {
-				for (int i = 0; i < method.Parameters.Count; i++) {
-					var p = new ParameterDefinition (method.Parameters [i].Name, method.Parameters [i].Attributes, InflateType (git, method.Parameters [i].ParameterType));
+				return openMethod;
+			//return TypeReferenceExtensions.MakeMethodReferenceForGenericInstanceType (git, openMethod);
+			var mr = new MethodReference (openMethod.Name, InflateType (inflatedDeclaringType, openMethod, git, openMethod.ReturnType), git);
+			if (openMethod.HasParameters) {
+				for (int i = 0; i < openMethod.Parameters.Count; i++) {
+					var p = new ParameterDefinition (openMethod.Parameters [i].Name, openMethod.Parameters [i].Attributes, InflateType (inflatedDeclaringType, openMethod, git, openMethod.Parameters [i].ParameterType));
 					mr.Parameters.Add (p);
 				}
 			}
 			return mr;
 		}
-
-		bool IsSubclassed (TypeDefinition type, TypeDefinition byType)
-		{
-			if (byType.Is (type.Namespace, type.Name))
-				return true;
-			if (byType.HasNestedTypes) {
-				foreach (var ns in byType.NestedTypes) {
-					if (IsSubclassed (type, ns))
-						return true;
-				}
-			}
-			return false;
-		}
-
-		bool IsSubclassed (TypeDefinition type)
-		{
-			foreach (var a in context.GetAssemblies ()) {
-				foreach (var s in a.MainModule.Types) {
-					if (IsSubclassed (type, s))
-						return true;
-				}
-			}
-			return false;
-		}
-
 	}
 }

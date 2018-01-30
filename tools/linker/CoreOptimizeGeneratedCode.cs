@@ -699,11 +699,13 @@ namespace Xamarin.Linker {
 
 				// Locating the instruction that loads the first argument can be complicated, so we simplify by making a few assumptions:
 				// 1. The instruction immediately before the call instruction (which would load the last argument) is a Push1/Pop0 instruction. 
-				//    This avoids running into trouble when the instruction does something else (it could be a nop for instance, which would throw off the next calculations)
+				//    This avoids running into trouble when the instruction does something else (it could be a any other instruction, which would throw off the next calculations)
 				// 2. We have a whitelist of instructions we know how to calculate the type for, and which we use on the second to last instruction before the call instruction
 
 				// First verify the Push1/Pop0 behavior in point 1.
 				var prev = ins.Previous;
+				while (prev.OpCode.Code == Code.Nop)
+					prev = prev.Previous; // Skip any nops.
 				if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
 					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.{2} in {0} at offset {1} because the previous instruction was unexpected ({3})", caller, ins.Offset, mr.Name, prev));
 					return 0;
@@ -712,17 +714,24 @@ namespace Xamarin.Linker {
 					return 0;
 				}
 
-				var loadTrampolineInstruction = ins.Previous.Previous;
+				var loadTrampolineInstruction = prev.Previous;
+				while (loadTrampolineInstruction.OpCode.Code == Code.Nop)
+					loadTrampolineInstruction = loadTrampolineInstruction.Previous; // Skip any nops.
 
-				// First find the field type of the 'ldsfld' instruction (the first argument to SetupBlockUnsafe)
+				// Then find the type of the previous instruction (the first argument to SetupBlock[Unsafe])
 				var trampolineDelegateType = GetPushedType (caller, loadTrampolineInstruction);
 				if (trampolineDelegateType == null) {
 					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.{2} in {0} at offset {1} because could not determine the type of the delegate type of the first argument (instruction: {3})", caller, ins.Offset, mr.Name, loadTrampolineInstruction));
 					return 0;
 				}
 
+				if (trampolineDelegateType.Is ("System", "Delegate") || trampolineDelegateType.Is ("System", "MulticastDelegate")) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.{2} in {0} because the type of the value passed as the first argument (the trampoline) is {1}, which makes it impossible to compute the block signature.", caller, trampolineDelegateType.FullName, mr.Name));
+					return 0;
+				}
+
 				// Calculate the block signature.
-				bool blockSignature = false;
+				var blockSignature = false;
 				MethodReference userMethod = null;
 
 				// First look for any [UserDelegateType] attributes on the trampoline delegate type.
@@ -767,15 +776,11 @@ namespace Xamarin.Linker {
 		}
 
 		// Returns the type of the value pushed on the stack by the given instruction.
-		// Returns null for unknown instructions, or instructions that don't push anything on the stack.
+		// Returns null for unknown instructions, or for instructions that don't push anything on the stack.
 		TypeReference GetPushedType (MethodDefinition method, Instruction ins)
 		{
 			var index = 0;
 			switch (ins.OpCode.Code) {
-			case Code.Ldloc:
-			case Code.Ldarg:
-				index = (int) ins.Operand;
-				break;
 			case Code.Ldloc_0:
 			case Code.Ldarg_0:
 				index = 0;
@@ -792,12 +797,19 @@ namespace Xamarin.Linker {
 			case Code.Ldarg_3:
 				index = 3;
 				break;
+			case Code.Ldloc:
 			case Code.Ldloc_S:
+				return ((VariableDefinition) ins.Operand).VariableType;
+			case Code.Ldarg:
 			case Code.Ldarg_S:
 				return ((ParameterDefinition) ins.Operand).ParameterType;
 			case Code.Ldfld:
 			case Code.Ldsfld:
 				return ((FieldReference) ins.Operand).FieldType;
+			case Code.Call:
+			case Code.Calli:
+			case Code.Callvirt:
+				return ((MethodReference) ins.Operand).ReturnType;
 			default:
 				return null;
 			}
@@ -808,14 +820,12 @@ namespace Xamarin.Linker {
 			case Code.Ldloc_1:
 			case Code.Ldloc_2:
 			case Code.Ldloc_3:
-			case Code.Ldloc_S:
 				return method.Body.Variables [index].VariableType;
 			case Code.Ldarg:
 			case Code.Ldarg_0:
 			case Code.Ldarg_1:
 			case Code.Ldarg_2:
 			case Code.Ldarg_3:
-			case Code.Ldarg_S:
 				if (method.IsStatic) {
 					return method.Parameters [index].ParameterType;
 				} else if (index == 0) {

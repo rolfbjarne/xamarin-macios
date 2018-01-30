@@ -2361,7 +2361,12 @@ namespace XamCore.Registrar {
 					var type = parameters [i];
 					if (IsByRef (type)) {
 						signature.Append ("^");
-						signature.Append (ToSignature (GetElementType (type), member, ref success));
+						var elementType = GetElementType (type);
+						if (IsNullable (elementType)) {
+							signature.Append (ToSignature (GetNullableType (elementType), member, ref success));
+						} else {
+							signature.Append (ToSignature (elementType, member, ref success));
+						}
 					} else {
 						signature.Append (ToSignature (type, member, ref success));
 					}
@@ -2509,9 +2514,6 @@ namespace XamCore.Registrar {
 					return ToSignature (GetEnumUnderlyingType (type), member, ref success);
 				}
 			}
-
-			if (IsNullable (type))
-				return ToSignature (GetNullableType (type), member, ref success, forProperty);
 
 			if (IsValueType (type))
 				return ValueTypeSignature (type, member, ref success);

@@ -85,7 +85,6 @@ namespace XamCore.ObjCRuntime {
 
 		void SetupBlock (Delegate trampoline, Delegate userDelegate, bool safe)
 		{
-
 			// We need to get the signature of the target method, so that we can compute
 			// the ObjC signature correctly (the generated method that's actually
 			// invoked by native code does not have enough type information to compute
@@ -93,6 +92,9 @@ namespace XamCore.ObjCRuntime {
 			// This attribute might not exist for third-party libraries created
 			// with earlier versions of Xamarin.iOS, so make sure to cope with
 			// the attribute not being available.
+
+			// This logic is mirrored in CoreOptimizeGeneratedCode.ProcessSetupBlock and must be
+			// updated if anything changes here.
 			var userDelegateType = trampoline.GetType ().GetCustomAttribute<UserDelegateTypeAttribute> ()?.UserDelegateType;
 			bool blockSignature;
 			MethodInfo userMethod;

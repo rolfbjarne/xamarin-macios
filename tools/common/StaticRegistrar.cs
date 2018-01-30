@@ -868,6 +868,12 @@ namespace XamCore.Registrar {
 
 		protected override TypeReference GetElementType (TypeReference type)
 		{
+			var ts = type as TypeSpecification;
+			if (ts != null) {
+				// TypeSpecification.GetElementType calls GetElementType on the element type, thus unwinding multiple element types (which we don't want).
+				// By fetching the ElementType property we only unwind one level.
+				return ts.ElementType;
+			}
 			return type.GetElementType ();
 		}
 

@@ -412,24 +412,6 @@ namespace Linker.Shared {
 			block.CleanupBlock ();
 		}
 
-		//[BindingImpl (BindingImplOptions.Optimizable)]
-		//void SetupBlockOptimized_Delegate (Action callback, Delegate block_callback)
-		//{
-		//	BlockLiteral block = new BlockLiteral ();
-		//	block.SetupBlock (block_callback, callback);
-		//	Bindings.Test.CFunctions.x_call_block (ref block);
-		//	block.CleanupBlock ();
-		//}
-
-		//[BindingImpl (BindingImplOptions.Optimizable)]
-		//void SetupBlockOptimized_MulticastDelegate (Action callback, MulticastDelegate block_callback)
-		//{
-		//	BlockLiteral block = new BlockLiteral ();
-		//	block.SetupBlock (block_callback, callback);
-		//	Bindings.Test.CFunctions.x_call_block (ref block);
-		//	block.CleanupBlock ();
-		//}
-
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		void SetupBlockOptimized_SpecificArgument (Action<IntPtr> block_callback, Action callback)
 		{

@@ -1,3 +1,4 @@
+// Tests are common to both mtouch and mmp
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using System.Linq;
 using NUnit.Framework;
 
 using Mono.Cecil;
+
+using Xamarin.Tests;
 
 namespace Xamarin.ApiTest
 {
@@ -18,13 +21,14 @@ namespace Xamarin.ApiTest
 		[TestCase (Profile.watchOS)]
 		[TestCase (Profile.tvOS)]
 #else
-		[TestCase (Profile.something)]
+		[TestCase (Profile.macOSMobile)]
+		[TestCase (Profile.macOSMobile)]
 #endif
 		public void AlwaysOptimizable (Profile profile)
 		{
 			// This test ensures that all methods that call BlockLiteral.SetupBlock[Impl] have an [BindingImpl (BindingImplOptions.Optimizable)] attribute.
 
-			var dll = MTouch.GetBaseLibrary (profile);
+			var dll = Configuration.GetBaseLibrary (profile);
 			var asm = AssemblyDefinition.ReadAssembly (dll);
 
 			var failures = new List<string> ();

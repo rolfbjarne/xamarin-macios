@@ -4,6 +4,10 @@ using Xamarin;
 using NUnit.Framework;
 using System.Text;
 
+using Xamarin.Tests;
+
+using MTouchLinker = Xamarin.Tests.LinkerOption;
+
 namespace Xamarin.Profiler
 {
 	[TestFixture (Profile.iOS)]

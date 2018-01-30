@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace LinkAllTests
 {
 	[Preserve (AllMembers = true)]
-	public class LinkAllTest : BaseLinkAllTest
+	public class LinkAllTest
 	{
 		[Test]
 		public void Existence ()

@@ -680,68 +680,87 @@ namespace Xamarin.Linker {
 			// (which both SetupBlock and SetupBlockUnsafe do), and then rewrite the code to call SetupBlockImpl instead
 			// (which takes the block signature as an argument instead of calculating it). This is required to
 			// remove the dynamic registrar, because calculating the block signature is done in the dynamic registrar.
+			//
+			// This code is a mirror of the code in BlockLiteral.SetupBlock (to calculate the block signature).
 			var mr = ins.Operand as MethodReference;
 			if (!mr.DeclaringType.Is (Namespaces.ObjCRuntime, "BlockLiteral"))
 				return 0;
 
 			string signature = null;
-			TypeReference delegateType = null;
+			TypeReference trampolineDelegateType = null;
+			TypeReference callbackDelegateType = null;
 			try {
-				var prev = ins.Previous;
-				if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's pop stack behavior was {3} (expected Pop0).", caller, ins.Offset, prev.Offset, prev.OpCode.StackBehaviourPop));
-					return 0;
-				} else if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's push stack behavior was {3} (expected Push1).", caller, ins.Offset, prev.Offset, prev.OpCode.StackBehaviourPush));
-					return 0;
-				}
-				prev = prev.Previous;
+				// Example sequence:
+				//
+				// ldsfld ObjCRuntime.Trampolines/DJSContextExceptionHandler ObjCRuntime.Trampolines/SDJSContextExceptionHandler::Handler
+				// ldarg.1
+				// call System.Void ObjCRuntime.BlockLiteral::SetupBlockUnsafe(System.Delegate, System.Delegate)
+				// 
+				var loadCallbackInstruction = ins.Previous;
+				var loadTrampolineInstruction = loadCallbackInstruction.Previous;
 
-				if (prev.OpCode.Code == Code.Ldsfld) {
-					delegateType = ((FieldReference) prev.Operand).Resolve ().FieldType;
+				// First find the field type of the 'ldsfld' instruction (the first argument to SetupBlockUnsafe)
+				if (loadTrampolineInstruction.OpCode.Code == Code.Ldsfld) {
+					trampolineDelegateType = ((FieldReference) loadTrampolineInstruction.Operand).Resolve ().FieldType;
 				} else {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because expected an earlier (at index {2}) instruction to be Ldsfld, but it was `{3}`.", caller, ins.Offset, prev.Offset, prev));
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because expected an earlier (at index {2}) instruction to be Ldsfld, but it was `{3}`.", caller, ins.Offset, loadTrampolineInstruction.Offset, loadTrampolineInstruction));
 					return 0;
 				}
 
-				// Calculate the block signature
-				TypeReference userDelegateType = null;
-				var delegateTypeDefinition = delegateType.Resolve ();
-				foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
-					var attribType = attrib.Constructor.DeclaringType;
-					if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
-						continue;
-					userDelegateType = attrib.ConstructorArguments [0].Value as TypeReference;
-					break;
+				// Then lookup the type of the 'ldarg.1' instruction (the last argument to SetupBlockUnsafe)
+				if (loadCallbackInstruction.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's pop stack behavior was {3} (expected Pop0).", caller, ins.Offset, loadCallbackInstruction.Offset, loadCallbackInstruction.OpCode.StackBehaviourPop));
+					return 0;
+				} else if (loadCallbackInstruction.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's push stack behavior was {3} (expected Push1).", caller, ins.Offset, loadCallbackInstruction.Offset, loadCallbackInstruction.OpCode.StackBehaviourPush));
+					return 0;
+				} else {
+					callbackDelegateType = GetPushedType (caller, loadCallbackInstruction);
 				}
+
+
+				// Calculate the block signature.
 				bool blockSignature = false;
 				MethodReference userMethod = null;
+
+				// First look for any [UserDelegateType] attributes on the trampoline delegate. This value trumps any other.
+				var userDelegateType = GetUserDelegateType (trampolineDelegateType);
 				if (userDelegateType != null) {
-					var userDelegateTypeDefinition = userDelegateType.Resolve ();
-					MethodDefinition userMethodDefinition = null;
-					foreach (var method in userDelegateTypeDefinition.Methods) {
-						if (method.Name != "Invoke")
-							continue;
-						userMethodDefinition = method;
-						break;
+					var userMethodDefinition = GetDelegateInvoke (userDelegateType);
+					if (userMethodDefinition != null) {
+						blockSignature = true;
+						userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+					} else {
+						Driver.Log (4, "Could not find the Invoke method of the delegate {0}", userDelegateType);
 					}
-					if (userMethodDefinition == null)
-						throw new NotImplementedException ();
-					blockSignature = true;
-					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
-				} else if (delegateType.Is ("System", "Action`1") && (delegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
-					// This is a quite common signature, so just hardcode it.
-					signature = "v@?";
-				} else {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because no [UserDelegateType] attribute could be found on {2}.", caller, ins.Offset, delegateType.FullName));
+				}
+
+				// Deduce the signature from the callback given by the code.
+				if (userMethod == null && trampolineDelegateType != null) {
+					var userMethodDefinition = GetDelegateInvoke (trampolineDelegateType);
+					if (userMethodDefinition != null) {
+						blockSignature = false;
+						userMethod = InflateMethod (trampolineDelegateType, userMethodDefinition);
+					} else {
+						Driver.Log (4, "Could not find the Invoke method of the delegate {0}", callbackDelegateType);
+					}
+				} 
+
+				//// This is a quite common signature, so just hardcode it.
+				//if (userMethod == null && trampolineDelegateType.Is ("System", "Action`1") && (trampolineDelegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
+				//	signature = "v@?";
+				//}
+
+				// No luck finding the signature, so give up.
+				if (userMethod == null) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because no [UserDelegateType] attribute could be found on {2}.", caller, ins.Offset, trampolineDelegateType.FullName));
 					return 0;
 				}
-				if (signature == null) {
-					var parameters = new TypeReference [userMethod.Parameters.Count];
-					for (int p = 0; p < parameters.Length; p++)
-						parameters [p] = userMethod.Parameters [p].ParameterType;
-					signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, userMethod.Resolve (), isBlockSignature: blockSignature);
-				}
+
+				var parameters = new TypeReference [userMethod.Parameters.Count];
+				for (int p = 0; p < parameters.Length; p++)
+					parameters [p] = userMethod.Parameters [p].ParameterType;
+				signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, userMethod.Resolve (), isBlockSignature: blockSignature);
 			} catch (Exception e) {
 				ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, e, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1}: {2}.", caller, ins.Offset, e.Message));
 				return 0;
@@ -758,6 +777,88 @@ namespace Xamarin.Linker {
 
 			//Driver.Log (4, "Optimized call to BlockLiteral.SetupBlock in {0} at offset {1} with delegate type {2} and signature {3}", caller, ins.Offset, delegateType.FullName, signature);
 			return 2;
+		}
+
+		// Find the value of the [UserDelegateType] attribute on the specified delegate
+		TypeReference GetUserDelegateType (TypeReference delegateType)
+		{
+			var delegateTypeDefinition = delegateType.Resolve ();
+			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
+				var attribType = attrib.AttributeType;
+				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
+					continue;
+				return attrib.ConstructorArguments [0].Value as TypeReference;
+			}
+			return null;
+		}
+
+		MethodDefinition GetDelegateInvoke (TypeReference delegateType)
+		{
+			var td = delegateType.Resolve ();
+			foreach (var method in td.Methods) {
+				if (method.Name == "Invoke")
+					return method;
+			}
+			return null;
+		}
+
+		// Returns the type of the value pushed on the stack by the given instruction.
+		// Returns null for unknown instructions, or instructions that don't push anything on the stack.
+		TypeReference GetPushedType (MethodDefinition method, Instruction ins)
+		{
+			var index = 0;
+			switch (ins.OpCode.Code) {
+			case Code.Ldloc:
+			case Code.Ldarg:
+				index = (int) ins.Operand;
+				break;
+			case Code.Ldloc_0:
+			case Code.Ldarg_0:
+				index = 0;
+				break;
+			case Code.Ldloc_1:
+			case Code.Ldarg_1:
+				index = 1;
+				break;
+			case Code.Ldloc_2:
+			case Code.Ldarg_2:
+				index = 2;
+				break;
+			case Code.Ldloc_3:
+			case Code.Ldarg_3:
+				index = 3;
+				break;
+			case Code.Ldloc_S:
+			case Code.Ldarg_S:
+				return ((ParameterDefinition) ins.Operand).ParameterType;
+			default:
+				return null;
+			}
+
+			switch (ins.OpCode.Code) {
+			case Code.Ldloc:
+			case Code.Ldloc_0:
+			case Code.Ldloc_1:
+			case Code.Ldloc_2:
+			case Code.Ldloc_3:
+			case Code.Ldloc_S:
+				return method.Body.Variables [index].VariableType;
+			case Code.Ldarg:
+			case Code.Ldarg_0:
+			case Code.Ldarg_1:
+			case Code.Ldarg_2:
+			case Code.Ldarg_3:
+			case Code.Ldarg_S:
+				if (method.IsStatic) {
+					return method.Parameters [index].ParameterType;
+				} else if (index == 0) {
+					return method.DeclaringType;
+				} else {
+					return method.Parameters [index - 1].ParameterType;
+				}
+			default:
+				return null;
+			}
 		}
 
 		MethodDefinition setupblock_def;

@@ -687,69 +687,56 @@ namespace Xamarin.Linker {
 				return 0;
 
 			string signature = null;
-			TypeReference trampolineDelegateType = null;
-			TypeReference callbackDelegateType = null;
 			try {
+				// We need to figure out the type of the first argument to the call to SetupBlock[Impl].
+				// 
 				// Example sequence:
 				//
 				// ldsfld ObjCRuntime.Trampolines/DJSContextExceptionHandler ObjCRuntime.Trampolines/SDJSContextExceptionHandler::Handler
 				// ldarg.1
 				// call System.Void ObjCRuntime.BlockLiteral::SetupBlockUnsafe(System.Delegate, System.Delegate)
 				// 
-				var loadCallbackInstruction = ins.Previous;
-				var loadTrampolineInstruction = loadCallbackInstruction.Previous;
+
+				// Locating the instruction that loads the first argument can be complicated, so we simplify by making a few assumptions:
+				// 1. The instruction immediately before the call instruction (which would load the last argument) is a Push1/Pop0 instruction. 
+				//    This avoids running into trouble when the instruction does something else (it could be a nop for instance, which would throw off the next calculations)
+				// 2. We have a whitelist of instructions we know how to calculate the type for, and which we use on the second to last instruction before the call instruction
+
+				// First verify the Push1/Pop0 behavior in point 1.
+				var prev = ins.Previous;
+				if (prev.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.{2} in {0} at offset {1} because the previous instruction was unexpected ({3})", caller, ins.Offset, mr.Name, prev));
+					return 0;
+				} else if (prev.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.{2} in {0} at offset {1} because the previous instruction was unexpected ({3})", caller, ins.Offset, mr.Name, prev));
+					return 0;
+				}
+
+				var loadTrampolineInstruction = ins.Previous.Previous;
 
 				// First find the field type of the 'ldsfld' instruction (the first argument to SetupBlockUnsafe)
-				if (loadTrampolineInstruction.OpCode.Code == Code.Ldsfld) {
-					trampolineDelegateType = ((FieldReference) loadTrampolineInstruction.Operand).Resolve ().FieldType;
-				} else {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because expected an earlier (at index {2}) instruction to be Ldsfld, but it was `{3}`.", caller, ins.Offset, loadTrampolineInstruction.Offset, loadTrampolineInstruction));
+				var trampolineDelegateType = GetPushedType (caller, loadTrampolineInstruction);
+				if (trampolineDelegateType == null) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.{2} in {0} at offset {1} because could not determine the type of the delegate type of the first argument (instruction: {3})", caller, ins.Offset, mr.Name, loadTrampolineInstruction));
 					return 0;
 				}
-
-				// Then lookup the type of the 'ldarg.1' instruction (the last argument to SetupBlockUnsafe)
-				if (loadCallbackInstruction.OpCode.StackBehaviourPop != StackBehaviour.Pop0) {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's pop stack behavior was {3} (expected Pop0).", caller, ins.Offset, loadCallbackInstruction.Offset, loadCallbackInstruction.OpCode.StackBehaviourPop));
-					return 0;
-				} else if (loadCallbackInstruction.OpCode.StackBehaviourPush != StackBehaviour.Push1) {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (Options.Application, 2106, caller, ins, "Could not optimize the call to BlockLiteral.SetupBlock in {0} at offset {1} because an earlier (at index {2}) instruction's push stack behavior was {3} (expected Push1).", caller, ins.Offset, loadCallbackInstruction.Offset, loadCallbackInstruction.OpCode.StackBehaviourPush));
-					return 0;
-				} else {
-					callbackDelegateType = GetPushedType (caller, loadCallbackInstruction);
-				}
-
 
 				// Calculate the block signature.
 				bool blockSignature = false;
 				MethodReference userMethod = null;
 
-				// First look for any [UserDelegateType] attributes on the trampoline delegate. This value trumps any other.
+				// First look for any [UserDelegateType] attributes on the trampoline delegate type.
 				var userDelegateType = GetUserDelegateType (trampolineDelegateType);
 				if (userDelegateType != null) {
 					var userMethodDefinition = GetDelegateInvoke (userDelegateType);
-					if (userMethodDefinition != null) {
-						blockSignature = true;
-						userMethod = InflateMethod (userDelegateType, userMethodDefinition);
-					} else {
-						Driver.Log (4, "Could not find the Invoke method of the delegate {0}", userDelegateType);
-					}
-				}
-
-				// Deduce the signature from the callback given by the code.
-				if (userMethod == null && trampolineDelegateType != null) {
+					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+					blockSignature = true;
+				} else {
+					// Couldn't find a [UserDelegateType] attribute, use the type of the actual trampoline instead.
 					var userMethodDefinition = GetDelegateInvoke (trampolineDelegateType);
-					if (userMethodDefinition != null) {
-						blockSignature = false;
-						userMethod = InflateMethod (trampolineDelegateType, userMethodDefinition);
-					} else {
-						Driver.Log (4, "Could not find the Invoke method of the delegate {0}", callbackDelegateType);
-					}
-				} 
-
-				//// This is a quite common signature, so just hardcode it.
-				//if (userMethod == null && trampolineDelegateType.Is ("System", "Action`1") && (trampolineDelegateType is GenericInstanceType git) && git.GenericArguments [0].Is ("System", "IntPtr")) {
-				//	signature = "v@?";
-				//}
+					userMethod = InflateMethod (trampolineDelegateType, userMethodDefinition);
+					blockSignature = false;
+				}
 
 				// No luck finding the signature, so give up.
 				if (userMethod == null) {
@@ -777,29 +764,6 @@ namespace Xamarin.Linker {
 
 			//Driver.Log (4, "Optimized call to BlockLiteral.SetupBlock in {0} at offset {1} with delegate type {2} and signature {3}", caller, ins.Offset, delegateType.FullName, signature);
 			return 2;
-		}
-
-		// Find the value of the [UserDelegateType] attribute on the specified delegate
-		TypeReference GetUserDelegateType (TypeReference delegateType)
-		{
-			var delegateTypeDefinition = delegateType.Resolve ();
-			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
-				var attribType = attrib.AttributeType;
-				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
-					continue;
-				return attrib.ConstructorArguments [0].Value as TypeReference;
-			}
-			return null;
-		}
-
-		MethodDefinition GetDelegateInvoke (TypeReference delegateType)
-		{
-			var td = delegateType.Resolve ();
-			foreach (var method in td.Methods) {
-				if (method.Name == "Invoke")
-					return method;
-			}
-			return null;
 		}
 
 		// Returns the type of the value pushed on the stack by the given instruction.
@@ -831,6 +795,9 @@ namespace Xamarin.Linker {
 			case Code.Ldloc_S:
 			case Code.Ldarg_S:
 				return ((ParameterDefinition) ins.Operand).ParameterType;
+			case Code.Ldfld:
+			case Code.Ldsfld:
+				return ((FieldReference) ins.Operand).FieldType;
 			default:
 				return null;
 			}
@@ -861,6 +828,29 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		// Find the value of the [UserDelegateType] attribute on the specified delegate
+		TypeReference GetUserDelegateType (TypeReference delegateType)
+		{
+			var delegateTypeDefinition = delegateType.Resolve ();
+			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
+				var attribType = attrib.AttributeType;
+				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
+					continue;
+				return attrib.ConstructorArguments [0].Value as TypeReference;
+			}
+			return null;
+		}
+
+		MethodDefinition GetDelegateInvoke (TypeReference delegateType)
+		{
+			var td = delegateType.Resolve ();
+			foreach (var method in td.Methods) {
+				if (method.Name == "Invoke")
+					return method;
+			}
+			return null;
+		}
+
 		MethodDefinition setupblock_def;
 		MethodReference GetBlockSetupImpl (MethodDefinition caller, Instruction ins)
 		{
@@ -879,22 +869,18 @@ namespace Xamarin.Linker {
 			return caller.Module.ImportReference (setupblock_def);
 		}
 
-		TypeReference InflateType (TypeReference inflatedGenericType, MethodDefinition openMethod, GenericInstanceType git, TypeReference type)
-		{
-
-			return TypeReferenceExtensions.InflateGenericType (git, type);
-		}
-
 		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition openMethod)
 		{
 			var git = inflatedDeclaringType as GenericInstanceType;
 			if (git == null)
 				return openMethod;
-			//return TypeReferenceExtensions.MakeMethodReferenceForGenericInstanceType (git, openMethod);
-			var mr = new MethodReference (openMethod.Name, InflateType (inflatedDeclaringType, openMethod, git, openMethod.ReturnType), git);
-			if (openMethod.HasParameters) {
+
+			var inflatedReturnType = TypeReferenceExtensions.InflateGenericType (git, openMethod.ReturnType);
+			var mr = new MethodReference (openMethod.Name, inflatedReturnType, git);
+			if (openMethod.HasParameters) { 
 				for (int i = 0; i < openMethod.Parameters.Count; i++) {
-					var p = new ParameterDefinition (openMethod.Parameters [i].Name, openMethod.Parameters [i].Attributes, InflateType (inflatedDeclaringType, openMethod, git, openMethod.Parameters [i].ParameterType));
+					var inflatedParameterType = TypeReferenceExtensions.InflateGenericType (git, openMethod.Parameters [i].ParameterType);
+					var p = new ParameterDefinition (openMethod.Parameters [i].Name, openMethod.Parameters [i].Attributes, inflatedParameterType);
 					mr.Parameters.Add (p);
 				}
 			}

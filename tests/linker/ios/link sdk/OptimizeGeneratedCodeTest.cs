@@ -307,6 +307,68 @@ namespace Linker.Shared {
 			if (IntPtr.Size <= 3)
 				throw new NUnit.Framework.Internal.NUnitException ("6");
 		}
-#endif
+
+		[Test]
+		public void SetupBlockTest ()
+		{
+			const int iterations = 50000;
+
+			var queue = new CoreFoundation.DispatchQueue ("Queue", false);
+			var qHandle = queue.Handle;
+
+			// Run unoptimized
+			var unoptimizedWatch = System.Diagnostics.Stopwatch.StartNew ();
+			var unoptimizedCounter = 0;
+			for (var i = 0; i < iterations; i++)
+				SetupBlockUnoptimized (qHandle, () => unoptimizedCounter++);
+			unoptimizedWatch.Stop ();
+			Assert.AreEqual (iterations, unoptimizedCounter, "Unoptimized Counter");
+
+			// Run optimized
+			var optimizedWatch = System.Diagnostics.Stopwatch.StartNew ();
+			var optimizedCounter = 0;
+			for (var i = 0; i < iterations; i++)
+				SetupBlockOptimized (qHandle, () => optimizedCounter++);
+			optimizedWatch.Stop ();
+			Assert.AreEqual (iterations, optimizedCounter, "Optimized Counter");
+
+
+			Console.WriteLine ("Optimized: {0} ms", optimizedWatch.ElapsedMilliseconds);
+			Console.WriteLine ("Unoptimized: {0} ms", unoptimizedWatch.ElapsedMilliseconds);
+			Console.WriteLine ("Speedup: {0}x", unoptimizedWatch.ElapsedMilliseconds / (double) optimizedWatch.ElapsedMilliseconds);
+			Assert.That (optimizedWatch.ElapsedTicks, Is.LessThan (unoptimizedWatch.ElapsedTicks / 10), "At least 10x speedup");
+		}
+
+
+		[DllImport (Constants.libcLibrary)]
+		extern static void dispatch_sync (IntPtr queue, IntPtr block);
+
+		[MonoPInvokeCallback (typeof (Action<IntPtr>))]
+		unsafe static void BlockCallback (IntPtr block)
+		{
+			var descriptor = (BlockLiteral*) block;
+			var del = (Action) (descriptor->Target);
+			del ();
+		}
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		unsafe void SetupBlockOptimized (IntPtr queue, Action callback)
+		{
+			BlockLiteral block = new BlockLiteral ();
+			Action<IntPtr> action = BlockCallback;
+			block.SetupBlock (action, callback);
+			dispatch_sync (queue, (IntPtr) (BlockLiteral *) &block);
+			block.CleanupBlock ();
+		}
+
+		unsafe void SetupBlockUnoptimized (IntPtr queue, Action callback)
+		{
+			BlockLiteral block = new BlockLiteral ();
+			Action<IntPtr> action = BlockCallback;
+			block.SetupBlock (action, callback);
+			dispatch_sync (queue, (IntPtr) (BlockLiteral*) & block);
+			block.CleanupBlock ();
+		}
+#endif // LINKALL
 	}
 }

@@ -29,13 +29,6 @@ namespace Xamarin
 		Ignore,
 	}
 
-	public enum MTouchRegistrar
-	{
-		Unspecified,
-		Dynamic,
-		Static,
-	}
-
 	public enum MTouchBitcode
 	{
 		Unspecified,
@@ -44,69 +37,35 @@ namespace Xamarin
 		Marker,
 	}
 
-	[Flags]
-	enum I18N
-	{
-		None = 0,
-
-		CJK = 1,
-		MidEast = 2,
-		Other = 4,
-		Rare = 8,
-		West = 16,
-
-		All = CJK | MidEast | Other | Rare | West,
-		Base
-	}
-
 	class MTouchTool : BundlerTool, IDisposable
 	{
 #pragma warning disable 649
 		// These map directly to mtouch options
 		public bool? NoSign;
-		public bool? Debug;
 		public bool? FastDev;
 		public bool? Dlsym;
-		public string Sdk;
-		public string TargetVer;
-		public string [] References;
 		public string Executable;
-		public string TargetFramework;
-		public string Abi;
 		public string AppPath;
 		public string Device; // --device
 		public MTouchSymbolMode SymbolMode;
 		public bool? NoFastSim;
-		public MTouchRegistrar Registrar;
-		public I18N I18N;
-		public bool? Extension;
 		public List<MTouchTool> AppExtensions = new List<MTouchTool> ();
 		public List<string> Frameworks = new List<string> ();
-		public string HttpMessageHandler;
 		public bool? PackageMdb;
 		public bool? MSym;
 		public bool? DSym;
 		public bool? NoStrip;
 		public string NoSymbolStrip;
 		public string Mono;
-		public string GccFlags;
 
 		// These are a bit smarter
-		public bool NoPlatformAssemblyReference;
 		public List<string> AssemblyBuildTargets = new List<string> ();
 		static XmlDocument device_list_cache;
 		public string LLVMOptimizations;
-		public string [] CustomArguments; // Sometimes you want to pass invalid arguments to mtouch, in this case this array is used. No processing will be done, if quotes are required, they must be added to the arguments in the array.
-		public int [] NoWarn; // null array: no passed to mtouch. empty array: pass --nowarn (which means disable all warnings).
-		public int [] WarnAsError; // null array: no passed to mtouch. empty array: pass --warnaserror (which means makes all warnings errors).
 		public MTouchBitcode Bitcode;
 		public string AotArguments;
 		public string AotOtherArguments;
-		public string [] LinkSkip;
-		public string [] XmlDefinitions;
-		public bool? Profiling;
 		public string SymbolList;
-		public string ResponseFile;
 
 #pragma warning restore 649
 
@@ -227,12 +186,42 @@ namespace Xamarin
 			Assert.IsEmpty (failed, message);
 		}
 
+		protected override string GetDefaultAbi()
+		{
+			var isDevice = false;
+
+			switch (action) {
+			case MTouchAction.None:
+				break;
+			case MTouchAction.BuildDev:
+				isDevice = true;
+				break;
+			case MTouchAction.BuildSim:
+				isDevice = false;
+				break;
+			case MTouchAction.LaunchSim:
+				isDevice = false;
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+
+			switch (Profile) {
+			case Profile.iOS:
+				return null; // not required
+			case Profile.tvOS:
+				return isDevice ? "arm64" : "x86_64";
+			case Profile.watchOS:
+				return isDevice ? "armv7k" : "i386";
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
 		MTouchAction action;
 		protected override void BuildArguments (StringBuilder sb)
 		{
 			base.BuildArguments (sb);
-
-			var isDevice = false;
 
 			switch (action) {
 			case MTouchAction.None:
@@ -241,17 +230,14 @@ namespace Xamarin
 				MTouch.AssertDeviceAvailable ();
 				if (AppPath == null)
 					throw new Exception ("No AppPath specified.");
-				isDevice = true;
 				sb.Append (" --dev ").Append (StringUtils.Quote (AppPath));
 				break;
 			case MTouchAction.BuildSim:
-				isDevice = false;
 				if (AppPath == null)
 					throw new Exception ("No AppPath specified.");
 				sb.Append (" --sim ").Append (StringUtils.Quote (AppPath));
 				break;
 			case MTouchAction.LaunchSim:
-				isDevice = false;
 				if (AppPath == null)
 					throw new Exception ("No AppPath specified.");
 				sb.Append (" --launchsim ").Append (StringUtils.Quote (AppPath));
@@ -259,25 +245,6 @@ namespace Xamarin
 			default:
 				throw new NotImplementedException ();
 			}
-
-			sb.Append (" ").Append (GetVerbosity ());
-
-			if (Sdk == None) {
-				// do nothing	
-			} else if (!string.IsNullOrEmpty (Sdk)) {
-				sb.Append (" --sdk ").Append (Sdk);
-			} else {
-				sb.Append (" --sdk ").Append (MTouch.GetSdkVersion (Profile));
-			}
-
-			if (TargetVer == None) {
-				// do nothing
-			} else if (!string.IsNullOrEmpty (TargetVer)) {
-				sb.Append (" --targetver ").Append (TargetVer);
-			}
-
-			if (Debug.HasValue && Debug.Value)
-				sb.Append (" --debug");
 
 			if (FastDev.HasValue && FastDev.Value)
 				sb.Append (" --fastdev");
@@ -296,9 +263,6 @@ namespace Xamarin
 				}
 			}
 
-			if (Profiling.HasValue)
-				sb.Append (" --profiling:").Append (Profiling.Value ? "true" : "false");
-
 			if (!string.IsNullOrEmpty (SymbolList))
 				sb.Append (" --symbollist=").Append (StringUtils.Quote (SymbolList));
 
@@ -308,9 +272,6 @@ namespace Xamarin
 			if (DSym.HasValue)
 				sb.Append (" --dsym:").Append (DSym.Value ? "true" : "false");
 
-			if (Extension == true)
-				sb.Append (" --extension");
-
 			foreach (var appext in AppExtensions)
 				sb.Append (" --app-extension ").Append (StringUtils.Quote (appext.AppPath));
 
@@ -319,62 +280,12 @@ namespace Xamarin
 
 			if (!string.IsNullOrEmpty (Mono))
 				sb.Append (" --mono:").Append (StringUtils.Quote (Mono));
-
-			if (!string.IsNullOrEmpty (GccFlags))
-				sb.Append (" --gcc_flags ").Append (StringUtils.Quote (GccFlags));
-
-			if (!string.IsNullOrEmpty (HttpMessageHandler))
-				sb.Append (" --http-message-handler=").Append (StringUtils.Quote (HttpMessageHandler));
-
+			
 			if (Dlsym.HasValue)
 				sb.Append (" --dlsym:").Append (Dlsym.Value ? "true" : "false");
-
-			if (References != null) {
-				foreach (var r in References)
-					sb.Append (" -r:").Append (StringUtils.Quote (r));
-			}
-
+			
 			if (!string.IsNullOrEmpty (Executable))
 				sb.Append (" --executable ").Append (StringUtils.Quote (Executable));
-
-			if (TargetFramework == None) {
-				// do nothing
-			} else if (!string.IsNullOrEmpty (TargetFramework)) {
-				sb.Append (" --target-framework ").Append (TargetFramework);
-			} else if (!NoPlatformAssemblyReference) {
-				// make the implicit default the way tests have been running until now, and at the same time the very minimum to make apps build.
-				switch (Profile) {
-				case Profile.iOS:
-					sb.Append (" -r:").Append (StringUtils.Quote (Configuration.XamarinIOSDll));
-					break;
-				case Profile.tvOS:
-				case Profile.watchOS:
-					sb.Append (" --target-framework ").Append (MTouch.GetTargetFramework (Profile));
-					sb.Append (" -r:").Append (StringUtils.Quote (MTouch.GetBaseLibrary (Profile)));
-					break;
-				default:
-					throw new NotImplementedException ();
-				}
-			}
-
-			if (Abi == None) {
-				// add nothing
-			} else if (!string.IsNullOrEmpty (Abi)) {
-				sb.Append (" --abi ").Append (Abi);
-			} else {
-				switch (Profile) {
-				case Profile.iOS:
-					break; // not required
-				case Profile.tvOS:
-					sb.Append (isDevice ? " --abi arm64" : " --abi x86_64");
-					break;
-				case Profile.watchOS:
-					sb.Append (isDevice ? " --abi armv7k" : " --abi i386");
-					break;
-				default:
-					throw new NotImplementedException ();
-				}
-			}
 
 			switch (SymbolMode) {
 			case MTouchSymbolMode.Ignore:
@@ -398,71 +309,12 @@ namespace Xamarin
 			if (NoFastSim.HasValue && NoFastSim.Value)
 				sb.Append (" --nofastsim");
 
-			switch (Registrar) {
-			case MTouchRegistrar.Unspecified:
-				break;
-			case MTouchRegistrar.Dynamic:
-				sb.Append (" --registrar:dynamic");
-				break;
-			case MTouchRegistrar.Static:
-				sb.Append (" --registrar:static");
-				break;
-			default:
-				throw new NotImplementedException ();
-			}
-
-			if (I18N != I18N.None) {
-				sb.Append (" --i18n ");
-				int count = 0;
-				if ((I18N & I18N.CJK) == I18N.CJK)
-					sb.Append (count++ == 0 ? string.Empty : ",").Append ("cjk");
-				if ((I18N & I18N.MidEast) == I18N.MidEast)
-					sb.Append (count++ == 0 ? string.Empty : ",").Append ("mideast");
-				if ((I18N & I18N.Other) == I18N.Other)
-					sb.Append (count++ == 0 ? string.Empty : ",").Append ("other");
-				if ((I18N & I18N.Rare) == I18N.Rare)
-					sb.Append (count++ == 0 ? string.Empty : ",").Append ("rare");
-				if ((I18N & I18N.West) == I18N.West)
-					sb.Append (count++ == 0 ? string.Empty : ",").Append ("west");
-			}
-
-			if (!string.IsNullOrEmpty (Cache))
-				sb.Append (" --cache ").Append (StringUtils.Quote (Cache));
-
 			if (!string.IsNullOrEmpty (Device))
 				sb.Append (" --device:").Append (StringUtils.Quote (Device));
 
 			if (!string.IsNullOrEmpty (LLVMOptimizations))
 				sb.Append (" --llvm-opt=").Append (StringUtils.Quote (LLVMOptimizations));
-
-			if (CustomArguments != null) {
-				foreach (var arg in CustomArguments) {
-					sb.Append (" ").Append (arg);
-				}
-			}
-
-			if (NoWarn != null) {
-				if (NoWarn.Length > 0) {
-					sb.Append (" --nowarn:");
-					foreach (var code in NoWarn)
-						sb.Append (code).Append (',');
-					sb.Length--;
-				} else {
-					sb.Append (" --nowarn");
-				}
-			}
-
-			if (WarnAsError != null) {
-				if (WarnAsError.Length > 0) {
-					sb.Append (" --warnaserror:");
-					foreach (var code in WarnAsError)
-						sb.Append (code).Append (',');
-					sb.Length--;
-				} else {
-					sb.Append (" --warnaserror");
-				}
-			}
-
+			
 			if (Bitcode != MTouchBitcode.Unspecified)
 				sb.Append (" --bitcode:").Append (Bitcode.ToString ().ToLower ());
 
@@ -474,19 +326,6 @@ namespace Xamarin
 
 			if (!string.IsNullOrEmpty (AotOtherArguments))
 				sb.Append (" --aot-options:").Append (StringUtils.Quote (AotOtherArguments));
-
-			if (LinkSkip?.Length > 0) {
-				foreach (var ls in LinkSkip)
-					sb.Append (" --linkskip:").Append (StringUtils.Quote (ls));
-			}
-
-			if (XmlDefinitions?.Length > 0) {
-				foreach (var xd in XmlDefinitions)
-					sb.Append (" --xml:").Append (StringUtils.Quote (xd));
-			}
-
-			if (!string.IsNullOrEmpty (ResponseFile))
-				sb.Append (" @").Append (StringUtils.Quote (ResponseFile));
 		}
 
 		XmlDocument FetchDeviceList (bool allowCache = true)

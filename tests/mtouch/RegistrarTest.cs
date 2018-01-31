@@ -10,6 +10,7 @@ using Xamarin.Utils;
 using NUnit.Framework;
 
 using MTouchLinker = Xamarin.Tests.LinkerOption;
+using MTouchRegistrar = Xamarin.Tests.RegistrarOption;
 
 namespace Xamarin
 {

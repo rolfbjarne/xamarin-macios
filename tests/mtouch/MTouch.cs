@@ -14,6 +14,7 @@ using Xamarin.Tests;
 using NUnit.Framework;
 
 using MTouchLinker = Xamarin.Tests.LinkerOption;
+using MTouchRegistrar = Xamarin.Tests.RegistrarOption;
 
 namespace Xamarin.Tests {
 	static class TestTarget {
@@ -1789,16 +1790,7 @@ public class TestApp {
 
 		public static string GetTargetFramework (Profile profile)
 		{
-			switch (profile) {
-			case Profile.iOS:
-				return "Xamarin.iOS,v1.0";
-			case Profile.tvOS:
-				return "Xamarin.TVOS,v1.0";
-			case Profile.watchOS:
-				return "Xamarin.WatchOS,v1.0";
-			default:
-				throw new NotImplementedException ();
-			}
+			return Configuration.GetTargetFramework (profile);
 		}
 
 		public static string GetDeviceArchitecture (Profile profile)
@@ -1878,16 +1870,7 @@ public class TestApp {
 
 		public static string GetSdkVersion (Profile profile)
 		{
-			switch (profile) {
-			case Profile.iOS:
-				return Configuration.sdk_version;
-			case Profile.tvOS:
-				return Configuration.tvos_sdk_version;
-			case Profile.watchOS:
-				return Configuration.watchos_sdk_version;
-			default:
-				throw new NotImplementedException ();
-			}
+			return Configuration.GetSdkVersion (profile);
 		}
 
 		[Test]

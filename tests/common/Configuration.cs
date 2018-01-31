@@ -410,6 +410,44 @@ namespace Xamarin.Tests
 			}
 		}
 
+		public static string GetTargetFramework (Profile profile)
+		{
+			switch (profile) {
+			case Profile.iOS:
+				return "Xamarin.iOS,v1.0";
+			case Profile.tvOS:
+				return "Xamarin.TVOS,v1.0";
+			case Profile.watchOS:
+				return "Xamarin.WatchOS,v1.0";
+			case Profile.macOSMobile:
+				return "Xamarin.Mac,Version=v2.0,Profile=Mobile";
+			case Profile.macOSFull:
+				return "Xamarin.Mac,Version=v4.5,Profile=Full";
+			case Profile.macOSSystem:
+				return "Xamarin.Mac,Version=v4.5,Profile=System";
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public static string GetSdkVersion (Profile profile)
+		{
+			switch (profile) {
+			case Profile.iOS:
+				return Configuration.sdk_version;
+			case Profile.tvOS:
+				return Configuration.tvos_sdk_version;
+			case Profile.watchOS:
+				return Configuration.watchos_sdk_version;
+			case Profile.macOSFull:
+			case Profile.macOSMobile:
+			case Profile.macOSSystem:
+				return Configuration.macos_sdk_version;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
 		public static string GetCompiler (Profile profile, StringBuilder args, bool use_csc = false)
 		{
 			args.Append (" -lib:").Append (Path.GetDirectoryName (GetBaseLibrary (profile))).Append (' ');

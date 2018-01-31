@@ -1615,7 +1615,9 @@ namespace Xamarin.Bundler {
 						var macho_file = Path.Combine (targetPath, Path.GetFileNameWithoutExtension (framework_src));
 						var macho_info = new FileInfo (macho_file);
 						var macho_last_write_time = macho_info.LastWriteTimeUtc; // this returns a date in the 17th century if the file doesn't exist.
+						var watch = System.Diagnostics.Stopwatch.StartNew ();
 						UpdateDirectory (framework_src, Path.GetDirectoryName (targetPath));
+						Console.WriteLine ("UpdateDirectory in {0}ms", watch.ElapsedMilliseconds);
 						if (IsDeviceBuild) {
 							// Remove architectures we don't care about.
 							MachO.SelectArchitectures (macho_file, AllArchitectures);

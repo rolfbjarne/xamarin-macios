@@ -20,14 +20,6 @@ namespace Xamarin
 		LaunchSim,
 	}
 
-	public enum MTouchLinker
-	{
-		Unspecified,
-		LinkAll,
-		LinkSdk,
-		DontLink,
-	}
-
 	public enum MTouchSymbolMode
 	{
 		Unspecified,
@@ -67,14 +59,10 @@ namespace Xamarin
 		Base
 	}
 
-	class MTouchTool : Tool, IDisposable
+	class MTouchTool : BundlerTool, IDisposable
 	{
-		public const string None = "None";
-
 #pragma warning disable 649
 		// These map directly to mtouch options
-		public int Verbosity;
-		public string SdkRoot;
 		public bool? NoSign;
 		public bool? Debug;
 		public bool? FastDev;
@@ -83,14 +71,10 @@ namespace Xamarin
 		public string TargetVer;
 		public string [] References;
 		public string Executable;
-		public string RootAssembly;
 		public string TargetFramework;
 		public string Abi;
 		public string AppPath;
-		public string Cache;
 		public string Device; // --device
-		public MTouchLinker Linker;
-		public string [] Optimize;
 		public MTouchSymbolMode SymbolMode;
 		public bool? NoFastSim;
 		public MTouchRegistrar Registrar;
@@ -108,7 +92,6 @@ namespace Xamarin
 		public string GccFlags;
 
 		// These are a bit smarter
-		public Profile Profile = Profile.iOS;
 		public bool NoPlatformAssemblyReference;
 		public List<string> AssemblyBuildTargets = new List<string> ();
 		static XmlDocument device_list_cache;
@@ -127,6 +110,11 @@ namespace Xamarin
 
 #pragma warning restore 649
 
+		public MTouchTool ()
+		{
+			Profile = Profile.iOS;
+		}
+
 		public class DeviceInfo
 		{
 			public string UDID;
@@ -135,17 +123,6 @@ namespace Xamarin
 			public string DeviceClass;
 
 			public DeviceInfo Companion;
-		}
-
-		string GetVerbosity ()
-		{
-			if (Verbosity == 0) {
-				return string.Empty;
-			} else if (Verbosity > 0) {
-				return new string ('-', Verbosity).Replace ("-", "-v ");
-			} else {
-				return new string ('-', -Verbosity).Replace ("-", "-q ");
-			}
 		}
 
 		public int LaunchOnDevice (DeviceInfo device, string appPath, bool waitForUnlock, bool waitForExit)
@@ -158,19 +135,28 @@ namespace Xamarin
 			return Execute ("--devname \"{0}\" --installdev \"{1}\" --sdkroot \"{2}\" {3} {4}", device.Name, appPath, Configuration.xcode_root, GetVerbosity (), devicetype == null ? string.Empty : "--device " + devicetype);
 		}
 
+		// The default is to build for the simulator
+		public override int Execute ()
+		{
+			return Execute (MTouchAction.BuildSim);
+		}
+
 		public int Execute (MTouchAction action)
 		{
-			return Execute (BuildArguments (action), always_show_output: Verbosity > 0);
+			this.action = action;
+			return base.Execute ();
+		}
+
+		// The default is to build for the simulator
+		public override void AssertExecute (string message = null)
+		{
+			AssertExecute (MTouchAction.BuildSim, message);
 		}
 
 		public void AssertExecute (MTouchAction action, string message = null)
 		{
-			var rv = Execute (action);
-			if (rv == 0)
-				return;
-			var errors = Messages.Where ((v) => v.IsError).ToList ();
-			Assert.Fail ($"Expected execution to succeed, but exit code was {rv}, and there were {errors.Count} error(s): {message}\n\t" +
-			             string.Join ("\n\t", errors.Select ((v) => v.ToString ())));
+			this.action = action;
+			base.AssertExecute (message);
 		}
 
 		public void AssertExecuteFailure (MTouchAction action, string message = null)
@@ -241,9 +227,11 @@ namespace Xamarin
 			Assert.IsEmpty (failed, message);
 		}
 
-		string BuildArguments (MTouchAction action)
+		MTouchAction action;
+		protected override void BuildArguments (StringBuilder sb)
 		{
-			var sb = new StringBuilder ();
+			base.BuildArguments (sb);
+
 			var isDevice = false;
 
 			switch (action) {
@@ -270,14 +258,6 @@ namespace Xamarin
 				break;
 			default:
 				throw new NotImplementedException ();
-			}
-
-			if (SdkRoot == None) {
-				// do nothing
-			} else if (!string.IsNullOrEmpty (SdkRoot)) {
-				sb.Append (" --sdkroot ").Append (StringUtils.Quote (SdkRoot));
-			} else {
-				sb.Append (" --sdkroot ").Append (StringUtils.Quote (Configuration.xcode_root));
 			}
 
 			sb.Append (" ").Append (GetVerbosity ());
@@ -357,9 +337,6 @@ namespace Xamarin
 			if (!string.IsNullOrEmpty (Executable))
 				sb.Append (" --executable ").Append (StringUtils.Quote (Executable));
 
-			if (!string.IsNullOrEmpty (RootAssembly))
-				sb.Append (" ").Append (StringUtils.Quote (RootAssembly));
-
 			if (TargetFramework == None) {
 				// do nothing
 			} else if (!string.IsNullOrEmpty (TargetFramework)) {
@@ -397,25 +374,6 @@ namespace Xamarin
 				default:
 					throw new NotImplementedException ();
 				}
-			}
-
-			switch (Linker) {
-			case MTouchLinker.LinkAll:
-			case MTouchLinker.Unspecified:
-				break;
-			case MTouchLinker.DontLink:
-				sb.Append (" --nolink");
-				break;
-			case MTouchLinker.LinkSdk:
-				sb.Append (" --linksdkonly");
-				break;
-			default:
-				throw new NotImplementedException ();
-			}
-
-			if (Optimize != null) {
-				foreach (var opt in Optimize)
-					sb.Append (" --optimize:").Append (opt);
 			}
 
 			switch (SymbolMode) {
@@ -529,8 +487,6 @@ namespace Xamarin
 
 			if (!string.IsNullOrEmpty (ResponseFile))
 				sb.Append (" @").Append (StringUtils.Quote (ResponseFile));
-
-			return sb.ToString ();
 		}
 
 		XmlDocument FetchDeviceList (bool allowCache = true)
@@ -655,6 +611,12 @@ namespace Xamarin
 			return MTouch.CompileTestAppLibrary (asm_dir, "class X {}", appName: Path.GetFileNameWithoutExtension (asm_name));
 		}
 
+		public override void CreateTemporaryApp (Profile profile, string appName = "testApp", string code = null, string extraArg = "", string extraCode = null, string usings = null, bool use_csc = false)
+		{
+			Profile = profile;
+			CreateTemporaryApp (appName: appName, code: code, extraArg: extraArg, extraCode: extraCode, usings: usings, use_csc: use_csc);
+		}
+
 		public void CreateTemporaryApp (bool hasPlist = false, string appName = "testApp", string code = null, string extraArg = "", string extraCode = null, string usings = null, bool use_csc = false)
 		{
 			string testDir;
@@ -667,7 +629,7 @@ namespace Xamarin
 			var app = AppPath ?? Path.Combine (testDir, appName + ".app");
 			Directory.CreateDirectory (app);
 			AppPath = app;
-			RootAssembly = MTouch.CompileTestAppExecutable (testDir, code, extraArg, Profile, appName, extraCode, usings, use_csc);
+			RootAssembly = CompileTestAppExecutable (testDir, code, extraArg, Profile, appName, extraCode, usings, use_csc);
 
 			if (hasPlist)
 				File.WriteAllText (Path.Combine (app, "Info.plist"), CreatePlist (Profile, appName));
@@ -874,11 +836,6 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 ");
 		}
 
-		public string CreateTemporaryDirectory ()
-		{
-			return Xamarin.Cache.CreateTemporaryDirectory ();
-		}
-
 		public void CreateTemporaryApp_LinkWith ()
 		{
 			AppPath = CreateTemporaryAppDirectory ();
@@ -894,12 +851,6 @@ public partial class NotificationController : WKUserNotificationInterfaceControl
 			Directory.CreateDirectory (AppPath);
 
 			return AppPath;
-		}
-
-		public void CreateTemporaryCacheDirectory ()
-		{
-			Cache = Path.Combine (CreateTemporaryDirectory (), "mtouch-test-cache");
-			Directory.CreateDirectory (Cache);
 		}
 
 		void IDisposable.Dispose ()

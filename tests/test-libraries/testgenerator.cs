@@ -84,7 +84,7 @@ static class C {
 		new BindAsData { Managed = "NSRange", Native = "NSRange", ManagedNewExpression = "new NSRange (7, 8)", Map = ".RangeValue", MapFrom = "FromRange" },
 		new BindAsData { Managed = "CGVector", Native = "CGVector", ManagedCondition = "!__MACOS__", ManagedNewExpression = "new CGVector (9, 10)", Map = ".CGVectorValue", MapFrom = "FromCGVector" },
 		new BindAsData { Managed = "SCNMatrix4", Native = "SCNMatrix4", ManagedNewExpression = "SCNMatrix4.Identity", Map = ".SCNMatrix4Value", MapFrom = "FromSCNMatrix4" },
-		new BindAsData { Managed = "CLLocationCoordinate2D", Native = "CLLocationCoordinate2D", ManagedNewExpression = "new CLLocationCoordinate2D (11, 12)", Map = ".CoordinateValue", MapFrom = "FromMKCoordinate" },
+		new BindAsData { Managed = "CLLocationCoordinate2D", Native = "CLLocationCoordinate2D", ManagedCondition = "!__MACOS__",  ManagedNewExpression = "new CLLocationCoordinate2D (11, 12)", Map = ".CoordinateValue", MapFrom = "FromMKCoordinate" },
 		new BindAsData { Managed = "SCNVector3", Native = "SCNVector3", ManagedNewExpression = "new SCNVector3 (13, 14, 15)", Map = ".Vector3Value", MapFrom = "FromVector" },
 		new BindAsData { Managed = "SCNVector4", Native = "SCNVector4", ManagedNewExpression = "new SCNVector4 (16, 17, 18, 19)", Map = ".Vector4Value", MapFrom = "FromVector" },
 		new BindAsData { Managed = "CGPoint", Native = "CGPoint", ManagedCondition = "XAMCORE_2_0 && !__MACOS__", ManagedNewExpression = "new CGPoint (19, 20)", Map = ".CGPointValue", MapFrom = "FromCGPoint" },

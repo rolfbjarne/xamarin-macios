@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 using NUnit.Framework;
 
@@ -272,6 +273,18 @@ namespace Xamarin.Tests
 			}
 		}
 
+		public static string XamarinMacMobileDll {
+			get {
+				return Path.Combine (SdkRootXM, "lib", "mono", "Xamarin.Mac", "Xamarin.Mac.dll");
+			}
+		}
+
+		public static string XamarinMacFullDll {
+			get {
+				return Path.Combine (SdkRootXM, "lib", "mono", "4.5", "Xamarin.Mac.dll");
+			}
+		}
+
 		public static string SdkBinDir {
 			get {
 #if MONOMAC
@@ -376,6 +389,34 @@ namespace Xamarin.Tests
 				if (!string.IsNullOrEmpty (env))
 					return env;
 				return Path.Combine (BinDirXI, "mlaunch");
+			}
+		}
+
+		public static string GetBaseLibrary (Profile profile)
+		{
+			switch (profile) {
+			case Profile.iOS:
+				return XamarinIOSDll;
+			case Profile.tvOS:
+				return XamarinTVOSDll;
+			case Profile.watchOS:
+				return XamarinWatchOSDll;
+			case Profile.macOSMobile:
+				return XamarinMacMobileDll;
+			case Profile.macOSFull:
+				return XamarinMacFullDll;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
+		public static string GetCompiler (Profile profile, StringBuilder args, bool use_csc = false)
+		{
+			args.Append (" -lib:").Append (Path.GetDirectoryName (GetBaseLibrary (profile))).Append (' ');
+			if (use_csc) {
+				return "/Library/Frameworks/Mono.framework/Commands/csc";
+			} else {
+				return "/Library/Frameworks/Mono.framework/Commands/mcs";
 			}
 		}
 	}

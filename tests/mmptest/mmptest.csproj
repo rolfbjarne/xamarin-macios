@@ -83,6 +83,12 @@
     <Compile Include="..\common\ExecutionHelper.cs">
       <Link>src\ExecutionHelper.cs</Link>
     </Compile>
+    <Compile Include="..\common\ApiTest.cs">
+      <Link>src\ApiTest.cs</Link>
+    </Compile>
+    <Compile Include="..\common\BundlerTest.cs">
+      <Link>src\BundlerTest.cs</Link>
+    </Compile>
     <Compile Include="..\common\Profile.cs">
       <Link>Profile.cs</Link>
     </Compile>

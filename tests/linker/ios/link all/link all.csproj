@@ -170,7 +170,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="..\..\BaseOptimizeGeneratedCodeTest.cs" />
     <Compile Include="LinkAllTest.cs" />
     <Compile Include="ClassLayoutTest.cs" />
     <Compile Include="StructLayoutTest.cs" />
@@ -178,6 +177,7 @@
     <Compile Include="AttributeTest.cs" />
     <Compile Include="InterfacesTest.cs" />
     <Compile Include="DataContractTest.cs" />
+    <Compile Include="..\..\BaseOptimizeGeneratedCodeTest.cs" />
     <Compile Include="..\link sdk\OptimizeGeneratedCodeTest.cs">
       <Link>OptimizeGeneratedCodeTest.cs</Link>
     </Compile>

@@ -28,6 +28,41 @@ namespace Linker.Shared
 	public class BaseOptimizeGeneratedCodeTest
 	{
 		[Test]
+		public void SetupBlock_CustomDelegate ()
+		{
+			int counter = 0;
+			var action = new Action (() => counter++);
+			Custom (action);
+			CustomWithAttribute (action);
+			Assert.AreEqual (1, counter, "Counter");
+		}
+
+		delegate void CustomDelegate (IntPtr block);
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		unsafe void Custom (Action callback)
+		{
+			BlockLiteral block = new BlockLiteral ();
+			CustomDelegate block_callback = BlockCallback;
+			block.SetupBlock (block_callback, callback);
+			Bindings.Test.CFunctions.x_call_block (ref block);
+			block.CleanupBlock ();
+		}
+
+		[UserDelegateType (typeof (Action))]
+		delegate void CustomDelegateWithAttribute (IntPtr block);
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		unsafe void CustomWithAttribute (Action callback)
+		{
+			BlockLiteral block = new BlockLiteral ();
+			CustomDelegateWithAttribute block_callback = BlockCallback;
+			block.SetupBlock (block_callback, callback);
+			Bindings.Test.CFunctions.x_call_block (ref block);
+			block.CleanupBlock ();
+		}
+
+		[Test]
 		public void SetupBlockPerfTest ()
 		{
 			const int iterations = 5000;

@@ -70,5 +70,74 @@ class T {
 				bundler.AssertWarningCount (2);
 			}
 		}
+
+		[Test]
+#if __MACOS__
+		[TestCase (Profile.macOSMobile)]
+#else
+		[TestCase (Profile.iOS)]
+#endif
+		public void MX4105 (Profile profile)
+		{
+			using (var bundler = new BundlerTool ()) {
+				var code = @"
+using System;
+using Foundation;
+using ObjCRuntime;
+class D : NSObject {
+	[Export (""d1:"")]
+	public void D1 (Delegate d)
+	{
+	}
+
+	[Export (""d2:"")]
+	public void D2 (MulticastDelegate d)
+	{
+	}
+
+	[Export (""d3:"")]
+	public void D3 (Action d)
+	{
+		// This should not show errors
+	}
+
+	[Export (""d4"")]
+	public Delegate D4 ()
+	{
+		return null;
+	}
+
+	[Export (""d5"")]
+	public MulticastDelegate D5 ()
+	{
+		return null;
+	}
+
+	[Export (""d6"")]
+	public Action D6 ()
+	{
+		return null;
+	}
+
+	static void Main ()
+	{
+		Console.WriteLine (typeof (NSObject));
+	}
+}
+";
+				bundler.Profile = profile;
+				bundler.CreateTemporaryCacheDirectory ();
+				bundler.CreateTemporaryApp (profile, code: code, extraArg: "/debug:full");
+				bundler.Optimize = new string [] { "blockliteral-setupblock" };
+				bundler.Registrar = RegistrarOption.Static;
+				bundler.AssertExecuteFailure ();
+				bundler.AssertError (4105, "The registrar cannot marshal the parameter of type `System.Delegate` in signature for method `D.D1`.");
+				bundler.AssertError (4105, "The registrar cannot marshal the parameter of type `System.MulticastDelegate` in signature for method `D.D2`.");
+				bundler.AssertWarning (4173, "The registrar can't compute the block signature for the delegate of type System.Delegate in the method D.D4 because System.Delegate doesn't have a specific signature.", "testApp.cs", 24);
+				bundler.AssertWarning (4173, "The registrar can't compute the block signature for the delegate of type System.MulticastDelegate in the method D.D5 because System.MulticastDelegate doesn't have a specific signature.", "testApp.cs", 30);
+				bundler.AssertErrorCount (2);
+				bundler.AssertWarningCount (2);
+			}
+		}
 	}
 }

@@ -1657,6 +1657,15 @@ with a test case and we'll evaluate it.
 [1]: https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS
 [2]: https://bugzilla.xamarin.com/enter_bug.cgi?product=iOS&component=General&bug_severity=enhancement
 
+### <a name="MT4173"/>MT4173: The registrar can't compute the block signature for the delegate of type {delegate-type} in the method {method} because *.
+
+This is a warning indicating that the registrar couldn't inject the block
+signature of the specified method into the generated registrar code, because
+the registrar couldn't compute it.
+
+This means that the block signature has to be computed at runtime, which is
+somewhat slower.
+
 # MT5xxx: GCC and toolchain error messages
 
 ### MT51xx: Compilation

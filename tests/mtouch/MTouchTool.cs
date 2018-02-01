@@ -41,6 +41,7 @@ namespace Xamarin
 	{
 #pragma warning disable 649
 		// These map directly to mtouch options
+		MTouchAction? Action; // --sim, --dev, --launchsim, etc
 		public bool? NoSign;
 		public bool? FastDev;
 		public bool? Dlsym;
@@ -97,24 +98,28 @@ namespace Xamarin
 		// The default is to build for the simulator
 		public override int Execute ()
 		{
-			return Execute (MTouchAction.BuildSim);
+			if (!Action.HasValue)
+				Action = MTouchAction.BuildSim;
+			return base.Execute ();
 		}
 
 		public int Execute (MTouchAction action)
 		{
-			this.action = action;
+			this.Action = action;
 			return base.Execute ();
 		}
 
 		// The default is to build for the simulator
 		public override void AssertExecute (string message = null)
 		{
-			AssertExecute (MTouchAction.BuildSim, message);
+			if (!Action.HasValue)
+				Action = MTouchAction.BuildSim;
+			base.AssertExecute (message);
 		}
 
 		public void AssertExecute (MTouchAction action, string message = null)
 		{
-			this.action = action;
+			this.Action = action;
 			base.AssertExecute (message);
 		}
 
@@ -190,7 +195,7 @@ namespace Xamarin
 		{
 			var isDevice = false;
 
-			switch (action) {
+			switch (Action.Value) {
 			case MTouchAction.None:
 				break;
 			case MTouchAction.BuildDev:
@@ -218,12 +223,11 @@ namespace Xamarin
 			}
 		}
 
-		MTouchAction action;
 		protected override void BuildArguments (StringBuilder sb)
 		{
 			base.BuildArguments (sb);
 
-			switch (action) {
+			switch (Action.Value) {
 			case MTouchAction.None:
 				break;
 			case MTouchAction.BuildDev:

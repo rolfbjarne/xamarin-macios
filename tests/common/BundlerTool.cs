@@ -118,7 +118,7 @@ namespace Xamarin.Tests
 				var a = GetDefaultAbi ();
 				if (!string.IsNullOrEmpty (a)) {
 					sb.Append (IsMtouchTool ? " --abi " : " --arch ");
-					sb.Append (Abi);
+					sb.Append (a);
 				}
 			}
 

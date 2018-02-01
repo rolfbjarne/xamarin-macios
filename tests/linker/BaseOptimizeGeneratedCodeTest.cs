@@ -303,7 +303,7 @@ namespace Linker.Shared
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		void SetupBlockOptimized_LoadLocalVariable0 (Action callback)
 		{
-			var block_callback = OptimizeGeneratedCodeTest.block_callback; // ldloc_0
+			var block_callback = BaseOptimizeGeneratedCodeTest.block_callback; // ldloc_0
 
 			// Load the trampoline from a instance method call
 			BlockLiteral block = new BlockLiteral ();
@@ -316,7 +316,7 @@ namespace Linker.Shared
 		void SetupBlockOptimized_LoadLocalVariable1 (Action callback)
 		{
 			int dummy0 = 0;
-			var block_callback = OptimizeGeneratedCodeTest.block_callback; // ldloc_1
+			var block_callback = BaseOptimizeGeneratedCodeTest.block_callback; // ldloc_1
 
 			// Load the trampoline from a instance method call
 			BlockLiteral block = new BlockLiteral ();
@@ -332,7 +332,7 @@ namespace Linker.Shared
 		void SetupBlockOptimized_LoadLocalVariable2 (Action callback)
 		{
 			int dummy0 = 0, dummy1 = 0;
-			var block_callback = OptimizeGeneratedCodeTest.block_callback; // ldloc_2
+			var block_callback = BaseOptimizeGeneratedCodeTest.block_callback; // ldloc_2
 
 			// Load the trampoline from a instance method call
 			BlockLiteral block = new BlockLiteral ();
@@ -349,7 +349,7 @@ namespace Linker.Shared
 		void SetupBlockOptimized_LoadLocalVariable3 (Action callback)
 		{
 			int dummy0 = 0, dummy1 = 0, dummy2 = 0;
-			var block_callback = OptimizeGeneratedCodeTest.block_callback; // ldloc_3
+			var block_callback = BaseOptimizeGeneratedCodeTest.block_callback; // ldloc_3
 
 			// Load the trampoline from a instance method call
 			BlockLiteral block = new BlockLiteral ();
@@ -367,7 +367,7 @@ namespace Linker.Shared
 		void SetupBlockOptimized_LoadLocalVariable4 (Action callback)
 		{
 			int dummy0 = 0, dummy1 = 0, dummy2 = 0, dummy3 = 0;
-			var block_callback = OptimizeGeneratedCodeTest.block_callback; // ldloc_S
+			var block_callback = BaseOptimizeGeneratedCodeTest.block_callback; // ldloc_S
 
 			// Load the trampoline from a instance method call
 			BlockLiteral block = new BlockLiteral ();
@@ -415,7 +415,7 @@ namespace Linker.Shared
 			int dummy207 = 0, dummy217 = 0, dummy227 = 0, dummy237 = 0, dummy247 = 0, dummy257 = 0, dummy267 = 0, dummy277 = 0, dummy287 = 0, dummy297 = 0;
 			int dummy208 = 0, dummy218 = 0, dummy228 = 0, dummy238 = 0, dummy248 = 0, dummy258 = 0, dummy268 = 0, dummy278 = 0, dummy288 = 0, dummy298 = 0;
 			int dummy209 = 0, dummy219 = 0, dummy229 = 0, dummy239 = 0, dummy249 = 0, dummy259 = 0, dummy269 = 0, dummy279 = 0, dummy289 = 0, dummy299 = 0;
-			var block_callback = OptimizeGeneratedCodeTest.block_callback; // ldloc
+			var block_callback = BaseOptimizeGeneratedCodeTest.block_callback; // ldloc
 
 			// Load the trampoline from a instance method call
 			BlockLiteral block = new BlockLiteral ();

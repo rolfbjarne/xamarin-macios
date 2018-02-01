@@ -22,12 +22,12 @@ namespace Xamarin
 	public class BundlerTests
 	{
 		[Test]
-#if MONOTOUCH
-		[TestCase (Profile.iOS)]
-#else
+#if __MACOS__
 		[TestCase (Profile.macOSMobile)]
+#else
+		[TestCase (Profile.iOS)]
 #endif
-		public void XX2106 (Profile profile)
+		public void MX2106 (Profile profile)
 		{
 			using (var bundler = new BundlerTool ()) {
 				var code = @"

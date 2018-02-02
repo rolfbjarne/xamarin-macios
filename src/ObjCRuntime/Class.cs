@@ -34,7 +34,7 @@ namespace XamCore.ObjCRuntime {
 
 			for (int i = 0; i < map->assembly_count; i++) {
 				var ptr = Marshal.ReadIntPtr (map->assembly, i * IntPtr.Size);
-				Runtime.Registrar.SetAssemblyRegistered (Marshal.PtrToStringAuto (ptr));
+				DynamicRegistrar.SetAssemblyRegistered (Marshal.PtrToStringAuto (ptr));
 			}
 		}
 

@@ -275,6 +275,7 @@ namespace XamCore.ObjCRuntime {
 		/*
 		Type must have been previously registered.
 		*/
+		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 #if !XAMCORE_2_0 && !MONOTOUCH // Accidently exposed this to public, can't break API
 		public
 #else

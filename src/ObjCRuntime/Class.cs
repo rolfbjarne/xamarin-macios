@@ -60,7 +60,7 @@ namespace ObjCRuntime {
 			this.handle = handle;
 		}
 
-		internal static Class Construct (IntPtr handle) 
+		internal static Class Construct (IntPtr handle)
 		{
 			return new Class (handle);
 		}
@@ -90,7 +90,8 @@ namespace ObjCRuntime {
 		// class (it will be faster than GetHandle, but it will
 		// not compile unless the class in question actually exists
 		// as an ObjectiveC class in the binary).
-		public static IntPtr GetHandleIntrinsic (string name) {
+		public static IntPtr GetHandleIntrinsic (string name)
+		{
 			return objc_getClass (name);
 		}
 

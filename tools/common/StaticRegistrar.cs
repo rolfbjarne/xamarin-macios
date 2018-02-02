@@ -295,7 +295,7 @@ namespace Registrar {
 		{
 			if (type == null)
 				return;
-			
+
 			if (type.BaseType != null)
 				CollectInterfaces (ref ifaces, type.BaseType.Resolve ());
 
@@ -651,7 +651,7 @@ namespace Registrar {
 		{
 			throw ErrorHelper.CreateError (code, message, args);
 		}
-		
+
 		protected override void ReportWarning (int code, string message, params object[] args)
 		{
 			ErrorHelper.Show (ErrorHelper.CreateWarning (code, message, args));
@@ -675,7 +675,7 @@ namespace Registrar {
 				case "System.Int32":
 				case "System.UInt32": return 4;
 				case "System.Double":
-				case "System.Int64": 
+				case "System.Int64":
 				case "System.UInt64": return 8;
 				case "System.IntPtr":
 				case "System.nfloat":
@@ -726,7 +726,7 @@ namespace Registrar {
 #endif
 			}
 		}
-			
+
 		protected override bool Is64Bits {
 			get {
 				if (IsSingleAssembly)
@@ -752,7 +752,7 @@ namespace Registrar {
 			return ErrorHelper.CreateError (App, code, innerException, method, message, args);
 		}
 
-		protected override Exception CreateException (int code, Exception innerException, TypeReference type, string message, params object [] args)
+		protected override Exception CreateException (int code, Exception innerException, TypeReference type, string message, params object[] args)
 		{
 			return ErrorHelper.CreateError (App, code, innerException, type, message, args);
 		}
@@ -899,7 +899,7 @@ namespace Registrar {
 		{
 			return method.IsStatic;
 		}
-		
+
 		protected override bool IsStatic (PropertyDefinition property)
 		{
 			if (property.GetMethod != null)
@@ -931,7 +931,7 @@ namespace Registrar {
 		{
 			if (system_void != null)
 				return system_void;
-			
+
 			// find corlib
 			AssemblyDefinition corlib = null;
 			AssemblyDefinition first = null;
@@ -1178,7 +1178,7 @@ namespace Registrar {
 			return GetEnumUnderlyingType (type);
 		}
 
-		protected override TypeReference[] GetParameters (MethodDefinition method)
+		protected override TypeReference [] GetParameters (MethodDefinition method)
 		{
 			if (!method.HasParameters || method.Parameters.Count == 0)
 				return null;
@@ -1325,7 +1325,7 @@ namespace Registrar {
 					break;
 				case "FormalSince":
 					Version version;
-					if (!Version.TryParse ((string)prop.Argument.Value, out version))
+					if (!Version.TryParse ((string) prop.Argument.Value, out version))
 						throw ErrorHelper.CreateError (4147, "Invalid {0} found on '{1}'. Please file a bug report at http://bugzilla.xamarin.com", "ProtocolAttribute", type.FullName);
 					rv.FormalSinceVersion = version;
 					break;
@@ -1371,16 +1371,16 @@ namespace Registrar {
 						break;
 					case "ParameterType":
 						if (prop.Argument.Value != null) {
-							var arr = (CustomAttributeArgument[])prop.Argument.Value;
+							var arr = (CustomAttributeArgument [])prop.Argument.Value;
 							rv.ParameterType = new TypeReference[arr.Length];
 							for (int i = 0; i < arr.Length; i++) {
-								rv.ParameterType [i] = (TypeReference)arr [i].Value;
+								rv.ParameterType [i] = (TypeReference) arr[i].Value;
 							}
 						}
 						break;
 					case "ParameterByRef":
 						if (prop.Argument.Value != null) {
-							var arr = (CustomAttributeArgument[])prop.Argument.Value;
+							var arr = (CustomAttributeArgument [])prop.Argument.Value;
 							rv.ParameterByRef = new bool[arr.Length];
 							for (int i = 0; i < arr.Length; i++) {
 								rv.ParameterByRef [i] = (bool)arr [i].Value;
@@ -1433,7 +1433,7 @@ namespace Registrar {
 				var caType = ca.AttributeType;
 				if (caType.Namespace != ObjCRuntime && !string.IsNullOrEmpty (caType.Namespace))
 					continue;
-				
+
 				AvailabilityKind kind;
 				PlatformName platformName = global::ObjCRuntime.PlatformName.None;
 				PlatformArchitecture architecture = PlatformArchitecture.All;
@@ -1600,10 +1600,10 @@ namespace Registrar {
 
 			if (td == null)
 				return null;
-			
+
 			if (td.HasCustomAttributes)
 				CollectAvailabilityAttributes (td.CustomAttributes, ref rv);
-			
+
 			if (AvailabilityAnnotations != null) {
 				object attribObjects;
 				if (AvailabilityAnnotations.TryGetValue (td, out attribObjects))
@@ -1777,7 +1777,7 @@ namespace Registrar {
 				return attrib;
 			return null;
 		}
-		
+
 		PropertyDefinition GetBasePropertyInTypeHierarchy (PropertyDefinition property)
 		{
 			if (!IsOverride (property))
@@ -1788,30 +1788,30 @@ namespace Registrar {
 				PropertyDefinition base_property = TryMatchProperty (@base.Resolve (), property);
 				if (base_property != null)
 					return GetBasePropertyInTypeHierarchy (base_property) ?? base_property;
-				
+
 				@base = GetBaseType (@base);
 			}
 
 			return property;
 		}
-		
+
 		static PropertyDefinition TryMatchProperty (TypeDefinition type, PropertyDefinition property)
 		{
 			if (!type.HasProperties)
 				return null;
-			
+
 			foreach (PropertyDefinition candidate in type.Properties)
 				if (PropertyMatch (candidate, property))
 					return candidate;
-			
+
 			return null;
 		}
-		
+
 		static bool PropertyMatch (PropertyDefinition candidate, PropertyDefinition property)
 		{
 			if (candidate.Name != property.Name)
 				return false;
-			
+
 			if (candidate.GetMethod != null) {
 				if (property.GetMethod == null)
 					return false;
@@ -1820,7 +1820,7 @@ namespace Registrar {
 			} else if (property.GetMethod != null) {
 				return false;
 			}
-			
+
 			if (candidate.SetMethod != null) {
 				if (property.SetMethod == null)
 					return false;
@@ -1829,10 +1829,10 @@ namespace Registrar {
 			} else if (property.SetMethod != null) {
 				return false;
 			}
-			
+
 			return true;
 		}
-		
+
 		MethodDefinition GetBaseMethodInTypeHierarchy (MethodDefinition method)
 		{
 			if (!IsOverride (method))
@@ -1843,22 +1843,22 @@ namespace Registrar {
 				MethodDefinition base_method = TryMatchMethod (@base.Resolve (), method);
 				if (base_method != null)
 					return GetBaseMethodInTypeHierarchy (base_method) ?? base_method;
-				
+
 				@base = GetBaseType (@base);
 			}
-			
+
 			return method;
 		}
-		
+
 		static MethodDefinition TryMatchMethod (TypeDefinition type, MethodDefinition method)
 		{
 			if (!type.HasMethods)
 				return null;
-			
+
 			foreach (MethodDefinition candidate in type.Methods)
 				if (MethodMatch (candidate, method))
 					return candidate;
-			
+
 			return null;
 		}
 
@@ -1871,7 +1871,7 @@ namespace Registrar {
 		AutoIndentStringBuilder interfaces; // public objective-c @interface declarations
 		AutoIndentStringBuilder nslog_start = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder nslog_end = new AutoIndentStringBuilder ();
-		
+
 		AutoIndentStringBuilder comment = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder copyback = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder invoke = new AutoIndentStringBuilder ();
@@ -1879,7 +1879,7 @@ namespace Registrar {
 		AutoIndentStringBuilder setup_return = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder body = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder body_setup = new AutoIndentStringBuilder ();
-		
+
 		HashSet<string> trampoline_names = new HashSet<string> ();
 		HashSet<string> namespaces = new HashSet<string> ();
 		HashSet<string> structures = new HashSet<string> ();
@@ -1930,7 +1930,7 @@ namespace Registrar {
 					if (reported_frameworks == null)
 						reported_frameworks = new HashSet<string> ();
 					if (!reported_frameworks.Contains (framework.Name)) {
-						exceptions.Add (ErrorHelper.CreateError (4134, 
+						exceptions.Add (ErrorHelper.CreateError (4134,
 #if MMP
 							"Your application is using the '{0}' framework, which isn't included in the {3} SDK you're using to build your app (this framework was introduced in {3} {2}, while you're building with the {3} {1} SDK.) " +
 							"This configuration is not supported with the static registrar (pass --registrar:dynamic as an additional mmp argument in your project's Mac Build option to select). " +
@@ -1960,7 +1960,7 @@ namespace Registrar {
 
 			if (namespaces.Contains (ns))
 				return;
-			
+
 			namespaces.Add (ns);
 
 			string h;
@@ -2005,7 +2005,7 @@ namespace Registrar {
 				}
 #endif
 				return;
-			case "CoreMidi":	
+			case "CoreMidi":
 				h = "<CoreMIDI/CoreMIDI.h>";
 				break;
 #if MTOUCH
@@ -2089,25 +2089,25 @@ namespace Registrar {
 			}
 			header.WriteLine ("#import {0}", h);
 		}
-		
+
 		string CheckStructure (TypeDefinition structure, string descriptiveMethodName, MemberReference inMember)
 		{
 			string n;
 			StringBuilder name = new StringBuilder ();
 			var body = new AutoIndentStringBuilder (1);
 			int size = 0;
-			
+
 			ProcessStructure (name, body, structure, ref size, descriptiveMethodName, structure, inMember);
-			
+
 			n = "struct trampoline_struct_" + name.ToString ();
 			if (!structures.Contains (n)) {
 				structures.Add (n);
 				declarations.WriteLine ("{0} {{\n{1}}};", n, body.ToString ());
 			}
-			
+
 			return n;
 		}
-		
+
 		void ProcessStructure (StringBuilder name, AutoIndentStringBuilder body, TypeDefinition structure, ref int size, string descriptiveMethodName, TypeDefinition root_structure, MemberReference inMember)
 		{
 			switch (structure.FullName) {
@@ -2166,7 +2166,7 @@ namespace Registrar {
 					if (field.IsStatic)
 						continue;
 					var fieldType = field.FieldType.Resolve ();
-					if (fieldType == null) 
+					if (fieldType == null)
 						throw ErrorHelper.CreateError (App, 4111, inMember, "The registrar cannot build a signature for type `{0}' in method `{1}`.", structure.FullName, descriptiveMethodName);
 					if (!fieldType.IsValueType)
 						throw ErrorHelper.CreateError (App, 4161, inMember, "The registrar found an unsupported structure '{0}': All fields in a structure must also be structures (field '{1}' with type '{2}' is not a structure).", root_structure.FullName, field.Name, fieldType.FullName);
@@ -2193,7 +2193,7 @@ namespace Registrar {
 				fixup [i] = '_';
 			}
 			suggestion = new string (fixup);
-			
+
 			if (trampoline_names.Contains (suggestion)) {
 				string tmp;
 				int counter = 0;
@@ -2202,9 +2202,9 @@ namespace Registrar {
 				} while (trampoline_names.Contains (tmp));
 				suggestion = tmp;
 			}
-			
+
 			trampoline_names.Add (suggestion);
-			
+
 			return suggestion;
 		}
 
@@ -2337,7 +2337,7 @@ namespace Registrar {
 				}
 			}
 		}
-		
+
 		string GetPrintfFormatSpecifier (TypeDefinition type, out bool unknown)
 		{
 			unknown = false;
@@ -2353,7 +2353,7 @@ namespace Registrar {
 				case "System.UInt32": return "u";
 				case "System.Int64": return "lld";
 				case "System.UInt64": return "llu";
-				case "System.nint":	return "zd";
+				case "System.nint": return "zd";
 				case "System.nuint": return "tu";
 				case "System.nfloat":
 				case "System.Single":
@@ -4513,6 +4513,7 @@ namespace Registrar {
 
 		protected override bool SkipRegisterAssembly (AssemblyDefinition assembly)
 		{
+				
 			if (assembly.HasCustomAttributes) {
 				foreach (var ca in assembly.CustomAttributes) {
 					var t = ca.AttributeType.Resolve ();

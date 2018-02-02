@@ -2381,7 +2381,6 @@ namespace XamCore.Registrar
 			}
 			return signature.ToString ();
 		}
-
 		protected string ToSignature (TType type, ObjCMember member, bool forProperty = false)
 		{
 			bool success = true;

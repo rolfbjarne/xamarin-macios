@@ -134,6 +134,19 @@ namespace ObjCRuntime {
 
 		internal static unsafe InitializationOptions* options;
 
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		public static bool DynamicRegistrationSupported {
+			get {
+				// The linker will turn calls to this property into a constant, and for if blocks remove the resulting dead code.
+				//
+				// The value is false for Xamarin.iOS (it's true by default for Xamarin.Mac apps) if all of these conditions are true:
+				// * The static registrar is selected
+				// * No Runtime.ConnectMethod overloads are used anywhere.
+				// * No BlockLiteral.SetupBlock calls anywhere (the linker can rewrite some BlockLiteral.SetupBlock calls so that they do not count, but not always).
+				return true;
+			}
+		}
+
 		internal static bool Initialized {
 			get { return initialized; }
 		}
@@ -206,7 +219,9 @@ namespace ObjCRuntime {
 
 			NSObjectClass = NSObject.Initialize ();
 
-			Registrar = new DynamicRegistrar ();
+			// The linker will remove this condition (and the subsequent new call) if possible
+			if (DynamicRegistrationSupported)
+				Registrar = new DynamicRegistrar ();
 			RegisterDelegates (options);
 			Class.Initialize (options);
 			InitializePlatform (options);
@@ -1340,6 +1355,9 @@ namespace ObjCRuntime {
 
 			if (export == null)
 				throw new ArgumentNullException ("export");
+
+			if (!DynamicRegistrationSupported)
+				throw ErrorHelper.CreateError (8025, "Runtime.ConnectMethod is not supported when the dynamic registrar has been linked away.");
 
 			Registrar.RegisterMethod (type, method, export);
 		}

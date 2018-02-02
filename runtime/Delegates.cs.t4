@@ -68,6 +68,7 @@ namespace ObjCRuntime {
 
 <# } #>
 
+        [BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		static void RegisterDelegates (InitializationOptions* options)
 		{
 <# foreach (var d in delegates) {

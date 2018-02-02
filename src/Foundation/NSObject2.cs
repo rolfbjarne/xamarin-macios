@@ -282,6 +282,7 @@ namespace XamCore.Foundation {
 
 		[Export ("conformsToProtocol:")]
 		[Preserve ()]
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public virtual bool ConformsToProtocol (IntPtr protocol)
 		{
 			bool does;

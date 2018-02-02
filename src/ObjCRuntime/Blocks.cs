@@ -83,6 +83,7 @@ namespace XamCore.ObjCRuntime {
 		[DllImport ("__Internal")]
 		static extern IntPtr xamarin_get_block_descriptor ();
 
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		void SetupBlock (Delegate trampoline, Delegate userDelegate, bool safe)
 		{
 			if (!Runtime.DynamicRegistrationSupported)
@@ -242,6 +243,7 @@ namespace XamCore.ObjCRuntime {
 			return descriptor->copy_helper == ((BlockDescriptor *) literal->block_descriptor)->copy_helper;
 		}
 
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		internal static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate, string signature)
 		{
 			if (@delegate == null)

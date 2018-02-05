@@ -315,23 +315,28 @@ namespace Foundation {
 
 			if (does)
 				return true;
-			
-			object [] adoptedProtocols = GetType ().GetCustomAttributes (typeof (AdoptsAttribute), true);
-			foreach (AdoptsAttribute adopts in adoptedProtocols){
-				if (adopts.ProtocolHandle == protocol)
+
+			if (Runtime.DynamicRegistrationSupported) {
+				object [] adoptedProtocols = GetType ().GetCustomAttributes (typeof (AdoptsAttribute), true);
+				foreach (AdoptsAttribute adopts in adoptedProtocols) {
+					if (adopts.ProtocolHandle == protocol)
+						return true;
+				}
+
+				// Check if this class or any of the interfaces
+				// it implements are protocols.
+
+				if (IsProtocol (GetType (), protocol))
 					return true;
-			}
 
-			// Check if this class or any of the interfaces
-			// it implements are protocols.
-
-			if (IsProtocol (GetType (), protocol))
-				return true;
-
-			var ifaces = GetType ().GetInterfaces ();
-			foreach (var iface in ifaces) {
-				if (IsProtocol (iface, protocol))
-					return true;
+				var ifaces = GetType ().GetInterfaces ();
+				foreach (var iface in ifaces) {
+					if (IsProtocol (iface, protocol))
+						return true;
+				}
+			} else {
+				if (Runtime.ConformsToProtocol (GetType (), protocol, true))
+				    return true;
 			}
 
 			return false;

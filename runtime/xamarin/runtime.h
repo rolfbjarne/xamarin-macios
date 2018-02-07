@@ -77,6 +77,17 @@ typedef struct __attribute__((packed)) {
 	uint32_t /* index into MTRegistrationMap->map */ index;
 } MTManagedClassMap;
 
+typedef struct __attribute__((packed)) {
+	uint32_t /* MTTokenReference */ token; // Token to a class)
+	uint32_t protocol_count; // Number of protocols
+	const char * const * protocols;
+} MTProtocolMap;
+
+typedef struct __attribute__((packed)) {
+	uint32_t protocol_token;
+	uint32_t wrapper_token;
+} MTProtocolWrapperMap;
+
 struct MTRegistrationMap;
 
 struct MTRegistrationMap {
@@ -93,11 +104,15 @@ struct MTRegistrationMap {
 	// ObjC class, but this is not a constant known at compile time, which
 	// means it can't be stored in read-only memory).
 	const MTManagedClassMap *skipped_map;
+	const MTProtocolMap *protocols; // array of MTProtocolMap, sorted ascending by token
+	const MTProtocolWrapperMap *protocol_wrappers; // array of MTProtocolWrapperMap, sorted ascending by protocol_token
 	int assembly_count;
 	int map_count;
 	int custom_type_count;
 	int full_token_reference_count;
 	int skipped_map_count;
+	int protocol_count;
+	int protocol_wrapper_count;
 };
 
 typedef struct {

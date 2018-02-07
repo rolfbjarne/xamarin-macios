@@ -316,6 +316,9 @@ namespace Foundation {
 			if (does)
 				return true;
 			
+			if (Runtime.ConformsToProtocol (GetType (), protocol, true))
+				return true;
+
 			object [] adoptedProtocols = GetType ().GetCustomAttributes (typeof (AdoptsAttribute), true);
 			foreach (AdoptsAttribute adopts in adoptedProtocols){
 				if (adopts.ProtocolHandle == protocol)

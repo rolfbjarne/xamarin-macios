@@ -333,6 +333,12 @@ namespace Registrar {
 
 			iface_methods = new List<MethodDefinition> ();
 			foreach (var iface in ifaces) {
+				var storedMethods = LinkContext?.GetProtocolMethods (iface.Resolve ());
+				if (storedMethods?.Count > 0) {
+					foreach (var imethod in storedMethods)
+						if (!iface_methods.Contains (imethod))
+							iface_methods.Add (imethod);
+				}
 				if (!iface.HasMethods)
 					continue;
 
@@ -1026,6 +1032,20 @@ namespace Registrar {
 			return rv;
 		}
 
+		protected override TypeReference [] GetLinkedAwayInterfaces (TypeReference type)
+		{
+			if (LinkContext == null)
+				return null;
+			
+			if (LinkContext.ProtocolImplementations.TryGetValue (type.Resolve (), out var linkedAwayInterfaces) != true)
+				return null;
+
+			if (linkedAwayInterfaces.Count == 0)
+				return null;
+
+			return linkedAwayInterfaces.ToArray ();
+		}
+
 		protected override TypeReference GetGenericTypeDefinition (TypeReference type)
 		{
 			var git = type as GenericInstanceType;
@@ -1285,7 +1305,7 @@ namespace Registrar {
 					rv.Name = (string) prop.Argument.Value;
 					break;
 				case "WrapperType":
-					rv.WrapperType = (TypeDefinition) prop.Argument.Value;
+					rv.WrapperType = ((TypeReference) prop.Argument.Value).Resolve ();
 					break;
 				case "IsInformal":
 					rv.IsInformal = (bool) prop.Argument.Value;
@@ -1314,13 +1334,7 @@ namespace Registrar {
 		{
 			var td = type.Resolve ();
 
-			if (!td.HasCustomAttributes)
-				yield break;
-
-			foreach (var ca in td.CustomAttributes) {
-				if (!ca.Constructor.DeclaringType.Is (Foundation, StringConstants.ProtocolMemberAttribute))
-					continue;
-
+			foreach (var ca in GetCustomAttributes (td, Foundation, StringConstants.ProtocolMemberAttribute)) {
 				var rv = new ProtocolMemberAttribute ();
 				foreach (var prop in ca.Properties) {
 					switch (prop.Name) {
@@ -1565,6 +1579,22 @@ namespace Registrar {
 			return null;
 		}
 
+		IEnumerable<AdoptsAttribute> GetAdoptsAttributes (TypeDefinition type)
+		{
+			foreach (var ca in GetCustomAttributes (type, ObjCRuntime, "AdoptsAttribute")) {
+				var attrib = new AdoptsAttribute ();
+				switch (ca.ConstructorArguments.Count) {
+				case 1:
+					attrib.ProtocolType = (string) ca.ConstructorArguments [0].Value;
+					break;
+				default:
+					throw ErrorHelper.CreateError (4124, "Invalid AdoptsAttribute found on '{0}': expected 1 constructor arguments, got {1}. Please file a bug report at https://bugzilla.xamarin.com", type.FullName, 1, ca.ConstructorArguments.Count);
+				}
+				yield return attrib;
+			}
+
+		}
+
 		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
 			ICustomAttribute attrib;
@@ -1802,7 +1832,7 @@ namespace Registrar {
 			if (type.IsNested)
 				return false;
 
-			var aname = type.Module.Assembly.Name.Name;
+			var aname = type.Module?.Assembly?.Name?.Name;
 			if (aname != PlatformAssembly)
 				return false;
 				
@@ -2355,8 +2385,13 @@ namespace Registrar {
 			}
 
 			var td = type.Resolve ();
-			if (td != null)
-				sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+			if (td != null) {
+				if (td.Module == null) {
+					sb.Append (", TypeWasLinkedAwayFIXME"); // FIXME
+				} else {
+					sb.Append (", ").Append (td.Module.Assembly.Name.Name);
+				}
+			}
 
 			return sb.ToString ();
 		}
@@ -2437,6 +2472,8 @@ namespace Registrar {
 			var map_init = new AutoIndentStringBuilder ();
 			var map_dict = new Dictionary<ObjCType, int> (); // maps ObjCType to its index in the map
 			var map_entries = 0;
+			var protocol_map = new Dictionary<uint, Tuple<ObjCType, List<string>>> ();
+			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
 
 			var i = 0;
 			
@@ -2513,11 +2550,13 @@ namespace Registrar {
 
 				skip.Clear ();
 
+				uint token_ref = uint.MaxValue;
 				if (!@class.IsProtocol && !@class.IsCategory) {
 					if (!isPlatformType)
 						customTypeCount++;
 					
 					CheckNamespace (@class, exceptions);
+					token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
 					map.AppendLine ("{{ NULL, 0x{1:X} /* #{3} '{0}' => '{2}' */ }},", 
 									@class.ExportedName,
 									CreateTokenReference (@class.Type, TokenType.TypeDef), 
@@ -2554,8 +2593,36 @@ namespace Registrar {
 					}
 
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
+
+					if (!@class.IsWrapper) {
+						List<string> protocols = null;
+						var adopts = GetAdoptsAttributes (@class.Type.Resolve ()).ToArray ();
+
+						if (@class.Protocols != null || adopts.Length > 0) {
+							protocols = new List<string> (@class.Protocols?.Length ?? 0 + adopts.Length);
+							protocol_map [token_ref] = new Tuple<ObjCType, List<string>> (@class, protocols);
+						}
+
+						if (@class.Protocols != null) {
+							for (int p = 0; p < @class.Protocols.Length; p++)
+								protocols.Add (@class.Protocols [p].ProtocolName);
+						}
+						foreach (var adopt in adopts)
+							protocols.Add (adopt.ProtocolType);
+					}
 				}
 
+
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+					if (@class.ProtocolWrapperType.Module == null) {
+						// The protocol was linked away
+						Console.WriteLine ($"Linked away protocol wrapper type {@class.ProtocolWrapperType.FullName} for {@class.Type.FullName}");
+					} else {
+						if (token_ref == uint.MaxValue)
+							token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
+						protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+					}
+				}
 				if (@class.IsWrapper && isPlatformType)
 					continue;
 
@@ -2802,16 +2869,41 @@ namespace Registrar {
 				map.AppendLine ();
 			}
 
+			if (protocol_map.Count > 0) {
+				var ordered_protocols = protocol_map.OrderBy ((v) => v.Key);
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("const char *__xamarin_protocols_{0}[] = {{ \"{1}\" }};", EncodeNonAsciiCharacters (p.Value.Item1.ExportedName), string.Join ("\", \"", p.Value.Item2));
+				map.AppendLine ("static const MTProtocolMap __xamarin_protocol_map [] = {");
+				foreach (var p in ordered_protocols)
+					map.AppendLine ("{{ 0x{0:X}, {1}, __xamarin_protocols_{2} }},", p.Key, p.Value.Item2.Count, EncodeNonAsciiCharacters (p.Value.Item1.ExportedName));
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
+			if (protocol_wrapper_map.Count > 0) {
+				var ordered = protocol_wrapper_map.OrderBy ((v) => v.Key);
+				map.AppendLine ("static const MTProtocolWrapperMap __xamarin_protocol_wrapper_map [] = {");
+				foreach (var p in ordered) {
+					map.AppendLine ("{{ 0x{0:X} /* {1} */, 0x{2:X} /* {3} */ }},", p.Key, p.Value.Item1.Name, p.Value.Item2, p.Value.Item1.ProtocolWrapperType.Name);
+				}
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
 			map.AppendLine ("static struct MTRegistrationMap __xamarin_registration_map = {");
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
 			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
 			map.AppendLine (skipped_types.Count == 0 ? "NULL," : "__xamarin_skipped_map,");
+			map.AppendLine (protocol_map.Count == 0 ? "NULL," : "__xamarin_protocol_map,");
+			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", customTypeCount);
 			map.AppendLine ("{0},", full_token_reference_count);
-			map.AppendLine ("{0}", skipped_types.Count);
+			map.AppendLine ("{0},", skipped_types.Count);
+			map.AppendLine ("{0},", protocol_map.Count);
+			map.AppendLine ("{0}", protocol_wrapper_map.Count);
 			map.AppendLine ("};");
 
 
@@ -4449,5 +4541,10 @@ namespace Registrar {
 		public string Name { get; set; }
 		public bool IsWrapper { get; set; }
 		public bool SkipRegistration { get; set; }
+	}
+
+	class AdoptsAttribute : Attribute
+	{
+		public string ProtocolType { get; set; }
 	}
 }

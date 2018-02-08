@@ -135,6 +135,7 @@ namespace Registrar {
 			public TType Type;
 			public ObjCType BaseType;
 			public ObjCType [] Protocols;
+			public string [] AdoptedProtocols;
 			public bool IsModel;
 			// if this type represents an ObjC protocol (!= has the protocol attribute, since that can be applied to all kinds of things).
 			public bool IsProtocol;
@@ -142,6 +143,8 @@ namespace Registrar {
 			public bool IsGeneric;
 #if !MTOUCH && !MMP
 			public IntPtr Handle;
+#else
+			public TType ProtocolWrapperType;
 #endif
 
 			public Dictionary<string, ObjCField> Fields;
@@ -997,6 +1000,7 @@ namespace Registrar {
 		protected abstract bool ContainsPlatformReference (TAssembly assembly); // returns true if the assembly is monotouch.dll too.
 		protected abstract TType GetBaseType (TType type); // for generic parameters it returns the first specific class constraint.
 		protected abstract TType[] GetInterfaces (TType type); // may return interfaces from base classes as well. May return null if no interfaces found.
+		protected virtual TType [] GetLinkedAwayInterfaces (TType type) { return null; } // may NOT return interfaces from base classes as well. May return null if no interfaces found.
 		protected abstract TMethod GetBaseMethod (TMethod method);
 		protected abstract TType[] GetParameters (TMethod method);
 		protected abstract string GetParameterName (TMethod method, int parameter_index);
@@ -1021,13 +1025,14 @@ namespace Registrar {
 		public abstract RegisterAttribute GetRegisterAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract CategoryAttribute GetCategoryAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract ConnectAttribute GetConnectAttribute (TProperty property); // Return null if no attribute is found. Do not consider inherited properties.
-		protected abstract ProtocolAttribute GetProtocolAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
+		public abstract ProtocolAttribute GetProtocolAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract IEnumerable<ProtocolMemberAttribute> GetProtocolMemberAttributes (TType type); // Return null if no attributes found. Do not consider base types.
 		protected abstract List<AvailabilityBaseAttribute> GetAvailabilityAttributes (TType obj); // must only return attributes for the current platform.
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
 		protected abstract BindAsAttribute GetBindAsAttribute (TProperty property);
+		protected abstract IList<AdoptsAttribute> GetAdoptsAttributes (TType type);
 		public abstract TType GetNullableType (TType type); // For T? returns T. For T returns null.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
@@ -1593,6 +1598,8 @@ namespace Registrar {
 			// return interfaces from all base classes as well.
 			// We only want the interfaces declared on this type.
 
+			// Additionally it may return interface implementations that were linked away.
+
 			// This function will return arrays with null entries.
 
 			var type = objcType.Type;
@@ -1624,20 +1631,57 @@ namespace Registrar {
 		ObjCType [] GetProtocols (ObjCType type, ref List<Exception> exceptions)
 		{
 			var interfaces = GetInterfacesImpl (type);
-			if (interfaces == null || interfaces.Length == 0)
-				return null;
-
-			var protocolList = new List<ObjCType> (interfaces.Length);
-			for (int i = 0; i < interfaces.Length; i++) {
-				if (interfaces [i] == null)
-					continue;
-				var baseP = RegisterTypeUnsafe (interfaces [i], ref exceptions);
-				if (baseP != null)
-					protocolList.Add (baseP);
+			List<ObjCType> protocolList = null;
+			if (interfaces?.Length > 0) {
+				protocolList = new List<ObjCType> (interfaces.Length);
+				for (int i = 0; i < interfaces.Length; i++) {
+					if (interfaces [i] == null)
+						continue;
+					var baseP = RegisterTypeUnsafe (interfaces [i], ref exceptions);
+					if (baseP != null)
+						protocolList.Add (baseP);
+				}
 			}
-			if (protocolList.Count == 0)
+
+			// The interface might have been linked away.
+			var linkedAwayInterfaces = GetLinkedAwayInterfaces (type.Type);
+			if (linkedAwayInterfaces?.Length > 0) {
+				if (protocolList == null)
+					protocolList = new List<ObjCType> ();
+				foreach (var iface in linkedAwayInterfaces) {
+					if (!HasProtocolAttribute (iface))
+						continue;
+					// We can't register this interface (because it's been linked away),
+					// but we still need to return information about it.
+					// So create an ObjCType with just the required information,
+					// and add that to what we return.
+					var objcType = new ObjCType () {
+						Registrar = this,
+						Type = iface,
+						IsProtocol = true,
+					};
+#if MMP || MTOUCH
+					objcType.ProtocolWrapperType = GetProtocolAttributeWrapperType (objcType.Type);
+					objcType.IsWrapper = objcType.ProtocolWrapperType != null;
+#endif
+
+					protocolList.Add (objcType);
+				}
+			}
+			if (protocolList == null || protocolList.Count == 0)
 				return null;
 			return protocolList.ToArray ();
+		}
+
+		string [] GetAdoptedProtocols (ObjCType type)
+		{
+			var attribs = GetAdoptsAttributes (type.Type);
+			if (attribs == null || attribs.Count == 0)
+				return null;
+			var rv = new string [attribs.Count];
+			for (var i = 0; i < attribs.Count; i++)
+				rv [i] = attribs [i].ProtocolType;
+			return rv;
 		}
 
 		ObjCType RegisterCategory (TType type, CategoryAttribute attrib, ref List<Exception> exceptions)
@@ -1823,7 +1867,11 @@ namespace Registrar {
 			};
 			objcType.VerifyRegisterAttribute (ref exceptions);
 			objcType.Protocols = GetProtocols (objcType, ref exceptions);
+			objcType.AdoptedProtocols = GetAdoptedProtocols (objcType);
 			objcType.BaseType = isProtocol ? null : (baseObjCType ?? objcType);
+#if MMP || MTOUCH
+			objcType.ProtocolWrapperType = (isProtocol && !isInformalProtocol) ? GetProtocolAttributeWrapperType (objcType.Type) : null;
+#endif
 			objcType.IsWrapper = (isProtocol && !isInformalProtocol) ? (GetProtocolAttributeWrapperType (objcType.Type) != null) : (objcType.RegisterAttribute != null && objcType.RegisterAttribute.IsWrapper);
 
 			if (!objcType.IsWrapper && objcType.BaseType != null)

@@ -333,6 +333,12 @@ namespace Registrar {
 
 			iface_methods = new List<MethodDefinition> ();
 			foreach (var iface in ifaces) {
+				var storedMethods = LinkContext?.GetProtocolMethods (iface.Resolve ());
+				if (storedMethods?.Count > 0) {
+					foreach (var imethod in storedMethods)
+						if (!iface_methods.Contains (imethod))
+							iface_methods.Add (imethod);
+				}
 				if (!iface.HasMethods)
 					continue;
 
@@ -466,6 +472,21 @@ namespace Registrar {
 			return false;
 		}
 
+		static TypeDefinition ResolveType (TypeReference tr)
+		{
+			// The static registrar might sometimes deal with types that have been linked away
+			// It's not always possible to call .Resolve () on types that have been linked away,
+			// it might result in a NotSupportedException, so here we manually replicate some
+			// resolution logic to try to avoid those NotSupportedExceptions.
+			// The static registrar calls .Resolve () in a lot of places; we'll only call
+			// this method if there's an actual need.
+			if (tr is ArrayType arrayType) {
+				return arrayType.ElementType.Resolve ();
+			} else {
+				return tr.Resolve ();
+			}
+		}
+
 		public static bool IsNativeObject (TypeReference tr)
 		{
 			var gp = tr as GenericParameter;
@@ -479,7 +500,8 @@ namespace Registrar {
 				return false;
 			}
 
-			var type = tr.Resolve ();
+			var type = ResolveType (tr);
+
 			while (type != null) {
 				if (type.HasInterfaces) {
 					foreach (var iface in type.Interfaces)
@@ -1027,6 +1049,20 @@ namespace Registrar {
 			return rv;
 		}
 
+		protected override TypeReference [] GetLinkedAwayInterfaces (TypeReference type)
+		{
+			if (LinkContext == null)
+				return null;
+			
+			if (LinkContext.ProtocolImplementations.TryGetValue (type.Resolve (), out var linkedAwayInterfaces) != true)
+				return null;
+
+			if (linkedAwayInterfaces.Count == 0)
+				return null;
+
+			return linkedAwayInterfaces.ToArray ();
+		}
+
 		protected override TypeReference GetGenericTypeDefinition (TypeReference type)
 		{
 			var git = type as GenericInstanceType;
@@ -1124,7 +1160,7 @@ namespace Registrar {
 				}
 				return null;
 			}
-			var type = tr.Resolve ();
+			var type = ResolveType (tr);
 			if (type.BaseType == null)
 				return null;
 
@@ -1267,11 +1303,16 @@ namespace Registrar {
 			return CreateExportAttribute (GetBasePropertyInTypeHierarchy (property) ?? property);
 		}
 
-		protected override ProtocolAttribute GetProtocolAttribute (TypeReference type)
+		public override ProtocolAttribute GetProtocolAttribute (TypeReference type)
 		{
 			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out var attrib))
 				return null;
 
+			return CreateProtocolAttribute (type, attrib);
+		}
+
+		public static ProtocolAttribute CreateProtocolAttribute (TypeReference type, ICustomAttribute attrib)
+		{
 			if (!attrib.HasProperties)
 				return new ProtocolAttribute ();
 
@@ -1282,7 +1323,7 @@ namespace Registrar {
 					rv.Name = (string) prop.Argument.Value;
 					break;
 				case "WrapperType":
-					rv.WrapperType = (TypeDefinition) prop.Argument.Value;
+					rv.WrapperType = ((TypeReference) prop.Argument.Value).Resolve ();
 					break;
 				case "IsInformal":
 					rv.IsInformal = (bool) prop.Argument.Value;
@@ -1600,6 +1641,28 @@ namespace Registrar {
 			}
 
 			return null;
+		}
+
+		protected override IList<AdoptsAttribute> GetAdoptsAttributes (TypeReference type)
+		{
+			var attributes = GetCustomAttributes (type.Resolve (), ObjCRuntime, "AdoptsAttribute");
+			if (attributes == null || !attributes.Any ())
+				return null;
+			
+			var rv = new List<AdoptsAttribute> ();
+			foreach (var ca in attributes) {
+				var attrib = new AdoptsAttribute ();
+				switch (ca.ConstructorArguments.Count) {
+				case 1:
+					attrib.ProtocolType = (string) ca.ConstructorArguments [0].Value;
+					break;
+				default:
+					throw ErrorHelper.CreateError (4124, "Invalid AdoptsAttribute found on '{0}': expected 1 constructor arguments, got {1}. Please file a bug report at https://bugzilla.xamarin.com", type.FullName, 1, ca.ConstructorArguments.Count);
+				}
+				rv.Add (attrib);
+			}
+
+			return rv;
 		}
 
 		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
@@ -2488,6 +2551,7 @@ namespace Registrar {
 			var map_init = new AutoIndentStringBuilder ();
 			var map_dict = new Dictionary<ObjCType, int> (); // maps ObjCType to its index in the map
 			var map_entries = 0;
+			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
 
 			var i = 0;
 			
@@ -2560,11 +2624,13 @@ namespace Registrar {
 
 				skip.Clear ();
 
+				uint token_ref = uint.MaxValue;
 				if (!@class.IsProtocol && !@class.IsCategory) {
 					if (!isPlatformType)
 						customTypeCount++;
 					
 					CheckNamespace (@class, exceptions);
+					token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
 					map.AppendLine ("{{ NULL, 0x{1:X} /* #{3} '{0}' => '{2}' */ }},", 
 									@class.ExportedName,
 									CreateTokenReference (@class.Type, TokenType.TypeDef), 
@@ -2603,6 +2669,12 @@ namespace Registrar {
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
 				}
 
+
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+					if (token_ref == uint.MaxValue)
+						token_ref = CreateTokenReference (@class.Type, TokenType.TypeDef);
+					protocol_wrapper_map.Add (token_ref, new Tuple<ObjCType, uint> (@class, CreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef)));
+				}
 				if (@class.IsWrapper && isPlatformType)
 					continue;
 
@@ -2650,6 +2722,15 @@ namespace Registrar {
 							any_protocols = true;
 							iface.Append (tp.Protocols [p].ProtocolName);
 							CheckNamespace (tp.Protocols [p], exceptions);
+						}
+					}
+					if (App.Optimizations.RegisterProtocols == true && tp.AdoptedProtocols != null) {
+						for (int p = 0; p < tp.AdoptedProtocols.Length; p++) {
+							if (tp.AdoptedProtocols [p] == "UIAppearance")
+								continue; // This is not a real protocol
+							iface.Append (any_protocols ? ", " : "<");
+							any_protocols = true;
+							iface.Append (tp.AdoptedProtocols [p]);
 						}
 					}
 					tp = tp.BaseType;
@@ -2849,16 +2930,28 @@ namespace Registrar {
 				map.AppendLine ();
 			}
 
+			if (protocol_wrapper_map.Count > 0) {
+				var ordered = protocol_wrapper_map.OrderBy ((v) => v.Key);
+				map.AppendLine ("static const MTProtocolWrapperMap __xamarin_protocol_wrapper_map [] = {");
+				foreach (var p in ordered) {
+					map.AppendLine ("{{ 0x{0:X} /* {1} */, 0x{2:X} /* {3} */ }},", p.Key, p.Value.Item1.Name, p.Value.Item2, p.Value.Item1.ProtocolWrapperType.Name);
+				}
+				map.AppendLine ("};");
+				map.AppendLine ();
+			}
+
 			map.AppendLine ("static struct MTRegistrationMap __xamarin_registration_map = {");
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
 			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
 			map.AppendLine (skipped_types.Count == 0 ? "NULL," : "__xamarin_skipped_map,");
+			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", customTypeCount);
 			map.AppendLine ("{0},", full_token_reference_count);
-			map.AppendLine ("{0}", skipped_types.Count);
+			map.AppendLine ("{0},", skipped_types.Count);
+			map.AppendLine ("{0}", protocol_wrapper_map.Count);
 			map.AppendLine ("};");
 
 
@@ -4496,5 +4589,10 @@ namespace Registrar {
 		public string Name { get; set; }
 		public bool IsWrapper { get; set; }
 		public bool SkipRegistration { get; set; }
+	}
+
+	class AdoptsAttribute : Attribute
+	{
+		public string ProtocolType { get; set; }
 	}
 }

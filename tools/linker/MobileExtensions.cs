@@ -34,13 +34,21 @@ namespace Xamarin.Linker {
 
 		public static bool HasCustomAttribute (this ICustomAttributeProvider provider, string @namespace, string name)
 		{
+			return HasCustomAttribute (provider, @namespace, name, out _);
+		}
+
+		public static bool HasCustomAttribute (this ICustomAttributeProvider provider, string @namespace, string name, out CustomAttribute attrib)
+		{
+			attrib = null;
 			if (provider == null || !provider.HasCustomAttributes)
 				return false;
 
 			foreach (CustomAttribute attribute in provider.CustomAttributes) {
 				TypeReference tr = attribute.Constructor.DeclaringType;
-				if (tr.Is (@namespace, name))
+				if (tr.Is (@namespace, name)) {
+					attrib = attribute;
 					return true;
+				}
 			}
 			return false;
 		}

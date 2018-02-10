@@ -348,3 +348,14 @@ the static registrar is enabled by default for release builds).
 
 The default behavior can be overridden by passing `--optimize=[+|-]blockliteral-setupblock` to mtouch/mmp.
 
+Optimize support for protocols
+------------------------------
+
+This optimization requires both the linker and the static registrar to be
+enabled.
+
+On Xamarin.iOS this optimization is enabled by default when both the linker
+and the static registrar are enabled. On Xamarin.Mac this optimization is
+never enabled by default.
+
+The default behavior can be overridden by passing `--optimize=-register-protocols` to mtouch/mmp.

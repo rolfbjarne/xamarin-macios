@@ -59,14 +59,20 @@ namespace Xamarin.Bundler
 
 		public void Initialize (Application app)
 		{
-			// warn if the user asked to optimize something when the linker is not enabled
-			if (app.LinkMode == LinkMode.None) {
-				for (int i = 0; i < values.Length; i++) {
-					if (!values [i].HasValue)
-						continue;
-					ErrorHelper.Warning (2003, $"Option '--optimize={(values [i].Value ? "" : "-")}{opt_names [i]}' will be ignored since linking is disabled");
+			// warn if the user asked to optimize something when the optimization can't be applied
+			for (int i = 0; i < values.Length; i++) {
+				if (!values [i].HasValue)
+					continue;
+				switch (i) {
+				case 6:
+					if (app.Registrar != RegistrarMode.Static)
+						ErrorHelper.Warning (2003, $"Option '--optimize={(values [i].Value ? "" : "-")}{opt_names [i]}' will be ignored since the static registrar is not enabled");
+					goto default; // also requires the linker
+				default:
+					if (app.LinkMode == LinkMode.None)
+						ErrorHelper.Warning (2003, $"Option '--optimize={(values [i].Value ? "" : "-")}{opt_names [i]}' will be ignored since linking is disabled");
+					break;
 				}
-				return;
 			}
 
 			// by default we keep the code to ensure we're executing on the UI thread (for UI code) for debug builds

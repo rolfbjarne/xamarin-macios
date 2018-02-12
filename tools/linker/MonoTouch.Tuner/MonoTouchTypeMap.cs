@@ -24,11 +24,95 @@ namespace MonoTouch.Tuner {
 	public class MonoTouchTypeMapStep : TypeMapStep {
 		HashSet<TypeDefinition> cached_isnsobject = new HashSet<TypeDefinition> ();
 		Dictionary<TypeDefinition, bool?> isdirectbinding_value = new Dictionary<TypeDefinition, bool?> ();
+		bool dynamic_registration_support_required;
+		List<Exception> exceptions;
 
 		DerivedLinkContext LinkContext {
 			get {
 				return (DerivedLinkContext) base.Context;
 			}
+		}
+
+		protected override void ProcessAssembly (AssemblyDefinition assembly)
+		{
+			if (LinkContext.App.Optimizations.RemoveDynamicRegistrar != false)
+				dynamic_registration_support_required |= RequiresDynamicRegistrar (assembly, LinkContext.App.Optimizations.RemoveDynamicRegistrar == true);
+
+			base.ProcessAssembly (assembly);
+		}
+
+		// If certain conditions are met, we can optimize away the code for the dynamic registrar.
+		bool RequiresDynamicRegistrar (AssemblyDefinition assembly, bool errorIfRequired)
+		{
+			// Disable removing the dynamic registrar for XM/Classic to simplify the code a little bit.
+			if (!Driver.IsUnified)
+				return true;
+
+			if (!Profile.IsSdkAssembly (assembly)) {
+				// We know that the SDK assemblies we ship don't use the methods we're looking for.
+				if (Profile.IsProductAssembly (assembly) || HasProductReference (assembly)) {
+					// Check if the assembly references the method.
+					foreach (var mr in assembly.MainModule.GetMemberReferences ()) {
+						if (!Profile.IsProductAssembly (mr.Module.Assembly))
+							continue;
+
+						if (mr.DeclaringType == null)
+							continue;
+
+						if (mr.DeclaringType.Namespace != "ObjCRuntime")
+							continue;
+
+						switch (mr.DeclaringType.Name) {
+						case "Runtime":
+							switch (mr.Name) {
+							case "ConnectMethod":
+								// Req 1: Nobody must call Runtime.ConnectMethod.
+								if (errorIfRequired) {
+									if (exceptions == null)
+										exceptions = new List<Exception> ();
+									exceptions.Add (ErrorHelper.CreateError (2107, "Can't remove the dynamic registrar, because {0} references BlockLiteral.SetupBlock.", assembly.FullName));
+								}
+								
+								return true;	
+							}
+							break;
+						case "BlockLiteral":
+							switch (mr.Name) {
+							case "SetupBlock":
+							case "SetupBlockUnsafe":
+								// Req 2: Nobody must call BlockLiteral.SetupBlock[Unsafe].
+								//
+								// Fortunately the linker is able to rewrite calls to SetupBlock[Unsafe] to call
+								// SetupBlockImpl (which doesn't need the dynamic registrar), which means we only have
+								// to look in assemblies that aren't linked.
+								if (LinkContext.Annotations.GetAction (assembly) == Mono.Linker.AssemblyAction.Link && LinkContext.App.Optimizations.OptimizeBlockLiteralSetupBlock == true)
+									break;
+
+								if (errorIfRequired) {
+									if (exceptions == null)
+										exceptions = new List<Exception> ();
+									exceptions.Add (ErrorHelper.CreateError (2107, "Can't remove the dynamic registrar, because {0} references BlockLiteral.{1}.", assembly.FullName, mr.Name));
+								}
+								
+								return true;
+							}
+							break;
+							
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+		bool HasProductReference (AssemblyDefinition assembly)
+		{
+			foreach (var ar in assembly.MainModule.AssemblyReferences) {
+				if (Profile.IsProductAssembly (ar.Name))
+					return true;
+			}
+			return false;
 		}
 
 		protected override void EndProcess ()
@@ -37,6 +121,15 @@ namespace MonoTouch.Tuner {
 
 			LinkContext.CachedIsNSObject = cached_isnsobject;
 			LinkContext.IsDirectBindingValue = isdirectbinding_value;
+
+			if (exceptions?.Count > 0)
+				throw new AggregateException (exceptions);
+
+			if (!LinkContext.App.Optimizations.RemoveDynamicRegistrar.HasValue) {
+				// If dynamic registration is not supported, and removal of the dynamic registrar hasn't already
+				// been disabled, then we can remove it!
+				LinkContext.App.Optimizations.RemoveDynamicRegistrar = !dynamic_registration_support_required;
+			}
 		}
 
 		protected override void MapType (TypeDefinition type)

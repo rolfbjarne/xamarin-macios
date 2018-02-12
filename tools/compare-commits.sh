@@ -107,16 +107,24 @@ COMP_HASH=$(git log -1 --pretty=%H $COMP_HASH)
 BASE_HASH=$(git log -1 --pretty=%H $BASE_HASH)
 
 # Save the current branch/hash
-CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+CURRENT_BRANCH=$(git symbolic-ref --short HEAD || true)
+CURRENT_HASH=$(git log -1 --pretty=%H)
 
 GENERATOR_DIFF_FILE=
 APIDIFF_FILE=
 
 function upon_exit ()
 {
-	echo "Restoring the previous branch ${BLUE}$CURRENT_BRANCH${CLEAR}..."
-	git checkout --force $CURRENT_BRANCH
-	echo "Previous branch restored successfully."
+	if test -z $CURRENT_BRANCH; then
+		echo "Restoring the previous hash ${BLUE}${CURRENT_BRANCH}${CLEAR} (there was no previous branch; probably because HEAD was detached)"
+		git checkout --force $CURRENT_HASH
+		echo "Previous hash restored successfully."
+	else
+		echo "Restoring the previous branch ${BLUE}$CURRENT_BRANCH${CLEAR}..."
+		git checkout --force $CURRENT_BRANCH
+		git reset --hard $CURRENT_HASH
+		echo "Previous branch restored successfully."
+	fi
 
 	if ! test -z $GENERATOR_DIFF_FILE; then
 		echo "Generator diff: $GENERATOR_DIFF_FILE"

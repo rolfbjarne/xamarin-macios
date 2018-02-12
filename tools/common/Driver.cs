@@ -130,6 +130,7 @@ namespace Xamarin.Bundler {
 					"Available optimizations:\n" +
 					"    dead-code-elimination: By default always enabled (requires the linker). Removes IL instructions the linker can determine will never be executed. This is most useful in combination with the inline-* optimizations, since inlined conditions almost always also results in blocks of code that will never be executed.\n" +
 					"    remove-uithread-checks: By default enabled for release builds (requires the linker). Remove all UI Thread checks (makes the app smaller, and slightly faster at runtime).\n" +
+					"    remove-dynamic-registrar: By default enabled when the static registrar is enabled. Removes the dynamic registrar (makes the app smaller).\n" +
 #if MONOTOUCH
 					"    inline-isdirectbinding: By default enabled (requires the linker). Tries to inline calls to NSObject.IsDirectBinding to load a constant value. Makes the app smaller, and slightly faster at runtime.\n" +
 #else

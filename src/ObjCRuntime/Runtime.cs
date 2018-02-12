@@ -177,6 +177,7 @@ namespace ObjCRuntime {
 #endif
 
 		[Preserve] // called from native - runtime.m.
+		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		unsafe static void Initialize (InitializationOptions* options)
 		{
 #if PROFILE
@@ -1379,6 +1380,7 @@ namespace ObjCRuntime {
 			ConnectMethod (type, method, new ExportAttribute (selector.Name));
 		}
 			
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void ConnectMethod (Type type, MethodInfo method, ExportAttribute export)
 		{
 			if (type == null)

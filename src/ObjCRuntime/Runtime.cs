@@ -157,12 +157,7 @@ namespace ObjCRuntime {
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static bool DynamicRegistrationSupported {
 			get {
-				// The linker will turn calls to this property into a constant, and for if blocks remove the resulting dead code.
-				//
-				// The value is false for Xamarin.iOS (it's true by default for Xamarin.Mac apps) if all of these conditions are true:
-				// * The static registrar is selected
-				// * No Runtime.ConnectMethod overloads are used anywhere.
-				// * No BlockLiteral.SetupBlock calls anywhere (the linker can rewrite some BlockLiteral.SetupBlock calls so that they do not count, but not always).
+				// The linker may turn calls to this property into a constant
 				return true;
 			}
 		}

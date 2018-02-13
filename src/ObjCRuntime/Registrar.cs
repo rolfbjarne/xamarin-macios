@@ -1650,7 +1650,8 @@ namespace Registrar {
 				if (protocolList == null)
 					protocolList = new List<ObjCType> ();
 				foreach (var iface in linkedAwayInterfaces) {
-					if (!HasProtocolAttribute (iface))
+					var proto = GetProtocolAttribute (iface);
+					if (proto != null || proto.IsInformal)
 						continue;
 					// We can't register this interface (because it's been linked away),
 					// but we still need to return information about it.

@@ -1648,6 +1648,7 @@ namespace Registrar {
 						} else {
 							protocolList.Add (baseP);
 						}
+					}
 				}
 			}
 

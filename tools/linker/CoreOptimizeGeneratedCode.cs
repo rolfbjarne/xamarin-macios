@@ -196,6 +196,8 @@ namespace Xamarin.Linker {
 			case Code.Callvirt:
 			case Code.Box:
 			case Code.Ldsfld:
+			case Code.Ldind_Ref:
+			case Code.Dup:
 				return null; // just to not hit the CWL below
 #endif
 			default:

@@ -174,9 +174,9 @@ namespace ObjCRuntime {
 			if (Runtime.DynamicRegistrationSupported)
 				return Runtime.Registrar.Lookup (klass, throw_on_error);
 
-			// FIXME: add tests, both working and failing
 			if (throw_on_error)
-				throw ErrorHelper.CreateError (8999 /* FIXME */, $"Could not find class 0x{klass.ToString ("x")}");
+				throw ErrorHelper.CreateError (8026, $"Can't lookup the Objective-C class 0x{klass.ToString ("x")} ({class_getName (klass)}) when the dynamic registrar has been linked away.");
+
 			return null;
 		}
 

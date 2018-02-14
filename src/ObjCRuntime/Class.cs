@@ -401,7 +401,7 @@ namespace ObjCRuntime {
 				return asm;
 			}
 
-			throw ErrorHelper.CreateError (8019, $"Could not find the assembly {Marshal.PtrToStringUTF8 (assembly_name)} in the loaded assemblies.");
+			throw ErrorHelper.CreateError (8019, $"Could not find the assembly {assembly_name} in the loaded assemblies.");
 		}
 
 		internal unsafe static uint GetTokenReference (Type type)

@@ -126,7 +126,7 @@ namespace MonoTouch.Tuner {
 				throw new AggregateException (exceptions);
 
 			if (!LinkContext.App.Optimizations.RemoveDynamicRegistrar.HasValue) {
-				// If dynamic registration is not supported, and removal of the dynamic registrar hasn't already
+				// If dynamic registration is not required, and removal of the dynamic registrar hasn't already
 				// been disabled, then we can remove it!
 				LinkContext.App.Optimizations.RemoveDynamicRegistrar = !dynamic_registration_support_required;
 			}

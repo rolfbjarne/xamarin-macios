@@ -1311,16 +1311,11 @@ Please file an [issue](https://github.com/xamarin/xamarin-macios/issues/new)
 along with a complete build log so that we can investigate what went wrong and
 possibly enable more scenarios in the future.
 
-### <a name="MT2107"/>MT2107: Can't remove the dynamic registrar, because {reasons}
+### <a name="MT2107"/>MT2107: It's not safe to remove the dynamic registrar because {reasons}
 
-The linker reports this error when the developer requests removal of the
+The linker reports this warning when the developer requests removal of the
 dynamic registrar (by passing `--optimize:remove-dynamic-registrar` to
-mtouch), but the linker determines that it's not possible to remove the
-dynamic registrar.
-
-Please file an [issue](https://github.com/xamarin/xamarin-macios/issues/new)
-along with a complete build log so that we can investigate what went wrong and
-possibly enable more scenarios in the future.
+mmp), but the linker determines that it's not safe to do so.
 
 # MT3xxx: AOT error messages
 

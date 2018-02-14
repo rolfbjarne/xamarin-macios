@@ -80,7 +80,8 @@ namespace Xamarin.ApiTest
 				}
 			}
 
-			CollectionAssert.IsEmpty (failures, "All methods calling SetupBlock[Unsafe] must be optimizable");
+			if (failures.Count > 0)
+				Assert.Fail ($"All methods calling optimizable API must be optimizable\n\t{string.Join ("\n\t", failures)}");
 		}
 
 		bool IsOptimizable (MethodDefinition method)

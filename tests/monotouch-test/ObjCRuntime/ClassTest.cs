@@ -83,8 +83,16 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			Assert.AreEqual (typeof (NSObject), Class.Lookup (new Class (typeof (NSObject))), "NSObject");
 			Assert.AreEqual (typeof (NSString), Class.Lookup (new Class (typeof (NSString))), "NSString");
 			Assert.AreNotEqual (typeof (NSObject), Class.Lookup (new Class (typeof (NSString))), "neq");
-			Assert.AreEqual (typeof (NSString), Class.Lookup (new Class ("__CFConstantString")), "NSString subclass");
-			Assert.Throws<ArgumentNullException> (() => Class.Lookup (new Class ("NSProxy")), "NSProxy");
+			try {
+				Class.Lookup (new Class ("NSProxy"));
+			} catch (Exception e) {
+				Assert.AreEqual (typeof (RuntimeException), e.GetType (), "NSProxy exception");
+				Assert.AreEqual (e.Message, "The ObjectiveC class 'NSProxy' could not be registered, it does not seem to derive from any known ObjectiveC class (including NSObject).", "NSProxy exception message");
+			}
+			Assert.Throws<ArgumentException> (() => new Class ("InexistentClass"), "inexistent");
+			// Private class which we've obviously not bound, but we've bound a super class.
+			// And yes, NSMutableString is the first public superclass of __NSCFConstantString.
+			Assert.AreEqual (typeof (NSMutableString), Class.Lookup (new Class ("__NSCFConstantString")), "private class"); 
 		}
 
 		[Test]

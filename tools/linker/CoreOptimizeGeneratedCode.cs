@@ -208,6 +208,9 @@ namespace Xamarin.Linker {
 
 		static bool MarkInstructions (MethodDefinition method, Mono.Collections.Generic.Collection<Instruction> instructions, bool [] reachable, int start, int end)
 		{
+			// Skip any nop instructions
+			while (instructions [start].OpCode.Code == Code.Nop)
+				start++;
 			if (reachable [start])
 				return true; // We've already marked this section of code
 

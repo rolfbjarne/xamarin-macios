@@ -480,11 +480,11 @@ namespace ObjCRuntime {
 			var @class = FindClass (type, out is_custom_type);
 			if (@class != IntPtr.Zero)
 				return is_custom_type;
-			// The linker will remove this condition (and the subsequent method call) if possible
+			
 			if (Runtime.DynamicRegistrationSupported)
 				return Runtime.Registrar.IsCustomType (type);
-			// FIXME: add tests, failing and working.
-			throw ErrorHelper.CreateError (8999 /* FIXME */, "Can't determine custom-ness");
+
+			throw ErrorHelper.CreateError (8026, $"Can't determine if {type.FullName} is a custom type when the dynamic registrar has been linked away.");
 		}
 
 		[DllImport ("/usr/lib/libobjc.dylib")]

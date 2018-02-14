@@ -55,6 +55,53 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			Assert.That (p, Is.Not.EqualTo (IntPtr.Zero), "Class");
 		}
 
+		[Test]
+		public void Ctor ()
+		{
+			Assert.DoesNotThrow (() => new Class (typeof (NSObject)), "NSObject");
+			if (Runtime.DynamicRegistrationSupported) {
+				Assert.AreEqual (IntPtr.Zero, new Class (typeof (string)).Handle, "string");
+			} else {
+				Assert.Throws<ArgumentNullException> (() => new Class (typeof (string)), "string");
+			}
+		}
+
+		[Test]
+		public void GetHandle ()
+		{
+			Assert.AreNotEqual (IntPtr.Zero, Class.GetHandle (typeof (NSObject)), "NSObject");
+			if (Runtime.DynamicRegistrationSupported) {
+				Assert.AreEqual (IntPtr.Zero, Class.GetHandle (typeof (string)), "string 1");
+			} else {
+				Assert.Throws<ArgumentNullException> (() => Class.GetHandle (typeof (string)), "string b");
+			}
+		}
+
+		[Test]
+		public void Lookup ()
+		{
+			Assert.AreEqual (typeof (NSObject), Class.Lookup (new Class (typeof (NSObject))), "NSObject");
+			Assert.AreEqual (typeof (NSString), Class.Lookup (new Class (typeof (NSString))), "NSString");
+			Assert.AreNotEqual (typeof (NSObject), Class.Lookup (new Class (typeof (NSString))), "neq");
+			Assert.AreEqual (typeof (NSString), Class.Lookup (new Class ("__CFConstantString")), "NSString subclass");
+			Assert.Throws<ArgumentNullException> (() => Class.Lookup (new Class ("NSProxy")), "NSProxy");
+		}
+
+		[Test]
+		public void IsCustomType ()
+		{
+			using (var str = new DirtyType ())
+				str.MarkDirty ();
+		}
+
+		class DirtyType : NSObject
+		{
+			public void MarkDirty ()
+			{
+				base.MarkDirty ();
+			}
+		}
+
 		// Not sure what to do about this one, it doesn't compile with the static registrar (since linking fails)
 #if DYNAMIC_REGISTRAR
 		[Test]

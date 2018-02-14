@@ -544,6 +544,7 @@ namespace ObjCRuntime {
 			return Registrar.ComputeSignature (method, isBlockSignature);
 		}
 
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void RegisterAssembly (Assembly a)
 		{
 			if (a == null)

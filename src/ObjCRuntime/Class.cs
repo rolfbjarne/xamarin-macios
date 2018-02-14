@@ -27,6 +27,7 @@ namespace ObjCRuntime {
 
 		internal IntPtr handle;
 
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		internal unsafe static void Initialize (Runtime.InitializationOptions* options)
 		{
 			var map = options->RegistrationMap;
@@ -36,7 +37,7 @@ namespace ObjCRuntime {
 			if (map == null)
 				return;
 
-			if (Runtime.DynamicRegistrationSupported)
+			if (!Runtime.DynamicRegistrationSupported)
 				return; // Only the dynamic registrar needs the list of registered assemblies.
 			
 			for (int i = 0; i < map->assembly_count; i++) {

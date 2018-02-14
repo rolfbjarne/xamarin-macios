@@ -62,7 +62,12 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			if (Runtime.DynamicRegistrationSupported) {
 				Assert.AreEqual (IntPtr.Zero, new Class (typeof (string)).Handle, "string");
 			} else {
-				Assert.Throws<ArgumentNullException> (() => new Class (typeof (string)), "string");
+				try {
+					new Class (typeof (string));
+				} catch (Exception e) {
+					Assert.AreEqual (typeof (RuntimeException), e.GetType (), "string exc");
+					Assert.AreEqual ("Can't register the class System.String when the dynamic registrar has been linked away.", e.Message, "exc message");
+				}
 			}
 		}
 
@@ -73,7 +78,12 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			if (Runtime.DynamicRegistrationSupported) {
 				Assert.AreEqual (IntPtr.Zero, Class.GetHandle (typeof (string)), "string 1");
 			} else {
-				Assert.Throws<ArgumentNullException> (() => Class.GetHandle (typeof (string)), "string b");
+				try {
+					Class.GetHandle (typeof (string));
+				} catch (Exception e) {
+					Assert.AreEqual (typeof (RuntimeException), e.GetType (), "string exc");
+					Assert.AreEqual ("Can't register the class System.String when the dynamic registrar has been linked away.", e.Message, "exc message");
+				}
 			}
 		}
 
@@ -87,7 +97,11 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Class.Lookup (new Class ("NSProxy"));
 			} catch (Exception e) {
 				Assert.AreEqual (typeof (RuntimeException), e.GetType (), "NSProxy exception");
-				Assert.AreEqual (e.Message, "The ObjectiveC class 'NSProxy' could not be registered, it does not seem to derive from any known ObjectiveC class (including NSObject).", "NSProxy exception message");
+				if (Runtime.DynamicRegistrationSupported) {
+					Assert.AreEqual ("The ObjectiveC class 'NSProxy' could not be registered, it does not seem to derive from any known ObjectiveC class (including NSObject).", e.Message, "NSProxy exception message");
+				} else {
+					Assert.That (e.Message, Is.StringMatching ("Can't lookup the Objective-C class 0x.* w"), "NSProxy exception message 2");
+				}
 			}
 			Assert.Throws<ArgumentException> (() => new Class ("InexistentClass"), "inexistent");
 			// Private class which we've obviously not bound, but we've bound a super class.

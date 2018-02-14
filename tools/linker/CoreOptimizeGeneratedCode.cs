@@ -551,6 +551,15 @@ namespace Xamarin.Linker {
 				return;
 			}
 
+			if (!LinkContext.App.DynamicRegistrationSupported && method.Name == "get_DynamicRegistrationSupported" && method.DeclaringType.Is (Namespaces.ObjCRuntime, "Runtime")) {
+				// Rewrite to return 'false'
+				var instr = method.Body.Instructions;
+				instr.Clear ();
+				instr.Add (Instruction.Create (OpCodes.Ldc_I4_0));
+				instr.Add (Instruction.Create (OpCodes.Ret));
+				return; // nothing else to do here.
+			}
+
 			var instructions = method.Body.Instructions;
 			for (int i = 0; i < instructions.Count; i++) {
 				var ins = instructions [i];
@@ -675,7 +684,7 @@ namespace Xamarin.Linker {
 
 		void ProcessIsDynamicSupported (MethodDefinition caller, Instruction ins)
 		{
-			const string operation = "inline Runtime.IsDynamicSupported";
+			const string operation = "inline Runtime.DynamicRegistrationSupported";
 
 			if (Optimizations.InlineDynamicRegistrationSupported != true)
 				return;

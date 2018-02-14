@@ -66,7 +66,6 @@ LINKER_SOURCES = \
 	$(LINKER_DIR)/MonoTouch.Tuner/MonoTouchMarkStep.cs		\
 	$(LINKER_DIR)/MonoTouch.Tuner/MonoTouchProfile.cs		\
 	$(LINKER_DIR)/MonoTouch.Tuner/MonoTouchSweepStep.cs		\
-	$(LINKER_DIR)/MonoTouch.Tuner/MonoTouchTypeMap.cs		\
 	$(LINKER_DIR)/MonoTouch.Tuner/OptimizeGeneratedCodeSubStep.cs	\
 	$(LINKER_DIR)/MonoTouch.Tuner/PreserveCode.cs			\
 	$(LINKER_DIR)/MonoTouch.Tuner/ProcessExportedFields.cs	\
@@ -83,6 +82,7 @@ LINKER_SOURCES = \
 	$(TOP)/tools/linker/CoreRemoveAttributes.cs		\
 	$(TOP)/tools/linker/CoreRemoveSecurity.cs		\
 	$(TOP)/tools/linker/CoreSweepStep.cs		\
+	$(TOP)/tools/linker/CoreTypeMapStep.cs		\
 	$(TOP)/tools/linker/ExceptionalSubStep.cs		\
 	$(TOP)/tools/linker/MarkNSObjects.cs			\
 	$(TOP)/tools/linker/MobileExtensions.cs		\

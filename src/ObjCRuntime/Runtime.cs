@@ -549,6 +549,8 @@ namespace ObjCRuntime {
 			if (a == null)
 				throw new ArgumentNullException ("a");
 
+			if (!DynamicRegistrationSupported)
+				throw ErrorHelper.CreateError (8026, "Runtime.RegisterAssembly is not supported when the dynamic registrar has been linked away.");
 #if MONOMAC
 			var attributes = a.GetCustomAttributes (typeof (RequiredFrameworkAttribute), false);
 

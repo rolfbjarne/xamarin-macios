@@ -68,7 +68,7 @@ namespace ObjCRuntime {
 
 <# } #>
 
-        [BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
+		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		static void RegisterDelegates (InitializationOptions* options)
 		{
 <# foreach (var d in delegates) {
@@ -76,7 +76,7 @@ namespace ObjCRuntime {
 			options->Delegates-><#= d.SimpleEntryPoint #> = GetFunctionPointer (new <#= d.SimpleEntryPoint #>_delegate (<#= d.SimpleEntryPoint #>));
 <# } #>
 
-            // The linker will remove this condition (and the subsequent method call) if possible
+			// The linker will remove this condition (and the subsequent method call) if possible
 			if (DynamicRegistrationSupported)
 				RegisterDelegatesDynamic (options);
 		}

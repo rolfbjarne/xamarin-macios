@@ -256,7 +256,6 @@ namespace VideoToolbox {
 		}
 
 		[Mac (10,11), iOS (9,0)]
-		[BindingImpl (BindingImplOptions.Optimizable)]
 		public VTStatus DecodeFrame (CMSampleBuffer sampleBuffer, VTDecodeFrameFlags decodeFlags,
 			out VTDecodeInfoFlags infoFlags, VTDecompressionOutputHandler outputHandler)
 		{

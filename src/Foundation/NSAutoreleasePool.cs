@@ -39,7 +39,6 @@ namespace Foundation {
 		public override IntPtr ClassHandle { get { return Class.GetHandle ("NSAutoreleasePool"); } }
 
 		[Export ("init")]
-		[BindingImpl (BindingImplOptions.Optimizable)]
 		public NSAutoreleasePool () : base (NSObjectFlag.Empty)
 		{
 			IsDirectBinding = GetType () == typeof (NSAutoreleasePool);

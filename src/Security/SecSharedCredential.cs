@@ -18,7 +18,6 @@ namespace Security {
 			IntPtr /* void (^completionHandler)( CFErrorRef error) ) */ completionHandler);
 			
 		[UnmanagedFunctionPointerAttribute (CallingConvention.Cdecl)]
-		[UserDelegateType (typeof (global::System.Action<NSError>))]
 		internal delegate void DActionArity1V12 (IntPtr block, IntPtr obj);
 		
 		// This class bridges native block invocations that call into C#
@@ -72,7 +71,6 @@ namespace Security {
 			IntPtr /* void (^completionHandler)( CFArrayRef credentials, CFErrorRef error) */ completionHandler);
 
 		[UnmanagedFunctionPointerAttribute (CallingConvention.Cdecl)]
-		[UserDelegateType (typeof (global::System.Action<NSArray, NSError>))]
 		internal delegate void ArrayErrorAction (IntPtr block, IntPtr array, IntPtr err);
 
 		//

@@ -87,7 +87,7 @@ namespace Xamarin.Bundler {
 
 		public bool DynamicRegistrationSupported {
 			get {
-				return Optimizations.RemoveDynamicRegistrar.Value != true;
+				return Optimizations.RemoveDynamicRegistrar != true;
 			}
 		}
 

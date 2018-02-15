@@ -167,6 +167,8 @@ namespace ObjCRuntime {
 				var tp = FindType (find_class, out is_custom_type);
 				if (tp != null)
 					return tp;
+				if (Runtime.DynamicRegistrationSupported)
+					break; // We can't continue looking up the hierarchy if we have the dynamic registrar, because we might be supposed to register this class.
 				find_class = class_getSuperclass (find_class);
 			} while (find_class != IntPtr.Zero);
 

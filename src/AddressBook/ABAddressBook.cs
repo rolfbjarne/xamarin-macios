@@ -224,7 +224,6 @@ namespace AddressBook {
 			}
 		}
 
-		[UserDelegateType (typeof (Action<bool, NSError>))]
 		internal delegate void InnerCompleted (IntPtr block, bool success, IntPtr error);
 		static readonly InnerCompleted static_completionHandler = TrampolineCompletionHandler;
 		[MonoPInvokeCallback (typeof (InnerCompleted))]

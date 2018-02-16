@@ -397,6 +397,7 @@ public class B : A {}
 					mtouch.DSym = false; // faster test
 					mtouch.MSym = false; // faster test
 					mtouch.NoStrip = true; // faster test
+					mtouch.Verbosity = 20;
 
 					var timestamp = DateTime.MinValue;
 
@@ -477,7 +478,8 @@ public class B : A {}
 
 					timestamp = DateTime.Now;
 					System.Threading.Thread.Sleep (1000); // make sure all new timestamps are at least a second older. HFS+ has a 1s timestamp resolution :(
-
+					File.Copy ("/work/maccore/embeddinator/xamarin-macios/tests/mtouch/bin/Debug/tmp-test-dir/Xamarin.Tests.BundlerTool.CreateTemporaryDirectory2/mtouch-test-cache/armv7/main.m", "/tmp/main.m");
+					File.Copy ("/work/maccore/embeddinator/xamarin-macios/tests/mtouch/bin/Debug/tmp-test-dir/Xamarin.Tests.BundlerTool.CreateTemporaryDirectory2/mtouch-test-cache/registrar.m", "/tmp/registrar.m");
 					{
 						// Add a satellite to the extension.
 						var satellite = extension.CreateTemporarySatelliteAssembly ();

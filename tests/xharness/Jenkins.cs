@@ -2572,6 +2572,7 @@ function toggleAll (show)
 			ExecutionResult = TestExecutingResult.Building;
 			using (var resource = await NotifyAndAcquireDesktopResourceAsync ()) {
 				var log = Logs.Create ($"build-{Platform}-{Timestamp}.txt", "Build log");
+				log.Timestamp = true;
 				await RestoreNugetsAsync (log, resource);
 				using (var xbuild = new Process ()) {
 					xbuild.StartInfo.FileName = "/Applications/Visual Studio.app/Contents/MacOS/vstool";
@@ -2646,6 +2647,7 @@ function toggleAll (show)
 		{
 			using (var resource = await NotifyAndAcquireDesktopResourceAsync ()) {
 				var log = Logs.Create ($"build-{Platform}-{Timestamp}.txt", "Build log");
+				log.Timestamp = true;
 
 				await RestoreNugetsAsync (log, resource);
 

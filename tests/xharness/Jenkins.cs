@@ -753,12 +753,11 @@ namespace xharness
 			};
 			Tasks.Add (runGenerator);
 
-			var run_mmp = new MakeTask
-			{
+			var run_mmp = new MakeTask {
 				Jenkins = this,
 				Platform = TestPlatform.Mac,
 				TestName = "MMP Regression Tests",
-				Target = "all -j" + Environment.ProcessorCount,
+				Target = "all", // -j" + Environment.ProcessorCount,
 				WorkingDirectory = Path.Combine (Harness.RootDirectory, "mmptest", "regression"),
 				Ignored = !IncludeMmpTest || !IncludeMac,
 				Timeout = TimeSpan.FromMinutes (30),
@@ -768,6 +767,8 @@ namespace xharness
 			{
 				foreach (var log in Directory.GetFiles (Path.GetFullPath (run_mmp.WorkingDirectory), "*.log", SearchOption.AllDirectories))
 					run_mmp.Logs.AddFile (log, log.Substring (run_mmp.WorkingDirectory.Length + 1));
+				var files = Directory.GetFiles (Path.GetFullPath (run_mmp.WorkingDirectory), "*", SearchOption.AllDirectories);
+				Harness.HarnessLog.WriteLine ($"{files.Length} files in mmptest/regression:\n\t{string.Join ("\n\t", files)}");
 			});
 			run_mmp.Environment.Add ("BUILD_REVISION", "jenkins"); // This will print "@MonkeyWrench: AddFile: <log path>" lines, which we can use to get the log filenames.
 			Tasks.Add (run_mmp);

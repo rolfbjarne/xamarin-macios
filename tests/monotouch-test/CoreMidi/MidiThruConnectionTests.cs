@@ -135,7 +135,7 @@ namespace MonoTouchFixtures.CoreMidi {
 				var connections = MidiThruConnection.Find ("com.xamarin.midi", out err);
 				Assert.IsTrue (err == MidiError.Ok, "midi connection error");
 				Assert.NotNull (connections, "connections should not be null");
-				Assert.IsTrue (connections.Length == 2, "2 midi connections");
+				Assert.AreEqual (2, connections.Length, "2 midi connections");
 			}
 		}
 	}

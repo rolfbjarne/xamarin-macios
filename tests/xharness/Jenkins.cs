@@ -1224,6 +1224,11 @@ namespace xharness
 
 		string GetTestColor (TestTask test)
 		{
+			return GetTestColor (test.LastRun);
+		}
+
+		string GetTestColor (TestRun test)
+		{
 			if (test.NotStarted) {
 				return "black";
 			} else if (test.InProgress) {
@@ -1860,7 +1865,11 @@ function toggleAll (show)
 					 }).
 					ThenBy ((v) => v.Key, StringComparer.OrdinalIgnoreCase);
 				}
+
 				foreach (var group in orderedTasks) {
+					if (group.Count () > 1)
+						Debugger.Break ();
+					
 					var singleTask = group.Count () == 1;
 					var groupId = group.Key.Replace (' ', '-');
 
@@ -1899,11 +1908,9 @@ function toggleAll (show)
 							writer.WriteLine ($"<div id='test_container2_{modeGroupId}' class='togglable' style='display: {defaultDisplay}; margin-left: 20px;'>");
 						}
 						foreach (var test in modeGroup.OrderBy ((v) => v.Variation, StringComparer.OrdinalIgnoreCase)) {
-							var runTest = test as RunTestTask;
 							string state;
 							state = test.ExecutionResult.ToString ();
 							var log_id = id_counter++;
-							var logs = test.AggregatedLogs.ToList ();
 							string title;
 							if (multipleModes) {
 								title = test.Variation ?? "Default";
@@ -1924,158 +1931,9 @@ function toggleAll (show)
 							if (IsServerMode && !test.InProgress && !test.Waiting)
 								writer.Write ($" <span><a class='runall' href='javascript:runtest ({test.ID})'>Run</a></span> ");
 							writer.WriteLine ("</div>");
-							writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable logs togglable' data-onautorefresh='{log_id}' style='display: {defaultDisplay};'>");
 
-							if (!string.IsNullOrEmpty (test.FailureMessage)) {
-								var msg = System.Web.HttpUtility.HtmlEncode (test.FailureMessage).Replace ("\n", "<br />");
-								if (test.FailureMessage.Contains ('\n')) {
-									writer.WriteLine ($"Failure:<br /> <div style='margin-left: 20px;'>{msg}</div>");
-								} else {
-									writer.WriteLine ($"Failure: {msg} <br />");
-								}
-							}
-							var progressMessage = test.ProgressMessage;
-							if (!string.IsNullOrEmpty (progressMessage))
-								writer.WriteLine (progressMessage + "<br />");
-							if (runTest != null) {
-								if (runTest.BuildTask.Duration.Ticks > 0) {
-									writer.WriteLine ($"Project file: {runTest.BuildTask.ProjectFile} <br />");
-									writer.WriteLine ($"Platform: {runTest.BuildTask.ProjectPlatform} Configuration: {runTest.BuildTask.ProjectConfiguration} <br />");
-									IEnumerable<IDevice> candidates = (runTest as RunDeviceTask)?.Candidates;
-									if (candidates == null)
-										candidates = (runTest as RunSimulatorTask)?.Candidates;
-									if (candidates != null)
-										writer.WriteLine ($"Candidate devices: {string.Join (", ", candidates.Select ((v) => v.Name))} <br />");
-									writer.WriteLine ($"Build duration: {runTest.BuildTask.Duration} <br />");
-								}
-								if (test.Duration.Ticks > 0)
-									writer.WriteLine ($"Run duration: {test.Duration} <br />");
-								var runDeviceTest = runTest as RunDeviceTask;
-								if (runDeviceTest?.Device != null) {
-									if (runDeviceTest.CompanionDevice != null) {
-										writer.WriteLine ($"Device: {runDeviceTest.Device.Name} ({runDeviceTest.CompanionDevice.Name}) <br />");
-									} else {
-										writer.WriteLine ($"Device: {runDeviceTest.Device.Name} <br />");
-									}
-								}
-							} else {
-								if (test.Duration.Ticks > 0)
-									writer.WriteLine ($"Duration: {test.Duration} <br />");
-							}
-
-							if (logs.Count () > 0) {
-								foreach (var log in logs) {
-									log.Flush ();
-									string log_type = System.Web.MimeMapping.GetMimeMapping (log.FullPath);
-									string log_target;
-									switch (log_type) {
-									case "text/xml":
-										log_target = "_top";
-										break;
-									default:
-										log_target = "_self";
-										break;
-									}
-									writer.WriteLine ("<a href='{0}' type='{2}' target='{3}'>{1}</a><br />", LinkEncode (log.FullPath.Substring (LogDirectory.Length + 1)), log.Description, log_type, log_target);
-									if (log.Description == "Test log" || log.Description == "Extension test log" || log.Description == "Execution log") {
-										string summary;
-										List<string> fails;
-										try {
-											using (var reader = log.GetReader ()) {
-												Tuple<long, object> data;
-												if (!log_data.TryGetValue (log, out data) || data.Item1 != reader.BaseStream.Length) {
-													summary = string.Empty;
-													fails = new List<string> ();
-													while (!reader.EndOfStream) {
-														string line = reader.ReadLine ()?.Trim ();
-														if (line == null)
-															continue;
-														if (line.StartsWith ("Tests run:", StringComparison.Ordinal)) {
-															summary = line;
-														} else if (line.StartsWith ("[FAIL]", StringComparison.Ordinal)) {
-															fails.Add (line);
-														}
-													}
-												} else {
-													var data_tuple = (Tuple<string, List<string>>) data.Item2;
-													summary = data_tuple.Item1;
-													fails = data_tuple.Item2;
-												}
-											}
-											if (fails.Count > 0) {
-												writer.WriteLine ("<div style='padding-left: 15px;'>");
-												foreach (var fail in fails)
-													writer.WriteLine ("{0} <br />", System.Web.HttpUtility.HtmlEncode (fail));
-												writer.WriteLine ("</div>");
-											}
-											if (!string.IsNullOrEmpty (summary))
-												writer.WriteLine ("<span style='padding-left: 15px;'>{0}</span><br />", summary);
-										} catch (Exception ex) {
-											writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
-										}
-									} else if (log.Description == "Build log") {
-										HashSet<string> errors;
-										try {
-											using (var reader = log.GetReader ()) {
-												Tuple<long, object> data;
-												if (!log_data.TryGetValue (log, out data) || data.Item1 != reader.BaseStream.Length) {
-													errors = new HashSet<string> ();
-													while (!reader.EndOfStream) {
-														string line = reader.ReadLine ()?.Trim ();
-														if (line == null)
-															continue;
-														// Sometimes we put error messages in pull request descriptions
-														// Then Jenkins create environment variables containing the pull request descriptions (and other pull request data)
-														// So exclude any lines matching 'ghprbPull', to avoid reporting those environment variables as build errors.
-														if (line.Contains (": error") && !line.Contains ("ghprbPull"))
-															errors.Add (line);
-													}
-													log_data [log] = new Tuple<long, object> (reader.BaseStream.Length, errors);
-												} else {
-													errors = (HashSet<string>) data.Item2;
-												}
-											}
-											if (errors.Count > 0) {
-												writer.WriteLine ("<div style='padding-left: 15px;'>");
-												foreach (var error in errors)
-													writer.WriteLine ("{0} <br />", System.Web.HttpUtility.HtmlEncode (error));
-												writer.WriteLine ("</div>");
-											}
-										} catch (Exception ex) {
-											writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
-										}
-									} else if (log.Description == "NUnit results" || log.Description == "XML log") {
-										try {
-											if (File.Exists (log.FullPath) && new FileInfo (log.FullPath).Length > 0) {
-												var doc = new System.Xml.XmlDocument ();
-												doc.LoadWithoutNetworkAccess (log.FullPath);
-												var failures = doc.SelectNodes ("//test-case[@result='Error' or @result='Failure']").Cast<System.Xml.XmlNode> ().ToArray ();
-												if (failures.Length > 0) {
-													writer.WriteLine ("<div style='padding-left: 15px;'>");
-													writer.WriteLine ("<ul>");
-													foreach (var failure in failures) {
-														writer.WriteLine ("<li>");
-														var test_name = failure.Attributes ["name"]?.Value;
-														var message = failure.SelectSingleNode ("failure/message")?.InnerText;
-														writer.Write (System.Web.HttpUtility.HtmlEncode (test_name));
-														if (!string.IsNullOrEmpty (message)) {
-															writer.Write (": ");
-															writer.Write (HtmlFormat (message));
-														}
-														writer.WriteLine ("<br />");
-														writer.WriteLine ("</li>");
-													}
-													writer.WriteLine ("</ul>");
-													writer.WriteLine ("</div>");
-												}
-											}
-										} catch (Exception ex) {
-											writer.WriteLine ($"<span style='padding-left: 15px;'>Could not parse {log.Description}: {HtmlFormat (ex.Message)}</span><br />");
-										}
-									}
-								}
-							}
-							writer.WriteLine ("</div>");
+							for (int i = 0; i < test.TestRuns.Count; i++)
+								RenderTestRun (writer, test.TestRuns [i], test.TestRuns.Count > 1, log_id);
 						}
 						if (multipleModes)
 							writer.WriteLine ("</div>");
@@ -2089,6 +1947,172 @@ function toggleAll (show)
 				writer.WriteLine ("</html>");
 			}
 		}
+
+		void RenderTestRun (StreamWriter writer, TestRun test, bool header, int log_id)
+		{
+			var runTest = test.TestTask as RunTestTask;
+
+			var logs = test.AggregatedLogs.ToList ();
+
+			var autoExpand = !IsServerMode && test.Failed;
+			var ignoredClass = test.TestTask.Ignored ? "toggleable-ignored" : string.Empty;
+			var defaultExpander = autoExpand ? "&nbsp;" : "+";
+			var defaultDisplay = autoExpand ? "block" : "none";
+
+			writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable logs togglable' data-onautorefresh='{log_id}' style='display: {defaultDisplay};'>");
+
+			if (!string.IsNullOrEmpty (test.FailureMessage)) {
+				var msg = System.Web.HttpUtility.HtmlEncode (test.FailureMessage).Replace ("\n", "<br />");
+				if (test.FailureMessage.Contains ('\n')) {
+					writer.WriteLine ($"Failure:<br /> <div style='margin-left: 20px;'>{msg}</div>");
+				} else {
+					writer.WriteLine ($"Failure: {msg} <br />");
+				}
+			}
+			var progressMessage = test.TestTask.ProgressMessage;
+			if (!string.IsNullOrEmpty (progressMessage))
+				writer.WriteLine (progressMessage + "<br />");
+			if (runTest != null) {
+				if (runTest.BuildTask.Duration.Ticks > 0) {
+					writer.WriteLine ($"Project file: {runTest.BuildTask.ProjectFile} <br />");
+					writer.WriteLine ($"Platform: {runTest.BuildTask.ProjectPlatform} Configuration: {runTest.BuildTask.ProjectConfiguration} <br />");
+					IEnumerable<IDevice> candidates = (runTest as RunDeviceTask)?.Candidates;
+					if (candidates == null)
+						candidates = (runTest as RunSimulatorTask)?.Candidates;
+					if (candidates != null)
+						writer.WriteLine ($"Candidate devices: {string.Join (", ", candidates.Select ((v) => v.Name))} <br />");
+					writer.WriteLine ($"Build duration: {runTest.BuildTask.Duration} <br />");
+				}
+				if (test.Duration.Ticks > 0)
+					writer.WriteLine ($"Run duration: {test.Duration} <br />");
+				var runDeviceTest = runTest as RunDeviceTask;
+				if (runDeviceTest?.Device != null) {
+					if (runDeviceTest.CompanionDevice != null) {
+						writer.WriteLine ($"Device: {runDeviceTest.Device.Name} ({runDeviceTest.CompanionDevice.Name}) <br />");
+					} else {
+						writer.WriteLine ($"Device: {runDeviceTest.Device.Name} <br />");
+					}
+				}
+			} else {
+				if (test.Duration.Ticks > 0)
+					writer.WriteLine ($"Duration: {test.Duration} <br />");
+			}
+
+			if (logs.Count () > 0) {
+				foreach (var log in logs) {
+					log.Flush ();
+					string log_type = System.Web.MimeMapping.GetMimeMapping (log.FullPath);
+					string log_target;
+					switch (log_type) {
+					case "text/xml":
+						log_target = "_top";
+						break;
+					default:
+						log_target = "_self";
+						break;
+					}
+					writer.WriteLine ("<a href='{0}' type='{2}' target='{3}'>{1}</a><br />", LinkEncode (log.FullPath.Substring (LogDirectory.Length + 1)), log.Description, log_type, log_target);
+					if (log.Description == "Test log" || log.Description == "Extension test log" || log.Description == "Execution log") {
+						string summary;
+						List<string> fails;
+						try {
+							using (var reader = log.GetReader ()) {
+								Tuple<long, object> data;
+								if (!log_data.TryGetValue (log, out data) || data.Item1 != reader.BaseStream.Length) {
+									summary = string.Empty;
+									fails = new List<string> ();
+									while (!reader.EndOfStream) {
+										string line = reader.ReadLine ()?.Trim ();
+										if (line == null)
+											continue;
+										if (line.StartsWith ("Tests run:", StringComparison.Ordinal)) {
+											summary = line;
+										} else if (line.StartsWith ("[FAIL]", StringComparison.Ordinal)) {
+											fails.Add (line);
+										}
+									}
+								} else {
+									var data_tuple = (Tuple<string, List<string>>) data.Item2;
+									summary = data_tuple.Item1;
+									fails = data_tuple.Item2;
+								}
+							}
+							if (fails.Count > 0) {
+								writer.WriteLine ("<div style='padding-left: 15px;'>");
+								foreach (var fail in fails)
+									writer.WriteLine ("{0} <br />", System.Web.HttpUtility.HtmlEncode (fail));
+								writer.WriteLine ("</div>");
+							}
+							if (!string.IsNullOrEmpty (summary))
+								writer.WriteLine ("<span style='padding-left: 15px;'>{0}</span><br />", summary);
+						} catch (Exception ex) {
+							writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
+						}
+					} else if (log.Description == "Build log") {
+						HashSet<string> errors;
+						try {
+							using (var reader = log.GetReader ()) {
+								Tuple<long, object> data;
+								if (!log_data.TryGetValue (log, out data) || data.Item1 != reader.BaseStream.Length) {
+									errors = new HashSet<string> ();
+									while (!reader.EndOfStream) {
+										string line = reader.ReadLine ()?.Trim ();
+										if (line == null)
+											continue;
+										// Sometimes we put error messages in pull request descriptions
+										// Then Jenkins create environment variables containing the pull request descriptions (and other pull request data)
+										// So exclude any lines matching 'ghprbPull', to avoid reporting those environment variables as build errors.
+										if (line.Contains (": error") && !line.Contains ("ghprbPull"))
+											errors.Add (line);
+									}
+									log_data [log] = new Tuple<long, object> (reader.BaseStream.Length, errors);
+								} else {
+									errors = (HashSet<string>) data.Item2;
+								}
+							}
+							if (errors.Count > 0) {
+								writer.WriteLine ("<div style='padding-left: 15px;'>");
+								foreach (var error in errors)
+									writer.WriteLine ("{0} <br />", System.Web.HttpUtility.HtmlEncode (error));
+								writer.WriteLine ("</div>");
+							}
+						} catch (Exception ex) {
+							writer.WriteLine ("<span style='padding-left: 15px;'>Could not parse log file: {0}</span><br />", System.Web.HttpUtility.HtmlEncode (ex.Message));
+						}
+					} else if (log.Description == "NUnit results" || log.Description == "XML log") {
+						try {
+							if (File.Exists (log.FullPath) && new FileInfo (log.FullPath).Length > 0) {
+								var doc = new System.Xml.XmlDocument ();
+								doc.LoadWithoutNetworkAccess (log.FullPath);
+								var failures = doc.SelectNodes ("//test-case[@result='Error' or @result='Failure']").Cast<System.Xml.XmlNode> ().ToArray ();
+								if (failures.Length > 0) {
+									writer.WriteLine ("<div style='padding-left: 15px;'>");
+									writer.WriteLine ("<ul>");
+									foreach (var failure in failures) {
+										writer.WriteLine ("<li>");
+										var test_name = failure.Attributes ["name"]?.Value;
+										var message = failure.SelectSingleNode ("failure/message")?.InnerText;
+										writer.Write (System.Web.HttpUtility.HtmlEncode (test_name));
+										if (!string.IsNullOrEmpty (message)) {
+											writer.Write (": ");
+											writer.Write (HtmlFormat (message));
+										}
+										writer.WriteLine ("<br />");
+										writer.WriteLine ("</li>");
+									}
+									writer.WriteLine ("</ul>");
+									writer.WriteLine ("</div>");
+								}
+							}
+						} catch (Exception ex) {
+							writer.WriteLine ($"<span style='padding-left: 15px;'>Could not parse {log.Description}: {HtmlFormat (ex.Message)}</span><br />");
+						}
+					}
+				}
+			}
+			writer.WriteLine ("</div>");
+		}
+
 		Dictionary<Log, Tuple<long, object>> log_data = new Dictionary<Log, Tuple<long, object>> ();
 
 		static string HtmlFormat (string value)
@@ -2125,64 +2149,67 @@ function toggleAll (show)
 		}
 	}
 
-	abstract class TestTask
+	class TestRun
 	{
-		static int counter;
-		public readonly int ID = counter++;
+		TestTask task;
 
-		bool? supports_parallel_execution;
-
-		public Jenkins Jenkins;
-		public Harness Harness { get { return Jenkins.Harness; } }
-		public TestProject TestProject;
-		public string ProjectFile { get { return TestProject?.Path; } }
-		public string ProjectConfiguration;
-		public string ProjectPlatform;
-		public Dictionary<string, string> Environment = new Dictionary<string, string> ();
-
-		public Task InitialTask; // a task that's executed before this task's ExecuteAsync method.
-		public Task CompletedTask; // a task that's executed after this task's ExecuteAsync method.
-
-		public void CloneTestProject (TestProject project)
-		{
-			// Don't build in the original project directory
-			// We can build multiple projects in parallel, and if some of those
-			// projects have the same project dependencies, then we may end up
-			// building the same (dependent) project simultaneously (and they can
-			// stomp on eachother).
-			// So we clone the project file to a separate directory and build there instead.
-			// This is done asynchronously to speed to the initial test load.
-			TestProject = project.Clone ();
-			InitialTask = TestProject.CreateCopyAsync ();
-		}
-
-		protected Stopwatch duration = new Stopwatch ();
-		public TimeSpan Duration { 
+		public TestTask TestTask {
 			get {
-				return duration.Elapsed;
+				return task;
 			}
 		}
 
-		TestExecutingResult execution_result;
-		public virtual TestExecutingResult ExecutionResult {
+		Stopwatch stopwatch = new Stopwatch ();
+
+		public DateTime StartTime { get; private set; }
+		public DateTime EndTime { get; private set; }
+
+		public void StartWatch ()
+		{
+			if (StartTime.Ticks == 0)
+				StartTime = DateTime.Now;
+			stopwatch.Start ();
+		}
+
+		public void StopWatch ()
+		{
+			EndTime = DateTime.Now;
+			stopwatch.Stop ();
+		}
+
+		public void ResetWatch ()
+		{
+			// This will reset the duration, but not initial start time.
+			// This is to know when a test started executing (StartTime), but also
+			// allows us to see for how long it executed without counting build time for instance
+			stopwatch.Reset ();
+		}
+
+		public TestRun (TestTask task)
+		{
+			this.task = task;
+		}
+
+		public TimeSpan Duration {
 			get {
-				return execution_result;
+				return stopwatch.Elapsed;
+			}
+		}
+
+		IEnumerable<Log> aggregated_logs;
+		public IEnumerable<Log> AggregatedLogs {
+			get {
+				return aggregated_logs ?? task.AggregatedLogs;
 			}
 			set {
-				execution_result = value;
+				aggregated_logs = value;
 			}
 		}
 
-		string failure_message;
-		public string FailureMessage {
-			get { return failure_message; }
-			protected set {
-				failure_message = value;
-				MainLog.WriteLine (failure_message);
-			}
-		}
-
-		public virtual string ProgressMessage { get; }
+		public TestExecutingResult ExecutionResult;
+		public string FailureMessage;
+		public Logs Logs;
+		public Log MainLog;
 
 		public bool NotStarted { get { return (ExecutionResult & TestExecutingResult.StateMask) == TestExecutingResult.NotStarted; } }
 		public bool InProgress { get { return (ExecutionResult & TestExecutingResult.InProgress) == TestExecutingResult.InProgress; } }
@@ -2209,6 +2236,97 @@ function toggleAll (show)
 		public bool TimedOut { get { return (ExecutionResult & TestExecutingResult.TimedOut) == TestExecutingResult.TimedOut; } }
 		public bool BuildFailure { get { return (ExecutionResult & TestExecutingResult.BuildFailure) == TestExecutingResult.BuildFailure; } }
 		public bool HarnessException { get { return (ExecutionResult & TestExecutingResult.HarnessException) == TestExecutingResult.HarnessException; } }
+	}
+
+	abstract class TestTask
+	{
+		static int counter;
+		public readonly int ID = counter++;
+
+		bool? supports_parallel_execution;
+
+		public Jenkins Jenkins;
+		public Harness Harness { get { return Jenkins.Harness; } }
+		public TestProject TestProject;
+		public string ProjectFile { get { return TestProject?.Path; } }
+		public string ProjectConfiguration;
+		public string ProjectPlatform;
+		public Dictionary<string, string> Environment = new Dictionary<string, string> ();
+
+		public Task InitialTask; // a task that's executed before this task's ExecuteAsync method.
+		public Task CompletedTask; // a task that's executed after this task's ExecuteAsync method.
+
+		public List<TestRun> TestRuns = new List<TestRun> ();
+		public TestRun LastRun {
+			get {
+				return TestRuns [0];
+			}
+		}
+
+		public TestTask ()
+		{
+			TestRuns.Add (new TestRun (this));
+		}
+
+		public void CloneTestProject (TestProject project)
+		{
+			// Don't build in the original project directory
+			// We can build multiple projects in parallel, and if some of those
+			// projects have the same project dependencies, then we may end up
+			// building the same (dependent) project simultaneously (and they can
+			// stomp on eachother).
+			// So we clone the project file to a separate directory and build there instead.
+			// This is done asynchronously to speed to the initial test load.
+			TestProject = project.Clone ();
+			InitialTask = TestProject.CreateCopyAsync ();
+		}
+
+		public TimeSpan Duration { 
+			get {
+				return LastRun.Duration;
+			}
+		}
+
+		public virtual TestExecutingResult ExecutionResult {
+			get {
+				return LastRun.ExecutionResult;
+			}
+			set {
+				LastRun.ExecutionResult = value;
+			}
+		}
+
+		public string FailureMessage {
+			get { return LastRun.FailureMessage; }
+			protected set {
+				LastRun.FailureMessage = value;
+				MainLog.WriteLine (LastRun.FailureMessage);
+			}
+		}
+
+		public virtual string ProgressMessage { get; }
+
+		public bool NotStarted { get { return LastRun.NotStarted; } }
+		public bool InProgress { get { return LastRun.InProgress; } }
+		public bool Waiting { get { return LastRun.Waiting; } }
+		public bool Finished { get { return LastRun.Finished; } }
+
+		public bool Building { get { return LastRun.Building; } }
+		public bool Built { get { return LastRun.Built; } }
+		public bool Running { get { return LastRun.Running; } }
+
+		public bool Succeeded { get { return LastRun.Succeeded; } }
+		public bool Failed { get { return LastRun.Failed; } }
+		public bool Ignored {
+			get { return LastRun.Ignored; }
+			set { LastRun.Ignored = value; }
+		}
+		public bool Skipped { get { return LastRun.Skipped; } }
+
+		public bool Crashed { get { return LastRun.Crashed; } }
+		public bool TimedOut { get { return LastRun.TimedOut; } }
+		public bool BuildFailure { get { return LastRun.BuildFailure; } }
+		public bool HarnessException { get { return LastRun.HarnessException; } }
 
 		public virtual string Mode { get; set; }
 		public virtual string Variation { get; set; }
@@ -2265,16 +2383,31 @@ function toggleAll (show)
 			}
 		}
 
+		string [] testPath;
+		public string [] TestPath {
+			get {
+				if (testPath == null) {
+					var rv = new List<string> ();
+					rv.Add (TestName);
+					if (!string.IsNullOrEmpty (Mode))
+						rv.Add (Mode);
+					if (!string.IsNullOrEmpty (Variation))
+						rv.Add (Variation);
+					testPath = rv.ToArray ();
+				}
+				return testPath;
+			}
+		}
+
 		public TestPlatform Platform { get; set; }
 
 		public List<Resource> Resources = new List<Resource> ();
 
-		Log test_log;
 		public Log MainLog {
 			get {
-				if (test_log == null)
-					test_log = Logs.Create ($"main-{Timestamp}.log", "Main log");
-				return test_log;
+				if (LastRun.MainLog == null)
+					LastRun.MainLog = Logs.Create ($"main-{Timestamp}.log", "Main log");
+				return LastRun.MainLog;
 			}
 		}
 
@@ -2292,10 +2425,11 @@ function toggleAll (show)
 			}
 		}
 
-		Logs logs;
 		public Logs Logs {
 			get {
-				return logs ?? (logs = new Logs (LogDirectory));
+				if (LastRun.Logs == null)
+					LastRun.Logs = new Logs (LogDirectory);
+				return LastRun.Logs;
 			}
 		}
 
@@ -2311,7 +2445,7 @@ function toggleAll (show)
 				if (InitialTask != null)
 					await InitialTask;
 
-				duration.Start ();
+				LastRun.StartWatch ();
 
 				execute_task = ExecuteAsync ();
 				await execute_task;
@@ -2332,8 +2466,8 @@ function toggleAll (show)
 					log.WriteLine (FailureMessage);
 				}
 			} finally {
-				logs?.Dispose ();
-				duration.Stop ();
+				LastRun.Logs?.Dispose ();
+				LastRun.StopWatch ();
 			}
 
 			Jenkins.GenerateReport (true);
@@ -2341,11 +2475,8 @@ function toggleAll (show)
 
 		public virtual void Reset ()
 		{
-			test_log = null;
-			failure_message = null;
-			logs = null;
-			duration.Reset ();
-			execution_result = TestExecutingResult.NotStarted;
+			LastRun.AggregatedLogs = AggregatedLogs.ToList (); // Capture the current set of aggregated logs
+			TestRuns.Add (new TestRun (this));
 			execute_task = null;
 		}
 
@@ -2468,12 +2599,12 @@ function toggleAll (show)
 			var rv = new BlockingWait ();
 
 			// Stop the timer while we're waiting for a resource
-			duration.Stop ();
+			LastRun.StopWatch ();
 			ExecutionResult = ExecutionResult | TestExecutingResult.Waiting;
 			rv.Wrapped = await task;
 			ExecutionResult = ExecutionResult & ~TestExecutingResult.Waiting;
-			duration.Start ();
-			rv.OnDispose = duration.Stop;
+			LastRun.StartWatch ();
+			rv.OnDispose = LastRun.StopWatch;
 			return rv;
 		}
 
@@ -3104,7 +3235,7 @@ function toggleAll (show)
 				return;
 
 			ExecutionResult = TestExecutingResult.Running;
-			duration.Restart (); // don't count the build time.
+			LastRun.ResetWatch (); // don't count the build time.
 			await RunTestAsync ();
 		}
 

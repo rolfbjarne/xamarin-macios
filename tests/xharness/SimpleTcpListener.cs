@@ -53,6 +53,7 @@ namespace xharness
 		bool Processing (TcpClient client)
 		{
 			Connected (client.Client.RemoteEndPoint.ToString ());
+			Launch ();
 			// now simply copy what we receive
 			int i;
 			int total = 0;

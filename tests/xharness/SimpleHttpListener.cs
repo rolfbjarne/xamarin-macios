@@ -81,6 +81,7 @@ namespace xharness
 				if (!connected_once) {
 					connected_once = true;
 					Connected (request.RemoteEndPoint.ToString ());
+					Launch ();
 				}
 				break;
 			case "/Finish":

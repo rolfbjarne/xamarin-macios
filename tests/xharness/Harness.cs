@@ -297,18 +297,18 @@ namespace xharness
 				"System.ServiceModel",
 				"System.IdentityModel",
 			};
-			foreach (var p in bcl_suites) {
-				foreach (var flavor in new MacFlavors [] { MacFlavors.Full, MacFlavors.Modern }) {
-					var bclTestInfo = new MacBCLTestInfo (this, p, flavor);
-					var bclTestProject = new MacTestProject (bclTestInfo.ProjectPath, targetFrameworkFlavor: flavor, generateVariations: false) {
-						Name = p,
-						BCLInfo = bclTestInfo,
-						Platform = "AnyCPU",
-					};
+			//foreach (var p in bcl_suites) {
+			//	foreach (var flavor in new MacFlavors [] { MacFlavors.Full, MacFlavors.Modern }) {
+			//		var bclTestInfo = new MacBCLTestInfo (this, p, flavor);
+			//		var bclTestProject = new MacTestProject (bclTestInfo.ProjectPath, targetFrameworkFlavor: flavor, generateVariations: false) {
+			//			Name = p,
+			//			BCLInfo = bclTestInfo,
+			//			Platform = "AnyCPU",
+			//		};
 
-					MacTestProjects.Add (bclTestProject);
-				}
-			}
+			//		MacTestProjects.Add (bclTestProject);
+			//	}
+			//}
 		}
 
 		void AutoConfigureIOS ()
@@ -358,13 +358,13 @@ namespace xharness
 			foreach (var p in fsharp_library_projects)
 				IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, p + "/" + p + ".fsproj")), false));
 
-			foreach (var p in bcl_suites) {
-				BCLTestInfo bclTestInfo = new BCLTestInfo (this, p);
-				IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "bcl-test/" + p + "/" + p + ".csproj"))) {
-					SkipwatchOSVariation = bcl_skip_watchos.Contains (p),
-					BCLInfo = bclTestInfo
-				});
-			}
+			//foreach (var p in bcl_suites) {
+			//	BCLTestInfo bclTestInfo = new BCLTestInfo (this, p);
+			//	IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "bcl-test/" + p + "/" + p + ".csproj"))) {
+			//		SkipwatchOSVariation = bcl_skip_watchos.Contains (p),
+			//		BCLInfo = bclTestInfo
+			//	});
+			//}
 			
 			IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "introspection", "iOS", "introspection-ios.csproj"))) { Name = "introspection" });
 			IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "linker", "ios", "dont link", "dont link.csproj"))) { Configurations = new string [] { "Debug", "Release" } });

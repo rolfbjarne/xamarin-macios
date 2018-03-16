@@ -89,5 +89,13 @@
     <Compile Include="SimpleFileListener.cs" />
     <Compile Include="iOSTarget.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="xharness.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="xharness.css" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

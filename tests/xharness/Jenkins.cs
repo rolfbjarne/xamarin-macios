@@ -965,6 +965,7 @@ namespace xharness
 							rv.Add (v);
 							return rv;
 						});
+						string serveFile = null;
 						switch (request.Url.LocalPath) {
 						case "/":
 							response.ContentType = System.Net.Mime.MediaTypeNames.Text.Html;
@@ -1158,14 +1159,27 @@ namespace xharness
 							response.OutputStream.Write (favicon, 0, favicon.Length);
 							response.OutputStream.Close ();
 							break;
+						case "/xharness.css":
+						case "/xharness.js":
+							serveFile = Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), request.Url.LocalPath.Substring (1));
+							goto default;
 						default:
-							var path = Path.Combine (LogDirectory, request.Url.LocalPath.Substring (1));
+							if (serveFile == null)
+								serveFile = Path.Combine (LogDirectory, request.Url.LocalPath.Substring (1));
+							var path = serveFile;
 							if (File.Exists (path)) {
 								var buffer = new byte [4096];
 								using (var fs = new FileStream (path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
 									int read;
 									response.ContentLength64 = fs.Length;
-									response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
+									switch (Path.GetExtension (path)) {
+									case ".css":
+										response.ContentType = "text/css";
+										break;
+									default:
+										response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
+										break;
+									}
 									while ((read = fs.Read (buffer, 0, buffer.Length)) > 0)
 										response.OutputStream.Write (buffer, 0, read);
 								}
@@ -1292,6 +1306,9 @@ namespace xharness
 							markdown_writer.Close ();
 						}
 					}
+					foreach (var file in new string [] { "xharness.js", "xharness.css" }) {
+						File.Copy (Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), file), Path.Combine (LogDirectory, file), true);
+					}
 				}
 			} catch (Exception e) {
 				this.MainLog.WriteLine ("Failed to write log: {0}", e);
@@ -1404,285 +1421,15 @@ namespace xharness
 				writer.WriteLine ("<html onkeypress='keyhandler(event)' lang='en'>");
 				if (IsServerMode && populating)
 					writer.WriteLine ("<meta http-equiv=\"refresh\" content=\"1\">");
-				writer.WriteLine (@"<head>
-<style>
-.pdiv { display: table; padding-top: 10px; }
-.p1 { }
-.p2 { }
-.p3 { }
-.expander { display: table-cell; height: 100%; padding-right: 6px; text-align: center; vertical-align: middle; min-width: 10px; }
-.runall { font-size: 75%; margin-left: 3px; }
-.logs { padding-bottom: 10px; padding-top: 10px; padding-left: 30px; }
-
-#nav {
-	display: inline-block;
-	width: 350px;
-}
-
-#nav > * {
-	display: inline;
-	width: 300px;
-}
-
-#nav ul {
-	background: #ffffff;
-	list-style: none;
-	position: absolute;
-	left: -9999px;
-	padding: 10px;
-	z-index: 2;
-	width: 200px;
-	border-style: ridge;
-	border-width: thin;
-}
-
-#nav li {
-	margin-right: 10px;
-	position: relative;
-}
-#nav a {
-	display: block;
-	padding: 5px;
-	text-decoration: none;
-}
-#nav a:hover {
-	text-decoration: underline;
-}
-#nav ul li {
-	padding-top: 0;
-	padding-bottom: 0;
-	padding-left: 0;
-}
-#nav ul a {
-	white-space: nowrap;
-}
-#nav li:hover ul { 
-	left: 0;
-}
-#nav li:hover a {
-	text-decoration: underline;
-}
-#nav li:hover ul a { 
-	text-decoration:none;
-}
-#nav li:hover ul li a:hover {
-	text-decoration: underline;
-}
-
-</style>");
+				writer.WriteLine ("<head>");
+				writer.WriteLine ("<link rel='stylesheet' href='xharness.css'>");
 				writer.WriteLine ("<title>Test results</title>");
-				writer.WriteLine (@"<script type='text/javascript'>
-var ajax_log = null;
-function addlog (msg)
-{
-	if (ajax_log == null)
-		ajax_log = document.getElementById ('ajax-log');
-	if (ajax_log == null)
-		return;
-	var newText = msg + ""\n"" + ajax_log.innerText;
-	if (newText.length > 1024)
-		newText = newText.substring (0, 1024);
-	ajax_log.innerText = newText;
-}
-
-function toggleLogVisibility (logName)
-{
-	var button = document.getElementById ('button_' + logName);
-	var logs = document.getElementById ('logs_' + logName);
-	if (logs.style.display == 'none' && logs.innerText.trim () != '') {
-		logs.style.display = 'block';
-		button.innerText = '-';
-	} else {
-		logs.style.display = 'none';
-		button.innerText = '+';
-	}
-}
-function toggleContainerVisibility2 (containerName)
-{
-	var button = document.getElementById ('button_container2_' + containerName);
-	var div = document.getElementById ('test_container2_' + containerName);
-	if (div.style.display == 'none') {
-		div.style.display = 'block';
-		button.innerText = '-';
-	} else {
-		div.style.display = 'none';
-		button.innerText = '+';
-	}
-}
-function quit ()
-{
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-	    if (this.readyState == 4 && this.status == 200) {
-	       window.close ();
-	    }
-	};
-	xhttp.open(""GET"", ""quit"", true);
-	xhttp.send();
-}
-function toggleAjaxLogVisibility()
-{
-	if (ajax_log == null)
-		ajax_log = document.getElementById ('ajax-log');
-	var button = document.getElementById ('ajax-log-button');
-	if (ajax_log.style.display == 'none') {
-		ajax_log.style.display = 'block';
-		button.innerText = 'Hide log';
-	} else {
-		ajax_log.style.display = 'none';
-		button.innerText = 'Show log';
-	}
-}
-function toggleVisibility (css_class)
-{
-	var objs = document.getElementsByClassName (css_class);
-	
-	for (var i = 0; i < objs.length; i++) {
-		var obj = objs [i];
-		
-		var pname = 'original-' + css_class + '-display';
-		if (obj.hasOwnProperty (pname)) {
-			obj.style.display = obj [pname];
-			delete obj [pname];
-		} else {
-			obj [pname] = obj.style.display;
-			obj.style.display = 'none';
-		}
-	}
-}
-function keyhandler(event)
-{
-	switch (String.fromCharCode (event.keyCode)) {
-	case ""q"":
-	case ""Q"":
-		quit ();
-		break;
-	}
-}
-function runalltests()
-{
-	sendrequest (""runalltests"");
-}
-function runtest(id)
-{
-	sendrequest (""runtest?id="" + id);
-}
-function sendrequest(url, callback)
-{
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4) {
-			addlog (""Loaded url: "" + url + "" with status code: "" + this.status + ""\nResponse: "" + this.responseText);
-			if (callback)
-				callback (this.responseText);
-		}
-	};
-	xhttp.open(""GET"", url, true);
-	xhttp.send();
-	addlog (""Loading url: "" + url);
-}
-function autorefresh()
-{
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-	    if (this.readyState == 4) {
-			addlog (""Reloaded."");
-			var parser = new DOMParser ();
-			var r = parser.parseFromString (this.responseText, 'text/html');
-			var ar_objs = document.getElementsByClassName (""autorefreshable"");
-
-			for (var i = 0; i < ar_objs.length; i++) {
-				var ar_obj = ar_objs [i];
-				if (!ar_obj.id || ar_obj.id.length == 0) {
-					console.log (""Found object without id"");
-					continue;
-				}
-				
-				var new_obj = r.getElementById (ar_obj.id);
-				if (new_obj) {
-					if (ar_obj.innerHTML != new_obj.innerHTML)
-						ar_obj.innerHTML = new_obj.innerHTML;
-					if (ar_obj.style.cssText != new_obj.style.cssText) {
-						ar_obj.style = new_obj.style;
-					}
-					
-					var evt = ar_obj.getAttribute ('data-onautorefresh');
-					if (evt != '') {
-						autoshowdetailsmessage (evt);
-					}
-				} else {
-					console.log (""Could not find id "" + ar_obj.id + "" in updated page."");
-				}
-			}
-			setTimeout (autorefresh, 1000);
-	    }
-	};
-	xhttp.open(""GET"", window.location.href, true);
-	xhttp.send();
-}
-
-function autoshowdetailsmessage (id)
-{
-	var input_id = 'logs_' + id;
-	var message_id = 'button_' + id;
-	var input_div = document.getElementById (input_id);
-	if (input_div == null)
-		return;
-	var message_div = document.getElementById (message_id);
-	var txt = input_div.innerText.trim ();
-	if (txt == '') {
-		message_div.style.opacity = 0;
-	} else {
-		message_div.style.opacity = 1;
-		if (input_div.style.display == 'block') {
-			message_div.innerText = '-';
-		} else {
-			message_div.innerText = '+';
-		}
-	}
-}
-
-function oninitialload ()
-{
-	var autorefreshable = document.getElementsByClassName (""autorefreshable"");
-	for (var i = 0; i < autorefreshable.length; i++) {
-		var evt = autorefreshable [i].getAttribute (""data-onautorefresh"");
-		if (evt != '')
-			autoshowdetailsmessage (evt);
-	}
-}
-
-function toggleAll (show)
-{
-	var expandable = document.getElementsByClassName ('expander');
-	var counter = 0;
-	var value = show ? '-' : '+';
-	for (var i = 0; i < expandable.length; i++) {
-		var div = expandable [i];
-		if (div.textContent != value)
-			div.textContent = value;
-		counter++;
-	}
-	
-	var togglable = document.getElementsByClassName ('togglable');
-	counter = 0;
-	value = show ? 'block' : 'none';
-	for (var i = 0; i < togglable.length; i++) {
-		var div = togglable [i];
-		if (div.style.display != value) {
-			if (show && div.innerText.trim () == '') {
-				// don't show nothing
-			} else {
-				div.style.display = value;
-			}
-		}
-		counter++;
-	}
-}
-
-");
-				if (IsServerMode)
+				writer.WriteLine (@"<script type='text/javascript' src='xharness.js'></script>");
+				if (IsServerMode) {
+					writer.WriteLine (@"<script type='text/javascript'>");
 					writer.WriteLine ("setTimeout (autorefresh, 1000);");
+					writer.WriteLine (@"</script>");
+				}
 				writer.WriteLine ("</script>");
 				writer.WriteLine ("</head>");
 				writer.WriteLine ("<body onload='oninitialload ();'>");
@@ -1845,102 +1592,39 @@ function toggleAll (show)
 				writer.WriteLine ("</div>");
 
 				writer.WriteLine ("<div id='test-list' style='float:left'>");
-				var orderedTasks = allTasks.GroupBy ((TestTask v) => v.TestName);
+				var orderedTasks = allTasks.GroupBy ((TestTask v) => v.TestPath [0]);
 
+				Func<IEnumerable<IGrouping<string, TestTask>>, IEnumerable<IGrouping<string, TestTask>>> sort;
 				if (IsServerMode) {
 					// In server mode don't take into account anything that can change during a test run
 					// when ordering, since it's confusing to have the tests reorder by themselves while
 					// you're looking at the web page.
-					orderedTasks = orderedTasks.OrderBy ((v) => v.Key, StringComparer.OrdinalIgnoreCase);
+					//orderedTasks = orderedTasks.OrderBy ((v) => v.Key, StringComparer.OrdinalIgnoreCase);
+					sort = (s) => s.OrderBy ((v) => v.Key);
 				} else {
 					// Put failed tests at the top and ignored tests at the end.
 					// Then order alphabetically.
-					orderedTasks = orderedTasks.OrderBy ((v) =>
-					 {
-						 if (v.Any ((t) => t.Failed))
-							 return -1;
-						 if (v.All ((t) => t.Ignored))
-							 return 1;
-						 return 0;
-					 }).
-					ThenBy ((v) => v.Key, StringComparer.OrdinalIgnoreCase);
+					//orderedTasks = orderedTasks.OrderBy ((v) =>
+					// {
+					//	 if (v.Any ((t) => t.Failed))
+					//		 return -1;
+					//	 if (v.All ((t) => t.Ignored))
+					//		 return 1;
+					//	 return 0;
+					// }).
+					//ThenBy ((v) => v.Key, StringComparer.OrdinalIgnoreCase);
+					sort = (s) => s.OrderBy ((v) => {
+						if (v.Any ((t) => t.Failed))
+							return -1;
+						if (v.All ((t) => t.Ignored))
+							return 1;
+						return 0;
+					}).ThenBy ((v) => v.Key, StringComparer.OrdinalIgnoreCase);
 				}
 
-				foreach (var group in orderedTasks) {
-					if (group.Count () > 1)
-						Debugger.Break ();
-					
-					var singleTask = group.Count () == 1;
-					var groupId = group.Key.Replace (' ', '-');
-
-					// Test header for multiple tests
-					if (!singleTask) {
-						var autoExpand = !IsServerMode && group.Any ((v) => v.Failed);
-						var ignoredClass = group.All ((v) => v.Ignored) ? "toggleable-ignored" : string.Empty;
-						var defaultExpander = autoExpand ? "-" : "+";
-						var defaultDisplay = autoExpand ? "block" : "none";
-						writer.Write ($"<div class='pdiv {ignoredClass}'>");
-						writer.Write ($"<span id='button_container2_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>{defaultExpander}</span>");
-						writer.Write ($"<span id='x{id_counter++}' class='p1 autorefreshable' onclick='javascript: toggleContainerVisibility2 (\"{groupId}\");'>{group.Key}{RenderTextStates (group)}</span>");
-						if (IsServerMode)
-							writer.Write ($" <span><a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
-						writer.WriteLine ("</div>");
-						writer.WriteLine ($"<div id='test_container2_{groupId}' class='togglable' style='display: {defaultDisplay}; margin-left: 20px;'>");
-					}
-
-					// Test data
-					var groupedByMode = group.GroupBy ((v) => v.Mode);
-					foreach (var modeGroup in groupedByMode) {
-						var multipleModes = modeGroup.Count () > 1;
-						if (multipleModes) {
-							var modeGroupId = id_counter++.ToString ();
-							var autoExpand = !IsServerMode && modeGroup.Any ((v) => v.Failed);
-							var ignoredClass = modeGroup.All ((v) => v.Ignored) ? "toggleable-ignored" : string.Empty;
-							var defaultExpander = autoExpand ? "-" : "+";
-							var defaultDisplay = autoExpand ? "block" : "none";
-							writer.Write ($"<div class='pdiv {ignoredClass}'>");
-							writer.Write ($"<span id='button_container2_{modeGroupId}' class='expander' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>{defaultExpander}</span>");
-							writer.Write ($"<span id='x{id_counter++}' class='p2 autorefreshable' onclick='javascript: toggleContainerVisibility2 (\"{modeGroupId}\");'>{modeGroup.Key}{RenderTextStates (modeGroup)}</span>");
-							if (IsServerMode)
-								writer.Write ($" <span><a class='runall' href='javascript: runtest (\"{string.Join (",", modeGroup.Select ((v) => v.ID.ToString ()))}\");'>Run all</a></span>");
-							writer.WriteLine ("</div>");
-
-							writer.WriteLine ($"<div id='test_container2_{modeGroupId}' class='togglable' style='display: {defaultDisplay}; margin-left: 20px;'>");
-						}
-						foreach (var test in modeGroup.OrderBy ((v) => v.Variation, StringComparer.OrdinalIgnoreCase)) {
-							string state;
-							state = test.ExecutionResult.ToString ();
-							var log_id = id_counter++;
-							string title;
-							if (multipleModes) {
-								title = test.Variation ?? "Default";
-							} else if (singleTask) {
-								title = test.TestName;
-							} else {
-								title = test.Mode;
-							}
-
-							var autoExpand = !IsServerMode && test.Failed;
-							var ignoredClass = test.Ignored ? "toggleable-ignored" : string.Empty;
-							var defaultExpander = autoExpand ? "&nbsp;" : "+";
-							var defaultDisplay = autoExpand ? "block" : "none";
-
-							writer.Write ($"<div class='pdiv {ignoredClass}'>");
-							writer.Write ($"<span id='button_{log_id}' class='expander' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>{defaultExpander}</span>");
-							writer.Write ($"<span id='x{id_counter++}' class='p3 autorefreshable' onclick='javascript: toggleLogVisibility (\"{log_id}\");'>{title} (<span style='color: {GetTestColor (test)}'>{state}</span>) </span>");
-							if (IsServerMode && !test.InProgress && !test.Waiting)
-								writer.Write ($" <span><a class='runall' href='javascript:runtest ({test.ID})'>Run</a></span> ");
-							writer.WriteLine ("</div>");
-
-							for (int i = 0; i < test.TestRuns.Count; i++)
-								RenderTestRun (writer, test.TestRuns [i], test.TestRuns.Count > 1, log_id);
-						}
-						if (multipleModes)
-							writer.WriteLine ("</div>");
-					}
-					if (!singleTask)
-						writer.WriteLine ("</div>");
-				}
+				//foreach (var group in orderedTasks)
+				RenderTests (writer, allTasks, sort, ref id_counter, 0);
+				
 				writer.WriteLine ("</div>");
 				writer.WriteLine ("</div>");
 				writer.WriteLine ("</body>");
@@ -1948,7 +1632,62 @@ function toggleAll (show)
 			}
 		}
 
-		void RenderTestRun (StreamWriter writer, TestRun test, bool header, int log_id)
+		void RenderTests (StreamWriter writer, IEnumerable<TestTask> tests, Func<IEnumerable<IGrouping<string, TestTask>>, IEnumerable<IGrouping<string, TestTask>>> sort, ref int id_counter, int level)
+		{
+			if (tests.Count () > 1) {
+				if (level > 3) {
+					Console.WriteLine ($"SKIPPING {string.Join ("/", tests.First ().TestPath)}");
+					return;
+				}
+				var grouped = tests.GroupBy ((v) => string.Join ("/", v.TestPath.Take (level + 1)));
+				if (sort != null)
+					grouped = sort (grouped);
+				foreach (var group in grouped) {
+					var groupId = group.Key.Replace (' ', '-');
+					var ignoredClass = group.All ((v) => v.Ignored) ? "toggleable-ignored" : string.Empty;
+					var autoExpand = !IsServerMode && group.Any ((v) => v.Failed);
+					var defaultExpander = autoExpand ? "-" : "+";
+					var defaultDisplay = autoExpand ? "block" : "none";
+
+					writer.WriteLine ($"<div id='div_{groupId}' class='pdiv {ignoredClass}'>");
+
+					// test header
+					writer.Write ($"<span>");
+					writer.Write ($"<span id='expander_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility (\"{groupId}\");'>{defaultExpander}</span>");
+					writer.Write ($"<span id='test_{groupId}' class='p1 autorefreshable' onclick='javascript: toggleContainerVisibility (\"{groupId}\");'>{group.Key}{RenderTextStates (group)}</span>");
+					if (IsServerMode)
+						writer.Write ($"<span><a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run</a></span>");
+					writer.WriteLine ($"</span>");
+
+					// test content
+					writer.WriteLine ($"<div id='test_container_{groupId}' class='testcontainer togglable' style='display: {defaultDisplay};'>");
+					RenderTests (writer, group, null, ref id_counter, level + 1);
+					writer.WriteLine ("</div>"); // test_container_{groupId}
+
+					writer.WriteLine ($"</div>"); // div_{groupId}
+				}
+			} else if (tests.Count () == 1) {
+				var test = tests.First ();
+				var runTest = test as RunTestTask;
+				if (runTest != null) {
+					var pf_id = id_counter++;
+					writer.WriteLine ($"Project file: {runTest.BuildTask.ProjectFile} <br />");
+					writer.WriteLine ($"Platform: {runTest.BuildTask.ProjectPlatform} Configuration: {runTest.BuildTask.ProjectConfiguration} <br />");
+				}
+				var test_id = id_counter++;
+				var autoExpand = !IsServerMode && test.Failed;
+				var defaultExpander = autoExpand ? "&nbsp;" : "+";
+				var defaultDisplay = autoExpand ? "block" : "none";
+
+				writer.WriteLine ($"<div id='testruns_{test_id}' class='autorefreshable' data-onautorefresh='{test_id}' style='display: block;'>");
+				for (var i = 0; i < test.TestRuns.Count; i++)
+					RenderTestRun (writer, test.TestRuns [i], i, test.TestRuns.Count > 1, ref id_counter);
+				writer.WriteLine ($"</div>");
+			}
+			
+		}
+
+		void RenderTestRun (StreamWriter writer, TestRun test, int index, bool header, ref int id_counter)
 		{
 			var runTest = test.TestTask as RunTestTask;
 
@@ -1959,7 +1698,12 @@ function toggleAll (show)
 			var defaultExpander = autoExpand ? "&nbsp;" : "+";
 			var defaultDisplay = autoExpand ? "block" : "none";
 
-			writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable logs togglable' data-onautorefresh='{log_id}' style='display: {defaultDisplay};'>");
+			var log_id = id_counter++;
+			writer.Write ($"<span id='testrun_header_{log_id}' class='appendable' onclick='javascript: toggleContainerVisibility (\"{log_id}\");' {(header ? "" : "style='display: none'")} >");
+			writer.Write ($"<span id='expander_{log_id}' class='expander'>-</span>");
+			writer.Write ($"<span>Test run #{index + 1} (<span style='color: {GetTestColor (test)}'>{test.ExecutionResult.ToString ()}</span>)</span><br/>");
+			writer.WriteLine ($"</span>");
+			writer.WriteLine ($"<div id='test_container_{log_id}' class='{(header ? "logs togglable" : "")} appendable' style='display: block;{(header ? "margin-left: 20px;" : "")}'>");
 
 			if (!string.IsNullOrEmpty (test.FailureMessage)) {
 				var msg = System.Web.HttpUtility.HtmlEncode (test.FailureMessage).Replace ("\n", "<br />");
@@ -1973,29 +1717,27 @@ function toggleAll (show)
 			if (!string.IsNullOrEmpty (progressMessage))
 				writer.WriteLine (progressMessage + "<br />");
 			if (runTest != null) {
-				if (runTest.BuildTask.Duration.Ticks > 0) {
-					writer.WriteLine ($"Project file: {runTest.BuildTask.ProjectFile} <br />");
-					writer.WriteLine ($"Platform: {runTest.BuildTask.ProjectPlatform} Configuration: {runTest.BuildTask.ProjectConfiguration} <br />");
+				var buildRun = runTest.BuildTask.TestRuns [index];
+				if (buildRun.Duration.Ticks > 0) {
 					IEnumerable<IDevice> candidates = (runTest as RunDeviceTask)?.Candidates;
 					if (candidates == null)
 						candidates = (runTest as RunSimulatorTask)?.Candidates;
 					if (candidates != null)
 						writer.WriteLine ($"Candidate devices: {string.Join (", ", candidates.Select ((v) => v.Name))} <br />");
-					writer.WriteLine ($"Build duration: {runTest.BuildTask.Duration} <br />");
+					writer.WriteLine ($"Build duration: {buildRun.Duration} <br />");
 				}
 				if (test.Duration.Ticks > 0)
 					writer.WriteLine ($"Run duration: {test.Duration} <br />");
-				var runDeviceTest = runTest as RunDeviceTask;
-				if (runDeviceTest?.Device != null) {
-					if (runDeviceTest.CompanionDevice != null) {
-						writer.WriteLine ($"Device: {runDeviceTest.Device.Name} ({runDeviceTest.CompanionDevice.Name}) <br />");
-					} else {
-						writer.WriteLine ($"Device: {runDeviceTest.Device.Name} <br />");
-					}
-				}
 			} else {
 				if (test.Duration.Ticks > 0)
 					writer.WriteLine ($"Duration: {test.Duration} <br />");
+			}
+			if (test.Device != null) {
+				if (test.CompanionDevice != null) {
+					writer.WriteLine ($"Device: {test.Device.Name} ({test.CompanionDevice.Name}) <br />");
+				} else {
+					writer.WriteLine ($"Device: {test.Device.Name} <br />");
+				}
 			}
 
 			if (logs.Count () > 0) {
@@ -2236,6 +1978,9 @@ function toggleAll (show)
 		public bool TimedOut { get { return (ExecutionResult & TestExecutingResult.TimedOut) == TestExecutingResult.TimedOut; } }
 		public bool BuildFailure { get { return (ExecutionResult & TestExecutingResult.BuildFailure) == TestExecutingResult.BuildFailure; } }
 		public bool HarnessException { get { return (ExecutionResult & TestExecutingResult.HarnessException) == TestExecutingResult.HarnessException; } }
+
+		public IDevice Device;
+		public IDevice CompanionDevice;
 	}
 
 	abstract class TestTask
@@ -2259,7 +2004,7 @@ function toggleAll (show)
 		public List<TestRun> TestRuns = new List<TestRun> ();
 		public TestRun LastRun {
 			get {
-				return TestRuns [0];
+				return TestRuns [TestRuns.Count - 1];
 			}
 		}
 
@@ -2475,8 +2220,12 @@ function toggleAll (show)
 
 		public virtual void Reset ()
 		{
-			LastRun.AggregatedLogs = AggregatedLogs.ToList (); // Capture the current set of aggregated logs
-			TestRuns.Add (new TestRun (this));
+			if (Ignored) {
+				ExecutionResult = TestExecutingResult.NotStarted;
+			} else if (!NotStarted) {
+				LastRun.AggregatedLogs = AggregatedLogs.ToList (); // Capture the current set of aggregated logs
+				TestRuns.Add (new TestRun (this));
+			}
 			execute_task = null;
 		}
 
@@ -3252,8 +3001,6 @@ function toggleAll (show)
 	abstract class RunXITask<TDevice> : RunTestTask where TDevice: class, IDevice
 	{
 		IEnumerable<TDevice> candidates;
-		TDevice device;
-		TDevice companion_device;
 		public AppRunnerTarget AppRunnerTarget;
 
 		protected AppRunner runner;
@@ -3262,13 +3009,13 @@ function toggleAll (show)
 		public IEnumerable<TDevice> Candidates => candidates;
 
 		public TDevice Device {
-			get { return device; }
-			protected set { device = value; }
+			get { return (TDevice) LastRun.Device; }
+			protected set { LastRun.Device = value; }
 		}
 
 		public TDevice CompanionDevice {
-			get { return companion_device; }
-			protected set { companion_device = value; }
+			get { return (TDevice) LastRun.CompanionDevice; }
+			protected set { LastRun.CompanionDevice = value; }
 		}
 
 		public string BundleIdentifier {

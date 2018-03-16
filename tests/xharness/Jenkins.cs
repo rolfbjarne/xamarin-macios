@@ -17,15 +17,15 @@ namespace xharness
 
 		public Harness Harness;
 		public bool IncludeAll;
-		public bool IncludeClassicMac = true;
-		public bool IncludeBcl;
-		public bool IncludeMac = true;
-		public bool IncludeiOS = true;
+		public bool IncludeClassicMac = false;
+		public bool IncludeBcl = false;
+		public bool IncludeMac = false;
+		public bool IncludeiOS = false;
 		public bool IncludeiOSExtensions;
-		public bool IncludetvOS = true;
+		public bool IncludetvOS = false;
 		public bool IncludewatchOS = true;
 		public bool IncludeMmpTest;
-		public bool IncludeiOSMSBuild = true;
+		public bool IncludeiOSMSBuild = false;
 		public bool IncludeMtouch;
 		public bool IncludeBtouch;
 		public bool IncludeMacBindingProject;
@@ -202,7 +202,7 @@ namespace xharness
 						yield return new TestData { Variation = "Release (all optimizations)", MonoBundlingExtraArgs = "--registrar:static --optimize:all", Debug = false, LinkMode = "Full", Defines = "LINKALL;OPTIMIZEALL"};
 						break;
 					case "Debug":
-						yield return new TestData { Variation = "Release (all optimizations)", MonoBundlingExtraArgs = "--registrar:static --optimize:all,-remove-uithread-checks", Debug = true, LinkMode = "Full", Defines = "LINKALL;OPTIMIZEALL", Ignored = !IncludeAll };
+						yield return new TestData { Variation = "Debug (all optimizations)", MonoBundlingExtraArgs = "--registrar:static --optimize:all,-remove-uithread-checks", Debug = true, LinkMode = "Full", Defines = "LINKALL;OPTIMIZEALL", Ignored = !IncludeAll };
 						break;
 					}
 					break;
@@ -1635,10 +1635,8 @@ namespace xharness
 		void RenderTests (StreamWriter writer, IEnumerable<TestTask> tests, Func<IEnumerable<IGrouping<string, TestTask>>, IEnumerable<IGrouping<string, TestTask>>> sort, ref int id_counter, int level)
 		{
 			if (tests.Count () > 1) {
-				if (level > 3) {
-					Console.WriteLine ($"SKIPPING {string.Join ("/", tests.First ().TestPath)}");
-					return;
-				}
+				if (level > 30)
+					throw new NotSupportedException ("This shouldn't happen");
 				var grouped = tests.GroupBy ((v) => string.Join ("/", v.TestPath.Take (level + 1)));
 				if (sort != null)
 					grouped = sort (grouped);
@@ -3008,6 +3006,12 @@ namespace xharness
 
 		public IEnumerable<TDevice> Candidates => candidates;
 
+		public AppRunner Runner {
+			get {
+				return runner;
+			}
+		}
+
 		public TDevice Device {
 			get { return (TDevice) LastRun.Device; }
 			protected set { LastRun.Device = value; }
@@ -3083,27 +3087,12 @@ namespace xharness
 
 	class RunDeviceTask : RunXITask<Device>
 	{
-		object lock_obj = new object ();
-		Log install_log;
+		string progress_message;
 		public override string ProgressMessage {
 			get {
-				StreamReader reader;
-				lock (lock_obj)
-					reader = install_log?.GetReader ();
-				
-				if (reader == null)
-					return base.ProgressMessage;
-
-				using (reader) {
-					var lines = reader.ReadToEnd ().Split ('\n');
-					for (int i = lines.Length - 1; i >= 0; i--) {
-						var idx = lines [i].IndexOf ("PercentComplete:", StringComparison.Ordinal);
-						if (idx == -1)
-							continue;
-						return "Install: " + lines [i].Substring (idx + "PercentComplete:".Length + 1) + "%";
-					}
-				}
-
+				var pm = progress_message;
+				if (pm != null)
+					return pm;
 				return base.ProgressMessage;
 			}
 		}
@@ -3136,8 +3125,6 @@ namespace xharness
 		{
 			Jenkins.MainLog.WriteLine ("Running '{0}' on device (candidates: '{1}')", ProjectFile, string.Join ("', '", Candidates.Select ((v) => v.Name).ToArray ()));
 
-			var install_log = Logs.Create ($"install-{Timestamp}.log", "Install log");
-			install_log.Timestamp = true;
 			var uninstall_log = Logs.Create ($"uninstall-{Timestamp}.log", "Uninstall log");
 			using (var device_resource = await NotifyBlockingWaitAsync (Jenkins.GetDeviceResources (Candidates).AcquireAnyConcurrentAsync ())) {
 				try {
@@ -3153,7 +3140,6 @@ namespace xharness
 						ProjectFile = ProjectFile,
 						Target = AppRunnerTarget,
 						LogDirectory = LogDirectory,
-						MainLog = install_log,
 						DeviceName = Device.Name,
 						CompanionDeviceName = CompanionDevice?.Name,
 						Configuration = ProjectConfiguration,
@@ -3165,61 +3151,75 @@ namespace xharness
 					if (!uninstall_result.Succeeded)
 						MainLog.WriteLine ($"Pre-run uninstall failed, exit code: {uninstall_result.ExitCode} (this hopefully won't affect the test result)");
 
-					if (!Failed) {
-						// Install the app
-						lock (lock_obj)
-							this.install_log = install_log;
-						try {
+					if (Failed)
+						return;
+					
+					// Install the app, and try a few times.
+					try {
+						ProcessExecutionResult install_result = null;
+
+						var progress_reporter = new CallbackLog ((line) => {
+							var idx = line.IndexOf ("PercentComplete:", StringComparison.Ordinal);
+							if (idx > -1)
+								progress_message = $"Install: {line.Substring (idx + "PercentComplete:".Length + 1)}%";
+						});
+
+						for (var i = 0; i < 3; i++) {
+							var file_log = Logs.Create ($"install-{Timestamp}.log", i == 0 ? "Install log" : $"Install log #{i + 1}", true);
+							var install_log = Log.CreateAggregatedLog (file_log, progress_reporter);
 							runner.MainLog = install_log;
-							var install_result = await runner.InstallAsync ();
-							if (!install_result.Succeeded) {
-								FailureMessage = $"Install failed, exit code: {install_result.ExitCode}.";
-								ExecutionResult = TestExecutingResult.Failed;
-							}
-						} finally {
-							lock (lock_obj)
-								this.install_log = null;
+							progress_message = null;
+							install_result = await runner.InstallAsync ();
+							if (install_result.Succeeded)
+								break;
 						}
+						if (!install_result.Succeeded) {
+							FailureMessage = $"Install failed, exit code: {install_result.ExitCode}.";
+							ExecutionResult = TestExecutingResult.Failed;
+						}
+					} finally {
+						progress_message = null;
 					}
 
-					if (!Failed) {
-						// Run the app
-						runner.MainLog = Logs.Create ($"run-{Device.UDID}-{Timestamp}.log", "Run log");
-						await runner.RunAsync ();
+					if (Failed)
+						return;
 
-						if (!string.IsNullOrEmpty (runner.FailureMessage))
-							FailureMessage = runner.FailureMessage;
-						else if (runner.Result != TestExecutingResult.Succeeded)
-							FailureMessage = GuessFailureReason (runner.MainLog);
+					// Run the app
+					runner.MainLog = Logs.Create ($"run-{Device.UDID}-{Timestamp}.log", "Run log", true);
+					await runner.RunAsync ();
 
-						if (runner.Result == TestExecutingResult.Succeeded && Platform == TestPlatform.iOS_TodayExtension64) {
-							// For the today extension, the main app is just a single test.
-							// This is because running the today extension will not wake up the device,
-							// nor will it close & reopen the today app (but launching the main app
-							// will do both of these things, preparing the device for launching the today extension).
+					if (!string.IsNullOrEmpty (runner.FailureMessage))
+						FailureMessage = runner.FailureMessage;
+					else if (runner.Result != TestExecutingResult.Succeeded)
+						FailureMessage = GuessFailureReason (runner.MainLog);
 
-							AppRunner todayRunner = new AppRunner
-							{
-								Harness = Harness,
-								ProjectFile = TestProject.GetTodayExtension ().Path,
-								Target = AppRunnerTarget,
-								LogDirectory = LogDirectory,
-								MainLog = Logs.Create ($"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log"),
-								DeviceName = Device.Name,
-								CompanionDeviceName = CompanionDevice?.Name,
-								Configuration = ProjectConfiguration,
-							};
-							additional_runner = todayRunner;
-							await todayRunner.RunAsync ();
-							foreach (var log in todayRunner.Logs.Where ((v) => !v.Description.StartsWith ("Extension ", StringComparison.Ordinal)))
-								log.Description = "Extension " + log.Description [0].ToString ().ToLower () + log.Description.Substring (1);
-							ExecutionResult = todayRunner.Result;
+					if (runner.Result == TestExecutingResult.Succeeded && Platform == TestPlatform.iOS_TodayExtension64) {
+						// For the today extension, the main app is just a single test.
+						// This is because running the today extension will not wake up the device,
+						// nor will it close & reopen the today app (but launching the main app
+						// will do both of these things, preparing the device for launching the today extension).
 
-							if (!string.IsNullOrEmpty (todayRunner.FailureMessage))
-								FailureMessage = todayRunner.FailureMessage;
-						} else {
-							ExecutionResult = runner.Result;
-						}
+						AppRunner todayRunner = new AppRunner
+						{
+							Harness = Harness,
+							ProjectFile = TestProject.GetTodayExtension ().Path,
+							Target = AppRunnerTarget,
+							LogDirectory = LogDirectory,
+							MainLog = Logs.Create ($"extension-run-{Device.UDID}-{Timestamp}.log", "Extension run log", true),
+							DeviceName = Device.Name,
+							CompanionDeviceName = CompanionDevice?.Name,
+							Configuration = ProjectConfiguration,
+						};
+						additional_runner = todayRunner;
+						await todayRunner.RunAsync ();
+						foreach (var log in todayRunner.Logs.Where ((v) => !v.Description.StartsWith ("Extension ", StringComparison.Ordinal)))
+							log.Description = "Extension " + log.Description [0].ToString ().ToLower () + log.Description.Substring (1);
+						ExecutionResult = todayRunner.Result;
+
+						if (!string.IsNullOrEmpty (todayRunner.FailureMessage))
+							FailureMessage = todayRunner.FailureMessage;
+					} else {
+						ExecutionResult = runner.Result;
 					}
 				} finally {
 					// Uninstall again, so that we don't leave junk behind and fill up the device.
@@ -3244,6 +3244,7 @@ namespace xharness
 
 	class RunSimulatorTask : RunXITask<SimDevice>
 	{
+		public AggregatedRunSimulatorTask AggregatedTask;
 		public IAcquiredResource AcquiredResource;
 
 		public SimDevice [] Simulators {
@@ -3293,7 +3294,7 @@ namespace xharness
 				EnsureCleanSimulatorState = clean_state,
 				Target = AppRunnerTarget,
 				LogDirectory = LogDirectory,
-				MainLog = Logs.Create ($"run-{Device.UDID}-{Timestamp}.log", "Run log"),
+				MainLog = Logs.Create ($"run-{Device.UDID}-{Timestamp}.log", "Run log", true),
 				Configuration = ProjectConfiguration,
 			};
 			runner.Simulators = Simulators;
@@ -3371,6 +3372,25 @@ namespace xharness
 		public AggregatedRunSimulatorTask (IEnumerable<RunSimulatorTask> tasks)
 		{
 			this.Tasks = tasks;
+			foreach (var task in tasks)
+				task.AggregatedTask = this;
+		}
+
+		IEnumerable<RunSimulatorTask> GetExecutingTasks ()
+		{
+			return Tasks.Where ((v) => !v.Ignored && !v.Failed);;
+		}
+
+		public async Task PrepareSimulatorsAsync (IEnumerable<RunSimulatorTask> executingTasks = null, IEnumerable<SimDevice> devices = null)
+		{
+			if (executingTasks == null)
+				executingTasks = GetExecutingTasks ();
+			
+			if (devices == null)
+				devices = executingTasks.First ().Simulators;
+			
+			foreach (var dev in devices)
+				await dev.PrepareSimulatorAsync (Jenkins.MainLog, executingTasks.Select ((v) => v.BundleIdentifier).ToArray ());
 		}
 
 		protected override async Task ExecuteAsync ()
@@ -3380,43 +3400,56 @@ namespace xharness
 				return;
 			}
 
-			// First build everything. This is required for the run simulator
-			// task to properly configure the simulator.
-			build_timer.Start ();
-			await Task.WhenAll (Tasks.Select ((v) => v.BuildAsync ()).Distinct ());
-			build_timer.Stop ();
+			var executingTasks = new Queue<RunSimulatorTask> (GetExecutingTasks ());
+			RunSimulatorTask last_re_executed_task = null;
 
-			using (var desktop = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireExclusiveAsync ())) {
-				run_timer.Start ();
+			while (executingTasks.Count > 0) {
+				// First build everything. This is required for the run simulator
+				// task to properly configure the simulator.
+				build_timer.Start ();
+				await Task.WhenAll (executingTasks.Select ((v) => v.BuildAsync ()));
+				build_timer.Stop ();
 
-				// We need to set the dialog permissions for all the apps
-				// before launching the simulator, because once launched
-				// the simulator caches the values in-memory.
-				var executingTasks = Tasks.Where ((v) => !v.Ignored && !v.Failed);
-				foreach (var task in executingTasks)
-					await task.SelectSimulatorAsync ();
+				using (var desktop = await NotifyBlockingWaitAsync (Jenkins.DesktopResource.AcquireExclusiveAsync ())) {
+					run_timer.Start ();
 
-				var devices = executingTasks.First ().Simulators;
-				Jenkins.MainLog.WriteLine ("Selected simulator: {0}", devices.Length > 0 ? devices [0].Name : "none");
+					// We need to set the dialog permissions for all the apps    
+					// before launching the simulator, because once launched
+					// the simulator caches the values in-memory.
+					foreach (var task in executingTasks)
+						await task.SelectSimulatorAsync ();
 
-				foreach (var dev in devices)
-					await dev.PrepareSimulatorAsync (Jenkins.MainLog, executingTasks.Select ((v) => v.BundleIdentifier).ToArray ());
+					var devices = executingTasks.First ().Simulators;
+					Jenkins.MainLog.WriteLine ("Selected simulator: {0}", devices.Length > 0 ? devices [0].Name : "none");
 
-				foreach (var task in executingTasks) {
-					task.AcquiredResource = desktop;
-					try {
-						await task.RunAsync ();
-					} finally {
-						task.AcquiredResource = null;
+					await PrepareSimulatorsAsync (executingTasks, devices);
+
+					while (executingTasks.Count > 0) {
+						var task = executingTasks.Peek ();
+						task.AcquiredResource = desktop;
+						try {
+							await task.RunAsync ();
+							if (!task.Succeeded && !task.Runner.TestsLaunched && task.Platform == TestPlatform.watchOS && last_re_executed_task != task) {
+								// watchOS test run where the tests didn't launch. Try again
+								last_re_executed_task = task;
+								task.Reset ();
+								break;
+							}
+
+							// We're done with this test. Remove it from the queue.
+							executingTasks.Dequeue ();
+						} finally {
+							task.AcquiredResource = null;
+						}
 					}
+
+					foreach (var dev in devices)
+						await dev.ShutdownAsync (Jenkins.MainLog);
+
+					await SimDevice.KillEverythingAsync (Jenkins.MainLog);
+
+					run_timer.Stop ();
 				}
-
-				foreach (var dev in devices)
-					await dev.ShutdownAsync (Jenkins.MainLog);
-
-				await SimDevice.KillEverythingAsync (Jenkins.MainLog);
-
-				run_timer.Stop ();
 			}
 
 			if (Tasks.All ((v) => v.Ignored)) {

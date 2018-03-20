@@ -2,7 +2,7 @@
 
 def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
 def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
-def hash = isPr ? env.ghprbActualCommit : env.GIT_COMMIT
+def hash = (isPr ? env.ghprbActualCommit : env.GIT_COMMIT)
 def packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${hash}/package/xamarin-ios-dummy-package.pkg"
 
 pipeline {

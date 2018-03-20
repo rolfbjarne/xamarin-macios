@@ -5,6 +5,9 @@ timestamps {
         stage('checkout') {
             checkout scm
 
+            sh('env')
+            sh('pwd')
+            sh('ls -la')
             sh('./jenkins/build-package.sh')
         }
     }

@@ -22,14 +22,9 @@ pipeline {
                 sh('env')
                 sh('pwd')
                 sh('ls -la')
-                echo "${packageUrl}"
-                echo "${gitHash}"
-                echo "${env.GIT_COMMIT}"
-                echo "${branchName}"
                 sh('./xamarin-macios/jenkins/build-package.sh')
             }
         }
-        /*
         stage('Upload .pkg to Azure') {
             steps {
                 step([
@@ -55,6 +50,5 @@ pipeline {
                 }
             }
         }
-        */
     }
 }

@@ -52,6 +52,7 @@ pipeline {
                 */
                 step([
                     $class: 'GitHubCommitStatusSetter',
+                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
                     commitShaSource: [$class: "ManuallyEnteredShaSource", sha: gitHash],
                     contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS'],
                     statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: "${packageUrl}"],

@@ -1,0 +1,17 @@
+#!/bin/groovy
+
+timestamps {
+	node('felix-sierra') {
+        stage('checkout') {
+            checkout scm
+            // dir('maccore') {
+            //     checkout scm
+            // }
+            //checkoutRepo('master', 'xamarin-macios', 'xamarin/xamarin-macios')
+
+            dir('xamarin-macios') {
+                sh('make print-versions || true')
+            }
+        }
+    }
+}

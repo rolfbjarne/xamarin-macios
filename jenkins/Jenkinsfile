@@ -4,7 +4,7 @@ timestamps {
 	node('felix-sierra') {
         stage('checkout') {
             options {
-                options { checkoutToSubdirectory('xamarin-macios')
+                checkoutToSubdirectory('xamarin-macios')
             }
             checkout scm
 

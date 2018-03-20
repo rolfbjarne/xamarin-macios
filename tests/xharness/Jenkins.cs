@@ -18,7 +18,7 @@ namespace xharness
 		public Harness Harness;
 		public bool IncludeAll;
 		public bool IncludeClassicMac = false;
-		public bool IncludeBcl = false;
+		public bool IncludeBcl = true;
 		public bool IncludeMac = false;
 		public bool IncludeiOS = false;
 		public bool IncludeiOSExtensions;

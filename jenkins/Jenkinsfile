@@ -13,7 +13,7 @@ pipeline {
                 sh('env')
                 sh('pwd')
                 sh('ls -la')
-                sh('./jenkins/build-package.sh')
+                sh('./xamarin-macios/jenkins/build-package.sh')
             }
 
         }

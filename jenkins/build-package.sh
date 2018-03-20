@@ -6,7 +6,7 @@ ls -la
 CURDIR=$(pwd)
 cd ..
 mv $CURDIR xamarin-macios
-ln -s $CURDIR/../xamarin-macios $CURDIR
+ln -s $(pwd)/xamarin-macios $CURDIR
 
 ls -la
 cd xamarin-macios

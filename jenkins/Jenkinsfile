@@ -4,16 +4,10 @@ timestamps {
 	node('felix-sierra') {
         stage('checkout') {
             checkout scm
-            // dir('maccore') {
-            //     checkout scm
-            // }
-            //checkoutRepo('master', 'xamarin-macios', 'xamarin/xamarin-macios')
 
-            sh('ls -la')
-            dir('xamarin-macios') {
-                sh('ls -la')
-                sh('make print-versions || true')
-            }
+            sh('make print-versions')
+            sh('./configure --enable-xamarin')
+            sh('make reset')
         }
     }
 }

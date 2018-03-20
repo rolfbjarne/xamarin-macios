@@ -1,17 +1,21 @@
 #!/bin/groovy
 
-timestamps {
-            options {
-                checkoutToSubdirectory('xamarin-macios')
+pipeline {
+    agent { label 'felix-sierra' }
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        checkoutToSubdirectory('xamarin-macios')
+        timestamps()
+    }
+    stages {
+        stage('test') {
+            steps {
+                sh('env')
+                sh('pwd')
+                sh('ls -la')
+                sh('./jenkins/build-package.sh')
             }
-	node('felix-sierra') {
-        stage('checkout') {
-            checkout scm
 
-            sh('env')
-            sh('pwd')
-            sh('ls -la')
-            sh('./jenkins/build-package.sh')
         }
     }
 }

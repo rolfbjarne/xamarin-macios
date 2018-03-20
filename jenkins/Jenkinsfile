@@ -2,7 +2,6 @@
 
 def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
 def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
-def gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
 def packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"
 
 pipeline {
@@ -15,6 +14,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                def gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
                 sh('env')
                 sh('pwd')
                 sh('ls -la')

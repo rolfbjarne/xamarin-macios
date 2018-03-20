@@ -4,7 +4,6 @@ def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
 def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
 def hash = isPr ? env.ghprbActualCommit : env.GIT_COMMIT
 def packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${hash}/package/xamarin-ios-dummy-package.pkg"
-//def utils = null
 
 pipeline {
     agent { label 'felix-sierra' }
@@ -20,7 +19,6 @@ pipeline {
                 sh('pwd')
                 sh('ls -la')
                 sh('./xamarin-macios/jenkins/build-package.sh')
-                def utils = load "xamarin-macios/jenkins/utils.groovy"
             }
         }
         stage('Upload .pkg to Azure') {
@@ -42,7 +40,10 @@ pipeline {
                     uploadZips: false,
                     virtualPath: "jenkins/${branchName}/${env.BUILD_NUMBER}/${hash}/"
                 ])
-                utils.reportGitHubStatus (hash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
+                script {
+                    def utils = load "xamarin-macios/jenkins/utils.groovy"
+                    utils.reportGitHubStatus (hash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
+                }
             }
         }
     }

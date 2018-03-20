@@ -9,7 +9,9 @@ timestamps {
             // }
             //checkoutRepo('master', 'xamarin-macios', 'xamarin/xamarin-macios')
 
+            sh('ls -la')
             dir('xamarin-macios') {
+                sh('ls -la')
                 sh('make print-versions || true')
             }
         }

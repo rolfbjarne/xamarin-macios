@@ -5,9 +5,7 @@ timestamps {
         stage('checkout') {
             checkout scm
 
-            sh('make print-versions')
-            sh('./configure --enable-xamarin')
-            sh('make reset')
+            sh('./jenkins/build-package.sh')
         }
     }
 }

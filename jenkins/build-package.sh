@@ -1,22 +1,7 @@
 #!/bin/bash -ex
 
-env
-ls -la
-cd ..
-ls -la
+cd xamarin-macios
 
-# CURDIR=$(pwd)
-# cd ..
-# if ! test -d xamarin-macios
-# 	mv $CURDIR xamarin-macios
-# else
-
-# fi
-
-# ln -s $(pwd)/xamarin-macios $CURDIR
-
-# ls -la
-# cd xamarin-macios
-# ./configure --enable-xamarin
-# make reset
-# make print-versions
+./configure --enable-xamarin
+make reset
+make print-versions

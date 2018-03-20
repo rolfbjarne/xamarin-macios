@@ -14,7 +14,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                def gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
+                script {
+                    def gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
+                }
                 sh('env')
                 sh('pwd')
                 sh('ls -la')

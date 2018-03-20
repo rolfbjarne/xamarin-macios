@@ -2,10 +2,10 @@
 
 timestamps {
 	node('felix-sierra') {
-        stage('checkout') {
             options {
                 checkoutToSubdirectory('xamarin-macios')
             }
+        stage('checkout') {
             checkout scm
 
             sh('env')

@@ -46,7 +46,7 @@ pipeline {
                 ])
                 script {
                     def utils = load "xamarin-macios/jenkins/utils.groovy"
-                    utils.reportGitHubStatus (hash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
+                    utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
                 }
             }
         }

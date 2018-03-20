@@ -1,10 +1,10 @@
 #!/bin/groovy
 
 timestamps {
-	node('felix-sierra') {
             options {
                 checkoutToSubdirectory('xamarin-macios')
             }
+	node('felix-sierra') {
         stage('checkout') {
             checkout scm
 

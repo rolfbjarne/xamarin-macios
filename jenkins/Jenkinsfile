@@ -10,7 +10,7 @@ timestamps {
     node('felix-sierra') {
         dir('xamarin-macios') {
             stage('checkout') {
-                checkout scm
+                scmVars = checkout scm
                 sh('env')
                 sh('pwd')
                 sh('ls -la')
@@ -18,7 +18,7 @@ timestamps {
                 utils = load "./jenkins/utils.groovy"
             }
             stage('report status') {
-                gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
+                gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
                 packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"
                 utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
 
@@ -27,7 +27,7 @@ timestamps {
                 step([
                     $class: 'GitHubCommitStatusSetter',
                     commitShaSource: [$class: "ManuallyEnteredShaSource", sha: gitHash],
-                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://api.github.com/repos/xamarin/xamarin-macios"],
+                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
                     contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS2'],
                     errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
                     statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: "${packageUrl}"],

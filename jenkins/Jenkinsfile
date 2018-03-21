@@ -17,6 +17,15 @@ timestamps {
                 sh('./jenkins/build-package.sh')
                 utils = load "./jenkins/utils.groovy"
             }
+            stage('Signing') {
+                echo "Triggering codesign"
+                withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'CODESIGN_KEYCHAIN_PASSWORD')]) {
+                    sh "security unlock-keychain -p $CODESIGN_KEYCHAIN_PASSWORD"
+                    sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' 'foo.pkg' 'foo-signed.pkg'"
+                    sh "/usr/sbin/spctl -vvv --assess --type install 'foo-signed.pkg'"
+                }
+                sh "mv foo-signed.pkg ../package"
+            }
             stage('report status') {
                 gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
                 packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"

@@ -65,12 +65,10 @@ pipeline {
                     uploadZips: false,
                     virtualPath: "jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/"
                 ])
-                /*
-                script {
-                    def utils = load "xamarin-macios/jenkins/utils.groovy"
-                    //utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
-                }
-                */
+                //script {
+                //    def utils = load "xamarin-macios/jenkins/utils.groovy"
+                //    //utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
+                //}
                 step([
                     $class: 'GitHubCommitStatusSetter',
                     reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],

@@ -52,7 +52,7 @@ pipeline {
                 */
                 step([
                     $class: 'GitHubCommitStatusSetter',
-                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "git@github.com:xamarin/xamarin-macios https://github.com/xamarin/xamarin-macios"],
+                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: ""],
                     contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS'],
                     errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
                     statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', state: 'SUCCESS', message: "xamarin-ios-dummy-package.pkg"]]]

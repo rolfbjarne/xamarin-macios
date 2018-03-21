@@ -14,8 +14,8 @@ timestamps {
                 sh('env')
                 sh('pwd')
                 sh('ls -la')
-                sh('./xamarin-macios/jenkins/build-package.sh')
-                utils = load "xamarin-macios/jenkins/utils.groovy"
+                sh('./jenkins/build-package.sh')
+                utils = load "./jenkins/utils.groovy"
             }
             stage('report status') {
                 gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)

@@ -27,8 +27,11 @@ timestamps {
         stage('Signing') {
             xiPackageFileName = findFiles (glob: "package/xamarin.ios-*.pkg")[0].name
             xmPackageFileName = findFiles (glob: "package/xamarin.mac-*.pkg")[0].name
-            utils.signPackage ("package", xiPackageFilename)
-            utils.signPackage ("package", xmPackageFilename)
+            sh('ls -la .')
+            sh('ls -la package')
+            echo "Found xi: ${xiPackageFilename} xm: ${xmPackageFilename}"
+            utils.signPackage ("package", "${xiPackageFilename}")
+            utils.signPackage ("package", "${xmPackageFilename}")
         }
         stage('Report GitHub Status') {
             gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)

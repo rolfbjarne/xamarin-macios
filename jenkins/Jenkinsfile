@@ -27,7 +27,7 @@ timestamps {
                 step([
                     $class: 'GitHubCommitStatusSetter',
                     commitShaSource: [$class: "ManuallyEnteredShaSource", sha: gitHash],
-                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
+                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://api.github.com/repos/xamarin/xamarin-macios"],
                     contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS2'],
                     errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
                     statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: "${packageUrl}"],

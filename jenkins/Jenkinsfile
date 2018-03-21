@@ -21,6 +21,20 @@ timestamps {
                 gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
                 packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"
                 utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
+
+                echo 'second try'
+
+                step([
+                    $class: 'GitHubCommitStatusSetter',
+                    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: gitHash],
+                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
+                    contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS2'],
+                    errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+                    statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: "${packageUrl}"],
+                    statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', state: 'SUCCESS', message: "xamarin-ios-dummy-package.pkg"]]]
+                ])
+
+                echo 'done?'
             }
         }
     }

@@ -20,24 +20,14 @@ timestamps {
                 sh('ls -la')
                 sh('./jenkins/build-package.sh')
                 utils = load "./jenkins/utils.groovy"
+                sh('ls -la ..')
+                sh('ls -la ../package')
                 xiPackageFileName = findFiles (glob: "../package/xamarin.ios-*.pkg")[0].name
                 xmPackageFileName = findFiles (glob: "../package/xamarin.mac-*.pkg")[0].name
             }
             stage('Signing') {
-                echo "Signing ${xiPackageFilename}"
-                withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'CODESIGN_KEYCHAIN_PASSWORD')]) {
-                    sh "security unlock-keychain -p $CODESIGN_KEYCHAIN_PASSWORD"
-                    sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' '../package/${xiPackageFilename}' '../package/${xiPackageFilename}-signed.pkg'"
-                    sh "/usr/sbin/spctl -vvv --assess --type install '../package/${xiPackageFilename}-signed.pkg'"
-                }
-                sh "mv ../package/${xiPackageFilename}-signed.pkg .../package/${xiPackageFilename}"
-                echo "Signing ${xmPackageFilename}"
-                withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'CODESIGN_KEYCHAIN_PASSWORD')]) {
-                    sh "security unlock-keychain -p $CODESIGN_KEYCHAIN_PASSWORD"
-                    sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' '../package/${xmPackageFilename}' '../package/${xmPackageFilename}-signed.pkg'"
-                    sh "/usr/sbin/spctl -vvv --assess --type install '../package/${xmPackageFilename}-signed.pkg'"
-                }
-                sh "mv ../package/${xmPackageFilename}-signed.pkg .../package/${xmPackageFilename}"
+                utils.signPackage ("../package", xiPackageFilename)
+                utils.signPackage ("../package", xmPackageFilename)
             }
             stage('report status') {
                 gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)

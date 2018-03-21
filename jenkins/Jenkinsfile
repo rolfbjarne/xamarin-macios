@@ -13,7 +13,7 @@ def xmPackageFilename = null
 timestamps {
     node('felix-sierra') {
         dir('xamarin-macios') {
-            stage('checkout') {
+            stage('Checkout') {
                 scmVars = checkout scm
                 sh('env')
                 sh('pwd')
@@ -22,20 +22,20 @@ timestamps {
                 utils = load "./jenkins/utils.groovy"
                 sh('ls -la ..')
                 sh('ls -la ../package')
-                xiPackageFileName = findFiles (glob: "../package/xamarin.ios-*.pkg")[0].name
-                xmPackageFileName = findFiles (glob: "../package/xamarin.mac-*.pkg")[0].name
             }
-            stage('Signing') {
-                utils.signPackage ("../package", xiPackageFilename)
-                utils.signPackage ("../package", xmPackageFilename)
-            }
-            stage('report status') {
-                gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-                xiPackageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
-                xiPackageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
-                utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
-                utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
-            }
+        }
+        stage('Signing') {
+            xiPackageFileName = findFiles (glob: "package/xamarin.ios-*.pkg")[0].name
+            xmPackageFileName = findFiles (glob: "package/xamarin.mac-*.pkg")[0].name
+            utils.signPackage ("package", xiPackageFilename)
+            utils.signPackage ("package", xmPackageFilename)
+        }
+        stage('Report GitHub Status') {
+            gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+            xiPackageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
+            xiPackageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
+            utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
+            utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
         }
     }
 }

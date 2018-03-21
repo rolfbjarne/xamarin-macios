@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+exit 0
+
 cd xamarin-macios
 
 ./configure --enable-xamarin

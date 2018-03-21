@@ -4,7 +4,28 @@ def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
 def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
 def gitHash = null
 def packageUrl = null
+def utils = null
 
+timestamps {
+    dir("xamarin-macios") {
+        node('felix-sierra') {
+            stage('checkout') {
+                checkout scm
+                sh('env')
+                sh('pwd')
+                sh('ls -la')
+                sh('./xamarin-macios/jenkins/build-package.sh')
+                utils = load "scripts/ci/pipeline/utils.groovy"
+            }
+            stage('report status') {
+                gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
+                packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"
+                utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
+            }
+        }
+    }
+}
+/*
 pipeline {
     agent { label 'felix-sierra' }
     options {
@@ -52,7 +73,7 @@ pipeline {
                 */
                 step([
                     $class: 'GitHubCommitStatusSetter',
-                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://api.github.com/xamarin/xamarin-macios"],
+                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
                     contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS'],
                     errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
                     statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', state: 'SUCCESS', message: "xamarin-ios-dummy-package.pkg"]]]
@@ -61,3 +82,4 @@ pipeline {
         }
     }
 }
+*/

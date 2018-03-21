@@ -3,8 +3,12 @@
 def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
 def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
 def gitHash = null
-def packageUrl = null
+def xiPackageUrl = null
+def xmPackageUrl = null
 def utils = null
+
+def xiPackageFilename = null
+def xmPackageFilename = null
 
 timestamps {
     node('felix-sierra') {
@@ -16,91 +20,32 @@ timestamps {
                 sh('ls -la')
                 sh('./jenkins/build-package.sh')
                 utils = load "./jenkins/utils.groovy"
+                xiPackageFileName = findFiles (glob: "../package/xamarin.ios-*.pkg")[0].name
+                xmPackageFileName = findFiles (glob: "../package/xamarin.mac-*.pkg")[0].name
             }
             stage('Signing') {
-                echo "Triggering codesign"
+                echo "Signing ${xiPackageFilename}"
                 withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'CODESIGN_KEYCHAIN_PASSWORD')]) {
                     sh "security unlock-keychain -p $CODESIGN_KEYCHAIN_PASSWORD"
-                    sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' 'foo.pkg' 'foo-signed.pkg'"
-                    sh "/usr/sbin/spctl -vvv --assess --type install 'foo-signed.pkg'"
+                    sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' '../package/${xiPackageFilename}' '../package/${xiPackageFilename}-signed.pkg'"
+                    sh "/usr/sbin/spctl -vvv --assess --type install '../package/${xiPackageFilename}-signed.pkg'"
                 }
-                sh "mv foo-signed.pkg ../package"
+                sh "mv ../package/${xiPackageFilename}-signed.pkg .../package/${xiPackageFilename}"
+                echo "Signing ${xmPackageFilename}"
+                withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'CODESIGN_KEYCHAIN_PASSWORD')]) {
+                    sh "security unlock-keychain -p $CODESIGN_KEYCHAIN_PASSWORD"
+                    sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' '../package/${xmPackageFilename}' '../package/${xmPackageFilename}-signed.pkg'"
+                    sh "/usr/sbin/spctl -vvv --assess --type install '../package/${xmPackageFilename}-signed.pkg'"
+                }
+                sh "mv ../package/${xmPackageFilename}-signed.pkg .../package/${xmPackageFilename}"
             }
             stage('report status') {
                 gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-                packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"
-                utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
-
-                echo 'second try'
-
-                step([
-                    $class: 'GitHubCommitStatusSetter',
-                    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: gitHash],
-                    //reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
-                    contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS2'],
-                    errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-                    statusBackrefSource: [$class: 'ManuallyEnteredBackrefSource', backref: "${packageUrl}"],
-                    statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', state: 'SUCCESS', message: "xamarin-ios-dummy-package.pkg"]]]
-                ])
-
-                echo 'done?'
+                xiPackageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
+                xiPackageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
+                utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
+                utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
             }
         }
     }
 }
-/*
-pipeline {
-    agent { label 'felix-sierra' }
-    options {
-        timeout(time: 1, unit: 'HOURS')
-        checkoutToSubdirectory('xamarin-macios')
-        timestamps()
-    }
-    stages {
-        stage('Build') {
-            steps {
-                script {
-                    gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)
-                    packageUrl = "http://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/package/xamarin-ios-dummy-package.pkg"
-                }
-                sh('env')
-                sh('pwd')
-                sh('ls -la')
-                sh('./xamarin-macios/jenkins/build-package.sh')
-            }
-        }
-        stage('Upload .pkg to Azure') {
-            steps {
-                step([
-                    $class: 'WAStoragePublisher',
-                    allowAnonymousAccess: true,
-                    cleanUpContainer: false,
-                    cntPubAccess: true,
-                    containerName: "wrench",
-                    doNotFailIfArchivingReturnsNothing: false,
-                    doNotUploadIndividualFiles: false,
-                    doNotWaitForPreviousBuild: true,
-                    excludeFilesPath: '',
-                    filesPath: "package/*.pkg",
-                    storageAccName: 'bosstoragemirror',
-                    storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
-                    uploadArtifactsOnlyIfSuccessful: false,
-                    uploadZips: false,
-                    virtualPath: "jenkins/${branchName}/${env.BUILD_NUMBER}/${gitHash}/"
-                ])
-                //script {
-                //    def utils = load "xamarin-macios/jenkins/utils.groovy"
-                //    //utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${packageUrl}", 'SUCCESS', "xamarin-ios-dummy-package.pkg")
-                //}
-                step([
-                    $class: 'GitHubCommitStatusSetter',
-                    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/xamarin/xamarin-macios"],
-                    contextSource: [$class: 'ManuallyEnteredCommitContextSource', context: 'jenkins-PKG-Xamarin.iOS'],
-                    errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-                    statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', state: 'SUCCESS', message: "xamarin-ios-dummy-package.pkg"]]]
-                ])
-            }
-        }
-    }
-}
-*/

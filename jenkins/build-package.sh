@@ -6,6 +6,9 @@ mkdir -p Library
 echo foo > Library/foo
 pkgbuild --identifier com.xamarin.foo --nopayload --root Library foo.pkg
 
+cp foo.pkg ../package/xamarin.ios-1.2.3.4.pkg
+cp foo.pkg ../package/xamarin.mac-1.2.3.4.pkg
+
 exit 0
 
 cd xamarin-macios

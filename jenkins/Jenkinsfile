@@ -7,15 +7,15 @@ def packageUrl = null
 def utils = null
 
 timestamps {
-    dir("xamarin-macios") {
-        node('felix-sierra') {
+    node('felix-sierra') {
+        dir('xamarin-macios') {
             stage('checkout') {
                 checkout scm
                 sh('env')
                 sh('pwd')
                 sh('ls -la')
                 sh('./xamarin-macios/jenkins/build-package.sh')
-                utils = load "scripts/ci/pipeline/utils.groovy"
+                utils = load "xamarin-macios/jenkins/utils.groovy"
             }
             stage('report status') {
                 gitHash = (isPr ? (env.ghprbActualCommit) : env.GIT_COMMIT)

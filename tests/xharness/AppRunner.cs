@@ -116,6 +116,18 @@ namespace xharness
 			}
 		}
 
+		TimeSpan? timeout;
+		public TimeSpan Timeout { 
+			get {
+				if (timeout.HasValue)
+					return timeout.Value;
+				return TimeSpan.FromMinutes (Harness.Timeout);
+			}
+			set {
+				timeout = value;
+			}
+		}
+
 		string mode;
 
 		async Task<bool> FindSimulatorAsync ()
@@ -618,11 +630,11 @@ namespace xharness
 
 				main_log.WriteLine ("Starting test run");
 
-				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), run_log, TimeSpan.FromMinutes (Harness.Timeout), cancellation_token: cancellation_source.Token);
+				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), run_log, Timeout, cancellation_token: cancellation_source.Token);
 				if (result.TimedOut) {
 					timed_out = true;
 					success = false;
-					main_log.WriteLine ("Test run timed out after {0} minute(s).", Harness.Timeout);
+					main_log.WriteLine ("Test run timed out after {0} minute(s).", Timeout.TotalMinutes);
 				} else if (result.Succeeded) {
 					main_log.WriteLine ("Test run completed");
 					success = true;
@@ -653,8 +665,8 @@ namespace xharness
 					if (pid > 0) {
 						var launchTimedout = cancellation_source.IsCancellationRequested;
 						var timeoutType = launchTimedout ? "Launch" : "Completion";
-						var timeoutValue = launchTimedout ? Harness.LaunchTimeout : Harness.Timeout;
-						main_log.WriteLine ($"{timeoutType} timed out after {timeoutValue}");
+						var timeoutValue = launchTimedout ? Harness.LaunchTimeout : Timeout.TotalMinutes;
+						main_log.WriteLine ($"{timeoutType} timed out after {timeoutValue} minutes");
 						await Process_Extensions.KillTreeAsync (pid, main_log, true);
 					} else {
 						main_log.WriteLine ("Could not find pid in mtouch output.");
@@ -702,14 +714,13 @@ namespace xharness
 						launch_failure = true;
 				});
 				var runLog = Log.CreateAggregatedLog (callbackLog, main_log);
-				var timeout = TimeSpan.FromMinutes (Harness.Timeout);
 				var timeoutWatch = Stopwatch.StartNew ();
-				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), runLog, timeout, cancellation_token: cancellation_source.Token);
+				var result = await ProcessHelper.ExecuteCommandAsync (Harness.MlaunchPath, args.ToString (), runLog, Timeout, cancellation_token: cancellation_source.Token);
 
 				if (!waitedForExit && !result.TimedOut) {
 					// mlaunch couldn't wait for exit for some reason. Let's assume the app exits when the test listener completes.
 					main_log.WriteLine ("Waiting for listener to complete, since mlaunch won't tell.");
-					if (!await listener.CompletionTask.TimeoutAfter (timeout - timeoutWatch.Elapsed)) {
+					if (!await listener.CompletionTask.TimeoutAfter (Timeout - timeoutWatch.Elapsed)) {
 						result.TimedOut = true;
 					}
 				}
@@ -717,7 +728,7 @@ namespace xharness
 				if (result.TimedOut) {
 					timed_out = true;
 					success = false;
-					main_log.WriteLine ("Test run timed out after {0} minute(s).", Harness.Timeout);
+					main_log.WriteLine ("Test run timed out after {0} minute(s).", Timeout);
 				} else if (result.Succeeded) {
 					main_log.WriteLine ("Test run completed");
 					success = true;

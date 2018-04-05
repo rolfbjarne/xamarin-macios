@@ -305,7 +305,8 @@ namespace xharness
 						BCLInfo = bclTestInfo,
 						Platform = "AnyCPU",
 					};
-
+					if (p == "System.Net.Http")
+						bclTestProject.TimeoutMultiplier = 10; // https://github.com/xamarin/maccore/issues/673
 					MacTestProjects.Add (bclTestProject);
 				}
 			}
@@ -362,7 +363,8 @@ namespace xharness
 				BCLTestInfo bclTestInfo = new BCLTestInfo (this, p);
 				IOSTestProjects.Add (new iOSTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "bcl-test/" + p + "/" + p + ".csproj"))) {
 					SkipwatchOSVariation = bcl_skip_watchos.Contains (p),
-					BCLInfo = bclTestInfo
+					BCLInfo = bclTestInfo,
+					TimeoutMultiplier = p == "System.Net.Http" ? 10 : 1, // https://github.com/xamarin/maccore/issues/673
 				});
 			}
 			

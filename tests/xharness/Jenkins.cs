@@ -285,6 +285,7 @@ namespace xharness
 					T newVariation = creator (build, task);
 					newVariation.Variation = variation;
 					newVariation.Ignored = task.Ignored || ignored;
+					newVariation.Timeout = task.Timeout;
 					rv.Add (newVariation);
 				}
 			}
@@ -327,6 +328,8 @@ namespace xharness
 						};
 						derived.CloneTestProject (pair.Item1);
 						var simTasks = CreateRunSimulatorTaskAsync (derived);
+						foreach (var task in simTasks)
+							task.Timeout = TimeSpan.FromTicks ((long)(task.Timeout.Ticks * project.TimeoutMultiplier));
 						runSimulatorTasks.AddRange (simTasks);
 						if (configurations.Length > 1) {
 							foreach (var task in simTasks)
@@ -416,6 +419,9 @@ namespace xharness
 					buildWatch.CloneTestProject (watchOSProject);
 					rv.Add (new RunDeviceTask (buildWatch, Devices.ConnectedDevices.Where ((dev) => dev.DevicePlatform == DevicePlatform.watchOS)) { Ignored = ignored || !IncludewatchOS });
 				}
+
+				foreach (var task in rv)
+						task.Timeout = TimeSpan.FromTicks ((long)(task.Timeout.Ticks * project.TimeoutMultiplier));
 			}
 
 			return CreateTestVariations (rv, (buildTask, test) => new RunDeviceTask (buildTask, test.Candidates));
@@ -697,6 +703,7 @@ namespace xharness
 						};
 						execs = CreateTestVariations (new [] { exec }, (buildTask, test) => new MacExecuteTask (buildTask));
 					}
+					exec.Timeout = TimeSpan.FromTicks ((long) (exec.Timeout.Ticks * project.TimeoutMultiplier));
 					exec.Variation = configurations.Length > 1 ? config : project.TargetFrameworkFlavor.ToString ();
 
 					Tasks.AddRange (execs);
@@ -750,7 +757,6 @@ namespace xharness
 				WorkingDirectory = Path.Combine (Harness.RootDirectory, "generator", "bin", "Debug"),
 				Platform = TestPlatform.iOS,
 				TestName = "Generator tests",
-				Timeout = TimeSpan.FromMinutes (10),
 				Ignored = !IncludeBtouch,
 			};
 			Tasks.Add (runGenerator);
@@ -2734,7 +2740,6 @@ function toggleAll (show)
 		public string TestExecutable;
 		public string WorkingDirectory;
 		public bool ProduceHtmlReport = true;
-		public TimeSpan Timeout = TimeSpan.FromMinutes (10);
 
 		public NUnitExecuteTask (BuildToolTask build_task)
 			: base (build_task)
@@ -3037,6 +3042,7 @@ function toggleAll (show)
 	abstract class RunTestTask : TestTask
 	{
 		public readonly BuildToolTask BuildTask;
+		public TimeSpan Timeout = TimeSpan.FromMinutes (10);
 
 		public RunTestTask (BuildToolTask build_task)
 		{
@@ -3282,6 +3288,7 @@ function toggleAll (show)
 						DeviceName = Device.Name,
 						CompanionDeviceName = CompanionDevice?.Name,
 						Configuration = ProjectConfiguration,
+						Timeout = Timeout,
 					};
 
 					// Sometimes devices can't upgrade (depending on what has changed), so make sure to uninstall any existing apps first.
@@ -3333,6 +3340,7 @@ function toggleAll (show)
 								DeviceName = Device.Name,
 								CompanionDeviceName = CompanionDevice?.Name,
 								Configuration = ProjectConfiguration,
+								Timeout = Timeout,
 							};
 							additional_runner = todayRunner;
 							await todayRunner.RunAsync ();
@@ -3420,6 +3428,7 @@ function toggleAll (show)
 				LogDirectory = LogDirectory,
 				MainLog = Logs.Create ($"run-{Device.UDID}-{Timestamp}.log", "Run log"),
 				Configuration = ProjectConfiguration,
+				Timeout = Timeout,
 			};
 			runner.Simulators = Simulators;
 			runner.Initialize ();

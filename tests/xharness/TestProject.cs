@@ -18,6 +18,7 @@ namespace xharness
 		public bool IsNUnitProject;
 		public bool GenerateVariations = true;
 		public string [] Configurations;
+		public double TimeoutMultiplier = 1;
 
 		public IEnumerable<TestProject> ProjectReferences;
 

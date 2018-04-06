@@ -2878,6 +2878,7 @@ function toggleAll (show)
 		public MacExecuteTask (BuildToolTask build_task)
 			: base (build_task)
 		{ 
+			Timeout = TimeSpan.FromMinutes (20);
 		}
 
 		public override bool SupportsParallelExecution {
@@ -2957,11 +2958,9 @@ function toggleAll (show)
 
 						ProcessExecutionResult result = null;
 						try {
-							var timeout = TimeSpan.FromMinutes (20);
-
-							result = await proc.RunAsync (log, true, timeout);
+							result = await proc.RunAsync (log, true, Timeout);
 							if (result.TimedOut) {
-								FailureMessage = $"Execution timed out after {timeout.TotalSeconds} seconds.";
+								FailureMessage = $"Execution timed out after {Timeout.TotalMinutes} minutes.";
 								log.WriteLine (FailureMessage);
 								ExecutionResult = TestExecutingResult.TimedOut;
 							} else if (result.Succeeded) {
@@ -2987,6 +2986,7 @@ function toggleAll (show)
 
 		public RunXtroTask (BuildToolTask build_task) : base (build_task)
 		{
+			Timeout = TimeSpan.FromMinutes (20);
 		}
 
 		protected override async Task RunTestAsync ()
@@ -3011,11 +3011,9 @@ function toggleAll (show)
 						await snapshot.StartCaptureAsync ();
 
 						try {
-							var timeout = TimeSpan.FromMinutes (20);
-
-							var result = await proc.RunAsync (log, true, timeout);
+							var result = await proc.RunAsync (log, true, Timeout);
 							if (result.TimedOut) {
-								FailureMessage = $"Execution timed out after {timeout.TotalSeconds} seconds.";
+								FailureMessage = $"Execution timed out after {Timeout.TotalMinutes} minutes.";
 								log.WriteLine (FailureMessage);
 								ExecutionResult = TestExecutingResult.TimedOut;
 							} else if (result.Succeeded) {

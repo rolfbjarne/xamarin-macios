@@ -19,7 +19,7 @@ timestamps {
             stage('Add commit comment') {
                 utils = load "./jenkins/utils.groovy"
                 gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-                sh('''echo \'{ "body": "Build in progress..." }\' ''' > /tmp/commentFile')
+                sh('''echo \'{ "body": "Build in progress..." }\' > /tmp/commentFile''')
                 utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
             }
             stage('Build') {

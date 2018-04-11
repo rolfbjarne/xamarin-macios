@@ -24,6 +24,10 @@ timestamps {
                 sh('ls -la ../package')
             }
         }
+        stage('Add commit comment') {
+            gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+            utils.commentOnCommit ("${gitHash}", "Build in progress...")
+        }
         stage('Signing') {
             def p = findFiles (glob: "package/xamarin.ios-*.pkg")
             echo "p: ${p}"

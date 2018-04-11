@@ -9,6 +9,7 @@ def utils = null
 
 def xiPackageFilename = null
 def xmPackageFilename = null
+def gitHash = null
 
 timestamps {
     node('xamarin-macios') {
@@ -45,8 +46,26 @@ timestamps {
             utils.signPackage ("package", "${xiPackageFilename}")
             utils.signPackage ("package", "${xmPackageFilename}")
         }
+        stage('Upload to Azure') {
+            step([
+                $class: 'WAStoragePublisher',
+                allowAnonymousAccess: true,
+                cleanUpContainer: false,
+                cntPubAccess: true,
+                containerName: "wrench",
+                doNotFailIfArchivingReturnsNothing: false,
+                doNotUploadIndividualFiles: false,
+                doNotWaitForPreviousBuild: true,
+                excludeFilesPath: '',
+                filesPath: "package/*.pkg",
+                storageAccName: 'bosstoragemirror',
+                storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
+                uploadArtifactsOnlyIfSuccessful: false,
+                uploadZips: false,
+                virtualPath: "jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/${env.GIT_COMMIT}/"
+            ])
+        }
         stage('Report GitHub Status') {
-            gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
             xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
             xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
             utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")

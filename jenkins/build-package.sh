@@ -1,5 +1,6 @@
 #!/bin/bash -ex
 
+./system-dependencies.sh --provision-all
 ./configure --enable-xamarin
 make reset
 make print-versions

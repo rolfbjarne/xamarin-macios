@@ -11,7 +11,7 @@ def xiPackageFilename = null
 def xmPackageFilename = null
 
 timestamps {
-    node('felix-sierra') {
+    node('xamarin-macios') {
         dir('xamarin-macios') {
             stage('Checkout') {
                 scmVars = checkout scm

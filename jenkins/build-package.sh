@@ -3,6 +3,7 @@
 ./system-dependencies.sh --provision-all
 ./configure --enable-xamarin
 make reset
+make git-clean-all
 make print-versions
 
 make -j8

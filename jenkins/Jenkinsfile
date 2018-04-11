@@ -15,20 +15,22 @@ timestamps {
         dir('xamarin-macios') {
             stage('Checkout') {
                 scmVars = checkout scm
+            }
+            stage('Add commit comment') {
+                utils = load "./jenkins/utils.groovy"
+                gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+                utils.commentOnCommit ("${gitHash}", "Build in progress...")
+            }
+            stage('Build') {
                 sh('env')
                 sh('pwd')
                 sh('ls -la')
                 sh('./jenkins/build-package.sh')
-                utils = load "./jenkins/utils.groovy"
                 sh('ls -la ..')
                 sh('ls -la ../package')
             }
         }
-        stage('Add commit comment') {
-            gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-            utils.commentOnCommit ("${gitHash}", "Build in progress...")
-        }
-        stage('Signing') {
+        stage('Sign') {
             def p = findFiles (glob: "package/xamarin.ios-*.pkg")
             echo "p: ${p}"
             echo "p[0]: " + p[0]

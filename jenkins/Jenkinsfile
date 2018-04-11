@@ -9,7 +9,6 @@ def utils = null
 
 def xiPackageFilename = null
 def xmPackageFilename = null
-def gitHash = null
 
 timestamps {
     node('xamarin-macios') {

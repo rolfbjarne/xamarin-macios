@@ -19,11 +19,10 @@ def signPackage(packageDir, packageName) {
     echo "Signed ${packageName}"
 }
 
-def commentOnCommit(commitHash, comment) {
+def commentOnCommit(commitHash, commentFile) {
     echo "Adding comment to commit ${commitHash}"
     withCredentials([string(credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
-        def json = groovy.json.JsonOutput.toJson([body: comment])
-        httpRequest (url: "https://api.github.com/repos/xamarin-macios/commits/${commitHash}/comments", httpMode: 'POST', requestBody: json, contentType: 'APPLICATION_JSON', authentication: "${GITHUB_COMMENT_TOKEN}", responseHandle: 'NONE')
+        sh "curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}'  https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --request POST --data '@${commentFile}'"
     }
 }
 

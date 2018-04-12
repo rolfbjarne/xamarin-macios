@@ -8,4 +8,6 @@ make print-versions
 
 make -j8
 make install -j8
+
+rm -Rf ../package
 make package

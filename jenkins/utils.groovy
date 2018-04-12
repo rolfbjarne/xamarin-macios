@@ -15,7 +15,7 @@ def signPackage(packageDir, packageName) {
         sh "/usr/bin/productsign -s 'Developer ID Installer: Xamarin Inc' '${packageDir}/${packageName}' '${packageDir}/${packageName}-signed.pkg'"
         sh "/usr/sbin/spctl -vvv --assess --type install '${packageDir}/${packageName}-signed.pkg'"
     }
-    sh "mv ${packageDir}/${packageName}-signed.pkg ${packageDir}/${packageName}.pkg"
+    sh "mv ${packageDir}/${packageName}-signed.pkg ${packageDir}/${packageName}"
     echo "Signed ${packageName}"
 }
 

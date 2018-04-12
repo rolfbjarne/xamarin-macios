@@ -75,9 +75,11 @@ timestamps {
                 echo "Not running tests here because they're run on public Jenkins."
             } else {
                 try {
-                    sh('./jenkins/run-tests.sh broken')
+                    sh('./xamarin-macios/jenkins/run-tests.sh broken')
                 } finally {
                     def commentFile = "${env.PWD}/jenkins/pr-comments.md"
+                    echo "${commentFile}"
+                    sh "cat ${commentFile} || true"
                     if (fileExists (commentFile))
                         utils.commentOnCommit ("${gitHash}", "${commentFile}")
                 }

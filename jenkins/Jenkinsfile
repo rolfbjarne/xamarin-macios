@@ -77,7 +77,7 @@ timestamps {
                 try {
                     sh('./xamarin-macios/jenkins/run-tests.sh broken')
                 } finally {
-                    def commentFile = "${env.PWD}/jenkins/pr-comments.md"
+                    def commentFile = "${env.PWD}/xamarin-macios/jenkins/pr-comments.md"
                     echo "${commentFile}"
                     sh "cat ${commentFile} || true"
                     if (fileExists (commentFile))

@@ -23,7 +23,7 @@ def commentOnCommit(commitHash, commentFile) {
     def markdown = readFile ("${commentFile}")
     def json = groovy.json.JsonOutput.toJson ([body: markdown])
     def jsonFile = "${commentFile}.json"
-    writeFile ("${jsonFile}", "${json}")
+    writeFile file: "${jsonFile}", text: "${json}"
     sh ("cat ${commentFile}")
     sh ("cat ${jsonFile}")
     withCredentials([string(credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {

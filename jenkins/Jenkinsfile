@@ -20,7 +20,7 @@ timestamps {
             }
             stage('Add commit comment') {
                 sh('echo "# Build in progress..." > /tmp/commentFile')
-                utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
+                // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
             }
             stage('Build') {
                 sh('env')

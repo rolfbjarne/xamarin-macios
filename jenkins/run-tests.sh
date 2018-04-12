@@ -27,7 +27,11 @@ security set-keychain-settings -lut 7200
 rm -rf ~/.config/.mono/keypairs/
 
 # Run tests
-make -C tests jenkins
+TARGET=$1
+if test -z $TARGET; then
+	TARGET=jenkins
+fi
+make -C tests $TARGET
 
 printf "✅ [Test run succeeded]($BUILD_URL/Test_Report/)\\n" >> $WORKSPACE/jenkins/pr-comments.md
 

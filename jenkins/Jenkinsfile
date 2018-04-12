@@ -15,12 +15,12 @@ timestamps {
         dir('xamarin-macios') {
             stage('Checkout') {
                 scmVars = checkout scm
-            }
-            stage('Add commit comment') {
                 utils = load "./jenkins/utils.groovy"
                 gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-                sh('''echo \'{ "body": "Build in progress..." }\' > /tmp/commentFile''')
-                // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
+            }
+            stage('Add commit comment') {
+                sh('echo "# Build in progress..." > /tmp/commentFile')
+                utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
             }
             stage('Build') {
                 sh('env')
@@ -69,6 +69,19 @@ timestamps {
             xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
             utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
             utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
+        }
+        stage('Run tests') {
+            if (isPr) {
+                echo "Not running tests here because they're run on public Jenkins."
+            } else {
+                try {
+                    sh('./jenkins/run-tests.sh broken')
+                } finally {
+                    def commentFile = "${env.PWD}/jenkins/pr-comments.md"
+                    if (fileExists (commentFile))
+                        utils.commentOnCommit ("${gitHash}", "${commentFile}")
+                }
+            }
         }
     }
 }

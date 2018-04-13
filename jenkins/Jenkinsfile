@@ -90,7 +90,7 @@ timestamps {
                             echo "${commentFile}"
                             sh "cat ${commentFile} || true"
                             if (fileExists (commentFile))
-                                utils.commentOnCommit ("${gitHash}", "${commentFile}")
+                                commentOnCommit ("${gitHash}", "${commentFile}")
                         }
                     }
                 }
@@ -99,6 +99,7 @@ timestamps {
             def errorFile = "${env.PWD}/xamarin-macios/jenkins/build-failure.txt"
             writeFile file: "${errorFile}", text: "# Build failed\n\n${error}"
             commentOnCommit ("${gitHash}", "${errorFile}")
+            throw
         }
     }
 }

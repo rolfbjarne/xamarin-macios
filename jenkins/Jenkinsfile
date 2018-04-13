@@ -18,7 +18,7 @@ def commentOnCommit(commitHash, commentFile) {
     sh ("cat ${commentFile}")
     sh ("cat ${jsonFile}")
     withCredentials([string(credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
-        sh "curl -vvvv -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}'  https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --request POST --data '@${jsonFile}'"
+        sh "curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}'  https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --data '@${jsonFile}'"
     }
     sh ("rm -f ${jsonFile}")
 }
@@ -34,10 +34,6 @@ timestamps {
                         utils = load "./jenkins/utils.groovy"
                     }
                 }
-                // stage('Add commit comment') {
-                //     sh('echo "# Build in progress..." > /tmp/commentFile')
-                //     // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
-                // }
                 stage('Build') {
                     sh('env')
                     sh('pwd')
@@ -98,7 +94,7 @@ timestamps {
             }
         } catch (error) {
             def errorFile = "${env.PWD}/xamarin-macios/jenkins/build-failure.txt"
-            writeFile file: "${errorFile}", text: "# Build failed\n\n${error}"
+            writeFile file: "${errorFile}", text: "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
             commentOnCommit ("${gitHash}", "${errorFile}")
             throw
         }

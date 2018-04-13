@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+cd ..
+
 report_error ()
 {
 	printf "🔥 [Test run failed]($BUILD_URL/Test_Report/) 🔥\\n" >> $WORKSPACE/jenkins/pr-comments.md

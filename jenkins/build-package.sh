@@ -1,5 +1,8 @@
 #!/bin/bash -ex
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+cd ..
+
 ./system-dependencies.sh --provision-all
 ./configure --enable-xamarin
 make reset

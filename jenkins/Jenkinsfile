@@ -18,32 +18,27 @@ timestamps {
                 utils = load "./jenkins/utils.groovy"
                 gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
             }
-            stage('Add commit comment') {
-                sh('echo "# Build in progress..." > /tmp/commentFile')
-                // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
-            }
-            stage('Build') {
-                sh('env')
-                sh('pwd')
-                sh('ls -la')
-                sh('./jenkins/build-package.sh')
-                sh('ls -la ..')
-                sh('ls -la ../package')
-            }
+        }
+        // stage('Add commit comment') {
+        //     sh('echo "# Build in progress..." > /tmp/commentFile')
+        //     // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
+        // }
+        stage('Build') {
+            sh('env')
+            sh('pwd')
+            sh('ls -la')
+            sh('./xamarin-macios/jenkins/build-package.sh')
+            sh('ls -la package')
         }
         stage('Sign') {
-            def p = findFiles (glob: "package/xamarin.ios-*.pkg")
-            echo "p: ${p}"
-            echo "p[0]: " + p[0]
-            echo "p[0].name: " + p[0].name
-
             xiPackageFilename = findFiles (glob: "package/xamarin.ios-*.pkg")[0].name
             xmPackageFilename = findFiles (glob: "package/xamarin.mac-*.pkg")[0].name
             sh('ls -la .')
             sh('ls -la package')
             echo "Found xi: ${xiPackageFilename} xm: ${xmPackageFilename}"
-            utils.signPackage ("package", "${xiPackageFilename}")
-            utils.signPackage ("package", "${xmPackageFilename}")
+            withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'PRODUCTSIGN_KEYCHAIN_PASSWORD')]) {
+                sh "./xamarin-macios/jenkins/productsign.sh"
+            }
         }
         stage('Upload to Azure') {
             step([

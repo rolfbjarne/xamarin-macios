@@ -57,4 +57,3 @@ for pkg in package/*.pkg; do
 done
 
 rm shell.xmllint
-rm -Rf $SIGNING_DIR

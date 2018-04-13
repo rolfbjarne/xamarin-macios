@@ -10,76 +10,94 @@ def utils = null
 def xiPackageFilename = null
 def xmPackageFilename = null
 
-timestamps {
-    node('xamarin-macios') {
-        dir('xamarin-macios') {
-            stage('Checkout') {
-                scmVars = checkout scm
-                utils = load "./jenkins/utils.groovy"
-                gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-            }
-        }
-        // stage('Add commit comment') {
-        //     sh('echo "# Build in progress..." > /tmp/commentFile')
-        //     // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
-        // }
-        stage('Build') {
-            sh('env')
-            sh('pwd')
-            sh('ls -la')
-            sh('./xamarin-macios/jenkins/build-package.sh')
-            sh('ls -la package')
-        }
-        stage('Sign') {
-            xiPackageFilename = findFiles (glob: "package/xamarin.ios-*.pkg")[0].name
-            xmPackageFilename = findFiles (glob: "package/xamarin.mac-*.pkg")[0].name
-            sh('ls -la .')
-            sh('ls -la package')
-            echo "Found xi: ${xiPackageFilename} xm: ${xmPackageFilename}"
-            withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'PRODUCTSIGN_KEYCHAIN_PASSWORD')]) {
-                sh "./xamarin-macios/jenkins/productsign.sh"
-            }
-        }
-        stage('Upload to Azure') {
-            step([
-                $class: 'WAStoragePublisher',
-                allowAnonymousAccess: true,
-                cleanUpContainer: false,
-                cntPubAccess: true,
-                containerName: "wrench",
-                doNotFailIfArchivingReturnsNothing: false,
-                doNotUploadIndividualFiles: false,
-                doNotWaitForPreviousBuild: true,
-                excludeFilesPath: '',
-                filesPath: "package/*.pkg",
-                storageAccName: 'bosstoragemirror',
-                storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
-                uploadArtifactsOnlyIfSuccessful: false,
-                uploadZips: false,
-                virtualPath: "jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/"
-            ])
-        }
-        stage('Report GitHub Status') {
-            xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
-            xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
-            utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
-            utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
-        }
-        stage('Run tests') {
-            if (isPr) {
-                echo "Not running tests here because they're run on public Jenkins."
-            } else {
-                try {
-                    sh('./xamarin-macios/jenkins/run-tests.sh broken')
-                } finally {
-                    def commentFile = "${env.PWD}/xamarin-macios/jenkins/pr-comments.md"
-                    echo "${commentFile}"
-                    sh "cat ${commentFile} || true"
-                    if (fileExists (commentFile))
-                        utils.commentOnCommit ("${gitHash}", "${commentFile}")
+def commentOnCommit(commitHash, commentFile) {
+    def markdown = readFile ("${commentFile}")
+    def json = groovy.json.JsonOutput.toJson ([body: markdown])
+    def jsonFile = "${commentFile}.json"
+    writeFile file: "${jsonFile}", text: "${json}"
+    sh ("cat ${commentFile}")
+    sh ("cat ${jsonFile}")
+    withCredentials([string(credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
+        sh "curl -vvvv -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}'  https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --request POST --data '@${jsonFile}'"
+    }
+}
+
+try {
+    timestamps {
+        node('xamarin-macios') {
+            withEnv(["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
+                dir('xamarin-macios') {
+                    stage('Checkout') {
+                        scmVars = checkout scm
+                        gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+                        utils = load "./jenkins/utils.groovy"
+                    }
+                }
+                // stage('Add commit comment') {
+                //     sh('echo "# Build in progress..." > /tmp/commentFile')
+                //     // utils.commentOnCommit ("${gitHash}", "/tmp/commentFile")
+                // }
+                stage('Build') {
+                    sh('env')
+                    sh('pwd')
+                    sh('ls -la')
+                    sh('./xamarin-macios/jenkins/build-package.sh')
+                    sh('ls -la package')
+                }
+                stage('Sign') {
+                    xiPackageFilename = findFiles (glob: "package/xamarin.ios-*.pkg")[0].name
+                    xmPackageFilename = findFiles (glob: "package/xamarin.mac-*.pkg")[0].name
+                    sh('ls -la .')
+                    sh('ls -la package')
+                    echo "Found xi: ${xiPackageFilename} xm: ${xmPackageFilename}"
+                    withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'PRODUCTSIGN_KEYCHAIN_PASSWORD')]) {
+                        sh "./xamarin-macios/jenkins/productsign.sh"
+                    }
+                }
+                stage('Upload to Azure') {
+                    step([
+                        $class: 'WAStoragePublisher',
+                        allowAnonymousAccess: true,
+                        cleanUpContainer: false,
+                        cntPubAccess: true,
+                        containerName: "wrench",
+                        doNotFailIfArchivingReturnsNothing: false,
+                        doNotUploadIndividualFiles: false,
+                        doNotWaitForPreviousBuild: true,
+                        excludeFilesPath: '',
+                        filesPath: "package/*.pkg",
+                        storageAccName: 'bosstoragemirror',
+                        storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
+                        uploadArtifactsOnlyIfSuccessful: false,
+                        uploadZips: false,
+                        virtualPath: "jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/"
+                    ])
+                }
+                stage('Report GitHub Status') {
+                    xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
+                    xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
+                    utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
+                    utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
+                }
+                stage('Run tests') {
+                    if (isPr) {
+                        echo "Not running tests here because they're run on public Jenkins."
+                    } else {
+                        try {
+                            sh('./xamarin-macios/jenkins/run-tests.sh broken')
+                        } finally {
+                            def commentFile = "${env.PWD}/xamarin-macios/jenkins/pr-comments.md"
+                            echo "${commentFile}"
+                            sh "cat ${commentFile} || true"
+                            if (fileExists (commentFile))
+                                utils.commentOnCommit ("${gitHash}", "${commentFile}")
+                        }
+                    }
                 }
             }
         }
     }
+} catch (error) {
+    def errorFile = "${env.PWD}/xamarin-macios/jenkins/build-failure.txt"
+    writeFile file: "${errorFile}", text: "# Build failed\n\n${error}"
 }
-

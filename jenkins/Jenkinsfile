@@ -100,4 +100,5 @@ try {
 } catch (error) {
     def errorFile = "${env.PWD}/xamarin-macios/jenkins/build-failure.txt"
     writeFile file: "${errorFile}", text: "# Build failed\n\n${error}"
+    commentOnCommit ("${gitHash}", "${errorFile}")
 }

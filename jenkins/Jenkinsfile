@@ -96,7 +96,7 @@ timestamps {
             def errorFile = "${env.PWD}/xamarin-macios/jenkins/build-failure.txt"
             writeFile file: "${errorFile}", text: "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
             commentOnCommit ("${gitHash}", "${errorFile}")
-            throw
+            throw error
         }
     }
 }

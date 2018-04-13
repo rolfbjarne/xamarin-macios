@@ -20,6 +20,7 @@ def commentOnCommit(commitHash, commentFile) {
     withCredentials([string(credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
         sh "curl -vvvv -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}'  https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --request POST --data '@${jsonFile}'"
     }
+    sh ("rm -f ${jsonFile}")
 }
 
 timestamps {

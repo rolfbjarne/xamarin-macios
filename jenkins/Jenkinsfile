@@ -7,6 +7,7 @@ def xiPackageUrl = null
 def xmPackageUrl = null
 def utils = null
 def errorMessage = null
+def currentStage = null
 
 def xiPackageFilename = null
 def xmPackageFilename = null
@@ -30,26 +31,33 @@ timestamps {
             withEnv(["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
                 dir('xamarin-macios') {
                     stage('Checkout') {
+                        currentStage = "${STAGE_NAME}"
                         echo "Building on ${env.NODE_NAME}"
                         scmVars = checkout scm
                         gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
                     }
-                    stage('Provision') {
+
+                    stage('Provisioning') {
+                        currentStage = "${STAGE_NAME}"
                         echo "Building on ${env.NODE_NAME}"
                         sh('./jenkins/provision-deps.sh')
                     }
+
                     stage('Build') {
+                        currentStage = "${STAGE_NAME}"
                         echo "Building on ${env.NODE_NAME}"
                         sh('./jenkins/build.sh --configure-flags --enable-xamarin')
                     }
-                    stage('Package') {
-                        echo "Building on ${env.NODE_NAME}"
+
+                    stage('Packaging') {
+                        currentStage = "${STAGE_NAME}"
                         sh('./jenkins/build-package.sh')
                         sh('ls -la ../package')
                     }
                 }
 
-                stage('Sign') {
+                stage('Signing') {
+                    currentStage = "${STAGE_NAME}"
                     def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg");
                     if (xiPackages.length > 0) {
                         xiPackageFilename = xiPackages [0].name
@@ -66,6 +74,7 @@ timestamps {
                 }
 
                 stage('Upload to Azure') {
+                    currentStage = "${STAGE_NAME}"
                     step([
                         $class: 'WAStoragePublisher',
                         allowAnonymousAccess: true,
@@ -86,7 +95,8 @@ timestamps {
                 }
 
                 stage('Publish builds to GitHub') {
-                    utils = load "./jenkins/utils.groovy"
+                    currentStage = "${STAGE_NAME}"
+                    utils = load "./xamarin-macios/jenkins/utils.groovy"
                     if (xiPackageFilename != null) {
                         xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
                         utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
@@ -99,28 +109,26 @@ timestamps {
 
                 dir('xamarin-macios') {
                     stage('Run tests') {
+                        currentStage = "Test run"
                         if (isPr) {
                             echo "Not running tests here because they're run on public Jenkins."
                         } else {
-                            try {
-                                sh('./jenkins/run-tests.sh broken')
-                            } catch (error) {
-                                errorMessage = "Test run failed"
-                            } finally {
-                                def commentFile = "./jenkins/pr-comments.md"
-                                echo "${commentFile}"
-                                sh "cat ${commentFile} || true"
-                                if (fileExists (commentFile))
-                                    commentOnCommit ("${gitHash}", "${commentFile}")
-                            }
+                            sh('./jenkins/run-tests.sh broken')
                         }
                     }
                 }
             }
         } catch (error) {
-            def errorFile = "/tmp/build-failure.txt"
-            writeFile file: "${errorFile}", text: "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
-            commentOnCommit ("${gitHash}", "${errorFile}")
+            def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
+            if (!fileExists (commentFile))
+                writeFile file: "${commentFile}", text: "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
+            commentOnCommit ("${gitHash}", "${commentFile}")
+
+            if (currentStage != null)
+                error "${currentStage} failed"
+            else if (errorMessage != null)
+                error "${errorMessage}"
+
             throw error
         }
 

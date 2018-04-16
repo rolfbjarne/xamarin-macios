@@ -55,7 +55,7 @@ timestamps {
                         xiPackageFilename = xiPackages [0].name
                         echo "Created Xamarin.iOS package: ${xiPackageFilename}"
                     }
-                    var xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
+                    def xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
                     if (xmPackages.length > 0) {
                         xmPackageFilename = xmPackages [0].name
                         echo "Created Xamarin.Mac package: ${xmPackageFilename}"

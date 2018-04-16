@@ -6,6 +6,7 @@ def gitHash = null
 def xiPackageUrl = null
 def xmPackageUrl = null
 def utils = null
+def errorMessage = null
 
 def xiPackageFilename = null
 def xmPackageFilename = null
@@ -29,11 +30,13 @@ timestamps {
             withEnv(["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
                 dir('xamarin-macios') {
                     stage('Checkout') {
+                        echo "Building on ${env.NODE_NAME}"
                         scmVars = checkout scm
                         gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
                         utils = load "./jenkins/utils.groovy"
                     }
                     stage('Build') {
+                        echo "Building on ${env.NODE_NAME}"
                         sh('env')
                         sh('pwd')
                         sh('ls -la')
@@ -87,6 +90,8 @@ timestamps {
                         } else {
                             try {
                                 sh('./jenkins/run-tests.sh broken')
+                            } catch (error) {
+                                errorMessage = "Test run failed"
                             } finally {
                                 def commentFile = "./jenkins/pr-comments.md"
                                 echo "${commentFile}"
@@ -104,5 +109,8 @@ timestamps {
             commentOnCommit ("${gitHash}", "${errorFile}")
             throw error
         }
+
+        if (errorMessage != null)
+            error "${errorMessage}"
     }
 }

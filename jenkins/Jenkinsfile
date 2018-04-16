@@ -19,7 +19,7 @@ def commentOnCommit(commitHash, commentFile) {
     sh ("cat ${commentFile}")
     sh ("cat ${jsonFile}")
     withCredentials([string(credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
-        sh "curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}'  https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --data '@${jsonFile}'"
+        sh "curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}' https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --data '@${jsonFile}'"
     }
     sh ("rm -f ${jsonFile}")
 }
@@ -33,24 +33,33 @@ timestamps {
                         echo "Building on ${env.NODE_NAME}"
                         scmVars = checkout scm
                         gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
-                        utils = load "./jenkins/utils.groovy"
+                    }
+                    stage('Provision') {
+                        echo "Building on ${env.NODE_NAME}"
+                        sh('./jenkins/provision-deps.sh')
                     }
                     stage('Build') {
                         echo "Building on ${env.NODE_NAME}"
-                        sh('env')
-                        sh('pwd')
-                        sh('ls -la')
+                        sh('./jenkins/build.sh --configure-flags --enable-xamarin')
+                    }
+                    stage('Package') {
+                        echo "Building on ${env.NODE_NAME}"
                         sh('./jenkins/build-package.sh')
                         sh('ls -la ../package')
                     }
                 }
 
                 stage('Sign') {
-                    xiPackageFilename = findFiles (glob: "package/xamarin.ios-*.pkg")[0].name
-                    xmPackageFilename = findFiles (glob: "package/xamarin.mac-*.pkg")[0].name
-                    sh('ls -la .')
-                    sh('ls -la package')
-                    echo "Found xi: ${xiPackageFilename} xm: ${xmPackageFilename}"
+                    def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg");
+                    if (xiPackages.length > 0) {
+                        xiPackageFilename = xiPackages [0].name
+                        echo "Created Xamarin.iOS package: ${xiPackageFilename}"
+                    }
+                    var xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
+                    if (xmPackages.length > 0) {
+                        xmPackageFilename = xmPackages [0].name
+                        echo "Created Xamarin.Mac package: ${xmPackageFilename}"
+                    }
                     withCredentials([string(credentialsId: 'codesign_keychain_pw', variable: 'PRODUCTSIGN_KEYCHAIN_PASSWORD')]) {
                         sh "./xamarin-macios/jenkins/productsign.sh"
                     }
@@ -76,11 +85,16 @@ timestamps {
                     ])
                 }
 
-                stage('Report GitHub Status') {
-                    xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
-                    xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
-                    utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
-                    utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
+                stage('Publish builds to GitHub') {
+                    utils = load "./jenkins/utils.groovy"
+                    if (xiPackageFilename != null) {
+                        xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
+                        utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
+                    }
+                    if (xmPackageFilename != null) {
+                        xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
+                        utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
+                    }
                 }
 
                 dir('xamarin-macios') {

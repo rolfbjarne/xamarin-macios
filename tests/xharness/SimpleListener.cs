@@ -14,6 +14,13 @@ namespace xharness
 
 		TaskCompletionSource<bool> stopped = new TaskCompletionSource<bool> ();
 		protected ManualResetEvent connected = new ManualResetEvent (false);
+		TaskCompletionSource<bool> launched = new TaskCompletionSource<bool> ();
+
+		public bool Launched {
+			get {
+				return launched.Task.IsCompleted && launched.Task.Result;
+			}
+		}
 
 		public IPAddress Address { get; set; }
 		public int Port { get; set; }
@@ -30,6 +37,17 @@ namespace xharness
 			get {
 				return output_writer;
 			}
+		}
+
+		public Task<bool> LaunchTask {
+			get {
+				return launched.Task;
+			}
+		}
+
+		protected void Launch ()
+		{
+			launched.TrySetResult (true);
 		}
 
 		protected void Connected (string remote)

@@ -42,6 +42,7 @@ namespace xharness
 
 		public TestExecutingResult Result { get; private set; }
 		public string FailureMessage { get; private set; }
+		public bool TestsLaunched { get; private set; } // if the unit tests launched
 
 		string appName;
 		string appPath;
@@ -73,6 +74,12 @@ namespace xharness
 		public bool isExtension {
 			get {
 				return extension.HasValue;
+			}
+		}
+
+		public bool IsSimulator {
+			get {
+				return isSimulator;
 			}
 		}
 
@@ -598,6 +605,12 @@ namespace xharness
 			listener.Address = System.Net.IPAddress.Any;
 			listener.XmlOutput = useXmlOutput;
 			listener.Initialize ();
+
+			TestsLaunched = false;
+			var tmp = listener.LaunchTask.ContinueWith ((v) => {
+				if (v.IsCompleted)
+					TestsLaunched = true;
+			});
 
 			args.AppendFormat (" -argument=-app-arg:-hostport:{0}", listener.Port);
 			args.AppendFormat (" -setenv=NUNIT_HOSTPORT={0}", listener.Port);

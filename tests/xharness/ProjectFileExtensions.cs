@@ -849,6 +849,8 @@ namespace xharness
 					return input; // This is already a full path.
 				if (input.StartsWith ("$(MSBuildBinPath)", StringComparison.Ordinal))
 					return input; // This is already a full path.
+				if (input.StartsWith ("$(TestLibrariesDirectory)", StringComparison.Ordinal))
+					return input; // This is already a full path.
 				input = input.Replace ('\\', '/'); // make unix-style
 				input = System.IO.Path.GetFullPath (System.IO.Path.Combine (dir, input));
 				input = input.Replace ('/', '\\'); // make windows-style again

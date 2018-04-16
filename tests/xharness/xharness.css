@@ -21,6 +21,11 @@
     min-width: 10px;
 }
 
+.testcontainer {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
 .runall {
     font-size: 75%;
     margin-left: 3px;

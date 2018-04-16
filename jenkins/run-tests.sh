@@ -2,6 +2,7 @@
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 cd ..
+WORKSPACE=$(pwd)
 
 report_error ()
 {
@@ -17,7 +18,7 @@ report_error ()
 trap report_error ERR
 
 export BUILD_REVISION=jenkins
-cd $WORKSPACE
+
 # Unlock
 security default-keychain -s builder.keychain
 security list-keychains -s builder.keychain
@@ -34,6 +35,9 @@ TARGET=$1
 if test -z $TARGET; then
 	TARGET=jenkins
 fi
+pwd
+ls -la
+env
 make -C tests $TARGET
 
 printf "✅ [Test run succeeded]($BUILD_URL/Test_Report/)\\n" >> $WORKSPACE/jenkins/pr-comments.md

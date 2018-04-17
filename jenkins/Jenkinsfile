@@ -27,10 +27,10 @@ def commentOnCommit(commitHash, commentFile) {
 
 def processAtMonkeyWrench(outputFile) {
     def tmpfile = "atmonkeywrench.tmp"
-    sh("grep '^@MonkeyWrench: AddSummary: ' '${outputFile}' > $tmpfile")
-    def lines = readFile ($tmpfile).split ("\n")
+    sh (script: "grep '^@MonkeyWrench: AddSummary: ' '${outputFile}' > $tmpfile", returnStatus: true /* don't throw exceptions if something goes wrong */)
+    def lines = readFile ("${tmpfile}").split ("\n")
     for (int i = 0; i < lines.length; i++)
-        echo (lines[i].subString ("@MonkeyWrench: AddSummary: ".length).trim)
+        echo (lines [i].subString ("@MonkeyWrench: AddSummary: ".length).trim)
 }
 
 timestamps {
@@ -123,7 +123,7 @@ timestamps {
                         } else {
                             def outputFile = "wrench-launch-external.output.tmp"
                             try {
-                                sh("make -C ./xamarin-macios/tests wrench-launch-external 2>&1 | tee ${outputFile}")
+                                sh("make -C tests wrench-launch-external 2>&1 | tee ${outputFile}")
                             } catch (error) {
                                 echo ("🚫 Launching external tests failed: ${error} 🚫")
                             } finally {
@@ -144,7 +144,7 @@ timestamps {
                     }
                 }
             }
-        } catch (error) {
+        } catch (err) {
             def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
             def comment = null;
             if (fileExists (commentFile)) {
@@ -153,6 +153,7 @@ timestamps {
                 comment = "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}";
             }
             comment += "\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
+            writeFile (file: "${commentFile}", text: "${comment}")
             commentOnCommit ("${gitHash}", "${commentFile}")
 
             if (currentStage != null)
@@ -160,7 +161,7 @@ timestamps {
             else if (errorMessage != null)
                 error "${errorMessage}"
 
-            throw error
+            throw err
         }
 
         if (errorMessage != null)

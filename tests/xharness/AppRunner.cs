@@ -712,6 +712,10 @@ namespace xharness
 					waitedForExit &= line?.Contains ("MT1111: ") != true;
 					if (line?.Contains ("error MT1007") == true)
 						launch_failure = true;
+					else if (line?.Contains ("error HE0047") == true) {
+						// error HE0047: Failed to request XPC observation:  (2). Please try again.
+						launch_failure = true;
+					}
 				});
 				var runLog = Log.CreateAggregatedLog (callbackLog, main_log);
 				var timeout = TimeSpan.FromMinutes (Harness.Timeout);

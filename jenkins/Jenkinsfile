@@ -25,6 +25,14 @@ def commentOnCommit(commitHash, commentFile) {
     sh ("rm -f ${jsonFile}")
 }
 
+def processAtMonkeyWrench(outputFile) {
+    def tmpfile = "atmonkeywrench.tmp"
+    sh("grep '^@MonkeyWrench: AddSummary: ' '${outputFile}' > $tmpfile")
+    def lines = readFile ($tmpfile).split ("\n")
+    for (int i = 0; i < lines.length; i++)
+        echo (lines[i].subString ("@MonkeyWrench: AddSummary: ".length)).trim)
+}
+
 timestamps {
     node('xamarin-macios') {
         try {
@@ -108,6 +116,22 @@ timestamps {
                 }
 
                 dir('xamarin-macios') {
+                    stage('Launch external tests') {
+                        currentStage = "${STAGE_NAME}"
+                        if (isPr) {
+                            echo "Currently not launching external tests for pull requests"
+                        } else {
+                            def outputFile = "wrench-launch-external.output.tmp"
+                            try {
+                                sh("make -C ./xamarin-macios/tests wrench-launch-external 2>&1 | tee ${outputFile}")
+                            } catch (error) {
+                                echo ("🚫 Launching external tests failed: ${error} 🚫")
+                            } finally {
+                                processAtMonkeyWrench (outputFile)
+                            }
+                        }
+                    }
+
                     stage('Run tests') {
                         currentStage = "Test run"
                         if (isPr) {
@@ -120,8 +144,13 @@ timestamps {
             }
         } catch (error) {
             def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
-            if (!fileExists (commentFile))
-                writeFile file: "${commentFile}", text: "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
+            def comment = null;
+            if (fileExists (commentFile)) {
+                comment = readFile ("${commentFile}")
+             } else {
+                comment = "🔥 Jenkins job failed unexpectedly 🔥\n\n${error}";
+            }
+            comment += "\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
             commentOnCommit ("${gitHash}", "${commentFile}")
 
             if (currentStage != null)

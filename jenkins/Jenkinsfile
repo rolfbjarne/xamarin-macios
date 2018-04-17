@@ -30,7 +30,7 @@ def processAtMonkeyWrench(outputFile) {
     sh("grep '^@MonkeyWrench: AddSummary: ' '${outputFile}' > $tmpfile")
     def lines = readFile ($tmpfile).split ("\n")
     for (int i = 0; i < lines.length; i++)
-        echo (lines[i].subString ("@MonkeyWrench: AddSummary: ".length)).trim)
+        echo (lines[i].subString ("@MonkeyWrench: AddSummary: ".length).trim)
 }
 
 timestamps {

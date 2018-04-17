@@ -55,7 +55,7 @@ if test -n "$PUBLISH_HTML_REPORT" -o -n "$PRINT_HTML_REPORT_LINK"; then
 		echo "BUILD_NUMBER is not set"
 		exit 1
 	fi
-	P="jenkins/xamarin-macios/${BRANCH_NAME}/$(git show -1 --pretty=%H)/${BUILD_NUMBER}"
+	P="jenkins/xamarin-macios/${BRANCH_NAME}/$(git log -1 --pretty=%H)/${BUILD_NUMBER}"
 
 	echo "<a href='http://xamarin-storage/$P/jenkins-results/tests/index.html'>Html Report</a><br/>"
 	if test -n "$PRINT_HTML_REPORT_LINK"; then

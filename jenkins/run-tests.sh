@@ -17,6 +17,58 @@ report_error ()
 }
 trap report_error ERR
 
+TARGET=jenkins
+PUBLISH_HTML_REPORT=
+PRINT_HTML_REPORT_LINK=
+while ! test -z $1; do
+	case $1 in
+		--target=)
+			TARGET=${1:9}
+			shift
+			;;
+		--publish-html-report)
+			PUBLISH_HTML_REPORT=1
+			shift 1
+			;;
+		--print-html-report-link)
+			PRINT_HTML_REPORT_LINK=1
+			shift 1
+			;;
+		*)
+			echo "Unknown argument: $1"
+			exit 1
+			;;
+    esac
+done
+
+IS_PR=
+if test -n "$ghprbPullId"; then
+	IS_PR=1
+	BRANCH_NAME="pr$ghprbPullId"
+fi
+if test -n "$PUBLISH_HTML_REPORT" -o -n "$PRINT_HTML_REPORT_LINK"; then
+	if test -z "$BRANCH_NAME"; then
+		echo "BRANCH_NAME is not set"
+		exit 1
+	fi
+	if test -z "$BUILD_NUMBER"; then
+		echo "BUILD_NUMBER is not set"
+		exit 1
+	fi
+	P="jenkins/xamarin-macios/${BRANCH_NAME}/$(git show -1 --pretty=%H)/${BUILD_NUMBER}"
+
+	echo "<a href='http://xamarin-storage/$P/jenkins-results/tests/index.html'>Html Report</a><br/>"
+	if test -n "$PRINT_HTML_REPORT_LINK"; then
+		# nothing else to do
+		exit 0
+	fi
+
+	# Make sure the target directory exists
+	ssh builder@xamarin-storage "mkdir -p /volume1/storage/$P"
+
+	export TESTS_PERIODIC_COMMAND="--periodic-interval 10 --periodic-command rsync --periodic-command-arguments '-avz --chmod=+r -e ssh $WORKSPACE/jenkins-results builder@xamarin-storage:/volume1/storage/$P'"
+fi
+
 export BUILD_REVISION=jenkins
 
 # Unlock
@@ -36,14 +88,17 @@ security -v find-identity builder.keychain
 rm -rf ~/.config/.mono/keypairs/
 
 # Run tests
-TARGET=$1
-if test -z $TARGET; then
-	TARGET=jenkins
+RC=0
+make -C tests $TARGET || RC=$?
+
+# upload of the final html report
+if -n "$PUBLISH_HTML_REPORT"; then
+	rsync -avz --chmod=+r -e ssh $WORKSPACE/jenkins-results builder@xamarin-storage:/volume1/storage/$P
 fi
-pwd
-ls -la
-env
-make -C tests $TARGET
+
+if [[ x$RC != x0 ]]; then
+	exit $RC
+fi
 
 printf "✅ [Test run succeeded]($BUILD_URL/Test_Report/)\\n" >> $WORKSPACE/jenkins/pr-comments.md
 

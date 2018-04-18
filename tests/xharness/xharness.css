@@ -22,9 +22,17 @@
     min-width: 10px
 }
 
+.toggler {
+    cursor: grab;
+}
+
 .testcontainer {
-    margin-left: 20px;
-    margin-top: 10px;
+    padding-left: 30px;
+}
+
+.test {
+    /*padding-left: 30px;*/
+    padding-top: 10px;
 }
 
 .runall {

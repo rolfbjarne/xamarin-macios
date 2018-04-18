@@ -92,7 +92,7 @@ RC=0
 make -C tests $TARGET || RC=$?
 
 # upload of the final html report
-if -n "$PUBLISH_HTML_REPORT"; then
+if test -n "$PUBLISH_HTML_REPORT"; then
 	rsync -avz --chmod=+r -e ssh $WORKSPACE/jenkins-results builder@xamarin-storage:/volume1/storage/$P
 fi
 

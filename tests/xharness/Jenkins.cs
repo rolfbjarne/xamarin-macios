@@ -1655,15 +1655,15 @@ namespace xharness
 
 					// test header
 					writer.Write ($"<span>");
-					writer.Write ($"<span id='expander_{groupId}' class='expander' onclick='javascript: toggleContainerVisibility (\"{groupId}\");'>{defaultExpander}</span>");
-					writer.Write ($"<span id='test_{groupId}' class='p1 autorefreshable' onclick='javascript: toggleContainerVisibility (\"{groupId}\");'>{group.Key}{RenderTextStates (group)}</span>");
+					writer.Write ($"<span id='expander_{groupId}' class='expander toggler' onclick='javascript: toggleContainerVisibility (\"{groupId}\");'>{defaultExpander}</span>");
+					writer.Write ($"<span id='test_{groupId}' class='p1 autorefreshable toggler' onclick='javascript: toggleContainerVisibility (\"{groupId}\");'>{group.First ().TestPath [level]}{RenderTextStates (group)}</span>");
 					if (IsServerMode)
 						writer.Write ($"<span><a class='runall' href='javascript: runtest (\"{string.Join (",", group.Select ((v) => v.ID.ToString ()))}\");'>Run</a></span>");
 					writer.WriteLine ($"</span>");
 
 					// test content
 					writer.WriteLine ($"<div id='test_container_{groupId}' class='testcontainer togglable' style='display: {defaultDisplay};'>");
-					RenderTests (writer, group, null, ref id_counter, level + 1);
+					RenderTests (writer, group, sort, ref id_counter, level + 1);
 					writer.WriteLine ("</div>"); // test_container_{groupId}
 
 					writer.WriteLine ($"</div>"); // div_{groupId}
@@ -1671,6 +1671,7 @@ namespace xharness
 			} else if (tests.Count () == 1) {
 				var test = tests.First ();
 				var runTest = test as RunTestTask;
+				writer.WriteLine ($"<div class='test'>");
 				if (runTest != null) {
 					var pf_id = id_counter++;
 					writer.WriteLine ($"Project file: {runTest.BuildTask.ProjectFile} <br />");
@@ -1684,6 +1685,7 @@ namespace xharness
 				writer.WriteLine ($"<div id='testruns_{test_id}' class='autorefreshable' data-onautorefresh='{test_id}' style='display: block;'>");
 				for (var i = 0; i < test.TestRuns.Count; i++)
 					RenderTestRun (writer, test.TestRuns [i], i, test.TestRuns.Count > 1, ref id_counter);
+				writer.WriteLine ($"</div>");
 				writer.WriteLine ($"</div>");
 			}
 			
@@ -1701,7 +1703,7 @@ namespace xharness
 			var defaultDisplay = autoExpand ? "block" : "none";
 
 			var log_id = id_counter++;
-			writer.Write ($"<span id='testrun_header_{log_id}' class='appendable' onclick='javascript: toggleContainerVisibility (\"{log_id}\");' {(header ? "" : "style='display: none'")} >");
+			writer.Write ($"<span id='testrun_header_{log_id}' class='appendable toggler' onclick='javascript: toggleContainerVisibility (\"{log_id}\");' {(header ? "" : "style='display: none'")} >");
 			writer.Write ($"<span id='expander_{log_id}' class='expander'>-</span>");
 			writer.Write ($"<span>Test run #{index + 1} (<span style='color: {GetTestColor (test)}'>{test.ExecutionResult.ToString ()}</span>)</span><br/>");
 			writer.WriteLine ($"</span>");

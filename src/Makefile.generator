@@ -141,7 +141,7 @@ WATCH_TARGETS +=                                                        \
 WATCH_TARGETS +=                                                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch                        \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch: Makefile.generator
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch: Makefile.generator | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
 	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.WatchOS,v1.0 \"\$$@\"\n" > $@
 	$(Q) chmod +x $@
 
@@ -166,7 +166,7 @@ TVOS_TARGETS +=                                                  \
 TVOS_TARGETS +=                                                  \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv                    \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv: Makefile.generator
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv: Makefile.generator | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin
 	$(Q_GEN) printf "#!/bin/sh -e\n\nexec /Library/Frameworks/Mono.framework/Versions/Current/bin/mono64 --debug $(abspath $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe) --target-framework=Xamarin.TVOS,v1.0 \"\$$@\"\n" > $@
 	$(Q) chmod +x $@
 

@@ -57,7 +57,7 @@ if test -n "$PUBLISH_HTML_REPORT" -o -n "$PRINT_HTML_REPORT_LINK"; then
 	fi
 	P="jenkins/xamarin-macios/${BRANCH_NAME}/$(git log -1 --pretty=%H)/${BUILD_NUMBER}"
 
-	echo "<a href='http://xamarin-storage/$P/jenkins-results/tests/index.html'>Html Report</a><br/>"
+	echo "http://xamarin-storage/$P/jenkins-results/tests/index.html"
 	if test -n "$PRINT_HTML_REPORT_LINK"; then
 		# nothing else to do
 		exit 0

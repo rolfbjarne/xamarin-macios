@@ -1,9 +1,9 @@
 ifdef ENABLE_XAMARIN
-NEEDED_MACCORE_VERSION := f7a4cc9161752e08d6283c6abd85b0090dc69e6a
-NEEDED_MACCORE_BRANCH := master
+NEEDED_MACCORE_VERSION := b1d0303bf1b1a95db0ae6ded337bd68e0f9e9479
+NEEDED_MACCORE_BRANCH := tests-override-urls
 
 MACCORE_DIRECTORY := maccore
-MACCORE_MODULE    := git@github.com:xamarin/maccore.git
+MACCORE_MODULE    := git@github.com:rolfbjarne/maccore.git
 MACCORE_VERSION   := $(shell cd $(MACCORE_PATH) 2> /dev/null && git rev-parse HEAD 2> /dev/null)
 MACCORE_BRANCH    := $(shell cd $(MACCORE_PATH) 2> /dev/null && git symbolic-ref --short HEAD 2> /dev/null)
 MACCORE_REMOTE    := origin

@@ -22,7 +22,7 @@ PUBLISH_HTML_REPORT=
 PRINT_HTML_REPORT_LINK=
 while ! test -z $1; do
 	case $1 in
-		--target=)
+		--target=*)
 			TARGET=${1:9}
 			shift
 			;;

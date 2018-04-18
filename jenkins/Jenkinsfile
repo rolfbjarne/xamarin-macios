@@ -136,7 +136,7 @@ timestamps {
                         if (isPr) {
                             echo "Not running tests here because they're run on public Jenkins."
                         } else {
-                            def htmlReportLink = sh (script: './jenkins/run-tests.sh --print-html-report-link | grep "^[<].*Html Report"', returnStdout: true).trim ()
+                            def htmlReportLink = sh (script: './jenkins/run-tests.sh --print-html-report-link | grep "^http"', returnStdout: true).trim ()
                             echo("Html Report: ${htmlReportLink}")
                             sh('./jenkins/run-tests.sh --target=wrench-jenkins --publish-html-report')
                         }

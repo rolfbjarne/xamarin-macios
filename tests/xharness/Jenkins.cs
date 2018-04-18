@@ -563,7 +563,7 @@ namespace xharness
 			// enabled by default
 			SetEnabled (labels, "ios", ref IncludeiOS);
 			SetEnabled (labels, "tvos", ref IncludetvOS);
-			SetEnabled (labels, "watchos", ref IncludewatchOS);
+			//SetEnabled (labels, "watchos", ref IncludewatchOS);
 			SetEnabled (labels, "mac", ref IncludeMac);
 			SetEnabled (labels, "mac-classic", ref IncludeClassicMac);
 			SetEnabled (labels, "ios-msbuild", ref IncludeiOSMSBuild);

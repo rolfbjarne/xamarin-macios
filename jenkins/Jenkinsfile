@@ -34,7 +34,7 @@ def processAtMonkeyWrench(outputFile) {
 }
 
 timestamps {
-    node('xamarin-macios') {
+    node('xamarin-macios && macos-high-sierra') {
         try {
             withEnv(["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
                 dir('xamarin-macios') {

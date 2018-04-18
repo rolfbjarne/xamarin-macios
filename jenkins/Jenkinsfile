@@ -29,8 +29,11 @@ def processAtMonkeyWrench(outputFile) {
     def tmpfile = "atmonkeywrench.tmp"
     sh (script: "grep '^@MonkeyWrench: AddSummary: ' '${outputFile}' > ${tmpfile}", returnStatus: true /* don't throw exceptions if something goes wrong */)
     def lines = readFile ("${tmpfile}").split ("\n")
-    for (int i = 0; i < lines.length; i++)
-        echo (lines [i].subString ("@MonkeyWrench: AddSummary: ".length).trim)
+    echo ("length: ${lines.length}")
+    for (int i = 0; i < lines.length; i++) {
+        echo ("line ${i}: ${lines [i]}")
+        echo (lines [i].subString (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim)
+    }
 }
 
 timestamps {

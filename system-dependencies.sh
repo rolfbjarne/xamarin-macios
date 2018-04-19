@@ -364,8 +364,12 @@ function check_specific_xcode () {
 }
 
 function check_xcode () {
-	if ! test -z $IGNORE_XCODE; then return; fi
-
+	env
+	if ! test -z $IGNORE_XCODE; then
+		echo "Ignored"
+		return;
+	fi
+	echo "Not ignored"
 	# must have latest Xcode in /Applications/Xcode<version>.app
 	check_specific_xcode
 

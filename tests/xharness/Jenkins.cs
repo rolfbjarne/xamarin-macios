@@ -908,7 +908,9 @@ namespace xharness
 				}
 				Task.WaitAll (tasks.ToArray ());
 				GenerateReport ();
-				return Tasks.Any ((v) => v.Failed || v.Skipped) ? 1 : 0;
+				var failedTests = Tasks.Where ((v) => v.Failed || v.Skipped);
+				Console.WriteLine ($"Test run completed with {Tasks.Count ((v) => v.Failed)} failed and {Tasks.Count ((v) => v.Skipped)} skipped tests (of {Tasks.Count ()} total tests)");
+				return failedTests.Any () ? 1 : 0;
 			} catch (Exception ex) {
 				MainLog.WriteLine ("Unexpected exception: {0}", ex);
 				Console.WriteLine ("Unexpected exception: {0}", ex);

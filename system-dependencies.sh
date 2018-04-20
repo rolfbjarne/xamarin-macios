@@ -311,10 +311,12 @@ function install_specific_xcode () {
 }
 
 function check_specific_xcode () {
+	echo "csx 1"
 	local XCODE_DEVELOPER_ROOT=`grep XCODE$1_DEVELOPER_ROOT= Make.config | sed 's/.*=//'`
 	local XCODE_VERSION=`grep XCODE$1_VERSION= Make.config | sed 's/.*=//'`
 	local XCODE_ROOT=$(dirname `dirname $XCODE_DEVELOPER_ROOT`)
 	local ENABLE_XAMARIN=$(grep -s ^ENABLE_XAMARIN= Make.config.local configure.inc | sed 's/.*=//')
+	echo "csx 2"
 	
 	if ! test -d $XCODE_DEVELOPER_ROOT; then
 		if ! test -z $PROVISION_XCODE; then
@@ -327,6 +329,7 @@ function check_specific_xcode () {
 		else
 			fail "You must install Xcode ($XCODE_VERSION) in $XCODE_ROOT. You can download Xcode $XCODE_VERSION here: https://developer.apple.com/downloads/index.action?name=Xcode"
 		fi
+		echo "csx 3"	
 		return
 	else
 		if is_at_least_version $XCODE_VERSION 5.0; then
@@ -336,18 +339,19 @@ function check_specific_xcode () {
 				else
 					fail "The license for Xcode $XCODE_VERSION has not been accepted. Execute '$SUDO $XCODE_DEVELOPER_ROOT/usr/bin/xcodebuild' to review the license and accept it."
 				fi
+				echo "csx 4"
 				return
 			fi
 		fi
 	fi
-
+echo "csx 5"
 	local XCODE_ACTUAL_VERSION=`/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$XCODE_DEVELOPER_ROOT/../version.plist"`
 	# this is a hard match, having 4.5 when requesting 4.4 is not OK (but 4.4.1 is OK)
 	if [[ ! "x$XCODE_ACTUAL_VERSION" =~ "x$XCODE_VERSION" ]]; then
 		fail "You must install Xcode $XCODE_VERSION in $XCODE_ROOT (found $XCODE_ACTUAL_VERSION).  You can download Xcode $XCODE_VERSION here: https://developer.apple.com/downloads/index.action?name=Xcode";
 		return
 	fi
-
+echo "csx 6"
 	local XCODE_SELECT=$(xcode-select -p)
 	if [[ "x$XCODE_SELECT" != "x$XCODE_DEVELOPER_ROOT" ]]; then
 		if ! test -z $PROVISION_XCODE; then
@@ -359,7 +363,7 @@ function check_specific_xcode () {
 			fail "'xcode-select -p' does not point to $XCODE_DEVELOPER_ROOT, it points to $XCODE_SELECT. Execute '$SUDO xcode-select -s $XCODE_DEVELOPER_ROOT' to fix."
 		fi
 	fi
-
+echo "csx 7"
 	ok "Found Xcode $XCODE_ACTUAL_VERSION in $XCODE_ROOT"
 }
 
@@ -372,7 +376,7 @@ function check_xcode () {
 	echo "Not ignored"
 	# must have latest Xcode in /Applications/Xcode<version>.app
 	check_specific_xcode
-
+echo "cx 1"
 	local XCODE_DEVELOPER_ROOT=`grep ^XCODE_DEVELOPER_ROOT= Make.config | sed 's/.*=//'`
 	local IOS_SDK_VERSION=`grep ^IOS_SDK_VERSION= Make.config | sed 's/.*=//'`
 	local OSX_SDK_VERSION=`grep ^OSX_SDK_VERSION= Make.config | sed 's/.*=//'`
@@ -398,6 +402,7 @@ function check_xcode () {
 	if test ! -d $D -a -z "$FAIL"; then
 		fail "The directory $D does not exist. If you've updated the Xcode location it means you also need to update WATCH_SDK_VERSION in Make.config."
 	fi
+echo "cx 2"
 }
 
 function check_mono () {

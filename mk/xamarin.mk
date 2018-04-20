@@ -1,6 +1,6 @@
 ifdef ENABLE_XAMARIN
-NEEDED_MACCORE_VERSION := 6c031b487d47fb9eebb8a21933b9021cf5ed3b05
-NEEDED_MACCORE_BRANCH := tests-override-urls
+NEEDED_MACCORE_VERSION := 28fa7344ad288673daf0318e29a8e3606e2f870e
+NEEDED_MACCORE_BRANCH := jenkinsfile
 
 MACCORE_DIRECTORY := maccore
 MACCORE_MODULE    := git@github.com:rolfbjarne/maccore.git

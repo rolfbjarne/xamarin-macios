@@ -137,6 +137,11 @@ timestamps {
                             }
                         }
 
+                        stage('Install Provisioning Profiles') {
+                            currentStage = "${STAGE_NAME}"
+                            sh('./../maccore/tools/install-qa-provisioning-profiles.sh')
+                        }
+
                         timeout(time: 6, unit: 'HOURS') {
                             stage('Run tests') {
                                 currentStage = "Test run"

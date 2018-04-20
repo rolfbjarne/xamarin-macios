@@ -157,41 +157,41 @@ timestamps {
                 }
             }
         } // timeout
-
-        post {
-            def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
-            def comment = null
-            aborted {
-                if (fileExists (commentFile))
-                    comment = readFile ("${commentFile}")
-                comment += "\n🔥 Jenkins job was aborted 🔥\n"
-                writeFile (file: "${commentFile}", text: "${comment}")
-            }
-            failure {
-                if (fileExists (commentFile))
-                    comment = readFile ("${commentFile}")
-                comment += "\n🔥 Jenkins job failed in stage '${currentStage}' 🔥\n"
-                writeFile (file: "${commentFile}", text: "${comment}")
-            }
-            success {
-                if (fileExists (commentFile))
-                    comment = readFile ("${commentFile}")
-                comment += "\n✅ Jenkins job succeeded\n"
-                writeFile (file: "${commentFile}", text: "${comment}")
-            }
-            always {
-                if (fileExists (commentFile)) {
-                    comment = readFile ("${commentFile}")
-                 } else {
-                    comment = "No comments?";
-                }
-                comment += "\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
-                writeFile (file: "${commentFile}", text: "${comment}")
-                commentOnCommit ("${gitHash}", "${commentFile}")
-            }
-            cleanup {
-                sh (script: 'make git-clean-all', returnStatus: true /* don't throw exceptions if something goes wrong */)
-            }
-        }
     } // node
+
+    post {
+        def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
+        def comment = null
+        aborted {
+            if (fileExists (commentFile))
+                comment = readFile ("${commentFile}")
+            comment += "\n🔥 Jenkins job was aborted 🔥\n"
+            writeFile (file: "${commentFile}", text: "${comment}")
+        }
+        failure {
+            if (fileExists (commentFile))
+                comment = readFile ("${commentFile}")
+            comment += "\n🔥 Jenkins job failed in stage '${currentStage}' 🔥\n"
+            writeFile (file: "${commentFile}", text: "${comment}")
+        }
+        success {
+            if (fileExists (commentFile))
+                comment = readFile ("${commentFile}")
+            comment += "\n✅ Jenkins job succeeded\n"
+            writeFile (file: "${commentFile}", text: "${comment}")
+        }
+        always {
+            if (fileExists (commentFile)) {
+                comment = readFile ("${commentFile}")
+             } else {
+                comment = "No comments?";
+            }
+            comment += "\n\n[View in Jenkins](${env.RUN_DISPLAY_URL})"
+            writeFile (file: "${commentFile}", text: "${comment}")
+            commentOnCommit ("${gitHash}", "${commentFile}")
+        }
+        cleanup {
+            sh (script: 'make git-clean-all', returnStatus: true /* don't throw exceptions if something goes wrong */)
+        }
+    }
 } // timestamps

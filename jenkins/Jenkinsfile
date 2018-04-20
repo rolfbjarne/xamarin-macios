@@ -180,5 +180,11 @@ timestamps {
             if (errorMessage != null)
                 error "${errorMessage}"
         } // timeout
+
+        post {
+            cleanup {
+                sh (script: 'make git-clean-all', returnStatus: true /* don't throw exceptions if something goes wrong */)
+            }
+        }
     } // node
 } // timestamps

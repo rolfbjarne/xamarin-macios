@@ -107,7 +107,14 @@ namespace xharness
 			});
 		}
 
-		public async Task<SimDevice []> FindAsync (AppRunnerTarget target, Log log)
+		string CreateName (string devicetype, string runtime)
+		{
+			var runtime_name = supported_runtimes?.Where ((v) => v.Identifier == runtime).FirstOrDefault ()?.Name ?? Path.GetExtension (runtime).Substring (1);
+			var device_name = supported_device_types?.Where ((v) => v.Identifier == devicetype).FirstOrDefault ()?.Name ?? Path.GetExtension (devicetype).Substring (1);
+			return $"{device_name} ({runtime_name}) - created by xharness";
+		}
+
+		public async Task<SimDevice []> FindAsync (AppRunnerTarget target, Log log, bool create_if_needed = true)
 		{
 			SimDevice [] simulators = null;
 
@@ -180,6 +187,17 @@ namespace xharness
 				} else {
 					candidate = data;
 				}
+			}
+
+			if (simulators == null && candidate == null && target != AppRunnerTarget.Simulator_watchOS && create_if_needed) {
+				var devicetype = simulator_devicetypes [0];
+				var rv = await Harness.ExecuteXcodeCommandAsync ("simctl", $"create {StringUtils.Quote (CreateName (devicetype, simulator_runtime))} {devicetype} {simulator_runtime}", log, TimeSpan.FromMinutes (1));
+				if (!rv.Succeeded) {
+					log.WriteLine ($"Could not create device for runtime={simulator_runtime} and device type={devicetype}.");
+					return null;
+				}
+				await LoadAsync (log, force: true);
+				return await FindAsync (target, log, false);
 			}
 
 			if (simulators == null && candidate == null && target == AppRunnerTarget.Simulator_watchOS) {

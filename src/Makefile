@@ -175,12 +175,15 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%: $(IOS_BUILD_DIR)/compat/%
 $(eval $(call IOS_TARGETS_template,native-32,--ns=ObjCRuntime,Xamarin.iOS.dll,native,native-32,32))
 $(eval $(call IOS_TARGETS_template,native-64,--ns=ObjCRuntime,Xamarin.iOS.dll,native,native-64,64))
 
+# MonoTouch.Dialog-1
+$(IOS_BUILD_DIR)/reference/MonoTouch.Dialog-1.dll: $(MACIOS_BINARIES_PATH)/MonoTouch.Dialog-Unified/ios/MonoTouch.Dialog-1.dll | $(IOS_BUILD_DIR)/reference
+	$(Q) cp $< $@
+
+$(IOS_BUILD_DIR)/reference/MonoTouch.Dialog-1.pdb: $(MACIOS_BINARIES_PATH)/MonoTouch.Dialog-Unified/ios/MonoTouch.Dialog-1.pdb | $(IOS_BUILD_DIR)/reference
+	$(Q) cp $< $@
+
 define IOS_LIBS_template
 IOS_VARIANTS_TARGETS += $(addprefix $(IOS_BUILD_DIR)/$(1)/,$(4) $(5))
-
-# MonoTouch.Dialog-1
-$(IOS_BUILD_DIR)/reference/MonoTouch.Dialog-1.%: $(MACIOS_BINARIES_PATH)/MonoTouch.Dialog-Unified/ios/MonoTouch.Dialog-1.% | $(IOS_BUILD_DIR)/reference
-	$$(Q) cp $$< $$@
 
 # MonoTouch.NUnitLite
 $(IOS_BUILD_DIR)/$(1)%$(5) $(IOS_BUILD_DIR)/$(1)%$(5:.dll=.pdb): $$(IOS_TOUCHUNIT_SOURCES) $(IOS_BUILD_DIR)/$(1)/$(4) $(PRODUCT_KEY_PATH) $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll

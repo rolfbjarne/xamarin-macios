@@ -1,18 +1,6 @@
 
 GENERATOR_SOURCES =                                             \
-	$(TOP)/src/btouch.cs                               \
-	$(TOP)/src/error.cs                                \
-	$(TOP)/src/generator.cs                            \
-	$(TOP)/src/generator-attributes.cs                 \
-	$(TOP)/src/generator-attribute-manager.cs          \
-	$(TOP)/src/generator-enums.cs                      \
-	$(TOP)/src/generator-filters.cs                    \
-	$(TOP)/src/generator-typemanager.cs                \
-	$(TOP)/src/ObjCRuntime/Stret.cs                    \
-	$(TOP)/tools/common/TargetFramework.cs             \
-	$(TOP)/tools/common/StringUtils.cs				   \
-	$(BUILD_DIR)/generator-frameworks.g.cs                    \
-	$(MONO_PATH)/mcs/class/Mono.Options/Mono.Options/Options.cs \
+	Makefile.generator                    \
 
 GENERATOR_DEFINES = -d:BGENERATOR -d:NET_4_0
 
@@ -52,9 +40,9 @@ GENERATOR_ATTRIBUTE_SOURCES = \
 
 IKVM_REFLECTION_FLAGS = -d:NO_AUTHENTICODE,STATIC,NO_SYMBOL_WRITER
 
-$(BUILD_DIR)/common/bgen.exe: $(GENERATOR_SOURCES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_ATTRIBUTE_SOURCES) Makefile.generator
+$(BUILD_DIR)/common/bgen.exe: Makefile.generator
 	$(Q) mkdir -p $(BUILD_DIR)/common
-	$(Q_GEN) $(SYSTEM_CSC) -nologo -debug:portable -out:$@ $(IKVM_REFLECTION_FLAGS) $(GENERATOR_DEFINES) $(IKVM_REFLECTION_SOURCES) $(GENERATOR_ATTRIBUTE_SOURCES) $(GENERATOR_SOURCES)
+	touch $@
 
 # The command-line arguments in the csproj are currently kept up-to-date manually
 generator.csproj: generator-ikvm.csproj.in Makefile.generator
@@ -77,9 +65,9 @@ PROJECT_FILES += generator.csproj
 # Common
 #
 
-$(BUILD_DIR)/generator-frameworks.g.cs: frameworks.sources Makefile.generator generate-frameworks.csharp
+$(BUILD_DIR)/generator-frameworks.g.cs: Makefile.generator
 	@mkdir -p $(dir $@)
-	@./generate-frameworks.csharp '$(IOS_FRAMEWORKS)' '$(MAC_FRAMEWORKS)' '$(WATCHOS_FRAMEWORKS)' '$(TVOS_FRAMEWORKS)' > $@
+	touch $@
 
 #
 # Xamarin.iOS (btouch)
@@ -89,14 +77,14 @@ IOS_TARGETS_DIRS +=                              \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/btouch \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen   \
 
-IOS_TARGETS +=                                                          \
+IOS_TARGETSx +=                                                          \
 	generator.csproj                                               \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/monotouch.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/Xamarin.iOS.BindingAttributes.dll \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/bgen.exe                 \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bgen                          \
 
-IOS_TARGETS += \
+IOS_TARGETSs += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch                        \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-native                 \
 

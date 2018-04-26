@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+printf "⚠️ [Skipped comparing API and creating generator diff] ⚠\\n" >> $WORKSPACE/jenkins/pr-comments.md
+exit 0
+
 report_error ()
 {
 	printf "🔥 [Failed to compare API and create generator diff]($BUILD_URL/console) 🔥\\n" >> $WORKSPACE/jenkins/pr-comments.md

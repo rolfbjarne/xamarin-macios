@@ -182,7 +182,7 @@ timestamps {
                 reportFinalStatus ("${err}")
             } finally {
                 stage('Cleanup') {
-                    sh (script: 'make git-clean-all', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                    sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)
                 }
             }
         } // timeout

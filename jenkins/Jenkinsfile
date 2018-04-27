@@ -32,7 +32,17 @@ def processAtMonkeyWrench(outputFile) {
     echo ("length: ${lines.length}")
     for (int i = 0; i < lines.length; i++) {
         echo ("line ${i}: ${lines [i]}")
-        echo (lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ())
+        def summary = lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ()
+        // remove <br/>
+        summary = summary.replace ("<br/>", "")
+        // remove <a href=''></a>, but leaving only the link itself
+        def href = summary.indexOf ("<a href='")
+        if (href > 0) {
+            def href_end = summary.indexof ("</a>")
+            if (href_end > href)
+                summary = summary.replace (summary.substring (href, href_end - href), "")
+        }
+        echo (summary)
     }
 }
 

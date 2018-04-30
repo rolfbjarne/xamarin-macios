@@ -33,14 +33,14 @@ def processAtMonkeyWrench(outputFile) {
     for (int i = 0; i < lines.length; i++) {
         echo ("line ${i}: ${lines [i]}")
         def summary = lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ()
-        // remove <br/>
-        summary = summary.replace ("<br/>", "")
-        // remove <a href=''></a>, but leaving only the link itself
+        // remove <br/> and </a>
+        summary = summary.replace ("<br/>", "").replace ("</a>", "")
+        // remove <a href=''>, thus leaving only the link itself
         def href = summary.indexOf ("<a href='")
         if (href > 0) {
-            def href_end = summary.indexOf ("</a>")
+            def href_end = summary.indexOf (href, "'>")
             if (href_end > href)
-                summary = summary.replace (summary.substring (href, href_end - href), "")
+                summary = summary.replace (summary.substring (href, href_end + 2), "")
         }
         echo (summary)
     }
@@ -172,7 +172,7 @@ timestamps {
                             sh('./../maccore/tools/install-qa-provisioning-profiles.sh')
                         }
 
-                        timeout(time: 6, unit: 'HOURS') {
+                        timeout(time: 8, unit: 'HOURS') {
                             stage('Run tests') {
                                 currentStage = "Test run"
                                 echo "Building on ${env.NODE_NAME}"

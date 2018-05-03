@@ -53,7 +53,7 @@ def reportFinalStatus(err)
     if (fileExists (commentFile))
         comment = readFile ("${commentFile}")
 
-    var status = currentBuild.currentResult
+    def status = currentBuild.currentResult
     if ("${status}" == "SUCCESS") {
         comment += "\n✅ Jenkins job succeeded\n"
     } else {

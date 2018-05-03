@@ -46,7 +46,7 @@ def processAtMonkeyWrench(outputFile) {
     }
 }
 
-def reportFinalStatus(err)
+def reportFinalStatus(err, gitHash)
 {
     def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
     def comment = null
@@ -187,9 +187,9 @@ timestamps {
                         }
                     }
                 }
-                reportFinalStatus ("")
+                reportFinalStatus ("", "${gitHash}")
             } catch (err) {
-                reportFinalStatus ("${err}")
+                reportFinalStatus ("${err}", "${gitHash}")
             } finally {
                 stage('Cleanup') {
                     sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)

@@ -11,6 +11,7 @@ def currentStage = null
 
 def xiPackageFilename = null
 def xmPackageFilename = null
+def reportPrefix = null
 
 def commentOnCommit(commitHash, commentFile) {
     def markdown = readFile ("${commentFile}")
@@ -173,6 +174,28 @@ timestamps {
                             sh('./../maccore/tools/install-qa-provisioning-profiles.sh')
                         }
 
+                        stage('Publish report') {
+                            currentStage = "${STAGE_NAME}"
+                            reportPrefix = sh (script: './jenkins/publish-results.sh | grep "^Url Prefix: " | sed "s/^Url Prefix: //"', returnStdout: true).trim ()
+                            echo ("Html report: ${reportPrefix}/tests/index.html")
+                            echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
+                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/index.html")
+                            echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
+                        }
+
+                        stage('API diff') {
+                            currentStage = "${STAGE_NAME}"
+                            sh('./jenkins/build-api-diff.sh')
+                            echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
+                        }
+
+                        stage('API & Generator comparison') {
+                            currentStage = "${STAGE_NAME}"
+                            sh('./jenkins/compare.sh')
+                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/index.html")
+                            echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
+                        }
+
                         timeout(time: 6, unit: 'HOURS') {
                             stage('Run tests') {
                                 currentStage = "Test run"
@@ -180,9 +203,8 @@ timestamps {
                                 if (isPr) {
                                     echo "Not running tests here because they're run on public Jenkins."
                                 } else {
-                                    def htmlReportLink = sh (script: './jenkins/run-tests.sh --print-html-report-link | grep "^http"', returnStdout: true).trim ()
-                                    echo("Html Report: ${htmlReportLink}")
-                                    sh('./jenkins/run-tests.sh --target=wrench-jenkins --publish-html-report')
+                                    echo ("Html report: ${reportPrefix}/tests/index.html")
+                                    sh('./jenkins/run-tests.sh --target=wrench-jenkins')
                                 }
                             }
                         }
@@ -193,6 +215,9 @@ timestamps {
         } catch (err) {
             reportFinalStatus ("${err}", "${gitHash}", "${currentStage}")
         } finally {
+            stage('Final report upload') {
+                sh (script: './jenkins/publish-results.sh', returnStatus: true /* don't throw exceptions if something goes wrong */)
+            }
             stage('Cleanup') {
                 sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)
             }

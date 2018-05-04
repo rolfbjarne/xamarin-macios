@@ -46,30 +46,31 @@ def processAtMonkeyWrench(outputFile) {
     }
 }
 
-def reportFinalStatus(err, gitHash)
+def reportFinalStatus(err, gitHash, currentStage)
 {
     def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
     def comment = null
-    if (fileExists (commentFile))
-        comment = readFile ("${commentFile}")
-
     def status = currentBuild.currentResult
-    if ("${status}" == "SUCCESS") {
-        comment += "\n✅ Jenkins job succeeded\n"
+
+    if ("${status}" == "SUCCESS" && err == "") {
+        comment = "✅ [Jenkins job](${env.RUN_DISPLAY_URL}) succeeded"
     } else {
-        comment += "\n🔥 Jenkins job failed (${status}) in stage '${currentStage}' 🔥"
+        comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) failed (${status}) in stage '${currentStage}' 🔥"
         if (err != "")
             comment += " : ${err}"
-        comment += "\n"
     }
+
+    if (fileExists (commentFile))
+        comment += "\n\n" + readFile ("${commentFile}")
+
     writeFile (file: "${commentFile}", text: "${comment}")
     commentOnCommit ("${gitHash}", "${commentFile}")
 }
 
 timestamps {
     node('xamarin-macios && macos-high-sierra') {
-        timeout (time: 9, unit: 'HOURS') {
-            try {
+        try {
+            timeout (time: 9, unit: 'HOURS') {
                 withEnv(["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
                     dir('xamarin-macios') {
                         stage('Checkout') {
@@ -172,7 +173,7 @@ timestamps {
                             sh('./../maccore/tools/install-qa-provisioning-profiles.sh')
                         }
 
-                        timeout(time: 8, unit: 'HOURS') {
+                        timeout(time: 6, unit: 'HOURS') {
                             stage('Run tests') {
                                 currentStage = "Test run"
                                 echo "Building on ${env.NODE_NAME}"
@@ -187,14 +188,14 @@ timestamps {
                         }
                     }
                 }
-                reportFinalStatus ("", "${gitHash}")
-            } catch (err) {
-                reportFinalStatus ("${err}", "${gitHash}")
-            } finally {
-                stage('Cleanup') {
-                    sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)
-                }
+                reportFinalStatus ("", "${gitHash}", "${currentStage}")
+            } // timeout
+        } catch (err) {
+            reportFinalStatus ("${err}", "${gitHash}", "${currentStage}")
+        } finally {
+            stage('Cleanup') {
+                sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)
             }
-        } // timeout
+        }
     } // node
 } // timestamps

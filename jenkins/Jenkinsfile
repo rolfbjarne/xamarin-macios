@@ -45,6 +45,7 @@ def processAtMonkeyWrench(outputFile) {
         }
         echo (summary)
     }
+    sh ("rm -f '${tmpfile}'")
 }
 
 def reportFinalStatus(err, gitHash, currentStage)
@@ -165,6 +166,8 @@ timestamps {
                                     processAtMonkeyWrench (outputFile)
                                 } catch (error) {
                                     echo ("🚫 Launching external tests failed: ${error} 🚫")
+                                } finally {
+                                    sh("rm -f '${outputFile}'")
                                 }
                             }
                         }
@@ -185,13 +188,13 @@ timestamps {
 
                         stage('API diff') {
                             currentStage = "${STAGE_NAME}"
-                            sh('./jenkins/build-api-diff.sh')
+                            sh(script: './jenkins/build-api-diff.sh', returnStatus: true)
                             echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
                         }
 
                         stage('API & Generator comparison') {
                             currentStage = "${STAGE_NAME}"
-                            sh('./jenkins/compare.sh')
+                            sh(script: './jenkins/compare.sh', returnStatus: true)
                             echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/index.html")
                             echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                         }

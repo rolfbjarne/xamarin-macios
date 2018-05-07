@@ -33,4 +33,4 @@ echo "Periodic Command: --periodic-interval 10 --periodic-command rsync --period
 # SC2029: Note that, unescaped, this expands on the client side. [Referring to $P]
 # shellcheck disable=SC2029
 ssh builder@xamarin-storage "mkdir -p /volume1/storage/$P"
-rsync -avz --chmod=+r -e ssh "$WORKSPACE/jenkins-results builder@xamarin-storage:/volume1/storage/$P"
+rsync -avz --chmod=+r -e ssh "$WORKSPACE/jenkins-results" "builder@xamarin-storage:/volume1/storage/$P"

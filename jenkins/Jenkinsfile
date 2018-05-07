@@ -57,9 +57,11 @@ def reportFinalStatus(err, gitHash, currentStage)
     if ("${status}" == "SUCCESS" && err == "") {
         comment = "✅ [Jenkins job](${env.RUN_DISPLAY_URL}) succeeded"
     } else {
-        comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) failed (${status}) in stage '${currentStage}' 🔥"
+        comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) failed in stage '${currentStage}' 🔥"
         if (err != "")
             comment += " : ${err}"
+        manager.addErrorBadge (comment)
+        manager.buildFailure ()
     }
 
     if (fileExists (commentFile))

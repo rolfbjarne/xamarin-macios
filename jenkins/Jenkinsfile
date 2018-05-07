@@ -28,24 +28,27 @@ def commentOnCommit(commitHash, commentFile) {
 
 def processAtMonkeyWrench(outputFile) {
     def tmpfile = "atmonkeywrench.tmp"
-    sh (script: "grep '^@MonkeyWrench: ...Summary: ' '${outputFile}' > ${tmpfile}", returnStatus: true /* don't throw exceptions if something goes wrong */)
-    def lines = readFile ("${tmpfile}").split ("\n")
-    echo ("length: ${lines.length}")
-    for (int i = 0; i < lines.length; i++) {
-        echo ("line ${i}: ${lines [i]}")
-        def summary = lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ()
-        // remove <br/> and </a>
-        summary = summary.replace ("<br/>", "").replace ("</a>", "")
-        // remove <a href=''>, thus leaving only the link itself
-        def href = summary.indexOf ("<a href='")
-        if (href > 0) {
-            def href_end = summary.indexOf ("'>", href)
-            if (href_end > href)
-                summary = summary.replace (summary.substring (href, href_end + 2), "")
+    try {
+        sh (script: "grep '^@MonkeyWrench: ...Summary: ' '${outputFile}' > ${tmpfile}", returnStatus: true /* don't throw exceptions if something goes wrong */)
+        def lines = readFile ("${tmpfile}").split ("\n")
+        echo ("length: ${lines.length}")
+        for (int i = 0; i < lines.length; i++) {
+            echo ("line ${i}: ${lines [i]}")
+            def summary = lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ()
+            // remove <br/> and </a>
+            summary = summary.replace ("<br/>", "").replace ("</a>", "")
+            // remove <a href=''>, thus leaving only the link itself
+            def href = summary.indexOf ("<a href='")
+            if (href > 0) {
+                def href_end = summary.substring (href).indexOf ("'>")
+                if (href_end > href)
+                    summary = summary.replace (summary.substring (href, href_end + 2), "")
+            }
+            echo (summary)
         }
-        echo (summary)
+    } finally {
+        sh ("rm -f '${tmpfile}'")
     }
-    sh ("rm -f '${tmpfile}'")
 }
 
 def reportFinalStatus(err, gitHash, currentStage)
@@ -190,13 +193,17 @@ timestamps {
 
                         stage('API diff') {
                             currentStage = "${STAGE_NAME}"
-                            sh(script: './jenkins/build-api-diff.sh', returnStatus: true)
+                            def apidiffResult = sh(script: './jenkins/build-api-diff.sh', returnStatus: true)
+                            if (apidiffResult != 0)
+                                manager.addWarningBadge ("Failed to generate API diff")
                             echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
                         }
 
                         stage('API & Generator comparison') {
                             currentStage = "${STAGE_NAME}"
-                            sh(script: './jenkins/compare.sh', returnStatus: true)
+                            def compareResult = sh(script: './jenkins/compare.sh', returnStatus: true)
+                            if (compareResult != 0)
+                                manager.addWarningBadge ("Failed to generate API / Generator diff")
                             echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/index.html")
                             echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                         }

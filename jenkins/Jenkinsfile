@@ -171,6 +171,7 @@ timestamps {
                                     processAtMonkeyWrench (outputFile)
                                 } catch (error) {
                                     echo ("🚫 Launching external tests failed: ${error} 🚫")
+                                    manager.addWarningBadge ("Failed to launch external tests")
                                 } finally {
                                     sh("rm -f '${outputFile}'")
                                 }

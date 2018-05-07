@@ -221,7 +221,7 @@ timestamps {
             reportFinalStatus ("${err}", "${gitHash}", "${currentStage}")
         } finally {
             stage('Final report upload') {
-                sh (script: './jenkins/publish-results.sh', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                sh (script: './xamarin-macios/jenkins/publish-results.sh', returnStatus: true /* don't throw exceptions if something goes wrong */)
             }
             stage('Cleanup') {
                 sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)

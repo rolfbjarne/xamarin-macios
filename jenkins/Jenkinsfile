@@ -183,7 +183,7 @@ timestamps {
                             reportPrefix = sh (script: './jenkins/publish-results.sh | grep "^Url Prefix: " | sed "s/^Url Prefix: //"', returnStdout: true).trim ()
                             echo ("Html report: ${reportPrefix}/tests/index.html")
                             echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
-                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/index.html")
+                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
                             echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                         }
 

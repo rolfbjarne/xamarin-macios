@@ -26,6 +26,8 @@ P="jenkins/xamarin-macios/${BRANCH_NAME}/$(git log -1 --pretty=%H)/${BUILD_NUMBE
 echo "Url Prefix: http://xamarin-storage/$P/jenkins-results"
 echo "Periodic Command: --periodic-interval 10 --periodic-command rsync --periodic-command-arguments '-avz --chmod=+r -e ssh $WORKSPACE/jenkins-results builder@xamarin-storage:/volume1/storage/$P'"
 
+mkdir -p "$WORKSPACE/jenkins-results"
+
 # Publish
 
 # Make sure the target directory exists

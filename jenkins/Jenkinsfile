@@ -31,10 +31,9 @@ def processAtMonkeyWrench(outputFile) {
     try {
         sh (script: "grep '^@MonkeyWrench: ...Summary: ' '${outputFile}' > ${tmpfile}", returnStatus: true /* don't throw exceptions if something goes wrong */)
         def lines = readFile ("${tmpfile}").split ("\n")
-        echo ("length: ${lines.length}")
         for (int i = 0; i < lines.length; i++) {
-            echo ("line ${i}: ${lines [i]}")
             def summary = lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ()
+            summary = summary.replace ("<br/>", "")
             summary = summary.replace ("<a href='", "")
             def href_end = summary.indexOf ("'>")
             if (href_end > 0)
@@ -178,7 +177,7 @@ timestamps {
                             sh('./../maccore/tools/install-qa-provisioning-profiles.sh')
                         }
 
-                        stage('Publish report') {
+                        stage('Publish reports') {
                             currentStage = "${STAGE_NAME}"
                             reportPrefix = sh (script: './jenkins/publish-results.sh | grep "^Url Prefix: " | sed "s/^Url Prefix: //"', returnStdout: true).trim ()
                             echo ("Html report: ${reportPrefix}/tests/index.html")
@@ -200,7 +199,7 @@ timestamps {
                             def compareResult = sh(script: './jenkins/compare.sh', returnStatus: true)
                             if (compareResult != 0)
                                 manager.addWarningBadge ("Failed to generate API / Generator diff")
-                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/index.html")
+                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
                             echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                         }
 

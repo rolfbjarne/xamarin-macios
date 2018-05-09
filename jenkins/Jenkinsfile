@@ -1,0 +1,236 @@
+#!/bin/groovy
+
+def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
+def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
+def gitHash = null
+def xiPackageUrl = null
+def xmPackageUrl = null
+def utils = null
+def errorMessage = null
+def currentStage = null
+
+def xiPackageFilename = null
+def xmPackageFilename = null
+def reportPrefix = null
+
+def commentOnCommit (commitHash, markdown)
+{
+    def json = groovy.json.JsonOutput.toJson ([body: markdown])
+    def jsonFile = "./xamarin-macios/jenkins/commit-comments.json"
+    try {
+        writeFile (file: "${jsonFile}", text: "${json}")
+        withCredentials ([string (credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
+            sh ("curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}' https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --data '@${jsonFile}'")
+        }
+    } finally {
+        sh ("rm -f ${jsonFile}")
+    }
+}
+
+def processAtMonkeyWrench (outputFile)
+{
+    def tmpfile = "atmonkeywrench.tmp"
+    try {
+        sh (script: "grep '^@MonkeyWrench: ...Summary: ' '${outputFile}' > ${tmpfile}", returnStatus: true /* don't throw exceptions if something goes wrong */)
+        def lines = readFile ("${tmpfile}").split ("\n")
+        for (int i = 0; i < lines.length; i++) {
+            def summary = lines [i].substring (27 /*"@MonkeyWrench: AddSummary: ".length*/).trim ()
+            summary = summary.replace ("<br/>", "")
+            summary = summary.replace ("<a href='", "")
+            def href_end = summary.indexOf ("'>")
+            if (href_end > 0)
+                summary = summary.substring (0, href_end)
+            echo (summary)
+        }
+    } finally {
+        sh ("rm -f '${tmpfile}'")
+    }
+}
+
+def reportFinalStatus (err, gitHash, currentStage)
+{
+    def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
+    def comment = null
+    def status = currentBuild.currentResult
+
+    if ("${status}" == "SUCCESS" && err == "") {
+        comment = "✅ [Jenkins job](${env.RUN_DISPLAY_URL}) succeeded"
+    } else {
+        comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) failed in stage '${currentStage}' 🔥"
+        if (err != "")
+            comment += " : ${err}"
+        manager.addErrorBadge (comment)
+        manager.buildFailure ()
+    }
+
+    if (fileExists (commentFile))
+        comment += "\n\n" + readFile ("${commentFile}")
+
+    commentOnCommit ("${gitHash}", "${comment}")
+}
+
+timestamps {
+    node ('xamarin-macios && macos-high-sierra') {
+        try {
+            timeout (time: 9, unit: 'HOURS') {
+                withEnv (["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
+                    dir ('xamarin-macios') {
+                        stage ('Checkout') {
+                            currentStage = "${STAGE_NAME}"
+                            echo ("Building on ${env.NODE_NAME}")
+                            scmVars = checkout scm
+                            gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+                        }
+
+                        stage ('Provisioning') {
+                            currentStage = "${STAGE_NAME}"
+                            echo ("Building on ${env.NODE_NAME}")
+                            sh ('./jenkins/provision-deps.sh')
+                        }
+
+                        stage ('Build') {
+                            currentStage = "${STAGE_NAME}"
+                            echo ("Building on ${env.NODE_NAME}")
+                            sh ('./jenkins/build.sh --configure-flags --enable-xamarin')
+                        }
+
+                        stage ('Packaging') {
+                            currentStage = "${STAGE_NAME}"
+                            echo ("Building on ${env.NODE_NAME}")
+                            sh ('./jenkins/build-package.sh')
+                            sh (script: 'ls -la ../package', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                        }
+                    }
+
+                    stage ('Signing') {
+                        currentStage = "${STAGE_NAME}"
+                        echo ("Building on ${env.NODE_NAME}")
+                        def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg");
+                        if (xiPackages.length > 0) {
+                            xiPackageFilename = xiPackages [0].name
+                            echo ("Created Xamarin.iOS package: ${xiPackageFilename}")
+                        }
+                        def xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
+                        if (xmPackages.length > 0) {
+                            xmPackageFilename = xmPackages [0].name
+                            echo ("Created Xamarin.Mac package: ${xmPackageFilename}")
+                        }
+                        withCredentials ([string(credentialsId: 'codesign_keychain_pw', variable: 'PRODUCTSIGN_KEYCHAIN_PASSWORD')]) {
+                            sh ("./xamarin-macios/jenkins/productsign.sh")
+                        }
+                    }
+
+                    stage ('Upload to Azure') {
+                        currentStage = "${STAGE_NAME}"
+                        step ([
+                            $class: 'WAStoragePublisher',
+                            allowAnonymousAccess: true,
+                            cleanUpContainer: false,
+                            cntPubAccess: true,
+                            containerName: "wrench",
+                            doNotFailIfArchivingReturnsNothing: false,
+                            doNotUploadIndividualFiles: false,
+                            doNotWaitForPreviousBuild: true,
+                            excludeFilesPath: '',
+                            filesPath: "package/*.pkg",
+                            storageAccName: 'bosstoragemirror',
+                            storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
+                            uploadArtifactsOnlyIfSuccessful: false,
+                            uploadZips: false,
+                            virtualPath: "jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/"
+                        ])
+                    }
+
+                    stage ('Publish builds to GitHub') {
+                        currentStage = "${STAGE_NAME}"
+                        utils = load ("./xamarin-macios/jenkins/utils.groovy")
+                        if (xiPackageFilename != null) {
+                            xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
+                            utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
+                        }
+                        if (xmPackageFilename != null) {
+                            xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
+                            utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
+                        }
+                    }
+
+                    dir ('xamarin-macios') {
+                        stage ('Launch external tests') {
+                            currentStage = "${STAGE_NAME}"
+                            if (isPr) {
+                                echo "Currently not launching external tests for pull requests"
+                            } else {
+                                def outputFile = "wrench-launch-external.output.tmp"
+                                try {
+                                    withCredentials ([string(credentialsId: 'macios_provisionator_pat', variable: 'PROVISIONATOR_VSTS_PAT')]) {
+                                        sh("make -C tests wrench-launch-external MAC_PACKAGE_URL=${xmPackageUrl} IOS_PACKAGE_URL=${xiPackageUrl} WRENCH_URL=${env.RUN_DISPLAY_URL} BUILD_REVISION=${gitHash} BUILD_LANE=jenkins/${branchName} BUILD_WORK_HOST=${env.NODE_NAME} 2>&1 | tee ${outputFile}")
+                                    }
+                                    processAtMonkeyWrench (outputFile)
+                                } catch (error) {
+                                    echo ("🚫 Launching external tests failed: ${error} 🚫")
+                                    manager.addWarningBadge ("Failed to launch external tests")
+                                } finally {
+                                    sh ("rm -f '${outputFile}'")
+                                }
+                            }
+                        }
+
+                        stage ('Install Provisioning Profiles') {
+                            currentStage = "${STAGE_NAME}"
+                            sh ('./../maccore/tools/install-qa-provisioning-profiles.sh')
+                        }
+
+                        stage ('Publish reports') {
+                            currentStage = "${STAGE_NAME}"
+                            reportPrefix = sh (script: './jenkins/publish-results.sh | grep "^Url Prefix: " | sed "s/^Url Prefix: //"', returnStdout: true).trim ()
+                            echo ("Html report: ${reportPrefix}/tests/index.html")
+                            echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
+                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
+                            echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
+                        }
+
+                        stage ('API diff') {
+                            currentStage = "${STAGE_NAME}"
+                            def apidiffResult = sh (script: './jenkins/build-api-diff.sh', returnStatus: true)
+                            if (apidiffResult != 0)
+                                manager.addWarningBadge ("Failed to generate API diff")
+                            echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
+                        }
+
+                        stage ('API & Generator comparison') {
+                            currentStage = "${STAGE_NAME}"
+                            def compareResult = sh (script: './jenkins/compare.sh', returnStatus: true)
+                            if (compareResult != 0)
+                                manager.addWarningBadge ("Failed to generate API / Generator diff")
+                            echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
+                            echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
+                        }
+
+                        timeout (time: 6, unit: 'HOURS') {
+                            stage ('Run tests') {
+                                currentStage = "Test run"
+                                echo ("Building on ${env.NODE_NAME}")
+                                if (isPr) {
+                                    echo "Not running tests here because they're run on public Jenkins."
+                                } else {
+                                    echo ("Html report: ${reportPrefix}/tests/index.html")
+                                    sh ('./jenkins/run-tests.sh --target=wrench-jenkins')
+                                }
+                            }
+                        }
+                    }
+                }
+                reportFinalStatus ("", "${gitHash}", "${currentStage}")
+            } // timeout
+        } catch (err) {
+            reportFinalStatus ("${err}", "${gitHash}", "${currentStage}")
+        } finally {
+            stage ('Final report upload') {
+                sh (script: './xamarin-macios/jenkins/publish-results.sh', returnStatus: true /* don't throw exceptions if something goes wrong */)
+            }
+            stage ('Cleanup') {
+                sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)
+            }
+        }
+    } // node
+} // timestamps

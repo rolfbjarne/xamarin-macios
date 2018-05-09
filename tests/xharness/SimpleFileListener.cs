@@ -46,6 +46,7 @@ namespace xharness
 						OutputWriter.WriteLine (line);
 						if (line.StartsWith ("[Runner executing:", StringComparison.Ordinal)) {
 							Log.WriteLine ("Tests have started executing");
+							Launch ();
 						} else if (!XmlOutput && line.StartsWith ("Tests run: ", StringComparison.Ordinal)) {
 							Log.WriteLine ("Tests have finished executing");
 							Finished ();

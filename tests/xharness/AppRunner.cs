@@ -681,7 +681,6 @@ namespace xharness
 					}
 				}
 
-				listener.Cancel ();
 
 				// cleanup after us
 				if (EnsureCleanSimulatorState)
@@ -760,6 +759,7 @@ namespace xharness
 				}
 			}
 
+			listener.Cancel ();
 			listener.Dispose ();
 
 			// check the final status

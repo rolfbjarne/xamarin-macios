@@ -575,5 +575,6 @@ clean-local::
 	$(Q) rm -Rf .libs
 	$(Q) rm -f xamarin/mono-runtime.h mono-runtime.m delegates.h delegates.inc Delegates.generated.cs
 
+.SECONDARY: delegates.inc delegates.h
 
 include $(TOP)/mk/rules.mk

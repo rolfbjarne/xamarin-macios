@@ -60,6 +60,8 @@ namespace xharness
 			set { configuration = value; }
 		}
 
+		public bool IsUsb { get; set; }
+
 		public string DeviceName {
 			get { return device_name; }
 			set { device_name = value; }
@@ -502,8 +504,10 @@ namespace xharness
 			string transport;
 			if (mode == "watchos") {
 				transport = isSimulator ? "FILE" : "HTTP";
+			} else if (IsUsb) {
+				transport = "INCOMING-TCP";
 			} else {
-				transport = isSimulator ? "TCP" : "INCOMING-TCP";
+				transport = "TCP";
 			}
 			args.AppendFormat (" -argument=-app-arg:-transport:{0}", transport);
 			args.AppendFormat (" -setenv=NUNIT_TRANSPORT={0}", transport);

@@ -29,6 +29,7 @@ namespace xharness
 		public override void Initialize ()
 		{
 			processor_thread = new Thread (Processing);
+			processor_thread.Name = $"SimpleFileListener thread for {Path}";
 		}
 
 		protected override void Start ()

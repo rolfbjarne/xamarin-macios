@@ -98,6 +98,7 @@ $@"[Local Date/Time:	{DateTime.Now}]
 			{
 				IsBackground = true,
 			};
+			t.Name = "SimpleListener thread";
 			t.Start ();
 		}
 

@@ -134,7 +134,7 @@ namespace xharness
 				}
 			});
 
-			new Thread (() =>
+			var t = new Thread (() =>
 			{
 				if (timeout.HasValue) {
 					if (!process.WaitForExit ((int) timeout.Value.TotalMilliseconds)) {
@@ -151,7 +151,9 @@ namespace xharness
 				stdout_completion.TrySetResult (false);
 			}) {
 				IsBackground = true,
-			}.Start ();
+			};
+			t.Name = $"Process waiter for {process.StartInfo.FileName}";
+			t.Start ();
 
 			await Task.WhenAll (stderr_completion.Task, stdout_completion.Task, exit_completion.Task);
 

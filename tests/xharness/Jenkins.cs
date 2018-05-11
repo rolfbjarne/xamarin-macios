@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
 using Xamarin.Utils;
@@ -1302,37 +1303,43 @@ namespace xharness
 			}
 		}
 
-		object report_lock = new object ();
+		Mutex report_lock = new Mutex ();
 		public void GenerateReport (bool only_if_ci = false)
 		{
 			if (only_if_ci && IsServerMode)
 				return;
 			
 			try {
-				lock (report_lock) {
-					var report = Path.Combine (LogDirectory, "index.html");
-					using (var stream = new MemoryStream ()) {
-						MemoryStream markdown_summary = null;
-						StreamWriter markdown_writer = null;
-						if (!string.IsNullOrEmpty (Harness.MarkdownSummaryPath)) {
-							markdown_summary = new MemoryStream ();
-							markdown_writer = new StreamWriter (markdown_summary);
+				if (report_lock.WaitOne (TimeSpan.FromSeconds (5))) {
+					try {
+						var report = Path.Combine (LogDirectory, "index.html");
+						using (var stream = new MemoryStream ()) {
+							MemoryStream markdown_summary = null;
+							StreamWriter markdown_writer = null;
+							if (!string.IsNullOrEmpty (Harness.MarkdownSummaryPath)) {
+								markdown_summary = new MemoryStream ();
+								markdown_writer = new StreamWriter (markdown_summary);
+							}
+							GenerateReportImpl (stream, markdown_writer);
+							if (File.Exists (report))
+								File.Delete (report);
+							File.WriteAllBytes (report, stream.ToArray ());
+							if (!string.IsNullOrEmpty (Harness.MarkdownSummaryPath)) {
+								markdown_writer.Flush ();
+								if (File.Exists (Harness.MarkdownSummaryPath))
+									File.Delete (Harness.MarkdownSummaryPath);
+								File.WriteAllBytes (Harness.MarkdownSummaryPath, markdown_summary.ToArray ());
+								markdown_writer.Close ();
+							}
 						}
-						GenerateReportImpl (stream, markdown_writer);
-						if (File.Exists (report))
-							File.Delete (report);
-						File.WriteAllBytes (report, stream.ToArray ());
-						if (!string.IsNullOrEmpty (Harness.MarkdownSummaryPath)) {
-							markdown_writer.Flush ();
-							if (File.Exists (Harness.MarkdownSummaryPath))
-								File.Delete (Harness.MarkdownSummaryPath);
-							File.WriteAllBytes (Harness.MarkdownSummaryPath, markdown_summary.ToArray ());
-							markdown_writer.Close ();
+						foreach (var file in new string [] { "xharness.js", "xharness.css" }) {
+							File.Copy (Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), file), Path.Combine (LogDirectory, file), true);
 						}
+					} finally {
+						report_lock.ReleaseMutex ();
 					}
-					foreach (var file in new string [] { "xharness.js", "xharness.css" }) {
-						File.Copy (Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), file), Path.Combine (LogDirectory, file), true);
-					}
+				} else {
+					MainLog.WriteLine ("Failed to acquire report mutex: report won't be updated.");
 				}
 			} catch (Exception e) {
 				this.MainLog.WriteLine ("Failed to write log: {0}", e);

@@ -60,11 +60,13 @@ namespace xharness
 		public override void WriteLine (string value)
 		{
 			Write (value + "\n");
+			Flush ();
 		}
 
 		public override void WriteLine (string format, params object [] args)
 		{
 			Write (string.Format (format, args) + "\n");
+			Flush ();
 		}
 
 		public override string ToString ()

@@ -1,30 +1,74 @@
 #!/bin/groovy
 
-def isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
-def branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
-def gitHash = null
-def xiPackageUrl = null
-def xmPackageUrl = null
-def utils = null
-def errorMessage = null
-def currentStage = null
+// global variables
+repository = "xamarin/xamarin-macios"
+isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
+branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
+gitHash = null
+xiPackageUrl = null
+xmPackageUrl = null
+utils = null
+errorMessage = null
+currentStage = null
 
-def xiPackageFilename = null
-def xmPackageFilename = null
-def reportPrefix = null
+xiPackageFilename = null
+xmPackageFilename = null
+reportPrefix = null
 
-def commentOnCommit (commitHash, markdown)
+def githubAddComment (url, markdown)
 {
     def json = groovy.json.JsonOutput.toJson ([body: markdown])
-    def jsonFile = "./xamarin-macios/jenkins/commit-comments.json"
+    def jsonFile = "${workspace}/xamarin-macios/jenkins/commit-comments.json"
     try {
         writeFile (file: "${jsonFile}", text: "${json}")
+        sh ("cat '${jsonFile}'")
         withCredentials ([string (credentialsId: 'macios_github_comment_token', variable: 'GITHUB_COMMENT_TOKEN')]) {
-            sh ("curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}' https://api.github.com/repos/xamarin/xamarin-macios/commits/${commitHash}/comments --data '@${jsonFile}'")
+            sh ("curl -i -H 'Authorization: token ${GITHUB_COMMENT_TOKEN}' ${url} --data '@${jsonFile}'")
         }
     } finally {
         sh ("rm -f ${jsonFile}")
     }
+}
+
+def commentOnCommit (commitHash, markdown)
+{
+    githubAddComment ("https://api.github.com/repos/${repository}/commits/${commitHash}/comments", markdown)
+}
+
+def commentOnPullRequest (pullRequest, markdown)
+{
+    githubAddComment ("https://api.github.com/repos/${repository}/pulls/${pullRequest}/comments", markdown)
+}
+
+def addComment (markdown)
+{
+    if (isPr) {
+        commentOnPullRequest ("${env.CHANGE_ID}", markdown)
+    } else {
+        commentOnCommit ("${gitHash}", markdown)
+    }
+}
+
+def reportFinalStatus (err, gitHash, currentStage)
+{
+    def commentFile = "${workspace}/xamarin-macios/jenkins/pr-comments.md"
+    def comment = null
+    def status = currentBuild.currentResult
+
+    if ("${status}" == "SUCCESS" && err == "") {
+        comment = "✅ [Jenkins job](${env.RUN_DISPLAY_URL}) succeeded"
+    } else {
+        comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) failed in stage '${currentStage}' 🔥"
+        if (err != "")
+            comment += " : ${err}"
+        manager.addErrorBadge (comment)
+        manager.buildFailure ()
+    }
+
+    if (fileExists (commentFile))
+        comment += "\n\n" + readFile ("${commentFile}")
+
+    addComment ("${comment}")
 }
 
 def processAtMonkeyWrench (outputFile)
@@ -47,34 +91,20 @@ def processAtMonkeyWrench (outputFile)
     }
 }
 
-def reportFinalStatus (err, gitHash, currentStage)
-{
-    def commentFile = "./xamarin-macios/jenkins/pr-comments.md"
-    def comment = null
-    def status = currentBuild.currentResult
-
-    if ("${status}" == "SUCCESS" && err == "") {
-        comment = "✅ [Jenkins job](${env.RUN_DISPLAY_URL}) succeeded"
-    } else {
-        comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) failed in stage '${currentStage}' 🔥"
-        if (err != "")
-            comment += " : ${err}"
-        manager.addErrorBadge (comment)
-        manager.buildFailure ()
-    }
-
-    if (fileExists (commentFile))
-        comment += "\n\n" + readFile ("${commentFile}")
-
-    commentOnCommit ("${gitHash}", "${comment}")
-}
-
 timestamps {
     node ('xamarin-macios && macos-high-sierra') {
         try {
             timeout (time: 9, unit: 'HOURS') {
-                withEnv (["PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}"]) {
-                    dir ('xamarin-macios') {
+                // Hard-code a workspace, since branch-based and PR-based
+                // builds would otherwise use different workspaces, which
+                // wastes a lot of disk space.
+                workspace = "${env.HOME}/jenkins/workspace/xamarin-macios"
+                withEnv ([
+                    "PATH=/Library/Frameworks/Mono.framework/Versions/Current/Commands:${env.PATH}",
+                    "WORKSPACE=${workspace}"
+                    ]) {
+                    sh ("mkdir -p '${workspace}/xamarin-macios'")
+                    dir ("${workspace}") {
                         stage ('Checkout') {
                             currentStage = "${STAGE_NAME}"
                             echo ("Building on ${env.NODE_NAME}")
@@ -226,10 +256,10 @@ timestamps {
             reportFinalStatus ("${err}", "${gitHash}", "${currentStage}")
         } finally {
             stage ('Final report upload') {
-                sh (script: './xamarin-macios/jenkins/publish-results.sh', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                sh (script: "${workspace}/xamarin-macios/jenkins/publish-results.sh", returnStatus: true /* don't throw exceptions if something goes wrong */)
             }
             stage ('Cleanup') {
-                sh (script: 'make git-clean-all -C xamarin-macios', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                sh (script: "make git-clean-all -C ${workspace}/xamarin-macios", returnStatus: true /* don't throw exceptions if something goes wrong */)
             }
         }
     } // node

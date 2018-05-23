@@ -179,13 +179,13 @@ endif
 
 package:
 	mkdir -p ../package
-	$(MAKE) -C ../maccore package
+	$(MAKE) -C $(MACCORE_PATH) package
 	# copy .pkg, .zip and *updateinfo to the packages directory to be uploaded to storage
 	cp ../maccore/release/*.pkg ../package
-	-cp ../maccore/release/*.zip ../package
-	-cp ../maccore/release/*updateinfo ../package
-	-cp ../maccore/tests/*.zip ../package
-	-cp ../xamarin-macios/tests/*.zip ../package
+	cp ../maccore/release/*.zip ../package
+	cp ../maccore/release/*updateinfo ../package
+	cp ../maccore/tests/*.zip ../package
+	cp ../xamarin-macios/tests/*.zip ../package
 
 install-system: install-system-ios install-system-mac
 	@# Clean up some old files

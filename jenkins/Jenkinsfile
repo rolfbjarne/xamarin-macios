@@ -139,6 +139,14 @@ def uploadFiles (glob, virtualPath)
     ])
 }
 
+def runXamarinMacTests (url, macOS)
+{
+    step ("Running Xamarin.Mac tests on ${macOS}") {
+        echo ("URL: ${url}")
+        sh ("env")
+    }
+}
+
 timestamps {
     node ('xamarin-macios && macos-high-sierra') {
         try {
@@ -318,9 +326,19 @@ timestamps {
                             }
                         }
 
-                        stage ('Package Xamarin.Mac tests') {
+                        stage ('Package & run Xamarin.Mac tests') {
                             sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
                             uploadFiles ("xamarin-macios/tests/*.zip", virtualPath)
+                            def url = "${packagePrefix}/mac-test-package.zip"
+                            parallel (
+                                node ('xamarin-macios && macos-lion')          { runXamarinMacTests (url, "lion"); },
+                                node ('xamarin-macios && macos-mountain-lion') { runXamarinMacTests (url, "mountain-lion"); },
+                                node ('xamarin-macios && macos-mavericks')     { runXamarinMacTests (url, "mavericks"); },
+                                node ('xamarin-macios && macos-yosemite')      { runXamarinMacTests (url, "yosemite"); },
+                                node ('xamarin-macios && macos-elcapitan')     { runXamarinMacTests (url, "elcapitan"); },
+                                node ('xamarin-macios && macos-sierra')        { runXamarinMacTests (url, "sierra"); },
+                                node ('xamarin-macios && macos-high-sierra')   { runXamarinMacTests (url, "high-sierra"); }
+                            )
                         }
                     }
                 }

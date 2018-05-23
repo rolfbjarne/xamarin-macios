@@ -121,9 +121,11 @@ timestamps {
     node ('xamarin-macios && macos-high-sierra') {
         try {
             timeout (time: 9, unit: 'HOURS') {
-                stage ("Checking for previous builds") {
-                    abortExecutingBuilds ()
-                }
+                // This runs into problems with the Jenkins sandbox:
+                // stage ("Checking for previous builds") {
+                //     abortExecutingBuilds ()
+                // }
+
                 // Hard-code a workspace, since branch-based and PR-based
                 // builds would otherwise use different workspaces, which
                 // wastes a lot of disk space.

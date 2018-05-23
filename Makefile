@@ -184,7 +184,6 @@ package:
 	cp $(MACCORE_PATH)/release/*.pkg ../package
 	cp $(MACCORE_PATH)/release/*.zip ../package
 	cp $(MACCORE_PATH)/release/*updateinfo ../package
-	cp $(TOP)/tests/*.zip ../package
 
 install-system: install-system-ios install-system-mac
 	@# Clean up some old files

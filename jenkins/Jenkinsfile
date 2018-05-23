@@ -5,6 +5,7 @@ repository = "xamarin/xamarin-macios"
 isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
 branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
 gitHash = null
+packagePrefix = null
 xiPackageUrl = null
 xmPackageUrl = null
 utils = null
@@ -137,12 +138,12 @@ timestamps {
                     stage ('Signing') {
                         currentStage = "${STAGE_NAME}"
                         echo ("Building on ${env.NODE_NAME}")
-                        def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg");
+                        def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg")
                         if (xiPackages.length > 0) {
                             xiPackageFilename = xiPackages [0].name
                             echo ("Created Xamarin.iOS package: ${xiPackageFilename}")
                         }
-                        def xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
+                        def xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg")
                         if (xmPackages.length > 0) {
                             xmPackageFilename = xmPackages [0].name
                             echo ("Created Xamarin.Mac package: ${xmPackageFilename}")
@@ -154,6 +155,30 @@ timestamps {
 
                     stage ('Upload to Azure') {
                         currentStage = "${STAGE_NAME}"
+                        def virtualPath = "jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}"
+                        packagePrefix = "https://bosstoragemirror.blob.core.windows.net/wrench/${virtualPath}/package"
+
+                        // Create metadata.json and manifest
+                        def uploadingFiles = findFiles (glob: "package/*")
+                        def manifest = new StringBuilder ()
+                        def metadata = new StringBuilder ()
+                        metadata.append ("[\n")
+                        for (int i = 0; i < uploadingFiles.length; i++) {
+                            def file = uploadingFiles [i]
+                            def f = new File (file)
+                            def f_length = f.length ()
+                            def md5 = sh (returnStdout: true, script: "md5 -q '${file}'").trim ()
+                            manifest.append ("${packagePrefix}/${file}\n")
+                            metadata.append ("  {\n    \"file\": \"${file}\",\n    \"md5\": \"${md5}\",\n    \"size\": ${f_length}\n  \"}")
+                            if (i < uploadingFiles.length - 1)
+                                metadata.append (",")
+                            metadata.append ("\n")
+                        }
+                        metadata.append ("]\n")
+                        writeFile (file: "package/manifest", text: manifest.toString ())
+                        writeFile (file: "package/metadata.json", text: metadata.toString ())
+
+                        sh ("ls -la package")
                         step ([
                             $class: 'WAStoragePublisher',
                             allowAnonymousAccess: true,
@@ -164,12 +189,12 @@ timestamps {
                             doNotUploadIndividualFiles: false,
                             doNotWaitForPreviousBuild: true,
                             excludeFilesPath: '',
-                            filesPath: "package/*.pkg",
+                            filesPath: "package/*",
                             storageAccName: 'bosstoragemirror',
                             storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
                             uploadArtifactsOnlyIfSuccessful: false,
                             uploadZips: false,
-                            virtualPath: "jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/"
+                            virtualPath: "${virtualPath}"
                         ])
                     }
 
@@ -177,11 +202,11 @@ timestamps {
                         currentStage = "${STAGE_NAME}"
                         utils = load ("${workspace}/xamarin-macios/jenkins/utils.groovy")
                         if (xiPackageFilename != null) {
-                            xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
+                            xiPackageUrl = "${packagePrefix}/${xiPackageFilename}"
                             utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
                         }
                         if (xmPackageFilename != null) {
-                            xmPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xmPackageFilename}"
+                            xmPackageUrl = "${packagePrefix}/${xmPackageFilename}"
                             utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
                         }
                     }

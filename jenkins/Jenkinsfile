@@ -137,12 +137,12 @@ timestamps {
                     stage ('Signing') {
                         currentStage = "${STAGE_NAME}"
                         echo ("Building on ${env.NODE_NAME}")
-                        def xiPackages = findFiles (glob: "${workspace}/package/xamarin.ios-*.pkg");
+                        def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg");
                         if (xiPackages.length > 0) {
                             xiPackageFilename = xiPackages [0].name
                             echo ("Created Xamarin.iOS package: ${xiPackageFilename}")
                         }
-                        def xmPackages = findFiles (glob: "${workspace}/package/xamarin.mac-*.pkg");
+                        def xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
                         if (xmPackages.length > 0) {
                             xmPackageFilename = xmPackages [0].name
                             echo ("Created Xamarin.Mac package: ${xmPackageFilename}")

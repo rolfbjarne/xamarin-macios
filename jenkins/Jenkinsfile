@@ -105,11 +105,13 @@ timestamps {
                     ]) {
                     sh ("mkdir -p '${workspace}/xamarin-macios'")
                     dir ("${workspace}") {
-                        stage ('Checkout') {
-                            currentStage = "${STAGE_NAME}"
-                            echo ("Building on ${env.NODE_NAME}")
-                            scmVars = checkout scm
-                            gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+                        dir ("xamarin-macios") {
+                            stage ('Checkout') {
+                                currentStage = "${STAGE_NAME}"
+                                echo ("Building on ${env.NODE_NAME}")
+                                scmVars = checkout scm
+                                gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+                            }
                         }
 
                         stage ('Provisioning') {

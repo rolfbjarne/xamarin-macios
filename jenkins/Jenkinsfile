@@ -115,38 +115,38 @@ timestamps {
                         stage ('Provisioning') {
                             currentStage = "${STAGE_NAME}"
                             echo ("Building on ${env.NODE_NAME}")
-                            sh ('./jenkins/provision-deps.sh')
+                            sh ("${workspace}/xamarin-macios/jenkins/provision-deps.sh")
                         }
 
                         stage ('Build') {
                             currentStage = "${STAGE_NAME}"
                             echo ("Building on ${env.NODE_NAME}")
-                            sh ('./jenkins/build.sh --configure-flags --enable-xamarin')
+                            sh ("${workspace}/xamarin-macios/jenkins/build.sh --configure-flags --enable-xamarin")
                         }
 
                         stage ('Packaging') {
                             currentStage = "${STAGE_NAME}"
                             echo ("Building on ${env.NODE_NAME}")
-                            sh ('./jenkins/build-package.sh')
-                            sh (script: 'ls -la ../package', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                            sh ("${workspace}/xamarin-macios/jenkins/build-package.sh")
+                            sh (script: "ls -la ${workspace}/package", returnStatus: true /* don't throw exceptions if something goes wrong */)
                         }
                     }
 
                     stage ('Signing') {
                         currentStage = "${STAGE_NAME}"
                         echo ("Building on ${env.NODE_NAME}")
-                        def xiPackages = findFiles (glob: "package/xamarin.ios-*.pkg");
+                        def xiPackages = findFiles (glob: "${workspace}/package/xamarin.ios-*.pkg");
                         if (xiPackages.length > 0) {
                             xiPackageFilename = xiPackages [0].name
                             echo ("Created Xamarin.iOS package: ${xiPackageFilename}")
                         }
-                        def xmPackages = findFiles (glob: "package/xamarin.mac-*.pkg");
+                        def xmPackages = findFiles (glob: "${workspace}/package/xamarin.mac-*.pkg");
                         if (xmPackages.length > 0) {
                             xmPackageFilename = xmPackages [0].name
                             echo ("Created Xamarin.Mac package: ${xmPackageFilename}")
                         }
                         withCredentials ([string(credentialsId: 'codesign_keychain_pw', variable: 'PRODUCTSIGN_KEYCHAIN_PASSWORD')]) {
-                            sh ("./xamarin-macios/jenkins/productsign.sh")
+                            sh ("${workspace}/xamarin-macios/jenkins/productsign.sh")
                         }
                     }
 
@@ -162,7 +162,7 @@ timestamps {
                             doNotUploadIndividualFiles: false,
                             doNotWaitForPreviousBuild: true,
                             excludeFilesPath: '',
-                            filesPath: "package/*.pkg",
+                            filesPath: "${workspace}/package/*.pkg",
                             storageAccName: 'bosstoragemirror',
                             storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
                             uploadArtifactsOnlyIfSuccessful: false,
@@ -173,7 +173,7 @@ timestamps {
 
                     stage ('Publish builds to GitHub') {
                         currentStage = "${STAGE_NAME}"
-                        utils = load ("./xamarin-macios/jenkins/utils.groovy")
+                        utils = load ("${workspace}/xamarin-macios/jenkins/utils.groovy")
                         if (xiPackageFilename != null) {
                             xiPackageUrl = "https://bosstoragemirror.blob.core.windows.net/wrench/jenkins/${branchName}/${gitHash}/${env.BUILD_NUMBER}/package/${xiPackageFilename}"
                             utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.iOS', "${xiPackageUrl}", 'SUCCESS', "${xiPackageFilename}")
@@ -190,10 +190,10 @@ timestamps {
                             if (isPr) {
                                 echo "Currently not launching external tests for pull requests"
                             } else {
-                                def outputFile = "wrench-launch-external.output.tmp"
+                                def outputFile = "${workspace}/xamarin-macios/wrench-launch-external.output.tmp"
                                 try {
                                     withCredentials ([string(credentialsId: 'macios_provisionator_pat', variable: 'PROVISIONATOR_VSTS_PAT')]) {
-                                        sh("make -C tests wrench-launch-external MAC_PACKAGE_URL=${xmPackageUrl} IOS_PACKAGE_URL=${xiPackageUrl} WRENCH_URL=${env.RUN_DISPLAY_URL} BUILD_REVISION=${gitHash} BUILD_LANE=jenkins/${branchName} BUILD_WORK_HOST=${env.NODE_NAME} 2>&1 | tee ${outputFile}")
+                                        sh ("make -C ${workspace}/xamarin-macios/tests wrench-launch-external MAC_PACKAGE_URL=${xmPackageUrl} IOS_PACKAGE_URL=${xiPackageUrl} WRENCH_URL=${env.RUN_DISPLAY_URL} BUILD_REVISION=${gitHash} BUILD_LANE=jenkins/${branchName} BUILD_WORK_HOST=${env.NODE_NAME} 2>&1 | tee ${outputFile}")
                                     }
                                     processAtMonkeyWrench (outputFile)
                                 } catch (error) {
@@ -207,12 +207,12 @@ timestamps {
 
                         stage ('Install Provisioning Profiles') {
                             currentStage = "${STAGE_NAME}"
-                            sh ('./../maccore/tools/install-qa-provisioning-profiles.sh')
+                            sh ("${workspace}/maccore/tools/install-qa-provisioning-profiles.sh")
                         }
 
                         stage ('Publish reports') {
                             currentStage = "${STAGE_NAME}"
-                            reportPrefix = sh (script: './jenkins/publish-results.sh | grep "^Url Prefix: " | sed "s/^Url Prefix: //"', returnStdout: true).trim ()
+                            reportPrefix = sh (script: "${workspace}/xamarin-macios/jenkins/publish-results.sh | grep '^Url Prefix: ' | sed 's/^Url Prefix: //'", returnStdout: true).trim ()
                             echo ("Html report: ${reportPrefix}/tests/index.html")
                             echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
                             echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
@@ -221,7 +221,7 @@ timestamps {
 
                         stage ('API diff') {
                             currentStage = "${STAGE_NAME}"
-                            def apidiffResult = sh (script: './jenkins/build-api-diff.sh', returnStatus: true)
+                            def apidiffResult = sh (script: "${workspace}/xamarin-macios/jenkins/build-api-diff.sh", returnStatus: true)
                             if (apidiffResult != 0)
                                 manager.addWarningBadge ("Failed to generate API diff")
                             echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
@@ -229,7 +229,7 @@ timestamps {
 
                         stage ('API & Generator comparison') {
                             currentStage = "${STAGE_NAME}"
-                            def compareResult = sh (script: './jenkins/compare.sh', returnStatus: true)
+                            def compareResult = sh (script: "${workspace}/xamarin-macios/jenkins/compare.sh", returnStatus: true)
                             if (compareResult != 0)
                                 manager.addWarningBadge ("Failed to generate API / Generator diff")
                             echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
@@ -244,7 +244,7 @@ timestamps {
                                     echo "Not running tests here because they're run on public Jenkins."
                                 } else {
                                     echo ("Html report: ${reportPrefix}/tests/index.html")
-                                    sh ('./jenkins/run-tests.sh --target=wrench-jenkins')
+                                    sh ("${workspace}/xamarin-macios/jenkins/run-tests.sh --target=wrench-jenkins")
                                 }
                             }
                         }

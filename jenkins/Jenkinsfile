@@ -164,7 +164,7 @@ timestamps {
                             doNotUploadIndividualFiles: false,
                             doNotWaitForPreviousBuild: true,
                             excludeFilesPath: '',
-                            filesPath: "${workspace}/package/*.pkg",
+                            filesPath: "package/*.pkg",
                             storageAccName: 'bosstoragemirror',
                             storageCredentialId: 'bc6a99d18d7d9ca3f6bf6b19e364d564',
                             uploadArtifactsOnlyIfSuccessful: false,

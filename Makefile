@@ -181,10 +181,10 @@ package:
 	mkdir -p ../package
 	$(MAKE) -C $(MACCORE_PATH) package
 	# copy .pkg, .zip and *updateinfo to the packages directory to be uploaded to storage
-	cp ../maccore/release/*.pkg ../package
-	cp ../maccore/release/*.zip ../package
-	cp ../maccore/release/*updateinfo ../package
-	cp ../xamarin-macios/tests/*.zip ../package
+	cp $(MACCORE_PATH)/release/*.pkg ../package
+	cp $(MACCORE_PATH)/release/*.zip ../package
+	cp $(MACCORE_PATH)/release/*updateinfo ../package
+	cp $(TOP)/tests/*.zip ../package
 
 install-system: install-system-ios install-system-mac
 	@# Clean up some old files

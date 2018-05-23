@@ -184,7 +184,6 @@ package:
 	cp ../maccore/release/*.pkg ../package
 	cp ../maccore/release/*.zip ../package
 	cp ../maccore/release/*updateinfo ../package
-	cp ../maccore/tests/*.zip ../package
 	cp ../xamarin-macios/tests/*.zip ../package
 
 install-system: install-system-ios install-system-mac

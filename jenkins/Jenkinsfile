@@ -18,17 +18,15 @@ reportPrefix = null
 
 def abortExecutingBuilds ()
 {
-  def job_name = env.JOB_NAME.split ('/')[0]
-  def job_base_name = env.JOB_BASE_NAME
-
-  Jenkins.instance.getItem (job_name).getItem (job_base_name).getBuilds ().each
-  {
-    build ->
-        def exec = build.getExecutor ()
+    def job = Jenkins.instance.getItemByFullName (env.JOB_NAME)
+    for (build in job.builds) {
+        if (!build.isBuilding ())
+            continue
 
         if (build.number > currentBuild.number) {
             error ("There is already a newer build in progress (#${build.number})")
         } else if (build.number < currentBuild.number) {
+            def exec = build.getExecutor ()
             if (exec == null) {
                 echo ("No executor for build ${build.number}")
             } else {

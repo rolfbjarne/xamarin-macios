@@ -223,8 +223,7 @@ timestamps {
                             def metadata = "[\n"
                             for (int i = 0; i < uploadingFiles.length; i++) {
                                 def file = uploadingFiles [i]
-                                def f = new File (file)
-                                def f_length = f.length ()
+                                def f_length = file.length;
                                 def md5 = sh (returnStdout: true, script: "md5 -q '${file}'").trim ()
                                 manifest += "${packagePrefix}/${file}\n"
                                 metadata += "  {\n    \"file\": \"${file}\",\n    \"md5\": \"${md5}\",\n    \"size\": ${f_length}\n  \"}"

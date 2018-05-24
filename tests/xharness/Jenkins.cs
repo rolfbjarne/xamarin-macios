@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
 using Xamarin.Utils;
@@ -863,16 +864,16 @@ namespace xharness
 			throw new NotImplementedException ();
 		}
 
-		async Task ExecutePeriodicCommandAsync (Log periodic_loc)
+		async Task ExecutePeriodicCommandAsync (Log periodic_loc, CancellationToken cancellation_token)
 		{
 			//await Task.Delay (Harness.UploadInterval);
 			periodic_loc.WriteLine ($"Starting periodic task with interval {Harness.PeriodicCommandInterval.TotalMinutes} minutes.");
-			while (true) {
+			while (!cancellation_token.IsCancellationRequested) {
 				var watch = Stopwatch.StartNew ();
 				using (var process = new Process ()) {
 					process.StartInfo.FileName = Harness.PeriodicCommand;
 					process.StartInfo.Arguments = Harness.PeriodicCommandArguments;
-					var rv = await process.RunAsync (periodic_loc, null);
+					var rv = await process.RunAsync (periodic_loc, cancellation_token: cancellation_token, timeout: TimeSpan.FromMinutes (10));
 					if (!rv.Succeeded)
 						periodic_loc.WriteLine ($"Periodic command failed with exit code {rv.ExitCode} (Timed out: {rv.TimedOut})");
 				}
@@ -880,8 +881,9 @@ namespace xharness
 				if (ticksLeft < 0)
 					ticksLeft = Harness.PeriodicCommandInterval.Ticks;
 				var wait = TimeSpan.FromTicks (ticksLeft);
-				await Task.Delay (wait);
+				await Task.Delay (wait, cancellation_token).ContinueWith (_ => periodic_loc.WriteLine ("Periodic execution cancelled."), TaskContinuationOptions.OnlyOnCanceled);
 			}
+			periodic_loc.WriteLine ("Periodic execution completed.");
 		}
 
 		public int Run ()
@@ -906,10 +908,14 @@ namespace xharness
 						}
 					});
 				}
+
+				CancellationTokenSource periodic_cancellation = null; 
+				Task periodic_task = null;
 				if (!string.IsNullOrEmpty (Harness.PeriodicCommand)) {
+					periodic_cancellation = new CancellationTokenSource ();
 					var periodic_log = Logs.Create ("PeriodicCommand.log", "Periodic command log");
 					periodic_log.Timestamp = true;
-					Task.Run (async () => await ExecutePeriodicCommandAsync (periodic_log));
+					periodic_task = ExecutePeriodicCommandAsync (periodic_log, periodic_cancellation.Token);
 				}
 
 				Task.Run (async () =>
@@ -926,6 +932,14 @@ namespace xharness
 				}
 				Task.WaitAll (tasks.ToArray ());
 				GenerateReport ();
+
+				try {
+					periodic_cancellation?.Cancel ();
+					periodic_task?.Wait ();
+				} catch (AggregateException) {
+					// The above can throw a TaskCanceledException, which we'll just ignore.
+				}
+
 				return Tasks.Any ((v) => v.Failed || v.Skipped) ? 1 : 0;
 			} catch (Exception ex) {
 				MainLog.WriteLine ("Unexpected exception: {0}", ex);

@@ -39,22 +39,23 @@ export TESTS_PERIODIC_COMMAND
 export BUILD_REVISION=jenkins
 
 # Unlock
-if ! test -f ~/Library/Keychains/builder.keychain-db; then
-	echo "The 'builder' keychain is not available."
+KEYCHAIN=xamarin-macios
+if ! test -f ~/Library/Keychains/$KEYCHAIN.keychain-db; then
+	echo "The '$KEYCHAIN' keychain is not available."
 	exit 1
 fi
-security default-keychain -s builder.keychain
-security list-keychains -s builder.keychain
+security default-keychain -s $KEYCHAIN.keychain
+security list-keychains -s $KEYCHAIN.keychain
 echo "Unlock keychain"
-security unlock-keychain -p "$(cat ~/.config/keychain)"
+security unlock-keychain -p "$(cat ~/.config/$KEYCHAIN-keychain)"
 echo "Increase keychain unlock timeout"
 security set-keychain-settings -lut 7200
-security -v find-identity builder.keychain
+security -v find-identity $KEYCHAIN.keychain
 
 # Prevent dialogs from asking for permissions.
 # http://stackoverflow.com/a/40039594/183422
 # Discard output since there can be a *lot* of it.
-security set-key-partition-list -S apple-tool:,apple: -s -k "$(cat ~/.config/keychain)" builder.keychain >/dev/null 2>&1
+security set-key-partition-list -S apple-tool:,apple: -s -k "$(cat ~/.config/$KEYCHAIN-keychain)" $KEYCHAIN.keychain >/dev/null 2>&1
 
 # clean mono keypairs (used in tests)
 rm -rf ~/.config/.mono/keypairs/

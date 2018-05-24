@@ -225,13 +225,14 @@ timestamps {
                                 def file = uploadingFiles [i]
                                 def f_length = file.length;
                                 def md5 = sh (returnStdout: true, script: "md5 -q '${file}'").trim ()
-                                manifest += "${packagePrefix}/${file}\n"
-                                metadata += "  {\n    \"file\": \"${file}\",\n    \"md5\": \"${md5}\",\n    \"size\": ${f_length}\n  \"}"
+                                manifest += "${packagePrefix}/${file.name}\n"
+                                metadata += "  {\n    \"file\": \"${file.name}\",\n    \"md5\": \"${md5}\",\n    \"size\": ${f_length}\n  }"
                                 if (i < uploadingFiles.length - 1)
                                     metadata += ","
                                 metadata +="\n"
                             }
                             metadata += "]\n"
+                            manifest += "${packagePrefix}/manifest.json\n"
                             writeFile (file: "package/manifest", text: manifest)
                             writeFile (file: "package/metadata.json", text: metadata)
 

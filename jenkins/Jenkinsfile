@@ -143,7 +143,7 @@ def runXamarinMacTests (url, macOS)
 {
     echo ("URL: ${url}")
     sh ("env")
-    sh ("curl -L '$DOWNLOAD_URL' --output mac-test-package.zip")
+    sh ("curl -L '${url}' --output mac-test-package.zip")
     sh ("unzip mac-test-package.zip")
     sh ("cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake")
     sh ("make -C mac-test-package/tests exec-mac-dontlink")
@@ -151,7 +151,7 @@ def runXamarinMacTests (url, macOS)
 }
 
 timestamps {
-    node ('xamarin-macios && macos-high-sierra') {
+    node ('xamarin-macios && macos-10.13') {
         try {
             timeout (time: 9, unit: 'HOURS') {
                 // This runs into problems with the Jenkins sandbox:
@@ -333,17 +333,17 @@ timestamps {
                                     def lastOS = lastOSValue.split ("\\.")[1].toInteger ()
                                     for (os = firstOS; os < lastOS; os++) {
                                         def macOS = "${os}" // Need to bind the label variable before the closure
-                                        builders [macOS] = {
+                                        builders ["XM tests on 10.${macOS}"] = {
                                             node ("xamarin-macios && macos-10.${macOS}") {
-                                                stage ("Running XM tests on 10.'${macOS}'") {
-                                                    runXamarinMacTests (url, macOS)
+                                                stage ("Running XM tests on '10.${macOS}'") {
+                                                    runXamarinMacTests (url, "macOS 10.${macOS}")
                                                 }
                                             }
                                         }
                                     }
 
                                     // Add standard test run
-                                    builders ["Run tests"] = {
+                                    builders ["All tests"] = {
                                         stage ('Run tests') {
                                             currentStage = "Test run"
                                             echo ("Building on ${env.NODE_NAME}")

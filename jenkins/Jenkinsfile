@@ -323,18 +323,33 @@ timestamps {
                             // }
 
                             stage ('Package & run Xamarin.Mac tests') {
+                                currentStage = "${STAGE_NAME}"
                                 sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
                                 uploadFiles ("tests/*.zip", virtualPath)
                                 def url = "${packagePrefix}/mac-test-package.zip"
-                                parallel (
-                                    node ('xamarin-macios && macos-lion')          { stage ("Running XM tests on lion") { runXamarinMacTests (url, "lion"); }},
-                                    node ('xamarin-macios && macos-mountain-lion') { stage ("Running XM tests on mountain-lion") { runXamarinMacTests (url, "mountain-lion"); }},
-                                    node ('xamarin-macios && macos-mavericks')     { stage ("Running XM tests on mavericks") { runXamarinMacTests (url, "mavericks"); }},
-                                    node ('xamarin-macios && macos-yosemite')      { stage ("Running XM tests on yosemite") { runXamarinMacTests (url, "yosemite"); }},
-                                    node ('xamarin-macios && macos-elcapitan')     { stage ("Running XM tests on elcapitan") { runXamarinMacTests (url, "elcapitan"); }},
-                                    node ('xamarin-macios && macos-sierra')        { stage ("Running XM tests on sierra") { runXamarinMacTests (url, "sierra"); }},
-                                    node ('xamarin-macios && macos-high-sierra')   { stage ("Running XM tests on high-sierra") { runXamarinMacTests (url, "high-sierra"); }}
-                                )
+                                def macOSes = [
+                                    'lion',
+                                    'mountain-lion',
+                                    'mavericks',
+                                    'yosemite',
+                                    'elcapitan',
+                                    'sierra',
+                                    'high-sierra',
+                                ] // labels for Jenkins node types we will build on
+                                def builders = [:]
+                                for (x in macOSes) {
+                                    def macOS = x // Need to bind the label variable before the closure - can't do 'for (label in labels)'
+
+                                    builders [macOS] = {
+                                        node ("xamarin-macios && macos-${macOS}") {
+                                            stage ("Running XM tests on '${macOS}'") {
+                                                runXamarinMacTests (url, macOS)
+                                            }
+                                        }
+                                    }
+                                }
+                                parallel builders
+
                             }
                         } // dir ("xamarin-macios")
                     } // dir ("${workspace}")

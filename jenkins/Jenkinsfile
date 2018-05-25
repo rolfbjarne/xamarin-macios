@@ -143,6 +143,11 @@ def runXamarinMacTests (url, macOS)
 {
     echo ("URL: ${url}")
     sh ("env")
+    sh ("curl -L '$DOWNLOAD_URL' --output mac-test-package.zip")
+    sh ("unzip mac-test-package.zip")
+    sh ("cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake")
+    sh ("make -C mac-test-package/tests exec-mac-dontlink")
+    sh ("make -C mac-test-package/tests exec-mac-apitest")
 }
 
 timestamps {

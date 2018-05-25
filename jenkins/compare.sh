@@ -42,4 +42,19 @@ cp -R tools/comparison/generator-diff jenkins-results/generator-diff
 URL_PREFIX=$(./jenkins/publish-results.sh | grep "^Url Prefix: " | sed 's/^Url Prefix: //')
 
 printf "✅ [API Diff (from PR only)](%s/apicomparison/index.html)\\n" "$URL_PREFIX" >> "$WORKSPACE/jenkins/pr-comments.md"
-printf "✅ [Generator Diff](%s/generator-diff/index.html)\\n" "$URL_PREFIX" >> "$WORKSPACE/jenkins/pr-comments.md"
+if ! grep "href=" jenkins-results/apicomparison/api-diff.html >/dev/null 2>&1; then
+	printf " (no change)" >> "$WORKSPACE/jenkins/pr-comments.md"
+elif grep "</script>" jenkins-results/apicomparison/*.html | grep data-is-breaking; then
+	printf " (🔥 breaking changes 🔥)" >> "$WORKSPACE/jenkins/pr-comments.md"
+else
+	printf " (please review changes)" >> "$WORKSPACE/jenkins/pr-comments.md"
+fi
+printf "\\n" >> "$WORKSPACE/jenkins/pr-comments.md"
+
+printf "✅ [Generator Diff](%s/generator-diff/index.html)" "$URL_PREFIX" >> "$WORKSPACE/jenkins/pr-comments.md"
+if grep "^[+-][^+-]" jenkins-results/generator-diff/generator.diff | grep -v "^.[[]assembly: AssemblyInformationalVersion" | grep -v "^[+-][[:space:]]*internal const string Revision =" >dev/null 2>&1; then
+	printf " (please review changes)" >> "$WORKSPACE/jenkins/pr-comments.md"
+else
+	printf " (only version changes)" >> "$WORKSPACE/jenkins/pr-comments.md"
+fi
+printf "\\n" >> "$WORKSPACE/jenkins/pr-comments.md"

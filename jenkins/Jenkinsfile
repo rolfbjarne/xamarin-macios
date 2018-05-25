@@ -141,10 +141,8 @@ def uploadFiles (glob, virtualPath)
 
 def runXamarinMacTests (url, macOS)
 {
-    step ("Running Xamarin.Mac tests on ${macOS}") {
-        echo ("URL: ${url}")
-        sh ("env")
-    }
+    echo ("URL: ${url}")
+    sh ("env")
 }
 
 timestamps {
@@ -329,13 +327,13 @@ timestamps {
                                 uploadFiles ("tests/*.zip", virtualPath)
                                 def url = "${packagePrefix}/mac-test-package.zip"
                                 parallel (
-                                    node ('xamarin-macios && macos-lion')          { runXamarinMacTests (url, "lion"); },
-                                    node ('xamarin-macios && macos-mountain-lion') { runXamarinMacTests (url, "mountain-lion"); },
-                                    node ('xamarin-macios && macos-mavericks')     { runXamarinMacTests (url, "mavericks"); },
-                                    node ('xamarin-macios && macos-yosemite')      { runXamarinMacTests (url, "yosemite"); },
-                                    node ('xamarin-macios && macos-elcapitan')     { runXamarinMacTests (url, "elcapitan"); },
-                                    node ('xamarin-macios && macos-sierra')        { runXamarinMacTests (url, "sierra"); },
-                                    node ('xamarin-macios && macos-high-sierra')   { runXamarinMacTests (url, "high-sierra"); }
+                                    node ('xamarin-macios && macos-lion')          { stage ("Running XM tests on lion") { runXamarinMacTests (url, "lion"); }},
+                                    node ('xamarin-macios && macos-mountain-lion') { stage ("Running XM tests on mountain-lion") { runXamarinMacTests (url, "mountain-lion"); }},
+                                    node ('xamarin-macios && macos-mavericks')     { stage ("Running XM tests on mavericks") { runXamarinMacTests (url, "mavericks"); }},
+                                    node ('xamarin-macios && macos-yosemite')      { stage ("Running XM tests on yosemite") { runXamarinMacTests (url, "yosemite"); }},
+                                    node ('xamarin-macios && macos-elcapitan')     { stage ("Running XM tests on elcapitan") { runXamarinMacTests (url, "elcapitan"); }},
+                                    node ('xamarin-macios && macos-sierra')        { stage ("Running XM tests on sierra") { runXamarinMacTests (url, "sierra"); }},
+                                    node ('xamarin-macios && macos-high-sierra')   { stage ("Running XM tests on high-sierra") { runXamarinMacTests (url, "high-sierra"); }}
                                 )
                             }
                         } // dir ("xamarin-macios")

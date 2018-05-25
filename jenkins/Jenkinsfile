@@ -277,10 +277,10 @@ timestamps {
                             //     }
                             // }
 
-                            // stage ('Install Provisioning Profiles') {
-                            //     currentStage = "${STAGE_NAME}"
-                            //     sh ("${workspace}/maccore/tools/install-qa-provisioning-profiles.sh")
-                            // }
+                            stage ('Install Provisioning Profiles') {
+                                currentStage = "${STAGE_NAME}"
+                                sh ("${workspace}/maccore/tools/install-qa-provisioning-profiles.sh")
+                            }
 
                             // stage ('Publish reports') {
                             //     currentStage = "${STAGE_NAME}"
@@ -308,34 +308,20 @@ timestamps {
                             //     echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                             // }
 
-                            // timeout (time: 6, unit: 'HOURS') {
-                            //     stage ('Run tests') {
-                            //         currentStage = "Test run"
-                            //         echo ("Building on ${env.NODE_NAME}")
-                            //         if (isPr) {
-                            //             echo "Not running tests here because they're run on public Jenkins."
-                            //         } else {
-                            //             echo ("Html report: ${reportPrefix}/tests/index.html")
-                            //             sh ("${workspace}/xamarin-macios/jenkins/run-tests.sh --target=wrench-jenkins")
-                            //         }
-                            //     }
+                            stage ("Package XM tests") {
+                                currentStage = "${STAGE_NAME}"
+                                sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
+                                uploadFiles ("tests/*.zip", virtualPath)
+                            }
 
-                            //     stage ('Test docs') {
-                            //         currentStage = "${STAGE_NAME}"
-                            //         echo ("Building on ${env.NODE_NAME}")
-                            //         sh ("make -C ${workspace}/xamarin-macios/tests wrench-docs")
-                            //     }
-                            // }
+                            timeout (time: 6, unit: 'HOURS') {
+                                stage ('Run tests parallelized') {
+                                    def builders = [:]
 
-                            timeout (time: 3, unit: 'HOURS') {
-                                stage ('Package & run Xamarin.Mac tests') {
-                                    currentStage = "${STAGE_NAME}"
-                                    sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
-                                    uploadFiles ("tests/*.zip", virtualPath)
+                                    // Add test runs on older macOS versions
                                     def url = "${packagePrefix}/mac-test-package.zip"
                                     def firstOS = sh (returnStdout: true, script: "grep ^MIN_OSX_SDK_VERSION= Make.config | sed 's/.*=//'").trim ().split (".")[1].toInteger ()
                                     def lastOS = sh (returnStdout: true, script: "grep ^OSX_SDK_VERSION= Make.config | sed 's/.*=//'").trim ().split (".")[1].toInteger ()
-                                    def builders = [:]
                                     for (os = firstOS; os < lastOS; os++) {
                                         def macOS = "${os}" // Need to bind the label variable before the closure
                                         builders [macOS] = {
@@ -346,6 +332,27 @@ timestamps {
                                             }
                                         }
                                     }
+
+                                    // Add standard test run
+                                    builders ["Run tests"] = {
+                                        stage ('Run tests') {
+                                            currentStage = "Test run"
+                                            echo ("Building on ${env.NODE_NAME}")
+                                            if (isPr) {
+                                                echo "Not running tests here because they're run on public Jenkins."
+                                            } else {
+                                                echo ("Html report: ${reportPrefix}/tests/index.html")
+                                                sh ("${workspace}/xamarin-macios/jenkins/run-tests.sh --target=wrench-jenkins")
+                                            }
+                                        }
+                                        stage ('Test docs') {
+                                            currentStage = "${STAGE_NAME}"
+                                            echo ("Building on ${env.NODE_NAME}")
+                                            sh ("make -C ${workspace}/xamarin-macios/tests wrench-docs")
+                                        }
+                                    }
+
+                                    // Run it all parallelized
                                     parallel builders
                                 }
                             }

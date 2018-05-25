@@ -327,34 +327,35 @@ timestamps {
                             //     }
                             // }
 
-                            stage ('Package & run Xamarin.Mac tests') {
-                                currentStage = "${STAGE_NAME}"
-                                sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
-                                uploadFiles ("tests/*.zip", virtualPath)
-                                def url = "${packagePrefix}/mac-test-package.zip"
-                                def macOSes = [
-                                    'lion',
-                                    'mountain-lion',
-                                    'mavericks',
-                                    'yosemite',
-                                    'elcapitan',
-                                    'sierra',
-                                    'high-sierra',
-                                ] // labels for Jenkins node types we will build on
-                                def builders = [:]
-                                for (x in macOSes) {
-                                    def macOS = x // Need to bind the label variable before the closure - can't do 'for (label in labels)'
+                            timeout (time: 3, unit: 'HOURS') {
+                                stage ('Package & run Xamarin.Mac tests') {
+                                    currentStage = "${STAGE_NAME}"
+                                    sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
+                                    uploadFiles ("tests/*.zip", virtualPath)
+                                    def url = "${packagePrefix}/mac-test-package.zip"
+                                    def macOSes = [
+                                        'lion',
+                                        'mountain-lion',
+                                        'mavericks',
+                                        'yosemite',
+                                        'elcapitan',
+                                        'sierra',
+                                        'high-sierra',
+                                    ] // labels for Jenkins node types we will build on
+                                    def builders = [:]
+                                    for (x in macOSes) {
+                                        def macOS = x // Need to bind the label variable before the closure - can't do 'for (label in labels)'
 
-                                    builders [macOS] = {
-                                        node ("xamarin-macios && macos-${macOS}") {
-                                            stage ("Running XM tests on '${macOS}'") {
-                                                runXamarinMacTests (url, macOS)
+                                        builders [macOS] = {
+                                            node ("xamarin-macios && macos-${macOS}") {
+                                                stage ("Running XM tests on '${macOS}'") {
+                                                    runXamarinMacTests (url, macOS)
+                                                }
                                             }
                                         }
                                     }
+                                    parallel builders
                                 }
-                                parallel builders
-
                             }
                         } // dir ("xamarin-macios")
                     } // dir ("${workspace}")

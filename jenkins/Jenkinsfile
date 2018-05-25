@@ -333,22 +333,14 @@ timestamps {
                                     sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
                                     uploadFiles ("tests/*.zip", virtualPath)
                                     def url = "${packagePrefix}/mac-test-package.zip"
-                                    def macOSes = [
-                                        'lion',
-                                        'mountain-lion',
-                                        'mavericks',
-                                        'yosemite',
-                                        'elcapitan',
-                                        'sierra',
-                                        'high-sierra',
-                                    ] // labels for Jenkins node types we will build on
+                                    def firstOS = sh (returnStdout: true, script: "grep ^MIN_OSX_SDK_VERSION= Make.config | sed 's/.*=//'").trim ().split (".")[1].toInteger ()
+                                    def lastOS = sh (returnStdout: true, script: "grep ^OSX_SDK_VERSION= Make.config | sed 's/.*=//'").trim ().split (".")[1].toInteger ()
                                     def builders = [:]
-                                    for (x in macOSes) {
-                                        def macOS = x // Need to bind the label variable before the closure - can't do 'for (label in labels)'
-
+                                    for (os = firstOS; os < lastOS; os++) {
+                                        def macOS = "${os}" // Need to bind the label variable before the closure
                                         builders [macOS] = {
-                                            node ("xamarin-macios && macos-${macOS}") {
-                                                stage ("Running XM tests on '${macOS}'") {
+                                            node ("xamarin-macios && macos-10.${macOS}") {
+                                                stage ("Running XM tests on 10.'${macOS}'") {
                                                     runXamarinMacTests (url, macOS)
                                                 }
                                             }

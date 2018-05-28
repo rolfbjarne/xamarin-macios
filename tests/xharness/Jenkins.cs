@@ -894,6 +894,11 @@ namespace xharness
 				Harness.HarnessLog = MainLog = log;
 				Harness.HarnessLog.Timestamp = true;
 
+				AppDomain.CurrentDomain.UnhandledException += ((sender, args) => {
+					Console.WriteLine ("Unexpected exception in appdomain: {0}", args.ExceptionObject);
+					MainLog.WriteLine ("Unexpected exception in appdomain: {0}", args.ExceptionObject);
+				});
+
 				var tasks = new List<Task> ();
 				if (IsServerMode)
 					tasks.Add (RunTestServer ());

@@ -2,8 +2,8 @@
 
 // global variables
 repository = "xamarin/xamarin-macios"
-isPr = (env.ghprbPullId && !env.ghprbPullId.empty ? true : false)
-branchName = (isPr ? ("pr" + env.ghprbPullId) : env.BRANCH_NAME)
+isPr = false
+branchName = null
 gitHash = null
 packagePrefix = null
 virtualPath = null
@@ -177,7 +177,18 @@ timestamps {
                                 currentStage = "${STAGE_NAME}"
                                 echo ("Building on ${env.NODE_NAME}")
                                 scmVars = checkout scm
-                                gitHash = (isPr ? (env.ghprbActualCommit) : scmVars.GIT_COMMIT)
+                                isPr = (env.CHANGE_ID && !env.CHANGE_ID.empty ? true : false)
+                                branchName = env.BRANCH_NAME
+                                if (isPr) {
+                                    gitHash = sh (script: "git log -1 --pretty=%H refs/remotes/origin/${env.BRANCH_NAME}", returnStdout: true).trim ()
+                                } else {
+                                    gitHash = scmVars.GIT_COMMIT
+                                }
+                                // Make sure we start from scratch
+                                sh (script: 'make git-clean-all', returnStatus: true /* don't throw exceptions if something goes wrong */)
+                                // Make really, really sure
+                                sh ('git clean -xffd')
+                                sh ('git submodule foreach --recursive git clean -xffd')
                             }
                         }
 

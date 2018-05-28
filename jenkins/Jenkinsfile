@@ -291,22 +291,22 @@ timestamps {
                                 echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                             }
 
-                            // stage ('API diff') {
-                            //     currentStage = "${STAGE_NAME}"
-                            //     def apidiffResult = sh (script: "${workspace}/xamarin-macios/jenkins/build-api-diff.sh", returnStatus: true)
-                            //     if (apidiffResult != 0)
-                            //         manager.addWarningBadge ("Failed to generate API diff")
-                            //     echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
-                            // }
+                            stage ('API diff') {
+                                currentStage = "${STAGE_NAME}"
+                                def apidiffResult = sh (script: "${workspace}/xamarin-macios/jenkins/build-api-diff.sh", returnStatus: true)
+                                if (apidiffResult != 0)
+                                    manager.addWarningBadge ("Failed to generate API diff")
+                                echo ("API diff (from stable): ${reportPrefix}/api-diff/index.html")
+                            }
 
-                            // stage ('API & Generator comparison') {
-                            //     currentStage = "${STAGE_NAME}"
-                            //     def compareResult = sh (script: "${workspace}/xamarin-macios/jenkins/compare.sh", returnStatus: true)
-                            //     if (compareResult != 0)
-                            //         manager.addWarningBadge ("Failed to generate API / Generator diff")
-                            //     echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
-                            //     echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
-                            // }
+                            stage ('API & Generator comparison') {
+                                currentStage = "${STAGE_NAME}"
+                                def compareResult = sh (script: "${workspace}/xamarin-macios/jenkins/compare.sh", returnStatus: true)
+                                if (compareResult != 0)
+                                    manager.addWarningBadge ("Failed to generate API / Generator diff")
+                                echo ("API diff (from previous commit / before pull request): ${reportPrefix}/apicomparison/api-diff.html")
+                                echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
+                            }
 
                             stage ("Package XM tests") {
                                 currentStage = "${STAGE_NAME}"

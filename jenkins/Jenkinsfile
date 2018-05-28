@@ -345,8 +345,7 @@ timestamps {
                                                 echo "Not running tests here because they're run on public Jenkins."
                                             } else {
                                                 echo ("Html report: ${reportPrefix}/tests/index.html")
-                                                sh ("echo RUNNING TESTS")
-                                                // sh ("${workspace}/xamarin-macios/jenkins/run-tests.sh --target=wrench-jenkins")
+                                                sh ("${workspace}/xamarin-macios/jenkins/run-tests.sh --target=wrench-jenkins")
                                             }
                                         }
                                         stage ('Test docs') {

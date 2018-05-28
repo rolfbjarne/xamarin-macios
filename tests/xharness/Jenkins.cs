@@ -2069,7 +2069,7 @@ namespace xharness
 
 		public string FailureMessage {
 			get { return LastRun.FailureMessage; }
-			protected set {
+			set {
 				LastRun.FailureMessage = value;
 				MainLog.WriteLine (LastRun.FailureMessage);
 			}
@@ -2236,12 +2236,17 @@ namespace xharness
 					FailureMessage = $"Harness exception for '{TestName}': {e}";
 					log.WriteLine (FailureMessage);
 				}
+				PropagateResults ();
 			} finally {
 				LastRun.Logs?.Dispose ();
 				LastRun.StopWatch ();
 			}
 
 			Jenkins.GenerateReport (true);
+		}
+
+		protected virtual void PropagateResults ()
+		{
 		}
 
 		public virtual void Reset ()
@@ -3420,6 +3425,14 @@ namespace xharness
 			
 			foreach (var dev in devices)
 				await dev.PrepareSimulatorAsync (Jenkins.MainLog, executingTasks.Select ((v) => v.BundleIdentifier).ToArray ());
+		}
+
+		protected override void PropagateResults ()
+		{
+			foreach (var task in Tasks) {
+				task.ExecutionResult = ExecutionResult;
+				task.FailureMessage = FailureMessage;
+			}
 		}
 
 		protected override async Task ExecuteAsync ()

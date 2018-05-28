@@ -2203,7 +2203,7 @@ function toggleAll (show)
 		string failure_message;
 		public string FailureMessage {
 			get { return failure_message; }
-			protected set {
+			set {
 				failure_message = value;
 				MainLog.WriteLine (failure_message);
 			}
@@ -2358,12 +2358,17 @@ function toggleAll (show)
 					FailureMessage = $"Harness exception for '{TestName}': {e}";
 					log.WriteLine (FailureMessage);
 				}
+				PropagateResults ();
 			} finally {
 				logs?.Dispose ();
 				duration.Stop ();
 			}
 
 			Jenkins.GenerateReport (true);
+		}
+
+		protected virtual void PropagateResults ()
+		{
 		}
 
 		public virtual void Reset ()
@@ -3518,6 +3523,14 @@ function toggleAll (show)
 		public AggregatedRunSimulatorTask (IEnumerable<RunSimulatorTask> tasks)
 		{
 			this.Tasks = tasks;
+		}
+
+		protected override void PropagateResults ()
+		{
+			foreach (var task in Tasks) {
+				task.ExecutionResult = ExecutionResult;
+				task.FailureMessage = FailureMessage;
+			}
 		}
 
 		protected override async Task ExecuteAsync ()

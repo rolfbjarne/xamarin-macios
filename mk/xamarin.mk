@@ -1,9 +1,9 @@
 ifdef ENABLE_XAMARIN
-NEEDED_MACCORE_VERSION := 016bd7f5117603f1d3962d9ad95375a63e10062d
-NEEDED_MACCORE_BRANCH := jenkinsfile
+NEEDED_MACCORE_VERSION := 33a46996aa7e76c0944700f08b8254712bcb06aa
+NEEDED_MACCORE_BRANCH := master
 
 MACCORE_DIRECTORY := maccore
-MACCORE_MODULE    := git@github.com:rolfbjarne/maccore.git
+MACCORE_MODULE    := git@github.com:xamarin/maccore.git
 MACCORE_VERSION   := $(shell cd $(MACCORE_PATH) 2> /dev/null && git rev-parse HEAD 2> /dev/null)
 MACCORE_BRANCH    := $(shell cd $(MACCORE_PATH) 2> /dev/null && git symbolic-ref --short HEAD 2> /dev/null)
 

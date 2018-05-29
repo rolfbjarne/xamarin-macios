@@ -1751,8 +1751,14 @@ namespace xharness
 					IEnumerable<IDevice> candidates = (runTest as RunDeviceTask)?.Candidates;
 					if (candidates == null)
 						candidates = (runTest as RunSimulatorTask)?.Candidates;
-					if (candidates != null)
-						writer.WriteLine ($"Candidate devices: {string.Join (", ", candidates.Select ((v) => v.Name))} <br />");
+					if (candidates != null) {
+						var simulatorEnumerable = candidates as IAsyncEnumerable;
+						if (simulatorEnumerable?.ReadyTask.IsCompleted == false) {
+							writer.WriteLine ($"Candidate devices: <loading> <br />");
+						} else {
+							writer.WriteLine ($"Candidate devices: {string.Join (", ", candidates.Select ((v) => v.Name))} <br />");
+						}
+					}
 					writer.WriteLine ($"Build duration: {buildRun.Duration} <br />");
 				}
 				if (test.Duration.Ticks > 0)

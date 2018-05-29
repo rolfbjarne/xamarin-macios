@@ -3474,7 +3474,7 @@ namespace xharness
 						task.AcquiredResource = desktop;
 						try {
 							await task.RunAsync ();
-							if (!task.Succeeded && !task.Runner.TestsLaunched && task.Platform == TestPlatform.watchOS && last_re_executed_task != task) {
+							if (!task.Succeeded && !task.Skipped && !task.Runner.TestsLaunched && task.Platform == TestPlatform.watchOS && last_re_executed_task != task) {
 								// watchOS test run where the tests didn't launch. Try again
 								last_re_executed_task = task;
 								task.Reset ();

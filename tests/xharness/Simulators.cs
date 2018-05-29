@@ -166,7 +166,7 @@ namespace xharness
 					unPairedDevices = await FindOrCreateDevicesAsync (log, pairedDevice.SimRuntime, pairedDevice.SimDeviceType, force: true);
 					if (unPairedDevices?.Any () != true)
 						return null;
-					device = unPairedDevices.First ();
+					device = unPairedDevices.Where ((v) => !AvailableDevicePairs.Any ((SimDevicePair p) => { return p.Gizmo == v.UDID; })).First ();
 				}
 				var companion_device = companion_devices.First ();
 				log.WriteLine ($"Creating device pair for '{device.Name}' and '{companion_device.Name}'");

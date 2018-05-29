@@ -18,15 +18,15 @@ namespace xharness
 
 		public Harness Harness;
 		public bool IncludeAll;
-		public bool IncludeClassicMac = true;
+		public bool IncludeClassicMac = false;
 		public bool IncludeBcl;
-		public bool IncludeMac = true;
+		public bool IncludeMac = false;
 		public bool IncludeiOS = true;
 		public bool IncludeiOSExtensions;
 		public bool IncludetvOS = true;
 		public bool IncludewatchOS = true;
 		public bool IncludeMmpTest;
-		public bool IncludeiOSMSBuild = true;
+		public bool IncludeiOSMSBuild = false;
 		public bool IncludeMtouch;
 		public bool IncludeBtouch;
 		public bool IncludeMacBindingProject;

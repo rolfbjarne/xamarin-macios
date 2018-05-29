@@ -16,6 +16,8 @@ namespace xharness
 		public Harness Harness;
 
 		bool loaded;
+		bool load_failure;
+
 		SemaphoreSlim semaphore = new SemaphoreSlim (1);
 
 		BlockingEnumerableCollection<SimRuntime> supported_runtimes = new BlockingEnumerableCollection<SimRuntime> ();
@@ -52,8 +54,11 @@ namespace xharness
 						process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listsim {1}", Harness.XcodeRoot, tmpfile);
 						log.WriteLine ("Launching {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
 						var rv = await process.RunAsync (log, false, timeout: TimeSpan.FromSeconds (30));
-						if (!rv.Succeeded)
-							throw new Exception ("Failed to list simulators.");
+						if (!rv.Succeeded) {
+							load_failure = true;
+							log.WriteLine ("Failed to load simulators.");
+							return;
+						}
 						log.WriteLine ("Result:");
 						log.WriteLine (File.ReadAllText (tmpfile));
 						var simulator_data = new XmlDocument ();
@@ -122,6 +127,9 @@ namespace xharness
 
 		public async Task<SimDevice []> FindAsync (AppRunnerTarget target, Log log, bool create_if_needed = true)
 		{
+			if (load_failure)
+				return null;
+
 			SimDevice [] simulators = null;
 
 			string [] simulator_devicetypes;
@@ -566,8 +574,11 @@ namespace xharness
 						process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listdev={1} {2} --output-format=xml", Harness.XcodeRoot, tmpfile, extra_data ? "--list-extra-data" : string.Empty);
 						log.WriteLine ("Launching {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
 						var rv = await process.RunAsync (log, false, timeout: TimeSpan.FromSeconds (120));
-						if (!rv.Succeeded)
-							throw new Exception ("Failed to list devices.");
+						if (!rv.Succeeded) {
+							log.WriteLine ("Failed to list devices.");
+							load_failure = true;
+							return;
+						}
 						log.WriteLine ("Result:");
 						log.WriteLine (File.ReadAllText (tmpfile));
 

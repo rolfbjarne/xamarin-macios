@@ -933,7 +933,11 @@ namespace xharness
 				GenerateReport ();
 
 				periodic_cancellation.Cancel ();
-				periodic_task.Wait ();
+				try {
+					periodic_task.Wait ();
+				} catch (AggregateException) {
+					// The above can throw a TaskCanceledException, which we'll just ignore.
+				}
 
 				return Tasks.Any ((v) => v.Failed || v.Skipped) ? 1 : 0;
 			} catch (Exception ex) {

@@ -69,6 +69,10 @@ def githubGetPullRequestLabels ()
         github_pull_request_labels = []
         if (isPr) {
             def pinfo = githubGetPullRequestInfo ()
+            echo ("Got: ${pinfo.getClass ()}")
+            pinfo.each { prop, val ->
+                echo ("p: ${prop} val: ${val}")
+            }
             if (pinfo.labels != null) {
                 for (int i = 0; i < pinfo.labels.size (); i++) {
                     labels.add (pinfo.labels [i].name.getString ())

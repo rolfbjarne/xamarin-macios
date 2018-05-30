@@ -75,11 +75,11 @@ def githubGetPullRequestLabels ()
             }
             def labels = pinfo ["labels"]
             if (labels != null) {
-                echo ("Found ${labels.size} labels in github PR info: ${labels}")
+                echo ("Found ${labels.size ()} labels in github PR info: ${labels}")
                 for (int i = 0; i < labels.size (); i++) {
                     def label = labels [i]
                     echo ("Label #${i + 1}: ${label}")
-                    labels.add (label ["name"].toString ())
+                    // labels.add (label ["name"].toString ())
                 }
             }
             echo ("Found labels ${github_pull_request_labels} for the pull request.")

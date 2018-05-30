@@ -102,7 +102,7 @@ def commentOnCommit (commitHash, markdown)
 
 def commentOnPullRequest (pullRequest, markdown)
 {
-    githubAddComment ("https://api.github.com/repos/${repository}/pulls/${pullRequest}/comments", markdown)
+    githubAddComment ("https://api.github.com/repos/${repository}/issues/${pullRequest}/comments", markdown)
 }
 
 def addComment (markdown)

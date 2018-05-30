@@ -16,6 +16,7 @@ currentStage = null
 xiPackageFilename = null
 xmPackageFilename = null
 reportPrefix = null
+createFinalStatus = true
 
 def abortExecutingBuilds ()
 {
@@ -71,10 +72,8 @@ def githubGetPullRequestLabels ()
             def pinfo = githubGetPullRequestInfo ()
             def labels = pinfo ["labels"]
             if (labels != null) {
-                echo ("Found ${labels.size ()} labels in github PR info: ${labels}")
                 for (int i = 0; i < labels.size (); i++) {
                     def label = labels [i]
-                    echo ("Label #${i + 1} ${label.getClass ()}: ${label}")
                     github_pull_request_labels.add (label ["name"])
                 }
             }
@@ -120,6 +119,9 @@ def addComment (markdown)
 
 def reportFinalStatus (err, gitHash, currentStage)
 {
+    if (!createFinalStatus)
+        return
+
     def commentFile = "${workspace}/xamarin-macios/jenkins/pr-comments.md"
     def comment = null
     def status = currentBuild.currentResult
@@ -236,6 +238,7 @@ timestamps {
                     if (isPr) {
                         if (!githubGetPullRequestLabels ().contains ("build-package")) {
                             // don't add a comment to the pull request, since the public jenkins will also add comments, which ends up being too much.
+                            createFinalStatus = false
                             echo ("Build skipped because the pull request doesn't have the label 'build-package'.")
                             return
                         }

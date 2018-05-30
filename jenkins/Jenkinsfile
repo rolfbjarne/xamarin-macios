@@ -75,7 +75,7 @@ def githubGetPullRequestLabels ()
                 for (int i = 0; i < labels.size (); i++) {
                     def label = labels [i]
                     echo ("Label #${i + 1} ${label.getClass ()}: ${label}")
-                    labels.add (label ["name"])
+                    github_pull_request_labels.add (label ["name"])
                 }
             }
             echo ("Found labels ${github_pull_request_labels} for the pull request.")

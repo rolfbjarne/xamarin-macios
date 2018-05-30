@@ -73,9 +73,10 @@ def githubGetPullRequestLabels ()
             pinfo.each { prop, val ->
                 echo ("p: ${prop} val: ${val}")
             }
-            if (pinfo.labels != null) {
-                for (int i = 0; i < pinfo.labels.size (); i++) {
-                    labels.add (pinfo.labels [i].name.getString ())
+            def labels = pinfo.labels ()
+            if (labels != null) {
+                for (int i = 0; i < labels.size (); i++) {
+                    labels.add (labels [i].name.getString ())
                 }
             }
             echo ("Found labels ${github_pull_request_labels} for the pull request.")

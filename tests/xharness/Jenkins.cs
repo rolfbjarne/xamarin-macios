@@ -906,11 +906,13 @@ namespace xharness
 					if (!rv.Succeeded)
 						periodic_loc.WriteLine ($"Periodic command failed with exit code {rv.ExitCode} (Timed out: {rv.TimedOut})");
 				}
-				var ticksLeft = watch.ElapsedTicks - Harness.PeriodicCommandInterval.Ticks;
+				var ticksLeft = Harness.PeriodicCommandInterval.Ticks - watch.ElapsedTicks;
 				if (ticksLeft < 0)
 					ticksLeft = Harness.PeriodicCommandInterval.Ticks;
 				var wait = TimeSpan.FromTicks (ticksLeft);
-				await Task.Delay (wait, cancellation_token).ContinueWith (_ => periodic_loc.WriteLine ("Periodic execution cancelled."), TaskContinuationOptions.OnlyOnCanceled);
+				await Task.Delay (wait, cancellation_token)
+						  .ContinueWith (_ => periodic_loc.WriteLine ("Periodic execution cancelled."), TaskContinuationOptions.OnlyOnCanceled)
+				          .ContinueWith (_ => { /* I wish I new why this was needed, but the wait will never return complete otherwise (unless cancelled) */ });
 			}
 			periodic_loc.WriteLine ("Periodic execution completed.");
 		}

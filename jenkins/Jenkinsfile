@@ -431,7 +431,7 @@ timestamps {
                                                 }
                                             } catch (err) {
                                                 currentStage = "Running XM tests on '10.${macOS}'"
-                                                throw
+                                                throw err
                                             }
                                         }
                                     }

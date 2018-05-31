@@ -15,6 +15,7 @@ currentStage = null
 
 xiPackageFilename = null
 xmPackageFilename = null
+manifestFilename = null
 reportPrefix = null
 createFinalStatus = true
 
@@ -302,12 +303,21 @@ timestamps {
                                 metadata +="\n"
                             }
                             metadata += "]\n"
-                            manifest += "${packagePrefix}/manifest.json\n"
+                            manifest += "${packagePrefix}/metadata.json\n"
+                            manifest += "${packagePrefix}/manifest\n"
                             writeFile (file: "package/manifest", text: manifest)
                             writeFile (file: "package/metadata.json", text: metadata)
 
                             sh ("ls -la package")
                             uploadFiles ("package/*", virtualPath)
+
+                            // Also upload manifest to a predictable url (without the build number)
+                            // This manifest will be overwritten in subsequent builds (for this [PR/branch]+hash combination)
+                            uploadFiles ("package/manifest", "jenkins/${branchName}/${gitHash}")
+                            // And also create a 'latest' version (which really means 'latest built', not 'latest hash', but it will hopefully be good enough)
+                            uploadFiles ("package/manifest", "jenkins/${branchName}/latest")
+
+                            manifestFilename = "manifest"
                         }
 
                         stage ('Publish builds to GitHub') {
@@ -320,6 +330,10 @@ timestamps {
                             if (xmPackageFilename != null) {
                                 xmPackageUrl = "${packagePrefix}/${xmPackageFilename}"
                                 utils.reportGitHubStatus (gitHash, 'jenkins-PKG-Xamarin.Mac', "${xmPackageUrl}", 'SUCCESS', "${xmPackageFilename}")
+                            }
+                            if (manifestFilename != null) {
+                                def manifestUrl = "${packagePrefix}/${manifestFilename}"
+                                utils.reportGitHubStatus (gitHash, '${manifestFilename}', "${manifestUrl}", 'SUCCESS', "${manifestFilename}")
                             }
                         }
 

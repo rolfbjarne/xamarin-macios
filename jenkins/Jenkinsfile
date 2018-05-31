@@ -372,7 +372,7 @@ timestamps {
                             stage ('Publish reports') {
                                 currentStage = "${STAGE_NAME}"
                                 reportPrefix = sh (script: "${workspace}/xamarin-macios/jenkins/publish-results.sh | grep '^Url Prefix: ' | sed 's/^Url Prefix: //'", returnStdout: true).trim ()
-                                if (skipLocalTestRunReason != "") {
+                                if (skipLocalTestRunReason == "") {
                                     echo ("Html report: ${reportPrefix}/tests/index.html")
                                 } else {
                                     echo ("Html report: ${skipLocalTestRunReason}")

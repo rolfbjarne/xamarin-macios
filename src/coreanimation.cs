@@ -1723,6 +1723,7 @@ namespace CoreAnimation {
 		NSString RenderAdditive { get; }			
 	}
 
+	// Looks like this class was removed from the headers in iOS 11, needs investigation.
 	[iOS (7,0), Mac (10, 9)]
 	[BaseType (typeof (NSObject))]
 	interface CAEmitterBehavior : NSSecureCoding {

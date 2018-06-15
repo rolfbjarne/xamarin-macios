@@ -11,6 +11,7 @@ using Contacts;
 #endif
 #if MONOMAC
 using AppKit;
+using EventKit;
 #else
 #if !__TVOS__ && !__WATCHOS__
 using AddressBook;
@@ -89,9 +90,9 @@ partial class TestRuntime
 		return new Version (major, minor, build);
 	}
 
-	public static void AssertXcodeVersion (int major, int minor)
+	public static void AssertXcodeVersion (int major, int minor, int build = 0)
 	{
-		if (CheckXcodeVersion (major, minor))
+		if (CheckXcodeVersion (major, minor, build))
 			return;
 
 		NUnit.Framework.Assert.Ignore ("Requires the platform version shipped with Xcode {0}.{1}", major, minor);
@@ -378,6 +379,8 @@ partial class TestRuntime
 		case 4:
 #if __IOS__
 			switch (minor) {
+			case 1:
+				return true; // iOS 4.3.2
 			case 5:
 				return CheckiOSSystemVersion (6, 0);
 			case 6:
@@ -389,6 +392,8 @@ partial class TestRuntime
 			return true;
 #elif MONOMAC
 			switch (minor) {
+			case 1:
+				return CheckMacSystemVersion (10, 7, 0);
 			case 5:
 			case 6:
 				return CheckMacSystemVersion (10, 8, 0);
@@ -418,6 +423,12 @@ partial class TestRuntime
 #endif
 	}
 
+	public static void AssertiOSSystemVersion (int major, int minor, bool throwIfOtherPlatform = true)
+	{
+		if (!CheckiOSSystemVersion (major, minor, throwIfOtherPlatform))
+			NUnit.Framework.Assert.Ignore ($"This test requires iOS {major}.{minor}");
+	}
+
 	public static bool CheckExactiOSSystemVersion (int major, int minor)
 	{
 #if __IOS__
@@ -443,6 +454,12 @@ partial class TestRuntime
 #endif
 	}
 
+	public static void AsserttvOSSystemVersion (int major, int minor, bool throwIfOtherPlatform = true)
+	{
+		if (!ChecktvOSSystemVersion (major, minor, throwIfOtherPlatform))
+			NUnit.Framework.Assert.Ignore ($"This test requires tvOS {major}.{minor}");
+	}
+
 	// This method returns true if:
 	// system version >= specified version
 	// AND
@@ -459,6 +476,14 @@ partial class TestRuntime
 #endif
 	}
 
+	public static void AssertWatchOSVersion (int major, int minor, bool throwIfOtherPlatform = true)
+	{
+		if (CheckWatchOSSystemVersion (major, minor, throwIfOtherPlatform))
+			return;
+
+		NUnit.Framework.Assert.Ignore ($"This test requires watchOS {major}.{minor}");
+	}
+
 	public static bool CheckMacSystemVersion (int major, int minor, int build = 0, bool throwIfOtherPlatform = true)
 	{
 #if MONOMAC
@@ -470,25 +495,10 @@ partial class TestRuntime
 #endif
 	}
 
-	// This method returns true if:
-	// system version >= specified version
-	// AND
-	// sdk version >= specified version
-	public static bool CheckSystemAndSDKVersion (int major, int minor)
+	public static void AssertMacSystemVersion (int major, int minor, int build = 0, bool throwIfOtherPlatform = true)
 	{
-#if __WATCHOS__
-		throw new Exception ("Can't get iOS System/SDK version on WatchOS.");
-#elif MONOMAC
-		if (OSXVersion < new Version (major, minor))
-			return false;
-#else
-		if (!UIDevice.CurrentDevice.CheckSystemVersion (major, minor))
-			return false;
-#endif
-
-		// Check if the SDK version we're built includes the version we're checking for
-		// We don't want to execute iOS7 tests on an iOS7 device when built with the iOS6 SDK.
-		return CheckSDKVersion (major, minor);
+		if (!CheckMacSystemVersion (major, minor, build, throwIfOtherPlatform))
+			NUnit.Framework.Assert.Ignore ($"This test requires macOS {major}.{minor}.{build}");
 	}
 
 	public static bool CheckSDKVersion (int major, int minor)
@@ -654,4 +664,49 @@ partial class TestRuntime
 		}
 	}
 #endif // !MONOMAC && !__TVOS__
+
+#if __MACOS__
+	public static void RequestEventStorePermission (EKEntityType entityType, bool assert_granted = false)
+	{
+		TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
+
+		var status = EKEventStore.GetAuthorizationStatus (entityType);
+		Console.WriteLine ("EKEventStore.GetAuthorizationStatus ({1}): {0}", status, entityType);
+		switch (status) {
+		case EKAuthorizationStatus.Authorized:
+		case EKAuthorizationStatus.Restricted:
+			return;
+		case EKAuthorizationStatus.NotDetermined:
+			// There's an instance method on EKEventStore to request permission,
+			// but creating the instance can end up blocking the app showing a permission dialog...
+			// (on Mavericks at least)
+			if (TestRuntime.CheckMacSystemVersion (10, 10))
+				return; // Crossing fingers that this won't hang.
+			NUnit.Framework.Assert.Ignore ("This test requires permission to access events, but there's no API to request access without potentially showing dialogs.");
+			break;
+		case EKAuthorizationStatus.Denied:
+			if (assert_granted)
+				NUnit.Framework.Assert.Ignore ("This test requires permission to access events.");
+			break;
+		}
+	}
+#endif
+
+#if __MACOS__
+	public static global::CoreGraphics.CGColor GetCGColor (NSColor color)
+#else
+	public static global::CoreGraphics.CGColor GetCGColor (UIColor color)
+#endif
+	{
+#if __MACOS__
+		var components = new nfloat [color.ComponentCount];
+		color.GetComponents (out components);
+		NSApplication.CheckForIllegalCrossThreadCalls = false;
+		var cs = color.ColorSpace.ColorSpace;
+		NSApplication.CheckForIllegalCrossThreadCalls = true;
+		return new global::CoreGraphics.CGColor (cs, components);
+#else
+		return color.CGColor;
+#endif
+	}
 }

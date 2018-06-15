@@ -3028,7 +3028,7 @@ function toggleAll (show)
 				using (var proc = new Process ()) {
 					proc.StartInfo.FileName = "/Library/Frameworks/Mono.framework/Commands/mono";
 					var reporter = System.IO.Path.Combine (WorkingDirectory, "xtro-report/bin/Debug/xtro-report.exe");
-					var results = System.IO.Path.GetFullPath (System.IO.Path.Combine (Jenkins.LogDirectory, "..", "xtro"));
+					var results = System.IO.Path.Combine (Logs.Directory, $"xtro-{Timestamp}");
 					proc.StartInfo.Arguments = $"--debug {reporter} {WorkingDirectory} {results}";
 
 					Jenkins.MainLog.WriteLine ("Executing {0} ({1})", TestName, Mode);
@@ -3061,9 +3061,7 @@ function toggleAll (show)
 					}
 					Jenkins.MainLog.WriteLine ("Executed {0} ({1})", TestName, Mode);
 
-					var output = Logs.Create ($"Report-{Timestamp}.html", "HTML Report");
-					var report = System.IO.Path.GetFullPath (System.IO.Path.Combine (results, "index.html"));
-					output.WriteLine ($"<html><head><meta http-equiv=\"refresh\" content=\"0; url={report}\" /></head></html>");
+					Logs.AddFile (System.IO.Path.Combine (results, "index.html"), "HTML Report");
 				}
 			}
 		}

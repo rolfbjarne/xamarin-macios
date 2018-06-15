@@ -342,9 +342,15 @@ namespace Xamarin.Bundler
 			}
 
 			try {
+				Driver.Log (2, "Computing assembly list for {0} (Is64Build: {1})", App.Name, Is64Build);
 				foreach (var root in App.RootAssemblies) {
 					var assembly = ManifestResolver.Load (root);
-					ComputeListOfAssemblies (assemblies, assembly, exceptions);
+					ComputeListOfAssemblies (assemblies, assembly, null, exceptions);
+				}
+				if (Driver.Verbosity >= 2) {
+					Driver.Log (2, "Found {0} assemblies for {1} (Is64Build: {2}):", assemblies.Count, App.Name, Is64Build);
+					foreach (var asm in assemblies.OrderBy ((v) => Path.GetFileName (v)))
+						Driver.Log (2, "    {0} => {1}", Path.GetFileName (asm), asm);
 				}
 			} catch (MonoTouchException mte) {
 				exceptions.Add (mte);
@@ -363,10 +369,15 @@ namespace Xamarin.Bundler
 			File.WriteAllLines (cache_file, assemblies);
 		}
 
-		void ComputeListOfAssemblies (HashSet<string> assemblies, AssemblyDefinition assembly, List<Exception> exceptions)
+		void ComputeListOfAssemblies (HashSet<string> assemblies, AssemblyDefinition assembly, AssemblyNameReference ar, List<Exception> exceptions)
 		{
-			if (assembly == null)
+			if (assembly == null) {
+				if (ar != null)
+					Driver.Log (1, "Failed to load '{0}'", ar.FullName);
+				else
+					Driver.Log (1, "Failed to load unknown assembly.");
 				return;
+			}
 
 			var fqname = assembly.MainModule.FileName;
 			if (assemblies.Contains (fqname))
@@ -393,7 +404,7 @@ namespace Xamarin.Bundler
 				}
 
 				var reference_assembly = ManifestResolver.Resolve (reference);
-				ComputeListOfAssemblies (assemblies, reference_assembly, exceptions);
+				ComputeListOfAssemblies (assemblies, reference_assembly, reference, exceptions);
 			}
 
 			if (Profile.IsSdkAssembly (assembly) || Profile.IsProductAssembly (assembly))
@@ -442,7 +453,7 @@ namespace Xamarin.Bundler
 			if (ar == null)
 				return;
 			var reference_assembly = ManifestResolver.Resolve (ar);
-			ComputeListOfAssemblies (assemblies, reference_assembly, exceptions);
+			ComputeListOfAssemblies (assemblies, reference_assembly, ar, exceptions);
 		}
 
 		bool IncludeI18nAssembly (Mono.Linker.I18nAssemblies assembly)
@@ -702,8 +713,10 @@ namespace Xamarin.Bundler
 							throw ErrorHelper.CreateError (99, "Internal error {0}. Please file a bug report with a test case (http://bugzilla.xamarin.com).", $"The assembly {next} was referenced by another assembly, but at the same time linked out by the linker.");
 						if (ad.MainModule.HasAssemblyReferences) {
 							foreach (var ar in ad.MainModule.AssemblyReferences) {
-								if (!collectedNames.Contains (ar.Name) && !queue.Contains (ar.Name))
+								if (!collectedNames.Contains (ar.Name) && !queue.Contains (ar.Name)) {
+									Console.WriteLine ($"Enqueued {ar.Name} because {ad.MainModule.Name} references it");
 									queue.Enqueue (ar.Name);
+								}
 							}
 						}
 					} while (queue.Count > 0);

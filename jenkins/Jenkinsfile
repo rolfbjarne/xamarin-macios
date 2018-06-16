@@ -434,7 +434,7 @@ timestamps {
                                     def macOSes = []
                                     for (os = firstOS; os < lastOS; os++)
                                         macOSes.add (os)
-                                    macOSes.add (15) // 10.15, Mojave
+                                    macOSes.add (14) // 10.14, Mojave
                                     for (i = 0; i < macOSes.size (); i++) {
                                         def os = macOSes [i];
                                         def macOS = "${os}" // Need to bind the label variable before the closure

@@ -10178,7 +10178,8 @@ namespace AVFoundation {
 		[Export ("seekToDate:")]
 		void Seek (NSDate date);
 
-		[iOS (6,0), Mac (10,7)]
+		[iOS (6,0)]
+		[Mac (10,9)] // Header says 10.7, but it's a lie
 		[Export ("seekToDate:completionHandler:")]
 		[Async]
 		void Seek (NSDate date, AVCompletion onComplete);

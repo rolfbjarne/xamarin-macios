@@ -185,7 +185,8 @@ def runXamarinMacTests (url, macOS)
         sh ("cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake")
         def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
         tests.each { test ->
-            def exitCode = sh (script: "make -C mac-test-package/tests exec-mac-${test}", returnStatus: true)
+            def t = "${test}"
+            def exitCode = sh (script: "make -C mac-test-package/tests exec-mac-${t}", returnStatus: true)
             if (exitCode != 0) {
                 failureMessage += "${test} failed with exit code ${exitCode}\n"
             }

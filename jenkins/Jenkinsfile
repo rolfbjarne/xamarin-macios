@@ -196,6 +196,7 @@ def runXamarinMacTests (url, macOS)
     if (failureMessage != "") {
         manager.addErrorBadge (failureMessage)
         manager.buildFailure ()
+        error (failureMessage)
     }
 }
 

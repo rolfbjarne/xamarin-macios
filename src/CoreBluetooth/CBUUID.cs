@@ -209,6 +209,7 @@ namespace CoreBluetooth {
 #if MONOMAC
 		// workaround for 27160443 – Trello: https://trello.com/c/oqB27JA6
 		// try new constant (10.13+) and fallback to the old/misnamed one
+		[Availability (Introduced = Platform.Mac_10_13)]
 		public static NSString CharacteristicValidRangeString {
 			get {
 				return CBUUIDCharacteristicValidRangeString ?? CBUUIDValidRangeString;

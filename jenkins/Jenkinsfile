@@ -206,6 +206,7 @@ def runXamarinMacTests (url, macOS)
                 failed = true
                 manager.addErrorBadge ("${t} failed with error: ${error}")
             }
+        }
     } finally {
         sh ("rm -rf mac-test-package *.zip")
     }

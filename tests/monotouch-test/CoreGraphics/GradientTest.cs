@@ -42,8 +42,12 @@ namespace MonoTouchFixtures.CoreGraphics {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
 	public class GradientTest {
-		
-		static CGColor [] array = { UIColor.Black.CGColor, UIColor.Clear.CGColor, UIColor.Blue.CGColor };
+
+		static CGColor [] array = {
+			new CGColor (0, 0, 0),
+			new CGColor (0, 0, 0, 1),
+			new CGColor (0, 0, 255, 0),
+		};
 		
 		[Test]
 		public void Colorspace_Null ()

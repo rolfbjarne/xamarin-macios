@@ -44,8 +44,8 @@ namespace MonoTouchFixtures.Foundation {
 		[Test]
 		public void Attributes ()
 		{
-			red = UIColor.Red.CGColor;
-			yellow = UIColor.Yellow.CGColor;
+			red = new CGColor (1, 0, 0);
+			yellow = new CGColor (1, 1, 0);
 			
 			var j = new NSMutableAttributedString ("Hello", new CTStringAttributes() { ForegroundColor = red });
 			j.Append (new NSMutableAttributedString ("12345", new CTStringAttributes() { ForegroundColor = yellow }));

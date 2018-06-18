@@ -46,13 +46,13 @@ namespace MonoTouchFixtures.CoreAnimation {
 			Assert.Null (sl.StrokeColor, "StrokeColor");
 			sl.StrokeColor = null;
 
-			sl.FillColor = UIColor.Black.CGColor;
+			sl.FillColor = new CGColor (0, 0, 0);
 			Assert.NotNull (sl.FillColor, "FillColor");
 			sl.Path = new CGPath ();
 			Assert.NotNull (sl.Path, "Path");
 			sl.LineDashPattern = new [] { new NSNumber (5), new NSNumber (10) };
 			Assert.NotNull (sl.LineDashPattern, "LineDashPattern");
-			sl.StrokeColor = UIColor.White.CGColor;
+			sl.StrokeColor = new CGColor (1, 1, 1);
 			Assert.NotNull (sl.StrokeColor, "StrokeColor");
 		}
 	}

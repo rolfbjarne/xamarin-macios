@@ -87,7 +87,7 @@ namespace MonoTouchFixtures.CoreText
 		public void BackgroundColor ()
 		{
 			var sa = new CTStringAttributes ();
-			Assert.DoesNotThrow (() => { sa.BackgroundColor = UIColor.Blue.CGColor; }, "#0");
+			Assert.DoesNotThrow (() => { sa.BackgroundColor = new CGColor (0, 0, 1); }, "#0");
 			Assert.DoesNotThrow (() => { var x = sa.BackgroundColor; }, "#1");
 		}
 

@@ -173,32 +173,45 @@ def uploadFiles (glob, virtualPath)
 
 def runXamarinMacTests (url, macOS)
 {
-    def failureMessage = ""
+    // This function can't call any shell scripts in git,
+    // because the xamarin-macios repo isn't checked out
+    // on the bots where this is executed.
+    def failed = false
     try {
         echo ("Executing on ${env.NODE_NAME}")
         echo ("URL: ${url}")
-        sh ("env")
-        sh ("rm -f *.zip")
-        sh ("curl -L '${url}' --output mac-test-package.zip")
-        sh ("rm -rf mac-test-package")
-        sh ("unzip -o mac-test-package.zip")
-        sh ("cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake")
+        sh ("""
+            env
+            rm -f *.zip
+            curl -L '${url}' --output mac-test-package.zip
+            rm -rf mac-test-package
+            unzip -o mac-test-package.zip
+            cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake
+            """)
         def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
         tests.each { test ->
             def t = "${test}"
-            def exitCode = sh (script: "make -C mac-test-package/tests exec-mac-${t}", returnStatus: true)
-            if (exitCode != 0) {
-                failureMessage += "${test} failed with exit code ${exitCode}\n"
+            def exitCode = 0
+            try {
+                timeout (time: 10, unit: 'MINUTES') {
+                    exitCode = sh (script: "make -C mac-test-package/tests exec-mac-${t}", returnStatus: true)
+                }
+                if (exitCode != 0) {
+                    manager.addErrorBadge ("${t} failed with exit code ${exitCode}")
+                    failed = true
+                } else {
+                    echo ("${t} succeeded")
+                }
+            } catch (error) {
+                failed = true
+                manager.addErrorBadge ("${t} failed with error: ${error}")
             }
-        }
-    } catch (error) {
-        failureMessage += "Test run failed: ${error}\n"
     } finally {
         sh ("rm -rf mac-test-package *.zip")
     }
-    if (failureMessage != "") {
+    if (failed) {
+        def failureMessage = "Xamarin.Mac tests on 10.${macOS} failed"
         manager.addErrorBadge (failureMessage)
-        manager.buildFailure ()
         error (failureMessage)
     }
 }

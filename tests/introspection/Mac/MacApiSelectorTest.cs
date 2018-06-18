@@ -350,6 +350,14 @@ namespace Introspection {
 					if (Mac.IsAtLeast (10, 11))
 						return true;
 					break;
+				case "NSNull":
+					switch (selectorName) {
+					case "runActionForKey:object:arguments:":
+						// This comes from implementing the CAAction protocol, which started in 10.11.
+						if (Mac.CheckSystemVersion (10, 11))
+							return true;
+						break;
+					}
 				}
 				break;
 			case "MonoMac.AppKit":

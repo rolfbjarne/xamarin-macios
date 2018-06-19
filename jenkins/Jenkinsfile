@@ -171,6 +171,17 @@ def uploadFiles (glob, virtualPath)
     ])
 }
 
+// There must be a better way of showing a message that shows up in red in
+// Jenkins Blue Ocean UI instead of this hack...
+def echoError (message)
+{
+    try {
+        error (message)
+    } catch (e) {
+        // Ignore
+    }
+}
+
 def runXamarinMacTests (url, macOS)
 {
     // This function can't call any shell scripts in git,
@@ -197,7 +208,7 @@ def runXamarinMacTests (url, macOS)
                     exitCode = sh (script: "make -C mac-test-package/tests exec-mac-${t}", returnStatus: true)
                 }
                 if (exitCode != 0) {
-                    manager.addErrorBadge ("${t} failed with exit code ${exitCode}")
+                    echoError ("${t} failed with exit code ${exitCode}")
                     failed = true
                 } else {
                     echo ("${t} succeeded")
@@ -447,9 +458,15 @@ timestamps {
                                 echo ("Generator diff: ${reportPrefix}/generator-diff/index.html")
                             }
 
+                            def hasXamarinMacTests = true
                             stage ("Package XM tests") {
                                 currentStage = "${STAGE_NAME}"
-                                sh ("make -C ${workspace}/xamarin-macios/tests package-tests")
+                                def exitCode = sh (script: "make -C ${workspace}/xamarin-macios/tests package-tests", returnStatus: true)
+                                if (exitCode != 0) {
+                                    hasXamarinMacTests = false
+                                    manager.addErrorBadge ("Failed to package Xamarin.Mac tests (exit code: ${exitCode}")
+                                    manager.buildUnstable ()
+                                }
                                 uploadFiles ("tests/*.zip", virtualPath)
                             }
 
@@ -465,27 +482,29 @@ timestamps {
                                     def builders = [:]
 
                                     // Add test runs on older macOS versions
-                                    def url = "https://bosstoragemirror.blob.core.windows.net/wrench/${virtualPath}/tests/mac-test-package.zip"
-                                    def firstOS = sh (returnStdout: true, script: "grep ^MIN_OSX_SDK_VERSION= '${workspace}/xamarin-macios/Make.config' | sed 's/.*=//'").trim ().split ("\\.")[1].toInteger ()
-                                    def lastOS = sh (returnStdout: true, script: "grep ^OSX_SDK_VERSION= '${workspace}/xamarin-macios/Make.config' | sed 's/.*=//'").trim ().split ("\\.")[1].toInteger ()
-                                    def macOSes = []
-                                    for (os = firstOS; os < lastOS; os++)
-                                        macOSes.add (os)
-                                    macOSes.add (14) // 10.14, Mojave
-                                    for (i = 0; i < macOSes.size (); i++) {
-                                        def os = macOSes [i];
-                                        def macOS = "${os}" // Need to bind the label variable before the closure
-                                        builders ["XM tests on 10.${macOS}"] = {
-                                            try {
-                                                node ("xamarin-macios && macos-10.${macOS}") {
-                                                    stage ("Running XM tests on '10.${macOS}'") {
-                                                        runXamarinMacTests (url, "macOS 10.${macOS}")
+                                    if (hasXamarinMacTests) {
+                                        def url = "https://bosstoragemirror.blob.core.windows.net/wrench/${virtualPath}/tests/mac-test-package.zip"
+                                        def firstOS = sh (returnStdout: true, script: "grep ^MIN_OSX_SDK_VERSION= '${workspace}/xamarin-macios/Make.config' | sed 's/.*=//'").trim ().split ("\\.")[1].toInteger ()
+                                        def lastOS = sh (returnStdout: true, script: "grep ^OSX_SDK_VERSION= '${workspace}/xamarin-macios/Make.config' | sed 's/.*=//'").trim ().split ("\\.")[1].toInteger ()
+                                        def macOSes = []
+                                        for (os = firstOS; os < lastOS; os++)
+                                            macOSes.add (os)
+                                        macOSes.add (14) // 10.14, Mojave
+                                        for (i = 0; i < macOSes.size (); i++) {
+                                            def os = macOSes [i];
+                                            def macOS = "${os}" // Need to bind the label variable before the closure
+                                            builders ["XM tests on 10.${macOS}"] = {
+                                                try {
+                                                    node ("xamarin-macios && macos-10.${macOS}") {
+                                                        stage ("Running XM tests on '10.${macOS}'") {
+                                                            runXamarinMacTests (url, "macOS 10.${macOS}")
+                                                        }
                                                     }
+                                                } catch (err) {
+                                                    currentStage = "Running XM tests on '10.${macOS}'"
+                                                    appendFileComment ("🔥 [Xamarin.Mac tests on 10.${macOS} failed](${env.RUN_DISPLAY_URL}) 🔥\n")
+                                                    throw err
                                                 }
-                                            } catch (err) {
-                                                currentStage = "Running XM tests on '10.${macOS}'"
-                                                appendFileComment ("🔥 [Xamarin.Mac tests on 10.${macOS} failed](${env.RUN_DISPLAY_URL}) 🔥\n")
-                                                throw err
                                             }
                                         }
                                     }

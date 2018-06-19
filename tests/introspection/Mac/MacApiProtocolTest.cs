@@ -241,6 +241,7 @@ namespace Introspection {
 						return true;
 					break;
 				}
+				break;
 			}
 
 			switch (type.Name) {

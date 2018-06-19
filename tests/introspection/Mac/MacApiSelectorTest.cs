@@ -358,6 +358,7 @@ namespace Introspection {
 							return true;
 						break;
 					}
+					break;
 				}
 				break;
 			case "MonoMac.AppKit":

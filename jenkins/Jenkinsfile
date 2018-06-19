@@ -202,27 +202,21 @@ def runXamarinMacTests (url, macOS)
         def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
         tests.each { test ->
             def t = "${test}"
-            def exitCode = 0
             try {
                 timeout (time: 10, unit: 'MINUTES') {
-                    exitCode = sh (script: "make -C mac-test-package/tests exec-mac-${t}", returnStatus: true)
-                }
-                if (exitCode != 0) {
-                    echoError ("${t} failed with exit code ${exitCode}")
-                    failed = true
-                } else {
+                    sh ("make -C mac-test-package/tests exec-mac-${t}")
                     echo ("${t} succeeded")
                 }
             } catch (error) {
+                echoError ("${t} failed with error: ${error}")
                 failed = true
-                manager.addErrorBadge ("${t} failed with error: ${error}")
             }
         }
     } finally {
         sh ("rm -rf mac-test-package *.zip")
     }
     if (failed) {
-        def failureMessage = "Xamarin.Mac tests on 10.${macOS} failed"
+        def failureMessage = "Xamarin.Mac tests on ${macOS} failed"
         manager.addErrorBadge (failureMessage)
         error (failureMessage)
     }

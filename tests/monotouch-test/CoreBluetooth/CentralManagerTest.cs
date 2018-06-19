@@ -80,6 +80,7 @@ namespace MonoTouchFixtures.CoreBluetooth {
 		[SetUp]
 		public void SetUp ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
 			var e = new AutoResetEvent (false);
 			mgrDelegate = new ManagerDelegate (e);
 			mgr = new CBCentralManager (mgrDelegate, new DispatchQueue ("com.xamarin.tests." + TestContext.CurrentContext.Test.Name));

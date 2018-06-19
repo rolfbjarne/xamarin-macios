@@ -50,12 +50,14 @@ namespace MonoTouchFixtures.CoreImage {
 		[Test]
 		public void EmptyImage ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
 			Assert.IsNull (CIImage.EmptyImage.Properties);
 		}
 
 		[Test]
 		public void InitializationWithCustomMetadata ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
 			string file = Path.Combine (NSBundle.MainBundle.ResourcePath, "basn3p08.png");
 			using (var dp = new CGDataProvider (file)) {
 				using (var img = CGImage.FromPNG (dp, null, false, CGColorRenderingIntent.Default)) {

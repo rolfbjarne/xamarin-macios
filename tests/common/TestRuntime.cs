@@ -378,6 +378,8 @@ partial class TestRuntime
 		case 4:
 #if __IOS__
 			switch (minor) {
+			case 1:
+				return true; // iOS 4.3.2
 			case 5:
 				return CheckiOSSystemVersion (6, 0);
 			case 6:
@@ -389,6 +391,8 @@ partial class TestRuntime
 			return true;
 #elif MONOMAC
 			switch (minor) {
+			case 1:
+				return CheckMacSystemVersion (10, 7, 0);
 			case 5:
 			case 6:
 				return CheckMacSystemVersion (10, 8, 0);
@@ -468,6 +472,12 @@ partial class TestRuntime
 			throw new Exception ("Can't get iOS System version on other platforms.");
 		return true;
 #endif
+	}
+
+	public static void AssertMacSystemVersion (int major, int minor, int build = 0, bool throwIfOtherPlatform = true)
+	{
+		if (!CheckMacSystemVersion (major, minor, build, throwIfOtherPlatform))
+			NUnit.Framework.Assert.Ignore ($"This test requires macOS {major}.{minor}.{build}");
 	}
 
 	// This method returns true if:

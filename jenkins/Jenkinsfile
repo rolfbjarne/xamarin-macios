@@ -182,34 +182,54 @@ def echoError (message)
     }
 }
 
-def runXamarinMacTests (url, macOS)
+def runXamarinMacTests (url, macOS, maccore_hash)
 {
     // This function can't call any shell scripts in git,
     // because the xamarin-macios repo isn't checked out
     // on the bots where this is executed.
     def failed = false
+    def workspace = "${env.HOME}/jenkins/workspace/xamarin-macios"
     try {
         echo ("Executing on ${env.NODE_NAME}")
         echo ("URL: ${url}")
-        sh ("""
-            env
-            rm -f *.zip
-            curl -L '${url}' --output mac-test-package.zip
-            rm -rf mac-test-package
-            unzip -o mac-test-package.zip
-            cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake
-            """)
-        def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
-        tests.each { test ->
-            def t = "${test}"
-            try {
-                timeout (time: 10, unit: 'MINUTES') {
-                    sh ("make -C mac-test-package/tests exec-mac-${t}")
-                    echo ("${t} succeeded")
+        sh ("mkdir -p '${workspace}/xamarin-macios'")
+        dir ("${workspace}/xamarin-macios") {
+            sh ("""
+                env
+                rm -f *.zip
+                curl -L '${url}' --output mac-test-package.zip
+                rm -rf mac-test-package
+                unzip -o mac-test-package.zip
+                cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake
+                # fetch script to install provisioning profiles and run it
+                if test -d maccore; then
+                    cd maccore
+                    if ! git fetch origin; then
+                        cd ..
+                        rm -Rf maccore
+                    fi
+                fi
+                if ! test -d maccore; then
+                    git clone git@github.com:xamarin/maccore
+                    cd maccore
+                fi
+                cd maccore
+                git reset --hard ${maccore_hash}
+                cd ..
+                ${workspace}/maccore/tools/install-qa-provisioning-profiles.sh
+                """)
+            def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
+            tests.each { test ->
+                def t = "${test}"
+                try {
+                    timeout (time: 10, unit: 'MINUTES') {
+                        sh ("make -C mac-test-package/tests exec-mac-${t}")
+                        echo ("${t} succeeded")
+                    }
+                } catch (error) {
+                    echoError ("${t} failed with error: ${error}")
+                    failed = true
                 }
-            } catch (error) {
-                echoError ("${t} failed with error: ${error}")
-                failed = true
             }
         }
     } finally {
@@ -478,6 +498,7 @@ timestamps {
                                     // Add test runs on older macOS versions
                                     if (hasXamarinMacTests) {
                                         def url = "https://bosstoragemirror.blob.core.windows.net/wrench/${virtualPath}/tests/mac-test-package.zip"
+                                        def maccore_hash = sh (script: "grep NEEDED_MACCORE_VERSION ${workspace}/xamarin-macios/mk/xamarin.mk | sed 's/NEEDED_MACCORE_VERSION := //'", returnStdout: true).trim ()
                                         def firstOS = sh (returnStdout: true, script: "grep ^MIN_OSX_SDK_VERSION= '${workspace}/xamarin-macios/Make.config' | sed 's/.*=//'").trim ().split ("\\.")[1].toInteger ()
                                         def lastOS = sh (returnStdout: true, script: "grep ^OSX_SDK_VERSION= '${workspace}/xamarin-macios/Make.config' | sed 's/.*=//'").trim ().split ("\\.")[1].toInteger ()
                                         def macOSes = []
@@ -491,7 +512,7 @@ timestamps {
                                                 try {
                                                     node ("xamarin-macios && macos-10.${macOS}") {
                                                         stage ("Running XM tests on '10.${macOS}'") {
-                                                            runXamarinMacTests (url, "macOS 10.${macOS}")
+                                                            runXamarinMacTests (url, "macOS 10.${macOS}", maccore_hash)
                                                         }
                                                     }
                                                 } catch (err) {

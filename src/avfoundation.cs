@@ -5479,7 +5479,7 @@ namespace AVFoundation {
 		NSString FormatHlsMetadata { get; }
 #endif
 
-		[iOS (9,3)][Mac (10, 11, 3)]
+		[iOS (9,3)][Mac (10, 12)]
 		[TV (9,2)]
 		[Field ("AVMetadataKeySpaceHLSDateRange")]
 		NSString KeySpaceHlsDateRange { get; }
@@ -10368,14 +10368,14 @@ namespace AVFoundation {
 		[Export ("items", ArgumentSemantic.Copy)]
 		AVMetadataItem[] Items { get; }
 
-		[iOS (9,3)][Mac (10,11,3)]
+		[iOS (9,3)][Mac (10,12)]
 		[TV (9,2)]
 		[NullAllowed, Export ("classifyingLabel")]
 		string ClassifyingLabel { get; }
 
 		[iOS (9,3)]
 		[TV (9,2)]
-		[Mac (10,11,3)]
+		[Mac (10,12)]
 		[NullAllowed, Export ("uniqueID")]
 		string UniqueID { get; }
 	}
@@ -10685,17 +10685,17 @@ namespace AVFoundation {
 		AVInterstitialTimeRange[] InterstitialTimeRanges { get; set; }
 #endregion
 
-		[iOS (9,3)][Mac (10,11,3)]
+		[iOS (9,3)][Mac (10,12)]
 		[TV (9,2)]
 		[Export ("addMediaDataCollector:")]
 		void AddMediaDataCollector (AVPlayerItemMediaDataCollector collector);
 		
-		[iOS (9,3)][Mac (10,11,3)]
+		[iOS (9,3)][Mac (10,12)]
 		[TV (9,2)]
 		[Export ("removeMediaDataCollector:")]
 		void RemoveMediaDataCollector (AVPlayerItemMediaDataCollector collector);
 		
-		[iOS (9,3)][Mac (10,11,3)]
+		[iOS (9,3)][Mac (10,12)]
 		[TV (9,2)]
 		[Export ("mediaDataCollectors")]
 		AVPlayerItemMediaDataCollector[] MediaDataCollectors { get; }

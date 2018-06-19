@@ -213,7 +213,6 @@ def runXamarinMacTests (url, macOS, maccore_hash)
                     git clone git@github.com:xamarin/maccore
                     cd maccore
                 fi
-                cd maccore
                 git reset --hard ${maccore_hash}
                 cd ..
                 ${workspace}/maccore/tools/install-qa-provisioning-profiles.sh

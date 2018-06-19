@@ -192,8 +192,8 @@ def runXamarinMacTests (url, macOS, maccore_hash)
     try {
         echo ("Executing on ${env.NODE_NAME}")
         echo ("URL: ${url}")
-        sh ("mkdir -p '${workspace}/xamarin-macios'")
-        dir ("${workspace}/xamarin-macios") {
+        sh ("mkdir -p '${workspace}'")
+        dir ("${workspace}") {
             sh ("""
                 env
                 rm -f *.zip
@@ -223,7 +223,7 @@ def runXamarinMacTests (url, macOS, maccore_hash)
                 def t = "${test}"
                 try {
                     timeout (time: 10, unit: 'MINUTES') {
-                        sh ("make -C mac-test-package/tests exec-mac-${t}")
+                        sh ("make -C mac-test-package/tests exec-mac-${t} MONO_DEBUG=no-gdb-backtrace")
                         echo ("${t} succeeded")
                     }
                 } catch (error) {
@@ -233,7 +233,15 @@ def runXamarinMacTests (url, macOS, maccore_hash)
             }
         }
     } finally {
-        sh ("rm -rf mac-test-package *.zip")
+        sh ("rm -rf ${workspace}/mac-test-package ${workspace}/*.zip")
+        // Find and upload any crash reports
+        sh (script: """
+            rm -Rf ${workspace}/crash-reports
+            mkdir ${workspace}/crash-reports
+            find ~/Library/Logs/DiagnosticReports/ -mtime -10m -exec cp {} ${workspace}/crash-reports \\;
+            """,
+            returnStatus: true /* Don't fail if something goes wrong */)
+        archiveArtifacts ("${workspace}/crash-reports/*")
     }
     if (failed) {
         def failureMessage = "Xamarin.Mac tests on ${macOS} failed"

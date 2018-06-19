@@ -25264,6 +25264,7 @@ namespace AppKit {
 	interface INSUserInterfaceValidations {}
 
 	[Protocol]
+	[Mac (10,11)]
 	interface NSUserInterfaceValidations
 	{
 		[Abstract]

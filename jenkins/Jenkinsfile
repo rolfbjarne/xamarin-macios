@@ -215,7 +215,10 @@ def runXamarinMacTests (url, macOS, maccore_hash)
                 fi
                 git reset --hard ${maccore_hash}
                 cd ..
-                ${workspace}/maccore/tools/install-qa-provisioning-profiles.sh
+                pwd
+                ls -la . || true
+                ls -la ${workspace}/maccore || true
+                ./maccore/tools/install-qa-provisioning-profiles.sh
                 """)
             def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
             tests.each { test ->
@@ -238,9 +241,14 @@ def runXamarinMacTests (url, macOS, maccore_hash)
             rm -Rf ${workspace}/crash-reports
             mkdir ${workspace}/crash-reports
             find ~/Library/Logs/DiagnosticReports/ -mtime -10m -exec cp {} ${workspace}/crash-reports \\;
+            ls -la ${workspace}/crash-reports
             """,
             returnStatus: true /* Don't fail if something goes wrong */)
-        archiveArtifacts ("${workspace}/crash-reports/*")
+        try {
+            archiveArtifacts ("${workspace}/crash-reports/*")
+        } catch (e) {
+            // Ignore any archiving errors.
+        }
     }
     if (failed) {
         def failureMessage = "Xamarin.Mac tests on ${macOS} failed"

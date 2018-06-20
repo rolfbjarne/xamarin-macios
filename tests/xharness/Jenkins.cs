@@ -408,7 +408,13 @@ namespace xharness
 						TestName = project.Name,
 					};
 					buildToday.CloneTestProject (todayProject);
-					rv.Add (new RunDeviceTask (buildToday, Devices.ConnectedDevices.Where ((dev) => dev.DevicePlatform == DevicePlatform.iOS && dev.Supports64Bit)) { Ignored = ignored || !IncludeiOSExtensions });
+					var ignoreExtension = ignored || !IncludeiOSExtensions;
+					if (buildToday.TestName == "fsharp")
+						ignoreExtension = true; // https://github.com/xamarin/xamarin-macios/issues/3684
+					rv.Add (new RunDeviceTask (buildToday, Devices.ConnectedDevices.Where ((dev) => dev.DevicePlatform == DevicePlatform.iOS && dev.Supports64Bit)) {
+						Ignored = ignoreExtension,
+						BuildOnly = BuildiOSExtensions,
+					});
 				}
 
 				if (!project.SkiptvOSVariation) {

@@ -195,6 +195,7 @@ def runXamarinMacTests (url, macOS, maccore_hash)
         sh ("mkdir -p '${workspace}'")
         dir ("${workspace}") {
             sh ("""
+                if test -f ~/.jenkins-profile; then source ~/.jenkins-profile; fi
                 env
                 rm -f *.zip
                 curl -L '${url}' --output mac-test-package.zip
@@ -245,7 +246,11 @@ def runXamarinMacTests (url, macOS, maccore_hash)
             """,
             returnStatus: true /* Don't fail if something goes wrong */)
         try {
-            archiveArtifacts ("${workspace}/crash-reports/*")
+            if (findFiles (glob: "crash-reports/*").length > 0) {
+                archiveArtifacts ("${workspace}/crash-reports/*")
+            } else {
+                echo ("No crash reports found")
+            }
         } catch (e) {
             // Ignore any archiving errors.
         }

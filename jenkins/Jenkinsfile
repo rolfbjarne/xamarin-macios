@@ -182,11 +182,8 @@ def echoError (message)
     }
 }
 
-def runXamarinMacTests (url, macOS, maccore_hash)
+def runXamarinMacTests (url, macOS, maccore_hash, xamarin_macios_hash)
 {
-    // This function can't call any shell scripts in git,
-    // because the xamarin-macios repo isn't checked out
-    // on the bots where this is executed.
     def failed = false
     def workspace = "${env.HOME}/jenkins/workspace/xamarin-macios"
     try {
@@ -194,32 +191,12 @@ def runXamarinMacTests (url, macOS, maccore_hash)
         echo ("URL: ${url}")
         sh ("mkdir -p '${workspace}'")
         dir ("${workspace}") {
+            // Download the script we need, and then execute it, so that we
+            // don't clone all of xamarin-macios to get a single file.
             sh ("""
-                if test -f ~/.jenkins-profile; then source ~/.jenkins-profile; fi
-                env
-                rm -f *.zip
-                curl -L '${url}' --output mac-test-package.zip
-                rm -rf mac-test-package
-                unzip -o mac-test-package.zip
-                cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake
-                # fetch script to install provisioning profiles and run it
-                if test -d maccore; then
-                    cd maccore
-                    if ! git fetch origin; then
-                        cd ..
-                        rm -Rf maccore
-                    fi
-                fi
-                if ! test -d maccore; then
-                    git clone git@github.com:xamarin/maccore
-                    cd maccore
-                fi
-                git reset --hard ${maccore_hash}
-                cd ..
-                pwd
-                ls -la . || true
-                ls -la ${workspace}/maccore || true
-                ./maccore/tools/install-qa-provisioning-profiles.sh
+                curl -fLO https://raw.githubusercontent.com/xamarin/xamarin-macios/${xamarin_macios_hash}/jenkins/prepare-packaged-macos-tests.sh
+                chmod +x prepare-packaged-macos-tests.sh
+                ./prepare-packaged-macos-tests.sh
                 """)
             def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
             tests.each { test ->
@@ -532,7 +509,7 @@ timestamps {
                                                 try {
                                                     node ("xamarin-macios && macos-10.${macOS}") {
                                                         stage ("Running XM tests on '10.${macOS}'") {
-                                                            runXamarinMacTests (url, "macOS 10.${macOS}", maccore_hash)
+                                                            runXamarinMacTests (url, "macOS 10.${macOS}", maccore_hash, gitHash)
                                                         }
                                                     }
                                                 } catch (err) {

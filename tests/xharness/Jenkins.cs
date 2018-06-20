@@ -23,6 +23,7 @@ namespace xharness
 		public bool IncludeMac = true;
 		public bool IncludeiOS = true;
 		public bool IncludeiOSExtensions;
+		public bool BuildiOSExtensions;
 		public bool IncludetvOS = true;
 		public bool IncludewatchOS = true;
 		public bool IncludeMmpTest;
@@ -303,6 +304,7 @@ namespace xharness
 					T newVariation = creator (build, task);
 					newVariation.Variation = variation;
 					newVariation.Ignored = task.Ignored || ignored;
+					newVariation.BuildOnly = task.BuildOnly;
 					rv.Add (newVariation);
 				}
 			}
@@ -577,6 +579,11 @@ namespace xharness
 			SetEnabled (labels, "ios-device", ref IncludeDevice);
 			SetEnabled (labels, "xtro", ref IncludeXtro);
 			SetEnabled (labels, "all", ref IncludeAll);
+
+			if (labels.Contains ("build-ios-extensions-tests")) {
+				BuildiOSExtensions = true;
+				IncludeiOSExtensions = true;
+			}
 
 			// enabled by default
 			SetEnabled (labels, "ios", ref IncludeiOS);
@@ -1304,6 +1311,8 @@ namespace xharness
 					return "red";
 				} else if (test.Succeeded) {
 					return "green";
+				} else if (test.BuildSucceeded) {
+					return "yellowgreen";
 				} else if (test.Ignored) {
 					return "gray";
 				} else if (test.Waiting) {
@@ -2010,6 +2019,7 @@ namespace xharness
 		public bool Running { get { return (ExecutionResult & TestExecutingResult.Running) == TestExecutingResult.Running; } }
 
 		public bool Succeeded { get { return (ExecutionResult & TestExecutingResult.Succeeded) == TestExecutingResult.Succeeded; } }
+		public bool BuildSucceeded { get { return (ExecutionResult & TestExecutingResult.BuildSucceeded) == TestExecutingResult.BuildSucceeded; } }
 		public bool Failed { get { return (ExecutionResult & TestExecutingResult.Failed) == TestExecutingResult.Failed; } }
 		public bool Ignored {
 			get { return ExecutionResult == TestExecutingResult.Ignored; }
@@ -2044,6 +2054,7 @@ namespace xharness
 		public string ProjectConfiguration;
 		public string ProjectPlatform;
 		public Dictionary<string, string> Environment = new Dictionary<string, string> ();
+		public bool BuildOnly;
 
 		public Task InitialTask; // a task that's executed before this task's ExecuteAsync method.
 		public Task CompletedTask; // a task that's executed after this task's ExecuteAsync method.
@@ -3013,6 +3024,8 @@ namespace xharness
 					ExecutionResult = TestExecutingResult.BuildFailure;
 				}
 				FailureMessage = BuildTask.FailureMessage;
+			} else if (BuildOnly) {
+				ExecutionResult = TestExecutingResult.BuildSucceeded;
 			} else {
 				ExecutionResult = TestExecutingResult.Built;
 			}
@@ -3029,6 +3042,9 @@ namespace xharness
 				return;
 
 			if (!await BuildAsync ())
+				return;
+
+			if (Finished)
 				return;
 
 			ExecutionResult = TestExecutingResult.Running;
@@ -3706,6 +3722,7 @@ namespace xharness
 		Failed           =  0x200 + Finished,
 		Ignored          =  0x400 + Finished,
 		Skipped          =  0x800 + Finished,
+		BuildSucceeded   =0x10000 + Finished,
 
 		// Finished & Failed results
 		Crashed          = 0x1000 + Failed,

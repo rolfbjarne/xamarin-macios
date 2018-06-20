@@ -97,8 +97,8 @@ namespace MonoTouchFixtures.CoreImage {
 		[Test]
 		public void ColorSpace ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (7, 0))
-				Assert.Ignore ("Ignoring ColorSpace test: CIColorCubeWithColorSpace requires iOS7+");
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
+			TestRuntime.AssertiOSSystemVersion (7, 0, throwIfOtherPlatform: false);
 
 			using (var f = new CIColorCubeWithColorSpace ()) {
 				Assert.Null (f.ColorSpace, "ColorSpace/default");

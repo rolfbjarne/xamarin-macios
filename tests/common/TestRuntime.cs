@@ -422,6 +422,12 @@ partial class TestRuntime
 #endif
 	}
 
+	public static void AssertiOSSystemVersion (int major, int minor, bool throwIfOtherPlatform = true)
+	{
+		if (!CheckiOSSystemVersion (major, minor, throwIfOtherPlatform))
+			NUnit.Framework.Assert.Ignore ($"This test requires iOS {major}.{minor}");
+	}
+
 	public static bool CheckExactiOSSystemVersion (int major, int minor)
 	{
 #if __IOS__

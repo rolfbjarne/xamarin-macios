@@ -2157,7 +2157,7 @@ namespace xharness
 
 		public string FailureMessage {
 			get { return LastRun.FailureMessage; }
-			protected set {
+			set {
 				LastRun.FailureMessage = value;
 				MainLog.WriteLine (LastRun.FailureMessage);
 			}

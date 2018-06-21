@@ -18,7 +18,12 @@ if test -d "$DEPENDENCY_PATH"; then
 	if ! git log -1 --pretty=%H "$DEPENDENCY_HASH" > /dev/null 2>&1; then
 		echo "*** [$DEPENDENCY_NAME] git fetch $DEPENDENCY_REMOTE"
 		git fetch "$DEPENDENCY_REMOTE"
+	elif ! git rev-parse --verify "$DEPENDENCY_REMOTE/$DEPENDENCY_BRANCH" > /dev/null 2>&1; then
+		# Also check if we have the branch we need, we might already have the hash, but not the branch
+		echo "*** [$DEPENDENCY_NAME] git fetch $DEPENDENCY_REMOTE"
+		git fetch "$DEPENDENCY_REMOTE"
 	fi
+
 else
 	echo "*** [$DEPENDENCY_NAME] git clone $DEPENDENCY_MODULE --recursive $DEPENDENCY_DIRECTORY -b $DEPENDENCY_BRANCH --origin $DEPENDENCY_REMOTE"
 	mkdir -p "$(dirname "$DEPENDENCY_PATH")"

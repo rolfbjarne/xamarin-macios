@@ -90,7 +90,7 @@ namespace MonoTouchFixtures.CoreBluetooth {
 		public void TearDown ()
 		{
 			// should dispose the delegate
-			mgr.Dispose ();
+			mgr?.Dispose ();
 		}
 			
 		[Test, Timeout (5000)]

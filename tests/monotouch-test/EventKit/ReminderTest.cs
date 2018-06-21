@@ -37,6 +37,12 @@ namespace MonoTouchFixtures.EventKit {
 	[Preserve (AllMembers = true)]
 	public class ReminderTest
 	{
+		[SetUp]
+		public void Setup ()
+		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+		}
+
 		[Test]
 		public void DefaultProperties ()
 		{

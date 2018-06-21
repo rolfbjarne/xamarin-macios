@@ -40,6 +40,7 @@ namespace MonoTouchFixtures.MediaPlayer {
 			manualBindingDone = true;
 
 			TestRuntime.AssertiOSSystemVersion (7, 1, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 12, 2, throwIfOtherPlatform: false);
 
 			MPSkipIntervalCommand skip = MPRemoteCommandCenter.Shared.SkipBackwardCommand;
 

@@ -35,6 +35,7 @@ namespace MonoTouchFixtures.MediaPlayer {
 		public void Shared ()
 		{
 			TestRuntime.AssertiOSSystemVersion (7, 1, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 12, 2, throwIfOtherPlatform: false);
 
 			MPRemoteCommandCenter shared = MPRemoteCommandCenter.Shared;
 			Assert.NotNull (shared.BookmarkCommand, "BookmarkCommand");

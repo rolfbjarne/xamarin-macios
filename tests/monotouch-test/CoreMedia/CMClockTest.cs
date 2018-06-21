@@ -51,6 +51,8 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void HostTimeClock ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			using (var clock = CMClock.HostTimeClock) {
 				Assert.That (clock.Handle, Is.Not.EqualTo (IntPtr.Zero), "Handle");
 				Assert.That (CFGetRetainCount (clock.Handle), Is.GreaterThanOrEqualTo ((nint) 1), "RetainCount");

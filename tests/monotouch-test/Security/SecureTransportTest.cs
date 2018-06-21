@@ -51,6 +51,8 @@ namespace MonoTouchFixtures.Security {
 		[Test]
 		public void StreamDefaults ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			using (var ssl = new SslContext (SslProtocolSide.Client, SslConnectionType.Stream)) {
 				Assert.That (ssl.BufferedReadSize, Is.EqualTo ((nint) 0), "BufferedReadSize");
 				Assert.That (ssl.ClientCertificateState, Is.EqualTo (SslClientCertificateState.None), "ClientCertificateState");
@@ -118,6 +120,8 @@ namespace MonoTouchFixtures.Security {
 		[Test]
 		public void DatagramDefaults ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			nint dsize = TestRuntime.CheckXcodeVersion (6, 0) ? 1327 : 1387;
 			using (var ssl = new SslContext (SslProtocolSide.Client, SslConnectionType.Datagram)) {
 				Assert.That (ssl.BufferedReadSize, Is.EqualTo ((nint) 0), "BufferedReadSize");
@@ -148,6 +152,8 @@ namespace MonoTouchFixtures.Security {
 		[Test]
 		public void SslSupportedCiphers ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			int ssl_client_ciphers = -1;
 			using (var client = new SslContext (SslProtocolSide.Client, SslConnectionType.Stream)) {
 				// maximum downgrade
@@ -184,6 +190,8 @@ namespace MonoTouchFixtures.Security {
 		[Test]
 		public void Tls12 ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			var client = new TcpClient ("google.ca", 443);
 			using (NetworkStream ns = client.GetStream ())
 			using (var ssl = new SslContext (SslProtocolSide.Client, SslConnectionType.Stream)) {

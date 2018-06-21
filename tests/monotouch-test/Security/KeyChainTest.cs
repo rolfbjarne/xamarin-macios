@@ -90,7 +90,7 @@ namespace MonoTouchFixtures.Security {
 			using (var id = IdentityTest.GetIdentity ()) {
 				data.LowlevelSetObject (id.Handle, valueref.Handle);
 				SecStatusCode code = SecItemAdd (data.Handle, IntPtr.Zero);
-				Assert.True (code == SecStatusCode.DuplicateItem || code == SecStatusCode.Success);
+				Assert.That (code, Is.EqualTo (SecStatusCode.DuplicateItem).Or.EqualTo (SecStatusCode.Success));
 			}
 		}
 		

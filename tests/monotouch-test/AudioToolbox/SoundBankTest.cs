@@ -72,6 +72,7 @@ namespace MonoTouchFixtures.AudioToolbox {
 		public void GetInstrumentInfo ()
 		{
 			TestRuntime.AssertiOSSystemVersion (7, 0, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
 
 			Assert.Throws<ArgumentNullException> (delegate { SoundBank.GetInstrumentInfo (null); }, "null");
 

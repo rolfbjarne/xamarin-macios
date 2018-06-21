@@ -29,6 +29,8 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void Ctor ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			using (var mp = new CMMemoryPool ())
 			{
 				var allocator = mp.GetAllocator ();
@@ -41,6 +43,8 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void CtorAgeOutPeriod ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			using (var mp = new CMMemoryPool (TimeSpan.FromSeconds (40)))
 			{
 				var allocator = mp.GetAllocator ();

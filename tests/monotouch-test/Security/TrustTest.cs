@@ -87,7 +87,12 @@ namespace MonoTouchFixtures.Security {
 			// that certificate stopped being valid on September 30th, 2013 so we validate it with a date earlier than that
 			trust.SetVerifyDate (new DateTime (635108745218945450, DateTimeKind.Utc));
 			// the system was able to construct the chain based on the single certificate
-			Assert.That (Evaluate (trust, true), Is.EqualTo (SecTrustResult.RecoverableTrustFailure), "Evaluate");
+			var expectedTrust = SecTrustResult.RecoverableTrustFailure;
+#if __MACOS__
+			if (!TestRuntime.CheckMacSystemVersion (10, 8))
+				expectedTrust = SecTrustResult.Unspecified;
+#endif
+			Assert.That (Evaluate (trust, true), Is.EqualTo (expectedTrust), "Evaluate");
 
 			if (TestRuntime.CheckXcodeVersion (5, 0)) {
 				Assert.True (trust.NetworkFetchAllowed, "NetworkFetchAllowed-1");
@@ -142,7 +147,12 @@ namespace MonoTouchFixtures.Security {
 			using (var trust = new SecTrust (x, policy)) {
 				// that certificate stopped being valid on September 30th, 2013 so we validate it with a date earlier than that
 				trust.SetVerifyDate (new DateTime (635108745218945450, DateTimeKind.Utc));
-				Assert.That (Evaluate (trust, true), Is.EqualTo (SecTrustResult.RecoverableTrustFailure), "Evaluate");
+				var expectedTrust = SecTrustResult.RecoverableTrustFailure;
+#if __MACOS__
+				if (!TestRuntime.CheckMacSystemVersion (10, 8))
+					expectedTrust = SecTrustResult.Unspecified;
+#endif
+				Assert.That (Evaluate (trust, true), Is.EqualTo (expectedTrust), "Evaluate");
 				
 				if (TestRuntime.CheckXcodeVersion (5, 0)) {
 					using (var rev = SecPolicy.CreateRevocationPolicy (SecRevocation.UseAnyAvailableMethod)) {
@@ -165,7 +175,12 @@ namespace MonoTouchFixtures.Security {
 				// that certificate stopped being valid on September 30th, 2013 so we validate it with a date earlier than that
 				trust.SetVerifyDate (new DateTime (635108745218945450, DateTimeKind.Utc));
 				// a host name is not meaningful for client certificates
-				Assert.That (Evaluate (trust, true), Is.EqualTo (SecTrustResult.RecoverableTrustFailure), "Evaluate");
+				var expectedTrust = SecTrustResult.RecoverableTrustFailure;
+#if __MACOS__
+				if (!TestRuntime.CheckMacSystemVersion (10, 8))
+					expectedTrust = SecTrustResult.Unspecified;
+#endif
+				Assert.That (Evaluate (trust, true), Is.EqualTo (expectedTrust), "Evaluate");
 
 				if (TestRuntime.CheckXcodeVersion (5, 0)) {
 					// by default there's no *custom* anchors

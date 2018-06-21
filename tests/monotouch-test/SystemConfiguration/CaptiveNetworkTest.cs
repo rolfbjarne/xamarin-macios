@@ -97,6 +97,8 @@ namespace MonoTouchFixtures.SystemConfiguration {
 		[Test]
 		public void MarkPortalOnline ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			Assert.False (CaptiveNetwork.MarkPortalOnline ("xamxam"));
 		}
 		
@@ -110,6 +112,8 @@ namespace MonoTouchFixtures.SystemConfiguration {
 		[Test]
 		public void MarkPortalOffline ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			Assert.False (CaptiveNetwork.MarkPortalOffline ("xamxam"));
 		}
 		
@@ -123,6 +127,8 @@ namespace MonoTouchFixtures.SystemConfiguration {
 		[Test]
 		public void SetSupportedSSIDs ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 #if MONOMAC
 			bool supported = true;
 #else

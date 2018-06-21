@@ -94,6 +94,8 @@ namespace MonoTouchFixtures.HttpClientTests
 		[TestCase (typeof (NSUrlSessionHandler))]
 		public void EnsureModifiabilityPostSend (Type handlerType)
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			var wrapper = HandlerWrapper.GetWrapper (handlerType);
 			using (var client = new HttpClient (wrapper.Handler))
 			using (var request = new HttpRequestMessage (HttpMethod.Get, "http://xamarin.com")) {

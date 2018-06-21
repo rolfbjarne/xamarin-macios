@@ -43,6 +43,8 @@ namespace MonoTouchFixtures.GameKit {
 
 		void Check (GKLeaderboard lb)
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 #if !__TVOS__
 			Assert.Null (lb.Category, "Category");
 #endif
@@ -84,6 +86,8 @@ namespace MonoTouchFixtures.GameKit {
 		[Test]
 		public void DefaultCtor ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			using (var lb = new GKLeaderboard ()) {
 				Check (lb);
 			}
@@ -92,6 +96,8 @@ namespace MonoTouchFixtures.GameKit {
 		[Test]
 		public void PlayersCtor ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+
 			// note: Mavericks does not like (respond to) this selector - but it did work with ML and is documented
 			using (var lb = new GKLeaderboard (new string [0])) {
 				Check (lb);

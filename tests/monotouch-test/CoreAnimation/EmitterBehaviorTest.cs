@@ -30,6 +30,7 @@ namespace MonoTouchFixtures.CoreAnimation {
 		public void AllBehaviorTypes ()
 		{
 			TestRuntime.AssertiOSSystemVersion (7, 0, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 
 			// turns out there's 2 undocumented behaviors: colorOverDistance and valueOverDistance
 			foreach (var type in CAEmitterBehavior.BehaviorTypes) {
@@ -45,6 +46,7 @@ namespace MonoTouchFixtures.CoreAnimation {
 		public void ColorOverDistance ()
 		{
 			TestRuntime.AssertiOSSystemVersion (7, 0, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 
 			// undocumented - we'll track it over the betas :)
 			using (var eb = CAEmitterBehavior.Create ((NSString) "colorOverDistance")) {
@@ -64,6 +66,7 @@ namespace MonoTouchFixtures.CoreAnimation {
 		public void ValueOverDistance ()
 		{
 			TestRuntime.AssertiOSSystemVersion (7, 0, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 
 			// undocumented - we'll track it over the betas :)
 			using (var eb = CAEmitterBehavior.Create ((NSString) "valueOverDistance")) {

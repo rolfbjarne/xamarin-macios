@@ -196,7 +196,7 @@ def runXamarinMacTests (url, macOS, maccore_hash, xamarin_macios_hash)
             sh ("""
                 curl -fLO https://raw.githubusercontent.com/xamarin/xamarin-macios/${xamarin_macios_hash}/jenkins/prepare-packaged-macos-tests.sh
                 chmod +x prepare-packaged-macos-tests.sh
-                ./prepare-packaged-macos-tests.sh
+                ./prepare-packaged-macos-tests.sh '${url}' '${maccore_hash}'
                 """)
             def tests = [ "dontlink", "apitest", "introspection", "linksdk", "linkall", "xammac_tests" ];
             tests.each { test ->

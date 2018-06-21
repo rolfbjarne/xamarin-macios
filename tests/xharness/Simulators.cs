@@ -50,11 +50,19 @@ namespace xharness
 				try {
 					using (var process = new Process ()) {
 						process.StartInfo.FileName = Harness.MlaunchPath;
-						process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listsim {1}", Harness.XcodeRoot, tmpfile);
+						process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listsim {1} -vvvv", Harness.XcodeRoot, tmpfile);
 						log.WriteLine ("Launching {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
-						var rv = await process.RunAsync (log, false, timeout: TimeSpan.FromSeconds (30));
-						if (!rv.Succeeded)
-							throw new Exception ("Failed to list simulators.");
+						var capturedLog = new StringBuilder ();
+						var captureLog = new CallbackLog ((data) => {
+							capturedLog.Append (data);
+						});
+						var rv = await process.RunAsync (Log.CreateAggregatedLog (captureLog, log), false, timeout: TimeSpan.FromSeconds (30));
+						if (!rv.Succeeded) {
+							var msg = rv.TimedOut ? "Timed out while trying to list simulators." : "Failed to list simulators.";
+							Console.WriteLine (msg);
+							Console.WriteLine (capturedLog);
+							return;
+						}
 						log.WriteLine ("Result:");
 						log.WriteLine (File.ReadAllText (tmpfile));
 						var simulator_data = new XmlDocument ();
@@ -669,11 +677,19 @@ namespace xharness
 				try {
 					using (var process = new Process ()) {
 						process.StartInfo.FileName = Harness.MlaunchPath;
-						process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listdev={1} {2} --output-format=xml", Harness.XcodeRoot, tmpfile, extra_data ? "--list-extra-data" : string.Empty);
+						process.StartInfo.Arguments = string.Format ("--sdkroot {0} --listdev={1} {2} --output-format=xml -vvvv", Harness.XcodeRoot, tmpfile, extra_data ? "--list-extra-data" : string.Empty);
 						log.WriteLine ("Launching {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
-						var rv = await process.RunAsync (log, false, timeout: TimeSpan.FromSeconds (120));
-						if (!rv.Succeeded)
-							throw new Exception ("Failed to list devices.");
+						var capturedLog = new StringBuilder ();
+						var captureLog = new CallbackLog ((data) => {
+							capturedLog.Append (data);
+						});
+						var rv = await process.RunAsync (Log.CreateAggregatedLog (captureLog, log), false, timeout: TimeSpan.FromSeconds (120));
+						if (!rv.Succeeded) {
+							var msg = rv.TimedOut ? "Timed out while trying to list devices." : "Failed to list devices.";
+							Console.WriteLine (msg);
+							Console.WriteLine (capturedLog);
+							return;
+						}
 						log.WriteLine ("Result:");
 						log.WriteLine (File.ReadAllText (tmpfile));
 

@@ -143,8 +143,9 @@ namespace xharness
 						lock (StderrStream)
 							log.WriteLine ($"Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
 					}
+				} else {
+					process.WaitForExit ();
 				}
-				process.WaitForExit ();
 				exit_completion.TrySetResult (true);
 				Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
 				stderr_completion.TrySetResult (false);

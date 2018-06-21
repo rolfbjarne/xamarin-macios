@@ -80,10 +80,10 @@ namespace MonoTouchFixtures.GamePlayKit {
 				}
 			}
 
-			// increasing min required version due to in 9.2 we get a crash from GameplayKit
+			// increasing min required version due to in iOS 9.2 we get a crash from GameplayKit
 			// pretty similar to this report on stackoverflow, this does not happen on 9.3
 			// http://stackoverflow.com/questions/35811432/gameplaykit-gkgraph-dealloc-crash-on-ios9-2
-			if (TestRuntime.CheckSystemAndSDKVersion (9, 3))
+			if (TestRuntime.CheckXcodeVersion (7, 3))
 				graph.RemoveNodes (walls.ToArray ());
 
 			Assert.NotNull (startPosition, "startPosition must not be null");

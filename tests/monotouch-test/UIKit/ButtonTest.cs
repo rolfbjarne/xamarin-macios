@@ -46,7 +46,7 @@ namespace MonoTouchFixtures.UIKit {
 				Assert.IsNull (b.Title (UIControlState.Normal), "title");
 
 				b.SetTitleColor (null, UIControlState.Normal);
-				if (TestRuntime.CheckSystemAndSDKVersion (7,0))
+				if (TestRuntime.CheckiOSSystemVersion (7, 0))
 					Assert.That (b.TitleColor (UIControlState.Normal), Is.EqualTo (UIColor.White), "titlecolor");
 				else
 					Assert.IsNull (b.TitleColor (UIControlState.Normal), "titlecolor");

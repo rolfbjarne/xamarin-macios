@@ -130,7 +130,7 @@ namespace MonoTouchFixtures.SystemConfiguration {
 					Assert.That ((int)flags, Is.EqualTo (0), "#3 Reachable");
 				else {
 					var expected = NetworkReachabilityFlags.Reachable;
-					if (!UIDevice.CurrentDevice.CheckSystemVersion (9, 0))
+					if (!TestRuntime.CheckXcodeVersion (7, 0))
 						expected |= NetworkReachabilityFlags.IsLocalAddress;
 					Assert.That (flags, Is.EqualTo (expected), "#3 Reachable");
 				}

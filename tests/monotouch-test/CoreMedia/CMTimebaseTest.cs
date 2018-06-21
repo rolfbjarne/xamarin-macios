@@ -30,9 +30,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void DefaultValues ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("CMTimebase is new in 6.0");
-
 			var htc = CMClock.HostTimeClock;
 			using (var tb = new CMTimebase (htc)) {
 				Assert.AreEqual (0, tb.EffectiveRate, "EffectiveRate");
@@ -51,9 +48,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void SetAnchorTime ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("CMTimebase is new in 6.0");
-
 			using (var tb = new CMTimebase (CMClock.HostTimeClock)) {
 				Assert.AreEqual (CMTimebaseError.None, tb.SetAnchorTime (new CMTime (1000000, 200), new CMTime (-1, -2)));
 				var cmt = tb.GetTime (new CMTimeScale (int.MaxValue), CMTimeRoundingMethod.QuickTime);
@@ -64,9 +58,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void AddTimer ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("CMTimebase is new in 6.0");
-
 			using (var tb = new CMTimebase (CMClock.HostTimeClock)) {
 				var timer = NSTimer.CreateRepeatingTimer (CMTimebase.VeryLongTimeInterval, delegate { });
 
@@ -80,9 +71,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void GetMasterTests ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("CMTimebase is new in 6.0");
-
 			using (var tb = new CMTimebase (CMClock.HostTimeClock)) {
 				var masterTB = tb.GetMasterTimebase ();
 				AssertNullOrValidHandle (masterTB, "GetMasterTimebase");
@@ -101,9 +89,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void CopyMasterTests ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("CMTimebase is new in 6.0");
-
 			using (var tb = new CMTimebase (CMClock.HostTimeClock)) {
 				var masterTB = tb.CopyMasterTimebase ();
 				AssertNullOrValidHandle (masterTB, "CopyMasterTimebase");

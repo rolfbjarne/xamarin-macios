@@ -29,9 +29,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void Ctor ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("EntryPointNotFoundException : CMMemoryPoolCreate before 6.0");
-
 			using (var mp = new CMMemoryPool ())
 			{
 				var allocator = mp.GetAllocator ();
@@ -44,9 +41,6 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void CtorAgeOutPeriod ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (6,0))
-				Assert.Inconclusive ("EntryPointNotFoundException : CMMemoryPoolCreate before 6.0");
-
 			using (var mp = new CMMemoryPool (TimeSpan.FromSeconds (40)))
 			{
 				var allocator = mp.GetAllocator ();

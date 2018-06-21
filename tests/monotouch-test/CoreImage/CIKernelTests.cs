@@ -143,8 +143,8 @@ namespace MonoTouchFixtures.CoreImage
 		[Test]
 		public void CIKernel_BasicTest ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (8, 0))
-				Assert.Inconclusive ("Custom filters require iOS8+");
+			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
 
 			Exception ex = null;
 			var t = new Thread (() => {
@@ -195,8 +195,7 @@ namespace MonoTouchFixtures.CoreImage
 		[Test]
 		public void CIKernel_TestFromPrograms ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (8, 0))
-				Assert.Inconclusive ("Custom filters require iOS8+");
+			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
 
 			CIKernel[] kernels = 
 #if XAMCORE_2_0

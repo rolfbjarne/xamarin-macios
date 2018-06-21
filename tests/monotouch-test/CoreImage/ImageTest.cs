@@ -92,8 +92,8 @@ namespace MonoTouchFixtures.CoreImage {
 		[Test]
 		public void AreaHistogram ()
 		{
-			if (!TestRuntime.CheckSystemAndSDKVersion (8, 0))
-				Assert.Inconclusive ("requires iOS8+");
+			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
 
 			// validate that a null NSDictionary is correct (i.e. uses filter defaults)
 			using (var h = CIImage.EmptyImage.CreateByFiltering ("CIAreaHistogram", null)) {

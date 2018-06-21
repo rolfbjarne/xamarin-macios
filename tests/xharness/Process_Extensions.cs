@@ -129,33 +129,42 @@ namespace xharness
 
 			cancellation_token?.Register (() => {
 				if (!exit_completion.Task.IsCompleted) {
-					StderrStream.WriteLine ($"Execution was cancelled.");
+					lock (StderrStream) {
+						StderrStream.WriteLine ($"Execution was cancelled.");
+						StderrStream.Flush ();
+					}
 					ProcessHelper.kill (process.Id, 9);
 				}
 			});
 
 			var t = new Thread (() =>
 			{
-				if (timeout.HasValue) {
-					if (!process.WaitForExit ((int) timeout.Value.TotalMilliseconds)) {
-						process.KillTreeAsync (log, true).Wait ();
-						rv.TimedOut = true;
-						lock (StderrStream)
-							log.WriteLine ($"Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
+				try {
+					if (timeout.HasValue) {
+						exit_completion.SetResult (process.WaitForExit ((int) timeout.Value.TotalMilliseconds));
+					} else {
+						process.WaitForExit ();
+						exit_completion.SetResult (true);
 					}
+				} catch (Exception e) {
+					exit_completion.SetException (e);
 				}
-				process.WaitForExit ();
-				exit_completion.TrySetResult (true);
-				Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
-				stderr_completion.TrySetResult (false);
-				stdout_completion.TrySetResult (false);
 			}) {
 				IsBackground = true,
 			};
 			t.Name = $"Process waiter for {process.StartInfo.FileName}";
 			t.Start ();
 
-			await Task.WhenAll (stderr_completion.Task, stdout_completion.Task, exit_completion.Task);
+			await exit_completion.Task;
+			if (!exit_completion.Task.Result) {
+				await process.KillTreeAsync (log, true);
+				rv.TimedOut = true;
+				lock (StderrStream)
+					log.WriteLine ($"Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
+			}
+
+			// Wait at most 1 second for stderr and stdout to finish.
+			Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
 
 			try {
 				rv.ExitCode = process.ExitCode;

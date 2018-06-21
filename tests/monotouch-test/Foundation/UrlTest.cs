@@ -40,7 +40,8 @@ namespace MonoTouchFixtures.Foundation {
 		[Test]
 		public void IsExcludedFromBackupKey ()
 		{
-			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+			//TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false); // 10.8 fails DoNotBackupMe-1
 
 			// NOTE: this test was failing with either NullReferenceException or InvalidCastException
 			// when we used CFBoolean as a NSObject (i.e. CFBoolean.TrueObject). The test order execution

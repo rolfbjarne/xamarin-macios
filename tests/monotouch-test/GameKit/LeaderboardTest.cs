@@ -51,7 +51,7 @@ namespace MonoTouchFixtures.GameKit {
 #if __MACOS__
 			var hasGroupIdentifier = TestRuntime.CheckMacSystemVersion (10, 9);
 			var hasIdentifier = TestRuntime.CheckMacSystemVersion (10, 10);
-			var hasRange = TestRuntime.CheckMacSystemVersion (10, 8);
+			var hasRange = TestRuntime.CheckMacSystemVersion (10, 9);
 #elif __IOS__
 			var hasGroupIdentifier = TestRuntime.CheckiOSSystemVersion (6, 0);
 			var hasIdentifier = TestRuntime.CheckiOSSystemVersion (7, 0);

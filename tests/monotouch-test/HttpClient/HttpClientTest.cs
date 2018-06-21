@@ -89,12 +89,12 @@ namespace MonoTouchFixtures.HttpClientTests
 			}
 		}
 
-		[TestCase (typeof (HttpClientHandler))]
-		[TestCase (typeof (CFNetworkHandler))]
-		[TestCase (typeof (NSUrlSessionHandler))]
-		public void EnsureModifiabilityPostSend (Type handlerType)
+		[TestCase (typeof (HttpClientHandler), 8)]
+		[TestCase (typeof (CFNetworkHandler), 8)]
+		[TestCase (typeof (NSUrlSessionHandler), 9)]
+		public void EnsureModifiabilityPostSend (Type handlerType, int macOSMinVersion)
 		{
-			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, macOSMinVersion, throwIfOtherPlatform: false);
 
 			var wrapper = HandlerWrapper.GetWrapper (handlerType);
 			using (var client = new HttpClient (wrapper.Handler))

@@ -90,7 +90,12 @@ namespace MonoTouchFixtures.Security {
 			using (var id = IdentityTest.GetIdentity ()) {
 				data.LowlevelSetObject (id.Handle, valueref.Handle);
 				SecStatusCode code = SecItemAdd (data.Handle, IntPtr.Zero);
-				Assert.That (code, Is.EqualTo (SecStatusCode.DuplicateItem).Or.EqualTo (SecStatusCode.Success));
+				var expected = Is.EqualTo (SecStatusCode.DuplicateItem).Or.EqualTo (SecStatusCode.Success);
+#if __MACOS__
+				if (!TestRuntime.CheckMacSystemVersion (10, 9))
+					expected = Is.EqualTo (SecStatusCode.Param);
+#endif
+				Assert.That (code, expected);
 			}
 		}
 		

@@ -196,7 +196,7 @@ namespace MonoTouchFixtures.CoreImage
 		public void CIKernel_TestFromPrograms ()
 		{
 			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
 
 			CIKernel[] kernels = 
 #if XAMCORE_2_0

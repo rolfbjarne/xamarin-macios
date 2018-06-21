@@ -51,7 +51,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 		public void DecompressionSessionSetDecompressionPropertiesTest ()
 		{
 			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 			TestRuntime.AsserttvOSSystemVersion (10, 2, throwIfOtherPlatform: false);
 
 			using (var asset = AVAsset.FromUrl (NSBundle.MainBundle.GetUrlForResource ("xamvideotest", "mp4"))) 

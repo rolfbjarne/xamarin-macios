@@ -71,6 +71,8 @@ namespace MonoTouchFixtures.EventKit {
 		[Test]
 		public void Range ()
 		{
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
+
 			using (var rem = new EKReminder ()) {
 				// priority is documented to have a range of 0-9 but there's no validation in ObjC
 				// this test is here to ensure Apple does not start throwing native exceptions at some points

@@ -126,6 +126,7 @@ namespace MonoTouchFixtures.Security {
 		public void RevocationPolicy ()
 		{
 			TestRuntime.AssertXcodeVersion (5, 0);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 
 			using (var policy = SecPolicy.CreateRevocationPolicy (SecRevocation.UseAnyAvailableMethod | SecRevocation.RequirePositiveResponse)) {
 				Assert.That (policy.Handle, Is.Not.EqualTo (IntPtr.Zero), "Handle");
@@ -153,6 +154,7 @@ namespace MonoTouchFixtures.Security {
 		public void CreateWellKnownPolicies ()
 		{
 			TestRuntime.AssertXcodeVersion (5, 0);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 
 			CreatePolicy (SecPolicyIdentifier.AppleX509Basic);
 			CreatePolicy (SecPolicyIdentifier.AppleSSL);
@@ -172,6 +174,7 @@ namespace MonoTouchFixtures.Security {
 		public void CreateUnknownPolicy ()
 		{
 			TestRuntime.AssertXcodeVersion (5, 0);
+			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
 
 			using (var oid = new NSString ("1.2.3.4")) {
 				Assert.Throws<ArgumentException> (delegate {

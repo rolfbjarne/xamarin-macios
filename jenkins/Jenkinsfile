@@ -186,6 +186,7 @@ def runXamarinMacTests (url, macOS, maccore_hash, xamarin_macios_hash)
 {
     def failed = false
     def workspace = "${env.HOME}/jenkins/workspace/xamarin-macios"
+    def failedTests = []
     try {
         echo ("Executing on ${env.NODE_NAME}")
         echo ("URL: ${url}")
@@ -209,6 +210,7 @@ def runXamarinMacTests (url, macOS, maccore_hash, xamarin_macios_hash)
                 } catch (error) {
                     echoError ("${t} failed with error: ${error}")
                     failed = true
+                    failedTests.add (t)
                 }
             }
         }
@@ -233,7 +235,7 @@ def runXamarinMacTests (url, macOS, maccore_hash, xamarin_macios_hash)
         }
     }
     if (failed) {
-        def failureMessage = "Xamarin.Mac tests on ${macOS} failed"
+        def failureMessage = "Xamarin.Mac tests on ${macOS} failed (${failedTests.join (', ')})"
         manager.addErrorBadge (failureMessage)
         error (failureMessage)
     }

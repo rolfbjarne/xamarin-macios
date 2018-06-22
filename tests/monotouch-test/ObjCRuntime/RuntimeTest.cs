@@ -294,8 +294,11 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void FinalizationRaceCondition ()
 		{
-			if ((IntPtr.Size == 8) && TestRuntime.CheckXcodeVersion (7, 0))
-				Assert.Ignore ("NSString retainCount is nuint.MaxValue, so we won't collect them");
+			if (IntPtr.Size == 8) {
+				// NSString retainCount is nuint.MaxValue, so we won't collect them
+				TestRuntime.AssertMacSystemVersion (10, 15, throwIfOtherPlatform: false); // huh?
+				TestRuntime.AssertXcodeVersion (7, 0);
+			}
 			
 #if __WATCHOS__
 			if (Runtime.Arch == Arch.DEVICE)
@@ -308,6 +311,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				dict = new NSMutableDictionary();
 				dict["Hello"] = new NSString(@"World");
 				dict["Bye"] = new NSString(@"Bye");
+				Console.WriteLine ($"Hello: {dict ["Hello"].RetainCount} Bye: {dict ["Bye"].RetainCount}");
 			})
 			{ 
 				IsBackground = true

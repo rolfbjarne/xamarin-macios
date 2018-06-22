@@ -127,6 +127,9 @@ namespace MonoTouchFixtures.CoreFoundation {
 #if __IOS__
 			if (TestRuntime.CheckiOSSystemVersion (8, 0))
 				qname = "com.apple.root.default-qos";
+#elif __MACOS__
+			if (TestRuntime.CheckMacSystemVersion (10, 10))
+				qname = "com.apple.root.default-qos";
 #endif
 			Assert.That (DispatchQueue.DefaultGlobalQueue.Label, Is.EqualTo (qname), "Default");
 		}
@@ -180,6 +183,9 @@ namespace MonoTouchFixtures.CoreFoundation {
 			var newDefaults = false;
 #if __IOS__
 			if (TestRuntime.CheckiOSSystemVersion (8, 0))
+				newDefaults = true;
+#elif __MACOS__
+			if (TestRuntime.CheckMacSystemVersion (10, 10))
 				newDefaults = true;
 #endif
 			if (newDefaults) {

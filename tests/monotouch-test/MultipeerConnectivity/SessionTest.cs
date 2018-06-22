@@ -56,7 +56,7 @@ namespace MonoTouchFixtures.MultipeerConnectivity {
 				Assert.AreSame (s.MyPeerID, peer, "MyPeerID");
 				Assert.Null (s.SecurityIdentity, "SecurityIdentity");
 #if MONOMAC
-				var pref = MCEncryptionPreference.Required;
+				var pref = TestRuntime.CheckMacSystemVersion (10, 11) ? MCEncryptionPreference.Required : MCEncryptionPreference.Optional;
 #else
 				var pref = TestRuntime.CheckiOSSystemVersion (9, 0) ? MCEncryptionPreference.Required : MCEncryptionPreference.Optional;
 #endif

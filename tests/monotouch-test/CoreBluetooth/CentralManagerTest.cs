@@ -80,7 +80,7 @@ namespace MonoTouchFixtures.CoreBluetooth {
 		[SetUp]
 		public void SetUp ()
 		{
-			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false); // Required API is available in macOS 10.8, but it doesn't work (hangs) on the bots.
 			var e = new AutoResetEvent (false);
 			mgrDelegate = new ManagerDelegate (e);
 			mgr = new CBCentralManager (mgrDelegate, new DispatchQueue ("com.xamarin.tests." + TestContext.CurrentContext.Test.Name));

@@ -47,7 +47,7 @@ namespace MonoTouchFixtures.NetworkExtension {
 #if __IOS__
 			var HasLocalizedDescription = TestRuntime.CheckiOSSystemVersion (9, 0);
 #elif __MACOS__
-			var HasLocalizedDescription = TestRuntime.CheckMacSystemVersion (10, 12);
+			var HasLocalizedDescription = TestRuntime.CheckMacSystemVersion (10, 11);
 #endif
 			if (HasLocalizedDescription) {
 #if MONOMAC

@@ -135,7 +135,12 @@ namespace MonoTouchFixtures.Security {
 				using (var properties = policy.GetProperties ()) {
 					Assert.That (properties.Handle, Is.Not.EqualTo (IntPtr.Zero), "Properties.Handle");
 					Assert.That (CFGetRetainCount (properties.Handle), Is.EqualTo ((nint) 1), "Properties.RetainCount");
-					Assert.That (properties.Count, Is.EqualTo ((nuint) 1), "Count");
+					var expectedCount = (nuint) 1;
+#if __MACOS__
+					if (TestRuntime.CheckMacSystemVersion (10, 11) && !TestRuntime.CheckMacSystemVersion (10, 12))
+						expectedCount = 2;
+#endif
+					Assert.That (properties.Count, Is.EqualTo (expectedCount), "Count");
 					Assert.That (properties [SecPolicyPropertyKey.Oid].ToString (), Is.EqualTo ("1.2.840.113635.100.1.21"), "SecPolicyOid");
 				}
 			}
@@ -146,7 +151,7 @@ namespace MonoTouchFixtures.Security {
 			string name = oid + ".";
 			using (var policy = SecPolicy.CreatePolicy (oid, null)) {
 				Assert.That (CFGetRetainCount (policy.Handle), Is.EqualTo ((nint) 1), name + "RetainCount");
-				Assert.That (policy.GetProperties ().Values [0], Is.EqualTo (propertyOid ?? oid), name + "SecPolicyOid");
+				Assert.That (policy.GetProperties ().Values [0].ToString (), Is.EqualTo ((string) (propertyOid ?? oid)), name + "SecPolicyOid");
 			}
 		}
 
@@ -167,7 +172,12 @@ namespace MonoTouchFixtures.Security {
 			CreatePolicy (SecPolicyIdentifier.AppleIDValidation, (NSString) oid);
 			// invalid handle ? not yet supported ?!?
 			// CreatePolicy (SecPolicyIdentifier.AppleTimeStamping);
-			CreatePolicy (SecPolicyIdentifier.AppleRevocation);
+			oid = null;
+#if __MACOS__
+			if (TestRuntime.CheckMacSystemVersion (10, 11) && !TestRuntime.CheckMacSystemVersion (10, 12))
+				oid = "3";
+#endif
+			CreatePolicy (SecPolicyIdentifier.AppleRevocation, (NSString) oid);
 		}
 
 		[Test]

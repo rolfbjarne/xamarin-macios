@@ -41,6 +41,7 @@ namespace MonoTouchFixtures.CoreImage
 	[Preserve (AllMembers = true)]
 	public class CIKernelTests
 	{
+		// macOS: the __sample type is available starting in 10.11FinalizationRaceCondition
 		const string NoOpColorKernel = @"kernel vec4 doNothing ( __sample s) { return s.rgba; }";
 		const string NoOpWithParamColorKernel = @"kernel vec4 doNothingWithParam ( __sample s, float d) { return s.rgba; }";
 		const string PositionColorKernel = @"kernel vec4 vignette ( __sample s, vec2 centerOffset, float radius )
@@ -64,6 +65,7 @@ namespace MonoTouchFixtures.CoreImage
 #else
 				kernel = CIKernel.FromProgram (GetKernelString ());
 #endif
+				Assert.IsNotNull (kernel, $"Kernel: {Type}");
 			}
 
 			public bool IsColorKernel
@@ -144,7 +146,7 @@ namespace MonoTouchFixtures.CoreImage
 		public void CIKernel_BasicTest ()
 		{
 			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 11, throwIfOtherPlatform: false);
 
 			Exception ex = null;
 			var t = new Thread (() => {
@@ -183,6 +185,7 @@ namespace MonoTouchFixtures.CoreImage
 							Assert.IsTrue (filter.kernel is CIWarpKernel, "CIKernel_BasicTest we disagree that it is a warp kernel");
 					}
 				} catch (Exception ex2) {
+					Console.WriteLine (ex2);
 					ex = ex2;
 				}
 			});
@@ -196,7 +199,7 @@ namespace MonoTouchFixtures.CoreImage
 		public void CIKernel_TestFromPrograms ()
 		{
 			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 11, throwIfOtherPlatform: false);
 
 			CIKernel[] kernels = 
 #if XAMCORE_2_0

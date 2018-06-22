@@ -135,7 +135,13 @@ namespace MonoTouchFixtures.Security {
 
 					var trust_result = SecTrustResult.Invalid;
 #if __MACOS__
-					trust_result = SecTrustResult.RecoverableTrustFailure; // Result not invalidated starting with Xcode 9 beta 3.
+					if (TestRuntime.CheckMacSystemVersion (10, 13)) {
+						trust_result = SecTrustResult.RecoverableTrustFailure;
+					} else if (TestRuntime.CheckMacSystemVersion (10, 12)) {
+						trust_result = SecTrustResult.Invalid;
+					} else if (TestRuntime.CheckMacSystemVersion (10, 8)) {
+						trust_result = SecTrustResult.RecoverableTrustFailure;
+					}
 #else
 					if (!TestRuntime.CheckXcodeVersion (9, 0))
 						trust_result = SecTrustResult.RecoverableTrustFailure; // Result not invalidated starting with Xcode 9 beta 3.
@@ -332,7 +338,15 @@ namespace MonoTouchFixtures.Security {
 				Assert.That (trust.GetCustomAnchorCertificates ().Length, Is.EqualTo (certs.Count), "GetCustomAnchorCertificates");
 
 #if __MACOS__
-				trust_result = SecTrustResult.Unspecified;
+				if (TestRuntime.CheckMacSystemVersion (10, 13)) {
+					trust_result = SecTrustResult.Unspecified;
+				} else if (TestRuntime.CheckMacSystemVersion (10, 12)) {
+					trust_result = SecTrustResult.Invalid;
+				} else if (TestRuntime.CheckMacSystemVersion (10, 11)) {
+					trust_result = SecTrustResult.RecoverableTrustFailure;
+				} else {
+					trust_result = SecTrustResult.Unspecified;
+				}
 #else
 
 				if (ios11)

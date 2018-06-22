@@ -65,7 +65,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 		public void ToCGImageTest ()
 		{
 			TestRuntime.AssertiOSSystemVersion (9, 0, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 11, throwIfOtherPlatform: false);
 			TestRuntime.AsserttvOSSystemVersion (10, 2, throwIfOtherPlatform: false);
 
 #if MONOMAC

@@ -98,7 +98,16 @@ namespace MonoTouchFixtures.CoreImage {
 			// validate that a null NSDictionary is correct (i.e. uses filter defaults)
 			using (var h = CIImage.EmptyImage.CreateByFiltering ("CIAreaHistogram", null)) {
 				// broken on simulator/64 bits on iOS9 beta 2 - radar 21564256 -> fixed in beta 4
-				Assert.That (h.Extent.Height, Is.EqualTo ((nfloat) 1), "Height");
+				var success = true;
+#if __MACOS__
+				if (!TestRuntime.CheckMacSystemVersion (10, 11))
+					success = false;
+#endif
+				if (success) {
+					Assert.That (h.Extent.Height, Is.EqualTo ((nfloat)1), "Height");
+				} else {
+					Assert.IsNull (h, "Image");
+				}
 			}
 		}
 

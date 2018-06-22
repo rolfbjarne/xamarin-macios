@@ -205,7 +205,7 @@ namespace MonoTouchFixtures.Security {
 #if __MACOS__
 				if (!TestRuntime.CheckMacSystemVersion (10, 8))
 					expectedStatus = SecStatusCode.Success;
-				else if (!TestRuntime.CheckMacSystemVersion (10, 10))
+				else if (!TestRuntime.CheckMacSystemVersion (10, 12))
 					expectedStatus = SecStatusCode.OutputLengthError;
 #endif
 				Assert.That (rv, Is.EqualTo (expectedStatus), "Encrypt");
@@ -248,7 +248,7 @@ namespace MonoTouchFixtures.Security {
 				Assert.That (private_key.Decrypt (SecPadding.OAEP, cipher, out result), Is.EqualTo (SecStatusCode.Success), "Decrypt");
 				var expectEmpty = false;
 #if __MACOS__
-				if (!TestRuntime.CheckMacSystemVersion (10, 10))
+				if (!TestRuntime.CheckMacSystemVersion (10, 12))
 					expectEmpty = true;
 #endif
 				if (expectEmpty) {

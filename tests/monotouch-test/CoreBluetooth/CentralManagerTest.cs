@@ -91,6 +91,16 @@ namespace MonoTouchFixtures.CoreBluetooth {
 		{
 			// should dispose the delegate
 			mgr?.Dispose ();
+			GC.Collect ();
+			GC.WaitForPendingFinalizers ();
+			GC.Collect ();
+			GC.WaitForPendingFinalizers ();
+			GC.Collect ();
+			GC.WaitForPendingFinalizers ();
+			GC.Collect ();
+			GC.WaitForPendingFinalizers ();
+			GC.Collect ();
+			GC.WaitForPendingFinalizers ();
 		}
 			
 		[Test, Timeout (5000)]

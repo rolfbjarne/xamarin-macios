@@ -523,6 +523,8 @@ namespace Introspection {
 					case "delegate":
 					case "setDelegate:":
 					case "expectedPlayerCount":
+					case "chooseBestHostPlayerWithCompletionHandler:":
+					case "rematchWithCompletionHandler:":
 						return true;
 					}
 					break;
@@ -537,6 +539,11 @@ namespace Introspection {
 					case "cancel":
 					case "queryPlayerGroupActivity:withCompletionHandler:":
 					case "queryActivityWithCompletionHandler:":
+					case "cancelInviteToPlayer:":
+					case "finishMatchmakingForMatch:":
+					case "matchForInvite:completionHandler:":
+					case "startBrowsingForNearbyPlayersWithReachableHandler:":
+					case "stopBrowsingForNearbyPlayers":
 						return true;
 					}
 					break;

@@ -11942,6 +11942,7 @@ namespace AVFoundation {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface AVOutputSettingsAssistant {
+		[Mac (10, 10)]
 		[Static, Export ("availableOutputSettingsPresets")]
 		string [] AvailableOutputSettingsPresets { get; }
 
@@ -11978,6 +11979,7 @@ namespace AVFoundation {
 		[Export ("sourceVideoAverageFrameDuration", ArgumentSemantic.Copy)]
 		CMTime SourceVideoAverageFrameDuration { get; set; }
 
+		[Mac (10, 10)]
 		[Export ("sourceVideoMinFrameDuration", ArgumentSemantic.Copy)]
 		CMTime SourceVideoMinFrameDuration { get; set; }
 

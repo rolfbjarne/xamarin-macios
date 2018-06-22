@@ -31,7 +31,7 @@ namespace MonoTouchFixtures.MapKit {
 		public void EmptyRequest ()
 		{
 			TestRuntime.AssertiOSSystemVersion (6, 1, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
 			TestRuntime.AsserttvOSSystemVersion (9, 2, throwIfOtherPlatform: false);
 
 			using (var lsr = new MKLocalSearchRequest ())

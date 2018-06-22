@@ -46,6 +46,9 @@ namespace MonoTouchFixtures.CoreFoundation {
 #if __IOS__
 				if (TestRuntime.CheckiOSSystemVersion (7, 0))
 					value = "file:///";
+#elif __MACOS__
+				if (TestRuntime.CheckMacSystemVersion (10, 9))
+					value = "file:///";
 #endif
 
 				Assert.That (url.ToString (), Is.EqualTo (value), "FromFile");

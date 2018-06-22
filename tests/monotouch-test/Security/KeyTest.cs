@@ -181,7 +181,7 @@ namespace MonoTouchFixtures.Security {
 					expectedResult = SecStatusCode.InvalidData;
 #endif
 				Assert.That (private_key.Decrypt (SecPadding.PKCS1, cipher, out result), Is.EqualTo (expectedResult), "Decrypt");
-				if (expectedResult != SecStatusCode.InvalidID)
+				if (expectedResult != SecStatusCode.InvalidData)
 					Assert.That (plain, Is.EqualTo (result), "match");
 				private_key.Dispose ();
 			}
@@ -205,7 +205,7 @@ namespace MonoTouchFixtures.Security {
 #if __MACOS__
 				if (!TestRuntime.CheckMacSystemVersion (10, 8))
 					expectedStatus = SecStatusCode.Success;
-				else if (!TestRuntime.CheckMacSystemVersion (10, 9))
+				else if (!TestRuntime.CheckMacSystemVersion (10, 10))
 					expectedStatus = SecStatusCode.OutputLengthError;
 #endif
 				Assert.That (rv, Is.EqualTo (expectedStatus), "Encrypt");
@@ -248,7 +248,7 @@ namespace MonoTouchFixtures.Security {
 				Assert.That (private_key.Decrypt (SecPadding.OAEP, cipher, out result), Is.EqualTo (SecStatusCode.Success), "Decrypt");
 				var expectEmpty = false;
 #if __MACOS__
-				if (!TestRuntime.CheckMacSystemVersion (10, 9))
+				if (!TestRuntime.CheckMacSystemVersion (10, 10))
 					expectEmpty = true;
 #endif
 				if (expectEmpty) {

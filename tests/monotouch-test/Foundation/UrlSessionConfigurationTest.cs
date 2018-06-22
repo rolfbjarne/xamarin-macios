@@ -92,7 +92,13 @@ namespace MonoTouchFixtures.Foundation {
 			Assert.False (config.SessionSendsLaunchEvents, "sessionSendsLaunchEvents");
 			config.SessionSendsLaunchEvents = config.SessionSendsLaunchEvents; // setSessionSendsLaunchEvents:
 
-			if (TestRuntime.CheckXcodeVersion (6, 0)) {
+			var hasSharedContainerIdentifier = true;
+#if __MACOS__
+			hasSharedContainerIdentifier = TestRuntime.CheckMacSystemVersion (10, 10);
+#else
+			hasSharedContainerIdentifier = TestRuntime.CheckXcodeVersion (6, 0);
+#endif
+			if (hasSharedContainerIdentifier) {
 				Assert.Null (config.SharedContainerIdentifier, "sharedContainerIdentifier");
 				config.SharedContainerIdentifier = config.SharedContainerIdentifier; // setSharedContainerIdentifier:
 			}
@@ -116,7 +122,13 @@ namespace MonoTouchFixtures.Foundation {
 			Assert.NotNull (config.URLCredentialStorage, "URLCredentialStorage");
 			config.URLCredentialStorage = config.URLCredentialStorage; // setURLCredentialStorage:
 
-			if (TestRuntime.CheckXcodeVersion (6, 0)) {
+			var hasProtocolClasses = true;
+#if __MACOS__
+			hasProtocolClasses = TestRuntime.CheckMacSystemVersion (10, 10);
+#else
+			hasProtocolClasses = TestRuntime.CheckXcodeVersion (6, 0);
+#endif
+			if (hasProtocolClasses) {
 				Assert.NotNull (config.WeakProtocolClasses, "protocolClasses");
 			} else {
 				Assert.Null (config.WeakProtocolClasses, "protocolClasses");

@@ -50,7 +50,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 		public void CompressionSessionSetCompressionPropertiesTest ()
 		{
 			TestRuntime.AssertiOSSystemVersion (8, 0, throwIfOtherPlatform: false);
-			TestRuntime.AssertMacSystemVersion (10, 9, throwIfOtherPlatform: false);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
 			TestRuntime.AsserttvOSSystemVersion (10, 2, throwIfOtherPlatform: false);
 
 			using (var session = CreateSession ()){
@@ -60,7 +60,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 					AllowFrameReordering = false
 				});
 
-				Assert.That (result == VTStatus.Ok, "SetCompressionProperties");
+				Assert.That (result, Is.EqualTo (VTStatus.Ok), "SetCompressionProperties");
 			}
 		}
 

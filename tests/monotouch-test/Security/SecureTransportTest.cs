@@ -122,7 +122,11 @@ namespace MonoTouchFixtures.Security {
 		{
 			TestRuntime.AssertMacSystemVersion (10, 8, throwIfOtherPlatform: false);
 
+#if __MACOS__
+			nint dsize = TestRuntime.CheckMacSystemVersion (10, 10) ? 1327 : 1387;
+#else
 			nint dsize = TestRuntime.CheckXcodeVersion (6, 0) ? 1327 : 1387;
+#endif
 			using (var ssl = new SslContext (SslProtocolSide.Client, SslConnectionType.Datagram)) {
 				Assert.That (ssl.BufferedReadSize, Is.EqualTo ((nint) 0), "BufferedReadSize");
 				Assert.Null (ssl.Connection, "Connection");

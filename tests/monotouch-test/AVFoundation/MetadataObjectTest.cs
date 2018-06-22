@@ -44,6 +44,7 @@ namespace MonoTouchFixtures.AVFoundation {
 		public void Defaults ()
 		{
 			TestRuntime.AssertXcodeVersion (6, 0);
+			TestRuntime.AssertMacSystemVersion (10, 10, throwIfOtherPlatform: false);
 
 			using (var obj = new AVMetadataFaceObject ()) {
 				Assert.AreEqual (0, obj.FaceID, "FaceID");

@@ -53,7 +53,9 @@ namespace MonoTouchFixtures.MapKit {
 #endif
 
 				Assert.That (av.PinColor, Is.EqualTo (MKPinAnnotationColor.Red), "PinColor");
-				Assert.NotNull (av.PinTintColor, "PinTintColor");
+
+				if (TestRuntime.CheckXcodeVersion (7, 0))
+					Assert.NotNull (av.PinTintColor, "PinTintColor");
 			}
 		}
 

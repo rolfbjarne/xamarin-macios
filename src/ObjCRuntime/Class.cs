@@ -212,9 +212,6 @@ namespace ObjCRuntime {
 				return IntPtr.Zero;
 			}
 
-			if (type.IsByRef)
-				return IntPtr.Zero;
-
 			if (type.IsGenericType)
 				type = type.GetGenericTypeDefinition ();
 

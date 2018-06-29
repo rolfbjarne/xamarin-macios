@@ -116,12 +116,16 @@ def reportFinalStatus (err, gitHash, currentStage)
 
     if ("${status}" == "SUCCESS" && err == "") {
         comment = "✅ [Jenkins job](${env.RUN_DISPLAY_URL}) (on internal Jenkins) succeeded"
+
+        slackSend (botUser: true, channel: "#ios-notifications", color: "good", message: comment)
     } else {
         comment = "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) (on internal Jenkins) failed in stage '${currentStage}' 🔥"
         if (err != "")
             comment += " : ${err}"
         manager.addErrorBadge (comment)
         manager.buildFailure ()
+
+        slackSend (botUser: true, channel: "#ios-notifications", color: "danger", message: comment)
     }
 
     if (fileExists (commentFile))

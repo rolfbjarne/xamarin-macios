@@ -101,5 +101,10 @@ namespace Xamarin.BindingTests
 				completionHandler (42);
 			}
 		}
+
+		public class PropertyBlock : NSObject, IProtocolWithSingleBlockProperty {
+			[Export ("myProperty")]
+			public SimpleCallback MyProperty { get; set; }
+		}
 	}
 }

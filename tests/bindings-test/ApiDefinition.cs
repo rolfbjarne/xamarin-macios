@@ -350,6 +350,14 @@ namespace Bindings.Test {
 		[Export ("evilCallback")]
 		Action<int> EvilCallback { get; set; }
 	}
+
+	delegate void SimpleCallback ();
+	[BaseType (typeof (NSObject))]
+	[Model, Protocol]
+	interface ProtocolWithSingleBlockProperty {
+		[Export ("myproperty")]
+		SimpleCallback MyProperty { get; set; }
+	}
 }
 
 

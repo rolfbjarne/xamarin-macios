@@ -120,7 +120,7 @@ def reportFinalStatus (err, gitHash, currentStage)
         // Aborted builds throw either a FlowInterruptedException or an AbortException (depending on what's executing),
         // so treat either as an abortion (both can be thrown in other circumstances as well, so it's just a best guess).
         if (err.contains ("FlowInterruptedException") || err.contains ("AbortException"))
-            comment += "❌ [Build was (probably) aborted](${env.RUN_DISPLAY_URL})\n\n"
+            comment += "❌ [Build was (likely) aborted](${env.RUN_DISPLAY_URL})\n\n"
         comment += "🔥 [Jenkins job](${env.RUN_DISPLAY_URL}) (on internal Jenkins) failed in stage '${currentStage}' 🔥"
         if (err != "")
             comment += " : ${err}"

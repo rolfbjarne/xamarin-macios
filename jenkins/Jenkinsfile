@@ -253,6 +253,27 @@ def runXamarinMacTests (url, macOS, maccore_hash, xamarin_macios_hash)
     }
 }
 
+def abortExecutingBuilds ()
+{
+    def job = Jenkins.instance.getItemByFullName (env.JOB_NAME)
+    for (build in job.builds) {
+        if (!build.isBuilding ())
+            continue
+        echo ("Current build: ${currentBuild.number} Checking build: ${build.number}");
+        if (build.number > currentBuild.number) {
+            error ("There is already a newer build in progress (#${build.number})")
+        } else if (build.number < currentBuild.number) {
+            def exec = build.getExecutor ()
+            if (exec == null) {
+                echo ("No executor for build ${build.number}")
+            } else {
+                exec.interrupt (Result.ABORTED, new CauseOfInterruption.UserInterruption ("Aborted by build #${currentBuild.number}"))
+                echo ("Aborted previous build: #${build.number}")
+            }
+        }
+    }
+}
+
 timestamps {
     node ('xamarin-macios && macos-10.13') {
         try {
@@ -301,6 +322,8 @@ timestamps {
 
                         if (!hasRunInternalTests)
                             skipLocalTestRunReason = "Not running tests here because they're run on public Jenkins."
+
+                        abortExecutingBuilds ()
                     }
 
                     dir ("${workspace}") {

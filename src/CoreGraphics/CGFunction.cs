@@ -35,15 +35,22 @@ namespace CoreGraphics {
 
 	// CGFunction.h
 	public class CGFunction : INativeObject, IDisposable {
-		internal IntPtr handle;
-		GCHandle gch;
+		IntPtr handle;
 		CGFunctionEvaluate evaluate;
-		
+
+		static CGFunctionCallbacks cbacks;
+
+		unsafe static CGFunction ()
+		{
+			cbacks.version = 0;
+			cbacks.evaluate = new CGFunctionEvaluateCallback (EvaluateCallback);
+			cbacks.release = new CGFunctionReleaseCallback (ReleaseCallback);
+		}
+
 		// invoked by marshallers
 		internal CGFunction (IntPtr handle)
 			: this (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		[Preserve (Conditional=true)]
@@ -69,6 +76,15 @@ namespace CoreGraphics {
 			get { return handle; }
 		}
 	
+		public CGFunctionEvaluate EvaluateFunction {
+			get {
+				return evaluate;
+			}
+			set {
+				evaluate = value;
+			}
+		}
+
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGFunctionRelease (/* CGFunctionRef */ IntPtr function);
 
@@ -77,22 +93,22 @@ namespace CoreGraphics {
 		
 		protected virtual void Dispose (bool disposing)
 		{
+			Console.WriteLine ($"CGFunction.Dispose () handle: 0x{handle.ToString ("x")}");
 			if (handle != IntPtr.Zero){
 				CGFunctionRelease (handle);
 				handle = IntPtr.Zero;
-				gch.Free ();
-				evaluate = null;
 			}
 		}
 
 		// Apple's documentation says 'float', the header files say 'CGFloat'
-		unsafe delegate void CGFunctionEvaluateCallback (/* void* */ IntPtr info, /* CGFloat* */ nfloat *data, /* CGFloat* */ nfloat *outData); 
+		unsafe delegate void CGFunctionEvaluateCallback (/* void* */ IntPtr info, /* CGFloat* */ nfloat *data, /* CGFloat* */ nfloat *outData);
+		delegate void CGFunctionReleaseCallback (IntPtr info);
 			
 		[StructLayout (LayoutKind.Sequential)]
 		struct CGFunctionCallbacks {
 			public /* unsigned int */ uint version;
 			public CGFunctionEvaluateCallback evaluate;
-			public /* CGFunctionReleaseInfoCallback */ IntPtr release;
+			public CGFunctionReleaseCallback release;
 		}
 		
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -115,13 +131,18 @@ namespace CoreGraphics {
 
 			this.evaluate = callback;
 
-			CGFunctionCallbacks cbacks;
-			cbacks.version = 0;
-			cbacks.evaluate = new CGFunctionEvaluateCallback (EvaluateCallback);
-			cbacks.release = IntPtr.Zero;
+			var gch = GCHandle.Alloc (this);
+			var ptr = GCHandle.ToIntPtr (gch);
+			Console.WriteLine ($"CGFunction () handle: 0x{handle.ToString ("x")} ptr: 0x{ptr.ToString ("x")}");
+			handle = CGFunctionCreate (ptr, domain != null ? domain.Length/2 : 0, domain, range != null ? range.Length/2 : 0, range, ref cbacks);
+		}
 
-			gch = GCHandle.Alloc (this);
-			handle = CGFunctionCreate (GCHandle.ToIntPtr (gch), domain != null ? domain.Length/2 : 0, domain, range != null ? range.Length/2 : 0, range, ref cbacks);
+#if !MONOMAC
+		[MonoPInvokeCallback (typeof (CGFunctionReleaseCallback))]
+#endif
+		static void ReleaseCallback (IntPtr info)
+		{
+			GCHandle.FromIntPtr (info).Free ();
 		}
 
 #if !MONOMAC
@@ -129,10 +150,11 @@ namespace CoreGraphics {
 #endif
 		unsafe static void EvaluateCallback (IntPtr info, nfloat *input, nfloat *output)
 		{
+			Console.WriteLine ($"EvaluateCallback (0x{info.ToString ("x")})");
 			GCHandle lgc = GCHandle.FromIntPtr (info);
 			CGFunction container = (CGFunction) lgc.Target;
 
-			container.evaluate (input, output);
+			container.evaluate?.Invoke (input, output);
 		}
 	}
 }

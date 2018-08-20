@@ -84,6 +84,13 @@ namespace xharness
 			csproj.SetMtouchUseBitcode (true, "iPhone", "Release");
 			csproj.SetMtouchUseLlvm (true, "iPhone", "Release");
 
+			// Not linking a watch extensions requires passing -O2 to the native compiler.
+			// https://github.com/mono/mono/issues/9867
+			var configurations = new string [] { "Debug", "Debug32", "Release", "Release32", "Release-bitcode" };
+			foreach (var c in configurations)
+				if (csproj.GetMtouchLink ("iPhone", c) == "None")
+					csproj.AddExtraMtouchArgs ("--gcc_flags=-O2", "iPhone", c);
+
 			Harness.Save (csproj, WatchOSExtensionProjectPath);
 
 			WatchOSExtensionGuid = csproj.GetProjectGuid ();

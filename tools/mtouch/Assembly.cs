@@ -23,6 +23,7 @@ namespace Xamarin.Bundler {
 		public AOTTask Task;
 		public LinkTask LinkTask;
 		public List<string> BitcodeFiles = new List<string> (); // .bc files produced by the AOT compiler
+		public List<string> CompiledBitcodeFiles = new List<string> (); // .o files produced by compiling the .bc files
 		public List<string> AsmFiles = new List<string> (); // .s files produced by the AOT compiler.
 		public List<string> AotDataFiles = new List<string> (); // .aotdata files produced by the AOT compiler
 		public List<string> ObjectFiles = new List<string> (); // .o files produced by the AOT compiler

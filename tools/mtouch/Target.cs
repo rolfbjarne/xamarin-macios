@@ -1029,13 +1029,36 @@ namespace Xamarin.Bundler
 						aot_dependencies.AddRange (aottasks);
 					}
 
+					foreach (var info in infos) {
+						foreach (var bc in info.BitcodeFiles) {
+							if (string.IsNullOrEmpty (App.UserGccFlags)) {
+								var compile_task = new CompileTask {
+									Target = this,
+									SharedLibrary = false,
+									InputFile = bc,
+									OutputFile = Path.ChangeExtension (bc, ".o"),
+									Abi = abi,
+								};
+								compile_task.AddDependency (info.Task);
+								link_dependencies.Add (compile_task);
+								info.CompiledBitcodeFiles.Add (compile_task.OutputFile);
+							} else {
+								// If there are custom GCC flags, we can't assume they're not there to 
+								// customize the bc compilation done (nor can we assume they're not),
+								// which means we can't parallelize the bc -> o compilation since we
+								// don't know if we know all the compiler flags.
+								info.CompiledBitcodeFiles.Add (bc);
+							}
+						}
+					}
+
 					var arch = abi.AsArchString ();
 					switch (build_target) {
 					case AssemblyBuildTarget.StaticObject:
 						LinkWithTaskOutput (link_dependencies); // Any .s or .ll files from the AOT compiler (compiled to object files)
 						foreach (var info in infos) {
 							LinkWithStaticLibrary (info.ObjectFiles);
-							LinkWithStaticLibrary (info.BitcodeFiles);
+							LinkWithStaticLibrary (info.CompiledBitcodeFiles);
 						}
 						continue; // no linking to do here.
 					case AssemblyBuildTarget.DynamicLibrary:
@@ -1056,7 +1079,7 @@ namespace Xamarin.Bundler
 
 					foreach (var info in infos) {
 						compiler_flags.AddLinkWith (info.ObjectFiles);
-						compiler_flags.AddLinkWith (info.BitcodeFiles);
+						compiler_flags.AddLinkWith (info.CompiledBitcodeFiles);
 					}
 
 					foreach (var task in link_dependencies)
@@ -1380,7 +1403,7 @@ namespace Xamarin.Bundler
 						AotInfo info;
 						if (!a.AotInfos.TryGetValue (abi, out info))
 							continue;
-						linker_flags.AddLinkWith (info.BitcodeFiles);
+						linker_flags.AddLinkWith (info.CompiledBitcodeFiles);
 						linker_flags.AddLinkWith (info.ObjectFiles);
 					}
 				}

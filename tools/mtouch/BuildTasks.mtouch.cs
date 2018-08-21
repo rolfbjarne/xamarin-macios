@@ -187,6 +187,7 @@ namespace Xamarin.Bundler
 				return AotInfo.AotDataFiles
 							  .Union (AotInfo.AsmFiles)
 							  .Union (AotInfo.BitcodeFiles)
+							  .Union (AotInfo.CompiledBitcodeFiles)
 							  .Union (AotInfo.ObjectFiles);
 			}
 		}

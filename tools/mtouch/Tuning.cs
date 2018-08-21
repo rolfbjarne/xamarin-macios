@@ -23,6 +23,7 @@ namespace MonoTouch.Tuner {
 		public LinkMode LinkMode { get; set; }
 		public AssemblyResolver Resolver { get; set; }
 		public IEnumerable<string> SkippedAssemblies { get; set; }
+		public IEnumerable<string> AddedAssemblies { get; set; }
 		public I18nAssemblies I18nAssemblies { get; set; }
 		public bool LinkSymbols { get; set; }
 		public bool LinkAway { get; set; }
@@ -185,7 +186,7 @@ namespace MonoTouch.Tuner {
 			if (options.LinkMode != LinkMode.None)
 				pipeline.Append (new BlacklistStep ());
 
-			pipeline.Append (new CustomizeIOSActions (options.LinkMode, options.SkippedAssemblies));
+			pipeline.Append (new CustomizeIOSActions (options.LinkMode, options.SkippedAssemblies, options.AddedAssemblies));
 
 			// We need to store the Field attribute in annotations, since it may end up removed.
 			pipeline.Append (new ProcessExportedFields ());
@@ -283,19 +284,48 @@ namespace MonoTouch.Tuner {
 	public class CustomizeIOSActions : CustomizeActions
 	{
 		LinkMode link_mode;
+		readonly HashSet<string> added_assemblies;
+		readonly HashSet<string> skipped_assemblies;
 
-		public CustomizeIOSActions (LinkMode mode, IEnumerable<string> skipped_assemblies)
+		public CustomizeIOSActions (LinkMode mode, IEnumerable<string> skipped_assemblies, IEnumerable<string> added_assemblies)
 			: base (mode == LinkMode.SDKOnly, skipped_assemblies)
 		{
 			link_mode = mode;
+			this.skipped_assemblies = new HashSet<string> (skipped_assemblies);
+			this.added_assemblies = new HashSet<string> (added_assemblies);
 		}
 
 		protected override bool IsLinked (AssemblyDefinition assembly)
 		{
-			if (link_mode == LinkMode.None)
+			if (skipped_assemblies.Contains (assembly.Name.Name))
 				return false;
-			
-			return base.IsLinked (assembly);
+
+			if (added_assemblies.Contains (assembly.Name.Name))
+				return true;
+
+			switch (link_mode) {
+			case LinkMode.None:
+				return false;
+			case LinkMode.All:
+				return true;
+			case LinkMode.SDKOnly:
+				// Link SDK : applies to BCL/SDK and product assembly (e.g. monotouch.dll)
+				if (Profile.IsSdkAssembly (assembly))
+					return true;
+				if (Profile.IsProductAssembly (assembly))
+					return true;
+				// the assembly can be marked with [LinkAssembly]
+				if (assembly.HasCustomAttributes) {
+					foreach (var ca in assembly.CustomAttributes) {
+						if (IsLinkerSafeAttribute (ca))
+							return true;
+					}
+				}
+
+				return false;
+			}
+
+			return false;
 		}
 
 		protected override void ProcessAssembly (AssemblyDefinition assembly)

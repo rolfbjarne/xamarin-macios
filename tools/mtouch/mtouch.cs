@@ -1008,6 +1008,7 @@ namespace Xamarin.Bundler
 			{ "linkerdumpdependencies", "Dump linker dependencies for linker-analyzer tool", v => app.LinkerDumpDependencies = true },
 			{ "linksdkonly", "Link only the SDK assemblies", v => app.LinkMode = LinkMode.SDKOnly },
 			{ "linkskip=", "Skip linking of the specified assembly", v => app.LinkSkipped.Add (v) },
+			{ "linkadd=", "Link the specified assembly", v => app.LinkAdded.Add (v) },
 			{ "nolinkaway", "Disable the linker step which replace code with a 'Linked Away' exception.", v => app.LinkAway = false },
 			{ "xml=", "Provide an extra XML definition file to the linker", v => app.Definitions.Add (v) },
 			{ "i18n=", "List of i18n assemblies to copy to the output directory, separated by commas (none,all,cjk,mideast,other,rare,west)", v => app.I18n = LinkerOptions.ParseI18nAssemblies (v) },

@@ -31,6 +31,7 @@ namespace Xamarin.Bundler {
 	public enum LinkMode {
 		None,
 		SDKOnly,
+		Custom,
 		All,
 #if !MONOTOUCH
 		Platform,
@@ -58,6 +59,7 @@ namespace Xamarin.Bundler {
 		// Linker config
 		public LinkMode LinkMode = LinkMode.All;
 		public List<string> LinkSkipped = new List<string> ();
+		public List<string> LinkAdded = new List<string> ();
 		public List<string> Definitions = new List<string> ();
 		public Mono.Linker.I18nAssemblies I18n;
 
@@ -437,6 +439,9 @@ namespace Xamarin.Bundler {
 		{
 			Namespaces.Initialize ();
 			SelectRegistrar ();
+
+			if (LinkMode == LinkMode.None && LinkAdded.Count > 0)
+				LinkMode = LinkMode.Custom;
 
 			if (RequiresXcodeHeaders && SdkVersion < SdkVersions.GetVersion (Platform)) {
 				throw ErrorHelper.CreateError (91, "This version of {0} requires the {1} {2} SDK (shipped with Xcode {3}). Either upgrade Xcode to get the required header files or {4} (to try to avoid the new APIs).", ProductName, PlatformName, SdkVersions.GetVersion (Platform), SdkVersions.Xcode, Error91LinkerSuggestion);

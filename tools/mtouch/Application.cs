@@ -1041,6 +1041,12 @@ namespace Xamarin.Bundler {
 						continue;
 					}
 
+					var linkadded_same = !LinkAdded.Except (appex.LinkAdded).Any () && !appex.LinkAdded.Except (LinkAdded).Any ();
+					if (!linkadded_same) {
+						ErrorHelper.Warning (113, "Native code sharing has been disabled for the extension '{0}' because {1}", appex.Name, $"the added assemblies for the managed linker are different between the container app ({string.Join (", ", LinkAdded)}) and the extension ({string.Join (", ", appex.LinkAdded)}).");
+						continue;
+					}
+
 					if (Definitions.Count > 0) {
 						ErrorHelper.Warning (112, "Native code sharing has been disabled because {0}", $"the container app has custom xml definitions for the managed linker ({string.Join (", ", Definitions)}).");
 						continue;

@@ -496,9 +496,14 @@ namespace Xamarin.Bundler
 				foreach (var root in appex.App.RootAssemblies)
 					main_assemblies.Add (Resolver.Load (root));
 			}
-			
-			if (Driver.Verbosity > 0)
+
+			if (Driver.Verbosity > 0) {
 				Console.WriteLine ("Linking {0} into {1} using mode '{2}'", string.Join (", ", main_assemblies.Select ((v) => v.MainModule.FileName)), output_dir, App.LinkMode);
+				if (App.LinkSkipped.Count > 0)
+					Console.WriteLine ("    LinkSkipped: {0}", string.Join (", ", App.LinkSkipped));
+				if (App.LinkAdded.Count > 0)
+					Console.WriteLine ("    LinkAdded: {0}", string.Join (", ", App.LinkAdded));
+			}
 			
 			LinkerOptions = new LinkerOptions {
 				MainAssemblies = main_assemblies,
@@ -506,6 +511,7 @@ namespace Xamarin.Bundler
 				LinkMode = App.LinkMode,
 				Resolver = resolver,
 				SkippedAssemblies = App.LinkSkipped,
+				AddedAssemblies = App.LinkAdded,
 				I18nAssemblies = App.I18n,
 				LinkSymbols = true,
 				LinkAway = App.LinkAway,

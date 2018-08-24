@@ -184,6 +184,16 @@ def runXamarinMacTests (url, macOS)
         sh ("cd mac-test-package && ./system-dependencies.sh --provision-mono --ignore-autotools --ignore-xamarin-studio --ignore-xcode --ignore-osx --ignore-cmake")
         sh ("make -C mac-test-package/tests exec-mac-dontlink")
         sh ("make -C mac-test-package/tests exec-mac-apitest")
+        // install oldest supported mono
+        sh ('''
+            cd mac-test-package
+            URL=`grep "^MIN_XM_MONO_URL=" Make.config | sed 's/.*=//'`
+            curl -L '$URL' --output old-mono.pkg
+            sudo installer -pkg old-mono.pkg -target /
+            mono --version
+            ''')
+        // run dontlink tests using the system mono
+        sh ("make -C mac-test-package/tests exec-mac-system-dontlink")
     } finally {
         sh ("rm -rf mac-test-package *.zip")
     }

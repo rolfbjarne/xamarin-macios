@@ -44,7 +44,7 @@ namespace CoreFoundation {
 		High = 2,
 		Default = 0,
 		Low = -2,
-		Background = Int16.MinValue
+		Background = Int16.MinValue,
 	}
 	
 	public abstract class DispatchObject : INativeObject

@@ -46,61 +46,45 @@ namespace CoreFoundation {
 		Low = -2,
 		Background = Int16.MinValue,
 	}
+
+	// dispatch_qos_class_t is defined in usr/include/dispatch/queue.h, but redirects to qos_class_t
+	// the qos_class_t enum is defined in usr/include/sys/qos.h (typed as 'unsigned int')
+	public enum DispatchQualityOfService : uint {
+		UserInteractive = 0x21,
+		UserInitiated   = 0x19,
+		Default         = 0x15,
+		Utility         = 0x11,
+		Background      = 0x09,
+		Unspecified     = 0x00,
+	}
 	
-	public abstract class DispatchObject : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public abstract class DispatchObject : NativeObject
 	{
 #if !COREBUILD
-		internal IntPtr handle;
-
 		//
 		// Constructors and lifecycle
 		//
 		[Preserve (Conditional = true)]
 		internal DispatchObject (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ArgumentNullException ("handle");
-			
-			this.handle = handle;
-			if (!owns)
-				dispatch_retain (handle);
 		}
 
-		internal DispatchObject ()
+		protected override void Retain ()
 		{
-		}      
+			dispatch_retain (Handle);
+		}
+
+		protected override void Release ()
+		{
+			dispatch_release (Handle);
+		}
 
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_release (IntPtr o);
 
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_retain (IntPtr o);
-
-		~DispatchObject ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				dispatch_release (handle);
-				handle = IntPtr.Zero;
-			}
-		}
 
 		public static bool operator == (DispatchObject a, DispatchObject b)
 		{
@@ -114,45 +98,27 @@ namespace CoreFoundation {
 			} else {
 				if (ob == null)
 					return false;
-				return a.handle == b.handle;
+				return a.Handle == b.Handle;
 			}
 		}
 
 		public static bool operator != (DispatchObject a, DispatchObject b)
 		{
-			var oa = a as object;
-			var ob = b as object;
-			
-			if (oa == null){
-				if (ob == null)
-					return false;
-				return true;
-			} else {
-				if (ob == null)
-					return true;
-				return a.handle != b.handle;
-			}
+			return !(a == b);
 		}
 
 		public override bool Equals (object other)
-		{
-			if (other == null)
-				return false;
-			
+		{	
 			var od = other as DispatchQueue;
-			return od.handle == handle;
+			if (od == null)
+				return false;
+			return od.Handle == Handle;
 		}
 
 		public override int GetHashCode ()
 		{
-			return (int) handle;
+			return (int) Handle;
 		}
-
-		protected void Check ()
-		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException (GetType ().ToString ());
-		}			
 
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_set_target_queue (/* dispatch_object_t */ IntPtr queue, /* dispatch_queue_t */ IntPtr target);
@@ -160,8 +126,7 @@ namespace CoreFoundation {
 		public void SetTargetQueue (DispatchQueue queue)
 		{
 			// note: null is allowed because DISPATCH_TARGET_QUEUE_DEFAULT is defined as NULL (dispatch/queue.h)
-			IntPtr q = queue == null ? IntPtr.Zero : queue.Handle;
-			dispatch_set_target_queue (handle, q);
+			dispatch_set_target_queue (Handle, queue.GetHandle ());
 		}
 
 		[DllImport (Constants.libcLibrary)]
@@ -183,11 +148,10 @@ namespace CoreFoundation {
 		{
 		}
 		
-		public DispatchQueue (string label) : base ()
+		public DispatchQueue (string label)
+			: base (dispatch_queue_create (label, IntPtr.Zero), true)
 		{
-			// Initialized in owned state for the queue.
-			handle = dispatch_queue_create (label, IntPtr.Zero);
-			if (handle == IntPtr.Zero)
+			if (Handle == IntPtr.Zero)
 				throw new Exception ("Error creating dispatch queue");
 		}
 
@@ -201,22 +165,30 @@ namespace CoreFoundation {
 		}
 		
 		public DispatchQueue (string label, bool concurrent)
+			: base (dispatch_queue_create (label, concurrent ? ConcurrentQueue : IntPtr.Zero), true)
 		{
-			handle = dispatch_queue_create (label, concurrent ? ConcurrentQueue : IntPtr.Zero);
-			if (handle == IntPtr.Zero)
+			if (Handle == IntPtr.Zero)
 				throw new Exception ("Error creating dispatch queue");
 		}
 		
+		[Mac (10,12)]
+		[iOS (10,0)]
+		[TV (10,0)]
+		[Watch (3,0)]
+		public DispatchQueue (string label, Attributes attributes, DispatchQueue target = null)
+			: base (dispatch_queue_create_with_target (label, attributes?.Create () ?? IntPtr.Zero, target.GetHandle ()), true)
+		{
+			if (Handle == IntPtr.Zero)
+				throw new Exception ("Error creating dispatch queue");
+		}
+
 		//
 		// Properties and methods
 		//
 
 		public string Label {
 			get {
-				if (handle == IntPtr.Zero)
-					throw new ObjectDisposedException ("DispatchQueue");
-				
-				return Marshal.PtrToStringAnsi (dispatch_queue_get_label (handle));
+				return Marshal.PtrToStringAnsi (dispatch_queue_get_label (GetCheckedHandle ()));
 			}
 		}
 
@@ -229,14 +201,12 @@ namespace CoreFoundation {
 
 		public void Suspend ()
 		{
-			Check ();
-			dispatch_suspend (handle);
+			dispatch_suspend (GetCheckedHandle ());
 		}
 
 		public void Resume ()
 		{
-			Check ();
-			dispatch_resume (handle);
+			dispatch_resume (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.libcLibrary)]
@@ -250,12 +220,10 @@ namespace CoreFoundation {
 
 		public IntPtr Context {
 			get {
-				Check ();
-				return dispatch_get_context (handle);
+				return dispatch_get_context (GetCheckedHandle ());
 			}
 			set {
-				Check ();
-				dispatch_set_context (handle, value);
+				dispatch_set_context (GetCheckedHandle (), value);
 			}
 		}
 	
@@ -277,37 +245,27 @@ namespace CoreFoundation {
 				return new DispatchQueue (dispatch_get_global_queue ((nint) (int) DispatchQueuePriority.Default, 0), false);
 			}
 		}
-#if MONOMAC
-		static DispatchQueue PInvokeDispatchGetMainQueue ()
-		{
-			return new DispatchQueue (dispatch_get_main_queue (), false);
-		}
 
-#endif
 		static IntPtr main_q;
-		static object lockobj = new object ();
 
 		public static DispatchQueue MainQueue {
 			get {
-				lock (lockobj) {
-					if (main_q == IntPtr.Zero) {
-						// Try loading the symbol from our address space first, should work everywhere
-						main_q = Dlfcn.dlsym ((IntPtr) (-2), "_dispatch_main_q");
+				var main_queue = main_q;
+				if (main_queue == IntPtr.Zero) {
+					// Try loading the symbol from our address space first, should work everywhere
+					main_queue = Dlfcn.dlsym ((IntPtr) (-2), "_dispatch_main_q");
 
-						// Last case: this is technically not right for the simulator, as this path
-						// actually points to the MacOS library, not the one in the SDK.
-						if (main_q == IntPtr.Zero){
-							var h = Dlfcn.dlopen ("/usr/lib/libSystem.dylib", 0x0);
-							main_q = Dlfcn.GetIndirect (h, "_dispatch_main_q");
-							Dlfcn.dlclose (h);
-						}
-					}
+					// Last case: this is technically not right for the simulator, as this path
+					// actually points to the MacOS library, not the one in the SDK.
+					if (main_queue == IntPtr.Zero)
+						main_queue = Dlfcn.GetIndirect (Libraries.System.Handle, "_dispatch_main_q");
+
+					if (main_queue == IntPtr.Zero)
+						main_queue = dispatch_get_main_queue ();
 				}
-#if MONOMAC
-				// For Snow Leopard
-				if (main_q == IntPtr.Zero)
-					return PInvokeDispatchGetMainQueue ();
-#endif
+				if (main_queue != IntPtr.Zero)
+					main_q = main_queue;
+
 				return new DispatchQueue (main_q, false);
 			}
 		}
@@ -377,13 +335,21 @@ namespace CoreFoundation {
 			}
 
 		}
-						     
+
+		internal static readonly dispatch_callback_t free_gchandle = static_free_gchandle;
+
+		[MonoPInvokeCallback (typeof (dispatch_callback_t))]
+		static void static_free_gchandle (IntPtr context)
+		{
+			GCHandle.FromIntPtr (context).Free ();
+		}
+
 		public void DispatchAsync (Action action)
 		{
 			if (action == null)
 				throw new ArgumentNullException ("action");
 			
-			dispatch_async_f (handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
+			dispatch_async_f (Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
 		}
 
 		public void DispatchSync (Action action)
@@ -391,7 +357,7 @@ namespace CoreFoundation {
 			if (action == null)
 				throw new ArgumentNullException ("action");
 			
-			dispatch_sync_f (handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
+			dispatch_sync_f (Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
 		}
 
 		public void DispatchBarrierAsync (Action action)
@@ -399,29 +365,67 @@ namespace CoreFoundation {
 			if (action == null)
 				throw new ArgumentNullException ("action");
 			
-			dispatch_barrier_async_f (handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
+			dispatch_barrier_async_f (Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
 		}
-		
+
+		public void DispatchBarrierSync (Action action)
+		{
+			if (action == null)
+				throw new ArgumentNullException (nameof (action));
+
+			dispatch_barrier_sync_f (Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
+		}
+
 		public void DispatchAfter (DispatchTime when, Action action)
 		{
 			if (action == null)
 				throw new ArgumentNullException ("action");
 
-			dispatch_after_f (when.Nanoseconds, handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
+			dispatch_after_f (when.Nanoseconds, Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch);
 		}
 
 		public void Submit (Action<int> action, long times)
 		{
 			if (action == null)
 				throw new ArgumentNullException ("action");
-			dispatch_apply_f ((IntPtr) times, handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch_iterations);
+			dispatch_apply_f ((IntPtr) times, Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, this)), static_dispatch_iterations);
 		}
 		
+		public void SetSpecific (IntPtr key, object context)
+		{
+			dispatch_queue_set_specific (GetCheckedHandle (), key, (IntPtr) GCHandle.Alloc (context), free_gchandle);
+		}
+
+		public object GetContext (IntPtr key)
+		{
+			GCHandle gchandle = (GCHandle) dispatch_queue_get_specific (GetCheckedHandle (), key);
+			return gchandle.Target;
+		}
+
+		public DispatchQualityOfService GetQualityOfService (out int relative_priority)
+		{
+			unsafe {
+				fixed (int* rel_pri = &relative_priority)
+					return dispatch_queue_get_qos_class (Handle, rel_pri);
+			}
+		}
+
+		public DispatchQualityOfService QualityOfService {
+			get {
+				unsafe {
+					return dispatch_queue_get_qos_class(Handle, null);
+				}
+			}
+		}
+
 		//
 		// Native methods
 		//
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_queue_create (string label, IntPtr attr);
+
+		[DllImport (Constants.libcLibrary)]
+		extern static IntPtr dispatch_queue_create_with_target (string label, IntPtr attr, IntPtr target);
 
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_async_f (IntPtr queue, IntPtr context, dispatch_callback_t dispatch);
@@ -431,6 +435,9 @@ namespace CoreFoundation {
 
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_barrier_async_f (IntPtr queue, IntPtr context, dispatch_callback_t dispatch);
+
+		[DllImport(Constants.libcLibrary)]
+		extern static void dispatch_barrier_sync_f (IntPtr queue, IntPtr context, dispatch_callback_t dispatch);
 
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_after_f (/* dispath_time_t */ ulong time, IntPtr queue, IntPtr context, dispatch_callback_t dispatch);
@@ -442,22 +449,28 @@ namespace CoreFoundation {
 		// dispatch_queue_t dispatch_get_global_queue (long priority, unsigned long flags);
 		extern static IntPtr dispatch_get_global_queue (nint priority, nuint flags);
 
-#if MONOMAC
-		[Obsoleted (PlatformName.MacOSX, 10, 7)]
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_get_main_queue ();
-#endif
 
 		[DllImport (Constants.libcLibrary)]
 		// this returns a "const char*" so we cannot make a string out of it since it will be freed (and crash)
 		extern static IntPtr dispatch_queue_get_label (IntPtr queue);
+
+		[DllImport(Constants.libcLibrary)]
+		extern static void dispatch_queue_set_specific (IntPtr queue, /* const void* */ IntPtr key, /* void *_Nullable */ IntPtr context, dispatch_callback_t /* _Nullable */ destructor);
+
+		[DllImport(Constants.libcLibrary)]
+		extern static IntPtr dispatch_queue_get_specific (IntPtr queue, /* const void* */ IntPtr key);
+
+		[DllImport (Constants.libcLibrary)]
+		unsafe extern static /* dispatch_qos_class_t */ DispatchQualityOfService dispatch_queue_get_qos_class (/* dispatch_queue_t */ IntPtr queue, /* int *_Nullable */ int* relative_priority);
 
 		public override bool Equals (object other)
 		{
 			DispatchQueue o = other as DispatchQueue;
 			if (o == null)
 				return false;
-			return (o.Handle == handle);
+			return (o.Handle == Handle);
 		}
 
 		public static bool operator == (DispatchQueue left, DispatchQueue right)
@@ -476,7 +489,7 @@ namespace CoreFoundation {
 
 		public override int GetHashCode ()
 		{
-			return (int)handle;
+			return (int)Handle;
 		}
 		
 #if MONOMAC
@@ -493,6 +506,43 @@ namespace CoreFoundation {
 		}
 #endif
 #endif // !COREBUILD
+
+		public class Attributes
+		{
+			public bool IsInitiallyActive { get; set; }
+
+			public AutoreleaseFrequency? AutoreleaseFrequency { get; set; }
+
+			public int RelativePriority { get; set; }
+
+			public DispatchQualityOfService? QualityOfService { get; set; }
+
+			internal IntPtr Create ()
+			{
+				throw new NotImplementedException ();
+			}
+
+			[DllImport (Constants.libcLibrary)]
+			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_initially_inactive (/* dispatch_queue_attr_t _Nullable */ IntPtr attr);
+
+			[DllImport (Constants.libcLibrary)]
+			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_with_autorelease_frequency (/* dispatch_queue_attr_t _Nullable */ IntPtr attr, /* dispatch_autorelease_frequency_t */ nuint frequency);
+
+			[DllImport (Constants.libcLibrary)]
+			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_with_qos_class (/* dispatch_queue_attr_t _Nullable */ IntPtr attr, /* dispatch_qos_class_t */ DispatchQualityOfService qos_class, int relative_priority);
+		}
+
+		[Mac (10,12)]
+		[iOS (10,0)]
+		[TV (10,0)]
+		[Watch (3,0)]
+		[Native]
+		public enum AutoreleaseFrequency : ulong /* unsigned long */
+		{
+			Inherit = 0,
+			WorkItem = 1,
+			Never = 2,
+		}
 	}
 
 	// Some insights from: https://opensource.apple.com/source/libdispatch/libdispatch-442.1.4/src/time.c
@@ -563,8 +613,7 @@ namespace CoreFoundation {
 			if (action == null)
 				throw new ArgumentNullException ("action");
 
-			Check ();
-			dispatch_group_async_f (handle, queue.handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, queue)), DispatchQueue.static_dispatch);
+			dispatch_group_async_f (GetCheckedHandle (), queue.Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, queue)), DispatchQueue.static_dispatch);
 		}
 
 		public void Notify (DispatchQueue queue, Action action)
@@ -574,26 +623,22 @@ namespace CoreFoundation {
 			if (action == null)
 				throw new ArgumentNullException ("action");
 
-			Check ();
-			dispatch_group_notify_f (handle, queue.handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, queue)), DispatchQueue.static_dispatch);
+			dispatch_group_notify_f (GetCheckedHandle (), queue.Handle, (IntPtr) GCHandle.Alloc (Tuple.Create (action, queue)), DispatchQueue.static_dispatch);
 		}
 
 		public void Enter ()
 		{
-			Check ();			
-			dispatch_group_enter (handle);
+			dispatch_group_enter (GetCheckedHandle ());
 		}
 
 		public void Leave ()
 		{
-			Check ();
-			dispatch_group_leave (handle);
+			dispatch_group_leave (GetCheckedHandle ());
 		}
 
 		public bool Wait (DispatchTime timeout)
 		{
-			Check ();			
-			return dispatch_group_wait (handle, timeout.Nanoseconds) == 0;
+			return dispatch_group_wait (GetCheckedHandle (), timeout.Nanoseconds) == 0;
 		}
 
 		[DllImport (Constants.libcLibrary)]

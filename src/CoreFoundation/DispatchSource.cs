@@ -57,11 +57,6 @@ namespace CoreFoundation {
 		{
 		}
 
-		// Invoked by subclasses in this file that fully initialize both
-		// queue and handle
-		internal DispatchSource () {}
-		
-
 		[DllImport (Constants.libcLibrary)]
 		extern static dispatch_source_t dispatch_source_create (dispatch_source_type_t type, IntPtr handle, IntPtr mask, dispatch_queue_t queue);
 
@@ -97,60 +92,52 @@ namespace CoreFoundation {
 
 		public void SetEventHandler (Action handler)
 		{
-			Check ();
 			if (handler == null){
-				dispatch_source_set_event_handler_f (handle, IntPtr.Zero);
+				dispatch_source_set_event_handler_f (GetCheckedHandle (), IntPtr.Zero);
 				return;
 			}
 
-			unsafe {
-				DispatchBlock.Invoke (
-					delegate {
-						var sc = SynchronizationContext.Current;
+			DispatchBlock.Invoke (
+				delegate {
+					var sc = SynchronizationContext.Current;
+					if (sc == null)
+						SynchronizationContext.SetSynchronizationContext (new DispatchQueueSynchronizationContext (queue));
+					try {
+						handler ();
+					} finally {
 						if (sc == null)
-							SynchronizationContext.SetSynchronizationContext (new DispatchQueueSynchronizationContext (queue));
-						try {
-							handler ();
-						} finally {
-							if (sc == null)
-								SynchronizationContext.SetSynchronizationContext (null);
-						}
-					}, block=> dispatch_source_set_event_handler (handle, block));
-			}
+							SynchronizationContext.SetSynchronizationContext (null);
+					}
+				}, block=> dispatch_source_set_event_handler (GetCheckedHandle (), block));
 		}
 
 		public void Suspend ()
 		{
-			Check ();
-			dispatch_suspend (handle);
+			dispatch_suspend (GetCheckedHandle ());
 		}
 
 		public void Resume ()
 		{
-			Check ();
-			dispatch_resume (handle);
+			dispatch_resume (GetCheckedHandle ());
 		}
 		
 		public void SetRegistrationHandler (Action handler)
 		{
 			if (handler == null)
 				throw new ArgumentNullException ("handler");
-			Check ();
 
-			unsafe {
-				DispatchBlock.Invoke (
-					delegate {
-						var sc = SynchronizationContext.Current;
+			DispatchBlock.Invoke (
+				delegate {
+					var sc = SynchronizationContext.Current;
+					if (sc == null)
+						SynchronizationContext.SetSynchronizationContext (new DispatchQueueSynchronizationContext (queue));
+					try {
+						handler ();
+					} finally {
 						if (sc == null)
-							SynchronizationContext.SetSynchronizationContext (new DispatchQueueSynchronizationContext (queue));
-						try {
-							handler ();
-						} finally {
-							if (sc == null)
-								SynchronizationContext.SetSynchronizationContext (null);
-						}
-					}, block => dispatch_source_set_registration_handler (handle, block));
-			}
+							SynchronizationContext.SetSynchronizationContext (null);
+					}
+				}, block => dispatch_source_set_registration_handler (GetCheckedHandle (), block));
 		}
 
 		public void SetCancelHandler (Action handler)
@@ -158,27 +145,23 @@ namespace CoreFoundation {
 			if (handler == null)
 				throw new ArgumentNullException ("handler");
 
-			Check ();
-			unsafe {
-				DispatchBlock.Invoke (
-					delegate {
-						var sc = SynchronizationContext.Current;
+			DispatchBlock.Invoke (
+				delegate {
+					var sc = SynchronizationContext.Current;
+					if (sc == null)
+						SynchronizationContext.SetSynchronizationContext (new DispatchQueueSynchronizationContext (queue));
+					try {
+						handler ();
+					} finally {
 						if (sc == null)
-							SynchronizationContext.SetSynchronizationContext (new DispatchQueueSynchronizationContext (queue));
-						try {
-							handler ();
-						} finally {
-							if (sc == null)
-								SynchronizationContext.SetSynchronizationContext (null);
-						}
-					}, block => dispatch_source_set_cancel_handler (handle, block));
-			}
+							SynchronizationContext.SetSynchronizationContext (null);
+					}
+				}, block => dispatch_source_set_cancel_handler (GetCheckedHandle (), block));
 		}
 
 		public void Cancel ()
 		{
-			Check ();
-			dispatch_source_cancel (handle);
+			dispatch_source_cancel (GetCheckedHandle ());
 		}
 
 		protected override void Dispose (bool disposing)
@@ -191,23 +174,21 @@ namespace CoreFoundation {
 		
 		public bool IsCanceled {
 			get {
-				Check ();
-				return dispatch_source_testcancel (handle) != IntPtr.Zero;
+				return dispatch_source_testcancel (GetCheckedHandle ()) != IntPtr.Zero;
 			}
 		}
 		
 		public class Data : DispatchSource {
-			internal Data () {}
 			internal Data (IntPtr handle, bool owns) : base (handle, owns) {}
 
 			public void MergeData (IntPtr value)
 			{
-				dispatch_source_merge_data (handle, value);
+				dispatch_source_merge_data (Handle, value);
 			}
 
 			public IntPtr PendingData {
 				get {
-					return dispatch_source_get_data (handle);
+					return dispatch_source_get_data (Handle);
 				}
 			}
 		}
@@ -218,13 +199,18 @@ namespace CoreFoundation {
 			public DataAdd (IntPtr handle, bool owns) : base (handle, owns) { }
 			public DataAdd (IntPtr handle) : base (handle, false) { }
 
-			public DataAdd (DispatchQueue queue = null) 
+			public DataAdd (DispatchQueue queue = null)
+				: base (Create (queue), true)
+			{
+				this.queue = queue;
+			}
+	    		
+	    		static IntPtr Create (DispatchQueue queue)
 			{
 				if (type_data_add == IntPtr.Zero)
 					type_data_add = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_data_add");
 
-				this.queue = queue;
-				handle = dispatch_source_create (type_data_add,
+				return dispatch_source_create (type_data_add,
 								 handle: IntPtr.Zero,
 								 mask:   IntPtr.Zero,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -238,11 +224,16 @@ namespace CoreFoundation {
 			public DataOr (IntPtr handle) : base (handle, false) { }
 			
 			public DataOr (DispatchQueue queue = null)
+				: base (Create (queue), true)
+			{
+				this.queue = queue;
+			}
+
+	    		static IntPtr Create (DispatchQueue queue)
 			{
 				if (type_data_or == IntPtr.Zero)
 					type_data_or = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_data_or");
-				this.queue = queue;
-				handle = dispatch_source_create (type_data_or,
+				return dispatch_source_create (type_data_or,
 								 handle: IntPtr.Zero,
 								 mask:   IntPtr.Zero,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -251,14 +242,10 @@ namespace CoreFoundation {
 
 		public class Mach : DispatchSource {
 			internal Mach (IntPtr handle, bool owns) : base (handle, owns) { }
-			internal Mach (IntPtr handle) : base (handle, false) { }
-			internal Mach () 
-			{ }
 			
 			public int MachPort {
 				get {
-					Check ();
-					return (int) dispatch_source_get_handle (handle);
+					return (int) dispatch_source_get_handle (GetCheckedHandle ());
 				}
 			}
 		}
@@ -270,11 +257,16 @@ namespace CoreFoundation {
 			public MachSend (IntPtr handle) : base (handle, false) { }
 			
 			public MachSend (int machPort, bool sendDead = false, DispatchQueue queue = null)
+				: base (Create (machPort, sendDead, queue), true)
+			{
+				this.queue = queue;
+			}
+
+			static IntPtr Create(int machPort, bool sendDead, DispatchQueue queue)
 			{
 				if (type_mach_send == IntPtr.Zero)
-					type_mach_send = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_mach_send");
-				this.queue = queue;
-				handle = dispatch_source_create (type_mach_send,
+					type_mach_send = Dlfcn.dlsym(Libraries.System.Handle, "_dispatch_source_type_mach_send");
+				return dispatch_source_create (type_mach_send,
 								 handle: (IntPtr) machPort,
 								 mask:   (IntPtr) (sendDead ? 1 : 0),
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -282,8 +274,7 @@ namespace CoreFoundation {
 
 			public bool SendRightsDestroyed  {
 				get {
-					Check ();
-					return dispatch_source_get_data (handle) != IntPtr.Zero;
+					return dispatch_source_get_data (GetCheckedHandle ()) != IntPtr.Zero;
 				}
 			}
 		}
@@ -292,13 +283,18 @@ namespace CoreFoundation {
 
 			public MachReceive (IntPtr handle, bool owns) : base (handle, owns) { }
 			public MachReceive (IntPtr handle) : base (handle, false) { }
-			
-			public MachReceive (int machPort, DispatchQueue queue = null)
+
+			public MachReceive(int machPort, DispatchQueue queue = null)
+				: base (Create (machPort, queue), true)
+			{
+				this.queue = queue;
+			}
+
+	    		static IntPtr Create (int machPort, DispatchQueue queue)
 			{
 				if (type_mach_recv == IntPtr.Zero)
 					type_mach_recv = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_mach_recv");
-				this.queue = queue;
-				handle = dispatch_source_create (type_mach_recv,
+				return dispatch_source_create (type_mach_recv,
 								 handle: (IntPtr) machPort,
 								 mask:   IntPtr.Zero,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -310,13 +306,18 @@ namespace CoreFoundation {
 			static IntPtr type_memorypressure;
 			public MemoryPressure (IntPtr handle, bool owns) : base (handle, owns){}
 			public MemoryPressure (IntPtr handle) : base (handle, false){}
-			
+
 			public MemoryPressure (MemoryPressureFlags monitorFlags = MemoryPressureFlags.Normal | MemoryPressureFlags.Warn, DispatchQueue queue = null)
+				: base (Create (monitorFlags, queue), true)
+			{
+				this.queue = queue;
+			}
+
+	    		static IntPtr Create (MemoryPressureFlags monitorFlags, DispatchQueue queue)
 			{
 				if (type_memorypressure == IntPtr.Zero)
 					type_memorypressure = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_memorypressure");
-				this.queue = queue;
-				handle = dispatch_source_create (type_memorypressure,
+				return dispatch_source_create (type_memorypressure,
 								 handle: IntPtr.Zero,
 								 mask:   (IntPtr) monitorFlags,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -324,8 +325,7 @@ namespace CoreFoundation {
 
 			public MemoryPressureFlags PressureFlags {
 				get {
-					Check ();
-					return (MemoryPressureFlags) dispatch_source_get_data (handle);
+					return (MemoryPressureFlags) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 		}
@@ -336,12 +336,16 @@ namespace CoreFoundation {
 			public ProcessMonitor (IntPtr handle, bool owns) : base (handle, owns){}
 			public ProcessMonitor (IntPtr handle) : base (handle, false){}
 			public ProcessMonitor (int processId, ProcessMonitorFlags monitorKind = ProcessMonitorFlags.Exit, DispatchQueue queue = null)
+				: base (Create (processId, monitorKind, queue), true)
 			{
-				
+				this.queue = queue;
+			}
+
+	    		static IntPtr Create (int processId, ProcessMonitorFlags monitorKind, DispatchQueue queue)
+			{
 				if (type_proc == IntPtr.Zero)
 					type_proc = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_proc");
-				this.queue = queue;
-				handle = dispatch_source_create (type_proc,
+				return dispatch_source_create (type_proc,
 								 handle: (IntPtr) processId,
 								 mask:   (IntPtr) monitorKind,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -349,15 +353,13 @@ namespace CoreFoundation {
 
 			public int ProcessId {
 				get {
-					Check ();
-					return (int) dispatch_source_get_handle (handle);
+					return (int) dispatch_source_get_handle (GetCheckedHandle ());
 				}
 			}
 
 			public ProcessMonitorFlags MonitorFlags {
 				get {
-					Check ();
-					return (ProcessMonitorFlags) dispatch_source_get_data (handle);
+					return (ProcessMonitorFlags) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 		}
@@ -366,13 +368,17 @@ namespace CoreFoundation {
 			static IntPtr type_read;
 			public ReadMonitor (IntPtr handle, bool owns) : base (handle, owns){}
 			public ReadMonitor (IntPtr handle) : base (handle, false){}
-			public ReadMonitor (int fileDescriptor, DispatchQueue queue = null)
+			public ReadMonitor(int fileDescriptor, DispatchQueue queue = null)
+				: base(Create(fileDescriptor, queue), true)
 			{
-				
+				this.queue = queue;
+			}
+			
+	    		static IntPtr Create (int fileDescriptor, DispatchQueue queue)
+			{
 				if (type_read == IntPtr.Zero)
 					type_read = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_read");
-				this.queue = queue;
-				handle = dispatch_source_create (type_read,
+				return dispatch_source_create (type_read,
 								 handle: (IntPtr) fileDescriptor,
 								 mask:   IntPtr.Zero,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -380,15 +386,13 @@ namespace CoreFoundation {
 
 			public int FileDescriptor {
 				get {
-					Check ();
-					return (int) dispatch_source_get_handle (handle);
+					return (int) dispatch_source_get_handle (GetCheckedHandle ());
 				}
 			}
 
 			public int BytesAvailable {
 				get {
-					Check ();
-					return (int) dispatch_source_get_data (handle);
+					return (int) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 		}
@@ -397,12 +401,17 @@ namespace CoreFoundation {
 			static IntPtr type_signal;
 			public SignalMonitor (IntPtr handle, bool owns) : base (handle, owns){}
 			public SignalMonitor (IntPtr handle) : base (handle, false){}
-			public SignalMonitor (int signalNumber, DispatchQueue queue = null)
+			public SignalMonitor(int signalNumber, DispatchQueue queue = null)
+				: base (Create(signalNumber, queue), true)
+			{
+				this.queue = queue;
+			}
+
+			static IntPtr Create (int signalNumber, DispatchQueue queue)
 			{
 				if (type_signal == IntPtr.Zero)
 					type_signal = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_signal");
-				this.queue = queue;
-				handle = dispatch_source_create (type_signal,
+				return dispatch_source_create (type_signal,
 								 handle: (IntPtr) signalNumber,
 								 mask:   IntPtr.Zero,
 								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
@@ -410,15 +419,13 @@ namespace CoreFoundation {
 
 			public int SignalNumber {
 				get {
-					Check ();
-					return (int) dispatch_source_get_handle (handle);
+					return (int) dispatch_source_get_handle (GetCheckedHandle ());
 				}
 			}
 
 			public int SignalsDelivered {
 				get {
-					Check ();
-					return (int) dispatch_source_get_data (handle);
+					return (int) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 		}
@@ -430,11 +437,16 @@ namespace CoreFoundation {
 			public Timer (DispatchQueue queue = null) : this (false, queue) {}
 				
 			public Timer (bool strict = false, DispatchQueue queue = null)
+				: base (Create (strict, queue), true)
+			{
+				this.queue = queue;
+			}
+
+			static IntPtr Create (bool strict, DispatchQueue queue)
 			{
 				if (type_timer == IntPtr.Zero)
 					type_timer = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_timer");
-				this.queue = queue;
-				handle = dispatch_source_create (type_timer,
+				return dispatch_source_create (type_timer,
 								 handle: IntPtr.Zero,
 								 mask: strict ? (IntPtr) 1 : IntPtr.Zero,
 								 queue: queue == null ? IntPtr.Zero : queue.Handle);
@@ -442,8 +454,7 @@ namespace CoreFoundation {
 
 			public int TimerFiredCount {
 				get {
-					Check ();
-					return (int) dispatch_source_get_data (handle);
+					return (int) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 			[DllImport (Constants.libcLibrary)]
@@ -451,13 +462,20 @@ namespace CoreFoundation {
 
 			public void SetTimer (DispatchTime time, long nanosecondInterval, long nanosecondLeeway)
 			{
-				Check ();
-				dispatch_source_set_timer (handle, time.Nanoseconds, nanosecondInterval, nanosecondLeeway);
+				dispatch_source_set_timer (GetCheckedHandle (), time.Nanoseconds, nanosecondInterval, nanosecondLeeway);
 			}
 		}
 		
 		public class VnodeMonitor : DispatchSource {
 			static IntPtr type_vnode;
+
+	    		static IntPtr TypeVNode {
+				get {
+					if (type_vnode == IntPtr.Zero)
+						type_vnode = Dlfcn.dlsym(Libraries.System.Handle, "_dispatch_source_type_vnode");
+					return type_vnode;
+				}
+			}
 
 			// If different than -1, we opened the descriptor and must close it.
 			int fd;
@@ -465,16 +483,24 @@ namespace CoreFoundation {
 			public VnodeMonitor (IntPtr handle, bool owns) : base (handle, owns){}
 			public VnodeMonitor (IntPtr handle) : base (handle, false){}
 			
-			public VnodeMonitor (int fileDescriptor, VnodeMonitorKind vnodeKind, DispatchQueue queue = null)
+	    		VnodeMonitor (bool free_fd, int fileDescriptor, VnodeMonitorKind vnodeKind, DispatchQueue queue)
+				: base (Create (fileDescriptor, vnodeKind, queue), true)
 			{
-				if (type_vnode == IntPtr.Zero)
-					type_vnode = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_vnode");
 				this.queue = queue;
-				fd = -1;
-				handle = dispatch_source_create (type_vnode,
+				this.fd = free_fd ? fileDescriptor : -1;
+			}
+
+	    		static IntPtr Create (int fileDescriptor, VnodeMonitorKind vnodeKind, DispatchQueue queue)
+			{
+				return dispatch_source_create (TypeVNode,
 								 handle: (IntPtr) fileDescriptor,
-								 mask:   (IntPtr) vnodeKind,
-								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
+								 mask: (IntPtr) vnodeKind,
+								 queue: queue == null ? IntPtr.Zero : queue.Handle);
+			}
+
+			public VnodeMonitor (int fileDescriptor, VnodeMonitorKind vnodeKind, DispatchQueue queue = null)
+				: this (false, fileDescriptor, vnodeKind, queue)
+			{
 			}
 
 			const int O_EVTONLY = 0x8000;
@@ -484,22 +510,21 @@ namespace CoreFoundation {
 			[DllImport (Constants.libcLibrary)]
 			internal extern static int close (int fd);
 			
-			public VnodeMonitor (string path, VnodeMonitorKind vnodeKind, DispatchQueue queue = null)
+	    		static int OpenFile (string path)
 			{
 				if (path == null)
 					throw new ArgumentNullException ("path");
 
-				fd = open (path, O_EVTONLY);
+				var fd = open (path, O_EVTONLY);
 				if (fd == -1)
 					throw new IOException ("Failure to open the file", Marshal.GetLastWin32Error ());
-				if (type_vnode == IntPtr.Zero)
-					type_vnode = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_vnode");
-				this.queue = queue;
-				
-				handle = dispatch_source_create (type_vnode,
-								 handle: (IntPtr) fd,
-								 mask:   (IntPtr) vnodeKind,
-								 queue:  queue == null ? IntPtr.Zero : queue.Handle);
+				return fd;
+
+			}
+
+			public VnodeMonitor (string path, VnodeMonitorKind vnodeKind, DispatchQueue queue = null)
+				: this (true, OpenFile (path), vnodeKind, queue)
+			{
 			}
 
 			protected override void Dispose (bool disposing)
@@ -513,15 +538,13 @@ namespace CoreFoundation {
 
 			public int FileDescriptor {
 				get {
-					Check ();
-					return (int) dispatch_source_get_handle (handle);
+					return (int) dispatch_source_get_handle (GetCheckedHandle ());
 				}
 			}
 
 			public VnodeMonitorKind ObservedEvents  {
 				get {
-					Check ();
-					return (VnodeMonitorKind) (int) dispatch_source_get_data (handle);
+					return (VnodeMonitorKind) (int) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 				
@@ -531,28 +554,32 @@ namespace CoreFoundation {
 			static IntPtr type_write;
 			public WriteMonitor (IntPtr handle, bool owns) : base (handle, owns){}
 			public WriteMonitor (IntPtr handle) : base (handle, false){}
-			
-			public WriteMonitor (int fileDescriptor, DispatchQueue queue = null)
+
+			public WriteMonitor(int fileDescriptor, DispatchQueue queue = null)
+				: base (Create(fileDescriptor, queue), true)
+			{
+				this.queue = queue;
+			}
+
+			static IntPtr Create (int fileDescriptor, DispatchQueue queue)
 			{
 				if (type_write == IntPtr.Zero)
 					type_write = Dlfcn.dlsym (Libraries.System.Handle, "_dispatch_source_type_write");
-				this.queue = queue;
-				handle = dispatch_source_create (type_write,
+				return dispatch_source_create (type_write,
 								 handle: (IntPtr) fileDescriptor,
 								 mask: IntPtr.Zero,
 								 queue: queue == null ? IntPtr.Zero : queue.Handle);
 			}
+
 			public int FileDescriptor {
 				get {
-					Check ();
-					return (int) dispatch_source_get_handle (handle);
+					return (int) dispatch_source_get_handle (GetCheckedHandle ());
 				}
 			}
 			
 			public int BufferSpaceAvailable {
 				get {
-					Check ();
-					return (int) dispatch_source_get_data (handle);
+					return (int) dispatch_source_get_data (GetCheckedHandle ());
 				}
 			}
 		}

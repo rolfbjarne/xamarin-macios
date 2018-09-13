@@ -51,6 +51,9 @@ namespace ObjCRuntime {
 		static public class System {
 			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.libSystemLibrary, 0);
 		}
+		static public class LibC {
+			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.libcLibrary, 0);
+		}
 #if !WATCH
 		static public class MetalPerformanceShaders {
 			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.MetalPerformanceShadersLibrary, 0);

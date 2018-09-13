@@ -54,6 +54,13 @@ namespace ObjCRuntime {
 		static public class LibC {
 			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.libcLibrary, 0);
 		}
+		static public class AudioToolbox {
+			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.AudioToolboxLibrary, 0);
+		}
+		static public class OpenGLES
+		{
+			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.OpenGLESLibrary, 0);
+		}
 #if !WATCH
 		static public class MetalPerformanceShaders {
 			static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.MetalPerformanceShadersLibrary, 0);

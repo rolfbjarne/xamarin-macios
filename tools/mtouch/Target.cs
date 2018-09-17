@@ -1085,6 +1085,8 @@ namespace Xamarin.Bundler
 							}
 						}
 					}
+					compiler_flags.AddFrameworks (App.Frameworks, App.WeakFrameworks);
+
 					if (App.Embeddinator) {
 						if (!string.IsNullOrEmpty (App.UserGccFlags))
 							compiler_flags.AddOtherFlag (App.UserGccFlags);

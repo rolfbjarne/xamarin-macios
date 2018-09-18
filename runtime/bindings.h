@@ -221,7 +221,7 @@ struct MPSImageHistogramInfoWrapper {
 	// entire struct on a 16-byte boundary, which doesn't match how we've
 	// defined it in managed code (explicit layout, but no specific alignment).
 	// So we need to manually pad the struct to match the managed definition.
-#if defined (__x86_64__) || defined (__arm64__)
+#if (defined (__x86_64__) || defined (__arm64__)) && !defined (__ARM64_ARCH_8_32__ /* arm64_32 */)
 	uint8_t dummy[7];
 #else
 	uint8_t dummy[11];

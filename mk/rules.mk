@@ -12,6 +12,7 @@ DEV64_I := $(COMMON_I) -I$(BUILD_DESTDIR)/target64/include/mono-2.0
 
 SIMW_I  := $(COMMON_I) -I$(BUILD_DESTDIR)/watchsimulator/include/mono-2.0
 DEVW_I  := $(COMMON_I) -I$(BUILD_DESTDIR)/targetwatch/include/mono-2.0
+DEVW6432_I  := $(COMMON_I) -I$(BUILD_DESTDIR)/targetwatch6432/include/mono-2.0
 
 SIM_TV_I:= $(COMMON_I) -I$(BUILD_DESTDIR)/tvsimulator/include/mono-2.0
 DEV_TV_I:= $(COMMON_I) -I$(BUILD_DESTDIR)/targettv/include/mono-2.0
@@ -116,6 +117,18 @@ define NativeCompilationTemplate
 
 .libs/watchos/%$(1).armv7k.framework: | .libs/watchos
 	$$(call Q_2,LD,    [watchos]) $(DEVICE_CC) $(DEVICEWATCH_CFLAGS)          $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_WATCHOS_SDK)/Frameworks -fapplication-extension
+
+.libs/watchos/%$(1).arm64_32.o: %.m $(EXTRA_DEPENDENCIES) | .libs/watchos
+	$$(call Q_2,OBJC,  [watchos]) $(DEVICE_CC) $(DEVICEWATCH6432_OBJC_CFLAGS)    $$(EXTRA_DEFINES) $(DEVW6432_I) -g $(2) -c $$< -o $$@ 
+
+.libs/watchos/%$(1).arm64_32.o: %.c $(EXTRA_DEPENDENCIES) | .libs/watchos
+	$$(call Q_2,CC,    [watchos]) $(DEVICE_CC) $(DEVICEWATCH6432_CFLAGS)         $$(EXTRA_DEFINES) $(DEVW6432_I) -g $(2) -c $$< -o $$@ 
+
+.libs/watchos/%$(1).arm64_32.dylib: | .libs/watchos
+	$$(call Q_2,LD,    [watchos]) $(DEVICE_CC) $(DEVICEWATCH6432_CFLAGS)          $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_WATCHOS_SDK)/usr/lib -fapplication-extension
+
+.libs/watchos/%$(1).arm64_32.framework: | .libs/watchos
+	$$(call Q_2,LD,    [watchos]) $(DEVICE_CC) $(DEVICEWATCH6432_CFLAGS)          $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_WATCHOS_SDK)/Frameworks -fapplication-extension
 
 ## tv simulator
 

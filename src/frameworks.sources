@@ -108,6 +108,7 @@ APPKIT_SOURCES = \
 	AppKit/NSGraphicsContext.cs \
 	AppKit/NSImage.cs \
 	AppKit/NSLayoutManager.cs \
+	UIKit/NSLayoutManager.cs \
 	AppKit/NSLevelIndicator.cs \
 	AppKit/NSMatrix.cs \
 	AppKit/NSMenu.cs \
@@ -1387,6 +1388,7 @@ UIKIT_SOURCES = \
 	UIKit/Compat.cs \
 	UIKit/NSLayoutConstraint.cs \
 	UIKit/NSLayoutManager.cs \
+	AppKit/NSLayoutManager.cs \
 	UIKit/UIAccessibility.cs \
 	UIKit/UIAccessibilityCustomAction.cs \
 	UIKit/UIActionSheet.cs \
@@ -1645,7 +1647,7 @@ COMMON_FRAMEWORKS =         \
 MAC_FRAMEWORKS =            \
 	$(COMMON_FRAMEWORKS)    \
 	Accounts                \
-	AppKit                  \
+	AppKit XKit             \
 	AudioToolbox            \
 	AudioUnit               \
 	AVKit                   \
@@ -1792,7 +1794,7 @@ IOS_FRAMEWORKS =         \
 	StoreKit \
 	SystemConfiguration \
 	Twitter \
-	UIKit \
+	UIKit XKit \
 	UserNotifications \
 	UserNotificationsUI \
 	VideoToolbox \
@@ -1822,7 +1824,7 @@ WATCHOS_FRAMEWORKS =        \
 	MobileCoreServices      \
 	PassKit                 \
 	Security                \
-	UIKit                   \
+	UIKit XKit              \
 	UserNotifications       \
 	WatchConnectivity       \
 	WatchKit                \
@@ -1871,7 +1873,7 @@ TVOS_FRAMEWORKS =           \
 	SystemConfiguration     \
 	TVMLKit                 \
 	TVServices				\
-	UIKit                   \
+	UIKit XKit              \
 	UserNotifications       \
 	VideoSubscriberAccount  \
 	VideoToolbox            \

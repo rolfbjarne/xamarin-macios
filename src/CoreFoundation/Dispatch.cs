@@ -31,6 +31,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using ObjCRuntime;
@@ -64,6 +65,15 @@ namespace CoreFoundation {
 		internal DispatchObject ()
 		{
 		}      
+
+#if !XAMCORE_4_0
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[Obsolete ("Use 'GetCheckedHandle' instead.")]
+		protected void Check ()
+		{
+			GetCheckedHandle ();
+		}
+#endif
 
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_release (IntPtr o);

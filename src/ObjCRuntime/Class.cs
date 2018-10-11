@@ -25,6 +25,7 @@ namespace ObjCRuntime {
 
 		// We use the last significant bit of the IntPtr to store if this is a custom class or not.
 		static Dictionary<Type, IntPtr> type_to_class; // accessed from multiple threads, locking required.
+		static Type[] class_to_type;
 
 		internal IntPtr handle;
 
@@ -33,12 +34,15 @@ namespace ObjCRuntime {
 		{
 			type_to_class = new Dictionary<Type, IntPtr> (Runtime.TypeEqualityComparer);
 
-			if (!Runtime.DynamicRegistrationSupported)
-				return; // Only the dynamic registrar needs the list of registered assemblies.
-
 			var map = options->RegistrationMap;
 			if (map == null)
 				return;
+
+			class_to_type = new Type [map->map_count];
+
+			if (!Runtime.DynamicRegistrationSupported)
+				return; // Only the dynamic registrar needs the list of registered assemblies.
+
 			
 			for (int i = 0; i < map->assembly_count; i++) {
 				var ptr = Marshal.ReadIntPtr (map->assembly, i * IntPtr.Size);
@@ -296,7 +300,7 @@ namespace ObjCRuntime {
 		internal unsafe static Type FindType (IntPtr @class, out bool is_custom_type)
 		{
 			var map = Runtime.options->RegistrationMap;
-			Runtime.MTClassMap? entry = null;
+			uint type_reference = uint.MaxValue;
 
 			is_custom_type = false;
 
@@ -311,32 +315,40 @@ namespace ObjCRuntime {
 			// Potential improvement: order the type handles after loading them, which means we could do a binary search here.
 			// A binary search will likely be faster than a dictionary for any real-world scenario (and if slower, not much slower),
 			// but it would need a lot less memory (very little when sorting, could probably use stack memory, and then nothing at all afterwards).
+			var mapIndex = -1;
 			for (int i = 0; i < map->map_count; i++) {
 				if (map->map [i].handle != @class)
 					continue;
 
-				entry = map->map [i];
+				type_reference = map->map [i].type_reference;
 				is_custom_type = i >= (map->map_count - map->custom_type_count);
+
+				mapIndex = i;
 				break;
 			}
 
-			if (!entry.HasValue) {
+			if (type_reference == uint.MaxValue) {
 #if LOG_TYPELOAD
 				Console.WriteLine ($"FindType (0x{@class:X} = {Marshal.PtrToStringAuto (class_getName (@class))}) => found no type.");
 #endif
 				return null;
 			}
 
+			if (class_to_type [mapIndex] != null)
+				return class_to_type [mapIndex];
+
 			// Resolve the map entry we found to a managed type
-			var member = ResolveTokenReference (entry.Value.type_reference, 0x02000000);
+			var member = ResolveTokenReference (type_reference, 0x02000000);
 			var type = member as Type;
 
 			if (type == null && member != null)
-				throw ErrorHelper.CreateError (8022, $"Expected the token reference 0x{entry.Value.type_reference:X} to be a type, but it's a {member.GetType ().Name}. Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new.");
+				throw ErrorHelper.CreateError (8022, $"Expected the token reference 0x{type_reference:X} to be a type, but it's a {member.GetType ().Name}. Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new.");
 
 #if LOG_TYPELOAD
 			Console.WriteLine ($"FindType (0x{@class:X} = {Marshal.PtrToStringAuto (class_getName (@class))}) => {type.FullName}; is custom: {is_custom_type} (token reference: 0x{entry.Value.type_reference:X}).");
 #endif
+
+			class_to_type [mapIndex] = type;
 
 			return type;
 		}

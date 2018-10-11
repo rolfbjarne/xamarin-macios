@@ -1879,11 +1879,45 @@ xamarin_set_gchandle (id self, int gchandle)
 	set_raw_gchandle (self, gchandle);
 }
 
+static pthread_mutex_t user_type_lock = PTHREAD_MUTEX_INITIALIZER;
+static CFMutableDictionaryRef user_type_cache = NULL;
+
 static inline bool
 is_user_type (id self)
 {
+	Class cls = object_getClass (self);
+
+	if (options.RegistrationData != NULL && options.RegistrationData->map_count > 0) {
+		MTClassMap *map = options.RegistrationData->map;
+		for (int i = options.RegistrationData->map_count - options.RegistrationData->custom_type_count; i < options.RegistrationData->map_count; i++) {
+			if (map [i].handle == cls)
+				return true;
+		}
+		return false;
+	}
+
+
+	// bool found = false;
+	// const void *cached_value = NULL;
+	// pthread_mutex_lock (&user_type_lock);
+	// if (user_type_cache == NULL) {
+	// 	user_type_cache = CFDictionaryCreateMutable (NULL, 0, NULL, NULL);
+	// } else {
+	// 	found = CFDictionaryGetValueIfPresent (user_type_cache, cls, &cached_value);
+	// }
+	// pthread_mutex_unlock (&user_type_lock);
+
+	// if (found)
+	// 	return cached_value != NULL;
+
 	// COOP: no managed memory access: any mode
-	return class_getInstanceMethod (object_getClass (self), @selector (xamarinSetGCHandle:)) != NULL;
+	bool rv = class_getInstanceMethod (cls, @selector (xamarinSetGCHandle:)) != NULL;
+
+	// pthread_mutex_lock (&user_type_lock);
+	// CFDictionarySetValue (user_type_cache, cls, GINT_TO_POINTER ((int) rv));
+	// pthread_mutex_unlock (&user_type_lock);
+
+	return rv;
 }
 
 #if defined(DEBUG_REF_COUNTING)

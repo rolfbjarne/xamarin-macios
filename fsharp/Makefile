@@ -30,6 +30,32 @@ FSHARP_TARGET_FILES =   \
 	FSharp.Core.sigdata \
 	FSharp.Core.xml     \
 
+clean-locally-installed:
+	rm -f $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/FSharp* $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/LICENSE-fsharp
+	rm -f $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/FSharp* $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/LICENSE-fsharp
+	rm -f $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/FSharp* $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/LICENSE-fsharp
+	rm -f $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/FSharp* $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/LICENSE-fsharp
+	rm -f $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/FSharp* $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/LICENSE-fsharp
+	rm -f $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/FSharp* $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/LICENSE-fsharp
+
+copy-installed-to-binaries:
+	mkdir -p $(FSHARP_BINARIES_PATH)/lib/release/monotouch
+	mkdir -p $(FSHARP_BINARIES_PATH)/lib/release/xamarinwatchos
+	mkdir -p $(FSHARP_BINARIES_PATH)/lib/release/xamarintvos
+	mkdir -p $(FSHARP_BINARIES_PATH)/lib/release/xamarinmacmobile
+	mkdir -p $(FSHARP_BINARIES_PATH)/lib/release/xamarinmacfull
+	cp /Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/LICENSE-fsharp $(FSHARP_BINARIES_PATH)/License
+	cp $(foreach file,$(FSHARP_TARGET_FILES),/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/$(file)) $(FSHARP_BINARIES_PATH)/lib/release/monotouch
+	cp $(foreach file,$(FSHARP_TARGET_FILES),/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.TVOS/$(file)) $(FSHARP_BINARIES_PATH)/lib/release/xamarintvos
+	cp $(foreach file,$(FSHARP_TARGET_FILES),/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.WatchOS/$(file)) $(FSHARP_BINARIES_PATH)/lib/release/xamarinwatchos
+	cp $(foreach file,$(FSHARP_TARGET_FILES),/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono/4.5/$(file)) $(FSHARP_BINARIES_PATH)/lib/release/xamarinmacfull
+	cp $(foreach file,$(FSHARP_TARGET_FILES),/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono/Xamarin.Mac/$(file)) $(FSHARP_BINARIES_PATH)/lib/release/xamarinmacmobile
+	printf "Added F# binaries\\n\\n" > msg.txt
+	printf "Xamarin.iOS version: $(shell /Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mtouch --version)\\n" >> msg.txt
+	printf "Xamarin.Mac version: $(shell /Library/Frameworks/Xamarin.Mac.framework/Versions/Current/bin/mmp --version)\\n" >> msg.txt
+	cd $(FSHARP_BINARIES_PATH) && git add . && git commit -F $(abspath $(CURDIR)/msg.txt)
+	rm -f msg.txt
+
 $(FSHARP_SOURCE_PATH):
 	$(Q) echo "Cloning the fsharp repository..."
 	$(Q) git clone -q https://github.com/fsharp/fsharp fsharp

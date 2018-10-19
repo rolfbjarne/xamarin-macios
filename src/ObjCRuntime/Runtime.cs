@@ -29,6 +29,13 @@ using Mono.Security.Interface;
 #endif
 
 namespace ObjCRuntime {
+	public interface INSObjectInstantiator
+	{
+		NSObject Create (IntPtr handle);
+	}
+}
+
+namespace ObjCRuntime {
 	
 	public partial class Runtime {
 #if !COREBUILD
@@ -39,7 +46,7 @@ namespace ObjCRuntime {
 #endif
 
 		static Dictionary<IntPtrTypeValueTuple,Delegate> block_to_delegate_cache;
-		static Dictionary<Type, ConstructorInfo> intptr_ctor_cache;
+		static Dictionary<Type, Tuple<ConstructorInfo,INSObjectInstantiator>> intptr_ctor_cache;
 		static Dictionary<Type, ConstructorInfo> intptr_bool_ctor_cache;
 
 		static List <object> delegates;
@@ -249,7 +256,7 @@ namespace ObjCRuntime {
 			Runtime.options = options;
 			delegates = new List<object> ();
 			object_map = new Dictionary <IntPtr, WeakReference> (IntPtrEqualityComparer);
-			intptr_ctor_cache = new Dictionary<Type, ConstructorInfo> (TypeEqualityComparer);
+			intptr_ctor_cache = new Dictionary<Type, Tuple<ConstructorInfo,INSObjectInstantiator>> (TypeEqualityComparer);
 			intptr_bool_ctor_cache = new Dictionary<Type, ConstructorInfo> (TypeEqualityComparer);
 			lock_obj = new object ();
 
@@ -1135,13 +1142,16 @@ namespace ObjCRuntime {
 			if (type == null)
 				throw new ArgumentNullException ("type");
 
-			var ctor = GetIntPtrConstructor (type);
-
-			if (ctor == null) {
+			var tuple = GetIntPtrConstructor (type);
+			if (tuple == null || (tuple.Item1 == null && tuple.Item2 == null)) {
 				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, selector, method);
 				return null;
 			}
 
+			if (tuple.Item2 != null)
+				return (T) (object) tuple.Item2.Create (ptr);
+
+			var ctor = tuple?.Item1;
 			return (T) ctor.Invoke (new object[] { ptr });
 		}
 
@@ -1162,7 +1172,7 @@ namespace ObjCRuntime {
 			return (T) ctor.Invoke (new object[] { ptr, owns});
 		}
 
-		static ConstructorInfo GetIntPtrConstructor (Type type)
+		static Tuple<ConstructorInfo, INSObjectInstantiator> GetIntPtrConstructor (Type type)
 		{
 			lock (intptr_ctor_cache) {
 				if (intptr_ctor_cache.TryGetValue (type, out var rv))
@@ -1172,9 +1182,14 @@ namespace ObjCRuntime {
 			for (int i = 0; i < ctors.Length; ++i) {
 				var param = ctors[i].GetParameters ();
 				if (param.Length == 1 && param [0].ParameterType == typeof (IntPtr)) {
+					var ctor = ctors [i];
+					var instantiator = (INSObjectInstantiator) type.GetMethod ("CreateInstantiator", BindingFlags.NonPublic | BindingFlags.Static)?.Invoke (null, null);
+					var tuple = new Tuple<ConstructorInfo, INSObjectInstantiator> (ctors [i], instantiator);
 					lock (intptr_ctor_cache)
-						intptr_ctor_cache [type] = ctors [i];
-					return ctors [i];
+						intptr_ctor_cache [type] = tuple;
+					if (instantiator != null)
+						Console.WriteLine ("Found instantiator for: {0}", type.FullName);
+					return tuple;
 				}
 			}
 			return null;

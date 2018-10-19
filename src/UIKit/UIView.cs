@@ -21,6 +21,19 @@ using CoreGraphics;
 namespace UIKit {
 	public partial class UIView : IEnumerable {
 
+		class Instantiator : INSObjectInstantiator
+		{
+			public NSObject Create (IntPtr handle)
+			{
+				return new UIView (handle);
+			}
+		}
+		[Preserve (Conditional = true)]
+		static INSObjectInstantiator CreateInstantiator ()
+		{
+			return new Instantiator ();
+		}
+
 		public void Add (UIView view)
 		{
 			AddSubview (view);

@@ -3,6 +3,34 @@ include $(TOP)/Make.config
 
 PREFIX=$(abspath $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/)
 
+MONO_HASH=f87470806dc6e77b563390ca04f08d8f9811e317
+MONO_FILENAME=ios-release-Darwin-$(MONO_HASH).zip
+MONO_URL=https://xamjenkinsartifact.blob.core.windows.net/mono-sdks/$(MONO_FILENAME)
+
+downloads/$(MONO_FILENAME):
+	mkdir -p downloads
+	curl -L $(MONO_URL) --output $@.tmp
+	mv $@.tmp $@
+
+downloads/$(basename $(MONO_FILENAME)): downloads/$(MONO_FILENAME)
+	unzip -d $@ $<
+
+clean-locals::
+	rm -Rf downloads
+
+ifeq ($(MONO_BUILD_FROM_SOURCE),)
+SDK_BUILDDIR=$(abspath downloads/$(basename $(MONO_FILENAME)))
+SDK_DESTDIR=$(abspath downloads/$(basename $(MONO_FILENAME)))
+MONO_CONFIGURE_DEPENDENCY=
+BUILD_MODE=download
+PROVISION_TARGET=downloads/$(basename $(MONO_FILENAME))
+else
+SDK_BUILDDIR=$(MONO_PATH)/sdks/builds
+SDK_DESTDIR=$(MONO_PATH)/sdks/out
+MONO_CONFIGURE_DEPENDENCY=$(MONO_PATH)/configure
+BUILD_MODE=compile
+endif
+
 IPHONESIMULATOR_SDK=$(MONOTOUCH_PREFIX)/SDKs/MonoTouch.iphonesimulator.sdk
 IPHONESIMULATOR_PREFIX=$(MONOTOUCH_PREFIX)/SDKs/MonoTouch.iphonesimulator.sdk/usr
 IPHONEOS_SDK=$(MONOTOUCH_PREFIX)/SDKs/MonoTouch.iphoneos.sdk
@@ -28,11 +56,13 @@ endif
 
 # this is a list of all the files from mono we care about, so that we
 # can use that list as dependencies for our makefile targets
+ifneq ($(MONO_BUILD_FROM_SOURCE),)
 -include .deps.mono.mk
 .deps.mono.mk: $(TOP)/.git/modules/external/mono/HEAD
 	$(Q) printf 'MONO_DEPENDENCIES += Makefile \\\n' > $@.tmp
 	$(Q) cd $(MONO_PATH) && git ls-files 'mcs/class/*.cs' '*.h' '*.c' '*.cpp' | grep -v "/Test/" | sed 's/ /\\ /g' | sed 's@^\(.*\)$$@	$(MONO_PATH)/\1 \\@' >> $(abspath $@).tmp
 	$(Q) mv $@.tmp $@
+endif
 
 # ld: weak import of symbol '_fstatat' not supported because of option: -no_weak_imports for architecture x86_64
 # according to 'man fstatat' it appeared in OS X 10.10 (iOS 8)
@@ -97,9 +127,6 @@ ifdef DISABLE_DOWNLOAD_LLVM
 SDK_ARGS += DISABLE_DOWNLOAD_LLVM=1
 SDK32_ARGS += DISABLE_DOWNLOAD_LLVM=1
 endif
-
-SDK_BUILDDIR = $(MONO_PATH)/sdks/builds
-SDK_DESTDIR = $(abspath $(MONO_PATH)/sdks/out)
 
 $(MONO_PATH)/sdks/Make.config:
 	echo "DISABLE_ANDROID=1" > $@
@@ -256,10 +283,17 @@ $(BUILD_DESTDIR)/mono-$(2): mono-wrapper.in .stamp-configure-$(2) | $(BUILD_DEST
 	$$(Q_GEN) sed < $$< > $$@ 's|@ARCH@|$(1)|g; s|@MONO@|$(realpath .)/$(2)/mono/mini/mono|g; s|@FRAMEWORK_ROOT@|$(abspath $(MAC_DESTDIR)/$$(MAC_FRAMEWORK_CURRENT_DIR))|g'
 	$$(Q) chmod +x $$@
 
-.stamp-build-$(2): .stamp-configure-$(2) $(BUILD_DESTDIR)/mono-$(2) $(MONO_DEPENDENCIES)
+.stamp-compile-$(2): .stamp-configure-$(2) $(BUILD_DESTDIR)/mono-$(2) $(MONO_DEPENDENCIES)
 	PATH="$(MONO_PREFIX)/bin:$(PATH)" $(MAKE) -C $(2)/mono
 	PATH="$(MONO_PREFIX)/bin:$(PATH)" $(MAKE) -C $(2)/mono install
 	PATH="$(MONO_PREFIX)/bin:$(PATH)" $(MAKE) -C $(2)/support
+	$(Q) touch $$@
+
+.stamp-download-$(2): $(PROVISION_TARGET)
+	$(Q) touch $$@
+
+# PENDING
+.stamp-build-$(2): .stamp-compile-$(2)
 	$(Q) touch $$@
 
 build-$(2): .stamp-build-$(2)
@@ -724,8 +758,14 @@ $(2):: build-$(2)
 build:: build-$(2)
 clean-local:: clean-$(2)
 
-.stamp-build-$(2): $(MONO_PATH)/configure $(MONO_DEPENDENCIES) $(BUILD_DESTDIR)/$(2)
+.stamp-compile-$(2): $(MONO_PATH)/configure $(MONO_DEPENDENCIES) $(BUILD_DESTDIR)/$(2)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-$(3) $(SDK_ARGS)
+	$(Q) touch $$@
+
+.stamp-download-$(2): $(PROVISION_TARGET)
+	$(Q) touch $$@
+
+.stamp-build-$(2): .stamp-$(BUILD_MODE)-$(2)
 	$(Q) cp -r $(SDK_DESTDIR)/ios-$(4)/lib $(BUILD_DESTDIR)/$(2)
 	$(Q) cp -r $(SDK_DESTDIR)/ios-$(4)/include $(BUILD_DESTDIR)/$(2)
 	$(Q) touch $$@
@@ -829,8 +869,14 @@ watchsimulator: build-watchsimulator install-watchsimulator
 .PHONY: watchsimulator
 endif
 
-.stamp-build-watchsimulator: $(MONO_PATH)/configure $(MONO_DEPENDENCIES)
+.stamp-compile-watchsimulator: $(MONO_PATH)/configure $(MONO_DEPENDENCIES)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-simwatch $(SDK_ARGS)
+	$(Q) touch $@
+
+.stamp-download-watchsimulator: $(PROVISION_TARGET)
+	$(Q) touch $@
+
+.stamp-build-watchsimulator: .stamp-$(BUILD_MODE)-watchsimulator
 	$(Q) mkdir -p $(BUILD_DESTDIR)/watchsimulator
 	$(Q) cp -r $(SDK_DESTDIR)/ios-simwatch-release/lib $(BUILD_DESTDIR)/watchsimulator
 	$(Q) cp -r $(SDK_DESTDIR)/ios-simwatch-release/include $(BUILD_DESTDIR)/watchsimulator
@@ -908,8 +954,14 @@ tvsimulator: build-tvsimulator install-tvsimulator
 .PHONY: tvsimulator
 endif
 
-.stamp-build-tvsimulator: $(MONO_PATH)/configure $(MONO_DEPENDENCIES)
+.stamp-compile-tvsimulator: $(MONO_PATH)/configure $(MONO_DEPENDENCIES)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-simtv $(SDK_ARGS)
+	$(Q) touch $@
+
+.stamp-download-tvsimulator: $(PROVISION_TARGET)
+	$(Q) touch $@
+
+.stamp-build-tvsimulator: .stamp-$(BUILD_MODE)-tvsimulator
 	$(Q) mkdir -p $(BUILD_DESTDIR)/tvsimulator
 	$(Q) cp -r $(SDK_DESTDIR)/ios-simtv-release/lib $(BUILD_DESTDIR)/tvsimulator
 	$(Q) cp -r $(SDK_DESTDIR)/ios-simtv-release/include $(BUILD_DESTDIR)/tvsimulator
@@ -999,8 +1051,14 @@ $(2): build-$(2)
 build:: build-$(2)
 clean-local:: clean-$(2)
 
-.stamp-build-$(2): $(MONO_PATH)/configure $(SDK_CONFIG) $(MONO_DEPENDENCIES)
+.stamp-compile-$(2): $(MONO_PATH)/configure $(SDK_CONFIG) $(MONO_DEPENDENCIES)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-$(3) $(SDK_ARGS)
+	$(Q) touch $$@
+
+.stamp-download-$(2): $(PROVISION_TARGET)
+	$(Q) touch $$@
+
+.stamp-build-$(2): .stamp-$(BUILD_MODE)-$(2)
 	$(Q) mkdir -p $(BUILD_DESTDIR)/$(2)
 	$(Q) cp -r $(SDK_DESTDIR)/ios-$(3)-release/* $(BUILD_DESTDIR)/$(2)
 	$(Q) touch $$@
@@ -1173,8 +1231,14 @@ watchos:: targetwatch
 
 .PHONY: targetwatch
 
-.stamp-build-targetwatch: $(MONO_PATH)/configure $(SDK_CONFIG) $(MONO_DEPENDENCIES)
+.stamp-compile-targetwatch: $(MONO_PATH)/configure $(SDK_CONFIG) $(MONO_DEPENDENCIES)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-targetwatch $(SDK_ARGS)
+	$(Q) touch $@
+
+.stamp-download-targetwatch: $(PROVISION_TARGET)
+	$(Q) touch $@
+
+.stamp-build-targetwatch: .stamp-$(BUILD_MODE)-targetwatch
 	$(Q) mkdir -p $(BUILD_DESTDIR)/targetwatch
 	$(Q) cp -r $(SDK_DESTDIR)/ios-targetwatch-release/* $(BUILD_DESTDIR)/targetwatch
 	$(Q) touch $@
@@ -1284,8 +1348,14 @@ tvos:: targettv
 
 .PHONY: targettv
 
-.stamp-build-targettv: $(MONO_PATH)/configure $(SDK_CONFIG) $(MONO_DEPENDENCIES)
+.stamp-compile-targettv: $(MONO_PATH)/configure $(SDK_CONFIG) $(MONO_DEPENDENCIES)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-targettv $(SDK_ARGS)
+	$(Q) touch $@
+
+.stamp-download-targettv: $(PROVISION_TARGET)
+	$(Q) touch $@
+
+.stamp-build-targettv: .stamp-$(BUILD_MODE)-targettv
 	$(Q) mkdir -p $(BUILD_DESTDIR)/targettv
 	$(Q) cp -r $(SDK_DESTDIR)/ios-targettv-release/* $(BUILD_DESTDIR)/targettv
 	$(Q) touch $@
@@ -1406,13 +1476,19 @@ endif
 build-llvm32: .stamp-build-llvm .stamp-build-llvm32
 build-llvm64: .stamp-build-llvm .stamp-build-llvm32
 
-.stamp-build-llvm: $(SDK_CONFIG)
+.stamp-compile-llvm: $(SDK_CONFIG)
 	$(MAKE) -C $(SDK_BUILDDIR) provision-llvm-llvm64 $(SDK_ARGS)
 	$(Q) touch $@
 
-.stamp-build-llvm32: $(SDK_CONFIG)
+.stamp-compile-llvm32: $(SDK_CONFIG)
 	$(MAKE) -C $(SDK_BUILDDIR) provision-llvm36-llvm32 $(SDK32_ARGS)
 	$(Q) touch $@
+
+.stamp-download-llvm .stamp-download-llvm32: $(PROVISION_TARGET)
+	$(Q) touch $@
+
+.stamp-build-llvm: .stamp-$(BUILD_MODE)-llvm
+.stamp-build-llvm32: .stamp-$(BUILD_MODE)-llvm32
 
 clean-llvm: $(SDK_CONFIG)
 	$(MAKE) -C $(SDK_BUILDDIR) clean-llvm36-llvm32 clean-llvm-llvm64 $(SDK_ARGS)
@@ -1478,8 +1554,14 @@ build:: build-$(1)
 install-local:: install-$(1)
 clean-local:: clean-$(1)
 
-.stamp-build-$(1): .stamp-build-llvm .stamp-build-llvm32 $(MONO_PATH)/configure $(MONO_PATH)/tools/offsets-tool/MonoAotOffsetsDumper.exe $(MONO_DEPENDENCIES) $(SDK_CONFIG)
+.stamp-compile-$(1): .stamp-build-llvm .stamp-build-llvm32 $(MONO_PATH)/configure $(MONO_PATH)/tools/offsets-tool/MonoAotOffsetsDumper.exe $(MONO_DEPENDENCIES) $(SDK_CONFIG)
 	$(MAKE) -C $(SDK_BUILDDIR) package-ios-$(1) $(SDK_ARGS) $(if $(5), XCODE_DIR=$(5))
+	$(Q) touch $$@
+
+.stamp-download-$(1): $(PROVISION_TARGET)
+	$(Q) touch $$@
+
+.stamp-build-$(1): .stamp-$(BUILD_MODE)-$(1)
 	$(Q) touch $$@
 
 build-$(1): .stamp-build-$(1)

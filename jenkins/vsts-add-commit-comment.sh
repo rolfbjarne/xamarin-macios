@@ -49,11 +49,13 @@ fi
 printf "[Html Report](http://xamarin-storage/%s/jenkins-results/tests/index.html)\\n" "$P" >> "$MESSAGE_FILE"
 printf "[VSTS](%s)\\n\\n" "${SYSTEM_TEAMFOUNDATIONCOLLECTIONURI}${SYSTEM_TEAMPROJECT}/_build/index?buildId=${BUILD_BUILDID}" >> "$MESSAGE_FILE"
 
-FILE=$PWD/tests/TestSummary.md
-if ! test -f "$FILE"; then
-printf "Tests failed catastrophically (no summary found)\\n" >> "$MESSAGE_FILE"
-else
-cat "$FILE" >> "$MESSAGE_FILE"
+if test -z "$START"; then
+	FILE=$PWD/tests/TestSummary.md
+	if ! test -f "$FILE"; then
+		printf "Tests failed catastrophically (no summary found)\\n" >> "$MESSAGE_FILE"
+	else
+		cat "$FILE" >> "$MESSAGE_FILE"
+	fi
 fi
 
 ./jenkins/add-commit-comment.sh --token="$TOKEN" --file="$MESSAGE_FILE" "--hash=$BUILD_REVISION"

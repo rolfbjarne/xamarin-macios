@@ -18,10 +18,10 @@
 
 .subsections_via_symbols
 .text
-
+.align 2
 _xamarin_arm64_common_trampoline:
 	mov x9, sp ;#Save sp to a temporary register
-	sub sp, sp, #224 ;# allocate 224 bytes from the stack (stack must always be 16-byte aligned)
+	sub sp, sp, #2240 ;# allocate 224 bytes from the stack (stack must always be 16-byte aligned)
 
 	# todo: verify alignment.
 	stp x16, x9, [sp, #0x00]
@@ -52,8 +52,8 @@ _xamarin_arm64_common_trampoline:
 
 	ldp  q0, q1, [sp, #0x60]
 	ldp  q2, q3, [sp, #0x80]
-	ldp  q4, q5, [sp, #0xa0]
-	ldp  q6, q7, [sp, #0xc0]
+	# ldp  q4, q5, [sp, #0xa0]
+	# ldp  q6, q7, [sp, #0xc0]
 
 	add sp, sp, #224 ;# deallocate 224 bytes from the stack
 

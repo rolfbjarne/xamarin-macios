@@ -72,11 +72,11 @@ get_primitive_size (char type)
 
 #ifdef TRACE
 static void
-dump_state (struct CallState *state, id self, SEL sel)
+dump_state (struct CallState *state, id self, SEL sel, const char *prefix)
 {
-	fprintf (stderr, "type: %llu self: %p SEL: %s sp: 0x%llx x0: 0x%llx x1: 0x%llx x2: 0x%llx x3: 0x%llx x4: 0x%llx x5: 0x%llx x6: 0x%llx x7: 0x%llx x8: 0x%llx -- q0: %Lf q1: %Lf q2: %Lf q3: %Lf q4: %Lf q5: %Lf q6: %Lf q7: %Lf\n",
-		state->type, self, sel_getName (sel), state->sp, state->x0, state->x1, state->x2, state->x3, state->x4, state->x5, state->x6, state->x7, state->x8,
-		state->q0, state->q1, state->q2, state->q3, state->q4, state->q5, state->q6, state->q7);
+	fprintf (stderr, "%stype: %llu self: %p SEL: %s sp: 0x%llx x0: 0x%llx x1: 0x%llx x2: 0x%llx x3: 0x%llx x4: 0x%llx x5: 0x%llx x6: 0x%llx x7: 0x%llx x8: 0x%llx -- q0: %Lf q1: %Lf q2: %Lf q3: %Lf q4: %Lf q5: %Lf q6: %Lf q7: %Lf\n",
+		prefix, state->type, self, sel_getName (sel), state->sp, state->x0, state->x1, state->x2, state->x3, state->x4, state->x5, state->x6, state->x7, state->x8,
+		state->q0.d, state->q1.d, state->q2.d, state->q3.d, state->q4.d, state->q5.d, state->q6.d, state->q7.d);
 }
 #else
 #define dump_state(...)
@@ -110,13 +110,13 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 		if (it->nsrn < 8) {
 			if (target != NULL) {
 				*(float *) target = *(float *) &it->state->q [it->nsrn];
-				LOGZ (" reading float at q%i into %p: %f\n", it->nsrn, target, *(float *) target);
+				LOGZ ("     reading float at q%i into %p: %f\n", it->nsrn, target, *(float *) target);
 			}
 			it->nsrn++;
 		} else {
 			if (target != NULL) {
 				*(float *) target = *(float *) it->nsaa;
-				LOGZ (" reading float at stack %p into %p: %f\n", it->nsaa, target, *(float *) target);
+				LOGZ ("     reading float at stack %p into %p: %f\n", it->nsaa, target, *(float *) target);
 			}
 			it->nsaa += 4;
 		}
@@ -126,13 +126,13 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 		if (it->nsrn < 8) {
 			if (target != NULL) {
 				*(double *) target = *(double *) &it->state->q [it->nsrn];
-				LOGZ (" reading double at q%i into %p: %f\n", it->nsrn, target, *(double *) target);
+				LOGZ ("     reading double at q%i into %p: %f\n", it->nsrn, target, *(double *) target);
 			}
 			it->nsrn++;
 		} else {
 			if (target != NULL) {
 				*(double *) target = *(double *) it->nsaa;
-				LOGZ (" reading dobule at stack %p into %p: %f\n", it->nsaa, target, *(double *) target);
+				LOGZ ("     reading dobule at stack %p into %p: %f\n", it->nsaa, target, *(double *) target);
 			}
 			it->nsaa += 8;
 		}
@@ -160,16 +160,16 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 		bool read_register = it->ngrn < 8;
 
 		if (read_register) {
-			ptr = (uint8_t *) it->state->x [it->ngrn];
+			ptr = (uint8_t *) &it->state->x [it->ngrn];
 			if (target != NULL) {
-				LOGZ (" reading primitive of size %i from x%i into %p: ",
+				LOGZ ("     reading primitive of size %i from x%i into %p: ",
 					(int) size, it->ngrn, target);
 			}
 			it->ngrn++;
 		} else {
 			ptr = (uint8_t *) it->nsaa;
 			if (target != NULL) {
-				LOGZ (" reading primitive of size %i from %p into %p: ",
+				LOGZ ("     reading primitive of size %i from %p into %p: ",
 					(int) size, ptr, target);
 			}
 			it->nsaa += size;
@@ -212,12 +212,12 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 	struct ParamIterator *it = (struct ParamIterator *) context;
 
 	if (action == IteratorStart) {
-		it->ngrn = 0;
+		it->ngrn = 2; // we already have two arguments: self + SEL
 		it->nsrn = 0;
 		it->nsaa = (uint8_t *) it->state->sp;
 		it->state->x = &it->state->x0;
 		it->state->q = &it->state->q0;
-		LOGZ("initialized parameter iterator. next register: %i next fp register: %i next stack pointer: %p\n", it->ngrn, it->nsrn, it->nsaa);
+		LOGZ ("    initialized parameter iterator. next register: %i next fp register: %i next stack pointer: %p\n", it->ngrn, it->nsrn, it->nsaa);
 		return;
 	} else if (action == IteratorEnd) {
 		return;
@@ -272,7 +272,7 @@ marshal_return_value (void *context, const char *type, size_t size, void *vvalue
 	MonoObject *value = (MonoObject *) vvalue;
 	struct ParamIterator *it = (struct ParamIterator *) context;
 
-	LOGZ (" marshalling return value %p as %s\n", value, type);
+	LOGZ ("     marshalling return value %p as %s\n", value, type);
 
 	switch (type [0]) {
 	case _C_FLT:
@@ -497,11 +497,11 @@ xamarin_arch_trampoline (struct CallState *state)
 
 	id self = (id) state->x0;
 	SEL sel = (SEL) state->x1;
-	dump_state (state, self, sel);
+	dump_state (state, self, sel, "BEGIN: ");
 	struct ParamIterator iter;
 	iter.state = state;
 	xamarin_invoke_trampoline ((enum TrampolineType) state->type, self, sel, param_iter_next, marshal_return_value, &iter);
-	dump_state (state, self, sel);
+	dump_state (state, self, sel, "END: ");
 }
 
 #endif /* __x86_64__ */

@@ -5,6 +5,13 @@
 extern "C" {
 #endif
 
+struct BigDouble {
+	union {
+		__int128 bits;
+		long double d;
+	};
+};
+
 struct CallState {
 	uint64_t type;
 	uint64_t sp;
@@ -18,18 +25,18 @@ struct CallState {
 	uint64_t x7;
 	uint64_t x8;
 
-	long double q0;
-	long double q1;
-	long double q2;
-	long double q3;
-	long double q4;
-	long double q5;
-	long double q6;
-	long double q7;
+	struct BigDouble q0;
+	struct BigDouble q1;
+	struct BigDouble q2;
+	struct BigDouble q3;
+	struct BigDouble q4;
+	struct BigDouble q5;
+	struct BigDouble q6;
+	struct BigDouble q7;
 
 	// computed values
 	uint64_t *x;
-	long double *q;
+	struct BigDouble *q;
 };
 
 struct ParamIterator {

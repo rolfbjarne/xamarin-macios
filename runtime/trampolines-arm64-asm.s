@@ -21,41 +21,43 @@
 .align 2
 _xamarin_arm64_common_trampoline:
 	mov x9, sp ;#Save sp to a temporary register
-	sub sp, sp, #2240 ;# allocate 224 bytes from the stack (stack must always be 16-byte aligned)
+	sub sp, sp, #240 ;# allocate 224 bytes from the stack (stack must always be 16-byte aligned) + 16 bytes for the stack frame
 
-	# todo: verify alignment.
-	stp x16, x9, [sp, #0x00]
-	stp  x0, x1, [sp, #0x10]
-	stp  x2, x3, [sp, #0x20]
-	stp  x4, x5, [sp, #0x30]
-	stp  x6, x7, [sp, #0x40]
-	str  x8,     [sp, #0x50]
+	# Create stack frame
+	stp x29, x30, [sp, #0x00]
+	mov x29, sp
 
-	stp  q0, q1, [sp, #0x60]
-	stp  q2, q3, [sp, #0x80]
-	stp  q4, q5, [sp, #0xa0]
-	stp  q6, q7, [sp, #0xc0]
+	stp x16, x9, [sp, #0x10]
+	stp  x0, x1, [sp, #0x20]
+	stp  x2, x3, [sp, #0x30]
+	stp  x4, x5, [sp, #0x40]
+	stp  x6, x7, [sp, #0x50]
+	str  x8,     [sp, #0x60]
 
-	mov x0, sp
+	stp  q0, q1, [sp, #0x70]
+	stp  q2, q3, [sp, #0x90]
+	stp  q4, q5, [sp, #0xb0]
+	stp  q6, q7, [sp, #0xd0]
+
+	add x0, sp, #0x10
 	bl	_xamarin_arch_trampoline
 
 	# get return value(s)
 
-	;#FIXME return values
+	ldp x16, x9, [sp, #0x10]
+	ldp  x0, x1, [sp, #0x20]
+	ldp  x2, x3, [sp, #0x30]
+	ldp  x4, x5, [sp, #0x40]
+	ldp  x6, x7, [sp, #0x50]
+	ldr  x8,     [sp, #0x60]
 
-	ldp x16, x9, [sp, #0x00]
-	ldp  x0, x1, [sp, #0x10]
-	ldp  x2, x3, [sp, #0x20]
-	ldp  x4, x5, [sp, #0x30]
-	ldp  x6, x7, [sp, #0x40]
-	ldr  x8,     [sp, #0x50]
+	ldp  q0, q1, [sp, #0x70]
+	ldp  q2, q3, [sp, #0x90]
+	ldp  q4, q5, [sp, #0xb0]
+	ldp  q6, q7, [sp, #0xd0]
 
-	ldp  q0, q1, [sp, #0x60]
-	ldp  q2, q3, [sp, #0x80]
-	# ldp  q4, q5, [sp, #0xa0]
-	# ldp  q6, q7, [sp, #0xc0]
-
-	add sp, sp, #224 ;# deallocate 224 bytes from the stack
+	ldp	x29, x30, [sp, #0x00]
+	add sp, sp, #240 ;# deallocate 224 bytes from the stack + 16 bytes for stack frame
 
 	ret
 

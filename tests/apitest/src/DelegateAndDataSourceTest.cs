@@ -61,33 +61,44 @@ namespace Xamarin.Mac.Tests
 					if (isValidToTest (weakDelegate) || isValidToTest (del) ||
 					isValidToTest (weakDataSource)  || isValidToTest (dataSource) ) {
 						try {
+							Console.WriteLine ("    {0}", t.FullName);
 							// Create an instance and try to set null
 							using (var instance = (IDisposable) ctor.Invoke (null)) {
 								if (isValidToTest (weakDelegate)) {
+									Console.WriteLine ("        setting weak delegate", t.FullName);
 									weakDelegate.SetValue (instance, null, null);
 								}
 								if (isValidToTest (del)) {
+									Console.WriteLine ("        setting delegate", t.FullName);
 									del.SetValue (instance, null, null);
 								}
 								if (isValidToTest (weakDataSource)) {
+									Console.WriteLine ("        setting weak data source", t.FullName);
 									weakDataSource.SetValue (instance, null, null);
 								}
 								if (isValidToTest (dataSource)) {
+									Console.WriteLine ("        setting data source", t.FullName);
 									dataSource.SetValue (instance, null, null);
 								}
 							}
 						}
 						catch (TargetInvocationException e) {
+							Console.WriteLine ("        failed (tie): ", e.InnerException.Message);
 							failingTypes.Add (t, e.InnerException.Message);
 						}
 						catch (Exception e) {
+							Console.WriteLine ("        failed: ", e.Message);
 							Assert.Fail ("Unexpected exception {0} while testing {1}", e, t);
+						} finally {
+							Console.WriteLine ("        finished");
 						}
 					}
 				}
 			}
 
+			Console.WriteLine ("    Forcing garbage collection");
 			GC.Collect (2); // Flush out random failures. Some classes only act badly when disposed
+			Console.WriteLine ("    Garbage collection completed");
 			if (failingTypes.Count > 0) {
 				Console.WriteLine ("{0} failing types:", failingTypes.Count);
 				foreach (var kvp in failingTypes)

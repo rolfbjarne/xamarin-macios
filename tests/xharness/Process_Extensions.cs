@@ -234,7 +234,14 @@ namespace xharness
 				ps.StartInfo.Arguments = "-eo ppid,pid";
 				ps.StartInfo.UseShellExecute = false;
 				ps.StartInfo.RedirectStandardOutput = true;
-				ps.Start ();
+				try {
+					ps.Start ();
+				} catch (System.ComponentModel.Win32Exception we) {
+					Console.WriteLine ("{0} Failed to launch ps: {1}", Harness.Timestamp, we.Message);
+					Console.WriteLine ("{0} Will now wait for 20 minutes.", Harness.Timestamp);
+					Thread.Sleep (TimeSpan.FromMinutes (20));
+					throw;
+				}
 				stdout = ps.StandardOutput.ReadToEnd ();
 
 				if (!ps.WaitForExit (1000)) {

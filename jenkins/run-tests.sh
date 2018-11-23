@@ -83,9 +83,21 @@ security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$(cat "$K
 # clean mono keypairs (used in tests)
 rm -rf ~/.config/.mono/keypairs/
 
+touch .stamp-sleeper
+(
+	while test -f .stamp-sleeper; do
+		sleep 600
+		dt=$(date)
+		printf "%s ps aux:\\n%s\\n" "$dt" "$(ps aux | sed "s/^/$dt    /")"
+	done
+)&
+
 # Run tests
 RC=0
 make -C tests "$TARGET" || RC=$?
+
+rm -f .stamp-sleeper
+wait
 
 # upload of the final html report
 if test -n "$PUBLISH"; then

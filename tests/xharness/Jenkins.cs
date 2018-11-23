@@ -932,7 +932,8 @@ namespace xharness
 					Task.Factory.StartNew (async () => {
 						while (true) {
 							await Task.Delay (TimeSpan.FromMinutes (10));
-							Console.WriteLine ("Still running tests. Please be patient.");
+							Console.WriteLine ("Still running tests. Please be patient. {0} succeede, {1} failed, {2} in progress, {3} not started.", Tasks.Count ((v) => v.Succeeded), Tasks.Count ((v) => v.Failed), Tasks.Count ((v) => v.InProgress), Tasks.Count ((v) => v.NotStarted));
+							ProcessHelper.kill (Process.GetCurrentProcess ().Id, 3 /* SIGQUIT */);
 						}
 					});
 				}

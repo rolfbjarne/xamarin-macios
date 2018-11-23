@@ -70,7 +70,7 @@ namespace xharness
 		{
 			var stdout_completion = new TaskCompletionSource<bool> ();
 			var stderr_completion = new TaskCompletionSource<bool> ();
-			var exit_completion = new TaskCompletionSource<bool> ();
+			//var exit_completion = new TaskCompletionSource<bool> ();
 			var rv = new ProcessExecutionResult ();
 
 			process.StartInfo.RedirectStandardError = true;
@@ -122,38 +122,56 @@ namespace xharness
 			sb.Append ($"{StringUtils.Quote (process.StartInfo.FileName)} {process.StartInfo.Arguments}");
 			log.WriteLine (sb);
 
+			var watch = Stopwatch.StartNew ();
 			process.Start ();
+			var pid = process.Id;
+			Console.WriteLine ("{3} Executing '{0} {1}' with timeout {2} seconds", process.StartInfo.FileName, process.StartInfo.Arguments, timeout.HasValue ? timeout.Value.TotalSeconds.ToString () : "infinite", pid);
 
 			process.BeginErrorReadLine ();
 			process.BeginOutputReadLine ();
 
 			cancellation_token?.Register (() => {
-				if (!exit_completion.Task.IsCompleted) {
+				if (!process.HasExited) {
 					StderrStream.WriteLine ($"Execution was cancelled.");
 					ProcessHelper.kill (process.Id, 9);
 				}
 			});
 
-			new Thread (() =>
-			{
-				if (timeout.HasValue) {
-					if (!process.WaitForExit ((int) timeout.Value.TotalMilliseconds)) {
-						process.KillTreeAsync (log, true).Wait ();
-						rv.TimedOut = true;
-						lock (StderrStream)
-							log.WriteLine ($"Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
-					}
+			if (timeout.HasValue) {
+				if (!await process.WaitForExitAsync (timeout.Value)) {
+					Console.WriteLine ("{2} Execution of '{0} {1}' timed out, will now kill.", process.StartInfo.FileName, process.StartInfo.Arguments, pid);
+					await process.KillTreeAsync (log, true);
+					rv.TimedOut = true;
+					lock (StderrStream)
+						log.WriteLine ($"{pid} Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
+					return rv;
 				}
-				process.WaitForExit ();
-				exit_completion.TrySetResult (true);
-				Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
-				stderr_completion.TrySetResult (false);
-				stdout_completion.TrySetResult (false);
-			}) {
-				IsBackground = true,
-			}.Start ();
+			}
+			await process.WaitForExitAsync ();
+			watch.Stop ();
+			Console.WriteLine ("{2} Execution of '{0} {1}' succeeded in {3} ms.", process.StartInfo.FileName, process.StartInfo.Arguments, pid, watch.ElapsedMilliseconds);
+			Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
 
-			await Task.WhenAll (stderr_completion.Task, stdout_completion.Task, exit_completion.Task);
+			//new Thread (() =>
+			//{
+			//	if (timeout.HasValue) {
+			//		if (!process.WaitForExit ((int) timeout.Value.TotalMilliseconds)) {
+			//			process.KillTreeAsync (log, true).Wait ();
+			//			rv.TimedOut = true;
+			//			lock (StderrStream)
+			//				log.WriteLine ($"Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
+			//		}
+			//	}
+			//	process.WaitForExit ();
+			//	exit_completion.TrySetResult (true);
+			//	Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
+			//	stderr_completion.TrySetResult (false);
+			//	stdout_completion.TrySetResult (false);
+			//}) {
+			//	IsBackground = true,
+			//}.Start ();
+
+			//await Task.WhenAll (stderr_completion.Task, stdout_completion.Task, exit_completion.Task);
 
 			try {
 				rv.ExitCode = process.ExitCode;
@@ -164,65 +182,120 @@ namespace xharness
 			return rv;
 		}
 
+		public async static Task WaitForExitAsync (this Process process)
+		{
+			if (process.HasExited)
+				return;
+
+			var tcs = new TaskCompletionSource<bool> ();
+
+			void ProcessExited (object sender, EventArgs ea)
+			{
+				process.Exited -= ProcessExited;
+				tcs.TrySetResult (true);
+			}
+
+			process.Exited += ProcessExited;
+			process.EnableRaisingEvents = true;
+
+			if (process.HasExited) {
+				process.Exited -= ProcessExited;
+				return;
+			}
+
+			await tcs.Task;
+		}
+
+		public async static Task<bool> WaitForExitAsync (this Process process, TimeSpan timeout)
+		{
+			if (process.HasExited)
+				return true;
+
+			var tcs = new TaskCompletionSource<bool> ();
+
+			void ProcessExited (object sender, EventArgs ea)
+			{
+				process.Exited -= ProcessExited;
+				tcs.TrySetResult (true);
+			}
+
+			process.Exited += ProcessExited;
+			process.EnableRaisingEvents = true;
+
+			if (process.HasExited) {
+				process.Exited -= ProcessExited;
+				return true;
+			}
+
+			return await tcs.Task.TimeoutAfter (timeout);
+		}
+
 		public static Task KillTreeAsync (this Process @this, Log log, bool diagnostics = true)
 		{
 			return KillTreeAsync (@this.Id, log, diagnostics);
 		}
 
+		[ThreadStatic]
+		static bool printing_diagnostics; // Make sure we don't try to print diagnostics when printing diagnostics times out, since we end up with recursive process creation that can OOM the system and end up requiring a hard reboot.
+
 		public static async Task KillTreeAsync (int pid, Log log, bool diagnostics = true)
 		{
 			var pids = new List<int> ();
 			GetChildrenPS (log, pids, pid);
-			if (diagnostics) {
-				log.WriteLine ($"Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
-				using (var ps = new Process ()) {
-					log.WriteLine ("Writing process list:");
-					ps.StartInfo.FileName = "ps";
-					ps.StartInfo.Arguments = "-A -o pid,ruser,ppid,pgid,%cpu=%CPU,%mem=%MEM,flags=FLAGS,lstart,rss,vsz,tty,state,time,command";
-					await ps.RunAsync (log, true, TimeSpan.FromSeconds (5));
-				}
+			if (diagnostics && !printing_diagnostics) {
+				try {
+					printing_diagnostics = true;
+					log.WriteLine ($"Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
+					Console.WriteLine ($"{pid} Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
+					using (var ps = new Process ()) {
+						log.WriteLine ("Writing process list:");
+						ps.StartInfo.FileName = "ps";
+						ps.StartInfo.Arguments = "-A -o pid,ruser,ppid,pgid,%cpu=%CPU,%mem=%MEM,flags=FLAGS,lstart,rss,vsz,tty,state,time,command";
+						await ps.RunAsync (log, true, TimeSpan.FromSeconds (5));
+					}
 
-				foreach (var diagnose_pid in pids) {
-					var template = Path.GetTempFileName ();
-					try {
-						var commands = new StringBuilder ();
-						using (var dbg = new Process ()) {
-							commands.AppendLine ($"process attach --pid {diagnose_pid}");
-							commands.AppendLine ("thread list");
-							commands.AppendLine ("thread backtrace all");
-							commands.AppendLine ("detach");
-							commands.AppendLine ("quit");
-							dbg.StartInfo.FileName = "/usr/bin/lldb";
-							dbg.StartInfo.Arguments = $"--source {StringUtils.Quote (template)}";
-							File.WriteAllText (template, commands.ToString ());
-
-							log.WriteLine ($"Printing backtrace for pid={pid}");
-							await dbg.RunAsync (log, true, TimeSpan.FromSeconds (30));
-						}
-					} finally {
+					foreach (var diagnose_pid in pids) {
+						var template = Path.GetTempFileName ();
 						try {
-							File.Delete (template);
-						} catch {
-							// Don't care
+							var commands = new StringBuilder ();
+							using (var dbg = new Process ()) {
+								commands.AppendLine ($"process attach --pid {diagnose_pid}");
+								commands.AppendLine ("thread list");
+								commands.AppendLine ("thread backtrace all");
+								commands.AppendLine ("detach");
+								commands.AppendLine ("quit");
+								dbg.StartInfo.FileName = "/usr/bin/lldb";
+								dbg.StartInfo.Arguments = $"--source {StringUtils.Quote (template)}";
+								File.WriteAllText (template, commands.ToString ());
+
+								log.WriteLine ($"Printing backtrace for pid={pid}");
+								Console.WriteLine ($"Printing backtrace for pid={pid}");
+								var rv = await dbg.RunAsync (log, true, TimeSpan.FromSeconds (30));
+								Console.WriteLine ($"Printed backtrace for pid={pid} (Succeeded: {rv.Succeeded} TimedOut: {rv.TimedOut}");
+							}
+						} finally {
+							try {
+								File.Delete (template);
+							} catch {
+								// Don't care
+							}
 						}
 					}
+				} finally {
+					printing_diagnostics = false;
 				}
 			}
 
-			using (var kill = new Process ()) {
-				kill.StartInfo.FileName = "kill";
-				// Send SIGABRT since that produces a crash report
-				// lldb may fail to attach to system processes, but crash reports will still be produced with potentially helpful stack traces.
-				kill.StartInfo.Arguments = "-6 " + string.Join (" ", pids.Select ((v) => v.ToString ()).ToArray ());
-				await kill.RunAsync (log, true, TimeSpan.FromSeconds (2.5));
-			}
+			// Send SIGABRT since that produces a crash report
+			// lldb may fail to attach to system processes, but crash reports will still be produced with potentially helpful stack traces.
+			Console.WriteLine ($"Sending SIGABRT to: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
+			for (int i = 0; i < pids.Count; i++)
+				ProcessHelper.kill (pids [i], 6);
 
-			using (var kill = new Process ()) {
-				kill.StartInfo.FileName = "kill";
-				// send kill -9 anyway as a last resort
-				kill.StartInfo.Arguments = "-9 " + string.Join (" ", pids.Select ((v) => v.ToString ()).ToArray ());
-				await kill.RunAsync (log, true, TimeSpan.FromSeconds (2.5));
-			}
+			// send kill -9 anyway as a last resort
+			Console.WriteLine ($"Sending SIGKILL to: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
+			for (int i = 0; i < pids.Count; i++)
+				ProcessHelper.kill (pids [i], 9);
 		}
 
 		static void GetChildrenPS (Log log, List<int> list, int pid)

@@ -350,18 +350,6 @@ namespace Xamarin.Bundler
 			return Path.Combine (PlatformsDirectory, GetPlatform (app) + ".platform");
 		}
 
-		public static int XcodeRun (string command, string args, StringBuilder output = null)
-		{
-			string [] env = DeveloperDirectory != String.Empty ? new string [] { "DEVELOPER_DIR", DeveloperDirectory } : null;
-			int ret = RunCommand ("xcrun", String.Concat ("-sdk macosx ", command, " ", args), env, output);
-			if (ret != 0 && verbose > 1) {
-				StringBuilder debug = new StringBuilder ();
-				RunCommand ("xcrun", String.Concat ("--find ", command), env, debug);
-				Console.WriteLine ("failed using `{0}` from: {1}", command, debug);
-			}
-			return ret;
-		}
-
 		public static string GetAotCompiler (Application app, bool is64bits)
 		{
 			switch (app.Platform) {

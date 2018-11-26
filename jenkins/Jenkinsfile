@@ -766,7 +766,7 @@ timestamps {
         } finally {
             stage ('Final tasks') {
                 sh (script: "${workspace}/xamarin-macios/jenkins/publish-results.sh", returnStatus: true /* don't throw exceptions if something goes wrong */)
-                sh (script: "make git-clean-all -C ${workspace}/xamarin-macios", returnStatus: true /* don't throw exceptions if something goes wrong */)
+                // sh (script: "make git-clean-all -C ${workspace}/xamarin-macios", returnStatus: true /* don't throw exceptions if something goes wrong */)
             }
         }
     } // node

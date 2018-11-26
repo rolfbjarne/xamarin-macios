@@ -56,17 +56,17 @@ namespace xharness
 
 	public static class Process_Extensions
 	{
-		public static async Task<ProcessExecutionResult> RunAsync (this Process process, Log log, CancellationToken? cancellation_token = null)
+		public static async Task<ProcessExecutionResult> RunAsync (this Process process, Log log, CancellationToken? cancellation_token = null, bool? diagnostics = null)
 		{
-			return await RunAsync (process, log, log, log, cancellation_token: cancellation_token);
+			return await RunAsync (process, log, log, log, cancellation_token: cancellation_token, diagnostics: diagnostics);
 		}
 
-		public static Task<ProcessExecutionResult> RunAsync (this Process process, Log log, bool append = true, TimeSpan? timeout = null, Dictionary<string, string> environment_variables = null, CancellationToken? cancellation_token = null)
+		public static Task<ProcessExecutionResult> RunAsync (this Process process, Log log, bool append = true, TimeSpan? timeout = null, Dictionary<string, string> environment_variables = null, CancellationToken? cancellation_token = null, bool? diagnostics = null)
 		{
-			return RunAsync (process, log, log, log, timeout, environment_variables, cancellation_token);
+			return RunAsync (process, log, log, log, timeout, environment_variables, cancellation_token, diagnostics);
 		}
 
-		public static async Task<ProcessExecutionResult> RunAsync (this Process process, Log log, TextWriter StdoutStream, TextWriter StderrStream, TimeSpan? timeout = null, Dictionary<string, string> environment_variables = null, CancellationToken? cancellation_token = null)
+		public static async Task<ProcessExecutionResult> RunAsync (this Process process, Log log, TextWriter StdoutStream, TextWriter StderrStream, TimeSpan? timeout = null, Dictionary<string, string> environment_variables = null, CancellationToken? cancellation_token = null, bool? diagnostics = null)
 		{
 			var stdout_completion = new TaskCompletionSource<bool> ();
 			var stderr_completion = new TaskCompletionSource<bool> ();
@@ -140,7 +140,7 @@ namespace xharness
 			if (timeout.HasValue) {
 				if (!await process.WaitForExitAsync (timeout.Value)) {
 					Console.WriteLine ("{2} Execution of '{0} {1}' timed out, will now kill.", process.StartInfo.FileName, process.StartInfo.Arguments, pid);
-					await process.KillTreeAsync (log, true);
+					await process.KillTreeAsync (log, diagnostics ?? true);
 					rv.TimedOut = true;
 					lock (StderrStream)
 						log.WriteLine ($"{pid} Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
@@ -151,27 +151,6 @@ namespace xharness
 			watch.Stop ();
 			Console.WriteLine ("{2} Execution of '{0} {1}' succeeded in {3} ms.", process.StartInfo.FileName, process.StartInfo.Arguments, pid, watch.ElapsedMilliseconds);
 			Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
-
-			//new Thread (() =>
-			//{
-			//	if (timeout.HasValue) {
-			//		if (!process.WaitForExit ((int) timeout.Value.TotalMilliseconds)) {
-			//			process.KillTreeAsync (log, true).Wait ();
-			//			rv.TimedOut = true;
-			//			lock (StderrStream)
-			//				log.WriteLine ($"Execution timed out after {timeout.Value.TotalSeconds} seconds and the process was killed.");
-			//		}
-			//	}
-			//	process.WaitForExit ();
-			//	exit_completion.TrySetResult (true);
-			//	Task.WaitAll (new Task [] { stderr_completion.Task, stdout_completion.Task }, TimeSpan.FromSeconds (1));
-			//	stderr_completion.TrySetResult (false);
-			//	stdout_completion.TrySetResult (false);
-			//}) {
-			//	IsBackground = true,
-			//}.Start ();
-
-			//await Task.WhenAll (stderr_completion.Task, stdout_completion.Task, exit_completion.Task);
 
 			try {
 				rv.ExitCode = process.ExitCode;
@@ -230,59 +209,51 @@ namespace xharness
 			return await tcs.Task.TimeoutAfter (timeout);
 		}
 
-		public static Task KillTreeAsync (this Process @this, Log log, bool diagnostics = true)
+		public static Task KillTreeAsync (this Process @this, Log log, bool? diagnostics = true)
 		{
 			return KillTreeAsync (@this.Id, log, diagnostics);
 		}
 
-		[ThreadStatic]
-		static bool printing_diagnostics; // Make sure we don't try to print diagnostics when printing diagnostics times out, since we end up with recursive process creation that can OOM the system and end up requiring a hard reboot.
-
-		public static async Task KillTreeAsync (int pid, Log log, bool diagnostics = true)
+		public static async Task KillTreeAsync (int pid, Log log, bool? diagnostics = true)
 		{
 			var pids = new List<int> ();
 			GetChildrenPS (log, pids, pid);
-			if (diagnostics && !printing_diagnostics) {
-				try {
-					printing_diagnostics = true;
-					log.WriteLine ($"Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
-					Console.WriteLine ($"{pid} Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
-					using (var ps = new Process ()) {
-						log.WriteLine ("Writing process list:");
-						ps.StartInfo.FileName = "ps";
-						ps.StartInfo.Arguments = "-A -o pid,ruser,ppid,pgid,%cpu=%CPU,%mem=%MEM,flags=FLAGS,lstart,rss,vsz,tty,state,time,command";
-						await ps.RunAsync (log, true, TimeSpan.FromSeconds (5));
-					}
+			if (diagnostics == true) {
+				log.WriteLine ($"Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
+				Console.WriteLine ($"{pid} Pids to kill: {string.Join (", ", pids.Select ((v) => v.ToString ()).ToArray ())}");
+				using (var ps = new Process ()) {
+					log.WriteLine ("Writing process list:");
+					ps.StartInfo.FileName = "ps";
+					ps.StartInfo.Arguments = "-A -o pid,ruser,ppid,pgid,%cpu=%CPU,%mem=%MEM,flags=FLAGS,lstart,rss,vsz,tty,state,time,command";
+					await ps.RunAsync (log, true, TimeSpan.FromSeconds (5), diagnostics: false);
+				}
 
-					foreach (var diagnose_pid in pids) {
-						var template = Path.GetTempFileName ();
+				foreach (var diagnose_pid in pids) {
+					var template = Path.GetTempFileName ();
+					try {
+						var commands = new StringBuilder ();
+						using (var dbg = new Process ()) {
+							commands.AppendLine ($"process attach --pid {diagnose_pid}");
+							commands.AppendLine ("thread list");
+							commands.AppendLine ("thread backtrace all");
+							commands.AppendLine ("detach");
+							commands.AppendLine ("quit");
+							dbg.StartInfo.FileName = "/usr/bin/lldb";
+							dbg.StartInfo.Arguments = $"--source {StringUtils.Quote (template)}";
+							File.WriteAllText (template, commands.ToString ());
+
+							log.WriteLine ($"Printing backtrace for pid={pid}");
+							Console.WriteLine ($"Printing backtrace for pid={pid}");
+							var rv = await dbg.RunAsync (log, true, TimeSpan.FromSeconds (30), diagnostics: false);
+							Console.WriteLine ($"Printed backtrace for pid={pid} (Succeeded: {rv.Succeeded} TimedOut: {rv.TimedOut}");
+						}
+					} finally {
 						try {
-							var commands = new StringBuilder ();
-							using (var dbg = new Process ()) {
-								commands.AppendLine ($"process attach --pid {diagnose_pid}");
-								commands.AppendLine ("thread list");
-								commands.AppendLine ("thread backtrace all");
-								commands.AppendLine ("detach");
-								commands.AppendLine ("quit");
-								dbg.StartInfo.FileName = "/usr/bin/lldb";
-								dbg.StartInfo.Arguments = $"--source {StringUtils.Quote (template)}";
-								File.WriteAllText (template, commands.ToString ());
-
-								log.WriteLine ($"Printing backtrace for pid={pid}");
-								Console.WriteLine ($"Printing backtrace for pid={pid}");
-								var rv = await dbg.RunAsync (log, true, TimeSpan.FromSeconds (30));
-								Console.WriteLine ($"Printed backtrace for pid={pid} (Succeeded: {rv.Succeeded} TimedOut: {rv.TimedOut}");
-							}
-						} finally {
-							try {
-								File.Delete (template);
-							} catch {
-								// Don't care
-							}
+							File.Delete (template);
+						} catch {
+							// Don't care
 						}
 					}
-				} finally {
-					printing_diagnostics = false;
 				}
 			}
 

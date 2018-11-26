@@ -750,4 +750,114 @@ static void block_called ()
 }
 @end
 
+@implementation RefOutParameters : NSObject {
+}
++(void) testINativeObject: (int) action a:(id *)          refValue b:(id *)          outValue
+{
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action) {
+	case 0: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 1: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 2: // set both parameters to the same pointer, a new NSObject.
+		*refValue = [NSObject new];
+		*outValue = *refValue;
+		break;
+	default:
+		abort ();
+	}
+}
+
++(void) testINSCoding:     (int) action a:(id<NSCoding>*) refValue b:(id<NSCoding>*) outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testNSObject:      (int) action a:(id *)          refValue b:(id *)          outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testValue:         (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testString:        (int) action a:(NSString **)   refValue b:(NSString **)   outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testInt:           (int) action a:(int32_t *)     refValue b:(int32_t *)     outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
+
++(void) testINativeObjectArray: (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testINSCodingArray:     (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testNSObjectArray:      (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testNSValueArray:       (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
++(void) testStringArray:        (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+{
+	switch (action) {
+	default:
+		abort ();
+	}
+}
+
+@end
 #include "libtest.decompile.m"

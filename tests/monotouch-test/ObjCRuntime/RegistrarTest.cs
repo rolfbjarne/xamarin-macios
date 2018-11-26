@@ -2556,6 +2556,19 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreEqual ("ByrefParameter", str.ToString ());
 			}
 		}
+
+		[Test]
+		public unsafe void RefOutTest ()
+		{
+			IntPtr refValue;
+			IntPtr outValue;
+
+			using (var obj = new BI1064.RefOutParameters ()) {
+				refValue = IntPtr.Zero;
+				outValue = IntPtr.Zero;
+				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, Selector.GetHandle ("..."), 0, refValue, outValue);
+			}
+		}
 	}
 
 #if !__WATCHOS__

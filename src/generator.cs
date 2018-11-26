@@ -4075,17 +4075,34 @@ public partial class Generator : IMemberGatherer {
 			if (mai.Type.IsByRef && mai.Type.GetElementType ().IsValueType == false){
 				string isForcedOwns;
 				var isForced = HasForcedAttribute (pi, out isForcedOwns);
-				by_ref_init.AppendFormat ("IntPtr {0}Value = IntPtr.Zero;\n", pi.Name.GetSafeParamName ());
+				if (pi.IsOut) {
+					by_ref_init.AppendFormat ("IntPtr {0}Value = IntPtr.Zero;\n", pi.Name.GetSafeParamName ());
+				} else {
+					by_ref_init.AppendFormat ("IntPtr {0}Value = ", pi.Name.GetSafeParamName ());
+					if (mai.Type.GetElementType () == TypeManager.System_String){
+						by_ref_init.AppendFormat ("{0}.GetHandle ();\n", pi.Name.GetSafeParamName ());
+					} else if (pi.ParameterType.GetElementType ().IsArray) {
+						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromNSObjects ({0});\n", pi.Name.GetSafeParamName ()));
+						by_ref_init.AppendFormat ("{0}ArrayValue.GetHandle ();\n", pi.Name.GetSafeParamName ());
+					} else {
+						by_ref_init.AppendFormat ("{0}.GetHandle ();\n", pi.Name.GetSafeParamName ());
+					}
+				}
 
 				by_ref_processing.AppendLine();
 				if (mai.Type.GetElementType () == TypeManager.System_String){
-					by_ref_processing.AppendFormat("{0} = {0}Value != IntPtr.Zero ? NSString.FromHandle ({0}Value) : null;", pi.Name.GetSafeParamName ());
+					by_ref_processing.AppendFormat("{0} = NSString.FromHandle ({0}Value);\n", pi.Name.GetSafeParamName ());
 				} else if (pi.ParameterType.GetElementType ().IsArray) {
-					by_ref_processing.AppendFormat ("{0} = {0}Value != IntPtr.Zero ? NSArray.ArrayFromHandle<{1}> ({0}Value) : null;", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ().GetElementType ()));
+					by_ref_processing.AppendFormat ("{0} = NSArray.ArrayFromHandle<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ().GetElementType ()));
+					if (!pi.IsOut) {
+						by_ref_processing.AppendFormat ("if ((object) {0} != (object) {0}ArrayValue\n", pi.Name.GetSafeParamName ());
+						by_ref_processing.AppendFormat ("\t{0}ArrayValue?.Dispose ();\n", pi.Name.GetSafeParamName ());
+					}
 				} else if (isForced) {
-					by_ref_processing.AppendFormat("{0} = {0}Value != IntPtr.Zero ? Runtime.GetINativeObject<{1}> ({0}Value, {2}) : null;", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ()), isForcedOwns);
+					throw new Exception ("WTF");
+					by_ref_processing.AppendFormat("{0} = Runtime.GetINativeObject<{1}> ({0}Value, {2});\n", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ()), isForcedOwns);
 				} else {
-					by_ref_processing.AppendFormat("{0} = {0}Value != IntPtr.Zero ? Runtime.GetNSObject<{1}> ({0}Value) : null;", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ()));
+					by_ref_processing.AppendFormat("{0} = Runtime.GetNSObject<{1}> ({0}Value);\n                ", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ()));
 				}
 			}
 		}

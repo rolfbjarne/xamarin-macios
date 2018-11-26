@@ -579,6 +579,57 @@ namespace BI1063Tests {
 		}
 
 		[Test]
+		public void BI1064 ()
+		{
+			var bgen = new BGenTool {
+				Profile = Profile.iOS,
+				ProcessEnums = true
+			};
+			bgen.CreateTemporaryBinding (@"
+using System;
+using ObjCRuntime;
+using Foundation;
+
+namespace BI1064Errors
+{
+	[BaseType (typeof (NSObject))]
+	interface C
+	{
+		[Export (""invalid1:a:"")]
+		void TestInvalid1 (ref DateTime[] refInvalid, out DateTime[] outInvalid);
+
+		[Export (""invalid2:a:"")]
+		void TestInvalid2 (ref object[] refInvalid, out object[] outInvalid);
+
+		[Export (""invalid3:a:"")]
+		void TestInvalid3 (ref int[] refInvalid, out int[] outInvalid);
+
+		[Export (""invalid4:a:"")]
+		void TestInvalid4 (ref object refInvalid, out object outInvalid);
+
+		[Export (""testINativeObject:a:b:"")]
+		void TestINativeObject (int action, ref INativeObject refValue, out INativeObject outValue);
+
+		[Export (""testINativeObjectArray:a:b:"")]
+		void TestINativeObjectArray (int action, ref INativeObject[] refValues, out INativeObject[] outValues);
+	}
+}");
+			bgen.AssertExecuteError ("build");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'ObjCRuntime.INativeObject' for the parameter 'refValue' in BI1064Errors.C.TestINativeObject.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'ObjCRuntime.INativeObject' for the parameter 'outValue' in BI1064Errors.C.TestINativeObject.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'ObjCRuntime.INativeObject[]' for the parameter 'refValues' in BI1064Errors.C.TestINativeObjectArray.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'ObjCRuntime.INativeObject[]' for the parameter 'outValues' in BI1064Errors.C.TestINativeObjectArray.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.DateTime[]' for the parameter 'refInvalid' in BI1064Errors.C.TestInvalid1.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.DateTime[]' for the parameter 'outInvalid' in BI1064Errors.C.TestInvalid1.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object[]' for the parameter 'refInvalid' in BI1064Errors.C.TestInvalid2.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object[]' for the parameter 'refInvalid' in BI1064Errors.C.TestInvalid2.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Int32[]' for the parameter 'outInvalid' in BI1064Errors.C.TestInvalid3.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Int32[]' for the parameter 'outInvalid' in BI1064Errors.C.TestInvalid3.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object' for the parameter 'refInvalid' in BI1064Errors.C.TestInvalid4.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object' for the parameter 'refInvalid' in BI1064Errors.C.TestInvalid4.");
+			bgen.AssertErrorCount (12);
+		}
+		[Test]
 		[TestCase (Profile.iOS)]
 		[TestCase (Profile.macOSFull)]
 		[TestCase (Profile.macOSMobile)]

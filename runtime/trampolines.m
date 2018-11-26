@@ -44,7 +44,7 @@
 static pthread_mutex_t refcount_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER;
 
 void *
-xamarin_marshal_return_value (MonoType *mtype, const char *type, MonoObject *retval, bool retain, MonoMethod *method, MethodDescription *desc, guint32 *exception_gchandle)
+xamarin_marshal_return_value (SEL sel, MonoType *mtype, const char *type, MonoObject *retval, bool retain, MonoMethod *method, MethodDescription *desc, guint32 *exception_gchandle)
 {
 	// COOP: accesses managed memory: unsafe mode.
 	MONO_ASSERT_GC_UNSAFE;
@@ -71,52 +71,9 @@ xamarin_marshal_return_value (MonoType *mtype, const char *type, MonoObject *ret
 			if (desc && desc->bindas [0].original_type != NULL) {
 				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), mono_reflection_type_get_type (desc->bindas [0].original_type), method, INVALID_TOKEN_REF, exception_gchandle);
 			} else if (r_klass == mono_get_string_class ()) {
-				char *str = mono_string_to_utf8 ((MonoString *) retval);
-				NSString *rv = [[NSString alloc] initWithUTF8String:str];
-
-				if (!retain)
-					[rv autorelease];
-				mono_free (str);
-				return (void *) rv;
+				return xamarin_string_to_nsstring ((MonoString *) retval, retain);
 			} else if (xamarin_is_class_array (r_klass)) {
-				MonoClass *e_klass = mono_class_get_element_class (r_klass);
-				bool is_string = e_klass == mono_get_string_class ();
-				MonoArray *m_arr = (MonoArray *) retval;
-				int length = mono_array_length (m_arr);
-				id *buf = (id *) malloc (sizeof (id) * length);
-				NSArray *arr;
-				int i;
-				id v;
-
-				for (i = 0; i < length; i++) {
-					MonoObject *value = mono_array_get (m_arr, MonoObject *, i);
-					
-					if (is_string) {
-						char *str = mono_string_to_utf8 ((MonoString *) value);
-						NSString *sv = [[NSString alloc] initWithUTF8String:str];
-
-						[sv autorelease];
-						mono_free (str);
-
-						v = sv;
-					} else {
-						v = xamarin_get_handle (value, exception_gchandle);
-						if (*exception_gchandle != 0) {
-							free (buf);
-							 return NULL;
-						}
-					}
-					buf[i] = v;
-				}
-
-				arr = [[NSArray alloc] initWithObjects: buf count: length];
-
-				free (buf);
-
-				if (!retain)
-					[arr autorelease];
-				
-				return (void *) arr;
+				return (void *) xamarin_managed_array_to_nsarray (sel, method, -1, (MonoArray *) retval, NULL, r_klass, retain, exception_gchandle);
 			} else if (xamarin_is_class_nsobject (r_klass)) {
 				id i = xamarin_get_handle (retval, exception_gchandle);
 				if (*exception_gchandle != 0)

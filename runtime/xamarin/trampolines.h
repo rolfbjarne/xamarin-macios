@@ -178,6 +178,23 @@ id xamarin_uiedgeinsets_to_nsvalue           (MonoObject *value, guint32 context
 id xamarin_uioffset_to_nsvalue               (MonoObject *value, guint32 context, guint32 *exception_gchandle);
 id xamarin_nsdirectionaledgeinsets_to_nsvalue(MonoObject *value, guint32 context, guint32 *exception_gchandle);
 
+NSString *   xamarin_string_to_nsstring (MonoString *obj, bool retain);
+// domain is optional, if NULL the function will call mono_get_domain.
+MonoString * xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj);
+
+// Either managed_type or managed_class has to be provided
+NSArray *   xamarin_managed_array_to_nsarray (SEL sel, MonoMethod *method, int parameter, MonoArray *array, MonoType *managed_type, MonoClass *managed_class, bool retain, guint32 *exception_gchandle);
+// Either managed_type or managed_class has to be provided
+MonoArray * xamarin_nsarray_to_managed_array (SEL sel, MonoMethod *method, int parameter, NSArray *array, MonoType *managed_type, MonoClass *managed_class, guint32 *exception_gchandle);
+
+NSArray *   xamarin_managed_string_array_to_nsarray (MonoArray *array, bool retain, guint32 *exception_gchandle);
+NSArray *   xamarin_managed_nsobject_array_to_nsarray (MonoArray *array, bool retain, guint32 *exception_gchandle);
+NSArray *   xamarin_managed_inativeobject_array_to_nsarray (MonoArray *array, bool retain, guint32 *exception_gchandle);
+
+MonoArray * xamarin_nsarray_to_managed_string_array (NSArray *array, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
+
 /* Copied from SGen */
 
 static inline void

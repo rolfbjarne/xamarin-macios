@@ -3515,10 +3515,14 @@ namespace Registrar {
 							setup_call_stack.AppendLine ("a{0} = *p{0} ? mono_string_new (mono_domain_get (), [(*p{0}) UTF8String]) : NULL;", i);
 						setup_call_stack.AppendLine ("arg_ptrs [{0}] = &a{0};", i);
 						body_setup.AppendLine ("char *str{0} = NULL;", i);
+						copyback.AppendLine ("if (a{0} == NULL) {{", i);
+						copyback.AppendLine ("*p{0} = NULL;");
+						copyback.AppendLine ("} else {");
 						copyback.AppendLine ("str{0} = mono_string_to_utf8 (a{0});", i);
 						copyback.AppendLine ("*p{0} = [[NSString alloc] initWithUTF8String:str{0}];", i);
 						copyback.AppendLine ("[*p{0} autorelease];", i);
 						copyback.AppendLine ("mono_free (str{0});", i);
+						copyback.AppendLine ("}");
 					} else {
 						setup_call_stack.AppendLine ("arg_ptrs [{0}] = p{0} ? mono_string_new (mono_domain_get (), [p{0} UTF8String]) : NULL;", i);
 					}

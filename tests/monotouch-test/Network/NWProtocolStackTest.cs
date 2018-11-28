@@ -27,7 +27,7 @@ namespace MonoTouchFixtures.Network {
 		string host;
 		NWConnection connection;
 		NWProtocolStack stack;
-		List<NWProtocolOptions> options;
+		List<NWProtocolOptions> options = new List<NWProtocolOptions> ();
 
 		[TestFixtureSetUp]
 		public void Init ()
@@ -60,7 +60,7 @@ namespace MonoTouchFixtures.Network {
 		[SetUp]
 		public void SetUp ()
 		{
-			options = new List<NWProtocolOptions> (); 
+			options.Clear ();
 		}
 
 		void ConnectionStateHandler (NWConnectionState state, NWError error)

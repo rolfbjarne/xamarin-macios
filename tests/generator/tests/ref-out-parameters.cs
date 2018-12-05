@@ -1,32 +1,47 @@
 using System;
 using Foundation;
+using ObjCRuntime;
 
-namespace NS
+namespace BI1064
 {
 	[BaseType (typeof (NSObject))]
 	interface C
 	{
-		[Export ("string")]
-		void (ref string refString, out string outString);
+		[Export ("testINativeObject:a:")]
+		void TestINativeObject (ref INativeObject refValue, out INativeObject outValue);
 
-		[Export ("nsarray")]
-		void (ref NSValue[] refValues, out NSValue[] outValues);
+		[Export ("testINSCoding:a:")]
+		void TestINSCoding (ref INSCoding refValue, out INSCoding outValue);
 
-		[Export ("stringarray")]
-		void (ref string[] refStrings, out string[] outStrings);
+		[Export ("testNSObject:a:")]
+		void TestNSObject (ref NSObject refValue, out NSObject outValue);
+
+		[Export ("testNSValue:a:")]
+		void TestValue (ref NSValue refValue, out NSValue outValue);
+
+		[Export ("testString:a:")]
+		void TestString (ref string refValue, out string outValue);
+
+		[Export ("testDateTime:a:")]
+		void TestDateTime (ref DateTime refValue, out DateTime outValue);
+
+		[Export ("testInt:a:")]
+		void TestInt (ref int refValue, out int outValue);
 
 
-	}
+		[Export ("testINativeObjectArray:a:")]
+		void TestINativeObjectArray (ref INativeObject[] refValues, out INativeObject[] outValues);
 
-	[BaseType (typeof (NSObject))]
-	interface RefO
-	{
-	}
+		[Export ("testINSCodingArray:a:")]
+		void TestINSCodingArray (ref INSCoding[] refValues, out INSCoding[] outValues);
 
-	[Model]
-	[Protocol]
-	[BaseType (typeof (NSObject))]
-	interface P
-	{
+		[Export ("testNSObjectArray:a:")]
+		void TestNSObjectArray (ref NSObject[] refValues, out NSObject[] outValues);
+
+		[Export ("testNSValueArray:a:")]
+		void TestNSValueArray (ref NSValue[] refValues, out NSValue[] outValues);
+
+		[Export ("testStringArray:a:")]
+		void TestStringArray (ref string[] refStrings, out string[] outStrings);
 	}
 }

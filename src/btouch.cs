@@ -38,7 +38,7 @@ using ObjCRuntime;
 using Foundation;
 using Xamarin.Utils;
 
-class BindingTouch {
+public class BindingTouch {
 	static TargetFramework? target_framework;
 	public static PlatformName CurrentPlatform;
 	public static bool Unified;
@@ -58,7 +58,7 @@ class BindingTouch {
 	}
 
 	public static string ToolName {
-		get { return Path.GetFileNameWithoutExtension (System.Reflection.Assembly.GetEntryAssembly ().Location); }
+		get { return Path.GetFileNameWithoutExtension (System.Reflection.Assembly.GetEntryAssembly ()?.Location ?? "bgen"); }
 	}
 
 	static void ShowHelp (OptionSet os)
@@ -69,13 +69,12 @@ class BindingTouch {
 		os.WriteOptionDescriptions (Console.Out);
 	}
 	
-	static int Main (string [] args)
+	public static int Main (string [] args)
 	{
 		try {
 			return Main2 (args);
 		} catch (Exception ex) {
-			ErrorHelper.Show (ex);
-			return 1;
+			return ErrorHelper.Show (ex);
 		}
 	}
 
@@ -425,7 +424,7 @@ class BindingTouch {
 		string firstApiDefinitionName = Path.GetFileNameWithoutExtension (StringUtils.Unquote (api_sources [0]));
 		firstApiDefinitionName = firstApiDefinitionName.Replace ('-', '_'); // This is not exhaustive, but common.
 		if (outfile == null)
-			outfile = firstApiDefinitionName + ".dll";
+			outfile = Path.Combine (Path.GetDirectoryName (StringUtils.Unquote (api_sources [0])), firstApiDefinitionName + ".dll");
 
 		string refs = string.Empty;
 		foreach (var r in references) {
@@ -523,7 +522,7 @@ class BindingTouch {
 					try {
 						universe.LoadFile (r);
 					} catch (Exception ex) {
-						ErrorHelper.Show (new BindingException (1104, false, "Could not load the referenced library '{0}': {1}.", r, ex.Message));
+						ErrorHelper.ShowWarning (1104, "Could not load the referenced library '{0}': {1}.", r, ex.Message);
 					}
 				}
 			}
@@ -604,9 +603,26 @@ class BindingTouch {
 			if (verbose)
 				Console.WriteLine ("{0} {1}", si.FileName, si.Arguments);
 
-			p = Process.Start (si);
+			//si.RedirectStandardError = true;
+			//si.RedirectStandardOutput = true;
+
+			p = new Process ();
+			p.StartInfo = si;
+			//p.EnableRaisingEvents = true;
+			//p.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => {
+			//	if (e.Data != null)
+			//		Console.Error.WriteLine (e.Data);
+			//};
+			//p.OutputDataReceived += (object sender, DataReceivedEventArgs e) => {
+			//	if (e.Data != null)
+			//		Console.WriteLine (e.Data);
+			//};
+			p.Start ();
+			//var output = p.StandardOutput.ReadToEnd ();
+			//var error = p.StandardError.ReadToEnd ();
 			p.WaitForExit ();
 			if (p.ExitCode != 0){
+				//System.Threading.Thread.Sleep (1000);
 				Console.WriteLine ("{0}: API binding contains errors.", ToolName);
 				return 1;
 			}

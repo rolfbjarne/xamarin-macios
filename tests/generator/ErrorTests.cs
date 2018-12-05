@@ -579,6 +579,46 @@ namespace BI1063Tests {
 		}
 
 		[Test]
+		public void BI1064 ()
+		{
+			var bgen = new BGenTool {
+				Profile = Profile.iOS,
+				ProcessEnums = true
+			};
+			bgen.CreateTemporaryBinding (@"
+using System;
+using Foundation;
+
+namespace BI1064Errors
+{
+	[BaseType (typeof (NSObject))]
+	interface C
+	{
+		[Export (""invalid1:a:"")]
+		void TestInvalid1 (ref DateTime[] refInvalid, out DateTime[] outInvalid);
+
+		[Export (""invalid2:a:"")]
+		void TestInvalid2 (ref object[] refInvalid, out object[] outInvalid);
+
+		[Export (""invalid3:a:"")]
+		void TestInvalid3 (ref int[] refInvalid, out int[] outInvalid);
+
+		[Export (""invalid4:a:"")]
+		void TestInvalid4 (ref object refInvalid, out object outInvalid);
+	}
+}");
+			bgen.AssertExecuteError ("build");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.DateTime[]&' for the parameter 'refInvalid' in BI1064.C.TestInvalid1.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.DateTime[]&' for the parameter 'outInvalid' in BI1064.C.TestInvalid1.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object[]&' for the parameter 'refInvalid' in BI1064.C.TestInvalid2.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object[]&' for the parameter 'refInvalid' in BI1064.C.TestInvalid2.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Int32[]&' for the parameter 'outInvalid' in BI1064.C.TestInvalid3.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Int32[]&' for the parameter 'outInvalid' in BI1064.C.TestInvalid3.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object&' for the parameter 'refInvalid' in BI1064.C.TestInvalid4.");
+			bgen.AssertError (1064, "Unsupported ref/out parameter type 'System.Object&' for the parameter 'refInvalid' in BI1064.C.TestInvalid4.");
+			bgen.AssertErrorCount (8);
+		}
+		[Test]
 		[TestCase (Profile.iOS)]
 		[TestCase (Profile.macOSFull)]
 		[TestCase (Profile.macOSMobile)]

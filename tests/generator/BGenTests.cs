@@ -564,7 +564,7 @@ namespace GeneratorTests
 		[Test]
 		public void RefOutParameters ()
 		{
-			BuildFile (Profile.macOSMobile, true, "ref-out-parameters.cs");
+			BuildFile (Profile.macOSMobile, true, "tests/ref-out-parameters.cs");
 
 		}
 
@@ -594,7 +594,7 @@ namespace GeneratorTests
 			foreach (var filename in filenames)
 				TestContext.Out.WriteLine ($"\t{filename}");
 			bgen.CreateTemporaryBinding (filenames.Select ((filename) => File.ReadAllText (Path.Combine (Configuration.SourceRoot, "tests", "generator", filename))).ToArray ());
-			bgen.AssertExecute ("build");
+			bgen.AssertExecute ("build", in_process: true);
 			if (nowarnings)
 				bgen.AssertNoWarnings ();
 			return bgen;

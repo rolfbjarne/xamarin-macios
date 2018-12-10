@@ -214,6 +214,23 @@ typedef void (^outerBlock) (innerBlock callback);
 -(void) dealloc;
 @end
 
+@interface RefOutParameters : NSObject {
+}
+	+(void) testINativeObject: (id *)refValue           a:(id *) outValue;
+	+(void) testINSCoding:     (id<NSCoding>*) refValue a:(id<NSCoding>*) outValue;
+	+(void) testNSObject:      (id *)refValue           a:(id *) outValue;
+	+(void) testValue:         (NSValue **) refValue    a:(NSValue **) outValue;
+	+(void) testString:        (NSString **) refValue   a:(NSString **) outValue;
+	// +(void) testDateTime:      ()
+	+(void) testInt:           (int32_t *) refValue     a:(int32_t *) outValue;
+
+	+(void) testINativeObjectArray: (NSArray **) refValue a:(NSArray **) outValue;
+	+(void) testINSCodingArray: (NSArray **) refValue     a:(NSArray **) outValue;
+	+(void) testNSObjectArray: (NSArray **) refValue      a:(NSArray **) outValue;
+	+(void) testNSValueArray: (NSArray **) refValue       a:(NSArray **) outValue;
+	+(void) testStringArray: (NSArray **) refValue        a:(NSArray **) outValue;
+@end
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

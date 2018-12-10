@@ -5,7 +5,7 @@ using ObjCRuntime;
 namespace BI1064
 {
 	[BaseType (typeof (NSObject))]
-	interface C
+	interface RefOutParameters
 	{
 		[Export ("testINativeObject:a:")]
 		void TestINativeObject (ref INativeObject refValue, out INativeObject outValue);

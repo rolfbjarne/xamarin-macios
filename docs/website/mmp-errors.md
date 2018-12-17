@@ -749,3 +749,7 @@ There are a few reasons this may happen:
 
 This usually indicates a bug in Xamarin.Mac, because runtime functions should
 not be linked away if they're needed. Please [submit an issue](https://github.com/xamarin/xamarin-macios/wiki/Submitting-Bugs-&-Suggestions).
+
+### <a name="MT8029"/>MT8029: The runtime function {function} wasn't found or loaded correctly.
+
+This indicates a bug in Xamarin.Mac. Please file a new issue on [github](https://github.com/xamarin/xamarin-macios/issues/new).

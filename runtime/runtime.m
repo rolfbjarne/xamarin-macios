@@ -579,6 +579,85 @@ xamarin_has_managed_ref_safe (id self)
 	return get_raw_gchandle_safe (self) & MANAGED_REF_BIT;
 }
 
+// Finds a method given the name of the method, and an array of the method's parameter types.
+static MonoMethod *
+xamarin_mono_class_get_method_from_and_parameters (MonoClass *klass, const char *name, int parameter_count, const char * const parameter_types [])
+{	// Don't call managed functions from this method, because this method is called when we report errors about looking up managed functions.
+	void *iter = NULL;
+	MonoMethod *m;
+
+	while ((m = mono_class_get_methods (mono_get_exception_class (), &iter)) != NULL) {
+		if (strcmp (mono_method_get_name (m), name) != 0)
+			continue;
+
+		MonoMethodSignature *msig = mono_method_signature (m);
+		void *piter = NULL;
+		bool found = true;
+		for (int i = 0; i < parameter_count; i++) {
+			MonoType *p = mono_signature_get_params (msig, &piter);
+			if (p == NULL) {
+				found = false;
+				break;
+			}
+			MonoClass *klass = mono_class_from_mono_type (p);
+			const char *c_namespace = mono_class_get_namespace (klass);
+			const char *c_name = mono_class_get_name (klass);
+			int c_namespace_len = strlen (c_namespace);
+			int c_name_len = strlen (c_name);
+			const char *parameter_type = parameter_types [i];
+			// Check if parameter_name == namespace + '.' + name
+			if (c_namespace_len + c_name_len + 1 != strlen (parameter_type) ||
+				strncmp (parameter_type, c_namespace, c_namespace_len) != 0 ||
+				parameter_type [c_namespace_len] != '.' ||
+				strncmp (parameter_type + c_namespace_len + 1, c_name, c_name_len) != 0) {
+				found = false;
+				break;
+			}
+			if (!found)
+				break;
+		}
+		if (!found)
+			continue;
+
+		if (mono_signature_get_params (msig, &piter) != NULL) {
+			// More parameters than the method we're looking for.
+			continue;
+		}
+
+		return m;
+	}
+
+	return NULL;
+}
+
+MonoException *
+xamarin_create_exception_with_inner (const char *msg, MonoException *inner_exception)
+{
+	static MonoMethod *ctor = NULL;
+
+	// COOP: calls mono, needs to be in UNSAFE mode.
+	MONO_ASSERT_GC_UNSAFE;
+
+	if (ctor == NULL) {
+		const char * const parameter_types [] = { "System.String", "System.Exception" };
+		ctor = xamarin_mono_class_get_method_from_and_parameters (mono_get_exception_class (), ".ctor", 2, parameter_types);
+	}
+
+	if (ctor == NULL)
+		return xamarin_create_exception (msg); // drop the inner exception if we can't find the System.Exception ctor we're looking for.
+
+	void *params[2];
+	params [0] = mono_string_new (mono_domain_get (), msg);
+	params [1] = inner_exception;
+
+	MonoObject *rv = mono_object_new (mono_domain_get (), mono_get_exception_class ());
+	MonoObject *exc = NULL;
+	mono_runtime_invoke (ctor, rv, params, &exc);
+	if (exc == NULL)
+		return (MonoException *) rv;
+	return xamarin_create_exception (msg); // drop the inner exception if something went wrong when calling the System.Exception ctor.
+}
+
 MonoException *
 xamarin_create_exception (const char *msg)
 {
@@ -2334,8 +2413,7 @@ xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwMan
 	mode = xamarin_on_marshal_objectivec_exception (ns_exception, throwManagedAsDefault, &exception_gchandle);
 
 	if (exception_gchandle != 0) {
-		PRINT (PRODUCT ": Got an exception while executing the MarshalObjectiveCException event (this exception will be ignored):");
-		PRINT ("%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
+		PRINT (PRODUCT ": Got an exception while executing the MarshalObjectiveCException event (this exception will be ignored):\n%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
 		mono_gchandle_free (exception_gchandle);
 		exception_gchandle = 0;
 	}
@@ -2358,8 +2436,7 @@ xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwMan
 		} else {
 			int handle = xamarin_create_ns_exception (ns_exception, &exception_gchandle);
 			if (exception_gchandle != 0) {
-				PRINT (PRODUCT ": Got an exception while creating a managed NSException wrapper (will throw this exception instead):");
-				PRINT ("%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
+				PRINT (PRODUCT ": Got an exception while creating a managed NSException wrapper (will throw this exception instead):\n%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
 				handle = exception_gchandle;
 				exception_gchandle = 0;
 			}
@@ -2391,8 +2468,7 @@ xamarin_process_managed_exception (MonoObject *exception)
 	mono_gchandle_free (handle);
 
 	if (exception_gchandle != 0) {
-		PRINT (PRODUCT ": Got an exception while executing the MarshalManagedException event (this exception will be ignored):");
-		PRINT ("%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
+		PRINT (PRODUCT ": Got an exception while executing the MarshalManagedException event (this exception will be ignored):\n%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
 		mono_gchandle_free (exception_gchandle);
 		exception_gchandle = 0;
 		mode = MarshalManagedExceptionModeDefault;
@@ -2438,8 +2514,7 @@ xamarin_process_managed_exception (MonoObject *exception)
 		NSException *ns_exc = xamarin_unwrap_ns_exception (handle, &exception_gchandle);
 		
 		if (exception_gchandle != 0) {
-			PRINT (PRODUCT ": Got an exception while unwrapping a managed NSException wrapper (this exception will be ignored):");
-			PRINT ("%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
+			PRINT (PRODUCT ": Got an exception while unwrapping a managed NSException wrapper (this exception will be ignored):\n%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
 			mono_gchandle_free (exception_gchandle);
 			exception_gchandle = 0;
 			ns_exc = NULL;
@@ -2461,8 +2536,7 @@ xamarin_process_managed_exception (MonoObject *exception)
 			
 			fullname = xamarin_type_get_full_name (mono_class_get_type (mono_object_get_class (exception)), &exception_gchandle);
 			if (exception_gchandle != 0) {
-				PRINT (PRODUCT ": Got an exception when trying to get the typename for an exception (this exception will be ignored):");
-				PRINT ("%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
+				PRINT (PRODUCT ": Got an exception when trying to get the typename for an exception (this exception will be ignored):\n%@", print_all_exceptions (mono_gchandle_get_target (exception_gchandle)));
 				mono_gchandle_free (exception_gchandle);
 				exception_gchandle = 0;
 				fullname = "Unknown";

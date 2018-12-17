@@ -80,6 +80,12 @@
 		new Export ("MonoType *", "mono_class_get_type",
 			"MonoClass *", "klass"
 		),
+
+		new Export ("MonoMethod *", "mono_class_get_methods",
+			"MonoClass *", "klass",
+			"void **", "iter"
+		),
+
 		#endregion
 
 		#region metadata/class-internals.h
@@ -321,6 +327,10 @@
 		),
 
 		new Export ("MonoClass *", "mono_method_get_class",
+			"MonoMethod *", "method"
+		),
+
+		new Export ("const char *", "mono_method_get_name",
 			"MonoMethod *", "method"
 		),
 

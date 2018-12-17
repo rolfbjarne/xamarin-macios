@@ -190,6 +190,7 @@ void			xamarin_set_nsobject_flags (MonoObject *obj, uint8_t flags);
 void			xamarin_throw_nsexception (MonoException *exc);
 void			xamarin_rethrow_managed_exception (guint32 original_gchandle, guint32 *exception_gchandle);
 MonoException *	xamarin_create_exception (const char *msg);
+MonoException *	xamarin_create_exception_with_inner (const char *msg, MonoException *inner_exception);
 id				xamarin_get_handle (MonoObject *obj, guint32 *exception_gchandle);
 char *			xamarin_strdup_printf (const char *msg, ...);
 void *			xamarin_calloc (size_t size);

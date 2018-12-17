@@ -34,6 +34,7 @@
 		) {
 			WrappedManagedFunction = "RethrowManagedException",
 			OnlyDynamicUsage = false,
+			InnerException = "mono_gchandle_get_target (original_exception_gchandle)",
 		},
 
 		new XDelegate ("int", "int", "xamarin_create_ns_exception",
@@ -250,6 +251,7 @@
 		) {
 			WrappedManagedFunction = "OnMarshalManagedException",
 			OnlyDynamicUsage = false,
+			InnerException = "mono_gchandle_get_target (exception)",
 		},
 
 		new XDelegate ("enum MarshalObjectiveCExceptionMode", "MarshalObjectiveCExceptionMode", "xamarin_on_marshal_objectivec_exception",
@@ -315,6 +317,7 @@
 		public List<Arg> Arguments;
 		public string WrappedManagedFunction;
 		public bool ExceptionHandling = true;
+		public string InnerException = "NULL";
 		// Detemines whether the function is only used by the dynamic registrar (in which case we might be able to link the function away if the static registrar is being used)
 		public bool OnlyDynamicUsage;
 

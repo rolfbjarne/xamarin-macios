@@ -3338,3 +3338,7 @@ There are a few reasons this may happen:
 ### <a name="MT8028"/>MT8028: The runtime function {function} has been linked away.
 
 This indicates a bug in Xamarin.iOS. Please file a new issue on [github](https://github.com/xamarin/xamarin-macios/issues/new).
+
+### <a name="MT8029"/>MT8029: The runtime function {function} wasn't found or loaded correctly.
+
+This indicates a bug in Xamarin.iOS. Please file a new issue on [github](https://github.com/xamarin/xamarin-macios/issues/new).

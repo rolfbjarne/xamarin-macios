@@ -28,7 +28,7 @@ struct Delegates {
 static struct Delegates delegates = { 0 };
 
 static guint32
-create_linked_away_exception (const char *func)
+create_linked_away_exception (const char *func, MonoException *inner_exc)
 {
 	char *msg = xamarin_strdup_printf ("The runtime function %s has been linked away.", func);
 	guint32 gchandle = xamarin_create_product_exception (8028, msg);
@@ -36,12 +36,25 @@ create_linked_away_exception (const char *func)
 	return gchandle;
 }
 
+static guint32
+create_inexistent_exception (const char *func, MonoObject *inner_exc)
+{
+#if DYNAMIC_MONO_RUNTIME
+	char *msg = xamarin_strdup_printf ("The runtime function %s wasn't found or loaded correctly. This is most likely due to an incompatible Mono version at runtime (this version of Xamarin.Mac requires at least Mono " MIN_XM_MONO_VERSION ").", func);
+#else
+	char *msg = xamarin_strdup_printf ("The runtime function %s wasn't found or loaded correctly.", func);
+#endif
+	MonoException *exc = inner_exc == NULL ? xamarin_create_exception (msg) : xamarin_create_exception_with_inner (msg, (MonoException *) inner_exc);
+	xamarin_free (msg);
+	return mono_gchandle_new ((MonoObject *) exc, FALSE);;
+}
+
 <# foreach (var d in delegates) { #>
 <#= d.CReturnType #>
 <#= d.EntryPoint #> (<#= d.CArgumentSignature #>)
 {
-	<#if (d.ExceptionHandling && d.OnlyDynamicUsage) {#>if (delegates.<#= d.EntryPoint.Substring ("xamarin_".Length) #> == NULL) {
-		*exception_gchandle = create_linked_away_exception ("<#= d.EntryPoint.Substring ("xamarin_".Length) #>");
+	<#if (d.ExceptionHandling) {#>if (delegates.<#= d.EntryPoint.Substring ("xamarin_".Length) #> == NULL) {
+		*exception_gchandle = <#= d.OnlyDynamicUsage ? "create_linked_away_exception" : "create_inexistent_exception" #> ("<#= d.EntryPoint.Substring ("xamarin_".Length) #>", <#= d.InnerException #>);
 		return<# if (d.CReturnType != "void") { #> (<#= d.CReturnType #>) 0<# } #>;
 	}
 <#}#>

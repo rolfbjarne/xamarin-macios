@@ -446,18 +446,18 @@ app_initialize (xamarin_initialize_data *data)
 
 	char *mono_version;
 	const char *err = xamarin_initialize_dynamic_runtime (mono_runtime_prefix);
-	if (err) {
-		mono_version = xamarin_get_mono_runtime_build_info ();
-		if (mono_version && !check_mono_version (mono_version, [minVersion UTF8String])) {
-			exit_with_message ([[NSString stringWithFormat:@"This application requires the Mono framework version %@ or newer.", minVersion] UTF8String], data->basename, true);
-		} else {
-			exit_with_message (err, data->basename, true);
-		}
-	}
+	// if (err) {
+	// 	mono_version = xamarin_get_mono_runtime_build_info ();
+	// 	if (mono_version && !check_mono_version (mono_version, [minVersion UTF8String])) {
+	// 		exit_with_message ([[NSString stringWithFormat:@"This application requires the Mono framework version %@ or newer.", minVersion] UTF8String], data->basename, true);
+	// 	} else {
+	// 		exit_with_message (err, data->basename, true);
+	// 	}
+	// }
 
 	mono_version = mono_get_runtime_build_info ();
-	if (!check_mono_version (mono_version, [minVersion UTF8String]))
-		exit_with_message ([[NSString stringWithFormat:@"This application requires the Mono framework version %@ or newer.", minVersion] UTF8String], data->basename, true);
+	// if (!check_mono_version (mono_version, [minVersion UTF8String]))
+	// 	exit_with_message ([[NSString stringWithFormat:@"This application requires the Mono framework version %@ or newer.", minVersion] UTF8String], data->basename, true);
 #endif
 
 	// 6) Find the executable. The name is: [...]

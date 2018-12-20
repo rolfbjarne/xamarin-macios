@@ -36,6 +36,7 @@ using Mono.Options;
 
 using ObjCRuntime;
 using Foundation;
+using Xamarin;
 using Xamarin.Utils;
 
 public class BindingTouch {
@@ -426,57 +427,40 @@ public class BindingTouch {
 		if (outfile == null)
 			outfile = Path.Combine (Path.GetDirectoryName (StringUtils.Unquote (api_sources [0])), firstApiDefinitionName + ".dll");
 
-		string refs = string.Empty;
-		foreach (var r in references) {
-			if (refs != string.Empty)
-				refs += " ";
-			refs += "-r:" + StringUtils.Quote (r);
-		}
-		string paths = (libs.Count > 0 ? "-lib:" + String.Join (" -lib:", libs.ToArray ()) : "");
-
 		try {
 			var tmpass = Path.Combine (tmpdir, "temp.dll");
 
+			var environment = new Dictionary<string, string> {
+				{ "MONO_PATH", null },
+			};
 			// -nowarn:436 is to avoid conflicts in definitions between core.dll and the sources
 			// Keep source files at the end of the command line - csc will create TWO assemblies if any sources preceed the -out parameter
-			var cargs = new StringBuilder ();
-
-			cargs.Append ("-debug -unsafe -target:library -nowarn:436").Append (' ');
-			cargs.Append ("-out:").Append (StringUtils.Quote (tmpass)).Append (' ');
-			cargs.Append ("-r:").Append (StringUtils.Quote (GetAttributeLibraryPath ())).Append (' ');
-			cargs.Append (refs).Append (' ');
-			if (unsafef)
-				cargs.Append ("-unsafe ");
-			cargs.Append ("-r:").Append (StringUtils.Quote (baselibdll)).Append (' ');
-			foreach (var def in defines)
-				cargs.Append ("-define:").Append (def).Append (' ');
-			cargs.Append (paths).Append (' ');
-			if (nostdlib) {
-				cargs.Append ("-nostdlib ");
-				cargs.Append ("-noconfig ");
-			}
-			foreach (var qs in api_sources)
-				cargs.Append (qs).Append (' ');
-			foreach (var cs in core_sources)
-				cargs.Append (cs).Append (' ');
-			if (!string.IsNullOrEmpty (Path.GetDirectoryName (baselibdll)))
-				cargs.Append ("-lib:").Append (Path.GetDirectoryName (baselibdll)).Append (' ');
-			
-
-			var si = new ProcessStartInfo (compiler, cargs.ToString ()) {
-				UseShellExecute = false,
+			var cargs = new List<string> {
+				"-debug",
+				"-unsafe",
+				"-target:library",
+				"-nowarn:436",
+				"-out:" + tmpass,
+				"-r:" + GetAttributeLibraryPath (),
 			};
-				
-			// HACK: We are calling btouch with forced 2.1 path but we need working mono for compiler
-			si.EnvironmentVariables.Remove ("MONO_PATH");
+			cargs.AddRange (references.Select ((v) => "-r:" + v));
+			if (unsafef)
+				cargs.Add ("-unsafe");
+			cargs.Add ("-r:" + baselibdll);
+			cargs.AddRange (defines.Select ((v) => "-define:" + v));
+			cargs.AddRange (libs.Select ((v) => "-lib:" + v));
+			if (nostdlib) {
+				cargs.Add ("-nostdlib");
+				cargs.Add ("-noconfig");
+			}
+			cargs.AddRange (api_sources);
+			cargs.AddRange (core_sources);
+			if (!string.IsNullOrEmpty (Path.GetDirectoryName (baselibdll)))
+				cargs.Add ("-lib:" + Path.GetDirectoryName (baselibdll));
 
-			if (verbose)
-				Console.WriteLine ("{0} {1}", si.FileName, si.Arguments);
-			
-			var p = Process.Start (si);
-			p.WaitForExit ();
-			if (p.ExitCode != 0){
-				Console.WriteLine ("{0}: API binding contains errors.", ToolName);
+			var exitCode = ProcessHelper.Run (compiler, cargs, environment: environment, verbose: verbose, always_show_errors: true);
+			if (exitCode != 0) {
+				ErrorHelper.Show (ErrorHelper.CreateError (3, "The API binding contains errors."));
 				return 1;
 			}
 
@@ -571,59 +555,26 @@ public class BindingTouch {
 
 			cargs.Clear ();
 			if (unsafef)
-				cargs.Append ("-unsafe ");
-			cargs.Append ("-target:library ");
-			cargs.Append ("-out:").Append (StringUtils.Quote (outfile)).Append (' ');
-			foreach (var def in defines)
-				cargs.Append ("-define:").Append (def).Append (' ');
-			foreach (var gf in g.GeneratedFiles)
-				cargs.Append (gf).Append (' ');
-			foreach (var cs in core_sources)
-				cargs.Append (cs).Append (' ');
-			foreach (var es in extra_sources)
-				cargs.Append (es).Append (' ');
-			cargs.Append (refs).Append (' ');
-			cargs.Append ("-r:").Append (StringUtils.Quote (baselibdll)).Append (' ');
-			foreach (var res in resources)
-				cargs.Append (res).Append (' ');
+				cargs.Add ("-unsafe");
+			cargs.Add ("-target:library");
+			cargs.Add ("-out:" + outfile);
+			cargs.AddRange (defines.Select ((v) => "-define:" + v));
+			cargs.AddRange (g.GeneratedFiles);
+			cargs.AddRange (core_sources);
+			cargs.AddRange (extra_sources);
+			cargs.AddRange (references.Select ((v) => "-r:" + v));
+			cargs.Add ("-r:" + baselibdll);
+			cargs.AddRange (resources);
 			if (nostdlib) {
-				cargs.Append ("-nostdlib ");
-				cargs.Append ("-noconfig ");
+				cargs.Add ("-nostdlib");
+				cargs.Add ("-noconfig");
 			}
 			if (!string.IsNullOrEmpty (Path.GetDirectoryName (baselibdll)))
-				cargs.Append ("-lib:").Append (Path.GetDirectoryName (baselibdll)).Append (' ');
-				
-			si = new ProcessStartInfo (compiler, cargs.ToString ()) {
-				UseShellExecute = false,
-			};
+				cargs.Add ("-lib:" + Path.GetDirectoryName (baselibdll));
 
-			// HACK: We are calling btouch with forced 2.1 path but we need working mono for compiler
-			si.EnvironmentVariables.Remove ("MONO_PATH");
-
-			if (verbose)
-				Console.WriteLine ("{0} {1}", si.FileName, si.Arguments);
-
-			//si.RedirectStandardError = true;
-			//si.RedirectStandardOutput = true;
-
-			p = new Process ();
-			p.StartInfo = si;
-			//p.EnableRaisingEvents = true;
-			//p.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => {
-			//	if (e.Data != null)
-			//		Console.Error.WriteLine (e.Data);
-			//};
-			//p.OutputDataReceived += (object sender, DataReceivedEventArgs e) => {
-			//	if (e.Data != null)
-			//		Console.WriteLine (e.Data);
-			//};
-			p.Start ();
-			//var output = p.StandardOutput.ReadToEnd ();
-			//var error = p.StandardError.ReadToEnd ();
-			p.WaitForExit ();
-			if (p.ExitCode != 0){
-				//System.Threading.Thread.Sleep (1000);
-				Console.WriteLine ("{0}: API binding contains errors.", ToolName);
+			exitCode = ProcessHelper.Run (compiler, cargs, environment: environment, verbose: verbose, always_show_errors: true);
+			if (exitCode != 0) {
+				ErrorHelper.Show (ErrorHelper.CreateError (2, "The generated API binding contains errors."));
 				return 1;
 			}
 		} finally {

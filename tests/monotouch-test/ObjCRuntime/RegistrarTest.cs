@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 
 #if XAMCORE_2_0
+using CoreFoundation;
 #if !__TVOS__ && !__WATCHOS__ && !MONOMAC
 using AddressBook;
 using AddressBookUI;
@@ -2558,80 +2559,342 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
-		public unsafe void RefOutTest ()
+		public unsafe void ___RefOutTest_CFBundle ()
 		{
-			IntPtr refValue;
-			IntPtr outValue;
-			INativeObject refIObj = new NSObject ();
-			INativeObject outIObj = new NSObject ();
+			IntPtr refValue = IntPtr.Zero;
+			IntPtr outValue = IntPtr.Zero;
 
 			using (var obj = new RefOutParametersSubclass ()) {
-				INativeObject refIObjCopy = refIObj;
-				INativeObject outIObj;
+				{ // TestCFBundle
+					var sel = Selector.GetHandle ("testCFBundle:a:b:");
+					var dummyObj = CFBundle.GetMain ();
+					CFBundle refObj = null;
+					CFBundle outObj = null;
+					int action;
 
-				// 1 (native): set both to null
-				refIObjCopy = refIObj;
-				outIObj = outIObj;
-				obj.TestINativeObject (1, ref refIObjCopy, out outIObj);
-				Assert.IsNull (refIObjCopy, "1A-ref");
-				Assert.IsNull (outIObj, "1A-out");
+					/// 1: set both to null
+					action = 1;
 
-				// 1 (managed): set both to null
-				refIObjCopy = refIObj;
-				outIObj = outIObj;
-				obj.TestINativeObject (1 << 8, ref refIObjCopy, out outIObj);
-				Assert.IsNull (refIObjCopy, "1M-ref");
-				Assert.IsNull (outIObj, "1M-out");
+					// native
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestCFBundle (action << 0, ref refObj, out outObj);
+					Assert.IsNull (refObj, "CFBundle-1A-ref");
+					Assert.IsNull (outObj, "CFBundle-1A-out");
 
-				// 1 (direct native): set both to null
-				refIObjCopy = refIObj;
-				outIObj = outIObj;
-				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, Selector.GetHandle ("testINativeObject:a:b:)", 1 << 0, ref refValue, out outValue);
-				Assert.IsNull (refIObjCopy, "1DA-ref");
-				Assert.IsNull (outIObj, "1DA-out");
+					// managed
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestCFBundle (action << 8, ref refObj, out outObj);
+					Assert.IsNull (refObj, "CFBundle-1M-ref");
+					Assert.IsNull (outObj, "CFBundle-1M-out");
 
-				// 1 (direct managed): set both to null
-				refIObjCopy = refIObj;
-				outIObj = outIObj;
-				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, Selector.GetHandle ("testINativeObject:a:b:)", 1 << 8, ref refValue, out outValue);
-				Assert.IsNull (refIObjCopy, "1DA-ref");
-				Assert.IsNull (outIObj, "1DA-out");
+					// direct native
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreEqual (IntPtr.Zero, refValue, "CFBundle-1DA-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-1DA-out");
+
+					// direct managed
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreEqual (IntPtr.Zero, refValue, "CFBundle-1DM-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-1DM-out");
+
+					/// 2: verify that refValue points to something
+					action = 2;
+
+					// native
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestCFBundle (action << 0, ref refObj, out outObj);
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-2A-ref");
+					Assert.AreSame (dummyObj, refObj, "CBundle-2A-ref-same");
+					Assert.IsNull (outObj, "CFBundle-2A-out");
+
+					// managed
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestCFBundle (action << 8, ref refObj, out outObj);
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-2M-ref");
+					Assert.AreSame (dummyObj, refObj, "CBundle-2M-ref-same");
+					Assert.IsNull (outObj, "CFBundle-2M-out");
+
+					// direct native
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-2DA-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-2DA-out");
+
+					// direct managed
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-2DM-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-2DM-out");
+
+
+					/// 3 set both parameteres to the same pointer of a CFBundle
+					action = 3;
+
+					// native
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestCFBundle (action << 0, ref refObj, out outObj);
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-3A-ref");
+					Assert.AreSame (dummyObj, refObj, "CBundle-3A-ref-same");
+					Assert.AreEqual (dummyObj.Handle, outObj.Handle, "CFBundle-3A-out");
+					Assert.AreNotSame (dummyObj, outObj, "CBundle-3A-ref-out");
+
+					// managed
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestCFBundle (action << 8, ref refObj, out outObj);
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-3M-ref");
+					Assert.AreNotSame (dummyObj, refObj, "CBundle-3M-ref-same");
+					Assert.AreEqual (dummyObj.Handle, outObj.Handle, "CFBundle-3M-out");
+					Assert.AreNotSame (dummyObj, outObj, "CBundle-3M-ref-out");
+
+					// direct native
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-3DA-ref");
+					Assert.AreEqual (dummyObj.Handle, outValue, "CFBundle-3DA-out");
+
+					// direct managed
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-3DM-ref");
+					Assert.AreEqual (dummyObj.Handle, outValue, "CFBundle-3DM-out");
+
+
+					/// 4 set both parameteres to different pointers of a CFBundle
+					action = 4;
+
+					// native
+					refObj = null; // set to non-null
+					outObj = null; // set to non-null
+					obj.TestCFBundle (action << 0, ref refObj, out outObj);
+					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "CFBundle-4A-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "CFBundle-4A-out");
+					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "CBundle-4A-ref-distinct");
+
+					// managed
+					refObj = null; // set to non-null
+					outObj = null; // set to non-null
+					obj.TestCFBundle (action << 8, ref refObj, out outObj);
+					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "CFBundle-4M-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "CFBundle-4M-out");
+					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "CBundle-4M-ref-distinct");
+
+					// direct native
+					refValue = IntPtr.Zero; // set to non-null
+					outValue = IntPtr.Zero; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreNotEqual (IntPtr.Zero, refValue, "CFBundle-4DA-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outValue, "CFBundle-4DA-out");
+					Assert.AreNotEqual (refValue, outValue, "CBundle-4DA-ref-distinct");
+
+					// direct managed
+					refValue = IntPtr.Zero; // set to non-null
+					outValue = IntPtr.Zero; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreNotEqual (IntPtr.Zero, refValue, "CFBundle-4DM-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outValue, "CFBundle-4DM-out");
+					Assert.AreNotEqual (refValue, outValue, "CBundle-4DM-ref-distinct");
+				}
+			}
+		}
+
+
+		[Test]
+		public unsafe void ___RefOutTest_INSCoding ()
+		{
+			IntPtr refValue = IntPtr.Zero;
+			IntPtr outValue = IntPtr.Zero;
+
+			using (var obj = new RefOutParametersSubclass ()) {
+				{ // TestINSCoding
+					var sel = Selector.GetHandle ("testINSCoding:a:b:");
+					INSCoding dummyObj = new NSString ("Dummy obj");
+					INSCoding refObj = null;
+					INSCoding outObj = null;
+					int action;
+
+					/// 1: set both to null
+					action = 1;
+
+					// native
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestINSCoding (action << 0, ref refObj, out outObj);
+					Assert.IsNull (refObj, "CFBundle-1A-ref");
+					Assert.IsNull (outObj, "CFBundle-1A-out");
+
+					// managed
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestINSCoding (action << 8, ref refObj, out outObj);
+					Assert.IsNull (refObj, "CFBundle-1M-ref");
+					Assert.IsNull (outObj, "CFBundle-1M-out");
+
+					// direct native
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreEqual (IntPtr.Zero, refValue, "CFBundle-1DA-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-1DA-out");
+
+					// direct managed
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreEqual (IntPtr.Zero, refValue, "CFBundle-1DM-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-1DM-out");
+
+					/// 2: verify that refValue points to something
+					action = 2;
+
+					// native
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestINSCoding (action << 0, ref refObj, out outObj);
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-2A-ref");
+					Assert.AreSame (dummyObj, refObj, "CBundle-2A-ref-same");
+					Assert.IsNull (outObj, "CFBundle-2A-out");
+
+					// managed
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestINSCoding (action << 8, ref refObj, out outObj);
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-2M-ref");
+					Assert.AreSame (dummyObj, refObj, "CBundle-2M-ref-same");
+					Assert.IsNull (outObj, "CFBundle-2M-out");
+
+					// direct native
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-2DA-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-2DA-out");
+
+					// direct managed
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-2DM-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-2DM-out");
+
+
+					/// 3 set both parameteres to the same pointer of a CFBundle
+					action = 3;
+
+					// native
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestINSCoding (action << 0, ref refObj, out outObj);
+					Assert.AreNotEqual (dummyObj.Handle, refObj.Handle, "CFBundle-3A-ref");
+					Assert.AreNotSame (dummyObj, refObj, "CBundle-3A-ref-same");
+					Assert.AreNotEqual (dummyObj.Handle, outObj.Handle, "CFBundle-3A-out");
+					Assert.AreNotSame (dummyObj, outObj, "CBundle-3A-ref-out");
+					Assert.AreEqual (refObj.Handle, outObj.Handle, "CFBundle-3A-out-ref-eq");
+					Assert.AreNotSame (refObj, outObj, "CBundle-3A-ref-out-not-safe");
+					Assert.That (refObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-3A-ref-wrapper-type");
+					Assert.That (outObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-3A-ref-wrapper-type");
+
+					// managed
+					refObj = dummyObj; // set to non-null
+					outObj = dummyObj; // set to non-null
+					obj.TestINSCoding (action << 8, ref refObj, out outObj);
+					Assert.AreNotEqual (dummyObj.Handle, refObj.Handle, "CFBundle-3M-ref");
+					Assert.AreNotSame (dummyObj, refObj, "CBundle-3M-ref-same");
+					Assert.AreNotEqual (dummyObj.Handle, outObj.Handle, "CFBundle-3M-out");
+					Assert.AreNotSame (dummyObj, outObj, "CBundle-3M-ref-out");
+					Assert.AreEqual (refObj.Handle, outObj.Handle, "CFBundle-3M-out-ref-eq");
+					Assert.AreSame (refObj, outObj, "CBundle-3M-ref-out-not-safe");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-3M-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-3M-ref-wrapper-type");
+
+					// direct native
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreNotEqual (dummyObj.Handle, refValue, "CFBundle-3DA-ref");
+					Assert.AreNotEqual (dummyObj.Handle, outValue, "CFBundle-3DA-out");
+					Assert.AreSame (refObj, outObj, "CFBundle-3DA-out-ref-same");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-3DA-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-3DA-ref-wrapper-type");
+
+					// direct managed
+					refValue = dummyObj.Handle; // set to non-null
+					outValue = dummyObj.Handle; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreNotEqual (dummyObj.Handle, refValue, "CFBundle-3DM-ref");
+					Assert.AreNotEqual (dummyObj.Handle, outValue, "CFBundle-3DM-out");
+					Assert.AreSame (refObj, outObj, "CFBundle-3DM-out-ref-eq");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-3DM-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-3DM-ref-wrapper-type");
+
+
+					/// 4 set both parameteres to different pointers of a CFBundle
+					action = 4;
+
+					// native
+					refObj = null; // set to non-null
+					outObj = null; // set to non-null
+					obj.TestINSCoding (action << 0, ref refObj, out outObj);
+					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "CFBundle-4A-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "CFBundle-4A-out");
+					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "CBundle-4A-ref-distinct");
+					Assert.That (refObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-4A-ref-wrapper-type");
+					Assert.That (outObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-4A-ref-wrapper-type");
+
+					// managed
+					refObj = null; // set to non-null
+					outObj = null; // set to non-null
+					obj.TestINSCoding (action << 8, ref refObj, out outObj);
+					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "CFBundle-4M-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "CFBundle-4M-out");
+					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "CBundle-4M-ref-distinct");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-4M-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-4M-ref-wrapper-type");
+
+					// direct native
+					refValue = IntPtr.Zero; // set to non-null
+					outValue = IntPtr.Zero; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
+					Assert.AreNotEqual (IntPtr.Zero, refValue, "CFBundle-4DA-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outValue, "CFBundle-4DA-out");
+					Assert.AreNotEqual (refValue, outValue, "CBundle-4DA-ref-distinct");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-4DA-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-4DA-ref-wrapper-type");
+
+					// direct managed
+					refValue = IntPtr.Zero; // set to non-null
+					outValue = IntPtr.Zero; // set to non-null
+					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
+					Assert.AreNotEqual (IntPtr.Zero, refValue, "CFBundle-4DM-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outValue, "CFBundle-4DM-out");
+					Assert.AreNotEqual (refValue, outValue, "CBundle-4DM-ref-distinct");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-4DM-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-4DM-ref-wrapper-type");
+				}
 			}
 		}
 
 		class RefOutParametersSubclass : BI1064.RefOutParameters
 		{
-			public override void TestINativeObject (int action, ref INativeObject refValue, out INativeObject outValue)
-			{
-				var managedAction = (action & 0xFF00) >> 8;
-				switch (managedAction) {
-				case 0: // call native
-					base.TestINativeObject (action, ref refValue, out outValue);
-					break;
-				case 1: // set both to null
-					refValue = null;
-					outValue = null;
-					break;
-				case 2: // verify that refValue points to something
-					Assert.IsNotNull (refValue, "2");
-					outValue = null; // compiler-enforced
-					break;
-				case 3: // set both parameters to the same pointer, a new NSObject.
-					var obj = new NSObject ();
-					refValue = obj;
-					outValue = obj;
-					break;
-				default:
-					throw new NotImplementedException ();
-				}
-			}
-
 			public override void TestCFBundle (int action, ref CFBundle refValue, out CFBundle outValue)
 			{
 				var managedAction = (action & 0xFF00) >> 8;
 				switch (managedAction) {
 				case 0: // call native
-					base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+					base.TestCFBundle (action, ref refValue, out outValue);
 					break;
 				case 1: // set both to null
 					refValue = null;
@@ -2657,56 +2920,74 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 			public override void TestINSCoding (int action, ref INSCoding refValue, out INSCoding outValue)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				var managedAction = (action & 0xFF00) >> 8;
+				switch (managedAction) {
+				case 0: // call native
+					base.TestINSCoding (action, ref refValue, out outValue);
+					break;
+				case 1: // set both to null
+					refValue = null;
+					outValue = null;
+					break;
+				case 2: // verify that refValue points to something
+					Assert.IsNotNull (refValue, "2");
+					outValue = null; // compiler-enforced
+					break;
+				case 3: // set both parameteres to the same pointer of an NSString
+					var obj = new NSString ("A managed string");
+					refValue = obj;
+					outValue = obj;
+					break;
+				case 4: // set both parameteres to different pointers of an NSString
+					refValue = new NSString ("A managed ref string");
+					outValue = new NSString ("A managed out string");
+					break;
+				default:
+					throw new NotImplementedException ();
+				}
 			}
 
 			public override void TestNSObject (int action, ref NSObject refValue, out NSObject outValue)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestNSObject (action, ref refValue, out outValue);
 			}
 
 			public override void TestValue (int action, ref NSValue refValue, out NSValue outValue)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestValue (action, ref refValue, out outValue);
 			}
 
 			public override void TestString (int action, ref string refValue, out string outValue)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestString (action, ref refValue, out outValue);
 			}
 
 			public override void TestInt (int action, ref int refValue, out int outValue)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestInt (action, ref refValue, out outValue);
 			}
 
-
-			public override void TestINativeObjectArray (int action, ref INativeObject [] refValues, out INativeObject [] outValues)
-			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
-			}
 
 			public override void TestINSCodingArray (int action, ref INSCoding [] refValues, out INSCoding [] outValues)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestINSCodingArray (action, ref refValues, out outValues);
 			}
 
 			public override void TestNSObjectArray (int action, ref NSObject [] refValues, out NSObject [] outValues)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestNSObjectArray (action, ref refValues, out outValues);
 			}
 
 			public override void TestNSValueArray (int action, ref NSValue [] refValues, out NSValue [] outValues)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestNSValueArray (action, ref refValues, out outValues);
 			}
 
 			public override void TestStringArray (int action, ref string [] refStrings, out string [] outStrings)
 			{
-				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+				base.TestStringArray (action, ref refStrings, out outStrings);
 			}
 		}
-	}
 	}
 
 #if !__WATCHOS__

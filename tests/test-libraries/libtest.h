@@ -216,19 +216,17 @@ typedef void (^outerBlock) (innerBlock callback);
 
 @interface RefOutParameters : NSObject {
 }
-	+(void) testINativeObject: (int) action a:(id *)          refValue b:(id *)          outValue;
-	+(void) testCFBundle:      (int) action a:(CFBundleRef *) refValue b:(CFBundleRef *) outValue;
-	+(void) testINSCoding:     (int) action a:(id<NSCoding>*) refValue b:(id<NSCoding>*) outValue;
-	+(void) testNSObject:      (int) action a:(id *)          refValue b:(id *)          outValue;
-	+(void) testValue:         (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue;
-	+(void) testString:        (int) action a:(NSString **)   refValue b:(NSString **)   outValue;
-	+(void) testInt:           (int) action a:(int32_t *)     refValue b:(int32_t *)     outValue;
+	-(void) testCFBundle:      (int) action a:(CFBundleRef *) refValue b:(CFBundleRef *) outValue;
+	-(void) testINSCoding:     (int) action a:(id<NSCoding>*) refValue b:(id<NSCoding>*) outValue;
+	-(void) testNSObject:      (int) action a:(id *)          refValue b:(id *)          outValue;
+	-(void) testValue:         (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue;
+	-(void) testString:        (int) action a:(NSString **)   refValue b:(NSString **)   outValue;
+	-(void) testInt:           (int) action a:(int32_t *)     refValue b:(int32_t *)     outValue;
 
-	+(void) testINativeObjectArray: (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
-	+(void) testINSCodingArray:     (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
-	+(void) testNSObjectArray:      (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
-	+(void) testNSValueArray:       (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
-	+(void) testStringArray:        (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
+	-(void) testINSCodingArray:     (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
+	-(void) testNSObjectArray:      (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
+	-(void) testNSValueArray:       (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
+	-(void) testStringArray:        (int) action a:(NSArray **) refValue b:(NSArray **) outValue;
 @end
 
 #ifdef __cplusplus

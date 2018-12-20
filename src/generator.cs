@@ -1044,6 +1044,21 @@ public partial class Generator : IMemberGatherer {
 		return (pt == TypeManager.System_Int32 || pt == TypeManager.System_Int64 || pt == TypeManager.System_Byte || pt == TypeManager.System_Int16);
 	}
 
+
+	public bool IsNSObject (Type type)
+	{
+		if (type == TypeManager.NSObject)
+			return true;
+
+		if (type.IsSubclassOf (TypeManager.NSObject))
+			return true;
+
+		if (BindThirdPartyLibrary)
+			return false;
+
+		return type.IsInterface;
+	}
+
 	public string PrimitiveType (Type t, bool formatted = false, EnumMode enum_mode = EnumMode.Compat)
 	{
 		if (t == TypeManager.System_Void)
@@ -4082,16 +4097,19 @@ public partial class Generator : IMemberGatherer {
 
 			// Handle ByRef
 			if (mai.Type.IsByRef && mai.Type.GetElementType ().IsValueType == false){
+				// We support: string, NSObject (and subclasses), INativeObject implementations (but not INativeObject itself)
 				var elementType = mai.Type.GetElementType ();
 				var isString = elementType == TypeManager.System_String;
+				var isINativeObject = elementType == TypeManager.INativeObject;
+				var isINativeObjectSubclass = !isINativeObject && TypeManager.INativeObject.IsAssignableFrom (elementType);
+				var isNSObject = IsNSObject (elementType);
 				var isArray = elementType.IsArray;
-				var isArrayOfWrappedObject = isArray && IsWrappedType (elementType.GetElementType ());
 				var isArrayOfString = isArray && elementType.GetElementType () == TypeManager.System_String;
-				var isWrappedObject = IsWrappedType (elementType);
-				var isINativeObject = TypeManager.INativeObject.IsAssignableFrom (elementType);
+				var isArrayOfNSObject = isArray && IsNSObject (elementType.GetElementType ());
+				var isArrayOfINativeObject = isArray && TypeManager.INativeObject.IsAssignableFrom (elementType.GetElementType ());
 
-				if (!isString && !isArrayOfWrappedObject && !isWrappedObject && !isArrayOfString && !isINativeObject) {
-					exceptions.Add (ErrorHelper.CreateError (1064, "Unsupported ref/out parameter type '{0}' for the parameter '{1}' in {2}.{3}.", mai.Type.FullName, string.IsNullOrEmpty (pi.Name) ? $"#{pi.Position}" : pi.Name, mi.DeclaringType.FullName, mi.Name));
+				if (!isString && !isArrayOfNSObject && !isNSObject && !isArrayOfString && !isINativeObjectSubclass && !isArrayOfINativeObject || isINativeObject) {
+					exceptions.Add (ErrorHelper.CreateError (1064, "Unsupported ref/out parameter type '{0}' for the parameter '{1}' in {2}.{3}.", elementType.FullName, string.IsNullOrEmpty (pi.Name) ? $"#{pi.Position}" : pi.Name, mi.DeclaringType.FullName, mi.Name));
 					continue;
 				}
 
@@ -4102,16 +4120,16 @@ public partial class Generator : IMemberGatherer {
 					if (isString) {
 						by_ref_init.AppendFormat ("NSString.CreateNative ({0}, true);\n", pi.Name.GetSafeParamName ());
 						by_ref_init.AppendFormat ("IntPtr {0}OriginalValue = {0}Value;\n", pi.Name.GetSafeParamName ());
-					} else if (isArrayOfWrappedObject) {
+					} else if (isArrayOfNSObject || isArrayOfINativeObject) {
 						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromNSObjects ({0});\n", pi.Name.GetSafeParamName ()));
 						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
 					} else if (isArrayOfString) {
 						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromStrings ({0});\n", pi.Name.GetSafeParamName ()));
 						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
-					} else if (isWrappedObject || isINativeObject) {
+					} else if (isNSObject || isINativeObjectSubclass) {
 						by_ref_init.AppendFormat ("{0} == null ? IntPtr.Zero : {0}.Handle;\n", pi.Name.GetSafeParamName ());
 					} else {
-						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for {mai.Type}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
+						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out (input) code for {mai.Type} in {mi}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
 					}
 				}
 
@@ -4123,22 +4141,24 @@ public partial class Generator : IMemberGatherer {
 					if (!pi.IsOut)
 						by_ref_processing.AppendFormat ("if ({0}Value != ({0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle))\n\t", pi.Name.GetSafeParamName ());
 
-					if (isArrayOfWrappedObject) {
+					if (isArrayOfNSObject || isArrayOfINativeObject) {
 						by_ref_processing.AppendFormat ("{0} = NSArray.ArrayFromHandle<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType.GetElementType ()));
 					} else if (isArrayOfString) {
 						by_ref_processing.AppendFormat ("{0} = NSArray.StringArrayFromHandle ({0}Value);\n", pi.Name.GetSafeParamName ());
 					} else {
-						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for {mai.Type}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
+						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for array {mai.Type} in {mi}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
 					}
 
 					if (!pi.IsOut)
 						by_ref_processing.AppendFormat ("{0}ArrayValue?.Dispose ();\n", pi.Name.GetSafeParamName ());
-				} else if (isWrappedObject) {
+				} else if (isNSObject) {
 					by_ref_processing.AppendFormat ("{0} = Runtime.GetNSObject<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
-				} else if (isINativeObject) {
+				} else if (isINativeObjectSubclass) {
+					if (!pi.IsOut)
+						by_ref_processing.AppendFormat ("if ({0}Value != ({0} == null ? IntPtr.Zero : {0}.Handle))\n\t", pi.Name.GetSafeParamName ());
 					by_ref_processing.AppendFormat ("{0} = Runtime.GetINativeObject<{1}> ({0}Value, false);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
 				} else {
-					throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for {mai.Type}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
+					throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out (output) code for {mai.Type} in {mi}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
 				}
 			}
 		}

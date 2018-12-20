@@ -8,9 +8,6 @@ namespace BI1064
 	[BaseType (typeof (NSObject))]
 	interface RefOutParameters
 	{
-		[Export ("testINativeObject:a:b:")]
-		void TestINativeObject (int action, ref INativeObject refValue, out INativeObject outValue);
-
 		[Export ("testCFBundle:a:b:")]
 		void TestCFBundle (int action, ref CFBundle refValue, out CFBundle outValue);
 
@@ -29,9 +26,9 @@ namespace BI1064
 		[Export ("testInt:a:b:")]
 		void TestInt (int action, ref int refValue, out int outValue);
 
+		[Export ("testNSError:a:b:")]
+		void TestInt (int action, ref NSError refValue, out NSError outValue);
 
-		[Export ("testINativeObjectArray:a:b:")]
-		void TestINativeObjectArray (int action, ref INativeObject[] refValues, out INativeObject[] outValues);
 
 		[Export ("testINSCodingArray:a:b:")]
 		void TestINSCodingArray (int action, ref INSCoding[] refValues, out INSCoding[] outValues);

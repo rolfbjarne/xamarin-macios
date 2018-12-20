@@ -752,26 +752,55 @@ static void block_called ()
 
 @implementation RefOutParameters : NSObject {
 }
-+(void) testINativeObject: (int) action a:(id *)          refValue b:(id *)          outValue
++(void) testINativeObject: (int) action a:(id *) refValue b:(id *) outValue
 {
 	// We should never get null pointers.
 	assert (refValue != NULL);
 	assert (outValue != NULL);
 
-	// out parameters should always be NULL upon entry
+	// out parameters from managed code should always be NULL upon entry
 	assert (*outValue == NULL);
 
-	switch (action) {
-	case 0: // Set both to null
+	switch (action & 0xFF) {
+	case 1: // Set both to null
 		*refValue = NULL;
 		*outValue = NULL;
 		break;
-	case 1: // verify that refValue points to something
+	case 2: // verify that refValue points to something
 		assert (*refValue != NULL);
 		break;
-	case 2: // set both parameters to the same pointer, a new NSObject.
-		*refValue = [NSObject new];
+	case 3: // set both parameters to the same pointer, a new NSObject.
+		*refValue = [[NSObject new] autorelease];
 		*outValue = *refValue;
+		break;
+	default:
+		abort ();
+	}
+}
++(void) testCFBundle: (int) action a:(CFBundleRef *) refValue b:(CFBundleRef *) outValue
+{
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of a CFBundle
+		*refValue = CFBundleGetMainBundle ();
+		*outValue = CFBundleGetMainBundle ();
+		break;
+	case 4: // set both parameteres to different pointers of a CFBundle
+		*refValue = (CFBundleRef) CFArrayGetValueAtIndex (CFBundleGetAllBundles (), 0);
+		*refValue = (CFBundleRef) CFArrayGetValueAtIndex (CFBundleGetAllBundles (), 1);
 		break;
 	default:
 		abort ();

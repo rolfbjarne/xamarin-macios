@@ -4088,8 +4088,9 @@ public partial class Generator : IMemberGatherer {
 				var isArrayOfWrappedObject = isArray && IsWrappedType (elementType.GetElementType ());
 				var isArrayOfString = isArray && elementType.GetElementType () == TypeManager.System_String;
 				var isWrappedObject = IsWrappedType (elementType);
+				var isINativeObject = TypeManager.INativeObject.IsAssignableFrom (elementType);
 
-				if (!isString && !isArrayOfWrappedObject && !isWrappedObject && !isArrayOfString) {
+				if (!isString && !isArrayOfWrappedObject && !isWrappedObject && !isArrayOfString && !isINativeObject) {
 					exceptions.Add (ErrorHelper.CreateError (1064, "Unsupported ref/out parameter type '{0}' for the parameter '{1}' in {2}.{3}.", mai.Type.FullName, string.IsNullOrEmpty (pi.Name) ? $"#{pi.Position}" : pi.Name, mi.DeclaringType.FullName, mi.Name));
 					continue;
 				}
@@ -4107,7 +4108,7 @@ public partial class Generator : IMemberGatherer {
 					} else if (isArrayOfString) {
 						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromStrings ({0});\n", pi.Name.GetSafeParamName ()));
 						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
-					} else if (isWrappedObject) {
+					} else if (isWrappedObject || isINativeObject) {
 						by_ref_init.AppendFormat ("{0} == null ? IntPtr.Zero : {0}.Handle;\n", pi.Name.GetSafeParamName ());
 					} else {
 						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for {mai.Type}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
@@ -4121,7 +4122,7 @@ public partial class Generator : IMemberGatherer {
 				} else if (isArray) {
 					if (!pi.IsOut)
 						by_ref_processing.AppendFormat ("if ({0}Value != ({0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle))\n\t", pi.Name.GetSafeParamName ());
-		
+
 					if (isArrayOfWrappedObject) {
 						by_ref_processing.AppendFormat ("{0} = NSArray.ArrayFromHandle<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType.GetElementType ()));
 					} else if (isArrayOfString) {
@@ -4133,11 +4134,9 @@ public partial class Generator : IMemberGatherer {
 					if (!pi.IsOut)
 						by_ref_processing.AppendFormat ("{0}ArrayValue?.Dispose ();\n", pi.Name.GetSafeParamName ());
 				} else if (isWrappedObject) {
-					if (elementType == TypeManager.INativeObject || elementType.IsSubclassOf (TypeManager.INativeObject) || IsProtocolInterface (elementType)) {
-						by_ref_processing.AppendFormat ("{0} = Runtime.GetINativeObject<{1}> ({0}Value, false);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
-					} else {
-						by_ref_processing.AppendFormat ("{0} = Runtime.GetNSObject<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
-					}
+					by_ref_processing.AppendFormat ("{0} = Runtime.GetNSObject<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
+				} else if (isINativeObject) {
+					by_ref_processing.AppendFormat ("{0} = Runtime.GetINativeObject<{1}> ({0}Value, false);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
 				} else {
 					throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for {mai.Type}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
 				}

@@ -1,4 +1,5 @@
 using System;
+using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
@@ -9,6 +10,9 @@ namespace BI1064
 	{
 		[Export ("testINativeObject:a:b:")]
 		void TestINativeObject (int action, ref INativeObject refValue, out INativeObject outValue);
+
+		[Export ("testCFBundle:a:b:")]
+		void TestCFBundle (int action, ref CFBundle refValue, out CFBundle outValue);
 
 		[Export ("testINSCoding:a:b:")]
 		void TestINSCoding (int action, ref INSCoding refValue, out INSCoding outValue);

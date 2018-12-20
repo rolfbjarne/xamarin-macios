@@ -217,6 +217,7 @@ typedef void (^outerBlock) (innerBlock callback);
 @interface RefOutParameters : NSObject {
 }
 	+(void) testINativeObject: (int) action a:(id *)          refValue b:(id *)          outValue;
+	+(void) testCFBundle:      (int) action a:(CFBundleRef *) refValue b:(CFBundleRef *) outValue;
 	+(void) testINSCoding:     (int) action a:(id<NSCoding>*) refValue b:(id<NSCoding>*) outValue;
 	+(void) testNSObject:      (int) action a:(id *)          refValue b:(id *)          outValue;
 	+(void) testValue:         (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue;

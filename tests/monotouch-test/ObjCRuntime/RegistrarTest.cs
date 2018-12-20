@@ -2562,13 +2562,151 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		{
 			IntPtr refValue;
 			IntPtr outValue;
+			INativeObject refIObj = new NSObject ();
+			INativeObject outIObj = new NSObject ();
 
-			using (var obj = new BI1064.RefOutParameters ()) {
-				refValue = IntPtr.Zero;
-				outValue = IntPtr.Zero;
-				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, Selector.GetHandle ("..."), 0, refValue, outValue);
+			using (var obj = new RefOutParametersSubclass ()) {
+				INativeObject refIObjCopy = refIObj;
+				INativeObject outIObj;
+
+				// 1 (native): set both to null
+				refIObjCopy = refIObj;
+				outIObj = outIObj;
+				obj.TestINativeObject (1, ref refIObjCopy, out outIObj);
+				Assert.IsNull (refIObjCopy, "1A-ref");
+				Assert.IsNull (outIObj, "1A-out");
+
+				// 1 (managed): set both to null
+				refIObjCopy = refIObj;
+				outIObj = outIObj;
+				obj.TestINativeObject (1 << 8, ref refIObjCopy, out outIObj);
+				Assert.IsNull (refIObjCopy, "1M-ref");
+				Assert.IsNull (outIObj, "1M-out");
+
+				// 1 (direct native): set both to null
+				refIObjCopy = refIObj;
+				outIObj = outIObj;
+				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, Selector.GetHandle ("testINativeObject:a:b:)", 1 << 0, ref refValue, out outValue);
+				Assert.IsNull (refIObjCopy, "1DA-ref");
+				Assert.IsNull (outIObj, "1DA-out");
+
+				// 1 (direct managed): set both to null
+				refIObjCopy = refIObj;
+				outIObj = outIObj;
+				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, Selector.GetHandle ("testINativeObject:a:b:)", 1 << 8, ref refValue, out outValue);
+				Assert.IsNull (refIObjCopy, "1DA-ref");
+				Assert.IsNull (outIObj, "1DA-out");
 			}
 		}
+
+		class RefOutParametersSubclass : BI1064.RefOutParameters
+		{
+			public override void TestINativeObject (int action, ref INativeObject refValue, out INativeObject outValue)
+			{
+				var managedAction = (action & 0xFF00) >> 8;
+				switch (managedAction) {
+				case 0: // call native
+					base.TestINativeObject (action, ref refValue, out outValue);
+					break;
+				case 1: // set both to null
+					refValue = null;
+					outValue = null;
+					break;
+				case 2: // verify that refValue points to something
+					Assert.IsNotNull (refValue, "2");
+					outValue = null; // compiler-enforced
+					break;
+				case 3: // set both parameters to the same pointer, a new NSObject.
+					var obj = new NSObject ();
+					refValue = obj;
+					outValue = obj;
+					break;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+
+			public override void TestCFBundle (int action, ref CFBundle refValue, out CFBundle outValue)
+			{
+				var managedAction = (action & 0xFF00) >> 8;
+				switch (managedAction) {
+				case 0: // call native
+					base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+					break;
+				case 1: // set both to null
+					refValue = null;
+					outValue = null;
+					break;
+				case 2: // verify that refValue points to something
+					Assert.IsNotNull (refValue, "2");
+					outValue = null; // compiler-enforced
+					break;
+				case 3: // set both parameteres to the same pointer of a CFBundle
+					var obj = global::CoreFoundation.CFBundle.GetMain ();
+					refValue = obj;
+					outValue = obj;
+					break;
+				case 4: // set both parameteres to different pointers of a CFBundle
+					refValue = global::CoreFoundation.CFBundle.GetAll () [0];
+					outValue = global::CoreFoundation.CFBundle.GetAll () [1];
+					break;
+				default:
+					throw new NotImplementedException ();
+				}
+			}
+
+			public override void TestINSCoding (int action, ref INSCoding refValue, out INSCoding outValue)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestNSObject (int action, ref NSObject refValue, out NSObject outValue)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestValue (int action, ref NSValue refValue, out NSValue outValue)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestString (int action, ref string refValue, out string outValue)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestInt (int action, ref int refValue, out int outValue)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+
+			public override void TestINativeObjectArray (int action, ref INativeObject [] refValues, out INativeObject [] outValues)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestINSCodingArray (int action, ref INSCoding [] refValues, out INSCoding [] outValues)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestNSObjectArray (int action, ref NSObject [] refValues, out NSObject [] outValues)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestNSValueArray (int action, ref NSValue [] refValues, out NSValue [] outValues)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+
+			public override void TestStringArray (int action, ref string [] refStrings, out string [] outStrings)
+			{
+				base.TestINativeObject_CFBundle (action, ref refValue, out outValue);
+			}
+		}
+	}
 	}
 
 #if !__WATCHOS__

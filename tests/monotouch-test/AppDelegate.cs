@@ -57,7 +57,17 @@ namespace MonoTouchFixtures {
 			window.RootViewController = new UINavigationController (runner.GetViewController ());
 			// make the window visible
 			window.MakeKeyAndVisible ();
-			
+
+			NSTimer.CreateScheduledTimer (TimeSpan.FromSeconds (1), (var) => {
+				try {
+					new ObjCRuntime.RegistrarTest ().___RefOutTest_INSCoding ();
+					new ObjCRuntime.RegistrarTest ().___RefOutTest_CFBundle ();
+					Console.WriteLine ("SUCCESS!");
+				} catch (Exception e) {
+					Console.WriteLine (e);
+				}
+			});
+
 			return true;
 		}
 

@@ -15,7 +15,7 @@ using System.Threading;
 
 using Xamarin.Utils;
 
-namespace Xamarin {
+namespace Xamarin.Utils {
 	public partial class ProcessHelper {
 		public static int Run (string path, IEnumerable<string> args, Dictionary<string, string> environment, StringBuilder output = null, bool verbose = false, bool always_show_errors = true)
 		{
@@ -92,7 +92,7 @@ namespace Xamarin {
 					if (verbose || always_show_errors) {
 						// note: this repeat the failing command line. However we can't avoid this since we're often
 						// running commands in parallel (so the last one printed might not be the one failing)
-						Console.Error.WriteLine ("Process exited with code {0}, command:\n{1} {2}{3}", p.ExitCode, path, args, output.Length > 0 ? "\n" + output : string.Empty);
+						Console.WriteLine ("Process exited with code {0}, command:\n{1} {2}{3}", p.ExitCode, path, args, output.Length > 0 ? "\n" + output : string.Empty);
 					}
 				} else if (verbose && output.Length > 0) {
 					Console.WriteLine (output);

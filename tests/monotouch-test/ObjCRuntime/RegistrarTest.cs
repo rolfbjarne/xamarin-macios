@@ -2711,7 +2711,6 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			}
 		}
 
-
 		[Test]
 		public unsafe void ___RefOutTest_INSCoding ()
 		{
@@ -2733,29 +2732,29 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					refObj = dummyObj; // set to non-null
 					outObj = dummyObj; // set to non-null
 					obj.TestINSCoding (action << 0, ref refObj, out outObj);
-					Assert.IsNull (refObj, "CFBundle-1A-ref");
-					Assert.IsNull (outObj, "CFBundle-1A-out");
+					Assert.IsNull (refObj, "NSCoding-1A-ref");
+					Assert.IsNull (outObj, "NSCoding-1A-out");
 
 					// managed
 					refObj = dummyObj; // set to non-null
 					outObj = dummyObj; // set to non-null
 					obj.TestINSCoding (action << 8, ref refObj, out outObj);
-					Assert.IsNull (refObj, "CFBundle-1M-ref");
-					Assert.IsNull (outObj, "CFBundle-1M-out");
+					Assert.IsNull (refObj, "NSCoding-1M-ref");
+					Assert.IsNull (outObj, "NSCoding-1M-out");
 
 					// direct native
 					refValue = dummyObj.Handle; // set to non-null
 					outValue = dummyObj.Handle; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-					Assert.AreEqual (IntPtr.Zero, refValue, "CFBundle-1DA-ref");
-					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-1DA-out");
+					Assert.AreEqual (IntPtr.Zero, refValue, "NSCoding-1DA-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "NSCoding-1DA-out");
 
 					// direct managed
 					refValue = dummyObj.Handle; // set to non-null
 					outValue = dummyObj.Handle; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-					Assert.AreEqual (IntPtr.Zero, refValue, "CFBundle-1DM-ref");
-					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-1DM-out");
+					Assert.AreEqual (IntPtr.Zero, refValue, "NSCoding-1DM-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "NSCoding-1DM-out");
 
 					/// 2: verify that refValue points to something
 					action = 2;
@@ -2764,125 +2763,125 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					refObj = dummyObj; // set to non-null
 					outObj = dummyObj; // set to non-null
 					obj.TestINSCoding (action << 0, ref refObj, out outObj);
-					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-2A-ref");
-					Assert.AreSame (dummyObj, refObj, "CBundle-2A-ref-same");
-					Assert.IsNull (outObj, "CFBundle-2A-out");
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "NSCoding-2A-ref");
+					Assert.AreSame (dummyObj, refObj, "NSCoding-2A-ref-same");
+					Assert.IsNull (outObj, "NSCoding-2A-out");
 
 					// managed
 					refObj = dummyObj; // set to non-null
 					outObj = dummyObj; // set to non-null
 					obj.TestINSCoding (action << 8, ref refObj, out outObj);
-					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "CFBundle-2M-ref");
-					Assert.AreSame (dummyObj, refObj, "CBundle-2M-ref-same");
-					Assert.IsNull (outObj, "CFBundle-2M-out");
+					Assert.AreEqual (dummyObj.Handle, refObj.Handle, "NSCoding-2M-ref");
+					Assert.AreSame (dummyObj, refObj, "NSCoding-2M-ref-same");
+					Assert.IsNull (outObj, "NSCoding-2M-out");
 
 					// direct native
 					refValue = dummyObj.Handle; // set to non-null
 					outValue = dummyObj.Handle; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-2DA-ref");
-					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-2DA-out");
+					Assert.AreEqual (dummyObj.Handle, refValue, "NSCoding-2DA-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "NSCoding-2DA-out");
 
 					// direct managed
 					refValue = dummyObj.Handle; // set to non-null
 					outValue = dummyObj.Handle; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-					Assert.AreEqual (dummyObj.Handle, refValue, "CFBundle-2DM-ref");
-					Assert.AreEqual (IntPtr.Zero, outValue, "CFBundle-2DM-out");
+					Assert.AreEqual (dummyObj.Handle, refValue, "NSCoding-2DM-ref");
+					Assert.AreEqual (IntPtr.Zero, outValue, "NSCoding-2DM-out");
 
 
-					/// 3 set both parameteres to the same pointer of a CFBundle
+					/// 3 set both parameteres to the same pointer of a NSCoding
 					action = 3;
 
 					// native
 					refObj = dummyObj; // set to non-null
 					outObj = dummyObj; // set to non-null
 					obj.TestINSCoding (action << 0, ref refObj, out outObj);
-					Assert.AreNotEqual (dummyObj.Handle, refObj.Handle, "CFBundle-3A-ref");
-					Assert.AreNotSame (dummyObj, refObj, "CBundle-3A-ref-same");
-					Assert.AreNotEqual (dummyObj.Handle, outObj.Handle, "CFBundle-3A-out");
-					Assert.AreNotSame (dummyObj, outObj, "CBundle-3A-ref-out");
-					Assert.AreEqual (refObj.Handle, outObj.Handle, "CFBundle-3A-out-ref-eq");
-					Assert.AreNotSame (refObj, outObj, "CBundle-3A-ref-out-not-safe");
-					Assert.That (refObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-3A-ref-wrapper-type");
-					Assert.That (outObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-3A-ref-wrapper-type");
+					Assert.AreNotEqual (dummyObj.Handle, refObj.Handle, "NSCoding-3A-ref");
+					Assert.AreNotSame (dummyObj, refObj, "NSCoding-3A-ref-same");
+					Assert.AreNotEqual (dummyObj.Handle, outObj.Handle, "NSCoding-3A-out");
+					Assert.AreNotSame (dummyObj, outObj, "NSCoding-3A-ref-out");
+					Assert.AreEqual (refObj.Handle, outObj.Handle, "NSCoding-3A-out-ref-eq");
+					Assert.AreNotSame (refObj, outObj, "NSCoding-3A-ref-out-not-safe");
+					Assert.That (refObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCoding-3A-ref-wrapper-type");
+					Assert.That (outObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCoding-3A-ref-wrapper-type");
 
 					// managed
 					refObj = dummyObj; // set to non-null
 					outObj = dummyObj; // set to non-null
 					obj.TestINSCoding (action << 8, ref refObj, out outObj);
-					Assert.AreNotEqual (dummyObj.Handle, refObj.Handle, "CFBundle-3M-ref");
-					Assert.AreNotSame (dummyObj, refObj, "CBundle-3M-ref-same");
-					Assert.AreNotEqual (dummyObj.Handle, outObj.Handle, "CFBundle-3M-out");
-					Assert.AreNotSame (dummyObj, outObj, "CBundle-3M-ref-out");
-					Assert.AreEqual (refObj.Handle, outObj.Handle, "CFBundle-3M-out-ref-eq");
-					Assert.AreSame (refObj, outObj, "CBundle-3M-ref-out-not-safe");
-					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-3M-ref-wrapper-type");
-					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-3M-ref-wrapper-type");
+					Assert.AreNotEqual (dummyObj.Handle, refObj.Handle, "NSCoding-3M-ref");
+					Assert.AreNotSame (dummyObj, refObj, "NSCoding-3M-ref-same");
+					Assert.AreNotEqual (dummyObj.Handle, outObj.Handle, "NSCoding-3M-out");
+					Assert.AreNotSame (dummyObj, outObj, "NSCoding-3M-ref-out");
+					Assert.AreEqual (refObj.Handle, outObj.Handle, "NSCoding-3M-out-ref-eq");
+					Assert.AreSame (refObj, outObj, "NSCoding-3M-ref-out-not-safe");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "NSCoding-3M-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "NSCoding-3M-ref-wrapper-type");
 
 					// direct native
 					refValue = dummyObj.Handle; // set to non-null
 					outValue = dummyObj.Handle; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-					Assert.AreNotEqual (dummyObj.Handle, refValue, "CFBundle-3DA-ref");
-					Assert.AreNotEqual (dummyObj.Handle, outValue, "CFBundle-3DA-out");
-					Assert.AreSame (refObj, outObj, "CFBundle-3DA-out-ref-same");
-					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-3DA-ref-wrapper-type");
-					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-3DA-ref-wrapper-type");
+					Assert.AreNotEqual (dummyObj.Handle, refValue, "NSCoding-3DA-ref");
+					Assert.AreNotEqual (dummyObj.Handle, outValue, "NSCoding-3DA-out");
+					Assert.AreSame (refObj, outObj, "NSCoding-3DA-out-ref-same");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "NSCoding-3DA-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "NSCoding-3DA-ref-wrapper-type");
 
 					// direct managed
 					refValue = dummyObj.Handle; // set to non-null
 					outValue = dummyObj.Handle; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-					Assert.AreNotEqual (dummyObj.Handle, refValue, "CFBundle-3DM-ref");
-					Assert.AreNotEqual (dummyObj.Handle, outValue, "CFBundle-3DM-out");
-					Assert.AreSame (refObj, outObj, "CFBundle-3DM-out-ref-eq");
-					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-3DM-ref-wrapper-type");
-					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-3DM-ref-wrapper-type");
+					Assert.AreNotEqual (dummyObj.Handle, refValue, "NSCoding-3DM-ref");
+					Assert.AreNotEqual (dummyObj.Handle, outValue, "NSCoding-3DM-out");
+					Assert.AreSame (refObj, outObj, "NSCoding-3DM-out-ref-eq");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "NSCoding-3DM-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "NSCoding-3DM-ref-wrapper-type");
 
 
-					/// 4 set both parameteres to different pointers of a CFBundle
+					/// 4 set both parameteres to different pointers of a NSCoding
 					action = 4;
 
 					// native
 					refObj = null; // set to non-null
 					outObj = null; // set to non-null
 					obj.TestINSCoding (action << 0, ref refObj, out outObj);
-					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "CFBundle-4A-ref");
-					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "CFBundle-4A-out");
-					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "CBundle-4A-ref-distinct");
-					Assert.That (refObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-4A-ref-wrapper-type");
-					Assert.That (outObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "CBundle-4A-ref-wrapper-type");
+					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "NSCoding-4A-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "NSCoding-4A-out");
+					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "NSCoding-4A-ref-distinct");
+					Assert.That (refObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCoding-4A-ref-wrapper-type");
+					Assert.That (outObj.GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCoding-4A-ref-wrapper-type");
 
 					// managed
 					refObj = null; // set to non-null
 					outObj = null; // set to non-null
 					obj.TestINSCoding (action << 8, ref refObj, out outObj);
-					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "CFBundle-4M-ref");
-					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "CFBundle-4M-out");
-					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "CBundle-4M-ref-distinct");
-					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-4M-ref-wrapper-type");
-					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-4M-ref-wrapper-type");
+					Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "NSCoding-4M-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "NSCoding-4M-out");
+					Assert.AreNotEqual (refObj.Handle, outObj.Handle, "NSCoding-4M-ref-distinct");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "NSCoding-4M-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "NSCoding-4M-ref-wrapper-type");
 
 					// direct native
 					refValue = IntPtr.Zero; // set to non-null
 					outValue = IntPtr.Zero; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-					Assert.AreNotEqual (IntPtr.Zero, refValue, "CFBundle-4DA-ref");
-					Assert.AreNotEqual (IntPtr.Zero, outValue, "CFBundle-4DA-out");
-					Assert.AreNotEqual (refValue, outValue, "CBundle-4DA-ref-distinct");
-					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-4DA-ref-wrapper-type");
-					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-4DA-ref-wrapper-type");
+					Assert.AreNotEqual (IntPtr.Zero, refValue, "NSCoding-4DA-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outValue, "NSCoding-4DA-out");
+					Assert.AreNotEqual (refValue, outValue, "NSCoding-4DA-ref-distinct");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "NSCoding-4DA-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "NSCoding-4DA-ref-wrapper-type");
 
 					// direct managed
 					refValue = IntPtr.Zero; // set to non-null
 					outValue = IntPtr.Zero; // set to non-null
 					Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-					Assert.AreNotEqual (IntPtr.Zero, refValue, "CFBundle-4DM-ref");
-					Assert.AreNotEqual (IntPtr.Zero, outValue, "CFBundle-4DM-out");
-					Assert.AreNotEqual (refValue, outValue, "CBundle-4DM-ref-distinct");
-					Assert.That (refObj, Is.TypeOf<NSString> (), "CBundle-4DM-ref-wrapper-type");
-					Assert.That (outObj, Is.TypeOf<NSString> (), "CBundle-4DM-ref-wrapper-type");
+					Assert.AreNotEqual (IntPtr.Zero, refValue, "NSCoding-4DM-ref");
+					Assert.AreNotEqual (IntPtr.Zero, outValue, "NSCoding-4DM-out");
+					Assert.AreNotEqual (refValue, outValue, "NSCoding-4DM-ref-distinct");
+					Assert.That (refObj, Is.TypeOf<NSString> (), "NSCoding-4DM-ref-wrapper-type");
+					Assert.That (outObj, Is.TypeOf<NSString> (), "NSCoding-4DM-ref-wrapper-type");
 				}
 			}
 		}

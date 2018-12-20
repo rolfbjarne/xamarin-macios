@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 
 #include <objc/objc.h>
 #include <objc/runtime.h>
@@ -840,66 +841,262 @@ static void block_called ()
 	}
 }
 
--(void) testNSObject:      (int) action a:(id *)          refValue b:(id *)          outValue
+-(void) testNSObject: (int) action a:(id *) refValue b:(id *) outValue
 {
-	switch (action) {
+	NSObject *obj = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSObject
+		obj = [NSObject new];
+		*refValue = obj;
+		*outValue = obj;
+		return;
+	case 4: // set both parameteres to different objects
+		*refValue = [NSObject new];
+		*outValue = [NSObject new];
+		break;
 	default:
 		abort ();
 	}
 }
 
--(void) testValue:         (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue
+-(void) testValue: (int) action a:(NSValue **) refValue b:(NSValue **) outValue
 {
-	switch (action) {
+	NSValue *obj = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSValue
+		obj = [NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (3, 14)];
+		*refValue = obj;
+		*outValue = obj;
+		return;
+	case 4: // set both parameteres to different objects
+		*refValue = [NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (3, 14)];
+		*outValue = [NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (2, 71)];
+		break;
 	default:
 		abort ();
 	}
 }
 
--(void) testString:        (int) action a:(NSString **)   refValue b:(NSString **)   outValue
+-(void) testString: (int) action a:(NSString **) refValue b:(NSString **) outValue
 {
-	switch (action) {
+	NSString *obj = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSString
+		obj = @"A constant native string";
+		*refValue = obj;
+		*outValue = obj;
+		return;
+	case 4: // set both parameteres to different objects
+		*refValue = [NSString stringWithUTF8String: "Hello Xamarin"];
+		*outValue = [NSString stringWithUTF8String: "Hello Microsoft"];
+		break;
 	default:
 		abort ();
 	}
 }
 
--(void) testInt:           (int) action a:(int32_t *)     refValue b:(int32_t *)     outValue
+-(void) testInt: (int) action a:(int32_t *) refValue b:(int32_t *) outValue
 {
-	switch (action) {
+	NSString *obj = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == 0);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to 0
+		*refValue = 0;
+		*outValue = 0;
+		break;
+	case 3: // set both parameteres to the same value
+		obj = @"A constant native string";
+		*refValue = 314159;
+		*outValue = 314159;
+		return;
+	case 4: // set both parameteres to different objects
+		*refValue = 3141592;
+		*outValue = 2718282;
+		break;
 	default:
 		abort ();
 	}
 }
 
-
--(void) testINSCodingArray:     (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+-(void) testINSCodingArray: (int) action a:(NSArray **) refValue b:(NSArray **) outValue
 {
-	switch (action) {
+	NSArray *arr = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSArray of NSString (which implements NSCoding)
+		arr = @[@"Hello", @"World"];
+		*refValue = arr;
+		*outValue = arr;
+		return;
+	case 4: // set both parameteres to different NSArrays
+		*refValue = @[@3, @14];
+		*outValue = @[@"Hello", @"Xamarin"];
+		break;
 	default:
 		abort ();
 	}
 }
 
--(void) testNSObjectArray:      (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+-(void) testNSObjectArray: (int) action a:(NSArray **) refValue b:(NSArray **) outValue
 {
-	switch (action) {
+	NSArray *arr = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSArray of NSString
+		arr = @[@"Hello", @"World"];
+		*refValue = arr;
+		*outValue = arr;
+		return;
+	case 4: // set both parameteres to different NSArrays
+		*refValue = @[@3, @14];
+		*outValue = @[@"Hello", @"Xamarin"];
+		break;
 	default:
 		abort ();
 	}
 }
 
--(void) testNSValueArray:       (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+-(void) testNSValueArray: (int) action a:(NSArray **) refValue b:(NSArray **) outValue
 {
-	switch (action) {
+	NSArray *arr = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSArray of NSValue
+		arr = @[[NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (3, 14)], [NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (2, 71)]];
+		*refValue = arr;
+		*outValue = arr;
+		return;
+	case 4: // set both parameteres to different NSArrays
+		*refValue = @[[NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (3, 14)], [NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (15, 92)]];
+		*outValue = @[[NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (2, 71)], [NSValue valueWithMKCoordinate: CLLocationCoordinate2DMake (82, 82)]];
+		break;
 	default:
 		abort ();
 	}
 }
 
--(void) testStringArray:        (int) action a:(NSArray **) refValue b:(NSArray **) outValue
+-(void) testStringArray: (int) action a:(NSArray **) refValue b:(NSArray **) outValue
 {
-	switch (action) {
+	NSArray *arr = NULL;
+
+	// We should never get null pointers.
+	assert (refValue != NULL);
+	assert (outValue != NULL);
+
+	// out parameters from managed code should always be NULL upon entry
+	assert (*outValue == NULL);
+
+	switch (action & 0xFF) {
+	case 1: // Set both to null
+		*refValue = NULL;
+		*outValue = NULL;
+		break;
+	case 2: // verify that refValue points to something
+		assert (*refValue != NULL);
+		break;
+	case 3: // set both parameteres to the same pointer of an NSArray of NSString
+		arr = @[@"Hello", @"World"];
+		*refValue = arr;
+		*outValue = arr;
+		return;
+	case 4: // set both parameteres to different NSArrays
+		*refValue = @[@"Hello", @"Microsoft"];
+		*outValue = @[@"Hello", @"Xamarin"];
+		break;
 	default:
 		abort ();
 	}

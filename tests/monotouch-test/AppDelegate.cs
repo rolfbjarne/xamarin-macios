@@ -59,71 +59,78 @@ namespace MonoTouchFixtures {
 			window.MakeKeyAndVisible ();
 
 			//NSTimer.CreateScheduledTimer (TimeSpan.FromSeconds (1), (var) => {
-				var rt = new ObjCRuntime.RegistrarTest ();
-				try {
-					Console.WriteLine ("___RefOutTest_StringArray");
-					rt.___RefOutTest_StringArray ();
-					Console.WriteLine ("SUCCESS!");
-				} catch (Exception e) {
-					Console.WriteLine (e);
-				}
-				try {
-					Console.WriteLine ("___RefOutTest_NSValueArray");
-					rt.___RefOutTest_NSValueArray ();
-					Console.WriteLine ("SUCCESS!");
-				} catch (Exception e) {
-					Console.WriteLine (e);
-				}
-				try {
-					Console.WriteLine ("___RefOutTest_NSObjectArray");
-					rt.___RefOutTest_NSObjectArray ();
-					Console.WriteLine ("SUCCESS!");
-				} catch (Exception e) {
-					Console.WriteLine (e);
-				}
-				try {
-					Console.WriteLine ("___RefOutTest_INSCodingArray");
-					rt.___RefOutTest_INSCodingArray ();
-					Console.WriteLine ("SUCCESS!");
-				} catch (Exception e) {
-					Console.WriteLine (e);
-				}
-				//try {
-				//	Console.WriteLine ("___RefOutTest_String");
-				//	rt.___RefOutTest_String ();
-				//	Console.WriteLine ("SUCCESS!");
-				//} catch (Exception e) {
-				//	Console.WriteLine (e);
-				//}
-				//try {
-				//	Console.WriteLine ("___RefOutTest_NSValue");
-				//	rt.___RefOutTest_NSValue ();
-				//	Console.WriteLine ("SUCCESS!");
-				//} catch (Exception e) {
-				//	Console.WriteLine (e);
-				//}
-				//try {
-				//	Console.WriteLine ("___RefOutTest_NSObject");
-				//	rt.___RefOutTest_NSObject ();
-				//	Console.WriteLine ("SUCCESS!");
-				//} catch (Exception e) {
-				//	Console.WriteLine (e);
-				//}
-				//try {
-				//	Console.WriteLine ("___RefOutTest_INSCoding");
-				//	rt.___RefOutTest_INSCoding ();
-				//	Console.WriteLine ("SUCCESS!");
-				//} catch (Exception e) {
-				//	Console.WriteLine (e);
-				//}
-				//try {
-				//	Console.WriteLine ("___RefOutTest_CFBundle");
-				//	rt.___RefOutTest_CFBundle ();
-				//	Console.WriteLine ("SUCCESS!");
-				//} catch (Exception e) {
-				//	Console.WriteLine (e);
-				//}
-				Environment.Exit (0);
+			//	var rt = new ObjCRuntime.RegistrarTest ();
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_StringArray");
+			//		rt.___RefOutTest_StringArray ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_NSValueArray");
+			//		rt.___RefOutTest_NSValueArray ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_NSObjectArray");
+			//		rt.___RefOutTest_NSObjectArray ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_INSCodingArray");
+			//		rt.___RefOutTest_INSCodingArray ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_String");
+			//		rt.___RefOutTest_String ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_NSValue");
+			//		rt.___RefOutTest_NSValue ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_NSObject");
+			//		rt.___RefOutTest_NSObject ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_INSCoding");
+			//		rt.___RefOutTest_INSCoding ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//	}
+			//	try {
+			//		Console.WriteLine ("___RefOutTest_CFBundle");
+			//		rt.___RefOutTest_CFBundle ();
+			//		Console.WriteLine ("SUCCESS!");
+			//	} catch (Exception e) {
+			//		Console.WriteLine (e);
+			//}
+			//try {
+			//	Console.WriteLine ("___RefOutTest_Int");
+			//	rt.___RefOutTest_Int ();
+			//	Console.WriteLine ("SUCCESS!");
+			//} catch (Exception e) {
+			//	Console.WriteLine (e);
+			//}
+			//Environment.Exit (0);
 			//});
 			return true;
 		}

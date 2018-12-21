@@ -948,9 +948,6 @@ static void block_called ()
 	assert (refValue != NULL);
 	assert (outValue != NULL);
 
-	// out parameters from managed code should always be NULL upon entry
-	assert (*outValue == 0);
-
 	switch (action & 0xFF) {
 	case 1: // Set both to 0
 		*refValue = 0;
@@ -990,13 +987,17 @@ static void block_called ()
 		assert (*refValue != NULL);
 		break;
 	case 3: // set both parameteres to the same pointer of an NSArray of NSString (which implements NSCoding)
-		arr = @[@"Hello", @"World"];
+		arr = @[
+				// This looks funny, but it's to ensure we don't get strings that are statically allocated (in which case the same pointer would be returned in multiple calls, which may throw off some of our tests)
+				[[NSString stringWithUTF8String: "Hello"] stringByAppendingString: @"World"],
+				[[NSString stringWithUTF8String: "Hello"] stringByAppendingString: @"Universe"]
+				];
 		*refValue = arr;
 		*outValue = arr;
 		return;
 	case 4: // set both parameteres to different NSArrays
 		*refValue = @[@3, @14];
-		*outValue = @[@"Hello", @"Xamarin"];
+		*outValue = @[[NSString stringWithUTF8String: "Hello"], [NSString stringWithUTF8String: "Xamarin"]];
 		break;
 	default:
 		abort ();
@@ -1096,6 +1097,9 @@ static void block_called ()
 	case 4: // set both parameteres to different NSArrays
 		*refValue = @[@"Hello", @"Microsoft"];
 		*outValue = @[@"Hello", @"Xamarin"];
+		break;
+	case 5: // change a value in the ref input
+		[((NSMutableArray *) *refValue) replaceObjectAtIndex: 1 withObject: @"Universe"];
 		break;
 	default:
 		abort ();

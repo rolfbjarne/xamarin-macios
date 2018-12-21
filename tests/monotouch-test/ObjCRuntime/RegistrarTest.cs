@@ -3368,7 +3368,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		public unsafe void ___RefOutTest_Int ()
 		{
 			using (var obj = new RefOutParametersSubclass ()) {
-				var sel = Selector.GetHandle ("testString:a:b:");
+				var sel = Selector.GetHandle ("testInt:a:b:");
 				var dummyObj = 314;
 				int refObj = 0;
 				int outObj = 0;
@@ -3381,15 +3381,15 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refObj = dummyObj; // set to non-null
 				outObj = dummyObj; // set to non-null
 				obj.TestInt (action << 0, ref refObj, out outObj);
-				Assert.IsNull (refObj, "Int-1A-ref");
-				Assert.IsNull (outObj, "Int-1A-out");
+				Assert.AreEqual (0, refObj, "Int-1A-ref");
+				Assert.AreEqual (0, outObj, "Int-1A-out");
 
 				// managed
 				refObj = dummyObj; // set to non-null
 				outObj = dummyObj; // set to non-null
 				obj.TestInt (action << 8, ref refObj, out outObj);
-				Assert.IsNull (refObj, "Int-1M-ref");
-				Assert.IsNull (outObj, "Int-1M-out");
+				Assert.AreEqual (0, refObj, "Int-1M-ref");
+				Assert.AreEqual (0, outObj, "Int-1M-out");
 
 				// direct native
 				refObj = dummyObj; // set to non-null
@@ -3405,37 +3405,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreEqual (0, refObj, "Int-1DM-ref");
 				Assert.AreEqual (0, outObj, "Int-1DM-out");
 
-				/// 2: verify that refValue points to something
-				action = 2;
-
-				// native
-				refObj = dummyObj; // set to non-null
-				outObj = dummyObj; // set to non-null
-				obj.TestInt (action << 0, ref refObj, out outObj);
-				Assert.AreEqual (dummyObj, refObj, "Int-2A-ref");
-				Assert.IsNull (outObj, "Int-2A-out");
-
-				// managed
-				refObj = dummyObj; // set to non-null
-				outObj = dummyObj; // set to non-null
-				obj.TestInt (action << 8, ref refObj, out outObj);
-				Assert.AreEqual (dummyObj, refObj, "Int-2M-ref");
-				Assert.IsNull (outObj, "Int-2M-out");
-
-				// direct native
-				refObj = dummyObj; // set to non-null
-				outObj = dummyObj; // set to non-null
-				Messaging.void_objc_msgSend_int_int_int (obj.Handle, sel, action << 0, ref refObj, out outObj);
-				Assert.AreEqual (dummyObj, refObj, "Int-2DA-ref");
-				Assert.AreEqual (0, outObj, "Int-2DA-out");
-
-				// direct managed
-				refObj = dummyObj; // set to non-null
-				outObj = dummyObj; // set to non-null
-				Messaging.void_objc_msgSend_int_int_int (obj.Handle, sel, action << 8, ref refObj, out outObj);
-				Assert.AreEqual (dummyObj, refObj, "Int-2DM-ref");
-				Assert.AreEqual (0, outObj, "Int-2DM-out");
-
+				/// 2: N/A for testInt
 
 				/// 3 set both parameteres to the same pointer of a Int
 				action = 3;
@@ -3480,37 +3450,37 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refObj = 0; // set to 0
 				outObj = 0; // set to 0
 				obj.TestInt (action << 0, ref refObj, out outObj);
-				Assert.AreNotEqual (null, refObj, "Int-4A-ref");
-				Assert.AreNotEqual (null, outObj, "Int-4A-out");
+				Assert.AreNotEqual (0, refObj, "Int-4A-ref");
+				Assert.AreNotEqual (0, outObj, "Int-4A-out");
 				Assert.AreNotEqual (refObj, outObj, "Int-4A-ref-distinct");
 
 				// managed
 				refObj = 0; // set to 0
 				outObj = 0; // set to 0
 				obj.TestInt (action << 8, ref refObj, out outObj);
-				Assert.AreNotEqual (null, refObj, "Int-4M-ref");
-				Assert.AreNotEqual (null, outObj, "Int-4M-out");
+				Assert.AreNotEqual (0, refObj, "Int-4M-ref");
+				Assert.AreNotEqual (0, outObj, "Int-4M-out");
 				Assert.AreNotEqual (refObj, outObj, "Int-4M-ref-distinct");
 
 				// direct native
 				refObj = 0; // set to 0
 				outObj = 0; // set to 0
 				Messaging.void_objc_msgSend_int_int_int (obj.Handle, sel, action << 0, ref refObj, out outObj);
-				Assert.AreNotEqual (IntPtr.Zero, refObj, "Int-4DA-ref");
-				Assert.AreNotEqual (IntPtr.Zero, outObj, "Int-4DA-out");
+				Assert.AreNotEqual (0, refObj, "Int-4DA-ref");
+				Assert.AreNotEqual (0, outObj, "Int-4DA-out");
 				Assert.AreNotEqual (refObj, outObj, "Int-4DA-ref-distinct");
 				Assert.AreEqual (3141592, refObj, "Int-4DA-ref-value");
-				Assert.AreEqual (2178282, outObj, "Int-4DA-out-value");
+				Assert.AreEqual (2718282, outObj, "Int-4DA-out-value");
 
 				// direct managed
 				refObj = 0; // set to 0
 				outObj = 0; // set to 0
 				Messaging.void_objc_msgSend_int_int_int (obj.Handle, sel, action << 8, ref refObj, out outObj);
-				Assert.AreNotEqual (IntPtr.Zero, refObj, "Int-4DM-ref");
-				Assert.AreNotEqual (IntPtr.Zero, outObj, "Int-4DM-out");
+				Assert.AreNotEqual (0, refObj, "Int-4DM-ref");
+				Assert.AreNotEqual (0, outObj, "Int-4DM-out");
 				Assert.AreNotEqual (refObj, outObj, "Int-4DM-ref-distinct");
 				Assert.AreEqual (3141592, refObj, "Int-4DM-ref-value");
-				Assert.AreEqual (2178282, outObj, "Int-4DM-out-value");
+				Assert.AreEqual (2718282, outObj, "Int-4DM-out-value");
 			}
 		}
 
@@ -3595,7 +3565,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				outObj = dummyObj; // set to non-null
 				test (action << 0, ref refObj, out outObj);
 				AssertAreEqual (dummyObj, refObj, "NSCodingArray-2A-ref");
-				Assert.AreNotSame (dummyObj, refObj, "NSCodingArray-2A-ref-same");
+				Assert.AreSame (dummyObj, refObj, "NSCodingArray-2A-ref-same");
 				Assert.IsNull (outObj, "NSCodingArray-2A-out");
 
 				// managed
@@ -3603,7 +3573,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				outObj = dummyObj; // set to non-null
 				test (action << 8, ref refObj, out outObj);
 				AssertAreEqual (dummyObj, refObj, "NSCodingArray-2M-ref");
-				Assert.AreNotSame (dummyObj, refObj, "NSCodingArray-2M-ref-same");
+				Assert.AreSame (dummyObj, refObj, "NSCodingArray-2M-ref-same");
 				Assert.IsNull (outObj, "NSCodingArray-2M-out");
 
 				// direct native
@@ -3632,8 +3602,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreNotSame (dummyObj, outObj, "NSCodingArray-3A-ref-out");
 				AssertAreEqual (refObj, outObj, "NSCodingArray-3A-out-ref-eq");
 				Assert.AreNotSame (refObj, outObj, "NSCodingArray-3A-ref-out-not-safe");
-				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSCodingArrayWrapper"), "NSCodingArray-3A-ref-wrapper-type");
-				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSCodingArrayWrapper"), "NSCodingArray-3A-ref-wrapper-type");
+				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCodingArray-3A-ref-wrapper-type");
+				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCodingArray-3A-ref-wrapper-type");
 
 				// managed
 				refObj = dummyObj; // set to non-null
@@ -3674,8 +3644,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.IsNotNull (refObj, "NSCodingArray-4A-ref");
 				Assert.IsNotNull (outObj, "NSCodingArray-4A-out");
 				AssertAreNotEqual (refObj, outObj, "NSCodingArray-4A-ref-distinct");
-				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSCodingArrayWrapper"), "NSCodingArray-4A-ref-wrapper-type");
-				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSCodingArrayWrapper"), "NSCodingArray-4A-ref-wrapper-type");
+				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
+				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSCodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
 
 				// managed
 				refObj = null; // set to null
@@ -3796,8 +3766,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreNotSame (dummyObj, outObj, "NSObjectArray-3A-ref-out");
 				AssertAreEqual (refObj, outObj, "NSObjectArray-3A-out-ref-eq");
 				Assert.AreNotSame (refObj, outObj, "NSObjectArray-3A-ref-out-not-safe");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (),"NSObjectArray-3A-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (),"NSObjectArray-3A-ref-wrapper-type");
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World" }), "NSObjectArray-3A-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World" }), "NSObjectArray-3A-obj-equiv");
 
 				// managed
 				refObj = dummyObj; // set to non-null
@@ -3806,26 +3776,28 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreNotSame (dummyObj, refObj, "NSObjectArray-3M-ref-same");
 				Assert.AreNotSame (dummyObj, outObj, "NSObjectArray-3M-ref-out");
 				AssertAreEqual (refObj, outObj, "NSObjectArray-3M-ref-out-not-safe");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (), "NSObjectArray-3M-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (), "NSObjectArray-3M-ref-wrapper-type");
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World", (NSString) "from", (NSString) "managed" }), "NSObjectArray-3M-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World", (NSString) "from", (NSString) "managed" }), "NSObjectArray-3M-obj-equiv");
 
 				// direct native
 				refValue = dummyArray.Handle; // set to non-null
 				outValue = dummyArray.Handle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-				Assert.AreNotSame (refValue, outValue, "NSObjectArray-3DA-out-ref-not-same");
-				AssertAreEqual (refObj, outObj, "NSObjectArray-3DA-out-ref-equal");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (), "NSObjectArray-3DA-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (), "NSObjectArray-3DA-ref-wrapper-type");
+				Assert.AreNotEqual (refValue, outValue, "NSObjectArray-3DA-out-ref-not-same");
+				refObj = NSArray.ArrayFromHandle<NSObject> (refValue);
+				outObj = NSArray.ArrayFromHandle<NSObject> (outValue);
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World" }), "NSObjectArray-3DA-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World" }), "NSObjectArray-3DA-obj-equiv");
 
 				// direct managed
 				refValue = dummyArray.Handle; // set to non-null
 				outValue = dummyArray.Handle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-				Assert.AreNotSame (refValue, outValue, "NSObjectArray-3DM-out-ref-not-same");
-				AssertAreEqual (refObj, outObj, "NSObjectArray-3DM-out-ref-equal");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (), "NSObjectArray-3DM-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (), "NSObjectArray-3DM-ref-wrapper-type");
+				Assert.AreNotEqual (refValue, outValue, "NSObjectArray-3DM-out-ref-not-same");
+				refObj = NSArray.ArrayFromHandle<NSObject> (refValue);
+				outObj = NSArray.ArrayFromHandle<NSObject> (outValue);
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World", (NSString) "from", (NSString) "managed" }), "NSObjectArray-3DM-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "World", (NSString) "from", (NSString) "managed" }), "NSObjectArray-3DM-obj-equiv");
 
 
 				/// 4 set both parameteres to different pointers of a NSObjectArray
@@ -3835,35 +3807,34 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refObj = null; // set to null
 				outObj = null; // set to null
 				test (action << 0, ref refObj, out outObj);
-				Assert.IsNotNull (refObj, "NSObjectArray-4A-ref");
-				Assert.IsNotNull (outObj, "NSObjectArray-4A-out");
-				AssertAreNotEqual (refObj, outObj, "NSObjectArray-4A-ref-distinct");
-				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSObjectArrayWrapper"), "NSObjectArray-4A-ref-wrapper-type");
-				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSObjectArrayWrapper"), "NSObjectArray-4A-ref-wrapper-type");
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { NSNumber.FromInt32 (3), NSNumber.FromInt32 (14) }), "NSObjectArray-4A-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "Xamarin" }), "NSObjectArray-4A-obj-equiv");
 
 				// managed
 				refObj = null; // set to null
 				outObj = null; // set to null
 				test (action << 8, ref refObj, out outObj);
 				AssertAreNotEqual (refObj, outObj, "NSObjectArray-4M-ref-distinct");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (), "NSObjectArray-4M-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (), "NSObjectArray-4M-ref-wrapper-type");
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { NSNumber.FromInt32 (2), NSNumber.FromInt32 (71) }), "NSObjectArray-4M-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "Microsoft", (NSString) "from", (NSString) "managed" }), "NSObjectArray-4M-obj-equiv");
 
 				// direct native
 				refValue = IntPtr.Zero; // set to null
 				outValue = IntPtr.Zero; // set to null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-				AssertAreNotEqual (NSArray.ArrayFromHandle<NSObject> (refValue), NSArray.ArrayFromHandle<NSObject> (outValue), "NSObjectArray-4DA-ref-distinct");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (), "NSObjectArray-4DA-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (), "NSObjectArray-4DA-ref-wrapper-type");
+				refObj = NSArray.ArrayFromHandle<NSObject> (refValue);
+				outObj = NSArray.ArrayFromHandle<NSObject> (outValue);
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { NSNumber.FromInt32 (3), NSNumber.FromInt32 (14) }), "NSObjectArray-4DA-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "Xamarin" }), "NSObjectArray-4DA-obj-equiv");
 
 				// direct managed
 				refValue = IntPtr.Zero; // set to null
 				outValue = IntPtr.Zero; // set to null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-				AssertAreNotEqual (NSArray.ArrayFromHandle<NSObject> (refValue), NSArray.ArrayFromHandle<NSObject> (outValue), "NSObjectArray-4DM-ref-distinct");
-				Assert.That (refObj [0], Is.TypeOf<NSString> (), "NSObjectArray-4DM-ref-wrapper-type");
-				Assert.That (outObj [0], Is.TypeOf<NSString> (), "NSObjectArray-4DM-ref-wrapper-type");
+				refObj = NSArray.ArrayFromHandle<NSObject> (refValue);
+				outObj = NSArray.ArrayFromHandle<NSObject> (outValue);
+				Assert.That (refObj, Is.EquivalentTo (new NSObject [] { NSNumber.FromInt32 (2), NSNumber.FromInt32 (71) }), "NSObjectArray-4DM-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new NSObject [] { (NSString) "Hello", (NSString) "Microsoft", (NSString) "from", (NSString) "managed" }), "NSObjectArray-4DM-obj-equiv");
 			}
 		}
 
@@ -4036,7 +4007,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			IntPtr outValue = IntPtr.Zero;
 
 			using (var obj = new RefOutParametersSubclass ()) {
-				var sel = Selector.GetHandle ("testNSObjectArray:a:b:");
+				var sel = Selector.GetHandle ("testStringArray:a:b:");
 				var dummyObj = new string [] { "Hello" };
 				var dummyArray = NSArray.FromStrings (dummyObj);
 				string [] refObj = null;
@@ -4118,32 +4089,33 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refObj = dummyObj; // set to non-null
 				outObj = dummyObj; // set to non-null
 				test (action << 0, ref refObj, out outObj);
-				Assert.AreNotSame (dummyObj, refObj, "NSStringArray-3A-ref-same");
-				Assert.AreNotSame (dummyObj, outObj, "NSStringArray-3A-ref-out");
-				Assert.That (refObj, Is.EquivalentTo (outObj), "NSStringArray-3A-out-ref-eq");
-				Assert.AreNotSame (refObj, outObj, "NSStringArray-3A-ref-out-not-safe");
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "World" }), "NSStringArray-3A-out-contents");
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "World" }), "NSStringArray-3A-ref-contents");
 
 				// managed
 				refObj = dummyObj; // set to non-null
 				outObj = dummyObj; // set to non-null
 				test (action << 8, ref refObj, out outObj);
-				Assert.AreNotSame (dummyObj, refObj, "NSStringArray-3M-ref-same");
-				Assert.AreNotSame (dummyObj, outObj, "NSStringArray-3M-ref-out");
-				Assert.That (refObj, Is.EquivalentTo (outObj), "NSStringArray-3M-ref-out-not-safe");
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "Managed", "World" }), "NSStringArray-3M-out-contents");
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "Managed", "World" }), "NSStringArray-3M-ref-contents");
 
 				// direct native
 				refValue = dummyArray.Handle; // set to non-null
 				outValue = dummyArray.Handle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-				Assert.AreNotSame (refValue, outValue, "NSStringArray-3DA-out-ref-not-same");
-				Assert.That (refObj, Is.EquivalentTo (outObj), "NSStringArray-3DA-out-ref-equal");
+				refObj = NSArray.StringArrayFromHandle (refValue);
+				outObj = NSArray.StringArrayFromHandle (outValue);
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "World" }), "NSStringArray-3DA-out-contents");
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "World" }), "NSStringArray-3DA-ref-contents");
 
 				// direct managed
 				refValue = dummyArray.Handle; // set to non-null
 				outValue = dummyArray.Handle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-				Assert.AreNotSame (refValue, outValue, "NSStringArray-3DM-out-ref-not-same");
-				Assert.That (refObj, Is.EquivalentTo (outObj), "NSStringArray-3DM-out-ref-equal");
+				refObj = NSArray.StringArrayFromHandle (refValue);
+				outObj = NSArray.StringArrayFromHandle (outValue);
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "Managed", "World" }), "NSStringArray-3DM-out-contents");
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "Managed", "World" }), "NSStringArray-3DM-ref-contents");
 
 
 				/// 4 set both parameteres to different pointers of a NSStringArray
@@ -4155,25 +4127,60 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				test (action << 0, ref refObj, out outObj);
 				Assert.IsNotNull (refObj, "NSStringArray-4A-ref");
 				Assert.IsNotNull (outObj, "NSStringArray-4A-out");
-				Assert.That (refObj, Is.Not.EquivalentTo (outObj), "NSStringArray-4A-ref-distinct");
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "Microsoft" }), "NSStringArray-4A-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "Xamarin" }), "NSStringArray-4A-obj-equiv");
 
 				// managed
 				refObj = null; // set to null
 				outObj = null; // set to null
 				test (action << 8, ref refObj, out outObj);
-				Assert.That (refObj, Is.Not.EquivalentTo (outObj), "NSStringArray-4M-ref-distinct");
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "Microsoft", "from", "managed" }), "NSStringArray-4M-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "Xamarin", "from", "managed" }), "NSStringArray-4M-obj-equiv");
 
 				// direct native
 				refValue = IntPtr.Zero; // set to null
 				outValue = IntPtr.Zero; // set to null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-				Assert.That (NSArray.StringArrayFromHandle (refValue), Is.Not.EquivalentTo (NSArray.StringArrayFromHandle (outValue)), "NSStringArray-4DA-ref-distinct");
+				refObj = NSArray.StringArrayFromHandle (refValue);
+				outObj = NSArray.StringArrayFromHandle (outValue);
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "Microsoft" }), "NSStringArray-4DA-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "Xamarin" }), "NSStringArray-4DA-obj-equiv");
 
 				// direct managed
 				refValue = IntPtr.Zero; // set to null
 				outValue = IntPtr.Zero; // set to null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-				Assert.That (NSArray.StringArrayFromHandle (refValue), Is.Not.EquivalentTo (NSArray.StringArrayFromHandle (outValue)), "NSStringArray-4DM-ref-distinct");
+				refObj = NSArray.StringArrayFromHandle (refValue);
+				outObj = NSArray.StringArrayFromHandle (outValue);
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "Microsoft", "from", "managed" }), "NSStringArray-4DM-ref-equiv");
+				Assert.That (outObj, Is.EquivalentTo (new string [] { "Hello", "Xamarin", "from", "managed" }), "NSStringArray-4DM-obj-equiv");
+
+				/// 5 change a value in the ref input
+				/// Here we verify that changing an element in the input array is not copied back to the ref argument.
+				/// If an element needs to be changed, a new array must be created, and elements copied over, including the modified one.
+				action = 5;
+
+				// Only direct calls can be done because we need to use an NSMutableArray, and the binding code creates NSArrays.
+				// direct native
+				Func<string [], NSMutableArray> fromStrings = (arr) => {
+				 	var rv = new NSMutableArray ((nuint) arr.Length);
+					for (int i = 0; i < arr.Length; i++)
+						rv.Add ((NSString) arr [i]);
+					return rv;
+				};
+
+				//refObj = new string [] { "Hello", "World" };
+				//refValue = fromStrings (refObj).Handle;
+				//Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out var _);
+				//refObj = NSArray.StringArrayFromHandle (refValue);
+				//Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "World" }), "NSStringArray-5DA-ref-equiv");
+
+				// direct managed
+				refObj = new string [] { "Hello", "World" };
+				refValue = fromStrings (refObj).Handle;
+				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out var _);
+				refObj = NSArray.StringArrayFromHandle (refValue);
+				Assert.That (refObj, Is.EquivalentTo (new string [] { "Hello", "World" }), "NSStringArray-5DM-ref-equiv");
 			}
 		}
 
@@ -4393,13 +4400,13 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					outValue = null; // compiler-enforced
 					break;
 				case 3: // set both parameteres to the same pointer of an NSObject
-					var obj = new NSObject [] { (NSString) "Hello", (NSString) "World" };
+					var obj = new NSObject [] { (NSString) "Hello", (NSString) "World", (NSString) "from", (NSString) "managed" };
 					refValue = obj;
 					outValue = obj;
 					break;
 				case 4: // set both parameteres to different objects
-					refValue = new NSObject [] { (NSString) "Hello Xamarin from managed" };
-					outValue = new NSObject [] { (NSString) "Hello Microsoft from managed" };
+					refValue = new NSObject [] { NSNumber.FromInt32 (2), NSNumber.FromInt32 (71) };
+					outValue = new NSObject [] { (NSString) "Hello", (NSString) "Microsoft", (NSString) "from", (NSString) "managed" };
 					break;
 				default:
 					throw new NotImplementedException ();
@@ -4451,13 +4458,17 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					outValue = null; // compiler-enforced
 					break;
 				case 3: // set both parameteres to the same pointer of an NSObject
-					var obj = new string [] { "Hello", "World" };
+					var obj = new string [] { "Hello", "Managed", "World" };
 					refValue = obj;
 					outValue = obj;
 					break;
 				case 4: // set both parameteres to different objects
-					refValue = new string [] { "Hello", "Microsoft" };
-					outValue = new string [] { "Hello", "Xamarin" };
+					refValue = new string [] { "Hello", "Microsoft", "from", "managed" };
+					outValue = new string [] { "Hello", "Xamarin", "from", "managed" };
+					break;
+				case 5: // change a value in the ref input
+					refValue [1] = "Universe";
+					outValue = null;
 					break;
 				default:
 					throw new NotImplementedException ();

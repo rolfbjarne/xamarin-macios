@@ -12,7 +12,7 @@
 #include "delegates.h"
 #include "product.h"
 
-#define TRACE
+// #define TRACE
 #ifdef TRACE
 #define LOGZ(...) fprintf (stderr, __VA_ARGS__);
 #else
@@ -161,7 +161,7 @@ xamarin_nsarray_to_managed_array (SEL sel, MonoMethod *method, int parameter, NS
 			if (*exception_gchandle != 0)
 				return NULL;
 		} else if (is_inativeobject) {
-			mobj = xamarin_get_inative_object_dynamic (obj, false, e, exception_gchandle);
+			mobj = xamarin_get_inative_object_dynamic (obj, false, mono_type_get_object (domain, e), exception_gchandle);
 			if (*exception_gchandle != 0)
 				return NULL;
 		} else {
@@ -356,7 +356,8 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							writeback [i + mofs] = TRUE;
 							if (is_parameter_out) {
 								LOGZ (" argument %i is an out parameter. Passing in a pointer to a NULL value.\n", i + 1);
-								*(NSObject **) arg = NULL;
+								if (arg != NULL)
+									*(NSObject **) arg = NULL;
 							} else if (xamarin_is_class_nsobject (p_klass)) {
 								arg_frame [ofs] = xamarin_get_nsobject_with_type_for_ptr (*(NSObject **) arg, false, p, sel, method, &exception_gchandle);
 								if (exception_gchandle != 0)
@@ -675,6 +676,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 				NSObject *obj = NULL;
 
 				if (value == pvalue) {
+					// This means that we won't copy back arrays if an element in the array changed (which can happen in managed code: the array pointer and size are immutable, but array elements can change).
+					// If the developer wants to change an array element, a new array must be created and assigned to the ref parameter.
+					// This is by design: otherwise we'll have to copy arrays even though they didn't change (because we can't know if they changed without comparing every element).
 					LOGZ (" not writing back managed object to argument at index %i (%p => %p) because it didn't change\n", i, arg, value);
 					continue;
 				} else if (value == NULL) {

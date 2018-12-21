@@ -4124,7 +4124,7 @@ public partial class Generator : IMemberGatherer {
 						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromNSObjects ({0});\n", pi.Name.GetSafeParamName ()));
 						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
 					} else if (isArrayOfString) {
-						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromStrings ({0});\n", pi.Name.GetSafeParamName ()));
+						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = {0} == null ? null : NSArray.FromStrings ({0});\n", pi.Name.GetSafeParamName ()));
 						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
 					} else if (isNSObject || isINativeObjectSubclass) {
 						by_ref_init.AppendFormat ("{0} == null ? IntPtr.Zero : {0}.Handle;\n", pi.Name.GetSafeParamName ());

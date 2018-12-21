@@ -219,7 +219,7 @@ typedef void (^outerBlock) (innerBlock callback);
 	-(void) testCFBundle:      (int) action a:(CFBundleRef *) refValue b:(CFBundleRef *) outValue;
 	-(void) testINSCoding:     (int) action a:(id<NSCoding>*) refValue b:(id<NSCoding>*) outValue;
 	-(void) testNSObject:      (int) action a:(id *)          refValue b:(id *)          outValue;
-	-(void) testValue:         (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue;
+	-(void) testNSValue:       (int) action a:(NSValue **)    refValue b:(NSValue **)    outValue;
 	-(void) testString:        (int) action a:(NSString **)   refValue b:(NSString **)   outValue;
 	-(void) testInt:           (int) action a:(int32_t *)     refValue b:(int32_t *)     outValue;
 

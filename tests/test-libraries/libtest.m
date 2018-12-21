@@ -874,7 +874,7 @@ static void block_called ()
 	}
 }
 
--(void) testValue: (int) action a:(NSValue **) refValue b:(NSValue **) outValue
+-(void) testNSValue: (int) action a:(NSValue **) refValue b:(NSValue **) outValue
 {
 	NSValue *obj = NULL;
 

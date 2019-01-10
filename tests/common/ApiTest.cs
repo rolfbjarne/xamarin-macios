@@ -16,6 +16,7 @@ namespace Xamarin.ApiTest
 	public class ApiTest
 	{
 		[Test]
+		[Parallelizable (ParallelScope.All)]
 #if MONOTOUCH
 		[Parallelizable (ParallelScope.All)]
 		[TestCase (Profile.iOS)]

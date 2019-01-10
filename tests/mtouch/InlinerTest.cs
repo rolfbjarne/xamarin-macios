@@ -126,6 +126,7 @@ namespace Xamarin.Linker {
 	}
 
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class MscorlibInlinerTest : InlinerTest {
 
 		protected override string Assembly {

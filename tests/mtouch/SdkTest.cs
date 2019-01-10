@@ -29,6 +29,7 @@ namespace Xamarin.Linker {
 	}
 
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public partial class SdkTest {
 		
 		static string UnifiedPath { get { return Path.Combine (Configuration.MonoTouchRootDirectory, "lib/mono/Xamarin.iOS/"); } }

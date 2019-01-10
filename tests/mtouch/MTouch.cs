@@ -34,6 +34,7 @@ namespace Xamarin
 	public enum MSym { Default, WithMSym, WoutMSym }
 
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class MTouch
 	{
 		[Test]

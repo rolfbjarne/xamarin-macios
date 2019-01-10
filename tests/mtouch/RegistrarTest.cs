@@ -15,6 +15,7 @@ using MTouchRegistrar = Xamarin.Tests.RegistrarOption;
 namespace Xamarin
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class Registrar
 	{
 		enum R {

@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace Xamarin.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class Misc
 	{
 		[Test]

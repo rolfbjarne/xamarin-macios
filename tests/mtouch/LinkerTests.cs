@@ -8,6 +8,7 @@ using MTouchLinker = Xamarin.Tests.LinkerOption;
 namespace Xamarin.Linker
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public partial class Preservation
 	{
 		[Test]

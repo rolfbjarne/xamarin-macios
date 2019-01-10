@@ -5,6 +5,7 @@ using Xamarin.Utils;
 namespace Xamarin.Tests.Utils {
 
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class StringUtilsTest {
 
 		[Test]

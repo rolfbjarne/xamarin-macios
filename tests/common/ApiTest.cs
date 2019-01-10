@@ -17,6 +17,7 @@ namespace Xamarin.ApiTest
 	{
 		[Test]
 #if MONOTOUCH
+		[Parallelizable (ParallelScope.All)]
 		[TestCase (Profile.iOS)]
 		[TestCase (Profile.watchOS)]
 		[TestCase (Profile.tvOS)]

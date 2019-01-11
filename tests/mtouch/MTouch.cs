@@ -2510,6 +2510,7 @@ public class B
 		[TestCase (Target.Dev, Profile.iOS, "monotouch-test", "Release64")]
 		[TestCase (Target.Dev, Profile.iOS, "mscorlib", "Release64")]
 		[TestCase (Target.Dev, Profile.iOS, "System.Core", "Release64")]
+		[NonParallelizable] // Running multiple of these tests in parallel may cause mtouch to crash (OOM?)
 		public void BuildTestProject (Target target, Profile profile, string testname, string configuration)
 		{
 			if (target == Target.Dev)

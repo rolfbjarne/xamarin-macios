@@ -12,6 +12,7 @@ using Xamarin.Tests;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class AOTTests
 	{
 		void ValidateAOTStatus (string tmpDir, Func<FileInfo, bool> shouldAOT, string buildResults)

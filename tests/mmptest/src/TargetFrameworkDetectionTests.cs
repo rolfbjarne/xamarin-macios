@@ -8,6 +8,7 @@ using Xamarin.Utils;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class TargetFrameworkDetectionTests
 	{
 		TargetFramework [] XMTargetFrameworks = { TargetFramework.Xamarin_Mac_2_0_Mobile, TargetFramework.Xamarin_Mac_4_5_Full, TargetFramework.Xamarin_Mac_4_5_System };

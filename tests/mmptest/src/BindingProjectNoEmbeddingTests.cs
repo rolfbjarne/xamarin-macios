@@ -8,6 +8,8 @@ using Xamarin.Utils;
 
 namespace Xamarin.MMP.Tests
 {
+	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class BindingProjectNoEmbeddingTests
 	{
 		static void Touch (string projectPath) => File.SetLastWriteTimeUtc (projectPath, DateTime.UtcNow);

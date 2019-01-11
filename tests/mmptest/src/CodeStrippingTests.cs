@@ -7,6 +7,8 @@ using Xamarin.Utils;
 
 namespace Xamarin.MMP.Tests
 {
+	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class CodeStrippingTests
 	{
 		static Func<string, bool> LipoStripConditional = s => s.Contains ("lipo") && s.Contains ("-thin");

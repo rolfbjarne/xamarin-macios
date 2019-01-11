@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class WarningTests
 	{
 		[Test]

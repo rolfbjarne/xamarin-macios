@@ -10,6 +10,7 @@ using System.Reflection;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class LinkerTests
 	{
 		int GetNumberOfTypesInLibrary (string path)

@@ -12,6 +12,7 @@ using Xamarin.Tests;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public partial class MMPTests 
 	{
 		public static void RunMMPTest (Action <string> test, string directoryName = null)

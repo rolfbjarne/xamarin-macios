@@ -19,6 +19,7 @@ using BundlerTool = Xamarin.MmpTool;
 namespace Xamarin
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class BundlerTests
 	{
 #if __MACOS__

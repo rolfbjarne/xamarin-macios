@@ -11,6 +11,8 @@ using Xamarin.Tests;
 
 namespace Xamarin.MMP.Tests
 {
+	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class NativeReferenceTests {
 		public const string ItemGroupTemplate = @"<ItemGroup>{0}</ItemGroup>";
 		public const string NativeReferenceTemplate = @"<NativeReference Include=""{0}""><IsCxx>False</IsCxx><Kind>{1}</Kind></NativeReference>";

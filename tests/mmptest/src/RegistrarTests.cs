@@ -4,6 +4,7 @@ using NUnit.Framework;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class RegistrarTests
 	{
 		[TestCase (false, "x86_64")]

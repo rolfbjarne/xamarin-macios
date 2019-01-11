@@ -18,6 +18,8 @@ namespace Xamarin.MMP.Tests
 		FullXamMacTag, // Sets just UseXamMacFullFramework
 	}
 
+	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class BindingProjectTests
 	{
 		internal static string RemoveCSProj (string s) => s.Remove (s.IndexOf (".csproj", StringComparison.InvariantCulture));

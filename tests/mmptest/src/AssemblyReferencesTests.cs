@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Xamarin.MMP.Tests
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class AssemblyReferencesTests
 	{
 		[Test]

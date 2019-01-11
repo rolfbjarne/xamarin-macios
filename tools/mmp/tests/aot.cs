@@ -11,6 +11,7 @@ using Xamarin.Utils;
 namespace Xamarin.MMP.Tests.Unit
 {
 	[TestFixture]
+	[Parallelizable (ParallelScope.All)]
 	public class AotTests
 	{
 		const string TestRootDir = "/a/non/sense/dir/";

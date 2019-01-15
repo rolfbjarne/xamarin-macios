@@ -1932,13 +1932,15 @@ public class B
 			}
 		}
 
+		static object bindings_lock = new object ();
 		static string GetBindingsLibrary (Profile profile)
 		{
 			var fn = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bin", "Any CPU", GetConfiguration (profile), "bindings-test.dll");
 
 			if (!File.Exists (fn)) {
 				var csproj = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "bindings-test" + GetProjectSuffix (profile) + ".csproj");
-				XBuild.Build (csproj, platform: "AnyCPU");
+				lock (bindings_lock)
+					XBuild.Build (csproj, platform: "AnyCPU");
 			}
 
 			return fn;
@@ -1951,7 +1953,8 @@ public class B
 
 			if (!File.Exists (fn)) {
 				var csproj = Path.Combine (Configuration.SourceRoot, "tests", "bindings-framework-test", "bindings-framework-test" + GetProjectSuffix (profile) + ".csproj");
-				XBuild.Build (csproj, platform: "AnyCPU");
+				lock (bindings_lock)
+					XBuild.Build (csproj, platform: "AnyCPU");
 			}
 
 			return fn;
@@ -3738,6 +3741,7 @@ public class TestApp {
 		[TestCase ("HttpClientHandler", "HttpClientHandler")]
 		[TestCase (null, "NSUrlSessionHandler")]
 		[TestCase ("", "NSUrlSessionHandler")]
+		[NonParallelizable]
 		public void HttpClientHandler (string mtouchHandler, string expectedHandler)
 		{
 			var testCode = $@"
@@ -4230,10 +4234,13 @@ using ObjCRuntime;
 			}
 		}
 
-		static Dictionary<Profile, string> compiled_linkwith_apps = new Dictionary<Profile, string> ();
+		[ThreadStatic]
+		static Dictionary<Profile, string> compiled_linkwith_apps;
 		public static string CompileTestAppExecutableLinkWith (string targetDirectory, Profile profile = Profile.iOS)
 		{
 			string compiled_linkwith_app;
+			if (compiled_linkwith_apps == null)
+				compiled_linkwith_apps = new Dictionary<Profile, string> ();
 			if (compiled_linkwith_apps.TryGetValue (profile, out compiled_linkwith_app) && File.Exists (compiled_linkwith_app))
 				return compiled_linkwith_app;
 

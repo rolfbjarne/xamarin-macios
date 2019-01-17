@@ -496,13 +496,14 @@ namespace Xamarin.Tests
 		{
 			StringBuilder output = new StringBuilder ();
 			int exitCode = Execute (fileName, arguments, environmentVariables, output, output, timeout);
-			if (!hide_output) {
+			if (!hide_output || (throwOnError && exitCode != 0)) {
 				Console.WriteLine ("{0} {1}", fileName, arguments);
 				Console.WriteLine (output);
 				Console.WriteLine ("Exit code: {0}", exitCode);
 			}
-			if (throwOnError && exitCode != 0)
-				throw new TestExecutionException (output.ToString ());
+			if (throwOnError && exitCode != 0) {
+				throw new TestExecutionException ($"Failed to execute: '{fileName} {arguments}' (exit code: {exitCode}). See console output for more info.");
+			}
 			return output.ToString ();
 		}
 	}

@@ -2934,13 +2934,16 @@ function toggleAll (show)
 			}
 				
 			if (nunit_version [0] == '2') {
-				TestExecutable = Path.Combine (Harness.RootDirectory, "..", "packages", "NUnit.ConsoleRunner." + nunit_version, "tools", "nunit-console.exe");
+				TestExecutable = Path.Combine (Harness.RootDirectory, "..", "packages", "NUnit.Runners." + nunit_version, "tools", "nunit-console.exe");
 				WorkingDirectory = Path.Combine (Path.GetDirectoryName (TestExecutable), "lib");
 			} else {
 				TestExecutable = Path.Combine (Harness.RootDirectory, "..", "packages", "NUnit.ConsoleRunner." + nunit_version, "tools", "nunit3-console.exe");
 				WorkingDirectory = Path.GetDirectoryName (TestLibrary);
 			}
 			TestExecutable = Path.GetFullPath (TestExecutable);
+			WorkingDirectory = Path.GetFullPath (WorkingDirectory);
+			if (!File.Exists (TestExecutable))
+				throw new FileNotFoundException ($"The nunit executable '{TestExecutable}' doesn't exist.");
 		}
 
 		public bool IsNUnit3 {

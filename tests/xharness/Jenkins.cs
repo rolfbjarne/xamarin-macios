@@ -825,6 +825,7 @@ namespace xharness
 				Timeout = TimeSpan.FromMinutes (120),
 				Ignored = !IncludeMtouch,
 				InProcess = true,
+				Workers = 4,
 			};
 			Tasks.Add (nunitExecutionMTouch);
 
@@ -2675,6 +2676,7 @@ namespace xharness
 		public string WorkingDirectory;
 		public bool ProduceHtmlReport = true;
 		public bool InProcess;
+		public int? Workers;
 		public TimeSpan Timeout = TimeSpan.FromMinutes (10);
 
 		public NUnitExecuteTask (BuildToolTask build_task)
@@ -2773,6 +2775,8 @@ namespace xharness
 						args.Append ("--labels=All ");
 						if (InProcess)
 							args.Append ("--inprocess ");
+						if (Workers.HasValue)
+							args.Append ($"--workers={Workers.Value} ");
 					} else {
 						args.Append ("-xml=" + StringUtils.Quote (xmlLog)).Append (' ');
 						args.Append ("-labels ");

@@ -1768,6 +1768,7 @@ namespace ObjCRuntime {
 			}
 		}
 #endif
+	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>
 	{

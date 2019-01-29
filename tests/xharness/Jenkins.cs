@@ -3307,7 +3307,7 @@ namespace xharness
 				try {
 					// Set the device we acquired.
 					Device = Candidates.First ((d) => d.UDID == device_resource.Resource.Name);
-					if (Platform == TestPlatform.watchOS)
+					if (Device.DevicePlatform == DevicePlatform.watchOS)
 						CompanionDevice = Jenkins.Devices.FindCompanionDevice (Jenkins.DeviceLoadLog, Device);
 					Jenkins.MainLog.WriteLine ("Acquired device '{0}' for '{1}'", Device.Name, ProjectFile);
 

@@ -365,6 +365,8 @@ namespace xharness
 							Ignored = pair.Item3,
 							TestName = project.Name,
 							Dependency = project.Dependency,
+							FailureMessage = project.FailureMessage,
+							ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 						};
 						derived.CloneTestProject (pair.Item1);
 						var simTasks = CreateRunSimulatorTaskAsync (derived);
@@ -406,6 +408,8 @@ namespace xharness
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.iOS_Unified64,
 						TestName = project.Name,
+						FailureMessage = project.FailureMessage,
+						ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 					};
 					build64.CloneTestProject (project);
 					rv.Add (new RunDeviceTask (build64, Devices.Connected64BitIOS) { Ignored = ignored || !IncludeiOS, BuildOnly = project.BuildOnly });
@@ -416,6 +420,8 @@ namespace xharness
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.iOS_Unified32,
 						TestName = project.Name,
+						FailureMessage = project.FailureMessage,
+						ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 					};
 					build32.CloneTestProject (project);
 					rv.Add (new RunDeviceTask (build32, Devices.Connected32BitIOS) { Ignored = ignored || !IncludeiOS, BuildOnly = project.BuildOnly });
@@ -427,6 +433,8 @@ namespace xharness
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.iOS_TodayExtension64,
 						TestName = project.Name,
+						FailureMessage = project.FailureMessage,
+						ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 					};
 					buildToday.CloneTestProject (todayProject);
 					rv.Add (new RunDeviceTask (buildToday, Devices.Connected64BitIOS) { Ignored = ignored || !IncludeiOSExtensions, BuildOnly = project.BuildOnly || ForceExtensionBuildOnly });
@@ -440,6 +448,8 @@ namespace xharness
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.tvOS,
 						TestName = project.Name,
+						FailureMessage = project.FailureMessage,
+						ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 					};
 					buildTV.CloneTestProject (tvOSProject);
 					rv.Add (new RunDeviceTask (buildTV, Devices.ConnectedTV) { Ignored = ignored || !IncludetvOS, BuildOnly = project.BuildOnly });
@@ -453,6 +463,8 @@ namespace xharness
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.watchOS_32,
 						TestName = project.Name,
+						FailureMessage = project.FailureMessage,
+						ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 					};
 					buildWatch32.CloneTestProject (watchOSProject);
 					rv.Add (new RunDeviceTask (buildWatch32, Devices.ConnectedWatch) { Ignored = ignored || !IncludewatchOS, BuildOnly = project.BuildOnly });
@@ -463,6 +475,8 @@ namespace xharness
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.watchOS_64_32,
 						TestName = project.Name,
+						FailureMessage = project.FailureMessage,
+						ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted,
 					};
 					buildWatch64_32.CloneTestProject (watchOSProject);
 					rv.Add (new RunDeviceTask (buildWatch64_32, Devices.ConnectedWatch32_64) { Ignored = ignored || !IncludewatchOS, BuildOnly = project.BuildOnly });
@@ -772,6 +786,8 @@ namespace xharness
 					build.SpecifyPlatform = false;
 					build.SpecifyConfiguration = build.ProjectConfiguration != "Debug";
 					build.Dependency = project.Dependency;
+					build.FailureMessage = project.FailureMessage;
+					build.ExecutionResult = !string.IsNullOrEmpty (project.FailureMessage) ? TestExecutingResult.Failed : TestExecutingResult.NotStarted;
 					RunTestTask exec;
 					IEnumerable<RunTestTask> execs;
 					var ignored_main = ignored;

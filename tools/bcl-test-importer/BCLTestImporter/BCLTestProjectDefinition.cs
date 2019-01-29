@@ -38,6 +38,8 @@ namespace BCLTestImporter {
 		}
 		
 		static IEnumerable<string> GetAssemblyReferences (string assemblyPath) {
+			if (!File.Exists (assemblyPath))
+				throw new FileNotFoundException ($"The assembly {assemblyPath} does not exist.");
 			var a = Assembly.LoadFile (assemblyPath);
 			return a.GetReferencedAssemblies ().Select ((arg) => arg.Name);
 		}
@@ -83,6 +85,8 @@ namespace BCLTestImporter {
 			// loop over the paths, grab the assembly, find a type and then add it
 			foreach (var definition in TestAssemblies) {
 				var path = definition.GetPath (monoRootPath, platform, wasDownloaded);
+				if (!File.Exists (path))
+					throw new FileNotFoundException ($"The assembly {path} does not exist.");
 				var a = Assembly.LoadFile (path);
 				try {
 					var types = a.ExportedTypes;

@@ -109,7 +109,7 @@ namespace UIKit {
 		{
 			IntPtr[] ptrs = TypesToPointers (whenFoundIn);
 
-			if (IntPtr.Size == 8 && Runtime.Arch == Arch.DEVICE) {
+			if (Runtime.IsARM64CallingConvention) {
 				// The native function takes a variable number of arguments ('appearanceWhenContainedIn:'), terminated with a nil value.
 				// Unfortunately iOS/ARM64 (not the general ARM64 ABI as published by ARM) has a different calling convention for varargs methods
 				// than regular methods: all variable arguments are passed on the stack, no matter how many normal arguments there are.

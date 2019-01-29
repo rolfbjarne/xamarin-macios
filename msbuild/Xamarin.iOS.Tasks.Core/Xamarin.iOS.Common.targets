@@ -340,6 +340,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			_GetNativeExecutableName;
 			_ParseExtraMtouchArgs;
 			_CompileToNative;
+			_RemoveBitcode;
 			_CompileITunesMetadata;
 			_CollectITunesArtwork;
 			_CopyITunesArtwork;
@@ -383,6 +384,10 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			AfterCodeSign;
 		</CodesignDependsOn>
 	</PropertyGroup>
+
+	<Target Name="_RemoveBitcode" Condition="'$(IsWatchExtension)' == 'true'">
+		<Exec Command="xcrun bitcode_strip '$(_NativeExecutable)' -m -o '$(_NativeExecutable)'" />
+	</Target>
 
 	<Target Name="BeforeCodesign" />
 	<Target Name="CoreCodesign" DependsOnTargets="$(_CoreCodesignDependsOn)" />

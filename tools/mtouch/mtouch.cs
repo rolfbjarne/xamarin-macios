@@ -407,6 +407,8 @@ namespace Xamarin.Bundler
 			} else
 				args.Append ("full,");
 
+			args.Append ("readonly-value=ObjCRuntime.Runtime.Arch=i4/0,");
+
 			var aname = Path.GetFileNameWithoutExtension (fname);
 			var sdk_or_product = Profile.IsSdkAssembly (aname) || Profile.IsProductAssembly (aname);
 

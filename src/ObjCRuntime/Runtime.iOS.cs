@@ -43,12 +43,12 @@ namespace ObjCRuntime {
 		internal const string AssemblyName = "monotouch.dll";
 #endif
 
-		public static Arch Arch; // default: = Arch.DEVICE;
+		public readonly static Arch Arch; // default: = Arch.DEVICE;
 
 		unsafe static void InitializePlatform (InitializationOptions* options)
 		{
-			if (options->IsSimulator)
-				Arch = Arch.SIMULATOR;
+			//if (options->IsSimulator)
+				//Arch = Arch.SIMULATOR;
 
 			UIApplication.Initialize ();
 		}

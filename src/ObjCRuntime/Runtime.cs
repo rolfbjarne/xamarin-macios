@@ -1736,7 +1736,7 @@ namespace ObjCRuntime {
 			}
 		}
 
-		[DllImport ("?")]
+		[DllImport (Constants.libSystemLibrary)]
 		static unsafe extern NXArchInfo* NXGetLocalArchInfo ();
 
 		static string cpuarchitecture;

@@ -41,7 +41,7 @@ namespace Introspection {
 		{
 			Class.ThrowOnInitFailure = false;
 			ContinueOnFailure = true;
-			//LogProgress = true;
+			LogProgress = true;
 		}
 
 		protected override bool Skip (Type type)

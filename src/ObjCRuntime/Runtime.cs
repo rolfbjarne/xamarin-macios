@@ -1590,7 +1590,7 @@ namespace ObjCRuntime {
 			var fmt = NSString.CreateNative ("%s");
 			var val = (args == null || args.Length == 0) ? format : string.Format (format, args);
 #if !MONOMAC
-			if (IsARM64VarArgs)
+			if (IsARM64CallingConvention)
 				NSLog_arm64 (fmt, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, val);
 			else
 #endif
@@ -1752,11 +1752,11 @@ namespace ObjCRuntime {
 		}
 
 #if MONOMAC
-		internal const bool IsARM64VarArgs = false;
+		internal const bool IsARM64CallingConvention = false;
 #else
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		// FIXME: add support for optimizing this property to a constant value.
-		internal static bool IsARM64VarArgs {
+		public static bool IsARM64CallingConvention {
 			get {
 				if (Arch != Arch.DEVICE)
 					return false;

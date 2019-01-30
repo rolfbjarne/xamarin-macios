@@ -92,7 +92,7 @@ namespace CoreGraphics {
 			var second = triples.Length > 1 ? triples [1] : empty; 
 			var third = triples.Length > 2 ? triples [2] : empty;
 #if !MONOMAC
-			if (Runtime.IsARM64VarArgs) {
+			if (Runtime.IsARM64CallingConvention) {
 				Handle = CGColorConversionInfoCreateFromList_arm64 (o, NativeObjectHelper.GetHandle (first.Space), (long) first.Transform, (long) first.Intent,
 					IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
 					NativeObjectHelper.GetHandle (second.Space), (long) second.Transform, (long) second.Intent,

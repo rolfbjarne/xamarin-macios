@@ -1102,7 +1102,6 @@ namespace xharness
 							rv.Add (v);
 							return rv;
 						});
-						string serveFile = null;
 						switch (request.Url.LocalPath) {
 						case "/":
 							response.ContentType = System.Net.Mime.MediaTypeNames.Text.Html;
@@ -1320,18 +1319,23 @@ namespace xharness
 							}
 							server.Stop ();
 							break;
-						case "/favicon.ico":
-							var favicon = File.ReadAllBytes (Path.Combine (Harness.RootDirectory, "xharness", "favicon.ico"));
-							response.OutputStream.Write (favicon, 0, favicon.Length);
-							response.OutputStream.Close ();
-							break;
-						case "/xharness.css":
-						case "/xharness.js":
-							serveFile = Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), request.Url.LocalPath.Substring (1));
-							goto default;
 						default:
+							var filename = Path.GetFileName (request.Url.LocalPath);
+							string serveFile = null;
+							switch (filename) {
+							case "favicon.ico":
+								serveFile = Path.Combine (Harness.RootDirectory, "xharness", "favicon.ico");
+								break;
+							case "index.html":
+								response.ContentType = System.Net.Mime.MediaTypeNames.Text.Html;
+								GenerateReportImpl (response.OutputStream);
+								break;
+							default:
+								serveFile = Path.Combine (Path.GetDirectoryName (LogDirectory), request.Url.LocalPath.Substring (1));
+								break;
+							}
 							if (serveFile == null)
-								serveFile = Path.Combine (LogDirectory, request.Url.LocalPath.Substring (1));
+								break;
 							var path = serveFile;
 							if (File.Exists (path)) {
 								var buffer = new byte [4096];
@@ -1348,6 +1352,9 @@ namespace xharness
 									case ".js":
 										response.ContentType = "text/javascript";
 										break;
+									case ".ico":
+										response.ContentType = "image/png";
+										break;
 									default:
 										response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
 										break;
@@ -1356,6 +1363,7 @@ namespace xharness
 										response.OutputStream.Write (buffer, 0, read);
 								}
 							} else {
+								Console.WriteLine ($"404: {request.Url.LocalPath}");
 								response.StatusCode = 404;
 								response.OutputStream.WriteByte ((byte) '?');
 							}
@@ -1375,7 +1383,7 @@ namespace xharness
 			};
 			thread.Start ();
 
-			var url = $"http://localhost:{port}/";
+			var url = $"http://localhost:{port}/" + Path.GetFileName (LogDirectory) + "/index.html";
 			Console.WriteLine ($"Launching {url} in the system's default browser.");
 			Process.Start ("open", url);
 
@@ -1470,6 +1478,7 @@ namespace xharness
 					foreach (var file in new string [] { "xharness.js", "xharness.css" }) {
 						File.Copy (Path.Combine (dependentFileLocation, file), Path.Combine (LogDirectory, file), true);
 					}
+					File.Copy (Path.Combine (Harness.RootDirectory, "xharness", "favicon.ico"), Path.Combine (LogDirectory, "favicon.ico"), true);
 				}
 			} catch (Exception e) {
 				this.MainLog.WriteLine ("Failed to write log: {0}", e);
@@ -1586,15 +1595,17 @@ namespace xharness
 					markdown_summary.WriteLine ("</details>");
 			}
 
+			var rootDirectory = string.Empty;
+
 			using (var writer = new StreamWriter (stream)) {
 				writer.WriteLine ("<!DOCTYPE html>");
 				writer.WriteLine ("<html onkeypress='keyhandler(event)' lang='en'>");
 				if (IsServerMode && populating)
 					writer.WriteLine ("<meta http-equiv=\"refresh\" content=\"1\">");
 				writer.WriteLine ("<head>");
-				writer.WriteLine ("<link rel='stylesheet' href='xharness.css'>");
+				writer.WriteLine ($"<link rel='stylesheet' href='{rootDirectory}xharness.css'>");
 				writer.WriteLine ("<title>Test results</title>");
-				writer.WriteLine (@"<script type='text/javascript' src='xharness.js'></script>");
+				writer.WriteLine ($"<script type='text/javascript' src='{rootDirectory}xharness.js'></script>");
 				if (IsServerMode) {
 					writer.WriteLine ("<script type='text/javascript'>");
 					writer.WriteLine ("setTimeout (autorefresh, 1000);");
@@ -1611,7 +1622,7 @@ namespace xharness
 				writer.WriteLine ("<h1>Test results</h1>");
 
 				foreach (var log in Logs)
-					writer.WriteLine ("<span id='x{2}' class='autorefreshable'> <a href='{0}' type='text/plain'>{1}</a></span><br />", log.FullPath.Substring (LogDirectory.Length + 1), log.Description, id_counter++);
+					writer.WriteLine ($"<span id='x{id_counter++}' class='autorefreshable'> <a href='{rootDirectory}{log.FullPath.Substring (LogDirectory.Length + 1)}' type='text/plain'>{log.Description}</a></span><br />");
 
 				var headerColor = "black";
 				if (unfinishedTests.Any ()) {
@@ -1907,7 +1918,7 @@ namespace xharness
 										log_target = "_self";
 										break;
 									}
-									writer.WriteLine ("<a href='{0}' type='{2}' target='{3}'>{1}</a><br />", LinkEncode (log.FullPath.Substring (LogDirectory.Length + 1)), log.Description, log_type, log_target);
+									writer.WriteLine ("<a href='{4}{0}' type='{2}' target='{3}'>{1}</a><br />", LinkEncode (log.FullPath.Substring (LogDirectory.Length + 1)), log.Description, log_type, log_target, rootDirectory);
 									if (log.Description == "Test log" || log.Description == "Extension test log" || log.Description == "Execution log") {
 										string summary;
 										List<string> fails;

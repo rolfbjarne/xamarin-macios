@@ -38,7 +38,7 @@ namespace MonoTouchFixtures {
 				}
 			}
 
-			Assert.IsTrue (aot || interp, "#1");
+			Assert.IsTrue (aot || interp, "#1: \n\t" + string.Join ("\n\t", symbols));
 		}
 
 		void Collect ()

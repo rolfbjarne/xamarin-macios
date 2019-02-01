@@ -4680,8 +4680,17 @@ namespace Registrar {
 			interfaces = ifaces;
 		}
 
-		public void GeneratePInvokeWrappersEnd ()
+		public void GeneratePInvokeWrappersEnd (PInvokeWrapperGenerator state)
 		{
+			state.sb.AppendLine ();
+			foreach (var item in state.signatures) {
+				if (item.Value.Item2.Count == 1)
+					continue;
+				state.sb.AppendLine ("// Method: {0}", item.Key);
+				foreach (var method in item.Value.Item2)
+					state.sb.AppendLine ("//     {0}", method.FullName);
+			}
+
 			header = null;	
 			declarations = null;
 			methods = null;
@@ -4736,18 +4745,21 @@ namespace Registrar {
 			signature.Append (")");
 
 			string wrapperName;
-			if (!signatures.TryGetValue (signature.ToString (), out wrapperName)) {
+			if (!signatures.TryGetValue (signature.ToString (), out var funcData)) {
 				var name = "xamarin_pinvoke_wrapper_" + method.Name;
 				var counter = 0;
 				while (names.Contains (name)) {
 					name = "xamarin_pinvoke_wrapper_" + method.Name + (++counter).ToString ();
 				}
 				names.Add (name);
-				signatures [signature.ToString ()] = wrapperName = name;
+				wrapperName = name;
+				funcData = new Tuple<string, List<MethodDefinition>> (wrapperName, new List<MethodDefinition> ());
+				signatures [signature.ToString ()] = funcData;
 
 				sb.WriteLine ("// EntryPoint: {0}", pinfo.EntryPoint);
 				sb.WriteLine ("// Managed method: {0}.{1}", method.DeclaringType.FullName, method.Name);
 				sb.WriteLine ("// Signature: {0}", signature.ToString ());
+				sb.WriteLine ("// Consumer (only first; the rest are listed at the end of this file): {0}", method.FullName);
 
 				sb.Write ("typedef ");
 				sb.Write (native_return_type);
@@ -4799,7 +4811,9 @@ namespace Registrar {
 				sb.WriteLine ();
 			} else {
 				// Console.WriteLine ("Signature already processed: {0} for {1}.{2}", signature.ToString (), method.DeclaringType.FullName, method.Name);
+				wrapperName = funcData.Item1;
 			}
+			funcData.Item2.Add (method);
 
 			return wrapperName;
 		}

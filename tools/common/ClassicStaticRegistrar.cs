@@ -4556,14 +4556,16 @@ namespace Registrar {
 			signature.Append (")");
 
 			string wrapperName;
-			if (!signatures.TryGetValue (signature.ToString (), out wrapperName)) {
+			if (!signatures.TryGetValue (signature.ToString (), out var funcData)) {
 				var name = "xamarin_pinvoke_wrapper_" + method.Name;
 				var counter = 0;
 				while (names.Contains (name)) {
 					name = "xamarin_pinvoke_wrapper_" + method.Name + (++counter).ToString ();
 				}
 				names.Add (name);
-				signatures [signature.ToString ()] = wrapperName = name;
+				wrapperName = name;
+				funcData = new Tuple<string, List<MethodDefinition>> (wrapperName, new List<MethodDefinition> ());
+				signatures [signature.ToString ()] = funcData;
 
 				sb.WriteLine ("// EntryPoint: {0}", pinfo.EntryPoint);
 				sb.WriteLine ("// Managed method: {0}.{1}", method.DeclaringType.FullName, method.Name);
@@ -4619,7 +4621,9 @@ namespace Registrar {
 				sb.WriteLine ();
 			} else {
 				// Console.WriteLine ("Signature already processed: {0} for {1}.{2}", signature.ToString (), method.DeclaringType.FullName, method.Name);
+				wrapperName = funcData.Item1;
 			}
+			funcData.Item2.Add (method);
 
 			return wrapperName;
 		}

@@ -13,7 +13,7 @@ namespace Xamarin.Bundler
 	class PInvokeWrapperGenerator
 	{
 		public Application App;
-		public Dictionary<string,string> signatures = new Dictionary<string, string> ();
+		public Dictionary<string,Tuple<string, List<MethodDefinition>>> signatures = new Dictionary<string, Tuple<string, List<MethodDefinition>>> ();
 		public List<Exception> exceptions = new List<Exception> ();
 		public StringBuilder signature = new StringBuilder ();
 		public HashSet<string> names = new HashSet<string> ();
@@ -76,7 +76,7 @@ namespace Xamarin.Bundler
 
 			sb.WriteLine ("}");
 
-			Registrar.GeneratePInvokeWrappersEnd ();
+			Registrar.GeneratePInvokeWrappersEnd (this);
 
 			Driver.WriteIfDifferent (HeaderPath, hdr.ToString () + "\n" + decls.ToString () + "\n" + ifaces.ToString () + "\n", true);
 			Driver.WriteIfDifferent (SourcePath, mthds.ToString () + "\n" + sb.ToString () + "\n", true);

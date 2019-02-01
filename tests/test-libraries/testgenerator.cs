@@ -25,23 +25,23 @@ static class C {
 		/* integral types */
 		"c:0", "cc:4", "ccc:5",  "cccc:4",
 		"s:0", "ss:4", "sss:5",  "ssss:4",
-		"i:0", "ii:4", "iii:5",  "iiii:5",  "iiiii:15",
-		"l:4", "ll:5", "lll:15", "llll:15", "lllll:15",
+		"i:0", "ii:4", "iii:5",  "iiii:5", // "iiiii:15",
+		"l:4", "ll:5", // "lll:15", "llll:15", "lllll:15",
 		/* floating point types */
-		"f:4", "ff:4", "fff:5", "ffff:5",  "fffff:15",
-		"d:4", "dd:5", "ddd:7", "dddd:7",  "ddddd:15",
+		"f:4", "ff:4", "fff:5", "ffff:5", /* "fffff:15", */
+		"d:4", "dd:5", "ddd:7", "dddd:7", /*  "ddddd:15", */
 		/* mixed types */
 		"if:4", "fi:4", // 8 bytes
 		"iff:5", // 12 bytes
 		"iiff:5", // 16 bytes
 		"id:5", "di:5", // 16 bytes
 		"iid:5", // 16 bytes
-		"idi:15", // 16 bytes on i386 and 24 bytes on x86_64 (due to alignment)
-		"ddi:15", // 24 bytes
-		"didi:15", // 24 bytes on 32-bit arch, 32 bytes on 64-bit arch
-		"idid:15", // 24 bytes on 32-bit arch, 32 bytes on 64-bit arch
-		"dldl:15",
-		"ldld:15",
+		// "idi:15", // 16 bytes on i386 and 24 bytes on x86_64 (due to alignment)
+		// "ddi:15", // 24 bytes
+		// "didi:15", // 24 bytes on 32-bit arch, 32 bytes on 64-bit arch
+		// "idid:15", // 24 bytes on 32-bit arch, 32 bytes on 64-bit arch
+		// "dldl:15",
+		// "ldld:15",
 		"fifi:5",
 		"ifif:5",
 	};
@@ -81,10 +81,10 @@ static class C {
 		new BindAsData { Managed = "NSStreamStatus", Native = "NSStreamStatus", ManagedNewExpression = "NSStreamStatus.Closed", Map = ".UInt64Value", ToNSNumberCastExpression = "(ulong) ", FromNSNumberCastExpression = "(NSStreamStatus) " },
 	};
 	static BindAsData[] bindas_nsvalue = new [] {
-		new BindAsData { Managed = "CGAffineTransform", Native = "CGAffineTransform", ManagedCondition = "!__MACOS__", ManagedNewExpression = "new CGAffineTransform (1, 2, 3, 4, 5, 6)", Map = ".CGAffineTransformValue", MapFrom = "FromCGAffineTransform" },
+		new BindAsData { Managed = "CGAffineTransform", Native = "CGAffineTransform", ManagedCondition = "!__MACOS__ && !__WATCHOS__ // WatchOS: https://xamarinhq.slack.com/archives/C03CFKFGL/p1548922453093200", ManagedNewExpression = "new CGAffineTransform (1, 2, 3, 4, 5, 6)", Map = ".CGAffineTransformValue", MapFrom = "FromCGAffineTransform" },
 		new BindAsData { Managed = "NSRange", Native = "NSRange", ManagedNewExpression = "new NSRange (7, 8)", Map = ".RangeValue", MapFrom = "FromRange" },
 		new BindAsData { Managed = "CGVector", Native = "CGVector", ManagedCondition = "!__MACOS__", ManagedNewExpression = "new CGVector (9, 10)", Map = ".CGVectorValue", MapFrom = "FromCGVector", MinXcodeVersion = new Version (8, 0) },
-		new BindAsData { Managed = "SCNMatrix4", Native = "SCNMatrix4", ManagedNewExpression = "SCNMatrix4.Identity", Map = ".SCNMatrix4Value", MapFrom = "FromSCNMatrix4", MinMacOSVersion = new Version (10, 10), MinXcodeVersion = new Version (8, 0) },
+		new BindAsData { Managed = "SCNMatrix4", Native = "SCNMatrix4", ManagedCondition = "!__WATCHOS__ // WatchOS: https://xamarinhq.slack.com/archives/C03CFKFGL/p1548922453093200", ManagedNewExpression = "SCNMatrix4.Identity", Map = ".SCNMatrix4Value", MapFrom = "FromSCNMatrix4", MinMacOSVersion = new Version (10, 10), MinXcodeVersion = new Version (8, 0) },
 		new BindAsData { Managed = "CLLocationCoordinate2D", Native = "CLLocationCoordinate2D", ManagedNewExpression = "new CLLocationCoordinate2D (11, 12)", Map = ".CoordinateValue", MapFrom = "FromMKCoordinate", MinMacOSVersion = new Version (10, 9) },
 		new BindAsData { Managed = "SCNVector3", Native = "SCNVector3", ManagedNewExpression = "new SCNVector3 (13, 14, 15)", Map = ".Vector3Value", MapFrom = "FromVector", MinMacOSVersion = new Version (10, 8), MinXcodeVersion = new Version (8, 0) },
 		new BindAsData { Managed = "SCNVector4", Native = "SCNVector4", ManagedNewExpression = "new SCNVector4 (16, 17, 18, 19)", Map = ".Vector4Value", MapFrom = "FromVector", MinMacOSVersion = new Version (10, 8), MinXcodeVersion = new Version (8, 0) },

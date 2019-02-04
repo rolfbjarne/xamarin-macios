@@ -18,7 +18,7 @@ namespace MonoTouchFixtures {
 	[Preserve (AllMembers = true)]
 	public partial class Symbols {
 		string [] symbols;
-		int recurse = 1;
+		int recurse = 20;
 
 		[Test]
 		public void FunctionNames ()
@@ -44,9 +44,12 @@ namespace MonoTouchFixtures {
 
 		int Collect ()
 		{
+			Console.WriteLine ("Collect ({0})", recurse);
 			// Make this function look recursive so that LLVM doesn't optimize/inline it away.
-			if (recurse > 0)
-				return Collect (recurse - 1);
+			if (recurse > 0) {
+				recurse--;
+				return Collect ();
+			}
 
 			var array = new IntPtr [50];
 			var size = backtrace (array, array.Length);

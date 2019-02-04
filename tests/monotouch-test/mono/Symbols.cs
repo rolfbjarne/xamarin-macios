@@ -18,6 +18,7 @@ namespace MonoTouchFixtures {
 	[Preserve (AllMembers = true)]
 	public partial class Symbols {
 		string [] symbols;
+		int recurse = 1;
 
 		[Test]
 		public void FunctionNames ()
@@ -30,7 +31,7 @@ namespace MonoTouchFixtures {
 			bool interp = false;
 
 			if (!aot) {
-				for (int i = 0; i < 5 && !interp; i++) {
+				for (int i = 0; i < 6 && !interp; i++) {
 					/* ves_pinvoke_method (slow path) and do_icall (fast path) are
 					 * MONO_NEVER_INLINE, so they should show up in the backtrace
 					 * reliably */
@@ -41,8 +42,12 @@ namespace MonoTouchFixtures {
 			Assert.IsTrue (aot || interp, "#1: \n\t" + string.Join ("\n\t", symbols));
 		}
 
-		void Collect ()
+		int Collect ()
 		{
+			// Make this function look recursive so that LLVM doesn't optimize/inline it away.
+			if (recurse > 0)
+				return Collect (recurse - 1);
+
 			var array = new IntPtr [50];
 			var size = backtrace (array, array.Length);
 			var symbols = backtrace_symbols (array, size);
@@ -54,6 +59,8 @@ namespace MonoTouchFixtures {
 			}
 
 			free (symbols);
+
+			return recurse;
 		}
 
 		[DllImport (Constants.libcLibrary)]

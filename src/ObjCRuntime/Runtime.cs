@@ -1751,13 +1751,13 @@ namespace ObjCRuntime {
 			}
 		}
 
-#if MONOMAC
-		internal const bool IsARM64CallingConvention = false;
-#else
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		// FIXME: add support for optimizing this property to a constant value.
 		public static bool IsARM64CallingConvention {
 			get {
+#if MONOMAC
+				return false;
+#else
 				if (Arch != Arch.DEVICE)
 					return false;
 #if __WATCHOS__
@@ -1765,9 +1765,9 @@ namespace ObjCRuntime {
 #else
 				return IntPtr.Size == 8;
 #endif
+#endif
 			}
 		}
-#endif
 	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

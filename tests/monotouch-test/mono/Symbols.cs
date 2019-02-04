@@ -18,6 +18,7 @@ namespace MonoTouchFixtures {
 	[Preserve (AllMembers = true)]
 	public partial class Symbols {
 		string [] symbols;
+		int recurse = 20;
 
 		[Test]
 		public void FunctionNames ()
@@ -27,10 +28,11 @@ namespace MonoTouchFixtures {
 			
 			Collect ();
 			bool aot = symbols [1].Contains ("MonoTouchFixtures_Symbols_Collect");
+			bool llvmonly = symbols [1].Contains ("mono_llvmonly_runtime_invoke"); // LLVM inlines the Collect function, so 'Collect' doesn't show up in the stack trace :/
 			bool interp = false;
 
 			if (!aot) {
-				for (int i = 0; i < 5 && !interp; i++) {
+				for (int i = 0; i < 6 && !interp; i++) {
 					/* ves_pinvoke_method (slow path) and do_icall (fast path) are
 					 * MONO_NEVER_INLINE, so they should show up in the backtrace
 					 * reliably */
@@ -38,10 +40,10 @@ namespace MonoTouchFixtures {
 				}
 			}
 
-			Assert.IsTrue (aot || interp, "#1");
+			Assert.IsTrue (aot || interp || llvmonly, "#1");
 		}
 
-		void Collect ()
+		int Collect ()
 		{
 			var array = new IntPtr [50];
 			var size = backtrace (array, array.Length);
@@ -54,6 +56,8 @@ namespace MonoTouchFixtures {
 			}
 
 			free (symbols);
+
+			return recurse;
 		}
 
 		[DllImport (Constants.libcLibrary)]

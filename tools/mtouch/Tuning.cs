@@ -191,7 +191,7 @@ namespace MonoTouch.Tuner {
 			pipeline.Append (new ProcessExportedFields ());
 
 			// We need to remove incompatible bitcode for all assemblies, not only the linked assemblies.
-			if (options.Application.EnableBitCode)
+			if (options.Application.EnableLLVMOnlyBitCode)
 				pipeline.AppendStep (new RemoveBitcodeIncompatibleCodeStep (options));
 			
 			if (options.LinkMode != LinkMode.None) {

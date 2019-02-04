@@ -20,9 +20,6 @@ namespace MonoTouchFixtures.Foundation {
 
 	[TestFixture]
 	[Preserve (AllMembers = true)]
-#if __WATCHOS__
-	[Ignore ("Bug in arm64_32 code causing crashes: https://xamarinhq.slack.com/archives/C03CFKFGL/p1548922453093200")]
-#endif
 	public class DecimalTest {
 
 		[Test]

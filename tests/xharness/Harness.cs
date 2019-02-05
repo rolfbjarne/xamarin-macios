@@ -835,6 +835,17 @@ namespace xharness
  			return build_bcl_tests;
  		}
 
+		public static void Say (string message)
+		{
+			ThreadPool.QueueUserWorkItem ((v) => {
+				try {
+					using (var say = Process.Start ("say", message))
+						say.WaitForExit ();
+				} catch {
+					// Ignore
+				}
+			});
+		}
 	}
 
 	public class CrashReportSnapshot

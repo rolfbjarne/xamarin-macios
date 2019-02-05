@@ -2174,6 +2174,22 @@ namespace xharness
 			}
 			set {
 				execution_result = value;
+				if (Jenkins.IsServerMode) {
+					switch (value) {
+					case TestExecutingResult.BuildFailure:
+						Harness.Say ("Build failed");
+						break;
+					case TestExecutingResult.Crashed:
+						Harness.Say ("Test crashed");
+						break;
+					case TestExecutingResult.Failed:
+						Harness.Say ("Test failed");
+						break;
+					case TestExecutingResult.TimedOut:
+						Harness.Say ("Test timed out");
+						break;
+					}
+				}
 			}
 		}
 

@@ -37,7 +37,9 @@ namespace Xamarin
 				}
 			}
 
-			var rv = Path.Combine (root, name);
+			Directory.CreateDirectory (Path.Combine (root, name));
+
+			var rv = Path.Combine (root, name, last_number.ToString ());
 			for (int i = last_number; i < 10000 + last_number; i++) {
 				// There's no way to know if Directory.CreateDirectory
 				// created the directory or not (which would happen if the directory
@@ -48,7 +50,7 @@ namespace Xamarin
 					last_number = i;
 					return rv;
 				}
-				rv = Path.Combine (root, name + i);
+				rv = Path.Combine (root, name, i.ToString ());
 			}
 
 			throw new Exception ("Could not create temporary directory");

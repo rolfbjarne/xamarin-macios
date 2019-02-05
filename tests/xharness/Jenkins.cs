@@ -2161,6 +2161,25 @@ namespace xharness
 			}
 			set {
 				execution_result = value;
+				if (Jenkins.IsServerMode && this is RunTestTask) {
+					switch (value) {
+					case TestExecutingResult.BuildFailure:
+						Harness.Say ($"Build failed for {TestName}");
+						break;
+					case TestExecutingResult.Crashed:
+						Harness.Say ($"Test crashed for {TestName}");
+						break;
+					case TestExecutingResult.Failed:
+						Harness.Say ($"Test failed for {TestName}");
+						break;
+					case TestExecutingResult.TimedOut:
+						Harness.Say ($"Test timed out for {TestName}");
+						break;
+					case TestExecutingResult.Succeeded:
+						Harness.Say ($"Test succeeded for {TestName}");
+						break;
+					}
+				}
 			}
 		}
 

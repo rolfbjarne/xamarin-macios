@@ -1375,9 +1375,11 @@ namespace xharness
 								serveFile = Path.Combine (Harness.RootDirectory, "xharness", "favicon.ico");
 								break;
 							case "index.html":
-								response.ContentType = System.Net.Mime.MediaTypeNames.Text.Html;
-								GenerateReportImpl (response.OutputStream);
-								break;
+								if (Path.GetFileName (LogDirectory) == Path.GetFileName (Path.GetDirectoryName (request.Url.LocalPath))) {
+									// We're asked for the report for the current test run, so re-generate it.
+									GenerateReport ();
+								}
+								goto default;
 							default:
 								serveFile = Path.Combine (Path.GetDirectoryName (LogDirectory), request.Url.LocalPath.Substring (1));
 								break;
@@ -1539,6 +1541,7 @@ namespace xharness
 			}
 		}
 
+		string previous_test_runs;
 		void GenerateReportImpl (Stream stream, StreamWriter markdown_summary = null)
 		{
 			var id_counter = 0;
@@ -1657,7 +1660,7 @@ namespace xharness
 				if (IsServerMode && populating)
 					writer.WriteLine ("<meta http-equiv=\"refresh\" content=\"1\">");
 				writer.WriteLine ("<head>");
-				writer.WriteLine ($"<link rel='stylesheet' href='{rootDirectory}xharness.css'>");
+				writer.WriteLine ($"<link rel='stylesheet' href='{rootDirectory}xharness.css'/>");
 				writer.WriteLine ("<title>Test results</title>");
 				writer.WriteLine ($"<script type='text/javascript' src='{rootDirectory}xharness.js'></script>");
 				if (IsServerMode) {
@@ -1712,7 +1715,7 @@ namespace xharness
 				} else {
 					writer.Write ($"No tests selected.");
 				}
-				writer.WriteLine ("</span>");
+				writer.Write ("</span>");
 				writer.WriteLine ("</h2>");
 				if (allTasks.Count > 0) {
 					writer.WriteLine ($"<ul id='nav'>");
@@ -1776,6 +1779,38 @@ namespace xharness
 			</ul>
 	</li>
 	");
+						if (previous_test_runs == null) {
+							var sb = new StringBuilder ();
+							var previous = Directory.GetDirectories (Path.GetDirectoryName (LogDirectory)).
+									Select ((v) => Path.Combine (v, "index.html")).
+									    Where (File.Exists);
+							if (previous.Any ()) {
+								sb.AppendLine ("\t<li>Previous test runs");
+								sb.AppendLine ("\t\t<ul>");
+								foreach (var prev in previous) {
+									var dir = Path.GetFileName (Path.GetDirectoryName (prev));
+									var ts = dir;
+									var description = File.ReadAllLines (prev).Where ((v) => v.StartsWith ("<h2", StringComparison.Ordinal)).FirstOrDefault ();
+									if (description != null) {
+										description = description.Substring (description.IndexOf ('>') + 1); // <h2 ...>
+										description = description.Substring (description.IndexOf ('>') + 1); // <span id= ...>
+
+										var h2end = description.LastIndexOf ("</h2>", StringComparison.Ordinal);
+										if (h2end > -1)
+											description = description.Substring (0, h2end);
+										description = description.Substring (0, description.LastIndexOf ('<'));
+									} else {
+										description = "<unknown state>";
+									}
+									sb.AppendLine ($"\t\t\t<li class=\"adminitem\"><a href='/{dir}/index.html'>{ts}: {description}</a></li>");
+								}
+								sb.AppendLine ("\t\t</ul>");
+								sb.AppendLine ("\t</li>");
+							}
+							previous_test_runs = sb.ToString ();
+						}
+						if (!string.IsNullOrEmpty (previous_test_runs))
+							writer.Write (previous_test_runs);
 					}
 					writer.WriteLine ("</ul>");
 				}

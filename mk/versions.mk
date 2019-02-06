@@ -28,6 +28,8 @@ ifeq ($$(IGNORE_$(2)_VERSION),)
 				make reset-$(1) || exit 1; \
 			else \
 				echo "Your $(1) version is $(COLOR_RED)out of date$(COLOR_CLEAR), please run 'make reset-$(1)' (found $($(2)_VERSION), expected $(NEEDED_$(2)_VERSION)). Alternatively export IGNORE_$(2)_VERSION=1 to skip this check."; \
+				echo "    The difference is the following commits:"; \
+				cd $($(2)_PATH) && git log --color=always --decorate --oneline $(NEEDED_$(2)_VERSION)..$($(2)_VERSION) | sed 's/^/        /'; \
 				test -z "$(BUILD_REVISION)" || $(MAKE) test-$(1); \
 				touch .check-versions-failure; \
 			fi; \

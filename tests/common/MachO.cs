@@ -46,6 +46,7 @@ namespace Xamarin.Tests
 		static string GetArch (int cputype, int cpusubtype)
 		{
 			const int ABI64 = 0x01000000;
+			const int ABI64_32 = 0x02000000;
 			const int X86 = 7;
 			const int ARM = 12;
 
@@ -55,6 +56,7 @@ namespace Xamarin.Tests
 				case 6: return "armv6";
 				case 9: return "armv7";
 				case 11: return "armv7s";
+				case 12: return "armv7k";
 				default:
 					return "unknown arm variation: " + cpusubtype.ToString ();
 				}
@@ -64,6 +66,13 @@ namespace Xamarin.Tests
 					return "arm64";
 				default:
 					return "unknown arm/64 variation: " + cpusubtype.ToString ();
+				}
+			case ARM | ABI64_32:
+				switch (cpusubtype) {
+				case 1:
+					return "arm64_32";
+				default:
+					return "unknown arm64_32 variation: " + cpusubtype.ToString ();
 				}
 			case X86: // x86
 				return "i386";

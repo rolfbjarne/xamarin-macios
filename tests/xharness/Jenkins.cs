@@ -449,7 +449,7 @@ namespace xharness
 					var watchOSProject = project.AsWatchOSProject ();
 					var buildWatch32 = new XBuildTask {
 						Jenkins = this,
-						ProjectConfiguration = "Debug64_32",
+						ProjectConfiguration = "Debug32",
 						ProjectPlatform = "iPhone",
 						Platform = TestPlatform.watchOS_32,
 						TestName = project.Name,
@@ -2153,19 +2153,22 @@ namespace xharness
 			}
 			set {
 				execution_result = value;
-				if (Jenkins.IsServerMode) {
+				if (Jenkins.IsServerMode && this is RunTestTask) {
 					switch (value) {
 					case TestExecutingResult.BuildFailure:
-						Harness.Say ("Build failed");
+						Harness.Say ($"Build failed for {TestName}");
 						break;
 					case TestExecutingResult.Crashed:
-						Harness.Say ("Test crashed");
+						Harness.Say ($"Test crashed for {TestName}");
 						break;
 					case TestExecutingResult.Failed:
-						Harness.Say ("Test failed");
+						Harness.Say ($"Test failed for {TestName}");
 						break;
 					case TestExecutingResult.TimedOut:
-						Harness.Say ("Test timed out");
+						Harness.Say ($"Test timed out for {TestName}");
+						break;
+					case TestExecutingResult.Succeeded:
+						Harness.Say ($"Test succeeded for {TestName}");
 						break;
 					}
 				}

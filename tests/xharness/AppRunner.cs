@@ -298,7 +298,7 @@ namespace xharness
 						watchAppSize += file.Length;
 					// transfer speed is ~10MB/minute. Add another 50% just because transfer isn't the only thing happening, and also set it to at least 3 minutes
 					var estimatedTransferTime = watchAppSize / 1024 / 1024 / 10.0;
-					timeout = TimeSpan.FromMinutes (Math.Max (3, estimatedTransferTime * 1.5));
+					timeout = TimeSpan.FromMinutes (Math.Max (3, estimatedTransferTime * 1.5 * 2));
 					main_log.WriteLine ($"Estimated transfer speed to be {estimatedTransferTime} minutes based on the watch app size ({watchAppSize} bytes) and a speed of 10MB/s. Thus setting the install timeout to {timeout.TotalMinutes} minutes (giving it a little extra time).");
 				} else {
 					timeout = TimeSpan.FromMinutes (15);

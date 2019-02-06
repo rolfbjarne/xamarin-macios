@@ -1463,7 +1463,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 	[TestFixture]
 	[Preserve (AllMembers = true)]
-	public partual class TrampolineTestGenerated {");
+	public partial class TrampolineTestGenerated {");
 		w.AppendLine ("\t\tconst string LIBOBJC_DYLIB = \"/usr/lib/libobjc.dylib\";");
 		w.AppendLine ();
 

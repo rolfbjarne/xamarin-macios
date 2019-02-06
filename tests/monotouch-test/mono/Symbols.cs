@@ -28,6 +28,7 @@ namespace MonoTouchFixtures {
 			
 			Collect ();
 			bool aot = symbols [1].Contains ("MonoTouchFixtures_Symbols_Collect");
+			bool llvmonly = symbols [1].Contains ("mono_llvmonly_runtime_invoke"); // LLVM inlines the Collect function, so 'Collect' doesn't show up in the stack trace :/
 			bool interp = false;
 
 			if (!aot) {
@@ -39,18 +40,11 @@ namespace MonoTouchFixtures {
 				}
 			}
 
-			Assert.IsTrue (aot || interp, "#1: \n\t" + string.Join ("\n\t", symbols));
+			Assert.IsTrue (aot || interp || llvmonly, "#1: \n\t" + string.Join ("\n\t", symbols));
 		}
 
 		int Collect ()
 		{
-			Console.WriteLine ("Collect ({0})", recurse);
-			// Make this function look recursive so that LLVM doesn't optimize/inline it away.
-			if (recurse > 0) {
-				recurse--;
-				return Collect ();
-			}
-
 			var array = new IntPtr [50];
 			var size = backtrace (array, array.Length);
 			var symbols = backtrace_symbols (array, size);

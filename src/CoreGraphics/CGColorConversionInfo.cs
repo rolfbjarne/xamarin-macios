@@ -34,20 +34,18 @@ namespace CoreGraphics {
 
 	// CGColorConverter.h
 	[iOS (10,0)][TV (10,0)][Watch (3,0)][Mac (10,12)]
-	public partial class CGColorConversionInfo : INativeObject, IDisposable {
+	public partial class CGColorConversionInfo : NativeObject {
 
 		/* invoked by marshallers */
 		internal CGColorConversionInfo (IntPtr handle)
+			: base (handle, false)
 		{
-			Handle = handle;
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGColorConversionInfo (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			Handle = handle;
-			if (!owns)
-				CFObject.CFRetain (Handle);
 		}
 
 		[DllImport(Constants.CoreGraphicsLibrary)]
@@ -79,11 +77,16 @@ namespace CoreGraphics {
 		}
 
 		public CGColorConversionInfo (NSDictionary options, params GColorConversionInfoTriple [] triples)
+			: base (CreateHandle (options, triples), true)
+		{
+		}
+
+		static IntPtr CreateHandle (NSDictionary options, GColorConversionInfoTriple[] triples)
 		{
 			// the API won't return a valid instance if no triple is given, i.e. at least one is needed. 
 			// `null` is accepted to mark the end of the list, not to make it optional
 			if ((triples == null) || (triples.Length == 0))
-				throw new ArgumentNullException ("triples");
+				throw new ArgumentNullException (nameof (triples));
 			if (triples.Length > 3)
 				throw new ArgumentException ("A maximum of 3 triples are supported");
 			
@@ -91,24 +94,22 @@ namespace CoreGraphics {
 			var first = triples [0]; // there's always one
 			var second = triples.Length > 1 ? triples [1] : empty; 
 			var third = triples.Length > 2 ? triples [2] : empty;
-#if !MONOMAC && !WATCH
-			if ((IntPtr.Size == 8) && (Runtime.Arch == Arch.DEVICE)) {
-				Handle = CGColorConversionInfoCreateFromList_arm64 (o, NativeObjectHelper.GetHandle (first.Space), (long) first.Transform, (long) first.Intent,
+#if !MONOMAC
+			if (Runtime.IsARM64CallingConvention) {
+				return CGColorConversionInfoCreateFromList_arm64 (o, NativeObjectHelper.GetHandle (first.Space), (uint) first.Transform, (int) first.Intent,
 					IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
 					NativeObjectHelper.GetHandle (second.Space), (long) second.Transform, (long) second.Intent,
 					NativeObjectHelper.GetHandle (third.Space), (long) third.Transform, (long) third.Intent,
 					IntPtr.Zero);
 			} else {
 #endif
-				Handle = CGColorConversionInfoCreateFromList (o, NativeObjectHelper.GetHandle (first.Space), first.Transform, first.Intent,
+				return CGColorConversionInfoCreateFromList (o, NativeObjectHelper.GetHandle (first.Space), first.Transform, first.Intent,
 					NativeObjectHelper.GetHandle (second.Space), second.Transform, second.Intent,
 					NativeObjectHelper.GetHandle (third.Space), third.Transform, third.Intent,
 					IntPtr.Zero);
-#if !MONOMAC && !WATCH
+#if !MONOMAC
 			}
 #endif
-			if (Handle == IntPtr.Zero)
-				throw new Exception ("Failed to create CGColorConverter");
 		}
 
 		[iOS (10,0)][Mac (10,12)]
@@ -117,37 +118,11 @@ namespace CoreGraphics {
 
 		[iOS (10,0)][Mac (10,12)]
 		public CGColorConversionInfo (CGColorSpace src, CGColorSpace dst)
+						: base (CGColorConversionInfoCreate (
+									Runtime.ThrowOnNull (src, nameof (src)).Handle, 
+									Runtime.ThrowOnNull (dst, nameof (dst)).Handle),
+								true)
 		{
-			// API accept null arguments but returns null, which we can't use
-			if (src == null)
-				throw new ArgumentNullException (nameof (src));
-			if (dst == null)
-				throw new ArgumentNullException (nameof (dst));
-			Handle = CGColorConversionInfoCreate (src.Handle, dst.Handle);
-
-			if (Handle == IntPtr.Zero)
-				throw new Exception ("Failed to create CGColorConversionInfo");
-		}
-
-		~CGColorConversionInfo ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle { get; private set; }
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (Handle != IntPtr.Zero){
-				CFObject.CFRelease (Handle);
-				Handle = IntPtr.Zero;
-			}
 		}
 	}
 }

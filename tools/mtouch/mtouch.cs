@@ -380,7 +380,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public static string GetAotArguments (Application app, string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile)
+		public static string GetAotArguments (Application app, Target target, string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile)
 		{
 			string fname = Path.GetFileName (filename);
 			StringBuilder args = new StringBuilder ();
@@ -419,6 +419,35 @@ namespace Xamarin.Bundler
 				args.Append ("interp,full,");
 			} else
 				args.Append ("full,");
+
+			// read-only static field optimizations: we can give the AOT compiler a constant value for a read-only static field, and the AOT compiler will replace the field load with the constant value.
+			if (app.Optimizations.InlineIsARM64CallingConvention == true) {
+				bool? is_arm64_calling_convention = null;
+				switch ((abi & Abi.ArchMask)) {
+				case Abi.ARM64:
+				case Abi.ARM64e:
+				case Abi.ARM64_32:
+					is_arm64_calling_convention = true;
+					break;
+				case Abi.ARMv7:
+				case Abi.ARMv7s:
+				case Abi.i386:
+				case Abi.x86_64:
+					is_arm64_calling_convention = false;
+					break;
+				case Abi.ARMv7k:
+					// We won't be running our ARMv7k code on ARM64_32 if we're also building for ARM64_32.
+					// However, if we're not building for ARM64_32 too, we need to defer this to runtime.
+					if (target.Abis.Contains (Abi.ARM64_32))
+						is_arm64_calling_convention = false;
+					break;
+				default:
+					ErrorHelper.Show (ErrorHelper.CreateWarning (99, $"Internal consistency check failure: unknown abi for readonly field optimizations: {abi}. Please file an issue at https://github.com/xamarin/xamarin-macios/issues/new."));
+					break;
+				}
+				if (is_arm64_calling_convention.HasValue)
+					args.Append ("readonly-value=ObjCRuntime.Runtime.IsARM64CallingConvention=i1/").Append (is_arm64_calling_convention.Value ? "1" : "0").Append (',');
+			}
 
 			var aname = Path.GetFileNameWithoutExtension (fname);
 			var sdk_or_product = Profile.IsSdkAssembly (aname) || Profile.IsProductAssembly (aname);

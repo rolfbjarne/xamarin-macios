@@ -58,6 +58,7 @@
     <MtouchExtraArgs>-gcc_flags="-UhoItsB0rken" --optimize=all,-remove-dynamic-registrar</MtouchExtraArgs>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|iPhone' ">
     <DebugSymbols>True</DebugSymbols>

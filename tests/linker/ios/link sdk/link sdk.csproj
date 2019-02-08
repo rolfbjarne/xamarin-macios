@@ -53,6 +53,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|iPhone' ">
     <DebugSymbols>True</DebugSymbols>

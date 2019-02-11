@@ -107,11 +107,16 @@ namespace xharness
 		public string PeriodicCommandArguments { get; set; }
 		public TimeSpan PeriodicCommandInterval { get; set; }
 		// whether tests that require access to system resources (system contacts, photo library, etc) should be executed or not
-		public bool IncludeSystemPermissionTests { get; set; } = true;
+		public bool? IncludeSystemPermissionTests { get; set; }
 
 		public Harness ()
 		{
 			LaunchTimeout = InWrench ? 3 : 120;
+		}
+
+		public bool GetIncludeSystemPermissionsTests (bool is_device)
+		{
+			return IncludeSystemPermissionTests ?? !is_device;
 		}
 
 		static string FindXcode (string path)

@@ -162,7 +162,7 @@ namespace xharness
 			if (!IncludeBcl && project.IsBclTest)
 				return false;
 
-			if (!Harness.IncludeSystemPermissionTests && project.Name == "introspection")
+			if (!Harness.GetIncludeSystemPermissionsTests (false) && project.Name == "introspection")
 				return false;
 
 			return true;
@@ -668,9 +668,9 @@ namespace xharness
 			SetEnabled (labels, "mac-classic", ref IncludeClassicMac);
 			SetEnabled (labels, "ios-msbuild", ref IncludeiOSMSBuild);
 			SetEnabled (labels, "ios-simulator", ref IncludeSimulator);
-			bool inc_permission_tests = Harness.IncludeSystemPermissionTests;
-			SetEnabled (labels, "system-permission", ref inc_permission_tests);
-			Harness.IncludeSystemPermissionTests = inc_permission_tests;
+			bool inc_permission_tests = false;
+			if (SetEnabled (labels, "system-permission", ref inc_permission_tests))
+				Harness.IncludeSystemPermissionTests = inc_permission_tests;
 
 			// docs is a bit special:
 			// - can only be executed if the Xamarin-specific parts of the build is enabled

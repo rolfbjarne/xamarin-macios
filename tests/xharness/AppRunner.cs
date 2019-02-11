@@ -547,7 +547,7 @@ namespace xharness
 				args.Append (" -setenv=NUNIT_ENABLE_XML_MODE=wrapped");
 			}
 
-			if (!Harness.IncludeSystemPermissionTests)
+			if (!Harness.GetIncludeSystemPermissionsTests (!isSimulator))
 				args.Append (" -setenv=DISABLE_SYSTEM_PERMISSION_TESTS=1");
 
 			if (isSimulator) {

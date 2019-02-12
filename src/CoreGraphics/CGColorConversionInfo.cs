@@ -113,7 +113,7 @@ namespace CoreGraphics {
 			}
 #endif
 			if (Handle == IntPtr.Zero)
-				throw new Exception ("Failed to create CGColorConverter");
+				throw new Exception ("Failed to create CGColorConversionInfo");
 		}
 
 		[iOS (10,0)][Mac (10,12)]

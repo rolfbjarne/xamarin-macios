@@ -2450,9 +2450,9 @@ public class B
 		}
 
 		[Test]
-		[TestCase (Target.Dev, null, "armv7k")]
-		[TestCase (Target.Dev, "arm64_32+llvm", "arm64_32")]
-		[TestCase (Target.Dev, "armv7k+llvm,arm64_32+llvm", "armv7k,arm64_32")]
+		[TestCase (Target.Dev, null, "ARMv7k")]
+		[TestCase (Target.Dev, "arm64_32+llvm", "ARM64_32")]
+		[TestCase (Target.Dev, "armv7k+llvm,arm64_32+llvm", "ARMv7k,ARM64_32")]
 		[TestCase (Target.Sim, null, "i386")]
 		public void Architectures_WatchOS (Target target, string abi, string expected_abi)
 		{
@@ -2465,7 +2465,7 @@ public class B
 				mtouch.CreateTemporaryWatchKitExtension ();
 				mtouch.Action = target == Target.Dev ? MTouchAction.BuildDev : MTouchAction.BuildSim;
 				mtouch.AssertExecute ("build");
-				VerifyArchitectures (mtouch.NativeExecutablePath, "arch", expected_abi);
+				VerifyArchitectures (mtouch.NativeExecutablePath, "arch", expected_abi.Split (','));
 			}
 		}
 

@@ -814,6 +814,7 @@ namespace Registrar {
 			/*FIXME try to guess the name of the missing library - quite trivial for monotouch.dll*/
 			// types decorated with [Model] attribute are not registered (see registrar.cs and regression from #769)
 			if (type.IsWrapper && !type.IsModel) {
+				return;
 				if (!IsSimulatorOrDesktop) {
 					// This can happen when Apple introduces new types and puts them as base types for already
 					// existing types. We can't throw any exceptions in that case, since the derived class

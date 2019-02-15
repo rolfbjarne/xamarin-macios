@@ -103,8 +103,10 @@ param_read_primitive (struct ParamIterator *it, const char *type_ptr, void *targ
 			it->nsaa += size;
 		}
 
-		if (target == NULL)
+		if (target == NULL) {
+			LOGZ (" not reading, since target is NULL.\n");
 			return size;
+		}
 
 		switch (size) {
 		case 8:

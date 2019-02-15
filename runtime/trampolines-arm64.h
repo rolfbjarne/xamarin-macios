@@ -33,10 +33,6 @@ struct CallState {
 	struct BigDouble q5;
 	struct BigDouble q6;
 	struct BigDouble q7;
-
-	// computed values
-	uint64_t *x;
-	struct BigDouble *q;
 };
 
 struct ParamIterator {
@@ -44,6 +40,10 @@ struct ParamIterator {
 	int ngrn; // Next General-purpose Register Number
 	int nsrn; // Next SIMD and Floating-point Register Number
 	uint8_t *nsaa; // Next stacked argument address.
+
+	// computed values
+	uint64_t *x;
+	struct BigDouble *q;
 };
 
 void xamarin_arch_trampoline (struct CallState *state);

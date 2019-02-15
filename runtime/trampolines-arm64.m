@@ -82,7 +82,7 @@ dump_state (struct CallState *state, id self, SEL sel, const char *prefix)
 #define dump_state(...)
 #endif
 
-const char* registers[] =  { "rdi", "rsi", "rdx", "rcx", "r8", "r9", "err"  };
+//const char* registers[] =  { "rdi", "rsi", "rdx", "rcx", "r8", "r9", "err"  };
 
 static const char *
 skip_type_name (const char *ptr)
@@ -109,7 +109,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 	case _C_FLT: {
 		if (it->nsrn < 8) {
 			if (target != NULL) {
-				*(float *) target = *(float *) &it->state->q [it->nsrn];
+				*(float *) target = *(float *) &it->q [it->nsrn];
 				LOGZ ("     reading float at q%i into %p: %f\n", it->nsrn, target, *(float *) target);
 			}
 			it->nsrn++;
@@ -125,7 +125,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 	case _C_DBL: {
 		if (it->nsrn < 8) {
 			if (target != NULL) {
-				*(double *) target = *(double *) &it->state->q [it->nsrn];
+				*(double *) target = *(double *) &it->q [it->nsrn];
 				LOGZ ("     reading double at q%i into %p: %f\n", it->nsrn, target, *(double *) target);
 			}
 			it->nsrn++;
@@ -160,7 +160,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 		bool read_register = it->ngrn < 8;
 
 		if (read_register) {
-			ptr = (uint8_t *) &it->state->x [it->ngrn];
+			ptr = (uint8_t *) &it->x [it->ngrn];
 			if (target != NULL) {
 				LOGZ ("     reading primitive of size %i from x%i into %p: ",
 					(int) size, it->ngrn, target);
@@ -215,8 +215,8 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 		it->ngrn = 2; // we already have two arguments: self + SEL
 		it->nsrn = 0;
 		it->nsaa = (uint8_t *) it->state->sp;
-		it->state->x = &it->state->x0;
-		it->state->q = &it->state->q0;
+		it->x = &it->state->x0;
+		it->q = &it->state->q0;
 		LOGZ ("    initialized parameter iterator. next register: %i next fp register: %i next stack pointer: %p\n", it->ngrn, it->nsrn, it->nsaa);
 		return;
 	} else if (action == IteratorEnd) {

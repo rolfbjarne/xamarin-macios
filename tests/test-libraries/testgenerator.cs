@@ -1517,8 +1517,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		w.AppendLine ("\t\t}");
 
 		foreach (var s in structs) {
-			if (/*s.Length == 1 || */s.Contains ('c'))
-				continue; // our trampolines don't currently like structs with a single member, nor char members
+			// if (/*s.Length == 1 || */s.Contains ('c'))
+			// 	continue; // our trampolines don't currently like structs with a single member, nor char members
 
 			bool never;
 			w.AppendLine ();

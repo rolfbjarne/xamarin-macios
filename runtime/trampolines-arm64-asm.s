@@ -1,17 +1,16 @@
 #
 # store all parameters in a consistent way, and send it off to managed code.
 # we need to store:
-#   %rdi, %rsi, %rdx, %rcx, %r8, %r9
-#   %xmm0-%xmm7
+#   x0-x9, x16
+#   q0-q7
+#   x29, x30 (for the stack frame)
 #   an unknown amount of stack space, but we can pass a pointer to the start of this area.
-# in total we need 6*64bits registers + 8*128bits registers + 1*64bit ptr = 184 bytes.
-# additionally we'll use %r11 to specify the type of trampoline was called, so 192 bytes.
-#
+# in total we need 11*64bits registers + 8*128bits registers + 2*64bits register = 232 bytes.
+# the 128 bit registers need to be 16-byte aligned, so there's a register-sized padding before the qX registers, thus total 240 bytes.
 #
 # upon return we may need to write to:
-#   %rax, %rdx 
-#   %xmm0-%xmm1
-#   (the spec says %st0 and %st1 are used to return 'long double' arguments, but we won't encounter those)
+#   x0, x1
+#   q0, q1, q2, q3
 #
 
 #if __arm64__

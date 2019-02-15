@@ -14,13 +14,7 @@
 #include "xamarin/runtime.h"
 #include "runtime-internal.h"
 #include "trampolines-arm64.h"
-
-#define TRACE
-#ifdef TRACE
-#define LOGZ(...) fprintf (stderr, __VA_ARGS__);
-#else
-#define LOGZ(...) ;
-#endif
+#include "product.h"
 
 /*
  * https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/iPhoneOSABIReference/Articles/ARM64FunctionCallingConventions.html
@@ -34,42 +28,6 @@
  *
  */
 
-static guint32
-create_mt_exception (char *msg)
-{
-	MonoException *ex = xamarin_create_exception (msg);
-	xamarin_free (msg);
-	return mono_gchandle_new ((MonoObject *) ex, FALSE);
-}
-
-static size_t
-get_primitive_size (char type)
-{
-	switch (type) {
-	case _C_ID: return sizeof (id);
-	case _C_CLASS: return sizeof (Class);
-	case _C_SEL: return sizeof (SEL);
-	case _C_CHR: return sizeof (char);
-	case _C_UCHR: return sizeof (unsigned char);
-	case _C_SHT: return sizeof (short);
-	case _C_USHT: return sizeof (unsigned short);
-	case _C_INT: return sizeof (int);
-	case _C_UINT: return sizeof (unsigned int);
-	case _C_LNG: return sizeof (long);
-	case _C_ULNG: return sizeof (unsigned long);
-	case _C_LNG_LNG: return sizeof (long long);
-	case _C_ULNG_LNG: return sizeof (unsigned long long);
-	case _C_FLT: return sizeof (float);
-	case _C_DBL: return sizeof (double);
-	case _C_BOOL: return sizeof (BOOL);
-	case _C_VOID: return 0;
-	case _C_PTR: return sizeof (void *);
-	case _C_CHARPTR: return sizeof (char *);
-	default:
-		return 0;
-	}
-}
-
 #ifdef TRACE
 static void
 dump_state (struct CallState *state, id self, SEL sel, const char *prefix)
@@ -82,41 +40,25 @@ dump_state (struct CallState *state, id self, SEL sel, const char *prefix)
 #define dump_state(...)
 #endif
 
-//const char* registers[] =  { "rdi", "rsi", "rdx", "rcx", "r8", "r9", "err"  };
-
-static const char *
-skip_type_name (const char *ptr)
-{
-	const char *t = ptr;
-	do {
-		if (*t == '=') {
-			t++;
-			return t;
-		}
-		t++;
-	} while (*t != 0);
-
-	return ptr;
-}
-
 static int
-param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *target, size_t total_size, guint32 *exception_gchandle)
+param_read_primitive (struct ParamIterator *it, const char *type_ptr, void *target, size_t total_size, guint32 *exception_gchandle)
 {
 	// COOP: does not access managed memory: any mode.
-	char type = **type_ptr;
+	char type = *type_ptr;
+	LOGZ ("        reading primitive %c. total size: %i nsrn: %i ngrn: %i nsaa: %p\n", type, (int) total_size, it->nsrn, it->ngrn, it->nsaa);
 
 	switch (type) {
 	case _C_FLT: {
 		if (it->nsrn < 8) {
 			if (target != NULL) {
 				*(float *) target = *(float *) &it->q [it->nsrn];
-				LOGZ ("     reading float at q%i into %p: %f\n", it->nsrn, target, *(float *) target);
+				LOGZ ("        reading float at q%i into %p: %f\n", it->nsrn, target, *(float *) target);
 			}
 			it->nsrn++;
 		} else {
 			if (target != NULL) {
 				*(float *) target = *(float *) it->nsaa;
-				LOGZ ("     reading float at stack %p into %p: %f\n", it->nsaa, target, *(float *) target);
+				LOGZ ("        reading float at stack %p into %p: %f\n", it->nsaa, target, *(float *) target);
 			}
 			it->nsaa += 4;
 		}
@@ -126,32 +68,20 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 		if (it->nsrn < 8) {
 			if (target != NULL) {
 				*(double *) target = *(double *) &it->q [it->nsrn];
-				LOGZ ("     reading double at q%i into %p: %f\n", it->nsrn, target, *(double *) target);
+				LOGZ ("        reading double at q%i into %p: %f\n", it->nsrn, target, *(double *) target);
 			}
 			it->nsrn++;
 		} else {
 			if (target != NULL) {
 				*(double *) target = *(double *) it->nsaa;
-				LOGZ ("     reading dobule at stack %p into %p: %f\n", it->nsaa, target, *(double *) target);
+				LOGZ ("        reading double at stack %p into %p: %f\n", it->nsaa, target, *(double *) target);
 			}
 			it->nsaa += 8;
 		}
 		return 8;
 	}
-	case _C_PTR: { // ^
-		// Need to skip what's pointed to
-		int nesting = 0;
-		do {
-			(*type_ptr)++;
-			if (**type_ptr == '{')
-				nesting++;
-			else if (**type_ptr == '}')
-				nesting--;
-		} while (**type_ptr != 0 && nesting > 0);
-		// fallthrough
-	}
 	default: {
-		size_t size = get_primitive_size (type);
+		size_t size = xamarin_get_primitive_size (type);
 
 		if (size == 0)
 			return 0;
@@ -162,15 +92,13 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 		if (read_register) {
 			ptr = (uint8_t *) &it->x [it->ngrn];
 			if (target != NULL) {
-				LOGZ ("     reading primitive of size %i from x%i into %p: ",
-					(int) size, it->ngrn, target);
+				LOGZ ("        reading primitive of size %i from x%i into %p: ", (int) size, it->ngrn, target);
 			}
 			it->ngrn++;
 		} else {
 			ptr = (uint8_t *) it->nsaa;
 			if (target != NULL) {
-				LOGZ ("     reading primitive of size %i from %p into %p: ",
-					(int) size, ptr, target);
+				LOGZ ("        reading primitive of size %i from %p into %p: ",  (int) size, ptr, target);
 			}
 			it->nsaa += size;
 		}
@@ -196,7 +124,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, void *tar
 			LOGZ ("0x%x = %u = '%c'\n", (int) * (uint8_t *) target, (int) * (uint8_t *) target, (char) * (uint8_t *) target);
 			break;
 		default:
-			*exception_gchandle = create_mt_exception (xamarin_strdup_printf ("Xamarin.iOS: Cannot marshal parameter type %c (size: %i): invalid size.\n", type, (int) size));
+			*exception_gchandle = xamarin_create_mt_exception (xamarin_strdup_printf (PRODUCT ": Cannot marshal parameter type %c (size: %i): invalid size.\n", type, (int) size));
 			return 0;
 		}
 
@@ -223,14 +151,17 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 		return;
 	}
 
-	const char *t = type;
-	uint8_t *targ = (uint8_t *) target;
-
 	// target must be at least pointer sized, and we need to zero it out first.
 	if (target != NULL)
 		*(uint64_t *) target = 0;
 
-	if (size > 16) {
+	char struct_name [5]; // we don't care about structs with more than 4 fields.
+	xamarin_collapse_struct_name (type, struct_name, sizeof (struct_name), exception_gchandle);
+	if (*exception_gchandle != 0)
+		return;
+
+	if (size > 16 && strcmp (struct_name, "dddd") && strcmp (struct_name, "ddd")) {
+		LOGZ ("    reading parameter passed by reference. type: %s size: %i nsaa: %p\n", type, (int) size, it->nsaa);
 		// passed on the stack
 		if (target != NULL)
 			memcpy (target, it->nsaa, size);
@@ -239,23 +170,17 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 		return;
 	}
 
+	if (*struct_name == 0) {
+		// FIXME throw exception
+		assert (0);
+	}
+
 	// passed in registers (and on the stack if not enough registers)
+	LOGZ ("    reading parameter from registers/stack. type: %s (collapsed: %s) size: %i\n", type, struct_name, (int) size);
+	const char *t = struct_name;
+	uint8_t *targ = (uint8_t *) target;
 	do {
-		// skip over any struct names
-		if (*t == '{') {
-			do {
-				t++;
-				if (*t == '=') {
-					t++;
-					break;
-				}
-			} while (*t != 0);
-		}
-
-		if (*t == 0)
-			break;
-
-		int c = param_read_primitive (it, &t, targ, size, exception_gchandle);
+		int c = param_read_primitive (it, t, targ, size, exception_gchandle);
 		if (*exception_gchandle != 0)
 			return;
 		if (targ != NULL)
@@ -269,177 +194,62 @@ marshal_return_value (void *context, const char *type, size_t size, void *vvalue
 	// COOP: accessing managed memory (as input), so must be in unsafe mode.
 	MONO_ASSERT_GC_UNSAFE;
 
+	char struct_name[5];
 	MonoObject *value = (MonoObject *) vvalue;
 	struct ParamIterator *it = (struct ParamIterator *) context;
 
-	LOGZ ("     marshalling return value %p as %s\n", value, type);
+	LOGZ ("    marshalling return value %p as %s with size %i\n", value, type, (int) size);
 
 	switch (type [0]) {
 	case _C_FLT:
 		// single floating point return value
-		*(float*)&it->state->q0 = *(float *) mono_object_unbox (value);
+		it->state->q0.f.f1 = *(float *) mono_object_unbox (value);
 		break;
 	case _C_DBL:
 		// double floating point return value
-		*(double*)&it->state->q0 = *(double *) mono_object_unbox (value);
+		it->state->q0.d = *(double *) mono_object_unbox (value);
 		break;
 	case _C_STRUCT_B:
 		/*
-		 * Structures, this is ugly :|
+		 * Structures, this is ugly, but not as bad as x86_64.
 		 *
-		 * Fortunately we don't have to implement support for the full x86_64 ABI, since we don't need
-		 * to support all the types. We only have to implement support for two classes of types:
-		 * 
-		 *   INTEGER: all variants of ints/uints/pointers. IOW anything that fits into a pointer-sized variable and isn't a floating point value.
-		 *   FLOAT:   float, double.
-		 * 
-		 * To make things more interesting, struct fields are joined together until the reach 64-bit size,
-		 * so for instance two int fields will be stuffed into one 64-bit INTEGER register. Same for floats,
-		 * two floats will be put into one 64-bit FLOAT register. If there's a mix of floats
-		 * and ints the ints win, so a float+int will be put into a 64-bit INTEGER register.
-		 * There are also two registers available for each class:
-		 * 
-		 *   INTEGER: %rax and %rdi
-		 *   FLOAT: %xmm0 and %xmm1
-		 *
-		 * Up to 2 registers (either both INTEGER, both FLOAT or a mix) can be used. This means that 
-		 * structs up to 16 bytes can be (and are) passed in registers.
-		 * 
-		 * A few examples (d=double f=float i=int c=char):
-		 * 
-		 *	M(d);     // xmm0
-		 *	M(dd);    // xmm0 + xmm1
-		 *	M(ddd);   // stack
-		 *	M(dddd);  // stack
-		 *	M(i);     // eax
-		 *	M(id);    // eax + xmm0
-		 *	M(di);    // xmm0 + eax
-		 *	M(ddi);   // stack
-		 *	M(ii);    // rax
-		 *	M(iii);   // rax + edx
-		 *	M(iiii);  // rax + rdx
-		 *	M(iiiii); // stack
-		 *	M(idi);   // stack
-		 *	M(iid);   // rax + xmm0
-		 *	M(ll);    // rax + rdx
-		 *	M(lll);   // stack
-		 *	M(cccc);  // eax
-		 *	M(ffff);  // xmm0 + xmm1
-		 *  M(if_);   // rax
-		 *  M(f);     // xmm0
-		 *  M(iff);   // rax + xmm0 (if: rax, f: xmm0)
-		 *  M(iiff);  // rax + xmm0
-		 *  M(fi);    // rax
-		 *
+		 * A) Structures of 1 to 4 fields of the same floating point type (float or double), are passed in the q[0-3] registers.
+		 * B) Any other structure > 16 bytes is passed by reference (pointer to memory in x8)
+		 * C) Structures <= 16 bytes are passed in x0 and x1 as needed. Each register can contain multiple fields.
 		 */
 
-		if ((it->state->type & Tramp_Stret) == Tramp_Stret) {
-			memcpy ((void *) it->state->x8, mono_object_unbox (value), size);
-			break;
-		}
-
-		if (size > 8 && size <= 16) {
-			*exception_gchandle = create_mt_exception (xamarin_strdup_printf ("Xamarin.iOS: Cannot marshal struct return type %s (size: %i)\n", type, (int) size));
+		xamarin_collapse_struct_name (type, struct_name, sizeof (struct_name), exception_gchandle);
+		if (*exception_gchandle != 0)
 			return;
-			// uint64_t *i_ptr = &it->state->rax;
-			// uint64_t *f_ptr = (uint64_t *) &it->state->xmm0;
-			// uint64_t *reg_ptr = f_ptr;
 
-			// void *unboxed = mono_object_unbox (value);
-
-			// // read the struct into 2 64bit values.
-			// uint64_t v[2];
-			// v[0] = *(uint64_t *) unboxed;
-			// // read as much as we can of the second value
-			// unboxed = 1 + (uint64_t *) unboxed;
-			// if (size == 16) {
-			// 	v[1] = *(uint64_t *) unboxed;
-			// } else if (size == 12) {
-			// 	v[1] = *(uint32_t *) unboxed;
-			// } else if (size == 10) {
-			// 	v[1] = *(uint16_t *) unboxed;
-			// } else if (size == 9) {
-			// 	v[1] = *(uint8_t *) unboxed;
-			// } else {
-			// 	v[1] = 0; // theoretically impossible, but it silences static analysis, and if the real world proves the theory wrong, then we still get consistent behavior.
-			// }
-			// // figure out where to put the values.
-			// const char *t = skip_type_name (type);
-			// int acc = 0;
-			// int stores = 0;
-
-			// while (true) {
-			// 	if (*t == 0) {
-			// 		if (stores >= 2 && acc > 0) {
-			// 			*exception_gchandle = create_mt_exception (xamarin_strdup_printf ("Xamarin.iOS: Cannot marshal return type %s (size: %i): more than 2 64-bit values found.\n", type, (int) size));
-			// 			return;
-			// 		} else if (stores < 2) {
-			// 			*reg_ptr = v [stores];
-			// 		}
-			// 		break;
-			// 	}
-					
-			// 	bool is_float = *t == _C_FLT || *t == _C_DBL;
-			// 	int s = get_primitive_size (*t);
-
-			// 	t++;
-
-			// 	if (s == 0)
-			// 		continue;
-
-			// 	if (acc + s == 8) {
-			// 		// We have exactly the amount of data we need for one register.
-			// 		// Store the value and start over again.
-			// 		reg_ptr = is_float ? reg_ptr : i_ptr;
-			// 		acc = 0;
-			// 	} else if (acc + s < 8) {
-			// 		// We haven't filled up a register yet.
-			// 		// Continue iterating.
-			// 		reg_ptr = is_float ? reg_ptr : i_ptr;
-			// 		acc += s;
-			// 		// find next.
-			// 		continue;
-			// 	} else {
-			// 		// We've overflown. Store the value and start over again,
-			// 		// setting the current total to the size of the current type.
-			// 		acc = s;
-			// 	}
-
-			// 	if (stores >= 2) {
-			// 		*exception_gchandle = create_mt_exception (xamarin_strdup_printf ("Xamarin.iOS: Cannot marshal return type %s (size: %i): more than 2 64-bit values found.\n", type, (int) size));
-			// 		return;
-			// 	}
-
-			// 	// Write the current value to the correct register.
-			// 	*reg_ptr = v [stores++];
-			// 	if (reg_ptr == f_ptr) {
-			// 		f_ptr += 2; // xmm0/xmm1 are 128-bit wide (long double).
-			// 	} else {
-			// 		i_ptr++;
-			// 	}
-
-			// 	if (acc == s) {
-			// 		// Overflown codepath from above.
-			// 		reg_ptr = is_float ? f_ptr : i_ptr;
-			// 	} else {
-			// 		reg_ptr = f_ptr;
-			// 	}
-
-			// };
-		} else if (size == 8) {
-			type = skip_type_name (type);
-			if (!strncmp (type, "ff}", 3) || !strncmp (type, "d}", 2)) {
-				// the only two fully fp combinations are: ff and d
-				memcpy (&it->state->q0, mono_object_unbox (value), 8);
-			} else {
-				// all other combinations would contain at least one INTEGER-class type.
-				it->state->x8 = *(uint64_t *) mono_object_unbox (value);
+		if ((size == 32 && !strncmp (struct_name, "dddd", 4)) ||
+			(size == 24 && !strncmp (struct_name, "ddd", 3)) ||
+			(size == 16 && !strncmp (struct_name, "dd", 2)) ||
+			(size == 8 && !strncmp (struct_name, "d", 1))) {
+			LOGZ ("        marshalling as %i doubles (struct name: %s)\n", (int) size / 8, struct_name);
+			double* ptr = (double *) mono_object_unbox (value);
+			for (int i = 0; i < size / 8; i++) {
+				LOGZ ("        #%i: %f\n", i, ptr [i]);
+				it->q [i].d = ptr [i];
 			}
-		} else if (size < 8) {
-			memcpy (&it->state->x8, mono_object_unbox (value), size);
+		} else if ((size == 16 && !strncmp (struct_name, "ffff", 4)) ||
+				   (size == 12 && !strncmp (struct_name, "fff", 3)) ||
+				   (size == 8 && !strncmp (struct_name, "ff", 2)) ||
+				   (size == 4 && !strncmp (struct_name, "f", 1))) {
+			LOGZ ("        marshalling as %i floats (struct name: %s)\n", (int) size / 4, struct_name);
+			float* ptr = (float *) mono_object_unbox (value);
+			for (int i = 0; i < size / 4; i++) {
+				LOGZ ("        #%i: %f\n", i, ptr [i]);
+				it->q [i].f.f1 = ptr [i];
+			}
+		} else if (size > 16) {
+			LOGZ ("        marshalling as stret through x8\n");
+			memcpy ((void *) it->state->x8, mono_object_unbox (value), size);
 		} else {
-			*exception_gchandle = create_mt_exception (xamarin_strdup_printf ("Xamarin.iOS: Cannot marshal struct return type %s (size: %i)\n", type, (int) size));
-			return;
+			LOGZ ("        marshalling as composite values in x0 and x1\n");
+			it->state->x0 = 0;
+			it->state->x1 = 0;
+			memcpy (&it->state->x0, mono_object_unbox (value), size);
 		}
 		break;
 	// For primitive types we get a pointer to the actual value
@@ -462,7 +272,7 @@ marshal_return_value (void *context, const char *type, size_t size, void *vvalue
 	case _C_ULNG_LNG:
 		it->state->x0 = *(uint64_t *) mono_object_unbox (value);
 		break;
-	
+
 	// For pointer types we get the value itself.
 	case _C_CLASS:
 	case _C_SEL:
@@ -483,7 +293,7 @@ marshal_return_value (void *context, const char *type, size_t size, void *vvalue
 		if (size == 8) {
 			it->state->x0 = (uint64_t) value;
 		} else {
-			*exception_gchandle = create_mt_exception (xamarin_strdup_printf ("Xamarin.iOS: Cannot marshal return type %s (size: %i)\n", type, (int) size));
+			*exception_gchandle = xamarin_create_mt_exception (xamarin_strdup_printf (PRODUCT ": Cannot marshal return type %s (size: %i)\n", type, (int) size));
 		}
 		break;
 	}
@@ -504,4 +314,4 @@ xamarin_arch_trampoline (struct CallState *state)
 	dump_state (state, self, sel, "END: ");
 }
 
-#endif /* __x86_64__ */
+#endif /* __arm64__ */

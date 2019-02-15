@@ -72,10 +72,11 @@
     <WarningLevel>0</WarningLevel>
     <MtouchDebug>True</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchExtraArgs>-v -v -v -v</MtouchExtraArgs>
+    <MtouchExtraArgs>-v -v -v -v --registrar:dynamic --debug:all --optimize:-all</MtouchExtraArgs>
     <MtouchArch>ARM64</MtouchArch>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|iPhone' ">
     <DebugSymbols>True</DebugSymbols>

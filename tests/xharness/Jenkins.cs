@@ -1744,6 +1744,14 @@ namespace xharness
 						}
 						if (!string.IsNullOrEmpty (previous_test_runs))
 							writer.Write (previous_test_runs);
+
+						writer.WriteLine ($@"
+	<li>Options
+			<ul>
+				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""set-option?{(CleanSuccessfulTestRuns ? "do-not-clean" : "clean")}"");'>&#x{(CleanSuccessfulTestRuns ? "2705" : "274C")} Clean successful test runs</a></span></li>
+			</ul>
+	</li>
+	");
 					}
 					writer.WriteLine ("</ul>");
 				}

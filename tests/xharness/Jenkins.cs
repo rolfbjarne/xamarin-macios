@@ -1844,10 +1844,9 @@ namespace xharness
 								}
 							}
 							var progressMessage = test.ProgressMessage;
-							if (!string.IsNullOrEmpty (progressMessage)) {
-								writer.WriteLine ("<br />");
-								writer.WriteLine (HtmlFormat ("\t" + progressMessage) + " <br />");
-							}
+							if (!string.IsNullOrEmpty (progressMessage))
+								writer.WriteLine (HtmlFormat (progressMessage) + " <br />");
+
 							if (runTest != null) {
 								if (runTest.BuildTask.Duration.Ticks > 0) {
 									writer.WriteLine ($"Project file: {runTest.BuildTask.ProjectFile} <br />");

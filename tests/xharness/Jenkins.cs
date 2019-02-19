@@ -39,6 +39,7 @@ namespace xharness
 		public bool IncludeDocs;
 
 		public bool CleanSuccessfulTestRuns = true;
+		public bool UninstallAfterTestCompletion = true;
 
 		public Log MainLog;
 		public Log SimulatorLoadLog;
@@ -1100,6 +1101,12 @@ namespace xharness
 							case "?do-not-clean":
 								CleanSuccessfulTestRuns = false;
 								break;
+							case "?uninstall-after-test-completion":
+								UninstallAfterTestCompletion = true;
+								break;
+							case "?do-not-uninstall-after-test-completion":
+								UninstallAfterTestCompletion = false;
+								break;
 							default:
 								throw new NotImplementedException (request.Url.Query);
 							}
@@ -1749,7 +1756,8 @@ namespace xharness
 						writer.WriteLine ($@"
 	<li>Options
 			<ul>
-				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""set-option?{(CleanSuccessfulTestRuns ? "do-not-clean" : "clean")}"");'>&#x{(CleanSuccessfulTestRuns ? "2705" : "274C")} Clean successful test runs</a></span></li>
+				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""/set-option?{(CleanSuccessfulTestRuns ? "do-not-clean" : "clean")}"");'>&#x{(CleanSuccessfulTestRuns ? "2705" : "274C")} Clean successful test runs</a></span></li>
+				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""/set-option?{(UninstallAfterTestCompletion ? "do-not-uninstall-after-test-completion" : "uninstall-after-test-completion")}"");'>&#x{(UninstallAfterTestCompletion ? "2705" : "274C")} Uninstall apps from device after test completion</a></span></li>
 			</ul>
 	</li>
 	");
@@ -3479,10 +3487,14 @@ namespace xharness
 					}
 				} finally {
 					// Uninstall again, so that we don't leave junk behind and fill up the device.
-					runner.MainLog = uninstall_log;
-					var uninstall_result = await runner.UninstallAsync ();
-					if (!uninstall_result.Succeeded)
-						MainLog.WriteLine ($"Post-run uninstall failed, exit code: {uninstall_result.ExitCode} (this won't affect the test result)");
+					if (Jenkins.UninstallAfterTestCompletion) {
+						runner.MainLog = uninstall_log;
+						var uninstall_result = await runner.UninstallAsync ();
+						if (!uninstall_result.Succeeded)
+							MainLog.WriteLine ($"Post-run uninstall failed, exit code: {uninstall_result.ExitCode} (this won't affect the test result)");
+					} else {
+						uninstall_log.WriteLine ($"Post-run uninstall skipped.");
+					}
 
 					// Also clean up after us locally.
 					if (Harness.InJenkins || Harness.InWrench || (Jenkins.CleanSuccessfulTestRuns && Succeeded))

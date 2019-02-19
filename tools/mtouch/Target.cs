@@ -1099,10 +1099,8 @@ namespace Xamarin.Bundler
 							}
 						}
 					}
-					if (App.Embeddinator) {
-						if (!string.IsNullOrEmpty (App.UserGccFlags))
-							compiler_flags.AddOtherFlag (App.UserGccFlags);
-					}
+					if (App.Embeddinator)
+						compiler_flags.AddOtherFlag (App.UserGccFlags);
 					compiler_flags.LinkWithMono ();
 					compiler_flags.LinkWithXamarin ();
 					if (GetAllSymbols ().Contains ("UIApplicationMain"))
@@ -1522,8 +1520,7 @@ namespace Xamarin.Bundler
 				linker_flags.AddLinkWith (libilgen);
 			}
 
-			if (!string.IsNullOrEmpty (App.UserGccFlags))
-				linker_flags.AddOtherFlag (App.UserGccFlags);
+			linker_flags.AddOtherFlag (App.UserGccFlags);
 
 			if (App.DeadStrip)
 				linker_flags.AddOtherFlag ("-dead_strip");

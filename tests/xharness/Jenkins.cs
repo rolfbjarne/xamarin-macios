@@ -1858,7 +1858,7 @@ namespace xharness
 							writer.WriteLine ($"<div id='logs_{log_id}' class='autorefreshable logs togglable' data-onautorefresh='{log_id}' style='display: {defaultDisplay};'>");
 
 							if (!string.IsNullOrEmpty (test.FailureMessage)) {
-								var msg = System.Web.HttpUtility.HtmlEncode (test.FailureMessage).Replace ("\n", "<br />");
+								var msg = HtmlFormat (test.FailureMessage);
 								var prefix = test.Ignored ? "Ignored" : "Failure";
 								if (test.FailureMessage.Contains ('\n')) {
 									writer.WriteLine ($"{prefix}:<br /> <div style='margin-left: 20px;'>{msg}</div>");

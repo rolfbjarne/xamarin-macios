@@ -91,13 +91,14 @@ namespace xharness
 				log = Logs.Create ($"{name}-list-{Harness.Timestamp}.log", $"{name} Listing");
 			log.Description = $"{name} Listing (in progress)";
 
+			var capturedLog = log;
 			return loadable.LoadAsync (DeviceLoadLog, include_locked: false, force: true).ContinueWith ((v) => {
 				if (v.IsFaulted) {
-					DeviceLoadLog.WriteLine ("Failed to load:");
-					DeviceLoadLog.WriteLine (v.Exception);
-					DeviceLoadLog.Description = $"{name} Listing {v.Exception.Message})";
+					capturedLog.WriteLine ("Failed to load:");
+					capturedLog.WriteLine (v.Exception);
+					capturedLog.Description = $"{name} Listing {v.Exception.Message})";
 				} else if (v.IsCompleted) {
-					DeviceLoadLog.Description = $"{name} Listing (ok)";
+					capturedLog.Description = $"{name} Listing (ok)";
 				}
 			});
 		}
@@ -687,7 +688,7 @@ namespace xharness
 			return false;
 		}
 
-		async Task PopulateTasksAsync ()
+		Task PopulateTasksAsync ()
 		{
 			// Missing:
 			// api-diff
@@ -918,6 +919,8 @@ namespace xharness
 			Tasks.Add (runDocsTests);
 
 			Tasks.AddRange (CreateRunDeviceTasks ());
+
+			return Task.CompletedTask;
 		}
 
 		RunTestTask CloneExecuteTask (RunTestTask task, TestProject original_project, TestPlatform platform, string suffix, bool ignore, bool requiresXcode94 = false)
@@ -1284,10 +1287,10 @@ namespace xharness
 							}
 							break;
 						case "/reload-devices":
-							GC.KeepAlive (Devices.LoadAsync (DeviceLoadLog, force: true));
+							LoadAsync (ref DeviceLoadLog, Devices, "Device").DoNotAwait ();
 							break;
 						case "/reload-simulators":
-							GC.KeepAlive (Simulators.LoadAsync (SimulatorLoadLog, force: true));
+							LoadAsync (ref SimulatorLoadLog, Simulators, "Simulator").DoNotAwait ();
 							break;
 						case "/quit":
 							using (var writer = new StreamWriter (response.OutputStream)) {

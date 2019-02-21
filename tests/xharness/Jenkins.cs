@@ -39,7 +39,7 @@ namespace xharness
 		public bool IncludeDocs;
 
 		public bool CleanSuccessfulTestRuns = true;
-		public bool UninstallAfterTestCompletion = true;
+		public bool UninstallTestApp = true;
 
 		public Log MainLog;
 		public Log SimulatorLoadLog;
@@ -1142,11 +1142,11 @@ namespace xharness
 							case "?do-not-clean":
 								CleanSuccessfulTestRuns = false;
 								break;
-							case "?uninstall-after-test-completion":
-								UninstallAfterTestCompletion = true;
+							case "?uninstall-test-app":
+								UninstallTestApp = true;
 								break;
-							case "?do-not-uninstall-after-test-completion":
-								UninstallAfterTestCompletion = false;
+							case "?do-not-uninstall-test-app":
+								UninstallTestApp = false;
 								break;
 							default:
 								throw new NotImplementedException (request.Url.Query);
@@ -1756,7 +1756,7 @@ namespace xharness
 	<li>Options
 			<ul>
 				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""/set-option?{(CleanSuccessfulTestRuns ? "do-not-clean" : "clean")}"");'>&#x{(CleanSuccessfulTestRuns ? "2705" : "274C")} Clean successful test runs</a></span></li>
-				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""/set-option?{(UninstallAfterTestCompletion ? "do-not-uninstall-after-test-completion" : "uninstall-after-test-completion")}"");'>&#x{(UninstallAfterTestCompletion ? "2705" : "274C")} Uninstall apps from device after test completion</a></span></li>
+				<li class=""adminitem""><span id='{id_counter++}' class='autorefreshable'><a href='javascript:sendrequest (""/set-option?{(UninstallTestApp ? "do-not-uninstall-uninstall-test-app" : "uninstall-test-app")}"");'>&#x{(UninstallTestApp ? "2705" : "274C")} Uninstall the app from device before and after the test run</a></span></li>
 			</ul>
 	</li>
 	");
@@ -3430,10 +3430,14 @@ namespace xharness
 					};
 
 					// Sometimes devices can't upgrade (depending on what has changed), so make sure to uninstall any existing apps first.
-					runner.MainLog = uninstall_log;
-					var uninstall_result = await runner.UninstallAsync ();
-					if (!uninstall_result.Succeeded)
-						MainLog.WriteLine ($"Pre-run uninstall failed, exit code: {uninstall_result.ExitCode} (this hopefully won't affect the test result)");
+					if (Jenkins.UninstallTestApp) {
+						runner.MainLog = uninstall_log;
+						var uninstall_result = await runner.UninstallAsync ();
+						if (!uninstall_result.Succeeded)
+							MainLog.WriteLine ($"Pre-run uninstall failed, exit code: {uninstall_result.ExitCode} (this hopefully won't affect the test result)");
+					} else {
+						uninstall_log.WriteLine ($"Pre-run uninstall skipped.");
+					}
 
 					if (!Failed) {
 						// Install the app
@@ -3492,7 +3496,7 @@ namespace xharness
 					}
 				} finally {
 					// Uninstall again, so that we don't leave junk behind and fill up the device.
-					if (Jenkins.UninstallAfterTestCompletion) {
+					if (Jenkins.UninstallTestApp) {
 						runner.MainLog = uninstall_log;
 						var uninstall_result = await runner.UninstallAsync ();
 						if (!uninstall_result.Succeeded)

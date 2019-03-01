@@ -436,6 +436,32 @@ namespace Xamarin.Tests
 			}
 		}
 
+		public static IEnumerable<string> GetBaseLibraryImplementations (Profile profile)
+		{
+			switch (profile) {
+			case Profile.iOS:
+				yield return Path.Combine (mt_root, "lib", "32bits", "Xamarin.iOS.dll");
+				yield return Path.Combine (mt_root, "lib", "64bits", "Xamarin.iOS.dll");
+				break;
+			case Profile.macOSMobile:
+				yield return Path.Combine (SdkRootXM, "lib", "x86_64", "mobile", "Xamarin.Mac.dll");
+				yield return Path.Combine (SdkRootXM, "lib", "i386", "mobile", "Xamarin.Mac.dll");
+				break;
+			case Profile.macOSFull:
+				yield return Path.Combine (SdkRootXM, "lib", "x86_64", "full", "Xamarin.Mac.dll");
+				yield return Path.Combine (SdkRootXM, "lib", "i386", "full", "Xamarin.Mac.dll");
+				break;
+			case Profile.tvOS:
+				yield return Path.Combine (mt_root, "lib", "64bits", "Xamarin.TVOS.dll");
+				break;
+			case Profile.watchOS:
+				yield return Path.Combine (mt_root, "lib", "32bits", "Xamarin.WatchOS.dll");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+		}
+
 		public static string GetTargetFramework (Profile profile)
 		{
 			switch (profile) {

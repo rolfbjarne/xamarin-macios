@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using NUnit.Framework;
 
 using Xamarin.Tests;
@@ -362,6 +363,116 @@ namespace Xamarin.Linker {
 
 			Assert.IsEmpty (string.Join ("\n", llvm_failed), "LLVM failed");
 			Assert.AreEqual (expected_exit_code, rv, "AOT compilation");
+		}
+
+		[Test]
+		[TestCase (Profile.iOS)]
+		[TestCase (Profile.tvOS)]
+		[TestCase (Profile.watchOS)]
+		[TestCase (Profile.macOSFull)]
+		[TestCase (Profile.macOSMobile)]
+		public void INativeObjectIntPtrConstructorDoesNotOwnHandle (Profile profile)
+		{
+			var noIntPtrBoolConstructors = new List<TypeDefinition> ();
+			var assumesOwnership = new List<TypeDefinition> ();
+			SequencePoint seq;
+	
+			foreach (var dll in Configuration.GetBaseLibraryImplementations (profile)) {
+				using (var ad = AssemblyDefinition.ReadAssembly (dll, new ReaderParameters (ReadingMode.Deferred) { ReadSymbols = true })) {
+					foreach (var type in ad.MainModule.Types) {
+						// Skip classes we know aren't (properly) reference counted.
+						switch (type.Name) {
+						case "Selector": // Never freed
+						case "Class": // Never freed
+						case "Protocol": // Never freed
+						case "SecKeyChain": // Not reference counted
+							continue;
+						}
+
+						// Find classes that implement INativeObject, but doesn't subclass NSObject.
+						if (!type.IsClass)
+							continue;
+						if (!type.HasInterfaces)
+							continue;
+
+						// Does type implement INativeObject?
+						var implementsINativeObject = false;
+						foreach (var id in type.Interfaces) {
+							if (id.InterfaceType.Name == "INativeObject") {
+								implementsINativeObject = true;
+								break;
+							}
+						}
+						if (!implementsINativeObject)
+							continue;
+
+						// Does type subclass NSObject (or is it NSObject itself)?
+						var baseClass = type;
+						while (baseClass != null && baseClass.Name != "NSObject")
+							baseClass = baseClass.BaseType?.Resolve ();
+						if (baseClass?.Name == "NSObject")
+							continue;
+
+						// Find the two constructors we care about
+						MethodDefinition intptrCtor = null;
+						MethodDefinition intptrBoolCtor = null;
+						foreach (var ctor in type.Methods) {
+							if (!ctor.IsConstructor)
+								continue;
+							if (ctor.IsStatic)
+								continue;
+							if (!ctor.HasParameters)
+								continue;
+							var parameters = ctor.Parameters;
+							if (parameters.Count == 1 && parameters [0].ParameterType.Is ("System", "IntPtr")) {
+								intptrCtor = ctor;
+							} else if (parameters.Count == 2 && parameters [0].ParameterType.Is ("System", "IntPtr") && parameters [1].ParameterType.Is ("System", "Boolean")) {
+								intptrBoolCtor = ctor;
+							} else {
+								continue;
+							}
+							if (intptrCtor != null && intptrBoolCtor != null)
+								break;
+						}
+
+						// If we don't have an IntPtr constructor, there's nothing else to verify.
+						// In this case it's usually not a problem to not have an 'IntPtr, bool' ctor either
+						if (intptrCtor == null)
+							continue;
+						
+						// If we have an IntPtr constructor, then we should have an 'IntPtr, bool' as well
+						if (intptrBoolCtor == null) {
+							seq = (intptrCtor ?? type.Methods.FirstOrDefault ())?.DebugInformation?.SequencePoints?.FirstOrDefault ();
+							Console.WriteLine ("{0} does not have an IntPtr, bool ctor{1}", type.FullName, seq == null ? string.Empty : $": {seq?.Document?.Url}:{seq?.StartLine}");
+							noIntPtrBoolConstructors.Add (type);
+							continue;
+						}
+
+						var foundSelfCall = false;
+						foreach (var instr in intptrCtor.Body.Instructions) {
+							if (instr.OpCode.Code != Code.Call)
+								continue;
+							var method = (MethodReference) instr.Operand;
+							if (method != intptrCtor)
+								continue;
+							if (instr.Previous.OpCode.Code != Code.Ldc_I4_0) {
+								seq =  intptrCtor.DebugInformation?.SequencePoints?.FirstOrDefault ();
+								Console.WriteLine ("{0}'s IntPtr constructor calls the IntPtr, bool constructor, but owns!=false{1}", type.FullName, seq == null ? string.Empty : $": {seq?.Document?.Url}:{seq?.StartLine}");
+								continue;
+							}
+
+							foundSelfCall = true;
+						}
+						if (foundSelfCall)
+							continue;
+						seq = intptrCtor.DebugInformation?.SequencePoints?.FirstOrDefault ();
+						Console.WriteLine ("{0}'s IntPtr constructor does not call the IntPtr, bool constructor{1}", type.FullName, seq == null ? string.Empty : $": {seq?.Document?.Url}:{seq?.StartLine}");
+						assumesOwnership.Add (type);
+					}
+				}
+			}
+			Assert.AreEqual (0, assumesOwnership.Count, "IntPtr constructor assumes ownership Count");
+			Assert.AreEqual (0, noIntPtrBoolConstructors.Count, "No IntPtr, bool constructor Count");
 		}
 	}
 }

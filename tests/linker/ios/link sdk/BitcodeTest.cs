@@ -76,6 +76,13 @@ namespace LinkSdk {
 			var enumeratorType = GetType ().GetNestedTypes (BindingFlags.NonPublic).First ((v) => v.Name.Contains ($"<{nameof (FaultClause)}>"));
 			var method = enumeratorType.GetMethod ("MoveNext", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 			var body = method.GetMethodBody ();
+
+			var il = body.GetILAsByteArray ();
+			if (il.Length == 1 && il [0] == 0x2a) {
+				// A single ret instruction.
+				Assert.Inconclusive ("The IL has been stripped away");
+			}
+
 			Assert.IsTrue (body.ExceptionHandlingClauses.Any ((v) => v.Flags == ExceptionHandlingClauseOptions.Fault), "Any fault clauses");
 
 			// Then assert that the method can be called successfully.

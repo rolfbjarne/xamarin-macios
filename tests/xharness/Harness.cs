@@ -109,7 +109,7 @@ namespace xharness
 		public string PeriodicCommandArguments { get; set; }
 		public TimeSpan PeriodicCommandInterval { get; set; }
 		// whether tests that require access to system resources (system contacts, photo library, etc) should be executed or not
-		public bool IncludeSystemPermissionTests { get; set; } = true;
+		public bool IncludeSystemPermissionTests { get; set; } = false;
 
 		public Harness ()
 		{

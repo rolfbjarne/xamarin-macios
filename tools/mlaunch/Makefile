@@ -28,3 +28,6 @@ publish:
 	@echo "Can't publish mlaunch binaries to the macios-binaries repository unless building mlaunch from source (by enabling the xamarin build)"
 	@exit 1
 endif
+
+clean-local::
+	cd $(MACIOSTOOLS_PATH)/Xamarin.Hosting && git clean -xfd

@@ -191,9 +191,10 @@ NSArray *   xamarin_managed_string_array_to_nsarray (MonoArray *array, bool reta
 NSArray *   xamarin_managed_nsobject_array_to_nsarray (MonoArray *array, bool retain, guint32 *exception_gchandle);
 NSArray *   xamarin_managed_inativeobject_array_to_nsarray (MonoArray *array, bool retain, guint32 *exception_gchandle);
 
-MonoArray * xamarin_nsarray_to_managed_string_array (NSArray *array, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
-MonoArray * xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
-MonoArray * xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_string_array (NSArray *array, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_inativeobject_array_static (NSArray *array, MonoType *array_type, MonoClass *element_class, uint32_t iface_token_ref, uint32_t implementation_token_ref, guint32 *exception_gchandle);
 
 /* Copied from SGen */
 

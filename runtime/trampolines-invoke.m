@@ -61,8 +61,19 @@ xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj)
 	return str;
 }
 
+struct conversion_data {
+	MonoDomain *domain;
+	MonoType *element_type;
+	MonoClass *element_class;
+	MonoReflectionType *element_reflection_type;
+	uint32_t iface_token_ref;
+	uint32_t implementation_token_ref;
+	SEL sel;
+	MonoMethod *managed_method;
+};
+
 typedef NSObject *(*managed_element_to_nsobject_func) (MonoObject *obj, guint32 *exception_gchandle);
-typedef MonoObject *(*nsobject_element_to_managed_func) (MonoDomain *domain, MonoClass *element_type, SEL sel, MonoMethod *managed_method, NSObject *obj, guint32 *exception_gchandle);
+typedef MonoObject *(*nsobject_element_to_managed_func) (NSObject *obj, struct conversion_data *data, guint32 *exception_gchandle);
 
 static NSObject *
 xamarin_element_string_to_nsstring (MonoObject *obj, guint32 *exception_gchandle)
@@ -86,34 +97,41 @@ xamarin_element_inativeobject_to_nsobject (MonoObject *object, guint32 *exceptio
 }
 
 static MonoObject *
-xamarin_element_nsobject_to_string (MonoDomain *domain, MonoClass *element_type, SEL sel, MonoMethod *managed_method, NSObject *object, guint32 *exception_gchandle)
+xamarin_element_nsobject_to_string (NSObject *object, struct conversion_data *data, guint32 *exception_gchandle)
 {
-	return (MonoObject *) xamarin_nsstring_to_string (domain, (NSString *) object);
+	return (MonoObject *) xamarin_nsstring_to_string (data->domain, (NSString *) object);
 }
 
 static MonoObject *
-xamarin_element_nsobject_to_object (MonoDomain *domain, MonoClass *element_type, SEL sel, MonoMethod *managed_method, NSObject *object, guint32 *exception_gchandle)
+xamarin_element_nsobject_to_object (NSObject *object, struct conversion_data *data, guint32 *exception_gchandle)
 {
-	return xamarin_get_nsobject_with_type_for_ptr (object, false, mono_class_get_type (element_type), sel, managed_method, exception_gchandle);
+	return xamarin_get_nsobject_with_type_for_ptr (object, false, data->element_type, data->sel, data->managed_method, exception_gchandle);
 }
 
 static MonoObject *
-xamarin_element_nsobject_to_inativeobject (MonoDomain *domain, MonoClass *element_type, SEL sel, MonoMethod *managed_method, NSObject *object, guint32 *exception_gchandle)
+xamarin_element_nsobject_to_inativeobject (NSObject *object, struct conversion_data *data, guint32 *exception_gchandle)
 {
-	return xamarin_get_inative_object_dynamic (object, false, mono_type_get_object (domain, mono_class_get_type (element_type)), exception_gchandle);
+	return xamarin_get_inative_object_dynamic (object, false, data->element_reflection_type, exception_gchandle);
 }
 
-MonoArray *
-xamarin_nsarray_to_managed_array_func (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, nsobject_element_to_managed_func func, guint32 *exception_gchandle)
+static MonoObject *
+xamarin_element_nsobject_to_inativeobject_static (NSObject *object, struct conversion_data *data, guint32 *exception_gchandle)
+{
+	return xamarin_get_inative_object_static (object, false, data->iface_token_ref, data->implementation_token_ref, exception_gchandle);
+}
+
+static MonoArray *
+xamarin_nsarray_to_managed_array_func (NSArray *array, struct conversion_data *data, nsobject_element_to_managed_func func, guint32 *exception_gchandle)
 {
 	if (array == NULL)
 		return NULL;
 
-	MonoDomain *domain = mono_domain_get ();
-	MonoArray *marr = mono_array_new (mono_domain_get (), element_type, [array count]);
+	if (data->domain == NULL)
+		data->domain = mono_domain_get ();
+	MonoArray *marr = mono_array_new (data->domain, data->element_class, [array count]);
 	for (int i = 0; i < [array count]; i++) {
 		NSObject *nobj = [array objectAtIndex: i];
-		MonoObject *mobj = func (domain, element_type, sel, managed_method, nobj, exception_gchandle);
+		MonoObject *mobj = func (nobj, data, exception_gchandle);
 		if (*exception_gchandle != 0)
 			return NULL;
 		mono_array_setref (marr, i, mobj);
@@ -123,21 +141,46 @@ xamarin_nsarray_to_managed_array_func (NSArray *array, MonoClass *element_type, 
 }
 
 MonoArray *
-xamarin_nsarray_to_managed_string_array (NSArray *array, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle)
+xamarin_nsarray_to_managed_string_array (NSArray *array, guint32 *exception_gchandle)
 {
-	return xamarin_nsarray_to_managed_array_func (array, mono_get_string_class (), sel, managed_method, xamarin_element_nsobject_to_string, exception_gchandle);
+	struct conversion_data data = { 0 };
+	data.domain = mono_domain_get ();
+	data.element_class = mono_get_string_class ();
+	data.element_type = mono_class_get_type (data.element_class);
+	return xamarin_nsarray_to_managed_array_func (array, &data, xamarin_element_nsobject_to_string, exception_gchandle);
 }
 
 MonoArray *
-xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle)
+xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle)
 {
-	return xamarin_nsarray_to_managed_array_func (array, element_type, sel, managed_method, xamarin_element_nsobject_to_object, exception_gchandle);
+	struct conversion_data data = { 0 };
+	data.element_class = element_class == NULL ? mono_class_get_element_class (mono_class_from_mono_type (array_type)) : element_class;
+	data.element_type = mono_class_get_type (data.element_class);
+	data.sel = sel;
+	data.managed_method = managed_method;
+	return xamarin_nsarray_to_managed_array_func (array, &data, xamarin_element_nsobject_to_object, exception_gchandle);
 }
 
 MonoArray *
-xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoClass *element_type, SEL sel, MonoMethod *managed_method, guint32 *exception_gchandle)
+xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, guint32 *exception_gchandle)
 {
-	return xamarin_nsarray_to_managed_array_func (array, element_type, sel, managed_method, xamarin_element_nsobject_to_inativeobject, exception_gchandle);
+	struct conversion_data data = { 0 };
+	data.domain = mono_domain_get ();
+	data.element_class = element_class == NULL ? mono_class_get_element_class (mono_class_from_mono_type (array_type)) : element_class;
+	data.element_type = mono_class_get_type (data.element_class);
+	data.element_reflection_type = mono_type_get_object (data.domain, data.element_type);
+	return xamarin_nsarray_to_managed_array_func (array, &data, xamarin_element_nsobject_to_inativeobject, exception_gchandle);
+}
+
+MonoArray *
+xamarin_nsarray_to_managed_inativeobject_array_static (NSArray *array, MonoType *array_type, MonoClass *element_class, uint32_t iface_token_ref, uint32_t implementation_token_ref, guint32 *exception_gchandle)
+{
+	struct conversion_data data = { 0 };
+	data.element_class = element_class == NULL ? mono_class_get_element_class (mono_class_from_mono_type (array_type)) : element_class;
+	data.element_type = mono_class_get_type (data.element_class);
+	data.iface_token_ref = iface_token_ref;
+	data.implementation_token_ref = implementation_token_ref;
+	return xamarin_nsarray_to_managed_array_func (array, &data, xamarin_element_nsobject_to_inativeobject_static, exception_gchandle);
 }
 
 static NSArray *
@@ -221,11 +264,11 @@ xamarin_nsarray_to_managed_array (SEL sel, MonoMethod *method, int parameter, NS
 
 	MonoClass *e_klass = mono_class_get_element_class (managed_class);
 	if (e_klass == mono_get_string_class ()) {
-		return xamarin_nsarray_to_managed_string_array (array, sel, method, exception_gchandle);
+		return xamarin_nsarray_to_managed_string_array (array, exception_gchandle);
 	} else if (xamarin_is_class_nsobject (e_klass)) {
-		return xamarin_nsarray_to_managed_nsobject_array (array, e_klass, sel, method, exception_gchandle);
+		return xamarin_nsarray_to_managed_nsobject_array (array, managed_type, e_klass, sel, method, exception_gchandle);
 	} else if (xamarin_is_class_inativeobject (e_klass)) {
-		return xamarin_nsarray_to_managed_inativeobject_array (array, e_klass, sel, method, exception_gchandle);
+		return xamarin_nsarray_to_managed_inativeobject_array (array, managed_type, e_klass, exception_gchandle);
 	} else {
 		*exception_gchandle = xamarin_get_exception_for_parameter (8029, "Unable to marshal the parameter", sel, method, managed_type, parameter, true);
 		return NULL;

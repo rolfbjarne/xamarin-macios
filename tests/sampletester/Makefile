@@ -21,7 +21,7 @@ unexport XamarinMacFrameworkRoot
 unexport MSBuildExtensionsPath
 endif
 
-NUNIT_MSBUILD_DIR=$(TOP)/packages/NUnit.ConsoleRunner.3.5.0/tools/
+NUNIT_MSBUILD_DIR=$(TOP)/packages/NUnit.ConsoleRunner.3.9.0/tools/
 
 all-local::
 	$(MAKE) build
@@ -33,11 +33,8 @@ endif
 
 run-tests:
 	@rm -f .failed-stamp
-	mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(WHERE_CONDITION) $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml);format=nunit2" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
-	@# Create an html file and tell MonkeyWrench to upload it (if we're running there)
-	@[[ -z "$$BUILD_REPOSITORY" ]] || \
-		( xsltproc $(TOP)/tests/HtmlTransform.xslt TestResult.xml  > index.html && \
-		echo "@MonkeyWrench: AddFile: $$PWD/index.html")
+	mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(WHERE_CONDITION) $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml)" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
+	# xsltproc $(TOP)/tests/HtmlTransform.xslt TestResult.xml > index.html
 	@[[ ! -e .failed-stamp ]]
 
 run-tests-system:
@@ -45,5 +42,5 @@ run-tests-system:
 
 build:
 	$(Q) $(SYSTEM_MONO) /Library/Frameworks//Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore ../tests.sln
-	$(SYSTEM_XBUILD) sampletester.csproj $(XBUILD_VERBOSITY)
+	$(SYSTEM_MSBUILD) sampletester.csproj $(MSBUILD_VERBOSITY)
 	$(Q) rm -f .failed-stamp

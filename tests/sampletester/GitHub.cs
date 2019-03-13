@@ -1,25 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Xml;
 
 using NUnit.Framework;
 
-public static class GitHub
-{
-	public static string [] GetSolutions (string user, string repo)
+public static class GitHub {
+	static WebClient CreateClient ()
+	{
+		var client = new WebClient ();
+		client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
+		var xharness_github_token_file = Environment.GetEnvironmentVariable ("XHARNESS_GITHUB_TOKEN_FILE");
+		if (!string.IsNullOrEmpty (xharness_github_token_file) && File.Exists (xharness_github_token_file))
+			client.Headers.Add (HttpRequestHeader.Authorization, File.ReadAllText (xharness_github_token_file));
+		return client;
+	}
+
+	static string[] GetFiles (string user, string repo)
 	{
 		var fn = Path.Combine (Configuration.RootDirectory, $"{repo}.filelist");
 		if (File.Exists (fn))
 			return File.ReadAllLines (fn);
 		Directory.CreateDirectory (Path.GetDirectoryName (fn));
 
-		using (var client = new WebClient ()) {
+		using (var client = CreateClient ()) {
 			byte [] data;
 			try {
-				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
 				data = client.DownloadData ($"https://api.github.com/repos/{user}/{repo}/git/trees/master?recursive=1");
 			} catch (WebException we) {
 				string rsp = we.Message;
@@ -38,15 +47,27 @@ public static class GitHub
 			doc.Load (reader);
 			var rv = new List<string> ();
 			foreach (XmlNode node in doc.SelectNodes ("/root/tree/item/path")) {
-				var path = node.InnerText;
-				if (!path.EndsWith (".sln", StringComparison.OrdinalIgnoreCase))
-					continue;
 				rv.Add (node.InnerText);
 			}
 
 			File.WriteAllLines (fn, rv.ToArray ());
 			return rv.ToArray ();
 		}
+
+	}
+
+	public static string [] GetSolutions (string user, string repo)
+	{
+		return GetFiles (user, repo).Where ((v) => v.EndsWith (".sln", StringComparison.OrdinalIgnoreCase)).ToArray ();
+	}
+
+	public static string [] GetProjects (string user, string repo)
+	{
+		return GetFiles (user, repo)
+			.Where ((v) => {
+				var ext = Path.GetExtension (v).ToLowerInvariant ();
+				return ext == ".csproj" || ext == ".fsproj";
+			}).ToArray ();
 	}
 
 	public static string [] GetDirectories (string user, string repo, bool recursive)
@@ -54,12 +75,10 @@ public static class GitHub
 		var fn = Path.Combine (Configuration.RootDirectory, $"{user}-{repo}.filelist");
 		if (File.Exists (fn))
 			return File.ReadAllLines (fn);
-		Directory.CreateDirectory (Path.GetDirectoryName (fn));
 
-		using (var client = new WebClient ()) {
+		using (var client = CreateClient ()) {
 			byte [] data;
 			try {
-				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
 				data = client.DownloadData ($"https://api.github.com/repos/{user}/{repo}/git/trees/master?recursive=0");
 			} catch (WebException we) {
 				return new string [] { $"Failed to load repo {user}/{repo}: {we.Message}" };
@@ -82,7 +101,7 @@ public static class GitHub
 
 	public static string GetFileContents (string user, string repo, string filename)
 	{
-		using (var client = new WebClient ()) {
+		using (var client = CreateClient ()) {
 			try {
 				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
 				return client.DownloadString ($"https://raw.githubusercontent.com/{user}/{repo}/master/{filename}");

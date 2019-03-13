@@ -8,13 +8,31 @@ using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
+using Xamarin;
+
 public static class ProcessHelper
 {
+	static string log_directory;
+	static string LogDirectory {
+		get {
+			if (log_directory == null)
+				log_directory = Cache.CreateTemporaryDirectory ("execution-logs");
+			return log_directory;
+		}
+
+	}
 	public static void AssertRunProcess (string filename, string arguments, TimeSpan timeout, string workingDirectory, string message)
 	{
 		var exitCode = 0;
 		var output = new List<string> ();
 		var rv = RunProcess (filename, arguments, out exitCode, timeout, workingDirectory, output);
+
+		// Write execution log to disk (and print the path)
+		var logfile = Path.Combine (LogDirectory, Guid.NewGuid ().ToString () + ".log");
+		File.WriteAllLines (logfile, output);
+		TestContext.AddTestAttachment (logfile, $"Execution log for {filename}");
+		Console.WriteLine ("Execution log for {0}: {1}", filename, logfile);
+
 		var errors = new List<string> ();
 		var errorMessage = "";
 		if ((!rv || exitCode != 0) && output.Count > 0) {
@@ -22,7 +40,6 @@ public static class ProcessHelper
 			foreach (var line in output) {
 				if (regex.IsMatch (line) && !errors.Contains (line))
 					errors.Add (line);
-				Console.WriteLine (line);
 			}
 			if (errors.Count > 0)
 				errorMessage = "\n\t[Summary of errors from the build output below]\n\t" + string.Join ("\n\t", errors);
@@ -103,10 +120,24 @@ public static class ProcessHelper
 		}
 	}
 
-	public static void BuildSolution (string solution, string msbuild, string platform, string configuration)
+	public static void BuildSolution (string solution, string platform, string configuration, string target = "")
 	{
 		try {
-			AssertRunProcess ("nuget", $"restore \"{solution}\"", TimeSpan.FromMinutes (2), Configuration.RootDirectory, "nuget restore");
+			// nuget restore
+			var solution_dir = string.Empty;
+			var solutions = new string [] { solution };
+			if (!solution.EndsWith (".sln", StringComparison.Ordinal)) {
+				var slndir = Path.GetDirectoryName (solution);
+				solutions = Directory.GetFiles (slndir, "*.sln", SearchOption.TopDirectoryOnly);
+				while ((solutions = Directory.GetFiles (slndir, "*.sln", SearchOption.TopDirectoryOnly)).Length == 0 && slndir.Length > 1)
+					slndir = Path.GetDirectoryName (slndir);
+				solution_dir = $"-SolutionDir \"{slndir}\"";
+
+			}
+			foreach (var sln in solutions)
+				AssertRunProcess ("nuget", $"restore \"{sln}\" -Verbosity detailed {solution_dir}", TimeSpan.FromMinutes (2), Configuration.RootDirectory, "nuget restore");
+
+			// msbuild
 			var sb = new StringBuilder ();
 			sb.Append ("/verbosity:diag ");
 			if (!string.IsNullOrEmpty (platform))
@@ -114,11 +145,13 @@ public static class ProcessHelper
 			if (!string.IsNullOrEmpty (configuration))
 				sb.Append ($" /p:Configuration={configuration}");
 			sb.Append ($" \"{solution}\"");
-			AssertRunProcess (msbuild, sb.ToString (), TimeSpan.FromMinutes (5), Configuration.RootDirectory, "build");
+			if (!string.IsNullOrEmpty (target))
+				sb.Append ($" /t:{target}");
+			AssertRunProcess ("msbuild", sb.ToString (), TimeSpan.FromMinutes (5), Configuration.RootDirectory, "build");
 		} finally {
 			// Clean up after us, since building for device needs a lot of space.
 			// Ignore any failures (since failures here doesn't mean the test failed).
-			GitHub.CleanRepository (Path.GetDirectoryName (solution), false);
+			//GitHub.CleanRepository (Path.GetDirectoryName (solution), false);
 		}
 	}
 

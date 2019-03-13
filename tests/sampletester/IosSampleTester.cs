@@ -2,24 +2,26 @@
 
 using NUnit.Framework;
 
-[Category (CATEGORY)]
-public class IosSampleTester : SampleTester
-{
-	const string REPO = "ios-samples"; // monotouch-samples redirects to ios-samples
-	const string CATEGORY = "iossamples"; // categories can't contain dashes
-	public IosSampleTester ()
-		: base (REPO)
-	{
-	}
+namespace Samples {
+	[Category (CATEGORY)]
+	public class IosSampleTester : SampleTester {
+		const string REPO = "ios-samples"; // monotouch-samples redirects to ios-samples
+		const string CATEGORY = "iossamples"; // categories can't contain dashes
+		const string HASH = "origin/master";
 
-	static string [] GetSolutions ()
-	{
-		return GetSolutionsImpl (REPO);
-	}
+		static string [] GetSolutions ()
+		{
+			return GetSolutionsImpl (REPO);
+		}
 
-	protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
-	{
-		return new Dictionary<string, string> {
+		static string [] GetProjects ()
+		{
+			return GetExecutableProjects (REPO);
+		}
+
+		protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
+		{
+			return new Dictionary<string, string> {
 			{ "BindingSample/src/sample/Xamarin.XMBindingLibrarySample/Xamarin.XMBindingLibrarySample.sln", "Binding sample solution that depends on a makefile-built binding library. Fix: change the makefile-built binding library to a binding project, and add it as a project reference in the solution" },
 			{ "BouncingGameEmptyiOS/BouncingGame.sln", @"nuget restore fails with: Unable to find version '1.3.1.0' of package 'CocosSharp.PCL.Shared'." },
 			{ "CustomTransitions/CustomTransitions.sln", "personal code signing key: /Library/Frameworks/Mono.framework/External/xbuild/Xamarin/iOS/Xamarin.iOS.Common.targets: error : iOS code signing key 'iPhone Developer: Germán Marquez (U3F86JM574)' not found in keychain." },
@@ -106,5 +108,6 @@ public class IosSampleTester : SampleTester
 			// seems to only fail with msbuild. I can't repro this locally (but I haven't tried much either).
 			{ "ios8/SceneKitFSharp/FSSceneKit.sln", "/tmp/xamarin-macios-sample-builder/repositories/ios-samples/ios8/SceneKitFSharp/FSSceneKit/FSSceneKitViewController.fs(6,6): error FS0074: The type referenced through 'System.Runtime.CompilerServices.ExtensionAttribute' is defined in an assembly that is not referenced. You must add a reference to assembly 'System.Runtime'. [/private/tmp/xamarin-macios-sample-builder/repositories/ios-samples/ios8/SceneKitFSharp/FSSceneKit/FSSceneKit.fsproj]" },
 		};
+		}
 	}
 }

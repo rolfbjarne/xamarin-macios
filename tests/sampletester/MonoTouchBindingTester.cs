@@ -10,47 +10,44 @@ using System.Xml;
 
 using NUnit.Framework;
 
-[TestFixture]
-[Category (CATEGORY)]
-public class MonoTouchBindingTester : BaseTester
-{
-	public const string REPO = "monotouch-bindings";
-	const string CATEGORY = "monotouchbindings"; // categories can't contain dashes
+namespace Bindings {
+	[TestFixture]
+	[Category (CATEGORY)]
+	public class MonoTouchBindingTester : BaseTester {
+		public const string REPO = "monotouch-bindings";
+		const string CATEGORY = "monotouchbindings"; // categories can't contain dashes
+		const string HASH = "origin/master";
 
-	public MonoTouchBindingTester ()
-		: base (REPO)
-	{
-	}
+		Dictionary<string, string> ignored_bindings;
+		Dictionary<string, string> GetIgnoredBindings ()
+		{
+			if (ignored_bindings == null)
+				ignored_bindings = GetIgnoredBindingsImpl ();
+			return ignored_bindings;
+		}
 
-	Dictionary<string, string> ignored_bindings; 
-	Dictionary<string, string> GetIgnoredBindings ()
-	{
-		if (ignored_bindings == null)
-			ignored_bindings = GetIgnoredBindingsImpl ();
-		return ignored_bindings;
-	}
+		[Test]
+		[Ignore ("Skipping bindings for now")]
+		public void BuildBinding ([ValueSource ("GetBindings")] string binding)
+		{
+			string ignored_message = "Ignored";
+			if (GetIgnoredBindings ()?.TryGetValue (binding, out ignored_message) == true)
+				Assert.Ignore (ignored_message);
 
-	[Test]
-	public void BuildBinding ([ValueSource ("GetBindings")] string binding)
-	{
-		string ignored_message = "Ignored";
-		if (GetIgnoredBindings ()?.TryGetValue (binding, out ignored_message) == true)
-			Assert.Ignore (ignored_message);
+			GitHub.CloneRepository ("xamarin", "monotouch-bindings-externals");
+			var binding_dir = Path.Combine (GitHub.CloneRepository ("mono", Repository), binding);
 
-		GitHub.CloneRepository ("xamarin", "monotouch-bindings-externals");
-		var binding_dir = Path.Combine (GitHub.CloneRepository ("mono", Repository), binding);
+			ProcessHelper.BuildMakefile (Path.Combine (binding_dir, "Makefile"));
+		}
 
-		ProcessHelper.BuildMakefile (Path.Combine (binding_dir, "Makefile"));
-	}
+		static string [] GetBindings ()
+		{
+			return GitHub.GetDirectories ("mono", "monotouch-bindings", false);
+		}
 
-	static string [] GetBindings ()
-	{
-		return GitHub.GetDirectories ("mono", "monotouch-bindings", false);
-	}
-
-	Dictionary<string, string> GetIgnoredBindingsImpl ()
-	{
-		return new Dictionary<string, string> {
+		Dictionary<string, string> GetIgnoredBindingsImpl ()
+		{
+			return new Dictionary<string, string> {
 			{ "AdJitsu", "?" },  // Not included in the top-level makefile
 			{ "CardIO", "?" },  // Not included in the top-level makefile
 			{ "CDCircleSharp", "?" },  // Not included in the top-level makefile
@@ -119,5 +116,6 @@ public class MonoTouchBindingTester : BaseTester
 			{ "WEPopover", "?" },
 			{ "ZipArchive", "?" },
 		};
+		}
 	}
 }

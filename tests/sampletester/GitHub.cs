@@ -8,6 +8,8 @@ using System.Xml;
 
 using NUnit.Framework;
 
+using Xamarin.Tests;
+
 public static class GitHub {
 	static WebClient CreateClient ()
 	{
@@ -21,7 +23,7 @@ public static class GitHub {
 
 	static string[] GetFiles (string user, string repo)
 	{
-		var fn = Path.Combine (Configuration.RootDirectory, $"{repo}.filelist");
+		var fn = Path.Combine (Configuration.SampleRootDirectory, $"{repo}.filelist");
 		if (File.Exists (fn))
 			return File.ReadAllLines (fn);
 		Directory.CreateDirectory (Path.GetDirectoryName (fn));
@@ -72,7 +74,7 @@ public static class GitHub {
 
 	public static string [] GetDirectories (string user, string repo, bool recursive)
 	{
-		var fn = Path.Combine (Configuration.RootDirectory, $"{user}-{repo}.filelist");
+		var fn = Path.Combine (Configuration.SampleRootDirectory, $"{user}-{repo}.filelist");
 		if (File.Exists (fn))
 			return File.ReadAllLines (fn);
 
@@ -113,20 +115,13 @@ public static class GitHub {
 
 	public static string CloneRepository (string user, string repo)
 	{
-		var repo_dir = Path.Combine (Configuration.RootDirectory, repo);
+		var repo_dir = Path.Combine (Configuration.SampleRootDirectory, repo);
 
-		Directory.CreateDirectory (Configuration.RootDirectory);
+		Directory.CreateDirectory (Configuration.SampleRootDirectory);
 
 		if (!Directory.Exists (repo_dir)) {
-			var exitCode = 0;
 			var auth = Environment.GetEnvironmentVariable ("GITHUB_AUTH_TOKEN") ?? string.Empty;
-			Func<string, string> scrambler = (string v) => v;
-			if (!string.IsNullOrEmpty (auth)) {
-				scrambler = (string v) => v?.Replace (auth, "******");
-				auth += "@";
-			}
-			Assert.IsTrue (ProcessHelper.RunProcess ("git", $"clone https://{auth}github.com/{user}/{repo}", out exitCode, TimeSpan.FromMinutes (10), Configuration.RootDirectory, scrambler: scrambler), "cloned in 10 minutes");
-			Assert.AreEqual (0, exitCode, "git clone exit code");
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "clone", $"https://{auth}github.com/{user}/{repo}" }, working_directory: Configuration.SampleRootDirectory, timeout: TimeSpan.FromMinutes (10)), "cloned in 10 minutes");
 		} else {
 			CleanRepository (repo_dir);
 		}
@@ -136,8 +131,8 @@ public static class GitHub {
 
 	public static void CleanRepository (string directory, bool submodules = true)
 	{
-		ProcessHelper.RunProcess ("git", "clean -xffdq", TimeSpan.FromSeconds (30), directory);
+		ExecutionHelper.Execute ("git", new string [] { "clean", "-xffdq" }, working_directory: directory, timeout: TimeSpan.FromSeconds (30));
 		if (submodules)
-			ProcessHelper.RunProcess ("git", "submodule foreach --recursive 'clean -xffdq'", TimeSpan.FromSeconds (60), directory);
+			ExecutionHelper.Execute ("git", new string [] { "submodule", "foreach", "--recursive", "clean -xffdq" }, working_directory: directory, timeout: TimeSpan.FromSeconds (60));
 	}
 }

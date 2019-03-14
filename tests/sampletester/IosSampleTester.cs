@@ -32,7 +32,6 @@ namespace Samples {
 				{ "ios8/Lister/Lister/Lister.csproj", new SampleTestData { BuildSolution = true, Solution = "ios8/Lister/Lister.sln" } },
 				{ "ios9/Emporium/Emporium/Emporium.csproj", new SampleTestData { BuildSolution = true, Solution = "ios9/Emporium/Emporium.sln" } },
 				{ "ios9/iTravel/iTravel/iTravel.csproj", new SampleTestData { BuildSolution = true, Solution = "ios9/iTravel/iTravel.sln" } },
-				{ "PassKit/PassLibrary/PassLibrary.csproj", new SampleTestData { BuildSolution = true, Solution = "PassKit/PassLibrary/PassLibrary.sln" } },
 				{ "Profiling/MemoryDemo/MemoryDemo/MemoryDemo.csproj", new SampleTestData { BuildSolution = true, Solution = "Profiling/MemoryDemo/MemoryDemo.sln", DebugConfiguration = "Before-Debug", ReleaseConfiguration = "Before-Release" } },
 				{ "WalkingGameCompleteiOS/WalkingGame.iOS/WalkingGame.iOS.csproj", new SampleTestData { BuildSolution = true, Solution = "WalkingGameCompleteiOS/WalkingGame.sln" } },
 				{ "WalkingGameEmptyiOS/WalkingGame.iOS/WalkingGame.iOS.csproj", new SampleTestData { BuildSolution = true, Solution = "WalkingGameEmptyiOS/WalkingGame.sln" } },
@@ -42,6 +41,7 @@ namespace Samples {
 				// known failures
 				{ "WatchKit/GpsWatch/GpsWatch/MainApp.csproj", new SampleTestData { KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
 				{ "WatchKit/WatchNotifications/WatchNotifications_iOS/WatchNotifications_iOS.csproj", new SampleTestData { KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
+				{ "PassKit/PassLibrary/PassLibrary.csproj", new SampleTestData { BuildSolution = true, Solution = "PassKit/PassLibrary/PassLibrary.sln", KnownFailure = "Requires custom provisioning to get a proper pass." } },
 			};
 		}
 	}

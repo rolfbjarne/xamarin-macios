@@ -418,7 +418,7 @@ namespace ObjCRuntime {
 #endif
 				return method;
 			default:
-				throw ErrorHelper.CreateError (8021, $"Unknown implicit token type: 0x{token_type}.");
+				throw ErrorHelper.CreateError (8021, $"Unknown implicit token type: 0x{token_type:X}.");
 			}
 		}
 

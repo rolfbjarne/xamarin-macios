@@ -16,6 +16,8 @@ namespace Samples {
 		public string Solution;
 		public bool BuildSolution;
 		public string KnownFailure;
+		public string DebugConfiguration;
+		public string ReleaseConfiguration;
 	}
 
 	[TestFixture]
@@ -107,6 +109,11 @@ namespace Samples {
 					project_to_build = data.Solution;
 					target = Path.GetFileNameWithoutExtension (project).Replace ('.', '_');
 				}
+
+				if (configuration == "Debug" && data.DebugConfiguration != null)
+					configuration = data.DebugConfiguration;
+				if (configuration == "Release" && data.ReleaseConfiguration != null)
+					configuration = data.ReleaseConfiguration;
 			}
 
 

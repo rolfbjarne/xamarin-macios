@@ -1366,19 +1366,17 @@ WATCHOS_TARGET_SHAREDLIBLOGPROFILER = \
 
 WATCHOS_TARGET_LIBMONONATIVECOMPAT        = \
 	$(BUILD_DESTDIR)/targetwatch/lib/libmono-native-compat.a \
-	$(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native-compat.a \
 
 WATCHOS_TARGET_LIBMONONATIVEUNIFIED       = \
 	$(BUILD_DESTDIR)/targetwatch/lib/libmono-native-unified.a \
-	$(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native-unified.a \
+	$(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native.a \
 
 WATCHOS_TARGET_SHAREDLIBMONONATIVECOMPAT  = \
 	$(BUILD_DESTDIR)/targetwatch/lib/libmono-native-compat.dylib \
-	$(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native-compat.dylib \
 
 WATCHOS_TARGET_SHAREDLIBMONONATIVEUNIFIED = \
 	$(BUILD_DESTDIR)/targetwatch/lib/libmono-native-unified.dylib \
-	$(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native-unified.dylib \
+	$(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native.dylib \
 
 WATCHOS_TARGET_MONOFRAMEWORK = \
 	$(BUILD_DESTDIR)/targetwatch/tmp-lib/Mono \
@@ -1461,8 +1459,15 @@ $(IOS_DESTDIR)$(XAMARIN_WATCHOS_SDK)/usr/lib/libmono-native-compat.dylib: $(WATC
 	$(Q) dsymutil -t 4 -o $@.dSYM $@
 
 $(IOS_DESTDIR)$(XAMARIN_WATCHOS_SDK)/usr/lib/libmono-native-unified.dylib: $(WATCHOS_TARGET_SHAREDLIBMONONATIVEUNIFIED) | $(IOS_DESTDIR)$(XAMARIN_WATCHOS_SDK)/usr/lib
-	$(Q) $(WATCHOS_BIN_PATH)/bitcode_strip $(WATCHOS_TARGET_SHAREDLIBMONONATIVEUNIFIED) -m -o $@
-	$(Q) $(WATCHOS_BIN_PATH)/install_name_tool -id @rpath/libmono-native-unified.dylib -change $(SDK_DESTDIR)/ios-targetwatch-release/lib/libmono-native-unified.dylib @rpath/libmono-native-unified.dylib -change $(SDK_DESTDIR)/ios-targetwatch-release/lib/libmonosgen-2.0.1.dylib @rpath/libmonosgen-2.0.dylib $@
+	$(Q_STRIP) $(WATCHOS_BIN_PATH)/bitcode_strip $(BUILD_DESTDIR)/targetwatch/lib/libmono-native-unified.dylib -m -o $(BUILD_DESTDIR)/targetwatch/tmp-lib/libmono-native-unified.dylib
+	$(Q_STRIP) $(WATCHOS_BIN_PATH)/bitcode_strip $(BUILD_DESTDIR)/targetwatch64_32/lib/libmono-native.dylib -m -o $(BUILD_DESTDIR)/targetwatch64_32/tmp-lib/libmono-native.dylib
+	$(Q_STRIP) $(WATCHOS_BIN_PATH)/lipo $(BUILD_DESTDIR)/targetwatch/tmp-lib/libmono-native-unified.dylib $(BUILD_DESTDIR)/targetwatch64_32/tmp-lib/libmono-native.dylib -create -output $@
+	$(Q) $(WATCHOS_BIN_PATH)/install_name_tool -id @rpath/libmono-native-unified.dylib \
+		-change $(SDK_DESTDIR)/ios-targetwatch64_32-release/lib/libmono-native.dylib @rpath/libmono-native-unified.dylib \
+		-change $(SDK_DESTDIR)/ios-targetwatch64_32-release/lib/libmonosgen-2.0.1.dylib @rpath/libmonosgen-2.0.dylib \
+		-change $(SDK_DESTDIR)/ios-targetwatch-release/lib/libmono-native-unified.dylib @rpath/libmono-native-unified.dylib \
+		-change $(SDK_DESTDIR)/ios-targetwatch-release/lib/libmonosgen-2.0.1.dylib @rpath/libmonosgen-2.0.dylib \
+		$@
 	$(Q) dsymutil -t 4 -o $@.dSYM $@
 
 $(WATCHOS_DIRECTORIES):

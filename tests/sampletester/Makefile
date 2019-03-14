@@ -3,13 +3,15 @@ TOP=../..
 include $(TOP)/Make.config
 
 ifneq ('$(IOS_DESTDIR)','')
+export MD_APPLE_SDK_ROOT=$(abspath $(XCODE_DEVELOPER_ROOT)/../..)
 export MD_MTOUCH_SDK_ROOT=$(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)
-export XBUILD_FRAMEWORK_FOLDERS_PATH=$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks
-export MSBuildExtensionsPath=$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild
+export TargetFrameworkFallbackSearchPaths=$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks
+export MSBuildExtensionsPathFallbackPathsOverride=$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild
 else
+unexport MD_APPLE_SDK_ROOT
 unexport MD_MTOUCH_SDK_ROOT
-unexport XBUILD_FRAMEWORK_FOLDERS_PATH
-unexport MSBuildExtensionsPath
+unexport TargetFrameworkFallbackSearchPaths
+unexport MSBuildExtensionsPathFallbackPathsOverride
 endif
 
 ifneq ('$(MAC_DESTDIR)','')
@@ -18,7 +20,8 @@ export XamarinMacFrameworkRoot=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.fra
 else
 unexport XAMMAC_FRAMEWORK_PATH
 unexport XamarinMacFrameworkRoot
-unexport MSBuildExtensionsPath
+unexport TargetFrameworkFallbackSearchPaths
+unexport MSBuildExtensionsPathFallbackPathsOverride
 endif
 
 NUNIT_MSBUILD_DIR=$(TOP)/packages/NUnit.ConsoleRunner.3.9.0/tools/
@@ -33,8 +36,8 @@ endif
 
 run-tests:
 	@rm -f .failed-stamp
-	mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(WHERE_CONDITION) $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml)" $(TEST_FIXTURE) --labels=All || touch $(CURDIR)/.failed-stamp
-	# xsltproc $(TOP)/tests/HtmlTransform.xslt TestResult.xml > index.html
+	mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(WHERE_CONDITION) $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/TestResult.xml)" $${TEST_FIXTURE:+"$$TEST_FIXTURE"} --labels=All || touch $(CURDIR)/.failed-stamp
+	xsltproc HtmlReport.xslt TestResult.xml > index.html
 	@[[ ! -e .failed-stamp ]]
 
 run-tests-system:

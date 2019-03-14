@@ -2,6 +2,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output omit-xml-declaration="yes" indent="yes" />
   <xsl:template match="/">
+    <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;&#10;</xsl:text>
+    <html>
+    <head>
+    <title>Test results</title>
     <style type="text/css">
 
       .strong {
@@ -31,7 +35,11 @@
       }
 
     </style>
+    </head>
+    <body>
     <xsl:apply-templates/>
+    </body>
+    </html>
   </xsl:template>
 
   <xsl:template match="test-run">
@@ -84,6 +92,16 @@
         </ol>
       </xsl:if>
     </div>
+
+    <!-- Successes -->
+    <xsl:if test="//test-case[@result='Passed']">
+      <details>
+      <summary>Successes</summary>
+      <ol>
+        <xsl:apply-templates select="//test-case[@result='Passed']"/>
+      </ol>
+    </details>
+    </xsl:if>
 
     <!-- Tests Not Run -->
     <xsl:if test="//test-case[@result='Skipped']">
@@ -220,6 +238,9 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
+        <xsl:when test="@result='Passed'">
+           <xsl:value-of select="'Success'"/>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="'Unknown'"/>
         </xsl:otherwise>
@@ -228,9 +249,9 @@
 
     <!-- Show details of test-cases either skipped or errored -->
     <li>
-      <pre>
         <xsl:value-of select="concat($type,' : ', @fullname)" />
         <br/>
+      <pre>
         <xsl:value-of select="child::node()/message"/>
 
         <xsl:choose>
@@ -240,6 +261,9 @@
           <xsl:when test="$type='Error'">
             <br/>
           </xsl:when>
+          <xsl:when test="$type='Passed'">
+            <br/>
+          </xsl:when>
         </xsl:choose>
 
         <!-- Stack trace for failures -->
@@ -247,10 +271,14 @@
           <xsl:value-of select="failure/stack-trace"/>
         </xsl:if>
       </pre>
-          <xsl:for-each select="child::node()/attachment">
-              Attachment: <a href="file://{filePath}"><xsl:value-of select="description"/></a><br/>
-          </xsl:for-each>
+
+      <xsl:if test="child::node()/attachment">
+        <ul>
+        <xsl:for-each select="child::node()/attachment">
+           <li> <a href="file://{filePath}"><xsl:value-of select="description"/></a></li>
+        </xsl:for-each>
+        </ul>
+      </xsl:if>
     </li>
   </xsl:template>
-
 </xsl:stylesheet>

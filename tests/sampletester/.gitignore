@@ -1,4 +1,5 @@
-TestResult.html
+TestResult*.html
+TestResult*.xml
 .failed-stamp
 split
 

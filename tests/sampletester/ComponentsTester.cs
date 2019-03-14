@@ -11,6 +11,8 @@ using System.Xml;
 
 using NUnit.Framework;
 
+using Xamarin.Tests;
+
 namespace Components {
 
 	[TestFixture]
@@ -49,7 +51,7 @@ namespace Components {
 			var repo_path = GitHub.CloneRepository ("xamarin", Repository);
 			var info = Components.Single ((v) => v.Name == component);
 			try {
-				ProcessHelper.AssertRunProcess ("sh", $"{Path.Combine (repo_path, "build.sh")} -t samples", TimeSpan.FromMinutes (15), Path.GetDirectoryName (Path.Combine (repo_path, info.BuildScript)), "build");
+				ProcessHelper.AssertRunProcess ("sh", new string [] { Path.Combine (repo_path, "build.sh"), "-t", "samples" }, TimeSpan.FromMinutes (15), Path.GetDirectoryName (Path.Combine (repo_path, info.BuildScript)), "build");
 			} finally {
 				GitHub.CleanRepository (Path.Combine (repo_path, info.BuildScript), false);
 			}
@@ -64,7 +66,7 @@ namespace Components {
 
 		protected static string RootDirectory {
 			get {
-				return Configuration.RootDirectory;
+				return Configuration.SampleRootDirectory;
 			}
 		}
 

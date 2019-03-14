@@ -11,6 +11,8 @@ using System.Xml;
 
 using NUnit.Framework;
 
+using Xamarin.Tests;
+
 namespace Samples {
 	public class SampleTestData {
 		public string Solution;
@@ -100,6 +102,26 @@ namespace Samples {
 				throw new NotImplementedException (test_platform.ToString ());
 			}
 
+			var environment_variables = new Dictionary<string, string> ();
+			switch (test_platform) {
+			case TestPlatform.iOS:
+			case TestPlatform.tvOS:
+			case TestPlatform.watchOS:
+				environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
+				environment_variables ["MD_MTOUCH_SDK_ROOT"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
+				environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
+				environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
+				break;
+			case TestPlatform.macOS:
+				environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
+				environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
+				environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
+				environment_variables ["XamarinMacFrameworkRoot"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
+				environment_variables ["XAMMAC_FRAMEWORK_PATH"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
+				break;
+			default:
+				throw new NotImplementedException (test_platform.ToString ());
+			}
 			var project_to_build = project;
 			var target = string.Empty;
 			if (GetTestData ().TryGetValue (project, out var data)) {
@@ -118,7 +140,7 @@ namespace Samples {
 
 
 			project_to_build = Path.Combine (CloneRepo (), project_to_build);
-		 	ProcessHelper.BuildSolution (project_to_build, platform, configuration, target);
+		 	ProcessHelper.BuildSolution (project_to_build, platform, configuration, environment_variables, target);
 		}
 
 		void BuildProject (string configuration, string platform, string solution)
@@ -128,7 +150,7 @@ namespace Samples {
 
 		protected static string RootDirectory {
 			get {
-				return Configuration.RootDirectory;
+				return Configuration.SampleRootDirectory;
 			}
 		}
 

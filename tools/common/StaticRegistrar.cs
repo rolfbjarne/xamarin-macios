@@ -3547,8 +3547,8 @@ namespace Registrar {
 							setup_call_stack.AppendLine ("arr{0} = *(NSArray **) p{0};", i);
 						} else {
 							setup_call_stack.AppendLine ("arr{0} = p{0};", i);
-							//if (App.EnableDebug)
-							//setup_call_stack.AppendLine ("xamarin_check_objc_type (p{0}, [NSArray class], _cmd, self, {0}, managed_method);", i);
+							if (App.EnableDebug)
+								setup_call_stack.AppendLine ("xamarin_check_objc_type (p{0}, [NSArray class], _cmd, self, {0}, managed_method);", i);
 						}
 
 						var isString = elementType.Is ("System", "String");
@@ -3583,7 +3583,8 @@ namespace Registrar {
 									"two (IntPtr, bool) arguments.", nativeObjType.FullName, descriptiveMethodName);
 
 							if (isNativeObjectInterface) {
-								var iface_token_ref = $"0x{CreateTokenReference (elementType, TokenType.TypeDef):X} /* {elementType} */ ";
+								var resolvedElementType = ResolveType (elementType);
+								var iface_token_ref = $"0x{CreateTokenReference (resolvedElementType, TokenType.TypeDef):X} /* {resolvedElementType} */ ";
 								var implementation_token_ref = $"0x{CreateTokenReference (nativeObjType, TokenType.TypeDef):X} /* {nativeObjType} */ ";
 								setup_call_stack.AppendLine ("marr{0} = xamarin_nsarray_to_managed_inativeobject_array_static (arr{0}, xamarin_get_parameter_type (managed_method, {0}), NULL, {1}, {2}, &exception_gchandle);", i, iface_token_ref, implementation_token_ref);
 							} else {
@@ -4638,6 +4639,13 @@ namespace Registrar {
 		uint CreateFullTokenReference (MemberReference member)
 		{
 			var rv = (full_token_reference_count++ << 1) + 1;
+			switch (member.MetadataToken.TokenType) {
+			case TokenType.TypeDef:
+			case TokenType.Method:
+				break; // OK
+			default:
+				throw ErrorHelper.CreateError (99, $"Internal error: unsupported tokentype ({member.MetadataToken.TokenType}) for {member.FullName}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
+			}
 			full_token_references.AppendFormat ("\t\t{{ /* #{3} = 0x{4:X} */ \"{0}\", 0x{1:X}, 0x{2:X} }},\n", GetAssemblyName (member.Module.Assembly), member.Module.MetadataToken.ToUInt32 (), member.MetadataToken.ToUInt32 (), full_token_reference_count, rv);
 			return rv;
 		}

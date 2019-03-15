@@ -4140,8 +4140,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.IsNotNull (refObj, "NSCodingArray-4A-ref");
 				Assert.IsNotNull (outObj, "NSCodingArray-4A-out");
 				AssertAreNotEqual (refObj, outObj, "NSCodingArray-4A-ref-distinct");
-				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
-				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
+				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSNumber").Or.StringContaining ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
+				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSNumber").Or.StringContaining ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
 
 				// managed
 				refObj = null; // set to null

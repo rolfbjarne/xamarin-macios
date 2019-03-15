@@ -58,25 +58,33 @@ public static class GitHub {
 
 	}
 
-	public static string [] GetProjects (string user, string repo)
+	public static string [] GetProjects (string user, string repo, bool clone)
 	{
-		return GetFiles (user, repo)
+		IEnumerable<string> files;
+
+		if (clone) {
+			var dir = CloneRepository (user, repo);
+			files = Directory.GetFiles (dir, "*.*", SearchOption.AllDirectories);
+			files = files.Select ((v) => v.Substring (dir.Length).TrimStart ('/'));
+		} else {
+			files = GetFiles (user, repo);
+		}
+
+		return files
 			.Where ((v) => {
 				var ext = Path.GetExtension (v).ToLowerInvariant ();
 				return ext == ".csproj" || ext == ".fsproj";
 			}).ToArray ();
 	}
 
-	public static string CloneRepository (string user, string repo)
+	public static string CloneRepository (string user, string repo, bool clean = true)
 	{
 		var repo_dir = Path.Combine (Configuration.SampleRootDirectory, repo);
-
-		Directory.CreateDirectory (Configuration.SampleRootDirectory);
 
 		if (!Directory.Exists (repo_dir)) {
 			var auth = Environment.GetEnvironmentVariable ("GITHUB_AUTH_TOKEN") ?? string.Empty;
 			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "clone", $"https://{auth}github.com/{user}/{repo}" }, working_directory: Configuration.SampleRootDirectory, timeout: TimeSpan.FromMinutes (10)), "cloned in 10 minutes");
-		} else {
+		} else if (clean) {
 			CleanRepository (repo_dir);
 		}
 

@@ -68,6 +68,7 @@
     <Compile Include="..\common\ExecutionHelper.cs">
       <Link>external\ExecutionHelper.cs</Link>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

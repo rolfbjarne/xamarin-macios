@@ -22,7 +22,6 @@ namespace Samples {
 		public string ReleaseConfiguration;
 	}
 
-	[TestFixture]
 	public abstract class SampleTester : BaseTester {
 		Dictionary<string, string> ignored_solutions;
 		Dictionary<string, string> GetIgnoredSolutions ()

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Xml;
 
 using NUnit.Framework;
+using Xamarin.Tests;
 
 namespace Bindings {
 	[TestFixture]

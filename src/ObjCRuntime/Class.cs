@@ -483,7 +483,7 @@ namespace ObjCRuntime {
 					continue;
 
 #if LOG_TYPELOAD
-				Console.WriteLine ($"ResolveAssembly (\"{assembly_name}\"): {asm.FullName}.");
+				Console.WriteLine ($"ResolveAssembly (0x{assembly_name:X}): {asm.FullName}.");
 #endif
 				return asm;
 			}

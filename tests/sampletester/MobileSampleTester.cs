@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Samples {
@@ -16,6 +16,7 @@ namespace Samples {
 		protected override Dictionary<string, SampleTestData> GetTestDataImpl ()
 		{
 			return new Dictionary<string, SampleTestData> {
+				// Build solution instead of csproj
 				{ "BouncingGame/BouncingGame/BouncingGame.iOS/BouncingGame.iOS.csproj", new SampleTestData { BuildSolution = true, Solution = "BouncingGame/BouncingGame.sln" } },
 				{ "CCAction/ActionProject/ActionProject.iOS/ActionProject.iOS.csproj", new SampleTestData { BuildSolution = true, Solution = "CCAction/ActionProject.sln" } },
 				{ "CCRenderTexture/RenderTextureExample/RenderTextureExample.iOS/RenderTextureExample.iOS.csproj", new SampleTestData { BuildSolution = true, Solution = "CCRenderTexture/RenderTextureExample.sln" } },

@@ -40,11 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SampleTester.cs" />
-    <Compile Include="MonoTouchBindingTester.cs" />
     <Compile Include="GitHub.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ProcessHelper.cs" />
-    <Compile Include="ComponentsTester.cs" />
     <Compile Include="MobileSampleTester.cs" />
     <Compile Include="XamarinFormsSampleTester.cs" />
     <Compile Include="PrebuiltAppTester.cs" />

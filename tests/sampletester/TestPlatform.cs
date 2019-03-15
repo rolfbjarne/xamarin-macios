@@ -1,4 +1,4 @@
-﻿public enum TestPlatform {
+public enum TestPlatform {
 	None,
 	iOS,
 	macOS,

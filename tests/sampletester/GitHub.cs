@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,11 +58,6 @@ public static class GitHub {
 
 	}
 
-	public static string [] GetSolutions (string user, string repo)
-	{
-		return GetFiles (user, repo).Where ((v) => v.EndsWith (".sln", StringComparison.OrdinalIgnoreCase)).ToArray ();
-	}
-
 	public static string [] GetProjects (string user, string repo)
 	{
 		return GetFiles (user, repo)
@@ -70,47 +65,6 @@ public static class GitHub {
 				var ext = Path.GetExtension (v).ToLowerInvariant ();
 				return ext == ".csproj" || ext == ".fsproj";
 			}).ToArray ();
-	}
-
-	public static string [] GetDirectories (string user, string repo, bool recursive)
-	{
-		var fn = Path.Combine (Configuration.SampleRootDirectory, $"{user}-{repo}.filelist");
-		if (File.Exists (fn))
-			return File.ReadAllLines (fn);
-
-		using (var client = CreateClient ()) {
-			byte [] data;
-			try {
-				data = client.DownloadData ($"https://api.github.com/repos/{user}/{repo}/git/trees/master?recursive=0");
-			} catch (WebException we) {
-				return new string [] { $"Failed to load repo {user}/{repo}: {we.Message}" };
-			}
-			var reader = JsonReaderWriterFactory.CreateJsonReader (data, new XmlDictionaryReaderQuotas ());
-			var doc = new XmlDocument ();
-			doc.Load (reader);
-			var rv = new List<string> ();
-			foreach (XmlNode node in doc.SelectNodes ("/root/tree/item[type = 'tree']/path")) {
-				var path = node.InnerText;
-				if (!recursive && path.IndexOf ('/') >= 0)
-					continue;
-				rv.Add (node.InnerText);
-			}
-
-			File.WriteAllLines (fn, rv.ToArray ());
-			return rv.ToArray ();
-		}
-	}
-
-	public static string GetFileContents (string user, string repo, string filename)
-	{
-		using (var client = CreateClient ()) {
-			try {
-				client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
-				return client.DownloadString ($"https://raw.githubusercontent.com/{user}/{repo}/master/{filename}");
-			} catch (WebException we) {
-				return $"Failed to load repo {user}/{repo}: {we.Message}";
-			}
-		}
 	}
 
 	public static string CloneRepository (string user, string repo)

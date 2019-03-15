@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Samples {
@@ -11,12 +11,6 @@ namespace Samples {
 		static string [] GetProjects ()
 		{
 			return GetExecutableProjects (REPO);
-		}
-
-		protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
-		{
-			return new Dictionary<string, string> {
-			};
 		}
 	}
 }

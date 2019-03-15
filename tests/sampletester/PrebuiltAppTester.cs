@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Samples {
@@ -8,20 +8,9 @@ namespace Samples {
 		const string CATEGORY = "prebuiltapps"; // categories can't contain dashes
 		const string HASH = "origin/master";
 
-		static string [] GetSolutions ()
-		{
-			return GetSolutionsImpl (REPO);
-		}
-
 		static string [] GetProjects ()
 		{
 			return GetExecutableProjects (REPO);
-		}
-
-		protected override Dictionary<string, string> GetIgnoredSolutionsImpl ()
-		{
-			return new Dictionary<string, string> {
-			};
 		}
 	}
 }

@@ -2,73 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Runtime.Serialization.Json;
-using System.Xml;
 
 using NUnit.Framework;
 
 using Xamarin.Tests;
 
 public static class GitHub {
-	static WebClient CreateClient ()
-	{
-		var client = new WebClient ();
-		client.Headers.Add (HttpRequestHeader.UserAgent, "xamarin");
-		var xharness_github_token_file = Environment.GetEnvironmentVariable ("XHARNESS_GITHUB_TOKEN_FILE");
-		if (!string.IsNullOrEmpty (xharness_github_token_file) && File.Exists (xharness_github_token_file))
-			client.Headers.Add (HttpRequestHeader.Authorization, File.ReadAllText (xharness_github_token_file));
-		return client;
-	}
-
-	static string[] GetFiles (string user, string repo)
-	{
-		var fn = Path.Combine (Configuration.SampleRootDirectory, $"{repo}.filelist");
-		if (File.Exists (fn))
-			return File.ReadAllLines (fn);
-		Directory.CreateDirectory (Path.GetDirectoryName (fn));
-
-		using (var client = CreateClient ()) {
-			byte [] data;
-			try {
-				data = client.DownloadData ($"https://api.github.com/repos/{user}/{repo}/git/trees/master?recursive=1");
-			} catch (WebException we) {
-				string rsp = we.Message;
-				try {
-					foreach (var header in we.Response.Headers.AllKeys)
-						rsp += $"\n{header}={we.Response.Headers [header]}";
-					using (var webreader = new StreamReader (we.Response.GetResponseStream ()))
-						rsp += "\n" + webreader.ReadToEnd ();
-				} catch {
-				}
-
-				return new string [] { $"Failed to load {user}/{repo}: {rsp}" };
-			}
-			var reader = JsonReaderWriterFactory.CreateJsonReader (data, new XmlDictionaryReaderQuotas ());
-			var doc = new XmlDocument ();
-			doc.Load (reader);
-			var rv = new List<string> ();
-			foreach (XmlNode node in doc.SelectNodes ("/root/tree/item/path")) {
-				rv.Add (node.InnerText);
-			}
-
-			File.WriteAllLines (fn, rv.ToArray ());
-			return rv.ToArray ();
-		}
-
-	}
-
-	public static string [] GetProjects (string user, string repo, bool clone)
+	public static string [] GetProjects (string user, string repo)
 	{
 		IEnumerable<string> files;
 
-		if (clone) {
-			var dir = CloneRepository (user, repo);
-			files = Directory.GetFiles (dir, "*.*", SearchOption.AllDirectories);
-			files = files.Select ((v) => v.Substring (dir.Length).TrimStart ('/'));
-		} else {
-			files = GetFiles (user, repo);
-		}
+		var dir = CloneRepository (user, repo);
+		files = Directory.GetFiles (dir, "*.*", SearchOption.AllDirectories);
+		files = files.Select ((v) => v.Substring (dir.Length).TrimStart ('/'));
 
 		return files
 			.Where ((v) => {

@@ -8,9 +8,9 @@ namespace Samples {
 		const string CATEGORY = "xamarinformssamples"; // categories can't contain dashes
 		const string HASH = "origin/master";
 
-		static string [] GetProjects ()
+		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetExecutableProjects (REPO);
+			return GetSampleTestData (null, REPO);
 		}
 	}
 }

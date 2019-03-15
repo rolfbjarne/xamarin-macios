@@ -52,7 +52,7 @@
       <Link>external\Cache.cs</Link>
     </Compile>
     <Compile Include="..\..\tools\common\StringUtils.cs">
-      <Link>StringUtils.cs</Link>
+      <Link>external\StringUtils.cs</Link>
     </Compile>
     <Compile Include="..\common\Configuration.cs">
       <Link>external\Configuration.cs</Link>

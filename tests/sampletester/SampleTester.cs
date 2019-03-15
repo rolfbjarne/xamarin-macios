@@ -14,16 +14,32 @@ using NUnit.Framework;
 using Xamarin.Tests;
 
 namespace Samples {
-	public class SampleTestData {
+	public class SampleTest {
+		public ProjectInfo Project;
 		public string Solution;
 		public bool BuildSolution;
 		public string KnownFailure;
-		public string DebugConfiguration;
-		public string ReleaseConfiguration;
+		public string[] DebugConfigurations;
+		public string[] ReleaseConfigurations;
+	}
+
+	public class SampleTestData {
+		public SampleTest SampleTest;
+		public string Configuration;
+		public string Platform;
+
+		public override string ToString ()
+		{
+			if (string.IsNullOrEmpty (Platform))
+				return $"{SampleTest.Project.Title}: {Configuration}";
+			return $"{SampleTest.Project.Title}: {Configuration}|{Platform}";
+		}
 	}
 
 	public class ProjectInfo {
-		public string Path;
+		public string Title;
+		public string RelativePath;
+		public string FullPath;
 		public bool IsExecutable;
 		public string [] Imports;
 		public TestPlatform Platform;
@@ -54,19 +70,6 @@ namespace Samples {
 	}
 
 	public abstract class SampleTester : BaseTester {
-		Dictionary<string, SampleTestData> test_data;
-		Dictionary<string, SampleTestData> GetTestData ()
-		{
-			if (test_data == null)
-				test_data = GetTestDataImpl ();
-			return test_data;
-		}
-
-		protected virtual Dictionary<string, SampleTestData> GetTestDataImpl ()
-		{
-			return new Dictionary<string, SampleTestData> ();
-		}
-
 		protected SampleTester ()
 		{
 		}
@@ -76,11 +79,12 @@ namespace Samples {
 		{
 		}
 
-		static ProjectInfo GetProjectInfo (string project)
+		static ProjectInfo GetProjectInfo (string relative_path, string full_path)
 		{
-			var xml = File.ReadAllText (project);
+			var xml = File.ReadAllText (full_path);
 			var info = new ProjectInfo ();
-			info.Path = project;
+			info.FullPath = full_path;
+			info.RelativePath = relative_path;
 			info.IsExecutable = xml.Contains ("<OutputType>Exe</OutputType>");
 
 			var xml_lines = xml.Split ('\n');
@@ -107,29 +111,14 @@ namespace Samples {
 		}
 
 		[Test]
-		public void BuildProject ([Values ("Debug", "Release")] string configuration, [ValueSource ("GetProjects")] string project)
+		public void BuildSample ([ValueSource ("GetSampleData")] SampleTestData sampleTestData)
 		{
-			var proj_path = Path.Combine (CloneRepo (), project);
-			var info = GetProjectInfo (proj_path);
-
-			info.IsApplicable (true);
-
-			var platform = string.Empty;
-			switch (info.Platform) {
-			case TestPlatform.iOS:
-			case TestPlatform.tvOS:
-				platform = "iPhone";
-				break;
-			case TestPlatform.macOS:
-				// empty platform is expected
-				break;
-			case TestPlatform.watchOS: // info.IsApplicable should Assert.Ignore for watchOS, so this shouldn't happen
-			default:
-				throw new NotImplementedException (info.Platform.ToString ());
-			}
+			var data = sampleTestData.SampleTest;
+			if (!string.IsNullOrEmpty (data.KnownFailure))
+				Assert.Ignore (data.KnownFailure);
 
 			var environment_variables = new Dictionary<string, string> ();
-			switch (info.Platform) {
+			switch (data.Project.Platform) {
 			case TestPlatform.iOS:
 			case TestPlatform.tvOS:
 			case TestPlatform.watchOS:
@@ -146,49 +135,89 @@ namespace Samples {
 				environment_variables ["XAMMAC_FRAMEWORK_PATH"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
 				break;
 			default:
-				throw new NotImplementedException (info.Platform.ToString ());
+				throw new NotImplementedException (sampleTestData.Platform.ToString ());
 			}
 
-			var file_to_build = project;
+			var file_to_build = sampleTestData.SampleTest.Project.RelativePath;
 			var target = string.Empty;
-			if (GetTestData ().TryGetValue (project, out var data)) {
-				if (!string.IsNullOrEmpty (data.KnownFailure))
-					Assert.Ignore (data.KnownFailure);
-				if (data.BuildSolution) {
-					file_to_build = data.Solution;
-					target = Path.GetFileNameWithoutExtension (project).Replace ('.', '_');
-				}
-
-				if (configuration == "Debug" && data.DebugConfiguration != null)
-					configuration = data.DebugConfiguration;
-				if (configuration == "Release" && data.ReleaseConfiguration != null)
-					configuration = data.ReleaseConfiguration;
+			if (data.BuildSolution) {
+				file_to_build = data.Solution;
+				target = Path.GetFileNameWithoutExtension (data.Project.RelativePath).Replace ('.', '_');
 			}
-
 
 			file_to_build = Path.Combine (CloneRepo (), file_to_build);
-			ProcessHelper.BuildSolution (file_to_build, platform, configuration, environment_variables, target);
+			ProcessHelper.BuildSolution (file_to_build, sampleTestData.Platform, sampleTestData.Configuration, environment_variables, target);
 		}
 
-		static Dictionary<string, string []> projects = new Dictionary<string, string []> ();
-		protected static string [] GetExecutableProjects (string repo)
+		static Dictionary<string, ProjectInfo []> projects = new Dictionary<string, ProjectInfo []> ();
+		protected static ProjectInfo [] GetExecutableProjects (string repo)
 		{
 			if (!projects.TryGetValue (repo, out var rv)) {
-				var clone = true; // If we clone the repo to get the list of projects, or if we use GitHub's REST API. The former is much slower, but needs to be done anyway, and allows us to immediately filter out projects we don't care about.
+				var project_paths = GitHub.GetProjects ("xamarin", repo, true);
 
-				rv = GitHub.GetProjects ("xamarin", repo, clone);
-				if (clone) {
-					// We can filter out project we don't care about.
-					rv = rv.Where ((v) => {
-						var proj_path = Path.Combine (GitHub.CloneRepository ("xamarin", repo, false), v);
-						var info = GetProjectInfo (proj_path);
-						return info.IsApplicable (false);
-					}).ToArray ();
-				}
-
+				// We can filter out project we don't care about.
+				rv = project_paths.
+					Select ((v) => GetProjectInfo (v, Path.Combine (GitHub.CloneRepository ("xamarin", repo, false), v))).
+					Where ((v) => v.IsApplicable (false)).
+					ToArray ();
+			
 				projects [repo] = rv;
 			}
 			return rv;
+		}
+
+		protected static IEnumerable<SampleTestData> GetSampleTestData (Dictionary<string, SampleTest> samples, string repo)
+		{
+			var defaultDebugConfigurations = new string [] { "Debug" };
+			var defaultReleaseConfigurations = new string [] { "Release" };
+
+			if (samples == null) {
+				samples = new Dictionary<string, SampleTest> ();
+			} else {
+				samples = new Dictionary<string, SampleTest> (samples);
+			}
+
+			// If a project's filename is unique in this repo, use the filename (without extension) as the name of the test.
+			// Otherwise use the project's relative path.
+			var executable_projects = GetExecutableProjects (repo);
+			var duplicateProjects = executable_projects.GroupBy ((v) => Path.GetFileNameWithoutExtension (v.RelativePath)).Where ((v) => v.Count () > 1);
+			foreach (var group in duplicateProjects) {
+				foreach (var proj in group) {
+					proj.Title = proj.RelativePath;
+				}
+			}
+			foreach (var proj in executable_projects) {
+				if (proj.Title == null) {
+					proj.Title = Path.GetFileNameWithoutExtension (proj.RelativePath);
+				}
+			}
+
+			// Create the test variations for each project.
+			foreach (var proj in executable_projects) {
+				if (!samples.TryGetValue (proj.RelativePath, out var sample))
+					samples [proj.RelativePath] = sample = new SampleTest ();
+				sample.Project = proj;
+				string [] platforms;
+				switch (proj.Platform) {
+				case TestPlatform.iOS:
+				case TestPlatform.tvOS:
+					platforms = new string [] { "iPhone", "iPhoneSimulator" };
+					break;
+				case TestPlatform.macOS:
+					platforms = new string [] { "" };
+					break;
+				case TestPlatform.watchOS:
+				default:
+					throw new NotImplementedException (proj.Platform.ToString ());
+				}
+				foreach (var platform in platforms) {
+					var configs = new List<string> ();
+					configs.AddRange (sample.DebugConfigurations ?? defaultDebugConfigurations);
+					configs.AddRange (sample.ReleaseConfigurations ?? defaultReleaseConfigurations);
+					foreach (var config in configs)
+						yield return new SampleTestData { SampleTest = sample, Configuration = config, Platform = platform };
+				}
+			}
 		}
 
 		string CloneRepo ()

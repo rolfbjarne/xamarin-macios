@@ -9,20 +9,17 @@ namespace Samples {
 		const string CATEGORY = "maciossamples"; // categories can't contain dashes
 		const string HASH = "origin/master";
 
-		static string [] GetProjects ()
-		{
-			return GetExecutableProjects (REPO);
-		}
-
-		protected override Dictionary<string, SampleTestData> GetTestDataImpl ()
-		{
-			return new Dictionary<string, SampleTestData> {
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj
-				{ "ExceptionMarshaling/ExceptionMarshaling.Mac.csproj", new SampleTestData { BuildSolution = true, Solution = "ExceptionMarshaling/ExceptionMarshaling.sln" } },
-				{ "Fox2/Fox2.macOS/Fox2.macOS.csproj", new SampleTestData { BuildSolution = true, Solution = "Fox2/Fox2.sln" } },
-				{ "MetalKitEssentials/MetalKitEssentials.Mac/MetalKitEssentials.Mac.csproj", new SampleTestData { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln" } },
-				{ "SceneKitReel/SceneKitReelMac/SceneKitReelMac.csproj", new SampleTestData { BuildSolution = true, Solution = "SceneKitReel/SceneKitReel.sln" } },
+				{ "ExceptionMarshaling/ExceptionMarshaling.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "ExceptionMarshaling/ExceptionMarshaling.sln" } },
+				{ "Fox2/Fox2.macOS/Fox2.macOS.csproj", new SampleTest { BuildSolution = true, Solution = "Fox2/Fox2.sln" } },
+				{ "MetalKitEssentials/MetalKitEssentials.Mac/MetalKitEssentials.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln" } },
+				{ "SceneKitReel/SceneKitReelMac/SceneKitReelMac.csproj", new SampleTest { BuildSolution = true, Solution = "SceneKitReel/SceneKitReel.sln" } },
 			};
+
+		static IEnumerable<SampleTestData> GetSampleData ()
+		{
+			return GetSampleTestData (test_data, REPO);
 		}
 	}
 }

@@ -40,12 +40,6 @@
     <Compile Include="GitHub.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ProcessHelper.cs" />
-    <Compile Include="MobileSampleTester.cs" />
-    <Compile Include="XamarinFormsSampleTester.cs" />
-    <Compile Include="PrebuiltAppTester.cs" />
-    <Compile Include="MacSampleTester.cs" />
-    <Compile Include="MacIosSampleTester.cs" />
-    <Compile Include="IosSampleTester.cs" />
     <Compile Include="BaseTester.cs" />
     <Compile Include="TestPlatform.cs" />
     <Compile Include="..\mtouch\Cache.cs">
@@ -64,6 +58,7 @@
       <Link>external\ExecutionHelper.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.IO;
-using System.Net;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Threading;
-using System.Xml;
 
 using NUnit.Framework;
 
@@ -153,7 +147,7 @@ namespace Samples {
 		protected static ProjectInfo [] GetExecutableProjects (string repo)
 		{
 			if (!projects.TryGetValue (repo, out var rv)) {
-				var project_paths = GitHub.GetProjects ("xamarin", repo, true);
+				var project_paths = GitHub.GetProjects ("xamarin", repo);
 
 				// We can filter out project we don't care about.
 				rv = project_paths.

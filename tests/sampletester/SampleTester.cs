@@ -22,6 +22,37 @@ namespace Samples {
 		public string ReleaseConfiguration;
 	}
 
+	public class ProjectInfo {
+		public string Path;
+		public bool IsExecutable;
+		public string [] Imports;
+		public TestPlatform Platform;
+
+		public bool IsApplicable (bool assert)
+		{
+			if (!IsExecutable) {
+				if (assert)
+					Assert.Ignore ("Project is not an executable project");
+				return false;
+			}
+
+			if (Platform == TestPlatform.None) {
+				if (assert)
+					Assert.Ignore ("Project is not an Xamarin.iOS/Xamarin.Mac/Xamarin.WatchOS/Xamarin.TVOS project. Imports:\n\t{0}", string.Join ("\t\n", Imports));
+				return false;
+			}
+
+			if (Platform == TestPlatform.watchOS) {
+				if (assert)
+					Assert.Ignore ("Project is a watchOS app"); // no need to build watchOS apps, they're built as part of their containing iOS project.
+
+				return false;
+			}
+
+			return true;
+		}
+	}
+
 	public abstract class SampleTester : BaseTester {
 		Dictionary<string, SampleTestData> test_data;
 		Dictionary<string, SampleTestData> GetTestData ()
@@ -45,17 +76,18 @@ namespace Samples {
 		{
 		}
 
-		[Test]
-		public void BuildProject ([Values ("Debug", "Release")] string configuration, [ValueSource ("GetProjects")] string project)
+		static ProjectInfo GetProjectInfo (string project)
 		{
-			var proj_path = Path.Combine (CloneRepo (), project);
-			var xml = File.ReadAllText (proj_path);
-			if (!xml.Contains ("<OutputType>Exe</OutputType>"))
-				Assert.Ignore ("Project is not an executable project");
+			var xml = File.ReadAllText (project);
+			var info = new ProjectInfo ();
+			info.Path = project;
+			info.IsExecutable = xml.Contains ("<OutputType>Exe</OutputType>");
+
 			var xml_lines = xml.Split ('\n');
 			var xml_imports = xml_lines.
 				Where ((v) => v.Contains ("<Import Project=")).
 				Select ((v) => v.Split ('"') [1]);
+			info.Imports = xml_imports.ToArray ();
 
 			var test_platform = TestPlatform.None;
 			if (xml_imports.Any ((v) => v.Contains ("Xamarin.iOS"))) {
@@ -67,29 +99,37 @@ namespace Samples {
 			} else if (xml_imports.Any ((v) => v.Contains ("Xamarin.Mac"))) {
 				test_platform = TestPlatform.macOS;
 			} else {
-				Assert.Ignore ("Project is not an Xamarin.iOS/Xamarin.Mac/Xamarin.WatchOS/Xamarin.TVOS project. Imports:\n\t{0}", string.Join ("\t\n", xml_imports));
+				test_platform = TestPlatform.None;
 			}
+			info.Platform = test_platform;
+
+			return info;
+		}
+
+		[Test]
+		public void BuildProject ([Values ("Debug", "Release")] string configuration, [ValueSource ("GetProjects")] string project)
+		{
+			var proj_path = Path.Combine (CloneRepo (), project);
+			var info = GetProjectInfo (proj_path);
+
+			info.IsApplicable (true);
 
 			var platform = string.Empty;
-			switch (test_platform) {
+			switch (info.Platform) {
 			case TestPlatform.iOS:
-				platform = "iPhone";
-				break;
 			case TestPlatform.tvOS:
 				platform = "iPhone";
-				break;
-			case TestPlatform.watchOS:
-				Assert.Ignore ("Project is a watchOS app"); // no need to build watchOS apps, they're built as part of their containing iOS project.
 				break;
 			case TestPlatform.macOS:
 				// empty platform is expected
 				break;
+			case TestPlatform.watchOS: // info.IsApplicable should Assert.Ignore for watchOS, so this shouldn't happen
 			default:
-				throw new NotImplementedException (test_platform.ToString ());
+				throw new NotImplementedException (info.Platform.ToString ());
 			}
 
 			var environment_variables = new Dictionary<string, string> ();
-			switch (test_platform) {
+			switch (info.Platform) {
 			case TestPlatform.iOS:
 			case TestPlatform.tvOS:
 			case TestPlatform.watchOS:
@@ -106,7 +146,7 @@ namespace Samples {
 				environment_variables ["XAMMAC_FRAMEWORK_PATH"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
 				break;
 			default:
-				throw new NotImplementedException (test_platform.ToString ());
+				throw new NotImplementedException (info.Platform.ToString ());
 			}
 
 			var file_to_build = project;
@@ -133,8 +173,21 @@ namespace Samples {
 		static Dictionary<string, string []> projects = new Dictionary<string, string []> ();
 		protected static string [] GetExecutableProjects (string repo)
 		{
-			if (!projects.TryGetValue (repo, out var rv))
-				projects [repo] = rv = GitHub.GetProjects ("xamarin", repo);
+			if (!projects.TryGetValue (repo, out var rv)) {
+				var clone = true; // If we clone the repo to get the list of projects, or if we use GitHub's REST API. The former is much slower, but needs to be done anyway, and allows us to immediately filter out projects we don't care about.
+
+				rv = GitHub.GetProjects ("xamarin", repo, clone);
+				if (clone) {
+					// We can filter out project we don't care about.
+					rv = rv.Where ((v) => {
+						var proj_path = Path.Combine (GitHub.CloneRepository ("xamarin", repo, false), v);
+						var info = GetProjectInfo (proj_path);
+						return info.IsApplicable (false);
+					}).ToArray ();
+				}
+
+				projects [repo] = rv;
+			}
 			return rv;
 		}
 

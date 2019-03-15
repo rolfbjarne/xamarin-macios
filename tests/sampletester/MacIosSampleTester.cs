@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -17,6 +17,7 @@ namespace Samples {
 		protected override Dictionary<string, SampleTestData> GetTestDataImpl ()
 		{
 			return new Dictionary<string, SampleTestData> {
+				// Build solution instead of csproj
 				{ "ExceptionMarshaling/ExceptionMarshaling.Mac.csproj", new SampleTestData { BuildSolution = true, Solution = "ExceptionMarshaling/ExceptionMarshaling.sln" } },
 				{ "Fox2/Fox2.macOS/Fox2.macOS.csproj", new SampleTestData { BuildSolution = true, Solution = "Fox2/Fox2.sln" } },
 				{ "MetalKitEssentials/MetalKitEssentials.Mac/MetalKitEssentials.Mac.csproj", new SampleTestData { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln" } },

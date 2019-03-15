@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,19 +23,6 @@ namespace Samples {
 	}
 
 	public abstract class SampleTester : BaseTester {
-		Dictionary<string, string> ignored_solutions;
-		Dictionary<string, string> GetIgnoredSolutions ()
-		{
-			if (ignored_solutions == null)
-				ignored_solutions = GetIgnoredSolutionsImpl ();
-			return ignored_solutions;
-		}
-
-		protected virtual Dictionary<string, string> GetIgnoredSolutionsImpl ()
-		{
-			return new Dictionary<string, string> ();
-		}
-
 		Dictionary<string, SampleTestData> test_data;
 		Dictionary<string, SampleTestData> GetTestData ()
 		{
@@ -59,7 +46,7 @@ namespace Samples {
 		}
 
 		[Test]
-		public void BuildProject ([Values ("Debug"/*, "Release"*/)] string configuration, [ValueSource ("GetProjects")] string project)
+		public void BuildProject ([Values ("Debug", "Release")] string configuration, [ValueSource ("GetProjects")] string project)
 		{
 			var proj_path = Path.Combine (CloneRepo (), project);
 			var xml = File.ReadAllText (proj_path);
@@ -78,7 +65,7 @@ namespace Samples {
 			} else if (xml_imports.Any ((v) => v.Contains ("Xamarin.WatchOS"))) {
 				test_platform = TestPlatform.watchOS;
 			} else if (xml_imports.Any ((v) => v.Contains ("Xamarin.Mac"))) {
-				test_platform = TestPlatform.macOS; // CHECK ME
+				test_platform = TestPlatform.macOS;
 			} else {
 				Assert.Ignore ("Project is not an Xamarin.iOS/Xamarin.Mac/Xamarin.WatchOS/Xamarin.TVOS project. Imports:\n\t{0}", string.Join ("\t\n", xml_imports));
 			}
@@ -121,13 +108,14 @@ namespace Samples {
 			default:
 				throw new NotImplementedException (test_platform.ToString ());
 			}
-			var project_to_build = project;
+
+			var file_to_build = project;
 			var target = string.Empty;
 			if (GetTestData ().TryGetValue (project, out var data)) {
 				if (!string.IsNullOrEmpty (data.KnownFailure))
 					Assert.Ignore (data.KnownFailure);
 				if (data.BuildSolution) {
-					project_to_build = data.Solution;
+					file_to_build = data.Solution;
 					target = Path.GetFileNameWithoutExtension (project).Replace ('.', '_');
 				}
 
@@ -138,28 +126,8 @@ namespace Samples {
 			}
 
 
-			project_to_build = Path.Combine (CloneRepo (), project_to_build);
-		 	ProcessHelper.BuildSolution (project_to_build, platform, configuration, environment_variables, target);
-		}
-
-		void BuildProject (string configuration, string platform, string solution)
-		{
-
-		}
-
-		protected static string RootDirectory {
-			get {
-				return Configuration.SampleRootDirectory;
-			}
-		}
-
-		static Dictionary<string, string []> solutions = new Dictionary<string, string []> ();
-		protected static string [] GetSolutionsImpl (string repo)
-		{
-			string [] rv;
-			if (!solutions.TryGetValue (repo, out rv))
-				solutions [repo] = rv = GitHub.GetSolutions ("xamarin", repo);
-			return rv;
+			file_to_build = Path.Combine (CloneRepo (), file_to_build);
+			ProcessHelper.BuildSolution (file_to_build, platform, configuration, environment_variables, target);
 		}
 
 		static Dictionary<string, string []> projects = new Dictionary<string, string []> ();

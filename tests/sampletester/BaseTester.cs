@@ -1,4 +1,3 @@
-﻿using System;
 using System.Reflection;
 
 using NUnit.Framework;
@@ -11,7 +10,7 @@ namespace Xamarin.Tests {
 		public virtual string Repository {
 			get {
 				if (repository == null)
-					repository = (string)GetType ().GetField ("REPO", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).GetValue (null);
+					repository = (string) GetType ().GetField ("REPO", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).GetValue (null);
 				return repository;
 			}
 			protected set {
@@ -23,7 +22,7 @@ namespace Xamarin.Tests {
 		public virtual string Hash {
 			get {
 				if (hash == null)
-					hash = (string)GetType ().GetField ("HASH", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).GetValue (null);
+					hash = (string) GetType ().GetField ("HASH", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).GetValue (null);
 				return hash;
 			}
 			protected set {

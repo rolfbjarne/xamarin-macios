@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -6,7 +6,7 @@ namespace Xamarin.Tests {
 	public partial  class Configuration {
 		public static string SampleRootDirectory {
 			get {
-				var rv = Path.Combine (Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location), "repositories");
+				var rv = Path.Combine (Path.GetDirectoryName (Assembly.GetExecutingAssembly ().Location), "repositories");
 				var nuget_conf = Path.Combine (rv, "NuGet.config");
 				Directory.CreateDirectory (rv);
 				if (!File.Exists (nuget_conf)) {

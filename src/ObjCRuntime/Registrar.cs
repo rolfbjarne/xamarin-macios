@@ -1418,19 +1418,37 @@ namespace Registrar {
 		// This method is thread-safe (locks 'types').
 		public ObjCType RegisterType (TType type)
 		{
+Console.WriteLine ($"Registrar.RegisterType ({type}) 1");
 			ObjCType rv;
+Console.WriteLine ($"Registrar.RegisterType ({type}) 2");
 			List<Exception> exceptions = null;
+Console.WriteLine ($"Registrar.RegisterType ({type}) 3");
 
+Console.WriteLine ($"Registrar.RegisterType ({type}) 4");
 			lock (types) {
-				if (types.TryGetValue (type, out rv))
+Console.WriteLine ($"Registrar.RegisterType ({type}) 5");
+				if (types.TryGetValue (type, out rv)) {
+Console.WriteLine ($"Registrar.RegisterType ({type}) 6");
 					return rv;
+Console.WriteLine ($"Registrar.RegisterType ({type}) 7");
+				}
+Console.WriteLine ($"Registrar.RegisterType ({type}) 8");
 
+Console.WriteLine ($"Registrar.RegisterType ({type}) 9");
 				rv = RegisterTypeUnsafe (type, ref exceptions);
+Console.WriteLine ($"Registrar.RegisterType ({type}) 10");
 			}
+Console.WriteLine ($"Registrar.RegisterType ({type}) 11");
 
-			if (exceptions != null && exceptions.Count > 0)
+Console.WriteLine ($"Registrar.RegisterType ({type}) 12");
+			if (exceptions != null && exceptions.Count > 0) {
+Console.WriteLine ($"Registrar.RegisterType ({type}) 13");
 				throw new AggregateException (exceptions);
+Console.WriteLine ($"Registrar.RegisterType ({type}) 14");
+			}
+Console.WriteLine ($"Registrar.RegisterType ({type}) 15");
 
+Console.WriteLine ($"Registrar.RegisterType ({type}) 16");
 			return rv;
 		}
 
@@ -1855,63 +1873,130 @@ namespace Registrar {
 		// a lock held on 'types'.
 		ObjCType RegisterTypeUnsafe (TType type, ref List<Exception> exceptions)
 		{
+Console.WriteLine ($"RegisterTypeUnsafe ({type}) 1");
+Console.WriteLine ($"RegisterTypeUnsafe () 2");
 			ObjCType objcType;
+Console.WriteLine ($"RegisterTypeUnsafe () 3");
 			bool isGenericType = false;
+Console.WriteLine ($"RegisterTypeUnsafe () 4");
 			bool isProtocol = false;
+Console.WriteLine ($"RegisterTypeUnsafe () 5");
 			bool isInformalProtocol = false;
+Console.WriteLine ($"RegisterTypeUnsafe () 6");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 7");
 			if (IsGenericType (type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 8");
 				type = GetGenericTypeDefinition (type);
+Console.WriteLine ($"RegisterTypeUnsafe () 9");
 				isGenericType = true;
+Console.WriteLine ($"RegisterTypeUnsafe () 10");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 11");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 12");
 			if (types.TryGetValue (type, out objcType)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 13");
 				OnReloadType (objcType);
+Console.WriteLine ($"RegisterTypeUnsafe () 14");
 				return objcType;
+Console.WriteLine ($"RegisterTypeUnsafe () 15");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 16");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 17");
 			var categoryAttribute = GetCategoryAttribute (type);
-			if (categoryAttribute != null)
+Console.WriteLine ($"RegisterTypeUnsafe () 18");
+			if (categoryAttribute != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 19");
 				return RegisterCategory (type, categoryAttribute, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 20");
+			}
+Console.WriteLine ($"RegisterTypeUnsafe () 21");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 22");
 			if (!IsNSObject (type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 23");
 				//Trace ("{0} is not derived from NSObject", GetTypeFullName (type));
-				if (!IsInterface (type))
+Console.WriteLine ($"RegisterTypeUnsafe () 24");
+				if (!IsInterface (type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 25");
 					return null;
-
-				if (!HasProtocolAttribute (type))
-					return null;
-
-				if (isGenericType) {
-					exceptions.Add (ErrorHelper.CreateError (4148, "The registrar found a generic protocol: '{0}'. Exporting generic protocols is not supported.", GetTypeFullName (type)));
-					return null;
+Console.WriteLine ($"RegisterTypeUnsafe () 26");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 27");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 28");
+				if (!HasProtocolAttribute (type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 29");
+					return null;
+Console.WriteLine ($"RegisterTypeUnsafe () 30");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 31");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 32");
+				if (isGenericType) {
+Console.WriteLine ($"RegisterTypeUnsafe () 33");
+					exceptions.Add (ErrorHelper.CreateError (4148, "The registrar found a generic protocol: '{0}'. Exporting generic protocols is not supported.", GetTypeFullName (type)));
+Console.WriteLine ($"RegisterTypeUnsafe () 34");
+					return null;
+Console.WriteLine ($"RegisterTypeUnsafe () 35");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 36");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 37");
 				// This is a protocol
+Console.WriteLine ($"RegisterTypeUnsafe () 38");
 				var pAttr = GetProtocolAttribute (type);
+Console.WriteLine ($"RegisterTypeUnsafe () 39");
 				isInformalProtocol = pAttr.IsInformal;
+Console.WriteLine ($"RegisterTypeUnsafe () 40");
 				isProtocol = true;
+Console.WriteLine ($"RegisterTypeUnsafe () 41");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 42");
 #if MMP || MTOUCH
-				if (pAttr.FormalSinceVersion != null && pAttr.FormalSinceVersion > App.SdkVersion)
+Console.WriteLine ($"RegisterTypeUnsafe () 43");
+				if (pAttr.FormalSinceVersion != null && pAttr.FormalSinceVersion > App.SdkVersion) {
+Console.WriteLine ($"RegisterTypeUnsafe () 44");
 					isInformalProtocol = !isInformalProtocol;
+Console.WriteLine ($"RegisterTypeUnsafe () 45");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 46");
 #endif
+Console.WriteLine ($"RegisterTypeUnsafe () 47");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 48");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 49");
 			// make sure the base type is already registered
+Console.WriteLine ($"RegisterTypeUnsafe () 50");
 			var baseType = GetBaseType (type);
+Console.WriteLine ($"RegisterTypeUnsafe () 51");
 			ObjCType baseObjCType = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 52");
 			if (baseType != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 53");
 				Trace ("Registering base type {0} of {1}", GetTypeName (baseType), GetTypeName (type));
+Console.WriteLine ($"RegisterTypeUnsafe () 54");
 				baseObjCType = RegisterTypeUnsafe (baseType, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 55");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 56");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 57");
 			var register_attribute = GetRegisterAttribute (type);
+Console.WriteLine ($"RegisterTypeUnsafe () 58");
 			if (register_attribute != null && register_attribute.SkipRegistration) {
+Console.WriteLine ($"RegisterTypeUnsafe () 59");
 				OnSkipType (type, baseObjCType);
+Console.WriteLine ($"RegisterTypeUnsafe () 60");
 				return baseObjCType;
+Console.WriteLine ($"RegisterTypeUnsafe () 61");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 62");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 63");
 			objcType = new ObjCType () {
 				Registrar = this,
 				RegisterAttribute = GetRegisterAttribute (type),
@@ -1921,110 +2006,197 @@ namespace Registrar {
 				IsInformalProtocol = isInformalProtocol,
 				IsGeneric = isGenericType,
 			};
+Console.WriteLine ($"RegisterTypeUnsafe () 72");
 			objcType.VerifyRegisterAttribute (ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 73");
 			objcType.AdoptedProtocols = GetAdoptedProtocols (objcType);
+Console.WriteLine ($"RegisterTypeUnsafe () 74");
 			objcType.VerifyAdoptedProtocolsNames (ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 75");
 			objcType.BaseType = isProtocol ? null : (baseObjCType ?? objcType);
+Console.WriteLine ($"RegisterTypeUnsafe () 76");
 			objcType.Protocols = GetProtocols (objcType, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 77");
 #if MMP || MTOUCH
+Console.WriteLine ($"RegisterTypeUnsafe () 78");
 			objcType.ProtocolWrapperType = (isProtocol && !isInformalProtocol) ? GetProtocolAttributeWrapperType (objcType.Type) : null;
+Console.WriteLine ($"RegisterTypeUnsafe () 79");
 #endif
+Console.WriteLine ($"RegisterTypeUnsafe () 80");
 			objcType.IsWrapper = (isProtocol && !isInformalProtocol) ? (GetProtocolAttributeWrapperType (objcType.Type) != null) : (objcType.RegisterAttribute != null && objcType.RegisterAttribute.IsWrapper);
+Console.WriteLine ($"RegisterTypeUnsafe () 81");
 
-			if (!objcType.IsWrapper && objcType.BaseType != null)
+Console.WriteLine ($"RegisterTypeUnsafe () 82");
+			if (!objcType.IsWrapper && objcType.BaseType != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 83");
 				VerifyTypeInSDK (ref exceptions, objcType.BaseType.Type, baseTypeOf: objcType.Type);
+Console.WriteLine ($"RegisterTypeUnsafe () 84");
+			}
+Console.WriteLine ($"RegisterTypeUnsafe () 85");
 
-			if (ObjCType.IsObjectiveCKeyword (objcType.ExportedName))
+Console.WriteLine ($"RegisterTypeUnsafe () 86");
+			if (ObjCType.IsObjectiveCKeyword (objcType.ExportedName)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 87");
 				AddException (ref exceptions, ErrorHelper.CreateError (4168, $"Cannot register the type '{GetTypeFullName (type)}' because its Objective-C name '{objcType.ExportedName}' is an Objective-C keyword. Please use a different name."));
+Console.WriteLine ($"RegisterTypeUnsafe () 88");
+			}
+Console.WriteLine ($"RegisterTypeUnsafe () 89");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 90");
 			// make sure all the protocols this type implements are registered
+Console.WriteLine ($"RegisterTypeUnsafe () 91");
 			if (objcType.Protocols != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 92");
 				foreach (var p in objcType.Protocols) {
+Console.WriteLine ($"RegisterTypeUnsafe () 93");
 					Trace ("Registering implemented protocol {0} of {1}", p == null ? "null" : p.ProtocolName, GetTypeName (type));
+Console.WriteLine ($"RegisterTypeUnsafe () 94");
 					OnRegisterProtocol (p);
+Console.WriteLine ($"RegisterTypeUnsafe () 95");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 96");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 97");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 98");
 			TType previous_type;
+Console.WriteLine ($"RegisterTypeUnsafe () 99");
 			if (objcType.IsProtocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 100");
 				lock (protocol_map) {
-					if (protocol_map.TryGetValue (objcType.ExportedName, out previous_type))
-						throw ErrorHelper.CreateError (4126, "Cannot register two managed protocols ('{0}' and '{1}') with the same native name ('{2}').",
-							GetAssemblyQualifiedName (type), GetAssemblyQualifiedName (previous_type), objcType.ExportedName);
+Console.WriteLine ($"RegisterTypeUnsafe () 101");
+					if (protocol_map.TryGetValue (objcType.ExportedName, out previous_type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 102");
+						throw ErrorHelper.CreateError (4126, "Cannot register two managed protocols ('{0}' and '{1}') with the same native name ('{2}').",GetAssemblyQualifiedName (type), GetAssemblyQualifiedName (previous_type), objcType.ExportedName);
+Console.WriteLine ($"RegisterTypeUnsafe () 103");
+					}
+Console.WriteLine ($"RegisterTypeUnsafe () 104");
 					protocol_map.Add (objcType.ExportedName, type);
+Console.WriteLine ($"RegisterTypeUnsafe () 105");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 106");
 			} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 107");
 				lock (type_map) {
-					if (type_map.TryGetValue (objcType.ExportedName, out previous_type))
-						throw ErrorHelper.CreateError (4118, "Cannot register two managed types ('{0}' and '{1}') with the same native name ('{2}').",
-							GetAssemblyQualifiedName (type), GetAssemblyQualifiedName (previous_type), objcType.ExportedName);
+Console.WriteLine ($"RegisterTypeUnsafe () 108");
+					if (type_map.TryGetValue (objcType.ExportedName, out previous_type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 109");
+						throw ErrorHelper.CreateError (4118, "Cannot register two managed types ('{0}' and '{1}') with the same native name ('{2}').", GetAssemblyQualifiedName (type), GetAssemblyQualifiedName (previous_type), objcType.ExportedName);
+Console.WriteLine ($"RegisterTypeUnsafe () 110");
+					}
+Console.WriteLine ($"RegisterTypeUnsafe () 111");
 					type_map.Add (objcType.ExportedName, type);
+Console.WriteLine ($"RegisterTypeUnsafe () 112");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 113");
 			}
-		
-			types.Add (type, objcType);
-			
-			Trace ("    [TYPE] Registering {0} => {1} IsWrapper: {2} BaseType: {3} IsModel: {4} IsProtocol: {5}", type.ToString ().Replace ('+', '/'), objcType.ExportedName, objcType.IsWrapper, objcType.BaseType == null ? "null" : objcType.BaseType.Name, objcType.IsModel, objcType.IsProtocol);
+Console.WriteLine ($"RegisterTypeUnsafe () 114");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 115");
+			types.Add (type, objcType);
+Console.WriteLine ($"RegisterTypeUnsafe () 116");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 117");
+			Trace ("    [TYPE] Registering {0} => {1} IsWrapper: {2} BaseType: {3} IsModel: {4} IsProtocol: {5}", type.ToString ().Replace ('+', '/'), objcType.ExportedName, objcType.IsWrapper, objcType.BaseType == null ? "null" : objcType.BaseType.Name, objcType.IsModel, objcType.IsProtocol);
+Console.WriteLine ($"RegisterTypeUnsafe () 118");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 119");
 			// Special methods
+Console.WriteLine ($"RegisterTypeUnsafe () 120");
 			bool is_first_nonWrapper = false;
+Console.WriteLine ($"RegisterTypeUnsafe () 121");
 			var methods = new List<TMethod> (CollectMethods (type));
+Console.WriteLine ($"RegisterTypeUnsafe () 122");
 			if (!isProtocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 123");
 				is_first_nonWrapper = !(objcType.IsWrapper || objcType.IsModel) && (objcType.BaseType.IsWrapper || objcType.BaseType.IsModel);
+Console.WriteLine ($"RegisterTypeUnsafe () 124");
 				if (is_first_nonWrapper) {
+Console.WriteLine ($"RegisterTypeUnsafe () 125");
 					bool isCalayerSubclass = IsSubClassOf (objcType.Type, CoreAnimation, "CALayer");
+Console.WriteLine ($"RegisterTypeUnsafe () 126");
 					if (!isCalayerSubclass) {
+Console.WriteLine ($"RegisterTypeUnsafe () 127");
 						objcType.Add (new ObjCMethod (this, objcType, null) {
 							Selector = "release",
 							Trampoline = Trampoline.Release,
 							Signature = "v@:",
 							IsStatic = false,
 						}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 133");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 134");
 						objcType.Add (new ObjCMethod (this, objcType, null) {
 							Selector = "retain",
 							Trampoline = Trampoline.Retain,
 							Signature = "@@:",
 							IsStatic = false,
 						}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 140");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 141");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 142");
 					objcType.Add (new ObjCMethod (this, objcType, null) {
 						Selector = "xamarinGetGCHandle",
 						Trampoline = Trampoline.GetGCHandle,
 						Signature = "i@:",
 						IsStatic = false,
 					}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 148");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 149");
 					objcType.Add (new ObjCMethod (this, objcType, null) {
 						Selector = "xamarinSetGCHandle:",
 						Trampoline = Trampoline.SetGCHandle,
 						Signature = "v@:i",
 						IsStatic = false,
 					}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 155");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 156");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 157");
 				// Find conform_to_protocol
+Console.WriteLine ($"RegisterTypeUnsafe () 158");
 				if (conforms_to_protocol == null && Is (type, Foundation, "NSObject")) {
+Console.WriteLine ($"RegisterTypeUnsafe () 159");
 					foreach (var method in methods) {
+Console.WriteLine ($"RegisterTypeUnsafe () 160");
 						switch (GetMethodName (method)) {
 						case "InvokeConformsToProtocol":
+Console.WriteLine ($"RegisterTypeUnsafe () 162");
 							invoke_conforms_to_protocol = method;
+Console.WriteLine ($"RegisterTypeUnsafe () 163");
 							break;
 						case "ConformsToProtocol":
+Console.WriteLine ($"RegisterTypeUnsafe () 165");
 							conforms_to_protocol = method;
+Console.WriteLine ($"RegisterTypeUnsafe () 166");
 							break;
 						}
+Console.WriteLine ($"RegisterTypeUnsafe () 168");
 
-						if (invoke_conforms_to_protocol != null && conforms_to_protocol != null)
+Console.WriteLine ($"RegisterTypeUnsafe () 169");
+						if (invoke_conforms_to_protocol != null && conforms_to_protocol != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 170");
 							break;
+						}
+Console.WriteLine ($"RegisterTypeUnsafe () 172");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 173");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 174");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 175");
 #if MMP || MTOUCH
+Console.WriteLine ($"RegisterTypeUnsafe () 176");
 				// Special fields
+Console.WriteLine ($"RegisterTypeUnsafe () 177");
 				if (is_first_nonWrapper) {
+Console.WriteLine ($"RegisterTypeUnsafe () 178");
 					// static registrar
+Console.WriteLine ($"RegisterTypeUnsafe () 179");
 						objcType.Add (new ObjCField () {
 							DeclaringType = objcType,
 							FieldType = "XamarinObject",// "^v", // void*
@@ -2032,19 +2204,33 @@ namespace Registrar {
 							IsPrivate = SupportsModernObjectiveC,
 							IsStatic = false,
 						}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 186");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 187");
 #endif
+Console.WriteLine ($"RegisterTypeUnsafe () 188");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 189");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 190");
 			var properties = new List<TProperty> (CollectProperties (type));
+Console.WriteLine ($"RegisterTypeUnsafe () 191");
 			var hasProtocolMemberAttributes = false;
+Console.WriteLine ($"RegisterTypeUnsafe () 192");
 			if (isProtocol && !isInformalProtocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 193");
 				var attribs = GetProtocolMemberAttributes (type);
+Console.WriteLine ($"RegisterTypeUnsafe () 194");
 				foreach (var attrib in attribs) {
+Console.WriteLine ($"RegisterTypeUnsafe () 195");
 					hasProtocolMemberAttributes = true;
+Console.WriteLine ($"RegisterTypeUnsafe () 196");
 					if (attrib.IsProperty) {
+Console.WriteLine ($"RegisterTypeUnsafe () 197");
 						if (attrib.IsStatic) {
+Console.WriteLine ($"RegisterTypeUnsafe () 198");
 							// There is no such things as a static property in ObjC, so export this as just the getter[+setter].
+Console.WriteLine ($"RegisterTypeUnsafe () 199");
 							var objcGetter = new ObjCMethod (this, objcType, null) {
 								Name = attrib.Name,
 								Selector = attrib.GetterSelector,
@@ -2054,10 +2240,15 @@ namespace Registrar {
 								IsOptional = !attrib.IsRequired,
 								IsConstructor = false,
 							};
+Console.WriteLine ($"RegisterTypeUnsafe () 208");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 209");
 							objcType.Add (objcGetter, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 210");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 211");
 							if (!string.IsNullOrEmpty (attrib.SetterSelector)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 212");
 								var objcSetter = new ObjCMethod (this, objcType, null) {
 									Name = attrib.Name,
 									Selector = attrib.SetterSelector,
@@ -2067,9 +2258,13 @@ namespace Registrar {
 									IsOptional = !attrib.IsRequired,
 									IsConstructor = false,
 								};
+Console.WriteLine ($"RegisterTypeUnsafe () 221");
 								objcType.Add (objcSetter, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 222");
 							}
+Console.WriteLine ($"RegisterTypeUnsafe () 223");
 						} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 224");
 							var objcProperty = new ObjCProperty () {
 								Registrar = this,
 								DeclaringType = objcType,
@@ -2084,13 +2279,21 @@ namespace Registrar {
 								SetterSelector = attrib.SetterSelector,
 								PropertyType = attrib.PropertyType,
 							};
+Console.WriteLine ($"RegisterTypeUnsafe () 238");
 							objcType.Add (objcProperty, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 239");
 						}
+Console.WriteLine ($"RegisterTypeUnsafe () 240");
 					} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 241");
 						TMethod method = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 242");
 #if MTOUCH || MMP
+Console.WriteLine ($"RegisterTypeUnsafe () 243");
 						method = attrib.Method;
+Console.WriteLine ($"RegisterTypeUnsafe () 244");
 #endif
+Console.WriteLine ($"RegisterTypeUnsafe () 245");
 						var objcMethod = new ObjCMethod (this, objcType, method) {
 							Name = attrib.Name,
 							Selector = attrib.Selector,
@@ -2101,40 +2304,75 @@ namespace Registrar {
 							IsOptional = !attrib.IsRequired,
 							IsConstructor = false,
 						};
+Console.WriteLine ($"RegisterTypeUnsafe () 255");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 256");
 						if (attrib.ParameterType != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 257");
 							var parameters = new TType [attrib.ParameterType.Length];
+Console.WriteLine ($"RegisterTypeUnsafe () 258");
 							for (int i = 0; i < parameters.Length; i++) {
+Console.WriteLine ($"RegisterTypeUnsafe () 259");
 								if (attrib.ParameterByRef [i]) {
+Console.WriteLine ($"RegisterTypeUnsafe () 260");
 									parameters [i] = MakeByRef (attrib.ParameterType [i]);
+Console.WriteLine ($"RegisterTypeUnsafe () 261");
 								} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 262");
 									parameters [i] = attrib.ParameterType [i];
+Console.WriteLine ($"RegisterTypeUnsafe () 263");
 								}
+Console.WriteLine ($"RegisterTypeUnsafe () 264");
 							}
+Console.WriteLine ($"RegisterTypeUnsafe () 265");
 							objcMethod.Parameters = parameters;
+Console.WriteLine ($"RegisterTypeUnsafe () 266");
 						} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 267");
 							objcMethod.Parameters = new TType[] { };
+Console.WriteLine ($"RegisterTypeUnsafe () 268");
 						}
+Console.WriteLine ($"RegisterTypeUnsafe () 269");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 270");
 						objcType.Add (objcMethod, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 271");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 272");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 273");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 274");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 275");
 			foreach (TProperty property in properties) {
-				if (hasProtocolMemberAttributes)
+Console.WriteLine ($"RegisterTypeUnsafe () 276");
+				if (hasProtocolMemberAttributes) {
+Console.WriteLine ($"RegisterTypeUnsafe () 277");
 					continue;
-				
+Console.WriteLine ($"RegisterTypeUnsafe () 278");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 279");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 280");
 				if (!isProtocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 281");
 					var ca = GetConnectAttribute (property);
+Console.WriteLine ($"RegisterTypeUnsafe () 282");
 					if (ca != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 283");
 						if (!IsINativeObject (GetPropertyType (property))) {
+Console.WriteLine ($"RegisterTypeUnsafe () 284");
 							AddException (ref exceptions, CreateException (4139, property,
 								"The registrar cannot marshal the property type '{0}' of the property '{1}.{2}'. Properties with the [Connect] attribute must have a property type of NSObject (or a subclass of NSObject).",
 								GetTypeFullName (GetPropertyType (property)), GetTypeFullName (type), GetPropertyName (property)));
+Console.WriteLine ($"RegisterTypeUnsafe () 287");
 							continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 288");
 						}
+Console.WriteLine ($"RegisterTypeUnsafe () 289");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 290");
 						objcType.Add (new ObjCField () {
 							DeclaringType = objcType,
 							Name = ca.Name ?? GetPropertyName (property),
@@ -2146,35 +2384,69 @@ namespace Registrar {
 							IsProperty = true,
 							IsStatic = IsStatic (property),
 						}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 301");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 302");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 303");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 304");
 				var ea = GetExportAttribute (property);
+Console.WriteLine ($"RegisterTypeUnsafe () 305");
 
-				if (ea == null)
+Console.WriteLine ($"RegisterTypeUnsafe () 306");
+				if (ea == null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 307");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 308");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 309");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 310");
 				if (IsStatic (property) && (objcType.IsWrapper || objcType.IsModel)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 311");
 					// This is useless to export, since the user can't actually do anything with it,
+Console.WriteLine ($"RegisterTypeUnsafe () 312");
 					// it'll just call back into the base implementation.
+Console.WriteLine ($"RegisterTypeUnsafe () 313");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 314");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 315");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 316");
 				if (IsStatic (property) && isGenericType) {
+Console.WriteLine ($"RegisterTypeUnsafe () 317");
 					AddException (ref exceptions, CreateException (4131, property, "The registrar cannot export static properties in generic classes ('{0}.{1}').", GetTypeFullName (type), GetPropertyName (property)));
+Console.WriteLine ($"RegisterTypeUnsafe () 318");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 319");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 320");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 321");
 				TType property_type = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 322");
 				if (isGenericType && !VerifyIsConstrainedToNSObject (GetPropertyType (property), out property_type)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 323");
 					AddException (ref exceptions, CreateException (4132, property, "The registrar found an invalid generic return type '{0}' in the property '{1}.{2}'. The return type must have an 'NSObject' constraint.", GetTypeFullName (GetPropertyType (property)), GetTypeFullName (type), GetPropertyName (property)));
+Console.WriteLine ($"RegisterTypeUnsafe () 324");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 325");
 				}
-				if (property_type == null)
+Console.WriteLine ($"RegisterTypeUnsafe () 326");
+				if (property_type == null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 327");
 					property_type = GetPropertyType (property);
+Console.WriteLine ($"RegisterTypeUnsafe () 328");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 329");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 330");
 				Trace ("        [PROPERTY] {0} => {1}", property, ea.Selector);
+Console.WriteLine ($"RegisterTypeUnsafe () 331");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 332");
 				var objcProperty = new ObjCProperty ()
 				{
 					Registrar = this,
@@ -2185,189 +2457,375 @@ namespace Registrar {
 					ArgumentSemantic = ea.ArgumentSemantic,
 					PropertyType = property_type,
 				};
+Console.WriteLine ($"RegisterTypeUnsafe () 342");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 343");
 				TMethod getter = GetGetMethod (property);
+Console.WriteLine ($"RegisterTypeUnsafe () 344");
 				TMethod setter = GetSetMethod (property);
+Console.WriteLine ($"RegisterTypeUnsafe () 345");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 346");
 				if (getter != null && VerifyNonGenericMethod (ref exceptions, type, getter)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 347");
 					var method = new ObjCMethod (this, objcType, getter) {
 						Selector = ea.Selector ?? GetPropertyName (property),
 						ArgumentSemantic = ea.ArgumentSemantic,
 						ReturnType = property_type,
 					};
+Console.WriteLine ($"RegisterTypeUnsafe () 352");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 353");
 					List<Exception> excs = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 354");
 					if (!method.ValidateSignature (ref excs)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 355");
 						exceptions.Add (CreateException (4138, excs [0], property, "The registrar cannot marshal the property type '{0}' of the property '{1}.{2}'.",
 							GetTypeFullName (property.PropertyType), property.DeclaringType.FullName, property.Name));
+Console.WriteLine ($"RegisterTypeUnsafe () 357");
 						continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 358");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 359");
 
-					if (!objcType.Add (method, ref exceptions))
+Console.WriteLine ($"RegisterTypeUnsafe () 360");
+					if (!objcType.Add (method, ref exceptions)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 361");
 						continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 362");
+					}
+Console.WriteLine ($"RegisterTypeUnsafe () 363");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 364");
 					Trace ("            [GET] {0}", objcType.Methods [objcType.Methods.Count - 1].Name);
+Console.WriteLine ($"RegisterTypeUnsafe () 365");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 366");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 367");
 				if (setter != null && VerifyNonGenericMethod (ref exceptions, type, setter)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 368");
 					string setterName = ea.Selector ?? GetPropertyName (property);
+Console.WriteLine ($"RegisterTypeUnsafe () 369");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 370");
 					var method = new ObjCMethod (this, objcType, setter) {
 						Selector = CreateSetterSelector (setterName),
 						ArgumentSemantic = ea.ArgumentSemantic,
 						Parameters = new TType[] { property_type },
 					};
+Console.WriteLine ($"RegisterTypeUnsafe () 375");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 376");
 					List<Exception> excs = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 377");
 					if (!method.ValidateSignature (ref excs)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 378");
 						exceptions.Add (CreateException (4138, excs [0], property, "The registrar cannot marshal the property type '{0}' of the property '{1}.{2}'.",
 							GetTypeFullName (property.PropertyType), property.DeclaringType.FullName, property.Name));
+Console.WriteLine ($"RegisterTypeUnsafe () 380");
 						continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 381");
 					}
+Console.WriteLine ($"RegisterTypeUnsafe () 382");
 
-					if (!objcType.Add (method, ref exceptions))
+Console.WriteLine ($"RegisterTypeUnsafe () 383");
+					if (!objcType.Add (method, ref exceptions)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 384");
 						continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 385");
+					}
+Console.WriteLine ($"RegisterTypeUnsafe () 386");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 387");
 					Trace ("            [SET] {0}", objcType.Methods [objcType.Methods.Count - 1].Name);
+Console.WriteLine ($"RegisterTypeUnsafe () 388");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 389");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 390");
 				objcType.Add (objcProperty, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 391");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 392");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 393");
 			var custom_conforms_to_protocol = !is_first_nonWrapper; // we only have to generate the conformsToProtocol method for the first non-wrapper type.
+Console.WriteLine ($"RegisterTypeUnsafe () 394");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 395");
 #if MONOMAC
+Console.WriteLine ($"RegisterTypeUnsafe () 396");
 			ObjCMethod custom_copy_with_zone = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 397");
 			var isNSCellSubclass = IsSubClassOf (type, AppKit, "NSCell");
+Console.WriteLine ($"RegisterTypeUnsafe () 398");
 #endif
+Console.WriteLine ($"RegisterTypeUnsafe () 399");
 			Dictionary<TMethod, List<TMethod>> method_map = null;
+Console.WriteLine ($"RegisterTypeUnsafe () 400");
 
-			if (!isProtocol)
+Console.WriteLine ($"RegisterTypeUnsafe () 401");
+			if (!isProtocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 402");
 				method_map = PrepareMethodMapping (type);
-
-			foreach (TMethod method in methods) {
-				if (hasProtocolMemberAttributes)
-					continue;
-				
-				var ea = GetExportAttribute (method);
-
-				if (ea == null) {
-					List<TMethod> impls;
-					if (method_map != null && method_map.TryGetValue (method, out impls)) {
-						if (impls.Count != 1) {
-							AddException (ref exceptions, Shared.GetMT4127 (method, impls));
-							continue;
-						}
-
-						ea = GetExportAttribute (impls [0]);
-					}
-				}
-
-				if (ea == null)
-					continue;
-
-				if (IsStatic (method) && (objcType.IsWrapper || objcType.IsModel) && !(objcType.IsProtocol && !objcType.IsFakeProtocol)) {
-					// This is useless to export, since the user can't actually do anything with it,
-					// it'll just call back into the base implementation.
-					continue;
-				}
-
-				if (objcType.IsModel && IsVirtual (method))
-					continue;
-
-				Trace ("        [METHOD] {0} => {1}", method, ea.Selector);
-
-				if (!custom_conforms_to_protocol && method.DeclaringType == type && GetBaseMethod (method) == conforms_to_protocol)
-					custom_conforms_to_protocol = true;
-
-				if (!VerifyNonGenericMethod (ref exceptions, type, method))
-					continue;
-
-				var objcMethod = new ObjCMethod (this, objcType, method);
-				if (!objcMethod.SetExportAttribute (ea, ref exceptions))
-					continue;
-
-#if MONOMAC
-				if (objcMethod.Selector == "copyWithZone:")
-					custom_copy_with_zone = objcMethod;
-#endif
-
-				if (IsStatic (method) && isGenericType) {
-					AddException (ref exceptions, CreateException (4130, method, "The registrar cannot export static methods in generic classes ('{0}').", GetDescriptiveMethodName (type, method)));
-					continue;
-				} else if (isGenericType && !VerifyIsConstrainedToNSObject (ref exceptions, type, objcMethod)) {
-					continue;
-				}
-
-				try {
-					objcType.Add (objcMethod, ref exceptions);
-				} catch (Exception ex) {
-					AddException (ref exceptions, ex);
-				}
+Console.WriteLine ($"RegisterTypeUnsafe () 403");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 404");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 405");
+			foreach (TMethod method in methods) {
+Console.WriteLine ($"RegisterTypeUnsafe () 406");
+				if (hasProtocolMemberAttributes) {
+Console.WriteLine ($"RegisterTypeUnsafe () 407");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 408");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 409");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 410");
+				var ea = GetExportAttribute (method);
+Console.WriteLine ($"RegisterTypeUnsafe () 411");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 412");
+				if (ea == null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 413");
+					List<TMethod> impls;
+Console.WriteLine ($"RegisterTypeUnsafe () 414");
+					if (method_map != null && method_map.TryGetValue (method, out impls)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 415");
+						if (impls.Count != 1) {
+Console.WriteLine ($"RegisterTypeUnsafe () 416");
+							AddException (ref exceptions, Shared.GetMT4127 (method, impls));
+Console.WriteLine ($"RegisterTypeUnsafe () 417");
+							continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 418");
+						}
+Console.WriteLine ($"RegisterTypeUnsafe () 419");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 420");
+						ea = GetExportAttribute (impls [0]);
+Console.WriteLine ($"RegisterTypeUnsafe () 421");
+					}
+Console.WriteLine ($"RegisterTypeUnsafe () 422");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 423");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 424");
+				if (ea == null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 425");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 426");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 427");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 428");
+				if (IsStatic (method) && (objcType.IsWrapper || objcType.IsModel) && !(objcType.IsProtocol && !objcType.IsFakeProtocol)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 429");
+					// This is useless to export, since the user can't actually do anything with it,
+Console.WriteLine ($"RegisterTypeUnsafe () 430");
+					// it'll just call back into the base implementation.
+Console.WriteLine ($"RegisterTypeUnsafe () 431");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 432");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 433");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 434");
+				if (objcType.IsModel && IsVirtual (method)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 435");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 436");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 437");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 438");
+				Trace ("        [METHOD] {0} => {1}", method, ea.Selector);
+Console.WriteLine ($"RegisterTypeUnsafe () 439");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 440");
+				if (!custom_conforms_to_protocol && method.DeclaringType == type && GetBaseMethod (method) == conforms_to_protocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 441");
+					custom_conforms_to_protocol = true;
+Console.WriteLine ($"RegisterTypeUnsafe () 442");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 443");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 444");
+				if (!VerifyNonGenericMethod (ref exceptions, type, method)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 445");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 446");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 447");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 448");
+				var objcMethod = new ObjCMethod (this, objcType, method);
+Console.WriteLine ($"RegisterTypeUnsafe () 449");
+				if (!objcMethod.SetExportAttribute (ea, ref exceptions)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 450");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 451");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 452");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 453");
+#if MONOMAC
+Console.WriteLine ($"RegisterTypeUnsafe () 454");
+				if (objcMethod.Selector == "copyWithZone:") {
+Console.WriteLine ($"RegisterTypeUnsafe () 455");
+					custom_copy_with_zone = objcMethod;
+Console.WriteLine ($"RegisterTypeUnsafe () 456");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 457");
+#endif
+Console.WriteLine ($"RegisterTypeUnsafe () 458");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 459");
+				if (IsStatic (method) && isGenericType) {
+Console.WriteLine ($"RegisterTypeUnsafe () 460");
+					AddException (ref exceptions, CreateException (4130, method, "The registrar cannot export static methods in generic classes ('{0}').", GetDescriptiveMethodName (type, method)));
+Console.WriteLine ($"RegisterTypeUnsafe () 461");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 462");
+				} else if (isGenericType && !VerifyIsConstrainedToNSObject (ref exceptions, type, objcMethod)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 463");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 464");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 465");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 466");
+				try {
+Console.WriteLine ($"RegisterTypeUnsafe () 467");
+					objcType.Add (objcMethod, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 468");
+				} catch (Exception ex) {
+Console.WriteLine ($"RegisterTypeUnsafe () 469");
+					AddException (ref exceptions, ex);
+Console.WriteLine ($"RegisterTypeUnsafe () 470");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 471");
+			}
+Console.WriteLine ($"RegisterTypeUnsafe () 472");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 473");
 			if (!isProtocol && !custom_conforms_to_protocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 474");
 				objcType.Add (new ObjCMethod (this, objcType, invoke_conforms_to_protocol) {
 					Selector = "conformsToProtocol:",
 					Trampoline = Trampoline.Normal,
 					Signature = "B@:^v",
 					IsStatic = false,
 				}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 480");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 481");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 482");
 #if MONOMAC
+Console.WriteLine ($"RegisterTypeUnsafe () 483");
 			if (isNSCellSubclass) {
+Console.WriteLine ($"RegisterTypeUnsafe () 484");
 				if (custom_copy_with_zone != null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 485");
 					custom_copy_with_zone.Trampoline = Trampoline.CopyWithZone2;
+Console.WriteLine ($"RegisterTypeUnsafe () 486");
 				} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 487");
 					objcType.Add (new ObjCMethod (this, objcType, null) {
 						Selector = "copyWithZone:",
 						Trampoline = Trampoline.CopyWithZone1,
 						Signature = "@@:^v",
 						IsStatic = false,
 					}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 493");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 494");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 495");
 #endif
+Console.WriteLine ($"RegisterTypeUnsafe () 496");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 497");
 			foreach (TMethod ctor in CollectConstructors (type)) {
-				if (IsStatic (ctor))
+Console.WriteLine ($"RegisterTypeUnsafe () 498");
+				if (IsStatic (ctor)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 499");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 500");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 501");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 502");
 				var parameters = GetParameters (ctor);
+Console.WriteLine ($"RegisterTypeUnsafe () 503");
 				if (parameters == null || parameters.Length == 0) {
+Console.WriteLine ($"RegisterTypeUnsafe () 504");
 					Trace ("        [CTOR] {0} default => init", GetTypeName (type));
+Console.WriteLine ($"RegisterTypeUnsafe () 505");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 506");
 					objcType.Add (new ObjCMethod (this, objcType, ctor)
 					{
 						Selector = "init",
 						Trampoline = Trampoline.Constructor,
 					}, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 511");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 512");
 				}
+Console.WriteLine ($"RegisterTypeUnsafe () 513");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 514");
 				var ea = GetExportAttribute (ctor);
+Console.WriteLine ($"RegisterTypeUnsafe () 515");
 
-				if (ea == null)
+Console.WriteLine ($"RegisterTypeUnsafe () 516");
+				if (ea == null) {
+Console.WriteLine ($"RegisterTypeUnsafe () 517");
 					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 518");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 519");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 520");
 				Trace ("        [CTOR] {2} {0} => {1}", GetMethodName (ctor), ea.Selector, GetTypeName (type));
-				
-				if (!VerifyNonGenericMethod (ref exceptions, type, ctor))
-					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 521");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 522");
+				if (!VerifyNonGenericMethod (ref exceptions, type, ctor)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 523");
+					continue;
+Console.WriteLine ($"RegisterTypeUnsafe () 524");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 525");
+
+Console.WriteLine ($"RegisterTypeUnsafe () 526");
 				var method = new ObjCMethod (this, objcType, ctor) {
 					Trampoline = Trampoline.Constructor,
 				};
-				if (method.SetExportAttribute (ea, ref exceptions))
+Console.WriteLine ($"RegisterTypeUnsafe () 529");
+				if (method.SetExportAttribute (ea, ref exceptions)) {
+Console.WriteLine ($"RegisterTypeUnsafe () 530");
 					objcType.Add (method, ref exceptions);
+Console.WriteLine ($"RegisterTypeUnsafe () 531");
+				}
+Console.WriteLine ($"RegisterTypeUnsafe () 532");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 533");
 
+Console.WriteLine ($"RegisterTypeUnsafe () 534");
 			if (objcType.IsProtocol) {
+Console.WriteLine ($"RegisterTypeUnsafe () 535");
 				OnRegisterProtocol (objcType);
+Console.WriteLine ($"RegisterTypeUnsafe () 536");
 			} else {
+Console.WriteLine ($"RegisterTypeUnsafe () 537");
 				OnRegisterType (objcType);
+Console.WriteLine ($"RegisterTypeUnsafe () 538");
 			}
+Console.WriteLine ($"RegisterTypeUnsafe () 539");
 
 			return objcType;
 		}

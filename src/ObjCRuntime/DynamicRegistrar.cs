@@ -223,7 +223,10 @@ namespace Registrar {
 
 		protected override IEnumerable<MethodBase> CollectMethods (Type type)
 		{
-			return type.GetMethods (BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+			Console.WriteLine ($"CollectMethods ({type}) 1");
+			var rv = type.GetMethods (BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+			Console.WriteLine ($"CollectMethods ({type}) 2");
+			return rv;
 		}
 
 		protected override IEnumerable<PropertyInfo> CollectProperties (Type type)
@@ -1155,12 +1158,23 @@ namespace Registrar {
 
 		public IntPtr Register (Type type)
 		{
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 1");
 			List<Exception> exceptions = null;
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 2");
 			var objctype = RegisterType (type, ref exceptions);
-			if (exceptions != null && exceptions.Count > 0)
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 3");
+			if (exceptions != null && exceptions.Count > 0) {
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 4");
 				throw new AggregateException (exceptions);
-			if (objctype == null)
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 5");
+			}
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 6");
+			if (objctype == null) {
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 7");
 				return IntPtr.Zero;
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 8");
+			}
+Console.WriteLine ($"DynamicRegistrar.Register ({type}) 9");
 			return objctype.Handle;
 		}
 

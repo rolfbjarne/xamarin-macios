@@ -213,6 +213,7 @@ namespace ObjCRuntime {
 
 		internal static IntPtr Register (Type type)
 		{
+Console.WriteLine ($"Class.Register ({type}) 1");
 			return Runtime.Registrar.Register (type);
 		}
 

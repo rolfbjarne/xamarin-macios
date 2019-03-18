@@ -390,7 +390,9 @@ namespace ObjCRuntime {
 
 		static void RegisterAssembly (IntPtr a)
 		{
+			Console.WriteLine ($"RegisterAssembly (0x{a.ToString ("X")}) 1");
 			RegisterAssembly ((Assembly) ObjectWrapper.Convert (a));
+			Console.WriteLine ($"RegisterAssembly (0x{a.ToString ("X")}) 2");
 		}
 
 		static void RegisterEntryAssembly (IntPtr a)
@@ -560,62 +562,125 @@ namespace ObjCRuntime {
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void RegisterAssembly (Assembly a)
 		{
-			if (a == null)
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 1");
+			if (a == null) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 2");
 				throw new ArgumentNullException ("a");
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 3");
+			}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 4");
 
-			if (!DynamicRegistrationSupported)
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 5");
+			if (!DynamicRegistrationSupported) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 6");
 				throw ErrorHelper.CreateError (8026, "Runtime.RegisterAssembly is not supported when the dynamic registrar has been linked away.");
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 7");
+			}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 8");
 #if MONOMAC
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 9");
 			var attributes = a.GetCustomAttributes (typeof (RequiredFrameworkAttribute), false);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 10");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 11");
 			foreach (var attribute in attributes) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 12");
 				var requiredFramework = (RequiredFrameworkAttribute)attribute;
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 13");
 				string libPath;
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 14");
 				string libName = requiredFramework.Name;
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 15");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 16");
 				if (libName.Contains (".dylib")) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 17");
 					libPath = ResourcesPath;
-				}
-				else {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 18");
+				} else {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 19");
 					libPath = FrameworksPath;
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 20");
 					libPath = Path.Combine (libPath, libName);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 21");
 					libName = libName.Replace (".frameworks", "");
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 22");
 				}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 23");
 				libPath = Path.Combine (libPath, libName);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 24");
 
-				if (Dlfcn.dlopen (libPath, 0) == IntPtr.Zero)
-					throw new Exception (string.Format ("Unable to load required framework: '{0}'", requiredFramework.Name),
-						new Exception (Dlfcn.dlerror()));
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 25");
+				if (Dlfcn.dlopen (libPath, 0) == IntPtr.Zero) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 26");
+					throw new Exception (string.Format ("Unable to load required framework: '{0}'", requiredFramework.Name), new Exception (Dlfcn.dlerror()));
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 27");
+				}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 28");
 			}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 29");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 30");
 			attributes = a.GetCustomAttributes (typeof (DelayedRegistrationAttribute), false);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 31");
 			foreach (var attribute in attributes) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 32");
 				var delayedRegistration = (DelayedRegistrationAttribute) attribute;
-				if (delayedRegistration.Delay)
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 33");
+				if (delayedRegistration.Delay) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 34");
 					return;
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 35");
+				}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 36");
 			}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 37");
 #endif
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 38");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 39");
 			if (assemblies == null) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 40");
 				assemblies = new List <Assembly> ();
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 41");
 				Class.Register (typeof (NSObject));
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 42");
 			}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 43");
 
-			if (assemblies.Contains (a))
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 44");
+			if (assemblies.Contains (a)) {
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 45");
 				return;
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 46");
+			}
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 47");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 48");
 			assemblies.Add (a);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 49");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 50");
 #if PROFILE
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 51");
 			var watch = new Stopwatch ();
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 52");
 			watch.Start ();
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 53");
 #endif
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 54");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 55");
 			Registrar.RegisterAssembly (a);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 56");
 
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 57");
 #if PROFILE
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 58");
 			watch.Stop ();
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 59");
 			Console.WriteLine ("RegisterAssembly ({0}) completed in {1} ms", a.FullName, watch.ElapsedMilliseconds);
+Console.WriteLine ($"RegisterAssembly (\"{a}\"): 60");
 #endif
 		}
 

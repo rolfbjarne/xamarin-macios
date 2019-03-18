@@ -975,12 +975,19 @@ xamarin_open_assembly (const char *name)
 static bool
 register_assembly (MonoAssembly *assembly, guint32 *exception_gchandle)
 {
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 	// COOP: this is a function executed only at startup, I believe the mode here doesn't matter.
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 	if (!xamarin_supports_dynamic_registration) {
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 		LOG (PRODUCT ": Skipping assembly registration for %s since it's not needed (dynamic registration is not supported)", mono_assembly_name_get_name (mono_assembly_get_name (assembly)));
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 		return true;
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 	}
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 	xamarin_register_assembly (mono_assembly_get_object (mono_domain_get (), assembly), exception_gchandle);
+fprintf (stderr, "register_assembly (%p, %p)\n", assembly, exception_gchandle);
 	return *exception_gchandle == 0;
 }
 
@@ -1323,108 +1330,217 @@ xamarin_install_log_callbacks ()
 void
 xamarin_initialize ()
 {
+fprintf (stderr, "xamarin_initialize: 1\n");
 	// COOP: accessing managed memory: UNSAFE mode
+fprintf (stderr, "xamarin_initialize: 2\n");
 	MONO_ASSERT_GC_UNSAFE;
+fprintf (stderr, "xamarin_initialize: 3\n");
 	
+fprintf (stderr, "xamarin_initialize: 4\n");
 	MonoAssembly *assembly = NULL;
+fprintf (stderr, "xamarin_initialize: 5\n");
 	MonoMethod *runtime_initialize;
+fprintf (stderr, "xamarin_initialize: 6\n");
 	void* params[2];
+fprintf (stderr, "xamarin_initialize: 7\n");
 	const char *product_dll = NULL;
+fprintf (stderr, "xamarin_initialize: 8\n");
 	guint32 exception_gchandle = 0;
+fprintf (stderr, "xamarin_initialize: 9\n");
 	MonoObject *exc = NULL;
+fprintf (stderr, "xamarin_initialize: 10\n");
 
+fprintf (stderr, "xamarin_initialize: 11\n");
 	initialize_started = TRUE;
+fprintf (stderr, "xamarin_initialize: 12\n");
 
+fprintf (stderr, "xamarin_initialize: 13\n");
 #ifdef DYNAMIC_MONO_RUNTIME
+fprintf (stderr, "xamarin_initialize: 14\n");
 	// We might be called from the managed Runtime.EnsureInitialized method,
+fprintf (stderr, "xamarin_initialize: 15\n");
 	// in which case xamarin_initialize_dynamic_runtime has not been called yet.
+fprintf (stderr, "xamarin_initialize: 16\n");
 	xamarin_initialize_dynamic_runtime (NULL);
+fprintf (stderr, "xamarin_initialize: 17\n");
 #endif
+fprintf (stderr, "xamarin_initialize: 18\n");
 
+fprintf (stderr, "xamarin_initialize: 19\n");
 	xamarin_insert_dllmap ();
+fprintf (stderr, "xamarin_initialize: 20\n");
 
+fprintf (stderr, "xamarin_initialize: 21\n");
 	MONO_ENTER_GC_UNSAFE;
+fprintf (stderr, "xamarin_initialize: 22\n");
 
+fprintf (stderr, "xamarin_initialize: 23\n");
 	xamarin_install_log_callbacks ();
+fprintf (stderr, "xamarin_initialize: 24\n");
 
+fprintf (stderr, "xamarin_initialize: 25\n");
 #if MONOMAC
+fprintf (stderr, "xamarin_initialize: 26\n");
 	detect_product_assembly ();
+fprintf (stderr, "xamarin_initialize: 27\n");
 #endif
+fprintf (stderr, "xamarin_initialize: 28\n");
 
+fprintf (stderr, "xamarin_initialize: 29\n");
 	MonoGCFinalizerCallbacks gc_callbacks;
+fprintf (stderr, "xamarin_initialize: 30\n");
 	gc_callbacks.version = MONO_GC_FINALIZER_EXTENSION_VERSION;
+fprintf (stderr, "xamarin_initialize: 31\n");
 	gc_callbacks.is_class_finalization_aware = is_class_finalization_aware;
+fprintf (stderr, "xamarin_initialize: 32\n");
 	gc_callbacks.object_queued_for_finalization = object_queued_for_finalization;
+fprintf (stderr, "xamarin_initialize: 33\n");
 	mono_gc_register_finalizer_callbacks (&gc_callbacks);
+fprintf (stderr, "xamarin_initialize: 34\n");
 
+fprintf (stderr, "xamarin_initialize: 35\n");
 	if (xamarin_is_gc_coop) {
+fprintf (stderr, "xamarin_initialize: 36\n");
 		// There should be no such thing as an unhandled ObjC exception
+fprintf (stderr, "xamarin_initialize: 37\n");
 		// when running the GC in cooperative mode, and if we run into it,
+fprintf (stderr, "xamarin_initialize: 38\n");
 		// it's a bug somewhere, in which case we must fix it.
+fprintf (stderr, "xamarin_initialize: 39\n");
 	} else {
+fprintf (stderr, "xamarin_initialize: 40\n");
 		NSSetUncaughtExceptionHandler (exception_handler);
+fprintf (stderr, "xamarin_initialize: 41\n");
 	}
+fprintf (stderr, "xamarin_initialize: 42\n");
 
+fprintf (stderr, "xamarin_initialize: 43\n");
 	product_dll = xamarin_use_new_assemblies ? PRODUCT_DUAL_ASSEMBLY : PRODUCT_COMPAT_ASSEMBLY;
+fprintf (stderr, "xamarin_initialize: 44\n");
 
+fprintf (stderr, "xamarin_initialize: 45\n");
 	assembly = xamarin_open_assembly (product_dll);
+fprintf (stderr, "xamarin_initialize: 46\n");
 
-	if (!assembly)
+fprintf (stderr, "xamarin_initialize: 47\n");
+	if (!assembly) {
+fprintf (stderr, "xamarin_initialize: 48\n");
 		xamarin_assertion_message ("Failed to load %s.", product_dll);
-	platform_image = mono_assembly_get_image (assembly);
-
-	const char *objcruntime = xamarin_use_new_assemblies ? "ObjCRuntime" : PRODUCT_COMPAT_NAMESPACE ".ObjCRuntime";
-	const char *foundation = xamarin_use_new_assemblies ? "Foundation" : PRODUCT_COMPAT_NAMESPACE ".Foundation";
-
-	runtime_class = get_class_from_name (platform_image, objcruntime, "Runtime");
-	inativeobject_class = get_class_from_name (platform_image, objcruntime, "INativeObject");
-	nsobject_class = get_class_from_name (platform_image, foundation, "NSObject");
-	nsnumber_class = get_class_from_name (platform_image, foundation, "NSNumber", true);
-	nsvalue_class = get_class_from_name (platform_image, foundation, "NSValue", true);
-	nsstring_class = get_class_from_name (platform_image, foundation, "NSString", true);
-
-	xamarin_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_release_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_release_managed_ref", (const void *) xamarin_release_managed_ref);
-	xamarin_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_create_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_create_managed_ref", (const void *) xamarin_create_managed_ref);
-
-	runtime_initialize = mono_class_get_method_from_name (runtime_class, "Initialize", 1);
-
-	options.size = sizeof (options);
-#if MONOTOUCH && (defined(__i386__) || defined (__x86_64__))
-	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsSimulator);
-#endif
-
-	options.Delegates = &delegates;
-	options.Trampolines = &trampolines;
-	options.MarshalObjectiveCExceptionMode = xamarin_marshal_objectivec_exception_mode;
-	options.MarshalManagedExceptionMode = xamarin_marshal_managed_exception_mode;
-#if MONOMAC
-	options.LaunchMode = xamarin_launch_mode;
-	options.EntryAssemblyPath = xamarin_entry_assembly_path;
-#endif
-
-	params [0] = &options;
-
-	mono_runtime_invoke (runtime_initialize, NULL, params, &exc);
-
-	if (exc)
-		xamarin_process_managed_exception (exc);
-
-	if (!register_assembly (assembly, &exception_gchandle))
-		xamarin_process_managed_exception_gchandle (exception_gchandle);
-
-	xamarin_install_mono_profiler (); // must be called before xamarin_install_nsautoreleasepool_hooks or gc_enable_new_refcount
-
-	xamarin_install_nsautoreleasepool_hooks ();
-
-#if defined (DEBUG)
-	if (xamarin_gc_pump) {
-		pthread_t gc_thread;
-		pthread_create (&gc_thread, NULL, pump_gc, NULL);
+fprintf (stderr, "xamarin_initialize: 49\n");
 	}
+fprintf (stderr, "xamarin_initialize: 50\n");
+	platform_image = mono_assembly_get_image (assembly);
+fprintf (stderr, "xamarin_initialize: 51\n");
+
+fprintf (stderr, "xamarin_initialize: 52\n");
+	const char *objcruntime = xamarin_use_new_assemblies ? "ObjCRuntime" : PRODUCT_COMPAT_NAMESPACE ".ObjCRuntime";
+fprintf (stderr, "xamarin_initialize: 53\n");
+	const char *foundation = xamarin_use_new_assemblies ? "Foundation" : PRODUCT_COMPAT_NAMESPACE ".Foundation";
+fprintf (stderr, "xamarin_initialize: 54\n");
+
+fprintf (stderr, "xamarin_initialize: 55\n");
+	runtime_class = get_class_from_name (platform_image, objcruntime, "Runtime");
+fprintf (stderr, "xamarin_initialize: 56\n");
+	inativeobject_class = get_class_from_name (platform_image, objcruntime, "INativeObject");
+fprintf (stderr, "xamarin_initialize: 57\n");
+	nsobject_class = get_class_from_name (platform_image, foundation, "NSObject");
+fprintf (stderr, "xamarin_initialize: 58\n");
+	nsnumber_class = get_class_from_name (platform_image, foundation, "NSNumber", true);
+fprintf (stderr, "xamarin_initialize: 59\n");
+	nsvalue_class = get_class_from_name (platform_image, foundation, "NSValue", true);
+fprintf (stderr, "xamarin_initialize: 60\n");
+	nsstring_class = get_class_from_name (platform_image, foundation, "NSString", true);
+fprintf (stderr, "xamarin_initialize: 61\n");
+
+fprintf (stderr, "xamarin_initialize: 62\n");
+	xamarin_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_release_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_release_managed_ref", (const void *) xamarin_release_managed_ref);
+fprintf (stderr, "xamarin_initialize: 63\n");
+	xamarin_add_internal_call (xamarin_use_new_assemblies ? "Foundation.NSObject::xamarin_create_managed_ref" : PRODUCT_COMPAT_NAMESPACE ".Foundation.NSObject::xamarin_create_managed_ref", (const void *) xamarin_create_managed_ref);
+fprintf (stderr, "xamarin_initialize: 64\n");
+
+fprintf (stderr, "xamarin_initialize: 65\n");
+	runtime_initialize = mono_class_get_method_from_name (runtime_class, "Initialize", 1);
+fprintf (stderr, "xamarin_initialize: 66\n");
+
+fprintf (stderr, "xamarin_initialize: 67\n");
+	options.size = sizeof (options);
+fprintf (stderr, "xamarin_initialize: 68\n");
+#if MONOTOUCH && (defined(__i386__) || defined (__x86_64__))
+fprintf (stderr, "xamarin_initialize: 69\n");
+	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsSimulator);
+fprintf (stderr, "xamarin_initialize: 70\n");
 #endif
+fprintf (stderr, "xamarin_initialize: 71\n");
 
+fprintf (stderr, "xamarin_initialize: 72\n");
+	options.Delegates = &delegates;
+fprintf (stderr, "xamarin_initialize: 73\n");
+	options.Trampolines = &trampolines;
+fprintf (stderr, "xamarin_initialize: 74\n");
+	options.MarshalObjectiveCExceptionMode = xamarin_marshal_objectivec_exception_mode;
+fprintf (stderr, "xamarin_initialize: 75\n");
+	options.MarshalManagedExceptionMode = xamarin_marshal_managed_exception_mode;
+fprintf (stderr, "xamarin_initialize: 76\n");
+#if MONOMAC
+fprintf (stderr, "xamarin_initialize: 77\n");
+	options.LaunchMode = xamarin_launch_mode;
+fprintf (stderr, "xamarin_initialize: 78\n");
+	options.EntryAssemblyPath = xamarin_entry_assembly_path;
+fprintf (stderr, "xamarin_initialize: 79\n");
+#endif
+fprintf (stderr, "xamarin_initialize: 80\n");
+
+fprintf (stderr, "xamarin_initialize: 81\n");
+	params [0] = &options;
+fprintf (stderr, "xamarin_initialize: 82\n");
+
+fprintf (stderr, "xamarin_initialize: 83\n");
+	mono_runtime_invoke (runtime_initialize, NULL, params, &exc);
+fprintf (stderr, "xamarin_initialize: 84\n");
+
+fprintf (stderr, "xamarin_initialize: 85\n");
+	if (exc) {
+fprintf (stderr, "xamarin_initialize: 86\n");
+		xamarin_process_managed_exception (exc);
+fprintf (stderr, "xamarin_initialize: 87\n");
+	}
+fprintf (stderr, "xamarin_initialize: 88\n");
+
+fprintf (stderr, "xamarin_initialize: 89\n");
+	if (!register_assembly (assembly, &exception_gchandle)) {
+fprintf (stderr, "xamarin_initialize: 90\n");
+		xamarin_process_managed_exception_gchandle (exception_gchandle);
+fprintf (stderr, "xamarin_initialize: 91\n");
+	}
+fprintf (stderr, "xamarin_initialize: 92\n");
+
+fprintf (stderr, "xamarin_initialize: 93\n");
+	xamarin_install_mono_profiler (); // must be called before xamarin_install_nsautoreleasepool_hooks or gc_enable_new_refcount
+fprintf (stderr, "xamarin_initialize: 94\n");
+
+fprintf (stderr, "xamarin_initialize: 95\n");
+	xamarin_install_nsautoreleasepool_hooks ();
+fprintf (stderr, "xamarin_initialize: 96\n");
+
+fprintf (stderr, "xamarin_initialize: 97\n");
+#if defined (DEBUG)
+fprintf (stderr, "xamarin_initialize: 98\n");
+	if (xamarin_gc_pump) {
+fprintf (stderr, "xamarin_initialize: 99\n");
+		pthread_t gc_thread;
+fprintf (stderr, "xamarin_initialize: 100\n");
+		pthread_create (&gc_thread, NULL, pump_gc, NULL);
+fprintf (stderr, "xamarin_initialize: 101\n");
+	}
+fprintf (stderr, "xamarin_initialize: 102\n");
+#endif
+fprintf (stderr, "xamarin_initialize: 103\n");
+
+fprintf (stderr, "xamarin_initialize: 104\n");
 	gc_enable_new_refcount ();
+fprintf (stderr, "xamarin_initialize: 105\n");
 
+fprintf (stderr, "xamarin_initialize: 106\n");
 	MONO_EXIT_GC_UNSAFE;
 }
 

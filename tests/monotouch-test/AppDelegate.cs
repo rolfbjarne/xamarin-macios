@@ -57,7 +57,173 @@ namespace MonoTouchFixtures {
 			window.RootViewController = new UINavigationController (runner.GetViewController ());
 			// make the window visible
 			window.MakeKeyAndVisible ();
-			
+
+			NSTimer.CreateScheduledTimer (TimeSpan.FromSeconds (1), (var) => {
+				string name;
+				var rt = new ObjCRuntime.RegistrarTest ();
+
+				name = nameof (rt.___RefOutTest_StringArray);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_StringArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_NSValueArray);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_NSValueArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_NSValueArray);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_NSValueArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_INSCodingArray);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_INSCodingArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_String);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_String ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_NSValue);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_NSValue ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_NSObject);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_NSObject ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_INSCoding);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_INSCoding ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_CFBundle);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_CFBundle ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_Int);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_Int ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_Sel);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_Sel ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_ClassArray);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_ClassArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.___RefOutTest_Class);
+				try {
+					Console.WriteLine (name);
+					rt.___RefOutTest_Class ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt.TestStringArray);
+				try {
+					Console.WriteLine (name);
+					rt.TestStringArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt._____TestNSObjectArray);
+				try {
+					Console.WriteLine (name);
+					rt._____TestNSObjectArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				name = nameof (rt._____TestINSCodingArray);
+				try {
+					Console.WriteLine (name);
+					rt._____TestINSCodingArray ();
+					Console.WriteLine ("✅ SUCCESS! {0}", name);
+				} catch (Exception e) {
+					Console.WriteLine ("❌ FAILURE! {0}", name);
+					Console.WriteLine (e);
+				}
+
+				//Environment.Exit (0);
+			});
 			return true;
 		}
 

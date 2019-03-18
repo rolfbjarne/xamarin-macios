@@ -830,6 +830,7 @@ public partial class Frameworks {
 }
 
 public partial class Generator : IMemberGatherer {
+	List<Exception> exceptions = new List<Exception> ();
 	internal static bool IsPublicMode;
 
 	static NamespaceManager ns;
@@ -1041,6 +1042,21 @@ public partial class Generator : IMemberGatherer {
 	bool IsNativeType (Type pt)
 	{
 		return (pt == TypeManager.System_Int32 || pt == TypeManager.System_Int64 || pt == TypeManager.System_Byte || pt == TypeManager.System_Int16);
+	}
+
+
+	public bool IsNSObject (Type type)
+	{
+		if (type == TypeManager.NSObject)
+			return true;
+
+		if (type.IsSubclassOf (TypeManager.NSObject))
+			return true;
+
+		if (BindThirdPartyLibrary)
+			return false;
+
+		return type.IsInterface;
 	}
 
 	public string PrimitiveType (Type t, bool formatted = false, EnumMode enum_mode = EnumMode.Compat)
@@ -1718,9 +1734,9 @@ public partial class Generator : IMemberGatherer {
 				} else {
 					if (!AttributeManager.HasAttribute<CCallbackAttribute> (pi)) {
 						if (t.FullName.StartsWith ("System.Action`", StringComparison.Ordinal) || t.FullName.StartsWith ("System.Func`", StringComparison.Ordinal)) {
-							ErrorHelper.Show (new BindingException (1116, "The parameter '{0}' in the delegate '{1}' does not have a [CCallback] or [BlockCallback] attribute. Defaulting to [CCallback]. Declare a custom delegate instead of using System.Action / System.Func and add the attribute on the corresponding parameter.", pi.Name.GetSafeParamName (), t.FullName));
+							ErrorHelper.ShowWarning (1116, "The parameter '{0}' in the delegate '{1}' does not have a [CCallback] or [BlockCallback] attribute. Defaulting to [CCallback]. Declare a custom delegate instead of using System.Action / System.Func and add the attribute on the corresponding parameter.", pi.Name.GetSafeParamName (), t.FullName);
 						} else {
-							ErrorHelper.Show (new BindingException (1115, "The parameter '{0}' in the delegate '{1}' does not have a [CCallback] or [BlockCallback] attribute. Defaulting to [CCallback].", pi.Name.GetSafeParamName (), t.FullName));
+							ErrorHelper.ShowWarning (1115, "The parameter '{0}' in the delegate '{1}' does not have a [CCallback] or [BlockCallback] attribute. Defaulting to [CCallback].", pi.Name.GetSafeParamName (), t.FullName);
 						}
 					}
 					pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
@@ -2465,6 +2481,14 @@ public partial class Generator : IMemberGatherer {
 
 		if (libraries.Count > 0)
 			GenerateLibraryHandles ();
+
+		ThrowIfExceptions ();
+	}
+
+	void ThrowIfExceptions ()
+	{
+		if (exceptions.Count > 0)
+			throw new AggregateException (exceptions);
 	}
 
 	static string GenerateNSValue (string propertyToCall)
@@ -3425,7 +3449,7 @@ public partial class Generator : IMemberGatherer {
 				var hasReturnTypeProtocolize = Protocolize (AttributeManager.GetReturnTypeCustomAttributes (minfo.method));
 				if (hasReturnTypeProtocolize) {
 					if (!IsProtocol (minfo.method.ReturnType)) {
-						ErrorHelper.Show (new BindingException (1108, false, "The [Protocolize] attribute is applied to the return type of the method {0}.{1}, but the return type ({2}) isn't a model and can thus not be protocolized. Please remove the [Protocolize] attribute.", minfo.method.DeclaringType, minfo.method, minfo.method.ReturnType.FullName));
+						ErrorHelper.ShowWarning (1108, "The [Protocolize] attribute is applied to the return type of the method {0}.{1}, but the return type ({2}) isn't a model and can thus not be protocolized. Please remove the [Protocolize] attribute.", minfo.method.DeclaringType, minfo.method, minfo.method.ReturnType.FullName);
 					} else {
 						prefix = "I";
 					}
@@ -3433,10 +3457,10 @@ public partial class Generator : IMemberGatherer {
 				if (minfo.method.ReturnType.IsArray) {
 					var et = minfo.method.ReturnType.GetElementType ();
 					if (IsModel (et))
-						ErrorHelper.Show (new BindingException (1109, false, "The return type of the method {0}.{1} exposes a model ({2}). Please expose the corresponding protocol type instead ({3}.I{4}).", minfo.method.DeclaringType, minfo.method.Name, et, et.Namespace, et.Name));
+						ErrorHelper.ShowWarning (1109, "The return type of the method {0}.{1} exposes a model ({2}). Please expose the corresponding protocol type instead ({3}.I{4}).", minfo.method.DeclaringType, minfo.method.Name, et, et.Namespace, et.Name);
 				}
 				if (IsModel (minfo.method.ReturnType) && !hasReturnTypeProtocolize)
-					ErrorHelper.Show (new BindingException (1107, false, "The return type of the method {0}.{1} exposes a model ({2}). Please expose the corresponding protocol type instead ({3}.I{4}).", minfo.method.DeclaringType, minfo.method.Name, minfo.method.ReturnType, minfo.method.ReturnType.Namespace, minfo.method.ReturnType.Name));
+					ErrorHelper.ShowWarning (1107, "The return type of the method {0}.{1} exposes a model ({2}). Please expose the corresponding protocol type instead ({3}.I{4}).", minfo.method.DeclaringType, minfo.method.Name, minfo.method.ReturnType, minfo.method.ReturnType.Namespace, minfo.method.ReturnType.Name);
 			}
 
 			if (minfo.is_bindAs) {
@@ -3651,6 +3675,8 @@ public partial class Generator : IMemberGatherer {
 			} else if (minfo != null && minfo.protocolize) {
 				cast_a = "NSArray.ArrayFromHandle<global::" + etype.Namespace + ".I" + etype.Name + ">(";
 				cast_b = ")";
+			} else if (etype == TypeManager.Selector) {
+				exceptions.Add (ErrorHelper.CreateError (1066, "Unsupported return type '{0}' in {1}.{2}.", mai.Type.FullName, mi.DeclaringType.FullName, mi.Name));
 			} else {
 				if (NamespaceManager.NamespacesThatConflictWithTypes.Contains (NamespaceManager.Get(etype.Namespace)))
 					cast_a = "NSArray.ArrayFromHandle<global::" + etype + ">(";
@@ -3672,9 +3698,9 @@ public partial class Generator : IMemberGatherer {
 				if (IsTarget (pi)){
 					if (pi.ParameterType == TypeManager.System_String){
 						var mai = new MarshalInfo (mi, pi);
-						
+
 						if (mai.PlainString)
-							ErrorHelper.Show (new BindingException (1101, false, "Trying to use a string as a [Target]"));
+							ErrorHelper.ShowWarning (1101, "Trying to use a string as a [Target]");
 
 						if (mai.ZeroCopyStringMarshal){
 							target_name = "(IntPtr)(&_s" + pi.Name + ")";
@@ -4032,6 +4058,8 @@ public partial class Generator : IMemberGatherer {
 						convs.AppendFormat ("var nsa_{0} = NSArray.FromStrings ({1});\n", pi.Name, pi.Name.GetSafeParamName ());
 						disposes.AppendFormat ("nsa_{0}.Dispose ();\n", pi.Name);
 					}
+				} else if (etype == TypeManager.Selector) {
+					exceptions.Add (ErrorHelper.CreateError (1065, "Unsupported parameter type '{0}' for the parameter '{1}' in {2}.{3}.", mai.Type.FullName, string.IsNullOrEmpty (pi.Name) ? $"#{pi.Position}" : pi.Name, mi.DeclaringType.FullName, mi.Name));
 				} else {
 					if (null_allowed_override || AttributeManager.HasAttribute<NullAllowedAttribute> (pi)) {
 						convs.AppendFormat ("var nsa_{0} = {1} == null ? null : NSArray.FromNSObjects ({1});\n", pi.Name, pi.Name.GetSafeParamName ());
@@ -4076,19 +4104,76 @@ public partial class Generator : IMemberGatherer {
 
 			// Handle ByRef
 			if (mai.Type.IsByRef && mai.Type.GetElementType ().IsValueType == false){
-				string isForcedOwns;
-				var isForced = HasForcedAttribute (pi, out isForcedOwns);
-				by_ref_init.AppendFormat ("IntPtr {0}Value = IntPtr.Zero;\n", pi.Name.GetSafeParamName ());
+				// For out/ref parameters we support:
+				// * string and string[]
+				// * NSObject (and subclasses), and array of NSObject (and subclasses)
+				// * INativeObject subclasses (but not INativeObject itself), and array of INativeObject subclasses (but not arrays of INativeObject itself)
+				// 	* Except that we do not support arrays of Selector
+				// Modifications to an array (i.e. changing an element) are not marshalled back.
+				// If the array is modified, then a new array instance must be created and assigned to the ref/out parameter for us to marshal back any modifications.
+				var elementType = mai.Type.GetElementType ();
+				var isString = elementType == TypeManager.System_String;
+				var isINativeObject = elementType == TypeManager.INativeObject;
+				var isINativeObjectSubclass = !isINativeObject && TypeManager.INativeObject.IsAssignableFrom (elementType);
+				var isNSObject = IsNSObject (elementType);
+				var isArray = elementType.IsArray;
+				var isArrayOfString = isArray && elementType.GetElementType () == TypeManager.System_String;
+				var isArrayOfNSObject = isArray && IsNSObject (elementType.GetElementType ());
+				var isArrayOfINativeObject = isArray && elementType.GetElementType () == TypeManager.INativeObject;
+				var isArrayOfINativeObjectSubclass = isArray && TypeManager.INativeObject.IsAssignableFrom (elementType.GetElementType ());
+				var isArrayOfSelector = isArray && elementType.GetElementType () == TypeManager.Selector;
 
-				by_ref_processing.AppendLine();
-				if (mai.Type.GetElementType () == TypeManager.System_String){
-					by_ref_processing.AppendFormat("{0} = {0}Value != IntPtr.Zero ? NSString.FromHandle ({0}Value) : null;", pi.Name.GetSafeParamName ());
-				} else if (pi.ParameterType.GetElementType ().IsArray) {
-					by_ref_processing.AppendFormat ("{0} = {0}Value != IntPtr.Zero ? NSArray.ArrayFromHandle<{1}> ({0}Value) : null;", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ().GetElementType ()));
-				} else if (isForced) {
-					by_ref_processing.AppendFormat("{0} = {0}Value != IntPtr.Zero ? Runtime.GetINativeObject<{1}> ({0}Value, {2}) : null;", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ()), isForcedOwns);
+				if (!isString && !isArrayOfNSObject && !isNSObject && !isArrayOfString && !isINativeObjectSubclass && !isArrayOfINativeObjectSubclass || isINativeObject || isArrayOfSelector || isArrayOfINativeObject) {
+					exceptions.Add (ErrorHelper.CreateError (1064, "Unsupported ref/out parameter type '{0}' for the parameter '{1}' in {2}.{3}.", elementType.FullName, string.IsNullOrEmpty (pi.Name) ? $"#{pi.Position}" : pi.Name, mi.DeclaringType.FullName, mi.Name));
+					continue;
+				}
+
+				if (pi.IsOut) {
+					by_ref_init.AppendFormat ("IntPtr {0}Value = IntPtr.Zero;\n", pi.Name.GetSafeParamName ());
 				} else {
-					by_ref_processing.AppendFormat("{0} = {0}Value != IntPtr.Zero ? Runtime.GetNSObject<{1}> ({0}Value) : null;", pi.Name.GetSafeParamName (), RenderType (mai.Type.GetElementType ()));
+					by_ref_init.AppendFormat ("IntPtr {0}Value = ", pi.Name.GetSafeParamName ());
+					if (isString) {
+						by_ref_init.AppendFormat ("NSString.CreateNative ({0}, true);\n", pi.Name.GetSafeParamName ());
+						by_ref_init.AppendFormat ("IntPtr {0}OriginalValue = {0}Value;\n", pi.Name.GetSafeParamName ());
+					} else if (isArrayOfNSObject || isArrayOfINativeObjectSubclass) {
+						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = NSArray.FromNSObjects ({0});\n", pi.Name.GetSafeParamName ()));
+						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
+					} else if (isArrayOfString) {
+						by_ref_init.Insert (0, string.Format ("NSArray {0}ArrayValue = {0} == null ? null : NSArray.FromStrings ({0});\n", pi.Name.GetSafeParamName ()));
+						by_ref_init.AppendFormat ("{0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle;\n", pi.Name.GetSafeParamName ());
+					} else if (isNSObject || isINativeObjectSubclass) {
+						by_ref_init.AppendFormat ("{0} == null ? IntPtr.Zero : {0}.Handle;\n", pi.Name.GetSafeParamName ());
+					} else {
+						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out (input) code for {mai.Type} in {mi}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
+					}
+				}
+
+				if (isString) {
+					if (!pi.IsOut)
+						by_ref_processing.AppendFormat ("if ({0}Value != {0}OriginalValue)\n\t", pi.Name.GetSafeParamName ());
+					by_ref_processing.AppendFormat ("{0} = NSString.FromHandle ({0}Value);\n", pi.Name.GetSafeParamName ());
+				} else if (isArray) {
+					if (!pi.IsOut)
+						by_ref_processing.AppendFormat ("if ({0}Value != ({0}ArrayValue == null ? IntPtr.Zero : {0}ArrayValue.Handle))\n\t", pi.Name.GetSafeParamName ());
+
+					if (isArrayOfNSObject || isArrayOfINativeObjectSubclass) {
+						by_ref_processing.AppendFormat ("{0} = NSArray.ArrayFromHandle<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType.GetElementType ()));
+					} else if (isArrayOfString) {
+						by_ref_processing.AppendFormat ("{0} = NSArray.StringArrayFromHandle ({0}Value);\n", pi.Name.GetSafeParamName ());
+					} else {
+						throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out code for array {mai.Type} in {mi}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
+					}
+
+					if (!pi.IsOut)
+						by_ref_processing.AppendFormat ("{0}ArrayValue?.Dispose ();\n", pi.Name.GetSafeParamName ());
+				} else if (isNSObject) {
+					by_ref_processing.AppendFormat ("{0} = Runtime.GetNSObject<{1}> ({0}Value);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
+				} else if (isINativeObjectSubclass) {
+					if (!pi.IsOut)
+						by_ref_processing.AppendFormat ("if ({0}Value != ({0} == null ? IntPtr.Zero : {0}.Handle))\n\t", pi.Name.GetSafeParamName ());
+					by_ref_processing.AppendFormat ("{0} = Runtime.GetINativeObject<{1}> ({0}Value, false);\n", pi.Name.GetSafeParamName (), RenderType (elementType));
+				} else {
+					throw ErrorHelper.CreateError (99, $"Internal error: don't know how to create ref/out (output) code for {mai.Type} in {mi}. Please file a bug report with a test case (https://github.com/xamarin/xamarin-macios/issues/new).");
 				}
 			}
 		}
@@ -4109,8 +4194,8 @@ public partial class Generator : IMemberGatherer {
 
 			if (UnifiedAPI && !BindThirdPartyLibrary) {
 				if (!mi.IsSpecialName && IsModel (pi.ParameterType) && !Protocolize (pi))
-					ErrorHelper.Show (new BindingException (1106, false, "The parameter {2} in the method {0}.{1} exposes a model ({3}). Please expose the corresponding protocol type instead ({4}.I{5}).",
-						mi.DeclaringType, mi.Name, pi.Name, pi.ParameterType, pi.ParameterType.Namespace, pi.ParameterType.Name));
+					ErrorHelper.ShowWarning (1106, "The parameter {2} in the method {0}.{1} exposes a model ({3}). Please expose the corresponding protocol type instead ({4}.I{5}).",
+						mi.DeclaringType, mi.Name, pi.Name, pi.ParameterType, pi.ParameterType.Namespace, pi.ParameterType.Name);
 			}
 			
 			if (Protocolize (pi)) {
@@ -4186,7 +4271,7 @@ public partial class Generator : IMemberGatherer {
 		var hasStaticAtt = AttributeManager.HasAttribute<StaticAttribute> (mi);
 		if (category_type != null && hasStaticAtt && !minfo.ignore_category_static_warnings) {
 			var baseTypeAtt = AttributeManager.GetCustomAttribute<BaseTypeAttribute> (minfo.type);
-			ErrorHelper.Show (new BindingException (1117, "The member '{0}' is decorated with [Static] and its container class {1} is decorated with [Category] this leads to hard to use code. Please inline {0} into {2} class.", mi.Name, type.FullName, baseTypeAtt?.BaseType.FullName));
+			ErrorHelper.ShowWarning (1117, "The member '{0}' is decorated with [Static] and its container class {1} is decorated with [Category] this leads to hard to use code. Please inline {0} into {2} class.", mi.Name, type.FullName, baseTypeAtt?.BaseType.FullName);
 		}
 
 		indent++;
@@ -4586,7 +4671,7 @@ public partial class Generator : IMemberGatherer {
 			var elType = pi.PropertyType.IsArray ? pi.PropertyType.GetElementType () : pi.PropertyType;
 
 			if (IsModel (elType) && !minfo.protocolize) {
-				ErrorHelper.Show (new BindingException (1110, false, "The property {0}.{1} exposes a model ({2}). Please expose the corresponding protocol type instead ({3}.I{4}).", pi.DeclaringType, pi.Name, pi.PropertyType, pi.PropertyType.Namespace, pi.PropertyType.Name));
+				ErrorHelper.ShowWarning (1110, "The property {0}.{1} exposes a model ({2}). Please expose the corresponding protocol type instead ({3}.I{4}).", pi.DeclaringType, pi.Name, pi.PropertyType, pi.PropertyType.Namespace, pi.PropertyType.Name);
 			}
 		}
 
@@ -5204,8 +5289,8 @@ public partial class Generator : IMemberGatherer {
 					argCount++;
 			}
 			if (minfo.method.GetParameters ().Length != argCount) {
-				ErrorHelper.Show (new BindingException (1105, false, "Potential selector/argument mismatch [Export (\"{0}\")] has {1} arguments and {2} has {3} arguments",
-					minfo.selector, argCount, minfo.method, minfo.method.GetParameters ().Length));
+				ErrorHelper.ShowWarning (1105, "Potential selector/argument mismatch [Export (\"{0}\")] has {1} arguments and {2} has {3} arguments",
+					minfo.selector, argCount, minfo.method, minfo.method.GetParameters ().Length);
 			}
 		}
 
@@ -5797,7 +5882,7 @@ public partial class Generator : IMemberGatherer {
 	StreamWriter GetOutputStreamForType (Type type)
 	{
 		if (type.Namespace == null)
-			ErrorHelper.Show (new BindingException (1103, false, "'{0}' does not live under a namespace; namespaces are a highly recommended .NET best practice", type.FullName));
+			ErrorHelper.ShowWarning (1103, "'{0}' does not live under a namespace; namespaces are a highly recommended .NET best practice", type.FullName);
 
 		var tn = GetGeneratedTypeName (type);
 		if (type.IsGenericType)
@@ -5974,7 +6059,7 @@ public partial class Generator : IMemberGatherer {
 	public void Generate (Type type)
 	{
 		if (!Compat && ZeroCopyStrings) {
-			ErrorHelper.Show (new BindingException (1027, "Support for ZeroCopy strings is not implemented. Strings will be marshalled as NSStrings."));
+			ErrorHelper.ShowWarning (1027, "Support for ZeroCopy strings is not implemented. Strings will be marshalled as NSStrings.");
 			ZeroCopyStrings = false;
 		}
 
@@ -6029,7 +6114,7 @@ public partial class Generator : IMemberGatherer {
 				if (is_static_class)
 					throw new BindingException (1025, true, "[Static] and [Protocol] are mutually exclusive ({0})", type.FullName);
 				if (is_model && base_type == TypeManager.System_Object)
-					ErrorHelper.Show (new BindingException (1060, "The {0} protocol is decorated with [Model], but not [BaseType]. Please verify that [Model] is relevant for this protocol; if so, add [BaseType] as well, otherwise remove [Model].", type.FullName));
+					ErrorHelper.ShowWarning (1060, "The {0} protocol is decorated with [Model], but not [BaseType]. Please verify that [Model] is relevant for this protocol; if so, add [BaseType] as well, otherwise remove [Model].", type.FullName);
 
 				GenerateProtocolTypes (type, class_visibility, TypeName, protocol.Name ?? objc_type_name, protocol);
 			}
@@ -6079,7 +6164,7 @@ public partial class Generator : IMemberGatherer {
 				
 			if (is_model){
 				if (is_category_class)
-					ErrorHelper.Show (new BindingException (1022, true, "Category classes can not use the [Model] attribute"));
+					throw ErrorHelper.CreateError (1022, "Category classes can not use the [Model] attribute");
 				print ("[Model]");
 			}
 
@@ -6105,7 +6190,7 @@ public partial class Generator : IMemberGatherer {
 					string nonInterfaceName = protocolType.Name.Substring (1);
 					if (protocolType.Name[0] == 'I' && types.Any (x => x.Name.Contains(nonInterfaceName)))
 						if (protocolType.Name.Contains ("MKUserLocation"))	// We can not fix MKUserLocation without breaking API, and we don't want warning forever in build until then...
-							ErrorHelper.Show (new BindingException (1111, false, "Interface '{0}' on '{1}' is being ignored as it is not a protocol. Did you mean '{2}' instead?", protocolType, type, nonInterfaceName));
+							ErrorHelper.ShowWarning (1111, "Interface '{0}' on '{1}' is being ignored as it is not a protocol. Did you mean '{2}' instead?", protocolType, type, nonInterfaceName);
 					continue;
 				}
 
@@ -7562,7 +7647,7 @@ public partial class Generator : IMemberGatherer {
 		if (a == null)
 			throw new BindingException (1006, true, "The delegate method {0}.{1} is missing the [DelegateName] attribute (or EventArgs)", mi.DeclaringType.FullName, mi.Name);
 
-		ErrorHelper.Show (new BindingException (1102, false, "Using the deprecated 'EventArgs' for a delegate signature in {0}.{1}, please use 'DelegateName' instead.", mi.DeclaringType.FullName, mi.Name));
+		ErrorHelper.ShowWarning (1102, "Using the deprecated 'EventArgs' for a delegate signature in {0}.{1}, please use 'DelegateName' instead.", mi.DeclaringType.FullName, mi.Name);
 		return ((EventArgsAttribute) a).ArgName;
 	}
 	

@@ -1066,29 +1066,13 @@ namespace Xamarin.Bundler
 						aot_dependencies.AddRange (aottasks);
 					}
 
-					// Compile any .bc files to .o
-					foreach (var info in infos) {
-						foreach (var bc in info.BitcodeFiles) {
-							var compile_task = new CompileTask {
-								Target = this,
-								SharedLibrary = false,
-								InputFile = bc,
-								OutputFile = bc + ".o",
-								Abi = abi,
-							};
-							if (!string.IsNullOrEmpty (App.UserGccFlags))
-								compile_task.CompilerFlags.AddOtherFlag (App.UserGccFlags);
-							compile_task.AddDependency (info.Task);
-							link_dependencies.Add (compile_task);
-						}
-					}
-
 					var arch = abi.AsArchString ();
 					switch (build_target) {
 					case AssemblyBuildTarget.StaticObject:
 						LinkWithTaskOutput (link_dependencies); // Any .s or .ll files from the AOT compiler (compiled to object files)
 						foreach (var info in infos) {
 							LinkWithStaticLibrary (abi, info.ObjectFiles);
+							LinkWithStaticLibrary (abi, info.BitcodeFiles);
 						}
 						continue; // no linking to do here.
 					case AssemblyBuildTarget.DynamicLibrary:
@@ -1109,6 +1093,7 @@ namespace Xamarin.Bundler
 
 					foreach (var info in infos) {
 						compiler_flags.AddLinkWith (info.ObjectFiles);
+						compiler_flags.AddLinkWith (info.BitcodeFiles);
 					}
 
 					foreach (var task in link_dependencies)
@@ -1448,6 +1433,7 @@ namespace Xamarin.Bundler
 					AotInfo info;
 					if (!a.AotInfos.TryGetValue (abi, out info))
 						continue;
+					linker_flags.AddLinkWith (info.BitcodeFiles);
 					linker_flags.AddLinkWith (info.ObjectFiles);
 				}
 			}

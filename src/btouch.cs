@@ -69,13 +69,12 @@ class BindingTouch {
 		os.WriteOptionDescriptions (Console.Out);
 	}
 	
-	static int Main (string [] args)
+	public static int Main (string [] args)
 	{
 		try {
 			return Main2 (args);
 		} catch (Exception ex) {
-			ErrorHelper.Show (ex);
-			return 1;
+			return ErrorHelper.Show (ex);
 		}
 	}
 

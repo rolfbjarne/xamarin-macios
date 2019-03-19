@@ -63,7 +63,7 @@ public static class ErrorHelper {
 		return new ProductException (code, true, message, args);
 	}
 
-	static public void Show (Exception e)
+	static public int Show (Exception e)
 	{
 		List<Exception> exceptions = new List<Exception> ();
 		bool error = false;
@@ -73,8 +73,7 @@ public static class ErrorHelper {
 		foreach (var ex in exceptions)
 			error |= ShowInternal (ex);
 
-		if (error)
-			Environment.Exit (1);
+		return error ? 1 : 0;
 	}
 
 	static void CollectExceptions (Exception ex, List<Exception> exceptions)

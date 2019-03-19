@@ -1,0 +1,18 @@
+# Xamarin
+# Build samples
+
+trigger:
+  - sample-tester
+
+jobs:
+- job: macOS
+  displayName: xamarin macios
+  timeoutInMinutes: 120
+
+  pool:
+    vmImage: 'macOS-10.13'
+
+  steps:
+  - bash: |
+      echo "Hello world"
+    displayName: "Hello!"

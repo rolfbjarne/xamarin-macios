@@ -859,6 +859,7 @@ public partial class Generator : IMemberGatherer {
 	public TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
 	public AttributeManager AttributeManager { get { return BindingTouch.AttributeManager; } }
 	public GeneratedTypes GeneratedTypes;
+	List<Exception> exceptions = new List<Exception> ();
 
 	Dictionary<Type,IEnumerable<string>> selectors = new Dictionary<Type,IEnumerable<string>> ();
 	Dictionary<Type,bool> need_static = new Dictionary<Type,bool> ();
@@ -2490,6 +2491,14 @@ public partial class Generator : IMemberGatherer {
 
 		if (libraries.Count > 0)
 			GenerateLibraryHandles ();
+
+		ThrowIfExceptions ();
+	}
+
+	void ThrowIfExceptions ()
+	{
+		if (exceptions.Count > 0)
+			throw new AggregateException (exceptions);
 	}
 
 	static string GenerateNSValue (string propertyToCall)

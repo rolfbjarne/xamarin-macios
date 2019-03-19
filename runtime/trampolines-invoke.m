@@ -265,6 +265,8 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								exception_gchandle = xamarin_get_exception_for_parameter (8029, "Unable to marshal the byref parameter", sel, method, p, i, true);
 								goto exception_handling;
 							}
+							arg_copy [i + mofs] = arg_frame [ofs];
+							LOGZ (" argument %i's value: %p\n", i + 1, arg_copy [i + mofs]);
 							break;
 						}
 						case _C_PTR: {

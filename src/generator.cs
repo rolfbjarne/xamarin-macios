@@ -830,6 +830,7 @@ public partial class Frameworks {
 }
 
 public partial class Generator : IMemberGatherer {
+	List<Exception> exceptions = new List<Exception> ();
 	internal static bool IsPublicMode;
 
 	static NamespaceManager ns;
@@ -2465,6 +2466,14 @@ public partial class Generator : IMemberGatherer {
 
 		if (libraries.Count > 0)
 			GenerateLibraryHandles ();
+
+		ThrowIfExceptions ();
+	}
+
+	void ThrowIfExceptions ()
+	{
+		if (exceptions.Count > 0)
+			throw new AggregateException (exceptions);
 	}
 
 	static string GenerateNSValue (string propertyToCall)

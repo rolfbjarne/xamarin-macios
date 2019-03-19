@@ -1169,9 +1169,9 @@ namespace Xamarin.Bundler {
 			}
 
 			try {
-				string [] env = null;
+				Dictionary<string, string> env = null;
 				if (IsUnified && !IsUnifiedFullSystemFramework)
-					env = new [] { "PKG_CONFIG_PATH", Path.Combine (GetXamMacPrefix (), "lib", "pkgconfig") };
+					env = new Dictionary<string, string> { { "PKG_CONFIG_PATH", Path.Combine (GetXamMacPrefix (), "lib", "pkgconfig") } };
 
 				RunCommand (pkg_config, "--cflags mono-2", env, cflagsb);
 				RunCommand (pkg_config, "--variable=libdir mono-2", env, libdirb);
@@ -1382,18 +1382,6 @@ namespace Xamarin.Bundler {
 				throw new MonoMacException (5103, true, e, "Failed to compile the file '{0}'. Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new", "driver");
 			}
 			
-			return ret;
-		}
-
-		static int XcodeRun (string command, string args, StringBuilder output = null)
-		{
-			string [] env = DeveloperDirectory != string.Empty ? new string [] { "DEVELOPER_DIR", DeveloperDirectory } : null;
-			int ret = RunCommand ("xcrun", String.Concat ("-sdk macosx ", command, " ", args), env, output);
-			if (ret != 0 && verbose > 1) {
-				StringBuilder debug = new StringBuilder ();
-				RunCommand ("xcrun", String.Concat ("--find ", command), env, debug);
-				Console.WriteLine ("failed using `{0}` from: {1}", command, debug);
-			}
 			return ret;
 		}
 

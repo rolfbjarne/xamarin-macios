@@ -249,25 +249,23 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							if (is_parameter_out) {
 								LOGZ (" argument %i is an out parameter. Passing in a pointer to a NULL value.\n", i + 1);
 								break;
-							} else {
-								if (xamarin_is_class_nsobject (p_klass)) {
-									MonoObject *obj;
-									NSObject *targ = *(NSObject **) arg;
+							} else if (xamarin_is_class_nsobject (p_klass)) {
+								MonoObject *obj;
+								NSObject *targ = *(NSObject **) arg;
 
-									obj = xamarin_get_nsobject_with_type_for_ptr (targ, false, p, sel, method, &exception_gchandle);
-									if (exception_gchandle != 0)
-										goto exception_handling;
-#if DEBUG
-									xamarin_verify_parameter (obj, sel, self, targ, i, p_klass, method);
-#endif
-									arg_frame [ofs] = obj;
-									LOGZ (" argument %i is a ref NSObject parameter: %p = %p\n", i + 1, arg, obj);
-								} else {
-									exception_gchandle = xamarin_get_exception_for_parameter (8029, 0, "Unable to marshal the byref parameter", sel, method, p, i, true);
+								obj = xamarin_get_nsobject_with_type_for_ptr (targ, false, p, sel, method, &exception_gchandle);
+								if (exception_gchandle != 0)
 									goto exception_handling;
-								}
-								break;
+#if DEBUG
+								xamarin_verify_parameter (obj, sel, self, targ, i, p_klass, method);
+#endif
+								arg_frame [ofs] = obj;
+								LOGZ (" argument %i is a ref NSObject parameter: %p = %p\n", i + 1, arg, obj);
+							} else {
+								exception_gchandle = xamarin_get_exception_for_parameter (8029, 0, "Unable to marshal the byref parameter", sel, method, p, i, true);
+								goto exception_handling;
 							}
+							break;
 						}
 						case _C_PTR: {
 							if (mono_type_is_byref (p)) {

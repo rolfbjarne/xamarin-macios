@@ -3685,6 +3685,8 @@ public partial class Generator : IMemberGatherer {
 			} else if (minfo != null && minfo.protocolize) {
 				cast_a = "NSArray.ArrayFromHandle<global::" + etype.Namespace + ".I" + etype.Name + ">(";
 				cast_b = ")";
+			} else if (etype == TypeManager.Selector) {
+				exceptions.Add (ErrorHelper.CreateError (1066, "Unsupported return type '{0}' in {1}.{2}.", mai.Type.FullName, mi.DeclaringType.FullName, mi.Name));
 			} else {
 				if (NamespaceManager.NamespacesThatConflictWithTypes.Contains (NamespaceManager.Get(etype.Namespace)))
 					cast_a = "NSArray.ArrayFromHandle<global::" + etype + ">(";
@@ -4066,6 +4068,8 @@ public partial class Generator : IMemberGatherer {
 						convs.AppendFormat ("var nsa_{0} = NSArray.FromStrings ({1});\n", pi.Name, pi.Name.GetSafeParamName ());
 						disposes.AppendFormat ("nsa_{0}.Dispose ();\n", pi.Name);
 					}
+				} else if (etype == TypeManager.Selector) {
+					exceptions.Add (ErrorHelper.CreateError (1065, "Unsupported parameter type '{0}' for the parameter '{1}' in {2}.{3}.", mai.Type.FullName, string.IsNullOrEmpty (pi.Name) ? $"#{pi.Position}" : pi.Name, mi.DeclaringType.FullName, mi.Name));
 				} else {
 					if (null_allowed_override || AttributeManager.HasAttribute<NullAllowedAttribute> (pi)) {
 						convs.AppendFormat ("var nsa_{0} = {1} == null ? null : NSArray.FromNSObjects ({1});\n", pi.Name, pi.Name.GetSafeParamName ());

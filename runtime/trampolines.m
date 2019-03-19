@@ -73,38 +73,7 @@ xamarin_marshal_return_value (SEL sel, MonoType *mtype, const char *type, MonoOb
 			} else if (r_klass == mono_get_string_class ()) {
 				return xamarin_string_to_nsstring ((MonoString *) retval, retain);
 			} else if (xamarin_is_class_array (r_klass)) {
-				MonoClass *e_klass = mono_class_get_element_class (r_klass);
-				bool is_string = e_klass == mono_get_string_class ();
-				MonoArray *m_arr = (MonoArray *) retval;
-				int length = mono_array_length (m_arr);
-				id *buf = (id *) malloc (sizeof (id) * length);
-				NSArray *arr;
-				int i;
-				id v;
-
-				for (i = 0; i < length; i++) {
-					MonoObject *value = mono_array_get (m_arr, MonoObject *, i);
-					
-					if (is_string) {
-						v = xamarin_string_to_nsstring ((MonoString *) value, false);
-					} else {
-						v = xamarin_get_handle (value, exception_gchandle);
-						if (*exception_gchandle != 0) {
-							free (buf);
-							 return NULL;
-						}
-					}
-					buf[i] = v;
-				}
-
-				arr = [[NSArray alloc] initWithObjects: buf count: length];
-
-				free (buf);
-
-				if (!retain)
-					[arr autorelease];
-				
-				return (void *) arr;
+				return (void *) xamarin_managed_array_to_nsarray (sel, method, -1, (MonoArray *) retval, NULL, r_klass, retain, exception_gchandle);
 			} else if (xamarin_is_class_nsobject (r_klass)) {
 				id i = xamarin_get_handle (retval, exception_gchandle);
 				if (*exception_gchandle != 0)

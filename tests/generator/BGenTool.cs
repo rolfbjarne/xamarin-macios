@@ -57,6 +57,17 @@ namespace Xamarin.Tests
 		string BuildArguments ()
 		{
 			var sb = new StringBuilder ();
+			foreach (var arg in BuildArgumentArray ()) {
+				if (sb.Length > 0)
+					sb.Append (' ');
+				sb.Append (StringUtils.Quote (arg));
+			}
+			return sb.ToString ();
+		}
+
+		string [] BuildArgumentArray ()
+		{
+			var sb = new List<string> ();
 			var targetFramework = (string) null;
 
 			switch (Profile) {
@@ -88,54 +99,81 @@ namespace Xamarin.Tests
 			}
 
 			if (!string.IsNullOrEmpty (targetFramework))
-				sb.Append (" --target-framework=").Append (targetFramework);
+				sb.Add ($"--target-framework={targetFramework}");
 
 			foreach (var ad in ApiDefinitions)
-				sb.Append (" --api=").Append (StringUtils.Quote (ad));
+				sb.Add ($"--api={ad}");
 
 			foreach (var s in Sources)
-				sb.Append (" -s=").Append (StringUtils.Quote (s));
+				sb.Add ("-s={s}");
 
 			foreach (var r in References)
-				sb.Append (" -r=").Append (StringUtils.Quote (r));
+				sb.Add ($"-r={r}");
 
 			if (!string.IsNullOrEmpty (TmpDirectory))
-				sb.Append (" --tmpdir=").Append (StringUtils.Quote (TmpDirectory));
+				sb.Add ($"--tmpdir={TmpDirectory}");
 
 			if (!string.IsNullOrEmpty (ResponseFile))
-				sb.Append (" @").Append (StringUtils.Quote (ResponseFile));
+				sb.Add ($"@{ResponseFile}");
 
 			if (ProcessEnums)
-				sb.Append (" --process-enums");
+				sb.Add ("--process-enums");
 
 			if (Defines != null) {
 				foreach (var d in Defines)
-					sb.Append (" -d ").Append (StringUtils.Quote (d));
+					sb.Add ($"-d={d}");
 			}
 
 			if (WarnAsError != null) {
-				sb.Append (" --warnaserror");
+				var arg = "--warnaserror";
 				if (WarnAsError.Length > 0)
-					sb.Append (":").Append (StringUtils.Quote (WarnAsError));
+					arg += ":" + WarnAsError;
+				sb.Add (arg);
 			}
 
 			if (NoWarn != null) {
-				sb.Append (" --nowarn");
+				var arg = "--nowarn";
 				if (NoWarn.Length > 0)
-					sb.Append (":").Append (StringUtils.Quote (NoWarn));
+					arg += ":" + NoWarn;
+				sb.Add (arg);
 			}
-
-			return sb.ToString ();
+			sb.Add ("-v");
+			return sb.ToArray ();
 		}
 
-		public void AssertExecute (string message)
+		public void AssertExecute (string message, bool in_process = false)
 		{
-			Assert.AreEqual (0, Execute (BuildArguments (), always_show_output: true), message);
+			if (in_process) {
+				Assert.AreEqual (0, Execute (BuildArgumentArray ()), message);
+			} else {
+				Assert.AreEqual (0, Execute (BuildArguments (), always_show_output: true), message);
+			}
 		}
 
-		public void AssertExecuteError (string message)
+		public void AssertExecuteError (string message, bool in_process = false)
 		{
-			Assert.AreNotEqual (0, Execute (BuildArguments ()), message);
+			var rv = in_process ? Execute (BuildArgumentArray ()) : Execute (BuildArguments ());
+			Assert.AreNotEqual (0, rv, message);
+		}
+
+		int Execute (string[] arguments)
+		{
+			int rv;
+			var originalOut = Console.Out;
+			var originalErr = Console.Error;
+			using (var str = new StringWriter (Output)) {
+				Console.SetOut (str);
+				Console.SetError (str);
+				try {
+					rv = BindingTouch.Main (arguments);
+				} finally {
+					Console.SetOut (originalOut);
+					Console.SetError (originalErr);
+					Console.WriteLine (Output);
+				}
+			}
+			ParseMessages ();
+			return rv;
 		}
 
 		public void AssertApiCallsMethod (string caller_namespace, string caller_type, string caller_method, string @called_method, string message)

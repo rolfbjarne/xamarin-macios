@@ -392,6 +392,9 @@
     <Compile Include="..\linker\CustomSymbolWriter.cs">
       <Link>Xamarin.Linker\CustomSymbolWriter.cs</Link>
     </Compile>
+    <Compile Include="..\common\ProcessHelper.cs">
+      <Link>external\ProcessHelper.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

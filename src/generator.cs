@@ -6079,7 +6079,7 @@ public partial class Generator : IMemberGatherer {
 				
 			if (is_model){
 				if (is_category_class)
-					ErrorHelper.Show (new BindingException (1022, true, "Category classes can not use the [Model] attribute"));
+					throw ErrorHelper.CreateError (1022, "Category classes can not use the [Model] attribute");
 				print ("[Model]");
 			}
 

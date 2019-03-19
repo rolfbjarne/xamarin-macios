@@ -578,7 +578,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 						goto exception_handling;
 					LOGZ (" writing back managed INativeObject %p to argument at index %i (%p)\n", value, i + 1, arg);
 				} else {
-					exception_gchandle = xamarin_get_exception_for_parameter (8030, "Unable to marshal the out/ref parameter %i", sel, method, p, i, false);
+					exception_gchandle = xamarin_get_exception_for_parameter (8030, "Unable to marshal the out/ref parameter", sel, method, p, i, false);
 					goto exception_handling;
 				}
 				*(NSObject **) arg = obj;

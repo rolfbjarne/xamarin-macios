@@ -246,7 +246,8 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							writeback [i + mofs] = TRUE;
 							if (is_parameter_out) {
 								LOGZ (" argument %i is an out parameter. Passing in a pointer to a NULL value.\n", i + 1);
-								break;
+								if (arg != NULL)
+									*(NSObject **) arg = NULL;
 							} else if (xamarin_is_class_nsobject (p_klass)) {
 								MonoObject *obj;
 								NSObject *targ = *(NSObject **) arg;

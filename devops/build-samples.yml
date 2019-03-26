@@ -14,5 +14,11 @@ jobs:
 
   steps:
   - bash: |
-      echo "Hello world"
-    displayName: "Hello!"
+      set -x
+      set -e
+      uname -a
+      ls -la /Library/Frameworks/Xamarin.iOS.framework/Versions || true
+      ls -la /Library/Frameworks/Xamarin.Mac.framework/Versions || true
+      mono --version || true
+      env | sort
+    displayName: "System Info"

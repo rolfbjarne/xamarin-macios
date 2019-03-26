@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
 
@@ -30,6 +31,16 @@ public static string DownloadWithGithubAuth (string uri)
 	if (!string.IsNullOrEmpty (authToken)) {
 		Console.WriteLine ("Has auth token!");
 		headers.Add (("Authorization", $"token {authToken}"));
+
+		Console.WriteLine ("Running curl");
+		var lines = new List<string> ();
+		var task = new Exec (
+			ProcessArguments.FromCommandAndArguments ("curl", new string [] { "-H", $"Authorization: token {authToken}", "-I", "-v", uri }),
+			ExecFlags.RedirectStdout | ExecFlags.RedirectStderr,
+			segment => Console.WriteLine (segment.Data.TrimEnd ('\r', '\n')))
+			.RunAsync ();
+		Task.WaitAny (task);
+		Console.WriteLine ("curled");
 	} else {
 		Console.WriteLine ("Does not have auth token!");
 	}

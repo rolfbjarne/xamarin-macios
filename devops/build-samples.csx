@@ -27,8 +27,12 @@ public static string DownloadWithGithubAuth (string uri)
 	var path = Path.GetTempFileName ();
 	var headers = new List<(string, string)> ();
 	var authToken = AuthToken ("github.com");
-	if (!string.IsNullOrEmpty (authToken))
+	if (!string.IsNullOrEmpty (authToken)) {
+		Console.WriteLine ("Has auth token!");
 		headers.Add (("Authorization", authToken));
+	} else {
+		Console.WriteLine ("Does not have auth token!");
+	}
 	path = downloader
 		.DownloadItemAsync (
 			uri,

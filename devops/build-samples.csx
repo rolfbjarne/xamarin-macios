@@ -21,11 +21,35 @@ string manifest_url = null;
 string[] manifest = null;
 IEnumerable<string> make_config = null;
 
+public static string DownloadWithGithubAuth (string uri)
+{
+	var downloader = new Downloader ();
+	var path = Path.GetTempFileName ();
+	var headers = new List<(string, string)> ();
+	var authToken = AuthToken ("github.com");
+	if (!string.IsNullOrEmpty (authToken))
+		headers.Add (("Authorization", authToken));
+	path = downloader
+		.DownloadItemAsync (
+			uri,
+			headers.ToArray (),
+			Path.GetDirectoryName (path),
+			Path.GetFileName (path),
+			options: Downloader.Options.Default.WithUseCache (false))
+		.GetAwaiter ()
+		.GetResult ();
+	try {
+		return File.ReadAllText (path);
+	} finally {
+		File.Delete (path);
+	}
+}
+
 string GetManifestUrl ()
 {
 	if (manifest_url == null) {
 		var url = $"https://api.github.com/repos/xamarin/xamarin-macios/statuses/{provision_from_commit}";
-		var json = Json (url);
+		var json = JToken.Parse (DownloadWithGithubAuth (url));
 		var value = (JValue) ((JArray) json).Where ((v) => v ["context"].ToString () == "manifest").Select ((v) => v ["target_url"]).FirstOrDefault ();
 		manifest_url = (string) value?.Value;
 		if (manifest_url == null)

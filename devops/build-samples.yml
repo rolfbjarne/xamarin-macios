@@ -7,7 +7,7 @@ trigger:
 jobs:
 - job: macOS
   displayName: xamarin macios
-  timeoutInMinutes: 120
+  timeoutInMinutes: 360
 
   pool:
     vmImage: 'macOS-10.13'

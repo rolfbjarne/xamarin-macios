@@ -13,6 +13,13 @@ jobs:
     vmImage: 'macOS-10.13'
 
   steps:
+  - task: InstallSSHKey@0
+    inputs:
+      hostName: $(github-hostname)
+      sshPublicKey: $(github-pubkey)
+      sshPassphrase: $(github-sec)
+      sshKeySecureFile: $(github-file)
+
   - bash: |
       set -x
       set -e
@@ -23,8 +30,13 @@ jobs:
       env | sort
     displayName: "System Info"
 
-
   - task: xamops.azdevex.provisionator-task.provisionator@1
     displayName: Provisionate dependencies
     inputs:
       provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
+
+  - bash: |
+      set -x
+      set -e
+      make -C tests test-system.config
+      make -C tests/sampletester TESTS_USE_SYSTEM=1

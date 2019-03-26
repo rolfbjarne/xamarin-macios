@@ -22,3 +22,9 @@ jobs:
       mono --version || true
       env | sort
     displayName: "System Info"
+
+
+  - task: xamops.azdevex.provisionator-task.provisionator@1
+    displayName: Provisionate dependencies
+    inputs:
+      provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx

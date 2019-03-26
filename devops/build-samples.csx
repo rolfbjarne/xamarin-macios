@@ -29,7 +29,7 @@ public static string DownloadWithGithubAuth (string uri)
 	var authToken = AuthToken ("github.com");
 	if (!string.IsNullOrEmpty (authToken)) {
 		Console.WriteLine ("Has auth token!");
-		headers.Add (("Authorization", authToken));
+		headers.Add (("Authorization", $"token {authToken}"));
 	} else {
 		Console.WriteLine ("Does not have auth token!");
 	}

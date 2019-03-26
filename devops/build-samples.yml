@@ -13,13 +13,6 @@ jobs:
     vmImage: 'macOS-10.13'
 
   steps:
-  - task: InstallSSHKey@0
-    inputs:
-      hostName: $(github-hostname)
-      sshPublicKey: $(github-pubkey)
-      sshPassphrase: $(github-sec)
-      sshKeySecureFile: $(github-file)
-
   - bash: |
       set -x
       set -e

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 
 using NUnit.Framework;
 
@@ -186,12 +187,29 @@ namespace Samples {
 				}
 			}
 
+			var platform_filter = Environment.GetEnvironmentVariable ("TEST_PLATFORM_FILTER_EXPRESSION");
+			var config_filter = Environment.GetEnvironmentVariable ("TEST_CONFIG_FILTER_EXPRESSION");
+
+			IEnumerable<string> filter (string name, string proj, IEnumerable<string> input, string filter_expression)
+			{
+				if (string.IsNullOrEmpty (filter_expression))
+					return input;
+
+				var filtered = input.Where ((v) => Regex.IsMatch (v, filter_expression));
+				var removed = input.Where ((v) => !filtered.Contains (v));
+				if (removed.Any ()) {
+					Console.WriteLine ($"Filtered out {removed.Count ()} {name}s for {repo}/{proj}: {string.Join (", ", removed)}");
+					return filtered;
+				}
+				return input;
+			}
+
 			// Create the test variations for each project.
 			foreach (var proj in executable_projects) {
 				if (!samples.TryGetValue (proj.RelativePath, out var sample))
 					samples [proj.RelativePath] = sample = new SampleTest ();
 				sample.Project = proj;
-				string [] platforms;
+				IEnumerable<string> platforms;
 				switch (proj.Platform) {
 				case TestPlatform.iOS:
 				case TestPlatform.tvOS:
@@ -204,12 +222,14 @@ namespace Samples {
 				default:
 					throw new NotImplementedException (proj.Platform.ToString ());
 				}
-				foreach (var platform in platforms) {
+
+				foreach (var platform in filter ("platform", proj.Title, platforms, platform_filter)) {
 					var configs = new List<string> ();
 					configs.AddRange (sample.DebugConfigurations ?? defaultDebugConfigurations);
 					configs.AddRange (sample.ReleaseConfigurations ?? defaultReleaseConfigurations);
-					foreach (var config in configs)
+					foreach (var config in filter ("config", proj.Title, configs, config_filter)) {
 						yield return new SampleTestData { SampleTest = sample, Configuration = config, Platform = platform };
+					}
 				}
 			}
 		}

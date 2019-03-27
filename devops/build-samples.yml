@@ -21,10 +21,10 @@ jobs:
       ls -la /Library/Frameworks/Xamarin.Mac.framework/Versions || true
       mono --version || true
       env | sort
-    displayName: "System Info"
+    displayName: System Info
 
   - task: xamops.azdevex.provisionator-task.provisionator@1
-    displayName: Provisionate dependencies
+    displayName: Provision dependencies
     inputs:
       provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
 
@@ -33,3 +33,12 @@ jobs:
       set -e
       make -C tests test-system.config
       make -C tests/sampletester TESTS_USE_SYSTEM=1
+    displayName: Run tests
+
+  - task: PublishTestResults@2
+    displayName: Publish test results
+    condition: always()
+    testResultsFormat: NUnit
+    testResultsFiles: '**/TestResult*.xml'
+    testRunTitle: Sample tests (build)
+    publishRunAttachments: true

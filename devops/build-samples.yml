@@ -47,14 +47,13 @@ jobs:
 
   # FIXME: this should figure out the exact Xcode version from PROVISION_FROM_COMMIT.
   - bash: |
-      ln -s /Applications/Xcode_10.1.app /Applications/Xcode101.app
+      ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode101.app
       sudo xcode-select -s /Applications/Xcode101.app
-      make reset-maccore
     displayName: Provision some dependencies
 
   - bash: |
-      make reset-maccore
-      ../maccore/tools/install-qa-provisioning-profiles.sh -v
+      make reset-maccore -C "$(System.DefaultWorkingDirectory)"
+      "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles
 
   - task: xamops.azdevex.provisionator-task.provisionator@1

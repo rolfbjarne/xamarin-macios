@@ -10,10 +10,13 @@ using Newtonsoft.Json.Linq;
 using Xamarin.Provisioning;
 using Xamarin.Provisioning.Model;
 
-// Provision Mono, XI and XMc.
+// Provision Mono, XI and XM.
 // We get Mono from the current commit's MIN_MONO_URL value in Make.config
-// We get XI and XM from the current commit's manifest from GitHub's statuses (the current commit can be overridden by setting the PROVISION_FROM_COMMIT variable, which is usually easier than overriding each url)
-// In all cases the download URL can be overridden by setting environment variables (MIN_MONO_URL, XI_PACKAGE and/or XM_PACKAGE).
+// We get XI and XM from the current commit's manifest from GitHub's statuses
+//
+// Overrides:
+// * Each download URL can be overriden by setting an environment variable (MIN_MONO_URL, XI_PACKAGE and/or XM_PACKAGE).
+// * The current commit can be overridden by setting the PROVISION_FROM_COMMIT variable. This is usually easier than overriding each url.
 
 var commit = Environment.GetEnvironmentVariable ("BUILD_SOURCEVERSION");
 var provision_from_commit = Environment.GetEnvironmentVariable ("PROVISION_FROM_COMMIT") ?? commit;

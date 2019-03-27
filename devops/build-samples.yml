@@ -6,8 +6,28 @@ trigger:
 
 jobs:
 - job: macOS
-  displayName: xamarin macios
+  displayName: Build samples
   timeoutInMinutes: 360
+  strategy:
+    matrix:
+      Debug|iPhone:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      Debug|iPhoneSimulator:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      Release|iPhone:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+      Release|iPhoneSimulator:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+      Debug|Mac:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      Release|Mac:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
 
   pool:
     vmImage: 'macOS-10.13'
@@ -43,3 +63,4 @@ jobs:
       testResultsFiles: '**/TestResult*.xml'
       testRunTitle: Sample tests (build)
       publishRunAttachments: true
+      mergeTestResults: true

@@ -45,7 +45,7 @@ public static class ProcessHelper
 		environment_variables ["XCODE_DEVELOPER_DIR_PATH"] = null;
 		environment_variables ["DEVELOPER_DIR"] = Configuration.XcodeLocation;
 
-		var exit_code = ExecutionHelper.Execute (filename, arguments, out var timed_out, workingDirectory, environment_variables, output_callback, output_callback, timeout);
+		exitCode = ExecutionHelper.Execute (filename, arguments, out var timed_out, workingDirectory, environment_variables, output_callback, output_callback, timeout);
 
 		// Write execution log to disk (and print the path)
 		var logfile = Path.Combine (LogDirectory, Guid.NewGuid ().ToString () + ".log");
@@ -74,16 +74,24 @@ public static class ProcessHelper
 			// nuget restore
 			var solution_dir = string.Empty;
 			var solutions = new string [] { solution };
+			var nuget_args = new List<string> ();
+			nuget_args.Add ("restore");
+			nuget_args.Add ("sln"); // replaced later
+			nuget_args.Add ("-Verbosity");
+			nuget_args.Add ("detailed");
 			if (!solution.EndsWith (".sln", StringComparison.Ordinal)) {
 				var slndir = Path.GetDirectoryName (solution);
 				solutions = Directory.GetFiles (slndir, "*.sln", SearchOption.TopDirectoryOnly);
 				while ((solutions = Directory.GetFiles (slndir, "*.sln", SearchOption.TopDirectoryOnly)).Length == 0 && slndir.Length > 1)
 					slndir = Path.GetDirectoryName (slndir);
-				solution_dir = $"-SolutionDir \"{slndir}\"";
-
+				nuget_args.Add ("-SolutionDir");
+				nuget_args.Add (slndir);
 			}
-			foreach (var sln in solutions)
-				AssertRunProcess ("nuget", new string [] { "restore", sln, "-Verbosity", "detailed", solution_dir }, TimeSpan.FromMinutes (2), Configuration.SampleRootDirectory, "nuget restore");
+
+			foreach (var sln in solutions) {
+				nuget_args [1] = sln;
+				AssertRunProcess ("nuget", nuget_args.ToArray (), TimeSpan.FromMinutes (2), Configuration.SampleRootDirectory, "nuget restore");
+			}
 
 			// msbuild
 			var sb = new List<string> ();

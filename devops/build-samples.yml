@@ -53,13 +53,13 @@ jobs:
       sudo xcode-select -s /Applications/Xcode101.app
     displayName: Provision some dependencies
 
-  - bash: |
-      set -x
-      set -e
-      ./configure --enable-xamarin
-      make reset-maccore -C "$(System.DefaultWorkingDirectory)"
-      "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
-    displayName: Provision provisioning profiles
+  # - bash: |
+  #     set -x
+  #     set -e
+  #     ./configure --enable-xamarin
+  #     make reset-maccore -C "$(System.DefaultWorkingDirectory)"
+  #     "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
+  #   displayName: Provision provisioning profiles
 
   - task: xamops.azdevex.provisionator-task.provisionator@1
     displayName: Provision more dependencies

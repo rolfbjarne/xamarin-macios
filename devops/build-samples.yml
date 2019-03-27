@@ -39,9 +39,15 @@ jobs:
       uname -a
       ls -la /Library/Frameworks/Xamarin.iOS.framework/Versions || true
       ls -la /Library/Frameworks/Xamarin.Mac.framework/Versions || true
+      ls -lad /Applications/Xcode*
+      xcode-select -p
       mono --version || true
       env | sort
     displayName: System Info
+
+  # FIXME: this should figure out the exact Xcode version from on PROVISION_FROM_COMMIT.
+  - bash: sudo xcode-select -s /Applications/Xcode_10.1.app
+    displayName: Select Xcode 10.1
 
   - task: xamops.azdevex.provisionator-task.provisionator@1
     displayName: Provision dependencies

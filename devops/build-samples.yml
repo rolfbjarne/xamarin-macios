@@ -56,6 +56,7 @@ jobs:
   - bash: |
       set -x
       set -e
+      ./configure --enable-xamarin
       make reset-maccore -C "$(System.DefaultWorkingDirectory)"
       "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles

@@ -67,13 +67,14 @@ jobs:
       set -e
       ./configure --enable-xamarin
 
-      git init maccore
-      cd maccore
-      git remote add origin https://github.com/xamarin/maccore
-      git config gc.auto 0
-      git config --get-all http.https://github.com/xamarin/maccore.extraheader
-      AUTH=$(git config -l | grep AUTHORIZATION | head -1 | sed 's/.*AUTHORIZATION: //')
-      git -c http.extraheader="AUTHORIZATION: $AUTH" fetch --tags --prune --progress --no-recurse-submodules origin
+      # git init maccore
+      # cd maccore
+      # git remote add origin https://github.com/xamarin/maccore
+      # git config gc.auto 0
+      # git config --get-all http.https://github.com/xamarin/maccore.extraheader
+      # AUTH=$(git config -l | grep AUTHORIZATION | head -1 | sed 's/.*AUTHORIZATION: //')
+      # git -c http.extraheader="AUTHORIZATION: $AUTH" fetch --tags --prune --progress --no-recurse-submodules origin
+      git clone https://github.com/xamarin/maccore
       make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
       "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles

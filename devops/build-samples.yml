@@ -33,6 +33,9 @@ jobs:
     vmImage: 'macOS-10.13'
 
   steps:
+  - checkout:
+      persistCredentials: true
+
   - bash: |
       set -x
       set -e
@@ -43,6 +46,7 @@ jobs:
       xcode-select -p
       mono --version || true
       env | sort
+      git config -l | sort
     displayName: System Info
 
   # FIXME: this should figure out the exact Xcode version from PROVISION_FROM_COMMIT.

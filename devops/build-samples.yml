@@ -50,8 +50,9 @@ jobs:
       git config --global url."https://github.com/".insteadOf git@github.com:
       git config --global url."https://".insteadOf git://
       AUTH=$(git config -l | grep AUTHORIZATION | sed 's/.*AUTHORIZATION: //')
-      git config --global "http.https://github.com/xamarin/maccore.extraheader=AUTHORIZATION: $(AUTH)"
-      git config --global "http.https://github.com/rolfbjarne/maccore.extraheader=AUTHORIZATION: $(AUTH)"
+      git config --global http.https://github.com/xamarin/maccore.extraheader "AUTHORIZATION: $AUTH"
+      git config --global http.https://github.com/rolfbjarne/maccore.extraheader "AUTHORIZATION: $AUTH"
+      git config -l | sort
     displayName: System Info
 
   # FIXME: this should figure out the exact Xcode version from PROVISION_FROM_COMMIT.

@@ -75,8 +75,9 @@ jobs:
       # AUTH=$(git config -l | grep AUTHORIZATION | head -1 | sed 's/.*AUTHORIZATION: //')
       # git -c http.extraheader="AUTHORIZATION: $AUTH" fetch --tags --prune --progress --no-recurse-submodules origin
       git clone https://github.com/xamarin/maccore
-      make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
-      "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
+      ./maccore/tools/install-qa-provisioning-profiles.sh" -v
+      #make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
+      #"$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles
 
   - task: xamops.azdevex.provisionator-task.provisionator@1

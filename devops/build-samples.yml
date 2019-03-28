@@ -72,7 +72,6 @@ jobs:
       git remote add origin https://github.com/xamarin/maccore
       git config gc.auto 0
       git config --get-all http.https://github.com/xamarin/maccore.extraheader
-      git config --get-all http.proxy
       AUTH=$(git config -l | grep AUTHORIZATION | sed 's/.*AUTHORIZATION: //')
       git -c http.extraheader="AUTHORIZATION: $AUTH" fetch --tags --prune --progress --no-recurse-submodules origin
       make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1

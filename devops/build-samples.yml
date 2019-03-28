@@ -62,31 +62,19 @@ jobs:
       sudo xcode-select -s /Applications/Xcode101.app
     displayName: Provision some dependencies
 
-  # - task: xamops.azdevex.provisionator-task.provisionator@1
-  #   displayName: Provision more dependencies
-  #   inputs:
-  #     provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
+  - task: xamops.azdevex.provisionator-task.provisionator@1
+    displayName: Provision more dependencies
+    inputs:
+      provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
 
   - bash: |
       set -x
       set -e
       ./configure --enable-xamarin
 
-      # testing
-      make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed 's/.*:= //' | sed -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
-
-      exit 12 # just testing
-      # git init maccore
-      # cd maccore
-      # git remote add origin https://github.com/xamarin/maccore
-      # git config gc.auto 0
-      # git config --get-all http.https://github.com/xamarin/maccore.extraheader
-      # AUTH=$(git config -l | grep AUTHORIZATION | head -1 | sed 's/.*AUTHORIZATION: //')
-      # git -c http.extraheader="AUTHORIZATION: $AUTH" fetch --tags --prune --progress --no-recurse-submodules origin
-      git clone https://github.com/xamarin/maccore
-      ./maccore/tools/install-qa-provisioning-profiles.sh
-      #make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
-      #"$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
+      # the github auth we use only works with https, so change maccore's url to be https:// instead of git@
+      make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed -e 's/.*:= //' -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
+      ../maccore/tools/install-qa-provisioning-profiles.sh -v
     displayName: Provision provisioning profiles
 
   - bash: |

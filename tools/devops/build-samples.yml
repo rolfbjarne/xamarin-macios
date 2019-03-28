@@ -4,30 +4,61 @@
 trigger:
   - sample-tester
 
+variables:
+  debug_filter: '^.*Debug.*$'
+  release_filter: '^.*Release.*$'
+  iphone_filter: '^iPhone$'
+  iphonesimulator_filter: '^iPhoneSimulator$'
+  mac_platform_filter: '^$'
+  name_filter_af: '^[A-Fa-f].*$'
+  name_filter_gr: '^[G-Rg-r].*$'
+  name_filter_rest: '^[^A-Ra-r].*$'
+
 jobs:
 - job: macOS
   displayName: Build samples
   timeoutInMinutes: 360
   strategy:
     matrix:
-      Debug|iPhone:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      # We have rougly 900 tests, which take a while to build for device.
+      # So in that case, we split them in 3 buckets of roughly 300 tests each,
+      # based on the first letter of the project's filename.
+      Debug|iPhone|A-F:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_af)
+      Debug|iPhone|E-R:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_gr)
+      Debug|iPhone|S-Z:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_rest)
       Debug|iPhoneSimulator:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-      Release|iPhone:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphonesimulator_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
+      Release|iPhone|A-F:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_af)
+      Release|iPhone|G-R:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_gr)
+      Release|iPhone|S-Z:
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
+        TEST_NAME_FILTER_EXPRESSION: $(name_filter_rest)
       Release|iPhoneSimulator:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+        TEST_PLATFORM_FILTER_EXPRESSION: $(iphonesimulator_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
       Debug|Mac:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+        TEST_PLATFORM_FILTER_EXPRESSION: $(mac_platform_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
       Release|Mac:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+        TEST_PLATFORM_FILTER_EXPRESSION: $(mac_platform_filter)
+        TEST_CONFIG_FILTER_EXPRESSION: $(release_filter)
 
   pool:
     vmImage: 'macOS-10.13'

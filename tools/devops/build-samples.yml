@@ -47,10 +47,8 @@ jobs:
       mono --version || true
       env | sort
       git config -l | sort
-      git config --global url."https://github.com/".insteadOf git@github.com:
       AUTH=$(git config -l | grep AUTHORIZATION | sed 's/.*AUTHORIZATION: //')
-      git config --global http.https://github.com/xamarin/maccore.extraheader "AUTHORIZATION: $AUTH"
-      git config --global http.https://github.com/rolfbjarne/maccore.extraheader "AUTHORIZATION: $AUTH"
+      git config --global http.extraheader "AUTHORIZATION: $AUTH"
       git config -l | sort
     displayName: System Info
 
@@ -73,7 +71,6 @@ jobs:
       set -x
       set -e
       ./configure --enable-xamarin
-
       # the github auth we use only works with https, so change maccore's url to be https:// instead of git@
       make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed -e 's/.*:= //' -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
       ../maccore/tools/install-qa-provisioning-profiles.sh

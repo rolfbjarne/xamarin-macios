@@ -34,7 +34,7 @@ jobs:
 
   steps:
   - checkout:
-      persistCredentials: true
+    persistCredentials: true
 
   - bash: |
       set -x

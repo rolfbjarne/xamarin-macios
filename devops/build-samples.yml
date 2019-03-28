@@ -62,6 +62,11 @@ jobs:
       sudo xcode-select -s /Applications/Xcode101.app
     displayName: Provision some dependencies
 
+  - task: xamops.azdevex.provisionator-task.provisionator@1
+    displayName: Provision more dependencies
+    inputs:
+      provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
+
   - bash: |
       set -x
       set -e
@@ -79,11 +84,6 @@ jobs:
       #make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
       #"$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles
-
-  - task: xamops.azdevex.provisionator-task.provisionator@1
-    displayName: Provision more dependencies
-    inputs:
-      provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
 
   - bash: |
       set -x

@@ -33,7 +33,7 @@ jobs:
     vmImage: 'macOS-10.13'
 
   steps:
-  - checkout:
+  - checkout: self
     persistCredentials: true
 
   - bash: |

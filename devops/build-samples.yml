@@ -8,26 +8,26 @@ jobs:
 - job: macOS
   displayName: Build samples
   timeoutInMinutes: 360
-  strategy:
-    matrix:
-      Debug|iPhone:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-      Debug|iPhoneSimulator:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-      Release|iPhone:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
-      Release|iPhoneSimulator:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
-      Debug|Mac:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-      Release|Mac:
-        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
-        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+  # strategy:
+  #   matrix:
+  #     Debug|iPhone:
+  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
+  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+  #     Debug|iPhoneSimulator:
+  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
+  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+  #     Release|iPhone:
+  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
+  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+  #     Release|iPhoneSimulator:
+  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
+  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+  #     Debug|Mac:
+  #       TEST_PLATFORM_FILTER_EXPRESSION: '^$'
+  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+  #     Release|Mac:
+  #       TEST_PLATFORM_FILTER_EXPRESSION: '^$'
+  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
 
   pool:
     vmImage: 'macOS-10.13'
@@ -66,7 +66,15 @@ jobs:
       set -x
       set -e
       ./configure --enable-xamarin
-      git clone https://github.com/xamarin/maccore
+
+      git init maccore
+      cd maccore
+      git remote add origin https://github.com/xamarin/maccore
+      git config gc.auto 0
+      git config --get-all http.https://github.com/xamarin/maccore.extraheader
+      git config --get-all http.proxy
+      AUTH=$(git config -l | grep AUTHORIZATION | sed 's/.*AUTHORIZATION: //')
+      git -c http.extraheader="AUTHORIZATION: $AUTH" fetch --tags --prune --progress --no-recurse-submodules origin
       make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
       "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles

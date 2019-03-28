@@ -65,7 +65,7 @@ jobs:
   - task: xamops.azdevex.provisionator-task.provisionator@1
     displayName: Provision more dependencies
     inputs:
-      provisioning_script: $(System.DefaultWorkingDirectory)/devops/build-samples.csx
+      provisioning_script: $(System.DefaultWorkingDirectory)/tools/devops/build-samples.csx
 
   - bash: |
       set -x

@@ -66,6 +66,7 @@ jobs:
       set -x
       set -e
       ./configure --enable-xamarin
+      git clone https://github.com/xamarin/maccore
       make reset-maccore -C "$(System.DefaultWorkingDirectory)" V=1
       "$(System.DefaultWorkingDirectory)/../maccore/tools/install-qa-provisioning-profiles.sh" -v
     displayName: Provision provisioning profiles

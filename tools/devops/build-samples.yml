@@ -58,8 +58,10 @@ jobs:
   - bash: |
       set -x
       set -e
+      rm -f /Applications/Xcode.app
       ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode101.app
-      sudo xcode-select -s /Applications/Xcode101.app
+      ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode.app
+      sudo xcode-select -s /Applications/Xcode.app
     displayName: Provision some dependencies
 
   - task: xamops.azdevex.provisionator-task.provisionator@1

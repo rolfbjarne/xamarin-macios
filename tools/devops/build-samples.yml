@@ -8,26 +8,26 @@ jobs:
 - job: macOS
   displayName: Build samples
   timeoutInMinutes: 360
-  # strategy:
-  #   matrix:
-  #     Debug|iPhone:
-  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
-  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-  #     Debug|iPhoneSimulator:
-  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
-  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-  #     Release|iPhone:
-  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
-  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
-  #     Release|iPhoneSimulator:
-  #       TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
-  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
-  #     Debug|Mac:
-  #       TEST_PLATFORM_FILTER_EXPRESSION: '^$'
-  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
-  #     Release|Mac:
-  #       TEST_PLATFORM_FILTER_EXPRESSION: '^$'
-  #       TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+  strategy:
+    matrix:
+      Debug|iPhone:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      Debug|iPhoneSimulator:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      Release|iPhone:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhone$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+      Release|iPhoneSimulator:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^iPhoneSimulator$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
+      Debug|Mac:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Debug.*$'
+      Release|Mac:
+        TEST_PLATFORM_FILTER_EXPRESSION: '^$'
+        TEST_CONFIG_FILTER_EXPRESSION: '^.*Release.*$'
 
   pool:
     vmImage: 'macOS-10.13'
@@ -76,7 +76,7 @@ jobs:
 
       # the github auth we use only works with https, so change maccore's url to be https:// instead of git@
       make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed -e 's/.*:= //' -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
-      ../maccore/tools/install-qa-provisioning-profiles.sh -v
+      ../maccore/tools/install-qa-provisioning-profiles.sh
     displayName: Provision provisioning profiles
 
   - bash: |

@@ -73,7 +73,7 @@ jobs:
       ./configure --enable-xamarin
 
       # testing
-      make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed 's/.*:= //' | sed 's_git@github.com:_https://github.com/_') V=1
+      make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed 's/.*:= //' | sed -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
 
       exit 12 # just testing
       # git init maccore

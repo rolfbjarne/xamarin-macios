@@ -21,8 +21,11 @@ namespace Samples {
 				{ "ios11/ARKitPlacingObjects/PlacingObjects/PlacingObjects.csproj", new SampleTest { BuildSolution = true, Solution = "ios11/ARKitPlacingObjects/PlacingObjects.sln" } },
 				{ "ios11/WeatherWidget/WeatherWidget/WeatherWidget.csproj", new SampleTest { BuildSolution = true, Solution = "ios11/WeatherWidget/WeatherWidget.sln" } },
 				{ "ios12/SoupChef/SoupChef/SoupChef.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/SoupChef/SoupChef.sln" } },
-				{ "ios12/XamarinShot/XamarinShot/XamarinShot.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/XamarinShot/XamarinShot.sln" } },
+				{ "ios12/XamarinShot/XamarinShot/XamarinShot.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/XamarinShot/XamarinShot.sln", Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
 				{ "ios8/Lister/Lister/Lister.csproj", new SampleTest { BuildSolution = true, Solution = "ios8/Lister/Lister.sln" } },
+				{ "ios8/MetalBasic3D/MetalBasic3D/MetalBasic3D.csproj", new SampleTest { Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
+				{ "ios8/MetalImageProcessing/MetalImageProcessing/MetalImageProcessing.csproj", new SampleTest { Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
+				{ "ios8/MetalTexturedQuad/MetalTexturedQuad/MetalTexturedQuad.csproj", new SampleTest { Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
 				{ "ios9/iTravel/iTravel/iTravel.csproj", new SampleTest { BuildSolution = true, Solution = "ios9/iTravel/iTravel.sln" } },
 				{ "Profiling/MemoryDemo/MemoryDemo/MemoryDemo.csproj", new SampleTest { BuildSolution = true, Solution = "Profiling/MemoryDemo/MemoryDemo.sln", DebugConfigurations = new string [] { "Before-Debug", "After-Debug" }, ReleaseConfigurations = new string [] { "Before-Release", "After-Release" } } },
 				{ "WalkingGameCompleteiOS/WalkingGame.iOS/WalkingGame.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "WalkingGameCompleteiOS/WalkingGame.sln" } },
@@ -35,6 +38,7 @@ namespace Samples {
 				{ "WatchKit/GpsWatch/GpsWatch/MainApp.csproj", new SampleTest { KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
 				{ "WatchKit/WatchNotifications/WatchNotifications_iOS/WatchNotifications_iOS.csproj", new SampleTest { KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
 				{ "PassKit/PassLibrary/PassLibrary.csproj", new SampleTest { BuildSolution = true, Solution = "PassKit/PassLibrary/PassLibrary.sln", KnownFailure = "Requires custom provisioning to get a proper pass." } },
+
 			};
 
 		static IEnumerable<SampleTestData> GetSampleData ()
@@ -53,7 +57,7 @@ namespace Samples {
 				// Build solution instead of csproj
 				{ "ExceptionMarshaling/ExceptionMarshaling.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "ExceptionMarshaling/ExceptionMarshaling.sln" } },
 				{ "Fox2/Fox2.macOS/Fox2.macOS.csproj", new SampleTest { BuildSolution = true, Solution = "Fox2/Fox2.sln" } },
-				{ "MetalKitEssentials/MetalKitEssentials.Mac/MetalKitEssentials.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln" } },
+				{ "MetalKitEssentials/MetalKitEssentials.Mac/MetalKitEssentials.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln", Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
 				{ "SceneKitReel/SceneKitReelMac/SceneKitReelMac.csproj", new SampleTest { BuildSolution = true, Solution = "SceneKitReel/SceneKitReel.sln" } },
 			};
 
@@ -90,11 +94,13 @@ namespace Samples {
 				{ "FruityFalls/FruityFalls/FruityFalls.iOS/FruityFalls.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "FruityFalls/FruityFalls.sln" } },
 				{ "LivePlayer/BasicCalculator/Calculator.iOS/Calculator.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "LivePlayer/BasicCalculator/Calculator.sln" } },
 				{ "MonoGameTvOs/MonoGameTvOs/MonoGameTvOs.csproj", new SampleTest { BuildSolution = true, Solution = "MonoGameTvOs/MonoGameTvOs.sln" } },
-				{ "RazorTodo/RazorNativeTodo/RazorNativeTodo.iOS/RazorNativeTodo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "RazorTodo/RazorNativeTodo/RazorNativeTodo.sln", KnownFailure = "There's a Xamarin.Android project in the solution, and I can't figure out how to build only the Xamarin.iOS project." } },
-				{ "RazorTodo/RazorTodo/RazorTodo.iOS/RazorTodo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "RazorTodo/RazorTodo/RazorTodo.sln", KnownFailure = "There's a Xamarin.Android project in the solution, and I can't figure out how to build only the Xamarin.iOS project." } },
 				{ "SpriteSheetDemo/iOS/SpriteSheetDemo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "SpriteSheetDemo/SpriteSheetDemo.sln" } },
 				{ "TaskyPortable/TaskyiOS/TaskyiOS.csproj", new SampleTest { BuildSolution = true, Solution = "TaskyPortable/TaskyPortable.sln" } },
 				{ "TipCalc/TipCalc-UI-iOS/TipCalc-UI-iOS.csproj", new SampleTest { BuildSolution = true, Solution = "TipCalc/TipCalc.sln" } },
+				
+				// Known failures
+				{ "RazorTodo/RazorNativeTodo/RazorNativeTodo.iOS/RazorNativeTodo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "RazorTodo/RazorNativeTodo/RazorNativeTodo.sln", KnownFailure = "There's a Xamarin.Android project in the solution, and I can't figure out how to build only the Xamarin.iOS project." } },
+				{ "RazorTodo/RazorTodo/RazorTodo.iOS/RazorTodo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "RazorTodo/RazorTodo/RazorTodo.sln", KnownFailure = "There's a Xamarin.Android project in the solution, and I can't figure out how to build only the Xamarin.iOS project." } },
 				{ "VisualBasic/TaskyPortableVB/TaskyiOS/TaskyiOS.csproj", new SampleTest { KnownFailure = "VisualBasic not supported on macOS: error MSB4057: The target \"Build\" does not exist in the project." } },
 				{ "VisualBasic/XamarinFormsVB/XamarinForms.iOS/XamarinForms.iOS.csproj", new SampleTest { KnownFailure = "VisualBasic not supported on macOS." } },
 				{ "WebServices/WebServiceSamples/WebServices.RxNorm/src/WebServices.RxNormSample/WebServices.RxNormSample.csproj", new SampleTest { KnownFailure = "Xamarin.iOS Classic isn't supported anymore." } },
@@ -111,6 +117,11 @@ namespace Samples {
 		const string REPO = "prebuilt-apps";
 		const string CATEGORY = "prebuiltapps"; // categories can't contain dashes
 		const string HASH = "origin/master";
+
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+				// Known failures
+				{ "FieldService/FieldService.iOS/FieldService.iOS.csproj", new SampleTest { KnownFailure = "The sample uses Xamarin Components which don't work anymore." } },
+			};
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
@@ -137,9 +148,20 @@ namespace Samples {
 		const string CATEGORY = "xamarinformsbookssamples"; // categories can't contain dashes
 		const string HASH = "origin/master";
 
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+				// Build solution instead of csproj,
+				{ "Chapter20/TextFileAsync/TextFileAsync/TextFileAsync.iOS/TextFileAsync.iOS.csprojj", new SampleTest { BuildSolution = true, Solution = "Chapter20/TextFileAsync/TextFileAsync.sln" } },
+				{ "Chapter24/NoteTaker/NoteTaker/NoteTaker.iOS/NoteTaker.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter24/NoteTaker/NoteTaker/NoteTaker.sln" } },
+				{ "Chapter27/BouncingBall/BouncingBall/BouncingBall.iOS/BouncingBall.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/BouncingBall/BouncingBall.sln" } },
+				{ "Chapter27/EllipseDemo/EllipseDemo/EllipseDemo.iOS/EllipseDemo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/EllipseDemo/EllipseDemo.sln" } },
+				{ "Chapter27/StepSliderDemo/StepSliderDemo/StepSliderDemo.iOS/StepSliderDemo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/StepSliderDemo/StepSliderDemo.sln" } },
+				{ "Chapter28/MapDemos/MapDemos/MapDemos.iOS/MapDemos.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter28/MapDemos/MapDemos.sln" } },
+				{ "Chapter28/WhereAmI/WhereAmI/WhereAmI.iOS/WhereAmI.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter28/WhereAmI/WhereAmI.sln" } },
+			};
+
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (null, REPO);
+			return GetSampleTestData (test_data, REPO);
 		}
 	}
 }

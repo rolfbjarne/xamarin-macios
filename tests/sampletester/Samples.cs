@@ -23,7 +23,6 @@ namespace Samples {
 				{ "ios12/SoupChef/SoupChef/SoupChef.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/SoupChef/SoupChef.sln" } },
 				{ "ios12/XamarinShot/XamarinShot/XamarinShot.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/XamarinShot/XamarinShot.sln" } },
 				{ "ios8/Lister/Lister/Lister.csproj", new SampleTest { BuildSolution = true, Solution = "ios8/Lister/Lister.sln" } },
-				{ "ios9/Emporium/Emporium/Emporium.csproj", new SampleTest { BuildSolution = true, Solution = "ios9/Emporium/Emporium.sln" } },
 				{ "ios9/iTravel/iTravel/iTravel.csproj", new SampleTest { BuildSolution = true, Solution = "ios9/iTravel/iTravel.sln" } },
 				{ "Profiling/MemoryDemo/MemoryDemo/MemoryDemo.csproj", new SampleTest { BuildSolution = true, Solution = "Profiling/MemoryDemo/MemoryDemo.sln", DebugConfigurations = new string [] { "Before-Debug", "After-Debug" }, ReleaseConfigurations = new string [] { "Before-Release", "After-Release" } } },
 				{ "WalkingGameCompleteiOS/WalkingGame.iOS/WalkingGame.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "WalkingGameCompleteiOS/WalkingGame.sln" } },
@@ -32,6 +31,7 @@ namespace Samples {
 				{ "watchOS/WatchKitCatalog/WatchKitCatalog/WatchKitCatalog.csproj", new SampleTest { BuildSolution = true, Solution = "watchOS/WatchKitCatalog/WatchKitCatalog.sln" } },
 
 				// known failures
+				{ "ios9/Emporium/Emporium/Emporium.csproj", new SampleTest { BuildSolution = true, Solution = "ios9/Emporium/Emporium.sln", KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
 				{ "WatchKit/GpsWatch/GpsWatch/MainApp.csproj", new SampleTest { KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
 				{ "WatchKit/WatchNotifications/WatchNotifications_iOS/WatchNotifications_iOS.csproj", new SampleTest { KnownFailure = "error : Xcode 10 does not support watchOS 1 apps. Either upgrade to watchOS 2 apps, or use an older version of Xcode." } },
 				{ "PassKit/PassLibrary/PassLibrary.csproj", new SampleTest { BuildSolution = true, Solution = "PassKit/PassLibrary/PassLibrary.sln", KnownFailure = "Requires custom provisioning to get a proper pass." } },

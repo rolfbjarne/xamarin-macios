@@ -16,6 +16,7 @@ namespace Samples {
 		public string KnownFailure;
 		public string[] DebugConfigurations;
 		public string[] ReleaseConfigurations;
+		public string[] Platforms;
 	}
 
 	public class SampleTestData {
@@ -210,18 +211,20 @@ namespace Samples {
 				if (!samples.TryGetValue (proj.RelativePath, out var sample))
 					samples [proj.RelativePath] = sample = new SampleTest ();
 				sample.Project = proj;
-				IEnumerable<string> platforms;
-				switch (proj.Platform) {
-				case TestPlatform.iOS:
-				case TestPlatform.tvOS:
-					platforms = new string [] { "iPhone", "iPhoneSimulator" };
-					break;
-				case TestPlatform.macOS:
-					platforms = new string [] { "" };
-					break;
-				case TestPlatform.watchOS:
-				default:
-					throw new NotImplementedException (proj.Platform.ToString ());
+				IEnumerable<string> platforms = sample.Platforms;
+				if (platforms == null) {
+					switch (proj.Platform) {
+					case TestPlatform.iOS:
+					case TestPlatform.tvOS:
+						platforms = new string [] { "iPhone", "iPhoneSimulator" };
+						break;
+					case TestPlatform.macOS:
+						platforms = new string [] { "" };
+						break;
+					case TestPlatform.watchOS:
+					default:
+						throw new NotImplementedException (proj.Platform.ToString ());
+					}
 				}
 
 				foreach (var platform in filter ("platform", proj.Title, platforms, platform_filter, (v) => v)) {

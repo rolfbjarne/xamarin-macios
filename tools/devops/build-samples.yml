@@ -110,6 +110,7 @@ jobs:
   - bash: |
       set -x
       set -e
+      echo 123456789 > ~/.mtouch-verbosity
       make -C tests test-system.config
       make -C tests/sampletester TESTS_USE_SYSTEM=1
     displayName: Run tests

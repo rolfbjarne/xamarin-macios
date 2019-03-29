@@ -57,7 +57,7 @@ namespace Samples {
 				// Build solution instead of csproj
 				{ "ExceptionMarshaling/ExceptionMarshaling.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "ExceptionMarshaling/ExceptionMarshaling.sln" } },
 				{ "Fox2/Fox2.macOS/Fox2.macOS.csproj", new SampleTest { BuildSolution = true, Solution = "Fox2/Fox2.sln" } },
-				{ "MetalKitEssentials/MetalKitEssentials.Mac/MetalKitEssentials.Mac.csproj", new SampleTest { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln", Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
+				{ "MetalKitEssentials/MetalKitEssentials.iOS/MetalKitEssentials.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "MetalKitEssentials/MetalKitEssentials.sln", Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
 				{ "SceneKitReel/SceneKitReelMac/SceneKitReelMac.csproj", new SampleTest { BuildSolution = true, Solution = "SceneKitReel/SceneKitReel.sln" } },
 			};
 

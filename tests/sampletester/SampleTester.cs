@@ -146,14 +146,14 @@ namespace Samples {
 		}
 
 		static Dictionary<string, ProjectInfo []> projects = new Dictionary<string, ProjectInfo []> ();
-		protected static ProjectInfo [] GetExecutableProjects (string repo)
+		protected static ProjectInfo [] GetExecutableProjects (string repo, string org = "xamarin")
 		{
 			if (!projects.TryGetValue (repo, out var rv)) {
-				var project_paths = GitHub.GetProjects ("xamarin", repo);
+				var project_paths = GitHub.GetProjects (org, repo);
 
 				// We can filter out project we don't care about.
 				rv = project_paths.
-					Select ((v) => GetProjectInfo (v, Path.Combine (GitHub.CloneRepository ("xamarin", repo, false), v))).
+					Select ((v) => GetProjectInfo (v, Path.Combine (GitHub.CloneRepository (org, repo, false), v))).
 					Where ((v) => v.IsApplicable (false)).
 					ToArray ();
 			
@@ -162,7 +162,7 @@ namespace Samples {
 			return rv;
 		}
 
-		protected static IEnumerable<SampleTestData> GetSampleTestData (Dictionary<string, SampleTest> samples, string repo)
+		protected static IEnumerable<SampleTestData> GetSampleTestData (Dictionary<string, SampleTest> samples, string repo, string org = "xamarin")
 		{
 			var defaultDebugConfigurations = new string [] { "Debug" };
 			var defaultReleaseConfigurations = new string [] { "Release" };
@@ -175,7 +175,7 @@ namespace Samples {
 
 			// If a project's filename is unique in this repo, use the filename (without extension) as the name of the test.
 			// Otherwise use the project's relative path.
-			var executable_projects = GetExecutableProjects (repo);
+			var executable_projects = GetExecutableProjects (repo, org);
 			var duplicateProjects = executable_projects.GroupBy ((v) => Path.GetFileNameWithoutExtension (v.RelativePath)).Where ((v) => v.Count () > 1);
 			foreach (var group in duplicateProjects) {
 				foreach (var proj in group) {

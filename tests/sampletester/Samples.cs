@@ -73,9 +73,12 @@ namespace Samples {
 		const string CATEGORY = "macsamples"; // categories can't contain dashes
 		const string HASH = "origin/master";
 
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+		};
+
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (null, REPO);
+			return GetSampleTestData (test_data, REPO);
 		}
 	}
 
@@ -125,7 +128,7 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (null, REPO);
+			return GetSampleTestData (test_data, REPO);
 		}
 	}
 
@@ -135,12 +138,32 @@ namespace Samples {
 		const string CATEGORY = "xamarinformssamples"; // categories can't contain dashes
 		const string HASH = "origin/master";
 
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+			};
+
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (null, REPO);
+			return GetSampleTestData (test_data, REPO);
 		}
 	}
 
+
+	[Category (CATEGORY)]
+	public class EmbeddedFrameworksTester : SampleTester {
+		const string REPO = "embedded-frameworks";
+		const string CATEGORY = "embeddedframeworks"; // categories can't contain dashes
+		const string HASH = "origin/master";
+
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+				// Known failures
+				{ "simpleapp-with-framework/simpleapp-with-framework/simpleapp-with-framework.csproj", new SampleTest { BuildSolution = true, Solution = "simpleapp-with-framework/simpleapp-with-framework.sln" } },
+			};
+
+		static IEnumerable<SampleTestData> GetSampleData ()
+		{
+			return GetSampleTestData (test_data, REPO, "rolfbjarne");
+		}
+	}
 
 	[Category (CATEGORY)]
 	public class XamarinFormsBooksTester : SampleTester {
@@ -150,7 +173,7 @@ namespace Samples {
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj,
-				{ "Chapter20/TextFileAsync/TextFileAsync/TextFileAsync.iOS/TextFileAsync.iOS.csprojj", new SampleTest { BuildSolution = true, Solution = "Chapter20/TextFileAsync/TextFileAsync.sln" } },
+				{ "Chapter20/TextFileAsync/TextFileAsync/TextFileAsync.iOS/TextFileAsync.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter20/TextFileAsync/TextFileAsync.sln" } },
 				{ "Chapter24/NoteTaker/NoteTaker/NoteTaker.iOS/NoteTaker.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter24/NoteTaker/NoteTaker/NoteTaker.sln" } },
 				{ "Chapter27/BouncingBall/BouncingBall/BouncingBall.iOS/BouncingBall.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/BouncingBall/BouncingBall.sln" } },
 				{ "Chapter27/EllipseDemo/EllipseDemo/EllipseDemo.iOS/EllipseDemo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/EllipseDemo/EllipseDemo.sln" } },

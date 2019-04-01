@@ -20,7 +20,7 @@ namespace Samples {
 				{ "ios10/IceCreamBuilder/IceCreamBuilder/IceCreamBuilder.csproj", new SampleTest { BuildSolution = true, Solution = "ios10/IceCreamBuilder/IceCreamBuilder.sln" } },
 				{ "ios11/ARKitPlacingObjects/PlacingObjects/PlacingObjects.csproj", new SampleTest { BuildSolution = true, Solution = "ios11/ARKitPlacingObjects/PlacingObjects.sln" } },
 				{ "ios11/WeatherWidget/WeatherWidget/WeatherWidget.csproj", new SampleTest { BuildSolution = true, Solution = "ios11/WeatherWidget/WeatherWidget.sln" } },
-				{ "ios12/SoupChef/SoupChef/SoupChef.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/SoupChef/SoupChef.sln", KnownFailure = "https://github.com/xamarin/ios-samples/pull/371" } },
+				{ "ios12/SoupChef/SoupChef/SoupChef.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/SoupChef/SoupChef.sln" } },
 				{ "ios12/XamarinShot/XamarinShot/XamarinShot.csproj", new SampleTest { BuildSolution = true, Solution = "ios12/XamarinShot/XamarinShot.sln", Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.
 				{ "ios8/Lister/Lister/Lister.csproj", new SampleTest { BuildSolution = true, Solution = "ios8/Lister/Lister.sln" } },
 				{ "ios8/MetalBasic3D/MetalBasic3D/MetalBasic3D.csproj", new SampleTest { Platforms = new string [] { "iPhone" } } }, // Requires Metal, which doesn't work/build in the simulator.

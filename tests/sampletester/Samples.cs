@@ -139,29 +139,13 @@ namespace Samples {
 		const string HASH = "origin/master";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+				// Known failures
+				{ "WebServices/TodoREST/iOS/TodoREST.iOS.csproj", new SampleTest { KnownFailure = "https://github.com/xamarin/xamarin-forms-samples/pull/451" } },
 			};
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
 			return GetSampleTestData (test_data, REPO);
-		}
-	}
-
-
-	[Category (CATEGORY)]
-	public class EmbeddedFrameworksTester : SampleTester {
-		const string REPO = "embedded-frameworks";
-		const string CATEGORY = "embeddedframeworks"; // categories can't contain dashes
-		const string HASH = "origin/master";
-
-		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
-				// Known failures
-				{ "simpleapp-with-framework/simpleapp-with-framework/simpleapp-with-framework.csproj", new SampleTest { BuildSolution = true, Solution = "simpleapp-with-framework/simpleapp-with-framework.sln" } },
-			};
-
-		static IEnumerable<SampleTestData> GetSampleData ()
-		{
-			return GetSampleTestData (test_data, REPO, "rolfbjarne");
 		}
 	}
 
@@ -174,7 +158,7 @@ namespace Samples {
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj,
 				{ "Chapter20/TextFileAsync/TextFileAsync/TextFileAsync.iOS/TextFileAsync.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter20/TextFileAsync/TextFileAsync.sln" } },
-				{ "Chapter24/NoteTaker/NoteTaker/NoteTaker.iOS/NoteTaker.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter24/NoteTaker/NoteTaker/NoteTaker.sln" } },
+				{ "Chapter24/NoteTaker/NoteTaker/NoteTaker.iOS/NoteTaker.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter24/NoteTaker/NoteTaker.sln" } },
 				{ "Chapter27/BouncingBall/BouncingBall/BouncingBall.iOS/BouncingBall.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/BouncingBall/BouncingBall.sln" } },
 				{ "Chapter27/EllipseDemo/EllipseDemo/EllipseDemo.iOS/EllipseDemo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/EllipseDemo/EllipseDemo.sln" } },
 				{ "Chapter27/StepSliderDemo/StepSliderDemo/StepSliderDemo.iOS/StepSliderDemo.iOS.csproj", new SampleTest { BuildSolution = true, Solution = "Chapter27/StepSliderDemo/StepSliderDemo.sln" } },
@@ -216,4 +200,22 @@ namespace Samples {
 			return GetSampleTestData (test_data, REPO);
 		}
 	}
+
+	[Category (CATEGORY)]
+	public class EmbeddedFrameworksTester : SampleTester {
+		const string REPO = "embedded-frameworks";
+		const string CATEGORY = "embeddedframeworks"; // categories can't contain dashes
+		const string HASH = "origin/master";
+
+		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
+				// Known failures
+				{ "simpleapp-with-framework/simpleapp-with-framework/simpleapp-with-framework.csproj", new SampleTest { BuildSolution = true, Solution = "simpleapp-with-framework/simpleapp-with-framework.sln" } },
+			};
+
+		static IEnumerable<SampleTestData> GetSampleData ()
+		{
+			return GetSampleTestData (test_data, REPO, "rolfbjarne");
+		}
+	}
+
 }

@@ -91,6 +91,7 @@ jobs:
       ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode101.app
       ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode.app
       sudo xcode-select -s /Applications/Xcode.app
+      ./system-dependencies.sh --ignore-all --provision-sharpie
     displayName: Provision some dependencies
 
   - task: xamops.azdevex.provisionator-task.provisionator@1

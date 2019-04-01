@@ -27,7 +27,7 @@ jobs:
         TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
         TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
         TEST_NAME_FILTER_EXPRESSION: $(name_filter_af)
-      Debug|iPhone|E-R:
+      Debug|iPhone|G-R:
         TEST_PLATFORM_FILTER_EXPRESSION: $(iphone_filter)
         TEST_CONFIG_FILTER_EXPRESSION: $(debug_filter)
         TEST_NAME_FILTER_EXPRESSION: $(name_filter_gr)

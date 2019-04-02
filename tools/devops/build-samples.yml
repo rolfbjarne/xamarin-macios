@@ -128,7 +128,7 @@ jobs:
 
 - job: Add GitHub comment
   dependsOn: macOS
-  server: true
+  pool: server
   - task: InvokeRESTAPI@1
     inputs:
       connectionType: connectedServiceName

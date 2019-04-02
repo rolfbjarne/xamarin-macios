@@ -15,6 +15,8 @@ using Xamarin.Utils;
 
 public static class ProcessHelper
 {
+	static int counter;
+
 	static string log_directory;
 	static string LogDirectory {
 		get {
@@ -48,7 +50,7 @@ public static class ProcessHelper
 		exitCode = ExecutionHelper.Execute (filename, arguments, out var timed_out, workingDirectory, environment_variables, output_callback, output_callback, timeout);
 
 		// Write execution log to disk (and print the path)
-		var logfile = Path.Combine (LogDirectory, Guid.NewGuid ().ToString () + ".log");
+		var logfile = Path.Combine (LogDirectory, $"{filename}-{Interlocked.Increment (ref counter)}.log");
 		File.WriteAllLines (logfile, output);
 		TestContext.AddTestAttachment (logfile, $"Execution log for {filename}");
 		Console.WriteLine ("Execution log for {0}: {1}", filename, logfile);

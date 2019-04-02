@@ -109,40 +109,46 @@ namespace Samples {
 		[Test]
 		public void BuildSample ([ValueSource ("GetSampleData")] SampleTestData sampleTestData)
 		{
-			var data = sampleTestData.SampleTest;
-			if (!string.IsNullOrEmpty (data.KnownFailure))
-				Assert.Ignore (data.KnownFailure);
+			try {
+				var data = sampleTestData.SampleTest;
+				if (!string.IsNullOrEmpty (data.KnownFailure))
+					Assert.Ignore (data.KnownFailure);
 
-			var environment_variables = new Dictionary<string, string> ();
-			switch (data.Project.Platform) {
-			case TestPlatform.iOS:
-			case TestPlatform.tvOS:
-			case TestPlatform.watchOS:
-				environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
-				environment_variables ["MD_MTOUCH_SDK_ROOT"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
-				environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
-				environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
-				break;
-			case TestPlatform.macOS:
-				environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
-				environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
-				environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
-				environment_variables ["XamarinMacFrameworkRoot"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
-				environment_variables ["XAMMAC_FRAMEWORK_PATH"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
-				break;
-			default:
-				throw new NotImplementedException (sampleTestData.Platform.ToString ());
+				var environment_variables = new Dictionary<string, string> ();
+				switch (data.Project.Platform) {
+				case TestPlatform.iOS:
+				case TestPlatform.tvOS:
+				case TestPlatform.watchOS:
+					environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
+					environment_variables ["MD_MTOUCH_SDK_ROOT"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
+					environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
+					environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
+					break;
+				case TestPlatform.macOS:
+					environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
+					environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
+					environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
+					environment_variables ["XamarinMacFrameworkRoot"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
+					environment_variables ["XAMMAC_FRAMEWORK_PATH"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");
+					break;
+				default:
+					throw new NotImplementedException (sampleTestData.Platform.ToString ());
+				}
+
+				var file_to_build = sampleTestData.SampleTest.Project.RelativePath;
+				var target = string.Empty;
+				if (data.BuildSolution) {
+					file_to_build = data.Solution;
+					target = Path.GetFileNameWithoutExtension (data.Project.RelativePath).Replace ('.', '_');
+				}
+
+				file_to_build = Path.Combine (CloneRepo (), file_to_build);
+				ProcessHelper.BuildSolution (file_to_build, sampleTestData.Platform, sampleTestData.Configuration, environment_variables, target);
+				Console.WriteLine ("✅ {0} succeeded.", TestContext.CurrentContext.Test.FullName);
+			} catch (Exception e) {
+				Console.WriteLine ("❌ {0} failed: {1}", TestContext.CurrentContext.Test.FullName, e.Message);
+				throw;
 			}
-
-			var file_to_build = sampleTestData.SampleTest.Project.RelativePath;
-			var target = string.Empty;
-			if (data.BuildSolution) {
-				file_to_build = data.Solution;
-				target = Path.GetFileNameWithoutExtension (data.Project.RelativePath).Replace ('.', '_');
-			}
-
-			file_to_build = Path.Combine (CloneRepo (), file_to_build);
-			ProcessHelper.BuildSolution (file_to_build, sampleTestData.Platform, sampleTestData.Configuration, environment_variables, target);
 		}
 
 		static Dictionary<string, ProjectInfo []> projects = new Dictionary<string, ProjectInfo []> ();
@@ -200,7 +206,6 @@ namespace Samples {
 				var filtered = input.Where ((v) => Regex.IsMatch (tostring (v), filter_expression));
 				var removed = input.Where ((v) => !filtered.Contains (v));
 				if (removed.Any ()) {
-					Console.WriteLine ($"Filtered out {removed.Count ()} {name}s for {repo}/{proj} ({filtered.Count ()} left): {string.Join (", ", removed.Select (tostring))}");
 					return filtered;
 				}
 				return input;

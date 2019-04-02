@@ -125,17 +125,3 @@ jobs:
       testRunTitle: Sample tests (build)
       publishRunAttachments: true
       mergeTestResults: true
-
-- job: AddGitHubComment
-  dependsOn: macOS
-  pool: server
-
-  steps:
-  - task: InvokeRESTAPI@1
-    inputs:
-      connectionType: connectedServiceName
-      serviceConnection: https://api.github.com/repos/xamarin/xamarin-macios/commits/$(Build.SourceVersion)/comments
-      method: POST
-      headers: '{ "Content-Type": "application/json", "Authorization": "token $(github-pat)", "User-Agent": "command line tool" }'
-      body: '{ "body": "Test result goes here" }'
-

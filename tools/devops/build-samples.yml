@@ -126,7 +126,7 @@ jobs:
       publishRunAttachments: true
       mergeTestResults: true
 
-- job: Add GitHub comment
+- job: AddGitHubComment
   dependsOn: macOS
   pool: server
 

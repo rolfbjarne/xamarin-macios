@@ -71,3 +71,10 @@ string FindConfigurationVariable (string variable, string hash = "HEAD")
 
 	return null;
 }
+
+void InstallPackage (string name, string url)
+{
+	Console.WriteLine ($"Installing {name} from {url}");
+	var version = Regex.Match (mono_package, "[0-9]+[.][0-9]+[.][0-9]+([.][0-9]+)?").Value;
+	Item (name, GetVersion (url)).Source (url);
+}

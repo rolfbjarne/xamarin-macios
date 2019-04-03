@@ -33,10 +33,10 @@ string FindVariable (string variable)
 
 	switch (variable) {
 	case "XI_PACKAGE":
-		value = GetManifest ().Where ((v) => v.Contains ("xamarin.ios-") && v.EndsWith (".pkg", StringComparison.Ordinal)).FirstOrDefault ();
+		value = GetManifest (provision_from_commit).Where ((v) => v.Contains ("xamarin.ios-") && v.EndsWith (".pkg", StringComparison.Ordinal)).FirstOrDefault ();
 		break;
 	case "XM_PACKAGE":
-		value = GetManifest ().Where ((v) => v.Contains ("xamarin.mac-") && v.EndsWith (".pkg", StringComparison.Ordinal)).FirstOrDefault ();
+		value = GetManifest (provision_from_commit).Where ((v) => v.Contains ("xamarin.mac-") && v.EndsWith (".pkg", StringComparison.Ordinal)).FirstOrDefault ();
 		break;
 	}
 

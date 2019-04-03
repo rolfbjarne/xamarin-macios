@@ -32,10 +32,10 @@ string DownloadWithGithubAuth (string uri)
 }
 
 string manifest_url = null;
-string GetManifestUrl (string org, string repo, string hash)
+string GetManifestUrl (string hash)
 {
 	if (manifest_url == null) {
-		var url = $"https://api.github.com/repos/{org}/{repo}/statuses/{hash}";
+		var url = $"https://api.github.com/repos/xamarin/xamarin-macios/statuses/{hash}";
 		var json = JToken.Parse (DownloadWithGithubAuth (url));
 		var value = (JValue) ((JArray) json).Where ((v) => v ["context"].ToString () == "manifest").Select ((v) => v ["target_url"]).FirstOrDefault ();
 		manifest_url = (string) value?.Value;
@@ -46,10 +46,10 @@ string GetManifestUrl (string org, string repo, string hash)
 }
 
 string[] manifest = null;
-string[] GetManifest (string org, string repo, string hash)
+string[] GetManifest (string hash)
 {
 	if (manifest == null)
-		manifest = ReadAllText (GetManifestUrl (org, repo, hash)).Split ('\n');
+		manifest = ReadAllText (GetManifestUrl (hash)).Split ('\n');
 	return manifest;
 }
 
@@ -75,6 +75,6 @@ string FindConfigurationVariable (string variable, string hash = "HEAD")
 void InstallPackage (string name, string url)
 {
 	Console.WriteLine ($"Installing {name} from {url}");
-	var version = Regex.Match (mono_package, "[0-9]+[.][0-9]+[.][0-9]+([.][0-9]+)?").Value;
-	Item (name, GetVersion (url)).Source (url);
+	var version = Regex.Match (url, "[0-9]+[.][0-9]+[.][0-9]+([.][0-9]+)?").Value;
+	Item (name, version).Source (url);
 }

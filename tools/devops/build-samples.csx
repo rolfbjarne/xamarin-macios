@@ -1,3 +1,4 @@
+#load "utils.csx"
 #load "../../../maccore/tools/devops/external-deps.csx" // this will map the Xcode locations from Azure into our expected locations using symlinks.
 
 using System.Collections.Generic;

@@ -155,19 +155,29 @@ jobs:
       env | sort
       statuses="JOBRESULTDEBUGIPHONEAF JOBRESULTDEBUGIPHONEGR JOBRESULTDEBUGIPHONESZ JOBRESULTDEBUGIPHONESIMULATOR JOBRESULTRELEASEIPHONEAF JOBRESULTRELEASEIPHONEGR JOBRESULTRELEASEIPHONESZ JOBRESULTRELEASEIPHONESIMULATOR JOBRESULTDEBUGMAC JOBRESULTRELEASEMAC"
       EMOJI=
+      STATUS=
+      GH_STATE=
       for name in $statuses; do
         status=${!name}
         if ! [[ "$status" =~ Succeeded* ]]; then
           EMOJII="❌"
+          GH_STATE=failure
+          STATUS="$status"
         elif [[ "$status" == "SucceededWithIssues" && "$EMOJII" == "" ]]; then
           EMOJII="⚠️"
+          GH_STATE=failure
+          STATUS="$status"
         fi
       done
       if [[ "$EMOJII" == "" ]]; then
         EMOJII="✅"
+        GH_STATE=success
+        STATUS=Succeeded
       fi
-      echo "$EMOJII Status for '$BUILD_DEFINITIONNAME': $AGENT_JOBSTATUS. [View results](${SYSTEM_COLLECTIONURI}/${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID})" > commit-comment.md
+      AZURE_BUILD_URL="${SYSTEM_COLLECTIONURI}/${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID}"
+      echo "$EMOJII Status for '$BUILD_DEFINITIONNAME': $STATUS. [View results]($AZURE_BUILD_URL)" > commit-comment.md
       ./jenkins/add-commit-comment.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--file=commit-comment.md"
       rm -f commit-comment.md
-    displayName: Add GitHub comment with test results
+      ./jenkins/add-commit-status.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--state=$GH_STATE" --target-url="$AZURE_BUILD_URL" --description="$STATUS" --context="$BUILD_DEFINITIONNAME"
+    displayName: Add GitHub comment / status
     condition: always()

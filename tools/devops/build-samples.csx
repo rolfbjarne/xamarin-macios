@@ -60,7 +60,7 @@ InstallPackage ("Objective-Sharpie", FindVariable ("MIN_SHARPIE_URL"));
 
 // Xcode
 var xcode_path = Path.GetDirectoryName (Path.GetDirectoryName (FindVariable ("XCODE_DEVELOPER_ROOT")));
-Exec ($"ln -Fhs {xcode_path} /Applications/Xcode.app");
+Exec ("ln", "-Fhs", xcode_path, "/Applications/Xcode.app");
 
 // Provisioning profiles
 Exec ($"../../../maccore/tools/install-qa-provisioning-profiles.sh");

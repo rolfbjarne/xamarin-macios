@@ -83,30 +83,26 @@ jobs:
       git config -l | sort
     displayName: System Info
 
-  # FIXME: this should figure out the exact Xcode version from PROVISION_FROM_COMMIT.
-  - bash: |
-      set -x
-      set -e
-      rm -f /Applications/Xcode.app
-      ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode101.app
-      ln -Fhs /Applications/Xcode_10.1.app /Applications/Xcode.app
-      sudo xcode-select -s /Applications/Xcode.app
-      ./system-dependencies.sh --ignore-all --provision-sharpie
-    displayName: Provision some dependencies
-
-  - task: xamops.azdevex.provisionator-task.provisionator@1
-    displayName: Provision more dependencies
-    inputs:
-      provisioning_script: $(System.DefaultWorkingDirectory)/tools/devops/build-samples.csx
-
   - bash: |
       set -x
       set -e
       ./configure --enable-xamarin
       # the github auth we use only works with https, so change maccore's url to be https:// instead of git@
       make reset-maccore MACCORE_MODULE=$(grep ^MACCORE_MODULE mk/xamarin.mk | sed -e 's/.*:= //' -e 's_git@github.com:_https://github.com/_' -e 's/[.]git//') V=1
-      ../maccore/tools/install-qa-provisioning-profiles.sh
-    displayName: Provision provisioning profiles
+    displayName: Fetch maccore
+
+  - task: xamops.azdevex.provisionator-task.provisionator@1
+    displayName: Provision XI/XM/Mono/Xcode/Objective-Sharpie
+    inputs:
+      provisioning_script: $(System.DefaultWorkingDirectory)/tools/devops/build-samples.csx
+
+  - bash: |
+      set -x
+      set -e
+      env | sort
+      ls -lad /Applications/Xcode*
+      xcode-select -p
+    displayName: System Info post provisioning
 
   - bash: |
       set -x
@@ -126,21 +122,47 @@ jobs:
       publishRunAttachments: true
       mergeTestResults: true
 
+  - bash: "echo ##vso[task.setvariable variable=JobStatus;isOutput=true]$(Agent.JobStatus)"
+    name: ExportedVariables
+    displayName: Export status
+    condition: always()
+
+
 - job: AddGitHubComment
   dependsOn: macOS
   condition: always()
   pool:
     vmImage: 'macOS-10.13'
+  variables:
+    jobResultDebugiPhoneAF: $[dependencies.macOS.outputs['Debug|iPhone|A-F.ExportedVariables.JobStatus']]
+    jobResultDebugiPhoneGR: $[dependencies.macOS.outputs['Debug|iPhone|G-R.ExportedVariables.JobStatus']]
+    jobResultDebugiPhoneSZ: $[dependencies.macOS.outputs['Debug|iPhone|S-Z.ExportedVariables.JobStatus']]
+    jobResultDebugiPhoneSimulator: $[dependencies.macOS.outputs['Debug|iPhoneSimulator.ExportedVariables.JobStatus']]
+    jobResultReleaseiPhoneAF: $[dependencies.macOS.outputs['Release|iPhone|A-F.ExportedVariables.JobStatus']]
+    jobResultReleaseiPhoneGR: $[dependencies.macOS.outputs['Release|iPhone|G-R.ExportedVariables.JobStatus']]
+    jobResultReleaseiPhoneSZ: $[dependencies.macOS.outputs['Release|iPhone|S-Z.ExportedVariables.JobStatus']]
+    jobResultReleaseiPhoneSimulator: $[dependencies.macOS.outputs['Release|iPhoneSimulator.ExportedVariables.JobStatus']]
+    jobResultDebugMac: $[dependencies.macOS.outputs['Debug|Mac.ExportedVariables.JobStatus']]
+    jobResultReleaseMac: $[dependencies.macOS.outputs['Release|Mac.ExportedVariables.JobStatus']]
 
   steps:
   - bash: |
       set -x
       set -e
-      EMOJI="❌"
-      if [[ "$AGENT_JOBSTATUS" == "Succeeded" ]]; then
+      env | sort
+      statuses="JOBRESULTDEBUGIPHONEAF JOBRESULTDEBUGIPHONEGR JOBRESULTDEBUGIPHONESZ JOBRESULTDEBUGIPHONESIMULATOR JOBRESULTRELEASEIPHONEAF JOBRESULTRELEASEIPHONEGR JOBRESULTRELEASEIPHONESZ JOBRESULTRELEASEIPHONESIMULATOR JOBRESULTDEBUGMAC JOBRESULTRELEASEMAC"
+      EMOJI=
+      for name in $statuses; do
+        status=${!name}
+        if ! [[ "$status" ~= Succeeded* 
+        ]]; then
+          EMOJII="❌"
+        elif [[ "$status" == "SucceededWithIssues" && "$EMOJII" == "" ]]; then
+          EMOJII="⚠️"
+        fi
+      done
+      if [[ "$EMOJII" == "" ]]; then
         EMOJII="✅"
-      elif [[ "$AGENT_JOBSTATUS" == "SucceededWithIssues" ]]; then
-        EMOJII="⚠️"
       fi
       echo "$EMOJII Status for '$BUILD_DEFINITIONNAME': $AGENT_JOBSTATUS. [View results](${SYSTEM_COLLECTIONURI}/${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID})" > commit-comment.md
       ./jenkins/add-commit-comment.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--file=commit-comment.md"

@@ -1,6 +1,6 @@
 ifdef ENABLE_XAMARIN
-NEEDED_MACCORE_VERSION := 1695dfb1dabe8fd27716978edc5aa929a8dbfbff
-NEEDED_MACCORE_BRANCH := distribution-certificates
+NEEDED_MACCORE_VERSION := bf02d63234c682d428c599e891c3f5475a80369e
+NEEDED_MACCORE_BRANCH := master
 
 MACCORE_DIRECTORY := maccore
 MACCORE_MODULE    := git@github.com:xamarin/maccore.git

@@ -125,3 +125,25 @@ jobs:
       testRunTitle: Sample tests (build)
       publishRunAttachments: true
       mergeTestResults: true
+
+- job: AddGitHubComment
+  dependsOn: macOS
+  condition: always()
+  pool:
+    vmImage: 'macOS-10.13'
+
+  steps:
+  - bash: |
+      set -x
+      set -e
+      EMOJI="❌"
+      if [[ "$AGENT_JOBSTATUS" == "Succeeded" ]]; then
+        EMOJII="✅"
+      elif [[ "$AGENT_JOBSTATUS" == "SucceededWithIssues" ]]; then
+        EMOJII="⚠️"
+      fi
+      echo "$EMOJII Status for '$BUILD_DEFINITIONNAME': $AGENT_JOBSTATUS. [View results](${SYSTEM_COLLECTIONURI}/${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID})" > commit-comment.md
+      ./jenkins/add-commit-comment.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--file=commit-comment.md"
+      rm -f commit-comment.md
+    displayName: Add GitHub comment with test results
+    condition: always()

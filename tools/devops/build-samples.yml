@@ -154,7 +154,7 @@ jobs:
       EMOJI=
       for name in $statuses; do
         status=${!name}
-        if ! [[ "$status" ~= Succeeded* ]]; then
+        if ! [[ "$status" =~ Succeeded* ]]; then
           EMOJII="❌"
         elif [[ "$status" == "SucceededWithIssues" && "$EMOJII" == "" ]]; then
           EMOJII="⚠️"

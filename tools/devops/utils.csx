@@ -76,5 +76,5 @@ void InstallPackage (string name, string url)
 {
 	Console.WriteLine ($"Installing {name} from {url}");
 	var version = Regex.Match (url, "[0-9]+[.][0-9]+[.][0-9]+([.][0-9]+)?").Value;
-	Item (name, version).Source (url);
+	Item (name, version).Source (pkg => url);
 }

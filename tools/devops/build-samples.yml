@@ -127,6 +127,9 @@ jobs:
     displayName: Export status
     condition: always()
 
+  - bash: env | sort
+    displayName: Environment
+    condition: always()
 
 - job: AddGitHubComment
   dependsOn: macOS

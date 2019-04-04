@@ -152,45 +152,12 @@ jobs:
     jobResultReleaseMac: $[ dependencies.macOS.outputs['Release|Mac.ExportedVariables.JobStatus'] ]
   steps:
   - bash: |
-      set -x
-      set -e
-      env | sort
-
-      STEPS="$STEPS Debug|iPhone|A-F"
-      STEPS="$STEPS Debug|iPhone|G-R"
-      STEPS="$STEPS Debug|iPhone|S-Z"
-      STEPS="$STEPS Debug|iPhoneSimulator"
-      STEPS="$STEPS Release|iPhone|A-F"
-      STEPS="$STEPS Release|iPhone|G-R"
-      STEPS="$STEPS Release|iPhone|S-Z"
-      STEPS="$STEPS Release|iPhoneSimulator"
-      STEPS="$STEPS Debug|Mac"
-      STEPS="$STEPS Release|Mac"
-
-      EMOJII="✅"
-      STATUS=
-      GH_STATE=success
-      FILE=commit-comment.md
-      AZURE_BUILD_URL="${SYSTEM_COLLECTIONURI}/${SYSTEM_TEAMPROJECT}/_build/results?buildId=${BUILD_BUILDID}"
-
-      for STEP in $STEPS; do
-        STEPNAME=JOBRESULT$(echo "$STEP" | tr a-z A-Z | sed -e 's/|//' -e 's/-//')
-        STEPSTATUS=${!STEPNAME}
-        if [[ "$STEPSTATUS" == "Succeeded" ]]; then
-          STEPEMOJII="✅"
-        else
-          STEPEMOJII="❌"
-          EMOJII="❌"
-          GH_STATE=failure
-        fi
-        echo "* $STEPEMOJII $STEPNAME: $STEPSTATUS" >> "$FILE"
-      fi
-
-      echo "$EMOJII Status for '$BUILD_DEFINITIONNAME': $GH_STATE. [View results]($AZURE_BUILD_URL)\n" | cat - "$FILE" > "$FILE.tmp"
-      mv "$FILE.tmp" "$FILE"
-
-      ./jenkins/add-commit-comment.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--file=$FILE"
-      ./jenkins/add-commit-status.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--state=$GH_STATE" --target-url="$AZURE_BUILD_URL" --description="$GH_STATE" --context="$BUILD_DEFINITIONNAME"
-      rm -f "$FILE"
+      ./tools/devops/build-samples-report-to-github.sh \
+        "Debug|iPhone|A-F" "Debug|iPhone|G-R" "Debug|iPhone|S-Z" \
+        "Debug|iPhoneSimulator" \
+        "Release|iPhone|A-F" "Release|iPhone|G-R" "Release|iPhone|S-Z" \
+        "Release|iPhoneSimulator" \
+        "Debug|Mac" \
+        "Release|Mac"
     displayName: Add GitHub comment / status
     condition: always()

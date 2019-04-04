@@ -1,9 +1,6 @@
 # Xamarin
 # Build samples
 
-trigger:
-  - sample-tester
-
 variables:
   debug_filter: '^.*Debug.*$'
   release_filter: '^.*Release.*$'
@@ -101,6 +98,9 @@ jobs:
       set -e
       env | sort
       ls -lad /Applications/Xcode*
+      ls -la /Applications/Xcode101.app
+      ls -la /Applications/Xcode101.app/Contents
+      ls -la /Applications/Xcode101.app/Contents/Developer
       xcode-select -p
     displayName: System Info post provisioning
 
@@ -123,7 +123,8 @@ jobs:
       mergeTestResults: true
 
   - bash: |
-      echo ##vso[task.setvariable variable=JobStatus;isOutput=true]$AGENT_JOBSTATUS
+      echo "#vso[task.setvariable variable=JobStatus;isOutput=true]$AGENT_JOBSTATUS"
+      echo "##vso[task.setvariable variable=JobStatus;isOutput=true]$AGENT_JOBSTATUS"
       env|sort
     name: ExportedVariables
     displayName: Export status

@@ -115,17 +115,16 @@ namespace Samples {
 					Assert.Ignore (data.KnownFailure);
 
 				var environment_variables = new Dictionary<string, string> ();
+				environment_variables ["MD_APPLE_SDK_ROOT"] = Path.GetDirectoryName (Path.GetDirectoryName (Configuration.XcodeLocation));
 				switch (data.Project.Platform) {
 				case TestPlatform.iOS:
 				case TestPlatform.tvOS:
 				case TestPlatform.watchOS:
-					environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
 					environment_variables ["MD_MTOUCH_SDK_ROOT"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
 					environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
 					environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.IOS_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
 					break;
 				case TestPlatform.macOS:
-					environment_variables ["MD_APPLE_SDK_ROOT"] = Configuration.XcodeLocation;
 					environment_variables ["TargetFrameworkFallbackSearchPaths"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild-frameworks");
 					environment_variables ["MSBuildExtensionsPathFallbackPathsOverride"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Mono.framework", "External", "xbuild");
 					environment_variables ["XamarinMacFrameworkRoot"] = Path.Combine (Configuration.MAC_DESTDIR, "Library", "Frameworks", "Xamarin.Mac.framework", "Versions", "Current");

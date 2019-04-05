@@ -3,7 +3,7 @@
 These unit tests clone a series of known repositories that contain sample
 projects, and build all the relevant projects in those repositories.
 
-It is executed automatically in Azure DevOps [here][1] every Saturday for the
+It is executed automatically in [Azure DevOps][1] every [Saturday][2] for the
 following branches:
 
 * master
@@ -29,3 +29,4 @@ There are two ways to run these tests locally:
 * Executing `make` in this directory.
 
 [1]: https://dev.azure.com/xamarin/internal/_build?definitionId=23
+[1]: https://dev.azure.com/xamarin/internal/_apps/hub/ms.vss-ciworkflow.build-ci-hub?_a=edit-build-definition&id=23&view=Tab_Triggers

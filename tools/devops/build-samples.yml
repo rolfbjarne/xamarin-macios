@@ -10,9 +10,19 @@ variables:
   name_filter_af: '^[A-Fa-f].*$'
   name_filter_gr: '^[G-Rg-r].*$'
   name_filter_rest: '^[^A-Ra-r].*$'
+  azure_build_url: '$(System.CollectionUri}/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)'
 
 jobs:
+- job: ReportStartToGitHub
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - bash: |
+      ./jenkins/add-commit-status.sh "--token=$(github-pat)" "--hash=$BUILD_SOURCEVERSION" "--state=pending" --target-url="$AZURE_BUILD_URL" --description="$BUILD_DEFINITIONNAME" --context="$BUILD_DEFINITIONNAME"
+    displayName: Set pending GitHub status
+
 - job: macOS
+  dependsOn: ReportStartToGitHub
   displayName: Build samples
   timeoutInMinutes: 360
   strategy:
@@ -134,7 +144,7 @@ jobs:
     displayName: Environment
     condition: always()
 
-- job: AddGitHubComment
+- job: ReportResultsToGitHub
   dependsOn: macOS
   condition: always()
   pool:
@@ -159,5 +169,5 @@ jobs:
         "Release|iPhoneSimulator" \
         "Debug|Mac" \
         "Release|Mac"
-    displayName: Add GitHub comment / status
+    displayName: Report results to GitHub as comment / status
     condition: always()

@@ -11,7 +11,7 @@ GH_STATE=success
 FILE=commit-comment.md
 
 for STEP in $STEPS; do
-  STEPNAME=JOBRESULT$(echo "$STEP" | tr '[:lower:]' '[:upper:]' | sed -e 's/|//' -e 's/-//')
+  STEPNAME=JOBRESULT$(echo "$STEP" | tr '[:lower:]' '[:upper:]' | sed -e 's/|//g' -e 's/-//g')
   STEPSTATUS=${!STEPNAME}
   if [[ "$STEPSTATUS" == "Succeeded" ]]; then
     STEPEMOJII="✅"

@@ -454,6 +454,19 @@ namespace Xamarin.Tests
 			return Execute (psi, stdout_callback, stderr_callback, timeout);
 		}
 
+		public static int Execute (string fileName, string [] arguments, out StringBuilder output, string working_directory = null, TimeSpan? timeout = null)
+		{
+			output = new StringBuilder ();
+			var psi = new ProcessStartInfo (fileName, string.Join (" ", arguments.Select ((v) => StringUtils.Quote (v))));
+			psi.WorkingDirectory = working_directory;
+			var capturedOutput = output;
+			var callback = new Action<string> ((v) => {
+				lock (psi)
+					capturedOutput.AppendLine (v);
+			});
+			return Execute (psi, callback, callback, timeout);
+		}
+
 		public static int Execute (string fileName, string [] arguments, out bool timed_out, Dictionary<string, string> environment_variables = null, Action<string> stdout_callback = null, Action<string> stderr_callback = null, TimeSpan? timeout = null)
 		{
 			var psi = new ProcessStartInfo (fileName, string.Join (" ", StringUtils.Quote (arguments)));

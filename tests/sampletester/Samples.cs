@@ -5,9 +5,10 @@ using NUnit.Framework;
 namespace Samples {
 	[Category (CATEGORY)]
 	public class IosSampleTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "ios-samples"; // monotouch-samples redirects to ios-samples
 		const string CATEGORY = "iossamples"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "1d0f3270c394e9c15c014813e804972b17ce3e48";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj
@@ -43,15 +44,16 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
 	[Category (CATEGORY)]
 	public class MacIosSampleTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "mac-ios-samples";
 		const string CATEGORY = "maciossamples"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "9c3fd48abdd80c320db17f286eaf43073161ccff";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj
@@ -63,30 +65,32 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
 	[Category (CATEGORY)]
 	public class MacSampleTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "mac-samples";
 		const string CATEGORY = "macsamples"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "68a43ce4f4333e20f9883c48b433877b03357f4e";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 		};
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
 	[Category (CATEGORY)]
 	public class MobileSampleTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "mobile-samples";
 		const string CATEGORY = "mobilesamples"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "5ccc17a2da7c34724c5d71bac4e52f20e8b25287";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj
@@ -111,15 +115,16 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
 	[Category (CATEGORY)]
 	public class PrebuiltAppTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "prebuilt-apps";
 		const string CATEGORY = "prebuiltapps"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "6f237ada6b687498f0aac45c1b55983201e39410";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Known failures
@@ -128,15 +133,16 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
 	[Category (CATEGORY)]
 	public class XamarinFormsTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "xamarin-forms-samples";
 		const string CATEGORY = "xamarinformssamples"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "34bb42317262908413ed256f819fae3356ed6667";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Known failures
@@ -145,15 +151,16 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
 	[Category (CATEGORY)]
 	public class XamarinFormsBooksTester : SampleTester {
+		const string ORG = "xamarin";
 		const string REPO = "xamarin-forms-book-samples";
 		const string CATEGORY = "xamarinformsbookssamples"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "79f51213ed742878333e072fdc74c2ee894c0130";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj,
@@ -197,7 +204,7 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 
@@ -206,7 +213,7 @@ namespace Samples {
 		const string ORG = "rolfbjarne";
 		const string REPO = "embedded-frameworks";
 		const string CATEGORY = "embeddedframeworks"; // categories can't contain dashes
-		const string HASH = "origin/master";
+		const string HASH = "faaad6f9dcda53b2c49cec567eca769cb534307f";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Known failures
@@ -215,7 +222,7 @@ namespace Samples {
 
 		static IEnumerable<SampleTestData> GetSampleData ()
 		{
-			return GetSampleTestData (test_data, REPO, ORG);
+			return GetSampleTestData (test_data, ORG, REPO, HASH);
 		}
 	}
 

@@ -494,6 +494,8 @@ namespace Xamarin.Tests
 				psi.UseShellExecute = false;
 				psi.RedirectStandardError = true;
 				psi.RedirectStandardOutput = true;
+				if (!string.IsNullOrEmpty (psi.WorkingDirectory))
+					Console.Write ($"cd {StringUtils.Quote (psi.WorkingDirectory)} && ");
 				Console.WriteLine ("{0} {1}", psi.FileName, psi.Arguments);
 				using (var p = new Process ()) {
 					p.StartInfo = psi;

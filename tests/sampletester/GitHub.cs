@@ -8,11 +8,11 @@ using NUnit.Framework;
 using Xamarin.Tests;
 
 public static class GitHub {
-	public static string [] GetProjects (string user, string repo)
+	public static string [] GetProjects (string user, string repo, string hash)
 	{
 		IEnumerable<string> files;
 
-		var dir = CloneRepository (user, repo);
+		var dir = CloneRepository (user, repo, hash);
 		files = Directory.GetFiles (dir, "*.*", SearchOption.AllDirectories);
 		files = files.Select ((v) => v.Substring (dir.Length).TrimStart ('/'));
 
@@ -23,14 +23,19 @@ public static class GitHub {
 			}).ToArray ();
 	}
 
-	public static string CloneRepository (string user, string repo, bool clean = true)
+	public static string CloneRepository (string user, string repo, string hash, bool clean = true)
 	{
 		var repo_dir = Path.Combine (Configuration.SampleRootDirectory, repo);
 
 		if (!Directory.Exists (repo_dir)) {
-			var auth = Environment.GetEnvironmentVariable ("GITHUB_AUTH_TOKEN") ?? string.Empty;
-			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "clone", $"https://{auth}github.com/{user}/{repo}" }, working_directory: Configuration.SampleRootDirectory, timeout: TimeSpan.FromMinutes (10)), "cloned in 10 minutes");
+			Directory.CreateDirectory (repo_dir);
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "init" }, working_directory: repo_dir, timeout: TimeSpan.FromSeconds (10)), "git init");
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "remote", "add", "origin", $"https://github.com/{user}/{repo}" }, working_directory: repo_dir, timeout: TimeSpan.FromSeconds (10)), "git remote add");
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "fetch" }, working_directory: repo_dir, timeout: TimeSpan.FromMinutes (10)), "git fetch");
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "checkout", "-b", "temporary-sample-testing-branch", hash }, working_directory: repo_dir, timeout: TimeSpan.FromMinutes (1)), "git checkout");
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "submodule", "update", "--init", "--recursive" }, working_directory: repo_dir, timeout: TimeSpan.FromMinutes (10)), "git submodule update");
 		} else if (clean) {
+			Assert.AreEqual (0, ExecutionHelper.Execute ("git", new string [] { "reset", "--hard", hash }, working_directory: repo_dir, timeout: TimeSpan.FromMinutes (1)), "git checkout");
 			CleanRepository (repo_dir);
 		}
 

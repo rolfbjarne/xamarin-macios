@@ -2,6 +2,8 @@
 
 env | sort
 
+TOKEN=$1
+shift
 STEPS="$*"
 
 EMOJII="✅"
@@ -22,9 +24,9 @@ for STEP in $STEPS; do
   echo "* $STEPEMOJII $STEPNAME: $STEPSTATUS" >> "$FILE"
 done
 
-echo "$EMOJII Status for '$BUILD_DEFINITIONNAME': $GH_STATE. [View results]($AZURE_BUILD_URL)\n" | cat - "$FILE" > "$FILE.tmp"
+printf "%s" "$EMOJII Status for '$BUILD_DEFINITIONNAME': $GH_STATE. [View results]($AZURE_BUILD_URL)\n\n" | cat - "$FILE" > "$FILE.tmp"
 mv "$FILE.tmp" "$FILE"
 
-./jenkins/add-commit-comment.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--file=$FILE"
-./jenkins/add-commit-status.sh "--token=$(github-pat)" "--hash=$(Build.SourceVersion)" "--state=$GH_STATE" --target-url="$AZURE_BUILD_URL" --description="$GH_STATE" --context="$BUILD_DEFINITIONNAME"
+./jenkins/add-commit-comment.sh "--token=$TOKEN" "--hash=$BUILD_SOURCEVERSION" "--file=$FILE"
+./jenkins/add-commit-status.sh "--token=$TOKEN" "--hash=$BUILD_SOURCEVERSION" "--state=$GH_STATE" --target-url="$AZURE_BUILD_URL" --description="$GH_STATE" --context="$BUILD_DEFINITIONNAME"
 rm -f "$FILE" 

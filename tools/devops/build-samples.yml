@@ -152,7 +152,7 @@ jobs:
     jobResultReleaseMac: $[ dependencies.macOS.outputs['Release|Mac.ExportedVariables.JobStatus'] ]
   steps:
   - bash: |
-      ./tools/devops/build-samples-report-to-github.sh \
+      ./tools/devops/build-samples-report-to-github.sh "$(github-pat)" \
         "Debug|iPhone|A-F" "Debug|iPhone|G-R" "Debug|iPhone|S-Z" \
         "Debug|iPhoneSimulator" \
         "Release|iPhone|A-F" "Release|iPhone|G-R" "Release|iPhone|S-Z" \

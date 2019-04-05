@@ -10,7 +10,7 @@ variables:
   name_filter_af: '^[A-Fa-f].*$'
   name_filter_gr: '^[G-Rg-r].*$'
   name_filter_rest: '^[^A-Ra-r].*$'
-  azure_build_url: '$(System.CollectionUri}/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)'
+  azure_build_url: '$(System.CollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)'
 
 jobs:
 - job: ReportStartToGitHub

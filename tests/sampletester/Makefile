@@ -12,6 +12,8 @@ endif
 
 TEST_RESULT=TestResult-$(shell date "+%Y%m%d-%H%M%S")
 
+build: bin/Debug/sampletester.dll
+
 run-tests: bin/Debug/sampletester.dll
 	$(Q) rm -f .failed-stamp
 	$(Q) mono64 --debug $(NUNIT_MSBUILD_DIR)/nunit3-console.exe $(WHERE_CONDITION) $(abspath $(CURDIR)/bin/Debug/sampletester.dll) "--result=$(abspath $(CURDIR)/$(TEST_RESULT).xml)" $${TEST_FIXTURE:+"$$TEST_FIXTURE"} --labels=All --inprocess || touch $(CURDIR)/.failed-stamp

@@ -1,22 +1,31 @@
 # Sample testing
 
-These unit tests clone a series of known repositories with sample projects, and builds all the relevant projects in those repositories.
+These unit tests clone a series of known repositories that contain sample
+projects, and build all the relevant projects in those repositories.
 
-This is executed in Azure DevOps [here][1], but it must be triggered manually:
+It is executed automatically in Azure DevOps [here][1] every Saturday for the
+following branches:
 
-Queue:
-* Branch: the branch to test.
-* Commit: the commit in that branch to test.
+* master
+* d16-*
+* xcode*
 
-Requirements:
-* The commit in question must have already have packages (as GitHub statuses).
+It can also be triggered manually, but have in mind that the commit in
+question must already have packages (as GitHub statuses).
 
-It's possible to use the sample tests from one commit, and then test with a
-completely different commit, by setting the `PROVISION_FROM_COMMIT` variable
-to the commit that's to be tested:
+It's also possible to use the sample tests from one commit, and then test with
+Xamarin.iOS/Xamarin.Mac a completely different commit, by setting the
+`PROVISION_FROM_COMMIT` variable to the commit that's to be tested:
 
 ![screenshot](images/provision_from_commit.png)
 
-The previous point is still required: the commit to provision from must have packages.
+The previous point is still required: the commit to provision from must have
+packages.
 
-[1]: https://dev.azure.com/xamarin/public/_build?definitionId=20
+There are two ways to run these tests locally:
+
+* Launching xharness in server mode and execute the "Sample tests" (they're
+  disabled by default).
+* Executing `make` in this directory.
+
+[1]: https://dev.azure.com/xamarin/internal/_build?definitionId=23

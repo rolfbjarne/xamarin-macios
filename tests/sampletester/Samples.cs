@@ -53,7 +53,7 @@ namespace Samples {
 		const string ORG = "xamarin";
 		const string REPO = "mac-ios-samples";
 		const string CATEGORY = "maciossamples"; // categories can't contain dashes
-		const string HASH = "2ab4faf9254cecdf5766af573e508f9ac8691663";
+		const string HASH = "45182f311db77bb05971a22d58edfdef44a4b657";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj

@@ -124,7 +124,7 @@ jobs:
 
   - bash: |
       echo "#vso[task.setvariable variable=JobStatus;isOutput=true]$AGENT_JOBSTATUS"
-      echo "##vso[task.setvariable variable=JobStatus;isOutput=true]CurrentStatus=$AGENT_JOBSTATUS"
+      echo "##vso[task.setvariable variable=JobStatus;isOutput=true]$AGENT_JOBSTATUS"
       env|sort
     name: ExportedVariables
     displayName: Export status

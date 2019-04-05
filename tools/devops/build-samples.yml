@@ -14,6 +14,7 @@ variables:
 
 jobs:
 - job: ReportStartToGitHub
+  displayName: Set pending GitHub status
   pool:
     vmImage: 'macOS-10.13'
   steps:
@@ -145,6 +146,7 @@ jobs:
     condition: always()
 
 - job: ReportResultsToGitHub
+  displayName: Report status/results to GitHub
   dependsOn: macOS
   condition: always()
   pool:

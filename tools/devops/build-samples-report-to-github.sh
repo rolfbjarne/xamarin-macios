@@ -23,7 +23,7 @@ for STEP in $STEPS; do
   echo "* $STEPEMOJII $STEP: $STEPSTATUS" >> "$FILE"
 done
 
-printf "%s" "$EMOJII Status for '$BUILD_DEFINITIONNAME': $GH_STATE. [View results]($AZURE_BUILD_URL)\\n\\n" | cat - "$FILE" > "$FILE.tmp"
+printf "%s\n\n" "$EMOJII Status for '$BUILD_DEFINITIONNAME': $GH_STATE. [View results]($AZURE_BUILD_URL)" | cat - "$FILE" > "$FILE.tmp"
 mv "$FILE.tmp" "$FILE"
 
 ./jenkins/add-commit-comment.sh "--token=$TOKEN" "--hash=$BUILD_SOURCEVERSION" "--file=$FILE"

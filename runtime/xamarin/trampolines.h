@@ -54,9 +54,10 @@ enum ArgumentSemantic /* Xcode 4.4 doesn't like this ': int' */ {
 //
 // The `value` parameter is the value to convert.
 //
-// The `ptr` parameter is optional, if passed the resulting value type will be
-// stored here. If NULL, memory is allocated and returned, and the return
-// value must be freed using `xamarin_free`.
+// The `ptr` parameter must not be passed if the managed type is a class. If
+// the managed type is a value type, `ptr` is optional, and if passed the
+// resulting value will be stored here. If NULL, memory is allocated and
+// returned, and the return value must be freed using `xamarin_free`.
 //
 // The `managedType` parameter is the managed type to convert to.
 //
@@ -73,7 +74,7 @@ enum ArgumentSemantic /* Xcode 4.4 doesn't like this ': int' */ {
 // to any exceptions that occur.
 //
 // The return value is:
-// * xamarin_id_to_managed_func: a pointer to the resulting value type. If
+// * xamarin_id_to_managed_func: a pointer to the resulting value. If
 //   `ptr` was passed, this value is also returned, otherwise newly allocated
 //   memory is returned (which must be freed with `xamarin_free`). If an
 //   exception occurs, 'ptr' is returned (and no memory allocated).
@@ -178,9 +179,28 @@ id xamarin_uiedgeinsets_to_nsvalue           (MonoObject *value, void *context, 
 id xamarin_uioffset_to_nsvalue               (MonoObject *value, void *context, guint32 *exception_gchandle);
 id xamarin_nsdirectionaledgeinsets_to_nsvalue(MonoObject *value, void *context, guint32 *exception_gchandle);
 
+// These functions can be passed as xamarin_id_to_managed_func/xamarin_managed_to_id_func parameters
+id           xamarin_convert_string_to_nsstring (MonoObject *obj, void *context, guint32 *exception_gchandle);
+void *       xamarin_convert_nsstring_to_string (id value, void *ptr, MonoClass *managedType, void *context, guint32 *exception_gchandle);
+
+// These are simpler versions of the above string<->nsstring conversion functions.
 NSString *   xamarin_string_to_nsstring (MonoString *obj, bool retain);
 // domain is optional, if NULL the function will call mono_get_domain.
 MonoString * xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj);
+
+// Either managed_type or managed_class has to be provided
+NSArray *   xamarin_managed_array_to_nsarray (MonoArray *array, MonoType *managed_type, MonoClass *managed_class, guint32 *exception_gchandle);
+// Either managed_type or managed_class has to be provided
+MonoArray * xamarin_nsarray_to_managed_array (NSArray *array, MonoType *managed_type, MonoClass *managed_class, guint32 *exception_gchandle);
+
+NSArray *   xamarin_managed_string_array_to_nsarray (MonoArray *array, guint32 *exception_gchandle);
+NSArray *   xamarin_managed_nsobject_array_to_nsarray (MonoArray *array, guint32 *exception_gchandle);
+NSArray *   xamarin_managed_inativeobject_array_to_nsarray (MonoArray *array, guint32 *exception_gchandle);
+
+MonoArray * xamarin_nsarray_to_managed_string_array (NSArray *array, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, guint32 *exception_gchandle);
+MonoArray * xamarin_nsarray_to_managed_inativeobject_array_static (NSArray *array, MonoType *array_type, MonoClass *element_class, uint32_t iface_token_ref, uint32_t implementation_token_ref, guint32 *exception_gchandle);
 
 /* Copied from SGen */
 

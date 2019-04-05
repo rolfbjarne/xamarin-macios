@@ -103,6 +103,8 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 	MONO_THREAD_ATTACH; // COOP: This will swith to GC_UNSAFE
 
+	MonoDomain *domain = mono_domain_get ();
+
 	// pre-prolog
 	SList *dispose_list = NULL;
 	SList *free_list = NULL;
@@ -236,7 +238,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								exception = (MonoObject *) mono_get_exception_execution_engine ("Invalid type encoding for parameter");
 								goto exception_handling;
 							}
-							bool is_parameter_out = xamarin_is_parameter_out (mono_method_get_object (mono_domain_get (), method, NULL), i, &exception_gchandle);
+							bool is_parameter_out = xamarin_is_parameter_out (mono_method_get_object (domain, method, NULL), i, &exception_gchandle);
 							if (exception_gchandle != 0)
 								goto exception_handling;
 
@@ -283,7 +285,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 									[id_arg autorelease];
 								}
 								MonoObject *obj;
-								obj = xamarin_get_inative_object_dynamic (id_arg, false, mono_type_get_object (mono_domain_get (), p), &exception_gchandle);
+								obj = xamarin_get_inative_object_dynamic (id_arg, false, mono_type_get_object (domain, p), &exception_gchandle);
 								if (exception_gchandle != 0)
 									goto exception_handling;
 								LOGZ (" argument %i is ptr/INativeObject %p: %p\n", i + 1, id_arg, obj);
@@ -335,7 +337,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 						LOGZ (" argument %i is char*: NULL\n", i + 1);
 						break;
 					} else {
-						arg_ptrs [i + mofs] = (void *) mono_string_new (mono_domain_get (), (const char *) arg);
+						arg_ptrs [i + mofs] = (void *) mono_string_new (domain, (const char *) arg);
 						LOGZ (" argument %i is char*: %p = %s\n", i + 1, arg, arg);
 						break;
 					}
@@ -354,7 +356,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 					} else {
 						if (p_klass == mono_get_string_class ()) {
 							NSString *str = (NSString *) id_arg;
-							arg_ptrs [i + mofs] = xamarin_nsstring_to_string (NULL, str);
+							arg_ptrs [i + mofs] = xamarin_nsstring_to_string (domain, str);
 							LOGZ (" argument %i is NSString: %p = %s\n", i + 1, id_arg, [str UTF8String]);
 						} else if (xamarin_is_class_array (p_klass)) {
 #if DEBUG
@@ -397,7 +399,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								goto exception_handling;
 
 							if (created && obj) {
-								bool is_transient = xamarin_is_parameter_transient (mono_method_get_object (mono_domain_get (), method, NULL), i, &exception_gchandle);
+								bool is_transient = xamarin_is_parameter_transient (mono_method_get_object (domain, method, NULL), i, &exception_gchandle);
 								if (exception_gchandle != 0)
 									goto exception_handling;
 								if (is_transient)
@@ -414,7 +416,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								[id_arg autorelease];
 							}
 							MonoObject *obj;
-							obj = xamarin_get_inative_object_dynamic (id_arg, false, mono_type_get_object (mono_domain_get (), p), &exception_gchandle);
+							obj = xamarin_get_inative_object_dynamic (id_arg, false, mono_type_get_object (domain, p), &exception_gchandle);
 							if (exception_gchandle != 0)
 								goto exception_handling;
 							LOGZ (" argument %i is NSObject/INativeObject %p: %p\n", i + 1, id_arg, obj);
@@ -481,7 +483,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 		 * This problem is documented in the following bug:
 		 * https://bugzilla.xamarin.com/show_bug.cgi?id=6556
 		 */
-		retval = mono_object_new (mono_domain_get (), mono_method_get_class (method));
+		retval = mono_object_new (domain, mono_method_get_class (method));
 
 		xamarin_set_nsobject_handle (retval, self);
 		xamarin_set_nsobject_flags (retval, NSObjectFlagsNativeRef);

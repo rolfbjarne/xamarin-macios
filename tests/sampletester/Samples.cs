@@ -74,7 +74,7 @@ namespace Samples {
 		const string ORG = "xamarin";
 		const string REPO = "mac-samples";
 		const string CATEGORY = "macsamples"; // categories can't contain dashes
-		const string HASH = "68a43ce4f4333e20f9883c48b433877b03357f4e";
+		const string HASH = "6f905972c98e64759ff84a25e4e2b42366fa197b";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 		};
@@ -90,7 +90,7 @@ namespace Samples {
 		const string ORG = "xamarin";
 		const string REPO = "mobile-samples";
 		const string CATEGORY = "mobilesamples"; // categories can't contain dashes
-		const string HASH = "5ccc17a2da7c34724c5d71bac4e52f20e8b25287";
+		const string HASH = "45182f311db77bb05971a22d58edfdef44a4b657";
 
 		static Dictionary<string, SampleTest> test_data = new Dictionary<string, SampleTest> {
 				// Build solution instead of csproj

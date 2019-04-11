@@ -639,6 +639,7 @@ public class MemberInformation
 public class NamespaceManager
 {
 	public BindingTouch BindingTouch;
+	Frameworks Frameworks { get { return BindingTouch.Frameworks; } }
 
 	public string Prefix { get; private set; }
 
@@ -806,11 +807,17 @@ public enum EnumMode {
 }
 
 public partial class Frameworks {
-	static HashSet<string> frameworks;
-	static bool GetValue (string framework)
+	HashSet<string> frameworks;
+	readonly PlatformName CurrentPlatform;
+	public Frameworks (PlatformName current_platform)
+	{
+		CurrentPlatform = current_platform;
+	}
+
+	bool GetValue (string framework)
 	{
 		if (frameworks == null) {
-			switch (Generator.CurrentPlatform) {
+			switch (CurrentPlatform) {
 			case PlatformName.iOS:
 				frameworks = iosframeworks;
 				break;
@@ -824,7 +831,7 @@ public partial class Frameworks {
 				frameworks = macosframeworks;
 				break;
 			default:
-				throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (https://github.com/xamarin/xamarin-macios/issues/new) with a test case.", Generator.CurrentPlatform);
+				throw new BindingException (1047, "Unsupported platform: {0}. Please file a bug report (https://github.com/xamarin/xamarin-macios/issues/new) with a test case.", CurrentPlatform);
 			}
 		}
 
@@ -837,6 +844,7 @@ public partial class Generator : IMemberGatherer {
 
 	static NamespaceManager ns;
 	static BindingTouch BindingTouch;
+	static Frameworks Frameworks { get { return BindingTouch.Frameworks; } }
 	Dictionary<Type,IEnumerable<string>> selectors = new Dictionary<Type,IEnumerable<string>> ();
 	Dictionary<Type,bool> need_static = new Dictionary<Type,bool> ();
 	Dictionary<Type,bool> need_abstract = new Dictionary<Type,bool> ();

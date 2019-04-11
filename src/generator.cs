@@ -73,7 +73,7 @@ public static class ReflectionExtensions {
 	public static Type GetBaseType (Type type, Generator generator)
 	{
 		BaseTypeAttribute bta = GetBaseTypeAttribute (type, generator);
-		Type base_type = bta != null ?  bta.BaseType : Generator.TypeManager.System_Object;
+		Type base_type = bta != null ?  bta.BaseType : generator.TypeManager.System_Object;
 
 		return base_type;
 	}
@@ -96,7 +96,7 @@ public static class ReflectionExtensions {
 	{
 		return generator.AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (provider)
 			.Any (attr => attr.AvailabilityKind == AvailabilityKind.Unavailable &&
-				attr.Platform == Generator.CurrentPlatform);
+				attr.Platform == generator.CurrentPlatform);
 	}
 	
 	public static AvailabilityBaseAttribute GetAvailability (this ICustomAttributeProvider attrProvider, AvailabilityKind availabilityKind, Generator generator)
@@ -104,7 +104,7 @@ public static class ReflectionExtensions {
 		return generator.AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (attrProvider)
 			.FirstOrDefault (attr =>
 				attr.AvailabilityKind == availabilityKind &&
-					attr.Platform == Generator.CurrentPlatform
+					attr.Platform == generator.CurrentPlatform
 			);
 	}
 
@@ -118,7 +118,7 @@ public static class ReflectionExtensions {
 		string owrap;
 		string nwrap;
 
-		if (parent_type != Generator.TypeManager.NSObject) {
+		if (parent_type != generator.TypeManager.NSObject) {
 			if (generator.AttributeManager.HasAttribute<ModelAttribute> (parent_type)) {
 				foreach (PropertyInfo pinfo in parent_type.GetProperties (flags)) {
 					bool toadd = true;
@@ -177,7 +177,7 @@ public static class ReflectionExtensions {
 
 		Type parent_type = GetBaseType (type, generator);
 
-		if (parent_type != Generator.TypeManager.NSObject) {
+		if (parent_type != generator.TypeManager.NSObject) {
 			if (generator.AttributeManager.HasAttribute<ModelAttribute> (parent_type))
 				foreach (MethodInfo minfo in parent_type.GetMethods ())
 					if (generator.AttributeManager.HasAttribute<ExportAttribute> (minfo))
@@ -268,6 +268,8 @@ public static class StringExtensions
 //
 public class MarshalInfo {
 	public Generator Generator;
+	public AttributeManager AttributeManager { get { return Generator.AttributeManager; } }
+	public TypeManager TypeManager { get { return Generator.TypeManager; } }
 	public bool PlainString;
 	public Type Type;
 	public bool IsOut;
@@ -283,10 +285,10 @@ public class MarshalInfo {
 	public MarshalInfo (Generator generator, MethodInfo mi, ParameterInfo pi)
 	{
 		this.Generator = generator;
-		PlainString = Generator.AttributeManager.HasAttribute<PlainStringAttribute> (pi);
+		PlainString = AttributeManager.HasAttribute<PlainStringAttribute> (pi);
 		Type = pi.ParameterType;
-		ZeroCopyStringMarshal = (Type == Generator.TypeManager.System_String) && PlainString == false && !Generator.AttributeManager.HasAttribute<DisableZeroCopyAttribute> (pi) && generator.type_wants_zero_copy;
-		if (ZeroCopyStringMarshal && Generator.AttributeManager.HasAttribute<DisableZeroCopyAttribute> (mi))
+		ZeroCopyStringMarshal = (Type == TypeManager.System_String) && PlainString == false && !AttributeManager.HasAttribute<DisableZeroCopyAttribute> (pi) && generator.type_wants_zero_copy;
+		if (ZeroCopyStringMarshal && AttributeManager.HasAttribute<DisableZeroCopyAttribute> (mi))
 			ZeroCopyStringMarshal = false;
 		IsOut = TypeManager.IsOutParameter (pi);
 	}
@@ -295,7 +297,7 @@ public class MarshalInfo {
 	public MarshalInfo (Generator generator, MethodInfo mi)
 	{
 		this.Generator = generator;
-		PlainString = Generator.AttributeManager.HasAttribute<PlainStringAttribute> (AttributeManager.GetReturnTypeCustomAttributes (mi));
+		PlainString = AttributeManager.HasAttribute<PlainStringAttribute> (AttributeManager.GetReturnTypeCustomAttributes (mi));
 		Type = mi.ReturnType;
 	}
 }
@@ -363,32 +365,22 @@ public class TrampolineInfo {
 // which types need to have Appearance methods created
 //
 public class GeneratedType {
-	static Dictionary<Type,GeneratedType> knownTypes = new Dictionary<Type,GeneratedType> ();
-
-	public static GeneratedType Lookup (Type t, Generator generator)
+	public GeneratedType (GeneratedTypes root, Type t)
 	{
-		if (knownTypes.ContainsKey (t))
-			return knownTypes [t];
-		var n = new GeneratedType (t, generator);
-		knownTypes [t] = n;
-		return n;
-	}
-	
-	public GeneratedType (Type t, Generator generator)
-	{
+		Root = root;
 		Type = t;
 		foreach (var iface in Type.GetInterfaces ()){
 			if (iface.Name == "UIAppearance" || iface.Name == "IUIAppearance")
 				ImplementsAppearance = true;
 		}
-		var btype = ReflectionExtensions.GetBaseType (Type, generator);
-		if (btype != Generator.TypeManager.System_Object){
+		var btype = ReflectionExtensions.GetBaseType (Type, Root.Generator);
+		if (btype != Root.Generator.TypeManager.System_Object){
 			Parent = btype;
 			// protected against a StackOverflowException - bug #19751
 			// it does not protect against large cycles (but good against copy/paste errors)
 			if (Parent == Type)
 				throw new BindingException (1030, true, "{0} cannot have [BaseType(typeof({1}))] as it creates a circular dependency", Type, Parent);
-			ParentGenerated = Lookup (Parent, generator);
+			ParentGenerated = Root.Lookup (Parent);
 
 			// If our parent had UIAppearance, we flag this class as well
 			if (ParentGenerated.ImplementsAppearance)
@@ -396,9 +388,10 @@ public class GeneratedType {
 			ParentGenerated.Children.Add (this);
 		}
 
-		if (generator.AttributeManager.HasAttribute<CategoryAttribute> (t))
+		if (root.Generator.AttributeManager.HasAttribute<CategoryAttribute> (t))
 			ImplementsAppearance = false;
 	}
+	public GeneratedTypes Root;
 	public Type Type;
 	public List<GeneratedType> Children = new List<GeneratedType> (1);
 	public Type Parent;
@@ -415,6 +408,27 @@ public class GeneratedType {
 		}
 	}
 }
+public class GeneratedTypes
+{
+	public Generator Generator;
+
+	Dictionary<Type, GeneratedType> knownTypes = new Dictionary<Type, GeneratedType> ();
+
+	public GeneratedTypes (Generator generator)
+	{
+		this.Generator = generator;
+	}
+
+	public GeneratedType Lookup (Type t)
+	{
+		if (knownTypes.ContainsKey (t))
+			return knownTypes [t];
+		var n = new GeneratedType (this, t);
+		n.Root = this;
+		knownTypes [t] = n;
+		return n;
+	}
+}
 
 public interface IMemberGatherer {
 	IEnumerable<MethodInfo> GetTypeContractMethods (Type source);
@@ -427,7 +441,7 @@ class WrapPropMemberInformation
 	public string WrapGetter { get; private set; }
 	public string WrapSetter { get; private set; }
 
-	public WrapPropMemberInformation (PropertyInfo pi, Generator generator)
+	public WrapPropMemberInformation (Generator generator, PropertyInfo pi)
 	{
 		WrapGetter = generator.AttributeManager.GetCustomAttribute<WrapAttribute> (pi?.GetMethod)?.MethodName;
 		WrapSetter = generator.AttributeManager.GetCustomAttribute<WrapAttribute> (pi?.SetMethod)?.MethodName;
@@ -461,6 +475,7 @@ public class MemberInformation
 		Generator = generator;
 		var method = mi as MethodInfo;
 
+		this.Generator = generator;
 		is_ctor = mi is MethodInfo && mi.Name == "Constructor";
 		is_abstract = AttributeManager.HasAttribute<AbstractAttribute> (mi) && mi.DeclaringType == type;
 		is_protected = AttributeManager.HasAttribute<ProtectedAttribute> (mi);
@@ -517,10 +532,10 @@ public class MemberInformation
 	{
 		is_basewrapper_protocol_method = isBaseWrapperProtocolMethod;
 		foreach (ParameterInfo pi in mi.GetParameters ())
-			if (pi.ParameterType.IsSubclassOf (Generator.TypeManager.System_Delegate))
+			if (pi.ParameterType.IsSubclassOf (generator.TypeManager.System_Delegate))
 				is_unsafe = true;
 
-		if (!is_unsafe &&  mi.ReturnType.IsSubclassOf (Generator.TypeManager.System_Delegate))
+		if (!is_unsafe &&  mi.ReturnType.IsSubclassOf (generator.TypeManager.System_Delegate))
 			is_unsafe = true;
 
 		if (selector != null) {
@@ -561,7 +576,7 @@ public class MemberInformation
 		this.category_extension_type = category_extension_type;
 		if (category_extension_type != null) {
 			is_category_extension = true;
-			ignore_category_static_warnings = is_internal || type.IsInternal (generator) || Generator.AttributeManager.GetCustomAttribute<CategoryAttribute> (type).AllowStaticMembers;
+			ignore_category_static_warnings = is_internal || type.IsInternal (generator) || AttributeManager.GetCustomAttribute<CategoryAttribute> (type).AllowStaticMembers;
 		}
 
 		if (is_static || is_category_extension || is_interface_impl || is_extension_method || is_type_sealed)
@@ -571,7 +586,7 @@ public class MemberInformation
 	public MemberInformation (Generator generator, IMemberGatherer gather, PropertyInfo pi, Type type, bool is_interface_impl = false)
 		: this (generator, gather, (MemberInfo) pi, type, is_interface_impl, false, false, false)
 	{
-		if (pi.PropertyType.IsSubclassOf (Generator.TypeManager.System_Delegate))
+		if (pi.PropertyType.IsSubclassOf (generator.TypeManager.System_Delegate))
 			is_unsafe = true;
 
 		var export = Generator.GetExportAttribute (pi, out wrap_method);
@@ -590,7 +605,7 @@ public class MemberInformation
 		// Properties can have WrapAttribute on getter/setter so we need to check for this
 		// but only if no Export is already found on property level.
 		if (export is null) {
-			wpmi = new WrapPropMemberInformation (pi, generator);
+			wpmi = new WrapPropMemberInformation (generator, pi);
 			has_inner_wrap_attribute = wpmi.HasWrapOnGetter || wpmi.HasWrapOnSetter;
 
 			// Wrap can only be used either at property level or getter/setter level at a given time.
@@ -838,13 +853,14 @@ public partial class Frameworks {
 }
 
 public partial class Generator : IMemberGatherer {
+	BindingTouch BindingTouch;
+	Frameworks Frameworks { get { return BindingTouch.Frameworks; } }
+	public TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
+	public AttributeManager AttributeManager { get { return BindingTouch.AttributeManager; } }
+	public GeneratedTypes GeneratedTypes;
 	internal bool IsPublicMode;
 
 	NamespaceManager ns;
-	static BindingTouch BindingTouch;
-	static Frameworks Frameworks { get { return BindingTouch.Frameworks; } }
-	public static TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
-	public AttributeManager AttributeManager { get { return BindingTouch.AttributeManager; } }
 	Dictionary<Type,IEnumerable<string>> selectors = new Dictionary<Type,IEnumerable<string>> ();
 	Dictionary<Type,bool> need_static = new Dictionary<Type,bool> ();
 	Dictionary<Type,bool> need_abstract = new Dictionary<Type,bool> ();
@@ -867,9 +883,9 @@ public partial class Generator : IMemberGatherer {
 
 	public bool Compat { get { return !UnifiedAPI; } }
 
-	public static PlatformName CurrentPlatform { get { return BindingTouch.CurrentPlatform; } }
+	public PlatformName CurrentPlatform { get { return BindingTouch.CurrentPlatform; } }
 
-	public static string ApplicationClassName {
+	public string ApplicationClassName {
 		get {
 			switch (CurrentPlatform) {
 			case PlatformName.iOS:
@@ -889,7 +905,7 @@ public partial class Generator : IMemberGatherer {
 	public bool UnifiedAPI { get { return BindingTouch.Unified; } }
 	public int XamcoreVersion {
 		get {
-			switch (Generator.CurrentPlatform) {
+			switch (CurrentPlatform) {
 			case PlatformName.MacOSX:
 			case PlatformName.iOS:
 				return UnifiedAPI ? 2 : 1;
@@ -967,13 +983,13 @@ public partial class Generator : IMemberGatherer {
 	// Whether to use ZeroCopy for strings, defaults to false
 	public bool ZeroCopyStrings;
 
-	public static bool BindThirdPartyLibrary { get { return BindingTouch.BindThirdPartyLibrary; } }
+	public bool BindThirdPartyLibrary { get { return BindingTouch.BindThirdPartyLibrary; } }
 	public bool InlineSelectors;
 	public string BaseDir { get { return basedir; } set { basedir = value; }}
 	string basedir;
 	HashSet<string> generated_files = new HashSet<string> ();
 
-	static string CoreImageMap {
+	string CoreImageMap {
 		get {
 			switch (CurrentPlatform) {
 			case PlatformName.iOS:
@@ -988,7 +1004,7 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	static string CoreServicesMap {
+	string CoreServicesMap {
 		get {
 			switch (CurrentPlatform) {
 			case PlatformName.iOS:
@@ -1003,7 +1019,7 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	static string PDFKitMap {
+	string PDFKitMap {
 		get {
 			switch (CurrentPlatform) {
 			case PlatformName.iOS:
@@ -1213,6 +1229,11 @@ public partial class Generator : IMemberGatherer {
 		return "I" + type.Name;
 	}
 
+	Type GetBaseType (Type type)
+	{
+		return ReflectionExtensions.GetBaseType (type, this);
+	}
+
 	public BindAsAttribute GetBindAsAttribute (ICustomAttributeProvider cu)
 	{
 		BindAsAttribute rv;
@@ -1329,7 +1350,7 @@ public partial class Generator : IMemberGatherer {
 			throw new BindingException (1048, true, $"Unsupported type 'ref/out {originalType.Name.Replace ("&", string.Empty)}' decorated with [BindAs]");
 
 		var retType = TypeManager.GetUnderlyingNullableType (attrib.Type) ?? attrib.Type;
-		var isNullable = attrib.IsNullable;
+		var isNullable = attrib.IsNullable (this);
 		var isValueType = retType.IsValueType;
 		var isEnum = retType.IsEnum;
 		var parameterName = pi != null ? pi.Name.GetSafeParamName () : "value";
@@ -1626,7 +1647,7 @@ public partial class Generator : IMemberGatherer {
 
 			if (Frameworks.HaveCoreMedia) {
 				// special case (false) so it needs to be before the _real_ INativeObject check
-				if (pi.ParameterType == TypeManager.CMSampleBuffer) {
+				if (pi.ParameterType == TypeManager.CMSampleBuffer){
 					pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
 					if (BindThirdPartyLibrary)
 						invoke.AppendFormat ("{0} == IntPtr.Zero ? null : Runtime.GetINativeObject<CMSampleBuffer> ({0}, false)", pi.Name.GetSafeParamName ());
@@ -1880,7 +1901,7 @@ public partial class Generator : IMemberGatherer {
 
 		var bindAsAtt = GetBindAsAttribute (pi) ?? GetBindAsAttribute (propInfo);
 		if (bindAsAtt != null)
-			return bindAsAtt.IsNullable || !bindAsAtt.IsValueType;
+			return bindAsAtt.IsNullable (this) || !bindAsAtt.IsValueType (this);
 
 		if (IsWrappedType (pi.ParameterType))
 			return true;
@@ -2177,7 +2198,7 @@ public partial class Generator : IMemberGatherer {
 		if (Compat)
 			return AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (t)
 				.Any (attr => attr.AvailabilityKind == AvailabilityKind.Introduced &&
-					attr.Platform == Generator.CurrentPlatform &&
+					attr.Platform == CurrentPlatform &&
 					attr.Architecture == PlatformArchitecture.Arch64);
 
 		return false;
@@ -2185,6 +2206,8 @@ public partial class Generator : IMemberGatherer {
 
 	public void Go ()
 	{
+		GeneratedTypes = new GeneratedTypes (this);
+
 		marshal_types.Add (new MarshalType (TypeManager.NSObject, create: "Runtime.GetNSObject ("));
 		marshal_types.Add (new MarshalType (TypeManager.Selector, create: "Selector.FromHandle ("));
 		marshal_types.Add (new MarshalType (TypeManager.BlockLiteral, "BlockLiteral", "{0}", "THIS_IS_BROKEN"));
@@ -2286,7 +2309,7 @@ public partial class Generator : IMemberGatherer {
 				continue;
 
 			// We call lookup to build the hierarchy graph
-			GeneratedType.Lookup (t, this);
+			GeneratedTypes.Lookup (t);
 			
 			var tselectors = new List<string> ();
 			
@@ -3922,7 +3945,7 @@ public partial class Generator : IMemberGatherer {
 		List<string> stringParameters = null;
 		
 		foreach (var pi in mi.GetParameters ()){
-			var mai = new MarshalInfo (this, mi, pi);
+ 			var mai = new MarshalInfo (this, mi, pi);
 
  			if (mai.ZeroCopyStringMarshal){
  				if (stringParameters == null)
@@ -4879,13 +4902,14 @@ public partial class Generator : IMemberGatherer {
 		public bool has_nserror, is_void_async, is_single_arg_async;
 		public MethodInfo MethodInfo;
 		
-		public AsyncMethodInfo (Generator generator, IMemberGatherer gather, Type type, MethodInfo mi, Type category_extension_type, bool is_extension_method) : base (generator, gather, mi, type, category_extension_type, false, is_extension_method)
+		public AsyncMethodInfo (Generator generator, IMemberGatherer gather, Type type, MethodInfo mi, Type category_extension_type, bool is_extension_method)
+			: base (generator, gather, mi, type, category_extension_type, false, is_extension_method)
 		{
 			this.MethodInfo = mi;
 			this.async_initial_params = Generator.DropLast (mi.GetParameters ());
 
 			var lastType = mi.GetParameters ().Last ().ParameterType;
-			if (!lastType.IsSubclassOf (TypeManager.System_Delegate))
+			if (!lastType.IsSubclassOf (generator.TypeManager.System_Delegate))
 				throw new BindingException (1036, true, "The last parameter in the method '{0}.{1}' must be a delegate (it's '{2}').", mi.DeclaringType.FullName, mi.Name, lastType.FullName);
 			var cbParams = lastType.GetMethod ("Invoke").GetParameters ();
 			async_completion_params = cbParams;
@@ -5972,7 +5996,7 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	static string GetAssemblyName ()
+	string GetAssemblyName ()
 	{
 		if (BindThirdPartyLibrary)
 			return Path.GetFileNameWithoutExtension (BindingTouch.outfile);
@@ -6002,7 +6026,7 @@ public partial class Generator : IMemberGatherer {
 		string TypeName = GetGeneratedTypeName (type);
 		indent = 0;
 		var instance_fields_to_clear_on_dispose = new List<string> ();
-		var gtype = GeneratedType.Lookup (type, this);
+		var gtype = GeneratedTypes.Lookup (type);
 		var appearance_selectors = gtype.ImplementsAppearance ? gtype.AppearanceSelectors : null;
 
 		using (var sw = GetOutputStreamForType (type)) {
@@ -7054,7 +7078,7 @@ public partial class Generator : IMemberGatherer {
 			//
 			// Appearance class
 			//
-			var gt = GeneratedType.Lookup (type, this);
+			var gt = GeneratedTypes.Lookup (type);
 			if (gt.ImplementsAppearance){
 				var parent_implements_appearance = gt.Parent != null && gt.ParentGenerated.ImplementsAppearance;
 				string base_class;

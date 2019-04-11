@@ -38,8 +38,6 @@ namespace ObjCRuntime
 	class Stret
 	{
 #if BGENERATOR
-		public static BindingTouch BindingTouch;
-		static TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
 #elif __UNIFIED__
 		const bool isUnified = true;
 #else
@@ -52,11 +50,11 @@ namespace ObjCRuntime
 			return members <= 4;
 		}
 
-		static bool IsHomogeneousAggregateBaseType_Armv7k (Type t)
+		static bool IsHomogeneousAggregateBaseType_Armv7k (Type t, Generator generator)
 		{
 			// https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L5500-L5514
 #if BGENERATOR
-			if (t == TypeManager.System_Float || t == TypeManager.System_Double || t == TypeManager.System_nfloat)
+			if (t == generator.TypeManager.System_Float || t == generator.TypeManager.System_Double || t == generator.TypeManager.System_nfloat)
 				return true;
 #else
 			if (t == typeof (float) || t == typeof (double) || t == typeof (nfloat))
@@ -66,7 +64,7 @@ namespace ObjCRuntime
 			return false;
 		}
 
-		static bool IsHomogeneousAggregate_Armv7k (List<Type> fieldTypes)
+		static bool IsHomogeneousAggregate_Armv7k (List<Type> fieldTypes, Generator generator)
 		{
 			// Very simplified version of https://github.com/llvm-mirror/clang/blob/82f6d5c9ae84c04d6e7b402f72c33638d1fb6bc8/lib/CodeGen/TargetInfo.cpp#L4051
 			// since C# supports a lot less types than clang does.
@@ -77,7 +75,7 @@ namespace ObjCRuntime
 			if (!IsHomogeneousAggregateSmallEnough_Armv7k (fieldTypes [0], fieldTypes.Count))
 				return false;
 
-			if (!IsHomogeneousAggregateBaseType_Armv7k (fieldTypes [0]))
+			if (!IsHomogeneousAggregateBaseType_Armv7k (fieldTypes [0], generator))
 				return false;
 
 			for (int i = 1; i < fieldTypes.Count; i++) {
@@ -103,13 +101,13 @@ namespace ObjCRuntime
 				if (t.Namespace != "System")
 					return false;
 #if BGENERATOR
-				return t.Assembly == TypeManager.PlatformAssembly;
+				return t.Assembly == generator.TypeManager.PlatformAssembly;
 #else
 				return t.Assembly == typeof (NSObject).Assembly;
 #endif
 			default:
 #if BGENERATOR
-				return t.Assembly == TypeManager.CorlibAssembly;
+				return t.Assembly == generator.TypeManager.CorlibAssembly;
 #else
 				return t.Assembly == typeof (object).Assembly;
 #endif
@@ -120,7 +118,7 @@ namespace ObjCRuntime
 		{
 			bool has32bitArm;
 #if BGENERATOR
-			has32bitArm = BindingTouch.CurrentPlatform != PlatformName.TvOS && BindingTouch.CurrentPlatform != PlatformName.MacOSX;
+			has32bitArm = generator.CurrentPlatform != PlatformName.TvOS && generator.CurrentPlatform != PlatformName.MacOSX;
 #elif MONOMAC || __TVOS__
 			has32bitArm = false;
 #else
@@ -139,7 +137,7 @@ namespace ObjCRuntime
 
 			bool isWatchOS;
 #if BGENERATOR
-			isWatchOS = BindingTouch.CurrentPlatform == PlatformName.WatchOS;
+			isWatchOS = generator.CurrentPlatform == PlatformName.WatchOS;
 #elif __WATCHOS__
 			isWatchOS = true;
 #else
@@ -154,13 +152,13 @@ namespace ObjCRuntime
 					return false;
 
 				// Except homogeneous aggregates, which are not stret either.
-				if (IsHomogeneousAggregate_Armv7k (fieldTypes))
+				if (IsHomogeneousAggregate_Armv7k (fieldTypes, generator))
 					return false;
 			}
 
 			bool isiOS;
 #if BGENERATOR
-			isiOS = BindingTouch.CurrentPlatform == PlatformName.iOS;
+			isiOS = generator.CurrentPlatform == PlatformName.iOS;
 #elif __IOS__
 			isiOS = true;
 #else

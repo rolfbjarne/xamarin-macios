@@ -39,7 +39,7 @@ namespace ObjCRuntime
 #if BGENERATOR
 		public static BindingTouch BindingTouch;
 		static TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
-		static bool isUnified = BindingTouch.Unified;
+		static bool isUnified { get { return BindingTouch.Unified; } }
 #elif __UNIFIED__
 		const bool isUnified = true;
 #else

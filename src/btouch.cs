@@ -570,7 +570,7 @@ public class BindingTouch {
 				InlineSelectors = inline_selectors ?? (Unified && CurrentPlatform != PlatformName.MacOSX),
 			};
 
-			if (!Unified && !Generator.BindThirdPartyLibrary) {
+			if (!Unified && !BindThirdPartyLibrary) {
 				foreach (var mi in baselib.GetType (nsManager.CoreObjCRuntime + ".Messaging").GetMethods ()){
 					if (mi.Name.IndexOf ("_objc_msgSend", StringComparison.Ordinal) != -1)
 						g.RegisterMethodName (mi.Name);

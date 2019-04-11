@@ -292,8 +292,9 @@ public class MarshalInfo {
 	}
 
 	// Used to return values
-	public MarshalInfo (MethodInfo mi)
+	public MarshalInfo (Generator generator, MethodInfo mi)
 	{
+		this.Generator = generator;
 		PlainString = Generator.AttributeManager.HasAttribute<PlainStringAttribute> (AttributeManager.GetReturnTypeCustomAttributes (mi));
 		Type = mi.ReturnType;
 	}
@@ -1939,7 +1940,7 @@ public partial class Generator : IMemberGatherer {
 			sb.Append ("xamarin_");
 		
 		try {
-			sb.Append (ParameterGetMarshalType (new MarshalInfo (mi) { IsAligned = aligned, EnumMode = enum_mode } ));
+			sb.Append (ParameterGetMarshalType (new MarshalInfo (this, mi) { IsAligned = aligned, EnumMode = enum_mode } ));
 		} catch (BindingException ex) {
 			throw new BindingException (ex.Code, ex.Error, ex,  "{0} in method `{1}'", ex.Message, mi.Name);
 		}
@@ -2011,7 +2012,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print (m, "\t\tpublic extern static {0} {1} ({3}IntPtr receiver, IntPtr selector{2});",
-		       need_stret ? "void" : ParameterGetMarshalType (new MarshalInfo (mi) { EnumMode = enum_mode }, true), method_name, b.ToString (),
+		       need_stret ? "void" : ParameterGetMarshalType (new MarshalInfo (this, mi) { EnumMode = enum_mode }, true), method_name, b.ToString (),
 		       need_stret ? (aligned ? "IntPtr" : "out " + FormatTypeUsedIn (ns.CoreObjCRuntime, mi.ReturnType)) + " retval, " : "");
 	}
 
@@ -3562,7 +3563,7 @@ public partial class Generator : IMemberGatherer {
 			throw new ArgumentException ("the provided Method has a void return type, it should never call this method");
 		}
 		
-		MarshalInfo mai = new MarshalInfo (mi);
+		MarshalInfo mai = new MarshalInfo (this, mi);
 		MarshalType mt;
 
 		if (IsNativeEnum (mi.ReturnType) && enum_mode == EnumMode.Bit32) {

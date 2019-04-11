@@ -975,8 +975,6 @@ public partial class Generator : IMemberGatherer {
 	public string BaseDir { get { return basedir; } set { basedir = value; }}
 	string basedir;
 	HashSet<string> generated_files = new HashSet<string> ();
-	public Type CoreNSObject = Generator.TypeManager.NSObject;
-	public Type SampleBufferType = Generator.TypeManager.CMSampleBuffer;
 
 	static string CoreImageMap {
 		get {
@@ -1107,8 +1105,8 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (t.IsInterface) 
 			return true;
-		if (CoreNSObject != null)
-			return t.IsSubclassOf (CoreNSObject) || t == CoreNSObject; 
+		if (TypeManager.NSObject != null)
+			return t.IsSubclassOf (TypeManager.NSObject) || t == TypeManager.NSObject; 
 		return false;
 	}
 
@@ -1631,7 +1629,7 @@ public partial class Generator : IMemberGatherer {
 
 			if (Frameworks.HaveCoreMedia) {
 				// special case (false) so it needs to be before the _real_ INativeObject check
-				if (pi.ParameterType == SampleBufferType){
+				if (pi.ParameterType == TypeManager.CMSampleBuffer) {
 					pars.AppendFormat ("IntPtr {0}", pi.Name.GetSafeParamName ());
 					if (BindThirdPartyLibrary)
 						invoke.AppendFormat ("{0} == IntPtr.Zero ? null : Runtime.GetINativeObject<CMSampleBuffer> ({0}, false)", pi.Name.GetSafeParamName ());

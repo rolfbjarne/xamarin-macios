@@ -638,6 +638,8 @@ public class MemberInformation
 
 public class NamespaceManager
 {
+	public BindingTouch BindingTouch;
+
 	public string Prefix { get; private set; }
 
 	// Where the core messaging lives
@@ -653,8 +655,9 @@ public class NamespaceManager
 	public ICollection<string> ImplicitNamespaces { get; private set; }
 	public ICollection<string> NamespacesThatConflictWithTypes { get; private set; }
 
-	public NamespaceManager (string prefix, string customObjCRuntimeNS, bool skipSystemDrawing)
+	public NamespaceManager (BindingTouch binding_touch, string prefix, string customObjCRuntimeNS, bool skipSystemDrawing)
 	{
+		BindingTouch = binding_touch;
 		Prefix = prefix;
 
 		CoreObjCRuntime = Get ("ObjCRuntime");

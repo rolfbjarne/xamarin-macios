@@ -835,7 +835,7 @@ public partial class Frameworks {
 public partial class Generator : IMemberGatherer {
 	internal bool IsPublicMode;
 
-	static NamespaceManager ns;
+	NamespaceManager ns;
 	static BindingTouch BindingTouch;
 	static Frameworks Frameworks { get { return BindingTouch.Frameworks; } }
 	public static TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
@@ -902,7 +902,7 @@ public partial class Generator : IMemberGatherer {
 	StreamWriter sw, m;
 	int indent;
 
-	static public NamespaceManager NamespaceManager {
+	public NamespaceManager NamespaceManager {
 		get { return ns; }
 	}
 

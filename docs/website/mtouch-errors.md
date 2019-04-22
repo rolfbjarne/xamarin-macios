@@ -3522,3 +3522,11 @@ There are a few reasons this may happen:
 ### MT8028: The runtime function {function} has been linked away.
 
 This indicates a bug in Xamarin.iOS. Please file a new issue on [github](https://github.com/xamarin/xamarin-macios/issues/new).
+
+### <a name="MM8033"/>MM8033: Unable to marshal the return value of type {type} to Objective-C.
+
+This usually indicates a bug in Objective-C binding code.
+
+If the managed binding is from a third-party vendor, please contact the vendor.
+
+If the managed binding is shipped with Xamarin.iOS, please [submit an issue](https://github.com/xamarin/xamarin-macios/wiki/Submitting-Bugs-&-Suggestions).

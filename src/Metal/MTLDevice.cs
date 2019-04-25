@@ -36,7 +36,7 @@ namespace Metal {
 					try {
 						var h = MTLCreateSystemDefaultDevice ();
 						if (h != IntPtr.Zero)
-							system_default = new MTLDeviceWrapper (h, false);
+							system_default = new MTLDeviceWrapper (h, true);
 					}
 					catch (EntryPointNotFoundException) {
 					}

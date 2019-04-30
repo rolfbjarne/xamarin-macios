@@ -1,4 +1,4 @@
-﻿#if MONOMAC
+#if MONOMAC || __IOS__
 
 using System;
 using Foundation;
@@ -19,6 +19,7 @@ namespace MonoTouchFixtures.Metal {
 			TestRuntime.AssertXcodeVersion (9, 0);
 		}
 
+#if MONOMAC
 		[Test]
 		public void GetAllDevicesTest ()
 		{
@@ -36,6 +37,40 @@ namespace MonoTouchFixtures.Metal {
 			Assert.DoesNotThrow (() => {
 				MTLDevice.RemoveObserver (refObj);
 			});
+		}
+#endif // MONOMAC
+
+		[Test]
+		public void SystemDefault ()
+		{
+			for (int i = 0; i < 2000000; i++)
+				Assert.DoesNotThrow (() => { var obj = MTLDevice.SystemDefault; }, "No exception");
+		}
+
+		[Test]
+		public void CreateHeap ()
+		{
+			var device = MTLDevice.SystemDefault;
+
+			using (var hd = new MTLHeapDescriptor ()) {
+				hd.CpuCacheMode = MTLCpuCacheMode.DefaultCache;
+				hd.StorageMode = MTLStorageMode.Private;
+				using (var txt = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 40, 40, false)) {
+					var sa = device.GetHeapTextureSizeAndAlign (txt);
+					hd.Size = sa.Size;
+					using (var heap = device.CreateHeap (hd)) {
+						Assert.IsNotNull (heap, $"NonNullHeap");
+					}
+				}
+			}
+
+			using (var queue = device.CreateCommandQueue ()) {
+				Assert.IsNotNull (queue, "Queue: NonNull 1");
+			}
+
+			using (var queue = device.CreateCommandQueue (10)) {
+				Assert.IsNotNull (queue, "Queue: NonNull 2");
+			}
 		}
 	}
 }

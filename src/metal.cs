@@ -792,7 +792,7 @@ namespace Metal {
 #endif
 		[Export ("newHeapWithDescriptor:")]
 		[return: NullAllowed]
-		[return: Release]
+		//[return: Release]
 		IMTLHeap CreateHeap (MTLHeapDescriptor descriptor);
 
 		[Abstract, Export ("newCommandQueue")]

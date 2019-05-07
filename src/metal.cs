@@ -792,42 +792,42 @@ namespace Metal {
 #endif
 		[Export ("newHeapWithDescriptor:")]
 		[return: NullAllowed]
-		//[return: Release]
+		[return: Release] //TESTED
 		IMTLHeap CreateHeap (MTLHeapDescriptor descriptor);
 
 		[Abstract, Export ("newCommandQueue")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release] //TESTED
 		IMTLCommandQueue CreateCommandQueue ();
 
 		[Abstract, Export ("newCommandQueueWithMaxCommandBufferCount:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release] //TESTED
 		IMTLCommandQueue CreateCommandQueue (nuint maxCommandBufferCount);
 
 		[Abstract, Export ("newBufferWithLength:options:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release] //TESTED
 		IMTLBuffer CreateBuffer (nuint length, MTLResourceOptions options);
 
 		[Abstract, Export ("newBufferWithBytes:length:options:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release] //TESTED
 		IMTLBuffer CreateBuffer (IntPtr pointer, nuint length, MTLResourceOptions options);
 
 		[Abstract, Export ("newBufferWithBytesNoCopy:length:options:deallocator:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release]//TESTED
 		IMTLBuffer CreateBufferNoCopy (IntPtr pointer, nuint length, MTLResourceOptions options, MTLDeallocator deallocator);
 
 		[Abstract, Export ("newDepthStencilStateWithDescriptor:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release]//TESTED
 		IMTLDepthStencilState CreateDepthStencilState (MTLDepthStencilDescriptor descriptor);
 
 		[Abstract, Export ("newTextureWithDescriptor:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release]//TESTED
 		IMTLTexture CreateTexture (MTLTextureDescriptor descriptor);
 
 #if XAMCORE_4_0
@@ -835,7 +835,7 @@ namespace Metal {
 #endif
 		[iOS (11,0), TV (11,0), NoWatch, Mac (10,11)]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release]//TESTED
 		[Export ("newTextureWithDescriptor:iosurface:plane:")]
 		IMTLTexture CreateTexture (MTLTextureDescriptor descriptor, IOSurface.IOSurface iosurface, nuint plane);
 
@@ -859,11 +859,11 @@ namespace Metal {
 
 		[Abstract, Export ("newSamplerStateWithDescriptor:")]
 		[return: NullAllowed]
-		[return: Release]
+		[return: Release] //TESTED
 		IMTLSamplerState CreateSamplerState (MTLSamplerDescriptor descriptor);
 
 		[Abstract, Export ("newDefaultLibrary")]
-		[return: Release]
+		[return: Release] //TESTED
 		IMTLLibrary CreateDefaultLibrary ();
 
 		[Abstract, Export ("newLibraryWithFile:error:")]

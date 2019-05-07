@@ -1,6 +1,8 @@
 #if MONOMAC || __IOS__
 
 using System;
+using System.Runtime.InteropServices;
+
 using Foundation;
 
 #if XAMCORE_2_0
@@ -71,6 +73,74 @@ namespace MonoTouchFixtures.Metal {
 			using (var queue = device.CreateCommandQueue (10)) {
 				Assert.IsNotNull (queue, "Queue: NonNull 2");
 			}
+
+			using (var buffer = device.CreateBuffer (1024, MTLResourceOptions.CpuCacheModeDefault)) {
+				Assert.IsNotNull (buffer, "CreateBuffer: NonNull 1");
+			}
+
+			var buffer_mem = Marshal.AllocHGlobal (1024);
+			using (var buffer = device.CreateBuffer (buffer_mem, 1024, MTLResourceOptions.CpuCacheModeDefault)) {
+				Assert.IsNotNull (buffer, "CreateBuffer: NonNull 2");
+			}
+			Marshal.FreeHGlobal (buffer_mem);
+
+			var buffer_bytes = new byte [1024];
+			using (var buffer = device.CreateBuffer (buffer_bytes, MTLResourceOptions.CpuCacheModeDefault)) {
+				Assert.IsNotNull (buffer, "CreateBuffer: NonNull 3");
+			}
+
+			buffer_mem = Marshal.AllocHGlobal (1024);
+			bool freed = false;
+			using (var buffer = device.CreateBufferNoCopy (buffer_mem, 1024, MTLResourceOptions.CpuCacheModeDefault, (pointer, length) => { Marshal.FreeHGlobal (pointer); freed = true; })) {
+				Assert.IsNotNull (buffer, "CreateBufferNoCopy: NonNull 1");
+			}
+			Assert.IsTrue (freed, "CreateBufferNoCopy: Freed 1");
+
+			freed = false;
+			using (var buffer = device.CreateBufferNoCopy (buffer_bytes, MTLResourceOptions.CpuCacheModeDefault, (pointer, length) => { freed = true; })) {
+				Assert.IsNotNull (buffer, "CreateBufferNoCopy: NonNull 2");
+			}
+			Assert.IsTrue (freed, "CreateBufferNoCopy: Freed 2");
+
+			using (var buffer = device.CreateBufferNoCopy (buffer_bytes, MTLResourceOptions.CpuCacheModeDefault)) {
+				Assert.IsNotNull (buffer, "CreateBufferNoCopy: NonNull 3");
+			}
+
+			using (var descriptor = new MTLDepthStencilDescriptor ()) {
+				using (var dss = device.CreateDepthStencilState (descriptor)) {
+					Assert.IsNotNull (dss, "CreateDepthStencilState: NonNull 1");
+				}
+			}
+
+			using (var descriptor = new MTLTextureDescriptor ()) {
+				using (var texture = device.CreateTexture (descriptor)) {
+					Assert.NotNull (texture, "CreateTexture: NonNull 1");
+				}
+
+				using (var surface = new IOSurface.IOSurface ()) {
+					using (var texture = device.CreateTexture (descriptor, surface, 0)) {
+						Assert.NotNull (texture, "CreateTexture: NonNull 2");
+					}
+				}
+
+#if __MACOS__
+				using (var texture = device.CreateSharedTexture (descriptor)) {
+					Assert.IsNotNull (texture, "CreateSharedTexture: NonNull 1");
+				}
+#endif
+			}
+
+			using (var descriptor = new MTLSamplerDescriptor ()) {
+				using (var sampler = device.CreateSamplerState (descriptor)) {
+					Assert.IsNotNull (sampler, "CreateSamplerState: NonNull 1");
+				}
+			}
+
+			using (var library = device.CreateDefaultLibrary ()) {
+				Assert.IsNotNull (library, "CreateDefaultLibrary: NonNull 1");
+			}
+
+
 		}
 	}
 }

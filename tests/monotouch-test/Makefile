@@ -28,3 +28,9 @@ check-files:
 		exit 1; \
 	fi
 	@rm -f csproj-files cs-files
+
+sample.air: sample.metal
+	xcrun -sdk iphoneos metal -c $< -o $@
+
+sample.metallib: sample.air
+	xcrun -sdk iphoneos metallib $< -o $@

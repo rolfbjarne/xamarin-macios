@@ -171,7 +171,7 @@ $(IOS_BUILD_DIR)/reference/System.Drawing.dll: $(IOS_SYSTEM_DRAWING_SOURCES) mon
 		$(IOS_SYSTEM_DRAWING_SOURCES)
 
 $(IOS_BUILD_DIR)/reference/Xamarin.iOS.dll: $(IOS_BUILD_DIR)/native-64/Xamarin.iOS.dll | $(IOS_BUILD_DIR)/reference
-	$(Q_STRIP) mono-cil-strip -q $< $@
+	$(Q_STRIP) mono-cil-strip $< $@
 
 $(IOS_BUILD_DIR)/reference/Xamarin.iOS.pdb: $(IOS_BUILD_DIR)/native-64/Xamarin.iOS.pdb | $(IOS_BUILD_DIR)/reference
 	$(Q) $(CP) $< $@
@@ -659,7 +659,7 @@ $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS%dll $(WATCH_BUILD_DIR)/watch-32/Xama
 		$(WATCHOS_SOURCES) @$(WATCH_BUILD_DIR)/watch/generated_sources
 
 $(WATCH_BUILD_DIR)/reference/Xamarin.WatchOS.dll: $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.dll | $(WATCH_BUILD_DIR)/reference
-	$(Q_STRIP) mono-cil-strip -q $< $@
+	$(Q_STRIP) mono-cil-strip $< $@
 
 $(WATCH_BUILD_DIR)/reference/Xamarin.WatchOS.pdb: $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS.pdb | $(WATCH_BUILD_DIR)/reference
 	$(Q) $(CP) $< $@
@@ -828,7 +828,7 @@ $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%dll $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVO
 		$(TVOS_SOURCES) @$(TVOS_BUILD_DIR)/tvos/generated_sources
 
 $(TVOS_BUILD_DIR)/reference/Xamarin.TVOS.dll: $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.dll | $(TVOS_BUILD_DIR)/reference
-	$(Q_STRIP) mono-cil-strip -q $< $@
+	$(Q_STRIP) mono-cil-strip $< $@
 
 $(TVOS_BUILD_DIR)/reference/Xamarin.TVOS.pdb: $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.pdb | $(TVOS_BUILD_DIR)/reference
 	$(Q) $(CP) $< $@

@@ -870,9 +870,21 @@ namespace Metal {
 		[return: Release]
 		IMTLLibrary CreateLibrary (string filepath, out NSError error);
 
+#if !XAMCORE_4_0
 		[Abstract, Export ("newLibraryWithData:error:")]
 		[return: Release]
+		[Obsolete ("Use the overload that take a 'DispatchData' instead.")]
 		IMTLLibrary CreateLibrary (NSObject data, out NSError error);
+#endif
+
+#if XAMCORE_4_0
+		[Abstract]
+#else
+		[Sealed]
+#endif
+		[Export ("newLibraryWithData:error:")]
+		[return: Release]
+		IMTLLibrary CreateLibrary (DispatchData data, out NSError error);
 
 		[Abstract, Export ("newLibraryWithSource:options:error:")]
 		[return: Release]

@@ -61,7 +61,7 @@ namespace ___MonoTouchFixtures.Metal {
 		}
 
 		[Test]
-		public void MemTest1 ([Range (0, 20)] int test)
+		public void MemTest1 ([Range (0, 40)] int test)
 		{
 			var device = MTLDevice.SystemDefault;
 			IntPtr buffer_mem;
@@ -310,19 +310,19 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 26:
-				using (var library = device.CreateEvent ()) {
-					Assert.IsNotNull (library, "CreateEvent: NonNull");
+				using (var evt = device.CreateEvent ()) {
+					Assert.IsNotNull (evt, "CreateEvent: NonNull");
 				}
 				break;
 			case 26:
-				using (var library = device.CreateSharedEvent ()) {
-					Assert.IsNotNull (library, "CreateSharedEvent: NonNull");
+				using (var evt = device.CreateSharedEvent ()) {
+					Assert.IsNotNull (evt, "CreateSharedEvent: NonNull");
 				}
 				break;
 			case 26:
-				using (var evt = new MTLSharedEventHandle ()) {
-					using (var library = device.CreateSharedEvent (evt)) {
-						Assert.IsNotNull (library, "CreateSharedEvent (MTLSharedEventHandle): NonNull");
+				using (var evt_handle = new MTLSharedEventHandle ()) {
+					using (var evt = device.CreateSharedEvent (evt_handle)) {
+						Assert.IsNotNull (evt, "CreateSharedEvent (MTLSharedEventHandle): NonNull");
 					}
 				}
 				break;
@@ -402,6 +402,33 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 								Assert.IsNotNull (texture, "MTLHeap.CreateTexture (MTLTextureDescriptor): nonnull");
 							}
 						}
+					}
+				}
+				break;
+			case 33:
+				using (var scope = MTLCaptureManager.Shared.CreateNewCaptureScope (device)) {
+					Assert.IsNotNull (scope, "MTLCaptureManager.CreateNewCaptureScope (MTLDevice): nonnull");
+				}
+				break;
+			case 34:
+				using (var queue = device.CreateCommandQueue ()) {
+					using (var scope = MTLCaptureManager.Shared.CreateNewCaptureScope (queue)) {
+						Assert.IsNotNull (scope, "MTLCaptureManager.CreateNewCaptureScope (MTLCommandQueue): nonnull");
+					}
+				}
+				break;
+			case 35:
+				using (var encoder = device.CreateArgumentEncoder ()) {
+					using (var nested = encoder.CreateArgumentEncoder (0)) {
+						Assert.IsNotNull (scope, "MTLArgumentEncoder.CreateArgumentEncoder (nuint): nonnull");
+
+					}
+				}
+				break;
+			case 36:
+				using (var evt = device.CreateSharedEvent ()) {
+					using (var shared = evt.CreateSharedEventHandle ()) {
+						Assert.IsNotNull (library, "MTLSharedEvent.CreateSharedEvent: NonNull");
 					}
 				}
 				break;

@@ -879,13 +879,10 @@ namespace Metal {
 
 #if XAMCORE_4_0
 		[Abstract]
-#else
-		[Sealed]
-		[Static]
-#endif
 		[Export ("newLibraryWithData:error:")]
-		[return: Release] // TESTED
+		[return: Release] // XAMCORE_4_0: NOT TESTED
 		IMTLLibrary CreateLibrary (DispatchData data, out NSError error);
+#endif
 
 		[Abstract, Export ("newLibraryWithSource:options:error:")]
 		[return: Release] // TESTED
@@ -895,25 +892,16 @@ namespace Metal {
 		[Async]
 		void CreateLibrary (string source, MTLCompileOptions options, Action<IMTLLibrary, NSError> completionHandler);
 		
-#if !XAMCORE_4_0
 		[iOS (10,0), TV (10,0), NoWatch, Mac (10,12)]
-		[Export ("newDefaultLibraryWithBundle:error:")]
-		[return: Release] // OBSOLETE: NOT TESTED
-		[return: NullAllowed]
-		[Obsolete ("Use 'CreateDefaultLibrary' instead.")]
-		IMTLLibrary CreateLibrary (NSBundle bundle, out NSError error);
-#endif
-
-		[iOS (10,0), TV (10,0), NoWatch, Mac (10,12)]
-#if XAMCORE_4_0
-		[Abstract]
-#else
-		[Sealed][Static]
-#endif
 		[Export ("newDefaultLibraryWithBundle:error:")]
 		[return: Release] // TESTED
 		[return: NullAllowed]
+#if XAMCORE_4_0
 		IMTLLibrary CreateDefaultLibrary (NSBundle bundle, out NSError error);
+#else
+		[Obsolete ("Use 'CreateDefaultLibrary' instead.")]
+		IMTLLibrary CreateLibrary (NSBundle bundle, out NSError error);
+#endif
 
 		[Abstract, Export ("newRenderPipelineStateWithDescriptor:error:")]
 		[return: Release] // TESTED
@@ -1795,7 +1783,6 @@ namespace Metal {
 
 	[iOS (10,0), TV (10,0), NoWatch, Mac (10,12, onlyOn64 : true)]
 	[BaseType (typeof(NSObject))]
-	[DisableDefaultCtor]
 	interface MTLFunctionConstantValues : NSCopying
 	{
 		[Export ("setConstantValue:type:atIndex:")]

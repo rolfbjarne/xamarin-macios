@@ -47,8 +47,7 @@ namespace ___MonoTouchFixtures.Metal {
 		[Test]
 		public void SystemDefault ()
 		{
-			for (int i = 0; i < 2000000; i++)
-				Assert.DoesNotThrow (() => { var obj = MTLDevice.SystemDefault; }, "No exception");
+			Assert.DoesNotThrow (() => { var obj = MTLDevice.SystemDefault; }, "No exception");
 		}
 
 		[DllImport (ObjCRuntime.Constants.libcLibrary)]
@@ -69,23 +68,7 @@ namespace ___MonoTouchFixtures.Metal {
 			bool freed;
 			byte [] buffer_bytes;
 
-			const string metal_code = @"#include <metal_stdlib>
-#include <simd/simd.h>
-
-using namespace metal;
-
-typedef struct
-{
-    float4 anArray [[position]];
-    float4 aValue;
-
-} SomeData;
-
-fragment float4 fragmentShader(SomeData in [[stage_in]])
-{
-    return in.aValue;
-}
-";
+			string metal_code = File.ReadAllText (Path.Combine (NSBundle.MainBundle.BundlePath, "Resources", "metal-sample.metal"));
 			switch (test) {
 			case 0:
 				using (var hd = new MTLHeapDescriptor ()) {
@@ -233,7 +216,7 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 18:
-				break; //FIXME CRASHES
+				//break; //FIXME CRASHES
 				using (var library = device.CreateDefaultLibrary (NSBundle.MainBundle, out var error)) {
 					Assert.IsNotNull (library, "CreateDefaultLibrary: NonNull 2");
 					Assert.IsNull (error, "CreateDefaultLibrary: NonNull error 2");
@@ -316,8 +299,8 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 26:
-				break; //FIXME CRASHES
-				using (var library = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { new MTLArgumentDescriptor () })) {
+				//break; //FIXME CRASHES
+				using (var library = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { new MTLArgumentDescriptor () { DataType = MTLDataType.Int } })) {
 					Assert.IsNotNull (library, "CreateArgumentEncoder (MTLArgumentDescriptor[]): NonNull");
 				}
 				break;
@@ -350,10 +333,11 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 31:
-				using (var descriptor = new MTLTileRenderPipelineDescriptor ()) {
+				using (var descriptor = new MTLRenderPipelineDescriptor ()) {
 					using (var library = device.CreateDefaultLibrary ()) {
 						using (var func = library.CreateFunction ("vertexShader")) {
-							descriptor.TileFunction = func;
+							descriptor.VertexFunction = func;
+							descriptor.ColorAttachments [0].PixelFormat = MTLPixelFormat.BGRA8Unorm_sRGB;
 							using (var rps = device.CreateRenderPipelineState (descriptor, MTLPipelineOption.ArgumentInfo, out var reflection, out var error)) {
 								Assert.IsNotNull (rps, "CreateRenderPipelineState (MTLTileRenderPipelineDescriptor, MTLPipelineOption, MTLRenderPipelineReflection, NSError): NonNull");
 								Assert.IsNull (error, "CreateRenderPipelineState (MTLTileRenderPipelineDescriptor, MTLPipelineOption, MTLRenderPipelineReflection, NSError: NonNull error");
@@ -373,13 +357,13 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 33:
-				break; //FIXME CRASHES
+				//break; //FIXME CRASHES
 				using (var descriptor = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 64, 64, false)) {
 					using (var texture = device.CreateTexture (descriptor)) {
 						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm)) {
 							Assert.IsNotNull (view, "MTLTexture.CreateTextureView (MTLPixelFormat): nonnull");
 						}
-						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm, MTLTextureType.kTextureBuffer, new NSRange (0, 1), new NSRange (0, 1))) {
+						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm, MTLTextureType.k2D, new NSRange (0, 1), new NSRange (0, 1))) {
 							Assert.IsNotNull (view, "MTLTexture.CreateTextureView (MTLPixelFormat, MTLTextureType, NSRange, NSRange): nonnull");
 						}
 #if __MACOS__
@@ -417,7 +401,6 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 36:
-				break; //FIXME CRASHES
 				using (var hd = new MTLHeapDescriptor ()) {
 					hd.CpuCacheMode = MTLCpuCacheMode.DefaultCache;
 					hd.StorageMode = MTLStorageMode.Private;
@@ -425,9 +408,22 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 						var sa = device.GetHeapTextureSizeAndAlign (txt);
 						hd.Size = sa.Size;
 						using (var heap = device.CreateHeap (hd)) {
-							using (var buffer = heap.CreateBuffer (0, MTLResourceOptions.CpuCacheModeDefault)) {
+							using (var buffer = heap.CreateBuffer (1024, MTLResourceOptions.StorageModePrivate)) {
 								Assert.IsNotNull (buffer, "MTLHeap.CreateBuffer (nuint, MTLResourceOptions): nonnull");
 							}
+						}
+					}
+				}
+				break;
+			case 41:
+				//break; //FIXME CRASHES
+				using (var hd = new MTLHeapDescriptor ()) {
+					hd.CpuCacheMode = MTLCpuCacheMode.DefaultCache;
+					hd.StorageMode = MTLStorageMode.Shared;
+					using (var txt = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 40, 40, false)) {
+						var sa = device.GetHeapTextureSizeAndAlign (txt);
+						hd.Size = sa.Size;
+						using (var heap = device.CreateHeap (hd)) {
 							using (var texture = heap.CreateTexture (txt)) {
 								Assert.IsNotNull (texture, "MTLHeap.CreateTexture (MTLTextureDescriptor): nonnull");
 							}
@@ -448,11 +444,10 @@ fragment float4 fragmentShader(SomeData in [[stage_in]])
 				}
 				break;
 			case 39:
-				break; //FIXME CRASHES
-				using (var encoder = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { new MTLArgumentDescriptor () })) {
+				break; // FIXME: crashes
+				using (var encoder = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { new MTLArgumentDescriptor () { DataType = MTLDataType.Int } })) {
 					using (var nested = encoder.CreateArgumentEncoder (0)) {
 						Assert.IsNotNull (nested, "MTLArgumentEncoder.CreateArgumentEncoder (nuint): nonnull");
-
 					}
 				}
 				break;

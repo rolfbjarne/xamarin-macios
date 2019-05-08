@@ -30,7 +30,7 @@ check-files:
 	@rm -f csproj-files cs-files
 
 verify.air: $(wildcard Resources/*.metal)
-	xcrun -sdk iphoneos metal -c  -o $@ -mios-version-min=11.0 $<
+	xcrun -sdk iphoneos metal -c  -o $@ -mios-version-min=6.0 $<
 	#xcrun -sdk iphoneos metal -c $< -o $@
 
 verify.metallib: verify.air

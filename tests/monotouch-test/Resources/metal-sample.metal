@@ -74,27 +74,15 @@ struct SomeData2
     float2 texcoord;
 };
 
-struct ShaderInputs {
+struct SomeInputs {
     texture2d<float> snapshotTexture;
     texture2d<float> cameraTexture;
     sampler textureSampler;
     float time;
 };
 
-/*
-vertex ColorInOut vertexShader(const device float4* positions [[ buffer(0) ]],
-                               const device float2* texcoords [[ buffer(1) ]],
-                               const uint           vid       [[ vertex_id ]])
-{
-    ColorInOut out;
-    out.position = positions[vid];
-    out.texcoord = texcoords[vid];
-    return out;
-}
-*/
-
 fragment float4
-fragmentShader2(SomeData2 in [[ stage_in ]], constant ShaderInputs &inputs [[ buffer(0) ]])
+fragmentShader2(SomeData2 in [[ stage_in ]], constant SomeInputs &inputs [[ buffer(0) ]])
 {
     float4 color = { 0 };
     return color;

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using Foundation;
 
 #if XAMCORE_2_0
@@ -68,6 +69,23 @@ namespace ___MonoTouchFixtures.Metal {
 			bool freed;
 			byte [] buffer_bytes;
 
+			const string metal_code = @"#include <metal_stdlib>
+#include <simd/simd.h>
+
+using namespace metal;
+
+typedef struct
+{
+    float4 anArray [[position]];
+    float4 aValue;
+
+} SomeData;
+
+fragment float4 fragmentShader(SomeData in [[stage_in]])
+{
+    return in.aValue;
+}
+";
 			switch (test) {
 			case 0:
 				using (var hd = new MTLHeapDescriptor ()) {
@@ -87,6 +105,21 @@ namespace ___MonoTouchFixtures.Metal {
 					Assert.IsNotNull (queue, "Queue: NonNull 1");
 				}
 				break;
+
+#if __MACOS__
+			case 2:
+				using (var descriptor = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 64, 64, false)) {
+					using (var texture = device.CreateSharedTexture (descriptor)) {
+						Assert.IsNotNull (texture, "CreateSharedTexture (MTLTextureDescriptor): NonNull");
+					}
+				}
+				using (var descriptor = new MTLSharedTextureHandle ()) {
+					using (var texture = device.CreateSharedTexture (descriptor)) {
+						Assert.IsNotNull (texture, "CreateSharedTexture (MTLSharedTextureHandle): NonNull");
+					}
+				}
+				break;
+#endif
 			case 3:
 				using (var queue = device.CreateCommandQueue (10)) {
 					Assert.IsNotNull (queue, "Queue: NonNull 2");
@@ -155,12 +188,6 @@ namespace ___MonoTouchFixtures.Metal {
 							Assert.NotNull (texture, "CreateTexture: NonNull 2");
 						}
 					}
-
-#if __MACOS__
-				using (var texture = device.CreateSharedTexture (descriptor)) {
-					Assert.IsNotNull (texture, "CreateSharedTexture: NonNull 1");
-				}
-#endif
 				}
 				break;
 			case 12:
@@ -179,6 +206,203 @@ namespace ___MonoTouchFixtures.Metal {
 				using (var library = device.CreateLibrary (Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib"), out var error)) {
 					Assert.IsNotNull (library, "CreateLibrary: NonNull 1");
 					Assert.IsNull (error, "CreateLibrary: NonNull error 1");
+				}
+				break;
+			case 15:
+				using (var data = DispatchData.FromByteBuffer (File.ReadAllBytes (Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib")))) {
+					using (var library = device.CreateLibrary (data, out var error)) {
+						Assert.IsNotNull (library, "CreateLibrary: NonNull 2");
+						Assert.IsNull (error, "CreateLibrary: NonNull error 2");
+					}
+				}
+				break;
+			case 16:
+				using (var compile_options = new MTLCompileOptions ()) {
+					using (var library = device.CreateLibrary (metal_code, compile_options, out var error)) {
+						Assert.IsNotNull (library, "CreateLibrary: NonNull 3");
+						Assert.IsNull (error, "CreateLibrary: NonNull error 3");
+					}
+				}
+				break;
+			case 17:
+				using (var compile_options = new MTLCompileOptions ()) {
+					device.CreateLibrary (metal_code, compile_options, (library, error) => {
+						Assert.IsNotNull (library, "CreateLibrary: NonNull 4");
+						Assert.IsNull (error, "CreateLibrary: NonNull error 4");
+					});
+				}
+				break;
+			case 18:
+				using (var library = device.CreateDefaultLibrary (NSBundle.MainBundle, out var error)) {
+					Assert.IsNotNull (library, "CreateDefaultLibrary: NonNull 2");
+					Assert.IsNull (error, "CreateDefaultLibrary: NonNull error 2");
+				}
+				break;
+			case 19:
+				using (var descriptor = new MTLRenderPipelineDescriptor ()) {
+					using (var rps = device.CreateRenderPipelineState (descriptor, out var error)) {
+						Assert.IsNotNull (rps, "CreateRenderPipelineState: NonNull 1");
+						Assert.IsNull (error, "CreateRenderPipelineState: NonNull error 1");
+					}
+				}
+				break;
+			case 20:
+				using (var descriptor = new MTLRenderPipelineDescriptor ()) {
+					using (var rps = device.CreateRenderPipelineState (descriptor, MTLPipelineOption.None, out var reflection, out var error)) {
+						Assert.IsNotNull (rps, "CreateRenderPipelineState: NonNull 2");
+						Assert.IsNull (error, "CreateRenderPipelineState: NonNull error 2");
+						Assert.IsNotNull (reflection, "CreateRenderPipelineState: NonNull reflection 2");
+					}
+				}
+				break;
+			case 21:
+				using (var library = device.CreateDefaultLibrary ()) {
+					using (var func = library.CreateFunction ("CreateComputePipelineState1")) {
+						using (var rps = device.CreateComputePipelineState (func, MTLPipelineOption.None, out var reflection, out var error)) {
+							Assert.IsNotNull (rps, "CreateComputePipelineState: NonNull 1");
+							Assert.IsNull (error, "CreateComputePipelineState: NonNull error 1");
+							Assert.IsNotNull (reflection, "CreateComputePipelineState: NonNull reflection 1");
+						}
+					}
+				}
+				break;
+			case 21:
+				using (var library = device.CreateDefaultLibrary ()) {
+					using (var func = library.CreateFunction ("CreateComputePipelineState2")) {
+						using (var rps = device.CreateComputePipelineState (func, out var error)) {
+							Assert.IsNotNull (rps, "CreateComputePipelineState: NonNull 2");
+							Assert.IsNull (error, "CreateComputePipelineState: NonNull error 2");
+							Assert.IsNotNull (reflection, "CreateComputePipelineState: NonNull reflection 2");
+						}
+					}
+				}
+				break;
+			case 21:
+				using (var func = new MTLComputePipelineDescriptor ()) {
+					using (var rps = device.CreateComputePipelineState (func, out var error)) {
+						Assert.IsNotNull (rps, "CreateComputePipelineState: NonNull 3");
+						Assert.IsNull (error, "CreateComputePipelineState: NonNull error 3");
+						Assert.IsNotNull (reflection, "CreateComputePipelineState: NonNull reflection 3");
+					}
+				}
+				break;
+			case 22:
+				using (var fence = device.CreateFence ()) {
+					Assert.IsNotNull (fence, "CreateFence 1: NonNull");
+				}
+				break;
+			case 23:
+				using (var library = device.CreateLibrary (new NSUrl ("file://" + Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib")), out var error)) {
+					Assert.IsNotNull (library, "CreateLibrary (NSUrl, NSError): NonNull");
+					Assert.IsNull (error, "CreateLibrary (NSUrl, NSError): NonNull error");
+				}
+				break;
+			case 24:
+				using (var library = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { })) {
+					Assert.IsNotNull (library, "CreateArgumentEncoder (MTLArgumentDescriptor[]): NonNull");
+				}
+				break;
+			case 25:
+				using (var descriptor = new MTLIndirectCommandBufferDescriptor ()) {
+					using (var library = device.CreateIndirectCommandBuffer (descriptor, 1, MTLResourceOptions.CpuCacheModeDefault)) {
+						Assert.IsNotNull (library, "CreateIndirectCommandBuffer: NonNull");
+					}
+				}
+				break;
+			case 26:
+				using (var library = device.CreateEvent ()) {
+					Assert.IsNotNull (library, "CreateEvent: NonNull");
+				}
+				break;
+			case 26:
+				using (var library = device.CreateSharedEvent ()) {
+					Assert.IsNotNull (library, "CreateSharedEvent: NonNull");
+				}
+				break;
+			case 26:
+				using (var evt = new MTLSharedEventHandle ()) {
+					using (var library = device.CreateSharedEvent (evt)) {
+						Assert.IsNotNull (library, "CreateSharedEvent (MTLSharedEventHandle): NonNull");
+					}
+				}
+				break;
+			case 27:
+				using (var descriptor = new MTLTileRenderPipelineDescriptor ()) {
+					using (var rps = device.CreateRenderPipelineState (descriptor, MTLPipelineOption.None, out var reflection, out var error)) {
+						Assert.IsNotNull (rps, "CreateRenderPipelineState (MTLTileRenderPipelineDescriptor, MTLPipelineOption, MTLRenderPipelineReflection, NSError): NonNull");
+						Assert.IsNull (error, "CreateRenderPipelineState (MTLTileRenderPipelineDescriptor, MTLPipelineOption, MTLRenderPipelineReflection, NSError: NonNull error");
+						Assert.IsNotNull (reflection, "CreateRenderPipelineState (MTLTileRenderPipelineDescriptor, MTLPipelineOption, MTLRenderPipelineReflection, NSError): NonNull reflection");
+					}
+				}
+				break;
+			case 28:
+				using (var buffer = device.CreateBuffer (1024, MTLResourceOptions.CpuCacheModeDefault)) {
+					using (var texture = new MTLTextureDescriptor ()) {
+						using (var texture = buffer.CreateTexture (descriptor, 0, 64)) {
+							Assert.IsNotNull (buffer, "MTLBuffer.CreateTexture (MTLTextureDescriptor, nuint, nuint): NonNull");
+						}
+					}
+				}
+				break;
+			case 29:
+				using (var descriptor = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 64, 64, false)) {
+					using (var texture = device.CreateTexture (descriptor)) {
+						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm)) {
+							Assert.IsNotNull (view, "MTLTexture.CreateTextureView (MTLPixelFormat): nonnull");
+						}
+						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm, MTLTextureType.kTextureBuffer, new NSRange (0, 1), new NSRange (0, 1))) {
+							Assert.IsNotNull (view, "MTLTexture.CreateTextureView (MTLPixelFormat, MTLTextureType, NSRange, NSRange): nonnull");
+						}
+#if __MACOS__
+						using (var sth = texture.CreateSharedTextureHandle ()) {
+							Assert.IsNotNull (view, "MTLTexture.CreateSharedTextureHandle (): nonnull");
+						}
+#endif
+					}
+				}
+				break;
+			case 30:
+				using (var library = device.CreateDefaultLibrary ()) {
+					using (var func = library.CreateFunction ("MTLFunction.CreateArgumentEncoder")) {
+						using (var enc = func.CreateArgumentEncoder (0)) {
+							Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint): NonNull");
+						}
+						using (var enc = func.CreateArgumentEncoder (0, out var reflection)) {
+							Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull");
+							Assert.IsNotNull (reflection, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull reflection");
+						}
+					}
+				}
+				break;
+			case 31:
+				using (var library = device.CreateDefaultLibrary ()) {
+					using (var func = library.CreateFunction ("MTLLibrary.CreateFunction1")) {
+						Assert.IsNotNull (func, "CreateFunction (string): nonnull");
+					}
+					using (var constants = new MTLFunctionConstantValues ()) {
+						using (var func = library.CreateFunction ("MTLLibrary.CreateFunction2", constants, out var error)) {
+							Assert.IsNotNull (func, "CreateFunction (string, MTLFunctionConstantValues, NSError): nonnull");
+							Assert.IsNotNull (error, "CreateFunction (string, MTLFunctionConstantValues, NSError): nonnull error");
+						}
+					}
+				}
+				break;
+			case 32:
+				using (var hd = new MTLHeapDescriptor ()) {
+					hd.CpuCacheMode = MTLCpuCacheMode.DefaultCache;
+					hd.StorageMode = MTLStorageMode.Private;
+					using (var txt = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 40, 40, false)) {
+						var sa = device.GetHeapTextureSizeAndAlign (txt);
+						hd.Size = sa.Size;
+						using (var heap = device.CreateHeap (hd)) {
+							using (var buffer = heap.CreateBuffer (0, MTLResourceOptions.CpuCacheModeDefault)) {
+								Assert.IsNotNull (buffer, "MTLHeap.CreateBuffer (nuint, MTLResourceOptions): nonnull");
+							}
+							using (var texture = heap.CreateTexture (txt)) {
+								Assert.IsNotNull (texture, "MTLHeap.CreateTexture (MTLTextureDescriptor): nonnull");
+							}
+						}
+					}
 				}
 				break;
 			default:

@@ -319,14 +319,12 @@
     <BundleResource Include="compressed_lz4" />
     <BundleResource Include="compressed_lzma" />
     <BundleResource Include="compressed_zip" />
-    <BundleResource Include="sample.metallib" />
   </ItemGroup>
   <ItemGroup>
     <Metal Include="Resources\metal-sample.metal" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\openssl_crt.der">
-        <LogicalName>monotouchtest.Security.openssl_crt.der</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

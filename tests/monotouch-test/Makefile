@@ -29,8 +29,11 @@ check-files:
 	fi
 	@rm -f csproj-files cs-files
 
-sample.air: sample.metal
-	xcrun -sdk iphoneos metal -c $< -o $@
+verify.air: $(wildcard Resources/*.metal)
+	xcrun -sdk iphoneos metal -c  -o $@ -mios-version-min=11.0 $<
+	#xcrun -sdk iphoneos metal -c $< -o $@
 
-sample.metallib: sample.air
+verify.metallib: verify.air
 	xcrun -sdk iphoneos metallib $< -o $@
+
+verify: verify.metallib

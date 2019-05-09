@@ -53,10 +53,19 @@ namespace ___MonoTouchFixtures.Metal {
 		[DllImport (ObjCRuntime.Constants.libcLibrary)]
 		static extern int getpagesize ();
 
+		[DllImport (ObjCRuntime.Constants.libcLibrary)]
+		static extern IntPtr mmap (IntPtr start, nint length, int prot, int flags, int fd, nint offset);
 		static IntPtr AllocHGlobalPageAligned (int pages, out int length)
 		{
 			length = pages * getpagesize ();
-			return Marshal.AllocHGlobal (length);
+			var rv = mmap (IntPtr.Zero, length, 0x1 /* PROT_READ */ | 0x2 /*   */, 0x0002 /* MAP_PRIVATE */ | 0x1000 /* MAP_ANONYMOUS */, 0, 0);
+			return rv;
+		}
+		[DllImport (ObjCRuntime.Constants.libcLibrary)]
+		static extern int munmap (IntPtr addr, nint size);
+		static void FreeHGlobalPageAligned (IntPtr ptr, int length)
+		{
+			munmap (ptr, length);
 		}
 
 		[Test]
@@ -68,7 +77,13 @@ namespace ___MonoTouchFixtures.Metal {
 			bool freed;
 			byte [] buffer_bytes;
 
-			string metal_code = File.ReadAllText (Path.Combine (NSBundle.MainBundle.BundlePath, "Resources", "metal-sample.metal"));
+#if __MACOS__
+			string metal_code = File.ReadAllText (Path.Combine (NSBundle.MainBundle.ResourcePath, "metal-sample.metal"));
+			string metallib_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "default.metallib");
+#else
+			string metal_code = File.ReadAllText (Path.Combine (NSBundle.MainBundle.BundlePath, "metal-sample.metal"));
+			string metallib_path = Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib");
+#endif
 			switch (test) {
 			case 0:
 				using (var hd = new MTLHeapDescriptor ()) {
@@ -92,13 +107,15 @@ namespace ___MonoTouchFixtures.Metal {
 #if __MACOS__
 			case 2:
 				using (var descriptor = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 64, 64, false)) {
+					descriptor.StorageMode = MTLStorageMode.Private;
 					using (var texture = device.CreateSharedTexture (descriptor)) {
 						Assert.IsNotNull (texture, "CreateSharedTexture (MTLTextureDescriptor): NonNull");
-					}
-				}
-				using (var descriptor = new MTLSharedTextureHandle ()) {
-					using (var texture = device.CreateSharedTexture (descriptor)) {
-						Assert.IsNotNull (texture, "CreateSharedTexture (MTLSharedTextureHandle): NonNull");
+
+						using (var handle = texture.CreateSharedTextureHandle ()) {
+							using (var shared = device.CreateSharedTexture (handle)) {
+								Assert.IsNotNull (texture, "CreateSharedTexture (MTLSharedTextureHandle): NonNull");
+							}
+						}
 					}
 				}
 				break;
@@ -118,7 +135,7 @@ namespace ___MonoTouchFixtures.Metal {
 				using (var buffer = device.CreateBuffer (buffer_mem, (nuint) buffer_length, MTLResourceOptions.CpuCacheModeDefault)) {
 					Assert.IsNotNull (buffer, "CreateBuffer: NonNull 2");
 				}
-				Marshal.FreeHGlobal (buffer_mem);
+				FreeHGlobalPageAligned (buffer_mem, buffer_length);
 				break;
 			case 6:
 				buffer_bytes = new byte [getpagesize ()];
@@ -130,25 +147,16 @@ namespace ___MonoTouchFixtures.Metal {
 			case 7:
 				buffer_mem = AllocHGlobalPageAligned (1, out buffer_length);
 				freed = false;
-				using (var buffer = device.CreateBufferNoCopy (buffer_mem, (nuint) buffer_length, MTLResourceOptions.CpuCacheModeDefault, (pointer, length) => { Marshal.FreeHGlobal (pointer); freed = true; })) {
+#if __MACOS__
+				var resourceOptions7 = MTLResourceOptions.StorageModeManaged;
+#else
+				var resourceOptions7 = MTLResourceOptions.CpuCacheModeDefault;
+#endif
+				using (var buffer = device.CreateBufferNoCopy (buffer_mem, (nuint) buffer_length, resourceOptions7, (pointer, length) => { FreeHGlobalPageAligned (pointer, (int) length); freed = true; })) {
 					Assert.IsNotNull (buffer, "CreateBufferNoCopy: NonNull 1");
 				}
 				Assert.IsTrue (freed, "CreateBufferNoCopy: Freed 1");
 				break;
-			//case 8:
-				//freed = false;
-				//buffer_bytes = new byte [getpagesize ()];
-				//using (var buffer = device.CreateBufferNoCopy (buffer_bytes, MTLResourceOptions.CpuCacheModeDefault, (pointer, length) => { freed = true; })) {
-				//	Assert.IsNotNull (buffer, "CreateBufferNoCopy: NonNull 2");
-				//}
-				//Assert.IsTrue (freed, "CreateBufferNoCopy: Freed 2");
-				//break;
-			//case 9:
-				//buffer_bytes = new byte [getpagesize ()];
-				//using (var buffer = device.CreateBufferNoCopy (buffer_bytes, MTLResourceOptions.CpuCacheModeDefault)) {
-				//	Assert.IsNotNull (buffer, "CreateBufferNoCopy: NonNull 3");
-				//}
-				//break;
 			case 10:
 				using (var descriptor = new MTLDepthStencilDescriptor ()) {
 					using (var dss = device.CreateDepthStencilState (descriptor)) {
@@ -186,13 +194,13 @@ namespace ___MonoTouchFixtures.Metal {
 				}
 				break;
 			case 14:
-				using (var library = device.CreateLibrary (Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib"), out var error)) {
+				using (var library = device.CreateLibrary (metallib_path, out var error)) {
 					Assert.IsNotNull (library, "CreateLibrary: NonNull 1");
 					Assert.IsNull (error, "CreateLibrary: NonNull error 1");
 				}
 				break;
 			case 15:
-				using (var data = DispatchData.FromByteBuffer (File.ReadAllBytes (Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib")))) {
+				using (var data = DispatchData.FromByteBuffer (File.ReadAllBytes (metallib_path))) {
 					using (var library = device.CreateLibrary (data, out var error)) {
 						Assert.IsNotNull (library, "CreateLibrary: NonNull 2");
 						Assert.IsNull (error, "CreateLibrary: NonNull error 2");
@@ -216,7 +224,6 @@ namespace ___MonoTouchFixtures.Metal {
 				}
 				break;
 			case 18:
-				//break; //FIXME CRASHES
 				using (var library = device.CreateDefaultLibrary (NSBundle.MainBundle, out var error)) {
 					Assert.IsNotNull (library, "CreateDefaultLibrary: NonNull 2");
 					Assert.IsNull (error, "CreateDefaultLibrary: NonNull error 2");
@@ -299,7 +306,6 @@ namespace ___MonoTouchFixtures.Metal {
 				}
 				break;
 			case 26:
-				//break; //FIXME CRASHES
 				using (var library = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { new MTLArgumentDescriptor () { DataType = MTLDataType.Int } })) {
 					Assert.IsNotNull (library, "CreateArgumentEncoder (MTLArgumentDescriptor[]): NonNull");
 				}
@@ -326,9 +332,11 @@ namespace ___MonoTouchFixtures.Metal {
 				break;
 			case 30:
 				TestRuntime.AssertXcodeVersion (10, 0);
-				using (var evt_handle = new MTLSharedEventHandle ()) {
-					using (var evt = device.CreateSharedEvent (evt_handle)) {
-						Assert.IsNotNull (evt, "CreateSharedEvent (MTLSharedEventHandle): NonNull");
+				using (var evt1 = device.CreateSharedEvent ()) {
+					using (var evt_handle = evt1.CreateSharedEventHandle ()) {
+						using (var evt = device.CreateSharedEvent (evt_handle)) {
+							Assert.IsNotNull (evt, "CreateSharedEvent (MTLSharedEventHandle): NonNull");
+						}
 					}
 				}
 				break;
@@ -357,7 +365,6 @@ namespace ___MonoTouchFixtures.Metal {
 				}
 				break;
 			case 33:
-				//break; //FIXME CRASHES
 				using (var descriptor = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 64, 64, false)) {
 					using (var texture = device.CreateTexture (descriptor)) {
 						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm)) {
@@ -366,26 +373,22 @@ namespace ___MonoTouchFixtures.Metal {
 						using (var view = texture.CreateTextureView (MTLPixelFormat.RGBA8Unorm, MTLTextureType.k2D, new NSRange (0, 1), new NSRange (0, 1))) {
 							Assert.IsNotNull (view, "MTLTexture.CreateTextureView (MTLPixelFormat, MTLTextureType, NSRange, NSRange): nonnull");
 						}
-#if __MACOS__
-						using (var sth = texture.CreateSharedTextureHandle ()) {
-							Assert.IsNotNull (view, "MTLTexture.CreateSharedTextureHandle (): nonnull");
-						}
-#endif
 					}
 				}
 				break;
 			case 34:
-				using (var library = device.CreateDefaultLibrary ()) {
-					using (var func = library.CreateFunction ("fragmentShader2")) {
-						using (var enc = func.CreateArgumentEncoder (0)) {
-							Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint): NonNull");
-						}
-						using (var enc = func.CreateArgumentEncoder (0, out var reflection)) {
-							Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull");
-							Assert.IsNotNull (reflection, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull reflection");
-						}
-					}
-				}
+				// fragmentShader2 will only compile if min deployment target is >= 10.0, so comment this out for now since monotouch-test uses min deployment target 6.0.
+				//using (var library = device.CreateDefaultLibrary ()) {
+				//	using (var func = library.CreateFunction ("fragmentShader2")) {
+				//		using (var enc = func.CreateArgumentEncoder (0)) {
+				//			Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint): NonNull");
+				//		}
+				//		using (var enc = func.CreateArgumentEncoder (0, out var reflection)) {
+				//			Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull");
+				//			Assert.IsNotNull (reflection, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull reflection");
+				//		}
+				//	}
+				//}
 				break;
 			case 35:
 				using (var library = device.CreateDefaultLibrary ()) {
@@ -416,14 +419,21 @@ namespace ___MonoTouchFixtures.Metal {
 				}
 				break;
 			case 41:
-				//break; //FIXME CRASHES
 				using (var hd = new MTLHeapDescriptor ()) {
 					hd.CpuCacheMode = MTLCpuCacheMode.DefaultCache;
+#if __MACOS__
+					hd.StorageMode = MTLStorageMode.Private;
+#else
 					hd.StorageMode = MTLStorageMode.Shared;
+#endif
 					using (var txt = MTLTextureDescriptor.CreateTexture2DDescriptor (MTLPixelFormat.RGBA8Unorm, 40, 40, false)) {
 						var sa = device.GetHeapTextureSizeAndAlign (txt);
 						hd.Size = sa.Size;
+
 						using (var heap = device.CreateHeap (hd)) {
+#if __MACOS__
+							txt.StorageMode = MTLStorageMode.Private;
+#endif
 							using (var texture = heap.CreateTexture (txt)) {
 								Assert.IsNotNull (texture, "MTLHeap.CreateTexture (MTLTextureDescriptor): nonnull");
 							}
@@ -440,14 +450,6 @@ namespace ___MonoTouchFixtures.Metal {
 				using (var queue = device.CreateCommandQueue ()) {
 					using (var scope = MTLCaptureManager.Shared.CreateNewCaptureScope (queue)) {
 						Assert.IsNotNull (scope, "MTLCaptureManager.CreateNewCaptureScope (MTLCommandQueue): nonnull");
-					}
-				}
-				break;
-			case 39:
-				break; // FIXME: crashes
-				using (var encoder = device.CreateArgumentEncoder (new MTLArgumentDescriptor [] { new MTLArgumentDescriptor () { DataType = MTLDataType.Int } })) {
-					using (var nested = encoder.CreateArgumentEncoder (0)) {
-						Assert.IsNotNull (nested, "MTLArgumentEncoder.CreateArgumentEncoder (nuint): nonnull");
 					}
 				}
 				break;

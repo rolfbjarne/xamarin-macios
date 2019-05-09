@@ -3200,7 +3200,7 @@ namespace Metal {
 #endif
 		[Export ("newArgumentEncoderForBufferAtIndex:")]
 		[return: NullAllowed]
-		[return: Release] // TESTED
+		[return: Release] // NOT TESTED, CAN'T FIGURE OUT HOW TO CREATE NESTED STUFF
 		IMTLArgumentEncoder CreateArgumentEncoder (nuint index);
 	}
 

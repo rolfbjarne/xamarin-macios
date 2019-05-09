@@ -147,6 +147,9 @@
     <Content Include="..\monotouch-test\Resources\metal-sample.metal">
       <Link>Resources\metal-sample.metal</Link>
     </Content>
+    <Content Include="..\monotouch-test\Resources\fragmentShader.metal">
+      <Link>Resources\fragmentShader.metal</Link>
+    </Content>
     <Content Include="..\monotouch-test\uncompressed.txt">
       <Link>uncompressed.txt</Link>
     </Content>
@@ -219,7 +222,12 @@
     <GeneratedTestOutput Include="..\..\tests\test-libraries\TrampolineTest.generated.cs" />
     <GeneratedTestOutput Include="..\..\tests\test-libraries\RegistrarTest.generated.cs" />
   </ItemGroup>
-  <Target Name="BeforeBuild" Inputs="@(GeneratedTestInput)" Outputs="@(GeneratedTestOutput)">
+  <Target Name="CustomMetalSmelting" Inputs="..\monotouch-test\Resources\fragmentShader.metal" Outputs="$(_AppBundlePath)\Contents\Resources\fragmentShader.metallib" DependsOnTargets="_GenerateBundleName">
+    <MakeDir Directories="$(IntermediateOutputPath)\Contents\Resources;$(AppBundleDir)\Contents\Resources" />
+    <Exec Command="xcrun -sdk macosx metal -c ..\monotouch-test\Resources\fragmentShader.metal -o $(IntermediateOutputPath)\Contents\Resources\fragmentShader.air -mmacos-version-min=10.13" />
+    <Exec Command="xcrun -sdk macosx metallib $(IntermediateOutputPath)\Contents\Resources\fragmentShader.air -o $(AppBundleDir)\Contents\Resources\fragmentShader.metallib" />
+  </Target>
+  <Target Name="BeforeBuild" Inputs="@(GeneratedTestInput)" Outputs="@(GeneratedTestOutput)" DependsOnTargets="CustomMetalSmelting">
     <Exec Command="make -j8 -C $(TestLibrariesDirectory)" />
   </Target>
 </Project>

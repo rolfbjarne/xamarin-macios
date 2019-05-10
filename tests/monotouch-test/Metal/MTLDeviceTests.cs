@@ -70,7 +70,7 @@ namespace MonoTouchFixtures.Metal {
 		}
 
 		[Test]
-		public void MemTest1 ([Range (0, 50)] int test)
+		public void MemTest1 (int test)
 		{
 			var device = MTLDevice.SystemDefault;
 			IntPtr buffer_mem;
@@ -81,9 +81,11 @@ namespace MonoTouchFixtures.Metal {
 #if __MACOS__
 			string metal_code = File.ReadAllText (Path.Combine (NSBundle.MainBundle.ResourcePath, "metal-sample.metal"));
 			string metallib_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "default.metallib");
+			string fragmentshader_path = Path.Combine (NSBundle.MainBundle.ResourcePath, "fragmentShader.metallib");
 #else
 			string metal_code = File.ReadAllText (Path.Combine (NSBundle.MainBundle.BundlePath, "metal-sample.metal"));
 			string metallib_path = Path.Combine (NSBundle.MainBundle.BundlePath, "default.metallib");
+			string fragmentshader_path = Path.Combine (NSBundle.MainBundle.BundlePath, "fragmentShader.metallib");
 #endif
 			using (var hd = new MTLHeapDescriptor ()) {
 				hd.CpuCacheMode = MTLCpuCacheMode.DefaultCache;
@@ -343,17 +345,17 @@ namespace MonoTouchFixtures.Metal {
 			}
 
 			// fragmentShader2 will only compile if min deployment target is >= 10.0, so comment this out for now since monotouch-test uses min deployment target 6.0.
-			//using (var library = device.CreateDefaultLibrary ()) {
-			//	using (var func = library.CreateFunction ("fragmentShader2")) {
-			//		using (var enc = func.CreateArgumentEncoder (0)) {
-			//			Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint): NonNull");
-			//		}
-			//		using (var enc = func.CreateArgumentEncoder (0, out var reflection)) {
-			//			Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull");
-			//			Assert.IsNotNull (reflection, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull reflection");
-			//		}
-			//	}
-			//}
+			using (var library = device.CreateLibrary (fragmentshader_path, out var error)) {
+				using (var func = library.CreateFunction ("fragmentShader")) {
+					using (var enc = func.CreateArgumentEncoder (0)) {
+						Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint): NonNull");
+					}
+					using (var enc = func.CreateArgumentEncoder (0, out var reflection)) {
+						Assert.IsNotNull (enc, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull");
+						Assert.IsNotNull (reflection, "MTLFunction.CreateArgumentEncoder (nuint, MTLArgument): NonNull reflection");
+					}
+				}
+			}
 
 			using (var library = device.CreateDefaultLibrary ()) {
 				using (var func = library.CreateFunction ("grayscaleKernel")) {

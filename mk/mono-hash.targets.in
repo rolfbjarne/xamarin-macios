@@ -1,0 +1,8 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<MonoHash>%MONO_HASH%</MonoHash>
+		<MonoiOSBclPath>$(MSBuildThisFileDirectory)\..\builds\downloads\ios-release-Darwin-$(MonoHash)\ios-bcl</MonoiOSBclPath>
+		<MonoSourcePath>$(MSBuildThisFileDirectory)\..\builds\downloads\ios-release-Darwin-$(MonoHash)\ios-sources</MonoSourcePath>
+		<IkvmSourcePath>$(MonoSourcePath)\external\ikvm</IkvmSourcePath>
+	</PropertyGroup>
+</Project>

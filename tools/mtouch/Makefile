@@ -186,12 +186,12 @@ LOCAL_MTOUCH=$(MTOUCH_DIR)/mtouch.exe
 
 # mtouch.csproj.inc contains the mtouch_dependencies variable used to determine if mtouch needs to be rebuilt or not.
 mtouch.csproj.inc: Makefile ../common/create-makefile-fragment.sh $(TOP)/Make.config
-	$(Q_GEN) MONO_IOS_SDK_DESTDIR=$(MONO_IOS_SDK_DESTDIR) ../common/create-makefile-fragment.sh $(CURDIR)/mtouch.csproj
+	$(Q_GEN) ../common/create-makefile-fragment.sh $(CURDIR)/mtouch.csproj
 
 -include mtouch.csproj.inc
 
 $(MTOUCH_DIR)/mtouch.exe: $(mtouch_dependencies)
-	$(Q_GEN) $(SYSTEM_MSBUILD) $(TOP)/Xamarin.iOS.sln "/t:mtouch" $(XBUILD_VERBOSITY) /p:Configuration=$(MTOUCH_CONF) /p:MONO_IOS_SDK_DESTDIR=$(MONO_IOS_SDK_DESTDIR)
+	$(Q_GEN) $(SYSTEM_MSBUILD) $(TOP)/Xamarin.iOS.sln "/t:mtouch" $(XBUILD_VERBOSITY) /p:Configuration=$(MTOUCH_CONF)
 
 #
 # Partial static registrar libraries

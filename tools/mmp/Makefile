@@ -13,12 +13,12 @@ LOCAL_MMP=$(MMP_DIR)/mmp.exe
 
 # mmp.csproj.inc contains the mmp_dependencies variable used to determine if mmp needs to be rebuilt or not.
 mmp.csproj.inc: Makefile ../common/create-makefile-fragment.sh $(TOP)/Make.config
-	$(Q_GEN) MONO_IOS_SDK_DESTDIR=$(MONO_IOS_SDK_DESTDIR) ../common/create-makefile-fragment.sh $(CURDIR)/mmp.csproj
+	$(Q_GEN) ../common/create-makefile-fragment.sh $(CURDIR)/mmp.csproj
 
 -include mmp.csproj.inc
 
 $(MMP_DIR)/mmp.exe: $(mmp_dependencies)
-	$(Q_GEN) $(SYSTEM_MSBUILD) $(TOP)/Xamarin.Mac.sln "/t:mmp" $(XBUILD_VERBOSITY) /p:Configuration=$(MMP_CONF) /p:MONO_IOS_SDK_DESTDIR=$(MONO_IOS_SDK_DESTDIR)
+	$(Q_GEN) $(SYSTEM_MSBUILD) $(TOP)/Xamarin.Mac.sln "/t:mmp" $(XBUILD_VERBOSITY) /p:Configuration=$(MMP_CONF)
 
 MMP_TARGETS = \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/mmp \

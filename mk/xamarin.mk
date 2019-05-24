@@ -1,3 +1,6 @@
+NEEDED_MONO_VERSION := 3dc72cfe51379bf10d6b63880a33cf4c044904e3
+NEEDED_MONO_BRANCH  := 2019-02
+
 ifdef ENABLE_XAMARIN
 NEEDED_MACCORE_VERSION := 34725fe136aee39a9f9984bbb508b6670654f7b3
 NEEDED_MACCORE_BRANCH := master
@@ -6,6 +9,7 @@ MACCORE_DIRECTORY := maccore
 MACCORE_MODULE    := git@github.com:xamarin/maccore.git
 MACCORE_VERSION   := $(shell cd $(MACCORE_PATH) 2> /dev/null && git rev-parse HEAD 2> /dev/null)
 MACCORE_BRANCH    := $(shell cd $(MACCORE_PATH) 2> /dev/null && git symbolic-ref --short HEAD 2> /dev/null)
+endif
 
 define CheckVersionTemplate
 check-$(1)::
@@ -77,6 +81,7 @@ DEPENDENCY_DIRECTORIES += $($(2)_PATH)
 
 endef
 
+ifdef ENABLE_XAMARIN
 $(MACCORE_PATH):
 	$(Q) git clone --recursive $(MACCORE_MODULE) $(MACCORE_PATH)
 	$(Q) $(MAKE) reset-maccore
@@ -84,4 +89,12 @@ $(MACCORE_PATH):
 $(eval $(call CheckVersionTemplate,maccore,MACCORE))
 -include $(MACCORE_PATH)/mk/versions.mk
 $(MACCORE_PATH)/mk/versions.mk: | $(MACCORE_PATH)
+endif
+
+$(MONO_PATH):
+	$(Q) git clone --recursive $(MONO_MODULE) $(MONO_PATH)
+	$(Q) $(MAKE) reset-mono
+
+ifdef MONO_BUILD_FROM_SOURCE
+$(eval $(call CheckVersionTemplate,mono,MONO))
 endif

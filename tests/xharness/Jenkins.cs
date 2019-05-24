@@ -697,7 +697,7 @@ namespace xharness
 				"tools/common",
 				"tools/linker",
 				"src/ObjCRuntime/Registrar.cs",
-				"mk/mono.mk",
+				"mk/xamarin.mk",
 				"msbuild",
 			};
 			var mmp_prefixes = new string [] {
@@ -707,13 +707,13 @@ namespace xharness
 				"tools/common",
 				"tools/linker",
 				"src/ObjCRuntime/Registrar.cs",
-				"mk/mono.mk",
+				"mk/xamarin.mk",
 				"msbuild",
 			};
 			var bcl_prefixes = new string [] {
 				"tests/bcl-test",
 				"tests/common",
-				"mk/mono.mk",
+				"mk/xamarin.mk",
 			};
 			var btouch_prefixes = new string [] {
 				"src/btouch.cs",

@@ -637,7 +637,11 @@ namespace xharness
 			args.AppendFormat (" -argument=-app-arg:-transport:{0}", transport);
 			args.AppendFormat (" -setenv=NUNIT_TRANSPORT={0}", transport);
 
-			listener_log = Logs.Create ($"test-{mode}-{Harness.Timestamp}.log", "Test log");
+			if (useXmlOutput) {
+				listener_log = Logs.Create ($"test-{mode}-{Harness.Timestamp}.xml", "XML log", timestamp: false);
+			} else {
+				listener_log = Logs.Create ($"test-{mode}-{Harness.Timestamp}.log", "Test log");
+			}
 
 			SimpleListener listener;
 			switch (transport) {

@@ -340,13 +340,10 @@ namespace xharness
 					}
 				}
 			}
-			// we want to reuse the stream (and we are sync)
-			stream.BaseStream.Position = 0;
-			stream.DiscardBufferedData ();
 			return isTouchUnit;
 		}
 
-		(string resultLine, bool failed) ParseTouchUnitXml (StreamReader stream, StreamWriter writer)
+		(string resultLine, bool failed) ParseTouchUnitXml (StreamReader stream, TextWriter writer)
 		{
 			long total, errors, failed, notRun, inconclusive, ignored, skipped, invalid;
 			total = errors = failed = notRun = inconclusive = ignored = skipped = invalid = 0L;
@@ -374,7 +371,7 @@ namespace xharness
 			return (resultLine, total == 0 || errors != 0 || failed != 0);
 		}
 
-		(string resultLine, bool failed) ParseNUnitXml (StreamReader stream, StreamWriter writer)
+		(string resultLine, bool failed) ParseNUnitXml (StreamReader stream, TextWriter writer)
 		{
 			long total, errors, failed, notRun, inconclusive, ignored, skipped, invalid;
 			total = errors = failed = notRun = inconclusive = ignored = skipped = invalid = 0L;
@@ -451,37 +448,34 @@ namespace xharness
 			// On the other hand, the nunit and xunit do not have that data and have to be parsed.
 			if (Harness.InJenkins) {
 				(string resultLine, bool failed, bool crashed) parseResult = (null, false, false);
-				// move the xml to a tmp path, that path will be use to read the xml
-				// in the reader, and the writer will use the stream from the logger to
-				// write the human readable log
-				var tmpFile = Path.Combine (Path.GetTempPath (), Guid.NewGuid ().ToString ()); 
-
-				File.Move (listener_log.FullPath, tmpFile);
 				crashed = false;
+				var tmpFile = listener_log.FullPath + ".tmp";
 				try {
-					using (var streamReaderTmp = new StreamReader (tmpFile)) {
-						var isTouchUnit = IsTouchUnitResult (streamReaderTmp); // method resets position
-						using (var writer = new StreamWriter (listener_log.FullPath, true)) { // write the human result to the log file
+					bool isTouchUnit;
+					using (var reader = listener_log.GetReader ())
+						isTouchUnit = IsTouchUnitResult (reader);
+
+					using (var reader = listener_log.GetReader ()) {
+						using (var textLog = listener_log.Logs.Create (Path.ChangeExtension (Path.GetFileName (listener_log.FullPath), "log"), "Test log", timestamp: false)) {
+							// write the human result to the log file
 							if (isTouchUnit) {
-								var (resultLine, failed)= ParseTouchUnitXml (streamReaderTmp, writer);
+								var (resultLine, failed) = ParseTouchUnitXml (reader, textLog);
 								parseResult.resultLine = resultLine;
 								parseResult.failed = failed;
 							} else {
-								var (resultLine, failed)= ParseNUnitXml (streamReaderTmp, writer);
+								var (resultLine, failed) = ParseNUnitXml (reader, textLog);
 								parseResult.resultLine = resultLine;
 								parseResult.failed = failed;
 							}
 						}
-						// reset pos of the stream
-						streamReaderTmp.BaseStream.Position = 0;
-						streamReaderTmp.DiscardBufferedData ();
-						var path = listener_log.FullPath;
-						path = Path.ChangeExtension (path, "xml");
-						// both the nunit and xunit runners are not
-						// setting the test results correctly, lets add them
-						using (var xmlWriter = new StreamWriter (path)) {
+					}
+
+					// both the nunit and xunit runners are not
+					// setting the test results correctly, lets add them
+					using (var reader = listener_log.GetReader ()) { 
+						using (var xmlWriter = new StreamWriter (tmpFile)) {
 							string line;
-							while ((line = streamReaderTmp.ReadLine ()) != null) {
+							while ((line = reader.ReadLine ()) != null) {
 								if (line.Contains ("<test-results")) {
 									if (line.Contains ("name=\"\"")) { // NUnit case
 										xmlWriter.WriteLine (line.Replace ("name=\"\"", $"name=\"{appName + " " + configuration}\""));
@@ -494,9 +488,8 @@ namespace xharness
 								}
 							}
 						}
-						// we do not longer need the tmp file
-						Logs.AddFile (path, "Test xml");
 					}
+					File.Move (tmpFile, listener_log.FullPath);
 					return parseResult;
 				} catch (Exception e) {
 					main_log.WriteLine ("Could not parse xml result file: {0}", e);

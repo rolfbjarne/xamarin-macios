@@ -389,6 +389,8 @@ namespace Xamarin.MacDev.Tasks
 					Log.LogError ("Error writing archived-expanded-entitlements.xcent file: {0}", ex.Message);
 					return false;
 				}
+			} else {
+				Log.LogMessage (MessageImportance.Low, "The compiled entitlements have not changed.");
 			}
 
 			return !Log.HasLoggedErrors;

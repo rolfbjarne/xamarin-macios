@@ -1,3 +1,4 @@
 .build-stamp
+.nuget-stamp
 .stamp-test-xml
 

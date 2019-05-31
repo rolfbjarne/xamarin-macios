@@ -81,6 +81,7 @@
     <Compile Include="InterfaceController.designer.cs">
       <DependentUpon>InterfaceController.cs</DependentUpon>
     </Compile>
+    <Compile Include="$(MyWatchKit2Extension_ExtraCompileInclude)" Condition="'$(MyWatchKit2Extension_ExtraCompileInclude)' != ''" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyWatchKit2IntentsExtension\MyWatchKit2IntentsExtension.csproj">

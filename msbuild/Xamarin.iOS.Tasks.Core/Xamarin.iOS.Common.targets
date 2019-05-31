@@ -361,7 +361,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	<PropertyGroup>
 		<_CodesignAppBundleDependsOn>
 			_EmbedMobileProvision;
-			_CodesignNativeLibraries;
 			_CollectFrameworks;
 			_CodesignFrameworks;
 			_ReadAppExtensionCodesignProperties;
@@ -842,7 +841,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			ArchiveSymbols="$(MonoSymbolArchive)"
 			Verbosity="$(MtouchVerbosity)"
 			>
-			<Output TaskParameter="CompiledArchitectures" PropertyName="_CompiledArchitectures" />
 		</MTouch>
 
 		<Touch
@@ -884,7 +882,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '%(_AppExtensionDebugSymbolProperties.NoDSymUtil)' == 'false'"
 			AppBundleDir="$(_AppBundlePath)PlugIns\%(_AppExtensionDebugSymbolProperties.Identity)"
-			Architectures="%(_AppExtensionDebugSymbolProperties.CompiledArchitectures)"
 			DSymDir="$(AppBundleDir)\..\%(_AppExtensionDebugSymbolProperties.Identity).dSYM"
 			Executable="$(_AppBundlePath)PlugIns\%(_AppExtensionDebugSymbolProperties.Identity)\%(_AppExtensionDebugSymbolProperties.NativeExecutable)"
 			ToolExe="$(DSymUtilExe)"
@@ -923,7 +920,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '$(MtouchNoDSymUtil)' == 'false'"
 			AppBundleDir="$(AppBundleDir)"
-			Architectures=""
 			DSymDir="$(AppBundleDir)\..\%(_Frameworks.Filename).framework.dSYM"
 			Executable="%(_Frameworks.Identity)"
 			ToolExe="$(DSymUtilExe)"
@@ -940,7 +936,15 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		>
 		</SymbolStrip>
 
+		<!-- The output file is created by the DSymUtil task, while the input file(s) are modified by the SymbolStrip task. If we don't touch the output file, we'll re-run in the next build. -->
+		<Touch
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true' And '$(MtouchNoDSymUtil)' == 'false'"
+			Files="$(AppBundleDir)\..\%(_Frameworks.Filename).framework.dSYM\Contents\Info.plist"
+		/>
+
 		<!-- _GenerateDebugSymbols will run spotlight to index the dSYMs -->
+
 	</Target>
 
 	<Target Name="_PrepareDebugSymbolGeneration" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'true' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs"
@@ -960,7 +964,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			<_AppExtensionDebugSymbolProperties Remove="@(_AppExtensionDebugSymbolProperties)" />
 
 			<_AppExtensionDebugSymbolProperties Include="$(_AppBundleFileName)">
-				<CompiledArchitectures>$(_CompiledArchitectures)</CompiledArchitectures>
 				<NativeExecutable>$(_NativeExecutableFileName)</NativeExecutable>
 				<NoSymbolStrip>$(MtouchNoSymbolStrip)</NoSymbolStrip>
 				<SymbolsList>$(_SymbolsListFullPath)</SymbolsList>
@@ -989,7 +992,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '$(MtouchNoDSymUtil)' == 'false' And '$(IsAppExtension)' == 'false'"
 			AppBundleDir="$(AppBundleDir)"
-			Architectures="$(_CompiledArchitectures)"
 			DSymDir="$(AppBundleDir).dSYM"
 			Executable="$(_NativeExecutable)"
 			ToolExe="$(DSymUtilExe)"
@@ -1636,10 +1638,15 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			ToolPath="$(DittoPath)"
 			Source="@(_ResolvedAppExtensionReferences)"
 			Destination="$(_AppBundlePath)PlugIns\%(_ResolvedAppExtensionReferences.FileName)%(_ResolvedAppExtensionReferences.Extension)"
-		/>
+			Ignore="_CodeSignature"
+			>
+
+			<Output TaskParameter="CopiedFiles" PropertyName="_DittoFilesCopied" />
+			<Output TaskParameter="AnyCopiedFiles" PropertyName="_DittoAnyFilesCopied" />
+		</Ditto>
 
 		<!-- Delete any code signatures and dSYM dirs since they are now invalid -->
-		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(_AppBundlePath)PlugIns\%(_ResolvedAppExtensionReferences.FileName)%(_ResolvedAppExtensionReferences.Extension)\_CodeSignature;
+		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And $(_DittoAnyFilesCopied) == 'true'" Directories="$(_AppBundlePath)PlugIns\%(_ResolvedAppExtensionReferences.FileName)%(_ResolvedAppExtensionReferences.Extension)\_CodeSignature;
 			$(_AppBundlePath)..\%(_ResolvedAppExtensionReferences.FileName)%(_ResolvedAppExtensionReferences.Extension).dSYM" />
 	</Target>
 
@@ -1768,32 +1775,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</CollectFrameworks>
 	</Target>
 
-	<!-- Note: Always codesign *.dylibs even for Simulator builds. We use $(_CanOutputAppBundle) because dylibs can exist in app extensions as well. -->
-	<Target Name="_CodesignNativeLibraries" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectSigningIdentity;_CompileToNative">
-
-		<PropertyGroup>
-			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
-			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(MtouchDebug)' == 'true'">True</_CodesignDisableTimestamp>
-			<_LibraryCodeSigningKey>$(_CodeSigningKey)</_LibraryCodeSigningKey>
-			<_LibraryCodeSigningKey Condition="'$(_LibraryCodeSigningKey)' == ''">-</_LibraryCodeSigningKey>
-		</PropertyGroup>
-
-		<CodesignNativeLibraries
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
-			ToolExe="$(CodesignExe)"
-			ToolPath="$(CodesignPath)"
-			AppBundleDir="$(AppBundleDir)"
-			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)codesign"
-			CodesignAllocate="$(_CodesignAllocate)"
-			DisableTimestamp="$(_CodesignDisableTimestamp)"
-			Keychain="$(CodesignKeychain)"
-			SigningKey="$(_LibraryCodeSigningKey)"
-			ExtraArgs="$(CodesignExtraArgs)"
-			>
-		</CodesignNativeLibraries>
-	</Target>
-
 	<Target Name="_CodesignFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(_Frameworks)' != ''" DependsOnTargets="_DetectSigningIdentity;_CollectFrameworks"
 		Inputs="%(_Frameworks.Identity)" Outputs="$(DeviceSpecificIntermediateOutputPath)codesign\%(_Frameworks.Filename)%(_Frameworks.Extension)">
 
@@ -1828,18 +1809,36 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Touch>
+
+               <!-- sign after dsymytil modifies the executable, making dsymutil run again next time -->
+               <Touch
+                       SessionId="$(BuildSessionId)"
+                       Condition="'$(IsMacEnabled)' == 'true' And Exists('$(AppBundleDir)\..\%(_Frameworks.Filename).framework.dSYM\Contents\Info.plist')"
+                       Files="$(AppBundleDir)\..\%(_Frameworks.Filename).framework.dSYM\Contents\Info.plist"
+               />
+
 	</Target>
 
 	<Target Name="_ReadAppExtensionCodesignProperties">
-		<ReadItemsFromFile File="%(_ResolvedAppExtensionReferences.Identity)\..\codesign.items" Condition="Exists('%(_ResolvedAppExtensionReferences.Identity)\..\codesign.items')">
+		<ReadItemsFromFile
+				File="%(_ResolvedAppExtensionReferences.Identity)\..\codesign.items"
+				Condition="Exists('%(_ResolvedAppExtensionReferences.Identity)\..\codesign.items')"
+				ListDirectory="%(_ResolvedAppExtensionReferences.Identity)"
+				ListDirectoryTargetVariable="CodesignAppExtensionFiles"
+				>
 			<Output TaskParameter="Items" ItemName="_AppExtensionCodesignProperties" />
 		</ReadItemsFromFile>
+		<Warning Text="CodesignAppExtensionFiles %(_AppExtensionCodesignProperties.Identity) => %(_AppExtensionCodesignProperties.CodesignAppExtensionFiles)"/>
+		<Warning Text="CodesignAppExtensionInputs %(_AppExtensionCodesignProperties.Identity) => %(_AppExtensionCodesignProperties.CodesignAppExtensionInputs)"/>
 	</Target>
 
 	<Target Name="_CodesignAppExtensions" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(_AppExtensionCodesignProperties)' != ''"
 		DependsOnTargets="_DetectSigningIdentity;_ReadAppExtensionCodesignProperties"
-		Inputs="$(_AppBundlePath)PlugIns\%(_AppExtensionCodesignProperties.Identity)\%(_AppExtensionCodesignProperties.NativeExecutable);%(_AppExtensionCodesignProperties.CodesignAppExtensionInputs)"
+		Inputs="%(_AppExtensionCodesignProperties.CodesignAppExtensionFiles);%(_AppExtensionCodesignProperties.CodesignAppExtensionInputs)"
 		Outputs="$(_AppBundlePath)PlugIns\%(_AppExtensionCodesignProperties.Identity)\_CodeSignature\CodeResources">
+
+		<Warning Text="_CodesignAppExtensions.Inputs: %(_AppExtensionCodesignProperties.CodesignAppExtensionFiles);%(_AppExtensionCodesignProperties.CodesignAppExtensionInputs)" />
+		<Warning Text="_CodesignAppExtensions.Outputs: $(_AppBundlePath)PlugIns\%(_AppExtensionCodesignProperties.Identity)\_CodeSignature\CodeResources" />
 
 		<CodesignNativeLibraries
 			SessionId="$(BuildSessionId)"
@@ -1903,10 +1902,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			<Output TaskParameter="FullPath" PropertyName="_ResourceRulesFullPath" />
 		</GetFullPath>
 
-		<GetFiles SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(_AppBundleFullPath)" Pattern="*.*" Option="AllDirectories">
-			<Output TaskParameter="Files" ItemName="_AppExtensionBundleFiles" />
-		</GetFiles>
-
 		<PropertyGroup>
 			<!-- [System.IO.Path]::GetFileName() is safe to use -->
 			<_AppBundleFileName>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))</_AppBundleFileName>
@@ -1915,7 +1910,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
 			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(MtouchDebug)' == 'true'">True</_CodesignDisableTimestamp>
 
-			<_CodesignAppExtensionInputs>@(_AppExtensionBundleFiles);$(_EntitlementsFullPath)</_CodesignAppExtensionInputs>
+			<_CodesignAppExtensionInputs>$(_CompiledEntitlementsFullPath)</_CodesignAppExtensionInputs>
 
 			<_LibrarySigningKey>$(_CodeSigningKey)</_LibrarySigningKey>
 			<_LibrarySigningKey Condition="'$(_LibrarySigningKey)' == ''">-</_LibrarySigningKey>
@@ -1960,7 +1955,24 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<PropertyGroup>
 			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
 			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(MtouchDebug)' == 'true'">True</_CodesignDisableTimestamp>
+			<_LibraryCodeSigningKey>$(_CodeSigningKey)</_LibraryCodeSigningKey>
+			<_LibraryCodeSigningKey Condition="'$(_LibraryCodeSigningKey)' == ''">-</_LibraryCodeSigningKey>
 		</PropertyGroup>
+
+		<CodesignNativeLibraries
+			Condition="'$(IsMacEnabled)' == 'true'"
+			SessionId="$(BuildSessionId)"
+			ToolExe="$(CodesignExe)"
+			ToolPath="$(CodesignPath)"
+			AppBundleDir="$(AppBundleDir)"
+			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)codesign"
+			CodesignAllocate="$(_CodesignAllocate)"
+			DisableTimestamp="$(_CodesignDisableTimestamp)"
+			Keychain="$(CodesignKeychain)"
+			SigningKey="$(_LibraryCodeSigningKey)"
+			ExtraArgs="$(CodesignExtraArgs)"
+			>
+		</CodesignNativeLibraries>
 
 		<Codesign
 			SessionId="$(BuildSessionId)"

@@ -25,6 +25,12 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public ITaskItem File { get; set; }
 
+		// A directory whose contents will be listed, and stored into the specified TargetVariable
+		// I couldn't figure out how to do this in the .targets file's xml after the call to
+		// this target, so I ended up adding it here instead.
+		public ITaskItem ListDirectory { get; set; }
+		public ITaskItem ListDirectoryTargetVariable { get; set; }
+
 		#endregion
 
 		#region Outputs
@@ -53,6 +59,11 @@ namespace Xamarin.MacDev.Tasks
 
 			foreach (var metadata in element.Elements ()) {
 				item.SetMetadata (metadata.Name.LocalName, metadata.Value);
+			}
+
+			if (ListDirectory != null) {
+				var files = Directory.GetFiles (ListDirectory.ItemSpec);
+				item.SetMetadata (ListDirectoryTargetVariable.ItemSpec, string.Join (";", files));
 			}
 
 			return item;

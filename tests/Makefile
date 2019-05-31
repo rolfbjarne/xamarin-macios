@@ -209,7 +209,7 @@ killall:
 NUNIT_MSBUILD_DIR=$(TOP)/packages/NUnit.Runners.2.6.4/tools/lib
 test-ios-tasks:
 	$(SYSTEM_XIBUILD) -- $(TOP)/msbuild/Xamarin.MacDev.Tasks.sln
-	cd $(NUNIT_MSBUILD_DIR) && $(SYSTEM_XIBUILD) -t -- ../nunit-console.exe ../../../../msbuild/tests/bin/Xamarin.iOS.Tasks.Tests.dll -xml=TestResults_Xamarin.iOS.Tasks.Tests.xml -labels $(TEST_FIXTURE) || touch .failed-stamp
+	cd $(NUNIT_MSBUILD_DIR) && MONO_ENV_OPTIONS=--debug $(SYSTEM_XIBUILD) -t -- ../nunit-console.exe ../../../../msbuild/tests/bin/Xamarin.iOS.Tasks.Tests.dll -xml=TestResults_Xamarin.iOS.Tasks.Tests.xml -labels $(TEST_FIXTURE) || touch .failed-stamp
 	@[[ -z "$$BUILD_REPOSITORY" ]] || ( xsltproc $(TOP)/tests/HtmlTransform.xslt $(NUNIT_MSBUILD_DIR)/TestResults_Xamarin.iOS.Tasks.Tests.xml > $(TOP)/tests/index.html && echo "@MonkeyWrench: AddFile: $$PWD/index.html" )
 	@if test -e $(NUNIT_MSBUILD_DIR)/.failed-stamp; then rm $(NUNIT_MSBUILD_DIR)/.failed-stamp; exit 1; fi
 

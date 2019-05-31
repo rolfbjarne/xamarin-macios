@@ -16,8 +16,6 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string AppBundleDir { get; set; }
 
-		public string Architectures { get; set; }
-
 		[Required]
 		public string DSymDir { get; set; }
 

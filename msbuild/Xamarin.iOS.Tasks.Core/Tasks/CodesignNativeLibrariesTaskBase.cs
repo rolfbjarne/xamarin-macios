@@ -154,7 +154,20 @@ namespace Xamarin.iOS.Tasks
 		{
 			var output = GetOutputPath (path);
 
-			return !File.Exists (output) || File.GetLastWriteTimeUtc (path) >= File.GetLastWriteTimeUtc (output);
+			if (!File.Exists (output)) {
+				Log.LogMessage ($"Signing {path} because {output} does not exist.");
+				return true;
+			}
+
+			var a = File.GetLastWriteTimeUtc (path);
+			var b = File.GetLastWriteTimeUtc (output);
+
+			if (a >= b) {
+				Log.LogMessage ($"Signing {path} because {output} is out-of-date ({a} vs {b}).");
+				return true;
+			}
+
+			return false;
 		}
 
 		public override bool Execute ()

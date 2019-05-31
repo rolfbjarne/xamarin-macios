@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -66,6 +67,8 @@ namespace Xamarin.iOS.Tasks
 			}
 
 			Files = items.ToArray ();
+
+			Log.LogMessage ("GetFiles found: {0}", string.Join (", ", Files.Select ((v) => v.ItemSpec).ToArray ()));
 
 			return !Log.HasLoggedErrors;
 		}

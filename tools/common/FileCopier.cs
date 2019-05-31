@@ -5,51 +5,57 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Xamarin.Bundler {
+	[Flags]
+	enum CopyFileFlags : uint
+	{
+		ACL = 1 << 0,
+		Stat = 1 << 1,
+		Xattr = 1 << 2,
+		Data = 1 << 3,
+		Security = Stat | ACL,
+		Metadata = Security | Xattr,
+		All = Metadata | Data,
+
+		Recursive = 1 << 15,
+		NoFollow_Src = 1 << 18,
+		NoFollow_Dst = 1 << 19,
+		Unlink = 1 << 21,
+		Nofollow = NoFollow_Src | NoFollow_Dst,
+		Clone = 1 << 24,
+	}
+
+	enum CopyFileState : uint
+	{
+		StatusCB = 6,
+	}
+
+	public enum CopyFileStep
+	{
+		Start = 1,
+		Finish = 2,
+		Err = 3,
+		Progress = 4,
+	}
+
+	public enum CopyFileResult
+	{
+		Continue = 0,
+		Skip = 1,
+		Quit = 2,
+	}
+
+	public enum CopyFileWhat
+	{
+		Error = 0,
+		File = 1,
+		Dir = 2,
+		DirCleanup = 3,
+		CopyData = 4,
+		CopyXattr = 5,
+	}
+
 	public static class FileCopier 
 	{
-		enum CopyFileFlags : uint {
-			ACL = 1 << 0,
-			Stat = 1 << 1,
-			Xattr = 1 << 2,
-			Data = 1 << 3,
-			Security = Stat | ACL,
-			Metadata = Security | Xattr,
-			All = Metadata | Data,
-
-			Recursive = 1 << 15,
-			NoFollow_Src = 1 << 18,
-			NoFollow_Dst = 1 << 19,
-			Unlink = 1 << 21,
-			Nofollow = NoFollow_Src | NoFollow_Dst,
-			Clone = 1 << 24,
-		}
-
-		enum CopyFileState : uint {
-			StatusCB = 6,
-		}
-
-		enum CopyFileStep {
-			Start = 1,
-			Finish = 2,
-			Err = 3,
-			Progress = 4,
-		}
-
-		enum CopyFileResult {
-			Continue = 0,
-			Skip = 1,
-			Quit = 2,
-		}
-
-		enum CopyFileWhat {
-			Error = 0,
-			File = 1,
-			Dir = 2,
-			DirCleanup = 3,
-			CopyData = 4,
-			CopyXattr = 5,
-		}
-
 		[DllImport ("/usr/lib/libSystem.dylib")]
 		static extern IntPtr copyfile_state_alloc ();
 
@@ -59,7 +65,7 @@ namespace Xamarin.Bundler {
 		[DllImport ("/usr/lib/libSystem.dylib")]
 		static extern int copyfile_state_set (IntPtr state, CopyFileState flag, IntPtr value);
 
-		delegate CopyFileResult CopyFileCallbackDelegate (CopyFileWhat what, CopyFileStep stage, IntPtr state, string src, string dst, IntPtr ctx);
+		public delegate CopyFileResult CopyFileCallbackDelegate (CopyFileWhat what, CopyFileStep stage, IntPtr state, string src, string dst, IntPtr ctx);
 
 		[DllImport ("/usr/lib/libSystem.dylib", SetLastError = true)]
 		static extern int copyfile (string @from, string @to, IntPtr state, CopyFileFlags flags);
@@ -75,7 +81,7 @@ namespace Xamarin.Bundler {
 		public static Exception CreateError (int code, string message, params object[] args) => throw new Exception ($"{code} {string.Format (message, args)}");
 #endif
 
-		public static void UpdateDirectory (string source, string target)
+		public static void UpdateDirectory (string source, string target, CopyFileCallbackDelegate callback = null)
 		{
 			if (!Directory.Exists (target))
 				Directory.CreateDirectory (target);
@@ -84,7 +90,7 @@ namespace Xamarin.Bundler {
 			// so we need to use native functions directly. Luckily OSX provides exactly what we need.
 			IntPtr state = copyfile_state_alloc ();
 			try {
-				CopyFileCallbackDelegate del = CopyFileCallback;
+				CopyFileCallbackDelegate del = callback ?? CopyFileCallback;
 				copyfile_state_set (state, CopyFileState.StatusCB, Marshal.GetFunctionPointerForDelegate (del));
 				int rv = copyfile (source, target, state, CopyFileFlags.Data | CopyFileFlags.Recursive | CopyFileFlags.Nofollow | CopyFileFlags.Clone);
 				if (rv != 0)
@@ -164,7 +170,7 @@ namespace Xamarin.Bundler {
 				throw new NotImplementedException ("Checking file contents is not supported");
 #endif
 
-			Log (3, "Prerequisite '{0}' is newer than the target '{1}'.", source, target);
+			Log (3, "Prerequisite '{0}' is newer than the target '{1}' ({2} vs {3}).", source, target, sfi.LastWriteTimeUtc, tfi.LastWriteTimeUtc);
 			return false;
 		}
 		

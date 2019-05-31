@@ -21,6 +21,7 @@ MSBUILD_SYMLINKS             =
 MSBUILD_TASK_ASSEMBLIES      =
 
 ALL_SOURCES:= $(shell git ls-files | sed 's/ /\\ /g') $(wildcard $(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/*.cs) $(wildcard $(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/*.csproj)
+NUGET_SOURCES:= $(shell git ls-files | grep -E "(csproj|packages.config)$$" | sed 's/ /\\ /g')
 CONFIG      = Debug
 
 ##
@@ -300,8 +301,11 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/msbuild/%.dll: build/%.dll | $(MA
 # we must install locally during 'make all', because the F# build depends on the msbuild targets/assemblies.
 all-local:: $(MSBUILD_PRODUCTS) .stamp-test-xml
 
-.build-stamp: $(ALL_SOURCES)
+.nuget-stamp: $(NUGET_SOURCES)
 	$(Q) $(SYSTEM_MONO) /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore
+	$(Q) touch $@
+
+.build-stamp: .nuget-stamp $(ALL_SOURCES)
 	$(Q) $(SYSTEM_MSBUILD) $(XBUILD_VERBOSITY)
 	$(Q) touch $@
 

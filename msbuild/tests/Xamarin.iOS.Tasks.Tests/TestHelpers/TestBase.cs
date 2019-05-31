@@ -104,7 +104,7 @@ namespace Xamarin.iOS.Tasks
 
 		public string TempDir {
 			get; set;
-		}
+		} = Path.GetFullPath ("ScratchDir");
 
 		public ProjectPaths SetupProjectPaths (string projectName, string csprojName, string baseDir = "../", bool includePlatform = true, string platform = "iPhoneSimulator", string config = "Debug")
 		{

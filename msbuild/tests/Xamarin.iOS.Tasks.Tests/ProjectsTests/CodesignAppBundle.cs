@@ -56,6 +56,20 @@ namespace Xamarin.iOS.Tasks
 			}
 		}
 
+		void AssertNoModifiedFiles (DateTime timestamp, string path = null)
+		{
+			var files = Directory.EnumerateFiles (path ?? AppBundlePath, "*.*", SearchOption.TopDirectoryOnly);
+			var failures = new List<string> ();
+			foreach (var file in files) {
+				var newTimestamp = GetLastModified (file);
+				if (newTimestamp <= timestamp)
+					continue;
+
+				failures.Add ($"{file} was modified (current timestamp: {newTimestamp}, expected <= {timestamp}");
+			}
+			Assert.IsEmpty (failures, "No modified files");
+		}
+
 		[Test]
 		public void RebuildNoChanges ()
 		{
@@ -69,50 +83,54 @@ namespace Xamarin.iOS.Tasks
 			var appexDsymDir = Path.GetFullPath (Path.Combine (AppBundlePath, "..", "MyActionExtension.appex.dSYM"));
 
 			var timestamps = Directory.EnumerateFiles (AppBundlePath, "*.*", SearchOption.TopDirectoryOnly).ToDictionary (file => file, file => GetLastModified (file));
-			Dictionary<string, DateTime> dsymTimestamps = null, appexDsymTimestamps = null;
+			//Dictionary<string, DateTime> dsymTimestamps = null, appexDsymTimestamps = null;
 
-			if (Platform != "iPhoneSimulator") {
-				dsymTimestamps = Directory.EnumerateFiles (dsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
-				appexDsymTimestamps = Directory.EnumerateFiles (appexDsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
-			}
+			//if (Platform != "iPhoneSimulator") {
+			//	dsymTimestamps = Directory.EnumerateFiles (dsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
+			//	appexDsymTimestamps = Directory.EnumerateFiles (appexDsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
+			//}
 
 			EnsureFilestampChange ();
+			var timestamp = DateTime.Now;
 
 			// Rebuild w/ no changes
 			BuildProject ("MyTabbedApplication", Platform, config, clean: false);
 
 			AssertProperlyCodesigned (expectedCodesignResults);
+			AssertNoModifiedFiles (timestamp);
 
-			var newTimestamps = Directory.EnumerateFiles (AppBundlePath, "*.*", SearchOption.TopDirectoryOnly).ToDictionary (file => file, file => GetLastModified (file));
+			//var newTimestamps = Directory.EnumerateFiles (AppBundlePath, "*.*", SearchOption.TopDirectoryOnly).ToDictionary (file => file, file => GetLastModified (file));
 
-			foreach (var file in timestamps.Keys) {
-				// The executable files will all be newer because they get touched during each Build, all other files should not change
-				if (Path.GetFileName (file) == "MyTabbedApplication" || Path.GetExtension (file) == ".dylib")
-					continue;
+			//foreach (var file in timestamps.Keys) {
+			//	// The executable files will all be newer because they get touched during each Build, all other files should not change
+			//	if (Path.GetFileName (file) == "MyTabbedApplication" || Path.GetExtension (file) == ".dylib")
+			//		continue;
 
-				Assert.AreEqual (timestamps[file], newTimestamps[file], "App Bundle timestamp changed: " + file);
-			}
+			//	Assert.AreEqual (timestamps[file], newTimestamps[file], "App Bundle timestamp changed: " + file);
+			//}
 
 			if (Platform != "iPhoneSimulator") {
-				var newDsymTimestamps = Directory.EnumerateFiles (dsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
-				var newAppexDsymTimestamps = Directory.EnumerateFiles (appexDsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
+				AssertNoModifiedFiles (timestamp, dsymDir);
+				AssertNoModifiedFiles (timestamp, appexDsymDir);
+				//var newDsymTimestamps = Directory.EnumerateFiles (dsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
+				//var newAppexDsymTimestamps = Directory.EnumerateFiles (appexDsymDir, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
 
-				foreach (var file in dsymTimestamps.Keys) {
-					// The Info.plist should be newer because it gets touched
-					if (Path.GetFileName (file) == "Info.plist") {
-						Assert.IsTrue (dsymTimestamps[file] < newDsymTimestamps[file], "App Bundle dSYMs Info.plist not touched: " + file);
-					} else {
-						Assert.AreEqual (dsymTimestamps[file], newDsymTimestamps[file], "App Bundle dSYMs changed: " + file);
-					}
-				}
+				//foreach (var file in dsymTimestamps.Keys) {
+				//	// The Info.plist should be newer because it gets touched
+				//	if (Path.GetFileName (file) == "Info.plist") {
+				//		Assert.IsTrue (dsymTimestamps[file] < newDsymTimestamps[file], "App Bundle dSYMs Info.plist not touched: " + file);
+				//	} else {
+				//		Assert.AreEqual (dsymTimestamps[file], newDsymTimestamps[file], "App Bundle dSYMs changed: " + file);
+				//	}
+				//}
 
-				// The appex dSYMs will all be newer because they currently get regenerated after each Build due to the fact that the entire
-				// *.appex gets cloned into the app bundle each time.
-				//
-				// Note: we could fix this by not using `ditto` and instead implementing this ourselves to only overwrite files if they've changed
-				// and then setting some [Output] params that specify whether or not we need to re-codesign and/or strip debug symbols.
-				foreach (var file in appexDsymTimestamps.Keys)
-					Assert.IsTrue (appexDsymTimestamps[file] < newAppexDsymTimestamps[file], "App Extension dSYMs should be newer: " + file);
+				//// The appex dSYMs will all be newer because they currently get regenerated after each Build due to the fact that the entire
+				//// *.appex gets cloned into the app bundle each time.
+				////
+				//// Note: we could fix this by not using `ditto` and instead implementing this ourselves to only overwrite files if they've changed
+				//// and then setting some [Output] params that specify whether or not we need to re-codesign and/or strip debug symbols.
+				//foreach (var file in appexDsymTimestamps.Keys)
+					//Assert.IsTrue (appexDsymTimestamps[file] < newAppexDsymTimestamps[file], "App Extension dSYMs should be newer: " + file);
 			}
 		}
 
@@ -161,12 +179,13 @@ namespace Xamarin.iOS.Tasks
 			AssertProperlyCodesigned (expectedCodesignResults);
 
 			EnsureFilestampChange ();
-
+			var timestamp = DateTime.Now;
 			// Rebuild w/ no changes
 			BuildProject ("MyWatch2Container", Platform, config, clean: false);
 
 			// make sure everything is still codesigned properly
 			AssertProperlyCodesigned (expectedCodesignResults);
+			AssertNoModifiedFiles (timestamp);
 		}
 
 		[Test]
@@ -198,7 +217,7 @@ namespace Xamarin.iOS.Tasks
 
 				// make sure that the main app bundle was codesigned due to the changes in the appex
 				// Note: this step requires msbuild instead of xbuild to work properly
-				//Assert.IsTrue (newTimestamp > timestamp, "The main app bundle does not seem to have been re-codesigned");
+				Assert.IsTrue (newTimestamp > timestamp, "The main app bundle does not seem to have been re-codesigned");
 			} finally {
 				// restore the original ActionViewController.cs code...
 				text = text.Replace ("{0} The Awakening...", "{0} awake with context");

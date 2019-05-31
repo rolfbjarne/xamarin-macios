@@ -16,6 +16,15 @@ namespace Extrospection {
 
 	public class ReleaseAttributeCheck : BaseVisitor {
 
+		class MethodData {
+			public MethodDefinition Method;
+			public string Selector;
+			public bool HasReleaseAttribute;
+			public string Family;
+			public string ObjCFamilyAttribute;
+		}
+		static Dictionary<string, MethodData> methods = new Dictionary<string, MethodData> ();
+
 		// most selectors will be found in [Export] attributes
 		public override void VisitManagedMethod (MethodDefinition method)
 		{
@@ -73,55 +82,75 @@ namespace Extrospection {
 				}
 			}
 
-			switch (family) {
-			case "init": // in many cases we have custom init/constructor code, which seems to be correct, so ignore the 'init' family for now.
-				break;
-			case "alloc":
-			case "copy":
-			case "mutableCopy":
-			case "new":
-				if (!hasReleaseAttribute) {
-					var framework = Helpers.GetFramework (method);
-					Log.On (framework).Add ($"!missing-release-attribute-on-return-value! {method.FullName}'s selector's ('{selector}') Objective-C method family ('{family}') indicates that the native method returns a retained object, and as such a '[return: Release]' attribute is required.");
-				}
-				break;
-			default:
-				break;
+			var key = method.GetName ();
+			if (key == null) {
+				if (family == null)
+					return;
+				// No key for this method, let's just use a random value as the key. Worst case scenario is that we won't find any objc_method_family attributes for this method, and report it when we shouldn't.
+				key = Guid.NewGuid ().ToString ();
+			} else if (methods.ContainsKey (key)) {
+				// No key for this method, let's just use a random value as the key. Worst case scenario is that we won't find any objc_method_family attributes for this method, and report it when we shouldn't.
+				key = Guid.NewGuid ().ToString ();
 			}
-
+			methods.Add (key, new MethodData { Family = family, HasReleaseAttribute = hasReleaseAttribute, Method = method, Selector = selector });
 		}
 
-		// We should also look at the native definition for family attributes: __attribute__((objc_method_family(...))
-		// but unfortunately ObjectiveSharpie doesn't support getting the actual family from the attribute yet,
-		// so this will have to wait. In any case there only seems to be a single method with the family attribute in the SDKs,
-		// so we can live with a manual exception.
-		//public override void VisitObjCMethodDecl (ObjCMethodDecl decl, VisitKind visitKind)
-		//{
-		//	if (visitKind != VisitKind.Enter)
-		//		return;
+		// Look at the native definition for family attributes: __attribute__((objc_method_family(...))
+		public override void VisitObjCMethodDecl (ObjCMethodDecl decl, VisitKind visitKind)
+		{
+			if (visitKind != VisitKind.Enter)
+				return;
 
-		//	// don't process methods (or types) that are unavailable for the current platform
-		//	if (!decl.IsAvailable () || !(decl.DeclContext as Decl).IsAvailable ())
-		//		return;
+			// don't process methods (or types) that are unavailable for the current platform
+			if (!decl.IsAvailable () || !(decl.DeclContext as Decl).IsAvailable ())
+				return;
 
-		//	var framework = Helpers.GetFramework (decl);
-		//	if (framework == null)
-		//		return;
+			var framework = Helpers.GetFramework (decl);
+			if (framework == null)
+				return;
 
-		//	string selector = decl.GetSelector ();
-		//	if (string.IsNullOrEmpty (selector))
-		//		return;
+			foreach (var attr in decl.Attrs) {
+				switch (attr.Kind) {
+				case AttrKind.ObjCMethodFamily:
+					ObjCMethodFamilyAttr familyAttr = (ObjCMethodFamilyAttr)attr;
+					var key = decl.GetName ();
+					if (key != null && methods.TryGetValue (key, out var data))
+						data.ObjCFamilyAttribute = familyAttr.Family.ToString ().ToLower ();
+					break;
+				default:
+					break;
+				}
+			}
+		}
 
-		//	foreach (var attr in decl.Attrs) {
-		//		switch (attr.Kind) {
-		//		case AttrKind.ObjCMethodFamily:
-		//			ObjCMethodFamilyAttr familyAttr = (ObjCMethodFamilyAttr)attr;
-		//			Console.WriteLine ("Family attribute {0} for {1}", familyAttr, selector);
-		//			break;
-		//		default:
-		//			break;
-		//		}
-		//	}
-		//}
+		public override void End ()
+		{
+			foreach (var entry in methods) {
+				var family = entry.Value.Family;
+				var method = entry.Value.Method;
+				var hasReleaseAttribute = entry.Value.HasReleaseAttribute;
+				var selector = entry.Value.Selector;
+
+				if (entry.Value.ObjCFamilyAttribute != null)
+					family = entry.Value.ObjCFamilyAttribute;
+
+				switch (family) {
+				case "init": // in many cases we have custom init/constructor code, which seems to be correct, so ignore the 'init' family for now.
+					break;
+				case "alloc":
+				case "copy":
+				case "mutableCopy":
+				case "new":
+					if (!hasReleaseAttribute) {
+						var framework = Helpers.GetFramework (method);
+						Log.On (framework).Add ($"!missing-release-attribute-on-return-value! {method.FullName}'s selector's ('{selector}') Objective-C method family ('{family}') indicates that the native method returns a retained object, and as such a '[return: Release]' attribute is required.");
+					}
+					break;
+				case "none":
+				default:
+					break;
+				}
+			}
+		}
 	}
 }

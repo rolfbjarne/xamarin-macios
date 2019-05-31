@@ -66,8 +66,14 @@ namespace BCLTests {
 			base.ViewDidLoad ();
 			var options = ApplicationOptions.Current;
 			TcpTextWriter writer = null;
-			if (!string.IsNullOrEmpty (options.HostName))
-				writer = new TcpTextWriter (options.HostName, options.HostPort);
+			if (!string.IsNullOrEmpty (options.HostName)) {
+				Console.WriteLine ($"Connecting to {options.HostName}:{options.HostPort}");
+				try {
+					writer = new TcpTextWriter (options.HostName, options.HostPort);
+				} catch (Exception e) {
+					Console.WriteLine ($"Failed to connect to {options.HostName}:{options.HostPort} (will write output to the console instead): {e.Message}");
+				}
+			}
 
 			// we generate the logs in two different ways depending if the generate xml flag was
 			// provided. If it was, we will write the xml file to the tcp writer if present, else

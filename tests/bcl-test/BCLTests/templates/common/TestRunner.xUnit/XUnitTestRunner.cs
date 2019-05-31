@@ -130,7 +130,7 @@ namespace Xamarin.iOS.UnitTests.XUnit
 				return;
 
 			PassedTests++;
-			OnInfo ($"\t[PASS] {args.Message.TestCase.DisplayName}");
+			//OnInfo ($"\t[PASS] {args.Message.TestCase.DisplayName}");
 			LogTestDetails (args.Message.Test, log: OnDebug);
 			LogTestOutput (args.Message, log: OnDiagnostic);
 			ReportTestCases ("   Associated", args.Message.TestCases, log: OnDiagnostic);

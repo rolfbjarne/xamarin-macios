@@ -56,20 +56,22 @@ namespace xharness
 			// now simply copy what we receive
 			int i;
 			int total = 0;
-			NetworkStream stream = client.GetStream ();
-			var fs = OutputWriter;
-			while ((i = stream.Read (buffer, 0, buffer.Length)) != 0) {
-				fs.Write (buffer, 0, i);
-				fs.Flush ();
-				total += i;
+			using (var stream = client.GetStream ()) {
+				var fs = OutputWriter;
+				while ((i = stream.Read (buffer, 0, buffer.Length)) != 0) {
+					fs.Write (buffer, 0, i);
+					fs.Flush ();
+					total += i;
+					Console.WriteLine ("Received {0} bytes for a total of {1} bytes", i, total);
+				}
+				Console.WriteLine ("Received: {0}", System.Text.Encoding.UTF8.GetString (buffer));
+				if (total < 16) {
+					// This wasn't a test run, but a connection from the app (on device) to find
+					// the ip address we're reachable on.
+					return false;
+				}
+				return true;
 			}
-
-			if (total < 16) {
-				// This wasn't a test run, but a connection from the app (on device) to find
-				// the ip address we're reachable on.
-				return false;
-			}
-			return true;
 		}
 	}
 }

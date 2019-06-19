@@ -60,7 +60,7 @@ IOS_FSHARP_DIRECTORIES =                                   \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1         \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/LICENSE-fsharp: $(FSHARP_PATH)/License | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.dll: $(FSHARP_BUILD_PATH)/monotouch/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
@@ -69,7 +69,7 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.dll: $(FSHARP_BUILD_PATH)/monot
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%: $(IOS_BIN_DIR)/% | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
 	$(Q) install -m 0644 $< $@
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/LICENSE-fsharp: $(FSHARP_PATH)/License | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/%.dll: $(FSHARP_BUILD_PATH)/monotouch/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS
@@ -89,7 +89,7 @@ WATCH_FSHARP_DIRECTORIES =                                     \
 	build/xamarinwatchos                                       \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/LICENSE-fsharp: $(FSHARP_PATH)/License | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/%.dll: $(FSHARP_BUILD_PATH)/xamarinwatchos/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
@@ -109,7 +109,7 @@ TVOS_FSHARP_DIRECTORIES =                                   \
 	build/xamarintvos                                       \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS \
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/LICENSE-fsharp: $(FSHARP_PATH)/License | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
 	$(Q) install -m 0644 $< $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/%.dll: $(FSHARP_BUILD_PATH)/xamarintvos/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
@@ -134,7 +134,7 @@ MAC_FSHARP_DIRECTORIES =                                            \
 
 ## XM full
 
-$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/LICENSE-fsharp: $(FSHARP_PATH)/License | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5
 	$(Q) install -m 0644 $< $@
 
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/%.dll: $(FSHARP_BUILD_PATH)/xamarinmacfull/%.dll | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5
@@ -145,7 +145,7 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/4.5/%: $(MAC_45_BIN_DIR)/% |
 
 ## XM mobile
 
-$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/LICENSE-fsharp: $(FSHARP_PATH)/LICENSE | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/LICENSE-fsharp: $(FSHARP_PATH)/License | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac
 	$(Q) install -m 0644 $< $@
 
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/%.dll: $(FSHARP_BUILD_PATH)/xamarinmacmobile/%.dll | $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac

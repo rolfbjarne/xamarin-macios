@@ -53,7 +53,7 @@ namespace xharness
 		protected virtual string AdditionalDefines { get { return string.Empty; } }
 		public virtual string Platform { get { throw new NotImplementedException (); } }
 
-		public virtual bool ShouldSkipProjectGeneration { get { return false; } } // Only generate makefile to invoke hard coded csproj
+		public bool ShouldSkipProjectGeneration { get; set; }
 		public virtual bool ShouldSetTargetFrameworkIdentifier { get { return true; } }
 		public virtual string DefaultAssemblyReference { get { return "Xamarin.iOS"; } }
 		public virtual IEnumerable<string> ReferenceToRemove { get { return Enumerable.Empty<string> (); } }
@@ -65,8 +65,9 @@ namespace xharness
 
 		public string LanguageGuid { get { return IsFSharp ? FSharpGuid : CSharpGuid; } }
 
-		protected virtual bool FixProjectReference (string name)
+		protected virtual bool FixProjectReference (string name, out string fixed_reference)
 		{
+			fixed_reference = null;
 			return true;
 		}
 

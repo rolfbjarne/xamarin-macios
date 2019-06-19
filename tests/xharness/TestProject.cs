@@ -25,6 +25,12 @@ namespace xharness
 
 		public IEnumerable<TestProject> ProjectReferences;
 
+		// Optional
+		public BCLTestInfo BCLInfo { get; set; }
+
+		// Optional
+		public MonoNativeInfo MonoNativeInfo { get; set; }
+
 		public TestProject ()
 		{
 		}
@@ -154,12 +160,6 @@ namespace xharness
 		public bool SkiptvOSVariation;
 		public bool BuildOnly;
 
-		// Optional
-		public BCLTestInfo BCLInfo { get; set; }
-
-		// Optional
-		public MonoNativeInfo MonoNativeInfo { get; set; }
-
 		public iOSTestProject ()
 		{
 		}
@@ -170,21 +170,21 @@ namespace xharness
 		}
 	}
 
-	public enum MacFlavors { All, Modern, Full, System, NonSystem }
+	[Flags]
+	public enum MacFlavors {
+		Modern = 1, // Xamarin.Mac/Modern app
+		Full = 2, // Xamarin.Mac/Full app
+		System = 4, // Xamarin.Mac/System app
+		Console = 8, // Console executable
+	}
 
 	public class MacTestProject : TestProject
 	{
 		public MacFlavors TargetFrameworkFlavor;
 
-		// Optional
-		public MacBCLTestInfo BCLInfo { get; set; }
-
-		// Optional
-		public MacMonoNativeInfo MonoNativeInfo { get; set; }
-
-		public bool GenerateModern => TargetFrameworkFlavor == MacFlavors.All || TargetFrameworkFlavor == MacFlavors.NonSystem || TargetFrameworkFlavor == MacFlavors.Modern;
-		public bool GenerateFull => TargetFrameworkFlavor == MacFlavors.All || TargetFrameworkFlavor == MacFlavors.NonSystem || TargetFrameworkFlavor == MacFlavors.Full;
-		public bool GenerateSystem => TargetFrameworkFlavor == MacFlavors.All || TargetFrameworkFlavor == MacFlavors.System;
+		public bool GenerateModern => GenerateVariations && (TargetFrameworkFlavor & MacFlavors.Modern) == MacFlavors.Modern;
+		public bool GenerateFull => GenerateVariations && (TargetFrameworkFlavor & MacFlavors.Full) == MacFlavors.Full;
+		public bool GenerateSystem => GenerateVariations && (TargetFrameworkFlavor & MacFlavors.System) == MacFlavors.System;
 
 		public string Platform = "x86";
 
@@ -192,8 +192,10 @@ namespace xharness
 		{
 		}
 
-		public MacTestProject (string path, bool isExecutableProject = true, bool generateVariations = true, MacFlavors targetFrameworkFlavor = MacFlavors.NonSystem) : base (path, isExecutableProject, generateVariations)
+		public MacTestProject (string path, bool isExecutableProject = true, bool generateVariations = true, MacFlavors targetFrameworkFlavor = MacFlavors.Full | MacFlavors.Modern) : base (path, isExecutableProject, generateVariations)
 		{
+			if (!generateVariations && (targetFrameworkFlavor != MacFlavors.Modern && targetFrameworkFlavor != MacFlavors.Full && targetFrameworkFlavor != MacFlavors.System && targetFrameworkFlavor != MacFlavors.Console))
+				throw new ArgumentOutOfRangeException ($"generateVarations {generateVariations} must be true when multiple target framework flavors ({targetFrameworkFlavor}) are given.");
 			TargetFrameworkFlavor = targetFrameworkFlavor;
 		}
 
@@ -204,6 +206,11 @@ namespace xharness
 			rv.BCLInfo = BCLInfo;
 			rv.Platform = Platform;
 			return rv;
+		}
+
+		public override string ToString ()
+		{
+			return base.ToString () + " (" + TargetFrameworkFlavor.ToString () + ")";
 		}
 	}
 }

@@ -23,6 +23,7 @@ build
 *-macXM45.?sproj
 *-macXM45-32.?sproj
 *-macXM45.sln
+*-full.csproj
 *-mac-32.sln
 *-macXM45-32.sln
 *-today.?sproj

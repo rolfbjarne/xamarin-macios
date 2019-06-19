@@ -4,10 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace xharness
-{
-	public static class MakefileGenerator
-	{
+namespace xharness {
+	public static class MakefileGenerator {
 		static void WriteTarget (this StreamWriter writer, string target, string dependencies, params string [] arguments)
 		{
 			var t = string.Format (target, arguments);
@@ -31,18 +29,17 @@ namespace xharness
 			var make_escaped_suffix = "-" + target.Platform.Replace (" ", "\\ ");
 			var make_escaped_name = target.SimplifiedName.Replace (" ", "\\ ");
 
-			switch (type)
-			{
-				case MacTargetNameType.Build:
-					return string.Format ("build{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
-				case MacTargetNameType.Clean:
-					return string.Format ("clean{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
-				case MacTargetNameType.Exec:
-					return string.Format ("exec{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
-				case MacTargetNameType.Run:
-					return string.Format ("run{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
-				default:
-					throw new NotImplementedException ();
+			switch (type) {
+			case MacTargetNameType.Build:
+				return string.Format ("build{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
+			case MacTargetNameType.Clean:
+				return string.Format ("clean{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
+			case MacTargetNameType.Exec:
+				return string.Format ("exec{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
+			case MacTargetNameType.Run:
+				return string.Format ("run{0}-{2}-{1}", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
+			default:
+				throw new NotImplementedException ();
 			}
 		}
 
@@ -95,9 +92,9 @@ namespace xharness
 					allTargetNames.Add (MakeMacUnifiedTargetName (target, MacTargetNameType.Build));
 					allTargetCleanNames.Add (MakeMacUnifiedTargetName (target, MacTargetNameType.Clean));
 
-					string guiUnitDependency = target.Mobile ? "$(GUI_UNIT_PATH)/bin/xammac_mobile/GuiUnit.exe" : "$(GUI_UNIT_PATH)/bin/net_4_5/GuiUnit.exe";
+					string guiUnitDependency = target.Modern ? "$(GUI_UNIT_PATH)/bin/xammac_mobile/GuiUnit.exe" : "$(GUI_UNIT_PATH)/bin/net_4_5/GuiUnit.exe";
 
-					writer.WriteTarget (MakeMacUnifiedTargetName (target, MacTargetNameType.Build), "{0}", target.ProjectPath.Replace (" ", "\\ ") + " "  + guiUnitDependency + " " + nuget_restore_dependency);
+					writer.WriteTarget (MakeMacUnifiedTargetName (target, MacTargetNameType.Build), "{0}", target.ProjectPath.Replace (" ", "\\ ") + " " + guiUnitDependency + " " + nuget_restore_dependency);
 					writer.WriteLine ("\t$(Q_XBUILD) $(SYSTEM_XIBUILD) -- \"/property:Configuration=$(CONFIG)\" /t:Build $(XBUILD_VERBOSITY) \"{0}\"", target.ProjectPath);
 					writer.WriteLine ();
 
@@ -128,7 +125,7 @@ namespace xharness
 				writer.WriteLine ();
 				writer.WriteLine ("MD_APPLE_SDK_ROOT_EVALUATED:=$(shell dirname `dirname $(XCODE_DEVELOPER_ROOT)`)");
 
-				var enviromentalVariables = new Dictionary<string,string> () {
+				var enviromentalVariables = new Dictionary<string, string> () {
 					{ "TargetFrameworkFallbackSearchPaths", "$(MAC_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks"},
 					{ "MSBuildExtensionsPathFallbackPathsOverride", "$(MAC_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild" },
 					{ "MD_APPLE_SDK_ROOT", "$(MD_APPLE_SDK_ROOT_EVALUATED)"},
@@ -309,7 +306,7 @@ namespace xharness
 					// exec sim project target
 					if (target.IsMultiArchitecture) {
 						writer.WriteTarget ("exec{0}-sim64-{1}", "$(UNIT_SERVER)", make_escaped_suffix, make_escaped_name);
-						writer.WriteLine ("\t$(Q) $(SYSTEM_MONO) --debug $(XIBUILD_EXE_PATH) -t -- $(CURDIR)/xharness/xharness.exe $(XHARNESS_VERBOSITY) --run \"{0}\" --target {1}-simulator-64 --sdkroot $(XCODE_DEVELOPER_ROOT) --logdirectory \"$(abspath $(CURDIR))/logs/$@\" --configuration $(CONFIG)", target.ProjectPath, target.Platform); 
+						writer.WriteLine ("\t$(Q) $(SYSTEM_MONO) --debug $(XIBUILD_EXE_PATH) -t -- $(CURDIR)/xharness/xharness.exe $(XHARNESS_VERBOSITY) --run \"{0}\" --target {1}-simulator-64 --sdkroot $(XCODE_DEVELOPER_ROOT) --logdirectory \"$(abspath $(CURDIR))/logs/$@\" --configuration $(CONFIG)", target.ProjectPath, target.Platform);
 						writer.WriteLine ();
 
 						writer.WriteTarget ("exec{0}-sim32-{1}", "$(UNIT_SERVER)", make_escaped_suffix, make_escaped_name);
@@ -321,7 +318,7 @@ namespace xharness
 						writer.WriteLine ();
 					} else {
 						writer.WriteTarget ("exec{0}-sim{2}-{1}", "$(UNIT_SERVER)", make_escaped_suffix, make_escaped_name, target.MakefileWhereSuffix);
-						writer.WriteLine ("\t$(Q) $(SYSTEM_MONO) --debug $(XIBUILD_EXE_PATH) -t -- $(CURDIR)/xharness/xharness.exe $(XHARNESS_VERBOSITY) --run \"{0}\" --target {1}-simulator --sdkroot $(XCODE_DEVELOPER_ROOT) --logdirectory \"$(abspath $(CURDIR))/logs/$@\" --configuration $(CONFIG)", target.ProjectPath, target.Platform); 
+						writer.WriteLine ("\t$(Q) $(SYSTEM_MONO) --debug $(XIBUILD_EXE_PATH) -t -- $(CURDIR)/xharness/xharness.exe $(XHARNESS_VERBOSITY) --run \"{0}\" --target {1}-simulator --sdkroot $(XCODE_DEVELOPER_ROOT) --logdirectory \"$(abspath $(CURDIR))/logs/$@\" --configuration $(CONFIG)", target.ProjectPath, target.Platform);
 						writer.WriteLine ();
 					}
 
@@ -454,8 +451,8 @@ namespace xharness
 					var chunks = new List<string> ();
 					if (target is WatchOSTarget && target.IsBCLProject) {
 						if (target.Name == "mscorlib") {
-							for (int i = (int) 'A'; i <= (int) 'Z'; i++) {
-								chunks.Add (((char) i).ToString () + ((char) i).ToString ());
+							for (int i = (int)'A'; i <= (int)'Z'; i++) {
+								chunks.Add (((char)i).ToString () + ((char)i).ToString ());
 							}
 						} else if (target.Name == "System") {
 							chunks.Add ("AE");
@@ -563,7 +560,7 @@ namespace xharness
 				foreach (var target in unified_targets) {
 					if (!target.IsExe || target.Name.IndexOf ("BCLTests", 0, StringComparison.Ordinal) != -1)
 						continue;
-					
+
 					writer.WriteLine ("\t$(Q) $(MAKE) \"build-sim-{0}\" \"build-dev-{0}\" || echo \"build-{0} failed\" >> \".$@-failure.stamp\"", target.GetMakeName (false));
 				}
 				writer.WriteLine ("\t$(Q) if test -e \".$@-failure.stamp\"; then cat \".$@-failure.stamp\"; rm \".$@-failure.stamp\"; exit 1; fi");
@@ -587,7 +584,7 @@ namespace xharness
 						dependencies.Add ("tvos");
 					if (includewatchOS)
 						dependencies.Add ("watchos");
-					
+
 					writer.WriteTarget ("build-sim-{0}", string.Join (" ", dependencies.Select ((v) => $"build-{v}-sim-{{0}}")), make_escaped_name);
 					writer.WriteLine ("\t$(Q) echo Simulator builds succeeded"); // This is important, otherwise we'll end up executing the catch-all build-% target
 					writer.WriteLine ();

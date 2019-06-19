@@ -117,6 +117,8 @@ namespace xharness
 					return "9.0";
 				case DevicePlatform.watchOS:
 					return "2.0";
+				case DevicePlatform.macOS:
+					return "10.9";
 				default:
 					throw new Exception ($"Unknown DevicePlatform: {platform}");
 				}
@@ -128,6 +130,8 @@ namespace xharness
 					return "10.1"; // Can't use 10.0 due to http://openradar.appspot.com/radar?id=4966840983879680.
 				case DevicePlatform.watchOS:
 					return "4.0";
+				case DevicePlatform.macOS:
+					return "10.12";
 				default:
 					throw new Exception ($"Unknown DevicePlatform: {platform}");
 				}
@@ -148,11 +152,12 @@ namespace xharness
 			Flavor = flavor;
 		}
 
-		string NativeFlavorSuffix => Flavor == MonoNativeFlavor.Compat ? "-compat" : "-unified";
-		public virtual string FlavorSuffix => NativeFlavorSuffix;
-		public string ProjectName => "mono-native" + NativeFlavorSuffix;
-		public string ProjectPath => Path.Combine (Harness.RootDirectory, "mono-native", "mono-native" + FlavorSuffix + ".csproj");
-		public string TemplatePath => Path.Combine (Harness.RootDirectory, "mono-native", "mono-native" + (Harness.Mac ? "-mac" : string.Empty) + ".csproj.template");
+		public string FlavorSuffix => Flavor == MonoNativeFlavor.Compat ? "-compat" : "-unified";
+		public string ProjectName => "mono-native" + FlavorSuffix;
+		public string ProjectPath => Path.Combine (Harness.RootDirectory, "mono-native", TemplateName + FlavorSuffix + ".csproj");
+		string TemplateName => "mono-native" + TemplateSuffix;
+		public virtual string TemplatePath => Path.Combine (Harness.RootDirectory, "mono-native", TemplateName + ".csproj.template");
+		protected virtual string TemplateSuffix => string.Empty;
 
 		public void Convert ()
 		{
@@ -164,9 +169,15 @@ namespace xharness
 			inputProject.SetIntermediateOutputPath ("obj\\$(Platform)\\$(Configuration)" + FlavorSuffix);
 			inputProject.SetAssemblyName (inputProject.GetAssemblyName () + FlavorSuffix);
 
-			AddProjectDefines (inputProject);
+			var template_info_plist = Path.Combine (Path.GetDirectoryName (TemplatePath), inputProject.GetInfoPListInclude ());
+			var info_plist = new XmlDocument ();
+			info_plist.LoadWithoutNetworkAccess (template_info_plist);
+			info_plist.SetMinimummacOSVersion (MonoNativeHelper.GetMinimumOSVersion (DevicePlatform.macOS, Flavor));
+			var target_info_plist = Path.Combine (Path.GetDirectoryName (template_info_plist), "Info" + TemplateSuffix + FlavorSuffix + ".plist");
+			Harness.Save (info_plist, target_info_plist);
+			inputProject.FixInfoPListInclude (FlavorSuffix, newName: System.IO.Path.GetFileName (target_info_plist));
 
-			Convert (inputProject);
+			AddProjectDefines (inputProject);
 
 			Harness.Save (inputProject, ProjectPath);
 		}
@@ -183,34 +194,15 @@ namespace xharness
 
 	public class MacMonoNativeInfo : MonoNativeInfo
 	{
-		public MacFlavors MacFlavor { get; set; }
+		protected override string TemplateSuffix => "-mac";
 
-		public override string FlavorSuffix => base.FlavorSuffix + (MacFlavor == MacFlavors.Full ? "-full" : "-modern");
-
-		public MacMonoNativeInfo (Harness harness, MonoNativeFlavor flavor, MacFlavors macFlavor)
+		public MacMonoNativeInfo (Harness harness, MonoNativeFlavor flavor)
 			: base (harness, flavor)
 		{
-			if (macFlavor == MacFlavors.All)
-				throw new ArgumentException ("Each target must be a specific flavor");
-
-			MacFlavor = macFlavor;
 		}
 
 		protected override void Convert (XmlDocument inputProject)
 		{
-			switch (MacFlavor) {
-			case MacFlavors.Modern:
-				inputProject.SetTargetFrameworkIdentifier ("Xamarin.Mac");
-				inputProject.SetTargetFrameworkVersion ("v2.0");
-				inputProject.RemoveNode ("UseXamMacFullFramework");
-				inputProject.AddAdditionalDefines ("MOBILE;XAMMAC");
-				inputProject.AddReference ("Mono.Security");
-				break;
-			case MacFlavors.Full:
-				inputProject.AddAdditionalDefines ("XAMMAC_4_5");
-				break;
-			}
-
 			base.Convert (inputProject);
 		}
 	}

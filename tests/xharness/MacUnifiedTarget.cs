@@ -7,56 +7,41 @@ using Xamarin;
 
 namespace xharness
 {
-	public class MacUnifiedTarget : MacTarget
-	{
-		public bool Mobile { get; private set; }
-		public bool System { get; set; }
+	public class MacUnifiedTarget : Target {
+		public MacFlavors Flavor { get; private set; }
+		public bool Modern => Flavor == MacFlavors.Modern;
+		public bool System => Flavor == MacFlavors.System;
+		public bool Full => Flavor == MacFlavors.Full;
 
 		// Optional
 		public MacBCLTestInfo BCLInfo { get; set; }
 		bool IsBCL => BCLInfo != null;
 
-		bool SkipProjectGeneration;
-		bool SkipSuffix;
-
-		public MacUnifiedTarget (bool mobile, bool shouldSkipProjectGeneration = false, bool skipSuffix = false) : base ()
+		public MacUnifiedTarget (MacFlavors flavor)
 		{
-			Mobile = mobile;
-			SkipProjectGeneration = shouldSkipProjectGeneration;
-			SkipSuffix = skipSuffix;
+			Flavor = flavor;
 		}
 
 		protected override void CalculateName ()
 		{
 			base.CalculateName ();
 
-			if (IsBCL)
-				Name = Name + BCLInfo.FlavorSuffix;
 			if (MonoNativeInfo != null)
 				Name = Name + MonoNativeInfo.FlavorSuffix;
 		}
 
-		public override bool ShouldSkipProjectGeneration
-		{
-			get
-			{
-				return SkipProjectGeneration;
-			}
-		}
-
 		public override string Suffix {
 			get {
-				if (SkipProjectGeneration)
-					return "";
-				if (MonoNativeInfo != null) {
-					if (System)
-						return MonoNativeInfo.FlavorSuffix + "-system";
-					return MonoNativeInfo.FlavorSuffix;
-				}
-				if (System)
+				switch (Flavor) {
+				case MacFlavors.Modern:
+					return string.Empty;
+				case MacFlavors.Full:
+					return "-full";
+				case MacFlavors.System:
 					return "-system";
-				var suffix = (Mobile ? "" : "XM45");
-				return "-unified" + (IsBCL ? "" : suffix);
+				default:
+					throw new NotImplementedException ($"Suffix for {Flavor}");
+				}
 			}
 		}
 
@@ -64,8 +49,9 @@ namespace xharness
 			get {
 				if (System)
 					return "system";
-				string suffix = (Mobile ? "" : "XM45");
-				return "unified" + (IsBCL ? "" : suffix);
+				if (Full)
+					return "full";
+				return string.Empty;
 			}
 		}
 			
@@ -101,7 +87,12 @@ namespace xharness
 
 		protected override string AdditionalDefines {
 			get {
-				return "XAMCORE_2_0";
+				var rv = "XAMCORE_2_0";
+
+				if (Full)
+					rv += ";XAMMAC_4_5";
+
+				return rv;
 			}
 		}
 
@@ -117,11 +108,38 @@ namespace xharness
 			}
 		}
 
+		public string SimplifiedName {
+			get {
+				return Name.EndsWith ("-mac", StringComparison.Ordinal) ? Name.Substring (0, Name.Length - 4) : Name;
+			}
+		}
+
+		public MonoNativeInfo MonoNativeInfo { get; set; }
+
+		protected override bool FixProjectReference (string name, out string fixed_reference)
+		{
+			fixed_reference = null;
+			switch (name) {
+			case "GuiUnit_NET_4_5":
+				if (Flavor == MacFlavors.Full || Flavor == MacFlavors.System)
+					return false;
+				fixed_reference = "GuiUnit_xammac_mobile";
+				return true;
+			case "GuiUnit_xammac_mobile":
+				if (Flavor == MacFlavors.Modern)
+					return false;
+				fixed_reference = "GuiUnit_NET_4_5";
+				return true;
+			default:
+				return base.FixProjectReference (name, out fixed_reference);
+			}
+		}
+	
 		public override string DefaultAssemblyReference { get { return "Xamarin.Mac"; } }
 
 		public override IEnumerable<string> ReferenceToRemove { get { yield return "System.Drawing"; } }
 
-		public override bool ShouldSetTargetFrameworkIdentifier { get { return Mobile; } }
+		public override bool ShouldSetTargetFrameworkIdentifier { get { return Modern; } }
 
 		public override Dictionary<string, string> NewPropertiesToAdd 
 		{
@@ -133,7 +151,7 @@ namespace xharness
 				if (System) {
 					props.Add ("TargetFrameworkVersion", "v4.7.1");
 					props.Add ("MonoBundlingExtraArgs", "--embed-mono=no");
-				} else if (Mobile)
+				} else if (Modern)
 				{
 					props.Add ("TargetFrameworkVersion", "v2.0");
 				}
@@ -160,14 +178,7 @@ namespace xharness
 		{
 			if (MonoNativeInfo == null)
 				return templateMinimumOSVersion;
-			switch (MonoNativeInfo.Flavor) {
-			case MonoNativeFlavor.Compat:
-				return "10.9";
-			case MonoNativeFlavor.Unified:
-				return "10.12";
-			default:
-				throw new Exception ($"Unknown MonoNativeFlavor: {MonoNativeInfo.Flavor}");
-			}
+			return MonoNativeHelper.GetMinimumOSVersion (DevicePlatform.macOS, MonoNativeInfo.Flavor);
 		}
 
 		protected override void ProcessProject ()
@@ -182,12 +193,10 @@ namespace xharness
 
 			XmlDocument info_plist = new XmlDocument ();
 			var target_info_plist = Path.Combine (TargetDirectory, "Info" + Suffix + ".plist");
-			info_plist.LoadWithoutNetworkAccess (Path.Combine (TargetDirectory, "Info-mac.plist"));
+			info_plist.LoadWithoutNetworkAccess (Path.Combine (TargetDirectory, inputProject.GetInfoPListInclude ()));
 			BundleIdentifier = info_plist.GetCFBundleIdentifier ();
 			var plist_min_version = info_plist.GetPListStringValue ("LSMinimumSystemVersion");
 			info_plist.SetPListStringValue ("LSMinimumSystemVersion", GetMinimumOSVersion (plist_min_version));
-
-			inputProject.FixInfoPListInclude (Suffix);
 
 			Harness.Save (info_plist, target_info_plist);
 		}

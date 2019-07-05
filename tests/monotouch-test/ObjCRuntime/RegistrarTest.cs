@@ -5421,4 +5421,106 @@ namespace MonoTouchFixtures.ObjCRuntime {
 	}
 #endif // !__TVOS__
 #endif // !__WATCHOS__
+
+
+	public class CustomUrlProtocol : NSUrlProtocol, INSUrlSessionDelegate, INSUrlSessionTaskDelegate, INSUrlSessionDataDelegate {
+
+		// From NSUrlSessionDelegate
+		[Export ("URLSession:didBecomeInvalidWithError:")]
+		public virtual void DidBecomeInvalid (NSUrlSession session, NSError error)
+		{
+		}
+		
+		[Export ("URLSessionDidFinishEventsForBackgroundURLSession:")]
+		public virtual void DidFinishEventsForBackgroundSession (NSUrlSession session)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:didReceiveChallenge:completionHandler:")]
+		public unsafe virtual void DidReceiveChallenge (NSUrlSession session, NSUrlAuthenticationChallenge challenge, Action<NSUrlSessionAuthChallengeDisposition, NSUrlCredential> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		// From NSUrlSessionTaskDelegate
+		[Export ("URLSession:task:didCompleteWithError:")]
+		public virtual void DidCompleteWithError (NSUrlSession session, NSUrlSessionTask task, NSError error)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:task:didFinishCollectingMetrics:")]
+		public virtual void DidFinishCollectingMetrics (NSUrlSession session, NSUrlSessionTask task, NSUrlSessionTaskMetrics metrics)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:task:didReceiveChallenge:completionHandler:")]
+		public unsafe virtual void DidReceiveChallenge (NSUrlSession session, NSUrlSessionTask task, NSUrlAuthenticationChallenge challenge, Action<NSUrlSessionAuthChallengeDisposition, NSUrlCredential> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:")]
+		public virtual void DidSendBodyData (NSUrlSession session, NSUrlSessionTask task, long bytesSent, long totalBytesSent, long totalBytesExpectedToSend)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:task:needNewBodyStream:")]
+		public unsafe virtual void NeedNewBodyStream (NSUrlSession session, NSUrlSessionTask task, System.Action<NSInputStream> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:taskIsWaitingForConnectivity:")]
+		public virtual void TaskIsWaitingForConnectivity (NSUrlSession session, NSUrlSessionTask task)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:task:willBeginDelayedRequest:completionHandler:")]
+		public unsafe virtual void WillBeginDelayedRequest (NSUrlSession session, NSUrlSessionTask task, NSUrlRequest request, Action<NSUrlSessionDelayedRequestDisposition, NSUrlRequest> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:")]
+		public unsafe virtual void WillPerformHttpRedirection (NSUrlSession session, NSUrlSessionTask task, NSHttpUrlResponse response, NSUrlRequest newRequest, Action<NSUrlRequest> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		// From NSUrlSessionDataDelegate
+		[Export ("URLSession:dataTask:didBecomeDownloadTask:")]
+		public virtual void DidBecomeDownloadTask (NSUrlSession session, NSUrlSessionDataTask dataTask, NSUrlSessionDownloadTask downloadTask)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:dataTask:didBecomeStreamTask:")]
+		public virtual void DidBecomeStreamTask (NSUrlSession session, NSUrlSessionDataTask dataTask, NSUrlSessionStreamTask streamTask)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:dataTask:didReceiveData:")]
+		public virtual void DidReceiveData (NSUrlSession session, NSUrlSessionDataTask dataTask, NSData data)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:dataTask:didReceiveResponse:completionHandler:")]
+		public unsafe virtual void DidReceiveResponse (NSUrlSession session, NSUrlSessionDataTask dataTask, NSUrlResponse response, Action<NSUrlSessionResponseDisposition> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+
+		[Export ("URLSession:dataTask:willCacheResponse:completionHandler:")]
+		public unsafe virtual void WillCacheResponse (NSUrlSession session, NSUrlSessionDataTask dataTask, NSCachedUrlResponse proposedResponse, Action<NSCachedUrlResponse> completionHandler)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+	}
 }

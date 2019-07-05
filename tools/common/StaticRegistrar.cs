@@ -4137,11 +4137,10 @@ namespace Registrar {
 			}
 
 			// Might be an implementation of an optional protocol member.
-			var allProtocols = obj_method.DeclaringType.AllProtocols;
-			if (allProtocols != null) {
+			if (obj_method.DeclaringType.Protocols != null) {
 				string selector = null;
 
-				foreach (var proto in allProtocols) {
+				foreach (var proto in obj_method.DeclaringType.Protocols) {
 					// We store the DelegateProxy type in the ProtocolMemberAttribute, so check those.
 					if (selector == null)
 						selector = obj_method.Selector ?? string.Empty;
@@ -4184,11 +4183,10 @@ namespace Registrar {
 			}
 
 			// Might be an implementation of an optional protocol member.
-			var allProtocols = obj_method.DeclaringType.AllProtocols;
-			if (allProtocols != null) {
+			if (obj_method.DeclaringType.Protocols != null) {
 				string selector = null;
 
-				foreach (var proto in allProtocols) {
+				foreach (var proto in obj_method.DeclaringType.Protocols) {
 					// We store the BlockProxy type in the ProtocolMemberAttribute, so check those.
 					// We may run into binding assemblies built with earlier versions of the generator,
 					// which means we can't rely on finding the BlockProxy attribute in the ProtocolMemberAttribute.

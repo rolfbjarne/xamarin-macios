@@ -262,9 +262,81 @@ namespace Xamarin.Bundler {
 						AssertiOSVersionSupportsUserFrameworks (linkWith.LibraryName);
 
 						Frameworks.Add (ExtractFramework (assembly, metadata));
+					} else if (linkWith.LibraryName.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase)) {
+						AssertXcodeVersioSupportXCFrameworks (linkWith.LibraryName);
+						var xcframework = ExtractFramework (assembly, metadata);
+						Frameworks.UnionWith (SelectFrameworks (xcframework));
 					} else {
 						LinkWith.Add (ExtractNativeLibrary (assembly, metadata));
 					}
+				}
+			}
+		}
+
+		IEnumerable<string> SelectFrameworks (string xcframework)
+		{
+			var info_plist = Path.Combine (xcframework, "Info.plist");
+			if (!File.Exists (info_plist))
+				throw ErrorHelper.CreateError (9999, "The binding library '{0}' contains an invalid cross-platform user framework ({1}): could not find an Info.plist.", FileName, Path.GetFileName (xcframework));
+
+			var plist = Driver.FromPList (info_plist);
+			var version_string = (Xamarin.MacDev.PString) plist ["XCFrameworkFormatVersion"];
+			var package_type = (Xamarin.MacDev.PString) plist ["CFBundlePackageType"];
+			if (!Version.TryParse (version_string.Value, out var format_version)) {
+				throw ErrorHelper.CreateError (9999, "The binding library '{0}' contains a cross-platform user framework ({1}) whose format version could not be parsed ({2}).", FileName, Path.GetFileName (xcframework), version_string.Value);
+			} else if (format_version > new Version (1, 0)) {
+				throw ErrorHelper.CreateError (9999, "The binding library '{0}' contains a cross-platform user framework ({1}) whose format version is higher than expected (excepted v1.0 or earlier, found {2}).", FileName, Path.GetFileName (xcframework), version_string.Value);
+			}
+
+			if (package_type.Value != "XFWK")
+				throw ErrorHelper.CreateError (9999, "The binding library '{0}' contains a cross-platform user framework ({1}) of unknown package type (expected 'XFWK', found{2}).", FileName, Path.GetFileName (xcframework), package_type.Value);
+
+			var libraries = plist.GetArray ("AvailableLibraries");
+			var platform = string.Empty;
+			var platform_variant = string.Empty;
+			switch (App.Platform) {
+			case ApplePlatform.iOS:
+				platform = "ios";
+				break;
+			case ApplePlatform.TVOS:
+				platform = "tvos";
+				break;
+			case ApplePlatform.WatchOS:
+				platform = "watchos";
+				break;
+			case ApplePlatform.MacOSX:
+				platform = "macos";
+				break;
+			default:
+				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case.", App.Platform, App.SdkVersion);
+			}
+#if MTOUCH
+			if (App.IsSimulatorBuild)
+				platform_variant = "simulator";
+#endif
+			foreach (var entry in libraries) {
+				var entry_dict = (Xamarin.MacDev.PDictionary) entry;
+				var supported_platform = (Xamarin.MacDev.PString) entry_dict ["SupportedPlatform"];
+				if (supported_platform.Value != platform)
+					continue;
+				entry_dict.TryGetValue<Xamarin.MacDev.PString> ("SupportedPlatformVariant", out var supported_platform_variant);
+				if (platform_variant != supported_platform_variant?.Value)
+					continue;
+
+				var architectures = (Xamarin.MacDev.PArray) entry_dict ["SupportedArchitectures"];
+				foreach (var arch in architectures) {
+					var str_arch = ((Xamarin.MacDev.PString) arch).Value;
+					if (!Enum.TryParse<Abi> (str_arch, true, out var abi)) {
+						ErrorHelper.Warning (9999, "Unknown architecture in xcframework: {0}", str_arch);
+						continue;
+					}
+
+					if (!App.IsArchEnabled (abi))
+						continue;
+
+					var library_identifier = (Xamarin.MacDev.PString) entry_dict ["LibraryIdentifier"];
+					var library_path = (Xamarin.MacDev.PString) entry_dict ["LibraryPath"];
+					yield return Path.Combine (xcframework, library_identifier.Value, library_path);
 				}
 			}
 		}
@@ -277,6 +349,13 @@ namespace Xamarin.Bundler {
 					FileName, Path.GetFileName (path), App.DeploymentTarget);
 			}
 #endif
+		}
+
+		void AssertXcodeVersioSupportXCFrameworks (string path)
+		{
+			if (Driver.XcodeVersion.Major >= 11)
+				return;
+			throw ErrorHelper.CreateError (9999, "The binding library '{0}' contains a cross-platform user framework ({1}), but the current version of Xcode doesn't support cross-platform user frameworks. Please upgrade to Xcode 11 or later.", FileName, Path.GetFileName (path));
 		}
 
 		void ProcessNativeReferenceOptions (NativeReferenceMetadata metadata)

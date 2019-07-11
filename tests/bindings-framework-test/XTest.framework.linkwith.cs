@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: LinkWith ("XTest.framework", Frameworks = LinkWithConstants.Frameworks)]
 [assembly: LinkWith ("XStaticObjectTest.framework", LinkerFlags = "-lz", Frameworks = LinkWithConstants.Frameworks)]
 [assembly: LinkWith ("XStaticArTest.framework", Frameworks = LinkWithConstants.Frameworks)]
+[assembly: LinkWith ("XCTest.xcframework", Frameworks = LinkWithConstants.Frameworks)]
 #endif
 
 static class LinkWithConstants

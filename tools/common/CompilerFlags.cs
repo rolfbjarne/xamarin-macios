@@ -193,7 +193,7 @@ namespace Xamarin.Utils
 					WeakFrameworks = new HashSet<string> ();
 				
 				foreach (var fwk in Frameworks) {
-					if (!fwk.EndsWith (".framework", StringComparison.Ordinal)) {
+					if (!fwk.EndsWith (".framework", StringComparison.OrdinalIgnoreCase) && !fwk.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase)) {
 						var add_to = WeakFrameworks;
 						var framework = Driver.GetFrameworks (Application).Find (fwk);
 						if (framework != null) {
@@ -308,7 +308,7 @@ namespace Xamarin.Utils
 		void ProcessFrameworkForArguments (StringBuilder args, string fw, bool is_weak, ref bool any_user_framework)
 		{
 			var name = Path.GetFileNameWithoutExtension (fw);
-			if (fw.EndsWith (".framework", StringComparison.Ordinal)) {
+			if (fw.EndsWith (".framework", StringComparison.OrdinalIgnoreCase)) {
 				// user framework, we need to pass -F to the linker so that the linker finds the user framework.
 				any_user_framework = true;
 				AddInput (Path.Combine (fw, name));

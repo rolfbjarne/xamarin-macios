@@ -150,6 +150,38 @@ $(eval $(call LibTemplate,arm64+x86_64,.libs/tvos/libtest.arm64.o,.libs/tvos/lib
 
 $(eval $(call LibTemplate,armv7k+x86,.libs/watchos/libtest.armv7k.o,.libs/watchos/libtest.x86.o,watchos,WATCHOS))
 
+
+define XCTemplate
+.libs/by-platform/$(1)/XCTest.framework/XCTest: $(foreach arch,$(3),.libs/$(2)/libtest$(4).$(arch).dylib) | .libs/by-platform/$(1)/XCTest.framework
+	$$(call Q_2,LIPO   [$(1)]) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo $$^ -create -output $$@
+
+.libs/by-platform/$(1)/XCTest.framework/Info.plist: XTest-Info.plist | .libs/by-platform/$(1)/XCTest.framework
+	$$(Q) $(CP) $$^ $$@
+
+.libs/by-platform/$(1)/XCTest.framework:
+	$$(Q) mkdir -p $$@
+
+XTEST_XCFRAMEWORKS += .libs/by-platform/$(1)/XCTest.framework
+XTEST_XCTARGETS += \
+	.libs/by-platform/$(1)/XCTest.framework/XCTest \
+	.libs/by-platform/$(1)/XCTest.framework/Info.plist \
+
+endef
+
+$(eval $(call XCTemplate,iphoneos,ios,armv7 armv7s arm64,-dev))
+$(eval $(call XCTemplate,iphonesimulator,ios,i386 x86_64,-sim))
+$(eval $(call XCTemplate,appletv,tvos,arm64,-dev))
+$(eval $(call XCTemplate,appletvsimulator,tvos,x86_64,-sim))
+$(eval $(call XCTemplate,watchos,watchos,armv7k arm64_32,-dev))
+$(eval $(call XCTemplate,watchsimulator,watchos,i386,-sim))
+$(eval $(call XCTemplate,macos,macos,x86_64,-sim))
+
+.libs/XCTest.xcframework: $(XTEST_XCTARGETS) Makefile
+	$(Q) rm -rf $@
+	$(Q_GEN) $(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $(foreach fw,$(XTEST_XCFRAMEWORKS),-framework $(fw)) -output $@
+
+all-local:: .libs/XCTest.xcframework
+
 # Xamarin.Mac
 
 MAC_CLANG = DEVELOPER_DIR=$(XCODE_DEVELOPER_ROOT) $(MAC_CC)

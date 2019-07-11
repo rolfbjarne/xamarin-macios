@@ -63,6 +63,9 @@
     <ObjcBindingNativeFramework Include="..\..\tests\test-libraries\.libs\ios\XStaticArTest.framework">
       <Link>XStaticArTest.framework</Link>
     </ObjcBindingNativeFramework>
+    <ObjcBindingNativeFramework Include="..\..\tests\test-libraries\.libs\XCTest.xcframework">
+      <Link>XCTest.xcframework</Link>
+    </ObjcBindingNativeFramework>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XTest.framework.linkwith.cs">

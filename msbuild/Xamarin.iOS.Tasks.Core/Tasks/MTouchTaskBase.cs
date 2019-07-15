@@ -168,6 +168,8 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public ITaskItem[] AppExtensionReferences { get; set; }
 
+		public string Platform { get; set; }
+
 		#endregion
 
 		#region Outputs
@@ -598,7 +600,18 @@ namespace Xamarin.iOS.Tasks
 			foreach (var ext in AppExtensionReferences)
 				args.AddQuotedLine ($"--app-extension={Path.GetFullPath (ext.ItemSpec)}");
 
-			args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
+			if (!string.IsNullOrEmpty (Platform)) {
+				switch (Platform) {
+				case "macOS":
+					args.AddLine ($"--target-framework=Xamarin.UIKitForMac,v1.0");
+					break;
+				default:
+					Log.LogError ($"Invalid value for MtouchPlatform: {Platform} (only valid value is 'macOS').");
+					break;
+				}
+			} else {
+				args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
+			}
 
 			args.AddQuotedLine ($"--root-assembly={Path.GetFullPath (MainAssembly.ItemSpec)}");
 
@@ -608,7 +621,7 @@ namespace Xamarin.iOS.Tasks
 
 			if (!string.IsNullOrWhiteSpace (License))
 				args.AddLine ($"--license={License}");
-
+			
 			// Generate a response file
 			var responseFile = Path.GetFullPath (ResponseFilePath);
 

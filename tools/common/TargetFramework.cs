@@ -38,13 +38,14 @@ namespace Xamarin.Utils
 		public static readonly TargetFramework Xamarin_iOS_1_0 = Parse ("Xamarin.iOS,v1.0");
 		public static readonly TargetFramework Xamarin_WatchOS_1_0 = Parse ("Xamarin.WatchOS,v1.0");
 		public static readonly TargetFramework Xamarin_TVOS_1_0 = Parse ("Xamarin.TVOS,v1.0");
+		public static readonly TargetFramework Xamarin_UIKitForMac_1_0 = Parse ("Xamarin.UIKitForMac,v1.0");
 
 		public static readonly TargetFramework XamMac_1_0 = Parse ("XamMac,v1.0");
 		public static readonly TargetFramework Xamarin_Mac_2_0_Mobile = Parse ("Xamarin.Mac,Version=v2.0,Profile=Mobile");
 		public static readonly TargetFramework Xamarin_Mac_4_5_Full = Parse ("Xamarin.Mac,Version=v4.5,Profile=Full");
 		public static readonly TargetFramework Xamarin_Mac_4_5_System = Parse ("Xamarin.Mac,Version=v4.5,Profile=System");
 #if MTOUCH
-		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[] { Xamarin_iOS_1_0, Xamarin_WatchOS_1_0, Xamarin_TVOS_1_0 };
+		public static readonly TargetFramework [] ValidFrameworks = { Xamarin_iOS_1_0, Xamarin_WatchOS_1_0, Xamarin_TVOS_1_0, Xamarin_UIKitForMac_1_0 };
 #elif BGENERATOR
 		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[]
 		{
@@ -211,6 +212,7 @@ namespace Xamarin.Utils
 					return ApplePlatform.WatchOS;
 				case "Xamarin.TVOS":
 					return ApplePlatform.TVOS;
+				case "Xamarin.UIKitForMac":
 				default:
 					return ApplePlatform.MacOSX;
 				}

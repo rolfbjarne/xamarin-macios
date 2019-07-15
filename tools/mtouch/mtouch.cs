@@ -1057,7 +1057,7 @@ namespace Xamarin.Bundler
 			},
 			{ "sgen:", "Enable the SGen garbage collector",
 					v => {
-						if (!ParseBool (v, "sgen")) 
+						if (!ParseBool (v, "sgen"))
 							ErrorHelper.Warning (43, "The Boehm garbage collector is not supported. The SGen garbage collector has been selected instead.");
 					},
 					true // do not show the option anymore
@@ -1065,7 +1065,7 @@ namespace Xamarin.Bundler
 			{ "boehm:", "Enable the Boehm garbage collector",
 					v => {
 						if (ParseBool (v, "boehm"))
-							ErrorHelper.Warning (43, "The Boehm garbage collector is not supported. The SGen garbage collector has been selected instead."); }, 
+							ErrorHelper.Warning (43, "The Boehm garbage collector is not supported. The SGen garbage collector has been selected instead."); },
 					true // do not show the option anymore
 				},
 			{ "new-refcount:", "Enable new refcounting logic",
@@ -1197,7 +1197,7 @@ namespace Xamarin.Bundler
 				}
 			},
 			{ "interpreter:", "Enable the *experimental* interpreter. Optionally takes a comma-separated list of assemblies to interpret (if prefixed with a minus sign, the assembly will be AOT-compiled instead). 'all' can be used to specify all assemblies. This argument can be specified multiple times.", v =>
-				{ 
+				{
 					app.UseInterpreter = true;
 					if (!string.IsNullOrEmpty (v)) {
 						app.InterpretedAssemblies.AddRange (v.Split (new char [] { ',' }, StringSplitOptions.RemoveEmptyEntries));

@@ -12,7 +12,7 @@ namespace Xamarin.Utils
 {
 	public enum ApplePlatform {
 		None,
-		MacOSX,
+		macOS,
 		iOS,
 		WatchOS,
 		TVOS,
@@ -214,7 +214,7 @@ namespace Xamarin.Utils
 					return ApplePlatform.TVOS;
 				case "Xamarin.UIKitForMac":
 				default:
-					return ApplePlatform.MacOSX;
+					return ApplePlatform.macOS;
 				}
 			}
 		}

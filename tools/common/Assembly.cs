@@ -468,7 +468,7 @@ namespace Xamarin.Bundler {
 		public string GetCompressionLinkingFlag ()
 		{
 			switch(App.Platform) {
-			case ApplePlatform.MacOSX:
+			case ApplePlatform.macOS:
 				if (App.DeploymentTarget >= new Version (10, 11, 0))
 					return "-lcompression";
 				return "-weak-lcompression";

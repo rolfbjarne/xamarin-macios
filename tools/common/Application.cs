@@ -127,7 +127,7 @@ namespace Xamarin.Bundler {
 					return "tvOS";
 				case ApplePlatform.WatchOS:
 					return "watchOS";
-				case ApplePlatform.MacOSX:
+				case ApplePlatform.macOS:
 					return "macOS";
 				default:
 					throw new NotImplementedException ();
@@ -418,7 +418,7 @@ namespace Xamarin.Bundler {
 #endif
 			};
 
-			if (Platform == ApplePlatform.iOS || Platform == ApplePlatform.MacOSX) {
+			if (Platform == ApplePlatform.iOS || Platform == ApplePlatform.macOS) {
 				if (Is32Build) {
 					resolver.ArchDirectory = Driver.GetArch32Directory (this);
 				} else {

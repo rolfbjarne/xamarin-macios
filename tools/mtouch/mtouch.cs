@@ -188,6 +188,7 @@ namespace Xamarin.Bundler
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+			case ApplePlatform.UIKitForMac:
 				return app.IsDeviceBuild ? "iPhoneOS" : "iPhoneSimulator";
 			case ApplePlatform.WatchOS:
 				return app.IsDeviceBuild ? "WatchOS" : "WatchSimulator";
@@ -236,6 +237,7 @@ namespace Xamarin.Bundler
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+			case ApplePlatform.UIKitForMac:
 				return Path.Combine (MonoTouchDirectory, "lib", "mono", "Xamarin.iOS");
 			case ApplePlatform.WatchOS:
 				return Path.Combine (MonoTouchDirectory, "lib", "mono", "Xamarin.WatchOS");
@@ -304,6 +306,7 @@ namespace Xamarin.Bundler
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+			case ApplePlatform.UIKitForMac:
 				return "Xamarin.iOS";
 			case ApplePlatform.WatchOS:
 				return "Xamarin.WatchOS";
@@ -1656,6 +1659,7 @@ namespace Xamarin.Bundler
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+			case ApplePlatform.UIKitForMac:
 				return Frameworks.GetiOSFrameworks (app);
 			case ApplePlatform.WatchOS:
 				return Frameworks.GetwatchOSFrameworks (app);

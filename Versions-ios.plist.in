@@ -71,6 +71,10 @@
 			<string>5.2</string>
 			<string>6.0</string>
 		</array>
+		<key>UIKitForMac</key>
+		<array>
+			<string>10.15</string>
+		</array>
 	</dict>
 	<key>RecommendedXcodeVersion</key>
 	<string>@XCODE_VERSION@</string>

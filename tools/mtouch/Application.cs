@@ -673,6 +673,10 @@ namespace Xamarin.Bundler {
 				if (abis.Count == 0)
 					throw ErrorHelper.CreateError (76, "No architecture specified (using the --abi argument). An architecture is required for {0} projects.", "Xamarin.TVOS");
 				break;
+			case ApplePlatform.UIKitForMac:
+				if (abis.Count == 0)
+					throw ErrorHelper.CreateError (76, "No architecture specified (using the --abi argument). An architecture is required.");
+				break;
 			default:
 				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in Xamarin.iOS; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case.", Platform);
 			}
@@ -719,6 +723,9 @@ namespace Xamarin.Bundler {
 				} else {
 					validAbis.Add (Abi.x86_64);
 				}
+				break;
+			case ApplePlatform.UIKitForMac:
+				validAbis.Add (Abi.x86_64);
 				break;
 			default:
 				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in Xamarin.iOS; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case.", Platform);

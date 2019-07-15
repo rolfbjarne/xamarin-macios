@@ -16,6 +16,7 @@ namespace Xamarin.Utils
 		iOS,
 		WatchOS,
 		TVOS,
+		UIKitForMac,
 	}
 
 	public struct TargetFramework : IEquatable<TargetFramework>
@@ -213,6 +214,7 @@ namespace Xamarin.Utils
 				case "Xamarin.TVOS":
 					return ApplePlatform.TVOS;
 				case "Xamarin.UIKitForMac":
+					return ApplePlatform.UIKitForMac;
 				default:
 					return ApplePlatform.macOS;
 				}

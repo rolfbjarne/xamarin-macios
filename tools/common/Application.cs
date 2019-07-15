@@ -129,8 +129,10 @@ namespace Xamarin.Bundler {
 					return "watchOS";
 				case ApplePlatform.macOS:
 					return "macOS";
+				case ApplePlatform.UIKitForMac:
+					return "UIKitForMac";
 				default:
-					throw new NotImplementedException ();
+					throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in Xamarin.iOS; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case.", Platform);
 				}
 			}
 		}

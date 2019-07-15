@@ -187,6 +187,10 @@ namespace Xamarin.iOS.Tasks
 
 		#endregion
 
+		bool IsUIKitForMac {
+			get { return Platform == "macOS"; }
+		}
+
 		public PlatformFramework Framework {
 			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkIdentifier); }
 		}
@@ -673,7 +677,7 @@ namespace Xamarin.iOS.Tasks
 
 //			deviceType = plist.GetUIDeviceFamily ();
 
-			if (plist.TryGetValue (ManifestKeys.MinimumOSVersion, out value)) {
+			if (plist.TryGetValue (IsUIKitForMac ? ManifestKeys.LSMinimumSystemVersion : ManifestKeys.MinimumOSVersion, out value)) {
 				if (!IPhoneSdkVersion.TryParse (value.Value, out minimumOSVersion)) {
 					Log.LogError (null, null, null, AppManifest.ItemSpec, 0, 0, 0, 0, "Could not parse MinimumOSVersion '{0}'", value);
 					return false;

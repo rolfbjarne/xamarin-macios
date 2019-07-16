@@ -54,15 +54,13 @@ public class ForcedTypeAttribute : Attribute {
 	public bool Owns;
 }
 
-// Used to flag a type as needing to be turned into a protocol on output for Unified
+// Used to flag a type as needing to be turned into a protocol on output
 // For example:
 //   [Protocolize, Wrap ("WeakDelegate")]
 //   MyDelegate Delegate { get; set; }
 //
 // becomes:
 //   IMyDelegate Delegate { get; set; }
-//
-// on the Unified API.
 //
 // Valid on return values and parameters
 //
@@ -257,15 +255,6 @@ public class NullAllowedAttribute : Attribute {
 // When applied to a method or property, flags the resulting generated code as internal
 public class InternalAttribute : Attribute {
 	public InternalAttribute () {}
-}
-
-// This is a conditional "Internal" method, that flags methods as internal only when
-// compiling with Unified, otherwise, this is ignored.
-//
-// In addition, UnifiedInternal members automatically get an underscore after their name
-// so [UnifiedInternal] void Foo(); becomes "Foo_()"
-public class UnifiedInternalAttribute : Attribute {
-	public UnifiedInternalAttribute () {}
 }
 
 // When applied to a method or property, flags the resulting generated code as internal

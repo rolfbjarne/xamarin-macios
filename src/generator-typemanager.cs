@@ -286,7 +286,7 @@ public class TypeManager {
 		if (Frameworks.HaveCoreMidi)
 			MidiEndpoint = Lookup (platform_assembly, "CoreMidi", "MidiEndpoint");
 		if (Frameworks.HaveMapKit)
-			MKCoordinateSpan = Lookup (platform_assembly, "MapKit", "MKCoordinateSpan", true /* isn't in XM/Classic */);
+			MKCoordinateSpan = Lookup (platform_assembly, "MapKit", "MKCoordinateSpan");
 		if (Frameworks.HaveMediaToolbox)
 			MTAudioProcessingTap = Lookup (platform_assembly, "MediaToolbox", "MTAudioProcessingTap");
 		NSNumber = Lookup (binding_touch.BindThirdPartyLibrary ? platform_assembly : api_assembly, "Foundation", "NSNumber");

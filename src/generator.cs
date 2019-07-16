@@ -148,25 +148,17 @@ public static class ReflectionExtensions {
 
 	public static bool IsInternal (this MemberInfo mi, Generator generator)
 	{
-		return generator.AttributeManager.HasAttribute<InternalAttribute> (mi)
-			|| (generator.AttributeManager.HasAttribute<UnifiedInternalAttribute> (mi));
+		return generator.AttributeManager.HasAttribute<InternalAttribute> (mi);
 	}
-
-	public static bool IsUnifiedInternal (this MemberInfo mi, Generator generator)
-	{
-		return (generator.AttributeManager.HasAttribute<UnifiedInternalAttribute> (mi));
-	}
-
+	
 	public static bool IsInternal (this PropertyInfo pi, Generator generator)
 	{
-		return generator.AttributeManager.HasAttribute<InternalAttribute> (pi)
-			|| (generator.AttributeManager.HasAttribute<UnifiedInternalAttribute> (pi));
+		return generator.AttributeManager.HasAttribute<InternalAttribute> (pi);
 	}
 
 	public static bool IsInternal (this Type type, Generator generator)
 	{
-		return generator.AttributeManager.HasAttribute<InternalAttribute> (type)
-			|| (generator.AttributeManager.HasAttribute<UnifiedInternalAttribute> (type));
+		return generator.AttributeManager.HasAttribute<InternalAttribute> (type);
 	}
 	
 	public static List <MethodInfo> GatherMethods (this Type type, BindingFlags flags, Generator generator) {
@@ -456,7 +448,7 @@ public class MemberInformation
 	public readonly Type type;
 	public readonly Type category_extension_type;
 	internal readonly WrapPropMemberInformation wpmi;
-	public readonly bool is_abstract, is_protected, is_internal, is_unified_internal, is_override, is_new, is_sealed, is_static, is_thread_static, is_autorelease, is_wrapper, is_forced;
+	public readonly bool is_abstract, is_protected, is_internal, is_override, is_new, is_sealed, is_static, is_thread_static, is_autorelease, is_wrapper, is_forced;
 	public readonly bool is_type_sealed, ignore_category_static_warnings, is_basewrapper_protocol_method;
 	public readonly bool has_inner_wrap_attribute;
 	public readonly Generator.ThreadCheck threadCheck;
@@ -478,7 +470,6 @@ public class MemberInformation
 		is_abstract = AttributeManager.HasAttribute<AbstractAttribute> (mi) && mi.DeclaringType == type;
 		is_protected = AttributeManager.HasAttribute<ProtectedAttribute> (mi);
 		is_internal = mi.IsInternal (generator);
-		is_unified_internal = AttributeManager.HasAttribute<UnifiedInternalAttribute> (mi);
 		is_override = AttributeManager.HasAttribute<OverrideAttribute> (mi) || !Generator.MemberBelongsToType (mi.DeclaringType, type);
 		is_new = AttributeManager.HasAttribute<NewAttribute> (mi);
 		is_sealed = AttributeManager.HasAttribute<SealedAttribute> (mi);
@@ -2361,7 +2352,7 @@ public partial class Generator : IMemberGatherer {
 					} else if (attr is StaticAttribute){
 						need_static [t] = true;
 						continue;
-					} else if (attr is InternalAttribute || attr is UnifiedInternalAttribute || attr is ProtectedAttribute){
+					} else if (attr is InternalAttribute || attr is ProtectedAttribute){
 						continue;
 					} else if (attr is NeedsAuditAttribute) {
 						continue;
@@ -3431,7 +3422,6 @@ public partial class Generator : IMemberGatherer {
 
 			sb.Append (" ");
 		}
-		// Unified internal methods automatically get a _ appended
 		if (minfo.is_extension_method && minfo.method.IsSpecialName) {
 			if (name.StartsWith ("get_", StringComparison.Ordinal))
 				name = "Get" + name.Substring (4);
@@ -3439,8 +3429,6 @@ public partial class Generator : IMemberGatherer {
 				name = "Set" + name.Substring (4);
 		}
 		sb.Append (name);
-		if (minfo.is_unified_internal)
-			sb.Append ("_");
 		sb.Append (" (");
 
 		bool comma = false;
@@ -4592,7 +4580,6 @@ public partial class Generator : IMemberGatherer {
 		string wrap;
 		var export = GetExportAttribute (pi, out wrap);
 		var minfo = new MemberInformation (this, this, pi, type, is_interface_impl);
-		bool use_underscore = minfo.is_unified_internal;
 		var mod = minfo.GetVisibility ();
 		minfo.protocolize = Protocolize (pi);
 
@@ -4624,12 +4611,11 @@ public partial class Generator : IMemberGatherer {
 			print_generated_code ();
 			PrintPropertyAttributes (pi);
 			PrintAttributes (pi, preserve:true, advice:true);
-			print ("{0} {1}{2} {3}{4} {{",
+			print ("{0} {1}{2} {3} {{",
 			       mod,
 			       minfo.GetModifiers (),
 			       (minfo.protocolize ? "I" : "") + FormatType (pi.DeclaringType, GetCorrectGenericType (pi.PropertyType)),
-					pi.Name.GetSafeParamName (),
-			       use_underscore ? "_" : "");
+					pi.Name.GetSafeParamName ());
 			indent++;
 			if (pi.CanRead) {
 				PrintAttributes (pi, platform:true);
@@ -4720,12 +4706,11 @@ public partial class Generator : IMemberGatherer {
 			propertyTypeName = FormatType (pi.DeclaringType, GetCorrectGenericType (pi.PropertyType));
 		}
 
-		print ("{0} {1}{2} {3}{4} {{",
+		print ("{0} {1}{2} {3} {{",
 		       mod,
 		       minfo.GetModifiers (),
 			   propertyTypeName,
-				pi.Name.GetSafeParamName (),
-		       use_underscore ? "_" : "");
+				pi.Name.GetSafeParamName ());
 		indent++;
 
 		if (wrap != null) {
@@ -6495,8 +6480,6 @@ public partial class Generator : IMemberGatherer {
 					var fieldAttr = AttributeManager.GetCustomAttribute<FieldAttribute> (field_pi);
 					ComputeLibraryName (fieldAttr, type, field_pi.Name, out string library_name, out string library_path);
 
-					bool is_unified_internal = field_pi.IsUnifiedInternal (this);
-
 					string fieldTypeName;
 					string smartEnumTypeName = null;
 					if (IsSmartEnum (field_pi.PropertyType)) {
@@ -6522,10 +6505,9 @@ public partial class Generator : IMemberGatherer {
 					if (AttributeManager.HasAttribute<NotificationAttribute> (field_pi))
 						print ($"[Advice (\"Use {type.Name}.Notifications.Observe{GetNotificationName (field_pi)} helper method instead.\")]");
 
-					print ("{0} static {1} {2}{3} {{", field_pi.IsInternal (this) ? "internal" : "public",
+					print ("{0} static {1} {2} {{", field_pi.IsInternal (this) ? "internal" : "public",
 						smartEnumTypeName ?? fieldTypeName,
-						field_pi.Name,
-						is_unified_internal ? "_" : "");
+						field_pi.Name);
 					indent++;
 
 					PrintAttributes (field_pi, platform:true);
@@ -6701,7 +6683,7 @@ public partial class Generator : IMemberGatherer {
 					//    If you have two or more types in an inheritence structure in the binding that expose events
 					//    they can fight over who's generated delegate gets used if you use the events at both level.
 					//    e.g. NSComboxBox.SelectionChanged (on NSComboxBox) and NSComboBox.EditingEnded (on NSTextField)
-					// We solve this under Unified when the delegate is protocalized (and leave Classic how it always has been)
+					// We solve this under Unified when the delegate is protocalized
 					// To handle this case, we do two things:
 					//    1) We have to ensure that the same internal delegate is uses for base and derived events, so they
 					//     aren't stepping on each other toes. This means we always instance up the leaf class's internal delegate

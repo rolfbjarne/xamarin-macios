@@ -2109,12 +2109,14 @@ namespace AVFoundation {
 		NSString PortCarAudio { get; }
 
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionLocationUpper")]
-		NSString LocationUpper { get; }
+		[Field ("AVAudioSessionLocationUpper")]
+		[Internal]
+		NSString LocationUpper_ { get; }
 
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionLocationLower")]
-		NSString LocationLower { get; }
+		[Field ("AVAudioSessionLocationLower")]
+		[Internal]
+		NSString LocationLower_ { get; }
 		
 		[iOS (6,0)]
 		[Export ("inputDataSources"), NullAllowed]
@@ -2191,20 +2193,24 @@ namespace AVFoundation {
 		nint MaximumOutputNumberOfChannels { get; }
 
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionOrientationTop")]
-		NSString OrientationTop { get; }
+		[Field ("AVAudioSessionOrientationTop")]
+		[Internal]
+		NSString OrientationTop_ { get; }
 	
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionOrientationBottom")]
-		NSString OrientationBottom { get; }
+		[Field ("AVAudioSessionOrientationBottom")]
+		[Internal]
+		NSString OrientationBottom_ { get; }
 	
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionOrientationFront")]
-		NSString OrientationFront { get; }
+		[Field ("AVAudioSessionOrientationFront")]
+		[Internal]
+		NSString OrientationFront_ { get; }
 	
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionOrientationBack")]
-		NSString OrientationBack { get; }
+		[Field ("AVAudioSessionOrientationBack")]
+		[Internal]
+		NSString OrientationBack_ { get; }
 
 		[iOS (8,0)]
 		[Field ("AVAudioSessionOrientationLeft")]
@@ -2215,16 +2221,19 @@ namespace AVFoundation {
 		NSString OrientationRight { get; }
 	
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionPolarPatternOmnidirectional")]
-		NSString PolarPatternOmnidirectional { get; }
+		[Field ("AVAudioSessionPolarPatternOmnidirectional")]
+		[Internal]
+		NSString PolarPatternOmnidirectional_ { get; }
 	
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionPolarPatternCardioid")]
-		NSString PolarPatternCardioid { get; }
+		[Field ("AVAudioSessionPolarPatternCardioid")]
+		[Internal]
+		NSString PolarPatternCardioid_ { get; }
 	
 		[iOS (7,0)]
-		[UnifiedInternal, Field ("AVAudioSessionPolarPatternSubcardioid")]
-		NSString PolarPatternSubcardioid { get; }
+		[Field ("AVAudioSessionPolarPatternSubcardioid")]
+		[Internal]
+		NSString PolarPatternSubcardioid_ { get; }
 
 		// 8.0
 		[NoTV]
@@ -2294,23 +2303,27 @@ namespace AVFoundation {
 
 		[NoWatch]
 		[iOS (7,0)]
-		[UnifiedInternal, Export ("supportedPolarPatterns")]
-		NSString [] SupportedPolarPatterns { get; }
+		[Export ("supportedPolarPatterns")]
+		[Internal]
+		NSString [] SupportedPolarPatterns_ { get; }
 	
 		[NoWatch]
 		[iOS (7,0)]
-		[UnifiedInternal, Export ("selectedPolarPattern", ArgumentSemantic.Copy)]
-		NSString SelectedPolarPattern { get; }
+		[Export ("selectedPolarPattern", ArgumentSemantic.Copy)]
+		[Internal]
+		NSString SelectedPolarPattern_ { get; }
 	
 		[NoWatch]
 		[iOS (7,0)]
-		[UnifiedInternal, Export ("preferredPolarPattern", ArgumentSemantic.Copy)]
-		NSString PreferredPolarPattern { get; }
+		[Export ("preferredPolarPattern", ArgumentSemantic.Copy)]
+		[Internal]
+		NSString PreferredPolarPattern_ { get; }
 	
 		[NoWatch]
 		[iOS (7,0)]
-		[UnifiedInternal, Export ("setPreferredPolarPattern:error:")]
-		bool SetPreferredPolarPattern ([NullAllowed] NSString pattern, out NSError outError);
+		[Export ("setPreferredPolarPattern:error:")]
+		[Internal]
+		bool SetPreferredPolarPattern_ ([NullAllowed] NSString pattern, out NSError outError);
 		
 	}
 

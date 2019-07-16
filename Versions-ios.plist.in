@@ -150,7 +150,7 @@
 		<string>mono-symbol-archive</string>
 		<string>sgen-concurrent-gc</string>
 		<string>arm64_32</string>
-		<string>catalyst</string>
+		<string>uikitformac</string>
 	</array>
 	<key>Optimizations</key>
 	<dict>

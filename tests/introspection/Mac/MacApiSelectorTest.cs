@@ -684,13 +684,6 @@ namespace Introspection {
 						return true;
 					}
 					break;
-				case "AVSpeechSynthesisVoice":
-					switch (selectorName) {
-					case "gender":
-						// Selector not there: https://github.com/xamarin/maccore/issues/1949
-						return true;
-					}
-					break;
 				break;
 				}
 				break;

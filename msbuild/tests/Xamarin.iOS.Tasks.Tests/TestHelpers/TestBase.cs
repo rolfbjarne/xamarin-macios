@@ -312,7 +312,7 @@ namespace Xamarin.iOS.Tasks
 			project.RemoveItems (project.GetItems (itemName));
 		}
 
-		protected string SetPListKey (string key, PObject value)
+		internal string SetPListKey (string key, PObject value)
 		{
 
 			var paths = SetupProjectPaths ("MySingleView");

@@ -16,15 +16,15 @@ namespace Xamarin.iOS.Tasks
 		protected const string displayName = "DisplayName";
 		protected const string identifier = "Identifier";
 
-		protected PDictionary Plist {
+		internal PDictionary Plist {
 			get; set;
 		}
 
-		protected PDictionary CompiledPlist {
+		internal PDictionary CompiledPlist {
 			get; set;
 		}
 
-		protected CompileAppManifestTaskBase Task {
+		internal CompileAppManifestTaskBase Task {
 			get; set;
 		}
 

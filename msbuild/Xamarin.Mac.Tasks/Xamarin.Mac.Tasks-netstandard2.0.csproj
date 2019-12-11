@@ -96,9 +96,7 @@
     <None Include="../Xamarin.Shared/Xamarin.Shared.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <!--<None Include="packages.config" />-->
 
-<!--    <PackageReference Include="ILRepack" Version="2.0.13" />-->
     <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" PrivateAssets="All"/>
   </ItemGroup>
 

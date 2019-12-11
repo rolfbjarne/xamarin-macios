@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+<PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <BaseIntermediateOutputPath>obj\netstandard2.0</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\netstandard2.0</BaseOutputPath>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Xamarin.iOS.Tasks</RootNamespace>
+    <AssemblyName>Xamarin.iOS.Tasks</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xamarin.iOS.Tasks.Core\Xamarin.iOS.Tasks.Core-netstandard2.0.csproj">
+      <Project>{93E12FA0-089C-4BC8-840F-43CFBC7927C7}</Project>
+      <Name>Xamarin.iOS.Tasks.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.MacDev.Tasks.Core\Xamarin.MacDev.Tasks.Core-netstandard2.0.csproj">
+      <Project>{7B095849-6FDB-4BD2-9B59-569D81A1A809}</Project>
+      <Name>Xamarin.MacDev.Tasks.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.MacDev.Tasks\Xamarin.MacDev.Tasks-netstandard2.0.csproj">
+      <Project>{534D7C5A-0E1C-4C58-9E48-21B1A98919EB}</Project>
+      <Name>Xamarin.MacDev.Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\Xamarin.MacDev-netstandard2.0.csproj">
+      <Project>{CC3D9353-20C4-467A-8522-A9DED6F0C753}</Project>
+      <Name>Xamarin.MacDev</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.9.20" IncludeAssets="compile"/>
+
+    <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" PrivateAssets="All"/>
+  </ItemGroup>
+  <Import Project="..\..\packages\ILRepack.2.0.13\build\ILRepack.props" Condition="Exists('..\..\packages\ILRepack.2.0.13\build\ILRepack.props')" />
+
+
+<Target Name="ILRepack" AfterTargets="Build">
+    <PropertyGroup>
+      <WorkingDirectory>$(MSBuildThisFileDirectory)bin\$(TargetFramework)\$(Configuration)\$(TargetFramework)</WorkingDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <!--<InputAssemblies Include="DotNet.Xdt.dll" />-->
+    </ItemGroup>
+    <ItemGroup>
+      <!-- Dot not internalize any types inside this assembly -->
+      <!--<InternalizeExcludeAssemblies Include="Cake.Core.dll" />-->
+    </ItemGroup>
+    <ILRepack
+      OutputType="$(OutputType)"
+      MainAssembly="$(AssemblyName).dll"
+      OutputAssembly="$(AssemblyName).dll"
+      InputAssemblies="@(InputAssemblies)"
+      InternalizeExcludeAssemblies="@(InternalizeExcludeAssemblies)"
+      WorkingDirectory="$(WorkingDirectory)" />
+</Target>
+
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <!--
+  <Target Name="ILRepack" AfterTargets="CoreCompile" DependsOnTargets="CoreCompile" Inputs="@(IntermediateAssembly -&gt; '%(FullPath)')" Outputs="$(IntermediateOutputPath)ilrepack.txt" Returns="@(MergedAssemblies)" Condition="Exists(@(IntermediateAssembly -&gt; '%(FullPath)')) And '$(ILRepack)' != 'false'">
+    <GetReferenceAssemblyPaths BypassFrameworkInstallChecks="False" TargetFrameworkMoniker="$(TargetFrameworkMoniker)">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FullFrameworkReferenceAssemblyPaths" />
+    </GetReferenceAssemblyPaths>
+    <ItemGroup>
+      <MergedAssemblies Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(FileName)').StartsWith('Xamarin')) And '%(Extension)' == '.dll'" />
+      <MergedAssemblies Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(FileName)').StartsWith('Mono')) And '%(Extension)' == '.dll'" />
+      <ReferenceCopyLocalDirs Include="@(ReferenceCopyLocalPaths -&gt; '%(RootDir)%(Directory)')" />
+      <ReferenceCopyLocalPaths Remove="@(MergedAssemblies)" />
+      <LibDir Include="@(ReferenceCopyLocalDirs -&gt; Distinct())" />
+    </ItemGroup>
+    <PropertyGroup>
+      <ILRepackArgs Condition="'$(AssemblyOriginatorKeyFile)' != ''">/keyfile:"$(AssemblyOriginatorKeyFile)"</ILRepackArgs>
+    </PropertyGroup>
+    <Exec Command="&quot;$(ILRepack)&quot; @(LibDir -&gt; '/lib:&quot;%(Identity).&quot;', ' ') $(ILRepackArgs) /out:&quot;@(IntermediateAssembly -&gt; '%(FullPath)')&quot; &quot;@(IntermediateAssembly -&gt; '%(FullPath)')&quot; @(MergedAssemblies -&gt; '&quot;%(FullPath)&quot;', ' ')" WorkingDirectory="$(MSBuildProjectDirectory)\$(OutputPath)" StandardErrorImportance="high" StandardOutputImportance="low" ConsoleToMSBuild="true" ContinueOnError="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ILRepackOutput" />
+      <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
+    </Exec>
+    <Message Importance="high" Text="$(ILRepackOutput)" Condition="'$(ExitCode)' != '0'" />
+    <Delete Files="$(IntermediateOutputPath)ilrepack.txt" Condition="'$(ExitCode)' != '0'" />
+    <Touch AlwaysCreate="true" Files="$(IntermediateOutputPath)ilrepack.txt" Condition="'$(ExitCode)' == '0'" />
+    <Error Text="$(ILRepackOutput)" Condition="'$(ExitCode)' != '0' And '$(ContinueOnError)' != 'true'" />
+    <Delete Files="@(MergedAssemblies -&gt; '$(MSBuildProjectDirectory)\$(OutputPath)%(Filename)%(Extension)')" Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)%(Filename)%(Extension)')" />
+  </Target>
+-->
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+</Project>

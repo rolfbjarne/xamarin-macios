@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+<PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <BaseIntermediateOutputPath>obj\netstandard2.0</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\netstandard2.0</BaseOutputPath>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Xamarin.MacDev.Tasks</RootNamespace>
+    <AssemblyName>Xamarin.MacDev.Tasks</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FilesToSign Include="$(OutDir)\$(AssemblyName).dll">
+      <Authenticode>Microsoft400</Authenticode>
+    </FilesToSign>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <Private>True</Private>
+      <HintPath Condition=" Exists('..\..\packages\Mono.Cecil.0.9.5.0\lib\net40\Mono.Cecil.dll') ">..\..\packages\Mono.Cecil.0.9.5.0\lib\net40\Mono.Cecil.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.9.20" IncludeAssets="compile"/>
+
+    <ProjectReference Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\Xamarin.MacDev-netstandard.csproj">
+      <Project>{CC3D9353-20C4-467A-8522-A9DED6F0C753}</Project>
+      <Name>Xamarin.MacDev</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.MacDev.Tasks.Core\Xamarin.MacDev.Tasks.Core-netstandard2.0.csproj">
+      <Project>{7B095849-6FDB-4BD2-9B59-569D81A1A809}</Project>
+      <Name>Xamarin.MacDev.Tasks.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+</Project>

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-//using Mono.Unix.Native;
+using Mono.Unix.Native;
 
 namespace Xamarin.MacDev.Tasks
 {
@@ -68,10 +68,10 @@ namespace Xamarin.MacDev.Tasks
 			File.Copy (source, target, true);
 			if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				Console.WriteLine ("Syscall.stat NIEX");
-				// if (Syscall.stat (target, out var stat) == 0) {
-				// 	// ensure it's world read-able or this might trigger an appstore rejection
-				// 	Syscall.chmod (target, stat.st_mode | FilePermissions.S_IROTH);
-				// }
+				if (Syscall.stat (target, out var stat) == 0) {
+					// ensure it's world read-able or this might trigger an appstore rejection
+					Syscall.chmod (target, stat.st_mode | FilePermissions.S_IROTH);
+				}
 			}
 
 			copied.Add (new TaskItem (targetItemSpec));

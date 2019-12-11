@@ -1,3 +1,4 @@
+#if !WINDOWS
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -92,3 +93,4 @@ namespace Microsoft.Build.Tasks
 		}
 	}
 }
+#endif // !WINDOWS

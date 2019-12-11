@@ -22,11 +22,10 @@
     <AssemblyName>Xamarin.MacDev.Tasks.Core</AssemblyName>
     <DefineConstants>MONO_DATACONVERTER_PUBLIC</DefineConstants>
     <!-- Mono has a different implementation of the Move task, so when building on a Mac we need to include XBuildMoveTaskBase.cs -->
-    <DefineConstants Condition="'$(OS)' == 'Windows_NT'">$(DefineConstants);WINDOWS_NET"  </DefineConstants>
-    <!-- <DefineConstants Condition="'$(OS)' != 'Windows_NT'" /> -->
+    <DefineConstants Condition="'$(OS)' == 'Windows_NT'">$(DefineConstants);WINDOWS"  </DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>    
+  <ItemGroup>
     <!-- Compile against Microsoft.Build* NuGet refs, but do not copy to OutputDir. -->
     <PackageReference Include="Microsoft.Build" Version="15.9.20" IncludeAssets="compile" />
     <PackageReference Include="Microsoft.Build.Framework" Version="15.9.20" IncludeAssets="compile" />
@@ -39,7 +38,7 @@
     <Reference Include="Microsoft.Build.Utilities.Core" HintPath="$(MSBuildBinPath)\Microsoft.Build.Utilities.Core.dll" />
     <Reference Include="Mono.Posix" />
 -->
-    <Reference Include="System.Text.Json" />
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
     <Reference Include="System.Memory" />
 <!--     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -213,6 +213,12 @@ test-ios-tasks:
 	@[[ -z "$$BUILD_REPOSITORY" ]] || ( xsltproc $(TOP)/tests/HtmlTransform.xslt $(NUNIT_MSBUILD_DIR)/TestResults_Xamarin.iOS.Tasks.Tests.xml > $(TOP)/tests/index.html && echo "@MonkeyWrench: AddFile: $$PWD/index.html" )
 	@if test -e $(NUNIT_MSBUILD_DIR)/.failed-stamp; then rm $(NUNIT_MSBUILD_DIR)/.failed-stamp; exit 1; fi
 
+test-ios-netstandard-tasks:
+	$(SYSTEM_XIBUILD) -- $(TOP)/msbuild/Xamarin.MacDev.Tasks-netstandard2.0.sln
+	$(SYSTEM_XIBUILD) -t -- $(HOME)/.nuget/packages/nunit.consolerunner/3.9.0/tools/nunit3-console.exe $(TOP)/msbuild/tests/Xamarin.iOS.Tasks.Tests/bin/netstandard2.0/Debug/netstandard2.0/Xamarin.iOS.Tasks.Tests.dll $(TEST_FIXTURE) || touch .failed-stamp
+	@[[ -z "$$BUILD_REPOSITORY" ]] || ( xsltproc $(TOP)/tests/HtmlTransform.xslt $(NUNIT_MSBUILD_DIR)/TestResults_Xamarin.iOS.Tasks.Tests-netstandard2.0.xml > $(TOP)/tests/index.html && echo "@MonkeyWrench: AddFile: $$PWD/index.html" )
+	@if test -e $(NUNIT_MSBUILD_DIR)/.failed-stamp; then rm $(NUNIT_MSBUILD_DIR)/.failed-stamp; exit 1; fi
+
 test-install-sources:
 	$(SYSTEM_XIBUILD) -- $(TOP)/tools/install-source/InstallSourcesTests/InstallSourcesTests.csproj
 	cd $(NUNIT_MSBUILD_DIR) && $(SYSTEM_XIBUILD) -t -- ../nunit-console.exe ../../../../tools/install-source/InstallSourcesTests/bin/Release/InstallSourcesTests.dll -xml=TestResults_InstallSourcesTests.xml -labels $(TEST_FIXTURE) || touch .failed-stamp

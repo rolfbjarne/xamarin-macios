@@ -42,6 +42,7 @@
       <HintPath>..\..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
    -->
+     <PackageReference Include="Mono.Cecil" Version="0.11.1" />
      <PackageReference Include="NUnit" Version="3.11.0" />
      <PackageReference Include="NUnit.ConsoleRunner" Version="3.9.0" />
   </ItemGroup>
@@ -60,6 +61,9 @@
     </Compile>
     <Compile Include="..\..\..\tests\common\ExecutionHelper.cs">
       <Link>ExecutionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\tools\common\StringUtils.cs">
+      <Link>StringUtils.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace Xamarin.iOS.Tasks
 		const string MTOUCH_LOCATION_ENV_VAR = "MD_MTOUCH_SDK_ROOT";
 
 		public static AppleIPhoneSdk Native { get; private set; }
-		public static MonoTouchSdk MonoTouch { get; internal set; }
+		public static MonoTouchSdk MonoTouch { get; set; }
 		public static AppleWatchSdk Watch { get; private set; }
 		public static AppleTVOSSdk TVOS { get; private set; }
 

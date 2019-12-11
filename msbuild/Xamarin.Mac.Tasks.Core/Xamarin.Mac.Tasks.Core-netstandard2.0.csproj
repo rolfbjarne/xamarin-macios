@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-<PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -18,33 +18,36 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Xamarin.MacDev.Tasks</RootNamespace>
-    <AssemblyName>Xamarin.MacDev.Tasks</AssemblyName>
+    <RootNamespace>Xamarin.Mac.Tasks</RootNamespace>
+    <AssemblyName>Xamarin.Mac.Tasks.Core</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-      <Private>True</Private>
-      <HintPath Condition=" Exists('..\..\packages\Mono.Cecil.0.9.5.0\lib\net40\Mono.Cecil.dll') ">..\..\packages\Mono.Cecil.0.9.5.0\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Build" Version="15.9.20" IncludeAssets="compile" />
     <PackageReference Include="Microsoft.Build.Framework" Version="15.9.20" IncludeAssets="compile" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.9.20" IncludeAssets="compile" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.9.20" IncludeAssets="compile"/>
-
+    <!--
+    <Reference Include="Microsoft.Build.Framework" HintPath="$(MSBuildBinPath)\Microsoft.Build.Framework.dll" />
+    <Reference Include="Microsoft.Build" HintPath="$(MSBuildBinPath)\Microsoft.Build.dll" />
+    <Reference Include="Microsoft.Build.Utilities.Core" HintPath="$(MSBuildBinPath)\Microsoft.Build.Utilities.Core.dll" />
+    <Reference Include="Microsoft.Build.Tasks.Core" HintPath="$(MSBuildBinPath)\Microsoft.Build.Tasks.Core.dll" />
+  -->
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\Xamarin.MacDev-netstandard2.0.csproj">
       <Project>{CC3D9353-20C4-467A-8522-A9DED6F0C753}</Project>
       <Name>Xamarin.MacDev</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.MacDev.Tasks\Xamarin.MacDev.Tasks-netstandard2.0.csproj">
+      <Project>{534D7C5A-0E1C-4C58-9E48-21B1A98919EB}</Project>
+      <Name>Xamarin.MacDev.Tasks</Name>
     </ProjectReference>
     <ProjectReference Include="..\Xamarin.MacDev.Tasks.Core\Xamarin.MacDev.Tasks.Core-netstandard2.0.csproj">
       <Project>{7B095849-6FDB-4BD2-9B59-569D81A1A809}</Project>
       <Name>Xamarin.MacDev.Tasks.Core</Name>
     </ProjectReference>
   </ItemGroup>
-
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 </Project>

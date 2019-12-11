@@ -77,7 +77,7 @@
     </Reference>-->
   </ItemGroup> 
   <ItemGroup>
-    <ProjectReference Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\Xamarin.MacDev-netstandard.csproj">
+    <ProjectReference Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\Xamarin.MacDev-netstandard2.0.csproj">
       <Project>{CC3D9353-20C4-467A-8522-A9DED6F0C753}</Project>
       <Name>Xamarin.MacDev</Name>
     </ProjectReference>

@@ -2,17 +2,17 @@
 <Project>
 
 <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <BaseIntermediateOutputPath>obj\netstandard2.0</BaseIntermediateOutputPath>
-    <BaseOutputPath>bin\netstandard2.0</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\onedotnet</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\onedotnet</BaseOutputPath>
   </PropertyGroup>
 
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -52,9 +52,9 @@
   <Import Project="..\..\packages\ILRepack.2.0.13\build\ILRepack.props" Condition="Exists('..\..\packages\ILRepack.2.0.13\build\ILRepack.props')" />
 
 
-<Target Name="ILRepack" AfterTargets="Build">
+<Target Name="ILRepack" AfterTargets="Build" Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PropertyGroup>
-      <WorkingDirectory>$(MSBuildThisFileDirectory)bin\$(TargetFramework)\$(Configuration)\$(TargetFramework)</WorkingDirectory>
+      <WorkingDirectory>$(MSBuildThisFileDirectory)$(BaseOutputPath)\$(Configuration)\$(TargetFramework)</WorkingDirectory>
     </PropertyGroup>
     <ItemGroup>
       <!--<InputAssemblies Include="DotNet.Xdt.dll" />-->

@@ -2,17 +2,17 @@
 <Project>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <BaseIntermediateOutputPath>obj\netstandard2.0</BaseIntermediateOutputPath>
-    <BaseOutputPath>bin\netstandard2.0</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\onedotnet</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\onedotnet</BaseOutputPath>
   </PropertyGroup>
 
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>

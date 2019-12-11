@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
-using Gdk;
+// using Gdk;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -76,8 +76,9 @@ namespace Xamarin.iOS.Tasks
 		static bool GetJpgImageSize (string path, out int width, out int height)
 		{
 			try {
-				var type = Pixbuf.GetFileInfo (path, out width, out height);
-				return type != null && type.Name == "jpeg";
+				throw new NotImplementedException ("GetJpgImageSize");
+				// var type = Pixbuf.GetFileInfo (path, out width, out height);
+				// return type != null && type.Name == "jpeg";
 			} catch {
 				width = height = -1;
 				return false;

@@ -52,16 +52,16 @@
   <Import Project="..\..\packages\ILRepack.2.0.13\build\ILRepack.props" Condition="Exists('..\..\packages\ILRepack.2.0.13\build\ILRepack.props')" />
 
 
-<Target Name="ILRepack" AfterTargets="Build" Condition="'$(TargetFramework)' == 'netstandard2.0'">
+<Target Name="ILRepack" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
     <PropertyGroup>
       <WorkingDirectory>$(MSBuildThisFileDirectory)$(BaseOutputPath)\$(Configuration)\$(TargetFramework)</WorkingDirectory>
     </PropertyGroup>
     <ItemGroup>
-      <!--<InputAssemblies Include="DotNet.Xdt.dll" />-->
-    </ItemGroup>
-    <ItemGroup>
-      <!-- Dot not internalize any types inside this assembly -->
-      <!--<InternalizeExcludeAssemblies Include="Cake.Core.dll" />-->
+      <InputAssemblies Include="Mono.Cecil.dll" />
+      <InputAssemblies Include="Xamarin.iOS.Tasks.Core.dll" />
+      <InputAssemblies Include="Xamarin.MacDev.Tasks.Core.dll" />
+      <InputAssemblies Include="Xamarin.MacDev.Tasks.dll" />
+      <InputAssemblies Include="Xamarin.MacDev.dll" />
     </ItemGroup>
     <ILRepack
       OutputType="$(OutputType)"

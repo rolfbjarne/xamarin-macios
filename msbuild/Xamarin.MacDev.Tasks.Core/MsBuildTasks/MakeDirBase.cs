@@ -1,7 +1,9 @@
-﻿namespace Microsoft.Build.Tasks
+﻿#if false
+namespace Microsoft.Build.Tasks
 {
 	public abstract class MakeDirBase : MakeDir
 	{
 		public string SessionId { get; set; }
 	}
 }
+#endif

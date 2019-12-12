@@ -21,7 +21,15 @@ MSBUILD_SYMLINKS             =
 MSBUILD_TASK_ASSEMBLIES      =
 
 ALL_SOURCES:= $(shell git ls-files | sed 's/ /\\ /g') $(wildcard $(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/*.cs) $(wildcard $(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/*.csproj)
+ifndef NOONEDOTNET
+TARGET      = onedotnet/
 CONFIG      = Debug
+TARGETFRAMEWORK = net461/
+SLN         = Xamarin.MacDev.Tasks-netstandard2.0.sln
+else
+CONFIG      = Debug
+SLN         = Xamarin.MacDev.Tasks.sln
+endif
 
 ##
 ## XI definitions
@@ -301,18 +309,18 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/msbuild/%.dll: build/%.dll | $(MA
 all-local:: $(MSBUILD_PRODUCTS) .stamp-test-xml
 
 .build-stamp: $(ALL_SOURCES)
-	$(Q) $(SYSTEM_MONO) /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore
-	$(Q) $(SYSTEM_MSBUILD) $(XBUILD_VERBOSITY)
+	$(Q) $(SYSTEM_MONO) /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore $(SLN)
+	$(Q) $(SYSTEM_MSBUILD) $(XBUILD_VERBOSITY) $(SLN)
 	$(Q) touch $@
 
 # make all the target assemblies build when any of the sources have changed
-$(foreach dll,$(MSBUILD_TASK_ASSEMBLIES),$(dll)/bin/$(CONFIG)/$(dll).dll): .build-stamp
+$(foreach dll,$(MSBUILD_TASK_ASSEMBLIES),$(dll)/bin/$(TARGET)$(CONFIG)/$(TARGETFRAMEWORK)$(dll).dll): .build-stamp
 
 # Always remake the symlinks
 .PHONY: $(MSBUILD_SYMLINKS)
 
 define copyToBuild
-build/$(1).dll: $(1)/bin/$(CONFIG)/$(1).dll | build
+build/$(1).dll: $(1)/bin/$(TARGET)$(CONFIG)/$(TARGETFRAMEWORK)$(1).dll | build
 	$$(Q) $(CP) $$< $$@
 endef
 

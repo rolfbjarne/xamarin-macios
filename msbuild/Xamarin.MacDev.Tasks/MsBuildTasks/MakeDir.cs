@@ -1,4 +1,5 @@
-﻿using Xamarin.MacDev.Tasks;
+﻿#if false
+using Xamarin.MacDev.Tasks;
 
 namespace Microsoft.Build.Tasks
 {
@@ -6,3 +7,4 @@ namespace Microsoft.Build.Tasks
 	{
 	}
 }
+#endif

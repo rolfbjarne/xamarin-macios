@@ -21,6 +21,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Xamarin.iOS.Tasks</RootNamespace>
     <AssemblyName>Xamarin.iOS.Tasks.Tests</AssemblyName>
+    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,7 +43,7 @@
       <HintPath>..\..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
    -->
-     <PackageReference Include="Mono.Cecil" Version="0.11.1" />
+     <!--<PackageReference Include="Mono.Cecil" Version="0.11.1" />-->
      <PackageReference Include="NUnit" Version="3.11.0" />
      <PackageReference Include="NUnit.ConsoleRunner" Version="3.9.0" />
   </ItemGroup>
@@ -57,7 +58,7 @@
      </None>
    </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.iOS.Tasks\Xamarin.iOS.Tasks-netstandard2.0.csproj">
+    <ProjectReference Include="..\..\Xamarin.iOS.Tasks\Xamarin.iOS.Tasks-netstandard2.0.csproj" PrivateAssets="All">
       <Project>{44605724-8002-48E1-895F-7CB068099B6A}</Project>
       <Name>Xamarin.iOS.Tasks</Name>
     </ProjectReference>

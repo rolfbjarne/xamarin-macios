@@ -121,6 +121,7 @@
     <ItemGroup>
       <MergedAssemblies Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(FileName)').StartsWith('Xamarin')) And '%(Extension)' == '.dll'" />
       <MergedAssemblies Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(FileName)').StartsWith('Mono')) And '%(Extension)' == '.dll'" />
+      <MergedAssemblies Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(FileName)').StartsWith('System.Text.Json')) And '%(Extension)' == '.dll'" />
       <ReferenceCopyLocalDirs Include="@(ReferenceCopyLocalPaths -&gt; '%(RootDir)%(Directory)')" />
       <ReferenceCopyLocalPaths Remove="@(MergedAssemblies)" />
       <LibDir Include="@(ReferenceCopyLocalDirs -&gt; Distinct())" />

@@ -57,6 +57,7 @@ namespace Xamarin.MacDev
 
 		public static string GetVirtualProjectPath (string projectDir, ITaskItem item, bool isVSBuild)
 		{
+			Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item})");
 			var link = item.GetMetadata ("Link");
 
 			// Note: if the Link metadata exists, then it will be the equivalent of the ProjectVirtualPath
@@ -64,6 +65,7 @@ namespace Xamarin.MacDev
 				if (Path.DirectorySeparatorChar != '\\')
 					return link.Replace ('\\', '/');
 
+				Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item}) => link {link}");
 				return link;
 			}
 
@@ -78,6 +80,7 @@ namespace Xamarin.MacDev
 			}
 
 			var definingProjectFullPath = item.GetMetadata ("DefiningProjectFullPath");
+			Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item}) => DefiningProjectFullPath: {definingProjectFullPath}");
 			var path = item.GetMetadata ("FullPath");
 			string baseDir;
 

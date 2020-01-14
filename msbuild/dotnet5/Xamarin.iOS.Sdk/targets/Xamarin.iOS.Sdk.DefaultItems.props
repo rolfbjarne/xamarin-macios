@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- Enable default inclusion behavior unless told otherwise -->
+    <EnableDefaultItems Condition=" '$(EnableDefaultItems)' == '' ">true</EnableDefaultItems>
+    <EnableDefaultiOSAssetCatalogItems Condition=" '$(EnableDefaultiOSAssetCatalogItems)' == '' ">$(EnableDefaultItems)</EnableDefaultiOSAssetCatalogItems>
+    <EnableDefaultiOSAtlasTextureItems Condition=" '$(EnableDefaultiOSAtlasTextureItems)' == '' ">$(EnableDefaultItems)</EnableDefaultiOSAtlasTextureItems>
+    <EnableDefaultiOSStoryboardItems Condition=" '$(EnableDefaultiOSStoryboardItems)' == '' ">$(EnableDefaultItems)</EnableDefaultiOSStoryboardItems>
+    <EnableDefaultiOSPlistItems Condition=" '$(EnableDefaultiOSPlistItems)' == '' ">$(EnableDefaultItems)</EnableDefaultiOSPlistItems>
+    <EnableDefaultiOSITunesArtworkItems Condition=" '$(EnableDefaultiOSITunesArtworkItems)' == '' ">$(EnableDefaultItems)</EnableDefaultiOSITunesArtworkItems>
+  </PropertyGroup>
+
+  <!-- Defaults -->
+
+  <!-- Default Storyboard file inclusion -->
+  <ItemGroup Condition="'$(EnableDefaultiOSAssetCatalogItems)' == 'true' ">
+    <!-- Do we really want to look for *.xcassets everywhere? Or just root project folder + Resources subfolder? -->
+    <ImageAsset Include="**\*.xcassets\*\*.png;**\*.xcassets\*\*.jpg;**\*.xcassets\*\*.json">
+      <Link>%(Identity)</Link>
+      <Visible>false</Visible>
+    </ImageAsset>
+  </ItemGroup>
+
+  <!-- Default Asset Catalog file inclusion -->
+  <ItemGroup Condition=" '$(EnableDefaultiOSStoryboardItems)' == 'true' ">
+    <!-- Do we really want to look for *.storyboard and *.xib everywhere? Or just root project folder + Resources subfolder? -->
+    <InterfaceDefinition Include="**\*.storyboard;**\*.xib">
+      <Link>%(Identity)</Link>
+    </InterfaceDefinition>
+  </ItemGroup>
+
+  <!-- Default Asset Catalog file inclusion -->
+  <ItemGroup Condition=" '$(EnableDefaultiOSAtlasTextureItems)' == 'true' ">
+    <!-- Do we really want to look for *.atlas? Or just root project folder + Resources subfolder? -->
+    <AtlasTexture Include="**\*.atlas">
+      <Link>%(Identity)</Link>
+    </AtlasTexture>
+  </ItemGroup>
+
+  <!-- Default plist file inclusion -->
+  <ItemGroup Condition="'$(EnableDefaultiOSPlistItems)' == 'true' ">
+    <None Include="*.plist">
+      <Link>%(Identity)</Link>
+    </None>
+  </ItemGroup>
+
+  <!-- Default iTunesArtwork inclusion -->
+  <ItemGroup Condition="'$(EnableDefaultiOSITunesArtworkItems)' == 'true' ">
+    <ITunesArtwork Include="iTunesArtwork" Condition="Exists ('iTunesArtwork')">
+      <Link>%(Identity)</Link>
+    </ITunesArtwork>
+    <ITunesArtwork Include="iTunesArtwork%402x" Condition="Exists ('iTunesArtwork%402x')">
+      <Link>%(Identity)</Link>
+    </ITunesArtwork>
+  </ItemGroup>
+
+   <!-- Default References -->
+  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true'">
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Xamarin.iOS" />
+  </ItemGroup>
+
+</Project>

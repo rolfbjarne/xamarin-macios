@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 using NUnit.Framework;
 using Xamarin.Utils;
+using System.Collections;
 
 namespace Xamarin.Tests
 {
@@ -541,6 +542,9 @@ namespace Xamarin.Tests
 				psi.UseShellExecute = false;
 				psi.RedirectStandardError = true;
 				psi.RedirectStandardOutput = true;
+				//foreach (DictionaryEntry kvp in psi.EnvironmentVariables) {
+				//	Console.WriteLine ($"{kvp.Key}={kvp.Value}");
+				//}
 				if (!string.IsNullOrEmpty (psi.WorkingDirectory))
 					Console.Write ($"cd {StringUtils.Quote (psi.WorkingDirectory)} && ");
 				Console.WriteLine ("{0} {1}", psi.FileName, psi.Arguments);
@@ -635,7 +639,12 @@ namespace Xamarin.Tests
 			if (environmentVariables != null) {
 				var envs = psi.EnvironmentVariables;
 				foreach (var kvp in environmentVariables) {
-					envs [kvp.Key] = kvp.Value;
+					if (kvp.Value == null) {
+						if (envs.ContainsKey (kvp.Key))
+							envs.Remove (kvp.Key);
+					} else {
+						envs [kvp.Key] = kvp.Value;
+					}
 				}
 			}
 

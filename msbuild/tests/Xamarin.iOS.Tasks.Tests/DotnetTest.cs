@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Xamarin.iOS.Tasks {
 
-	[TestFixture ("iPhone")]
+	//[TestFixture ("iPhone")]
 	[TestFixture ("iPhoneSimulator")]
 	public class DotnetTest : ProjectTest {
 		public DotnetTest (string platform)
@@ -14,35 +14,42 @@ namespace Xamarin.iOS.Tasks {
 		{
 		}
 
-		[TestCase ("AppWithExtraArgumentThatOverrides")]
-		//[TestCase ("Bug60536")] // Supposed to fail the build
-		[TestCase ("My Spaced App")]
-		[TestCase ("MyAppWithPackageReference")]
-		[TestCase ("MyCoreMLApp")]
-		[TestCase ("MyIBToolLinkTest")]
-		[TestCase ("MyLinkedAssets")]
-		[TestCase ("MyMasterDetailApp")]
-		[TestCase ("MyMetalGame")]
-		[TestCase ("MyOpenGLApp")]
-		[TestCase ("MyReleaseBuild")]
-		[TestCase ("MySceneKitApp")]
-		[TestCase ("MySingleView")]
-		[TestCase ("MySpriteKitGame")]
-		//[TestCase ("MyTVApp")] // Apple TV - not yet
-		[TestCase ("MyTabbedApplication")]
-		//[TestCase ("MyWatch2Container")] // watchOS - not yet
-		[TestCase ("MyWebViewApp")]
+		//[TestCase ("AppWithExtraArgumentThatOverrides")]
+		////[TestCase ("Bug60536")] // Supposed to fail the build
+		//[TestCase ("My Spaced App")]
+		//[TestCase ("MyAppWithPackageReference")]
+		//[TestCase ("MyCoreMLApp")]
+		//[TestCase ("MyIBToolLinkTest")]
+		//[TestCase ("MyLinkedAssets")]
+		//[TestCase ("MyMasterDetailApp")]
+		//[TestCase ("MyMetalGame")]
+		//[TestCase ("MyOpenGLApp")]
+		//[TestCase ("MyReleaseBuild")]
+		//[TestCase ("MySceneKitApp")]
+		//[TestCase ("MySingleView")]
+		//[TestCase ("MySpriteKitGame")]
+		////[TestCase ("MyTVApp")] // Apple TV - not yet
+		//[TestCase ("MyTabbedApplication")]
+		////[TestCase ("MyWatch2Container")] // watchOS - not yet
+		//[TestCase ("MyWebViewApp")]
 		[TestCase ("MyXamarinFormsApp")]
-		[TestCase ("MyiOSAppWithBinding")]
+		//[TestCase ("MyiOSAppWithBinding")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");
 			var dotnet = GetTestDirectory ("dotnet");
 			FixupTestFiles (dotnet, "dotnet5");
 
-			BuildProject (project, "iPhone", "Debug", projectBaseDir: net461, use_dotnet: false, nuget_restore: true);
+
+			switch (project) {
+			case "MyXamarinFormsApp":
+				NugetRestore (Path.Combine (net461, project, "MyXamarinFormsAppNS", "MyXamarinFormsAppNS.csproj"));
+				break;
+			}
+
+			BuildProject (project, Platform, "Debug", projectBaseDir: net461, use_dotnet: false, nuget_restore: true);
 			var net461_bundle = AppBundlePath;
-			BuildProject (project, "iPhone", "Debug", projectBaseDir: dotnet, use_dotnet: true);
+			BuildProject (project, Platform, "Debug", projectBaseDir: dotnet, use_dotnet: true);
 			var dotnet_bundle = AppBundlePath;
 
 			var net461_files = Directory.GetFiles (net461_bundle, "*.*", SearchOption.AllDirectories).Select ((v) => v.Substring (net461_bundle.Length + 1));
@@ -54,7 +61,7 @@ namespace Xamarin.iOS.Tasks {
 			Assert.That (extra_dotnet_files, Is.Empty, "Extra dotnet files");
 			Assert.That (extra_net461_files, Is.Empty, "Extra net461 files");
 
-			var total_diff = 0l;
+			var total_diff = 0L;
 			foreach (var file in dotnet_files) {
 				var dotnet_size = new FileInfo (Path.Combine (dotnet_bundle, file)).Length;
 				var net461_size = new FileInfo (Path.Combine (net461_bundle, file)).Length;

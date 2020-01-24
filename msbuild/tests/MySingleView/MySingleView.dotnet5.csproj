@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Xamarin.iOS.Sdk">
+  <PropertyGroup>
+    <TargetFramework>xamarinios10</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="MyLibrary\MyLibrary.csproj">
+      <Name>MyLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <BundleResource Include="LinkedBundleResource.txt">
+      <Link>Folder\LinkedBundleResource.txt</Link>
+    </BundleResource>
+    <BundleResource Include="Folder\BundleResource.txt" />
+    <BundleResource Include="Resources\image.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LinkedEmbeddedResource.txt">
+      <Link>Folder\LinkedEmbeddedResource.txt</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Folder\EmbeddedResource.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Folder\Content.txt" />
+    <Content Include="LinkedContent.txt">
+      <Link>Folder\LinkedContent.txt</Link>
+    </Content>
+  </ItemGroup>
+
+</Project>

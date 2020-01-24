@@ -35,7 +35,7 @@ namespace Xamarin.iOS.Tasks
 			SetupEngine ();
 		}
 
-		public string BuildProject (string appName, string platform, string config, int expectedErrorCount = 0, bool clean = true, string projectBaseDir = "../", bool use_dotnet = false)
+		public string BuildProject (string appName, string platform, string config, int expectedErrorCount = 0, bool clean = true, string projectBaseDir = "../", bool use_dotnet = false, bool nuget_restore = false)
 		{
 			var mtouchPaths = SetupProjectPaths (appName, projectBaseDir, true, platform, config, use_dotnet);
 			var csproj = mtouchPaths["project_csprojpath"];
@@ -47,6 +47,9 @@ namespace Xamarin.iOS.Tasks
 			AppBundlePath = mtouchPaths ["app_bundlepath"];
 			Engine.ProjectCollection.SetGlobalProperty("Platform", platform);
 			Engine.ProjectCollection.SetGlobalProperty("Configuration", config);
+
+			if (nuget_restore)
+				NugetRestore (csproj);
 
 			if (clean) {
 				RunTarget (proj, csproj, "Clean", use_dotnet);

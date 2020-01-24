@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Xamarin.iOS.Sdk">
+  <PropertyGroup>
+    <TargetFramework>xamarinios10</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Metal Include="Resources\Shaders.metal" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyKeyboardExtension\MyKeyboardExtension.csproj">
+      <IsAppExtension>True</IsAppExtension>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

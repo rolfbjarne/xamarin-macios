@@ -470,9 +470,9 @@ namespace Xamarin.iOS.Tasks
 			env ["MSBuildSDKsPath"] = null;
 			env ["MSBUILD_EXE_PATH"] = null;
 			var rv = ExecutionHelper.Execute ("dotnet", args, env, output, output, timeout: TimeSpan.FromMinutes (10));
+			Console.WriteLine (output);
 			if (rv != 0) {
 				Console.WriteLine ($"dotnet '{string.Join ("' '", args)}' failed with exit code {rv}.");
-				Console.WriteLine (output);
 				Assert.Fail ($"'dotnet {string.Join (" ", args)}' failed with exit code {rv}.");
 			}
 		}

@@ -6,14 +6,16 @@ using NUnit.Framework;
 
 namespace Xamarin.iOS.Tasks {
 
-	//[TestFixture ("iPhone")]
-	[TestFixture ("iPhoneSimulator")]
+	[TestFixture]
+	//[TestFixture ("iPhoneSimulator")]
+	//[TestFixture ("iPhoneSimulator")]
 	public class DotnetTest : ProjectTest {
-		public DotnetTest (string platform)
-			: base (platform)
+		public DotnetTest ()
+			: base ("iPhoneSimulator")
 		{
 		}
 
+		[Test]
 		//[TestCase ("AppWithExtraArgumentThatOverrides")]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
 		//[TestCase ("My Spaced App")]
@@ -47,9 +49,14 @@ namespace Xamarin.iOS.Tasks {
 				break;
 			}
 
+			Console.WriteLine ("Building net461");
 			BuildProject (project, Platform, "Debug", projectBaseDir: net461, use_dotnet: false, nuget_restore: true);
+			Console.WriteLine ("Done building net461");
 			var net461_bundle = AppBundlePath;
+
+			Console.WriteLine ("Building dotnet");
 			BuildProject (project, Platform, "Debug", projectBaseDir: dotnet, use_dotnet: true);
+			Console.WriteLine ("Done building dotnet");
 			var dotnet_bundle = AppBundlePath;
 
 			var net461_files = Directory.GetFiles (net461_bundle, "*.*", SearchOption.AllDirectories).Select ((v) => v.Substring (net461_bundle.Length + 1));
@@ -57,6 +64,9 @@ namespace Xamarin.iOS.Tasks {
 
 			var extra_net461_files = net461_files.Except (dotnet_files);
 			var extra_dotnet_files = dotnet_files.Except (net461_files);
+
+			Console.WriteLine ($"net461: {net461_bundle}");
+			Console.WriteLine ($"dotnet: {dotnet_bundle}");
 
 			Assert.That (extra_dotnet_files, Is.Empty, "Extra dotnet files");
 			Assert.That (extra_net461_files, Is.Empty, "Extra net461 files");

@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>xamarinios10</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);your_nonproj.file;a\**\*.pattern;MyXamarinFormsAppNS\*</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

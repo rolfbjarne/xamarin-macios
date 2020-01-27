@@ -207,7 +207,7 @@ killall:
 	@killall Touch.Server >/dev/null 2>&1 || true
 
 NUNIT_MSBUILD_DIR=$(TOP)/packages/NUnit.Runners.2.6.4/tools/lib
-test-ios-tasks: test-ios-tasks-net461 test-ios-tasks-netstandard2.0
+test-ios-tasks: test-ios-tasks-net461
 test-ios-tasks-%: verify-system-vsmac-xcode-match
 	$(SYSTEM_MSBUILD) $(TOP)/msbuild/tests/Xamarin.iOS.Tasks.Tests/Xamarin.iOS.Tasks.Tests.csproj /p:Configuration=Debug-$*
 	cd $(TOP)/msbuild/tests/Xamarin.iOS.Tasks.Tests && $(SYSTEM_XIBUILD) -t -- $(abspath $(TOP)/tools/nunit3-console-3.10.0) $(abspath $(TOP)/msbuild/tests/Xamarin.iOS.Tasks.Tests/bin/Debug-$*/net461/Xamarin.iOS.Tasks.Tests.dll) "--result=$(abspath $(CURDIR)/TestResults_$*_Xamarin.iOS.Tasks.Tests.xml);format=nunit2" -labels=All $(TEST_FIXTURE) || touch .failed-stamp

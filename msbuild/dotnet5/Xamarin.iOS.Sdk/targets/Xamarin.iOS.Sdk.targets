@@ -38,6 +38,12 @@
 
   </PropertyGroup>
 
+  <!-- Check if we're a binding project or not -->
+  <PropertyGroup Condition="'$(IsBindingProject)' == '' And '$(OutputType)' == 'Library'">
+    <_ExpandedObjcBindingApiDefinition>@(ObjcBindingApiDefinition)</_ExpandedObjcBindingApiDefinition>
+    <IsBindingProject Condition="'$(_ExpandedObjcBindingApiDefinition)' != ''">true</IsBindingProject>
+  </PropertyGroup>
+
   <!-- Figure out the app bundle extension -->
   <PropertyGroup Condition="'$(AppBundleExtension)' == ''">
     <!-- The extension for app extensions is .appex -->
@@ -46,7 +52,7 @@
     <AppBundleExtension Condition="'$(AppBundleExtension)' == ''">.app</AppBundleExtension>
   </PropertyGroup>
 
-  <Target Name="ValidateArchitecture">
+  <Target Name="ValidateArchitecture" Condition="'$(IsBindingProject)' != 'true'">
     <Error Text="The project file must specify a value for the MtouchArch or the TargetDeviceArchitecture property." Condition="'$(MtouchArch)' == ''"/>
     <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, x86_64, ARMv7, ARMv7s and ARM64." Condition="'$(TargetDeviceArchitecture)' == ''"/>
     <Error Text="The project file does not specify a valid value for the TargetDeviceArchitecture property ($(TargetDeviceArchitecture)). Valid values are: Simulator and Device." Condition="'$(TargetDeviceArchitecture)' != 'Simulator' And '$(TargetDeviceArchitecture)' != 'Device'"/>
@@ -78,7 +84,8 @@
   </ImportGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
-  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.CSharp.targets" Condition="'$(IsBindingProject)' != 'true'" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" Condition="'$(IsBindingProject)' == 'true'" />
 
   <PropertyGroup>
     <BuildDependsOn>

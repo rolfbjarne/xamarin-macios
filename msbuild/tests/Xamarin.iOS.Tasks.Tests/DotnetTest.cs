@@ -34,8 +34,8 @@ namespace Xamarin.iOS.Tasks {
 		//[TestCase ("MyTabbedApplication")]
 		////[TestCase ("MyWatch2Container")] // watchOS - not yet
 		//[TestCase ("MyWebViewApp")]
-		[TestCase ("MyXamarinFormsApp")]
-		//[TestCase ("MyiOSAppWithBinding")]
+		// OK [TestCase ("MyXamarinFormsApp")]
+		// OK [TestCase ("MyiOSAppWithBinding")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");

@@ -45,6 +45,8 @@
     <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(MtouchArch)' == 'ARMv7s, ARM64'">Device</TargetDeviceArchitecture>
     <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(MtouchArch)' == 'ARMv7, ARMv7s, ARM64'">Device</TargetDeviceArchitecture>
 
+    <ComputedPlatform Condition="'$(TargetDeviceArchitecture)' == 'Device'">iPhone</ComputedPlatform>
+    <ComputedPlatform Condition="'$(TargetDeviceArchitecture)' == 'Simulator'">iPhoneSimulator</ComputedPlatform>
   </PropertyGroup>
 
   <!-- Figure out the app bundle extension -->
@@ -87,8 +89,9 @@
   </ImportGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
-  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.CSharp.targets" Condition="'$(IsBindingProject)' != 'true'" />
-  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" Condition="'$(IsBindingProject)' == 'true'" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.AppExtension.CSharp.targets" Condition="'$(IsBindingProject)' != 'true' And '$(IsAppExtension)' == 'true'" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.CSharp.targets" Condition="'$(IsBindingProject)' != 'true' And '$(IsAppExtension)' != 'true'" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" Condition="'$(IsBindingProject)' == 'true' And '$(IsAppExtension)' != 'true'" />
 
   <PropertyGroup>
     <BuildDependsOn>

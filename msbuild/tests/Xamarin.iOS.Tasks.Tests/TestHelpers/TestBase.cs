@@ -93,7 +93,10 @@ namespace Xamarin.iOS.Tasks
 				if (!File.Exists (tgt))
 					continue;
 				File.Delete (tgt);
-				File.Move (file, tgt);
+				var contents = File.ReadAllText (file);
+				contents = contents.Replace (replace, ".");
+				File.WriteAllText (tgt, contents);
+				File.Delete (file);
 			}
 		}
 

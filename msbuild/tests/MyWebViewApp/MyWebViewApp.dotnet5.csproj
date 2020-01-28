@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyDocumentPickerExtension\MyDocumentPickerExtension.csproj">
+    <ProjectReference Include="..\MyDocumentPickerExtension\MyDocumentPickerExtension.dotnet5.csproj">
+      <Name>MyDocumentPickerExtension</Name>
       <IsAppExtension>True</IsAppExtension>
     </ProjectReference>
   </ItemGroup>

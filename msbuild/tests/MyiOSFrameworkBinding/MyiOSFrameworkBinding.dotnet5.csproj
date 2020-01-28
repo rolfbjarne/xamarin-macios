@@ -5,6 +5,7 @@
     <OutputType>Library</OutputType>
     <EnableDefaultItems>false</EnableDefaultItems>
 
+    <IsBindingProject>true</IsBindingProject>
     <RootNamespace>MyiOSBinding</RootNamespace>
     <AssemblyName>MyiOSBinding</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

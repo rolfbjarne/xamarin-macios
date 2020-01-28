@@ -33,7 +33,7 @@ namespace Xamarin.iOS.Tasks {
 		////[TestCase ("MyTVApp")] // Apple TV - not yet
 		//[TestCase ("MyTabbedApplication")]
 		////[TestCase ("MyWatch2Container")] // watchOS - not yet
-		//[TestCase ("MyWebViewApp")]
+		[TestCase ("MyWebViewApp")]
 		// OK [TestCase ("MyXamarinFormsApp")]
 		// OK [TestCase ("MyiOSAppWithBinding")]
 		public void CompareBuilds (string project)

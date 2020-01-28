@@ -12,11 +12,16 @@
       <DependentUpon>RazorView.cshtml</DependentUpon>
     </Compile>
   </ItemGroup>
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Views\RazorView.cs</DefaultItemExcludes>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="Views\RazorView.cshtml">
       <Generator>RazorTemplatePreprocessor</Generator>
     </None>
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyDocumentPickerExtension\MyDocumentPickerExtension.csproj">
       <IsAppExtension>True</IsAppExtension>

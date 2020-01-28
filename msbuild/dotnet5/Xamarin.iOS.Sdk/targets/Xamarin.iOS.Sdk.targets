@@ -11,6 +11,15 @@
     <RunArguments>-launchsim=$(OutputPath)\$(AssemblyName).app -device=:v2:runtime=com.apple.CoreSimulator.SimRuntime.iOS-13-3,devicetype=com.apple.CoreSimulator.SimDeviceType.iPhone-11</RunArguments>
   </PropertyGroup>
 
+  <!-- Figure out project types -->
+  <PropertyGroup>
+    <!-- Check if we're a binding project or not  -->
+    <!-- THIS DOES NOT WORK !!! <_ExpandedObjcBindingApiDefinition>@(ObjcBindingApiDefinition)</_ExpandedObjcBindingApiDefinition> <!-->
+    <IsBindingProject Condition="'$(IsBindingProject)' == '' And '$(OutputType)' == 'Library' And '$(_ExpandedObjcBindingApiDefinition)' != ''">$(_ExpandedObjcBindingApiDefinition)</IsBindingProject>
+    <!-- There's no way to distinguish between class library projects and app extension projects, so IsAppExtension has to be set in the csproj -->
+  </PropertyGroup>
+
+
   <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
   <PropertyGroup>
     <!-- We cannot use $(Platform) in conditions on props, because VS interprets them as valid platforms
@@ -36,12 +45,6 @@
     <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(MtouchArch)' == 'ARMv7s, ARM64'">Device</TargetDeviceArchitecture>
     <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(MtouchArch)' == 'ARMv7, ARMv7s, ARM64'">Device</TargetDeviceArchitecture>
 
-  </PropertyGroup>
-
-  <!-- Check if we're a binding project or not -->
-  <PropertyGroup Condition="'$(IsBindingProject)' == '' And '$(OutputType)' == 'Library'">
-    <_ExpandedObjcBindingApiDefinition>@(ObjcBindingApiDefinition)</_ExpandedObjcBindingApiDefinition>
-    <IsBindingProject Condition="'$(_ExpandedObjcBindingApiDefinition)' != ''">true</IsBindingProject>
   </PropertyGroup>
 
   <!-- Figure out the app bundle extension -->

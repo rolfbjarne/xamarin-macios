@@ -40,10 +40,10 @@ Copyright (C) 2014-2016 Xamarin. All rights reserved.
 			<_AppBundlePath>$(AppBundleDir)\</_AppBundlePath>
 
 			<!-- needed for GetTargetPath/Build/Rebuild task outputs -->
-			<_AppExtensionBundlePath>$(MSBuildProjectDirectory)\$(AppBundleDir)</_AppExtensionBundlePath>
+			<_AppExtensionBundlePath>$(AppBundleDir)</_AppExtensionBundlePath>
 		</PropertyGroup>
 		<ItemGroup>
-			<_AppExtensionBundlePath Include="$(MSBuildProjectDirectory)\$(AppBundleDir)">
+			<_AppExtensionBundlePath Include="$(AppBundleDir)">
 				<!-- We need this metadata to fix the source in VS -->
 				<BuildSessionId>$(BuildSessionId)</BuildSessionId>
 				<BuildServerPath>..\..\$(BuildAppName)\$(BuildSessionId)\$(AppBundleDir)</BuildServerPath>

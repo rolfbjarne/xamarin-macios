@@ -69,7 +69,7 @@ namespace Xamarin.iOS.Tasks {
 			Console.WriteLine ($"dotnet: {dotnet_bundle}");
 
 			Assert.That (extra_dotnet_files, Is.Empty, "Extra dotnet files");
-			Assert.That (extra_net461_files, Is.Empty, "Extra net461 files");
+			Assert.That (extra_net461_files, Is.Empty, "Missing dotnet files");
 
 			var total_diff = 0L;
 			foreach (var file in dotnet_files) {

@@ -73,6 +73,7 @@
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <MtouchArch Condition="'$(MtouchArch)' == ''">x86_64</MtouchArch>
     <MtouchLink Condition="'$(MtouchLink)' == ''">None</MtouchLink>
+    <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Device' ">

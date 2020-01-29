@@ -57,7 +57,14 @@
     <AppBundleExtension Condition="'$(AppBundleExtension)' == ''">.app</AppBundleExtension>
   </PropertyGroup>
 
-  <Target Name="ValidateArchitecture" Condition="'$(IsAppExtension)' == 'true' Or '$(OutputType)' == 'Exe'">
+  <!-- Figure out what kind of project we are -->
+  <PropertyGroup>
+    <!-- Are we a project that outputs a bundle? This is an executable or app extension project -->
+    <IsAppBundle Condition="'$(IsAppBundle)' == '' And ('$(OutputType)' == 'Exe' Or '$(IsAppExtension)' == 'true')">true</IsAppBundle>
+    <IsAppBundle Condition="'$(IsAppBundle)' == ''">false</IsAppBundle>
+  </PropertyGroup>
+
+  <Target Name="ValidateArchitecture" Condition="'$(IsAppBundle)' == 'true'">
     <Error Text="The project file must specify a value for the MtouchArch or the TargetDeviceArchitecture property. Platform: $(Platform)" Condition="'$(MtouchArch)' == ''"/>
     <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, x86_64, ARMv7, ARMv7s and ARM64." Condition="'$(TargetDeviceArchitecture)' == ''"/>
     <Error Text="The project file does not specify a valid value for the TargetDeviceArchitecture property ($(TargetDeviceArchitecture)). Valid values are: Simulator and Device." Condition="'$(TargetDeviceArchitecture)' != 'Simulator' And '$(TargetDeviceArchitecture)' != 'Device'"/>

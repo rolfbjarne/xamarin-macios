@@ -2,6 +2,7 @@
 <Project Sdk="Xamarin.iOS.Sdk">
   <PropertyGroup>
     <TargetFramework>xamarinios10</TargetFramework>
+    <DefaultItemExcludes>$(DefaultItemExcludes);MyLibrary\*</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

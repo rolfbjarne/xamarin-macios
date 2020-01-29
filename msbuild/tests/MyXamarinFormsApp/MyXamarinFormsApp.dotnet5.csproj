@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefaultItemExcludes>$(DefaultItemExcludes);your_nonproj.file;a\**\*.pattern;MyXamarinFormsAppNS\*</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);MyXamarinFormsAppNS\*</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

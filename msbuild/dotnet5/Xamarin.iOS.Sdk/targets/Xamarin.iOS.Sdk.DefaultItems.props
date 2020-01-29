@@ -16,7 +16,7 @@
   <!-- Defaults -->
 
   <!-- Default Storyboard file inclusion -->
-  <ItemGroup Condition="'$(EnableDefaultiOSAssetCatalogItems)' == 'true' ">
+  <ItemGroup Condition="'$(EnableDefaultiOSAssetCatalogItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <!-- Do we really want to look for *.xcassets everywhere? Or just root project folder + Resources subfolder? -->
     <ImageAsset Include="**\*.xcassets\*\*.png;**\*.xcassets\*\*.jpg;**\*.xcassets\*\*.json">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <!-- Default Asset Catalog file inclusion -->
-  <ItemGroup Condition=" '$(EnableDefaultiOSStoryboardItems)' == 'true' ">
+  <ItemGroup Condition=" '$(EnableDefaultiOSStoryboardItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <!-- Do we really want to look for *.storyboard and *.xib everywhere? Or just root project folder + Resources subfolder? -->
     <InterfaceDefinition Include="**\*.storyboard;**\*.xib">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <!-- Default Asset Catalog file inclusion -->
-  <ItemGroup Condition=" '$(EnableDefaultiOSAtlasTextureItems)' == 'true' ">
+  <ItemGroup Condition=" '$(EnableDefaultiOSAtlasTextureItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <!-- Do we really want to look for *.atlas? Or just root project folder + Resources subfolder? -->
     <AtlasTexture Include="**\*.atlas">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
@@ -41,14 +41,14 @@
   </ItemGroup>
 
   <!-- Default plist file inclusion -->
-  <ItemGroup Condition="'$(EnableDefaultiOSPlistItems)' == 'true' ">
+  <ItemGroup Condition="'$(EnableDefaultiOSPlistItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <None Include="*.plist">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </None>
   </ItemGroup>
 
   <!-- Default iTunesArtwork inclusion -->
-  <ItemGroup Condition="'$(EnableDefaultiOSITunesArtworkItems)' == 'true' ">
+  <ItemGroup Condition="'$(EnableDefaultiOSITunesArtworkItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <ITunesArtwork Include="iTunesArtwork" Condition="Exists ('iTunesArtwork')">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </ITunesArtwork>
@@ -58,21 +58,21 @@
   </ItemGroup>
 
   <!-- Default CoreMLModel inclusion -->
-  <ItemGroup Condition="'$(EnableDefaultiOSCoreMLModelItems)' == 'true' ">
+  <ItemGroup Condition="'$(EnableDefaultiOSCoreMLModelItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <CoreMLModel Include="**\*.mlmodel">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </CoreMLModel>
   </ItemGroup>
 
   <!-- Default Metal inclusion -->
-  <ItemGroup Condition="'$(EnableDefaultiOSMetalItems)' == 'true' ">
+  <ItemGroup Condition="'$(EnableDefaultiOSMetalItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <Metal Include="**\*.metal">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </Metal>
   </ItemGroup>
 
   <!-- Default ScheneKit assets inclusion -->
-  <ItemGroup Condition="'$(EnableDefaultiOSSceneKitAssetItems)' == 'true' ">
+  <ItemGroup Condition="'$(EnableDefaultiOSSceneKitAssetItems)' == 'true' And '$(IsAppBundle)' == 'true' ">
     <SceneKitAsset Include="**\*.scnassets\*">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </SceneKitAsset>

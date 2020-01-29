@@ -19,7 +19,7 @@
   <ItemGroup Condition="'$(EnableDefaultiOSAssetCatalogItems)' == 'true' ">
     <!-- Do we really want to look for *.xcassets everywhere? Or just root project folder + Resources subfolder? -->
     <ImageAsset Include="**\*.xcassets\*\*.png;**\*.xcassets\*\*.jpg;**\*.xcassets\*\*.json">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
@@ -28,7 +28,7 @@
   <ItemGroup Condition=" '$(EnableDefaultiOSStoryboardItems)' == 'true' ">
     <!-- Do we really want to look for *.storyboard and *.xib everywhere? Or just root project folder + Resources subfolder? -->
     <InterfaceDefinition Include="**\*.storyboard;**\*.xib">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </InterfaceDefinition>
   </ItemGroup>
 
@@ -36,45 +36,45 @@
   <ItemGroup Condition=" '$(EnableDefaultiOSAtlasTextureItems)' == 'true' ">
     <!-- Do we really want to look for *.atlas? Or just root project folder + Resources subfolder? -->
     <AtlasTexture Include="**\*.atlas">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </AtlasTexture>
   </ItemGroup>
 
   <!-- Default plist file inclusion -->
   <ItemGroup Condition="'$(EnableDefaultiOSPlistItems)' == 'true' ">
     <None Include="*.plist">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </None>
   </ItemGroup>
 
   <!-- Default iTunesArtwork inclusion -->
   <ItemGroup Condition="'$(EnableDefaultiOSITunesArtworkItems)' == 'true' ">
     <ITunesArtwork Include="iTunesArtwork" Condition="Exists ('iTunesArtwork')">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </ITunesArtwork>
     <ITunesArtwork Include="iTunesArtwork%402x" Condition="Exists ('iTunesArtwork%402x')">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </ITunesArtwork>
   </ItemGroup>
 
   <!-- Default CoreMLModel inclusion -->
   <ItemGroup Condition="'$(EnableDefaultiOSCoreMLModelItems)' == 'true' ">
     <CoreMLModel Include="**\*.mlmodel">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </CoreMLModel>
   </ItemGroup>
 
   <!-- Default Metal inclusion -->
   <ItemGroup Condition="'$(EnableDefaultiOSMetalItems)' == 'true' ">
     <Metal Include="**\*.metal">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </Metal>
   </ItemGroup>
 
   <!-- Default ScheneKit assets inclusion -->
   <ItemGroup Condition="'$(EnableDefaultiOSSceneKitAssetItems)' == 'true' ">
     <SceneKitAsset Include="**\*.scnassets\*">
-      <Link>%(Identity)</Link>
+      <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
     </SceneKitAsset>
   </ItemGroup>
 

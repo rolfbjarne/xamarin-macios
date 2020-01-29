@@ -39,6 +39,9 @@ namespace Xamarin.iOS.Tasks
 		{
 			var mtouchPaths = SetupProjectPaths (appName, projectBaseDir, true, platform, config, use_dotnet);
 			var csproj = mtouchPaths["project_csprojpath"];
+			var sln = Path.ChangeExtension (csproj, ".sln");
+			//if (!File.Exists (sln))
+				sln = csproj;
 
 			Project proj = null;
 			if (!use_dotnet)
@@ -49,10 +52,10 @@ namespace Xamarin.iOS.Tasks
 			Engine.ProjectCollection.SetGlobalProperty("Configuration", config);
 
 			if (nuget_restore)
-				NugetRestore (csproj);
+				NugetRestore (sln);
 
 			if (clean) {
-				RunTarget (proj, csproj, "Clean", use_dotnet);
+				RunTarget (proj, sln, "Clean", use_dotnet);
 				Assert.IsFalse (Directory.Exists (AppBundlePath), "App bundle exists after cleanup: {0} ", AppBundlePath);
 				Assert.IsFalse (Directory.Exists (AppBundlePath + ".dSYM"), "App bundle .dSYM exists after cleanup: {0} ", AppBundlePath + ".dSYM");
 				Assert.IsFalse (Directory.Exists (AppBundlePath + ".mSYM"), "App bundle .mSYM exists after cleanup: {0} ", AppBundlePath + ".mSYM");
@@ -76,7 +79,7 @@ namespace Xamarin.iOS.Tasks
 			if (!use_dotnet)
 				proj = SetupProject (Engine, mtouchPaths.ProjectCSProjPath);
 
-			RunTarget (proj, csproj, "Build", use_dotnet, expectedErrorCount);
+			RunTarget (proj, sln, "Build", use_dotnet, expectedErrorCount);
 
 			if (expectedErrorCount > 0)
 				return csproj;

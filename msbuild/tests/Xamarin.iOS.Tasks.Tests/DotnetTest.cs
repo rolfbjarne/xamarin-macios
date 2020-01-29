@@ -31,7 +31,7 @@ namespace Xamarin.iOS.Tasks {
 		//[TestCase ("MySingleView")]
 		//[TestCase ("MySpriteKitGame")]
 		////[TestCase ("MyTVApp")] // Apple TV - not yet
-		//[TestCase ("MyTabbedApplication")]
+		// OK [TestCase ("MyTabbedApplication")]
 		////[TestCase ("MyWatch2Container")] // watchOS - not yet
 		// OK [TestCase ("MyWebViewApp")]
 		// OK [TestCase ("MyXamarinFormsApp")]

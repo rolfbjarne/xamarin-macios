@@ -11,7 +11,7 @@
     <BundleResource Include="Resources\second%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyActionExtension\MyActionExtension.csproj">
+    <ProjectReference Include="..\MyActionExtension\MyActionExtension.dotnet5.csproj">
       <IsAppExtension>True</IsAppExtension>
     </ProjectReference>
   </ItemGroup>

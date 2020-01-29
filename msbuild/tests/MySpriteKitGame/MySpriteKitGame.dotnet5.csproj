@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyPhotoEditingExtension\MyPhotoEditingExtension.csproj">
+    <ProjectReference Include="..\MyPhotoEditingExtension\MyPhotoEditingExtension.dotnet5.csproj">
       <IsAppExtension>True</IsAppExtension>
     </ProjectReference>
   </ItemGroup>

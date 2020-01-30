@@ -2,12 +2,9 @@
 <Project Sdk="Xamarin.iOS.Sdk">
   <PropertyGroup>
     <TargetFramework>xamarinios10</TargetFramework>
+    <OutputType>Library</OutputType>
+    <IsAppExtension>true</IsAppExtension>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MyShareExtension\MyShareExtension.dotnet5.csproj">
-      <IsAppExtension>True</IsAppExtension>
-    </ProjectReference>
-  </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <CodesignEntitlements>None</CodesignEntitlements>

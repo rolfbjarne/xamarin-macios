@@ -24,7 +24,7 @@ namespace Xamarin.iOS.Tasks {
 		// OK [TestCase ("MyIBToolLinkTest")]
 		// OK [TestCase ("MyLinkedAssets")]
 		// OK [TestCase ("MyMasterDetailApp")]
-		// PENDING - DEVICE ONLY [TestCase ("MyMetalGame")] // The iOS Simulator does not support metal. Build for a device instead.
+		// OK [TestCase ("MyMetalGame")]
 		// OK [TestCase ("MyOpenGLApp")]
 		// OK [TestCase ("MyReleaseBuild")]
 		// OK [TestCase ("MySceneKitApp")]
@@ -49,6 +49,10 @@ namespace Xamarin.iOS.Tasks {
 				break;
 			case "MyAppWithPackageReference":
 				NugetRestore (Path.Combine (net461, "MyExtensionWithPackageReference", "MyExtensionWithPackageReference.csproj"));
+				break;
+			case "MyMetalGame":
+				if (Platform == "iPhoneSimulator")
+					Assert.Ignore ("The iOS Simulator does not support metal. Build for a device instead.");
 				break;
 			}
 

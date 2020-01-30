@@ -38,6 +38,10 @@ TVOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.tvOS.Sdk.DefaultItems.props \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.tvOS.Sdk.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.tvOS.Sdk.props \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.TargetFrameworkInference.targets \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.DefaultItems.props \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.props \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.tvOS/RedistList/FrameworkList.xml \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Framework/Xamarin.tvOS/v1.0 \
 
@@ -64,6 +68,15 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Framework/Xamarin
 	ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.tvOS $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/%: % | $(DIRECTORIES)
+	$(Q) $(CP) $< $@
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/targets/Xamarin.Shared.%: targets/Xamarin.Shared.% | $(DIRECTORIES)
+	$(Q) $(CP) $< $@
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.%: targets/Xamarin.Shared.% | $(DIRECTORIES)
+	$(Q) $(CP) $< $@
+
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets/Xamarin.Shared.%: targets/Xamarin.Shared.% | $(DIRECTORIES)
 	$(Q) $(CP) $< $@
 
 $(DIRECTORIES):

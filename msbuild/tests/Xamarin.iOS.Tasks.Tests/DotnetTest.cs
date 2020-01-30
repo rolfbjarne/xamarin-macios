@@ -16,7 +16,7 @@ namespace Xamarin.iOS.Tasks {
 		}
 
 		[Test]
-		//[TestCase ("AppWithExtraArgumentThatOverrides")]
+		// OK [TestCase ("AppWithExtraArgumentThatOverrides")]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
 		// OK [TestCase ("My Spaced App")]
 		// OK [TestCase ("MyAppWithPackageReference")]

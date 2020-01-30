@@ -11,4 +11,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <MtouchFastDev>true</MtouchFastDev>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
 </Project>

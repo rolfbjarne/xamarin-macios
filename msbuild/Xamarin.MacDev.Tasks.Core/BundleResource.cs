@@ -62,10 +62,10 @@ namespace Xamarin.MacDev
 
 			// Note: if the Link metadata exists, then it will be the equivalent of the ProjectVirtualPath
 			if (!string.IsNullOrEmpty (link)) {
+				Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item}) => link => {link} (definingProjectFullPath: {item.GetMetadata ("DefiningProjectFullPath")})");
 				if (Path.DirectorySeparatorChar != '\\')
 					return link.Replace ('\\', '/');
 
-				Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item}) => link {link}");
 				return link;
 			}
 
@@ -79,8 +79,8 @@ namespace Xamarin.MacDev
 				}
 			}
 
-			var definingProjectFullPath = item.GetMetadata ("DefiningProjectFullPath");
-			Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item}) => DefiningProjectFullPath: {definingProjectFullPath}");
+			var isDefaultItem = item.GetMetadata ("IsDefaultItem") == "true";
+			var definingProjectFullPath = item.GetMetadata (isDefaultItem ? "MSBuildProjectFullPath" : "DefiningProjectFullPath");
 			var path = item.GetMetadata ("FullPath");
 			string baseDir;
 
@@ -93,7 +93,9 @@ namespace Xamarin.MacDev
 			baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
 			path = PathUtils.ResolveSymbolicLinks (path);
 			
-			return PathUtils.AbsoluteToRelative (baseDir, path);
+			var rv = PathUtils.AbsoluteToRelative (baseDir, path);
+			Console.WriteLine ($"GetVirtualProjectPath ({projectDir}, {item}) => isDefaultItem: {isDefaultItem} DefiningProjectFullPath: {definingProjectFullPath} => {rv}");
+			return rv;
 		}
 
 		public static string GetLogicalName (string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild)
@@ -101,6 +103,7 @@ namespace Xamarin.MacDev
 			var logicalName = item.GetMetadata ("LogicalName");
 
 			if (!string.IsNullOrEmpty (logicalName)) {
+				Console.WriteLine ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item}, {isVSBuild}) => LogicalName => {logicalName}");
 				if (Path.DirectorySeparatorChar != '\\')
 					return logicalName.Replace ('\\', '/');
 
@@ -115,9 +118,13 @@ namespace Xamarin.MacDev
 					matchlen = prefix.Length;
 			}
 
-			if (matchlen > 0)
-				return vpath.Substring (matchlen);
+			if (matchlen > 0) {
+				var rv = vpath.Substring (matchlen);
+				Console.WriteLine ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item}, {isVSBuild}) => vpath match => {rv}");
+				return rv;
+			}
 
+			Console.WriteLine ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item}, {isVSBuild}) => vpath => {vpath}");
 			return vpath;
 		}
 	}

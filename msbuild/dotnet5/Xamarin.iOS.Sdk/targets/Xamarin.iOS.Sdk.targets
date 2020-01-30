@@ -64,6 +64,7 @@
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <MtouchArch Condition="'$(MtouchArch)' == ''">x86_64</MtouchArch>
     <MtouchLink Condition="'$(MtouchLink)' == ''">None</MtouchLink>
+    <!-- QUESTION: Do we automatically enable signing for the simulator? -->
     <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
 
@@ -77,6 +78,8 @@
   <PropertyGroup>
     <IntermediateOutputPath>$(MSBuildProjectDirectory)\bin\$(Platform)\$(Configuration)\$(TargetDeviceArchitecture)\</IntermediateOutputPath>
     <OutputPath>$(MSBuildProjectDirectory)\bin\$(Platform)\$(Configuration)\$(TargetDeviceArchitecture)\</OutputPath>
+
+    <!-- Make it possible to disable CodesignEntitlements by setting it to 'None' -->
     <CodesignEntitlements Condition="'$(CodesignEntitlements)' == 'None' "></CodesignEntitlements>
   </PropertyGroup>
 

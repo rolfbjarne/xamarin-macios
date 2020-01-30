@@ -19,7 +19,7 @@ namespace Xamarin.iOS.Tasks {
 		//[TestCase ("AppWithExtraArgumentThatOverrides")]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
 		//[TestCase ("My Spaced App")]
-		//[TestCase ("MyAppWithPackageReference")]
+		// OK [TestCase ("MyAppWithPackageReference")]
 		// OK [TestCase ("MyCoreMLApp")]
 		// OK [TestCase ("MyIBToolLinkTest")]
 		// OK [TestCase ("MyLinkedAssets")]
@@ -46,6 +46,9 @@ namespace Xamarin.iOS.Tasks {
 			switch (project) {
 			case "MyXamarinFormsApp":
 				NugetRestore (Path.Combine (net461, project, "MyXamarinFormsAppNS", "MyXamarinFormsAppNS.csproj"));
+				break;
+			case "MyAppWithPackageReference":
+				NugetRestore (Path.Combine (net461, "MyExtensionWithPackageReference", "MyExtensionWithPackageReference.csproj"));
 				break;
 			}
 

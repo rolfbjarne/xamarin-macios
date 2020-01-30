@@ -8,6 +8,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyExtensionWithPackageReference\MyExtensionWithPackageReference.dotnet5.csproj" >
       <IsAppExtension>True</IsAppExtension>

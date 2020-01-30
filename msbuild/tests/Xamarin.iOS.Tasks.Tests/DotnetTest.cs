@@ -24,7 +24,7 @@ namespace Xamarin.iOS.Tasks {
 		//[TestCase ("MyIBToolLinkTest")]
 		//[TestCase ("MyLinkedAssets")]
 		//[TestCase ("MyMasterDetailApp")]
-		//[TestCase ("MyMetalGame")]
+		// PENDING - DEVICE ONLY [TestCase ("MyMetalGame")] // The iOS Simulator does not support metal. Build for a device instead.
 		// OK [TestCase ("MyOpenGLApp")]
 		// OK [TestCase ("MyReleaseBuild")]
 		// OK [TestCase ("MySceneKitApp")]

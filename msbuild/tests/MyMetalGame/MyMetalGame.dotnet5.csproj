@@ -7,7 +7,7 @@
     <Metal Include="Resources\Shaders.metal" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyKeyboardExtension\MyKeyboardExtension.csproj">
+    <ProjectReference Include="..\MyKeyboardExtension\MyKeyboardExtension.dotnet5.csproj">
       <IsAppExtension>True</IsAppExtension>
     </ProjectReference>
   </ItemGroup>

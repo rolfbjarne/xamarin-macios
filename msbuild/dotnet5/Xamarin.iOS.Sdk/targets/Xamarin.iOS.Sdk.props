@@ -45,6 +45,21 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+
+
+  <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
+  <PropertyGroup>
+    <!-- We cannot use $(Platform) in conditions on props, because VS interprets them as valid platforms
+       for the current project and makes them available for solution configurations, which fails miserably
+       for iOS class library projects. By using another property name, we "opt out" of this "smart" behavior -->
+    <_Platform>$(Platform)</_Platform>
+
+    <!-- Fall back to old behavior, where the target device architecture was specified using the Platform property -->
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(_Platform)' == 'iPhoneSimulator'">Simulator</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(_Platform)' == 'iPhone'">Device</TargetDeviceArchitecture>
+  </PropertyGroup>
+
+
   <!-- Default item includes (globs and implicit references) -->
   <Import Project="Xamarin.iOS.Sdk.DefaultItems.props" />
 </Project>

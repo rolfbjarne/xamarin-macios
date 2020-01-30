@@ -22,15 +22,6 @@
 
   <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
   <PropertyGroup>
-    <!-- We cannot use $(Platform) in conditions on props, because VS interprets them as valid platforms
-       for the current project and makes them available for solution configurations, which fails miserably
-       for iOS class library projects. By using another property name, we "opt out" of this "smart" behavior -->
-    <_Platform>$(Platform)</_Platform>
-
-    <!-- Fall back to old behavior, where the target device architecture was specified using the Platform property -->
-    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(_Platform)' == 'iPhoneSimulator'">Simulator</TargetDeviceArchitecture>
-    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(_Platform)' == 'iPhone'">Device</TargetDeviceArchitecture>
-
     <MtouchArch Condition="'$(MtouchArch)' == '' And '$(TargetDeviceArchitecture)' == 'Simulator'">x86_64</MtouchArch>
     <MtouchArch Condition="'$(MtouchArch)' == '' And '$(TargetDeviceArchitecture)' == 'Device'">ARM64</MtouchArch>
 
@@ -86,6 +77,7 @@
   <PropertyGroup>
     <IntermediateOutputPath>$(MSBuildProjectDirectory)\bin\$(Platform)\$(Configuration)\$(TargetDeviceArchitecture)\</IntermediateOutputPath>
     <OutputPath>$(MSBuildProjectDirectory)\bin\$(Platform)\$(Configuration)\$(TargetDeviceArchitecture)\</OutputPath>
+    <CodesignEntitlements Condition="'$(CodesignEntitlements)' == 'None' "></CodesignEntitlements>
   </PropertyGroup>
 
   <ItemGroup>

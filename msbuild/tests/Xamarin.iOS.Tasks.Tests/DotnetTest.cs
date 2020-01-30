@@ -26,7 +26,7 @@ namespace Xamarin.iOS.Tasks {
 		//[TestCase ("MyMasterDetailApp")]
 		//[TestCase ("MyMetalGame")]
 		//[TestCase ("MyOpenGLApp")]
-		//[TestCase ("MyReleaseBuild")]
+		// OK [TestCase ("MyReleaseBuild")]
 		// OK [TestCase ("MySceneKitApp")]
 		// OK [TestCase ("MySingleView")]
 		// OK [TestCase ("MySpriteKitGame")]

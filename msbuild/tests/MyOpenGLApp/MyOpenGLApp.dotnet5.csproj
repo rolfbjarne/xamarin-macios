@@ -13,8 +13,13 @@
     <BundleResource Include="Shader.vsh" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\MyTodayExtension\MyTodayExtension.csproj">
+    <ProjectReference Include="..\MyTodayExtension\MyTodayExtension.dotnet5.csproj">
+      <Name>MyTodayExtension</Name>
       <IsAppExtension>True</IsAppExtension>
     </ProjectReference>
   </ItemGroup>

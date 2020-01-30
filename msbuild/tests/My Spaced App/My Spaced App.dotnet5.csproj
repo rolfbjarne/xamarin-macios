@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Xamarin.iOS.Sdk">
+  <Import Project="../Common.props" />
   <PropertyGroup>
     <TargetFramework>xamarinios10</TargetFramework>
+    <AssemblyName>MySpacedApp</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +14,7 @@
     <Folder Include="en.lproj\" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\..\..\tests\test-libraries\.libs\ios-fat\libtest2.a">
+    <NativeReference Include="$(RepositoryPath)\tests\test-libraries\.libs\ios-fat\libtest2.a">
       <Kind>Static</Kind>
       <Link>libtest2.a</Link>
     </NativeReference>

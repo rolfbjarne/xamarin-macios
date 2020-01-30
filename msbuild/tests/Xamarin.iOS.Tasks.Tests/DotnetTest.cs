@@ -20,7 +20,7 @@ namespace Xamarin.iOS.Tasks {
 		////[TestCase ("Bug60536")] // Supposed to fail the build
 		//[TestCase ("My Spaced App")]
 		//[TestCase ("MyAppWithPackageReference")]
-		//[TestCase ("MyCoreMLApp")]
+		// OK [TestCase ("MyCoreMLApp")]
 		// OK [TestCase ("MyIBToolLinkTest")]
 		// OK [TestCase ("MyLinkedAssets")]
 		// OK [TestCase ("MyMasterDetailApp")]

@@ -21,7 +21,7 @@ namespace Xamarin.iOS.Tasks {
 		//[TestCase ("My Spaced App")]
 		//[TestCase ("MyAppWithPackageReference")]
 		//[TestCase ("MyCoreMLApp")]
-		//[TestCase ("MyIBToolLinkTest")]
+		// OK [TestCase ("MyIBToolLinkTest")]
 		// OK [TestCase ("MyLinkedAssets")]
 		// OK [TestCase ("MyMasterDetailApp")]
 		// PENDING - DEVICE ONLY [TestCase ("MyMetalGame")] // The iOS Simulator does not support metal. Build for a device instead.

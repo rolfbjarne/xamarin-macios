@@ -39,7 +39,7 @@ namespace Xamarin.iOS.Tasks {
 		// OK [TestCase ("MySpriteKitGame")]
 		// OK [TestCase ("MyTVApp")]
 		// OK [TestCase ("MyTabbedApplication")]
-		[TestCase ("MyWatch2Container")] // watchOS - not yet
+		// OK [TestCase ("MyWatch2Container")]
 		// OK [TestCase ("MyWebViewApp")]
 		// OK [TestCase ("MyXamarinFormsApp")]
 		// OK [TestCase ("MyiOSAppWithBinding")]
@@ -49,7 +49,7 @@ namespace Xamarin.iOS.Tasks {
 			var dotnet = GetTestDirectory ("dotnet");
 			FixupTestFiles (dotnet, "dotnet5");
 
-			tfi = null;
+			tfi = "Xamarin.iOS";
 			switch (project) {
 			case "MyXamarinFormsApp":
 				NugetRestore (Path.Combine (net461, project, "MyXamarinFormsAppNS", "MyXamarinFormsAppNS.csproj"));
@@ -65,7 +65,7 @@ namespace Xamarin.iOS.Tasks {
 				tfi = "Xamarin.TVOS";
 				break;
 			case "MyWatch2Container":
-				tfi = "Xamarin.WatchOS";
+				tfi = "Xamarin.iOS"; // The executable project is still an iOS project
 				break;
 			}
 

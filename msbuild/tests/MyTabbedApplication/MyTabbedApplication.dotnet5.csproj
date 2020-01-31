@@ -4,16 +4,24 @@
     <TargetFramework>xamarinios10</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' ">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug'">
+    <MtouchProfiling>true</MtouchProfiling>
+  </PropertyGroup>
+
   <ItemGroup>
     <BundleResource Include="Resources\first.png" />
     <BundleResource Include="Resources\first%402x.png" />
     <BundleResource Include="Resources\second.png" />
     <BundleResource Include="Resources\second%402x.png" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
-    <CodesignEntitlements>None</CodesignEntitlements>
-  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyActionExtension\MyActionExtension.dotnet5.csproj">

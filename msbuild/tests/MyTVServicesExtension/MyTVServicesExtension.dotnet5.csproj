@@ -5,7 +5,13 @@
     <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <CodesignEntitlements>None</CodesignEntitlements>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug'">
+    <MtouchFastDev>true</MtouchFastDev>
+  </PropertyGroup>
+
 </Project>

@@ -4,12 +4,12 @@
     <TargetFramework>xamarinios10</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <MtouchFastDev>true</MtouchFastDev>
-  </PropertyGroup>
-
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Device' ">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
   </PropertyGroup>
 
   <ItemGroup>

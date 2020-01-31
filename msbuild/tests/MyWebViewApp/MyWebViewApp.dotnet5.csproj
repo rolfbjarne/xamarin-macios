@@ -26,6 +26,14 @@
     <CodesignEntitlements>None</CodesignEntitlements>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device'">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug'">
+    <MtouchProfiling>true</MtouchProfiling>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyDocumentPickerExtension\MyDocumentPickerExtension.dotnet5.csproj">
       <Name>MyDocumentPickerExtension</Name>

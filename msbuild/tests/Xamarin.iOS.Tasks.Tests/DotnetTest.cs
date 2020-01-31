@@ -11,7 +11,7 @@ namespace Xamarin.iOS.Tasks {
 	//[TestFixture ("iPhoneSimulator")]
 	public class DotnetTest : ProjectTest {
 		public DotnetTest ()
-			: base ("iPhoneSimulator")
+			: base ("iPhone")
 		{
 		}
 
@@ -29,6 +29,7 @@ namespace Xamarin.iOS.Tasks {
 		[TestCase ("MyAppWithPackageReference")]
 		[TestCase ("MyCoreMLApp")]
 		[TestCase ("MyIBToolLinkTest")]
+		[TestCase ("MyiOSAppWithBinding")]
 		[TestCase ("MyLinkedAssets")]
 		[TestCase ("MyMasterDetailApp")]
 		[TestCase ("MyMetalGame")]
@@ -37,12 +38,11 @@ namespace Xamarin.iOS.Tasks {
 		[TestCase ("MySceneKitApp")]
 		[TestCase ("MySingleView")]
 		[TestCase ("MySpriteKitGame")]
-		[TestCase ("MyTVApp")]
 		[TestCase ("MyTabbedApplication")]
+		[TestCase ("MyTVApp")]
 		[TestCase ("MyWatch2Container")]
 		[TestCase ("MyWebViewApp")]
 		[TestCase ("MyXamarinFormsApp")]
-		[TestCase ("MyiOSAppWithBinding")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");

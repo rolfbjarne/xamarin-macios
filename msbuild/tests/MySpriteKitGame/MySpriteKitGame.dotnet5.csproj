@@ -4,13 +4,21 @@
     <TargetFramework>xamarinios10</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug'">
+    <MtouchProfiling>true</MtouchProfiling>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' ">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+
   <ItemGroup>
     <BundleResource Include="Resources\Spaceship.png" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
-    <CodesignEntitlements>None</CodesignEntitlements>
-  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyPhotoEditingExtension\MyPhotoEditingExtension.dotnet5.csproj">

@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == ''">
-    <TargetFrameworkIdentifier Condition="'$(_ShortFrameworkIdentifier)' == 'xamarin$(_PlatformName)'">Xamarin.$(_PlatformName)</TargetFrameworkIdentifier>
+    <TargetFrameworkIdentifier Condition="'$(_ShortFrameworkIdentifier)' == 'xamarinios' And '$(_PlatformName)' == 'iOS'">Xamarin.iOS</TargetFrameworkIdentifier>
+    <TargetFrameworkIdentifier Condition="'$(_ShortFrameworkIdentifier)' == 'xamarintvos' And '$(_PlatformName)' == 'tvOS'">Xamarin.TVOS</TargetFrameworkIdentifier>
+    <TargetFrameworkIdentifier Condition="'$(_ShortFrameworkIdentifier)' == 'xamarinwatchos' And '$(_PlatformName)' == 'watchOS'">Xamarin.WatchOS</TargetFrameworkIdentifier>
   </PropertyGroup>
 
   <!-- Versions with no dots and up to 3 characters get leading 'v' and implicit dots between characters. -->

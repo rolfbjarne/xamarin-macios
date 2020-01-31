@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>xamarintvos10</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyTVServicesExtension\MyTVServicesExtension.dotnet5.csproj">
       <IsAppExtension>true</IsAppExtension>

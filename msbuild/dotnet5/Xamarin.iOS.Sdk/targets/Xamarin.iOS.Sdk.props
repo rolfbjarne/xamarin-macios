@@ -3,7 +3,7 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
-    <UsingXamariniOSSdk>true</UsingXamariniOSSdk>
+    <UsingXamarinSdk>true</UsingXamarinSdk>
     <!-- This is the .net 5 location of the Xamarin.Sdk (/usr/local/share/dotnet/sdk/<version>/Sdks/Xamarin.iOS.Sdk) -->
     <XamariniOSSdkRootDirectory>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..'))\</XamariniOSSdkRootDirectory>
     <!-- This is the old location of the Xamarin Sdk -->

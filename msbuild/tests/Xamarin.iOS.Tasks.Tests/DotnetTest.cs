@@ -15,6 +15,13 @@ namespace Xamarin.iOS.Tasks {
 		{
 		}
 
+		string tfi;
+		public override string TargetFrameworkIdentifier {
+			get {
+				return tfi ?? base.TargetFrameworkIdentifier;
+			}
+		}
+
 		[Test]
 		// OK [TestCase ("AppWithExtraArgumentThatOverrides")]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
@@ -30,7 +37,7 @@ namespace Xamarin.iOS.Tasks {
 		// OK [TestCase ("MySceneKitApp")]
 		// OK [TestCase ("MySingleView")]
 		// OK [TestCase ("MySpriteKitGame")]
-		////[TestCase ("MyTVApp")] // Apple TV - not yet
+		[TestCase ("MyTVApp")]
 		// OK [TestCase ("MyTabbedApplication")]
 		////[TestCase ("MyWatch2Container")] // watchOS - not yet
 		// OK [TestCase ("MyWebViewApp")]
@@ -42,7 +49,7 @@ namespace Xamarin.iOS.Tasks {
 			var dotnet = GetTestDirectory ("dotnet");
 			FixupTestFiles (dotnet, "dotnet5");
 
-
+			tfi = null;
 			switch (project) {
 			case "MyXamarinFormsApp":
 				NugetRestore (Path.Combine (net461, project, "MyXamarinFormsAppNS", "MyXamarinFormsAppNS.csproj"));
@@ -53,6 +60,12 @@ namespace Xamarin.iOS.Tasks {
 			case "MyMetalGame":
 				if (Platform == "iPhoneSimulator")
 					Assert.Ignore ("The iOS Simulator does not support metal. Build for a device instead.");
+				break;
+			case "MyTVApp":
+				tfi = "Xamarin.TVOS";
+				break;
+			case "MyWatch2Container":
+				tfi = "Xamarin.WatchOS";
 				break;
 			}
 

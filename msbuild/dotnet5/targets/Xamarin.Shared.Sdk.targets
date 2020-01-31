@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NoStdLib>true</NoStdLib>
+    <DisableExtraReferences>true</DisableExtraReferences>
+  </PropertyGroup>
+
+  <!-- Figure out project types -->
+  <PropertyGroup>
+    <!-- Check if we're a binding project or not  -->
+    <!-- THIS DOES NOT WORK !!! <_ExpandedObjcBindingApiDefinition>@(ObjcBindingApiDefinition)</_ExpandedObjcBindingApiDefinition> <!-->
+    <IsBindingProject Condition="'$(IsBindingProject)' == '' And '$(OutputType)' == 'Library' And '$(_ExpandedObjcBindingApiDefinition)' != ''">$(_ExpandedObjcBindingApiDefinition)</IsBindingProject>
+    <!-- There's no way to distinguish between class library projects and app extension projects, so IsAppExtension has to be set in the csproj -->
+  </PropertyGroup>
+
+
+  <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
+  <PropertyGroup>
+    <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Simulator'">x86_64</MtouchArch>
+    <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Device'">ARM64</MtouchArch>
+    <MtouchArch Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' == 'watchOS' And '$(TargetDeviceArchitecture)' == 'Simulator'">i386</MtouchArch>
+    <MtouchArch Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' == 'watchOS' And '$(TargetDeviceArchitecture)' == 'Device'">ARM64_32</MtouchArch>
+
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS')    And '$(MtouchArch)' == 'x86_64'">Simulator</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'watchOS') And '$(MtouchArch)' == 'i386'">Simulator</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'i386, x86_64'">Simulator</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'ARMv7'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'ARMv7s'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'watchOS')                                And '$(MtouchArch)' == 'ARMv7k'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'watchOS')                                And '$(MtouchArch)' == 'ARM64_32'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS')    And '$(MtouchArch)' == 'ARM64'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'ARMv7, ARMv7s'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'ARMv7, ARM64'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'ARMv7s, ARM64'">Device</TargetDeviceArchitecture>
+    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS')                                    And '$(MtouchArch)' == 'ARMv7, ARMv7s, ARM64'">Device</TargetDeviceArchitecture>
+
+    <ComputedPlatform Condition="'$(TargetDeviceArchitecture)' == 'Device'">iPhone</ComputedPlatform>
+    <ComputedPlatform Condition="'$(TargetDeviceArchitecture)' == 'Simulator'">iPhoneSimulator</ComputedPlatform>
+  </PropertyGroup>
+
+  <!-- Figure out the app bundle extension -->
+  <PropertyGroup Condition="'$(AppBundleExtension)' == ''">
+    <!-- The extension for app extensions is .appex -->
+    <AppBundleExtension Condition="'$(IsAppExtension)' == 'true'">.appex</AppBundleExtension>
+    <!-- Otherwise use .app as the extension -->
+    <AppBundleExtension Condition="'$(AppBundleExtension)' == ''">.app</AppBundleExtension>
+  </PropertyGroup>
+
+  <!-- Figure out what kind of project we are -->
+  <PropertyGroup>
+    <!-- Are we a project that outputs a bundle? This is an executable or app extension project -->
+    <IsAppBundle Condition="'$(IsAppBundle)' == '' And ('$(OutputType)' == 'Exe' Or '$(IsAppExtension)' == 'true')">true</IsAppBundle>
+    <IsAppBundle Condition="'$(IsAppBundle)' == ''">false</IsAppBundle>
+  </PropertyGroup>
+
+  <Target Name="ValidateArchitecture" Condition="'$(IsAppBundle)' == 'true'">
+    <Error Text="The project file must specify a value for the MtouchArch or the TargetDeviceArchitecture property. Platform: $(Platform)" Condition="'$(MtouchArch)' == ''"/>
+    <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, x86_64, ARMv7, ARMv7s and ARM64." Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'iOS'"/>
+    <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: x86_64 and ARM64."                      Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'tvOS'"/>
+    <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, ARMv7k and ARM64_32."             Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'watchOS'"/>
+    <Error Text="The project file does not specify a valid value for the TargetDeviceArchitecture property ($(TargetDeviceArchitecture)). Valid values are: Simulator and Device." Condition="'$(TargetDeviceArchitecture)' != 'Simulator' And '$(TargetDeviceArchitecture)' != 'Device'"/>
+  </Target>
+
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <MtouchArch Condition="'$(MtouchArch)' == ''">x86_64</MtouchArch>
+    <MtouchLink Condition="'$(MtouchLink)' == ''">None</MtouchLink>
+    <!-- QUESTION: Do we automatically enable signing for the simulator? -->
+    <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Device' ">
+    <MtouchArch Condition="'$(MtouchArch)' == ''">ARM64</MtouchArch>
+    <MtouchLink Condition="'$(MtouchLink)' == ''">SdkOnly</MtouchLink>
+    <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
+    <CodesignKey Condition="'$(CodesignKey)' == ''">iPhone Developer</CodesignKey>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IntermediateOutputPath>$(MSBuildProjectDirectory)\bin\$(Platform)\$(Configuration)\$(TargetDeviceArchitecture)\</IntermediateOutputPath>
+    <OutputPath>$(MSBuildProjectDirectory)\bin\$(Platform)\$(Configuration)\$(TargetDeviceArchitecture)\</OutputPath>
+
+    <!-- Make it possible to disable CodesignEntitlements by setting it to 'None' -->
+    <CodesignEntitlements Condition="'$(CodesignEntitlements)' == 'None' "></CodesignEntitlements>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="$(MSBuildProjectDirectory)\Resources\" />
+  </ItemGroup>
+
+  <ImportGroup Condition="'$(IsMultiTargetingBuild)' != 'true'">
+    <Import Project="..\targets\Xamarin.$(_PlatformName).TargetFrameworkInference.targets" Condition="'$(TargetFramework)' != '' AND !($(TargetFramework.Contains(',')) OR $(TargetFramework.Contains(';')))"/>
+  </ImportGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\$(_PlatformName)\Xamarin.$(_PlatformName).AppExtension.CSharp.targets" Condition="'$(IsBindingProject)' != 'true' And '$(IsAppExtension)' == 'true'" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\$(_PlatformName)\Xamarin.$(_PlatformName).CSharp.targets" Condition="'$(IsBindingProject)' != 'true' And '$(IsAppExtension)' != 'true'" />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\$(_PlatformName)\Xamarin.$(_PlatformName).ObjCBinding.CSharp.targets" Condition="'$(IsBindingProject)' == 'true' And '$(IsAppExtension)' != 'true'" />
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      ValidateArchitecture;
+      $(BuildDependsOn);
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishDependsOn>
+      Build;
+    </PublishDependsOn>
+  </PropertyGroup>
+
+  <Target Name="Publish"
+        DependsOnTargets="$(PublishDependsOn)"
+        Condition=" '$(IsGraphBuild)' != 'true' ">
+    <Exec Condition="'$(Platform)' == 'iPhoneSimulator'" Command="$(MlaunchPath) -installsim=$(OutputPath)\$(AssemblyName).app -device=:v2:runtime=com.apple.CoreSimulator.SimRuntime.iOS-13-3,devicetype=com.apple.CoreSimulator.SimDeviceType.iPhone-11" />
+    <Exec Condition="'$(Platform)' == 'iPhone'" Command="$(MlaunchPath) -installdev=$(OutputPath)\$(AssemblyName).app" />
+    <Message Importance="High" Text="!!!! Publishing done !!!!" />
+  </Target>
+</Project>

@@ -188,8 +188,22 @@ namespace Xamarin.iOS.Tasks
 			string objPath;
 			if (use_dotnet) {
 				var targetPlatform = platform == "iPhone" ? "Device" : "Simulator";
-				binPath = Path.Combine (projectPath, "bin", platform, config, targetPlatform, "xamarinios10");
-				objPath = Path.Combine (projectPath, "obj", platform, config, targetPlatform, "xamarinios10");
+				var subdir = string.Empty;
+				switch (TargetFrameworkIdentifier) {
+				case "Xamarin.iOS":
+					subdir = "xamarinios10";
+					break;
+				case "Xamarin.TVOS":
+					subdir = "xamarintvos10";
+					break;
+				case "Xamarin.WatchOS":
+					subdir = "xamarinwatchos10";
+					break;
+				default:
+					throw new NotImplementedException ($"Unknown TargetFrameworkIdentifier: {TargetFrameworkIdentifier}");
+				}
+				binPath = Path.Combine (projectPath, "bin", platform, config, targetPlatform, subdir);
+				objPath = Path.Combine (projectPath, "obj", platform, config, targetPlatform, subdir);
 			} else {
 				binPath = includePlatform ? Path.Combine (projectPath, "bin", platform, config) : Path.Combine (projectPath, "bin", config);
 				objPath = includePlatform ? Path.Combine (projectPath, "obj", platform, config) : Path.Combine (projectPath, "obj", config);

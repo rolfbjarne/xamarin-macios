@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Xamarin.iOS.Sdk">
+  <PropertyGroup>
+    <TargetFramework>xamarinwatchos10</TargetFramework>
+    <OutputType>Library</OutputType>
+    <IsAppExtension>true</IsAppExtension>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyWatchKit2IntentsExtension\MyWatchKit2IntentsExtension.dotnet5.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Name>MyWatchKit2IntentsExtension</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

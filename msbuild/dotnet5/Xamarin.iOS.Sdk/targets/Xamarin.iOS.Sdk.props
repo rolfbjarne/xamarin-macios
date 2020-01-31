@@ -1,65 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
-
   <PropertyGroup>
-    <UsingXamarinSdk>true</UsingXamarinSdk>
-    <!-- This is the .net 5 location of the Xamarin.Sdk (/usr/local/share/dotnet/sdk/<version>/Sdks/Xamarin.iOS.Sdk) -->
-    <XamariniOSSdkRootDirectory>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..'))\</XamariniOSSdkRootDirectory>
-    <!-- This is the old location of the Xamarin Sdk -->
-    <XamariniOSDotNetRootDirectory>/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/</XamariniOSDotNetRootDirectory>
-
-    <!-- We should always override the framework path so that we resolves to our own mscorlib.dll -->
-    <TargetFrameworkRootPath>$(XamariniOSSdkRootDirectory)Framework</TargetFrameworkRootPath>
-    <FrameworkPathOverride>$(XamariniOSSdkRootDirectory)Framework\Xamarin.iOS\v1.0</FrameworkPathOverride>
-
-    <!-- Enable nuget package conflict resolution -->
-    <ResolveAssemblyConflicts>true</ResolveAssemblyConflicts>
+    <_PlatformName>iOS</_PlatformName>
   </PropertyGroup>
 
-  <!-- Defaults -->
-
-  <!-- User-facing configuration-agnostic defaults -->
-  <PropertyGroup>
-    <RootNamespace>$(MSBuildProjectName)</RootNamespace>
-    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <OutputType>Exe</OutputType>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-
-  <!--  User-facing configuration-specific defaults -->
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG</DefineConstants>
-    <MtouchDebug>true</MtouchDebug>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-
-
-
-  <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
-  <PropertyGroup>
-    <!-- We cannot use $(Platform) in conditions on props, because VS interprets them as valid platforms
-       for the current project and makes them available for solution configurations, which fails miserably
-       for iOS class library projects. By using another property name, we "opt out" of this "smart" behavior -->
-    <_Platform>$(Platform)</_Platform>
-
-    <!-- Fall back to old behavior, where the target device architecture was specified using the Platform property -->
-    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(_Platform)' == 'iPhoneSimulator'">Simulator</TargetDeviceArchitecture>
-    <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And '$(_Platform)' == 'iPhone'">Device</TargetDeviceArchitecture>
-  </PropertyGroup>
-
-
-  <!-- Default item includes (globs and implicit references) -->
-  <Import Project="Xamarin.iOS.Sdk.DefaultItems.props" />
+  <Import Project="Xamarin.Shared.Sdk.props" />
 </Project>

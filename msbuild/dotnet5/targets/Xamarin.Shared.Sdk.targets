@@ -92,9 +92,63 @@
   </ImportGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
-  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\$(_PlatformName)\Xamarin.$(_PlatformName).AppExtension.CSharp.targets" Condition="'$(IsBindingProject)' != 'true' And '$(IsAppExtension)' == 'true'" />
-  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\$(_PlatformName)\Xamarin.$(_PlatformName).CSharp.targets" Condition="'$(IsBindingProject)' != 'true' And '$(IsAppExtension)' != 'true'" />
-  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\$(_PlatformName)\Xamarin.$(_PlatformName).ObjCBinding.CSharp.targets" Condition="'$(IsBindingProject)' == 'true' And '$(IsAppExtension)' != 'true'" />
+
+
+  <!-- Project types and how do we distinguish between them
+
+                                  OutputType   Custom variable
+    ==================================================================
+    iOS Executable Project        Exe
+    iOS App Extension Project     Library      IsAppExtension
+    iOS Binding Project           Library      IsBindingProject
+    iOS Class Library Project     Library
+
+    tvOS Executable Project       Exe
+    tvOS App Extension Project    Library      IsAppExtension
+    tvOS Binding Project          Library      IsBindingProject
+    tvOS Class Library Project    Library
+
+    watchOS App Project           Library      IsWatchOSApp
+    watchOS App Extension Project Library      IsAppExtension
+    watchOS Binding Project       Library      IsBindingProject
+    watchOS Class Library Project Library
+
+  -->
+
+  <PropertyGroup>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'iOS' And '$(OutputType)' == 'Exe'">iOSExecutableProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'iOS' And '$(OutputType)' == 'Library' And '$(IsAppExtension)' != ''">iOSAppExtensionProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'iOS' And '$(OutputType)' == 'Library' And '$(IsBindingProject)' != ''">iOSBindingProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'iOS' And '$(OutputType)' == 'Library'">iOSClassLibrary</_ProjectType>
+
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'tvOS' And '$(OutputType)' == 'Exe'">tvOSExecutableProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'tvOS' And '$(OutputType)' == 'Library' And '$(IsAppExtension)' != ''">tvOSAppExtensionProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'tvOS' And '$(OutputType)' == 'Library' And '$(IsBindingProject)' != ''">tvOSBindingProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'tvOS' And '$(OutputType)' == 'Library'">tvOSClassLibrary</_ProjectType>
+
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS' And '$(IsWatchOSApp)' != ''">watchOSAppProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS' And '$(IsAppExtension)' != ''">watchOSAppExtensionProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS' And '$(IsBindingProject)' != ''">watchOSBindingProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS'">watchOSClassLibrary</_ProjectType>
+
+    <!-- Language? -->
+    <_ProjectLanguage Condition="'$(_ProjectLanguage)' == '' ">CSharp</_ProjectLanguage>
+    <!-- F#?? How do we detect this? -->
+  </PropertyGroup>
+
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'iOSExecutableProject' Or '$(_ProjectType)' == 'iOSClassLibrary' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'iOSAppExtensionProject' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'iOSBindingProject' " />
+
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\TVOS\Xamarin.TVOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'tvOSExecutableProject' Or '$(_ProjectType)' == 'tvOSClassLibrary' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\TVOS\Xamarin.TVOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'tvOSAppExtensionProject' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\TVOS\Xamarin.TVOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'tvOSBindingProject' " />
+
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\WatchOS\Xamarin.WatchOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'watchOSClassLibrary' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\WatchOS\Xamarin.WatchOS.App.$(_ProjectLanguage).targets"          Condition="'$(_ProjectType)' == 'watchOSAppProject' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\WatchOS\Xamarin.WatchOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'watchOSAppExtensionProject' " />
+  <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\WatchOS\Xamarin.WatchOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'watchOSBindingProject' " />
+
 
   <PropertyGroup>
     <BuildDependsOn>

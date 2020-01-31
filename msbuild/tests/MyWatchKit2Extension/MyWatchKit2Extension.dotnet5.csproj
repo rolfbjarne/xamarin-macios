@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Xamarin.iOS.Sdk">
+<Project Sdk="Xamarin.watchOS.Sdk">
   <PropertyGroup>
     <TargetFramework>xamarinwatchos10</TargetFramework>
     <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
   </PropertyGroup>
 
   <ItemGroup>

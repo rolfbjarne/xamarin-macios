@@ -13,7 +13,16 @@ namespace Xamarin.iOS.Tasks {
 		public DotnetTest ()
 			: base ("iPhone")
 		{
+			Configuration = "Debug";
 		}
+
+		public DotnetTest (string platform, string configuration)
+			: base (platform)
+		{
+			Configuration = configuration;
+		}
+
+		public string Configuration;
 
 		string tfi;
 		public override string TargetFrameworkIdentifier {
@@ -23,26 +32,26 @@ namespace Xamarin.iOS.Tasks {
 		}
 
 		[Test]
-		[TestCase ("AppWithExtraArgumentThatOverrides")]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
-		[TestCase ("My Spaced App")]
-		[TestCase ("MyAppWithPackageReference")]
-		[TestCase ("MyCoreMLApp")]
+		//[TestCase ("AppWithExtraArgumentThatOverrides")]
+		//[TestCase ("My Spaced App")]
+		//[TestCase ("MyAppWithPackageReference")]
+		//[TestCase ("MyCoreMLApp")]
 		[TestCase ("MyIBToolLinkTest")]
-		[TestCase ("MyiOSAppWithBinding")]
-		[TestCase ("MyLinkedAssets")]
-		[TestCase ("MyMasterDetailApp")]
+		//[TestCase ("MyiOSAppWithBinding")]
+		//[TestCase ("MyLinkedAssets")]
+		//[TestCase ("MyMasterDetailApp")]
 		[TestCase ("MyMetalGame")]
-		[TestCase ("MyOpenGLApp")]
-		[TestCase ("MyReleaseBuild")]
-		[TestCase ("MySceneKitApp")]
-		[TestCase ("MySingleView")]
+		//[TestCase ("MyOpenGLApp")]
+		//[TestCase ("MyReleaseBuild")]
+		//[TestCase ("MySceneKitApp")]
+		//[TestCase ("MySingleView")]
 		[TestCase ("MySpriteKitGame")]
-		[TestCase ("MyTabbedApplication")]
-		[TestCase ("MyTVApp")]
-		[TestCase ("MyWatch2Container")]
+		//[TestCase ("MyTabbedApplication")]
+		//[TestCase ("MyTVApp")]
+		//[TestCase ("MyWatch2Container")]
 		[TestCase ("MyWebViewApp")]
-		[TestCase ("MyXamarinFormsApp")]
+		//[TestCase ("MyXamarinFormsApp")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");
@@ -70,12 +79,12 @@ namespace Xamarin.iOS.Tasks {
 			}
 
 			Console.WriteLine ("Building net461");
-			BuildProject (project, Platform, "Debug", projectBaseDir: net461, use_dotnet: false, nuget_restore: true);
+			BuildProject (project, Platform, Configuration, projectBaseDir: net461, use_dotnet: false, nuget_restore: true);
 			Console.WriteLine ("Done building net461");
 			var net461_bundle = AppBundlePath;
 
 			Console.WriteLine ("Building dotnet");
-			BuildProject (project, Platform, "Debug", projectBaseDir: dotnet, use_dotnet: true);
+			BuildProject (project, Platform, Configuration, projectBaseDir: dotnet, use_dotnet: true);
 			Console.WriteLine ("Done building dotnet");
 			var dotnet_bundle = AppBundlePath;
 

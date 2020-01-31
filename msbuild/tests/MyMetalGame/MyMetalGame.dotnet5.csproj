@@ -4,6 +4,14 @@
     <TargetFramework>xamarinios10</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device'">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug'">
+    <MtouchProfiling>true</MtouchProfiling>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyKeyboardExtension\MyKeyboardExtension.dotnet5.csproj">
       <IsAppExtension>True</IsAppExtension>

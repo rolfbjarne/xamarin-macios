@@ -8,6 +8,10 @@
     <MtouchFastDev>true</MtouchFastDev>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyiOSFrameworkBinding\MyiOSFrameworkBinding.csproj" />
   </ItemGroup>

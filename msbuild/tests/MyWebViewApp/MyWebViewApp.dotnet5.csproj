@@ -22,6 +22,10 @@
     </None>
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyDocumentPickerExtension\MyDocumentPickerExtension.dotnet5.csproj">
       <Name>MyDocumentPickerExtension</Name>

@@ -10,6 +10,10 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);MyXamarinFormsAppNS\*</DefaultItemExcludes>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.540366" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />

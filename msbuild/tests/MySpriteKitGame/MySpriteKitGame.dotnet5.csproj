@@ -8,6 +8,10 @@
     <BundleResource Include="Resources\Spaceship.png" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
+    <CodesignEntitlements>None</CodesignEntitlements>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyPhotoEditingExtension\MyPhotoEditingExtension.dotnet5.csproj">
       <IsAppExtension>True</IsAppExtension>

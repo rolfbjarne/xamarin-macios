@@ -5,4 +5,8 @@
     <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device'">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
 </Project>

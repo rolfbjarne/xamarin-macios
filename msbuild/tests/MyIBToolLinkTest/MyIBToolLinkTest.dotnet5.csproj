@@ -10,6 +10,7 @@
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug' ">
     <MtouchFastDev>true</MtouchFastDev>
+    <MtouchProfiling>true</MtouchProfiling>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device'">

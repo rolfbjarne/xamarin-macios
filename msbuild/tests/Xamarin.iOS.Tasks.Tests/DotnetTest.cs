@@ -8,10 +8,14 @@ namespace Xamarin.iOS.Tasks {
 
 	[TestFixture]
 	//[TestFixture ("iPhoneSimulator")]
-	//[TestFixture ("iPhoneSimulator")]
+	//[TestFixture ("iPhone")]
+	//[TestFixture ("iPhone", "Debug")]
+	[TestFixture ("iPhone", "Release")]
+	//[TestFixture ("iPhoneSimulator", "Debug")]
+	//[TestFixture ("iPhoneSimulator", "Release")]
 	public class DotnetTest : ProjectTest {
-		public DotnetTest ()
-			: base ("iPhone")
+		public DotnetTest (string platform)
+			: base (platform)
 		{
 			Configuration = "Debug";
 		}
@@ -33,25 +37,25 @@ namespace Xamarin.iOS.Tasks {
 
 		[Test]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
-		//[TestCase ("AppWithExtraArgumentThatOverrides")]
-		//[TestCase ("My Spaced App")]
-		//[TestCase ("MyAppWithPackageReference")]
-		//[TestCase ("MyCoreMLApp")]
+		[TestCase ("AppWithExtraArgumentThatOverrides")]
+		[TestCase ("My Spaced App")]
+		[TestCase ("MyAppWithPackageReference")]
+		[TestCase ("MyCoreMLApp")]
 		[TestCase ("MyIBToolLinkTest")]
-		//[TestCase ("MyiOSAppWithBinding")]
-		//[TestCase ("MyLinkedAssets")]
-		//[TestCase ("MyMasterDetailApp")]
+		[TestCase ("MyiOSAppWithBinding")]
+		[TestCase ("MyLinkedAssets")]
+		[TestCase ("MyMasterDetailApp")]
 		[TestCase ("MyMetalGame")]
-		//[TestCase ("MyOpenGLApp")]
-		//[TestCase ("MyReleaseBuild")]
-		//[TestCase ("MySceneKitApp")]
-		//[TestCase ("MySingleView")]
+		[TestCase ("MyOpenGLApp")]
+		[TestCase ("MyReleaseBuild")]
+		[TestCase ("MySceneKitApp")]
+		[TestCase ("MySingleView")]
 		[TestCase ("MySpriteKitGame")]
-		//[TestCase ("MyTabbedApplication")]
-		//[TestCase ("MyTVApp")]
-		//[TestCase ("MyWatch2Container")]
+		[TestCase ("MyTabbedApplication")]
+		[TestCase ("MyTVApp")]
+		[TestCase ("MyWatch2Container")]
 		[TestCase ("MyWebViewApp")]
-		//[TestCase ("MyXamarinFormsApp")]
+		[TestCase ("MyXamarinFormsApp")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");
@@ -75,6 +79,8 @@ namespace Xamarin.iOS.Tasks {
 				break;
 			case "MyWatch2Container":
 				tfi = "Xamarin.iOS"; // The executable project is still an iOS project
+				if (Platform == "iPhone")
+					Assert.Ignore ("https://github.com/mono/mono/issues/18689");
 				break;
 			}
 

@@ -7,12 +7,10 @@ using NUnit.Framework;
 namespace Xamarin.iOS.Tasks {
 
 	[TestFixture]
-	//[TestFixture ("iPhoneSimulator")]
-	//[TestFixture ("iPhone")]
-	//[TestFixture ("iPhone", "Debug")]
+	[TestFixture ("iPhone", "Debug")]
 	[TestFixture ("iPhone", "Release")]
-	//[TestFixture ("iPhoneSimulator", "Debug")]
-	//[TestFixture ("iPhoneSimulator", "Release")]
+	[TestFixture ("iPhoneSimulator", "Debug")]
+	[TestFixture ("iPhoneSimulator", "Release")]
 	public class DotnetTest : ProjectTest {
 		public DotnetTest (string platform)
 			: base (platform)
@@ -37,25 +35,25 @@ namespace Xamarin.iOS.Tasks {
 
 		[Test]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
-		[TestCase ("AppWithExtraArgumentThatOverrides")]
-		[TestCase ("My Spaced App")]
-		[TestCase ("MyAppWithPackageReference")]
-		[TestCase ("MyCoreMLApp")]
-		[TestCase ("MyIBToolLinkTest")]
-		[TestCase ("MyiOSAppWithBinding")]
-		[TestCase ("MyLinkedAssets")]
-		[TestCase ("MyMasterDetailApp")]
-		[TestCase ("MyMetalGame")]
-		[TestCase ("MyOpenGLApp")]
-		[TestCase ("MyReleaseBuild")]
-		[TestCase ("MySceneKitApp")]
-		[TestCase ("MySingleView")]
-		[TestCase ("MySpriteKitGame")]
+		//[TestCase ("AppWithExtraArgumentThatOverrides")]
+		//[TestCase ("My Spaced App")]
+		//[TestCase ("MyAppWithPackageReference")]
+		//[TestCase ("MyCoreMLApp")]
+		//[TestCase ("MyIBToolLinkTest")]
+		//[TestCase ("MyiOSAppWithBinding")]
+		//[TestCase ("MyLinkedAssets")]
+		//[TestCase ("MyMasterDetailApp")]
+		//[TestCase ("MyMetalGame")]
+		//[TestCase ("MyOpenGLApp")]
+		//[TestCase ("MyReleaseBuild")]
+		//[TestCase ("MySceneKitApp")]
+		//[TestCase ("MySingleView")]
+		//[TestCase ("MySpriteKitGame")]
 		[TestCase ("MyTabbedApplication")]
-		[TestCase ("MyTVApp")]
-		[TestCase ("MyWatch2Container")]
-		[TestCase ("MyWebViewApp")]
-		[TestCase ("MyXamarinFormsApp")]
+		//[TestCase ("MyTVApp")]
+		//[TestCase ("MyWatch2Container")]
+		//[TestCase ("MyWebViewApp")]
+		//[TestCase ("MyXamarinFormsApp")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");

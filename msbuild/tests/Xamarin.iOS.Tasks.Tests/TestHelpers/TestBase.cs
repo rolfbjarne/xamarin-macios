@@ -34,14 +34,17 @@ namespace Xamarin.iOS.Tasks
 		}
 
 		static Dictionary<string, string> tests_directories = new Dictionary<string, string> ();
-		protected static string GetTestDirectory ()
+		protected static string GetTestDirectory (string mode = null)
 		{
-			var mode = "unknown";
 			var assembly_path = Assembly.GetExecutingAssembly ().Location;
-			if (assembly_path.Contains ("netstandard2.0"))
-				mode = "netstandard2.0";
-			else if (assembly_path.Contains ("net461"))
-				mode = "net461";
+			if (string.IsNullOrEmpty (mode)) {
+				if (assembly_path.Contains ("netstandard2.0"))
+					mode = "netstandard2.0";
+				else if (assembly_path.Contains ("net461"))
+					mode = "net461";
+				else
+					mode = "unknown";
+			}
 
 			// Copy the test projects to a temporary directory and run the tests there.
 			// Some tests may modify the test code / projects, and this way the working copy doesn't end up dirty.
@@ -71,6 +74,29 @@ namespace Xamarin.iOS.Tasks
 
 				tests_directories [mode] = testsTemporaryDirectory;
 				return testsTemporaryDirectory;
+			}
+		}
+
+		// Replace one file with another
+		// Example files:
+		//    foo.csproj
+		//    foo.mode.csproj
+		// when called with mode="mode", will delete foo.csproj and move foo.mode.csproj to foo.csproj
+		protected static void FixupTestFiles (string directory, string mode)
+		{
+			var files = Directory.GetFiles (directory, "*", SearchOption.AllDirectories);
+			var replace = "." + mode + ".";
+			foreach (var file in files) {
+				if (!file.Contains (replace))
+					continue;
+				var tgt = file.Replace (replace, ".");
+				if (!File.Exists (tgt))
+					continue;
+				File.Delete (tgt);
+				var contents = File.ReadAllText (file);
+				contents = contents.Replace (replace, ".");
+				File.WriteAllText (tgt, contents);
+				File.Delete (file);
 			}
 		}
 
@@ -148,19 +174,41 @@ namespace Xamarin.iOS.Tasks
 			get; set;
 		}
 
-		public ProjectPaths SetupProjectPaths (string projectName, string csprojName, string baseDir = "../", bool includePlatform = true, string platform = "iPhoneSimulator", string config = "Debug")
+		public ProjectPaths SetupProjectPaths (string projectName, string csprojName, string baseDir = "../", bool includePlatform = true, string platform = "iPhoneSimulator", string config = "Debug", bool use_dotnet = false)
 		{
-			var testsBase = GetTestDirectory ();
 			string projectPath;
 			if (Path.IsPathRooted (baseDir)) {
 				projectPath = Path.Combine (baseDir, projectName);
 			} else {
+				var testsBase = GetTestDirectory ();
 				projectPath = Path.Combine (testsBase, "Xamarin.iOS.Tasks.Tests", baseDir, projectName);
 			}
 
-			var binPath = includePlatform ? Path.Combine (projectPath, "bin", platform, config) : Path.Combine (projectPath, "bin", config);
-			var objPath = includePlatform ? Path.Combine (projectPath, "obj", platform, config) : Path.Combine (projectPath, "obj", config);
-
+			string binPath;
+			string objPath;
+			if (use_dotnet) {
+				var targetPlatform = platform == "iPhone" ? "Device" : "Simulator";
+				var subdir = string.Empty;
+				switch (TargetFrameworkIdentifier) {
+				case "Xamarin.iOS":
+					subdir = "xamarinios10";
+					break;
+				case "Xamarin.TVOS":
+					subdir = "xamarintvos10";
+					break;
+				case "Xamarin.WatchOS":
+					subdir = "xamarinwatchos10";
+					break;
+				default:
+					throw new NotImplementedException ($"Unknown TargetFrameworkIdentifier: {TargetFrameworkIdentifier}");
+				}
+				binPath = Path.Combine (projectPath, "bin", platform, config, targetPlatform, subdir);
+				objPath = Path.Combine (projectPath, "obj", platform, config, targetPlatform, subdir);
+			} else {
+				binPath = includePlatform ? Path.Combine (projectPath, "bin", platform, config) : Path.Combine (projectPath, "bin", config);
+				objPath = includePlatform ? Path.Combine (projectPath, "obj", platform, config) : Path.Combine (projectPath, "obj", config);
+			}			
+			
 			return new ProjectPaths {
 				ProjectPath = projectPath,
 				ProjectBinPath = binPath,
@@ -170,9 +218,9 @@ namespace Xamarin.iOS.Tasks
 			};
 		}
 
-		public ProjectPaths SetupProjectPaths (string projectName, string baseDir = "../", bool includePlatform = true, string platform = "iPhoneSimulator", string config = "Debug")
+		public ProjectPaths SetupProjectPaths (string projectName, string baseDir = "../", bool includePlatform = true, string platform = "iPhoneSimulator", string config = "Debug", bool use_dotnet = false)
 		{
-			return SetupProjectPaths (projectName, projectName, baseDir, includePlatform, platform, config);
+			return SetupProjectPaths (projectName, projectName, baseDir, includePlatform, platform, config, use_dotnet);
 		}
 
 		[SetUp]
@@ -405,7 +453,45 @@ namespace Xamarin.iOS.Tasks
 
 		public void RunTarget (Project project, string target, int expectedErrorCount = 0)
 		{
-			RunTargetOnInstance (project.CreateProjectInstance (), target, expectedErrorCount);
+			RunTarget (project, null, target, false, expectedErrorCount);
+		}
+		public void RunTarget (Project project, string project_path, string target, bool use_dotnet, int expectedErrorCount = 0)
+		{
+			if (use_dotnet) {
+				if (expectedErrorCount != 0)
+					throw new NotImplementedException ();
+				var platform = Engine.ProjectCollection.GetGlobalProperty ("Platform")?.EvaluatedValue;
+				var configuration = Engine.ProjectCollection.GetGlobalProperty ("Configuration")?.EvaluatedValue;
+				var dict = new Dictionary<string, string> ();
+				if (!string.IsNullOrEmpty (platform))
+					dict ["Platform"] = platform;
+				if (!string.IsNullOrEmpty (configuration))
+					dict ["Configuration"] = configuration;
+				Dotnet (target, project_path, dict);
+			} else {
+				RunTargetOnInstance (project.CreateProjectInstance (), target, expectedErrorCount);
+			}
+		}
+
+		public void Dotnet (string command, string project, Dictionary<string, string> properties)
+		{
+			var args = new List<string> ();
+			args.Add (command.ToLowerInvariant ());
+			args.Add (project);
+			foreach (var prop in properties) {
+				args.Add ($"/p:{prop.Key}={prop.Value}");
+			}
+			args.Add ("/verbosity:diag");
+			var output = new StringBuilder ();
+			var env = new Dictionary<string, string> ();
+			env ["MSBuildSDKsPath"] = null;
+			env ["MSBUILD_EXE_PATH"] = null;
+			var rv = ExecutionHelper.Execute ("dotnet", args, env, output, output, timeout: TimeSpan.FromMinutes (10));
+			Console.WriteLine (output);
+			if (rv != 0) {
+				Console.WriteLine ($"dotnet '{string.Join ("' '", args)}' failed with exit code {rv}.");
+				Assert.Fail ($"'dotnet {string.Join (" ", args)}' failed with exit code {rv}.");
+			}
 		}
 
 		public void RunTargetOnInstance (ProjectInstance instance, string target, int expectedErrorCount = 0)

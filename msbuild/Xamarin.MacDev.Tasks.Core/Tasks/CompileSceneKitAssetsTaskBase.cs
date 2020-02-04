@@ -187,6 +187,7 @@ namespace Xamarin.MacDev.Tasks
 
 				var bundleName = BundleResource.GetLogicalName (ProjectDir, prefixes, asset, !string.IsNullOrEmpty(SessionId));
 				var output = new TaskItem (Path.Combine (intermediate, bundleName));
+				Console.WriteLine ("CompileSceneKitAssetsTaskBase.Execute () intermediate: {0} bundleName: {1} => output: {2}", intermediate, bundleName, output);
 
 				if (!modified.Contains (scnassets) && (!File.Exists (output.ItemSpec) || File.GetLastWriteTimeUtc (asset.ItemSpec) > File.GetLastWriteTimeUtc (output.ItemSpec))) {
 					// Base the new item on @asset, to get the `DefiningProject*` metadata too
@@ -227,6 +228,7 @@ namespace Xamarin.MacDev.Tasks
 			foreach (var item in items) {
 				var bundleDir = BundleResource.GetLogicalName (ProjectDir, prefixes, new TaskItem (item), !string.IsNullOrEmpty(SessionId));
 				var output = Path.Combine (intermediate, bundleDir);
+				Console.WriteLine ("CompileSceneKitAssetsTaskBase.Execute () intermediate: {0} bundleDir: {1} => output: {2} (ProjectDir: {3} item: {4} prefixes: {5})", intermediate, bundleDir, output, ProjectDir, item, string.Join (", ", prefixes));
 
 				if (CopySceneKitAssets (item.ItemSpec, output, intermediate) == -1)
 					return false;

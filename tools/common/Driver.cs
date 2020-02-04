@@ -652,6 +652,49 @@ namespace Xamarin.Bundler {
 			return local_build;
 		}
 
+		static bool? is_dotnet;
+		public static bool IsDotNet {
+			get {
+				if (!is_dotnet.HasValue) {
+					is_dotnet = File.Exists (Path.Combine (FrameworkDirectory, "tools/buildinfo"));
+					Log (4, "IsDotNet: {0} FrameworkDirectory: {1}", is_dotnet.Value, FrameworkDirectory);
+				}
+				return is_dotnet.Value;
+			}
+		}
+
+		// The layout on the file system is different depending on where we're installed
+		//
+		// As a framework (in /Library/Frameworks/Xamarin.*.framework/Versions/Current):
+		// 
+		// * bin:
+		//     - executable scripts for mtouch, mmp, mlaunch, bgen, etc
+		// * SDKs: native sdks (MonoTouch.iphoneos.sdk, etc)
+		// * lib:
+		//     - the binaries for mtouch, mmp, mlaunch, bgen, etc
+		//     * native libraries (.a / .dylib) for Xamarin.Mac
+		//     * mono/TFI: BCL
+		//     * [32|64]bits|x86_64: arch specific BCL libraries
+		//     * msbuild: targets and task assemblies
+		//
+		// As an Sdk (in /usr/local/share/dotnet/sdk/<version>/Sdks/Xamarin.*.Sdk):
+		//
+		// - This has to follow the structure of a nuget
+		// * lib (can only contain managed assemblies part of the BCL)
+		//     * TFI/v1.0: BCL
+		// * tools (can contain anything)
+		//     - targets and task assemblies
+		//     * bin
+		//         - executable scripts for mtouch, mmp, mlaunch, bgen, etc
+		//     * lib
+		//         - the binaries for mtouch, mmp, mlaunch, bgen, etc
+		//     * [32|64]bits: arch specific BCL libraries
+		//     * SDKs: native sdks (MonoTouch.iphoneos.sdk, etc)
+		//     
+		// * targets
+		//     - Sdk-specific targets files
+		// 
+
 		// This is the 'Current' directory of the installed framework
 		// For XI/XM installed from package it's /Library/Frameworks/Xamarin.iOS.framework/Versions/Current or /Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 		static string framework_dir;
@@ -668,6 +711,10 @@ namespace Xamarin.Bundler {
 						framework_dir = WalkUpDirHierarchyLookingForLocalBuild ();
 #else
 						framework_dir = Path.GetDirectoryName (Path.GetDirectoryName (Path.GetDirectoryName (GetFullPath ())));
+
+						// If we're in a nuget we need to go one more directory up
+						if (!File.Exists (Path.Combine (framework_dir, "Version")) && File.Exists (Path.Combine (framework_dir, "..", "Version")))
+							framework_dir = Path.GetDirectoryName (framework_dir);
 #endif
 					}
 					framework_dir = Target.GetRealPath (framework_dir);
@@ -686,6 +733,34 @@ namespace Xamarin.Bundler {
 			get {
 				return Path.Combine (FrameworkDirectory, "lib");
 			}
+		}
+
+		public static string GetProductSdkDirectory (Application app)
+		{
+			var sdksDir = Path.Combine (FrameworkDirectory, "SDKs");
+			string sdkName;
+			switch (app.Platform) {
+			case ApplePlatform.iOS:
+				sdkName = app.IsDeviceBuild ? "MonoTouch.iphoneos.sdk" : "MonoTouch.iphonesimulator.sdk";
+				break;
+			case ApplePlatform.WatchOS:
+				sdkName = app.IsDeviceBuild ? "Xamarin.WatchOS.sdk" : "Xamarin.WatchSimulator.sdk";
+				break;
+			case ApplePlatform.TVOS:
+				sdkName = app.IsDeviceBuild ? "Xamarin.AppleTVOS.sdk" : "Xamarin.AppleTVSimulator.sdk";
+				break;
+			case ApplePlatform.MacOSX:
+				sdkName = "Xamarin.macOS.sdk";
+				break;
+			default:
+				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, PRODUCT);
+			}
+			return Path.Combine (sdksDir, sdkName);
+		}
+
+		public static string GetProductSdkLibDirectory (Application app)
+		{
+			return Path.Combine (GetProductSdkDirectory (app), "usr", "lib");
 		}
 
 		static void ValidateXcode (bool accept_any_xcode_version, bool warn_if_not_found)

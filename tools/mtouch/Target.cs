@@ -1681,7 +1681,7 @@ namespace Xamarin.Bundler
 			if (!MonoNative.RequireMonoNative)
 				return;
 			var libnative = GetLibNativeName ();
-			var libdir = Driver.GetMonoTouchLibDirectory (app);
+			var libdir = Driver.GetProductSdkLibDirectory (app);
 			Driver.Log (3, "Adding mono-native library {0} for {1}.", libnative, app);
 			switch (app.LibMonoNativeLinkMode) {
 			case AssemblyBuildTarget.DynamicLibrary:
@@ -1769,7 +1769,7 @@ namespace Xamarin.Bundler
 				var lib_native_target = Path.Combine (TargetDirectory, "libmono-native.dylib");
 
 				var lib_native_name = GetLibNativeName () + ".dylib";
-				var lib_native_path = Path.Combine (Driver.GetMonoTouchLibDirectory (App), lib_native_name);
+				var lib_native_path = Path.Combine (Driver.GetProductSdkLibDirectory (App), lib_native_name);
 				Application.UpdateFile (lib_native_path, lib_native_target);
 				Driver.Log (3, "Added mono-native library {0} for {1}.", lib_native_name, MonoNativeMode);
 			}

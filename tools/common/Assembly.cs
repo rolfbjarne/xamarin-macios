@@ -559,6 +559,9 @@ namespace Xamarin.Bundler {
 								Driver.Log (3, "Linking with the framework ApplicationServices because {0} is referenced by a module reference in {1}", file, FileName);
 							break;
 						}
+#else
+						if (name.Contains ("Carbon"))
+							break;
 #endif
 
 						// detect frameworks

@@ -531,6 +531,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 		<Mmp
 			Condition="'$(IsMacEnabled)' == 'true'"
 			SessionId="$(BuildSessionId)"
+			ToolPath="$(XamarinFrameworkBinDir)"
 			FrameworkRoot="$(XamarinMacFrameworkRoot)"
 			AppBundleDir="$(AppBundleDir)"
 			OutputPath="$(OutputPath)"

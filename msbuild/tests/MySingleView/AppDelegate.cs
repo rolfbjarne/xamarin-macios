@@ -12,6 +12,10 @@ namespace MySingleView
 	[Register ("AppDelegate")]
 	public partial class AppDelegate : UIApplicationDelegate
 	{
+		public AppDelegate ()
+		{
+			Console.WriteLine ("AppDelegate ctor");
+		}
 		// class-level declarations
 		public override UIWindow Window {
 			get;

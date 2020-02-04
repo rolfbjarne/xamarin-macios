@@ -5,6 +5,8 @@ using Mono.Linker;
 using Mono.Linker.Steps;
 using Mono.Tuner;
 
+using Xamarin.Bundler;
+
 namespace Xamarin.Linker {
 
 	public class CorePreserveCode : IStep {
@@ -23,7 +25,10 @@ namespace Xamarin.Linker {
 		public virtual void Process (LinkContext context)
 		{
 			Context = context;
-			Corlib = context.GetAssembly ("mscorlib");
+			Corlib = context.GetAssembly (Driver.IsDotNet ? "System.Private.CoreLib" : "mscorlib");
+
+			if (Corlib == null)
+				throw ErrorHelper.CreateError (99, Errors.MX0099, "Could not find mscorlib.dll?");
 
 			if (I18n.HasFlag (I18nAssemblies.MidEast)) {
 				PreserveCalendar ("UmAlQuraCalendar");

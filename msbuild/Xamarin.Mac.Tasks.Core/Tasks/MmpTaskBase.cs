@@ -92,10 +92,21 @@ namespace Xamarin.Mac.Tasks
 
 		[Output]
 		public ITaskItem[] NativeLibraries { get; set; }
-		
+
+		string BinDir {
+			get {
+				return Path.Combine (FrameworkRoot, "bin");
+			}
+		}
+
 		protected override string GenerateFullPathToTool ()
 		{
-			return Path.Combine (FrameworkRoot, "bin", "mmp");
+			if (!string.IsNullOrEmpty (ToolPath))
+				return Path.Combine (ToolPath, ToolExe);
+
+			var path = Path.Combine (BinDir, ToolExe);
+
+			return File.Exists (path) ? path : ToolExe;
 		}
 
 		protected override bool ValidateParameters ()
@@ -119,7 +130,9 @@ namespace Xamarin.Mac.Tasks
 			if (!string.IsNullOrEmpty (ApplicationName))
 				args.AddQuotedLine ("/name:" + ApplicationName);
 
-			if (TargetFrameworkIdentifier == "Xamarin.Mac")
+			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))
+				args.AddLine ("/profile:" + TargetFrameworkMoniker);
+			else if (TargetFrameworkIdentifier == "Xamarin.Mac")
 				args.AddLine ("/profile:Xamarin.Mac,Version=v2.0,Profile=Mobile");
 			else if (UseXamMacFullFramework)
 				args.AddLine ($"/profile:Xamarin.Mac,Version={TargetFrameworkVersion},Profile=Full");

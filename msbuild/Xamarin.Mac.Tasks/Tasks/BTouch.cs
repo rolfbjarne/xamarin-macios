@@ -60,6 +60,8 @@ namespace Xamarin.Mac.Tasks
 					return "/target-framework=Xamarin.Mac,Version=v2.0,Profile=Mobile";
 				case ".NETFramework":
 					return "/target-framework=Xamarin.Mac,Version=v4.5,Profile=Full";
+				case ".NETCoreApp":
+					return "/target-framework=" + TargetFrameworkMoniker;
 				default:
 					Log.LogError ($"Unknown target framework identifier: {TargetFrameworkIdentifier}.");
 					return string.Empty;

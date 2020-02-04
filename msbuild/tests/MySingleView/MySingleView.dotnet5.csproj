@@ -5,6 +5,10 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);MyLibrary\*</DefaultItemExcludes>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Release'">
+    <MtouchArch>ARMv7, ARM64</MtouchArch>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="MyLibrary\MyLibrary.csproj" />
   </ItemGroup>

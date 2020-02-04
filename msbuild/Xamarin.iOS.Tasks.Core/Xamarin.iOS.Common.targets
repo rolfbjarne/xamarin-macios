@@ -745,6 +745,20 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</ItemGroup>
 	</Target>
 
+	<Target Name="_GetWatchAppBundlePath" DependsOnTargets="_GenerateBundleName;$(_GetWatchAppBundlePathDependsOn)">
+		<PropertyGroup>
+			<!-- needed for GetTargetPath/Build/Rebuild task outputs -->
+			<_WatchAppBundlePath>$(AppBundleDir)</_WatchAppBundlePath>
+		</PropertyGroup>
+		<ItemGroup>
+			<_WatchAppBundlePath Include="$(AppBundleDir)">
+				<!-- We need this metadata to fix the source in VS -->
+				<BuildSessionId>$(BuildSessionId)</BuildSessionId>
+				<BuildServerPath>..\..\$(BuildAppName)\$(BuildSessionId)\$(AppBundleDir)</BuildServerPath>
+			</_WatchAppBundlePath>
+		</ItemGroup>
+	</Target>
+
 	<Target Name="GetAppBundleDir" DependsOnTargets="_GenerateBundleName" Returns="$(AppBundleDir)"/>
 
 	<Target Name="_CompileAppManifest"

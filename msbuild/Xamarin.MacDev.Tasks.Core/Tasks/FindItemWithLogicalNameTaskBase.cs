@@ -39,12 +39,16 @@ namespace Xamarin.MacDev.Tasks
 				foreach (var item in Items) {
 					var logical = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty(SessionId));
 
+					Console.WriteLine ("FindItemWithLogicalName ProjectDir={0} prefixes={1} item={2} => {3}", ProjectDir, string.Join (";", prefixes), item, logical);
 					if (logical == LogicalName) {
 						Log.LogMessage (MessageImportance.Low, "  {0} found at: {1}", LogicalName, item.ItemSpec);
 						Item = item;
 						break;
 					}
 				}
+			} else {
+
+				Console.WriteLine ("FindItemWithLogicalName ProjectDir={0} No Items", ProjectDir);
 			}
 
 			return !Log.HasLoggedErrors;

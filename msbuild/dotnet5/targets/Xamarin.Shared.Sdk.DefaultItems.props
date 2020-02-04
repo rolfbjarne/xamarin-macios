@@ -18,7 +18,7 @@
   <!-- Default Storyboard file inclusion -->
   <ItemGroup Condition="'$(EnableDefaultXamarinAssetCatalogItems)' == 'true' ">
     <!-- Do we really want to look for *.xcassets everywhere? Or just root project folder + Resources subfolder? -->
-    <ImageAsset Include="**\*.xcassets\**\*.png;**\*.xcassets\*\*.jpg;**\*.xcassets\**\*.json">
+    <ImageAsset Include="**\*.xcassets\**\*.png;**\*.xcassets\*\*.jpg;**\*.xcassets\**\*.json" Exclude="$(DefaultItemExcludes);$(DefaultXamarinAssetCatalogItemExcludes)">
       <Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
       <Visible>false</Visible>
       <IsDefaultItem>true</IsDefaultItem>

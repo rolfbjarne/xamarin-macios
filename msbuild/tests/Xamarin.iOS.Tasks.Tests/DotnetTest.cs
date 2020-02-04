@@ -12,11 +12,7 @@ namespace Xamarin.iOS.Tasks {
 	[TestFixture ("iPhoneSimulator", "Debug")]
 	[TestFixture ("iPhoneSimulator", "Release")]
 	public class DotnetTest : ProjectTest {
-		public DotnetTest (string platform)
-			: base (platform)
-		{
-			Configuration = "Debug";
-		}
+		public string Configuration;
 
 		public DotnetTest (string platform, string configuration)
 			: base (platform)
@@ -24,7 +20,6 @@ namespace Xamarin.iOS.Tasks {
 			Configuration = configuration;
 		}
 
-		public string Configuration;
 
 		string tfi;
 		public override string TargetFrameworkIdentifier {
@@ -35,25 +30,25 @@ namespace Xamarin.iOS.Tasks {
 
 		[Test]
 		////[TestCase ("Bug60536")] // Supposed to fail the build
-		//[TestCase ("AppWithExtraArgumentThatOverrides")]
-		//[TestCase ("My Spaced App")]
-		//[TestCase ("MyAppWithPackageReference")]
-		//[TestCase ("MyCoreMLApp")]
-		//[TestCase ("MyIBToolLinkTest")]
-		//[TestCase ("MyiOSAppWithBinding")]
-		//[TestCase ("MyLinkedAssets")]
-		//[TestCase ("MyMasterDetailApp")]
-		//[TestCase ("MyMetalGame")]
-		//[TestCase ("MyOpenGLApp")]
-		//[TestCase ("MyReleaseBuild")]
-		//[TestCase ("MySceneKitApp")]
-		//[TestCase ("MySingleView")]
-		//[TestCase ("MySpriteKitGame")]
+		[TestCase ("AppWithExtraArgumentThatOverrides")]
+		[TestCase ("My Spaced App")]
+		[TestCase ("MyAppWithPackageReference")]
+		[TestCase ("MyCoreMLApp")]
+		[TestCase ("MyIBToolLinkTest")]
+		[TestCase ("MyiOSAppWithBinding")]
+		[TestCase ("MyLinkedAssets")]
+		[TestCase ("MyMasterDetailApp")]
+		[TestCase ("MyMetalGame")]
+		[TestCase ("MyOpenGLApp")]
+		[TestCase ("MyReleaseBuild")]
+		[TestCase ("MySceneKitApp")]
+		[TestCase ("MySingleView")]
+		[TestCase ("MySpriteKitGame")]
 		[TestCase ("MyTabbedApplication")]
-		//[TestCase ("MyTVApp")]
-		//[TestCase ("MyWatch2Container")]
-		//[TestCase ("MyWebViewApp")]
-		//[TestCase ("MyXamarinFormsApp")]
+		[TestCase ("MyTVApp")]
+		[TestCase ("MyWatch2Container")]
+		[TestCase ("MyWebViewApp")]
+		[TestCase ("MyXamarinFormsApp")]
 		public void CompareBuilds (string project)
 		{
 			var net461 = GetTestDirectory ("net461");
@@ -76,7 +71,6 @@ namespace Xamarin.iOS.Tasks {
 				tfi = "Xamarin.TVOS";
 				break;
 			case "MyWatch2Container":
-				tfi = "Xamarin.iOS"; // The executable project is still an iOS project
 				if (Platform == "iPhone")
 					Assert.Ignore ("https://github.com/mono/mono/issues/18689");
 				break;
@@ -104,6 +98,7 @@ namespace Xamarin.iOS.Tasks {
 			Assert.That (extra_dotnet_files, Is.Empty, "Extra dotnet files");
 			Assert.That (extra_net461_files, Is.Empty, "Missing dotnet files");
 
+			// Print out a size comparison. Any size difference does not fail the test, since some size differences are normal.
 			var total_diff = 0L;
 			foreach (var file in dotnet_files) {
 				var dotnet_size = new FileInfo (Path.Combine (dotnet_bundle, file)).Length;

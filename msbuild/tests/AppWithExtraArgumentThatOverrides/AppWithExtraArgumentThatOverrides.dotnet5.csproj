@@ -14,6 +14,5 @@
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <CodesignEntitlements>None</CodesignEntitlements>
-    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
 </Project>

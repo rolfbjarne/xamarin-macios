@@ -98,6 +98,7 @@
     <Reference Include="Xamarin.iOS" Condition="'$(_PlatformName)' == 'iOS'" />
     <Reference Include="Xamarin.TVOS" Condition="'$(_PlatformName)' == 'tvOS'" />
     <Reference Include="Xamarin.WatchOS" Condition="'$(_PlatformName)' == 'watchOS'" />
+    <Reference Include="Xamarin.Mac" Condition="'$(_PlatformName)' == 'macOS'" />
   </ItemGroup>
 
 </Project>

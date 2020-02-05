@@ -70,10 +70,6 @@ namespace Xamarin.iOS.Tasks {
 			case "MyTVApp":
 				tfi = "Xamarin.TVOS";
 				break;
-			case "MyWatch2Container":
-				if (Platform == "iPhone")
-					Assert.Ignore ("https://github.com/mono/mono/issues/18689");
-				break;
 			}
 
 			Console.WriteLine ("Building net461");

@@ -5,15 +5,6 @@
     <DisableExtraReferences>true</DisableExtraReferences>
   </PropertyGroup>
 
-  <!-- Figure out project types -->
-  <PropertyGroup>
-    <!-- Check if we're a binding project or not  -->
-    <!-- THIS DOES NOT WORK !!! <_ExpandedObjcBindingApiDefinition>@(ObjcBindingApiDefinition)</_ExpandedObjcBindingApiDefinition> <!-->
-    <IsBindingProject Condition="'$(IsBindingProject)' == '' And '$(OutputType)' == 'Library' And '$(_ExpandedObjcBindingApiDefinition)' != ''">$(_ExpandedObjcBindingApiDefinition)</IsBindingProject>
-    <!-- There's no way to distinguish between class library projects and app extension projects, so IsAppExtension has to be set in the csproj -->
-  </PropertyGroup>
-
-
   <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
   <PropertyGroup>
     <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Simulator'">x86_64</MtouchArch>
@@ -132,11 +123,9 @@
     <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS' And '$(IsBindingProject)' != ''">watchOSBindingProject</_ProjectType>
     <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS'">watchOSClassLibrary</_ProjectType>
 
-    <!-- Language? -->
     <_ProjectLanguage>$(Language)</_ProjectLanguage>
     <_ProjectLanguage Condition="'$(_ProjectLanguage)' == '' Or '$(_ProjectLanguage)' == 'C#' ">CSharp</_ProjectLanguage>
     <_ProjectLanguage Condition="'$(_ProjectLanguage)' == 'F#' ">FSharp</_ProjectLanguage>
-    <!-- F#?? How do we detect this? -->
   </PropertyGroup>
 
   <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\iOS\Xamarin.iOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'iOSExecutableProject' Or '$(_ProjectType)' == 'iOSClassLibrary' " />

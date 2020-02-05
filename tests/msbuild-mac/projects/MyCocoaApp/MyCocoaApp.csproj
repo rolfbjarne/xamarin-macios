@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Xamarin.macOS.Sdk">
   <PropertyGroup>
-    <TargetFramework>xamarinmacos10</TargetFramework>
+    <TargetFramework>xamarinmac10</TargetFramework>
   </PropertyGroup>
 <!-- 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -70,9 +70,9 @@
     <_ProjectLanguage Condition="'$(_ProjectLanguage)' == 'F#' ">FSharp</_ProjectLanguage>
   </PropertyGroup>
 
-  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\iOS\Xamarin.macOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'macOSExecutableProject' Or '$(_ProjectType)' == 'macOSClassLibrary' " />
-  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\iOS\Xamarin.macOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'macOSAppExtensionProject' " />
-  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\iOS\Xamarin.macOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'macOSBindingProject' " />
+  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\Xamarin.Mac.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'macOSExecutableProject' Or '$(_ProjectType)' == 'macOSClassLibrary' " />
+  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\Xamarin.Mac.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'macOSAppExtensionProject' " />
+  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\Xamarin.Mac.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'macOSBindingProject' " />
 
   <!-- Do some validation before the build -->
   <PropertyGroup>

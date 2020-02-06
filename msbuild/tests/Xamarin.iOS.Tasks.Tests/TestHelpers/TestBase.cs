@@ -33,7 +33,6 @@ namespace Xamarin.iOS.Tasks
 			public static string ResolveReferences = "ResolveReferences";
 		}
 
-		static Dictionary<string, string> tests_directories = new Dictionary<string, string> ();
 		protected static string GetTestDirectory (string mode = null)
 		{
 			var assembly_path = Assembly.GetExecutingAssembly ().Location;
@@ -46,58 +45,8 @@ namespace Xamarin.iOS.Tasks
 					mode = "unknown";
 			}
 
-			// Copy the test projects to a temporary directory and run the tests there.
-			// Some tests may modify the test code / projects, and this way the working copy doesn't end up dirty.
-			lock (tests_directories) {
-				if (tests_directories.TryGetValue (mode, out var value))
-					return value;
-
-				var testSourceDirectory = Path.Combine (Configuration.RootPath, "msbuild", "tests");
-				var testsTemporaryDirectory = Path.Combine (Path.GetDirectoryName (assembly_path), "tests-tmp", mode);
-
-				// We want to start off clean every time the tests are launched
-				if (Directory.Exists (testsTemporaryDirectory))
-					Directory.Delete (testsTemporaryDirectory, true);
-
-				// Only copy files in git, we want a clean copy
-				var rv = ExecutionHelper.Execute ("git", new string [] { "ls-files" }, out var ls_files_output, working_directory: testSourceDirectory, timeout: TimeSpan.FromSeconds (15));
-				Assert.AreEqual (0, rv, "Failed to list test files");
-				var files = ls_files_output.ToString ().Split (new char [] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToArray ();
-
-				foreach (var file in files) {
-					var src = Path.Combine (testSourceDirectory, file);
-					var tgt = Path.Combine (testsTemporaryDirectory, file);
-					var tgtDir = Path.GetDirectoryName (tgt);
-					Directory.CreateDirectory (tgtDir);
-					File.Copy (src, tgt);
-				}
-
-				tests_directories [mode] = testsTemporaryDirectory;
-				return testsTemporaryDirectory;
-			}
-		}
-
-		// Replace one file with another
-		// Example files:
-		//    foo.csproj
-		//    foo.mode.csproj
-		// when called with mode="mode", will delete foo.csproj and move foo.mode.csproj to foo.csproj
-		protected static void FixupTestFiles (string directory, string mode)
-		{
-			var files = Directory.GetFiles (directory, "*", SearchOption.AllDirectories);
-			var replace = "." + mode + ".";
-			foreach (var file in files) {
-				if (!file.Contains (replace))
-					continue;
-				var tgt = file.Replace (replace, ".");
-				if (!File.Exists (tgt))
-					continue;
-				File.Delete (tgt);
-				var contents = File.ReadAllText (file);
-				contents = contents.Replace (replace, ".");
-				File.WriteAllText (tgt, contents);
-				File.Delete (file);
-			}
+			var testSourceDirectory = Path.Combine (Configuration.RootPath, "msbuild", "tests");
+			return Configuration.CloneTestDirectory (testSourceDirectory, mode);
 		}
 
 		public string [] ExpectedAppFiles = { };
@@ -475,23 +424,8 @@ namespace Xamarin.iOS.Tasks
 
 		public void Dotnet (string command, string project, Dictionary<string, string> properties)
 		{
-			var args = new List<string> ();
-			args.Add (command.ToLowerInvariant ());
-			args.Add (project);
-			foreach (var prop in properties) {
-				args.Add ($"/p:{prop.Key}={prop.Value}");
-			}
-			args.Add ("/verbosity:diag");
-			var output = new StringBuilder ();
-			var env = new Dictionary<string, string> ();
-			env ["MSBuildSDKsPath"] = null;
-			env ["MSBUILD_EXE_PATH"] = null;
-			var rv = ExecutionHelper.Execute ("dotnet", args, env, output, output, timeout: TimeSpan.FromMinutes (10));
-			Console.WriteLine (output);
-			if (rv != 0) {
-				Console.WriteLine ($"dotnet '{string.Join ("' '", args)}' failed with exit code {rv}.");
-				Assert.Fail ($"'dotnet {string.Join (" ", args)}' failed with exit code {rv}.");
-			}
+			var rv = DotNet.Execute (command, project, properties, out var _);
+			Assert.AreEqual (0, rv, $"dotnet {command} {project}");
 		}
 
 		public void RunTargetOnInstance (ProjectInstance instance, string target, int expectedErrorCount = 0)

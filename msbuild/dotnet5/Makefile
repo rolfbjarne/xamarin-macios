@@ -3,9 +3,6 @@ TOP = ../..
 include $(TOP)/Make.config
 include $(TOP)/mk/rules.mk
 
-DOTNET_VERSION=$(shell dotnet --version)
-DOTNET_PATH=/usr/local/share/dotnet/sdk/$(DOTNET_VERSION)/Sdks
-
 DIRECTORIES = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/Sdk \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/targets \
@@ -83,10 +80,7 @@ MACOS_TARGETS = \
 TARGETS = $(IOS_TARGETS) $(TVOS_TARGETS) $(WATCHOS_TARGETS) $(MACOS_TARGETS)
 
 install-symlink:
-	sudo ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk $(DOTNET_PATH)/Xamarin.iOS.Sdk
-	sudo ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk $(DOTNET_PATH)/Xamarin.tvOS.Sdk
-	sudo ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk $(DOTNET_PATH)/Xamarin.watchOS.Sdk
-	sudo ln -Fhs $(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk $(DOTNET_PATH)/Xamarin.macOS.Sdk
+	IOS_TARGETDIR=$(IOS_TARGETDIR) MAC_TARGETDIR=$(MAC_TARGETDIR) ./install-into-dotnet.sh
 
 install-local:: $(TARGETS) install-symlink
 

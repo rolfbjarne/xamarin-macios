@@ -37,6 +37,12 @@
     <AppBundleExtension Condition="'$(AppBundleExtension)' == ''">.app</AppBundleExtension>
   </PropertyGroup>
 
+  <!-- OutputType is Library if we're building a binding project or an app extension, otherwise it's Exe (unless it's already set) -->
+  <PropertyGroup Condition="'$(OutputType)' == ''">
+    <OutputType Condition="'$(IsBindingProject)' == 'true' Or '$(IsAppExtension)' == 'true' Or '$(IsWatchOSApp)' == 'true'">Library</OutputType>
+    <OutputType Condition="'$(OutputType)' == ''">Exe</OutputType>
+  </PropertyGroup>
+
   <!-- Figure out what kind of project we are -->
   <PropertyGroup>
     <!-- Are we a project that outputs a bundle? This is an executable or app extension project -->

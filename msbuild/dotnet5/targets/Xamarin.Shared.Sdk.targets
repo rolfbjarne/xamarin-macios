@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <!-- Set some default values. These values can't be set in Sdk.props, because they're evaluated based on the MtouchArch property, which is not set yet in Sdk.props -->
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(_PlatformName)' != 'macOS' ">
     <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Simulator'">x86_64</MtouchArch>
     <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Device'">ARM64</MtouchArch>
     <MtouchArch Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' == 'watchOS' And '$(TargetDeviceArchitecture)' == 'Simulator'">i386</MtouchArch>
@@ -45,13 +45,14 @@
   </PropertyGroup>
 
   <Target Name="_ValidateXamarinConfiguration" Condition="'$(IsAppBundle)' == 'true'">
-    <Error Text="The project file must specify a value for the MtouchArch or the TargetDeviceArchitecture property. Platform: $(Platform)" Condition="'$(MtouchArch)' == ''"/>
+    <Error Text="The project file must specify a value for the MtouchArch or the TargetDeviceArchitecture property. Platform: $(Platform)" Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' != 'macOS' "/>
     <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, x86_64, ARMv7, ARMv7s and ARM64." Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'iOS'"/>
     <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: x86_64 and ARM64."                      Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'tvOS'"/>
     <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, ARMv7k and ARM64_32."             Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'watchOS'"/>
-    <Error Text="The project file does not specify a valid value for the TargetDeviceArchitecture property ($(TargetDeviceArchitecture)). Valid values are: Simulator and Device." Condition="'$(TargetDeviceArchitecture)' != 'Simulator' And '$(TargetDeviceArchitecture)' != 'Device'"/>
+    <Error Text="The project file does not specify a valid value for the TargetDeviceArchitecture property ($(TargetDeviceArchitecture)). Valid values are: Simulator and Device." Condition="'$(TargetDeviceArchitecture)' != 'Simulator' And '$(TargetDeviceArchitecture)' != 'Device' And '$(_PlatformName)' != 'macOS' "/>
     <Error Text="Invalid language: $(_ProjectLanguage). Valid languages: C# and F#." Condition=" '$(_ProjectLanguage)' == '' " />
   </Target>
+
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <MtouchArch Condition="'$(MtouchArch)' == ''">x86_64</MtouchArch>
@@ -64,7 +65,8 @@
     <MtouchArch Condition="'$(MtouchArch)' == ''">ARM64</MtouchArch>
     <MtouchLink Condition="'$(MtouchLink)' == ''">SdkOnly</MtouchLink>
     <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
-    <CodesignKey Condition="'$(CodesignKey)' == ''">iPhone Developer</CodesignKey>
+    <CodesignKey Condition=" '$(CodesignKey)' == '' And '$(_PlatformName)' != 'macOS' ">iPhone Developer</CodesignKey>
+    <CodesignKey Condition=" '$(CodesignKey)' == '' And '$(_PlatformName)' == 'macOS' ">Mac Developer</CodesignKey>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -101,6 +103,11 @@
     watchOS Binding Project       Library      IsBindingProject
     watchOS Class Library Project Library
 
+    macOS Executable Project        Exe
+    macOS App Extension Project     Library      IsAppExtension
+    macOS Binding Project           Library      IsBindingProject
+    macOS Class Library Project     Library
+
   -->
 
   <PropertyGroup>
@@ -118,6 +125,11 @@
     <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS' And '$(IsAppExtension)' != ''">watchOSAppExtensionProject</_ProjectType>
     <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS' And '$(IsBindingProject)' != ''">watchOSBindingProject</_ProjectType>
     <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'watchOS'">watchOSClassLibrary</_ProjectType>
+
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'macOS' And '$(OutputType)' == 'Exe'">macOSExecutableProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'macOS' And '$(OutputType)' == 'Library' And '$(IsAppExtension)' != ''">macOSAppExtensionProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'macOS' And '$(OutputType)' == 'Library' And '$(IsBindingProject)' != ''">macOSBindingProject</_ProjectType>
+    <_ProjectType Condition="'$(_ProjectType)' == '' And '$(_PlatformName)' == 'macOS' And '$(OutputType)' == 'Library'">macOSClassLibrary</_ProjectType>
 
     <_ProjectLanguage>$(Language)</_ProjectLanguage>
     <_ProjectLanguage Condition="'$(_ProjectLanguage)' == '' Or '$(_ProjectLanguage)' == 'C#' ">CSharp</_ProjectLanguage>
@@ -137,6 +149,9 @@
   <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\WatchOS\Xamarin.WatchOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'watchOSAppExtensionProject' " />
   <Import Project="$(XamariniOSDotNetRootDirectory)lib\msbuild\WatchOS\Xamarin.WatchOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'watchOSBindingProject' " />
 
+  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\Xamarin.Mac.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'macOSExecutableProject' Or '$(_ProjectType)' == 'macOSClassLibrary' " />
+  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\Xamarin.Mac.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'macOSAppExtensionProject' " />
+  <Import Project="$(XamarinMacDotNetRootDirectory)lib\msbuild\Xamarin.Mac.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'macOSBindingProject' " />
 
   <PropertyGroup>
     <BuildDependsOn>

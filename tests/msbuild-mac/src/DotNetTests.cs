@@ -21,6 +21,9 @@ namespace Xamarin.MMP.Tests {
 		}
 
 		[TestCase ("MyCocoaApp")]
+		[TestCase ("MySpriteKitGame")]
+		[TestCase ("MySceneKitGame")]
+		[TestCase ("MyMetalGame")]
 		public void CompareBuilds (string project)
 		{
 			var project_dir = Path.Combine (Xamarin.Tests.Configuration.RootPath, "tests", "msbuild-mac", "projects");
@@ -40,7 +43,7 @@ namespace Xamarin.MMP.Tests {
 
 			Console.WriteLine ("Building dotnet");
 			var new_proj = Path.Combine (dotnet, project, project + ".csproj");
-			DotNet.Execute ("build", new_proj, properties, out var _);
+			Assert.AreEqual (0, DotNet.Execute ("build", new_proj, properties, out var _), "dotnet build return value");
 			Console.WriteLine ("Done building dotnet");
 			var dotnet_bundle = Path.Combine (Path.GetDirectoryName (new_proj), "bin", "AnyCPU", Configuration, "xamarinmac10", project + ".app");
 

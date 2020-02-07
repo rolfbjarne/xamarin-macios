@@ -2,7 +2,6 @@
 <Project Sdk="Xamarin.tvOS.Sdk">
   <PropertyGroup>
     <TargetFramework>xamarintvos10</TargetFramework>
-    <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
   </PropertyGroup>
 

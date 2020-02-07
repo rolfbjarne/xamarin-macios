@@ -8,7 +8,7 @@
     <MtouchExtraArgs>--linksdkonly -v -v</MtouchExtraArgs>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And '$(TargetDeviceArchitecture)' == 'Device' ">
     <MtouchFastDev>true</MtouchFastDev>
   </PropertyGroup>
 

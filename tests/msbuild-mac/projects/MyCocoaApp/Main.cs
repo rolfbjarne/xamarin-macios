@@ -1,4 +1,4 @@
-﻿using AppKit;
+using AppKit;
 
 namespace MyCocoaApp {
 	static class MainClass {

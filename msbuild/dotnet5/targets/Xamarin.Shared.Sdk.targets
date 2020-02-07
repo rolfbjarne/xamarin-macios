@@ -44,6 +44,25 @@
     <IsAppBundle Condition="'$(IsAppBundle)' == ''">false</IsAppBundle>
   </PropertyGroup>
 
+  <!-- Defaults specific to iOS/watchOS/tvOS -->
+  <PropertyGroup Condition=" '$(_PlatformName)' != 'macOS' ">
+  </PropertyGroup>
+
+  <!-- Defaults specific to macOS -->
+  <PropertyGroup Condition=" '$(_PlatformName)' == 'macOS' And '$(IsAppBundle)' == 'true' ">
+    <EnableCodeSigning Condition=" '$(EnableCodeSigning)' == ''">false</EnableCodeSigning>
+    <EnablePackageSigning Condition=" '$(EnablePackageSigning)' == ''">false</EnablePackageSigning>
+    <IncludeMonoRuntime Condition=" '$(IncludeMonoRuntime)' == ''">true</IncludeMonoRuntime>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(_PlatformName)' == 'macOS' And '$(Configuration)' == 'Debug' And '$(IsAppBundle)' == 'true' ">
+    <CreatePackage Condition=" '$(OutputType)' == 'Exe' And '$(CreatePackage)' == '' ">false</CreatePackage>
+    <LinkMode Condition=" '$(LinkMode)' == '' ">None</LinkMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(_PlatformName)' == 'macOS' And '$(Configuration)' == 'Release' And '$(IsAppBundle)' == 'true' ">
+    <CreatePackage Condition=" '$(OutputType)' == 'Exe' And '$(CreatePackage)' == '' ">true</CreatePackage>
+    <LinkMode Condition=" '$(LinkMode)' == '' ">SdkOnly</LinkMode>
+  </PropertyGroup>
+
   <Target Name="_ValidateXamarinConfiguration" Condition="'$(IsAppBundle)' == 'true'">
     <Error Text="The project file must specify a value for the MtouchArch or the TargetDeviceArchitecture property. Platform: $(Platform)" Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' != 'macOS' "/>
     <Error Text="The project file does not specify a valid value for the MtouchArch property ($(MtouchArch)). Valid values are: i386, x86_64, ARMv7, ARMv7s and ARM64." Condition="'$(TargetDeviceArchitecture)' == '' And '$(_PlatformName)' == 'iOS'"/>

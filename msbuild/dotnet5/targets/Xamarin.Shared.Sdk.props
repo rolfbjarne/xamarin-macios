@@ -68,15 +68,6 @@
     <EnablePackageSigning>false</EnablePackageSigning>
     <IncludeMonoRuntime>true</IncludeMonoRuntime>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(_PlatformName)' == 'macOS' And '$(Configuration)' == 'Debug' ">
-    <CreatePackage>false</CreatePackage>
-    <LinkMode>None</LinkMode>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(_PlatformName)' == 'macOS' And '$(Configuration)' == 'Release' ">
-    <CreatePackage>true</CreatePackage>
-    <LinkMode>SdkOnly</LinkMode>
-  </PropertyGroup>
-
 
   <!-- Default item includes (globs and implicit references) -->
   <Import Project="Xamarin.$(_PlatformName).Sdk.DefaultItems.props" />

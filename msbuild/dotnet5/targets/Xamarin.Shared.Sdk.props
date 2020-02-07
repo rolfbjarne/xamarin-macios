@@ -24,7 +24,6 @@
   <PropertyGroup>
     <RootNamespace>$(MSBuildProjectName)</RootNamespace>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <OutputType>Exe</OutputType>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

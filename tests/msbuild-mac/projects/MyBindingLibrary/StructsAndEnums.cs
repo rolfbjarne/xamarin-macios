@@ -1,4 +1,9 @@
 using System;
 
-namespace MyBindingLibrary {
+namespace MyBindingLibrary
+{
+	public class MyBindingClass
+	{
+
+	}
 }

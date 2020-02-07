@@ -40,6 +40,5 @@
     <ImageAsset Include="..\MySingleView\Resources\Images.xcassets\AppIcons.appiconset\Icon-Small-40%402x.png">
       <Link>Assets.xcassets\AppIcon.appiconset\Icon-Small-40%402x.png</Link>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\Contents.json" />
   </ItemGroup>
 </Project>

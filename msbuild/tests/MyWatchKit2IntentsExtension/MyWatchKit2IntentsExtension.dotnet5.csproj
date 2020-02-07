@@ -2,7 +2,6 @@
 <Project Sdk="Xamarin.watchOS.Sdk">
   <PropertyGroup>
     <TargetFramework>xamarinwatchos10</TargetFramework>
-    <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
   </PropertyGroup>
 

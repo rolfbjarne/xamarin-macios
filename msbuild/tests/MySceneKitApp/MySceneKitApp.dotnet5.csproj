@@ -4,11 +4,8 @@
     <TargetFramework>xamarinios10</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <MtouchFastDev>true</MtouchFastDev>
-  </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And '$(TargetDeviceArchitecture)' == 'Device' ">
+    <MtouchFastDev>true</MtouchFastDev>
     <MtouchProfiling>true</MtouchProfiling>
   </PropertyGroup>
 </Project>

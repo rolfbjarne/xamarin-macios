@@ -3,11 +3,6 @@
   <PropertyGroup>
     <TargetFramework>xamarinios10</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MyShareExtension\MyShareExtension.dotnet5.csproj">
-      <IsAppExtension>True</IsAppExtension>
-    </ProjectReference>
-  </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
     <CodesignEntitlements>None</CodesignEntitlements>
@@ -18,6 +13,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Debug' ">
-    <MtouchProfiling>true</MtouchProfiling> <!-- CHECK FIXME: default for debug+device? -->
+    <MtouchProfiling>true</MtouchProfiling>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyShareExtension\MyShareExtension.dotnet5.csproj">
+      <IsAppExtension>True</IsAppExtension>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

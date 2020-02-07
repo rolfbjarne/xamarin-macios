@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(UsingNETSdkDefaults)' == 'true'">
     <!-- Enable default inclusion behavior unless told otherwise -->
     <EnableDefaultItems Condition=" '$(EnableDefaultItems)' == '' ">true</EnableDefaultItems>
     <EnableDefaultXamarinAssetCatalogItems Condition=" '$(EnableDefaultXamarinAssetCatalogItems)' == '' ">$(EnableDefaultItems)</EnableDefaultXamarinAssetCatalogItems>
@@ -11,6 +11,10 @@
     <EnableDefaultXamarinCoreMLModelItems Condition=" '$(EnableDefaultXamarinCoreMLModelItems)' == '' ">$(EnableDefaultItems)</EnableDefaultXamarinCoreMLModelItems>
     <EnableDefaultXamarinMetalItems Condition=" '$(EnableDefaultXamarinMetalItems)' == '' ">$(EnableDefaultItems)</EnableDefaultXamarinMetalItems>
     <EnableDefaultXamarinSceneKitAssetItems Condition=" '$(EnableDefaultXamarinSceneKitAssetItems)' == '' ">$(EnableDefaultItems)</EnableDefaultXamarinSceneKitAssetItems>
+    <EnableDefaultXamarinBindingItems Condition=" '$(EnableDefaultXamarinBindingItems)' == '' And '$(IsBindingProject)' == 'true'">true</EnableDefaultXamarinBindingItems>
+
+    <!-- Don't include default Compile items for binding projects, because that would pick up ApiDefinition.cs and StructsAndEnums.cs -->
+    <EnableDefaultCompileItems Condition=" '$(EnableDefaultCompileItems)' == '' And '$(IsBindingProject)' == 'true' ">false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <!-- Defaults -->
@@ -79,12 +83,21 @@
     </Metal>
   </ItemGroup>
 
-  <!-- Default ScheneKit assets inclusion -->
+  <!-- Default SceneKit assets inclusion -->
   <ItemGroup Condition="'$(EnableDefaultXamarinSceneKitAssetItems)' == 'true' ">
     <SceneKitAsset Include="**\*.scnassets\*" Exclude="$(DefaultItemExcludes);$(DefaultXamarinSceneKitAssetItemExcludes)">
-      <!-- <Link>$([System.IO.Path]::GetDirectoryName ($([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))))</Link> -->
       <IsDefaultItem>true</IsDefaultItem>
     </SceneKitAsset>
+  </ItemGroup>
+
+  <!-- Default includes for binding projects: StructsAndEnums.cs and ApiDefinition.cs -->
+  <ItemGroup Condition="'$(EnableDefaultXamarinBindingItems)' == 'true' ">
+    <ObjcBindingCoreSource Condition="Exists ('StructsAndEnums.cs')" Include="StructsAndEnums.cs">
+      <IsDefaultItem>true</IsDefaultItem>
+    </ObjcBindingCoreSource>
+    <ObjcBindingApiDefinition Condition="Exists ('ApiDefinition.cs')" Include="ApiDefinition.cs">
+      <IsDefaultItem>true</IsDefaultItem>
+    </ObjcBindingApiDefinition>
   </ItemGroup>
 
    <!-- Default References -->

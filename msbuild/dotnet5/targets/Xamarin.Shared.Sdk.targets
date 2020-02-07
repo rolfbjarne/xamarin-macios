@@ -81,10 +81,10 @@
     <Import Project="..\targets\Xamarin.$(_PlatformName).TargetFrameworkInference.targets" Condition="'$(TargetFramework)' != '' AND !($(TargetFramework.Contains(',')) OR $(TargetFramework.Contains(';')))"/>
   </ImportGroup>
 
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
-
   <!-- Default item includes (globs and implicit references) -->
-  <Import Project="Xamarin.$(_PlatformName).Sdk.DefaultItems.targets" />
+  <Import Project="Xamarin.Shared.Sdk.DefaultItems.targets" />
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 
   <!-- Project types and how do we distinguish between them
 

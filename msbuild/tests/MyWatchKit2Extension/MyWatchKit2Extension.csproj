@@ -36,6 +36,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchArch>ARM64_32</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>full</DebugType>
@@ -62,6 +63,7 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
     <MtouchFastDev>true</MtouchFastDev>
+    <MtouchArch>ARM64_32</MtouchArch>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

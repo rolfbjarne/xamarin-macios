@@ -114,10 +114,13 @@ namespace Xamarin.Tests {
 
 		public static int Execute (string verb, string project, Dictionary<string, string> properties, out StringBuilder output, string verbosity = "diagnostic")
 		{
+			verb = verb.ToLowerInvariant ();
+
 			switch (verb) {
+			case "clean":
 			case "build":
 				var args = new List<string> ();
-				args.Add (verb.ToLowerInvariant ());
+				args.Add (verb);
 				args.Add (project);
 				foreach (var prop in properties) {
 					args.Add ($"/p:{prop.Key}={prop.Value}");

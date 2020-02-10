@@ -37,10 +37,10 @@
     <AppBundleExtension Condition="'$(AppBundleExtension)' == ''">.app</AppBundleExtension>
   </PropertyGroup>
 
-  <!-- OutputType is Library if we're building a binding project or an app extension, otherwise it's Exe (unless it's already set) -->
-  <PropertyGroup Condition="'$(OutputType)' == ''">
+  <!-- OutputType is Library if we're building a binding project, an app extension or a watch app, otherwise it's Exe (unless it's already set) -->
+  <PropertyGroup Condition="'$(OutputType)' == '' Or '$(OutputType)' == 'DefaultOutputType'">
     <OutputType Condition="'$(IsBindingProject)' == 'true' Or '$(IsAppExtension)' == 'true' Or '$(IsWatchOSApp)' == 'true'">Library</OutputType>
-    <OutputType Condition="'$(OutputType)' == ''">Exe</OutputType>
+    <OutputType Condition="'$(OutputType)' == '' Or '$(OutputType)' == 'DefaultOutputType'">Exe</OutputType>
   </PropertyGroup>
 
   <!-- Figure out what kind of project we are -->

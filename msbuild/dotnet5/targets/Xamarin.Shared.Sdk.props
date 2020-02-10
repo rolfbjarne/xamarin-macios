@@ -16,6 +16,14 @@
 
     <!-- Enable nuget package conflict resolution -->
     <ResolveAssemblyConflicts>true</ResolveAssemblyConflicts>
+
+    <!-- We want to set OutputType=Library automatically for app extensions
+    and watch apps, which means we need to be able to detect if the project
+    sets it or not (so that we don't override anything the user sets). A
+    complication is that at this point OutputType=Library by default (set by
+    Sdk.props at the top of this file), so we can't check if OutputType=''.
+    Instead set OutputType to a sentinent value we can check for later -->
+    <OutputType>DefaultOutputType</OutputType>
   </PropertyGroup>
 
   <!-- Defaults -->

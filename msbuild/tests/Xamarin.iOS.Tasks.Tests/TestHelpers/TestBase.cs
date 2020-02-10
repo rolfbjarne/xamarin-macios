@@ -424,6 +424,10 @@ namespace Xamarin.iOS.Tasks
 
 		public void Dotnet (string command, string project, Dictionary<string, string> properties)
 		{
+			if (properties == null)
+				properties = new Dictionary<string, string> ();
+			properties.Add ("XamarinMacFrameworkRoot", Configuration.SdkRootXM);
+			properties.Add ("MD_MTOUCH_SDK_ROOT", Configuration.SdkRootXI);
 			var rv = DotNet.Execute (command, project, properties, out var _);
 			Assert.AreEqual (0, rv, $"dotnet {command} {project}");
 		}

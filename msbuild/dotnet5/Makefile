@@ -49,7 +49,7 @@ TVOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.DefaultItems.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.props \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.tvOS/RedistList/FrameworkList.xml \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/RedistList/FrameworkList.xml \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Framework/Xamarin.tvOS/v1.0 \
 
 WATCHOS_TARGETS = \
@@ -64,7 +64,7 @@ WATCHOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets/Xamarin.Shared.Sdk.DefaultItems.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets/Xamarin.Shared.Sdk.props \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.watchOS/RedistList/FrameworkList.xml \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/RedistList/FrameworkList.xml \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/Framework/Xamarin.watchOS/v1.0 \
 
 MACOS_TARGETS = \

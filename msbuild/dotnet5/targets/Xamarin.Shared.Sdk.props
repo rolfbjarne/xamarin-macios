@@ -7,8 +7,11 @@
     <!-- This is the .net 5 location of the Xamarin.Sdk (/usr/local/share/dotnet/sdk/<version>/Sdks/Xamarin.[iOS/tvOS/watchOS/macOS].Sdk) -->
     <XamarinSdkRootDirectory>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..'))\</XamarinSdkRootDirectory>
     <!-- This is the old location of the legacy Xamarin Sdk -->
-    <XamariniOSDotNetRootDirectory>/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/</XamariniOSDotNetRootDirectory>
-    <XamarinMacDotNetRootDirectory>/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/</XamarinMacDotNetRootDirectory>
+    <!-- For iOS, first check MD_MTOUCH_SDK_ROOT and then MonoTouchSdkRoot -->
+    <MonoTouchSdkRoot Condition=" '$(MonoTouchSdkRoot)' == '' And '$(MD_MTOUCH_SDK_ROOT)' != '' ">$(MD_MTOUCH_SDK_ROOT)</MonoTouchSdkRoot>
+    <MonoTouchSdkRoot Condition=" '$(MonoTouchSdkRoot)' == '' And Exists('/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin') ">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</MonoTouchSdkRoot>
+    <!-- for macOS, check XamarinMacFrameworkRoot only -->
+    <XamarinMacFrameworkRoot Condition=" '$(XamarinMacFrameworkRoot) == '' ">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/</XamarinMacFrameworkRoot>
 
     <!-- We should always override the framework path so that we resolves to our own mscorlib.dll -->
     <TargetFrameworkRootPath>$(XamarinSdkRootDirectory)Framework</TargetFrameworkRootPath>

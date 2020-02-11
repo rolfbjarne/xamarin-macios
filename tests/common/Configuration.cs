@@ -409,12 +409,6 @@ namespace Xamarin.Tests
 			}
 		}
 
-		public static string SmcsPath {
-			get {
-				return Path.Combine (SdkBinDir, "smcs");
-			}
-		}
-
 		public static string BtouchPath {
 			get {
 				return Path.Combine (SdkBinDir, "btouch-native");

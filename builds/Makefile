@@ -408,9 +408,6 @@ MAC_FACADE_ASSEMBLIES = $(COMMON_FACADE_ASSEMBLIES) $(MOBILE_ADDITIONAL_FACADE_A
 MAC_4_5_FACADE_ASSEMBLIES = $(COMMON_FACADE_ASSEMBLIES) System.Net.Http.Rtc
 
 IOS_BCL_DIRECTORIES = \
-	$(PREFIX)/lib/mono/2.1 \
-	$(PREFIX)/lib/mono/2.1/Facades \
-	$(PREFIX)/lib/mono/2.1/repl \
 	$(PREFIX)/lib/mono/Xamarin.iOS \
 	$(PREFIX)/lib/mono/Xamarin.iOS/Facades \
 	$(PREFIX)/lib/mono/Xamarin.iOS/repl
@@ -435,14 +432,9 @@ NO_PDB_ASSEMBLIES = System.Windows System.Xml.Serialization
 MAC_NO_PDB_ASSEMBLIES = System.Windows System.Xml.Serialization
 
 IOS_BCL_TARGETS =                                                                                                  \
-	$(foreach file,$(IOS_ASSEMBLIES),$(PREFIX)/lib/mono/2.1/$(file).dll)                                                \
-	$(foreach file,$(filter-out $(NO_PDB_ASSEMBLIES),$(IOS_ASSEMBLIES)),$(PREFIX)/lib/mono/2.1/$(file).pdb)         \
 	$(foreach file,$(IOS_ASSEMBLIES),$(PREFIX)/lib/mono/Xamarin.iOS/$(file).dll)                                        \
 	$(foreach file,$(filter-out $(NO_PDB_ASSEMBLIES),$(IOS_ASSEMBLIES)),$(PREFIX)/lib/mono/Xamarin.iOS/$(file).pdb) \
-	$(foreach file,$(IOS_FACADE_ASSEMBLIES),$(PREFIX)/lib/mono/2.1/Facades/$(file).dll)                                 \
 	$(foreach file,$(IOS_FACADE_ASSEMBLIES),$(PREFIX)/lib/mono/Xamarin.iOS/Facades/$(file).dll)                         \
-	$(foreach file,$(IOS_REPL_ASSEMBLIES),$(PREFIX)/lib/mono/2.1/repl/$(file).dll)                                      \
-	$(foreach file,$(IOS_REPL_ASSEMBLIES),$(PREFIX)/lib/mono/2.1/repl/$(file).pdb)                                  \
 	$(foreach file,$(IOS_REPL_ASSEMBLIES),$(PREFIX)/lib/mono/Xamarin.iOS/repl/$(file).dll)                              \
 	$(foreach file,$(IOS_REPL_ASSEMBLIES),$(PREFIX)/lib/mono/Xamarin.iOS/repl/$(file).pdb)                          \
 
@@ -475,15 +467,6 @@ $(PREFIX)/lib/mono/Xamarin.iOS/repl/%: .stamp-$(MONO_BUILD_MODE) | $(PREFIX)/lib
 	$(Q) install -m 0755 $(MONO_IOS_SDK_DESTDIR)/ios-bcl/monotouch_runtime/$(notdir $@) $@
 
 $(PREFIX)/lib/mono/Xamarin.iOS/%: .stamp-$(MONO_BUILD_MODE) | $(PREFIX)/lib/mono/Xamarin.iOS
-	$(Q) install -m 0755 $(MONO_IOS_SDK_DESTDIR)/ios-bcl/monotouch/$(notdir $@) $@
-
-$(PREFIX)/lib/mono/2.1/Facades/%: .stamp-$(MONO_BUILD_MODE) | $(PREFIX)/lib/mono/2.1/Facades
-	$(Q) install -m 0755 $(MONO_IOS_SDK_DESTDIR)/ios-bcl/monotouch/Facades/$(notdir $@) $@
-
-$(PREFIX)/lib/mono/2.1/repl/%: .stamp-$(MONO_BUILD_MODE) | $(PREFIX)/lib/mono/2.1/repl
-	$(Q) install -m 0755 $(MONO_IOS_SDK_DESTDIR)/ios-bcl/monotouch_runtime/$(notdir $@) $@
-
-$(PREFIX)/lib/mono/2.1/%: .stamp-$(MONO_BUILD_MODE) | $(PREFIX)/lib/mono/2.1
 	$(Q) install -m 0755 $(MONO_IOS_SDK_DESTDIR)/ios-bcl/monotouch/$(notdir $@) $@
 
 $(PREFIX)/lib/mono/Xamarin.WatchOS/Facades/%: .stamp-$(MONO_BUILD_MODE) | $(PREFIX)/lib/mono/Xamarin.WatchOS/Facades
@@ -570,15 +553,15 @@ install-bcl:: install-bcl-mac
 ### TODO END
 
 verify-signature:
-	for file in $(PREFIX)/lib/mono/2.1/*.dll; do \
+	for file in $(PREFIX)/lib/mono/Xamarin.iOS/*.dll; do \
 		MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $$file;	\
 	done
-	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/2.1/monotouch.dll			\
-	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/2.1/MonoTouch.Dialog.dll		\
-	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/2.1/MonoTouch.NUnitLite.dll	\
-	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/2.1/OpenTK.dll			\
-	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/2.1/OpenTK-10.dll
-	for file in $$(find $(PREFIX)/lib/mono/2.1/Facades -name "*.dll"); do \
+	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/Xamarin.iOS/monotouch.dll			\
+	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/Xamarin.iOS/MonoTouch.Dialog.dll		\
+	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/Xamarin.iOS/MonoTouch.NUnitLite.dll	\
+	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/Xamarin.iOS/OpenTK.dll			\
+	@MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $(PREFIX)/lib/mono/Xamarin.iOS/OpenTK-10.dll
+	for file in $$(find $(PREFIX)/lib/mono/Xamarin.iOS/Facades -name "*.dll"); do \
 		MONO_CFG_DIR=$(TOP) $(SYSTEM_SN) -q -v $$file;	\
 	done
 
@@ -594,12 +577,8 @@ $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/bin/smcs:
 	@echo Installing smcs script
 	@echo "#!/bin/bash" > $@
 	@echo >> $@
-	@echo 'SMCS=`which mcs`' >> $@
-	@echo 'if test -z $$SMCS; then' >> $@
-	@echo "    SMCS=/Library/Frameworks/Mono.framework/Versions/Current/bin/mcs" >> $@
-	@echo "fi" >> $@
-	@echo 'unset MONO_PATH' >> $@
-	@echo "\$$SMCS -nostdlib -r:$(abspath $(IOS_TARGETDIR)/$(MONOTOUCH_PREFIX)/lib/mono/2.1/mscorlib.dll) -r:$(abspath $(IOS_TARGETDIR)/$(MONOTOUCH_PREFIX)/lib/mono/2.1/System.dll) \"\$$@\"" >> $@
+	@echo "echo 'This script ($$0) is obsolete. Use csc to compile instead."
+	@echo "exit 1"
 	@chmod +x $@
 
 install-smcs: $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/bin/smcs

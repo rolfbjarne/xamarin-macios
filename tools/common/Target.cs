@@ -109,8 +109,11 @@ namespace Xamarin.Bundler {
 		public static string GetRealPath (string path)
 		{
 			var rv = realpath (path, IntPtr.Zero);
-			if (rv != null)
+			if (rv != null) {
+				Console.WriteLine ("GetRealPath ({0}) => {1}", path, rv);
 				return rv;
+			}
+			Console.WriteLine ("GetRealPath ({0}) => FAILED", path);
 
 			var errno = Marshal.GetLastWin32Error ();
 			ErrorHelper.Warning (54, Errors.MT0054, path, FileCopier.strerror (errno), errno);

@@ -609,6 +609,7 @@ namespace Xamarin.Bundler {
 		{
 			var satellite_name = Path.GetFileNameWithoutExtension (FullPath) + ".resources.dll";
 			var path = Path.GetDirectoryName (FullPath);
+			Console.WriteLine ("ComputeSatellites FullPath: {1} path: {0}", path, FullPath);
 			// first look if satellites are located in subdirectories of the current location of the assembly
 			ComputeSatellites (satellite_name, path);
 			if (Satellites == null) {
@@ -616,12 +617,14 @@ namespace Xamarin.Bundler {
 				// they will be copied (at build time) into the destination directory (making them work at runtime)
 				// but they won't be side-by-side the original assembly (which breaks our build time assumptions)
 				path = Path.GetDirectoryName (App.RootAssemblies [0]);
+				Console.WriteLine ("ComputeSatellites 2nd chance root assembly: {1} path: {0}", path, App.RootAssemblies [0]);
 				ComputeSatellites (satellite_name, path);
 			}
 		}
 
 		void ComputeSatellites (string satellite_name, string path)
 		{
+			Console.WriteLine ("ComputeSatellites path: {0}", path);
 			foreach (var subdir in Directory.GetDirectories (path)) {
 				var culture_name = Path.GetFileName (subdir);
 				CultureInfo ci;

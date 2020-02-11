@@ -10,7 +10,8 @@
     <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Simulator'">x86_64</MtouchArch>
     <MtouchArch Condition="'$(MtouchArch)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Device'">ARM64</MtouchArch>
     <MtouchArch Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' == 'watchOS' And '$(TargetDeviceArchitecture)' == 'Simulator'">i386</MtouchArch>
-    <MtouchArch Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' == 'watchOS' And '$(TargetDeviceArchitecture)' == 'Device'">ARM64_32</MtouchArch>
+    <MtouchArch Condition="'$(MtouchArch)' == '' And '$(_PlatformName)' == 'watchOS' And '$(TargetDeviceArchitecture)' == 'Device' ">ARM64_32</MtouchArch>
+    <MtouchUseLlvm Condition="'$(MtouchUseLlvm)' == '' And ('$(_PlatformName)' == 'watchOS' Or '$(_PlatformName)' == 'tvOS') And '$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Release' ">true</MtouchUseLlvm>
 
     <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS')    And '$(MtouchArch)' == 'x86_64'">Simulator</TargetDeviceArchitecture>
     <TargetDeviceArchitecture Condition="'$(TargetDeviceArchitecture)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'watchOS') And '$(MtouchArch)' == 'i386'">Simulator</TargetDeviceArchitecture>
@@ -50,8 +51,18 @@
     <IsAppBundle Condition="'$(IsAppBundle)' == ''">false</IsAppBundle>
   </PropertyGroup>
 
-  <!-- Defaults specific to iOS/watchOS/tvOS -->
-  <PropertyGroup Condition=" '$(_PlatformName)' != 'macOS' ">
+  <!-- Defaults specific to iOS -->
+  <PropertyGroup Condition=" '$(_PlatformName)' == 'iOS' ">
+  </PropertyGroup>
+
+  <!-- Defaults specific to tvOS -->
+  <PropertyGroup Condition=" '$(_PlatformName)' == 'tvOS' ">
+    <MtouchEnableBitcode Condition=" '$(MtouchEnableBitcode)' == '' And '$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Release' ">true</MtouchEnableBitcode>
+  </PropertyGroup>
+
+  <!-- Defaults specific to watchOS -->
+  <PropertyGroup Condition=" '$(_PlatformName)' == 'watchOS' ">
+    <MtouchEnableBitcode Condition=" '$(MtouchEnableBitcode)' == '' And '$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Release' And '$(IsAppExtension)' == 'true' ">true</MtouchEnableBitcode>
   </PropertyGroup>
 
   <!-- Defaults specific to macOS -->
@@ -80,14 +91,12 @@
 
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Simulator' ">
-    <MtouchArch Condition="'$(MtouchArch)' == ''">x86_64</MtouchArch>
     <MtouchLink Condition="'$(MtouchLink)' == ''">None</MtouchLink>
     <!-- QUESTION: Do we automatically enable signing for the simulator? -->
     <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetDeviceArchitecture)' == 'Device' ">
-    <MtouchArch Condition="'$(MtouchArch)' == ''">ARM64</MtouchArch>
     <MtouchLink Condition="'$(MtouchLink)' == ''">SdkOnly</MtouchLink>
     <CodesignEntitlements Condition="'$(CodesignEntitlements)' == '' And Exists ('$(MSBuildProjectDirectory)\Entitlements.plist')">$(MSBuildProjectDirectory)\Entitlements.plist</CodesignEntitlements>
     <CodesignKey Condition=" '$(CodesignKey)' == '' And '$(_PlatformName)' != 'macOS' ">iPhone Developer</CodesignKey>

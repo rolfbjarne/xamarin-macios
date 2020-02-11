@@ -112,7 +112,7 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		public static int Execute (string verb, string project, Dictionary<string, string> properties, out StringBuilder output, string verbosity = "diagnostic")
+		public static int Execute (string verb, string project, Dictionary<string, string> properties, out StringBuilder output, string verbosity = "diagnostic", bool assert_success = true)
 		{
 			verb = verb.ToLowerInvariant ();
 
@@ -136,6 +136,8 @@ namespace Xamarin.Tests {
 					Console.WriteLine ($"'dotnet {StringUtils.FormatArguments (args)}' failed with exit code {rv}.");
 					Console.WriteLine (output);
 				}
+				if (assert_success)
+					Assert.AreEqual (0, rv, $"Exit code: dotnet {StringUtils.FormatArguments (args)}");
 				return rv;
 			default:
 				throw new NotImplementedException ($"Unknown dotnet action: '{verb}'");

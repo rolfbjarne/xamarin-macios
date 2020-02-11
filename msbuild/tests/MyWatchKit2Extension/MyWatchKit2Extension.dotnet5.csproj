@@ -9,6 +9,11 @@
     <CodesignEntitlements>None</CodesignEntitlements>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And '$(TargetDeviceArchitecture)' == 'Device' ">
+    <MtouchFastDev>true</MtouchFastDev>
+    <MtouchProfiling>true</MtouchProfiling>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\MyWatchKit2IntentsExtension\MyWatchKit2IntentsExtension.dotnet5.csproj">
       <IsAppExtension>true</IsAppExtension>

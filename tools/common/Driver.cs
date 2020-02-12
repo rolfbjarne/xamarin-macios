@@ -651,6 +651,17 @@ namespace Xamarin.Bundler {
 			return local_build;
 		}
 
+		static bool? is_dotnet;
+		public static bool IsDotNet {
+			get {
+				if (!is_dotnet.HasValue) {
+					is_dotnet = File.Exists (Path.Combine (FrameworkDirectory, "tools/buildinfo"));
+					Log (4, "IsDotNet: {0} FrameworkDirectory: {1}", is_dotnet.Value, FrameworkDirectory);
+				}
+				return is_dotnet.Value;
+			}
+		}
+
 		// This is the 'Current' directory of the installed framework
 		// For XI/XM installed from package it's /Library/Frameworks/Xamarin.iOS.framework/Versions/Current or /Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 		static string framework_dir;
@@ -667,6 +678,10 @@ namespace Xamarin.Bundler {
 						framework_dir = WalkUpDirHierarchyLookingForLocalBuild ();
 #else
 						framework_dir = Path.GetDirectoryName (Path.GetDirectoryName (Path.GetDirectoryName (GetFullPath ())));
+
+						// If we're in a nuget we need to go one more directory up
+						if (!File.Exists (Path.Combine (framework_dir, "Version")) && File.Exists (Path.Combine (framework_dir, "..", "Version")))
+							framework_dir = Path.GetDirectoryName (framework_dir);
 #endif
 					}
 					framework_dir = Target.GetRealPath (framework_dir);

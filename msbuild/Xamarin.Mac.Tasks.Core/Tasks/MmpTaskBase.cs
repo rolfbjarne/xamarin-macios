@@ -88,10 +88,21 @@ namespace Xamarin.Mac.Tasks
 
 		[Output]
 		public ITaskItem[] NativeLibraries { get; set; }
-		
+
+		string BinDir {
+			get {
+				return Path.Combine (FrameworkRoot, "bin");
+			}
+		}
+
 		protected override string GenerateFullPathToTool ()
 		{
-			return Path.Combine (FrameworkRoot, "bin", "mmp");
+			if (!string.IsNullOrEmpty (ToolPath))
+				return Path.Combine (ToolPath, ToolExe);
+
+			var path = Path.Combine (BinDir, ToolExe);
+
+			return File.Exists (path) ? path : ToolExe;
 		}
 
 		protected override bool ValidateParameters ()

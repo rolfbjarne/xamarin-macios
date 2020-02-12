@@ -139,3 +139,11 @@ $(DIRECTORIES):
 	$(Q) mkdir -p $@
 
 all-local:: $(TARGETS)
+
+pack:
+	rm -Rf nupkgs
+	mkdir -p nupkgs
+	dotnet pack package/xamarin-ios.csproj --output nupkgs --verbosity detailed
+	unzip -l nupkgs/*.nupkg
+	unzip -d tmp nupkgs/*.nupkg
+	chmod -R +r tmp

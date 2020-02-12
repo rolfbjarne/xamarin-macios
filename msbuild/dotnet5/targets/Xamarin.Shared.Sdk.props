@@ -3,19 +3,46 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
+    <_TFI Condition=" '$(_PlatformName)' == 'iOS' ">Xamarin.iOS</_TFI>
+    <_TFI Condition=" '$(_PlatformName)' == 'tvOS' ">Xamarin.TVOS</_TFI>
+    <_TFI Condition=" '$(_PlatformName)' == 'watchOS' ">Xamarin.WatchOS</_TFI>
+    <_TFI Condition=" '$(_PlatformName)' == 'macOS' ">Xamarin.Mac</_TFI>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <UsingXamarinSdk>true</UsingXamarinSdk>
+
+    <!--
+      Terminology:
+      * Framework refers to XI/XM when installed into /Library/Frameworks
+      * Sdk refers to the XI/XM when installed into /usr/local/share/dotnet/sdk/<version>/Sdks
+    -->
+
     <!-- This is the .net 5 location of the Xamarin.Sdk (/usr/local/share/dotnet/sdk/<version>/Sdks/Xamarin.[iOS/tvOS/watchOS/macOS].Sdk) -->
     <XamarinSdkRootDirectory>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..'))\</XamarinSdkRootDirectory>
+
+    <!-- Opt-in to use the version of XI/XM installed into the system -->
+    <XamarinUseSystemInstall Condition=" '$(XamarinUseGlobalInstallation)' == '' ">false</XamarinUseSystemInstall>
+    <MD_MTOUCH_SDK_ROOT      Condition=" '$(XamarinUseSystemInstall)' == 'false' And '$(_PlatformName)' != 'macOS' And '$(MD_MTOUCH_SDK_ROOT)' == ''      ">$(XamarinSdkRootDirectory)</MD_MTOUCH_SDK_ROOT>
+    <XamarinMacFrameworkRoot Condition=" '$(XamarinUseSystemInstall)' == 'false' And '$(_PlatformName)' == 'macOS' And '$(XamarinMacFrameworkRoot)' == '' ">$(XamarinSdkRootDirectory)</XamarinMacFrameworkRoot>
+
     <!-- This is the old location of the legacy Xamarin Sdk -->
     <!-- For iOS, first check MD_MTOUCH_SDK_ROOT and then MonoTouchSdkRoot -->
     <MonoTouchSdkRoot Condition=" '$(MonoTouchSdkRoot)' == '' And '$(MD_MTOUCH_SDK_ROOT)' != '' ">$(MD_MTOUCH_SDK_ROOT)</MonoTouchSdkRoot>
     <MonoTouchSdkRoot Condition=" '$(MonoTouchSdkRoot)' == '' And Exists('/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin') ">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</MonoTouchSdkRoot>
     <!-- for macOS, check XamarinMacFrameworkRoot only -->
-    <XamarinMacFrameworkRoot Condition=" '$(XamarinMacFrameworkRoot) == '' ">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/</XamarinMacFrameworkRoot>
+    <XamarinMacFrameworkRoot Condition=" '$(XamarinMacFrameworkRoot)' == '' ">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/</XamarinMacFrameworkRoot>
+
+    <!-- Have one variable for either MonoTouchSdkRoot and XamarinMacFrameworkRoot, it simplifies our code a bit -->
+    <XamarinFrameworkRoot Condition=" '$(_PlatformName)' == 'macOS' ">$(XamarinMacFrameworkRoot)</XamarinFrameworkRoot>
+    <XamarinFrameworkRoot Condition=" '$(_PlatformName)' != 'macOS' ">$(MonoTouchSdkRoot)</XamarinFrameworkRoot>
 
     <!-- We should always override the framework path so that we resolves to our own mscorlib.dll -->
-    <TargetFrameworkRootPath>$(XamarinSdkRootDirectory)Framework</TargetFrameworkRootPath>
-    <FrameworkPathOverride>$(XamarinSdkRootDirectory)Framework\Xamarin.$(_PlatformName)\v1.0</FrameworkPathOverride>
+    <TargetFrameworkRootPath>$(XamarinSdkRootDirectory)lib</TargetFrameworkRootPath>
+    <FrameworkPathOverride>$(XamarinSdkRootDirectory)lib\$(_TFI)\v1.0</FrameworkPathOverride>
+
+    <XamarinFrameworkBinDir Condition=" '$(_PlatformName)' == 'macOS' And '$(XamarinUseSystemInstall)' == 'false' ">$(XamarinFrameworkRoot)/tools/bin</XamarinFrameworkBinDir>
+    <XamarinFrameworkBinDir Condition=" '$(_PlatformName)' == 'macOS' And '$(XamarinUseSystemInstall)' != 'false' ">$(XamarinFrameworkRoot)/bin</XamarinFrameworkBinDir>
 
     <!-- Enable nuget package conflict resolution -->
     <ResolveAssemblyConflicts>true</ResolveAssemblyConflicts>

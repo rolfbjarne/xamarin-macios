@@ -147,3 +147,7 @@ pack:
 	unzip -l nupkgs/*.nupkg
 	unzip -d tmp nupkgs/*.nupkg
 	chmod -R +r tmp
+
+pack-%:
+	dotnet pack package/xamarin-$*.csproj --output nupkgs --verbosity detailed
+

@@ -683,6 +683,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SdkVersion="$(MtouchSdkVersion)"
 			TargetFrameworkIdentifier="$(TargetFrameworkIdentifier)"
 			TargetArchitectures="$(TargetArchitectures)"
+			MtouchSdkRoot="$(MD_MTOUCH_SDK_ROOT)"
 			>
 			
 			<Output TaskParameter="SdkVersion" PropertyName="MtouchSdkVersion" />

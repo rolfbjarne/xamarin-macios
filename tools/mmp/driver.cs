@@ -152,11 +152,16 @@ namespace Xamarin.Bundler {
 
 		public static string GetPlatformFrameworkDirectory (Application app)
 		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "lib", "Xamarin.Mac", "v1.0");
+
 			if (IsUnifiedMobile)
 				return Path.Combine (FrameworkLibDirectory, "mono", "Xamarin.Mac");
 			else if (IsUnifiedFullXamMacFramework)
 				return Path.Combine (FrameworkLibDirectory, "mono", "4.5");
-			throw new InvalidOperationException ("PlatformFrameworkDirectory when not Mobile or Full?");
+			else if (IsUnifiedFullSystemFramework)
+				return Path.Combine (FrameworkLibDirectory, "mono", "4.5");
+			throw new InvalidOperationException ("PlatformFrameworkDirectory when not Mobile or Full or System?");
 		}
 
 		public static string GetArch32Directory (Application app)
@@ -664,11 +669,7 @@ namespace Xamarin.Bundler {
 				if (references.Exists (a => Path.GetFileNameWithoutExtension (a).Equals (root_wo_ext)))
 					throw new MonoMacException (23, true, Errors.MM0023, root_wo_ext);
 
-				string monoFrameworkDirectory = TargetFramework.MonoFrameworkDirectory;
-				if (IsUnifiedFullXamMacFramework || IsUnifiedFullSystemFramework)
-					monoFrameworkDirectory = "4.5";
-
-				fx_dir = Path.Combine (MonoDirectory, "lib", "mono", monoFrameworkDirectory);
+				fx_dir = GetPlatformFrameworkDirectory (App);
 
 				if (!Directory.Exists (fx_dir))
 					throw new MonoMacException (1403, true, Errors.MM1403, "Directory", fx_dir, userTargetFramework);
@@ -813,7 +814,7 @@ namespace Xamarin.Bundler {
 				}
 			}
 
-			var src = Path.Combine (MonoDirectory, "lib", name + ".dylib");
+			var src = Path.Combine (NativeMonoLibraryDirectory, name + ".dylib");
 			var dest = Path.Combine (mmp_dir, "libmono-native.dylib");
 			Watch ($"Adding mono-native library {name} for {BuildTarget.MonoNativeMode}.", 1);
 
@@ -841,6 +842,24 @@ namespace Xamarin.Bundler {
 				throw new AggregateException (exceptions);
 
 			Watch ("Extracted native link info", 1);
+		}
+
+		static string NativeLibraryDirectory {
+			get {
+				if (IsDotNet)
+					return Path.Combine (FrameworkDirectory, "tools", "lib");
+
+				return Path.Combine (FrameworkDirectory, "lib");
+			}
+		}
+
+		static string NativeMonoLibraryDirectory {
+			get {
+				if (IsDotNet)
+					return Path.Combine (FrameworkDirectory, "tools", "lib");
+
+				return Path.Combine (MonoDirectory, "lib");
+			}
 		}
 
 		static string MonoDirectory {
@@ -1057,7 +1076,7 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (147, ex, Errors.MM0147, str_cflags, ex.Message);
 
 			var libmain = embed_mono ? "libxammac" : "libxammac-system";
-			var libxammac = Path.Combine (FrameworkLibDirectory, libmain + (App.EnableDebug ? "-debug" : "") + ".a");
+			var libxammac = Path.Combine (NativeLibraryDirectory, libmain + (App.EnableDebug ? "-debug" : "") + ".a");
 
 			if (!File.Exists (libxammac))
 				throw new MonoMacException (5203, true, Errors.MM5203, libxammac);
@@ -1833,7 +1852,7 @@ namespace Xamarin.Bundler {
 
 		static AssemblyDefinition AddAssemblyPathToResolver (string path)
 		{
-			if (AssemblySwapInfo.AssemblyNeedsSwappedOut (path))
+			if (!IsDotNet && AssemblySwapInfo.AssemblyNeedsSwappedOut (path))
 				path = AssemblySwapInfo.GetSwappedAssemblyPath (path);
 
 			var assembly = BuildTarget.Resolver.Load (path);

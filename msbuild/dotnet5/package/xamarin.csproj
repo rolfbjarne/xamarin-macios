@@ -20,9 +20,25 @@
     <_macOSBuildPath>$(_RepositoryPath)/_mac-build</_macOSBuildPath>
     <_iOSCurrentPath>$(_iOSBuildPath)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</_iOSCurrentPath>
     <_macOSCurrentPath>$(_macOSBuildPath)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current</_macOSCurrentPath>
+    <_OSCurrentPath Condition=" '$(_PlatformName)' != 'macOS' ">$(_iOSCurrentPath)</_OSCurrentPath>
+    <_OSCurrentPath Condition=" '$(_PlatformName)' == 'macOS' ">$(_macOSCurrentPath)</_OSCurrentPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_TFI Condition=" '$(_PlatformName)' == 'iOS' ">Xamarin.iOS</_TFI>
+    <_TFI Condition=" '$(_PlatformName)' == 'tvOS' ">Xamarin.TVOS</_TFI>
+    <_TFI Condition=" '$(_PlatformName)' == 'watchOS' ">Xamarin.WatchOS</_TFI>
+    <_TFI Condition=" '$(_PlatformName)' == 'macOS' ">Xamarin.Mac</_TFI>
+    <!--<_BinDir>tools\bin</_BinDir>-->
+    <_BinDir>bin</_BinDir> <!-- use same structure as the system install of XI/XM -->
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Version -->
+    <Content Include="$(_OSCurrentPath)/Version" >
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
     <!-- SDK tasks and targets -->
     <Content Include="..\Xamarin.$(_PlatformName).Sdk\**" >
       <Pack>true</Pack>
@@ -40,17 +56,17 @@
     <!-- BCL -->
     <Content Include="$(_iOSCurrentPath)\lib\mono\Xamarin.$(_PlatformName)\**">
       <Pack>true</Pack>
-      <PackagePath>Framework\Xamarin.$(_PlatformName)\v1.0</PackagePath>
+      <PackagePath>lib\$(_TFI)\v1.0</PackagePath>
     </Content>
     <!-- simlauncher -->
     <Content Include="$(_iOSCurrentPath)\bin\simlauncher-*" Condition=" '$(_PlatformName)' == 'iOS'">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <!-- generator -->
     <Content Include="$(_iOSCurrentPath)\bin\bgen">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\lib\bgen\**">
       <Pack>true</Pack>
@@ -58,20 +74,20 @@
     </Content>
     <Content Include="$(_iOSCurrentPath)\bin\btouch" Condition=" '$(_PlatformName)' == 'iOS'">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\bin\btv" Condition=" '$(_PlatformName)' == 'tvOS'">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\bin\bwatch" Condition=" '$(_PlatformName)' == 'watchOS'">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <!-- mtouch -->
     <Content Include="$(_iOSCurrentPath)\bin\mtouch" Condition=" '$(_PlatformName)' != 'macOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\lib\mtouch\**" Condition=" '$(_PlatformName)' != 'macOS' ">
       <Pack>true</Pack>
@@ -80,7 +96,7 @@
     <!-- mlaunch -->
     <Content Include="$(_iOSCurrentPath)\bin\mlaunch" Condition=" '$(_PlatformName)' != 'macOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\lib\mlaunch\**" Condition=" '$(_PlatformName)' != 'macOS' ">
       <Pack>true</Pack>
@@ -89,19 +105,19 @@
     <!-- AOT compilers -->
     <Content Include="$(_iOSCurrentPath)\bin\arm64-darwin-mono-sgen" Condition=" '$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\bin\arm-darwin-mono-sgen" Condition=" '$(_PlatformName)' == 'iOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\bin\arm64_32-darwin-mono-sgen" Condition=" '$(_PlatformName)' == 'watchOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\bin\armv7k-unknown-darwin-mono-sgen" Condition=" '$(_PlatformName)' == 'watchOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\bin</PackagePath>
+      <PackagePath>$(_BinDir)</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\LLVM\bin\llc;$(_iOSCurrentPath)\LLVM\bin\opt">
       <Pack>true</Pack>

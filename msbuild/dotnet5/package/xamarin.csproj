@@ -39,7 +39,7 @@
     <!-- BCL -->
     <Content Include="$(_iOSCurrentPath)\lib\mono\Xamarin.$(_PlatformName)\**">
       <Pack>true</Pack>
-      <PackagePath>lib\Xamarin.$(_PlatformName)</PackagePath>
+      <PackagePath>Framework\Xamarin.$(_PlatformName)\v1.0</PackagePath>
     </Content>
     <!-- simlauncher -->
     <Content Include="$(_iOSCurrentPath)\bin\simlauncher-*" Condition=" '$(_PlatformName)' == 'iOS'">

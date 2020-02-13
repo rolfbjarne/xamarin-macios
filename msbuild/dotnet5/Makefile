@@ -158,4 +158,4 @@ test-nuget:
 	cp -c $(TOP)/NuGet.config .
 	nuget sources add -Name local-dotnet-feed -Source $(PWD)/feed/ -ConfigFile NuGet.config
 	rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
-	dotnet build MySingleView/MySingleView.csproj
+	dotnet build MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator /v:diag

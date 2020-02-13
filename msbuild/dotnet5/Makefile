@@ -146,7 +146,7 @@ pack:
 	$(MAKE) pack-iOS
 	#pack-tvOS pack-watchOS pack-macOS
 
-pack-%:
+pack-%: package/versions.targets
 	dotnet pack package/Xamarin.$*.csproj --output nupkgs --verbosity detailed
 	unzip -l nupkgs/Xamarin.$**nupkg
 
@@ -159,3 +159,18 @@ test-nuget:
 	nuget sources add -Name local-dotnet-feed -Source $(PWD)/feed/ -ConfigFile NuGet.config
 	rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
 	dotnet build MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator /v:diag
+
+CURRENT_HASH:=$(shell git log -1 --pretty=%h)
+package/versions.targets: package/versions.template.targets Makefile $(TOP)/Make.config.inc
+	$(call Q_PROF_GEN,ios) sed \
+		-e "s/@IOS_PACKAGE_VERSION_MAJOR@/$(IOS_PACKAGE_VERSION_MAJOR)/g" \
+		-e "s/@IOS_PACKAGE_VERSION_MINOR@/$(IOS_PACKAGE_VERSION_MINOR)/g" \
+		-e "s/@IOS_PACKAGE_VERSION_REV@/$(IOS_PACKAGE_VERSION_REV)/g" \
+		-e "s/@MAC_PACKAGE_VERSION_MAJOR@/$(MAC_PACKAGE_VERSION_MAJOR)/g" \
+		-e "s/@MAC_PACKAGE_VERSION_MINOR@/$(MAC_PACKAGE_VERSION_MINOR)/g" \
+		-e "s/@MAC_PACKAGE_VERSION_REV@/$(MAC_PACKAGE_VERSION_REV)/g" \
+		-e 's/@IOS_COMMIT_DISTANCE@/$(IOS_COMMIT_DISTANCE)/g' \
+		-e 's/@MAC_COMMIT_DISTANCE@/$(MAC_COMMIT_DISTANCE)/g' \
+		-e "s/@CURRENT_BRANCH@/$(CURRENT_BRANCH_SED_ESCAPED)/g" \
+		-e "s/@CURRENT_HASH@/$(CURRENT_HASH)/g" \
+	$< > $@

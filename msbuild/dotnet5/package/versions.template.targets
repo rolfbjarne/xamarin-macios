@@ -1,0 +1,14 @@
+<Project>
+	<PropertyGroup>
+		<XIPackageVersionMajor>@IOS_PACKAGE_VERSION_MAJOR@</XIPackageVersionMajor>
+		<XIPackageVersionMinor>@IOS_PACKAGE_VERSION_MINOR@</XIPackageVersionMinor>
+		<XIPackageVersionRev>@IOS_PACKAGE_VERSION_REV@</XIPackageVersionRev>
+		<XICommitDistance>@IOS_COMMIT_DISTANCE@</XICommitDistance>
+		<XMPackageVersionMajor>@MAC_PACKAGE_VERSION_MAJOR@</XMPackageVersionMajor>
+		<XMPackageVersionMinor>@MAC_PACKAGE_VERSION_MINOR@</XMPackageVersionMinor>
+		<XMPackageVersionRev>@MAC_PACKAGE_VERSION_REV@</XMPackageVersionRev>
+		<XMCommitDistance>@MAC_COMMIT_DISTANCE@</XMCommitDistance>
+		<CurrentBranch>@CURRENT_BRANCH@</CurrentBranch>
+		<CurrentHash>@CURRENT_HASH@</CurrentHash>
+	</PropertyGroup>
+</Project>

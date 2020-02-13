@@ -27,6 +27,10 @@
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
+    <Content Include="..\targets\**" >
+      <Pack>true</Pack>
+      <PackagePath>targets</PackagePath>
+    </Content>
     <!-- MSBuild tasks and targets -->
     <Content Include="$(_iOSCurrentPath)\lib\msbuild\$(_PlatformName)\**">
       <Pack>true</Pack>

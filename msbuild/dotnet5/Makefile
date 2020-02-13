@@ -146,19 +146,36 @@ pack:
 	$(MAKE) pack-iOS
 	#pack-tvOS pack-watchOS pack-macOS
 
-pack-%: package/versions.targets
-	dotnet pack package/Xamarin.$*.csproj --output nupkgs --verbosity detailed
-	unzip -l nupkgs/Xamarin.$**nupkg
+ifeq ($(V),)
+DOTNET_PACK_VERBOSITY=--verbosity:quiet
+else
+DOTNET_PACK_VERBOSITY=--verbosity:detailed
+endif
 
-test-nuget:
-	rm -Rf nupkgs feed
+TEST_FEED_PATH=test/feed
+
+pack-%: package/versions.targets
+	rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').sdk
+	dotnet pack package/Xamarin.$*.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
+	nuget add nupkgs/Xamarin.$*.Sdk.*nupkg -source $(TEST_FEED_PATH)
+
+test/NuGet.config: $(TOP)/NuGet.config
+	$(CP) $< $@.tmp
+	$(Q) nuget sources add -Name local-dotnet-feed -Source $(PWD)/$(TEST_FEED_PATH) -ConfigFile $@.tmp
+	$(Q) mv $@.tmp $@
+
+test/global.json: Makefile package/versions.targets
+		$(Q_GEN) \
+		VERSIONS='$(shell msbuild package/versions.targets /t:PrintVersions /v:m /nologo)'; \
+		XIPackageVersion=$$(echo $$VERSIONS | sed -e 's/.*XIPackageVersion: //' -e 's/ XMPackageVersion.*//'); \
+		XMPackageVersion=$$(echo $$VERSIONS | sed -e 's/.*XMPackageVersion: //'); \
+		printf "{\n\t'msbuild-sdks': {\n\t\t'Xamarin.iOS.sdk': '$$XIPackageVersion',\n\t\t'Xamarin.tvOS.sdk': '$$XIPackageVersion',\n\t\t'Xamarin.watchOS.sdk': '$$XIPackageVersion',\n\t\t'Xamarin.macOS.sdk': '$$XMPackageVersion'\n\t}\n}\n" > $@
+
+test-nuget: test/NuGet.config test/global.json
 	$(MAKE) pack
-	nuget init $(PWD)/nupkgs/ $(PWD)/feed/
-	rm -f NuGet.config
-	cp -c $(TOP)/NuGet.config .
-	nuget sources add -Name local-dotnet-feed -Source $(PWD)/feed/ -ConfigFile NuGet.config
+	# Clear out anything from the nuget cache from previous tests
 	rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
-	dotnet build MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator /v:diag
+	dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator /v:diag
 
 CURRENT_HASH:=$(shell git log -1 --pretty=%h)
 package/versions.targets: package/versions.template.targets Makefile $(TOP)/Make.config.inc

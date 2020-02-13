@@ -10,17 +10,16 @@ DIRECTORIES = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/Sdk \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/Framework/Xamarin.iOS \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Framework/Xamarin.tvOS \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/Framework/Xamarin.watchOS \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/lib/Xamarin.iOS \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/lib/Xamarin.TVOS \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/lib/Xamarin.WatchOS \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/RedistList \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.tvOS/RedistList \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.watchOS/RedistList \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Sdk \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/targets \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/RedistList \
-	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Framework/Xamarin.macOS \
-	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Framework/Xamarin.Mac \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/lib/Xamarin.Mac \
 
 IOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/Sdk/Sdk.props \
@@ -35,7 +34,7 @@ IOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/targets/Xamarin.Shared.Sdk.props \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS/RedistList/FrameworkList.xml \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/Framework/Xamarin.iOS/v1.0 \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/lib/Xamarin.iOS/v1.0 \
 
 TVOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Sdk/Sdk.props \
@@ -50,7 +49,7 @@ TVOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/targets/Xamarin.Shared.Sdk.props \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/RedistList/FrameworkList.xml \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Framework/Xamarin.tvOS/v1.0 \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/lib/Xamarin.TVOS/v1.0 \
 
 WATCHOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/Sdk/Sdk.props \
@@ -65,7 +64,7 @@ WATCHOS_TARGETS = \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/targets/Xamarin.Shared.Sdk.props \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/RedistList/FrameworkList.xml \
-	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/Framework/Xamarin.watchOS/v1.0 \
+	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/lib/Xamarin.WatchOS/v1.0 \
 
 MACOS_TARGETS = \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Sdk/Sdk.props \
@@ -80,8 +79,7 @@ MACOS_TARGETS = \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/targets/Xamarin.Shared.Sdk.targets \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/targets/Xamarin.Shared.Sdk.props \
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/RedistList/FrameworkList.xml \
-	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Framework/Xamarin.macOS/v1.0 \
-	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Framework/Xamarin.Mac/v1.0 \
+	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/lib/Xamarin.Mac/v1.0 \
 
 TARGETS = $(IOS_TARGETS) $(TVOS_TARGETS) $(WATCHOS_TARGETS) $(MACOS_TARGETS)
 
@@ -102,19 +100,16 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/RedistList/FrameworkL
 $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac/RedistList/FrameworkList.xml: ../Xamarin.Mac.Tasks/Xamarin.Mac-Mobile-FrameworkList.xml.in Makefile | $(DIRECTORIES)
 	$(Q) sed 's@%TargetFrameworkDirectory%@$(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac@' $< > $@
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/Framework/Xamarin.iOS/v1.0: Makefile
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.iOS.Sdk/lib/Xamarin.iOS/v1.0: Makefile
 	ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.iOS $@
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/Framework/Xamarin.tvOS/v1.0: Makefile
-	ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.tvOS $@
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.tvOS.Sdk/lib/Xamarin.TVOS/v1.0: Makefile
+	ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS $@
 
-$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/Framework/Xamarin.watchOS/v1.0: Makefile
-	ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.watchOS $@
+$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/Xamarin.watchOS.Sdk/lib/Xamarin.WatchOS/v1.0: Makefile
+	ln -Fhs $(IOS_TARGETDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS $@
 
-$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Framework/Xamarin.macOS/v1.0: Makefile
-	ln -Fhs $(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac $@
-
-$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/Framework/Xamarin.Mac/v1.0: Makefile
+$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet5/Xamarin.macOS.Sdk/lib/Xamarin.Mac/v1.0: Makefile
 	ln -Fhs $(MAC_TARGETDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/mono/Xamarin.Mac $@
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/dotnet5/%: % | $(DIRECTORIES)
@@ -141,41 +136,43 @@ $(DIRECTORIES):
 all-local:: $(TARGETS)
 
 pack:
-	rm -Rf nupkgs
-	mkdir -p nupkgs
-	$(MAKE) pack-iOS
+	$(Q) rm -Rf nupkgs
+	$(Q) mkdir -p nupkgs
+	$(Q) $(MAKE) pack-iOS
 	#pack-tvOS pack-watchOS pack-macOS
 
 ifeq ($(V),)
-DOTNET_PACK_VERBOSITY=--verbosity:quiet
+DOTNET_PACK_VERBOSITY=--verbosity:quiet --nologo
+NUGET_VERBOSITY=-verbosity quiet
 else
 DOTNET_PACK_VERBOSITY=--verbosity:detailed
+NUGET_VERBOSITY=-verbosity detailed
 endif
 
 TEST_FEED_PATH=test/feed
 
 pack-%: package/versions.targets
-	rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').sdk
-	dotnet pack package/Xamarin.$*.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
-	nuget add nupkgs/Xamarin.$*.Sdk.*nupkg -source $(TEST_FEED_PATH)
+	$(Q) rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').sdk
+	$(if $(V),,@echo "PACK     nupkgs/Xamarin.$*.Sdk.nupkg";) dotnet pack package/Xamarin.$*.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
+	$(if $(V),,@echo "ADD      nupkgs/Xamarin.$*.Sdk.nupkg";) nuget add nupkgs/Xamarin.$*.Sdk.*nupkg -source $(TEST_FEED_PATH) $(NUGET_VERBOSITY)
 
 test/NuGet.config: $(TOP)/NuGet.config
-	$(CP) $< $@.tmp
+	$(Q_CP) $< $@.tmp
 	$(Q) nuget sources add -Name local-dotnet-feed -Source $(PWD)/$(TEST_FEED_PATH) -ConfigFile $@.tmp
 	$(Q) mv $@.tmp $@
 
 test/global.json: Makefile package/versions.targets
-		$(Q_GEN) \
+	$(Q_GEN) \
 		VERSIONS='$(shell msbuild package/versions.targets /t:PrintVersions /v:m /nologo)'; \
 		XIPackageVersion=$$(echo $$VERSIONS | sed -e 's/.*XIPackageVersion: //' -e 's/ XMPackageVersion.*//'); \
 		XMPackageVersion=$$(echo $$VERSIONS | sed -e 's/.*XMPackageVersion: //'); \
-		printf "{\n\t'msbuild-sdks': {\n\t\t'Xamarin.iOS.sdk': '$$XIPackageVersion',\n\t\t'Xamarin.tvOS.sdk': '$$XIPackageVersion',\n\t\t'Xamarin.watchOS.sdk': '$$XIPackageVersion',\n\t\t'Xamarin.macOS.sdk': '$$XMPackageVersion'\n\t}\n}\n" > $@
+		printf "{\n\t\"msbuild-sdks\": {\n\t\t\"Xamarin.iOS.Sdk\": \"$$XIPackageVersion\",\n\t\t\"Xamarin.tvOS.Sdk\": \"$$XIPackageVersion\",\n\t\t\"Xamarin.watchOS.Sdk\": \"$$XIPackageVersion\",\n\t\t\"Xamarin.macOS.Sdk\": \"$$XMPackageVersion\"\n\t}\n}\n" > $@
 
 test-nuget: test/NuGet.config test/global.json
-	$(MAKE) pack
-	# Clear out anything from the nuget cache from previous tests
-	rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
-	dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator /v:diag
+	$(Q) $(MAKE) pack
+	@# Clear out anything from the nuget cache from previous tests
+	$(Q) rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
+	$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator $(XBUILD_VERBOSITY)
 
 CURRENT_HASH:=$(shell git log -1 --pretty=%h)
 package/versions.targets: package/versions.template.targets Makefile $(TOP)/Make.config.inc

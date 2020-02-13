@@ -170,22 +170,35 @@
     <_ProjectLanguage Condition="'$(_ProjectLanguage)' == 'F#' ">FSharp</_ProjectLanguage>
   </PropertyGroup>
 
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\iOS\Xamarin.iOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'iOSExecutableProject' Or '$(_ProjectType)' == 'iOSClassLibrary' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\iOS\Xamarin.iOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'iOSAppExtensionProject' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\iOS\Xamarin.iOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'iOSBindingProject' " />
+  <PropertyGroup Condition=" '$(XamarinUseSystemInstall)' == 'false' ">
+    <_TargetsDiriOS>$(XamarinSdkRootDirectory)\tools</_TargetsDiriOS>
+    <_TargetsDirtvOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirtvOS>
+    <_TargetsDirwatchOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirwatchOS>
+    <_TargetsDirmacOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirmacOS>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(XamarinUseSystemInstall)' != 'false' ">
+    <_TargetsDiriOS>$(MonoTouchSdkRoot)\lib\msbuild\iOS</_TargetsDiriOS>
+    <_TargetsDirtvOS>$(MonoTouchSdkRoot)\lib\msbuild\TVOS</_TargetsDirtvOS>
+    <_TargetsDirwatchOS>$(MonoTouchSdkRoot)\lib\msbuild\WatchOS</_TargetsDirwatchOS>
+    <_TargetsDirmacOS>$(XamarinMacFrameworkRoot)\lib\msbuild</_TargetsDirmacOS>
+  </PropertyGroup>
 
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\TVOS\Xamarin.TVOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'tvOSExecutableProject' Or '$(_ProjectType)' == 'tvOSClassLibrary' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\TVOS\Xamarin.TVOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'tvOSAppExtensionProject' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\TVOS\Xamarin.TVOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'tvOSBindingProject' " />
+  <Import Project="$(_TargetsDiriOS)\Xamarin.iOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'iOSExecutableProject' Or '$(_ProjectType)' == 'iOSClassLibrary' " />
+  <Import Project="$(_TargetsDiriOS)\Xamarin.iOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'iOSAppExtensionProject' " />
+  <Import Project="$(_TargetsDiriOS)\Xamarin.iOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'iOSBindingProject' " />
 
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\WatchOS\Xamarin.WatchOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'watchOSClassLibrary' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\WatchOS\Xamarin.WatchOS.App.$(_ProjectLanguage).targets"          Condition="'$(_ProjectType)' == 'watchOSAppProject' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\WatchOS\Xamarin.WatchOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'watchOSAppExtensionProject' " />
-  <Import Project="$(MonoTouchSdkRoot)\lib\msbuild\WatchOS\Xamarin.WatchOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'watchOSBindingProject' " />
+  <Import Project="$(_TargetsDirtvOS)\Xamarin.TVOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'tvOSExecutableProject' Or '$(_ProjectType)' == 'tvOSClassLibrary' " />
+  <Import Project="$(_TargetsDirtvOS)\Xamarin.TVOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'tvOSAppExtensionProject' " />
+  <Import Project="$(_TargetsDirtvOS)\Xamarin.TVOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'tvOSBindingProject' " />
 
-  <Import Project="$(XamarinMacFrameworkRoot)\lib\msbuild\Xamarin.Mac.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'macOSExecutableProject' Or '$(_ProjectType)' == 'macOSClassLibrary' " />
-  <Import Project="$(XamarinMacFrameworkRoot)\lib\msbuild\Xamarin.Mac.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'macOSAppExtensionProject' " />
-  <Import Project="$(XamarinMacFrameworkRoot)\lib\msbuild\Xamarin.Mac.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'macOSBindingProject' " />
+  <Import Project="$(_TargetsDirwatchOS)\Xamarin.WatchOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'watchOSClassLibrary' " />
+  <Import Project="$(_TargetsDirwatchOS)\Xamarin.WatchOS.App.$(_ProjectLanguage).targets"          Condition="'$(_ProjectType)' == 'watchOSAppProject' " />
+  <Import Project="$(_TargetsDirwatchOS)\Xamarin.WatchOS.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'watchOSAppExtensionProject' " />
+  <Import Project="$(_TargetsDirwatchOS)\Xamarin.WatchOS.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'watchOSBindingProject' " />
+
+  <Import Project="$(_TargetsDirmacOS)\Xamarin.Mac.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'macOSExecutableProject' Or '$(_ProjectType)' == 'macOSClassLibrary' " />
+  <Import Project="$(_TargetsDirmacOS)\Xamarin.Mac.AppExtension.$(_ProjectLanguage).targets" Condition="'$(_ProjectType)' == 'macOSAppExtensionProject' " />
+  <Import Project="$(_TargetsDirmacOS)\Xamarin.Mac.ObjCBinding.$(_ProjectLanguage).targets"  Condition="'$(_ProjectType)' == 'macOSBindingProject' " />
 
   <PropertyGroup>
     <BuildDependsOn>

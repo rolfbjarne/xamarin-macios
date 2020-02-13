@@ -1,13 +1,14 @@
 <Project>
-
+  <Import Project="versions.targets" />
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>Xamarin.$(_PlatformName).Sdk</PackageId>
-    <PackageVersion>0.0.1</PackageVersion>
+    <PackageVersion Condition=" '$(_PlatformName)' != 'macOS' ">$(XIPackageVersionMajor).$(XIPackageVersionMinor).$(XIPackageVersionRev)-alpha.$(XICommitDistance)+$(CurrentHash)</PackageVersion>
+    <PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">$(XMPackageVersionMajor).$(XMPackageVersionMinor).$(XMPackageVersionRev)-alpha.$(XMCommitDistance)+$(CurrentHash)</PackageVersion>
     <RepositoryUrl>https://github.com/xamarin/xamarin-macios</RepositoryUrl>
-    <RepositoryBranch>tobecomputed</RepositoryBranch>
-    <RepositoryCommit>tobecomputed</RepositoryCommit>
+    <RepositoryBranch>$(CurrentBranch)</RepositoryBranch>
+    <RepositoryCommit>$(CurrentHash)</RepositoryCommit>
     <Authors>Xamarin</Authors>
     <Description>C# Tools and Bindings for the $(_PlatformName) SDK</Description>
     <OutputPath>_build\$(_PlatformName)</OutputPath>

@@ -143,9 +143,19 @@ all-local:: $(TARGETS)
 pack:
 	rm -Rf nupkgs
 	mkdir -p nupkgs
-	$(MAKE) pack-iOS pack-tvOS pack-watchOS pack-macOS
+	$(MAKE) pack-iOS
+	#pack-tvOS pack-watchOS pack-macOS
 
 pack-%:
 	dotnet pack package/Xamarin.$*.csproj --output nupkgs --verbosity detailed
 	unzip -l nupkgs/Xamarin.$**nupkg
 
+test-nuget:
+	rm -Rf nupkgs feed
+	$(MAKE) pack
+	nuget init $(PWD)/nupkgs/ $(PWD)/feed/
+	rm -f NuGet.config
+	cp -c $(TOP)/NuGet.config .
+	nuget sources add -Name local-dotnet-feed -Source $(PWD)/feed/ -ConfigFile NuGet.config
+	rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
+	dotnet build MySingleView/MySingleView.csproj

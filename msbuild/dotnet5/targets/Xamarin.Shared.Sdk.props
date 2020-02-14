@@ -27,9 +27,16 @@
     <!-- for macOS, check XamarinMacFrameworkRoot only -->
     <XamarinMacFrameworkRoot Condition=" '$(XamarinMacFrameworkRoot)' == '' ">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/</XamarinMacFrameworkRoot>
 
+    <!-- Have one variable for either MonoTouchSdkRoot and XamarinMacFrameworkRoot, it simplifies our code a bit -->
+    <XamarinFrameworkRoot Condition=" '$(_PlatformName)' == 'macOS' ">$(XamarinMacFrameworkRoot)</XamarinFrameworkRoot>
+    <XamarinFrameworkRoot Condition=" '$(_PlatformName)' != 'macOS' ">$(MonoTouchSdkRoot)</XamarinFrameworkRoot>
+
     <!-- We should always override the framework path so that we resolves to our own mscorlib.dll -->
     <TargetFrameworkRootPath>$(XamarinSdkRootDirectory)lib</TargetFrameworkRootPath>
     <FrameworkPathOverride>$(XamarinSdkRootDirectory)lib\$(_TFI)\v1.0</FrameworkPathOverride>
+
+    <XamarinFrameworkBinDir Condition=" '$(_PlatformName)' == 'macOS' And '$(XamarinUseSystemInstall)' == 'false' ">$(XamarinFrameworkRoot)/tools/bin</XamarinFrameworkBinDir>
+    <XamarinFrameworkBinDir Condition=" '$(_PlatformName)' == 'macOS' And '$(XamarinUseSystemInstall)' != 'false' ">$(XamarinFrameworkRoot)/bin</XamarinFrameworkBinDir>
 
     <!-- Enable nuget package conflict resolution -->
     <ResolveAssemblyConflicts>true</ResolveAssemblyConflicts>

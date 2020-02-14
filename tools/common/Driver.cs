@@ -712,6 +712,8 @@ namespace Xamarin.Bundler {
 			return local_build;
 		}
 
+		// This is the 'Current' directory of the installed framework
+		// For XI/XM installed from package it's /Library/Frameworks/Xamarin.iOS.framework/Versions/Current or /Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 		static string framework_dir;
 		public static string FrameworkDirectory {
 			get {

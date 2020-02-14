@@ -182,8 +182,8 @@ namespace Xamarin.Bundler
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
 			}
 			if (IsDotNet)
-				return Path.Combine (MonoTouchDirectory, "lib", platform, "v1.0");
-			return Path.Combine (MonoTouchDirectory, "lib", "mono", platform);
+				return Path.Combine (FrameworkDirectory, "lib", platform, "v1.0");
+			return Path.Combine (FrameworkDirectory, "lib", "mono", platform);
 		}
 
 		public static string GetArchDirectory (Application app, bool is64bit)
@@ -221,9 +221,9 @@ namespace Xamarin.Bundler
 		{
 			string sdksDir;
 			if (IsDotNet) {
-				sdksDir = Path.Combine (MonoTouchDirectory, "tools", "SDKs");
+				sdksDir = Path.Combine (FrameworkDirectory, "tools", "SDKs");
 			} else {
-				sdksDir = Path.Combine (MonoTouchDirectory, "SDKs");
+				sdksDir = Path.Combine (FrameworkDirectory, "SDKs");
 			}
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
@@ -1246,7 +1246,7 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (82, true, Errors.MT0082);
 
 			if (cross_prefix == null) {
-				cross_prefix = MonoTouchDirectory;
+				cross_prefix = FrameworkDirectory;
 				if (IsDotNet)
 					cross_prefix = Path.Combine (cross_prefix, "tools");
 			}

@@ -684,6 +684,17 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		static bool? is_dotnet;
+		public static bool IsDotNet {
+			get {
+				if (!is_dotnet.HasValue) {
+					is_dotnet = File.Exists (Path.Combine (FrameworkDirectory, "tools/buildinfo"));
+					Log (4, "IsDotNet: {0} FrameworkDirectory: {1}", is_dotnet.Value, FrameworkDirectory);
+				}
+				return is_dotnet.Value;
+			}
+		}
+
 		static void ValidateXcode (bool accept_any_xcode_version, bool warn_if_not_found)
 		{
 			if (sdk_root == null) {

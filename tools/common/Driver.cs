@@ -21,6 +21,8 @@ using ObjCRuntime;
 
 namespace Xamarin.Bundler {
 	public partial class Driver {
+		static int verbose = GetDefaultVerbosity ();
+
 		static void AddSharedOptions (Application app, Mono.Options.OptionSet options)
 		{
 			options.Add ("sdkroot=", "Specify the location of Apple SDKs, default to 'xcode-select' value.", v => sdk_root = v);
@@ -168,6 +170,18 @@ namespace Xamarin.Bundler {
 
 		public static int Verbosity {
 			get { return verbose; }
+		}
+
+		static int GetDefaultVerbosity ()
+		{
+			var v = 0;
+			var fn = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), $".{NAME}-verbosity");
+			if (File.Exists (fn)) {
+				v = (int) new FileInfo (fn).Length;
+				if (v == 0)
+					v = 4; // this is the magic verbosity level we give everybody.
+			}
+			return v;
 		}
 
 		public const bool IsXAMCORE_4_0 = false;

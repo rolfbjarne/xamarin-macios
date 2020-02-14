@@ -81,6 +81,8 @@ namespace Xamarin.Bundler
 	public partial class Driver {
 		internal const string NAME = "mtouch";
 		internal const string PRODUCT = "Xamarin.iOS";
+		const string LOCAL_BUILD_DIR = "_ios-build";
+		const string FRAMEWORK_LOCATION_VARIABLE = "MD_MTOUCH_SDK_ROOT";
 
 		public static void ShowHelp (OptionSet os)
 		{
@@ -126,25 +128,11 @@ namespace Xamarin.Bundler
 		static string dotfile;
 		static string cross_prefix = Environment.GetEnvironmentVariable ("MONO_CROSS_PREFIX");
 		static string extra_args = Environment.GetEnvironmentVariable ("MTOUCH_ENV_OPTIONS");
-
-		static int verbose = GetDefaultVerbosity ();
-
+		
 		public static string DotFile {
 			get {
 				return dotfile;
 			}
-		}
-
-		static int GetDefaultVerbosity ()
-		{
-			var v = 0;
-			var fn = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".mtouch-verbosity");
-			if (File.Exists (fn)) {
-				v = (int) new FileInfo (fn).Length;
-				if (v == 0)
-					v = 4; // this is the magic verbosity level we give everybody.
-			}
-			return v;
 		}
 
 		static string mtouch_dir;

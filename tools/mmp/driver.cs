@@ -70,6 +70,8 @@ namespace Xamarin.Bundler {
 	public static partial class Driver {
 		internal const string NAME = "mmp";
 		const string PRODUCT = "Xamarin.Mac";
+		const string LOCAL_BUILD_DIR = "_mac-build";
+		const string FRAMEWORK_LOCATION_VARIABLE = "XAMMAC_FRAMEWORK_PATH";
 		internal static Application App = new Application (Environment.GetCommandLineArgs ());
 		static Target BuildTarget;
 		static List<string> references = new List<string> ();
@@ -112,7 +114,6 @@ namespace Xamarin.Bundler {
 
 		static string icon;
 		static string certificate_name;
-		static int verbose = 0;
 		public static bool Force;
 
 		static bool is_extension, is_xpc_service;

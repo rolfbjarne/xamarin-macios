@@ -12,6 +12,9 @@
     <Authors>Xamarin</Authors>
     <Description>C# Tools and Bindings for the $(_PlatformName) SDK</Description>
     <OutputPath>_build\$(_PlatformName)</OutputPath>
+
+    <!-- The package version '#.#.#-alpha.##+hash' uses SemVer 2.0.0 or components of SemVer 1.0.0 that are not supported on legacy clients. Change the package version to a SemVer 1.0.0 string. If the version contains a release label it must start with a letter. This message can be ignored if the package is not intended for older clients. -->
+    <NoWarn>$(NoWarn);NU5105</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,8 +32,7 @@
     <_TFI Condition=" '$(_PlatformName)' == 'tvOS' ">Xamarin.TVOS</_TFI>
     <_TFI Condition=" '$(_PlatformName)' == 'watchOS' ">Xamarin.WatchOS</_TFI>
     <_TFI Condition=" '$(_PlatformName)' == 'macOS' ">Xamarin.Mac</_TFI>
-    <!--<_BinDir>tools\bin</_BinDir>-->
-    <_BinDir>bin</_BinDir> <!-- use same structure as the system install of XI/XM -->
+    <_BinDir>tools\bin</_BinDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +40,15 @@
     <Content Include="$(_OSCurrentPath)/Version" >
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
+    </Content>
+    <!-- we rename 'buildinfo' to 'versioninfo' because having a file named 'buildinfo' makes nuget do very strange things and it crashes in stranger locations -->
+    <Content Include="ios\versioninfo" Condition=" '$(_PlatformName)' != 'macOS' " >
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </Content>
+    <Content Include="mac\versioninfo" Condition=" '$(_PlatformName)' == 'macOS' " >
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
     </Content>
     <!-- SDK tasks and targets -->
     <Content Include="..\Xamarin.$(_PlatformName).Sdk\**" >
@@ -151,19 +162,19 @@
     <!-- arch-specifid BCL -->
     <Content Include="$(_iOSCurrentPath)\lib\32bits\Xamarin.iOS.dll" Condition=" '$(_PlatformName)' == 'iOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\32bits</PackagePath>
+      <PackagePath>tools\lib\32bits</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\lib\32bits\Xamarin.WatchOS.dll" Condition=" '$(_PlatformName)' == 'watchOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\32bits</PackagePath>
+      <PackagePath>tools\lib\32bits</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\lib\64bits\Xamarin.iOS.dll" Condition=" '$(_PlatformName)' == 'iOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\64bits</PackagePath>
+      <PackagePath>tools\lib\64bits</PackagePath>
     </Content>
     <Content Include="$(_iOSCurrentPath)\lib\64bits\Xamarin.TVOS.dll" Condition=" '$(_PlatformName)' == 'tvOS' ">
       <Pack>true</Pack>
-      <PackagePath>tools\64bits</PackagePath>
+      <PackagePath>tools\lib\64bits</PackagePath>
     </Content>
   </ItemGroup>
 </Project>

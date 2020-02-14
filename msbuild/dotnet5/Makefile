@@ -138,7 +138,8 @@ all-local:: $(TARGETS)
 pack:
 	$(Q) rm -Rf nupkgs
 	$(Q) mkdir -p nupkgs
-	$(Q) $(MAKE) pack-iOS
+	$(Q) $(MAKE) pack-macOS
+	#$(Q) $(MAKE) pack-iOS
 	#pack-tvOS pack-watchOS pack-macOS
 
 ifeq ($(V),)
@@ -151,7 +152,7 @@ endif
 
 TEST_FEED_PATH=test/feed
 
-pack-%: package/versions.targets package/ios/versioninfo package/mac/versioninfo
+pack-%: package/versions.targets package/ios/buildinfo.txt package/mac/buildinfo.txt
 	$(Q) rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').sdk
 	$(if $(V),,@echo "PACK     nupkgs/Xamarin.$*.Sdk.nupkg";) dotnet pack package/Xamarin.$*.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
 	$(if $(V),,@echo "ADD      nupkgs/Xamarin.$*.Sdk.nupkg";) nuget add nupkgs/Xamarin.$*.Sdk.*nupkg -source $(TEST_FEED_PATH) $(NUGET_VERBOSITY)
@@ -172,8 +173,9 @@ test-nuget: test/NuGet.config test/global.json
 	$(Q) $(MAKE) pack
 	@# Clear out anything from the nuget cache from previous tests
 	$(Q) rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
-	$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhone $(XBUILD_VERBOSITY)
-	$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator $(XBUILD_VERBOSITY)
+	@#$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhone $(XBUILD_VERBOSITY)
+	@#$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator $(XBUILD_VERBOSITY)
+	$(if $(V),,@echo "BUILD    MyCocoaApp.app";)   dotnet build test/MyCocoaApp/MyCocoaApp.csproj $(XBUILD_VERBOSITY)
 
 CURRENT_HASH:=$(shell git log -1 --pretty=%h)
 package/versions.targets: package/versions.template.targets Makefile $(TOP)/Make.config.inc
@@ -190,11 +192,11 @@ package/versions.targets: package/versions.template.targets Makefile $(TOP)/Make
 		-e "s/@CURRENT_HASH@/$(CURRENT_HASH)/g" \
 	$< > $@
 
-package/ios/versioninfo: $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/buildinfo
+package/ios/buildinfo.txt: $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/buildinfo
 	$(Q) mkdir -p $(dir $@)
 	$(Q) $(CP) $< $@
 
-package/mac/versioninfo: $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/buildinfo
+package/mac/buildinfo.txt: $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/buildinfo
 	$(Q) mkdir -p $(dir $@)
 	$(Q) $(CP) $< $@
 

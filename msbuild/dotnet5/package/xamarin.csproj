@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <!-- Version -->
-    <Content Include="$(_OSCurrentPath)/Version" >
+    <Content Include="$(_OSCurrentPath)\Version" >
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
@@ -59,8 +59,16 @@
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
+    <Content Include="$(_macOSCurrentPath)\lib\msbuild\**">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </Content>
     <!-- BCL -->
-    <Content Include="$(_iOSCurrentPath)\lib\mono\Xamarin.$(_PlatformName)\**">
+    <Content Include="$(_OSCurrentPath)\lib\mono\$(_TFI)\**">
+      <Pack>true</Pack>
+      <PackagePath>lib\$(_TFI)\v1.0</PackagePath>
+    </Content>
+    <Content Include="$(_OSCurrentPath)\lib\x86_64\mobile\**" Condition=" '$(_PlatformName)' == 'macOS' ">
       <Pack>true</Pack>
       <PackagePath>lib\$(_TFI)\v1.0</PackagePath>
     </Content>
@@ -98,6 +106,15 @@
     <Content Include="$(_iOSCurrentPath)\lib\mtouch\**" Condition=" '$(_PlatformName)' != 'macOS' ">
       <Pack>true</Pack>
       <PackagePath>tools\lib\mtouch</PackagePath>
+    </Content>
+    <!-- mtouch -->
+    <Content Include="$(_macOSCurrentPath)\bin\mmp" Condition=" '$(_PlatformName)' == 'macOS' ">
+      <Pack>true</Pack>
+      <PackagePath>$(_BinDir)</PackagePath>
+    </Content>
+    <Content Include="$(_macOSCurrentPath)\lib\mmp\**" Condition=" '$(_PlatformName)' == 'macOS' ">
+      <Pack>true</Pack>
+      <PackagePath>tools\lib\mmp</PackagePath>
     </Content>
     <!-- mlaunch -->
     <Content Include="$(_iOSCurrentPath)\bin\mlaunch" Condition=" '$(_PlatformName)' != 'macOS' ">
@@ -153,6 +170,10 @@
     <Content Include="$(_iOSCurrentPath)\SDKs\Xamarin.WatchOS.sdk\**" Condition=" '$(_PlatformName)' == 'watchOS'">
       <Pack>true</Pack>
       <PackagePath>tools\SDKS\Xamarin.WatchOS.sdk</PackagePath>
+    </Content>
+    <Content Include="$(_macOSCurrentPath)\lib\*.dylib;$(_macOSCurrentPath)\lib\*.a" Condition=" '$(_PlatformName)' == 'macOS' ">
+      <Pack>true</Pack>
+      <PackagePath>tools\lib</PackagePath>
     </Content>
     <!-- arch-specifid BCL -->
     <Content Include="$(_iOSCurrentPath)\lib\32bits\Xamarin.iOS.dll" Condition=" '$(_PlatformName)' == 'iOS' ">

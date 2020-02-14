@@ -177,10 +177,10 @@
     <_TargetsDirmacOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirmacOS>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(XamarinUseSystemInstall)' != 'false' ">
-    <_TargetsDiriOS>$(MonoTouchSdkRoot)\lib\msbuild\iOS</_TargetsDiriOS>
-    <_TargetsDirtvOS>$(MonoTouchSdkRoot)\lib\msbuild\TVOS</_TargetsDirtvOS>
-    <_TargetsDirwatchOS>$(MonoTouchSdkRoot)\lib\msbuild\WatchOS</_TargetsDirwatchOS>
-    <_TargetsDirmacOS>$(XamarinMacFrameworkRoot)\lib\msbuild</_TargetsDirmacOS>
+    <_TargetsDiriOS>$(XamarinFrameworkRoot)\lib\msbuild\iOS</_TargetsDiriOS>
+    <_TargetsDirtvOS>$(XamarinFrameworkRoot)\lib\msbuild\TVOS</_TargetsDirtvOS>
+    <_TargetsDirwatchOS>$(XamarinFrameworkRoot)\lib\msbuild\WatchOS</_TargetsDirwatchOS>
+    <_TargetsDirmacOS>$(XamarinFrameworkRoot)\lib\msbuild</_TargetsDirmacOS>
   </PropertyGroup>
 
   <Import Project="$(_TargetsDiriOS)\Xamarin.iOS.$(_ProjectLanguage).targets"              Condition="'$(_ProjectType)' == 'iOSExecutableProject' Or '$(_ProjectType)' == 'iOSClassLibrary' " />

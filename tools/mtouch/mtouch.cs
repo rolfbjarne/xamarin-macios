@@ -199,26 +199,7 @@ namespace Xamarin.Bundler
 
 		public static string MonoTouchBinDirectory {
 			get {
-				return Path.Combine (MonoTouchDirectory, "bin");
-			}
-		}
-
-		public static string MonoTouchDirectory {
-			get {
-				if (mtouch_dir == null) {
-					mtouch_dir = Path.GetFullPath (GetFullPath () + "/../../..");
-					if (!File.Exists (Path.Combine (mtouch_dir, "Version")) && File.Exists (Path.Combine (mtouch_dir, "..", "Version")))
-						mtouch_dir = Path.GetDirectoryName (mtouch_dir);
-#if DEV
-					// when launched from Xamarin Studio, mtouch is not in the final install location,
-					// so walk the directory hierarchy to find the root source directory.
-					while (!File.Exists (Path.Combine (mtouch_dir, "Make.config")))
-						mtouch_dir = Path.GetDirectoryName (mtouch_dir);
-					mtouch_dir = Path.Combine (mtouch_dir, "_ios-build", "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current");
-#endif
-					mtouch_dir = Target.GetRealPath (mtouch_dir);
-				}
-				return mtouch_dir;
+				return Path.Combine (FrameworkDirectory, "bin");
 			}
 		}
 
@@ -239,8 +220,8 @@ namespace Xamarin.Bundler
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
 			}
 			if (IsDotNet)
-				return Path.Combine (MonoTouchDirectory, "lib", platform, "v1.0");
-			return Path.Combine (MonoTouchDirectory, "lib", "mono", platform);
+				return Path.Combine (FrameworkDirectory, "lib", platform, "v1.0");
+			return Path.Combine (FrameworkDirectory, "lib", "mono", platform);
 		}
 
 		public static string GetArchDirectory (Application app, bool is64bit)
@@ -278,9 +259,9 @@ namespace Xamarin.Bundler
 		{
 			string sdksDir;
 			if (IsDotNet) {
-				sdksDir = Path.Combine (MonoTouchDirectory, "tools", "SDKs");
+				sdksDir = Path.Combine (FrameworkDirectory, "tools", "SDKs");
 			} else {
-				sdksDir = Path.Combine (MonoTouchDirectory, "SDKs");
+				sdksDir = Path.Combine (FrameworkDirectory, "SDKs");
 			}
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
@@ -452,7 +433,7 @@ namespace Xamarin.Bundler
 			}
 
 			if (enable_llvm)
-				aot.Append ("llvm-path=").Append (MonoTouchDirectory).Append ("/LLVM/bin/,");
+				aot.Append ("llvm-path=").Append (FrameworkDirectory).Append ("/LLVM/bin/,");
 
 			aot.Append ("outfile=").Append (outputFile);
 			if (enable_llvm)
@@ -1355,7 +1336,7 @@ namespace Xamarin.Bundler
 				throw new MonoTouchException (82, true, Errors.MT0082);
 
 			if (cross_prefix == null) {
-				cross_prefix = MonoTouchDirectory;
+				cross_prefix = FrameworkDirectory;
 				if (IsDotNet)
 					cross_prefix = Path.Combine (cross_prefix, "tools");
 			}
@@ -1408,7 +1389,7 @@ namespace Xamarin.Bundler
 		static string MlaunchPath {
 			get {
 				// check next to mtouch first
-				var path = Path.Combine (MonoTouchDirectory, "bin", "mlaunch");
+				var path = Path.Combine (FrameworkDirectory, "bin", "mlaunch");
 				if (File.Exists (path))
 					return path;
 

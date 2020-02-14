@@ -728,6 +728,10 @@ namespace Xamarin.Bundler {
 						framework_dir = WalkUpDirHierarchyLookingForLocalBuild ();
 #else
 						framework_dir = Path.GetDirectoryName (Path.GetDirectoryName (Path.GetDirectoryName (GetFullPath ())));
+
+						// If we're in a nuget we need to go one more directory up
+						if (!File.Exists (Path.Combine (framework_dir, "Version")) && File.Exists (Path.Combine (framework_dir, "..", "Version")))
+							framework_dir = Path.GetDirectoryName (framework_dir);
 #endif
 					}
 					framework_dir = Target.GetRealPath (framework_dir);

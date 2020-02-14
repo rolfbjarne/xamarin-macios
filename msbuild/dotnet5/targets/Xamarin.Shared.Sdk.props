@@ -12,6 +12,12 @@
   <PropertyGroup>
     <UsingXamarinSdk>true</UsingXamarinSdk>
 
+    <!--
+      Terminology:
+      * Framework refers to XI/XM when installed into /Library/Frameworks
+      * Sdk refers to the XI/XM when installed into /usr/local/share/dotnet/sdk/<version>/Sdks
+    -->
+
     <!-- This is the .net 5 location of the Xamarin.Sdk (/usr/local/share/dotnet/sdk/<version>/Sdks/Xamarin.[iOS/tvOS/watchOS/macOS].Sdk) -->
     <XamarinSdkRootDirectory>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..'))\</XamarinSdkRootDirectory>
 

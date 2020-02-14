@@ -203,6 +203,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
+		// This is where the BCL lives
 		public static string GetPlatformFrameworkDirectory (Application app)
 		{
 			string platform;

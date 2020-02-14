@@ -41,14 +41,9 @@
       <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </Content>
-    <!-- we rename 'buildinfo' to 'versioninfo' because having a file named 'buildinfo' makes nuget do very strange things and it crashes in stranger locations -->
-    <Content Include="ios\versioninfo" Condition=" '$(_PlatformName)' != 'macOS' " >
+    <Content Include="$(_OSCurrentPath)\buildinfo" >
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
-    </Content>
-    <Content Include="mac\versioninfo" Condition=" '$(_PlatformName)' == 'macOS' " >
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>tools</PackagePath>
     </Content>
     <!-- SDK tasks and targets -->
     <Content Include="..\Xamarin.$(_PlatformName).Sdk\**" >

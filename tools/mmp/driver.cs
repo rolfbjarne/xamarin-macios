@@ -927,9 +927,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		[DllImport ("/usr/lib/system/libdyld.dylib")]
-		static extern int _NSGetExecutablePath (byte[] buffer, ref uint bufsize);
-
 		public static string WalkUpDirHierarchyLookingForLocalBuild ()
 		{
 			var path = System.Reflection.Assembly.GetExecutingAssembly ().Location;
@@ -976,11 +973,6 @@ namespace Xamarin.Bundler {
 			get {
 				return Path.Combine (GetXamMacPrefix (), "lib", string.Format ("mmp/Xamarin.Mac.registrar.{0}.a", IsUnifiedMobile ? "mobile" : "full"));
 			}
-		}
-
-		public static bool IsUptodate (string source, string target)
-		{
-			return Application.IsUptodate (source, target);
 		}
 
 		static string GenerateMain ()

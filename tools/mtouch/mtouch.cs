@@ -219,6 +219,8 @@ namespace Xamarin.Bundler
 			get {
 				if (mtouch_dir == null) {
 					mtouch_dir = Path.GetFullPath (GetFullPath () + "/../../..");
+					if (!File.Exists (Path.Combine (mtouch_dir, "Version")) && File.Exists (Path.Combine (mtouch_dir, "..", "Version")))
+						mtouch_dir = Path.GetDirectoryName (mtouch_dir);
 #if DEV
 					// when launched from Xamarin Studio, mtouch is not in the final install location,
 					// so walk the directory hierarchy to find the root source directory.
@@ -232,24 +234,51 @@ namespace Xamarin.Bundler
 			}
 		}
 
+		static bool? is_dotnet;
+		public static bool IsDotNet {
+			get {
+				if (!is_dotnet.HasValue) {
+					is_dotnet = File.Exists (Path.Combine (MonoTouchDirectory, "versioninfo"));
+					Console.WriteLine ("IsDotNet: {0} MonoTouchDirectory: {1}", is_dotnet.Value, MonoTouchDirectory);
+				}
+				return is_dotnet.Value;
+			}
+		}
+
 		public static string GetPlatformFrameworkDirectory (Application app)
 		{
+			string platform;
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
-				return Path.Combine (MonoTouchDirectory, "lib", "mono", "Xamarin.iOS");
+				platform = "Xamarin.iOS";
+				break;
 			case ApplePlatform.WatchOS:
-				return Path.Combine (MonoTouchDirectory, "lib", "mono", "Xamarin.WatchOS");
+				platform = "Xamarin.WatchOS";
+				break;
 			case ApplePlatform.TVOS:
-				return Path.Combine (MonoTouchDirectory, "lib", "mono", "Xamarin.TVOS");
+				platform = "Xamarin.TVOS";
+				break;
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
 			}
+			if (IsDotNet)
+				return Path.Combine (MonoTouchDirectory, "lib", platform, "v1.0");
+			return Path.Combine (MonoTouchDirectory, "lib", "mono", platform);
+		}
+
+		public static string GetArchDirectory (Application app, bool is64bit)
+		{
+			if (is64bit)
+				return GetArch64Directory (app);
+			return GetArch32Directory (app);
 		}
 
 		public static string GetArch32Directory (Application app)
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+				if (IsDotNet)
+					return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "..", "tools", "lib", "32bits");
 				return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "32bits");
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
@@ -260,6 +289,8 @@ namespace Xamarin.Bundler
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+				if (IsDotNet)
+					return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "..", "tools", "lib", "64bits");
 				return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "64bits");
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
@@ -268,13 +299,19 @@ namespace Xamarin.Bundler
 
 		public static string GetProductSdkDirectory (Application app)
 		{
+			string sdksDir;
+			if (IsDotNet) {
+				sdksDir = Path.Combine (MonoTouchDirectory, "tools", "SDKs");
+			} else {
+				sdksDir = Path.Combine (MonoTouchDirectory, "SDKs");
+			}
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
-				return Path.Combine (MonoTouchDirectory, "SDKs", app.IsDeviceBuild ? "MonoTouch.iphoneos.sdk" : "MonoTouch.iphonesimulator.sdk");
+				return Path.Combine (sdksDir, app.IsDeviceBuild ? "MonoTouch.iphoneos.sdk" : "MonoTouch.iphonesimulator.sdk");
 			case ApplePlatform.WatchOS:
-				return Path.Combine (MonoTouchDirectory, "SDKs", app.IsDeviceBuild ? "Xamarin.WatchOS.sdk" : "Xamarin.WatchSimulator.sdk");
+				return Path.Combine (sdksDir, app.IsDeviceBuild ? "Xamarin.WatchOS.sdk" : "Xamarin.WatchSimulator.sdk");
 			case ApplePlatform.TVOS:
-				return Path.Combine (MonoTouchDirectory, "SDKs", app.IsDeviceBuild ? "Xamarin.AppleTVOS.sdk" : "Xamarin.AppleTVSimulator.sdk");
+				return Path.Combine (sdksDir, app.IsDeviceBuild ? "Xamarin.AppleTVOS.sdk" : "Xamarin.AppleTVSimulator.sdk");
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
 			}
@@ -1340,8 +1377,11 @@ namespace Xamarin.Bundler
 			if (app.EnableRepl && app.LinkMode != LinkMode.None)
 				throw new MonoTouchException (82, true, Errors.MT0082);
 
-			if (cross_prefix == null)
+			if (cross_prefix == null) {
 				cross_prefix = MonoTouchDirectory;
+				if (IsDotNet)
+					cross_prefix = Path.Combine (cross_prefix, "tools");
+			}
 
 			Watch ("Setup", 1);
 

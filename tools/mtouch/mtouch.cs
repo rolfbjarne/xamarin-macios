@@ -158,11 +158,6 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public static string GetMonoTouchLibDirectory (Application app)
-		{
-			return Path.Combine (GetProductSdkDirectory (app), "usr", "lib");
-		}
-
 		public static string GetPlatformFrameworkDirectory (Application app)
 		{
 			string platform;
@@ -213,31 +208,6 @@ namespace Xamarin.Bundler
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
 			}
-		}
-
-		public static string GetProductSdkDirectory (Application app)
-		{
-			string sdksDir;
-			if (IsDotNet) {
-				sdksDir = Path.Combine (FrameworkDirectory, "tools", "SDKs");
-			} else {
-				sdksDir = Path.Combine (FrameworkDirectory, "SDKs");
-			}
-			string sdkName;
-			switch (app.Platform) {
-			case ApplePlatform.iOS:
-				sdkName = app.IsDeviceBuild ? "MonoTouch.iphoneos.sdk" : "MonoTouch.iphonesimulator.sdk";
-				break;
-			case ApplePlatform.WatchOS:
-				sdkName = app.IsDeviceBuild ? "Xamarin.WatchOS.sdk" : "Xamarin.WatchSimulator.sdk";
-				break;
-			case ApplePlatform.TVOS:
-				sdkName = app.IsDeviceBuild ? "Xamarin.AppleTVOS.sdk" : "Xamarin.AppleTVSimulator.sdk";
-				break;
-			default:
-				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
-			}
-			return Path.Combine (sdksDir, sdkName);
 		}
 
 		public static string GetProductFrameworksDirectory (Application app)

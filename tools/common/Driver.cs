@@ -626,6 +626,49 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public static string FrameworkPkgConfigDirectory {
+			get {
+				return Path.Combine (FrameworkDirectory, "lib", "pkgconfig");
+			}
+		}
+		public static string GetProductSdkDirectory (Application app)
+		{
+			var sdksDir = Path.Combine (FrameworkDirectory, "SDKs");
+			string sdkName;
+			switch (app.Platform) {
+			case ApplePlatform.iOS:
+				sdkName = app.IsDeviceBuild ? "MonoTouch.iphoneos.sdk" : "MonoTouch.iphonesimulator.sdk";
+				break;
+			case ApplePlatform.WatchOS:
+				sdkName = app.IsDeviceBuild ? "Xamarin.WatchOS.sdk" : "Xamarin.WatchSimulator.sdk";
+				break;
+			case ApplePlatform.TVOS:
+				sdkName = app.IsDeviceBuild ? "Xamarin.AppleTVOS.sdk" : "Xamarin.AppleTVSimulator.sdk";
+				break;
+			case ApplePlatform.MacOSX:
+				sdkName = "Xamarin.macOS.sdk";
+				break;
+			default:
+				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, PRODUCT);
+			}
+			return Path.Combine (sdksDir, sdkName);
+		}
+
+		public static string GetProductSdkLibDirectory (Application app)
+		{
+			return Path.Combine (GetProductSdkDirectory (app), "usr", "lib");
+		}
+
+		public static string GetProductSdkIncludeDirectory (Application app)
+		{
+			return Path.Combine (GetProductSdkDirectory (app), "usr", "include");
+		}
+
+		public static string GetProductFrameworksDirectory (Application app)
+		{
+			return Path.Combine (GetProductSdkDirectory (app), "Frameworks");
+		}
+
 		static void ValidateXcode (bool accept_any_xcode_version, bool warn_if_not_found)
 		{
 			if (sdk_root == null) {

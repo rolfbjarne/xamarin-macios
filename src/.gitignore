@@ -1,4 +1,5 @@
 build
+dotnet
 MonoTouch.NUnitLite.csproj
 MonoTouch.NUnitLite.tvos.csproj
 MonoTouch.NUnitLite.unified.csproj

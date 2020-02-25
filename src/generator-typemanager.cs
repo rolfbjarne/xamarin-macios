@@ -117,9 +117,14 @@ public class TypeManager {
 	Assembly platform_assembly;
 	Assembly system_assembly;
 	Assembly binding_assembly;
+	Assembly system_runtime_assembly;
 
 	public Assembly CorlibAssembly {
 		get { return corlib_assembly; }
+	}
+
+	public Assembly SystemRuntimeAssembly {
+		get { return system_runtime_assembly; }
 	}
 
 	public Assembly PlatformAssembly {
@@ -157,7 +162,7 @@ public class TypeManager {
 			return null;
 
 		var gt = type.GetGenericTypeDefinition ();
-		if (gt.Assembly != CorlibAssembly)
+		if (gt.Assembly != CorlibAssembly && gt.Assembly != SystemRuntimeAssembly)
 			return null;
 
 		if (gt.Namespace != "System")
@@ -179,7 +184,7 @@ public class TypeManager {
 		return type.GetEnumUnderlyingType ();
 	}
 
-	public void Initialize (BindingTouch binding_touch, Assembly api, Assembly corlib, Assembly platform, Assembly system, Assembly binding)
+	public void Initialize (BindingTouch binding_touch, Assembly api, Assembly corlib, Assembly platform, Assembly system, Assembly binding, Assembly system_runtime)
 	{
 		BindingTouch = binding_touch;
 
@@ -188,6 +193,7 @@ public class TypeManager {
 		platform_assembly = platform;
 		system_assembly = system;
 		binding_assembly = binding;
+		system_runtime_assembly = system_runtime;
 
 		/* corlib */
 		System_Attribute = Lookup (corlib_assembly, "System", "Attribute");

@@ -112,31 +112,35 @@ public class BindingTouch {
 
 	IEnumerable<string> GetLibraryDirectories ()
 	{
-		switch (CurrentPlatform) {
-		case PlatformName.iOS:
-			yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.iOS");
-			break;
-		case PlatformName.WatchOS:
-			yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.WatchOS");
-			break;
-		case PlatformName.TvOS:
-			yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.TVOS");
-			break;
-		case PlatformName.MacOSX:
-			if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
-				yield return Path.Combine (GetSDKRoot (), "lib", "reference", "full");
-				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "4.5");
-			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
-				yield return "/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5";
-				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "4.5");
-			} else if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
-				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.Mac");
-			} else {
-				throw ErrorHelper.CreateError (1053, target_framework);
+		//yield return "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1";
+		//yield break;
+		if (!TargetFramework.IsDotNet) {
+			switch (CurrentPlatform) {
+			case PlatformName.iOS:
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.iOS");
+				break;
+			case PlatformName.WatchOS:
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.WatchOS");
+				break;
+			case PlatformName.TvOS:
+				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.TVOS");
+				break;
+			case PlatformName.MacOSX:
+				if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
+					yield return Path.Combine (GetSDKRoot (), "lib", "reference", "full");
+					yield return Path.Combine (GetSDKRoot (), "lib", "mono", "4.5");
+				} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
+					yield return "/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5";
+					yield return Path.Combine (GetSDKRoot (), "lib", "mono", "4.5");
+				} else if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
+					yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.Mac");
+				} else {
+					throw ErrorHelper.CreateError (1053, target_framework);
+				}
+				break;
+			default:
+				throw new BindingException (1047, CurrentPlatform);
 			}
-			break;
-		default:
-			throw new BindingException (1047, CurrentPlatform);
 		}
 		foreach (var lib in libs)
 			yield return lib;
@@ -159,6 +163,14 @@ public class BindingTouch {
 		}
 
 		throw new FileNotFoundException ($"Could not find the assembly '{name}' in any of the directories: {string.Join (", ", GetLibraryDirectories ())}");
+	}
+
+	string GetBCLRoot ()
+	{
+		if (!TargetFramework.IsDotNet)
+			return GetSDKRoot ();
+
+		throw new NotImplementedException ();
 	}
 
 	string GetSDKRoot ()
@@ -329,8 +341,8 @@ public class BindingTouch {
 		Console.WriteLine ("isDotNet: {0} {1}", isDotNet, references.Count);
 		foreach (var r in references)
 			Console.WriteLine ($"    {r}");
-		switch (target_framework.Value.Identifier.ToLowerInvariant ()) {
-		case "xamarin.ios":
+		switch (target_framework.Value.Platform) {
+		case ApplePlatform.iOS:
 			CurrentPlatform = PlatformName.iOS;
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll))
@@ -340,7 +352,7 @@ public class BindingTouch {
 				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.iOS", references);
 			}
 			break;
-		case "xamarin.tvos":
+		case ApplePlatform.TVOS:
 			CurrentPlatform = PlatformName.TvOS;
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll))
@@ -350,7 +362,7 @@ public class BindingTouch {
 				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.TVOS", references);
 			}
 			break;
-		case "xamarin.watchos":
+		case ApplePlatform.WatchOS:
 			CurrentPlatform = PlatformName.WatchOS;
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll))
@@ -360,7 +372,7 @@ public class BindingTouch {
 				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.WatchOS", references);
 			}
 			break;
-		case "xamarin.mac":
+		case ApplePlatform.MacOSX:
 			CurrentPlatform = PlatformName.MacOSX;
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll)) {
@@ -454,20 +466,26 @@ public class BindingTouch {
 				
 
 			universe = new Universe (UniverseOptions.EnableFunctionPointers | UniverseOptions.ResolveMissingMembers | UniverseOptions.MetadataOnly);
-			universe.AssemblyResolve += (object sender, IKVM.Reflection.ResolveEventArgs args) => {
-				var an = new AssemblyName (args.Name);
-				Console.WriteLine ("Resolving {0} => {1} with {2} references", args.Name, an.Name, references.Count);
-				foreach (var r in references) {
-					Console.WriteLine (" Ref {0}", r);
-					var fn = Path.GetFileNameWithoutExtension (r);
-					if (fn == an.Name) {
-						Console.WriteLine ("Found: {0}", r);
-						return universe.LoadFile (r);
+			if (TargetFramework.IsDotNet) {
+				var dict = new Dictionary<string, Assembly> ();
+				universe.AssemblyResolve += (object sender, IKVM.Reflection.ResolveEventArgs args2) => {
+					var an = new AssemblyName (args2.Name);
+					if (dict.TryGetValue (an.Name, out var rv))
+						return rv;
+					Console.WriteLine ("Resolving {0} => {1} with {2} references", args2.Name, an.Name, references.Count);
+					foreach (var r in references) {
+						Console.WriteLine (" Ref {0}", r);
+						var fn = Path.GetFileNameWithoutExtension (r);
+						if (fn == an.Name) {
+							Console.WriteLine ("Found: {0}", r);
+							rv = universe.LoadFile (r);
+							dict [an.Name] = rv;
+							return rv;
+						}
 					}
-				}
-				throw new NotImplementedException ();
-			};
-
+					throw new NotImplementedException ();
+				};
+			}
 
 			Assembly api;
 			try {
@@ -498,7 +516,8 @@ public class BindingTouch {
 			Assembly platform_assembly = baselib;
 			Assembly system_assembly = universe.LoadFile (LocateAssembly ("System"));
 			Assembly binding_assembly = universe.LoadFile (GetAttributeLibraryPath ());
-			TypeManager.Initialize (this, api, corlib_assembly, platform_assembly, system_assembly, binding_assembly);
+			Assembly system_runtime_assembly = universe.Load ("System.Runtime");
+			TypeManager.Initialize (this, api, corlib_assembly, platform_assembly, system_assembly, binding_assembly, system_runtime_assembly);
 
 			foreach (var linkWith in AttributeManager.GetCustomAttributes<LinkWithAttribute> (api)) {
 				if (!linkwith.Contains (linkWith.LibraryName)) {

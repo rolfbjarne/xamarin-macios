@@ -841,7 +841,8 @@ $(DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 		-native-exception-marshalling                                             \
 		--ns:ObjCRuntime                                                          \
 		$(TVOS_APIS)                                                              \
-		--target-framework=Xamarin.TVOS,v1.0                                      \
+		--lib=$(DOTNET_DIR)                                                       \
+		--target-framework=.NETCoreApp,Version=5.0,Profile=tvos                   \
 		> $@
 
 $(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources: $(TVOS_DOTNET_GENERATOR) $(TVOS_APIS) $(TVOS_DOTNET_BUILD_DIR)/core.dll $(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(DOTNET_BUILD_DIR)/tvos.rsp

@@ -20,7 +20,7 @@ public class AttributeManager
 	System.Type ConvertType (Type type, ICustomAttributeProvider provider)
 	{
 		System.Type rv;
-		if (type.Assembly == TypeManager.CorlibAssembly) {
+		if (type.Assembly == TypeManager.CorlibAssembly || type.Assembly == TypeManager.SystemRuntimeAssembly || type.Assembly.GetName ().Name == "System.Runtime.InteropServices") {
 			rv = typeof (int).Assembly.GetType (type.FullName);
 		} else if (type.Assembly == TypeManager.SystemAssembly) {
 			rv = typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly.GetType (type.FullName);
@@ -43,17 +43,43 @@ public class AttributeManager
 
 			rv = typeof (TypeManager).Assembly.GetType (type.FullName);
 		} else {
+			switch (type.FullName) {
+			case "System.Runtime.InteropServices.MarshalAsAttribute":
+				return typeof (System.Runtime.InteropServices.MarshalAsAttribute);
+			case "System.Diagnostics.DebuggerBrowsableAttribute":
+				return typeof (System.Diagnostics.DebuggerBrowsableAttribute);
+			case "System.Diagnostics.DebuggerBrowsableState":
+				return typeof (System.Diagnostics.DebuggerBrowsableState);
+			}
 			throw ErrorHelper.CreateError (1054, type.AssemblyQualifiedName);
 		}
 		if (rv == null)
 			throw ErrorHelper.CreateError (1055, type.AssemblyQualifiedName);
+		if (reported2.Add (type))
+			Console.WriteLine ($"ConvertType2 ({type.FullName}) => {rv.AssemblyQualifiedName}");
 		return rv;
 	}
+	static HashSet<Type> reported2 = new HashSet<Type> ();
 
+	static Dictionary<System.Type, Type> ikvm_type_lookup = new Dictionary<System.Type, Type> ();
 	// This method gets the IKVM.Reflection.Type for a System.Type.
 	// It knows about our mock attribute logic, so it will return the mocked IKVM.Reflection.Type for a mocked System.Type.
 	Type ConvertType (System.Type type, ICustomAttributeProvider provider)
 	{
+		if (!ikvm_type_lookup.TryGetValue (type, out var lookup)) {
+			var assemblies = BindingTouch.universe.GetAssemblies ();
+			foreach (var asm in assemblies) {
+				var rv2 = asm.FindType (new TypeName (type.Namespace, type.Name));
+				if (rv2 != null) {
+					Console.WriteLine ($"ConvertType ({type.FullName}) => {rv2.AssemblyQualifiedName} ASM LOOKUP");
+					ikvm_type_lookup [type] = rv2;
+					return rv2;
+				}
+			}
+		} else {
+			return lookup;
+		}
+
 		Type rv;
 		if (type.Assembly == typeof (int).Assembly) {
 			rv = TypeManager.CorlibAssembly.GetType (type.FullName);
@@ -78,8 +104,11 @@ public class AttributeManager
 		}
 		if (rv == null)
 			throw ErrorHelper.CreateError (1055, type.AssemblyQualifiedName);
+		if (reported.Add (type))
+			Console.WriteLine ($"ConvertType ({type.FullName}) => {rv.AssemblyQualifiedName}");
 		return rv;
 	}
+	static HashSet<System.Type> reported = new HashSet<System.Type> ();
 
 
 	static IEnumerable<System.Attribute> ConvertOldAttributes (CustomAttributeData attribute)

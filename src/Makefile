@@ -2,6 +2,7 @@ TOP=..
 include $(TOP)/Make.config
 
 BUILD_DIR=build
+DOTNET_BUILD_DIR=dotnet
 PROJECT_DIR=.
 
 include $(TOP)/src/frameworks.sources
@@ -17,6 +18,11 @@ MAC_BUILD_DIR=$(BUILD_DIR)/mac
 IOS_BUILD_DIR=$(BUILD_DIR)/ios
 WATCH_BUILD_DIR=$(BUILD_DIR)/watch
 TVOS_BUILD_DIR=$(BUILD_DIR)/tvos
+
+MACOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/macos
+IOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/ios
+WATCHOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/watchos
+TVOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/tvos
 
 include $(TOP)/opentk/Makefile.include
 
@@ -76,7 +82,6 @@ IOS_GENERATOR_native_FLAGS = -d:XAMCORE_2_0 -d:__UNIFIED__
 IOS_DEFINES = -define:IPHONE -define:IOS -define:MONOTOUCH -d:NET_2_0 -d:__IOS__ $(APPLETLS_DEFINES) -d:SYSTEM_NET_HTTP
 IOS_native_DEFINES = -d:XAMCORE_2_0 -d:__UNIFIED__
 IOS_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
-IOS_BMONO = MONO_PATH=$(IOS_LIBDIR) $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btouch-mono
 IOS_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 IOS_GENERATE=$(SYSTEM_MONO) --debug $(IOS_GENERATOR)
 $(IOS_BUILD_DIR)/Constants.cs: Constants.iOS.cs.in Makefile $(TOP)/Make.config.inc | $(IOS_BUILD_DIR)
@@ -98,6 +103,16 @@ $(IOS_BUILD_DIR)/native/core.dll: $(IOS_CORE_SOURCES) frameworks.sources
 		-define:COREBUILD $(IOS_DEFINES) \
 		$(IOS_native_DEFINES) \
 		$(IOS_CORE_SOURCES)
+
+$(IOS_DOTNET_BUILD_DIR)/core.dll: $(IOS_CORE_SOURCES) frameworks.sources
+	$(call Q_PROF_CSC,ios/dotnet) $(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		-define:COREBUILD $(IOS_DEFINES) \
+		$(IOS_native_DEFINES) \
+		$(IOS_CORE_SOURCES) \
+		$(DOTNET_FLAGS)
+
+DOTNET_TARGETS += $(IOS_DOTNET_BUILD_DIR)/core.dll
 
 # generated_sources
 $(IOS_BUILD_DIR)/native/generated_sources: $(IOS_GENERATOR) $(IOS_APIS) $(IOS_BUILD_DIR)/native/core.dll $(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll $(BUILD_DIR)/ios.rsp
@@ -403,6 +418,21 @@ endef
 $(eval $(call MAC_GENERATOR_template,full,--ns=ObjCRuntime,-d:NO_SYSTEM_DRAWING,,,full,Xamarin.Mac-full.BindingAttributes.dll))
 $(eval $(call MAC_GENERATOR_template,mobile,--ns=ObjCRuntime,$(SHARED_SYSTEM_DRAWING_SOURCES),,,mobile,Xamarin.Mac-mobile.BindingAttributes.dll))
 
+$(MACOS_DOTNET_BUILD_DIR)/core.dll: $(MAC_CORE_SOURCES) frameworks.sources
+	$(Q) mkdir -p $(dir $@)
+	$(call Q_PROF_CSC,macos/dotnet) \
+		$(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe -nowarn:3021,612,618,1635 \
+		$(MAC_BOOTSTRAP_DEFINES) \
+		$(3) \
+		$(MAC_CORE_SOURCES) \
+		$(DOTNET_FLAGS) \
+
+# $(MAC_BUILD_DIR)/$(1)/generated-sources: $$(MAC_$(1)_GENERATOR) $(MAC_APIS) $(MAC_BUILD_DIR)/$(1)/core.dll $(MAC_BUILD_DIR)/$(7) $(BUILD_DIR)/mac-$(1).rsp
+# 	$$(call Q_PROF_GEN,mac/$(1)) $$(MAC_$(1)_GENERATE) @$(BUILD_DIR)/mac-$(1).rsp
+
+DOTNET_TARGETS += \
+	$(MACOS_DOTNET_BUILD_DIR)/core.dll \
+
 define MAC_TARGETS_template
 $(MAC_BUILD_DIR)/$(1)/$(2): $(MAC_BUILD_DIR)/$(3)/generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(MAC_CLASSIC_SOURCES) $(SN_KEY)
 	@mkdir -p $(MAC_BUILD_DIR)/$(1)
@@ -528,7 +558,6 @@ all-mac: $(MAC_TARGETS)
 
 WATCH_DEFINES = -define:IPHONE -define:MONOTOUCH -d:NET_2_0 -d:WATCH -d:XAMCORE_2_0 -d:XAMCORE_3_0 -d:__WATCHOS__ -d:__UNIFIED__ -d:SYSTEM_NET_HTTP
 WATCH_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
-WATCH_BMONO = MONO_PATH=$(WATCH_LIBDIR)/repl $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/bwatch-mono
 WATCH_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 WATCH_GENERATE=$(SYSTEM_MONO) --debug $(WATCH_GENERATOR)
 WATCH_GENERATED_DEFINES= -d:WATCH -d:XAMCORE_3_0 -d:XAMCORE_2_0 -d:__UNIFIED__
@@ -582,6 +611,17 @@ $(WATCH_BUILD_DIR)/watch/core.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources | 
 		-define:COREBUILD    \
 		$(WATCH_DEFINES)     \
 		$(WATCHOS_CORE_SOURCES)
+
+$(WATCHOS_DOTNET_BUILD_DIR)/core.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources | $(WATCHOS_DOTNET_BUILD_DIR)
+	$(call Q_PROF_CSC,watchos/dotnet) $(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		-define:COREBUILD    \
+		$(WATCH_DEFINES)     \
+		$(WATCHOS_CORE_SOURCES) \
+		$(DOTNET_FLAGS) \
+
+DOTNET_TARGETS += \
+	$(WATCHOS_DOTNET_BUILD_DIR)/core.dll \
 
 # generated_sources
 $(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_GENERATOR) $(WATCHOS_APIS) $(WATCH_BUILD_DIR)/watch/core.dll $(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll $(BUILD_DIR)/watchos.rsp
@@ -695,10 +735,11 @@ endif
 
 TVOS_DEFINES = -define:IPHONE -define:MONOTOUCH -d:NET_2_0 -d:TVOS -d:XAMCORE_2_0 -d:XAMCORE_3_0 -d:__TVOS__ $(APPLETLS_DEFINES) -d:__UNIFIED__ -d:SYSTEM_NET_HTTP
 TVOS_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
-TVOS_BMONO = MONO_PATH=$(TVOS_LIBDIR)/repl $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/bin/btv-mono
 TVOS_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 TVOS_GENERATE=$(SYSTEM_MONO) --debug $(TVOS_GENERATOR)
 TVOS_GENERATED_DEFINES= -d:TVOS -d:XAMCORE_3_0 -d:XAMCORE_2_0 -d:__UNIFIED__
+TVOS_DOTNET_GENERATOR=$(DOTNET_BUILD_DIR)/bgen/bgen
+TVOS_DOTNET_GENERATE=$(SYSTEM_MONO) --debug $(TVOS_DOTNET_GENERATOR)
 
 TVOS_EXTRA_CORE_SOURCES = \
 	$(TVOS_BUILD_DIR)/Constants.cs    \
@@ -749,9 +790,19 @@ $(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefil
 		$(TVOS_DEFINES)     \
 		$(TVOS_CORE_SOURCES)
 
+$(TVOS_DOTNET_BUILD_DIR)/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefile | $(TVOS_BUILD_DIR)
+	$(call Q_PROF_CSC,tvos/dotnet) $(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		-define:COREBUILD    \
+		$(TVOS_DEFINES)     \
+		$(TVOS_CORE_SOURCES) \
+		$(DOTNET_FLAGS) \
+
 # generated_sources
 $(TVOS_BUILD_DIR)/tvos/generated_sources: $(TVOS_GENERATOR) $(TVOS_APIS) $(TVOS_BUILD_DIR)/tvos/core.dll $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(BUILD_DIR)/tvos.rsp
 	$(call Q_PROF_GEN,tvos) $(TVOS_GENERATE) @$(BUILD_DIR)/tvos.rsp
+
+### .NET (tvOS) ###
 
 $(BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 	$(Q_GEN) echo \
@@ -772,6 +823,34 @@ $(BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 		$(TVOS_APIS)                                            \
 		--target-framework=Xamarin.TVOS,v1.0                     \
 		> $@
+
+$(DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
+	$(Q_GEN) echo \
+		-inline-selectors                                                         \
+		-process-enums                                                            \
+		-warnaserror:$(TVOS_GENERATOR_WARNASERROR)                                \
+		-core                                                                     \
+		-sourceonly=$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources               \
+		-compiler=$(SYSTEM_CSC) $(DOTNET_FLAGS)                                   \
+		-nologo -nostdlib -noconfig                                               \
+		-tmpdir=$(TVOS_DOTNET_BUILD_DIR)                                          \
+		-baselib=$(TVOS_DOTNET_BUILD_DIR)/core.dll                                \
+		-attributelib=$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll \
+		$(TVOS_GENERATED_DEFINES)				                                  \
+		-ns=MonoTouch.ObjCRuntime                                                 \
+		-native-exception-marshalling                                             \
+		--ns:ObjCRuntime                                                          \
+		$(TVOS_APIS)                                                              \
+		--target-framework=Xamarin.TVOS,v1.0                                      \
+		> $@
+
+$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources: $(TVOS_DOTNET_GENERATOR) $(TVOS_APIS) $(TVOS_DOTNET_BUILD_DIR)/core.dll $(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(DOTNET_BUILD_DIR)/tvos.rsp
+	$(call Q_PROF_GEN,tvos) $< @$(DOTNET_BUILD_DIR)/tvos.rsp
+
+DOTNET_TARGETS += \
+	$(TVOS_DOTNET_BUILD_DIR)/core.dll \
+	$(DOTNET_BUILD_DIR)/tvos.rsp \
+	$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources \
 
 $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%dll $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%pdb: $(TVOS_SOURCES) $(TVOS_BUILD_DIR)/tvos/generated_sources $(PRODUCT_KEY_PATH) | $(TVOS_BUILD_DIR)/tvos-64
 	$(call Q_PROF_CSC,tvos) $(TV_CSC) -nologo -out:$(basename $@).dll -target:library -debug -unsafe -optimize \
@@ -885,6 +964,8 @@ $(COMMON_TARGET_DIRS):
 
 install-local:: $(INSTALL_TARGETS)
 all-local:: $(ALL_TARGETS)
+
+dotnet: $(DOTNET_TARGETS)
 
 project-files: $(PROJECT_FILES)
 

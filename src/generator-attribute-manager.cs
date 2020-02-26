@@ -15,12 +15,151 @@ public class AttributeManager
 		BindingTouch = binding_touch;
 	}
 
+	System.Type LookupReflectionType (string fullname)
+	{
+		switch (fullname) {
+		case "AbstractAttribute":
+			return typeof (AbstractAttribute);
+		case "AppearanceAttribute":
+			return typeof (AppearanceAttribute);
+		case "AsyncAttribute":
+			return typeof (AsyncAttribute);
+		case "AutoreleaseAttribute":
+			return typeof (AutoreleaseAttribute);
+		case "BaseTypeAttribute":
+			return typeof (BaseTypeAttribute);
+		case "BindAttribute":
+			return typeof (BindAttribute);
+		case "CategoryAttribute":
+			return typeof (CategoryAttribute);
+		case "CheckDisposedAttribute":
+			return typeof (CheckDisposedAttribute);
+		case "DefaultEnumValueAttribute":
+			return typeof (DefaultEnumValueAttribute);
+		case "DefaultValueAttribute":
+			return typeof (DefaultValueAttribute);
+		case "DelegateApiNameAttribute":
+			return typeof (DelegateApiNameAttribute);
+		case "DelegateNameAttribute":
+			return typeof (DelegateNameAttribute);
+		case "DesignatedInitializerAttribute":
+			return typeof (DesignatedInitializerAttribute);
+		case "DisableDefaultCtorAttribute":
+			return typeof (DisableDefaultCtorAttribute);
+		case "ErrorDomainAttribute":
+			return typeof (ErrorDomainAttribute);
+		case "EventArgsAttribute":
+			return typeof (EventArgsAttribute);
+		case "EventNameAttribute":
+			return typeof (EventNameAttribute);
+		case "Foundation.AdviceAttribute":
+			return typeof (Foundation.AdviceAttribute);
+		case "Foundation.ExportAttribute":
+			return typeof (Foundation.ExportAttribute);
+		case "Foundation.FieldAttribute":
+			return typeof (Foundation.FieldAttribute);
+		case "Foundation.ModelAttribute":
+			return typeof (Foundation.ModelAttribute);
+		case "Foundation.NotImplementedAttribute":
+			return typeof (Foundation.NotImplementedAttribute);
+		case "Foundation.ProtocolAttribute":
+			return typeof (Foundation.ProtocolAttribute);
+		case "IgnoredInDelegateAttribute":
+			return typeof (IgnoredInDelegateAttribute);
+		case "InternalAttribute":
+			return typeof (InternalAttribute);
+		case "ManualAttribute":
+			return typeof (ManualAttribute);
+		case "MarshalDirectiveAttribute":
+			return typeof (MarshalDirectiveAttribute);
+		case "MarshalNativeExceptionsAttribute":
+			return typeof (MarshalNativeExceptionsAttribute);
+		case "NewAttribute":
+			return typeof (NewAttribute);
+		case "NoDefaultValueAttribute":
+			return typeof (NoDefaultValueAttribute);
+		case "NoMethodAttribute":
+			return typeof (NoMethodAttribute);
+		case "NotificationAttribute":
+			return typeof (NotificationAttribute);
+		case "ObjCRuntime.ArgumentSemantic":
+			return typeof (ObjCRuntime.ArgumentSemantic);
+		case "ObjCRuntime.BindAsAttribute":
+			return typeof (ObjCRuntime.BindAsAttribute);
+		case "ObjCRuntime.DeprecatedAttribute":
+			return typeof (ObjCRuntime.DeprecatedAttribute);
+		case "ObjCRuntime.IntroducedAttribute":
+			return typeof (ObjCRuntime.IntroducedAttribute);
+		case "ObjCRuntime.NativeAttribute":
+			return typeof (ObjCRuntime.NativeAttribute);
+		case "ObjCRuntime.ObsoletedAttribute":
+			return typeof (ObjCRuntime.ObsoletedAttribute);
+		case "ObjCRuntime.PlatformArchitecture":
+			return typeof (ObjCRuntime.PlatformArchitecture);
+		case "ObjCRuntime.PlatformName":
+			return typeof (ObjCRuntime.PlatformName);
+		case "ObjCRuntime.RequiresSuperAttribute":
+			return typeof (ObjCRuntime.RequiresSuperAttribute);
+		case "ObjCRuntime.UnavailableAttribute":
+			return typeof (ObjCRuntime.UnavailableAttribute);
+		case "OverrideAttribute":
+			return typeof (OverrideAttribute);
+		case "PostGetAttribute":
+			return typeof (PostGetAttribute);
+		case "PostSnippetAttribute":
+			return typeof (PostSnippetAttribute);
+		case "PreSnippetAttribute":
+			return typeof (PreSnippetAttribute);
+		case "ProtectedAttribute":
+			return typeof (ProtectedAttribute);
+		case "ProtocolizeAttribute":
+			return typeof (ProtocolizeAttribute);
+		case "SealedAttribute":
+			return typeof (SealedAttribute);
+		case "StaticAttribute":
+			return typeof (StaticAttribute);
+		case "System.Boolean":
+			return typeof (System.Boolean);
+		case "System.ComponentModel.EditorBrowsableAttribute":
+			return typeof (System.ComponentModel.EditorBrowsableAttribute);
+		case "System.ComponentModel.EditorBrowsableState":
+			return typeof (System.ComponentModel.EditorBrowsableState);
+		case "System.Int32":
+			return typeof (System.Int32);
+		case "System.Object":
+			return typeof (System.Object);
+		case "System.ObsoleteAttribute":
+			return typeof (System.ObsoleteAttribute);
+		case "System.Runtime.InteropServices.FieldOffsetAttribute":
+			return typeof (System.Runtime.InteropServices.FieldOffsetAttribute);
+		case "System.Runtime.InteropServices.MarshalAsAttribute":
+			return typeof (System.Runtime.InteropServices.MarshalAsAttribute);
+		case "System.Runtime.InteropServices.UnmanagedType":
+			return typeof (System.Runtime.InteropServices.UnmanagedType);
+		case "System.String":
+			return typeof (System.String);
+		case "ThreadSafeAttribute":
+			return typeof (ThreadSafeAttribute);
+		case "UnifiedInternalAttribute":
+			return typeof (UnifiedInternalAttribute);
+		case "WrapAttribute":
+			return typeof (WrapAttribute);
+		}
+
+		return null;
+	}
+
 	// This method gets the System.Type for a IKVM.Reflection.Type to a System.Type.
 	// It knows about our mock attribute logic, so it will return the corresponding non-mocked System.Type for a mocked IKVM.Reflection.Type.
 	System.Type ConvertType (Type type, ICustomAttributeProvider provider)
 	{
-		System.Type rv;
-		if (type.Assembly == TypeManager.CorlibAssembly || type.Assembly == TypeManager.SystemRuntimeAssembly || type.Assembly.GetName ().Name == "System.Runtime.InteropServices") {
+		System.Type rv = null;
+
+		rv = LookupReflectionType (type.FullName);
+		if (rv != null) {
+			// nothing else to do
+			reported2.Add (type); // DEBUG: prevent printing
+		} else if (type.Assembly == TypeManager.CorlibAssembly || type.Assembly == TypeManager.SystemRuntimeAssembly || type.Assembly.GetName ().Name == "System.Runtime.InteropServices") {
 			rv = typeof (int).Assembly.GetType (type.FullName);
 		} else if (type.Assembly == TypeManager.SystemAssembly) {
 			rv = typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly.GetType (type.FullName);
@@ -43,20 +182,13 @@ public class AttributeManager
 
 			rv = typeof (TypeManager).Assembly.GetType (type.FullName);
 		} else {
-			switch (type.FullName) {
-			case "System.Runtime.InteropServices.MarshalAsAttribute":
-				return typeof (System.Runtime.InteropServices.MarshalAsAttribute);
-			case "System.Diagnostics.DebuggerBrowsableAttribute":
-				return typeof (System.Diagnostics.DebuggerBrowsableAttribute);
-			case "System.Diagnostics.DebuggerBrowsableState":
-				return typeof (System.Diagnostics.DebuggerBrowsableState);
-			}
 			throw ErrorHelper.CreateError (1054, type.AssemblyQualifiedName);
 		}
 		if (rv == null)
 			throw ErrorHelper.CreateError (1055, type.AssemblyQualifiedName);
-		if (reported2.Add (type))
-			Console.WriteLine ($"ConvertType2 ({type.FullName}) => {rv.AssemblyQualifiedName}");
+		if (reported2.Add (type)) {
+			System.IO.File.WriteAllLines ("/tmp/foo.cs", reported2.OrderBy ((v) => v.FullName).Select ((v) => $"case \"{v.FullName}\":\n\treturn typeof ({v.FullName});")); // {rv.AssemblyQualifiedName}" });
+		}
 		return rv;
 	}
 	static HashSet<Type> reported2 = new HashSet<Type> ();
@@ -71,7 +203,7 @@ public class AttributeManager
 			foreach (var asm in assemblies) {
 				var rv2 = asm.FindType (new TypeName (type.Namespace, type.Name));
 				if (rv2 != null) {
-					Console.WriteLine ($"ConvertType ({type.FullName}) => {rv2.AssemblyQualifiedName} ASM LOOKUP");
+					//Console.WriteLine ($"// ConvertType ({type.FullName}) => {rv2.AssemblyQualifiedName} ASM LOOKUP");
 					ikvm_type_lookup [type] = rv2;
 					return rv2;
 				}
@@ -94,8 +226,8 @@ public class AttributeManager
 		}
 		if (rv == null)
 			throw ErrorHelper.CreateError (1055, type.AssemblyQualifiedName);
-		if (reported.Add (type))
-			Console.WriteLine ($"ConvertType ({type.FullName}) => {rv.AssemblyQualifiedName}");
+		//if (reported.Add (type))
+		//	Console.WriteLine ($"// case \"{type.FullName}\": return typeof ? => // {rv.AssemblyQualifiedName}");
 		return rv;
 	}
 	static HashSet<System.Type> reported = new HashSet<System.Type> ();

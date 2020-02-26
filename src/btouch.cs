@@ -328,9 +328,7 @@ public class BindingTouch {
 			Console.Error.WriteLine ("see {0} --help for more information", ToolName);
 			return 1;
 		}
-		Console.WriteLine ("Sources:");
-		foreach (var s in sources)
-			Console.WriteLine ($"     {s}");
+
 		if (show_help) {
 			ShowHelp (os);
 			return 0;
@@ -471,6 +469,13 @@ public class BindingTouch {
 					if (dict.TryGetValue (an.Name, out var rv))
 						return rv;
 					Console.WriteLine ("Resolving {0} => {1} with {2} references", args2.Name, an.Name, references.Count);
+					var assemblies = universe.GetAssemblies ();
+					foreach (var asm in assemblies) {
+						if (asm.GetName ().Name == an.Name) {
+							dict [an.Name] = asm;
+							return asm;
+						}
+					}
 					foreach (var r in references) {
 						var fn = Path.GetFileNameWithoutExtension (r);
 						if (fn == an.Name) {
@@ -524,6 +529,19 @@ public class BindingTouch {
 			}
 
 			foreach (var r in references) {
+				var fn = Path.GetFileNameWithoutExtension (r);
+				if (fn == corlib_assembly.GetName ().Name) {
+					continue;
+				} else if (fn == platform_assembly.GetName ().Name) {
+					continue;
+				} else if (fn == system_assembly.GetName ().Name) {
+					continue;
+				} else if (fn == binding_assembly.GetName ().Name) {
+					continue;
+				} else if (fn == system_runtime_assembly?.GetName ().Name) {
+					continue;
+				}
+
 				if (File.Exists (r)) {
 					try {
 						universe.LoadFile (r);

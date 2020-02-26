@@ -65,6 +65,10 @@ public class BindingTouch {
 		get { return "bgen"; }
 	}
 
+	bool IsDotNet {
+		get { return TargetFramework.IsDotNet; }
+	}
+
 	static void ShowHelp (OptionSet os)
 	{
 		Console.WriteLine ("{0} - Mono Objective-C API binder", ToolName);
@@ -112,9 +116,7 @@ public class BindingTouch {
 
 	IEnumerable<string> GetLibraryDirectories ()
 	{
-		//yield return "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1";
-		//yield break;
-		if (!TargetFramework.IsDotNet) {
+		if (!IsDotNet) {
 			switch (CurrentPlatform) {
 			case PlatformName.iOS:
 				yield return Path.Combine (GetSDKRoot (), "lib", "mono", "Xamarin.iOS");
@@ -167,7 +169,7 @@ public class BindingTouch {
 
 	string GetBCLRoot ()
 	{
-		if (!TargetFramework.IsDotNet)
+		if (!IsDotNet)
 			return GetSDKRoot ();
 
 		throw new NotImplementedException ();
@@ -337,17 +339,13 @@ public class BindingTouch {
 		if (!target_framework.HasValue)
 			throw ErrorHelper.CreateError (86);
 
-		var isDotNet = true; // references.Any ((v) => v.Contains ("Microsoft.NETCore.App.Ref"));
-		Console.WriteLine ("isDotNet: {0} {1}", isDotNet, references.Count);
-		foreach (var r in references)
-			Console.WriteLine ($"    {r}");
 		switch (target_framework.Value.Platform) {
 		case ApplePlatform.iOS:
 			CurrentPlatform = PlatformName.iOS;
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll))
 				baselibdll = Path.Combine (GetSDKRoot (), "lib/mono/Xamarin.iOS/Xamarin.iOS.dll");
-			if (!isDotNet) {
+			if (!IsDotNet) {
 				references.Add ("Facades/System.Drawing.Common");
 				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.iOS", references);
 			}
@@ -357,7 +355,7 @@ public class BindingTouch {
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll))
 				baselibdll = Path.Combine (GetSDKRoot (), "lib/mono/Xamarin.TVOS/Xamarin.TVOS.dll");
-			if (!isDotNet) {
+			if (!IsDotNet) {
 				references.Add ("Facades/System.Drawing.Common");
 				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.TVOS", references);
 			}
@@ -367,7 +365,7 @@ public class BindingTouch {
 			nostdlib = true;
 			if (string.IsNullOrEmpty (baselibdll))
 				baselibdll = Path.Combine (GetSDKRoot (), "lib/mono/Xamarin.WatchOS/Xamarin.WatchOS.dll");
-			if (!isDotNet) {
+			if (!IsDotNet) {
 				references.Add ("Facades/System.Drawing.Common");
 				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.WatchOS", references);
 			}
@@ -385,19 +383,19 @@ public class BindingTouch {
 			}
 			if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
 				skipSystemDrawing = true;
-				if (!isDotNet) {
+				if (!IsDotNet) {
 					references.Add ("Facades/System.Drawing.Common");
 					ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.Mac", references);
 				}
 			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
 				skipSystemDrawing = true;
-				if (!isDotNet) {
+				if (!IsDotNet) {
 					references.Add ("Facades/System.Drawing.Common");
 					ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/4.5", references);
 				}
 			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
 				skipSystemDrawing = false;
-				if (!isDotNet) {
+				if (!IsDotNet) {
 					ReferenceFixer.FixSDKReferences ("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5", references, forceSystemDrawing: true);
 				}
 			} else {
@@ -466,7 +464,7 @@ public class BindingTouch {
 				
 
 			universe = new Universe (UniverseOptions.EnableFunctionPointers | UniverseOptions.ResolveMissingMembers | UniverseOptions.MetadataOnly);
-			if (TargetFramework.IsDotNet) {
+			if (IsDotNet) {
 				var dict = new Dictionary<string, Assembly> ();
 				universe.AssemblyResolve += (object sender, IKVM.Reflection.ResolveEventArgs args2) => {
 					var an = new AssemblyName (args2.Name);
@@ -474,10 +472,9 @@ public class BindingTouch {
 						return rv;
 					Console.WriteLine ("Resolving {0} => {1} with {2} references", args2.Name, an.Name, references.Count);
 					foreach (var r in references) {
-						Console.WriteLine (" Ref {0}", r);
 						var fn = Path.GetFileNameWithoutExtension (r);
 						if (fn == an.Name) {
-							Console.WriteLine ("Found: {0}", r);
+							//Console.WriteLine ("Found: {0}", r);
 							rv = universe.LoadFile (r);
 							dict [an.Name] = rv;
 							return rv;

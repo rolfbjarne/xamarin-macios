@@ -20,6 +20,8 @@ public class AttributeManager
 		switch (fullname) {
 		case "AbstractAttribute":
 			return typeof (AbstractAttribute);
+		case "AlignAttribute":
+			return typeof (AlignAttribute);
 		case "AppearanceAttribute":
 			return typeof (AppearanceAttribute);
 		case "AsyncAttribute":
@@ -34,10 +36,18 @@ public class AttributeManager
 			return typeof (CategoryAttribute);
 		case "CheckDisposedAttribute":
 			return typeof (CheckDisposedAttribute);
+		case "CoreImageFilterAttribute":
+			return typeof (CoreImageFilterAttribute);
+		case "CoreImageFilterPropertyAttribute":
+			return typeof (CoreImageFilterPropertyAttribute);
+		case "DefaultCtorVisibilityAttribute":
+			return typeof (DefaultCtorVisibilityAttribute);
 		case "DefaultEnumValueAttribute":
 			return typeof (DefaultEnumValueAttribute);
 		case "DefaultValueAttribute":
 			return typeof (DefaultValueAttribute);
+		case "DefaultValueFromArgumentAttribute":
+			return typeof (DefaultValueFromArgumentAttribute);
 		case "DelegateApiNameAttribute":
 			return typeof (DelegateApiNameAttribute);
 		case "DelegateNameAttribute":
@@ -46,12 +56,16 @@ public class AttributeManager
 			return typeof (DesignatedInitializerAttribute);
 		case "DisableDefaultCtorAttribute":
 			return typeof (DisableDefaultCtorAttribute);
+		case "DisposeAttribute":
+			return typeof (DisposeAttribute);
 		case "ErrorDomainAttribute":
 			return typeof (ErrorDomainAttribute);
 		case "EventArgsAttribute":
 			return typeof (EventArgsAttribute);
 		case "EventNameAttribute":
 			return typeof (EventNameAttribute);
+		case "ForcedTypeAttribute":
+			return typeof (ForcedTypeAttribute);
 		case "Foundation.AdviceAttribute":
 			return typeof (Foundation.AdviceAttribute);
 		case "Foundation.ExportAttribute":
@@ -82,6 +96,8 @@ public class AttributeManager
 			return typeof (NoMethodAttribute);
 		case "NotificationAttribute":
 			return typeof (NotificationAttribute);
+		case "NullAllowedAttribute":
+			return typeof (NullAllowedAttribute);
 		case "ObjCRuntime.ArgumentSemantic":
 			return typeof (ObjCRuntime.ArgumentSemantic);
 		case "ObjCRuntime.BindAsAttribute":
@@ -102,6 +118,8 @@ public class AttributeManager
 			return typeof (ObjCRuntime.RequiresSuperAttribute);
 		case "ObjCRuntime.UnavailableAttribute":
 			return typeof (ObjCRuntime.UnavailableAttribute);
+		case "OptionalImplementationAttribute":
+			return typeof (OptionalImplementationAttribute);
 		case "OverrideAttribute":
 			return typeof (OverrideAttribute);
 		case "PostGetAttribute":
@@ -110,6 +128,8 @@ public class AttributeManager
 			return typeof (PostSnippetAttribute);
 		case "PreSnippetAttribute":
 			return typeof (PreSnippetAttribute);
+		case "PrivateDefaultCtorAttribute":
+			return typeof (PrivateDefaultCtorAttribute);
 		case "ProtectedAttribute":
 			return typeof (ProtectedAttribute);
 		case "ProtocolizeAttribute":
@@ -118,12 +138,18 @@ public class AttributeManager
 			return typeof (SealedAttribute);
 		case "StaticAttribute":
 			return typeof (StaticAttribute);
+		case "StrongDictionaryAttribute":
+			return typeof (StrongDictionaryAttribute);
 		case "System.Boolean":
 			return typeof (System.Boolean);
 		case "System.ComponentModel.EditorBrowsableAttribute":
 			return typeof (System.ComponentModel.EditorBrowsableAttribute);
 		case "System.ComponentModel.EditorBrowsableState":
 			return typeof (System.ComponentModel.EditorBrowsableState);
+		case "System.Diagnostics.DebuggerBrowsableAttribute":
+			return typeof (System.Diagnostics.DebuggerBrowsableAttribute);
+		case "System.Diagnostics.DebuggerBrowsableState":
+			return typeof (System.Diagnostics.DebuggerBrowsableState);
 		case "System.Int32":
 			return typeof (System.Int32);
 		case "System.Object":
@@ -140,8 +166,12 @@ public class AttributeManager
 			return typeof (System.String);
 		case "ThreadSafeAttribute":
 			return typeof (ThreadSafeAttribute);
+		case "TransientAttribute":
+			return typeof (TransientAttribute);
 		case "UnifiedInternalAttribute":
 			return typeof (UnifiedInternalAttribute);
+		case "Visibility":
+			return typeof (Visibility);
 		case "WrapAttribute":
 			return typeof (WrapAttribute);
 		}
@@ -150,88 +180,42 @@ public class AttributeManager
 	}
 
 	// This method gets the System.Type for a IKVM.Reflection.Type to a System.Type.
-	// It knows about our mock attribute logic, so it will return the corresponding non-mocked System.Type for a mocked IKVM.Reflection.Type.
 	System.Type ConvertType (Type type, ICustomAttributeProvider provider)
 	{
-		System.Type rv = null;
-
-		rv = LookupReflectionType (type.FullName);
-		if (rv != null) {
-			// nothing else to do
-			reported2.Add (type); // DEBUG: prevent printing
-		} else if (type.Assembly == TypeManager.CorlibAssembly || type.Assembly == TypeManager.SystemRuntimeAssembly || type.Assembly.GetName ().Name == "System.Runtime.InteropServices") {
-			rv = typeof (int).Assembly.GetType (type.FullName);
-		} else if (type.Assembly == TypeManager.SystemAssembly) {
-			rv = typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly.GetType (type.FullName);
-		} else if (type.Assembly == TypeManager.BindingAssembly) {
-			// Types (attributes) in the binding assembly are mocked in the generator itself.
-			rv = typeof (TypeManager).Assembly.GetType (type.FullName);
-		} else if (type.Assembly == TypeManager.PlatformAssembly) {
-			// Types (attributes) in the platform assemblies are mocked in the generator itself.
-
-			switch (type.FullName) {
-			case "ObjCRuntime.iOSAttribute":
-			case "ObjCRuntime.LionAttribute":
-			case "ObjCRuntime.AvailabilityAttribute":
-			case "ObjCRuntime.MacAttribute":
-			case "ObjCRuntime.SinceAttribute":
-			case "ObjCRuntime.MountainLionAttribute":
-			case "ObjCRuntime.MavericksAttribute":
-				throw ErrorHelper.CreateError (1061,type.FullName, Generator.FormatProvider (provider));
-			}
-
-			rv = typeof (TypeManager).Assembly.GetType (type.FullName);
-		} else {
-			throw ErrorHelper.CreateError (1054, type.AssemblyQualifiedName);
-		}
+		var rv = LookupReflectionType (type.FullName);
 		if (rv == null)
 			throw ErrorHelper.CreateError (1055, type.AssemblyQualifiedName);
-		if (reported2.Add (type)) {
-			System.IO.File.WriteAllLines ("/tmp/foo.cs", reported2.OrderBy ((v) => v.FullName).Select ((v) => $"case \"{v.FullName}\":\n\treturn typeof ({v.FullName});")); // {rv.AssemblyQualifiedName}" });
-		}
 		return rv;
 	}
-	static HashSet<Type> reported2 = new HashSet<Type> ();
 
 	static Dictionary<System.Type, Type> ikvm_type_lookup = new Dictionary<System.Type, Type> ();
 	// This method gets the IKVM.Reflection.Type for a System.Type.
-	// It knows about our mock attribute logic, so it will return the mocked IKVM.Reflection.Type for a mocked System.Type.
 	Type ConvertType (System.Type type, ICustomAttributeProvider provider)
 	{
 		if (!ikvm_type_lookup.TryGetValue (type, out var lookup)) {
+			// Brute force: look everywhere.
+			// Due to how types move around between assemblies in dotnet it gets complicated
+			// to figure out which assembly each type comes from (although not impossible if
+			// this method turns out to be a perf issue)
 			var assemblies = BindingTouch.universe.GetAssemblies ();
 			foreach (var asm in assemblies) {
-				var rv2 = asm.FindType (new TypeName (type.Namespace, type.Name));
-				if (rv2 != null) {
-					//Console.WriteLine ($"// ConvertType ({type.FullName}) => {rv2.AssemblyQualifiedName} ASM LOOKUP");
-					ikvm_type_lookup [type] = rv2;
-					return rv2;
+				var rv = asm.FindType (new TypeName (type.Namespace, type.Name));
+				if (rv == null)
+					continue;
+				if (rv.Assembly != asm) {
+					// Apparently looking for type X in assembly A can return type X from assembly B... ignore those.
+					continue;
 				}
+				if (lookup != null) {
+					ErrorHelper.Warning (99, $"Same type ({type.FullName}) found in multiple assemblies ({lookup.AssemblyQualifiedName} and {rv.AssemblyQualifiedName})");
+					break; // no need to report this more than once
+				}
+				lookup = rv;
 			}
-		} else {
-			return lookup;
+			ikvm_type_lookup [type] = lookup;
 		}
-
-		Type rv;
-		if (type.Assembly == typeof (int).Assembly) {
-			rv = TypeManager.CorlibAssembly.GetType (type.FullName);
-		} else if (type.Assembly == typeof (System.ComponentModel.EditorBrowsableAttribute).Assembly) {
-			rv = TypeManager.SystemAssembly.GetType (type.FullName);
-		} else if (type.Assembly == typeof (TypeManager).Assembly) {
-			// Types (attributes) in the generator are mocked types from
-			// either the binding assembly or the platform assembly.
-			rv = TypeManager.BindingAssembly.GetType (type.FullName);
-		} else {
-			throw ErrorHelper.CreateError (1054, type.AssemblyQualifiedName);
-		}
-		if (rv == null)
-			throw ErrorHelper.CreateError (1055, type.AssemblyQualifiedName);
-		//if (reported.Add (type))
-		//	Console.WriteLine ($"// case \"{type.FullName}\": return typeof ? => // {rv.AssemblyQualifiedName}");
-		return rv;
+		return lookup;
 	}
-	static HashSet<System.Type> reported = new HashSet<System.Type> ();
-
 
 	static IEnumerable<System.Attribute> ConvertOldAttributes (CustomAttributeData attribute)
 	{

@@ -162,7 +162,7 @@ public class TypeManager {
 			return null;
 
 		var gt = type.GetGenericTypeDefinition ();
-		if (gt.Assembly != CorlibAssembly && gt.Assembly != SystemRuntimeAssembly)
+		if (gt.IsNested)
 			return null;
 
 		if (gt.Namespace != "System")

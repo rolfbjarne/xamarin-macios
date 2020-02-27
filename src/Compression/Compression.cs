@@ -300,11 +300,23 @@ namespace Compression
 			throw new InvalidOperationException ("Writing to the compression stream is not supported.");
 		}
 
-		public override IAsyncResult BeginRead (byte[] buffer, int offset, int count, AsyncCallback asyncCallback, object asyncState) =>
-			TaskToApm.Begin(ReadAsync (buffer, offset, count, CancellationToken.None), asyncCallback, asyncState);
+		public override IAsyncResult BeginRead (byte[] buffer, int offset, int count, AsyncCallback asyncCallback, object asyncState)
+		{
+#if DOTNET_TODO
+			throw new NotImplementedException ();
+#else
+			return TaskToApm.Begin(ReadAsync (buffer, offset, count, CancellationToken.None), asyncCallback, asyncState);
+#endif
+		}
 
-		public override int EndRead (IAsyncResult asyncResult) =>
-			TaskToApm.End<int> (asyncResult);
+		public override int EndRead (IAsyncResult asyncResult)
+		{
+#if DOTNET_TODO
+			throw new NotImplementedException ();
+#else
+			return TaskToApm.End<int> (asyncResult);
+#endif
+		}
 
 		public override Task<int> ReadAsync (byte[] array, int offset, int count, CancellationToken cancellationToken)
 		{
@@ -547,10 +559,23 @@ namespace Compression
 			}
 		}
 
-		public override IAsyncResult BeginWrite (byte[] array, int offset, int count, AsyncCallback asyncCallback, object asyncState) =>
-			TaskToApm.Begin(WriteAsync (array, offset, count, CancellationToken.None), asyncCallback, asyncState);
+		public override IAsyncResult BeginWrite (byte[] array, int offset, int count, AsyncCallback asyncCallback, object asyncState)
+		{
+#if DOTNET_TODO
+			throw new NotImplementedException ();
+#else
+			return TaskToApm.Begin(WriteAsync (array, offset, count, CancellationToken.None), asyncCallback, asyncState);
+#endif
+		}
 
-		public override void EndWrite (IAsyncResult asyncResult) => TaskToApm.End (asyncResult);
+		public override void EndWrite (IAsyncResult asyncResult)
+		{
+#if DOTNET_TODO
+			throw new NotImplementedException ();
+#else
+			TaskToApm.End (asyncResult);
+#endif
+		}
 
 		public override Task WriteAsync (byte[] array, int offset, int count, CancellationToken cancellationToken)
 		{

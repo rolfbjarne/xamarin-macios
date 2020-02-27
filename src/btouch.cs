@@ -381,21 +381,17 @@ public class BindingTouch {
 			}
 			if (target_framework == TargetFramework.Xamarin_Mac_2_0_Mobile) {
 				skipSystemDrawing = true;
-				if (!IsDotNet) {
-					references.Add ("Facades/System.Drawing.Common");
-					ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.Mac", references);
-				}
+				references.Add ("Facades/System.Drawing.Common");
+				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/Xamarin.Mac", references);
 			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_Full) {
 				skipSystemDrawing = true;
-				if (!IsDotNet) {
-					references.Add ("Facades/System.Drawing.Common");
-					ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/4.5", references);
-				}
+				references.Add ("Facades/System.Drawing.Common");
+				ReferenceFixer.FixSDKReferences (GetSDKRoot (), "lib/mono/4.5", references);
 			} else if (target_framework == TargetFramework.Xamarin_Mac_4_5_System) {
 				skipSystemDrawing = false;
-				if (!IsDotNet) {
-					ReferenceFixer.FixSDKReferences ("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5", references, forceSystemDrawing: true);
-				}
+				ReferenceFixer.FixSDKReferences ("/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/4.5", references, forceSystemDrawing: true);
+			} else if (target_framework == TargetFramework.DotNet_5_0_macOS) {
+				skipSystemDrawing = false;
 			} else {
 				throw ErrorHelper.CreateError (1053, target_framework); 
 			}

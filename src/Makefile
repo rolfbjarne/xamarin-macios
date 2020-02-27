@@ -2,7 +2,7 @@ TOP=..
 include $(TOP)/Make.config
 
 BUILD_DIR=build
-DOTNET_BUILD_DIR=dotnet
+DOTNET_BUILD_DIR=build/dotnet
 PROJECT_DIR=.
 
 include $(TOP)/src/frameworks.sources
@@ -24,7 +24,11 @@ IOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/ios
 WATCHOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/watchos
 TVOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/tvos
 
+GENERATOR_FLAGS=-process-enums -core -nologo -nostdlib -noconfig -native-exception-marshalling --ns:ObjCRuntime
+
+DOTNET_GENERATOR_FLAGS=$(GENERATOR_FLAGS) -compiler=$(SYSTEM_CSC) $(DOTNET_FLAGS) --lib=$(DOTNET_DIR) -attributelib:$(DOTNET_BINDING_ATTRIBUTES)
 DOTNET_GENERATOR=$(DOTNET_BUILD_DIR)/bgen/bgen
+DOTNET_BINDING_ATTRIBUTES=$(DOTNET_BUILD_DIR)/Xamarin.Apple.BindingAttributes.dll
 
 include $(TOP)/opentk/Makefile.include
 
@@ -79,13 +83,16 @@ IOS_HTTP_SOURCES = \
 IOS_CORE_SOURCES += $(IOS_EXTRA_SOURCES)
 IOS_SOURCES += $(IOS_EXTRA_SOURCES) $(IOS_HTTP_SOURCES)
 
-IOS_GENERATOR_FLAGS = -inline-selectors -d:IOS -process-enums -warnaserror:$(IOS_GENERATOR_WARNASERROR)
-IOS_GENERATOR_native_FLAGS = -d:XAMCORE_2_0 -d:__UNIFIED__
+IOS_GENERATOR_FLAGS = -inline-selectors -d:IOS -process-enums -warnaserror:$(IOS_GENERATOR_WARNASERROR) -d:XAMCORE_2_0 -d:__UNIFIED__
 IOS_DEFINES = -define:IPHONE -define:IOS -define:MONOTOUCH -d:NET_2_0 -d:__IOS__ $(APPLETLS_DEFINES) -d:SYSTEM_NET_HTTP
 IOS_native_DEFINES = -d:XAMCORE_2_0 -d:__UNIFIED__
 IOS_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1
 IOS_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 IOS_GENERATE=$(SYSTEM_MONO) --debug $(IOS_GENERATOR)
+
+IOS_CORE_WARNINGS_TO_FIX=-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX)
+IOS_CORE_DEFINES=-define:COREBUILD $(IOS_DEFINES) $(IOS_native_DEFINES)
+
 $(IOS_BUILD_DIR)/Constants.cs: Constants.iOS.cs.in Makefile $(TOP)/Make.config.inc | $(IOS_BUILD_DIR)
 	$(call Q_PROF_GEN,ios) sed \
 		-e "s/@VERSION@/$(IOS_PACKAGE_VERSION_MAJOR).$(IOS_PACKAGE_VERSION_MINOR).$(IOS_PACKAGE_VERSION_REV)/g" \
@@ -106,24 +113,26 @@ $(IOS_BUILD_DIR)/native/core.dll: $(IOS_CORE_SOURCES) frameworks.sources
 		$(IOS_native_DEFINES) \
 		$(IOS_CORE_SOURCES)
 
-$(IOS_DOTNET_BUILD_DIR)/core.dll: $(IOS_CORE_SOURCES) frameworks.sources
-	$(call Q_PROF_CSC,ios/dotnet) $(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe \
-		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
-		-define:COREBUILD $(IOS_DEFINES) \
-		$(IOS_native_DEFINES) \
-		$(IOS_CORE_SOURCES) \
-		$(DOTNET_FLAGS)
-
-DOTNET_TARGETS += $(IOS_DOTNET_BUILD_DIR)/core.dll
-
 # generated_sources
 $(IOS_BUILD_DIR)/native/generated_sources: $(IOS_GENERATOR) $(IOS_APIS) $(IOS_BUILD_DIR)/native/core.dll $(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll $(BUILD_DIR)/ios.rsp
 	$(call Q_PROF_GEN,ios) $(IOS_GENERATE) @$(BUILD_DIR)/ios.rsp
 
+# .NET 5
+
+$(IOS_DOTNET_BUILD_DIR)/core-ios.dll: $(IOS_CORE_SOURCES) frameworks.sources | $(IOS_DOTNET_BUILD_DIR)
+	$(Q_DOTNET_GEN) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) \
+		$(IOS_CORE_WARNINGS_TO_FIX) \
+		$(IOS_CORE_DEFINES) \
+		$(IOS_CORE_SOURCES) \
+		-out:$@
+
+$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources: $(DOTNET_GENERATOR) $(IOS_APIS) $(IOS_DOTNET_BUILD_DIR)/core-ios.dll $(DOTNET_BINDING_ATTRIBUTES) $(IOS_DOTNET_BUILD_DIR)/ios.rsp | $(IOS_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(IOS_DOTNET_BUILD_DIR)/ios.rsp
+
 $(BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources
 	$(Q_GEN) echo \
 		$(IOS_GENERATOR_FLAGS) \
-		$(IOS_GENERATOR_native_FLAGS) \
 		-core \
 		-sourceonly=$(IOS_BUILD_DIR)/native/generated_sources \
 		-compiler=$(IOS_CSC) \
@@ -134,6 +143,18 @@ $(BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources
 		-native-exception-marshalling \
 		--ns=ObjCRuntime \
 		--target-framework=Xamarin.iOS,v1.0 \
+		$(IOS_APIS) \
+		> $@
+
+$(IOS_DOTNET_BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources
+	$(Q) echo \
+		$(IOS_GENERATOR_FLAGS) \
+		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
+		-warnaserror:$(IOS_GENERATOR_WARNASERROR) \
+		-sourceonly=$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources \
+		-tmpdir=$(IOS_DOTNET_BUILD_DIR)/generated-sources \
+		-baselib=$(IOS_DOTNET_BUILD_DIR)/core-ios.dll \
+		--target-framework=.NETCoreApp,Version=5.0,Profile=ios \
 		$(IOS_APIS) \
 		> $@
 
@@ -149,6 +170,15 @@ $(IOS_BUILD_DIR)/native-$(1)%Xamarin.iOS.dll $(IOS_BUILD_DIR)/native-$(1)%Xamari
 		-nowarn:219,618,114,414,1635,3021,$$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		$$(IOS_CSC_FLAGS_XI) \
 		$$(IOS_SOURCES) @$(IOS_BUILD_DIR)/native/generated_sources
+
+$(IOS_DOTNET_BUILD_DIR)/$(1)/Xamarin.iOS.dll: $$(IOS_SOURCES) $$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources $(PRODUCT_KEY_PATH) | $(IOS_DOTNET_BUILD_DIR)/$(1)
+	$$(call Q_PROF_CSC,dotnet/$(1)-bit) $(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$$@ -unsafe -optimize \
+		$$(ARGS_$(1)) \
+		-publicsign -keyfile:$(PRODUCT_KEY_PATH) $$(IOS_DEFINES) \
+		$$(IOS_native_DEFINES) \
+		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
+		$$(IOS_CSC_FLAGS_XI) \
+		$$(IOS_SOURCES) @$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources
 
 endef
 
@@ -248,6 +278,16 @@ IOS_TARGETS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/64bits/Xamarin.iOS.dll                   \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/64bits/Xamarin.iOS.pdb               \
 
+DOTNET_TARGETS += \
+	$(IOS_DOTNET_BUILD_DIR)/32/Xamarin.iOS.dll \
+	$(IOS_DOTNET_BUILD_DIR)/64/Xamarin.iOS.dll \
+
+DOTNET_TARGETS_DIRS += \
+	$(IOS_DOTNET_BUILD_DIR) \
+	$(IOS_DOTNET_BUILD_DIR)/32 \
+	$(IOS_DOTNET_BUILD_DIR)/64 \
+	$(IOS_DOTNET_BUILD_DIR)/generated-sources \
+
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/%.dll: $(IOS_BUILD_DIR)/compat/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/2.1/Facades
 	$(Q) install -m 0755 $< $@
 
@@ -318,6 +358,9 @@ MAC_full_ARGS = -define:NO_SYSTEM_DRAWING -define:XAMMAC_SYSTEM_MONO
 MAC_mobile_ARGS = 
 MAC_BOOTSTRAP_DEFINES = $(MAC_COMMON_DEFINES),COREBUILD
 MAC_GENERATED_DEFINES = -d:MONOMAC -d:XAMARIN_MAC -d:XAMCORE_2_0 -d:__UNIFIED__
+
+MAC_CORE_DEFINES = $(MAC_BOOTSTRAP_DEFINES)
+MAC_CORE_WARNINGS_TO_FIX = -nowarn:3021,612,618,1635
 
 $(MAC_BUILD_DIR)/$(1)/$(3).pdb: $(MAC_BUILD_DIR)/$(1)/$(3).dll
 
@@ -420,21 +463,6 @@ endef
 $(eval $(call MAC_GENERATOR_template,full,--ns=ObjCRuntime,-d:NO_SYSTEM_DRAWING,,,full,Xamarin.Mac-full.BindingAttributes.dll))
 $(eval $(call MAC_GENERATOR_template,mobile,--ns=ObjCRuntime,$(SHARED_SYSTEM_DRAWING_SOURCES),,,mobile,Xamarin.Mac-mobile.BindingAttributes.dll))
 
-$(MACOS_DOTNET_BUILD_DIR)/core.dll: $(MAC_CORE_SOURCES) frameworks.sources
-	$(Q) mkdir -p $(dir $@)
-	$(call Q_PROF_CSC,macos/dotnet) \
-		$(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe -nowarn:3021,612,618,1635 \
-		$(MAC_BOOTSTRAP_DEFINES) \
-		$(3) \
-		$(MAC_CORE_SOURCES) \
-		$(DOTNET_FLAGS) \
-
-# $(MAC_BUILD_DIR)/$(1)/generated-sources: $$(MAC_$(1)_GENERATOR) $(MAC_APIS) $(MAC_BUILD_DIR)/$(1)/core.dll $(MAC_BUILD_DIR)/$(7) $(BUILD_DIR)/mac-$(1).rsp
-# 	$$(call Q_PROF_GEN,mac/$(1)) $$(MAC_$(1)_GENERATE) @$(BUILD_DIR)/mac-$(1).rsp
-
-DOTNET_TARGETS += \
-	$(MACOS_DOTNET_BUILD_DIR)/core.dll \
-
 define MAC_TARGETS_template
 $(MAC_BUILD_DIR)/$(1)/$(2): $(MAC_BUILD_DIR)/$(3)/generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(MAC_CLASSIC_SOURCES) $(SN_KEY)
 	@mkdir -p $(MAC_BUILD_DIR)/$(1)
@@ -465,6 +493,50 @@ $(MAC_BUILD_DIR)/%-reference/Xamarin.Mac.dll: $(MAC_BUILD_DIR)/%-64/Xamarin.Mac.
 $(MAC_BUILD_DIR)/%-reference/Xamarin.Mac.pdb: $(MAC_BUILD_DIR)/%-64/Xamarin.Mac.pdb
 	@mkdir -p $(@D)
 	$(Q) $(CP) $^ $@
+
+# .NET 5
+
+$(MACOS_DOTNET_BUILD_DIR)/core-macos.dll: $(MAC_CORE_SOURCES) frameworks.sources | $(MACOS_DOTNET_BUILD_DIR)
+	$(Q_DOTNET_GEN) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ \
+		$(MAC_CORE_WARNINGS_TO_FIX) \
+		$(MAC_CORE_DEFINES) \
+		$(MAC_CORE_SOURCES) \
+		-out:$@ \
+
+$(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources: $(DOTNET_GENERATOR) $(MAC_APIS) $(MACOS_DOTNET_BUILD_DIR)/core-macos.dll $(DOTNET_BINDING_ATTRIBUTES) $(MACOS_DOTNET_BUILD_DIR)/macos.rsp | $(MACOS_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(MACOS_DOTNET_BUILD_DIR)/macos.rsp
+
+$(MACOS_DOTNET_BUILD_DIR)/macos.rsp: Makefile Makefile.generator frameworks.sources | $(MACOS_DOTNET_BUILD_DIR)
+	$(Q_GEN) echo \
+		$(MAC_GENERATED_DEFINES) \
+		$(DOTNET_GENERATOR_FLAGS) \
+		-warnaserror:$(MAC_GENERATOR_WARNASERROR) \
+		-sourceonly:$(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources \
+		-tmpdir:$(MACOS_DOTNET_BUILD_DIR)/generated-sources \
+		-baselib:$(MACOS_DOTNET_BUILD_DIR)/core-macos.dll \
+		--target-framework=.NETCoreApp,Version=5.0,Profile=macos \
+		$(MAC_APIS) \
+		> $@
+
+$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.dll: $(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(SN_KEY)
+	$(Q_DOTNET_BUILD) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ -optimize \
+		-publicsign -keyfile:$(SN_KEY) \
+		$(MAC_COMMON_DEFINES) \
+		$(ARGS_64) \
+		-nowarn:3021,1635,612,618,0219,0414,$(MAC_WARNINGS_TO_FIX) \
+		$(MAC_CSC_FLAGS_XM) \
+		$(MAC_CFNETWORK_SOURCES) $(MAC_HTTP_SOURCES) $(SHARED_SYSTEM_DRAWING_SOURCES) $(APPLETLS_DEFINES) -D:XAMARIN_MODERN -D:UNIFIED -D:__UNIFIED__ \
+		$(MAC_SOURCES) \
+		@$<
+
+DOTNET_TARGETS += \
+	$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.dll \
+
+DOTNET_TARGETS_DIRS += \
+	$(MACOS_DOTNET_BUILD_DIR) \
+	$(MACOS_DOTNET_BUILD_DIR)/generated-sources \
 
 MAC_VARIANTS_TARGETS = \
 	$(MAC_BUILD_DIR)/mobile-64/Xamarin.Mac.dll \
@@ -562,7 +634,12 @@ WATCH_DEFINES = -define:IPHONE -define:MONOTOUCH -d:NET_2_0 -d:WATCH -d:XAMCORE_
 WATCH_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS
 WATCH_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 WATCH_GENERATE=$(SYSTEM_MONO) --debug $(WATCH_GENERATOR)
-WATCH_GENERATED_DEFINES= -d:WATCH -d:XAMCORE_3_0 -d:XAMCORE_2_0 -d:__UNIFIED__
+WATCH_GENERATOR_DEFINES= -d:WATCH -d:XAMCORE_3_0 -d:XAMCORE_2_0 -d:__UNIFIED__
+
+WATCHOS_CORE_DEFINES = $(WATCH_DEFINES) -define:COREBUILD
+WATCHOS_CORE_WARNINGS_TO_FIX = -nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX)
+
+WATCHOS_WARNINGS_TO_FIX = -nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX)
 
 WATCHOS_EXTRA_CORE_SOURCES = \
     $(WATCH_BUILD_DIR)/Constants.cs    \
@@ -614,14 +691,6 @@ $(WATCH_BUILD_DIR)/watch/core.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources | 
 		$(WATCH_DEFINES)     \
 		$(WATCHOS_CORE_SOURCES)
 
-$(WATCHOS_DOTNET_BUILD_DIR)/core.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources | $(WATCHOS_DOTNET_BUILD_DIR)
-	$(call Q_PROF_CSC,watchos/dotnet) $(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe \
-		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
-		-define:COREBUILD    \
-		$(WATCH_DEFINES)     \
-		$(WATCHOS_CORE_SOURCES) \
-		$(DOTNET_FLAGS) \
-
 # generated_sources
 $(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_GENERATOR) $(WATCHOS_APIS) $(WATCH_BUILD_DIR)/watch/core.dll $(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll $(BUILD_DIR)/watchos.rsp
 	$(call Q_PROF_GEN,watch) $(WATCH_GENERATE) @$(BUILD_DIR)/watchos.rsp
@@ -636,49 +705,50 @@ $(BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources
 		-compiler=$(WATCH_CSC) \
 		-nologo -nostdlib -noconfig                              \
 		-tmpdir=$(WATCH_BUILD_DIR)/watch                         \
-		-baselib=$(WATCH_BUILD_DIR)/watch/core.dll               \
+		-baselib=$(WATCH_BUILD_DIR)/watch/core-watchos.dll               \
 		-attributelib=$(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll \
 		-native-exception-marshalling                            \
-		$(WATCH_GENERATED_DEFINES)				\
+		$(WATCH_GENERATOR_DEFINES)				\
 		--ns:ObjCRuntime                                         \
 		$(WATCHOS_APIS)                                            \
 		--target-framework=Xamarin.WatchOS,v1.0                     \
 		> $@
 
-$(DOTNET_BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources
-	$(Q_GEN) echo \
-		-inline-selectors                                                               \
-		-process-enums                                                                  \
-		-warnaserror:$(WATCH_GENERATOR_WARNASERROR)                                     \
-		-core                                                                           \
-		-sourceonly=$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources               \
-		-compiler=$(SYSTEM_CSC) $(DOTNET_FLAGS)                                         \
-		-nologo -nostdlib -noconfig                                                     \
-		-tmpdir=$(WATCHOS_DOTNET_BUILD_DIR)                                             \
-		-baselib=$(WATCHOS_DOTNET_BUILD_DIR)/core.dll                                   \
-		-attributelib=$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll \
-		-native-exception-marshalling                                                   \
-		$(WATCH_GENERATED_DEFINES)				                                        \
-		--ns:ObjCRuntime                                                                \
-		$(WATCHOS_APIS)                                                                 \
-		--lib=$(DOTNET_DIR)                                                             \
-		--target-framework=.NETCoreApp,Version=5.0,Profile=watchos                      \
+# .NET 5
+
+$(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources | $(WATCHOS_DOTNET_BUILD_DIR)
+	$(Q_DOTNET_GEN) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) \
+		$(WATCHOS_CORE_WARNINGS_TO_FIX) \
+		$(WATCHOS_CORE_DEFINES) \
+		$(WATCHOS_CORE_SOURCES) \
+		-out:$@ \
+
+$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources: $(DOTNET_GENERATOR) $(WATCHOS_APIS) $(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll $(DOTNET_BINDING_ATTRIBUTES) $(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp | $(WATCHOS_DOTNET_BUILD_DIR)/generated-sources
+	$(call Q_PROF_GEN,watchos) $< @$(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp
+
+$(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources | $(WATCHOS_DOTNET_BUILD_DIR)
+	$(Q) echo \
+		$(WATCH_GENERATOR_DEFINES) \
+		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
+		-warnaserror:$(WATCH_GENERATOR_WARNASERROR) \
+		-sourceonly=$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources \
+		-tmpdir=$(WATCHOS_DOTNET_BUILD_DIR)/generated-sources \
+		-baselib=$(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll \
+		--target-framework=.NETCoreApp,Version=5.0,Profile=watchos \
+		$(WATCHOS_APIS) \
 		> $@
 
-$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources: $(DOTNET_GENERATOR) $(WATCHOS_APIS) $(WATCHOS_DOTNET_BUILD_DIR)/core.dll $(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll $(DOTNET_BUILD_DIR)/watchos.rsp
-	$(call Q_PROF_GEN,watchos) $< @$(DOTNET_BUILD_DIR)/watchos.rsp
-
-$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll: $(WATCHOS_SOURCES) $(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources $(PRODUCT_KEY_PATH) | $(WATCHOS_DOTNET_BUILD_DIR)
-	$(call Q_PROF_CSC,dotnet/watchos) $(SYSTEM_CSC) $(DOTNET_FLAGS) -nologo -out:$(basename $@).dll -target:library -debug -unsafe -optimize \
-		-publicsign -keyfile:$(PRODUCT_KEY_PATH) $(WATCH_DEFINES) \
-		-deterministic \
+$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll: $(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources $(WATCHOS_SOURCES) $(PRODUCT_KEY_PATH) | $(WATCHOS_DOTNET_BUILD_DIR)
+	$(Q_DOTNET_GEN) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ -optimize \
+		-publicsign -keyfile:$(PRODUCT_KEY_PATH) \
+		$(WATCH_DEFINES) \
 		$(ARGS_32) \
-		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
-		$(WATCHOS_SOURCES) @$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources
-
-$(WATCHOS_DOTNET_BUILD_DIR)/reference/Xamarin.WatchOS.dll: $(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll | $(WATCHOS_DOTNET_BUILD_DIR)/reference
-	$(Q_STRIP) mono-cil-strip -q $< $@
-	$(Q) $(CP) $(basename $@).pdb $(dir $@)
+		$(WATCHOS_WARNINGS_TO_FIX) \
+		$(IOS_CSC_FLAGS_XI) \
+		$(WATCHOS_SOURCES) \
+		@$<
 
 $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS%dll $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS%pdb: $(WATCHOS_SOURCES) $(WATCH_BUILD_DIR)/watch/generated_sources $(PRODUCT_KEY_PATH) | $(WATCH_BUILD_DIR)/watch-32
 	$(call Q_PROF_CSC,watch) $(WATCH_CSC) -nologo -out:$(basename $@).dll -target:library -debug -unsafe -optimize \
@@ -735,10 +805,11 @@ WATCH_TARGETS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/MonoTouch.NUnitLite.pdb
 
 DOTNET_TARGETS += \
-	$(WATCHOS_DOTNET_BUILD_DIR)/core.dll \
-	$(DOTNET_BUILD_DIR)/watchos.rsp \
-	$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources \
 	$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll \
+
+DOTNET_TARGETS_DIRS += \
+	$(WATCHOS_DOTNET_BUILD_DIR) \
+	$(WATCHOS_DOTNET_BUILD_DIR)/generated-sources \
 
 # reference assemblies, this is just for compilation with XS
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/%.dll: $(WATCH_BUILD_DIR)/reference/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/Facades
@@ -777,6 +848,11 @@ TVOS_LIBDIR = $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS
 TVOS_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 TVOS_GENERATE=$(SYSTEM_MONO) --debug $(TVOS_GENERATOR)
 TVOS_GENERATED_DEFINES= -d:TVOS -d:XAMCORE_3_0 -d:XAMCORE_2_0 -d:__UNIFIED__
+
+TVOS_CORE_WARNINGS_TO_FIX=-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX)
+TVOS_CORE_DEFINES=$(TVOS_DEFINES) -d:COREBUILD
+TVOS_GENERATOR_DEFINES = $(TVOS_GENERATED_DEFINES)
+TVOS_WARNINGS_TO_FIX=-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX)
 
 TVOS_EXTRA_CORE_SOURCES = \
 	$(TVOS_BUILD_DIR)/Constants.cs    \
@@ -818,7 +894,6 @@ $(TVOS_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in $(TOP)/Make.con
 	$(Q) rm -f $@.tmp
 	$(Q) touch $@
 
-
 $(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefile | $(TVOS_BUILD_DIR)/tvos
 	@mkdir -p $(TVOS_BUILD_DIR)/tvos
 	$(call Q_PROF_CSC,tvos) $(TV_CSC) -nologo -out:$@ -target:library -debug -unsafe \
@@ -827,19 +902,9 @@ $(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefil
 		$(TVOS_DEFINES)     \
 		$(TVOS_CORE_SOURCES)
 
-$(TVOS_DOTNET_BUILD_DIR)/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefile | $(TVOS_BUILD_DIR)
-	$(call Q_PROF_CSC,tvos/dotnet) $(SYSTEM_CSC) -nologo -out:$@ -target:library -debug -unsafe \
-		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
-		-define:COREBUILD    \
-		$(TVOS_DEFINES)     \
-		$(TVOS_CORE_SOURCES) \
-		$(DOTNET_FLAGS) \
-
 # generated_sources
 $(TVOS_BUILD_DIR)/tvos/generated_sources: $(TVOS_GENERATOR) $(TVOS_APIS) $(TVOS_BUILD_DIR)/tvos/core.dll $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(BUILD_DIR)/tvos.rsp
 	$(call Q_PROF_GEN,tvos) $(TVOS_GENERATE) @$(BUILD_DIR)/tvos.rsp
-
-### .NET (tvOS) ###
 
 $(BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 	$(Q_GEN) echo \
@@ -860,28 +925,41 @@ $(BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 		--target-framework=Xamarin.TVOS,v1.0                     \
 		> $@
 
-$(DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
-	$(Q_GEN) echo \
-		-inline-selectors                                                         \
-		-process-enums                                                            \
-		-warnaserror:$(TVOS_GENERATOR_WARNASERROR)                                \
-		-core                                                                     \
-		-sourceonly=$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources               \
-		-compiler=$(SYSTEM_CSC) $(DOTNET_FLAGS)                                   \
-		-nologo -nostdlib -noconfig                                               \
-		-tmpdir=$(TVOS_DOTNET_BUILD_DIR)                                          \
-		-baselib=$(TVOS_DOTNET_BUILD_DIR)/core.dll                                \
-		-attributelib=$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll \
-		$(TVOS_GENERATED_DEFINES)				                                  \
-		-native-exception-marshalling                                             \
-		--ns:ObjCRuntime                                                          \
-		$(TVOS_APIS)                                                              \
-		--lib=$(DOTNET_DIR)                                                       \
-		--target-framework=.NETCoreApp,Version=5.0,Profile=tvos                   \
+### .NET 5 ###
+
+$(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefile | $(TVOS_DOTNET_BUILD_DIR)
+	$(Q_DOTNET_GEN) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) \
+		$(TVOS_CORE_WARNINGS_TO_FIX) \
+		$(TVOS_CORE_DEFINES) \
+		$(TVOS_CORE_SOURCES) \
+		-out:$@ \
+
+$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources: $(DOTNET_GENERATOR) $(TVOS_APIS) $(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll $(DOTNET_BINDING_ATTRIBUTES) $(TVOS_DOTNET_BUILD_DIR)/tvos.rsp | $(TVOS_DOTNET_BUILD_DIR)/generated-sources
+	$(call Q_PROF_GEN,tvos) $< @$(TVOS_DOTNET_BUILD_DIR)/tvos.rsp
+
+$(TVOS_DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
+	$(Q) echo \
+		$(TVOS_GENERATOR_DEFINES) \
+		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
+		-warnaserror:$(TVOS_GENERATOR_WARNASERROR) \
+		-sourceonly=$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources \
+		-tmpdir=$(TVOS_DOTNET_BUILD_DIR)/generated-sources \
+		-baselib=$(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll \
+		--target-framework=.NETCoreApp,Version=5.0,Profile=tvos \
+		$(TVOS_APIS) \
 		> $@
 
-$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources: $(DOTNET_GENERATOR) $(TVOS_APIS) $(TVOS_DOTNET_BUILD_DIR)/core.dll $(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(DOTNET_BUILD_DIR)/tvos.rsp
-	$(call Q_PROF_GEN,tvos) $< @$(DOTNET_BUILD_DIR)/tvos.rsp
+$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.dll: $(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources $(TVOS_SOURCES) $(PRODUCT_KEY_PATH) | $(TVOS_DOTNET_BUILD_DIR)
+	$(Q_DOTNET_GEN) \
+		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ -optimize \
+		-publicsign -keyfile:$(PRODUCT_KEY_PATH) \
+		$(TVOS_DEFINES) \
+		$(ARGS_64) \
+		$(TVOS_WARNINGS_TO_FIX) \
+		$(IOS_CSC_FLAGS_XI) \
+		$(TVOS_SOURCES) \
+		@$<
 
 $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%dll $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%pdb: $(TVOS_SOURCES) $(TVOS_BUILD_DIR)/tvos/generated_sources $(PRODUCT_KEY_PATH) | $(TVOS_BUILD_DIR)/tvos-64
 	$(call Q_PROF_CSC,tvos) $(TV_CSC) -nologo -out:$(basename $@).dll -target:library -debug -unsafe -optimize \
@@ -890,13 +968,6 @@ $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%dll $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVO
 		$(ARGS_64) \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
 		$(TVOS_SOURCES) @$(TVOS_BUILD_DIR)/tvos/generated_sources
-
-$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.dll: $(TVOS_SOURCES) $(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources $(PRODUCT_KEY_PATH) | $(TVOS_DOTNET_BUILD_DIR)
-	$(call Q_PROF_CSC,dotnet/tvos) $(SYSTEM_CSC) $(DOTNET_FLAGS) -nologo -out:$@ -target:library -debug -unsafe -optimize \
-		-publicsign -keyfile:$(PRODUCT_KEY_PATH) $(TVOS_DEFINES) \
-		$(ARGS_64) \
-		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX) \
-		$(TVOS_SOURCES) @$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources
 
 $(TVOS_BUILD_DIR)/reference/Xamarin.TVOS.dll: $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS.dll | $(TVOS_BUILD_DIR)/reference
 	$(Q_STRIP) mono-cil-strip -q $< $@
@@ -959,10 +1030,11 @@ TVOS_TARGETS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/MonoTouch.NUnitLite.pdb
 
 DOTNET_TARGETS += \
-	$(TVOS_DOTNET_BUILD_DIR)/core.dll \
-	$(DOTNET_BUILD_DIR)/tvos.rsp \
-	$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources \
 	$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.dll \
+
+DOTNET_TARGETS_DIRS += \
+	$(TVOS_DOTNET_BUILD_DIR) \
+	$(TVOS_DOTNET_BUILD_DIR)/generated-sources \
 
 # reference assemblies, this is just for compilation with XS
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/%.dll: $(TVOS_BUILD_DIR)/reference/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/Facades
@@ -1003,7 +1075,7 @@ $(SHARED_PATH)/Delegates.generated.cs: $(SHARED_PATH)/Delegates.cs.t4 $(SHARED_P
 $(BUILD_DIR)/common/NativeTypes/%.cs: $(TOP)/src/NativeTypes/%.tt | $(BUILD_DIR)/common/NativeTypes
 	$(Q_GEN) $(TT) $< -o $@ 1>/dev/null
 
-$(COMMON_TARGET_DIRS):
+$(COMMON_TARGET_DIRS) $(DOTNET_TARGETS_DIRS):
 	$(Q) mkdir -p $@
 
 install-local:: $(INSTALL_TARGETS)

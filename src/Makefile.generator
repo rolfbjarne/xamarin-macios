@@ -12,7 +12,7 @@ $(BUILD_DIR)/common/bgen.exe: $(generator_dependencies) Makefile.generator $(BUI
 	$(Q_GEN) $(SYSTEM_MSBUILD) $(XBUILD_VERBOSITY) /p:Configuration=Debug generator.csproj /p:IntermediateOutputPath=$(BUILD_DIR)/IDE/obj/common/ /p:OutputPath=$(BUILD_DIR)/common
 
 $(DOTNET_BUILD_DIR)/bgen/bgen:  $(generator_dependencies) Makefile.generator $(BUILD_DIR)/generator-frameworks.g.cs | $(DOTNET_BUILD_DIR)/bgen
-	$(Q_GEN) dotnet build $(XBUILD_VERBOSITY) /p:Configuration=Debug bgen/bgen.csproj
+	$(call Q_PROF_CSC,dotnet) dotnet build $(XBUILD_VERBOSITY) /p:Configuration=Debug bgen/bgen.csproj
 	$(Q) $(CP) bgen/bin/Debug/netcoreapp3.1/bgen* $(dir $@)
 
 DOTNET_TARGETS += \
@@ -21,9 +21,6 @@ DOTNET_TARGETS += \
 DOTNET_TARGETS_DIRS += \
 	$(DOTNET_BUILD_DIR)/bgen \
 
-$(DOTNET_TARGETS_DIRS):
-	$(Q) mkdir -p $@
-
 #
 # Common
 #
@@ -31,6 +28,9 @@ $(DOTNET_TARGETS_DIRS):
 $(BUILD_DIR)/generator-frameworks.g.cs: frameworks.sources Makefile.generator generate-frameworks.csharp
 	@mkdir -p $(dir $@)
 	@./generate-frameworks.csharp '$(IOS_FRAMEWORKS)' '$(MAC_FRAMEWORKS)' '$(WATCHOS_FRAMEWORKS)' '$(TVOS_FRAMEWORKS)' > $@
+
+$(DOTNET_BUILD_DIR)/Xamarin.Apple.BindingAttributes.dll: generator-attributes.cs Makefile.generator | $(DOTNET_BUILD_DIR)
+	$(Q_DOTNET_BUILD) $(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ $<
 
 #
 # Xamarin.iOS (btouch)
@@ -71,13 +71,6 @@ $(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll: generator-attributes.
 	$(Q) mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -out:$@ -debug generator-attributes.cs -target:library -deterministic
 
-$(IOS_DOTNET_BUILD_DIR)/Xamarin.iOS.BindingAttributes.dll: generator-attributes.cs Makefile.generator
-	$(Q) mkdir -p $(dir $@)
-	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -out:$@ -debug generator-attributes.cs -target:library -deterministic $(DOTNET_FLAGS)
-
-DOTNET_TARGETS += \
-	$(IOS_DOTNET_BUILD_DIR)/Xamarin.iOS.BindingAttributes.dll \
-
 #
 # Xamarin.Watch (bwatch)
 #
@@ -102,14 +95,6 @@ $(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll: generator-attributes.c
 	$(Q) mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -debug -out:$@ -debug generator-attributes.cs -target:library -deterministic
 
-$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll: generator-attributes.cs Makefile.generator
-	$(Q) mkdir -p $(dir $@)
-	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -debug -out:$@ -debug generator-attributes.cs -target:library -deterministic $(DOTNET_FLAGS)
-
-DOTNET_TARGETS += \
-	$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll \
-
-
 # #
 # # Xamarin.TVOS (btv)
 # #
@@ -133,13 +118,6 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/bgen/%.dll: $(TVOS_BUILD_DIR)/%.dll | $(IO
 $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll: generator-attributes.cs Makefile.generator
 	$(Q) mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -debug -out:$@ -debug generator-attributes.cs -target:library -deterministic
-
-$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll: generator-attributes.cs Makefile.generator
-	$(Q) mkdir -p $(dir $@)
-	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -debug -out:$@ -debug generator-attributes.cs -target:library -deterministic $(DOTNET_FLAGS)
-
-DOTNET_TARGETS += \
-	$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll \
 
 #
 # Xamarin.Mac (bmac)
@@ -185,13 +163,6 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/bgen/%.exe: $(BUILD_DIR)/common/b
 $(MAC_BUILD_DIR)/Xamarin.Mac-%.BindingAttributes.dll: generator-attributes.cs Makefile.generator
 	$(Q) mkdir -p $(dir $@)
 	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -debug -out:$@ -debug generator-attributes.cs -target:library -deterministic
-
-$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.BindingAttributes.dll: generator-attributes.cs Makefile.generator
-	$(Q) mkdir -p $(dir $@)
-	$(Q_GEN) $(SYSTEM_CSC) -features:strict -nologo -debug -out:$@ -debug generator-attributes.cs -target:library -deterministic $(DOTNET_FLAGS)
-
-DOTNET_TARGETS += \
-	$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.BindingAttributes.dll \
 
 install-bgen:	\
 	$(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/bin/bgen                     \

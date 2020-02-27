@@ -15,7 +15,7 @@
   <PropertyGroup>
     <UpdateXlfOnBuild>true</UpdateXlfOnBuild>
     <RepositoryPath>$(MSBuildThisFileDirectory)/../..</RepositoryPath>
-    <DotNetBuildDir>$(MSBuildThisFileDirectory)/../dotnet</DotNetBuildDir>
+    <DotNetBuildDir>$(MSBuildThisFileDirectory)/../build/dotnet</DotNetBuildDir>
     <BuildsDir>$(RepositoryPath)/builds</BuildsDir>
     <BuildDir Condition="'$(BUILD_DIR)' != ''">$(BUILD_DIR)\</BuildDir>
     <BuildDir Condition="'$(BUILD_DIR)' == ''">..\build\</BuildDir>
@@ -349,7 +349,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'ios' ">
     <StartAction>Project</StartAction>
-    <StartArguments>@../../../../dotnet/$(RunConfiguration).rsp</StartArguments>
+    <StartArguments>@build/dotnet/$(RunConfiguration)/$(RunConfiguration).rsp</StartArguments>
     <StartWorkingDirectory>..</StartWorkingDirectory>
     <ExternalConsole>false</ExternalConsole>
     <EnvironmentVariables>
@@ -358,7 +358,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'tvos' ">
     <StartAction>Project</StartAction>
-    <StartArguments>@dotnet/$(RunConfiguration).rsp</StartArguments>
+    <StartArguments>@build/dotnet/$(RunConfiguration)/$(RunConfiguration).rsp</StartArguments>
     <StartWorkingDirectory>..</StartWorkingDirectory>
     <ExternalConsole>false</ExternalConsole>
     <EnvironmentVariables>
@@ -367,7 +367,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'watchos' ">
     <StartAction>Project</StartAction>
-    <StartArguments>@$(DotNetBuildDir)/$(RunConfiguration).rsp</StartArguments>
+    <StartArguments>@build/dotnet/$(RunConfiguration)/$(RunConfiguration).rsp</StartArguments>
     <StartWorkingDirectory>..</StartWorkingDirectory>
     <ExternalConsole>false</ExternalConsole>
     <EnvironmentVariables>
@@ -376,7 +376,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'macos' ">
     <StartAction>Project</StartAction>
-    <StartArguments>@$(DotNetBuildDir)/$(RunConfiguration).rsp</StartArguments>
+    <StartArguments>@build/dotnet/$(RunConfiguration)/$(RunConfiguration).rsp</StartArguments>
     <StartWorkingDirectory>..</StartWorkingDirectory>
     <ExternalConsole>false</ExternalConsole>
     <EnvironmentVariables>

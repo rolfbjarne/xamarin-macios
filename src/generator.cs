@@ -6129,7 +6129,17 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (BindThirdPartyLibrary)
 			return Path.GetFileNameWithoutExtension (BindingTouch.outfile);
-		return BindingTouch.TargetFramework.Identifier;
+		switch (BindingTouch.TargetFramework.Platform) {
+		case ApplePlatform.iOS:
+			return "Xamarin.iOS";
+		case ApplePlatform.MacOSX:
+			return "Xamarin.Mac";
+		case ApplePlatform.TVOS:
+			return "Xamarin.TVOS";
+		case ApplePlatform.WatchOS:
+			return "Xamarin.WatchOS";
+		}
+		throw new NotImplementedException ();
 	}
 
 	public void Generate (Type type)

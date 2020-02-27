@@ -384,6 +384,7 @@ namespace System.Net.Http
 
 		void AddCookie (string value, Uri uri, string header)
 		{
+#if !DOTNET_TODO
 			CookieCollection cookies1 = null;
 			try {
 				cookies1 = cookies.CookieCutter (uri, header, value, false);
@@ -392,6 +393,7 @@ namespace System.Net.Http
 
 			if (cookies1 != null && cookies1.Count != 0) 
 				cookies.Add (cookies1);
+#endif
 		}
 
 		static bool IsContentHeader (string header)

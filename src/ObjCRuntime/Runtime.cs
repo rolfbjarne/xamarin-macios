@@ -253,10 +253,12 @@ namespace ObjCRuntime {
 				Registrar = new DynamicRegistrar ();
 			RegisterDelegates (options);
 			Class.Initialize (options);
+#if !DOTNET_TODO
 			Mono.SystemDependencyProvider.Initialize ();
+#endif
 			InitializePlatform (options);
 
-#if !XAMMAC_SYSTEM_MONO
+#if !XAMMAC_SYSTEM_MONO && !DOTNET_TODO
 			UseAutoreleasePoolInThreadPool = true;
 #endif
 			IsARM64CallingConvention = GetIsARM64CallingConvention (); // Can only be done after Runtime.Arch is set (i.e. InitializePlatform has been called).
@@ -270,7 +272,7 @@ namespace ObjCRuntime {
 #endif
 		}
 
-#if !XAMMAC_SYSTEM_MONO
+#if !XAMMAC_SYSTEM_MONO && !DOTNET_TODO
 		static bool has_autoreleasepool_in_thread_pool;
 		public static bool UseAutoreleasePoolInThreadPool {
 			get {

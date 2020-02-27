@@ -515,11 +515,9 @@ public class BindingTouch {
 			Frameworks = new Frameworks (CurrentPlatform);
 
 			Assembly corlib_assembly = universe.LoadFile (LocateAssembly ("mscorlib"));
-			Assembly platform_assembly = baselib;
-			Assembly system_assembly = universe.LoadFile (LocateAssembly ("System"));
-			Assembly binding_assembly = universe.LoadFile (GetAttributeLibraryPath ());
-			Assembly system_runtime_assembly = universe.Load ("System.Runtime");
-			TypeManager.Initialize (this, api, corlib_assembly, platform_assembly, system_assembly, binding_assembly, system_runtime_assembly);
+			universe.LoadFile (GetAttributeLibraryPath ());
+
+			TypeManager.Initialize (this, api, corlib_assembly, baselib);
 
 			foreach (var linkWith in AttributeManager.GetCustomAttributes<LinkWithAttribute> (api)) {
 				if (!linkwith.Contains (linkWith.LibraryName)) {
@@ -529,18 +527,11 @@ public class BindingTouch {
 			}
 
 			foreach (var r in references) {
+				// Don't load a reference we've already loaded
 				var fn = Path.GetFileNameWithoutExtension (r);
-				if (fn == corlib_assembly.GetName ().Name) {
+				var assemblies = universe.GetAssemblies ();
+				if (assemblies.Any ((v) => v.GetName ().Name == fn))
 					continue;
-				} else if (fn == platform_assembly.GetName ().Name) {
-					continue;
-				} else if (fn == system_assembly.GetName ().Name) {
-					continue;
-				} else if (fn == binding_assembly.GetName ().Name) {
-					continue;
-				} else if (fn == system_runtime_assembly?.GetName ().Name) {
-					continue;
-				}
 
 				if (File.Exists (r)) {
 					try {

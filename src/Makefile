@@ -871,6 +871,11 @@ $(COMMON_TARGET_DIRS):
 install-local:: $(INSTALL_TARGETS)
 all-local:: $(ALL_TARGETS)
 
+$(DOTNET_TARGETS_DIRS):
+	$(Q) mkdir -p $@
+
+dotnet: $(DOTNET_TARGETS)
+
 project-files: $(PROJECT_FILES)
 
 # Using .SECONDARY can cause make to go into an infinite loop.

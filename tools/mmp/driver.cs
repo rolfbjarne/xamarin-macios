@@ -858,7 +858,7 @@ namespace Xamarin.Bundler {
 		static string SystemMonoDirectory {
 			get {
 				if (system_mono_directory == null)
-					RunPkgConfig ("--variable=prefix", out system_mono_directory, force_system_mono: true);
+					system_mono_directory = RunPkgConfig ("--variable=prefix", force_system_mono: true);
 				return system_mono_directory;
 			}
 		}

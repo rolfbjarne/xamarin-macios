@@ -884,7 +884,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		static string mono_etc_directory;
 		static string MonoEtcDirectory {
 			get {
 				// Assume the etc directory is next to the lib directory

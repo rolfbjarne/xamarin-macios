@@ -44,21 +44,19 @@ Conditional compilation
 
 These are the symbols defined for each platform assembly:
 
-| Assembly            | Symbols                                        |
-| ------------------  | -----------                                    |
-| monotouch.dll       | IPHONE MONOTOUCH IOS                           |
-| Xamarin.iOS.dll     | IPHONE MONOTOUCH IOS XAMCORE_2_0               |
-| XamMac.dll          | MONOMAC XAMARIN_MAC                            |
-| Xamarin.Mac.dll     | MONOMAC XAMARIN_MAC XAMCORE_2_0                |
-| Xamarin.WatchOS.dll | IPHONE MONOTOUCH WATCH XAMCORE_2_0 XAMCORE_3_0 |
-| Xamarin.TVOS.dll    | IPHONE MONOTOUCH TVOS XAMCORE_2_0 XAMCORE_3_0  |
+| Assembly            | Symbols                                 |
+| ------------------  | -----------                             |
+| Xamarin.iOS.dll     | MONOTOUCH IOS XAMCORE_2_0               |
+| Xamarin.Mac.dll     | MONOMAC XAMCORE_2_0                     |
+| Xamarin.WatchOS.dll | MONOTOUCH WATCH XAMCORE_2_0 XAMCORE_3_0 |
+| Xamarin.TVOS.dll    | MONOTOUCH TVOS XAMCORE_2_0 XAMCORE_3_0  |
 
 To build core for only one platform, use the platform unique variables `IOS`, `MONOMAC`, `WATCH` or `TVOS`.
 
 ## Core Assemblies ##
 
-Currently 2 variations of the core Xamarin.iOS assembly and 4 variations of
-the core Xamarin.Mac assembly are produced:
+Currently 2 variations of the core Xamarin.iOS assembly and the core
+Xamarin.Mac assembly are produced:
 
 ### Xamarin.iOS ###
 
@@ -67,23 +65,24 @@ the core Xamarin.Mac assembly are produced:
 
 ### Xamarin.Mac ###
 
-* A 32-bit Unified assembly (uses `System.nint` in place of `NSInteger`, etc.)
-* A 64-bit Unified assembly (same as 32-bit Unified)
-* A 32-bit Full assembly (uses `System.nint` in place of `NSInteger`, and references the v4.5 BCL)
-* A 64-bit Full assembly (same as 32-bit Full)
+* A 64-bit Unified assembly (uses `System.nint` in place of `NSInteger`, etc.)
+* A 64-bit Full assembly (uses `System.nint` in place of `NSInteger`, and references the v4.5 BCL)
 
 ## Classic Assemblies ###
 
 The 32-bit Classic assemblies for iOS and Mac are no longer built and are now
 copied from the [macios-binaries](https://github.com/xamarin/macios-binaries)
-module. 
+module.
 
-The Classic assembly are copied in, tested, and shipped in order to not break customer code. 
-Customers can choose to continue using this assembly, but we will encourage customers to
-move to our Unified assemblies.
+THe 32-bit Mac assemblies are no longer being neither built nor shipped, we
+only support 64-bit Mac now.
+
+We still ship the Classic assemblies because the Classic -> Migration tool in
+Visual Studio for Mac needs them. Building a Classic project is not supported,
+and will fail with a compile-time error.
 
 The Unified assemblies provides many improvements and support for 64-bit
-iOS and OS X APIs.
+iOS and macOS APIs.
 
 ### Native Types ###
 
@@ -107,7 +106,7 @@ We have introduced 6 new types to make this possible:
 | `CGPoint`     | `System.Drawing.PointF`     | `CoreGraphics.CGPoint`   |
 | `CGRect`      | `System.Drawing.RectangleF` | `CoreGraphics.CGRect`    |
 
-In the Classic assembly, the `System.Drawing` types are backed by the 32-bit
+In the Classic assembly, the `System.Drawing` types were backed by the 32-bit
 `System.Single` type. In the Unified assemblies, the `CoreGraphics` types
 are backed by 32/64-bit `System.nfloat` type.
 
@@ -179,9 +178,9 @@ conditional compilation:
 | Variable  | Description |
 | --------- | ------------|
 | `MONOMAC` | defined for Xamarin.Mac builds; not defined for Xamarin.iOS |
-| `ARCH_32` | defined when the target architecture is 32-bit; this will be defined for Classic and the Unified 32-bit assemblies |
-| `ARCH_64` | defined when the target architecture is 64-bit; this will be defined only for the Unified 64-bit assembly |
-| `XAMCORE_2_0` | defined for the Unified assemblies; this should be used for most conditions dealing with API differences between Unified and Classic assemblies |
+| `ARCH_32` | defined when the target architecture is 32-bit; this will be defined for 32-bit assemblies |
+| `ARCH_64` | defined when the target architecture is 64-bit; this will be defined for 64-bit assemblies |
+| `XAMCORE_2_0` | defined for the Unified assemblies; this is always defined now and is unnecessary in new code |
 | `COREBUILD` | defined when building the intermediate `core.dll` assembly against which the code generator will produce bindings |
 
 For example, to build an API for all of iOS but only 64-bit OS X (Xamarin.Mac):

@@ -350,10 +350,6 @@ xm_mobile_profile=--target-framework=Xamarin.Mac,Version=v2.0,Profile=Mobile
 
 MAC_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 MAC_GENERATE=$(SYSTEM_MONO) --debug $(MAC_GENERATOR)
-MAC_full_GENERATOR=$(MAC_GENERATOR)
-MAC_full_GENERATE=$(MAC_GENERATE)
-MAC_mobile_GENERATOR=$(MAC_GENERATOR)
-MAC_mobile_GENERATE=$(MAC_GENERATE)
 
 define MAC_GENERATOR_template
 $(MAC_BUILD_DIR)/$(1)/core.dll: $(MAC_CORE_SOURCES) frameworks.sources
@@ -364,8 +360,8 @@ $(MAC_BUILD_DIR)/$(1)/core.dll: $(MAC_CORE_SOURCES) frameworks.sources
 		$(2) \
 		$$(MAC_CORE_SOURCES)
 
-$(MAC_BUILD_DIR)/$(1)/generated-sources: $$(MAC_$(1)_GENERATOR) $(MAC_APIS) $(MAC_BUILD_DIR)/$(1)/core.dll $(MAC_BUILD_DIR)/Xamarin.Mac-$(1).BindingAttributes.dll $(BUILD_DIR)/mac-$(1).rsp
-	$$(call Q_PROF_GEN,mac/$(1)) $$(MAC_$(1)_GENERATE) @$(BUILD_DIR)/mac-$(1).rsp
+$(MAC_BUILD_DIR)/$(1)/generated-sources: $$(MAC_GENERATOR) $(MAC_APIS) $(MAC_BUILD_DIR)/$(1)/core.dll $(MAC_BUILD_DIR)/Xamarin.Mac-$(1).BindingAttributes.dll $(BUILD_DIR)/mac-$(1).rsp
+	$$(call Q_PROF_GEN,mac/$(1)) $$(MAC_GENERATE) @$(BUILD_DIR)/mac-$(1).rsp
 
 $(BUILD_DIR)/mac-$(1).rsp: Makefile Makefile.generator frameworks.sources
 	$$(Q_GEN) echo \

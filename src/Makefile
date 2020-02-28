@@ -18,8 +18,6 @@ IOS_BUILD_DIR=$(BUILD_DIR)/ios
 WATCH_BUILD_DIR=$(BUILD_DIR)/watch
 TVOS_BUILD_DIR=$(BUILD_DIR)/tvos
 
-include $(TOP)/opentk/Makefile.include
-
 #
 # Specific warnings that we want reported as errors by generator
 # It takes a comma separated list, but an empty list means
@@ -37,8 +35,8 @@ MAC_GENERATOR_WARNASERROR=$(GENERATOR_WARNASERROR)
 #
 IOS_WARNINGS_THAT_YOU_SHOULD_FIX=108
 
-include ./OpenGLES/Makefile-1.0.include
 include ./Makefile.generator
+include ./opentk.mk
 
 include ./generator-diff.mk
 

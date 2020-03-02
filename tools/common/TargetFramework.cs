@@ -234,7 +234,7 @@ namespace Xamarin.Utils
 					case "macos":
 						return ApplePlatform.MacOSX;
 					default:
-						throw new InvalidOperationException (string.Format ("Invalid .NETCoreApp Profile for any Apple platform: {0}", Profile));
+						throw new InvalidOperationException (string.Format ("Invalid .NETCoreApp Profile for Apple platforms: {0}", Profile));
 					}
 				default:
 					return ApplePlatform.MacOSX;

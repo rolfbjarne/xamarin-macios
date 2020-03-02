@@ -138,8 +138,8 @@ all-local:: $(TARGETS)
 pack:
 	$(Q) rm -Rf nupkgs
 	$(Q) mkdir -p nupkgs
-	$(Q) $(MAKE) pack-macOS
-	#$(Q) $(MAKE) pack-iOS
+	#$(Q) $(MAKE) pack-macOS
+	$(Q) $(MAKE) pack-iOS
 	#pack-tvOS pack-watchOS pack-macOS
 
 ifeq ($(V),)
@@ -174,8 +174,8 @@ test-nuget: test/NuGet.config test/global.json
 	@# Clear out anything from the nuget cache from previous tests
 	$(Q) rm -Rf $(HOME)/.nuget/packages/xamarin.*.sdk
 	@#$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhone $(XBUILD_VERBOSITY)
-	@#$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator $(XBUILD_VERBOSITY)
-	$(if $(V),,@echo "BUILD    MyCocoaApp.app";)   dotnet build test/MyCocoaApp/MyCocoaApp.csproj $(XBUILD_VERBOSITY)
+	$(if $(V),,@echo "BUILD    MySingleView.app";) dotnet build test/MySingleView/MySingleView.csproj /p:Platform=iPhoneSimulator $(XBUILD_VERBOSITY)
+	@#$(if $(V),,@echo "BUILD    MyCocoaApp.app";)   dotnet build test/MyCocoaApp/MyCocoaApp.csproj $(XBUILD_VERBOSITY)
 
 CURRENT_HASH:=$(shell git log -1 --pretty=%h)
 package/versions.targets: package/versions.template.targets Makefile $(TOP)/Make.config.inc

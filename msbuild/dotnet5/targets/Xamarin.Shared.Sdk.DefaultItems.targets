@@ -103,6 +103,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.iOS" Condition="'$(_PlatformName)' == 'iOS'" />
     <Reference Include="Xamarin.TVOS" Condition="'$(_PlatformName)' == 'tvOS'" />

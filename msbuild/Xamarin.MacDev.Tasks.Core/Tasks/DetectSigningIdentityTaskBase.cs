@@ -7,6 +7,8 @@ using System.Security.Cryptography.X509Certificates;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
+using Xamarin.Utils;
+
 using SecKeychain = Xamarin.MacDev.Keychain;
 
 namespace Xamarin.MacDev.Tasks
@@ -22,8 +24,8 @@ namespace Xamarin.MacDev.Tasks
 		protected abstract string[] DevelopmentPrefixes { get; }
 		protected abstract string[] DirectDistributionPrefixes { get; }
 		protected abstract string[] AppStoreDistributionPrefixes { get; }
-		protected abstract PlatformFramework Framework { get; }
-		protected abstract string PlatformName { get ; }
+		protected abstract ApplePlatform Framework { get; }
+		protected abstract string PlatformName { get; }
 		protected abstract string ApplicationIdentifierKey { get; }
 
 		string provisioningProfileName;
@@ -81,8 +83,7 @@ namespace Xamarin.MacDev.Tasks
 
 		#endregion
 
-		class CodeSignIdentity
-		{
+		class CodeSignIdentity {
 			public X509Certificate2 SigningKey { get; set; }
 			public MobileProvision Profile { get; set; }
 			public string BundleId { get; set; }
@@ -130,7 +131,7 @@ namespace Xamarin.MacDev.Tasks
 			}
 
 			return ConstructValidAppId (
-				provision.ApplicationIdentifierPrefix[0] + "." + bundleId,
+				provision.ApplicationIdentifierPrefix [0] + "." + bundleId,
 				((PString) provision.Entitlements [ApplicationIdentifierKey]).Value,
 				out matchLength
 			);
@@ -174,17 +175,17 @@ namespace Xamarin.MacDev.Tasks
 			Log.LogMessage (MessageImportance.High, "  App Id: {0}", DetectedAppId);
 		}
 
-		static bool MatchesAny (string name, string[] names)
+		static bool MatchesAny (string name, string [] names)
 		{
 			for (int i = 0; i < names.Length; i++) {
-				if (name == names[i])
+				if (name == names [i])
 					return true;
 			}
 
 			return false;
 		}
 
-		static bool StartsWithAny (string name, string[] prefixes)
+		static bool StartsWithAny (string name, string [] prefixes)
 		{
 			foreach (var prefix in prefixes) {
 				if (name.StartsWith (prefix, StringComparison.Ordinal))
@@ -194,7 +195,7 @@ namespace Xamarin.MacDev.Tasks
 			return false;
 		}
 
-		bool TryGetSigningCertificates (SecKeychain keychain, out IList<X509Certificate2> certs, string[] prefixes, bool allowZeroCerts)
+		bool TryGetSigningCertificates (SecKeychain keychain, out IList<X509Certificate2> certs, string [] prefixes, bool allowZeroCerts)
 		{
 			var now = DateTime.Now;
 
@@ -283,8 +284,7 @@ namespace Xamarin.MacDev.Tasks
 			}
 		}
 
-		class SigningIdentityComparer : IComparer<CodeSignIdentity>
-		{
+		class SigningIdentityComparer : IComparer<CodeSignIdentity> {
 			public int Compare (CodeSignIdentity x, CodeSignIdentity y)
 			{
 				// reverse sort by provisioning profile creation date
@@ -311,7 +311,7 @@ namespace Xamarin.MacDev.Tasks
 			if (profiles.Count == 0) {
 				foreach (var f in failures)
 					Log.LogMessage (MessageImportance.Low, "{0}", f);
-				
+
 				Log.LogError ($"Could not find any available provisioning profiles for {AppBundleName} on {PlatformName}.");
 				return null;
 			}
@@ -393,14 +393,14 @@ namespace Xamarin.MacDev.Tasks
 				matches.Sort (new SigningIdentityComparer ());
 
 				for (int i = 0; i < matches.Count; i++) {
-					Log.LogMessage (MessageImportance.Normal, "{0,3}. Provisioning Profile: \"{1}\" ({2})", i + 1, matches[i].Profile.Name, matches[i].Profile.Uuid);
+					Log.LogMessage (MessageImportance.Normal, "{0,3}. Provisioning Profile: \"{1}\" ({2})", i + 1, matches [i].Profile.Name, matches [i].Profile.Uuid);
 
-					if (matches[i].SigningKey != null)
-						Log.LogMessage (MessageImportance.Normal, "{0}  Signing Identity: \"{1}\"", spaces, SecKeychain.GetCertificateCommonName (matches[i].SigningKey));
+					if (matches [i].SigningKey != null)
+						Log.LogMessage (MessageImportance.Normal, "{0}  Signing Identity: \"{1}\"", spaces, SecKeychain.GetCertificateCommonName (matches [i].SigningKey));
 				}
 			}
 
-			return matches[0];
+			return matches [0];
 		}
 
 		public override bool Execute ()
@@ -456,7 +456,7 @@ namespace Xamarin.MacDev.Tasks
 				return false;
 			}
 
-			if (Framework == PlatformFramework.MacOS) {
+			if (Framework == ApplePlatform.MacOSX) {
 				if (!RequireCodeSigning) {
 					DetectedBundleId = identity.BundleId;
 					DetectedAppId = DetectedBundleId;

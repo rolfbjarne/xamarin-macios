@@ -140,6 +140,9 @@ namespace Xamarin.Utils
 			}
 			AddOtherFlag ("-lz");
 			AddOtherFlag ("-liconv");
+			AddLinkWith ("/Users/rolf/Downloads/ios/netcoreapp5.0-iOS-Release-x64/System.IO.Compression.Native.a");
+			AddLinkWith ("/Users/rolf/Downloads/ios/netcoreapp5.0-iOS-Release-x64/System.Native.a");
+			AddLinkWith ("/Users/rolf/Downloads/ios/netcoreapp5.0-iOS-Release-x64/System.Security.Cryptography.Native.Apple.a");
 		}
 
 		public void LinkWithXamarin ()

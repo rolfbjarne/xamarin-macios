@@ -913,6 +913,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SdkVersion="$(MtouchSdkVersion)"
 			SymbolsList="$(_MtouchSymbolsList)"
 			TargetFrameworkIdentifier="$(TargetFrameworkIdentifier)"
+			TargetFrameworkProfile="$(TargetFrameworkProfile)"
 			TargetFrameworkVersion="$(TargetFrameworkVersion)"
 			UseLlvm="$(MtouchUseLlvm)"
 			UseFloat32="$(MtouchFloat32)"

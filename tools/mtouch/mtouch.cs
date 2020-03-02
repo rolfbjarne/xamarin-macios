@@ -1054,7 +1054,7 @@ namespace Xamarin.Bundler
 					}
 				}
 			},
-			{"target-framework=", "Specify target framework to use. Currently supported: 'MonoTouch,v1.0', 'Xamarin.iOS,v1.0', 'Xamarin.WatchOS,v1.0' and 'Xamarin.TVOS,v1.0' (defaults to '" + TargetFramework.Default + "')", v => SetTargetFramework (v) },
+			{"target-framework=", "Specify target framework to use. Currently supported: '" + StringUtils.Join ("', '", "', and '", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ())) + "' (defaults to '" + TargetFramework.Default + "')", v => SetTargetFramework (v) },
 			{ "bitcode:", "Enable generation of bitcode (asmonly, full, marker)", v =>
 				{
 					switch (v) {

@@ -155,6 +155,9 @@ namespace Xamarin.iOS.Tasks
 		public string TargetFrameworkVersion { get; set; }
 
 		[Required]
+		public string TargetFrameworkProfile { get; set; }
+
+		[Required]
 		public bool UseLlvm { get; set; }
 
 		[Required]
@@ -587,7 +590,7 @@ namespace Xamarin.iOS.Tasks
 			foreach (var ext in AppExtensionReferences)
 				args.AddQuotedLine ($"--app-extension={Path.GetFullPath (ext.ItemSpec)}");
 
-			args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
+			args.AddLine ($"--target-framework={TargetFrameworkIdentifier},Version={TargetFrameworkVersion},Profile={TargetFrameworkProfile}");
 
 			args.AddQuotedLine ($"--root-assembly={Path.GetFullPath (MainAssembly.ItemSpec)}");
 

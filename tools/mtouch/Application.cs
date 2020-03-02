@@ -1910,7 +1910,8 @@ namespace Xamarin.Bundler {
 		{
 			switch (build_target) {
 			case AssemblyBuildTarget.StaticObject:
-				return Path.Combine (Driver.GetProductSdkLibDirectory (this), "libmonosgen-2.0.a");
+				return "/Users/rolf/Downloads/ios/runtime.ios-x64.Microsoft.NETCore.Runtime.Mono.5.0.0-dev/runtimes/ios-x64/native/libmono.a";
+				//return Path.Combine (Driver.GetProductSdkLibDirectory (this), "libmonosgen-2.0.a");
 			case AssemblyBuildTarget.DynamicLibrary:
 				return Path.Combine (Driver.GetProductSdkLibDirectory (this), "libmonosgen-2.0.dylib");
 			case AssemblyBuildTarget.Framework:

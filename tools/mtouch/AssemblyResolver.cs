@@ -32,6 +32,16 @@ namespace MonoTouch.Tuner {
 				if (File.Exists (fn))
 					file = fn;
 			}
+
+			//var ref_path = "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1";
+			var lib_path = "/Users/rolf/Downloads/ios/netcoreapp5.0-iOS-Release-x64";
+			if (Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (file))) {
+				var fn = Path.Combine (lib_path, Path.GetFileName (file));
+				if (File.Exists (fn)) {
+					Driver.Log ("Redirected from {0} to {1}", file, fn);
+					file = fn;
+				}
+			}
 			return base.Load (file);
 		}
 	}
@@ -103,6 +113,14 @@ namespace MonoTouch.Tuner {
 				return assembly;
 
 			assembly = SearchDirectory (aname, RootDirectory, ".exe");
+			if (assembly != null)
+				return assembly;
+
+			assembly = SearchDirectory (aname, "/Users/rolf/Downloads/ios/netcoreapp5.0-iOS-Release-x64");
+			if (assembly != null)
+				return assembly;
+
+			assembly = SearchDirectory (aname, "/Users/rolf/Downloads/ios/runtime.ios-x64.Microsoft.NETCore.Runtime.Mono.5.0.0-dev/runtimes/ios-x64/lib/netstandard1.0");
 			if (assembly != null)
 				return assembly;
 

@@ -22,7 +22,7 @@
     <XamarinSdkRootDirectory>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..'))\</XamarinSdkRootDirectory>
 
     <!-- Opt-in to use the version of XI/XM installed into the system -->
-    <XamarinUseSystemInstall Condition=" '$(XamarinUseGlobalInstallation)' == '' ">false</XamarinUseSystemInstall>
+    <XamarinUseSystemInstall Condition=" '$(XamarinUseSystemInstall)' == '' ">false</XamarinUseSystemInstall>
     <MD_MTOUCH_SDK_ROOT      Condition=" '$(XamarinUseSystemInstall)' == 'false' And '$(_PlatformName)' != 'macOS' And '$(MD_MTOUCH_SDK_ROOT)' == ''      ">$(XamarinSdkRootDirectory)</MD_MTOUCH_SDK_ROOT>
     <XamarinMacFrameworkRoot Condition=" '$(XamarinUseSystemInstall)' == 'false' And '$(_PlatformName)' == 'macOS' And '$(XamarinMacFrameworkRoot)' == '' ">$(XamarinSdkRootDirectory)</XamarinMacFrameworkRoot>
 
@@ -38,8 +38,8 @@
     <XamarinFrameworkRoot Condition=" '$(_PlatformName)' != 'macOS' ">$(MonoTouchSdkRoot)</XamarinFrameworkRoot>
 
     <!-- We should always override the framework path so that we resolves to our own mscorlib.dll -->
-    <TargetFrameworkRootPath>$(XamarinSdkRootDirectory)lib</TargetFrameworkRootPath>
-    <FrameworkPathOverride>$(XamarinSdkRootDirectory)lib\$(_TFI)\v1.0</FrameworkPathOverride>
+    <TargetFrameworkRootPath Condition=" '$(TargetFrameworkRootPath)' == '' ">$(XamarinSdkRootDirectory)lib</TargetFrameworkRootPath>
+    <FrameworkPathOverride Condition=" '$(FrameworkPathOverride)' == '' ">$(XamarinSdkRootDirectory)lib\$(_TFI)\v1.0</FrameworkPathOverride>
 
     <XamarinFrameworkBinDir Condition=" '$(_PlatformName)' == 'macOS' And '$(XamarinUseSystemInstall)' == 'false' ">$(XamarinFrameworkRoot)/tools/bin</XamarinFrameworkBinDir>
     <XamarinFrameworkBinDir Condition=" '$(_PlatformName)' == 'macOS' And '$(XamarinUseSystemInstall)' != 'false' ">$(XamarinFrameworkRoot)/bin</XamarinFrameworkBinDir>

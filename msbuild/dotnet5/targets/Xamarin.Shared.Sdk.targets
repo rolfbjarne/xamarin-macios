@@ -171,10 +171,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(XamarinUseSystemInstall)' == 'false' ">
-    <_TargetsDiriOS>$(XamarinSdkRootDirectory)\tools</_TargetsDiriOS>
-    <_TargetsDirtvOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirtvOS>
-    <_TargetsDirwatchOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirwatchOS>
-    <_TargetsDirmacOS>$(XamarinSdkRootDirectory)\tools</_TargetsDirmacOS>
+    <_TargetsDiriOS>$(XamarinSdkRootDirectory)\tools\msbuild\iOS</_TargetsDiriOS>
+    <_TargetsDirtvOS>$(XamarinSdkRootDirectory)\tools\msbuild\TVOS</_TargetsDirtvOS>
+    <_TargetsDirwatchOS>$(XamarinSdkRootDirectory)\tools\msbuild\WatchOS</_TargetsDirwatchOS>
+    <_TargetsDirmacOS>$(XamarinSdkRootDirectory)\tools\msbuild</_TargetsDirmacOS>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(XamarinUseSystemInstall)' != 'false' ">
     <_TargetsDiriOS>$(XamarinFrameworkRoot)\lib\msbuild\iOS</_TargetsDiriOS>

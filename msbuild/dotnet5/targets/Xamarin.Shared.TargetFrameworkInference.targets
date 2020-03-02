@@ -21,4 +21,11 @@
     <TargetFrameworkVersion Condition="$(_ShortFrameworkVersion.Length) == 3">v$(_ShortFrameworkVersion[0]).$(_ShortFrameworkVersion[1]).$(_ShortFrameworkVersion[2])</TargetFrameworkVersion>
   </PropertyGroup>
 
+  <!-- This is a hack until we get the TFM values for real from the .NET build logic -->
+  <PropertyGroup>
+    <_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'iOS'">.NETCoreApp,Version=5.0,Profile=ios</_ComputedTargetFrameworkMoniker>
+    <_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'tvOS'">.NETCoreApp,Version=5.0,Profile=tvos</_ComputedTargetFrameworkMoniker>
+    <_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'watchOS'">.NETCoreApp,Version=5.0,Profile=watchos</_ComputedTargetFrameworkMoniker>
+    <_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS'">.NETCoreApp,Version=5.0,Profile=macos</_ComputedTargetFrameworkMoniker>
+  </PropertyGroup>
 </Project>

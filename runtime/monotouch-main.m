@@ -256,6 +256,8 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 	setenv ("DYLD_BIND_AT_LAUNCH", "1", 1);
 	setenv ("MONO_REFLECTION_SERIALIZER", "yes", 1);
 
+	setenv ("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT", "1", 1);
+
 #if TARGET_OS_WATCH
 	// watchOS can raise signals just fine...
 	// we might want to move this inside mono at some point.
@@ -466,6 +468,7 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 
 	DEBUG_LAUNCH_TIME_PRINT ("Total initialization time");
 
+	fprintf (stderr, "Xamarin: launching...\n");
 	int rv = 0;
 	switch (launch_mode) {
 	case XamarinLaunchModeExtension:
@@ -480,6 +483,7 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 		rv = xamarin_extension_main (argc, argv);
 		break;
 	case XamarinLaunchModeApp:
+		fprintf (stderr, "Xamarin: launching app! managed_argc: %i\n", managed_argc);
 		rv = mono_jit_exec (mono_domain_get (), assembly, managed_argc, managed_argv);
 		break;
 	case XamarinLaunchModeEmbedded:
@@ -490,5 +494,7 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 		break;
 	}
 	
+	fprintf (stderr, "Xamarin: exiting with exit code %i\n", rv);
+
 	return rv;
 }

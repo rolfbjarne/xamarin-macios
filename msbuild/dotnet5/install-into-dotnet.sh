@@ -14,8 +14,13 @@ if test -z "${DOTNET_PATH:-}"; then
 	DOTNET_PATH=/usr/local/share/dotnet/sdk/$DOTNET_VERSION/Sdks
 fi
 
+IOS_ROOTDIR=${IOS_TARGETDIR:-}/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/dotnet5
+MAC_ROOTDIR=${MAC_TARGETDIR:-}/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/dotnet5
 
-$SUDO ln -Fhs "${IOS_TARGETDIR:-}/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/dotnet5/Xamarin.iOS.Sdk" "$DOTNET_PATH/Xamarin.iOS.Sdk"
-$SUDO ln -Fhs "${IOS_TARGETDIR:-}/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/dotnet5/Xamarin.tvOS.Sdk" "$DOTNET_PATH/Xamarin.tvOS.Sdk"
-$SUDO ln -Fhs "${IOS_TARGETDIR:-}/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/dotnet5/Xamarin.watchOS.Sdk" "$DOTNET_PATH/Xamarin.watchOS.Sdk"
-$SUDO ln -Fhs "${MAC_TARGETDIR:-}/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/dotnet5/Xamarin.macOS.Sdk" "$DOTNET_PATH/Xamarin.macOS.Sdk"
+IOS_ROOTDIR=${DOTNET_DESTDIR:-}
+MAC_ROOTDIR=${DOTNET_DESTDIR:-}
+
+$SUDO ln -Fhs "$IOS_ROOTDIR/Xamarin.iOS.Sdk" "$DOTNET_PATH/Xamarin.iOS.Sdk"
+$SUDO ln -Fhs "$IOS_ROOTDIR/Xamarin.tvOS.Sdk" "$DOTNET_PATH/Xamarin.tvOS.Sdk"
+$SUDO ln -Fhs "$IOS_ROOTDIR/Xamarin.watchOS.Sdk" "$DOTNET_PATH/Xamarin.watchOS.Sdk"
+$SUDO ln -Fhs "$MAC_ROOTDIR/Xamarin.macOS.Sdk" "$DOTNET_PATH/Xamarin.macOS.Sdk"

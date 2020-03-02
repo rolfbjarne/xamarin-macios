@@ -53,6 +53,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string TargetFrameworkMoniker { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		public string ToolExe {
 			get { return toolExe ?? ToolName; }
 			set { toolExe = value; }

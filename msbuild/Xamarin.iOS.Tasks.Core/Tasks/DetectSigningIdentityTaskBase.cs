@@ -14,6 +14,9 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public string TargetFrameworkMoniker { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		static readonly string[] directDistributionPrefixes = new string[0];
 
 		protected override string[] DevelopmentPrefixes { get { return IPhoneCertificate.DevelopmentPrefixes; } }

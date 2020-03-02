@@ -26,6 +26,9 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public string TargetFrameworkMoniker { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		#endregion
 
 		public ApplePlatform Framework {

@@ -32,6 +32,16 @@ namespace MonoTouch.Tuner {
 				if (File.Exists (fn))
 					file = fn;
 			}
+
+			//var ref_path = "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1";
+			var lib_path = FrameworkDirectory;
+			if (Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (file)) ||  Profile.IsProductAssembly (Path.GetFileNameWithoutExtension (file))) {
+				var fn = Path.Combine (FrameworkDirectory, Path.GetFileName (file));
+				if (File.Exists (fn)) {
+					Driver.Log ("Redirected from {0} to {1}", file, fn);
+					file = fn;
+				}
+			}
 			return base.Load (file);
 		}
 	}

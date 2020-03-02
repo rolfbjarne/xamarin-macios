@@ -459,7 +459,13 @@ namespace Xamarin.Bundler
 					flags.AddOtherFlag ("-std=c++14");
 				}
 
-				flags.AddOtherFlag ($"-I{Path.Combine (Driver.GetProductSdkDirectory (app), "usr", "include")}");
+				string include_dir;
+				if (Driver.IsDotNet) {
+					include_dir = Path.Combine (Driver.FrameworkDirectory, "tools");
+				} else {
+					include_dir = Path.Combine (Driver.GetProductSdkDirectory (app), "usr");
+				}
+				flags.AddOtherFlag ($"-I{Path.Combine (include_dir, "include")}");
 			}
 			flags.AddOtherFlag ($"-isysroot", Driver.GetFrameworkDirectory (app));
 			flags.AddOtherFlag ("-Qunused-arguments"); // don't complain about unused arguments (clang reports -std=c99 and -Isomething as unused).
@@ -513,7 +519,7 @@ namespace Xamarin.Bundler
 				flags.AddOtherFlag ("-read_only_relocs", "suppress");
 			if (App.EnableBitCode)
 				flags.AddOtherFlag ("-lc++");
-			flags.LinkWithMono ();
+			flags.LinkWithMono (Abi);
 			flags.AddOtherFlag ("-install_name", install_name);
 			flags.AddOtherFlag ("-fapplication-extension"); // fixes this: warning MT5203: Native linking warning: warning: linking against dylib not safe for use in application extensions: [..]/actionextension.dll.arm64.dylib
 		}

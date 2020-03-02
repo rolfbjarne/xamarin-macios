@@ -579,6 +579,9 @@ namespace Registrar {
 							return true;
 				}
 
+				if (type.Is ("Foundation", "NSObject"))
+					return true;
+
 				type = type.BaseType != null ? type.BaseType.Resolve () : null;
 			}
 
@@ -997,22 +1000,23 @@ namespace Registrar {
 		{
 			if (system_void != null)
 				return system_void;
-			
+
 			// find corlib
+			var corlib_name = Driver.IsDotNet ? "System.Private.CoreLib" : "mscorlib";
 			AssemblyDefinition corlib = null;
 			AssemblyDefinition first = null;
 
 			foreach (var assembly in input_assemblies) {
 				if (first == null)
 					first = assembly;
-				if (assembly.Name.Name == "mscorlib") {
+				if (assembly.Name.Name == corlib_name) {
 					corlib = assembly;
 					break;
 				}
 			}
 
 			if (corlib == null) {
-				corlib = first.MainModule.AssemblyResolver.Resolve (AssemblyNameReference.Parse ("mscorlib"), new ReaderParameters ());
+				corlib = first.MainModule.AssemblyResolver.Resolve (AssemblyNameReference.Parse (corlib_name), new ReaderParameters ());
 			}
 			foreach (var type in corlib.MainModule.Types) {
 				if (type.Namespace == "System" && type.Name == "Void")

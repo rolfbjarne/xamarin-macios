@@ -11,10 +11,11 @@ PREFIX=$(abspath $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/)
 ##
 
 download: download-mono
-download-mono: downloads/$(basename $(MONO_IOS_FILENAME)) downloads/$(basename $(MONO_MAC_FILENAME))
+download-mono: downloads/$(basename $(MONO_IOS_FILENAME)) downloads/$(basename $(MONO_MAC_FILENAME)) downloads/$(basename $(DOTNET_IOS_PACKAGE_FILENAME))
 
 downloads/$(basename $(MONO_IOS_FILENAME)): MONO_URL=$(MONO_IOS_URL)
 downloads/$(basename $(MONO_MAC_FILENAME)): MONO_URL=$(MONO_MAC_URL)
+downloads/$(DOTNET_IOS_PACKAGE_FILENAME): MONO_URL=$(DOTNET_IOS_PACKAGE)
 
 include $(TOP)/mk/colors.mk
 
@@ -22,7 +23,7 @@ include $(TOP)/mk/colors.mk
 # If doing many clean builds, it's possible to copy the downloaded zip file to ~/Library/Caches/xamarin-macios
 # to avoid having to download it every time. The zip files have to be copied manually, otherwise
 # we'd end up filling up a lot of hard drives around the world.
-downloads/$(MONO_IOS_FILENAME) downloads/$(MONO_MAC_FILENAME):
+downloads/$(MONO_IOS_FILENAME) downloads/$(MONO_MAC_FILENAME) downloads/$(DOTNET_IOS_PACKAGE_FILENAME):
 	$(Q) mkdir -p downloads
 	$(Q) echo "Downloading $(MONO_URL)..."
 	$(Q) if test -f ~/Library/Caches/xamarin-macios/$(notdir $@); then \
@@ -45,6 +46,14 @@ downloads/%: downloads/%.7z
 	$(Q) echo "Unzipping $*..."
 	$(Q) rm -Rf $@.tmp
 	$(Q) 7z x $< -o$@.tmp
+	$(Q) find $@.tmp -exec touch {} +
+	$(Q) mv $@.tmp $@
+	$(Q) echo "Unzipped $*."
+
+downloads/%: downloads/%.zip
+	$(Q) echo "Unzipping $*..."
+	$(Q) rm -Rf $@.tmp
+	$(Q) unzip -d $@.tmp $<
 	$(Q) find $@.tmp -exec touch {} +
 	$(Q) mv $@.tmp $@
 	$(Q) echo "Unzipped $*."

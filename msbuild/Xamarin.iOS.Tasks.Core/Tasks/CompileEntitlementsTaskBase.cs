@@ -18,6 +18,9 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public string TargetFrameworkMoniker { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		static readonly HashSet<string> allowedProvisioningKeys = new HashSet<string> {
 			"application-identifier",
 			"aps-environment",

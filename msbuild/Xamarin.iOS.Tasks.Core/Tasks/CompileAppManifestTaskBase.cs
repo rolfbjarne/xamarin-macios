@@ -37,6 +37,9 @@ namespace Xamarin.iOS.Tasks
 		public string TargetFrameworkMoniker { get; set; }
 
 		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
+		[Required]
 		public bool Debug { get; set; }
 
 		public bool UseFakeWatchOS4_3Sdk { get; set; }

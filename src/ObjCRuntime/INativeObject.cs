@@ -3,6 +3,7 @@ using Foundation;
 
 namespace ObjCRuntime {
 
+	[Preserve]
 	public interface INativeObject {
 #if !COREBUILD
 		IntPtr Handle { 

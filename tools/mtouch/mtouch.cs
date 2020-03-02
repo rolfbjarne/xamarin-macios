@@ -191,7 +191,7 @@ namespace Xamarin.Bundler
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
 				if (IsDotNet)
-					return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "..", "tools", "lib", "32bits");
+					return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "..", "runtimes", "ios-armv7", "lib", "xamarinios10");
 				return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "32bits");
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
@@ -203,16 +203,11 @@ namespace Xamarin.Bundler
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
 				if (IsDotNet)
-					return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "..", "tools", "lib", "64bits");
+					return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "..", "runtimes", "ios-arm64", "lib", "xamarinios10");
 				return Path.Combine (GetPlatformFrameworkDirectory (app), "..", "..", "64bits");
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, "Xamarin.iOS");
 			}
-		}
-
-		public static string GetProductFrameworksDirectory (Application app)
-		{
-			return Path.Combine (GetProductSdkDirectory (app), "Frameworks");
 		}
 
 		// This is for the -mX-version-min=A.B compiler flag
@@ -1054,7 +1049,7 @@ namespace Xamarin.Bundler
 					}
 				}
 			},
-			{"target-framework=", "Specify target framework to use. Currently supported: 'Xamarin.iOS,v1.0', 'Xamarin.WatchOS,v1.0' and 'Xamarin.TVOS,v1.0' (defaults to '" + TargetFramework.Default + "')", v => SetTargetFramework (v) },
+			{"target-framework=", "Specify target framework to use. Currently supported: '" + StringUtils.Join ("', '", "', and '", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ())) + "' (defaults to '" + TargetFramework.Default + "')", v => SetTargetFramework (v) },
 			{ "bitcode:", "Enable generation of bitcode (asmonly, full, marker)", v =>
 				{
 					switch (v) {

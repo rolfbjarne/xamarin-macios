@@ -159,6 +159,9 @@ namespace Xamarin.iOS.Tasks
 		public string TargetFrameworkMoniker { get; set; }
 
 		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
+		[Required]
 		public bool UseLlvm { get; set; }
 
 		[Required]
@@ -203,7 +206,7 @@ namespace Xamarin.iOS.Tasks
 				return Path.Combine (ToolPath, ToolExe);
 
 			var path = Path.Combine (IPhoneSdks.MonoTouch.BinDir, ToolExe);
-
+			
 			return File.Exists (path) ? path : ToolExe;
 		}
 
@@ -591,7 +594,11 @@ namespace Xamarin.iOS.Tasks
 			foreach (var ext in AppExtensionReferences)
 				args.AddQuotedLine ($"--app-extension={Path.GetFullPath (ext.ItemSpec)}");
 
-			args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
+			if (string.IsNullOrEmpty (TargetFrameworkMoniker)) { 
+				args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
+			} else {
+				args.AddLine ($"--target-framework={TargetFrameworkMoniker}");
+			}
 
 			args.AddQuotedLine ($"--root-assembly={Path.GetFullPath (MainAssembly.ItemSpec)}");
 

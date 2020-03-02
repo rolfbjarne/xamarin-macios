@@ -30,6 +30,11 @@ namespace Xamarin.iOS.Tasks
 			get; set; 
 		}
 	
+		[Required]
+		public string TargetFrameworkMoniker {
+			get; set;
+		}
+
 		public string TargetArchitectures {
 			get; set;
 		}

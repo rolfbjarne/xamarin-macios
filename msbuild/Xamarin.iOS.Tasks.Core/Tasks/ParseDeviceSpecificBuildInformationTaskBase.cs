@@ -31,6 +31,9 @@ namespace Xamarin.iOS.Tasks
 		public string TargetFrameworkMoniker { get; set; }
 
 		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
+		[Required]
 		public string TargetiOSDevice { get; set; }
 
 		#endregion

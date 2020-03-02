@@ -1360,10 +1360,19 @@ xamarin_initialize ()
 
 	params [0] = &options;
 
+	int prv;
+	NSLog (@"Xamarin (NSLog): calling Runtime.Initialize");
+	prv = fprintf (stderr, "Xamarin (stderr): calling Runtime.Initialize\n");
 	mono_runtime_invoke (runtime_initialize, NULL, params, &exc);
 
-	if (exc)
+	NSLog (@"Xamarin (NSLog): called Runtime.Initialize");
+	prv = fprintf (stderr, "Xamarin (stderr): called Runtime.Initialize\n");
+
+	if (exc) {
+		NSLog (@PRODUCT ": An exception occurred when calling Runtime.Initialize:\n%@", xamarin_print_all_exceptions (exc));
 		xamarin_process_managed_exception (exc);
+		xamarin_assertion_message ("Can't continue if Runtime.Initialize fails.");
+	}
 
 	if (!register_assembly (assembly, &exception_gchandle))
 		xamarin_process_managed_exception_gchandle (exception_gchandle);
@@ -1382,6 +1391,7 @@ xamarin_initialize ()
 	gc_enable_new_refcount ();
 
 	MONO_EXIT_GC_UNSAFE;
+	fprintf (stderr, "Xamarin (stderr): done with xamarin_initialize\n");
 }
 
 static char *x_bundle_path = NULL;

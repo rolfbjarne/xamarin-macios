@@ -34,6 +34,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string TargetFrameworkMoniker { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		protected override string ToolName {
 			get { return "altool"; }
 		}

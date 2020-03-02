@@ -30,6 +30,7 @@ namespace MonoTouch.Tuner {
 
 		public override bool IsActiveFor (AssemblyDefinition assembly)
 		{
+			return false;
 			switch (assembly.Name.Name) {
 			case "mscorlib":
 				product = false;

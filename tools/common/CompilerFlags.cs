@@ -124,34 +124,48 @@ namespace Xamarin.Utils
 			OtherFlags.Add (flags);
 		}
 
-		public void LinkWithMono ()
+		public void LinkWithMono (Abi abi)
 		{
 			var mode = Target.App.LibMonoLinkMode;
 			switch (mode) {
 			case AssemblyBuildTarget.DynamicLibrary:
 			case AssemblyBuildTarget.StaticObject:
-				AddLinkWith (Application.GetLibMono (mode));
+				AddLinkWith (Application.GetLibMono (mode, abi));
 				break;
 			case AssemblyBuildTarget.Framework:
-				AddFramework (Application.GetLibMono (mode));
+				AddFramework (Application.GetLibMono (mode, abi));
 				break;
 			default:
 				throw ErrorHelper.CreateError (100, Errors.MT0100, mode);
 			}
 			AddOtherFlag ("-lz");
 			AddOtherFlag ("-liconv");
+
+			switch (mode) {
+			case AssemblyBuildTarget.DynamicLibrary:
+				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Target), "*.dylib"))
+					AddLinkWith (lib);
+				break;
+			case AssemblyBuildTarget.Framework:
+			case AssemblyBuildTarget.StaticObject:
+				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Target), "*.a"))
+					AddLinkWith (lib);
+				break;
+			default:
+				throw ErrorHelper.CreateError (100, Errors.MT0100, mode);
+			}
 		}
 
-		public void LinkWithXamarin ()
+		public void LinkWithXamarin (Abi abi)
 		{
 			var mode = Target.App.LibXamarinLinkMode;
 			switch (mode) {
 			case AssemblyBuildTarget.DynamicLibrary:
 			case AssemblyBuildTarget.StaticObject:
-				AddLinkWith (Application.GetLibXamarin (mode));
+				AddLinkWith (Application.GetLibXamarin (mode, abi));
 				break;
 			case AssemblyBuildTarget.Framework:
-				AddFramework (Application.GetLibXamarin (mode));
+				AddFramework (Application.GetLibXamarin (mode, abi));
 				break;
 			default:
 				throw ErrorHelper.CreateError (100, Errors.MT0100, mode);

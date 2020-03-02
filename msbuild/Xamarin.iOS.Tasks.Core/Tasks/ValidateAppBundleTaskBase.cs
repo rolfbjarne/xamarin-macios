@@ -26,10 +26,13 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public string TargetFrameworkIdentifier { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		#endregion
 
 		public ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 
 		void ValidateAppExtension (string path, string mainBundleIdentifier, string mainShortVersionString, string mainVersion)

@@ -35,6 +35,9 @@ namespace Xamarin.iOS.Tasks
 		public string TargetFrameworkIdentifier { get; set; }
 
 		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
+		[Required]
 		public bool Debug { get; set; }
 
 		public bool UseFakeWatchOS4_3Sdk { get; set; }
@@ -44,7 +47,7 @@ namespace Xamarin.iOS.Tasks
 		public string ResourceRules { get; set; }
 
 		public ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 
 		TargetArchitecture architectures;

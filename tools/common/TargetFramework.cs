@@ -25,7 +25,7 @@ namespace Xamarin.Utils
 #if MONOMAC
 			Parse ("4.0");
 #else
-			Parse ("MonoTouch,v1.0");	
+			Parse ("Xamarin.iOS,v1.0");
 #endif
 		public static readonly TargetFramework Net_2_0 = Parse ("2.0");
 		public static readonly TargetFramework Net_3_0 = Parse ("3.0");
@@ -48,11 +48,14 @@ namespace Xamarin.Utils
 		public static readonly TargetFramework DotNet_5_0_watchOS = Parse (".NETCoreApp,Version=5.0,Profile=watchos"); // Short form: net5.0-watchos
 		public static readonly TargetFramework DotNet_5_0_macOS = Parse (".NETCoreApp,Version=5.0,Profile=macos"); // Short form: net5.0-macos
 #if MTOUCH
-		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[] { Xamarin_iOS_1_0, Xamarin_WatchOS_1_0, Xamarin_TVOS_1_0 };
+		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[] {
+			Xamarin_iOS_1_0, Xamarin_WatchOS_1_0, Xamarin_TVOS_1_0,
+			DotNet_5_0_iOS, DotNet_5_0_macOS, DotNet_5_0_tvOS, DotNet_5_0_watchOS,
+		};
 #elif BGENERATOR
 		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[]
 		{
-			MonoTouch_1_0, Xamarin_iOS_1_0, Xamarin_TVOS_1_0, Xamarin_WatchOS_1_0,
+			Xamarin_iOS_1_0, Xamarin_TVOS_1_0, Xamarin_WatchOS_1_0,
 			Xamarin_Mac_2_0_Mobile, Xamarin_Mac_4_5_Full, Xamarin_Mac_4_5_System,
 			DotNet_5_0_iOS, DotNet_5_0_macOS, DotNet_5_0_tvOS, DotNet_5_0_watchOS,
 		};

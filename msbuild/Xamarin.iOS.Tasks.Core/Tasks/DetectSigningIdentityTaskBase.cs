@@ -12,14 +12,17 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public string TargetFrameworkIdentifier { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		static readonly string[] directDistributionPrefixes = new string[0];
 
 		protected override string[] DevelopmentPrefixes { get { return IPhoneCertificate.DevelopmentPrefixes; } }
 		protected override string[] DirectDistributionPrefixes { get { return directDistributionPrefixes; } }
 		protected override string[] AppStoreDistributionPrefixes { get { return IPhoneCertificate.DistributionPrefixes; } }
-		protected override string DeveloperRoot { get { return IPhoneSdks.GetSdk (TargetFrameworkIdentifier).DeveloperRoot; } }
+		protected override string DeveloperRoot { get { return IPhoneSdks.GetSdk (TargetFrameworkMoniker, TargetFrameworkIdentifier).DeveloperRoot; } }
 		protected override ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 		protected override string PlatformName {
 			get {

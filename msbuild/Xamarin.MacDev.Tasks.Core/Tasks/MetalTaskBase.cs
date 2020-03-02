@@ -45,6 +45,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string TargetFrameworkIdentifier { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		#endregion
 
 		[Output]
@@ -56,7 +59,7 @@ namespace Xamarin.MacDev.Tasks
 
 		protected virtual string OperatingSystem {
 			get {
-				switch (PlatformFrameworkHelper.GetFramework (TargetFrameworkIdentifier)) {
+				switch (PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier)) {
 				case ApplePlatform.WatchOS:
 					return SdkIsSimulator ? "watchos-simulator" : "watchos";
 				case ApplePlatform.TVOS:

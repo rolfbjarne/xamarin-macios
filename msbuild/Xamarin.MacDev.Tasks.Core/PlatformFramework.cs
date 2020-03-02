@@ -31,7 +31,19 @@ namespace Xamarin.MacDev.Tasks
 {
 	public static class PlatformFrameworkHelper
 	{
-		public static ApplePlatform GetFramework (string targetFrameworkIdentifier)
+		public static ApplePlatform ParseMoniker (string targetFrameworkMoniker)
+		{
+			return TargetFramework.Parse (targetFrameworkMoniker).Platform;
+		}
+
+		public static ApplePlatform GetFramework (string targetFrameworkMoniker, string targetFrameworkIdentifier)
+		{
+			if (string.IsNullOrEmpty (targetFrameworkMoniker))
+				return GetFramework (targetFrameworkIdentifier);
+			return ParseMoniker (targetFrameworkMoniker);
+		}
+
+		static ApplePlatform GetFramework (string targetFrameworkIdentifier)
 		{
 			switch (targetFrameworkIdentifier) {
 			case "Xamarin.Mac":
@@ -49,9 +61,9 @@ namespace Xamarin.MacDev.Tasks
 			}
 		}
 
-		public static string GetOperatingSystem (string targetFrameworkIdentifier)
+		public static string GetOperatingSystem (string targetFrameworkMoniker, string targetFrameworkIdentifier)
 		{
-			var framework = PlatformFrameworkHelper.GetFramework (targetFrameworkIdentifier);
+			var framework = PlatformFrameworkHelper.GetFramework (targetFrameworkMoniker, targetFrameworkIdentifier);
 			switch (framework) {
 			case ApplePlatform.WatchOS:
 				return "watchos";

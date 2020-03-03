@@ -59,7 +59,7 @@ namespace Xamarin.MacDev.Tasks
 
 		protected virtual string OperatingSystem {
 			get {
-				switch (PlatformFrameworkHelper.Parse (TargetFrameworkMoniker, TargetFrameworkIdentifier)) {
+				switch (PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier)) {
 				case ApplePlatform.WatchOS:
 					return SdkIsSimulator ? "watchos-simulator" : "watchos";
 				case ApplePlatform.TVOS:

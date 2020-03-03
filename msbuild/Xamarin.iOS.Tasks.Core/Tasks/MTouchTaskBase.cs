@@ -190,7 +190,7 @@ namespace Xamarin.iOS.Tasks
 		#endregion
 
 		public ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.Parse (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 
 		protected override string ToolName {

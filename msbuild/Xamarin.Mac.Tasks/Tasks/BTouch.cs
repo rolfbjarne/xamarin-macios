@@ -53,6 +53,9 @@ namespace Xamarin.Mac.Tasks
 
 		protected override string GetTargetFrameworkArgument ()
 		{
+			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))
+				return "/target-framework=" + TargetFrameworkMoniker;
+
 			switch (TargetFrameworkIdentifier) {
 				case null:
 				case "":

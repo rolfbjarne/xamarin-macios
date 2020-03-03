@@ -87,7 +87,7 @@ namespace Xamarin.iOS.Tasks
 #endregion Outputs
 
 		public ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.Parse (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 
 		public AppleSdk CurrentSdk {

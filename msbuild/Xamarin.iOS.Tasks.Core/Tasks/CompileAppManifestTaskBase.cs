@@ -47,7 +47,7 @@ namespace Xamarin.iOS.Tasks
 		public string ResourceRules { get; set; }
 
 		public ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.Parse (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 
 		TargetArchitecture architectures;

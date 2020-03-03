@@ -80,6 +80,7 @@ Copyright (C) 2013-2016 Xamarin Inc. All rights reserved.
 			ProjectDir="$(MSBuildProjectDirectory)"
 			References="@(ReferencePath)"
 			TargetFrameworkIdentifier="$(TargetFrameworkIdentifier)"
+			TargetFrameworkMoniker="$(XamarinTargetFrameworkMoniker)"
 			BTouchToolPath="$(BTouchToolPath)"
 			BTouchToolExe="$(BTouchToolExe)"
 			StandardOutputImportance="High"

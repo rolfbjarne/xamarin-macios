@@ -61,7 +61,7 @@ namespace Xamarin.iOS.Tasks
 
 		public static AppleSdk GetSdk (string targetFrameworkMoniker, string targetFrameworkIdentifier)
 		{
-			return GetSdk (PlatformFrameworkHelper.Parse (targetFrameworkMoniker, targetFrameworkIdentifier));
+			return GetSdk (PlatformFrameworkHelper.GetFramework (targetFrameworkMoniker, targetFrameworkIdentifier));
 		}
 	}
 }

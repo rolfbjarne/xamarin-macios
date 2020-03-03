@@ -25,6 +25,9 @@ namespace Xamarin.iOS.Tasks
 		[Required]
 		public string TargetFrameworkIdentifier { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		#endregion
 
 		#region Outputs
@@ -36,13 +39,13 @@ namespace Xamarin.iOS.Tasks
 
 		bool IsWatchFramework {
 			get {
-				return TargetFrameworkIdentifier == "Xamarin.WatchOS";
+				return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier) == Utils.ApplePlatform.WatchOS;
 			}
 		}
 
 		public override bool Execute ()
 		{
-			var currentSdk = IPhoneSdks.GetSdk (TargetFrameworkIdentifier);
+			var currentSdk = IPhoneSdks.GetSdk (TargetFrameworkMoniker, TargetFrameworkIdentifier);
 			IPhoneSdkVersion version;
 			string sdk_path;
 

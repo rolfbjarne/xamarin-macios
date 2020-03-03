@@ -22,7 +22,7 @@ namespace Xamarin.iOS.Tasks
 		protected override string[] AppStoreDistributionPrefixes { get { return IPhoneCertificate.DistributionPrefixes; } }
 		protected override string DeveloperRoot { get { return IPhoneSdks.GetSdk (TargetFrameworkMoniker, TargetFrameworkIdentifier).DeveloperRoot; } }
 		protected override ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.Parse (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 		protected override string PlatformName {
 			get {

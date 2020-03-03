@@ -42,6 +42,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string TargetFrameworkIdentifier { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		#endregion
 
 		string DevicePlatformBinDir {
@@ -50,7 +53,7 @@ namespace Xamarin.MacDev.Tasks
 
 		protected virtual string OperatingSystem {
 			get {
-				return PlatformFrameworkHelper.GetOperatingSystem (TargetFrameworkIdentifier);
+				return PlatformFrameworkHelper.GetOperatingSystem (TargetFrameworkMoniker, TargetFrameworkIdentifier);
 			}
 		}
 

@@ -50,6 +50,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string TargetFrameworkIdentifier { get; set; }
 
+		[Required]
+		public string TargetFrameworkMoniker { get; set; }
+
 		public string ToolExe {
 			get { return toolExe ?? ToolName; }
 			set { toolExe = value; }
@@ -72,7 +75,7 @@ namespace Xamarin.MacDev.Tasks
 
 		protected virtual string OperatingSystem {
 			get {
-				return PlatformFrameworkHelper.GetOperatingSystem (TargetFrameworkIdentifier);
+				return PlatformFrameworkHelper.GetOperatingSystem (TargetFrameworkMoniker, TargetFrameworkIdentifier);
 			}
 		}
 

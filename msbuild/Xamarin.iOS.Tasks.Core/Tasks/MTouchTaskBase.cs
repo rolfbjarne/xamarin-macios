@@ -156,7 +156,7 @@ namespace Xamarin.iOS.Tasks
 		public string TargetFrameworkVersion { get; set; }
 
 		[Required]
-		public string TargetFrameworkProfile { get; set; }
+		public string TargetFrameworkMoniker { get; set; }
 
 		[Required]
 		public bool UseLlvm { get; set; }
@@ -190,7 +190,7 @@ namespace Xamarin.iOS.Tasks
 		#endregion
 
 		public ApplePlatform Framework {
-			get { return PlatformFrameworkHelper.GetFramework (TargetFrameworkIdentifier); }
+			get { return PlatformFrameworkHelper.Parse (TargetFrameworkMoniker, TargetFrameworkIdentifier); }
 		}
 
 		protected override string ToolName {
@@ -591,7 +591,11 @@ namespace Xamarin.iOS.Tasks
 			foreach (var ext in AppExtensionReferences)
 				args.AddQuotedLine ($"--app-extension={Path.GetFullPath (ext.ItemSpec)}");
 
-			args.AddLine ($"--target-framework={TargetFrameworkIdentifier},Version={TargetFrameworkVersion},Profile={TargetFrameworkProfile}");
+			if (string.IsNullOrEmpty (TargetFrameworkMoniker)) { 
+				args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
+			} else {
+				args.AddLine ($"--target-framework={TargetFrameworkMoniker}");
+			}
 
 			args.AddQuotedLine ($"--root-assembly={Path.GetFullPath (MainAssembly.ItemSpec)}");
 

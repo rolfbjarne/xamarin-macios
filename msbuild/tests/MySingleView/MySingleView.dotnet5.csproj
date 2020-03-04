@@ -4,7 +4,7 @@
     <TargetFramework>xamarinios10</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);MyLibrary\**</DefaultItemExcludes>
 
-    <MtouchExtraArgs>--nofastsim</MtouchExtraArgs>
+    <MtouchExtraArgs>--nofastsim --ignore-dynamic-symbol=SystemNative_EnumerateGatewayAddressesForInterface</MtouchExtraArgs>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Release'">

@@ -100,6 +100,8 @@ namespace Xamarin.Bundler
 
 		public void SelectMonoNative ()
 		{
+			if (Driver.IsDotNet)
+				return;
 			switch (App.Platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
@@ -1003,7 +1005,7 @@ namespace Xamarin.Bundler
 						AddToBundle (pinvoke_task.OutputFile);
 					}
 					pinvoke_task.CompilerFlags.AddFramework ("Foundation");
-					pinvoke_task.CompilerFlags.LinkWithXamarin ();
+					pinvoke_task.CompilerFlags.LinkWithXamarin (abi);
 				}
 				pinvoke_tasks.Add (abi, pinvoke_task);
 
@@ -1170,8 +1172,8 @@ namespace Xamarin.Bundler
 					}
 					if (App.Embeddinator)
 						compiler_flags.AddOtherFlag (App.UserGccFlags);
-					compiler_flags.LinkWithMono ();
-					compiler_flags.LinkWithXamarin ();
+					compiler_flags.LinkWithMono (abi);
+					compiler_flags.LinkWithXamarin (abi);
 					if (GetAllSymbols ().Contains ("UIApplicationMain"))
 						compiler_flags.AddFramework ("UIKit");
 
@@ -1505,12 +1507,17 @@ namespace Xamarin.Bundler
 			} else {
 				CompileTask.GetSimulatorCompilerFlags (linker_flags, false, App);
 			}
-			linker_flags.LinkWithMono ();
+			linker_flags.LinkWithMono (abi);
 			if (App.LibMonoLinkMode != AssemblyBuildTarget.StaticObject)
-				AddToBundle (App.GetLibMono (App.LibMonoLinkMode));
-			linker_flags.LinkWithXamarin ();
+				AddToBundle (App.GetLibMono (App.LibMonoLinkMode, abi));
+			linker_flags.LinkWithXamarin (abi);
 			if (App.LibXamarinLinkMode != AssemblyBuildTarget.StaticObject)
-				AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode));
+				AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode, abi));
+
+			if (App.LibMonoLinkMode == AssemblyBuildTarget.DynamicLibrary) {
+				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (App, abi), "*.dylib"))
+					AddToBundle (lib);
+			}
 
 			linker_flags.AddOtherFlag ("-o", output_file);
 
@@ -1539,7 +1546,7 @@ namespace Xamarin.Bundler
 				throw ErrorHelper.CreateError (99, Errors.MX0099, $"invalid symbol mode: {App.SymbolMode}");
 			}
 
-			var libdir = Path.Combine (Driver.GetProductSdkDirectory (App), "usr", "lib");
+			var libdir = Driver.GetXamarinLibraryDirectory (App, abi);
 			if (App.Embeddinator) {
 				linker_flags.AddOtherFlag ("-shared");
 				linker_flags.AddOtherFlag ("-install_name", $"@rpath/{App.ExecutableName}.framework/{App.ExecutableName}");

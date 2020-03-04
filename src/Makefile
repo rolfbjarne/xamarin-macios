@@ -25,45 +25,44 @@ TVOS_DOTNET_BUILD_DIR=$(DOTNET_BUILD_DIR)/tvos
 
 GENERATOR_FLAGS=-process-enums -core -nologo -nostdlib -noconfig -native-exception-marshalling --ns:ObjCRuntime
 
-DOTNET_DIR=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1
 DOTNET_FLAGS=/noconfig /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:DOTNET /define:DOTNET_TODO \
-	/r:$(DOTNET_DIR)/mscorlib.dll \
-	/r:$(DOTNET_DIR)/System.Buffers.dll \
-	/r:$(DOTNET_DIR)/System.Collections.dll \
-	/r:$(DOTNET_DIR)/System.Collections.Concurrent.dll \
-	/r:$(DOTNET_DIR)/System.Collections.NonGeneric.dll \
-	/r:$(DOTNET_DIR)/System.Console.dll \
-	/r:$(DOTNET_DIR)/System.Diagnostics.Debug.dll \
-	/r:$(DOTNET_DIR)/System.Diagnostics.Tools.dll \
-	/r:$(DOTNET_DIR)/System.dll \
-	/r:$(DOTNET_DIR)/System.Drawing.Primitives.dll \
-	/r:$(DOTNET_DIR)/System.IO.Compression.dll \
-	/r:$(DOTNET_DIR)/System.IO.FileSystem.dll \
-	/r:$(DOTNET_DIR)/System.Linq.dll \
-	/r:$(DOTNET_DIR)/System.Memory.dll \
-	/r:$(DOTNET_DIR)/System.Net.dll \
-	/r:$(DOTNET_DIR)/System.Net.Http.dll \
-	/r:$(DOTNET_DIR)/System.Net.NameResolution.dll \
-	/r:$(DOTNET_DIR)/System.Net.Primitives.dll \
-	/r:$(DOTNET_DIR)/System.Net.Requests.dll \
-	/r:$(DOTNET_DIR)/System.Net.Security.dll \
-	/r:$(DOTNET_DIR)/System.Net.ServicePoint.dll \
-	/r:$(DOTNET_DIR)/System.Net.Sockets.dll \
-	/r:$(DOTNET_DIR)/System.ObjectModel.dll \
-	/r:$(DOTNET_DIR)/System.Text.RegularExpressions.dll \
-	/r:$(DOTNET_DIR)/System.Resources.ResourceManager.dll \
-	/r:$(DOTNET_DIR)/System.Runtime.dll \
-	/r:$(DOTNET_DIR)/System.Runtime.Extensions.dll \
-	/r:$(DOTNET_DIR)/System.Runtime.InteropServices.dll \
-	/r:$(DOTNET_DIR)/System.Security.Cryptography.X509Certificates.dll \
-	/r:$(DOTNET_DIR)/System.Threading.dll \
-	/r:$(DOTNET_DIR)/System.Threading.Tasks.dll \
-	/r:$(DOTNET_DIR)/System.Threading.Thread.dll \
-	/r:$(DOTNET_DIR)/System.Xml.ReaderWriter.dll \
-	/r:$(DOTNET_DIR)/System.Xml.Serialization.dll \
-	/r:$(DOTNET_DIR)/System.Xml.XmlSerializer.dll \
+	/r:$(DOTNET_BCL_DIR)/mscorlib.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Buffers.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Collections.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Collections.Concurrent.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Collections.NonGeneric.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Console.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Diagnostics.Debug.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Diagnostics.Tools.dll \
+	/r:$(DOTNET_BCL_DIR)/System.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Drawing.Primitives.dll \
+	/r:$(DOTNET_BCL_DIR)/System.IO.Compression.dll \
+	/r:$(DOTNET_BCL_DIR)/System.IO.FileSystem.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Linq.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Memory.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.Http.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.NameResolution.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.Primitives.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.Requests.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.Security.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.ServicePoint.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Net.Sockets.dll \
+	/r:$(DOTNET_BCL_DIR)/System.ObjectModel.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Text.RegularExpressions.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Resources.ResourceManager.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Runtime.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Runtime.Extensions.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Runtime.InteropServices.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Security.Cryptography.X509Certificates.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Threading.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Threading.Tasks.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Threading.Thread.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Xml.ReaderWriter.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Xml.Serialization.dll \
+	/r:$(DOTNET_BCL_DIR)/System.Xml.XmlSerializer.dll \
 
-DOTNET_GENERATOR_FLAGS=$(GENERATOR_FLAGS) -compiler=$(SYSTEM_CSC) $(DOTNET_FLAGS) --lib=$(DOTNET_DIR) -attributelib:$(DOTNET_BINDING_ATTRIBUTES)
+DOTNET_GENERATOR_FLAGS=$(GENERATOR_FLAGS) -compiler=$(SYSTEM_CSC) $(DOTNET_FLAGS) --lib=$(DOTNET_BCL_DIR) -attributelib:$(DOTNET_BINDING_ATTRIBUTES)
 DOTNET_GENERATOR=$(DOTNET_BUILD_DIR)/bgen/bgen
 DOTNET_BINDING_ATTRIBUTES=$(DOTNET_BUILD_DIR)/Xamarin.Apple.BindingAttributes.dll
 
@@ -196,6 +195,9 @@ $(IOS_DOTNET_BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources 
 		$(IOS_APIS) \
 		> $@
 
+$(IOS_DOTNET_BUILD_DIR)/Xamarin.iOS.dll: $(IOS_DOTNET_BUILD_DIR)/64/Xamarin.iOS.dll
+	$(Q_STRIP) mono-cil-strip -q $< $@
+
 define IOS_TARGETS_template
 # Xamarin.iOS.dll
 $(IOS_BUILD_DIR)/native-$(1)%Xamarin.iOS.dll $(IOS_BUILD_DIR)/native-$(1)%Xamarin.iOS.pdb: $$(IOS_SOURCES) $(IOS_BUILD_DIR)/native/generated_sources $(PRODUCT_KEY_PATH)
@@ -310,6 +312,7 @@ IOS_TARGETS += \
 DOTNET_TARGETS += \
 	$(IOS_DOTNET_BUILD_DIR)/32/Xamarin.iOS.dll \
 	$(IOS_DOTNET_BUILD_DIR)/64/Xamarin.iOS.dll \
+	$(IOS_DOTNET_BUILD_DIR)/Xamarin.iOS.dll \
 
 DOTNET_TARGETS_DIRS += \
 	$(IOS_DOTNET_BUILD_DIR) \
@@ -545,7 +548,7 @@ $(MACOS_DOTNET_BUILD_DIR)/macos.rsp: Makefile Makefile.generator frameworks.sour
 		$(MAC_APIS) \
 		> $@
 
-$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.dll: $(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(SN_KEY)
+$(MACOS_DOTNET_BUILD_DIR)/64/Xamarin.Mac.dll: $(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources $(MAC_SOURCES) $(MAC_CFNETWORK_SOURCES) $(SN_KEY) | $(MACOS_DOTNET_BUILD_DIR)/64
 	$(Q_DOTNET_BUILD) \
 		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ -optimize \
 		-publicsign -keyfile:$(SN_KEY) \
@@ -557,12 +560,16 @@ $(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.dll: $(MACOS_DOTNET_BUILD_DIR)/macos-gener
 		$(MAC_SOURCES) \
 		@$<
 
+$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.dll: $(MACOS_DOTNET_BUILD_DIR)/64/Xamarin.Mac.dll
+	$(Q_STRIP) mono-cil-strip -q $< $@
+
 DOTNET_TARGETS += \
 	$(MACOS_DOTNET_BUILD_DIR)/Xamarin.Mac.dll \
 
 DOTNET_TARGETS_DIRS += \
 	$(MACOS_DOTNET_BUILD_DIR) \
 	$(MACOS_DOTNET_BUILD_DIR)/generated-sources \
+	$(MACOS_DOTNET_BUILD_DIR)/64 \
 
 MAC_VARIANTS_TARGETS = \
 	$(MAC_BUILD_DIR)/mobile-64/Xamarin.Mac.dll \
@@ -764,7 +771,7 @@ $(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.
 		$(WATCHOS_APIS) \
 		> $@
 
-$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll: $(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources $(WATCHOS_SOURCES) $(PRODUCT_KEY_PATH) | $(WATCHOS_DOTNET_BUILD_DIR)
+$(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS.dll: $(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources $(WATCHOS_SOURCES) $(PRODUCT_KEY_PATH) | $(WATCHOS_DOTNET_BUILD_DIR)/32
 	$(Q_DOTNET_GEN) \
 		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ -optimize \
 		-publicsign -keyfile:$(PRODUCT_KEY_PATH) \
@@ -774,6 +781,9 @@ $(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll: $(WATCHOS_DOTNET_BUILD_DIR)/wat
 		$(IOS_CSC_FLAGS_XI) \
 		$(WATCHOS_SOURCES) \
 		@$<
+
+$(WATCHOS_DOTNET_BUILD_DIR)/Xamarin.WatchOS.dll: $(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS.dll
+	$(Q_STRIP) mono-cil-strip -q $< $@
 
 $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS%dll $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS%pdb: $(WATCHOS_SOURCES) $(WATCH_BUILD_DIR)/watch/generated_sources $(PRODUCT_KEY_PATH) | $(WATCH_BUILD_DIR)/watch-32
 	$(call Q_PROF_CSC,watch) $(WATCH_CSC) -nologo -out:$(basename $@).dll -target:library -debug -unsafe -optimize \
@@ -835,6 +845,7 @@ DOTNET_TARGETS += \
 DOTNET_TARGETS_DIRS += \
 	$(WATCHOS_DOTNET_BUILD_DIR) \
 	$(WATCHOS_DOTNET_BUILD_DIR)/generated-sources \
+	$(WATCHOS_DOTNET_BUILD_DIR)/32 \
 
 # reference assemblies, this is just for compilation with XS
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/%.dll: $(WATCH_BUILD_DIR)/reference/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/Facades
@@ -974,7 +985,7 @@ $(TVOS_DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.source
 		$(TVOS_APIS) \
 		> $@
 
-$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.dll: $(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources $(TVOS_SOURCES) $(PRODUCT_KEY_PATH) | $(TVOS_DOTNET_BUILD_DIR)
+$(TVOS_DOTNET_BUILD_DIR)/64/Xamarin.TVOS.dll: $(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources $(TVOS_SOURCES) $(PRODUCT_KEY_PATH) | $(TVOS_DOTNET_BUILD_DIR)/64
 	$(Q_DOTNET_GEN) \
 		$(SYSTEM_CSC) $(DOTNET_FLAGS) -out:$@ -optimize \
 		-publicsign -keyfile:$(PRODUCT_KEY_PATH) \
@@ -984,6 +995,9 @@ $(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.dll: $(TVOS_DOTNET_BUILD_DIR)/tvos-generat
 		$(IOS_CSC_FLAGS_XI) \
 		$(TVOS_SOURCES) \
 		@$<
+
+$(TVOS_DOTNET_BUILD_DIR)/Xamarin.TVOS.dll: $(TVOS_DOTNET_BUILD_DIR)/64/Xamarin.TVOS.dll
+	$(Q_STRIP) mono-cil-strip -q $< $@
 
 $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%dll $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%pdb: $(TVOS_SOURCES) $(TVOS_BUILD_DIR)/tvos/generated_sources $(PRODUCT_KEY_PATH) | $(TVOS_BUILD_DIR)/tvos-64
 	$(call Q_PROF_CSC,tvos) $(TV_CSC) -nologo -out:$(basename $@).dll -target:library -debug -unsafe -optimize \
@@ -1059,6 +1073,7 @@ DOTNET_TARGETS += \
 DOTNET_TARGETS_DIRS += \
 	$(TVOS_DOTNET_BUILD_DIR) \
 	$(TVOS_DOTNET_BUILD_DIR)/generated-sources \
+	$(TVOS_DOTNET_BUILD_DIR)/64 \
 
 # reference assemblies, this is just for compilation with XS
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/%.dll: $(TVOS_BUILD_DIR)/reference/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.TVOS/Facades

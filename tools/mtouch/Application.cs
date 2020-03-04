@@ -219,6 +219,9 @@ namespace Xamarin.Bundler {
 			get {
 				if (Embeddinator) {
 					return AssemblyBuildTarget.StaticObject;
+				} else if (Driver.IsDotNet && IsSimulatorBuild) {
+					// FIXME: .NET's mono doesn't support resolving p/invokes against loaded members, without looking at whether the dylib is around or not, thus we always need to use dylib.
+					return AssemblyBuildTarget.DynamicLibrary;
 				} else if (HasFrameworks || UseMonoFramework.Value) {
 					return AssemblyBuildTarget.Framework;
 				} else if (HasDynamicLibraries) {
@@ -1282,6 +1285,8 @@ namespace Xamarin.Bundler {
 				}
 			}
 			if (!platformAssemblyReference) {
+				if (Driver.IsDotNet)
+					throw ErrorHelper.CreateError (85, Errors.MT0085, Driver.GetProductAssembly (this) + ".dll");
 				ErrorHelper.Warning (85, Errors.MT0085, Driver.GetProductAssembly (this) + ".dll");
 				References.Add (Path.Combine (Driver.GetPlatformFrameworkDirectory (this), Driver.GetProductAssembly (this) + ".dll"));
 			}
@@ -1674,7 +1679,7 @@ namespace Xamarin.Bundler {
 				BundleFileInfo info;
 				var name = "Frameworks/Mono.framework";
 				bundle_files [name] = info = new BundleFileInfo ();
-				info.Sources.Add (GetLibMono (AssemblyBuildTarget.Framework));
+				info.Sources.Add (GetLibMono (AssemblyBuildTarget.Framework, Abi.None /* FIXME */));
 			}
 
 			var require_mono_native = false;
@@ -1694,6 +1699,9 @@ namespace Xamarin.Bundler {
 					require_mono_native |= target.MonoNative.RequireMonoNative;
 				}
 			}
+
+			if (Driver.IsDotNet)
+				require_mono_native = false;
 
 			if (require_mono_native && LibMonoNativeLinkMode == AssemblyBuildTarget.DynamicLibrary) {
 				foreach (var target in Targets) {
@@ -1906,30 +1914,29 @@ namespace Xamarin.Bundler {
 			Driver.Watch ("Select Native Compiler", 1);
 		}
 
-		public string GetLibMono (AssemblyBuildTarget build_target)
+		public string GetLibMono (AssemblyBuildTarget build_target, Abi abi)
 		{
 			switch (build_target) {
 			case AssemblyBuildTarget.StaticObject:
-				return "/Users/rolf/Downloads/ios/runtime.ios-x64.Microsoft.NETCore.Runtime.Mono.5.0.0-dev/runtimes/ios-x64/native/libmono.a";
-				//return Path.Combine (Driver.GetProductSdkLibDirectory (this), "libmonosgen-2.0.a");
+				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), Driver.IsDotNet ? "libmono.a" : "libmonosgen-2.0.a");
 			case AssemblyBuildTarget.DynamicLibrary:
-				return Path.Combine (Driver.GetProductSdkLibDirectory (this), "libmonosgen-2.0.dylib");
+				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), Driver.IsDotNet ? "libmono.dylib" : "libmonosgen-2.0.dylib");
 			case AssemblyBuildTarget.Framework:
-				return Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", "Mono.framework");
+				return Path.Combine (Driver.GetMonoFrameworkDirectory (this, abi), "Mono.framework");
 			default:
 				throw ErrorHelper.CreateError (100, Errors.MT0100, build_target);
 			}
 		}
 
-		public string GetLibXamarin (AssemblyBuildTarget build_target)
+		public string GetLibXamarin (AssemblyBuildTarget build_target, Abi abi)
 		{
 			switch (build_target) {
 			case AssemblyBuildTarget.StaticObject:
-				return Path.Combine (Driver.GetProductSdkLibDirectory (this), EnableDebug ? "libxamarin-debug.a" : "libxamarin.a");
+				return Path.Combine (Driver.GetXamarinLibraryDirectory (this, abi), EnableDebug ? "libxamarin-debug.a" : "libxamarin.a");
 			case AssemblyBuildTarget.DynamicLibrary:
-				return Path.Combine (Driver.GetProductSdkLibDirectory (this), EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib");
+				return Path.Combine (Driver.GetXamarinLibraryDirectory (this, abi), EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib");
 			case AssemblyBuildTarget.Framework:
-				return Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", EnableDebug ? "Xamarin-debug.framework" : "Xamarin.framework");
+				return Path.Combine (Driver.GetXamarinFrameworkDirectory (this, abi), EnableDebug ? "Xamarin-debug.framework" : "Xamarin.framework");
 			default:
 				throw ErrorHelper.CreateError (100, Errors.MT0100, build_target);
 			}

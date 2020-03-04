@@ -251,6 +251,10 @@ namespace Xamarin.Bundler {
 			set { targetFramework = value; }
 		}
 
+		public static bool IsDotNet {
+			get { return TargetFramework.IsDotNet; }
+		}
+
 		static void SetTargetFramework (string fx)
 		{
 #if MONOMAC
@@ -642,7 +646,28 @@ namespace Xamarin.Bundler {
 				var localPath = Path.GetDirectoryName (GetFullPath ());
 				while (localPath.Length > 1) {
 					if (File.Exists (Path.Combine (localPath, "Make.config"))) {
-						local_build = Path.Combine (localPath, LOCAL_BUILD_DIR, "Library", "Frameworks", PRODUCT + ".framework", "Versions", "Current");
+						if (IsDotNet) {
+							string sdk;
+							switch (TargetFramework.Platform) {
+							case ApplePlatform.iOS:
+								sdk = "iOS";
+								break;
+							case ApplePlatform.MacOSX:
+								sdk = "macOS";
+								break;
+							case ApplePlatform.TVOS:
+								sdk = "tvOS";
+								break;
+							case ApplePlatform.WatchOS:
+								sdk = "watchOS";
+								break;
+							default:
+								throw ErrorHelper.CreateError (71, Errors.MX0071, TargetFramework.Platform, PRODUCT);
+							}
+							local_build = Path.Combine (localPath, "_build", $"Xamarin.{sdk}.Sdk");
+						} else {
+							local_build = Path.Combine (localPath, LOCAL_BUILD_DIR, "Library", "Frameworks", PRODUCT + ".framework", "Versions", "Current");
+						}
 						return local_build;
 					}
 
@@ -650,17 +675,6 @@ namespace Xamarin.Bundler {
 				}
 			}
 			return local_build;
-		}
-
-		static bool? is_dotnet;
-		public static bool IsDotNet {
-			get {
-				if (!is_dotnet.HasValue) {
-					is_dotnet = File.Exists (Path.Combine (FrameworkDirectory, "tools/buildinfo"));
-					Log (4, "IsDotNet: {0} FrameworkDirectory: {1}", is_dotnet.Value, FrameworkDirectory);
-				}
-				return is_dotnet.Value;
-			}
 		}
 
 		// The layout on the file system is different depending on where we're installed
@@ -735,6 +749,56 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public static string GetProductSdkLibDirectory (Application app)
+		{
+			return Path.Combine (GetProductSdkDirectory (app), "usr", "lib");
+		}
+
+		// This is the directory where libxamarin[-debug].[a|dylib] are
+		public static string GetXamarinLibraryDirectory (Application app, Abi abi)
+		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture(abi)}",  "native");
+			return GetProductSdkLibDirectory (app);
+		}
+
+		// This is the directory where Xamarin[-debug].framework are
+		public static string GetXamarinFrameworkDirectory (Application app, Abi abi)
+		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture (abi)}", "native");
+			return GetProductFrameworksDirectory (app);
+		}
+
+		// This is the directory where libmono*.[a|dylib] are
+		public static string GetMonoLibraryDirectory (Application app, Abi abi)
+		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture (abi)}", "native");
+			return GetProductSdkLibDirectory (app);
+		}
+
+		// This is the directory where Mono.framework is
+		public static string GetMonoFrameworkDirectory (Application app, Abi abi)
+		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture (abi)}", "native");
+			return GetProductFrameworksDirectory (app);
+		}
+
+		public static string GetProductFrameworksDirectory (Application app)
+		{
+			return Path.Combine (GetProductSdkDirectory (app), "Frameworks");
+		}
+
+		public static string GetBCLImplementationDirectory (Application app, Abi abi)
+		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture (abi)}", "lib", GetNugetFramework (app));
+			return GetPlatformFrameworkDirectory (app);
+		}
+
+
 		public static string GetProductSdkDirectory (Application app)
 		{
 			var sdksDir = Path.Combine (FrameworkDirectory, "SDKs");
@@ -758,9 +822,56 @@ namespace Xamarin.Bundler {
 			return Path.Combine (sdksDir, sdkName);
 		}
 
-		public static string GetProductSdkLibDirectory (Application app)
+		static string GetNugetFramework (Application app)
 		{
-			return Path.Combine (GetProductSdkDirectory (app), "usr", "lib");
+			switch (app.Platform) {
+			case ApplePlatform.MacOSX:
+				return "xamarinmac10";
+			case ApplePlatform.iOS:
+				return "xamarinios10";
+			case ApplePlatform.WatchOS:
+				return "xamarinwatchos10";
+			case ApplePlatform.TVOS:
+				return "xamarintvos10";
+			default:
+				throw ErrorHelper.CreateError (71, Errors.MX0071, TargetFramework.Platform, PRODUCT);
+			}
+		}
+
+		static string GetNugetPlatform (Application app)
+		{
+			switch (app.Platform) {
+			case ApplePlatform.MacOSX:
+				return "macos";
+			case ApplePlatform.iOS:
+				return "ios";
+			case ApplePlatform.WatchOS:
+				return "watchos";
+			case ApplePlatform.TVOS:
+				return "tvos";
+			default:
+				throw ErrorHelper.CreateError (71, Errors.MX0071, TargetFramework.Platform, PRODUCT);
+			}
+		}
+
+		static string GetNugetArchitecture (Abi abi)
+		{
+			switch (abi) {
+			case Abi.ARMv7:
+			case Abi.ARMv7s:
+			case Abi.ARMv7k:
+				return "arm";
+			case Abi.ARM64:
+				return "arm64";
+			case Abi.ARM64_32:
+				throw new NotImplementedException ();
+			case Abi.i386:
+				return "x86";
+			case Abi.x86_64:
+				return "x64";
+			default:
+				throw ErrorHelper.CreateError (99, Errors.MX0099, $"Invalid abi: {abi.ToString ()}");
+			}
 		}
 
 		static void ValidateXcode (bool accept_any_xcode_version, bool warn_if_not_found)

@@ -410,23 +410,17 @@ namespace Xamarin.Bundler {
 			var registrar_m = RegistrarOutputLibrary;
 			var RootAssembly = RootAssemblies [0];
 			var resolvedAssemblies = new Dictionary<string, AssemblyDefinition> ();
-#if MTOUCH
-			if (abis.Count > 1)
+			if (Targets.Count > 1)
 				throw ErrorHelper.CreateError (99, Errors.MX0099, "Too many ABIs, can only take one at a time in runregistrar mode.");
-#endif
 			var resolver = new PlatformResolver () {
-#if MTOUCH
-				FrameworkDirectory = Driver.GetBCLImplementationDirectory (this, abis.First ()),
-#else
-				FrameworkDirectory = Driver.GetBCLImplementationDirectory (this, Abi.x86_64),
-#endif
+				FrameworkDirectory = Driver.GetBCLImplementationDirectory (this),
 				RootDirectory = Path.GetDirectoryName (RootAssembly),
 #if MMP
 				CommandLineAssemblies = RootAssemblies,
 #endif
 			};
 
-			if (Platform == ApplePlatform.iOS || Platform == ApplePlatform.MacOSX) {
+			if (Platform == ApplePlatform.iOS) {
 				if (Is32Build) {
 					resolver.ArchDirectory = Driver.GetArch32Directory (this);
 				} else {

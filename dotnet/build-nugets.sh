@@ -33,12 +33,15 @@ copy_files ()
 	mkdir -p "$dotnet_destdir/lib/$framework"
 	mkdir -p "$dotnet_destdir/lib/Xamarin.$assembly_infix/v1.0/RedistList"
 	mkdir -p "$dotnet_destdir/runtimes"
+	for arch in $arches; do
+		mkdir -p "$dotnet_destdir"/runtimes/"$platform_lower"-"$arch"/lib/netstandard1.0
+	done
 	mkdir -p "$dotnet_destdir/targets"
 	mkdir -p "$dotnet_destdir/tools"
 	mkdir -p "$dotnet_destdir/Sdk"
 	mkdir -p "$dotnet_destdir/tools"
 	mkdir -p "$dotnet_destdir/tools/bin"
-	for arch in $arches_32 $arches_64; do
+	for arch in $arches; do
 		mkdir -p "$dotnet_destdir/tools/bin/$arch"
 	done
 	mkdir -p "$dotnet_destdir/tools/include"
@@ -243,12 +246,19 @@ copy_files ()
 	    	$cp -r "$destdir/SDKs/MonoTouch.$platform_infix.sdk/Frameworks"/Xamarin*.framework*     "$dotnet_destdir/runtimes/$platform_lower-$arch/native/"
 	    done
 
-	    unzip -oj -d "$dotnet_destdir/runtimes/$platform_lower-x64/native/"   "$TOP/builds/downloads/ios/ios/runtime.ios-x64.Microsoft.NETCore.Runtime.Mono.5.0.0-dev.nupkg"   'runtimes/ios-x64/native/libmono.*'
-	    unzip -oj -d "$dotnet_destdir/runtimes/$platform_lower-arm/native/"   "$TOP/builds/downloads/ios/ios/runtime.ios-arm.Microsoft.NETCore.Runtime.Mono.5.0.0-dev.nupkg"   'runtimes/ios-arm/native/libmono.*'
-	    unzip -oj -d "$dotnet_destdir/runtimes/$platform_lower-arm64/native/" "$TOP/builds/downloads/ios/ios/runtime.ios-arm64.Microsoft.NETCore.Runtime.Mono.5.0.0-dev.nupkg" 'runtimes/ios-arm64/native/libmono.*'
+	    # FIXME: missing x86_64
+	    for arch in x64 arm arm64; do
+	    	unzip -oj -d "$dotnet_destdir/runtimes/$platform_lower-$arch/native/"         "$TOP/builds/downloads/ios/ios/runtime.$platform_lower-$arch.Microsoft.NETCore.Runtime.Mono.5.0.0-dev.nupkg" runtimes/"$platform_lower"-"$arch"/native/'libmono.*'
+			unzip -oj -d "$dotnet_destdir/runtimes/$platform_lower-$arch/lib/$framework/" "$TOP/builds/downloads/ios/ios/runtime.$platform_lower-$arch.Microsoft.NETCore.Runtime.Mono.5.0.0-dev.nupkg" runtimes/"$platform_lower"-"$arch"/lib/netstandard1.0/'*.dll'
+		done
 
-	    unzip -oj -d "$dotnet_destdir/tools/bin/arm64/" "$TOP/builds/downloads/ios/ios/runtime.ios-arm64.Microsoft.NETCore.Tool.MonoAOT.5.0.0-dev.nupkg" 'tools/mono-aot-cross'
-	    unzip -oj -d "$dotnet_destdir/tools/bin/arm/"   "$TOP/builds/downloads/ios/ios/runtime.ios-arm.Microsoft.NETCore.Tool.MonoAOT.5.0.0-dev.nupkg"   'tools/mono-aot-cross'
+	    unzip -oj -d "$dotnet_destdir/tools/bin/" "$TOP/builds/downloads/ios/ios/runtime.ios-arm64.Microsoft.NETCore.Tool.MonoAOT.5.0.0-dev.nupkg" 'tools/mono-aot-cross'
+	    mv "$dotnet_destdir/tools/bin/mono-aot-cross" "$dotnet_destdir/tools/bin/arm64-darwin-mono-sgen"
+	    chmod +x "$dotnet_destdir/tools/bin/arm64-darwin-mono-sgen"
+
+	    unzip -oj -d "$dotnet_destdir/tools/bin/"   "$TOP/builds/downloads/ios/ios/runtime.ios-arm.Microsoft.NETCore.Tool.MonoAOT.5.0.0-dev.nupkg"   'tools/mono-aot-cross'
+		mv "$dotnet_destdir/tools/bin/mono-aot-cross" "$dotnet_destdir/tools/bin/arm-darwin-mono-sgen"
+		chmod +x "$dotnet_destdir/tools/bin/arm-darwin-mono-sgen"
 
 	    $cp -r "$TOP"/runtime/xamarin "$dotnet_destdir/tools/include/"
 	    rm -f "$dotnet_destdir/tools/include/launch.h" # this file is macOS only

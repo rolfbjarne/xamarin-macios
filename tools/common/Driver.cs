@@ -791,13 +791,19 @@ namespace Xamarin.Bundler {
 			return Path.Combine (GetProductSdkDirectory (app), "Frameworks");
 		}
 
-		public static string GetBCLImplementationDirectory (Application app, Abi abi)
+		public static string GetBCLImplementationDirectory (Target target)
 		{
 			if (IsDotNet)
-				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture (abi)}", "lib", GetNugetFramework (app));
-			return GetPlatformFrameworkDirectory (app);
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (target.App)}-{GetNugetArchitecture (target)}", "lib", GetNugetFramework (target.App));
+			return GetPlatformFrameworkDirectory (target.App);
 		}
 
+		public static string GetBCLImplementationDirectory (Application app)
+		{
+			if (IsDotNet)
+				return Path.Combine (FrameworkDirectory, "runtimes", $"{GetNugetPlatform (app)}-{GetNugetArchitecture (app)}", "lib", GetNugetFramework (app));
+			return GetPlatformFrameworkDirectory (app);
+		}
 
 		public static string GetProductSdkDirectory (Application app)
 		{
@@ -851,6 +857,33 @@ namespace Xamarin.Bundler {
 				return "tvos";
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, TargetFramework.Platform, PRODUCT);
+			}
+		}
+
+		static string GetNugetArchitecture (Target target)
+		{
+			if (target.App.Platform == ApplePlatform.MacOSX)
+				return "x64";
+
+			if (target.App.IsDeviceBuild) {
+				return target.Is32Build ? "arm" : "arm64";
+			} else {
+				return target.Is32Build ? "x86_64" : "x64";
+			}
+		}
+
+		static string GetNugetArchitecture (Application app)
+		{
+			if (app.Platform == ApplePlatform.MacOSX)
+				return "x64";
+
+			if (app.Is64Build && app.Is32Build)
+				throw new NotImplementedException ();
+
+			if (app.IsDeviceBuild) {
+				return app.Is64Build ? "arm64" : "arm";
+			} else {
+				return app.Is64Build ? "x64" : "x86";
 			}
 		}
 

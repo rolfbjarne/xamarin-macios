@@ -4,7 +4,9 @@
     <TargetFramework>xamarinios10</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);MyLibrary\**</DefaultItemExcludes>
 
-    <MtouchExtraArgs>--nofastsim --ignore-dynamic-symbol=SystemNative_EnumerateGatewayAddressesForInterface</MtouchExtraArgs>
+    <MtouchExtraArgs>--nofastsim --ignore-dynamic-symbol=SystemNative_EnumerateGatewayAddressesForInterface --dlsym:true --nosymbolstrip</MtouchExtraArgs>
+    <MtouchLink>Full</MtouchLink>
+    <AssemblyName>MySingleView</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetDeviceArchitecture)' == 'Device' And '$(Configuration)' == 'Release'">
@@ -17,6 +19,8 @@
     </BundleResource>
     <BundleResource Include="Folder\BundleResource.txt" />
     <BundleResource Include="Resources\image.png" />
+
+    <Reference Include="System.Console" />
   </ItemGroup>
 
   <ItemGroup>

@@ -219,7 +219,7 @@ namespace Xamarin.Bundler {
 			get {
 				if (Embeddinator) {
 					return AssemblyBuildTarget.StaticObject;
-				} else if (Driver.IsDotNet && IsSimulatorBuild) {
+				} else if (Driver.IsDotNet) {
 					// FIXME: .NET's mono doesn't support resolving p/invokes against loaded members, without looking at whether the dylib is around or not, thus we always need to use dylib.
 					return AssemblyBuildTarget.DynamicLibrary;
 				} else if (HasFrameworks || UseMonoFramework.Value) {
@@ -1293,7 +1293,6 @@ namespace Xamarin.Bundler {
 
 			((MonoTouchProfile)Profile.Current).SetProductAssembly (Driver.GetProductAssembly (this));
 
-			var FrameworkDirectory = Driver.GetPlatformFrameworkDirectory (this);
 			foreach (var root in RootAssemblies) {
 				string root_wo_ext = Path.GetFileNameWithoutExtension (root);
 				if (Profile.IsSdkAssembly (root_wo_ext) || Profile.IsProductAssembly (root_wo_ext))
@@ -1342,7 +1341,7 @@ namespace Xamarin.Bundler {
 
 			var RootDirectory = Path.GetDirectoryName (Path.GetFullPath (RootAssemblies [0]));
 			foreach (var target in Targets) {
-				target.Resolver.FrameworkDirectory = FrameworkDirectory;
+				target.Resolver.FrameworkDirectory = Driver.GetBCLImplementationDirectory (target);
 				target.Resolver.RootDirectory = RootDirectory;
 				target.Resolver.EnableRepl = EnableRepl;
 				target.ManifestResolver.EnableRepl = EnableRepl;

@@ -1515,7 +1515,7 @@ namespace Xamarin.Bundler
 				AddToBundle (App.GetLibXamarin (App.LibXamarinLinkMode, abi));
 
 			if (App.LibMonoLinkMode == AssemblyBuildTarget.DynamicLibrary) {
-				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (App, abi), "*.dylib"))
+				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (this), "*.dylib"))
 					AddToBundle (lib);
 			}
 

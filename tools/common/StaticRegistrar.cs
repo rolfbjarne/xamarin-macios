@@ -579,6 +579,9 @@ namespace Registrar {
 							return true;
 				}
 
+				if (type.Is ("Foundation", "NSObject"))
+					return true;
+
 				type = type.BaseType != null ? type.BaseType.Resolve () : null;
 			}
 

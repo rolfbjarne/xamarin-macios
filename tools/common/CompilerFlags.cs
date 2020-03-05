@@ -143,12 +143,12 @@ namespace Xamarin.Utils
 
 			switch (mode) {
 			case AssemblyBuildTarget.DynamicLibrary:
-				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Application, abi), "*.dylib"))
+				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Target), "*.dylib"))
 					AddLinkWith (lib);
 				break;
 			case AssemblyBuildTarget.Framework:
 			case AssemblyBuildTarget.StaticObject:
-				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Application, abi), "*.a"))
+				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Target), "*.a"))
 					AddLinkWith (lib);
 				break;
 			default:

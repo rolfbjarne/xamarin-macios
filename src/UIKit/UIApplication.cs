@@ -83,7 +83,8 @@ namespace UIKit {
 		static void Main (string [] args, IntPtr principal, IntPtr @delegate)
 		{
 			Initialize ();
-			UIApplicationMain (args.Length, args, principal, @delegate);
+			var rv = UIApplicationMain (args.Length, args, principal, @delegate);
+			Console.WriteLine ("UIApplicationMain returned {0}", rv);
 		}
 #endif
 

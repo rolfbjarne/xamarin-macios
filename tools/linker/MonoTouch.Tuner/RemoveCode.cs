@@ -30,11 +30,11 @@ namespace MonoTouch.Tuner {
 
 		public override bool IsActiveFor (AssemblyDefinition assembly)
 		{
+			return false;
 			switch (assembly.Name.Name) {
 			case "mscorlib":
 				product = false;
 				return context.Annotations.GetAction (assembly) == AssemblyAction.Link;
-			case "monotouch":
 			case "Xamarin.iOS":
 			case "Xamarin.TVOS":
 			case "Xamarin.WatchOS":

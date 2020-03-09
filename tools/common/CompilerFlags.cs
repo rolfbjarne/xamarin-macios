@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using Mono.Cecil;
 using Xamarin.Bundler;
 
 namespace Xamarin.Utils
@@ -140,20 +140,6 @@ namespace Xamarin.Utils
 			}
 			AddOtherFlag ("-lz");
 			AddOtherFlag ("-liconv");
-
-			switch (mode) {
-			case AssemblyBuildTarget.DynamicLibrary:
-				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Target), "*.dylib"))
-					AddLinkWith (lib);
-				break;
-			case AssemblyBuildTarget.Framework:
-			case AssemblyBuildTarget.StaticObject:
-				foreach (var lib in Directory.GetFiles (Driver.GetBCLImplementationDirectory (Target), "*.a"))
-					AddLinkWith (lib);
-				break;
-			default:
-				throw ErrorHelper.CreateError (100, Errors.MT0100, mode);
-			}
 		}
 
 		public void LinkWithXamarin (Abi abi)

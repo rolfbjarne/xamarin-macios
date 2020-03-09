@@ -219,9 +219,9 @@ namespace Xamarin.Bundler {
 			get {
 				if (Embeddinator) {
 					return AssemblyBuildTarget.StaticObject;
-				} else if (Driver.IsDotNet) {
-					// FIXME: .NET's mono doesn't support resolving p/invokes against loaded members, without looking at whether the dylib is around or not, thus we always need to use dylib.
-					return AssemblyBuildTarget.DynamicLibrary;
+				//} else if (Driver.IsDotNet) {
+				//	// FIXME: .NET's mono doesn't support resolving p/invokes against loaded members, without looking at whether the dylib is around or not, thus we always need to use dylib.
+				//	return AssemblyBuildTarget.DynamicLibrary;
 				} else if (HasFrameworks || UseMonoFramework.Value) {
 					return AssemblyBuildTarget.Framework;
 				} else if (HasDynamicLibraries) {
@@ -495,7 +495,7 @@ namespace Xamarin.Bundler {
 
 		public bool UseDlsym (string assembly)
 		{
-			string asm;
+			string asm = null;
 
 			if (DlsymAssemblies != null) {
 				asm = Path.GetFileNameWithoutExtension (assembly);
@@ -525,7 +525,18 @@ namespace Xamarin.Bundler {
 
 			switch (Platform) {
 			case ApplePlatform.iOS:
-				return !Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (assembly));
+				if (asm == null)
+					asm = Path.GetFileNameWithoutExtension (assembly);
+				var is_sdk_assembly = Profile.IsSdkAssembly (asm);
+				if (Driver.IsDotNet) {
+					var needs_dlsym = false;
+					foreach (var target in Targets) {
+						needs_dlsym |= target.AssembliesWithInexistentPInvokes.Contains (asm);
+					}
+					if (needs_dlsym)
+						return needs_dlsym;
+				}
+				return !is_sdk_assembly;
 			case ApplePlatform.TVOS:
 			case ApplePlatform.WatchOS:
 				return false;

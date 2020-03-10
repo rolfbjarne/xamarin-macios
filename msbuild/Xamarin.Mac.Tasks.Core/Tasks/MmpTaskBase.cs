@@ -56,7 +56,9 @@ namespace Xamarin.Mac.Tasks
 			if (!string.IsNullOrEmpty (ApplicationName))
 				args.AddQuotedLine ("/name:" + ApplicationName);
 
-			if (TargetFrameworkIdentifier == "Xamarin.Mac")
+			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))
+				args.AddLine ("/profile:" + TargetFrameworkMoniker);
+			else if (TargetFrameworkIdentifier == "Xamarin.Mac")
 				args.AddLine ("/profile:Xamarin.Mac,Version=v2.0,Profile=Mobile");
 			else if (UseXamMacFullFramework)
 				args.AddLine ($"/profile:Xamarin.Mac,Version={TargetFrameworkVersion},Profile=Full");

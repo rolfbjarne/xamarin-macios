@@ -219,6 +219,9 @@ namespace Xamarin.Bundler {
 			get {
 				if (Embeddinator) {
 					return AssemblyBuildTarget.StaticObject;
+				//} else if (Driver.IsDotNet) {
+				//	// FIXME: .NET's mono doesn't support resolving p/invokes against loaded members, without looking at whether the dylib is around or not, thus we always need to use dylib.
+				//	return AssemblyBuildTarget.DynamicLibrary;
 				} else if (HasFrameworks || UseMonoFramework.Value) {
 					return AssemblyBuildTarget.Framework;
 				} else if (HasDynamicLibraries) {
@@ -492,7 +495,7 @@ namespace Xamarin.Bundler {
 
 		public bool UseDlsym (string assembly)
 		{
-			string asm;
+			string asm = null;
 
 			if (DlsymAssemblies != null) {
 				asm = Path.GetFileNameWithoutExtension (assembly);
@@ -522,7 +525,18 @@ namespace Xamarin.Bundler {
 
 			switch (Platform) {
 			case ApplePlatform.iOS:
-				return !Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (assembly));
+				if (asm == null)
+					asm = Path.GetFileNameWithoutExtension (assembly);
+				var is_sdk_assembly = Profile.IsSdkAssembly (asm);
+				if (Driver.IsDotNet) {
+					var needs_dlsym = false;
+					foreach (var target in Targets) {
+						needs_dlsym |= target.AssembliesWithInexistentPInvokes.Contains (asm);
+					}
+					if (needs_dlsym)
+						return needs_dlsym;
+				}
+				return !is_sdk_assembly;
 			case ApplePlatform.TVOS:
 			case ApplePlatform.WatchOS:
 				return false;
@@ -1282,13 +1296,14 @@ namespace Xamarin.Bundler {
 				}
 			}
 			if (!platformAssemblyReference) {
+				if (Driver.IsDotNet)
+					throw ErrorHelper.CreateError (85, Errors.MT0085, Driver.GetProductAssembly (this) + ".dll");
 				ErrorHelper.Warning (85, Errors.MT0085, Driver.GetProductAssembly (this) + ".dll");
 				References.Add (Path.Combine (Driver.GetPlatformFrameworkDirectory (this), Driver.GetProductAssembly (this) + ".dll"));
 			}
 
 			((MonoTouchProfile)Profile.Current).SetProductAssembly (Driver.GetProductAssembly (this));
 
-			var FrameworkDirectory = Driver.GetPlatformFrameworkDirectory (this);
 			foreach (var root in RootAssemblies) {
 				string root_wo_ext = Path.GetFileNameWithoutExtension (root);
 				if (Profile.IsSdkAssembly (root_wo_ext) || Profile.IsProductAssembly (root_wo_ext))
@@ -1319,7 +1334,7 @@ namespace Xamarin.Bundler {
 				target.TargetDirectory = AppDirectory;
 				target.AppTargetDirectory = IsSimulatorBuild ? AppDirectory : Path.Combine (AppDirectory, Is64Build ? ".monotouch-64" : ".monotouch-32");
 				target.ArchDirectory = Cache.Location;
-				target.Resolver.ArchDirectory = Path.Combine (FrameworkDirectory, "..", "..", Is32Build ? "32bits" : "64bits");
+				target.Resolver.ArchDirectory = Driver.GetArchDirectory (this, Is64Build);
 				target.Abis = abis;
 
 				Targets.Add (target);
@@ -1337,7 +1352,7 @@ namespace Xamarin.Bundler {
 
 			var RootDirectory = Path.GetDirectoryName (Path.GetFullPath (RootAssemblies [0]));
 			foreach (var target in Targets) {
-				target.Resolver.FrameworkDirectory = FrameworkDirectory;
+				target.Resolver.FrameworkDirectory = Driver.GetBCLImplementationDirectory (target);
 				target.Resolver.RootDirectory = RootDirectory;
 				target.Resolver.EnableRepl = EnableRepl;
 				target.ManifestResolver.EnableRepl = EnableRepl;
@@ -1674,7 +1689,7 @@ namespace Xamarin.Bundler {
 				BundleFileInfo info;
 				var name = "Frameworks/Mono.framework";
 				bundle_files [name] = info = new BundleFileInfo ();
-				info.Sources.Add (GetLibMono (AssemblyBuildTarget.Framework));
+				info.Sources.Add (GetLibMono (AssemblyBuildTarget.Framework, Abi.None /* FIXME */));
 			}
 
 			var require_mono_native = false;
@@ -1695,12 +1710,15 @@ namespace Xamarin.Bundler {
 				}
 			}
 
+			if (Driver.IsDotNet)
+				require_mono_native = false;
+
 			if (require_mono_native && LibMonoNativeLinkMode == AssemblyBuildTarget.DynamicLibrary) {
 				foreach (var target in Targets) {
 					BundleFileInfo info;
 					var lib_native_name = target.GetLibNativeName () + ".dylib";
 					bundle_files [lib_native_name] = info = new BundleFileInfo ();
-					var lib_native_path = Path.Combine (Driver.GetMonoTouchLibDirectory (this), lib_native_name);
+					var lib_native_path = Path.Combine (Driver.GetProductSdkLibDirectory (this), lib_native_name);
 					info.Sources.Add (lib_native_path);
 					Driver.Log (3, "Adding mono-native library {0} for {1}.", lib_native_name, target.MonoNativeMode);
 				}
@@ -1906,29 +1924,29 @@ namespace Xamarin.Bundler {
 			Driver.Watch ("Select Native Compiler", 1);
 		}
 
-		public string GetLibMono (AssemblyBuildTarget build_target)
+		public string GetLibMono (AssemblyBuildTarget build_target, Abi abi)
 		{
 			switch (build_target) {
 			case AssemblyBuildTarget.StaticObject:
-				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), "libmonosgen-2.0.a");
+				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), Driver.IsDotNet ? "libmono.a" : "libmonosgen-2.0.a");
 			case AssemblyBuildTarget.DynamicLibrary:
-				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), "libmonosgen-2.0.dylib");
+				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), Driver.IsDotNet ? "libmono.dylib" : "libmonosgen-2.0.dylib");
 			case AssemblyBuildTarget.Framework:
-				return Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", "Mono.framework");
+				return Path.Combine (Driver.GetMonoFrameworkDirectory (this, abi), "Mono.framework");
 			default:
 				throw ErrorHelper.CreateError (100, Errors.MT0100, build_target);
 			}
 		}
 
-		public string GetLibXamarin (AssemblyBuildTarget build_target)
+		public string GetLibXamarin (AssemblyBuildTarget build_target, Abi abi)
 		{
 			switch (build_target) {
 			case AssemblyBuildTarget.StaticObject:
-				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), EnableDebug ? "libxamarin-debug.a" : "libxamarin.a");
+				return Path.Combine (Driver.GetXamarinLibraryDirectory (this, abi), EnableDebug ? "libxamarin-debug.a" : "libxamarin.a");
 			case AssemblyBuildTarget.DynamicLibrary:
-				return Path.Combine (Driver.GetMonoTouchLibDirectory (this), EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib");
+				return Path.Combine (Driver.GetXamarinLibraryDirectory (this, abi), EnableDebug ? "libxamarin-debug.dylib" : "libxamarin.dylib");
 			case AssemblyBuildTarget.Framework:
-				return Path.Combine (Driver.GetProductSdkDirectory (this), "Frameworks", EnableDebug ? "Xamarin-debug.framework" : "Xamarin.framework");
+				return Path.Combine (Driver.GetXamarinFrameworkDirectory (this, abi), EnableDebug ? "Xamarin-debug.framework" : "Xamarin.framework");
 			default:
 				throw ErrorHelper.CreateError (100, Errors.MT0100, build_target);
 			}

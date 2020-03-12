@@ -254,6 +254,33 @@ namespace Xamarin.Utils {
 
 			return name;
 		}
+
+		public static string Join (string separator, string last_separator, IEnumerable<string> values)
+		{
+			if (separator == last_separator || last_separator == null)
+				return string.Join (separator, values);
+
+			if (values == null)
+				return null;
+
+			var array = values.ToArray ();
+			if (array.Length == 0)
+				return string.Empty;
+
+			if (array.Length == 1)
+				return array [0];
+
+			var length = array.Sum ((v) => v.Length) + separator.Length * (array.Length - 2) + last_separator.Length;
+			var sb = new StringBuilder (length);
+			for (var i = 0; i < array.Length - 2; i++) {
+				if (sb.Length > 0)
+					sb.Append (separator);
+				sb.Append (array [i]);
+			}
+			sb.Append (last_separator);
+			sb.Append (array [array.Length - 1]);
+			return sb.ToString ();
+		}
 	}
 
 	static class StringExtensions

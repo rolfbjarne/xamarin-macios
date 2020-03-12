@@ -40,6 +40,7 @@ namespace Xamarin.Bundler {
 			options.Add ("v|verbose", "Specify how verbose the output should be. This can be passed multiple times to increase the verbosity.", v => Verbosity++);
 			options.Add ("q|quiet", "Specify how quiet the output should be. This can be passed multiple times to increase the silence.", v => Verbosity--);
 			options.Add ("sdkroot=", "Specify the location of Apple SDKs, default to 'xcode-select' value.", v => sdk_root = v);
+			options.Add ("target-framework=", "Specify target framework to use. Currently supported: '" + StringUtils.Join ("', '", "', and '", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ())) + "' (defaults to '" + TargetFramework.Default + "')", v => SetTargetFramework (v));
 			options.Add ("no-xcode-version-check", "Ignores the Xcode version check.", v => { min_xcode_version = null; }, true /* This is a non-documented option. Please discuss any customers running into the xcode version check on the maciosdev@ list before giving this option out to customers. */);
 			options.Add ("warnaserror:", "An optional comma-separated list of warning codes that should be reported as errors (if no warnings are specified all warnings are reported as errors).", v =>
 			{

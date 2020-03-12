@@ -1293,6 +1293,8 @@ namespace Xamarin.Bundler {
 				}
 			}
 			if (!platformAssemblyReference) {
+				if (Driver.IsDotNet)
+					throw ErrorHelper.CreateError (85, Errors.MT0085, Driver.GetProductAssembly (this) + ".dll");
 				ErrorHelper.Warning (85, Errors.MT0085, Driver.GetProductAssembly (this) + ".dll");
 				References.Add (Path.Combine (Driver.GetPlatformFrameworkDirectory (this), Driver.GetProductAssembly (this) + ".dll"));
 			}
@@ -1705,12 +1707,15 @@ namespace Xamarin.Bundler {
 				}
 			}
 
+			if (Driver.IsDotNet)
+				require_mono_native = false;
+
 			if (require_mono_native && LibMonoNativeLinkMode == AssemblyBuildTarget.DynamicLibrary) {
 				foreach (var target in Targets) {
 					BundleFileInfo info;
 					var lib_native_name = target.GetLibNativeName () + ".dylib";
 					bundle_files [lib_native_name] = info = new BundleFileInfo ();
-					var lib_native_path = Path.Combine (Driver.GetMonoTouchLibDirectory (this), lib_native_name);
+					var lib_native_path = Path.Combine (Driver.GetProductSdkLibDirectory (this), lib_native_name);
 					info.Sources.Add (lib_native_path);
 					Driver.Log (3, "Adding mono-native library {0} for {1}.", lib_native_name, target.MonoNativeMode);
 				}
@@ -1920,9 +1925,9 @@ namespace Xamarin.Bundler {
 		{
 			switch (build_target) {
 			case AssemblyBuildTarget.StaticObject:
-				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), "libmonosgen-2.0.a");
+				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), Driver.IsDotNet ? "libmono.a" : "libmonosgen-2.0.a");
 			case AssemblyBuildTarget.DynamicLibrary:
-				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), "libmonosgen-2.0.dylib");
+				return Path.Combine (Driver.GetMonoLibraryDirectory (this, abi), Driver.IsDotNet ? "libmono.dylib" : "libmonosgen-2.0.dylib");
 			case AssemblyBuildTarget.Framework:
 				return Path.Combine (Driver.GetMonoFrameworkDirectory (this, abi), "Mono.framework");
 			default:

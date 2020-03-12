@@ -251,6 +251,10 @@ namespace Xamarin.Bundler {
 			set { targetFramework = value; }
 		}
 
+		public static bool IsDotNet {
+			get { return TargetFramework.IsDotNet; }
+		}
+
 		static void SetTargetFramework (string fx)
 		{
 #if MONOMAC
@@ -809,5 +813,12 @@ namespace Xamarin.Bundler {
 			return result;
 		}
 
+		public static string CorlibName {
+			get {
+				if (IsDotNet)
+					return "System.Private.CoreLib";
+				return "mscorlib";
+			}
+		}
 	}
 }

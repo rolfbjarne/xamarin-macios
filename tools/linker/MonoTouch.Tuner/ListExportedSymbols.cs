@@ -114,7 +114,7 @@ namespace MonoTouch.Tuner
 					}
 				}
 
-				Console.WriteLine ($"{pinfo.EntryPoint} -> {pinfo.Module.Name} from {method.FullName}");
+				Console.WriteLine ($"{pinfo.EntryPoint} -> {pinfo.Module.Name} from {method.FullName} ({method.Module.Assembly.FullName})");
 
 				switch (pinfo.Module.Name) {
 				case "__Internal":

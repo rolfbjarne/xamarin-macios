@@ -27,8 +27,6 @@ namespace Xamarin.Mac.Tasks
 
 		public bool IsXPCService { get; set; }
 
-		public bool UseXamMacFullFramework { get; set; }
-
 		public string ApplicationName { get; set; }
 		public string Architecture { get; set; }
 
@@ -55,13 +53,6 @@ namespace Xamarin.Mac.Tasks
 
 			if (!string.IsNullOrEmpty (ApplicationName))
 				args.AddQuotedLine ("/name:" + ApplicationName);
-
-			if (TargetFrameworkIdentifier == "Xamarin.Mac")
-				args.AddLine ("/profile:Xamarin.Mac,Version=v2.0,Profile=Mobile");
-			else if (UseXamMacFullFramework)
-				args.AddLine ($"/profile:Xamarin.Mac,Version={TargetFrameworkVersion},Profile=Full");
-			else
-				args.AddLine ($"/profile:Xamarin.Mac,Version={TargetFrameworkVersion},Profile=System");
 
 			XamMacArch arch;
 			if (!Enum.TryParse (Architecture, true, out arch))

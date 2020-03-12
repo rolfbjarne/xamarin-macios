@@ -485,8 +485,6 @@ namespace Xamarin.iOS.Tasks
 			foreach (var ext in AppExtensionReferences)
 				args.AddQuotedLine ($"--app-extension={Path.GetFullPath (ext.ItemSpec)}");
 
-			args.AddLine ($"--target-framework={TargetFrameworkIdentifier},{TargetFrameworkVersion}");
-			
 			if (!string.IsNullOrWhiteSpace (License))
 				args.AddLine ($"--license={License}");
 

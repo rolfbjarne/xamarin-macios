@@ -579,6 +579,9 @@ namespace Registrar {
 							return true;
 				}
 
+				if (type.Is ("Foundation", "NSObject"))
+					return true;
+
 				type = type.BaseType != null ? type.BaseType.Resolve () : null;
 			}
 
@@ -992,7 +995,7 @@ namespace Registrar {
 		{
 			if (system_void != null)
 				return system_void;
-			
+
 			// find corlib
 			var corlib_name = Driver.CorlibName;
 			AssemblyDefinition corlib = null;

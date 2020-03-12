@@ -114,6 +114,8 @@ namespace MonoTouch.Tuner
 					}
 				}
 
+				Console.WriteLine ($"{pinfo.EntryPoint} -> {pinfo.Module.Name} from {method.FullName}");
+
 				switch (pinfo.Module.Name) {
 				case "__Internal":
 					DerivedLinkContext.RequiredSymbols.AddFunction (pinfo.EntryPoint).AddMember (method);

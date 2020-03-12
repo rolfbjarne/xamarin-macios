@@ -40,10 +40,6 @@ namespace Xamarin.iOS.Tasks
 			get; set;
 		}
 
-		// MD_MTOUCH_SDK_ROOT
-		public string MtouchSdkRoot {
-			get; set;
-		}
 #endregion Inputs
 
 #region Outputs
@@ -97,9 +93,6 @@ namespace Xamarin.iOS.Tasks
 
 		public override bool Execute ()
 		{
-			if (!string.IsNullOrEmpty (MtouchSdkRoot))
-				Environment.SetEnvironmentVariable ("MD_MTOUCH_SDK_ROOT", MtouchSdkRoot);
-
 			AppleSdkSettings.Init ();
 			IPhoneSdks.Reload ();
 

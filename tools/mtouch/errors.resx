@@ -503,7 +503,7 @@
 		</comment>
 	</data>
 
-	<data name="MT0070" xml:space="preserve">
+	<data name="MX0070" xml:space="preserve">
 		<value>Invalid target framework: {0}. Valid target frameworks are: {1}.
 		</value>
 		<comment>

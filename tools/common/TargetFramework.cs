@@ -67,7 +67,7 @@ namespace Xamarin.Utils
 		public static IEnumerable<TargetFramework> ValidFrameworks { get { return ValidFrameworksiOS; } }
 #elif MMP
 		public static IEnumerable<TargetFramework> ValidFrameworks { get { return ValidFrameworksMac; } }
-#elif BGENERATOR
+#else
 		public static IEnumerable<TargetFramework> ValidFrameworks { get { return AllValidFrameworks; } }
 #endif
 

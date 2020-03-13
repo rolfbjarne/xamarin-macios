@@ -530,8 +530,10 @@ namespace Xamarin.Bundler {
 					foreach (var target in Targets) {
 						needs_dlsym |= target.AssembliesWithInexistentPInvokes.Contains (asm);
 					}
-					if (needs_dlsym)
+					if (needs_dlsym) {
+						Driver.Log ("Using dlsym for {0} because it contains P/Invokes to native functions that don't exist.", assembly);
 						return needs_dlsym;
+					}
 				}
 				return !is_sdk_assembly;
 			case ApplePlatform.TVOS:
@@ -1710,7 +1712,7 @@ namespace Xamarin.Bundler {
 			if (Driver.IsDotNet)
 				require_mono_native = false;
 
-			if (require_mono_native && LibMonoNativeLinkMode == AssemblyBuildTarget.DynamicLibrary) {
+			if (require_mono_native && LibMonoNativeLinkMode == AssemblyBuildTarget.DynamicLibrary && !Driver.IsDotNet) {
 				foreach (var target in Targets) {
 					BundleFileInfo info;
 					var lib_native_name = target.GetLibNativeName () + ".dylib";

@@ -81,7 +81,7 @@ copy_files ()
 	if [[ "$platform" == "iOS" ]]; then
 		for arch in arm64 arm x64; do
 			# FIXME: pending x86
-			$cp "$DOTNET_IOS_SDK_DESTDIR/debug/netcoreapp5.0-$platform-Release-$arch/"* "$dotnet_destdir/runtimes/$platform_lower-$arch/lib/$framework/"
+			$cp "$DOTNET_IOS_SDK_DESTDIR/debug/netcoreapp5.0-$platform-Debug-$arch/"* "$dotnet_destdir/runtimes/$platform_lower-$arch/lib/$framework/"
 		done
 
 		for dir in "$dotnet_destdir"/runtimes/"$platform_lower"-*/lib/"$framework/"; do

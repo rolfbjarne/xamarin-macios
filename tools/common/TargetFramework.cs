@@ -7,6 +7,8 @@
 // Copyright 2014 Xamarin Inc. All Rights Reserved.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Xamarin.Utils
 {
@@ -46,19 +48,36 @@ namespace Xamarin.Utils
 		public static readonly TargetFramework DotNet_5_0_tvOS = Parse (".NETCoreApp,Version=5.0,Profile=tvos"); // Short form: net5.0-tvos
 		public static readonly TargetFramework DotNet_5_0_watchOS = Parse (".NETCoreApp,Version=5.0,Profile=watchos"); // Short form: net5.0-watchos
 		public static readonly TargetFramework DotNet_5_0_macOS = Parse (".NETCoreApp,Version=5.0,Profile=macos"); // Short form: net5.0-macos
-#if MTOUCH
-		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[] {
+
+		public static readonly TargetFramework [] ValidFrameworksMac = new [] {
+			Xamarin_Mac_2_0_Mobile, Xamarin_Mac_4_5_Full, Xamarin_Mac_4_5_Full,
+			DotNet_5_0_macOS,
+		};
+
+		public static readonly TargetFramework [] ValidFrameworksiOS = new [] {
 			Xamarin_iOS_1_0, Xamarin_WatchOS_1_0, Xamarin_TVOS_1_0,
-			DotNet_5_0_iOS, DotNet_5_0_macOS, DotNet_5_0_tvOS, DotNet_5_0_watchOS,
+			DotNet_5_0_iOS, DotNet_5_0_tvOS, DotNet_5_0_watchOS,
 		};
+
+		public static IEnumerable<TargetFramework> AllValidFrameworks {
+			get { return ValidFrameworksMac.Union (ValidFrameworksiOS); }
+		}
+
+#if MTOUCH
+		public static IEnumerable<TargetFramework> ValidFrameworks { get { return ValidFrameworksiOS; } }
+#elif MMP
+		public static IEnumerable<TargetFramework> ValidFrameworks { get { return ValidFrameworksMac; } }
 #elif BGENERATOR
-		public static readonly TargetFramework [] ValidFrameworks = new TargetFramework[]
-		{
-			Xamarin_iOS_1_0, Xamarin_TVOS_1_0, Xamarin_WatchOS_1_0,
-			Xamarin_Mac_2_0_Mobile, Xamarin_Mac_4_5_Full, Xamarin_Mac_4_5_System,
-			DotNet_5_0_iOS, DotNet_5_0_macOS, DotNet_5_0_tvOS, DotNet_5_0_watchOS,
-		};
+		public static IEnumerable<TargetFramework> ValidFrameworks { get { return AllValidFrameworks; } }
 #endif
+
+		public static bool IsValidFramework (TargetFramework framework)
+		{
+			foreach (var tf in ValidFrameworks)
+				if (tf == framework)
+					return true;
+			return false;
+		}
 
 		public bool IsDotNet {
 			get { return Identifier == ".NETCoreApp" && Version.Major >= 5; }

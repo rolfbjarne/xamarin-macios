@@ -284,10 +284,8 @@ namespace Xamarin.Bundler {
 				break;
 			}
 
-#if MTOUCH
-			if (Array.IndexOf (TargetFramework.ValidFrameworks, targetFramework.Value) == -1)
-				throw ErrorHelper.CreateError (70, Errors.MT0070, targetFramework.Value, string.Join (" ", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ()).ToArray ()));
-#endif
+			if (!TargetFramework.IsValidFramework (targetFramework.Value))
+				throw ErrorHelper.CreateError (70, Errors.MX0070, targetFramework.Value, string.Join (" ", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ()).ToArray ()));
 		}
 
 		public static int RunCommand (string path, params string [] args)

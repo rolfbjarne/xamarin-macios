@@ -762,14 +762,6 @@
         <note>
 		</note>
       </trans-unit>
-      <trans-unit id="MT0070">
-        <source>Invalid target framework: {0}. Valid target frameworks are: {1}.
-		</source>
-        <target state="new">Invalid target framework: {0}. Valid target frameworks are: {1}.
-		</target>
-        <note>
-		</note>
-      </trans-unit>
       <trans-unit id="MT0072">
         <source>Extensions are not supported for the platform '{0}'.
 		</source>
@@ -2790,6 +2782,14 @@
         <source>Invalid value for target framework: {0}.
 		</source>
         <target state="new">Invalid value for target framework: {0}.
+		</target>
+        <note>
+		</note>
+      </trans-unit>
+      <trans-unit id="MX0070">
+        <source>Invalid target framework: {0}. Valid target frameworks are: {1}.
+		</source>
+        <target state="new">Invalid target framework: {0}. Valid target frameworks are: {1}.
 		</target>
         <note>
 		</note>

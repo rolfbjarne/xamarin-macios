@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- HACK: Declare the XI framework bundled with this version of the SDK. See Microsoft.NETCoreSdk.BundledVersions.props -->
+
+  <PropertyGroup>
+    <_XIPackageVersion>%XIPACKAGEVERSION%</_XIPackageVersion>
+    <_XMPackageVersion>%XMPACKAGEVERSION%</_XMPackageVersion>
+    <_PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">$(_XMPackageVersion)</_PackageVersion>
+    <_PackageVersion Condition=" '$(_PlatformName)' != 'macOS' ">$(_XIPackageVersion)</_PackageVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <KnownFrameworkReference Include="Xamarin.$(_PlatformName).App"
                             TargetFramework="netcoreapp5.0"
                             RuntimeFrameworkName="Xamarin.$(_PlatformName).App"
-                            DefaultRuntimeFrameworkVersion="0.0.1"
-                            LatestRuntimeFrameworkVersion="0.0.1"
+                            DefaultRuntimeFrameworkVersion="$(_PackageVersion)"
+                            LatestRuntimeFrameworkVersion="$(_PackageVersion)"
                             TargetingPackName="Xamarin.$(_PlatformName).App.Ref"
-                            TargetingPackVersion="0.0.1"
+                            TargetingPackVersion="$(_PackageVersion)"
                             RuntimePackNamePatterns="Xamarin.$(_PlatformName).App.Runtime.**RID**"
                             RuntimePackRuntimeIdentifiers="ios.8-x64;ios.8-arm64"
                             Profile="$(_PlatformName)"

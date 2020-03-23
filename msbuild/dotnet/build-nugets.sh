@@ -308,10 +308,6 @@ copy_files ()
 }
 
 copy_files "$IOS_DOTNET_DESTDIR"     "$IOS_DESTDIR$MONOTOUCH_PREFIX"                   iOS     "x64 arm64" "x86 arm"             iOS     xamarinios10
-
-
-exit 0
-
 copy_files "$MACOS_DOTNET_DESTDIR"   "$MAC_DESTDIR$MAC_FRAMEWORK_DIR/Versions/Current" macOS   "x64"       ""                    Mac     xamarinmac10
 copy_files "$TVOS_DOTNET_DESTDIR"    "$IOS_DESTDIR$MONOTOUCH_PREFIX"                   tvOS    "x64 arm64" ""                    TVOS    xamarintvos10
 copy_files "$WATCHOS_DOTNET_DESTDIR" "$IOS_DESTDIR$MONOTOUCH_PREFIX"                   watchOS ""          "x86 armv7k arm64_32" WatchOS xamarinwatchos10

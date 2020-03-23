@@ -7,6 +7,12 @@
     <_XMPackageVersion>%XMPACKAGEVERSION%</_XMPackageVersion>
     <_PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">$(_XMPackageVersion)</_PackageVersion>
     <_PackageVersion Condition=" '$(_PlatformName)' != 'macOS' ">$(_XIPackageVersion)</_PackageVersion>
+
+    <!-- Runtime pack identifiers -->
+    <_RuntimePackRuntimeIdentifiers Condition=" '$(_PlatformName)' == 'macOS' ">osx.10.12-x64</_RuntimePackRuntimeIdentifiers>
+    <_RuntimePackRuntimeIdentifiers Condition=" '$(_PlatformName)' == 'iOS' ">ios.13-x64;ios.13-arm64</_RuntimePackRuntimeIdentifiers>
+    <_RuntimePackRuntimeIdentifiers Condition=" '$(_PlatformName)' == 'tvOS' ">tvos.13-x64;tvos.13-arm64</_RuntimePackRuntimeIdentifiers>
+    <_RuntimePackRuntimeIdentifiers Condition=" '$(_PlatformName)' == 'watchOS' ">watchos.6-x86;watchis.6-arm64_32</_RuntimePackRuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +24,7 @@
                             TargetingPackName="Xamarin.$(_PlatformName).App.Ref"
                             TargetingPackVersion="$(_PackageVersion)"
                             RuntimePackNamePatterns="Xamarin.$(_PlatformName).App.Runtime.**RID**"
-                            RuntimePackRuntimeIdentifiers="ios.13-x64;ios.13-arm64"
+                            RuntimePackRuntimeIdentifiers="$(_RuntimePackRuntimeIdentifiers)"
                             Profile="$(_PlatformName)"
                             />
   </ItemGroup>

@@ -89,11 +89,11 @@ copy_files ()
 	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$dotnet_destdir/ref/netcoreapp5.0/"
 	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$dotnet_destdir/lib/netcoreapp5.0/"
 	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$dotnet_destdir/lib/netstandard2.0/"
-	$cp "$TOP/msbuild/dotnet/package/iOS/FrameworkList.xml" "$dotnet_destdir/data/"
+	$cp "$TOP/msbuild/dotnet/package/$platform/FrameworkList.xml" "$dotnet_destdir/data/"
 
 
 	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$appref_destdir/ref/netcoreapp5.0/"
-	$cp "$TOP/msbuild/dotnet/package/iOS/FrameworkList.xml" "$appref_destdir/data/"
+	$cp "$TOP/msbuild/dotnet/package/$platform/FrameworkList.xml" "$appref_destdir/data/"
 
 	if [[ "$platform" == "iOS--disabled" ]]; then
 		for arch in arm64 arm x64; do

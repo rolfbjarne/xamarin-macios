@@ -133,6 +133,13 @@ $(MAC_DESTDIR)$(MAC_FRAMEWORK_CURRENT_DIR)/lib/dotnet/Xamarin.macOS.Sdk/targets/
 $(DIRECTORIES):
 	$(Q) mkdir -p $@
 
+targets/Xamarin.Shared.Sdk.DefaultItems.targets: targets/Xamarin.Shared.Sdk.DefaultItems.template.targets package/versions.targets Makefile
+	$(Q_GEN) \
+		VERSIONS='$(shell msbuild package/versions.targets /t:PrintVersions /v:m /nologo)'; \
+		XIPackageVersion=$$(echo $$VERSIONS | sed -e 's/.*XIPackageVersion: //' -e 's/ XMPackageVersion.*//'); \
+		XMPackageVersion=$$(echo $$VERSIONS | sed -e 's/.*XMPackageVersion: //'); \
+		sed -e "s/%XIPACKAGEVERSION%/$$XIPackageVersion/" -e "s/%XMPACKAGEVERSION%/$$XMPackageVersion/" $< > $@
+
 all-local:: $(TARGETS)
 
 pack: prepare
@@ -154,14 +161,14 @@ endif
 
 TEST_FEED_PATH=test/feed
 
-ref-pack-%: package/versions.targets
+ref-pack-%: package/versions.targets targets/Xamarin.Shared.Sdk.DefaultItems.targets
 	$(Q) rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').app.ref
 	$(Q) rm -f nupkgs/Xamarin.$*.App.Ref.*.nupkg
 	$(if $(V),,@echo "PACK     nupkgs/Xamarin.$*.App.Ref.nupkg";) $(DOTNET) pack package/$*/Xamarin.$*.App.ref.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
 	$(if $(V),,@echo "ADD      nupkgs/Xamarin.$*.App.Ref.nupkg";) nuget add nupkgs/Xamarin.$*.App.Ref.*nupkg -source $(TEST_FEED_PATH) $(NUGET_VERBOSITY)
 	$(Q) echo "Created: $$(ls -1 nupkgs/Xamarin.$*.App.Ref.*nupkg)"
 
-pack-%: package/versions.targets
+pack-%: package/versions.targets targets/Xamarin.Shared.Sdk.DefaultItems.targets
 	$(Q) rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').sdk
 	$(Q) rm -f nupkgs/Xamarin.$*.Sdk.*.nupkg
 	$(if $(V),,@echo "PACK     nupkgs/Xamarin.$*.Sdk.nupkg";) $(DOTNET) pack package/$*/Xamarin.$*.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)

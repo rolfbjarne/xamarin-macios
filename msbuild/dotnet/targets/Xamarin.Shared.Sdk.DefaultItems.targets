@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Default References -->
+  <!-- HACK: Declare the XI framework bundled with this version of the SDK. See Microsoft.NETCoreSdk.BundledVersions.props -->
+  <ItemGroup>
+    <KnownFrameworkReference Include="Xamarin.$(_PlatformName).App"
+                            TargetFramework="netcoreapp5.0"
+                            RuntimeFrameworkName="Xamarin.$(_PlatformName).App"
+                            DefaultRuntimeFrameworkVersion="0.0.1"
+                            LatestRuntimeFrameworkVersion="0.0.1"
+                            TargetingPackName="Xamarin.$(_PlatformName).App.Ref"
+                            TargetingPackVersion="0.0.1"
+                            RuntimePackNamePatterns="Xamarin.$(_PlatformName).App.Runtime.**RID**"
+                            RuntimePackRuntimeIdentifiers="ios.8-x64;ios.8-arm64"
+                            Profile="$(_PlatformName)"
+                            />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true'">
-    <Reference Include="Xamarin.iOS" Condition="'$(_PlatformName)' == 'iOS'" />
-    <Reference Include="Xamarin.TVOS" Condition="'$(_PlatformName)' == 'tvOS'" />
-    <Reference Include="Xamarin.WatchOS" Condition="'$(_PlatformName)' == 'watchOS'" />
-    <Reference Include="Xamarin.Mac" Condition="'$(_PlatformName)' == 'macOS'" />
+    <FrameworkReference Include="Xamarin.$(_PlatformName).App" IsImplicitlyDefined="true"
+                        Pack="false"
+                        PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

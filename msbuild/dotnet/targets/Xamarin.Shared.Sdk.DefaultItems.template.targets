@@ -18,7 +18,7 @@
                             TargetingPackName="Xamarin.$(_PlatformName).App.Ref"
                             TargetingPackVersion="$(_PackageVersion)"
                             RuntimePackNamePatterns="Xamarin.$(_PlatformName).App.Runtime.**RID**"
-                            RuntimePackRuntimeIdentifiers="ios.8-x64;ios.8-arm64"
+                            RuntimePackRuntimeIdentifiers="ios.13-x64;ios.13-arm64"
                             Profile="$(_PlatformName)"
                             />
   </ItemGroup>

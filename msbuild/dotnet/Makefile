@@ -142,7 +142,7 @@ pack: prepare
 pack-simple: prepare
 	$(Q) rm -Rf nupkgs
 	$(Q) mkdir -p nupkgs
-	$(Q) $(MAKE) pack-iOS
+	$(Q) $(MAKE) pack-iOS ref-pack-iOS
 
 ifeq ($(V),)
 DOTNET_PACK_VERBOSITY=--verbosity:quiet --nologo
@@ -154,15 +154,22 @@ endif
 
 TEST_FEED_PATH=test/feed
 
+ref-pack-%: package/versions.targets
+	$(Q) rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').app.ref
+	$(Q) rm -f nupkgs/Xamarin.$*.App.Ref.*.nupkg
+	$(if $(V),,@echo "PACK     nupkgs/Xamarin.$*.App.Ref.nupkg";) $(DOTNET) pack package/$*/Xamarin.$*.App.ref.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
+	$(if $(V),,@echo "ADD      nupkgs/Xamarin.$*.App.Ref.nupkg";) nuget add nupkgs/Xamarin.$*.App.Ref.*nupkg -source $(TEST_FEED_PATH) $(NUGET_VERBOSITY)
+	$(Q) echo "Created: $$(ls -1 nupkgs/Xamarin.$*.App.Ref.*nupkg)"
+
 pack-%: package/versions.targets
 	$(Q) rm -Rf $(TEST_FEED_PATH)/xamarin.$(shell echo $* | tr '[:upper:]' '[:lower:]').sdk
 	$(Q) rm -f nupkgs/Xamarin.$*.Sdk.*.nupkg
 	$(if $(V),,@echo "PACK     nupkgs/Xamarin.$*.Sdk.nupkg";) $(DOTNET) pack package/$*/Xamarin.$*.csproj --output nupkgs $(DOTNET_PACK_VERBOSITY)
 	$(if $(V),,@echo "ADD      nupkgs/Xamarin.$*.Sdk.nupkg";) nuget add nupkgs/Xamarin.$*.Sdk.*nupkg -source $(TEST_FEED_PATH) $(NUGET_VERBOSITY)
-	@# Add the hash to the filename
-	$(Q) CURRENT_HASH=$(shell grep '<CurrentHash>' package/versions.targets | sed -e 's/<[/]*CurrentHash>//g' -e 's/[[:space:]]//g'); \
-	NAME=$$(echo nupkgs/Xamarin.$*.Sdk.*nupkg | sed -e 's/.nupkg$$//'); \
-	mv "$$NAME.nupkg" "$$NAME+$$CURRENT_HASH.nupkg"
+# 	@# Add the hash to the filename
+# 	$(Q) CURRENT_HASH=$(shell grep '<CurrentHash>' package/versions.targets | sed -e 's/<[/]*CurrentHash>//g' -e 's/[[:space:]]//g'); \
+# 	NAME=$$(echo nupkgs/Xamarin.$*.Sdk.*nupkg | sed -e 's/.nupkg$$//'); \
+# 	mv "$$NAME.nupkg" "$$NAME+$$CURRENT_HASH.nupkg"
 	$(Q) echo "Created: $$(ls -1 nupkgs/Xamarin.$*.Sdk.*nupkg)"
 
 test/NuGet.config: $(TOP)/NuGet.config

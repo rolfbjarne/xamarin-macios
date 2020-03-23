@@ -1,11 +1,13 @@
 <Project>
   <Import Project="versions.targets" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>Xamarin.$(_PlatformName).Sdk</PackageId>
-    <PackageVersion Condition=" '$(_PlatformName)' != 'macOS' ">$(XIPackageVersion)</PackageVersion>
-    <PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">$(XMPackageVersion)</PackageVersion>
+<!--     <PackageVersion Condition=" '$(_PlatformName)' != 'macOS' ">$(XIPackageVersion)</PackageVersion>
+    <PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">$(XMPackageVersion)</PackageVersion> -->
+    <PackageVersion Condition=" '$(_PlatformName)' != 'macOS' ">0.0.1</PackageVersion>
+    <PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">0.0.1</PackageVersion>
     <RepositoryUrl>https://github.com/xamarin/xamarin-macios</RepositoryUrl>
     <RepositoryBranch>$(CurrentBranch)</RepositoryBranch>
     <RepositoryCommit>$(CurrentHash)</RepositoryCommit>

@@ -29,6 +29,10 @@ copy_files ()
 	local assembly_infix=$6
 	local framework=$7
 
+	appref_destdir="$dotnet_destdir/../Xamarin.$platform.App.Ref"
+	mkdir -p "$appref_destdir/data"
+	mkdir -p "$appref_destdir/ref/netcoreapp5.0"
+
 	rm -Rf "$dotnet_destdir"
 
 	mkdir -p "$dotnet_destdir"
@@ -86,6 +90,10 @@ copy_files ()
 	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$dotnet_destdir/lib/netcoreapp5.0/"
 	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$dotnet_destdir/lib/netstandard2.0/"
 	$cp "$TOP/msbuild/dotnet/package/iOS/FrameworkList.xml" "$dotnet_destdir/data/"
+
+
+	$cp "$TOP/src/build/dotnet/$platform_lower/ref/Xamarin.$assembly_infix.dll" "$appref_destdir/ref/netcoreapp5.0/"
+	$cp "$TOP/msbuild/dotnet/package/iOS/FrameworkList.xml" "$appref_destdir/data/"
 
 	if [[ "$platform" == "iOS--disabled" ]]; then
 		for arch in arm64 arm x64; do

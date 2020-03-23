@@ -136,7 +136,7 @@ $(DIRECTORIES):
 all-local:: $(TARGETS)
 
 pack: prepare
-	$(Q) $(MAKE) pack-iOS pack-tvOS pack-watchOS pack-macOS
+	$(Q) $(MAKE) $(foreach var,iOS tvOS watchOS macOS,pack-$(var)) $(foreach var,iOS tvOS watchOS macOS,ref-pack-$(var))
 
 # just a temporary target while debugging for faster turnaround
 pack-simple: prepare

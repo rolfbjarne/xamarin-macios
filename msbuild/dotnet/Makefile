@@ -168,7 +168,8 @@ pack: prepare
 pack-simple: prepare
 	$(Q) rm -Rf nupkgs
 	$(Q) mkdir -p nupkgs
-	$(Q) $(MAKE) pack-iOS ref-pack-iOS pack-macOS ref-pack-macOS
+	$(Q) $(MAKE) pack-iOS ref-pack-iOS
+	# pack-macOS ref-pack-macOS
 
 ifeq ($(V),)
 DOTNET_PACK_VERBOSITY=--verbosity:quiet --nologo

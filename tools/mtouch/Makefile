@@ -202,9 +202,6 @@ LOCAL_MTOUCH=$(MTOUCH_DIR)/mtouch
 LOCAL_MTOUCH_COMMAND=$(MTOUCH_DIR)/mtouch
 
 # mtouch.csproj.inc contains the mtouch_dependencies variable used to determine if mtouch needs to be rebuilt or not.
-mtouch.csproj.inc: Makefile ../common/create-makefile-fragment.sh $(TOP)/Make.config $(TOP)/mk/mono.mk
-	$(Q_GEN) ../common/create-makefile-fragment.sh $(CURDIR)/mtouch.csproj
-
 -include mtouch.csproj.inc
 
 $(MTOUCH_DIR)/mtouch: $(mtouch_dependencies)

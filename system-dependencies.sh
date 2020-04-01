@@ -1060,6 +1060,9 @@ check_7z
 check_objective_sharpie
 check_simulators
 check_dotnet
+ok ".NET SDKs:"
+(IFS=$'\n'; for i in $(dotnet --list-sdks); do log "$i"; done)
+log "Current version: $(dotnet --version)"
 
 if test -z $FAIL; then
 	echo "System check succeeded"

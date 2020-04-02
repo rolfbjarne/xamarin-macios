@@ -1039,7 +1039,12 @@ namespace Xharness.Jenkins {
 					throw new NotImplementedException (project.TargetFrameworkFlavors.ToString ());
 				}
 				foreach (var config in configurations) {
-					MSBuildTask build = new MSBuildTask (processManager);
+					BuildProjectTask build;
+					if (project.IsDotNetProject) {
+						build = new DotNetBuildTask (processManager);
+					} else {
+						build = new MSBuildTask (processManager);
+					}
 					build.Platform = platform;
 					build.CloneTestProject (project);
 					build.Jenkins = this;
@@ -1052,7 +1057,15 @@ namespace Xharness.Jenkins {
 					RunTestTask exec;
 					IEnumerable<RunTestTask> execs;
 					var ignored_main = ignored;
-					if (project.IsNUnitProject) {
+					if (project.IsDotNetProject) {
+						exec = new DotNetTestTask ((DotNetBuildTask) build, processManager) {
+							TestProject = build.TestProject,
+							Platform = build.Platform,
+							TestName = build.TestName,
+							Ignored = ignored_main,
+						};
+						execs = new [] { exec };
+					} else if (project.IsNUnitProject) {
 						var dll = Path.Combine (Path.GetDirectoryName (build.TestProject.Path), project.Xml.GetOutputAssemblyPath (build.ProjectPlatform, build.ProjectConfiguration).Replace ('\\', '/'));
 						exec = new NUnitExecuteTask (build, processManager) {
 							Ignored = ignored_main,

@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 using Mono.Cecil;
 
@@ -30,6 +31,7 @@ namespace Xamarin.Bundler {
 	public partial class MonoMacResolver : CoreResolver {
 		public List <string> CommandLineAssemblies { get; set; }
 		public List<Exception> Exceptions = new List<Exception> ();
+		public string GAC;
 
 
 		public AssemblyDefinition GetAssembly (string fileName)
@@ -81,6 +83,19 @@ namespace Xamarin.Bundler {
 			assembly = SearchDirectory (name, RootDirectory, ".exe");
 			if (assembly != null)
 				return assembly;
+
+			if (!string.IsNullOrEmpty (GAC)) {
+				var gac_folder = new StringBuilder ()
+					.Append (reference.Version)
+					.Append ("__");
+
+				for (int i = 0; i < reference.PublicKeyToken.Length; i++)
+					gac_folder.Append (reference.PublicKeyToken [i].ToString ("x2"));
+
+				var gac_path = Path.Combine (GAC, reference.Name, gac_folder.ToString (), reference.Name + ".dll");
+				if (File.Exists (gac_path))
+					return Load (gac_path);
+			}
 
 			return null;
 		}

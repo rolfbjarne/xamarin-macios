@@ -77,7 +77,7 @@ jobs:
       set -x
       set -e
 
-      ./xamarin-macios/system-dependencies.sh --ignore-all --provision-xcode --provision-xamarin-studio --provision-mono --provision-7z
+      ./xamarin-macios/system-dependencies.sh --ignore-all --provision-xcode --provision-xamarin-studio --provision-mono --provision-7z --provision-dotnet
     displayName: 'Provision dependencies'
     timeoutInMinutes: 240
 

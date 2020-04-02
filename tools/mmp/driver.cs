@@ -607,6 +607,9 @@ namespace Xamarin.Bundler {
 				references.Add (root_assembly);
 				BuildTarget.Resolver.CommandLineAssemblies = references;
 
+				if (IsUnifiedFullSystemFramework || IsUnifiedFullXamMacFramework)
+					BuildTarget.Resolver.GAC = Path.Combine (SystemMonoDirectory, "lib", "mono", "gac");
+
 				if (string.IsNullOrEmpty (app_name))
 					app_name = root_wo_ext;
 			
@@ -766,15 +769,25 @@ namespace Xamarin.Bundler {
 			Watch ("Extracted native link info", 1);
 		}
 
+		static string system_mono_dir;
+		static string SystemMonoDirectory {
+			get {
+				if (system_mono_dir == null) {
+					var dir = new StringBuilder ();
+					RunCommand (pkg_config, new [] { "--variable=prefix", "mono-2" }, dir);
+					system_mono_dir = Path.GetFullPath (dir.ToString ().Replace (Environment.NewLine, String.Empty));
+				}
+				return system_mono_dir;
+			}
+		}
+
 		static string MonoDirectory {
 			get {
 				if (mono_dir == null) {
 					if (IsUnifiedFullXamMacFramework || IsUnifiedMobile) {
 						mono_dir = FrameworkDirectory;
 					} else {
-						var dir = new StringBuilder ();
-						RunCommand (pkg_config, new [] { "--variable=prefix", "mono-2" }, dir);
-						mono_dir = Path.GetFullPath (dir.ToString ().Replace (Environment.NewLine, String.Empty));
+						mono_dir = SystemMonoDirectory;
 					}
 				}
 				return mono_dir;
@@ -1736,7 +1749,7 @@ namespace Xamarin.Bundler {
 			resolved_assemblies.Add (fqname);
 
 			foreach (AssemblyNameReference reference in assembly.MainModule.AssemblyReferences) {
-				AssemblyDefinition reference_assembly = AddAssemblyReferenceToResolver (reference.Name);
+				AssemblyDefinition reference_assembly = AddAssemblyReferenceToResolver (reference);
 				ProcessAssemblyReferences (reference_assembly);
 			}
 		}
@@ -1752,10 +1765,10 @@ namespace Xamarin.Bundler {
 			return assembly;
 		}
 
-		static AssemblyDefinition AddAssemblyReferenceToResolver (string reference)
+		static AssemblyDefinition AddAssemblyReferenceToResolver (AssemblyNameReference reference)
 		{
-			if (AssemblySwapInfo.ReferencedNeedsSwappedOut (reference))
-				return BuildTarget.Resolver.Load (AssemblySwapInfo.GetSwappedReference (reference));
+			if (AssemblySwapInfo.ReferencedNeedsSwappedOut (reference.Name))
+				return BuildTarget.Resolver.Load (AssemblySwapInfo.GetSwappedReference (reference.Name));
 
 			return BuildTarget.Resolver.Resolve (reference);
 		}

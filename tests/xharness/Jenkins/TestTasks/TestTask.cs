@@ -317,6 +317,8 @@ namespace Xharness.Jenkins.TestTasks {
 		{
 			var xcodeRoot = Harness.XcodeRoot;
 
+			process.StartInfo.EnvironmentVariables ["PATH"] += ":" + Path.GetDirectoryName (Harness.DOTNET);
+
 			switch (Platform) {
 			case TestPlatform.iOS:
 			case TestPlatform.iOS_Unified:

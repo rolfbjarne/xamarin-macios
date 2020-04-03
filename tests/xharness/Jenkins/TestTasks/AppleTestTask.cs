@@ -28,6 +28,11 @@ namespace Xharness.Jenkins.TestTasks {
 		{
 			var xcodeRoot = Harness.XcodeRoot;
 
+			// Do this always, even for non-dotnet tasks, because we need dotnet in PATH when msbuild
+			// ends up executing dotnet (such as when restoring a solution that has both .NET projects and old-style
+			// projects).
+			process.StartInfo.EnvironmentVariables ["PATH"] += ":" + Path.GetDirectoryName (Harness.DOTNET);
+
 			switch (Platform) {
 			case TestPlatform.iOS:
 			case TestPlatform.iOS_Unified:

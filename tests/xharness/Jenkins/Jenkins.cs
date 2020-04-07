@@ -1061,8 +1061,9 @@ namespace Xharness.Jenkins {
 						exec = new DotNetTestTask ((DotNetBuildTask) build, processManager) {
 							TestProject = build.TestProject,
 							Platform = build.Platform,
-							TestName = build.TestName,
+							TestName = project.Name,
 							Ignored = ignored_main,
+							Mode = "macOS",
 						};
 						execs = new [] { exec };
 					} else if (project.IsNUnitProject) {

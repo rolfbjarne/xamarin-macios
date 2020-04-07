@@ -148,7 +148,7 @@ namespace Xharness {
 					var relative = cs.Substring (proj_dir.Length + 1);
 					if (relative.StartsWith ("bin", StringComparison.OrdinalIgnoreCase) || relative.StartsWith ("obj", StringComparison.Ordinal))
 						continue;
-					doc.AddCompileInclude (cs, cs);
+					doc.AddCompileInclude (cs, cs.Replace ('/', '\\'), true);
 				}
 			}
 			

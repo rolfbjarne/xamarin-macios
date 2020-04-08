@@ -1063,6 +1063,7 @@ namespace Xharness.Jenkins {
 							Platform = build.Platform,
 							TestName = project.Name,
 							Ignored = ignored_main,
+							Timeout = TimeSpan.FromMinutes (120),
 							Mode = "macOS",
 						};
 						execs = new [] { exec };

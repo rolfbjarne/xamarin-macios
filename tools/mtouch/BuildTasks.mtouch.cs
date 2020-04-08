@@ -307,7 +307,22 @@ namespace Xamarin.Bundler
 			// and very hard to diagnose otherwise when hidden from the build output. Ref: bug #2430
 			var linker_errors = new List<Exception> ();
 			var output = new StringBuilder ();
-			var code = await Driver.RunCommandAsync (Target.App.CompilerPath, CompilerFlags.ToArray (), null, output, suppressPrintOnErrors: true);
+			int code;
+
+			int ComputeCommandLength ()
+			{
+				return Target.App.CompilerPath.Length + 1 + CompilerFlags.ToString ().Length;
+			}
+
+			try {
+				code = await Driver.RunCommandAsync (Target.App.CompilerPath, CompilerFlags.ToArray (), null, output, suppressPrintOnErrors: true);
+			} catch (System.ComponentModel.Win32Exception wex) {
+				/* This means we failed to execute the linker, not that the linker itself returned with a failure */
+				if (wex.NativeErrorCode == 7 /* E2BIG = Too many arguments */ ) {
+					ErrorHelper.Warning (5217, wex, Errors.MT5217, ComputeCommandLength ());
+				}
+				throw ErrorHelper.CreateError (5222, wex, Errors.MX5222, wex.Message);
+			}
 
 			Application.ProcessNativeLinkerOutput (Target, output.ToString (), CompilerFlags.AllLibraries, linker_errors, code != 0);
 
@@ -337,7 +352,7 @@ namespace Xamarin.Bundler
 					if (Driver.RunCommand ("getconf", new [] { "ARG_MAX" }, output: getconf_output, suppressPrintOnErrors: true) == 0) {
 						int arg_max;
 						if (int.TryParse (getconf_output.ToString ().Trim (' ', '\t', '\n', '\r'), out arg_max)) {
-							var cmd_length = Target.App.CompilerPath.Length + 1 + CompilerFlags.ToString ().Length;
+							var cmd_length = ComputeCommandLength ();
 							if (cmd_length > arg_max) {
 								linker_errors.Add (ErrorHelper.CreateWarning (5217, Errors.MT5217, cmd_length));
 							} else {

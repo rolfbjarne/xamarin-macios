@@ -8,9 +8,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>MONOMAC;MMP;XAMARIN_APPLETLS;DEBUG;NETCOREAPP;NETCOREAPP3_1;DEV</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="XliffTasks" Version="1.0.0-beta.20154.1" />
     <Reference Include="Mono.Cecil">

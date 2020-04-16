@@ -106,31 +106,11 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	<Import Project="$(MSBuildThisFileDirectory)Xamarin.Shared.targets" />			
 
 	<PropertyGroup>
-		<!-- Switching to a new property allows us to potentially switch from iPhone to simulator builds
-			 dynamically based on the user's selection when starting the project. This allows us to 
-			 eventually even (optionally) switch back to AnyCPU platform in the IDE, therefore 
-			 fixing a key pain point in managing solution configurations. -->
-		<ComputedPlatform Condition="'$(ComputedPlatform)' == ''">$(Platform)</ComputedPlatform>
-		<ComputedPlatform Condition="'$(ComputedPlatform)' == 'AnyCPU'">iPhone</ComputedPlatform>
-
-		<_CanOutputAppBundle>False</_CanOutputAppBundle>
-		<_CanOutputAppBundle Condition="'$(OutputType)' == 'Exe' Or '$(IsAppExtension)' == 'true' Or '$(IsWatchApp)' == 'true'">True</_CanOutputAppBundle>
-
-		<_CanArchive>False</_CanArchive>
-		<_CanArchive Condition="'$(OutputType)' == 'Exe' And '$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'">True</_CanArchive>
-
 		<_CanDeployToDeviceOrSimulator>False</_CanDeployToDeviceOrSimulator>
 		<_CanDeployToDeviceOrSimulator Condition="('$(OutputType)' == 'Exe' Or '$(IsAppExtension)' == 'true') And '$(IsWatchApp)' == 'false'">True</_CanDeployToDeviceOrSimulator>
 
-		<_RequireCodeSigning>False</_RequireCodeSigning>
-		<_RequireCodeSigning Condition="'$(ComputedPlatform)' == 'iPhone'">True</_RequireCodeSigning>
-
-		<_RequireProvisioningProfile>False</_RequireProvisioningProfile>
-		<_RequireProvisioningProfile Condition="'$(ComputedPlatform)' == 'iPhone' Or '$(CodesignEntitlements)' != ''">True</_RequireProvisioningProfile>
-
 		<_PreparedResourceRules></_PreparedResourceRules>
 		<_AppBundleName>$(AssemblyName)</_AppBundleName>
-
 		<AppBundleExtension Condition="'$(AppBundleExtension)' == ''">.app</AppBundleExtension>
 
 		<DeviceSpecificIntermediateOutputPath>$(IntermediateOutputPath)</DeviceSpecificIntermediateOutputPath>
@@ -143,6 +123,22 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<DeviceSpecificOutputPath>$(OutputPath)</DeviceSpecificOutputPath>
 		<DeviceSpecificOutputPath Condition="$([System.IO.Path]::IsPathRooted ('$(DeviceSpecificOutputPath)')) == 'true'">$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)','$(OutputPath)'))</DeviceSpecificOutputPath>
 	</PropertyGroup>
+
+	<Target Name="_ComputeProperties" DependsOnTargets="_DetectSdkLocations;">
+		<PropertyGroup>
+			<_CanOutputAppBundle>False</_CanOutputAppBundle>
+			<_CanOutputAppBundle Condition="'$(OutputType)' == 'Exe' Or '$(IsAppExtension)' == 'true' Or '$(IsWatchApp)' == 'true'">True</_CanOutputAppBundle>
+
+			<_CanArchive>False</_CanArchive>
+			<_CanArchive Condition="'$(OutputType)' == 'Exe' And '$(_SdkIsSimulator)' == 'false' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'">True</_CanArchive>
+
+			<_RequireCodeSigning>False</_RequireCodeSigning>
+			<_RequireCodeSigning Condition="'$(_SdkIsSimulator)' == 'false'">True</_RequireCodeSigning>
+
+			<_RequireProvisioningProfile>False</_RequireProvisioningProfile>
+			<_RequireProvisioningProfile Condition="'$(_SdkIsSimulator)' == 'false' Or '$(CodesignEntitlements)' != ''">True</_RequireProvisioningProfile>
+		</PropertyGroup>
+	</Target>
 	
 	<PropertyGroup>
 		<ImplicitlyExpandDesignTimeFacades>true</ImplicitlyExpandDesignTimeFacades>
@@ -296,6 +292,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 
 	<PropertyGroup>
 		<CompileColladaAssetsDependsOn>
+			_ComputeProperties;
 			_CollectColladaAssets;
 			_CoreCompileColladaAssets
 		</CompileColladaAssetsDependsOn>
@@ -340,6 +337,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 
 	<PropertyGroup>
 		<CreateAppBundleDependsOn>
+			_CompileProperties;
 			_DetectAppManifest;
 			_DetectSigningIdentity;
 			_CopyResourcesToBundle;
@@ -375,6 +373,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 
 	<PropertyGroup>
 		<_CodesignAppBundleDependsOn>
+			_ComputeProperties;
 			_EmbedMobileProvision;
 			_CodesignNativeLibraries;
 			_CollectFrameworks;
@@ -409,6 +408,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<_BeforeCreateIpaForDistributionDependsOn />
 		
 		<CreateIpaDependsOn>
+			_ComputeProperties;
 			_BeforeCreateIpaForDistribution;
 			_CompileEntitlements;
 			_CoreCreateIpa;
@@ -417,6 +417,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</CreateIpaDependsOn>
 
 		<ArchiveDependsOn>
+			_ComputeProperties;
 			_CoreArchive
 		</ArchiveDependsOn>
 	</PropertyGroup>
@@ -449,16 +450,16 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	
 	<Target Name="CreateIpa" Condition="'$(_CanArchive)' == 'true'" DependsOnTargets="$(CreateIpaDependsOn)" />
 
-	<Target Name="_CleanAppBundle" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName">
+	<Target Name="_CleanAppBundle" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName;_ComputeProperties;">
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(_AppBundlePath)" />
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)mtouch.stamp" />
 	</Target>
 
-	<Target Name="_CleanUploaded" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures">
+	<Target Name="_CleanUploaded" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures;_ComputeProperties;">
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath).uploaded" />
 	</Target>
 
-	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName">
+	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName;_ComputeProperties;">
 		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM">
 			<Output TaskParameter="Directories" ItemName="_DebugSymbolDir" />
 		</GetDirectories>
@@ -468,11 +469,11 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'true'" Files="$(DeviceSpecificOutputPath)dsym.items" />
 	</Target>
 
-	<Target Name="_CleanITunesArtwork" Condition="'$(_CanArchive)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures">
+	<Target Name="_CleanITunesArtwork" Condition="'$(_CanArchive)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures;_ComputeProperties;">
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)iTunesMetadata.plist;$(DeviceSpecificOutputPath)iTunesArtwork@2x;$(DeviceSpecificOutputPath)iTunesArtwork" />
 	</Target>
 
-	<Target Name="_CleanDeviceSpecificOutput" Condition="'$(_CanOutputAppBundle)' == 'true'">
+	<Target Name="_CleanDeviceSpecificOutput" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeProperties;">
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(IntermediateOutputPath)device-builds;$(OutputPath)device-builds" />
 	</Target>
 
@@ -573,7 +574,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</CollectBundleResources>
 	</Target>
 
-	<Target Name="_DetectAppManifest">
+	<Target Name="_DetectAppManifest" DependsOnTargets="_ComputeProperties;">
 		<FindItemWithLogicalName
 			SessionId="$(BuildSessionId)"
 			ProjectDir="$(MSBuildProjectDirectory)"
@@ -601,7 +602,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<Error Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 	</Target>
 
-	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker">
+	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_ComputeProperties">
 		<Metal
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' and '%(Metal.Identity)' != ''"
@@ -653,7 +654,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</MetalLib>
 	</Target>
 
-	<Target Name="_PackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'false'" DependsOnTargets="_CollectBundleResources">
+	<Target Name="_PackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'false'" DependsOnTargets="_CollectBundleResources;_ComputeProperties;">
 		<PackLibraryResources
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -663,7 +664,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</PackLibraryResources>
 	</Target>
 
-	<Target Name="_UnpackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="ResolveReferences;_CollectBundleResources">
+	<Target Name="_UnpackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="ResolveReferences;_CollectBundleResources;_ComputeProperties;">
 		<UnpackLibraryResources
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -697,7 +698,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</DetectSdkLocations>
 	</Target>
 
-	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetFrameworkMoniker">
+	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_ComputeProperties;">
 		<DetectSigningIdentity
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -723,9 +724,9 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</DetectSigningIdentity>
 	</Target>
 	
-	<Target Name="_GenerateBundleName" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures;_GenerateAppBundleName;_GenerateAppExBundleName" />
+	<Target Name="_GenerateBundleName" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures;_GenerateAppBundleName;_GenerateAppExBundleName;_ComputeProperties;" />
 
-	<Target Name="_GenerateAppBundleName" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' != 'true'" DependsOnTargets="_ComputeTargetArchitectures">
+	<Target Name="_GenerateAppBundleName" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' != 'true'" DependsOnTargets="_ComputeTargetArchitectures;_ComputeProperties;">
 		<PropertyGroup>
 			<AppBundleDir Condition="'$(IsAppDistribution)' != 'true'">$(DeviceSpecificOutputPath)$(_AppBundleName)$(AppBundleExtension)</AppBundleDir>
 			<AppBundleDir Condition="'$(IsAppDistribution)' == 'true'">$(ArchivePath)\Products\Applications\$(_AppBundleName)$(AppBundleExtension)</AppBundleDir>
@@ -798,7 +799,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
 	</Target>
 
-	<Target Name="_CompileITunesMetadata" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'"
+	<Target Name="_CompileITunesMetadata" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'"
 		DependsOnTargets="_DetectSdkLocations;_DetectAppManifest;_GenerateBundleName;_CompileAppManifest"
 		Inputs="$(_AppManifest);@(ITunesMetadata)"
 		Outputs="$(DeviceSPecificOutputPath)iTunesMetadata.plist" >
@@ -811,7 +812,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_CollectITunesArtwork" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'">
+	<Target Name="_CollectITunesArtwork" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'">
 		<CollectITunesArtwork
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -821,8 +822,8 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</CollectITunesArtwork>
 	</Target>
 
-	<Target Name="_CopyITunesArtwork" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'"
-		DependsOnTargets="_CollectITunesArtwork"
+	<Target Name="_CopyITunesArtwork" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'"
+		DependsOnTargets="_CollectITunesArtwork;_DetectSdkLocations"
 		Inputs="@(_ITunesArtworkWithLogicalName)" Outputs="$(DeviceSpecificOutputPath)%(_ITunesArtworkWithLogicalName.LogicalName)">
 		<Copy
 			SessionId="$(BuildSessionId)"
@@ -955,7 +956,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</ReadItemsFromFile>
 	</Target>
 
-	<Target Name="_GenerateAppExtensionDebugSymbols" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false'"
+	<Target Name="_GenerateAppExtensionDebugSymbols" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsAppExtension)' == 'false'"
 		DependsOnTargets="_ParseExtraMtouchArgs;_CompileToNative;_ReadAppExtensionDebugSymbolProperties"
 		Inputs="$(_AppBundlePath)PlugIns\%(_AppExtensionDebugSymbolProperties.Identity)\%(_AppExtensionDebugSymbolProperties.NativeExecutable)"
 		Outputs="$(AppBundleDir)\..\%(_AppExtensionDebugSymbolProperties.Identity).dSYM\Contents\Info.plist">
@@ -994,7 +995,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</Touch>
 	</Target>
 
-	<Target Name="_GenerateFrameworkDebugSymbols" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs;_CollectFrameworks"
+	<Target Name="_GenerateFrameworkDebugSymbols" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs;_CollectFrameworks"
 		Inputs="%(_Frameworks.Identity)"
 		Outputs="$(AppBundleDir)\..\%(_Frameworks.Filename).framework.dSYM\Contents\Info.plist"
 		>
@@ -1026,7 +1027,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<!-- _GenerateDebugSymbols will run spotlight to index the dSYMs -->
 	</Target>
 
-	<Target Name="_PrepareDebugSymbolGeneration" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'true' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs"
+	<Target Name="_PrepareDebugSymbolGeneration" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsAppExtension)' == 'true' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs"
 			Inputs="$(_NativeExecutable)" Outputs="$(DeviceSpecificOutputPath)dsym.items">
 		<!-- For App Extensions, we delay running dsymutil & strip until it has been copied into the main app bundle... -->
 		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(_MtouchSymbolsList)">
@@ -1061,7 +1062,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_GenerateDebugSymbols" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs;_GenerateFrameworkDebugSymbols;_GenerateAppExtensionDebugSymbols;_PrepareDebugSymbolGeneration"
+	<Target Name="_GenerateDebugSymbols" Condition="'$(_SdkIsSimulator)' == 'false' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseExtraMtouchArgs;_GenerateFrameworkDebugSymbols;_GenerateAppExtensionDebugSymbols;_PrepareDebugSymbolGeneration"
 		Inputs="$(_NativeExecutable)" Outputs="$(AppBundleDir).dSYM\Contents\Info.plist">
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false'" Directories="$(AppBundleDir).dSYM" />
@@ -1564,7 +1565,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<CreatePkgInfo SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" OutputPath="$(_AppBundlePath)PkgInfo" />
 	</Target>
 
-	<Target Name="_EmbedMobileProvision" Condition="'$(_RequireCodeSigning)' == 'true'" DependsOnTargets="_GenerateBundleName;_DetectSigningIdentity"
+	<Target Name="_EmbedMobileProvision" Condition="'$(_RequireCodeSigning)' == 'true'" DependsOnTargets="_GenerateBundleName;_DetectSigningIdentity;_ComputeProperties;"
 		Outputs="$(_AppBundlePath)embedded.mobileprovision">
 		<EmbedMobileProvision
 			SessionId="$(BuildSessionId)"
@@ -1576,7 +1577,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</EmbedMobileProvision>
 	</Target>
 
-	<Target Name="_CompileEntitlements" Condition="'$(_RequireCodeSigning)' == 'true' Or '$(CodesignEntitlements)' != ''" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;_DetectSigningIdentity;_ComputeTargetFrameworkMoniker"
+	<Target Name="_CompileEntitlements" Condition="'$(_RequireCodeSigning)' == 'true' Or '$(CodesignEntitlements)' != ''" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;_DetectSigningIdentity;_ComputeTargetFrameworkMoniker;_ComputeProperties;"
 		Outputs="$(DeviceSpecificIntermediateOutputPath)Entitlements.xcent">
 		<CompileEntitlements
 			SessionId="$(BuildSessionId)"
@@ -1608,7 +1609,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	<Target Name="_PrepareResourceRules" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName">
 		<PrepareResourceRules
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(CodesignResourceRules)' != '' And '$(ComputedPlatform)' == 'iPhone'"
+			Condition="'$(IsMacEnabled)' == 'true' And '$(CodesignResourceRules)' != '' And '$(_SdkIsSimulator)' == 'false'"
 			AppBundleDir="$(AppBundleDir)"
 			ResourceRules="$(CodesignResourceRules)"
 			SdkVersion="$(MtouchSdkVersion)"
@@ -1837,7 +1838,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_CollectFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_CompileToNative">
+	<Target Name="_CollectFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_CompileToNative;_ComputeProperties;">
 		<CollectFrameworks
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -1848,7 +1849,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	</Target>
 
 	<!-- Note: Always codesign *.dylibs even for Simulator builds. We use $(_CanOutputAppBundle) because dylibs can exist in app extensions as well. -->
-	<Target Name="_CodesignNativeLibraries" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectSigningIdentity;_CompileToNative">
+	<Target Name="_CodesignNativeLibraries" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectSigningIdentity;_CompileToNative;_ComputeProperties;">
 
 		<PropertyGroup>
 			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
@@ -1873,7 +1874,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</CodesignNativeLibraries>
 	</Target>
 
-	<Target Name="_CodesignFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(_Frameworks)' != ''" DependsOnTargets="_DetectSigningIdentity;_CollectFrameworks"
+	<Target Name="_CodesignFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(_Frameworks)' != ''" DependsOnTargets="_DetectSigningIdentity;_CollectFrameworks;_ComputeProperties;"
 		Inputs="%(_Frameworks.Identity)" Outputs="$(DeviceSpecificIntermediateOutputPath)codesign\%(_Frameworks.Filename)%(_Frameworks.Extension)">
 
 		<PropertyGroup>
@@ -1916,7 +1917,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	</Target>
 
 	<Target Name="_CodesignAppExtensions" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(_AppExtensionCodesignProperties)' != ''"
-		DependsOnTargets="_DetectSigningIdentity;_ReadAppExtensionCodesignProperties"
+		DependsOnTargets="_DetectSigningIdentity;_ReadAppExtensionCodesignProperties;_ComputeProperties;"
 		Inputs="$(_AppBundlePath)PlugIns\%(_AppExtensionCodesignProperties.Identity)\%(_AppExtensionCodesignProperties.NativeExecutable);%(_AppExtensionCodesignProperties.CodesignAppExtensionInputs)"
 		Outputs="$(_AppBundlePath)PlugIns\%(_AppExtensionCodesignProperties.Identity)\_CodeSignature\CodeResources">
 
@@ -1963,7 +1964,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_PrepareCodesignAppExtension" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' == 'true' And '@(_ResolvedAppBundleExtensions)' == ''">
+	<Target Name="_PrepareCodesignAppExtension" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' == 'true' And '@(_ResolvedAppBundleExtensions)' == ''" DependsOnTargets="_ComputeProperties;">
 		<!-- For App Extensions, we delay running codesign until it has been copied into the main app bundle... -->
 		<PropertyGroup>
 			<_CompiledEntitlementsFullPath></_CompiledEntitlementsFullPath>
@@ -2027,7 +2028,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_CalculateCodesignAppBundleInputs" Condition="('$(_CanOutputAppBundle)' == 'true' And '$(_CodeSigningKey)' != '') And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')">
+	<Target Name="_CalculateCodesignAppBundleInputs" Condition="('$(_CanOutputAppBundle)' == 'true' And '$(_CodeSigningKey)' != '') And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')" DependsOnTargets="_ComputeProperties;">
 		<ItemGroup>
 			<_CodesignAppBundleInputs Include="$(_AppBundlePath)**\*.*" Exclude="$(_AppBundlePath)_CodeSignature\CodeResources" />
 		</ItemGroup>
@@ -2069,7 +2070,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_CodesignVerify" Condition="'$(_RequireCodeSigning)' == 'true' And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')" DependsOnTargets="_CodesignAppBundle">
+	<Target Name="_CodesignVerify" Condition="'$(_RequireCodeSigning)' == 'true' And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')" DependsOnTargets="_CodesignAppBundle;_ComputeProperties;">
 		<CodesignVerify
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '@(_ResolvedAppExtensionReferences)' != ''"

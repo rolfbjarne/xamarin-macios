@@ -11,12 +11,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <ProjectReference Include="..\..\tools\mmp\mmp.csproj" />
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\builds\mono-ios-sdk-destdir\ios-bcl\monotouch_tools\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>..\..\builds\mono-ios-sdk-destdir\ios-bcl\monotouch_tools\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Mono.Cecil" Version="0.11.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

@@ -88,11 +88,23 @@ namespace Xamarin.Bundler {
 				}
 
 				var parameters = CreateDefaultReaderParameters (fileName);
+				var invalidSymbols = false;
 				try {
 					assembly = ModuleDefinition.ReadModule (fileName, parameters).Assembly;
 					params_cache [assembly.Name.ToString ()] = parameters;
 				}
 				catch (SymbolsNotMatchingException) {
+					invalidSymbols = true;
+				} catch (IOException e) {
+					// An invalid pdb gets a Microsoft.Cci.Pdb.PdbException. This is an internal class that subclasses IOException.
+					if (e.GetType ().FullName == "Microsoft.Cci.Pdb.PdbException") {
+						invalidSymbols = true;
+					} else {
+						throw;
+					}
+				}
+
+				if (invalidSymbols) {
 					parameters.ReadSymbols = false;
 					parameters.SymbolReaderProvider = null;
 					assembly = ModuleDefinition.ReadModule (fileName, parameters).Assembly;

@@ -595,5 +595,11 @@ namespace Xamarin.iOS.Tasks
 
 			return null;
 		}
+
+		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
+		{
+			// Prevent MSBuild from turning random text (that happen to match a specific error regex) into errors (which happens even if mtouch succeeds).
+			Log.LogMessage (messageImportance, "{0}", singleLine);
+		}
 	}
 }

@@ -190,12 +190,8 @@ namespace Xamarin.Mac.Tasks
 
 		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
 		{
-			try { // We first try to use the base logic, which shows up nicely in XS.
-				base.LogEventsFromTextOutput (singleLine, messageImportance);
-			}
-			catch { // But when that fails, just output the message to the command line and XS will output it raw
-				Log.LogMessage (messageImportance, "{0}", singleLine);
-			}
+			// Prevent MSBuild from turning random text (that happen to match a specific error regex) into errors (which happens even if mmp succeeds).
+			Log.LogMessage (messageImportance, "{0}", singleLine);
 		}
 	}
 }

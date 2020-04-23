@@ -397,7 +397,13 @@ namespace ObjCRuntime {
 
 		static void RegisterAssembly (IntPtr a)
 		{
-			RegisterAssembly ((Assembly) ObjectWrapper.Convert (a));
+			Console.WriteLine ($"RegisterAssembly ({a.ToString ("x")})");
+			try {
+				RegisterAssembly ((Assembly) ObjectWrapper.Convert (a));
+			} catch (Exception e) {
+				Console.WriteLine (e);
+				throw;
+			}
 		}
 
 		static void RegisterEntryAssembly (IntPtr a)

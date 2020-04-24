@@ -651,7 +651,7 @@ namespace ObjCRuntime {
 
 		static IntPtr GetHandleForINativeObject (IntPtr ptr)
 		{
-			return ((INativeObject) ObjectWrapper.Convert (ptr)).Handle;
+			return ((INativeObject) GCHandle.FromIntPtr (ptr).Target).Handle;
 		}
 
 		static void UnregisterNSObject (IntPtr native_obj, IntPtr managed_obj) 

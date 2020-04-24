@@ -2149,15 +2149,15 @@ xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref,
 	MONO_ASSERT_GC_UNSAFE;
 	
 	MonoObject *delegate = NULL;
+	GCHandle obj_handle = INVALID_GCHANDLE;
 
 	if (nativeBlock == NULL)
 		return NULL;
 
-	MonoObject *obj;
 	if (token_ref != INVALID_TOKEN_REF) {
-		obj = (MonoObject *) xamarin_get_method_from_token (token_ref, exception_gchandle);
+		obj_handle = xamarin_get_method_from_token (token_ref, exception_gchandle);
 	} else {
-		obj = get_method_block_wrapper_creator (method, par, exception_gchandle);
+		obj_handle = get_method_block_wrapper_creator (method, par, exception_gchandle);
 	}
 	if (*exception_gchandle != 0)
 		goto cleanup;
@@ -2165,7 +2165,7 @@ xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref,
 	/* retain or copy (if it's a stack block) the block */
 	nativeBlock = _Block_copy (nativeBlock);
 
-	delegate = xamarin_create_block_proxy (obj, nativeBlock, exception_gchandle);
+	delegate = xamarin_create_block_proxy (obj_handle, nativeBlock, exception_gchandle);
 	if (*exception_gchandle != 0) {
 		_Block_release (nativeBlock);
 		delegate = NULL;
@@ -2183,6 +2183,7 @@ xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref,
 	pthread_mutex_unlock (&wrapper_hash_lock);
 
 cleanup:
+	xamarin_gchandle_free (obj_handle);
 	return delegate;
 }
 
@@ -2662,7 +2663,7 @@ xamarin_get_managed_method_for_token (guint32 token_ref, guint32 *exception_gcha
 {
 	MonoReflectionMethod *reflection_method;
 
-	reflection_method = xamarin_get_method_from_token (token_ref, exception_gchandle);
+	reflection_method = (MonoReflectionMethod *) xamarin_gchandle_unwrap (xamarin_get_method_from_token (token_ref, exception_gchandle));
 	if (*exception_gchandle != 0) return NULL;
 
 	return xamarin_get_reflection_method_method (reflection_method);

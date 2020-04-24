@@ -691,9 +691,8 @@ namespace ObjCRuntime {
 			/*
 			 * This method is called from marshalling bridge (dynamic mode).
 			 */
-			// It doesn't work to use System.Type in the signature, we get garbage.
-			var type = (System.Type) ObjectWrapper.Convert (type_ptr);
-			return ObjectWrapper.Convert (GetINativeObject (ptr, owns, type));
+			var type = (System.Type) GCHandle.FromIntPtr (type_ptr).Target;
+			return AllocGCHandle (GetINativeObject (ptr, owns, type));
 		}
 			
 		static IntPtr GetINativeObject_Static (IntPtr ptr, bool owns, uint iface_token, uint implementation_token)
@@ -704,7 +703,7 @@ namespace ObjCRuntime {
 
 			var iface = Class.ResolveTypeTokenReference (iface_token);
 			var type = Class.ResolveTypeTokenReference (implementation_token);
-			return ObjectWrapper.Convert (GetINativeObject (ptr, owns, iface, type));
+			return AllocGCHandle (GetINativeObject (ptr, owns, iface, type));
 		}
 
 		static IntPtr GetNSObjectWithType (IntPtr ptr, IntPtr type_ptr, out bool created)

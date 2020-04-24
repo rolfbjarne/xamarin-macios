@@ -406,9 +406,12 @@ namespace ObjCRuntime {
 			}
 		}
 
-		static void RegisterEntryAssembly (IntPtr a)
+		static void RegisterEntryAssembly (IntPtr assembly_handle)
 		{
-			RegisterEntryAssembly ((Assembly) ObjectWrapper.Convert (a));
+			var handle = GCHandle.FromIntPtr (assembly_handle);
+			var a = (Assembly) handle.Target;
+			handle.Free ();
+			RegisterEntryAssembly (a);
 		}
 
 		static void ThrowNSException (IntPtr ns_exception)

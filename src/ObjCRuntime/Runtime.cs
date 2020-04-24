@@ -630,7 +630,7 @@ namespace ObjCRuntime {
 
 		static IntPtr GetClass (IntPtr klass)
 		{
-			return ObjectWrapper.Convert (new Class (klass));
+			return AllocGCHandle (new Class (klass));
 		}
 
 		static IntPtr GetSelector (IntPtr sel)

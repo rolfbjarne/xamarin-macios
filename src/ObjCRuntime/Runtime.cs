@@ -635,7 +635,7 @@ namespace ObjCRuntime {
 
 		static IntPtr GetSelector (IntPtr sel)
 		{
-			return ObjectWrapper.Convert (new Selector (sel));
+			return AllocGCHandle (new Selector (sel));
 		}
 
 		static void GetMethodForSelector (IntPtr cls, IntPtr sel, bool is_static, IntPtr desc)

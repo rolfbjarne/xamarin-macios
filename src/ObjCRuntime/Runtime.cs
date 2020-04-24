@@ -395,11 +395,13 @@ namespace ObjCRuntime {
 			RegisterNSObject (GCHandle.FromIntPtr (managed_obj_handle), native_obj, null);
 		}
 
-		static void RegisterAssembly (IntPtr a)
+		static void RegisterAssembly (IntPtr assembly_handle)
 		{
-			Console.WriteLine ($"RegisterAssembly ({a.ToString ("x")})");
+			var handle = GCHandle.FromIntPtr (assembly_handle);
+			var a = (Assembly) handle.Target;
+			handle.Free ();
 			try {
-				RegisterAssembly ((Assembly) ObjectWrapper.Convert (a));
+				RegisterAssembly (a);
 			} catch (Exception e) {
 				Console.WriteLine (e);
 				throw;

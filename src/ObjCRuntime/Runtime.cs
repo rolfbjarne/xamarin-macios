@@ -397,7 +397,7 @@ namespace ObjCRuntime {
 
 		static void RegisterAssembly (IntPtr a)
 		{
-			RegisterAssembly ((Assembly) ObjectWrapper.Convert (a));
+			RegisterAssembly ((Assembly) GCHandle.FromIntPtr (a).Target);
 		}
 
 		static void RegisterEntryAssembly (IntPtr a)

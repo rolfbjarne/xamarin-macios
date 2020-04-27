@@ -29,6 +29,7 @@
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -44,6 +45,14 @@
     <Reference Include="Mono.Cecil">
       <HintPath>..\..\_mac-build\Library\Frameworks\Xamarin.Mac.framework\Versions\git\lib\mmp\Mono.Cecil.dll</HintPath>
     </Reference>
+=======
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.10.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <ProjectReference Include="..\..\tools\mmp\mmp.csproj" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.1" />
+>>>>>>> 46d878f2bf2... [mtouch/mmp] Get Mono.Cecil from nuget.
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

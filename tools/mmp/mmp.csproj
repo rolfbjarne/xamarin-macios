@@ -37,6 +37,7 @@
        <UpdateXlfOnBuild>true</UpdateXlfOnBuild>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -47,6 +48,10 @@
     <Reference Include="Mono.Cecil.Mdb">
       <HintPath>..\..\builds\mono-ios-sdk-destdir\ios-bcl\monotouch_tools\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
+=======
+    <PackageReference Include="XliffTasks" Version="1.0.0-beta.20154.1" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.1" />
+>>>>>>> 46d878f2bf2... [mtouch/mmp] Get Mono.Cecil from nuget.
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />

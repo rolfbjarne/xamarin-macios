@@ -40,10 +40,17 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="Application.cs" />
     <Compile Include="Assembly.cs" />
     <Compile Include="AssemblyResolver.cs" />
     <Compile Include="BitcodeConverter.cs" />
+=======
+    <PackageReference Include="XliffTasks" Version="1.0.0-beta.20154.1" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.1" />
+  </ItemGroup>
+  <ItemGroup>
+>>>>>>> 46d878f2bf2... [mtouch/mmp] Get Mono.Cecil from nuget.
     <Compile Include="..\common\error.cs">
       <Link>external\error.cs</Link>
     </Compile>

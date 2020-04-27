@@ -35,9 +35,8 @@
     <Reference Include="System.Xml" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.11.1" />
-    <Reference Include="mmp">
-      <HintPath>..\..\_mac-build\Library\Frameworks\Xamarin.Mac.framework\Versions\git\lib\mmp\mmp.exe</HintPath>
-    </Reference>
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="Mono.Cecil" Version="0.11.1" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +124,12 @@
     <EmbeddedResource Include="..\common\mac\remoting.config">
       <Link>remoting.config</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\mmp\mmp.csproj">
+      <Project>{F3232882-0FA0-4BB6-9D9C-E2CC779EAF0D}</Project>
+      <Name>mmp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="CustomBuildActions.targets" />

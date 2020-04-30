@@ -268,7 +268,7 @@
 			OnlyDynamicUsage = true,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_convert_nsstring_to_smart_enum",
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_convert_nsstring_to_smart_enum",
 			"NSString *", "IntPtr", "value",
 			"GCHandle->MonoReflectionType *", "IntPtr", "type"
 		) {

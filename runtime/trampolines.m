@@ -1434,7 +1434,6 @@ void *
 xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, void *context, guint32 *exception_gchandle)
 {
 	guint32 context_ref = GPOINTER_TO_UINT (context);
-	uint32_t gc_handle = 0;
 	MonoObject *obj;
 
 	if (context_ref == INVALID_TOKEN_REF) {

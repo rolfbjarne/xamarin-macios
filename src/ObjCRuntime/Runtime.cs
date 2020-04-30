@@ -706,7 +706,7 @@ namespace ObjCRuntime {
 
 		static IntPtr GetNSObjectWithType (IntPtr ptr, IntPtr type_ptr, out bool created)
 		{
-			var type = (System.Type) GCHandle.FromIntPtr (type_ptr).Target;
+			var type = (System.Type) GetGCHandleTarget (type_ptr);
 			return AllocGCHandle (GetNSObject (ptr, type, MissingCtorResolution.ThrowConstructor1NotFound, true, out created));
 		}
 

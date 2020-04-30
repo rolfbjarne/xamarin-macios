@@ -397,7 +397,7 @@ namespace ObjCRuntime {
 
 		static void RegisterAssembly (IntPtr a)
 		{
-			RegisterAssembly ((Assembly) GCHandle.FromIntPtr (a).Target);
+			RegisterAssembly ((Assembly) GetGCHandleTarget (a));
 		}
 
 		static void RegisterEntryAssembly (IntPtr a)

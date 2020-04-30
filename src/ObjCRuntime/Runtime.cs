@@ -712,7 +712,7 @@ namespace ObjCRuntime {
 
 		static void Dispose (IntPtr gchandle)
 		{
-			((IDisposable) GCHandle.FromIntPtr (gchandle).Target).Dispose ();
+			((IDisposable) GetGCHandleTarget (gchandle)).Dispose ();
 		}
 
 		static bool IsParameterTransient (IntPtr info, int parameter)

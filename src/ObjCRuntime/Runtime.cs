@@ -380,7 +380,7 @@ namespace ObjCRuntime {
 		// returns: GCHandle to a (smart) enum value. Caller must free the GCHandle.
 		static IntPtr ConvertNSStringToSmartEnum (IntPtr value, IntPtr type)
 		{
-			var smart_type = (Type) GetGCHandleTarget. (type);
+			var smart_type = (Type) GetGCHandleTarget (type);
 			var str = GetNSObject<NSString> (value);
 			MethodBase getConstantMethod, getValueMethod;
 			if (!Registrar.IsSmartEnum (smart_type, out getConstantMethod, out getValueMethod))

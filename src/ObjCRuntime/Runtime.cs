@@ -689,7 +689,7 @@ namespace ObjCRuntime {
 			/*
 			 * This method is called from marshalling bridge (dynamic mode).
 			 */
-			var type = (System.Type) GCHandle.FromIntPtr (type_ptr).Target;
+			var type = (System.Type) GetGCHandleTarget (type_ptr);
 			return AllocGCHandle (GetINativeObject (ptr, owns, type));
 		}
 			

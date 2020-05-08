@@ -121,7 +121,14 @@ namespace Xamarin.Bundler
 
 		protected override void Execute ()
 		{
-			Driver.GenerateMain (Target, Target.Assemblies, Target.App.AssemblyName, Abi, MainM, RegistrationMethods);
+			var mainGenerator = new MainGenerator ();
+			mainGenerator.Target = Target;
+			mainGenerator.Assemblies = Target.Assemblies;
+			mainGenerator.AssemblyName = Target.App.AssemblyName;
+			mainGenerator.Abi = Abi;
+			mainGenerator.RegistrationMethods = RegistrationMethods;
+			mainGenerator.Output = MainM;
+			mainGenerator.Generate ();
 		}
 	}
 

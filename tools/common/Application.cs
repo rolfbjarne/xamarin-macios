@@ -89,6 +89,10 @@ namespace Xamarin.Bundler {
 
 		public List<Target> Targets = new List<Target> ();
 
+		// Mono debug options for Xamarin.Mac
+		public bool? DisableLldbAttach = null;
+		public bool? DisableOmitFramePointer = null;
+
 		public Application (string[] arguments)
 		{
 			Cache = new Cache (arguments);

@@ -115,6 +115,9 @@ namespace Xamarin.Bundler {
 
 		public Dictionary<string, string> EnvironmentVariables = new Dictionary<string, string> ();
 
+		// Xamarin.Mac options available here to minimize ifdefs
+		public string CustomBundleName { get { throw ErrorHelper.CreateError (99, Errors.MX0099, "Not supported on this platform"); } }
+
 		//
 		// Linker config
 		//

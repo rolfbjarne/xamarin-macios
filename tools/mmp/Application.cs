@@ -13,6 +13,9 @@ namespace Xamarin.Bundler {
 		public bool IsSimulatorBuild => false;
 		public bool IsDeviceBuild => false;
 
+		public string CustomBundleName;
+		public AOTOptions AOTOptions;
+
 		bool RequiresXcodeHeaders => Driver.Registrar == RegistrarMode.Static && LinkMode == LinkMode.None;
 
 		// Use this to get the single Abi we currently support for Xamarin.Mac.

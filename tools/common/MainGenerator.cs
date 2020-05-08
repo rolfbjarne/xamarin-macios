@@ -1,0 +1,316 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+using Xamarin;
+using Xamarin.Bundler;
+using Xamarin.Utils;
+
+using ObjCRuntime;
+
+#if MTOUCH
+using ProductException = Xamarin.Bundler.MonoTouchException;
+#elif MMP
+using ProductException = Xamarin.Bundler.MonoMacException;
+#endif
+
+public class MainGenerator {
+	public Abi Abi;
+	public int Verbosity;
+	public Application App;
+	public IEnumerable<Assembly> Assemblies;
+	public IList<string> RegistrationMethods;
+	public string Output;
+
+	public RegistrarMode Registrar => App.Registrar;
+	public bool IsDefaultMarshalManagedExceptionMode => App.IsDefaultMarshalManagedExceptionMode;
+	public MarshalManagedExceptionMode MarshalManagedExceptions => App.MarshalManagedExceptions;
+	public MarshalObjectiveCExceptionMode MarshalObjectiveCExceptions => App.MarshalObjectiveCExceptions;
+	public bool EnableDebug => App.EnableDebug;
+	public bool EnableSGenConc => App.EnableSGenConc;
+	public bool DynamicRegistrationSupported => App.DynamicRegistrationSupported;
+
+	// Xamarin.Mac options
+	public string CustomBundleName;
+	public bool? DisableLldbAttach;
+	public bool? DisableOmitFramePointer;
+	public bool IsHybridAOT;
+	public bool IsMobile;
+
+	// note: this is executed under Parallel.ForEach
+	public void Generate ()
+	{
+		try {
+			var sb = new StringBuilder ();
+			using (var sw = new StringWriter (sb)) {
+				if (App.Platform == ApplePlatform.MacOSX) {
+					GenerateMac (sw);
+				} else {
+					GenerateiOS (sw);
+				}
+			}
+			FileUtils.WriteIfDifferent (Output, sb.ToString (), true);
+		} catch (ProductException) {
+			throw;
+		} catch (Exception e) {
+			throw ErrorHelper.CreateError (4001, e, Errors.MX4001, Output);
+		}
+	}
+
+	void GenerateMac (TextWriter sw)
+	{
+		sw.WriteLine ("#define MONOMAC 1");
+		sw.WriteLine ("#include <xamarin/xamarin.h>");
+		if (Registrar == RegistrarMode.PartialStatic)
+			sw.WriteLine ("extern \"C\" void xamarin_create_classes_Xamarin_Mac ();");
+		sw.WriteLine ();
+		sw.WriteLine ("extern \"C\" int xammac_setup ()");
+
+		sw.WriteLine ("{");
+		if (CustomBundleName != null) {
+			sw.WriteLine ("\textern NSString* xamarin_custom_bundle_name;");
+			sw.WriteLine ("\txamarin_custom_bundle_name = @\"" + CustomBundleName + "\";");
+		}
+		if (DisableLldbAttach.HasValue ? DisableLldbAttach.Value : !EnableDebug)
+			sw.WriteLine ("\txamarin_disable_lldb_attach = true;");
+		if (DisableOmitFramePointer ?? EnableDebug)
+			sw.WriteLine ("\txamarin_disable_omit_fp = true;");
+		sw.WriteLine ();
+
+		if (Registrar == RegistrarMode.Static)
+			sw.WriteLine ("\txamarin_create_classes ();");
+		else if (Registrar == RegistrarMode.PartialStatic)
+			sw.WriteLine ("\txamarin_create_classes_Xamarin_Mac ();");
+
+		if (IsHybridAOT)
+			sw.WriteLine ("\txamarin_mac_hybrid_aot = TRUE;");
+
+		if (IsMobile)
+			sw.WriteLine ("\txamarin_mac_modern = TRUE;");
+
+		GenerateCommon (sw);
+
+		sw.WriteLine ("\treturn 0;");
+		sw.WriteLine ("}");
+		sw.WriteLine ();
+	}
+
+	void GenerateCommon (TextWriter sw)
+	{
+		sw.WriteLine ("\txamarin_log_level = {0};", Verbosity.ToString (CultureInfo.InvariantCulture));
+		sw.WriteLine ("\txamarin_arch_name = \"{0}\";", Abi.AsArchString ());
+		if (!App.IsDefaultMarshalManagedExceptionMode)
+			sw.WriteLine ("\txamarin_marshal_managed_exception_mode = MarshalManagedExceptionMode{0};", App.MarshalManagedExceptions);
+		sw.WriteLine ("\txamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionMode{0};", App.MarshalObjectiveCExceptions);
+		if (App.EnableDebug)
+			sw.WriteLine ("\txamarin_debug_mode = TRUE;");
+		if (!string.IsNullOrEmpty (App.MonoGCParams))
+			sw.WriteLine ("\tsetenv (\"MONO_GC_PARAMS\", \"{0}\", 1);", App.MonoGCParams);
+		foreach (var kvp in App.EnvironmentVariables)
+			sw.WriteLine ("\tsetenv (\"{0}\", \"{1}\", 1);", kvp.Key.Replace ("\"", "\\\""), kvp.Value.Replace ("\"", "\\\""));
+		sw.WriteLine ("\txamarin_supports_dynamic_registration = {0};", App.DynamicRegistrationSupported ? "TRUE" : "FALSE");
+	}
+
+	void GenerateiOS (TextWriter sw)
+	{
+		var assembly_externs = new StringBuilder ();
+		var assembly_aot_modules = new StringBuilder ();
+		var register_assemblies = new StringBuilder ();
+		var assembly_location = new StringBuilder ();
+		var assembly_location_count = 0;
+		var enable_llvm = (Abi & Abi.LLVM) != 0;
+
+		register_assemblies.AppendLine ("\tguint32 exception_gchandle = 0;");
+		foreach (var s in Assemblies) {
+			if (!s.IsAOTCompiled)
+				continue;
+			if ((Abi & Abi.SimulatorArchMask) == 0) {
+				var info = s.AssemblyName;
+				info = EncodeAotSymbol (info);
+				assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
+				assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
+			}
+			string sname = s.FileName;
+			if (this.App.AssemblyName != sname && s.IsBoundAssembly) {
+				register_assemblies.Append ("\txamarin_open_and_register (\"").Append (sname).Append ("\", &exception_gchandle);").AppendLine ();
+				register_assemblies.AppendLine ("\txamarin_process_managed_exception_gchandle (exception_gchandle);");
+			}
+		}
+
+		if ((Abi & Abi.SimulatorArchMask) == 0 || App.Embeddinator) {
+			var frameworks = Assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
+									   .OrderBy ((a) => a.Identity, StringComparer.Ordinal);
+			foreach (var asm_fw in frameworks) {
+				var asm_name = asm_fw.Identity;
+				if (asm_fw.BuildTargetName == asm_name)
+					continue; // this is deduceable
+				var prefix = string.Empty;
+				if (!App.HasFrameworksDirectory && asm_fw.IsCodeShared)
+					prefix = "../../";
+				var suffix = string.Empty;
+				if (App.IsSimulatorBuild)
+					suffix = "/simulator";
+				assembly_location.AppendFormat ("\t{{ \"{0}\", \"{2}Frameworks/{1}.framework/MonoBundle{3}\" }},\n", asm_name, asm_fw.BuildTargetName, prefix, suffix);
+				assembly_location_count++;
+			}
+		}
+
+		sw.WriteLine ("#include \"xamarin/xamarin.h\"");
+
+		if (assembly_location.Length > 0) {
+			sw.WriteLine ();
+			sw.WriteLine ("struct AssemblyLocation assembly_location_entries [] = {");
+			sw.WriteLine (assembly_location);
+			sw.WriteLine ("};");
+
+			sw.WriteLine ();
+			sw.WriteLine ("struct AssemblyLocations assembly_locations = {{ {0}, assembly_location_entries }};", assembly_location_count);
+		}
+
+		sw.WriteLine ();
+		sw.WriteLine (assembly_externs);
+
+		sw.WriteLine ("void xamarin_register_modules_impl ()");
+		sw.WriteLine ("{");
+		sw.WriteLine (assembly_aot_modules);
+		sw.WriteLine ("}");
+		sw.WriteLine ();
+
+		sw.WriteLine ("void xamarin_register_assemblies_impl ()");
+		sw.WriteLine ("{");
+		sw.WriteLine (register_assemblies);
+		sw.WriteLine ("}");
+		sw.WriteLine ();
+
+		if (RegistrationMethods != null) {
+			foreach (var method in RegistrationMethods) {
+				sw.Write ("extern \"C\" void ");
+				sw.Write (method);
+				sw.WriteLine ("();");
+			}
+		}
+
+		// Burn in a reference to the profiling symbol so that the native linker doesn't remove it
+		// On iOS we can pass -u to the native linker, but that doesn't work on tvOS, where
+		// we're building with bitcode (even when bitcode is disabled, we still build with the
+		// bitcode marker, which makes the linker reject -u).
+		if (App.EnableProfiling) {
+			sw.WriteLine ("extern \"C\" { void mono_profiler_init_log (); }");
+			sw.WriteLine ("typedef void (*xamarin_profiler_symbol_def)();");
+			sw.WriteLine ("extern xamarin_profiler_symbol_def xamarin_profiler_symbol;");
+			sw.WriteLine ("xamarin_profiler_symbol_def xamarin_profiler_symbol = NULL;");
+		}
+
+		if (App.UseInterpreter) {
+			sw.WriteLine ("extern \"C\" { void mono_ee_interp_init (const char *); }");
+			sw.WriteLine ("extern \"C\" { void mono_icall_table_init (void); }");
+			sw.WriteLine ("extern \"C\" { void mono_marshal_ilgen_init (void); }");
+			sw.WriteLine ("extern \"C\" { void mono_method_builder_ilgen_init (void); }");
+			sw.WriteLine ("extern \"C\" { void mono_sgen_mono_ilgen_init (void); }");
+		}
+
+		sw.WriteLine ("void xamarin_setup_impl ()");
+		sw.WriteLine ("{");
+
+		if (App.EnableProfiling)
+			sw.WriteLine ("\txamarin_profiler_symbol = mono_profiler_init_log;");
+
+		if (App.EnableLLVMOnlyBitCode)
+			sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_LLVMONLY);");
+		else if (App.UseInterpreter) {
+			sw.WriteLine ("\tmono_icall_table_init ();");
+			sw.WriteLine ("\tmono_marshal_ilgen_init ();");
+			sw.WriteLine ("\tmono_method_builder_ilgen_init ();");
+			sw.WriteLine ("\tmono_sgen_mono_ilgen_init ();");
+			sw.WriteLine ("\tmono_ee_interp_init (NULL);");
+			sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_INTERP);");
+		} else if (App.IsDeviceBuild)
+			sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_FULL);");
+
+		if (assembly_location.Length > 0)
+			sw.WriteLine ("\txamarin_set_assembly_directories (&assembly_locations);");
+
+		if (RegistrationMethods != null) {
+			for (int i = 0; i < RegistrationMethods.Count; i++) {
+				sw.Write ("\t");
+				sw.Write (RegistrationMethods [i]);
+				sw.WriteLine ("();");
+			}
+		}
+
+		if (App.MonoNativeMode != MonoNativeMode.None) {
+			string mono_native_lib;
+			if (App.LibMonoNativeLinkMode == AssemblyBuildTarget.StaticObject)
+				mono_native_lib = "__Internal";
+			else
+				mono_native_lib = App.GetLibNativeName () + ".dylib";
+			sw.WriteLine ();
+			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Native\", NULL, \"{mono_native_lib}\", NULL);");
+			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Security.Cryptography.Native.Apple\", NULL, \"{mono_native_lib}\", NULL);");
+			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Net.Security.Native\", NULL, \"{mono_native_lib}\", NULL);");
+			sw.WriteLine ();
+		}
+
+		if (App.EnableDebug)
+			sw.WriteLine ("\txamarin_gc_pump = {0};", App.DebugTrack.Value ? "TRUE" : "FALSE");
+		sw.WriteLine ("\txamarin_init_mono_debug = {0};", App.PackageManagedDebugSymbols ? "TRUE" : "FALSE");
+		sw.WriteLine ("\txamarin_executable_name = \"{0}\";", App.AssemblyName);
+		sw.WriteLine ("\tmono_use_llvm = {0};", enable_llvm ? "TRUE" : "FALSE");
+		GenerateCommon (sw);
+		sw.WriteLine ("}");
+		sw.WriteLine ();
+		sw.Write ("int ");
+		sw.Write (App.IsWatchExtension ? "xamarin_watchextension_main" : "main");
+		sw.WriteLine (" (int argc, char **argv)");
+		sw.WriteLine ("{");
+		sw.WriteLine ("\tNSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];");
+		if (App.IsExtension) {
+			// the name of the executable must be the bundle id (reverse dns notation)
+			// but we do not want to impose that (ugly) restriction to the managed .exe / project name / ...
+			sw.WriteLine ("\targv [0] = (char *) \"{0}\";", Path.GetFileNameWithoutExtension (App.RootAssemblies [0]));
+			sw.WriteLine ("\tint rv = xamarin_main (argc, argv, XamarinLaunchModeExtension);");
+		} else {
+			sw.WriteLine ("\tint rv = xamarin_main (argc, argv, XamarinLaunchModeApp);");
+		}
+		sw.WriteLine ("\t[pool drain];");
+		sw.WriteLine ("\treturn rv;");
+		sw.WriteLine ("}");
+
+		sw.WriteLine ("void xamarin_initialize_callbacks () __attribute__ ((constructor));");
+		sw.WriteLine ("void xamarin_initialize_callbacks ()");
+		sw.WriteLine ("{");
+		sw.WriteLine ("\txamarin_setup = xamarin_setup_impl;");
+		sw.WriteLine ("\txamarin_register_assemblies = xamarin_register_assemblies_impl;");
+		sw.WriteLine ("\txamarin_register_modules = xamarin_register_modules_impl;");
+		sw.WriteLine ("}");
+
+		if (App.Platform == ApplePlatform.WatchOS && App.SdkVersion.Major >= 6 && App.IsWatchExtension) {
+			sw.WriteLine ();
+			sw.WriteLine ("extern \"C\" { int WKExtensionMain (int argc, char* argv[]); }");
+			sw.WriteLine ("int main (int argc, char *argv[])");
+			sw.WriteLine ("{");
+			sw.WriteLine ("\treturn WKExtensionMain (argc, argv);");
+			sw.WriteLine ("}");
+		}
+	}
+
+	public static string EncodeAotSymbol (string symbol)
+	{
+		var sb = new StringBuilder ();
+		/* This mimics what the aot-compiler does */
+		foreach (var b in Encoding.UTF8.GetBytes (symbol)) {
+			char c = (char) b;
+			if ((c >= '0' && c <= '9') ||
+				(c >= 'a' && c <= 'z') ||
+				(c >= 'A' && c <= 'Z')) {
+				sb.Append (c);
+				continue;
+			}
+			sb.Append ('_');
+		}
+		return sb.ToString ();
+	}
+}

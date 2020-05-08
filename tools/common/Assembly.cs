@@ -7,6 +7,7 @@ using System.Linq;
 using System.Xml;
 using Mono.Cecil;
 using MonoTouch.Tuner;
+using Xamarin.Linker;
 using ObjCRuntime;
 using Xamarin;
 using Xamarin.Utils;
@@ -19,7 +20,6 @@ using PlatformException = Xamarin.Bundler.MonoMacException;
 
 
 namespace Xamarin.Bundler {
-
 	struct NativeReferenceMetadata
 	{
 		public bool ForceLoad;
@@ -77,6 +77,10 @@ namespace Xamarin.Bundler {
 		}
 		public string FileName { get { return Path.GetFileName (FullPath); } }
 		public string Identity { get { return GetIdentity (FullPath); } }
+
+		public string AssemblyName {
+			get { return AssemblyDefinition.Name.Name; }
+		}
 
 		public static string GetIdentity (AssemblyDefinition ad)
 		{
@@ -672,6 +676,30 @@ namespace Xamarin.Bundler {
 					Directory.CreateDirectory (target_dir);
 
 				CopyAssembly (a, target_s);
+			}
+		}
+
+		// If this assembly has any types that subclasses NSObject
+		bool? is_bound_assembly;
+		public bool IsBoundAssembly {
+			get {
+				if (is_bound_assembly.HasValue == false) {
+					if (IsFrameworkAssembly) {
+						is_bound_assembly = false;
+					} else {
+						foreach (var md in AssemblyDefinition.Modules) {
+							foreach (var td in md.Types) {
+								if (td.IsNSObject (Target.LinkContext)) {
+									is_bound_assembly = true;
+									break;
+								}
+							}
+							if (is_bound_assembly.HasValue)
+								break;
+						}
+					}
+				}
+				return is_bound_assembly.Value;
 			}
 		}
 	}

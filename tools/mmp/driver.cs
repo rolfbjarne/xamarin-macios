@@ -81,8 +81,6 @@ namespace Xamarin.Bundler {
 		static bool no_executable;
 		static bool embed_mono = true;
 		static List<string> link_flags;
-		static bool? disable_lldb_attach = null;
-		static bool? disable_omit_fp = null;
 		static string machine_config_path = null;
 		static bool bypass_linking_checks = false;
 
@@ -92,12 +90,9 @@ namespace Xamarin.Bundler {
 		static string resources_dir;
 		static string mmp_dir;
 		
-		static string custom_bundle_name;
-
 		static string tls_provider;
 		static string http_message_provider;
 
-		static string BundleName { get { return custom_bundle_name != null ? custom_bundle_name : "MonoBundle"; } }
 		static string AppPath { get { return Path.Combine (macos_dir, app_name); } }
 
 		static string icon;
@@ -159,8 +154,6 @@ namespace Xamarin.Bundler {
 			throw new InvalidOperationException ("Arch64Directory when not Mobile or Full?");
 		}
 					
-		static AOTOptions aotOptions = null;
-
 		public static bool EnableDebug {
 			get { return App.EnableDebug; }
 		}
@@ -275,15 +268,15 @@ namespace Xamarin.Bundler {
 							App.Frameworks.Add (v);
 					}
 				},
-				{ "custom_bundle_name=", "Specify a custom name for the MonoBundle folder.", v => custom_bundle_name = v, true }, // Hidden hack for "universal binaries"
+				{ "custom_bundle_name=", "Specify a custom name for the MonoBundle folder.", v => App.CustomBundleName = v, true }, // Hidden hack for "universal binaries"
 				{ "tls-provider=", "Specify the default TLS provider", v => { tls_provider = v; }},
 				{ "http-message-handler=", "Specify the default HTTP Message Handler", v => { http_message_provider = v; }},
 				{ "extension", "Specifies an app extension", v => is_extension = true },
 				{ "xpc", "Specifies an XPC service", v => { is_extension = true; is_xpc_service = true; }},
 				{ "allow-unsafe-gac-resolution", "Allow MSBuild to resolve from the System GAC", v => {} , true }, // Used in Xamarin.Mac.XM45.targets and must be ignored here. Hidden since it is a total hack. If you can use it, you don't need support
 				{ "force-unsupported-linker", "Bypass safety checkes preventing unsupported linking options.", v => bypass_linking_checks = true , true }, // Undocumented option for a reason, You get to keep the pieces when it breaks
-				{ "disable-lldb-attach=", "Disable automatic lldb attach on crash", v => disable_lldb_attach = ParseBool (v, "disable-lldb-attach")},
-				{ "disable-omit-fp=", "Disable a JIT optimization where the frame pointer is omitted from the stack. This is optimization is disabled by default for debug builds.", v => disable_omit_fp = ParseBool (v, "disable-omit-fp") },
+				{ "disable-lldb-attach=", "Disable automatic lldb attach on crash", v => App.DisableLldbAttach = ParseBool (v, "disable-lldb-attach")},
+				{ "disable-omit-fp=", "Disable a JIT optimization where the frame pointer is omitted from the stack. This is optimization is disabled by default for debug builds.", v => App.DisableOmitFramePointer = ParseBool (v, "disable-omit-fp") },
 				{ "machine-config=", "Custom machine.config file to copy into MonoBundle/mono/4.5/machine.config. Pass \"\" to copy in a valid \"empty\" config file.", v => machine_config_path = v },
 				{ "runregistrar:", "Runs the registrar on the input assembly and outputs a corresponding native library.",
 					v => {
@@ -297,7 +290,7 @@ namespace Xamarin.Bundler {
 				{ "xamarin-system-framework", "Used with --target-framework=4.5 to select XM Full Target Framework. Deprecated, use --target-framework=Xamarin.Mac,Version=v4.0,Profile=System instead.", v => { TargetFramework = TargetFramework.Xamarin_Mac_4_5_System; }, true },
 				{ "aot:", "Specify assemblies that should be AOT compiled\n- none - No AOT (default)\n- all - Every assembly in MonoBundle\n- core - Xamarin.Mac, System, mscorlib\n- sdk - Xamarin.Mac.dll and BCL assemblies\n- |hybrid after option enables hybrid AOT which allows IL stripping but is slower (only valid for 'all')\n - Individual files can be included for AOT via +FileName.dll and excluded via -FileName.dll\n\nExamples:\n  --aot:all,-MyAssembly.dll\n  --aot:core,+MyOtherAssembly.dll,-mscorlib.dll",
 					v => {
-						aotOptions = new AOTOptions (v);
+						App.AOTOptions = new AOTOptions (v);
 					}
 				},
 				{ "link-prohibited-frameworks", "Natively link against prohibited (rejected by AppStore) frameworks", v => { LinkProhibitedFrameworks = true; } },
@@ -318,10 +311,10 @@ namespace Xamarin.Bundler {
 			if (ParseOptions (App, os, args, ref action))
 				return 0;
 
-			if (aotOptions == null) {
+			if (App.AOTOptions == null) {
 				string forceAotVariable = Environment.GetEnvironmentVariable ("XM_FORCE_AOT");
 				if (forceAotVariable != null)
-					aotOptions = new AOTOptions (forceAotVariable);
+					App.AOTOptions = new AOTOptions (forceAotVariable);
 			}
 
 			App.RuntimeOptions = RuntimeOptions.Create (App, http_message_provider, tls_provider);
@@ -678,7 +671,7 @@ namespace Xamarin.Bundler {
 			if (App.LinkMode != LinkMode.All && App.RuntimeOptions != null)
 				App.RuntimeOptions.Write (resources_dir);
 
-			if (aotOptions != null && aotOptions.IsAOT) {
+			if (App.AOTOptions != null && App.AOTOptions.IsAOT) {
 				AOTCompilerType compilerType;
 				if (IsUnifiedMobile || IsUnifiedFullXamMacFramework)
 					compilerType = AOTCompilerType.Bundled64;
@@ -687,7 +680,7 @@ namespace Xamarin.Bundler {
 				else
 					throw ErrorHelper.CreateError (0099, Errors.MX0099, "\"AOT with unexpected profile.\"");
 
-				AOTCompiler compiler = new AOTCompiler (aotOptions, compilerType, IsUnifiedMobile, !EnableDebug);
+				AOTCompiler compiler = new AOTCompiler (App.AOTOptions, compilerType, IsUnifiedMobile, !EnableDebug);
 				compiler.Compile (mmp_dir);
 				Watch ("AOT Compile", 1);
 			}
@@ -839,61 +832,19 @@ namespace Xamarin.Bundler {
 
 		static string GenerateMain ()
 		{
-			var sb = new StringBuilder ();
-			using (var sw = new StringWriter (sb)) {
-				sw.WriteLine ("#define MONOMAC 1");
-				sw.WriteLine ("#include <xamarin/xamarin.h>");
-				sw.WriteLine ("#import <AppKit/NSAlert.h>");
-				sw.WriteLine ("#import <Foundation/NSDate.h>"); // 10.7 wants this even if not needed on 10.9
-				if (Driver.Registrar == RegistrarMode.PartialStatic)
-					sw.WriteLine ("extern \"C\" void xamarin_create_classes_Xamarin_Mac ();");
-				sw.WriteLine ();
-				sw.WriteLine ();
-				sw.WriteLine ();
-				sw.WriteLine ("extern \"C\" int xammac_setup ()");
-
-				sw.WriteLine ("{");
-				if (custom_bundle_name != null) {
-					sw.WriteLine ("extern NSString* xamarin_custom_bundle_name;");
-					sw.WriteLine ("\txamarin_custom_bundle_name = @\"" + custom_bundle_name + "\";");
-				}
-				if (!App.IsDefaultMarshalManagedExceptionMode)
-					sw.WriteLine ("\txamarin_marshal_managed_exception_mode = MarshalManagedExceptionMode{0};", App.MarshalManagedExceptions);
-				sw.WriteLine ("\txamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionMode{0};", App.MarshalObjectiveCExceptions);
-				if (disable_lldb_attach.HasValue ? disable_lldb_attach.Value : !App.EnableDebug)
-					sw.WriteLine ("\txamarin_disable_lldb_attach = true;");
-				if (disable_omit_fp ?? App.EnableDebug)
-					sw.WriteLine ("\txamarin_disable_omit_fp = true;");
-				sw.WriteLine ();
-
-
-				if (Driver.Registrar == RegistrarMode.Static)
-					sw.WriteLine ("\txamarin_create_classes ();");
-				else if (Driver.Registrar == RegistrarMode.PartialStatic)
-					sw.WriteLine ("\txamarin_create_classes_Xamarin_Mac ();");
-
-				if (App.EnableDebug)
-					sw.WriteLine ("\txamarin_debug_mode = TRUE;");
-
-				if (App.EnableSGenConc)
-					sw.WriteLine ("\tsetenv (\"MONO_GC_PARAMS\", \"major=marksweep-conc\", 1);");
-				else
-					sw.WriteLine ("\tsetenv (\"MONO_GC_PARAMS\", \"major=marksweep\", 1);");
-
-				sw.WriteLine ("\txamarin_supports_dynamic_registration = {0};", App.DynamicRegistrationSupported ? "TRUE" : "FALSE");
-
-				if (aotOptions != null && aotOptions.IsHybridAOT)
-					sw.WriteLine ("\txamarin_mac_hybrid_aot = TRUE;");
-
-				if (IsUnifiedMobile)
-					sw.WriteLine ("\txamarin_mac_modern = TRUE;");
-
-				sw.WriteLine ("\treturn 0;");
-				sw.WriteLine ("}");
-				sw.WriteLine ();
-			}
-
-			return sb.ToString ();
+			var generator = new MainGenerator ();
+			// Common options
+			generator.Abi = App.Abi;
+			generator.Verbosity = Verbosity;
+			generator.App = App;
+			generator.Output = Path.Combine (App.Cache.Location, "main.m");
+			// Xamarin.Mac options
+			generator.CustomBundleName = App.CustomBundleName;
+			generator.DisableLldbAttach = App.DisableLldbAttach;
+			generator.DisableOmitFramePointer = App.DisableOmitFramePointer;
+			generator.IsHybridAOT = App.AOTOptions?.IsHybridAOT == true;
+			generator.IsMobile = Driver.TargetFramework == TargetFramework.Xamarin_Mac_2_0_Mobile;
+			return generator.Output;
 		}
 
 		static void HandleFramework (IList<string> args, string framework, bool weak)
@@ -1053,7 +1004,7 @@ namespace Xamarin.Bundler {
 				}
 				if (dylibs_copied_to_bundle_dir) {
 					args.Add ("-rpath");
-					args.Add ($"@loader_path/../{BundleName}");
+					args.Add ($"@loader_path/../{App.CustomBundleName}");
 				}
 
 				if (is_extension && !is_xpc_service) {
@@ -1073,7 +1024,7 @@ namespace Xamarin.Bundler {
 				}
 
 				var requiredSymbols = BuildTarget.GetRequiredSymbols ();
-				Driver.WriteIfDifferent (Path.Combine (App.Cache.Location, "exported-symbols-list"), string.Join ("\n", requiredSymbols.Select ((symbol) => symbol.Prefix + symbol.Name).ToArray ()));
+				FileUtils.WriteIfDifferent (Path.Combine (App.Cache.Location, "exported-symbols-list"), string.Join ("\n", requiredSymbols.Select ((symbol) => symbol.Prefix + symbol.Name).ToArray ()));
 				switch (App.SymbolMode) {
 				case SymbolMode.Ignore:
 					break;
@@ -1176,7 +1127,7 @@ namespace Xamarin.Bundler {
 					args.Add (state.SourcePath);
 				}
 
-				var main = Path.Combine (App.Cache.Location, "main.m");
+				var main = GenerateMain ();
 				File.WriteAllText (main, mainSource);
 				sourceFiles.Add (main);
 				args.AddRange (sourceFiles);
@@ -1336,7 +1287,7 @@ namespace Xamarin.Bundler {
 					string libName = Path.GetFileName (linkWith);
 					string finalLibPath = Path.Combine (mmp_dir, libName);
 					Application.UpdateFile (linkWith, finalLibPath);
-					RunInstallNameTool (new [] { "-id", "@executable_path/../" + BundleName + "/" + libName, finalLibPath });
+					RunInstallNameTool (new [] { "-id", "@executable_path/../" + App.CustomBundleName + "/" + libName, finalLibPath });
 					native_libraries_copied_in.Add (libName);
 				}
 			}
@@ -1359,7 +1310,7 @@ namespace Xamarin.Bundler {
 							CreateSymLink (mmp_dir, real_libname, libname);
 						sb.Add ("-change");
 						sb.Add (lib);
-						sb.Add ("@executable_path/../" + BundleName + "/" + libname);
+						sb.Add ("@executable_path/../" + App.CustomBundleName + "/" + libname);
 					}
 				}
 				// if required update the paths inside the .dylib that was copied
@@ -1503,7 +1454,7 @@ namespace Xamarin.Bundler {
 
 			if (native_references.Contains (real_src)) {
 				if (!isStaticLib)
-					RunInstallNameTool (new [] { "-id", "@executable_path/../" + BundleName + "/" + name, dest });
+					RunInstallNameTool (new [] { "-id", "@executable_path/../" + App.CustomBundleName + "/" + name, dest });
 				native_libraries_copied_in.Add (name);
 			}
 
@@ -1571,7 +1522,7 @@ namespace Xamarin.Bundler {
 
 			frameworks_dir = Path.Combine (contents_dir, "Frameworks");
 			resources_dir = Path.Combine (contents_dir, "Resources");
-			mmp_dir = Path.Combine (contents_dir, BundleName);
+			mmp_dir = Path.Combine (contents_dir, App.CustomBundleName);
 
 			CreateDirectoryIfNeeded (App.AppDirectory);
 			CreateDirectoryIfNeeded (contents_dir);

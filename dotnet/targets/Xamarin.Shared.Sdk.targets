@@ -22,6 +22,7 @@
 		<_TaskAssemblyName Condition="'$(_PlatformName)' == 'macOS'">Xamarin.Mac.Tasks.dll</_TaskAssemblyName>
 	</PropertyGroup>
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileExecutable" AssemblyFile="$(_AssemblyFileDir)$(_TaskAssemblyName)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.GenerateMain" AssemblyFile="$(_AssemblyFileDir)$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.iOS.Tasks.Mlaunch" AssemblyFile="$(_AssemblyFileDir)$(_TaskAssemblyName)" Condition=" '$(_PlatformName)' != 'macOS' " />
 
 	<!-- Automatically supply project capabilities for IDE use -->

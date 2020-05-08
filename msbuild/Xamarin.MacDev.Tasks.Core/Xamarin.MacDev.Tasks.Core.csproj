@@ -41,6 +41,27 @@
     <Compile Include="..\..\tools\mtouch\UnresolvedSymbols.cs">
       <Link>UnresolvedSymbols.cs</Link>
     </Compile>
+    <Compile Include="..\..\tools\common\MainGenerator.cs">
+      <Link>MainGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\MachO.cs">
+      <Link>MachO.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\ExceptionMode.cs">
+      <Link>ExceptionMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\RegistrarMode.cs">
+      <Link>RegistrarMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\MonoNativeMode.cs">
+      <Link>MonoNativeMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\AssemblyBuildTarget.cs">
+      <Link>AssemblyBuildTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\FileUtils.cs">
+      <Link>FileUtils.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\tools\mtouch\errors.resx">

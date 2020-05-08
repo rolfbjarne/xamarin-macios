@@ -1171,4 +1171,8 @@
         <value>Can't create a binding resource package unless there are native references in the binding project.
         </value>
     </data>
+    
+    <data name="E7069" xml:space="preserve">
+        <value>Failed to generate the main method: {0}</value>
+    </data>
 </root>

@@ -1190,6 +1190,11 @@
         </target>
         <note></note>
       </trans-unit>
+      <trans-unit id="E7069">
+        <source>Failed to generate the main method: {0}</source>
+        <target state="new">Failed to generate the main method: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="M0001">
         <source>Tool {0} execution started with arguments: {1}
         </source>

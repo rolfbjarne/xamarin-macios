@@ -1746,14 +1746,6 @@
         <note>
 		</note>
       </trans-unit>
-      <trans-unit id="MT4001">
-        <source>The main template could not be expanded to `{0}`.
-		</source>
-        <target state="new">The main template could not be expanded to `{0}`.
-		</target>
-        <note>
-		</note>
-      </trans-unit>
       <trans-unit id="MT4002">
         <source>Failed to compile the generated code for P/Invoke methods. Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new
 		</source>
@@ -2998,6 +2990,14 @@
         <source>Could not {0} the assembly '{1}'
 		</source>
         <target state="new">Could not {0} the assembly '{1}'
+		</target>
+        <note>
+		</note>
+      </trans-unit>
+      <trans-unit id="MX4001">
+        <source>The main template could not be expanded to `{0}`.
+		</source>
+        <target state="new">The main template could not be expanded to `{0}`.
 		</target>
         <note>
 		</note>

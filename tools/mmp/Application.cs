@@ -11,7 +11,14 @@ namespace Xamarin.Bundler {
 		public bool Is64Build => true;
 		public bool IsSimulatorBuild => false;
 		public bool IsDeviceBuild => false;
+		public bool IsWatchExtension => false;
+		public bool IsExtension => false;
 		public bool IsTodayExtension => false;
+		public bool UseInterpreter => false;
+		public bool EnableLLVMOnlyBitCode => false;
+
+		public string CustomBundleName = "MonoBundle";
+		public AOTOptions AOTOptions;
 
 		bool RequiresXcodeHeaders => Driver.Registrar == RegistrarMode.Static && LinkMode == LinkMode.None;
 

@@ -91,8 +91,6 @@ namespace Xamarin.Bundler {
 		static string resources_dir;
 		static string mmp_dir;
 		
-		static string custom_bundle_name;
-
 		static string tls_provider;
 		static string http_message_provider;
 
@@ -848,8 +846,17 @@ namespace Xamarin.Bundler {
 		static string GenerateMain ()
 		{
 			var generator = new MainGenerator ();
-			generator.IsHybridAOT = App.AOTOptions?.IsHybridAOT == true;
+			// Common options
+			generator.Abi = App.Abi;
+			generator.Verbosity = Verbosity;
+			generator.Target = BuildTarget;
 			generator.Output = Path.Combine (App.Cache.Location, "main.m");
+			// Xamarin.Mac options
+			generator.CustomBundleName = App.CustomBundleName;
+			generator.DisableLldbAttach = App.DisableLldbAttach;
+			generator.DisableOmitFramePointer = App.DisableOmitFramePointer;
+			generator.IsHybridAOT = App.AOTOptions?.IsHybridAOT == true;
+			generator.IsMobile = Driver.TargetFramework == TargetFramework.Xamarin_Mac_2_0_Mobile;
 			return generator.Output;
 		}
 

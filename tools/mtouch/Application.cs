@@ -84,8 +84,6 @@ namespace Xamarin.Bundler {
 		public bool DebugAll;
 		public List<string> DebugAssemblies = new List<string> ();
 
-		public bool? DebugTrack;
-
 		public string Compiler = string.Empty;
 		public string CompilerPath;
 
@@ -1011,12 +1009,6 @@ namespace Xamarin.Bundler {
 			if (IsLLVM && Platform == ApplePlatform.WatchOS && BitCodeMode != BitCodeMode.LLVMOnly) {
 				ErrorHelper.Warning (111, Errors.MT0111);
 				BitCodeMode = BitCodeMode.LLVMOnly;
-			}
-
-			if (!DebugTrack.HasValue) {
-				DebugTrack = false;
-			} else if (DebugTrack.Value && !EnableDebug) {
-				ErrorHelper.Warning (32, Errors.MT0032);
 			}
 
 			if (EnableAsmOnlyBitCode)

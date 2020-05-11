@@ -122,7 +122,7 @@ namespace Xamarin.Bundler
 		protected override void Execute ()
 		{
 			var mainGenerator = new MainGenerator ();
-			mainGenerator.Target = Target;
+			mainGenerator.App = App;
 			mainGenerator.Assemblies = Target.Assemblies;
 			mainGenerator.AssemblyName = Target.App.AssemblyName;
 			mainGenerator.Abi = Abi;

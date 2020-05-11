@@ -22,23 +22,10 @@ using PlatformResolver = Xamarin.Bundler.MonoMacResolver;
 
 namespace Xamarin.Bundler {
 
-	public enum MonoNativeMode {
-		None,
-		Compat,
-		Unified,
-	}
-
 	[Flags]
 	public enum RegistrarOptions {
 		Default = 0,
 		Trace = 1,
-	}
-
-	public enum RegistrarMode {
-		Default,
-		Dynamic,
-		PartialStatic,
-		Static,
 	}
 
 	public partial class Application
@@ -789,6 +776,12 @@ namespace Xamarin.Bundler {
 					return true;
 
 				return false;
+			}
+		}
+
+		public string AssemblyName {
+			get {
+				return Path.GetFileName (RootAssemblies [0]);
 			}
 		}
 	}

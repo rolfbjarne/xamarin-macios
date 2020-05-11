@@ -451,6 +451,18 @@
     <Compile Include="..\common\MainGenerator.cs">
       <Link>external\MainGenerator.cs</Link>
     </Compile>
+    <Compile Include="..\common\MonoNativeMode.cs">
+      <Link>external\MonoNativeMode.cs</Link>
+    </Compile>
+    <Compile Include="..\common\RegistrarMode.cs">
+      <Link>external\RegistrarMode.cs</Link>
+    </Compile>
+    <Compile Include="..\common\AssemblyBuildTarget.cs">
+      <Link>external\AssemblyBuildTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\common\FileUtils.cs">
+      <Link>external\FileUtils.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

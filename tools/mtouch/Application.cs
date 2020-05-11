@@ -1205,12 +1205,6 @@ namespace Xamarin.Bundler {
 			return rv;
 		}
 
-		public string AssemblyName {
-			get {
-				return Path.GetFileName (RootAssemblies [0]);
-			}
-		}
-
 		public string Executable {
 			get {
 				if (Embeddinator)

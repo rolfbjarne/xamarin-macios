@@ -5,27 +5,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using Mono.Cecil;
-
 using Xamarin;
 using Xamarin.Bundler;
-using Xamarin.Linker;
 using Xamarin.Utils;
 
 using ObjCRuntime;
 
 #if MTOUCH
 using ProductException = Xamarin.Bundler.MonoTouchException;
-#else
-using ProductException=Xamarin.Bundler.MonoMacException;
+#elif MMP
+using ProductException = Xamarin.Bundler.MonoMacException;
 #endif
 
 public class MainGenerator {
 	public Abi Abi;
 	public int Verbosity;
-	public Target Target;
+	public Application App;
 	public IEnumerable<Assembly> Assemblies;
-	public string AssemblyName;
 	public IList<string> RegistrationMethods;
 	public string Output;
 
@@ -44,8 +40,6 @@ public class MainGenerator {
 	public bool IsHybridAOT;
 	public bool IsMobile;
 
-	public Application App { get { return Target.App; } }
-
 	// note: this is executed under Parallel.ForEach
 	public void Generate ()
 	{
@@ -55,10 +49,10 @@ public class MainGenerator {
 				if (App.Platform == ApplePlatform.MacOSX) {
 					GenerateMac (sw);
 				} else {
-					GenerateMain (sw, Target, Assemblies, AssemblyName, Abi, RegistrationMethods);
+					GenerateiOS (sw);
 				}
 			}
-			Driver.WriteIfDifferent (Output, sb.ToString (), true);
+			FileUtils.WriteIfDifferent (Output, sb.ToString (), true);
 		} catch (ProductException) {
 			throw;
 		} catch (Exception e) {
@@ -120,46 +114,44 @@ public class MainGenerator {
 		sw.WriteLine ("\txamarin_supports_dynamic_registration = {0};", App.DynamicRegistrationSupported ? "TRUE" : "FALSE");
 	}
 
-	void GenerateMain (TextWriter sw, Target target, IEnumerable<Assembly> assemblies, string assembly_name, Abi abi, IList<string> registration_methods)
+	void GenerateiOS (TextWriter sw)
 	{
-		var app = App;
 		var assembly_externs = new StringBuilder ();
 		var assembly_aot_modules = new StringBuilder ();
 		var register_assemblies = new StringBuilder ();
 		var assembly_location = new StringBuilder ();
 		var assembly_location_count = 0;
-		var enable_llvm = (abi & Abi.LLVM) != 0;
-		var is_aot = App.Platform != ApplePlatform.MacOSX;
+		var enable_llvm = (Abi & Abi.LLVM) != 0;
 
 		register_assemblies.AppendLine ("\tguint32 exception_gchandle = 0;");
-		foreach (var s in assemblies) {
+		foreach (var s in Assemblies) {
 			if (!s.IsAOTCompiled)
 				continue;
-			if ((abi & Abi.SimulatorArchMask) == 0) {
-				var info = s.AssemblyDefinition.Name.Name;
+			if ((Abi & Abi.SimulatorArchMask) == 0) {
+				var info = s.AssemblyName;
 				info = EncodeAotSymbol (info);
 				assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
 				assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
 			}
 			string sname = s.FileName;
-			if (assembly_name != sname && IsBoundAssembly (s)) {
+			if (this.App.AssemblyName != sname && s.IsBoundAssembly) {
 				register_assemblies.Append ("\txamarin_open_and_register (\"").Append (sname).Append ("\", &exception_gchandle);").AppendLine ();
 				register_assemblies.AppendLine ("\txamarin_process_managed_exception_gchandle (exception_gchandle);");
 			}
 		}
 
-		if ((abi & Abi.SimulatorArchMask) == 0 || app.Embeddinator) {
-			var frameworks = assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
+		if ((Abi & Abi.SimulatorArchMask) == 0 || App.Embeddinator) {
+			var frameworks = Assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
 									   .OrderBy ((a) => a.Identity, StringComparer.Ordinal);
 			foreach (var asm_fw in frameworks) {
 				var asm_name = asm_fw.Identity;
 				if (asm_fw.BuildTargetName == asm_name)
 					continue; // this is deduceable
 				var prefix = string.Empty;
-				if (!app.HasFrameworksDirectory && asm_fw.IsCodeShared)
+				if (!App.HasFrameworksDirectory && asm_fw.IsCodeShared)
 					prefix = "../../";
 				var suffix = string.Empty;
-				if (app.IsSimulatorBuild)
+				if (App.IsSimulatorBuild)
 					suffix = "/simulator";
 				assembly_location.AppendFormat ("\t{{ \"{0}\", \"{2}Frameworks/{1}.framework/MonoBundle{3}\" }},\n", asm_name, asm_fw.BuildTargetName, prefix, suffix);
 				assembly_location_count++;
@@ -193,8 +185,8 @@ public class MainGenerator {
 		sw.WriteLine ("}");
 		sw.WriteLine ();
 
-		if (registration_methods != null) {
-			foreach (var method in registration_methods) {
+		if (RegistrationMethods != null) {
+			foreach (var method in RegistrationMethods) {
 				sw.Write ("extern \"C\" void ");
 				sw.Write (method);
 				sw.WriteLine ("();");
@@ -205,14 +197,14 @@ public class MainGenerator {
 		// On iOS we can pass -u to the native linker, but that doesn't work on tvOS, where
 		// we're building with bitcode (even when bitcode is disabled, we still build with the
 		// bitcode marker, which makes the linker reject -u).
-		if (app.EnableProfiling) {
+		if (App.EnableProfiling) {
 			sw.WriteLine ("extern \"C\" { void mono_profiler_init_log (); }");
 			sw.WriteLine ("typedef void (*xamarin_profiler_symbol_def)();");
 			sw.WriteLine ("extern xamarin_profiler_symbol_def xamarin_profiler_symbol;");
 			sw.WriteLine ("xamarin_profiler_symbol_def xamarin_profiler_symbol = NULL;");
 		}
 
-		if (app.UseInterpreter) {
+		if (App.UseInterpreter) {
 			sw.WriteLine ("extern \"C\" { void mono_ee_interp_init (const char *); }");
 			sw.WriteLine ("extern \"C\" { void mono_icall_table_init (void); }");
 			sw.WriteLine ("extern \"C\" { void mono_marshal_ilgen_init (void); }");
@@ -223,38 +215,38 @@ public class MainGenerator {
 		sw.WriteLine ("void xamarin_setup_impl ()");
 		sw.WriteLine ("{");
 
-		if (app.EnableProfiling)
+		if (App.EnableProfiling)
 			sw.WriteLine ("\txamarin_profiler_symbol = mono_profiler_init_log;");
 
-		if (app.EnableLLVMOnlyBitCode)
+		if (App.EnableLLVMOnlyBitCode)
 			sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_LLVMONLY);");
-		else if (app.UseInterpreter) {
+		else if (App.UseInterpreter) {
 			sw.WriteLine ("\tmono_icall_table_init ();");
 			sw.WriteLine ("\tmono_marshal_ilgen_init ();");
 			sw.WriteLine ("\tmono_method_builder_ilgen_init ();");
 			sw.WriteLine ("\tmono_sgen_mono_ilgen_init ();");
 			sw.WriteLine ("\tmono_ee_interp_init (NULL);");
 			sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_INTERP);");
-		} else if (app.IsDeviceBuild)
+		} else if (App.IsDeviceBuild)
 			sw.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_FULL);");
 
 		if (assembly_location.Length > 0)
 			sw.WriteLine ("\txamarin_set_assembly_directories (&assembly_locations);");
 
-		if (registration_methods != null) {
-			for (int i = 0; i < registration_methods.Count; i++) {
+		if (RegistrationMethods != null) {
+			for (int i = 0; i < RegistrationMethods.Count; i++) {
 				sw.Write ("\t");
-				sw.Write (registration_methods [i]);
+				sw.Write (RegistrationMethods [i]);
 				sw.WriteLine ("();");
 			}
 		}
 
-		if (app.MonoNativeMode != MonoNativeMode.None) {
+		if (App.MonoNativeMode != MonoNativeMode.None) {
 			string mono_native_lib;
-			if (app.LibMonoNativeLinkMode == AssemblyBuildTarget.StaticObject)
+			if (App.LibMonoNativeLinkMode == AssemblyBuildTarget.StaticObject)
 				mono_native_lib = "__Internal";
 			else
-				mono_native_lib = app.GetLibNativeName () + ".dylib";
+				mono_native_lib = App.GetLibNativeName () + ".dylib";
 			sw.WriteLine ();
 			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Native\", NULL, \"{mono_native_lib}\", NULL);");
 			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Security.Cryptography.Native.Apple\", NULL, \"{mono_native_lib}\", NULL);");
@@ -262,23 +254,23 @@ public class MainGenerator {
 			sw.WriteLine ();
 		}
 
-		if (app.EnableDebug)
-			sw.WriteLine ("\txamarin_gc_pump = {0};", app.DebugTrack.Value ? "TRUE" : "FALSE");
-		sw.WriteLine ("\txamarin_init_mono_debug = {0};", app.PackageManagedDebugSymbols ? "TRUE" : "FALSE");
-		sw.WriteLine ("\txamarin_executable_name = \"{0}\";", assembly_name);
+		if (App.EnableDebug)
+			sw.WriteLine ("\txamarin_gc_pump = {0};", App.DebugTrack.Value ? "TRUE" : "FALSE");
+		sw.WriteLine ("\txamarin_init_mono_debug = {0};", App.PackageManagedDebugSymbols ? "TRUE" : "FALSE");
+		sw.WriteLine ("\txamarin_executable_name = \"{0}\";", App.AssemblyName);
 		sw.WriteLine ("\tmono_use_llvm = {0};", enable_llvm ? "TRUE" : "FALSE");
 		GenerateCommon (sw);
 		sw.WriteLine ("}");
 		sw.WriteLine ();
 		sw.Write ("int ");
-		sw.Write (app.IsWatchExtension ? "xamarin_watchextension_main" : "main");
+		sw.Write (App.IsWatchExtension ? "xamarin_watchextension_main" : "main");
 		sw.WriteLine (" (int argc, char **argv)");
 		sw.WriteLine ("{");
 		sw.WriteLine ("\tNSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];");
-		if (app.IsExtension) {
+		if (App.IsExtension) {
 			// the name of the executable must be the bundle id (reverse dns notation)
 			// but we do not want to impose that (ugly) restriction to the managed .exe / project name / ...
-			sw.WriteLine ("\targv [0] = (char *) \"{0}\";", Path.GetFileNameWithoutExtension (app.RootAssemblies [0]));
+			sw.WriteLine ("\targv [0] = (char *) \"{0}\";", Path.GetFileNameWithoutExtension (App.RootAssemblies [0]));
 			sw.WriteLine ("\tint rv = xamarin_main (argc, argv, XamarinLaunchModeExtension);");
 		} else {
 			sw.WriteLine ("\tint rv = xamarin_main (argc, argv, XamarinLaunchModeApp);");
@@ -295,7 +287,7 @@ public class MainGenerator {
 		sw.WriteLine ("\txamarin_register_modules = xamarin_register_modules_impl;");
 		sw.WriteLine ("}");
 
-		if (app.Platform == ApplePlatform.WatchOS && app.SdkVersion.Major >= 6 && app.IsWatchExtension) {
+		if (App.Platform == ApplePlatform.WatchOS && App.SdkVersion.Major >= 6 && App.IsWatchExtension) {
 			sw.WriteLine ();
 			sw.WriteLine ("extern \"C\" { int WKExtensionMain (int argc, char* argv[]); }");
 			sw.WriteLine ("int main (int argc, char *argv[])");
@@ -320,20 +312,5 @@ public class MainGenerator {
 			sb.Append ('_');
 		}
 		return sb.ToString ();
-	}
-
-	static bool IsBoundAssembly (Assembly s)
-	{
-		if (s.IsFrameworkAssembly)
-			return false;
-
-		AssemblyDefinition ad = s.AssemblyDefinition;
-
-		foreach (ModuleDefinition md in ad.Modules)
-			foreach (TypeDefinition td in md.Types)
-				if (td.IsNSObject (s.Target.LinkContext))
-					return true;
-
-		return false;
 	}
 }

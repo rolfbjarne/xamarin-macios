@@ -20,6 +20,12 @@ using PlatformException = Xamarin.Bundler.MonoMacException;
 
 namespace Xamarin.Bundler {
 
+	public enum AssemblyBuildTarget {
+		StaticObject,
+		DynamicLibrary,
+		Framework,
+	}
+
 	struct NativeReferenceMetadata
 	{
 		public bool ForceLoad;

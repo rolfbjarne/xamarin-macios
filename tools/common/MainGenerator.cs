@@ -80,9 +80,6 @@ public class MainGenerator {
 			sw.WriteLine ("\textern NSString* xamarin_custom_bundle_name;");
 			sw.WriteLine ("\txamarin_custom_bundle_name = @\"" + CustomBundleName + "\";");
 		}
-		if (!IsDefaultMarshalManagedExceptionMode)
-			sw.WriteLine ("\txamarin_marshal_managed_exception_mode = MarshalManagedExceptionMode{0};", MarshalManagedExceptions);
-		sw.WriteLine ("\txamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionMode{0};", MarshalObjectiveCExceptions);
 		if (DisableLldbAttach.HasValue ? DisableLldbAttach.Value : !EnableDebug)
 			sw.WriteLine ("\txamarin_disable_lldb_attach = true;");
 		if (DisableOmitFramePointer ?? EnableDebug)
@@ -94,27 +91,37 @@ public class MainGenerator {
 		else if (Registrar == RegistrarMode.PartialStatic)
 			sw.WriteLine ("\txamarin_create_classes_Xamarin_Mac ();");
 
-		if (EnableDebug)
-			sw.WriteLine ("\txamarin_debug_mode = TRUE;");
-
-		sw.WriteLine ($"\tsetenv (\"MONO_GC_PARAMS\", \"major={(EnableSGenConc ? "marksweep-conc" : "marksweep")}\", 1);");
-		
-		sw.WriteLine ($"\txamarin_supports_dynamic_registration = {(DynamicRegistrationSupported ? "TRUE" : "FALSE")};");
-
 		if (IsHybridAOT)
 			sw.WriteLine ("\txamarin_mac_hybrid_aot = TRUE;");
 
 		if (IsMobile)
 			sw.WriteLine ("\txamarin_mac_modern = TRUE;");
 
+		GenerateCommon (sw);
+
 		sw.WriteLine ("\treturn 0;");
 		sw.WriteLine ("}");
 		sw.WriteLine ();
 	}
 
+	void GenerateCommon (TextWriter sw)
+	{
+		sw.WriteLine ("\txamarin_log_level = {0};", Verbosity.ToString (CultureInfo.InvariantCulture));
+		sw.WriteLine ("\txamarin_arch_name = \"{0}\";", Abi.AsArchString ());
+		if (!App.IsDefaultMarshalManagedExceptionMode)
+			sw.WriteLine ("\txamarin_marshal_managed_exception_mode = MarshalManagedExceptionMode{0};", App.MarshalManagedExceptions);
+		sw.WriteLine ("\txamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionMode{0};", App.MarshalObjectiveCExceptions);
+		if (App.EnableDebug)
+			sw.WriteLine ("\txamarin_debug_mode = TRUE;");
+		if (!string.IsNullOrEmpty (App.MonoGCParams))
+			sw.WriteLine ("\tsetenv (\"MONO_GC_PARAMS\", \"{0}\", 1);", App.MonoGCParams);
+		foreach (var kvp in App.EnvironmentVariables)
+			sw.WriteLine ("\tsetenv (\"{0}\", \"{1}\", 1);", kvp.Key.Replace ("\"", "\\\""), kvp.Value.Replace ("\"", "\\\""));
+		sw.WriteLine ("\txamarin_supports_dynamic_registration = {0};", App.DynamicRegistrationSupported ? "TRUE" : "FALSE");
+	}
+
 	void GenerateMain (TextWriter sw, Target target, IEnumerable<Assembly> assemblies, string assembly_name, Abi abi, IList<string> registration_methods)
 	{
-#if !MMP
 		var app = App;
 		var assembly_externs = new StringBuilder ();
 		var assembly_aot_modules = new StringBuilder ();
@@ -242,19 +249,16 @@ public class MainGenerator {
 			}
 		}
 
-		if (target.MonoNativeMode != MonoNativeMode.None) {
+		if (app.MonoNativeMode != MonoNativeMode.None) {
 			string mono_native_lib;
 			if (app.LibMonoNativeLinkMode == AssemblyBuildTarget.StaticObject)
 				mono_native_lib = "__Internal";
 			else
-				mono_native_lib = target.GetLibNativeName () + ".dylib";
+				mono_native_lib = app.GetLibNativeName () + ".dylib";
 			sw.WriteLine ();
 			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Native\", NULL, \"{mono_native_lib}\", NULL);");
-			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"libSystem.Native\", NULL, \"{mono_native_lib}\", NULL);");
 			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Security.Cryptography.Native.Apple\", NULL, \"{mono_native_lib}\", NULL);");
-			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"libSystem.Security.Cryptography.Native.Apple\", NULL, \"{mono_native_lib}\", NULL);");
 			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Net.Security.Native\", NULL, \"{mono_native_lib}\", NULL);");
-			sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"libSystem.Net.Security.Native\", NULL, \"{mono_native_lib}\", NULL);");
 			sw.WriteLine ();
 		}
 
@@ -263,18 +267,7 @@ public class MainGenerator {
 		sw.WriteLine ("\txamarin_init_mono_debug = {0};", app.PackageManagedDebugSymbols ? "TRUE" : "FALSE");
 		sw.WriteLine ("\txamarin_executable_name = \"{0}\";", assembly_name);
 		sw.WriteLine ("\tmono_use_llvm = {0};", enable_llvm ? "TRUE" : "FALSE");
-		sw.WriteLine ("\txamarin_log_level = {0};", Verbosity.ToString (CultureInfo.InvariantCulture));
-		sw.WriteLine ("\txamarin_arch_name = \"{0}\";", abi.AsArchString ());
-		if (!app.IsDefaultMarshalManagedExceptionMode)
-			sw.WriteLine ("\txamarin_marshal_managed_exception_mode = MarshalManagedExceptionMode{0};", app.MarshalManagedExceptions);
-		sw.WriteLine ("\txamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionMode{0};", app.MarshalObjectiveCExceptions);
-		if (app.EnableDebug)
-			sw.WriteLine ("\txamarin_debug_mode = TRUE;");
-		if (!string.IsNullOrEmpty (app.MonoGCParams))
-			sw.WriteLine ("\tsetenv (\"MONO_GC_PARAMS\", \"{0}\", 1);", app.MonoGCParams);
-		foreach (var kvp in app.EnvironmentVariables)
-			sw.WriteLine ("\tsetenv (\"{0}\", \"{1}\", 1);", kvp.Key.Replace ("\"", "\\\""), kvp.Value.Replace ("\"", "\\\""));
-		sw.WriteLine ("\txamarin_supports_dynamic_registration = {0};", app.DynamicRegistrationSupported ? "TRUE" : "FALSE");
+		GenerateCommon (sw);
 		sw.WriteLine ("}");
 		sw.WriteLine ();
 		sw.Write ("int ");
@@ -310,9 +303,6 @@ public class MainGenerator {
 			sw.WriteLine ("\treturn WKExtensionMain (argc, argv);");
 			sw.WriteLine ("}");
 		}
-#else
-	throw new NotImplementedException ();
-#endif
 	}
 
 	public static string EncodeAotSymbol (string symbol)

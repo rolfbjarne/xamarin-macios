@@ -178,8 +178,6 @@ namespace Xamarin.Bundler {
 		BuildTasks build_tasks;
 		BuildTask final_build_task; // either lipo or file copy (to final destination)
 
-		Dictionary<string, Tuple<AssemblyBuildTarget, string>> assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> ();
-
 		public AssemblyBuildTarget LibMonoLinkMode {
 			get {
 				if (Embeddinator) {
@@ -208,19 +206,12 @@ namespace Xamarin.Bundler {
 		}
 		public AssemblyBuildTarget LibPInvokesLinkMode => LibXamarinLinkMode;
 		public AssemblyBuildTarget LibProfilerLinkMode => OnlyStaticLibraries ? AssemblyBuildTarget.StaticObject : AssemblyBuildTarget.DynamicLibrary;
-		public AssemblyBuildTarget LibMonoNativeLinkMode => HasDynamicLibraries ? AssemblyBuildTarget.DynamicLibrary : AssemblyBuildTarget.StaticObject;
 
 		Dictionary<string, BundleFileInfo> bundle_files = new Dictionary<string, BundleFileInfo> ();
 
 		public bool OnlyStaticLibraries {
 			get {
 				return assembly_build_targets.All ((abt) => abt.Value.Item1 == AssemblyBuildTarget.StaticObject);
-			}
-		}
-
-		public bool HasDynamicLibraries {
-			get {
-				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
 			}
 		}
 

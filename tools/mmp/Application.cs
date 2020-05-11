@@ -9,7 +9,6 @@ namespace Xamarin.Bundler {
 
 		public bool Is32Build => false;
 		public bool Is64Build => true;
-		public bool IsDualBuild => false;
 		public bool IsSimulatorBuild => false;
 		public bool IsDeviceBuild => false;
 

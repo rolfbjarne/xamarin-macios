@@ -780,5 +780,16 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public bool HasFrameworksDirectory {
+			get {
+				if (!IsExtension)
+					return true;
+
+				if (IsWatchExtension && Platform == ApplePlatform.WatchOS)
+					return true;
+
+				return false;
+			}
+		}
 	}
 }

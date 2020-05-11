@@ -4,6 +4,11 @@ using System.IO;
 namespace Xamarin.Bundler {
 	public partial class Assembly
 	{
+		public bool IsAOTCompiled => false;
+		public AssemblyBuildTarget BuildTarget => AssemblyBuildTarget.None;
+		public string BuildTargetName => throw ErrorHelper.CreateError (99, "BuildTargetName is not valid for Xamarin.Mac projects");
+		public bool IsCodeShared => false;
+
 		// returns false if the assembly was not copied (because it was already up-to-date).
 		bool CopyAssembly (string source, string target)
 		{

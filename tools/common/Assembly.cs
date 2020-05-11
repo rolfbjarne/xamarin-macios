@@ -24,6 +24,7 @@ namespace Xamarin.Bundler {
 		StaticObject,
 		DynamicLibrary,
 		Framework,
+		None,
 	}
 
 	struct NativeReferenceMetadata

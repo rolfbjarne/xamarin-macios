@@ -97,9 +97,32 @@ namespace Xamarin.Bundler {
 
 		public List<Target> Targets = new List<Target> ();
 
+		bool? package_managed_debug_symbols;
+		public bool PackageManagedDebugSymbols {
+			get { return package_managed_debug_symbols.Value; }
+			set { package_managed_debug_symbols = value; }
+		}
+
+		// Mono debug options for Xamarin.Mac
+		public bool? DisableLldbAttach = null;
+		public bool? DisableOmitFramePointer = null;
+
+		Dictionary<string, Tuple<AssemblyBuildTarget, string>> assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> ();
+
+		public AssemblyBuildTarget LibMonoNativeLinkMode => HasDynamicLibraries ? AssemblyBuildTarget.DynamicLibrary : AssemblyBuildTarget.StaticObject;
+
+		public bool IsDualBuild { get { return Is32Build && Is64Build; } } // if we're building both a 32 and a 64 bit version.
+		public bool IsLLVM { get { return IsArchEnabled (Abi.LLVM); } }
+
 		public Application (string[] arguments)
 		{
 			Cache = new Cache (arguments);
+		}
+
+		public bool HasDynamicLibraries {
+			get {
+				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
+			}
 		}
 
 		public bool DynamicRegistrationSupported {
@@ -404,6 +427,12 @@ namespace Xamarin.Bundler {
 				DebugTrack = false;
 			} else if (DebugTrack.Value && !EnableDebug) {
 				ErrorHelper.Warning (32, Errors.MT0032);
+			}
+
+			if (!package_managed_debug_symbols.HasValue) {
+				package_managed_debug_symbols = EnableDebug;
+			} else if (package_managed_debug_symbols.Value && IsLLVM) {
+				ErrorHelper.Warning (3007, Errors.MT3007);
 			}
 
 			Optimizations.Initialize (this);

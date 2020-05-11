@@ -193,6 +193,15 @@ namespace Xamarin.Bundler {
 			options.Add ("profiling:", "Enable profiling", v => app.EnableProfiling = ParseBool (v, "profiling"));
 			options.Add ("debugtrack:", "Enable debug tracking of object resurrection bugs", v => { app.DebugTrack = ParseBool (v, "--debugtrack"); });
 			options.Add (new Mono.Options.ResponseFileSource ());
+			options.Add ("setenv=", "Set the environment variable in the application on startup", v => {
+					int eq = v.IndexOf ('=');
+					if (eq <= 0)
+						throw ErrorHelper.CreateError (2, Errors.MT0002, v);
+					var name = v.Substring (0, eq);
+					var value = v.Substring (eq + 1);
+					app.EnvironmentVariables.Add (name, value);
+				}
+			);
 
 			try {
 				app.RootAssemblies.AddRange (options.Parse (args));

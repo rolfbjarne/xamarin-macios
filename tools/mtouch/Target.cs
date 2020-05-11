@@ -98,36 +98,9 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public void SelectMonoNative ()
-		{
-			switch (App.Platform) {
-			case ApplePlatform.iOS:
-			case ApplePlatform.TVOS:
-				MonoNativeMode = App.DeploymentTarget.Major >= 10 ? MonoNativeMode.Unified : MonoNativeMode.Compat;
-				break;
-			case ApplePlatform.WatchOS:
-				if (Application.IsArchEnabled (Abis, Abi.ARM64_32)) {
-					MonoNativeMode = MonoNativeMode.Unified;
-				} else {
-					MonoNativeMode = App.DeploymentTarget.Major >= 3 ? MonoNativeMode.Unified : MonoNativeMode.Compat;
-				}
-				break;
-			default:
-				throw ErrorHelper.CreateError (71, Errors.MX0071, App.Platform, "Xamarin.iOS");
-			}
-		}
-
 		public string GetLibNativeName () 
 		{
-			switch (MonoNativeMode) {
-			case MonoNativeMode.Unified:
-				return "libmono-native-unified";
-			case MonoNativeMode.Compat:
-				return "libmono-native-compat";
-			default:
-				throw ErrorHelper.CreateError (99, Errors.MX0099, $"Invalid mono native type: '{MonoNativeMode}'");
-			}
-
+			return App.GetLibNativeName ();
 		}
 
 		List<Abi> GetArchitectures (AssemblyBuildTarget build_target)

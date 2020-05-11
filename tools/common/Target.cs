@@ -54,7 +54,7 @@ namespace Xamarin.Bundler {
 		// Note that each 'Target' can have multiple abis: armv7+armv7s for instance.
 		public List<Abi> Abis;
 
-		public MonoNativeMode MonoNativeMode { get; set; }
+		public MonoNativeMode MonoNativeMode { get { return App.MonoNativeMode; } }
 
 #if MONOMAC
 		public bool Is32Build { get { return false; } }

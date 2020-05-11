@@ -85,7 +85,6 @@ namespace Xamarin.Bundler {
 		static string machine_config_path = null;
 		static bool bypass_linking_checks = false;
 
-		static string arch = "x86_64";
 		static string contents_dir;
 		static string frameworks_dir;
 		static string macos_dir;
@@ -99,7 +98,6 @@ namespace Xamarin.Bundler {
 
 		static string BundleName { get { return custom_bundle_name != null ? custom_bundle_name : "MonoBundle"; } }
 		static string AppPath { get { return Path.Combine (macos_dir, app_name); } }
-		public static string Arch => arch;
 
 		static string icon;
 		static string certificate_name;
@@ -148,7 +146,7 @@ namespace Xamarin.Bundler {
 
 		public static bool Is64Bit { 
 			get {
-				return arch == "x86_64";
+				return App.Is64Build;
 			}
 		}
 
@@ -220,7 +218,7 @@ namespace Xamarin.Bundler {
 				{ "i|icon=", "Use the specified file as the bundle icon", v => { icon = v; }},
 				{ "xml=", "Provide an extra XML definition file to the linker", v => App.Definitions.Add (v) },
 				{ "time", v => WatchLevel++ },
-				{ "arch=", "Specify the architecture ('x86_64') of the native runtime (default to 'x86_64', which is the only valid value)", v => { arch = v; } },
+				{ "arch=", "Specify the architecture ('x86_64') of the native runtime (default to 'x86_64', which is the only valid value) [DEPRECATED, use --abi instead]", v => { App.ParseAbi (v); }, true},
 				{ "profile=", "(Obsoleted in favor of --target-framework) Specify the .NET profile to use", v => SetTargetFramework (v), true },
 				{ "force-thread-check", "Keep UI thread checks inside (even release) builds [DEPRECATED, use --optimize=-remove-uithread-checks instead]", v => { App.Optimizations.RemoveUIThreadChecks = false; }, true},
 				{ "disable-thread-check", "Remove UI thread checks inside (even debug) builds [DEPRECATED, use --optimize=remove-uithread-checks instead]", v => { App.Optimizations.RemoveUIThreadChecks = true; }, true},
@@ -611,13 +609,10 @@ namespace Xamarin.Bundler {
 
 			CreateDirectoriesIfNeeded ();
 
-			switch (arch) {
-			case "x86_64":
-				BuildTarget.Abis = new List<Abi> { Abi.x86_64 };
-				break;
-			default:
-				throw new MonoMacException (5205, true, Errors.MM5205, arch);
-			}
+			App.SetDefaultAbi ();
+			App.ValidateAbi ();
+
+			BuildTarget.Abis = App.Abis.ToList ();
 
 			Watch ("Setup", 1);
 
@@ -949,9 +944,8 @@ namespace Xamarin.Bundler {
 				}
 				args.Add ($"-mmacosx-version-min={App.DeploymentTarget.ToString ()}");
 				args.Add ("-arch");
-				args.Add (arch);
-				if (arch == "x86_64")
-					args.Add ($"-fobjc-runtime=macosx-{App.DeploymentTarget.ToString ()}");
+				args.Add (App.Abi.AsArchString ());
+				args.Add ($"-fobjc-runtime=macosx-{App.DeploymentTarget.ToString ()}");
 				if (!embed_mono)
 					args.Add ("-DDYNAMIC_MONO_RUNTIME");
 
@@ -1229,7 +1223,6 @@ namespace Xamarin.Bundler {
 				SkippedAssemblies = App.LinkSkipped,
 				I18nAssemblies = App.I18n,
 				ExtraDefinitions = App.Definitions,
-				Architecture = arch,
 				RuntimeOptions = App.RuntimeOptions,
 				MarshalNativeExceptionsState = !App.RequiresPInvokeWrappers ? null : new PInvokeWrapperGenerator ()
 				{
@@ -1499,6 +1492,7 @@ namespace Xamarin.Bundler {
 			if (existingArchs.Count () < 2)
 				return;
 
+			var arch = App.Abi.AsString ();
 			RunLipo (new [] { dest, "-thin", arch, "-output", dest });
 			if (name != "MonoPosixHelper" && name != "libmono-native-unified" && name != "libmono-native-compat")
 				ErrorHelper.Warning (2108, Errors.MM2108, name, arch);
@@ -1745,11 +1739,13 @@ namespace Xamarin.Bundler {
 		static string GetSwappedPathCore (string name)
 		{
 			string flavor = (Driver.IsUnifiedFullSystemFramework || Driver.IsUnifiedFullXamMacFramework) ? "full" : "mobile";
-			switch (Driver.Arch) {
-				case "x86_64":
-					return Path.Combine (Driver.FrameworkLibDirectory, Driver.Arch, flavor, name + ".dll");
+			var abi = Driver.App.Abi;
+			var arch = abi.AsArchString ();
+			switch (abi) {
+				case Abi.x86_64:
+					return Path.Combine (Driver.FrameworkLibDirectory, arch, flavor, name + ".dll");
 				default:
-					throw new MonoMacException (5205, true, Errors.MM5205, Driver.Arch);
+					throw new MonoMacException (5205, true, Errors.MM5205, arch);
 			}
 		}
 	}

@@ -202,6 +202,7 @@ namespace Xamarin.Bundler {
 					app.EnvironmentVariables.Add (name, value);
 				}
 			);
+			options.Add ("package-debug-symbols:", "Specify whether debug info files (*.mdb / *.pdb) should be packaged in the app. Default is 'true' for debug builds and 'false' for release builds.", v => app.PackageManagedDebugSymbols = ParseBool (v, "package-debug-symbols"));
 
 			try {
 				app.RootAssemblies.AddRange (options.Parse (args));

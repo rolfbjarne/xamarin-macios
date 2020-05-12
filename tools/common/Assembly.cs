@@ -20,7 +20,6 @@ using PlatformException = Xamarin.Bundler.MonoMacException;
 
 
 namespace Xamarin.Bundler {
-
 	struct NativeReferenceMetadata
 	{
 		public bool ForceLoad;
@@ -78,6 +77,10 @@ namespace Xamarin.Bundler {
 		}
 		public string FileName { get { return Path.GetFileName (FullPath); } }
 		public string Identity { get { return GetIdentity (FullPath); } }
+
+		public string AssemblyName {
+			get { return AssemblyDefinition.Name.Name; }
+		}
 
 		public static string GetIdentity (AssemblyDefinition ad)
 		{

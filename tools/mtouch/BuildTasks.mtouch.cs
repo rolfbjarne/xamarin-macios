@@ -122,12 +122,13 @@ namespace Xamarin.Bundler
 		protected override void Execute ()
 		{
 			var generator = new MainGenerator ();
-			generator.Abi = Abi;
-			generator.App = Target.App;
+			generator.App = App;
 			generator.Assemblies = Target.Assemblies;
-			generator.ExecutableAssemblyName = Target.App.AssemblyName;
-			generator.Output = MainM;
+			generator.AssemblyName = Target.App.AssemblyName;
+			generator.Abi = Abi;
 			generator.RegistrationMethods = RegistrationMethods;
+			generator.Output = MainM;
+			generator.Generate ();
 		}
 	}
 

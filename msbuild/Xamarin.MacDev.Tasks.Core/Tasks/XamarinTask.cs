@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
+using Xamarin.Localization.MSBuild;
 using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
@@ -78,6 +80,16 @@ namespace Xamarin.MacDev.Tasks {
 			default:
 				throw new InvalidOperationException ($"Invalid platform: {Platform}");
 			}
+		}
+
+		public bool TryParseTargetArchitectures (string value, out TargetArchitecture architectures)
+		{
+			if (!Enum.TryParse<TargetArchitecture> (value, out architectures)) {
+				Log.LogError (MSBStrings.E0057 /* Invalid architectures: '{0}'. */, value);
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

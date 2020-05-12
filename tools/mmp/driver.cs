@@ -823,10 +823,17 @@ namespace Xamarin.Bundler {
 		static string GenerateMain ()
 		{
 			var generator = new MainGenerator ();
-			generator.App = App;
+			// Common options
 			generator.Abi = App.Abi;
+			generator.Verbosity = Verbosity;
+			generator.App = App;
 			generator.Output = Path.Combine (App.Cache.Location, "main.m");
-			generator.Generate ();
+			// Xamarin.Mac options
+			generator.CustomBundleName = App.CustomBundleName;
+			generator.DisableLldbAttach = App.DisableLldbAttach;
+			generator.DisableOmitFramePointer = App.DisableOmitFramePointer;
+			generator.IsHybridAOT = App.AOTOptions?.IsHybridAOT == true;
+			generator.IsMobile = Driver.TargetFramework == TargetFramework.Xamarin_Mac_2_0_Mobile;
 			return generator.Output;
 		}
 

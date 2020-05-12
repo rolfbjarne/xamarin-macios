@@ -1061,7 +1061,7 @@ namespace Xamarin.Bundler {
 				}
 
 				var requiredSymbols = BuildTarget.GetRequiredSymbols ();
-				Driver.WriteIfDifferent (Path.Combine (App.Cache.Location, "exported-symbols-list"), string.Join ("\n", requiredSymbols.Select ((symbol) => symbol.Prefix + symbol.Name).ToArray ()));
+				FileUtils.WriteIfDifferent (Path.Combine (App.Cache.Location, "exported-symbols-list"), string.Join ("\n", requiredSymbols.Select ((symbol) => symbol.Prefix + symbol.Name).ToArray ()));
 				switch (App.SymbolMode) {
 				case SymbolMode.Ignore:
 					break;

@@ -15,6 +15,7 @@ using System.Text;
 
 using Xamarin.Bundler;
 using Xamarin.Linker;
+using Xamarin.Utils;
 
 #if MTOUCH
 using ProductException=Xamarin.Bundler.MonoTouchException;
@@ -4841,12 +4842,12 @@ namespace Registrar {
 
 			FlushTrace ();
 
-			Driver.WriteIfDifferent (source_path, methods.ToString (), true);
+			FileUtils.WriteIfDifferent (source_path, methods.ToString (), true);
 
 			header.AppendLine ();
 			header.AppendLine (declarations);
 			header.AppendLine (interfaces);
-			Driver.WriteIfDifferent (header_path, header.ToString (), true);
+			FileUtils.WriteIfDifferent (header_path, header.ToString (), true);
 
 			header.Dispose ();
 			header = null;

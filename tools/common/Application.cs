@@ -91,6 +91,8 @@ namespace Xamarin.Bundler {
 			set { package_managed_debug_symbols = value; }
 		}
 
+		public bool IsDualBuild { get { return Is32Build && Is64Build; } } // if we're building both a 32 and a 64 bit version.
+
 		public Application (string[] arguments)
 		{
 			Cache = new Cache (arguments);

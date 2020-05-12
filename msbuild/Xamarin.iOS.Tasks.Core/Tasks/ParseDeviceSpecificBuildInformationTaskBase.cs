@@ -11,11 +11,9 @@ using Xamarin.Localization.MSBuild;
 
 namespace Xamarin.iOS.Tasks
 {
-	public abstract class ParseDeviceSpecificBuildInformationTaskBase : Task
+	public abstract class ParseDeviceSpecificBuildInformationTaskBase : XamarinTask
 	{
 		#region Inputs
-
-		public string SessionId { get; set; }
 
 		[Required]
 		public string Architectures { get; set; }
@@ -25,11 +23,6 @@ namespace Xamarin.iOS.Tasks
 
 		[Required]
 		public string OutputPath { get; set; }
-
-		public TargetFramework TargetFramework { get { return TargetFramework.Parse (TargetFrameworkMoniker); } }
-
-		[Required]
-		public string TargetFrameworkMoniker { get; set; }
 
 		[Required]
 		public string TargetiOSDevice { get; set; }
@@ -74,10 +67,8 @@ namespace Xamarin.iOS.Tasks
 				break;
 			}
 
-			if (!Enum.TryParse (Architectures, out architectures)) {
-				Log.LogError (MSBStrings.E0057, Architectures);
+			if (TryParseTargetArchitectures (Architectures, out architectures))
 				return false;
-			}
 
 			if ((plist = PObject.FromString (TargetiOSDevice) as PDictionary) == null) {
 				Log.LogError (MSBStrings.E0058);

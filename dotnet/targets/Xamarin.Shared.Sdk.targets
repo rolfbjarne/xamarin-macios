@@ -236,12 +236,23 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CompileLauncher" DependsOnTargets="_SetVariables;_UpdateDynamicLibraryId">
+	<Target Name="_GenerateMain" DependsOnTargets="_SetVariables;_UpdateDynamicLibraryId">
+		<GenerateMain
+			SessionId="$(BuildSessionId)"
+
+			Architecture=""
+			Output=""
+			Verbosity=""
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			/>
+	</Target>
+
+	<Target Name="_CompileLauncher" DependsOnTargets="_SetVariables;_UpdateDynamicLibraryId;_GenerateMain">
 		<!-- FIXME: Use _NativeDynamicLibrary instead of _NativeDynamicLibraryFixed -->
 		<CompileExecutable
 			SessionId="$(BuildSessionId)"
 
-			Architecture="$(MtouchArch)"
+			Architectures="$(TargetArchitectures)"
 			AppBundlePath="$(_AppBundlePath)"
 			AssemblyName="$(AssemblyName)"
 			IsAppExtension="$(IsAppExtension)"

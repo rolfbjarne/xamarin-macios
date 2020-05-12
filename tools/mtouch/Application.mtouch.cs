@@ -1347,7 +1347,7 @@ namespace Xamarin.Bundler {
 				sb.Append ("Xamarin built applications contain open source software.  ");
 				sb.Append ("For detailed attribution and licensing notices, please visit...");
 				sb.AppendLine ().AppendLine ().Append ("http://xamarin.com/mobile-licensing").AppendLine ();
-				Driver.WriteIfDifferent (path, sb.ToString ());
+				FileUtils.WriteIfDifferent (path, sb.ToString ());
 			} catch (Exception ex) {
 				throw new MonoTouchException (1017, true, ex, Errors.MT1017, ex.Message);
 			}
@@ -1834,7 +1834,7 @@ namespace Xamarin.Bundler {
 			}
 
 			// Write only if we need to update the manifest
-			Driver.WriteIfDifferent (manifestPath, root.ToString ());
+			FileUtils.WriteIfDifferent (manifestPath, root.ToString ());
 		}
 
 		void CopyAotData (string src, string dest)
@@ -2141,7 +2141,7 @@ namespace Xamarin.Bundler {
 			sb.AppendLine ("</dict>");
 			sb.AppendLine ("</plist>");
 
-			Driver.WriteIfDifferent (output_path, sb.ToString ());
+			FileUtils.WriteIfDifferent (output_path, sb.ToString ());
 		}
 	}
 }

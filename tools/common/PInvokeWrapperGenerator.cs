@@ -5,7 +5,7 @@ using System.Text;
 
 using Mono.Cecil;
 
-using Xamarin.Bundler;
+using Xamarin.Utils;
 using Registrar;
 
 namespace Xamarin.Bundler
@@ -70,8 +70,8 @@ namespace Xamarin.Bundler
 
 			Registrar.GeneratePInvokeWrappersEnd ();
 
-			Driver.WriteIfDifferent (HeaderPath, hdr.ToString () + "\n" + decls.ToString () + "\n" + ifaces.ToString () + "\n", true);
-			Driver.WriteIfDifferent (SourcePath, mthds.ToString () + "\n" + sb.ToString () + "\n", true);
+			FileUtils.WriteIfDifferent (HeaderPath, hdr.ToString () + "\n" + decls.ToString () + "\n" + ifaces.ToString () + "\n", true);
+			FileUtils.WriteIfDifferent (SourcePath, mthds.ToString () + "\n" + sb.ToString () + "\n", true);
 		}
 
 		public void ProcessMethod (MethodDefinition method)

@@ -535,7 +535,7 @@ namespace Xamarin.Bundler
 						sw.WriteLine ("}");
 					}
 				}
-				WriteIfDifferent (main_source, sb.ToString (), true);
+				FileUtils.WriteIfDifferent (main_source, sb.ToString (), true);
 			} catch (MonoTouchException) {
 				throw;
 			} catch (Exception e) {

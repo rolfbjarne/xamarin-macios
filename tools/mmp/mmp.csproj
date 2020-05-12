@@ -446,8 +446,17 @@
     <Compile Include="..\linker\ScanTypeReferenceStep.cs">
       <Link>tools\linker\ScanTypeReferenceStep.cs</Link>
     </Compile>
+    <Compile Include="..\common\MonoNativeMode.cs">
+      <Link>tools\common\MonoNativeMode.cs</Link>
+    </Compile>
+    <Compile Include="..\common\RegistrarMode.cs">
+      <Link>tools\common\RegistrarMode.cs</Link>
+    </Compile>
+    <Compile Include="..\common\AssemblyBuildTarget.cs">
+      <Link>tools\common\AssemblyBuildTarget.cs</Link>
+    </Compile>
     <Compile Include="..\common\FileUtils.cs">
-      <Link>external\FileUtils.cs</Link>
+      <Link>tools\common\FileUtils.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -941,6 +941,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			>
 			<Output TaskParameter="NoSymbolStrip" PropertyName="MtouchNoSymbolStrip"/>
 			<Output TaskParameter="NoDSymUtil" PropertyName="MtouchNoDSymUtil"/>
+			<Output TaskParameter="Verbosity" PropertyName="_Verbosity" />
 		</ParseExtraMtouchArgs>
 	</Target>
 

@@ -20,6 +20,9 @@ namespace Xamarin.iOS.Tasks
 		[Output]
 		public string NoDSymUtil { get; set; }
 
+		[Output]
+		public int Verbosity { get; set; }
+
 		public override bool Execute ()
 		{
 			if (string.IsNullOrEmpty (NoSymbolStrip))
@@ -59,6 +62,14 @@ namespace Xamarin.iOS.Tasks
 					case "dsym":
 						NoDSymUtil = "false";
 						break;
+					case "v":
+					case "verbose":
+						Verbosity++;
+						break;
+					case "q":
+					case "quiet":
+						Verbosity--;
+						break;
 					default:
 						if (arg.StartsWith ("dsym:", StringComparison.Ordinal) || arg.StartsWith ("dsym=", StringComparison.Ordinal)) {
 							NoDSymUtil = ParseBool (arg.Substring (5)) ? "false" : "true";
@@ -70,6 +81,7 @@ namespace Xamarin.iOS.Tasks
 
 			Log.LogTaskProperty ("NoSymbolStrip Output", NoSymbolStrip);
 			Log.LogTaskProperty ("NoDSymUtil Output", NoDSymUtil);
+			Log.LogTaskProperty ("Verbosity Output", Verbosity);
 
 			return !Log.HasLoggedErrors;
 		}

@@ -359,7 +359,7 @@ namespace Xamarin.Bundler
 					assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
 				}
 				string sname = s.FileName;
-				if (assembly_name != sname && IsBoundAssembly (s)) {
+				if (assembly_name != sname && s.IsBoundAssembly) {
 					register_assemblies.Append ("\txamarin_open_and_register (\"").Append (sname).Append ("\", &exception_gchandle);").AppendLine ();
 					register_assemblies.AppendLine ("\txamarin_process_managed_exception_gchandle (exception_gchandle);");
 				}
@@ -1274,21 +1274,6 @@ namespace Xamarin.Bundler
 					throw new MonoTouchException (5103, true, Errors.MT5103, app.Compiler, original_compiler);
 				}
 			}
-		}
-
-		static bool IsBoundAssembly (Assembly s)
-		{
-			if (s.IsFrameworkAssembly)
-				return false;
-
-			AssemblyDefinition ad = s.AssemblyDefinition;
-
-			foreach (ModuleDefinition md in ad.Modules)
-				foreach (TypeDefinition td in md.Types)
-					if (td.IsNSObject (s.Target.LinkContext))
-						return true;
-
-			return false;
 		}
 
 		struct timespec {

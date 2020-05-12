@@ -446,6 +446,9 @@
     <Compile Include="..\linker\ScanTypeReferenceStep.cs">
       <Link>tools\linker\ScanTypeReferenceStep.cs</Link>
     </Compile>
+    <Compile Include="..\common\MainGenerator.cs">
+      <Link>tools\common\MainGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\common\MonoNativeMode.cs">
       <Link>tools\common\MonoNativeMode.cs</Link>
     </Compile>

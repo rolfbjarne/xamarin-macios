@@ -467,6 +467,9 @@
       <Link>Xamarin.Linker\MobileSubStepDispatcher.cs</Link>
     </Compile>
     <Compile Include="UnresolvedSymbols.cs" />
+    <Compile Include="..\common\MainGenerator.cs">
+      <Link>tools\common\MainGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\common\MonoNativeMode.cs">
       <Link>tools\common\MonoNativeMode.cs</Link>
     </Compile>

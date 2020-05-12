@@ -1565,9 +1565,9 @@ namespace Xamarin.Bundler {
             }
         }
         
-        internal static string MT4001 {
+        internal static string MX4001 {
             get {
-                return ResourceManager.GetString("MT4001", resourceCulture);
+                return ResourceManager.GetString("MX4001", resourceCulture);
             }
         }
         

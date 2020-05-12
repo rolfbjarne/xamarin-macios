@@ -67,10 +67,8 @@ namespace Xamarin.iOS.Tasks
 				break;
 			}
 
-			if (!Enum.TryParse (Architectures, out architectures)) {
-				Log.LogError (MSBStrings.E0057, Architectures);
+			if (TryParseTargetArchitectures (Architectures, out architectures))
 				return false;
-			}
 
 			if ((plist = PObject.FromString (TargetiOSDevice) as PDictionary) == null) {
 				Log.LogError (MSBStrings.E0058);

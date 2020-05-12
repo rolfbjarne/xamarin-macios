@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.Build.Framework" Version="15.9.20" IncludeAssets="compile" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.9.20" IncludeAssets="compile" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.9.20" IncludeAssets="compile" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\Xamarin.MacDev.csproj" />
@@ -40,6 +41,27 @@
     </Compile>
     <Compile Include="..\..\tools\mtouch\UnresolvedSymbols.cs">
       <Link>UnresolvedSymbols.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\MainGenerator.cs">
+      <Link>MainGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\MachO.cs">
+      <Link>MachO.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\ExceptionMode.cs">
+      <Link>ExceptionMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\RegistrarMode.cs">
+      <Link>RegistrarMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\MonoNativeMode.cs">
+      <Link>MonoNativeMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\AssemblyBuildTarget.cs">
+      <Link>AssemblyBuildTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\..\tools\common\FileUtils.cs">
+      <Link>FileUtils.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

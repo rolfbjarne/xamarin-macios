@@ -22,6 +22,7 @@
 		<_TaskAssemblyName Condition="'$(_PlatformName)' == 'macOS'">Xamarin.Mac.Tasks.dll</_TaskAssemblyName>
 	</PropertyGroup>
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileExecutable" AssemblyFile="$(_AssemblyFileDir)$(_TaskAssemblyName)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.GenerateMain" AssemblyFile="$(_AssemblyFileDir)$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.iOS.Tasks.Mlaunch" AssemblyFile="$(_AssemblyFileDir)$(_TaskAssemblyName)" Condition=" '$(_PlatformName)' != 'macOS' " />
 
 	<!-- Automatically supply project capabilities for IDE use -->
@@ -58,6 +59,7 @@
 			_ComputeLinkerArguments;
 			ComputeFilesToPublish;
 			ILLink;
+			_PostLinkTasks;
 			_AOTCompile;
 			_CompileLauncher;
 			_StripManagedAssemblies;
@@ -198,14 +200,14 @@
 	<Target Name="_LateAppBundleTasks" DependsOnTargets="$(_LateAppBundleTasksDependsOn)" />
 
 	<Target Name="_PreAOTCompile" DependsOnTargets="_SetVariables">
-		<Copy SourceFiles="@(_AssembliesToAOT)" DestinationFolder="$(_AOTInputDirectory)" />
+		<Copy SourceFiles="@(_ManagedAssemblies)" DestinationFolder="$(_AOTInputDirectory)" />
 	</Target>
 	<Target Name="_AOTCompile"
 			Condition="'$(_SdkIsSimulator)' != 'true'"
 			DependsOnTargets="_SetVariables;_PreAOTCompile;"
-			Inputs="@(_AssembliesToAOT)"
-			Outputs="@(_AssembliesToAOT->'$(_AOTOutputDirectory)%(Filename)%(Extension).s')">
-		<Error Text="Files to AOT (which hasn't been implemented): @(_AssembliesToAOT) " />
+			Inputs="@(_ManagedAssemblies)"
+			Outputs="@(_ManagedAssemblies->'$(_AOTOutputDirectory)%(Filename)%(Extension).s')">
+		<Error Text="Files to AOT (which hasn't been implemented): @(_ManagedAssemblies) " />
 	</Target>
 
 	<Target Name="_StripManagedAssemblies" />
@@ -220,12 +222,9 @@
 			<_IntermediateNativeLibraryDir>$(IntermediateOutputPath)nativelibraries/</_IntermediateNativeLibraryDir>
 			<_AOTInputDirectory>$(_IntermediateNativeLibraryDir)aot-input/</_AOTInputDirectory>
 			<_AOTOutputDirectory>$(_IntermediateNativeLibraryDir)</_AOTOutputDirectory>
+			<_MainDirectory>$(_IntermediateNativeLibraryDir)main</_MainDirectory>
 		</PropertyGroup>
 		<ItemGroup>
-			<_AssembliesToAOT Include="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.exe' ">
-				<_AOTOutputDirectory>$(_IntermediateNativeLibraryDir)</_AOTOutputDirectory>
-			</_AssembliesToAOT>
-
 			<_NativeDynamicLibrary Include="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dylib' And '%(RootDir)%(Directory)' == '$(_MonoLibDir)'" />
 			<_NativeDynamicLibrary Update="@(_NativeDynamicLibrary)">
 				<LibraryName>$([System.String]::new('%(Filename)').Substring(3))</LibraryName>
@@ -235,12 +234,33 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CompileLauncher" DependsOnTargets="_SetVariables;_UpdateDynamicLibraryId">
+	<Target Name="_PostLinkTasks">
+		<ItemGroup>
+			<!-- The list of assemblies that will be included in the .app -->
+			<_ManagedAssemblies Include="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.exe' ">
+				<_AOTOutputDirectory>$(_IntermediateNativeLibraryDir)</_AOTOutputDirectory>
+			</_ManagedAssemblies>
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_GenerateMain" DependsOnTargets="_SetVariables;_UpdateDynamicLibraryId;_PostLinkTasks">
+		<GenerateMain
+			SessionId="$(BuildSessionId)"
+
+			Architectures="$(TargetArchitectures)"
+			Assemblies="@(_ManagedAssemblies)"
+			OutputDirectory="$(_MainDirectory)"
+			Verbosity="$(_Verbosity)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			/>
+	</Target>
+
+	<Target Name="_CompileLauncher" DependsOnTargets="_SetVariables;_UpdateDynamicLibraryId;_GenerateMain">
 		<!-- FIXME: Use _NativeDynamicLibrary instead of _NativeDynamicLibraryFixed -->
 		<CompileExecutable
 			SessionId="$(BuildSessionId)"
 
-			Architecture="$(MtouchArch)"
+			Architectures="$(TargetArchitectures)"
 			AppBundlePath="$(_AppBundlePath)"
 			AssemblyName="$(AssemblyName)"
 			IsAppExtension="$(IsAppExtension)"

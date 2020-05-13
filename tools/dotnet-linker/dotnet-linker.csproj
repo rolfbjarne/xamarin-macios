@@ -86,6 +86,27 @@
       <Link>Errors.Designer.cs</Link>
       <DependentUpon>Errors.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\common\MainGenerator.cs">
+      <Link>MainGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\common\MachO.cs">
+      <Link>MachO.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\ExceptionMode.cs">
+      <Link>ExceptionMode.cs</Link>
+    </Compile>
+    <Compile Include="..\common\RegistrarMode.cs">
+      <Link>RegistrarMode.cs</Link>
+    </Compile>
+    <Compile Include="..\common\Assembly.cs">
+      <Link>Assembly.cs</Link>
+    </Compile>
+    <Compile Include="..\common\AssemblyBuildTarget.cs">
+      <Link>AssemblyBuildTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\common\Application.cs">
+      <Link>Application.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\mtouch\Errors.resx">

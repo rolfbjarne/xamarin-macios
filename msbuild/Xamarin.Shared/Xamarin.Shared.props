@@ -62,6 +62,9 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_RequireCodeSigning Condition="'$(_PlatformName)' == 'macOS' And '$(_RequireCodeSigning)' == ''">$(EnableCodeSigning)</_RequireCodeSigning> <!-- Xamarin.Mac projects use the 'EnableCodeSigning' variable to enable code signing -->
 		<_RequireCodeSigning Condition="'$(_PlatformName)' == 'macOS' And '$(_RequireCodeSigning)' == ''">false</_RequireCodeSigning> <!-- Xamarin.Mac projects: if 'EnableCodeSigning' is not set, then don't sign -->
 
+		<!-- SpecifiedCodeSigningKey -->
+		<_SpecifiedCodesignKey Condition="'$(_PlatformName)' == 'macOS'">$(CodeSigningKey)</_SpecifiedCodesignKey> <!-- Xamarin.Mac projects use 'CodeSigningKey' -->
+		<_SpecifiedCodesignKey Condition="'$(_PlatformName)' != 'macOS'">$(CodesignKey)</_SpecifiedCodesignKey> <!-- Xamarin.iOS projects use 'CodesignKey' -->
 	</PropertyGroup>
 
 	<Target Name="_ComputeTargetFrameworkMoniker" Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">

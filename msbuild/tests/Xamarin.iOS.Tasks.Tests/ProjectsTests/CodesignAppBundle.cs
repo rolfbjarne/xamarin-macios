@@ -137,17 +137,11 @@ namespace Xamarin.iOS.Tasks
 			File.WriteAllText (viewController, text);
 
 			try {
-				Console.WriteLine ("----BUILDING PROJECT AGAIN----");
 				BuildProject ("MyTabbedApplication", Platform, config, clean: false);
-				Console.WriteLine ("----DONE BUILDING PROJECT AGAIN----");
 				var newTimestamp = File.GetLastWriteTimeUtc (mainExecutable);
 
 				// make sure that the main app bundle was codesigned due to the changes in the appex
-				if (expectedCodesignResults) {
-					Assert.AreNotEqual (timestamp, newTimestamp, "The main app bundle wasn't codesigned when it was expected to");
-				} else {
-					Assert.AreEqual (timestamp, newTimestamp, "The main app bundle was codesigned when it was not expected to");
-				}
+				Assert.AreEqual (expectedCodesignResults, newTimestamp > timestamp, "The main app bundle does not seem to have been re-codesigned");
 
 				AssertProperlyCodesigned (expectedCodesignResults);
 			} finally {

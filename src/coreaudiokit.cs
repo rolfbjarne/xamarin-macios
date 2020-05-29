@@ -29,7 +29,7 @@ using NSViewController = Foundation.NSObject;
 #endif
 
 namespace CoreAudioKit {
-#if XAMCORE_2_0 || !MONOMAC
+#if !MONOMAC
 
 	[NoiOS]
 	[Mac (10,11)]

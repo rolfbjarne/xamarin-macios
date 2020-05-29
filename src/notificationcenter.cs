@@ -11,7 +11,7 @@ using AppKit;
 #endif
 
 namespace NotificationCenter {
-#if XAMCORE_2_0 || !MONOMAC
+#if !MONOMAC
 	[iOS (8,0)][Mac (10,10)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // not meant to be user created
@@ -68,11 +68,7 @@ namespace NotificationCenter {
 	[BaseType (typeof (UIVibrancyEffect))]
 	[Category (allowStaticMembers: true)] // Classic isn't internal so we need this
 	interface UIVibrancyEffect_NotificationCenter {
-#if XAMCORE_2_0
 		[Internal]
-#else
-		[EditorBrowsable (EditorBrowsableState.Advanced)] // this is not the one we want to be seen (compat only)
-#endif
 		[Deprecated (PlatformName.iOS, 10,0, message: "Use 'UIVibrancyEffect.GetWidgetEffect' instead.")]
 		[Static, Export ("notificationCenterVibrancyEffect")]
 		UIVibrancyEffect NotificationCenterVibrancyEffect ();

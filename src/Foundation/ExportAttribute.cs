@@ -46,7 +46,7 @@ namespace Foundation {
 		string selector;
 		ArgumentSemantic semantic;
 
-#if XAMCORE_2_0 || MTOUCH || MMP
+#if MTOUCH || MMP
 		protected ExportAttribute () {}
 #else
 		[Obsolete ("Every exported selector must include a name")]

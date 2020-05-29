@@ -1,5 +1,4 @@
-﻿#if XAMCORE_2_0 || !MONOMAC
-using System;
+﻿using System;
 using ObjCRuntime;
 
 namespace MetalPerformanceShaders {
@@ -18,4 +17,3 @@ namespace MetalPerformanceShaders {
 
 	}
 }
-#endif

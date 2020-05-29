@@ -1,4 +1,4 @@
-﻿#if XAMCORE_2_0 && MONOMAC
+﻿#if MONOMAC
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;

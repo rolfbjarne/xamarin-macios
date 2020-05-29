@@ -43,7 +43,6 @@ namespace Xamarin.iOS.Tasks
 
 		public void Shutdown ()
 		{
-			throw new NotImplementedException ();
 		}
 
 		public string Parameters {

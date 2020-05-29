@@ -454,17 +454,23 @@ namespace Xamarin.iOS.Tasks
 		public bool IsTargetSkipped (string target)
 		{
 			foreach (var line in Engine.Logger.MessageEvents.Select (m => m.Message)) {
+				Console.WriteLine ($"Evaluating ({target}): {line}");
 				if (line.Contains ($"Building target \"{target}\" completely")
-					|| line.Contains ($"Done building target \"{target}\""))
+					|| line.Contains ($"Done building target \"{target}\"")) {
+					Console.WriteLine ($"Evaluating ({target} => false): {line}");
 					return false;
+				}
 				if (line.Contains ($"Target {target} skipped due to ")
 					|| line.Contains ($"Skipping target \"{target}\" because it has no ") //NOTE: message can say `inputs` or `outputs`
 					|| line.Contains ($"Target \"{target}\" skipped, due to")
 					|| line.Contains ($"Skipping target \"{target}\" because its outputs are up-to-date")
 					|| line.Contains ($"target {target}, skipping")
-					|| line.Contains ($"Skipping target \"{target}\" because all output files are up-to-date"))
+					|| line.Contains ($"Skipping target \"{target}\" because all output files are up-to-date")) {
+					Console.WriteLine ($"Evaluating ({target} => true): {line}");
 					return true;
+				}
 			}
+			Console.WriteLine ($"Evaluating ({target} => false/EOM)");
 			return false;
 		}
 	}

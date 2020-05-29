@@ -14,8 +14,30 @@ using Microsoft.Build.Utilities;
 namespace Xamarin.iOS.Tasks
 {
 
+	class PersistentConsoleLogger : ConsoleLogger {
+		public PersistentConsoleLogger (LoggerVerbosity verbosity, WriteHandler write, ColorSetter colorSet, ColorResetter colorReset)
+			: base (verbosity, write, colorSet, colorReset)
+		{
+		}
+
+		public override void Shutdown ()
+		{
+			// Don't do anything
+		}
+	}
+
+
 	public class TestEngine : IBuildEngine, IBuildEngine2, IBuildEngine3, IBuildEngine4
 	{
+		ConsoleReportPrinter printer;
+		PersistentConsoleLogger cl;
+
+		BinaryLogger binlog;
+		string binlog_path;
+		string msbuildlog_path;
+		StreamWriter file_writer;
+		ConsoleLogger file_logger;
+		
 		public Logger Logger {
 			get; set;
 		}
@@ -25,11 +47,38 @@ namespace Xamarin.iOS.Tasks
 			Logger = new Logger ();
 			ProjectCollection = new ProjectCollection ();
 
-			ProjectCollection.RegisterLogger (Logger);
+			printer = new ConsoleReportPrinter ();
+			cl = new PersistentConsoleLogger (LoggerVerbosity.Diagnostic, printer.Print, printer.SetForeground, printer.ResetColor);
+		}
 
-			var printer = new ConsoleReportPrinter ();
-			var cl = new ConsoleLogger (LoggerVerbosity.Diagnostic, printer.Print, printer.SetForeground, printer.ResetColor);
+		void RegisterLoggers ()
+		{
+			ProjectCollection.RegisterLogger (Logger);
 			ProjectCollection.RegisterLogger (cl);
+
+			var ticks = DateTime.UtcNow.Ticks;
+			msbuildlog_path = $"/tmp/Xamarin.MacDev.Tasks-{ticks}.msbuildlog";
+			binlog_path = $"/tmp/Xamarin.MacDev.Tasks-{ticks}.binlog";
+
+			file_writer = new StreamWriter (File.OpenWrite (msbuildlog_path));
+			file_writer.AutoFlush = true;
+			var printer = new ConsoleReportPrinter (file_writer);
+			file_logger = new ConsoleLogger (LoggerVerbosity.Diagnostic, printer.Print, printer.SetForeground, printer.ResetColor);
+			ProjectCollection.RegisterLogger (file_logger);
+
+			var bl = new BinaryLogger ();
+			bl.Parameters = $"LogFile={binlog_path}";
+			ProjectCollection.RegisterLogger (bl);
+		}
+
+		void UnregisterLoggers ()
+		{
+			ProjectCollection.UnregisterAllLoggers ();
+
+			Console.WriteLine ($"MSBuildLog: {msbuildlog_path}");
+			Console.WriteLine ($"BinLog: {binlog_path}");
+
+			file_writer.Dispose ();
 		}
 
 		public bool BuildProjectFile (string projectFileName, string [] targetNames, IDictionary globalProperties, IDictionary targetOutputs)
@@ -47,8 +96,14 @@ namespace Xamarin.iOS.Tasks
 				}
 			}
 
+			RegisterLoggers ();
+
 			//FIXME: assumption that we are still using the same PC!
-			return instance.Build (targetNames, ProjectCollection.Loggers);
+			var rv = instance.Build (targetNames, ProjectCollection.Loggers);
+
+			UnregisterLoggers ();
+
+			return rv;
 		}
 
 		public void LogCustomEvent (CustomBuildEventArgs e)

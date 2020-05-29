@@ -241,8 +241,6 @@ AVFOUNDATION_SOURCES = \
 	AVFoundation/AVAssetDownloadStorageManagementPolicy.cs \
 	AVFoundation/AVAssetDownloadTask.cs \
 	AVFoundation/AVAssetDownloadUrlSession.cs \
-	AVFoundation/AVAssetImageGenerator.cs \
-	AVFoundation/AVAssetReaderVideoCompositionOutput.cs \
 	AVFoundation/AVAssetResourceLoadingDataRequest.cs \
 	AVFoundation/AVAudioBuffer.cs \
 	AVFoundation/AVAudioChannelLayout.cs \
@@ -259,7 +257,6 @@ AVFOUNDATION_SOURCES = \
 	AVFoundation/AVCaptureMetadataOutput.cs \
 	AVFoundation/AVCaptureSynchronizedDataCollection.cs \
 	AVFoundation/AVCaptureSynchronizedDepthData.cs \
-	AVFoundation/AVCaptureVideoDataOutput.cs \
 	AVFoundation/AVCaptureVideoPreviewLayer.cs \
 	AVFoundation/AVCompat.cs \
 	AVFoundation/AVContentKeyResponse.cs \
@@ -267,7 +264,6 @@ AVFOUNDATION_SOURCES = \
 	AVFoundation/AVFragmentedAsset.cs \
 	AVFoundation/AVFragmentedAssetTrack.cs \
 	AVFoundation/AVLayerVideoGravity.cs \
-	AVFoundation/AVMetadataItemFilter.cs \
 	AVFoundation/AVMetadataMachineReadableCodeObject.cs \
 	AVFoundation/AVMetadataObject.cs \
 	AVFoundation/AVOutputSettingsAssistant.cs \
@@ -277,7 +273,6 @@ AVFOUNDATION_SOURCES = \
 	AVFoundation/AVPlayerLayer.cs \
 	AVFoundation/AVPlayerViewController.cs \
 	AVFoundation/AVTextStyleRule.cs \
-	AVFoundation/DescriptionHelpers.cs \
 	AVFoundation/Events.cs \
 	AVFoundation/AVPlayerLooper.cs \
 	AVFoundation/AudioRendererWasFlushedAutomaticallyEventArgs.cs \

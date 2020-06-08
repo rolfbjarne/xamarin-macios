@@ -1086,10 +1086,10 @@ namespace Xamarin.Bundler {
 
 		static string RunPkgConfig (string option, bool force_system_mono = false)
 		{
-			string [] env = null;
+			Dictionary<string, string> env = null;
 
 			if (!IsUnifiedFullSystemFramework && !force_system_mono)
-				env = new [] { "PKG_CONFIG_PATH", Path.Combine (FrameworkLibDirectory, "pkgconfig") };
+				env = new Dictionary<string, string> { { "PKG_CONFIG_PATH", Path.Combine (FrameworkLibDirectory, "pkgconfig") } };
 
 			var sb = new StringBuilder ();
 			int rv;

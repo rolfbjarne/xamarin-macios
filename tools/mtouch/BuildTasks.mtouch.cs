@@ -310,7 +310,7 @@ namespace Xamarin.Bundler
 			var cmd_length = Target.App.CompilerPath.Length + 1 + CompilerFlags.ToString ().Length;
 
 			try {
-				var code = await Driver.RunCommandAsync (Target.App.CompilerPath, CompilerFlags.ToArray (), null, output, suppressPrintOnErrors: true);
+				var code = await Driver.RunCommandAsync (Target.App.CompilerPath, CompilerFlags.ToArray (), output: output, suppressPrintOnErrors: true);
 
 				Application.ProcessNativeLinkerOutput (Target, output.ToString (), CompilerFlags.AllLibraries, linker_errors, code != 0);
 
@@ -589,7 +589,7 @@ namespace Xamarin.Bundler
 				CheckFor5107 (assembly_name, line, exceptions);
 			});
 
-			var rv = await Driver.RunCommandAsync (App.CompilerPath, CompilerFlags.ToArray (), null, output_received, suppressPrintOnErrors: true);
+			var rv = await Driver.RunCommandAsync (App.CompilerPath, CompilerFlags.ToArray (), output_received: output_received, suppressPrintOnErrors: true);
 
 			WriteLimitedOutput (rv != 0 ? $"Compilation failed with code {rv}, command:\n{App.CompilerPath} {CompilerFlags.ToString ()}" : null, output, exceptions);
 

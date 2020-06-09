@@ -276,12 +276,12 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 		</CollectBundleResources>
 	</Target>
 
-	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker">
+	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_CompileAppManifest">
 		<Metal
 			Condition="'$(IsMacEnabled)' == 'true' and '%(Metal.Identity)' != ''"
 			SessionId="$(BuildSessionId)"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
-			AppManifest="$(_AppManifest)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			ResourcePrefix="$(_ResourcePrefix)"
@@ -419,6 +419,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			PartialAppManifests="@(_PartialAppManifest)"
 			TargetArchitectures="$(TargetArchitectures)"
 			>
+			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
 		</CompileAppManifest>
 	</Target>
 	
@@ -454,6 +455,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			OutputPath="$(OutputPath)"
 			ApplicationName="$(_AppBundleName)"
 			MainAssembly="$(OutputPath)$(TargetName)$(TargetExt)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			Architecture="$(TargetArchitectures)"
 			ArchiveSymbols="$(MonoSymbolArchive)"
@@ -548,7 +550,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 	<Target Name="_CoreCompileImageAssets"
 		Inputs="@(ImageAsset);$(_AppManifest)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
-		DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_BeforeCoreCompileImageAssets">
+		DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_BeforeCoreCompileImageAssets;_CompileAppManifest">
 
 		<ACTool
 			SessionId="$(BuildSessionId)"
@@ -558,6 +560,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			AppManifest="$(_AppManifest)"
 			EnableOnDemandResources="false"
 			ImageAssets="@(ImageAsset)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
 			OptimizePngs="false"
 			OutputPath="$(OutputPath)"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
@@ -608,7 +611,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 		</CompileSceneKitAssets>
 	</Target>
 
-	<Target Name="_CompileInterfaceDefinitions" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_CoreCompileInterfaceDefinitions" />
+	<Target Name="_CompileInterfaceDefinitions" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_CompileAppManifest;_CoreCompileInterfaceDefinitions" />
 
 	<Target Name="_CoreCompileInterfaceDefinitions">
 		<IBTool
@@ -620,6 +623,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			EnableOnDemandResources="false"
 			InterfaceDefinitions="@(InterfaceDefinition)"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
 			SdkPlatform="MacOSX"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"

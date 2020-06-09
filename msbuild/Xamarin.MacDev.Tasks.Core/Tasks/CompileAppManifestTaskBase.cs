@@ -96,6 +96,8 @@ namespace Xamarin.MacDev.Tasks
 			} else if (!IAppleSdkVersion_Extensions.TryParse (minimumOSVersionInManifest, out var _)) {
 				LogAppManifestError (MSBStrings.E0011, minimumOSVersionInManifest);
 				return false;
+			} else {
+				MinimumOSVersion = minimumOSVersionInManifest;
 			}
 			plist.SetIfNotPresent (MinimumOSVersionKey, MinimumOSVersion);
 

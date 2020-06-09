@@ -24,7 +24,7 @@ namespace Xamarin.iOS.Tasks
 			get; set;
 		}
 
-		protected CompileAppManifestTaskBase Task {
+		protected CompileAppManifestTaskCore Task {
 			get; set;
 		}
 

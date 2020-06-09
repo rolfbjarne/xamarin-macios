@@ -416,7 +416,10 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			IsAppExtension="$(IsAppExtension)"
 			IsXPCService="$(IsXPCService)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
-			PartialAppManifests="@(_PartialAppManifest)" />
+			PartialAppManifests="@(_PartialAppManifest)"
+			TargetArchitectures="$(TargetArchitectures)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			/>
 	</Target>
 	
 	<PropertyGroup>

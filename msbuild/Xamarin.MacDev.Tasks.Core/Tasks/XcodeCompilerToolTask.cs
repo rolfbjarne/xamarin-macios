@@ -23,6 +23,8 @@ namespace Xamarin.MacDev.Tasks
 
 		public ITaskItem AppManifest { get; set; }
 
+		public string MinimumOSVersion { get; set; }
+
 		[Required]
 		public string IntermediateOutputPath { get; set; }
 
@@ -85,8 +87,6 @@ namespace Xamarin.MacDev.Tasks
 		}
 
 		protected abstract string ToolName { get; }
-
-		protected abstract string MinimumDeploymentTargetKey { get; }
 
 		protected virtual bool UseCompilationDirectory {
 			get { return false; }

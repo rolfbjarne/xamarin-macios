@@ -150,6 +150,16 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<Error Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 	</Target>
 
+	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations">
+		<ReadAppManifest
+			SessionId="$(BuildSessionId)"
+			AppManifest="$(_AppManifest)"
+			SdkVersion="$(_SdkVersion)"
+			>
+			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
+		</ReadAppManifest>
+	</Target>
+
 	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetFrameworkMoniker">
 		<DetectSigningIdentity
 			SessionId="$(BuildSessionId)"

@@ -53,6 +53,20 @@ namespace Xamarin.MacDev.Tasks
 			}
 		}
 
+		public static string GetMinimumOSVersionKey (ApplePlatform platform)
+		{
+			switch (platform) {
+			case ApplePlatform.iOS:
+			case ApplePlatform.TVOS:
+			case ApplePlatform.WatchOS:
+				return ManifestKeys.MinimumOSVersion;
+			case ApplePlatform.MacOSX:
+				return ManifestKeys.LSMinimumSystemVersion;
+			default:
+				throw new InvalidOperationException ($"Invalid platform: {platform}");
+			}
+		}
+
 		public static string GetMinimumVersionOperatingSystem (string targetFrameworkMoniker, bool is_simulator)
 		{
 			var framework = GetFramework (targetFrameworkMoniker);

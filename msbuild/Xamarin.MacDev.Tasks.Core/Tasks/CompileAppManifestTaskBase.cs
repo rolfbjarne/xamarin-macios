@@ -31,7 +31,7 @@ namespace Xamarin.MacDev.Tasks
 		public string BundleIdentifier { get; set; }
 
 		[Required]
-		public string DefaultSdkVersion { get; set; }
+		public string MinimumOSVersion { get; set; }
 
 		public ITaskItem [] PartialAppManifests { get; set; }
 
@@ -43,26 +43,9 @@ namespace Xamarin.MacDev.Tasks
 		[Output]
 		public ITaskItem CompiledAppManifest { get; set; }
 
-		[Output]
-		public string MinimumOSVersion { get; set; }
 		#endregion
 
 		protected TargetArchitecture architectures;
-
-		string MinimumOSVersionKey {
-			get {
-				switch (Platform) {
-				case ApplePlatform.iOS:
-				case ApplePlatform.TVOS:
-				case ApplePlatform.WatchOS:
-					return ManifestKeys.MinimumOSVersion;
-				case ApplePlatform.MacOSX:
-					return ManifestKeys.LSMinimumSystemVersion;
-				default:
-					throw new InvalidOperationException ($"Invalid platform: {Platform}");
-				}
-			}
-		}
 
 		string AppManifestBundleDirectory {
 			get {
@@ -90,16 +73,7 @@ namespace Xamarin.MacDev.Tasks
 				return false;
 			}
 
-			var minimumOSVersionInManifest = plist.Get<PString> (MinimumOSVersionKey)?.Value;
-			if (string.IsNullOrEmpty (minimumOSVersionInManifest)) {
-				MinimumOSVersion = DefaultSdkVersion;
-			} else if (!IAppleSdkVersion_Extensions.TryParse (minimumOSVersionInManifest, out var _)) {
-				LogAppManifestError (MSBStrings.E0011, minimumOSVersionInManifest);
-				return false;
-			} else {
-				MinimumOSVersion = minimumOSVersionInManifest;
-			}
-			plist.SetIfNotPresent (MinimumOSVersionKey, MinimumOSVersion);
+			plist.SetIfNotPresent (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform), MinimumOSVersion);
 
 			if (!string.IsNullOrEmpty (TargetArchitectures) && !Enum.TryParse (TargetArchitectures, out architectures)) {
 				LogAppManifestError (MSBStrings.E0012, TargetArchitectures);

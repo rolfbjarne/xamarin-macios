@@ -11,8 +11,10 @@ using Xamarin.Utils;
 namespace Xamarin.Linker {
 	public class LinkerConfiguration {
 		public List<Abi> Abis;
+		public string OutputDirectory { get; private set; }
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; }
+		public string TemporaryDirectory { get; private set; }
 
 		static ConditionalWeakTable<LinkContext, LinkerConfiguration> configurations = new ConditionalWeakTable<LinkContext, LinkerConfiguration> ();
 
@@ -46,6 +48,9 @@ namespace Xamarin.Linker {
 				var key = line [..eq];
 				var value = line [(eq + 1)..];
 				switch (key) {
+				case "OutputDirectory":
+					OutputDirectory = value;
+					break;
 				case "Platform":
 					switch (value) {
 					case "iOS":
@@ -78,6 +83,9 @@ namespace Xamarin.Linker {
 							Abis.Add (a);
 					}
 					break;
+				case "TemporaryDirectory":
+					TemporaryDirectory = value;
+					break;
 				default:
 					throw new InvalidOperationException ($"Unknown key '{key}' in {linker_file}");
 				}
@@ -90,8 +98,10 @@ namespace Xamarin.Linker {
 		{
 			Console.WriteLine ($"LinkerConfiguration:");
 			Console.WriteLine ($"    Abis: {string.Join (", ", Abis.Select (v => v.AsArchString ()))}");
+			Console.WriteLine ($"    OutputDirectory: {OutputDirectory}");
 			Console.WriteLine ($"    Platform: {Platform}");
 			Console.WriteLine ($"    PlatformAssembly: {PlatformAssembly}.dll");
+			Console.WriteLine ($"    TemporaryDirectory: {TemporaryDirectory}");
 		}
 	}
 }

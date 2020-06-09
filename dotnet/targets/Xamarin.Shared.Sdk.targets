@@ -97,10 +97,19 @@
 		<PropertyGroup>
 			<!-- Pass the custom options to our custom steps -->
 			<_CustomLinkerOptionsFile>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)custom-linker-options.txt'))</_CustomLinkerOptionsFile>
+
+			<!-- The directory where the linker puts *.items files that will be loaded in the _LoadLinkerOutput target -->
+			<_LinkerOutputDirectory>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)linker-items'))</_LinkerOutputDirectory>
+
+			<!-- A temporary output directory for our linker steps -->
+			<_LinkerTemporaryDirectory>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)linker-cache'))</_LinkerTemporaryDirectory>
+
 			<_CustomLinkerOptions>
+				OutputDirectory=$(_LinkerOutputDirectory)
 				Platform=$(_PlatformName)
 				PlatformAssembly=$(_PlatformAssemblyName).dll
 				TargetArchitectures=$(TargetArchitectures)
+				TemporaryDirectory=$(_LinkerTemporaryDirectory)
 			</_CustomLinkerOptions>
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --custom-data "LinkerOptionsFile=$(_CustomLinkerOptionsFile)"</_ExtraTrimmerArgs>
 

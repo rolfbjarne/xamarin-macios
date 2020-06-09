@@ -402,7 +402,7 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 	</Target>
 
 	<Target Name="_CompileAppManifest"
-		DependsOnTargets="_DetectAppManifest;_GenerateBundleName;_DetectSigningIdentity"
+		DependsOnTargets="_DetectSdkLocations;_DetectAppManifest;_GenerateBundleName;_DetectSigningIdentity"
 		Inputs="$(_AppManifest);@(_PartialAppManifest)"
 		Outputs="$(_AppBundlePath)Contents\Info.plist" >
 		<CompileAppManifest
@@ -413,9 +413,13 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			AppManifest="$(_AppManifest)"
 			AssemblyName="$(TargetName)"
 			BundleIdentifier="$(_BundleIdentifier)"
+			DefaultSdkVersion="$(_SdkVersion)"
 			IsAppExtension="$(IsAppExtension)"
 			IsXPCService="$(IsXPCService)"
-			PartialAppManifests="@(_PartialAppManifest)" />
+			PartialAppManifests="@(_PartialAppManifest)"
+			TargetArchitectures="$(TargetArchitectures)"
+			>
+		</CompileAppManifest>
 	</Target>
 	
 	<PropertyGroup>

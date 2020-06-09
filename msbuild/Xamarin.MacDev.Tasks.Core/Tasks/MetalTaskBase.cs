@@ -118,7 +118,7 @@ namespace Xamarin.MacDev.Tasks
 			args.Add ("-o");
 			args.AddQuoted (Path.ChangeExtension (path, ".air"));
 
-			args.Add (string.Format ("-m{0}-version-min={1}", OperatingSystem, MinimumOSVersion));
+			args.Add (PlatformFrameworkHelper.GetMinimumVersionArgument (TargetFrameworkMoniker, SdkIsSimulator, MinimumOSVersion));
 
 			args.AddQuoted (SourceFile.ItemSpec);
 

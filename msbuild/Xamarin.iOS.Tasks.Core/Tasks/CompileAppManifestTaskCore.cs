@@ -84,9 +84,6 @@ namespace Xamarin.iOS.Tasks
 			}
 
 			if (IsIOS) {
-				if (plist.GetUIMainStoryboardFile (true) != null)
-					LogAppManifestError (MSBStrings.E0015);
-
 				if (!plist.ContainsKey (ManifestKeys.CFBundleName))
 					plist [ManifestKeys.CFBundleName] = plist.ContainsKey (ManifestKeys.CFBundleDisplayName) ? plist.GetString (ManifestKeys.CFBundleDisplayName).Clone () : new PString (AppBundleName);
 			} else {

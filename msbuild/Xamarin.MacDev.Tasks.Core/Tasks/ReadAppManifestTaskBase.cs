@@ -6,7 +6,6 @@ using Xamarin.Localization.MSBuild;
 
 namespace Xamarin.MacDev.Tasks {
 	public abstract class ReadAppManifestTaskBase : XamarinTask {
-		[Required]
 		public string AppManifest { get; set; }
 
 		[Required]
@@ -17,16 +16,18 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			PDictionary plist;
+			PDictionary plist = null;
 
-			try {
-				plist = PDictionary.FromFile (AppManifest);
-			} catch (Exception ex) {
-				Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0010, AppManifest, ex.Message);
-				return false;
+			if (!string.IsNullOrEmpty (AppManifest)) {
+				try {
+					plist = PDictionary.FromFile (AppManifest);
+				} catch (Exception ex) {
+					Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0010, AppManifest, ex.Message);
+					return false;
+				}
 			}
 
-			var minimumOSVersionInManifest = plist.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform))?.Value;
+			var minimumOSVersionInManifest = plist?.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform))?.Value;
 			if (string.IsNullOrEmpty (minimumOSVersionInManifest)) {
 				MinimumOSVersion = SdkVersion;
 			} else if (!IAppleSdkVersion_Extensions.TryParse (minimumOSVersionInManifest, out var _)) {

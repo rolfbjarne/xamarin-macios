@@ -150,11 +150,12 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<Error Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 	</Target>
 
-	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations">
+	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetFrameworkMoniker">
 		<ReadAppManifest
 			SessionId="$(BuildSessionId)"
 			AppManifest="$(_AppManifest)"
 			SdkVersion="$(_SdkVersion)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
 			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
 		</ReadAppManifest>

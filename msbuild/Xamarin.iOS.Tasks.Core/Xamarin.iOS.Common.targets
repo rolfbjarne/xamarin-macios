@@ -650,7 +650,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			DebugIPAddresses="$(_DebugIPAddresses)"
 			>
-			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
 		</CompileAppManifest>
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).dSYM" />

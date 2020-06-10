@@ -15,6 +15,9 @@ namespace Xamarin.iOS.Tasks
 	public abstract class CompileAppManifestTaskCore : CompileAppManifestTaskBase
 	{
 		[Required]
+		public string DefaultSdkVersion { get; set; }
+
+		[Required]
 		public bool IsWatchApp { get; set; }
 
 		[Required]

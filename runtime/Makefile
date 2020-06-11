@@ -9,6 +9,8 @@ export CCACHE_CPP2=1
 # Common
 #
 
+all-local:: debug-local
+
 SHARED_INC += \
 	delegates.inc                              \
 
@@ -169,6 +171,10 @@ $$(RUNTIME_$(2)_TARGETS_DIRS):
 all-$(2):: $$(RUNTIME_$(2)_TARGETS)
 all-local:: $$(RUNTIME_$(2)_TARGETS)
 install-local:: $$(RUNTIME_$(2)_TARGETS)
+
+debug-local::
+	@echo "PlatformTemplate: 3=$(3)"
+	@echo "PlatformTemplate: $(2)_ARCHITECTURES=$$($(2)_ARCHITECTURES)"
 
 endef
 

@@ -242,6 +242,9 @@ $$(foreach arch,$$($(2)_ARCHITECTURES),.libs/$(1)/tvextension-main.$$(arch).o): 
 	$$(call Q_2,LIPO,  [$1]) $(DEVICE_BIN_PATH)/lipo $$^ -create -output $$@
 
 .libs/$(1)/libxamarin.dylib:  $$(foreach arch,$$($(2)_ARCHITECTURES),.libs/$(1)/libxamarin.$$(arch).dylib)
+	echo "Lipoing libxamarin.dylib [$(1)]: 2: $(2)"
+	echo "Lipoing libxamarin.dylib [$(1)]: $(2)_ARCHITECTURES: $$($(2)_ARCHITECTURES)"
+	echo "Lipoing libxamarin.dylib [$(1)]: dependencies: $$^"
 	$(Q) rm -f $$@
 ifeq (1,$$(words $$($(2)_ARCHITECTURES)))
 	$(Q) $(CP) $$^ $$@

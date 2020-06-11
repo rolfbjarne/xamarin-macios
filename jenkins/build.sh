@@ -130,7 +130,7 @@ echo "Configuring the build with: $CONFIGURE_FLAGS"
 # If we're building mono from source, we might not have it cloned yet
 make reset
 
-time make -j8
+time make -j8 V=1
 time make install -j8
 
 printf "✅ [Build succeeded](%s/console)\\n" "$BUILD_URL" >> "$WORKSPACE/jenkins/pr-comments.md"

@@ -19,6 +19,7 @@ namespace Xamarin {
 
 void xamarin_setup_impl ()
 {{
+	setenv (""DOTNET_SYSTEM_GLOBALIZATION_INVARIANT"", ""1"", 1); // FIXME
 	xamarin_executable_name = ""{Configuration.AssemblyName}"";
 }}
 

@@ -125,6 +125,8 @@
 			</_CustomLinkerOptions>
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --custom-data "LinkerOptionsFile=$(_CustomLinkerOptionsFile)"</_ExtraTrimmerArgs>
 
+			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -p copy System.Runtime</_ExtraTrimmerArgs>
+
 			<!-- Verbose output, so that we get something to stdout when something goes wrong -->
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose</_ExtraTrimmerArgs>
 		</PropertyGroup>

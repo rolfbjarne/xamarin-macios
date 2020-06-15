@@ -116,6 +116,7 @@
 			<_LinkerTemporaryDirectory>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)linker-cache'))</_LinkerTemporaryDirectory>
 
 			<_CustomLinkerOptions>
+				AssemblyName=$(AssemblyName).dll
 				OutputDirectory=$(_LinkerOutputDirectory)
 				Platform=$(_PlatformName)
 				PlatformAssembly=$(_PlatformAssemblyName).dll

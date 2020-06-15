@@ -71,6 +71,11 @@ namespace Xamarin.MacDev.Tasks {
 				}
 			}
 
+			if (hasDylibs) {
+				arguments.Add ("-rpath");
+				arguments.Add ("@executable_path");
+			}
+
 			if (Frameworks != null) {
 				foreach (var fw in Frameworks) {
 					arguments.Add ("-framework");

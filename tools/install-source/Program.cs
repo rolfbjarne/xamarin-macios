@@ -75,6 +75,9 @@ public class ListSourceFiles {
 		return srcs;
 	}
 
+	//static DefaultAssemblyResolver assemblyResolver = new DefaultAssemblyResolver ();
+	static PortablePdbReaderProvider symbolReaderProvider = new PortablePdbReaderProvider ();
+	static ReaderParameters readerParameters = new ReaderParameters (ReadingMode.Deferred) { SymbolReaderProvider = symbolReaderProvider, ReadSymbols = true, }; //{ AssemblyResolver = assemblyResolver};
 	// returns the source paths used to create an assembly that has a pdb file
 	public static HashSet<String> GetFilePathsFromPdb (string pdbFile)
 	{
@@ -85,26 +88,15 @@ public class ListSourceFiles {
 		if (!File.Exists (pdbFile))
 			return result;
 
-		var assemblyResolver = new DefaultAssemblyResolver ();
-		var assemblyLocation = Path.GetDirectoryName (pdb);
-		assemblyResolver.AddSearchDirectory (assemblyLocation);
-
-		var readerParameters = new ReaderParameters { AssemblyResolver = assemblyResolver };
-		var writerParameters = new WriterParameters ();
-
-		var symbolReaderProvider = new PortablePdbReaderProvider ();
-		readerParameters.SymbolReaderProvider = symbolReaderProvider;
-		readerParameters.ReadSymbols = true;
-
 		var assemblyDefinition = AssemblyDefinition.ReadAssembly (pdb, readerParameters);
 		var mainModule = assemblyDefinition.MainModule;
+		var symbolReader = (PortablePdbReader) assemblyDefinition.MainModule.SymbolReader;
 		foreach (var type in mainModule.Types) {
 			foreach (var method in type.Methods) {
-				if (method.DebugInformation.SequencePoints.Any ()) {
-					var sequence_point = method.DebugInformation.SequencePoints[0];
-					var document = sequence_point.Document;
-					result.Add (document.Url);
-				}
+				var s = symbolReader.Read (method);
+				if (!s.HasSequencePoints)
+					continue;
+				result.Add (s.SequencePoints [0].Document.Url);
 			}
 		}
 		return result;

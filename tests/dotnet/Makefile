@@ -27,4 +27,25 @@ TARGETS += \
 	NuGet.config \
 	global.json \
 
+introspection: $(TARGETS)
+	cd $(TOP)/tests/introspection && git clean -xfd
+	$(CP) NuGet.config global.json $(TOP)/tests/introspection/iOS
+	$(CP) NuGet.config global.json $(TOP)/external/Touch.Unit/Touch.Client
+	dotnet build $(TOP)/tests/introspection/iOS/introspection-ios-dotnet.csproj /v:diag /bl:introspection.binlog
+	$(Q) rm -f $(TOP)/external/Touch.Unit/Touch.Client/NuGet.config $(TOP)/external/Touch.Unit/Touch.Client/global.json
+	$(Q) rm -f $(TOP)/tests/introspection/iOS/NuGet.config $(TOP)/tests/introspection/iOS/global.json
+	launch-in-sim $(PWD)/../introspection/iOS/bin/Debug/net5.0/ios-x64/introspection.app
+
+DIRS=tests/monotouch-test tests/EmbeddedResources tests/bindings-test external/Touch.Unit/Touch.Client
+monotouch-test monotouchtest: $(TARGETS)
+	cd $(TOP)/tests/monotouch-test && git clean -xfd
+	for dir in $(DIRS); do \
+		$(CP) NuGet.config global.json $(TOP)/$$dir; \
+	done
+	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
+	for dir in $(DIRS); do \
+		rm -f $$dir/NuGet.config $$dir/global.json $(TOP)/$$dir; \
+	done
+	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
+
 all-local:: $(TARGETS)

@@ -41,6 +41,31 @@ namespace Xharness.Targets
 			}
 		}
 
+		protected override bool FixProjectReference (string include, string suffix, out string fixed_include)
+		{
+
+			var fn = Path.GetFileName (include);
+
+			switch (fn) {
+			case "Touch.Client-macOS-mobile.csproj":
+				switch (Flavor) {
+				case MacFlavors.Full:
+				case MacFlavors.System:
+					var dir = Path.GetDirectoryName (include);
+					var parentDir = Path.GetDirectoryName (dir);
+					dir = Path.Combine (parentDir, "full");
+					fixed_include = Path.Combine (dir, fn.Replace ("-mobile", "-full"));
+					return true;
+				case MacFlavors.Modern:
+				default:
+					break;
+				}
+				break;
+			}
+
+			return base.FixProjectReference (include, suffix, out fixed_include);
+		}
+
 		public override string MakefileWhereSuffix {
 			get {
 				switch (Flavor) {

@@ -15,7 +15,7 @@
     <_EnableDefaultXamarinItems Condition=" '$(_PlatformName)' == 'macOS' ">$(EnableDefaultmacOSItems)</_EnableDefaultXamarinItems>
 
     <!-- Don't include default Compile items for binding projects, because that would pick up ApiDefinition.cs and StructsAndEnums.cs -->
-    <EnableDefaultCompileItems Condition=" '$(EnableDefaultCompileItems)' == '' And '$(IsBindingProject)' == 'true' ">false</EnableDefaultCompileItems>
+    <EnableDefaultCompileItems Condition=" '$(IsBindingProject)' == 'true' ">false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <!-- Default plist file inclusion -->

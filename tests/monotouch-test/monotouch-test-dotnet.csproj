@@ -121,11 +121,11 @@
       <Project>{676F527D-3352-42EA-9DE2-181C45003568}</Project>
       <Name>EmbeddedResources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\tests\bindings-test\bindings-test.csproj">
+    <ProjectReference Include="..\..\tests\bindings-test\bindings-test-dotnet.csproj">
       <Project>{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}</Project>
       <Name>bindings-test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\fsharplibrary\fsharplibrary.fsproj">
+    <ProjectReference Include="..\fsharplibrary\fsharplibrary-dotnet.fsproj">
       <Project>{C7212169-BA46-413B-91CD-A32C52AD5E0D}</Project>
       <Name>fsharplibrary</Name>
     </ProjectReference>

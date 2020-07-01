@@ -75,7 +75,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<PropertyGroup>
+	<PropertyGroup Condition="'$(_CanOutputAppBundle)' == 'true'">
 		<_CollectBundleResourcesDependsOn>
 			_CompileImageAssets;
 			_CompileInterfaceDefinitions;

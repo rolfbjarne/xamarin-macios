@@ -84,33 +84,29 @@ Copyright (C) 2013-2014 Xamarin. All rights reserved.
 		<IsMacEnabled>true</IsMacEnabled>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(XamarinMacFrameworkRoot)' == ''">
-		<XamarinMacFrameworkRoot>/Library/Frameworks/Xamarin.Mac.framework/Versions/Current</XamarinMacFrameworkRoot>
-	</PropertyGroup>
-
 	<Choose>
 		<When Condition=" '$(TargetFrameworkIdentifier)' == 'Xamarin.Mac'">
 			<PropertyGroup>
 				<TargetFrameworkName>Modern</TargetFrameworkName>
-				<MacBclPath>$(XamarinMacFrameworkRoot)/lib/mono/Xamarin.Mac</MacBclPath>
+				<MacBclPath>$(_XamarinSdkRoot)/lib/mono/Xamarin.Mac</MacBclPath>
 			</PropertyGroup>
 		</When>
 		<When Condition=" '$(TargetFrameworkIdentifier)' != 'Xamarin.Mac' And '$(UseXamMacFullFramework)' == 'true'">
 			<PropertyGroup>
 				<TargetFrameworkName>Full</TargetFrameworkName>
-				<MacBclPath>$(XamarinMacFrameworkRoot)/lib/mono/4.5</MacBclPath>
+				<MacBclPath>$(_XamarinSdkRoot)/lib/mono/4.5</MacBclPath>
 			</PropertyGroup>
 		</When>
 		<Otherwise>
 			<PropertyGroup>
 				<TargetFrameworkName>System</TargetFrameworkName>
-				<MacBclPath>$(XamarinMacFrameworkRoot)/lib/mono/4.5</MacBclPath>
+				<MacBclPath>$(_XamarinSdkRoot)/lib/mono/4.5</MacBclPath>
 			</PropertyGroup>
 		</Otherwise>
 	</Choose>
 
 	<PropertyGroup Condition="'$(TargetFrameworkName)' == 'Full'">
-		<AssemblySearchPaths>$(XamarinMacFrameworkRoot)/lib/reference/full;$(XamarinMacFrameworkRoot)/lib/mono;$(AssemblySearchPaths)</AssemblySearchPaths>
+		<AssemblySearchPaths>$(_XamarinSdkRoot)/lib/reference/full;$(_XamarinSdkRoot)/lib/mono;$(AssemblySearchPaths)</AssemblySearchPaths>
 		<ImplicitlyExpandNETStandardFacades>False</ImplicitlyExpandNETStandardFacades>
 	</PropertyGroup>
 

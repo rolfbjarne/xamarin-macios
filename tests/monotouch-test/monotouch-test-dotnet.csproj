@@ -11,9 +11,12 @@
     <MtouchLink>None</MtouchLink>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <AssetTargetFallback>xamarinios10;$(AssetTargetFallback)</AssetTargetFallback>
     <!-- This is needed because the packages/ directory might be in the same folder as this project file, and some some packages might have C# files, which would then automatically be included -->
     <DefaultItemExcludes>$(DefaultItemExcludes);packages/**;</DefaultItemExcludes>
+    <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,17 +35,6 @@
     <PackageReference Include="System.Diagnostics.EventLog" Version="5.0.0-preview.2.20160.6" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0-preview.2.20160.6" />
     <PackageReference Include="System.Data.SqlClient" Version="5.0.0-alpha1.19523.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Xamarin.iOS" />
-    <Reference Include="MonoTouch.NUnitLite" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="OpenTK-1.0" />
-    <Reference Include="System.Net" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,18 +91,9 @@
   </ItemGroup>
 -->
   <ItemGroup>
-    <ProjectReference Include="..\EmbeddedResources\EmbeddedResources-dotnet.csproj">
-      <Project>{676F527D-3352-42EA-9DE2-181C45003568}</Project>
-      <Name>EmbeddedResources</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\tests\bindings-test\bindings-test-dotnet.csproj">
-      <Project>{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}</Project>
-      <Name>bindings-test</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\fsharplibrary\fsharplibrary-dotnet.fsproj">
-      <Project>{C7212169-BA46-413B-91CD-A32C52AD5E0D}</Project>
-      <Name>fsharplibrary</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\EmbeddedResources\EmbeddedResources-dotnet.csproj" />
+    <ProjectReference Include="..\..\tests\bindings-test\bindings-test-dotnet.csproj" />
+    <!-- TODO: F# support <ProjectReference Include="..\fsharplibrary\fsharplibrary-dotnet.fsproj" /> -->
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="CoreImage\Xam.png" />

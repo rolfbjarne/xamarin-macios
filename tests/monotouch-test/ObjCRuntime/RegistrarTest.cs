@@ -455,7 +455,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				handle = Messaging.IntPtr_objc_msgSend (handle, Selector.GetHandle ("init"));
 				Assert.Fail ("Expected [[Open_1 alloc] init] to fail.");
 			} catch (PlatformException mex) {
-				Assert.That (mex.ToString (), Is.StringContaining ("Cannot construct an instance of the type 'MonoTouchFixtures.ObjCRuntime.RegistrarTest+Open`1' from Objective-C because the type is generic."), "Exception message");
+				Assert.That (mex.ToString (), Does.Contain ("Cannot construct an instance of the type 'MonoTouchFixtures.ObjCRuntime.RegistrarTest+Open`1' from Objective-C because the type is generic."), "Exception message");
 			} finally {
 				Messaging.void_objc_msgSend (handle, Selector.GetHandle ("release")); // or should this be dealloc directly?
 			}
@@ -2394,6 +2394,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		static extern IntPtr class_getInstanceMethod (IntPtr cls, IntPtr sel);
 
 #if !MONOMAC // Registrar_OutExportDerivedClass is from fsharp tests
+#if !NET // We don't support F# in .NET yet
 		[Test]
 		public void OutOverriddenWithoutOutAttribute ()
 		{
@@ -2406,6 +2407,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				}
 			}
 		}
+#endif // !NET
 #endif
 
 		class ProtocolArgumentClass : NSObject
@@ -2639,6 +2641,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("takes forever")]
+#endif
 		public void TestNSObjectArray ()
 		{
 #if !__WATCHOS__
@@ -2681,6 +2686,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("takes forever")]
+#endif
 		public void TestINSCodingArray ()
 		{
 #if !__WATCHOS__
@@ -2689,35 +2697,58 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			var items = Runtime.Arch == Arch.DEVICE ? 10 : 10000; // Don't test the GC on device, there's not enough memory.
 #endif
 			var array = new INSCoding [items];
+			Console.WriteLine ("TestINSCodingArray");
 			for (var i = 0; i < array.Length; i++)
 				array [i] = NSNumber.FromInt32 (i);
+			Console.WriteLine ("TestINSCodingArray created array");
 
 			using (var obj = new ObjCRegistrarTest ()) {
+				Console.WriteLine ("TestINSCodingArray a");
 				obj.INSCodingArrayProperty = array;
+				Console.WriteLine ("TestINSCodingArray b");
 				Assert.That (obj.INSCodingArrayProperty, Is.EqualTo (array), "1");
+				Console.WriteLine ("TestINSCodingArray c");
 				obj.SetINSCodingArrayMethod (null);
+				Console.WriteLine ("TestINSCodingArray d");
 				Assert.IsNull (obj.INSCodingArrayProperty, "2");
+				Console.WriteLine ("TestINSCodingArray e");
 				obj.SetINSCodingArrayMethod (array);
+				Console.WriteLine ("TestINSCodingArray f");
 				Assert.That (obj.INSCodingArrayProperty, Is.EqualTo (array), "3");
+				Console.WriteLine ("TestINSCodingArray g");
 				var rv = obj.GetINSCodingArrayMethod ();
 				Assert.That (rv, Is.EqualTo (array), "4");
 			}
 
 			using (var arrayObj = NSArray.FromNSObjects<INSCoding> (array)) {
+				Console.WriteLine ("TestINSCodingArray j");
 				using (var obj = new ArrayTester ()) {
+				Console.WriteLine ("TestINSCodingArray k");
 					obj.ManagedINSCodingArrayProperty = null;
+				Console.WriteLine ("TestINSCodingArray l");
 					Messaging.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle ("setINSCodingArrayProperty:"), arrayObj.Handle);
+				Console.WriteLine ("TestINSCodingArray m");
 					Assert.That (array, Is.EqualTo (obj.ManagedINSCodingArrayProperty), "1B");
+				Console.WriteLine ("TestINSCodingArray n");
 					obj.ManagedINSCodingArrayProperty = null;
+				Console.WriteLine ("TestINSCodingArray o");
 					Messaging.IntPtr_objc_msgSend (obj.Handle, Selector.GetHandle ("INSCodingArrayProperty"));
+				Console.WriteLine ("TestINSCodingArray p");
 					Assert.That (array, Is.EqualTo (obj.ManagedINSCodingArrayProperty), "2B");
+				Console.WriteLine ("TestINSCodingArray q");
 
 					obj.ManagedINSCodingArrayProperty = null;
+				Console.WriteLine ("TestINSCodingArray r");
 					Messaging.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle ("setINSCodingArrayMethod:"), arrayObj.Handle);
+				Console.WriteLine ("TestINSCodingArray s");
 					Assert.That (array, Is.EqualTo (obj.ManagedINSCodingArrayProperty), "3B");
+				Console.WriteLine ("TestINSCodingArray t");
 					obj.ManagedINSCodingArrayProperty = null;
+				Console.WriteLine ("TestINSCodingArray u");
 					Messaging.IntPtr_objc_msgSend (obj.Handle, Selector.GetHandle ("getINSCodingArrayMethod"));
+				Console.WriteLine ("TestINSCodingArray v");
 					Assert.That (array, Is.EqualTo (obj.ManagedINSCodingArrayProperty), "4B");
+				Console.WriteLine ("TestINSCodingArray w");
 				}
 			}
 		}
@@ -2963,8 +2994,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreNotSame (dummyObj, outObj, "NSCoding-3A-ref-out");
 				Assert.AreEqual (refObj.Handle, outObj.Handle, "NSCoding-3A-out-ref-eq");
 				Assert.AreNotSame (refObj, outObj, "NSCoding-3A-ref-out-not-safe");
-				Assert.That (refObj.GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCoding-3A-ref-wrapper-type");
-				Assert.That (outObj.GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCoding-3A-ref-wrapper-type");
+				Assert.That (refObj.GetType ().FullName, Does.Contain ("CodingWrapper"), "NSCoding-3A-ref-wrapper-type");
+				Assert.That (outObj.GetType ().FullName, Does.Contain ("CodingWrapper"), "NSCoding-3A-ref-wrapper-type");
 
 				// managed
 				refObj = dummyObj; // set to non-null
@@ -3010,8 +3041,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreNotEqual (IntPtr.Zero, refObj.Handle, "NSCoding-4A-ref");
 				Assert.AreNotEqual (IntPtr.Zero, outObj.Handle, "NSCoding-4A-out");
 				Assert.AreNotEqual (refObj.Handle, outObj.Handle, "NSCoding-4A-ref-distinct");
-				Assert.That (refObj.GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCoding-4A-ref-wrapper-type");
-				Assert.That (outObj.GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCoding-4A-ref-wrapper-type");
+				Assert.That (refObj.GetType ().FullName, Does.Contain ("CodingWrapper"), "NSCoding-4A-ref-wrapper-type");
+				Assert.That (outObj.GetType ().FullName, Does.Contain ("CodingWrapper"), "NSCoding-4A-ref-wrapper-type");
 
 				// managed
 				refObj = null; // set to null
@@ -4055,8 +4086,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.AreNotSame (dummyObj, outObj, "NSCodingArray-3A-ref-out");
 				AssertAreEqual (refObj, outObj, "NSCodingArray-3A-out-ref-eq");
 				Assert.AreNotSame (refObj, outObj, "NSCodingArray-3A-ref-out-not-safe");
-				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCodingArray-3A-ref-wrapper-type");
-				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("CodingWrapper"), "NSCodingArray-3A-ref-wrapper-type");
+				Assert.That (refObj [0].GetType ().FullName, Does.Contain ("CodingWrapper"), "NSCodingArray-3A-ref-wrapper-type");
+				Assert.That (outObj [0].GetType ().FullName, Does.Contain ("CodingWrapper"), "NSCodingArray-3A-ref-wrapper-type");
 
 				// managed
 				refObj = dummyObj; // set to non-null
@@ -4097,8 +4128,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				Assert.IsNotNull (refObj, "NSCodingArray-4A-ref");
 				Assert.IsNotNull (outObj, "NSCodingArray-4A-out");
 				AssertAreNotEqual (refObj, outObj, "NSCodingArray-4A-ref-distinct");
-				Assert.That (refObj [0].GetType ().FullName, Is.StringContaining ("NSNumber").Or.StringContaining ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
-				Assert.That (outObj [0].GetType ().FullName, Is.StringContaining ("NSNumber").Or.StringContaining ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
+				Assert.That (refObj [0].GetType ().FullName, Does.Contain ("NSNumber").Or.Contain ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
+				Assert.That (outObj [0].GetType ().FullName, Does.Contain ("NSNumber").Or.Contain ("CodingWrapper"), "NSCodingArray-4A-ref-wrapper-type");
 
 				// managed
 				refObj = null; // set to null

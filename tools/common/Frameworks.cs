@@ -20,6 +20,19 @@ public class Framework
 	public Version Version;
 	public Version VersionAvailableInSimulator;
 	public bool AlwaysWeakLinked;
+
+#if HAS_APPLICATION
+	public bool IsFrameworkAvailableInSimulator (Application app)
+	{
+		if (VersionAvailableInSimulator == null)
+			return false;
+
+		if (VersionAvailableInSimulator > app.SdkVersion)
+			return false;
+
+		return true;
+	}
+#endif
 }
 
 public class Frameworks : Dictionary <string, Framework>
@@ -523,6 +536,9 @@ public class Frameworks : Dictionary <string, Framework>
 				// We're building with an old sdk, and the framework doesn't exist there.
 				continue;
 			}
+
+			if (app.IsSimulatorBuild && !framework.IsFrameworkAvailableInSimulator (app))
+				continue;
 
 			var add_to = app.DeploymentTarget >= framework.Version ? frameworks : weak_frameworks;
 			add_to.Add (framework.Name);

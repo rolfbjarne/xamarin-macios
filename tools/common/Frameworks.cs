@@ -1,7 +1,11 @@
+#if MTOUCH || MMP || BUNDLER
+#define HAS_APPLICATION
+#endif
+
 using System;
 using System.Collections.Generic;
 
-#if MTOUCH || MMP || BUNDLER
+#if HAS_APPLICATION
 using Mono.Cecil;
 
 using Xamarin.Bundler;
@@ -496,7 +500,7 @@ public class Frameworks : Dictionary <string, Framework>
 		}
 	}
 
-#if MTOUCH || MMP || BUNDLER
+#if HAS_APPLICATION
 	static void Gather (Application app, AssemblyDefinition product_assembly, HashSet<string> frameworks, HashSet<string> weak_frameworks, Func<Framework, bool> include_framework)
 	{
 		var namespaces = new HashSet<string> ();
@@ -556,5 +560,5 @@ public class Frameworks : Dictionary <string, Framework>
 	{
 		Gather (app, product_assembly, frameworks, weak_frameworks, (framework) => FilterFrameworks (app, framework));
 	}
-#endif // MTOUCH || MMP || BUNDLER
+#endif // HAS_APPLICATION
 }

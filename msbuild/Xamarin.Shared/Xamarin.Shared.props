@@ -154,6 +154,16 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">$(MonoTouchSdkRoot)</_XamarinSdkRoot>
 		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">$(MD_MTOUCH_SDK_ROOT)</_XamarinSdkRoot>
 		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</_XamarinSdkRoot>
+
+		<!-- BTouch values
+			BTouchToolPath: the bin directory of the sdk, unless we're on Windows, in which case it's the same directory as the MSBuild files are
+			BTouchToolExe: on Mac it's the bgen script, on Windows it's the bgen.exe executable
+		-->
+		<BTouchToolPath Condition="'$(BTouchToolPath)' == '' And '$(OS)' == 'Unix'">$(_XamarinSdkRoot)/bin/</BTouchToolPath>
+		<BTouchToolPath Condition="'$(BTouchToolPath)' == '' And '$(OS)' != 'Unix' And '$(_PlatformName)' == 'macOS'">$(MSBuildExtensionsPath)\Xamarin\iOS\</BTouchToolPath>
+		<BTouchToolPath Condition="'$(BTouchToolPath)' == '' And '$(OS)' != 'Unix' And '$(_PlatformName)' != 'macOS'">$(MSBuildExtensionsPath)\Xamarin\Mac\</BTouchToolPath>
+		<BTouchToolExe Condition="'$(BTouchToolExe)' == '' And '$(OS)' == 'Unix'">bgen</BTouchToolExe>
+		<BTouchToolExe Condition="'$(BTouchToolExe)' == '' And '$(OS)' != 'Unix'">bgen.exe</BTouchToolExe>
 	</PropertyGroup>
 
 	<Target Name="_ComputeTargetFrameworkMoniker" Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">

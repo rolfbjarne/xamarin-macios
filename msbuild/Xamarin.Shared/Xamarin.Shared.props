@@ -28,6 +28,48 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<!-- _XamarinSdkRoot
+			Xamarin.Mac: Defaults to XamarinMacFrameworkRoot, otherwise /Library/Frameworks/Xamarin.Mac.framework/Versions/Current
+			Xamarin.iOS: Defaults to MonoTouchSdkRoot, otherwise use MD_MTOUCH_SDK_ROOT, otherwise /Library/Frameworks/Xamarin.iOS.framework/Versions/Current
+		-->
+		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' == 'macOS' ">$(XamarinMacFrameworkRoot)</_XamarinSdkRoot>
+		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' == 'macOS' ">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current</_XamarinSdkRoot>
+		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">$(MonoTouchSdkRoot)</_XamarinSdkRoot>
+		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">$(MD_MTOUCH_SDK_ROOT)</_XamarinSdkRoot>
+		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</_XamarinSdkRoot>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.Mac,Version=v2.0,Profile=Mobile'">
+		<TargetFrameworkName>Modern</TargetFrameworkName>
+		<_XamarinBclPath>$(_XamarinSdkRoot)/lib/mono/Xamarin.Mac</_XamarinBclPath>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.Mac,Version=v4.5,Profile=Full'">
+		<TargetFrameworkName>Full</TargetFrameworkName>
+		<_XamarinBclPath>$(_XamarinSdkRoot)/lib/mono/4.5</_XamarinBclPath>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.Mac,Version=v4.5,Profile=System'">
+		<TargetFrameworkName>System</TargetFrameworkName>
+		<_XamarinBclPath>$(_XamarinSdkRoot)/lib/mono/4.5</_XamarinBclPath>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(_XamarinBclPath)' == ''">
+		<_XamarinBclPath Condition="'$(_PlatformName)' == 'iOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.iOS/Xamarin.iOS.dll</_XamarinBclPath>
+		<_XamarinBclPath Condition="'$(_PlatformName)' == 'tvOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.TVOS/Xamarin.TVOS.dll</_XamarinBclPath>
+		<_XamarinBclPath Condition="'$(_PlatformName)' == 'watchOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.WatchOS/Xamarin.WatchOS.dll</_XamarinBclPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">
+		<!-- Get the TargetFrameworkMoniker and store it in our own variable so that it's overridable while only affecting the parts of the build that we care about.
+			 This is overridability is a workaround while we wait for .NET 5 to be able to give us the TFM we're supposed to get during the build. -->
+		<_ComputedTargetFrameworkMoniker>$(TargetFrameworkMoniker)</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the Mobile condition and set the computed Mobile TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(_ComputedTargetFrameworkMoniker)' == 'Xamarin.Mac,Version=v2.0'">Xamarin.Mac,Version=v2.0,Profile=Mobile</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the Full condition and set the computed TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=Full</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the System condition and set the computed TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' != 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=System</_ComputedTargetFrameworkMoniker>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<!--
 		     We don't want to use the Platform variable for conditional logic.
 		     Switching to a new property allows us to potentially switch from
@@ -145,16 +187,6 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<EnableOnDemandResources Condition="'$(_PlatformName)' == 'macOS' And '$(EnableOnDemandResources)' == ''">false</EnableOnDemandResources>
 		<EnableOnDemandResources Condition="'$(_PlatformName)' != 'macOS' And '$(EnableOnDemandResources)' == ''">true</EnableOnDemandResources>
 
-		<!-- _XamarinSdkRoot
-			Xamarin.Mac: Defaults to XamarinMacFrameworkRoot, otherwise /Library/Frameworks/Xamarin.Mac.framework/Versions/Current
-			Xamarin.iOS: Defaults to MonoTouchSdkRoot, otherwise use MD_MTOUCH_SDK_ROOT, otherwise /Library/Frameworks/Xamarin.iOS.framework/Versions/Current
-		-->
-		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' == 'macOS' ">$(XamarinMacFrameworkRoot)</_XamarinSdkRoot>
-		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' == 'macOS' ">/Library/Frameworks/Xamarin.Mac.framework/Versions/Current</_XamarinSdkRoot>
-		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">$(MonoTouchSdkRoot)</_XamarinSdkRoot>
-		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">$(MD_MTOUCH_SDK_ROOT)</_XamarinSdkRoot>
-		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</_XamarinSdkRoot>
-
 		<!-- BTouch values
 			BTouchToolPath: the bin directory of the sdk, unless we're on Windows, in which case it's the same directory as the MSBuild files are
 			BTouchToolExe: on Mac it's the bgen script, on Windows it's the bgen.exe executable
@@ -164,20 +196,10 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<BTouchToolPath Condition="'$(BTouchToolPath)' == '' And '$(OS)' != 'Unix' And '$(_PlatformName)' != 'macOS'">$(MSBuildExtensionsPath)\Xamarin\Mac\</BTouchToolPath>
 		<BTouchToolExe Condition="'$(BTouchToolExe)' == '' And '$(OS)' == 'Unix'">bgen</BTouchToolExe>
 		<BTouchToolExe Condition="'$(BTouchToolExe)' == '' And '$(OS)' != 'Unix'">bgen.exe</BTouchToolExe>
+		<BaseLibDllPath Condition="'$(BaseLibDllPath)' == ''">$(_XamarinBclPath)</BaseLibDllPath>
 	</PropertyGroup>
 
 	<Target Name="_ComputeTargetFrameworkMoniker" Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">
-		<PropertyGroup>
-			<!-- Get the TargetFrameworkMoniker and store it in our own variable so that it's overridable while only affecting the parts of the build that we care about.
-				 This is overridability is a workaround while we wait for .NET 5 to be able to give us the TFM we're supposed to get during the build. -->
-			<_ComputedTargetFrameworkMoniker>$(TargetFrameworkMoniker)</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the Mobile condition and set the computed Mobile TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(_ComputedTargetFrameworkMoniker)' == 'Xamarin.Mac,Version=v2.0'">Xamarin.Mac,Version=v2.0,Profile=Mobile</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the Full condition and set the computed TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=Full</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the System condition and set the computed TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' != 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=System</_ComputedTargetFrameworkMoniker>
-		</PropertyGroup>
 	</Target>
 
 	<Import Project="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).After.targets"

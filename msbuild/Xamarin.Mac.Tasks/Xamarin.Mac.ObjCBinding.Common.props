@@ -30,7 +30,6 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<BaseLibDllPath>$(MacBclPath)/Xamarin.Mac.dll</BaseLibDllPath>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 
 		<DefineConstants>__UNIFIED__;__MACOS__;$(DefineConstants)</DefineConstants>

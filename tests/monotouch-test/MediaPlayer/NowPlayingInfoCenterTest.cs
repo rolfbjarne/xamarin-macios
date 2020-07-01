@@ -79,43 +79,43 @@ namespace MonoTouchFixtures.MediaPlayer
 				dc.NowPlaying = NowPlayingInfo; // internal NSDictionary ToDictionary ()
 				var np = dc.NowPlaying; // internal MPNowPlayingInfo (NSDictionary source)
 
-				Assert.IsInstanceOfType (typeof (double), np.ElapsedPlaybackTime, "#1");
-				Assert.IsInstanceOfType (typeof (double), np.PlaybackRate, "#2");
+				Asserts.IsInstanceOfType (typeof (double), np.ElapsedPlaybackTime, "#1");
+				Asserts.IsInstanceOfType (typeof (double), np.PlaybackRate, "#2");
 				if (v8_0)
-					Assert.IsInstanceOfType (typeof (double), np.DefaultPlaybackRate, "#3");
-				Assert.IsInstanceOfType (typeof (int), np.PlaybackQueueIndex, "#4");
-				Assert.IsInstanceOfType (typeof (int), np.PlaybackQueueCount, "#5");
-				Assert.IsInstanceOfType (typeof (int), np.ChapterNumber, "#6");
-				Assert.IsInstanceOfType (typeof (int), np.ChapterCount, "#7");
+					Asserts.IsInstanceOfType (typeof (double), np.DefaultPlaybackRate, "#3");
+				Asserts.IsInstanceOfType (typeof (int), np.PlaybackQueueIndex, "#4");
+				Asserts.IsInstanceOfType (typeof (int), np.PlaybackQueueCount, "#5");
+				Asserts.IsInstanceOfType (typeof (int), np.ChapterNumber, "#6");
+				Asserts.IsInstanceOfType (typeof (int), np.ChapterCount, "#7");
 
 				if (v9_0) {
-					Assert.IsInstanceOfType (typeof (MPNowPlayingInfoLanguageOptionGroup []), np.AvailableLanguageOptions, "#8");
-					Assert.IsInstanceOfType (typeof (MPNowPlayingInfoLanguageOption []), np.CurrentLanguageOptions, "#9");
+					Asserts.IsInstanceOfType (typeof (MPNowPlayingInfoLanguageOptionGroup []), np.AvailableLanguageOptions, "#8");
+					Asserts.IsInstanceOfType (typeof (MPNowPlayingInfoLanguageOption []), np.CurrentLanguageOptions, "#9");
 				}
 				if (v10_0) {
-					Assert.IsInstanceOfType (typeof (string), (object)np.CollectionIdentifier, "#10");
-					Assert.IsInstanceOfType (typeof (string), (object)np.ExternalContentIdentifier, "#11");
-					Assert.IsInstanceOfType (typeof (string), (object)np.ExternalUserProfileIdentifier, "#12");
-					Assert.IsInstanceOfType (typeof (float), np.PlaybackProgress, "#13");
-					Assert.IsInstanceOfType (typeof (MPNowPlayingInfoMediaType), np.MediaType, "#14");
-					Assert.IsInstanceOfType (typeof (bool), np.IsLiveStream, "#15");
+					Asserts.IsInstanceOfType (typeof (string), (object)np.CollectionIdentifier, "#10");
+					Asserts.IsInstanceOfType (typeof (string), (object)np.ExternalContentIdentifier, "#11");
+					Asserts.IsInstanceOfType (typeof (string), (object)np.ExternalUserProfileIdentifier, "#12");
+					Asserts.IsInstanceOfType (typeof (float), np.PlaybackProgress, "#13");
+					Asserts.IsInstanceOfType (typeof (MPNowPlayingInfoMediaType), np.MediaType, "#14");
+					Asserts.IsInstanceOfType (typeof (bool), np.IsLiveStream, "#15");
 				}
 
-				Assert.IsInstanceOfType (typeof (string), (object)np.AlbumTitle, "#16");
-				Assert.IsInstanceOfType (typeof (int), np.AlbumTrackCount, "#17");
-				Assert.IsInstanceOfType (typeof (int), np.AlbumTrackNumber, "#18");
-				Assert.IsInstanceOfType (typeof (string), (object)np.Artist, "#19");
-				Assert.IsInstanceOfType (typeof (MPMediaItemArtwork), np.Artwork, "#20");
-				Assert.IsInstanceOfType (typeof (string), (object)np.Composer, "#21");
-				Assert.IsInstanceOfType (typeof (int), np.DiscCount, "#22");
-				Assert.IsInstanceOfType (typeof (int), np.DiscNumber, "#23");
-				Assert.IsInstanceOfType (typeof (string), (object)np.Genre, "#24");
-				Assert.IsInstanceOfType (typeof (ulong), np.PersistentID, "#25");
-				Assert.IsInstanceOfType (typeof (double), np.PlaybackDuration, "#26");
-				Assert.IsInstanceOfType (typeof (string), (object)np.Title, "#27");
+				Asserts.IsInstanceOfType (typeof (string), (object)np.AlbumTitle, "#16");
+				Asserts.IsInstanceOfType (typeof (int), np.AlbumTrackCount, "#17");
+				Asserts.IsInstanceOfType (typeof (int), np.AlbumTrackNumber, "#18");
+				Asserts.IsInstanceOfType (typeof (string), (object)np.Artist, "#19");
+				Asserts.IsInstanceOfType (typeof (MPMediaItemArtwork), np.Artwork, "#20");
+				Asserts.IsInstanceOfType (typeof (string), (object)np.Composer, "#21");
+				Asserts.IsInstanceOfType (typeof (int), np.DiscCount, "#22");
+				Asserts.IsInstanceOfType (typeof (int), np.DiscNumber, "#23");
+				Asserts.IsInstanceOfType (typeof (string), (object)np.Genre, "#24");
+				Asserts.IsInstanceOfType (typeof (ulong), np.PersistentID, "#25");
+				Asserts.IsInstanceOfType (typeof (double), np.PlaybackDuration, "#26");
+				Asserts.IsInstanceOfType (typeof (string), (object)np.Title, "#27");
 
 				if (v10_3)
-					Assert.IsInstanceOfType (typeof (NSUrl), np.AssetUrl, "#28");
+					Asserts.IsInstanceOfType (typeof (NSUrl), np.AssetUrl, "#28");
 			}
 		}
 	}

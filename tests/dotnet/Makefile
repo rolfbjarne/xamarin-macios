@@ -8,7 +8,8 @@ NuGet.config: $(TOP)/NuGet.config Makefile
 	$(Q) $(CP) $< $@.tmp
 	$(Q) nuget sources add -Name local-dotnet-feed -Source $(abspath $(DOTNET_FEED_DIR)) -ConfigFile $@.tmp
 	$(Q) nuget sources add -Name dotnet5 -Source "https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json" -ConfigFile $@.tmp
-	$(Q) nuget config -Set globalPackagesFolder=packages -Config $@.tmp
+	$(Q) nuget config -Set globalPackagesFolder=../packages -Config $@.tmp
+	$(Q) nuget config -Set repositorypath=../packages -Config $@.tmp
 	$(Q) mv $@.tmp $@
 
 # This tells NuGet to use the version we're building locally.
@@ -38,14 +39,26 @@ introspection: $(TARGETS)
 
 DIRS=tests/monotouch-test tests/EmbeddedResources tests/bindings-test external/Touch.Unit/Touch.Client
 monotouch-test monotouchtest: $(TARGETS)
-	cd $(TOP)/tests/monotouch-test && git clean -xfd
+	rm -f *.binlog
+	pkill -f MSBuild.dll.*nodemode # yay :/
+	for dir in $(DIRS); do \
+		cd $(TOP)/$$dir && git clean -qxfd && rm -Rf ../packages && cd $(CURDIR); \
+		$(CP) NuGet.config global.json $(TOP)/$$dir; \
+	done
+	$(MAKE) all -j8 -C $(TOP) && $(MAKE) install -j8 -C $(TOP)
+	$(MAKE) all -j8 -C $(TOP)/dotnet && $(MAKE) install -j8 -C $(TOP)/dotnet
+	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
+	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
+	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
+
+monotouch-test-simple monotouchtest-simple: $(TARGETS)
+	rm -f *.binlog
+	-pkill -f MSBuild.dll.*nodemode # yay :/
 	for dir in $(DIRS); do \
 		$(CP) NuGet.config global.json $(TOP)/$$dir; \
 	done
-	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
-	for dir in $(DIRS); do \
-		rm -f $$dir/NuGet.config $$dir/global.json $(TOP)/$$dir; \
-	done
+	make -C ../test-libraries -j
+	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:$@.binlog /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 
 all-local:: $(TARGETS)

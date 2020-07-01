@@ -21,7 +21,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		[Required]
 		public string OutputFile { get; set; }
-
+		
 		[Required]
 		public ITaskItem [] ObjectFiles { get; set; }
 
@@ -38,8 +38,12 @@ namespace Xamarin.MacDev.Tasks {
 
 			arguments.Add (PlatformFrameworkHelper.GetMinimumVersionArgument (TargetFrameworkMoniker, SdkIsSimulator, MinimumOSVersion));
 
+			arguments.Add ("-Wl,-all_load");
+			arguments.Add ("-lz");
+
 			arguments.Add ("-isysroot");
 			arguments.Add (SdkRoot);
+
 
 			bool hasDylibs = false;
 			if (LinkWithLibraries != null) {
@@ -88,7 +92,7 @@ namespace Xamarin.MacDev.Tasks {
 					arguments.Add (Path.GetFullPath (obj.ItemSpec));
 
 			arguments.Add ("-o");
-			arguments.Add (OutputFile);
+			arguments.Add (Path.GetFullPath (OutputFile));
 
 			ExecuteAsync ("xcrun", arguments, sdkDevPath: SdkDevPath).Wait ();
 

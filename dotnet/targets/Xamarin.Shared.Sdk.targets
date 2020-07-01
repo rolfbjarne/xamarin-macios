@@ -79,6 +79,7 @@
 		<_PlatformAssemblyName Condition=" '$(_PlatformName)' == 'tvOS' ">Xamarin.TVOS</_PlatformAssemblyName>
 		<_PlatformAssemblyName Condition=" '$(_PlatformName)' == 'watchOS' ">Xamarin.WatchOS</_PlatformAssemblyName>
 		<_PlatformAssemblyName Condition=" '$(_PlatformName)' == 'macOS' ">Xamarin.Mac</_PlatformAssemblyName>
+
 	</PropertyGroup>
 
 	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
@@ -148,18 +149,10 @@
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose</_ExtraTrimmerArgs>
 		</PropertyGroup>
 		<ItemGroup>
-			<!-- add our custom steps -->
+			<!-- add a custom step which inserts any other steps we need -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)">
 				<BeforeStep>LoadReferencesStep</BeforeStep>
 				<Type>Xamarin.SetupStep</Type>
-			</_TrimmerCustomSteps>
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)">
-				<!-- At the end of the pipeline -->
-				<Type>Xamarin.GenerateMainStep</Type>
-			</_TrimmerCustomSteps>
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)">
-				<!-- At the end of the pipeline -->
-				<Type>Xamarin.GatherFrameworksStep</Type>
 			</_TrimmerCustomSteps>
 		</ItemGroup>
 
@@ -176,21 +169,33 @@
 		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_LinkerFrameworks.items" Condition="Exists('$(_LinkerItemsDirectory)/_LinkerFrameworks.items')">
 			<Output TaskParameter="Items" ItemName="_LinkerFrameworks" />
 		</ReadItemsFromFile>
+		<!-- Load _NativeLinkerFlags -->
+		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_NativeLinkerFlags.items" Condition="Exists('$(_LinkerItemsDirectory)/_NativeLinkerFlags.items')">
+			<Output TaskParameter="Items" ItemName="_NativeLinkerFlags" />
+		</ReadItemsFromFile>
 	</Target>
 
 	<!-- Native code -->
 
-	<Target Name="_ComputeVariables" DependsOnTargets="_GenerateBundleName;ResolveRuntimePackAssets">
+	<Target Name="_ComputeFrameworkVariables" DependsOnTargets="ResolveReferences">
 		<ItemGroup>
-			<!-- Look in the ResolvedFrameworkReference for our Microsoft.* package. This should only find a single package. -->
+			<!-- Look in the ResolvedFrameworkReference for our Microsoft.* packages. This should only find a single package. -->
 			<_XamarinFrameworkReference Include="@(ResolvedFrameworkReference)" Condition="'%(ResolvedFrameworkReference.Identity)' == 'Microsoft.$(_PlatformName)'" />
 		</ItemGroup>
 		<PropertyGroup>
-			<_IntermediateNativeLibraryDir>$(IntermediateOutputPath)nativelibraries/</_IntermediateNativeLibraryDir>
-			<_NativeExecutableName>$(_AppBundleName)</_NativeExecutableName>
 			<_XamarinSdkRuntimePackDirectory>%(_XamarinFrameworkReference.RuntimePackPath)</_XamarinSdkRuntimePackDirectory>
+			<_XamarinRefPackageDirectory>%(_XamarinFrameworkReference.TargetingPackPath)</_XamarinRefPackageDirectory>
 			<_XamarinNativeLibraryDirectory>$(_XamarinSdkRuntimePackDirectory)/runtimes/$(RuntimeIdentifier)/native</_XamarinNativeLibraryDirectory>
 			<_XamarinIncludeDirectory>$(_XamarinSdkRuntimePackDirectory)/runtimes/$(RuntimeIdentifier)/native</_XamarinIncludeDirectory>
+			<_XamarinRefAssemblyDirectory>$(_XamarinRefPackageDirectory)/ref/net5.0/</_XamarinRefAssemblyDirectory>
+			<_XamarinRefAssemblyPath>$(_XamarinRefAssemblyDirectory)$(_PlatformAssemblyName).dll</_XamarinRefAssemblyPath>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="_ComputeVariables" DependsOnTargets="_GenerateBundleName;_ComputeFrameworkVariables">
+		<PropertyGroup>
+			<_IntermediateNativeLibraryDir>$(IntermediateOutputPath)nativelibraries/</_IntermediateNativeLibraryDir>
+			<_NativeExecutableName>$(_AppBundleName)</_NativeExecutableName>
 
 			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == '' And '$(ComputedPlatform)' != 'iPhone'">dylib</_LibMonoLinkMode>
 			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == ''">static</_LibMonoLinkMode>
@@ -216,6 +221,21 @@
 							"
 			/>
 		</ItemGroup>
+	</Target>
+
+	<PropertyGroup>
+		<_GenerateBindingsDependsOn>
+			_ComputeBindingVariables;
+			$(_GenerateBindingsDependsOn);
+		</_GenerateBindingsDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_ComputeBindingVariables" DependsOnTargets="_ComputeFrameworkVariables" Condition="'$(IsBindingProject)' == 'true'">
+		<PropertyGroup>
+			<BTouchToolPath>$(_XamarinSdkRootDirectory)/tools/bin</BTouchToolPath>
+			<BaseLibDllPath>$(_XamarinRefAssemblyPath)</BaseLibDllPath>
+			<BTouchAttributeAssembly>$(_XamarinSdkRootDirectory)/tools/lib/Xamarin.Apple.BindingAttributes.dll</BTouchAttributeAssembly>
+		</PropertyGroup>
 	</Target>
 
 	<Target Name="_CompileNativeExecutable"
@@ -288,7 +308,7 @@
 		<LinkNativeCode
 			SessionId="$(BuildSessionId)"
 			Frameworks="@(_NativeExecutableFrameworks)"
-			LinkWithLibraries="@(_XamarinMainLibraries)"
+			LinkWithLibraries="@(_XamarinMainLibraries);@(_NativeLinkerFlags)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
 			ObjectFiles="@(_NativeExecutableObjectFiles)"
 			OutputFile="$(_IntermediateNativeLibraryDir)$(_NativeExecutableName)"

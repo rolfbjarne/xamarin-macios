@@ -439,33 +439,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</_CollectBundleResourcesDependsOn>
 	</PropertyGroup>
 
-	<!-- TODO: check for duplicate items -->
-	<Target Name="_ComputeBundleResourceOutputPaths" DependsOnTargets="_CollectBundleResources;_GenerateBundleName;_DetectSigningIdentity">
-		<ComputeBundleResourceOutputPaths
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			AppBundleDir="$(AppBundleDir)"
-			BundleIdentifier="$(_BundleIdentifier)"
-			BundleResources="@(_BundleResourceWithLogicalName)"
-			EnableOnDemandResources="$(EnableOnDemandResources)"
-			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
-			OutputPath="$(DeviceSpecificOutputPath)"
-		>
-			<Output TaskParameter="BundleResourcesWithOutputPaths" ItemName="_BundleResourceWithOutputPath"/>
-		</ComputeBundleResourceOutputPaths>
-	</Target>
-
-	<Target Name="_CopyResourcesToBundle" DependsOnTargets="_ComputeBundleResourceOutputPaths"
-		Inputs = "@(_BundleResourceWithOutputPath)"
-		Outputs = "@(_BundleResourceWithOutputPath -> '%(OutputPath)')" >
-		<SmartCopy
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SourceFiles = "@(_BundleResourceWithOutputPath)"
-			DestinationFiles = "@(_BundleResourceWithOutputPath -> '%(OutputPath)')"
-		/>
-	</Target>
-
 	<Target Name="_CreateAssetPackManifest" DependsOnTargets="_CopyResourcesToBundle">
 		<CreateAssetPackManifest
 			SessionId="$(BuildSessionId)"
@@ -552,7 +525,11 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</UnpackLibraryResources>
 	</Target>
 
-	<Target Name="_GenerateBundleName" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures;_GenerateAppBundleName;_GenerateAppExBundleName" />
+	<Target Name="_GenerateBundleName" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures;_GenerateAppBundleName;_GenerateAppExBundleName">
+		<PropertyGroup>
+			<_AppResourcesPath>$(_AppBundlePath)</_AppResourcesPath>
+		</PropertyGroup>
+	</Target>
 
 	<Target Name="_GenerateAppBundleName" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' != 'true'" DependsOnTargets="_ComputeTargetArchitectures">
 		<PropertyGroup>

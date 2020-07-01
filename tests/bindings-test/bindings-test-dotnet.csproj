@@ -20,6 +20,10 @@
     <ObjcBindingCoreSource Include="StructsAndEnums.generated.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NUnitLite" Version="3.12.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TestLibrariesDirectory>..\..\tests\test-libraries</TestLibrariesDirectory>
   </PropertyGroup>

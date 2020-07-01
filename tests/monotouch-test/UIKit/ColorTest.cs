@@ -77,9 +77,11 @@ namespace MonoTouchFixtures.UIKit {
 		}
 
 		[Test]
+#if NET
+		[DefaultFloatingPointTolerance (0.00001)]
+#endif
 		public void HSBA ()
 		{
-			GlobalSettings.DefaultFloatingPointTolerance = 0.00001;
 			RoundtripHSBA (UIColor.Black);
 			RoundtripHSBA (UIColor.Blue);
 			RoundtripHSBA (UIColor.Brown);

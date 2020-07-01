@@ -58,7 +58,7 @@ namespace MonoTouchFixtures.ModelIO {
 #if MONOMAC
 				Assert.IsNotNull (color, "color 1");
 #else
-				if (Runtime.Arch == Arch.SIMULATOR && Environment.OSVersion.Version.Major < 15) {
+				if (Runtime.Arch == Arch.SIMULATOR) {
 					Assert.IsNull (color, "color 1");
 				} else {
 					Assert.IsNotNull (color, "color 1");
@@ -71,7 +71,7 @@ namespace MonoTouchFixtures.ModelIO {
 #if MONOMAC
 				Assert.IsNotNull (color, "color 2");
 #else
-				if (Runtime.Arch == Arch.SIMULATOR && Environment.OSVersion.Version.Major < 15) {
+				if (Runtime.Arch == Arch.SIMULATOR) {
 					Assert.IsNull (color, "color 2");
 				} else {
 					Assert.IsNotNull (color, "color 2");

@@ -41,8 +41,13 @@ namespace MonoTouchFixtures.Foundation
 			}
 		}
 
+#if NET
+		[TestCase ("Foo", ExpectedResult = "Foo")]
+		[TestCase (null, ExpectedResult = null)]
+#else
 		[TestCase ("Foo", Result = "Foo")]
 		[TestCase (null, Result = null)]
+#endif
 		public object FromConstant (object input)
 		{
 			NSObject value = null;

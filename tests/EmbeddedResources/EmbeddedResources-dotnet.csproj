@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.iOS.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>EmbeddedResources</RootNamespace>
+    <AssemblyName>EmbeddedResources</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnitLite" Version="3.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\common\TestRuntime.cs">
+      <Link>TestRuntime.cs</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

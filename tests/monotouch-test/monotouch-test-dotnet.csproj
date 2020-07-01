@@ -117,7 +117,7 @@
   </ItemGroup>
 -->
   <ItemGroup>
-    <ProjectReference Include="..\EmbeddedResources\EmbeddedResources.csproj">
+    <ProjectReference Include="..\EmbeddedResources\EmbeddedResources-dotnet.csproj">
       <Project>{676F527D-3352-42EA-9DE2-181C45003568}</Project>
       <Name>EmbeddedResources</Name>
     </ProjectReference>

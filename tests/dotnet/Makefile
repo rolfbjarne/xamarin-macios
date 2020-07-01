@@ -38,11 +38,13 @@ introspection: $(TARGETS)
 
 DIRS=tests/monotouch-test tests/EmbeddedResources tests/bindings-test external/Touch.Unit/Touch.Client
 monotouch-test monotouchtest: $(TARGETS)
-	cd $(TOP)/tests/monotouch-test && git clean -xfd
 	for dir in $(DIRS); do \
+		cd $(TOP)/$$dir && git clean -qxfd && cd $(CURDIR); \
 		$(CP) NuGet.config global.json $(TOP)/$$dir; \
 	done
-	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
+	make all install -j8 -C $(TOP)
+	dotnet build $(TOP)/tests/bindings-test/bindings-test-dotnet.csproj /v:diag /bl:bindings-test.binlog
+	#dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
 	for dir in $(DIRS); do \
 		rm -f $$dir/NuGet.config $$dir/global.json $(TOP)/$$dir; \
 	done

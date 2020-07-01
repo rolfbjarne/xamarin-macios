@@ -39,9 +39,11 @@ introspection: $(TARGETS)
 monotouch-test monotouchtest: $(TARGETS)
 	cd $(TOP)/tests/monotouch-test && git clean -xfd
 	$(CP) NuGet.config global.json $(TOP)/tests/monotouch-test
+	$(CP) NuGet.config global.json $(TOP)/tests/EmbeddedResources
 	$(CP) NuGet.config global.json $(TOP)/external/Touch.Unit/Touch.Client
 	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
 	$(Q) rm -f $(TOP)/external/Touch.Unit/Touch.Client/NuGet.config $(TOP)/external/Touch.Unit/Touch.Client/global.json
+	$(Q) rm -f $(TOP)/tests/EmbeddedResources/NuGet.config $(TOP)/tests/EmbeddedResources/global.json
 	$(Q) rm -f $(TOP)/tests/monotouch-test/NuGet.config $(TOP)/tests/monotouch-test/global.json
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 

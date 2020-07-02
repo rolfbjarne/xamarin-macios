@@ -41,7 +41,7 @@ DIRS=tests/monotouch-test tests/EmbeddedResources tests/bindings-test external/T
 monotouch-test monotouchtest: $(TARGETS)
 	rm -f *.binlog
 	for dir in $(DIRS); do \
-		cd $(TOP)/$$dir && git clean -qxfd && cd $(CURDIR); \
+		cd $(TOP)/$$dir && git clean -qxfd && rm -Rf ../packages && cd $(CURDIR); \
 		$(CP) NuGet.config global.json $(TOP)/$$dir; \
 	done
 	$(MAKE) all -j8 -C $(TOP) && $(MAKE) install -j8 -C $(TOP)

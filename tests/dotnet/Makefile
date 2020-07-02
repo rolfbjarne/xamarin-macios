@@ -45,11 +45,9 @@ monotouch-test monotouchtest: $(TARGETS)
 		$(CP) NuGet.config global.json $(TOP)/$$dir; \
 	done
 	$(MAKE) all -j8 -C $(TOP) && $(MAKE) install -j8 -C $(TOP)
-	dotnet build $(TOP)/tests/bindings-test/bindings-test-dotnet.csproj /v:diag /bl:bindings-test.binlog
-	#dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
-	for dir in $(DIRS); do \
-		rm -f $$dir/NuGet.config $$dir/global.json; \
-	done
+	#dotnet build $(TOP)/tests/bindings-test/bindings-test-dotnet.csproj /v:diag /bl:bindings-test.binlog
+	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
+	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 
 all-local:: $(TARGETS)

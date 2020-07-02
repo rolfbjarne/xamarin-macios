@@ -52,14 +52,6 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SymbolStrip" AssemblyFile="Xamarin.Mac.Tasks.dll" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.Zip" AssemblyFile="Xamarin.Mac.Tasks.dll" />
 
-	<UsingTask TaskName="Microsoft.Build.Tasks.Copy" AssemblyFile="Xamarin.Mac.Tasks.dll"/>
-	<UsingTask TaskName="Microsoft.Build.Tasks.Delete" AssemblyFile="Xamarin.Mac.Tasks.dll"/>
-	<UsingTask TaskName="Microsoft.Build.Tasks.Exec" AssemblyFile="Xamarin.Mac.Tasks.dll"/>
-	<UsingTask TaskName="Microsoft.Build.Tasks.MakeDir" AssemblyFile="Xamarin.Mac.Tasks.dll"/>
-	<UsingTask TaskName="Microsoft.Build.Tasks.Move" AssemblyFile="Xamarin.Mac.Tasks.dll" />
-	<UsingTask TaskName="Microsoft.Build.Tasks.RemoveDir" AssemblyFile="Xamarin.Mac.Tasks.dll"/>
-	<UsingTask TaskName="Microsoft.Build.Tasks.Touch" AssemblyFile="Xamarin.Mac.Tasks.dll"/>
-
 	<Import Project="$(MSBuildThisFileDirectory)Xamarin.Mac.Common.props"
 			Condition="'$(_XamarinCommonPropsHasBeenImported)' != 'true'" />
 	

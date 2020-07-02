@@ -26,6 +26,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ComputeBundleResourceOutputPaths" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.GetMinimumOSVersion" AssemblyFile="$(_TaskAssemblyName)" />
 
+	<UsingTask TaskName="Microsoft.Build.Tasks.Copy" AssemblyFile="$(_TaskAssemblyName)"/>
+	<UsingTask TaskName="Microsoft.Build.Tasks.Delete" AssemblyFile="$(_TaskAssemblyName)"/>
+	<UsingTask TaskName="Microsoft.Build.Tasks.Exec" AssemblyFile="$(_TaskAssemblyName)"/>
+	<UsingTask TaskName="Microsoft.Build.Tasks.MakeDir" AssemblyFile="$(_TaskAssemblyName)"/>
+	<UsingTask TaskName="Microsoft.Build.Tasks.Move" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask TaskName="Microsoft.Build.Tasks.RemoveDir" AssemblyFile="$(_TaskAssemblyName)"/>
+	<UsingTask TaskName="Microsoft.Build.Tasks.Touch" AssemblyFile="$(_TaskAssemblyName)"/>
+
 	<Import Project="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).Before.targets"
 			Condition="Exists('$(MSBuildThisFileDirectory)$(MSBuildThisFileName).Before.targets')"/>
 
@@ -291,6 +299,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<BTouchEmitDebugInformation>false</BTouchEmitDebugInformation>
 			<BTouchEmitDebugInformation Condition="'$(Debug)' != ''">true</BTouchEmitDebugInformation>
 		</PropertyGroup>
+
+		<MakeDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(GeneratedSourcesDir)" />
 
 		<BTouch
 			Condition="'$(IsMacEnabled)' == 'true'"

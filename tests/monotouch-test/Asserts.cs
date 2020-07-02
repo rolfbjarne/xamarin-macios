@@ -13,6 +13,11 @@ using MatrixDouble4x4 = global::OpenTK.NMatrix4d;
 using VectorDouble3 = global::OpenTK.NVector3d;
 using NUnit.Framework;
 
+#if NET
+class TestFixtureSetUpAttribute : OneTimeSetUpAttribute { }
+class TestFixtureTearDownAttribute : OneTimeTearDownAttribute { }
+#endif
+
 public static class Asserts
 {
 	public static void AreEqual (bool expected, bool actual, string message)

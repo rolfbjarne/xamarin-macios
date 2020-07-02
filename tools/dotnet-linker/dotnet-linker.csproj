@@ -94,4 +94,7 @@
       <LogicalName>Errors.mtouch.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <Target Name="BuildConstants" Inputs="Constants.cs.in" Outputs="Constants.generated.cs">
+    <Exec Command="make Constants.generated.cs" />
+  </Target>
 </Project>

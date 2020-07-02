@@ -228,6 +228,7 @@
 		<PropertyGroup>
 			<BTouchToolPath>$(_XamarinSdkRootDirectory)/tools/bin</BTouchToolPath>
 			<BaseLibDllPath>$(_XamarinRefAssemblyPath)</BaseLibDllPath>
+			<BTouchAttributeAssembly>$(_XamarinSdkRootDirectory)/tools/lib/Xamarin.Apple.BindingAttributes.dll</BTouchAttributeAssembly>
 		</PropertyGroup>
 	</Target>
 

@@ -10,34 +10,82 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\common\ApplePlatform.cs">
-      <Link>external\ApplePlatform.cs</Link>
+      <Link>external\tools\common\ApplePlatform.cs</Link>
     </Compile>
     <Compile Include="..\common\MachO.cs">
-      <Link>external\MachO.cs</Link>
+      <Link>external\tools\common\MachO.cs</Link>
     </Compile>
     <Compile Include="..\..\src\ObjCRuntime\ErrorHelper.cs">
-      <Link>external\ErrorHelper.cs</Link>
+      <Link>external\src\ObjCRuntime\ErrorHelper.cs</Link>
     </Compile>
     <Compile Include="..\common\error.cs">
-      <Link>external\error.cs</Link>
+      <Link>external\tools\common\error.cs</Link>
     </Compile>
     <Compile Include="..\common\ErrorHelper.tools.cs">
-      <Link>external\ErrorHelper.tools.cs</Link>
+      <Link>external\tools\common\ErrorHelper.tools.cs</Link>
     </Compile>
     <Compile Include="..\mtouch\Errors.designer.cs">
-      <Link>external\Errors.designer.cs</Link>
+      <Link>external\tools\mtouch\Errors.designer.cs</Link>
       <DependentUpon>Errors.resx</DependentUpon>
     </Compile>
     <Compile Include="..\common\Frameworks.cs">
-      <Link>external\Frameworks.cs</Link>
+      <Link>external\tools\common\Frameworks.cs</Link>
+    </Compile>
+    <Compile Include="..\common\Assembly.cs">
+      <Link>external\tools\common\Assembly.cs</Link>
+    </Compile>
+    <Compile Include="..\common\SdkVersions.cs">
+      <Link>external\tools\common\SdkVersions.cs</Link>
+    </Compile>
+    <Compile Include="..\common\Symbols.cs">
+      <Link>external\tools\common\Symbols.cs</Link>
+    </Compile>
+    <Compile Include="..\common\Target.cs">
+      <Link>external\tools\common\Assembly.cs</Link>
+    </Compile>
+    <Compile Include="..\common\DerivedLinkContext.cs">
+      <Link>external\tools\common\DerivedLinkContext.cs</Link>
+    </Compile>
+    <Compile Include="..\common\PInvokeWrapperGenerator.cs">
+      <Link>external\tools\common\PInvokeWrapperGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\common\StaticRegistrar.cs">
+      <Link>external\tools\common\StaticRegistrar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\Registrar.cs">
+      <Link>external\src\ObjCRuntime\Registrar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\ArgumentSemantic.cs">
+      <Link>external\src\ObjCRuntime\ArgumentSemantic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Foundation\ExportAttribute.cs">
+      <Link>external\src\Foundation\ExportAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Foundation\ConnectAttribute.cs">
+      <Link>external\src\Foundation\ConnectAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\LinkWithAttribute.cs">
+      <Link>external\src\ObjCRuntime\LinkWithAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\PlatformAvailability2.cs">
+      <Link>external\src\ObjCRuntime\PlatformAvailability2.cs</Link>
+    </Compile>
+    <Compile Include="..\linker\MonoTouch.Tuner\Extensions.cs">
+      <Link>external\tools\linker\MonoTouch.Tuner\Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\builds\mono-ios-sdk-destdir\ios-sources\external\linker\src\tuner\Mono.Tuner\Extensions.cs">
+      <Link>external\mono-archive\Mono.Tuner\Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\builds\mono-ios-sdk-destdir\ios-sources\external\linker\src\linker\Linker\AssemblyResolver.cs">
+      <Link>external\mono-archive\Linker\AssemblyResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\builds\mono-ios-sdk-destdir\ios-sources\external\linker\src\linker\Linker\Pipeline.cs">
+      <Link>external\mono-archive\Linker\Pipeline.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="external\" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\mtouch\Errors.resx">
-      <Link>external\Errors.resx</Link>
+      <Link>external\tools\mtouch\Errors.resx</Link>
       <XlfSourceFormat>Resx</XlfSourceFormat>
       <XlfOutputItem>EmbeddedResource</XlfOutputItem>
       <Generator>ResXFileCodeGenerator</Generator>

@@ -25,7 +25,7 @@ using ObjCRuntime;
 using Xamarin.Utils;
 using Xamarin.Bundler;
 
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 using TAssembly=Mono.Cecil.AssemblyDefinition;
 using TType=Mono.Cecil.TypeReference;
 using TMethod=Mono.Cecil.MethodDefinition;
@@ -41,11 +41,11 @@ using TField=System.Reflection.FieldInfo;
 using R=ObjCRuntime.Runtime;
 #endif
 
-#if !(MTOUCH || MMP)
+#if !(MTOUCH || MMP || BUNDLER)
 using ProductException=ObjCRuntime.RuntimeException;
 #endif
 
-#if !MTOUCH && !MMP
+#if !MTOUCH && !MMP && !BUNDLER
 // static registrar needs them but they might not be marked (e.g. if System.Console is not used)
 [assembly: Preserve (typeof (System.Action))]
 [assembly: Preserve (typeof (System.Action<string>))]
@@ -832,7 +832,7 @@ namespace Registrar {
 					if (trampoline != Trampoline.None)
 						return trampoline;
 
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 					throw ErrorHelper.CreateError (8018, Errors.MT8018);
 #else
 					var mi = (System.Reflection.MethodInfo) Method;
@@ -1259,7 +1259,7 @@ namespace Registrar {
 #if MONOMAC
 		internal const string AssemblyName = "Xamarin.Mac";
 #else
-#if MTOUCH
+#if MTOUCH || BUNDLER
 		internal string AssemblyName
 		{
 			get {
@@ -1270,6 +1270,8 @@ namespace Registrar {
 					return "Xamarin.WatchOS";
 				case Xamarin.Utils.ApplePlatform.TVOS:
 					return "Xamarin.TVOS";
+				case Xamarin.Utils.ApplePlatform.MacOSX:
+					return "Xamarin.Mac";
 				default:
 					throw ErrorHelper.CreateError (71, Errors.MX0071, App.Platform, "Xamarin.iOS");
 				}

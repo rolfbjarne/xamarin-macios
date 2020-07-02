@@ -21,7 +21,12 @@ using Xamarin.Utils;
 using Registrar;
 using ObjCRuntime;
 
-#if MONOTOUCH
+
+#if NET
+using LinkerOptions = Xamarin.Linker.LinkerConfiguration;
+using PlatformLinkContext = System.Object;
+using PlatformResolver = System.Object;
+#elif MONOTOUCH
 using MonoTouch;
 using MonoTouch.Tuner;
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;

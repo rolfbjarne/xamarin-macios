@@ -254,7 +254,7 @@ namespace MonoTouchFixtures.Compression {
 				Assert.Ignore ("Requires iOS 9.0+ or macOS 10.11+");
 			MemoryStream backing = new MemoryStream (compressed_data);
 			DeflateStream decompressing = new DeflateStream (backing, CompressionMode.Decompress, CompressionAlgorithm.Zlib);
-			Assert.Throws<NotSupportedException> (() => decompressing.Length);
+			Assert.Throws<NotSupportedException> (() => { var length = decompressing.Length; });
 		}
 
 		[Test]
@@ -264,7 +264,7 @@ namespace MonoTouchFixtures.Compression {
 				Assert.Ignore ("Requires iOS 9.0+ or macOS 10.11+");
 			MemoryStream backing = new MemoryStream (compressed_data);
 			DeflateStream decompressing = new DeflateStream (backing, CompressionMode.Decompress, CompressionAlgorithm.Zlib);
-			Assert.Throws<NotSupportedException> (() => decompressing.Position);
+			Assert.Throws<NotSupportedException> (() => { var position = decompressing.Position; });
 		}
 
 		[Test]

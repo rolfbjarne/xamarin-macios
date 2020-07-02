@@ -20,6 +20,24 @@ class TestFixtureTearDownAttribute : OneTimeTearDownAttribute { }
 
 public static class Asserts
 {
+	public static void IsInstanceOfType (Type type, object actual)
+	{
+#if NET
+		Assert.IsInstanceOf (type, actual);
+#else
+		Assert.IsInstanceOfType (type, actual);
+#endif
+	}
+
+	public static void IsInstanceOfType (Type type, object actual, string message)
+	{
+#if NET
+		Assert.IsInstanceOf (type, actual, message);
+#else
+		Assert.IsInstanceOfType (type, actual, message);
+#endif
+	}
+
 	public static void AreEqual (bool expected, bool actual, string message)
 	{
 		Assert.AreEqual (expected, actual, message + " (M)");

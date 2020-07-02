@@ -73,7 +73,7 @@ namespace MonoTests.System.Net.Http
 
 			Assert.IsTrue (done, "Did not time out");
 			Assert.IsNull (response, $"Response is not null {response}");
-			Assert.IsInstanceOfType (typeof (HttpRequestException), ex, "Exception");
+			Asserts.IsInstanceOfType (typeof (HttpRequestException), ex, "Exception");
 		}
 
 #if !__WATCHOS__
@@ -418,9 +418,9 @@ namespace MonoTests.System.Net.Http
 				Assert.True(validationCbWasExecuted);
 				// assert the exception type
 				Assert.IsNotNull (ex, (result == null)? "Expected exception is missing and got no result" : $"Expected exception but got {result.Content.ReadAsStringAsync ().Result}");
-				Assert.IsInstanceOfType (typeof (HttpRequestException), ex);
+				Asserts.IsInstanceOfType (typeof (HttpRequestException), ex);
 				Assert.IsNotNull (ex.InnerException);
-				Assert.IsInstanceOfType (expectedExceptionType, ex.InnerException);
+				Asserts.IsInstanceOfType (expectedExceptionType, ex.InnerException);
 			}
 		}
 

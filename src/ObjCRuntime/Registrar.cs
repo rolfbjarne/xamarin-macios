@@ -84,7 +84,7 @@ namespace Registrar {
 	}
 
 	abstract partial class Registrar {
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 		public Application App { get; protected set; }
 #endif
 
@@ -124,7 +124,7 @@ namespace Registrar {
 			public bool IsInformalProtocol;
 			public bool IsWrapper;
 			public bool IsGeneric;
-#if !MTOUCH && !MMP
+#if !MTOUCH && !MMP && !BUNDLER
 			public IntPtr Handle;
 #else
 			public TType ProtocolWrapperType;
@@ -140,7 +140,7 @@ namespace Registrar {
 
 			public bool IsCategory { get { return CategoryAttribute != null; } }
 
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 			HashSet<ObjCType> all_protocols;
 			// This contains all protocols in the type hierarchy.
 			// Given a type T that implements a protocol with super protocols:
@@ -585,7 +585,7 @@ namespace Registrar {
 				}
 			}
 
-#if !MMP && !MTOUCH
+#if !MMP && !MTOUCH && !BUNDLER
 			// The ArgumentSemantic enum is public, and
 			// I don't want to add another enum value there which
 			// is just an internal implementation detail, so just
@@ -1001,7 +1001,7 @@ namespace Registrar {
 		}
 
 		internal class ObjCField : ObjCMember {
-#if !MTOUCH && !MMP
+#if !MTOUCH && !MMP && !BUNDLER
 			public int Size;
 			public byte Alignment;
 #else
@@ -1307,7 +1307,7 @@ namespace Registrar {
 			}
 		}
 
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 		// "#if MTOUCH" code does not need locking when accessing 'types', because mtouch is single-threaded.
 		public Dictionary<TType, ObjCType> Types {
 			get { return types; }
@@ -1886,7 +1886,7 @@ namespace Registrar {
 			
 		protected bool SupportsModernObjectiveC {
 			get {
-#if MTOUCH || MONOTOUCH
+#if MTOUCH || MONOTOUCH || BUNDLER
 				return true;
 #elif MMP
 				return App.Is64Build;
@@ -1937,7 +1937,7 @@ namespace Registrar {
 				isInformalProtocol = pAttr.IsInformal;
 				isProtocol = true;
 
-#if MMP || MTOUCH
+#if MMP || MTOUCH || BUNDLER
 				if (pAttr.FormalSinceVersion != null && pAttr.FormalSinceVersion > App.SdkVersion)
 					isInformalProtocol = !isInformalProtocol;
 #endif
@@ -1971,7 +1971,7 @@ namespace Registrar {
 			objcType.VerifyAdoptedProtocolsNames (ref exceptions);
 			objcType.BaseType = isProtocol ? null : (baseObjCType ?? objcType);
 			objcType.Protocols = GetProtocols (objcType, ref exceptions);
-#if MMP || MTOUCH
+#if MMP || MTOUCH || BUNDLER
 			objcType.ProtocolWrapperType = (isProtocol && !isInformalProtocol) ? GetProtocolAttributeWrapperType (objcType.Type) : null;
 #endif
 			objcType.IsWrapper = (isProtocol && !isInformalProtocol) ? (GetProtocolAttributeWrapperType (objcType.Type) != null) : (objcType.RegisterAttribute != null && objcType.RegisterAttribute.IsWrapper);
@@ -2066,7 +2066,7 @@ namespace Registrar {
 					}
 				}
 
-#if MMP || MTOUCH
+#if MMP || MTOUCH || BUNDLER
 				// Special fields
 				if (is_first_nonWrapper) {
 					// static registrar
@@ -2133,7 +2133,7 @@ namespace Registrar {
 						}
 					} else {
 						TMethod method = null;
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 						method = attrib.Method;
 #endif
 						var objcMethod = new ObjCMethod (this, objcType, method) {
@@ -2182,7 +2182,7 @@ namespace Registrar {
 						objcType.Add (new ObjCField () {
 							DeclaringType = objcType,
 							Name = ca.Name ?? GetPropertyName (property),
-#if !MTOUCH && !MMP
+#if !MTOUCH && !MMP && !BUNDLER
 							Size = Is64Bits ? 8 : 4,
 							Alignment = (byte) (Is64Bits ? 3 : 2),
 #endif
@@ -2462,7 +2462,7 @@ namespace Registrar {
 
 			if (exceptions.Count > 0) {
 				Exception ae = exceptions.Count == 1 ? exceptions [0] : new AggregateException (exceptions);
-#if !MTOUCH && !MMP
+#if !MTOUCH && !MMP && !BUNDLER
 				Runtime.NSLog (ae.ToString ());
 #endif
 				throw ae;
@@ -2691,7 +2691,7 @@ namespace Registrar {
 			System.Threading.Monitor.Exit (types);
 		}
 
-#if MTOUCH || MMP
+#if MTOUCH || MMP || BUNDLER
 		internal static void NSLog (string format, params object [] args)
 		{
 			Console.WriteLine (format, args);

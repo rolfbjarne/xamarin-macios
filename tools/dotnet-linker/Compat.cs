@@ -57,6 +57,37 @@ namespace Xamarin.Bundler {
 			throw new NotImplementedException ();
 		}
 	}
+
+	public partial class Driver {
+		public static string NAME {
+			get { throw new NotImplementedException (); }
+		}
+
+		public static string PRODUCT {
+			get { throw new NotImplementedException (); }
+		}
+
+		public static string LOCAL_BUILD_DIR {
+			get { throw new NotImplementedException (); }
+		}
+
+		public static string FRAMEWORK_LOCATION_VARIABLE {
+			get { throw new NotImplementedException (); }
+		}
+	}
+
+	public class DotNetLinkContext {
+		public Mono.Linker.AnnotationStore Annotations {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public AssemblyDefinition GetAssembly (string name)
+		{
+			throw new NotImplementedException ();
+		}
+	}
 }
 
 namespace Mono.Linker {

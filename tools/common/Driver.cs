@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,8 @@ namespace Xamarin.Bundler {
 
 		public static bool Force { get; set; }
 
+		static Version min_xcode_version = new Version (6, 0);
+#if !NET
 		public static int Main (string [] args)
 		{
 			try {
@@ -320,6 +323,7 @@ namespace Xamarin.Bundler {
 
 			return false;
 		}
+#endif // !NET
 
 		static int Jobs;
 		public static int Concurrency {
@@ -1233,6 +1237,24 @@ namespace Xamarin.Bundler {
 			if (rv == null)
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, PRODUCT);
 			return rv;
+		}
+
+		[DllImport (Constants.libSystemLibrary)]
+		static extern int symlink (string path1, string path2);
+
+		public static bool Symlink (string path1, string path2)
+		{
+			return symlink (path1, path2) == 0;
+		}
+
+		[DllImport (Constants.libSystemLibrary)]
+		static extern int unlink (string pathname);
+
+		public static void FileDelete (string file)
+		{
+			// File.Delete can't always delete symlinks (in particular if the symlink points to a file that doesn't exist).
+			unlink (file);
+			// ignore any errors.
 		}
 	}
 }

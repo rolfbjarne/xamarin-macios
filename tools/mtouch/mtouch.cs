@@ -120,8 +120,6 @@ namespace Xamarin.Bundler
 			Embeddinator,
 		}
 
-		static Version min_xcode_version = new Version (6, 0);
-
 		//
 		// Output generation
 		static string dotfile;
@@ -523,24 +521,6 @@ namespace Xamarin.Bundler
 			}
 
 			return main_source;
-		}
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int symlink (string path1, string path2);
-
-		public static bool Symlink (string path1, string path2)
-		{
-			return symlink (path1, path2) == 0;
-		}
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int unlink (string pathname);
-
-		public static void FileDelete (string file)
-		{
-			// File.Delete can't always delete symlinks (in particular if the symlink points to a file that doesn't exist).
-			unlink (file);
-			// ignore any errors.
 		}
 
 		public static void CopyAssembly (string source, string target, string target_dir = null)
@@ -1222,14 +1202,6 @@ namespace Xamarin.Bundler
 				throw new Exception (string.Format ("Could not lstat '{0}': {1}", file, Marshal.GetLastWin32Error ()));
 			const int S_IFLNK = 40960;
 			return (buf.st_mode & S_IFLNK) == S_IFLNK;
-		}
-
-		public static bool IsFrameworkAvailableInSimulator (Application app, string framework)
-		{
-			if (!GetFrameworks (app).TryGetValue (framework, out var fw))
-				return true; // Unknown framework, assume it's valid for the simulator
-
-			return fw.IsFrameworkAvailableInSimulator (app);
 		}
 	}
 }

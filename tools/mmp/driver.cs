@@ -97,8 +97,6 @@ namespace Xamarin.Bundler {
 		static bool frameworks_copied_to_bundle_dir;    // Have we copied any frameworks to Foo.app/Contents/Frameworks?
 		static bool dylibs_copied_to_bundle_dir => native_libraries_copied_in.Count > 0;
 
-		static Version min_xcode_version = new Version (6, 0);
-
 		static void ShowHelp (OptionSet os) {
 			Console.WriteLine ("mmp - Xamarin.Mac Packer");
 			Console.WriteLine ("Copyright 2010 Novell Inc.");
@@ -707,12 +705,6 @@ namespace Xamarin.Bundler {
 		static void CodeSign () {
 			RunCommand ("codesign", String.Format ("-v -s \"{0}\" \"{1}\"", certificate_name, App.AppDirectory));
 		}
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int unlink (string pathname);
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int symlink (string path1, string path2);
 
 		[DllImport (Constants.libSystemLibrary)]
 		static extern IntPtr realpath (string path, IntPtr buffer);

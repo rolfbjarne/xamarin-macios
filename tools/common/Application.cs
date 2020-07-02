@@ -9,17 +9,26 @@ using Mono.Cecil.Cil;
 using Mono.Linker;
 
 using Xamarin.Linker;
+using Xamarin.MacDev;
 using Xamarin.Utils;
 
 using ObjCRuntime;
 
-#if MONOTOUCH
+#if NET
+using PlatformResolver = Xamarin.Linker.DotNetResolver;
+#elif MONOTOUCH
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
 #else
 using PlatformResolver = Xamarin.Bundler.MonoMacResolver;
 #endif
 
 namespace Xamarin.Bundler {
+
+	public enum BuildTarget {
+		None,
+		Simulator,
+		Device,
+	}
 
 	public enum MonoNativeMode {
 		None,
@@ -59,7 +68,10 @@ namespace Xamarin.Bundler {
 		public HashSet<string> Frameworks = new HashSet<string> ();
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
 
+		public bool IsExtension;
+#if !NET
 		public ApplePlatform Platform { get { return Driver.TargetFramework.Platform; } }
+#endif
 
 		// Linker config
 		public LinkMode LinkMode = LinkMode.All;
@@ -88,9 +100,106 @@ namespace Xamarin.Bundler {
 		public List<Application> SharedCodeApps = new List<Application> (); // List of appexes we're sharing code with.
 		public string RegistrarOutputLibrary;
 
+		public BuildTarget BuildTarget;
+
+		bool RequiresXcodeHeaders {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return LinkMode == LinkMode.None;
+				case ApplePlatform.MacOSX:
+					return Registrar == RegistrarMode.Static && LinkMode == LinkMode.None;
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+
+		public string Error91LinkerSuggestion {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return "set the managed linker behaviour to Link Framework SDKs Only in your project's iOS Build Options > Linker Behavior";
+				case ApplePlatform.MacOSX:
+					return "use the dynamic registrar or set the managed linker behaviour to Link Platform or Link Framework SDKs Only in your project's Mac Build Options > Linker Behavior";
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+
+		public bool IsDeviceBuild {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return BuildTarget == BuildTarget.Device;
+				case ApplePlatform.MacOSX:
+					return false;
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+
+#if !NET
+		public bool IsSimulatorBuild {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return BuildTarget == BuildTarget.Simulator;
+				case ApplePlatform.MacOSX:
+					return false;
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+#endif
+
+		public bool IsTodayExtension {
+			get {
+				return ExtensionIdentifier == "com.apple.widget-extension";
+			}
+		}
+
+		public bool IsWatchExtension {
+			get {
+				return ExtensionIdentifier == "com.apple.watchkit";
+			}
+		}
+
+		public bool IsTVExtension {
+			get {
+				return ExtensionIdentifier == "com.apple.tv-services";
+			}
+		}
+		public string ExtensionIdentifier {
+			get {
+				if (!IsExtension)
+					return null;
+
+				var info_plist = Path.Combine (AppDirectory, "Info.plist");
+				var plist = Driver.FromPList (info_plist);
+				var dict = plist.Get<PDictionary> ("NSExtension");
+				if (dict == null)
+					return null;
+				return dict.GetString ("NSExtensionPointIdentifier");
+			}
+		}
+
 		public static int Concurrency => Driver.Concurrency;
+#if !NET
 		public Version DeploymentTarget;
 		public Version SdkVersion;
+#endif
 	
 		public MonoNativeMode MonoNativeMode { get; set; }
 		List<Abi> abis;
@@ -118,10 +227,12 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+#if !NET
 		public string GetProductName ()
 		{
 			return ProductName;
 		}
+#endif
 
 		// If we're targetting a 64 bit arch.
 		bool? is64bits;
@@ -388,15 +499,15 @@ namespace Xamarin.Bundler {
 
 			RuntimeOptions = RuntimeOptions.Create (this, HttpMessageHandler, TlsProvider);
 
-			if (RequiresXcodeHeaders && SdkVersion < SdkVersions.GetVersion (Platform)) {
-				throw ErrorHelper.CreateError (91, Errors.MX0091, ProductName, PlatformName, SdkVersions.GetVersion (Platform), SdkVersions.Xcode, Error91LinkerSuggestion);
+			if (RequiresXcodeHeaders && SdkVersion < SdkVersions.GetVersion (this)) {
+				throw ErrorHelper.CreateError (91, Errors.MX0091, ProductName, PlatformName, SdkVersions.GetVersion (this), SdkVersions.Xcode, Error91LinkerSuggestion);
 			}
 
 			if (DeploymentTarget != null) {
-				if (DeploymentTarget < Xamarin.SdkVersions.GetMinVersion (Platform))
-					throw new ProductException (73, true, Errors.MT0073, Constants.Version, DeploymentTarget, Xamarin.SdkVersions.GetMinVersion (Platform), PlatformName, ProductName);
-				if (DeploymentTarget > Xamarin.SdkVersions.GetVersion (Platform))
-					throw new ProductException (74, true, Errors.MX0074, Constants.Version, DeploymentTarget, Xamarin.SdkVersions.GetVersion (Platform), PlatformName, ProductName);
+				if (DeploymentTarget < Xamarin.SdkVersions.GetMinVersion (this))
+					throw new ProductException (73, true, Errors.MT0073, Constants.Version, DeploymentTarget, Xamarin.SdkVersions.GetMinVersion (this), PlatformName, ProductName);
+				if (DeploymentTarget > Xamarin.SdkVersions.GetVersion (this))
+					throw new ProductException (74, true, Errors.MX0074, Constants.Version, DeploymentTarget, Xamarin.SdkVersions.GetVersion (this), PlatformName, ProductName);
 			}
 
 			if (Platform == ApplePlatform.WatchOS && EnableCoopGC.HasValue && !EnableCoopGC.Value)
@@ -530,6 +641,7 @@ namespace Xamarin.Bundler {
 #endif
 			};
 
+#if !NET
 			if (Platform == ApplePlatform.iOS) {
 				if (Is32Build) {
 					resolver.ArchDirectory = Driver.GetArch32Directory (this);
@@ -537,6 +649,7 @@ namespace Xamarin.Bundler {
 					resolver.ArchDirectory = Driver.GetArch64Directory (this);
 				}
 			}
+#endif
 
 			var ps = new ReaderParameters ();
 			ps.AssemblyResolver = resolver;
@@ -825,6 +938,14 @@ namespace Xamarin.Bundler {
 		{
 			foreach (var t in Targets)
 				t.LoadSymbols ();
+		}
+
+		public bool IsFrameworkAvailableInSimulator (string framework)
+		{
+			if (!Driver.GetFrameworks (this).TryGetValue (framework, out var fw))
+				return true; // Unknown framework, assume it's valid for the simulator
+
+			return fw.IsFrameworkAvailableInSimulator (this);
 		}
 	}
 }

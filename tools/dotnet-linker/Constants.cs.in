@@ -1,9 +1,5 @@
 namespace Xamarin.Bundler {
 	public static partial class Constants {
-		public const string Version = "@VERSION@";
-		internal const string Revision = "@REVISION@";
-		public const string SdkVersion = "@IOS_SDK_VERSION@";
-
 		const string IOS_NUGET_VERSION = "@IOS_NUGET_VERSION@";
 		const string TVOS_NUGET_VERSION = "@TVOS_NUGET_VERSION@";
 		const string WATCHOS_NUGET_VERSION = "@WATCHOS_NUGET_VERSION@";

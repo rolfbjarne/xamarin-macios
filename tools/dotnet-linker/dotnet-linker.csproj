@@ -4,6 +4,12 @@
     <RootNamespace>dotnet_linker</RootNamespace>
     <DefineConstants>$(DefineConstants);BUNDLER</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="XliffTasks" Version="1.0.0-beta.20154.1" />
     <PackageReference Include="Microsoft.NET.ILLink" Version="5.0.0-preview.3.20302.1" />
@@ -31,8 +37,23 @@
     <Compile Include="..\common\Frameworks.cs">
       <Link>external\tools\common\Frameworks.cs</Link>
     </Compile>
+    <Compile Include="..\common\Application.cs">
+      <Link>external\tools\common\Application.cs</Link>
+    </Compile>
+    <Compile Include="..\common\cache.cs">
+      <Link>external\tools\common\cache.cs</Link>
+    </Compile>
     <Compile Include="..\common\Assembly.cs">
       <Link>external\tools\common\Assembly.cs</Link>
+    </Compile>
+    <Compile Include="..\common\Driver.cs">
+      <Link>external\tools\common\Driver.cs</Link>
+    </Compile>
+    <Compile Include="..\common\FileCopier.cs">
+      <Link>external\tools\common\FileCopier.cs</Link>
+    </Compile>
+    <Compile Include="..\common\LinkMode.cs">
+      <Link>external\tools\common\LinkMode.cs</Link>
     </Compile>
     <Compile Include="..\common\SdkVersions.cs">
       <Link>external\tools\common\SdkVersions.cs</Link>
@@ -46,17 +67,38 @@
     <Compile Include="..\common\DerivedLinkContext.cs">
       <Link>external\tools\common\DerivedLinkContext.cs</Link>
     </Compile>
+    <Compile Include="..\common\Optimizations.cs">
+      <Link>external\tools\common\Optimizations.cs</Link>
+    </Compile>
     <Compile Include="..\common\PInvokeWrapperGenerator.cs">
       <Link>external\tools\common\PInvokeWrapperGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\common\PListExtensions.cs">
+      <Link>external\tools\common\PListExtensions.cs</Link>
     </Compile>
     <Compile Include="..\common\StaticRegistrar.cs">
       <Link>external\tools\common\StaticRegistrar.cs</Link>
     </Compile>
+    <Compile Include="..\common\StringUtils.cs">
+      <Link>external\tools\common\StringUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\common\TargetFramework.cs">
+      <Link>external\tools\common\TargetFramework.cs</Link>
+    </Compile>
+    <Compile Include="..\linker\CustomSymbolWriter.cs">
+      <Link>external\tools\linker\CustomSymbolWriter.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\ObjCRuntime\Registrar.cs">
       <Link>external\src\ObjCRuntime\Registrar.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\Registrar.core.cs">
+      <Link>external\src\ObjCRuntime\Registrar.core.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\ObjCRuntime\ArgumentSemantic.cs">
       <Link>external\src\ObjCRuntime\ArgumentSemantic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\Constants.cs">
+      <Link>external\src\ObjCRuntime\Constants.cs</Link>
     </Compile>
     <Compile Include="..\..\src\Foundation\ExportAttribute.cs">
       <Link>external\src\Foundation\ExportAttribute.cs</Link>
@@ -64,11 +106,17 @@
     <Compile Include="..\..\src\Foundation\ConnectAttribute.cs">
       <Link>external\src\Foundation\ConnectAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\ExceptionMode.cs">
+      <Link>external\src\ObjCRuntime\ExceptionMode.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\ObjCRuntime\LinkWithAttribute.cs">
       <Link>external\src\ObjCRuntime\LinkWithAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\src\ObjCRuntime\PlatformAvailability2.cs">
       <Link>external\src\ObjCRuntime\PlatformAvailability2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\RuntimeOptions.cs">
+      <Link>external\src\ObjCRuntime\RuntimeOptions.cs</Link>
     </Compile>
     <Compile Include="..\linker\MonoTouch.Tuner\Extensions.cs">
       <Link>external\tools\linker\MonoTouch.Tuner\Extensions.cs</Link>
@@ -82,6 +130,13 @@
     <Compile Include="..\..\builds\mono-ios-sdk-destdir\ios-sources\external\linker\src\linker\Linker\Pipeline.cs">
       <Link>external\mono-archive\Linker\Pipeline.cs</Link>
     </Compile>
+    <Compile Include="..\..\builds\mono-ios-sdk-destdir\ios-sources\external\linker\src\linker\Linker\I18nAssemblies.cs">
+      <Link>external\mono-archive\Linker\I18nAssemblies.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\PListObject.cs">
+      <Link>external\Xamarin.MacDev\Xamarin.MacDev\PListObject.cs</Link>
+    </Compile>
+    <Compile Include="Constants.generated.cs" Condition="!Exists ('Constants.generated.cs')"/>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\mtouch\Errors.resx">

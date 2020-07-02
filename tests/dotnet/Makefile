@@ -48,7 +48,7 @@ monotouch-test monotouchtest: $(TARGETS)
 	dotnet build $(TOP)/tests/bindings-test/bindings-test-dotnet.csproj /v:diag /bl:bindings-test.binlog
 	#dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog
 	for dir in $(DIRS); do \
-		rm -f $$dir/NuGet.config $$dir/global.json $(TOP)/$$dir; \
+		rm -f $$dir/NuGet.config $$dir/global.json; \
 	done
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 

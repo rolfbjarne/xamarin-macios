@@ -116,6 +116,9 @@ namespace Xharness.Jenkins {
 			if (!project.IsExecutableProject)
 				return false;
 			
+			if (project.IsDotNetProject && project.IsMonotouch ())
+				return false;
+
 			if (project.IsBclTest ()) {
 				if (!project.IsBclxUnit ())
 					return IncludeBcl || IncludeBCLNUnit;

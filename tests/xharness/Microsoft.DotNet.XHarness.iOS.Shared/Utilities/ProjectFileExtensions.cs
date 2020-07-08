@@ -185,11 +185,12 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 			return outputPath + "\\" + assemblyName + "." + extension; // MSBuild-style paths.
 		}
 
-		public static string GetIsBindingProject (this XmlDocument csproj)
+		public static bool GetIsBindingProject (this XmlDocument csproj)
 		{
-			return GetElementValue (csproj, string.Empty, string.Empty, "IsBindingProject", throwIfNotFound: false);
+			var value = GetElementValue (csproj, string.Empty, string.Empty, "IsBindingProject", throwIfNotFound: false);
+			return string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
 		}
-
+	
 		public static void SetIntermediateOutputPath (this XmlDocument csproj, string value)
 		{
 			// Set any existing IntermediateOutputPath

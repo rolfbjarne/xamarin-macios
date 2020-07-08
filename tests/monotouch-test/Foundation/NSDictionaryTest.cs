@@ -21,12 +21,12 @@ namespace MonoTouchFixtures.Foundation {
 			var value = new NSString ("value");
 			var j = new NSDictionary (key, value);
 		
-			Assert.AreEqual (j.Count, 1, "count");
+			Assert.AreEqual (j.Count, (nuint) 1, "count");
 			Assert.AreEqual (j [key], value, "key lookup");
 
 			j = new NSDictionary (new NSString ("first"), new NSString ("first-k"),
 			                      new NSString ("second"), new NSString ("second-k"));
-			Assert.AreEqual (j.Count, 2, "count");
+			Assert.AreEqual (j.Count, (nuint) 2, "count");
 			Assert.AreEqual ((string)(NSString)(j ["first"]), "first-k", "lookup1");
 			Assert.AreEqual ((string)(NSString)(j ["second"]), "second-k", "lookup2");
 		}
@@ -36,12 +36,12 @@ namespace MonoTouchFixtures.Foundation {
 		{
 			var j = new NSDictionary ("key", "value");
 			
-			Assert.AreEqual (j.Count, 1, "count");
+			Assert.AreEqual (j.Count, (nuint) 1, "count");
 			Assert.AreEqual ((string)(NSString)(j ["key"]), "value", "key lookup");
 			
 			j = new NSDictionary (1, 2, 3, 4);
 
-			Assert.AreEqual (j.Count, 2, "count");
+			Assert.AreEqual (j.Count, (nuint) 2, "count");
 			Assert.AreEqual (((NSNumber) j [new NSNumber (1)]).Int32Value, 2, "lookup1");
 			Assert.AreEqual (((NSNumber) j [new NSNumber (3)]).Int32Value, 4, "lookup2");
 		}
@@ -148,13 +148,13 @@ namespace MonoTouchFixtures.Foundation {
 				var objs = new NSObject[] { new NSNumber(1), new NSNumber(4) };
 				NSDictionary ns = NSDictionary.FromObjectsAndKeys (objs, keys, 1);
 				Console.WriteLine (ns.Count);
-				Assert.AreEqual (1, ns.Count, "#1");
+				Assert.AreEqual ((nuint) 1, ns.Count, "#1");
 			}
 			{
 				var keys = new object[] { 1, 2 };
 				var objs = new object[] { 3, 4 };
 				NSDictionary ns = NSDictionary.FromObjectsAndKeys (objs, keys, 1);
-				Assert.AreEqual (1, ns.Count, "#2");
+				Assert.AreEqual ((nuint) 1, ns.Count, "#2");
 			}
 		}
 

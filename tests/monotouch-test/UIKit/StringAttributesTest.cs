@@ -77,25 +77,25 @@ namespace MonoTouchFixtures.UIKit {
 			sa.Expansion = 0.0f;
 
 			var uc = UIColor.FromRGBA (0.1f, 0.2f, 0.3f, 0.4f);
-			Assert.That (uc.RetainCount, Is.EqualTo ((nint) 2), "UnderlineColor-new");
+			Assert.That (uc.RetainCount, Is.EqualTo ((nuint) 2), "UnderlineColor-new");
 			sa.UnderlineColor = uc;
-			Assert.That (uc.RetainCount, Is.EqualTo ((nint) 3), "UnderlineColor-set");
+			Assert.That (uc.RetainCount, Is.EqualTo ((nuint) 3), "UnderlineColor-set");
 
 			var sc = UIColor.FromRGBA (0.5f, 0.6f, 0.7f, 0.8f);
-			Assert.That (sc.RetainCount, Is.EqualTo ((nint) 2), "StrikethroughColor-new");
+			Assert.That (sc.RetainCount, Is.EqualTo ((nuint) 2), "StrikethroughColor-new");
 			sa.StrikethroughColor = sc;
-			Assert.That (sc.RetainCount, Is.EqualTo ((nint) 3), "StrikethroughColor-set");
+			Assert.That (sc.RetainCount, Is.EqualTo ((nuint) 3), "StrikethroughColor-set");
 
 			var u = new NSUrl ("http://xamarin.com");
-			Assert.That (u.RetainCount, Is.EqualTo ((nint) 1), "Link-new");
+			Assert.That (u.RetainCount, Is.EqualTo ((nuint) 1), "Link-new");
 			sa.Link = u;
-			Assert.That (u.RetainCount, Is.EqualTo ((nint) 2), "Link-set");
+			Assert.That (u.RetainCount, Is.EqualTo ((nuint) 2), "Link-set");
 
 #if !__WATCHOS__
 			var ta = new NSTextAttachment ();
-			Assert.That (ta.RetainCount, Is.EqualTo ((nint) 1), "TextAttachment-new");
+			Assert.That (ta.RetainCount, Is.EqualTo ((nuint) 1), "TextAttachment-new");
 			sa.TextAttachment = ta;
-			Assert.That (ta.RetainCount, Is.EqualTo ((nint) 2), "TextAttachment-set");
+			Assert.That (ta.RetainCount, Is.EqualTo ((nuint) 2), "TextAttachment-set");
 #endif // !__WATCHOS__
 
 			for (int i=0; i < 16; i++) {
@@ -107,11 +107,11 @@ namespace MonoTouchFixtures.UIKit {
 #endif
 			}
 
-			Assert.That (sa.UnderlineColor.RetainCount, Is.EqualTo ((nint) 3), "UnderlineColor");
-			Assert.That (sa.StrikethroughColor.RetainCount, Is.EqualTo ((nint) 3), "StrikethroughColor");
-			Assert.That (sa.Link.RetainCount, Is.EqualTo ((nint) 2), "Link");
+			Assert.That (sa.UnderlineColor.RetainCount, Is.EqualTo ((nuint) 3), "UnderlineColor");
+			Assert.That (sa.StrikethroughColor.RetainCount, Is.EqualTo ((nuint) 3), "StrikethroughColor");
+			Assert.That (sa.Link.RetainCount, Is.EqualTo ((nuint) 2), "Link");
 #if !__WATCHOS__
-			Assert.That (sa.TextAttachment.RetainCount, Is.EqualTo ((nint) 2), "TextAttachment");
+			Assert.That (sa.TextAttachment.RetainCount, Is.EqualTo ((nuint) 2), "TextAttachment");
 #endif
 
 			GC.KeepAlive (uc);

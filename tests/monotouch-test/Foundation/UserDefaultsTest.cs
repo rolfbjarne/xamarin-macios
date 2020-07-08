@@ -47,7 +47,7 @@ namespace MonoTouchFixtures.Foundation {
 			}
 
 			using (var ud = new NSUserDefaults ("username", NSUserDefaultsType.UserName)) {
-				Assert.That (ud.RetainCount, Is.EqualTo ((nint) 1), "RetainCount");
+				Assert.That (ud.RetainCount, Is.EqualTo ((nuint) 1), "RetainCount");
 				Assert.That (ud ["key"].ToString (), Is.EqualTo ("value"), "[key]-1");
 				ud.RemoveObject ("key");
 				ud.Synchronize ();
@@ -63,7 +63,7 @@ namespace MonoTouchFixtures.Foundation {
 
 			// initWithSuiteName:
 			using (var ud = new NSUserDefaults ("suitename", NSUserDefaultsType.SuiteName)) {
-				Assert.That (ud.RetainCount, Is.EqualTo ((nint) 1), "RetainCount");
+				Assert.That (ud.RetainCount, Is.EqualTo ((nuint) 1), "RetainCount");
 			}
 		}
 	}

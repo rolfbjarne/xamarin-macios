@@ -492,7 +492,7 @@ namespace MonoTouchFixtures.Security {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static nint CFGetRetainCount (IntPtr handle);
 
-		void CheckMailGoogleCom (SecCertificate cert, int expectedRetainCount)
+		void CheckMailGoogleCom (SecCertificate cert, nint expectedRetainCount)
 		{
 			Assert.That (cert.Handle, Is.Not.EqualTo (IntPtr.Zero), "Handle");
 			Assert.That (CFGetRetainCount (cert.Handle), Is.EqualTo (expectedRetainCount), "RetainCount");
@@ -610,10 +610,10 @@ namespace MonoTouchFixtures.Security {
 #endif
 			if (TestRuntime.CheckXcodeVersion (8,0)) {
 				using (var attrs = public_key.GetAttributes ()) {
-					Assert.That (attrs.Count, Is.GreaterThan (0), "public/GetAttributes");
+					Assert.That (attrs.Count, Is.GreaterThan ((nuint) 0), "public/GetAttributes");
 				}
 				using (var attrs = private_key.GetAttributes ()) {
-					Assert.That (attrs.Count, Is.GreaterThan (0), "private/GetAttributes");
+					Assert.That (attrs.Count, Is.GreaterThan ((nuint) 0), "private/GetAttributes");
 				}
 			}
 		}

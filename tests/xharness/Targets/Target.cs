@@ -259,7 +259,7 @@ namespace Xharness.Targets
 				outputType = inputProject.GetOutputType ();
 
 				if (inputProject.IsDotNetProject ()) {
-					IsBindingProject = string.Equals (inputProject.GetIsBindingProject (), "true", StringComparison.OrdinalIgnoreCase);
+					IsBindingProject = inputProject.GetIsBindingProject ();
 				} else {
 					switch (inputProject.GetXamarinImport ()) {
 					case "$(MSBuildExtensionsPath)\\Xamarin\\iOS\\Xamarin.iOS.CSharp.targets":

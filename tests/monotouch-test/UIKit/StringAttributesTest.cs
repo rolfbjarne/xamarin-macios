@@ -29,16 +29,16 @@ namespace MonoTouchFixtures.UIKit {
 			var sa = new UIStringAttributes ();
 
 			var bc = UIColor.FromRGBA (0.1f, 0.2f, 0.3f, 0.4f);
-			Assert.That (bc.RetainCount, Is.EqualTo ((nint) 2), "BackgroundColor-new"); // bug
+			Assert.That (bc.RetainCount, Is.EqualTo ((nuint) 2), "BackgroundColor-new"); // bug
 			sa.BackgroundColor = bc;
-			Assert.That (bc.RetainCount, Is.EqualTo ((nint) 3), "BackgroundColor-set");
+			Assert.That (bc.RetainCount, Is.EqualTo ((nuint) 3), "BackgroundColor-set");
 
 			sa.BaselineOffset = 0.0f;
 
 			var fc = UIColor.FromRGBA (0.5f, 0.6f, 0.7f, 0.8f);
-			Assert.That (fc.RetainCount, Is.EqualTo ((nint) 2), "ForegroundColor-new"); // bug
+			Assert.That (fc.RetainCount, Is.EqualTo ((nuint) 2), "ForegroundColor-new"); // bug
 			sa.ForegroundColor = fc;
-			Assert.That (fc.RetainCount, Is.EqualTo ((nint) 3), "ForegroundColor-set");
+			Assert.That (fc.RetainCount, Is.EqualTo ((nuint) 3), "ForegroundColor-set");
 
 			var f = UIFont.FromName ("Helvetica", 12);
 			var f_count = f.RetainCount; // lots of owner
@@ -46,9 +46,9 @@ namespace MonoTouchFixtures.UIKit {
 			Assert.That (f.RetainCount, Is.EqualTo (++f_count), "Font-set");
 
 			var ps = new NSParagraphStyle ();
-			Assert.That (ps.RetainCount, Is.EqualTo ((nint) 1), "ParagraphStyle-new");
+			Assert.That (ps.RetainCount, Is.EqualTo ((nuint) 1), "ParagraphStyle-new");
 			sa.ParagraphStyle = ps;
-			Assert.That (ps.RetainCount, Is.EqualTo ((nint) 2), "ParagraphStyle-set");
+			Assert.That (ps.RetainCount, Is.EqualTo ((nuint) 2), "ParagraphStyle-set");
 
 			for (int i=0; i < 16; i++) {
 				Assert.NotNull (sa.BackgroundColor, "BackgroundColor-get");
@@ -57,10 +57,10 @@ namespace MonoTouchFixtures.UIKit {
 				Assert.NotNull (sa.ParagraphStyle, "ParagraphStyle-get");
 			}
 
-			Assert.That (sa.BackgroundColor.RetainCount, Is.EqualTo ((nint) 3), "BackgroundColor");
-			Assert.That (sa.ForegroundColor.RetainCount, Is.EqualTo ((nint) 3), "ForegroundColor");
+			Assert.That (sa.BackgroundColor.RetainCount, Is.EqualTo ((nuint) 3), "BackgroundColor");
+			Assert.That (sa.ForegroundColor.RetainCount, Is.EqualTo ((nuint) 3), "ForegroundColor");
 			Assert.That (sa.Font.RetainCount, Is.EqualTo (f_count), "Font");
-			Assert.That (sa.ParagraphStyle.RetainCount, Is.EqualTo ((nint) 2), "ParagraphStyle");
+			Assert.That (sa.ParagraphStyle.RetainCount, Is.EqualTo ((nuint) 2), "ParagraphStyle");
 
 			GC.KeepAlive (bc);
 			GC.KeepAlive (fc);

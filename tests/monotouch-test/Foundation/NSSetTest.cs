@@ -48,7 +48,7 @@ namespace MonoTouchFixtures.Foundation {
 			sum = new NSSet (objs) + new NSSet (objs);
 			Assert.AreEqual (sum.Count, (nuint) 5);
 
-			Assert.AreEqual ((one + one).Count, 3);
+			Assert.AreEqual ((one + one).Count, (nuint) 3);
 			var sub = one - one;
 			Assert.AreEqual (sub.Count, (nuint) 0);
 

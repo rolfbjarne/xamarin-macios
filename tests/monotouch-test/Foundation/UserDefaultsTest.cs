@@ -41,7 +41,7 @@ namespace MonoTouchFixtures.Foundation {
 		{
 			// initWithUser:
 			using (var ud = new NSUserDefaults ("username")) {
-				Assert.That (ud.RetainCount, Is.EqualTo ((nint) 1), "RetainCount");
+				Assert.That (ud.RetainCount, Is.EqualTo ((nuint) 1), "RetainCount");
 				ud.SetString ("value", "key");
 				ud.Synchronize ();
 			}

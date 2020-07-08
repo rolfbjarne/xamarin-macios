@@ -48,7 +48,7 @@ namespace MonoTouchFixtures.Foundation {
 			using (var arr = new NSMutableArray<NSString> (v1)) {
 				Assert.Throws<ArgumentNullException> (() => arr.IndexOf (null), "IndexOf ANE");
 				Assert.AreEqual ((nuint) 0, arr.IndexOf (v1), "IndexOf 1");
-				Assert.AreEqual (nuint.MaxValue, arr.IndexOf (v2), "IndxOf 2"); // [NSArray indexOfObject:] returns NSNotFound = NSIntegerMax when object isn't found in the array
+				Assert.AreEqual ((nuint) nint.MaxValue, arr.IndexOf (v2), "IndxOf 2"); // [NSArray indexOfObject:] returns NSNotFound = NSIntegerMax when object isn't found in the array
 			}
 		}
 

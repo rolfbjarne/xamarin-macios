@@ -100,7 +100,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared {
 			doc.ResolveAllPaths (original_path, rootDirectory);
 
 			if (doc.IsDotNetProject ()) {
-				if (doc.GetEnableDefaultItems () != false) {
+				if (doc.GetEnableDefaultItems () != false && !doc.GetIsBindingProject ()) {
 					// Many types of files below the csproj directory are included by default,
 					// which means that we have to include them manually in the cloned csproj,
 					// because the cloned project is stored in a very different directory.

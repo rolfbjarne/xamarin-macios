@@ -42,21 +42,31 @@ namespace MonoTouchFixtures.Foundation {
 					bool native_exception = false;
 					try {
 						mur.Headers.SetValueForKey (s3, s1);
-						Assert.Fail ("exception immutability");
+						Assert.Fail ("exception immutability: {0} {1} {2} {3}", mur.GetType (), mur.Headers.GetType (), mur.Class.Name, mur.Headers.Class.Name);
 					} catch {
+						Console.WriteLine ("Exception: {0}", e);
 						native_exception = true;
 					}
+					Console.WriteLine ("A");
 					Assert.True (native_exception, "non-mutable NSDictionary");
+					Console.WriteLine ("B");
 
 					// the original NSMutableDictionary is fine - but it's not what's being used, i.e. property is "copy"
 					md.Remove (s1);
+					Console.WriteLine ("C");
 					Assert.That (md.Count, Is.EqualTo ((nuint) 0), "1");
+					Console.WriteLine ("D");
 					Assert.That (mur.Headers.Count, Is.EqualTo ((nuint) 1), "2");
+					Console.WriteLine ("E");
 					md.SetValueForKey (s3, s1);
+					Console.WriteLine ("F");
 					Assert.That (md.Count, Is.EqualTo ((nuint) 1), "3");
+					Console.WriteLine ("G");
 					Assert.That (mur.Headers.Count, Is.EqualTo ((nuint) 1), "40");
+					Console.WriteLine ("H");
 
 					Assert.AreNotSame (md, mur.Headers, "!same");
+					Console.WriteLine ("I");
 				}
 #endif
 

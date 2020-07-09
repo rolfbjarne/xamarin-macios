@@ -222,8 +222,8 @@
 			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == ''">static</_LibXamarinLinkMode>
 			<_LibXamarinExtension Condition="'$(_LibXamarinLinkMode)' == 'dylib'">dylib</_LibXamarinExtension>
 			<_LibXamarinExtension Condition="'$(_LibXamarinLinkMode)' == 'static'">a</_LibXamarinExtension>
-			<_LibXamarinName Condition="'$(_LibXamarinName)' == '' And '$(_Debug)' == 'true'">libxamarin-debug.$(_LibXamarinExtension)</_LibXamarinName>
-			<_LibXamarinName Condition="'$(_LibXamarinName)' == '' And '$(_Debug)' != 'true'">libxamarin.$(_LibXamarinExtension)</_LibXamarinName>
+			<_LibXamarinName Condition="'$(_LibXamarinName)' == '' And '$(_BundlerDebug)' == 'true'">libxamarin-debug.$(_LibXamarinExtension)</_LibXamarinName>
+			<_LibXamarinName Condition="'$(_LibXamarinName)' == '' And '$(_BundlerDebug)' != 'true'">libxamarin.$(_LibXamarinExtension)</_LibXamarinName>
 		</PropertyGroup>
 
 		<ItemGroup>
@@ -323,6 +323,7 @@
 
 		<LinkNativeCode
 			SessionId="$(BuildSessionId)"
+			EntitlementsInExecutable="$(_CompiledEntitlements)"
 			Frameworks="@(_NativeExecutableFrameworks)"
 			LinkWithLibraries="@(_XamarinMainLibraries);@(_NativeLinkerFlags)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
@@ -357,8 +358,8 @@
 				Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.pdb' Or '%(Extension)' == '.exe'" />
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
-				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_AssemblyPublishDir)))%(ResolvedFileToPublish.DestinationSubDirectory)%(TargetPath)"
-				Condition="'%(Extension)' == '.config'" />
+				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_AssemblyPublishDir)))%(ResolvedFileToPublish.DestinationSubDirectory)%(ResolvedFileToPublish.TargetPath)"
+				Condition="'%(Extension)' == '.config' And '%(ResolvedFileToPublish.TargetPath)' != ''" />
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
 				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_DylibPublishDir)))%(Filename)%(Extension)"

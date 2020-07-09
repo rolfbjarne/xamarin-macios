@@ -151,9 +151,9 @@ namespace MonoTouchFixtures.SystemConfiguration {
 		public void SetSupportedSSIDs_Null ()
 		{
 #if __TVOS__
-			Assert.Throws<ArgumentNullException> (() => CaptiveNetwork.SetSupportedSSIDs (null));
-#else
 			Assert.Throws<NotSupportedException> (() => CaptiveNetwork.SetSupportedSSIDs (null));
+#else
+			Assert.Throws<ArgumentNullException> (() => CaptiveNetwork.SetSupportedSSIDs (null));
 #endif
 		}
 

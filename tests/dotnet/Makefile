@@ -40,14 +40,14 @@ introspection: $(TARGETS)
 DIRS=tests/monotouch-test tests/EmbeddedResources tests/bindings-test external/Touch.Unit/Touch.Client
 monotouch-test monotouchtest: $(TARGETS)
 	rm -f *.binlog
-	pkill -f MSBuild.dll.*nodemode # yay :/
+	-pkill -f MSBuild.dll.*nodemode # yay :/
 	for dir in $(DIRS); do \
 		cd $(TOP)/$$dir && git clean -qxfd && rm -Rf ../packages && cd $(CURDIR); \
 		$(CP) NuGet.config global.json $(TOP)/$$dir; \
 	done
 	$(MAKE) all -j8 -C $(TOP) && $(MAKE) install -j8 -C $(TOP)
 	$(MAKE) all -j8 -C $(TOP)/dotnet && $(MAKE) install -j8 -C $(TOP)/dotnet
-	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
+	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog /property:GenerateFullPaths=true "/consoleloggerparameters:NoSummary;ForceNoAlign;DisableMPLogging"
 	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 
@@ -58,7 +58,7 @@ monotouch-test-simple monotouchtest-simple: $(TARGETS)
 		$(CP) NuGet.config global.json $(TOP)/$$dir; \
 	done
 	make -C ../test-libraries -j
-	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:$@.binlog /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
+	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:$@.binlog /property:GenerateFullPaths=true "/consoleloggerparameters:NoSummary;ForceNoAlign;DisableMPLogging"
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 
 all-local:: $(TARGETS)

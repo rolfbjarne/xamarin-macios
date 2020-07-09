@@ -93,6 +93,7 @@
 		<BuildDependsOn>
 			$(BuildDependsOn);
 			_CreateAppBundle;
+			Codesign;
 		</BuildDependsOn>
 
 		<!-- We re-use ComputeFilesToPublish & CopyFilesToPublishDirectory to copy files to the .app -->
@@ -101,9 +102,12 @@
 			_CollectBundleResources;
 			_DetectAppManifest;
 			_CopyResourcesToBundle;
+			_PrepareResourceRules;
+			_CompileEntitlements;
 			_CompileAppManifest;
 			_ComputeLinkerArguments;
 			ComputeFilesToPublish;
+			__FixLinkerDebugSymbolsBug;
 			_LoadLinkerOutput;
 			_CompileNativeExecutable;
 			_LinkNativeExecutable;
@@ -113,6 +117,15 @@
 	</PropertyGroup>
 
 	<!-- Linker -->
+	<Target Name="__FixLinkerDebugSymbolsBug">
+		<ItemGroup>
+			<_LinkedDebugSymbols Include="@(_ManagedAssembliesToLink->'$(IntermediateLinkDir)%(Filename).pdb')" Condition="Exists ('$(IntermediateLinkDir)%(Filename).pdb')" />
+			<_UnlinkedDebugSymbols Include="@(_ManagedAssembliesToLink->'%(RootDir)%(Directory)%(Filename).pdb'" Condition="Exists ('%(RootDir)%(Directory)%(Filename).pdb')" />
+			<ResolvedFileToPublish Remove="@(_UnlinkedDebugSymbols)" />
+			<ResolvedFileToPublish Include="@(_LinkedDebugSymbols)" />
+		</ItemGroup>
+	</Target>
+
 	<PropertyGroup>
 		<_AdditionalTaskAssemblyDirectory>$(_XamarinSdkRootDirectory)tools/dotnet-linker/</_AdditionalTaskAssemblyDirectory>
 		<_AdditionalTaskAssembly>$(_AdditionalTaskAssemblyDirectory)dotnet-linker.dll</_AdditionalTaskAssembly>
@@ -146,7 +159,10 @@
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -p copy "System.Runtime"</_ExtraTrimmerArgs>
 
 			<!-- Verbose output, so that we get something to stdout when something goes wrong -->
-			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose</_ExtraTrimmerArgs>
+			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose -c copy -u copy</_ExtraTrimmerArgs>
+
+			<!-- Process symbols as well (why is this not the default?) -->
+			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -b</_ExtraTrimmerArgs>
 		</PropertyGroup>
 		<ItemGroup>
 			<!-- add a custom step which inserts any other steps we need -->
@@ -337,8 +353,12 @@
 		<ItemGroup>
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
-				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_AssemblyPublishDir)))%(Filename)%(Extension)"
-				Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.pdb' Or '$(Extension)' == '.exe'" />
+				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_AssemblyPublishDir)))%(ResolvedFileToPublish.DestinationSubDirectory)%(Filename)%(Extension)"
+				Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.pdb' Or '%(Extension)' == '.exe'" />
+			<ResolvedFileToPublish
+				Update="@(ResolvedFileToPublish)"
+				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_AssemblyPublishDir)))%(ResolvedFileToPublish.DestinationSubDirectory)%(TargetPath)"
+				Condition="'%(Extension)' == '.config'" />
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
 				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_DylibPublishDir)))%(Filename)%(Extension)"

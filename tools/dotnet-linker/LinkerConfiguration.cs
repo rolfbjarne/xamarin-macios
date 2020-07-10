@@ -13,6 +13,8 @@ using Mono.Linker.Steps;
 using Xamarin.Bundler;
 using Xamarin.Utils;
 
+using ObjCRuntime;
+
 namespace Xamarin.Linker {
 	public class LinkerConfiguration {
 		public List<Abi> Abis;
@@ -22,6 +24,8 @@ namespace Xamarin.Linker {
 		public Version DeploymentTarget { get; private set; }
 		public string ItemsDirectory { get; private set; }
 		public bool IsSimulatorBuild { get; private set; }
+		public MarshalManagedExceptionMode MarshalManagedExceptionMode { get; private set; }
+		public MarshalObjectiveCExceptionMode MarshalObjectiveCExceptionMode { get; private set; }
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; }
 		public Version SdkVersion { get; private set; }
@@ -58,21 +62,6 @@ namespace Xamarin.Linker {
 				instance.Context = context;
 				context.Annotations.SetCustomAnnotation ("LinkerConfiguration", sr, instance);
 			}
-
-			//if (!configurations.TryGetValue (context, out var instance)) {
-			//	if (!context.TryGetCustomData ("LinkerOptionsFile", out var linker_options_file))
-			//		throw new Exception ($"No custom linker options file was passed to the linker (using --custom-data LinkerOptionsFile=...");
-			//	if (link_conf != null)
-			//		throw new Exception ("WTF?");
-			//	instance = new LinkerConfiguration (linker_options_file);
-			//	link_conf = instance;
-			//	instance.Context = context;
-			//	Console.WriteLine ("B LinkerConfigurations.Configurations.Count: {0}", configurations.Count);
-			//	configurations.Add (context, instance);
-			//	Console.WriteLine ("C LinkerConfigurations.Configurations.Count: {0}", configurations.Count);
-			//} else {
-			//	Console.WriteLine ("Z LinkerConfigurations.Configurations.Count: {0}", configurations.Count);
-			//}
 
 			return instance;
 		}
@@ -115,6 +104,18 @@ namespace Xamarin.Linker {
 				case "IsSimulatorBuild":
 					IsSimulatorBuild = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
 					break;
+				case "MarshalManagedExceptionMode": {
+					if (!Enum.TryParse<MarshalManagedExceptionMode> (value, out var mode))
+						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+					MarshalManagedExceptionMode = mode;
+					break;
+				}
+				case "MarshalObjectiveCExceptionMode": {
+					if (!Enum.TryParse<MarshalObjectiveCExceptionMode> (value, out var mode))
+						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+					MarshalObjectiveCExceptionMode = mode;
+					break;
+				}
 				case "Platform":
 					switch (value) {
 					case "iOS":
@@ -178,6 +179,8 @@ namespace Xamarin.Linker {
 			Console.WriteLine ($"    DeploymentTarget: {DeploymentTarget}");
 			Console.WriteLine ($"    ItemsDirectory: {ItemsDirectory}");
 			Console.WriteLine ($"    IsSimulatorBuild: {IsSimulatorBuild}");
+			Console.WriteLine ($"    MarshalManagedExceptions: {MarshalManagedExceptionMode}");
+			Console.WriteLine ($"    MarshalObjectiveCExceptions: {MarshalObjectiveCExceptionMode}");
 			Console.WriteLine ($"    Platform: {Platform}");
 			Console.WriteLine ($"    PlatformAssembly: {PlatformAssembly}.dll");
 			Console.WriteLine ($"    SdkVersion: {SdkVersion}");

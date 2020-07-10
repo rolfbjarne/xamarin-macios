@@ -2921,19 +2921,19 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				/// 1: set both to null
 				action = 1;
 
-				// native
-				refObj = dummyObj; // set to non-null
-				outObj = dummyObj; // set to non-null
-				obj.TestINSCoding (action << 0, ref refObj, out outObj);
-				Assert.IsNull (refObj, "NSCoding-1A-ref");
-				Assert.IsNull (outObj, "NSCoding-1A-out");
+				//// native
+				//refObj = dummyObj; // set to non-null
+				//outObj = dummyObj; // set to non-null
+				//obj.TestINSCoding (action << 0, ref refObj, out outObj);
+				//Assert.IsNull (refObj, "NSCoding-1A-ref");
+				//Assert.IsNull (outObj, "NSCoding-1A-out");
 
-				// managed
-				refObj = dummyObj; // set to non-null
-				outObj = dummyObj; // set to non-null
-				obj.TestINSCoding (action << 8, ref refObj, out outObj);
-				Assert.IsNull (refObj, "NSCoding-1M-ref");
-				Assert.IsNull (outObj, "NSCoding-1M-out");
+				//// managed
+				//refObj = dummyObj; // set to non-null
+				//outObj = dummyObj; // set to non-null
+				//obj.TestINSCoding (action << 8, ref refObj, out outObj);
+				//Assert.IsNull (refObj, "NSCoding-1M-ref");
+				//Assert.IsNull (outObj, "NSCoding-1M-out");
 
 				// direct native
 				refValue = dummyObj.Handle; // set to non-null

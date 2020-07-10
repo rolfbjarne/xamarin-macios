@@ -1392,6 +1392,8 @@ namespace ObjCRuntime {
 			// Lookup the ObjC type of the ptr and see if we can use it.
 			implementation = LookupINativeObjectImplementation (ptr, target_type, implementation);
 
+			Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o: {o} - {o.GetType ()}");
+
 			if (implementation.IsSubclassOf (typeof (NSObject))) {
 				if (o != null) {
 					// We already have an instance of an NSObject-subclass for this ptr.

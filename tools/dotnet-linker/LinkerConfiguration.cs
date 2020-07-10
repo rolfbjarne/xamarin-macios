@@ -21,6 +21,7 @@ namespace Xamarin.Linker {
 		// This is the AssemblyName MSBuild property for the main project (which is also the root/entry assembly)
 		public string AssemblyName { get; private set; }
 		public string CacheDirectory { get; private set; }
+		public bool Debug { get; set; }
 		public Version DeploymentTarget { get; private set; }
 		public string ItemsDirectory { get; private set; }
 		public bool IsSimulatorBuild { get; private set; }
@@ -93,6 +94,9 @@ namespace Xamarin.Linker {
 				case "CacheDirectory":
 					CacheDirectory = value;
 					break;
+				case "Debug":
+					Debug = string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
+					break;
 				case "DeploymentTarget":
 					if (!Version.TryParse (value, out var deployment_target))
 						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
@@ -104,18 +108,20 @@ namespace Xamarin.Linker {
 				case "IsSimulatorBuild":
 					IsSimulatorBuild = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
 					break;
-				case "MarshalManagedExceptionMode": {
-					if (!Enum.TryParse<MarshalManagedExceptionMode> (value, out var mode))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					MarshalManagedExceptionMode = mode;
+				case "MarshalManagedExceptionMode":
+					if (!string.IsNullOrEmpty (value)) {
+						if (!Enum.TryParse<MarshalManagedExceptionMode> (value, out var mode))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						MarshalManagedExceptionMode = mode;
+					}
 					break;
-				}
-				case "MarshalObjectiveCExceptionMode": {
-					if (!Enum.TryParse<MarshalObjectiveCExceptionMode> (value, out var mode))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					MarshalObjectiveCExceptionMode = mode;
+				case "MarshalObjectiveCExceptionMode":
+					if (!string.IsNullOrEmpty (value)) {
+						if (!Enum.TryParse<MarshalObjectiveCExceptionMode> (value, out var mode))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						MarshalObjectiveCExceptionMode = mode;
+					}
 					break;
-				}
 				case "Platform":
 					switch (value) {
 					case "iOS":
@@ -164,6 +170,10 @@ namespace Xamarin.Linker {
 			Target = new Target (Application);
 
 			Application.Cache.Location = CacheDirectory;
+
+			Application.MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product, out var isDefaultMode);
+			Application.IsDefaultMarshalManagedExceptionMode = isDefaultMode;
+			Application.MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product);
 
 			// Increase verbosity while .NET is being implemented.
 			Driver.Verbosity = 9;

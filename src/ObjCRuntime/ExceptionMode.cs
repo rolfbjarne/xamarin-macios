@@ -66,7 +66,7 @@ namespace ObjCRuntime {
 		public static bool TryParseObjectiveCExceptionMode (string value, out MarshalObjectiveCExceptionMode mode)
 		{
 			mode = MarshalObjectiveCExceptionMode.Default;
-			switch (v) {
+			switch (value) {
 			case "default":
 				mode = MarshalObjectiveCExceptionMode.Default;
 				break;

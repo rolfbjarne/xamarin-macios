@@ -107,7 +107,6 @@
 			_CompileAppManifest;
 			_ComputeLinkerArguments;
 			ComputeFilesToPublish;
-			__FixLinkerDebugSymbolsBug;
 			_LoadLinkerOutput;
 			_CompileNativeExecutable;
 			_LinkNativeExecutable;
@@ -115,16 +114,6 @@
 			CopyFilesToPublishDirectory;
 		</CreateAppBundleDependsOn>
 	</PropertyGroup>
-
-	<!-- Linker -->
-	<Target Name="__FixLinkerDebugSymbolsBug">
-		<ItemGroup>
-			<_LinkedDebugSymbols Include="@(_ManagedAssembliesToLink->'$(IntermediateLinkDir)%(Filename).pdb')" Condition="Exists ('$(IntermediateLinkDir)%(Filename).pdb')" />
-			<_UnlinkedDebugSymbols Include="@(_ManagedAssembliesToLink->'%(RootDir)%(Directory)%(Filename).pdb'" Condition="Exists ('%(RootDir)%(Directory)%(Filename).pdb')" />
-			<ResolvedFileToPublish Remove="@(_UnlinkedDebugSymbols)" />
-			<ResolvedFileToPublish Include="@(_LinkedDebugSymbols)" />
-		</ItemGroup>
-	</Target>
 
 	<PropertyGroup>
 		<_AdditionalTaskAssemblyDirectory>$(_XamarinSdkRootDirectory)tools/dotnet-linker/</_AdditionalTaskAssemblyDirectory>
@@ -164,8 +153,11 @@
 			<!-- Verbose output, so that we get something to stdout when something goes wrong -->
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose -c copy -u copy</_ExtraTrimmerArgs>
 
-			<!-- Process symbols as well (why is this not the default?) -->
-			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -b</_ExtraTrimmerArgs>
+			<!-- We always want the linker to process debug symbols, even when building in Release mode, because the AOT compiler uses the managed debug symbols to output DWARF debugging symbols -->
+			<TrimmerRemoveSymbols>false</TrimmerRemoveSymbols>
+
+			<!-- On the other hand, we want the linker to link away debug support in the actual code unless we're building for Debug -->
+			<DebuggerSupport>$(_BundlerDebug)</DebuggerSupport>
 		</PropertyGroup>
 		<ItemGroup>
 			<!-- add a custom step which inserts any other steps we need -->
@@ -177,6 +169,7 @@
 
 		<!-- Create the file with our custom linker options -->
 		<WriteLinesToFile File="$(_CustomLinkerOptionsFile)" Lines="$(_CustomLinkerOptions)" Overwrite="true" />
+
 	</Target>
 
 	<Target Name="_LoadLinkerOutput">

@@ -13,8 +13,63 @@ using MatrixDouble4x4 = global::OpenTK.NMatrix4d;
 using VectorDouble3 = global::OpenTK.NVector3d;
 using NUnit.Framework;
 
+class TestFixtureSetUpAttribute : OneTimeSetUpAttribute { }
+class TestFixtureTearDownAttribute : OneTimeTearDownAttribute { }
+
+namespace NUnit.Framework {
+	using Constraints;
+	public abstract class Does {
+		public static ContainsConstraint Contain (string expected)
+		{
+			return new ContainsConstraint (expected);
+		}
+		public static StartsWithConstraint StartWith (string expected)
+		{
+			return new StartsWithConstraint (expected);
+		}
+
+		public static EndsWithConstraint EndWith (string expected)
+		{
+			return new EndsWithConstraint (expected);
+		}
+		public static RegexConstraint Match (string pattern)
+		{
+			return new RegexConstraint (pattern);
+		}
+	}
+
+	public static class ConstraintExpression_Extensions {
+		public static StartsWithConstraint StartWith (this ConstraintExpression self, string expected)
+		{
+			return (StartsWithConstraint) self.Append (new StartsWithConstraint (expected));
+		}
+		public static ContainsConstraint Contain (this ConstraintExpression self, string expected)
+		{
+			return (ContainsConstraint) self.Append (new ContainsConstraint (expected));
+		}
+	}
+}
+
 public static class Asserts
 {
+	public static void IsInstanceOfType (Type type, object actual)
+	{
+#if true
+		Assert.IsInstanceOf (type, actual);
+#else
+		Assert.IsInstanceOfType (type, actual);
+#endif
+	}
+
+	public static void IsInstanceOfType (Type type, object actual, string message)
+	{
+#if true
+		Assert.IsInstanceOf (type, actual, message);
+#else
+		Assert.IsInstanceOfType (type, actual, message);
+#endif
+	}
+
 	public static void AreEqual (bool expected, bool actual, string message)
 	{
 		Assert.AreEqual (expected, actual, message + " (M)");

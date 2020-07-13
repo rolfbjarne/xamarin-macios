@@ -63,7 +63,6 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Hardware {
 						log.WriteLine ("Launching {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
 
 						var result = await task;
-
 						if (!result.Succeeded)
 							throw new Exception ("Failed to list simulators.");
 

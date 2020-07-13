@@ -271,6 +271,7 @@ namespace Xharness.Jenkins {
 					await simulator.KillEverything (MainLog);
 					await PopulateTasksAsync ();
 					Populating = false;
+					Console.WriteLine ("Populated!");
 				});
 				var preparations = new List<Task> ();
 				preparations.Add (populate);
@@ -336,6 +337,11 @@ namespace Xharness.Jenkins {
 							allSimulatorTasks.AddRange (aggregated.Tasks);
 							continue;
 						}
+						var simulator = task as RunSimulatorTask;
+						if (simulator != null) {
+							allSimulatorTasks.Add (simulator);
+							continue;
+						}
 
 						var execute = task as MacExecuteTask;
 						if (execute != null) {
@@ -368,7 +374,7 @@ namespace Xharness.Jenkins {
 
 						throw new NotImplementedException ();
 					}
-
+					Console.WriteLine ("Generating report: {0}", Populating);
 					var allTasks = new List<ITestTask> ();
 					if (!Populating) {
 						allTasks.AddRange (allExecuteTasks);

@@ -68,7 +68,8 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Hardware {
 					log.WriteLine ("Launching {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
 
 					var result = await task;
-
+					await Task.Delay (TimeSpan.FromSeconds (30));
+					Console.WriteLine ("Waited 30 second for devices");
 					if (!result.Succeeded)
 						throw new Exception ("Failed to list devices.");
 					log.WriteLine ("Result:");

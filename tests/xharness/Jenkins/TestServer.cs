@@ -296,6 +296,7 @@ namespace Xharness.Jenkins {
 							break;
 						default:
 							var filename = Path.GetFileName (request.Url.LocalPath);
+							Console.WriteLine ("Requested: {0}", filename);
 							if (filename == "index.html" && Path.GetFileName (jenkins.LogDirectory) == Path.GetFileName (Path.GetDirectoryName (request.Url.LocalPath))) {
 								// We're asked for the report for the current test run, so re-generate it.
 								jenkins.GenerateReport ();

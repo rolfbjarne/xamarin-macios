@@ -609,7 +609,7 @@ namespace LinkAll {
 			var bundlePath = NSBundle.MainBundle.BundlePath;
 			var isExtension = bundlePath.EndsWith (".appex", StringComparison.Ordinal);
 			var suffix = isExtension ? "link all.appex/mscorlib.dll" : "link all.app/mscorlib.dll";
-			Assert.That (corlib, Is.StringEnding (suffix), corlib);
+			Assert.That (corlib, Does.EndWith (suffix), corlib);
 		}
 	}
 

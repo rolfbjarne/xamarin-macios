@@ -179,9 +179,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INBooleanResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INBooleanResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INBooleanResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INBooleanResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INBooleanResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INBooleanResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -199,9 +199,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INCarAirCirculationModeResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INCarAirCirculationModeResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INCarAirCirculationModeResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INCarAirCirculationModeResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INCarAirCirculationModeResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INCarAirCirculationModeResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -218,9 +218,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INCarAudioSourceResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INCarAudioSourceResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INCarAudioSourceResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INCarAudioSourceResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INCarAudioSourceResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INCarAudioSourceResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -237,9 +237,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INCarDefrosterResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INCarDefrosterResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INCarDefrosterResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INCarDefrosterResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INCarDefrosterResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INCarDefrosterResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -256,9 +256,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INCarSeatResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INCarSeatResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INCarSeatResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INCarSeatResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INCarSeatResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INCarSeatResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -272,9 +272,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INCurrencyAmountResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INCurrencyAmountResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INCurrencyAmountResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INCurrencyAmountResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INCurrencyAmountResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INCurrencyAmountResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -288,9 +288,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INDoubleResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INDoubleResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INDoubleResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INDoubleResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INDoubleResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INDoubleResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -304,9 +304,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INDateComponentsResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INDateComponentsResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INDateComponentsResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INDateComponentsResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INDateComponentsResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INDateComponentsResolutionResult), unsupported, "Unsupported");
 			}
 		}
 

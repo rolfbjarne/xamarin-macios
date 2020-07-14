@@ -675,8 +675,10 @@ namespace Xharness {
 		int Jenkins ()
 		{
 			if (autoConf) {
+				var watch = System.Diagnostics.Stopwatch.StartNew ();
 				AutoConfigureIOS ();
 				AutoConfigureMac (false);
+				Console.WriteLine ($"Autoconfigured in {watch.Elapsed}");
 			}
 
 			var jenkins = new Jenkins.Jenkins (this, processManager, ResultParser, TunnelBore);

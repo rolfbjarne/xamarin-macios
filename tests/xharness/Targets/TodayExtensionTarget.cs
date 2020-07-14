@@ -96,7 +96,7 @@ namespace Xharness.Targets {
 			csproj.AddCompileInclude ("TodayExtensionMain." + ext, Path.Combine (IsGeneratedBclTest? GeneratedTemplatePath : Harness.TodayExtensionTemplate, "TodayExtensionMain." + ext), true);
 			csproj.AddInterfaceDefinition (Path.Combine (Harness.TodayExtensionTemplate, "TodayView.storyboard").Replace ('/', '\\'));
 			csproj.SetExtraLinkerDefs ("extra-linker-defs" + ExtraLinkerDefsSuffix + ".xml");
-			csproj.FixProjectReferences ("-today");
+			csproj.FixProjectReferences ("-today", FixProjectReference);
 			if (MonoNativeInfo != null) {
 				MonoNativeInfo.AddProjectDefines (csproj);
 				csproj.AddAdditionalDefines ("MONO_NATIVE_TODAY");

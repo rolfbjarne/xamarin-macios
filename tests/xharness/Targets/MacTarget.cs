@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.DotNet.XHarness.iOS.Shared;
 using Microsoft.DotNet.XHarness.iOS.Shared.Hardware;
 using Microsoft.DotNet.XHarness.iOS.Shared.Utilities;
@@ -121,22 +122,25 @@ namespace Xharness.Targets
 
 		public MonoNativeInfo MonoNativeInfo { get; set; }
 
-		protected override bool FixProjectReference (string name, out string fixed_name)
+		protected override bool FixProjectReference (string include, string suffix, out string fixed_include)
 		{
-			fixed_name = null;
+			var name = Path.GetFileNameWithoutExtension (include);
+
+			fixed_include = include;
+
 			switch (name) {
 			case "GuiUnit_NET_4_5":
 				if (Flavor == MacFlavors.Full || Flavor == MacFlavors.System)
-					return false;
-				fixed_name = "GuiUnit_xammac_mobile";
+					return false; // Do not fix
+				fixed_include = Path.Combine (Path.GetDirectoryName (include), "GuiUnit_xammac_mobile.csproj");
 				return true;
 			case "GuiUnit_xammac_mobile":
 				if (Flavor == MacFlavors.Modern)
-					return false;
-				fixed_name = "GuiUnit_NET_4_5";
+					return false; // Do not fix
+				fixed_include = Path.Combine (Path.GetDirectoryName (include), "GuiUnit_NET_4_5.csproj");
 				return true;
 			default:
-				return base.FixProjectReference (name, out fixed_name);
+				return base.FixProjectReference (include, suffix, out fixed_include);
 			}
 		}
 

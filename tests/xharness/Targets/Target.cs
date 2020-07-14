@@ -81,18 +81,24 @@ namespace Xharness.Targets
 			}
 		}
 
-		protected virtual bool FixProjectReference (string name, out string fixed_name)
+		protected virtual bool FixProjectReference (string include, string suffix, out string fixed_include)
 		{
-			fixed_name = null;
-			return true;
-		}
+			var fn = Path.GetFileName (include);
 
-		protected virtual bool FixDotNetProjectReference (string include, out string fixed_include)
-		{
-			if (include.EndsWith ("Touch.Client-iOS.dotnet.csproj", StringComparison.Ordinal)) {
-				fixed_include = include.Replace ("-iOS", "-" + PlatformString);
-			} else {
+			switch (fn) {
+			case "Touch.Client-iOS.dotnet.csproj":
+			case "Touch.Client-iOS.csproj":
+				var dir = Path.GetDirectoryName (include);
+				var parentDir = Path.GetFileName (dir);
+				if (parentDir == "iOS")
+					dir = Path.Combine (Path.GetDirectoryName (dir), PlatformString);
+				fixed_include = Path.Combine (dir, fn.Replace ("-iOS", "-" + PlatformString));
+				break;
+			default:
+				include = include.Replace (".csproj", suffix + ".csproj");
+				include = include.Replace (".fsproj", suffix + ".fsproj");
 				fixed_include = include;
+				break;
 			}
 
 			return true;
@@ -102,7 +108,7 @@ namespace Xharness.Targets
 		{
 			inputProject.SetSdk (DotNetSdk);
 			inputProject.SetRuntimeIdentifier (RuntimeIdentifier);
-			inputProject.FixProjectReferences (Suffix, fixIncludeCallback: FixDotNetProjectReference);
+			inputProject.FixProjectReferences (Suffix, FixProjectReference);
 			var fixedAssetTargetFallback = inputProject.GetAssetTargetFallback ()?.Replace ("xamarinios10", TargetFrameworkForNuGet);
 			if (fixedAssetTargetFallback != null)
 				inputProject.SetAssetTargetFallback (fixedAssetTargetFallback);

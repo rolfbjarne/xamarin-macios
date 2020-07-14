@@ -269,6 +269,14 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 				reference.ParentNode.RemoveChild (reference);
 		}
 
+
+		public static void RemovePackageReference (this XmlDocument csproj, string projectName)
+		{
+			var reference = csproj.SelectSingleNode ("/*/*/*[local-name() = 'PackageReference' and @Include = '" + projectName + "']");
+			if (reference != null)
+				reference.ParentNode.RemoveChild (reference);
+		}
+
 		public static void AddCompileInclude (this XmlDocument csproj, string link, string include, bool prepend = false)
 		{
 			AddInclude (csproj, "Compile", link, include, prepend);
@@ -628,6 +636,11 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 			var nodes = csproj.SelectNodes ("//*[local-name() = 'ProjectReference']");
 			foreach (XmlNode node in nodes)
 				yield return node.Attributes ["Include"].Value;
+		}
+
+		public static bool HasTouchClientReference (this XmlDocument csproj)
+		{
+			return GetProjectReferences (csproj).Any (proj => proj.Contains ("Touch.Client"));
 		}
 
 		public static IEnumerable<string> GetExtensionProjectReferences (this XmlDocument csproj)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using Microsoft.DotNet.XHarness.iOS.Shared.Utilities;
 using Microsoft.DotNet.XHarness.iOS.Shared.Hardware;
@@ -118,16 +119,6 @@ namespace Xharness.Targets {
 			}
 
 			var srcDirectory = Path.Combine (HarnessConfiguration.RootDirectory, "..", "src");
-
-			string project_guid;
-			var mt_nunitlite_project_path = Path.GetFullPath (Path.Combine (srcDirectory, "MonoTouch.NUnitLite.tvos.csproj"));
-			if (!project_guids.TryGetValue (mt_nunitlite_project_path, out project_guid)) {
-				XmlDocument mt_nunitlite_project = new XmlDocument ();
-				mt_nunitlite_project.LoadWithoutNetworkAccess (mt_nunitlite_project_path);
-				project_guid = mt_nunitlite_project.GetProjectGuid ();
-				project_guids [mt_nunitlite_project_path] = project_guid;
-			}
-			inputProject.CreateProjectReferenceValue ("MonoTouch.NUnitLite", mt_nunitlite_project_path, project_guid, "MonoTouch.NUnitLite");
 
 			inputProject.AddExtraMtouchArgs ("--bitcode:asmonly", "iPhone", "Release");
 			inputProject.SetMtouchUseLlvm (true, "iPhone", "Release");

@@ -269,6 +269,14 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 				reference.ParentNode.RemoveChild (reference);
 		}
 
+
+		public static void RemovePackageReference (this XmlDocument csproj, string projectName)
+		{
+			var reference = csproj.SelectSingleNode ("/*/*/*[local-name() = 'PackageReference' and @Include = '" + projectName + "']");
+			if (reference != null)
+				reference.ParentNode.RemoveChild (reference);
+		}
+
 		public static void AddCompileInclude (this XmlDocument csproj, string link, string include, bool prepend = false)
 		{
 			AddInclude (csproj, "Compile", link, include, prepend);
@@ -436,37 +444,24 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 			return imports [0].Attributes ["Project"].Value;
 		}
 
-		public delegate bool FixReferenceDelegate (string reference, out string fixed_reference);
-		public static void FixProjectReferences (this XmlDocument csproj, string suffix, FixReferenceDelegate fixCallback = null, FixReferenceDelegate fixIncludeCallback = null)
+		public delegate bool FixReferenceDelegate (string include, string suffix, out string fixed_include);
+		public static void FixProjectReferences (this XmlDocument csproj, string suffix, FixReferenceDelegate fixCallback)
 		{
 			var nodes = csproj.SelectNodes ("/*/*/*[local-name() = 'ProjectReference']");
-			if (nodes.Count == 0)
-				return;
 			foreach (XmlNode n in nodes) {
-				var name = n ["Name"]?.InnerText;
-				string fixed_name = null;
-				if (name != null && fixCallback != null && !fixCallback (name, out fixed_name))
+				var nameNode = n ["Name"];
+				var includeAttribute = n.Attributes ["Include"];
+				var include = includeAttribute.Value;
+
+				include = include.Replace ('\\', '/');
+				if (!fixCallback (include, suffix, out var fixed_include))
 					continue;
-				var include = n.Attributes ["Include"];
-				string fixed_include;
-				if (fixIncludeCallback != null && fixIncludeCallback (include.Value, out fixed_include)) {
-					// we're done here
-				} else if (fixed_name == null) {
-					fixed_include = include.Value;
-					fixed_include = fixed_include.Replace (".csproj", suffix + ".csproj");
-					fixed_include = fixed_include.Replace (".fsproj", suffix + ".fsproj");
-				} else {
-					var unix_path = include.Value.Replace ('\\', '/');
-					var unix_dir = System.IO.Path.GetDirectoryName (unix_path);
-					fixed_include = System.IO.Path.Combine (unix_dir, fixed_name + System.IO.Path.GetExtension (unix_path));
-					fixed_include = fixed_include.Replace ('/', '\\');
-				}
-				n.Attributes ["Include"].Value = fixed_include;
-				if (name != null) {
-					var nameElement = n ["Name"];
-					name = System.IO.Path.GetFileNameWithoutExtension (fixed_include.Replace ('\\', '/'));
-					nameElement.InnerText = name;
-				}
+				var name = Path.GetFileNameWithoutExtension (fixed_include);
+				fixed_include = fixed_include.Replace ('/', '\\');
+
+				includeAttribute.Value = fixed_include;
+				if (nameNode != null)
+					nameNode.InnerText = name;
 			}
 		}
 
@@ -619,6 +614,11 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 			var nodes = csproj.SelectNodes ("//*[local-name() = 'ProjectReference']");
 			foreach (XmlNode node in nodes)
 				yield return node.Attributes ["Include"].Value;
+		}
+
+		public static bool HasTouchClientReference (this XmlDocument csproj)
+		{
+			return GetProjectReferences (csproj).Any (proj => proj.Contains ("Touch.Client"));
 		}
 
 		public static IEnumerable<string> GetExtensionProjectReferences (this XmlDocument csproj)

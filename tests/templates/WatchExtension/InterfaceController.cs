@@ -71,6 +71,7 @@ namespace monotouchtestWatchKitExtension
 		void LoadTests ()
 		{
 			runner = new WatchOSRunner ();
+#if !NUNITLITE_NUGET
 			var categoryFilter = new NotFilter (new CategoryExpression ("MobileNotWorking,NotOnMac,NotWorking,ValueAdd,CAS,InetAccess,NotWorkingLinqInterpreter,RequiresBSDSockets,BitcodeNotSupported").Filter);
 			if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("NUNIT_FILTER_START"))) {
 				var firstChar = Environment.GetEnvironmentVariable ("NUNIT_FILTER_START") [0];
@@ -80,6 +81,7 @@ namespace monotouchtestWatchKitExtension
 			} else {
 				runner.Filter = categoryFilter;
 			}
+#endif
 			runner.Add (GetType ().Assembly);
 			TestLoader.AddTestAssemblies (runner);
 			ThreadPool.QueueUserWorkItem ((v) =>
@@ -154,6 +156,7 @@ namespace monotouchtestWatchKitExtension
 	}
 }
 
+#if !NUNITLITE_NUGET
 class NameStartsWithFilter : NUnit.Framework.Internal.TestFilter
 {
 	public char FirstChar;
@@ -185,3 +188,4 @@ class NameStartsWithFilter : NUnit.Framework.Internal.TestFilter
 		return Match (test);
 	}
 }
+#endif

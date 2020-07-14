@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.DotNet.XHarness.iOS.Shared;
 using Microsoft.DotNet.XHarness.iOS.Shared.Hardware;
 using Microsoft.DotNet.XHarness.iOS.Shared.Utilities;
@@ -121,23 +122,29 @@ namespace Xharness.Targets
 
 		public MonoNativeInfo MonoNativeInfo { get; set; }
 
-		protected override bool FixProjectReference (string name, out string fixed_name)
+		protected override bool FixProjectReference (string include, string suffix, out string fixed_include)
 		{
-			fixed_name = null;
-			switch (name) {
-			case "GuiUnit_NET_4_5":
-				if (Flavor == MacFlavors.Full || Flavor == MacFlavors.System)
-					return false;
-				fixed_name = "GuiUnit_xammac_mobile";
-				return true;
-			case "GuiUnit_xammac_mobile":
-				if (Flavor == MacFlavors.Modern)
-					return false;
-				fixed_name = "GuiUnit_NET_4_5";
-				return true;
-			default:
-				return base.FixProjectReference (name, out fixed_name);
+
+			var fn = Path.GetFileName (include);
+
+			switch (fn) {
+			case "Touch.Client-macOS-mobile.csproj":
+				switch (Flavor) {
+				case MacFlavors.Full:
+				case MacFlavors.System:
+					var dir = Path.GetDirectoryName (include);
+					var parentDir = Path.GetDirectoryName (dir);
+					dir = Path.Combine (parentDir, "full");
+					fixed_include = Path.Combine (dir, fn.Replace ("-mobile", "-full"));
+					return true;
+				case MacFlavors.Modern:
+				default:
+					break;
+				}
+				break;
 			}
+
+			return base.FixProjectReference (include, suffix, out fixed_include);
 		}
 
 		public string SimplifiedName {

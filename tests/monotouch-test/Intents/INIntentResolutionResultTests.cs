@@ -320,9 +320,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INIntegerResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INIntegerResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INIntegerResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INIntegerResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INIntegerResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INIntegerResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -339,9 +339,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INRadioTypeResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INRadioTypeResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INRadioTypeResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INRadioTypeResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INRadioTypeResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INRadioTypeResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -358,9 +358,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INRelativeReferenceResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INRelativeReferenceResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INRelativeReferenceResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INRelativeReferenceResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INRelativeReferenceResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INRelativeReferenceResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -377,9 +377,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INRelativeSettingResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INRelativeSettingResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INRelativeSettingResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INRelativeSettingResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INRelativeSettingResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INRelativeSettingResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -394,9 +394,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INRestaurantGuestResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INRestaurantGuestResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INRestaurantGuestResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INRestaurantGuestResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INRestaurantGuestResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INRestaurantGuestResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -410,9 +410,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INRestaurantResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INRestaurantResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INRestaurantResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INRestaurantResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INRestaurantResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INRestaurantResolutionResult), unsupported, "Unsupported");
 			}
 		}
 #endif
@@ -427,9 +427,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INTemperatureResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INTemperatureResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INTemperatureResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INTemperatureResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INTemperatureResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INTemperatureResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -443,9 +443,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INWorkoutGoalUnitTypeResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INWorkoutGoalUnitTypeResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INWorkoutGoalUnitTypeResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INWorkoutGoalUnitTypeResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INWorkoutGoalUnitTypeResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INWorkoutGoalUnitTypeResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -459,9 +459,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INWorkoutLocationTypeResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INWorkoutLocationTypeResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INWorkoutLocationTypeResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INWorkoutLocationTypeResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INWorkoutLocationTypeResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INWorkoutLocationTypeResolutionResult), unsupported, "Unsupported");
 			}
 		}
 #endif
@@ -478,9 +478,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INBillPayeeResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INBillPayeeResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INBillPayeeResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INBillPayeeResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INBillPayeeResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INBillPayeeResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -496,9 +496,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INBillTypeResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INBillTypeResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INBillTypeResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INBillTypeResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INBillTypeResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INBillTypeResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -514,9 +514,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INCarSignalOptionsResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INCarSignalOptionsResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INCarSignalOptionsResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INCarSignalOptionsResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INCarSignalOptionsResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INCarSignalOptionsResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -532,9 +532,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INPaymentAmountResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INPaymentAmountResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INPaymentAmountResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INPaymentAmountResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INPaymentAmountResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INPaymentAmountResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -550,9 +550,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INPaymentStatusResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INPaymentStatusResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INPaymentStatusResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INPaymentStatusResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INPaymentStatusResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INPaymentStatusResolutionResult), unsupported, "Unsupported");
 			}
 		}
 
@@ -568,9 +568,9 @@ namespace MonoTouchFixtures.Intents {
 				Assert.NotNull (notRequired, "NotRequired Null");
 				Assert.NotNull (unsupported, "Unsupported Null");
 
-				Assert.IsInstanceOfType (typeof (INPaymentAccountResolutionResult), needsValue, "NeedsValue");
-				Assert.IsInstanceOfType (typeof (INPaymentAccountResolutionResult), notRequired, "NotRequired");
-				Assert.IsInstanceOfType (typeof (INPaymentAccountResolutionResult), unsupported, "Unsupported");
+				Asserts.IsInstanceOfType (typeof (INPaymentAccountResolutionResult), needsValue, "NeedsValue");
+				Asserts.IsInstanceOfType (typeof (INPaymentAccountResolutionResult), notRequired, "NotRequired");
+				Asserts.IsInstanceOfType (typeof (INPaymentAccountResolutionResult), unsupported, "Unsupported");
 			}
 		}
 	}

@@ -300,7 +300,9 @@ namespace Xharness {
 			}
 
 			var monoImportTestFactory = new BCLTestImportTargetFactory (this);
+			var watch = System.Diagnostics.Stopwatch.StartNew ();
 			MacTestProjects.AddRange (monoImportTestFactory.GetMacBclTargets ());
+			Console.WriteLine ("GetMacBclTargets: {0}", watch.Elapsed.ToString ());
 
 			// Generate test projects from templates (bcl/mono-native templates)
 			if (generate_projects) {
@@ -410,7 +412,9 @@ namespace Xharness {
 
 			// add all the tests that are using the precompiled mono assemblies
 			var monoImportTestFactory = new BCLTestImportTargetFactory (this);
+			var watch = System.Diagnostics.Stopwatch.StartNew ();
 			IOSTestProjects.AddRange (monoImportTestFactory.GetiOSBclTargets ());
+			Console.WriteLine ("GetiOSBclTargets: {0}", watch.Elapsed.ToString ());
 
 			WatchOSContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchContainer"));
 			WatchOSAppTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchApp"));

@@ -121,13 +121,14 @@ namespace Xharness.Targets {
 			csproj.RemoveTargetFrameworkIdentifier ();
 			csproj.SetPlatformAssembly ("Xamarin.WatchOS");
 			csproj.SetImport (IsFSharp ? "$(MSBuildExtensionsPath)\\Xamarin\\WatchOS\\Xamarin.WatchOS.AppExtension.FSharp.targets" : "$(MSBuildExtensionsPath)\\Xamarin\\WatchOS\\Xamarin.WatchOS.AppExtension.CSharp.targets");
-			csproj.FixProjectReferences ("-watchos");
+			csproj.FixProjectReferences ("-watchos", FixProjectReference);
 
 			csproj.FixInfoPListInclude (suffix);
 			csproj.SetOutputType ("Library");
 			csproj.AddAdditionalDefines ("BITCODE", "iPhone", "Release");
 			csproj.AddAdditionalDefines ("XAMCORE_3_0;FEATURE_NO_BSD_SOCKETS;MONOTOUCH_WATCH;");
 			csproj.RemoveReferences ("OpenTK-1.0");
+			csproj.RemovePackageReference ("MonoTouch.Dialog");
 			var ext = IsFSharp ? "fs" : "cs";
 			csproj.AddCompileInclude ("InterfaceController." + ext, Path.Combine (Harness.WatchOSExtensionTemplate, "InterfaceController." + ext));
 			csproj.SetExtraLinkerDefs ("extra-linker-defs" + ExtraLinkerDefsSuffix + ".xml");
@@ -139,6 +140,9 @@ namespace Xharness.Targets {
 				MonoNativeHelper.AddProjectDefines (csproj, MonoNativeInfo.Flavor);
 				MonoNativeHelper.RemoveSymlinkMode (csproj);
 			}
+
+			if (csproj.HasTouchClientReference ())
+				csproj.AddAdditionalDefines ("NUNITLITE_NUGET");
 
 			// Not linking a watch extensions requires passing -Os to the native compiler.
 			// https://github.com/mono/mono/issues/9867
@@ -207,7 +211,8 @@ namespace Xharness.Targets {
 			csproj.SetPlatformAssembly ("Xamarin.WatchOS");
 			csproj.SetImport (IsBindingProject ? BindingsImports : Imports);
 			csproj.AddAdditionalDefines ("XAMCORE_3_0;MONOTOUCH_WATCH;");
-			csproj.FixProjectReferences (Suffix);
+			csproj.FixProjectReferences (Suffix, FixProjectReference);
+			csproj.RemovePackageReference ("MonoTouch.Dialog");
 			csproj.SetExtraLinkerDefs ("extra-linker-defs" + ExtraLinkerDefsSuffix + ".xml");
 			csproj.FixTestLibrariesReferences (Platform);
 			csproj.Save (WatchOSProjectPath, (l,m) => Harness.Log (l,m));

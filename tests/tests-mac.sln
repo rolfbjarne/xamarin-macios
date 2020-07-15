@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "link sdk-mac", "linker\mac\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test-mac", "bindings-test\bindings-test-mac.csproj", "{20BEA313-7E2D-4209-93C0-E4D99C72695A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Touch.Client-macOS-mobile", "..\external\Touch.Unit\Touch.Client\macOS\mobile\Touch.Client-macOS-mobile.csproj", "{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,5 +167,17 @@ Global
 		{20BEA313-7E2D-4209-93C0-E4D99C72695A}.Debug|x86.Build.0 = Debug|Any CPU
 		{20BEA313-7E2D-4209-93C0-E4D99C72695A}.Release|x86.ActiveCfg = Release|Any CPU
 		{20BEA313-7E2D-4209-93C0-E4D99C72695A}.Release|x86.Build.0 = Release|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Default|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Default|Any CPU.Build.0 = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Debug|x86.Build.0 = Debug|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Release|x86.ActiveCfg = Release|Any CPU
+		{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

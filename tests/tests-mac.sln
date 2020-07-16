@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test-mac", "bindin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Touch.Client-macOS-mobile", "..\external\Touch.Unit\Touch.Client\macOS\mobile\Touch.Client-macOS-mobile.csproj", "{88A8A1AC-0829-4C98-8F4A-9FC23DC42A06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Touch.Client-macOS-full", "..\external\Touch.Unit\Touch.Client\macOS\full\Touch.Client-macOS-full.csproj", "{A1209F3A-3876-4EAC-ADA7-99F660002AB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

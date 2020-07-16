@@ -1,10 +1,17 @@
+using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Xamarin.Mac.Tests {
 	static class MainClass {
-		static int Main (string [] args)
+		static async Task<int> Main (string [] args)
 		{
-			var exit_code = MonoTouch.NUnit.UI.MacRunner.Main (args, typeof (MainClass).Assembly);
+			// Skip arguments added by VSfM/macOS when running from the IDE
+			var arguments = new List<string> (args);
+			arguments.RemoveAll ((arg) => arg.StartsWith ("-psn_", StringComparison.Ordinal));
+
+			var exit_code = await MonoTouch.NUnit.UI.MacRunner.MainAsync (arguments, typeof (MainClass).Assembly);
 			_exit (exit_code);
 			return exit_code;
 		}

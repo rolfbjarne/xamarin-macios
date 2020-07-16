@@ -147,28 +147,6 @@ namespace Xharness.Targets
 
 		public MonoNativeInfo MonoNativeInfo { get; set; }
 
-		protected override bool FixProjectReference (string include, string suffix, out string fixed_include)
-		{
-			var name = Path.GetFileNameWithoutExtension (include);
-
-			fixed_include = include;
-
-			switch (name) {
-			case "GuiUnit_NET_4_5":
-				if (Flavor == MacFlavors.Full || Flavor == MacFlavors.System)
-					return false; // Do not fix
-				fixed_include = Path.Combine (Path.GetDirectoryName (include), "GuiUnit_xammac_mobile.csproj");
-				return true;
-			case "GuiUnit_xammac_mobile":
-				if (Flavor == MacFlavors.Modern)
-					return false; // Do not fix
-				fixed_include = Path.Combine (Path.GetDirectoryName (include), "GuiUnit_NET_4_5.csproj");
-				return true;
-			default:
-				return base.FixProjectReference (include, suffix, out fixed_include);
-			}
-		}
-
 		public string SimplifiedName {
 			get {
 				return Name.EndsWith ("-mac", StringComparison.Ordinal) ? Name.Substring (0, Name.Length - 4) : Name;

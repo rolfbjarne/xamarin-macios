@@ -53,7 +53,6 @@ namespace Xamarin.Bundler {
 		}
 		public bool EnableRepl;
 
-		public bool IsExtension;
 		public List<string> Extensions = new List<string> (); // A list of the extensions this app contains.
 		public List<Application> AppExtensions = new List<Application> ();
 		public Application ContainerApp; // For extensions, this is the containing app

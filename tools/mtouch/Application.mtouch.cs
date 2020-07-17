@@ -40,7 +40,6 @@ namespace Xamarin.Bundler {
 
 	public partial class Application
 	{
-		public const string Error91LinkerSuggestion = "set the managed linker behaviour to Link Framework SDKs Only in your project's iOS Build Options > Linker Behavior";
 		public string ProductName = "Xamarin.iOS";
 
 		public string ExecutableName;

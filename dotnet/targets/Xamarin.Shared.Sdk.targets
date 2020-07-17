@@ -416,6 +416,10 @@
 				Condition="'$(AppConfig)' != '' And '%(ResolvedFileToPublish.OriginalItemSpec)' == '$(AppConfig)' And '%(ResolvedFileToPublish.Link)' == 'app.config' And '%(ResolvedFileToPublish.TargetPath)' != ''" />
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
+				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_AssemblyPublishDir)))%(ResolvedFileToPublish.DestinationSubDirectory)%(ResolvedFileToPublish.TargetPath)"
+				Condition="'%(Extension)' == '.config' And '%(ResolvedFileToPublish.TargetPath)' != ''" />
+			<ResolvedFileToPublish
+				Update="@(ResolvedFileToPublish)"
 				RelativePath="$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_DylibPublishDir)))%(Filename)%(Extension)"
 				Condition="'%(Extension)' == '.dylib'" />
 		</ItemGroup>

@@ -1270,6 +1270,8 @@ namespace Registrar {
 					return "Xamarin.WatchOS";
 				case Xamarin.Utils.ApplePlatform.TVOS:
 					return "Xamarin.TVOS";
+				case Xamarin.Utils.ApplePlatform.MacOSX:
+					return "Xamarin.Mac";
 				default:
 					throw ErrorHelper.CreateError (71, Errors.MX0071, App.Platform, "Xamarin.iOS");
 				}

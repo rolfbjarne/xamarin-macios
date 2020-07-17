@@ -573,28 +573,9 @@ namespace Xamarin.Bundler {
 				}
 			}
 
-
-			bool isSimulatorOrDesktopDebug = EnableDebug;
-#if MTOUCH
-			isSimulatorOrDesktopDebug &= IsSimulatorBuild;
-#endif
-
-			if (MarshalObjectiveCExceptions == MarshalObjectiveCExceptionMode.Default) {
-				if (EnableCoopGC.Value || (Platform == ApplePlatform.MacOSX && EnableDebug)) {
-					MarshalObjectiveCExceptions = MarshalObjectiveCExceptionMode.ThrowManagedException;
-				} else {
-					MarshalObjectiveCExceptions = isSimulatorOrDesktopDebug ? MarshalObjectiveCExceptionMode.UnwindManagedCode : MarshalObjectiveCExceptionMode.Disable;
-				}
-			}
-
-			if (MarshalManagedExceptions == MarshalManagedExceptionMode.Default) {
-				if (EnableCoopGC.Value) {
-					MarshalManagedExceptions = MarshalManagedExceptionMode.ThrowObjectiveCException;
-				} else {
-					MarshalManagedExceptions = isSimulatorOrDesktopDebug ? MarshalManagedExceptionMode.UnwindNativeCode : MarshalManagedExceptionMode.Disable;
-				}
-				IsDefaultMarshalManagedExceptionMode = true;
-			}
+			MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptions, EnableCoopGC, IsSimulatorBuild, EnableDebug, Product);
+			MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptions, EnableCoopGC, IsSimulatorBuild, EnableDebug, Product, out var isDefaultManagedMode);
+			IsDefaultMarshalManagedExceptionMode = isDefaultManagedMode;
 
 			if (SymbolMode == SymbolMode.Default) {
 #if MONOTOUCH

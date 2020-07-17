@@ -122,7 +122,7 @@ namespace Xharness.Targets
 
 		public MonoNativeInfo MonoNativeInfo { get; set; }
 
-		protected override bool FixProjectReference (string include, string suffix, out string fixed_include)
+		protected override bool FixProjectReference (string include, string subdir, string suffix, out string fixed_include)
 		{
 
 			var fn = Path.GetFileName (include);
@@ -144,7 +144,7 @@ namespace Xharness.Targets
 				break;
 			}
 
-			return base.FixProjectReference (include, suffix, out fixed_include);
+			return base.FixProjectReference (include, subdir, suffix, out fixed_include);
 		}
 
 		public string SimplifiedName {

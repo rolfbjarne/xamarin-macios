@@ -138,8 +138,8 @@ namespace Xharness.Targets {
 
 			switch (OutputType) {
 			case "Exe":
-				TodayExtensionProjectPath = Path.Combine (TargetDirectory, templateName + Suffix + "-extension." + ProjectFileExtension);
-				TodayContainerProjectPath = Path.Combine (TargetDirectory, templateName + Suffix + "." + ProjectFileExtension);
+				TodayExtensionProjectPath = Path.Combine (TargetDirectory, ProjectsDir, GetTargetSpecificDir ("extension"), templateName + Suffix + "-extension." + ProjectFileExtension);
+				TodayContainerProjectPath = Path.Combine (TargetDirectory, ProjectsDir, GetTargetSpecificDir (), templateName + Suffix + "." + ProjectFileExtension);
 				CreateTodayExtensionProject ();
 				CreateTodayContainerProject ();
 				break;

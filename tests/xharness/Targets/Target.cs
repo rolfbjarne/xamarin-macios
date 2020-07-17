@@ -75,13 +75,25 @@ namespace Xharness.Targets
 		public abstract DevicePlatform ApplePlatform { get; }
 		public abstract string TargetFrameworkForNuGet { get; }
 
+		protected string ProjectsDir { get { return "projects"; } }
+		protected string GetTargetSpecificDir (string customSuffix = null)
+		{
+			string rv;
+			if (string.IsNullOrEmpty (customSuffix)) {
+				rv = Suffix;
+			} else {
+				rv = Suffix + "-" + customSuffix;
+			}
+			return rv.TrimStart ('-');
+		}
+
 		public string PlatformString {
 			get {
 				return ApplePlatform.AsString ();
 			}
 		}
 
-		protected virtual bool FixProjectReference (string include, string suffix, out string fixed_include)
+		protected virtual bool FixProjectReference (string include, string subdir, string suffix, out string fixed_include)
 		{
 			var fn = Path.GetFileName (include);
 
@@ -97,6 +109,10 @@ namespace Xharness.Targets
 			default:
 				include = include.Replace (".csproj", suffix + ".csproj");
 				include = include.Replace (".fsproj", suffix + ".fsproj");
+
+				if (!string.IsNullOrEmpty (subdir))
+					include = Path.Combine (Path.GetDirectoryName (include), subdir, Path.GetFileName (include));
+
 				fixed_include = include;
 				break;
 			}
@@ -229,7 +245,7 @@ namespace Xharness.Targets
 			if (templateName.Equals ("mono-native-mac"))
 				templateName = "mono-native";
 
-			ProjectPath = Path.Combine (targetDirectory, templateName + ProjectFileSuffix + "." + ProjectFileExtension);
+			ProjectPath = Path.Combine (targetDirectory, ProjectsDir, GetTargetSpecificDir (), templateName + ProjectFileSuffix + "." + ProjectFileExtension);
 
 			if (!ShouldSkipProjectGeneration)
 			{

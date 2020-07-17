@@ -39,17 +39,18 @@ namespace Xharness.Targets {
 			var suffix = Suffix + "-app";
 			csproj.LoadWithoutNetworkAccess (Path.Combine (Harness.WatchOSAppTemplate, "App.csproj"));
 			csproj.FindAndReplace ("%WATCHAPP_PATH%", Path.GetFullPath (Harness.WatchOSAppTemplate).Replace ('/', '\\') + "\\");
-			csproj.FindAndReplace ("%WATCHEXTENSION_CSPROJ%", Path.GetFileName (WatchOSExtensionProjectPath));
-			csproj.SetProjectReferenceValue (Path.GetFileName (WatchOSExtensionProjectPath), "Project", WatchOSExtensionGuid);
-			csproj.SetProjectReferenceValue (Path.GetFileName (WatchOSExtensionProjectPath), "Name", Path.GetFileNameWithoutExtension (WatchOSExtensionProjectPath));
+			csproj.FindAndReplace ("%WATCHEXTENSION_CSPROJ%", WatchOSExtensionProjectPath);
+			csproj.SetProjectReferenceValue (WatchOSExtensionProjectPath, "Project", WatchOSExtensionGuid);
+			csproj.SetProjectReferenceValue (WatchOSExtensionProjectPath, "Name", Path.GetFileNameWithoutExtension (WatchOSExtensionProjectPath));
 			WatchOSAppGuid = "{" + Helpers.GenerateStableGuid ().ToString ().ToUpper () + "}";
 			csproj.SetProjectGuid (WatchOSAppGuid);
-			csproj.FixInfoPListInclude (suffix);
+			csproj.FixInfoPListInclude (suffix, Path.GetDirectoryName (TemplateProjectPath));
 			if (MonoNativeInfo != null) {
 				csproj.AddAdditionalDefines ("MONO_NATIVE_WATCH");
 				MonoNativeHelper.AddProjectDefines (csproj, MonoNativeInfo.Flavor);
 				MonoNativeHelper.RemoveSymlinkMode (csproj);
 			}
+			csproj.ResolveAllPaths (TemplateProjectPath);
 			csproj.Save (WatchOSAppProjectPath, (l,m) => Harness.Log (l,m));
 
 			XmlDocument info_plist = new XmlDocument ();
@@ -68,16 +69,17 @@ namespace Xharness.Targets {
 			csproj.LoadWithoutNetworkAccess (Path.Combine (Harness.WatchOSContainerTemplate, "Container.csproj"));
 
 			csproj.FindAndReplace ("%CONTAINER_PATH%", Path.GetFullPath (Harness.WatchOSContainerTemplate).Replace ('/', '\\') + "\\");
-			csproj.FindAndReplace ("%WATCHAPP_CSPROJ%", Path.GetFileName (WatchOSAppProjectPath));
-			csproj.SetProjectReferenceValue (Path.GetFileName (WatchOSAppProjectPath), "Name", Path.GetFileNameWithoutExtension (WatchOSAppProjectPath));
+			csproj.FindAndReplace ("%WATCHAPP_CSPROJ%", WatchOSAppProjectPath);
+			csproj.SetProjectReferenceValue (WatchOSAppProjectPath, "Name", Path.GetFileNameWithoutExtension (WatchOSAppProjectPath));
 			WatchOSGuid = "{" + Helpers.GenerateStableGuid ().ToString ().ToUpper () + "}";
 			csproj.SetProjectGuid (WatchOSGuid);
-			csproj.FixInfoPListInclude (Suffix);
+			csproj.FixInfoPListInclude (Suffix, Path.GetDirectoryName (TemplateProjectPath));
 			if (MonoNativeInfo != null) {
 				csproj.AddAdditionalDefines ("MONO_NATIVE_WATCH");
 				MonoNativeHelper.AddProjectDefines (csproj, MonoNativeInfo.Flavor);
 				MonoNativeHelper.RemoveSymlinkMode (csproj);
 			}
+			csproj.ResolveAllPaths (TemplateProjectPath);
 			csproj.Save (WatchOSProjectPath, (l, m) => Harness.Log (l, m));
 
 			XmlDocument info_plist = new XmlDocument ();
@@ -121,9 +123,9 @@ namespace Xharness.Targets {
 			csproj.RemoveTargetFrameworkIdentifier ();
 			csproj.SetPlatformAssembly ("Xamarin.WatchOS");
 			csproj.SetImport (IsFSharp ? "$(MSBuildExtensionsPath)\\Xamarin\\WatchOS\\Xamarin.WatchOS.AppExtension.FSharp.targets" : "$(MSBuildExtensionsPath)\\Xamarin\\WatchOS\\Xamarin.WatchOS.AppExtension.CSharp.targets");
-			csproj.FixProjectReferences ("-watchos", FixProjectReference);
+			csproj.FixProjectReferences (Path.Combine (ProjectsDir, GetTargetSpecificDir ()), "-watchos", FixProjectReference);
 
-			csproj.FixInfoPListInclude (suffix);
+			csproj.FixInfoPListInclude (suffix, Path.GetDirectoryName (TemplateProjectPath));
 			csproj.SetOutputType ("Library");
 			csproj.AddAdditionalDefines ("BITCODE", "iPhone", "Release");
 			csproj.AddAdditionalDefines ("XAMCORE_3_0;FEATURE_NO_BSD_SOCKETS;MONOTOUCH_WATCH;");
@@ -134,6 +136,7 @@ namespace Xharness.Targets {
 			csproj.SetExtraLinkerDefs ("extra-linker-defs" + ExtraLinkerDefsSuffix + ".xml");
 			csproj.SetMtouchUseBitcode (true, "iPhone", "Release");
 			csproj.SetMtouchUseLlvm (true, "iPhone", "Release");
+			csproj.ResolveAllPaths (TemplateProjectPath);
 
 			if (MonoNativeInfo != null) {
 				csproj.AddAdditionalDefines ("MONO_NATIVE_WATCH");
@@ -215,6 +218,7 @@ namespace Xharness.Targets {
 			csproj.RemovePackageReference ("MonoTouch.Dialog");
 			csproj.SetExtraLinkerDefs ("extra-linker-defs" + ExtraLinkerDefsSuffix + ".xml");
 			csproj.FixTestLibrariesReferences (Platform);
+			csproj.ResolveAllPaths (TemplateProjectPath);
 			csproj.Save (WatchOSProjectPath, (l,m) => Harness.Log (l,m));
 
 			WatchOSGuid = csproj.GetProjectGuid ();
@@ -232,8 +236,8 @@ namespace Xharness.Targets {
 
 			switch (OutputType) {
 			case "Exe":
-				WatchOSExtensionProjectPath = Path.Combine (TargetDirectory, templateName + Suffix + "-extension.csproj");
-				WatchOSAppProjectPath = Path.Combine (TargetDirectory, templateName + Suffix + "-app.csproj");
+				WatchOSExtensionProjectPath = Path.Combine (TargetDirectory, ProjectsDir, GetTargetSpecificDir ("extension"), templateName + Suffix + "-extension.csproj");
+				WatchOSAppProjectPath = Path.Combine (TargetDirectory, ProjectsDir, GetTargetSpecificDir ("app"), templateName + Suffix + "-app.csproj");
 				CreateWatchOSExtensionProject ();
 				CreateWatchOSAppProject ();
 				CreateWatchOSContainerProject ();

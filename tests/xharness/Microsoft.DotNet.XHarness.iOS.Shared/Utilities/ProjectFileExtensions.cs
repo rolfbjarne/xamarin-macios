@@ -448,8 +448,13 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 			return imports [0].Attributes ["Project"].Value;
 		}
 
-		public delegate bool FixReferenceDelegate (string include, string suffix, out string fixed_include);
+		public delegate bool FixReferenceDelegate (string include, string subdir, string suffix, out string fixed_include);
 		public static void FixProjectReferences (this XmlDocument csproj, string suffix, FixReferenceDelegate fixCallback)
+		{
+			FixProjectReferences (csproj, null, suffix, fixCallback);
+		}
+
+		public static void FixProjectReferences (this XmlDocument csproj, string subdir, string suffix, FixReferenceDelegate fixCallback)
 		{
 			var nodes = csproj.SelectNodes ("/*/*/*[local-name() = 'ProjectReference']");
 			foreach (XmlNode n in nodes) {
@@ -458,7 +463,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 				var include = includeAttribute.Value;
 
 				include = include.Replace ('\\', '/');
-				if (!fixCallback (include, suffix, out var fixed_include))
+				if (!fixCallback (include, subdir, suffix, out var fixed_include))
 					continue;
 				var name = Path.GetFileNameWithoutExtension (fixed_include);
 				fixed_include = fixed_include.Replace ('/', '\\');
@@ -562,7 +567,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.Utilities {
 					if (string.IsNullOrEmpty (fullPath))
 						newName = value.Replace (fname, $"Info{suffix}.plist");
 					else
-						newName = value.Replace (fname, $"{fullPath}\\Info{suffix}.plist");
+						newName = value.Replace (fname, $"{fullPath.Replace ('/', '\\')}\\Info{suffix}.plist");
 				}
 				import.Attributes ["Include"].Value = (!Path.IsPathRooted (unixValue)) ? value.Replace (fname, newName) : newName;
 

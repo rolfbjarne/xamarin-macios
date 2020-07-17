@@ -5,10 +5,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
+using Mono.Cecil;
 using Mono.Linker;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
+
+using ObjCRuntime;
 
 namespace Xamarin.Linker {
 	public class LinkerConfiguration {
@@ -31,12 +34,17 @@ namespace Xamarin.Linker {
 
 		public Application Application { get; private set; }
 
+		public LinkContext Context { get; private set; }
+
 		public static LinkerConfiguration GetInstance (LinkContext context)
 		{
 			if (!configurations.TryGetValue (context, out var instance)) {
 				if (!context.TryGetCustomData ("LinkerOptionsFile", out var linker_options_file))
 					throw new Exception ($"No custom linker options file was passed to the linker (using --custom-data LinkerOptionsFile=...");
-				instance = new LinkerConfiguration (linker_options_file);
+				instance = new LinkerConfiguration (linker_options_file) {
+					Context = context,
+				};
+
 				configurations.Add (context, instance);
 			}
 
@@ -168,6 +176,15 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    SdkVersion: {SdkVersion}");
 				Console.WriteLine ($"    Verbosity: {Verbosity}");
 			}
+		}
+
+		public string GetAssemblyFileName (AssemblyDefinition assembly)
+		{
+			// See: https://github.com/mono/linker/issues/1313
+			// Call LinkContext.Resolver.GetAssemblyFileName (https://github.com/mono/linker/blob/da2cc0fcd6c3a8e8e5d1b5d4a655f3653baa8980/src/linker/Linker/AssemblyResolver.cs#L88) using reflection.
+			var resolver = typeof (LinkContext).GetProperty ("Resolver").GetValue (Context);
+			var filename = (string) resolver.GetType ().GetMethod ("GetAssemblyFileName", new Type [] { typeof (AssemblyDefinition) }).Invoke (resolver, new object [] { assembly });
+			return filename;
 		}
 
 		public void WriteOutputForMSBuild (string itemName, List<MSBuildItem> items)

@@ -176,6 +176,14 @@
 				this yet (ref: https://github.com/dotnet/sdk/pull/12144).
 			-->
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -b</_ExtraTrimmerArgs>
+
+			<!-- FIXME: what do we do here? This needs testing to see if it actually works -->
+
+			<!-- We always want the linker to process debug symbols, even when building in Release mode, because the AOT compiler uses the managed debug symbols to output DWARF debugging symbols -->
+			<TrimmerRemoveSymbols>false</TrimmerRemoveSymbols>
+
+			<!-- On the other hand, we want the linker to link away debug support in the actual code unless we're building for Debug -->
+			<DebuggerSupport>$(_BundlerDebug)</DebuggerSupport>
 		</PropertyGroup>
 
 		<ItemGroup>

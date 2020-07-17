@@ -49,6 +49,8 @@ namespace Xamarin.MacDev.Tasks {
 
 				arguments.Add (PlatformFrameworkHelper.GetMinimumVersionArgument (TargetFrameworkMoniker, SdkIsSimulator, MinimumOSVersion));
 
+				arguments.Add ("-Wl,-all_load");
+
 				arguments.Add ("-isysroot");
 				arguments.Add (SdkRoot);
 

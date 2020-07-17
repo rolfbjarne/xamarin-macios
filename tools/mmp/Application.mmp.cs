@@ -4,9 +4,6 @@ using System.Linq;
 namespace Xamarin.Bundler {
 	public partial class Application
 	{
-		public bool IsSimulatorBuild => false;
-		public bool IsDeviceBuild => false;
-		public bool IsTodayExtension => false;
 		public string ProductName = "Xamarin.Mac";
 
 		public string CustomBundleName = "MonoBundle";

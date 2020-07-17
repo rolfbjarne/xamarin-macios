@@ -7,6 +7,7 @@
     <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
     <LangVersion>latest</LangVersion>
     <IsBindingProject>true</IsBindingProject>
+    <AssemblyName>bindings-test</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,10 @@
   <ItemGroup>
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
     <ObjcBindingCoreSource Include="StructsAndEnums.generated.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnitLite" Version="3.12.0" />
   </ItemGroup>
 
   <PropertyGroup>

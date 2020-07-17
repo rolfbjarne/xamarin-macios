@@ -21,6 +21,12 @@ using PlatformResolver = Xamarin.Bundler.MonoMacResolver;
 
 namespace Xamarin.Bundler {
 
+	public enum BuildTarget {
+		None,
+		Simulator,
+		Device,
+	}
+
 	public enum MonoNativeMode {
 		None,
 		Compat,
@@ -89,6 +95,7 @@ namespace Xamarin.Bundler {
 		public List<Application> SharedCodeApps = new List<Application> (); // List of appexes we're sharing code with.
 		public string RegistrarOutputLibrary;
 
+		public BuildTarget BuildTarget;
 
 		public string Product {
 			get {

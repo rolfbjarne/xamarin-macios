@@ -336,9 +336,8 @@ namespace Xamarin.Bundler
 					// Load all the assemblies in the cached list of assemblies
 					foreach (var assembly in assemblies) {
 						var ad = ManifestResolver.Load (assembly);
-						var asm = new Assembly (this, ad);
+						var asm = AddAssembly (ad);
 						asm.ComputeSatellites ();
-						this.Assemblies.Add (asm);
 					}
 					return;
 				}
@@ -1640,7 +1639,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public static void AdjustDylibs (string output)
+		public void AdjustDylibs (string output)
 		{
 			var sb = new List<string> ();
 			foreach (var dependency in Xamarin.MachO.GetNativeDependencies (output)) {

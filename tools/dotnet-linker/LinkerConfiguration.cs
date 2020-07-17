@@ -171,6 +171,9 @@ namespace Xamarin.Linker {
 			Application.Cache.Location = CacheDirectory;
 			Application.DeploymentTarget = DeploymentTarget;
 			Application.SdkVersion = SdkVersion;
+			Application.MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product, out var isDefaultMode);
+			Application.IsDefaultMarshalManagedExceptionMode = isDefaultMode;
+			Application.MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product);
 
 			switch (Platform) {
 			case ApplePlatform.iOS:

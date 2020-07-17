@@ -28,7 +28,6 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string BundleIdentifier { get; set; }
 
-		[Output]
 		[Required]
 		public ITaskItem CompiledEntitlements { get; set; }
 
@@ -39,11 +38,19 @@ namespace Xamarin.MacDev.Tasks
 
 		public string ProvisioningProfile { get; set; }
 
+		public bool SdkIsSimulator { get; set; }
+
 		[Required]
 		public string SdkPlatform { get; set; }
 
 		[Required]
 		public string SdkVersion { get; set; }
+
+		[Output]
+		public ITaskItem EntitlementsInExecutable { get; set; }
+
+		[Output]
+		public ITaskItem EntitlementsInSignature { get; set; }
 
 		#endregion
 
@@ -382,7 +389,31 @@ namespace Xamarin.MacDev.Tasks
 				}
 			}
 
+			if (SdkIsSimulator) {
+				if (compiled.Count > 0) {
+					EntitlementsInExecutable = CompiledEntitlements;
+				}
+			} else {
+				EntitlementsInSignature = CompiledEntitlements;
+			}
+
 			return !Log.HasLoggedErrors;
 		}
+
+		static bool EntitlementsRequireLinkerFlags (string path)
+		{
+			try {
+				var plist = PDictionary.FromFile (path);
+
+				// FIXME: most keys do not require linking in the entitlements file, so we
+				// could probably add some smarter logic here to iterate over all of the
+				// keys in order to determine whether or not we really need to link with
+				// the entitlements or not.
+				return plist.Count != 0;
+			} catch {
+				return false;
+			}
+		}
+
 	}
 }

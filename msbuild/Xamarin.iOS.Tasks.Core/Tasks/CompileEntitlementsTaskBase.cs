@@ -10,9 +10,7 @@ using Xamarin.Utils;
 namespace Xamarin.iOS.Tasks
 {
 	public abstract class CompileEntitlementsTaskBase : Xamarin.MacDev.Tasks.CompileEntitlementsTaskBase
-	{
-		public bool SdkIsSimulator { get; set; }
-		
+	{		
 		static readonly HashSet<string> allowedProvisioningKeys = new HashSet<string> {
 			"application-identifier",
 			"aps-environment",

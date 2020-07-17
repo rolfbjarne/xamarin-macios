@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
+using Mono.Cecil;
 using Mono.Linker;
+using Mono.Linker.Steps;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
@@ -24,17 +27,37 @@ namespace Xamarin.Linker {
 		public Version SdkVersion { get; private set; }
 		public int Verbosity { get; private set; }
 
-		static ConditionalWeakTable<LinkContext, LinkerConfiguration> configurations = new ConditionalWeakTable<LinkContext, LinkerConfiguration> ();
+		static Dictionary<LinkContext, LinkerConfiguration> configurations = new Dictionary<LinkContext, LinkerConfiguration> ();
 
+		public LinkContext Context { get; private set; }
 		public Application Application { get; private set; }
+		public Target Target { get; private set; }
+
+		static LinkerConfiguration link_conf;
+
+		static LinkerConfiguration ()
+		{
+			Console.WriteLine ("LinkerConfiguration.cctor");
+		}
 
 		public static LinkerConfiguration GetInstance (LinkContext context)
 		{
-			if (!configurations.TryGetValue (context, out var instance)) {
+			// Read this first: https://github.com/mono/linker/issues/1314
+			// Then run away from here.
+
+			// OK, here's the problem:
+
+			LinkerConfiguration instance;
+
+			// System.Runtime should always be around
+			var sr = context.GetLoadedAssembly ("System.Private.CoreLib");
+			instance = context.Annotations.GetCustomAnnotation ("LinkerConfiguration", sr) as LinkerConfiguration;
+			if (instance == null) {
 				if (!context.TryGetCustomData ("LinkerOptionsFile", out var linker_options_file))
 					throw new Exception ($"No custom linker options file was passed to the linker (using --custom-data LinkerOptionsFile=...");
 				instance = new LinkerConfiguration (linker_options_file);
-				configurations.Add (context, instance);
+				instance.Context = context;
+				context.Annotations.SetCustomAnnotation ("LinkerConfiguration", sr, instance);
 			}
 
 			return instance;
@@ -46,6 +69,7 @@ namespace Xamarin.Linker {
 				throw new FileNotFoundException ($"The custom linker file {linker_file} does not exist.");
 
 			var lines = File.ReadAllLines (linker_file);
+			var significantLines = new List<string> ();
 			for (var i = 0; i < lines.Length; i++) {
 				var line = lines [i].TrimStart ();
 				if (line.Length == 0 || line [0] == '#')
@@ -54,6 +78,8 @@ namespace Xamarin.Linker {
 				var eq = line.IndexOf ('=');
 				if (eq == -1)
 					throw new InvalidOperationException ($"Invalid syntax for line {i + 1} in {linker_file}: No equals sign.");
+
+				significantLines.Add (line);
 
 				var key = line [..eq];
 				var value = line [(eq + 1)..];
@@ -128,7 +154,14 @@ namespace Xamarin.Linker {
 
 			ErrorHelper.Platform = Platform;
 
-			Application = new Application (this);
+			Application = new Application (this, significantLines.ToArray ());
+			Target = new Target (Application);
+
+			Application.Cache.Location = CacheDirectory;
+
+			// Increase verbosity while .NET is being implemented.
+			Driver.Verbosity = 9;
+			ErrorHelper.Verbosity = Driver.Verbosity;
 		}
 
 		public void Write ()
@@ -146,6 +179,15 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    SdkVersion: {SdkVersion}");
 				Console.WriteLine ($"    Verbosity: {Verbosity}");
 			}
+		}
+
+		public string GetAssemblyFileName (AssemblyDefinition assembly)
+		{
+			// See: https://github.com/mono/linker/issues/1313
+			// Call LinkContext.Resolver.GetAssemblyFileName (https://github.com/mono/linker/blob/da2cc0fcd6c3a8e8e5d1b5d4a655f3653baa8980/src/linker/Linker/AssemblyResolver.cs#L88) using reflection.
+			var resolver = typeof (LinkContext).GetProperty ("Resolver").GetValue (Context);
+			var filename = (string) resolver.GetType ().GetMethod ("GetAssemblyFileName", new Type [] { typeof (AssemblyDefinition) }).Invoke (resolver, new object [] { assembly });
+			return filename;
 		}
 
 		public void WriteOutputForMSBuild (string itemName, List<MSBuildItem> items)

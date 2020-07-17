@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>EmbeddedResources</RootNamespace>
+    <AssemblyName>EmbeddedResources</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\product.snk</AssemblyOriginatorKeyFile>
     <LangVersion>latest</LangVersion>

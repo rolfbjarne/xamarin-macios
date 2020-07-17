@@ -10,6 +10,9 @@ namespace Xamarin.MacDev.Tasks {
 #region Inputs
 		public ITaskItem[] LinkWithLibraries { get; set; }
 
+		// A path to entitlements to be embedded into the executable
+		public string EntitlementsInExecutable { get; set; }
+
 		[Required]
 		public string SdkDevPath { get; set; }
 
@@ -37,6 +40,9 @@ namespace Xamarin.MacDev.Tasks {
 			arguments.Add ("clang");
 
 			arguments.Add (PlatformFrameworkHelper.GetMinimumVersionArgument (TargetFrameworkMoniker, SdkIsSimulator, MinimumOSVersion));
+
+			arguments.Add ("-Wl,-all_load");
+			arguments.Add ("-lz");
 
 			arguments.Add ("-isysroot");
 			arguments.Add (SdkRoot);
@@ -87,12 +93,29 @@ namespace Xamarin.MacDev.Tasks {
 				foreach (var obj in ObjectFiles)
 					arguments.Add (Path.GetFullPath (obj.ItemSpec));
 
+			arguments.AddRange (GetEmbedEntitlementsInExecutableLinkerFlags (EntitlementsInExecutable));
+
 			arguments.Add ("-o");
 			arguments.Add (Path.GetFullPath (OutputFile));
 
 			ExecuteAsync ("xcrun", arguments, sdkDevPath: SdkDevPath).Wait ();
 
 			return !Log.HasLoggedErrors;
+		}
+
+
+		public static string[] GetEmbedEntitlementsInExecutableLinkerFlags (string entitlements)
+		{
+			if (string.IsNullOrEmpty (entitlements))
+				return Array.Empty<string> ();
+
+			return new string []
+			{
+				"-Xlinker", "-sectcreate",
+				"-Xlinker", "__TEXT",
+				"-Xlinker", "__entitlements",
+				"-Xlinker", Path.GetFullPath (entitlements),
+			};
 		}
 	}
 }

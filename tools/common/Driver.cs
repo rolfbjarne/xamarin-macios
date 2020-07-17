@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,7 @@ namespace Xamarin.Bundler {
 		public static bool Force { get; set; }
 
 		static Version min_xcode_version = new Version (6, 0);
+#if !NET
 		public static int Main (string [] args)
 		{
 			try {
@@ -321,6 +323,7 @@ namespace Xamarin.Bundler {
 
 			return false;
 		}
+#endif // !NET
 
 		static int Jobs;
 		public static int Concurrency {

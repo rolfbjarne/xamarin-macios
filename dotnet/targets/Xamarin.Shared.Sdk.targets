@@ -101,6 +101,8 @@
 			_CollectBundleResources;
 			_DetectAppManifest;
 			_CopyResourcesToBundle;
+			_PrepareResourceRules;
+			_CompileEntitlements;
 			_CompileAppManifest;
 			_ComputeLinkerArguments;
 			ComputeFilesToPublish;
@@ -182,6 +184,10 @@
 		<!-- Load _LinkerFrameworks -->
 		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_LinkerFrameworks.items" Condition="Exists('$(_LinkerItemsDirectory)/_LinkerFrameworks.items')">
 			<Output TaskParameter="Items" ItemName="_LinkerFrameworks" />
+		</ReadItemsFromFile>
+		<!-- Load _NativeLinkerFlags -->
+		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_NativeLinkerFlags.items" Condition="Exists('$(_LinkerItemsDirectory)/_NativeLinkerFlags.items')">
+			<Output TaskParameter="Items" ItemName="_NativeLinkerFlags" />
 		</ReadItemsFromFile>
 	</Target>
 
@@ -317,8 +323,9 @@
 
 		<LinkNativeCode
 			SessionId="$(BuildSessionId)"
+			EntitlementsInExecutable="$(_CompiledEntitlements)"
 			Frameworks="@(_NativeExecutableFrameworks)"
-			LinkWithLibraries="@(_XamarinMainLibraries)"
+			LinkWithLibraries="@(_XamarinMainLibraries);@(_NativeLinkerFlags)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
 			ObjectFiles="@(_NativeExecutableObjectFiles)"
 			OutputFile="$(_IntermediateNativeLibraryDir)$(_NativeExecutableName)"

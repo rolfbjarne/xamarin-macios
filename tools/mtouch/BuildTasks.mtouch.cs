@@ -601,6 +601,7 @@ namespace Xamarin.Bundler
 
 	public class LipoTask : BuildTask
 	{
+		public Application App;
 		public IEnumerable<string> InputFiles { get; set; }
 		public string OutputFile { get; set; }
 

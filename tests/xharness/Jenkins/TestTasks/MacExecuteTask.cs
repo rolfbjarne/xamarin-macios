@@ -136,7 +136,7 @@ namespace Xharness.Jenkins.TestTasks {
 						var listener = new Microsoft.DotNet.XHarness.iOS.Shared.Listeners.SimpleFileListener (xmlLog.FullPath, log, xmlLog, useXmlOutput);
 						var reporter = reporterFactory.Create (Harness.HarnessLog, log, Logs, snapshot, listener, Harness.ResultParser, new AppBundleInformation ("N/A", "N/A", "N/A", "N/A", null), RunMode.macOS, Harness.XmlJargon, "no device here", TimeSpan.Zero);
 						var rv = await reporter.ParseResult ();
-						ExecutionResult = rv.ExecutionResult;
+						ExecutionResult = rv.ExecutingResult;
 						FailureMessage = rv.FailureMessage;
 					}
 				}

@@ -59,6 +59,7 @@ namespace Xamarin.Bundler {
 		public HashSet<string> Frameworks = new HashSet<string> ();
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
 
+		public bool IsExtension;
 		public ApplePlatform Platform { get { return Driver.TargetFramework.Platform; } }
 
 		// Linker config

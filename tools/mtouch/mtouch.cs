@@ -1199,13 +1199,5 @@ namespace Xamarin.Bundler
 			const int S_IFLNK = 40960;
 			return (buf.st_mode & S_IFLNK) == S_IFLNK;
 		}
-
-		public static bool IsFrameworkAvailableInSimulator (Application app, string framework)
-		{
-			if (!GetFrameworks (app).TryGetValue (framework, out var fw))
-				return true; // Unknown framework, assume it's valid for the simulator
-
-			return fw.IsFrameworkAvailableInSimulator (app);
-		}
 	}
 }

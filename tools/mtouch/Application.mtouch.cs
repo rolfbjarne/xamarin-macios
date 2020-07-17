@@ -1067,7 +1067,7 @@ namespace Xamarin.Bundler {
 #endif
 
 			if (DeploymentTarget == null)
-				DeploymentTarget = Xamarin.SdkVersions.GetVersion (Platform);
+				DeploymentTarget = Xamarin.SdkVersions.GetVersion (this);
 
 			if (Platform == ApplePlatform.iOS && (HasDynamicLibraries || HasFrameworks) && DeploymentTarget.Major < 8) {
 				ErrorHelper.Warning (78, Errors.MT0078, DeploymentTarget);
@@ -2036,7 +2036,7 @@ namespace Xamarin.Bundler {
 			sb.AppendLine ("        <key>DTPlatformName</key>");
 			sb.AppendLine ($"        <string>{Driver.GetPlatform (this).ToLowerInvariant ()}</string>");
 			sb.AppendLine ("        <key>DTPlatformVersion</key>");
-			sb.AppendLine ($"        <string>{SdkVersions.GetVersion (Platform)}</string>");
+			sb.AppendLine ($"        <string>{SdkVersions.GetVersion (this)}</string>");
 			sb.AppendLine ("        <key>DTSDKBuild</key>");
 			sb.AppendLine ("        <string>12D508</string>");
 			sb.AppendLine ("        <key>DTSDKName</key>");

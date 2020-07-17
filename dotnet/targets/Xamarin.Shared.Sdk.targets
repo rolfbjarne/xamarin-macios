@@ -101,6 +101,7 @@
 			_CollectBundleResources;
 			_DetectAppManifest;
 			_CopyResourcesToBundle;
+			_PrepareResourceRules;
 			_CompileEntitlements;
 			_CompileAppManifest;
 			_ComputeLinkerArguments;

@@ -25,11 +25,6 @@ namespace Xamarin.Bundler {
 		MarkerOnly = 3,
 	}
 
-	public enum BuildTarget {
-		Simulator,
-		Device,
-	}
-
 	public enum DlsymOptions
 	{
 		Default,
@@ -43,7 +38,6 @@ namespace Xamarin.Bundler {
 		public string ProductName = "Xamarin.iOS";
 
 		public string ExecutableName;
-		public BuildTarget BuildTarget;
 
 		public bool EnableCxx;
 		bool? enable_msym;

@@ -1674,7 +1674,7 @@ namespace Xamarin.Bundler
 			}
 			if (sb.Count > 0) {
 				sb.Add (output);
-				Driver.RunInstallNameTool (sb);
+				Driver.RunInstallNameTool (App, sb);
 				sb.Clear ();
 			}
 		}
@@ -1705,7 +1705,7 @@ namespace Xamarin.Bundler
 
 			try {
 				var launcher = new StringBuilder ();
-				launcher.Append (Path.Combine (Driver.FrameworkBinDirectory, "simlauncher"));
+				launcher.Append (Path.Combine (Driver.GetFrameworkBinDirectory (App), "simlauncher"));
 				if (Is32Build)
 					launcher.Append ("32");
 				else if (Is64Build)

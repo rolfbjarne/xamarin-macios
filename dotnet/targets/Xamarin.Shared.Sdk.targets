@@ -103,6 +103,7 @@
 			_CompileAppManifest;
 			_ComputeLinkerArguments;
 			ComputeFilesToPublish;
+			__FixLinkerDebugSymbolsBug;
 			_LoadLinkerOutput;
 			_CompileNativeExecutable;
 			_LinkNativeExecutable;
@@ -112,6 +113,15 @@
 	</PropertyGroup>
 
 	<!-- Linker -->
+	<Target Name="__FixLinkerDebugSymbolsBug">
+		<ItemGroup>
+			<_LinkedDebugSymbols Include="@(_ManagedAssembliesToLink->'$(IntermediateLinkDir)%(Filename).pdb')" Condition="Exists ('$(IntermediateLinkDir)%(Filename).pdb')" />
+			<_UnlinkedDebugSymbols Include="@(_ManagedAssembliesToLink->'%(RootDir)%(Directory)%(Filename).pdb'" Condition="Exists ('%(RootDir)%(Directory)%(Filename).pdb')" />
+			<ResolvedFileToPublish Remove="@(_UnlinkedDebugSymbols)" />
+			<ResolvedFileToPublish Include="@(_LinkedDebugSymbols)" />
+		</ItemGroup>
+	</Target>
+
 	<PropertyGroup>
 		<_AdditionalTaskAssemblyDirectory>$(_XamarinSdkRootDirectory)tools/dotnet-linker/</_AdditionalTaskAssemblyDirectory>
 		<_AdditionalTaskAssembly>$(_AdditionalTaskAssemblyDirectory)dotnet-linker.dll</_AdditionalTaskAssembly>

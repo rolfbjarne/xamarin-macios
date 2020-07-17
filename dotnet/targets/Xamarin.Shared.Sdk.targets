@@ -153,7 +153,8 @@
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -p copy "System.Runtime"</_ExtraTrimmerArgs>
 
 			<!-- Verbose output, so that we get something to stdout when something goes wrong -->
-			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose</_ExtraTrimmerArgs>
+			<!-- Verbose output temporarily disabled because of https://github.com/mono/linker/issues/1351 -->
+			<!-- <_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -  -  verbose</_ExtraTrimmerArgs> -->
 
 			<!--
 				Always process symbols files, even in release mode, because

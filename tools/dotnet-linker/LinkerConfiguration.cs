@@ -166,6 +166,9 @@ namespace Xamarin.Linker {
 			Application.IsDefaultMarshalManagedExceptionMode = isDefaultMode;
 			Application.MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product);
 
+			// Increase verbosity while .NET is being implemented.
+			Driver.Verbosity = 9;
+			ErrorHelper.Verbosity = Driver.Verbosity;
 		}
 
 		public void Write ()

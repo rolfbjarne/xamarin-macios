@@ -33,6 +33,7 @@ namespace Xamarin.Linker {
 		static ConditionalWeakTable<LinkContext, LinkerConfiguration> configurations = new ConditionalWeakTable<LinkContext, LinkerConfiguration> ();
 
 		public Application Application { get; private set; }
+		public Target Target { get; private set; }
 
 		public LinkContext Context { get; private set; }
 
@@ -160,6 +161,8 @@ namespace Xamarin.Linker {
 			ErrorHelper.Platform = Platform;
 
 			Application = new Application (this, significantLines.ToArray ());
+			Target = new Target (Application);
+
 			Application.Cache.Location = CacheDirectory;
 
 			Application.MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product, out var isDefaultMode);

@@ -464,14 +464,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public bool IsDeviceBuild { 
-			get { return BuildTarget == BuildTarget.Device; } 
-		}
-
-		public bool IsSimulatorBuild { 
-			get { return BuildTarget == BuildTarget.Simulator; } 
-		}
-
 		public BitCodeMode BitCodeMode { get; set; }
 
 		public bool EnableAsmOnlyBitCode { get { return BitCodeMode == BitCodeMode.ASMOnly; } }
@@ -494,24 +486,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public bool IsTodayExtension {
-			get {
-				return ExtensionIdentifier == "com.apple.widget-extension";
-			}
-		}
-
-		public bool IsWatchExtension {
-			get {
-				return ExtensionIdentifier == "com.apple.watchkit";
-			}
-		}
-
-		public bool IsTVExtension {
-			get {
-				return ExtensionIdentifier == "com.apple.tv-services";
-			}
-		}
-
 		public bool HasFrameworksDirectory {
 			get {
 				if (!IsExtension)
@@ -524,19 +498,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public string ExtensionIdentifier {
-			get {
-				if (!IsExtension)
-					return null;
-
-				var info_plist = Path.Combine (AppDirectory, "Info.plist");
-				var plist = Driver.FromPList (info_plist);
-				var dict = plist.Get<PDictionary> ("NSExtension");
-				if (dict == null)
-					return null;
-				return dict.GetString ("NSExtensionPointIdentifier");
-			}
-		}
 
 		public string BundleId {
 			get {

@@ -523,24 +523,6 @@ namespace Xamarin.Bundler
 			return main_source;
 		}
 
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int symlink (string path1, string path2);
-
-		public static bool Symlink (string path1, string path2)
-		{
-			return symlink (path1, path2) == 0;
-		}
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int unlink (string pathname);
-
-		public static void FileDelete (string file)
-		{
-			// File.Delete can't always delete symlinks (in particular if the symlink points to a file that doesn't exist).
-			unlink (file);
-			// ignore any errors.
-		}
-
 		public static void CopyAssembly (string source, string target, string target_dir = null)
 		{
 			if (File.Exists (target))

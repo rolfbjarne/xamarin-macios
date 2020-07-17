@@ -14,7 +14,9 @@ using Xamarin.Utils;
 
 using ObjCRuntime;
 
-#if MONOTOUCH
+#if NET
+using PlatformResolver = Xamarin.Linker.DotNetResolver;
+#elif MONOTOUCH
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
 #elif MMP
 using PlatformResolver = Xamarin.Bundler.MonoMacResolver;
@@ -71,7 +73,9 @@ namespace Xamarin.Bundler {
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
 
 		public bool IsExtension;
+#if !NET
 		public ApplePlatform Platform { get { return Driver.TargetFramework.Platform; } }
+#endif
 
 		// Linker config
 		public LinkMode LinkMode = LinkMode.All;
@@ -211,6 +215,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+#if !NET
 		public bool IsSimulatorBuild {
 			get {
 				switch (Platform) {
@@ -225,6 +230,7 @@ namespace Xamarin.Bundler {
 				}
 			}
 		}
+#endif
 
 		public bool IsTodayExtension {
 			get {
@@ -258,8 +264,10 @@ namespace Xamarin.Bundler {
 		}
 
 		public static int Concurrency => Driver.Concurrency;
+#if !NET
 		public Version DeploymentTarget;
 		public Version SdkVersion;
+#endif
 	
 		public MonoNativeMode MonoNativeMode { get; set; }
 		List<Abi> abis;
@@ -287,10 +295,12 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+#if !NET
 		public string GetProductName ()
 		{
 			return ProductName;
 		}
+#endif
 
 		// If we're targetting a 64 bit arch.
 		bool? is64bits;
@@ -722,6 +732,7 @@ namespace Xamarin.Bundler {
 #endif
 			};
 
+#if !NET
 			if (Platform == ApplePlatform.iOS) {
 				if (Is32Build) {
 					resolver.ArchDirectory = Driver.GetArch32Directory (this);
@@ -729,6 +740,7 @@ namespace Xamarin.Bundler {
 					resolver.ArchDirectory = Driver.GetArch64Directory (this);
 				}
 			}
+#endif
 
 			var ps = new ReaderParameters ();
 			ps.AssemblyResolver = resolver;

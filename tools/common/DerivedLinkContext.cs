@@ -15,7 +15,11 @@ using LinkContext = Xamarin.Bundler.DotNetLinkContext;
 
 namespace Xamarin.Tuner
 {
+#if NET
+	public class DerivedLinkContext : DotNetLinkContext
+#else
 	public class DerivedLinkContext : LinkContext
+#endif
 	{
 		internal StaticRegistrar StaticRegistrar;
 		internal Target Target;
@@ -97,11 +101,13 @@ namespace Xamarin.Tuner
 			get; set;
 		}
 
+#if !NET
 		public DerivedLinkContext (Pipeline pipeline, AssemblyResolver resolver)
 			: base (pipeline, resolver)
 		{
 			UserAction = AssemblyAction.Link;
 		}
+#endif
 
 		public Dictionary<IMetadataTokenProvider, object> GetAllCustomAttributes (string storage_name)
 		{

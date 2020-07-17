@@ -26,6 +26,7 @@ using ObjCRuntime;
 namespace MonoTests.System.Net.Http
 {
 	[TestFixture]
+	[Ignore ("testing")]
 	public class MessageHandlerTest
 	{
 		public MessageHandlerTest ()
@@ -85,6 +86,9 @@ namespace MonoTests.System.Net.Http
 #if !__WATCHOS__
 		// ensure that we do get the same cookies as the managed handler
 		[Test]
+#if NET
+		[Ignore ("System.EntryPointNotFoundException: AppleCryptoNative_SecKeychainItemCopyKeychain")] // https://github.com/dotnet/runtime/issues/36897
+#endif
 		public void TestNSUrlSessionHandlerCookies ()
 		{
 			var managedCookieResult = false;
@@ -130,6 +134,9 @@ namespace MonoTests.System.Net.Http
 
 		// ensure that we can use a cookie container to set the cookies for a url
 		[Test]
+#if NET
+		[Ignore ("System.EntryPointNotFoundException: AppleCryptoNative_SecKeychainItemCopyKeychain")] // https://github.com/dotnet/runtime/issues/36897
+#endif
 		public void TestNSUrlSessionHandlerCookieContainer ()
 		{
 			var url = NetworkResources.Httpbin.CookiesUrl;

@@ -80,9 +80,6 @@ namespace Xamarin.Bundler
 {
 	public partial class Driver {
 		internal const string NAME = "mtouch";
-		internal const string PRODUCT = "Xamarin.iOS";
-		const string LOCAL_BUILD_DIR = "_ios-build";
-		const string FRAMEWORK_LOCATION_VARIABLE = "MD_MTOUCH_SDK_ROOT";
 
 		public static void ShowHelp (OptionSet os)
 		{
@@ -120,7 +117,6 @@ namespace Xamarin.Bundler
 			Embeddinator,
 		}
 
-		static Version min_xcode_version = new Version (6, 0);
 
 		//
 		// Output generation
@@ -290,7 +286,7 @@ namespace Xamarin.Bundler
 			}
 
 			if (enable_llvm)
-				aot.Append ("llvm-path=").Append (FrameworkDirectory).Append ("/LLVM/bin/,");
+				aot.Append ("llvm-path=").Append (GetFrameworkDirectory2 (app)).Append ("/LLVM/bin/,");
 
 			aot.Append ("outfile=").Append (outputFile);
 			if (enable_llvm)
@@ -523,24 +519,6 @@ namespace Xamarin.Bundler
 			}
 
 			return main_source;
-		}
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int symlink (string path1, string path2);
-
-		public static bool Symlink (string path1, string path2)
-		{
-			return symlink (path1, path2) == 0;
-		}
-
-		[DllImport (Constants.libSystemLibrary)]
-		static extern int unlink (string pathname);
-
-		public static void FileDelete (string file)
-		{
-			// File.Delete can't always delete symlinks (in particular if the symlink points to a file that doesn't exist).
-			unlink (file);
-			// ignore any errors.
 		}
 
 		public static void CopyAssembly (string source, string target, string target_dir = null)
@@ -944,7 +922,7 @@ namespace Xamarin.Bundler
 			
 			// Allow a few actions, since these seem to always work no matter the Xcode version.
 			var accept_any_xcode_version = action == Action.ListDevices || action == Action.ListCrashReports || action == Action.ListApps || action == Action.LogDev;
-			ValidateXcode (accept_any_xcode_version, false);
+			ValidateXcode (app, accept_any_xcode_version, false);
 
 			switch (action) {
 			/* Device actions */
@@ -966,7 +944,7 @@ namespace Xamarin.Bundler
 			case Action.LaunchWatchApp:
 			case Action.KillWatchApp:
 			case Action.ListSimulators:
-				return CallMlaunch ();
+				return CallMlaunch (app);
 			}
 
 			if (app.SdkVersion == null)
@@ -1007,7 +985,7 @@ namespace Xamarin.Bundler
 				throw new ProductException (82, true, Errors.MT0082);
 
 			if (cross_prefix == null)
-				cross_prefix = FrameworkDirectory;
+				cross_prefix = GetFrameworkDirectory2 (app);
 
 			Watch ("Setup", 1);
 
@@ -1054,23 +1032,22 @@ namespace Xamarin.Bundler
 			{ IsBackground = true }.Start ();
 		}
 
-		static string MlaunchPath {
-			get {
-				// check next to mtouch first
-				var path = Path.Combine (FrameworkBinDirectory, "mlaunch");
-				if (File.Exists (path))
-					return path;
+		static string GetMlaunchPath (Application app)
+		{
+			// check next to mtouch first
+			var path = Path.Combine (GetFrameworkBinDirectory (app), "mlaunch");
+			if (File.Exists (path))
+				return path;
 
-				// check an environment variable
-				path = Environment.GetEnvironmentVariable ("MLAUNCH_PATH");
-				if (File.Exists (path))
-					return path;
+			// check an environment variable
+			path = Environment.GetEnvironmentVariable ("MLAUNCH_PATH");
+			if (File.Exists (path))
+				return path;
 
-				throw ErrorHelper.CreateError (93, Errors.MT0093);
-			}
+			throw ErrorHelper.CreateError (93, Errors.MT0093);
 		}
 
-		static int CallMlaunch ()
+		static int CallMlaunch (Application app)
 		{
 			Log (1, "Forwarding to mlaunch");
 			using (var p = new Process ()) {
@@ -1078,7 +1055,7 @@ namespace Xamarin.Bundler
 				p.StartInfo.RedirectStandardError = true;
 				p.StartInfo.RedirectStandardInput = true;
 				p.StartInfo.RedirectStandardOutput = true;
-				p.StartInfo.FileName = MlaunchPath;
+				p.StartInfo.FileName = GetMlaunchPath (app);
 
 				var sb = Environment.GetCommandLineArgs ().Skip (1).ToList ();
 				p.StartInfo.Arguments = StringUtils.FormatArguments (sb);
@@ -1171,7 +1148,7 @@ namespace Xamarin.Bundler
 
 		static bool IsBoundAssembly (Assembly s)
 		{
-			if (s.IsFrameworkAssembly)
+			if (s.IsFrameworkAssembly == true)
 				return false;
 
 			AssemblyDefinition ad = s.AssemblyDefinition;
@@ -1222,14 +1199,6 @@ namespace Xamarin.Bundler
 				throw new Exception (string.Format ("Could not lstat '{0}': {1}", file, Marshal.GetLastWin32Error ()));
 			const int S_IFLNK = 40960;
 			return (buf.st_mode & S_IFLNK) == S_IFLNK;
-		}
-
-		public static bool IsFrameworkAvailableInSimulator (Application app, string framework)
-		{
-			if (!GetFrameworks (app).TryGetValue (framework, out var fw))
-				return true; // Unknown framework, assume it's valid for the simulator
-
-			return fw.IsFrameworkAvailableInSimulator (app);
 		}
 	}
 }

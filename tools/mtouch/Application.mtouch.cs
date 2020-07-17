@@ -1263,6 +1263,7 @@ namespace Xamarin.Bundler {
 				if (link_tasks.Count > 1) {
 					// If we have more than one executable, we must lipo them together.
 					var lipo_task = new LipoTask {
+						App = this,
 						InputFiles = link_tasks.Select ((v) => v.OutputFile),
 						OutputFile = Executable,
 					};

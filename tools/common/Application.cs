@@ -191,6 +191,67 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public bool IsDeviceBuild {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return BuildTarget == BuildTarget.Device;
+				case ApplePlatform.MacOSX:
+					return false;
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+
+		public bool IsSimulatorBuild {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return BuildTarget == BuildTarget.Simulator;
+				case ApplePlatform.MacOSX:
+					return false;
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+
+		public bool IsTodayExtension {
+			get {
+				return ExtensionIdentifier == "com.apple.widget-extension";
+			}
+		}
+
+		public bool IsWatchExtension {
+			get {
+				return ExtensionIdentifier == "com.apple.watchkit";
+			}
+		}
+
+		public bool IsTVExtension {
+			get {
+				return ExtensionIdentifier == "com.apple.tv-services";
+			}
+		}
+		public string ExtensionIdentifier {
+			get {
+				if (!IsExtension)
+					return null;
+
+				var info_plist = Path.Combine (AppDirectory, "Info.plist");
+				var plist = Driver.FromPList (info_plist);
+				var dict = plist.Get<PDictionary> ("NSExtension");
+				if (dict == null)
+					return null;
+				return dict.GetString ("NSExtensionPointIdentifier");
+			}
+		}
+
 		public static int Concurrency => Driver.Concurrency;
 		public Version DeploymentTarget;
 		public Version SdkVersion;

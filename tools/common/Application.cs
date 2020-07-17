@@ -573,8 +573,8 @@ namespace Xamarin.Bundler {
 				}
 			}
 
-			MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptions, EnableCoopGC, IsSimulatorBuild, EnableDebug, Product);
-			MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptions, EnableCoopGC, IsSimulatorBuild, EnableDebug, Product, out var isDefaultManagedMode);
+			MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptions, EnableCoopGC, IsSimulatorBuild, EnableDebug, ProductName);
+			MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptions, EnableCoopGC, IsSimulatorBuild, EnableDebug, ProductName, out var isDefaultManagedMode);
 			IsDefaultMarshalManagedExceptionMode = isDefaultManagedMode;
 
 			if (SymbolMode == SymbolMode.Default) {

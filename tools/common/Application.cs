@@ -9,6 +9,7 @@ using Mono.Cecil.Cil;
 using Mono.Linker;
 
 using Xamarin.Linker;
+using Xamarin.MacDev;
 using Xamarin.Utils;
 
 using ObjCRuntime;

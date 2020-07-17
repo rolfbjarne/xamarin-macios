@@ -2394,6 +2394,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		static extern IntPtr class_getInstanceMethod (IntPtr cls, IntPtr sel);
 
 #if !MONOMAC // Registrar_OutExportDerivedClass is from fsharp tests
+#if !NET // We don't support F# in .NET yet
 		[Test]
 		public void OutOverriddenWithoutOutAttribute ()
 		{
@@ -2406,6 +2407,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				}
 			}
 		}
+#endif // !NET
 #endif
 
 		class ProtocolArgumentClass : NSObject

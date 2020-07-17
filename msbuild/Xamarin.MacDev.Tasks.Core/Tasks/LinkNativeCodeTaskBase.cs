@@ -104,6 +104,20 @@ namespace Xamarin.MacDev.Tasks {
 
 			return !Log.HasLoggedErrors;
 		}
+
+		public static string[] GetEmbedEntitlementsInExecutableLinkerFlags (string entitlements)
+		{
+			if (string.IsNullOrEmpty (entitlements))
+				return Array.Empty<string> ();
+
+			return new string []
+			{
+				"-Xlinker", "-sectcreate",
+				"-Xlinker", "__TEXT",
+				"-Xlinker", "__entitlements",
+				"-Xlinker", Path.GetFullPath (entitlements),
+			};
+		}
 	}
 }
 

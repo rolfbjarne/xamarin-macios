@@ -174,4 +174,7 @@
   <Target Name="BuildConstants" Inputs="Constants.cs.in" Outputs="Constants.generated.cs">
     <Exec Command="make Constants.generated.cs" />
   </Target>
+  <Target Name="BuildSdkVersions" Inputs="../common/SdkVersions.cs.in" Outputs="../common/SdkVersions.cs" BeforeTargets="BeforeBuild">
+    <Exec Command="make -C ../mtouch ../common/SdkVersions.cs" />
+  </Target>
 </Project>

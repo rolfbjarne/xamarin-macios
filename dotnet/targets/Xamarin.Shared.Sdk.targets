@@ -157,6 +157,9 @@
 
 			<!-- Verbose output, so that we get something to stdout when something goes wrong -->
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose</_ExtraTrimmerArgs>
+
+			<!-- Process symbols as well (why is this not the default?) -->
+			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -b</_ExtraTrimmerArgs>
 		</PropertyGroup>
 		<ItemGroup>
 			<!-- add a custom step which inserts any other steps we need -->

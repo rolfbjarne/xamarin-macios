@@ -24,6 +24,8 @@ namespace Xamarin.Linker {
 		public string ItemsDirectory { get; private set; }
 		public bool IsSimulatorBuild { get; private set; }
 		public LinkMode LinkMode => Application.LinkMode;
+		public MarshalManagedExceptionMode MarshalManagedExceptionMode { get; private set; }
+		public MarshalObjectiveCExceptionMode MarshalObjectiveCExceptionMode { get; private set; }
 		public string PartialStaticRegistrarLibrary { get; set; }
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; }
@@ -108,6 +110,21 @@ namespace Xamarin.Linker {
 					if (!Enum.TryParse<LinkMode> (value, true, out var lm))
 						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
 					Application.LinkMode = lm;
+					break;
+				case "MarshalManagedExceptionMode":
+					if (!string.IsNullOrEmpty (value)) {
+						if (!Enum.TryParse<MarshalManagedExceptionMode> (value, out var mode))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						MarshalManagedExceptionMode = mode;
+					}
+					break;
+				case "MarshalObjectiveCExceptionMode":
+					if (!string.IsNullOrEmpty (value)) {
+						if (!Enum.TryParse<MarshalObjectiveCExceptionMode> (value, out var mode))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						MarshalObjectiveCExceptionMode = mode;
+					}
+					break;
 				case "PartialStaticRegistrarLibrary":
 					PartialStaticRegistrarLibrary = value;
 					break;
@@ -169,6 +186,9 @@ namespace Xamarin.Linker {
 			Application.Cache.Location = CacheDirectory;
 			Application.DeploymentTarget = DeploymentTarget;
 			Application.SdkVersion = SdkVersion;
+			Application.MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.ProductName, out var isDefaultMode);
+			Application.IsDefaultMarshalManagedExceptionMode = isDefaultMode;
+			Application.MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.ProductName);
 
 			switch (Platform) {
 			case ApplePlatform.iOS:
@@ -196,6 +216,8 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    ItemsDirectory: {ItemsDirectory}");
 				Console.WriteLine ($"    IsSimulatorBuild: {IsSimulatorBuild}");
 				Console.WriteLine ($"    LinkMode: {LinkMode}");
+				Console.WriteLine ($"    MarshalManagedExceptions: {MarshalManagedExceptionMode}");
+				Console.WriteLine ($"    MarshalObjectiveCExceptions: {MarshalObjectiveCExceptionMode}");
 				Console.WriteLine ($"    PartialStaticRegistrarLibrary: {PartialStaticRegistrarLibrary}");
 				Console.WriteLine ($"    Platform: {Platform}");
 				Console.WriteLine ($"    PlatformAssembly: {PlatformAssembly}.dll");

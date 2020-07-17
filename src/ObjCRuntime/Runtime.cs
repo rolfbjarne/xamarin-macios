@@ -1333,6 +1333,8 @@ namespace ObjCRuntime {
 
 		static Type LookupINativeObjectImplementation (IntPtr ptr, Type target_type, Type implementation = null)
 		{
+			Console.WriteLine ($"LookupINativeObjectImplementation (0x{ptr.ToString ("x")}, {target_type}, {implementation})");
+
 			if (!typeof (NSObject).IsAssignableFrom (target_type)) {
 				// If we're not expecting an NSObject, we can't do a dynamic lookup of the type of ptr,
 				// since we do not know if the object actually supports dynamic type lookup (it can be an
@@ -1358,8 +1360,18 @@ namespace ObjCRuntime {
 				}
 			}
 
-			if (implementation.IsInterface)
+			var interface_check_type = implementation;
+#if NET
+				// https://github.com/dotnet/runtime/issues/39068
+				if (interface_check_type.IsByRef)
+					interface_check_type = interface_check_type.GetElementType ();
+				Console.WriteLine ($"LookupINativeObjectImplementation (0x{ptr.ToString ("x")}, {target_type}, {implementation}) interface_check_type: {interface_check_type}");
+#endif
+
+			if (interface_check_type.IsInterface) 
 				implementation = FindProtocolWrapperType (implementation);
+
+			Console.WriteLine ($"LookupINativeObjectImplementation (0x{ptr.ToString ("x")}, {target_type}, {implementation}) done");
 
 			return implementation;
 		}
@@ -1372,25 +1384,42 @@ namespace ObjCRuntime {
 		// this method is identical in behavior to the generic one.
 		static INativeObject GetINativeObject (IntPtr ptr, bool owns, Type target_type, Type implementation)
 		{
+			Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation})");
 			if (ptr == IntPtr.Zero)
 				return null;
 
 			NSObject o = TryGetNSObject (ptr);
+			Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o1: {o} - {o?.GetType ()}");
 			if (o != null && target_type.IsAssignableFrom (o.GetType ())) {
 				// found an existing object with the right type.
+				Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o2: {o} - {o?.GetType ()}");
 				return o;
 			}
 
 			if (o != null) {
+				Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o3: {o} - {o?.GetType ()}");
+				var interface_check_type = target_type;
+#if NET
+				// https://github.com/dotnet/runtime/issues/39068
+				if (interface_check_type.IsByRef)
+					interface_check_type = interface_check_type.GetElementType ();
+				Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o3bis: {o} - {o?.GetType ()} - {interface_check_type}");
+#endif
 				// found an existing object, but with an incompatible type.
-				if (!target_type.IsInterface) {
+				if (!interface_check_type.IsInterface) {
+					Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o4: {o} - {o?.GetType ()}");
 					// if the target type is another class, there's nothing we can do.
 					throw new InvalidCastException (string.Format ("Unable to cast object of type '{0}' to type '{1}'.", o.GetType ().FullName, target_type.FullName));
 				}
+				Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o5: {o} - {o?.GetType ()}");
 			}
+
+			Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o6: {o} - {o?.GetType ()}");
 
 			// Lookup the ObjC type of the ptr and see if we can use it.
 			implementation = LookupINativeObjectImplementation (ptr, target_type, implementation);
+
+			Console.WriteLine ($"GetINativeObject (0x{ptr.ToString ("x")}, {owns}, {target_type}, {implementation}) o7: {o} - {o?.GetType ()}");
 
 			if (implementation.IsSubclassOf (typeof (NSObject))) {
 				if (o != null) {
@@ -1456,6 +1485,14 @@ namespace ObjCRuntime {
 
 		private static Type FindProtocolWrapperType (Type type)
 		{
+			Console.WriteLine ($"FindProtocolWrapperType ({type})");
+#if NET
+			// https://github.com/dotnet/runtime/issues/39068
+			if (type.IsByRef) {
+				type = type.GetElementType ();
+				Console.WriteLine ($"FindProtocolWrapperType ({type}) fixed");
+			}
+#endif
 			if (type == null || !type.IsInterface)
 				return null;
 

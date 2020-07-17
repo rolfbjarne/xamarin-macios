@@ -21,7 +21,12 @@ using Xamarin.Utils;
 using Registrar;
 using ObjCRuntime;
 
-#if MONOTOUCH
+
+#if NET
+using LinkerOptions = Xamarin.Linker.LinkerConfiguration;
+using PlatformLinkContext = Xamarin.Tuner.DerivedLinkContext;
+using PlatformResolver = System.Object;
+#elif MONOTOUCH
 using MonoTouch;
 using MonoTouch.Tuner;
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
@@ -54,15 +59,37 @@ namespace Xamarin.Bundler {
 		// Note that each 'Target' can have multiple abis: armv7+armv7s for instance.
 		public List<Abi> Abis;
 
-#if MONOMAC
-		public bool Is32Build { get { return false; } }
-		public bool Is64Build { get { return true; } }
-#endif
+		// If we're targetting a 32 bit arch for this target.
+		bool? is32bits;
+		public bool Is32Build {
+			get {
+				if (!is32bits.HasValue)
+					is32bits = Application.IsArchEnabled (Abis, Abi.Arch32Mask);
+				return is32bits.Value;
+			}
+		}
+
+		// If we're targetting a 64 bit arch for this target.
+		bool? is64bits;
+		public bool Is64Build {
+			get {
+				if (!is64bits.HasValue)
+					is64bits = Application.IsArchEnabled (Abis, Abi.Arch64Mask);
+				return is64bits.Value;
+			}
+		}
 
 		public Target (Application app)
 		{
 			this.App = app;
 			this.StaticRegistrar = new StaticRegistrar (this);
+		}
+
+		public Assembly AddAssembly (AssemblyDefinition assembly)
+		{
+			var asm = new Assembly (this, assembly);
+			Assemblies.Add (asm);
+			return asm;
 		}
 
 		// This will find the link context, possibly looking in container targets.

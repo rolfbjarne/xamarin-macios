@@ -19,7 +19,7 @@ dotnet-linker.csproj.inc: global.json
 -include dotnet-linker.csproj.inc
 
 $(BUILD_DIR)/dotnet-linker%dll $(BUILD_DIR)/dotnet-linker%pdb: Makefile global.json $(dotnet_linker_dependencies)
-	$(Q_DOTNET_BUILD) $(DOTNET5) build $(XBUILD_VERBOSITY)
+	$(Q_DOTNET_BUILD) $(DOTNET5) build $(XBUILD_VERBOSITY) /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
 
 $(DOTNET_DESTDIR)/Microsoft.iOS.Sdk/tools/dotnet-linker/%: $(BUILD_DIR)/% | $(DOTNET_DESTDIR)/Microsoft.iOS.Sdk/tools/dotnet-linker
 	$(Q) $(CP) $< $@

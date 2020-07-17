@@ -147,6 +147,8 @@
 				DeploymentTarget=$(_MinimumOSVersion)
 				ItemsDirectory=$(_LinkerItemsDirectory)
 				IsSimulatorBuild=$(_SdkIsSimulator)
+				MarshalManagedExceptionMode=$(_MarshalManagedExceptionMode)
+				MarshalObjectiveCExceptionMode=$(_MarshalObjectiveCExceptionMode)
 				Platform=$(_PlatformName)
 				PlatformAssembly=$(_PlatformAssemblyName).dll
 				SdkVersion=$(_SdkVersion)

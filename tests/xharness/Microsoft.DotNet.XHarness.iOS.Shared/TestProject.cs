@@ -131,11 +131,15 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared {
 						case ".cs":
 							doc.AddInclude ("Compile", file, windows_file, true);
 							break;
+						case ".config":
 						case ".plist":
 							doc.AddInclude ("None", file, windows_file, true);
 							break;
 						case ".storyboard":
 							doc.AddInclude ("InterfaceDefinition", file, windows_file, true);
+							break;
+						case ".resx":
+							doc.AddInclude ("EmbeddedResource", file, windows_file, true);
 							break;
 						case ".gitignore":
 						case ".csproj":

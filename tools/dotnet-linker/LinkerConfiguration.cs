@@ -162,6 +162,10 @@ namespace Xamarin.Linker {
 			Application = new Application (this, significantLines.ToArray ());
 			Application.Cache.Location = CacheDirectory;
 
+			Application.MarshalManagedExceptions = MarshalExceptions.GetManagedExceptionMode (Platform, MarshalManagedExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product, out var isDefaultMode);
+			Application.IsDefaultMarshalManagedExceptionMode = isDefaultMode;
+			Application.MarshalObjectiveCExceptions = MarshalExceptions.GetObjectiveCExceptionMode (Platform, MarshalObjectiveCExceptionMode, Application.EnableCoopGC, IsSimulatorBuild, Debug, Application.Product);
+
 		}
 
 		public void Write ()

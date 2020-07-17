@@ -10,6 +10,9 @@ namespace Xamarin.MacDev.Tasks {
 #region Inputs
 		public ITaskItem[] LinkWithLibraries { get; set; }
 
+		// A path to entitlements to be embedded into the executable
+		public string EntitlementsInExecutable { get; set; }
+
 		[Required]
 		public string SdkDevPath { get; set; }
 
@@ -86,6 +89,8 @@ namespace Xamarin.MacDev.Tasks {
 			if (ObjectFiles != null)
 				foreach (var obj in ObjectFiles)
 					arguments.Add (Path.GetFullPath (obj.ItemSpec));
+
+			arguments.AddRange (GetEmbedEntitlementsInExecutableLinkerFlags (EntitlementsInExecutable));
 
 			arguments.Add ("-o");
 			arguments.Add (Path.GetFullPath (OutputFile));

@@ -101,6 +101,7 @@
 			_CollectBundleResources;
 			_DetectAppManifest;
 			_CopyResourcesToBundle;
+			_CompileEntitlements;
 			_CompileAppManifest;
 			_ComputeLinkerArguments;
 			ComputeFilesToPublish;
@@ -317,6 +318,7 @@
 
 		<LinkNativeCode
 			SessionId="$(BuildSessionId)"
+			EntitlementsInExecutable="$(_CompiledEntitlements)"
 			Frameworks="@(_NativeExecutableFrameworks)"
 			LinkWithLibraries="@(_XamarinMainLibraries)"
 			MinimumOSVersion="$(_MinimumOSVersion)"

@@ -39,6 +39,54 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_XamarinSdkRoot Condition="'$(_XamarinSdkRoot)' == '' And '$(_PlatformName)' != 'macOS' ">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current</_XamarinSdkRoot>
 	</PropertyGroup>
 
+	<Choose>
+		<!-- If TargetFrameworkIdentifier is 'Xamarin.Mac', then we're in Modern mode -->
+		<When Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.Mac'">
+			<PropertyGroup>
+				<TargetFrameworkName>Modern</TargetFrameworkName>
+				<_XamarinBclPath>$(_XamarinSdkRoot)/lib/mono/Xamarin.Mac/</_XamarinBclPath>
+			</PropertyGroup>
+		</When>
+		<!-- If TargetFrameworkIdentifier is not 'Xamarin.Mac', but we're still a macOS app and UseXamMacFullFramework is true, then we're in Full mode -->
+		<When Condition="'$(TargetFrameworkIdentifier)' != 'Xamarin.Mac' And '$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true'">
+			<PropertyGroup>
+				<TargetFrameworkName>Full</TargetFrameworkName>
+				<_XamarinBclPath>$(_XamarinSdkRoot)/lib/mono/4.5/</_XamarinBclPath>
+			</PropertyGroup>
+		</When>
+		<!-- If the two other conditions don't match, but we're still a macOS app, then we're in System mode -->
+		<When Condition="'$(_PlatformName)' == 'macOS'">
+			<PropertyGroup>
+				<TargetFrameworkName>System</TargetFrameworkName>
+				<_XamarinBclPath>$(_XamarinSdkRoot)/lib/mono/4.5/</_XamarinBclPath>
+			</PropertyGroup>
+		</When>
+	</Choose>
+	<PropertyGroup Condition="'$(_XamarinBclPath)' == ''">
+		<_XamarinBclPath Condition="'$(_PlatformName)' == 'iOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.iOS/</_XamarinBclPath>
+		<_XamarinBclPath Condition="'$(_PlatformName)' == 'tvOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.TVOS/</_XamarinBclPath>
+		<_XamarinBclPath Condition="'$(_PlatformName)' == 'watchOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.WatchOS/</_XamarinBclPath>
+	</PropertyGroup>
+	<PropertyGroup>
+		<_XamarinPlatformAssemblyName Condition="'$(_PlatformName)' == 'iOS'">Xamarin.iOS.dll</_XamarinPlatformAssemblyName>
+		<_XamarinPlatformAssemblyName Condition="'$(_PlatformName)' == 'tvOS'">Xamarin.TVOS.dll</_XamarinPlatformAssemblyName>
+		<_XamarinPlatformAssemblyName Condition="'$(_PlatformName)' == 'watchOS'">Xamarin.WatchOS.dll</_XamarinPlatformAssemblyName>
+		<_XamarinPlatformAssemblyName Condition="'$(_PlatformName)' == 'macOS'">Xamarin.Mac.dll</_XamarinPlatformAssemblyName>
+		<_XamarinPlatformAssemblyPath>$(_XamarinBclPath)$(_XamarinPlatformAssemblyName)</_XamarinPlatformAssemblyPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">
+		<!-- Get the TargetFrameworkMoniker and store it in our own variable so that it's overridable while only affecting the parts of the build that we care about.
+			 This is overridability is a workaround while we wait for .NET 5 to be able to give us the TFM we're supposed to get during the build. -->
+		<_ComputedTargetFrameworkMoniker>$(TargetFrameworkMoniker)</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the Mobile condition and set the computed Mobile TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(_ComputedTargetFrameworkMoniker)' == 'Xamarin.Mac,Version=v2.0'">Xamarin.Mac,Version=v2.0,Profile=Mobile</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the Full condition and set the computed TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=Full</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the System condition and set the computed TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' != 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=System</_ComputedTargetFrameworkMoniker>
+	</PropertyGroup>
+
 	<PropertyGroup>
 		<!--
 		     We don't want to use the Platform variable for conditional logic.
@@ -58,30 +106,6 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<ComputedPlatform Condition="'$(ComputedPlatform)' == ''">$(Platform)</ComputedPlatform>
 		<ComputedPlatform Condition="'$(_PlatformName)' != 'macOS' And '$(ComputedPlatform)' == 'AnyCPU'">iPhone</ComputedPlatform>
 	</PropertyGroup>
-
-	<Choose>
-		<!-- If TargetFrameworkIdentifier is 'Xamarin.Mac', then we're in Modern mode -->
-		<When Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.Mac'">
-			<PropertyGroup>
-				<TargetFrameworkName>Modern</TargetFrameworkName>
-				<MacBclPath>$(_XamarinSdkRoot)/lib/mono/Xamarin.Mac</MacBclPath>
-			</PropertyGroup>
-		</When>
-		<!-- If TargetFrameworkIdentifier is not 'Xamarin.Mac', but we're still a macOS app and UseXamMacFullFramework is true, then we're in Full mode -->
-		<When Condition="'$(TargetFrameworkIdentifier)' != 'Xamarin.Mac' And '$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true'">
-			<PropertyGroup>
-				<TargetFrameworkName>Full</TargetFrameworkName>
-				<MacBclPath>$(_XamarinSdkRoot)/lib/mono/4.5</MacBclPath>
-			</PropertyGroup>
-		</When>
-		<!-- If the two other conditions don't match, but we're still a macOS app, then we're in System mode -->
-		<When Condition="'$(_PlatformName)' == 'macOS'">
-			<PropertyGroup>
-				<TargetFrameworkName>System</TargetFrameworkName>
-				<MacBclPath>$(_XamarinSdkRoot)/lib/mono/4.5</MacBclPath>
-			</PropertyGroup>
-		</When>
-	</Choose>
 
 	<!-- Sometimes we've used different variable names for the same thing for Xamarin.iOS and Xamarin.Mac projects. Here we try to unify those variables -->
 	<PropertyGroup>
@@ -199,13 +223,16 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(IsBindingProject)' == 'true'">
-		<BaseLibDllPath Condition="'$(OS)' == 'Unix' And '$(_PlatformName)' == 'iOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.iOS/Xamarin.iOS.dll</BaseLibDllPath>
-		<BaseLibDllPath Condition="'$(OS)' == 'Unix' And '$(_PlatformName)' == 'tvOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.TVOS/Xamarin.TVOS.dll</BaseLibDllPath>
-		<BaseLibDllPath Condition="'$(OS)' == 'Unix' And '$(_PlatformName)' == 'watchOS'">$(_XamarinSdkRoot)/lib/mono/Xamarin.WatchOS/Xamarin.WatchOS.dll</BaseLibDllPath>
-		<BaseLibDllPath Condition="'$(OS)' == 'Unix' And '$(_PlatformName)' == 'macOS'">$(MacBclPath)/Xamarin.Mac.dll</BaseLibDllPath>
+		<!-- BTouch values
+			BTouchToolPath: the bin directory of the sdk, unless we're on Windows, in which case it's the same directory as the MSBuild files are
+			BTouchToolExe: on Mac it's the bgen script, on Windows it's the bgen.exe executable
+		-->
+
+		<BaseLibDllPath Condition="'$(OS)' == 'Unix'">$(_XamarinPlatformAssemblyPath)</BaseLibDllPath>
 
 		<BTouchToolPath Condition="'$(OS)' == 'Unix' And '$(BTouchToolPath)' == ''">$(_XamarinSdkRoot)/bin/</BTouchToolPath>
 		<BTouchToolPath Condition="'$(OS)' != 'Unix' And '$(_PlatformName)' != 'macOS' And '$(BTouchToolPath)' == ''">$(MSBuildExtensionsPath)\Xamarin\iOS\</BTouchToolPath>
+		<BTouchToolPath Condition="'$(OS)' != 'Unix' And '$(_PlatformName)' == 'macOS' And '$(BTouchToolPath)' == ''">$(MSBuildExtensionsPath)\Xamarin\Mac\</BTouchToolPath>
 
 		<BTouchToolExe  Condition="'$(OS)' == 'Unix' And '$(BTouchToolExe)' == ''">bgen</BTouchToolExe>
 		<BTouchToolExe  Condition="'$(OS)' != 'Unix' And '$(BTouchToolExe)' == ''">bgen.exe</BTouchToolExe>
@@ -230,17 +257,6 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_ComputeTargetFrameworkMoniker" Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">
-		<PropertyGroup>
-			<!-- Get the TargetFrameworkMoniker and store it in our own variable so that it's overridable while only affecting the parts of the build that we care about.
-				 This is overridability is a workaround while we wait for .NET 5 to be able to give us the TFM we're supposed to get during the build. -->
-			<_ComputedTargetFrameworkMoniker>$(TargetFrameworkMoniker)</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the Mobile condition and set the computed Mobile TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(_ComputedTargetFrameworkMoniker)' == 'Xamarin.Mac,Version=v2.0'">Xamarin.Mac,Version=v2.0,Profile=Mobile</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the Full condition and set the computed TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=Full</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the System condition and set the computed TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' != 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=System</_ComputedTargetFrameworkMoniker>
-		</PropertyGroup>
 	</Target>
 
 	<Import Project="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).After.targets"

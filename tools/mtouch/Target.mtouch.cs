@@ -381,9 +381,8 @@ namespace Xamarin.Bundler
 			PrintAssemblyReferences (assembly);
 			assemblies.Add (fqname);
 
-			var asm = new Assembly (this, assembly);
+			var asm = AddAssembly (assembly);
 			asm.ComputeSatellites ();
-			this.Assemblies.Add (asm);
 
 			var main = assembly.MainModule;
 			foreach (AssemblyNameReference reference in main.AssemblyReferences) {

@@ -1,4 +1,5 @@
 generated-projects
+NuGet.config
 *index.html
 *.log
 *TestResult*.xml

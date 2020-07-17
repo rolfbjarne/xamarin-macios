@@ -1147,7 +1147,7 @@ namespace Xamarin.Bundler
 
 		static bool IsBoundAssembly (Assembly s)
 		{
-			if (s.IsFrameworkAssembly)
+			if (s.IsFrameworkAssembly == true)
 				return false;
 
 			AssemblyDefinition ad = s.AssemblyDefinition;
@@ -1198,14 +1198,6 @@ namespace Xamarin.Bundler
 				throw new Exception (string.Format ("Could not lstat '{0}': {1}", file, Marshal.GetLastWin32Error ()));
 			const int S_IFLNK = 40960;
 			return (buf.st_mode & S_IFLNK) == S_IFLNK;
-		}
-
-		public static bool IsFrameworkAvailableInSimulator (Application app, string framework)
-		{
-			if (!GetFrameworks (app).TryGetValue (framework, out var fw))
-				return true; // Unknown framework, assume it's valid for the simulator
-
-			return fw.IsFrameworkAvailableInSimulator (app);
 		}
 	}
 }

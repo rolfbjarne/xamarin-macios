@@ -363,6 +363,9 @@
     <Compile Include="..\common\Tuning.cs">
       <Link>tools\common\Tuning.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\ObjCRuntime\Constants.cs">
+      <Link>src\ObjCRuntime\Constants.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\ObjCRuntime\RuntimeOptions.cs">
       <Link>src\ObjCRuntime\RuntimeOptions.cs</Link>
     </Compile>

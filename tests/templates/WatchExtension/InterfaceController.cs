@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 
 using WatchKit;
 using Foundation;
 
-using NUnit.Framework.Internal.Filters;
+using NUnit.Framework.Internal;
 using MonoTouch.NUnit.UI;
+using NUnit.Framework.Interfaces;
 
 public static partial class TestLoader
 {
@@ -71,17 +71,17 @@ namespace monotouchtestWatchKitExtension
 		void LoadTests ()
 		{
 			runner = new WatchOSRunner ();
-#if !NUNITLITE_NUGET
-			var categoryFilter = new NotFilter (new CategoryExpression ("MobileNotWorking,NotOnMac,NotWorking,ValueAdd,CAS,InetAccess,NotWorkingLinqInterpreter,RequiresBSDSockets,BitcodeNotSupported").Filter);
-			if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("NUNIT_FILTER_START"))) {
-				var firstChar = Environment.GetEnvironmentVariable ("NUNIT_FILTER_START") [0];
-				var lastChar = Environment.GetEnvironmentVariable ("NUNIT_FILTER_END") [0];
-				var nameFilter = new NameStartsWithFilter () { FirstChar = firstChar, LastChar = lastChar };
-				runner.Filter = new AndFilter (categoryFilter, nameFilter);
-			} else {
-				runner.Filter = categoryFilter;
-			}
-#endif
+			var excludeCategories = new [] { "MobileNotWorking", "NotOnMac", "NotWorking", "ValueAdd", "CAS", "InetAccess", "NotWorkingLinqInterpreter", "RequiresBSDSockets", "BitcodeNotSupported" };
+			var filter_start = Environment.GetEnvironmentVariable ("NUNIT_FILTER_START");
+			var filter_end = Environment.GetEnvironmentVariable ("NUNIT_FILTER_END");
+			var filter = new WatchOSFilter ();
+
+			if (!string.IsNullOrEmpty (filter_start))
+				filter.FirstChar = char.ToUpperInvariant (filter_start [0]);
+			if (!string.IsNullOrEmpty (filter_end))
+				filter.LastChar = char.ToUpper (filter_end [0]);
+			filter.ExcludedCategories = new HashSet<string> (excludeCategories);
+			runner.Filter = filter;
 			runner.Add (GetType ().Assembly);
 			TestLoader.AddTestAssemblies (runner);
 			ThreadPool.QueueUserWorkItem ((v) =>
@@ -156,36 +156,65 @@ namespace monotouchtestWatchKitExtension
 	}
 }
 
-#if !NUNITLITE_NUGET
-class NameStartsWithFilter : NUnit.Framework.Internal.TestFilter
-{
+class WatchOSFilter : TestFilter {
+	public HashSet<string> ExcludedCategories;
 	public char FirstChar;
 	public char LastChar;
 
-	public override bool Match (NUnit.Framework.Api.ITest test)
+	public override TNode AddToXml (TNode parentNode, bool recursive)
 	{
-		if (test is NUnit.Framework.Internal.TestAssembly)
-			return true;
-
-		var method = test as NUnit.Framework.Internal.TestMethod;
-		if (method != null)
-			return Match (method.Parent);
-		
-		var name = !string.IsNullOrEmpty (test.Name) ? test.Name : test.FullName;
-		bool rv;
-		if (string.IsNullOrEmpty (name)) {
-			rv = true;
-		} else {
-			var z = Char.ToUpperInvariant (name [0]);
-			rv = z >= Char.ToUpperInvariant (FirstChar) && z <= Char.ToUpperInvariant (LastChar);
-		}
-
-		return rv;
+		throw new NotImplementedException ();
 	}
 
-	public override bool Pass (NUnit.Framework.Api.ITest test)
+	public override bool Match (ITest test)
+	{
+		var categories = test.Properties ["Category"];
+		if (categories != null) {
+			foreach (string cat in categories) {
+				if (ExcludedCategories.Contains (cat)) {
+					Console.WriteLine ($"Excluded {test.FullName} because it's an excluded category ({cat})");
+					return false;
+				}
+			}
+		}
+
+		if (FirstChar == 0 || LastChar == 0) {
+			Console.WriteLine ($"Included {test.FullName} because no first/last char is set");
+			return true;
+		}
+
+		if (test is TestAssembly) {
+			Console.WriteLine ($"Included {test.FullName} because it's an assembly");
+			return true;
+		}
+
+		var method = test as TestMethod;
+		if (method != null) {
+			Console.WriteLine ($"Decision postponed for {test.FullName} because it's a test method");
+			return Match (method.Parent);
+		}
+
+		var name = test.Name;
+		if (string.IsNullOrEmpty (test.Name))
+			name = test.FullName;
+
+		if (string.IsNullOrEmpty (name)) {
+			Console.WriteLine ($"Included {test} because it's nameless");
+			return true;
+		}
+
+		var ch = Char.ToUpperInvariant (name [0]);
+		if (ch >= FirstChar && ch <= LastChar) {
+			Console.WriteLine ($"Included {test.FullName} because its name's ({name}) first character ({ch}) is between {FirstChar} and {LastChar}");
+			return true;
+		}
+
+		Console.WriteLine ($"Excluded {test.FullName} because its name's ({name}) first character ({ch}) is NOT between {FirstChar} and {LastChar}");
+		return false;
+	}
+
+	public override bool Pass (ITest test)
 	{
 		return Match (test);
 	}
 }
-#endif

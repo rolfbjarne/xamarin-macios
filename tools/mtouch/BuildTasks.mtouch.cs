@@ -618,7 +618,7 @@ namespace Xamarin.Bundler
 
 		protected override void Execute ()
 		{
-			Application.Lipo (OutputFile, InputFiles.ToArray ());
+			Application.Lipo (App, OutputFile, InputFiles.ToArray ());
 		}
 
 		public override string ToString ()

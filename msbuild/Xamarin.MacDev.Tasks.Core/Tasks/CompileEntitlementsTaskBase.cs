@@ -36,6 +36,8 @@ namespace Xamarin.MacDev.Tasks
 
 		public string ProvisioningProfile { get; set; }
 
+		public bool SdkIsSimulator { get; set; }
+
 		[Required]
 		public string SdkDevPath { get; set; }
 

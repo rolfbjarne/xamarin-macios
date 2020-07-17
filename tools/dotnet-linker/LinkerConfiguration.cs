@@ -57,6 +57,7 @@ namespace Xamarin.Linker {
 				throw new FileNotFoundException ($"The custom linker file {linker_file} does not exist.");
 
 			var lines = File.ReadAllLines (linker_file);
+			var significantLines = new List<string> ();
 			for (var i = 0; i < lines.Length; i++) {
 				var line = lines [i].TrimStart ();
 				if (line.Length == 0 || line [0] == '#')
@@ -65,6 +66,8 @@ namespace Xamarin.Linker {
 				var eq = line.IndexOf ('=');
 				if (eq == -1)
 					throw new InvalidOperationException ($"Invalid syntax for line {i + 1} in {linker_file}: No equals sign.");
+
+				significantLines.Add (line);
 
 				var key = line [..eq];
 				var value = line [(eq + 1)..];
@@ -156,7 +159,9 @@ namespace Xamarin.Linker {
 
 			ErrorHelper.Platform = Platform;
 
-			Application = new Application (this);
+			Application = new Application (this, significantLines.ToArray ());
+			Application.Cache.Location = CacheDirectory;
+
 		}
 
 		public void Write ()

@@ -95,6 +95,18 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_XamarinPlatformAssemblyPath>$(_XamarinBclPath)$(_XamarinPlatformAssemblyName)</_XamarinPlatformAssemblyPath>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">
+		<!-- Get the TargetFrameworkMoniker and store it in our own variable so that it's overridable while only affecting the parts of the build that we care about.
+			 This is overridability is a workaround while we wait for .NET 5 to be able to give us the TFM we're supposed to get during the build. -->
+		<_ComputedTargetFrameworkMoniker>$(TargetFrameworkMoniker)</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the Mobile condition and set the computed Mobile TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(_ComputedTargetFrameworkMoniker)' == 'Xamarin.Mac,Version=v2.0'">Xamarin.Mac,Version=v2.0,Profile=Mobile</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the Full condition and set the computed TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=Full</_ComputedTargetFrameworkMoniker>
+		<!-- Detect the System condition and set the computed TFM our tooling expects -->
+		<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' != 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=System</_ComputedTargetFrameworkMoniker>
+	</PropertyGroup>
+
 	<!-- Sometimes we've used different variable names for the same thing for Xamarin.iOS and Xamarin.Mac projects. Here we try to unify those variables -->
 	<PropertyGroup>
 		<!-- ResourcePrefix -->
@@ -235,17 +247,6 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_ComputeTargetFrameworkMoniker" Condition="'$(_ComputedTargetFrameworkMoniker)' == ''">
-		<PropertyGroup>
-			<!-- Get the TargetFrameworkMoniker and store it in our own variable so that it's overridable while only affecting the parts of the build that we care about.
-				 This is overridability is a workaround while we wait for .NET 5 to be able to give us the TFM we're supposed to get during the build. -->
-			<_ComputedTargetFrameworkMoniker>$(TargetFrameworkMoniker)</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the Mobile condition and set the computed Mobile TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(_ComputedTargetFrameworkMoniker)' == 'Xamarin.Mac,Version=v2.0'">Xamarin.Mac,Version=v2.0,Profile=Mobile</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the Full condition and set the computed TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' == 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=Full</_ComputedTargetFrameworkMoniker>
-			<!-- Detect the System condition and set the computed TFM our tooling expects -->
-			<_ComputedTargetFrameworkMoniker Condition="'$(_PlatformName)' == 'macOS' And '$(UseXamMacFullFramework)' != 'true' And $([MSBuild]::ValueOrDefault('$(_ComputedTargetFrameworkMoniker),', '').StartsWith('.NETFramework,', StringComparison.OrdinalIgnoreCase))">Xamarin.Mac,Version=v4.5,Profile=System</_ComputedTargetFrameworkMoniker>
-		</PropertyGroup>
 	</Target>
 
 	<!-- When looking for related files to copy, look for Mono debugging files as well -->

@@ -103,6 +103,10 @@ namespace Xamarin.Bundler {
 		public BuildTarget BuildTarget;
 
 		bool RequiresXcodeHeaders {
+
+		public BuildTarget BuildTarget;
+
+		public string ProductName {
 			get {
 				switch (Platform) {
 				case ApplePlatform.iOS:

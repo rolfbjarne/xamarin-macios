@@ -151,7 +151,8 @@
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -p copy "System.Runtime"</_ExtraTrimmerArgs>
 
 			<!-- Verbose output, so that we get something to stdout when something goes wrong -->
-			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --verbose</_ExtraTrimmerArgs>
+			<!-- Verbose output temporarily disabled because of https://github.com/mono/linker/issues/1351 -->
+			<!-- <_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -  -  verbose</_ExtraTrimmerArgs> -->
 
 			<!-- We always want the linker to process debug symbols, even when building in Release mode, because the AOT compiler uses the managed debug symbols to output DWARF debugging symbols -->
 			<TrimmerRemoveSymbols>false</TrimmerRemoveSymbols>

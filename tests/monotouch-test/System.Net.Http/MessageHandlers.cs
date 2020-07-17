@@ -26,6 +26,7 @@ using ObjCRuntime;
 namespace MonoTests.System.Net.Http
 {
 	[TestFixture]
+	[Ignore ("testing")]
 	public class MessageHandlerTest
 	{
 		public MessageHandlerTest ()

@@ -164,6 +164,22 @@ namespace Xamarin.Bundler {
 				}
 			}
 		}
+
+		public string Error91LinkerSuggestion {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return "set the managed linker behaviour to Link Framework SDKs Only in your project's iOS Build Options > Linker Behavior";
+				case ApplePlatform.MacOSX:
+					return "use the dynamic registrar or set the managed linker behaviour to Link Platform or Link Framework SDKs Only in your project's Mac Build Options > Linker Behavior";
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
+
 		public static int Concurrency => Driver.Concurrency;
 		public Version DeploymentTarget;
 		public Version SdkVersion;

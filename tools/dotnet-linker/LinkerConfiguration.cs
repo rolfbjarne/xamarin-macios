@@ -23,6 +23,8 @@ namespace Xamarin.Linker {
 		public Version DeploymentTarget { get; private set; }
 		public string ItemsDirectory { get; private set; }
 		public bool IsSimulatorBuild { get; private set; }
+		public MarshalManagedExceptionMode MarshalManagedExceptionMode { get; private set; }
+		public MarshalObjectiveCExceptionMode MarshalObjectiveCExceptionMode { get; private set; }
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; }
 		public Version SdkVersion { get; private set; }
@@ -94,6 +96,20 @@ namespace Xamarin.Linker {
 					break;
 				case "IsSimulatorBuild":
 					IsSimulatorBuild = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
+					break;
+				case "MarshalManagedExceptionMode":
+					if (!string.IsNullOrEmpty (value)) {
+						if (!Enum.TryParse<MarshalManagedExceptionMode> (value, out var mode))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						MarshalManagedExceptionMode = mode;
+					}
+					break;
+				case "MarshalObjectiveCExceptionMode":
+					if (!string.IsNullOrEmpty (value)) {
+						if (!Enum.TryParse<MarshalObjectiveCExceptionMode> (value, out var mode))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						MarshalObjectiveCExceptionMode = mode;
+					}
 					break;
 				case "Platform":
 					switch (value) {
@@ -184,6 +200,8 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    DeploymentTarget: {DeploymentTarget}");
 				Console.WriteLine ($"    ItemsDirectory: {ItemsDirectory}");
 				Console.WriteLine ($"    IsSimulatorBuild: {IsSimulatorBuild}");
+				Console.WriteLine ($"    MarshalManagedExceptions: {MarshalManagedExceptionMode}");
+				Console.WriteLine ($"    MarshalObjectiveCExceptions: {MarshalObjectiveCExceptionMode}");
 				Console.WriteLine ($"    Platform: {Platform}");
 				Console.WriteLine ($"    PlatformAssembly: {PlatformAssembly}.dll");
 				Console.WriteLine ($"    SdkVersion: {SdkVersion}");

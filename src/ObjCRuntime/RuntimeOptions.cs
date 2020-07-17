@@ -91,7 +91,9 @@ namespace ObjCRuntime {
 			}
 			TypeDefinition type;
 			switch (handler) {
-#if MONOMAC
+#if NET
+			// TODO
+#elif MONOMAC
 			case HttpClientHandlerValue:
 				type = httpModule.GetType ("System.Net.Http", "HttpClientHandler");
 				break;

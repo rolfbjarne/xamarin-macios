@@ -19,6 +19,7 @@ namespace Xamarin.Linker {
 		// This is the AssemblyName MSBuild property for the main project (which is also the root/entry assembly)
 		public string AssemblyName { get; private set; }
 		public string CacheDirectory { get; private set; }
+		public bool Debug { get; set; }
 		public Version DeploymentTarget { get; private set; }
 		public string ItemsDirectory { get; private set; }
 		public bool IsSimulatorBuild { get; private set; }
@@ -88,6 +89,9 @@ namespace Xamarin.Linker {
 					break;
 				case "CacheDirectory":
 					CacheDirectory = value;
+					break;
+				case "Debug":
+					Debug = string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
 					break;
 				case "DeploymentTarget":
 					if (!Version.TryParse (value, out var deployment_target))

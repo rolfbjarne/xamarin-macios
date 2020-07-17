@@ -13,8 +13,10 @@ public class Cache {
 	const string NAME = "mmp";
 #elif MTOUCH
 	const string NAME = "mtouch";
+#elif BUNDLER
+	const string NAME = "dotnet-linker";
 #else
-	#error Wrong defines
+#error Wrong defines
 #endif
 
 	string cache_dir;

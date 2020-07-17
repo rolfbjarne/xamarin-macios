@@ -89,6 +89,36 @@ namespace Xamarin.Bundler {
 		public string RegistrarOutputLibrary;
 
 
+		public string Product {
+			get {
+#if NET
+				switch (Platform) {
+				case ApplePlatform.iOS:
+					return "Microsoft.iOS";
+				case ApplePlatform.TVOS:
+					return "Microsoft.tvOS";
+				case ApplePlatform.WatchOS:
+					return "Microsoft.watchOS";
+				case ApplePlatform.MacOSX:
+					return "Microsoft.macOS";
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+#else
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return "Xamarin.iOS";
+				case ApplePlatform.MacOSX:
+					return "Xamarin.Mac";
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+#endif
+			}
+		}
+
 		public string LocalBuildDir {
 			get {
 #if NET

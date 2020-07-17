@@ -116,8 +116,30 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared {
 					if (!result.Succeeded)
 						throw new Exception ($"Failed to list the files in the directory {test_dir} (TimedOut: {result.TimedOut} ExitCode: {result.ExitCode}):\n{stdout}");
 
+					// TODO: find all Include attributes and don't handle/warn about those
+					var nodes = doc.SelectNodes ("//*[@Include]");
+					var includes = new HashSet<string> ();
+					var original_dir = System.IO.Path.GetDirectoryName (original_path) + System.IO.Path.DirectorySeparatorChar;
+					foreach (XmlNode node in nodes) {
+						var inc = node.Attributes ["Include"].Value;
+						inc = inc.Replace ('\\', '/');
+						if (!System.IO.Path.IsPathRooted (inc)) {
+							var full_path = System.IO.Path.GetFullPath (inc);
+							if (File.Exists (full_path))
+								inc = full_path;
+						}
+						if (File.Exists (inc) && inc.StartsWith (original_dir, StringComparison.Ordinal)) 
+							inc = inc.Substring (original_dir.Length);
+						includes.Add (inc);
+					}
+
 					var files = stdout.ToString ().Split ('\n');
 					foreach (var file in files) {
+						if (includes.Contains (file)) {
+							Console.WriteLine ($"The project file knows what to do about {file}");
+							continue;
+						}
+
 						var ext = System.IO.Path.GetExtension (file);
 						var full_path = System.IO.Path.Combine (test_dir, file);
 						var windows_file = full_path.Replace ('/', '\\');

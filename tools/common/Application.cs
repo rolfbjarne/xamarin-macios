@@ -88,6 +88,37 @@ namespace Xamarin.Bundler {
 		public List<Application> SharedCodeApps = new List<Application> (); // List of appexes we're sharing code with.
 		public string RegistrarOutputLibrary;
 
+
+		public string LocalBuildDir {
+			get {
+#if NET
+				switch (Platform) {
+				case ApplePlatform.iOS:
+					return "_build/Microsoft.iOS.sdk";
+				case ApplePlatform.TVOS:
+					return "_build/Microsoft.tvOS.sdk";
+				case ApplePlatform.WatchOS:
+					return "_build/Microsoft.watchOS.sdk";
+				case ApplePlatform.MacOSX:
+					return "_build/Microsoft.macOS.sdk";
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+#else
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return "_ios-build";
+				case ApplePlatform.MacOSX:
+					return "_mac-build";
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+#endif
+
+			}
+		}
 		public static int Concurrency => Driver.Concurrency;
 		public Version DeploymentTarget;
 		public Version SdkVersion;

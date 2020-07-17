@@ -1639,7 +1639,7 @@ namespace Xamarin.Bundler
 			}
 		}
 
-		public static void AdjustDylibs (string output)
+		public void AdjustDylibs (string output)
 		{
 			var sb = new List<string> ();
 			foreach (var dependency in Xamarin.MachO.GetNativeDependencies (output)) {

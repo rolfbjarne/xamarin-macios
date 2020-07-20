@@ -101,6 +101,13 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 		bool srcGenerated = false;
 		object srcGeneratedLock = new object ();
 
+		string GetOutputPath (string projectName, Platform platform)
+		{
+			var rv = Path.Combine (GeneratedCodePathRoot, platform.ToString (), projectName);
+			Directory.CreateDirectory (rv);
+			return rv;
+		}
+
 		Dictionary<string, string> templates = new Dictionary<string, string> ();
 		string GetTemplateStream (string templateName)
 		{
@@ -201,17 +208,19 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 		/// <returns>The final path to which the project file should be written.</returns>
 		public string GetProjectPath (string projectName, Platform platform)
 		{
+			var dir = Path.Combine (GeneratedCodePathRoot, platform.ToString (), projectName);
+			Directory.CreateDirectory (dir);
 			switch (platform) {
 			case Platform.iOS:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}.csproj");
+				return Path.Combine (dir, $"{projectName}.csproj");
 			case Platform.TvOS:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}-tvos.csproj");
+				return Path.Combine (dir, $"{projectName}-tvos.csproj");
 			case Platform.WatchOS:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}-watchos.csproj");
+				return Path.Combine (dir, $"{projectName}-watchos.csproj");
 			case Platform.MacOSFull:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}-mac-full.csproj");
+				return Path.Combine (dir, $"{projectName}-mac-full.csproj");
 			case Platform.MacOSModern:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}-mac-modern.csproj");
+				return Path.Combine (dir, $"{projectName}-mac-modern.csproj");
 			default:
 				return null;
 			}
@@ -226,12 +235,17 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 		/// <returns>The final path to which the project file should be written.</returns>
 		public string GetProjectPath (string projectName, WatchAppType appType)
 		{
+			string rv;
 			switch (appType) {
 			case WatchAppType.App:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}-watchos-app.csproj");
+				rv = Path.Combine (GetOutputPath (projectName, Platform.WatchOS), "app", $"{projectName}-watchos-app.csproj");
+				break;
 			default:
-				return Path.Combine (OutputDirectoryPath, $"{projectName}-watchos-extension.csproj");
+				rv = Path.Combine (GetOutputPath (projectName, Platform.WatchOS), "extension", $"{projectName}-watchos-extension.csproj");
+				break;
 			}
+			Directory.CreateDirectory (Path.GetDirectoryName (rv));
+			return rv;
 		}
 
 		/// <summary>
@@ -246,7 +260,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 			case Platform.iOS:
 				return Path.Combine (rootDir, "Info.plist");
 			case Platform.TvOS:
-				return Path.Combine (rootDir, "Info-tv.plist");
+				return Path.Combine (rootDir, "Info-tvos.plist");
 			case Platform.WatchOS:
 				return Path.Combine (rootDir, "Info-watchos.plist");
 			case Platform.MacOSFull:
@@ -465,10 +479,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 
 				if (!projectDefinition.Validate ())
 					throw new InvalidOperationException ("xUnit and NUnit assemblies cannot be mixed in a test project.");
-				var generatedCodeDir = Path.Combine (GeneratedCodePathRoot, projectDefinition.Name, "watch");
-				if (!Directory.Exists (generatedCodeDir)) {
-					Directory.CreateDirectory (generatedCodeDir);
-				}
+				var generatedCodeDir = GetOutputPath (projectDefinition.Name, Platform.WatchOS);
 				var registerTypePath = Path.Combine (generatedCodeDir, "RegisterType.cs");
 				string failure = null;
 				string rootProjectPath = GetProjectPath (projectDefinition.Name, Platform.WatchOS); ;
@@ -498,7 +509,6 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 						using (var file = new StreamWriter (data.project, false)) { // false is do not append
 							await file.WriteAsync (generatedProject);
 						}
-
 						projectData [appType] = data;
 					} // foreach app type
 
@@ -589,10 +599,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 				if (!projectDefinition.Validate ())
 					throw new InvalidOperationException ("xUnit and NUnit assemblies cannot be mixed in a test project.");
 				// generate the required type registration info
-				var generatedCodeDir = Path.Combine (GeneratedCodePathRoot, projectDefinition.Name, platform == Platform.iOS ? "ios" : "tv");
-				if (!Directory.Exists (generatedCodeDir)) {
-					Directory.CreateDirectory (generatedCodeDir);
-				}
+				var generatedCodeDir = GetOutputPath (projectDefinition.Name, platform);
 				var registerTypePath = Path.Combine (generatedCodeDir, "RegisterType.cs");
 
 				string projectPath = GetProjectPath (projectDefinition.Name, platform);
@@ -685,8 +692,7 @@ namespace Microsoft.DotNet.XHarness.iOS.Shared.TestImporter.Templates.Managed {
 				if (!projectDefinition.Validate ())
 					throw new InvalidOperationException ("xUnit and NUnit assemblies cannot be mixed in a test project.");
 				// generate the required type registration info
-				var generatedCodeDir = Path.Combine (GeneratedCodePathRoot, projectDefinition.Name, "mac");
-				Directory.CreateDirectory (generatedCodeDir);
+				var generatedCodeDir = GetOutputPath (projectDefinition.Name, platform);
 				var registerTypePath = Path.Combine (generatedCodeDir, "RegisterType-mac.cs");
 
 				var typesPerAssembly = projectDefinition.GetTypeForAssemblies (AssemblyLocator.GetAssembliesRootLocation (platform), platform);

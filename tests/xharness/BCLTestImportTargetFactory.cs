@@ -366,6 +366,7 @@ namespace Xharness {
 					RestoreNugetsInProject = true,
 					MTouchExtraArgs = tp.ExtraArgs,
 					TimeoutMultiplier = tp.TimeoutMultiplier,
+					GenerateVariations = false,
 				});
 			}
 			return result;

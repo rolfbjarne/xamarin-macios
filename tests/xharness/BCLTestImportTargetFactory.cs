@@ -318,31 +318,20 @@ namespace Xharness {
 			return testProjects;
 		}
 
-		async Task<List<(string Name, string Path, bool XUnit, string ExtraArgs, List<Platform> Platforms, string Failure, double TimeoutMultiplier)>> GenerateAlliOSTestProjectsAsync ()
+		async Task<Tuple<GeneratedProjects, TestPlatform>[]> GenerateAlliOSTestProjectsAsync ()
 		{
-			var projectPaths = new List<(string Name, string Path, bool XUnit, string ExtraArgs, List<Platform> Platforms, string Failure, double TimeoutMultiplier)> ();
-			var projects = new Dictionary<string, (string Path, bool XUnit, string ExtraArgs, List<Platform> Platforms, string Failure, double TimeoutMultiplier)> ();
-			foreach (var platform in new [] { Platform.iOS, Platform.TvOS, Platform.WatchOS }) {
-				var generated = await GenerateTestProjectsAsync (GetProjectDefinitions (commoniOSTestProjects, platform), platform);
-				foreach (var tp in generated) {
-					if (!projects.ContainsKey (tp.Name)) {
-						projects [tp.Name] = (tp.Path, tp.XUnit, tp.ExtraArgs, new List<Platform> { platform }, tp.Failure, tp.TimeoutMultiplier);
-					} else {
-						var project = projects [tp.Name];
-						project.Platforms.Add (platform);
-						project.TimeoutMultiplier += (tp.TimeoutMultiplier - 1);
-					}
-				}
-			} // foreach platform
-
-			// return the grouped projects
-			foreach (var name in projects.Keys) {
-				projectPaths.Add ((name, projects [name].Path, projects [name].XUnit, projects [name].ExtraArgs, projects [name].Platforms, projects [name].Failure, projects [name].TimeoutMultiplier));
+			var platforms = new [] { Platform.iOS, Platform.TvOS, Platform.WatchOS };
+			var testPlatforms = new [] { TestPlatform.iOS_Unified, TestPlatform.tvOS, TestPlatform.watchOS };
+			var rv = new Tuple<GeneratedProjects, TestPlatform> [platforms.Length];
+			for (var i = 0; i < platforms.Length; i++) {
+				var platform = platforms [i];
+				var projects = await GenerateTestProjectsAsync (GetProjectDefinitions (commoniOSTestProjects, platform), platform);
+				rv [i] = new Tuple<GeneratedProjects, TestPlatform> (projects, testPlatforms [i]);
 			}
-			return projectPaths;
+			return rv;
 		}
 
-		public List<(string Name, string Path, bool XUnit, string ExtraArgs, List<Platform> Platforms, string Failure, double TimeoutMultiplier)> GenerateAlliOSTestProjects () => GenerateAlliOSTestProjectsAsync ().Result;
+		public Tuple<GeneratedProjects, TestPlatform> [] GenerateAlliOSTestProjects () => GenerateAlliOSTestProjectsAsync ().Result;
 
 		public Task<GeneratedProjects> GenerateAllMacTestProjectsAsync (Platform platform) => GenerateTestProjectsAsync (GetProjectDefinitions (macTestProjects, platform), platform);
 
@@ -353,21 +342,22 @@ namespace Xharness {
 		{
 			var result = new List<iOSTestProject> ();
 			// generate all projects, then create a new iOSTarget per project
-			foreach (var tp in GenerateAlliOSTestProjects ()) {
-				var prefix = tp.XUnit ? "xUnit" : "NUnit";
-				var finalName = tp.Name.StartsWith ("mscorlib", StringComparison.Ordinal) ? tp.Name : $"[{prefix}] Mono {tp.Name}"; // mscorlib is our special test
-				result.Add (new iOSTestProject (tp.Path) {
-					Name = finalName,
-					SkipiOSVariation = !tp.Platforms.Contains (Platform.iOS),
-					SkiptvOSVariation = !tp.Platforms.Contains (Platform.TvOS),
-					SkipwatchOS32Variation = tp.Name.StartsWith ("mscorlib", StringComparison.Ordinal), // mscorlib is our special test
-					SkipwatchOSVariation = !tp.Platforms.Contains (Platform.WatchOS),
-					FailureMessage = tp.Failure,
-					RestoreNugetsInProject = true,
-					MTouchExtraArgs = tp.ExtraArgs,
-					TimeoutMultiplier = tp.TimeoutMultiplier,
-					GenerateVariations = false,
-				});
+			foreach (var tuple in GenerateAlliOSTestProjects ()) {
+				var platform = tuple.Item2;
+				var projects = tuple.Item1;
+				foreach (var tp in projects) {
+					var prefix = tp.XUnit ? "xUnit" : "NUnit";
+					var finalName = tp.Name.StartsWith ("mscorlib", StringComparison.Ordinal) ? tp.Name : $"[{prefix}] Mono {tp.Name}"; // mscorlib is our special test
+					result.Add (new iOSTestProject (tp.Path) {
+						Name = finalName,
+						FailureMessage = tp.Failure,
+						RestoreNugetsInProject = true,
+						MTouchExtraArgs = tp.ExtraArgs,
+						TimeoutMultiplier = tp.TimeoutMultiplier,
+						GenerateVariations = false,
+						TestPlatform = platform,
+					});
+				}
 			}
 			return result;
 		}
@@ -390,6 +380,7 @@ namespace Xharness {
 					FailureMessage = tp.Failure,
 					RestoreNugetsInProject = true,
 					MTouchExtraArgs = tp.ExtraArgs,
+					TestPlatform = TestPlatform.Mac,
 				});
 			}
 			return result;

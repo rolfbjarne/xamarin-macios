@@ -27,7 +27,7 @@ namespace Xharness.Jenkins {
 					ignored = true;
 
 				projectTasks.Clear ();
-				if (!project.SkipiOSVariation) {
+				if (!project.SkipiOSVariation || project.TestPlatform == TestPlatform.iOS_Unified) {
 					var build64 = new MSBuildTask (jenkins: jenkins, testProject: project, processManager: processManager) {
 						ProjectConfiguration = "Debug64",
 						ProjectPlatform = "iPhone",
@@ -83,8 +83,8 @@ namespace Xharness.Jenkins {
 					}
 				}
 
-				if (!project.SkiptvOSVariation) {
-					var tvOSProject = project.AsTvOSProject ();
+				if (!project.SkiptvOSVariation || project.TestPlatform == TestPlatform.tvOS) {
+					var tvOSProject = project.TestPlatform == TestPlatform.tvOS ? project : project.AsTvOSProject ();
 					var buildTV = new MSBuildTask (jenkins: jenkins, testProject: tvOSProject, processManager: processManager) {
 						ProjectConfiguration = "Debug",
 						ProjectPlatform = "iPhone",
@@ -103,8 +103,8 @@ namespace Xharness.Jenkins {
 						candidates: jenkins.Devices.ConnectedTV.Where (d => project.IsSupported (d.DevicePlatform, d.ProductVersion))) { Ignored = !jenkins.IncludetvOS });
 				}
 
-				if (!project.SkipwatchOSVariation) {
-					var watchOSProject = project.AsWatchOSProject ();
+				if (!project.SkipwatchOSVariation || project.TestPlatform == TestPlatform.watchOS) {
+					var watchOSProject = project.TestPlatform == TestPlatform.watchOS ? project : project.AsWatchOSProject ();
 					if (!project.SkipwatchOS32Variation) {
 						var buildWatch32 = new MSBuildTask (jenkins: jenkins, testProject: watchOSProject, processManager: processManager) {
 							ProjectConfiguration = "Debug32",

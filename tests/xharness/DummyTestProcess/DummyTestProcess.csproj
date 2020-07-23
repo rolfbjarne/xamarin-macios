@@ -28,16 +28,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Mono.Options">
-      <HintPath>..\..\..\packages\Mono.Options.6.6.0.161\lib\net40\Mono.Options.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Mono.Options" Version="6.6.0.161" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

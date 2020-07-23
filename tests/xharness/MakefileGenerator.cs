@@ -66,8 +66,8 @@ namespace Xharness
 				writer.WriteLine ("\t$(Q) touch $@");
 				writer.WriteLine ();
 				var nuget_restore_dependency = ".stamp-nuget-restore-mac";
-				writer.WriteLine ("PACKAGES_CONFIG:=$(shell find . -name packages.config)");
-				writer.WriteLine ($"{nuget_restore_dependency}: tests-mac.sln $(PACKAGES_CONFIG)");
+				writer.WriteLine ("CSPROJECT_FILES:=$(shell git ls-files -- '*.csproj')");
+				writer.WriteLine ($"{nuget_restore_dependency}: tests-mac.sln $(CSPROJECT_FILES)");
 				writer.WriteLine ("\t$(Q_XBUILD) $(SYSTEM_XIBUILD) -t -- /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore tests-mac.sln");
 				writer.WriteLine ("\t$(Q) touch $@");
 

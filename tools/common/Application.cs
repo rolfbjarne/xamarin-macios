@@ -530,7 +530,7 @@ namespace Xamarin.Bundler {
 #endif
 			};
 
-			if (Platform == ApplePlatform.iOS) {
+			if (Platform == ApplePlatform.iOS && !Driver.IsDotNet) {
 				if (Is32Build) {
 					resolver.ArchDirectory = Driver.GetArch32Directory (this);
 				} else {
@@ -554,7 +554,7 @@ namespace Xamarin.Bundler {
 					foundProductAssembly = true;
 				
 				try {
-					AssemblyDefinition lastAssembly = ps.AssemblyResolver.Resolve (AssemblyNameReference.Parse (rootName), new ReaderParameters ());
+					var lastAssembly = resolver.Load (asm);
 					if (lastAssembly == null) {
 						ErrorHelper.CreateWarning (7, Errors.MX0007, rootName);
 						continue;

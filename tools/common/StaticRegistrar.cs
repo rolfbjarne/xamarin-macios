@@ -577,7 +577,7 @@ namespace Registrar {
 		Dictionary<IMetadataTokenProvider, object> availability_annotations;
 
 		PlatformResolver resolver;
-		PlatformResolver Resolver {  get { return resolver ?? Target.Resolver; } }
+		PlatformResolver Resolver { get { return resolver ?? Target.Resolver; } }
 
 #if MONOMAC
 		readonly Version MacOSTenTwelveVersion = new Version (10,12);

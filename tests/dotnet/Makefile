@@ -59,9 +59,23 @@ linkall: $(TARGETS)
 		cd "$(TOP)/$$dir" && git clean -qxfd && rm -Rf ../packages && cd "$(CURDIR)"; \
 		$(CP) NuGet.config global.json "$(TOP)/$$dir"; \
 	done
+	make -C $(TOP)/tests/test-libraries -j
 	dotnet build $(TOP)/tests/linker/ios/link\ all/dotnet/*.csproj /v:diag "/bl:$@.binlog" /property:GenerateFullPaths=true "/consoleloggerparameters:ForceNoAlign;DisableMPLogging"
 	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
 	launch-in-sim $(PWD)/../linker/ios/link\ all/dotnet/bin/Debug/net5.0/ios-x64/link\ all.app
+
+linksdk: $(TARGETS)
+	rm -f *.binlog
+	-pkill -f MSBuild.dll.*nodemode # yay :/
+	cd $(TOP)/tests/linker/ios/link\ sdk/dotnet && git clean -xfd
+	for dir in $(DIRS); do \
+		cd "$(TOP)/$$dir" && git clean -qxfd && rm -Rf ../packages && cd "$(CURDIR)"; \
+		$(CP) NuGet.config global.json "$(TOP)/$$dir"; \
+	done
+	make -C $(TOP)/tests/test-libraries -j
+	dotnet build $(TOP)/tests/linker/ios/link\ sdk/dotnet/*.csproj /v:diag "/bl:$@.binlog" /property:GenerateFullPaths=true "/consoleloggerparameters:ForceNoAlign;DisableMPLogging"
+	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
+	launch-in-sim $(PWD)/../linker/ios/link\ sdk/dotnet/bin/Debug/net5.0/ios-x64/link\ sdk.app
 
 monotouch-test monotouchtest: $(TARGETS)
 	rm -f *.binlog

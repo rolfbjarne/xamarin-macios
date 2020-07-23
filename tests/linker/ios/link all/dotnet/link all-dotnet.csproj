@@ -8,11 +8,12 @@
     <LangVersion>latest</LangVersion>
     <RootNamespace>linkall</RootNamespace>
     <AssemblyName>link all</AssemblyName>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
     <AssetTargetFallback>xamarinios10;$(AssetTargetFallback)</AssetTargetFallback>
     <!-- This is needed because the packages/ directory might be in the same folder as this project file, and some some packages might have C# files, which would then automatically be included -->
     <DefaultItemExcludes>$(DefaultItemExcludes);packages/**;</DefaultItemExcludes>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <MtouchExtraArgs>-disable-thread-check -xml=${ProjectDir}/../extra-linker-defs.xml "--dlsym:-link sdk" -gcc_flags="-UhoItsB0rken"</MtouchExtraArgs>
   </PropertyGroup>
 
@@ -21,6 +22,7 @@
       <HintPath>../support.dll</HintPath>
     </Reference>
 
+    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
     <PackageReference Include="NUnitLite" Version="3.12.0" />
     <PackageReference Include="MonoTouch.Dialog" Version="2.0.0-pre1" />
     <ProjectReference Include="..\..\..\..\..\external\Touch.Unit\Touch.Client\dotnet\iOS\Touch.Client-iOS.dotnet.csproj" />
@@ -38,7 +40,7 @@
     <PackageReference Include="System.Data.SqlClient" Version="5.0.0-alpha1.19523.8" />
 
     <ProjectReference Include="..\..\..\..\BundledResources\dotnet\BundledResources-dotnet.csproj" />
-    <ProjectReference Include="..\..\..\..\bindings-test\iOS\bindings-test-dotnet.csproj" />
+    <ProjectReference Include="..\..\..\..\bindings-test\iOS\dotnet\bindings-test-dotnet.csproj" />
   </ItemGroup>
 
   <ItemGroup>

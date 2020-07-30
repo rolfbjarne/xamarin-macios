@@ -4098,6 +4098,9 @@ public partial class KeyboardViewController : UIKit.UIInputViewController
 				mtouch.References = new string [] { bindingsLibrary };
 				mtouch.CreateTemporaryApp_LinkWith ();
 				mtouch.CreateTemporaryCacheDirectory ();
+				var refs = new List<string> (mtouch.References);
+				refs.Add (Path.Combine (Configuration.RootPath, "packages/NUnit.3.12.0/lib/netstandard2.0/nunit.framework.dll"));
+				mtouch.References = refs.ToArray ();
 				mtouch.SymbolMode = MTouchSymbolMode.Code;
 				mtouch.Verbosity = 9;
 

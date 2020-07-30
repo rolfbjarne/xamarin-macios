@@ -163,7 +163,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <ProjectReference Include="..\..\external\Touch.Unit\Touch.Client\iOS\Touch.Client-iOS.csproj">
+    <ProjectReference Include="..\..\..\external\Touch.Unit\Touch.Client\iOS\Touch.Client-iOS.csproj">
       <Project>{F611ED96-54B5-4975-99BB-12F50AF95936}</Project>
       <Name>Touch.Client-iOS</Name>
     </ProjectReference>

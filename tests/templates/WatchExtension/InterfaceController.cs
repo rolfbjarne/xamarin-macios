@@ -5,9 +5,7 @@ using System.Threading;
 using WatchKit;
 using Foundation;
 
-using NUnit.Framework.Internal;
 using MonoTouch.NUnit.UI;
-using NUnit.Framework.Interfaces;
 
 public static partial class TestLoader
 {

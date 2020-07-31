@@ -85,6 +85,11 @@ namespace Xamarin.Bundler {
 				try {
 					assembly = ModuleDefinition.ReadModule (fileName, parameters).Assembly;
 					params_cache [assembly.Name.ToString ()] = parameters;
+					if (!assembly.MainModule.HasSymbols) {
+						var pdb = Path.ChangeExtension (fileName, "pdb");
+						if (File.Exists (pdb))
+							ErrorHelper.Show (ErrorHelper.CreateWarning (129, Errors.MX0129, fileName));
+					}
 				}
 				catch (SymbolsNotMatchingException) {
 					parameters.ReadSymbols = false;

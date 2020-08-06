@@ -96,6 +96,7 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase ("iOS")]
+		[TestCase ("macOS")]
 		public void BuildBindingsTest (string platform)
 		{
 			var dotnet_bindings_dir = Path.Combine (Configuration.SourceRoot, "tests", "bindings-test", "dotnet");

@@ -270,7 +270,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			SdkPlatform="$(_SdkPlatform)"
 			SdkVersion="$(_SdkVersion)"
 			SdkDevPath="$(_SdkDevPath)"
-
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			Debug="$(_BundlerDebug)"
 			>
 

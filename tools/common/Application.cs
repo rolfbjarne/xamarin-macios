@@ -117,6 +117,8 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public BuildTarget BuildTarget;
+
 		public string LocalBuildDir {
 			get {
 #if NET

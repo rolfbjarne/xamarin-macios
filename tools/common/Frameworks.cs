@@ -569,7 +569,7 @@ public class Frameworks : Dictionary <string, Framework>
 			}
 			return true;
 		default:
-			throw ErrorHelper.CreateError (71, Errors.MX0071 /* "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case." */, app.Platform, app.GetProductName ());
+			throw ErrorHelper.CreateError (71, Errors.MX0071 /* "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case." */, app.Platform, app.ProductName);
 		}
 		return true;
 	}

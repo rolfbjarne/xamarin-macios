@@ -55,32 +55,6 @@ introspection-old: $(TARGETS)
 	$(Q) rm -f $(TOP)/tests/introspection/iOS/NuGet.config $(TOP)/tests/introspection/iOS/global.json
 	launch-in-sim $(PWD)/../introspection/iOS/bin/Debug/net5.0/ios-x64/introspection.app
 
-linkall: $(TARGETS)
-	rm -f *.binlog
-	-pkill -f MSBuild.dll.*nodemode # yay :/
-	cd $(TOP)/tests/linker/ios/link\ all/dotnet && git clean -xfd
-	for dir in $(DIRS); do \
-		cd "$(TOP)/$$dir" && git clean -qxfd && rm -Rf ../packages && cd "$(CURDIR)"; \
-		$(CP) NuGet.config global.json "$(TOP)/$$dir"; \
-	done
-	$(MAKE) -C $(TOP)/tests/test-libraries -j
-	dotnet build $(TOP)/tests/linker/ios/link\ all/dotnet/*.csproj /v:diag "/bl:$@.binlog" /property:GenerateFullPaths=true "/consoleloggerparameters:ForceNoAlign;DisableMPLogging"
-	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
-	launch-in-sim $(PWD)/../linker/ios/link\ all/dotnet/bin/Debug/net5.0/ios-x64/link\ all.app
-
-linksdk: $(TARGETS)
-	rm -f *.binlog
-	-pkill -f MSBuild.dll.*nodemode # yay :/
-	cd $(TOP)/tests/linker/ios/link\ sdk/dotnet && git clean -xfd
-	for dir in $(DIRS); do \
-		cd "$(TOP)/$$dir" && git clean -qxfd && rm -Rf ../packages && cd "$(CURDIR)"; \
-		$(CP) NuGet.config global.json "$(TOP)/$$dir"; \
-	done
-	$(MAKE) -C $(TOP)/tests/test-libraries -j
-	dotnet build $(TOP)/tests/linker/ios/link\ sdk/dotnet/*.csproj /v:diag "/bl:$@.binlog" /property:GenerateFullPaths=true "/consoleloggerparameters:ForceNoAlign;DisableMPLogging"
-	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
-	launch-in-sim $(PWD)/../linker/ios/link\ sdk/dotnet/bin/Debug/net5.0/ios-x64/link\ sdk.app
-
 build-project: $(TARGETS)
 	test -n "$(PROJECT_NAME)" || exit 1
 	rm -f *.binlog
@@ -115,7 +89,13 @@ build-project: $(TARGETS)
 		launch-in-sim $(PWD)/../"$(PROJECT_NAME)"/bin/Debug/net5.0*/ios-x64/*.app; \
 	fi
 
-dontlink:
+linksdk link\ sdk:
+	$(MAKE) build-project PROJECT_NAME=linker/ios/link\ sdk
+
+linkall link\ all:
+	$(MAKE) build-project PROJECT_NAME=linker/ios/link\ all
+
+dontlink dont\ link:
 	$(MAKE) build-project PROJECT_NAME=linker/ios/dont\ link
 
 monotouch-test monotouchtest: $(TARGETS)

@@ -105,9 +105,8 @@ build-project: $(TARGETS)
 	done
 	$(CP) NuGet.config global.json "$(TOP)/tests"
 	$(CP) NuGet.config global.json "$(TOP)/external/Touch.Unit/Touch.Client/dotnet"
-	make -C $(TOP)/tests/test-libraries -j
-	make all     -C $(TOP)/dotnet -j
-	make install -C $(TOP)/dotnet -j
+	make all     -C $(TOP) -j8
+	make install -C $(TOP) -j8
 	if test -f $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj; then \
 		$(DOTNET5) build $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
 	else \
@@ -130,3 +129,8 @@ monotouch-test monotouchtest: $(TARGETS)
 
 interdependent-binding-projects:
 	$(MAKE) build-project PROJECT_NAME=interdependent-binding-projects
+
+test-clean clean-test:
+	cd $(TOP)/tests && git clean -xfdq
+	cd $(TOP)/dotnet && git clean -xfdq
+	rm -Rf $(TOP)/_build

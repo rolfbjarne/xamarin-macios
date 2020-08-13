@@ -500,6 +500,8 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		Inputs="@(_CompileToNativeInput);@(_FrameworkNativeReference);@(_FileNativeReference);@(BundleDependentFiles)"
 		Outputs="$(_NativeExecutable);$(DeviceSpecificOutputPath)mtouch.stamp">
 
+		<Error Text="Should not execute this when running .NET" Condition="'$(_UsingXamarinSdk)' == 'true'" />
+
 		<MTouch
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"

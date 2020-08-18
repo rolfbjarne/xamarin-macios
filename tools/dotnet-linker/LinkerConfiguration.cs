@@ -22,6 +22,7 @@ namespace Xamarin.Linker {
 		public Version DeploymentTarget { get; private set; }
 		public string ItemsDirectory { get; private set; }
 		public bool IsSimulatorBuild { get; private set; }
+		public string PartialStaticRegistrarLibrary { get; set; }
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; }
 		public Version SdkVersion { get; private set; }
@@ -31,6 +32,9 @@ namespace Xamarin.Linker {
 
 		public Application Application { get; private set; }
 		public Target Target { get; private set; }
+
+		public IList<string> RegistrationMethods { get; set; } = new List<string> ();
+		public CompilerFlags CompilerFlags;
 
 		public LinkContext Context { get; private set; }
 
@@ -91,6 +95,9 @@ namespace Xamarin.Linker {
 				case "IsSimulatorBuild":
 					IsSimulatorBuild = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
 					break;
+				case "PartialStaticRegistrarLibrary":
+					PartialStaticRegistrarLibrary = value;
+					break;
 				case "Platform":
 					switch (value) {
 					case "iOS":
@@ -147,6 +154,7 @@ namespace Xamarin.Linker {
 
 			Application = new Application (this, significantLines.ToArray ());
 			Target = new Target (Application);
+			CompilerFlags = new CompilerFlags (Target);
 
 			Application.Cache.Location = CacheDirectory;
 			Application.DeploymentTarget = DeploymentTarget;
@@ -180,6 +188,7 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    DeploymentTarget: {DeploymentTarget}");
 				Console.WriteLine ($"    ItemsDirectory: {ItemsDirectory}");
 				Console.WriteLine ($"    IsSimulatorBuild: {IsSimulatorBuild}");
+				Console.WriteLine ($"    PartialStaticRegistrarLibrary: {PartialStaticRegistrarLibrary}");
 				Console.WriteLine ($"    Platform: {Platform}");
 				Console.WriteLine ($"    PlatformAssembly: {PlatformAssembly}.dll");
 				Console.WriteLine ($"    SdkVersion: {SdkVersion}");

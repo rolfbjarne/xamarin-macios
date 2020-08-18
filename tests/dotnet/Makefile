@@ -90,9 +90,6 @@ linksdk: $(TARGETS)
 	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
 	launch-in-sim $(PWD)/../linker/ios/link\ sdk/dotnet/bin/Debug/net5.0/ios-x64/link\ sdk.app
 
-monotouch-test monotouchtest: $(TARGETS)
-	$(MAKE) build-project PROJECT_NAME=monotouch-test
-
 build-project: $(TARGETS)
 	test -n "$(PROJECT_NAME)" || exit 1
 	rm -f *.binlog
@@ -120,6 +117,9 @@ build-project: $(TARGETS)
 	else \
 		launch-in-sim $(PWD)/../$(PROJECT_NAME)/bin/Debug/net5.0*/ios-x64/*.app; \
 	fi
+
+monotouch-test monotouchtest: $(TARGETS)
+	$(MAKE) build-project PROJECT_NAME=monotouch-test
 
 interdependent-binding-projects:
 	$(MAKE) build-project PROJECT_NAME=interdependent-binding-projects

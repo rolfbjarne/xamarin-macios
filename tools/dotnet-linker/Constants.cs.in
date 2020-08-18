@@ -1,0 +1,19 @@
+namespace Xamarin.Bundler {
+	public static partial class Constants {
+		const string IOS_NUGET_VERSION = "@IOS_NUGET_VERSION@";
+		const string TVOS_NUGET_VERSION = "@TVOS_NUGET_VERSION@";
+		const string WATCHOS_NUGET_VERSION = "@WATCHOS_NUGET_VERSION@";
+		const string MACOS_NUGET_VERSION = "@MACOS_NUGET_VERSION@";
+
+		public const string IOS_NUGET_VERSION_NO_METADATA = "@IOS_NUGET_VERSION_NO_METADATA@";
+		public const string TVOS_NUGET_VERSION_NO_METADATA = "@TVOS_NUGET_VERSION_NO_METADATA@";
+		public const string WATCHOS_NUGET_VERSION_NO_METADATA = "@WATCHOS_NUGET_VERSION_NO_METADATA@";
+		public const string MACOS_NUGET_VERSION_NO_METADATA = "@MACOS_NUGET_VERSION_NO_METADATA@";
+		public const string IOS_NUGET_VERSION_FULL = "@IOS_NUGET_VERSION_FULL@";
+		public const string TVOS_NUGET_VERSION_FULL = "@TVOS_NUGET_VERSION_FULL@";
+		public const string WATCHOS_NUGET_VERSION_FULL = "@WATCHOS_NUGET_VERSION_FULL@";
+		public const string MACOS_NUGET_VERSION_FULL = "@MACOS_NUGET_VERSION_FULL@";
+		public const string CURRENT_BRANCH = "@CURRENT_BRANCH@";
+		public const string CURRENT_HASH_LONG = "@CURRENT_HASH_LONG@";
+	}
+}

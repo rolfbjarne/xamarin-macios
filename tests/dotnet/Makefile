@@ -28,7 +28,20 @@ TARGETS += \
 	NuGet.config \
 	global.json \
 
-DIRS=tests/monotouch-test tests/EmbeddedResources tests/BundledResources tests/bindings-test external/Touch.Unit/Touch.Client tests/linker/ios/dont\ link/dotnet  tests/linker/ios/link\ all/dotnet
+all-local:: $(TARGETS)
+
+DOTNET_ARGS=/v:diag /property:GenerateFullPaths=true "/consoleloggerparameters:ForceNoAlign;DisableMPLogging"
+
+DIRS=\
+	tests/monotouch-test \
+	tests/interdependent-binding-projects \
+	tests/BundledResources \
+	tests/EmbeddedResources \
+	tests/bindings-test \
+	tests/bindings-test2 \
+	tests/linker/ios/dont\ link/dotnet \
+	tests/linker/ios/link\ all/dotnet \
+	external/Touch.Unit/Touch.Client \
 
 introspection: $(TARGETS)
 	cd $(TOP)/tests/introspection && git clean -xfd
@@ -100,29 +113,30 @@ monotouch-test-simple monotouchtest-simple: $(TARGETS)
 	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:$@.binlog /property:GenerateFullPaths=true "/consoleloggerparameters:NoSummary;ForceNoAlign;DisableMPLogging"
 	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
 
-all-local:: $(TARGETS)
+mt: $(TARGETS)
+	$(MAKE) build-project PROJECT_NAME=monotouch-test
 
-DIRS=\
-	tests/interdependent-binding-projects \
-	tests/EmbeddedResources \
-	tests/bindings-test \
-	tests/bindings-test2 \
-	external/Touch.Unit/Touch.Client \
-
-DOTNET_ARGS=/v:diag /property:GenerateFullPaths=true "/consoleloggerparameters:ForceNoAlign;DisableMPLogging"
-
-build-project:
+build-project: $(TARGETS)
 	test -n "$(PROJECT_NAME)" || exit 1
 	rm -f *.binlog
 	-pkill -f MSBuild.dll.*nodemode # yay :/
 	for dir in $(DIRS); do \
-		cd "$(TOP)/$$dir/dotnet" && git clean -qxfd && rm -Rf packages ../packages && cd "$(CURDIR)"; \
-		$(CP) NuGet.config global.json "$(TOP)/$$dir/dotnet"; \
+		if test -f "$(TOP)/$$dir/dotnet"; then \
+			cd "$(TOP)/$$dir/dotnet" && git clean -qxfd && rm -Rf packages ../packages && cd "$(CURDIR)"; \
+			$(CP) NuGet.config global.json "$(TOP)/$$dir/dotnet"; \
+		else \
+			rm -Rf "$(TOP)/$$dir/bin" "$(TOP)/$$dir/obj packages ../packages"; \
+			$(CP) NuGet.config global.json "$(TOP)/$$dir"; \
+		fi; \
 	done
 	$(CP) NuGet.config global.json "$(TOP)/tests"
 	$(CP) NuGet.config global.json "$(TOP)/external/Touch.Unit/Touch.Client/dotnet"
 	make -C $(TOP)/tests/test-libraries -j
-	dotnet build $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS)
+	if test -f $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj; then \
+		dotnet build $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
+	else \
+		dotnet build $(TOP)/tests/$(PROJECT_NAME)/*-dotnet.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
+	fi
 	rm -f "$(TOP)/tests/NuGet.config" "$(TOP)/tests/global.json" "$(TOP)/external/Touch.Unit/Touch.Client/dotnet/NuGet.config" "$(TOP)/external/Touch.Unit/Touch.Client/dotnet/global.json"
 	launch-in-sim $(PWD)/../$(PROJECT_NAME)/dotnet/iOS/bin/Debug/net5.0/ios-x64/*.app
 

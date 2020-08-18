@@ -36,6 +36,17 @@ $(DOTNET_DESTDIR)/Microsoft.macOS.Sdk/tools/dotnet-linker/%: $(BUILD_DIR)/% | $(
 $(DOTNET_DIRECTORIES):
 	$(Q) mkdir -p $@
 
+PLATFORMS:=$(shell echo $(DOTNET_PLATFORMS) | tr a-z A-Z)
+CURRENT_HASH_LONG:=$(shell git log -1 --pretty=%H)
+Constants.generated.cs: Constants.cs.in $(TOP)/Make.config.inc Makefile $(TOP)/.git/HEAD $(TOP)/.git/index
+	$(Q_GEN) sed \
+		$(foreach platform,$(PLATFORMS),-e "s/@$(platform)_NUGET_VERSION@/$($(platform)_NUGET_VERSION)/g") \
+		$(foreach platform,$(PLATFORMS),-e "s/@$(platform)_NUGET_VERSION_NO_METADATA@/$($(platform)_NUGET_VERSION_NO_METADATA)/g") \
+		$(foreach platform,$(PLATFORMS),-e "s/@$(platform)_NUGET_VERSION_FULL@/$($(platform)_NUGET_VERSION_FULL)/g") \
+		-e "s/@CURRENT_BRANCH@/$(CURRENT_BRANCH_SED_ESCAPED)/g" \
+		-e "s/@CURRENT_HASH_LONG@/$(CURRENT_HASH_LONG)/g" \
+	$< > $@
+
 # This tells NuGet to use the exact same dotnet version we've configured in Make.config
 global.json: $(TOP)/Make.config.inc Makefile $(TOP)/.git/HEAD $(TOP)/.git/index
 	$(Q_GEN) \

@@ -91,29 +91,6 @@ linksdk: $(TARGETS)
 	launch-in-sim $(PWD)/../linker/ios/link\ sdk/dotnet/bin/Debug/net5.0/ios-x64/link\ sdk.app
 
 monotouch-test monotouchtest: $(TARGETS)
-	rm -f *.binlog
-	-pkill -f MSBuild.dll.*nodemode # yay :/
-	for dir in $(DIRS); do \
-		cd $(TOP)/$$dir && git clean -qxfd && rm -Rf ../packages && cd $(CURDIR); \
-		$(CP) NuGet.config global.json $(TOP)/$$dir; \
-	done
-	$(MAKE) all -j8 -C $(TOP) && $(MAKE) install -j8 -C $(TOP)
-	$(MAKE) all -j8 -C $(TOP)/dotnet && $(MAKE) install -j8 -C $(TOP)/dotnet
-	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:monotouch-test.binlog /property:GenerateFullPaths=true "/consoleloggerparameters:NoSummary;ForceNoAlign;DisableMPLogging"
-	rm -f $(foreach dir,$(DIRS),$(TOP)/$(dir)/NuGet.config $(TOP)/$(dir)/global.json)
-	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
-
-monotouch-test-simple monotouchtest-simple: $(TARGETS)
-	rm -f *.binlog
-	-pkill -f MSBuild.dll.*nodemode # yay :/
-	for dir in $(DIRS); do \
-		$(CP) NuGet.config global.json $(TOP)/$$dir; \
-	done
-	make -C ../test-libraries -j
-	dotnet build $(TOP)/tests/monotouch-test/monotouch-test-dotnet.csproj /v:diag /bl:$@.binlog /property:GenerateFullPaths=true "/consoleloggerparameters:NoSummary;ForceNoAlign;DisableMPLogging"
-	launch-in-sim $(PWD)/../monotouch-test/bin/Debug/net5.0/ios-x64/monotouchtest.app
-
-mt: $(TARGETS)
 	$(MAKE) build-project PROJECT_NAME=monotouch-test
 
 build-project: $(TARGETS)
@@ -133,12 +110,16 @@ build-project: $(TARGETS)
 	$(CP) NuGet.config global.json "$(TOP)/external/Touch.Unit/Touch.Client/dotnet"
 	make -C $(TOP)/tests/test-libraries -j
 	if test -f $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj; then \
-		dotnet build $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
+		$(DOTNET5) build $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
 	else \
-		dotnet build $(TOP)/tests/$(PROJECT_NAME)/*-dotnet.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
+		$(DOTNET5) build $(TOP)/tests/$(PROJECT_NAME)/*-dotnet.csproj "/bl:$(PROJECT_NAME).binlog" $(DOTNET_ARGS); \
 	fi
 	rm -f "$(TOP)/tests/NuGet.config" "$(TOP)/tests/global.json" "$(TOP)/external/Touch.Unit/Touch.Client/dotnet/NuGet.config" "$(TOP)/external/Touch.Unit/Touch.Client/dotnet/global.json"
-	launch-in-sim $(PWD)/../$(PROJECT_NAME)/dotnet/iOS/bin/Debug/net5.0/ios-x64/*.app
+	if test -f $(TOP)/tests/$(PROJECT_NAME)/dotnet/iOS/*.csproj; then \
+		launch-in-sim $(PWD)/../$(PROJECT_NAME)/dotnet/iOS/bin/Debug/net5.0/ios-x64/*.app; \
+	else \
+		launch-in-sim $(PWD)/../$(PROJECT_NAME)/bin/Debug/net5.0*/ios-x64/*.app; \
+	fi
 
 interdependent-binding-projects:
 	$(MAKE) build-project PROJECT_NAME=interdependent-binding-projects

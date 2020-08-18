@@ -158,6 +158,7 @@
     <Compile Include="..\..\external\Xamarin.MacDev\Xamarin.MacDev\PListObject.cs">
       <Link>external\Xamarin.MacDev\Xamarin.MacDev\PListObject.cs</Link>
     </Compile>
+    <Compile Include="Constants.generated.cs" Condition="!Exists ('Constants.generated.cs')" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\mtouch\Errors.resx">
@@ -170,4 +171,7 @@
       <LogicalName>Errors.mtouch.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <Target Name="BuildConstants" Inputs="Constants.cs.in" Outputs="Constants.generated.cs">
+    <Exec Command="make Constants.generated.cs" />
+  </Target>
 </Project>

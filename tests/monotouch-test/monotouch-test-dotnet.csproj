@@ -91,9 +91,9 @@
   </ItemGroup>
 -->
   <ItemGroup>
-    <ProjectReference Include="..\EmbeddedResources\EmbeddedResources-dotnet.csproj" />
-    <ProjectReference Include="..\..\tests\bindings-test\bindings-test-dotnet.csproj" />
-    <!-- TODO: F# support <ProjectReference Include="..\fsharplibrary\fsharplibrary-dotnet.fsproj" /> -->
+    <ProjectReference Include="..\EmbeddedResources\dotnet\iOS\EmbeddedResources.csproj" />
+    <ProjectReference Include="..\..\tests\bindings-test\dotnet\iOS\bindings-test.csproj" />
+    <ProjectReference Include="..\fsharplibrary\dotnet\iOS\fsharplibrary.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="CoreImage\Xam.png" />

@@ -119,20 +119,6 @@ namespace Xamarin.Bundler {
 
 		public string LocalBuildDir {
 			get {
-#if NET
-				switch (Platform) {
-				case ApplePlatform.iOS:
-					return "_build/Microsoft.iOS.sdk";
-				case ApplePlatform.TVOS:
-					return "_build/Microsoft.tvOS.sdk";
-				case ApplePlatform.WatchOS:
-					return "_build/Microsoft.watchOS.sdk";
-				case ApplePlatform.MacOSX:
-					return "_build/Microsoft.macOS.sdk";
-				default:
-					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
-				}
-#else
 				switch (Platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
@@ -143,7 +129,6 @@ namespace Xamarin.Bundler {
 				default:
 					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
 				}
-#endif
 			}
 		}
 

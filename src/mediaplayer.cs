@@ -1177,6 +1177,7 @@ namespace MediaPlayer {
 		[Export ("indexOfNowPlayingItem")]
 		nuint IndexOfNowPlayingItem { get; }
 
+		[return: ForcedType] // iOS might return an instance of MPMusicPlayerMediaItemProxy, which is a subclass of NSProxy. See issue #9578.
 		[Export ("nowPlayingItem", ArgumentSemantic.Copy), NullAllowed]
 		MPMediaItem NowPlayingItem { get; set; }
 

@@ -76,9 +76,12 @@ namespace Xamarin {
 					if (step is SubStepsDispatcher) {
 						var substeps = typeof (SubStepsDispatcher).GetField ("substeps", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (step) as IEnumerable<ISubStep>;
 						if (substeps != null) {
+							Console.WriteLine ($"        Found {substeps.Count ()} substeps:.");
 							foreach (var substep in substeps) {
 								Console.WriteLine ($"        {substep}");
 							}
+						} else {
+							Console.WriteLine ($"        Could not find the 'substeps' field.");
 						}
 					}
 				}

@@ -17,10 +17,10 @@ namespace Xamarin.Linker {
 		public static string AsString (this ICustomAttributeProvider provider)
 		{
 			if (provider is MemberReference member)
-				return member.DeclaringType.FullName + "." + member.Name;
+				return member.DeclaringType?.FullName + "." + member.Name;
 			if (provider is MethodReturnType returnType)
 				return AsString ((ICustomAttributeProvider) returnType.Method);
-			return provider.ToString ();
+			return provider?.ToString ();
 		}
 
 		// This method will look in any stored attributes in the link context as well as the provider itself.

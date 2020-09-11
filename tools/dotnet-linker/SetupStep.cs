@@ -50,7 +50,12 @@ namespace Xamarin {
 			var prelink_substeps = new DotNetSubStepDispatcher ();
 			InsertAfter (prelink_substeps, "RemoveSecurityStep");
 
+			var post_sweep_substeps = new DotNetSubStepDispatcher ();
+			InsertAfter (post_sweep_substeps, "SweepStep");
+
 			if (Configuration.LinkMode != LinkMode.None) {
+				post_sweep_substeps.Add (new RemoveAttributesStep ());
+
 				// We need to run the ApplyPreserveAttribute step even we're only linking sdk assemblies, because even
 				// though we know that sdk assemblies will never have Preserve attributes, user assemblies may have
 				// [assembly: LinkSafe] attributes, which means we treat them as sdk assemblies and those may have

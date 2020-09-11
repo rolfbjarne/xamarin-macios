@@ -2579,8 +2579,12 @@ public partial class Generator : IMemberGatherer {
 			// it can't be conditional without fixing https://github.com/mono/linker/issues/516
 			// but we have a workaround in place because we can't fix old, binary bindings so...
 			// print ("[Preserve (Conditional=true)]");
+			// For .NET we fix it using the DynamicDependency attribute below
 			print ("static internal readonly {0} Handler = {1};", ti.DelegateName, ti.TrampolineName);
 			print ("");
+#if NET
+			print ("[global::System.Diagnostics.CodeAnalysis.DynamicDependency (\"Handler\")]");
+#endif
 			print ("[MonoPInvokeCallback (typeof ({0}))]", ti.DelegateName);
 			print ("static unsafe {0} {1} ({2}) {{", ti.ReturnType, ti.TrampolineName, ti.Parameters);
 			indent++;
@@ -5234,7 +5238,11 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (mi.ReturnType.IsSubclassOf (TypeManager.System_Delegate)) {
 			var ti = MakeTrampoline (mi.ReturnType);
-			print ("[return: DelegateProxy (typeof ({0}.Trampolines.{1}))]", ns.CoreObjCRuntime, ti.StaticName);
+			var typeName = $"{ns.CoreObjCRuntime}.Trampolines.{ti.StaticName}";
+#if NET
+			print ($"[global::System.Diagnostics.CodeAnalysis.DynamicDependency (global::System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.All, typeof ({typeName}))]");
+#endif
+			print ($"[return: DelegateProxy (typeof ({typeName}))]");
 		}
 	}
 

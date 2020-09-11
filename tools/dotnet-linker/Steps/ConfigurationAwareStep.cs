@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using Mono.Linker.Steps;
 
 using Xamarin.Bundler;
+using Xamarin.Tuner;
 
 namespace Xamarin.Linker {
 	public abstract class ConfigurationAwareStep : BaseStep {
 		public LinkerConfiguration Configuration {
 			get { return LinkerConfiguration.GetInstance (Context); }
+		}
+
+		public DerivedLinkContext LinkContext {
+			get { return Configuration.DerivedLinkContext; }
 		}
 
 		protected void Report (Exception exception)

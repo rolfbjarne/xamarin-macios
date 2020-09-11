@@ -609,6 +609,9 @@ namespace Registrar {
 					if (IsAttributeMatch (attrib, @namespace, name, inherits))
 						yield return attrib;
 				}
+#if NET
+				yield break;
+#endif
 			}
 
 			if (provider.HasCustomAttributes) {

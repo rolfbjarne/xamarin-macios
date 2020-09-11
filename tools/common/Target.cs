@@ -106,10 +106,8 @@ namespace Xamarin.Bundler {
 		{
 			if (LinkContext != null)
 				return LinkContext;
-#if MTOUCH
 			if (App.IsExtension && App.IsCodeShared)
 				return ContainerTarget.GetLinkContext ();
-#endif
 			return null;
 		}
 

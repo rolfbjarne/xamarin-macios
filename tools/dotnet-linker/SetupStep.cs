@@ -26,6 +26,17 @@ namespace Xamarin {
 			}
 		}
 
+		void InsertBefore (IStep step, string stepName)
+		{
+			for (int i = 0; i < Steps.Count; i++) {
+				if (Steps [i].GetType ().Name == stepName) {
+					Steps.Insert (i, step);
+					return;
+				}
+			}
+			throw new InvalidOperationException ($"Could not insert {step} before {stepName} because {stepName} wasn't found.");
+		}
+
 		void InsertAfter (IStep step, string stepName)
 		{
 			for (int i = 0; i < Steps.Count;) {
@@ -53,7 +64,11 @@ namespace Xamarin {
 			var post_sweep_substeps = new DotNetSubStepDispatcher ();
 			InsertAfter (post_sweep_substeps, "SweepStep");
 
+			var pre_dynamic_dependency_lookup_substeps = new DotNetSubStepDispatcher ();
+			InsertBefore (pre_dynamic_dependency_lookup_substeps, "DynamicDependencyLookupStep");
+
 			if (Configuration.LinkMode != LinkMode.None) {
+				pre_dynamic_dependency_lookup_substeps.Add (new InjectDynamicDependencyStep ());
 				post_sweep_substeps.Add (new RemoveAttributesStep ());
 
 				// We need to run the ApplyPreserveAttribute step even we're only linking sdk assemblies, because even

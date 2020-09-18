@@ -6,30 +6,27 @@ using Mono.Cecil;
 using Mono.Linker.Steps;
 using Mono.Tuner;
 
+using Xamarin.Bundler;
+
 namespace Xamarin.Linker.Steps {
 	public class InjectDynamicDependencyStep : ConfigurationAwareSubStep {
-		MethodDefinition dynamic_dependency_ctor_string;
-		MethodDefinition dynamic_dependency_ctor_enum_type;
+		MethodDefinition ctor_string;
+		MethodDefinition ctor_enum_type;
 
-		MethodReference dynamic_dependency_ctor_string_mr;
-		MethodReference dynamic_dependency_ctor_enum_type_mr;
-
-		public override bool IsActiveFor (AssemblyDefinition assembly)
-		{
-			return base.IsActiveFor (assembly);
-		}
+		MethodReference ctor_string_ref;
+		MethodReference ctor_enum_type_ref;
 
 		public override SubStepTargets Targets {
 			get {
 				return SubStepTargets.Method |
-						SubStepTargets.Assembly |
-						SubStepTargets.Type;
+						SubStepTargets.Assembly;
 			}
 		}
 
 		void FetchMethodDefinitions (AssemblyDefinition assembly)
 		{
-			if (dynamic_dependency_ctor_string == null) {
+			if (ctor_string == null) {
+				// Find the method definitions for the constructors we want to use
 				foreach (var asm in Configuration.Assemblies) {
 					var dependencyAttribute = asm.MainModule.GetType ("System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute");
 					if (dependencyAttribute == null)
@@ -39,60 +36,56 @@ namespace Xamarin.Linker.Steps {
 						if (!method.HasParameters)
 							continue;
 
-						if (method.Parameters.Count == 1 && method.Parameters [0].ParameterType.Is ("System", "String")) {
-							dynamic_dependency_ctor_string = method;
-						} else if (method.Parameters.Count == 2 && method.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes") && method.Parameters [1].ParameterType.Is ("System", "Type")) {
-							dynamic_dependency_ctor_enum_type = method;
+						if (method.Parameters.Count == 1) {
+							if (method.Parameters [0].ParameterType.Is ("System", "String"))
+								ctor_string = method;
+						} else if (method.Parameters.Count == 2) {
+							if (method.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes") && method.Parameters [1].ParameterType.Is ("System", "Type"))
+								ctor_enum_type = method;
 						}
+
+						if (ctor_enum_type != null && ctor_string != null)
+							break; // Found both of the methods we're looking for, no need to look any longer
 					}
 
 					break;
 				}
 
-				if (dynamic_dependency_ctor_string == null)
-					throw new NotImplementedException ("Method ctor string not found");
-				if (dynamic_dependency_ctor_enum_type == null)
-					throw new NotImplementedException ("Method ctor enum type not found");
+				if (ctor_string == null)
+					throw ErrorHelper.CreateError (99, Errors.MX0099, "Could not find the constructor 'System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute..ctor(System.String)'");
+				if (ctor_enum_type == null)
+					throw ErrorHelper.CreateError (99, Errors.MX0099, "Could not find the constructor 'System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute..ctor(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes,System.Type)'");
 			}
-			if (dynamic_dependency_ctor_string_mr == null)
-				dynamic_dependency_ctor_string_mr = assembly.MainModule.ImportReference (dynamic_dependency_ctor_string);
-			if (dynamic_dependency_ctor_enum_type_mr == null)
-				dynamic_dependency_ctor_enum_type_mr = assembly.MainModule.ImportReference (dynamic_dependency_ctor_enum_type);
+
+			// Import the constructors into the current assembly if they haven't already been imported
+			ctor_string_ref ??= assembly.MainModule.ImportReference (ctor_string);
+			ctor_enum_type_ref ??= assembly.MainModule.ImportReference (ctor_enum_type);
 		}
 
 		public override void ProcessAssembly (AssemblyDefinition assembly)
 		{
+			// Clear out the method references we have, so that the we import the method definitions again
+			ctor_enum_type_ref = null;
+			ctor_string_ref = null;
+
 			base.ProcessAssembly (assembly);
-
-			dynamic_dependency_ctor_enum_type_mr = null;
-			dynamic_dependency_ctor_string_mr = null;
-
-			Console.WriteLine ("InjectDynamicDependencyStep.ProcessAssembly {0}", assembly.Name.Name);
 		}
 
 		public override void ProcessMethod (MethodDefinition method)
 		{
 			base.ProcessMethod (method);
 
-			//Console.WriteLine ("InjectDynamicDependencyStep.ProcessMethod {0}", method.FullName);
-
-			// Find the attributes we want to inject
-			if (method.DeclaringType.Is ("System.Diagnostics.CodeAnalysis", "DynamicDependencyAttribute") && method.HasParameters) {
-				if (method.Parameters.Count == 1 && method.Parameters [0].ParameterType.Is ("System", "String")) {
-					dynamic_dependency_ctor_string = method;
-				} else if (method.Parameters.Count == 2 && method.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes") && method.Parameters [1].ParameterType.Is ("System", "Type")) {
-					dynamic_dependency_ctor_enum_type = method;
-				}
-			}
-
 			// Methods with [return: DelegateProxy (typeof (...))]
+			// Add the following attribute to any method that has a DelegateProxy return type attribute:
+			//     [DynamicDependency (DynamicallyAccessedMemberTypes.All, typeof (SomeType))]
+			// This DynamicDependency attribute makes sure the linker doesn't link away anything from SomeType (in particular SomeType.Handler)
 			if (method.MethodReturnType.HasCustomAttributes) {
 				var delegateProxyAttribute = method.MethodReturnType.CustomAttributes.FirstOrDefault (v => v.AttributeType.Is ("ObjCRuntime", "DelegateProxyAttribute"));
 				if (delegateProxyAttribute != null) {
 					FetchMethodDefinitions (method.DeclaringType.Module.Assembly);
-					var attrib = new CustomAttribute (dynamic_dependency_ctor_enum_type_mr);
-					attrib.ConstructorArguments.Add (new CustomAttributeArgument (dynamic_dependency_ctor_enum_type_mr.Parameters [0].ParameterType, System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.All));
-					attrib.ConstructorArguments.Add (new CustomAttributeArgument (dynamic_dependency_ctor_enum_type_mr.Parameters [1].ParameterType, delegateProxyAttribute.ConstructorArguments [0].Value));
+					var attrib = new CustomAttribute (ctor_enum_type_ref);
+					attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor_enum_type_ref.Parameters [0].ParameterType, System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.All));
+					attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor_enum_type_ref.Parameters [1].ParameterType, delegateProxyAttribute.ConstructorArguments [0].Value));
 					method.CustomAttributes.Add (attrib);
 					Console.WriteLine ("Added dynamic attribute (1) to: {0}", method.FullName);
 				}
@@ -112,22 +105,22 @@ namespace Xamarin.Linker.Steps {
 					}
 				}
 			*/
-			if (method.HasCustomAttributes) {
-				var monoPInvokeCallbackAttribute = method.CustomAttributes.FirstOrDefault (v => v.AttributeType.Is ("ObjCRuntime", "MonoPInvokeCallbackAttribute"));
-				if (monoPInvokeCallbackAttribute != null) {
-					var td = method.DeclaringType;
-					if (td.IsAbstract && td.IsSealed && td.IsNested && td.HasFields && td.HasFields && td.Fields.Count == 1 && td.DeclaringType.Is ("ObjCRuntime", "Trampolines")) {
-						var handlerField = td.Fields [0];
-						if (handlerField.IsInitOnly && handlerField.Name == "Handler") {
-							FetchMethodDefinitions (method.DeclaringType.Module.Assembly);
-							var attrib = new CustomAttribute (dynamic_dependency_ctor_string);
-							attrib.ConstructorArguments.Add (new CustomAttributeArgument (dynamic_dependency_ctor_string.Parameters [0].ParameterType, "Handler"));
-							method.CustomAttributes.Add (attrib);
-							Console.WriteLine ("Added dynamic attribute (2) to: {0}", method.FullName);
-						}
-					}
-				}
-			}
+			//if (method.HasCustomAttributes) {
+			//	var monoPInvokeCallbackAttribute = method.CustomAttributes.FirstOrDefault (v => v.AttributeType.Is ("ObjCRuntime", "MonoPInvokeCallbackAttribute"));
+			//	if (monoPInvokeCallbackAttribute != null) {
+			//		var td = method.DeclaringType;
+			//		if (td.IsAbstract && td.IsSealed && td.IsNested && td.HasFields && td.HasFields && td.Fields.Count == 1 && td.DeclaringType.Is ("ObjCRuntime", "Trampolines")) {
+			//			var handlerField = td.Fields [0];
+			//			if (handlerField.IsInitOnly && handlerField.Name == "Handler") {
+			//				FetchMethodDefinitions (method.DeclaringType.Module.Assembly);
+			//				var attrib = new CustomAttribute (ctor_string);
+			//				attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor_string.Parameters [0].ParameterType, "Handler"));
+			//				method.CustomAttributes.Add (attrib);
+			//				Console.WriteLine ("Added dynamic attribute (2) to: {0}", method.FullName);
+			//			}
+			//		}
+			//	}
+			//}
 		}
 	}
 }

@@ -10,23 +10,21 @@ using Xamarin.Bundler;
 
 namespace Xamarin.Linker.Steps {
 	public class InjectDynamicDependencyStep : ConfigurationAwareSubStep {
-		MethodDefinition ctor_string;
-		MethodDefinition ctor_enum_type;
-
+		MethodDefinition ctor_string_def;
 		MethodReference ctor_string_ref;
-		MethodReference ctor_enum_type_ref;
 
 		public override SubStepTargets Targets {
 			get {
-				return SubStepTargets.Method |
-						SubStepTargets.Assembly;
+				return SubStepTargets.Assembly |
+						SubStepTargets.Field |
+						SubStepTargets.Type;
 			}
 		}
 
-		void FetchMethodDefinitions (AssemblyDefinition assembly)
+		MethodReference GetConstructorReference (AssemblyDefinition assembly)
 		{
-			if (ctor_string == null) {
-				// Find the method definitions for the constructors we want to use
+			if (ctor_string_def == null) {
+				// Find the method definition for the constructor we want to use
 				foreach (var asm in Configuration.Assemblies) {
 					var dependencyAttribute = asm.MainModule.GetType ("System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute");
 					if (dependencyAttribute == null)
@@ -36,92 +34,105 @@ namespace Xamarin.Linker.Steps {
 						if (!method.HasParameters)
 							continue;
 
-						if (method.Parameters.Count == 1) {
-							if (method.Parameters [0].ParameterType.Is ("System", "String"))
-								ctor_string = method;
-						} else if (method.Parameters.Count == 2) {
-							if (method.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes") && method.Parameters [1].ParameterType.Is ("System", "Type"))
-								ctor_enum_type = method;
+						if (method.Parameters.Count == 1 && method.Parameters [0].ParameterType.Is ("System", "String")) {
+							ctor_string_def = method;
+							break;
 						}
-
-						if (ctor_enum_type != null && ctor_string != null)
-							break; // Found both of the methods we're looking for, no need to look any longer
 					}
 
 					break;
 				}
 
-				if (ctor_string == null)
+				if (ctor_string_def == null)
 					throw ErrorHelper.CreateError (99, Errors.MX0099, "Could not find the constructor 'System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute..ctor(System.String)'");
-				if (ctor_enum_type == null)
-					throw ErrorHelper.CreateError (99, Errors.MX0099, "Could not find the constructor 'System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute..ctor(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes,System.Type)'");
 			}
 
-			// Import the constructors into the current assembly if they haven't already been imported
-			ctor_string_ref ??= assembly.MainModule.ImportReference (ctor_string);
-			ctor_enum_type_ref ??= assembly.MainModule.ImportReference (ctor_enum_type);
+			// Import the constructor into the current assembly if it hasn't already been imported
+			ctor_string_ref ??= assembly.MainModule.ImportReference (ctor_string_def);
+
+			return ctor_string_ref;
 		}
 
 		public override void ProcessAssembly (AssemblyDefinition assembly)
 		{
-			// Clear out the method references we have, so that the we import the method definitions again
-			ctor_enum_type_ref = null;
+			// Clear out the method reference we have, so that we import the method definition again
 			ctor_string_ref = null;
 
 			base.ProcessAssembly (assembly);
 		}
 
-		public override void ProcessMethod (MethodDefinition method)
+		public override void ProcessField (FieldDefinition field)
 		{
-			base.ProcessMethod (method);
+			base.ProcessField (field);
 
-			// Methods with [return: DelegateProxy (typeof (...))]
-			// Add the following attribute to any method that has a DelegateProxy return type attribute:
-			//     [DynamicDependency (DynamicallyAccessedMemberTypes.All, typeof (SomeType))]
-			// This DynamicDependency attribute makes sure the linker doesn't link away anything from SomeType (in particular SomeType.Handler)
-			if (method.MethodReturnType.HasCustomAttributes) {
-				var delegateProxyAttribute = method.MethodReturnType.CustomAttributes.FirstOrDefault (v => v.AttributeType.Is ("ObjCRuntime", "DelegateProxyAttribute"));
-				if (delegateProxyAttribute != null) {
-					FetchMethodDefinitions (method.DeclaringType.Module.Assembly);
-					var attrib = new CustomAttribute (ctor_enum_type_ref);
-					attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor_enum_type_ref.Parameters [0].ParameterType, System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.All));
-					attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor_enum_type_ref.Parameters [1].ParameterType, delegateProxyAttribute.ConstructorArguments [0].Value));
-					method.CustomAttributes.Add (attrib);
-					Console.WriteLine ("Added dynamic attribute (1) to: {0}", method.FullName);
+			PreserveBlockField (field);
+		}
+
+		void PreserveBlockField (FieldDefinition field)
+		{
+			/* For the following class:
+
+			static internal class SDInnerBlock {
+				// this field is not preserved by other means, but it must not be linked away
+				static internal readonly DInnerBlock Handler = Invoke;
+
+				[MonoPInvokeCallback (typeof (DInnerBlock))]
+				static internal void Invoke (IntPtr block, int magic_number)
+				{
 				}
 			}
 
-			/*
-			 * 
-				// older generated bindings did not preserve the `Handler` field and
-				// newer (mono 2019-02) linker can optimize them (enabled by default)
-				// so we make sure our old bindings remains linker-safe
-				if (td.IsAbstract && td.IsSealed && td.IsNested && td.HasFields) {
-					var dt = td.DeclaringType;
-					if (dt.Is ("ObjCRuntime", "Trampolines")) {
-						var f = td.Fields [0];
-						if (f.IsInitOnly && td.Fields.Count == 1 && f.Name == "Handler")
-							MarkField (f);
-					}
-				}
+			We need to make sure the linker doesn't remove the Handler field. Unfortunately there's no programmatic way to
+			preserve a field dependent upon the preservation of the containing type, so we have to inject a DynamicDependency attribute.
+			Our generator generates this attribute, but since we have to work with existing assemblies, we also detect the scenario
+			here and inject the attribute manually.
+
 			*/
-			//if (method.HasCustomAttributes) {
-			//	var monoPInvokeCallbackAttribute = method.CustomAttributes.FirstOrDefault (v => v.AttributeType.Is ("ObjCRuntime", "MonoPInvokeCallbackAttribute"));
-			//	if (monoPInvokeCallbackAttribute != null) {
-			//		var td = method.DeclaringType;
-			//		if (td.IsAbstract && td.IsSealed && td.IsNested && td.HasFields && td.HasFields && td.Fields.Count == 1 && td.DeclaringType.Is ("ObjCRuntime", "Trampolines")) {
-			//			var handlerField = td.Fields [0];
-			//			if (handlerField.IsInitOnly && handlerField.Name == "Handler") {
-			//				FetchMethodDefinitions (method.DeclaringType.Module.Assembly);
-			//				var attrib = new CustomAttribute (ctor_string);
-			//				attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor_string.Parameters [0].ParameterType, "Handler"));
-			//				method.CustomAttributes.Add (attrib);
-			//				Console.WriteLine ("Added dynamic attribute (2) to: {0}", method.FullName);
-			//			}
-			//		}
-			//	}
-			//}
+
+			// First filter out any other fields
+			var td = field.DeclaringType;
+			if (!td.IsAbstract || !td.IsSealed || !td.IsNested)
+				return;
+			if (td.Fields.Count != 1)
+				return;
+
+			var nestingType = td.DeclaringType;
+			if (nestingType == null)
+				return;
+			if (!nestingType.Is ("ObjCRuntime", "Trampolines"))
+				return;
+
+
+			if (!field.IsInitOnly)
+				return;
+			if (field.Name != "Handler")
+				return;
+
+
+			// One problem is that we can't add the DynamicDependency attribute to the type, nor the field itself,
+			// so we add it to the Invoke method in the same type.
+			if (!td.HasMethods)
+				return;
+
+			var method = td.Methods.SingleOrDefault (v => {
+				if (v.Name != "Invoke")
+					return false;
+				if (v.Parameters.Count == 0)
+					return false;
+				if (!v.HasCustomAttributes)
+					return false;
+				if (!v.CustomAttributes.Any (v => v.AttributeType.Name == "MonoPInvokeCallbackAttribute"))
+					return false;
+				return true;
+			});
+			if (method == null)
+				return;
+
+			// Create and add the DynamicDependency attribute to the method
+			var ctor = GetConstructorReference (field.DeclaringType.Module.Assembly);
+			var attrib = new CustomAttribute (ctor);
+			attrib.ConstructorArguments.Add (new CustomAttributeArgument (ctor.Parameters [0].ParameterType, "Handler"));
+			method.CustomAttributes.Add (attrib);
 		}
 	}
 }
-

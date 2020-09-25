@@ -22,6 +22,12 @@ items).
 All \*.storyboard and \*.xib files in the project directory or any
 subdirectory are included by default (as `InterfaceDefinition` items).
 
+## Asset catalogs
+
+All \*.jpg, \*.png and \*.json files inside asset catalogs (\*.xcassets) in
+the project directory or any subdirectory are included by default (as
+`ImageAsset` items).
+
 ## Binding projects
 
 Default compilation includes is turned off for binding projects, because

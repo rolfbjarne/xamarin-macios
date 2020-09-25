@@ -17,6 +17,11 @@ the platform-specific variables `EnableDefaultiOSItems=false`,
 All \*.plist files in the root directory are included by default (as `None`
 items).
 
+## Storyboards
+
+All \*.storyboard and \*.xib files in the project directory or any
+subdirectory are included by default (as `InterfaceDefinition` items).
+
 ## Binding projects
 
 Default compilation includes is turned off for binding projects, because

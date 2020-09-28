@@ -123,6 +123,9 @@
 			_DetectAppManifest;
 			_CopyResourcesToBundle;
 			_CompileCoreMLModels;
+			_SmeltMetal;
+			_ForgeMetal;
+			_TemperMetal;
 			_CompileEntitlements;
 			_CompileAppManifest;
 			_ComputeLinkerArguments;

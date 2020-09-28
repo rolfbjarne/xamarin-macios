@@ -108,13 +108,6 @@ namespace Xamarin.Tests {
 						return false;
 					}
 
-					var dir = Path.GetDirectoryName (v);
-					var dirext = Path.GetExtension (dir);
-					switch (dirext) {
-					case ".scnassets": // TODO
-						return false;
-					}
-
 					var components = v.Split ('/');
 					if (components.Any (v => v.EndsWith (".framework", StringComparison.Ordinal))) {
 						return false; // TODO

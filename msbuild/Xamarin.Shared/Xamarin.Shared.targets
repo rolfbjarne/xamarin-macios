@@ -483,6 +483,17 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<CreatePkgInfo SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" OutputPath="$(_PkgInfoPath)" />
 	</Target>
 
+	<Target Name="_CreateAssetPackManifest" DependsOnTargets="_CopyResourcesToBundle">
+		<CreateAssetPackManifest
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AppBundleDir="$(AppBundleDir)"
+			InitialInstallTags="$(OnDemandResourcesInitialInstallTags)"
+			PrefetchOrder="$(OnDemandResourcesPrefetchOrder)"
+			OutputPath="$(DeviceSpecificOutputPath)"
+		/>
+	</Target>
+
 	<Target Name="_CompileCoreMLModels" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetArchitectures;_BeforeCompileCoreMLModels;_ReadCompileCoreMLModels;_CoreCompileCoreMLModels" />
 
 	<Target Name="_BeforeCompileCoreMLModels"

@@ -33,6 +33,11 @@ the project directory or any subdirectory are included by default (as
 All \*.png files inside \*.atlas directories in the project directory or any
 subdirectory are included by default (as `AtlasTexture` items).
 
+## Core ML Models
+
+All \*.mlmodel files anywhere in the project directory or any subdirectory are
+included by default (as `CoreMLModel` items).
+
 ## Binding projects
 
 Default compilation includes is turned off for binding projects, because

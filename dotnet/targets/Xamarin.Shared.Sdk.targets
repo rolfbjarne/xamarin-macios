@@ -124,6 +124,7 @@
 			_CopyResourcesToBundle;
 			_CompileCoreMLModels;
 			_CreateAssetPackManifest;
+			_CreatePkgInfo;
 			_SmeltMetal;
 			_ForgeMetal;
 			_TemperMetal;
@@ -136,6 +137,12 @@
 			_LinkNativeExecutable;
 			_ComputePublishLocation;
 			CopyFilesToPublishDirectory;
+		</CreateAppBundleDependsOn>
+
+		<CreateAppBundleDependsOn Condition="'$(_PlatformName)' != 'macOS'">
+			_CreateDebugSettings;
+			_CreateDebugConfiguration;
+			$(CreateAppBundleDependsOn);
 		</CreateAppBundleDependsOn>
 	</PropertyGroup>
 

@@ -101,15 +101,13 @@ namespace Xamarin.Tests {
 					switch (filename) {
 					case "runtime-options.plist":
 						return false; // the .NET runtime will deal with selecting the http handler, no need for us to do anything
-
-					// There's a lot of TODOs here, those correspond with missing features in .NET and will be removed as those features are implemented
 					}
 
 					var components = v.Split ('/');
 					if (components.Any (v => v.EndsWith (".framework", StringComparison.Ordinal))) {
-						return false; // TODO
+						return false; // This is Mono.framework, which is waiting for https://github.com/dotnet/runtime/issues/42846
 					} else if (components.Any (v => v.EndsWith (".appex", StringComparison.Ordinal))) {
-						return false; // TODO
+						return false; // https://github.com/xamarin/xamarin-macios/issues/9726
 					}
 
 					return true;

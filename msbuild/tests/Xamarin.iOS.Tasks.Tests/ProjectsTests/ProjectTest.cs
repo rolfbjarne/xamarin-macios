@@ -9,10 +9,17 @@ namespace Xamarin.iOS.Tasks
 	public class ProjectTest : TestBase {
 		public string BundlePath;
 		public string Platform;
+		public ExecutionMode? Mode;
 
 		public ProjectTest (string platform)
 		{
 			Platform = platform;
+		}
+
+		public ProjectTest (string platform, ExecutionMode executionMode)
+		{
+			Platform = platform;
+			Mode = executionMode;
 		}
 
 		public ProjectTest (string bundlePath, string platform)
@@ -21,12 +28,12 @@ namespace Xamarin.iOS.Tasks
 			Platform = platform;
 		}
 
-		//public void SetupPaths (string appName, string platform) 
-		//{
-		//	var paths = SetupProjectPaths (appName, "../", true, platform);
-		//	MonoTouchProjectPath = paths ["project_path"];
-		//	AppBundlePath = paths ["app_bundlepath"];
-		//}
+		public ProjectTest (string bundlePath, string platform, ExecutionMode executionMode)
+		{
+			BundlePath = bundlePath;
+			Platform = platform;
+			Mode = executionMode;
+		}
 
 		[SetUp]
 		public override void Setup () 
@@ -35,8 +42,13 @@ namespace Xamarin.iOS.Tasks
 			SetupEngine ();
 		}
 
-		public string BuildProject (string appName, string platform, string config, int expectedErrorCount = 0, bool clean = true, string projectBaseDir = "../", ExecutionMode executionMode = ExecutionMode.InProcess, bool nuget_restore = false)
+		public string BuildProject (string appName, string platform, string config, int expectedErrorCount = 0, bool clean = true, string projectBaseDir = "../", ExecutionMode? executionMode = null, bool nuget_restore = false)
 		{
+			// If the execution mode isn't passed in, use the class-level variable
+			executionMode ??= Mode;
+			// If the class-level variable isn't set either, default to InProcess
+			executionMode ??= ExecutionMode.InProcess;
+
 			var mtouchPaths = SetupProjectPaths (appName, appName, projectBaseDir, includePlatform: true, platform: platform, config: config, is_dotnet: executionMode == ExecutionMode.DotNet);
 			var csproj = mtouchPaths.ProjectCSProjPath;
 
@@ -52,7 +64,7 @@ namespace Xamarin.iOS.Tasks
 				NugetRestore (csproj);
 
 			if (clean) {
-				RunTarget (proj, csproj, "Clean", executionMode);
+				RunTarget (proj, csproj, "Clean", executionMode.Value);
 				Assert.IsFalse (Directory.Exists (AppBundlePath), "App bundle exists after cleanup: {0} ", AppBundlePath);
 				Assert.IsFalse (Directory.Exists (AppBundlePath + ".dSYM"), "App bundle .dSYM exists after cleanup: {0} ", AppBundlePath + ".dSYM");
 				Assert.IsFalse (Directory.Exists (AppBundlePath + ".mSYM"), "App bundle .mSYM exists after cleanup: {0} ", AppBundlePath + ".mSYM");
@@ -77,7 +89,7 @@ namespace Xamarin.iOS.Tasks
 			if (executionMode != ExecutionMode.DotNet)
 				proj = SetupProject (Engine, mtouchPaths.ProjectCSProjPath);
 
-			RunTarget (proj, csproj, "Build", executionMode, expectedErrorCount);
+			RunTarget (proj, csproj, "Build", executionMode.Value, expectedErrorCount);
 
 			if (expectedErrorCount > 0)
 				return csproj;

@@ -53,8 +53,10 @@ namespace Xamarin.iOS.Tasks
 
 			var rv = Configuration.CloneTestDirectory (Configuration.TestProjectsDirectory, mode);
 
-			if (mode == "dotnet")
+			if (mode == "dotnet") {
 				Configuration.CopyDotNetSupportingFiles (rv);
+				Configuration.FixupTestFiles (rv, "dotnet");
+			}
 
 			return rv;
 		}

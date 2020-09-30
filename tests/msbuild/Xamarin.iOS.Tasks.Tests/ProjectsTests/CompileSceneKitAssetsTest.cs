@@ -12,10 +12,11 @@ using Xamarin.Tests;
 namespace Xamarin.iOS.Tasks
 {
 	// [TestFixture ("iPhone")] // Skip this to speed things up a bit.
-	[TestFixture ("iPhoneSimulator")]
+	[TestFixture ("iPhoneSimulator", ExecutionMode.InProcess)]
+	[TestFixture ("iPhoneSimulator", ExecutionMode.DotNet)]
 	public class CompileSceneKitAssetsTest : ProjectTest
 	{
-		public CompileSceneKitAssetsTest (string platform) : base (platform)
+		public CompileSceneKitAssetsTest (string platform, ExecutionMode mode) : base (platform, mode)
 		{
 		}
 

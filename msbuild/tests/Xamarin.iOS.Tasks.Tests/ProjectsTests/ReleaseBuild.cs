@@ -29,7 +29,7 @@ namespace Xamarin.iOS.Tasks
 		[Test]
 		public void RebuildTest ()
 		{
-			var csproj = BuildProject ("MyReleaseBuild", Platform, "Release", clean: true);
+			var csproj = BuildProject ("MyReleaseBuild", Platform, "Release", clean: true).ProjectCSProjPath;
 			var bak = Path.Combine (Path.GetDirectoryName (csproj), "MyReleaseBuild.csproj.bak");
 			var llvm = Path.Combine (Path.GetDirectoryName (csproj), "MyReleaseBuildLlvm.csproj");
 

@@ -23,8 +23,8 @@ namespace Xamarin.iOS.Tasks
 		[Test]
 		public void Compilation ()
 		{
-			var csproj = BuildProject ("MySceneKitApp", Platform, "Debug", clean: true);
-			var appPath = Path.Combine (Path.GetDirectoryName (csproj), "bin", Platform, "Debug", "MySceneKitApp.app");
+			var proj = BuildProject ("MySceneKitApp", Platform, "Debug", clean: true);
+			var appPath = proj.AppBundlePath;
 			var scenePath = Path.GetFullPath (Path.Combine (appPath, "art.scnassets", "scene.scn"));
 
 			var xml = Configuration.ReadPListAsXml (scenePath);

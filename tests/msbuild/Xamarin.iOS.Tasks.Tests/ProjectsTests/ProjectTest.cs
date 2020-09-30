@@ -42,7 +42,7 @@ namespace Xamarin.iOS.Tasks
 			SetupEngine ();
 		}
 
-		public string BuildProject (string appName, string platform, string config, int expectedErrorCount = 0, bool clean = true, string projectBaseDir = "../", ExecutionMode? executionMode = null, bool nuget_restore = false)
+		public ProjectPaths BuildProject (string appName, string platform, string config, int expectedErrorCount = 0, bool clean = true, string projectBaseDir = "../", ExecutionMode? executionMode = null, bool nuget_restore = false)
 		{
 			// If the execution mode isn't passed in, use the class-level variable
 			executionMode ??= Mode;
@@ -92,7 +92,7 @@ namespace Xamarin.iOS.Tasks
 			RunTarget (proj, csproj, "Build", executionMode.Value, expectedErrorCount);
 
 			if (expectedErrorCount > 0)
-				return csproj;
+				return mtouchPaths;
 
 			Assert.IsTrue (Directory.Exists (AppBundlePath), "App Bundle does not exist: {0} ", AppBundlePath);
 
@@ -120,7 +120,7 @@ namespace Xamarin.iOS.Tasks
 				Assert.IsTrue (File.GetLastWriteTimeUtc (dSYMInfoPlist) >= File.GetLastWriteTimeUtc (nativeExecutable), "dSYM Info.plist should be newer than the native executable");
 			}
 
-			return csproj;
+			return mtouchPaths;
 		}
 	}
 }

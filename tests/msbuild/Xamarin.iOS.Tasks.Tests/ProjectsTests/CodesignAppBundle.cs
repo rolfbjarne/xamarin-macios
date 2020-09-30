@@ -119,7 +119,7 @@ namespace Xamarin.iOS.Tasks
 		[Test]
 		public void CodesignAfterModifyingAppExtensionTest ()
 		{
-			var csproj = BuildProject ("MyTabbedApplication", Platform, config, clean: true);
+			var csproj = BuildProject ("MyTabbedApplication", Platform, config, clean: true).ProjectCSProjPath;
 			var testsDir = Path.GetDirectoryName (Path.GetDirectoryName (csproj));
 			var appexProjectDir = Path.Combine (testsDir, "MyActionExtension");
 			var viewController = Path.Combine (appexProjectDir, "ActionViewController.cs");
@@ -172,7 +172,7 @@ namespace Xamarin.iOS.Tasks
 		[Test]
 		public void CodesignAfterModifyingWatchApp2Test ()
 		{
-			var csproj = BuildProject ("MyWatch2Container", Platform, config, clean: true);
+			var csproj = BuildProject ("MyWatch2Container", Platform, config, clean: true).ProjectCSProjPath;
 			var testsDir = Path.GetDirectoryName (Path.GetDirectoryName (csproj));
 			var appexProjectDir = Path.Combine (testsDir, "MyWatchKit2Extension");
 			var viewController = Path.Combine (appexProjectDir, "InterfaceController.cs");

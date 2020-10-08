@@ -60,7 +60,4 @@
       <Link>external\Profile.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="external\" />
-  </ItemGroup>
 </Project>

@@ -61,10 +61,9 @@ namespace Xamarin.iOS.Tasks
 			Assert.AreEqual ("32UV7A8CDE.com.xamarin.MySingleView", compiled.GetKeychainAccessGroups ().ToStringArray ().First (), "#7");
 		}
 
-		public override void Teardown ()
+		[TearDown]
+		public void Teardown ()
 		{
-			base.Teardown ();
-
 			CleanUp ();
 		}
 	}

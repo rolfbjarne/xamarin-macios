@@ -34,10 +34,10 @@ namespace Xamarin.iOS.Tasks
 
 			task = CreateTask<CustomCompileEntitlements> ();
 
-			task.AppBundleDir = AppBundlePath;
+			task.AppBundleDir = Cache.CreateTemporaryDirectory ();
 			task.AppIdentifier = "32UV7A8CDE.com.xamarin.MySingleView";
 			task.BundleIdentifier = "com.xamarin.MySingleView";
-			task.CompiledEntitlements = new TaskItem (Path.Combine (MonoTouchProjectObjPath, "Entitlements.xcent"));
+			task.CompiledEntitlements = new TaskItem (Path.Combine (Cache.CreateTemporaryDirectory (), "Entitlements.xcent"));
 			task.Entitlements = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location), "Resources", "Entitlements.plist");
 			task.IsAppExtension = false;
 			task.ProvisioningProfile = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location), "Resources", "profile.mobileprovision");
@@ -60,12 +60,5 @@ namespace Xamarin.iOS.Tasks
 			Assert.AreEqual ("Z8CSQKJE7R.com.xamarin.MySingleView", compiled.GetUbiquityKeyValueStore (), "#6");
 			Assert.AreEqual ("32UV7A8CDE.com.xamarin.MySingleView", compiled.GetKeychainAccessGroups ().ToStringArray ().First (), "#7");
 		}
-
-		[TearDown]
-		public void Teardown ()
-		{
-			CleanUp ();
-		}
 	}
 }
-

@@ -55,12 +55,12 @@ namespace Xamarin.iOS.Tasks
 			base.Setup ();
 
 			var tmpdir = Cache.CreateTemporaryDirectory ();
-
+			var projectPath = GetProjectPath ("MySingleView");
 			Task = CreateTask<CustomMTouchTask> ();
 			Task.ToolExe = "/path/to/mtouch";
 
-			Task.AppBundleDir = AppBundlePath;
-			Task.MinimumOSVersion = PDictionary.FromFile (Path.Combine (MonoTouchProjectPath, "Info.plist")).GetMinimumOSVersion ();
+			Task.AppBundleDir = Path.Combine (tmpdir, "AppBundlePath");
+			Task.MinimumOSVersion = PDictionary.FromFile (Path.Combine (projectPath, "Info.plist")).GetMinimumOSVersion ();
 			Task.CompiledEntitlements = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location), "Resources", "Entitlements.plist");
 			Task.IntermediateOutputPath = Path.Combine ("obj", "mtouch-cache");
 			Task.MainAssembly = new TaskItem ("Main.exe");
@@ -84,7 +84,7 @@ namespace Xamarin.iOS.Tasks
 			Assert.IsTrue (Task.ResponseFile.Contains ("\"--reference=" + Path.GetFullPath ("c\\\"quoted\\\".dll") + "\""), "#1c");
 			Assert.IsTrue (Task.ResponseFile.Contains ("Main.exe"), "#2");
 
-			var expectedSimArg = $"--sim={Path.GetFullPath (AppBundlePath)}";
+			var expectedSimArg = $"--sim={Path.GetFullPath (Task.AppBundleDir)}";
 			Assert.IsTrue (Task.ResponseFile.Contains (expectedSimArg), "#3");
 			Assert.IsTrue (Task.ResponseFile.Contains ("--sdk="), "#4");
 		}
@@ -189,7 +189,7 @@ namespace Xamarin.iOS.Tasks
 				var args = Task.GenerateCommandLineCommands ();
 				Assert.IsFalse (args.Contains ("$"), "#1");
 				Assert.IsTrue (args.Contains ("xyz-path/to-xyz"), "#ProjectDir");
-				Assert.That (args, Does.Match ("xxx-.*/MySingleView/bin/iPhoneSimulator/Debug/MySingleView.app-xxx"), "#AppBundleDir");
+				Assert.That (args, Does.Match ($"xxx-{Task.AppBundleDir}-xxx"), "#AppBundleDir");
 				Assert.IsTrue (args.Contains ("yyy-Main.exe-yyy"), "#TargetPath");
 				Assert.IsTrue (args.Contains ("yzy--yzy"), "#TargetDir");
 				Assert.IsTrue (args.Contains ("zzz-Main.exe-zzz"), "#TargetName");

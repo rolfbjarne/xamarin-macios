@@ -43,14 +43,6 @@ namespace Xamarin.iOS.Tasks
 			get; private set;
 		}
 
-		public Project MonoTouchProject {
-			get; private set;
-		}
-
-		public ProjectInstance MonoTouchProjectInstance {
-			get; set;
-		}
-
 		public string MonoTouchProjectObjPath;
 		public string MonoTouchProjectPath;
 		public string MonoTouchProjectCSProjPath;
@@ -98,9 +90,6 @@ namespace Xamarin.iOS.Tasks
 			AppBundlePath = mtouchPaths.AppBundlePath;
 
 			SetupEngine ();
-
-			MonoTouchProject = SetupProject (Engine, MonoTouchProjectCSProjPath);
-			MonoTouchProjectInstance = MonoTouchProject.CreateProjectInstance ();
 
 			CleanUp ();
 		}

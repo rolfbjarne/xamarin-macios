@@ -37,20 +37,6 @@ namespace Xamarin.iOS.Tasks
 			throw new NotImplementedException ();
 		}
 
-		public bool BuildProject (ProjectInstance instance, string [] targetNames, IDictionary globalProperties)
-		{
-			if (globalProperties != null) {
-				foreach (DictionaryEntry de in globalProperties) {
-					//Note: trying to set this on the project causes the project to be added to the PC
-					//      again, which of course, fails
-					instance.SetProperty ((string)de.Key, (string)de.Value);
-				}
-			}
-
-			//FIXME: assumption that we are still using the same PC!
-			return instance.Build (targetNames, ProjectCollection.Loggers);
-		}
-
 		public void LogCustomEvent (CustomBuildEventArgs e)
 		{
 			Logger.CustomEvents.Add (e);

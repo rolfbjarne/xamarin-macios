@@ -1120,7 +1120,10 @@ namespace Xamarin.Bundler {
 		public static void RunXcodeTool (Application app, string tool, IList<string> arguments)
 		{
 			var executable = FindTool (app, tool);
-			var rv = RunCommand (executable, arguments);
+			var env = new Dictionary<string, string> () {
+				{ "DEVELOPER_DIR", DeveloperDirectory },
+			};
+			var rv = RunCommand (executable, arguments, env: env, output: null);
 			if (rv != 0)
 				throw ErrorHelper.CreateError (5309, Errors.MX5309 /* Failed to execute the tool '{0}', it failed with an error code '{1}'. Please check the build log for details. */, tool, rv);
 		}

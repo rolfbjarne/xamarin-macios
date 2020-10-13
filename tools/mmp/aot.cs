@@ -213,7 +213,10 @@ namespace Xamarin.Bundler {
 			if (!options.IsAOT)
 				throw ErrorHelper.CreateError (0099, Errors.MX0099, $"\"AOTBundle with aot: {options.CompilationType}\" ");
 
-			var monoEnv = new Dictionary<string, string> { { "MONO_PATH", files.RootDir } };
+			var env = new Dictionary<string, string> {
+				{ "MONO_PATH", files.RootDir },
+				{ "DEVELOPER_DIR", Driver.DeveloperDirectory },
+			};
 
 			List<string> filesToAOT = GetFilesToAOT (files);
 			Parallel.ForEach (filesToAOT, ParallelOptions, file => {
@@ -222,7 +225,7 @@ namespace Xamarin.Bundler {
 				if (IsModern)
 					cmd.Add ("--runtime=mobile");
 				cmd.Add (file);
-				if (RunCommand (MonoPath, cmd, monoEnv) != 0)
+				if (RunCommand (MonoPath, cmd, env) != 0)
 					throw ErrorHelper.CreateError (3001, Errors.MX3001, "AOT", file);
 			});
 
@@ -237,7 +240,7 @@ namespace Xamarin.Bundler {
 				// mono --aot creates .dll.dylib.dSYM directories for each assembly AOTed
 				// There isn't an easy was to disable this behavior, so clean up under release
 				Parallel.ForEach (filesToAOT, ParallelOptions, file => {
-					if (RunCommand (DeleteDebugSymbolCommand, new [] { "-r", file + ".dylib.dSYM/" }, monoEnv) != 0)
+					if (RunCommand (DeleteDebugSymbolCommand, new [] { "-r", file + ".dylib.dSYM/" }, env) != 0)
 						throw ErrorHelper.CreateError (3001, Errors.MX3001, "delete debug info from", file);
 				});
 			}

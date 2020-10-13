@@ -11,17 +11,9 @@ NuGet.config: $(TOP)/NuGet.config Makefile
 	$(Q) nuget config -Set repositorypath=$(abspath $(CURDIR)/packages) -Config $@.tmp
 	$(Q) mv $@.tmp $@
 
-# This tells NuGet to use the version we're building locally.
-global.json: $(TOP)/Make.config.inc Makefile $(TOP)/.git/HEAD $(TOP)/.git/index
-	$(Q_GEN) \
-		printf "{\n" > $@; \
-		printf "\t\"sdk\": { \"version\": \"$(DOTNET5_VERSION)\" },\n" >> $@; \
-		printf "\t\"msbuild-sdks\": {\n" >> $@; \
-		printf "\t\t\"Microsoft.iOS.Sdk\": \"$(IOS_NUGET_VERSION_NO_METADATA)\",\n" >> $@; \
-		printf "\t\t\"Microsoft.tvOS.Sdk\": \"$(TVOS_NUGET_VERSION_NO_METADATA)\",\n" >> $@; \
-		printf "\t\t\"Microsoft.watchOS.Sdk\": \"$(WATCHOS_NUGET_VERSION_NO_METADATA)\",\n" >> $@; \
-		printf "\t\t\"Microsoft.macOS.Sdk\": \"$(MACOS_NUGET_VERSION_NO_METADATA)\"\n" >> $@; \
-		printf "\t}\n}\n" >> $@
+# This tells NuGet to use the exact same dotnet version we've configured in Make.config
+global.json: $(TOP)/global5.json
+	$(CP) $< $@
 
 ../bgen/global.json: global.json
 	$(Q) $(CP) $< $@
@@ -36,3 +28,6 @@ TARGETS += \
 	../bgen/global.json \
 
 all-local:: $(TARGETS)
+
+test: all-local
+	MSBuildEnableWorkloadResolver=true $(TOP)/builds/downloads/dotnet/5.0.100-rtm.20509.5/dotnet build MySingleView/MySingleView.csproj /v:diag /bl

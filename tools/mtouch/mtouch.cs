@@ -294,50 +294,13 @@ namespace Xamarin.Bundler
 			return args;
 		}
 
-		static string EncodeAotSymbol (string symbol)
-		{
-			var sb = new StringBuilder ();
-			/* This mimics what the aot-compiler does */
-			foreach (var b in System.Text.Encoding.UTF8.GetBytes (symbol)) {
-				char c = (char) b;
-				if ((c >= '0' && c <= '9') ||
-					(c >= 'a' && c <= 'z') ||
-					(c >= 'A' && c <= 'Z')) {
-					sb.Append (c);
-					continue;
-				}
-				sb.Append ('_');
-			}
-			return sb.ToString ();
-		}
-
 		// note: this is executed under Parallel.ForEach
 		public static string GenerateMain (Target target, IEnumerable<Assembly> assemblies, string assembly_name, Abi abi, string main_source, IList<string> registration_methods)
 		{
 			var app = target.App;
-			var assembly_externs = new StringBuilder ();
-			var assembly_aot_modules = new StringBuilder ();
-			var register_assemblies = new StringBuilder ();
 			var assembly_location = new StringBuilder ();
 			var assembly_location_count = 0;
 			var enable_llvm = (abi & Abi.LLVM) != 0;
-
-			register_assemblies.AppendLine ("\tguint32 exception_gchandle = 0;");
-			foreach (var s in assemblies) {
-				if (!s.IsAOTCompiled)
-					continue;
-				if ((abi & Abi.SimulatorArchMask) == 0) {
-					var info = s.AssemblyDefinition.Name.Name;
-					info = EncodeAotSymbol (info);
-					assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
-					assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
-				}
-				string sname = s.FileName;
-				if (assembly_name != sname && IsBoundAssembly (s)) {
-					register_assemblies.Append ("\txamarin_open_and_register (\"").Append (sname).Append ("\", &exception_gchandle);").AppendLine ();
-					register_assemblies.AppendLine ("\txamarin_process_managed_exception_gchandle (exception_gchandle);");
-				}
-			}
 
 			if ((abi & Abi.SimulatorArchMask) == 0 || app.Embeddinator) {
 				var frameworks = assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
@@ -371,29 +334,9 @@ namespace Xamarin.Bundler
 						sw.WriteLine ();
 						sw.WriteLine ("struct AssemblyLocations assembly_locations = {{ {0}, assembly_location_entries }};", assembly_location_count);
 					}
-					
-					sw.WriteLine ();
-					sw.WriteLine (assembly_externs);
 
-					sw.WriteLine ("void xamarin_register_modules_impl ()");
-					sw.WriteLine ("{");
-					sw.WriteLine (assembly_aot_modules);
-					sw.WriteLine ("}");
-					sw.WriteLine ();
-
-					sw.WriteLine ("void xamarin_register_assemblies_impl ()");
-					sw.WriteLine ("{");
-					sw.WriteLine (register_assemblies);
-					sw.WriteLine ("}");
-					sw.WriteLine ();
-
-					if (registration_methods != null) {
-						foreach (var method in registration_methods) {
-							sw.Write ("extern \"C\" void ");
-							sw.Write (method);
-							sw.WriteLine ("();");
-						}
-					}
+					target.GenerateAOTInitialization (sw, assemblies, abi, assembly_name);
+					target.AddRegistrationMethods (sw, registration_methods);
 
 					// Burn in a reference to the profiling symbol so that the native linker doesn't remove it
 					// On iOS we can pass -u to the native linker, but that doesn't work on tvOS, where
@@ -1174,21 +1117,6 @@ namespace Xamarin.Bundler
 					throw new ProductException (5103, true, Errors.MT5103, app.Compiler, original_compiler);
 				}
 			}
-		}
-
-		static bool IsBoundAssembly (Assembly s)
-		{
-			if (s.IsFrameworkAssembly == true)
-				return false;
-
-			AssemblyDefinition ad = s.AssemblyDefinition;
-
-			foreach (ModuleDefinition md in ad.Modules)
-				foreach (TypeDefinition td in md.Types)
-					if (td.IsNSObject (s.Target.LinkContext))
-						return true;
-
-			return false;
 		}
 	}
 }

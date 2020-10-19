@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 
 using Xamarin.Linker;
 
@@ -14,20 +15,20 @@ namespace Xamarin {
 			var items = new List<MSBuildItem> ();
 
 			var app = Configuration.Application;
+			var target = Configuration.Target;
+			var assemblies = target.Assemblies;
 			foreach (var abi in Configuration.Abis) {
 
+				var enable_llvm = (abi & Abi.LLVM) != 0;
 				var file = Path.Combine (Configuration.CacheDirectory, $"main.{abi.AsArchString ()}.mm");
 				var contents = new StringWriter ();
 
 				contents.WriteLine ("#include \"xamarin/xamarin.h\"");
 				contents.WriteLine ();
-				if (registration_methods != null) {
-					foreach (var method in registration_methods) {
-						contents.Write ("extern \"C\" void ");
-						contents.Write (method);
-						contents.WriteLine (" ();");
-					}
-				}
+
+				target.GenerateAOTInitialization (contents, assemblies, abi, Configuration.AssemblyName);
+				target.AddRegistrationMethods (contents, registration_methods);
+
 				contents.WriteLine ("void xamarin_setup_impl ()");
 				contents.WriteLine ("{");
 				contents.WriteLine ("\tsetenv (\"DOTNET_SYSTEM_GLOBALIZATION_INVARIANT\", \"1\", 1); // https://github.com/xamarin/xamarin-macios/issues/8906");
@@ -43,6 +44,13 @@ namespace Xamarin {
 					contents.WriteLine ("\txamarin_marshal_managed_exception_mode = MarshalManagedExceptionMode{0};", app.MarshalManagedExceptions);
 				contents.WriteLine ("\txamarin_marshal_objectivec_exception_mode = MarshalObjectiveCExceptionMode{0};", app.MarshalObjectiveCExceptions);
 				contents.WriteLine ("\txamarin_supports_dynamic_registration = {0};", app.DynamicRegistrationSupported ? "TRUE" : "FALSE");
+				contents.WriteLine ("\txamarin_register_assemblies = xamarin_register_assemblies_impl;");
+				contents.WriteLine ("\txamarin_register_modules = xamarin_register_modules_impl;");
+				if (app.IsDeviceBuild)
+					contents.WriteLine ("\tmono_jit_set_aot_mode (MONO_AOT_MODE_FULL);");
+				contents.WriteLine ("\tmono_use_llvm = {0};", enable_llvm ? "TRUE" : "FALSE");
+				contents.WriteLine ("\txamarin_log_level = {0};", Configuration.Verbosity.ToString (CultureInfo.InvariantCulture));
+				contents.WriteLine ("\txamarin_arch_name = \"{0}\";", abi.AsArchString ());
 				contents.WriteLine ("}");
 				contents.WriteLine ();
 

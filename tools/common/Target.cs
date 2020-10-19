@@ -501,5 +501,86 @@ namespace Xamarin.Bundler {
 				a.LoadSymbols ();
 		}
 
+		public void AddRegistrationMethods (StringWriter sw, IList<string> registration_methods)
+		{
+			if (registration_methods != null) {
+				foreach (var method in registration_methods) {
+					sw.Write ("extern \"C\" void ");
+					sw.Write (method);
+					sw.WriteLine ("();");
+				}
+			}
+		}
+
+		public void GenerateAOTInitialization (StringWriter sw, IEnumerable<Assembly> assemblies, Abi abi, string assembly_name)
+		{
+			var assembly_externs = new StringBuilder ();
+			var assembly_aot_modules = new StringBuilder ();
+			var register_assemblies = new StringBuilder ();
+
+			register_assemblies.AppendLine ("\tguint32 exception_gchandle = 0;");
+			foreach (var s in assemblies) {
+				if (!s.IsAOTCompiled)
+					continue;
+				if ((abi & Abi.SimulatorArchMask) == 0) {
+					var info = s.AssemblyDefinition.Name.Name;
+					info = EncodeAotSymbol (info);
+					assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
+					assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
+				}
+				string sname = s.FileName;
+				if (assembly_name != sname && IsBoundAssembly (s)) {
+					register_assemblies.Append ("\txamarin_open_and_register (\"").Append (sname).Append ("\", &exception_gchandle);").AppendLine ();
+					register_assemblies.AppendLine ("\txamarin_process_managed_exception_gchandle (exception_gchandle);");
+				}
+			}
+
+			sw.WriteLine ();
+			sw.WriteLine (assembly_externs);
+
+			sw.WriteLine ("void xamarin_register_modules_impl ()");
+			sw.WriteLine ("{");
+			sw.WriteLine (assembly_aot_modules);
+			sw.WriteLine ("}");
+			sw.WriteLine ();
+
+			sw.WriteLine ("void xamarin_register_assemblies_impl ()");
+			sw.WriteLine ("{");
+			sw.WriteLine (register_assemblies);
+			sw.WriteLine ("}");
+			sw.WriteLine ();
+		}
+
+		static string EncodeAotSymbol (string symbol)
+		{
+			var sb = new StringBuilder ();
+			/* This mimics what the aot-compiler does */
+			foreach (var b in Encoding.UTF8.GetBytes (symbol)) {
+				char c = (char) b;
+				if ((c >= '0' && c <= '9') ||
+					(c >= 'a' && c <= 'z') ||
+					(c >= 'A' && c <= 'Z')) {
+					sb.Append (c);
+					continue;
+				}
+				sb.Append ('_');
+			}
+			return sb.ToString ();
+		}
+
+		static bool IsBoundAssembly (Assembly s)
+		{
+			if (s.IsFrameworkAssembly == true)
+				return false;
+
+			AssemblyDefinition ad = s.AssemblyDefinition;
+
+			foreach (ModuleDefinition md in ad.Modules)
+				foreach (TypeDefinition td in md.Types)
+					if (td.IsNSObject (s.Target.LinkContext))
+						return true;
+
+			return false;
+		}
 	}
 }

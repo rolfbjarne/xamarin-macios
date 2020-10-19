@@ -609,7 +609,8 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_GenerateDebugSymbols" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false'" DependsOnTargets="_CompileToNative;_ParseBundlerArguments;_GenerateFrameworkDebugSymbols;_GenerateAppExtensionDebugSymbols;_PrepareDebugSymbolGeneration"
+	<Target Name="_GenerateDebugSymbols" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false'"
+		DependsOnTargets="_GetNativeExecutableName;_CompileToNative;_ParseBundlerArguments;_GenerateFrameworkDebugSymbols;_GenerateAppExtensionDebugSymbols;_PrepareDebugSymbolGeneration"
 		Inputs="$(_NativeExecutable)" Outputs="$(AppBundleDir).dSYM\Contents\Info.plist">
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false'" Directories="$(AppBundleDir).dSYM" />
@@ -631,7 +632,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<!-- strip the debug symbols from the $(_NativeExecutable) -->
 		<SymbolStrip
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(_NoSymbolStrip)' == 'false' And '$(IsAppExtension)' == 'false'"
+			Condition="'$(IsMacEnabled)' == 'true' And '$(_NoSymbolStrip)' == 'false' And '$(IsAppExtension)' == 'false' And '$(_UsingXamarinSdk)' == 'false'"
 			Executable="$(_NativeExecutable)"
 			IsFramework="false"
 			SymbolFile="$(_MtouchSymbolsList)"

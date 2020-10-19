@@ -154,6 +154,7 @@
 			_LinkNativeExecutable;
 			_ComputePublishLocation;
 			CopyFilesToPublishDirectory;
+			_GenerateDebugSymbols;
 		</CreateAppBundleDependsOn>
 	</PropertyGroup>
 

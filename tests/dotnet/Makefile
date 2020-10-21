@@ -2,6 +2,8 @@ TOP=../..
 
 include $(TOP)/Make.config
 
+export MSBuildEnableWorkloadResolver=true
+
 # This tells NuGet to use the nupkgs we're building locally,
 # and to put any extracted packages in the 'packages' directory (to not clutter up ~/.nuget/packages)
 NuGet.config: $(TOP)/NuGet.config Makefile
@@ -28,3 +30,10 @@ TARGETS += \
 	../bgen/global.json \
 
 all-local:: $(TARGETS)
+
+DEVNAME=c0814eeda0e071c4ed07f194ce9582674259fc4b
+test: $(TARGETS)
+	$(DOTNET5) build MySingleView/*.csproj /p:RuntimeIdentifier=ios-arm64 /bl /v:diag
+	mlaunch --installdev MySingleView/bin/Debug/net5.0-ios/ios-arm64/MySingleView.app --devname "$(DEVNAME)"
+	mlaunch --launchdev MySingleView/bin/Debug/net5.0-ios/ios-arm64/MySingleView.app --wait-for-unlock --wait-for-exit --devname "$(DEVNAME)"
+	sync-crash-reports.sh "$(DEVNAME)"

@@ -69,7 +69,6 @@ namespace Xamarin.Bundler {
 		public List<string> AotOtherArguments = null;
 		public bool? LLVMAsmWriter;
 		public Dictionary<string, string> LLVMOptimizations = new Dictionary<string, string> ();
-		public List<string> InterpretedAssemblies = new List<string> ();
 
 		// Xamarin.Mac options available here to minimize ifdefs
 		public string CustomBundleName { get { throw ErrorHelper.CreateError (99, Errors.MX0099, "Not supported on this platform"); } }
@@ -84,44 +83,6 @@ namespace Xamarin.Bundler {
 		public bool LinkerDumpDependencies { get; set; }
 		
 		public bool? BuildDSym;
-
-		public bool IsInterpreted (string assembly)
-		{
-			// IsAOTCompiled and IsInterpreted are not opposites: mscorlib.dll can be both.
-			if (!UseInterpreter)
-				return false;
-
-			// Go through the list of assemblies to interpret in reverse order,
-			// so that the last option passed to mtouch takes precedence.
-			for (int i = InterpretedAssemblies.Count - 1; i >= 0; i--) {
-				var opt = InterpretedAssemblies [i];
-				if (opt == "all")
-					return true;
-				else if (opt == "-all")
-					return false;
-				else if (opt == assembly)
-					return true;
-				else if (opt [0] == '-' && opt.Substring (1) == assembly)
-					return false;
-			}
-
-			// There's an implicit 'all' at the start of the list.
-			return true;
-		}
-
-		public bool IsAOTCompiled (string assembly)
-		{
-			if (!UseInterpreter)
-				return true;
-
-			// IsAOTCompiled and IsInterpreted are not opposites: mscorlib.dll can be both:
-			// - mscorlib will always be processed by the AOT compiler to generate required wrapper functions for the interpreter to work
-			// - mscorlib might also be fully AOT-compiled (both when the interpreter is enabled and when it's not)
-			if (assembly == "mscorlib")
-				return true;
-
-			return !IsInterpreted (assembly);
-		}
 
 		public List<string> UserGccFlags;
 
@@ -1128,12 +1089,6 @@ namespace Xamarin.Bundler {
 					rv.Add (abi);
 			}
 			return rv;
-		}
-
-		public string AssemblyName {
-			get {
-				return Path.GetFileName (RootAssemblies [0]);
-			}
 		}
 
 		public string Executable {

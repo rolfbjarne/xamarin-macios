@@ -45,6 +45,12 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public bool IsAOTCompiled {
+			get {
+				return App.IsAOTCompiled (Identity);
+			}
+		}
+
 		// Recursively list all the assemblies the specified assembly depends on.
 		HashSet<string> ComputeDependencies (List<Exception> warnings)
 		{

@@ -722,12 +722,6 @@ namespace Xamarin.Bundler {
 				Application.UpdateFile (config_src, config_target, true);
 			}
 		}
-
-		public bool IsAOTCompiled {
-			get {
-				return App.IsAOTCompiled (Identity);
-			}
-		}
 	}
 
 	public sealed class NormalizedStringComparer : IEqualityComparer<string>

@@ -60,7 +60,6 @@ namespace Xamarin.Bundler {
 		// The list of assemblies that we do generate debugging info for.
 		public bool DebugAll;
 		public bool UseInterpreter;
-		public List<string> InterpretedAssemblies = new List<string> ();
 		public List<string> DebugAssemblies = new List<string> ();
 		internal RuntimeOptions RuntimeOptions;
 		public Optimizations Optimizations = new Optimizations ();
@@ -1104,44 +1103,6 @@ namespace Xamarin.Bundler {
 					throw ErrorHelper.CreateError (89, Errors.MT0089, "--marshal-objectivec-exceptions", MarshalObjectiveCExceptions.ToString ().ToLowerInvariant ());
 				break;
 			}
-		}
-
-		public bool IsInterpreted (string assembly)
-		{
-			// IsAOTCompiled and IsInterpreted are not opposites: mscorlib.dll can be both.
-			if (!UseInterpreter)
-				return false;
-
-			// Go through the list of assemblies to interpret in reverse order,
-			// so that the last option passed to mtouch takes precedence.
-			for (int i = InterpretedAssemblies.Count - 1; i >= 0; i--) {
-				var opt = InterpretedAssemblies [i];
-				if (opt == "all")
-					return true;
-				else if (opt == "-all")
-					return false;
-				else if (opt == assembly)
-					return true;
-				else if (opt [0] == '-' && opt.Substring (1) == assembly)
-					return false;
-			}
-
-			// There's an implicit 'all' at the start of the list.
-			return true;
-		}
-
-		public bool IsAOTCompiled (string assembly)
-		{
-			if (!UseInterpreter)
-				return true;
-
-			// IsAOTCompiled and IsInterpreted are not opposites: mscorlib.dll can be both:
-			// - mscorlib will always be processed by the AOT compiler to generate required wrapper functions for the interpreter to work
-			// - mscorlib might also be fully AOT-compiled (both when the interpreter is enabled and when it's not)
-			if (assembly == "mscorlib")
-				return true;
-
-			return !IsInterpreted (assembly);
 		}
 	}
 }

@@ -21,10 +21,8 @@ namespace Xamarin {
 			global::Frameworks.Gather (Configuration.Application, assembly, Frameworks, WeakFrameworks);
 		}
 
-		protected override void EndProcess ()
+		protected override void TryEndProcess ()
 		{
-			base.EndProcess ();
-
 			// Remove duplicates. WeakFrameworks takes precedence
 			Frameworks.ExceptWith (WeakFrameworks);
 

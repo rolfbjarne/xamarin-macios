@@ -21,5 +21,20 @@ namespace Xamarin.Linker {
 			// We can't just throw an exception or exit here, since there might be only warnings in the list of exceptions.
 			ErrorHelper.Show (exceptions);
 		}
+
+		protected virtual void TryEndProcess ()
+		{
+			base.EndProcess ();
+		}
+
+		protected sealed override void EndProcess ()
+		{
+			try {
+				TryEndProcess ();
+			} catch (Exception e) {
+				Report (e);
+				throw;
+			}
+		}
 	}
 }

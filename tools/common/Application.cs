@@ -448,6 +448,13 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		public void ParseInterpreter (string value)
+		{
+			UseInterpreter = !string.IsNullOrEmpty (value);
+			if (UseInterpreter)
+				InterpretedAssemblies.AddRange (value.Split (new char [] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+		}
+
 		public void ParseI18nAssemblies (string i18n)
 		{
 			var assemblies = I18nAssemblies.None;

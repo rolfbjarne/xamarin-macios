@@ -112,6 +112,9 @@ namespace Xamarin.Linker {
 				case "FrameworkAssembly":
 					FrameworkAssemblies.Add (value);
 					break;
+				case "Interpreter":
+					Application.ParseInterpreter (value);
+					break;
 				case "ItemsDirectory":
 					ItemsDirectory = value;
 					break;

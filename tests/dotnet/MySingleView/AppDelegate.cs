@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using Foundation;
 using UIKit;
@@ -20,6 +21,14 @@ namespace MySingleView
 
 			window.RootViewController = dvc;
 			window.MakeKeyAndVisible ();
+
+			try {
+				var foos = new string [] { "hi", "bye" };
+				string f = foos.AsQueryable ().First ();
+				Console.WriteLine ("Success: {0}", f);
+			} catch (Exception e) {
+				Console.WriteLine (e);
+			}
 
 			return true;
 		}

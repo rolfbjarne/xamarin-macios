@@ -4,5 +4,6 @@
     <TargetFramework>net6.0-ios</TargetFramework>
     <RuntimeIdentifier>ios-x64</RuntimeIdentifier>
     <OutputType>Exe</OutputType>
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
 </Project>

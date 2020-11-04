@@ -28,3 +28,10 @@ TARGETS += \
 	../bgen/global.json \
 
 all-local:: $(TARGETS)
+
+
+export MSBuildEnableWorkloadResolver=true
+mysingleview: $(TARGETS)
+	$(DOTNET6) build MySingleView/MySingleView.csproj /p:RuntimeIdentifier=ios-arm64 /bl
+	$(DOTNET6) build /t:Run /p:RuntimeIdentifier=ios-arm64 MySingleView/MySingleView.csproj
+

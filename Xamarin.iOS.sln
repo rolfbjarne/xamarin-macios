@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "introspection-ios", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "link all", "tests\linker\ios\link all\link all.csproj", "{370CC763-EDC3-41DA-A21A-D4C82CABEFE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test", "tests\bindings-test\bindings-test.csproj", "{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test", "tests\bindings-test\iOS\bindings-test.csproj", "{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "link sdk", "tests\linker\ios\link sdk\link sdk.csproj", "{C47F8F72-A7CA-4149-AA7D-BC4814803EF3}"
 EndProject

@@ -11,10 +11,14 @@ PREFIX=$(abspath $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/)
 ##
 
 download: download-mono
-download-mono: downloads/$(basename $(MONO_IOS_FILENAME)) downloads/$(basename $(MONO_MAC_FILENAME))
+download-mono: \
+	downloads/$(basename $(MONO_IOS_FILENAME)) \
+	downloads/$(basename $(MONO_MAC_FILENAME)) \
+	downloads/$(basename $(MONO_MACCAT_FILENAME)) \
 
 downloads/$(basename $(MONO_IOS_FILENAME)): MONO_URL=$(MONO_IOS_URL)
 downloads/$(basename $(MONO_MAC_FILENAME)): MONO_URL=$(MONO_MAC_URL)
+downloads/$(basename $(MONO_MACCAT_FILENAME)): MONO_URL=$(MONO_MACCAT_URL)
 downloads/$(DOTNET5_BCL_REF_NAME): MONO_URL=$(DOTNET5_BCL_REF_URL)
 downloads/$(DOTNET5_TARBALL_NAME): MONO_URL=$(DOTNET5_TARBALL)
 
@@ -23,8 +27,11 @@ include $(TOP)/mk/colors.mk
 DOWNLOADS = \
 	downloads/$(MONO_IOS_FILENAME) \
 	downloads/$(MONO_MAC_FILENAME) \
+	downloads/$(MONO_MACCAT_FILENAME) \
 	downloads/$(DOTNET5_BCL_REF_NAME) \
 	downloads/$(DOTNET5_TARBALL_NAME) \
+
+download-mono: $(DOWNLOADS)
 
 # This target downloads the mono archives, there's one for Xamarin.iOS and one for Xamarin.Mac.
 # If doing many clean builds, it's possible to copy the downloaded zip file to ~/Library/Caches/xamarin-macios

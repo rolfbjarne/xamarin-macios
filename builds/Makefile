@@ -773,7 +773,7 @@ $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/updateinfo: $(TOP)/Make.config.inc
 	$(Q) echo "4569c276-1397-4adb-9485-82a7696df22e $(IOS_PACKAGE_UPDATE_ID)" > $@
 
 $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/Versions.plist: $(TOP)/Versions-ios.plist.in Makefile $(TOP)/Make.config $(TOP)/mk/mono.mk $(TOP)/versions-check.csharp .stamp-$(MONO_BUILD_MODE)
-	$(Q) $(TOP)/versions-check.csharp $< "$(MIN_IOS_SDK_VERSION)" "$(MAX_IOS_DEPLOYMENT_TARGET)" "$(MIN_TVOS_SDK_VERSION)" "$(MAX_TVOS_DEPLOYMENT_TARGET)" "$(MIN_WATCH_OS_VERSION)" "$(MAX_WATCH_DEPLOYMENT_TARGET)" "$(MIN_OSX_SDK_VERSION)" "$(OSX_SDK_VERSION)"
+	$(Q) $(TOP)/versions-check.csharp $< "$(MIN_IOS_SDK_VERSION)" "$(MAX_IOS_DEPLOYMENT_TARGET)" "$(MIN_TVOS_SDK_VERSION)" "$(MAX_TVOS_DEPLOYMENT_TARGET)" "$(MIN_WATCH_OS_VERSION)" "$(MAX_WATCH_DEPLOYMENT_TARGET)" "$(MIN_OSX_SDK_VERSION)" "$(OSX_SDK_VERSION)" "$(MIN_MACCATALYST_MAC_SDK_VERSION)" "$(MACCATALYST_MAC_SDK_VERSION)"
 	$(Q_GEN) sed -e 's/@XCODE_VERSION@/$(XCODE_VERSION)/g' -e "s/@MONO_VERSION@/$(shell cat $(MONO_IOS_SDK_DESTDIR)/ios-mono-version.txt)/g" $< > $@
 
 $(DOTNET_DESTDIR)/%.Sdk/Versions.plist: $(IOS_DESTDIR)/$(MONOTOUCH_PREFIX)/Versions.plist | $(DOTNET_DESTDIR)/%.Sdk
@@ -885,6 +885,36 @@ $(TVSIMULATOR_DIRECTORIES):
 	$(Q) mkdir -p $@
 
 install-tvsimulator: $(TVSIMULATOR_TARGETS)
+
+#
+# Mac Catalyst Mono runtime pieces
+#
+install-local:: install-maccatalyst
+all-local:: install-maccatalyst
+
+MACCATALYST_DIRECTORIES = \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib
+
+MACCATALYST_TARGETS = \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/libmonosgen-2.0.a                 \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/libmono-profiler-log.a            \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/libmono-native.a                  \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/libmonosgen-2.0.dylib             \
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/libmono-native.dylib              \
+
+$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/%: .stamp-$(MONO_BUILD_MODE) | $(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib
+	$(Q) $(CP) $(MONO_MACCAT_SDK_DESTDIR)/maccat-libs/$(notdir $@) $@
+	$(Q) if test -d $(MONO_MACCAT_SDK_DESTDIR)/maccat-libs/$(notdir $@).dSYM; then $(CP) -R $(MONO_MACCAT_SDK_DESTDIR)/maccat-libs/$(notdir $@).dSYM $(dir $@); fi
+
+$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks/Mono.framework/Mono: .stamp-$(MONO_BUILD_MODE) | $(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks
+	$(Q) $(CP) -R $(MONO_MACCAT_SDK_DESTDIR)/maccat-frameworks/ios-sim/Mono.framework $(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks
+	$(Q) $(CP) -R $(MONO_MACCAT_SDK_DESTDIR)/maccat-frameworks/ios-sim/Mono.framework.dSYM $(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks
+
+$(XAMARIN_MACCATALYST_SDK_DIRECTORIES):
+	$(Q) mkdir -p $@
+
+install-maccatalyst:: $(MACCATALYST_TARGETS)
 
 #
 # iPhone device Mono runtime pieces

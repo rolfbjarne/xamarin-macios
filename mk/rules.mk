@@ -186,7 +186,7 @@ endef
 $(eval $(call NativeCompilationTemplate,,-O2))
 $(eval $(call NativeCompilationTemplate,-debug,-DDEBUG))
 
-.libs/iphoneos .libs/iphonesimulator .libs/watchos .libs/watchsimulator .libs/tvos .libs/tvsimulator .libs/iosmac:
+.libs/iphoneos .libs/iphonesimulator .libs/watchos .libs/watchsimulator .libs/tvos .libs/tvsimulator .libs/maccatalyst:
 	$(Q) mkdir -p $@
 
 %.csproj.inc: %.csproj $(TOP)/Make.config $(TOP)/mk/mono.mk $(TOP)/tools/common/create-makefile-fragment.sh

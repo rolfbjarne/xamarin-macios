@@ -30,6 +30,7 @@ namespace Xamarin.Utils
 		public static readonly TargetFramework Xamarin_iOS_1_0 = Parse ("Xamarin.iOS,v1.0");
 		public static readonly TargetFramework Xamarin_WatchOS_1_0 = Parse ("Xamarin.WatchOS,v1.0");
 		public static readonly TargetFramework Xamarin_TVOS_1_0 = Parse ("Xamarin.TVOS,v1.0");
+		public static readonly TargetFramework Xamarin_MacCatalyst_1_0 = Parse ("Xamarin.MacCatalyst,v1.0");
 
 		public static readonly TargetFramework Xamarin_Mac_2_0_Mobile = Parse ("Xamarin.Mac,Version=v2.0,Profile=Mobile");
 		public static readonly TargetFramework Xamarin_Mac_4_5_Full = Parse ("Xamarin.Mac,Version=v4.5,Profile=Full");
@@ -47,6 +48,7 @@ namespace Xamarin.Utils
 
 		public static readonly TargetFramework [] ValidFrameworksiOS = new [] {
 			Xamarin_iOS_1_0, Xamarin_WatchOS_1_0, Xamarin_TVOS_1_0,
+			Xamarin_MacCatalyst_1_0,
 			DotNet_5_0_iOS, DotNet_5_0_tvOS, DotNet_5_0_watchOS,
 		};
 
@@ -220,6 +222,8 @@ namespace Xamarin.Utils
 					return ApplePlatform.WatchOS;
 				case "Xamarin.TVOS":
 					return ApplePlatform.TVOS;
+				case "Xamarin.MacCatalyst":
+					return ApplePlatform.MacCatalyst;
 				case ".NETCoreApp":
 					switch (Profile) {
 					case "ios":

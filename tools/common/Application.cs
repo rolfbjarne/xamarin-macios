@@ -1220,6 +1220,7 @@ namespace Xamarin.Bundler {
 					case ApplePlatform.iOS:
 					case ApplePlatform.TVOS:
 					case ApplePlatform.WatchOS:
+					case ApplePlatform.MacCatalyst:
 						MarshalManagedExceptions = EnableDebug && IsSimulatorBuild ? MarshalManagedExceptionMode.UnwindNativeCode : MarshalManagedExceptionMode.Disable;
 						break;
 					case ApplePlatform.MacOSX:
@@ -1250,6 +1251,7 @@ namespace Xamarin.Bundler {
 					case ApplePlatform.iOS:
 					case ApplePlatform.TVOS:
 					case ApplePlatform.WatchOS:
+					case ApplePlatform.MacCatalyst:
 						MarshalObjectiveCExceptions = EnableDebug && IsSimulatorBuild ? MarshalObjectiveCExceptionMode.UnwindManagedCode : MarshalObjectiveCExceptionMode.Disable;
 						break;
 					case ApplePlatform.MacOSX:

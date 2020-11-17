@@ -768,6 +768,9 @@ namespace Xamarin.Bundler {
 				else
 					MonoNativeMode = MonoNativeMode.Compat;
 				break;
+			case ApplePlatform.MacCatalyst:
+				MonoNativeMode = MonoNativeMode.Unified;
+				break;
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
 			}
@@ -777,6 +780,9 @@ namespace Xamarin.Bundler {
 		{
 			switch (MonoNativeMode) {
 			case MonoNativeMode.Unified:
+				if (Platform == ApplePlatform.MacCatalyst)
+					return "libmono-native";
+
 				return "libmono-native-unified";
 			case MonoNativeMode.Compat:
 				return "libmono-native-compat";

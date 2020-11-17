@@ -88,6 +88,12 @@
 			<string>6.2</string>
 			<string>7.0</string>
 		</array>
+		<key>MacCatalyst</key>
+		<array>
+			<string>10.15</string>
+			<string>10.16</string>
+			<string>11.0</string>
+		</array>
 	</dict>
 	<key>RecommendedXcodeVersion</key>
 	<string>@XCODE_VERSION@</string>
@@ -169,6 +175,7 @@
 		<string>sgen-concurrent</string> <!-- this means stable support for the concurrent GC -->
 		<string>arm64_32</string>
 		<string>altool</string>
+		<string>maccatalyst</string>
 	</array>
 	<key>Optimizations</key>
 	<dict>

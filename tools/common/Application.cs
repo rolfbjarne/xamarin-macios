@@ -1341,6 +1341,7 @@ namespace Xamarin.Bundler {
 			get {
 				switch (Platform) {
 				case ApplePlatform.iOS:
+				case ApplePlatform.MacCatalyst:
 					return ProductConstants.iOS;
 				case ApplePlatform.TVOS:
 					return ProductConstants.tvOS;

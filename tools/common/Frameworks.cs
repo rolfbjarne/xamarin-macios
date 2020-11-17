@@ -616,6 +616,8 @@ public class Frameworks : Dictionary <string, Framework>
 			var weak_link = framework.AlwaysWeakLinked || app.DeploymentTarget < framework.Version;
 			var add_to = weak_link ? weak_frameworks : frameworks;
 			add_to.Add (framework.Name);
+
+			Console.WriteLine ($"Linking with {framework.Name} because it's being used by a type in {nspace} (weak: {weak_link})");
 		}
 
 		// Make sure there are no duplicates between frameworks and weak frameworks.

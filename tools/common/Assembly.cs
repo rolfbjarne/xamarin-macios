@@ -450,6 +450,9 @@ namespace Xamarin.Bundler {
 
 		void AddFramework (string file)
 		{
+			if (file == "UserNotificationsUI")
+				Console.WriteLine ("STOP");
+
 			if (Driver.GetFrameworks (App).TryGetValue (file, out var framework)) {
 				if (framework.Unavailable) {
 					// FIXME: add proper warning

@@ -2513,6 +2513,9 @@ xamarin_get_assembly_name_without_extension (const char *aname, char *name, size
 		name [len - 4] = 0; // strip off any extensions.
 }
 
+#define LOG_RESOURCELOOKUP(...) do { NSLog (@ __VA_ARGS__); } while (0);
+// #define LOG_RESOURCELOOKUP(...)
+
 static bool
 xamarin_locate_assembly_resource_for_root (const char *root, const char *culture, const char *resource, char *path, size_t pathlen)
 {
@@ -2524,6 +2527,7 @@ xamarin_locate_assembly_resource_for_root (const char *root, const char *culture
 		} else if (xamarin_file_exists (path)) {
 			return true;
 		}
+		LOG_RESOURCELOOKUP (PRODUCT ": Failed to locate the resource '%s' from the root '%s' with the culture '%s' with path: '%s'\n", resource, root, culture, path);
 	}
 
 	// arch-specific extension
@@ -2533,6 +2537,7 @@ xamarin_locate_assembly_resource_for_root (const char *root, const char *culture
 	} else if (xamarin_file_exists (path)) {
 		return true;
 	}
+	LOG_RESOURCELOOKUP (PRODUCT ": Failed to locate the resource '%s' from the root '%s' with the culture '%s' with path: '%s'\n", resource, root, culture, path);
 
 #if !MONOMAC
 	// pointer-size subdirectory with arch-specific extension
@@ -2542,23 +2547,26 @@ xamarin_locate_assembly_resource_for_root (const char *root, const char *culture
 	} else if (xamarin_file_exists (path)) {
 		return true;
 	}
+	LOG_RESOURCELOOKUP (PRODUCT ": Failed to locate the resource '%s' from the root '%s' with the culture '%s' with path: '%s'\n", resource, root, culture, path);
 
 	// pointer-size subdirectory
 	if (snprintf (path, pathlen, "%s/%s/%s", root, ARCH_SUBDIR, resource) < 0) {
-		LOG (PRODUCT ": Failed to construct path for resource: %s (5): %s", resource, strerror (errno));
-		return false;
-	} else if (xamarin_file_exists (path)) {
-		return true;
-	}
-#endif // !MONOMAC
-
-	// just the file, no extensions, etc.
-	if (snprintf (path, pathlen, "%s/%s", root, resource) < 0) {
 		LOG (PRODUCT ": Failed to construct path for resource: %s (6): %s", resource, strerror (errno));
 		return false;
 	} else if (xamarin_file_exists (path)) {
 		return true;
 	}
+	LOG_RESOURCELOOKUP (PRODUCT ": Failed to locate the resource '%s' from the root '%s' with the culture '%s' with path: '%s'\n", resource, root, culture, path);
+#endif // !MONOMAC
+
+	// just the file, no extensions, etc.
+	if (snprintf (path, pathlen, "%s/%s", root, resource) < 0) {
+		LOG (PRODUCT ": Failed to construct path for resource: %s (7): %s", resource, strerror (errno));
+		return false;
+	} else if (xamarin_file_exists (path)) {
+		return true;
+	}
+	LOG_RESOURCELOOKUP (PRODUCT ": Failed to locate the resource '%s' from the root '%s' with the culture '%s' with path: '%s'\n", resource, root, culture, path);
 
 	return false;
 }
@@ -2570,9 +2578,6 @@ xamarin_locate_assembly_resource_for_name (MonoAssemblyName *assembly_name, cons
 	const char *aname = mono_assembly_name_get_name (assembly_name);
 	return xamarin_locate_assembly_resource (aname, culture, resource, path, pathlen);
 }
-
-// #define LOG_RESOURCELOOKUP(...) do { NSLog (@ __VA_ARGS__); } while (0);
-#define LOG_RESOURCELOOKUP(...)
 
 
 bool

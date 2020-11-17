@@ -2641,6 +2641,14 @@ xamarin_locate_assembly_resource (const char *assembly_name, const char *culture
 		}
 	}
 
+#if TARGET_OS_MACCATALYST
+	snprintf (root, sizeof (root), "%s/Contents/MonoBundle", app_path);
+	if (xamarin_locate_assembly_resource_for_root (root, culture, resource, path, pathlen)) {
+		LOG_RESOURCELOOKUP (PRODUCT ": Located resource '%s' from macOS content bundle '%s': %s\n", resource, aname, path);
+		return true;
+	}
+#endif
+
 	return false;
 }
 

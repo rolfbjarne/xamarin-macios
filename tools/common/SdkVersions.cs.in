@@ -16,11 +16,15 @@ namespace Xamarin {
 		public const string iOS = "@IOS_SDK_VERSION@";
 		public const string WatchOS = "@WATCHOS_SDK_VERSION@";
 		public const string TVOS = "@TVOS_SDK_VERSION@";
+		public const string MacCatalystiOS = "@MAX_MACCATALYST_IOS_VERSION@";
+		public const string MacCatalystmacOS = "@MAX_MACCATALYST_MAC_VERSION@";
 
 		public const string MinOSX = "@MIN_OSX_SDK_VERSION@";
 		public const string MiniOS = "@MIN_IOS_SDK_VERSION@";
 		public const string MinWatchOS = "@MIN_WATCHOS_SDK_VERSION@";
 		public const string MinTVOS = "@MIN_TVOS_SDK_VERSION@";
+		public const string MinMacCatalystiOS = "@MIN_MACCATALYST_IOS_VERSION@";
+		public const string MinMacCatalystmacOS = "@MIN_MACCATALYST_MAC_VERSION@";
 
 		public const string MiniOSSimulator = "@MIN_IOS_SIMULATOR_VERSION@";
 		public const string MinWatchOSSimulator = "@MIN_WATCHOS_SIMULATOR_VERSION@";
@@ -40,6 +44,8 @@ namespace Xamarin {
 		public static Version iOSVersion { get { return new Version (iOS); }}
 		public static Version WatchOSVersion { get { return new Version (WatchOS); }}
 		public static Version TVOSVersion { get { return new Version (TVOS); }}
+		public static Version MacCatalystiOSVersion { get { return new Version (MacCatalystiOS); }}
+		public static Version MacCatalystmacOSVersion { get { return new Version (MacCatalystmacOS); }}
 
 		public static Version iOSTargetVersion { get { return new Version (MaxiOSDeploymentTarget); }}
 		public static Version WatchOSTargetVersion { get { return new Version (MaxWatchDeploymentTarget); }}
@@ -49,6 +55,8 @@ namespace Xamarin {
 		public static Version MiniOSVersion { get { return new Version (MiniOS); }}
 		public static Version MinWatchOSVersion { get { return new Version (MinWatchOS); }}
 		public static Version MinTVOSVersion { get { return new Version (MinTVOS); }}
+		public static Version MinMacCatalystiOSVersion { get { return new Version (MinMacCatalystiOS); }}
+		public static Version MinMacCatalystmacOSVersion { get { return new Version (MinMacCatalystmacOS); }}
 
 		public static Version MiniOSSimulatorVersion { get { return new Version (MiniOSSimulator); }}
 		public static Version MinWatchOSSimulatorVersion { get { return new Version (MinWatchOSSimulator); }}
@@ -65,11 +73,12 @@ namespace Xamarin {
 #if MTOUCH || MMP || BUNDLER
 		public static Version GetVersion (Application app)
 		{
-			switch (app.Platform) {
-			case ApplePlatform.MacOSX: return OSXVersion;
+			switch (platform) {
+			case ApplePlatform.macOS: return OSXVersion;
 			case ApplePlatform.iOS: return iOSVersion;
 			case ApplePlatform.WatchOS: return WatchOSVersion;
 			case ApplePlatform.TVOS: return TVOSVersion;
+			case ApplePlatform.MacCatalyst: return MacCatalystmacOS;
 			default:
 				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case.", app.Platform, app.ProductName);
 			}
@@ -89,11 +98,12 @@ namespace Xamarin {
 
 		public static Version GetMinVersion (Application app)
 		{
-			switch (app.Platform) {
-			case ApplePlatform.MacOSX: return MinOSXVersion;
+			switch (platform) {
+			case ApplePlatform.macOS: return MacCatalystmacOS;
 			case ApplePlatform.iOS: return MiniOSVersion;
 			case ApplePlatform.WatchOS: return MinWatchOSVersion;
 			case ApplePlatform.TVOS: return MinTVOSVersion;
+			case ApplePlatform.MacCatalyst: return MinUIKitForMacVersion;
 			default:
 				throw ErrorHelper.CreateError (71, "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case.", app.Platform, app.ProductName);
 			}

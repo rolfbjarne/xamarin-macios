@@ -164,6 +164,8 @@ namespace Xamarin.Utils
 
 		public void AddFramework (string framework)
 		{
+			if (framework == "UserNotificationsUI")
+				Console.WriteLine ("UserNotificationsUI");
 			if (Frameworks == null)
 				Frameworks = new HashSet<string> ();
 			Frameworks.Add (framework);
@@ -171,6 +173,8 @@ namespace Xamarin.Utils
 
 		public void AddFrameworks (IEnumerable<string> frameworks, IEnumerable<string> weak_frameworks)
 		{
+			if (frameworks?.Contains ("UserNotificationsUI") == true || weak_frameworks?.Contains ("UserNotificationsUI") == true)
+				Console.WriteLine ("UserNotificationsUI");
 			if (frameworks != null) {
 				if (Frameworks == null)
 					Frameworks = new HashSet<string> ();

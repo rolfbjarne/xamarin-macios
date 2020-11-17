@@ -440,11 +440,13 @@ namespace Xamarin.Bundler
 
 		public static void GetCatalystCompilerFlags (CompilerFlags flags, Abi abi, Application app)
 		{
+			GetCompilerFlags (app, flags, false);
 			flags.AddOtherFlag ($"-target", $"{abi.AsArchString ()}-apple-ios{app.DeploymentTarget}-macabi");
 			var isysroot = Driver.GetFrameworkDirectory (app);
-			flags.AddOtherFlag ($"-isysroot", isysroot);
+			//flags.AddOtherFlag ($"-isysroot", isysroot);
 			flags.AddOtherFlag ($"-isystem", Path.Combine (isysroot, "System", "iOSSupport", "usr", "include"));
-			flags.AddOtherFlag ($"-iframework", Path.Combine (isysroot, "System", "iOSSupport", "System", "Library", "Framework"));
+			flags.AddOtherFlag ($"-iframework", Path.Combine (isysroot, "System", "iOSSupport", "System", "Library", "Frameworks"));
+			flags.AddOtherFlag ($"-L{Path.Combine (isysroot, "System", "iOSSupport", "usr", "lib")}");
 		}
 
 		public static void GetSimulatorCompilerFlags (CompilerFlags flags, bool is_assembler, Application app, string language = null)

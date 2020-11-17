@@ -258,9 +258,20 @@ namespace Xamarin.Bundler {
 #endif
 						}
 
+						if (framework.Unavailable) {
+							// FIXME: add proper warning
+							Driver.Log (1, "Not linking with the framework {0} (used by the type {1}) because it's not available on the current platform ({2}).", framework.Name, td.FullName, App.PlatformName);
+							continue;
+						}
+
+						if (framework.Name == "UserNotificationsUI")
+							Console.WriteLine ("STOP");
 						if (App.SdkVersion >= framework.Version) {
-							var add_to = framework.AlwaysWeakLinked || App.DeploymentTarget < framework.Version ? asm.WeakFrameworks : asm.Frameworks;
+							var weak_link = framework.AlwaysWeakLinked || App.DeploymentTarget < framework.Version;
+							var add_to = weak_link ? asm.WeakFrameworks : asm.Frameworks;
 							add_to.Add (framework.Name);
+
+							Console.WriteLine ($"Linking with {framework.Name} because it's being used by a type in {nspace} (weak: {weak_link})");
 							continue;
 						} else {
 							Driver.Log (3, "Not linking with the framework {0} (used by the type {1}) because it was introduced in {2} {3}, and we're using the {2} {4} SDK.", framework.Name, td.FullName, App.PlatformName, framework.Version, App.SdkVersion);

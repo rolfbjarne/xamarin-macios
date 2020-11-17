@@ -113,7 +113,7 @@ namespace Xamarin.Bundler {
 
 		public bool? DisableLldbAttach = null; // Only applicable to Xamarin.Mac
 		public bool? DisableOmitFramePointer = null; // Only applicable to Xamarin.Mac
-		public string CustomBundleName = "MonoBundle"; // Only applicable to Xamarin.Mac
+		public string CustomBundleName = "MonoBundle"; // Only applicable to Xamarin.Mac and Mac Catalyst
 
 		public bool? UseMonoFramework;
 
@@ -131,6 +131,22 @@ namespace Xamarin.Bundler {
 		// In the case of a framework, each framework may contain the native code for multiple assemblies.
 		// This variable does not apply to macOS (if assemblies are AOT-compiled, the AOT compiler will output a .dylib next to the assembly and there's nothing extra for us)
 		Dictionary<string, Tuple<AssemblyBuildTarget, string>> assembly_build_targets = new Dictionary<string, Tuple<AssemblyBuildTarget, string>> ();
+
+		public string ContentDirectory {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return AppDirectory;
+				case ApplePlatform.MacOSX:
+				case ApplePlatform.MacCatalyst:
+					return Path.Combine (AppDirectory, "Contents", CustomBundleName);
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
+			}
+		}
 
 		// How Mono should be embedded into the app.
 		public AssemblyBuildTarget LibMonoLinkMode {
@@ -340,6 +356,11 @@ namespace Xamarin.Bundler {
 			var file = Path.Combine (Driver.GetFrameworkCurrentDirectory (this), "Versions.plist");
 			var dict = Driver.FromPList (file);
 			var map = dict.Get<PDictionary> ("MacCatalystVersionMap");
+
+			// REMOVE THIS
+			return "11.0";
+			// END REMOVE THIS
+
 			if (!map.TryGetValue<PString> (iOSVersion.ToString (), out var value))
 				throw ErrorHelper.CreateError (99, "Could not map the iOS version {0} to a macOS version for Catalyst", iOSVersion.ToString ());
 
@@ -425,12 +446,27 @@ namespace Xamarin.Bundler {
 				if (!IsExtension)
 					return null;
 
-				var info_plist = Path.Combine (AppDirectory, "Info.plist");
-				var plist = Driver.FromPList (info_plist);
+				var plist = Driver.FromPList (InfoPListPath);
 				var dict = plist.Get<PDictionary> ("NSExtension");
 				if (dict == null)
 					return null;
 				return dict.GetString ("NSExtensionPointIdentifier");
+			}
+		}
+
+		public string InfoPListPath {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return Path.Combine (AppDirectory, "Info.plist");
+				case ApplePlatform.MacCatalyst:
+				case ApplePlatform.MacOSX:
+					return Path.Combine (AppDirectory, "Contents", "Info.plist");
+				default:
+					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
+				}
 			}
 		}
 
@@ -746,7 +782,7 @@ namespace Xamarin.Bundler {
 					MonoNativeMode = MonoNativeMode.Compat;
 				break;
 			case ApplePlatform.MacCatalyst:
-				MonoNativeMode = MonoNativeMode.None;
+				MonoNativeMode = MonoNativeMode.Unified;
 				break;
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
@@ -757,6 +793,9 @@ namespace Xamarin.Bundler {
 		{
 			switch (MonoNativeMode) {
 			case MonoNativeMode.Unified:
+				if (Platform == ApplePlatform.MacCatalyst)
+					return "libmono-native";
+
 				return "libmono-native-unified";
 			case MonoNativeMode.Compat:
 				return "libmono-native-compat";

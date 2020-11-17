@@ -1401,7 +1401,7 @@ namespace Xamarin.Bundler {
 			resources_dir = Path.Combine (contents_dir, "Resources");
 			mmp_dir = Path.Combine (contents_dir, App.CustomBundleName);
 
-			CreateDirectoryIfNeeded (App.AppDirectory);
+			CreateDirectoryIfNeeded (App.ContentDirectory);
 			CreateDirectoryIfNeeded (contents_dir);
 			CreateDirectoryIfNeeded (macos_dir);
 			CreateDirectoryIfNeeded (resources_dir);

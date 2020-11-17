@@ -450,6 +450,9 @@ namespace Xamarin.Bundler {
 
 		void AddFramework (string file)
 		{
+			if (file == "UserNotificationsUI")
+				Console.WriteLine ("STOP");
+
 			if (Driver.GetFrameworks (App).TryGetValue (file, out var framework)) {
 				if (framework.Unavailable) {
 					ErrorHelper.Warning (182, Errors.MX0182 /* Not linking with the framework {0} (referenced by a module reference in {1}) because it's not available on the current platform ({2}). */, framework.Name, FileName, App.PlatformName);

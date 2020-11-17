@@ -223,7 +223,7 @@ namespace Xamarin.Utils
 				case "Xamarin.TVOS":
 					return ApplePlatform.TVOS;
 				case "Xamarin.MacCatalyst":
-					return ApplePlatform.UIKitForMac;
+					return ApplePlatform.MacCatalyst;
 				case ".NETCoreApp":
 					switch (Profile) {
 					case "ios":

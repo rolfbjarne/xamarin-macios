@@ -79,6 +79,30 @@ MSBUILD_TASK_ASSEMBLIES += $(IOS_TASK_ASSEMBLIES)
 endif
 
 ##
+## MacCatalyst definitions
+##
+
+MACCAT_DIRECTORIES = \
+	$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks/Xamarin.MacCatalyst/v1.0/RedistList \
+
+MACCAT_SYMLINKS = \
+	$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks/Xamarin.MacCatalyst/v1.0/RedistList/FrameworkList.xml                          \
+	$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild/Xamarin/MacCatalyst                                                                       \
+
+MACCAT_PRODUCTS += \
+	$(MACCAT_SYMLINKS) \
+
+all-maccatalyst: $(MACCAT_PRODUCTS)
+symlinks-maccatalyst: $(MACCAT_SYMLINKS)
+
+ifdef INCLUDE_IOS
+MSBUILD_PRODUCTS += all-maccatalyst
+MSBUILD_DIRECTORIES += $(MACCAT_DIRECTORIES)
+MSBUILD_SYMLINKS += symlinks-maccatalyst
+MSBUILD_TASK_ASSEMBLIES += $(MACCAT_TASK_ASSEMBLIES)
+endif
+
+##
 ## XW definitions
 ##
 
@@ -235,6 +259,19 @@ $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/msbuild/iOS/%: Xamarin.iOS.Tasks/bin/$(CON
 
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/msbuild/iOS/%: Xamarin.Localization.MSBuild/bin/$(CONFIG)/$(TARGETFRAMEWORK)/% | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/msbuild/iOS
 	$(Q) install -m 644 $< $@
+
+##
+## MacCatalyst
+##
+
+$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks/Xamarin.MacCatalyst/v1.0/RedistList/FrameworkList.xml: | $(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild-frameworks/Xamarin.MacCatalyst/v1.0/RedistList
+	# HACK: re-use the iOS BCL for now
+	$(Q) ln -fs $(IOS_TARGETDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/msbuild/iOS/$(notdir $@) $@
+
+$(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild/Xamarin/MacCatalyst: | $(IOS_DESTDIR)/Library/Frameworks/Mono.framework/External/xbuild/Xamarin
+	# HACK: re-use the iOS BCL for now
+	$(Q) ln -Fhs $(IOS_TARGETDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/msbuild/iOS $@
+
 
 ##
 ## XW

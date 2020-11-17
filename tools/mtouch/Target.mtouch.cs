@@ -944,6 +944,9 @@ namespace Xamarin.Bundler
 			if (App.IsSimulatorBuild)
 				return;
 
+			if (App.Platform == ApplePlatform.MacCatalyst)
+				return;
+
 			// Here we create the tasks to run the AOT compiler.
 			foreach (var a in Assemblies) {
 				if (!a.IsAOTCompiled)
@@ -1312,6 +1315,7 @@ namespace Xamarin.Bundler
 				string library;
 				switch (App.Platform) {
 				case ApplePlatform.iOS:
+				case ApplePlatform.MacCatalyst:
 					method = "xamarin_create_classes_Xamarin_iOS";
 					library = "Xamarin.iOS.registrar.a";
 					break;
@@ -1430,6 +1434,8 @@ namespace Xamarin.Bundler
 			if (App.IsDeviceBuild) {
 				linker_flags.AddOtherFlag ($"-m{Driver.GetTargetMinSdkName (App)}-version-min={App.DeploymentTarget}");
 				linker_flags.AddOtherFlag ($"-isysroot", Driver.GetFrameworkDirectory (App));
+			} else if (App.Platform == ApplePlatform.MacCatalyst) {
+				CompileTask.GetCatalystCompilerFlags (linker_flags, abi, App);
 			} else {
 				CompileTask.GetSimulatorCompilerFlags (linker_flags, false, App);
 			}

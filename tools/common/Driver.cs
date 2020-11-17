@@ -773,6 +773,8 @@ namespace Xamarin.Bundler {
 				return Path.Combine (GetFrameworkLibDirectory (app), "mono", "Xamarin.WatchOS");
 			case ApplePlatform.TVOS:
 				return Path.Combine (GetFrameworkLibDirectory (app), "mono", "Xamarin.TVOS");
+			case ApplePlatform.MacCatalyst:
+				return Path.Combine (GetFrameworkLibDirectory (app), "mono", "Xamarin.iOS");
 			case ApplePlatform.MacOSX:
 #if MMP
 				if (IsUnifiedMobile)
@@ -853,6 +855,9 @@ namespace Xamarin.Bundler {
 			case ApplePlatform.MacOSX:
 				sdkName = "Xamarin.macOS.sdk";
 				break;
+			case ApplePlatform.MacCatalyst:
+				sdkName = "Xamarin.MacCatalyst.sdk";
+				break;
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, app.ProductName);
 			}
@@ -870,6 +875,7 @@ namespace Xamarin.Bundler {
 			case ApplePlatform.TVOS:
 				return app.IsDeviceBuild ? "AppleTVOS" : "AppleTVSimulator";
 			case ApplePlatform.MacOSX:
+			case ApplePlatform.MacCatalyst:
 				return "MacOSX";
 			default:
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, app.ProductName);
@@ -880,13 +886,19 @@ namespace Xamarin.Bundler {
 		public static string GetFrameworkDirectory (Application app)
 		{
 			var platform = GetPlatform (app);
-			return Path.Combine (PlatformsDirectory, platform + ".platform", "Developer", "SDKs", platform + app.SdkVersion.ToString () + ".sdk");
+			switch (app.Platform) {
+			case ApplePlatform.MacCatalyst:
+				return Path.Combine (PlatformsDirectory, platform + ".platform", "Developer", "SDKs", platform + app.MapCatalystDeploymentTargetToMacOSVersion (app.SdkVersion).ToString () + ".sdk");
+			default:
+				return Path.Combine (PlatformsDirectory, platform + ".platform", "Developer", "SDKs", platform + app.SdkVersion.ToString () + ".sdk");
+			}
 		}
 
 		public static string GetProductAssembly (Application app)
 		{
 			switch (app.Platform) {
 			case ApplePlatform.iOS:
+			case ApplePlatform.MacCatalyst:
 				return "Xamarin.iOS";
 			case ApplePlatform.WatchOS:
 				return "Xamarin.WatchOS";

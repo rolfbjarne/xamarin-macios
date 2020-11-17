@@ -535,6 +535,7 @@ public class Frameworks : Dictionary <string, Framework>
 	{
 		switch (platform) {
 		case ApplePlatform.iOS:
+		case ApplePlatform.MacCatalyst: // FIXME
 			return GetiOSFrameworks (is_simulator_build);
 		case ApplePlatform.WatchOS:
 			return GetwatchOSFrameworks (is_simulator_build);

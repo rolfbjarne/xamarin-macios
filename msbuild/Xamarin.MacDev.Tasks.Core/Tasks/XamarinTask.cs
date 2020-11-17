@@ -87,6 +87,8 @@ namespace Xamarin.MacDev.Tasks {
 				return isSimulator ? "WatchSimulator" : "WatchOS";
 			case ApplePlatform.MacOSX:
 				return "MacOSX";
+			case ApplePlatform.MacCatalyst:
+				return "MacCatalyst";
 			default:
 				throw new InvalidOperationException ($"Invalid platform: {Platform}");
 			}

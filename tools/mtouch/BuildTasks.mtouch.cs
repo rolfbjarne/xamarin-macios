@@ -438,6 +438,15 @@ namespace Xamarin.Bundler
 			flags.AddOtherFlag ("-Qunused-arguments"); // don't complain about unused arguments (clang reports -std=c99 and -Isomething as unused).
 		}
 
+		public static void GetCatalystCompilerFlags (CompilerFlags flags, Abi abi, Application app)
+		{
+			flags.AddOtherFlag ($"-target", $"{abi.AsArchString ()}-apple-ios{app.DeploymentTarget}-macabi");
+			var isysroot = Driver.GetFrameworkDirectory (app);
+			flags.AddOtherFlag ($"-isysroot", isysroot);
+			flags.AddOtherFlag ($"-isystem", Path.Combine (isysroot, "System", "iOSSupport", "usr", "include"));
+			flags.AddOtherFlag ($"-iframework", Path.Combine (isysroot, "System", "iOSSupport", "System", "Library", "Framework"));
+		}
+
 		public static void GetSimulatorCompilerFlags (CompilerFlags flags, bool is_assembler, Application app, string language = null)
 		{
 			GetCompilerFlags (app, flags, is_assembler, language);
@@ -517,6 +526,8 @@ namespace Xamarin.Bundler
 		{
 			if (App.IsDeviceBuild) {
 				GetDeviceCompilerFlags (CompilerFlags, IsAssembler);
+			}else if (App.Platform == ApplePlatform.MacCatalyst) {
+				GetCatalystCompilerFlags (CompilerFlags, Abi, App);
 			} else {
 				GetSimulatorCompilerFlags (CompilerFlags, IsAssembler, App, Language);
 			}

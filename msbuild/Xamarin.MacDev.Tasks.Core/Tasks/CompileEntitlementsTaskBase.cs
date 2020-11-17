@@ -326,8 +326,11 @@ namespace Xamarin.MacDev.Tasks
 			case "MacOSX":
 				platform = MobileProvisionPlatform.MacOS;
 				break;
+			case "MacCatalyst":
+				platform = MobileProvisionPlatform.MacOS;
+				break;
 			default:
-				Log.LogError ("Unknown SDK platform: {0}", SdkPlatform);
+				Log.LogError (MSBStrings.E0048, SdkPlatform);
 				return false;
 			}
 

@@ -898,6 +898,9 @@ namespace Xamarin.Bundler {
 				DeploymentTarget = new Version (8, 0);
 			}
 
+			if (Platform == ApplePlatform.MacCatalyst)
+				DeploymentTarget = MapCatalystMacOSVersionToDeploymentTarget (DeploymentTarget);
+
 			if (!enable_msym.HasValue)
 				enable_msym = !EnableDebug && IsDeviceBuild;
 

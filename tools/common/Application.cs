@@ -333,6 +333,28 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+		// This maps the deployment target (based on iOS version) to a mac version 
+		public string MapCatalystDeploymentTargetToMacOSVersion (Version iOSVersion)
+		{
+			var file = Path.Combine (Driver.GetFrameworkCurrentDirectory (this), "Versions.plist");
+			var dict = Driver.FromPList (file);
+			var map = dict.Get<PDictionary> ("MacCatalystVersionMap");
+
+			// REMOVE THIS
+			return "11.0";
+			// END REMOVE THIS
+
+			if (!map.TryGetValue<PString> (iOSVersion.ToString (), out var value))
+				throw ErrorHelper.CreateError (99, "Could not map the iOS version {0} to a macOS version for Catalyst", iOSVersion.ToString ());
+
+			return value.Value;
+		}
+
+		public Version MapCatalystMacOSVersionToDeploymentTarget (Version macVersion)
+		{
+			return new Version (13, 2);
+		}
+
 		public string GetProductName ()
 		{
 			return ProductName;

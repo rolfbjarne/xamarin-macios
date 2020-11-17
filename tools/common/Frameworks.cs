@@ -17,6 +17,7 @@ public class Framework
 	public Version Version;
 	public Version VersionAvailableInSimulator;
 	public bool AlwaysWeakLinked;
+	public bool Unavailable;
 
 #if MTOUCH || MMP || BUNDLER
 	public bool IsFrameworkAvailableInSimulator (Application app)
@@ -231,8 +232,14 @@ public class Frameworks : Dictionary <string, Framework>
 	static Frameworks ios_frameworks;
 	public static Frameworks GetiOSFrameworks (bool is_simulator_build)
 	{
-		if (ios_frameworks == null) {
-			ios_frameworks = new Frameworks () {
+		if (ios_frameworks == null)
+			ios_frameworks = CreateiOSFrameworks (is_simulator_build);
+		return ios_frameworks;
+	}
+
+	public static Frameworks CreateiOSFrameworks (bool is_simulator_build)
+	{
+		return new Frameworks () {
 				{ "AddressBook",  "AddressBook", 3 },
 				{ "Security", "Security", 3 },
 				{ "AudioUnit", "AudioToolbox", 3 },
@@ -378,8 +385,6 @@ public class Frameworks : Dictionary <string, Framework>
 				// 
 				// * RegistrarTest.MT4134
 			};
-		}
-		return ios_frameworks;
 	}
 
 	static Frameworks watch_frameworks;
@@ -530,6 +535,38 @@ public class Frameworks : Dictionary <string, Framework>
 		}
 	}
 
+	static Frameworks catalyst_frameworks;
+	public static Frameworks GetMacCatalystFrameworks ()
+	{
+		if (catalyst_frameworks == null) {
+			catalyst_frameworks = CreateiOSFrameworks (false);
+			catalyst_frameworks ["OpenGLES"].Unavailable = true;
+			catalyst_frameworks ["NewsstandKit"].Unavailable = true;
+			catalyst_frameworks ["VisionKit"].Unavailable = true;
+			catalyst_frameworks ["MediaSetup"].Unavailable = true;
+			catalyst_frameworks ["NotificationCenter"].Unavailable = true;
+			catalyst_frameworks ["GLKit"].Unavailable = true;
+
+			catalyst_frameworks ["FileProviderUI"].Unavailable = true; // this exists, but linker fails?
+
+			catalyst_frameworks ["Twitter"].Unavailable = true; // headers are there, but no documentation whatsoever online and linking fails too
+
+			foreach (var fw in new string [] {  "UserNotificationsUI", "Messages", "HomeKit", "ClassKit", "CarPlay", "AssetsLibrary", "ARKit", "AddressBookUI", "AddressBook" }) {
+				var f = catalyst_frameworks [fw];
+				f.Version = new Version (14, 2);
+				f.VersionAvailableInSimulator = new Version (14, 2);
+			}
+
+			foreach (var fw in catalyst_frameworks) {
+				if (fw.Value.Version == new Version (14, 0)) {
+					fw.Value.Version = new Version (14, 2);
+					fw.Value.VersionAvailableInSimulator = fw.Value.Version;
+				}
+			}
+		}
+		return catalyst_frameworks;
+	}
+
 	// returns null if the platform doesn't exist (the ErrorHandler machinery is heavy and this file is included in several projects, which makes throwing an exception complicated)
 	public static Frameworks GetFrameworks (ApplePlatform platform, bool is_simulator_build)
 	{
@@ -542,6 +579,8 @@ public class Frameworks : Dictionary <string, Framework>
 			return TVOSFrameworks;
 		case ApplePlatform.MacOSX:
 			return MacFrameworks;
+		case ApplePlatform.MacCatalyst:
+			return GetMacCatalystFrameworks ();
 		default:
 			return null;
 		}

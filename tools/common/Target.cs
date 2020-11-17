@@ -258,6 +258,12 @@ namespace Xamarin.Bundler {
 #endif
 						}
 
+						if (framework.Unavailable) {
+							// FIXME: add proper warning
+							Driver.Log (1, "Not linking with the framework {0} (used by the type {1}) because it's not available on the current platform ({2}).", framework.Name, td.FullName, App.PlatformName);
+							continue;
+						}
+
 						if (App.SdkVersion >= framework.Version) {
 							var add_to = framework.AlwaysWeakLinked || App.DeploymentTarget < framework.Version ? asm.WeakFrameworks : asm.Frameworks;
 							add_to.Add (framework.Name);

@@ -1315,6 +1315,7 @@ namespace Xamarin.Bundler
 				string library;
 				switch (App.Platform) {
 				case ApplePlatform.iOS:
+				case ApplePlatform.MacCatalyst:
 					method = "xamarin_create_classes_Xamarin_iOS";
 					library = "Xamarin.iOS.registrar.a";
 					break;

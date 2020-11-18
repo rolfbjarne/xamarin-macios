@@ -215,7 +215,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CompileAppManifest"
 		DependsOnTargets="$(_CompileAppManifestDependsOn)"
 		Inputs="$(_AppManifest);@(_PartialAppManifest)"
-		Outputs="$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist" >
+		Outputs="$(_AppBundlePath)$(_AppBundleManifestRelativePath)$(_AppManifest)" >
 		<CompileAppManifest
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -664,6 +664,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<Output TaskParameter="Item" PropertyName="_AppManifest" />
 		</FindItemWithLogicalName>
 		<Error Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
+		<PropertyGroup>
+			<_AppBundleManifestPath>$(_AppBundlePath)$(_AppBundleManifestRelativePath)$(_AppManifest)</_AppBundleManifestPath>
+		</PropertyGroup>
 	</Target>
 
 	<PropertyGroup Condition="'$(IsBindingProject)' == 'true'">

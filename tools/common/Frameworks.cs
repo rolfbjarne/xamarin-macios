@@ -550,20 +550,8 @@ public class Frameworks : Dictionary <string, Framework>
 			catalyst_frameworks ["FileProviderUI"].Unavailable = true; // this exists, but linker fails?
 
 			catalyst_frameworks ["Twitter"].Unavailable = true; // headers are there, but no documentation whatsoever online and linking fails too
-
-			foreach (var fw in new string [] {  "UserNotificationsUI", "Messages", "HomeKit", "ClassKit", "CarPlay", "AssetsLibrary", "ARKit", "AddressBookUI", "AddressBook" }) {
-				var f = catalyst_frameworks [fw];
-				f.Version = new Version (14, 2);
-				f.VersionAvailableInSimulator = new Version (14, 2);
-			}
-
-			foreach (var fw in catalyst_frameworks) {
-				if (fw.Value.Version == new Version (14, 0)) {
-					fw.Value.Version = new Version (14, 2);
-					fw.Value.VersionAvailableInSimulator = fw.Value.Version;
-				}
-			}
 		}
+
 		return catalyst_frameworks;
 	}
 

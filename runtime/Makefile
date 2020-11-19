@@ -99,6 +99,7 @@ MONOTOUCH_ARM64_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_ARM64_
 
 define FrameworkTemplate
 
+$(2)_ARCHITECTURES = $(3)
 $(2)_FRAMEWORKS    = $(MONOTOUCH_FRAMEWORKS)
 
 RUNTIME_$(2)_TARGETS_DIRS +=                                        \

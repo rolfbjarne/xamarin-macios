@@ -894,7 +894,7 @@ all-local:: install-maccatalyst
 
 MACCATALYST_DIRECTORIES = \
 	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks \
-	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib
+	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib \
 
 MACCATALYST_TARGETS = \
 	$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib/libmonosgen-2.0.a                 \
@@ -912,6 +912,9 @@ $(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks/Mono.framework/Mono: .stamp-
 	$(Q) $(CP) -R $(MONO_MACCAT_SDK_DESTDIR)/maccat-frameworks/ios-sim/Mono.framework.dSYM $(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks
 
 $(XAMARIN_MACCATALYST_SDK_DIRECTORIES):
+	$(Q) mkdir -p $@
+
+$(MACCATALYST_DIRECTORIES):
 	$(Q) mkdir -p $@
 
 install-maccatalyst:: $(MACCATALYST_TARGETS)

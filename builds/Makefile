@@ -31,8 +31,6 @@ DOWNLOADS = \
 	downloads/$(DOTNET5_BCL_REF_NAME) \
 	downloads/$(DOTNET6_TARBALL_NAME) \
 
-download-mono: $(DOWNLOADS)
-
 # This target downloads the mono archives, there's one for Xamarin.iOS and one for Xamarin.Mac.
 # If doing many clean builds, it's possible to copy the downloaded zip file to ~/Library/Caches/xamarin-macios
 # to avoid having to download it every time. The zip files have to be copied manually, otherwise

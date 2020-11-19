@@ -641,7 +641,6 @@ void monotouch_configure_debugging ()
 #endif
 
 	// Finally, fall back to loading values from MonoTouchDebugConfiguration.txt
-	NSString *bundle_path = [NSString stringWithUTF8String:xamarin_get_bundle_path ()];
 	NSString *conf_path = [bundle_path stringByAppendingPathComponent:@"MonoTouchDebugConfiguration.txt"];
 	FILE *debug_conf = fopen ([conf_path UTF8String], "r");
 	if (debug_conf != NULL) { 

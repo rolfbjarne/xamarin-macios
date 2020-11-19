@@ -2,6 +2,10 @@ TOP=../..
 
 include $(TOP)/Make.config
 
+# This is a temporary variable to enable the .NET workload resolver, because it's opt-in for now.
+# Ref: https://github.com/dotnet/sdk/issues/13849
+export MSBuildEnableWorkloadResolver=true
+
 # This tells NuGet to use the nupkgs we're building locally,
 # and to put any extracted packages in the 'packages' directory (to not clutter up ~/.nuget/packages)
 NuGet.config: $(TOP)/NuGet.config Makefile
@@ -28,3 +32,9 @@ TARGETS += \
 	../bgen/global.json \
 
 all-local:: $(TARGETS)
+
+build-mysingleview:
+	$(DOTNET6) build MySingleView/*.csproj
+
+run-mysingleview:
+	$(DOTNET6) build -t:Run MySingleView/*.csproj /p:_DeviceName=:v2:udid=03B4B310-6A00-4218-BA15-31312D6707DA /v:diag

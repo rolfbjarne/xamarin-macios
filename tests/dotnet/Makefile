@@ -38,3 +38,9 @@ run-unit-tests:
 	cd UnitTests && $(DOTNET) test DotNetUnitTests.csproj $(TEST_FILTER)
 
 all-local:: $(TARGETS)
+
+build-mysingleview:
+	$(DOTNET6) build MySingleView/*.csproj
+
+run-mysingleview:
+	$(DOTNET6) build -t:Run MySingleView/*.csproj /p:_DeviceName=:v2:udid=03B4B310-6A00-4218-BA15-31312D6707DA /v:diag

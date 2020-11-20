@@ -26,7 +26,6 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchArch>x86_64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchCatalyst>true</MtouchCatalyst>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|MacCatalyst' ">
     <DebugType>full</DebugType>
@@ -37,7 +36,6 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchCatalyst>true</MtouchCatalyst>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

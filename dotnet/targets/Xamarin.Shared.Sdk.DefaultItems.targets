@@ -98,4 +98,11 @@
     <FrameworkReference Include="Microsoft.NETCore.App.Mono" IsImplicitlyDefined="true" Pack="false" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup>
+    <KnownFrameworkReference Update="Microsoft.NETCore.App">
+      <DefaultRuntimeFrameworkVersion>6.0.0-preview.2.21109.2</DefaultRuntimeFrameworkVersion>
+      <LatestRuntimeFrameworkVersion>6.0.0-preview.2.21109.2</LatestRuntimeFrameworkVersion>
+    </KnownFrameworkReference>
+  </ItemGroup>
+
 </Project>

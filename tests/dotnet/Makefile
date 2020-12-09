@@ -28,3 +28,40 @@ TARGETS += \
 	../bgen/global.json \
 
 all-local:: $(TARGETS)
+
+export MSBuildEnableWorkloadResolver=true
+
+compare compare-size: $(TARGETS)
+	time $(MAKE) build-oldnet
+	time $(MAKE) build-dotnet
+	$(MAKE) report
+
+report:
+	@echo
+	@echo "## App sizes"
+	@echo
+	@echo "### Xamarin.iOS"
+	@echo
+	du -hs size-comparison/MySingleView/oldnet/bin/iPhone/Release/MySingleView.app
+	@echo
+	@echo "### .NET 6"
+	@echo
+	du -hs size-comparison/MySingleView/dotnet/bin/iPhone/Release/net6.0-ios/ios-arm64/*.app
+	@echo
+	@echo "## Assembly sizes"
+	@echo
+	@echo "### Xamarin.iOS"
+	@echo
+	ls -lahS size-comparison/MySingleView/oldnet/bin/iPhone/Release/MySingleView.app/*.dll size-comparison/MySingleView/oldnet/bin/iPhone/Release/MySingleView.app/*.exe
+	@echo
+	@echo "### .NET 6"
+	@echo
+	ls -lahS size-comparison/MySingleView/dotnet/bin/iPhone/Release/net6.0-ios/ios-arm64/*.app/*.dll
+
+
+COMMON_ARGS=/p:Platform=iPhone /p:Configuration=Release
+build-oldnet:
+	$(SYSTEM_MSBUILD) $(XBUILD_VERBOSITY) size-comparison/MySingleView/oldnet/MySingleView.csproj $(COMMON_ARGS) /bl:$@.binlog
+
+build-dotnet: $(TARGETS)
+	$(DOTNET6) build size-comparison/MySingleView/dotnet/MySingleView.csproj --runtime ios-arm64 $(COMMON_ARGS) /bl:$@.binlog

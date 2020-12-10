@@ -37,6 +37,14 @@ compare compare-size: $(TARGETS)
 	$(MAKE) report
 
 report:
+	@if test -z "$(APPCOMPARE")"; then $(MAKE) report-simple; else $(MAKE) report-appcompare; fi
+
+# Set APPCOMPARE to the local working directory of https://github.com/spouliot/dotnet-tools/tree/master/app-compare to use
+report-appcompare:
+	cd $(APPCOMPARE) && dotnet run $(abspath size-comparison/MySingleView/oldnet/bin/iPhone/Release/MySingleView.app) $(abspath size-comparison/MySingleView/dotnet/bin/iPhone/Release/net6.0-ios/ios-arm64/MySingleView.app) > $(CURDIR)/report.md
+	gist $(CURDIR)/report.md
+
+report-simple:
 	@echo
 	@echo "## App sizes"
 	@echo
@@ -46,7 +54,7 @@ report:
 	@echo
 	@echo "### .NET 6"
 	@echo
-	du -hs size-comparison/MySingleView/dotnet/bin/iPhone/Release/net6.0-ios/ios-arm64/*.app
+	du -hs size-comparison/MySingleView/dotnet/bin/iPhone/Release/net6.0-ios/ios-arm64/MySingleView.app
 	@echo
 	@echo "## Assembly sizes"
 	@echo

@@ -32,6 +32,7 @@ all-local:: $(TARGETS)
 export MSBuildEnableWorkloadResolver=true
 
 compare compare-size: $(TARGETS)
+	cd size-comparison && git clean -xfdq
 	time $(MAKE) build-oldnet
 	time $(MAKE) build-dotnet
 	$(MAKE) report

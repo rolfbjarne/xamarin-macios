@@ -37,7 +37,7 @@ compare compare-size: $(TARGETS)
 	$(MAKE) report
 
 report:
-	@if test -z "$(APPCOMPARE")"; then $(MAKE) report-simple; else $(MAKE) report-appcompare; fi
+	@if test -z "$(APPCOMPARE)"; then $(MAKE) report-simple; else $(MAKE) report-appcompare; fi
 
 # Set APPCOMPARE to the local working directory of https://github.com/spouliot/dotnet-tools/tree/master/app-compare to use
 report-appcompare:

@@ -44,7 +44,7 @@ DIRS=\
 	tests/linker/ios/link\ all \
 	external/Touch.Unit/Touch.Client \
 
-mysingleview: $(TARGETS)
+singleview: $(TARGETS)
 	$(DOTNET6) build        MySingleView/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER) "/bl:MySingleView.binlog" $(DOTNET_ARGS)
 	$(DOTNET6) build /t:Run MySingleView/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER)
 

@@ -37,9 +37,11 @@ all-local:: build-and-install
 		$(CP) -R $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mlaunch $(DOTNET_DESTDIR)/Microsoft.$$platform.Sdk/tools/lib; \
 	done
 
-$(DOTNET_DESTDIR)/Microsoft.%.Sdk/tools/bin/mlaunch: $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch
-	ls -la ../../_build/Microsoft.iOS.Sdk/tools/bin/mlaunch
+$(DOTNET_DESTDIR)/Microsoft.%.Sdk/tools/bin/mlaunch: $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/bin/mlaunch | $(DOTNET_DESTDIR)/Microsoft.%.Sdk/tools/bin
 	$(Q) $(CP) $< $@
+
+$(DOTNET_DESTDIR)/Microsoft.%.Sdk/tools/bin:
+	$(Q) mkdir -p $@
 endif
 
 ifdef ENABLE_XAMARIN

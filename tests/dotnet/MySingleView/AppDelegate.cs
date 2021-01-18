@@ -1,5 +1,23 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Json;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
+using System.Security.Principal;
+using System.Threading;
+using System.Xml;
 
 using Foundation;
 using UIKit;
@@ -23,9 +41,10 @@ namespace MySingleView
 			window.MakeKeyAndVisible ();
 
 			try {
-				var foos = new string [] { "hi", "bye" };
-				string f = foos.AsQueryable ().First ();
-				Console.WriteLine ("Success: {0}", f);
+				var ds = new DataContractSerializer (typeof (IEnumerable<int>));
+				using (var xw = XmlWriter.Create (System.IO.Stream.Null))
+					ds.WriteObject (xw, new int [] { 1, 2, 3 });
+				Console.WriteLine ("Success: {0}", dsgit);
 			} catch (Exception e) {
 				Console.WriteLine (e);
 			}

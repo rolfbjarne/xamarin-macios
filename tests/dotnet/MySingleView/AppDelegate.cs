@@ -6,7 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Json;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -41,10 +40,7 @@ namespace MySingleView
 			window.MakeKeyAndVisible ();
 
 			try {
-				var ds = new DataContractSerializer (typeof (IEnumerable<int>));
-				using (var xw = XmlWriter.Create (System.IO.Stream.Null))
-					ds.WriteObject (xw, new int [] { 1, 2, 3 });
-				Console.WriteLine ("Success: {0}", dsgit);
+				Console.WriteLine ("Success: {0}", NetworkInterface.GetAllNetworkInterfaces ());
 			} catch (Exception e) {
 				Console.WriteLine (e);
 			}

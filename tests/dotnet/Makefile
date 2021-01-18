@@ -46,7 +46,7 @@ DIRS=\
 
 singleview: $(TARGETS)
 	$(DOTNET6) build        MySingleView/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER) "/bl:MySingleView.binlog" $(DOTNET_ARGS)
-	$(DOTNET6) build /t:Run MySingleView/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER)
+	$(DOTNET6) build /t:Run MySingleView/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER) /verbosity:diag
 
 introspection: $(TARGETS)
 	$(MAKE) build-project PROJECT_NAME=introspection/iOS
@@ -80,7 +80,7 @@ build-project: build
 	$(CP) NuGet.config global.json "$(TOP)/tests"
 	$(CP) NuGet.config global.json "$(TOP)/external/Touch.Unit/Touch.Client/dotnet"
 	$(DOTNET6) build $(TOP)/tests/"$(PROJECT_NAME)"/dotnet/iOS/*.csproj "/bl:$(notdir $(PROJECT_NAME)).binlog" $(DOTNET_ARGS)
-	test -n "$$SKIP_LAUNCH" || $(DOTNET6) build /t:Run $(TOP)/tests/"$(PROJECT_NAME)"/dotnet/iOS/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER)
+	test -n "$$SKIP_LAUNCH" || $(DOTNET6) build /t:Run $(TOP)/tests/"$(PROJECT_NAME)"/dotnet/iOS/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER) /verbosity:diag "/consoleloggerparameters:ForceNoAlign;DisableMPLogging,NoSummary,PerformanceSummary=false"
 	rm -f "$(TOP)/tests/NuGet.config" \
 		"$(TOP)/tests/global.json" \
 		"$(TOP)/external/Touch.Unit/Touch.Client/dotnet/NuGet.config" \
@@ -89,8 +89,11 @@ build-project: build
 		"$(TOP)/external/Touch.Unit/Touch.Client/global.json"
 	for dir in $(DIRS); do rm -f "$(TOP)/$$dir/dotnet/NuGet.config" "$(TOP)/$$dir/dotnet/global.json"; done
 
-
 run-project:
+	$(DOTNET6) build /t:Run $(TOP)/tests/"$(PROJECT_NAME)"/dotnet/iOS/*.csproj /p:RuntimeIdentifier=$(RUNTIME_IDENTIFIER) /verbosity:diag "/consoleloggerparameters:ForceNoAlign;DisableMPLogging,NoSummary,PerformanceSummary=false"
+
+run-linksdk:
+	$(MAKE) run-project PROJECT_NAME=linker/ios/link\ sdk
 
 linksdk link\ sdk:
 	$(MAKE) build-project PROJECT_NAME=linker/ios/link\ sdk

@@ -11,7 +11,7 @@
     <MtouchLink>SdkOnly</MtouchLink>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssetTargetFallback>xamarinios10;$(AssetTargetFallback)</AssetTargetFallback>
-    <MtouchExtraArgs>-disable-thread-check -xml=${ProjectDir}/../extra-linker-defs.xml "--dlsym:-link sdk" -gcc_flags="-UhoItsB0rken"</MtouchExtraArgs>
+    <MtouchExtraArgs>-disable-thread-check -xml=../extra-linker-defs.xml "--dlsym:-link sdk" -gcc_flags="-UhoItsB0rken"</MtouchExtraArgs>
   </PropertyGroup>
 
   <ItemGroup>

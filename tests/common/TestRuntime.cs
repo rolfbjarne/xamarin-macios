@@ -850,10 +850,10 @@ partial class TestRuntime
 #endif
 	}
 
-	static bool CheckMacCatalystSystemVersion (int major, int minor, int build = 0, bool throwIfOtherPlatform = true)
+	static bool CheckMacCatalystSystemVersion (int major, int minor, bool throwIfOtherPlatform = true)
 	{
 #if __MACCATALYST__
-		return UIDevice.CurrentDevice.CheckSystemVersion (major, minor, build);
+		return UIDevice.CurrentDevice.CheckSystemVersion (major, minor);
 #else
 		if (throwIfOtherPlatform)
 			throw new Exception ("Can't get Mac Catalyst System version on other platforms.");
@@ -869,7 +869,7 @@ partial class TestRuntime
 
 	static void AssertMacCatalystSystemVersion (int major, int minor, int build = 0, bool throwIfOtherPlatform = true)
 	{
-		if (!CheckMacCatalystSystemVersion (major, minor, build, throwIfOtherPlatform))
+		if (!CheckMacCatalystSystemVersion (major, minor, throwIfOtherPlatform))
 			NUnit.Framework.Assert.Ignore ($"This test requires macOS {major}.{minor}.{build}");
 	}
 

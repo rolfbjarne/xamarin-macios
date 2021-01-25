@@ -309,16 +309,24 @@ namespace Xamarin.Bundler {
 
 				ShowInner (e);
 
-				if (Verbosity > 2 && !string.IsNullOrEmpty (e.StackTrace))
-					Console.Error.WriteLine (e.StackTrace);
+				if (Verbosity > 2) {
+					if (!string.IsNullOrEmpty (e.StackTrace))
+						Console.Error.WriteLine (e.StackTrace);
+					else
+						Console.Error.WriteLine ("No stack trace");
+				}
 			} else if (IsExpectedException == null || !IsExpectedException (e)) {
 				Console.Error.WriteLine ("error " + Prefix + "0000: Unexpected error - Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new");
 				Console.Error.WriteLine (e.ToString ());
 			} else {
 				Console.Error.WriteLine (e.ToString ());
 				ShowInner (e);
-				if (Verbosity > 2 && !string.IsNullOrEmpty (e.StackTrace))
-					Console.Error.WriteLine (e.StackTrace);
+				if (Verbosity > 2) {
+					if (!string.IsNullOrEmpty (e.StackTrace))
+						Console.Error.WriteLine (e.StackTrace);
+					else
+						Console.Error.WriteLine ("No stack trace");
+				}
 			}
 
 			return error;

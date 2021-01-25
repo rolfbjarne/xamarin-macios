@@ -31,11 +31,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string SdkDevPath { get; set; }
 
-		[Required]
-		public string TargetArchitectures { get; set; }
-
-		TargetArchitecture architectures;
-
 #region Output
 		[Output]
 		public ITaskItem[] AssemblyFiles { get; set; }
@@ -46,11 +41,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			if (!Enum.TryParse (TargetArchitectures, out architectures)) {
-				Log.LogError (12, null, MSBStrings.E0012, TargetArchitectures);
-				return false;
-			}
-
 			var inputs = new List<string> (Assemblies.Length);
 			for (var i = 0; i < Assemblies.Length; i++) {
 				inputs.Add (Path.GetFullPath (Assemblies [i].ItemSpec));
@@ -82,42 +72,45 @@ namespace Xamarin.MacDev.Tasks {
 				{ "MONO_PATH", Path.GetFullPath (InputDirectory) },
 			};
 
-			foreach (var arch in architectures.ToArray ()) {
-				for (var i = 0; i < Assemblies.Length; i++) {
-					var asm = Assemblies [i];
-					var input = inputs [i];
-					var abi = arch.ToNativeArchitecture ();
-					var aotData = Path.Combine (OutputDirectory, Path.GetFileNameWithoutExtension (input) + ".aotdata." + abi);
-					var aotAssembly = Path.Combine (OutputDirectory, Path.GetFileName (input) + ".s");
+			for (var i = 0; i < Assemblies.Length; i++) {
+				var asm = Assemblies [i];
+				var input = inputs [i];
+				var arch = Assemblies [i].GetMetadata ("Arch");
+				var aotArguments = Assemblies [i].GetMetadata ("AOTArguments");
+				var aotData = Assemblies [i].GetMetadata ("AOTData");
+				var aotAssembly = Assemblies [i].GetMetadata ("AOTAssembly");
 
-					var aotAssemblyItem = new TaskItem (aotAssembly);
-					aotAssemblyItem.SetMetadata ("Arguments", "-Xlinker -rpath -Xlinker @executable_path/ -Qunused-arguments -x assembler -D DEBUG");
-					aotAssemblyItem.SetMetadata ("Arch", abi);
-					aotAssemblyFiles.Add (aotAssemblyItem);
-					aotDataFiles.Add (new TaskItem (aotData));
+				var aotAssemblyItem = new TaskItem (aotAssembly);
+				aotAssemblyItem.SetMetadata ("Arguments", "-Xlinker -rpath -Xlinker @executable_path/ -Qunused-arguments -x assembler -D DEBUG");
+				aotAssemblyItem.SetMetadata ("Arch", arch);
+				aotAssemblyFiles.Add (aotAssemblyItem);
+				aotDataFiles.Add (new TaskItem (aotData));
 
-					var aotArg = new StringBuilder ();
-					aotArg.Append ($"--aot=mtriple={abi}-{PlatformName.ToLowerInvariant ()},");
-					aotArg.Append ($"data-outfile={aotData},");
-					aotArg.Append ($"static,asmonly,direct-icalls,full,dwarfdebug,no-direct-calls,");
-					aotArg.Append ($"soft-debug,");
-					aotArg.Append ($"outfile={aotAssembly}");
+				//var aotArg = new StringBuilder ();
+				//aotArg.Append ($"--aot=mtriple={arch}-{PlatformName.ToLowerInvariant ()},");
+				//aotArg.Append ($"data-outfile={aotData},");
+				//aotArg.Append ($"static,asmonly,direct-icalls,full,dwarfdebug,no-direct-calls,");
+				//aotArg.Append ($"soft-debug,");
+				//aotArg.Append ($"outfile={aotAssembly}");
 
-					var arguments = new List<string> ();
-					arguments.Add (aotArg.ToString ());
-					arguments.Add ("--debug");
-					arguments.Add ("-O=gsharedvt");
-					arguments.Add ("-O=-float32");
-					arguments.Add (input);
+				var arguments = new List<string> ();
+				if (!StringUtils.TryParseArguments (aotArguments, out var parsedArguments, out var ex))
+					throw ex;
+				arguments.AddRange (parsedArguments);
+				arguments.Add (input);
+				//arguments.Add (aotArg.ToString ());
+				//arguments.Add ("--debug");
+				//arguments.Add ("-O=gsharedvt");
+				//arguments.Add ("-O=-float32");
+				//arguments.Add (input);
 
-					processes [i] = ExecuteAsync (AOTCompilerPath, arguments, environment: environment, sdkDevPath: SdkDevPath, showErrorIfFailure: false /* we show our own error below */)
-						.ContinueWith ((v) => {
-							if (v.Result.ExitCode != 0)
-								Log.LogError ("Failed to AOT compile {0}, the AOT compiler exited with code {1}", Path.GetFileName (input), v.Result.ExitCode);
+				processes [i] = ExecuteAsync (AOTCompilerPath, arguments, environment: environment, sdkDevPath: SdkDevPath, showErrorIfFailure: false /* we show our own error below */)
+					.ContinueWith ((v) => {
+						if (v.Result.ExitCode != 0)
+							Log.LogError ("Failed to AOT compile {0}, the AOT compiler exited with code {1}", Path.GetFileName (input), v.Result.ExitCode);
 
-							return System.Threading.Tasks.Task.FromResult<Execution> (v.Result);
-						}).Unwrap ();
-				}
+						return System.Threading.Tasks.Task.FromResult<Execution> (v.Result);
+					}).Unwrap ();
 			}
 
 			System.Threading.Tasks.Task.WaitAll (processes);

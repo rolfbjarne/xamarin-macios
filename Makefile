@@ -174,3 +174,11 @@ SUBDIRS += $(MACCORE_PATH)
 endif
 
 SUBDIRS += tests
+
+
+test-mac-catalyst-gc:
+	cd tests/common/TestProjects/MyCatalystApp && rm -Rf bin obj
+	cd tests/common/TestProjects/MyCatalystApp && msbuild /bl
+	cd tests/common/TestProjects/MyCatalystApp && MONO_LOG_LEVEL=debug MONO_LOG_MASK=gc ./bin/MacCatalyst/Debug/MyCatalystApp.app/Contents/MacOS/MyCatalystApp
+
+

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Linker;
+using Mono.Tuner;
 
 using Xamarin;
 using Xamarin.Linker;
@@ -69,6 +71,13 @@ namespace Xamarin.Bundler {
 		public SymbolMode SymbolMode;
 		public HashSet<string> IgnoredSymbols = new HashSet<string> ();
 
+		// The AOT arguments are currently not used for macOS, but they could eventually be used there as well (there's no mmp option to set these yet).
+		public string AotArguments = "static,asmonly,direct-icalls,";
+		public List<string> AotOtherArguments = null;
+
+		public DlsymOptions DlsymOptions;
+		public List<Tuple<string, bool>> DlsymAssemblies;
+
 		public string CompilerPath;
 
 		public Application ContainerApp; // For extensions, this is the containing app
@@ -81,6 +90,13 @@ namespace Xamarin.Bundler {
 		public ApplePlatform Platform { get { return Driver.TargetFramework.Platform; } }
 
 		public List<string> InterpretedAssemblies = new List<string> ();
+
+		// EnableMSym: only implemented for Xamarin.iOS
+		bool? enable_msym;
+		public bool EnableMSym {
+			get { return enable_msym.Value; }
+			set { enable_msym = value; }
+		}
 
 		// Linker config
 		public LinkMode LinkMode = LinkMode.Full;
@@ -1406,10 +1422,91 @@ namespace Xamarin.Bundler {
 			// IsAOTCompiled and IsInterpreted are not opposites: mscorlib.dll can be both:
 			// - mscorlib will always be processed by the AOT compiler to generate required wrapper functions for the interpreter to work
 			// - mscorlib might also be fully AOT-compiled (both when the interpreter is enabled and when it's not)
+#if NET
+			if (assembly == "System.Private.CoreLib")
+				return true;
+#else
 			if (assembly == "mscorlib")
 				return true;
+#endif
 
 			return !IsInterpreted (assembly);
+		}
+
+		public IList<string> GetAotArguments (string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile)
+		{
+			string fname = Path.GetFileName (filename);
+			var args = new List<string> ();
+			var app = this;
+			bool enable_llvm = (abi & Abi.LLVM) != 0;
+			bool enable_thumb = (abi & Abi.Thumb) != 0;
+			bool enable_debug = app.EnableDebug;
+			bool enable_debug_symbols = app.PackageManagedDebugSymbols;
+			bool llvm_only = app.EnableLLVMOnlyBitCode;
+			bool interp = app.IsInterpreted (Assembly.GetIdentity (filename));
+			bool interp_full = !interp && app.UseInterpreter;
+			bool is32bit = (abi & Abi.Arch32Mask) > 0;
+			string arch = abi.AsArchString ();
+
+			args.Add ("--debug");
+
+			if (enable_llvm)
+				args.Add ("--llvm");
+
+			if (!llvm_only && !interp)
+				args.Add ("-O=gsharedvt");
+			if (app.AotOtherArguments != null)
+				args.AddRange (app.AotOtherArguments);
+			var aot = new StringBuilder ();
+			aot.Append ("--aot=mtriple=");
+			aot.Append (enable_thumb ? arch.Replace ("arm", "thumb") : arch);
+			aot.Append ("-ios,");
+			aot.Append ("data-outfile=").Append (dataFile).Append (",");
+			aot.Append (app.AotArguments);
+			if (llvm_only)
+				aot.Append ("llvmonly,");
+			else if (interp) {
+				if (fname != "mscorlib.dll")
+					throw ErrorHelper.CreateError (99, Errors.MX0099, fname);
+				aot.Append ("interp,");
+			} else if (interp_full) {
+				aot.Append ("interp,full,");
+			} else
+				aot.Append ("full,");
+
+			var aname = Path.GetFileNameWithoutExtension (fname);
+			var sdk_or_product = Profile.IsSdkAssembly (aname) || Profile.IsProductAssembly (aname);
+
+			if (enable_llvm)
+				aot.Append ("nodebug,");
+			else if (!(enable_debug || enable_debug_symbols))
+				aot.Append ("nodebug,");
+			else if (app.DebugAll || app.DebugAssemblies.Contains (fname) || !sdk_or_product)
+				aot.Append ("soft-debug,");
+
+			aot.Append ("dwarfdebug,");
+
+			/* Needed for #4587 */
+			if (enable_debug && !enable_llvm)
+				aot.Append ("no-direct-calls,");
+
+			if (!app.UseDlsym (filename))
+				aot.Append ("direct-pinvoke,");
+
+			if (app.EnableMSym) {
+				var msymdir = Path.Combine (outputDir, "Msym");
+				aot.Append ($"msym-dir={msymdir},");
+			}
+
+			if (enable_llvm)
+				aot.Append ("llvm-path=").Append (Driver.GetFrameworkCurrentDirectory (app)).Append ("/LLVM/bin/,");
+
+			aot.Append ("outfile=").Append (outputFile);
+			if (enable_llvm)
+				aot.Append (",llvm-outfile=").Append (llvmOutputFile);
+			args.Add (aot.ToString ());
+			args.Add (filename);
+			return args;
 		}
 
 		public string AssemblyName {
@@ -1435,5 +1532,85 @@ namespace Xamarin.Bundler {
 				}
 			}
 		}
+
+		public void SetDlsymOption (string asm, bool dlsym)
+		{
+			if (DlsymAssemblies == null)
+				DlsymAssemblies = new List<Tuple<string, bool>> ();
+
+			DlsymAssemblies.Add (new Tuple<string, bool> (Path.GetFileNameWithoutExtension (asm), dlsym));
+
+			DlsymOptions = DlsymOptions.Custom;
+		}
+
+		public void ParseDlsymOptions (string options)
+		{
+			bool dlsym;
+			if (Driver.TryParseBool (options, out dlsym)) {
+				DlsymOptions = dlsym ? DlsymOptions.All : DlsymOptions.None;
+			} else {
+				if (DlsymAssemblies == null)
+					DlsymAssemblies = new List<Tuple<string, bool>> ();
+
+				var assemblies = options.Split (',');
+				foreach (var assembly in assemblies) {
+					var asm = assembly;
+					if (assembly.StartsWith ("+", StringComparison.Ordinal)) {
+						dlsym = true;
+						asm = assembly.Substring (1);
+					} else if (assembly.StartsWith ("-", StringComparison.Ordinal)) {
+						dlsym = false;
+						asm = assembly.Substring (1);
+					} else {
+						dlsym = true;
+					}
+					DlsymAssemblies.Add (new Tuple<string, bool> (Path.GetFileNameWithoutExtension (asm), dlsym));
+				}
+
+				DlsymOptions = DlsymOptions.Custom;
+			}
+		}
+
+		public bool UseDlsym (string assembly)
+		{
+			string asm;
+
+			if (DlsymAssemblies != null) {
+				asm = Path.GetFileNameWithoutExtension (assembly);
+				foreach (var tuple in DlsymAssemblies) {
+					if (string.Equals (tuple.Item1, asm, StringComparison.Ordinal))
+						return tuple.Item2;
+				}
+			}
+
+			switch (DlsymOptions) {
+			case DlsymOptions.All:
+				return true;
+			case DlsymOptions.None:
+				return false;
+			}
+
+			if (EnableLLVMOnlyBitCode)
+				return false;
+
+			// Even if this assembly is aot'ed, if we are using the interpreter we can't yet
+			// guarantee that code in this assembly won't be executed in interpreted mode,
+			// which can happen for virtual calls between assemblies, during exception handling
+			// etc. We make sure we don't strip away symbols needed for pinvoke calls.
+			// https://github.com/mono/mono/issues/14206
+			if (UseInterpreter)
+				return true;
+
+			switch (Platform) {
+			case ApplePlatform.iOS:
+				return !Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (assembly));
+			case ApplePlatform.TVOS:
+			case ApplePlatform.WatchOS:
+				return false;
+			default:
+				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, "Xamarin.iOS");
+			}
+		}
+
 	}
 }

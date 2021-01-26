@@ -19,7 +19,6 @@ namespace Xamarin.MacDev.Tasks
 
 		#region Inputs
 
-		[Output]
 		[Required]
 		public ITaskItem File { get; set; }
 
@@ -27,6 +26,7 @@ namespace Xamarin.MacDev.Tasks
 
 		#region Outputs
 
+		// Also input
 		[Output]
 		public ITaskItem[] Items { get; set; }
 
@@ -36,11 +36,18 @@ namespace Xamarin.MacDev.Tasks
 		{
 			var document = XDocument.Load (this.File.ItemSpec);
 
-			this.Items = document.Root
+			var items = document.Root
 				.Elements (ItemGroupElementName)
 				.SelectMany (element => element.Elements ())
 				.Select (element => this.CreateItemFromElement (element))
 				.ToArray ();
+
+			if (this.Items == null) {
+				this.Items = items;
+			} else {
+				
+				this.Items = items;
+			}
 
 			return true;
 		}

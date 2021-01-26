@@ -330,10 +330,6 @@
 		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_ReferencesLinkerFlags.items" Condition="Exists('$(_LinkerItemsDirectory)/_ReferencesLinkerFlags.items')">
 			<Output TaskParameter="Items" ItemName="_ReferencesLinkerFlags" />
 		</ReadItemsFromFile>
-		<!-- Load _AssembliesToAOT -->
-		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_AssembliesToAOT.items" Condition="Exists('$(_LinkerItemsDirectory)/_AssembliesToAOT.items')">
-			<Output TaskParameter="Items" ItemName="_AssembliesToAOT" />
-		</ReadItemsFromFile>
 
 		<ItemGroup>
 			<_AssembliesToAOT Include="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.exe' " />
@@ -341,6 +337,15 @@
 			<_AssembliesToAOT Remove="@(ReferenceSatellitePaths)" /> <!-- this seems to be from referenced projects with satellite assemblies -->
 			<_AssembliesToAOT Remove="@(ResourceCopyLocalItems)" /> <!-- this seems to be from NuGets with satellite assemblies -->
 		</ItemGroup>
+
+		<!-- Load _AssembliesToAOT -->
+		<ReadItemsFromFile
+			File="$(_LinkerItemsDirectory)/_AssembliesToAOT.items"
+			Condition="Exists('$(_LinkerItemsDirectory)/_AssembliesToAOT.items')"
+			Items="@(_AssembliesToAOT)"
+			>
+			<Output TaskParameter="Items" ItemName="_AssembliesToAOT" />
+		</ReadItemsFromFile>
 	</Target>
 
 	<!-- Native code -->

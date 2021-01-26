@@ -42,11 +42,23 @@ namespace Xamarin.MacDev.Tasks
 				.Select (element => this.CreateItemFromElement (element))
 				.ToArray ();
 
-			if (this.Items == null) {
-				this.Items = items;
+			if (Items == null) {
+				Items = items;
 			} else {
-				
-				this.Items = items;
+				// Merge the created items into the existing array of items
+				// - If the item exists (based on ItemSpec), then copy the metadata into the existing item
+				// - If the item does not exist, return the entire item
+				var itemsMap = Items.ToDictionary (item => item.ItemSpec);
+				var finalItems = new List<ITaskItem> ();
+				foreach (var newItem in items) {
+					if (itemsMap.TryGetValue (newItem.ItemSpec, out var existingItem)) {
+						newItem.CopyMetadataTo (existingItem);
+						finalItems.Add (existingItem);
+					} else {
+						finalItems.Add (newItem);
+					}
+				}
+				Items = finalItems.ToArray ();
 			}
 
 			return true;

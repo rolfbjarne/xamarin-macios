@@ -73,11 +73,15 @@ namespace Xamarin.Linker {
 
 		protected virtual Exception Fail (Exception e)
 		{
+			Console.WriteLine ($"Failing {e}");
+			Console.WriteLine (Environment.StackTrace);
 			return ErrorHelper.CreateError (ErrorCode | 1, e, Errors.MX_ConfigurationAwareStep, Name, e.Message);
 		}
 
 		protected virtual Exception FailEnd (Exception e)
 		{
+			Console.WriteLine ($"FailEnding {e}");
+			Console.WriteLine (Environment.StackTrace);
 			return ErrorHelper.CreateError (ErrorCode | 2, e, Errors.MX_ConfigurationAwareStep, Name, e.Message);
 		}
 

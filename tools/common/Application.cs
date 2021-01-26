@@ -1423,7 +1423,7 @@ namespace Xamarin.Bundler {
 			// - mscorlib will always be processed by the AOT compiler to generate required wrapper functions for the interpreter to work
 			// - mscorlib might also be fully AOT-compiled (both when the interpreter is enabled and when it's not)
 #if NET
-			if (assembly == "System.Private.CoreLib")
+			if (assembly?.Contains (Driver.CorlibName) == true)
 				return true;
 #else
 			if (assembly == "mscorlib")
@@ -1466,7 +1466,7 @@ namespace Xamarin.Bundler {
 			if (llvm_only)
 				aot.Append ("llvmonly,");
 			else if (interp) {
-				if (fname != "mscorlib.dll")
+				if (fname != Driver.CorlibName + ".dll")
 					throw ErrorHelper.CreateError (99, Errors.MX0099, fname);
 				aot.Append ("interp,");
 			} else if (interp_full) {

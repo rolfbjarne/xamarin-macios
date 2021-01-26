@@ -32,12 +32,16 @@ namespace Xamarin.Bundler {
 		public ProductException (int code, bool error, Exception innerException, string message) :
 			base (message, innerException)
 		{
+			Console.WriteLine ($"ProductException ({code}, {message})");
+			Console.WriteLine (Environment.StackTrace);
 			SetValues (code, error);
 		}
 
 		public ProductException (int code, bool error, Exception innerException, string message, params object[] args) : 
 			base (Format (message, args), innerException)
 		{
+			Console.WriteLine ($"ProductException ({code}, {message})");
+			Console.WriteLine (Environment.StackTrace);
 			SetValues (code, error);
 		}
 

@@ -36,13 +36,17 @@ DEVNAME=a87b763bf8da1fcc094cbc01811a17eacf2279e5
 DEVNAME=00008030-000879200CC0802E
 test: $(TARGETS)
 	cd MyInterpretedApp && rm -Rf bin obj
-	$(DOTNET6) build MyInterpretedApp/*.csproj /p:RuntimeIdentifier=ios-arm64 /bl /v:diag
+	rm -Rf packages
+	$(DOTNET6) build MyInterpretedApp/*.csproj /p:RuntimeIdentifier=ios-arm64 /bl /v:diag || (openbinlog msbuild.binlog && exit 1)
 	mlaunch --installdev MyInterpretedApp/bin/Debug/net6.0-ios/ios-arm64/MyInterpretedApp.app --devname "$(DEVNAME)"
 	mlaunch --launchdev MyInterpretedApp/bin/Debug/net6.0-ios/ios-arm64/MyInterpretedApp.app --wait-for-unlock --wait-for-exit --devname "$(DEVNAME)"
 	sync-crash-reports.sh "$(DEVNAME)"
 
 test2: $(TARGETS)
 	$(DOTNET6) build MySingleView/*.csproj /p:RuntimeIdentifier=ios-arm64 /bl /v:diag
+	mlaunch --installdev MySingleView/bin/Debug/net6.0-ios/ios-arm64/MySingleView.app --devname "$(DEVNAME)"
+	mlaunch --launchdev MySingleView/bin/Debug/net6.0-ios/ios-arm64/MySingleView.app --wait-for-unlock --wait-for-exit --devname "$(DEVNAME)"
+	sync-crash-reports.sh "$(DEVNAME)"
 
 
 sim:

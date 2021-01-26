@@ -189,7 +189,7 @@
 		<_AdditionalTaskAssemblyDirectory>$(_XamarinSdkRootDirectory)tools/dotnet-linker/</_AdditionalTaskAssemblyDirectory>
 		<_AdditionalTaskAssembly>$(_AdditionalTaskAssemblyDirectory)dotnet-linker.dll</_AdditionalTaskAssembly>
 	</PropertyGroup>
-	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;">
+	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;">
 		<!-- Validate the linker mode -->
 		<Error Text="Invalid link mode: '$(_LinkMode)'. Valid link modes are: 'None', 'SdkOnly' and 'Full'" Condition="'$(_LinkMode)' != 'None' And '$(_LinkMode)' != 'SdkOnly' And '$(_LinkMode)' != 'Full'" />
 
@@ -205,6 +205,7 @@
 
 			<_CustomLinkerOptions>
 				AssemblyName=$(AssemblyName).dll
+				AOTOutputDirectory=$(_AOTOutputDirectory)
 				CacheDirectory=$(_LinkerCacheDirectory)
 				Debug=$(_BundlerDebug)
 				DeploymentTarget=$(_MinimumOSVersion)
@@ -331,21 +332,16 @@
 			<Output TaskParameter="Items" ItemName="_ReferencesLinkerFlags" />
 		</ReadItemsFromFile>
 
-		<ItemGroup>
-			<_AssembliesToAOT Include="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.exe' " />
-			<!-- Exclude resource assemblies from AOT compilation -->
-			<_AssembliesToAOT Remove="@(ReferenceSatellitePaths)" /> <!-- this seems to be from referenced projects with satellite assemblies -->
-			<_AssembliesToAOT Remove="@(ResourceCopyLocalItems)" /> <!-- this seems to be from NuGets with satellite assemblies -->
-		</ItemGroup>
-
 		<!-- Load _AssembliesToAOT -->
-		<ReadItemsFromFile
-			File="$(_LinkerItemsDirectory)/_AssembliesToAOT.items"
-			Condition="Exists('$(_LinkerItemsDirectory)/_AssembliesToAOT.items')"
-			Items="@(_AssembliesToAOT)"
-			>
+		<ReadItemsFromFile File="$(_LinkerItemsDirectory)/_AssembliesToAOT.items" Condition="Exists('$(_LinkerItemsDirectory)/_AssembliesToAOT.items')">
 			<Output TaskParameter="Items" ItemName="_AssembliesToAOT" />
 		</ReadItemsFromFile>
+
+		<ItemGroup>
+			<_AssembliesToAOTIntermediate Include="@(_AssembliesToAOT->'$(IntermediateLinkDir)%(Filename)%(Extension)')" />
+			<_AssembliesToAOT Remove="@(_AssembliesToAOT)" />
+			<_AssembliesToAOT Include="@(_AssembliesToAOTIntermediate)" />
+		</ItemGroup>
 	</Target>
 
 	<!-- Native code -->
@@ -429,7 +425,7 @@
 			Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS'"
 			DependsOnTargets="_ComputeVariables"
 			Inputs="@(_AssembliesToAOT)"
-			Outputs="@(_AssembliesToAOT -> '$(_AOTOutputDirectory)%(Filename)%(Extension).o')">
+			Outputs="@(_AssembliesToAOT -> '$(_AOTOutputDirectory)%(Arch)\%(Filename)%(Extension).o')">
 
 		<AOTCompile
 			SessionId="$(BuildSessionId)"
@@ -438,9 +434,8 @@
 			AOTCompilerPath="$(_AOTCompiler)"
 			InputDirectory="$(_AOTInputDirectory)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
-			OutputDirectory="$(_AOTOutputDirectory)"
+			OutputDirectory="$(_AOTOutputDirectory)\%(_AssembliesToAOT.Arch)"
 			SdkDevPath="$(_SdkDevPath)"
-			TargetArchitectures="$(TargetArchitectures)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 			<Output TaskParameter="AssemblyFiles" ItemName="_AOTAssemblyFiles" />
@@ -465,8 +460,8 @@
 			<_XamarinMainLibraries Include="@(_AOTObjectFiles)" />
 
 			<!-- copy the aotdata files to the .app -->
-			<ResolvedFileToPublish Include="$(_AOTOutputDirectory)%(_AssembliesToAOT.Filename).aotdata.arm64" >
-				<RelativePath>$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_NativeExecutablePublishDir)))\%(_AssembliesToAOT.Filename).aotdata.arm64</RelativePath>
+			<ResolvedFileToPublish Include="%(_AssembliesToAOT.AOTData)" >
+				<RelativePath>$([MSBuild]::MakeRelative($(MSBuildProjectDirectory)$(PublishDir),$(_NativeExecutablePublishDir)))\%(_AssembliesToAOT.Filename).aotdata.%(_AssembliesToAOT.Arch)</RelativePath>
 			</ResolvedFileToPublish>
 		</ItemGroup>
 	</Target>

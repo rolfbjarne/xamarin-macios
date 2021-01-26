@@ -19,7 +19,6 @@ namespace Xamarin.MacDev.Tasks
 
 		#region Inputs
 
-		[Output]
 		[Required]
 		public ITaskItem File { get; set; }
 
@@ -27,6 +26,7 @@ namespace Xamarin.MacDev.Tasks
 
 		#region Outputs
 
+		// Also input
 		[Output]
 		public ITaskItem[] Items { get; set; }
 
@@ -36,11 +36,38 @@ namespace Xamarin.MacDev.Tasks
 		{
 			var document = XDocument.Load (this.File.ItemSpec);
 
-			this.Items = document.Root
+			var items = document.Root
 				.Elements (ItemGroupElementName)
 				.SelectMany (element => element.Elements ())
 				.Select (element => this.CreateItemFromElement (element))
 				.ToArray ();
+
+			if (Items == null || Items.Length == 0) {
+				Items = items;
+			} else {
+				// Merge the created items into the existing array of items
+				// - If the item exists (based on ItemSpec), then copy the metadata into the existing item
+				// - If the item does not exist, return the entire item
+				var itemsMap = Items.ToDictionary (item => {
+					Log.LogMessage (MessageImportance.Low, $"ReadItems: Mapping {item.ItemSpec} to {Path.GetFullPath (item.ItemSpec)}");
+					return Path.GetFullPath (item.ItemSpec);
+				});
+				var finalItems = new List<ITaskItem> ();
+				foreach (var newItem in items) {
+					var fullNewPath = Path.GetFullPath (newItem.ItemSpec);
+					if (itemsMap.TryGetValue (fullNewPath, out var existingItem)) {
+						itemsMap.Remove (fullNewPath);
+						newItem.CopyMetadataTo (existingItem);
+						finalItems.Add (existingItem);
+						Log.LogMessage (MessageImportance.Low, $"ReadItems: Merging {newItem.ItemSpec} => {fullNewPath}");
+					} else {
+						finalItems.Add (newItem);
+						Log.LogMessage (MessageImportance.Low, $"ReadItems: Adding {newItem.ItemSpec} => {fullNewPath}");
+					}
+				}
+				finalItems.AddRange (itemsMap.Select (kvp => kvp.Value));
+				Items = finalItems.ToArray ();
+			}
 
 			return true;
 		}

@@ -33,7 +33,12 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void CMBlockBufferCustomBlockSource ()
 		{
-			var type = Type.GetType ("CoreMedia.CMCustomBlockAllocator/CMBlockBufferCustomBlockSource, " + typeof (NSObject).Assembly.GetName ().Name);
+#if NET
+			var tn = "CoreMedia.CMCustomBlockAllocator+CMBlockBufferCustomBlockSource, " + typeof (NSObject).Assembly.GetName ().Name;
+#else
+			var tn = "CoreMedia.CMCustomBlockAllocator/CMBlockBufferCustomBlockSource, " + typeof (NSObject).Assembly.GetName ().Name;
+#endif
+			var type = Type.GetType (tn);
 			Assert.NotNull (type, "CMBlockBufferCustomBlockSource");
 			// it's 28 (not 32) bytes when executed on 64bits iOS, which implies it's packed to 4 bytes
 			Assert.That (Marshal.SizeOf (type), Is.EqualTo (4 + 3 * IntPtr.Size), "Size");

@@ -67,6 +67,7 @@ xamarin_string_to_nsstring (MonoString *obj, bool retain)
 	return arg;
 }
 
+// Return value: NULL, or a retained MonoString, which must be released with xamarin_mono_object_release
 MonoString *
 xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj)
 {
@@ -195,7 +196,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	if (isCategoryInstance) {
 		// we know this must be an id
 		p = mono_signature_get_params (msig, &iter);
-		MonoObject* catobj = xamarin_get_nsobject_with_type_for_ptr (self, false, p, &exception_gchandle);
+		MonoObject *catobj = xamarin_get_nsobject_with_type_for_ptr (self, false, p, &exception_gchandle);
 		if (exception_gchandle != INVALID_GCHANDLE) {
 			exception_gchandle = xamarin_get_exception_for_parameter (8029, exception_gchandle, "Unable to marshal the parameter", sel, method, p, 0, true);
 			goto exception_handling;
@@ -266,7 +267,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								exception = (MonoObject *) mono_get_exception_execution_engine ("Invalid type encoding for parameter");
 								goto exception_handling;
 							}
-							bool is_parameter_out = xamarin_is_parameter_out (mono_method_get_object (domain, method, NULL), (int) i, &exception_gchandle);
+							MonoReflectionMethod *rmethod = mono_method_get_object (domain, method, NULL);
+							bool is_parameter_out = xamarin_is_parameter_out (rmethod, (int) i, &exception_gchandle);
+							ADD_TO_MONOOBJECT_RELEASE_LIST (rmethod);
 							if (exception_gchandle != INVALID_GCHANDLE)
 								goto exception_handling;
 
@@ -453,7 +456,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							ADD_TO_MONOOBJECT_RELEASE_LIST (obj);
 
 							if (created && obj) {
-								bool is_transient = xamarin_is_parameter_transient (mono_method_get_object (domain, method, NULL), (int32_t) i, &exception_gchandle);
+								MonoReflectionMethod *rmethod = mono_method_get_object (domain, method, NULL);
+								bool is_transient = xamarin_is_parameter_transient (rmethod, (int32_t) i, &exception_gchandle);
+								ADD_TO_MONOOBJECT_RELEASE_LIST (rmethod);
 								if (exception_gchandle != INVALID_GCHANDLE)
 									goto exception_handling;
 								if (is_transient)

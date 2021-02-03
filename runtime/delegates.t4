@@ -446,8 +446,8 @@
 			OnlyCoreCLR = true,
 		},
 
-		new XDelegate ("MonoObject *", "IntPtr", "xamarin_bridge_get_method_declaring_type",
-			"MonoObject *", "IntPtr", "gchandle"
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_method_declaring_type",
+			"MonoObject *", "MonoObject *", "method"
 		) {
 			WrappedManagedFunction = "GetMethodDeclaringType",
 			OnlyDynamicUsage = false,

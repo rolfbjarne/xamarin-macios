@@ -338,8 +338,14 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	if (method == NULL)
 		method = "<unknown method>";
 
-	fprintf (stderr, "%s threw an exception: %p => %s\n", method, gchandle, [xamarin_print_all_exceptions (gchandle) UTF8String]);
-	xamarin_assertion_message ("%s threw an exception: %p = %s", method, gchandle, [xamarin_print_all_exceptions (gchandle) UTF8String]);
+	GCHandle exception_gchandle = INVALID_GCHANDLE;
+	char * str = xamarin_bridge_tostring (gchandle, &exception_gchandle);
+	fprintf (stderr, "xamarin_handle_bridge_exception (%p, %s) => %s\n", gchandle, method, str);
+	if (exception_gchandle != INVALID_GCHANDLE)
+		xamarin_assertion_message ("xamarin_bridge_tostring threw an exception");
+	LOG_CORECLR (stderr, "%s threw an exception: %s\n", method, str);
+	mono_free (str);
+	xamarin_assertion_message ("%s threw an exception: %s", method, str);
 }
 
 typedef void (*xamarin_runtime_initialize_decl)(struct InitializationOptions* options);

@@ -150,6 +150,34 @@ namespace Foundation {
 			return class_ptr;
 		}
 
+#if NET
+		internal void SetHandleDirectly (IntPtr handle)
+		{
+			this.handle = handle;
+		}
+
+		internal void SetFlagsDirectly (byte flags)
+		{
+			this.flags = (Flags) flags;
+		}
+
+		internal byte GetFlagsDirectly ()
+		{
+			return (byte) this.flags;
+		}
+#endif
+
+#if NET
+		[DllImport ("__Internal")]
+		extern static void xamarin_register_toggleref_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_release_managed_ref_coreclr (IntPtr handle, IntPtr managed_obj);
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain);
+#endif
+
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
@@ -158,6 +186,72 @@ namespace Foundation {
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
+
+		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain)
+		{
+			xamarin_create_managed_ref (handle, obj, retain);
+		}
+
+		static void RegisterToggleRef_indirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void xamarin_release_managed_ref_indirection (IntPtr handle, NSObject managed_obj)
+		{
+			xamarin_release_managed_ref (handle, managed_obj);
+		}
+
+		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (obj);
+				try {
+					xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (obj_handle), retain);
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+			xamarin_create_managed_ref_indirection (handle, obj, retain);
+		}
+
+		static void ReleaseManagedReference (IntPtr handle, NSObject managed_obj)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (managed_obj);
+				try {
+					xamarin_release_managed_ref_coreclr (handle, GCHandle.ToIntPtr (obj_handle));
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+
+			xamarin_release_managed_ref_indirection (handle, managed_obj);
+
+		}
+
+		static void RegisterToggleReference (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (obj);
+				try {
+					xamarin_register_toggleref_coreclr (GCHandle.ToIntPtr (obj_handle), handle, isCustomType);
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+
+			RegisterToggleRef_indirection (obj, handle, isCustomType);
+		}
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()
@@ -184,7 +278,7 @@ namespace Foundation {
 				return;
 			
 			IsRegisteredToggleRef = true;
-			RegisterToggleRef (this, Handle, allowCustomTypes);
+			RegisterToggleReference (this, Handle, allowCustomTypes);
 		}
 
 		private void InitializeObject (bool alloced) {
@@ -224,12 +318,12 @@ namespace Foundation {
 
 		void CreateManagedRef (bool retain)
 		{
-			xamarin_create_managed_ref (handle, this, retain);
+			CreateManagedReference (handle, this, retain);
 		}
 
 		void ReleaseManagedRef ()
 		{
-			xamarin_release_managed_ref (handle, this);
+			ReleaseManagedReference (handle, this);
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)

@@ -276,6 +276,27 @@ xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, cons
 	return rv == 0;
 }
 
+bool
+xamarin_bridge_coreclr_object_isinst (GCHandle obj, MonoClass * klass)
+{
+	bool rv = xamarin_bridge_isinstance (obj, klass->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p, %p => %s) => %i\n", obj, klass, klass->fullname, rv);
+	return rv;
+}
+
+MonoClass *
+xamarin_bridge_coreclr_gchandle_get_class (GCHandle obj) // NEEDS REVIEW
+{
+	MonoType *type = xamarin_gchandle_unwrap (obj);
+	MonoClass *rv = xamarin_bridge_object_get_type (type);
+
+	xamarin_mono_object_release (&type);
+
+	LOG_CORECLR (stderr, "xamarin_bridge_coreclr_gchandle_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
+
+	return rv;
+}
+
 void
 xamarin_install_nsautoreleasepool_hooks ()
 {
@@ -639,6 +660,15 @@ mono_get_exception_out_of_memory ()
 {
 	MonoException *rv = xamarin_bridge_create_exception (XamarinExceptionTypes_System_OutOfMemoryException, NULL);
 	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, entrypoint, rv);
+	return rv;
+}
+
+MonoObject *
+xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc)
+{
+	MonoObject *mobj = xamarin_gchandle_get_target (obj);
+	MonoObject *rv = mono_runtime_invoke (method, mobj, params, exc);
+	xamarin_mono_object_release (&mobj);
 	return rv;
 }
 

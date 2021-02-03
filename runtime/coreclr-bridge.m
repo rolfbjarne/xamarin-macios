@@ -30,6 +30,20 @@ xamarin_bridge_initialize ()
 }
 
 void
+xamarin_coreclr_unhandled_exception_handler (void *context)
+{
+	GCHandle exception_gchandle = (GCHandle) context;
+
+	LOG_CORECLR (stderr, "%s (%p)\n", __func__, context);
+
+	xamarin_process_managed_exception_gchandle (exception_gchandle);
+
+	// The call to xamarin_process_managed_exception_gchandle should either abort or throw an Objective-C exception,
+	// and in neither case should we end up here, so just assert.
+	xamarin_assertion_message ("Failed to process managed exception.");
+}
+
+void
 xamarin_enable_new_refcount ()
 {
 	// Nothing to do here.

@@ -4883,6 +4883,12 @@ namespace Registrar {
 				methods.WriteLine ("#define DEBUG 1");
 			}
 
+			if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+				header.WriteLine ("#define CORECLR_RUNTIME");
+				methods.WriteLine ("#define CORECLR_RUNTIME");
+				methods.WriteLine ("#include <xamarin/coreclr-bridge.h>");
+			}
+
 			header.WriteLine ("#include <stdarg.h>");
 			if (SupportsModernObjectiveC) {
 				methods.WriteLine ("#include <xamarin/xamarin.h>");

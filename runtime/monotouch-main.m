@@ -243,7 +243,7 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 	// are other arguments besides --app-arg), but it's a guaranteed and bound
 	// upper limit.
 	const char *managed_argv [argc + 2];
-	int managed_argc = 1;
+	int managed_argc = 0;
 
 #if defined(__x86_64__)
 	patch_sigaction ();
@@ -252,12 +252,18 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 	xamarin_launch_mode = launch_mode;
 
 	memset (managed_argv, 0, sizeof (char*) * (unsigned long) (argc + 2));
-	managed_argv [0] = "monotouch";
+
+#if !(TARGET_OS_OSX || TARGET_OS_MACCATALYST)
+	managed_argv [managed_argc++] = "monotouch";
+#endif
 
 	DEBUG_LAUNCH_TIME_PRINT ("Main entered");
 
 	xamarin_setup ();
 	DEBUG_LAUNCH_TIME_PRINT ("MonoTouch setup time");
+
+	xamarin_bridge_initialize ();
+	DEBUG_LAUNCH_TIME_PRINT ("Xamarin Bridge setup time");
 
 	MonoAssembly *assembly;
 	GCHandle exception_gchandle = NULL;
@@ -308,6 +314,9 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 		 */
 		int i = 0;
 		for (i = 0; i < argc; i++) {
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+			managed_argv [managed_argc++] = argv [i];
+#else
 			char *arg = argv [i];
 			char *name;
 			char *value;
@@ -389,6 +398,7 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 			}
 			
 			free (name);
+#endif // TARGET_OS_OSX || TARGET_OS_MACCATALYST
 		}
 	}
 
@@ -399,6 +409,10 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 #endif
 
 	xamarin_bridge_initialize ();
+
+#if DOTNET
+	xamarin_vm_initialize ();
+#endif
 
 	xamarin_initialize ();
 	DEBUG_LAUNCH_TIME_PRINT ("\tmonotouch init time");

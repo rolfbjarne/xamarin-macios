@@ -1180,12 +1180,26 @@ print_all_exceptions (MonoObject *exc)
 	return str;
 }
 
+static NSMutableString *
+print_all_exceptions_gchandle (GCHandle handle)
+{
+	MonoObject *exc = xamarin_gchandle_get_target (handle);
+	NSMutableString *rv = print_all_exceptions (exc);
+	xamarin_mono_object_safe_release (&exc);
+	return rv;
+}
+
 NSString *
 xamarin_print_all_exceptions (MonoObject *exc)
 {
 	return print_all_exceptions (exc);
 }
 
+NSString *
+xamarin_print_all_exceptions_gchandle (GCHandle gchandle)
+{
+	return print_all_exceptions_gchandle (gchandle);
+}
 void
 xamarin_ftnptr_exception_handler (GCHandle gchandle)
 {
@@ -2319,7 +2333,7 @@ xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwMan
 
 	if (exception_gchandle != INVALID_GCHANDLE) {
 		PRINT (PRODUCT ": Got an exception while executing the MarshalObjectiveCException event (this exception will be ignored):");
-		PRINT ("%@", print_all_exceptions (xamarin_gchandle_get_target (exception_gchandle)));
+		PRINT ("%@", print_all_exceptions_gchandle (exception_gchandle));
 		xamarin_gchandle_free (exception_gchandle);
 		exception_gchandle = INVALID_GCHANDLE;
 	}
@@ -2345,7 +2359,7 @@ xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwMan
 			GCHandle handle = xamarin_create_ns_exception (ns_exception, &exception_gchandle);
 			if (exception_gchandle != INVALID_GCHANDLE) {
 				PRINT (PRODUCT ": Got an exception while creating a managed NSException wrapper (will throw this exception instead):");
-				PRINT ("%@", print_all_exceptions (xamarin_gchandle_get_target (exception_gchandle)));
+				PRINT ("%@", print_all_exceptions_gchandle (exception_gchandle));
 				handle = exception_gchandle;
 				exception_gchandle = INVALID_GCHANDLE;
 			}
@@ -2378,7 +2392,7 @@ xamarin_process_managed_exception (MonoObject *exception)
 
 	if (exception_gchandle != INVALID_GCHANDLE) {
 		PRINT (PRODUCT ": Got an exception while executing the MarshalManagedException event (this exception will be ignored):");
-		PRINT ("%@", print_all_exceptions (xamarin_gchandle_get_target (exception_gchandle)));
+		PRINT ("%@", print_all_exceptions_gchandle (exception_gchandle));
 		xamarin_gchandle_free (exception_gchandle);
 		exception_gchandle = INVALID_GCHANDLE;
 		mode = MarshalManagedExceptionModeDefault;
@@ -2425,7 +2439,7 @@ xamarin_process_managed_exception (MonoObject *exception)
 		
 		if (exception_gchandle != INVALID_GCHANDLE) {
 			PRINT (PRODUCT ": Got an exception while unwrapping a managed NSException wrapper (this exception will be ignored):");
-			PRINT ("%@", print_all_exceptions (xamarin_gchandle_get_target (exception_gchandle)));
+			PRINT ("%@", print_all_exceptions_gchandle (exception_gchandle));
 			xamarin_gchandle_free (exception_gchandle);
 			exception_gchandle = INVALID_GCHANDLE;
 			ns_exc = NULL;
@@ -2448,7 +2462,7 @@ xamarin_process_managed_exception (MonoObject *exception)
 			fullname = xamarin_type_get_full_name (mono_class_get_type (mono_object_get_class (exception)), &exception_gchandle);
 			if (exception_gchandle != INVALID_GCHANDLE) {
 				PRINT (PRODUCT ": Got an exception when trying to get the typename for an exception (this exception will be ignored):");
-				PRINT ("%@", print_all_exceptions (xamarin_gchandle_get_target (exception_gchandle)));
+				PRINT ("%@", print_all_exceptions_gchandle (exception_gchandle));
 				xamarin_gchandle_free (exception_gchandle);
 				exception_gchandle = INVALID_GCHANDLE;
 				fullname = "Unknown";

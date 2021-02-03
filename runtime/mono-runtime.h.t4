@@ -49,6 +49,7 @@ typedef gboolean (*GEqualFunc)     (gconstpointer a, gconstpointer b);
 #include <stdint.h>
 
 const char * xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix);
+const char * xamarin_initialize_runtime_bridge ();
 char *xamarin_get_mono_runtime_build_info (); // returns NULL if libmono couldn't be found (mono_get_runtime_build_info doesn't exist).
 
 
@@ -97,14 +98,20 @@ typedef struct _MonoReflectionType MonoReflectionType;
 typedef struct _MonoException MonoException;
 typedef struct _MonoThread MonoThread;
 typedef struct _MonoThreadsSync MonoThreadsSync;
-typedef struct {
-	MonoVTable *vtable;
-	MonoThreadsSync *synchronisation;
-} MonoObject;
+typedef struct _MonoObject MonoObject;
 
 typedef struct _MonoReferenceQueue MonoReferenceQueue;
 typedef void (*mono_reference_queue_callback) (void *user_data);
 
+#if defined (CORECLR_RUNTIME)
+#define mono_array_get(array,type,index) xamarin_gchandle_get_target (xamarin_bridge_get_array_object_value (array->gchandle, index));
+
+#define mono_array_setref(array,index,value)	\
+	do {	\
+		xamarin_bridge_set_array_object_value (array->gchandle, index, value->gchandle); \
+	} while (0)
+
+#else
 #define mono_array_addr(array,type,index) ((type*)(void*) mono_array_addr_with_size (array, sizeof (type), index))
 #define mono_array_get(array,type,index) ( *(type*)mono_array_addr ((array), type, (index)) )
 #define mono_array_setref(array,index,value)	\
@@ -113,6 +120,7 @@ typedef void (*mono_reference_queue_callback) (void *user_data);
 		mono_gc_wbarrier_set_arrayref ((array), __p, (MonoObject*)(value));	\
 		/* *__p = (value);*/	\
 	} while (0)
+#endif
 
 /* metadata/assembly.h */
 
@@ -223,7 +231,11 @@ typedef enum {
 	MONO_TYPE_SENTINEL   = 0x41,       /* Sentinel for varargs method signature */
 	MONO_TYPE_PINNED     = 0x45,       /* Local var that points to pinned object */
 
-	MONO_TYPE_ENUM       = 0x55        /* an enumeration */
+	MONO_TYPE_ENUM       = 0x55,       /* an enumeration */
+
+#if defined(CORECLR_RUNTIME)
+	MONO_TYPE_UNKNOWN    = 0xFF,
+#endif
 } MonoTypeEnum;
 
 /*
@@ -288,6 +300,10 @@ typedef void (*MonoFtnPtrEHCallback) (GCHandle gchandle);
 
 void mono_gc_init_finalizer_thread ();
 
+#if defined(CORECLR_RUNTIME)
+#include "xamarin/coreclr-bridge.h"
+#endif // CORECLR_RUNTIME
+
 /*
  * The functions we want to expose
  */
@@ -306,7 +322,14 @@ bool
 
 <# } #>
 
+#if defined(CORECLR_RUNTIME)
+<# foreach (var export in exports) { #>
 
+MONO_API <#= export.ReturnType #>
+xamarin_bridge_<#= export.EntryPoint #> (<#= export.ArgumentSignature #>);
+<# } #>
+
+#endif // CORECLR_RUNTIME
 
 #ifdef __cplusplus
 } /* extern "C" */

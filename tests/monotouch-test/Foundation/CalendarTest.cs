@@ -364,6 +364,9 @@ namespace MonoTouchFixtures.Foundation {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("needs exception work")]
+#endif
 		public void TestFindNextDateAfterDateMatching ()
 		{
 			RequiresIos8 ();

@@ -109,20 +109,28 @@
 		new Export ("uint32_t", "mono_gchandle_new",
 			"MonoObject *", "obj",
 			"mono_bool", "pinned"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoObject *", "mono_gchandle_get_target",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gchandle_free",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("uint32_t", "mono_gchandle_new_weakref",
 			"MonoObject *", "obj",
 			"mono_bool", "track_resurrection"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_raise_exception",
 			"MonoException *", "ex"
@@ -132,7 +140,9 @@
 			"MonoArray *", "array",
 			"int", "size",
 			"uintptr_t", "idx"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoString *", "mono_string_new",
 			"MonoDomain *", "domain",
@@ -187,7 +197,9 @@
 			"MonoArray *", "arr",
 			"void *", "slot_ptr",
 			"MonoObject *", "value"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -475,7 +487,9 @@
 
 		new Export ("void", "mono_gc_register_finalizer_callbacks",
 			"MonoGCFinalizerCallbacks *", "callbacks"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 		
 		#endregion
 
@@ -484,11 +498,15 @@
 		new Export ("void", "mono_gc_toggleref_add",
 			"MonoObject *", "object",
 			"mono_bool", "strong_ref"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gc_toggleref_register_callback",
 			"MonoToggleRefCallback", "process_toggleref"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -557,7 +575,9 @@
 		new Export ("int", "mono_main",
 			"int",     "argc",
 			"char **", "argv"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export (true, "void", "mono_install_load_aot_data_hook",
 			"MonoLoadAotDataFunc", "load_func",
@@ -656,6 +676,17 @@
 
 		#endregion
 
+		#region mini/mono-private-unstable.
+
+		new Export ("int", "monovm_initialize",
+			"int", "propertyCount",
+			"const char **", "propertyKeys",
+			"const char **", "propertyValues"
+		) {
+			IsDotNetOnly = true,
+		},
+
+		#endregion
 	};
 #><#+
 	class Arg
@@ -671,12 +702,29 @@
 		public string AlternativeExpression;
 		public List<Arg> Arguments;
 		public bool Optional;
+		public bool HasBridgeFunction = true;
+		public bool IsDotNetOnly;
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)
 		{
 		}
 
+		public string DotNetIf {
+			get {
+				if (IsDotNetOnly)
+					return "#if DOTNET\n";
+				return string.Empty;
+			}
+		}
+
+		public string DotNetEndIf {
+			get {
+				if (IsDotNetOnly)
+					return "#endif\n";
+				return string.Empty;
+			}
+		}
 
 		public Export (bool optional, string returnType, string entryPoint, params string [] arguments)
 		{

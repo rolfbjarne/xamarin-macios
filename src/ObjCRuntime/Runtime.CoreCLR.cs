@@ -96,7 +96,10 @@ namespace ObjCRuntime {
 			if (options->xamarin_objc_msgsend_super_stret != IntPtr.Zero)
 				ObjectiveCMarshal.SetMessageSendCallback (ObjectiveCMarshal.MessageSendFunction.MsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
 
-			ObjectiveCMarshal.Initialize (null, null, null, UnhandledExceptionPropagationHandler);
+			delegate* unmanaged<void> beginEndCallback = (delegate* unmanaged<void>) options->reference_tracking_begin_end_callback;
+			delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
+			delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
+			ObjectiveCMarshal.Initialize (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization, UnhandledExceptionPropagationHandler);
 		}
 
 		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
@@ -106,10 +109,31 @@ namespace ObjCRuntime {
 			return exceptionHandler;
 		}
 
+		// Size: 2 pointers
+		internal struct TrackedObjectInfo {
+			public IntPtr Handle;
+			public NSObject.Flags Flags;
+		}
+
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
-			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
-			Console.WriteLine ("Not implemented: RegisterToggleReferenceCoreCLR");
+			var gchandle = ObjectiveCMarshal.CreateReferenceTrackingHandle (obj, out var info);
+
+			unsafe {
+				TrackedObjectInfo* tracked_info;
+				fixed (void* ptr = info)
+					tracked_info = (TrackedObjectInfo *) ptr;
+				tracked_info->Handle = handle;
+				tracked_info->Flags = obj.FlagsInternal;
+				obj.tracked_object_info = tracked_info;
+				obj.tracked_object_handle = gchandle;
+
+				log_coreclr ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags}");
+			}
+
+			// Make sure the GCHandle we have is a weak one for custom types.
+			if (isCustomType)
+				xamarin_switch_gchandle (handle, true);
 		}
 
 		static unsafe MonoObject* CreateException (ExceptionType type, IntPtr arg0)
@@ -266,6 +290,9 @@ namespace ObjCRuntime {
 		{
 			GCHandle.FromIntPtr (gchandle).Free ();
 		}
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_switch_gchandle (IntPtr obj, [MarshalAs (UnmanagedType.I1)] bool to_weak);
 
 		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (IntPtr gchandle)

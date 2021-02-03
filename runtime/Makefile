@@ -424,6 +424,8 @@ MAC_LIBS =                   \
 	libxammac-system-debug.a \
 	libxammac-system-classic.a       \
 	libxammac-system-classic-debug.a \
+	libxamarin-coreclr.a             \
+	libxamarin-coreclr-debug.a       \
 
 #
 # libxammac[-debug].a: (no defines)
@@ -439,6 +441,9 @@ MAC_LIBS =                   \
 #    This is used linked into the native executable when using the system Mono (i.e. not)
 #    embedding the Mono runtime).
 #
+# libxamarin-coreclr.a:
+#    This is used when using the CoreCLR runtime instead of Mono.
+#
 
 all-local:: $(TARGETS)
 
@@ -446,6 +451,7 @@ define ObjTemplate
 DYNAMIC_DYLIB$(2)_OBJECTS   = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basename $$(src))$(3).dylib.$(1).o)
 STATIC_LAUNCHER$(2)_OBJECTS = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basename $$(src))$(3).static.$(1).o)
 SYSTEM_LAUNCHER$(2)_OBJECTS = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basename $$(src))$(3).system.$(1).o)
+CORECLR_LAUNCHER$(2)_OBJECTS = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basename $$(src))$(3).coreclr.$(1).o)
 
 .libs/mac/%$(3).dylib.$(1).o: %.m $$(SHARED_HEADERS) | .libs/mac
 	$$(call Q_2,OBJC,  [mac]) $(MAC_CLANG) -arch $(1) $(4) -c $$(MAC_OBJC_CFLAGS) $$(MAC_CFLAGS) -DDYNAMIC_MONO_RUNTIME -DDYLIB -o $$@ $$<
@@ -465,6 +471,12 @@ SYSTEM_LAUNCHER$(2)_OBJECTS = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basena
 .libs/mac/%$(3).system.$(1).o: %.s $$(SHARED_HEADERS) | .libs/mac
 	$$(call Q_2,ASM,   [mac]) $(MAC_CLANG) -arch $(1) $(4) -c $(MAC_CFLAGS) -DDYNAMIC_MONO_RUNTIME -o $$@ $$<
 
+.libs/mac/%$(3).coreclr.$(1).o: %.m $$(SHARED_HEADERS) | .libs/mac
+	$$(call Q_2,OBJC,  [mac]) $(MAC_CLANG) -arch $(1) $(4) $$(MAC_OBJC_CFLAGS) -c $$(MAC_STATIC_CFLAGS) -DCORECLR_RUNTIME -o $$@ $$<
+
+.libs/mac/%$(3).coreclr.$(1).o: %.s $$(SHARED_HEADERS) | .libs/mac
+	$$(call Q_2,ASM,   [mac]) $(MAC_CLANG) -arch $(1) $(4) -c $(MAC_CFLAGS) -DCORECLR_RUNTIME -o $$@ $$<
+
 .libs/mac/libxammac$(3).$(1).dylib: $$(DYNAMIC_DYLIB$(2)_OBJECTS)
 	$$(call Q_2,LD,    [mac]) $(MAC_CLANG) -arch $(1) -dynamiclib $$(MAC_LDFLAGS) -Wl,-install_name,libxammac$(3).dylib -o $$@ $$^ $$(addprefix -Xlinker -U -Xlinker ,$$(ALLOWED_UNDEFINED_SYMBOLS))
 
@@ -472,6 +484,9 @@ SYSTEM_LAUNCHER$(2)_OBJECTS = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basena
 	$$(call Q_2,LIB,   [mac]) xcrun libtool -no_warning_for_no_symbols -static -o $$@ $$^
 
 .libs/mac/libxammac-system$(3).$(1).a: $$(SYSTEM_LAUNCHER$(2)_OBJECTS)
+	$$(call Q_2,LIB,   [mac]) xcrun libtool -no_warning_for_no_symbols -static -o $$@ $$^
+
+.libs/mac/libxamarin-coreclr$(3).$(1).a: $$(CORECLR_LAUNCHER$(2)_OBJECTS)
 	$$(call Q_2,LIB,   [mac]) xcrun libtool -no_warning_for_no_symbols -static -o $$@ $$^
 
 endef
@@ -511,8 +526,17 @@ $(foreach arch,$(MAC_ARCHITECTURES),.libs/mac/extension-main.$(arch).o): EXTRA_D
 .libs/mac/libxammac-system.a: .libs/mac/libxammac-system.x86_64.a
 	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
 
+.libs/mac/libxamarin-coreclr-debug.a: .libs/mac/libxamarin-coreclr-debug.x86_64.a
+	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
+
+.libs/mac/libxamarin-coreclr.a: .libs/mac/libxamarin-coreclr.x86_64.a
+	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
+
 .libs/mac/libxammac-%.a: $(MACIOS_BINARIES_PATH)/libxammac-%.a | .libs/mac
 	$(Q) $(CP) $< $@
+
+.libs/mac/libxamarin%.a: .libs/mac/libxamarin%.x86_64.a
+	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
 
 RUNTIME_MAC_TARGETS_DIRS +=                                    \
 	.libs/mac                                                  \
@@ -575,6 +599,13 @@ $(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/xamarin/%.h: 
 	$$(Q) $$(CP) $$< $$@
 endef
 
+define DotNetCoreClrLibTemplate
+DOTNET_TARGETS += \
+	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-coreclr.a \
+	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-coreclr-debug.a \
+
+endef
+
 define DotNetLipoLibTemplate
 $(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/%: .libs/$(3)/% | $(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native
 	$$(call Q_2,LIPO,  [$1]) $(DEVICE_BIN_PATH)/lipo $$< $$(foreach arch,$(4),-extract_family $$(arch)) -output $$@
@@ -594,6 +625,8 @@ endef
 	$(Q) install_name_tool -id @rpath/$(@F) $@
 
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(eval $(call DotNetLibTemplate,$(platform),$(rid)))))
+
+$(foreach platform,$(DOTNET_CORECLR_PLATFORMS),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(eval $(call DotNetCoreClrLibTemplate,$(platform),$(rid)))))
 
 # If the RID represents fewer architectures than the library in .libs, then use the LipoTemplate, otherwise the CopyTemplate
 ifdef INCLUDE_IOS

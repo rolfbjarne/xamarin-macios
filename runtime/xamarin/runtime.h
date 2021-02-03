@@ -164,6 +164,13 @@ void xamarin_initialize ();
 void xamarin_initialize_embedded (); /* Public API, must not change - this is used by the embeddinator */
 
 void			xamarin_assertion_message (const char *msg, ...) __attribute__((__noreturn__));
+
+// two macros ensures any macro passed will
+// be expanded before being stringified
+#define STRINGIZE_DETAIL(x) #x
+#define STRINGIZE(x) STRINGIZE_DETAIL(x)
+#define			xamarin_assert(expression, ...) do { if (!(expression)) { xamarin_assertion_message ("Assertion '" #expression "' failed in " __FILE__ ":" STRINGIZE(__LINE__)); } } while (0);
+
 const char *	xamarin_get_bundle_path (); /* Public API */
 // Sets the bundle path (where the managed executable is). By default APP/Contents/MonoBundle.
 void			xamarin_set_bundle_path (const char *path); /* Public API */
@@ -207,6 +214,8 @@ const char *	xamarin_skip_encoding_flags (const char *encoding);
 void			xamarin_add_registration_map (struct MTRegistrationMap *map, bool partial);
 uint32_t		xamarin_find_protocol_wrapper_type (uint32_t token_ref);
 void			xamarin_release_block_on_main_thread (void *obj);
+void			xamarin_handle_bridge_exception (GCHandle gchandle, const char *method);
+bool			xamarin_get_initialization_finished ();
 
 bool			xamarin_has_managed_ref (id self);
 bool			xamarin_has_managed_ref_safe (id self);
@@ -243,6 +252,7 @@ void			xamarin_throw_product_exception (int code, const char *message);
 GCHandle		xamarin_create_product_exception (int code, const char *message);
 GCHandle		xamarin_create_product_exception_with_inner_exception (int code, GCHandle inner_exception_gchandle /* will be freed */, const char *message);
 NSString *		xamarin_print_all_exceptions (MonoObject *exc);
+NSString *		xamarin_print_all_exceptions_gchandle (GCHandle gchandle);
 
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
 MonoClass *		xamarin_get_nsnumber_class ();
@@ -272,6 +282,32 @@ GCHandle		xamarin_gchandle_new_weakref (MonoObject *obj, bool pinned);
 MonoObject *	xamarin_gchandle_get_target (GCHandle handle);
 void			xamarin_gchandle_free (GCHandle handle);
 MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle
+GCHandle		xamarin_gchandle_duplicate (GCHandle handle, enum XamarinGCHandleType handle_type);
+
+#if defined(CORECLR_RUNTIME)
+void			xamarin_mono_object_retain (MonoObject *mobj);
+void			xamarin_mono_object_release (MonoObject *mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoObject **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionMethod **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionAssembly **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionType **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoArray **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoString **mobj);
+#else
+// Nothing to do here.
+void			xamarin_mono_object_retain (MonoObject *mobj);
+#define			xamarin_mono_object_release(x)
+#define         xamarin_mono_object_safe_release(x) do { *x = NULL; } while (0);
+#endif
+
+MonoClass *
+xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
+
+void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
+void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
+void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
+void			xamarin_bridge_log_monoobject (MonoObject *obj, const char *stacktrace);
+MonoMethod *    xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method);
 
 /*
  * Look for an assembly in the app and open it.

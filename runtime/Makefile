@@ -20,13 +20,23 @@ SHIPPED_HEADERS +=         \
 	xamarin/runtime.h      \
 	xamarin/runtime-generated.h \
 
+CORECLR_SHIPPED_HEADERS = \
+	$(SHIPPED_HEADERS) \
+	xamarin/coreclr-bridge.h \
+
 SHARED_SOURCES += mono-runtime.m bindings.m bindings-generated.m shared.m runtime.m trampolines.m trampolines-invoke.m xamarin-support.m nsstring-localization.m trampolines-varargs.m
 SHARED_I386_SOURCES += trampolines-i386.m trampolines-i386-asm.s trampolines-i386-objc_msgSend.s trampolines-i386-objc_msgSendSuper.s trampolines-i386-objc_msgSend_stret.s trampolines-i386-objc_msgSendSuper_stret.s
 SHARED_X86_64_SOURCES += trampolines-x86_64.m trampolines-x86_64-asm.s trampolines-x86_64-objc_msgSend.s trampolines-x86_64-objc_msgSendSuper.s trampolines-x86_64-objc_msgSend_stret.s trampolines-x86_64-objc_msgSendSuper_stret.s
 SHARED_ARM64_SOURCES += trampolines-arm64.m trampolines-arm64-asm.s
-SHARED_HEADERS += shared.h product.h delegates.h runtime-internal.h $(SHARED_INC) $(SHIPPED_HEADERS) trampolines-internal.h slinked-list.h
+SHARED_HEADERS += shared.h product.h delegates.h runtime-internal.h $(SHARED_INC) $(SHIPPED_HEADERS) trampolines-internal.h slinked-list.h xamarin/coreclr-bridge.h
 
 SHARED_FILES = $(SHARED_SOURCES) $(SHARED_HEADERS) $(SHARED_I386_SOURCES) $(SHARED_X86_64_SOURCES) $(SHARED_ARM64_SOURCES)
+
+MONOVM_SOURCES = monovm-bridge.m
+MONOVM_HEADERS = xamarin/monovm-bridge.h
+
+CORECLR_SOURCES = coreclr-bridge.m
+CORECLR_HEADERS = xamarin/coreclr-bridge.h
 
 EXTRA_DEPENDENCIES = $(SHARED_HEADERS) $(TOP)/Make.config $(TOP)/mk/mono.mk
 
@@ -37,6 +47,17 @@ $(X86_64_SLICE): Makefile
 else
 X86_64_SLICE=
 endif
+
+coreclrhost.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/coreclr/hosts/inc/coreclrhost.h
+
+hostfxr.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/native/corehost/hostfxr.h
+
+coreclr_delegates.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/native/corehost/coreclr_delegates.h
+
+runtime.m: hostfxr.h coreclr_delegates.h coreclrhost.h
 
 xamarin/mono-runtime.h: mono-runtime.h.t4 exports.t4
 	$(Q_GEN) $(TT) $< -o $@
@@ -94,6 +115,13 @@ MONOTOUCH_X86_64_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_X86_6
 MONOTOUCH_ARM64_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_ARM64_SOURCES)))
 
 MONOTOUCH_X86_SOURCE_STEMS = $(MONOTOUCH_I386_SOURCE_STEMS)
+
+CORECLR_SOURCE_STEMS = $(MONOTOUCH_SOURCE_STEMS) $(patsubst %.s,%,$(patsubst %.m,%,$(CORECLR_SOURCES)))
+CORECLR_I386_SOURCE_STEMS = $(MONOTOUCH_I386_SOURCE_STEMS)
+CORECLR_X86_64_SOURCE_STEMS = $(MONOTOUCH_X86_64_SOURCE_STEMS)
+CORECLR_ARM64_SOURCE_STEMS = $(MONOTOUCH_ARM64_SOURCE_STEMS)
+
+CORECLR_X86_SOURCE_STEMS = $(MONOTOUCH_X86_SOURCE_STEMS)
 
 #
 # FrameworkTemplate contains the install targets and sets up some variables for frameworks
@@ -577,7 +605,7 @@ DOTNET_TARGETS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet.a \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet-debug.a \
 	$$(foreach lib,$$(DOTNET_$(2)_LIBRARIES),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(lib)) \
-	$$(foreach header,$$(SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
+	$$(foreach header,$$(CORECLR_SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
 
 DOTNET_TARGET_DIRS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native \
@@ -679,7 +707,7 @@ define DotNetLibXamarinTemplate
 DOTNET_$(4)_LIBDIR ?= $$(TOP)/builds/downloads/microsoft.netcore.app.runtime.$(3)/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/runtimes/$(3)/native
 DOTNET_$(4)_DYLIB_FLAGS = $(DOTNET_$(1)_DYLIB_FLAGS) -Wl,-install_name,libxamarin$(7).dylib -framework Foundation -framework CFNetwork -lz -L$(abspath $(DOTNET_$(4)_LIBDIR))
 
-DOTNET_$(4)_$(5)$(6)_OBJECTS   = $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(MONOTOUCH_SOURCE_STEMS)) $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(MONOTOUCH_$(shell echo $(5) | tr a-z A-Z)_SOURCE_STEMS))
+DOTNET_$(4)_$(5)$(6)_OBJECTS   = $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(CORECLR_SOURCE_STEMS)) $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(CORECLR_$(shell echo $(5) | tr a-z A-Z)_SOURCE_STEMS))
 
 .libs/$(1)/libxamarin$(7).$(5).a: $$(DOTNET_$(4)_$(5)$(6)_OBJECTS)
 	$$(Q) rm -f $$@

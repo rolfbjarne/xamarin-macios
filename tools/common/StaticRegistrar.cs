@@ -3780,9 +3780,14 @@ namespace Registrar {
 			if (isCtor) {
 				body_setup.AppendLine ("MonoClass *declaring_type = NULL;");
 				invoke.AppendLine ("declaring_type = mono_method_get_class (managed_method);");
-				invoke.AppendLine ("mthis = xamarin_new_nsobject (self, declaring_type, &exception_gchandle);");
+				if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+					invoke.AppendLine ("mthis = xamarin_new_nsobject_gchandle (self, declaring_type, &exception_gchandle);");
+					cleanup.AppendLine ("xamarin_gchandle_free (mthis);");
+				} else {
+					invoke.AppendLine ("mthis = xamarin_new_nsobject (self, declaring_type, &exception_gchandle);");
+					cleanup.AppendLine ("xamarin_mono_object_release (&mthis);");
+				}
 				invoke.AppendLine ("xamarin_mono_object_release (&declaring_type);");
-				cleanup.AppendLine ("xamarin_mono_object_release (&mthis);");
 				invoke.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 			}
 
@@ -3803,7 +3808,12 @@ namespace Registrar {
 				invoke.Append ("retval = ");
 			}
 
-			invoke.AppendLine ("mono_runtime_invoke (managed_method, {0}, arg_ptrs, {1});", isStatic ? "NULL" : "mthis", marshal_exception);
+			if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+				invoke.AppendLine ("xamarin_bridge_coreclr_runtime_invoke (managed_method, {0}, arg_ptrs, {1});", isStatic ? "NULL" : "mthis", marshal_exception);
+			} else {
+				invoke.AppendLine ("mono_runtime_invoke (managed_method, {0}, arg_ptrs, {1});", isStatic ? "NULL" : "mthis", marshal_exception);
+			}
+
 
 			body_setup.AppendLine ("GCHandle exception_gchandle = INVALID_GCHANDLE;");
 			// prepare the return value
@@ -3933,8 +3943,13 @@ namespace Registrar {
 			if (isInstanceCategory)
 				body.WriteLine ("id p0 = self;");
 			body_setup.WriteLine ("void *arg_ptrs [{0}];", num_arg);
-			if (!isStatic || isInstanceCategory)
-				body.WriteLine ("MonoObject *mthis = NULL;");
+			if (!isStatic || isInstanceCategory) {
+				if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+					body.WriteLine ("GCHandle mthis = INVALID_GCHANDLE;");
+				} else {
+					body.WriteLine ("MonoObject *mthis = NULL;");
+				}
+			}
 			
 			if (isCtor) {
 				body.WriteLine ("bool has_nsobject = xamarin_has_nsobject (self, &exception_gchandle);");
@@ -3947,8 +3962,14 @@ namespace Registrar {
 
 			if ((!isStatic || isInstanceCategory) && !isCtor) {
 				body.WriteLine ("if (self) {");
-				body.WriteLine ("mthis = xamarin_get_managed_object_for_ptr_fast (self, &exception_gchandle);");
-				cleanup.AppendLine ($"xamarin_mono_object_release (&mthis);");
+				if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+					body_setup.AppendLine ($"bool free_mthis = false;");
+					body.WriteLine ("mthis = xamarin_get_gchandle_for_ptr_fast (self, &exception_gchandle, &free_mthis);");
+					cleanup.AppendLine ($"if (free_mthis) xamarin_gchandle_free (mthis);");
+				} else {
+					body.WriteLine ("mthis = xamarin_get_managed_object_for_ptr_fast (self, &exception_gchandle);");
+					cleanup.AppendLine ($"xamarin_mono_object_release (&mthis);");
+				}
 				body.WriteLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 				body.WriteLine ("}");
 			}
@@ -3956,9 +3977,13 @@ namespace Registrar {
 			// no locking should be required here, it doesn't matter if we overwrite the field (it'll be the same value).
 			body.WriteLine ("if (!managed_method) {");
 			body.Write ("GCHandle reflection_method_handle = ");
-			if (isGeneric)
-				body.Write ("xamarin_get_generic_method_from_token (mthis, ");
-			else
+			if (isGeneric) {
+				if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+					body.Write ("xamarin_get_generic_method_from_token_with_gchandle (mthis, ");
+				} else {
+					body.Write ("xamarin_get_generic_method_from_token (mthis, ");
+				}
+			} else
 				body.Write ("xamarin_get_method_from_token (");
 
 			if (merge_bodies) {
@@ -3978,7 +4003,12 @@ namespace Registrar {
 			body.WriteLine ("}");
 
 			if (!isStatic && !isInstanceCategory && !isCtor) {
-				body.WriteLine ("xamarin_check_for_gced_object (mthis, _cmd, self, managed_method, &exception_gchandle);");
+
+				if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
+					body.WriteLine ("xamarin_check_for_gced_gchandle (mthis, _cmd, self, managed_method, &exception_gchandle);");
+				} else {
+					body.WriteLine ("xamarin_check_for_gced_object (mthis, _cmd, self, managed_method, &exception_gchandle);");
+				}
 				body.WriteLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 			}
 
@@ -4886,6 +4916,7 @@ namespace Registrar {
 			if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
 				header.WriteLine ("#define CORECLR_RUNTIME");
 				methods.WriteLine ("#define CORECLR_RUNTIME");
+				methods.WriteLine ("#include <xamarin/coreclr-bridge.h>");
 			}
 
 			header.WriteLine ("#include <stdarg.h>");

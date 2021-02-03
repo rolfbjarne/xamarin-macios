@@ -18,6 +18,10 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+#include <stddef.h>
+#include <sys/types.h>
+
 /*
  * Wrapper GCHandle functions that takes pointer sized handles instead of ints,
  * so that we can adapt our code incrementally to use pointers instead of ints
@@ -46,9 +50,8 @@ typedef gboolean (*GEqualFunc)     (gconstpointer a, gconstpointer b);
 #define GINT_TO_POINTER(i) ((void *) (long) (i))
 #endif
 
-#include <stdint.h>
-
 const char * xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix);
+const char * xamarin_initialize_runtime_bridge ();
 char *xamarin_get_mono_runtime_build_info (); // returns NULL if libmono couldn't be found (mono_get_runtime_build_info doesn't exist).
 
 
@@ -96,7 +99,12 @@ typedef struct _MonoObject MonoMethod;
 typedef struct _MonoMethod MonoMethod;
 #endif
 typedef struct _MonoMethodSignature MonoMethodSignature;
+#if defined (CORECLR_RUNTIME)
+// In Mono, MonoType is not related to MonoObject at all, but for the CoreCLR bridge we use the same struct representation for both types.
+typedef struct _MonoObject MonoType;
+#else
 typedef struct _MonoType MonoType;
+#endif
 
 /* metadata/class.h */
 typedef struct MonoVTable MonoVTable;
@@ -111,11 +119,13 @@ typedef struct _MonoArray MonoArray;
 typedef struct _MonoObject MonoReflectionAssembly;
 // Same for MonoReflectionMethod
 typedef struct _MonoObject MonoReflectionMethod;
+// Same for MonoReflectionType
+typedef struct _MonoObject MonoReflectionType;
 #else
 typedef struct _MonoReflectionAssembly MonoReflectionAssembly;
 typedef struct _MonoReflectionMethod MonoReflectionMethod;
-#endif
 typedef struct _MonoReflectionType MonoReflectionType;
+#endif
 typedef struct _MonoException MonoException;
 typedef struct _MonoThread MonoThread;
 typedef struct _MonoThreadsSync MonoThreadsSync;
@@ -124,14 +134,24 @@ typedef struct _MonoObject MonoObject;
 typedef struct _MonoReferenceQueue MonoReferenceQueue;
 typedef void (*mono_reference_queue_callback) (void *user_data);
 
+#if defined (CORECLR_RUNTIME)
+#define mono_array_get(array,type,index,exception_gchandle) xamarin_bridge_get_array_object_value (array->gchandle, (int32_t) index, exception_gchandle);
+
+#define mono_array_setref(array,index,value,exception_gchandle)	\
+	do {	\
+		xamarin_bridge_set_array_object_value (array->gchandle, (int32_t) index, value->gchandle, exception_gchandle); \
+	} while (0)
+
+#else
 #define mono_array_addr(array,type,index) ((type*)(void*) mono_array_addr_with_size (array, sizeof (type), index))
-#define mono_array_get(array,type,index) ( *(type*)mono_array_addr ((array), type, (index)) )
-#define mono_array_setref(array,index,value)	\
+#define mono_array_get(array,type,index,exception_gchandle) ( *(type*)mono_array_addr ((array), type, (index)) )
+#define mono_array_setref(array,index,value,exception_gchandle)	\
 	do {	\
 		void **__p = (void **) mono_array_addr ((array), void*, (index));	\
 		mono_gc_wbarrier_set_arrayref ((array), __p, (MonoObject*)(value));	\
 		/* *__p = (value);*/	\
 	} while (0)
+#endif
 
 /* metadata/assembly.h */
 
@@ -253,7 +273,11 @@ typedef enum {
 	MONO_TYPE_SENTINEL   = 0x41,       /* Sentinel for varargs method signature */
 	MONO_TYPE_PINNED     = 0x45,       /* Local var that points to pinned object */
 
-	MONO_TYPE_ENUM       = 0x55        /* an enumeration */
+	MONO_TYPE_ENUM       = 0x55,       /* an enumeration */
+
+#if defined(CORECLR_RUNTIME)
+	MONO_TYPE_UNKNOWN    = 0xFF,
+#endif
 } MonoTypeEnum;
 
 /*
@@ -318,6 +342,10 @@ typedef void (*MonoFtnPtrEHCallback) (GCHandle gchandle);
 
 void mono_gc_init_finalizer_thread ();
 
+#if defined(CORECLR_RUNTIME)
+#include "xamarin/coreclr-bridge.h"
+#endif // CORECLR_RUNTIME
+
 /*
  * The functions we want to expose
  */
@@ -337,7 +365,14 @@ void mono_gc_init_finalizer_thread ();
 
 <# } #>
 
+#if defined(CORECLR_RUNTIME)
+<# foreach (var export in exports) { #>
 
+<#= export.DotNetIf #>MONO_API <#= export.ReturnType #>
+xamarin_bridge_<#= export.EntryPoint #> (<#= export.ArgumentSignature #>);
+<#= export.DotNetEndIf #><# } #>
+
+#endif // CORECLR_RUNTIME
 
 #ifdef __cplusplus
 } /* extern "C" */

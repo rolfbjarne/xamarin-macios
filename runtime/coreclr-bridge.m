@@ -8,6 +8,12 @@
 
 #if defined (CORECLR_RUNTIME)
 
+#if DEBUG
+#define TRACK_MONOOBJECTS
+#define TRACK_MONOOBJECTS_STACKTRACE
+#endif
+
+#include <pthread.h>
 #include <inttypes.h>
 
 #include "product.h"
@@ -18,6 +24,116 @@
 
 unsigned int coreclr_domainId = 0;
 void *coreclr_handle = NULL;
+
+#if defined (TRACK_MONOOBJECTS)
+static int _Atomic monoobject_count = 0;
+static pthread_mutex_t monoobject_dict_lock;
+static CFMutableDictionaryRef monoobject_dict = NULL;
+
+struct monoobject_tracked_entry {
+	char *managed;
+	void *addresses [128];
+	int frames;
+	char *native;
+};
+#endif // defined (TRACK_MONOOBJECTS)
+
+#if defined (TRACK_MONOOBJECTS_STACKTRACE)
+static char *
+get_stacktrace (void **addresses, int frames)
+{
+	// get the symbols for the addresses
+	char** strs = backtrace_symbols (addresses, frames);
+
+	// compute the total length of all the symbols, adding 1 for every line (for the newline)
+	size_t length = 0;
+	int i;
+	for (i = 0; i < frames; i++)
+		length += strlen (strs [i]) + 1;
+	length++;
+
+	// format the symbols as one long string with newlines
+	char *rv = (char *) calloc (1, length);
+	char *buffer = rv;
+	size_t left = length;
+	for (i = 0; i < frames; i++) {
+		snprintf (buffer, left, "%s\n", strs [i]);
+		size_t slen = strlen (strs [i]) + 1;
+		left -= slen;
+		buffer += slen;
+	}
+	free (strs);
+
+	return rv;
+}
+#endif // defined (TRACK_MONOOBJECTS_STACKTRACE)
+
+#if defined (TRACK_MONOOBJECTS)
+void
+xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
+{
+	// create a new entry
+	struct monoobject_tracked_entry *value = (struct monoobject_tracked_entry *) calloc (1, sizeof (struct monoobject_tracked_entry));
+	// add stack traces if we have them / they've been been requested
+	value->managed = stacktrace ? xamarin_strdup_printf ("%s", stacktrace) : NULL;
+#if defined (TRACK_MONOOBJECTS_STACKTRACE)
+	value->frames = backtrace ((void **) &value->addresses, sizeof (value->addresses) / sizeof (&value->addresses [0]));
+#endif
+
+	// insert into our dictionary of monoobjects
+	pthread_mutex_lock (&monoobject_dict_lock);
+	CFDictionarySetValue (monoobject_dict, mobj, value);
+	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	atomic_fetch_add (&monoobject_count, 1);
+}
+
+void
+xamarin_bridge_dump_monoobjects ()
+{
+	// dump the monoobject's that haven't been freed (max 10 entries).
+	pthread_mutex_lock (&monoobject_dict_lock);
+	unsigned int length = (unsigned int) CFDictionaryGetCount (monoobject_dict);
+	MonoObject** keys = (MonoObject **) calloc (1, sizeof (void*) * length);
+	char** values = (char **) calloc (1, sizeof (char*) * length);
+	CFDictionaryGetKeysAndValues (monoobject_dict, (const void **) keys, (const void **) values);
+	fprintf (stderr, "There were %i MonoObjects created, and %i were not freed.\n", (int) monoobject_count, (int) length);
+	unsigned int items_to_show = length > 10 ? 10 : length;
+	if (items_to_show > 0) {
+		fprintf (stderr, "Showing the first %i (of %i) MonoObjects:\n", items_to_show, length);
+		for (unsigned int i = 0; i < items_to_show; i++) {
+			MonoObject *obj = keys [i];
+			struct monoobject_tracked_entry *value = (struct monoobject_tracked_entry *) values [i];
+#if defined (TRACK_MONOOBJECTS_STACKTRACE)
+			if (value->native == NULL)
+				value->native = get_stacktrace (value->addresses, value->frames);
+#endif
+			fprintf (stderr, "Object %i/%i %p RC: %i\n", i + 1, (int) length, obj, (int) obj->reference_count);
+			if (value->managed && *value->managed)
+				fprintf (stderr, "\tManaged stack trace:\n%s\n", value->managed);
+			if (value->native && *value->native)
+				fprintf (stderr, "\tNative stack trace:\n%s\n", value->native);
+		}
+	} else {
+		fprintf (stderr, "✅ No leaked MonoObjects!\n");
+	}
+	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	free (keys);
+	free (values);
+}
+
+static void
+monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
+{
+	struct monoobject_tracked_entry* v = (struct monoobject_tracked_entry *) value;
+	xamarin_free (v->managed);
+	if (v->native)
+		free (v->native);
+	free (v);
+}
+
+#endif // defined (TRACK_MONOOBJECTS)
 
 struct TrackedObjectInfo {
 	id handle;
@@ -32,6 +148,18 @@ xamarin_bridge_setup ()
 void
 xamarin_bridge_initialize ()
 {
+#if defined (TRACK_MONOOBJECTS)
+	// Initialize some debug stuff
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init (&attr);
+	pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
+	pthread_mutex_init (&monoobject_dict_lock, &attr);
+	pthread_mutexattr_destroy (&attr);
+
+	CFDictionaryValueCallBacks value_callbacks = { 0 };
+	value_callbacks.release = monoobject_dict_free_value;
+	monoobject_dict = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, NULL, &value_callbacks);
+#endif // defined (TRACK_MONOOBJECTS)
 }
 
 static bool reference_tracking_end = false;
@@ -230,6 +358,12 @@ xamarin_mono_object_release (MonoObject **mobj_ref)
 	}
 
 	*mobj_ref = NULL;
+#if defined (TRACK_MONOOBJECTS)
+	pthread_mutex_lock (&monoobject_dict_lock);
+	CFDictionaryRemoveValue (monoobject_dict, mobj);
+	pthread_mutex_unlock (&monoobject_dict_lock);
+#endif
+
 }
 
 /* Implementation of the Mono Embedding API */
@@ -354,6 +488,10 @@ mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const cha
 
 	if (rv != 0)
 		xamarin_assertion_message ("mono_jit_exec failed: %i\n", rv);
+
+#if defined (TRACK_MONOOBJECTS)
+	xamarin_bridge_dump_monoobjects ();
+#endif
 
 	return (int) exitCode;
 }

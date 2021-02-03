@@ -12,8 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ObjectiveC;
 using System.Text;
 
 using Foundation;
@@ -69,10 +70,61 @@ namespace ObjCRuntime {
 			NSLog (message);
 		}
 
+		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
+		{
+			delegate* unmanaged<void> beginEndCallback = (delegate* unmanaged<void>) options->reference_tracking_begin_end_callback;
+			delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
+			delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
+			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);
+
+			Bridge.UnhandledExceptionPropagation += UnhandledExceptionPropagationHandler;
+
+			if (options->xamarin_objc_msgsend != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSend, options->xamarin_objc_msgsend);
+
+			if (options->xamarin_objc_msgsend_fpret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendFpret, options->xamarin_objc_msgsend_fpret);
+
+			if (options->xamarin_objc_msgsend_stret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendStret, options->xamarin_objc_msgsend_stret);
+
+			if (options->xamarin_objc_msgsend_super != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuper, options->xamarin_objc_msgsend_super);
+
+			if (options->xamarin_objc_msgsend_super_stret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
+		}
+
+		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
+		{
+			var exceptionHandler = (delegate* unmanaged<IntPtr, void>) options->unhandled_exception_handler;
+			context = AllocGCHandle (exception);
+			return exceptionHandler;
+		}
+
+		// Size: 2 pointers
+		internal struct TrackedObjectInfo {
+			public IntPtr Handle;
+			public NSObject.Flags Flags;
+		}
+
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
-			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
-			Console.WriteLine ("Not implemented: RegisterToggleReferenceCoreCLR");
+			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
+
+			unsafe {
+				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;
+				tracked_info->Handle = handle;
+				tracked_info->Flags = obj.FlagsInternal;
+				obj.tracked_object_info = tracked_info;
+				obj.tracked_object_handle = gchandle;
+
+				xamarin_log ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) info).ToString ("x")} Flags={tracked_info->Flags}");
+			}
+
+			// Make sure the GCHandle we have is a weak one for custom types.
+			if (isCustomType)
+				xamarin_switch_gchandle (handle, true);
 		}
 
 		static unsafe MonoObject* CreateException (ExceptionType type, IntPtr arg0)
@@ -132,8 +184,8 @@ namespace ObjCRuntime {
 		static unsafe void SetPendingException (MonoObject* exception_obj)
 		{
 			var exc = (Exception) GetMonoObjectTarget (exception_obj);
-			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
-			Console.WriteLine ("Not implemented: SetPendingException ({0})", exc);;
+			xamarin_log ($"Runtime.SetPendingException ({exc})");
+			Bridge.SetMessageSendPendingExceptionForThread (exc);
 		}
 
 		unsafe static bool IsClassOfType (MonoObject *typeobj, TypeLookup match)
@@ -230,6 +282,9 @@ namespace ObjCRuntime {
 			GCHandle.FromIntPtr (gchandle).Free ();
 		}
 
+		[DllImport ("__Internal")]
+		static extern void xamarin_switch_gchandle (IntPtr obj, [MarshalAs (UnmanagedType.I1)] bool to_weak);
+
 		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (IntPtr gchandle)
 		{
@@ -259,6 +314,8 @@ namespace ObjCRuntime {
 
 			log_coreclr ($"GetMonoObjectImpl ({obj.GetType ()}) => 0x{rv.ToString ("x")} => GCHandle=0x{handle.ToString ("x")}");
 
+			// xamarin_bridge_log_monoobject (rv, Environment.StackTrace);
+
 			return rv;
 		}
 
@@ -278,6 +335,9 @@ namespace ObjCRuntime {
 			}
 		}
 
+		[DllImport ("__Internal", CharSet = CharSet.Auto)]
+		static extern void xamarin_bridge_log_monoobject (IntPtr mono_object, string stack_trace);
+
 		static IntPtr MarshalStructure<T> (T value) where T: struct
 		{
 			var rv = Marshal.AllocHGlobal (Marshal.SizeOf (typeof (T)));
@@ -293,9 +353,19 @@ namespace ObjCRuntime {
 			if (obj is bool b) {
 				// Only write a single byte for bools
 				Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
+			} else if (obj is char c) {
+				Marshal.WriteInt16 (ptr, (short) c);
 			} else {
 				Marshal.StructureToPtr (obj, ptr, false);
 			}
+		}
+
+		static IntPtr ObjectToString (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle);
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.ToString ());
 		}
 
 		static IntPtr WriteStructure (object obj)
@@ -341,10 +411,10 @@ namespace ObjCRuntime {
 			return (byte) obj.FlagsInternal;
 		}
 
-		static IntPtr GetMethodDeclaringType (MonoObjectPtr mobj)
+		static unsafe MonoObject * GetMethodDeclaringType (MonoObject * mobj)
 		{
 			var method = (MethodBase) GetMonoObjectTarget (mobj);
-			return GetMonoObject (method.DeclaringType);
+			return (MonoObject *) GetMonoObject (method.DeclaringType);
 		}
 
 		static IntPtr ObjectGetType (MonoObjectPtr mobj)
@@ -738,6 +808,9 @@ namespace ObjCRuntime {
 			// Only read a single byte for bools.
 			if (type == typeof (bool))
 				return Marshal.ReadByte (ptr) != 0;
+
+			if (type == typeof (char))
+				return (char) Marshal.ReadInt16 (ptr);
 
 			return Marshal.PtrToStructure (ptr, type);
 		}

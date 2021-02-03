@@ -154,11 +154,20 @@ void xamarin_initialize ();
 void xamarin_initialize_embedded (); /* Public API, must not change - this is used by the embeddinator */
 
 void			xamarin_assertion_message (const char *msg, ...) __attribute__((__noreturn__));
+
+// two macros ensures any macro passed will
+// be expanded before being stringified
+#define STRINGIZE_DETAIL(x) #x
+#define STRINGIZE(x) STRINGIZE_DETAIL(x)
+#define			xamarin_assert(expression, ...) do { if (!(expression)) { xamarin_assertion_message ("Assertion '" #expression "' failed in " __FILE__ ":" STRINGIZE(__LINE__)); } } while (0);
+
 const char *	xamarin_get_bundle_path (); /* Public API */
 // Sets the bundle path (where the managed executable is). By default APP/Contents/MonoBundle.
 void			xamarin_set_bundle_path (const char *path); /* Public API */
 MonoObject *	xamarin_get_managed_object_for_ptr_fast (id self, GCHandle *exception_gchandle);
+GCHandle		xamarin_get_gchandle_for_ptr_fast (id self, GCHandle *exception_gchandle, bool* free_handle);
 void			xamarin_check_for_gced_object (MonoObject *obj, SEL sel, id self, MonoMethod *method, GCHandle *exception_gchandle);
+void			xamarin_check_for_gced_gchandle (GCHandle obj, SEL sel, id self, MonoMethod *method, GCHandle *exception_gchandle);
 unsigned long 	xamarin_objc_type_size (const char *type);
 bool			xamarin_is_class_nsobject (MonoClass *cls);
 bool			xamarin_is_class_inativeobject (MonoClass *cls);
@@ -215,8 +224,10 @@ void			xamarin_bridge_free_mono_signature (MonoMethodSignature **signature);
 bool			xamarin_register_monoassembly (MonoAssembly *assembly, GCHandle *exception_gchandle);
 void			xamarin_install_nsautoreleasepool_hooks ();
 void			xamarin_enable_new_refcount ();
+void			xamarin_add_internal_call (const char *name, const void *method);
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
+GCHandle		xamarin_new_nsobject_gchandle (id self, MonoClass *klass, GCHandle *exception_gchandle);
 bool			xamarin_has_managed_ref (id self);
 bool			xamarin_has_managed_ref_safe (id self);
 void			xamarin_switch_gchandle (id self, bool to_weak);
@@ -291,6 +302,9 @@ MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target a
 typedef id (*xamarin_get_handle_func) (MonoObject *info);
 MonoToggleRefStatus	xamarin_gc_toggleref_callback (uint8_t flags, id handle, xamarin_get_handle_func get_handle, MonoObject *info);
 void				xamarin_gc_event (MonoGCEvent event);
+
+void			xamarin_bridge_log_monoobject (MonoObject *obj, const char *stacktrace);
+MonoMethod *    xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method);
 
 /*
  * In MonoVM MonoObjects are tracked in memory/the stack directly by the GC, but that doesn't

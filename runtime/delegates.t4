@@ -375,6 +375,7 @@
 			"enum XamarinGCHandleType", "GCHandleType", "type"
 		) {
 			WrappedManagedFunction = "CreateGCHandle",
+			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},
 
@@ -456,6 +457,7 @@
 			"GCHandle", "IntPtr", "gchandle"
 		) {
 			WrappedManagedFunction = "GetMonoObject",
+			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},
 

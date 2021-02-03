@@ -30,6 +30,10 @@ using System.Threading;
 using System.Drawing;
 #endif
 
+#if NET
+using System.Runtime.InteropServices.ObjectiveC;
+#endif
+
 using ObjCRuntime;
 #if !COREBUILD
 #if MONOTOUCH
@@ -48,6 +52,9 @@ namespace Foundation {
 		NSObjectFlag () {}
 	}
 
+#if NET && !COREBUILD
+	[TrackedNativeReference]
+#endif
 	[StructLayout (LayoutKind.Sequential)]
 	public partial class NSObject 
 #if !COREBUILD
@@ -68,7 +75,32 @@ namespace Foundation {
 
 		IntPtr handle;
 		IntPtr super; /* objc_super* */
-		Flags flags;
+		Flags actual_flags;
+
+#if NET
+		internal unsafe Runtime.TrackedObjectInfo* tracked_object_info;
+		internal GCHandle? tracked_object_handle;
+#endif
+
+		unsafe Flags flags {
+			get {
+#if NET
+				// Get back the InFinalizerQueue flag, it's the only flag we'll set in the tracked object info structure.
+				if (tracked_object_info != null && ((tracked_object_info->Flags) & Flags.InFinalizerQueue) == Flags.InFinalizerQueue)
+					actual_flags |= Flags.InFinalizerQueue;
+
+#endif
+				return actual_flags;
+			}
+			set {
+				actual_flags = value;
+#if NET
+				// Update the flags value that we can access from the toggle ref callback as well.
+				if (tracked_object_info != null)
+					tracked_object_info->Flags = value;
+#endif
+			}
+		}
 
 		// This enum has a native counterpart in runtime.h
 		[Flags]
@@ -207,11 +239,51 @@ namespace Foundation {
 			return class_ptr;
 		}
 
+#if NET
+		internal void SetHandleDirectly (IntPtr handle)
+		{
+			this.handle = handle;
+		}
+
+		internal void SetFlagsDirectly (byte flags)
+		{
+			this.flags = (Flags) flags;
+		}
+
+		internal Flags GetFlagsDirectly ()
+		{
+			return this.flags;
+		}
+#endif
+
+#if NET
+		[DllImport ("__Internal")]
+		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain, bool user_type);
+#endif
+
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
 		[DllImport ("__Internal")]
 		static extern void xamarin_release_managed_ref (IntPtr handle, bool user_type);
+
+		static void RegisterToggleRefIndirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting RegisterToggleRef will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void RegisterToggleReference (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				Runtime.RegisterToggleReferenceCoreCLR (obj, handle, isCustomType);
+				return;
+			}
+#endif
+
+			RegisterToggleRefIndirection (obj, handle, isCustomType);
+		}
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()
@@ -238,7 +310,7 @@ namespace Foundation {
 				return;
 			
 			IsRegisteredToggleRef = true;
-			RegisterToggleRef (this, Handle, allowCustomTypes);
+			RegisterToggleReference (this, Handle, allowCustomTypes);
 		}
 
 		private void InitializeObject (bool alloced) {
@@ -305,6 +377,10 @@ namespace Foundation {
 			}
 			xamarin_release_managed_ref (handle, user_type);
 			FreeData ();
+#if NET
+			if (tracked_object_handle.HasValue)
+				tracked_object_handle.Value.Free ();
+#endif
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)

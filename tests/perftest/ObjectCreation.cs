@@ -7,7 +7,7 @@ using BenchmarkDotNet.Attributes;
 
 using Bindings.Test;
 
-namespace PerfTest {
+namespace CoreCLRPerfTest {
 	public class ObjectCreation {
 
 		[Register ("CustomClass")]

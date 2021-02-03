@@ -96,7 +96,9 @@ xamarin_marshal_return_value_impl (MonoType *mtype, const char *type, MonoObject
 
 			if (desc && desc->bindas [0].original_type_handle != INVALID_GCHANDLE) {
 				MonoReflectionType *original_type = (MonoReflectionType *) xamarin_gchandle_get_target (desc->bindas [0].original_type_handle);
-				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), mono_reflection_type_get_type (original_type), method, (void *) INVALID_TOKEN_REF, exception_gchandle);
+				MonoType *original_tp = mono_reflection_type_get_type (original_type);
+				xamarin_mono_object_release (&original_type);
+				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), original_tp, method, (void *) INVALID_TOKEN_REF, exception_gchandle);
 			} else if (r_klass == mono_get_string_class ()) {
 				return xamarin_string_to_nsstring ((MonoString *) retval, retain);
 			} else if (xamarin_is_class_array (r_klass)) {
@@ -1489,8 +1491,12 @@ xamarin_smart_enum_to_nsstring (MonoObject *value, void *context /* token ref */
 
 		if (retval == NULL)
 			return NULL;
-		return xamarin_get_nsobject_handle (retval);
 
+		id retval_handle = xamarin_get_nsobject_handle (retval);
+
+		xamarin_mono_object_release (&retval);
+
+		return retval_handle;
 	}
 }
 
@@ -1498,7 +1504,7 @@ void *
 xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
 	guint32 context_ref = GPOINTER_TO_UINT (context);
-	MonoObject *obj;
+	MonoObject *obj = NULL;
 
 	if (context_ref == INVALID_TOKEN_REF) {
 		// This requires the dynamic registrar to invoke the correct conversion function
@@ -1511,14 +1517,19 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 		MonoMethod *managed_method;
 		void *arg_ptrs [1];
 		MonoObject *exception = NULL;
+		MonoObject *arg0 = NULL;
 
 		managed_method = xamarin_get_managed_method_for_token (context_ref /* token ref */, exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE) return NULL;
 
-		arg_ptrs [0] = xamarin_get_nsobject_with_type_for_ptr (value, false, xamarin_get_parameter_type (managed_method, 0), exception_gchandle);
+		arg0 = xamarin_get_nsobject_with_type_for_ptr (value, false, xamarin_get_parameter_type (managed_method, 0), exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE) return NULL;
 
+		arg_ptrs [0] = arg0;
+
 		obj = mono_runtime_invoke (managed_method, NULL, arg_ptrs, &exception);
+
+		xamarin_mono_object_release (&arg0);
 
 		if (exception) {
 			*exception_gchandle = xamarin_gchandle_new (exception, FALSE);
@@ -1531,6 +1542,9 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 		ptr = xamarin_calloc (size);
 	void *value_ptr = mono_object_unbox (obj);
 	memcpy (ptr, value_ptr, size);
+
+	xamarin_mono_object_release (&obj);
+
 	return ptr;
 }
 
@@ -1551,8 +1565,11 @@ xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_
 {
 	id *buf = NULL;
 	NSArray *rv = NULL;
+
+#if !defined (CORECLR_RUNTIME)	
 	size_t element_size = 0;
 	char *ptr = NULL;
+#endif
 
 	if (array == NULL)
 		return NULL;
@@ -1564,18 +1581,27 @@ xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_
 	buf = (id *) malloc (sizeof (id) * length);
 	MonoClass *element_class = mono_class_get_element_class (mono_object_get_class ((MonoObject *) array));
 	bool is_value_type = mono_class_is_valuetype (element_class);
+
+#if !defined (CORECLR_RUNTIME)
 	if (is_value_type) {
 		element_size = (size_t) mono_class_value_size (element_class, NULL);
 		ptr = (char *) mono_array_addr_with_size (array, (int) element_size, 0);
 	}
+#endif
+
 	for (unsigned long i = 0; i < length; i++) {
 		MonoObject *value;
 		if (is_value_type) {
+#if defined (CORECLR_RUNTIME)
+			value = mono_array_get (array, "ignored", i);
+#else
 			value = mono_value_box (mono_domain_get (), element_class, ptr + element_size * i);
+#endif
 		} else {
 			value = mono_array_get (array, MonoObject *, i);
 		}
 		buf [i] = convert (value, context, exception_gchandle);
+		xamarin_mono_object_release (&value);
 		if (*exception_gchandle != INVALID_GCHANDLE) {
 			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);
 			goto exception_handling;
@@ -1589,6 +1615,7 @@ exception_handling:
 	return rv;
 }
 
+// Return value: NULL, or a retained MonoArray* the caller must release with xamarin_mono_object_release.
 MonoArray *
 xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managedElementType, xamarin_id_to_managed_func convert, void *context, GCHandle *exception_gchandle)
 {
@@ -1604,21 +1631,34 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 	bool is_value_type = mono_class_is_valuetype (managedElementType);
 	MonoObject *mobj;
 	void *valueptr = NULL;
+#if !defined (CORECLR_RUNTIME)
 	size_t element_size = 0;
 	char *ptr = NULL;
+#endif
 
 	if (is_value_type) {
+#if !defined (CORECLR_RUNTIME)
 		element_size = (size_t) mono_class_value_size (managedElementType, NULL);
 		ptr = (char *) mono_array_addr_with_size (rv, (int) element_size, 0);
+#endif
 	}
 	for (unsigned long i = 0; i < length; i++) {
 		if (is_value_type) {
 			valueptr = convert ([array objectAtIndex: i], valueptr, managedElementType, context, exception_gchandle);
+#if defined (CORECLR_RUNTIME)
+			MonoObject *boxed = mono_value_box (NULL, managedElementType, valueptr);
+			xamarin_bridge_set_array_object_value (rv->gchandle, (int32_t) i, boxed->gchandle, exception_gchandle);
+			xamarin_mono_object_release (&boxed);
+#else
 			memcpy (ptr, valueptr, element_size);
 			ptr += element_size;
+#endif
 		} else {
 			mobj = (MonoObject *) convert ([array objectAtIndex: i], NULL, managedElementType, context, exception_gchandle);
-			mono_array_setref (rv, i, mobj);
+			if (*exception_gchandle == INVALID_GCHANDLE) {
+				mono_array_setref (rv, i, mobj, exception_gchandle);
+				xamarin_mono_object_release (&mobj);
+			}
 		}
 		if (*exception_gchandle != INVALID_GCHANDLE) {
 			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);

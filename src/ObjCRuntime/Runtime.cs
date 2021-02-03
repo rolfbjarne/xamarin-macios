@@ -156,6 +156,17 @@ namespace ObjCRuntime {
 #endif
 			IntPtr AssemblyLocations;
 
+#if NET
+			public IntPtr reference_tracking_begin_end_callback;
+			public IntPtr reference_tracking_is_referenced_callback;
+			public IntPtr reference_tracking_tracked_object_entered_finalization;
+			public IntPtr unhandled_exception_handler;
+			public IntPtr xamarin_objc_msgsend;
+			public IntPtr xamarin_objc_msgsend_fpret;
+			public IntPtr xamarin_objc_msgsend_stret;
+			public IntPtr xamarin_objc_msgsend_super;
+			public IntPtr xamarin_objc_msgsend_super_stret;
+#endif
 			public bool IsSimulator {
 				get {
 					return (Flags & InitializationFlags.IsSimulator) == InitializationFlags.IsSimulator;
@@ -173,6 +184,14 @@ namespace ObjCRuntime {
 		}
 
 		internal static unsafe InitializationOptions* options;
+
+#if NET
+		// FIXME: The linker can turn this into a constant
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal unsafe static bool IsCoreCLR {
+			get { return options->IsCoreCLR; }
+		}
+#endif
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static bool DynamicRegistrationSupported {
@@ -277,6 +296,11 @@ namespace ObjCRuntime {
 
 			objc_exception_mode = options->MarshalObjectiveCExceptionMode;
 			managed_exception_mode = options->MarshalManagedExceptionMode;
+
+#if NET
+			if (IsCoreCLR)
+				InitializeCoreCLRBridge (options);
+#endif
 
 			initialized = true;
 #if PROFILE
@@ -1856,8 +1880,23 @@ namespace ObjCRuntime {
 			}
 		}
 #endif
+
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public static void ThrowException (IntPtr gchandle)
+		{
+			if (gchandle == IntPtr.Zero)
+				return;
+			var handle = GCHandle.FromIntPtr (gchandle);
+			var exc = handle.Target as Exception;
+			handle.Free ();
+
+			if (exc == null)
+				return;
+
+			throw exc;
+		}
 	}
-	
+
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>
 	{
 		public bool Equals (IntPtr x, IntPtr y)

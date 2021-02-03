@@ -93,4 +93,25 @@
     <FrameworkReference Include="Microsoft.$(_PlatformName)" IsImplicitlyDefined="true" Pack="false" PrivateAssets="All" />
   </ItemGroup>
 
+  <!-- This a workaround until https://github.com/dotnet/runtime/issues/34193 is fixed and a proper solution can be implemented.
+       The problem is that by default we get the 'Microsoft.NETCore.App.Runtime.osx-x64' runtime pack (the core clr version), when we want the 'Microsoft.NETCore.App.Mono.Runtime.osx-x64' runtime pack.
+       This works around that by declaring a new known framework for mono's runtime pack, removing the default 'Microsoft.NETCore.App' framework reference, and adding the mono one.
+   -->
+  <ItemGroup Condition="'$(_PlatformName)' == 'macOS' And '$(_XamarinRuntime)' != 'CoreCLR' And '$(CUSTOM_DOTNET_VERSION)' != ''">
+    <KnownFrameworkReference Include="Microsoft.NETCore.App.Mono"
+                              TargetFramework="net6.0"
+                              RuntimeFrameworkName="Microsoft.NETCore.App.Mono"
+                              DefaultRuntimeFrameworkVersion="$(BundledNETCorePlatformsPackageVersion)"
+                              LatestRuntimeFrameworkVersion="$(BundledNETCorePlatformsPackageVersion)"
+                              RuntimeFrameworkVersion="$(CUSTOM_DOTNET_VERSION)"
+                              TargetingPackName="Microsoft.NETCore.App.Ref"
+                              TargetingPackVersion="$(_RuntimeFrameworkVersion)"
+                              RuntimePackNamePatterns="Microsoft.NETCore.App.Runtime.Mono.**RID**"
+                              RuntimePackRuntimeIdentifiers="osx-x64;osx-arm64"
+                              IsTrimmable="true"
+                              />
+    <FrameworkReference Remove="Microsoft.NETCore.App" />
+    <FrameworkReference Include="Microsoft.NETCore.App.Mono" IsImplicitlyDefined="true" Pack="false" PrivateAssets="All" RuntimeFrameworkVersion="$(CUSTOM_DOTNET_VERSION)" />
+  </ItemGroup>
+
 </Project>

@@ -38,7 +38,11 @@ namespace MonoTouchFixtures.Foundation {
 		
 		bool GetIsDirectBinding (NSObject obj)
 		{
+#if NET
+			int flags = (byte) typeof (NSObject).GetField ("actual_flags", BindingFlags.Instance | BindingFlags.GetField | BindingFlags.NonPublic).GetValue (obj);
+#else
 			int flags = (byte) typeof (NSObject).GetField ("flags", BindingFlags.Instance | BindingFlags.GetField | BindingFlags.NonPublic).GetValue (obj);
+#endif
 			return (flags & 4) == 4;
 		}
 		

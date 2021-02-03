@@ -153,6 +153,7 @@ struct InitializationOptions {
 	void *xamarin_objc_msgsend_super;
 	void *xamarin_objc_msgsend_stret;
 	void *xamarin_objc_msgsend_super_stret;
+	void *unhandled_exception_handler;
 #endif
 };
 
@@ -1261,6 +1262,7 @@ xamarin_initialize ()
 #endif
 
 #if defined (CORECLR_RUNTIME)
+	options.unhandled_exception_handler = (void *) &xamarin_coreclr_unhandled_exception_handler;
 	options.xamarin_objc_msgsend = (void *) xamarin_dyn_objc_msgSend;
 	options.xamarin_objc_msgsend_super = (void *) xamarin_dyn_objc_msgSendSuper;
 #if !defined(__aarch64__)

@@ -45,13 +45,28 @@ xamarin_log (const unsigned short *unicodeMessage)
 		length += sizeof (unsigned short);
 	NSString *msg = [[NSString alloc] initWithBytes: unicodeMessage length: length encoding: NSUTF16LittleEndianStringEncoding];
 
+#if defined (CORECLR_RUNTIME)
+	{
+		const char *utf8 = [msg UTF8String];
+		NSUInteger len = [msg lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; // does not include NULL
+		fwrite (utf8, 1, len, stderr);
+		if (len == 0 || utf8 [len - 1] != '\n')
+			fwrite ("\n", 1, 1, stderr);
+		fflush (stderr);
+		[msg release];
+		return;
+	}
+#endif
+
 #if TARGET_OS_WATCH && defined (__arm__) // maybe make this configurable somehow?
-	const char *utf8 = [msg UTF8String];
-	NSUInteger len = [msg lengthOfBytesUsingEncoding:NSUTF8StringEncoding] + 1; // does not include NULL
-	fwrite (utf8, 1, len, stdout);
-	if (len == 0 || utf8 [len - 1] != '\n')
-		fwrite ("\n", 1, 1, stdout);
-	fflush (stdout);
+	{
+		const char *utf8 = [msg UTF8String];
+		NSUInteger len = [msg lengthOfBytesUsingEncoding:NSUTF8StringEncoding] + 1; // does not include NULL
+		fwrite (utf8, 1, len, stdout);
+		if (len == 0 || utf8 [len - 1] != '\n')
+			fwrite ("\n", 1, 1, stdout);
+		fflush (stdout);
+	}
 #else
 	if (length > 4096) {
 		// Write in chunks of max 4096 characters; older versions of iOS seems to have a bug where NSLog may hang with long strings (!).

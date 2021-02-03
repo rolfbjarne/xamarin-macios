@@ -20,11 +20,15 @@ SHIPPED_HEADERS +=         \
 	xamarin/runtime.h      \
 	xamarin/runtime-generated.h \
 
+CORECLR_SHIPPED_HEADERS = \
+	$(SHIPPED_HEADERS) \
+	xamarin/coreclr-bridge.h \
+
 SHARED_SOURCES += mono-runtime.m bindings.m bindings-generated.m shared.m runtime.m trampolines.m trampolines-invoke.m xamarin-support.m nsstring-localization.m trampolines-varargs.m
 SHARED_I386_SOURCES += trampolines-i386.m trampolines-i386-asm.s trampolines-i386-objc_msgSend.s trampolines-i386-objc_msgSendSuper.s trampolines-i386-objc_msgSend_stret.s trampolines-i386-objc_msgSendSuper_stret.s
 SHARED_X86_64_SOURCES += trampolines-x86_64.m trampolines-x86_64-asm.s trampolines-x86_64-objc_msgSend.s trampolines-x86_64-objc_msgSendSuper.s trampolines-x86_64-objc_msgSend_stret.s trampolines-x86_64-objc_msgSendSuper_stret.s
 SHARED_ARM64_SOURCES += trampolines-arm64.m trampolines-arm64-asm.s
-SHARED_HEADERS += shared.h product.h delegates.h runtime-internal.h $(SHARED_INC) $(SHIPPED_HEADERS) trampolines-internal.h slinked-list.h
+SHARED_HEADERS += shared.h product.h delegates.h runtime-internal.h $(SHARED_INC) $(SHIPPED_HEADERS) trampolines-internal.h slinked-list.h xamarin/coreclr-bridge.h
 
 SHARED_FILES = $(SHARED_SOURCES) $(SHARED_HEADERS) $(SHARED_I386_SOURCES) $(SHARED_X86_64_SOURCES) $(SHARED_ARM64_SOURCES)
 
@@ -37,6 +41,17 @@ $(X86_64_SLICE): Makefile
 else
 X86_64_SLICE=
 endif
+
+coreclrhost.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/coreclr/hosts/inc/coreclrhost.h
+
+hostfxr.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/native/corehost/hostfxr.h
+
+coreclr_delegates.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/native/corehost/coreclr_delegates.h
+
+runtime.m: hostfxr.h coreclr_delegates.h coreclrhost.h
 
 xamarin/mono-runtime.h: mono-runtime.h.t4 exports.t4
 	$(Q_GEN) $(TT) $< -o $@
@@ -577,7 +592,7 @@ DOTNET_TARGETS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet.a \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet-debug.a \
 	$$(foreach lib,$$(DOTNET_$(2)_LIBRARIES),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(lib)) \
-	$$(foreach header,$$(SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
+	$$(foreach header,$$(CORECLR_SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
 
 DOTNET_TARGET_DIRS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native \
@@ -612,6 +627,13 @@ DOTNET_osx_x64_ARCHITECTURES=x86_64
 DOTNET_osx_arm64_ARCHITECTURES=arm64
 DOTNET_maccatalyst_x64_ARCHITECTURES=x86_64
 DOTNET_maccatalyst_arm64_ARCHITECTURES=arm64
+
+DOTNET_iphonesimulator_ARCHITECTURES=x86 x86_64
+DOTNET_iphoneos_ARCHITECTURES=armv7 armv7s arm64
+DOTNET_tvsimulator_ARCHITECTURES=x86_64
+DOTNET_tvos_ARCHITECTURES=arm64
+DOTNET_mac_ARCHITECTURES=x86_64 arm64
+DOTNET_maccatalyst_ARCHITECTURES=x86_64 arm64
 
 DOTNET_ios_x64_SDK_PLATFORM=iphonesimulator
 DOTNET_ios_x86_SDK_PLATFORM=iphonesimulator

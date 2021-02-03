@@ -162,7 +162,7 @@ namespace ObjCRuntime {
 #if NET
 			internal bool IsCoreCLR {
 				get {
-					return (Flags & InitializationFlags.IsSimulator) == InitializationFlags.IsCoreCLR;
+					return (Flags & InitializationFlags.IsCoreCLR) == InitializationFlags.IsCoreCLR;
 				}
 			}
 #endif
@@ -1598,8 +1598,8 @@ namespace ObjCRuntime {
 #endif
 
 #if MONOMAC
-		[DllImport ("__Internal")]
-		extern static void xamarin_log (string s);
+		//[DllImport ("__Internal")]
+		//extern static void xamarin_log (string s);
 		internal static void NSLog (string s)
 		{
 			if (PlatformHelper.CheckSystemVersion (10, 12)) {
@@ -1632,6 +1632,9 @@ namespace ObjCRuntime {
 			NSString.ReleaseNative (fmt);
 		}
 #endif // !COREBUILD
+
+		[DllImport ("__Internal", CharSet = CharSet.Unicode)]
+		internal extern static void xamarin_log (string s);
 
 		static int MajorVersion = -1;
 		static int MinorVersion = -1;

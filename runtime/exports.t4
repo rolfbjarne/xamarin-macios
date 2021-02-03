@@ -12,13 +12,17 @@
 			"MonoImage *",  "image",
 			"const char *", "name_space",
 			"const char *", "name"
-		),
+		) {
+			XamarinRuntime = RuntimeMode.MonoVM,
+		},
 
 		new Export ("MonoMethod *", "mono_class_get_method_from_name",
 			"MonoClass *", "klass",
 			"const char *", "name",
 			"int", "param_count"
-		),
+		) {
+			XamarinRuntime = RuntimeMode.MonoVM,
+		},
 
 		new Export ("mono_bool", "mono_class_is_assignable_from",
 			"MonoClass *", "klass",
@@ -122,20 +126,28 @@
 		new Export ("uint32_t", "mono_gchandle_new",
 			"MonoObject *", "obj",
 			"mono_bool", "pinned"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoObject *", "mono_gchandle_get_target",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gchandle_free",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("uint32_t", "mono_gchandle_new_weakref",
 			"MonoObject *", "obj",
 			"mono_bool", "track_resurrection"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_raise_exception",
 			"MonoException *", "ex"
@@ -147,7 +159,9 @@
 			"MonoArray *", "array",
 			"int", "size",
 			"uintptr_t", "idx"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoString *", "mono_string_new",
 			"MonoDomain *", "domain",
@@ -205,7 +219,9 @@
 			"MonoArray *", "arr",
 			"void *", "slot_ptr",
 			"MonoObject *", "value"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -264,6 +280,7 @@
 		)
 		{
 			AlternativeExpression = "return mono_raise_exception (exc);",
+			XamarinRuntime = RuntimeMode.MonoVM,
 		},
 
 		#endregion
@@ -543,8 +560,9 @@
 			"MonoGCFinalizerCallbacks *", "callbacks"
 		) {
 			XamarinRuntime = RuntimeMode.MonoVM,
+			HasBridgeFunction = false,
 		},
-		
+
 		#endregion
 
 		#region metadata/sgen-toggleref.h
@@ -552,11 +570,15 @@
 		new Export ("void", "mono_gc_toggleref_add",
 			"MonoObject *", "object",
 			"mono_bool", "strong_ref"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gc_toggleref_register_callback",
 			"MonoToggleRefCallback", "process_toggleref"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -629,7 +651,9 @@
 		new Export ("int", "mono_main",
 			"int",     "argc",
 			"char **", "argv"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export (true, "void", "mono_install_load_aot_data_hook",
 			"MonoLoadAotDataFunc", "load_func",
@@ -779,6 +803,7 @@
 		public DotNetMode Mode;
 		public RuntimeMode XamarinRuntime;
 		public bool HasCoreCLRBridgeFunction;
+		public bool HasBridgeFunction = true;
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)

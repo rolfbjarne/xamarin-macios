@@ -154,6 +154,13 @@ void xamarin_initialize ();
 void xamarin_initialize_embedded (); /* Public API, must not change - this is used by the embeddinator */
 
 void			xamarin_assertion_message (const char *msg, ...) __attribute__((__noreturn__));
+
+// two macros ensures any macro passed will
+// be expanded before being stringified
+#define STRINGIZE_DETAIL(x) #x
+#define STRINGIZE(x) STRINGIZE_DETAIL(x)
+#define			xamarin_assert(expression, ...) do { if (!(expression)) { xamarin_assertion_message ("Assertion '" #expression "' failed in " __FILE__ ":" STRINGIZE(__LINE__)); } } while (0);
+
 const char *	xamarin_get_bundle_path (); /* Public API */
 // Sets the bundle path (where the managed executable is). By default APP/Contents/MonoBundle.
 void			xamarin_set_bundle_path (const char *path); /* Public API */
@@ -203,12 +210,15 @@ unsigned char *	xamarin_load_aot_data (MonoAssembly *assembly, int size, gpointe
 void			xamarin_free_aot_data (MonoAssembly *assembly, int size, gpointer user_data, void *handle);
 MonoAssembly*	xamarin_assembly_preload_hook (MonoAssemblyName *aname, char **assemblies_path, void* user_data);
 void			xamarin_handle_bridge_exception (GCHandle gchandle, const char *method);
+bool			xamarin_get_initialization_finished ();
 void			xamarin_vm_initialize ();
 bool			xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues);
 void*			xamarin_pinvoke_override (const char *libraryName, const char *entrypointName);
 void			xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle);
 void			xamarin_bridge_register_product_assembly (GCHandle* exception_gchandle);
 bool			xamarin_register_monoassembly (MonoAssembly *assembly, GCHandle *exception_gchandle);
+void			xamarin_enable_new_refcount ();
+void			xamarin_add_internal_call (const char *name, const void *method);
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
 bool			xamarin_has_managed_ref (id self);
@@ -279,6 +289,19 @@ GCHandle		xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection
 MonoObject *	xamarin_gchandle_get_target (GCHandle handle);
 void			xamarin_gchandle_free (GCHandle handle);
 MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle
+GCHandle		xamarin_gchandle_duplicate (GCHandle handle, enum XamarinGCHandleType handle_type);
+
+typedef id (*xamarin_get_handle_func) (void *info);
+MonoToggleRefStatus	xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle, void *info);
+
+void			xamarin_gc_event (MonoGCEvent event);
+
+MonoClass *
+xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
+
+void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain, bool user_type);
+void			xamarin_bridge_log_monoobject (MonoObject *obj, const char *stacktrace);
+MonoMethod *    xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method);
 
 /*
  * In MonoVM MonoObjects are tracked in memory/the stack directly by the GC, but that doesn't
@@ -288,15 +311,38 @@ MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target a
  * The release function take a pointer to the variable that contains the MonoObject, and clears out the value,
  * to avoid running into use-after-free problems.
  */
+void			xamarin_mono_object_retain (MonoObject *mobj);
+#if defined(CORECLR_RUNTIME)
+extern "C++" void	xamarin_mono_object_release (MonoObject **mobj);
+extern "C++" void	xamarin_mono_object_release (MonoReflectionMethod **mobj);
+extern "C++" void	xamarin_mono_object_release (MonoReflectionAssembly **mobj);
+extern "C++" void	xamarin_mono_object_release (MonoReflectionType **mobj);
+extern "C++" void	xamarin_mono_object_release (MonoArray **mobj);
+extern "C++" void	xamarin_mono_object_release (MonoString **mobj);
+void			xamarin_mono_object_release_unsafe (MonoObject *mobj);
+#else
+// Nothing to do here.
+#define			xamarin_mono_object_release(x) do { *x = NULL; } while (0);
+#define			xamarin_mono_object_release_unsafe(x)
+#endif
+
+/*
 #if defined(CORECLR_RUNTIME)
 void			xamarin_mono_object_retain (MonoObject *mobj);
 void			xamarin_mono_object_release (MonoObject **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoObject **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionMethod **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionAssembly **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionType **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoArray **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoString **mobj);
 #else
 // Nothing to do here.
-#define			xamarin_mono_object_retain(x)
-#define			xamarin_mono_object_release(x) do { *x = NULL; } while (0);
+void			xamarin_mono_object_retain (MonoObject *mobj);
+#define			xamarin_mono_object_release(x)
+#define         xamarin_mono_object_safe_release(x) do { *x = NULL; } while (0);
 #endif
-
+*/
 
 /*
  * Look for an assembly in the app and open it.

@@ -1233,13 +1233,18 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 		void ThrowsICEIfDebug (TestDelegate code, string message, bool execute_release_mode = true)
 		{
-// The type checks have been disabled for now.
-//#if DEBUG
-//			Assert.Throws<InvalidCastException> (code, message);
-//#else
+#if CORECLR_RUNTIME
+			try {
+				code ();
+				Assert.Fail (message);
+			} catch (Exception e) {
+				Console.WriteLine ($"Expected exception: {e}");
+			}
+#else
+			// The type checks have been disabled for now.
 			if (execute_release_mode)
 				Assert.DoesNotThrow (code, message);
-//#endif
+#endif
 		}
 
 		[Test]

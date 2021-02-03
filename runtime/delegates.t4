@@ -180,6 +180,15 @@
 			OnlyDynamicUsage = false,
 		},
 
+		// Do not automatically unwrap the return value, because otherwise we might need to immediately wrap it in a GCHandle again.
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_get_generic_method_from_token_with_gchandle",
+			"GCHandle", "IntPtr", "obj_handle",
+			"unsigned int", "uint", "token_ref"
+		) {
+			WrappedManagedFunction = "GetGenericMethodFromToken",
+			OnlyDynamicUsage = false,
+		},
+
 		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_inative_object_static",
 			"id", "IntPtr", "obj",
 			"bool", "bool", "owns",
@@ -350,6 +359,7 @@
 			"enum XamarinGCHandleType", "GCHandleType", "type"
 		) {
 			WrappedManagedFunction = "CreateGCHandle",
+			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},
 
@@ -375,15 +385,264 @@
 			OnlyCoreCLR = true,
 		},
 
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_create_object",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "CreateObject",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_get_type_fullname",
+			"MonoObject *", "MonoObject *", "obj"
+		) {
+			WrappedManagedFunction = "GetTypeFullName",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_get_method_full_name",
+			"MonoObject *", "MonoObject *", "mobj"
+		) {
+			WrappedManagedFunction = "GetMethodFullName",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_method_returntype",
+			"MonoObject *", "MonoObject *", "method"
+		) {
+			WrappedManagedFunction = "GetMethodReturnType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_type",
+			"const char *", "IntPtr", "type_name"
+		) {
+			WrappedManagedFunction = "GetManagedType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void*", "IntPtr", "xamarin_bridge_write_structure",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "WriteStructure",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("bool", "bool", "xamarin_bridge_is_subclass_of",
+			"MonoObject *", "MonoObject *", "type1obj",
+			"MonoObject *", "MonoObject *", "type2obj",
+			"bool", "bool", "check_interfaces"
+		) {
+			WrappedManagedFunction = "IsSubclassOf",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("bool", "bool", "xamarin_bridge_is_enum",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "IsEnum",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_enum_basetype",
+			"MonoObject *", "MonoObject *", "gchandle"
+		) {
+			WrappedManagedFunction = "GetEnumBaseType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("bool", "bool", "xamarin_bridge_is_nullable",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "IsNullable",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_tostring",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "ObjectToString",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_mono_object_get_type",
+			"MonoObject *", "MonoObject *", "obj"
+		) {
+			WrappedManagedFunction = "MonoObjectGetType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_type_get_name",
+			"MonoObject *", "MonoObject *", "type"
+		) {
+			WrappedManagedFunction = "GetTypeName",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_type_get_name_space",
+			"MonoObject *", "MonoObject *", "type"
+		) {
+			WrappedManagedFunction = "GetTypeNamespace",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_element_class",
+			"MonoObject *", "MonoObject *", "classobj"
+		) {
+			WrappedManagedFunction = "GetElementClass",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_gc_reference_queue_create",
+			"void *", "IntPtr", "callback"
+		) {
+			WrappedManagedFunction = "CreateGCReferenceQueue",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_gc_reference_queue_add",
+			"GCHandle", "IntPtr", "queue_handle",
+			"GCHandle", "IntPtr", "obj",
+			"void *", "IntPtr", "user_data"
+		) {
+			WrappedManagedFunction = "GCReferenceQueueAdd",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_string_to_utf8",
+			"MonoObject *", "MonoObject *", "obj"
+		) {
+			WrappedManagedFunction = "StringToUtf8",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoString *", "IntPtr", "xamarin_bridge_new_string",
+			"const char *", "IntPtr", "text"
+		) {
+			WrappedManagedFunction = "NewString",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_mono_hash_table_create",
+			"void *", "IntPtr", "hash_func",
+			"void *", "IntPtr", "compare_func",
+			"int", "int", "type"
+		) {
+			WrappedManagedFunction = "CreateMonoHashTable",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_mono_hash_table_insert",
+			"GCHandle", "IntPtr", "gchandle",
+			"void *", "IntPtr", "key",
+			"GCHandle", "IntPtr", "value_gchandle"
+		) {
+			WrappedManagedFunction = "MonoHashTableInsert",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject*", "IntPtr", "xamarin_bridge_mono_hash_table_lookup",
+			"GCHandle", "IntPtr", "gchandle",
+			"void *", "IntPtr", "key"
+		) {
+			WrappedManagedFunction = "MonoHashTableLookup",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_nullable_element_type",
+			"MonoObject *", "MonoObject *", "typeobj"
+		) {
+			WrappedManagedFunction = "GetNullableElementType",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoArray*", "IntPtr", "xamarin_bridge_create_array",
+			"GCHandle", "IntPtr", "gchandle",
+			"uint64_t", "ulong", "elements"
+		) {
+			WrappedManagedFunction = "CreateArray",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("uint64_t", "ulong", "xamarin_bridge_get_array_length",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetArrayLength",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("uint8_t*", "IntPtr", "xamarin_bridge_get_array_data",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetArrayData",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_set_array_object_value",
+			"GCHandle", "IntPtr", "gchandle",
+			"int32_t", "int", "index",
+			"GCHandle", "IntPtr", "value"
+		) {
+			WrappedManagedFunction = "SetArrayObjectValue",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_array_object_value",
+			"GCHandle", "IntPtr", "gchandle",
+			"int32_t", "int", "index"
+		) {
+			WrappedManagedFunction = "GetArrayObjectValue",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_type_to_class",
+			"MonoObject *", "MonoObject *", "typeobj"
+		) {
+			WrappedManagedFunction = "TypeToClass",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_throw_exception",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "ThrowException",
+			OnlyDynamicUsage = false,
+			ExceptionHandling = false,
+		},
+
+		new XDelegate ("int32_t", "int", "xamarin_bridge_sizeof",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "SizeOf",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_box",
+			"GCHandle", "IntPtr", "gchandle",
+			"void *", "IntPtr", "value"
+		) {
+			WrappedManagedFunction = "Box",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
 		new XDelegate ("MonoObject*", "IntPtr", "xamarin_bridge_get_monoobject",
 			"GCHandle", "IntPtr", "gchandle"
 		) {
 			WrappedManagedFunction = "GetMonoObject",
+			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},
 
-		new XDelegate ("MonoObject *", "IntPtr", "xamarin_bridge_get_method_declaring_type",
-			"MonoObject *", "IntPtr", "gchandle"
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_method_declaring_type",
+			"MonoObject *", "MonoObject *", "method"
 		) {
 			WrappedManagedFunction = "GetMethodDeclaringType",
 			OnlyDynamicUsage = false,
@@ -417,10 +676,28 @@
 			OnlyCoreCLR = true,
 		},
 
-		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_type_to_class",
-			"MonoObject *", "MonoObject *", "typeobj"
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_find_method",
+			"GCHandle", "IntPtr", "klass",
+			"const char *", "IntPtr", "name",
+			"int", "int", "parameter_count"
 		) {
-			WrappedManagedFunction = "TypeToClass",
+			WrappedManagedFunction = "FindMethod",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_set_pending_exception_wrapper",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "SetPendingException",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoClass *", "IntPtr", "xamarin_bridge_lookup_class",
+			"enum XamarinLookupTypes", "Runtime.TypeLookup", "type"
+		) {
+			WrappedManagedFunction = "LookupType",
 			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},

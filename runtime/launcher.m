@@ -509,6 +509,7 @@ app_initialize (xamarin_initialize_data *data)
 			}
 		}
 
+#if !DOTNET
 		if (config_path != nil) {
 			NSString *config = [NSString stringWithContentsOfFile: config_path encoding: NSUTF8StringEncoding error: &error];
 			if (config != nil) {
@@ -517,6 +518,7 @@ app_initialize (xamarin_initialize_data *data)
 				// fprintf (stderr, PRODUCT ": Could not load config: %s\n", [config_path UTF8String]);
 			}
 		}
+#endif
 	}
 
 	/* other non-documented stuff... */	

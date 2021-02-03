@@ -599,7 +599,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					Messaging.void_objc_msgSend_IntPtr (handle, Selector.GetHandle ("doSomething:"), handle);
 					Assert.Fail ("Expected an MX8034 exception (B)");
 				} catch (RuntimeException mex) {
-					Assert.That (mex.Code, Is.EqualTo (8034).Or.EqualTo (8027), "Exception code (B)");
+					Assert.That (mex.Code, Is.EqualTo (8034).Or.EqualTo (8027).Or.EqualTo (8029), "Exception code (B)");
 					var failure = mex.ToString ();
 					Assert.That (failure, Does.Contain ("Failed to marshal the Objective-C object"), "Failed to marshal (B)");
 					Assert.That (failure, Does.Contain ("Additional information:"), "Additional information: (B)");

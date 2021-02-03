@@ -435,6 +435,13 @@
 			OnlyCoreCLR = true,
 		},
 
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_tostring",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "ObjectToString",
+			OnlyDynamicUsage = false,
+		},
+
 		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_box",
 			"MonoObject *", "MonoObject *", "typeobj",
 			"void *", "IntPtr", "value"

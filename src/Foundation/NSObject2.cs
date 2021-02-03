@@ -30,6 +30,10 @@ using System.Threading;
 using System.Drawing;
 #endif
 
+#if NET
+using System.Runtime.InteropServices.ObjectiveC;
+#endif
+
 using ObjCRuntime;
 #if !COREBUILD
 #if MONOTOUCH
@@ -48,6 +52,9 @@ namespace Foundation {
 		NSObjectFlag () {}
 	}
 
+#if NET && !COREBUILD
+	[ObjectiveCTrackedType]
+#endif
 	[StructLayout (LayoutKind.Sequential)]
 	public partial class NSObject 
 #if !COREBUILD
@@ -68,7 +75,32 @@ namespace Foundation {
 
 		IntPtr handle;
 		IntPtr super; /* objc_super* */
-		Flags flags;
+		Flags actual_flags;
+
+#if NET
+		internal unsafe Runtime.TrackedObjectInfo* tracked_object_info;
+		internal GCHandle? tracked_object_handle;
+#endif
+
+		unsafe Flags flags {
+			get {
+#if NET
+				// Get back the InFinalizerQueue flag, it's the only flag we'll set in the tracked object info structure.
+				if (tracked_object_info != null && ((tracked_object_info->Flags) & Flags.InFinalizerQueue) == Flags.InFinalizerQueue)
+					actual_flags |= Flags.InFinalizerQueue;
+
+#endif
+				return actual_flags;
+			}
+			set {
+				actual_flags = value;
+#if NET
+				// Update the flags value that we can access from the toggle ref callback as well.
+				if (tracked_object_info != null)
+					tracked_object_info->Flags = value;
+#endif
+			}
+		}
 
 		// This enum has a native counterpart in runtime.h
 		[Flags]
@@ -333,6 +365,10 @@ namespace Foundation {
 			}
 			xamarin_release_managed_ref (handle, user_type);
 			FreeData ();
+#if NET
+			if (tracked_object_handle.HasValue)
+				tracked_object_handle.Value.Free ();
+#endif
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)

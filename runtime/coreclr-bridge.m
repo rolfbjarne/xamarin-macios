@@ -11,6 +11,17 @@
 #include <inttypes.h>
 
 #include "product.h"
+
+#include <pthread.h>
+#include <objc/runtime.h>
+#include <execinfo.h>
+#include <sys/stat.h>
+#include <dlfcn.h>
+#include <inttypes.h>
+
+#include "product.h"
+#include "shared.h"
+#include "delegates.h"
 #include "runtime-internal.h"
 #include "xamarin/xamarin.h"
 #include "xamarin/coreclr-bridge.h"

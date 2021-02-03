@@ -14,9 +14,16 @@
 #endif
 
 #include <pthread.h>
+#include <objc/runtime.h>
+#include <execinfo.h>
+#include <sys/stat.h>
+#include <dlfcn.h>
 #include <inttypes.h>
 
 #include "product.h"
+#include "shared.h"
+#include "delegates.h"
+#include "runtime-internal.h"
 #include "xamarin/xamarin.h"
 #include "xamarin/coreclr-bridge.h"
 
@@ -68,10 +75,10 @@ get_stacktrace (void **addresses, int frames)
 }
 #endif // defined (TRACK_MONOOBJECTS_STACKTRACE)
 
-#if defined (TRACK_MONOOBJECTS)
 void
 xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
 {
+#if defined (TRACK_MONOOBJECTS)
 	// create a new entry
 	struct monoobject_tracked_entry *value = (struct monoobject_tracked_entry *) calloc (1, sizeof (struct monoobject_tracked_entry));
 	// add stack traces if we have them / they've been been requested
@@ -86,8 +93,10 @@ xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
 	pthread_mutex_unlock (&monoobject_dict_lock);
 
 	atomic_fetch_add (&monoobject_count, 1);
+#endif // defined (TRACK_MONOOBJECTS_STACKTRACE)
 }
 
+#if defined (TRACK_MONOOBJECTS)
 void
 xamarin_bridge_dump_monoobjects ()
 {

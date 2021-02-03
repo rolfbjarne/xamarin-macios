@@ -10,6 +10,7 @@
 #include <objc/runtime.h>
 #include <sys/stat.h>
 #include <dlfcn.h>
+#include <inttypes.h>
 
 #include "product.h"
 #include "shared.h"

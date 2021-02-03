@@ -413,6 +413,8 @@ xamarin_mono_object_release (MonoObject **mobj_ref)
 	if (mobj == NULL)
 		return;
 
+	xamarin_assert (mobj != (void *) 0xdeadf00d);
+
 	int rc = atomic_fetch_sub (&mobj->reference_count, 1) - 1;
 	if (rc == 0) {
 		if (mobj->gchandle != INVALID_GCHANDLE) {
@@ -434,7 +436,7 @@ xamarin_mono_object_release (MonoObject **mobj_ref)
 #endif
 	}
 
-	*mobj_ref = NULL;
+	*mobj_ref = (MonoObject *) 0xdeadf00d;
 }
 
 void

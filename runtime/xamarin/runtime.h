@@ -224,6 +224,7 @@ void			xamarin_bridge_free_mono_signature (MonoMethodSignature **signature);
 bool			xamarin_register_monoassembly (MonoAssembly *assembly, GCHandle *exception_gchandle);
 void			xamarin_install_nsautoreleasepool_hooks ();
 void			xamarin_enable_new_refcount ();
+void			xamarin_add_internal_call (const char *name, const void *method);
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
 GCHandle		xamarin_new_nsobject_gchandle (id self, MonoClass *klass, GCHandle *exception_gchandle);

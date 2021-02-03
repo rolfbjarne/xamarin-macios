@@ -8,6 +8,7 @@
 		<EmbeddedResourcesTestDirectory>$(RootTestsDirectory)\EmbeddedResources</EmbeddedResourcesTestDirectory>
 
 		<AssemblyOriginatorKeyFile>$(RootTestsDirectory)\..\product.snk</AssemblyOriginatorKeyFile>
+		<DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
 	</PropertyGroup>
 
 	<ItemGroup>

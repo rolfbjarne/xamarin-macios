@@ -108,7 +108,7 @@
                               IsTrimmable="true"
                               />
     <FrameworkReference Remove="Microsoft.NETCore.App" />
-    <FrameworkReference Include="Microsoft.NETCore.App.Mono" IsImplicitlyDefined="true" Pack="false" PrivateAssets="All" />
+    <FrameworkReference Include="Microsoft.NETCore.App.Mono" IsImplicitlyDefined="true" Pack="false" PrivateAssets="All" RuntimeFrameworkVersion="$(CUSTOM_DOTNET_VERSION)" />
   </ItemGroup>
 
 </Project>

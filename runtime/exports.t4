@@ -109,20 +109,28 @@
 		new Export ("uint32_t", "mono_gchandle_new",
 			"MonoObject *", "obj",
 			"mono_bool", "pinned"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoObject *", "mono_gchandle_get_target",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gchandle_free",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("uint32_t", "mono_gchandle_new_weakref",
 			"MonoObject *", "obj",
 			"mono_bool", "track_resurrection"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_raise_exception",
 			"MonoException *", "ex"
@@ -132,7 +140,9 @@
 			"MonoArray *", "array",
 			"int", "size",
 			"uintptr_t", "idx"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoString *", "mono_string_new",
 			"MonoDomain *", "domain",
@@ -187,7 +197,9 @@
 			"MonoArray *", "arr",
 			"void *", "slot_ptr",
 			"MonoObject *", "value"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -477,8 +489,9 @@
 			"MonoGCFinalizerCallbacks *", "callbacks"
 		) {
 			XamarinRuntime = RuntimeMode.MonoVM,
+			HasBridgeFunction = false,
 		},
-		
+
 		#endregion
 
 		#region metadata/sgen-toggleref.h
@@ -486,11 +499,15 @@
 		new Export ("void", "mono_gc_toggleref_add",
 			"MonoObject *", "object",
 			"mono_bool", "strong_ref"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gc_toggleref_register_callback",
 			"MonoToggleRefCallback", "process_toggleref"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -559,7 +576,9 @@
 		new Export ("int", "mono_main",
 			"int",     "argc",
 			"char **", "argv"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export (true, "void", "mono_install_load_aot_data_hook",
 			"MonoLoadAotDataFunc", "load_func",
@@ -671,7 +690,11 @@
 			"const char **", "propertyKeys",
 			"const char **", "propertyValues"
 		) {
+<<<<<<< HEAD
 			Mode = DotNetMode.OnlyDotNet,
+=======
+			IsDotNetOnly = true,
+>>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 		},
 
 		#endregion
@@ -702,8 +725,13 @@
 		public string AlternativeExpression;
 		public List<Arg> Arguments;
 		public bool Optional;
+<<<<<<< HEAD
 		public DotNetMode Mode;
 		public RuntimeMode XamarinRuntime;
+=======
+		public bool HasBridgeFunction = true;
+		public bool IsDotNetOnly;
+>>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)
@@ -712,23 +740,33 @@
 
 		public string DotNetIf {
 			get {
+<<<<<<< HEAD
 				switch (Mode) {
 				case DotNetMode.OnlyLegacy:
 					return "#if !DOTNET\n";
 				case DotNetMode.OnlyDotNet:
 					return "#if DOTNET\n";
 				}
+=======
+				if (IsDotNetOnly)
+					return "#if DOTNET\n";
+>>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 				return string.Empty;
 			}
 		}
 
 		public string DotNetEndIf {
 			get {
+<<<<<<< HEAD
 				switch (Mode) {
 				case DotNetMode.OnlyLegacy:
 				case DotNetMode.OnlyDotNet:
 					return "#endif\n";
 				}
+=======
+				if (IsDotNetOnly)
+					return "#endif\n";
+>>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 				return string.Empty;
 			}
 		}

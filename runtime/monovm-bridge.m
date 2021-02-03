@@ -417,6 +417,12 @@ xamarin_mono_object_retain (MonoObject *mobj)
 	// Nothing to do here
 }
 
+void
+xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+}
+
 #endif // DOTNET
 
 /*

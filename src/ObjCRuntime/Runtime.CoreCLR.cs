@@ -6,6 +6,9 @@
 //
 // Copyright 2021 Microsoft Corp.
 
+#define TRACK_MONOOBJECTS
+#define TRACK_MONOOBJECTS_STACKTRACE
+
 #if NET && !COREBUILD
 
 using System;
@@ -311,6 +314,14 @@ namespace ObjCRuntime {
 
 			log_coreclr ($"GetMonoObjectImpl ({obj.GetType ()}) => 0x{rv.ToString ("x")} => GCHandle=0x{handle.ToString ("x")}");
 
+#if TRACK_MONOOBJECTS
+#if TRACK_MONOOBJECTS_STACKTRACE
+	xamarin_bridge_log_monoobject (rv, Environment.StackTrace);
+#else
+	xamarin_bridge_log_monoobject (rv, null);
+#endif
+#endif
+
 			return rv;
 		}
 
@@ -329,6 +340,11 @@ namespace ObjCRuntime {
 				return GetGCHandleTarget (monoobj->GCHandle);
 			}
 		}
+
+#if TRACK_MONOOBJECTS
+		[DllImport ("__Internal", CharSet = CharSet.Auto)]
+		static extern void xamarin_bridge_log_monoobject (IntPtr mono_object, string stack_trace);
+#endif
 
 		static IntPtr MarshalStructure<T> (T value) where T: struct
 		{

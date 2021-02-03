@@ -14,9 +14,11 @@
     <CodesignEntitlements Condition="'$(Platform)' == 'iPhoneSimulator'">..\..\Entitlements.plist</CodesignEntitlements>
     <DefineConstants>$(DefineConstants);MONOMAC;XAMMAC_TESTS</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG</DefineConstants>
+    <DefineConstants>$(DefineConstants);CORECLR_RUNTIME</DefineConstants>
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
     <LinkMode>None</LinkMode>
-    <MonoBundlingExtraArgs>--registrar:static</MonoBundlingExtraArgs>
+    <MonoBundlingExtraArgs>--registrar:static --marshal-managed-exceptions=throwobjectivecexception --marshal-objectivec-exceptions=throwmanagedexception</MonoBundlingExtraArgs>
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\**\*.cs" Exclude="$(DefaultItemExcludes);..\..\obj\**;..\..\dotnet\**">
+    <Compile Include="..\..\**\*.cs" Exclude="$(DefaultItemExcludes);..\..\obj\**;..\..\bin\**;..\..\dotnet\**">
       <Link>%(RecursiveDir)%(Filename).cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\tests\test-libraries\TrampolineTest.generated.cs" />

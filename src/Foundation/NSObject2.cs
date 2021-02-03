@@ -150,6 +150,34 @@ namespace Foundation {
 			return class_ptr;
 		}
 
+#if NET
+		internal void SetHandleDirectly (IntPtr handle)
+		{
+			this.handle = handle;
+		}
+
+		internal void SetFlagsDirectly (byte flags)
+		{
+			this.flags = (Flags) flags;
+		}
+
+		internal byte GetFlagsDirectly ()
+		{
+			return (byte) this.flags;
+		}
+#endif
+
+#if NET
+		[DllImport ("__Internal")]
+		extern static void xamarin_register_toggleref_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_release_managed_ref_coreclr (IntPtr handle, bool user_type);
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain, bool user_type);
+#endif
+
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
@@ -158,6 +186,78 @@ namespace Foundation {
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain, bool user_type);
+
+#if NET
+		static void RegisterToggleRefIndirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting RegisterToggleRef will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void xamarin_release_managed_ref_indirection (IntPtr handle, bool user_type)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting ReleaseManagedReference will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			xamarin_release_managed_ref (handle, user_type);
+		}
+
+		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting CreateManagedReference will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			xamarin_create_managed_ref (handle, obj, retain);
+		}
+#endif
+
+		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain, bool user_type)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (obj);
+				try {
+					xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (obj_handle), retain, user_type);
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+
+			xamarin_create_managed_ref_indirection (handle, obj, retain, user_type);
+		}
+
+		static void ReleaseManagedReference (IntPtr handle, bool user_type)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (managed_obj);
+				try {
+					xamarin_release_managed_ref_coreclr (handle, user_type);
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+
+			xamarin_release_managed_ref_indirection (handle, user_type);
+
+		}
+
+		static void RegisterToggleReference (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (obj);
+				try {
+					xamarin_register_toggleref_coreclr (GCHandle.ToIntPtr (obj_handle), handle, isCustomType);
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+
+			RegisterToggleRefIndirection (obj, handle, isCustomType);
+		}
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()
@@ -184,7 +284,7 @@ namespace Foundation {
 				return;
 			
 			IsRegisteredToggleRef = true;
-			RegisterToggleRef (this, Handle, allowCustomTypes);
+			RegisterToggleReference (this, Handle, allowCustomTypes);
 		}
 
 		private void InitializeObject (bool alloced) {
@@ -221,7 +321,7 @@ namespace Foundation {
 		void CreateManagedRef (bool retain)
 		{
 			flags |= Flags.HasManagedRef;
-			xamarin_create_managed_ref (handle, this, retain, Runtime.IsUserType (handle));
+			CreateManagedReference (handle, this, retain, Runtime.IsUserType (handle));
 		}
 
 		void ReleaseManagedRef ()
@@ -233,7 +333,7 @@ namespace Foundation {
 				/* If we're a wrapper type, we need to unregister here, since we won't enter the release trampoline */
 				Runtime.NativeObjectHasDied (handle, this);
 			}
-			xamarin_release_managed_ref (handle, user_type);
+			ReleaseManagedReference (handle, user_type);
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)

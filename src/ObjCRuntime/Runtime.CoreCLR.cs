@@ -95,6 +95,15 @@ namespace ObjCRuntime {
 
 			if (options->xamarin_objc_msgsend_super_stret != IntPtr.Zero)
 				ObjectiveCMarshal.SetMessageSendCallback (ObjectiveCMarshal.MessageSendFunction.MsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
+
+			ObjectiveCMarshal.Initialize (null, null, null, UnhandledExceptionPropagationHandler);
+		}
+
+		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
+		{
+			var exceptionHandler = (delegate* unmanaged<IntPtr, void>) options->unhandled_exception_handler;
+			context = AllocGCHandle (exception);
+			return exceptionHandler;
 		}
 
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
@@ -160,8 +169,8 @@ namespace ObjCRuntime {
 		static unsafe void SetPendingException (MonoObject* exception_obj)
 		{
 			var exc = (Exception) GetMonoObjectTarget (exception_obj);
-			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
-			Console.WriteLine ("Not implemented: SetPendingException ({0})", exc);;
+			log_coreclr ($"Runtime.SetPendingException ({exc})");
+			ObjectiveCMarshal.SetMessageSendPendingException (exc);
 		}
 
 		unsafe static bool IsClassOfType (MonoObject *typeobj, TypeLookup match)

@@ -1263,9 +1263,13 @@ monotouch_load_profiler ()
 	// TODO: make this generic enough for other profilers to work too
 	// Main thread only
 	if (profiler_description != NULL) {
+#if !defined (CORECLR_RUNTIME)
 		mono_profiler_load (profiler_description);
 
 		LOG (PRODUCT ": Profiler loaded: %s\n", profiler_description);
+#else
+		LOG (PRODUCT ": Profiler not loaded (profiler loading not implemented for CoreCLR): %s\n", profiler_description);
+#endif
 		free (profiler_description);
 		profiler_description = NULL;
 	} else {

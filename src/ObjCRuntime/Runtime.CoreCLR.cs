@@ -370,6 +370,8 @@ namespace ObjCRuntime {
 			if (obj is bool b) {
 				// Only write a single byte for bools
 				Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
+			} else if (obj is char c) {
+				Marshal.WriteInt16 (ptr, (short) c);
 			} else {
 				Marshal.StructureToPtr (obj, ptr, false);
 			}
@@ -831,6 +833,9 @@ namespace ObjCRuntime {
 			// Only read a single byte for bools.
 			if (type == typeof (bool))
 				return Marshal.ReadByte (ptr) != 0;
+
+			if (type == typeof (char))
+				return (char) Marshal.ReadInt16 (ptr);
 
 			return Marshal.PtrToStructure (ptr, type);
 		}

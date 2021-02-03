@@ -376,6 +376,14 @@ namespace ObjCRuntime {
 			}
 		}
 
+		static IntPtr ObjectToString (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle);
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.ToString ());
+		}
+
 		static IntPtr WriteStructure (object obj)
 		{
 			if (obj == null)

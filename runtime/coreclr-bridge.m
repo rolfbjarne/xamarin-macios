@@ -148,6 +148,11 @@ monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 
 #endif // defined (TRACK_MONOOBJECTS)
 
+struct TrackedObjectInfo {
+	id handle;
+	enum NSObjectFlags flags;
+};
+
 void
 xamarin_bridge_setup ()
 {
@@ -194,18 +199,46 @@ xamarin_bridge_shutdown ()
 #endif
 }
 
+static bool reference_tracking_end = false;
+
 void
 xamarin_coreclr_reference_tracking_begin_end_callback ()
 {
 	LOG_CORECLR (stderr, "%s () reference_tracking_end: %i\n", __func__, reference_tracking_end);
+	if (reference_tracking_end) {
+		xamarin_gc_event (MONO_GC_EVENT_POST_START_WORLD);
+	} else {
+		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
+	}
+	reference_tracking_end = !reference_tracking_end;
 }
 
 int
 xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 {
+	// COOP: this is a callback called by the GC, so I assume the mode here doesn't matter
 	int rv = 0;
+	struct TrackedObjectInfo *info = (struct TrackedObjectInfo *) ptr;
+	enum NSObjectFlags flags = info->flags;
+	id handle = info->handle;
+	MonoToggleRefStatus res;
 
-	LOG_CORECLR (stderr, "%s (%p) => %i\n", __func__, ptr, rv);
+	res = xamarin_gc_toggleref_callback (flags, handle, NULL, NULL);
+
+	switch (res) {
+	case MONO_TOGGLE_REF_DROP:
+	case MONO_TOGGLE_REF_WEAK:
+		rv = 0;
+		break;
+	case MONO_TOGGLE_REF_STRONG:
+		rv = 1;
+		break;
+	default:
+		LOG_CORECLR (stderr, "%s (%p -> handle: %p flags: %i): INVALID toggle ref value: %i\n", __func__, ptr, handle, flags, res);
+		break;
+	}
+
+	LOG_CORECLR (stderr, "%s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
 
 	return rv;
 }
@@ -213,7 +246,9 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 void
 xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr)
 {
-	LOG_CORECLR (stderr, "%s (%p)\n", __func__, ptr);
+	struct TrackedObjectInfo *info = (struct TrackedObjectInfo *) ptr;
+	info->flags = (enum NSObjectFlags) (info->flags | NSObjectFlagsInFinalizerQueue);
+	LOG_CORECLR (stderr, "%s (%p) flags: %i\n", __func__, ptr, (int) info->flags);
 }
 
 void

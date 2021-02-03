@@ -17,6 +17,7 @@
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
     <LinkMode>None</LinkMode>
     <MonoBundlingExtraArgs>--registrar:static</MonoBundlingExtraArgs>
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\**\*.cs" Exclude="$(DefaultItemExcludes);..\..\obj\**;..\..\dotnet\**">
+    <Compile Include="..\..\**\*.cs" Exclude="$(DefaultItemExcludes);..\..\obj\**;..\..\bin\**;..\..\dotnet\**">
       <Link>%(RecursiveDir)%(Filename).cs</Link>
     </Compile>
     <Compile Include="..\..\..\..\tests\test-libraries\TrampolineTest.generated.cs" />

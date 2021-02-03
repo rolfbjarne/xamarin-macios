@@ -154,6 +154,13 @@ void xamarin_initialize ();
 void xamarin_initialize_embedded (); /* Public API, must not change - this is used by the embeddinator */
 
 void			xamarin_assertion_message (const char *msg, ...) __attribute__((__noreturn__));
+
+// two macros ensures any macro passed will
+// be expanded before being stringified
+#define STRINGIZE_DETAIL(x) #x
+#define STRINGIZE(x) STRINGIZE_DETAIL(x)
+#define			xamarin_assert(expression, ...) do { if (!(expression)) { xamarin_assertion_message ("Assertion '" #expression "' failed in " __FILE__ ":" STRINGIZE(__LINE__)); } } while (0);
+
 const char *	xamarin_get_bundle_path (); /* Public API */
 // Sets the bundle path (where the managed executable is). By default APP/Contents/MonoBundle.
 void			xamarin_set_bundle_path (const char *path); /* Public API */

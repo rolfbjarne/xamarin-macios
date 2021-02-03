@@ -1627,7 +1627,7 @@ void *
 xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
 	guint32 context_ref = GPOINTER_TO_UINT (context);
-	MonoObject *obj;
+	MonoObject *obj = NULL;
 
 	if (context_ref == INVALID_TOKEN_REF) {
 		// This requires the dynamic registrar to invoke the correct conversion function
@@ -1739,6 +1739,7 @@ xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_
 		}
 
 		buf [i] = convert (value, context, exception_gchandle);
+		xamarin_mono_object_release (&value);
 		if (*exception_gchandle != INVALID_GCHANDLE) {
 			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);
 			goto exception_handling;
@@ -1755,6 +1756,7 @@ exception_handling:
 	return rv;
 }
 
+// Return value: NULL, or a retained MonoArray* the caller must release with xamarin_mono_object_release.
 MonoArray *
 xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managedElementType, xamarin_id_to_managed_func convert, void *context, GCHandle *exception_gchandle)
 {

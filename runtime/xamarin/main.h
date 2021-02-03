@@ -73,6 +73,7 @@ enum XamarinLookupTypes : int {
 	XamarinLookupTypes_Foundation_NSString,
 	XamarinLookupTypes_Foundation_NSValue,
 	XamarinLookupTypes_ObjCRuntime_INativeObject,
+	XamarinLookupTypes_ObjCRuntime_Runtime,
 };
 
 extern bool mono_use_llvm; // this is defined inside mono

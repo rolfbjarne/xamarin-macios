@@ -13,8 +13,9 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <CodesignEntitlements Condition="'$(Platform)' == 'iPhoneSimulator'">..\..\Entitlements.plist</CodesignEntitlements>
     <DefineConstants>$(DefineConstants);MONOMAC;XAMMAC_TESTS</DefineConstants>
-    <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG;DYNAMIC_REGISTRAR</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG</DefineConstants>
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
+    <MonoBundlingExtraArgs>--registrar:static</MonoBundlingExtraArgs>
   </PropertyGroup>
 
   <ItemGroup>

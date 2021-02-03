@@ -8,16 +8,29 @@
 
 #if defined (CORECLR_RUNTIME)
 
+#include <pthread.h>
+#include <objc/runtime.h>
+#include <sys/stat.h>
+#include <dlfcn.h>
 #include <inttypes.h>
 
 #include "product.h"
+#include "shared.h"
+#include "delegates.h"
+#include "runtime-internal.h"
 #include "xamarin/xamarin.h"
 #include "xamarin/coreclr-bridge.h"
 
 #include "coreclrhost.h"
 
+bool xamarin_loaded_coreclr = false;
 unsigned int coreclr_domainId = 0;
 void *coreclr_handle = NULL;
+
+struct TrackedObjectInfo {
+	id handle;
+	enum NSObjectFlags flags;
+};
 
 void
 xamarin_bridge_setup ()
@@ -28,6 +41,180 @@ void
 xamarin_bridge_initialize ()
 {
 }
+
+static bool reference_tracking_end = false;
+
+void
+xamarin_coreclr_reference_tracking_begin_end_callback ()
+{
+	LOG_CORECLR (stderr, "LOG: %s () reference_tracking_end: %i\n", __func__, reference_tracking_end);
+	if (reference_tracking_end) {
+		xamarin_gc_event (MONO_GC_EVENT_POST_START_WORLD);
+	} else {
+		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
+	}
+	reference_tracking_end = !reference_tracking_end;
+}
+
+static id
+get_handle (void * ptr)
+{
+	return (id) ptr;
+}
+
+int
+xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
+{
+	// COOP: this is a callback called by the GC, so I assume the mode here doesn't matter
+	int rv = 0;
+	struct TrackedObjectInfo *info = (struct TrackedObjectInfo *) ptr;
+	enum NSObjectFlags flags = info->flags;
+	id handle = info->handle;
+	MonoToggleRefStatus res;
+
+	res = xamarin_gc_toggleref_callback (flags, get_handle, handle);
+
+	switch (res) {
+	case MONO_TOGGLE_REF_DROP:
+	case MONO_TOGGLE_REF_WEAK:
+		rv = 0;
+		break;
+	case MONO_TOGGLE_REF_STRONG:
+		rv = 1;
+		break;
+	default:
+		fprintf (stderr, "LOG: INVALID toggle ref value: %i\n", res);
+		break;
+	}
+
+	LOG_CORECLR (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
+
+	return rv;
+}
+
+void
+xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr)
+{
+	LOG_CORECLR (stderr, "LOG: %s (%p)\n", __func__, ptr);
+}
+
+void
+xamarin_coreclr_unhandled_exception_handler (void *context)
+{
+	GCHandle exception_gchandle = (GCHandle) context;
+
+	fprintf (stderr, "LOG: %s (%p)\n", __func__, context);
+
+	xamarin_process_managed_exception_gchandle (exception_gchandle);
+
+	xamarin_assertion_message ("Failed to process managed exception.");
+}
+
+void
+xamarin_enable_new_refcount ()
+{
+	// Nothing to do here.
+}
+
+static pthread_mutex_t monoobject_dict_lock;
+static CFMutableDictionaryRef monoobject_dict = NULL;
+
+static int _Atomic monoobject_count = 0;
+
+struct monoobject_dict_type {
+	char *managed;
+	void *addresses [128];
+	int frames;
+	char *native;
+};
+
+#include <execinfo.h>
+static char *
+get_stacktrace (void **addresses, int frames)
+{
+	char** strs = backtrace_symbols (addresses, frames);
+
+	size_t length = 0;
+	int i;
+	for (i = 0; i < frames; i++)
+		length += strlen (strs [i]) + 1;
+	length++;
+
+	char *rv = (char *) calloc (1, length);
+	char *buffer = rv;
+	size_t left = length;
+	for (i = 0; i < frames; i++) {
+		snprintf (buffer, left, "%s\n", strs [i]);
+		size_t slen = strlen (strs [i]) + 1;
+		left -= slen;
+		buffer += slen;
+	}
+	free (strs);
+	return rv;
+}
+
+void
+xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
+{
+	struct monoobject_dict_type *value = (struct monoobject_dict_type *) calloc (1, sizeof (struct monoobject_dict_type));
+	value->managed = xamarin_strdup_printf ("%s", stacktrace);
+	value->frames = backtrace ((void **) &value->addresses, sizeof (value->addresses) / sizeof (&value->addresses [0]));
+
+	pthread_mutex_lock (&monoobject_dict_lock);
+	CFDictionarySetValue (monoobject_dict, mobj, value);
+	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	atomic_fetch_add (&monoobject_count, 1);
+}
+
+void
+xamarin_bridge_dump_monoobjects ()
+{
+	pthread_mutex_lock (&monoobject_dict_lock);
+	unsigned int length = (unsigned int) CFDictionaryGetCount (monoobject_dict);
+	MonoObject** keys = (MonoObject **) calloc (1, sizeof (void*) * length);
+	char** values = (char **) calloc (1, sizeof (char*) * length);
+	CFDictionaryGetKeysAndValues (monoobject_dict, (const void **) keys, (const void **) values);
+	fprintf (stderr, "There were %i MonoObjects created, and %i were not freed.\n", (int) monoobject_count, (int) length);
+	unsigned int items_to_show = length > 10 ? 10 : length;
+	if (items_to_show > 0) {
+		fprintf (stderr, "Showing the first %i MonoObjects:\n", items_to_show);
+		for (unsigned int i = 0; i < items_to_show; i++) {
+			MonoObject *obj = keys [i];
+			struct monoobject_dict_type *value = (struct monoobject_dict_type *) values [i];
+			if (value->native == NULL)
+				value->native = get_stacktrace (value->addresses, value->frames);
+			fprintf (stderr, "Object %i/%i %p RC: %i\n", i + 1, (int) length, obj, (int) obj->reference_count);
+			fprintf (stderr, "\t%s\nNative stack trace:\n%s", value->managed, value->native);
+		}
+	} else {
+		fprintf (stderr, "✅ No leaked MonoObjects!\n");
+	}
+	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	free (keys);
+	free (values);
+}
+
+
+static void
+monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
+{
+	struct monoobject_dict_type* v = (struct monoobject_dict_type *) value;
+	xamarin_free (v->managed);
+	if (v->native)
+		free (v->native);
+	free (v);
+}
+
+// static void *
+// dump_monoobj (void *context)
+// {
+// 	while (1) {
+// 		sleep (15);
+// 		xamarin_bridge_dump_monoobjects ();
+// 	}
+// }
 
 bool
 xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
@@ -48,6 +235,48 @@ xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, cons
 	LOG_CORECLR (stderr, "xamarin_vm_initialize (%i, %p, %p): rv: %i domainId: %i handle: %p\n", propertyCount, propertyKeys, propertyValues, rv, coreclr_domainId, coreclr_handle);
 
 	return rv == 0;
+}
+
+static void
+xamarin_load_coreclr ()
+{
+	if (xamarin_loaded_coreclr)
+		return;
+	xamarin_loaded_coreclr = true;
+
+	// Initialize some debug stuff
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init (&attr);
+	pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
+	pthread_mutex_init (&monoobject_dict_lock, &attr);
+	pthread_mutexattr_destroy (&attr);
+
+	CFDictionaryValueCallBacks value_callbacks = { 0 };
+	value_callbacks.release = monoobject_dict_free_value;
+	monoobject_dict = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, NULL, &value_callbacks);
+
+	LOG_CORECLR (stderr, "xamarin_load_coreclr ()\n");
+}
+
+bool
+xamarin_bridge_coreclr_object_isinst (GCHandle obj, MonoClass * klass)
+{
+	bool rv = xamarin_bridge_isinstance (obj, klass->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p, %p => %s) => %i\n", obj, klass, klass->fullname, rv);
+	return rv;
+}
+
+MonoClass *
+xamarin_bridge_coreclr_gchandle_get_class (GCHandle obj) // NEEDS REVIEW
+{
+	MonoType *type = xamarin_gchandle_unwrap (obj);
+	MonoClass *rv = xamarin_bridge_object_get_type (type);
+
+	xamarin_mono_object_release (&type);
+
+	LOG_CORECLR (stderr, "xamarin_bridge_coreclr_gchandle_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
+
+	return rv;
 }
 
 void
@@ -73,14 +302,40 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	if (method == NULL)
 		method = "<unknown method>";
 
-	fprintf (stderr, "%s threw an exception: %p => %s\n", method, gchandle, [xamarin_print_all_exceptions (gchandle) UTF8String]);
-	xamarin_assertion_message ("%s threw an exception: %p = %s", method, gchandle, [xamarin_print_all_exceptions (gchandle) UTF8String]);
+	GCHandle exception_gchandle = INVALID_GCHANDLE;
+	char * str = xamarin_bridge_tostring (gchandle, &exception_gchandle);
+	fprintf (stderr, "xamarin_handle_bridge_exception (%p, %s) => %s\n", gchandle, method, str);
+	if (exception_gchandle != INVALID_GCHANDLE)
+		xamarin_assertion_message ("xamarin_bridge_tostring threw an exception");
+	LOG_CORECLR (stderr, "%s threw an exception: %s\n", method, str);
+	mono_free (str);
+	xamarin_assertion_message ("%s threw an exception: %s", method, str);
+}
+
+const char *
+mono_assembly_name_get_name (MonoAssemblyName *aname)
+{
+	xamarin_assertion_message ("%s not implemented\n", __func__);
+}
+
+const char *
+mono_assembly_name_get_culture (MonoAssemblyName *aname)
+{
+	xamarin_assertion_message ("%s not implemented\n", __func__);
+}
+
+MonoAssemblyName *
+mono_assembly_get_name (MonoAssembly *assembly)
+{
+	xamarin_assertion_message ("%s not implemented\n", __func__);
 }
 
 typedef void (*xamarin_runtime_initialize_decl)(struct InitializationOptions* options);
 void
 xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle)
 {
+	xamarin_load_coreclr ();
+
 	void *del = NULL;
 	int rv = coreclr_create_delegate (coreclr_handle, coreclr_domainId, PRODUCT ", Version=0.0.0.0", "ObjCRuntime.Runtime", "Initialize", &del);
 	if (rv != 0)
@@ -132,6 +387,7 @@ void
 xamarin_mono_object_retain (MonoObject *mobj)
 {
 	atomic_fetch_add (&mobj->reference_count, 1);
+	LOG_CORECLR (stderr, "xamarin_mono_object_retain (%p) RC: %i Type Name: %s Kind: %i\n", mobj, (int) mobj->reference_count, mobj->type_name, mobj->object_kind);
 }
 
 void
@@ -142,19 +398,29 @@ xamarin_mono_object_release (MonoObject **mobj_ref)
 	if (mobj == NULL)
 		return;
 
+	xamarin_assert (mobj != (void *) 0xdeadf00d);
+
 	int rc = atomic_fetch_sub (&mobj->reference_count, 1) - 1;
 	if (rc == 0) {
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): will free! Type Name: %s Kind: %i\n", mobj, mobj->type_name, mobj->object_kind);
 		if (mobj->gchandle != INVALID_GCHANDLE) {
 			xamarin_gchandle_free (mobj->gchandle);
 			mobj->gchandle = INVALID_GCHANDLE;
 		}
-
-		xamarin_free (mobj->struct_value); // allocated using Marshal.AllocHGlobal.
-
+		if (mobj->struct_value != NULL) {
+			// xamarin_free (mobj->struct_value);
+			mobj->struct_value = NULL;
+		}
 		xamarin_free (mobj); // allocated using Marshal.AllocHGlobal.
+	} else {
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i, kind: %i\n", mobj, rc, (int) mobj->object_kind);
 	}
 
-	*mobj_ref = NULL;
+	pthread_mutex_lock (&monoobject_dict_lock);
+	CFDictionaryRemoveValue (monoobject_dict, mobj);
+	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	*mobj_ref = (MonoObject *) 0xdeadf00d;
 }
 
 /* Implementation of the Mono Embedding API */
@@ -280,6 +546,8 @@ mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const cha
 	if (rv != 0)
 		xamarin_assertion_message ("mono_jit_exec failed: %i\n", rv);
 
+	xamarin_bridge_dump_monoobjects ();
+
 	return (int) exitCode;
 }
 
@@ -404,6 +672,15 @@ xamarin_create_system_out_of_memory_exception ()
 {
 	MonoException *rv = xamarin_bridge_create_exception (XamarinExceptionTypes_System_OutOfMemoryException, NULL);
 	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, entrypoint, rv);
+	return rv;
+}
+
+MonoObject *
+xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc)
+{
+	MonoObject *mobj = xamarin_gchandle_get_target (obj);
+	MonoObject *rv = mono_runtime_invoke (method, mobj, params, exc);
+	xamarin_mono_object_release (&mobj);
 	return rv;
 }
 

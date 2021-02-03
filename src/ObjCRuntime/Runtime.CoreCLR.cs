@@ -12,7 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ObjectiveC;
 using System.Runtime.CompilerServices;
 
 using Foundation;
@@ -34,6 +36,7 @@ namespace ObjCRuntime {
 			Foundation_NSString,
 			Foundation_NSValue,
 			ObjCRuntime_INativeObject,
+			ObjCRuntime_Runtime,
 		}
 
 		// This struct must be kept in sync with the _MonoObject struct in coreclr-bridge.h
@@ -42,6 +45,51 @@ namespace ObjCRuntime {
 			public int ReferenceCount;
 			public IntPtr GCHandle;
 			public IntPtr StructValue;
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoString {
+			public MonoObject Object;
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoArray {
+			public MonoObject Object;
+			public ulong Length; /* uint64_t */
+			public IntPtr Data; /* uint8_t */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoReflectionMethod {
+			public MonoObject Object;
+			public IntPtr Method; /* MonoMethod* */
+			IntPtr name;
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoReflectionAssembly {
+			public MonoObject Object;
+			IntPtr name;
+			public IntPtr Assembly; /* MonoAssembly* */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoReflectionType {
+			public MonoObject Object;
+			IntPtr name; /* char */
+			public IntPtr Type; /* MonoType* */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoException {
+			public MonoObject Object;
+			IntPtr name; /* char */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoAssembly {
+			public IntPtr Name; /* char* */
+			public IntPtr Image; /* MonoImage* */
 		}
 
 		// This struct must be kept in sync with the _MonoMethodSignature struct in coreclr-bridge.h
@@ -60,10 +108,61 @@ namespace ObjCRuntime {
 			NSLog (message);
 		}
 
+		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
+		{
+			delegate* unmanaged<void> beginEndCallback = (delegate* unmanaged<void>) options->reference_tracking_begin_end_callback;
+			delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
+			delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
+			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);
+
+			Bridge.UnhandledExceptionPropagation += UnhandledExceptionPropagationHandler;
+
+			if (options->xamarin_objc_msgsend != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSend, options->xamarin_objc_msgsend);
+
+			if (options->xamarin_objc_msgsend_fpret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendFpret, options->xamarin_objc_msgsend_fpret);
+
+			if (options->xamarin_objc_msgsend_stret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendStret, options->xamarin_objc_msgsend_stret);
+
+			if (options->xamarin_objc_msgsend_super != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuper, options->xamarin_objc_msgsend_super);
+
+			if (options->xamarin_objc_msgsend_super_stret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
+		}
+
+		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
+		{
+			var exceptionHandler = (delegate* unmanaged<IntPtr, void>) options->unhandled_exception_handler;
+			context = AllocGCHandle (exception);
+			return exceptionHandler;
+		}
+
+		// Size: 2 pointers
+		internal struct TrackedObjectInfo {
+			public IntPtr Handle;
+			public NSObject.Flags Flags;
+		}
+
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
-			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
-			Console.WriteLine ("Not implemented: RegisterToggleReferenceCoreCLR");
+			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
+
+			unsafe {
+				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;
+				tracked_info->Handle = handle;
+				tracked_info->Flags = obj.FlagsInternal;
+				obj.tracked_object_info = tracked_info;
+				obj.tracked_object_handle = gchandle;
+
+				xamarin_log ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) info).ToString ("x")} Flags={tracked_info->Flags}");
+			}
+
+			// Make sure the GCHandle we have is a weak one for custom types.
+			if (isCustomType)
+				xamarin_switch_gchandle (handle, true);
 		}
 
 		// Returns a retained MonoObject. Caller must release.
@@ -98,8 +197,8 @@ namespace ObjCRuntime {
 		static unsafe void SetPendingException (MonoObject* exception_obj)
 		{
 			var exc = (Exception) GetMonoObjectTarget (exception_obj);
-			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
-			Console.WriteLine ("Not implemented: SetPendingException ({0})", exc);;
+			xamarin_log ($"Runtime.SetPendingException ({exc})");
+			Bridge.SetMessageSendPendingExceptionForThread (exc);
 		}
 
 		unsafe static bool IsClassOfType (MonoObject *typeobj, TypeLookup match)
@@ -166,6 +265,59 @@ namespace ObjCRuntime {
 			GCHandle.FromIntPtr (gchandle).Free ();
 		}
 
+		static unsafe MonoObject* GetMethodReturnType (MonoObject* methodobj)
+		{
+			return (MonoObject *) GetMonoObject (GetMethodReturnType (GetMonoObjectTarget (methodobj)));
+		}
+
+		static object GetMethodReturnType (object method)
+		{
+			object rv = null;
+			if (method is MethodInfo minfo)
+				rv = minfo.ReturnType;
+			else if (method is ConstructorInfo cinfo)
+				rv = cinfo.DeclaringType;
+
+			log_coreclr ($"Return type for {method}: {rv}");
+
+			return rv;
+		}
+
+		static unsafe MonoObject * CreateObject (IntPtr gchandle)
+		{
+			var type = (Type) GetGCHandleTarget (gchandle);
+			var obj = RuntimeHelpers.GetUninitializedObject (type);
+			return (MonoObject *) GetMonoObject (obj);
+		}
+
+		static unsafe IntPtr GetTypeFullName (MonoObject* mobj)
+		{
+			return GetTypeFullName (GetMonoObjectTarget (mobj));
+		}
+
+		static IntPtr GetTypeFullName (object obj)
+		{
+			var type = (Type) obj;
+			return Marshal.StringToHGlobalAuto (type?.FullName);
+		}
+
+		static unsafe IntPtr GetMethodFullName (MonoObject* mobj)
+		{
+			return GetMethodFullName (GetMonoObjectTarget (mobj));
+		}
+
+		static IntPtr GetMethodFullName (object obj)
+		{
+			var method = (MethodBase) obj;
+			return Marshal.StringToHGlobalAuto (method?.ToString ());
+		}
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_mono_object_retain (IntPtr mono_object);
+
+		[DllImport ("__Internal")]
+		static extern void xamarin_switch_gchandle (IntPtr obj, [MarshalAs (UnmanagedType.I1)] bool to_weak);
+
 		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (IntPtr gchandle)
 		{
@@ -173,7 +325,7 @@ namespace ObjCRuntime {
 		}
 
 		// Returns a retained MonoObject. Caller must release.
-		static IntPtr GetMonoObject (object obj)
+		internal static MonoObjectPtr GetMonoObject (object obj)
 		{
 			if (obj == null)
 				return IntPtr.Zero;
@@ -181,8 +333,7 @@ namespace ObjCRuntime {
 			return GetMonoObjectImpl (obj);
 		}
 
-		// Returns a retained MonoObject. Caller must release.
-		static IntPtr GetMonoObjectImpl (object obj)
+		static MonoObjectPtr GetMonoObjectImpl (object obj)
 		{
 			var handle = AllocGCHandle (obj);
 
@@ -194,6 +345,8 @@ namespace ObjCRuntime {
 			IntPtr rv = MarshalStructure (mobj);
 
 			log_coreclr ($"GetMonoObjectImpl ({obj.GetType ()}) => 0x{rv.ToString ("x")} => GCHandle=0x{handle.ToString ("x")}");
+
+			// xamarin_bridge_log_monoobject (rv, Environment.StackTrace);
 
 			return rv;
 		}
@@ -214,6 +367,9 @@ namespace ObjCRuntime {
 			}
 		}
 
+		[DllImport ("__Internal", CharSet = CharSet.Auto)]
+		static extern void xamarin_bridge_log_monoobject (IntPtr mono_object, string stack_trace);
+
 		static IntPtr MarshalStructure<T> (T value) where T: struct
 		{
 			var rv = Marshal.AllocHGlobal (Marshal.SizeOf (typeof (T)));
@@ -226,7 +382,252 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return;
 
-			Marshal.StructureToPtr (obj, ptr, false);
+			if (obj is bool b)
+				Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
+			else if (obj is char c)
+				Marshal.WriteInt16 (ptr, (short) c);
+			else
+				Marshal.StructureToPtr (obj, ptr, false);
+		}
+
+		static IntPtr GetManagedType (IntPtr type_name)
+		{
+			var tn = Marshal.PtrToStringAuto (type_name);
+			log_coreclr ($"GetManagedType ({tn})");
+			var tp = Type.GetType (tn, true);
+			return AllocGCHandle (tp);
+		}
+
+		static IntPtr WriteStructure (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle);
+			if (obj == null)
+				return IntPtr.Zero;
+			if (!obj.GetType ().IsValueType) {
+				// log_coreclr ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
+				return IntPtr.Zero;
+			}
+
+			var structType = obj.GetType ();
+			if (structType.IsEnum) {
+				structType = Enum.GetUnderlyingType (structType);
+				obj = Convert.ChangeType (obj, structType);
+			}
+
+			var size = SizeOf (obj.GetType ());
+			var output = Marshal.AllocHGlobal (size);
+
+			StructureToPtr (obj, output);
+
+			var sb = new System.Text.StringBuilder ();
+			var l = SizeOf (obj.GetType ());
+			sb.Append ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, 0x{output.ToString ("x")}) Size: {l} -- ");
+			for (var i = 0; i < l; i++)
+				sb.Append ($" 0x{Marshal.ReadByte (output, i).ToString ("x")}");
+			sb.AppendLine ();
+			log_coreclr (sb.ToString ());
+			return output;
+		}
+
+		static bool IsDelegate (IntPtr type_gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
+			var rv = typeof (MulticastDelegate).IsAssignableFrom (type);
+			log_coreclr ($"IsDelegate ({type.FullName}) => {rv}");
+			return rv;
+		}
+
+
+		static unsafe bool IsSubclassOf (MonoObject* type1, MonoObject* type2, bool check_interfaces)
+		{
+			return IsSubclassOf ((Type) GetMonoObjectTarget (type1), (Type) GetMonoObjectTarget (type2), check_interfaces);
+		}
+
+		// This is supposed to work like mono_class_is_subclass_of
+		static bool IsSubclassOf (Type type1, Type type2, bool check_interfaces)
+		{
+			log_coreclr ($"IsSubclassOf ({type1.FullName}, {type2.FullName}, {check_interfaces})");
+
+			if (type1 == null || type2 == null)
+				return false;
+
+			if (check_interfaces) {
+				if (type2.IsAssignableFrom (type1)) {
+					log_coreclr ($"IsSubclassOf ({type1.FullName}, {type2.FullName}, {check_interfaces}) => type2 is assignable from type1");
+					return true;
+				}
+			} else {
+				if (!type2.IsInterface) {
+					var baseClass = type1;
+					while (baseClass != null && baseClass != typeof (object)) {
+						log_coreclr ($"IsSubclassOf ({type1.FullName}, {type2.FullName}, {check_interfaces}) => type2 is not an interface, checking base class {baseClass.FullName}");
+						if (baseClass == type2)
+							return true;
+						baseClass = baseClass.BaseType;
+					}
+				}
+			}
+
+			if (type2 == typeof (object))
+				return true;
+
+			return false;
+		}
+
+		static bool IsByRef (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsByRef;
+		}
+
+		static bool IsValueType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsValueType;
+		}
+
+		static bool IsEnum (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsEnum;
+		}
+
+		static unsafe MonoObject* GetEnumBaseType (MonoObject* type)
+		{
+			return (MonoObject*) GetMonoObject (GetEnumBaseType ((Type) GetMonoObjectTarget (type)));
+		}
+
+		static Type GetEnumBaseType (Type type)
+		{
+			return type.GetEnumUnderlyingType ();
+		}
+
+		static IntPtr ObjectToString (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle);
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.ToString ());
+		}
+
+		static unsafe MonoObject* MonoObjectGetType (MonoObject* mobj)
+		{
+			return (MonoObject *) GetMonoObject (MonoObjectGetType (GetMonoObjectTarget (mobj)));
+		}
+
+		static Type MonoObjectGetType (object obj)
+		{
+			return obj?.GetType ();
+		}
+
+		static unsafe IntPtr GetTypeName (MonoObject* typeobj)
+		{
+			var type = (Type) GetMonoObjectTarget (typeobj);
+			return Marshal.StringToHGlobalAuto (type?.Name);
+		}
+
+		static unsafe IntPtr GetTypeNamespace (MonoObject* typeobj)
+		{
+			var type = (Type) GetMonoObjectTarget (typeobj);
+			return Marshal.StringToHGlobalAuto (type?.Namespace);
+		}
+
+		static unsafe MonoObject* GetNullableElementType (MonoObject* typeobj)
+		{
+			var type = (Type) GetMonoObjectTarget (typeobj);
+			var elementType = type.GetGenericArguments () [0];
+			return (MonoObject*) GetMonoObject (elementType);
+		}
+
+		[DllImport ("libc")]
+		static extern IntPtr memcpy (IntPtr dest, IntPtr src, nint n);
+
+		static IntPtr GetArrayData (IntPtr gchandle)
+		{
+			if (gchandle == IntPtr.Zero)
+				return IntPtr.Zero;
+
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var elementSize = SizeOf (array.GetType ().GetElementType ());
+			var dataSize = elementSize * array.Length;
+			var rv = Marshal.AllocHGlobal (dataSize);
+
+			log_coreclr ($"GetArrayData (0x{gchandle.ToString ("x")}) Type: {array.GetType ()} Array Length: {array.Length} Element Size: {elementSize} rv: 0x{rv.ToString ("x")}");
+
+			if (array.Length > 0) {
+				if (array is bool[] arr) {
+					log_coreclr ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
+				}
+				var arrayType = array.GetType ().GetElementType ();
+				if (arrayType.IsEnum) {
+					// this is quite slow... here we copy the enum array to an array of the underlying type
+					// See: https://github.com/dotnet/runtime/issues/48907
+					var enumType = Enum.GetUnderlyingType (arrayType);
+					var integralArray = Array.CreateInstance (enumType, array.Length);
+					for (var i = 0; i < array.Length; i++)
+						integralArray.SetValue (Convert.ChangeType (array.GetValue (i), enumType), i);
+					array = integralArray;
+					log_coreclr ($" => converted to array of {enumType}");
+				}
+
+				var pinned = GCHandle.Alloc (array, GCHandleType.Pinned);
+				try {
+					var addr = pinned.AddrOfPinnedObject ();
+					memcpy (rv, addr, dataSize);
+				} finally {
+					pinned.Free ();
+				}
+			}
+
+			var sb = new System.Text.StringBuilder ();
+			for (var i = 0; i < Math.Min (16, dataSize); i++) {
+				sb.Append ($" 0x{Marshal.ReadByte (rv, i).ToString ("x")}");
+			}
+			log_coreclr ($"    => {sb.ToString ()}");
+
+			return rv;
+		}
+
+		static int SizeOf (IntPtr gchandle)
+		{
+			return SizeOf ((Type) GetGCHandleTarget (gchandle));
+		}
+
+		static unsafe MonoObject* Box (IntPtr gchandle, IntPtr value)
+		{
+			return (MonoObject *) GetMonoObject (BoxGCHandle (gchandle, value));
+		}
+
+		static object BoxGCHandle (IntPtr gchandle, IntPtr value)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			log_coreclr ($"BoxGCHandle ({type}, 0x{value.ToString ("x")})");
+			var structType = type;
+			Type enumType = null;
+
+			// We can have a nullable enum value
+			if (IsNullable (structType)) {
+				if (value == IntPtr.Zero)
+					return AllocGCHandle (null);
+				structType = Nullable.GetUnderlyingType (structType);
+			}
+
+			if (structType.IsEnum) {
+				// Change to underlying enum type
+				enumType = structType;
+				structType = Enum.GetUnderlyingType (structType);
+			}
+
+			var boxed = PtrToStructure (value, structType);
+			if (enumType != null) {
+				// Convert to enum value
+				boxed = Enum.ToObject (enumType, boxed);
+			}
+
+			if (boxed is bool)
+				log_coreclr ($"     bool boxed value: {boxed}");
+
+			return boxed;
 		}
 
 		static IntPtr WriteStructure (object obj)
@@ -272,10 +673,52 @@ namespace ObjCRuntime {
 			return (byte) obj.FlagsInternal;
 		}
 
-		static IntPtr GetMethodDeclaringType (MonoObjectPtr mobj)
+		static unsafe MonoObject * GetMethodDeclaringType (MonoObject * mobj)
 		{
-			var method = (MethodBase) GetMonoObjectTarget (mobj);
-			return GetMonoObject (method.DeclaringType);
+			return (MonoObject *) GetMonoObject (GetMethodDeclaringType (GetMonoObjectTarget (mobj)));
+		}
+
+		static Type GetMethodDeclaringType (object obj)
+		{
+			var method = (MethodBase) obj;
+			return method.DeclaringType;
+		}
+
+		static MonoObjectPtr LookupType (TypeLookup type)
+		{
+			Type rv;
+			switch (type) {
+			case TypeLookup.System_Array:
+				rv = typeof (System.Array);
+				break;
+			case TypeLookup.System_String:
+				rv = typeof (System.String);
+				break;
+			case TypeLookup.System_IntPtr:
+				rv = typeof (System.IntPtr);
+				break;
+			case TypeLookup.Foundation_NSNumber:
+				rv = typeof (Foundation.NSNumber);
+				break;
+			case TypeLookup.Foundation_NSObject:
+				rv = typeof (Foundation.NSObject);
+				break;
+			case TypeLookup.Foundation_NSString:
+				rv = typeof (Foundation.NSString);
+				break;
+			case TypeLookup.Foundation_NSValue:
+				rv = typeof (Foundation.NSValue);
+				break;
+			case TypeLookup.ObjCRuntime_INativeObject:
+				rv = typeof (ObjCRuntime.INativeObject);
+				break;
+			case TypeLookup.ObjCRuntime_Runtime:
+				rv = typeof (ObjCRuntime.Runtime);
+				break;
+			default:
+				throw new ArgumentOutOfRangeException (nameof (type));
+			}
+			return GetMonoObject (rv);
 		}
 
 		static IntPtr ObjectGetType (MonoObjectPtr mobj)
@@ -610,6 +1053,11 @@ namespace ObjCRuntime {
 			return boxed;
 		}
 
+		static bool IsNullable (IntPtr type)
+		{
+			return IsNullable ((Type) GetGCHandleTarget (type));
+		}
+
 		static bool IsNullable (Type type)
 		{
 			if (Nullable.GetUnderlyingType (type) != null)
@@ -642,7 +1090,10 @@ namespace ObjCRuntime {
 		{
 			if (ptr == IntPtr.Zero)
 				return null;
-
+			if (type == typeof (bool))
+				return Marshal.ReadByte (ptr) != 0;
+			else if (type == typeof (char))
+				return (char) Marshal.ReadInt16 (ptr);
 			return Marshal.PtrToStructure (ptr, type);
 		}
 

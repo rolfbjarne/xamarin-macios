@@ -150,6 +150,36 @@ namespace Foundation {
 			return class_ptr;
 		}
 
+//#if NET
+		internal void SetHandleDirectly (IntPtr handle)
+		{
+			this.handle = handle;
+		}
+
+		internal void SetFlagsDirectly (byte flags)
+		{
+			this.flags = (Flags) flags;
+		}
+
+		internal byte GetFlagsDirectly ()
+		{
+			return (byte) this.flags;
+		}
+		//#endif
+
+		const string LIB = "__Internal";
+
+#if NET
+		[DllImport (LIB)]
+		extern static void xamarin_register_toggleref_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
+
+		[DllImport (LIB)]
+		static extern void xamarin_release_managed_ref_coreclr (IntPtr handle, IntPtr managed_obj);
+
+		[DllImport (LIB)]
+		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain);
+#endif
+
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
@@ -158,6 +188,71 @@ namespace Foundation {
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
+
+		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain)
+		{
+			xamarin_create_managed_ref (handle, obj, retain);
+		}
+
+		static void RegisterToggleRef_indirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void xamarin_release_managed_ref_indirection (IntPtr handle, NSObject managed_obj)
+		{
+			xamarin_release_managed_ref (handle, managed_obj);
+		}
+
+		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain)
+		{
+#if NET
+			if (!IsMono) {
+				xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (obj)), retain);
+				return;
+			}
+#endif
+			xamarin_create_managed_ref_indirection (handle, obj, retain);
+		}
+
+		static void ReleaseManagedReference (IntPtr handle, NSObject managed_obj)
+		{
+#if NET
+			if (!IsMono) {
+				xamarin_release_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (managed_obj)));
+				return;
+			}
+#endif
+
+			xamarin_release_managed_ref_indirection (handle, managed_obj);
+
+		}
+
+		static void RegisterToggleReference (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+#if NET
+			if (!IsMono) {
+				xamarin_register_toggleref_coreclr (GCHandle.ToIntPtr (GCHandle.Alloc (obj)), handle, isCustomType);
+				return;
+			}
+#endif
+
+			RegisterToggleRef_indirection (obj, handle, isCustomType);
+		}
+
+		static bool? is_mono;
+		static bool IsMono {
+			get {
+				if (!is_mono.HasValue) {
+					is_mono = string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("XAMARIN_RUNTIME")); // Dlfcn.dlsym (Dlfcn.RTLD.Default, "mono_runtime_invoke") != IntPtr.Zero;
+
+					Console.WriteLine ($"OnMono: {is_mono.Value}");
+					is_mono = false; // FIXME
+				}
+				return is_mono.Value;
+			}
+		}
+
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()
@@ -184,7 +279,7 @@ namespace Foundation {
 				return;
 			
 			IsRegisteredToggleRef = true;
-			RegisterToggleRef (this, Handle, allowCustomTypes);
+			RegisterToggleReference (this, Handle, allowCustomTypes);
 		}
 
 		private void InitializeObject (bool alloced) {
@@ -224,12 +319,12 @@ namespace Foundation {
 
 		void CreateManagedRef (bool retain)
 		{
-			xamarin_create_managed_ref (handle, this, retain);
+			CreateManagedReference (handle, this, retain);
 		}
 
 		void ReleaseManagedRef ()
 		{
-			xamarin_release_managed_ref (handle, this);
+			ReleaseManagedReference (handle, this);
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)
@@ -265,7 +360,9 @@ namespace Foundation {
 		[Preserve]
 		bool InvokeConformsToProtocol (IntPtr protocol)
 		{
-			return ConformsToProtocol (protocol);
+			var b = ConformsToProtocol (protocol);
+			Console.WriteLine ($"InvokeConformsToProtocol (0x{protocol.ToString ("x")}) => {b}");
+			return b;
 		}
 
 		[Export ("conformsToProtocol:")]
@@ -277,9 +374,11 @@ namespace Foundation {
 			bool is_wrapper = IsDirectBinding;
 			bool is_third_party;
 
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")})");
 			if (is_wrapper) {
 				is_third_party = this.GetType ().Assembly != NSObject.PlatformAssembly;
 				if (is_third_party) {
+					Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) is_wrapper && is_third_party");
 					// Third-party bindings might lie about IsDirectBinding (see bug #14772),
 					// so don't trust any 'true' values unless we're in monotouch.dll.
 					var attribs = this.GetType ().GetCustomAttributes (typeof(RegisterAttribute), false);
@@ -302,14 +401,19 @@ namespace Foundation {
 			}
 #endif
 
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) does: {does}");
 			if (does)
 				return true;
 			
-			if (!Runtime.DynamicRegistrationSupported)
+			if (!Runtime.DynamicRegistrationSupported) {
+				Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) !DynamicRegistrationSupported");
 				return false;
+			}
 
 			object [] adoptedProtocols = GetType ().GetCustomAttributes (typeof (AdoptsAttribute), true);
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) AdoptedProtocols: {adoptedProtocols.Length}");
 			foreach (AdoptsAttribute adopts in adoptedProtocols){
+				Console.WriteLine ($"    ConformsToProtocol (0x{protocol.ToString ("x")}) AdoptedProtocol: {adopts.ProtocolType} 0x{adopts.ProtocolHandle.ToString ("x")}");
 				if (adopts.ProtocolHandle == protocol)
 					return true;
 			}
@@ -317,14 +421,23 @@ namespace Foundation {
 			// Check if this class or any of the interfaces
 			// it implements are protocols.
 
-			if (IsProtocol (GetType (), protocol))
+			if (IsProtocol (GetType (), protocol)) {
+				Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) IsProtocol ({GetType ()}): true");
 				return true;
+			}
 
 			var ifaces = GetType ().GetInterfaces ();
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) Interfaces: {ifaces.Length}");
 			foreach (var iface in ifaces) {
-				if (IsProtocol (iface, protocol))
+				if (IsProtocol (iface, protocol)) {
+					Console.WriteLine ($"    ConformsToProtocol (0x{protocol.ToString ("x")}) Interface: {iface} YES");
 					return true;
+				} else {
+					Console.WriteLine ($"    ConformsToProtocol (0x{protocol.ToString ("x")}) Interface: {iface} NO");
+				}
 			}
+
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) NOOOOOOOOOOOOOOO");
 
 			return false;
 		}

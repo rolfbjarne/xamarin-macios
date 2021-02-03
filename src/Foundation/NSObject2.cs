@@ -92,6 +92,10 @@ namespace Foundation {
 		bool disposed { 
 			get { return ((flags & Flags.Disposed) == Flags.Disposed); } 
 			set { flags = value ? (flags | Flags.Disposed) : (flags & ~Flags.Disposed);	}
+
+		bool HasManagedRef {
+			get { return (flags & Flags.HasManagedRef) == Flags.HasManagedRef; }
+			set { flags = value ? (flags | Flags.HasManagedRef) : (flags & ~Flags.HasManagedRef); }
 		}
 
 		internal bool IsRegisteredToggleRef { 
@@ -264,15 +268,15 @@ namespace Foundation {
 
 		void CreateManagedRef (bool retain)
 		{
-			flags |= Flags.HasManagedRef;
 			xamarin_create_managed_ref (handle, this, retain, Runtime.IsUserType (handle));
+			HasManagedRef = false;
 		}
 
 		void ReleaseManagedRef ()
 		{
 			var handle = this.Handle; // Get a copy of the handle, because it will be cleared out when calling Runtime.NativeObjectHasDied, and we still need the handle later.
 			var user_type = Runtime.IsUserType (handle);
-			flags &= ~Flags.HasManagedRef;
+			HasManagedRef = false;
 			if (!user_type) {
 				/* If we're a wrapper type, we need to unregister here, since we won't enter the release trampoline */
 				Runtime.NativeObjectHasDied (handle, this);

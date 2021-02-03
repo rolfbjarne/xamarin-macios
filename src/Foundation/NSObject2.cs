@@ -29,6 +29,10 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 #endif
 
+#if NET
+using System.Runtime.InteropServices.ObjectiveC;
+#endif
+
 using ObjCRuntime;
 #if !COREBUILD
 #if MONOTOUCH
@@ -47,6 +51,9 @@ namespace Foundation {
 		NSObjectFlag () {}
 	}
 
+#if NET && !COREBUILD
+	[TrackedNativeReference]
+#endif
 	[StructLayout (LayoutKind.Sequential)]
 	public partial class NSObject 
 #if !COREBUILD
@@ -67,7 +74,32 @@ namespace Foundation {
 
 		unsafe ObjectData* data;
 		IntPtr handle;
-		Flags flags;
+		Flags actual_flags;
+
+		unsafe Flags flags {
+			get {
+				//if (data == null)
+				//	throw new ObjectDisposedException (GetType ().FullName);
+
+				//return data->Flags;
+				return actual_flags;
+			}
+			set {
+				//if (data == null)
+				//	throw new ObjectDisposedException (GetType ().FullName);
+				actual_flags = value;
+				if (data != null && data->TrackedObjectInfo != null)
+					data->TrackedObjectInfo->Flags = value;
+				//data->Flags = value;
+			}
+		}
+
+#if NET
+		internal unsafe ObjectData* GetDataPointer ()
+		{
+			return data;
+		}
+#endif
 
 		// This enum has a native counterpart in runtime.h
 		[Flags]
@@ -83,15 +115,21 @@ namespace Foundation {
 		}
 
 		[StructLayout (LayoutKind.Sequential)]
-		struct ObjectData {
+		internal struct ObjectData {
 			// The order of 'Handle' and 'ClassHandle' is important: do not re-order unless SuperHandle is modified accordingly.
 			public IntPtr Handle;
 			public IntPtr ClassHandle;
+			public unsafe Runtime.TrackedObjectInfo* TrackedObjectInfo;
 		}
 
 		bool disposed { 
-			get { return ((flags & Flags.Disposed) == Flags.Disposed); } 
-			set { flags = value ? (flags | Flags.Disposed) : (flags & ~Flags.Disposed);	}
+			get { return (flags & Flags.Disposed) == Flags.Disposed; }
+			set { flags = value ? (flags | Flags.Disposed) : (flags & ~Flags.Disposed); }
+		}
+
+		bool HasManagedRef {
+			get { return (flags & Flags.HasManagedRef) == Flags.HasManagedRef; }
+			set { flags = value ? (flags | Flags.HasManagedRef) : (flags & ~Flags.HasManagedRef); }
 		}
 
 		internal bool IsRegisteredToggleRef { 
@@ -148,7 +186,7 @@ namespace Foundation {
 		~NSObject () {
 			Dispose (false);
 		}
-		
+
 		public void Dispose () {
 			Dispose (true);
 			GC.SuppressFinalize (this);
@@ -182,6 +220,28 @@ namespace Foundation {
 			return class_ptr;
 		}
 
+#if NET
+		internal void SetHandleDirectly (IntPtr handle)
+		{
+			this.handle = handle;
+		}
+
+		internal void SetFlagsDirectly (byte flags)
+		{
+			this.flags = (Flags) flags;
+		}
+
+		internal Flags GetFlagsDirectly ()
+		{
+			return this.flags;
+		}
+#endif
+
+#if NET
+		[DllImport ("__Internal")]
+		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain, bool user_type);
+#endif
+
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
@@ -190,6 +250,52 @@ namespace Foundation {
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain, bool user_type);
+
+		static void RegisterToggleRefIndirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting RegisterToggleRef will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain, bool user_type)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting CreateManagedReference will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			xamarin_create_managed_ref (handle, obj, retain, user_type);
+		}
+
+		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain, bool user_type)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				var obj_handle = GCHandle.Alloc (obj);
+				try {
+					xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (obj_handle), retain, user_type);
+				} finally {
+					obj_handle.Free ();
+				}
+				return;
+			}
+#endif
+
+			xamarin_create_managed_ref_indirection (handle, obj, retain, user_type);
+		}
+
+		static void ReleaseManagedReference (IntPtr handle, bool user_type)
+		{
+			xamarin_release_managed_ref (handle, user_type);
+		}
+
+		static void RegisterToggleReference (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+#if NET
+			if (Runtime.IsCoreCLR) {
+				Runtime.RegisterToggleReferenceCoreCLR (obj, handle, isCustomType);
+				return;
+			}
+#endif
+
+			RegisterToggleRefIndirection (obj, handle, isCustomType);
+		}
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()
@@ -216,7 +322,7 @@ namespace Foundation {
 				return;
 			
 			IsRegisteredToggleRef = true;
-			RegisterToggleRef (this, Handle, allowCustomTypes);
+			RegisterToggleReference (this, Handle, allowCustomTypes);
 		}
 
 		private void InitializeObject (bool alloced) {
@@ -252,20 +358,20 @@ namespace Foundation {
 
 		void CreateManagedRef (bool retain)
 		{
-			flags |= Flags.HasManagedRef;
-			xamarin_create_managed_ref (handle, this, retain, Runtime.IsUserType (handle));
+			HasManagedRef = false;
+			CreateManagedReference (handle, this, retain, Runtime.IsUserType (handle));
 		}
 
 		void ReleaseManagedRef ()
 		{
 			var handle = this.Handle; // Get a copy of the handle, because it will be cleared out when calling Runtime.NativeObjectHasDied, and we still need the handle later.
 			var user_type = Runtime.IsUserType (handle);
-			flags &= ~Flags.HasManagedRef;
+			HasManagedRef = false;
 			if (!user_type) {
 				/* If we're a wrapper type, we need to unregister here, since we won't enter the release trampoline */
 				Runtime.NativeObjectHasDied (handle, this);
 			}
-			xamarin_release_managed_ref (handle, user_type);
+			ReleaseManagedReference (handle, user_type);
 			FreeData ();
 		}
 
@@ -431,6 +537,7 @@ namespace Foundation {
 					throw new ObjectDisposedException (GetType ().Name);
 
 				unsafe {
+					ObjectData* data = this.data;
 					if (data->ClassHandle == IntPtr.Zero)
 						data->ClassHandle = ClassHandle;
 

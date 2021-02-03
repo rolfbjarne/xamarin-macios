@@ -1,0 +1,781 @@
+﻿//
+// Runtime.coreclr.cs: Supporting managed code for the CoreCLR bridge
+//
+// Authors:
+//   Rolf Bjarne Kvinge
+//
+// Copyright 2021 Microsoft Corp.
+
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace ObjCRuntime {
+
+	public partial class Runtime {
+#if !COREBUILD
+		enum MonoObjectType {
+			Unknown,
+			MonoReflectionMethod,
+			MonoReflectionAssembly,
+			MonoReflectionType,
+			MonoArray,
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoObject {
+			public MonoObjectType ObjectKind;
+			public IntPtr GCHandle;
+			public IntPtr TypeName;
+			public IntPtr StructValue;
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoString {
+			public MonoObject Object;
+			IntPtr Value; /* char */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoArray {
+			public MonoObject Object;
+			public ulong Length; /* uint64_t */
+			public IntPtr Data; /* uint8_t */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoReflectionMethod {
+			public MonoObject Object;
+			public IntPtr Method; /* MonoMethod* */
+			IntPtr name;
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoReflectionAssembly {
+			public MonoObject Object;
+			IntPtr name;
+			public IntPtr Assembly; /* MonoAssembly* */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoReflectionType {
+			public MonoObject Object;
+			IntPtr name; /* char */
+			public IntPtr Type; /* MonoType* */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoException {
+			public MonoObject Object;
+			IntPtr name; /* char */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoMethod {
+			public IntPtr Name; /* char* */
+			public IntPtr Class; /* MonoClass* */
+			public int ParameterCount;
+			public IntPtr GCHandle; /* GCHandle */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoAssembly {
+			public IntPtr Name; /* char* */
+			public IntPtr Image; /* MonoImage* */
+			public IntPtr Object; /* MonoReflectionAssembly* */
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MonoType {
+			public IntPtr FullName; /* char* */
+			public IntPtr GCHandle; /* GCHandle */
+			public IntPtr Name; /* char* */
+			public IntPtr Namespace; /* char* */
+			public int Type; /* MonoTypeEnum */
+		}
+
+		static IntPtr InvokeMethod (IntPtr method_gchandle, IntPtr instance_gchandle, IntPtr native_parameters)
+		{
+			var method = (MethodBase) GetGCHandleTarget (method_gchandle);
+			var instance = GetGCHandleTarget (instance_gchandle);
+
+			var methodParameters = method.GetParameters ();
+			var parameters = new object [methodParameters.Length];
+			var inputParameters = new object [methodParameters.Length];
+
+			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
+			unsafe {
+				IntPtr* nativeParams = (IntPtr*) native_parameters;
+				for (var i = 0; i < methodParameters.Length; i++) {
+					var nativeParam = nativeParams [i];
+					var p = methodParameters [i];
+					var paramType = p.ParameterType;
+					if (paramType.IsByRef)
+						paramType = paramType.GetElementType ();
+					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} IsByRef: {p.ParameterType.IsByRef} IsOut: {p.IsOut} IsClass: {paramType.IsClass} IsInterface: {paramType.IsInterface} NativeParameter: 0x{nativeParam.ToString ("x")}");
+				}
+			}
+
+			var anyUnknown = false;
+			unsafe {
+				IntPtr* nativeParams = (IntPtr*) native_parameters;
+				for (var i = 0; i < methodParameters.Length; i++) {
+					var nativeParam = nativeParams [i];
+					var p = methodParameters [i];
+					var paramType = p.ParameterType;
+					var isByRef = paramType.IsByRef;
+					if (isByRef)
+						paramType = paramType.GetElementType ();
+					xamarin_log ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName} [...]");
+
+					if (paramType == typeof (IntPtr)) {
+						xamarin_log ($"        IntPtr");
+						if (isByRef) {
+							if (p.IsOut) {
+								parameters [i] = Marshal.AllocHGlobal (IntPtr.Size);
+							} else {
+								parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
+							}
+						} else {
+							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
+						}
+						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
+					} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
+						xamarin_log ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
+						var obj_gchandle = IntPtr.Zero;
+						if (nativeParam != IntPtr.Zero) {
+							unsafe {
+								MonoObject* mono_obj;
+								if (isByRef) {
+									mono_obj = *(MonoObject**) nativeParam;
+								} else {
+									mono_obj = (MonoObject*) nativeParam;
+								}
+								if (mono_obj != null)
+									obj_gchandle = mono_obj->GCHandle;
+							}
+							if (obj_gchandle != IntPtr.Zero)
+								parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
+						}
+						if (parameters [i] is bool[] arr) {
+							xamarin_log ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
+						}
+						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					} else if (paramType.IsValueType) {
+						xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut}");
+						object vt = null;
+						IntPtr ptr = nativeParam;
+						if (nativeParam != IntPtr.Zero) {
+							if (ptr != IntPtr.Zero) {
+								xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")} ParameterType: {paramType}");
+								var structType = paramType;
+								Type enumType = null;
+								if (IsNullable (structType))
+									structType = Nullable.GetUnderlyingType (structType);
+								if (structType.IsEnum) {
+									enumType = structType;
+									structType = Enum.GetUnderlyingType (structType);
+								}
+								vt = Marshal.PtrToStructure (ptr, structType);
+								if (enumType != null)
+									vt = Enum.ToObject (enumType, vt);
+							}
+						}
+						parameters [i] = vt;
+						xamarin_log ($"        IsValueType (ptr: 0x{ptr.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
+					} else {
+						xamarin_log ($"        Marshalling unknown: {p.ParameterType.FullName}");
+						anyUnknown = true;
+					}
+				}
+			}
+
+			parameters.CopyTo (inputParameters, 0);
+
+			if (anyUnknown) {
+				throw new NotImplementedException ($"Unknown method parameters!");
+			}
+
+			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) INVOKING");
+
+			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
+
+			var byrefParameterCount = 0;
+			for (var i = 0; i < methodParameters.Length; i++) {
+				var p = methodParameters [i];
+				if (!p.IsOut && !p.ParameterType.IsByRef)
+					continue;
+				byrefParameterCount++;
+
+				xamarin_log ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+
+				if (parameters [i] == inputParameters [i]) {
+					xamarin_log ($"        The argument didn't change, no marshalling required");
+					continue;
+				}
+
+				var parameterType = p.ParameterType.GetElementType ();
+				if (parameterType == typeof (IntPtr)) {
+					xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()}");
+					unsafe {
+						IntPtr** nativeParams = (IntPtr**) native_parameters;
+						IntPtr* nativeParam = nativeParams [i];
+						if (nativeParam != null)
+							*nativeParam = (IntPtr) parameters [i];
+					}
+				} else if (parameterType.IsClass || parameterType.IsInterface || (parameterType.IsValueType && IsNullable (parameterType))) {
+					var ptr = GetMonoObject (parameters [i]);
+					xamarin_log ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					unsafe {
+						IntPtr** nativeParams = (IntPtr**) native_parameters;
+						IntPtr* nativeParam = nativeParams [i];
+						xamarin_log ($"            nativeParam: 0x{((IntPtr) nativeParam).ToString ("x")}");
+						if (nativeParam != null)
+							*nativeParam = ptr;
+					}
+					xamarin_log ($"        IsClass/IsInterface: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)} -> MonoObject: 0x{ptr.ToString ("x")}");
+				} else if (parameterType.IsValueType) {
+					xamarin_log ($"        IsValueType");
+					IntPtr nativeParam;
+					unsafe {
+						IntPtr* nativeParams = (IntPtr*) native_parameters;
+						nativeParam = nativeParams [i];
+					}
+					if (nativeParam != IntPtr.Zero) {
+						xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}");
+						Marshal.StructureToPtr (parameters [i], nativeParam, false);
+					}
+					xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
+				} else {
+					xamarin_log ($"        UNKNOWN BYREF PARAMETER TYPE: {p.ParameterType}");
+					throw new NotImplementedException ($"Unknown byref parameter type: {p.ParameterType}");
+				}
+			}
+
+			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) Ref parameters: {byrefParameterCount} Return value of type {rv?.GetType ()} {(rv is bool ? rv : null)}");
+
+			if (rv == null)
+				return IntPtr.Zero;
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+		}
+
+		[DllImport ("__Internal")]
+		static extern IntPtr xamarin_find_mono_class (IntPtr gchandle, string name_space, string name);
+
+		static IntPtr FindMonoClass (Type type)
+		{
+			var handle = GCHandle.Alloc (type);
+			try {
+				return xamarin_find_mono_class (GCHandle.ToIntPtr (handle), type.Namespace, type.Name);
+			} finally {
+				handle.Free ();
+			}
+		}
+
+		static IntPtr CreateMonoMethod (IntPtr handle, MethodBase method)
+		{
+			var rv = new MonoMethod ();
+			rv.Name = GetMethodName (handle);
+			rv.Class = FindMonoClass (method.DeclaringType);
+			rv.GCHandle = handle;
+			return MarshalStructure (rv);
+		}
+
+		static IntPtr CreateMonoType (IntPtr handle)
+		{
+			var rv = new MonoType ();
+			rv.FullName = TypeGetFullName (handle);
+			rv.Name = rv.FullName;
+			rv.GCHandle = handle;
+			return MarshalStructure (rv);
+		}
+
+		// This method must be kept in sync with xamarin_bridge_get_monoobject
+		static IntPtr GetMonoObject (object obj)
+		{
+			if (obj == null)
+				return IntPtr.Zero;
+
+			var gchandle = GCHandle.Alloc (obj);
+			var handle = GCHandle.ToIntPtr (gchandle);
+			var typename = GetGCHandleType (handle);
+			IntPtr rv;
+			if (obj is MethodBase mb) {
+				var mobj = new MonoReflectionMethod ();
+				mobj.Object.ObjectKind = MonoObjectType.MonoReflectionMethod;
+				mobj.Object.GCHandle = handle;
+				mobj.Object.TypeName = typename;
+				mobj.Method = CreateMonoMethod (handle, mb);
+				rv = MarshalStructure (mobj);
+				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+			} else if (obj is Type) {
+				var mobj = new MonoReflectionType ();
+				mobj.Object.ObjectKind = MonoObjectType.MonoReflectionType;
+				mobj.Object.GCHandle = handle;
+				mobj.Object.TypeName = typename;
+				mobj.Type = CreateMonoType (handle);
+				rv = MarshalStructure (mobj);
+				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+			} else if (obj is Array array) {
+				var mobj = new MonoArray ();
+				mobj.Object.ObjectKind = MonoObjectType.MonoArray;
+				mobj.Object.GCHandle = handle;
+				mobj.Object.TypeName = typename;
+				mobj.Length = (ulong) array.Length;
+				rv = MarshalStructure (mobj);
+				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+			} else {
+				var mobj = new MonoObject ();
+				mobj.GCHandle = handle;
+				mobj.TypeName = typename;
+				mobj.StructValue = WriteStructure (handle);
+				rv = MarshalStructure (mobj);
+				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
+			}
+			
+			return rv;
+		}
+
+		static IntPtr MarshalStructure<T> (T value) where T: struct
+		{
+			var rv = Marshal.AllocHGlobal (Marshal.SizeOf (typeof (T)));
+			Marshal.StructureToPtr (value, rv, false);
+			return rv;
+		}
+
+		static IntPtr GetManagedType (IntPtr type_name)
+		{
+			var tn = Marshal.PtrToStringAuto (type_name);
+			Console.WriteLine ($"GetManagedType ({tn})");
+			var tp = Type.GetType (tn, true);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (tp));
+		}
+
+		static IntPtr WriteStructure (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return IntPtr.Zero;
+			if (!obj.GetType ().IsValueType) {
+				//Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
+				return IntPtr.Zero;
+			}
+
+			var structType = obj.GetType ();
+			if (structType.IsEnum) {
+				structType = Enum.GetUnderlyingType (structType);
+				obj = Convert.ChangeType (obj, structType);
+			}
+
+			var size = SizeOf (obj.GetType ());
+			var output = Marshal.AllocHGlobal (size);
+
+			Marshal.StructureToPtr (obj, output, false);
+
+			var sb = new System.Text.StringBuilder ();
+			var l = SizeOf (obj.GetType ());
+			sb.Append ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, 0x{output.ToString ("x")}) Size: {l} -- ");
+			for (var i = 0; i < l; i++)
+				sb.Append ($" 0x{Marshal.ReadByte (output, i).ToString ("x")}");
+			sb.AppendLine ();
+			xamarin_log (sb.ToString ());
+			return output;
+		}
+
+		static bool IsInstance (IntPtr obj_gchandle, IntPtr type_gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
+			if (obj == null)
+				return false;
+
+			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
+			return obj.GetType ().IsAssignableFrom (type);
+		}
+
+		static bool IsDelegate (IntPtr type_gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
+			var rv = typeof (MulticastDelegate).IsAssignableFrom (type);
+			xamarin_log ($"IsDelegate ({type.FullName}) => {rv}");
+			return rv;
+		}
+
+		// This is supposed to work like mono_class_is_subclass_of
+		static bool IsSubclassOf (IntPtr type1_gchandle, IntPtr type2_gchandle, bool check_interfaces)
+		{
+			var sb = new System.Text.StringBuilder ();
+
+			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")}, 0x{type2_gchandle.ToString ("x")}, {check_interfaces})");
+
+			if (type1_gchandle == IntPtr.Zero)
+				return false;
+
+			if (type2_gchandle == IntPtr.Zero)
+				return false;
+
+			var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
+			var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
+
+			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
+
+			if (check_interfaces) {
+				if (type2.IsAssignableFrom (type1)) {
+					xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is assignable from type1");
+					return true;
+				}
+			} else {
+				if (!type2.IsInterface) {
+					var baseClass = type1;
+					while (baseClass != null && baseClass != typeof (object)) {
+						xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is not an interface, checking base class {baseClass.FullName}");
+						if (baseClass == type2)
+							return true;
+						baseClass = baseClass.BaseType;
+					}
+				}
+			}
+
+			if (type2 == typeof (object))
+				return true;
+
+			return false;
+		}
+
+		static bool IsByRef (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsByRef;
+		}
+
+		static bool IsValueType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsValueType;
+		}
+
+		static bool IsEnum (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsEnum;
+		}
+
+		static IntPtr GetEnumBaseType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var baseType = type.GetEnumUnderlyingType ();
+			return GCHandle.ToIntPtr (GCHandle.Alloc (baseType));
+		}
+
+		static bool IsNullable (IntPtr gchandle)
+		{
+			return IsNullable ((Type) GCHandle.FromIntPtr (gchandle).Target);
+		}
+
+		static bool IsNullable (Type type)
+		{
+			if (Nullable.GetUnderlyingType (type) != null)
+				return true;
+			if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (Nullable<>))
+				return true;
+			return false;
+
+		}
+
+		static IntPtr ObjectToString (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.ToString ());
+		}
+
+		static IntPtr ObjectGetType (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null) {
+				xamarin_log ($"ObjectGetType (0x{gchandle.ToString ("x")}) => null object");
+				return IntPtr.Zero;
+			}
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj.GetType ()));
+		}
+
+		static void GetNameAndNamespace (IntPtr gchandle, ref IntPtr name_space, ref IntPtr name)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			name_space = Marshal.StringToHGlobalAuto (type.Namespace);
+			name = Marshal.StringToHGlobalAuto (type.Name);
+		}
+
+		static IntPtr GetElementClass (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return GCHandle.ToIntPtr (GCHandle.Alloc (type.GetElementType ()));
+		}
+
+		// typedef void (* mono_reference_queue_callback) (void* user_data);
+		delegate void mono_reference_queue_callback (IntPtr user_data);
+
+		class ReferenceQueue {
+			public mono_reference_queue_callback Callback;
+			public ConditionalWeakTable<object, object> Table = new ConditionalWeakTable<object, object> ();
+		}
+
+		class ReferenceQueueEntry {
+			public ReferenceQueue Queue;
+			public IntPtr UserData;
+
+			~ReferenceQueueEntry ()
+			{
+				Queue.Callback (UserData);
+			}
+		}
+
+		static IntPtr CreateGCReferenceQueue (IntPtr callback)
+		{
+			var queue = new ReferenceQueue ();
+			queue.Callback = Marshal.GetDelegateForFunctionPointer<mono_reference_queue_callback> (callback);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (queue));
+		}
+
+		static void GCReferenceQueueAdd (IntPtr queue_handle, IntPtr obj_handle, IntPtr user_data)
+		{
+			var queue = (ReferenceQueue) GCHandle.FromIntPtr (queue_handle).Target;
+			var obj = GCHandle.FromIntPtr (obj_handle).Target;
+			queue.Table.Add (obj, new ReferenceQueueEntry () { Queue = queue, UserData = user_data });
+		}
+
+		static IntPtr StringToUtf8 (IntPtr gchandle)
+		{
+			var str = (string) GCHandle.FromIntPtr (gchandle).Target;
+			if (str == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (str);
+		}
+
+		static IntPtr NewString (IntPtr text)
+		{
+			if (text == IntPtr.Zero)
+				return IntPtr.Zero;
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (Marshal.PtrToStringAuto (text)));
+		}
+
+
+		class MonoHashTable : IEqualityComparer<IntPtr> {
+			Dictionary<IntPtr, GCHandle> Table;
+			HashFunc Hash;
+			EqualityFunc Compare;
+
+			public delegate uint HashFunc (IntPtr ptr);
+			public delegate bool EqualityFunc (IntPtr a, IntPtr b);
+
+			public MonoHashTable (IntPtr hash_func, IntPtr compare_func)
+			{
+				Table = new Dictionary<IntPtr, GCHandle> ();
+				Hash = Marshal.GetDelegateForFunctionPointer<HashFunc> (hash_func);
+				Compare = Marshal.GetDelegateForFunctionPointer<EqualityFunc> (compare_func);
+			}
+
+			public void Insert (IntPtr key, GCHandle obj)
+			{
+				xamarin_log ($"MonoHashTable.Add (0x{key.ToString ("x")}, {obj} = {obj.Target})");
+				Table [key] = obj;
+			}
+
+			public IntPtr Lookup (IntPtr key)
+			{
+				if (Table.TryGetValue (key, out var value))
+					return GCHandle.ToIntPtr (value);
+				return IntPtr.Zero;
+			}
+
+			bool IEqualityComparer<IntPtr>.Equals (IntPtr x, IntPtr y)
+			{
+				return Compare (x, y);
+			}
+
+			int IEqualityComparer<IntPtr>.GetHashCode (IntPtr obj)
+			{
+				unchecked {
+					return (int) Hash (obj);
+				}
+			}
+		}
+
+		static IntPtr CreateMonoHashTable (IntPtr hash_method, IntPtr compare_method, int type)
+		{
+			if (type != 2 /* MONO_HASH_VALUE_GC */)
+				throw new NotSupportedException ($"Unknown hash table type: {type}");
+
+			var dict = new MonoHashTable (hash_method, compare_method);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (dict));
+		}
+
+		static void MonoHashTableInsert (IntPtr gchandle, IntPtr key, IntPtr value_gchandle)
+		{
+			var dict = (MonoHashTable) GCHandle.FromIntPtr (gchandle).Target;
+			var value = GCHandle.FromIntPtr (value_gchandle);
+			dict.Insert (key, value);
+		}
+
+		static IntPtr MonoHashTableLookup (IntPtr gchandle, IntPtr key)
+		{
+			var dict = (MonoHashTable) GCHandle.FromIntPtr (gchandle).Target;
+			return dict.Lookup (key);
+		}
+
+		static IntPtr GetNullableElementType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var elementType = type.GetGenericArguments () [0];
+			return GCHandle.ToIntPtr (GCHandle.Alloc (elementType));
+		}
+
+		static IntPtr CreateArray (IntPtr gchandle, ulong elements)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = Array.CreateInstance (type, (int) elements);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+		}
+
+		[DllImport ("libc")]
+		static extern IntPtr memcpy (IntPtr dest, IntPtr src, nint n);
+
+		static IntPtr GetArrayData (IntPtr gchandle)
+		{
+			if (gchandle == IntPtr.Zero)
+				return IntPtr.Zero;
+
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var elementSize = SizeOf (array.GetType ().GetElementType ());
+			var dataSize = elementSize * array.Length;
+			var rv = Marshal.AllocHGlobal (dataSize);
+
+			xamarin_log ($"GetArrayData (0x{gchandle.ToString ("x")}) Type: {array.GetType ()} Array Length: {array.Length} Element Size: {elementSize} rv: 0x{rv.ToString ("x")}");
+
+			if (array.Length > 0) {
+				if (array is bool[] arr) {
+					xamarin_log ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
+				}
+				var arrayType = array.GetType ().GetElementType ();
+				if (arrayType.IsEnum) {
+					// this is quite slow... here we copy the enum array to an array of the underlying type
+					// See: https://github.com/dotnet/runtime/issues/48907
+					var enumType = Enum.GetUnderlyingType (arrayType);
+					var integralArray = Array.CreateInstance (enumType, array.Length);
+					for (var i = 0; i < array.Length; i++)
+						integralArray.SetValue (Convert.ChangeType (array.GetValue (i), enumType), i);
+					array = integralArray;
+					xamarin_log ($" => converted to array of {enumType}");
+				}
+
+				var pinned = GCHandle.Alloc (array, GCHandleType.Pinned);
+				try {
+					var addr = pinned.AddrOfPinnedObject ();
+					memcpy (rv, addr, dataSize);
+				} finally {
+					pinned.Free ();
+				}
+			}
+
+			var sb = new System.Text.StringBuilder ();
+			for (var i = 0; i < Math.Min (16, dataSize); i++) {
+				sb.Append ($" 0x{Marshal.ReadByte (rv, i).ToString ("x")}");
+			}
+			xamarin_log ($"    => {sb.ToString ()}");
+
+			return rv;
+		}
+
+		static ulong GetArrayLength (IntPtr gchandle)
+		{
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			return (ulong) array.Length;
+		}
+
+		static void SetArrayObjectValue (IntPtr gchandle, int index, IntPtr obj_gchandle)
+		{
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
+			array.SetValue (obj, index);
+			if (obj is bool)
+				xamarin_log ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj})");
+			else
+				xamarin_log ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj}) huh? {obj?.GetType ()}");
+		}
+
+		static IntPtr GetArrayObjectValue (IntPtr gchandle, int index)
+		{
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = array.GetValue (index);
+			if (obj is bool)
+				xamarin_log ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj}");
+			else
+				xamarin_log ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj} huh? {obj?.GetType ()}");
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+		}
+
+		static IntPtr TypeRemoveByRef (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			if (type.IsByRef)
+				type = type.GetElementType ();
+			return GCHandle.ToIntPtr (GCHandle.Alloc (type));
+		}
+
+		static void ThrowException (IntPtr gchandle)
+		{
+			var exc = (Exception) GCHandle.FromIntPtr (gchandle).Target;
+			throw exc;
+		}
+
+		static int SizeOf (IntPtr gchandle)
+		{
+			return SizeOf ((Type) GCHandle.FromIntPtr (gchandle).Target);
+		}
+
+		static int SizeOf (Type type)
+		{
+			if (type.IsEnum) // https://github.com/dotnet/runtime/issues/12258
+				type = Enum.GetUnderlyingType (type);
+			return Marshal.SizeOf (type);
+		}
+
+		static IntPtr Box (IntPtr gchandle, IntPtr value)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			xamarin_log ($"Box ({type}, 0x{value.ToString ("x")})");
+			var structType = type;
+			Type enumType = null;
+
+			// We can have a nullable enum value
+			if (IsNullable (structType)) {
+				if (value == IntPtr.Zero)
+					return GCHandle.ToIntPtr (GCHandle.Alloc (null));
+				structType = Nullable.GetUnderlyingType (structType);
+			}
+
+			if (structType.IsEnum) {
+				// Change to underlying enum type
+				enumType = structType;
+				structType = Enum.GetUnderlyingType (structType);
+			}
+
+			var boxed = Marshal.PtrToStructure (value, structType);
+			if (enumType != null) {
+				// Convert to enum value
+				boxed = Enum.ToObject (enumType, boxed);
+			}
+
+			if (boxed is bool)
+				xamarin_log ($"     bool boxed value: {boxed}");
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
+		}
+#endif // !COREBUILD
+	}
+}
+

@@ -1,3 +1,5 @@
+coreclr_delegates.h
+hostfxr.h
 .libs
 delegates.inc
 Delegates.generated.cs
@@ -11,3 +13,4 @@ tvextension-main.m
 bindings-generated.m
 *.dylib
 *.o
+coreclrhost.h

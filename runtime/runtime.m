@@ -152,6 +152,9 @@ struct InitializationOptions {
 	void *xamarin_objc_msgsend_stret;
 	void *xamarin_objc_msgsend_super_stret;
 	void *unhandled_exception_handler;
+	void *reference_tracking_begin_end_callback;
+	void *reference_tracking_is_referenced_callback;
+	void *reference_tracking_tracked_object_entered_finalization;
 #endif
 };
 
@@ -1260,6 +1263,9 @@ xamarin_initialize ()
 #endif
 
 #if defined (CORECLR_RUNTIME)
+	options.reference_tracking_begin_end_callback = (void *) &xamarin_coreclr_reference_tracking_begin_end_callback;
+	options.reference_tracking_is_referenced_callback = (void *) &xamarin_coreclr_reference_tracking_is_referenced_callback;
+	options.reference_tracking_tracked_object_entered_finalization = (void *) &xamarin_coreclr_reference_tracking_tracked_object_entered_finalization;
 	options.unhandled_exception_handler = (void *) &xamarin_coreclr_unhandled_exception_handler;
 	options.xamarin_objc_msgsend = (void *) xamarin_dyn_objc_msgSend;
 	options.xamarin_objc_msgsend_super = (void *) xamarin_dyn_objc_msgSendSuper;

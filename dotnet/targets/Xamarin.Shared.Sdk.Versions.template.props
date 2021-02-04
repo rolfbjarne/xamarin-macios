@@ -8,11 +8,13 @@
 		<_ShortPackageVersion Condition=" '$(_PlatformName)' == 'tvOS' ">@TVOS_NUGET_VERSION_NO_METADATA@</_ShortPackageVersion>
 		<_ShortPackageVersion Condition=" '$(_PlatformName)' == 'watchOS' ">@WATCHOS_NUGET_VERSION_NO_METADATA@</_ShortPackageVersion>
 		<_ShortPackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">@MACOS_NUGET_VERSION_NO_METADATA@</_ShortPackageVersion>
+		<_ShortPackageVersion Condition=" '$(_PlatformName)' == 'MacCatalyst' ">@MACCATALYST_NUGET_VERSION_NO_METADATA@</_ShortPackageVersion>
 
 		<_PackageVersion Condition=" '$(_PlatformName)' == 'iOS' ">@IOS_NUGET_VERSION_FULL@</_PackageVersion>
 		<_PackageVersion Condition=" '$(_PlatformName)' == 'tvOS' ">@TVOS_NUGET_VERSION_FULL@</_PackageVersion>
 		<_PackageVersion Condition=" '$(_PlatformName)' == 'watchOS' ">@WATCHOS_NUGET_VERSION_FULL@</_PackageVersion>
 		<_PackageVersion Condition=" '$(_PlatformName)' == 'macOS' ">@MACOS_NUGET_VERSION_FULL@</_PackageVersion>
+		<_PackageVersion Condition=" '$(_PlatformName)' == 'MacCatalyst' ">@MACCATALYST_NUGET_VERSION_FULL@</_PackageVersion>
 	</PropertyGroup>
 
 	<!-- Defines the default platform version if it's not specified in the TFM. The default should not change for a given .NET version:
@@ -27,5 +29,6 @@
 		<_DefaultTargetPlatformVersion Condition=" '$(_PlatformName)' == 'tvOS' ">13.4</_DefaultTargetPlatformVersion>
 		<_DefaultTargetPlatformVersion Condition=" '$(_PlatformName)' == 'watchOS' ">6.2</_DefaultTargetPlatformVersion>
 		<_DefaultTargetPlatformVersion Condition=" '$(_PlatformName)' == 'macOS' ">10.15</_DefaultTargetPlatformVersion>
+		<_DefaultTargetPlatformVersion Condition=" '$(_PlatformName)' == 'MacCatalyst' ">13.5</_DefaultTargetPlatformVersion>
 	</PropertyGroup>
 </Project>

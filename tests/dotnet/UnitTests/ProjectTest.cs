@@ -104,7 +104,7 @@ namespace Xamarin.Tests {
 		public void BuildMyCatalystApp ()
 		{
 			var platform = ApplePlatform.MacCatalyst;
-			var project_path = GetProjectPath ("BuildMyCatalystApp");
+			var project_path = GetProjectPath ("MyCatalystApp");
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			Clean (project_path);
 			var result = DotNet.AssertBuild (project_path, verbosity);

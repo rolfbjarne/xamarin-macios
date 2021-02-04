@@ -837,6 +837,7 @@ namespace Xamarin.Tests
 			case "tvos":
 			case "watchos":
 			case "macosx":
+			case "maccatalyst":
 				IgnoreIfIgnoredPlatform ((ApplePlatform) Enum.Parse (typeof (ApplePlatform), platform, true));
 				break;
 			case "macos":

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.MacCatalyst.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-maccatalyst</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
     <OutputType>Exe</OutputType>
-
-    <ApplicationTitle>MyCatalystApp</ApplicationTitle>
-    <ApplicationId>com.xamarin.mycatalystapp</ApplicationId>
-    <ApplicationVersion>3.14</ApplicationVersion>
   </PropertyGroup>
+  <ItemGroup>
+  	<None Include="Info.plist" />
+  </ItemGroup>
 </Project>

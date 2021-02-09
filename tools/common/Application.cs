@@ -780,11 +780,17 @@ namespace Xamarin.Bundler {
 
 			RuntimeOptions = RuntimeOptions.Create (this, HttpMessageHandler, TlsProvider);
 
+			if (Platform == ApplePlatform.MacCatalyst) {
+				// SdkVersion is the macOS SDK version, but the rest of our expects the supporting iOS version
+				SdkVersion = GetMacCatalystiOSVersion (SdkVersion);
+			}
+
 			if (RequiresXcodeHeaders && SdkVersion < SdkVersions.GetVersion (this)) {
 				switch (Platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
 				case ApplePlatform.WatchOS:
+				case ApplePlatform.MacCatalyst:
 					throw ErrorHelper.CreateError (180, Errors.MX0180, ProductName, PlatformName, SdkVersions.GetVersion (this), SdkVersions.Xcode);
 				case ApplePlatform.MacOSX:
 					throw ErrorHelper.CreateError (179, Errors.MX0179, ProductName, PlatformName, SdkVersions.GetVersion (this), SdkVersions.Xcode);
@@ -792,6 +798,27 @@ namespace Xamarin.Bundler {
 					// Default to the iOS error message, it's better than showing MX0071 (unknown platform), which would be completely unrelated
 					goto case ApplePlatform.iOS;
 				}
+			}
+
+
+#if ENABLE_BITCODE_ON_IOS
+			if (Platform == ApplePlatform.iOS)
+				DeploymentTarget = new Version (9, 0);
+#endif
+
+			if (DeploymentTarget == null)
+				DeploymentTarget = Xamarin.SdkVersions.GetVersion (this);
+
+			if (Platform == ApplePlatform.iOS && (HasDynamicLibraries || HasFrameworks) && DeploymentTarget.Major < 8) {
+				ErrorHelper.Warning (78, Errors.MT0078, DeploymentTarget);
+				DeploymentTarget = new Version (8, 0);
+			}
+
+			if (Platform == ApplePlatform.MacCatalyst) {
+				// The deployment target we expect for Mac Catalyst is the macOS version,
+				// but we're expected to provide the corresponding iOS version pretty much
+				// everywhere, so convert here.
+				//DeploymentTarget = GetMacCatalystiOSVersion (DeploymentTarget);
 			}
 
 			if (DeploymentTarget != null) {
@@ -1414,7 +1441,7 @@ namespace Xamarin.Bundler {
 		public bool IsAOTCompiled (string assembly)
 		{
 #if NET
-			if (Platform == ApplePlatform.MacOSX)
+			if (Platform == ApplePlatform.MacOSX || Platform == ApplePlatform.MacCatalyst)
 				return false; // AOT on .NET for macOS hasn't been implemented yet.
 #else	
 			if (Platform == ApplePlatform.MacOSX)
@@ -1610,9 +1637,10 @@ namespace Xamarin.Bundler {
 				return !Profile.IsSdkAssembly (Path.GetFileNameWithoutExtension (assembly));
 			case ApplePlatform.TVOS:
 			case ApplePlatform.WatchOS:
+			case ApplePlatform.MacCatalyst:
 				return false;
 			default:
-				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, "Xamarin.iOS");
+				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
 			}
 		}
 

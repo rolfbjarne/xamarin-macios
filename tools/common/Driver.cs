@@ -287,13 +287,18 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		static int verbose = GetDefaultVerbosity ();
+		static int verbose;
 		public static int Verbosity {
 			get { return verbose; }
 			set {
 				verbose = value;
 				ErrorHelper.Verbosity = Verbosity;
 			}
+		}
+
+		static Driver ()
+		{
+			Verbosity = GetDefaultVerbosity ();
 		}
 
 		static int GetDefaultVerbosity ()
@@ -726,6 +731,10 @@ namespace Xamarin.Bundler {
 				framework_dir = Target.GetRealPath (framework_dir);
 			}
 			return framework_dir;
+		}
+
+		public static string FrameworkCurrentDirectory {
+			set { framework_dir = value; }
 		}
 
 		// This is the 'Current/bin' directory of the installed framework

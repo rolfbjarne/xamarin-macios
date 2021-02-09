@@ -668,6 +668,7 @@ public class Frameworks : Dictionary <string, Framework>
 			var weak_link = framework.AlwaysWeakLinked || app.DeploymentTarget < framework.Version;
 			var add_to = weak_link ? weak_frameworks : frameworks;
 			add_to.Add (framework.Name);
+			Console.WriteLine ($"Adding {framework.Name} Weak: {weak_link} app.DeploymentTarget: {app.DeploymentTarget} AlwaysWeakLinked: {framework.AlwaysWeakLinked} Framework.Version: {framework.Version} app.SdkVersion: {app.SdkVersion}");
 		}
 
 		// Make sure there are no duplicates between frameworks and weak frameworks.
@@ -681,6 +682,7 @@ public class Frameworks : Dictionary <string, Framework>
 		case ApplePlatform.iOS:
 		case ApplePlatform.TVOS:
 		case ApplePlatform.WatchOS:
+		case ApplePlatform.MacCatalyst:
 			break; // Include all frameworks by default
 		case ApplePlatform.MacOSX:
 			switch (framework.Name) {

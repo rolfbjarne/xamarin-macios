@@ -119,6 +119,9 @@ nupkgs/$(1).$(2)+$(NUGET_BUILD_METADATA).nupkg: $(TEMPLATED_FILES) $(3) package/
 	$$(Q_NUGET_DEL) if test -d $(DOTNET_FEED_DIR)/$(shell echo $(1) | tr A-Z a-z)/$(2); then nuget delete $(1) $(2) -source $(abspath $(DOTNET_FEED_DIR)) -NonInteractive $(NUGET_VERBOSITY); fi
 	@# Add the nupkg to our local feed
 	$$(Q_NUGET_ADD) nuget add "$$@" -source $(DOTNET_FEED_DIR) -NonInteractive $(NUGET_VERBOSITY)
+
+z::
+	@echo nupkgs/$(1).$(2)+$(NUGET_BUILD_METADATA).nupkg
 endef
 
 # Create the NuGet packaging targets. It's amazing what make allows you to do...
@@ -134,14 +137,16 @@ define PacksDefinitions
 RUNTIME_PACKS_$(1) = $$(foreach rid,$$(DOTNET_$(1)_RUNTIME_IDENTIFIERS),$(DOTNET_NUPKG_DIR)/$($(1)_NUGET).Runtime.$$(rid).$($(1)_NUGET_VERSION_FULL).nupkg)
 RUNTIME_PACKS += $$(RUNTIME_PACKS_$(1))
 REF_PACKS_$(1) = $(DOTNET_NUPKG_DIR)/$($(1)_NUGET).Ref.$($(1)_NUGET_VERSION_FULL).nupkg
-REF_PACKS += $(REF_PACKS_$(1))
+REF_PACKS += $$(REF_PACKS_$(1))
 SDK_PACKS_$(1) = $(DOTNET_NUPKG_DIR)/$($(1)_NUGET).Sdk.$($(1)_NUGET_VERSION_FULL).nupkg
-SDK_PACKS += $(SDK_PACKS_$(1))
+SDK_PACKS += $$(SDK_PACKS_$(1))
 pack-$(shell echo $(1) | tr A-Z a-z): $$(RUNTIME_PACKS_$(1)) $$(REF_PACKS_$(1)) $$(SDK_PACKS_$(1))
 x-$(1):
-	echo $(1)
-	echo $$(RUNTIME_PACKS_$(1)) $$(REF_PACKS_$(1)) $$(SDK_PACKS_$(1))
-echo x: x-$(1)
+	@echo $(1)
+	@echo Runtime Packs: $$(RUNTIME_PACKS_$(1))
+	@echo Ref Packs: $$(REF_PACKS_$(1))
+	@echo Sdk Packs: $$(SDK_PACKS_$(1))
+x: x-$(1)
 endef
 $(foreach platform,$(DOTNET_PLATFORMS_UPPERCASE),$(eval $(call PacksDefinitions,$(platform))))
 
@@ -260,7 +265,7 @@ msi: $(MSI_TARGETS)
 package: $(PACKAGE_TARGETS) $(MSI_TARGETS)
 
 ifdef ENABLE_DOTNET
-all-local:: $(TARGETS) targets/Xamarin.Shared.Sdk.Versions.props
+all-local:: $(TARGETS) targets/Xamarin.Shared.Sdk.Versions.props $(PACKAGE_TARGETS) $(MSI_TARGETS)
 endif
 
 # This tells NuGet to use the exact same dotnet version we've configured in Make.config

@@ -815,6 +815,7 @@ IOS_COMMON_TARGETS = \
 	$(DOTNET_DESTDIR)/$(IOS_NUGET).Sdk/Versions.plist \
 	$(DOTNET_DESTDIR)/$(TVOS_NUGET).Sdk/Versions.plist \
 	$(DOTNET_DESTDIR)/$(WATCHOS_NUGET).Sdk/Versions.plist \
+	$(DOTNET_DESTDIR)/$(MACCATALYST_NUGET).Sdk/Versions.plist \
 
 $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current: | $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions
 	$(Q_LN) ln -hfs $(IOS_INSTALL_VERSION) $@

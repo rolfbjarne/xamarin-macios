@@ -761,10 +761,20 @@ namespace Xamarin.Bundler {
 				else
 					mono_native_lib = app.GetLibNativeName () + ".dylib";
 				sw.WriteLine ();
-				sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Native\", NULL, \"{mono_native_lib}\", NULL);");
-				sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Security.Cryptography.Native.Apple\", NULL, \"{mono_native_lib}\", NULL);");
-				sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Net.Security.Native\", NULL, \"{mono_native_lib}\", NULL);");
-				sw.WriteLine ();
+#if NET
+				// Mono doesn't support dllmaps for Mac Catalyst / macOS in .NET for now:
+				// macOS: https://github.com/dotnet/runtime/issues/43204
+				// Mac Catalyst: https://github.com/dotnet/runtime/issues/48110
+				var addDllMap = App.Platform != ApplePlatform.MacCatalyst && app.Platform != ApplePlatform.MacOSX;
+#else
+				var addDllMap = true;
+#endif
+				if (addDllMap) {
+					sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Native\", NULL, \"{mono_native_lib}\", NULL);");
+					sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Security.Cryptography.Native.Apple\", NULL, \"{mono_native_lib}\", NULL);");
+					sw.WriteLine ($"\tmono_dllmap_insert (NULL, \"System.Net.Security.Native\", NULL, \"{mono_native_lib}\", NULL);");
+					sw.WriteLine ();
+				}
 			}
 
 			if (app.EnableDebug)

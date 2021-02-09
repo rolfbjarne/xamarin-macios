@@ -9,6 +9,10 @@ namespace Xamarin.Bundler {
 	public class ProductException : Exception {
 		public static string Prefix => ErrorHelper.Prefix;
 
+#if NET
+		string stack_trace;
+#endif
+
 		public ProductException (int code, string message) :
 			this (code, false, message)
 		{
@@ -53,7 +57,21 @@ namespace Xamarin.Bundler {
 		{
 			Code = code;
 			Error = error || ErrorHelper.GetWarningLevel (code) == ErrorHelper.WarningLevel.Error;
+#if NET
+			stack_trace = Environment.StackTrace;
+#endif
 		}
+
+#if NET
+		public override string StackTrace {
+			get {
+				var st = base.StackTrace;
+				if (string.IsNullOrEmpty (st))
+					st = stack_trace;
+				return st;
+			}
+		}
+#endif
 
 		// http://blogs.msdn.com/b/msbuild/archive/2006/11/03/msbuild-visual-studio-aware-error-messages-and-message-formats.aspx
 		public override string ToString ()

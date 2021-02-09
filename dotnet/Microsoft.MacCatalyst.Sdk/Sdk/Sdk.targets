@@ -1,0 +1,9 @@
+<!-- TEMPORARY -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<TargetFrameworkIdentifier>MacCatalyst</TargetFrameworkIdentifier>
+	</PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)\AutoImport.props" />
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+</Project>
+<!-- END TEMPORARY -->

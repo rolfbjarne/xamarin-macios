@@ -938,6 +938,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<_LibraryCodeSigningKey Condition="'$(_LibraryCodeSigningKey)' == ''">-</_LibraryCodeSigningKey>
 		</PropertyGroup>
 
+		<Error Text="The '_AppContentsPath' variable isn't set" Condition="'$(_AppContentsPath)' == ''" />
+		<Error Text="The '_AppResourcesPath' variable isn't set" Condition="'$(_AppResourcesPath)' == ''" />
+		<Error Text="The '_AppBundlePath' variable isn't set" Condition="'$(_AppBundlePath)' == ''" />
+
 		<ItemGroup Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">
 			<_CodesignNativeLibrary Include="$(_AppContentsPath)\**\*.dylib" />
 			<_CodesignNativeLibrary Include="$(_AppResourcesPath)\**\*.metallib" />

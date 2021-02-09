@@ -3,6 +3,7 @@ using System;
 using Microsoft.Build.Framework;
 
 using Xamarin.Localization.MSBuild;
+using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public abstract class GetMinimumOSVersionTaskBase : XamarinTask {
@@ -35,6 +36,19 @@ namespace Xamarin.MacDev.Tasks {
 				return false;
 			} else {
 				MinimumOSVersion = minimumOSVersionInManifest;
+			}
+
+			if (Platform == ApplePlatform.MacCatalyst) {
+				// Convert the min macOS version to the min iOS version, which the rest of our tooling expects.
+				var dict = ((MacOSXSdk) Sdks.GetAppleSdk (Platform)).GetCatalystVersionMap_Mac_to_iOS (SdkVersion);
+				if (dict.TryGetValue (MinimumOSVersion, out var convertedVersion)) {
+					MinimumOSVersion = convertedVersion;
+				} else {
+					Log.LogError ($"Can't convert macOS version {MinimumOSVersion} to an iOS version.");
+					foreach (var kvp in dict)
+						Log.LogError ($" {kvp.Key} => {kvp.Value}");
+					return false;
+				}
 			}
 
 			return true;

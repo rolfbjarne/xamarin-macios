@@ -780,6 +780,11 @@ namespace Xamarin.Bundler {
 
 			RuntimeOptions = RuntimeOptions.Create (this, HttpMessageHandler, TlsProvider);
 
+			if (Platform == ApplePlatform.MacCatalyst) {
+				// SdkVersion is the macOS SDK version, but the rest of our expects the supporting iOS version
+				SdkVersion = GetMacCatalystiOSVersion (SdkVersion);
+			}
+
 			if (RequiresXcodeHeaders && SdkVersion < SdkVersions.GetVersion (this)) {
 				switch (Platform) {
 				case ApplePlatform.iOS:

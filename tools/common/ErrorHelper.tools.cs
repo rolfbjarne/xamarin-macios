@@ -19,6 +19,7 @@ namespace Xamarin.Bundler {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
 				case ApplePlatform.WatchOS:
+				case ApplePlatform.MacCatalyst:
 					return "MT";
 				case ApplePlatform.MacOSX:
 					return "MM";

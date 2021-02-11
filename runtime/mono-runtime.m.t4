@@ -11,7 +11,7 @@
 //
 <#@ include file="exports.t4" #>
 
-#ifdef DYNAMIC_MONO_RUNTIME
+#if defined(DYNAMIC_MONO_RUNTIME) || defined(CORECLR_RUNTIME)
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,6 +43,32 @@ xamarin_get_mono_runtime_build_info ()
 
 static char xamarin_dynamic_runtime_initialized = 0;
 
+#ifdef CORECLR_RUNTIME
+const char *
+xamarin_initialize_runtime_bridge ()
+{
+	if (xamarin_dynamic_runtime_initialized)
+		return NULL;
+
+<# foreach (var export in exports) { #>
+	<#= export.EntryPoint #>_func = xamarin_bridge_<#= export.EntryPoint #>;
+<# } #>
+	xamarin_dynamic_runtime_initialized = 1;
+
+	return NULL;
+}
+<# foreach (var export in exports) {
+	if (export.HasBridgeFunction) continue;
+#>
+
+MONO_API <#= export.ReturnType #>
+xamarin_bridge_<#= export.EntryPoint #> (<#= export.ArgumentSignature #>)
+{
+	xamarin_assertion_message ("xamarin_bridge_<#= export.EntryPoint #> not implemented\n");
+}
+<# } #>
+
+#else
 const char *
 xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix)
 {
@@ -88,6 +114,7 @@ xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix)
 
 	return errmsg;
 }
+#endif /* CORECLR_RUNTIME */
 
 <# foreach (var export in exports) { #>
 MONO_API <#= export.ReturnType #>
@@ -119,3 +146,4 @@ bool
 #else
 int xamarin_fix_ranlib_warning_about_no_symbols;
 #endif /* DYNAMIC_MONO_RUNTIME */
+

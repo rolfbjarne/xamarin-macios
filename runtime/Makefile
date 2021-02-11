@@ -424,6 +424,8 @@ MAC_LIBS =                   \
 	libxammac-system-classic-debug.a \
 	libxamarin-coreclr.a             \
 	libxamarin-coreclr-debug.a       \
+	libxamarin-coreclr.dylib         \
+	libxamarin-coreclr-debug.dylib   \
 
 #
 # libxammac[-debug].a: (no defines)
@@ -486,6 +488,9 @@ CORECLR_LAUNCHER$(2)_OBJECTS = $$(foreach src,$$(MAC_SOURCES),.libs/mac/$$(basen
 
 .libs/mac/libxamarin-coreclr$(3).$(1).a: $$(CORECLR_LAUNCHER$(2)_OBJECTS)
 	$$(call Q_2,LIB,   [mac]) xcrun libtool -no_warning_for_no_symbols -static -o $$@ $$^
+
+.libs/mac/libxamarin-coreclr$(3).$(1).dylib: $$(CORECLR_LAUNCHER$(2)_OBJECTS)
+	$$(call Q_2,LD,    [mac]) $(MAC_CLANG) -arch $(1) -dynamiclib $$(MAC_LDFLAGS) -Wl,-install_name,libxamarin$(3).dylib -o $$@ $$^ $$(addprefix -Xlinker -U -Xlinker ,$$(ALLOWED_UNDEFINED_SYMBOLS))
 
 endef
 

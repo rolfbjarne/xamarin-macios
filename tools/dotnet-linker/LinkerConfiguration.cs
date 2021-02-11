@@ -30,6 +30,7 @@ namespace Xamarin.Linker {
 		public string PlatformAssembly { get; private set; }
 		public Version SdkVersion { get; private set; }
 		public int Verbosity => Driver.Verbosity;
+		public string XamarinRuntime { get; private set; }
 
 		static ConditionalWeakTable<LinkContext, LinkerConfiguration> configurations = new ConditionalWeakTable<LinkContext, LinkerConfiguration> ();
 
@@ -208,6 +209,9 @@ namespace Xamarin.Linker {
 						throw new InvalidOperationException ($"Invalid Verbosity '{value}' in {linker_file}");
 					Driver.Verbosity += verbosity;
 					break;
+				case "XamarinRuntime":
+					XamarinRuntime = value;
+					break;
 				default:
 					throw new InvalidOperationException ($"Unknown key '{key}' in {linker_file}");
 				}
@@ -278,6 +282,7 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    SdkVersion: {SdkVersion}");
 				Console.WriteLine ($"    UseInterpreter: {Application.UseInterpreter}");
 				Console.WriteLine ($"    Verbosity: {Verbosity}");
+				Console.WriteLine ($"    XamarinRuntime: {XamarinRuntime}");
 			}
 		}
 

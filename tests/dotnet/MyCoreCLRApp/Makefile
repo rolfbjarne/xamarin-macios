@@ -7,8 +7,11 @@ include $(TOP)/Make.config
 export MSBuildEnableWorkloadResolver=true
 
 all-local::
-	$(MAKE) -C ..
-	$(DOTNET6) build *.csproj /bl
+	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 all
+	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 install
+	rm -Rf ../packages
+	git clean -xfd
+	$(DOTNET6) build *.csproj /bl /v:diag
 
 run: all-local
 	open bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app

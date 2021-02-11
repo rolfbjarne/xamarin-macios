@@ -38,6 +38,9 @@ else
 X86_64_SLICE=
 endif
 
+coreclrhost.h: Makefile
+	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/master/src/coreclr/hosts/inc/coreclrhost.h
+
 xamarin/mono-runtime.h: mono-runtime.h.t4 exports.t4
 	$(Q_GEN) $(TT) $< -o $@
 

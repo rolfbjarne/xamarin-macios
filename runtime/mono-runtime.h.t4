@@ -306,7 +306,14 @@ bool
 
 <# } #>
 
+#if defined(CORECLR_RUNTIME)
+<# foreach (var export in exports) { #>
 
+MONO_API <#= export.ReturnType #>
+xamarin_bridge_<#= export.EntryPoint #> (<#= export.ArgumentSignature #>);
+<# } #>
+
+#endif // CORECLR_RUNTIME
 
 #ifdef __cplusplus
 } /* extern "C" */

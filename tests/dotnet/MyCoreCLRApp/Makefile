@@ -7,6 +7,7 @@ include $(TOP)/Make.config
 export MSBuildEnableWorkloadResolver=true
 
 all-local::
+	$(MAKE) -C ..
 	$(DOTNET6) build *.csproj /bl
 
 run: all-local

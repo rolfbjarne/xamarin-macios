@@ -1741,6 +1741,26 @@ xamarin_is_native_debugger_attached ()
 }
 #endif /* TARGET_OS_WATCH && !TARGET_OS_SIMULATOR */
 
+#if CORECLR_RUNTIME
+void
+mono_debugger_agent_parse_options (const char *options)
+{
+	xamarin_assertion_message ("Not implemented in the bridge: %s\n", __func__);
+}
+
+gboolean
+mono_debugger_agent_transport_handshake (void)
+{
+	xamarin_assertion_message ("Not implemented in the bridge: %s\n", __func__);
+}
+
+void
+mono_debugger_agent_register_transport (DebuggerTransport *trans)
+{
+	xamarin_assertion_message ("Not implemented in the bridge: %s\n", __func__);
+}
+#endif
+
 #else
 int xamarin_fix_ranlib_warning_about_no_symbols_v2;
 #endif /* DEBUG */

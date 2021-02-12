@@ -425,10 +425,6 @@ MAC_LIBS =                   \
 	libxammac-system-debug.a \
 	libxammac-system-classic.a       \
 	libxammac-system-classic-debug.a \
-	libxamarin-coreclr.a             \
-	libxamarin-coreclr-debug.a       \
-	libxamarin-coreclr.dylib         \
-	libxamarin-coreclr-debug.dylib   \
 
 #
 # libxammac[-debug].a: (no defines)
@@ -532,12 +528,6 @@ $(foreach arch,$(MAC_ARCHITECTURES),.libs/mac/extension-main.$(arch).o): EXTRA_D
 .libs/mac/libxammac-system.a: .libs/mac/libxammac-system.x86_64.a
 	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
 
-.libs/mac/libxamarin-coreclr-debug.a: .libs/mac/libxamarin-coreclr-debug.x86_64.a
-	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
-
-.libs/mac/libxamarin-coreclr.a: .libs/mac/libxamarin-coreclr.x86_64.a
-	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
-
 .libs/mac/libxammac-%.a: $(MACIOS_BINARIES_PATH)/libxammac-%.a | .libs/mac
 	$(Q) $(CP) $< $@
 
@@ -583,6 +573,7 @@ install-local:: $(RUNTIME_MAC_TARGETS)
 # .NET
 #
 
+# FIXME: add these libraries
 DOTNET_iOS_LIBRARIES = libapp.a libextension.a
 DOTNET_tvOS_LIBRARIES = libtvextension.a
 DOTNET_watchOS_LIBRARIES = libextension.a libwatchextension.a
@@ -631,12 +622,14 @@ DOTNET_osx_x64_ARCHITECTURES=x86_64
 DOTNET_osx_arm64_ARCHITECTURES=arm64
 DOTNET_maccatalyst_x64_ARCHITECTURES=x86_64
 DOTNET_maccatalyst_arm64_ARCHITECTURES=arm64
+DOTNET_maccatalyst_x64_ARCHITECTURES=x86_64
 
 DOTNET_iphonesimulator_ARCHITECTURES=x86 x86_64
 DOTNET_iphoneos_ARCHITECTURES=armv7 armv7s arm64
 DOTNET_tvsimulator_ARCHITECTURES=x86_64
 DOTNET_tvos_ARCHITECTURES=arm64
-DOTNET_mac_ARCHITECTURES=x86_64
+DOTNET_mac_ARCHITECTURES=x86_64 arm64
+DOTNET_maccatalyst_ARCHITECTURES=x86_64 arm64
 
 DOTNET_ios_x64_SDK_PLATFORM=iphonesimulator
 DOTNET_ios_x86_SDK_PLATFORM=iphonesimulator
@@ -748,9 +741,7 @@ ifeq (1,$$(words $(3)))
 else
 	$$(call Q_2,LIPO,  [$1]) $(DEVICE_BIN_PATH)/lipo $$^ -create -output $$@
 endif
-
 endef
-
 
 # foreach (var platform in DOTNET_PLATFORMS)
 #   foreach (var rid in DOTNET_<platform>_RUNTIME_IDENTIFIERS)
@@ -818,7 +809,6 @@ $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_DEBUG,-dotnet-debug,-lmonosgen-2.0))))
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR,-dotnet-coreclr,))))
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR_DEBUG,-dotnet-coreclr-debug,))))
-
 
 dotnet: $(DOTNET_TARGETS)
 

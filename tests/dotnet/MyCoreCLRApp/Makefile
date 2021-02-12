@@ -14,7 +14,10 @@ all-local::
 	$(DOTNET6) build *.csproj /bl /v:diag
 
 run: all-local
-	open bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app
-
-run-bare: all-local
 	bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp
+
+run-bare:
+	bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp
+
+run-lldb:
+	lldb -- bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp --one-line run

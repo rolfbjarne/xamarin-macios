@@ -14,7 +14,11 @@
 //#define LOG_HTTP(...) do { NSLog (@ __VA_ARGS__); } while (0);
 #define LOG_HTTP(...)
 
+#include <TargetConditionals.h>
+
+#if !TARGET_OS_OSX
 #include <UIKit/UIKit.h>
+#endif
 
 #include <zlib.h>
 
@@ -1734,6 +1738,26 @@ xamarin_is_native_debugger_attached ()
 	return info.pbsi_flags & PROC_FLAG_TRACED;
 }
 #endif /* TARGET_OS_WATCH && !TARGET_OS_SIMULATOR */
+
+#if CORECLR_RUNTIME
+void
+mono_debugger_agent_parse_options (const char *options)
+{
+	xamarin_assertion_message ("Not implemented in the bridge: %s\n", __func__);
+}
+
+gboolean
+mono_debugger_agent_transport_handshake (void)
+{
+	xamarin_assertion_message ("Not implemented in the bridge: %s\n", __func__);
+}
+
+void
+mono_debugger_agent_register_transport (DebuggerTransport *trans)
+{
+	xamarin_assertion_message ("Not implemented in the bridge: %s\n", __func__);
+}
+#endif
 
 #else
 int xamarin_fix_ranlib_warning_about_no_symbols_v2;

@@ -415,7 +415,7 @@
 			<_LibXamarinExtension Condition="'$(_LibXamarinLinkMode)' == 'static'">a</_LibXamarinExtension>
 			<_LibXamarinRuntime Condition="'$(XamarinRuntime)' == 'CoreCLR'">-coreclr</_LibXamarinRuntime>
 			<_LibXamarinDebug Condition="'$(_BundlerDebug)' == 'true'">-debug</_LibXamarinDebug>
-			<_LibXamarinName Condition="'$(_LibXamarinName)' == ''">libxamarin$(_LibXamarinRuntime)$(_LibXamarinDebug).$(_LibXamarinExtension)</_LibXamarinName>
+			<_LibXamarinName Condition="'$(_LibXamarinName)' == ''">libxamarin-dotnet$(_LibXamarinRuntime)$(_LibXamarinDebug).$(_LibXamarinExtension)</_LibXamarinName>
 
 		</PropertyGroup>
 

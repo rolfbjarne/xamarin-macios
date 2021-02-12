@@ -1335,10 +1335,12 @@ xamarin_initialize ()
 
 	initialize_started = TRUE;
 
-#ifdef DYNAMIC_MONO_RUNTIME
+#if defined(DYNAMIC_MONO_RUNTIME)
 	// We might be called from the managed Runtime.EnsureInitialized method,
 	// in which case xamarin_initialize_dynamic_runtime has not been called yet.
 	xamarin_initialize_dynamic_runtime (NULL);
+#elif defined(CORECLR_RUNTIME)
+	xamarin_initialize_runtime_bridge ();
 #endif
 
 	xamarin_insert_dllmap ();

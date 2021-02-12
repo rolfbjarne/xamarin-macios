@@ -49,6 +49,7 @@ typedef gboolean (*GEqualFunc)     (gconstpointer a, gconstpointer b);
 #include <stdint.h>
 
 const char * xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix);
+const char * xamarin_initialize_runtime_bridge ();
 char *xamarin_get_mono_runtime_build_info (); // returns NULL if libmono couldn't be found (mono_get_runtime_build_info doesn't exist).
 
 

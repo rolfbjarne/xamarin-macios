@@ -423,10 +423,6 @@ MAC_LIBS =                   \
 	libxammac-system-debug.a \
 	libxammac-system-classic.a       \
 	libxammac-system-classic-debug.a \
-	libxamarin-coreclr.a             \
-	libxamarin-coreclr-debug.a       \
-	libxamarin-coreclr.dylib         \
-	libxamarin-coreclr-debug.dylib   \
 
 #
 # libxammac[-debug].a: (no defines)
@@ -530,12 +526,6 @@ $(foreach arch,$(MAC_ARCHITECTURES),.libs/mac/extension-main.$(arch).o): EXTRA_D
 .libs/mac/libxammac-system.a: .libs/mac/libxammac-system.x86_64.a
 	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
 
-.libs/mac/libxamarin-coreclr-debug.a: .libs/mac/libxamarin-coreclr-debug.x86_64.a
-	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
-
-.libs/mac/libxamarin-coreclr.a: .libs/mac/libxamarin-coreclr.x86_64.a
-	$(call Q_2,LIPO,  [mac]) xcrun lipo -create $^ -o $@
-
 .libs/mac/libxammac-%.a: $(MACIOS_BINARIES_PATH)/libxammac-%.a | .libs/mac
 	$(Q) $(CP) $< $@
 
@@ -582,10 +572,10 @@ install-local:: $(RUNTIME_MAC_TARGETS)
 #
 
 # FIXME: add these libraries
-# iOS_LIBRARIES = libapp.a libextension.a
-# tvOS_LIBRARIES = libtvextension.a
-# watchOS_LIBRARIES = libextension.a libwatchextension.a
-# macOS_LIBRARIES = libextension.a
+DOTNET_iOS_LIBRARIES = libapp.a libextension.a
+DOTNET_tvOS_LIBRARIES = libtvextension.a
+DOTNET_watchOS_LIBRARIES = libextension.a libwatchextension.a
+DOTNET_macOS_LIBRARIES = libextension.a
 
 define DotNetLibTemplate
 DOTNET_TARGETS += \
@@ -593,7 +583,7 @@ DOTNET_TARGETS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet-debug.dylib \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet.a \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet-debug.a \
-	$$(foreach lib,$$($(2)_LIBRARIES),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(lib)) \
+	$$(foreach lib,$$(DOTNET_$(2)_LIBRARIES),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(lib)) \
 	$$(foreach header,$$(SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
 
 DOTNET_TARGET_DIRS += \
@@ -623,12 +613,14 @@ DOTNET_ios_arm64_ARCHITECTURES=arm64
 DOTNET_tvos_x64_ARCHITECTURES=x86_64
 DOTNET_tvos_arm64_ARCHITECTURES=arm64
 DOTNET_osx_x64_ARCHITECTURES=x86_64
+DOTNET_maccatalyst_x64_ARCHITECTURES=x86_64
 
 DOTNET_iphonesimulator_ARCHITECTURES=x86 x86_64
 DOTNET_iphoneos_ARCHITECTURES=armv7 armv7s arm64
 DOTNET_tvsimulator_ARCHITECTURES=x86_64
 DOTNET_tvos_ARCHITECTURES=arm64
-DOTNET_mac_ARCHITECTURES=x86_64
+DOTNET_mac_ARCHITECTURES=x86_64 arm64
+DOTNET_maccatalyst_ARCHITECTURES=x86_64 arm64
 
 DOTNET_ios_x64_SDK_PLATFORM=iphonesimulator
 DOTNET_ios_x86_SDK_PLATFORM=iphonesimulator
@@ -637,6 +629,8 @@ DOTNET_ios_arm64_SDK_PLATFORM=iphoneos
 DOTNET_tvos_x64_SDK_PLATFORM=tvsimulator
 DOTNET_tvos_arm64_SDK_PLATFORM=tvos
 DOTNET_osx_x64_SDK_PLATFORM=mac
+DOTNET_maccatalyst_x64_SDK_PLATFORM=maccatalyst
+DOTNET_maccatalyst_arm64_SDK_PLATFORM=maccatalyst
 
 DOTNET_iOS_SDK_PLATFORMS=iphonesimulator iphoneos
 DOTNET_tvOS_SDK_PLATFORMS=tvsimulator tvos
@@ -657,9 +651,7 @@ ifeq (1,$$(words $(3)))
 else
 	$$(call Q_2,LIPO,  [$1]) $(DEVICE_BIN_PATH)/lipo $$^ -create -output $$@
 endif
-
 endef
-
 
 # foreach (var platform in DOTNET_PLATFORMS)
 #   foreach (var rid in DOTNET_<platform>_RUNTIME_IDENTIFIERS)
@@ -727,7 +719,6 @@ $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_DEBUG,-dotnet-debug,-lmonosgen-2.0))))
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR,-dotnet-coreclr,))))
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR_DEBUG,-dotnet-coreclr-debug,))))
-
 
 dotnet: $(DOTNET_TARGETS)
 

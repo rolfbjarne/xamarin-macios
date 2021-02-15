@@ -312,7 +312,7 @@ namespace Xamarin.Bundler {
 				if (!error && GetWarningLevel (mte.Code) == WarningLevel.Disable)
 					return false; // This is an ignored warning.
 			} else {
-				if (IsExpectedException == null || !IsExpectedException (e)) {
+				if (IsExpectedException == null || !IsExpectedException (e))
 					Console.Error.WriteLine ("error " + Prefix + "0000: Unexpected error - Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new");
 			}
 
@@ -330,7 +330,7 @@ namespace Xamarin.Bundler {
 
 			if (Verbosity > 3) {
 				Console.Error.WriteLine ("--- inner exception");
-				Print (e);
+				Print (ie);
 			} else if (Verbosity > 0 || ie is ProductException) {
 				Console.Error.WriteLine ("\t{0}", ie.Message);
 			}

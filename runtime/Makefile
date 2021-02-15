@@ -725,8 +725,8 @@ endef
 #     call DotNetLibXamarinTemplate (sdkPlatform, SDK_PLATFORM, "_CORECLR_DEBUG", "-dotnet-coreclr-debug",               , architectures_for_sdkplatform)
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),,-dotnet,-lmonosgen-2.0))))
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_DEBUG,-dotnet-debug,-lmonosgen-2.0))))
-$(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR,-dotnet-coreclr,))))
-$(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR_DEBUG,-dotnet-coreclr-debug,))))
+$(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR,-dotnet-coreclr,-lcoreclr -L/Users/rolf/work/maccore/coreclr/xamarin-macios/builds/downloads/dotnet-sdk-6.0.100-preview.1.21103.13-osx-x64/shared/Microsoft.NETCore.App/6.0.0-preview.1.21102.12))))
+$(foreach platform,$(DOTNET_PLATFORMS),$(foreach sdkPlatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetLibXamarinTemplate,$(sdkPlatform),$(shell echo $(sdkPlatform) | tr a-z A-Z),_CORECLR_DEBUG,-dotnet-coreclr-debug,-lcoreclr -L/Users/rolf/work/maccore/coreclr/xamarin-macios/builds/downloads/dotnet-sdk-6.0.100-preview.1.21103.13-osx-x64/shared/Microsoft.NETCore.App/6.0.0-preview.1.21102.12))))
 
 dotnet: $(DOTNET_TARGETS)
 

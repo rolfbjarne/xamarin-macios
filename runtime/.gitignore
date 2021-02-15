@@ -1,3 +1,5 @@
+coreclr_delegates.h
+hostfxr.h
 .libs
 delegates.inc
 Delegates.generated.cs

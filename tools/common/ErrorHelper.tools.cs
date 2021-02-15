@@ -294,6 +294,13 @@ namespace Xamarin.Bundler {
 			Environment.Exit (exitCode);
 		}
 
+		static void Print (Exception e)
+		{
+			Console.Error.WriteLine (e);
+			if (Verbosity > 2 && !string.IsNullOrEmpty (e.StackTrace))
+				Console.Error.WriteLine (e.StackTrace);
+		}
+
 		static bool ShowInternal (Exception e)
 		{
 			ProductException mte = (e as ProductException);
@@ -304,22 +311,13 @@ namespace Xamarin.Bundler {
 
 				if (!error && GetWarningLevel (mte.Code) == WarningLevel.Disable)
 					return false; // This is an ignored warning.
-
-				Console.Error.WriteLine (mte.ToString ());
-
-				ShowInner (e);
-
-				if (Verbosity > 2 && !string.IsNullOrEmpty (e.StackTrace))
-					Console.Error.WriteLine (e.StackTrace);
-			} else if (IsExpectedException == null || !IsExpectedException (e)) {
-				Console.Error.WriteLine ("error " + Prefix + "0000: Unexpected error - Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new");
-				Console.Error.WriteLine (e.ToString ());
 			} else {
-				Console.Error.WriteLine (e.ToString ());
-				ShowInner (e);
-				if (Verbosity > 2 && !string.IsNullOrEmpty (e.StackTrace))
-					Console.Error.WriteLine (e.StackTrace);
+				if (IsExpectedException == null || !IsExpectedException (e)) {
+					Console.Error.WriteLine ("error " + Prefix + "0000: Unexpected error - Please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new");
 			}
+
+			Print (e);
+			ShowInner (e);
 
 			return error;
 		}
@@ -332,8 +330,7 @@ namespace Xamarin.Bundler {
 
 			if (Verbosity > 3) {
 				Console.Error.WriteLine ("--- inner exception");
-				Console.Error.WriteLine (ie);
-				Console.Error.WriteLine ("---");
+				Print (e);
 			} else if (Verbosity > 0 || ie is ProductException) {
 				Console.Error.WriteLine ("\t{0}", ie.Message);
 			}

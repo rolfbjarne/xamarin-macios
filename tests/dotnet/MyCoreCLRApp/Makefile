@@ -18,8 +18,8 @@ run: all-local
 
 run-bare:
 	bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp || EC=$$?; \
-	if [[ "x$$EC" == "x139" ]]; then \
-		say "dotnet test app crashed, re-launching with lldb."; \
+	if [[ "x$$EC" == "x139" || "x$$EC" == "x134" ]]; then \
+		say "dotnet test app crashed, re-launching with lldb." & \
 		echo "Re-launching with lldb since it crashed"; \
 		$(MAKE) run-lldb; \
 	else \

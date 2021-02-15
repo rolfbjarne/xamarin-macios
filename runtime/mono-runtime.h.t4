@@ -101,6 +101,10 @@ typedef struct _MonoThreadsSync MonoThreadsSync;
 typedef struct {
 	MonoVTable *vtable;
 	MonoThreadsSync *synchronisation;
+#if defined(CORECLR_RUNTIME)
+	int object_kind; // enum of sorts
+	GCHandle gchandle;
+#endif
 } MonoObject;
 
 typedef struct _MonoReferenceQueue MonoReferenceQueue;

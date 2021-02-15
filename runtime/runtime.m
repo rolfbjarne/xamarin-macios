@@ -3007,6 +3007,7 @@ xamarin_is_managed_exception_marshaling_disabled ()
 struct _MonoAssembly {
 	char *name;
 	MonoImage *image;
+	MonoReflectionAssembly *obj;
 };
 
 struct _MonoAssemblyName {
@@ -3055,12 +3056,13 @@ struct _MonoArray {
 	char *name;
 };
 
-struct _MonoReflectionMethod {
+struct _MonoReflectionMethod : MonoObject {
 	char *name;
 };
 
-struct _MonoReflectionAssembly {
+struct _MonoReflectionAssembly : MonoObject {
 	char *name;
+	MonoAssembly *assembly;
 };
 
 struct _MonoReflectionType {
@@ -3083,12 +3085,18 @@ struct _MonoReferenceQueue {
 	char *name;
 };
 
+bool xamarin_loaded_coreclr = false;
+unsigned int coreclr_domainId = 0;
+void *coreclr_handle = NULL;
+
 static void
 xamarin_load_coreclr ()
 {
-	void *handle = NULL;
+	if (xamarin_loaded_coreclr)
+		return;
+	xamarin_loaded_coreclr = true;
+
 	int rv;
-	unsigned int domainId = 0;
 
 	const char *propertyKeys[] = {
 		"APP_PATHS",
@@ -3096,7 +3104,7 @@ xamarin_load_coreclr ()
 	const char *propertyValues[] = {
 		"/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/dotnet/MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64//MyCoreCLRApp.app/Contents/MonoBundle",
 	};
-	int propertyCount = sizeof (propertyValues);
+	int propertyCount = sizeof (propertyValues) / sizeof (propertyValues [0]);
 
 	rv = coreclr_initialize (
 		"HelloWorld",
@@ -3104,11 +3112,11 @@ xamarin_load_coreclr ()
 		propertyCount,
 		propertyKeys,
 		propertyValues,
-		&handle,
-		&domainId
+		&coreclr_handle,
+		&coreclr_domainId
 		);
 
-	fprintf (stderr, "xamarin_load_coreclr (): rv: %i domainId: %i handle: %p\n", rv, domainId, handle);
+	fprintf (stderr, "xamarin_load_coreclr (): rv: %i domainId: %i handle: %p\n", rv, coreclr_domainId, coreclr_handle);
 }
 
 MONO_API gchar *
@@ -3283,10 +3291,32 @@ xamarin_bridge_mono_method_full_name (MonoMethod * method, mono_bool signature)
 	xamarin_assertion_message ("xamarin_bridge_mono_method_full_name not implemented\n");
 }
 
+typedef void (*xamarin_runtime_initialize_decl)(void *);
+
 MONO_API MonoObject *
 xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** params, MonoObject ** exc)
 {
-	fprintf (stderr, "xamarin_bridge_mono_runtime_invoke (%p, %p, %p, %p) => assert\n", method, obj, params, exc);
+	xamarin_load_coreclr ();
+
+	fprintf (stderr, "xamarin_bridge_mono_runtime_invoke (%p, %p, %p, %p) => ?\n", method, obj, params, exc);
+
+	if (!strcmp (method->klass->name, "ObjCRuntime.Runtime")) {
+		if (!strcmp (method->name, "Initialize")) {
+			void *del = NULL;
+			int rv = coreclr_create_delegate (coreclr_handle, coreclr_domainId, "Xamarin.Mac, Version=0.0.0.0", "ObjCRuntime.Runtime", "Initialize", &del);
+			if (rv != 0)
+				xamarin_assertion_message ("xamarin_bridge_mono_runtime_invoke: calling %s.%s failed to load delegate\n", method->klass->name, method->name);
+
+			xamarin_runtime_initialize_decl func = (xamarin_runtime_initialize_decl) del;
+			func (params [0]);
+			return NULL;
+		} else {
+			xamarin_assertion_message ("xamarin_bridge_mono_runtime_invoke: calling %s.%s not implemented\n", method->klass->name, method->name);
+		}
+	} else {
+		xamarin_assertion_message ("xamarin_bridge_mono_runtime_invoke: calling %s.%s not implemented\n", method->klass->name, method->name);
+	}
+
 	xamarin_assertion_message ("xamarin_bridge_mono_runtime_invoke not implemented\n");
 }
 
@@ -3649,8 +3679,16 @@ xamarin_bridge_mono_domain_set_config (MonoDomain * domain, const char * base_di
 MONO_API MonoReflectionAssembly *
 xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * assembly)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_get_object (%p, %p) => assert\n", domain, assembly);
-	xamarin_assertion_message ("xamarin_bridge_mono_assembly_get_object not implemented\n");
+	if (assembly->obj != NULL)
+		return assembly->obj;
+
+	MonoReflectionAssembly *rv = (MonoReflectionAssembly *) calloc (1, sizeof (MonoReflectionAssembly));
+	rv->assembly = assembly;
+	GCHandle exception_handle;
+	rv->gchandle = xamarin_find_assembly (assembly->name, &exception_handle);
+	assembly->obj = rv;
+	fprintf (stderr, "xamarin_bridge_mono_assembly_get_object (%p, %p = %s) => %p = %p\n", domain, assembly, assembly->name, rv, (void *) rv->gchandle);
+	return rv;
 }
 
 MONO_API MonoReflectionMethod *

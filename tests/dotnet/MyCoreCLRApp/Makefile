@@ -14,10 +14,17 @@ all-local::
 	$(DOTNET6) build *.csproj /bl /v:diag && say core c l r test built successfully || (say core c l r test failed; exit 1)
 
 run: all-local
-	bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp
+	$(MAKE) run-bare
 
 run-bare:
-	bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp
+	bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp || EC=$$?; \
+	if [[ "x$$EC" == "x139" ]]; then \
+		say "dotnet test app crashed, re-launching with lldb."; \
+		echo "Re-launching with lldb since it crashed"; \
+		$(MAKE) run-lldb; \
+	else \
+		exit $$EC; \
+	fi; \
 
 run-lldb:
-	lldb -- bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp --one-line run
+	lldb --one-line run --one-line bt -- bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp

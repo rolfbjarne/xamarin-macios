@@ -408,11 +408,15 @@
 
 		new Export ("void", "mono_debug_init",
 			"MonoDebugFormat", "format"
-		),
+		) {
+			HasBridgeFunction = true,
+		},
 
 		new Export ("void", "mono_gc_collect",
 			"int", "generation"
-		),
+		) {
+			HasBridgeFunction = true,
+		},
 
 		new Export ("mono_bool", "mono_is_debugger_attached"),
 
@@ -509,7 +513,9 @@
 
 		new Export ("gchar *", "mono_path_resolve_symlinks",
 			"const char *", "path"
-		),
+		) {
+			HasBridgeFunction = true,
+		},
 
 		#endregion
 
@@ -517,7 +523,9 @@
 
 		new Export ("void", "mono_free",
 			"void *", "ptr"
-		),
+		) {
+			HasBridgeFunction = true,
+		},
 
 		#endregion
 
@@ -594,7 +602,9 @@
 
 		new Export (true, "gboolean", "mini_parse_debug_option",
 			"const char *", "option"
-		),
+		) {
+			HasBridgeFunction = true,
+		},
 
 		#endregion
 
@@ -683,7 +693,7 @@
 		public string AlternativeExpression;
 		public List<Arg> Arguments;
 		public bool Optional;
-		public bool HasBridgeFunction;
+		public bool HasBridgeFunction = true;
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)

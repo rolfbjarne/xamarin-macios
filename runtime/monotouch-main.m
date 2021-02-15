@@ -257,6 +257,11 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 	xamarin_setup ();
 	DEBUG_LAUNCH_TIME_PRINT ("MonoTouch setup time");
 
+#if defined(CORECLR_RUNTIME)
+	xamarin_initialize_runtime_bridge ();
+	DEBUG_LAUNCH_TIME_PRINT ("Xamarin Bridge setup time");
+#endif
+
 	MonoAssembly *assembly;
 	GCHandle exception_gchandle = NULL;
 	

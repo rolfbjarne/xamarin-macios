@@ -285,6 +285,13 @@
 			WrappedManagedFunction = "CreateRuntimeException",
 			OnlyDynamicUsage = false,
 		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_find_assembly",
+			"const char *","IntPtr", "assembly_name"
+		) {
+			WrappedManagedFunction = "FindAssembly",
+			OnlyDynamicUsage = false,
+		}
 	};
 	delegates.CalculateLengths ();
 #><#+

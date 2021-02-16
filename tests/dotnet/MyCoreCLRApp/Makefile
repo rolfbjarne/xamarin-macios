@@ -7,11 +7,16 @@ include $(TOP)/Make.config
 export MSBuildEnableWorkloadResolver=true
 
 all-local::
-	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 all || (say core c l r build failed; exit 1)
-	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 install || (say core c l r install failed; exit 1)
+	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 all || (say core c l r build failed & exit 1)
+	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 install || (say core c l r install failed & exit 1)
 	rm -Rf ../packages
 	git clean -xfd
-	$(DOTNET6) build *.csproj /bl /v:diag && say core c l r test built successfully || (say core c l r test failed; exit 1)
+	if $(DOTNET6) build *.csproj /bl /v:diag; then \
+		say core c l r test built successfully & \
+	else \
+		say core c l r test failed; \
+		exit 1; \
+	fi
 
 run: all-local
 	$(MAKE) run-bare
@@ -24,7 +29,7 @@ run-bare:
 		$(MAKE) run-lldb; \
 	else \
 		exit $$EC; \
-	fi; \
+	fi \
 
 run-lldb:
 	lldb --one-line run --one-line bt -- bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp

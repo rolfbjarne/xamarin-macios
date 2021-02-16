@@ -48,6 +48,7 @@ namespace ObjCRuntime {
 				<# if (d.ReturnType.MType != "void") { #>return <# } #><#=d.WrappedManagedFunction#> (<#=d.MArgumentNames#>);
 <# } #>
 			} catch (Exception ex) {
+				Console.WriteLine ($"Caught exception {ex} from call to <#= d.SimpleEntryPoint #>");
 				var handle = GCHandle.Alloc (ex, GCHandleType.Normal);
 				exception_gchandle = GCHandle.ToIntPtr (handle);
 <# if (d.SimpleEntryPoint == "get_nsobject_with_type") { #>				created = false;

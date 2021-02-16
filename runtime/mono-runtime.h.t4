@@ -65,6 +65,13 @@ char *xamarin_get_mono_runtime_build_info (); // returns NULL if libmono couldn'
 #define MONO_API
 typedef int32_t	mono_bool;
 
+#if defined (CORECLR_RUNTIME)
+enum MonoObjectType : int {
+	MonoObjectType_Unknown,
+	MonoObjectType_MonoReflectionMethod,
+};
+#endif
+
 /* metadata/image.h */
 typedef struct _MonoAssembly MonoAssembly;
 typedef struct _MonoAssemblyName MonoAssemblyName;
@@ -102,10 +109,96 @@ typedef struct {
 	MonoVTable *vtable;
 	MonoThreadsSync *synchronisation;
 #if defined(CORECLR_RUNTIME)
-	int object_kind; // enum of sorts
+	enum MonoObjectType object_kind;
 	GCHandle gchandle;
 #endif
 } MonoObject;
+
+#if defined(CORECLR_RUNTIME)
+
+struct _MonoAssembly {
+	char *name;
+	MonoImage *image;
+	MonoReflectionAssembly *obj;
+};
+
+struct _MonoAssemblyName {
+	char *name;
+};
+
+struct _MonoImage {
+	char *name;
+};
+
+struct _MonoClass {
+	char *name;
+};
+
+struct _MonoDomain {
+	char *name;
+};
+
+struct _MonoMethod {
+	char *name;
+	MonoClass *klass;
+	int param_count;
+	GCHandle gchandle;
+};
+
+struct _MonoMethodSignature {
+	char *name;
+};
+
+struct _MonoType {
+	char *name;
+};
+
+struct MonoVTable {
+	char *name;
+};
+
+struct _MonoClassField {
+	char *name;
+};
+
+struct _MonoString {
+	char *name;
+};
+
+struct _MonoArray {
+	char *name;
+};
+
+struct _MonoReflectionMethod : MonoObject {
+	char *name;
+};
+
+struct _MonoReflectionAssembly : MonoObject {
+	char *name;
+	MonoAssembly *assembly;
+};
+
+struct _MonoReflectionType {
+	char *name;
+};
+
+struct _MonoException {
+	char *name;
+};
+
+struct _MonoThread {
+	char *name;
+};
+
+struct _MonoThreadsSync {
+	char *name;
+};
+
+struct _MonoReferenceQueue {
+	char *name;
+};
+#endif
+
 
 typedef struct _MonoReferenceQueue MonoReferenceQueue;
 typedef void (*mono_reference_queue_callback) (void *user_data);

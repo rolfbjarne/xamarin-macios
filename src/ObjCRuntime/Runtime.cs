@@ -463,6 +463,51 @@ namespace ObjCRuntime {
 			return BlockLiteral.GetBlockForDelegate ((MethodInfo) GetGCHandleTarget (method), GetGCHandleTarget (@delegate), token_ref, Marshal.PtrToStringAuto (signature));
 		}
 
+		static IntPtr FindAssembly (IntPtr assembly_name)
+		{
+			var path = Marshal.PtrToStringAuto (assembly_name);
+			var name = Path.GetFileNameWithoutExtension (path);
+			Console.WriteLine ($"Runtime.FindAssembly (0x{assembly_name.ToString ("x")} = {name})");
+			foreach (var asm in AppDomain.CurrentDomain.GetAssemblies ()) {
+				Console.WriteLine ($"    Found in app domain: {asm.GetName ().Name}");
+				if (asm.GetName ().Name == name) {
+					Console.WriteLine ($"        Match!");
+					return GCHandle.ToIntPtr (GCHandle.Alloc (asm));
+				}
+			}
+
+			var loadedAssembly = Assembly.LoadFrom (path);
+			if (loadedAssembly != null) {
+				Console.WriteLine ($"    Loaded {loadedAssembly.GetName ().Name}");
+				return GCHandle.ToIntPtr (GCHandle.Alloc (loadedAssembly));
+			}
+
+			Console.WriteLine ($"Found no assembly named {name}");
+			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
+		}
+
+		static IntPtr DuplicateGCHandle (IntPtr gchandle, GCHandleType type)
+		{
+			var input = GCHandle.FromIntPtr (gchandle);
+			var obj = input.Target;
+			Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => {obj} => {obj?.GetType ()}, {type})");
+			var rv = GCHandle.Alloc (obj, type);
+			return GCHandle.ToIntPtr (rv);
+		}
+
+		static void FreeGCHandle (IntPtr gchandle)
+		{
+			GCHandle.FromIntPtr (gchandle).Free ();
+		}
+
+		static IntPtr GetGCHandleType (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.GetType ().FullName);
+		}
+
 		static unsafe Assembly GetEntryAssembly ()
 		{
 			var asm = Assembly.GetEntryAssembly ();

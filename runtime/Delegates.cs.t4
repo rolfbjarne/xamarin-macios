@@ -49,8 +49,8 @@ namespace ObjCRuntime {
 <# } #>
 			} catch (Exception ex) {
 				Console.WriteLine ($"Caught exception {ex} from call to <#= d.SimpleEntryPoint #>");
-				var handle = GCHandle.Alloc (ex, GCHandleType.Normal);
-				exception_gchandle = GCHandle.ToIntPtr (handle);
+				var tmp_ex_handle = GCHandle.Alloc (ex, GCHandleType.Normal);
+				exception_gchandle = GCHandle.ToIntPtr (tmp_ex_handle);
 <# if (d.SimpleEntryPoint == "get_nsobject_with_type") { #>				created = false;
 <# } #>
 <# if (d.ReturnType.MType != "void") { #>				return default (<#= d.ReturnType.MType #>);

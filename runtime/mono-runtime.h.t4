@@ -111,6 +111,8 @@ typedef struct {
 #if defined(CORECLR_RUNTIME)
 	enum MonoObjectType object_kind;
 	GCHandle gchandle;
+	char *type_name;
+	void *struct_value;
 #endif
 } MonoObject;
 
@@ -132,6 +134,7 @@ struct _MonoImage {
 
 struct _MonoClass {
 	char *name;
+	GCHandle gchandle;
 };
 
 struct _MonoDomain {
@@ -145,12 +148,21 @@ struct _MonoMethod {
 	GCHandle gchandle;
 };
 
+struct __MethodParameter {
+	const char *type_name;
+	GCHandle type_gchandle;
+};
+
 struct _MonoMethodSignature {
 	char *name;
+	MonoMethod *method;
+	int parameter_count;
+	struct __MethodParameter *parameters;
 };
 
 struct _MonoType {
 	char *name;
+	GCHandle gchandle;
 };
 
 struct MonoVTable {
@@ -170,6 +182,7 @@ struct _MonoArray {
 };
 
 struct _MonoReflectionMethod : MonoObject {
+	MonoMethod *method;
 	char *name;
 };
 

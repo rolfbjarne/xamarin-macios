@@ -490,9 +490,10 @@ namespace ObjCRuntime {
 		{
 			var input = GCHandle.FromIntPtr (gchandle);
 			var obj = input.Target;
-			Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => {obj} => {obj?.GetType ()}, {type})");
 			var rv = GCHandle.Alloc (obj, type);
-			return GCHandle.ToIntPtr (rv);
+			var rvptr = GCHandle.ToIntPtr (rv);
+			Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => {obj} => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
+			return rvptr;
 		}
 
 		static void FreeGCHandle (IntPtr gchandle)
@@ -506,6 +507,138 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return IntPtr.Zero;
 			return Marshal.StringToHGlobalAuto (obj.GetType ().FullName);
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MethodParameter {
+			public IntPtr TypeName;
+			public IntPtr Type_GCHandle;
+		}
+
+		static unsafe IntPtr GetMethodSignature (IntPtr gchandle, ref int parameterCount)
+		{
+			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			var parameters = method.GetParameters ();
+			parameterCount = parameters.Length;
+			var rv = Marshal.AllocHGlobal (sizeof (MethodParameter) * parameterCount);
+			MethodParameter* mparams = (MethodParameter*) rv;
+			for (var i = 0; i < parameters.Length; i++) {
+				var p = parameters [i];
+				mparams [i].Type_GCHandle = GCHandle.ToIntPtr (GCHandle.Alloc (p.ParameterType));
+				mparams [i].TypeName = Marshal.StringToHGlobalAuto (p.ParameterType.FullName);
+			}
+			return rv;
+		}
+
+		static IntPtr GetMethodDeclaringType (IntPtr gchandle)
+		{
+			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			return GCHandle.ToIntPtr (GCHandle.Alloc (method.DeclaringType));
+		}
+
+		static IntPtr GetMethodReturnType (IntPtr gchandle)
+		{
+			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			if (method is MethodInfo minfo)
+				return GCHandle.ToIntPtr (GCHandle.Alloc (minfo.ReturnType));
+			return GCHandle.ToIntPtr (GCHandle.Alloc (null));
+		}
+
+		static IntPtr CreateObject (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = RuntimeHelpers.GetUninitializedObject (type);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+		}
+
+		static void SetHandleForNSObject (IntPtr gchandle, IntPtr handle)
+		{
+			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			obj.SetHandleDirectly (handle);
+		}
+
+		static void SetFlagsForNSObject (IntPtr gchandle, byte flags)
+		{
+			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			obj.SetFlagsDirectly (flags);
+		}
+
+		static byte GetFlagsForNSObject (IntPtr gchandle)
+		{
+			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null) {
+				Console.WriteLine ($"GetFlagsForNSObject (0x{gchandle.ToString ("x")}) => NULLLLLL");
+			}
+			return obj.GetFlagsDirectly ();
+		}
+
+		static IntPtr GetTypeFullName (IntPtr gchandle)
+		{
+			var obj = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return Marshal.StringToHGlobalAuto (obj?.FullName);
+		}
+
+		static IntPtr GetMethodName (IntPtr gchandle)
+		{
+			var obj = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			return Marshal.StringToHGlobalAuto (obj?.Name);
+		}
+
+		static IntPtr InvokeMethod (IntPtr method_gchandle, IntPtr instance_gchandle, IntPtr native_parameters)
+		{
+			var method = (MethodBase) GetGCHandleTarget (method_gchandle);
+			var instance = GetGCHandleTarget (instance_gchandle);
+
+			var methodParameters = method.GetParameters ();
+			var parameters = new object [methodParameters.Length];
+
+			var anyUnknown = false;
+			unsafe {
+				IntPtr* nativeParams = (IntPtr*) native_parameters;
+				for (var i = 0; i < methodParameters.Length; i++) {
+					var nativeParam = nativeParams [i];
+					var p = methodParameters [i];
+					if (p.ParameterType == typeof (IntPtr)) {
+						parameters [i] = nativeParam;
+						Console.WriteLine ($"Argument #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")}");
+					} else {
+						Console.WriteLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
+						anyUnknown = true;
+					}
+				}
+			}
+
+			if (anyUnknown)
+				throw new NotImplementedException ("Method parameters");
+
+			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
+
+			Console.WriteLine ($"Return value of type: {rv?.GetType ()?.ToString ()}");
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+		}
+
+		static IntPtr GetManagedType (IntPtr type_name)
+		{
+			var tn = Marshal.PtrToStringAuto (type_name);
+			Console.WriteLine ($"GetManagedType ({tn})");
+			var tp = Type.GetType (tn, true);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (tp));
+		}
+
+		static void WriteStructure (IntPtr gchandle, ref IntPtr output)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return;
+			if (!obj.GetType ().IsValueType) {
+				Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
+				return;
+			}
+			var size = Marshal.SizeOf (obj);
+			output = Marshal.AllocHGlobal (size);
+			Marshal.StructureToPtr (obj, output, false);
+			Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, 0x{output.ToString ("x")})");
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

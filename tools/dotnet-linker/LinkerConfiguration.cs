@@ -150,7 +150,7 @@ namespace Xamarin.Linker {
 					}
 					break;
 				case "Optimize":
-					user_optimize_flags = value;
+					//user_optimize_flags = value;
 					break;
 				case "PartialStaticRegistrarLibrary":
 					PartialStaticRegistrarLibrary = value;

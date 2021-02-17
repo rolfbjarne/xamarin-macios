@@ -11,6 +11,14 @@ namespace Xamarin.Linker {
 
 			Configuration.Assemblies.Add (assembly);
 		}
+
+		protected override void TryEndProcess ()
+		{
+			foreach (var asm in Configuration.Assemblies)
+				System.Console.WriteLine ($"Collected assembly: {asm.FullName}");
+
+			base.TryEndProcess ();
+		}
 	}
 }
 

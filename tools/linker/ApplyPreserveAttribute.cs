@@ -41,6 +41,7 @@ namespace Xamarin.Linker.Steps {
 					if (tr == null)
 						continue;
 
+					continue;
 					// we do not call `this.ProcessType` since
 					// (a) we're potentially processing a different assembly and `is_active` represent the current one
 					// (b) it will try to fetch the [Preserve] attribute on the type (and it's not there) as `base` would

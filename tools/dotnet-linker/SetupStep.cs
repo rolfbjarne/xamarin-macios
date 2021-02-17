@@ -57,40 +57,44 @@ namespace Xamarin {
 			// is loaded into the current process once per --custom-step,
 			// which makes it very difficult to share state between steps.
 
-			// Load the list of assemblies loaded by the linker.
-			// This would not be needed of LinkContext.GetAssemblies () was exposed to us.
-			InsertAfter (new CollectAssembliesStep (), "MarkStep");
-
 			var pre_dynamic_dependency_lookup_substeps = new DotNetSubStepDispatcher ();
 			InsertBefore (pre_dynamic_dependency_lookup_substeps, "MarkStep");
 
 			var prelink_substeps = new DotNetSubStepDispatcher ();
 			InsertBefore (prelink_substeps, "MarkStep");
 
+			var postlink_substeps = new DotNetSubStepDispatcher ();
+			InsertAfter (postlink_substeps, "MarkStep");
+
+			// Load the list of assemblies loaded by the linker.
+			// This would not be needed of LinkContext.GetAssemblies () was exposed to us.
+			InsertAfter (new CollectAssembliesStep (), "MarkStep");
+
 			var post_sweep_substeps = new DotNetSubStepDispatcher ();
 			InsertAfter (post_sweep_substeps, "SweepStep");
 
 			if (Configuration.LinkMode != LinkMode.None) {
-				pre_dynamic_dependency_lookup_substeps.Add (new PreserveBlockCodeSubStep ());
+				//	//pre_dynamic_dependency_lookup_substeps.Add (new PreserveBlockCodeSubStep ());
 
-				// We need to run the ApplyPreserveAttribute step even we're only linking sdk assemblies, because even
-				// though we know that sdk assemblies will never have Preserve attributes, user assemblies may have
-				// [assembly: LinkSafe] attributes, which means we treat them as sdk assemblies and those may have
-				// Preserve attributes.
-				prelink_substeps.Add (new ApplyPreserveAttribute ());
-				prelink_substeps.Add (new OptimizeGeneratedCodeSubStep ());
-				prelink_substeps.Add (new MarkNSObjects ());
-				prelink_substeps.Add (new PreserveSmartEnumConversionsSubStep ());
-				prelink_substeps.Add (new CollectUnmarkedMembersSubStep ());
-				prelink_substeps.Add (new StoreAttributesStep ());
+				//	// We need to run the ApplyPreserveAttribute step even we're only linking sdk assemblies, because even
+				//	// though we know that sdk assemblies will never have Preserve attributes, user assemblies may have
+				//	// [assembly: LinkSafe] attributes, which means we treat them as sdk assemblies and those may have
+				//	// Preserve attributes.
+			//	postlink_substeps.Add (new ApplyPreserveAttribute ());
 
-				post_sweep_substeps.Add (new RemoveAttributesStep ());
+				//	//prelink_substeps.Add (new OptimizeGeneratedCodeSubStep ());
+				//	prelink_substeps.Add (new MarkNSObjects ());
+				//	prelink_substeps.Add (new PreserveSmartEnumConversionsSubStep ());
+				//	prelink_substeps.Add (new CollectUnmarkedMembersSubStep ());
+				//	prelink_substeps.Add (new StoreAttributesStep ());
+
+				//	post_sweep_substeps.Add (new RemoveAttributesStep ());
 			}
 
 			InsertBefore (new ListExportedSymbols (null), "OutputStep");
 			InsertBefore (new LoadNonSkippedAssembliesStep (), "OutputStep");
 			InsertBefore (new ExtractBindingLibrariesStep (), "OutputStep");
-			InsertBefore (new DotNetSubStepDispatcher (new RemoveUserResourcesSubStep ()), "OutputStep");
+			//InsertBefore (new DotNetSubStepDispatcher (new RemoveUserResourcesSubStep ()), "OutputStep");
 			Steps.Add (new RegistrarStep ());
 			Steps.Add (new GenerateMainStep ());
 			Steps.Add (new GenerateReferencesStep ());

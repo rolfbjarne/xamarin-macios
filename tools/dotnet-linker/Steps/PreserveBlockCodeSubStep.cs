@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Mono.Cecil;
@@ -24,26 +25,46 @@ namespace Xamarin.Linker.Steps {
 			}
 		}
 
+		MethodDefinition GetConstructorReference (TypeDefinition dependencyAttribute)
+		{
+			Console.WriteLine ("Looking for DynamicDependencyAttribute in {0}", dependencyAttribute?.FullName);
+			if (dependencyAttribute == null)
+				return null;
+
+			foreach (var method in dependencyAttribute.Methods) {
+				if (!method.HasParameters)
+					continue;
+
+					Console.WriteLine ($"Checking {0}", method.FullName);
+
+				if (method.Parameters.Count == 1 && method.Parameters [0].ParameterType.Is ("System", "String"))
+					return method;
+			}
+
+			return null;
+		}
+
 		MethodReference GetConstructorReference (AssemblyDefinition assembly)
 		{
 			if (ctor_string_def == null) {
 				// Find the method definition for the constructor we want to use
-				foreach (var asm in Configuration.Assemblies) {
-					var dependencyAttribute = asm.MainModule.GetType ("System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute");
-					if (dependencyAttribute == null)
-						continue;
+				var a1 = Configuration.Context.GetType ("System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e");
+				if (a1 != null) {
+					Console.WriteLine ("Found: {0}", a1.FullName);
+					ctor_string_def = GetConstructorReference (a1);
+				} else {
+					Console.WriteLine ("Could not load DynamicDependencyAttribute");
+				}
 
-					foreach (var method in dependencyAttribute.Methods) {
-						if (!method.HasParameters)
-							continue;
+				if (ctor_string_def == null) {
+					foreach (var asm in Configuration.Assemblies) {
+						Console.WriteLine ("Looking for DynamicDependencyAttribute in {0}", asm.FullName);
+						var dependencyAttribute = asm.MainModule.GetType ("System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute");
+						ctor_string_def = GetConstructorReference (dependencyAttribute);
 
-						if (method.Parameters.Count == 1 && method.Parameters [0].ParameterType.Is ("System", "String")) {
-							ctor_string_def = method;
+						if (ctor_string_def != null)
 							break;
-						}
 					}
-
-					break;
 				}
 
 				if (ctor_string_def == null)

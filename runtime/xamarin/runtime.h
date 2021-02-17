@@ -221,6 +221,10 @@ void			xamarin_create_managed_ref (id self, void * managed_object, bool retain);
 void            xamarin_release_managed_ref (id self, MonoObject *managed_obj);
 void			xamarin_notify_dealloc (id self, GCHandle gchandle);
 
+void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
+void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
+
+
 int				xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode);
 
 char *			xamarin_type_get_full_name (MonoType *type, GCHandle *exception_gchandle); // return value must be freed with 'mono_free'

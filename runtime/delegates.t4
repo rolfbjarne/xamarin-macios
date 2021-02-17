@@ -313,7 +313,98 @@
 		) {
 			WrappedManagedFunction = "GetGCHandleType",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void*", "IntPtr", "xamarin_bridge_method_get_signature",
+			"GCHandle", "IntPtr", "gchandle",
+			"int*", "ref int", "parameter_count"
+		) {
+			WrappedManagedFunction = "GetMethodSignature",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_method_declaring_type",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetMethodDeclaringType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_create_object",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "CreateObject",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_set_handle_for_nsobject",
+			"GCHandle", "IntPtr", "gchandle",
+			"id", "IntPtr", "handle"
+		) {
+			WrappedManagedFunction = "SetHandleForNSObject",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_set_flags_for_nsobject",
+			"GCHandle", "IntPtr", "gchandle",
+			"uint8_t", "byte", "flags"
+		) {
+			WrappedManagedFunction = "SetFlagsForNSObject",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("uint8_t", "byte", "xamarin_get_flags_for_nsobject",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetFlagsForNSObject",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_get_type_fullname",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetTypeFullName",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_get_method_name",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetMethodName",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_runtime_invoke_method",
+			"GCHandle", "IntPtr", "method_gchandle",
+			"GCHandle", "IntPtr", "instance_gchandle",
+			"void*", "IntPtr", "parameters"
+		) {
+			WrappedManagedFunction = "InvokeMethod",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_method_returntype",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetMethodReturnType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_type",
+			"const char *", "IntPtr", "type_name"
+		) {
+			WrappedManagedFunction = "GetManagedType",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_write_structure",
+			"GCHandle", "IntPtr", "gchandle",
+			"void**", "ref IntPtr", "output"
+		) {
+			WrappedManagedFunction = "WriteStructure",
+			OnlyDynamicUsage = false,
 		}
+
 	};
 	delegates.CalculateLengths ();
 #><#+

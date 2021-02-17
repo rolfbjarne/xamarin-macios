@@ -150,6 +150,52 @@ namespace Foundation {
 			return class_ptr;
 		}
 
+//#if NET
+		internal void SetHandleDirectly (IntPtr handle)
+		{
+			this.handle = handle;
+		}
+
+		internal void SetFlagsDirectly (byte flags)
+		{
+			this.flags = (Flags) flags;
+		}
+
+		internal byte GetFlagsDirectly ()
+		{
+			return (byte) this.flags;
+		}
+		//#endif
+
+		const string LIB = "/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/dotnet/MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp";
+
+#if NET
+		[DllImport (LIB)]
+		extern static void RegisterToggleRef_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
+
+		[DllImport (LIB)]
+		static extern void xamarin_release_managed_ref_coreclr (IntPtr handle, IntPtr managed_obj);
+
+		[DllImport (LIB)]
+		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain);
+
+		static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			Console.WriteLine ($"RegisterToggleRef ({obj}, 0x{handle.ToString ()}, {isCustomType})");
+		}
+
+		static void xamarin_release_managed_ref (IntPtr handle, NSObject managed_obj)
+		{
+			xamarin_release_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (managed_obj)));
+		}
+
+		static void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain)
+		{
+			xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (obj)), retain);
+		}
+#endif
+
+#if !NET
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
@@ -158,6 +204,7 @@ namespace Foundation {
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
+#endif
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()

@@ -28,3 +28,23 @@ TARGETS += \
 	../bgen/global.json \
 
 all-local:: $(TARGETS)
+
+# This is a temporary variable to enable the .NET workload resolver, because it's opt-in for now.
+# Ref: https://github.com/dotnet/sdk/issues/13849
+export MSBuildEnableWorkloadResolver=true
+
+PROJDIR=/Users/rolf/work/maccore/dotnet-bump/xamarin-macios/tests/xharness/tmp-test-dir/link all28/
+t: $(TARGETS)
+	cd $(TOP) && mai
+	cd "$(PROJDIR)" && rm -Rf bin obj
+	MSBuildExtensionsPathFallbackPathsOverride= \
+	MD_MTOUCH_SDK_ROOT=/Users/rolf/work/maccore/dotnet-bump/xamarin-macios/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/Current \
+	TargetFrameworkFallbackSearchPaths= \
+	MSBUILD_EXE_PATH= \
+	/Users/rolf/work/maccore/dotnet-bump/xamarin-macios/builds/downloads/dotnet-sdk-6.0.100-preview.2.21114.3-osx-x64/dotnet \
+		build \
+		/verbosity:diagnostic \
+		/bl \
+		/p:Platform=iPhoneSimulator \
+		/p:Configuration=Debug \
+		"$(PROJDIR)/link all.csproj"

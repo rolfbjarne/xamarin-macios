@@ -44,6 +44,7 @@ build-monotouch-test-with-mono: $(TARGETS)
 	$(MAKE) -C $(TOP) install -j8
 	$(CP) -c NuGet.config global.json $(TOP)/tests/monotouch-test/dotnet/macOS
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
+	rm -Rf packages
 	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog
 	$(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest
 

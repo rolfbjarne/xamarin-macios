@@ -15,7 +15,7 @@
     <DefineConstants>$(DefineConstants);MONOMAC;XAMMAC_TESTS</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG;DYNAMIC_REGISTRAR</DefineConstants>
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
-    <MtouchExtraArgs>-xml=${ProjectDir}/../extra-linker-defs.xml</MtouchExtraArgs>
+    <MonoBundlingExtraArgs>-xml=$(MSBuildThisFileDirectory)/../extra-linker-defs.xml --marshal-objectivec-exceptions:disable</MonoBundlingExtraArgs>
   </PropertyGroup>
 
   <ItemGroup>

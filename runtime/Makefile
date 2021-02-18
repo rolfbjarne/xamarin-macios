@@ -47,7 +47,7 @@ hostfxr.h: Makefile
 coreclr_delegates.h: Makefile
 	$(Q_CURL) curl -L --output "$@" https://raw.githubusercontent.com/dotnet/runtime/6c8f9fff6adcf6c661072646dbdafabed5267ec5/src/native/corehost/coreclr_delegates.h
 
-runtime.m: hostfxr.h coreclr_delegates.h
+runtime.m: hostfxr.h coreclr_delegates.h coreclrhost.h
 
 xamarin/mono-runtime.h: mono-runtime.h.t4 exports.t4
 	$(Q_GEN) $(TT) $< -o $@

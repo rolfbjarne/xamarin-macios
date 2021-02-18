@@ -178,24 +178,8 @@ namespace Foundation {
 
 		[DllImport (LIB)]
 		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain);
-
-		static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType)
-		{
-			Console.WriteLine ($"RegisterToggleRef ({obj}, 0x{handle.ToString ()}, {isCustomType})");
-		}
-
-		static void xamarin_release_managed_ref (IntPtr handle, NSObject managed_obj)
-		{
-			xamarin_release_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (managed_obj)));
-		}
-
-		static void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain)
-		{
-			xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (obj)), retain);
-		}
 #endif
 
-#if !NET
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 
@@ -204,7 +188,55 @@ namespace Foundation {
 
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
+
+		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain)
+		{
+#if NET
+			if (!IsMono) {
+				xamarin_create_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (obj)), retain);
+				return;
+			}
 #endif
+			xamarin_create_managed_ref (handle, obj, retain);
+		}
+
+		static void ReleaseManagedReference (IntPtr handle, NSObject managed_obj)
+		{
+#if NET
+			if (!IsMono) {
+				xamarin_release_managed_ref_coreclr (handle, GCHandle.ToIntPtr (GCHandle.Alloc (managed_obj)));
+				return;
+			}
+#endif
+
+			xamarin_release_managed_ref (handle, managed_obj);
+
+		}
+
+		static void RegisterToggleReference (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+#if NET
+			if (!IsMono) {
+				Console.WriteLine ($"RegisterToggleRef ({obj}, 0x{handle.ToString ("x")}, {isCustomType})");
+				return;
+			}
+#endif
+
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static bool? is_mono;
+		static bool IsMono {
+			get {
+				if (!is_mono.HasValue) {
+					is_mono = Dlfcn.dlsym (Dlfcn.RTLD.Default, "mono_runtime_invoke") != IntPtr.Zero;
+
+					Console.WriteLine ($"OnMono: {is_mono.Value}, {Dlfcn.dlsym (Dlfcn.RTLD.Default, "mono_runtime_invoke")}");
+				}
+				return is_mono.Value;
+			}
+		}
+
 
 #if !XAMCORE_3_0
 		public static bool IsNewRefcountEnabled ()
@@ -231,7 +263,7 @@ namespace Foundation {
 				return;
 			
 			IsRegisteredToggleRef = true;
-			RegisterToggleRef (this, Handle, allowCustomTypes);
+			RegisterToggleReference (this, Handle, allowCustomTypes);
 		}
 
 		private void InitializeObject (bool alloced) {
@@ -271,12 +303,12 @@ namespace Foundation {
 
 		void CreateManagedRef (bool retain)
 		{
-			xamarin_create_managed_ref (handle, this, retain);
+			CreateManagedReference (handle, this, retain);
 		}
 
 		void ReleaseManagedRef ()
 		{
-			xamarin_release_managed_ref (handle, this);
+			ReleaseManagedReference (handle, this);
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)

@@ -47,8 +47,8 @@ build-monotouch-test-with-mono: $(TARGETS)
 	$(CP) -c NuGet.config global.json $(TOP)/tests/monotouch-test/dotnet/macOS
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
-	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog
+	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS)
 	$(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest
 
 build-monotouch-test-with-coreclr: $(TARGETS)
-	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog /p:XamarinRuntime=CoreCLR
+	$(MAKE) build-monotouch-test-with-mono BUILD_PARAMETERS=/p:XamarinRuntime=CoreCLR

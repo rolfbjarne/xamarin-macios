@@ -403,8 +403,15 @@
 		) {
 			WrappedManagedFunction = "WriteStructure",
 			OnlyDynamicUsage = false,
-		}
+		},
 
+		new XDelegate ("bool", "bool", "xamarin_bridge_isinstance",
+			"GCHandle", "IntPtr", "gchandle",
+			"GCHandle", "IntPtr", "type"
+		) {
+			WrappedManagedFunction = "IsInstance",
+			OnlyDynamicUsage = false,
+		}
 	};
 	delegates.CalculateLengths ();
 #><#+

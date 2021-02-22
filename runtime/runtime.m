@@ -2899,7 +2899,7 @@ xamarin_gchandle_unwrap (GCHandle handle)
 	if (handle == INVALID_GCHANDLE)
 		return NULL;
 	MonoObject *rv = xamarin_gchandle_get_target (handle);
-	mono_gchandle_free (GPOINTER_TO_UINT (handle));
+	xamarin_gchandle_free (handle);
 	return rv;
 }
 
@@ -3142,7 +3142,7 @@ xamarin_load_coreclr ()
 		"APP_PATHS",
 	};
 	const char *propertyValues[] = {
-		"/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/dotnet/MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64//MyCoreCLRApp.app/Contents/MonoBundle",
+		xamarin_get_bundle_path (),
 	};
 	int propertyCount = sizeof (propertyValues) / sizeof (propertyValues [0]);
 
@@ -3421,7 +3421,7 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 		void *del = NULL;
 		int rv = coreclr_create_delegate (coreclr_handle, coreclr_domainId, "Xamarin.Mac, Version=0.0.0.0", "ObjCRuntime.Runtime", "Initialize", &del);
 		if (rv != 0)
-			xamarin_assertion_message ("xamarin_bridge_mono_runtime_invoke: calling %s.%s failed to load delegate\n", method->klass->name, method->name);
+			xamarin_assertion_message ("xamarin_bridge_mono_runtime_invoke: calling %s.%s failed to load delegate: %u -> %i\n", method->klass->name, method->name, rv, rv);
 
 		xamarin_runtime_initialize_decl func = (xamarin_runtime_initialize_decl) del;
 		func (params [0]);
@@ -3537,8 +3537,13 @@ xamarin_bridge_mono_array_length (MonoArray * array)
 MONO_API MonoObject *
 xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_object_isinst (%p, %p) => assert\n", obj, klass);
-	xamarin_assertion_message ("xamarin_bridge_mono_object_isinst not implemented\n");
+	GCHandle exception_gchandle = INVALID_GCHANDLE;
+	bool rv = xamarin_bridge_isinstance (obj->gchandle, klass->gchandle, &exception_gchandle);
+	if (exception_gchandle != INVALID_GCHANDLE)
+		xamarin_assertion_message ("xamarin_bridge_mono_object_isinst threw an exception\n");
+
+	fprintf (stderr, "xamarin_bridge_mono_object_isinst (%p => %s, %p => %s) => %i\n", obj, obj->type_name, klass, klass->name, rv);
+	return rv ? obj : NULL;
 }
 
 MONO_API MonoClass *

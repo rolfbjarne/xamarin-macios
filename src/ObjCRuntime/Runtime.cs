@@ -641,6 +641,16 @@ namespace ObjCRuntime {
 			Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, 0x{output.ToString ("x")})");
 		}
 
+		static bool IsInstance (IntPtr obj_gchandle, IntPtr type_gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
+			if (obj == null)
+				return false;
+
+			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
+			return obj.GetType ().IsAssignableFrom (type);
+		}
+
 		static unsafe Assembly GetEntryAssembly ()
 		{
 			var asm = Assembly.GetEntryAssembly ();

@@ -6,6 +6,8 @@ include $(TOP)/Make.config
 # Ref: https://github.com/dotnet/sdk/issues/13849
 export MSBuildEnableWorkloadResolver=true
 
+export XAMARIN_RUNTIME=CoreCLR
+
 all-local::
 	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 all || (say core c l r build failed & exit 1)
 	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) -j 8 install || (say core c l r install failed & exit 1)

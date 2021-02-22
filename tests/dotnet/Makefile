@@ -45,16 +45,25 @@ build-mysingleview:
 run-mysingleview:
 	$(DOTNET6) build -t:Run MySingleView/*.csproj /p:_DeviceName=:v2:udid=03B4B310-6A00-4218-BA15-31312D6707DA /v:diag
 
+export XAMARIN_RUNTIME=CoreCLR
+
 build-monotouch-test-with-mono: $(TARGETS)
-	rm -Rf $(TOP)/_build
+	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
 	cd $(TOP)/dotnet && git clean -xfd
+	cd $(TOP)/tests/monotouch-test/dotnet && git clean -xfd
 	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) all -j8
 	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) install -j8
 	$(CP) -c NuGet.config global.json $(TOP)/tests/monotouch-test/dotnet/macOS
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
 	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS)
-	$(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest
+	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)
 
 build-monotouch-test-with-coreclr: $(TARGETS)
 	$(MAKE) build-monotouch-test-with-mono BUILD_PARAMETERS=/p:XamarinRuntime=CoreCLR
+
+run:
+	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)
+
+run-lldb:
+	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)

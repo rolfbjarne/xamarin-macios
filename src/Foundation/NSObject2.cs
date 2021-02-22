@@ -167,7 +167,8 @@ namespace Foundation {
 		}
 		//#endif
 
-		const string LIB = "/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/dotnet/MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp";
+		// const string LIB = "/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/dotnet/MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp";
+		const string LIB = "/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest";
 
 #if NET
 		[DllImport (LIB)]
@@ -189,6 +190,21 @@ namespace Foundation {
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
 
+		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain)
+		{
+			xamarin_create_managed_ref (handle, obj, retain);
+		}
+
+		static void RegisterToggleRef_indirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void xamarin_release_managed_ref_indirection (IntPtr handle, NSObject managed_obj)
+		{
+			xamarin_release_managed_ref (handle, managed_obj);
+		}
+
 		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain)
 		{
 #if NET
@@ -197,7 +213,7 @@ namespace Foundation {
 				return;
 			}
 #endif
-			xamarin_create_managed_ref (handle, obj, retain);
+			xamarin_create_managed_ref_indirection (handle, obj, retain);
 		}
 
 		static void ReleaseManagedReference (IntPtr handle, NSObject managed_obj)
@@ -209,7 +225,7 @@ namespace Foundation {
 			}
 #endif
 
-			xamarin_release_managed_ref (handle, managed_obj);
+			xamarin_release_managed_ref_indirection (handle, managed_obj);
 
 		}
 
@@ -222,16 +238,17 @@ namespace Foundation {
 			}
 #endif
 
-			RegisterToggleRef (obj, handle, isCustomType);
+			RegisterToggleRef_indirection (obj, handle, isCustomType);
 		}
 
 		static bool? is_mono;
 		static bool IsMono {
 			get {
 				if (!is_mono.HasValue) {
-					is_mono = Dlfcn.dlsym (Dlfcn.RTLD.Default, "mono_runtime_invoke") != IntPtr.Zero;
+					is_mono = string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("XAMARIN_RUNTIME")); // Dlfcn.dlsym (Dlfcn.RTLD.Default, "mono_runtime_invoke") != IntPtr.Zero;
 
-					Console.WriteLine ($"OnMono: {is_mono.Value}, {Dlfcn.dlsym (Dlfcn.RTLD.Default, "mono_runtime_invoke")}");
+					Console.WriteLine ($"OnMono: {is_mono.Value}");
+					is_mono = false; // FIXME
 				}
 				return is_mono.Value;
 			}

@@ -593,23 +593,29 @@ namespace ObjCRuntime {
 			var parameters = new object [methodParameters.Length];
 
 			var anyUnknown = false;
+			var sb = new System.Text.StringBuilder ();
 			unsafe {
 				IntPtr* nativeParams = (IntPtr*) native_parameters;
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
+					sb.AppendLine ($"Argument #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {methodParameters [i].ParameterType.FullName}");
 					if (p.ParameterType == typeof (IntPtr)) {
 						parameters [i] = nativeParam;
-						Console.WriteLine ($"Argument #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")}");
+					} else if (p.ParameterType.IsClass) {
+						if (nativeParam != IntPtr.Zero)
+							parameters [i] = GCHandle.FromIntPtr (nativeParam).Target;
 					} else {
-						Console.WriteLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
+						sb.AppendLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
 						anyUnknown = true;
 					}
 				}
 			}
 
-			if (anyUnknown)
-				throw new NotImplementedException ("Method parameters");
+			if (anyUnknown) {
+				Console.WriteLine (sb);
+				throw new NotImplementedException ($"Method parameters:\n{sb}");
+			}
 
 			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
 
@@ -649,6 +655,107 @@ namespace ObjCRuntime {
 
 			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
 			return obj.GetType ().IsAssignableFrom (type);
+		}
+
+		static bool IsDelegate (IntPtr type_gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
+			return type.IsAssignableFrom (typeof (MulticastDelegate));
+		}
+
+		// This is supposed to work like mono_class_is_subclass_of
+		static bool IsSubclassOf (IntPtr type1_gchandle, IntPtr type2_gchandle, bool check_interfaces)
+		{
+			try {
+				var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
+				var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
+
+				if (check_interfaces) {
+					if (type1.IsAssignableFrom (type2))
+						return true;
+				} else {
+					if (!type2.IsInterface) {
+						var baseClass = type2;
+						while (baseClass != null && baseClass != typeof (object)) {
+							if (baseClass == type1)
+								return true;
+							baseClass = baseClass.BaseType;
+						}
+					}
+				}
+
+				if (type2 == typeof (object))
+					return true;
+
+			} catch (Exception e) {
+				for (var i = 0; i < 20; i++) {
+					Console.WriteLine (e);
+					Console.Error.WriteLine (e);
+					Console.WriteLine (i);
+					NSLog (e.ToString ());
+					System.Threading.Thread.Sleep (1000);
+				}
+				return false;
+			}
+			return false;
+		}
+
+		static bool IsByRef (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsByRef;
+		}
+
+		static bool IsValueType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsValueType;
+		}
+
+		static bool IsEnum (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return type.IsEnum;
+		}
+
+		static IntPtr GetEnumBaseType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var baseType = type.GetEnumUnderlyingType ();
+			return GCHandle.ToIntPtr (GCHandle.Alloc (baseType));
+		}
+
+		static bool IsNullable (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			if (Nullable.GetUnderlyingType (type) != null)
+				return true;
+			if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (Nullable<>))
+				return true;
+			return false;
+		}
+
+		static IntPtr ObjectToString (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.ToString ());
+		}
+
+		static IntPtr ObjectGetType (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return IntPtr.Zero;
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj.GetType ()));
+		}
+
+		static void GetNameAndNamespace (IntPtr gchandle, ref IntPtr name_space, ref IntPtr name)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			name_space = Marshal.StringToHGlobalAuto (type.Namespace);
+			name = Marshal.StringToHGlobalAuto (type.Name);
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

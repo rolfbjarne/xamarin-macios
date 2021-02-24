@@ -167,12 +167,11 @@ namespace Foundation {
 		}
 		//#endif
 
-		// const string LIB = "/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/dotnet/MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp";
-		const string LIB = "/Users/rolf/work/maccore/coreclr/xamarin-macios/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest";
+		const string LIB = "__Internal";
 
 #if NET
 		[DllImport (LIB)]
-		extern static void RegisterToggleRef_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
+		extern static void xamarin_register_toggleref_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
 
 		[DllImport (LIB)]
 		static extern void xamarin_release_managed_ref_coreclr (IntPtr handle, IntPtr managed_obj);
@@ -233,7 +232,7 @@ namespace Foundation {
 		{
 #if NET
 			if (!IsMono) {
-				Console.WriteLine ($"RegisterToggleRef ({obj}, 0x{handle.ToString ("x")}, {isCustomType})");
+				xamarin_register_toggleref_coreclr (GCHandle.ToIntPtr (GCHandle.Alloc (managed_obj)), handle, isCustomType);
 				return;
 			}
 #endif

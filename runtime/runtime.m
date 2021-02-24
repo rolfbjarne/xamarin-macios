@@ -884,6 +884,14 @@ gc_register_toggleref (MonoObject *obj, id self, bool isCustomType)
 	}
 }
 
+#if defined (CORECLR_RUNTIME)
+void
+xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType)
+{
+	fprintf (stderr, "xamarin_register_toggleref_coreclr (%p, %p, %i) => IGNORED\n", managed_obj, self, isCustomType);
+}
+#endif
+
 static MonoToggleRefStatus
 gc_toggleref_callback (MonoObject *object)
 {
@@ -3147,6 +3155,22 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	xamarin_assertion_message ("%s threw an exception: %s", method, str);
 }
 
+static void*
+xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
+{
+
+	void* symbol = NULL;
+
+	if (!strcmp (libraryName, "__Internal")) {
+		symbol = dlsym (RTLD_DEFAULT, entrypointName);
+		fprintf (stderr, "xamarin_pinvoke_override (%s, %s): %p error: %s\n", libraryName, entrypointName, symbol, dlerror ());
+	} else {
+		fprintf (stderr, "xamarin_pinvoke_override (%s, %s) unknown library\n", libraryName, entrypointName);
+	}
+
+	return symbol;
+}
+
 static void
 xamarin_load_coreclr ()
 {
@@ -3156,11 +3180,15 @@ xamarin_load_coreclr ()
 
 	int rv;
 
+	char *pinvokeOverride = xamarin_strdup_printf ("%p", &xamarin_pinvoke_override);
+
 	const char *propertyKeys[] = {
 		"APP_PATHS",
+		"PINVOKE_OVERRIDE",
 	};
 	const char *propertyValues[] = {
 		xamarin_get_bundle_path (),
+		pinvokeOverride,
 	};
 	int propertyCount = sizeof (propertyValues) / sizeof (propertyValues [0]);
 
@@ -3173,6 +3201,8 @@ xamarin_load_coreclr ()
 		&coreclr_handle,
 		&coreclr_domainId
 		);
+
+	xamarin_free (pinvokeOverride);
 
 	fprintf (stderr, "xamarin_load_coreclr (): rv: %i domainId: %i handle: %p\n", rv, coreclr_domainId, coreclr_handle);
 }
@@ -3229,12 +3259,16 @@ xamarin_find_mono_class (const char *name, GCHandle gchandle)
 		entry = (MonoClass *) calloc (1, sizeof (MonoClass));
 		entry->gchandle = class_gchandle;
 		entry->fullname = strdup (lookup_name);
-		xamarin_bridge_get_name_and_namespace (class_gchandle, &entry->name_space, &entry->name, NULL);
+		if (initialize_finished)
+			xamarin_bridge_get_name_and_namespace (class_gchandle, &entry->name_space, &entry->name, NULL);
 		CFDictionarySetValue (mono_class_hash_table, lookup_name, entry);
 		fprintf (stderr, "xamarin_find_mono_class (%s, %p) => added %p = %s (Namespace: %s Name: %s); %p => %p\n", name, gchandle, entry, entry->fullname, entry->name_space, entry->name, gchandle, class_gchandle);
 	} else {
 		fprintf (stderr, "xamarin_find_mono_class (%s, %p) => found %p = %s\n", name, gchandle, entry, entry->fullname);
 	}
+
+	if (initialize_finished && entry->name_space == NULL && entry->name == NULL)
+		xamarin_bridge_get_name_and_namespace (entry->gchandle, &entry->name_space, &entry->name, NULL);
 
 	if (type_name != NULL)
 		free (type_name);
@@ -3369,8 +3403,8 @@ xamarin_bridge_mono_class_get_namespace (MonoClass * klass)
 MONO_API const char *
 xamarin_bridge_mono_class_get_name (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_name (%p) => assert\n", klass);
-	xamarin_assertion_message ("xamarin_bridge_mono_class_get_name not implemented\n");
+	fprintf (stderr, "xamarin_bridge_mono_class_get_name (%p => %s) => %s\n", klass, klass->fullname, klass->name);
+	return klass->name;
 }
 
 MONO_API MonoClass *
@@ -3383,10 +3417,10 @@ xamarin_bridge_mono_class_get_parent (MonoClass * klass)
 MONO_API mono_bool
 xamarin_bridge_mono_class_is_subclass_of (MonoClass * klass, MonoClass * klassc, mono_bool check_interfaces)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	bool rv = xamarin_bridge_is_subclass_of (klass->gchandle, klassc->gchandle, check_interfaces, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_mono_class_is_subclass_of threw an exception\n");
+
+	fprintf (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s = %p, %p = %s = %p, %i)\n", klass, klass ? klass->fullname : "NULL", klass->gchandle, klassc, klassc ? klassc->fullname : "NULL", klassc->gchandle, check_interfaces);
+
+	bool rv = xamarin_bridge_is_subclass_of (klass->gchandle, klassc->gchandle, check_interfaces);
 
 	fprintf (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s, %p = %s, %i) => %i\n", klass, klass->fullname, klassc, klassc->fullname, check_interfaces, rv);
 
@@ -4286,7 +4320,7 @@ xamarin_bridge_mono_threads_detach_coop (gpointer cookie, gpointer* dummy)
 MONO_API void
 xamarin_bridge_mono_install_ftnptr_eh_callback (MonoFtnPtrEHCallback callback)
 {
-	fprintf (stderr, "%s (%p) => IGNOE\n", __func__, callback);
+	fprintf (stderr, "%s (%p) => IGNORE\n", __func__, callback);
 }
 
 #endif

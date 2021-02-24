@@ -485,6 +485,13 @@
 		) {
 			WrappedManagedFunction = "GetNameAndNamespace",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_element_class",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetElementClass",
+			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

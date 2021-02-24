@@ -133,8 +133,10 @@ struct _MonoImage {
 };
 
 struct _MonoClass {
-	char *name;
+	char *fullname;
 	GCHandle gchandle;
+	char *name;
+	char *name_space;
 };
 
 struct _MonoDomain {
@@ -191,8 +193,9 @@ struct _MonoReflectionAssembly : MonoObject {
 	MonoAssembly *assembly;
 };
 
-struct _MonoReflectionType {
+struct _MonoReflectionType : MonoObject {
 	char *name;
+	MonoType *type;
 };
 
 struct _MonoException {

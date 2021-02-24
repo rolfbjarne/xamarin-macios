@@ -584,6 +584,16 @@ namespace ObjCRuntime {
 			return Marshal.StringToHGlobalAuto (obj?.Name);
 		}
 
+		[StructLayout (LayoutKind.Sequential)]
+		readonly struct MonoObject {
+			readonly IntPtr vtable;
+			readonly IntPtr synchronisation;
+			readonly int object_kind;
+			public readonly IntPtr gchandle;
+			readonly IntPtr type_name;
+			readonly IntPtr struct_value;
+		}
+
 		static IntPtr InvokeMethod (IntPtr method_gchandle, IntPtr instance_gchandle, IntPtr native_parameters)
 		{
 			var method = (MethodBase) GetGCHandleTarget (method_gchandle);
@@ -606,9 +616,15 @@ namespace ObjCRuntime {
 						parameters [i] = nativeParam;
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
 					} else if (p.ParameterType.IsClass) {
-						if (nativeParam != IntPtr.Zero)
-							parameters [i] = GCHandle.FromIntPtr (nativeParam).Target;
-						xamarin_log ($"        IsClass (GCHandle: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i])}");
+						var obj_gchandle = IntPtr.Zero;
+						if (nativeParam != IntPtr.Zero) {
+							unsafe {
+								MonoObject* mono_obj = (MonoObject*) nativeParam;
+								obj_gchandle = mono_obj->gchandle;
+							}
+							parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
+						}
+						xamarin_log ($"        IsClass (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i])}");
 					} else {
 						sb.AppendLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
 						anyUnknown = true;
@@ -769,6 +785,54 @@ namespace ObjCRuntime {
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			return GCHandle.ToIntPtr (GCHandle.Alloc (type.GetElementType ()));
+		}
+
+		// typedef void (* mono_reference_queue_callback) (void* user_data);
+		delegate void mono_reference_queue_callback (IntPtr user_data); 
+
+		class ReferenceQueue {
+			public mono_reference_queue_callback Callback;
+			public ConditionalWeakTable<object, object> Table = new ConditionalWeakTable<object, object> ();
+		}
+
+		class ReferenceQueueEntry {
+			public ReferenceQueue Queue;
+			public IntPtr UserData;
+
+			~ReferenceQueueEntry ()
+			{
+				Queue.Callback (UserData);
+			}
+		}
+
+		static IntPtr CreateGCReferenceQueue (IntPtr callback)
+		{
+			var queue = new ReferenceQueue ();
+			queue.Callback = Marshal.GetDelegateForFunctionPointer<mono_reference_queue_callback> (callback);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (queue));
+		}
+
+		static void GCReferenceQueueAdd (IntPtr queue_handle, IntPtr obj_handle, IntPtr user_data)
+		{
+			var queue = (ReferenceQueue) GCHandle.FromIntPtr (queue_handle).Target;
+			var obj = GCHandle.FromIntPtr (obj_handle).Target;
+			queue.Table.Add (obj, new ReferenceQueueEntry () { Queue = queue, UserData = user_data });
+		}
+
+		static IntPtr StringToUtf8 (IntPtr gchandle)
+		{
+			var str = (string) GCHandle.FromIntPtr (gchandle).Target;
+			if (str == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (str);
+		}
+
+		static IntPtr NewString (IntPtr text)
+		{
+			if (text == IntPtr.Zero)
+				return IntPtr.Zero;
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (Marshal.PtrToStringAuto (text)));
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

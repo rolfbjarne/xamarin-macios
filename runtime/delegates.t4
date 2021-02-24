@@ -492,6 +492,36 @@
 		) {
 			WrappedManagedFunction = "GetElementClass",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_gc_reference_queue_create",
+			"void *", "IntPtr", "callback"
+		) {
+			WrappedManagedFunction = "CreateGCReferenceQueue",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_gc_reference_queue_add",
+			"GCHandle", "IntPtr", "queue_handle",
+			"GCHandle", "IntPtr", "obj",
+			"void *", "IntPtr", "user_data"
+		) {
+			WrappedManagedFunction = "GCReferenceQueueAdd",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("char *", "IntPtr", "xamarin_bridge_string_to_utf8",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "StringToUtf8",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_new_string",
+			"const char *", "IntPtr", "text"
+		) {
+			WrappedManagedFunction = "NewString",
+			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

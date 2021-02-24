@@ -666,9 +666,20 @@ namespace ObjCRuntime {
 		// This is supposed to work like mono_class_is_subclass_of
 		static bool IsSubclassOf (IntPtr type1_gchandle, IntPtr type2_gchandle, bool check_interfaces)
 		{
+			var sb = new System.Text.StringBuilder ();
+
 			try {
+				sb.AppendLine ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")}, 0x{type2_gchandle.ToString ("x")}, {check_interfaces})");
+			if (type1_gchandle == IntPtr.Zero)
+				return false;
+
+			if (type2_gchandle == IntPtr.Zero)
+				return false;
+
 				var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
 				var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
+
+				sb.AppendLine ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
 
 				if (check_interfaces) {
 					if (type1.IsAssignableFrom (type2))
@@ -688,14 +699,7 @@ namespace ObjCRuntime {
 					return true;
 
 			} catch (Exception e) {
-				for (var i = 0; i < 20; i++) {
-					Console.WriteLine (e);
-					Console.Error.WriteLine (e);
-					Console.WriteLine (i);
-					NSLog (e.ToString ());
-					System.Threading.Thread.Sleep (1000);
-				}
-				return false;
+				throw new Exception (sb.ToString (), e);
 			}
 			return false;
 		}

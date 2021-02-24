@@ -224,7 +224,7 @@ void			xamarin_notify_dealloc (id self, GCHandle gchandle);
 
 void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
 void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
-
+void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
 
 int				xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode);
 

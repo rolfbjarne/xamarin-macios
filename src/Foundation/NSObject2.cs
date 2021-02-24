@@ -232,7 +232,7 @@ namespace Foundation {
 		{
 #if NET
 			if (!IsMono) {
-				xamarin_register_toggleref_coreclr (GCHandle.ToIntPtr (GCHandle.Alloc (managed_obj)), handle, isCustomType);
+				xamarin_register_toggleref_coreclr (GCHandle.ToIntPtr (GCHandle.Alloc (obj)), handle, isCustomType);
 				return;
 			}
 #endif

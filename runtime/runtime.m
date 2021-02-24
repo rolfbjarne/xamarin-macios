@@ -2838,7 +2838,7 @@ xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection)
 }
 
 MonoClass *
-xamarin_find_mono_class (const char *name, GCHandle gchandle);
+xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
 
 MonoObject *
 xamarin_gchandle_get_target (GCHandle handle)
@@ -2847,10 +2847,7 @@ xamarin_gchandle_get_target (GCHandle handle)
 		return NULL;
 
 #if defined (CORECLR_RUNTIME)
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_gchandle_get_target (%p) => exception occurred", handle);
+	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle);
 
 	fprintf (stderr, "xamarin_gchandle_get_target (%p => %s)\n", handle, gchandle_type);
 
@@ -2859,12 +2856,8 @@ xamarin_gchandle_get_target (GCHandle handle)
 	if (gchandle_type && (!strcmp (gchandle_type, "System.Reflection.RuntimeConstructorInfo") || !strcmp (gchandle_type, "System.Reflection.RuntimeMethodInfo"))) {
 		MonoReflectionMethod *mrm = (MonoReflectionMethod *) calloc (1, sizeof (MonoReflectionMethod));
 		mrm->method = (MonoMethod *) calloc (1, sizeof (MonoMethod));
-		mrm->method->name = xamarin_bridge_get_method_name (handle, &exception_gchandle);
-		if (exception_gchandle != INVALID_GCHANDLE)
-			xamarin_assertion_message ("xamarin_bridge_get_method_name threw an exception");
-		mrm->method->klass = xamarin_find_mono_class (NULL, xamarin_bridge_get_method_declaring_type (handle, &exception_gchandle));
-		if (exception_gchandle != INVALID_GCHANDLE)
-			xamarin_assertion_message ("xamarin_bridge_get_method_declaring_type threw an exception");
+		mrm->method->name = xamarin_bridge_get_method_name (handle);
+		mrm->method->klass = xamarin_find_mono_class (xamarin_bridge_get_method_declaring_type (handle));
 		mrm->method->gchandle = handle;
 		mrm->object_kind = MonoObjectType_MonoReflectionMethod;
 		mrm->gchandle = handle;
@@ -2872,9 +2865,7 @@ xamarin_gchandle_get_target (GCHandle handle)
 	} else {
 		rv = (MonoObject *) calloc (1, sizeof (MonoObject));
 		rv->gchandle = handle;
-		xamarin_bridge_write_structure (handle, &rv->struct_value, &exception_gchandle);
-		if (exception_gchandle != INVALID_GCHANDLE)
-			xamarin_assertion_message ("xamarin_bridge_write_structure threw an exception");
+		xamarin_bridge_write_structure (handle, &rv->struct_value);
 	}
 	rv->type_name = gchandle_type;
 
@@ -3193,8 +3184,8 @@ xamarin_load_coreclr ()
 	int propertyCount = sizeof (propertyValues) / sizeof (propertyValues [0]);
 
 	rv = coreclr_initialize (
-		"HelloWorld",
-		"FriendlyAppDomainName",
+		"HelloWorld", // FIXME: application name
+		xamarin_executable_name,
 		propertyCount,
 		propertyKeys,
 		propertyValues,
@@ -3228,50 +3219,60 @@ hash_str_hash (const void *a)
 
 static CFMutableDictionaryRef mono_class_hash_table = NULL;
 MonoClass *
-xamarin_find_mono_class (const char *name, GCHandle gchandle)
+xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *name)
 {
+	MonoClass *entry = NULL;
+	char *fullname = NULL;
+
+	if (name_space == NULL && name == NULL) {
+		fullname = xamarin_bridge_get_type_fullname (gchandle, NULL);
+	} else if (name_space == NULL) {
+		fullname = xamarin_strdup_printf ("%s", name);
+	} else {
+		fullname = xamarin_strdup_printf ("%s.%s");
+	}
+
 	if (mono_class_hash_table == NULL) {
 		CFDictionaryKeyCallBacks key_callbacks = { 0 };
 		key_callbacks.equal = hash_str_equal;
 		key_callbacks.hash = hash_str_hash;
 		mono_class_hash_table = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, &key_callbacks, NULL);
-	}
-
-	char *type_name = NULL;
-	const char *lookup_name;
-	if (name == NULL) {
-		type_name = xamarin_bridge_get_type_fullname (gchandle, NULL);
-		lookup_name = type_name;
 	} else {
-		lookup_name = name;
+		entry = (MonoClass *) CFDictionaryGetValue (mono_class_hash_table, fullname);
 	}
 
-	MonoClass *entry = (MonoClass *) CFDictionaryGetValue (mono_class_hash_table, lookup_name);
 	if (entry == NULL) {
 		GCHandle class_gchandle = gchandle;
 		if (class_gchandle == INVALID_GCHANDLE) {
 			if (initialize_finished) {
-				class_gchandle = xamarin_bridge_get_type (lookup_name, NULL);
+				class_gchandle = xamarin_bridge_get_type (fullname, NULL);
 			}
 		} else {
 			class_gchandle = xamarin_bridge_duplicate_gchandle (gchandle, XamarinGCHandleTypeNormal, NULL);
 		}
 		entry = (MonoClass *) calloc (1, sizeof (MonoClass));
 		entry->gchandle = class_gchandle;
-		entry->fullname = strdup (lookup_name);
-		if (initialize_finished)
-			xamarin_bridge_get_name_and_namespace (class_gchandle, &entry->name_space, &entry->name, NULL);
-		CFDictionarySetValue (mono_class_hash_table, lookup_name, entry);
-		fprintf (stderr, "xamarin_find_mono_class (%s, %p) => added %p = %s (Namespace: %s Name: %s); %p => %p\n", name, gchandle, entry, entry->fullname, entry->name_space, entry->name, gchandle, class_gchandle);
+		entry->fullname = strdup (fullname);
+		entry->name_space = strdup (name_space);
+		entry->name = strdup (name);
+		CFDictionarySetValue (mono_class_hash_table, fullname, entry);
+		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => added %p = %s (GCHandle: %p)\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle);
 	} else {
-		fprintf (stderr, "xamarin_find_mono_class (%s, %p) => found %p = %s\n", name, gchandle, entry, entry->fullname);
+		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => found %p = %s (GCHandle: %p)\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle);
 	}
 
-	if (initialize_finished && entry->name_space == NULL && entry->name == NULL)
-		xamarin_bridge_get_name_and_namespace (entry->gchandle, &entry->name_space, &entry->name, NULL);
+	if (initialize_finished) {
+		if (entry->gchandle == INVALID_GCHANDLE) {
+			entry->gchandle = xamarin_bridge_get_type (fullname);
+			fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => got GCHandle %p for %s\n", gchandle, name_space, name, entry->gchandle, entry->fullname);
+		}
+		if (entry->name_space == NULL && entry->name == NULL) {
+			xamarin_bridge_get_name_and_namespace (entry->gchandle, &entry->name_space, &entry->name, NULL);
+			fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => got Namespace=%s and Name=%s for FullName=%s and GCHandle=%p\n", gchandle, name_space, name, entry->name_space, entry->name, entry->fullname, entry->gchandle);
+		}
+	}
 
-	if (type_name != NULL)
-		free (type_name);
+	free (fullname);
 
 	return entry;
 }
@@ -3332,9 +3333,7 @@ xamarin_bridge_mono_gc_collect (int generation)
 MONO_API MonoClass *
 xamarin_bridge_mono_class_from_name (MonoImage * image, const char * name_space, const char * name)
 {
-	char *tn = xamarin_strdup_printf ("%s.%s", name_space, name);
-	MonoClass *rv = xamarin_find_mono_class (tn, INVALID_GCHANDLE);
-	xamarin_free (tn);
+	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, name_space, name);
 	fprintf (stderr, "xamarin_bridge_mono_class_from_name (%p, %s, %s) => %p\n", image, name_space, name, rv);
 	return rv;
 }
@@ -3367,11 +3366,9 @@ xamarin_bridge_mono_class_is_assignable_from (MonoClass * klass, MonoClass * okl
 MONO_API MonoClass *
 xamarin_bridge_mono_class_from_mono_type (MonoType * type)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	MonoClass *rv = xamarin_find_mono_class (type->name, xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal, &exception_gchandle));
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_duplicate_gchandle threw an exception\n");
-	fprintf (stderr, "xamarin_bridge_mono_class_from_mono_type (%p = %s) => %p = %s\n", type, type->name, rv, rv->name);
+	GCHandle type_gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+	MonoClass *rv = xamarin_find_mono_class (type_gchandle /* get name[space] from type?  type->name */);
+	fprintf (stderr, "xamarin_bridge_mono_class_from_mono_type (%p = %s) => %p = %s\n", type, type->name, rv, rv->fullname);
 	return rv;
 }
 
@@ -3642,9 +3639,9 @@ xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass)
 MONO_API MonoClass *
 xamarin_bridge_mono_object_get_class (MonoObject * obj)
 {
-	GCHandle type_gchandle = xamarin_bridge_object_get_type (obj->gchandle, NULL);
+	GCHandle type_gchandle = xamarin_bridge_object_get_type (obj->gchandle);
 
-	MonoClass *rv = xamarin_find_mono_class (NULL, type_gchandle);
+	MonoClass *rv = xamarin_find_mono_class (type_gchandle);
 
 	fprintf (stderr, "xamarin_bridge_mono_object_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
 
@@ -3850,11 +3847,8 @@ MONO_API MonoClass *
 xamarin_bridge_mono_method_get_class (MonoMethod * method)
 {
 	if (method->klass == NULL) {
-		GCHandle exception_gchandle = INVALID_GCHANDLE;
-		GCHandle declaring_type_gchandle = xamarin_bridge_get_method_declaring_type (method->gchandle, &exception_gchandle);
-		if (exception_gchandle != INVALID_GCHANDLE)
-			xamarin_assertion_message ("xamarin_bridge_get_method_declaring_type threw an exception");
-		method->klass = xamarin_find_mono_class (NULL, declaring_type_gchandle);
+		GCHandle declaring_type_gchandle = xamarin_bridge_get_method_declaring_type (method->gchandle);
+		method->klass = xamarin_find_mono_class (declaring_type_gchandle);
 	}
 
 	fprintf (stderr, "xamarin_bridge_mono_method_get_class (%p) => %p = %s\n", method, method->klass->gchandle, method->klass->name);
@@ -3878,7 +3872,7 @@ xamarin_bridge_mono_domain_get (void)
 MONO_API MonoClass *
 xamarin_bridge_mono_get_intptr_class (void)
 {
-	MonoClass *rv = xamarin_find_mono_class ("System.IntPtr", INVALID_GCHANDLE);
+	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "IntPtr");
 	fprintf (stderr, "xamarin_bridge_mono_get_intptr_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
@@ -3886,7 +3880,7 @@ xamarin_bridge_mono_get_intptr_class (void)
 MONO_API MonoClass *
 xamarin_bridge_mono_get_string_class (void)
 {
-	MonoClass *rv = xamarin_find_mono_class ("System.String", INVALID_GCHANDLE);
+	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "String");
 	fprintf (stderr, "xamarin_bridge_mono_get_string_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
@@ -3901,7 +3895,7 @@ xamarin_bridge_mono_get_corlib (void)
 MONO_API MonoClass *
 xamarin_bridge_mono_get_array_class (void)
 {
-	MonoClass *rv = xamarin_find_mono_class ("System.Array", INVALID_GCHANDLE);
+	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "Array");
 	fprintf (stderr, "xamarin_bridge_mono_get_array_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
@@ -3909,7 +3903,7 @@ xamarin_bridge_mono_get_array_class (void)
 MONO_API MonoClass *
 xamarin_bridge_mono_get_exception_class (void)
 {
-	MonoClass *rv = xamarin_find_mono_class ("System.Exception", INVALID_GCHANDLE);
+	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "Exception");
 	fprintf (stderr, "xamarin_bridge_mono_get_exception_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }

@@ -592,6 +592,8 @@ namespace ObjCRuntime {
 			var methodParameters = method.GetParameters ();
 			var parameters = new object [methodParameters.Length];
 
+			xamarin_log ($"InvokeMethod ({method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
+
 			var anyUnknown = false;
 			var sb = new System.Text.StringBuilder ();
 			unsafe {
@@ -599,12 +601,14 @@ namespace ObjCRuntime {
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
-					sb.AppendLine ($"Argument #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {methodParameters [i].ParameterType.FullName}");
+					xamarin_log ($"    Argument #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => *0x{nativeParam.ToString ("x")}={(nativeParam == IntPtr.Zero ? "N/A" : Marshal.ReadIntPtr (nativeParam).ToString ("x"))} => {methodParameters [i].ParameterType.FullName}");
 					if (p.ParameterType == typeof (IntPtr)) {
 						parameters [i] = nativeParam;
+						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
 					} else if (p.ParameterType.IsClass) {
 						if (nativeParam != IntPtr.Zero)
 							parameters [i] = GCHandle.FromIntPtr (nativeParam).Target;
+						xamarin_log ($"        IsClass (GCHandle: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i])}");
 					} else {
 						sb.AppendLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
 						anyUnknown = true;
@@ -668,39 +672,38 @@ namespace ObjCRuntime {
 		{
 			var sb = new System.Text.StringBuilder ();
 
-			try {
-				sb.AppendLine ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")}, 0x{type2_gchandle.ToString ("x")}, {check_interfaces})");
+			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")}, 0x{type2_gchandle.ToString ("x")}, {check_interfaces})");
+
 			if (type1_gchandle == IntPtr.Zero)
 				return false;
 
 			if (type2_gchandle == IntPtr.Zero)
 				return false;
 
-				var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
-				var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
+			var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
+			var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
 
-				sb.AppendLine ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
+			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
 
-				if (check_interfaces) {
-					if (type1.IsAssignableFrom (type2))
-						return true;
-				} else {
-					if (!type2.IsInterface) {
-						var baseClass = type2;
-						while (baseClass != null && baseClass != typeof (object)) {
-							if (baseClass == type1)
-								return true;
-							baseClass = baseClass.BaseType;
-						}
+			if (check_interfaces) {
+				if (type2.IsAssignableFrom (type1)) {
+					xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is assignable from type1");
+					return true;
+				}
+			} else {
+				if (!type2.IsInterface) {
+					var baseClass = type2;
+					while (baseClass != null && baseClass != typeof (object)) {
+						if (baseClass == type1)
+							return true;
+						baseClass = baseClass.BaseType;
 					}
 				}
-
-				if (type2 == typeof (object))
-					return true;
-
-			} catch (Exception e) {
-				throw new Exception (sb.ToString (), e);
 			}
+
+			if (type2 == typeof (object))
+				return true;
+
 			return false;
 		}
 
@@ -760,6 +763,12 @@ namespace ObjCRuntime {
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			name_space = Marshal.StringToHGlobalAuto (type.Namespace);
 			name = Marshal.StringToHGlobalAuto (type.Name);
+		}
+
+		static IntPtr GetElementClass (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return GCHandle.ToIntPtr (GCHandle.Alloc (type.GetElementType ()));
 		}
 
 		static unsafe Assembly GetEntryAssembly ()
@@ -1889,8 +1898,8 @@ namespace ObjCRuntime {
 #endif
 
 #if MONOMAC
-		[DllImport ("__Internal")]
-		extern static void xamarin_log (string s);
+		//[DllImport ("__Internal")]
+		//extern static void xamarin_log (string s);
 		internal static void NSLog (string s)
 		{
 			if (PlatformHelper.CheckSystemVersion (10, 12)) {
@@ -1923,6 +1932,9 @@ namespace ObjCRuntime {
 			NSString.ReleaseNative (fmt);
 		}
 #endif // !COREBUILD
+
+		[DllImport ("__Internal", CharSet = CharSet.Unicode)]
+		internal extern static void xamarin_log (string s);
 
 		static int MajorVersion = -1;
 		static int MinorVersion = -1;

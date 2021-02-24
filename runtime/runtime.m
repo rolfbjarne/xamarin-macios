@@ -3981,8 +3981,9 @@ xamarin_bridge_mono_type_get_object (MonoDomain * domain, MonoType * type)
 MONO_API MonoType *
 xamarin_bridge_mono_reflection_type_get_type (MonoReflectionType * reftype)
 {
-	fprintf (stderr, "xamarin_bridge_mono_reflection_type_get_type (%p) => assert\n", reftype);
-	xamarin_assertion_message ("xamarin_bridge_mono_reflection_type_get_type not implemented\n");
+	MonoType *rv = reftype->type;
+	fprintf (stderr, "xamarin_bridge_mono_reflection_type_get_type (%p = %s) => %p = %s\n", reftype, reftype->name, rv, rv->name);
+	return rv;
 }
 
 MONO_API MonoType *

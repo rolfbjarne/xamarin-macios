@@ -175,8 +175,8 @@ struct _MonoClassField {
 	char *name;
 };
 
-struct _MonoString {
-	char *name;
+struct _MonoString : MonoObject {
+	char *value;
 };
 
 struct _MonoArray {
@@ -211,7 +211,7 @@ struct _MonoThreadsSync {
 };
 
 struct _MonoReferenceQueue {
-	char *name;
+	GCHandle gchandle;
 };
 #endif
 

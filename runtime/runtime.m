@@ -3594,8 +3594,11 @@ xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t
 MONO_API MonoString *
 xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text)
 {
-	fprintf (stderr, "xamarin_bridge_mono_string_new (%p, %s) => assert\n", domain, text);
-	xamarin_assertion_message ("xamarin_bridge_mono_string_new not implemented\n");
+	MonoString *rv = (MonoString *) calloc (1, sizeof (MonoString));
+	rv->value = strdup (text);
+	rv->gchandle = xamarin_bridge_new_string (text);
+	fprintf (stderr, "xamarin_bridge_mono_string_new (%p, %s) => %p = %p\n", domain, text, rv, rv->gchandle);
+	return rv;
 }
 
 MONO_API MonoArray *
@@ -3620,8 +3623,15 @@ xamarin_bridge_mono_object_unbox (MonoObject * obj)
 MONO_API char *
 xamarin_bridge_mono_string_to_utf8 (MonoString * string_obj)
 {
-	fprintf (stderr, "xamarin_bridge_mono_string_to_utf8 (%p) => assert\n", string_obj);
-	xamarin_assertion_message ("xamarin_bridge_mono_string_to_utf8 not implemented\n");
+	char * rv = NULL;
+
+	if (string_obj != NULL)
+		rv = xamarin_bridge_string_to_utf8 (string_obj->gchandle);
+
+
+	fprintf (stderr, "xamarin_bridge_mono_string_to_utf8 (%p = %p) => %s\n", string_obj, string_obj->gchandle, rv);
+
+	return rv;
 }
 
 MONO_API MonoObject *
@@ -4110,8 +4120,16 @@ xamarin_bridge_mono_get_exception_out_of_memory (void)
 MONO_API MonoReferenceQueue *
 xamarin_bridge_mono_gc_reference_queue_new (mono_reference_queue_callback callback)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_new (%p) => assert\n", callback);
-	xamarin_assertion_message ("xamarin_bridge_mono_gc_reference_queue_new not implemented\n");
+	GCHandle queue_handle;
+
+	queue_handle = xamarin_bridge_gc_reference_queue_create ((void *) callback);
+
+	MonoReferenceQueue *rv = (MonoReferenceQueue *) calloc (1, sizeof (MonoReferenceQueue));
+	rv->gchandle = queue_handle;
+
+	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_new (%p) => %p = %p\n", callback, rv, rv->gchandle);
+
+	return rv;
 }
 
 MONO_API void
@@ -4124,8 +4142,11 @@ xamarin_bridge_mono_gc_reference_queue_free (MonoReferenceQueue * queue)
 MONO_API gboolean
 xamarin_bridge_mono_gc_reference_queue_add (MonoReferenceQueue * queue, MonoObject * obj, void * user_data)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p, %p, %p) => assert\n", queue, obj, user_data);
-	xamarin_assertion_message ("xamarin_bridge_mono_gc_reference_queue_add not implemented\n");
+	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
+
+	xamarin_bridge_gc_reference_queue_add (queue->gchandle, obj->gchandle, user_data);
+
+	return true;
 }
 
 MONO_API void

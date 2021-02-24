@@ -3201,7 +3201,17 @@ xamarin_load_coreclr ()
 static Boolean
 hash_str_equal (const void *a, const void *b)
 {
-	return strcmp ((const char *) a, (const char *) b) == 0;
+	Boolean rv;
+
+	if (a == b) {
+		rv = TRUE;
+	} else {
+		rv = strcmp ((const char *) a, (const char *) b) == 0;
+	}
+
+	fprintf (stderr, "hash_str_equal ('%s', '%s') => %i\n", (const char *) a, (const char *) b, rv);
+
+	return rv;
 }
 
 static CFHashCode
@@ -3213,6 +3223,8 @@ hash_str_hash (const void *a)
 
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+	fprintf (stderr, "hash_str_hash ('%s') => %lu\n", (const char *) a, hash);
 
     return hash;
 }
@@ -3253,12 +3265,12 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 		entry = (MonoClass *) calloc (1, sizeof (MonoClass));
 		entry->gchandle = class_gchandle;
 		entry->fullname = strdup (fullname);
-		entry->name_space = strdup (name_space);
-		entry->name = strdup (name);
-		CFDictionarySetValue (mono_class_hash_table, fullname, entry);
-		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => added %p = %s (GCHandle: %p)\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle);
+		entry->name_space = name_space == NULL ? NULL : strdup (name_space);
+		entry->name = name == NULL ? NULL : strdup (name);
+		CFDictionarySetValue (mono_class_hash_table, entry->fullname, entry);
+		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => added %p = %s (GCHandle: %p) with key %s\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle, fullname);
 	} else {
-		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => found %p = %s (GCHandle: %p)\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle);
+		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => found %p = %s (GCHandle: %p) for key %s\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle, fullname);
 	}
 
 	if (initialize_finished) {
@@ -3386,8 +3398,13 @@ xamarin_bridge_mono_class_is_delegate (MonoClass * klass)
 MONO_API MonoClass *
 xamarin_bridge_mono_class_get_element_class (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_element_class (%p) => assert\n", klass);
-	xamarin_assertion_message ("xamarin_bridge_mono_class_get_element_class not implemented\n");
+	// FIXME
+	klass = xamarin_find_mono_class (klass->gchandle, klass->name_space, klass->name);
+
+	GCHandle element_type = xamarin_bridge_get_element_class (klass->gchandle);
+	MonoClass *rv = xamarin_find_mono_class (element_type);
+	fprintf (stderr, "xamarin_bridge_mono_class_get_element_class (%p = %s) => %p = %s = %p\n", klass, klass->fullname, rv, rv->fullname, rv->gchandle);
+	return rv;
 }
 
 MONO_API const char *
@@ -3414,6 +3431,9 @@ xamarin_bridge_mono_class_get_parent (MonoClass * klass)
 MONO_API mono_bool
 xamarin_bridge_mono_class_is_subclass_of (MonoClass * klass, MonoClass * klassc, mono_bool check_interfaces)
 {
+	// FIXME
+	klass = xamarin_find_mono_class (klass->gchandle, klass->name_space, klass->name);
+	klassc = xamarin_find_mono_class (klassc->gchandle, klassc->name_space, klassc->name);
 
 	fprintf (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s = %p, %p = %s = %p, %i)\n", klass, klass ? klass->fullname : "NULL", klass->gchandle, klassc, klassc ? klassc->fullname : "NULL", klassc->gchandle, check_interfaces);
 
@@ -3949,8 +3969,13 @@ xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method,
 MONO_API MonoReflectionType *
 xamarin_bridge_mono_type_get_object (MonoDomain * domain, MonoType * type)
 {
-	fprintf (stderr, "xamarin_bridge_mono_type_get_object (%p, %p) => assert\n", domain, type);
-	xamarin_assertion_message ("xamarin_bridge_mono_type_get_object not implemented\n");
+	MonoReflectionType *rv = (MonoReflectionType *) calloc (1, sizeof (MonoReflectionType));
+	rv->type = type;
+	rv->gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+
+	fprintf (stderr, "xamarin_bridge_mono_type_get_object (%p, %p = %s) => %p = %p\n", domain, type, type->name, rv, rv->gchandle);
+
+	return rv;
 }
 
 MONO_API MonoType *

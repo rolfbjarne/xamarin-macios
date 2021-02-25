@@ -69,6 +69,8 @@ typedef int32_t	mono_bool;
 enum MonoObjectType : int {
 	MonoObjectType_Unknown,
 	MonoObjectType_MonoReflectionMethod,
+	MonoObjectType_MonoReflectionAssembly,
+	MonoObjectType_MonoReflectionType,
 };
 #endif
 
@@ -163,8 +165,10 @@ struct _MonoMethodSignature {
 };
 
 struct _MonoType {
-	char *name;
+	char *fullname;
 	GCHandle gchandle;
+	char *name;
+	char *name_space;
 };
 
 struct MonoVTable {
@@ -211,6 +215,10 @@ struct _MonoThreadsSync {
 };
 
 struct _MonoReferenceQueue {
+	GCHandle gchandle;
+};
+
+struct _MonoGHashTable {
 	GCHandle gchandle;
 };
 #endif

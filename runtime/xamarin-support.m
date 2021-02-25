@@ -53,6 +53,8 @@ xamarin_log (const unsigned short *unicodeMessage)
 		if (len == 0 || utf8 [len - 1] != '\n')
 			fwrite ("\n", 1, 1, stderr);
 		fflush (stderr);
+		[msg release];
+		return;
 	}
 #endif
 

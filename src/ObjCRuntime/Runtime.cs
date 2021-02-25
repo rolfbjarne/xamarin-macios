@@ -603,15 +603,22 @@ namespace ObjCRuntime {
 			var parameters = new object [methodParameters.Length];
 
 			xamarin_log ($"InvokeMethod ({method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
-
-			var anyUnknown = false;
-			var sb = new System.Text.StringBuilder ();
 			unsafe {
 				IntPtr* nativeParams = (IntPtr*) native_parameters;
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
-					xamarin_log ($"    Argument #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => *0x{nativeParam.ToString ("x")}={(nativeParam == IntPtr.Zero ? "N/A" : Marshal.ReadIntPtr (nativeParam).ToString ("x"))} => {methodParameters [i].ParameterType.FullName}");
+					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} NativeParameter: 0x{nativeParam.ToString ("x")}");
+				}
+			}
+
+			var anyUnknown = false;
+			unsafe {
+				IntPtr* nativeParams = (IntPtr*) native_parameters;
+				for (var i = 0; i < methodParameters.Length; i++) {
+					var nativeParam = nativeParams [i];
+					var p = methodParameters [i];
+					xamarin_log ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {methodParameters [i].ParameterType.FullName}");
 					if (p.ParameterType == typeof (IntPtr)) {
 						parameters [i] = nativeParam;
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
@@ -624,17 +631,16 @@ namespace ObjCRuntime {
 							}
 							parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
 						}
-						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i])}");
+						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					} else {
-						sb.AppendLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
+						xamarin_log ($"        Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
 						anyUnknown = true;
 					}
 				}
 			}
 
 			if (anyUnknown) {
-				Console.WriteLine (sb);
-				throw new NotImplementedException ($"Method parameters:\n{sb}");
+				throw new NotImplementedException ($"Unknown method parameters!");
 			}
 
 			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
@@ -680,7 +686,9 @@ namespace ObjCRuntime {
 		static bool IsDelegate (IntPtr type_gchandle)
 		{
 			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
-			return type.IsAssignableFrom (typeof (MulticastDelegate));
+			var rv = typeof (MulticastDelegate).IsAssignableFrom (type);
+			xamarin_log ($"IsDelegate ({type.FullName}) => {rv}");
+			return rv;
 		}
 
 		// This is supposed to work like mono_class_is_subclass_of
@@ -708,9 +716,10 @@ namespace ObjCRuntime {
 				}
 			} else {
 				if (!type2.IsInterface) {
-					var baseClass = type2;
+					var baseClass = type1;
 					while (baseClass != null && baseClass != typeof (object)) {
-						if (baseClass == type1)
+						xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is not an interface, checking base class {baseClass.FullName}");
+						if (baseClass == type2)
 							return true;
 						baseClass = baseClass.BaseType;
 					}
@@ -833,6 +842,77 @@ namespace ObjCRuntime {
 				return IntPtr.Zero;
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (Marshal.PtrToStringAuto (text)));
+		}
+
+
+		class MonoHashTable : IEqualityComparer<IntPtr> {
+			Dictionary<IntPtr, GCHandle> Table;
+			HashFunc Hash;
+			EqualityFunc Compare;
+
+			public delegate uint HashFunc (IntPtr ptr);
+			public delegate bool EqualityFunc (IntPtr a, IntPtr b);
+
+			public MonoHashTable (IntPtr hash_func, IntPtr compare_func)
+			{
+				Table = new Dictionary<IntPtr, GCHandle> ();
+				Hash = Marshal.GetDelegateForFunctionPointer<HashFunc> (hash_func);
+				Compare = Marshal.GetDelegateForFunctionPointer<EqualityFunc> (compare_func);
+			}
+
+			public void Insert (IntPtr key, GCHandle obj)
+			{
+				xamarin_log ($"MonoHashTable.Add (0x{key.ToString ("x")}, {obj} = {obj.Target})");
+				Table [key] = obj;
+			}
+
+			public IntPtr Lookup (IntPtr key)
+			{
+				if (Table.TryGetValue (key, out var value))
+					return GCHandle.ToIntPtr (value);
+				return IntPtr.Zero;
+			}
+
+			bool IEqualityComparer<IntPtr>.Equals (IntPtr x, IntPtr y)
+			{
+				return Compare (x, y);
+			}
+
+			int IEqualityComparer<IntPtr>.GetHashCode (IntPtr obj)
+			{
+				unchecked {
+					return (int) Hash (obj);
+				}
+			}
+		}
+
+		static IntPtr CreateMonoHashTable (IntPtr hash_method, IntPtr compare_method, int type)
+		{
+			if (type != 2 /* MONO_HASH_VALUE_GC */)
+				throw new NotSupportedException ($"Unknown hash table type: {type}");
+
+			var dict = new MonoHashTable (hash_method, compare_method);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (dict));
+		}
+
+		static void MonoHashTableInsert (IntPtr gchandle, IntPtr key, IntPtr value_gchandle)
+		{
+			var dict = (MonoHashTable) GCHandle.FromIntPtr (gchandle).Target;
+			var value = GCHandle.FromIntPtr (value_gchandle);
+			dict.Insert (key, value);
+		}
+
+		static IntPtr MonoHashTableLookup (IntPtr gchandle, IntPtr key)
+		{
+			var dict = (MonoHashTable) GCHandle.FromIntPtr (gchandle).Target;
+			return dict.Lookup (key);
+		}
+
+		static IntPtr GetNullableElementType (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var elementType = type.GetGenericArguments () [0];
+			return GCHandle.ToIntPtr (GCHandle.Alloc (elementType));
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

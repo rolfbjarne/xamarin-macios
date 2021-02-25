@@ -3291,7 +3291,7 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 
 
 static MonoType *
-xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle)
+xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle = NULL)
 {
 	char *type_name;
 	if (name == NULL) {
@@ -3492,8 +3492,9 @@ xamarin_bridge_mono_class_value_size (MonoClass * klass, uint32_t * align)
 MONO_API MonoType *
 xamarin_bridge_mono_class_get_type (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_type (%p) => assert\n", klass);
-	xamarin_assertion_message ("xamarin_bridge_mono_class_get_type not implemented\n");
+	MonoType *rv = xamarin_create_mono_type (NULL, klass->gchandle);
+	fprintf (stderr, "xamarin_bridge_mono_class_get_type (%p) => %p = %p\n", klass, rv, rv->gchandle);
+	return rv;
 }
 
 MONO_API gboolean
@@ -3510,8 +3511,10 @@ xamarin_bridge_mono_class_is_nullable (MonoClass * klass)
 MONO_API MonoClass *
 xamarin_bridge_mono_class_get_nullable_param (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_nullable_param (%p) => assert\n", klass);
-	xamarin_assertion_message ("xamarin_bridge_mono_class_get_nullable_param not implemented\n");
+	GCHandle gchandle = xamarin_bridge_get_nullable_element_type (klass->gchandle);
+	MonoClass *rv = xamarin_find_mono_class (gchandle, NULL, NULL);
+	fprintf (stderr, "xamarin_bridge_mono_class_get_nullable_param (%p) => %p = %s = %p\n", klass, rv, rv->fullname, rv->gchandle);
+	return rv;
 }
 
 MONO_API char *
@@ -3962,6 +3965,7 @@ xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * ass
 
 	MonoReflectionAssembly *rv = (MonoReflectionAssembly *) calloc (1, sizeof (MonoReflectionAssembly));
 	rv->assembly = assembly;
+	rv->object_kind = MonoObjectType_MonoReflectionAssembly;
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
 	rv->gchandle = xamarin_find_assembly (assembly->name, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
@@ -3974,8 +3978,14 @@ xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * ass
 MONO_API MonoReflectionMethod *
 xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method, MonoClass * refclass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_method_get_object (%p, %p, %p) => assert\n", domain, method, refclass);
-	xamarin_assertion_message ("xamarin_bridge_mono_method_get_object not implemented\n");
+	MonoReflectionMethod *rv = (MonoReflectionMethod *) calloc (1, sizeof (MonoReflectionMethod));
+	rv->method = method;
+	rv->object_kind = MonoObjectType_MonoReflectionMethod;
+	rv->gchandle = method->gchandle;
+
+	fprintf (stderr, "xamarin_bridge_mono_method_get_object (%p, %p, %p) => %p = %p\n", domain, method, refclass, rv, rv->gchandle);
+
+	return rv;
 }
 
 MONO_API MonoReflectionType *
@@ -3984,6 +3994,7 @@ xamarin_bridge_mono_type_get_object (MonoDomain * domain, MonoType * type)
 	MonoReflectionType *rv = (MonoReflectionType *) calloc (1, sizeof (MonoReflectionType));
 	rv->type = type;
 	rv->gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+	rv->object_kind = MonoObjectType_MonoReflectionType;
 
 	fprintf (stderr, "xamarin_bridge_mono_type_get_object (%p, %p = %s) => %p = %p\n", domain, type, type->name, rv, rv->gchandle);
 
@@ -4080,22 +4091,31 @@ xamarin_bridge_mono_gc_max_generation (void)
 MONO_API MonoGHashTable *
 xamarin_bridge_mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type)
 {
-	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_new_type (%p, %p, %u) => assert\n", hash_func, key_equal_func, type);
-	xamarin_assertion_message ("xamarin_bridge_mono_g_hash_table_new_type not implemented\n");
+	MonoGHashTable *rv;
+
+	rv = (MonoGHashTable *) calloc (1, sizeof (MonoGHashTable));
+	rv->gchandle = xamarin_bridge_mono_hash_table_create ((void *) hash_func, (void *) key_equal_func, (int) type);
+
+	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_new_type (%p, %p, %u) => %p = %p\n", hash_func, key_equal_func, type, rv, rv->gchandle);
+
+	return rv;
 }
 
 MONO_API gpointer
 xamarin_bridge_mono_g_hash_table_lookup (MonoGHashTable * hash, gconstpointer key)
 {
-	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_lookup (%p, %p) => assert\n", hash, key);
-	xamarin_assertion_message ("xamarin_bridge_mono_g_hash_table_lookup not implemented\n");
+	GCHandle handle = xamarin_bridge_mono_hash_table_lookup (hash->gchandle, (void *) key);
+	MonoObject *rv = xamarin_gchandle_get_target (handle);
+	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_lookup (%p = %p, %p) => %p => %p\n", hash, hash->gchandle, key, handle, rv);
+	return rv;
 }
 
 MONO_API void
 xamarin_bridge_mono_g_hash_table_insert (MonoGHashTable * hash, gpointer k, gpointer v)
 {
-	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_insert (%p, %p, %p) => assert\n", hash, k, v);
-	xamarin_assertion_message ("xamarin_bridge_mono_g_hash_table_insert not implemented\n");
+	MonoObject *obj = (MonoObject *) v;
+	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_insert (%p = %p, %p, %p = %p)\n", hash, hash->gchandle, k, v, obj->gchandle);
+	xamarin_bridge_mono_hash_table_insert (hash->gchandle, k, obj->gchandle);
 }
 
 MONO_API MonoException *

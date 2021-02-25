@@ -522,6 +522,39 @@
 		) {
 			WrappedManagedFunction = "NewString",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_mono_hash_table_create",
+			"void *", "IntPtr", "hash_func",
+			"void *", "IntPtr", "compare_func",
+			"int", "int", "type"
+		) {
+			WrappedManagedFunction = "CreateMonoHashTable",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_mono_hash_table_insert",
+			"GCHandle", "IntPtr", "gchandle",
+			"void *", "IntPtr", "key",
+			"GCHandle", "IntPtr", "value_gchandle"
+		) {
+			WrappedManagedFunction = "MonoHashTableInsert",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_mono_hash_table_lookup",
+			"GCHandle", "IntPtr", "gchandle",
+			"void *", "IntPtr", "key"
+		) {
+			WrappedManagedFunction = "MonoHashTableLookup",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_nullable_element_type",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetNullableElementType",
+			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

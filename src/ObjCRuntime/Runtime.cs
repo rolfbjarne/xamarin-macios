@@ -492,7 +492,7 @@ namespace ObjCRuntime {
 			var obj = input.Target;
 			var rv = GCHandle.Alloc (obj, type);
 			var rvptr = GCHandle.ToIntPtr (rv);
-			Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => {obj} => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
+			Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
 			return rvptr;
 		}
 
@@ -615,7 +615,7 @@ namespace ObjCRuntime {
 					if (p.ParameterType == typeof (IntPtr)) {
 						parameters [i] = nativeParam;
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
-					} else if (p.ParameterType.IsClass) {
+					} else if (p.ParameterType.IsClass || p.ParameterType.IsInterface) {
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {
 							unsafe {
@@ -624,7 +624,7 @@ namespace ObjCRuntime {
 							}
 							parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
 						}
-						xamarin_log ($"        IsClass (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i])}");
+						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i])}");
 					} else {
 						sb.AppendLine ($"Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
 						anyUnknown = true;

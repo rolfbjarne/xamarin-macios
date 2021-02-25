@@ -377,7 +377,7 @@
 		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_runtime_invoke_method",
 			"GCHandle", "IntPtr", "method_gchandle",
 			"GCHandle", "IntPtr", "instance_gchandle",
-			"void*", "IntPtr", "parameters"
+			"void**", "IntPtr", "parameters"
 		) {
 			WrappedManagedFunction = "InvokeMethod",
 			OnlyDynamicUsage = false,

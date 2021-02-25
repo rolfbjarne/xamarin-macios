@@ -118,6 +118,7 @@ namespace MonoTouchFixtures.Foundation {
 			}
 		}
 
+		[Ignore ("CORECLR FIXME")]
 		[Test]
 		public void ValueForInvalidKeyTest ()
 		{
@@ -260,6 +261,7 @@ namespace MonoTouchFixtures.Foundation {
 		}
 
 #if !__WATCHOS__ // FIXME: this test can probably be fixed to run on WatchOS by testing something other than UIView
+#if false // FIXME
 		[Test]
 		public void ObserverTest ()
 		{
@@ -277,6 +279,7 @@ namespace MonoTouchFixtures.Foundation {
 			}
 			Assert.IsTrue (observed, "observed");
 		}
+#endif // FIXME
 #endif // !__WATCHOS__
 
 		[Test]

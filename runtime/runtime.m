@@ -3543,7 +3543,10 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 		MonoObject *instance = (MonoObject *) obj;
 
 		GCHandle returnValue = NULL;
-		returnValue = xamarin_bridge_runtime_invoke_method (method->gchandle, instance != NULL ? instance->gchandle : NULL, params, NULL);
+		GCHandle instanceHandle =  instance != NULL ? instance->gchandle : NULL;
+		GCHandle exception_gchandle = INVALID_GCHANDLE;
+		returnValue = xamarin_bridge_runtime_invoke_method (method->gchandle, instanceHandle, params, &exception_gchandle);
+		xamarin_handle_bridge_exception (exception_gchandle, "xamarin_bridge_runtime_invoke_method");
 		return xamarin_gchandle_get_target (returnValue);
 	}
 }
@@ -3761,8 +3764,7 @@ xamarin_bridge_mono_thread_detach_if_exiting (void)
 MONO_API void
 xamarin_bridge_mono_runtime_set_pending_exception (MonoException * exc, mono_bool overwrite)
 {
-	fprintf (stderr, "xamarin_bridge_mono_runtime_set_pending_exception (%p, %i) => assert\n", exc, overwrite);
-	xamarin_assertion_message ("xamarin_bridge_mono_runtime_set_pending_exception not implemented\n");
+	fprintf (stderr, "xamarin_bridge_mono_runtime_set_pending_exception (%p, %i) => IGNORE NEEDS TO FIX\n", exc, overwrite);
 }
 
 MONO_API void

@@ -3296,7 +3296,7 @@ xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* excepti
 	char *type_name;
 	if (name == NULL) {
 		type_name = xamarin_bridge_get_type_fullname (gchandle, exception_gchandle);
-		if (*exception_gchandle != INVALID_GCHANDLE)
+		if (exception_gchandle != NULL && *exception_gchandle != INVALID_GCHANDLE)
 			return NULL;
 	} else {
 		type_name = strdup (name);
@@ -3593,8 +3593,15 @@ xamarin_bridge_mono_raise_exception (MonoException * ex)
 MONO_API char*
 xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t idx)
 {
-	fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => assert\n", array, size, idx);
-	xamarin_assertion_message ("xamarin_bridge_mono_array_addr_with_size not implemented\n");
+	char *rv = NULL;
+	if (array->data == NULL)
+		array->data = (uint8_t *) xamarin_bridge_get_array_data (array->gchandle);
+
+	rv = (char *) (array->data + idx * size);
+
+	fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => %p\n", array, size, idx, rv);
+
+	return rv;
 }
 
 MONO_API MonoString *
@@ -3610,8 +3617,13 @@ xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text)
 MONO_API MonoArray *
 xamarin_bridge_mono_array_new (MonoDomain * domain, MonoClass * eclass, uintptr_t n)
 {
-	fprintf (stderr, "xamarin_bridge_mono_array_new (%p, %p, %" PRIdPTR " => assert\n", domain, eclass, n);
-	xamarin_assertion_message ("xamarin_bridge_mono_array_new not implemented\n");
+	GCHandle handle = xamarin_bridge_create_array (eclass->gchandle, n);
+
+	MonoArray *rv = (MonoArray *) calloc (1, sizeof (MonoArray));
+	rv->gchandle = handle;
+	rv->length = (uint64_t) n;
+	fprintf (stderr, "xamarin_bridge_mono_array_new (%p, %p, %" PRIdPTR ") => %p = %p\n", domain, eclass, n, rv, rv->gchandle);
+	return rv;
 }
 
 MONO_API void *
@@ -3656,8 +3668,9 @@ xamarin_bridge_mono_object_new (MonoDomain * domain, MonoClass * klass)
 MONO_API uintptr_t
 xamarin_bridge_mono_array_length (MonoArray * array)
 {
-	fprintf (stderr, "xamarin_bridge_mono_array_length (%p) => assert\n", array);
-	xamarin_assertion_message ("xamarin_bridge_mono_array_length not implemented\n");
+	uintptr_t rv = (uintptr_t) xamarin_bridge_get_array_length (array->gchandle);
+	fprintf (stderr, "xamarin_bridge_mono_array_length (%p = %p) => %llu\n", array, array->gchandle, (uint64_t) rv);
+	return rv;
 }
 
 MONO_API MonoObject *

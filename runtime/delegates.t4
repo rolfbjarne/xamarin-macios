@@ -555,6 +555,45 @@
 		) {
 			WrappedManagedFunction = "GetNullableElementType",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_create_array",
+			"GCHandle", "IntPtr", "gchandle",
+			"uint64_t", "ulong", "elements"
+		) {
+			WrappedManagedFunction = "CreateArray",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("uint64_t", "ulong", "xamarin_bridge_get_array_length",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetArrayLength",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("uint8_t", "IntPtr", "xamarin_bridge_get_array_data",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetArrayData",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_set_array_object_value",
+			"GCHandle", "IntPtr", "gchandle",
+			"int32_t", "int", "index",
+			"GCHandle", "IntPtr", "value"
+		) {
+			WrappedManagedFunction = "SetArrayObjectValue",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_array_object_value",
+			"GCHandle", "IntPtr", "gchandle",
+			"int32_t", "int", "index"
+		) {
+			WrappedManagedFunction = "GetArrayObjectValue",
+			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

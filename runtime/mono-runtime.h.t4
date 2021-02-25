@@ -183,8 +183,10 @@ struct _MonoString : MonoObject {
 	char *value;
 };
 
-struct _MonoArray {
+struct _MonoArray : MonoObject {
 	char *name;
+	uint64_t length;
+	uint8_t *data;
 };
 
 struct _MonoReflectionMethod : MonoObject {
@@ -227,6 +229,15 @@ struct _MonoGHashTable {
 typedef struct _MonoReferenceQueue MonoReferenceQueue;
 typedef void (*mono_reference_queue_callback) (void *user_data);
 
+#if defined (CORECLR_RUNTIME)
+#define mono_array_get(array,type,index) xamarin_gchandle_get_target (xamarin_bridge_get_array_object_value (array->gchandle, index));
+
+#define mono_array_setref(array,index,value)	\
+	do {	\
+		xamarin_bridge_set_array_object_value (array->gchandle, index, value->gchandle); \
+	} while (0)
+
+#else
 #define mono_array_addr(array,type,index) ((type*)(void*) mono_array_addr_with_size (array, sizeof (type), index))
 #define mono_array_get(array,type,index) ( *(type*)mono_array_addr ((array), type, (index)) )
 #define mono_array_setref(array,index,value)	\
@@ -235,6 +246,7 @@ typedef void (*mono_reference_queue_callback) (void *user_data);
 		mono_gc_wbarrier_set_arrayref ((array), __p, (MonoObject*)(value));	\
 		/* *__p = (value);*/	\
 	} while (0)
+#endif
 
 /* metadata/assembly.h */
 

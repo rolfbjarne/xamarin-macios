@@ -492,7 +492,7 @@ namespace ObjCRuntime {
 			var obj = input.Target;
 			var rv = GCHandle.Alloc (obj, type);
 			var rvptr = GCHandle.ToIntPtr (rv);
-			Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
+			//Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
 			return rvptr;
 		}
 
@@ -602,13 +602,13 @@ namespace ObjCRuntime {
 			var methodParameters = method.GetParameters ();
 			var parameters = new object [methodParameters.Length];
 
-			xamarin_log ($"InvokeMethod ({method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
+			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
 			unsafe {
 				IntPtr* nativeParams = (IntPtr*) native_parameters;
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
-					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} NativeParameter: 0x{nativeParam.ToString ("x")}");
+					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} IsByRef: {p.ParameterType.IsByRef} IsOut: {p.IsOut} NativeParameter: 0x{nativeParam.ToString ("x")}");
 				}
 			}
 
@@ -618,9 +618,16 @@ namespace ObjCRuntime {
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
-					xamarin_log ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {methodParameters [i].ParameterType.FullName}");
+					xamarin_log ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName} [...]");
 					if (p.ParameterType == typeof (IntPtr)) {
-						parameters [i] = nativeParam;
+						if (p.ParameterType.IsByRef) {
+							if (!p.IsOut) {
+								parameters [i] = null; // FIXME nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
+							}
+							parameters [i] = Marshal.AllocHGlobal (IntPtr.Size);
+						} else {
+							parameters [i] = nativeParam;
+						}
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
 					} else if (p.ParameterType.IsClass || p.ParameterType.IsInterface) {
 						var obj_gchandle = IntPtr.Zero;
@@ -633,7 +640,7 @@ namespace ObjCRuntime {
 						}
 						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					} else {
-						xamarin_log ($"        Marshalling unknown: {methodParameters [i].ParameterType.FullName}");
+						xamarin_log ($"        Marshalling unknown: {p.ParameterType.FullName}");
 						anyUnknown = true;
 					}
 				}
@@ -645,7 +652,16 @@ namespace ObjCRuntime {
 
 			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
 
-			Console.WriteLine ($"Return value of type: {rv?.GetType ()?.ToString ()}");
+			var byrefParameterCount = 0;
+			for (var i = 0; i < methodParameters.Length; i++) {
+				var p = methodParameters [i];
+				if (!p.IsOut && !p.ParameterType.IsByRef)
+					continue;
+				byrefParameterCount++;
+				xamarin_log ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+			}
+
+			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) Ref parameters: {byrefParameterCount} Return value of type {rv?.GetType ()}");
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
 		}
@@ -664,7 +680,7 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return;
 			if (!obj.GetType ().IsValueType) {
-				Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
+				//Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
 				return;
 			}
 			var size = Marshal.SizeOf (obj);
@@ -913,6 +929,57 @@ namespace ObjCRuntime {
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			var elementType = type.GetGenericArguments () [0];
 			return GCHandle.ToIntPtr (GCHandle.Alloc (elementType));
+		}
+
+		static IntPtr CreateArray (IntPtr gchandle, ulong elements)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = Array.CreateInstance (type, (int) elements);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+		}
+
+		[DllImport ("libc")]
+		static extern IntPtr memcpy (IntPtr dest, IntPtr src, nint n);
+
+		static IntPtr GetArrayData (IntPtr gchandle)
+		{
+			if (gchandle == IntPtr.Zero)
+				return IntPtr.Zero;
+
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var elementSize = Marshal.SizeOf (array.GetType ().GetElementType ());
+			var rv = Marshal.AllocHGlobal (elementSize * array.Length);
+
+			if (array.Length > 0) {
+				GCHandle pinned = GCHandle.Alloc (array, GCHandleType.Pinned);
+				for (var i = 0; i < array.Length; i++) {
+					var ptr = Marshal.UnsafeAddrOfPinnedArrayElement (array, i);
+					memcpy (rv + i * elementSize, ptr, elementSize);
+				}
+				pinned.Free ();
+			}
+
+			return rv;
+		}
+
+		static ulong GetArrayLength (IntPtr gchandle)
+		{
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			return (ulong) array.Length;
+		}
+
+		static void SetArrayObjectValue (IntPtr gchandle, int index, IntPtr obj_gchandle)
+		{
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
+			array.SetValue (obj, index);
+		}
+
+		static IntPtr GetArrayObjectValue (IntPtr gchandle, int index)
+		{
+			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = array.GetValue (index);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

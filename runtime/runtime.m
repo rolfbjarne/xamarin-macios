@@ -2171,6 +2171,11 @@ xamarin_create_managed_ref (id self, gpointer managed_object, bool retain)
 	mt_dummy_use (managed_object);
 }
 
+#if defined (CORECLR_RUNTIME)
+MonoType *
+xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle = NULL);
+#endif
+
 /*
  * Block support
  */
@@ -2849,8 +2854,6 @@ xamarin_gchandle_get_target (GCHandle handle)
 #if defined (CORECLR_RUNTIME)
 	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle);
 
-	fprintf (stderr, "xamarin_gchandle_get_target (%p => %s)\n", handle, gchandle_type);
-
 	MonoObject *rv = NULL;
 
 	if (gchandle_type && (!strcmp (gchandle_type, "System.Reflection.RuntimeConstructorInfo") || !strcmp (gchandle_type, "System.Reflection.RuntimeMethodInfo"))) {
@@ -2862,10 +2865,20 @@ xamarin_gchandle_get_target (GCHandle handle)
 		mrm->object_kind = MonoObjectType_MonoReflectionMethod;
 		mrm->gchandle = handle;
 		rv = (MonoObject *) mrm;
+		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoReflectionMethod => %p\n", handle, gchandle_type, rv);
+	} else if (gchandle_type && (!strcmp (gchandle_type, "System.RuntimeType"))) {
+		MonoReflectionType *mrt = (MonoReflectionType *) calloc (1, sizeof (MonoReflectionType));
+		mrt->type = xamarin_create_mono_type (NULL, handle, NULL);
+		mrt->gchandle = xamarin_bridge_duplicate_gchandle (handle, XamarinGCHandleTypeNormal);
+		mrt->object_kind = MonoObjectType_MonoReflectionType;
+		rv = (MonoObject *) mrt;
+		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoReflectionType => %p\n", handle, gchandle_type, rv);
 	} else {
 		rv = (MonoObject *) calloc (1, sizeof (MonoObject));
 		rv->gchandle = handle;
 		xamarin_bridge_write_structure (handle, &rv->struct_value);
+
+		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoObject => %p\n", handle, gchandle_type, rv);
 	}
 	rv->type_name = gchandle_type;
 
@@ -3289,9 +3302,8 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 	return entry;
 }
 
-
-static MonoType *
-xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle = NULL)
+MonoType *
+xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle)
 {
 	char *type_name;
 	if (name == NULL) {

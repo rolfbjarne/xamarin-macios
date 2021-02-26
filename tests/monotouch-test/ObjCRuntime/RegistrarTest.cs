@@ -434,6 +434,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("need to figure out how to marshal exceptions")]
+#endif
 		public void TestGeneric ()
 		{
 			var g1 = new GenericTestClass<string> ();
@@ -485,6 +488,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("need to figure out how to marshal exceptions")]
+#endif
 		public void TestInstanceMethodOnOpenGenericType ()
 		{
 			{
@@ -1241,6 +1247,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("This test does evil things")]
+#endif
 		public void TestConstrainedGenericType ()
 		{
 			IntPtr value;

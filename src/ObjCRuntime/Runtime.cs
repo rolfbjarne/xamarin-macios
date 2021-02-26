@@ -585,13 +585,13 @@ namespace ObjCRuntime {
 		}
 
 		[StructLayout (LayoutKind.Sequential)]
-		readonly struct MonoObject {
-			readonly IntPtr vtable;
-			readonly IntPtr synchronisation;
-			readonly int object_kind;
-			public readonly IntPtr gchandle;
-			readonly IntPtr type_name;
-			readonly IntPtr struct_value;
+		struct MonoObject {
+			IntPtr vtable;
+			IntPtr synchronisation;
+			int object_kind;
+			public IntPtr gchandle;
+			IntPtr type_name;
+			IntPtr struct_value;
 		}
 
 		static IntPtr InvokeMethod (IntPtr method_gchandle, IntPtr instance_gchandle, IntPtr native_parameters)
@@ -608,7 +608,10 @@ namespace ObjCRuntime {
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
-					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} IsByRef: {p.ParameterType.IsByRef} IsOut: {p.IsOut} NativeParameter: 0x{nativeParam.ToString ("x")}");
+					var paramType = p.ParameterType;
+					if (paramType.IsByRef)
+						paramType = paramType.GetElementType ();
+					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} IsByRef: {p.ParameterType.IsByRef} IsOut: {p.IsOut} IsClass: {paramType.IsClass} IsInterface: {paramType.IsInterface} NativeParameter: 0x{nativeParam.ToString ("x")}");
 				}
 			}
 
@@ -618,27 +621,56 @@ namespace ObjCRuntime {
 				for (var i = 0; i < methodParameters.Length; i++) {
 					var nativeParam = nativeParams [i];
 					var p = methodParameters [i];
+					var paramType = p.ParameterType;
+					var isByRef = paramType.IsByRef;
+					if (isByRef)
+						paramType = paramType.GetElementType ();
 					xamarin_log ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName} [...]");
-					if (p.ParameterType == typeof (IntPtr)) {
-						if (p.ParameterType.IsByRef) {
-							if (!p.IsOut) {
-								parameters [i] = null; // FIXME nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
+
+					if (paramType == typeof (IntPtr)) {
+						xamarin_log ($"        IntPtr");
+						if (isByRef) {
+							if (p.IsOut) {
+								parameters [i] = Marshal.AllocHGlobal (IntPtr.Size);
+							} else {
+								parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 							}
-							parameters [i] = Marshal.AllocHGlobal (IntPtr.Size);
 						} else {
 							parameters [i] = nativeParam;
 						}
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
-					} else if (p.ParameterType.IsClass || p.ParameterType.IsInterface) {
+					} else if (paramType.IsClass || paramType.IsInterface) {
+						xamarin_log ($"        IsClass/IsInterface IsByRef: {isByRef} IsOut: {p.IsOut}");
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {
 							unsafe {
-								MonoObject* mono_obj = (MonoObject*) nativeParam;
-								obj_gchandle = mono_obj->gchandle;
+								MonoObject* mono_obj;
+								if (isByRef) {
+									mono_obj = *(MonoObject**) nativeParam;
+								} else {
+									mono_obj = (MonoObject*) nativeParam;
+								}
+								if (mono_obj != null)
+									obj_gchandle = mono_obj->gchandle;
 							}
-							parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
+							if (obj_gchandle != IntPtr.Zero)
+								parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
 						}
 						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					} else if (paramType.IsValueType) {
+						xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut}");
+						object vt = null;
+						IntPtr ptr = nativeParam;
+						if (nativeParam != IntPtr.Zero) {
+							//if (isByRef)
+							//	ptr = Marshal.ReadIntPtr (ptr);
+							if (ptr != IntPtr.Zero) {
+								xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")}");
+								vt = Marshal.PtrToStructure (ptr, paramType);
+							}
+						}
+						parameters [i] = vt;
+						xamarin_log ($"        IsValueType (ptr: 0x{ptr.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
 					} else {
 						xamarin_log ($"        Marshalling unknown: {p.ParameterType.FullName}");
 						anyUnknown = true;
@@ -650,6 +682,8 @@ namespace ObjCRuntime {
 				throw new NotImplementedException ($"Unknown method parameters!");
 			}
 
+			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) INVOKING");
+
 			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
 
 			var byrefParameterCount = 0;
@@ -658,7 +692,47 @@ namespace ObjCRuntime {
 				if (!p.IsOut && !p.ParameterType.IsByRef)
 					continue;
 				byrefParameterCount++;
+
 				xamarin_log ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+
+				var parameterType = p.ParameterType.GetElementType ();
+				if (parameterType == typeof (IntPtr)) {
+					xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()}");
+					unsafe {
+						IntPtr** nativeParams = (IntPtr**) native_parameters;
+						IntPtr* nativeParam = nativeParams [i];
+						if (nativeParam != null)
+							*nativeParam = (IntPtr) parameters [i];
+					}
+				} else if (parameterType.IsClass || parameterType.IsInterface) {
+					IntPtr obj_gchandle = parameters [i] == null ? IntPtr.Zero : GCHandle.ToIntPtr (GCHandle.Alloc (parameters [i]));
+					xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					unsafe {
+						IntPtr** nativeParams = (IntPtr**) native_parameters;
+						IntPtr* nativeParam = nativeParams [i];
+						xamarin_log ($"            nativeParam: 0x{((IntPtr) nativeParam).ToString ("x")}");
+						MonoObject* mono_obj = (MonoObject*) nativeParam;
+						MonoObject mobj = new MonoObject ();
+						mobj.gchandle = obj_gchandle;
+						//*mono_obj = mobj; // FIXME
+					}
+					xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+				} else if (parameterType.IsValueType) {
+					xamarin_log ($"        IsValueType");
+					IntPtr nativeParam;
+					unsafe {
+						IntPtr* nativeParams = (IntPtr*) native_parameters;
+						nativeParam = nativeParams [i];
+					}
+					if (nativeParam != IntPtr.Zero) {
+						xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}");
+						Marshal.StructureToPtr (parameters [i], nativeParam, false);
+					}
+					xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
+				} else {
+					xamarin_log ($"        UNKNOWN BYREF PARAMETER TYPE: {p.ParameterType}");
+					throw new NotImplementedException ($"Unknown byref parameter type: {p.ParameterType}");
+				}
 			}
 
 			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) Ref parameters: {byrefParameterCount} Return value of type {rv?.GetType ()}");
@@ -980,6 +1054,20 @@ namespace ObjCRuntime {
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = array.GetValue (index);
 			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+		}
+
+		static IntPtr TypeRemoveByRef (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			if (type.IsByRef)
+				type = type.GetElementType ();
+			return GCHandle.ToIntPtr (GCHandle.Alloc (type));
+		}
+
+		static void ThrowException (IntPtr gchandle)
+		{
+			var exc = (Exception) GCHandle.FromIntPtr (gchandle).Target;
+			throw exc;
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

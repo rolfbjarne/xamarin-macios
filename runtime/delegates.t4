@@ -572,7 +572,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("uint8_t", "IntPtr", "xamarin_bridge_get_array_data",
+		new XDelegate ("uint8_t*", "IntPtr", "xamarin_bridge_get_array_data",
 			"GCHandle", "IntPtr", "gchandle"
 		) {
 			WrappedManagedFunction = "GetArrayData",
@@ -594,6 +594,21 @@
 		) {
 			WrappedManagedFunction = "GetArrayObjectValue",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_type_remove_byref",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "TypeRemoveByRef",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_throw_exception",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "ThrowException",
+			OnlyDynamicUsage = false,
+			ExceptionHandling = false,
 		}
 	};
 	delegates.CalculateLengths ();

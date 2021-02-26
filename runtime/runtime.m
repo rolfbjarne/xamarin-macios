@@ -3378,7 +3378,14 @@ xamarin_bridge_mono_class_is_assignable_from (MonoClass * klass, MonoClass * okl
 MONO_API MonoClass *
 xamarin_bridge_mono_class_from_mono_type (MonoType * type)
 {
-	GCHandle type_gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+	GCHandle type_gchandle;
+
+	if (xamarin_bridge_mono_type_is_byref (type)) {
+		type_gchandle = xamarin_bridge_type_remove_byref (type->gchandle);
+	} else {
+		type_gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+	}
+
 	MonoClass *rv = xamarin_find_mono_class (type_gchandle /* get name[space] from type?  type->name */);
 	fprintf (stderr, "xamarin_bridge_mono_class_from_mono_type (%p = %s) => %p = %s\n", type, type->name, rv, rv->fullname);
 	return rv;
@@ -3520,8 +3527,10 @@ xamarin_bridge_mono_class_get_nullable_param (MonoClass * klass)
 MONO_API char *
 xamarin_bridge_mono_method_full_name (MonoMethod * method, mono_bool signature)
 {
-	fprintf (stderr, "xamarin_bridge_mono_method_full_name (%p, %i) => assert\n", method, signature);
-	xamarin_assertion_message ("xamarin_bridge_mono_method_full_name not implemented\n");
+	char *rv = strdup (method->name);
+	fprintf (stderr, "xamarin_bridge_mono_method_full_name (%p, %i) => %s\n", method, signature, rv);
+	return rv;
+
 }
 
 typedef void (*xamarin_runtime_initialize_decl)(void *);
@@ -3586,8 +3595,20 @@ xamarin_bridge_mono_gchandle_new_weakref (MonoObject * obj, mono_bool track_resu
 MONO_API void
 xamarin_bridge_mono_raise_exception (MonoException * ex)
 {
-	fprintf (stderr, "xamarin_bridge_mono_raise_exception (%p) => assert\n", ex);
-	xamarin_assertion_message ("xamarin_bridge_mono_raise_exception not implemented\n");
+	fprintf (stderr, "xamarin_bridge_mono_raise_exception (%p)\n", ex);
+
+	// print out the exception
+	char * str = xamarin_bridge_tostring (ex->gchandle);
+	fprintf (stderr, "--------------------------------------------------\n");
+	fprintf (stderr, "Throwing managed exception through native code: %s\n", str);
+	fprintf (stderr, "--------------------------------------------------\n");
+	mono_free (str);
+
+	// throw the exception
+	xamarin_bridge_throw_exception (ex->gchandle);
+
+	// we should never get here
+	xamarin_assertion_message ("xamarin_bridge_mono_raise_exception did not throw/assert?\n");
 }
 
 MONO_API char*
@@ -4025,11 +4046,9 @@ xamarin_bridge_mono_reflection_type_get_type (MonoReflectionType * reftype)
 MONO_API MonoType *
 xamarin_bridge_mono_signature_get_params (MonoMethodSignature * sig, void ** iter)
 {
-	fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p, %p) => assert\n", sig, iter);
-
 	int* p = (int *) iter;
 	if (*p >= sig->parameter_count) {
-		fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p, %p => %i) => DONE\n", sig, iter, *p);
+		fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => DONE\n", sig, sig->method->name, iter, *p);
 		return NULL;
 	}
 
@@ -4038,7 +4057,7 @@ xamarin_bridge_mono_signature_get_params (MonoMethodSignature * sig, void ** ite
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_create_mono_type threw an exception\n");
 
-	fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p, %p => %i) => %s %p DONE\n", sig, iter, *p, rv->name, rv->gchandle);
+	fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => %s %p NEXT\n", sig, sig->method->name, iter, *p, rv->name, rv->gchandle);
 
 	*p = *p + 1;
 

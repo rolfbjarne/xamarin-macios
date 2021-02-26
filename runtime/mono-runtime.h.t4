@@ -204,7 +204,7 @@ struct _MonoReflectionType : MonoObject {
 	MonoType *type;
 };
 
-struct _MonoException {
+struct _MonoException : MonoObject {
 	char *name;
 };
 

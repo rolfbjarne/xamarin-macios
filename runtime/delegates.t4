@@ -609,6 +609,21 @@
 			WrappedManagedFunction = "ThrowException",
 			OnlyDynamicUsage = false,
 			ExceptionHandling = false,
+		},
+
+		new XDelegate ("int32_t", "int", "xamarin_bridge_sizeof",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "SizeOf",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_box",
+			"GCHandle", "IntPtr", "gchandle",
+			"void *", "IntPtr", "value"
+		) {
+			WrappedManagedFunction = "Box",
+			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

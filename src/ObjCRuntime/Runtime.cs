@@ -666,7 +666,10 @@ namespace ObjCRuntime {
 							//	ptr = Marshal.ReadIntPtr (ptr);
 							if (ptr != IntPtr.Zero) {
 								xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")}");
-								vt = Marshal.PtrToStructure (ptr, paramType);
+								var structType = paramType;
+								if (IsNullable (structType))
+									structType = Nullable.GetUnderlyingType (structType);
+								vt = Marshal.PtrToStructure (ptr, structType);
 							}
 						}
 						parameters [i] = vt;
@@ -849,12 +852,17 @@ namespace ObjCRuntime {
 
 		static bool IsNullable (IntPtr gchandle)
 		{
-			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return IsNullable ((Type) GCHandle.FromIntPtr (gchandle).Target);
+		}
+
+		static bool IsNullable (Type type)
+		{
 			if (Nullable.GetUnderlyingType (type) != null)
 				return true;
 			if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (Nullable<>))
 				return true;
 			return false;
+
 		}
 
 		static IntPtr ObjectToString (IntPtr gchandle)
@@ -1021,7 +1029,7 @@ namespace ObjCRuntime {
 				return IntPtr.Zero;
 
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
-			var elementSize = Marshal.SizeOf (array.GetType ().GetElementType ());
+			var elementSize = SizeOf (array.GetType ().GetElementType ());
 			var rv = Marshal.AllocHGlobal (elementSize * array.Length);
 
 			if (array.Length > 0) {
@@ -1068,6 +1076,25 @@ namespace ObjCRuntime {
 		{
 			var exc = (Exception) GCHandle.FromIntPtr (gchandle).Target;
 			throw exc;
+		}
+
+		static int SizeOf (IntPtr gchandle)
+		{
+			return SizeOf ((Type) GCHandle.FromIntPtr (gchandle).Target);
+		}
+
+		static int SizeOf (Type type)
+		{
+			if (type.IsEnum) // https://github.com/dotnet/runtime/issues/12258
+				type = Enum.GetUnderlyingType (type);
+			return Marshal.SizeOf (type);
+		}
+
+		static IntPtr Box (IntPtr gchandle, IntPtr value)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var boxed = Marshal.PtrToStructure (value, type);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
 		}
 
 		static unsafe Assembly GetEntryAssembly ()

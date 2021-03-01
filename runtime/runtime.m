@@ -3316,6 +3316,7 @@ xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* excepti
 
 	MonoType *rv = (MonoType *) calloc (1, sizeof (MonoType));
 	rv->name = type_name;
+	rv->fullname = type_name ? strdup (type_name) : NULL;
 	rv->gchandle = gchandle;
 
 	return rv;
@@ -3466,10 +3467,7 @@ xamarin_bridge_mono_class_is_subclass_of (MonoClass * klass, MonoClass * klassc,
 MONO_API mono_bool
 xamarin_bridge_mono_class_is_valuetype (MonoClass * klass)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	bool rv = xamarin_bridge_is_valuetype (klass->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_is_valuetype threw an exception\n");
+	bool rv = xamarin_bridge_is_valuetype (klass->gchandle);
 	fprintf (stderr, "xamarin_bridge_mono_class_is_valuetype (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
@@ -3477,10 +3475,7 @@ xamarin_bridge_mono_class_is_valuetype (MonoClass * klass)
 MONO_API mono_bool
 xamarin_bridge_mono_class_is_enum (MonoClass * klass)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	bool rv = xamarin_bridge_is_enum (klass->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_is_enum threw an exception\n");
+	bool rv = xamarin_bridge_is_enum (klass->gchandle);
 	fprintf (stderr, "xamarin_bridge_mono_class_is_enum (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
@@ -3488,15 +3483,8 @@ xamarin_bridge_mono_class_is_enum (MonoClass * klass)
 MONO_API MonoType *
 xamarin_bridge_mono_class_enum_basetype (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_enum_basetype (%p) => assert\n", klass);
-	xamarin_assertion_message ("xamarin_bridge_mono_class_enum_basetype not implemented\n");
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	GCHandle handle = xamarin_bridge_get_enum_basetype (klass->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_get_enum_basetype threw an exception\n");
-	MonoType *rv = xamarin_create_mono_type (NULL, handle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_create_mono_type threw an exception\n");
+	GCHandle handle = xamarin_bridge_get_enum_basetype (klass->gchandle);
+	MonoType *rv = xamarin_create_mono_type (NULL, handle);
 	fprintf (stderr, "xamarin_bridge_mono_class_enum_basetype (%p = %s) => %p = %s\n", klass, klass->fullname, rv, rv->name);
 	return rv;
 }
@@ -3504,8 +3492,14 @@ xamarin_bridge_mono_class_enum_basetype (MonoClass * klass)
 MONO_API int32_t
 xamarin_bridge_mono_class_value_size (MonoClass * klass, uint32_t * align)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_value_size (%p, %p) => assert\n", klass, align);
-	xamarin_assertion_message ("xamarin_bridge_mono_class_value_size not implemented\n");
+	if (align)
+		xamarin_assertion_message ("xamarin_bridge_mono_class_value_size (..., align) not implemented\n");
+
+	int32_t rv = xamarin_bridge_sizeof (klass->gchandle);
+
+	fprintf (stderr, "xamarin_bridge_mono_class_value_size (%p = %s, %p) => %i\n", klass, klass->fullname, align, rv);
+
+	return rv;
 }
 
 MONO_API MonoType *
@@ -3747,8 +3741,10 @@ xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, v
 MONO_API MonoObject *
 xamarin_bridge_mono_value_box (MonoDomain * domain, MonoClass * klass, void * val)
 {
-	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p, %p) => assert\n", domain, klass, val);
-	xamarin_assertion_message ("xamarin_bridge_mono_value_box not implemented\n");
+	GCHandle handle = xamarin_bridge_box (klass->gchandle, val);
+	MonoObject *rv = xamarin_gchandle_get_target (handle);
+	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p\n", domain, klass, klass->fullname, val, rv, rv->gchandle);
+	return rv;
 }
 
 MONO_API void
@@ -3917,10 +3913,7 @@ xamarin_bridge_mono_method_signature (MonoMethod * method)
 	MonoMethodSignature *rv = (MonoMethodSignature *) calloc (1, sizeof (MonoMethodSignature));
 	fprintf (stderr, "xamarin_bridge_mono_method_signature (%p) => %p\n", method, rv);
 	rv->method = method;
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	rv->parameters = (struct __MethodParameter *) xamarin_bridge_method_get_signature (method->gchandle, &rv->parameter_count, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_mono_method_signature threw an exception");
+	rv->parameters = (struct __MethodParameter *) xamarin_bridge_method_get_signature (method->gchandle, &rv->parameter_count);
 	return rv;
 }
 
@@ -4012,10 +4005,7 @@ xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * ass
 	MonoReflectionAssembly *rv = (MonoReflectionAssembly *) calloc (1, sizeof (MonoReflectionAssembly));
 	rv->assembly = assembly;
 	rv->object_kind = MonoObjectType_MonoReflectionAssembly;
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	rv->gchandle = xamarin_find_assembly (assembly->name, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("failed to call xamarin_find_assembly");
+	rv->gchandle = xamarin_find_assembly (assembly->name);
 	assembly->obj = rv;
 	fprintf (stderr, "xamarin_bridge_mono_assembly_get_object (%p, %p = %s) => %p = %p\n", domain, assembly, assembly->name, rv, (void *) rv->gchandle);
 	return rv;
@@ -4064,10 +4054,7 @@ xamarin_bridge_mono_signature_get_params (MonoMethodSignature * sig, void ** ite
 		return NULL;
 	}
 
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	MonoType *rv = xamarin_create_mono_type (sig->parameters [*p].type_name, sig->parameters [*p].type_gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_create_mono_type threw an exception\n");
+	MonoType *rv = xamarin_create_mono_type (sig->parameters [*p].type_name, sig->parameters [*p].type_gchandle);
 
 	fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => %s %p NEXT\n", sig, sig->method->name, iter, *p, rv->name, rv->gchandle);
 
@@ -4079,10 +4066,7 @@ xamarin_bridge_mono_signature_get_params (MonoMethodSignature * sig, void ** ite
 MONO_API mono_bool
 xamarin_bridge_mono_type_is_byref (MonoType * type)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	bool rv = xamarin_bridge_is_byref (type->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_mono_type_is_byref threw an exception\n");
+	bool rv = xamarin_bridge_is_byref (type->gchandle);
 
 	fprintf (stderr, "xamarin_bridge_mono_type_is_byref (%p = %s) => %i\n", type, type->name, rv);
 
@@ -4092,13 +4076,8 @@ xamarin_bridge_mono_type_is_byref (MonoType * type)
 MONO_API MonoType *
 xamarin_bridge_mono_signature_get_return_type (MonoMethodSignature * sig)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	GCHandle return_type_gchandle = xamarin_bridge_get_method_returntype (sig->method->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_get_method_returntype threw an exception\n");
-	MonoType *rv = xamarin_create_mono_type (NULL, return_type_gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_create_mono_type threw an exception\n");
+	GCHandle return_type_gchandle = xamarin_bridge_get_method_returntype (sig->method->gchandle);
+	MonoType *rv = xamarin_create_mono_type (NULL, return_type_gchandle);
 
 	fprintf (stderr, "xamarin_bridge_mono_signature_get_return_type (%p) => %p = %s\n", sig, rv->gchandle, rv->name);
 
@@ -4108,8 +4087,41 @@ xamarin_bridge_mono_signature_get_return_type (MonoMethodSignature * sig)
 MONO_API int
 xamarin_bridge_mono_type_get_type (MonoType * type)
 {
-	fprintf (stderr, "xamarin_bridge_mono_type_get_type (%p) => assert\n", type);
-	xamarin_assertion_message ("xamarin_bridge_mono_type_get_type not implemented\n");
+	if (0 == (int) type->type) {
+		if (type->fullname == NULL) {
+			type->type = MONO_TYPE_VOID;
+		} else if (!strcmp (type->fullname, "System.Byte")) {
+			type->type = MONO_TYPE_U1;
+		} else if (!strcmp (type->fullname, "System.SByte")) {
+			type->type = MONO_TYPE_I1;
+		} else if (!strcmp (type->fullname, "System.UInt16")) {
+			type->type = MONO_TYPE_U2;
+		} else if (!strcmp (type->fullname, "System.Int16")) {
+			type->type = MONO_TYPE_I2;
+		} else if (!strcmp (type->fullname, "System.UInt32")) {
+			type->type = MONO_TYPE_U4;
+		} else if (!strcmp (type->fullname, "System.Int32")) {
+			type->type = MONO_TYPE_I4;
+		} else if (!strcmp (type->fullname, "System.UInt64")) {
+			type->type = MONO_TYPE_U8;
+		} else if (!strcmp (type->fullname, "System.Int64")) {
+			type->type = MONO_TYPE_I8;
+		} else if (!strcmp (type->fullname, "System.Single")) {
+			type->type = MONO_TYPE_R4;
+		} else if (!strcmp (type->fullname, "System.Double")) {
+			type->type = MONO_TYPE_R8;
+		} else if (!strcmp (type->fullname, "System.Boolean")) {
+			type->type = MONO_TYPE_BOOLEAN;
+		} else if (!strcmp (type->fullname, "System.String")) {
+			type->type = MONO_TYPE_STRING;
+		} else {
+			type->type = MONO_TYPE_UNKNOWN;
+		}
+	}
+
+	MonoTypeEnum rv =type->type;
+	fprintf (stderr, "xamarin_bridge_mono_type_get_type (%p = %s) => %i\n", type, type->fullname, (int) rv);
+	return rv;
 }
 
 MONO_API mono_bool

@@ -1552,7 +1552,7 @@ xamarin_strdup_printf (const char *msg, ...)
 
 	return formatted;
 }
-
+#include <spawn.h>
 void
 xamarin_assertion_message (const char *msg, ...)
 {
@@ -1567,6 +1567,24 @@ xamarin_assertion_message (const char *msg, ...)
 		free (formatted);
 	}
 	va_end (args);
+
+
+#if !TARGET_OS_WATCH && !TARGET_OS_TV
+	const char * say[] = {
+		"/usr/bin/say",
+		"assertion failed",
+		formatted,
+		NULL,
+	};
+
+	posix_spawn (NULL, say [0], NULL, NULL, (char * const *) say, NULL);
+#endif
+
+	for (int i = 0; i < 30; i++) {
+		sleep (1);
+		fprintf (stderr, "Sleeping... %i/%i\n", i + 1, 30);
+	}
+
 	abort ();
 }
 
@@ -2853,7 +2871,8 @@ xamarin_gchandle_get_target (GCHandle handle)
 
 #if defined (CORECLR_RUNTIME)
 	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle);
-
+	GCHandle type = xamarin_bridge_object_get_type (handle);
+	MonoClass *klass = type == INVALID_GCHANDLE ? NULL : xamarin_find_mono_class (type);
 	MonoObject *rv = NULL;
 
 	if (gchandle_type && (!strcmp (gchandle_type, "System.Reflection.RuntimeConstructorInfo") || !strcmp (gchandle_type, "System.Reflection.RuntimeMethodInfo"))) {
@@ -2873,6 +2892,13 @@ xamarin_gchandle_get_target (GCHandle handle)
 		mrt->object_kind = MonoObjectType_MonoReflectionType;
 		rv = (MonoObject *) mrt;
 		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoReflectionType => %p\n", handle, gchandle_type, rv);
+	} else if (klass != NULL && xamarin_is_class_array (klass)) {
+		MonoArray *arr = (MonoArray *) calloc (1, sizeof (MonoArray));
+		arr->gchandle = handle;
+		arr->length = xamarin_bridge_get_array_length (handle);
+		arr->object_kind = MonoObjectType_MonoArray;
+		rv = arr;
+		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoArray => %p Length: %llu\n", handle, gchandle_type, rv, arr->length);
 	} else {
 		rv = (MonoObject *) calloc (1, sizeof (MonoObject));
 		rv->gchandle = handle;
@@ -3222,7 +3248,7 @@ hash_str_equal (const void *a, const void *b)
 		rv = strcmp ((const char *) a, (const char *) b) == 0;
 	}
 
-	fprintf (stderr, "hash_str_equal ('%s', '%s') => %i\n", (const char *) a, (const char *) b, rv);
+	// fprintf (stderr, "hash_str_equal ('%s', '%s') => %i\n", (const char *) a, (const char *) b, rv);
 
 	return rv;
 }
@@ -3237,7 +3263,7 @@ hash_str_hash (const void *a)
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
-	fprintf (stderr, "hash_str_hash ('%s') => %lu\n", (const char *) a, hash);
+	// fprintf (stderr, "hash_str_hash ('%s') => %lu\n", (const char *) a, hash);
 
     return hash;
 }
@@ -3250,6 +3276,8 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 	char *fullname = NULL;
 
 	if (name_space == NULL && name == NULL) {
+		if (gchandle == INVALID_GCHANDLE)
+			xamarin_assertion_message ("xamarin_find_mono_class called with no valid input");
 		fullname = xamarin_bridge_get_type_fullname (gchandle, NULL);
 	} else if (name_space == NULL) {
 		fullname = xamarin_strdup_printf ("%s", name);
@@ -3620,13 +3648,16 @@ xamarin_bridge_mono_raise_exception (MonoException * ex)
 MONO_API char*
 xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t idx)
 {
+	if (array->object_kind != MonoObjectType_MonoArray)
+		xamarin_assertion_message ("Array %p isn't an array: %i", array, array->object_kind);
+
 	char *rv = NULL;
 	if (array->data == NULL)
 		array->data = (uint8_t *) xamarin_bridge_get_array_data (array->gchandle);
 
 	rv = (char *) (array->data + idx * size);
 
-	fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => %p\n", array, size, idx, rv);
+	fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => %p (array->data: %p)\n", array, size, idx, rv, array->data);
 
 	return rv;
 }
@@ -3649,6 +3680,7 @@ xamarin_bridge_mono_array_new (MonoDomain * domain, MonoClass * eclass, uintptr_
 	MonoArray *rv = (MonoArray *) calloc (1, sizeof (MonoArray));
 	rv->gchandle = handle;
 	rv->length = (uint64_t) n;
+	rv->object_kind = MonoObjectType_MonoArray;
 	fprintf (stderr, "xamarin_bridge_mono_array_new (%p, %p, %" PRIdPTR ") => %p = %p\n", domain, eclass, n, rv, rv->gchandle);
 	return rv;
 }
@@ -3741,6 +3773,7 @@ xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, v
 MONO_API MonoObject *
 xamarin_bridge_mono_value_box (MonoDomain * domain, MonoClass * klass, void * val)
 {
+	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p)\n", domain, klass, klass->fullname, val);
 	GCHandle handle = xamarin_bridge_box (klass->gchandle, val);
 	MonoObject *rv = xamarin_gchandle_get_target (handle);
 	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p\n", domain, klass, klass->fullname, val, rv, rv->gchandle);

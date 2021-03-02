@@ -539,9 +539,15 @@ namespace ObjCRuntime {
 		static IntPtr GetMethodReturnType (IntPtr gchandle)
 		{
 			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			object rv = null;
 			if (method is MethodInfo minfo)
-				return GCHandle.ToIntPtr (GCHandle.Alloc (minfo.ReturnType));
-			return GCHandle.ToIntPtr (GCHandle.Alloc (null));
+				rv = minfo.ReturnType;
+			else if (method is ConstructorInfo cinfo)
+				rv = cinfo.DeclaringType;
+
+			xamarin_log ($"Return type for {method}: {rv}");
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
 		}
 
 		static IntPtr CreateObject (IntPtr gchandle)
@@ -662,14 +668,19 @@ namespace ObjCRuntime {
 						object vt = null;
 						IntPtr ptr = nativeParam;
 						if (nativeParam != IntPtr.Zero) {
-							//if (isByRef)
-							//	ptr = Marshal.ReadIntPtr (ptr);
 							if (ptr != IntPtr.Zero) {
-								xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")}");
+								xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")} ParameterType: {paramType}");
 								var structType = paramType;
+								Type enumType = null;
 								if (IsNullable (structType))
 									structType = Nullable.GetUnderlyingType (structType);
+								if (structType.IsEnum) {
+									enumType = structType;
+									structType = Enum.GetUnderlyingType (structType);
+								}
 								vt = Marshal.PtrToStructure (ptr, structType);
+								if (enumType != null)
+									vt = Enum.ToObject (enumType, vt);
 							}
 						}
 						parameters [i] = vt;
@@ -740,6 +751,9 @@ namespace ObjCRuntime {
 
 			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) Ref parameters: {byrefParameterCount} Return value of type {rv?.GetType ()}");
 
+			if (rv == null)
+				return IntPtr.Zero;
+
 			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
 		}
 
@@ -760,8 +774,16 @@ namespace ObjCRuntime {
 				//Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
 				return;
 			}
-			var size = Marshal.SizeOf (obj);
+
+			var structType = obj.GetType ();
+			if (structType.IsEnum) {
+				structType = Enum.GetUnderlyingType (structType);
+				obj = Convert.ChangeType (obj, structType);
+			}
+
+			var size = SizeOf (obj.GetType ());
 			output = Marshal.AllocHGlobal (size);
+
 			Marshal.StructureToPtr (obj, output, false);
 			Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, 0x{output.ToString ("x")})");
 		}
@@ -799,7 +821,7 @@ namespace ObjCRuntime {
 
 			var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
 			var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
-
+			
 			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
 
 			if (check_interfaces) {
@@ -876,8 +898,10 @@ namespace ObjCRuntime {
 		static IntPtr ObjectGetType (IntPtr gchandle)
 		{
 			var obj = GCHandle.FromIntPtr (gchandle).Target;
-			if (obj == null)
+			if (obj == null) {
+				xamarin_log ($"ObjectGetType (0x{gchandle.ToString ("x")}) => null object");
 				return IntPtr.Zero;
+			}
 			return GCHandle.ToIntPtr (GCHandle.Alloc (obj.GetType ()));
 		}
 
@@ -1030,15 +1054,31 @@ namespace ObjCRuntime {
 
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var elementSize = SizeOf (array.GetType ().GetElementType ());
-			var rv = Marshal.AllocHGlobal (elementSize * array.Length);
+			var dataSize = elementSize * array.Length;
+			var rv = Marshal.AllocHGlobal (dataSize);
+
+			xamarin_log ($"GetArrayData (0x{gchandle.ToString ("x")}) Type: {array.GetType ()} Array Length: {array.Length} Element Size: {elementSize} rv: 0x{rv.ToString ("x")}");
 
 			if (array.Length > 0) {
-				GCHandle pinned = GCHandle.Alloc (array, GCHandleType.Pinned);
-				for (var i = 0; i < array.Length; i++) {
-					var ptr = Marshal.UnsafeAddrOfPinnedArrayElement (array, i);
-					memcpy (rv + i * elementSize, ptr, elementSize);
+				var arrayType = array.GetType ().GetElementType ();
+				if (arrayType.IsEnum) {
+					// this is quite slow... here we copy the enum array to an array of the underlying type
+					// See: https://github.com/dotnet/runtime/issues/48907
+					var enumType = Enum.GetUnderlyingType (arrayType);
+					var integralArray = Array.CreateInstance (enumType, array.Length);
+					for (var i = 0; i < array.Length; i++)
+						integralArray.SetValue (Convert.ChangeType (array.GetValue (i), enumType), i);
+					array = integralArray;
+					xamarin_log ($" => converted to array of {enumType}");
 				}
-				pinned.Free ();
+
+				var pinned = GCHandle.Alloc (array, GCHandleType.Pinned);
+				try {
+					var addr = pinned.AddrOfPinnedObject ();
+					memcpy (rv, addr, dataSize);
+				} finally {
+					pinned.Free ();
+				}
 			}
 
 			return rv;
@@ -1093,7 +1133,29 @@ namespace ObjCRuntime {
 		static IntPtr Box (IntPtr gchandle, IntPtr value)
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
-			var boxed = Marshal.PtrToStructure (value, type);
+			xamarin_log ($"Box ({type}, 0x{value.ToString ("x")})");
+			var structType = type;
+			Type enumType = null;
+
+			// We can have a nullable enum value
+			if (IsNullable (structType)) {
+				if (value == IntPtr.Zero)
+					return GCHandle.ToIntPtr (GCHandle.Alloc (null));
+				structType = Nullable.GetUnderlyingType (structType);
+			}
+
+			if (structType.IsEnum) {
+				// Change to underlying enum type
+				enumType = structType;
+				structType = Enum.GetUnderlyingType (structType);
+			}
+
+			var boxed = Marshal.PtrToStructure (value, structType);
+			if (enumType != null) {
+				// Convert to enum value
+				boxed = Enum.ToObject (enumType, boxed);
+			}
+
 			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
 		}
 

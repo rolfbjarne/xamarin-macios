@@ -71,6 +71,7 @@ enum MonoObjectType : int {
 	MonoObjectType_MonoReflectionMethod,
 	MonoObjectType_MonoReflectionAssembly,
 	MonoObjectType_MonoReflectionType,
+	MonoObjectType_MonoArray,
 };
 #endif
 

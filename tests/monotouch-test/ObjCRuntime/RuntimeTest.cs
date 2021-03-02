@@ -579,6 +579,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("need to figure out how to marshal exceptions")]
+#endif
 		public void MX8029 ()
 		{
 			var handle = Messaging.IntPtr_objc_msgSend (Messaging.IntPtr_objc_msgSend (Class.GetHandle (typeof (Dummy)), Selector.GetHandle ("alloc")), Selector.GetHandle ("init"));
@@ -612,6 +615,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 #if DYNAMIC_REGISTRAR
+#if NET
+		[Ignore ("need to figure out how to marshal exceptions")]
+#endif
 		[Test]
 		public void MX8029_b ()
 		{
@@ -633,6 +639,9 @@ Additional information:
 			}
 		}
 
+#if NET
+		[Ignore ("need to figure out how to marshal exceptions")]
+#endif
 		[Test]
 		public void MX8033 ()
 		{

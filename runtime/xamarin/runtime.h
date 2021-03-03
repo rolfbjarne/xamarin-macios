@@ -278,6 +278,9 @@ MonoObject *	xamarin_gchandle_get_target (GCHandle handle);
 void			xamarin_gchandle_free (GCHandle handle);
 MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle
 
+MonoClass *		xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
+
+
 /*
  * Look for an assembly in the app and open it.
  *

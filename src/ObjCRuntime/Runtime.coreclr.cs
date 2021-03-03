@@ -8,20 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
-using Foundation;
-using Registrar;
-
-#if MONOMAC
-using AppKit;
-#endif
 
 namespace ObjCRuntime {
 
@@ -149,7 +138,7 @@ namespace ObjCRuntime {
 								parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 							}
 						} else {
-							parameters [i] = nativeParam;
+							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 						}
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
 					} else if (paramType.IsClass || paramType.IsInterface) {
@@ -754,5 +743,7 @@ namespace ObjCRuntime {
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
 		}
+#endif // !COREBUILD
 	}
 }
+

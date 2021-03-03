@@ -2865,9 +2865,6 @@ xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection)
 #endif
 }
 
-MonoClass *
-xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
-
 #if defined (CORECLR_RUNTIME)
 MonoObject *
 xamarin_bridge_get_monoobject (GCHandle handle)
@@ -2875,7 +2872,7 @@ xamarin_bridge_get_monoobject (GCHandle handle)
 	// This method must be kept in sync with Runtime.GetMonoObject
 
 	if (handle == INVALID_GCHANDLE)
-		return NULL:
+		return NULL;
 
 	// It's valid to create a MonoObject* to a GCHandle to a null object
 

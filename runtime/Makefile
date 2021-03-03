@@ -20,6 +20,10 @@ SHIPPED_HEADERS +=         \
 	xamarin/runtime.h      \
 	xamarin/runtime-generated.h \
 
+CORECLR_SHIPPED_HEADERS = \
+	$(SHIPPED_HEADERS) \
+	xamarin/coreclr-bridge.h \
+
 SHARED_SOURCES += mono-runtime.m bindings.m bindings-generated.m shared.m runtime.m trampolines.m trampolines-invoke.m xamarin-support.m nsstring-localization.m trampolines-varargs.m
 SHARED_I386_SOURCES += trampolines-i386.m trampolines-i386-asm.s trampolines-i386-objc_msgSend.s trampolines-i386-objc_msgSendSuper.s trampolines-i386-objc_msgSend_stret.s trampolines-i386-objc_msgSendSuper_stret.s
 SHARED_X86_64_SOURCES += trampolines-x86_64.m trampolines-x86_64-asm.s trampolines-x86_64-objc_msgSend.s trampolines-x86_64-objc_msgSendSuper.s trampolines-x86_64-objc_msgSend_stret.s trampolines-x86_64-objc_msgSendSuper_stret.s
@@ -28,7 +32,7 @@ SHARED_HEADERS += shared.h product.h delegates.h runtime-internal.h $(SHARED_INC
 
 SHARED_FILES = $(SHARED_SOURCES) $(SHARED_HEADERS) $(SHARED_I386_SOURCES) $(SHARED_X86_64_SOURCES) $(SHARED_ARM64_SOURCES)
 
-EXTRA_DEPENDENCIES = $(SHARED_HEADERS) $(TOP)/Make.config $(TOP)/mk/mono.mk
+EXTRA_DEPENDENCIES = $(CORECLR_SHARED_HEADERS) $(TOP)/Make.config $(TOP)/mk/mono.mk
 
 ifdef INJECT_X86_64_SLICE
 X86_64_SLICE=$(abspath $(CURDIR)/x86-64-slice.dylib)
@@ -581,7 +585,6 @@ install-local:: $(RUNTIME_MAC_TARGETS)
 # .NET
 #
 
-# FIXME: add these libraries
 DOTNET_iOS_LIBRARIES = libapp.a libextension.a
 DOTNET_tvOS_LIBRARIES = libtvextension.a
 DOTNET_watchOS_LIBRARIES = libextension.a libwatchextension.a
@@ -594,7 +597,7 @@ DOTNET_TARGETS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet.a \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/libxamarin-dotnet-debug.a \
 	$$(foreach lib,$$(DOTNET_$(2)_LIBRARIES),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(lib)) \
-	$$(foreach header,$$(SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
+	$$(foreach header,$$(CORECLR_SHIPPED_HEADERS),$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native/$$(header)) \
 
 DOTNET_TARGET_DIRS += \
 	$(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(2)/runtimes/$(2)/native \

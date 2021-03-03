@@ -360,7 +360,9 @@ namespace Foundation {
 		[Preserve]
 		bool InvokeConformsToProtocol (IntPtr protocol)
 		{
-			return ConformsToProtocol (protocol);
+			var b = ConformsToProtocol (protocol);
+			Console.WriteLine ($"InvokeConformsToProtocol (0x{protocol.ToString ("x")}) => {b}");
+			return b;
 		}
 
 		[Export ("conformsToProtocol:")]
@@ -372,9 +374,11 @@ namespace Foundation {
 			bool is_wrapper = IsDirectBinding;
 			bool is_third_party;
 
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")})");
 			if (is_wrapper) {
 				is_third_party = this.GetType ().Assembly != NSObject.PlatformAssembly;
 				if (is_third_party) {
+					Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) is_wrapper && is_third_party");
 					// Third-party bindings might lie about IsDirectBinding (see bug #14772),
 					// so don't trust any 'true' values unless we're in monotouch.dll.
 					var attribs = this.GetType ().GetCustomAttributes (typeof(RegisterAttribute), false);
@@ -397,14 +401,19 @@ namespace Foundation {
 			}
 #endif
 
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) does: {does}");
 			if (does)
 				return true;
 			
-			if (!Runtime.DynamicRegistrationSupported)
+			if (!Runtime.DynamicRegistrationSupported) {
+				Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) !DynamicRegistrationSupported");
 				return false;
+			}
 
 			object [] adoptedProtocols = GetType ().GetCustomAttributes (typeof (AdoptsAttribute), true);
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) AdoptedProtocols: {adoptedProtocols.Length}");
 			foreach (AdoptsAttribute adopts in adoptedProtocols){
+				Console.WriteLine ($"    ConformsToProtocol (0x{protocol.ToString ("x")}) AdoptedProtocol: {adopts.ProtocolType} 0x{adopts.ProtocolHandle.ToString ("x")}");
 				if (adopts.ProtocolHandle == protocol)
 					return true;
 			}
@@ -412,14 +421,23 @@ namespace Foundation {
 			// Check if this class or any of the interfaces
 			// it implements are protocols.
 
-			if (IsProtocol (GetType (), protocol))
+			if (IsProtocol (GetType (), protocol)) {
+				Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) IsProtocol ({GetType ()}): true");
 				return true;
+			}
 
 			var ifaces = GetType ().GetInterfaces ();
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) Interfaces: {ifaces.Length}");
 			foreach (var iface in ifaces) {
-				if (IsProtocol (iface, protocol))
+				if (IsProtocol (iface, protocol)) {
+					Console.WriteLine ($"    ConformsToProtocol (0x{protocol.ToString ("x")}) Interface: {iface} YES");
 					return true;
+				} else {
+					Console.WriteLine ($"    ConformsToProtocol (0x{protocol.ToString ("x")}) Interface: {iface} NO");
+				}
 			}
+
+			Console.WriteLine ($"ConformsToProtocol (0x{protocol.ToString ("x")}) NOOOOOOOOOOOOOOO");
 
 			return false;
 		}

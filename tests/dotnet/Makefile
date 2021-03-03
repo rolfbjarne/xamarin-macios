@@ -57,19 +57,19 @@ build-monotouch-test-with-mono: $(TARGETS)
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
 	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS)
-	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)
+	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 build-monotouch-test-with-coreclr: $(TARGETS)
 	$(MAKE) build-monotouch-test-with-mono BUILD_PARAMETERS=/p:XamarinRuntime=CoreCLR
 
 run:
-	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)
+	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 run-lldb:
-	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)
+	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 launch-lldb:
-	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest)
+	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 dotnet6:
 	@echo $(abspath $(DOTNET6))

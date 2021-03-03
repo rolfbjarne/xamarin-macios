@@ -188,6 +188,11 @@ static struct Trampolines trampolines = {
 static struct InitializationOptions options = { 0 };
 
 #if !defined(CORECLR_RUNTIME)
+struct _MonoObject {
+	MonoVTable *vtable;
+	MonoThreadsSync *synchronisation;
+};
+
 struct Managed_NSObject {
 	MonoObject obj;
 	id handle;
@@ -263,7 +268,7 @@ xamarin_get_nsobject_flags (MonoObject *obj)
 	uint8_t rv = xamarin_get_flags_for_nsobject (obj->gchandle, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_get_flags_for_nsobject threw an exception");
-	fprintf (stderr, "xamarin_get_nsobject_flags (%p) => 0x%x\n", obj, rv);
+	// fprintf (stderr, "xamarin_get_nsobject_flags (%p) => 0x%x\n", obj, rv);
 	return rv;
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
@@ -278,7 +283,7 @@ xamarin_set_nsobject_flags (MonoObject *obj, uint8_t flags)
 	MONO_ASSERT_GC_UNSAFE;
 	
 #if defined (CORECLR_RUNTIME)
-	fprintf (stderr, "xamarin_set_nsobject_flags (%p, 0x%x)\n", obj, flags);
+	//fprintf (stderr, "xamarin_set_nsobject_flags (%p, 0x%x)\n", obj, flags);
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
 	xamarin_set_flags_for_nsobject (obj->gchandle, flags, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
@@ -2863,13 +2868,17 @@ xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection)
 MonoClass *
 xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
 
-MonoObject *
-xamarin_gchandle_get_target (GCHandle handle)
-{
-	if (handle == INVALID_GCHANDLE)
-		return NULL;
-
 #if defined (CORECLR_RUNTIME)
+MonoObject *
+xamarin_bridge_get_monoobject (GCHandle handle)
+{
+	// This method must be kept in sync with Runtime.GetMonoObject
+
+	if (handle == INVALID_GCHANDLE)
+		return NULL:
+
+	// It's valid to create a MonoObject* to a GCHandle to a null object
+
 	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle);
 	GCHandle type = xamarin_bridge_object_get_type (handle);
 	MonoClass *klass = type == INVALID_GCHANDLE ? NULL : xamarin_find_mono_class (type);
@@ -2884,31 +2893,42 @@ xamarin_gchandle_get_target (GCHandle handle)
 		mrm->object_kind = MonoObjectType_MonoReflectionMethod;
 		mrm->gchandle = handle;
 		rv = (MonoObject *) mrm;
-		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoReflectionMethod => %p\n", handle, gchandle_type, rv);
+		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoReflectionMethod => %p\n", handle, gchandle_type, rv);
 	} else if (gchandle_type && (!strcmp (gchandle_type, "System.RuntimeType"))) {
 		MonoReflectionType *mrt = (MonoReflectionType *) calloc (1, sizeof (MonoReflectionType));
 		mrt->type = xamarin_create_mono_type (NULL, handle, NULL);
 		mrt->gchandle = xamarin_bridge_duplicate_gchandle (handle, XamarinGCHandleTypeNormal);
 		mrt->object_kind = MonoObjectType_MonoReflectionType;
 		rv = (MonoObject *) mrt;
-		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoReflectionType => %p\n", handle, gchandle_type, rv);
+		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoReflectionType => %p\n", handle, gchandle_type, rv);
 	} else if (klass != NULL && xamarin_is_class_array (klass)) {
 		MonoArray *arr = (MonoArray *) calloc (1, sizeof (MonoArray));
 		arr->gchandle = handle;
 		arr->length = xamarin_bridge_get_array_length (handle);
 		arr->object_kind = MonoObjectType_MonoArray;
 		rv = arr;
-		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoArray => %p Length: %llu\n", handle, gchandle_type, rv, arr->length);
+		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoArray => %p Length: %llu\n", handle, gchandle_type, rv, arr->length);
 	} else {
 		rv = (MonoObject *) calloc (1, sizeof (MonoObject));
 		rv->gchandle = handle;
 		xamarin_bridge_write_structure (handle, &rv->struct_value);
 
-		fprintf (stderr, "xamarin_gchandle_get_target (%p => %s) => MonoObject => %p\n", handle, gchandle_type, rv);
+		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoObject => %p\n", handle, gchandle_type, rv);
 	}
 	rv->type_name = gchandle_type;
 
 	return rv;
+}
+#endif // CORECLR_RUNTIME
+
+MonoObject *
+xamarin_gchandle_get_target (GCHandle handle)
+{
+	if (handle == INVALID_GCHANDLE)
+		return NULL;
+
+#if defined (CORECLR_RUNTIME)
+	return xamarin_bridge_get_monoobject (handle);
 #else
 	return mono_gchandle_get_target (GPOINTER_TO_UINT (handle));
 #endif
@@ -3693,7 +3713,7 @@ xamarin_bridge_mono_object_unbox (MonoObject * obj)
 	}
 
 	void *rv = obj->struct_value;
-	fprintf (stderr, "xamarin_bridge_mono_object_unbox (%p) => %p\n", obj, rv);
+	fprintf (stderr, "xamarin_bridge_mono_object_unbox (%p) => %p => %p\n", obj, rv, rv != NULL ? *(void **) rv : NULL);
 	return rv;
 }
 
@@ -4306,7 +4326,7 @@ xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int 
 	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
 
 	unsigned int exitCode = 0;
-	int rv = coreclr_execute_assembly (coreclr_handle, coreclr_domainId, argc > 0 ? argc - 1 : 0, argv, assembly->name, &exitCode);
+	int rv = coreclr_execute_assembly (coreclr_handle, coreclr_domainId, argc > 0 ? argc - 1 : 0, argv + 1, assembly->name, &exitCode);
 
 	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
 

@@ -48,7 +48,7 @@ xamarin_log (const unsigned short *unicodeMessage)
 #if defined (CORECLR_RUNTIME)
 	{
 		const char *utf8 = [msg UTF8String];
-		NSUInteger len = [msg lengthOfBytesUsingEncoding:NSUTF8StringEncoding] + 1; // does not include NULL
+		NSUInteger len = [msg lengthOfBytesUsingEncoding:NSUTF8StringEncoding]; // does not include NULL
 		fwrite (utf8, 1, len, stderr);
 		if (len == 0 || utf8 [len - 1] != '\n')
 			fwrite ("\n", 1, 1, stderr);

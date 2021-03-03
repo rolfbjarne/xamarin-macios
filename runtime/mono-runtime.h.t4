@@ -65,16 +65,6 @@ char *xamarin_get_mono_runtime_build_info (); // returns NULL if libmono couldn'
 #define MONO_API
 typedef int32_t	mono_bool;
 
-#if defined (CORECLR_RUNTIME)
-enum MonoObjectType : int {
-	MonoObjectType_Unknown,
-	MonoObjectType_MonoReflectionMethod,
-	MonoObjectType_MonoReflectionAssembly,
-	MonoObjectType_MonoReflectionType,
-	MonoObjectType_MonoArray,
-};
-#endif
-
 /* metadata/image.h */
 typedef struct _MonoAssembly MonoAssembly;
 typedef struct _MonoAssemblyName MonoAssemblyName;
@@ -108,17 +98,7 @@ typedef struct _MonoReflectionType MonoReflectionType;
 typedef struct _MonoException MonoException;
 typedef struct _MonoThread MonoThread;
 typedef struct _MonoThreadsSync MonoThreadsSync;
-typedef struct {
-	MonoVTable *vtable;
-	MonoThreadsSync *synchronisation;
-#if defined(CORECLR_RUNTIME)
-	enum MonoObjectType object_kind;
-	GCHandle gchandle;
-	char *type_name;
-	void *struct_value;
-#endif
-} MonoObject;
-
+typedef struct _MonoObject MonoObject;
 
 typedef struct _MonoReferenceQueue MonoReferenceQueue;
 typedef void (*mono_reference_queue_callback) (void *user_data);
@@ -320,115 +300,9 @@ typedef void (*MonoFtnPtrEHCallback) (GCHandle gchandle);
 
 void mono_gc_init_finalizer_thread ();
 
-/* Wrapping support for CoreCLR */
-
 #if defined(CORECLR_RUNTIME)
-
-struct _MonoAssembly {
-	char *name;
-	MonoImage *image;
-	MonoReflectionAssembly *obj;
-};
-
-struct _MonoAssemblyName {
-	char *name;
-};
-
-struct _MonoImage {
-	char *name;
-};
-
-struct _MonoClass {
-	char *fullname;
-	GCHandle gchandle;
-	char *name;
-	char *name_space;
-};
-
-struct _MonoDomain {
-	char *name;
-};
-
-struct _MonoMethod {
-	char *name;
-	MonoClass *klass;
-	int param_count;
-	GCHandle gchandle;
-};
-
-struct __MethodParameter {
-	const char *type_name;
-	GCHandle type_gchandle;
-};
-
-struct _MonoMethodSignature {
-	char *name;
-	MonoMethod *method;
-	int parameter_count;
-	struct __MethodParameter *parameters;
-};
-
-struct _MonoType {
-	char *fullname;
-	GCHandle gchandle;
-	char *name;
-	char *name_space;
-	MonoTypeEnum type;
-};
-
-struct MonoVTable {
-	char *name;
-};
-
-struct _MonoClassField {
-	char *name;
-};
-
-struct _MonoString : MonoObject {
-	char *value;
-};
-
-struct _MonoArray : MonoObject {
-	char *name;
-	uint64_t length;
-	uint8_t *data;
-};
-
-struct _MonoReflectionMethod : MonoObject {
-	MonoMethod *method;
-	char *name;
-};
-
-struct _MonoReflectionAssembly : MonoObject {
-	char *name;
-	MonoAssembly *assembly;
-};
-
-struct _MonoReflectionType : MonoObject {
-	char *name;
-	MonoType *type;
-};
-
-struct _MonoException : MonoObject {
-	char *name;
-};
-
-struct _MonoThread {
-	char *name;
-};
-
-struct _MonoThreadsSync {
-	char *name;
-};
-
-struct _MonoReferenceQueue {
-	GCHandle gchandle;
-};
-
-struct _MonoGHashTable {
-	GCHandle gchandle;
-};
-#endif // CORECRL_RUNTIME
+#include "xamarin/coreclr-bridge.h"
+#endif // CORECLR_RUNTIME
 
 /*
  * The functions we want to expose

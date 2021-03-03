@@ -103,6 +103,7 @@ namespace ObjCRuntime {
 
 			var methodParameters = method.GetParameters ();
 			var parameters = new object [methodParameters.Length];
+			var inputParameters = new object [methodParameters.Length];
 
 			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
 			unsafe {
@@ -141,8 +142,8 @@ namespace ObjCRuntime {
 							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 						}
 						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
-					} else if (paramType.IsClass || paramType.IsInterface) {
-						xamarin_log ($"        IsClass/IsInterface IsByRef: {isByRef} IsOut: {p.IsOut}");
+					} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
+						xamarin_log ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {
 							unsafe {
@@ -157,6 +158,9 @@ namespace ObjCRuntime {
 							}
 							if (obj_gchandle != IntPtr.Zero)
 								parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
+						}
+						if (parameters [i] is bool[] arr) {
+							xamarin_log ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
 						}
 						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					} else if (paramType.IsValueType) {
@@ -188,6 +192,8 @@ namespace ObjCRuntime {
 				}
 			}
 
+			parameters.CopyTo (inputParameters, 0);
+
 			if (anyUnknown) {
 				throw new NotImplementedException ($"Unknown method parameters!");
 			}
@@ -205,6 +211,11 @@ namespace ObjCRuntime {
 
 				xamarin_log ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 
+				if (parameters [i] == inputParameters [i]) {
+					xamarin_log ($"        The argument didn't change, no marshalling required");
+					continue;
+				}
+
 				var parameterType = p.ParameterType.GetElementType ();
 				if (parameterType == typeof (IntPtr)) {
 					xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()}");
@@ -214,9 +225,9 @@ namespace ObjCRuntime {
 						if (nativeParam != null)
 							*nativeParam = (IntPtr) parameters [i];
 					}
-				} else if (parameterType.IsClass || parameterType.IsInterface) {
+				} else if (parameterType.IsClass || parameterType.IsInterface || (parameterType.IsValueType && IsNullable (parameterType))) {
 					var ptr = GetMonoObject (parameters [i]);
-					xamarin_log ($"        IsClass/IsInterface: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					xamarin_log ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					unsafe {
 						IntPtr** nativeParams = (IntPtr**) native_parameters;
 						IntPtr* nativeParam = nativeParams [i];
@@ -320,7 +331,7 @@ namespace ObjCRuntime {
 				var mobj = new MonoObject ();
 				mobj.GCHandle = handle;
 				mobj.TypeName = typename;
-				WriteStructure (handle, ref mobj.StructValue);
+				mobj.StructValue = WriteStructure (handle);
 				rv = MarshalStructure (mobj);
 				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
 			}
@@ -343,14 +354,14 @@ namespace ObjCRuntime {
 			return GCHandle.ToIntPtr (GCHandle.Alloc (tp));
 		}
 
-		static void WriteStructure (IntPtr gchandle, ref IntPtr output)
+		static IntPtr WriteStructure (IntPtr gchandle)
 		{
 			var obj = GCHandle.FromIntPtr (gchandle).Target;
 			if (obj == null)
-				return;
+				return IntPtr.Zero;
 			if (!obj.GetType ().IsValueType) {
 				//Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
-				return;
+				return IntPtr.Zero;
 			}
 
 			var structType = obj.GetType ();
@@ -360,7 +371,7 @@ namespace ObjCRuntime {
 			}
 
 			var size = SizeOf (obj.GetType ());
-			output = Marshal.AllocHGlobal (size);
+			var output = Marshal.AllocHGlobal (size);
 
 			Marshal.StructureToPtr (obj, output, false);
 
@@ -371,6 +382,7 @@ namespace ObjCRuntime {
 				sb.Append ($" 0x{Marshal.ReadByte (output, i).ToString ("x")}");
 			sb.AppendLine ();
 			xamarin_log (sb.ToString ());
+			return output;
 		}
 
 		static bool IsInstance (IntPtr obj_gchandle, IntPtr type_gchandle)
@@ -645,6 +657,9 @@ namespace ObjCRuntime {
 			xamarin_log ($"GetArrayData (0x{gchandle.ToString ("x")}) Type: {array.GetType ()} Array Length: {array.Length} Element Size: {elementSize} rv: 0x{rv.ToString ("x")}");
 
 			if (array.Length > 0) {
+				if (array is bool[] arr) {
+					xamarin_log ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
+				}
 				var arrayType = array.GetType ().GetElementType ();
 				if (arrayType.IsEnum) {
 					// this is quite slow... here we copy the enum array to an array of the underlying type
@@ -666,6 +681,12 @@ namespace ObjCRuntime {
 				}
 			}
 
+			var sb = new System.Text.StringBuilder ();
+			for (var i = 0; i < Math.Min (16, dataSize); i++) {
+				sb.Append ($" 0x{Marshal.ReadByte (rv, i).ToString ("x")}");
+			}
+			xamarin_log ($"    => {sb.ToString ()}");
+
 			return rv;
 		}
 
@@ -680,12 +701,20 @@ namespace ObjCRuntime {
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
 			array.SetValue (obj, index);
+			if (obj is bool)
+				xamarin_log ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj})");
+			else
+				xamarin_log ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj}) huh? {obj?.GetType ()}");
 		}
 
 		static IntPtr GetArrayObjectValue (IntPtr gchandle, int index)
 		{
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = array.GetValue (index);
+			if (obj is bool)
+				xamarin_log ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj}");
+			else
+				xamarin_log ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj} huh? {obj?.GetType ()}");
 			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
 		}
 
@@ -740,6 +769,9 @@ namespace ObjCRuntime {
 				// Convert to enum value
 				boxed = Enum.ToObject (enumType, boxed);
 			}
+
+			if (boxed is bool)
+				xamarin_log ($"     bool boxed value: {boxed}");
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
 		}

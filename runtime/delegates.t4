@@ -397,9 +397,8 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("void", "void", "xamarin_bridge_write_structure",
-			"GCHandle", "IntPtr", "gchandle",
-			"void**", "ref IntPtr", "output"
+		new XDelegate ("void*", "IntPtr", "xamarin_bridge_write_structure",
+			"GCHandle", "IntPtr", "gchandle"
 		) {
 			WrappedManagedFunction = "WriteStructure",
 			OnlyDynamicUsage = false,

@@ -2908,7 +2908,7 @@ xamarin_bridge_get_monoobject (GCHandle handle)
 	} else {
 		rv = (MonoObject *) calloc (1, sizeof (MonoObject));
 		rv->gchandle = handle;
-		xamarin_bridge_write_structure (handle, &rv->struct_value);
+		rv->struct_value = xamarin_bridge_write_structure (handle);
 
 		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoObject => %p\n", handle, gchandle_type, rv);
 	}
@@ -3665,18 +3665,20 @@ xamarin_bridge_mono_raise_exception (MonoException * ex)
 MONO_API char*
 xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t idx)
 {
-	if (array->object_kind != MonoObjectType_MonoArray)
-		xamarin_assertion_message ("Array %p isn't an array: %i", array, array->object_kind);
+	xamarin_assertion_message ("xamarin_bridge_mono_array_addr_with_size should not be called\n");
 
-	char *rv = NULL;
-	if (array->data == NULL)
-		array->data = (uint8_t *) xamarin_bridge_get_array_data (array->gchandle);
+	// if (array->object_kind != MonoObjectType_MonoArray)
+	// 	xamarin_assertion_message ("Array %p isn't an array: %i", array, array->object_kind);
 
-	rv = (char *) (array->data + idx * size);
+	// char *rv = NULL;
+	// if (array->data == NULL)
+	// 	array->data = (uint8_t *) xamarin_bridge_get_array_data (array->gchandle);
 
-	fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => %p (array->data: %p)\n", array, size, idx, rv, array->data);
+	// rv = (char *) (array->data + idx * size);
 
-	return rv;
+	// fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => %p (array->data: %p)\n", array, size, idx, rv, array->data);
+
+	// return rv;
 }
 
 MONO_API MonoString *
@@ -3793,7 +3795,7 @@ xamarin_bridge_mono_value_box (MonoDomain * domain, MonoClass * klass, void * va
 	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p)\n", domain, klass, klass->fullname, val);
 	GCHandle handle = xamarin_bridge_box (klass->gchandle, val);
 	MonoObject *rv = xamarin_gchandle_get_target (handle);
-	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p\n", domain, klass, klass->fullname, val, rv, rv->gchandle);
+	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p = %s\n", domain, klass, klass->fullname, val, rv, rv->gchandle, rv->type_name);
 	return rv;
 }
 

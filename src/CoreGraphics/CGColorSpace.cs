@@ -486,6 +486,7 @@ namespace CoreGraphics {
 		[Watch (3,0)]
 		[TV (10,0)]
 		[DllImport (Constants.CoreGraphicsLibrary)]
+		[return: MarshalAs (UnmanagedType.I1)]
 		static extern bool CGColorSpaceIsWideGamutRGB (/* CGColorSpaceRef */ IntPtr space);
 
 		[iOS (10,0)][Mac (10,12)]

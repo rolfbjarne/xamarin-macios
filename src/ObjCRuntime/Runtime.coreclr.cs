@@ -392,7 +392,11 @@ namespace ObjCRuntime {
 				return false;
 
 			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
-			return obj.GetType ().IsAssignableFrom (type);
+			var rv = type.IsAssignableFrom (obj.GetType ());
+
+			xamarin_log ($"IsInstance ({obj.GetType ()}, {type})");
+
+			return rv;
 		}
 
 		static bool IsDelegate (IntPtr type_gchandle)

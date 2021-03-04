@@ -264,6 +264,8 @@ namespace ObjCRuntime {
 
 		static object PtrToStructure (IntPtr ptr, Type type)
 		{
+			if (ptr == IntPtr.Zero)
+				return null;
 			// if (type == typeof (bool))
 			// 	return Marshal.ReadByte (ptr) != 0;
 			// else if (type == typeof (char))
@@ -273,6 +275,9 @@ namespace ObjCRuntime {
 
 		static void StructureToPtr (object obj, IntPtr ptr)
 		{
+			if (obj == null)
+				return;
+
 			// if (obj is bool b)
 			// 	Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
 			// else if (obj is char c)

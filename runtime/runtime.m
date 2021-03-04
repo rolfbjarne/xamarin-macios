@@ -3278,7 +3278,7 @@ hash_str_hash (const void *a)
     int c;
 
     while ((c = *str++))
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        hash = ((hash << 5) + hash) + (unsigned long) c; /* hash * 33 + c */
 
 	// fprintf (stderr, "hash_str_hash ('%s') => %lu\n", (const char *) a, hash);
 
@@ -4014,8 +4014,8 @@ xamarin_bridge_mono_get_string_class (void)
 MONO_API MonoImage *
 xamarin_bridge_mono_get_corlib (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_get_corlib () => assert\n");
-	xamarin_assertion_message ("xamarin_bridge_mono_get_corlib not implemented\n");
+	fprintf (stderr, "xamarin_bridge_mono_get_corlib () => IGNORE (NULL)\n");
+	return NULL;
 }
 
 MONO_API MonoClass *

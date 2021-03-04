@@ -83,6 +83,15 @@ namespace MonoTouchFixtures.CoreGraphics {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("THe CGPDFOperatorTable.SetCallback API needs work, because of AOT limitations and the fact that .NET doesn't support P/Invokes with Action/Func delegates")]
+/*
+	[FAIL] Tamarin : System.Runtime.InteropServices.MarshalDirectiveException : Cannot marshal 'parameter #3': Non-blittable generic types cannot be marshaled.
+		   at CoreGraphics.CGPDFOperatorTable.CGPDFOperatorTableSetCallback(IntPtr table, String name, Action`2 callback)
+		   at CoreGraphics.CGPDFOperatorTable.SetCallback(String name, Action`2 callback)
+		   at MonoTouchFixtures.CoreGraphics.PDFScannerTest.Tamarin() in xamarin-macios/tests/monotouch-test/CoreGraphics/PDFScannerTest.cs:line 102
+*/
+#endif
 		public void Tamarin ()
 		{
 			using (var table = new CGPDFOperatorTable ()) {

@@ -79,7 +79,7 @@ namespace CoreGraphics {
 #if NET
 		// This signature requires C# 9 (so .NET), and results in ugly public API.
 		[DllImport (Constants.CoreGraphicsLibrary)]
-		unsafe extern static void CGPDFOperatorTableSetCallback (/* CGPDFOperatorTableRef */ IntPtr table, /* const char */ string name, /* CGPDFOperatorCallback */ delegate*<IntPtr,IntPtr> callback);
+		unsafe extern static void CGPDFOperatorTableSetCallback (/* CGPDFOperatorTableRef */ IntPtr table, /* const char */ string name, /* CGPDFOperatorCallback */ delegate* unmanaged<IntPtr,IntPtr> callback);
 #endif
 
 		// This signature should work everywhere, but it results in ugly public API.
@@ -121,7 +121,7 @@ namespace CoreGraphics {
 
 #if NET
 		// this signature requires C# 9
-		public unsafe void SetCallback (string name, delegate*<IntPtr,IntPtr> callback)
+		public unsafe void SetCallback (string name, delegate* unmanaged<IntPtr,IntPtr> callback)
 		{
 			if (name == null)
 				throw new ArgumentNullException (nameof (name));

@@ -33,9 +33,13 @@ namespace MonoTouchFixtures.CoreMedia {
 		[Test]
 		public void CMBlockBufferCustomBlockSource ()
 		{
+#if NET
+			var tn = "CoreMedia.CMCustomBlockAllocator+CMBlockBufferCustomBlockSource, " + typeof (NSObject).Assembly.GetName ().Name;
+#else
 			var tn = "CoreMedia.CMCustomBlockAllocator/CMBlockBufferCustomBlockSource, " + typeof (NSObject).Assembly.GetName ().Name;
+#endif
 			var type = Type.GetType (tn);
-			var allTypes = typeof (NSObject).Asssembly.GetTypes ();
+			var allTypes = typeof (NSObject).Assembly.GetTypes ();
 			Console.WriteLine ($"CMBlockBufferCustomBlockSource looking for {tn} in {allTypes.Length} types:");
 			foreach (var t in allTypes)
 				Console.WriteLine (t.AssemblyQualifiedName);

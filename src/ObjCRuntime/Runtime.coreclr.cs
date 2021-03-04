@@ -178,7 +178,7 @@ namespace ObjCRuntime {
 									enumType = structType;
 									structType = Enum.GetUnderlyingType (structType);
 								}
-								vt = Marshal.PtrToStructure (ptr, structType);
+								vt = PtrToStructure (ptr, structType);
 								if (enumType != null)
 									vt = Enum.ToObject (enumType, vt);
 							}
@@ -245,7 +245,7 @@ namespace ObjCRuntime {
 					}
 					if (nativeParam != IntPtr.Zero) {
 						xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}");
-						Marshal.StructureToPtr (parameters [i], nativeParam, false);
+						StructureToPtr (parameters [i], nativeParam);
 					}
 					xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
 				} else {
@@ -260,6 +260,25 @@ namespace ObjCRuntime {
 				return IntPtr.Zero;
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+		}
+
+		static object PtrToStructure (IntPtr ptr, Type type)
+		{
+			// if (type == typeof (bool))
+			// 	return Marshal.ReadByte (ptr) != 0;
+			// else if (type == typeof (char))
+			// 	return (char) Marshal.ReadInt16 (ptr);
+			return Marshal.PtrToStructure (ptr, type);
+		}
+
+		static void StructureToPtr (object obj, IntPtr ptr)
+		{
+			// if (obj is bool b)
+			// 	Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
+			// else if (obj is char c)
+			// 	Marshal.WriteInt16 (ptr, (short) c);
+			// else
+				Marshal.StructureToPtr (obj, ptr, false);
 		}
 
 		[DllImport ("__Internal")]
@@ -342,7 +361,7 @@ namespace ObjCRuntime {
 		static IntPtr MarshalStructure<T> (T value) where T: struct
 		{
 			var rv = Marshal.AllocHGlobal (Marshal.SizeOf (typeof (T)));
-			Marshal.StructureToPtr (value, rv, false);
+			StructureToPtr (value, rv);
 			return rv;
 		}
 
@@ -373,7 +392,7 @@ namespace ObjCRuntime {
 			var size = SizeOf (obj.GetType ());
 			var output = Marshal.AllocHGlobal (size);
 
-			Marshal.StructureToPtr (obj, output, false);
+			StructureToPtr (obj, output);
 
 			var sb = new System.Text.StringBuilder ();
 			var l = SizeOf (obj.GetType ());
@@ -768,7 +787,7 @@ namespace ObjCRuntime {
 				structType = Enum.GetUnderlyingType (structType);
 			}
 
-			var boxed = Marshal.PtrToStructure (value, structType);
+			var boxed = PtrToStructure (value, structType);
 			if (enumType != null) {
 				// Convert to enum value
 				boxed = Enum.ToObject (enumType, boxed);

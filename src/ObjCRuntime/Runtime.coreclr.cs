@@ -118,11 +118,6 @@ namespace ObjCRuntime {
 				}
 			}
 
-			// CHECK: we're incrementing and decrementing in both native and managed code. Is that thread-safe for the same memory location?
-			public unsafe void Retain ()
-			{
-				Interlocked.Increment (ref MonoObjectPtr->ReferenceCount);
-			}
 
 			public unsafe bool Release ()
 			{
@@ -137,8 +132,6 @@ namespace ObjCRuntime {
 				return free;
 			}
 		}
-
-		static ConditionalWeakTable<object, MonoObjectWrapper> mono_object_dictionary;
 
 		static IntPtr FindAssembly (IntPtr assembly_name)
 		{
@@ -498,9 +491,7 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return IntPtr.Zero;
 
-			var wrapper = mono_object_dictionary.GetValue (obj, CreateMonoObjectWrapper);
-			wrapper.Retain ();
-			return wrapper.MonoObject;
+			return GetMonoObjectImpl (obj);
 		}
 
 		static unsafe MonoObjectWrapper CreateMonoObjectWrapper (object obj)
@@ -549,7 +540,11 @@ namespace ObjCRuntime {
 				rv = MarshalStructure (mobj);
 				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
 			}
-			
+
+			unsafe {
+				((MonoObject*) rv)->ReferenceCount = 1;
+			}
+
 			return rv;
 		}
 

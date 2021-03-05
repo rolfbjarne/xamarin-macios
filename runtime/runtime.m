@@ -132,6 +132,7 @@ enum InitializationFlags : int {
 	InitializationFlagsDynamicRegistrar			= 0x04,
 	/* unused									= 0x08,*/
 	InitializationFlagsIsSimulator				= 0x10,
+	InitializationFlagsIsCoreCLR                = 0x20,
 };
 
 struct InitializationOptions {
@@ -1388,6 +1389,10 @@ xamarin_initialize ()
 	options.size = sizeof (options);
 #if MONOTOUCH && (defined(__i386__) || defined (__x86_64__))
 	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsSimulator);
+#endif
+
+#if defined(CORECLR_RUNTIME)
+	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsCoreCLR);
 #endif
 
 	options.Delegates = &delegates;

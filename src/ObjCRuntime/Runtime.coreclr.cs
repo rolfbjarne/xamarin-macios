@@ -8,9 +8,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
+using Foundation;
 
 namespace ObjCRuntime {
 
@@ -94,6 +97,133 @@ namespace ObjCRuntime {
 			public IntPtr Name; /* char* */
 			public IntPtr Namespace; /* char* */
 			public int Type; /* MonoTypeEnum */
+		}
+
+
+		static IntPtr FindAssembly (IntPtr assembly_name)
+		{
+			var path = Marshal.PtrToStringAuto (assembly_name);
+			var name = Path.GetFileNameWithoutExtension (path);
+			Console.WriteLine ($"Runtime.FindAssembly (0x{assembly_name.ToString ("x")} = {name})");
+			foreach (var asm in AppDomain.CurrentDomain.GetAssemblies ()) {
+				Console.WriteLine ($"    Found in app domain: {asm.GetName ().Name}");
+				if (asm.GetName ().Name == name) {
+					Console.WriteLine ($"        Match!");
+					return GCHandle.ToIntPtr (GCHandle.Alloc (asm));
+				}
+			}
+
+			var loadedAssembly = Assembly.LoadFrom (path);
+			if (loadedAssembly != null) {
+				Console.WriteLine ($"    Loaded {loadedAssembly.GetName ().Name}");
+				return GCHandle.ToIntPtr (GCHandle.Alloc (loadedAssembly));
+			}
+
+			Console.WriteLine ($"Found no assembly named {name}");
+			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
+		}
+
+		// FIXME: rename to CreateGCHandle
+		static IntPtr DuplicateGCHandle (IntPtr gchandle, GCHandleType type)
+		{
+			object obj = null;
+			if (gchandle != IntPtr.Zero)
+				obj = GCHandle.FromIntPtr (gchandle).Target;
+			var rv = GCHandle.Alloc (obj, type);
+			var rvptr = GCHandle.ToIntPtr (rv);
+			//Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
+			return rvptr;
+		}
+
+		static void FreeGCHandle (IntPtr gchandle)
+		{
+			GCHandle.FromIntPtr (gchandle).Free ();
+		}
+
+		static IntPtr GetGCHandleType (IntPtr gchandle)
+		{
+			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			if (obj == null)
+				return IntPtr.Zero;
+			return Marshal.StringToHGlobalAuto (obj.GetType ().FullName);
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct MethodParameter {
+			public IntPtr TypeName;
+			public IntPtr Type_GCHandle;
+		}
+
+		static unsafe IntPtr GetMethodSignature (IntPtr gchandle, ref int parameterCount)
+		{
+			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			var parameters = method.GetParameters ();
+			parameterCount = parameters.Length;
+			var rv = Marshal.AllocHGlobal (sizeof (MethodParameter) * parameterCount);
+			MethodParameter* mparams = (MethodParameter*) rv;
+			for (var i = 0; i < parameters.Length; i++) {
+				var p = parameters [i];
+				mparams [i].Type_GCHandle = GCHandle.ToIntPtr (GCHandle.Alloc (p.ParameterType));
+				mparams [i].TypeName = Marshal.StringToHGlobalAuto (p.ParameterType.FullName);
+			}
+			return rv;
+		}
+
+		static IntPtr GetMethodDeclaringType (IntPtr gchandle)
+		{
+			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			return GCHandle.ToIntPtr (GCHandle.Alloc (method.DeclaringType));
+		}
+
+		static IntPtr GetMethodReturnType (IntPtr gchandle)
+		{
+			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			object rv = null;
+			if (method is MethodInfo minfo)
+				rv = minfo.ReturnType;
+			else if (method is ConstructorInfo cinfo)
+				rv = cinfo.DeclaringType;
+
+			xamarin_log ($"Return type for {method}: {rv}");
+
+			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+		}
+
+		static IntPtr CreateObject (IntPtr gchandle)
+		{
+			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = RuntimeHelpers.GetUninitializedObject (type);
+			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+		}
+
+		static void SetHandleForNSObject (IntPtr gchandle, IntPtr handle)
+		{
+			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			obj.SetHandleDirectly (handle);
+		}
+
+		static void SetFlagsForNSObject (IntPtr gchandle, byte flags)
+		{
+			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			obj.SetFlagsDirectly (flags);
+		}
+
+		static byte GetFlagsForNSObject (IntPtr gchandle)
+		{
+			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			return obj.GetFlagsDirectly ();
+		}
+
+		static IntPtr GetTypeFullName (IntPtr gchandle)
+		{
+			var obj = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			return Marshal.StringToHGlobalAuto (obj?.FullName);
+		}
+
+		static IntPtr GetMethodName (IntPtr gchandle)
+		{
+			var obj = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			return Marshal.StringToHGlobalAuto (obj?.Name);
 		}
 
 		static IntPtr InvokeMethod (IntPtr method_gchandle, IntPtr instance_gchandle, IntPtr native_parameters)
@@ -266,10 +396,10 @@ namespace ObjCRuntime {
 		{
 			if (ptr == IntPtr.Zero)
 				return null;
-			// if (type == typeof (bool))
-			// 	return Marshal.ReadByte (ptr) != 0;
-			// else if (type == typeof (char))
-			// 	return (char) Marshal.ReadInt16 (ptr);
+			if (type == typeof (bool))
+				return Marshal.ReadByte (ptr) != 0;
+			else if (type == typeof (char))
+				return (char) Marshal.ReadInt16 (ptr);
 			return Marshal.PtrToStructure (ptr, type);
 		}
 
@@ -278,11 +408,11 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return;
 
-			// if (obj is bool b)
-			// 	Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
-			// else if (obj is char c)
-			// 	Marshal.WriteInt16 (ptr, (short) c);
-			// else
+			if (obj is bool b)
+				Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
+			else if (obj is char c)
+				Marshal.WriteInt16 (ptr, (short) c);
+			else
 				Marshal.StructureToPtr (obj, ptr, false);
 		}
 

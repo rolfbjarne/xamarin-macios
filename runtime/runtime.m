@@ -2842,7 +2842,7 @@ xamarin_gchandle_new (MonoObject *obj, bool pinned)
 {
 #if defined (CORECLR_RUNTIME)
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	GCHandle rv = xamarin_bridge_duplicate_gchandle (obj->gchandle, pinned ? XamarinGCHandleTypePinned : XamarinGCHandleTypeNormal, &exception_gchandle);
+	GCHandle rv = xamarin_bridge_duplicate_gchandle (obj == NULL ? INVALID_GCHANDLE : obj->gchandle, pinned ? XamarinGCHandleTypePinned : XamarinGCHandleTypeNormal, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("failed to call xamarin_bridge_duplicate_gchandle");
 	return rv;
@@ -2856,7 +2856,7 @@ xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection)
 {
 #if defined (CORECLR_RUNTIME)
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	GCHandle rv = xamarin_bridge_duplicate_gchandle (obj->gchandle, XamarinGCHandleTypeNormal /* FIXME  track_resurrection ? XamarinGCHandleTypeWeakTrackResurrection : XamarinGCHandleTypeWeak */, &exception_gchandle);
+	GCHandle rv = xamarin_bridge_duplicate_gchandle (obj == NULL ? INVALID_GCHANDLE : obj->gchandle, XamarinGCHandleTypeNormal /* FIXME  track_resurrection ? XamarinGCHandleTypeWeakTrackResurrection : XamarinGCHandleTypeWeak */, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("failed to call xamarin_bridge_duplicate_gchandle");
 	return rv;
@@ -2877,6 +2877,11 @@ xamarin_bridge_get_monoobject (GCHandle handle)
 	// It's valid to create a MonoObject* to a GCHandle to a null object
 
 	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle);
+	if (gchandle_type == NULL) {
+		fprintf (stderr, "xamarin_bridge_get_monoobject (%p) => NULL\n", handle);
+		return NULL;
+	}
+
 	GCHandle type = xamarin_bridge_object_get_type (handle);
 	MonoClass *klass = type == INVALID_GCHANDLE ? NULL : xamarin_find_mono_class (type);
 	MonoObject *rv = NULL;

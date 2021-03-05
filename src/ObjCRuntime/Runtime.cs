@@ -127,6 +127,7 @@ namespace ObjCRuntime {
 			DynamicRegistrar		= 0x04,
 			/* unused				= 0x08,*/
 			IsSimulator				= 0x10,
+			IsCoreCLR               = 0x20,
 		}
 
 #if MONOMAC
@@ -158,6 +159,13 @@ namespace ObjCRuntime {
 					return (Flags & InitializationFlags.IsSimulator) == InitializationFlags.IsSimulator;
 				}
 			}
+#if NET
+			internal bool IsCoreCLR {
+				get {
+					return (Flags & InitializationFlags.IsSimulator) == InitializationFlags.IsCoreCLR;
+				}
+			}
+#endif
 		}
 
 		internal static unsafe InitializationOptions* options;

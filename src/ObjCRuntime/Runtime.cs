@@ -162,7 +162,7 @@ namespace ObjCRuntime {
 #if NET
 			internal bool IsCoreCLR {
 				get {
-					return (Flags & InitializationFlags.IsSimulator) == InitializationFlags.IsCoreCLR;
+					return (Flags & InitializationFlags.IsCoreCLR) == InitializationFlags.IsCoreCLR;
 				}
 			}
 #endif
@@ -244,8 +244,8 @@ namespace ObjCRuntime {
 			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
 			TypeEqualityComparer = new TypeEqualityComparer ();
 
-#if DOTNET
-			if (options.IsCoreCLR)
+#if NET		
+			if (options->IsCoreCLR)
 				mono_object_dictionary = new ConditionalWeakTable<object, MonoObjectWrapper> ();
 #endif
 

@@ -66,7 +66,7 @@ build-monotouch-test-with-coreclr: $(TARGETS)
 
 run:
 	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."
-	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)) &> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME))
+	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) &> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
 	@echo "✅ Test run succeeded"
 	@say "Test run succeeded"
 

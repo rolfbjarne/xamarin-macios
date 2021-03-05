@@ -623,6 +623,13 @@
 		) {
 			WrappedManagedFunction = "Box",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("MonoObject*", "IntPtr", "xamarin_bridge_get_monoobject",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "GetMonoObject",
+			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

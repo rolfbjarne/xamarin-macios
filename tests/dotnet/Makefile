@@ -47,6 +47,8 @@ run-mysingleview:
 
 export XAMARIN_RUNTIME=CoreCLR
 
+LOGFILENAME=$(HOME)/test/monotouchtest-timings/$(shell date +%Y-%m-%d--%H:%M:%S).log
+
 build-monotouch-test-with-mono: $(TARGETS)
 	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
 	cd $(TOP)/dotnet && git clean -xfd
@@ -57,13 +59,16 @@ build-monotouch-test-with-mono: $(TARGETS)
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
 	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS)
-	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
+	$(MAKE) run
 
 build-monotouch-test-with-coreclr: $(TARGETS)
 	$(MAKE) build-monotouch-test-with-mono BUILD_PARAMETERS=/p:XamarinRuntime=CoreCLR
 
 run:
-	$(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
+	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."
+	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)) &> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME))
+	@echo "✅ Test run succeeded"
+	@say "Test run succeeded"
 
 run-lldb:
 	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)

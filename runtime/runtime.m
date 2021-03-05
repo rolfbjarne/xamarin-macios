@@ -2865,64 +2865,6 @@ xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection)
 #endif
 }
 
-#if defined (CORECLR_RUNTIME)
-MonoObject *
-xamarin_bridge_get_monoobject (GCHandle handle)
-{
-	// This method must be kept in sync with Runtime.GetMonoObject
-
-	if (handle == INVALID_GCHANDLE)
-		return NULL;
-
-	// It's valid to create a MonoObject* to a GCHandle to a null object
-
-	char *gchandle_type = xamarin_bridge_gchandle_get_target_type (handle);
-	if (gchandle_type == NULL) {
-		fprintf (stderr, "xamarin_bridge_get_monoobject (%p) => NULL\n", handle);
-		return NULL;
-	}
-
-	GCHandle type = xamarin_bridge_object_get_type (handle);
-	MonoClass *klass = type == INVALID_GCHANDLE ? NULL : xamarin_find_mono_class (type);
-	MonoObject *rv = NULL;
-
-	if (gchandle_type && (!strcmp (gchandle_type, "System.Reflection.RuntimeConstructorInfo") || !strcmp (gchandle_type, "System.Reflection.RuntimeMethodInfo"))) {
-		MonoReflectionMethod *mrm = (MonoReflectionMethod *) calloc (1, sizeof (MonoReflectionMethod));
-		mrm->method = (MonoMethod *) calloc (1, sizeof (MonoMethod));
-		mrm->method->name = xamarin_bridge_get_method_name (handle);
-		mrm->method->klass = xamarin_find_mono_class (xamarin_bridge_get_method_declaring_type (handle));
-		mrm->method->gchandle = handle;
-		mrm->object_kind = MonoObjectType_MonoReflectionMethod;
-		mrm->gchandle = handle;
-		rv = (MonoObject *) mrm;
-		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoReflectionMethod => %p\n", handle, gchandle_type, rv);
-	} else if (gchandle_type && (!strcmp (gchandle_type, "System.RuntimeType"))) {
-		MonoReflectionType *mrt = (MonoReflectionType *) calloc (1, sizeof (MonoReflectionType));
-		mrt->type = xamarin_create_mono_type (NULL, handle, NULL);
-		mrt->gchandle = xamarin_bridge_duplicate_gchandle (handle, XamarinGCHandleTypeNormal);
-		mrt->object_kind = MonoObjectType_MonoReflectionType;
-		rv = (MonoObject *) mrt;
-		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoReflectionType => %p\n", handle, gchandle_type, rv);
-	} else if (klass != NULL && xamarin_is_class_array (klass)) {
-		MonoArray *arr = (MonoArray *) calloc (1, sizeof (MonoArray));
-		arr->gchandle = handle;
-		arr->length = xamarin_bridge_get_array_length (handle);
-		arr->object_kind = MonoObjectType_MonoArray;
-		rv = arr;
-		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoArray => %p Length: %llu\n", handle, gchandle_type, rv, arr->length);
-	} else {
-		rv = (MonoObject *) calloc (1, sizeof (MonoObject));
-		rv->gchandle = handle;
-		rv->struct_value = xamarin_bridge_write_structure (handle);
-
-		fprintf (stderr, "xamarin_bridge_get_monoobject (%p => %s) => MonoObject => %p\n", handle, gchandle_type, rv);
-	}
-	rv->type_name = gchandle_type;
-
-	return rv;
-}
-#endif // CORECLR_RUNTIME
-
 MonoObject *
 xamarin_gchandle_get_target (GCHandle handle)
 {

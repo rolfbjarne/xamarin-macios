@@ -447,6 +447,11 @@ namespace ObjCRuntime {
 			return MarshalStructure (rv);
 		}
 
+		static IntPtr GetMonoObject (IntPtr gchandle)
+		{
+			return GetMonoObject (GetGCHandleTarget (gchandle));
+		}
+
 		// This method must be kept in sync with xamarin_bridge_get_monoobject
 		static IntPtr GetMonoObject (object obj)
 		{

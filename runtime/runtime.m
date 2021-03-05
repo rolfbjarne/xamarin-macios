@@ -3618,19 +3618,6 @@ MONO_API char*
 xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t idx)
 {
 	xamarin_assertion_message ("xamarin_bridge_mono_array_addr_with_size should not be called\n");
-
-	// if (array->object_kind != MonoObjectType_MonoArray)
-	// 	xamarin_assertion_message ("Array %p isn't an array: %i", array, array->object_kind);
-
-	// char *rv = NULL;
-	// if (array->data == NULL)
-	// 	array->data = (uint8_t *) xamarin_bridge_get_array_data (array->gchandle);
-
-	// rv = (char *) (array->data + idx * size);
-
-	// fprintf (stderr, "xamarin_bridge_mono_array_addr_with_size (%p, %i, %" PRIdPTR ") => %p (array->data: %p)\n", array, size, idx, rv, array->data);
-
-	// return rv;
 }
 
 MONO_API MonoString *
@@ -4457,6 +4444,12 @@ void _MonoObject::Release ()
 void _MonoObject::Retain ()
 {
 	atomic_fetch_add (&reference_count, 1);
+}
+
+void
+xamarin_mono_object_retain (MonoObject *mobj)
+{
+	mobj->Retain ();
 }
 
 void

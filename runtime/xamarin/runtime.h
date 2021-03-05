@@ -281,9 +281,11 @@ MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target a
 MonoClass *		xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
 
 #if defined(CORECLR_RUNTIME)
+void			xamarin_mono_object_retain (MonoObject *mobj);
 void			xamarin_mono_object_release (MonoObject *mobj);
 #else
 // Nothing to do here.
+#define			xamarin_mono_object_retain (mobj) 
 #define			xamarin_mono_object_release (mobj) 
 #endif
 

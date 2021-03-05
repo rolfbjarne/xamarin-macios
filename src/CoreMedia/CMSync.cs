@@ -70,6 +70,7 @@ namespace CoreMedia {
 		}
 
 		[DllImport(Constants.CoreMediaLibrary)]
+		[return: MarshalAs (UnmanagedType.I1)]
 		extern static /* Boolean */ bool CMClockMightDrift (/* CMClockRef */ IntPtr clock, /* CMClockRef */ IntPtr otherClock);
 
 		public bool MightDrift (CMClock otherClock)
@@ -456,19 +457,19 @@ namespace CoreMedia {
 			return new CMClock (ptr, deprecated);
 		}
 
-		[iOS (9,0)][Mac (10,11), Watch (6,0)]
+		[iOS (9,0)][Mac (10,11)]
 		[DllImport(Constants.CoreMediaLibrary)]
 		static extern unsafe /* CMTimebaseRef */ IntPtr  CMTimebaseCopyMasterTimebase (/* CMTimebaseRef */ IntPtr timebase);
 
-		[iOS (9,0)][Mac (10,11), Watch (6,0)]
+		[iOS (9,0)][Mac (10,11)]
 		[DllImport(Constants.CoreMediaLibrary)]
 		static extern unsafe /* CMClockRef */ IntPtr  CMTimebaseCopyMasterClock (/* CMTimebaseRef */ IntPtr timebase);
 
-		[iOS (9,0)][Mac (10,11), Watch (6,0)]
+		[iOS (9,0)][Mac (10,11)]
 		[DllImport(Constants.CoreMediaLibrary)]
 		static extern unsafe IntPtr /* void* */ CMTimebaseCopyMaster (/* CMTimebaseRef */ IntPtr timebase);
 
-		[iOS (9,0)][Mac (10,11), Watch (6,0)]
+		[iOS (9,0)][Mac (10,11)]
 		[DllImport(Constants.CoreMediaLibrary)]
 		static extern unsafe /* CMClockRef */ IntPtr CMTimebaseCopyUltimateMasterClock (/* CMTimebaseRef */ IntPtr timebase);
 #endif
@@ -584,6 +585,7 @@ namespace CoreMedia {
 		}
 
 		[DllImport(Constants.CoreMediaLibrary)]
+		[return: MarshalAs (UnmanagedType.I1)]
 		extern static /* Boolean */ bool CMSyncMightDrift (/* CMClockOrTimebaseRef */ IntPtr clockOrTimebase1, /* CMClockOrTimebaseRef */ IntPtr clockOrTimebase2);
 
 		public static bool MightDrift (CMClockOrTimebase clockOrTimebaseA, CMClockOrTimebase clockOrTimebaseB)

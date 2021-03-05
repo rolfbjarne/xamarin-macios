@@ -19,10 +19,14 @@ enum MonoObjectType : int {
 };
 
 struct _MonoObject {
+	int _Atomic reference_count;
 	enum MonoObjectType object_kind;
 	GCHandle gchandle;
 	char *type_name;
 	void *struct_value;
+
+	void Release ();
+	void Retain ();
 };
 
 struct _MonoAssembly {

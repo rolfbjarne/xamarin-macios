@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 using Foundation;
 
@@ -29,6 +30,7 @@ namespace ObjCRuntime {
 
 		[StructLayout (LayoutKind.Sequential)]
 		struct MonoObject {
+			public int ReferenceCount;
 			public MonoObjectType ObjectKind;
 			public IntPtr GCHandle;
 			public IntPtr TypeName;
@@ -99,6 +101,44 @@ namespace ObjCRuntime {
 			public int Type; /* MonoTypeEnum */
 		}
 
+
+		class MonoObjectWrapper {
+			public IntPtr /* MonoObject */ MonoObject;
+			public string Type;
+
+			public unsafe MonoObject* MonoObjectPtr { get { return (MonoObject*) MonoObject; } }
+
+			~MonoObjectWrapper ()
+			{
+				if (!Release ()) {
+					unsafe {
+						// This is not quite an error, but the MonoObject should be released by somebody else pretty soon, so it's indicative that someone forgot to release a MonoObject somewhere.
+						xamarin_log ($"MonoObjectWrapper.~MonoObjectWrapper () MonoObject is still alive - Type: {Type} ReferenceCount: {MonoObjectPtr->ReferenceCount}");
+					}
+				}
+			}
+
+			// CHECK: we're incrementing and decrementing in both native and managed code. Is that thread-safe for the same memory location?
+			public unsafe void Retain ()
+			{
+				Interlocked.Increment (ref MonoObjectPtr->ReferenceCount);
+			}
+
+			public unsafe bool Release ()
+			{
+				bool free = Interlocked.Decrement (ref MonoObjectPtr->ReferenceCount) == 0;
+
+				if (free) {
+					//	Marshal.FreeHGlobal ((IntPtr) MonoObject);
+					xamarin_log ($"MonoObjectWrapper.Release () Would free MonoObject with type: {Type}");
+					// TODO: free the GCHandle too, and anything else that might need releasing
+				}
+
+				return free;
+			}
+		}
+
+		static ConditionalWeakTable<object, MonoObjectWrapper> mono_object_dictionary;
 
 		static IntPtr FindAssembly (IntPtr assembly_name)
 		{
@@ -452,12 +492,27 @@ namespace ObjCRuntime {
 			return GetMonoObject (GetGCHandleTarget (gchandle));
 		}
 
-		// This method must be kept in sync with xamarin_bridge_get_monoobject
+		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (object obj)
 		{
 			if (obj == null)
 				return IntPtr.Zero;
 
+			var wrapper = mono_object_dictionary.GetValue (obj, CreateMonoObjectWrapper);
+			wrapper.Retain ();
+			return wrapper.MonoObject;
+		}
+
+		static unsafe MonoObjectWrapper CreateMonoObjectWrapper (object obj)
+		{
+			return new MonoObjectWrapper () {
+				MonoObject = GetMonoObjectImpl (obj),
+				Type = obj?.GetType ()?.FullName,
+			};
+		}
+
+		static IntPtr GetMonoObjectImpl (object obj)
+		{
 			var gchandle = GCHandle.Alloc (obj);
 			var handle = GCHandle.ToIntPtr (gchandle);
 			var typename = GetGCHandleType (handle);

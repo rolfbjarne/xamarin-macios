@@ -4446,4 +4446,16 @@ xamarin_bridge_mono_install_ftnptr_eh_callback (MonoFtnPtrEHCallback callback)
 	fprintf (stderr, "%s (%p) => IGNORE\n", __func__, callback);
 }
 
+void _MonoObject::Release ()
+{
+	if (atomic_fetch_sub (&reference_count, 1) == 0) {
+		// free (this); // allocated using Marshal.AllocHGlobal.
+		fprintf (stderr, "_MonoObject.Release (): would free %p\n", this);
+	}
+}
+
+void _MonoObject::Retain ()
+{
+	atomic_fetch_add (&reference_count, 1);
+}
 #endif

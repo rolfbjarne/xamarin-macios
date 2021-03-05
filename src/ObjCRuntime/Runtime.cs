@@ -244,6 +244,11 @@ namespace ObjCRuntime {
 			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
 			TypeEqualityComparer = new TypeEqualityComparer ();
 
+#if DOTNET
+			if (options.IsCoreCLR)
+				mono_object_dictionary = new ConditionalWeakTable<object, MonoObjectWrapper> ();
+#endif
+
 			Runtime.options = options;
 			delegates = new List<object> ();
 			object_map = new Dictionary <IntPtr, GCHandle> (IntPtrEqualityComparer);

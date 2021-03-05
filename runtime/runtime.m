@@ -4458,4 +4458,10 @@ void _MonoObject::Retain ()
 {
 	atomic_fetch_add (&reference_count, 1);
 }
+
+void
+xamarin_mono_object_release (MonoObject *mobj)
+{
+	mobj->Release ();
+}
 #endif

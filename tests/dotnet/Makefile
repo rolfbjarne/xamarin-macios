@@ -38,3 +38,6 @@ run-unit-tests:
 	cd UnitTests && $(DOTNET) test DotNetUnitTests.csproj $(TEST_FILTER)
 
 all-local:: $(TARGETS)
+
+run-test: $(TARGETS)
+	$(DOTNET6) build /t:Run MySingleView/*.csproj /bl

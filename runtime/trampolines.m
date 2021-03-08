@@ -1489,8 +1489,12 @@ xamarin_smart_enum_to_nsstring (MonoObject *value, void *context /* token ref */
 
 		if (retval == NULL)
 			return NULL;
-		return xamarin_get_nsobject_handle (retval);
 
+		id retval_handle = xamarin_get_nsobject_handle (retval);
+
+		xamarin_mono_object_release (retval);
+
+		return retval_handle;
 	}
 }
 
@@ -1531,6 +1535,9 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 		ptr = xamarin_calloc (size);
 	void *value_ptr = mono_object_unbox (obj);
 	memcpy (ptr, value_ptr, size);
+
+	xamarin_mono_object_release (obj);
+
 	return ptr;
 }
 

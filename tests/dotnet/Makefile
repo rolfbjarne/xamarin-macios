@@ -51,17 +51,19 @@ build-monotouch-test: $(TARGETS)
 	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
 	cd $(TOP)/dotnet && git clean -xfd
 	cd $(TOP)/tests/monotouch-test/dotnet && git clean -xfd
+	cd $(TOP)/tests/EmbeddedResources/dotnet && git clean -xfd
+	cd $(TOUCH_UNIT_PATH) && git clean -xfd
 	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) all -j8
 	unset MSBuildEnableWorkloadResolver && $(MAKE) -C $(TOP) install -j8
 	$(CP) -c NuGet.config global.json $(TOP)/tests/monotouch-test/dotnet/macOS
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
-	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME)
+	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME) "/p:DefaultItemExcludesInProjectFolder=bin/**/%3Bobj/**"
 	$(MAKE) run
 
 just-build:
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
-	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME)
+	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME) "/p:DefaultItemExcludesInProjectFolder=bin/**/%3Bobj/**"
 
 build-monotouch-test-with-mono: export XAMARIN_RUNTIME=MonoVM
 build-monotouch-test-with-mono: $(TARGETS)
@@ -73,15 +75,24 @@ build-monotouch-test-with-coreclr: $(TARGETS)
 
 run:
 	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."
-	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) &> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
+	@echo "VM: $(XAMARIN_RUNTIME)" > $(LOGFILENAME)
+	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) >> $(LOGFILENAME) 2>&1 || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
 	@echo "✅ Test run succeeded"
 	@say "Test run succeeded"
 
+run-monotouch-test-with-mono: export XAMARIN_RUNTIME=MonoVM
+run-monotouch-test-with-mono: $(TARGETS)
+	$(MAKE) run
+
+run-monotouch-test-with-coreclr: export XAMARIN_RUNTIME=CoreCLR
+run-monotouch-test-with-coreclr: $(TARGETS)
+	$(MAKE) run
+
 run-lldb:
-	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
+	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 launch-lldb:
-	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
+	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 dotnet6:
 	@echo $(abspath $(DOTNET6))

@@ -187,6 +187,26 @@ namespace Foundation {
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
 
+#if NET
+		static void RegisterToggleRefIndirection (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting RegisterToggleRef will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			RegisterToggleRef (obj, handle, isCustomType);
+		}
+
+		static void xamarin_release_managed_ref_indirection (IntPtr handle, NSObject managed_obj)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting ReleaseManagedReference will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			xamarin_release_managed_ref (handle, managed_obj);
+		}
+
+		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain)
+		{
+			// We need this indirection for CoreCLR, otherwise JITting CreateManagedReference will throw System.Security.SecurityException: ECall methods must be packaged into a system module.
+			xamarin_create_managed_ref (handle, obj, retain);
+		}
+#endif
+
 		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain)
 		{
 #if NET
@@ -200,7 +220,8 @@ namespace Foundation {
 				return;
 			}
 #endif
-			xamarin_create_managed_ref (handle, obj, retain);
+
+			xamarin_create_managed_ref_indirection (handle, obj, retain);
 		}
 
 		static void ReleaseManagedReference (IntPtr handle, NSObject managed_obj)
@@ -217,7 +238,7 @@ namespace Foundation {
 			}
 #endif
 
-			xamarin_release_managed_ref (handle, managed_obj);
+			xamarin_release_managed_ref_indirection (handle, managed_obj);
 
 		}
 
@@ -235,7 +256,7 @@ namespace Foundation {
 			}
 #endif
 
-			RegisterToggleRef (obj, handle, isCustomType);
+			RegisterToggleRefIndirection (obj, handle, isCustomType);
 		}
 
 #if !XAMCORE_3_0

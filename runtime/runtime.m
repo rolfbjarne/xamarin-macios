@@ -1441,7 +1441,10 @@ xamarin_initialize ()
 
 	params [0] = &options;
 
-	mono_runtime_invoke (runtime_initialize, NULL, params, &exc);
+	MonoObject *initialize_retval;
+
+	initialize_retval = mono_runtime_invoke (runtime_initialize, NULL, params, &exc);
+	xamarin_mono_object_release (initialize_retval);
 
 	if (exc) {
 		NSLog (@PRODUCT ": An exception occurred when calling Runtime.Initialize:\n%@", xamarin_print_all_exceptions (exc));

@@ -493,6 +493,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	
 	// invoke
 	MonoObject *retval;
+	MonoObject *ctorval;
 	if (is_ctor) {
 		/* 
 		 * Some Objective-C classes overwrite retain, release,
@@ -523,7 +524,8 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 
 		xamarin_set_nsobject_handle (retval, self);
 		xamarin_set_nsobject_flags (retval, NSObjectFlagsNativeRef);
-		mono_runtime_invoke (method, retval, (void **) arg_ptrs, exception_ptr);
+		ctorval = mono_runtime_invoke (method, retval, (void **) arg_ptrs, exception_ptr);
+		S_LIST_PREPEND_CORECLR (release_list, ctorval);
 		if (exception != NULL)
 			goto exception_handling;
 		xamarin_create_managed_ref (self, retval, true);
@@ -542,6 +544,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 #endif
 
 		retval = mono_runtime_invoke (method, mthis, (void **) arg_ptrs, exception_ptr);
+		S_LIST_PREPEND_CORECLR (release_list, retval);
 
 #ifdef TRACE
 		fprintf (stderr, " called managed method with %i arguments: ", num_arg);

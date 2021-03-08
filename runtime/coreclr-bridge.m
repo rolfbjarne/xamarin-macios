@@ -447,6 +447,8 @@ xamarin_bridge_mono_method_full_name (MonoMethod * method, mono_bool signature)
 
 typedef void (*xamarin_runtime_initialize_decl)(void *);
 
+// Return value: NULL, or a retained MonoObject* that must be freed with xamarin_mono_object_release.
+// Returns NULL in case of exception.
 MONO_API MonoObject *
 xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** params, MonoObject ** exc)
 {

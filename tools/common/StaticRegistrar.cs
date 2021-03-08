@@ -2031,6 +2031,7 @@ namespace Registrar {
 		AutoIndentStringBuilder invoke = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder setup_call_stack = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder setup_return = new AutoIndentStringBuilder ();
+		AutoIndentStringBuilder cleanup = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder body = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder body_setup = new AutoIndentStringBuilder ();
 		
@@ -3261,6 +3262,7 @@ namespace Registrar {
 			body.Clear ();
 			body_setup.Clear ();
 			setup_return.Clear ();
+			cleanup.Clear ();
 			
 			counter++;
 
@@ -3504,7 +3506,7 @@ namespace Registrar {
 						setup_call_stack.AppendLine ("a{0} = xamarin_nsstring_to_string (NULL, p{0});", i);
 						setup_call_stack.AppendLine ("arg_ptrs [{0}] = a{0};", i);
 					}
-					setup_return.AppendLine ("xamarin_mono_object_release (a{0});", i);
+					cleanup.AppendLine ("xamarin_mono_object_release (a{0});", i);
 					break;
 				default:
 					if (isArray || isByRefArray) {
@@ -3749,6 +3751,9 @@ namespace Registrar {
 			}
 
 			invoke.AppendLine ("mono_runtime_invoke (managed_method, {0}, arg_ptrs, {1});", isStatic ? "NULL" : "mthis", marshal_exception);
+
+			if (!isVoid)
+				cleanup.AppendLine ("xamarin_mono_object_release (retval);");
 		
 			if (isCtor)
 				invoke.AppendLine ("xamarin_create_managed_ref (self, mthis, true);");
@@ -3934,6 +3939,8 @@ namespace Registrar {
 			
 			if (trace)
 				body.AppendLine (nslog_end);
+
+			body.AppendLine (cleanup):
 
 			body.StringBuilder.AppendLine ("exception_handling:;");
 

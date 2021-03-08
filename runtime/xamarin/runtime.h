@@ -230,10 +230,6 @@ void			xamarin_create_managed_ref (id self, void * managed_object, bool retain);
 void            xamarin_release_managed_ref (id self, MonoObject *managed_obj);
 void			xamarin_notify_dealloc (id self, GCHandle gchandle);
 
-void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
-void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
-void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
-
 int				xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode);
 
 char *			xamarin_type_get_full_name (MonoType *type, GCHandle *exception_gchandle); // return value must be freed with 'mono_free'
@@ -285,8 +281,6 @@ GCHandle		xamarin_gchandle_new_weakref (MonoObject *obj, bool pinned);
 MonoObject *	xamarin_gchandle_get_target (GCHandle handle);
 void			xamarin_gchandle_free (GCHandle handle);
 MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle
-
-MonoClass *		xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
 
 #if defined(CORECLR_RUNTIME)
 void			xamarin_mono_object_retain (MonoObject *mobj);

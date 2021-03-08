@@ -134,6 +134,9 @@ struct _MonoGHashTable {
 	GCHandle gchandle;
 };
 
+MonoType *
+xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle = NULL);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

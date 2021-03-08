@@ -30,7 +30,7 @@ void *coreclr_handle = NULL;
 void
 xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType)
 {
-	fprintf (stderr, "xamarin_register_toggleref_coreclr (%p, %p, %i) => IGNORED\n", managed_obj, self, isCustomType);
+	LOG_CORECLR (stderr, "xamarin_register_toggleref_coreclr (%p, %p, %i) => IGNORED\n", managed_obj, self, isCustomType);
 }
 
 void
@@ -58,7 +58,7 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	char * str = xamarin_bridge_tostring (gchandle, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_bridge_tostring threw an exception");
-	fprintf (stderr, "%s threw an exception: %s\n", method, str);
+	LOG_CORECLR (stderr, "%s threw an exception: %s\n", method, str);
 	mono_free (str);
 	xamarin_assertion_message ("%s threw an exception: %s", method, str);
 }
@@ -71,9 +71,9 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 
 	if (!strcmp (libraryName, "__Internal")) {
 		symbol = dlsym (RTLD_DEFAULT, entrypointName);
-		fprintf (stderr, "xamarin_pinvoke_override (%s, %s): %p error: %s\n", libraryName, entrypointName, symbol, dlerror ());
+		LOG_CORECLR (stderr, "xamarin_pinvoke_override (%s, %s): %p error: %s\n", libraryName, entrypointName, symbol, dlerror ());
 	} else {
-		fprintf (stderr, "xamarin_pinvoke_override (%s, %s) unknown library\n", libraryName, entrypointName);
+		LOG_CORECLR (stderr, "xamarin_pinvoke_override (%s, %s) unknown library\n", libraryName, entrypointName);
 	}
 
 	return symbol;
@@ -112,7 +112,7 @@ xamarin_load_coreclr ()
 
 	xamarin_free (pinvokeOverride);
 
-	fprintf (stderr, "xamarin_load_coreclr (): rv: %i domainId: %i handle: %p\n", rv, coreclr_domainId, coreclr_handle);
+	LOG_CORECLR (stderr, "xamarin_load_coreclr (): rv: %i domainId: %i handle: %p\n", rv, coreclr_domainId, coreclr_handle);
 }
 
 static Boolean
@@ -126,7 +126,7 @@ hash_str_equal (const void *a, const void *b)
 		rv = strcmp ((const char *) a, (const char *) b) == 0;
 	}
 
-	// fprintf (stderr, "hash_str_equal ('%s', '%s') => %i\n", (const char *) a, (const char *) b, rv);
+	// LOG_CORECLR (stderr, "hash_str_equal ('%s', '%s') => %i\n", (const char *) a, (const char *) b, rv);
 
 	return rv;
 }
@@ -141,7 +141,7 @@ hash_str_hash (const void *a)
     while ((c = *str++))
         hash = ((hash << 5) + hash) + (unsigned long) c; /* hash * 33 + c */
 
-	// fprintf (stderr, "hash_str_hash ('%s') => %lu\n", (const char *) a, hash);
+	// LOG_CORECLR (stderr, "hash_str_hash ('%s') => %lu\n", (const char *) a, hash);
 
     return hash;
 }
@@ -187,19 +187,19 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 		entry->name_space = name_space == NULL ? NULL : strdup (name_space);
 		entry->name = name == NULL ? NULL : strdup (name);
 		CFDictionarySetValue (mono_class_hash_table, entry->fullname, entry);
-		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => added %p = %s (GCHandle: %p) with key %s\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle, fullname);
+		LOG_CORECLR (stderr, "xamarin_find_mono_class (%p, %s, %s) => added %p = %s (GCHandle: %p) with key %s\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle, fullname);
 	} else {
-		fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => found %p = %s (GCHandle: %p) for key %s\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle, fullname);
+		LOG_CORECLR (stderr, "xamarin_find_mono_class (%p, %s, %s) => found %p = %s (GCHandle: %p) for key %s\n", gchandle, name_space, name, entry, entry->fullname, entry->gchandle, fullname);
 	}
 
 	if (xamarin_get_initialization_finished ()) {
 		if (entry->gchandle == INVALID_GCHANDLE) {
 			entry->gchandle = xamarin_bridge_get_type (fullname);
-			fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => got GCHandle %p for %s\n", gchandle, name_space, name, entry->gchandle, entry->fullname);
+			LOG_CORECLR (stderr, "xamarin_find_mono_class (%p, %s, %s) => got GCHandle %p for %s\n", gchandle, name_space, name, entry->gchandle, entry->fullname);
 		}
 		if (entry->name_space == NULL && entry->name == NULL) {
 			xamarin_bridge_get_name_and_namespace (entry->gchandle, &entry->name_space, &entry->name, NULL);
-			fprintf (stderr, "xamarin_find_mono_class (%p, %s, %s) => got Namespace=%s and Name=%s for FullName=%s and GCHandle=%p\n", gchandle, name_space, name, entry->name_space, entry->name, entry->fullname, entry->gchandle);
+			LOG_CORECLR (stderr, "xamarin_find_mono_class (%p, %s, %s) => got Namespace=%s and Name=%s for FullName=%s and GCHandle=%p\n", gchandle, name_space, name, entry->name_space, entry->name, entry->fullname, entry->gchandle);
 		}
 	}
 
@@ -231,41 +231,41 @@ xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* excepti
 MONO_API gchar *
 xamarin_bridge_mono_path_resolve_symlinks (const char * path)
 {
-	fprintf (stderr, "xamarin_bridge_mono_path_resolve_symlinks (%s) => %s\n", path, path);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_path_resolve_symlinks (%s) => %s\n", path, path);
 	return (gchar *) strdup (path);
 }
 
 MONO_API gboolean
 xamarin_bridge_mini_parse_debug_option (const char * option)
 {
-	fprintf (stderr, "xamarin_bridge_mini_parse_debug_option (%s) => IGNORED\n", option);
+	LOG_CORECLR (stderr, "xamarin_bridge_mini_parse_debug_option (%s) => IGNORED\n", option);
 	return true;
 }
 
 MONO_API void
 xamarin_bridge_mono_free (void * ptr)
 {
-	fprintf (stderr, "xamarin_bridge_mono_free (%p) => FREED\n", ptr);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_free (%p) => FREED\n", ptr);
 	free (ptr);
 }
 
 MONO_API void
 xamarin_bridge_mono_debug_init (MonoDebugFormat format)
 {
-	fprintf (stderr, "xamarin_bridge_mono_debug_init (%p)\n", (void *) format);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_debug_init (%p)\n", (void *) format);
 }
 
 MONO_API void
 xamarin_bridge_mono_gc_collect (int generation)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_collect (%i)\n", generation);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_collect (%i)\n", generation);
 }
 
 MONO_API MonoClass *
 xamarin_bridge_mono_class_from_name (MonoImage * image, const char * name_space, const char * name)
 {
 	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, name_space, name);
-	fprintf (stderr, "xamarin_bridge_mono_class_from_name (%p, %s, %s) => %p\n", image, name_space, name, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_from_name (%p, %s, %s) => %p\n", image, name_space, name, rv);
 	return rv;
 }
 
@@ -276,21 +276,21 @@ xamarin_bridge_mono_class_get_method_from_name (MonoClass * klass, const char * 
 	rv->klass = klass;
 	rv->name = strdup (name);
 	rv->param_count = param_count;
-	fprintf (stderr, "xamarin_bridge_mono_class_get_method_from_name (%p, %s, %i) => %p\n", klass, name, param_count, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_method_from_name (%p, %s, %i) => %p\n", klass, name, param_count, rv);
 	return rv;
 }
 
 MONO_API MonoClassField *
 xamarin_bridge_mono_class_get_field_from_name (MonoClass * klass, const char * name)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_field_from_name (%p, %s) => assert\n", klass, name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_field_from_name (%p, %s) => assert\n", klass, name);
 	xamarin_assertion_message ("xamarin_bridge_mono_class_get_field_from_name not implemented\n");
 }
 
 MONO_API mono_bool
 xamarin_bridge_mono_class_is_assignable_from (MonoClass * klass, MonoClass * oklass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_is_assignable_from (%p, %p) => assert\n", klass, oklass);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_assignable_from (%p, %p) => assert\n", klass, oklass);
 	xamarin_assertion_message ("xamarin_bridge_mono_class_is_assignable_from not implemented\n");
 }
 
@@ -306,7 +306,7 @@ xamarin_bridge_mono_class_from_mono_type (MonoType * type)
 	}
 
 	MonoClass *rv = xamarin_find_mono_class (type_gchandle /* get name[space] from type?  type->name */);
-	fprintf (stderr, "xamarin_bridge_mono_class_from_mono_type (%p = %s) => %p = %s\n", type, type->name, rv, rv->fullname);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_from_mono_type (%p = %s) => %p = %s\n", type, type->name, rv, rv->fullname);
 	return rv;
 }
 
@@ -317,7 +317,7 @@ xamarin_bridge_mono_class_is_delegate (MonoClass * klass)
 	bool rv = xamarin_bridge_is_delegate (klass->gchandle, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_bridge_duplicate_gchandle threw an exception\n");
-	fprintf (stderr, "xamarin_bridge_mono_class_is_delegate (%p = %s) => %i\n", klass, klass->fullname, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_delegate (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
 
@@ -329,28 +329,28 @@ xamarin_bridge_mono_class_get_element_class (MonoClass * klass)
 
 	GCHandle element_type = xamarin_bridge_get_element_class (klass->gchandle);
 	MonoClass *rv = xamarin_find_mono_class (element_type);
-	fprintf (stderr, "xamarin_bridge_mono_class_get_element_class (%p = %s) => %p = %s = %p\n", klass, klass->fullname, rv, rv->fullname, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_element_class (%p = %s) => %p = %s = %p\n", klass, klass->fullname, rv, rv->fullname, rv->gchandle);
 	return rv;
 }
 
 MONO_API const char *
 xamarin_bridge_mono_class_get_namespace (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_namespace (%p => %s) => %s\n", klass, klass->fullname, klass->name_space);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_namespace (%p => %s) => %s\n", klass, klass->fullname, klass->name_space);
 	return klass->name_space;
 }
 
 MONO_API const char *
 xamarin_bridge_mono_class_get_name (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_name (%p => %s) => %s\n", klass, klass->fullname, klass->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_name (%p => %s) => %s\n", klass, klass->fullname, klass->name);
 	return klass->name;
 }
 
 MONO_API MonoClass *
 xamarin_bridge_mono_class_get_parent (MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_class_get_parent (%p) => assert\n", klass);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_parent (%p) => assert\n", klass);
 	xamarin_assertion_message ("xamarin_bridge_mono_class_get_parent not implemented\n");
 }
 
@@ -361,11 +361,11 @@ xamarin_bridge_mono_class_is_subclass_of (MonoClass * klass, MonoClass * klassc,
 	klass = xamarin_find_mono_class (klass->gchandle, klass->name_space, klass->name);
 	klassc = xamarin_find_mono_class (klassc->gchandle, klassc->name_space, klassc->name);
 
-	fprintf (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s = %p, %p = %s = %p, %i)\n", klass, klass ? klass->fullname : "NULL", klass->gchandle, klassc, klassc ? klassc->fullname : "NULL", klassc->gchandle, check_interfaces);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s = %p, %p = %s = %p, %i)\n", klass, klass ? klass->fullname : "NULL", klass->gchandle, klassc, klassc ? klassc->fullname : "NULL", klassc->gchandle, check_interfaces);
 
 	bool rv = xamarin_bridge_is_subclass_of (klass->gchandle, klassc->gchandle, check_interfaces);
 
-	fprintf (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s, %p = %s, %i) => %i\n", klass, klass->fullname, klassc, klassc->fullname, check_interfaces, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_subclass_of (%p = %s, %p = %s, %i) => %i\n", klass, klass->fullname, klassc, klassc->fullname, check_interfaces, rv);
 
 	return rv;
 }
@@ -374,7 +374,7 @@ MONO_API mono_bool
 xamarin_bridge_mono_class_is_valuetype (MonoClass * klass)
 {
 	bool rv = xamarin_bridge_is_valuetype (klass->gchandle);
-	fprintf (stderr, "xamarin_bridge_mono_class_is_valuetype (%p = %s) => %i\n", klass, klass->fullname, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_valuetype (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
 
@@ -382,7 +382,7 @@ MONO_API mono_bool
 xamarin_bridge_mono_class_is_enum (MonoClass * klass)
 {
 	bool rv = xamarin_bridge_is_enum (klass->gchandle);
-	fprintf (stderr, "xamarin_bridge_mono_class_is_enum (%p = %s) => %i\n", klass, klass->fullname, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_enum (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
 
@@ -391,7 +391,7 @@ xamarin_bridge_mono_class_enum_basetype (MonoClass * klass)
 {
 	GCHandle handle = xamarin_bridge_get_enum_basetype (klass->gchandle);
 	MonoType *rv = xamarin_create_mono_type (NULL, handle);
-	fprintf (stderr, "xamarin_bridge_mono_class_enum_basetype (%p = %s) => %p = %s\n", klass, klass->fullname, rv, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_enum_basetype (%p = %s) => %p = %s\n", klass, klass->fullname, rv, rv->name);
 	return rv;
 }
 
@@ -403,7 +403,7 @@ xamarin_bridge_mono_class_value_size (MonoClass * klass, uint32_t * align)
 
 	int32_t rv = xamarin_bridge_sizeof (klass->gchandle);
 
-	fprintf (stderr, "xamarin_bridge_mono_class_value_size (%p = %s, %p) => %i\n", klass, klass->fullname, align, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_value_size (%p = %s, %p) => %i\n", klass, klass->fullname, align, rv);
 
 	return rv;
 }
@@ -412,7 +412,7 @@ MONO_API MonoType *
 xamarin_bridge_mono_class_get_type (MonoClass * klass)
 {
 	MonoType *rv = xamarin_create_mono_type (NULL, klass->gchandle);
-	fprintf (stderr, "xamarin_bridge_mono_class_get_type (%p) => %p = %p\n", klass, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_type (%p) => %p = %p\n", klass, rv, rv->gchandle);
 	return rv;
 }
 
@@ -423,7 +423,7 @@ xamarin_bridge_mono_class_is_nullable (MonoClass * klass)
 	bool rv = xamarin_bridge_is_nullable (klass->gchandle, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_bridge_is_nullable threw an exception\n");
-	fprintf (stderr, "xamarin_bridge_mono_class_is_nullable (%p = %s) => %i\n", klass, klass->fullname, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_nullable (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
 
@@ -432,7 +432,7 @@ xamarin_bridge_mono_class_get_nullable_param (MonoClass * klass)
 {
 	GCHandle gchandle = xamarin_bridge_get_nullable_element_type (klass->gchandle);
 	MonoClass *rv = xamarin_find_mono_class (gchandle, NULL, NULL);
-	fprintf (stderr, "xamarin_bridge_mono_class_get_nullable_param (%p) => %p = %s = %p\n", klass, rv, rv->fullname, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_nullable_param (%p) => %p = %s = %p\n", klass, rv, rv->fullname, rv->gchandle);
 	return rv;
 }
 
@@ -440,7 +440,7 @@ MONO_API char *
 xamarin_bridge_mono_method_full_name (MonoMethod * method, mono_bool signature)
 {
 	char *rv = strdup (method->name);
-	fprintf (stderr, "xamarin_bridge_mono_method_full_name (%p, %i) => %s\n", method, signature, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_full_name (%p, %i) => %s\n", method, signature, rv);
 	return rv;
 
 }
@@ -452,7 +452,7 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 {
 	xamarin_load_coreclr ();
 
-	fprintf (stderr, "xamarin_bridge_mono_runtime_invoke (%p, %p, %p, %p) => %s.%s\n", method, obj, params, exc, method->klass->fullname, method->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_runtime_invoke (%p, %p, %p, %p) => %s.%s\n", method, obj, params, exc, method->klass->fullname, method->name);
 
 	if (!strcmp (method->klass->fullname, "ObjCRuntime.Runtime") && !strcmp (method->name, "Initialize")) {
 		void *del = NULL;
@@ -478,14 +478,14 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 MONO_API uint32_t
 xamarin_bridge_mono_gchandle_new (MonoObject * obj, mono_bool pinned)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gchandle_new (%p, %i) => assert\n", obj, pinned);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_new (%p, %i) => assert\n", obj, pinned);
 	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_new not implemented\n");
 }
 
 MONO_API MonoObject *
 xamarin_bridge_mono_gchandle_get_target (uint32_t gchandle)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gchandle_get_target (%u) => assert\n", gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_get_target (%u) => assert\n", gchandle);
 
 	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_get_target not implemented\n");
 }
@@ -493,27 +493,27 @@ xamarin_bridge_mono_gchandle_get_target (uint32_t gchandle)
 MONO_API void
 xamarin_bridge_mono_gchandle_free (uint32_t gchandle)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gchandle_free (%u) => assert\n", gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_free (%u) => assert\n", gchandle);
 	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_free not implemented\n");
 }
 
 MONO_API uint32_t
 xamarin_bridge_mono_gchandle_new_weakref (MonoObject * obj, mono_bool track_resurrection)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gchandle_new_weakref (%p, %i) => assert\n", obj, track_resurrection);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_new_weakref (%p, %i) => assert\n", obj, track_resurrection);
 	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_new_weakref not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_raise_exception (MonoException * ex)
 {
-	fprintf (stderr, "xamarin_bridge_mono_raise_exception (%p)\n", ex);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_raise_exception (%p)\n", ex);
 
 	// print out the exception
 	char * str = xamarin_bridge_tostring (ex->gchandle);
-	fprintf (stderr, "--------------------------------------------------\n");
-	fprintf (stderr, "Throwing managed exception through native code: %s\n", str);
-	fprintf (stderr, "--------------------------------------------------\n");
+	LOG_CORECLR (stderr, "--------------------------------------------------\n");
+	LOG_CORECLR (stderr, "Throwing managed exception through native code: %s\n", str);
+	LOG_CORECLR (stderr, "--------------------------------------------------\n");
 	mono_free (str);
 
 	// throw the exception
@@ -534,7 +534,7 @@ MONO_API MonoString *
 xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text)
 {
 	MonoString *rv = xamarin_bridge_new_string (text);
-	fprintf (stderr, "xamarin_bridge_mono_string_new (%p, %s) => %p = %p\n", domain, text, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_string_new (%p, %s) => %p = %p\n", domain, text, rv, rv->gchandle);
 	return rv;
 }
 
@@ -547,7 +547,7 @@ xamarin_bridge_mono_array_new (MonoDomain * domain, MonoClass * eclass, uintptr_
 	rv->gchandle = handle;
 	rv->length = (uint64_t) n;
 	rv->object_kind = MonoObjectType_MonoArray;
-	fprintf (stderr, "xamarin_bridge_mono_array_new (%p, %p, %" PRIdPTR ") => %p = %p\n", domain, eclass, n, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_array_new (%p, %p, %" PRIdPTR ") => %p = %p\n", domain, eclass, n, rv, rv->gchandle);
 	return rv;
 }
 
@@ -559,7 +559,7 @@ xamarin_bridge_mono_object_unbox (MonoObject * obj)
 	}
 
 	void *rv = obj->struct_value;
-	fprintf (stderr, "xamarin_bridge_mono_object_unbox (%p) => %p => %p\n", obj, rv, rv != NULL ? *(void **) rv : NULL);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_unbox (%p) => %p => %p\n", obj, rv, rv != NULL ? *(void **) rv : NULL);
 	return rv;
 }
 
@@ -575,7 +575,7 @@ xamarin_bridge_mono_string_to_utf8 (MonoString * string_obj)
 		rv = xamarin_bridge_string_to_utf8 (string_obj->gchandle);
 
 
-	fprintf (stderr, "xamarin_bridge_mono_string_to_utf8 (%p = %p) => %s\n", string_obj, string_obj->gchandle, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_string_to_utf8 (%p = %p) => %s\n", string_obj, string_obj->gchandle, rv);
 
 	return rv;
 }
@@ -583,7 +583,7 @@ xamarin_bridge_mono_string_to_utf8 (MonoString * string_obj)
 MONO_API MonoObject *
 xamarin_bridge_mono_object_new (MonoDomain * domain, MonoClass * klass)
 {
-	fprintf (stderr, "xamarin_bridge_mono_object_new (%p, %p) => assert\n", domain, klass);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_new (%p, %p) => assert\n", domain, klass);
 
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
 	GCHandle rv = xamarin_bridge_create_object (klass->gchandle, &exception_gchandle);
@@ -597,7 +597,7 @@ MONO_API uintptr_t
 xamarin_bridge_mono_array_length (MonoArray * array)
 {
 	uintptr_t rv = (uintptr_t) xamarin_bridge_get_array_length (array->gchandle);
-	fprintf (stderr, "xamarin_bridge_mono_array_length (%p = %p) => %llu\n", array, array->gchandle, (uint64_t) rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_array_length (%p = %p) => %llu\n", array, array->gchandle, (uint64_t) rv);
 	return rv;
 }
 
@@ -609,7 +609,7 @@ xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass)
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_bridge_mono_object_isinst threw an exception\n");
 
-	fprintf (stderr, "xamarin_bridge_mono_object_isinst (%p => %s, %p => %s) => %i\n", obj, obj->type_name, klass, klass->fullname, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p => %s, %p => %s) => %i\n", obj, obj->type_name, klass, klass->fullname, rv);
 	return rv ? obj : NULL;
 }
 
@@ -620,7 +620,7 @@ xamarin_bridge_mono_object_get_class (MonoObject * obj)
 
 	MonoClass *rv = xamarin_find_mono_class (type_gchandle);
 
-	fprintf (stderr, "xamarin_bridge_mono_object_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
 
 	return rv;
 }
@@ -628,96 +628,96 @@ xamarin_bridge_mono_object_get_class (MonoObject * obj)
 MONO_API MonoMethod *
 xamarin_bridge_mono_object_get_virtual_method (MonoObject * obj, MonoMethod * method)
 {
-	fprintf (stderr, "xamarin_bridge_mono_object_get_virtual_method (%p, %p) => assert\n", obj, method);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_get_virtual_method (%p, %p) => assert\n", obj, method);
 	xamarin_assertion_message ("xamarin_bridge_mono_object_get_virtual_method not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, void * value)
 {
-	fprintf (stderr, "xamarin_bridge_mono_field_get_value (%p, %p, %p) => assert\n", obj, field, value);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_field_get_value (%p, %p, %p) => assert\n", obj, field, value);
 	xamarin_assertion_message ("xamarin_bridge_mono_field_get_value not implemented\n");
 }
 
 MONO_API MonoObject *
 xamarin_bridge_mono_value_box (MonoDomain * domain, MonoClass * klass, void * val)
 {
-	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p)\n", domain, klass, klass->fullname, val);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p)\n", domain, klass, klass->fullname, val);
 	GCHandle handle = xamarin_bridge_box (klass->gchandle, val);
 	MonoObject *rv = xamarin_gchandle_get_target (handle);
-	fprintf (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p = %s\n", domain, klass, klass->fullname, val, rv, rv->gchandle, rv->type_name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p = %s\n", domain, klass, klass->fullname, val, rv, rv->gchandle, rv->type_name);
 	return rv;
 }
 
 MONO_API void
 xamarin_bridge_mono_gc_wbarrier_set_arrayref (MonoArray * arr, void * slot_ptr, MonoObject * value)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_wbarrier_set_arrayref (%p, %p, %p) => assert\n", arr, slot_ptr, value);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_wbarrier_set_arrayref (%p, %p, %p) => assert\n", arr, slot_ptr, value);
 	xamarin_assertion_message ("xamarin_bridge_mono_gc_wbarrier_set_arrayref not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_profiler_install (MonoProfiler * prof, MonoProfileFunc shutdown_callback)
 {
-	fprintf (stderr, "xamarin_bridge_mono_profiler_install (%p, %p) => IGNORE\n", prof, shutdown_callback);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_profiler_install (%p, %p) => IGNORE\n", prof, shutdown_callback);
 }
 
 MONO_API void
 xamarin_bridge_mono_profiler_install_thread (MonoProfileThreadFunc start, MonoProfileThreadFunc end)
 {
-	fprintf (stderr, "xamarin_bridge_mono_profiler_install_thread (%p, %p) => IGNORE\n", start, end);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_profiler_install_thread (%p, %p) => IGNORE\n", start, end);
 }
 
 MONO_API void
 xamarin_bridge_mono_profiler_install_gc (MonoProfileGCFunc callback, MonoProfileGCResizeFunc heap_resize_callback)
 {
-	fprintf (stderr, "xamarin_bridge_mono_profiler_install_gc (%p, %p) => IGNORE\n", callback, heap_resize_callback);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_profiler_install_gc (%p, %p) => IGNORE\n", callback, heap_resize_callback);
 }
 
 MONO_API void
 xamarin_bridge_mono_profiler_load (const char * desc)
 {
-	fprintf (stderr, "xamarin_bridge_mono_profiler_load (%s) => IGNORE\n", desc);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_profiler_load (%s) => IGNORE\n", desc);
 }
 
 MONO_API mono_bool
 xamarin_bridge_mono_thread_is_foreign (MonoThread * thread)
 {
-	fprintf (stderr, "xamarin_bridge_mono_thread_is_foreign (%p) => assert\n", thread);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_thread_is_foreign (%p) => assert\n", thread);
 	xamarin_assertion_message ("xamarin_bridge_mono_thread_is_foreign not implemented\n");
 }
 
 MONO_API MonoThread * 
 xamarin_bridge_mono_thread_current (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_thread_current () => assert\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_thread_current () => assert\n");
 	xamarin_assertion_message ("xamarin_bridge_mono_thread_current not implemented\n");
 }
 
 MONO_API MonoThread *
 xamarin_bridge_mono_thread_attach (MonoDomain * domain)
 {
-	fprintf (stderr, "xamarin_bridge_mono_thread_attach (%p) => assert\n", domain);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_thread_attach (%p) => assert\n", domain);
 	xamarin_assertion_message ("xamarin_bridge_mono_thread_attach not implemented\n");
 }
 
 MONO_API mono_bool
 xamarin_bridge_mono_thread_detach_if_exiting (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_thread_detach_if_exiting () => IGNORE\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_thread_detach_if_exiting () => IGNORE\n");
 	return false;
 }
 
 MONO_API void
 xamarin_bridge_mono_runtime_set_pending_exception (MonoException * exc, mono_bool overwrite)
 {
-	fprintf (stderr, "xamarin_bridge_mono_runtime_set_pending_exception (%p, %i) => IGNORE NEEDS TO FIX\n", exc, overwrite);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_runtime_set_pending_exception (%p, %i) => IGNORE NEEDS TO FIX\n", exc, overwrite);
 }
 
 MONO_API void
 xamarin_bridge_mono_set_assemblies_path (const char * path)
 {
-	fprintf (stderr, "xamarin_bridge_mono_set_assemblies_path (%s) => IGNORE\n", path);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_set_assemblies_path (%s) => IGNORE\n", path);
 }
 
 MONO_API MonoAssembly *
@@ -726,7 +726,7 @@ xamarin_bridge_mono_assembly_open (const char * filename, MonoImageOpenStatus * 
 	MonoAssembly *rv = (MonoAssembly *) calloc (1, sizeof (MonoAssembly));
 	rv->name = strdup (filename);
 	rv->image = (MonoImage *) calloc (1, sizeof (MonoImage));
-	fprintf (stderr, "xamarin_bridge_mono_assembly_open (%s, %p) => %s\n", filename, status, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_open (%s, %p) => %s\n", filename, status, rv->name);
 	return rv;
 }
 
@@ -734,86 +734,86 @@ MONO_API MonoImage *
 xamarin_bridge_mono_assembly_get_image (MonoAssembly * assembly)
 {
 	MonoImage *rv = assembly->image;
-	fprintf (stderr, "xamarin_bridge_mono_assembly_get_image (%p) => %p\n", assembly, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_get_image (%p) => %p\n", assembly, rv);
 	return rv;
 }
 
 MONO_API MonoAssemblyName *
 xamarin_bridge_mono_assembly_name_new (const char * name)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_name_new (%s) => assert\n", name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_name_new (%s) => assert\n", name);
 	xamarin_assertion_message ("xamarin_bridge_mono_assembly_name_new not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_assembly_name_free (MonoAssemblyName * aname)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_name_free (%p) => IGNORE\n", aname);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_name_free (%p) => IGNORE\n", aname);
 }
 
 MONO_API MonoAssembly *
 xamarin_bridge_mono_assembly_loaded (MonoAssemblyName * aname)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_loaded (%p) => assert\n", aname);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_loaded (%p) => assert\n", aname);
 	xamarin_assertion_message ("xamarin_bridge_mono_assembly_loaded not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_register_machine_config (const char * config_xml)
 {
-	fprintf (stderr, "xamarin_bridge_mono_register_machine_config (%s) => IGNORE\n", config_xml);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_register_machine_config (%s) => IGNORE\n", config_xml);
 }
 
 MONO_API void
 xamarin_bridge_mono_set_dirs (const char * assembly_dir, const char * config_dir)
 {
-	fprintf (stderr, "xamarin_bridge_mono_set_dirs (%s, %s) => IGNORE\n", assembly_dir, config_dir);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_set_dirs (%s, %s) => IGNORE\n", assembly_dir, config_dir);
 }
 
 MONO_API const char *
 xamarin_bridge_mono_assembly_name_get_name (MonoAssemblyName * aname)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_name_get_name (%p) => assert\n", aname);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_name_get_name (%p) => assert\n", aname);
 	xamarin_assertion_message ("xamarin_bridge_mono_assembly_name_get_name not implemented\n");
 }
 
 MONO_API const char *
 xamarin_bridge_mono_assembly_name_get_culture (MonoAssemblyName * aname)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_name_get_culture (%p) => assert\n", aname);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_name_get_culture (%p) => assert\n", aname);
 	xamarin_assertion_message ("xamarin_bridge_mono_assembly_name_get_culture not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_install_assembly_preload_hook (MonoAssemblyPreLoadFunc func, void * user_data)
 {
-	fprintf (stderr, "xamarin_bridge_mono_install_assembly_preload_hook (%p, %p) => IGNORE\n", func, user_data);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_install_assembly_preload_hook (%p, %p) => IGNORE\n", func, user_data);
 }
 
 MONO_API MonoAssemblyName *
 xamarin_bridge_mono_assembly_get_name (MonoAssembly * assembly)
 {
-	fprintf (stderr, "xamarin_bridge_mono_assembly_get_name (%p) => assert\n", assembly);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_get_name (%p) => assert\n", assembly);
 	xamarin_assertion_message ("xamarin_bridge_mono_assembly_get_name not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_add_internal_call (const char * name, const void * method)
 {
-	fprintf (stderr, "xamarin_bridge_mono_add_internal_call (%s, %p) => IGNORE\n", name, method);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_add_internal_call (%s, %p) => IGNORE\n", name, method);
 }
 
 MONO_API void
 xamarin_bridge_mono_dangerous_add_raw_internal_call (const char * name, const void * method)
 {
-	fprintf (stderr, "xamarin_bridge_mono_dangerous_add_raw_internal_call (%s, %s) => IGNORE\n", name, method);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_dangerous_add_raw_internal_call (%s, %s) => IGNORE\n", name, method);
 }
 
 MONO_API MonoMethodSignature *
 xamarin_bridge_mono_method_signature (MonoMethod * method)
 {
 	MonoMethodSignature *rv = (MonoMethodSignature *) calloc (1, sizeof (MonoMethodSignature));
-	fprintf (stderr, "xamarin_bridge_mono_method_signature (%p) => %p\n", method, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_signature (%p) => %p\n", method, rv);
 	rv->method = method;
 	rv->parameters = (struct __MethodParameter *) xamarin_bridge_method_get_signature (method->gchandle, &rv->parameter_count);
 	return rv;
@@ -827,7 +827,7 @@ xamarin_bridge_mono_method_get_class (MonoMethod * method)
 		method->klass = xamarin_find_mono_class (declaring_type_gchandle);
 	}
 
-	fprintf (stderr, "xamarin_bridge_mono_method_get_class (%p) => %p = %s\n", method, method->klass->gchandle, method->klass->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_get_class (%p) => %p = %s\n", method, method->klass->gchandle, method->klass->name);
 
 	return method->klass;
 }
@@ -835,13 +835,13 @@ xamarin_bridge_mono_method_get_class (MonoMethod * method)
 MONO_API void
 xamarin_bridge_mono_dllmap_insert (MonoImage * assembly, const char * dll, const char * func, const char * tdll, const char * tfunc)
 {
-	fprintf (stderr, "xamarin_bridge_mono_dllmap_insert (%p, %p, %p, %p, %p) => IGNORE\n", assembly, dll, func, tdll, tfunc);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_dllmap_insert (%p, %p, %p, %p, %p) => IGNORE\n", assembly, dll, func, tdll, tfunc);
 }
 
 MONO_API MonoDomain *
 xamarin_bridge_mono_domain_get (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_domain_get () => IGNORE\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_domain_get () => IGNORE\n");
 	return NULL;
 }
 
@@ -849,7 +849,7 @@ MONO_API MonoClass *
 xamarin_bridge_mono_get_intptr_class (void)
 {
 	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "IntPtr");
-	fprintf (stderr, "xamarin_bridge_mono_get_intptr_class () => %p = %s\n", rv, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_intptr_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
 
@@ -857,14 +857,14 @@ MONO_API MonoClass *
 xamarin_bridge_mono_get_string_class (void)
 {
 	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "String");
-	fprintf (stderr, "xamarin_bridge_mono_get_string_class () => %p = %s\n", rv, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_string_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
 
 MONO_API MonoImage *
 xamarin_bridge_mono_get_corlib (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_get_corlib () => IGNORE (NULL)\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_corlib () => IGNORE (NULL)\n");
 	return NULL;
 }
 
@@ -872,7 +872,7 @@ MONO_API MonoClass *
 xamarin_bridge_mono_get_array_class (void)
 {
 	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "Array");
-	fprintf (stderr, "xamarin_bridge_mono_get_array_class () => %p = %s\n", rv, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_array_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
 
@@ -880,21 +880,21 @@ MONO_API MonoClass *
 xamarin_bridge_mono_get_exception_class (void)
 {
 	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "Exception");
-	fprintf (stderr, "xamarin_bridge_mono_get_exception_class () => %p = %s\n", rv, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_exception_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
 
 MONO_API MonoDomain *
 xamarin_bridge_mono_get_root_domain (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_get_root_domain () => assert\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_root_domain () => assert\n");
 	xamarin_assertion_message ("xamarin_bridge_mono_get_root_domain not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_domain_set_config (MonoDomain * domain, const char * base_dir, const char * config_file_name)
 {
-	fprintf (stderr, "xamarin_bridge_mono_domain_set_config (%p, %s, %s) => assert\n", domain, base_dir, config_file_name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_domain_set_config (%p, %s, %s) => assert\n", domain, base_dir, config_file_name);
 	xamarin_assertion_message ("xamarin_bridge_mono_domain_set_config not implemented\n");
 }
 
@@ -909,7 +909,7 @@ xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * ass
 	rv->object_kind = MonoObjectType_MonoReflectionAssembly;
 	rv->gchandle = xamarin_find_assembly (assembly->name);
 	assembly->obj = rv;
-	fprintf (stderr, "xamarin_bridge_mono_assembly_get_object (%p, %p = %s) => %p = %p\n", domain, assembly, assembly->name, rv, (void *) rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_get_object (%p, %p = %s) => %p = %p\n", domain, assembly, assembly->name, rv, (void *) rv->gchandle);
 	return rv;
 }
 
@@ -921,7 +921,7 @@ xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method,
 	rv->object_kind = MonoObjectType_MonoReflectionMethod;
 	rv->gchandle = method->gchandle;
 
-	fprintf (stderr, "xamarin_bridge_mono_method_get_object (%p, %p, %p) => %p = %p\n", domain, method, refclass, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_get_object (%p, %p, %p) => %p = %p\n", domain, method, refclass, rv, rv->gchandle);
 
 	return rv;
 }
@@ -934,7 +934,7 @@ xamarin_bridge_mono_type_get_object (MonoDomain * domain, MonoType * type)
 	rv->gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
 	rv->object_kind = MonoObjectType_MonoReflectionType;
 
-	fprintf (stderr, "xamarin_bridge_mono_type_get_object (%p, %p = %s) => %p = %p\n", domain, type, type->name, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_type_get_object (%p, %p = %s) => %p = %p\n", domain, type, type->name, rv, rv->gchandle);
 
 	return rv;
 }
@@ -943,7 +943,7 @@ MONO_API MonoType *
 xamarin_bridge_mono_reflection_type_get_type (MonoReflectionType * reftype)
 {
 	MonoType *rv = reftype->type;
-	fprintf (stderr, "xamarin_bridge_mono_reflection_type_get_type (%p = %s) => %p = %s\n", reftype, reftype->name, rv, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_reflection_type_get_type (%p = %s) => %p = %s\n", reftype, reftype->name, rv, rv->name);
 	return rv;
 }
 
@@ -952,13 +952,13 @@ xamarin_bridge_mono_signature_get_params (MonoMethodSignature * sig, void ** ite
 {
 	int* p = (int *) iter;
 	if (*p >= sig->parameter_count) {
-		fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => DONE\n", sig, sig->method->name, iter, *p);
+		LOG_CORECLR (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => DONE\n", sig, sig->method->name, iter, *p);
 		return NULL;
 	}
 
 	MonoType *rv = xamarin_create_mono_type (sig->parameters [*p].type_name, sig->parameters [*p].type_gchandle);
 
-	fprintf (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => %s %p NEXT\n", sig, sig->method->name, iter, *p, rv->name, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_signature_get_params (%p => %s, %p => %i) => %s %p NEXT\n", sig, sig->method->name, iter, *p, rv->name, rv->gchandle);
 
 	*p = *p + 1;
 
@@ -970,7 +970,7 @@ xamarin_bridge_mono_type_is_byref (MonoType * type)
 {
 	bool rv = xamarin_bridge_is_byref (type->gchandle);
 
-	fprintf (stderr, "xamarin_bridge_mono_type_is_byref (%p = %s) => %i\n", type, type->name, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_type_is_byref (%p = %s) => %i\n", type, type->name, rv);
 
 	return rv;
 }
@@ -981,7 +981,7 @@ xamarin_bridge_mono_signature_get_return_type (MonoMethodSignature * sig)
 	GCHandle return_type_gchandle = xamarin_bridge_get_method_returntype (sig->method->gchandle);
 	MonoType *rv = xamarin_create_mono_type (NULL, return_type_gchandle);
 
-	fprintf (stderr, "xamarin_bridge_mono_signature_get_return_type (%p) => %p = %s\n", sig, rv->gchandle, rv->name);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_signature_get_return_type (%p) => %p = %s\n", sig, rv->gchandle, rv->name);
 
 	return rv;
 }
@@ -1022,27 +1022,27 @@ xamarin_bridge_mono_type_get_type (MonoType * type)
 	}
 
 	MonoTypeEnum rv =type->type;
-	fprintf (stderr, "xamarin_bridge_mono_type_get_type (%p = %s) => %i\n", type, type->fullname, (int) rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_type_get_type (%p = %s) => %i\n", type, type->fullname, (int) rv);
 	return rv;
 }
 
 MONO_API mono_bool
 xamarin_bridge_mono_is_debugger_attached (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_is_debugger_attached () => IGNORE\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_is_debugger_attached () => IGNORE\n");
 	return false;
 }
 
 MONO_API void
 xamarin_bridge_mono_config_parse_memory (const char * buffer)
 {
-	fprintf (stderr, "xamarin_bridge_mono_config_parse_memory (%s) => IGNORE\n", buffer);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_config_parse_memory (%s) => IGNORE\n", buffer);
 }
 
 MONO_API int
 xamarin_bridge_mono_gc_max_generation (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_max_generation () => 2\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_max_generation () => 2\n");
 	return 2;
 }
 
@@ -1054,7 +1054,7 @@ xamarin_bridge_mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_e
 	rv = (MonoGHashTable *) calloc (1, sizeof (MonoGHashTable));
 	rv->gchandle = xamarin_bridge_mono_hash_table_create ((void *) hash_func, (void *) key_equal_func, (int) type);
 
-	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_new_type (%p, %p, %u) => %p = %p\n", hash_func, key_equal_func, type, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_new_type (%p, %p, %u) => %p = %p\n", hash_func, key_equal_func, type, rv, rv->gchandle);
 
 	return rv;
 }
@@ -1064,7 +1064,7 @@ xamarin_bridge_mono_g_hash_table_lookup (MonoGHashTable * hash, gconstpointer ke
 {
 	GCHandle handle = xamarin_bridge_mono_hash_table_lookup (hash->gchandle, (void *) key);
 	MonoObject *rv = xamarin_gchandle_get_target (handle);
-	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_lookup (%p = %p, %p) => %p => %p\n", hash, hash->gchandle, key, handle, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_lookup (%p = %p, %p) => %p => %p\n", hash, hash->gchandle, key, handle, rv);
 	return rv;
 }
 
@@ -1072,28 +1072,28 @@ MONO_API void
 xamarin_bridge_mono_g_hash_table_insert (MonoGHashTable * hash, gpointer k, gpointer v)
 {
 	MonoObject *obj = (MonoObject *) v;
-	fprintf (stderr, "xamarin_bridge_mono_g_hash_table_insert (%p = %p, %p, %p = %p)\n", hash, hash->gchandle, k, v, obj->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_insert (%p = %p, %p, %p = %p)\n", hash, hash->gchandle, k, v, obj->gchandle);
 	xamarin_bridge_mono_hash_table_insert (hash->gchandle, k, obj->gchandle);
 }
 
 MONO_API MonoException *
 xamarin_bridge_mono_get_exception_execution_engine (const char * msg)
 {
-	fprintf (stderr, "xamarin_bridge_mono_get_exception_execution_engine (%s) => assert\n", msg);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_exception_execution_engine (%s) => assert\n", msg);
 	xamarin_assertion_message ("xamarin_bridge_mono_get_exception_execution_engine not implemented\n");
 }
 
 MONO_API MonoException *
 xamarin_bridge_mono_exception_from_name_msg (MonoImage * image, const char * name_space, const char * name, const char * msg)
 {
-	fprintf (stderr, "xamarin_bridge_mono_exception_from_name_msg (%p, %s, %s, %s) => assert\n", image, name_space, name, msg);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_exception_from_name_msg (%p, %s, %s, %s) => assert\n", image, name_space, name, msg);
 	xamarin_assertion_message ("xamarin_bridge_mono_exception_from_name_msg not implemented\n");
 }
 
 MONO_API MonoException *
 xamarin_bridge_mono_get_exception_out_of_memory (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_get_exception_out_of_memory () => assert\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_exception_out_of_memory () => assert\n");
 	xamarin_assertion_message ("xamarin_bridge_mono_get_exception_out_of_memory not implemented\n");
 }
 
@@ -1107,7 +1107,7 @@ xamarin_bridge_mono_gc_reference_queue_new (mono_reference_queue_callback callba
 	MonoReferenceQueue *rv = (MonoReferenceQueue *) calloc (1, sizeof (MonoReferenceQueue));
 	rv->gchandle = queue_handle;
 
-	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_new (%p) => %p = %p\n", callback, rv, rv->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_reference_queue_new (%p) => %p = %p\n", callback, rv, rv->gchandle);
 
 	return rv;
 }
@@ -1115,14 +1115,14 @@ xamarin_bridge_mono_gc_reference_queue_new (mono_reference_queue_callback callba
 MONO_API void
 xamarin_bridge_mono_gc_reference_queue_free (MonoReferenceQueue * queue)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_free (%p) => assert\n", queue);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_reference_queue_free (%p) => assert\n", queue);
 	xamarin_assertion_message ("xamarin_bridge_mono_gc_reference_queue_free not implemented\n");
 }
 
 MONO_API gboolean
 xamarin_bridge_mono_gc_reference_queue_add (MonoReferenceQueue * queue, MonoObject * obj, void * user_data)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
 
 	xamarin_bridge_gc_reference_queue_add (queue->gchandle, obj->gchandle, user_data);
 
@@ -1132,52 +1132,52 @@ xamarin_bridge_mono_gc_reference_queue_add (MonoReferenceQueue * queue, MonoObje
 MONO_API void
 xamarin_bridge_mono_gc_register_finalizer_callbacks (MonoGCFinalizerCallbacks * callbacks)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_register_finalizer_callbacks (%p) => IGNORE\n", callbacks);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_register_finalizer_callbacks (%p) => IGNORE\n", callbacks);
 }
 
 MONO_API void
 xamarin_bridge_mono_gc_toggleref_add (MonoObject * object, mono_bool strong_ref)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_toggleref_add (%p, %i) => assert\n", object, strong_ref);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_toggleref_add (%p, %i) => assert\n", object, strong_ref);
 	xamarin_assertion_message ("xamarin_bridge_mono_gc_toggleref_add not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_gc_toggleref_register_callback (MonoToggleRefCallback process_toggleref)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_toggleref_register_callback (%p) => IGNORE\n", process_toggleref);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_toggleref_register_callback (%p) => IGNORE\n", process_toggleref);
 }
 
 MONO_API char *
 xamarin_bridge_mono_get_runtime_build_info (void)
 {
-	fprintf (stderr, "xamarin_bridge_mono_get_runtime_build_info () => assert\n");
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_runtime_build_info () => assert\n");
 	xamarin_assertion_message ("xamarin_bridge_mono_get_runtime_build_info not implemented\n");
 }
 
 MONO_API MonoDomain *
 xamarin_bridge_mono_jit_init_version (const char * root_domain_name, const char * runtime_version)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_init_version (%s, %s) => IGNORE\n", root_domain_name, runtime_version);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_init_version (%s, %s) => IGNORE\n", root_domain_name, runtime_version);
 	return NULL;
 }
 
 MONO_API MonoDomain *
 xamarin_bridge_mono_jit_init (const char * file)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_init (%s) => assert\n", file);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_init (%s) => assert\n", file);
 	xamarin_assertion_message ("xamarin_bridge_mono_jit_init not implemented\n");
 }
 
 MONO_API int
 xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
 
 	unsigned int exitCode = 0;
 	int rv = coreclr_execute_assembly (coreclr_handle, coreclr_domainId, argc > 0 ? argc - 1 : 0, argv + 1, assembly->name, &exitCode);
 
-	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
 
 	if (rv != 0)
 		xamarin_assertion_message ("xamarin_bridge_mono_jit_exec failed: %i\n", rv);
@@ -1188,167 +1188,167 @@ xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int 
 MONO_API void
 xamarin_bridge_mono_jit_parse_options (int argc, char** argv)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_parse_options (%i, %p) => assert\n", argc, argv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_parse_options (%i, %p) => assert\n", argc, argv);
 	xamarin_assertion_message ("xamarin_bridge_mono_jit_parse_options not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_jit_set_aot_mode (MonoAotMode mode)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_set_aot_mode (%i) => assert\n", mode);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_set_aot_mode (%i) => assert\n", mode);
 	xamarin_assertion_message ("xamarin_bridge_mono_jit_set_aot_mode not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_set_signal_chaining (mono_bool chain_signals)
 {
-	fprintf (stderr, "xamarin_bridge_mono_set_signal_chaining (%i) => IGNORE\n", chain_signals);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_set_signal_chaining (%i) => IGNORE\n", chain_signals);
 }
 
 MONO_API void
 xamarin_bridge_mono_set_crash_chaining (mono_bool chain_signals)
 {
-	fprintf (stderr, "xamarin_bridge_mono_set_crash_chaining (%i) => IGNORE\n", chain_signals);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_set_crash_chaining (%i) => IGNORE\n", chain_signals);
 }
 
 MONO_API void
 xamarin_bridge_mono_jit_set_trace_options (const char * option)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_set_trace_options (%s) => IGNORE\n", option);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_set_trace_options (%s) => IGNORE\n", option);
 }
 
 MONO_API void*
 xamarin_bridge_mono_jit_thread_attach (MonoDomain * domain)
 {
-	fprintf (stderr, "xamarin_bridge_mono_jit_thread_attach (%p) => IGNORE\n", domain);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_thread_attach (%p) => IGNORE\n", domain);
 	return NULL;
 }
 
 MONO_API gboolean
 xamarin_bridge_mono_exception_walk_trace (MonoException * exc, MonoExceptionFrameWalk func, gpointer user_data)
 {
-	fprintf (stderr, "xamarin_bridge_mono_exception_walk_trace (%p, %p, %p) => assert\n", exc, func, user_data);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_exception_walk_trace (%p, %p, %p) => assert\n", exc, func, user_data);
 	xamarin_assertion_message ("xamarin_bridge_mono_exception_walk_trace not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_install_unhandled_exception_hook (MonoUnhandledExceptionFunc func, gpointer user_data)
 {
-	fprintf (stderr, "%s (%p, %p) => IGNORE\n", __func__, func, user_data);
+	LOG_CORECLR (stderr, "%s (%p, %p) => IGNORE\n", __func__, func, user_data);
 }
 
 MONO_API int
 xamarin_bridge_mono_main (int argc, char ** argv)
 {
-	fprintf (stderr, "%s (%i, %p) => assert\n", __func__, argc, argv);
+	LOG_CORECLR (stderr, "%s (%i, %p) => assert\n", __func__, argc, argv);
 	xamarin_assertion_message ("xamarin_bridge_mono_main not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_install_load_aot_data_hook (MonoLoadAotDataFunc load_func, MonoFreeAotDataFunc free_func, gpointer user_data)
 {
-	fprintf (stderr, "%s (%p, %p, %p) => IGNORE\n", __func__, load_func, free_func, user_data);
+	LOG_CORECLR (stderr, "%s (%p, %p, %p) => IGNORE\n", __func__, load_func, free_func, user_data);
 }
 
 MONO_API void
 xamarin_bridge_mono_trace_set_log_handler (MonoLogCallback callback, void * user_data)
 {
-	fprintf (stderr, "%s (%p, %p) => IGNORE\n", __func__, callback, user_data);
+	LOG_CORECLR (stderr, "%s (%p, %p) => IGNORE\n", __func__, callback, user_data);
 }
 
 MONO_API void
 xamarin_bridge_mono_trace_set_print_handler (MonoPrintCallback callback)
 {
-	fprintf (stderr, "%s (%p) => IGNORE\n", __func__, callback);
+	LOG_CORECLR (stderr, "%s (%p) => IGNORE\n", __func__, callback);
 }
 
 MONO_API void
 xamarin_bridge_mono_trace_set_printerr_handler (MonoPrintCallback callback)
 {
-	fprintf (stderr, "%s (%p) => IGNORE\n", __func__, callback);
+	LOG_CORECLR (stderr, "%s (%p) => IGNORE\n", __func__, callback);
 }
 
 MONO_API void*
 xamarin_bridge_mono_threads_enter_gc_unsafe_region (void ** stackdata)
 {
-	fprintf (stderr, "%s (%p) => assert\n", __func__, stackdata);
+	LOG_CORECLR (stderr, "%s (%p) => assert\n", __func__, stackdata);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_enter_gc_unsafe_region not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_threads_exit_gc_unsafe_region (void * cookie, void ** stackdata)
 {
-	fprintf (stderr, "%s (%p, %p) => assert\n", __func__, cookie, stackdata);
+	LOG_CORECLR (stderr, "%s (%p, %p) => assert\n", __func__, cookie, stackdata);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_exit_gc_unsafe_region not implemented\n");
 }
 
 MONO_API void*
 xamarin_bridge_mono_threads_enter_gc_safe_region (void ** stackdata)
 {
-	fprintf (stderr, "%s (%p) => assert\n", __func__, stackdata);
+	LOG_CORECLR (stderr, "%s (%p) => assert\n", __func__, stackdata);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_enter_gc_safe_region not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_threads_exit_gc_safe_region (void * cookie, void ** stackdata)
 {
-	fprintf (stderr, "%s (%p, %p) => assert\n", __func__, cookie, stackdata);
+	LOG_CORECLR (stderr, "%s (%p, %p) => assert\n", __func__, cookie, stackdata);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_exit_gc_safe_region not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_threads_assert_gc_safe_region (void)
 {
-	fprintf (stderr, "%s () => assert\n", __func__);
+	LOG_CORECLR (stderr, "%s () => assert\n", __func__);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_assert_gc_safe_region not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_threads_assert_gc_unsafe_region (void)
 {
-	fprintf (stderr, "%s () => assert\n", __func__);
+	LOG_CORECLR (stderr, "%s () => assert\n", __func__);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_assert_gc_unsafe_region not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_threads_assert_gc_starting_region (void)
 {
-	fprintf (stderr, "%s () => assert\n", __func__);
+	LOG_CORECLR (stderr, "%s () => assert\n", __func__);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_assert_gc_starting_region not implemented\n");
 }
 
 MONO_API void*
 xamarin_bridge_mono_thread_info_current_unchecked (void)
 {
-	fprintf (stderr, "%s () => assert\n", __func__);
+	LOG_CORECLR (stderr, "%s () => assert\n", __func__);
 	xamarin_assertion_message ("xamarin_bridge_mono_thread_info_current_unchecked not implemented\n");
 }
 
 MONO_API void *
 xamarin_bridge_mono_threads_attach_coop (MonoDomain * domain, gpointer* dummy)
 {
-	fprintf (stderr, "%s (%p, %p) => assert\n", __func__, domain, dummy);
+	LOG_CORECLR (stderr, "%s (%p, %p) => assert\n", __func__, domain, dummy);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_attach_coop not implemented\n");
 }
 
 MONO_API void *
 xamarin_bridge_mono_threads_detach_coop (gpointer cookie, gpointer* dummy)
 {
-	fprintf (stderr, "%s (%p, %p) => assert\n", __func__, cookie, dummy);
+	LOG_CORECLR (stderr, "%s (%p, %p) => assert\n", __func__, cookie, dummy);
 	xamarin_assertion_message ("xamarin_bridge_mono_threads_detach_coop not implemented\n");
 }
 
 MONO_API void
 xamarin_bridge_mono_install_ftnptr_eh_callback (MonoFtnPtrEHCallback callback)
 {
-	fprintf (stderr, "%s (%p) => IGNORE\n", __func__, callback);
+	LOG_CORECLR (stderr, "%s (%p) => IGNORE\n", __func__, callback);
 }
 
 void _MonoObject::Release ()
 {
 	if (atomic_fetch_sub (&reference_count, 1) == 0) {
 		// free (this); // allocated using Marshal.AllocHGlobal.
-		fprintf (stderr, "_MonoObject.Release (): would free %p\n", this);
+		LOG_CORECLR (stderr, "_MonoObject.Release (): would free %p\n", this);
 	}
 }
 

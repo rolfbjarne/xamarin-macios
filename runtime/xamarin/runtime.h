@@ -293,8 +293,8 @@ void			xamarin_mono_object_retain (MonoObject *mobj);
 void			xamarin_mono_object_release (MonoObject *mobj);
 #else
 // Nothing to do here.
-#define			xamarin_mono_object_retain (mobj) 
-#define			xamarin_mono_object_release (mobj) 
+#define			xamarin_mono_object_retain(x)
+#define			xamarin_mono_object_release(x)
 #endif
 
 /*

@@ -229,7 +229,7 @@ xamarin_get_nsobject_handle (MonoObject *obj)
 
 #if defined (CORECLR_RUNTIME)
 	id rv = xamarin_get_handle_for_inativeobject (obj);
-	fprintf (stderr, "xamarin_get_nsobject_handle (%p) => %p\n", obj, rv);
+	LOG_CORECLR (stderr, "xamarin_get_nsobject_handle (%p) => %p\n", obj, rv);
 	return rv;
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
@@ -244,11 +244,8 @@ xamarin_set_nsobject_handle (MonoObject *obj, id handle)
 	MONO_ASSERT_GC_UNSAFE;
 
 #if defined (CORECLR_RUNTIME)
-	fprintf (stderr, "xamarin_set_nsobject_handle (%p, %p)\n", obj, handle);
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	xamarin_set_handle_for_nsobject (obj->gchandle, handle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_set_handle_for_nsobject threw an exception");
+	// LOG_CORECLR (stderr, "xamarin_set_nsobject_handle (%p, %p)\n", obj, handle);
+	xamarin_set_handle_for_nsobject (obj->gchandle, handle);
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
 	mobj->handle  = handle;
@@ -262,11 +259,8 @@ xamarin_get_nsobject_flags (MonoObject *obj)
 	MONO_ASSERT_GC_UNSAFE;
 	
 #if defined (CORECLR_RUNTIME)
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	uint8_t rv = xamarin_get_flags_for_nsobject (obj->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_get_flags_for_nsobject threw an exception");
-	// fprintf (stderr, "xamarin_get_nsobject_flags (%p) => 0x%x\n", obj, rv);
+	uint8_t rv = xamarin_get_flags_for_nsobject (obj->gchandle);
+	// LOG_CORECLR (stderr, "xamarin_get_nsobject_flags (%p) => 0x%x\n", obj, rv);
 	return rv;
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
@@ -281,11 +275,8 @@ xamarin_set_nsobject_flags (MonoObject *obj, uint8_t flags)
 	MONO_ASSERT_GC_UNSAFE;
 	
 #if defined (CORECLR_RUNTIME)
-	//fprintf (stderr, "xamarin_set_nsobject_flags (%p, 0x%x)\n", obj, flags);
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	xamarin_set_flags_for_nsobject (obj->gchandle, flags, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_set_flags_for_nsobject threw an exception");
+	//LOG_CORECLRLOG_CORECLR (stderr, "xamarin_set_nsobject_flags (%p, 0x%x)\n", obj, flags);
+	xamarin_set_flags_for_nsobject (obj->gchandle, flags);
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
 	mobj->flags = flags;
@@ -2853,7 +2844,7 @@ xamarin_gchandle_free (GCHandle handle)
 	if (handle == INVALID_GCHANDLE)
 		return;
 #if defined (CORECLR_RUNTIME)
-	fprintf (stderr, "xamarin_gchandle_free (%p) => IGNORED\n", handle);
+	LOG_CORECLR (stderr, "xamarin_gchandle_free (%p) => IGNORED\n", handle);
 	return; // FIXME
 	xamarin_bridge_free_gchandle (handle);
 #else

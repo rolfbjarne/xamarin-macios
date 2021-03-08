@@ -3501,7 +3501,7 @@ namespace Registrar {
 						body_setup.AppendLine ("char *str{0} = NULL;", i);
 						copyback.AppendLine ("*p{0} = xamarin_string_to_nsstring (a{0}, false);", i);
 					} else {
-						setup_call_stack.AppendLine ("a{0} = xamarin_nsstring_to_string (NULL, *p{0});", i);
+						setup_call_stack.AppendLine ("a{0} = xamarin_nsstring_to_string (NULL, p{0});", i);
 						setup_call_stack.AppendLine ("arg_ptrs [{0}] = a{0};", i);
 					}
 					setup_return.AppendLine ("xamarin_mono_object_release (a{0});", i);

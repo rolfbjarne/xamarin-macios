@@ -45,11 +45,9 @@ build-mysingleview:
 run-mysingleview:
 	$(DOTNET6) build -t:Run MySingleView/*.csproj /p:_DeviceName=:v2:udid=03B4B310-6A00-4218-BA15-31312D6707DA /v:diag
 
-export XAMARIN_RUNTIME=CoreCLR
-
 LOGFILENAME=$(HOME)/test/monotouchtest-timings/$(shell date +%Y-%m-%d--%H:%M:%S).log
 
-build-monotouch-test-with-mono: $(TARGETS)
+build-monotouch-test: $(TARGETS)
 	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
 	cd $(TOP)/dotnet && git clean -xfd
 	cd $(TOP)/tests/monotouch-test/dotnet && git clean -xfd
@@ -58,11 +56,20 @@ build-monotouch-test-with-mono: $(TARGETS)
 	$(CP) -c NuGet.config global.json $(TOP)/tests/monotouch-test/dotnet/macOS
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
-	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS)
+	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME)
 	$(MAKE) run
 
+just-build:
+	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
+	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME)
+
+build-monotouch-test-with-mono: export XAMARIN_RUNTIME=MonoVM
+build-monotouch-test-with-mono: $(TARGETS)
+	$(MAKE) build-monotouch-test
+
+build-monotouch-test-with-coreclr: export XAMARIN_RUNTIME=CoreCLR
 build-monotouch-test-with-coreclr: $(TARGETS)
-	$(MAKE) build-monotouch-test-with-mono BUILD_PARAMETERS=/p:XamarinRuntime=CoreCLR
+	$(MAKE) build-monotouch-test
 
 run:
 	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."

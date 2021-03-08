@@ -516,7 +516,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_new_string",
+		new XDelegate ("MonoString *", "IntPtr", "xamarin_bridge_new_string",
 			"const char *", "IntPtr", "text"
 		) {
 			WrappedManagedFunction = "NewString",

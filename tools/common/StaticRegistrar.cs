@@ -3492,16 +3492,19 @@ namespace Registrar {
 					break;
 				case "System.String":
 					// This should always be an NSString and never char*
+					body_setup.AppendLine ("MonoString *a{0} = NULL;", i);
 					if (isRef) {
-						body_setup.AppendLine ("MonoString *a{0} = NULL;", i);
-						if (!isOut)
+						if (!isOut) {
 							setup_call_stack.AppendLine ("a{0} = xamarin_nsstring_to_string (NULL, *p{0});", i);
+						}
 						setup_call_stack.AppendLine ("arg_ptrs [{0}] = &a{0};", i);
 						body_setup.AppendLine ("char *str{0} = NULL;", i);
 						copyback.AppendLine ("*p{0} = xamarin_string_to_nsstring (a{0}, false);", i);
 					} else {
-						setup_call_stack.AppendLine ("arg_ptrs [{0}] = xamarin_nsstring_to_string (NULL, p{0});", i);
+						setup_call_stack.AppendLine ("a{0} = xamarin_nsstring_to_string (NULL, *p{0});", i);
+						setup_call_stack.AppendLine ("arg_ptrs [{0}] = a{0};", i);
 					}
+					setup_return.AppendLine ("xamarin_mono_object_release (a{0});", i);
 					break;
 				default:
 					if (isArray || isByRefArray) {
@@ -3929,7 +3932,7 @@ namespace Registrar {
 			body.AppendLine (copyback);
 			body.AppendLine (setup_return);
 			
-			if (trace )
+			if (trace)
 				body.AppendLine (nslog_end);
 
 			body.StringBuilder.AppendLine ("exception_handling:;");

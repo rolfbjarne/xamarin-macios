@@ -3620,12 +3620,11 @@ xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t
 	xamarin_assertion_message ("xamarin_bridge_mono_array_addr_with_size should not be called\n");
 }
 
+// Return value: a retained MonoString* which the caller must release.
 MONO_API MonoString *
 xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text)
 {
-	MonoString *rv = (MonoString *) calloc (1, sizeof (MonoString));
-	rv->value = strdup (text);
-	rv->gchandle = xamarin_bridge_new_string (text);
+	MonoString *rv = xamarin_bridge_new_string (text);
 	fprintf (stderr, "xamarin_bridge_mono_string_new (%p, %s) => %p = %p\n", domain, text, rv, rv->gchandle);
 	return rv;
 }
@@ -3655,10 +3654,13 @@ xamarin_bridge_mono_object_unbox (MonoObject * obj)
 	return rv;
 }
 
+// Return value: NULL, or allocated UTF8 string which the caller must free with xamarin_free.
 MONO_API char *
 xamarin_bridge_mono_string_to_utf8 (MonoString * string_obj)
 {
 	char * rv = NULL;
+
+	xamarin_assert (string_obj->object_kind == MonoObjectType_MonoString);
 
 	if (string_obj != NULL)
 		rv = xamarin_bridge_string_to_utf8 (string_obj->gchandle);

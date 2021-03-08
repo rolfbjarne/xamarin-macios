@@ -12,7 +12,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Threading;
 
 using Foundation;
 
@@ -26,6 +25,7 @@ namespace ObjCRuntime {
 			MonoReflectionAssembly,
 			MonoReflectionType,
 			MonoArray,
+			MonoString,
 		}
 
 		[StructLayout (LayoutKind.Sequential)]
@@ -101,58 +101,33 @@ namespace ObjCRuntime {
 			public int Type; /* MonoTypeEnum */
 		}
 
-
-		class MonoObjectWrapper {
-			public IntPtr /* MonoObject */ MonoObject;
-			public string Type;
-
-			public unsafe MonoObject* MonoObjectPtr { get { return (MonoObject*) MonoObject; } }
-
-			~MonoObjectWrapper ()
-			{
-				if (!Release ()) {
-					unsafe {
-						// This is not quite an error, but the MonoObject should be released by somebody else pretty soon, so it's indicative that someone forgot to release a MonoObject somewhere.
-						xamarin_log ($"MonoObjectWrapper.~MonoObjectWrapper () MonoObject is still alive - Type: {Type} ReferenceCount: {MonoObjectPtr->ReferenceCount}");
-					}
-				}
-			}
-
-
-			public unsafe bool Release ()
-			{
-				bool free = Interlocked.Decrement (ref MonoObjectPtr->ReferenceCount) == 0;
-
-				if (free) {
-					//	Marshal.FreeHGlobal ((IntPtr) MonoObject);
-					xamarin_log ($"MonoObjectWrapper.Release () Would free MonoObject with type: {Type}");
-					// TODO: free the GCHandle too, and anything else that might need releasing
-				}
-
-				return free;
-			}
+		// Comment out the attribute to get all printfs
+		[System.Diagnostics.Conditional ("UNDEFINED")]
+		static void log_coreclr (string message)
+		{
+			xamarin_log (message);
 		}
 
 		static IntPtr FindAssembly (IntPtr assembly_name)
 		{
 			var path = Marshal.PtrToStringAuto (assembly_name);
 			var name = Path.GetFileNameWithoutExtension (path);
-			Console.WriteLine ($"Runtime.FindAssembly (0x{assembly_name.ToString ("x")} = {name})");
+			log_coreclr ($"Runtime.FindAssembly (0x{assembly_name.ToString ("x")} = {name})");
 			foreach (var asm in AppDomain.CurrentDomain.GetAssemblies ()) {
-				Console.WriteLine ($"    Found in app domain: {asm.GetName ().Name}");
+				log_coreclr ($"    Found in app domain: {asm.GetName ().Name}");
 				if (asm.GetName ().Name == name) {
-					Console.WriteLine ($"        Match!");
+					log_coreclr ($"        Match!");
 					return GCHandle.ToIntPtr (GCHandle.Alloc (asm));
 				}
 			}
 
 			var loadedAssembly = Assembly.LoadFrom (path);
 			if (loadedAssembly != null) {
-				Console.WriteLine ($"    Loaded {loadedAssembly.GetName ().Name}");
+				log_coreclr ($"    Loaded {loadedAssembly.GetName ().Name}");
 				return GCHandle.ToIntPtr (GCHandle.Alloc (loadedAssembly));
 			}
 
-			Console.WriteLine ($"Found no assembly named {name}");
+			log_coreclr ($"Found no assembly named {name}");
 			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
 		}
 
@@ -164,7 +139,7 @@ namespace ObjCRuntime {
 				obj = GCHandle.FromIntPtr (gchandle).Target;
 			var rv = GCHandle.Alloc (obj, type);
 			var rvptr = GCHandle.ToIntPtr (rv);
-			//Console.WriteLine ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
+			// log_coreclr ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
 			return rvptr;
 		}
 
@@ -217,7 +192,7 @@ namespace ObjCRuntime {
 			else if (method is ConstructorInfo cinfo)
 				rv = cinfo.DeclaringType;
 
-			xamarin_log ($"Return type for {method}: {rv}");
+			log_coreclr ($"Return type for {method}: {rv}");
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
 		}
@@ -268,7 +243,7 @@ namespace ObjCRuntime {
 			var parameters = new object [methodParameters.Length];
 			var inputParameters = new object [methodParameters.Length];
 
-			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
+			log_coreclr ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")})");
 			unsafe {
 				IntPtr* nativeParams = (IntPtr*) native_parameters;
 				for (var i = 0; i < methodParameters.Length; i++) {
@@ -277,7 +252,7 @@ namespace ObjCRuntime {
 					var paramType = p.ParameterType;
 					if (paramType.IsByRef)
 						paramType = paramType.GetElementType ();
-					xamarin_log ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} IsByRef: {p.ParameterType.IsByRef} IsOut: {p.IsOut} IsClass: {paramType.IsClass} IsInterface: {paramType.IsInterface} NativeParameter: 0x{nativeParam.ToString ("x")}");
+					log_coreclr ($"    Argument #{i + 1}: Type = {p.ParameterType.FullName} IsByRef: {p.ParameterType.IsByRef} IsOut: {p.IsOut} IsClass: {paramType.IsClass} IsInterface: {paramType.IsInterface} NativeParameter: 0x{nativeParam.ToString ("x")}");
 				}
 			}
 
@@ -291,10 +266,10 @@ namespace ObjCRuntime {
 					var isByRef = paramType.IsByRef;
 					if (isByRef)
 						paramType = paramType.GetElementType ();
-					xamarin_log ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName} [...]");
+					log_coreclr ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName} [...]");
 
 					if (paramType == typeof (IntPtr)) {
-						xamarin_log ($"        IntPtr");
+						log_coreclr ($"        IntPtr");
 						if (isByRef) {
 							if (p.IsOut) {
 								parameters [i] = Marshal.AllocHGlobal (IntPtr.Size);
@@ -304,9 +279,9 @@ namespace ObjCRuntime {
 						} else {
 							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 						}
-						xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
+						log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
 					} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
-						xamarin_log ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
+						log_coreclr ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {
 							unsafe {
@@ -323,16 +298,16 @@ namespace ObjCRuntime {
 								parameters [i] = GCHandle.FromIntPtr (obj_gchandle).Target;
 						}
 						if (parameters [i] is bool[] arr) {
-							xamarin_log ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
+							log_coreclr ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
 						}
-						xamarin_log ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+						log_coreclr ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					} else if (paramType.IsValueType) {
-						xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut}");
+						log_coreclr ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut}");
 						object vt = null;
 						IntPtr ptr = nativeParam;
 						if (nativeParam != IntPtr.Zero) {
 							if (ptr != IntPtr.Zero) {
-								xamarin_log ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")} ParameterType: {paramType}");
+								log_coreclr ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} ptr: 0x{ptr.ToString ("x")} ParameterType: {paramType}");
 								var structType = paramType;
 								Type enumType = null;
 								if (IsNullable (structType))
@@ -347,9 +322,9 @@ namespace ObjCRuntime {
 							}
 						}
 						parameters [i] = vt;
-						xamarin_log ($"        IsValueType (ptr: 0x{ptr.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
+						log_coreclr ($"        IsValueType (ptr: 0x{ptr.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
 					} else {
-						xamarin_log ($"        Marshalling unknown: {p.ParameterType.FullName}");
+						log_coreclr ($"        Marshalling unknown: {p.ParameterType.FullName}");
 						anyUnknown = true;
 					}
 				}
@@ -361,7 +336,7 @@ namespace ObjCRuntime {
 				throw new NotImplementedException ($"Unknown method parameters!");
 			}
 
-			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) INVOKING");
+			log_coreclr ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method.DeclaringType.FullName}::{method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) INVOKING");
 
 			var rv = method.Invoke (instance, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance, null, parameters, null);
 
@@ -372,16 +347,16 @@ namespace ObjCRuntime {
 					continue;
 				byrefParameterCount++;
 
-				xamarin_log ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+				log_coreclr ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 
 				if (parameters [i] == inputParameters [i]) {
-					xamarin_log ($"        The argument didn't change, no marshalling required");
+					log_coreclr ($"        The argument didn't change, no marshalling required");
 					continue;
 				}
 
 				var parameterType = p.ParameterType.GetElementType ();
 				if (parameterType == typeof (IntPtr)) {
-					xamarin_log ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()}");
+					log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()}");
 					unsafe {
 						IntPtr** nativeParams = (IntPtr**) native_parameters;
 						IntPtr* nativeParam = nativeParams [i];
@@ -390,34 +365,34 @@ namespace ObjCRuntime {
 					}
 				} else if (parameterType.IsClass || parameterType.IsInterface || (parameterType.IsValueType && IsNullable (parameterType))) {
 					var ptr = GetMonoObject (parameters [i]);
-					xamarin_log ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					log_coreclr ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					unsafe {
 						IntPtr** nativeParams = (IntPtr**) native_parameters;
 						IntPtr* nativeParam = nativeParams [i];
-						xamarin_log ($"            nativeParam: 0x{((IntPtr) nativeParam).ToString ("x")}");
+						log_coreclr ($"            nativeParam: 0x{((IntPtr) nativeParam).ToString ("x")}");
 						if (nativeParam != null)
 							*nativeParam = ptr;
 					}
-					xamarin_log ($"        IsClass/IsInterface: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)} -> MonoObject: 0x{ptr.ToString ("x")}");
+					log_coreclr ($"        IsClass/IsInterface: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)} -> MonoObject: 0x{ptr.ToString ("x")}");
 				} else if (parameterType.IsValueType) {
-					xamarin_log ($"        IsValueType");
+					log_coreclr ($"        IsValueType");
 					IntPtr nativeParam;
 					unsafe {
 						IntPtr* nativeParams = (IntPtr*) native_parameters;
 						nativeParam = nativeParams [i];
 					}
 					if (nativeParam != IntPtr.Zero) {
-						xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}");
+						log_coreclr ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}");
 						StructureToPtr (parameters [i], nativeParam);
 					}
-					xamarin_log ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
+					log_coreclr ($"        IsValueType nativeParam: 0x{nativeParam.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
 				} else {
-					xamarin_log ($"        UNKNOWN BYREF PARAMETER TYPE: {p.ParameterType}");
+					log_coreclr ($"        UNKNOWN BYREF PARAMETER TYPE: {p.ParameterType}");
 					throw new NotImplementedException ($"Unknown byref parameter type: {p.ParameterType}");
 				}
 			}
 
-			xamarin_log ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) Ref parameters: {byrefParameterCount} Return value of type {rv?.GetType ()} {(rv is bool ? rv : null)}");
+			log_coreclr ($"InvokeMethod (0x{method_gchandle.ToString ("x")} = {method}, 0x{instance_gchandle.ToString ("x")} => {instance}, 0x{native_parameters.ToString ("x")}) Ref parameters: {byrefParameterCount} Return value of type {rv?.GetType ()} {(rv is bool ? rv : null)}");
 
 			if (rv == null)
 				return IntPtr.Zero;
@@ -507,7 +482,7 @@ namespace ObjCRuntime {
 				mobj.Object.TypeName = typename;
 				mobj.Method = CreateMonoMethod (handle, mb);
 				rv = MarshalStructure (mobj);
-				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else if (obj is Type) {
 				var mobj = new MonoReflectionType ();
 				mobj.Object.ObjectKind = MonoObjectType.MonoReflectionType;
@@ -515,7 +490,7 @@ namespace ObjCRuntime {
 				mobj.Object.TypeName = typename;
 				mobj.Type = CreateMonoType (handle);
 				rv = MarshalStructure (mobj);
-				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else if (obj is Array array) {
 				var mobj = new MonoArray ();
 				mobj.Object.ObjectKind = MonoObjectType.MonoArray;
@@ -523,14 +498,21 @@ namespace ObjCRuntime {
 				mobj.Object.TypeName = typename;
 				mobj.Length = (ulong) array.Length;
 				rv = MarshalStructure (mobj);
-				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+			} else if (obj is string str) {
+				var mobj = new MonoString ();
+				mobj.Object.ObjectKind = MonoObjectType.MonoString;
+				mobj.Object.GCHandle = handle;
+				mobj.Object.TypeName = typename;
+				rv = MarshalStructure (mobj);
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else {
 				var mobj = new MonoObject ();
 				mobj.GCHandle = handle;
 				mobj.TypeName = typename;
 				mobj.StructValue = WriteStructure (handle);
 				rv = MarshalStructure (mobj);
-				xamarin_log ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
 			}
 
 			unsafe {
@@ -550,7 +532,7 @@ namespace ObjCRuntime {
 		static IntPtr GetManagedType (IntPtr type_name)
 		{
 			var tn = Marshal.PtrToStringAuto (type_name);
-			Console.WriteLine ($"GetManagedType ({tn})");
+			log_coreclr ($"GetManagedType ({tn})");
 			var tp = Type.GetType (tn, true);
 			return GCHandle.ToIntPtr (GCHandle.Alloc (tp));
 		}
@@ -561,7 +543,7 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return IntPtr.Zero;
 			if (!obj.GetType ().IsValueType) {
-				//Console.WriteLine ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
+				// log_coreclr ($"StructureToPtr (0x{gchandle.ToString ("x")} = {obj?.GetType ()?.FullName}, <not a value type>)");
 				return IntPtr.Zero;
 			}
 
@@ -582,7 +564,7 @@ namespace ObjCRuntime {
 			for (var i = 0; i < l; i++)
 				sb.Append ($" 0x{Marshal.ReadByte (output, i).ToString ("x")}");
 			sb.AppendLine ();
-			xamarin_log (sb.ToString ());
+			log_coreclr (sb.ToString ());
 			return output;
 		}
 
@@ -595,7 +577,7 @@ namespace ObjCRuntime {
 			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
 			var rv = type.IsAssignableFrom (obj.GetType ());
 
-			xamarin_log ($"IsInstance ({obj.GetType ()}, {type})");
+			log_coreclr ($"IsInstance ({obj.GetType ()}, {type})");
 
 			return rv;
 		}
@@ -604,7 +586,7 @@ namespace ObjCRuntime {
 		{
 			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
 			var rv = typeof (MulticastDelegate).IsAssignableFrom (type);
-			xamarin_log ($"IsDelegate ({type.FullName}) => {rv}");
+			log_coreclr ($"IsDelegate ({type.FullName}) => {rv}");
 			return rv;
 		}
 
@@ -613,7 +595,7 @@ namespace ObjCRuntime {
 		{
 			var sb = new System.Text.StringBuilder ();
 
-			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")}, 0x{type2_gchandle.ToString ("x")}, {check_interfaces})");
+			log_coreclr ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")}, 0x{type2_gchandle.ToString ("x")}, {check_interfaces})");
 
 			if (type1_gchandle == IntPtr.Zero)
 				return false;
@@ -624,18 +606,18 @@ namespace ObjCRuntime {
 			var type1 = (Type) GCHandle.FromIntPtr (type1_gchandle).Target;
 			var type2 = (Type) GCHandle.FromIntPtr (type2_gchandle).Target;
 
-			xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
+			log_coreclr ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces})");
 
 			if (check_interfaces) {
 				if (type2.IsAssignableFrom (type1)) {
-					xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is assignable from type1");
+					log_coreclr ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is assignable from type1");
 					return true;
 				}
 			} else {
 				if (!type2.IsInterface) {
 					var baseClass = type1;
 					while (baseClass != null && baseClass != typeof (object)) {
-						xamarin_log ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is not an interface, checking base class {baseClass.FullName}");
+						log_coreclr ($"IsSubclassOf (0x{type1_gchandle.ToString ("x")} = {type1.FullName}, 0x{type2_gchandle.ToString ("x")} = {type2.FullName}, {check_interfaces}) => type2 is not an interface, checking base class {baseClass.FullName}");
 						if (baseClass == type2)
 							return true;
 						baseClass = baseClass.BaseType;
@@ -701,7 +683,7 @@ namespace ObjCRuntime {
 		{
 			var obj = GCHandle.FromIntPtr (gchandle).Target;
 			if (obj == null) {
-				xamarin_log ($"ObjectGetType (0x{gchandle.ToString ("x")}) => null object");
+				log_coreclr ($"ObjectGetType (0x{gchandle.ToString ("x")}) => null object");
 				return IntPtr.Zero;
 			}
 			return GCHandle.ToIntPtr (GCHandle.Alloc (obj.GetType ()));
@@ -765,7 +747,7 @@ namespace ObjCRuntime {
 			if (text == IntPtr.Zero)
 				return IntPtr.Zero;
 
-			return GCHandle.ToIntPtr (GCHandle.Alloc (Marshal.PtrToStringAuto (text)));
+			return GetMonoObject ((Marshal.PtrToStringAuto (text)));
 		}
 
 
@@ -786,7 +768,7 @@ namespace ObjCRuntime {
 
 			public void Insert (IntPtr key, GCHandle obj)
 			{
-				xamarin_log ($"MonoHashTable.Add (0x{key.ToString ("x")}, {obj} = {obj.Target})");
+				log_coreclr ($"MonoHashTable.Add (0x{key.ToString ("x")}, {obj} = {obj.Target})");
 				Table [key] = obj;
 			}
 
@@ -859,11 +841,11 @@ namespace ObjCRuntime {
 			var dataSize = elementSize * array.Length;
 			var rv = Marshal.AllocHGlobal (dataSize);
 
-			xamarin_log ($"GetArrayData (0x{gchandle.ToString ("x")}) Type: {array.GetType ()} Array Length: {array.Length} Element Size: {elementSize} rv: 0x{rv.ToString ("x")}");
+			log_coreclr ($"GetArrayData (0x{gchandle.ToString ("x")}) Type: {array.GetType ()} Array Length: {array.Length} Element Size: {elementSize} rv: 0x{rv.ToString ("x")}");
 
 			if (array.Length > 0) {
 				if (array is bool[] arr) {
-					xamarin_log ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
+					log_coreclr ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
 				}
 				var arrayType = array.GetType ().GetElementType ();
 				if (arrayType.IsEnum) {
@@ -874,7 +856,7 @@ namespace ObjCRuntime {
 					for (var i = 0; i < array.Length; i++)
 						integralArray.SetValue (Convert.ChangeType (array.GetValue (i), enumType), i);
 					array = integralArray;
-					xamarin_log ($" => converted to array of {enumType}");
+					log_coreclr ($" => converted to array of {enumType}");
 				}
 
 				var pinned = GCHandle.Alloc (array, GCHandleType.Pinned);
@@ -890,7 +872,7 @@ namespace ObjCRuntime {
 			for (var i = 0; i < Math.Min (16, dataSize); i++) {
 				sb.Append ($" 0x{Marshal.ReadByte (rv, i).ToString ("x")}");
 			}
-			xamarin_log ($"    => {sb.ToString ()}");
+			log_coreclr ($"    => {sb.ToString ()}");
 
 			return rv;
 		}
@@ -907,9 +889,9 @@ namespace ObjCRuntime {
 			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
 			array.SetValue (obj, index);
 			if (obj is bool)
-				xamarin_log ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj})");
+				log_coreclr ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj})");
 			else
-				xamarin_log ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj}) huh? {obj?.GetType ()}");
+				log_coreclr ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj}) huh? {obj?.GetType ()}");
 		}
 
 		static IntPtr GetArrayObjectValue (IntPtr gchandle, int index)
@@ -917,9 +899,9 @@ namespace ObjCRuntime {
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = array.GetValue (index);
 			if (obj is bool)
-				xamarin_log ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj}");
+				log_coreclr ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj}");
 			else
-				xamarin_log ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj} huh? {obj?.GetType ()}");
+				log_coreclr ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj} huh? {obj?.GetType ()}");
 			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
 		}
 
@@ -952,7 +934,7 @@ namespace ObjCRuntime {
 		static IntPtr Box (IntPtr gchandle, IntPtr value)
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
-			xamarin_log ($"Box ({type}, 0x{value.ToString ("x")})");
+			log_coreclr ($"Box ({type}, 0x{value.ToString ("x")})");
 			var structType = type;
 			Type enumType = null;
 
@@ -976,7 +958,7 @@ namespace ObjCRuntime {
 			}
 
 			if (boxed is bool)
-				xamarin_log ($"     bool boxed value: {boxed}");
+				log_coreclr ($"     bool boxed value: {boxed}");
 
 			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
 		}

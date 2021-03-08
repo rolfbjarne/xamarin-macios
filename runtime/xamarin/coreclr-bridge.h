@@ -16,6 +16,7 @@ enum MonoObjectType : int {
 	MonoObjectType_MonoReflectionAssembly,
 	MonoObjectType_MonoReflectionType,
 	MonoObjectType_MonoArray,
+	MonoObjectType_MonoString,
 };
 
 struct _MonoObject {

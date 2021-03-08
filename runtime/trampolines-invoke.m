@@ -12,6 +12,12 @@
 #include "delegates.h"
 #include "product.h"
 
+#if defined(CORECLR_RUNTIME)
+#define S_LIST_PREPEND_CORECLR(list,item) list = s_list_prepend (list, item)
+#else
+#define S_LIST_PREPEND_CORECLR(list,item)
+#endif
+
 static GCHandle
 xamarin_get_exception_for_method (int code, GCHandle inner_exception_gchandle, const char *reason, SEL sel, id self)
 {
@@ -50,7 +56,7 @@ xamarin_string_to_nsstring (MonoString *obj, bool retain)
 	if (obj == NULL)
 		return NULL;
 
-	char *str = mono_string_to_utf8 ((MonoString *) obj);
+	char *str = mono_string_to_utf8 (obj);
 	NSString *arg;
 	if (retain) {
 		arg = [[NSString alloc] initWithUTF8String:str];
@@ -61,6 +67,7 @@ xamarin_string_to_nsstring (MonoString *obj, bool retain)
 	return arg;
 }
 
+// Return value: NULL, or a retained MonoString, which must be released with xamarin_mono_object_release
 MonoString *
 xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj)
 {
@@ -114,6 +121,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	// pre-prolog
 	SList *dispose_list = NULL;
 	SList *free_list = NULL;
+#if defined (CORECLR_RUNTIME)
+	SList *release_list = NULL; // list of MonoObject*'s to release at the end.
+#endif
 	unsigned long num_arg;
 	unsigned long managed_arg_count;
 	NSMethodSignature *sig;
@@ -286,7 +296,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 									goto exception_handling;
 								LOGZ (" argument %i is a ref ptr/INativeObject %p: %p\n", i + 1, arg, arg_frame [ofs]);
 							} else if (p_klass == mono_get_string_class ()) {
-								arg_frame [ofs] = xamarin_nsstring_to_string (domain, *(NSString **) arg);
+								MonoString *str_arg = xamarin_nsstring_to_string (domain, *(NSString **) arg);
+								arg_frame [ofs] = str_arg;
+								S_LIST_PREPEND_CORECLR (release_list, str_arg);
 								LOGZ (" argument %i is a ref NSString %p: %p\n", i + 1, arg, arg_frame [ofs]);
 							} else if (xamarin_is_class_array (p_klass)) {
 								arg_frame [ofs] = xamarin_nsarray_to_managed_array (*(NSArray **) arg, p, p_klass, &exception_gchandle);
@@ -377,7 +389,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 						LOGZ (" argument %i is char*: NULL\n", i + 1);
 						break;
 					} else {
-						arg_ptrs [i + mofs] = (void *) mono_string_new (domain, (const char *) arg);
+						MonoString *arg_str = mono_string_new (domain, (const char *) arg);
+						arg_ptrs [i + mofs] = (void *) arg_str;
+						S_LIST_PREPEND_CORECLR (release_list, arg_str);
 						LOGZ (" argument %i is char*: %p = %s\n", i + 1, arg, arg);
 						break;
 					}
@@ -396,7 +410,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 					} else {
 						if (p_klass == mono_get_string_class ()) {
 							NSString *str = (NSString *) id_arg;
-							arg_ptrs [i + mofs] = xamarin_nsstring_to_string (domain, str);
+							MonoString *str_arg = xamarin_nsstring_to_string (domain, str);
+							arg_ptrs [i + mofs] = str_arg;
+							S_LIST_PREPEND_CORECLR (release_list, str_arg);
 							LOGZ (" argument %i is NSString: %p = %s\n", i + 1, id_arg, [str UTF8String]);
 						} else if (xamarin_is_class_array (p_klass)) {
 							arg_ptrs [i + mofs] = xamarin_nsarray_to_managed_array ((NSArray *) id_arg, p, p_klass, &exception_gchandle);
@@ -663,6 +679,17 @@ exception_handling:
 		}
 		s_list_free (free_list);
 	}
+
+#if defined (CORECLR_RUNTIME)
+	if (release_list) {
+		SList *list = release_list;
+		while (list) {
+			xamarin_mono_object_release ((MonoObject *) list->data);
+			list = list->next;
+		}
+		s_list_free (free_list);
+	}
+#endif
 
 	if (arg_copy != NULL) {
 		free (arg_copy);

@@ -329,6 +329,7 @@ namespace Foundation {
 
 		void ReleaseManagedRef ()
 		{
+			flags &= ~Flags.HasManagedRef;
 			ReleaseManagedReference (handle, this);
 		}
 

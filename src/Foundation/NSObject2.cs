@@ -187,21 +187,6 @@ namespace Foundation {
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		static extern void xamarin_create_managed_ref (IntPtr handle, NSObject obj, bool retain);
 
-		static void xamarin_create_managed_ref_indirection (IntPtr handle, NSObject obj, bool retain)
-		{
-			xamarin_create_managed_ref (handle, obj, retain);
-		}
-
-		static void RegisterToggleRef_indirection (NSObject obj, IntPtr handle, bool isCustomType)
-		{
-			RegisterToggleRef (obj, handle, isCustomType);
-		}
-
-		static void xamarin_release_managed_ref_indirection (IntPtr handle, NSObject managed_obj)
-		{
-			xamarin_release_managed_ref (handle, managed_obj);
-		}
-
 		static void CreateManagedReference (IntPtr handle, NSObject obj, bool retain)
 		{
 #if NET
@@ -215,7 +200,7 @@ namespace Foundation {
 				return;
 			}
 #endif
-			xamarin_create_managed_ref_indirection (handle, obj, retain);
+			xamarin_create_managed_ref (handle, obj, retain);
 		}
 
 		static void ReleaseManagedReference (IntPtr handle, NSObject managed_obj)
@@ -232,7 +217,7 @@ namespace Foundation {
 			}
 #endif
 
-			xamarin_release_managed_ref_indirection (handle, managed_obj);
+			xamarin_release_managed_ref (handle, managed_obj);
 
 		}
 
@@ -250,7 +235,7 @@ namespace Foundation {
 			}
 #endif
 
-			RegisterToggleRef_indirection (obj, handle, isCustomType);
+			RegisterToggleRef (obj, handle, isCustomType);
 		}
 
 #if !XAMCORE_3_0

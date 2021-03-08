@@ -32,6 +32,9 @@ SHARED_HEADERS += shared.h product.h delegates.h runtime-internal.h $(SHARED_INC
 
 SHARED_FILES = $(SHARED_SOURCES) $(SHARED_HEADERS) $(SHARED_I386_SOURCES) $(SHARED_X86_64_SOURCES) $(SHARED_ARM64_SOURCES)
 
+CORECLR_SOURCES = coreclr-bridge.m
+CORECLR_HEADERS = xamarin/coreclr-bridge.h
+
 EXTRA_DEPENDENCIES = $(SHARED_HEADERS) $(TOP)/Make.config $(TOP)/mk/mono.mk
 
 ifdef INJECT_X86_64_SLICE
@@ -109,6 +112,13 @@ MONOTOUCH_X86_64_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_X86_6
 MONOTOUCH_ARM64_SOURCE_STEMS = $(patsubst %.s,%,$(patsubst %.m,%,$(SHARED_ARM64_SOURCES)))
 
 MONOTOUCH_X86_SOURCE_STEMS = $(MONOTOUCH_I386_SOURCE_STEMS)
+
+CORECLR_SOURCE_STEMS = $(MONOTOUCH_SOURCE_STEMS) $(patsubst %.s,%,$(patsubst %.m,%,$(CORECLR_SOURCES)))
+CORECLR_I386_SOURCE_STEMS = $(MONOTOUCH_I386_SOURCE_STEMS)
+CORECLR_X86_64_SOURCE_STEMS = $(MONOTOUCH_X86_64_SOURCE_STEMS)
+CORECLR_ARM64_SOURCE_STEMS = $(MONOTOUCH_ARM64_SOURCE_STEMS)
+
+CORECLR_X86_SOURCE_STEMS = $(MONOTOUCH_X86_SOURCE_STEMS)
 
 #
 # FrameworkTemplate contains the install targets and sets up some variables for frameworks
@@ -694,7 +704,7 @@ define DotNetLibXamarinTemplate
 DOTNET_$(4)_LIBDIR ?= $$(TOP)/builds/downloads/microsoft.netcore.app.runtime.$(3)/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/runtimes/$(3)/native
 DOTNET_$(4)_DYLIB_FLAGS = $(DOTNET_$(1)_DYLIB_FLAGS) -Wl,-install_name,libxamarin$(7).dylib -framework Foundation -framework CFNetwork -lz -L$(abspath $(DOTNET_$(4)_LIBDIR))
 
-DOTNET_$(4)_$(5)$(6)_OBJECTS   = $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(MONOTOUCH_SOURCE_STEMS)) $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(MONOTOUCH_$(shell echo $(5) | tr a-z A-Z)_SOURCE_STEMS))
+DOTNET_$(4)_$(5)$(6)_OBJECTS   = $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(CORECLR_SOURCE_STEMS)) $$(patsubst %,.libs/$(1)/%$(7).$(5).o,   $(CORECLR_$(shell echo $(5) | tr a-z A-Z)_SOURCE_STEMS))
 
 .libs/$(1)/libxamarin$(7).$(5).a: $$(DOTNET_$(4)_$(5)$(6)_OBJECTS)
 	$$(Q) rm -f $$@

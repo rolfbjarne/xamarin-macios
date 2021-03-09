@@ -3535,9 +3535,11 @@ namespace Registrar {
 						if (isString) {
 							setup_call_stack.AppendLine ("marr{0} = xamarin_nsarray_to_managed_string_array (arr{0}, &exception_gchandle);", i);
 							setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
+							cleanup.AppendLine ($"xamarin_mono_object_safe_release (&marr{i});");
 						} else if (isNSObject) {
 							setup_call_stack.AppendLine ("marr{0} = xamarin_nsarray_to_managed_nsobject_array (arr{0}, xamarin_get_parameter_type (managed_method, {0}), NULL, &exception_gchandle);", i);
 							setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
+							cleanup.AppendLine ($"xamarin_mono_object_safe_release (&marr{i});");
 						} else if (isINativeObject) {
 							TypeDefinition nativeObjType = elementType.Resolve ();
 							var isNativeObjectInterface = nativeObjType.IsInterface;

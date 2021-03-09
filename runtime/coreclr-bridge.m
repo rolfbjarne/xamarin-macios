@@ -169,7 +169,7 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 				class_gchandle = xamarin_bridge_get_type (fullname, NULL);
 			}
 		} else {
-			class_gchandle = xamarin_bridge_duplicate_gchandle (gchandle, XamarinGCHandleTypeNormal, NULL);
+			class_gchandle = xamarin_bridge_create_gchandle (gchandle, XamarinGCHandleTypeNormal, NULL);
 		}
 		entry = (MonoClass *) calloc (1, sizeof (MonoClass));
 		entry->gchandle = class_gchandle;
@@ -292,7 +292,7 @@ xamarin_bridge_mono_class_from_mono_type (MonoType * type)
 	if (xamarin_bridge_mono_type_is_byref (type)) {
 		type_gchandle = xamarin_bridge_type_remove_byref (type->gchandle);
 	} else {
-		type_gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+		type_gchandle = xamarin_bridge_create_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
 	}
 
 	MonoClass *rv = xamarin_find_mono_class (type_gchandle /* get name[space] from type?  type->name */);
@@ -306,7 +306,7 @@ xamarin_bridge_mono_class_is_delegate (MonoClass * klass)
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
 	bool rv = xamarin_bridge_is_delegate (klass->gchandle, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_duplicate_gchandle threw an exception\n");
+		xamarin_assertion_message ("xamarin_bridge_create_gchandle threw an exception\n");
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_is_delegate (%p = %s) => %i\n", klass, klass->fullname, rv);
 	return rv;
 }
@@ -879,7 +879,7 @@ xamarin_bridge_mono_type_get_object (MonoDomain * domain, MonoType * type)
 {
 	MonoReflectionType *rv = (MonoReflectionType *) calloc (1, sizeof (MonoReflectionType));
 	rv->type = type;
-	rv->gchandle = xamarin_bridge_duplicate_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
+	rv->gchandle = xamarin_bridge_create_gchandle (type->gchandle, XamarinGCHandleTypeNormal);
 	rv->object_kind = MonoObjectType_MonoReflectionType;
 
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_type_get_object (%p, %p = %s) => %p = %p\n", domain, type, type->name, rv, rv->gchandle);

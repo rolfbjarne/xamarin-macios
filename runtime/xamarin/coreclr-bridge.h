@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #define LOG_CORECLR(...)
+// #define LOG_CORECLR(...) fprintf (__VA_ARGS__)
 
 struct _MonoAssembly {
 	char *name;
@@ -136,13 +137,6 @@ struct _MonoException : MonoObject {
 
 MonoType *
 xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle = NULL);
-
-MonoClass *
-xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
-
-void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
-void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
-void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
 
 MONO_API MonoClass *
 xamarin_bridge_mono_class_from_name (MonoImage * image, const char * name_space, const char * name);

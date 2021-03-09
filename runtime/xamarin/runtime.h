@@ -293,6 +293,13 @@ void			xamarin_mono_object_safe_release (MonoObject **mobj);
 #define         xamarin_mono_object_safe_release(x) do { *x = NULL; } while (0);
 #endif
 
+MonoClass *
+xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
+
+void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
+void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
+void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
+
 /*
  * Look for an assembly in the app and open it.
  *

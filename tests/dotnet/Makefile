@@ -45,7 +45,7 @@ build-mysingleview:
 run-mysingleview:
 	$(DOTNET6) build -t:Run MySingleView/*.csproj /p:_DeviceName=:v2:udid=03B4B310-6A00-4218-BA15-31312D6707DA /v:diag
 
-LOGFILENAME=$(HOME)/test/monotouchtest-timings/$(shell date +%Y-%m-%d--%H:%M:%S).log
+LOGFILENAME:=$(HOME)/test/monotouchtest-timings/$(shell date +%Y-%m-%d--%H:%M:%S).log
 
 build-monotouch-test: $(TARGETS)
 	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
@@ -60,6 +60,7 @@ build-monotouch-test: $(TARGETS)
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
 	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME) "/p:DefaultItemExcludesInProjectFolder=bin/**/%3Bobj/**"
 	$(MAKE) run
+	tail -n 5 $(LOGFILENAME)
 
 just-build:
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
@@ -97,6 +98,10 @@ launch-lldb:
 lldb-coreclr: export XAMARIN_RUNTIME=CoreCLR
 lldb-coreclr:
 	$(MAKE) launch-lldb
+
+perftest:
+	$(MAKE) build-monotouch-test-with-coreclr
+	$(MAKE) build-monotouch-test-with-mono || true # fails due to reversed tests
 
 dotnet6:
 	@echo $(abspath $(DOTNET6))

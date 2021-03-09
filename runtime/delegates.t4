@@ -293,11 +293,11 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_duplicate_gchandle",
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_create_gchandle",
 			"GCHandle", "IntPtr", "gchandle",
 			"enum XamarinGCHandleType", "GCHandleType", "type"
 		) {
-			WrappedManagedFunction = "DuplicateGCHandle",
+			WrappedManagedFunction = "CreateGCHandle",
 			OnlyDynamicUsage = false,
 		},
 

@@ -3731,7 +3731,7 @@ namespace Registrar {
 			// the actual invoke
 			if (isCtor) {
 				invoke.AppendLine ("mthis = mono_object_new (mono_domain_get (), mono_method_get_class (managed_method));");
-				cleanup.AppendLine ("xamarin_mono_object_safe_release (&mthis);")
+				cleanup.AppendLine ("xamarin_mono_object_safe_release (&mthis);");
 				body_setup.AppendLine ("uint8_t flags = NSObjectFlagsNativeRef;");
 				invoke.AppendLine ("xamarin_set_nsobject_handle (mthis, self);");
 				invoke.AppendLine ("xamarin_set_nsobject_flags (mthis, flags);");

@@ -1233,6 +1233,11 @@ xamarin_print_all_exceptions (MonoObject *exc)
 	return print_all_exceptions (exc);
 }
 
+NSString *
+xamarin_print_all_exceptions_gchandle (GCHandle gchandle)
+{
+	return print_all_exceptions_gchandle (gchandle);
+}
 void
 xamarin_ftnptr_exception_handler (GCHandle gchandle)
 {
@@ -2239,7 +2244,10 @@ get_method_block_wrapper_creator (MonoMethod *method, int par, GCHandle *excepti
 		return rv;
 	}
 
-	res = xamarin_get_block_wrapper_creator (mono_method_get_object (mono_domain_get (), method, NULL), (int) par, exception_gchandle);
+	MonoReflectionMethod *reflection_method = mono_method_get_object (mono_domain_get (), method, NULL);
+	res = xamarin_get_block_wrapper_creator (reflection_method, (int) par, exception_gchandle);
+	xamarin_mono_object_safe_release (&reflection_method);
+
 	if (*exception_gchandle != INVALID_GCHANDLE)
 		return INVALID_GCHANDLE;
 	// PRINT ("New value: %x", (int) res);
@@ -2332,7 +2340,10 @@ id
 xamarin_get_block_for_delegate (MonoMethod *method, MonoObject *delegate, const char *signature, guint32 token_ref, GCHandle *exception_gchandle)
 {
 	// COOP: accesses managed memory: unsafe mode.
-	return xamarin_create_delegate_proxy (mono_method_get_object (mono_domain_get (), method, NULL), delegate, signature, token_ref, exception_gchandle);
+	MonoReflectionMethod *reflection_method = mono_method_get_object (mono_domain_get (), method, NULL);
+	id rv = xamarin_create_delegate_proxy (reflection_method, delegate, signature, token_ref, exception_gchandle);
+	xamarin_mono_object_safe_release (&reflection_method);
+	return rv;
 }
 
 void
@@ -2886,6 +2897,34 @@ xamarin_gchandle_unwrap (GCHandle handle)
 	return rv;
 }
 
+GCHandle
+xamarin_gchandle_duplicate (GCHandle handle, enum XamarinGCHandleType handle_type)
+{
+	if (handle == INVALID_GCHANDLE)
+		return INVALID_GCHANDLE;
+
+	GCHandle rv = INVALID_GCHANDLE;
+	MonoObject *mobj = xamarin_gchandle_get_target (handle);
+	switch (handle_type) {
+	case XamarinGCHandleTypeWeak:
+		rv = xamarin_gchandle_new_weakref (mobj, false);
+		break;
+	case XamarinGCHandleTypeWeakTrackResurrection:
+		rv = xamarin_gchandle_new_weakref (mobj, true);
+		break;
+	case XamarinGCHandleTypeNormal:
+		rv = xamarin_gchandle_new (mobj, false);
+		break;
+	case XamarinGCHandleTypePinned:
+		rv = xamarin_gchandle_new (mobj, true);
+		break;
+	default:
+		xamarin_assertion_message (PRODUCT ": Unknown GCHandle type: %i", handle_type);
+		break;
+	}
+	xamarin_mono_object_safe_release (&mobj);
+	return rv;
+}
 /*
  * Object unregistration:
  *

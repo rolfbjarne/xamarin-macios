@@ -140,6 +140,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	MethodDescription *desc = NULL;
 	MonoMethod *method;
 	MonoMethodSignature *msig;
+	MonoReflectionMethod *reflection_method = NULL;
 	int semantic;
 	bool isCategoryInstance;
 
@@ -168,6 +169,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 		GCHandle mthis_handle = INVALID_GCHANDLE;
 		xamarin_get_method_and_object_for_selector ([self class], sel, is_static, self, &mthis_handle, desc, &exception_gchandle);
 		mthis = xamarin_gchandle_get_target (mthis_handle);
+		S_LIST_PREPEND_CORECLR (mthis);
 		xamarin_gchandle_free (mthis_handle);
 	}
 	if (exception_gchandle != INVALID_GCHANDLE) {
@@ -175,7 +177,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 		goto exception_handling;
 	}
 
-	method = xamarin_get_reflection_method_method ((MonoReflectionMethod *) xamarin_gchandle_get_target (desc->method_handle));
+	reflection_method = (MonoReflectionMethod *) xamarin_gchandle_get_target (desc->method_handle);
+	S_LIST_PREPEND_CORECLR (reflection_method);
+	method = xamarin_get_reflection_method_method (reflection_method);
 	msig = mono_method_signature (method);
 	semantic = desc->semantic & ArgumentSemanticMask;
 	isCategoryInstance = (desc->semantic & ArgumentSemanticCategoryInstance) == ArgumentSemanticCategoryInstance;
@@ -245,6 +249,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 				goto exception_handling;
 			if (desc->bindas [i + 1].original_type_handle != INVALID_GCHANDLE) {
 				MonoReflectionType *original_type = (MonoReflectionType *) xamarin_gchandle_get_target (desc->bindas [i + 1].original_type_handle);
+				S_LIST_PREPEND_CORECLR (original_type);
 				arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed ((id) arg, mono_reflection_type_get_type (original_type), p, method, &exception_gchandle, (void *) INVALID_TOKEN_REF, (void **) &free_list);
 				if (exception_gchandle != INVALID_GCHANDLE)
 					goto exception_handling;
@@ -262,7 +267,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								exception = (MonoObject *) mono_get_exception_execution_engine ("Invalid type encoding for parameter");
 								goto exception_handling;
 							}
-							bool is_parameter_out = xamarin_is_parameter_out (mono_method_get_object (domain, method, NULL), (int) i, &exception_gchandle);
+							MonoReflectionMethod *rmethod = mono_method_get_object (domain, method, NULL);
+							bool is_parameter_out = xamarin_is_parameter_out (rmethod, (int) i, &exception_gchandle);
+							S_LIST_PREPEND_CORECLR (rmethod);
 							if (exception_gchandle != INVALID_GCHANDLE)
 								goto exception_handling;
 
@@ -440,7 +447,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							}
 
 							if (created && obj) {
-								bool is_transient = xamarin_is_parameter_transient (mono_method_get_object (domain, method, NULL), (int32_t) i, &exception_gchandle);
+								MonoReflectionMethod *rmethod = mono_method_get_object (domain, method, NULL);
+								bool is_transient = xamarin_is_parameter_transient (rmethod, (int32_t) i, &exception_gchandle);
+								S_LIST_PREPEND_CORECLR (rmethod);
 								if (exception_gchandle != INVALID_GCHANDLE)
 									goto exception_handling;
 								if (is_transient)
@@ -667,7 +676,7 @@ exception_handling:
 					// If we already have an exception, don't overwrite it with an exception from disposing something.
 					// However we don't want to silently ignore it, so print it.
 					NSLog (@PRODUCT ": An exception occurred while disposing the object %p:", list->data);
-					NSLog (@"%@", xamarin_print_all_exceptions (xamarin_gchandle_get_target (dispose_exception_gchandle)));
+					NSLog (@"%@", xamarin_print_all_exceptions_gchandle (dispose_exception_gchandle));
 				}
 			}
 			list = list->next;

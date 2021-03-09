@@ -3275,6 +3275,7 @@ namespace Registrar {
 			invoke.Indentation = indent;
 			setup_call_stack.Indentation = indent;
 			setup_return.Indentation = indent;
+			cleanup.Indentation = indent;
 
 			var token_ref = CreateTokenReference (method.Method, TokenType.Method);
 
@@ -3561,6 +3562,7 @@ namespace Registrar {
 							} else {
 								setup_call_stack.AppendLine ("marr{0} = xamarin_nsarray_to_managed_inativeobject_array (arr{0}, xamarin_get_parameter_type (managed_method, {0}), NULL, &exception_gchandle);", i);
 							}
+							cleanup.AppendLine ($"xamarin_mono_object_safe_release (&marr{i});");
 							setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 						} else {
 							throw ErrorHelper.CreateError (App, 4111, method.Method, Errors.MT4111, type.FullName, descriptiveMethodName);
@@ -3946,9 +3948,9 @@ namespace Registrar {
 			if (trace)
 				body.AppendLine (nslog_end);
 
-			body.AppendLine (cleanup);
+			body.StringBuilder.AppendLine ("exception_handling:");
 
-			body.StringBuilder.AppendLine ("exception_handling:;");
+			body.AppendLine (cleanup);
 
 			body.WriteLine ("MONO_THREAD_DETACH;"); // COOP: this will switch to GC_SAFE
 

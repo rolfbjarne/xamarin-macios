@@ -108,7 +108,6 @@ struct _MonoObject {
 };
 
 struct _MonoString : MonoObject {
-	char *value;
 };
 
 struct _MonoArray : MonoObject {
@@ -195,12 +194,14 @@ xamarin_bridge_mono_class_get_nullable_param (MonoClass * klass);
 MONO_API char *
 xamarin_bridge_mono_method_full_name (MonoMethod * method, mono_bool signature);
 
+/* REVIEW COMPLETED */
 MONO_API MonoObject *
 xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** params, MonoObject ** exc);
 
 MONO_API void
 xamarin_bridge_mono_raise_exception (MonoException * ex);
 
+/* REVIEW COMPLETED */
 MONO_API MonoString *
 xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text);
 
@@ -213,6 +214,7 @@ xamarin_bridge_mono_object_unbox (MonoObject * obj);
 MONO_API char *
 xamarin_bridge_mono_string_to_utf8 (MonoString * string_obj);
 
+/* REVIEW COMPLETED */
 MONO_API MonoObject *
 xamarin_bridge_mono_object_new (MonoDomain * domain, MonoClass * klass);
 
@@ -381,6 +383,7 @@ xamarin_bridge_mono_gc_max_generation (void);
 MONO_API MonoGHashTable *
 xamarin_bridge_mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type);
 
+/* REVIEW COMPLETE */
 MONO_API gpointer
 xamarin_bridge_mono_g_hash_table_lookup (MonoGHashTable * hash, gconstpointer key);
 

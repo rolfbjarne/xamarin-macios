@@ -3597,6 +3597,7 @@ namespace Registrar {
 								body_setup.AppendLine ("MonoType *paramtype{0} = NULL;", i);
 								setup_call_stack.AppendLine ("paramtype{0} = xamarin_get_parameter_type (managed_method, {0});", i);
 								setup_call_stack.AppendLine ("mobj{0} = xamarin_get_nsobject_with_type_for_ptr (nsobj{0}, false, paramtype{0}, &exception_gchandle);", i);
+								cleanup.AppendLine ($"xamarin_mono_object_safe_release (&mobj{i});");
 								setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) {");
 								setup_call_stack.AppendLine ("exception_gchandle = xamarin_get_exception_for_parameter (8029, exception_gchandle, \"Unable to marshal the byref parameter\", _cmd, managed_method, paramtype{0}, {0}, true);", i);
 								setup_call_stack.AppendLine ("goto exception_handling;");
@@ -3627,6 +3628,7 @@ namespace Registrar {
 							body_setup.AppendLine ("MonoType *paramtype{0} = NULL;", i);
 							setup_call_stack.AppendLine ("paramtype{0} = xamarin_get_parameter_type (managed_method, {0});", i);
 							setup_call_stack.AppendLine ("mobj{0} = xamarin_get_nsobject_with_type_for_ptr_created (nsobj{0}, false, paramtype{0}, &created{0}, &exception_gchandle);", i);
+							cleanup.AppendLine ($"xamarin_mono_object_safe_release (&mobj{i});");
 							setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) {");
 							setup_call_stack.AppendLine ("exception_gchandle = xamarin_get_exception_for_parameter (8029, exception_gchandle, \"Unable to marshal the parameter\", _cmd, managed_method, paramtype{0}, {0}, true);", i);
 							setup_call_stack.AppendLine ("goto exception_handling;");
@@ -3729,6 +3731,7 @@ namespace Registrar {
 			// the actual invoke
 			if (isCtor) {
 				invoke.AppendLine ("mthis = mono_object_new (mono_domain_get (), mono_method_get_class (managed_method));");
+				cleanup.AppendLine ("xamarin_mono_object_safe_release (&mthis);")
 				body_setup.AppendLine ("uint8_t flags = NSObjectFlagsNativeRef;");
 				invoke.AppendLine ("xamarin_set_nsobject_handle (mthis, self);");
 				invoke.AppendLine ("xamarin_set_nsobject_flags (mthis, flags);");
@@ -3900,6 +3903,7 @@ namespace Registrar {
 				body.WriteLine ("mthis = xamarin_get_managed_object_for_ptr_fast (self, &exception_gchandle);");
 				body.WriteLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 				body.WriteLine ("}");
+				cleanup.AppendLine ($"xamarin_mono_object_safe_release (&mthis);");
 			}
 
 			// no locking should be required here, it doesn't matter if we overwrite the field (it'll be the same value).
@@ -3916,6 +3920,7 @@ namespace Registrar {
 				body.WriteLine ("0x{0:X}, &exception_gchandle);", token_ref);
 			}
 			body.WriteLine ("MonoReflectionMethod *reflection_method = (MonoReflectionMethod *) xamarin_gchandle_unwrap (reflection_method_handle);");
+			cleanup.AppendLine ($"xamarin_mono_object_safe_release (&reflection_method);");
 
 			body.WriteLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 			body.WriteLine ("managed_method = xamarin_get_reflection_method_method (reflection_method);");

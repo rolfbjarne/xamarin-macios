@@ -3763,7 +3763,7 @@ namespace Registrar {
 			invoke.AppendLine ("mono_runtime_invoke (managed_method, {0}, arg_ptrs, {1});", isStatic ? "NULL" : "mthis", marshal_exception);
 
 			if (!isVoid)
-				cleanup.AppendLine ("xamarin_mono_object_release (retval);");
+				cleanup.AppendLine ("xamarin_mono_object_safe_release (&retval);");
 		
 			if (isCtor)
 				invoke.AppendLine ("xamarin_create_managed_ref (self, mthis, true);");
@@ -4831,8 +4831,10 @@ namespace Registrar {
 				methods.WriteLine ("#define DEBUG 1");
 			}
 
-			if (App.XamarinRuntime == XamarinRuntime.CoreCLR)
+			if (App.XamarinRuntime == XamarinRuntime.CoreCLR) {
 				header.WriteLine ("#define CORECLR_RUNTIME");
+				methods.WriteLine ("#define CORECLR_RUNTIME");
+			}
 
 			header.WriteLine ("#include <stdarg.h>");
 			if (SupportsModernObjectiveC) {

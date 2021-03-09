@@ -103,7 +103,7 @@ namespace ObjCRuntime {
 		}
 
 		// Comment out the attribute to get all printfs
-		[System.Diagnostics.Conditional ("UNDEFINED")]
+		// [System.Diagnostics.Conditional ("UNDEFINED")]
 		static void log_coreclr (string message)
 		{
 			xamarin_log (message);

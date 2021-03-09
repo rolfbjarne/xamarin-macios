@@ -690,7 +690,7 @@ exception_handling:
 			xamarin_mono_object_release ((MonoObject *) list->data);
 			list = list->next;
 		}
-		s_list_free (free_list);
+		s_list_free (release_list);
 	}
 #endif
 

@@ -2333,6 +2333,7 @@ xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref,
 
 cleanup:
 	xamarin_gchandle_free (obj_handle);
+	xamarin_mono_object_safe_release (&delegate);
 	return delegate;
 }
 

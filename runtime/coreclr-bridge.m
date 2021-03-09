@@ -142,7 +142,7 @@ xamarin_bridge_dump_monoobjects ()
 		for (unsigned int i = 0; i < items_to_show; i++) {
 			MonoObject *obj = keys [i];
 			char *value = values [i];
-			fprintf (stderr, "Object %i/%i Kind: %i\n", i + 1, (int) length, obj->object_kind);
+			fprintf (stderr, "Object %i/%i %p Kind: %i\n", i + 1, (int) length, obj, obj->object_kind);
 			fprintf (stderr, "\t%s\n", value);
 		}
 	} else {

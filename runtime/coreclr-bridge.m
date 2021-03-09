@@ -118,17 +118,7 @@ xamarin_load_coreclr ()
 static Boolean
 hash_str_equal (const void *a, const void *b)
 {
-	Boolean rv;
-
-	if (a == b) {
-		rv = TRUE;
-	} else {
-		rv = strcmp ((const char *) a, (const char *) b) == 0;
-	}
-
-	// LOG_CORECLR (stderr, "hash_str_equal ('%s', '%s') => %i\n", (const char *) a, (const char *) b, rv);
-
-	return rv;
+	return strcmp ((const char *) a, (const char *) b) == 0;
 }
 
 static CFHashCode
@@ -1309,10 +1299,20 @@ xamarin_mono_object_retain (MonoObject *mobj)
 }
 
 void
+xamarin_mono_object_safe_release (MonoObject **mobj)
+{
+	xamarin_mono_object_release (*mobj);
+	*mobj = NULL;
+}
+
+void
 xamarin_mono_object_release (MonoObject *mobj)
 {
+	if (mobj == NULL)
+		return;
+
 	int rc = atomic_fetch_sub (&mobj->reference_count, 1);
-	if (rv == 0) {
+	if (rc == 0) {
 		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would free\n", mobj);
 		if (mobj->gchandle != INVALID_GCHANDLE) {
 			xamarin_gchandle_free (mobj->gchandle);
@@ -1329,49 +1329,54 @@ xamarin_mono_object_release (MonoObject *mobj)
 		switch (mobj->object_kind) {
 		case MonoObjectType_Object:
 			break;
-		case MonoObjectType_MonoReflectionMethod:
+		case MonoObjectType_MonoReflectionMethod: {
 			MonoReflectionMethod *mrm = (MonoReflectionMethod *) mobj;
 			if (mrm->name != NULL) {
 				xamarin_free (mrm->name);
 				mrm->name = NULL;
 			}
 			break;
-		case MonoObjectType_MonoReflectionAssembly:
+		}
+		case MonoObjectType_MonoReflectionAssembly: {
 			MonoReflectionAssembly *mra = (MonoReflectionAssembly *) mobj;
 			if (mra->name != NULL) {
 				xamarin_free (mra->name);
 				mra->name = NULL;
 			}
 			break;
-		case MonoObjectType_MonoReflectionType:
+		}
+		case MonoObjectType_MonoReflectionType: {
 			MonoReflectionType *mrt = (MonoReflectionType *) mobj;
 			if (mrt->name != NULL) {
 				xamarin_free (mrt->name);
 				mrt->name = NULL;
 			}
 			break;
-		case MonoObjectType_MonoArray:
+		}
+		case MonoObjectType_MonoArray: {
 			MonoArray *array = (MonoArray *) mobj;
 			if (array->data != NULL) {
 				xamarin_free (array->data);
 				array->data = NULL;
 			}
 			break;
-		case MonoObjectType_MonoString:
+		}
+		case MonoObjectType_MonoString: {
 			MonoString *mstr = (MonoString *) mobj;
 			if (mstr->value) {
 				xamarin_free (mstr->value);
 				mstr->value = NULL;
 			}
 			break;
+		}
 		default:
-			LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): unknown type: %i\n", mobj, mobj->object_kind);
+			LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): unknown kind: %i\n", mobj, mobj->object_kind);
 			break;
 		}
 
-		xamarin_free (this); // allocated using Marshal.AllocHGlobal.
+		xamarin_free (mobj); // allocated using Marshal.AllocHGlobal.
 	} else {
-		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i\n", mobj, rc);
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i, kind: %i\n", mobj, rc, (int) mobj->object_type);
 	}
 }
 #endif

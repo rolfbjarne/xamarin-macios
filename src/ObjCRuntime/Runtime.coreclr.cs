@@ -108,6 +108,11 @@ namespace ObjCRuntime {
 			xamarin_log (message);
 		}
 
+		static void DumpStats ()
+		{
+			xamarin_log ("Dumping stats:");
+		}
+
 		static IntPtr FindAssembly (IntPtr assembly_name)
 		{
 			var path = Marshal.PtrToStringAuto (assembly_name);

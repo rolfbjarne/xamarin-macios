@@ -2289,7 +2289,7 @@ xamarin_release_block_on_main_thread (void *obj)
  * on the parameter of the function, or in one of the base definitions.   That attribute
  * contains a link to a proxy type that can create the delegate, which we in turn invoke
  *
- * Returns: the instantiated delegate.
+ * Returns: the instantiated delegate. Must be released with xamarin_mono_object_safe_release.
  */
 MonoObject *
 xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref, int par, void *nativeBlock, GCHandle *exception_gchandle)

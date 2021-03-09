@@ -3718,8 +3718,11 @@ namespace Registrar {
 									exceptions.Add (ErrorHelper.CreateWarning (App, 4174, method.Method, Errors.MT4174, method.DescriptiveMethodName, i + 1));
 								}
 							}
+							body_setup.AppendLine ("MonoObject *del{0} = NULL;", i);
+							cleanup.AppendLine ($"xamarin_mono_object_safe_release (&del{i});");
 							setup_call_stack.AppendLine ("if (p{0}) {{", i);
-							setup_call_stack.AppendLine ("arg_ptrs [{0}] = (void *) xamarin_get_delegate_for_block_parameter (managed_method, {1}, {0}, p{0}, &exception_gchandle);", i, token);
+							setup_call_stack.AppendLine ("del{0} = xamarin_get_delegate_for_block_parameter (managed_method, {1}, {0}, p{0}, &exception_gchandle);", i, token);
+							setup_call_stack.AppendLine ("arg_ptrs [{0}] = del{0};", i);
 							setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 							setup_call_stack.AppendLine ("} else {");
 							setup_call_stack.AppendLine ("arg_ptrs [{0}] = NULL;", i);
@@ -4827,6 +4830,9 @@ namespace Registrar {
 				header.WriteLine ("#define DEBUG 1");
 				methods.WriteLine ("#define DEBUG 1");
 			}
+
+			if (App.XamarinRuntime == XamarinRuntime.CoreCLR)
+				header.WriteLine ("#define CORECLR_RUNTIME");
 
 			header.WriteLine ("#include <stdarg.h>");
 			if (SupportsModernObjectiveC) {

@@ -83,12 +83,65 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 	return symbol;
 }
 
+static pthread_mutex_t monoobject_dict_lock;
+static CFMutableDictionaryRef monoobject_dict = NULL;
+
+static int _Atomic monoobject_count = 0;
+
+void
+xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+	pthread_mutex_lock (&monoobject_dict_lock);
+	CFDictionarySetValue (monoobject_dict, mobj, stacktrace);
+	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	atomic_fetch_add (&monoobject_count, 1);
+}
+
+void
+xamarin_bridge_dump_monoobjects ()
+{
+	pthread_mutex_lock (&monoobject_dict_lock);
+	unsigned int length = (unsigned int) CFDictionaryGetCount (monoobject_dict);
+	MonoObject** keys = (MonoObject **) calloc (1, sizeof (void*) * length);
+	char** values = (char **) calloc (1, sizeof (char*) * length);
+	CFDictionaryGetKeysAndValues (monoobject_dict, (const void **) &keys, (const void **) &values);
+	fprintf (stderr, "There were %i MonoObjects created, and %i were not freed.\n", (int) monoobject_count, (int) length);
+	for (unsigned int i = 0; i < length; i++) {
+		MonoObject *obj = keys [i];
+		char *value = values [i];
+		fprintf (stderr, "Object %i/%i Kind: %i\n", i + 1, (int) length, obj->object_kind);
+		fprintf (stderr, "\t%s\n", value);
+	}
+	pthread_mutex_unlock (&monoobject_dict_lock);
+	free (keys);
+	free (values);
+}
+
+static void
+monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
+{
+	xamarin_free ((void *) value);
+}
+
 static void
 xamarin_load_coreclr ()
 {
 	if (xamarin_loaded_coreclr)
 		return;
 	xamarin_loaded_coreclr = true;
+
+	// Initialize some debug stuff
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init (&attr);
+	pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
+	pthread_mutex_init (&monoobject_dict_lock, &attr);
+	pthread_mutexattr_destroy (&attr);
+
+	CFDictionaryValueCallBacks value_callbacks = { 0 };
+	value_callbacks.release = monoobject_dict_free_value;
+	monoobject_dict = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, NULL, &value_callbacks);
 
 	int rv;
 
@@ -1125,6 +1178,7 @@ xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int 
 		xamarin_assertion_message ("xamarin_bridge_mono_jit_exec failed: %i\n", rv);
 
 	xamarin_bridge_dump_stats ();
+	xamarin_bridge_dump_monoobjects ();
 
 	return (int) exitCode;
 }
@@ -1314,7 +1368,7 @@ xamarin_mono_object_release (MonoObject *mobj)
 	if (mobj == NULL)
 		return;
 
-	int rc = atomic_fetch_sub (&mobj->reference_count, 1);
+	int rc = atomic_fetch_sub (&mobj->reference_count, 1) - 1;
 	if (rc == 0) {
 		fprintf (stderr, "xamarin_mono_object_release (%p): will free!\n", mobj);
 		if (mobj->gchandle != INVALID_GCHANDLE) {
@@ -1377,5 +1431,10 @@ xamarin_mono_object_release (MonoObject *mobj)
 	} else {
 		fprintf (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i, kind: %i\n", mobj, rc, (int) mobj->object_kind);
 	}
+
+	pthread_mutex_lock (&monoobject_dict_lock);
+	CFDictionaryRemoveValue (monoobject_dict, mobj);
+	pthread_mutex_unlock (&monoobject_dict_lock);
 }
+
 #endif

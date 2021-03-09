@@ -477,35 +477,6 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 	}
 }
 
-MONO_API uint32_t
-xamarin_bridge_mono_gchandle_new (MonoObject * obj, mono_bool pinned)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_new (%p, %i) => assert\n", obj, pinned);
-	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_new not implemented\n");
-}
-
-MONO_API MonoObject *
-xamarin_bridge_mono_gchandle_get_target (uint32_t gchandle)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_get_target (%u) => assert\n", gchandle);
-
-	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_get_target not implemented\n");
-}
-
-MONO_API void
-xamarin_bridge_mono_gchandle_free (uint32_t gchandle)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_free (%u) => assert\n", gchandle);
-	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_free not implemented\n");
-}
-
-MONO_API uint32_t
-xamarin_bridge_mono_gchandle_new_weakref (MonoObject * obj, mono_bool track_resurrection)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_gchandle_new_weakref (%p, %i) => assert\n", obj, track_resurrection);
-	xamarin_assertion_message ("xamarin_bridge_mono_gchandle_new_weakref not implemented\n");
-}
-
 MONO_API void
 xamarin_bridge_mono_raise_exception (MonoException * ex)
 {
@@ -523,12 +494,6 @@ xamarin_bridge_mono_raise_exception (MonoException * ex)
 
 	// we should never get here
 	xamarin_assertion_message ("xamarin_bridge_mono_raise_exception did not throw/assert?\n");
-}
-
-MONO_API char*
-xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t idx)
-{
-	xamarin_assertion_message ("xamarin_bridge_mono_array_addr_with_size should not be called\n");
 }
 
 // Return value: a retained MonoString* which the caller must release.
@@ -598,19 +563,18 @@ xamarin_bridge_mono_object_new (MonoDomain * domain, MonoClass * klass)
 MONO_API uintptr_t
 xamarin_bridge_mono_array_length (MonoArray * array)
 {
+	xamarin_assert (array->object_kind == MonoObjectType_MonoArray);
+
 	uintptr_t rv = (uintptr_t) xamarin_bridge_get_array_length (array->gchandle);
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_array_length (%p = %p) => %llu\n", array, array->gchandle, (uint64_t) rv);
 	return rv;
 }
 
+// Return value: 'obj' if 'obj' is an instance of 'klass'.
 MONO_API MonoObject *
 xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass)
 {
-	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	bool rv = xamarin_bridge_isinstance (obj->gchandle, klass->gchandle, &exception_gchandle);
-	if (exception_gchandle != INVALID_GCHANDLE)
-		xamarin_assertion_message ("xamarin_bridge_mono_object_isinst threw an exception\n");
-
+	bool rv = xamarin_bridge_isinstance (obj->gchandle, klass->gchandle);
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p => %s, %p => %s) => %i\n", obj, obj->type_name, klass, klass->fullname, rv);
 	return rv ? obj : NULL;
 }
@@ -641,21 +605,13 @@ xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, v
 	xamarin_assertion_message ("xamarin_bridge_mono_field_get_value not implemented\n");
 }
 
+// Return value: a retained MonoObject*, which the caller must release with xamarin_mono_object_release.
 MONO_API MonoObject *
 xamarin_bridge_mono_value_box (MonoDomain * domain, MonoClass * klass, void * val)
 {
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p)\n", domain, klass, klass->fullname, val);
-	GCHandle handle = xamarin_bridge_box (klass->gchandle, val);
-	MonoObject *rv = xamarin_gchandle_get_target (handle);
+	MonoObject *rv = xamarin_bridge_box (klass->gchandle, val);
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_value_box (%p, %p = %s, %p) => %p = %p = %s\n", domain, klass, klass->fullname, val, rv, rv->gchandle, rv->type_name);
 	return rv;
-}
-
-MONO_API void
-xamarin_bridge_mono_gc_wbarrier_set_arrayref (MonoArray * arr, void * slot_ptr, MonoObject * value)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_wbarrier_set_arrayref (%p, %p, %p) => assert\n", arr, slot_ptr, value);
-	xamarin_assertion_message ("xamarin_bridge_mono_gc_wbarrier_set_arrayref not implemented\n");
 }
 
 MONO_API void
@@ -1346,28 +1302,76 @@ xamarin_bridge_mono_install_ftnptr_eh_callback (MonoFtnPtrEHCallback callback)
 	LOG_CORECLR (stderr, "%s (%p) => IGNORE\n", __func__, callback);
 }
 
-void _MonoObject::Release ()
-{
-	if (atomic_fetch_sub (&reference_count, 1) == 0) {
-		// free (this); // allocated using Marshal.AllocHGlobal.
-		LOG_CORECLR (stderr, "_MonoObject.Release (): would free %p\n", this);
-	}
-}
-
-void _MonoObject::Retain ()
-{
-	atomic_fetch_add (&reference_count, 1);
-}
-
 void
 xamarin_mono_object_retain (MonoObject *mobj)
 {
-	mobj->Retain ();
+	atomic_fetch_add (&mobj->reference_count, 1);
 }
 
 void
 xamarin_mono_object_release (MonoObject *mobj)
 {
-	mobj->Release ();
+	int rc = atomic_fetch_sub (&mobj->reference_count, 1);
+	if (rv == 0) {
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would free\n", mobj);
+		if (mobj->gchandle != INVALID_GCHANDLE) {
+			xamarin_gchandle_free (mobj->gchandle);
+			mobj->gchandle = INVALID_GCHANDLE;
+		}
+		if (mobj->type_name != NULL) {
+			xamarin_free (mobj->type_name);
+			mobj->type_name = NULL;
+		}
+		if (mobj->struct_value != NULL) {
+			xamarin_free (mobj->struct_value);
+			mobj->struct_value = NULL;
+		}
+		switch (mobj->object_kind) {
+		case MonoObjectType_Object:
+			break;
+		case MonoObjectType_MonoReflectionMethod:
+			MonoReflectionMethod *mrm = (MonoReflectionMethod *) mobj;
+			if (mrm->name != NULL) {
+				xamarin_free (mrm->name);
+				mrm->name = NULL;
+			}
+			break;
+		case MonoObjectType_MonoReflectionAssembly:
+			MonoReflectionAssembly *mra = (MonoReflectionAssembly *) mobj;
+			if (mra->name != NULL) {
+				xamarin_free (mra->name);
+				mra->name = NULL;
+			}
+			break;
+		case MonoObjectType_MonoReflectionType:
+			MonoReflectionType *mrt = (MonoReflectionType *) mobj;
+			if (mrt->name != NULL) {
+				xamarin_free (mrt->name);
+				mrt->name = NULL;
+			}
+			break;
+		case MonoObjectType_MonoArray:
+			MonoArray *array = (MonoArray *) mobj;
+			if (array->data != NULL) {
+				xamarin_free (array->data);
+				array->data = NULL;
+			}
+			break;
+		case MonoObjectType_MonoString:
+			MonoString *mstr = (MonoString *) mobj;
+			if (mstr->value) {
+				xamarin_free (mstr->value);
+				mstr->value = NULL;
+			}
+			break;
+		default:
+			LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): unknown type: %i\n", mobj, mobj->object_kind);
+			break;
+		}
+
+		xamarin_free (this); // allocated using Marshal.AllocHGlobal.
+	} else {
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i\n", mobj, rc);
+	}
 }
 #endif

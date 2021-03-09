@@ -1594,6 +1594,7 @@ xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_
 			value = mono_array_get (array, MonoObject *, i);
 		}
 		buf [i] = convert (value, context, exception_gchandle);
+		xamarin_mono_object_release (value);
 		if (*exception_gchandle != INVALID_GCHANDLE) {
 			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);
 			goto exception_handling;
@@ -1607,6 +1608,7 @@ exception_handling:
 	return rv;
 }
 
+// Return value: NULL, or a retained MonoArray* the caller must release with xamarin_mono_object_release.
 MonoArray *
 xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managedElementType, xamarin_id_to_managed_func convert, void *context, GCHandle *exception_gchandle)
 {
@@ -1639,6 +1641,7 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 #if defined (CORECLR_RUNTIME)
 			MonoObject *boxed = mono_value_box (NULL, managedElementType, valueptr);
 			xamarin_bridge_set_array_object_value (rv->gchandle, (int32_t) i, boxed->gchandle);
+			xamarin_mono_object_release (boxed);
 #else
 			memcpy (ptr, valueptr, element_size);
 			ptr += element_size;

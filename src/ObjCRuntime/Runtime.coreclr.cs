@@ -41,7 +41,6 @@ namespace ObjCRuntime {
 		[StructLayout (LayoutKind.Sequential)]
 		struct MonoString {
 			public MonoObject Object;
-			IntPtr Value; /* char */
 		}
 
 		[StructLayout (LayoutKind.Sequential)]
@@ -132,15 +131,13 @@ namespace ObjCRuntime {
 			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
 		}
 
-		// FIXME: rename to CreateGCHandle
-		static IntPtr DuplicateGCHandle (IntPtr gchandle, GCHandleType type)
+		static IntPtr CreateGCHandle (IntPtr gchandle, GCHandleType type)
 		{
 			object obj = null;
 			if (gchandle != IntPtr.Zero)
 				obj = GCHandle.FromIntPtr (gchandle).Target;
 			var rv = GCHandle.Alloc (obj, type);
 			var rvptr = GCHandle.ToIntPtr (rv);
-			// log_coreclr ($"Runtime.DuplicateGCHandle (0x{gchandle.ToString ("x")} => --- => {obj?.GetType ()}, {type}) => 0x{rvptr.ToString ("x")}");
 			return rvptr;
 		}
 
@@ -200,38 +197,38 @@ namespace ObjCRuntime {
 
 		static IntPtr CreateObject (IntPtr gchandle)
 		{
-			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var type = (Type) GetGCHandleTarget (gchandle);
 			var obj = RuntimeHelpers.GetUninitializedObject (type);
-			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+			return GetMonoObject (obj);
 		}
 
 		static void SetHandleForNSObject (IntPtr gchandle, IntPtr handle)
 		{
-			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = (NSObject) GetGCHandleTarget (gchandle);
 			obj.SetHandleDirectly (handle);
 		}
 
 		static void SetFlagsForNSObject (IntPtr gchandle, byte flags)
 		{
-			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = (NSObject) GetGCHandleTarget (gchandle);
 			obj.SetFlagsDirectly (flags);
 		}
 
 		static byte GetFlagsForNSObject (IntPtr gchandle)
 		{
-			var obj = (NSObject) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = (NSObject) GetGCHandleTarget (gchandle);
 			return obj.GetFlagsDirectly ();
 		}
 
 		static IntPtr GetTypeFullName (IntPtr gchandle)
 		{
-			var obj = (Type) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = (Type) GetGCHandleTarget (gchandle);
 			return Marshal.StringToHGlobalAuto (obj?.FullName);
 		}
 
 		static IntPtr GetMethodName (IntPtr gchandle)
 		{
-			var obj = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			var obj = (MethodBase) GetGCHandleTarget (gchandle);
 			return Marshal.StringToHGlobalAuto (obj?.Name);
 		}
 
@@ -398,7 +395,7 @@ namespace ObjCRuntime {
 			if (rv == null)
 				return IntPtr.Zero;
 
-			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+			return GetMonoObject (rv);
 		}
 
 		static object PtrToStructure (IntPtr ptr, Type type)

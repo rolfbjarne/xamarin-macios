@@ -318,7 +318,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_create_object",
+		new XDelegate ("MonoObject *", "IntPtr", "xamarin_bridge_create_object",
 			"GCHandle", "IntPtr", "gchandle"
 		) {
 			WrappedManagedFunction = "CreateObject",
@@ -362,7 +362,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_runtime_invoke_method",
+		new XDelegate ("MonoObject *", "IntPtr", "xamarin_bridge_runtime_invoke_method",
 			"GCHandle", "IntPtr", "method_gchandle",
 			"GCHandle", "IntPtr", "instance_gchandle",
 			"void**", "IntPtr", "parameters"

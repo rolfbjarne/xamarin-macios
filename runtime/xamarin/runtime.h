@@ -285,7 +285,8 @@ MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target a
 #if defined(CORECLR_RUNTIME)
 void			xamarin_mono_object_retain (MonoObject *mobj);
 void			xamarin_mono_object_release (MonoObject *mobj);
-void			xamarin_mono_object_safe_release (MonoObject **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoObject **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionMethod **mobj);
 #else
 // Nothing to do here.
 #define			xamarin_mono_object_retain(x)

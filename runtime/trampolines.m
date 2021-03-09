@@ -1643,7 +1643,7 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 #if defined (CORECLR_RUNTIME)
 			MonoObject *boxed = mono_value_box (NULL, managedElementType, valueptr);
 			xamarin_bridge_set_array_object_value (rv->gchandle, (int32_t) i, boxed->gchandle);
-			xamarin_mono_object_release (boxed);
+			xamarin_mono_object_safe_release (&boxed);
 #else
 			memcpy (ptr, valueptr, element_size);
 			ptr += element_size;
@@ -1651,6 +1651,7 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 		} else {
 			mobj = (MonoObject *) convert ([array objectAtIndex: i], NULL, managedElementType, context, exception_gchandle);
 			mono_array_setref (rv, i, mobj);
+			xamarin_mono_object_safe_release (&mobj);
 		}
 		if (*exception_gchandle != INVALID_GCHANDLE) {
 			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);

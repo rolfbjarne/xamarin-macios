@@ -12,26 +12,6 @@ extern "C" {
 
 #define LOG_CORECLR(...)
 
-enum MonoObjectType : int {
-	MonoObjectType_Unknown,
-	MonoObjectType_MonoReflectionMethod,
-	MonoObjectType_MonoReflectionAssembly,
-	MonoObjectType_MonoReflectionType,
-	MonoObjectType_MonoArray,
-	MonoObjectType_MonoString,
-};
-
-struct _MonoObject {
-	int _Atomic reference_count;
-	enum MonoObjectType object_kind;
-	GCHandle gchandle;
-	char *type_name;
-	void *struct_value;
-
-	void Release ();
-	void Retain ();
-};
-
 struct _MonoAssembly {
 	char *name;
 	MonoImage *image;
@@ -92,6 +72,40 @@ struct _MonoClassField {
 	char *name;
 };
 
+struct _MonoThread {
+	char *name;
+};
+
+struct _MonoThreadsSync {
+	char *name;
+};
+
+struct _MonoReferenceQueue {
+	GCHandle gchandle;
+};
+
+struct _MonoGHashTable {
+	GCHandle gchandle;
+};
+
+enum MonoObjectType : int {
+	MonoObjectType_Unknown,
+	MonoObjectType_Object,
+	MonoObjectType_MonoReflectionMethod,
+	MonoObjectType_MonoReflectionAssembly,
+	MonoObjectType_MonoReflectionType,
+	MonoObjectType_MonoArray,
+	MonoObjectType_MonoString,
+};
+
+struct _MonoObject {
+	int _Atomic reference_count;
+	enum MonoObjectType object_kind;
+	GCHandle gchandle;
+	char *type_name;
+	void *struct_value;
+};
+
 struct _MonoString : MonoObject {
 	char *value;
 };
@@ -118,22 +132,6 @@ struct _MonoReflectionType : MonoObject {
 
 struct _MonoException : MonoObject {
 	char *name;
-};
-
-struct _MonoThread {
-	char *name;
-};
-
-struct _MonoThreadsSync {
-	char *name;
-};
-
-struct _MonoReferenceQueue {
-	GCHandle gchandle;
-};
-
-struct _MonoGHashTable {
-	GCHandle gchandle;
 };
 
 MonoType *
@@ -206,23 +204,8 @@ xamarin_bridge_mono_method_full_name (MonoMethod * method, mono_bool signature);
 MONO_API MonoObject *
 xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** params, MonoObject ** exc);
 
-MONO_API uint32_t
-xamarin_bridge_mono_gchandle_new (MonoObject * obj, mono_bool pinned);
-
-MONO_API MonoObject *
-xamarin_bridge_mono_gchandle_get_target (uint32_t gchandle);
-
-MONO_API void
-xamarin_bridge_mono_gchandle_free (uint32_t gchandle);
-
-MONO_API uint32_t
-xamarin_bridge_mono_gchandle_new_weakref (MonoObject * obj, mono_bool track_resurrection);
-
 MONO_API void
 xamarin_bridge_mono_raise_exception (MonoException * ex);
-
-MONO_API char*
-xamarin_bridge_mono_array_addr_with_size (MonoArray * array, int size, uintptr_t idx);
 
 MONO_API MonoString *
 xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text);
@@ -239,9 +222,11 @@ xamarin_bridge_mono_string_to_utf8 (MonoString * string_obj);
 MONO_API MonoObject *
 xamarin_bridge_mono_object_new (MonoDomain * domain, MonoClass * klass);
 
+/* REVIEW COMPLETED */
 MONO_API uintptr_t
 xamarin_bridge_mono_array_length (MonoArray * array);
 
+/* REVIEW COMPLETED */
 MONO_API MonoObject *
 xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass);
 
@@ -254,11 +239,9 @@ xamarin_bridge_mono_object_get_virtual_method (MonoObject * obj, MonoMethod * me
 MONO_API void
 xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, void * value);
 
+/* REVIEW COMPLETED */
 MONO_API MonoObject *
 xamarin_bridge_mono_value_box (MonoDomain * domain, MonoClass * klass, void * val);
-
-MONO_API void
-xamarin_bridge_mono_gc_wbarrier_set_arrayref (MonoArray * arr, void * slot_ptr, MonoObject * value);
 
 MONO_API void
 xamarin_bridge_mono_profiler_install (MonoProfiler * prof, MonoProfileFunc shutdown_callback);
@@ -275,7 +258,7 @@ xamarin_bridge_mono_profiler_load (const char * desc);
 MONO_API mono_bool
 xamarin_bridge_mono_thread_is_foreign (MonoThread * thread);
 
-MONO_API MonoThread * 
+MONO_API MonoThread *
 xamarin_bridge_mono_thread_current (void);
 
 MONO_API MonoThread *

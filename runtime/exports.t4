@@ -113,20 +113,28 @@
 		new Export ("uint32_t", "mono_gchandle_new",
 			"MonoObject *", "obj",
 			"mono_bool", "pinned"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoObject *", "mono_gchandle_get_target",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_gchandle_free",
 			"uint32_t", "gchandle"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("uint32_t", "mono_gchandle_new_weakref",
 			"MonoObject *", "obj",
 			"mono_bool", "track_resurrection"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("void", "mono_raise_exception",
 			"MonoException *", "ex"
@@ -136,7 +144,9 @@
 			"MonoArray *", "array",
 			"int", "size",
 			"uintptr_t", "idx"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export ("MonoString *", "mono_string_new",
 			"MonoDomain *", "domain",
@@ -196,7 +206,9 @@
 			"MonoArray *", "arr",
 			"void *", "slot_ptr",
 			"MonoObject *", "value"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		#endregion
 
@@ -408,15 +420,11 @@
 
 		new Export ("void", "mono_debug_init",
 			"MonoDebugFormat", "format"
-		) {
-			HasBridgeFunction = true,
-		},
+		),
 
 		new Export ("void", "mono_gc_collect",
 			"int", "generation"
-		) {
-			HasBridgeFunction = true,
-		},
+		),
 
 		new Export ("mono_bool", "mono_is_debugger_attached"),
 
@@ -513,9 +521,7 @@
 
 		new Export ("gchar *", "mono_path_resolve_symlinks",
 			"const char *", "path"
-		) {
-			HasBridgeFunction = true,
-		},
+		),
 
 		#endregion
 
@@ -523,9 +529,7 @@
 
 		new Export ("void", "mono_free",
 			"void *", "ptr"
-		) {
-			HasBridgeFunction = true,
-		},
+		),
 
 		#endregion
 
@@ -602,9 +606,7 @@
 
 		new Export (true, "gboolean", "mini_parse_debug_option",
 			"const char *", "option"
-		) {
-			HasBridgeFunction = true,
-		},
+		),
 
 		#endregion
 

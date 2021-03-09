@@ -617,7 +617,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_box",
+		new XDelegate ("MonoObject *", "IntPtr", "xamarin_bridge_box",
 			"GCHandle", "IntPtr", "gchandle",
 			"void *", "IntPtr", "value"
 		) {

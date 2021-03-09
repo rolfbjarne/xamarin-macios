@@ -21,6 +21,7 @@ namespace ObjCRuntime {
 #if !COREBUILD
 		enum MonoObjectType {
 			Unknown,
+			MonoObject,
 			MonoReflectionMethod,
 			MonoReflectionAssembly,
 			MonoReflectionType,
@@ -511,6 +512,7 @@ namespace ObjCRuntime {
 				mobj.GCHandle = handle;
 				mobj.TypeName = typename;
 				mobj.StructValue = WriteStructure (handle);
+				mobj.ObjectKind = MonoObjectType.MonoObject;
 				rv = MarshalStructure (mobj);
 				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
 			}
@@ -960,7 +962,7 @@ namespace ObjCRuntime {
 			if (boxed is bool)
 				log_coreclr ($"     bool boxed value: {boxed}");
 
-			return GCHandle.ToIntPtr (GCHandle.Alloc (boxed));
+			return GetMonoObject (boxed);
 		}
 #endif // !COREBUILD
 	}

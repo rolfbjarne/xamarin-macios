@@ -3136,4 +3136,10 @@ xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustom
 	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
 }
 
+void
+xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+}
+
 #endif // !defined (CORECLR_RUNTIME)

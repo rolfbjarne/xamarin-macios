@@ -60,7 +60,6 @@ build-monotouch-test: $(TARGETS)
 	rm -Rf packages $(TOP)/tests/monotouch-test/dotnet/macOS/packages
 	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:BaseIntermediateOutputPath=obj/vm/$(XAMARIN_RUNTIME)/ /p:BaseOutputPath=bin/vm/$(XAMARIN_RUNTIME)/ /p:XamarinRuntime=$(XAMARIN_RUNTIME) "/p:DefaultItemExcludesInProjectFolder=bin/**/%3Bobj/**"
 	$(MAKE) run
-	tail -n 5 $(LOGFILENAME)
 
 just-build:
 	cd $(TOP)/tests/monotouch-test/dotnet/macOS && rm -Rf bin obj
@@ -77,9 +76,10 @@ build-monotouch-test-with-coreclr: $(TARGETS)
 run:
 	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."
 	@echo "VM: $(XAMARIN_RUNTIME)" > $(LOGFILENAME)
-	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) >> $(LOGFILENAME) 2>&1 || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
+	@(time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) 2>&1 | stamp >> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
 	@echo "✅ Test run succeeded"
 	@say "Test run succeeded"
+	tail -n 5 $(LOGFILENAME)
 
 run-monotouch-test-with-mono: export XAMARIN_RUNTIME=MonoVM
 run-monotouch-test-with-mono: $(TARGETS)

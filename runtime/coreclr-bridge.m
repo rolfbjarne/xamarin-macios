@@ -88,13 +88,41 @@ static CFMutableDictionaryRef monoobject_dict = NULL;
 
 static int _Atomic monoobject_count = 0;
 
+#include <execinfo.h>
+static char *
+get_stacktrace ()
+{
+	void* addresses[128];
+	int frames = backtrace (addresses, sizeof (addresses) / sizeof (addresses [0]));
+	char** strs = backtrace_symbols (addresses, frames);
+
+	size_t length = 0;
+	int i;
+	for (i = 0; i < frames; i++)
+		length += strlen (strs [i]) + 1;
+	length++;
+
+	char *rv = (char *) calloc (1, length);
+	char *buffer = rv;
+	size_t left = length;
+	for (i = 0; i < frames; i++) {
+		snprintf (buffer, left, "%s\n", strs [i]);
+		size_t slen = strlen (strs [i]) + 1;
+		left -= slen;
+		buffer += slen;
+	}
+	free (strs);
+	return rv;
+}
+
 void
 xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
 {
-	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+	char *native_backtrace = get_stacktrace ();
 	pthread_mutex_lock (&monoobject_dict_lock);
-	CFDictionarySetValue (monoobject_dict, mobj, stacktrace);
+	CFDictionarySetValue (monoobject_dict, mobj, xamarin_strdup_printf ("%s\nNative stack trace:\n%s", stacktrace, native_backtrace));
 	pthread_mutex_unlock (&monoobject_dict_lock);
+	free (native_backtrace);
 
 	atomic_fetch_add (&monoobject_count, 1);
 }
@@ -106,13 +134,19 @@ xamarin_bridge_dump_monoobjects ()
 	unsigned int length = (unsigned int) CFDictionaryGetCount (monoobject_dict);
 	MonoObject** keys = (MonoObject **) calloc (1, sizeof (void*) * length);
 	char** values = (char **) calloc (1, sizeof (char*) * length);
-	CFDictionaryGetKeysAndValues (monoobject_dict, (const void **) &keys, (const void **) &values);
+	CFDictionaryGetKeysAndValues (monoobject_dict, (const void **) keys, (const void **) values);
 	fprintf (stderr, "There were %i MonoObjects created, and %i were not freed.\n", (int) monoobject_count, (int) length);
-	for (unsigned int i = 0; i < length; i++) {
-		MonoObject *obj = keys [i];
-		char *value = values [i];
-		fprintf (stderr, "Object %i/%i Kind: %i\n", i + 1, (int) length, obj->object_kind);
-		fprintf (stderr, "\t%s\n", value);
+	unsigned int items_to_show = length > 10 ? 10 : length;
+	if (items_to_show > 0) {
+		fprintf (stderr, "Showing the first %i MonoObjects:\n", items_to_show);
+		for (unsigned int i = 0; i < items_to_show; i++) {
+			MonoObject *obj = keys [i];
+			char *value = values [i];
+			fprintf (stderr, "Object %i/%i Kind: %i\n", i + 1, (int) length, obj->object_kind);
+			fprintf (stderr, "\t%s\n", value);
+		}
+	} else {
+		fprintf (stderr, "✅ No leaked MonoObjects!\n");
 	}
 	pthread_mutex_unlock (&monoobject_dict_lock);
 	free (keys);
@@ -124,6 +158,16 @@ monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 {
 	xamarin_free ((void *) value);
 }
+
+static void *
+dump_monoobj (void *context)
+{
+	while (1) {
+		sleep (15);
+		xamarin_bridge_dump_monoobjects ();
+	}
+}
+
 
 static void
 xamarin_load_coreclr ()
@@ -142,6 +186,10 @@ xamarin_load_coreclr ()
 	CFDictionaryValueCallBacks value_callbacks = { 0 };
 	value_callbacks.release = monoobject_dict_free_value;
 	monoobject_dict = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, NULL, &value_callbacks);
+
+	pthread_t monoobject_thread;
+	pthread_create (&monoobject_thread, NULL, dump_monoobj, NULL);
+	pthread_detach (monoobject_thread);
 
 	int rv;
 
@@ -910,10 +958,7 @@ xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * ass
 MONO_API MonoReflectionMethod *
 xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method, MonoClass * refclass)
 {
-	MonoReflectionMethod *rv = (MonoReflectionMethod *) calloc (1, sizeof (MonoReflectionMethod));
-	rv->method = method;
-	rv->object_kind = MonoObjectType_MonoReflectionMethod;
-	rv->gchandle = method->gchandle;
+	MonoReflectionMethod *rv = (MonoReflectionMethod *) xamarin_gchandle_get_target (method->gchandle);
 
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_get_object (%p, %p, %p) => %p = %p\n", domain, method, refclass, rv, rv->gchandle);
 
@@ -1357,6 +1402,34 @@ xamarin_mono_object_safe_release (MonoObject **mobj)
 
 void
 xamarin_mono_object_safe_release (MonoReflectionMethod **mobj)
+{
+	xamarin_mono_object_release ((MonoObject *) *mobj);
+	*mobj = NULL;
+}
+
+void
+xamarin_mono_object_safe_release (MonoReflectionAssembly **mobj)
+{
+	xamarin_mono_object_release ((MonoObject *) *mobj);
+	*mobj = NULL;
+}
+
+void
+xamarin_mono_object_safe_release (MonoReflectionType **mobj)
+{
+	xamarin_mono_object_release ((MonoObject *) *mobj);
+	*mobj = NULL;
+}
+
+void
+xamarin_mono_object_safe_release (MonoArray **mobj)
+{
+	xamarin_mono_object_release ((MonoObject *) *mobj);
+	*mobj = NULL;
+}
+
+void
+xamarin_mono_object_safe_release (MonoString **mobj)
 {
 	xamarin_mono_object_release ((MonoObject *) *mobj);
 	*mobj = NULL;

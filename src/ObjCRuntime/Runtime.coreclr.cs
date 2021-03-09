@@ -523,8 +523,13 @@ namespace ObjCRuntime {
 				((MonoObject*) rv)->ReferenceCount = 1;
 			}
 
+			xamarin_bridge_log_monoobject (rv, Environment.StackTrace);
+
 			return rv;
 		}
+
+		[DllImport ("__Internal", CharSet = CharSet.Auto)]
+		static extern void xamarin_bridge_log_monoobject (IntPtr mono_object, string stack_trace);
 
 		static IntPtr MarshalStructure<T> (T value) where T: struct
 		{
@@ -538,7 +543,7 @@ namespace ObjCRuntime {
 			var tn = Marshal.PtrToStringAuto (type_name);
 			log_coreclr ($"GetManagedType ({tn})");
 			var tp = Type.GetType (tn, true);
-			return GCHandle.ToIntPtr (GCHandle.Alloc (tp));
+			return AllocGCHandle (tp);
 		}
 
 		static IntPtr WriteStructure (IntPtr gchandle)

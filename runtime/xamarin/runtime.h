@@ -252,6 +252,7 @@ void			xamarin_throw_product_exception (int code, const char *message);
 GCHandle		xamarin_create_product_exception (int code, const char *message);
 GCHandle		xamarin_create_product_exception_with_inner_exception (int code, GCHandle inner_exception_gchandle /* will be freed */, const char *message);
 NSString *		xamarin_print_all_exceptions (MonoObject *exc);
+NSString *		xamarin_print_all_exceptions_gchandle (GCHandle gchandle);
 
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
 MonoClass *		xamarin_get_nsnumber_class ();
@@ -281,12 +282,17 @@ GCHandle		xamarin_gchandle_new_weakref (MonoObject *obj, bool pinned);
 MonoObject *	xamarin_gchandle_get_target (GCHandle handle);
 void			xamarin_gchandle_free (GCHandle handle);
 MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle
+GCHandle		xamarin_gchandle_duplicate (GCHandle handle, enum XamarinGCHandleType handle_type);
 
 #if defined(CORECLR_RUNTIME)
 void			xamarin_mono_object_retain (MonoObject *mobj);
 void			xamarin_mono_object_release (MonoObject *mobj);
 extern "C++" void	xamarin_mono_object_safe_release (MonoObject **mobj);
 extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionMethod **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionAssembly **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionType **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoArray **mobj);
+extern "C++" void	xamarin_mono_object_safe_release (MonoString **mobj);
 #else
 // Nothing to do here.
 #define			xamarin_mono_object_retain(x)
@@ -300,6 +306,7 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const
 void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain);
 void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
 void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
+void			xamarin_bridge_log_monoobject (MonoObject *obj, const char *stacktrace);
 
 /*
  * Look for an assembly in the app and open it.

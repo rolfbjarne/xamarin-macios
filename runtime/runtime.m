@@ -2805,8 +2805,7 @@ GCHandle
 xamarin_gchandle_new (MonoObject *obj, bool pinned)
 {
 #if defined (CORECLR_RUNTIME)
-	GCHandle rv = xamarin_bridge_duplicate_gchandle (obj == NULL ? INVALID_GCHANDLE : obj->gchandle, pinned ? XamarinGCHandleTypePinned : XamarinGCHandleTypeNormal);
-	return rv;
+	return xamarin_bridge_create_gchandle (obj == NULL ? INVALID_GCHANDLE : obj->gchandle, pinned ? XamarinGCHandleTypePinned : XamarinGCHandleTypeNormal);
 #else
 	return GINT_TO_POINTER (mono_gchandle_new (obj, pinned));
 #endif
@@ -2816,8 +2815,7 @@ GCHandle
 xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection)
 {
 #if defined (CORECLR_RUNTIME)
-	GCHandle rv = xamarin_bridge_duplicate_gchandle (obj == NULL ? INVALID_GCHANDLE : obj->gchandle, XamarinGCHandleTypeNormal /* FIXME  track_resurrection ? XamarinGCHandleTypeWeakTrackResurrection : XamarinGCHandleTypeWeak */);
-	return rv;
+	return xamarin_bridge_create_gchandle (obj == NULL ? INVALID_GCHANDLE : obj->gchandle, track_resurrection ? XamarinGCHandleTypeWeakTrackResurrection : XamarinGCHandleTypeWeak);
 #else
 	return GINT_TO_POINTER (mono_gchandle_new_weakref (obj, track_resurrection));
 #endif
@@ -3084,3 +3082,30 @@ xamarin_get_initialization_finished ()
 }
 @end
 
+#if !defined (CORECLR_RUNTIME)
+
+MonoClass *
+xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *name)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+}
+
+void
+xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+}
+
+void
+xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+}
+
+void
+xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType)
+{
+	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
+}
+
+#endif // !defined (CORECLR_RUNTIME)

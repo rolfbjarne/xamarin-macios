@@ -27,6 +27,33 @@ bool xamarin_loaded_coreclr = false;
 unsigned int coreclr_domainId = 0;
 void *coreclr_handle = NULL;
 
+GCHandle
+xamarin_get_mono_method_gchandle (MonoMethod *method)
+{
+	GCHandle rv = method->gchandle_tmp;
+	if (rv == INVALID_GCHANDLE) {
+		rv = xamarin_bridge_find_method (method->klass->gchandle, method->name, method->param_count);
+		// FIXME: thread safety
+		method->gchandle_tmp = rv;
+	}
+	return rv;
+}
+
+MonoMethod *
+xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method)
+{
+	MonoMethod *rv = (MonoMethod *) calloc (1, sizeof (MonoMethod));
+	rv->gchandle_tmp = xamarin_gchandle_duplicate (reflection_method->gchandle, XamarinGCHandleTypeNormal);
+	rv->name = xamarin_bridge_get_method_name (reflection_method->gchandle);
+	GCHandle klass_handle = xamarin_bridge_get_method_declaring_type (reflection_method->gchandle);
+	rv->klass = xamarin_find_mono_class (klass_handle);
+	xamarin_gchandle_free (klass_handle);
+
+	fprintf (stderr, "xamarin_bridge_get_mono_method (%p = %p) => %p = %s.%s = %p\n", reflection_method, reflection_method->gchandle, rv, rv->klass->fullname, rv->name, rv->gchandle_tmp);
+
+	return rv;
+}
+
 void
 xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType)
 {
@@ -60,6 +87,7 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
 	char * str = xamarin_bridge_tostring (gchandle, &exception_gchandle);
+	fprintf (stderr, "xamarin_handle_bridge_exception (%p, %s) => %s\n", gchandle, method, str);
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_assertion_message ("xamarin_bridge_tostring threw an exception");
 	LOG_CORECLR (stderr, "%s threw an exception: %s\n", method, str);
@@ -382,10 +410,15 @@ xamarin_bridge_mono_class_from_name (MonoImage * image, const char * name_space,
 MONO_API MonoMethod *
 xamarin_bridge_mono_class_get_method_from_name (MonoClass * klass, const char * name, int param_count)
 {
+	xamarin_assert (klass != NULL);
 	MonoMethod *rv = (MonoMethod *) calloc (1, sizeof (MonoMethod));
 	rv->klass = klass;
 	rv->name = strdup (name);
 	rv->param_count = param_count;
+
+	if (xamarin_get_initialization_finished ())
+		rv->gchandle_tmp = xamarin_bridge_find_method (rv->klass->gchandle, rv->name, rv->param_count);
+
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_class_get_method_from_name (%p, %s, %i) => %p\n", klass, name, param_count, rv);
 	return rv;
 }
@@ -575,7 +608,7 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 		MonoObject * returnValue = NULL;
 		GCHandle instanceHandle =  instance != NULL ? instance->gchandle : NULL;
 		GCHandle exception_gchandle = INVALID_GCHANDLE;
-		returnValue = xamarin_bridge_runtime_invoke_method (method->gchandle, instanceHandle, params, &exception_gchandle);
+		returnValue = xamarin_bridge_runtime_invoke_method (xamarin_get_mono_method_gchandle (method), instanceHandle, params, &exception_gchandle);
 		xamarin_handle_bridge_exception (exception_gchandle, "xamarin_bridge_runtime_invoke_method");
 		return returnValue;
 	}
@@ -865,19 +898,21 @@ MONO_API MonoMethodSignature *
 xamarin_bridge_mono_method_signature (MonoMethod * method)
 {
 	MonoMethodSignature *rv = (MonoMethodSignature *) calloc (1, sizeof (MonoMethodSignature));
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_signature (%p) => %p\n", method, rv);
+	fprintf (stderr, "xamarin_bridge_mono_method_signature (%p => %p) => %p\n", method, xamarin_get_mono_method_gchandle (method), rv);
 	rv->method = method;
-	rv->parameters = (struct __MethodParameter *) xamarin_bridge_method_get_signature (method->gchandle, &rv->parameter_count);
+	rv->parameters = (struct __MethodParameter *) xamarin_bridge_method_get_signature (xamarin_get_mono_method_gchandle (method), &rv->parameter_count);
 	return rv;
 }
 
 MONO_API MonoClass *
 xamarin_bridge_mono_method_get_class (MonoMethod * method)
 {
-	if (method->klass == NULL) {
-		GCHandle declaring_type_gchandle = xamarin_bridge_get_method_declaring_type (method->gchandle);
-		method->klass = xamarin_find_mono_class (declaring_type_gchandle);
-	}
+	xamarin_assert (method != NULL);
+	xamarin_assert (method->klass != NULL);
+	// if (method->klass == NULL) {
+	// 	GCHandle declaring_type_gchandle = xamarin_bridge_get_method_declaring_type (method->gchandle_tmp);
+	// 	method->klass = xamarin_find_mono_class (declaring_type_gchandle);
+	// }
 
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_get_class (%p) => %p = %s\n", method, method->klass->gchandle, method->klass->name);
 
@@ -968,7 +1003,7 @@ xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * ass
 MONO_API MonoReflectionMethod *
 xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method, MonoClass * refclass)
 {
-	MonoReflectionMethod *rv = (MonoReflectionMethod *) xamarin_gchandle_get_target (method->gchandle);
+	MonoReflectionMethod *rv = (MonoReflectionMethod *) xamarin_gchandle_get_target (xamarin_get_mono_method_gchandle (method));
 
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_get_object (%p, %p, %p) => %p = %p\n", domain, method, refclass, rv, rv->gchandle);
 
@@ -1027,7 +1062,7 @@ xamarin_bridge_mono_type_is_byref (MonoType * type)
 MONO_API MonoType *
 xamarin_bridge_mono_signature_get_return_type (MonoMethodSignature * sig)
 {
-	GCHandle return_type_gchandle = xamarin_bridge_get_method_returntype (sig->method->gchandle);
+	GCHandle return_type_gchandle = xamarin_bridge_get_method_returntype (xamarin_get_mono_method_gchandle (sig->method));
 	MonoType *rv = xamarin_create_mono_type (NULL, return_type_gchandle);
 
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_signature_get_return_type (%p) => %p = %s\n", sig, rv->gchandle, rv->name);

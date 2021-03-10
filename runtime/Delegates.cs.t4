@@ -51,6 +51,7 @@ namespace ObjCRuntime {
 				Console.Error.WriteLine ($"Caught exception {ex} from call to <#= d.SimpleEntryPoint #>");
 				Console.WriteLine ($"Caught exception {ex} from call to <#= d.SimpleEntryPoint #>");
 				NSLog ($"Caught exception {ex} from call to <#= d.SimpleEntryPoint #>");
+				xamarin_log ($"Caught exception {ex} from call to <#= d.SimpleEntryPoint #>");
 				var tmp_ex_handle = GCHandle.Alloc (ex, GCHandleType.Normal);
 				exception_gchandle = GCHandle.ToIntPtr (tmp_ex_handle);
 <# if (d.SimpleEntryPoint == "get_nsobject_with_type") { #>				created = false;

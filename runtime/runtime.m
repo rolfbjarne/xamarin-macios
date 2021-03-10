@@ -651,21 +651,31 @@ xamarin_create_exception (const char *msg)
 	return (MonoException *) mono_exception_from_name_msg (mono_get_corlib (), "System", "Exception", msg);
 }
 
+#if !defined (CORECLR_RUNTIME)
 typedef struct {
 	MonoObject object;
 	MonoMethod *method;
 	MonoString *name;
 	MonoReflectionType *reftype;
 } PublicMonoReflectionMethod;
+#endif
 
 MonoMethod *
 xamarin_get_reflection_method_method (MonoReflectionMethod *method)
 {
+	MonoMethod *rv = NULL;
+
 	// COOP: Reads managed memory, needs to be in UNSAFE mode
 	MONO_ASSERT_GC_UNSAFE;
 	
+#if defined (CORECLR_RUNTIME)
+	rv = xamarin_bridge_get_mono_method (method);
+#else
 	PublicMonoReflectionMethod *rm = (PublicMonoReflectionMethod *) method;
-	return rm->method;
+	rv = rm->method;
+#endif
+
+	return rv;
 }
 
 id
@@ -2879,7 +2889,7 @@ xamarin_gchandle_free (GCHandle handle)
 	if (handle == INVALID_GCHANDLE)
 		return;
 #if defined (CORECLR_RUNTIME)
-	LOG_CORECLR (stderr, "xamarin_gchandle_free (%p) => IGNORED\n", handle);
+	fprintf (stderr, "xamarin_gchandle_free (%p) => FREED\n", handle);
 	return; // FIXME
 	xamarin_bridge_free_gchandle (handle);
 #else

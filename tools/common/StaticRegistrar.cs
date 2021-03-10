@@ -4486,7 +4486,10 @@ namespace Registrar {
 			if (isManagedArray) {
 				sb.AppendLine ($"xamarin_id_to_managed_func {inputName}_conv_func = (xamarin_id_to_managed_func) {func};");
 				sb.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
-				sb.AppendLine ($"{outputName} = xamarin_convert_nsarray_to_managed_with_func ({inputName}, {classVariableName}, {inputName}_conv_func, GINT_TO_POINTER ({token}), &exception_gchandle);");
+				body_setup.AppendLine ("MonoObject *arr_convert_{0} = NULL;", parameter);
+				cleanup.AppendLine ("xamarin_mono_object_safe_release (&arr_convert_{0});", parameter);
+				sb.AppendLine ($"arr_convert_{parameter} = xamarin_convert_nsarray_to_managed_with_func ({inputName}, {classVariableName}, {inputName}_conv_func, GINT_TO_POINTER ({token}), &exception_gchandle);");
+				sb.AppendLine ($"{outputName} = arr_convert_{parameter};");
 				sb.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 			} else {
 				var tmpName = $"{inputName}_conv_tmp";

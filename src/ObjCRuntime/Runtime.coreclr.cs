@@ -167,7 +167,9 @@ namespace ObjCRuntime {
 
 		static unsafe IntPtr GetMethodSignature (IntPtr gchandle, ref int parameterCount)
 		{
-			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
+			var method = (MethodBase) GetGCHandleTarget (gchandle);
+			if (method == null)
+				throw new ArgumentNullException (nameof (gchandle));
 			var parameters = method.GetParameters ();
 			parameterCount = parameters.Length;
 			var rv = Marshal.AllocHGlobal (sizeof (MethodParameter) * parameterCount);
@@ -561,7 +563,7 @@ namespace ObjCRuntime {
 
 		static IntPtr WriteStructure (IntPtr gchandle)
 		{
-			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			var obj = GetGCHandleTarget (gchandle);
 			if (obj == null)
 				return IntPtr.Zero;
 			if (!obj.GetType ().IsValueType) {
@@ -690,12 +692,11 @@ namespace ObjCRuntime {
 			if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof (Nullable<>))
 				return true;
 			return false;
-
 		}
 
 		static IntPtr ObjectToString (IntPtr gchandle)
 		{
-			var obj = GCHandle.FromIntPtr (gchandle).Target;
+			var obj = GetGCHandleTarget (gchandle);
 			if (obj == null)
 				return IntPtr.Zero;
 			return Marshal.StringToHGlobalAuto (obj.ToString ());
@@ -977,6 +978,27 @@ namespace ObjCRuntime {
 				log_coreclr ($"     bool boxed value: {boxed}");
 
 			return GetMonoObject (boxed);
+		}
+
+		static IntPtr FindMethod (IntPtr klass_handle, IntPtr name_ptr, int parameter_count)
+		{
+			var klass = (Type) GetGCHandleTarget (klass_handle);
+			if (klass == null)
+				throw new ArgumentNullException (nameof (klass_handle));
+			var name = Marshal.PtrToStringAuto (name_ptr);
+			var methods = klass.GetMethods (BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+			MethodInfo rv = null;
+			foreach (var method in methods) {
+				if (method.GetParameters ().Length != parameter_count)
+					continue;
+				if (method.Name != name)
+					continue;
+				if (rv != null)
+					throw new AmbiguousMatchException ($"Found more than one method named '{name}' in {klass.FullName}' with {parameter_count} parameters.");
+				rv = method;
+			}
+			xamarin_log ($"FindMethod (0x{klass_handle.ToString ("x")} = {klass.FullName}, {name}, {parameter_count}) => {rv}");
+			return AllocGCHandle (rv);
 		}
 #endif // !COREBUILD
 	}

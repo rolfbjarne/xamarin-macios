@@ -307,6 +307,7 @@ void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, boo
 void            xamarin_release_managed_ref_coreclr (id self, GCHandle managed_obj);
 void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
 void			xamarin_bridge_log_monoobject (MonoObject *obj, const char *stacktrace);
+MonoMethod *    xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method);
 
 /*
  * Look for an assembly in the app and open it.

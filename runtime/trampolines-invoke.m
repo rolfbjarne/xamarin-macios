@@ -376,7 +376,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 						LOGZ (" argument %i is Class: NULL\n", i + 1);
 						break;
 					} else {
-						arg_ptrs [i + mofs] = (void *) xamarin_get_class ((Class) arg, &exception_gchandle);
+						MonoObject *mclass = xamarin_get_class ((Class) arg, &exception_gchandle);
+						arg_ptrs [i + mofs] = mclass;
+						S_LIST_PREPEND_CORECLR (mclass);
 						if (exception_gchandle != INVALID_GCHANDLE)
 							goto exception_handling;
 						LOGZ (" argument %i is Class: %p = %s\n", i + 1, arg, class_getName ((Class) arg));
@@ -389,7 +391,9 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 						LOGZ (" argument %i is SEL: NULL\n", i + 1);
 						break;
 					} else {
-						arg_ptrs [i + mofs] = (void *) xamarin_get_selector ((SEL) arg, &exception_gchandle);
+						MonoObject *msel = xamarin_get_selector ((SEL) arg, &exception_gchandle);
+						arg_ptrs [i + mofs] = msel;
+						S_LIST_PREPEND_CORECLR (msel);
 						if (exception_gchandle != INVALID_GCHANDLE)
 							goto exception_handling;
 						LOGZ (" argument %i is SEL: %p = %s\n", i + 1, arg, sel_getName ((SEL) arg));

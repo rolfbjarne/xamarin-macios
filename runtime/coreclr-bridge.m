@@ -88,12 +88,17 @@ static CFMutableDictionaryRef monoobject_dict = NULL;
 
 static int _Atomic monoobject_count = 0;
 
+struct monoobject_dict_type {
+	char *managed;
+	void *addresses [128];
+	int frames;
+	char *native;
+};
+
 #include <execinfo.h>
 static char *
-get_stacktrace ()
+get_stacktrace (void **addresses, int frames)
 {
-	void* addresses[128];
-	int frames = backtrace (addresses, sizeof (addresses) / sizeof (addresses [0]));
 	char** strs = backtrace_symbols (addresses, frames);
 
 	size_t length = 0;
@@ -118,11 +123,13 @@ get_stacktrace ()
 void
 xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
 {
-	char *native_backtrace = get_stacktrace ();
+	struct monoobject_dict_type *value = (struct monoobject_dict_type *) calloc (1, sizeof (struct monoobject_dict_type));
+	value->managed = xamarin_strdup_printf ("%x", stacktrace);
+	value->frames = backtrace ((void **) &value->addresses, sizeof (value->addresses) / sizeof (&value->addresses [0]));
+
 	pthread_mutex_lock (&monoobject_dict_lock);
-	CFDictionarySetValue (monoobject_dict, mobj, xamarin_strdup_printf ("%s\nNative stack trace:\n%s", stacktrace, native_backtrace));
+	CFDictionarySetValue (monoobject_dict, mobj, value);
 	pthread_mutex_unlock (&monoobject_dict_lock);
-	free (native_backtrace);
 
 	atomic_fetch_add (&monoobject_count, 1);
 }
@@ -141,22 +148,31 @@ xamarin_bridge_dump_monoobjects ()
 		fprintf (stderr, "Showing the first %i MonoObjects:\n", items_to_show);
 		for (unsigned int i = 0; i < items_to_show; i++) {
 			MonoObject *obj = keys [i];
-			char *value = values [i];
-			fprintf (stderr, "Object %i/%i %p Kind: %i\n", i + 1, (int) length, obj, obj->object_kind);
-			fprintf (stderr, "\t%s\n", value);
+			struct monoobject_dict_type *value = (struct monoobject_dict_type *) values [i];
+			if (value->native == NULL)
+				value->native = get_stacktrace (value->addresses, value->frames);
+			fprintf (stderr, "Object %i/%i %p Kind: %i RC: %i\n", i + 1, (int) length, obj, obj->object_kind, (int) obj->reference_count);
+			fprintf (stderr, "\t%s\nNative stack trace:\n%s", value->managed, value->native);
 		}
 	} else {
 		fprintf (stderr, "✅ No leaked MonoObjects!\n");
 	}
 	pthread_mutex_unlock (&monoobject_dict_lock);
+
 	free (keys);
 	free (values);
 }
 
+
 static void
 monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 {
-	xamarin_free ((void *) value);
+	struct monoobject_dict_type* v = (struct monoobject_dict_type *) value;
+	xamarin_free (v->managed);
+	free (v->addresses);
+	if (v->native)
+		xamarin_free (v->native);
+	xamarin_free (v);
 }
 
 static void *

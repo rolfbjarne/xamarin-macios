@@ -182,14 +182,15 @@ namespace CoreText {
 
 #region RunDelegate Creation
 		[DllImport (Constants.CoreTextLibrary)]
-		static extern IntPtr CTRunDelegateCreate (CTRunDelegateCallbacks callbacks, IntPtr refCon);
+		static extern IntPtr CTRunDelegateCreate (ref CTRunDelegateCallbacks callbacks, IntPtr refCon);
 
 		static IntPtr Create (CTRunDelegateOperations operations)
 		{
 			if (operations == null)
 				throw new ArgumentNullException (nameof (operations));
 
-			return CTRunDelegateCreate (operations.GetCallbacks (), operations.Handle);
+			CTRunDelegateCallbacks callbacks = operations.GetCallbacks ();
+			return CTRunDelegateCreate (ref callbacks, operations.Handle);
 		}
 
 		public CTRunDelegate (CTRunDelegateOperations operations)

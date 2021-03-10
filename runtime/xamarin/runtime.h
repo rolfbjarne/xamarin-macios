@@ -295,7 +295,7 @@ extern "C++" void	xamarin_mono_object_safe_release (MonoArray **mobj);
 extern "C++" void	xamarin_mono_object_safe_release (MonoString **mobj);
 #else
 // Nothing to do here.
-#define			xamarin_mono_object_retain(x)
+void			xamarin_mono_object_retain (MonoObject *mobj);
 #define			xamarin_mono_object_release(x)
 #define         xamarin_mono_object_safe_release(x) do { *x = NULL; } while (0);
 #endif

@@ -1112,8 +1112,7 @@ xamarin_bridge_mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_e
 MONO_API gpointer
 xamarin_bridge_mono_g_hash_table_lookup (MonoGHashTable * hash, gconstpointer key)
 {
-	GCHandle handle = xamarin_bridge_mono_hash_table_lookup (hash->gchandle, (void *) key);
-	MonoObject *rv = xamarin_gchandle_get_target (handle);
+	MonoObject *rv = xamarin_bridge_mono_hash_table_lookup (hash->gchandle, (void *) key);
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_lookup (%p = %p, %p) => %p => %p\n", hash, hash->gchandle, key, handle, rv);
 	return rv;
 }
@@ -1172,7 +1171,7 @@ xamarin_bridge_mono_gc_reference_queue_free (MonoReferenceQueue * queue)
 MONO_API gboolean
 xamarin_bridge_mono_gc_reference_queue_add (MonoReferenceQueue * queue, MonoObject * obj, void * user_data)
 {
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
+	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
 
 	xamarin_bridge_gc_reference_queue_add (queue->gchandle, obj->gchandle, user_data);
 
@@ -1222,18 +1221,21 @@ xamarin_bridge_mono_jit_init (const char * file)
 MONO_API int
 xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
 {
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
+	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
 
 	unsigned int exitCode = 0;
 	int rv = coreclr_execute_assembly (coreclr_handle, coreclr_domainId, argc > 0 ? argc - 1 : 0, argv + 1, assembly->name, &exitCode);
 
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
+	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
 
 	if (rv != 0)
 		xamarin_assertion_message ("xamarin_bridge_mono_jit_exec failed: %i\n", rv);
 
 	xamarin_bridge_dump_stats ();
 	xamarin_bridge_dump_monoobjects ();
+
+	fflush (stdout);
+	fflush (stderr);
 
 	return (int) exitCode;
 }
@@ -1440,7 +1442,7 @@ xamarin_mono_object_release (MonoObject *mobj)
 
 	int rc = atomic_fetch_sub (&mobj->reference_count, 1) - 1;
 	if (rc == 0) {
-		fprintf (stderr, "xamarin_mono_object_release (%p): will free! Type Name: %s Kind: %i\n", mobj, mobj->type_name, mobj->object_kind);
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): will free! Type Name: %s Kind: %i\n", mobj, mobj->type_name, mobj->object_kind);
 		if (mobj->gchandle != INVALID_GCHANDLE) {
 			xamarin_gchandle_free (mobj->gchandle);
 			mobj->gchandle = INVALID_GCHANDLE;

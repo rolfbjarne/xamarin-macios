@@ -529,7 +529,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_mono_hash_table_lookup",
+		new XDelegate ("MonoObject*", "IntPtr", "xamarin_bridge_mono_hash_table_lookup",
 			"GCHandle", "IntPtr", "gchandle",
 			"void *", "IntPtr", "key"
 		) {

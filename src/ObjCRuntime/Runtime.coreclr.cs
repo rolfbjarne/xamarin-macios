@@ -140,7 +140,7 @@ namespace ObjCRuntime {
 		{
 			object obj = null;
 			if (gchandle != IntPtr.Zero)
-				obj = GCHandle.FromIntPtr (gchandle).Target;
+				obj = GetGCHandleTarget (gchandle);
 			var rv = GCHandle.Alloc (obj, type);
 			var rvptr = GCHandle.ToIntPtr (rv);
 			return rvptr;
@@ -738,6 +738,7 @@ namespace ObjCRuntime {
 
 			~ReferenceQueueEntry ()
 			{
+				xamarin_log ($"~ReferenceQueueEntry UserData: 0x{UserData.ToString ("x")}");
 				Queue.Callback (UserData);
 			}
 		}
@@ -751,8 +752,8 @@ namespace ObjCRuntime {
 
 		static void GCReferenceQueueAdd (IntPtr queue_handle, IntPtr obj_handle, IntPtr user_data)
 		{
-			var queue = (ReferenceQueue) GCHandle.FromIntPtr (queue_handle).Target;
-			var obj = GCHandle.FromIntPtr (obj_handle).Target;
+			var queue = (ReferenceQueue) GetGCHandleTarget (queue_handle);
+			var obj = GetGCHandleTarget (obj_handle);
 			queue.Table.Add (obj, new ReferenceQueueEntry () { Queue = queue, UserData = user_data });
 		}
 
@@ -774,7 +775,7 @@ namespace ObjCRuntime {
 
 
 		class MonoHashTable : IEqualityComparer<IntPtr> {
-			Dictionary<IntPtr, GCHandle> Table;
+			Dictionary<IntPtr, object> Table;
 			HashFunc Hash;
 			EqualityFunc Compare;
 
@@ -783,22 +784,22 @@ namespace ObjCRuntime {
 
 			public MonoHashTable (IntPtr hash_func, IntPtr compare_func)
 			{
-				Table = new Dictionary<IntPtr, GCHandle> ();
+				Table = new Dictionary<IntPtr, object> ();
 				Hash = Marshal.GetDelegateForFunctionPointer<HashFunc> (hash_func);
 				Compare = Marshal.GetDelegateForFunctionPointer<EqualityFunc> (compare_func);
 			}
 
-			public void Insert (IntPtr key, GCHandle obj)
+			public void Insert (IntPtr key, object obj)
 			{
-				log_coreclr ($"MonoHashTable.Add (0x{key.ToString ("x")}, {obj} = {obj.Target})");
+				log_coreclr ($"MonoHashTable.Add (0x{key.ToString ("x")}, {obj?.GetType ()})");
 				Table [key] = obj;
 			}
 
-			public IntPtr Lookup (IntPtr key)
+			public object Lookup (IntPtr key)
 			{
 				if (Table.TryGetValue (key, out var value))
-					return GCHandle.ToIntPtr (value);
-				return IntPtr.Zero;
+					return value;
+				return null;
 			}
 
 			bool IEqualityComparer<IntPtr>.Equals (IntPtr x, IntPtr y)
@@ -825,15 +826,15 @@ namespace ObjCRuntime {
 
 		static void MonoHashTableInsert (IntPtr gchandle, IntPtr key, IntPtr value_gchandle)
 		{
-			var dict = (MonoHashTable) GCHandle.FromIntPtr (gchandle).Target;
-			var value = GCHandle.FromIntPtr (value_gchandle);
+			var dict = (MonoHashTable) GetGCHandleTarget (gchandle);
+			var value = GetGCHandleTarget (value_gchandle);
 			dict.Insert (key, value);
 		}
 
 		static IntPtr MonoHashTableLookup (IntPtr gchandle, IntPtr key)
 		{
-			var dict = (MonoHashTable) GCHandle.FromIntPtr (gchandle).Target;
-			return dict.Lookup (key);
+			var dict = (MonoHashTable) GetGCHandleTarget (gchandle);
+			return GetMonoObject (dict.Lookup (key));
 		}
 
 		static IntPtr GetNullableElementType (IntPtr gchandle)

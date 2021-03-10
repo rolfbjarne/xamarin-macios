@@ -1504,7 +1504,7 @@ void *
 xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
 	guint32 context_ref = GPOINTER_TO_UINT (context);
-	MonoObject *obj;
+	MonoObject *obj = NULL;
 
 	if (context_ref == INVALID_TOKEN_REF) {
 		// This requires the dynamic registrar to invoke the correct conversion function
@@ -1517,14 +1517,19 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 		MonoMethod *managed_method;
 		void *arg_ptrs [1];
 		MonoObject *exception = NULL;
+		MonoObject *arg0 = NULL;
 
 		managed_method = xamarin_get_managed_method_for_token (context_ref /* token ref */, exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE) return NULL;
 
-		arg_ptrs [0] = xamarin_get_nsobject_with_type_for_ptr (value, false, xamarin_get_parameter_type (managed_method, 0), exception_gchandle);
+		arg0 = xamarin_get_nsobject_with_type_for_ptr (value, false, xamarin_get_parameter_type (managed_method, 0), exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE) return NULL;
 
+		arg_ptrs [0] = arg0;
+
 		obj = mono_runtime_invoke (managed_method, NULL, arg_ptrs, &exception);
+
+		xamarin_mono_object_safe_release (&arg0);
 
 		if (exception) {
 			*exception_gchandle = xamarin_gchandle_new (exception, FALSE);
@@ -1538,7 +1543,7 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 	void *value_ptr = mono_object_unbox (obj);
 	memcpy (ptr, value_ptr, size);
 
-	xamarin_mono_object_release (obj);
+	xamarin_mono_object_safe_release (&obj);
 
 	return ptr;
 }

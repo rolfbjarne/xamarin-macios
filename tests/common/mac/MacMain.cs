@@ -13,6 +13,7 @@ namespace Xamarin.Mac.Tests {
 
 			var exit_code = await MonoTouch.NUnit.UI.MacRunner.MainAsync (arguments, true, _exit, typeof (MainClass).Assembly);
 			//_exit (exit_code);
+			Console.WriteLine ("Exit Code: {0}", exit_code);
 			return exit_code;
 		}
 

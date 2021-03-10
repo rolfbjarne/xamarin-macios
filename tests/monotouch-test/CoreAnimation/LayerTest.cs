@@ -152,7 +152,7 @@ namespace MonoTouchFixtures.CoreAnimation {
 			}
 
 			Assert.IsNull (ex, "Exceptions");
-#if CORECLR_RUNTIME
+#if CORECLR_RUNTIME && false
 			// FIXME: make test pass until it's working, to ease test automation while making it work.
 			Assert.That (TextLayersDisposed, Is.EqualTo (0), "disposed text layers");
 #else

@@ -2889,8 +2889,7 @@ xamarin_gchandle_free (GCHandle handle)
 	if (handle == INVALID_GCHANDLE)
 		return;
 #if defined (CORECLR_RUNTIME)
-	fprintf (stderr, "xamarin_gchandle_free (%p) => FREED\n", handle);
-	return; // FIXME
+	LOG_CORECLR (stderr, "xamarin_gchandle_free (%p) => FREED\n", handle);
 	xamarin_bridge_free_gchandle (handle);
 #else
 	mono_gchandle_free (GPOINTER_TO_UINT (handle));

@@ -582,12 +582,6 @@
 			"MonoDomain *", "domain"
 		),
 
-		new Export ("gboolean", "mono_exception_walk_trace",
-			"MonoException *", "exc",
-			"MonoExceptionFrameWalk", "func",
-			"gpointer", "user_data"
-		),
-
 		new Export ("void", "mono_install_unhandled_exception_hook",
 			"MonoUnhandledExceptionFunc", "func",
 			"gpointer", "user_data"
@@ -596,7 +590,9 @@
 		new Export ("int", "mono_main",
 			"int",     "argc",
 			"char **", "argv"
-		),
+		) {
+			HasBridgeFunction = false,
+		},
 
 		new Export (true, "void", "mono_install_load_aot_data_hook",
 			"MonoLoadAotDataFunc", "load_func",

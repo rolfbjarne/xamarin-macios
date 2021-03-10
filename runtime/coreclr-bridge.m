@@ -124,7 +124,7 @@ void
 xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
 {
 	struct monoobject_dict_type *value = (struct monoobject_dict_type *) calloc (1, sizeof (struct monoobject_dict_type));
-	value->managed = xamarin_strdup_printf ("%x", stacktrace);
+	value->managed = xamarin_strdup_printf ("%s", stacktrace);
 	value->frames = backtrace ((void **) &value->addresses, sizeof (value->addresses) / sizeof (&value->addresses [0]));
 
 	pthread_mutex_lock (&monoobject_dict_lock);
@@ -169,10 +169,9 @@ monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 {
 	struct monoobject_dict_type* v = (struct monoobject_dict_type *) value;
 	xamarin_free (v->managed);
-	free (v->addresses);
 	if (v->native)
-		xamarin_free (v->native);
-	xamarin_free (v);
+		free (v->native);
+	free (v);
 }
 
 static void *
@@ -613,12 +612,7 @@ xamarin_bridge_mono_string_new (MonoDomain * domain, const char * text)
 MONO_API MonoArray *
 xamarin_bridge_mono_array_new (MonoDomain * domain, MonoClass * eclass, uintptr_t n)
 {
-	GCHandle handle = xamarin_bridge_create_array (eclass->gchandle, n);
-
-	MonoArray *rv = (MonoArray *) calloc (1, sizeof (MonoArray));
-	rv->gchandle = handle;
-	rv->length = (uint64_t) n;
-	rv->object_kind = MonoObjectType_MonoArray;
+	MonoArray *rv = xamarin_bridge_create_array (eclass->gchandle, n);
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_array_new (%p, %p, %" PRIdPTR ") => %p = %p\n", domain, eclass, n, rv, rv->gchandle);
 	return rv;
 }
@@ -1283,24 +1277,10 @@ xamarin_bridge_mono_jit_thread_attach (MonoDomain * domain)
 	return NULL;
 }
 
-MONO_API gboolean
-xamarin_bridge_mono_exception_walk_trace (MonoException * exc, MonoExceptionFrameWalk func, gpointer user_data)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_exception_walk_trace (%p, %p, %p) => assert\n", exc, func, user_data);
-	xamarin_assertion_message ("xamarin_bridge_mono_exception_walk_trace not implemented\n");
-}
-
 MONO_API void
 xamarin_bridge_mono_install_unhandled_exception_hook (MonoUnhandledExceptionFunc func, gpointer user_data)
 {
 	LOG_CORECLR (stderr, "%s (%p, %p) => IGNORE\n", __func__, func, user_data);
-}
-
-MONO_API int
-xamarin_bridge_mono_main (int argc, char ** argv)
-{
-	LOG_CORECLR (stderr, "%s (%i, %p) => assert\n", __func__, argc, argv);
-	xamarin_assertion_message ("xamarin_bridge_mono_main not implemented\n");
 }
 
 MONO_API void
@@ -1407,6 +1387,7 @@ void
 xamarin_mono_object_retain (MonoObject *mobj)
 {
 	atomic_fetch_add (&mobj->reference_count, 1);
+	fprintf (stderr, "xamarin_mono_object_retain (%p) RC: %i Type Name: %s Kind: %i\n", mobj, (int) mobj->reference_count, mobj->type_name, mobj->object_kind);
 }
 
 void
@@ -1459,7 +1440,7 @@ xamarin_mono_object_release (MonoObject *mobj)
 
 	int rc = atomic_fetch_sub (&mobj->reference_count, 1) - 1;
 	if (rc == 0) {
-		fprintf (stderr, "xamarin_mono_object_release (%p): will free!\n", mobj);
+		fprintf (stderr, "xamarin_mono_object_release (%p): will free! Type Name: %s Kind: %i\n", mobj, mobj->type_name, mobj->object_kind);
 		if (mobj->gchandle != INVALID_GCHANDLE) {
 			xamarin_gchandle_free (mobj->gchandle);
 			mobj->gchandle = INVALID_GCHANDLE;

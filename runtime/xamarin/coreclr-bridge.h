@@ -42,7 +42,7 @@ struct _MonoMethod {
 	char *name;
 	MonoClass *klass;
 	int param_count;
-	GCHandle gchandle;
+	GCHandle gchandle_tmp;
 };
 
 struct __MethodParameter {

@@ -556,7 +556,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_create_array",
+		new XDelegate ("MonoArray*", "IntPtr", "xamarin_bridge_create_array",
 			"GCHandle", "IntPtr", "gchandle",
 			"uint64_t", "ulong", "elements"
 		) {
@@ -587,7 +587,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_get_array_object_value",
+		new XDelegate ("MonoObject *", "IntPtr", "xamarin_bridge_get_array_object_value",
 			"GCHandle", "IntPtr", "gchandle",
 			"int32_t", "int", "index"
 		) {

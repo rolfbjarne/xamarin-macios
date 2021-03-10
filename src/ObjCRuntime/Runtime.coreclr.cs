@@ -122,14 +122,14 @@ namespace ObjCRuntime {
 				log_coreclr ($"    Found in app domain: {asm.GetName ().Name}");
 				if (asm.GetName ().Name == name) {
 					log_coreclr ($"        Match!");
-					return GCHandle.ToIntPtr (GCHandle.Alloc (asm));
+					return AllocGCHandle (asm);
 				}
 			}
 
 			var loadedAssembly = Assembly.LoadFrom (path);
 			if (loadedAssembly != null) {
 				log_coreclr ($"    Loaded {loadedAssembly.GetName ().Name}");
-				return GCHandle.ToIntPtr (GCHandle.Alloc (loadedAssembly));
+				return AllocGCHandle (loadedAssembly);
 			}
 
 			log_coreclr ($"Found no assembly named {name}");
@@ -174,7 +174,7 @@ namespace ObjCRuntime {
 			MethodParameter* mparams = (MethodParameter*) rv;
 			for (var i = 0; i < parameters.Length; i++) {
 				var p = parameters [i];
-				mparams [i].Type_GCHandle = GCHandle.ToIntPtr (GCHandle.Alloc (p.ParameterType));
+				mparams [i].Type_GCHandle = AllocGCHandle (p.ParameterType);
 				mparams [i].TypeName = Marshal.StringToHGlobalAuto (p.ParameterType.FullName);
 			}
 			return rv;
@@ -183,7 +183,7 @@ namespace ObjCRuntime {
 		static IntPtr GetMethodDeclaringType (IntPtr gchandle)
 		{
 			var method = (MethodBase) GCHandle.FromIntPtr (gchandle).Target;
-			return GCHandle.ToIntPtr (GCHandle.Alloc (method.DeclaringType));
+			return AllocGCHandle (method.DeclaringType);
 		}
 
 		static IntPtr GetMethodReturnType (IntPtr gchandle)
@@ -197,7 +197,7 @@ namespace ObjCRuntime {
 
 			log_coreclr ($"Return type for {method}: {rv}");
 
-			return GCHandle.ToIntPtr (GCHandle.Alloc (rv));
+			return AllocGCHandle (rv);
 		}
 
 		static IntPtr CreateObject (IntPtr gchandle)
@@ -237,6 +237,8 @@ namespace ObjCRuntime {
 			return Marshal.StringToHGlobalAuto (obj?.Name);
 		}
 
+		// Return value: NULL or a MonoObject* that must be released with xamarin_mono_object_safe_release.
+		// Any MonoObject* ref parameters must also be released with xamarin_mono_object_safe_release.
 		static IntPtr InvokeMethod (IntPtr method_gchandle, IntPtr instance_gchandle, IntPtr native_parameters)
 		{
 			var method = (MethodBase) GetGCHandleTarget (method_gchandle);
@@ -352,12 +354,21 @@ namespace ObjCRuntime {
 
 				log_coreclr ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 
+				var parameterType = p.ParameterType.GetElementType ();
+				var isMonoObject = parameterType.IsClass || parameterType.IsInterface || (parameterType.IsValueType && IsNullable (parameterType));
+
 				if (parameters [i] == inputParameters [i]) {
 					log_coreclr ($"        The argument didn't change, no marshalling required");
+					if (parameters [i] != null && parameterType != typeof (IntPtr) && isMonoObject) {
+						unsafe {
+							IntPtr** nativeParams = (IntPtr**) native_parameters;
+							IntPtr* nativeParam = nativeParams [i];
+							xamarin_mono_object_retain (*nativeParam);
+						}
+					}
 					continue;
 				}
 
-				var parameterType = p.ParameterType.GetElementType ();
 				if (parameterType == typeof (IntPtr)) {
 					log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()}");
 					unsafe {
@@ -366,7 +377,7 @@ namespace ObjCRuntime {
 						if (nativeParam != null)
 							*nativeParam = (IntPtr) parameters [i];
 					}
-				} else if (parameterType.IsClass || parameterType.IsInterface || (parameterType.IsValueType && IsNullable (parameterType))) {
+				} else if (isMonoObject) {
 					var ptr = GetMonoObject (parameters [i]);
 					log_coreclr ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					unsafe {
@@ -430,6 +441,9 @@ namespace ObjCRuntime {
 		[DllImport ("__Internal")]
 		static extern IntPtr xamarin_find_mono_class (IntPtr gchandle, string name_space, string name);
 
+		[DllImport ("__Internal")]
+		static extern void xamarin_mono_object_retain (IntPtr mono_object);
+
 		static IntPtr FindMonoClass (Type type)
 		{
 			var handle = GCHandle.Alloc (type);
@@ -474,8 +488,7 @@ namespace ObjCRuntime {
 
 		static IntPtr GetMonoObjectImpl (object obj)
 		{
-			var gchandle = GCHandle.Alloc (obj);
-			var handle = GCHandle.ToIntPtr (gchandle);
+			var handle = AllocGCHandle (obj);
 			var typename = GetGCHandleType (handle);
 			IntPtr rv;
 			if (obj is MethodBase mb) {
@@ -662,7 +675,7 @@ namespace ObjCRuntime {
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			var baseType = type.GetEnumUnderlyingType ();
-			return GCHandle.ToIntPtr (GCHandle.Alloc (baseType));
+			return AllocGCHandle (baseType);
 		}
 
 		static bool IsNullable (IntPtr gchandle)
@@ -695,7 +708,7 @@ namespace ObjCRuntime {
 				log_coreclr ($"ObjectGetType (0x{gchandle.ToString ("x")}) => null object");
 				return IntPtr.Zero;
 			}
-			return GCHandle.ToIntPtr (GCHandle.Alloc (obj.GetType ()));
+			return AllocGCHandle (obj.GetType ());
 		}
 
 		static void GetNameAndNamespace (IntPtr gchandle, ref IntPtr name_space, ref IntPtr name)
@@ -708,7 +721,7 @@ namespace ObjCRuntime {
 		static IntPtr GetElementClass (IntPtr gchandle)
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
-			return GCHandle.ToIntPtr (GCHandle.Alloc (type.GetElementType ()));
+			return AllocGCHandle (type.GetElementType ());
 		}
 
 		// typedef void (* mono_reference_queue_callback) (void* user_data);
@@ -733,7 +746,7 @@ namespace ObjCRuntime {
 		{
 			var queue = new ReferenceQueue ();
 			queue.Callback = Marshal.GetDelegateForFunctionPointer<mono_reference_queue_callback> (callback);
-			return GCHandle.ToIntPtr (GCHandle.Alloc (queue));
+			return AllocGCHandle (queue);
 		}
 
 		static void GCReferenceQueueAdd (IntPtr queue_handle, IntPtr obj_handle, IntPtr user_data)
@@ -807,7 +820,7 @@ namespace ObjCRuntime {
 				throw new NotSupportedException ($"Unknown hash table type: {type}");
 
 			var dict = new MonoHashTable (hash_method, compare_method);
-			return GCHandle.ToIntPtr (GCHandle.Alloc (dict));
+			return AllocGCHandle (dict);
 		}
 
 		static void MonoHashTableInsert (IntPtr gchandle, IntPtr key, IntPtr value_gchandle)
@@ -827,14 +840,14 @@ namespace ObjCRuntime {
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			var elementType = type.GetGenericArguments () [0];
-			return GCHandle.ToIntPtr (GCHandle.Alloc (elementType));
+			return AllocGCHandle (elementType);
 		}
 
 		static IntPtr CreateArray (IntPtr gchandle, ulong elements)
 		{
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = Array.CreateInstance (type, (int) elements);
-			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+			return GetMonoObject (obj);
 		}
 
 		[DllImport ("libc")]
@@ -897,21 +910,15 @@ namespace ObjCRuntime {
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
 			array.SetValue (obj, index);
-			if (obj is bool)
-				log_coreclr ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj})");
-			else
-				log_coreclr ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj}) huh? {obj?.GetType ()}");
+			log_coreclr ($"SetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}, {obj}) {obj?.GetType ()}");
 		}
 
 		static IntPtr GetArrayObjectValue (IntPtr gchandle, int index)
 		{
 			var array = (Array) GCHandle.FromIntPtr (gchandle).Target;
 			var obj = array.GetValue (index);
-			if (obj is bool)
-				log_coreclr ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj}");
-			else
-				log_coreclr ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj} huh? {obj?.GetType ()}");
-			return GCHandle.ToIntPtr (GCHandle.Alloc (obj));
+			log_coreclr ($"GetArrayObjectValue (0x{gchandle.ToString ("x")}, {index}) => {obj} huh? {obj?.GetType ()}");
+			return GetMonoObject (obj);
 		}
 
 		static IntPtr TypeRemoveByRef (IntPtr gchandle)
@@ -919,7 +926,7 @@ namespace ObjCRuntime {
 			var type = (Type) GCHandle.FromIntPtr (gchandle).Target;
 			if (type.IsByRef)
 				type = type.GetElementType ();
-			return GCHandle.ToIntPtr (GCHandle.Alloc (type));
+			return AllocGCHandle (type);
 		}
 
 		static void ThrowException (IntPtr gchandle)
@@ -950,7 +957,7 @@ namespace ObjCRuntime {
 			// We can have a nullable enum value
 			if (IsNullable (structType)) {
 				if (value == IntPtr.Zero)
-					return GCHandle.ToIntPtr (GCHandle.Alloc (null));
+					return AllocGCHandle (null);
 				structType = Nullable.GetUnderlyingType (structType);
 			}
 

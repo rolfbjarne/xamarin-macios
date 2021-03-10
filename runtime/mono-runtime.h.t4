@@ -104,7 +104,7 @@ typedef struct _MonoReferenceQueue MonoReferenceQueue;
 typedef void (*mono_reference_queue_callback) (void *user_data);
 
 #if defined (CORECLR_RUNTIME)
-#define mono_array_get(array,type,index) xamarin_gchandle_get_target (xamarin_bridge_get_array_object_value (array->gchandle, (int32_t) index));
+#define mono_array_get(array,type,index) xamarin_bridge_get_array_object_value (array->gchandle, (int32_t) index);
 
 #define mono_array_setref(array,index,value)	\
 	do {	\

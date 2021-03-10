@@ -3530,6 +3530,7 @@ namespace Registrar {
 						body_setup.AppendLine ("NSArray *arr{0} = NULL;", i);
 						if (isByRefArray) {
 							body_setup.AppendLine ("MonoArray *original_marr{0} = NULL;", i);
+							cleanup.AppendLine ($"xamarin_mono_object_safe_release (&original_marr{i});");
 							setup_call_stack.AppendLine ("if (p{0} == NULL) {{", i);
 							setup_call_stack.AppendLine ("arg_ptrs [{0}] = NULL;", i);
 							setup_call_stack.AppendLine ("} else {");

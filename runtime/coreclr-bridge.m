@@ -1424,7 +1424,7 @@ void
 xamarin_mono_object_retain (MonoObject *mobj)
 {
 	atomic_fetch_add (&mobj->reference_count, 1);
-	fprintf (stderr, "xamarin_mono_object_retain (%p) RC: %i Type Name: %s Kind: %i\n", mobj, (int) mobj->reference_count, mobj->type_name, mobj->object_kind);
+	LOG_CORECLR (stderr, "xamarin_mono_object_retain (%p) RC: %i Type Name: %s Kind: %i\n", mobj, (int) mobj->reference_count, mobj->type_name, mobj->object_kind);
 }
 
 void
@@ -1536,7 +1536,7 @@ xamarin_mono_object_release (MonoObject *mobj)
 
 		xamarin_free (mobj); // allocated using Marshal.AllocHGlobal.
 	} else {
-		fprintf (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i, kind: %i\n", mobj, rc, (int) mobj->object_kind);
+		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): would not free, RC=%i, kind: %i\n", mobj, rc, (int) mobj->object_kind);
 	}
 
 	pthread_mutex_lock (&monoobject_dict_lock);

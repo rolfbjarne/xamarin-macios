@@ -538,7 +538,7 @@ namespace ObjCRuntime {
 				((MonoObject*) rv)->ReferenceCount = 1;
 			}
 
-			xamarin_bridge_log_monoobject (rv, Environment.StackTrace);
+			// xamarin_bridge_log_monoobject (rv, Environment.StackTrace);
 
 			return rv;
 		}

@@ -76,7 +76,7 @@ build-monotouch-test-with-coreclr: $(TARGETS)
 run:
 	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."
 	@echo "VM: $(XAMARIN_RUNTIME)" > $(LOGFILENAME)
-	@(set -o pipefail; time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) 2>&1 | stamp >> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
+	@set -o pipefail; (time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/vm/$(XAMARIN_RUNTIME)/Debug/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) 2>&1 | stamp >> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
 	@echo "✅ Test run succeeded"
 	@say "Test run succeeded"
 	tail -n 5 $(LOGFILENAME)

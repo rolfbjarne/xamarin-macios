@@ -770,9 +770,8 @@ namespace ObjCRuntime {
 			if (text == IntPtr.Zero)
 				return IntPtr.Zero;
 
-			return GetMonoObject ((Marshal.PtrToStringAuto (text)));
+			return GetMonoObject (Marshal.PtrToStringAuto (text));
 		}
-
 
 		class MonoHashTable : IEqualityComparer<IntPtr> {
 			Dictionary<IntPtr, object> Table;

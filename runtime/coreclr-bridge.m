@@ -49,7 +49,7 @@ xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method)
 	rv->klass = xamarin_find_mono_class (klass_handle);
 	xamarin_gchandle_free (klass_handle);
 
-	fprintf (stderr, "xamarin_bridge_get_mono_method (%p = %p) => %p = %s.%s = %p\n", reflection_method, reflection_method->gchandle, rv, rv->klass->fullname, rv->name, rv->gchandle_tmp);
+	LOG_CORECLR (stderr, "xamarin_bridge_get_mono_method (%p = %p) => %p = %s.%s = %p\n", reflection_method, reflection_method->gchandle, rv, rv->klass->fullname, rv->name, rv->gchandle_tmp);
 
 	return rv;
 }
@@ -202,14 +202,14 @@ monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 	free (v);
 }
 
-static void *
-dump_monoobj (void *context)
-{
-	while (1) {
-		sleep (15);
-		xamarin_bridge_dump_monoobjects ();
-	}
-}
+// static void *
+// dump_monoobj (void *context)
+// {
+// 	while (1) {
+// 		sleep (15);
+// 		xamarin_bridge_dump_monoobjects ();
+// 	}
+// }
 
 
 static void
@@ -230,9 +230,9 @@ xamarin_load_coreclr ()
 	value_callbacks.release = monoobject_dict_free_value;
 	monoobject_dict = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, NULL, &value_callbacks);
 
-	pthread_t monoobject_thread;
-	pthread_create (&monoobject_thread, NULL, dump_monoobj, NULL);
-	pthread_detach (monoobject_thread);
+	// pthread_t monoobject_thread;
+	// pthread_create (&monoobject_thread, NULL, dump_monoobj, NULL);
+	// pthread_detach (monoobject_thread);
 
 	int rv;
 
@@ -898,7 +898,7 @@ MONO_API MonoMethodSignature *
 xamarin_bridge_mono_method_signature (MonoMethod * method)
 {
 	MonoMethodSignature *rv = (MonoMethodSignature *) calloc (1, sizeof (MonoMethodSignature));
-	fprintf (stderr, "xamarin_bridge_mono_method_signature (%p => %p) => %p\n", method, xamarin_get_mono_method_gchandle (method), rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_method_signature (%p => %p) => %p\n", method, xamarin_get_mono_method_gchandle (method), rv);
 	rv->method = method;
 	rv->parameters = (struct __MethodParameter *) xamarin_bridge_method_get_signature (xamarin_get_mono_method_gchandle (method), &rv->parameter_count);
 	return rv;
@@ -1206,7 +1206,7 @@ xamarin_bridge_mono_gc_reference_queue_free (MonoReferenceQueue * queue)
 MONO_API gboolean
 xamarin_bridge_mono_gc_reference_queue_add (MonoReferenceQueue * queue, MonoObject * obj, void * user_data)
 {
-	fprintf (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_gc_reference_queue_add (%p = %p, %p = %p, %p)\n", queue, queue->gchandle, obj, obj->gchandle, user_data);
 
 	xamarin_bridge_gc_reference_queue_add (queue->gchandle, obj->gchandle, user_data);
 

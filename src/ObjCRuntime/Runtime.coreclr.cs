@@ -739,7 +739,6 @@ namespace ObjCRuntime {
 
 			~ReferenceQueueEntry ()
 			{
-				xamarin_log ($"~ReferenceQueueEntry UserData: 0x{UserData.ToString ("x")}");
 				Queue.Callback (UserData);
 			}
 		}
@@ -997,7 +996,7 @@ namespace ObjCRuntime {
 					throw new AmbiguousMatchException ($"Found more than one method named '{name}' in {klass.FullName}' with {parameter_count} parameters.");
 				rv = method;
 			}
-			xamarin_log ($"FindMethod (0x{klass_handle.ToString ("x")} = {klass.FullName}, {name}, {parameter_count}) => {rv}");
+			log_coreclr ($"FindMethod (0x{klass_handle.ToString ("x")} = {klass.FullName}, {name}, {parameter_count}) => {rv}");
 			return AllocGCHandle (rv);
 		}
 #endif // !COREBUILD

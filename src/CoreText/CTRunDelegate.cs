@@ -187,9 +187,9 @@ namespace CoreText {
 		static IntPtr Create (CTRunDelegateOperations operations)
 		{
 			if (operations == null)
-				throw ConstructorError.ArgumentNull (this, "operations");
+				throw new ArgumentNullException (nameof (operations));
 
-			CTRunDelegateCreate (operations.GetCallbacks (), operations.Handle);
+			return CTRunDelegateCreate (operations.GetCallbacks (), operations.Handle);
 		}
 
 		public CTRunDelegate (CTRunDelegateOperations operations)

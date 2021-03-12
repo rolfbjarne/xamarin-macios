@@ -284,6 +284,11 @@ namespace ObjCRuntime {
 			objc_exception_mode = options->MarshalObjectiveCExceptionMode;
 			managed_exception_mode = options->MarshalManagedExceptionMode;
 
+#if NET
+			if (IsCoreCLR)
+				InitializeCoreCLRBridge ();
+#endif
+
 			initialized = true;
 #if PROFILE
 			Console.WriteLine ("Runtime.Initialize completed in {0} ms", watch.ElapsedMilliseconds);
@@ -403,7 +408,7 @@ namespace ObjCRuntime {
 			return AllocGCHandle (rv);
 		}
 
-#region Wrappers for delegate callbacks
+			#region Wrappers for delegate callbacks
 		static void RegisterAssembly (IntPtr a)
 		{
 			RegisterAssembly ((Assembly) GetGCHandleTarget (a));
@@ -780,7 +785,7 @@ namespace ObjCRuntime {
 		{
 			return Marshal.StringToHGlobalAuto (Class.LookupFullName (klass));
 		}
-#endregion
+			#endregion
 
 		static MethodInfo GetBlockProxyAttributeMethod (MethodInfo method, int parameter)
 		{
@@ -1667,7 +1672,7 @@ namespace ObjCRuntime {
 		}
 #endif // !COREBUILD
 
-		[DllImport ("__Internal", CharSet = CharSet.Unicode)]
+			[DllImport ("__Internal", CharSet = CharSet.Unicode)]
 		internal extern static void xamarin_log (string s);
 
 		static int MajorVersion = -1;

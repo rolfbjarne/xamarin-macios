@@ -6,12 +6,15 @@
 //
 // Copyright 2021 Microsoft Corp.
 
+#if NET
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ObjectiveC;
 
 using Foundation;
 
@@ -108,9 +111,9 @@ namespace ObjCRuntime {
 			xamarin_log (message);
 		}
 
-		static void DumpStats ()
+		static unsafe void InitializeCoreCLRBridge ()
 		{
-			xamarin_log ("Dumping stats:");
+			Bridge.InitializeReferenceTracking (null, null, null);
 		}
 
 		static IntPtr FindAssembly (IntPtr assembly_name)
@@ -1003,3 +1006,4 @@ namespace ObjCRuntime {
 	}
 }
 
+#endif // NET

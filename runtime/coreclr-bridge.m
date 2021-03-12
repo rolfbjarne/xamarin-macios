@@ -61,18 +61,18 @@ xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustom
 }
 
 void
-xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain)
+xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain, bool user_type)
 {
 	MonoObject *mobj = xamarin_gchandle_get_target (managed_object);
-	xamarin_create_managed_ref (self, mobj, retain);
+	xamarin_create_managed_ref (self, mobj, retain, user_type);
 	xamarin_mono_object_safe_release (&mobj);
 }
 
 void
-xamarin_release_managed_ref_coreclr (id self, GCHandle managed_object)
+xamarin_release_managed_ref_coreclr (id self, GCHandle managed_object, bool user_type)
 {
 	MonoObject *mobj = xamarin_gchandle_get_target (managed_object);
-	xamarin_release_managed_ref (self, mobj);
+	xamarin_release_managed_ref (self, mobj, user_type);
 	xamarin_mono_object_safe_release (&mobj);
 }
 
@@ -1418,6 +1418,27 @@ MONO_API void
 xamarin_bridge_mono_install_ftnptr_eh_callback (MonoFtnPtrEHCallback callback)
 {
 	LOG_CORECLR (stderr, "%s (%p) => IGNORE\n", __func__, callback);
+}
+
+MONO_API void
+xamarin_bridge_mono_debugger_agent_parse_options (const char * options)
+{
+	LOG_CORECLR (stderr, "%s (%s) => assert\n", __func__, options);
+	xamarin_assertion_message ("%s not implemented\n", __func__);
+}
+
+MONO_API gboolean
+xamarin_bridge_mono_debugger_agent_transport_handshake ()
+{
+	LOG_CORECLR (stderr, "%s () => assert\n", __func__);
+	xamarin_assertion_message ("%s not implemented\n", __func__);
+}
+
+MONO_API void
+xamarin_bridge_mono_debugger_agent_register_transport (DebuggerTransport * trans)
+{
+	LOG_CORECLR (stderr, "%s (%p) => assert\n", __func__, trans);
+	xamarin_assertion_message ("%s not implemented\n", __func__);
 }
 
 void

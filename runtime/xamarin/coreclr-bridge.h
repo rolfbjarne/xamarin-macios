@@ -510,6 +510,15 @@ xamarin_bridge_mono_threads_detach_coop (gpointer cookie, gpointer* dummy);
 MONO_API void
 xamarin_bridge_mono_install_ftnptr_eh_callback (MonoFtnPtrEHCallback callback);
 
+MONO_API void
+xamarin_bridge_mono_debugger_agent_parse_options (const char * options);
+
+MONO_API gboolean
+xamarin_bridge_mono_debugger_agent_transport_handshake (void);
+
+MONO_API void
+xamarin_bridge_mono_debugger_agent_register_transport (DebuggerTransport * trans);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

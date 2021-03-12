@@ -7,15 +7,15 @@
     <RootNamespace></RootNamespace>
     <AssemblyName>%ASSEMBLY_NAME%</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\product.snk</AssemblyOriginatorKeyFile>
-    <IntermediateOutputPath>..\..\build\dotnet\IDE\obj\%PLATFORM%\$(Configuration)</IntermediateOutputPath>
+    <AssemblyOriginatorKeyFile>..\..\..\..\product.snk</AssemblyOriginatorKeyFile>
+    <IntermediateOutputPath>..\..\..\build\dotnet\IDE\obj\%PLATFORM%\$(Configuration)</IntermediateOutputPath>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants Condition="'%PLATFORM%' == 'iOS'">IPHONE;IOS;MINIMAL;MONOTOUCH</DefineConstants>
-    <DefineConstants Condition="'%PLATFORM%' == 'tvOS'">MONOTOUCH;IPHONE;TVOS;XAMCORE_3_0</DefineConstants>
-    <DefineConstants Condition="'%PLATFORM%' == 'watchOS'">MONOTOUCH;WATCH;XAMCORE_3_0</DefineConstants>
-    <DefineConstants Condition="'%PLATFORM%' == 'macOS'">DEBUG;MONOMAC;NO_SYSTEM_DRAWING</DefineConstants>
-    <DefineConstants Condition="'%PLATFORM%' == 'MacCatalyst'">IPHONE;MACCATALYST;MINIMAL;MONOTOUCH</DefineConstants>
+    <DefineConstants Condition="'%PLATFORM%' == 'iOS'">$(DefineConstants);IPHONE;IOS;MINIMAL;MONOTOUCH</DefineConstants>
+    <DefineConstants Condition="'%PLATFORM%' == 'tvOS'">$(DefineConstants);MONOTOUCH;IPHONE;TVOS;XAMCORE_3_0</DefineConstants>
+    <DefineConstants Condition="'%PLATFORM%' == 'watchOS'">$(DefineConstants);MONOTOUCH;WATCH;XAMCORE_3_0</DefineConstants>
+    <DefineConstants Condition="'%PLATFORM%' == 'macOS'">$(DefineConstants);DEBUG;MONOMAC;NO_SYSTEM_DRAWING</DefineConstants>
+    <DefineConstants Condition="'%PLATFORM%' == 'MacCatalyst'">$(DefineConstants);IPHONE;MACCATALYST;MINIMAL;MONOTOUCH</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <!--%FILES%-->

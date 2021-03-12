@@ -180,6 +180,12 @@ git-clean-all:
 		echo "Done"; \
 	fi; \
 
+# The developer can modify this using the configure script, but having this target makes it
+# so that running configure won't be required for a build to succeed, because we'll just
+# create a default (empty) configure.inc.
+configure.inc:
+	$(Q) touch configure.inc
+
 ifdef ENABLE_XAMARIN
 SUBDIRS += $(MACCORE_PATH)
 endif

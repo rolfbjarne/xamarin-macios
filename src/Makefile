@@ -1549,7 +1549,7 @@ DOTNET_macOS_ASSEMBLY_NAME=Xamarin.Mac
 DOTNET_MacCatalyst_ASSEMBLY_NAME=Xamarin.MacCatalyst
 
 define GenerateProject
-$(PROJECT_DIR)/projects/$(1)/net-$(1).csproj: projects/template.csproj Makefile $$(wildcard $(TOP)/src/*.sources) | $(PROJECT_DIR)/projects/$(1)
+$(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj: projects/template.csproj Makefile $$(wildcard $(TOP)/src/*.sources) | $(PROJECT_DIR)/projects/dotnet/$(1)
 	$$(Q_GEN) sed \
 		-e 's*<!--%FILES%-->*$$(foreach file,$$($(2)_SOURCES),<Compile Include="$$(file)"/>)*' \
 		-e 's*<!--%APIS%-->*$$(foreach file,$$($(2)_APIS),<None Include="$$(file)"/>)*' \
@@ -1557,11 +1557,11 @@ $(PROJECT_DIR)/projects/$(1)/net-$(1).csproj: projects/template.csproj Makefile 
 		-e 's*%ASSEMBLY_NAME%*$$(DOTNET_$(1)_ASSEMBLY_NAME)*g' \
 		$$< | xmllint --format - > $$@
 
-$(PROJECT_DIR)/projects/$(1):
-	mkdir -p $$@
+$(PROJECT_DIR)/projects/dotnet/$(1):
+	$(Q) mkdir -p $$@
 
-DOTNET_TARGETS += $(PROJECT_DIR)/projects/$(1)/net-$(1).csproj
-PROJECT_FILES += $(PROJECT_DIR)/projects/$(1)/net-$(1).csproj
+DOTNET_TARGETS += $(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj
+PROJECT_FILES += $(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj
 endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call GenerateProject,$(platform),$(shell echo $(platform) | tr a-z A-Z))))
 

@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "generator-tests", "tests\ge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cecil-tests", "tests\cecil-tests\cecil-tests.csproj", "{0C979851-15E9-4BB6-AD79-5F0C7DF69456}"
 EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "net-iOS", "src\projects\dotnet\iOS\net-iOS.csproj", "{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -487,6 +489,42 @@ Global
 		{0C979851-15E9-4BB6-AD79-5F0C7DF69456}.Debug|x86.Build.0 = Debug|Any CPU
 		{0C979851-15E9-4BB6-AD79-5F0C7DF69456}.Release|x86.ActiveCfg = Release|Any CPU
 		{0C979851-15E9-4BB6-AD79-5F0C7DF69456}.Release|x86.Build.0 = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_2_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_2_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_2_0_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_2_0_Release|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_3_5_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_3_5_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_3_5_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_3_5_Release|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_4_0_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_4_0_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.net_4_0_Release|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.silverlight_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.silverlight_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.silverlight_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.silverlight_Release|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.winphone_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.winphone_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.winphone_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.winphone_Release|Any CPU.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|iPhone.Build.0 = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{D93F6197-E37A-4699-A6E9-C4BE78F4E9B7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{208744BD-504E-47D7-9A98-1CF02454A6DA} = {2BFA13F8-B568-48BF-9A70-9D43F718C523}

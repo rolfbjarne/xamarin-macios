@@ -112,13 +112,19 @@ $(eval $(call FixMacCatalystAssembly,System.Net.Http))
 		build \
 		download-packages.proj \
 		/t:WriteBundledNETCorePlatformsPackageVersion \
-		/p:WriteFilePath=$(CURDIR)/BundledNETCorePlatformsPackageVersion.txt \
+		/p:WriteFilePath=$(CURDIR)/.stamp-download-dotnet-packages.tmp \
 		/p:PackageRuntimeIdentifiers="$(DOTNET_RUNTIME_IDENTIFIERS)" \
 		/bl \
 		/v:quiet
-	$(Q) touch $@
+	$(Q) mv .stamp-download-dotnet-packages.tmp .stamp-download-dotnet-packages
 
-BundledNETCorePlatformsPackageVersion.txt: .stamp-download-dotnet-packages
+
+BundledNETCorePlatformsPackageVersion.txt: .stamp-download-dotnet-packages $(TOP)/configure.inc
+ifdef CUSTOM_DOTNET
+	$(Q) echo 6.0.0-dev > $@
+else
+	$(CP) .stamp-download-dotnet-packages $@
+endif
 
 package-download/global.json: $(TOP)/global6.json Makefile
 	$(Q) $(CP) $< $@
@@ -141,14 +147,14 @@ endif
 
 downloads/dotnet-sdk: $(TOP)/configure.inc | downloads
 ifdef CUSTOM_DOTNET
-	ln -Fhs $(abspath $(TOP)/builds/custom-dotnet/dotnet-sdk) $@
+	ln -Fhs $(abspath $(TOP)/builds/dotnet-dev/dotnet-sdk) $@
 else
 	ln -Fhs $(abspath $(TOP)/builds/downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME)))) $@
 endif
 
 downloads/microsoft.netcore.app.ref/selected-version: $(TOP)/configure.inc | downloads/microsoft.netcore.app.ref
 ifdef CUSTOM_DOTNET
-	ln -Fhs $(abspath $(TOP)/builds/custom-dotnet/microsoft.netcore.app.ref/custom-version) $@
+	ln -Fhs $(abspath $(TOP)/builds/dotnet-dev/microsoft.netcore.app.ref/6.0.0-dev) $@
 else
 	ln -Fhs $(abspath $(TOP)/builds/downloads/microsoft.netcore.app.ref/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)) $@
 endif
@@ -161,19 +167,18 @@ DOTNET_COMMON_DIRECTORIES += \
 	downloads \
 	downloads/microsoft.netcore.app.ref \
 
-custom-dotnet/dotnet-sdk: $(TOP)/configure.inc | custom-dotnet
+dotnet-dev/dotnet-sdk: $(TOP)/configure.inc | dotnet-dev
 	ln -Fhs $(CUSTOM_DOTNET_PATH)/obj/Microsoft.NETCore.App.Bundle/Debug/net6.0/osx-x64/output $@
 
-custom-dotnet/microsoft.netcore.app.ref/custom-version: $(TOP)/configure.inc | custom-dotnet/microsoft.netcore.app.ref
-	ln -Fhs $(CUSTOM_DOTNET_PATH)/bin/microsoft.netcore.app.ref $@
+dotnet-dev/microsoft.netcore.app.ref: $(TOP)/configure.inc | dotnet-dev
+	ln -Fhs $(CUSTOM_DOTNET_PATH)/bin $@
 
 DOTNET_CUSTOM_SYMLINKS = \
-	custom-dotnet/dotnet-sdk \
-	custom-dotnet/microsoft.netcore.app.ref/custom-version \
+	dotnet-dev/dotnet-sdk \
+	dotnet-dev/microsoft.netcore.app.ref \
 
 DOTNET_COMMON_DIRECTORIES += \
-	custom-dotnet \
-	custom-dotnet/microsoft.netcore.app.ref \
+	dotnet-dev \
 
 x: $(DOTNET_CUSTOM_SYMLINKS)
 y: $(DOTNET_COMMON_TARGETS)

@@ -1551,8 +1551,8 @@ DOTNET_MacCatalyst_ASSEMBLY_NAME=Xamarin.MacCatalyst
 define GenerateProject
 $(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj: projects/template.csproj Makefile $$(wildcard $(TOP)/src/*.sources) | $(PROJECT_DIR)/projects/dotnet/$(1)
 	$$(Q_GEN) sed \
-		-e 's*<!--%FILES%-->*$$(foreach file,$$($(2)_SOURCES),<Compile Include="$$(file)"/>)*' \
-		-e 's*<!--%APIS%-->*$$(foreach file,$$($(2)_APIS),<None Include="$$(file)"/>)*' \
+		-e 's*<!--%FILES%-->*$$(foreach file,$$($(2)_SOURCES),<Compile Include="../../../$$(file)"><Link>$$(shell echo $$(file) | sed 's_[.][.]/__'g)</Link></Compile>)*' \
+		-e 's*<!--%APIS%-->*$$(foreach file,$$($(2)_APIS),<None Include="../../../$$(file)"></None>)*' \
 		-e 's*%PLATFORM%*$(1)*g' \
 		-e 's*%ASSEMBLY_NAME%*$$(DOTNET_$(1)_ASSEMBLY_NAME)*g' \
 		$$< | xmllint --format - > $$@

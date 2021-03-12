@@ -90,7 +90,7 @@ endif
 package-tests:
 	$(MAKE) qa-test-dependencies.zip mac-test-package.zip
 
-test.config: Makefile $(TOP)/Make.config $(TOP)/mk/mono.mk
+test.config: Makefile $(TOP)/Make.config $(TOP)/mk/mono.mk $(TOP)/configure.inc
 	@rm -f $@
 	@echo "MONOTOUCH_PREFIX=$(abspath $(MONOTOUCH_PREFIX))" >> $@
 	@echo "IOS_DESTDIR=$(abspath $(IOS_DESTDIR))" >> $@

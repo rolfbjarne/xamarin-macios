@@ -134,9 +134,53 @@ DOTNET_DOWNLOADS = \
 	downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) \
 	.stamp-download-dotnet-packages \
 
-dotnet: $(DOTNET_DOWNLOADS)
+dotnet:: $(DOTNET_DOWNLOADS)
 ifdef ENABLE_DOTNET
 all-local:: $(DOTNET_DOWNLOADS)
+endif
+
+downloads/dotnet-sdk: $(TOP)/configure.inc | downloads
+ifdef CUSTOM_DOTNET
+	ln -Fhs $(abspath $(TOP)/builds/custom-dotnet/dotnet-sdk) $@
+else
+	ln -Fhs $(abspath $(TOP)/builds/downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME)))) $@
+endif
+
+downloads/microsoft.netcore.app.ref/selected-version: $(TOP)/configure.inc | downloads/microsoft.netcore.app.ref
+ifdef CUSTOM_DOTNET
+	ln -Fhs $(abspath $(TOP)/builds/custom-dotnet/microsoft.netcore.app.ref/custom-version) $@
+else
+	ln -Fhs $(abspath $(TOP)/builds/downloads/microsoft.netcore.app.ref/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)) $@
+endif
+
+DOTNET_COMMON_TARGETS += \
+	downloads/dotnet-sdk \
+	downloads/microsoft.netcore.app.ref/selected-version \
+
+DOTNET_COMMON_DIRECTORIES += \
+	downloads \
+	downloads/microsoft.netcore.app.ref \
+
+custom-dotnet/dotnet-sdk: $(TOP)/configure.inc | custom-dotnet
+	ln -Fhs $(CUSTOM_DOTNET_PATH)/obj/Microsoft.NETCore.App.Bundle/Debug/net6.0/osx-x64/output $@
+
+custom-dotnet/microsoft.netcore.app.ref/custom-version: $(TOP)/configure.inc | custom-dotnet/microsoft.netcore.app.ref
+	ln -Fhs $(CUSTOM_DOTNET_PATH)/bin/microsoft.netcore.app.ref $@
+
+DOTNET_CUSTOM_SYMLINKS = \
+	custom-dotnet/dotnet-sdk \
+	custom-dotnet/microsoft.netcore.app.ref/custom-version \
+
+DOTNET_COMMON_DIRECTORIES += \
+	custom-dotnet \
+	custom-dotnet/microsoft.netcore.app.ref \
+
+x: $(DOTNET_CUSTOM_SYMLINKS)
+y: $(DOTNET_COMMON_TARGETS)
+
+ifdef CUSTOM_DOTNET
+dotnet:: $(DOTNET_CUSTOM_SYMLINKS)
+all-local:: $(DOTNET_CUSTOM_SYMLINKS)
 endif
 
 clean-local::
@@ -1100,7 +1144,7 @@ install-tvos: $(TVOS_TARGETS)
 DOTNET_COMMON_DIRECTORIES += \
 	$(foreach platform,$(DOTNET_PLATFORMS_UPPERCASE),$(DOTNET_DESTDIR)/$($(platform)_NUGET).Sdk) \
 
-DOTNET_COMMON_TARGETS = \
+DOTNET_COMMON_TARGETS += \
 	$(foreach platform,$(DOTNET_PLATFORMS_UPPERCASE),$(DOTNET_DESTDIR)/$($(platform)_NUGET).Sdk/Versions.plist) \
 
 $(DOTNET_COMMON_DIRECTORIES):

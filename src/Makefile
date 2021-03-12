@@ -1546,6 +1546,33 @@ INSTALL_TARGETS += install-tvos
 endif
 endif
 
+MACOS_SOURCES = $(MAC_SOURCES)
+MACOS_APIS = $(MAC_APIS)
+
+DOTNET_iOS_ASSEMBLY_NAME=Xamarin.iOS
+DOTNET_tvOS_ASSEMBLY_NAME=Xamarin.TVOS
+DOTNET_macOS_ASSEMBLY_NAME=Xamarin.Mac
+DOTNET_MacCatalyst_ASSEMBLY_NAME=Xamarin.MacCatalyst
+
+define GenerateProject
+$(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj: projects/template.csproj Makefile $$(wildcard $(TOP)/src/*.sources) | $(PROJECT_DIR)/projects/dotnet/$(1)
+	$$(Q_GEN) sed \
+		-e 's*<!--%FILES%-->*$$(foreach file,$$($(2)_SOURCES),<Compile Include="../../../$$(file)"><Link>$$(shell echo $$(file) | sed 's_[.][.]/__'g)</Link></Compile>)*' \
+		-e 's*<!--%APIS%-->*$$(foreach file,$$($(2)_APIS),<None Include="../../../$$(file)"></None>)*' \
+		-e 's*%PLATFORM%*$(1)*g' \
+		-e 's*%ASSEMBLY_NAME%*$$(DOTNET_$(1)_ASSEMBLY_NAME)*g' \
+		$$< | xmllint --format - > $$@
+
+$(PROJECT_DIR)/projects/dotnet/$(1):
+	$(Q) mkdir -p $$@
+
+DOTNET_TARGETS += $(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj
+PROJECT_FILES += $(PROJECT_DIR)/projects/dotnet/$(1)/net-$(1).csproj
+endef
+$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call GenerateProject,$(platform),$(shell echo $(platform) | tr a-z A-Z))))
+
+
+
 #
 # Global targets
 #

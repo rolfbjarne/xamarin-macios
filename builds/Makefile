@@ -107,15 +107,15 @@ $(eval $(call FixMacCatalystAssembly,System.Net.Http))
 	$(MAKE) download-mono
 	$(Q) touch $@
 
-.stamp-download-dotnet-packages: $(TOP)/Make.config downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) package-download/global.json package-download/NuGet.config
-	$(Q_GEN) cd package-download && $(DOTNET6) \
+.stamp-download-dotnet-packages: $(TOP)/Make.config downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) package-download/NuGet.config
+	$(Q_GEN) cd package-download && $(DOTNET) \
 		build \
 		download-packages.proj \
 		/t:WriteBundledNETCorePlatformsPackageVersion \
 		/p:WriteFilePath=$(CURDIR)/.stamp-download-dotnet-packages.tmp \
 		/p:PackageRuntimeIdentifiers="$(DOTNET_RUNTIME_IDENTIFIERS)" \
 		/bl \
-		/v:quiet
+		$(MSBUILD_VERBOSITY)
 	$(Q) mv .stamp-download-dotnet-packages.tmp .stamp-download-dotnet-packages
 
 
@@ -134,6 +134,9 @@ package-download/NuGet.config: $(TOP)/NuGet.config Makefile
 	$(Q) $(CP) $< $@
 	$(Q) $(CP) $< $@.tmp
 	$(Q) nuget config -Set globalPackagesFolder=$(abspath $(CURDIR)/downloads) -Config $@.tmp
+ifdef CUSTOM_DOTNET
+	$(Q) nuget sources add -Name dev-runtime-feed -Source $(abspath $(CUSTOM_DOTNET_PATH)/packages/Release/Shipping) -ConfigFile $@.tmp
+endif
 	$(Q) mv $@.tmp $@
 
 DOTNET_DOWNLOADS = \

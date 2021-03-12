@@ -689,7 +689,8 @@ DOTNET_$(2)_$(3)$(4)_OBJECTS   = $$(patsubst %,.libs/$(1)/%$(5).$(3).o,   $(MONO
 .libs/$(1)/libxamarin$(5).$(3).dylib: $$(DOTNET_$(2)_$(3)$(4)_OBJECTS)
 
 endef
-
+xx:
+	echo $(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)
 # foreach (var platform in DOTNET_PLATFORMS)
 #   foreach (var rid in DOTNET_<platform>_RUNTIME_IDENTIFIERS))
 #      foreach (var arch in DOTNET_<rid>_ARCHITECTURES)

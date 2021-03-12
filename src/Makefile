@@ -930,6 +930,7 @@ WATCH_TARGETS += \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/MonoTouch.NUnitLite.dll      \
 	$(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/MonoTouch.NUnitLite.pdb
 
+ifdef INCLUDE_DOTNET_WATCHOS
 DOTNET_TARGETS += \
 	$(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS.dll \
 	$(WATCHOS_DOTNET_BUILD_DIR)/64/Xamarin.WatchOS.dll \
@@ -946,6 +947,8 @@ DOTNET_TARGETS_DIRS += \
 	$(WATCHOS_DOTNET_BUILD_DIR)/ref \
 	$(DOTNET_DESTDIR)/$(WATCHOS_NUGET).Ref/ref/net6.0 \
 	$(foreach rid,$(DOTNET_WATCHOS_RUNTIME_IDENTIFIERS),$(DOTNET_DESTDIR)/$(WATCHOS_NUGET).Runtime.$(rid)/runtimes/$(rid)/lib/net6.0) \
+
+endif
 
 # reference assemblies, this is just for compilation with XS
 $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/%.dll: $(WATCH_BUILD_DIR)/reference/%.dll | $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS $(IOS_DESTDIR)$(MONOTOUCH_PREFIX)/lib/mono/Xamarin.WatchOS/Facades
@@ -1536,6 +1539,33 @@ ALL_TARGETS += all-tvos
 INSTALL_TARGETS += install-tvos
 endif
 endif
+
+MACOS_SOURCES = $(MAC_SOURCES)
+MACOS_APIS = $(MAC_APIS)
+
+DOTNET_iOS_ASSEMBLY_NAME=Xamarin.iOS
+DOTNET_tvOS_ASSEMBLY_NAME=Xamarin.TVOS
+DOTNET_macOS_ASSEMBLY_NAME=Xamarin.Mac
+DOTNET_MacCatalyst_ASSEMBLY_NAME=Xamarin.MacCatalyst
+
+define GenerateProject
+$(PROJECT_DIR)/projects/$(1)/net-$(1).csproj: projects/template.csproj Makefile $$(wildcard $(TOP)/src/*.sources) | $(PROJECT_DIR)/projects/$(1)
+	$$(Q_GEN) sed \
+		-e 's*<!--%FILES%-->*$$(foreach file,$$($(2)_SOURCES),<Compile Include="$$(file)"/>)*' \
+		-e 's*<!--%APIS%-->*$$(foreach file,$$($(2)_APIS),<None Include="$$(file)"/>)*' \
+		-e 's*%PLATFORM%*$(1)*g' \
+		-e 's*%ASSEMBLY_NAME%*$$(DOTNET_$(1)_ASSEMBLY_NAME)*g' \
+		$$< | xmllint --format - > $$@
+
+$(PROJECT_DIR)/projects/$(1):
+	mkdir -p $$@
+
+DOTNET_TARGETS += $(PROJECT_DIR)/projects/$(1)/net-$(1).csproj
+PROJECT_FILES += $(PROJECT_DIR)/projects/$(1)/net-$(1).csproj
+endef
+$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call GenerateProject,$(platform),$(shell echo $(platform) | tr a-z A-Z))))
+
+
 
 #
 # Global targets

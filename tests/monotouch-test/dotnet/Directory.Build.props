@@ -1,0 +1,5 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+    	<FrameworkReference Update="Microsoft.NETCore.App" RuntimeFrameworkVersion="6.0.0-dev" />
+	</PropertyGroup>
+</Project>

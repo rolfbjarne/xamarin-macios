@@ -107,18 +107,27 @@ $(eval $(call FixMacCatalystAssembly,System.Net.Http))
 	$(MAKE) download-mono
 	$(Q) touch $@
 
+ifdef CUSTOM_DOTNET
+DOWNLOAD_DOTNET_VERSION=$(CUSTOM_DOTNET_VERSION)
+else
+DOWNLOAD_DOTNET_VERSION=$(DOTNET6_VERSION)
+endif
+
 .stamp-download-dotnet-packages: $(TOP)/Make.config downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) package-download/global.json package-download/NuGet.config
 	$(Q_GEN) cd package-download && $(DOTNET6) \
 		build \
 		download-packages.proj \
 		/t:WriteBundledNETCorePlatformsPackageVersion \
-		/p:WriteFilePath=$(CURDIR)/BundledNETCorePlatformsPackageVersion.txt \
+		/p:WriteFilePath=$(CURDIR)/.stamp-download-dotnet-packages.tmp \
 		/p:PackageRuntimeIdentifiers="$(DOTNET_RUNTIME_IDENTIFIERS)" \
+		/p:CustomDotNetVersion="$(DOWNLOAD_DOTNET_VERSION)" \
 		/bl \
-		/v:quiet
-	$(Q) touch $@
+		$(MSBUILD_VERBOSITY)
+	$(Q) mv .stamp-download-dotnet-packages.tmp .stamp-download-dotnet-packages
+
 
 BundledNETCorePlatformsPackageVersion.txt: .stamp-download-dotnet-packages
+	$(Q) $(CP) .stamp-download-dotnet-packages $@
 
 package-download/global.json: $(TOP)/global6.json Makefile
 	$(Q) $(CP) $< $@
@@ -128,15 +137,32 @@ package-download/NuGet.config: $(TOP)/NuGet.config Makefile
 	$(Q) $(CP) $< $@
 	$(Q) $(CP) $< $@.tmp
 	$(Q) nuget config -Set globalPackagesFolder=$(abspath $(CURDIR)/downloads) -Config $@.tmp
+ifdef CUSTOM_DOTNET
+	$(Q) nuget sources add -Name dev-runtime-feed -Source $(abspath $(CUSTOM_DOTNET_PATH)/packages/Release/Shipping) -ConfigFile $@.tmp
+endif
 	$(Q) mv $@.tmp $@
 
 DOTNET_DOWNLOADS = \
 	downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) \
 	.stamp-download-dotnet-packages \
 
-dotnet: $(DOTNET_DOWNLOADS)
+dotnet:: $(DOTNET_DOWNLOADS)
 ifdef ENABLE_DOTNET
 all-local:: $(DOTNET_DOWNLOADS)
+endif
+
+dotnet-dev/microsoft.netcore.app.ref: $(TOP)/configure.inc | dotnet-dev
+	$(Q_LN) ln -Fhs $(CUSTOM_DOTNET_PATH)/bin $@
+
+DOTNET_CUSTOM_SYMLINKS = \
+	dotnet-dev/microsoft.netcore.app.ref \
+
+DOTNET_COMMON_DIRECTORIES += \
+	dotnet-dev \
+
+ifdef CUSTOM_DOTNET
+dotnet:: $(DOTNET_CUSTOM_SYMLINKS)
+all-local:: $(DOTNET_CUSTOM_SYMLINKS)
 endif
 
 clean-local::
@@ -1100,7 +1126,7 @@ install-tvos: $(TVOS_TARGETS)
 DOTNET_COMMON_DIRECTORIES += \
 	$(foreach platform,$(DOTNET_PLATFORMS_UPPERCASE),$(DOTNET_DESTDIR)/$($(platform)_NUGET).Sdk) \
 
-DOTNET_COMMON_TARGETS = \
+DOTNET_COMMON_TARGETS += \
 	$(foreach platform,$(DOTNET_PLATFORMS_UPPERCASE),$(DOTNET_DESTDIR)/$($(platform)_NUGET).Sdk/Versions.plist) \
 
 $(DOTNET_COMMON_DIRECTORIES):

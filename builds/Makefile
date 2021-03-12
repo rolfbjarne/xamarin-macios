@@ -107,13 +107,20 @@ $(eval $(call FixMacCatalystAssembly,System.Net.Http))
 	$(MAKE) download-mono
 	$(Q) touch $@
 
-.stamp-download-dotnet-packages: $(TOP)/Make.config downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) package-download/NuGet.config
-	$(Q_GEN) cd package-download && $(DOTNET) \
+ifdef CUSTOM_DOTNET
+DOWNLOAD_DOTNET_VERSION=$(CUSTOM_DOTNET_VERSION)
+else
+DOWNLOAD_DOTNET_VERSION=$(OFFICIAL_DOTNET_VERSION)
+endif
+
+.stamp-download-dotnet-packages: $(TOP)/Make.config downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) package-download/global.json package-download/NuGet.config
+	$(Q_GEN) cd package-download && $(DOTNET6) \
 		build \
 		download-packages.proj \
 		/t:WriteBundledNETCorePlatformsPackageVersion \
 		/p:WriteFilePath=$(CURDIR)/.stamp-download-dotnet-packages.tmp \
 		/p:PackageRuntimeIdentifiers="$(DOTNET_RUNTIME_IDENTIFIERS)" \
+		/p:CustomDotNetVersion="$(DOWNLOAD_DOTNET_VERSION)" \
 		/bl \
 		$(MSBUILD_VERBOSITY)
 	$(Q) mv .stamp-download-dotnet-packages.tmp .stamp-download-dotnet-packages
@@ -121,7 +128,7 @@ $(eval $(call FixMacCatalystAssembly,System.Net.Http))
 
 BundledNETCorePlatformsPackageVersion.txt: .stamp-download-dotnet-packages $(TOP)/configure.inc
 ifdef CUSTOM_DOTNET
-	$(Q) echo 6.0.0-dev > $@
+	$(Q) echo $(CUSTOM_DOTNET_VERSION) > $@
 else
 	$(CP) .stamp-download-dotnet-packages $@
 endif
@@ -148,13 +155,6 @@ ifdef ENABLE_DOTNET
 all-local:: $(DOTNET_DOWNLOADS)
 endif
 
-downloads/dotnet-sdk: $(TOP)/configure.inc | downloads
-ifdef CUSTOM_DOTNET
-	ln -Fhs $(abspath $(TOP)/builds/dotnet-dev/dotnet-sdk) $@
-else
-	ln -Fhs $(abspath $(TOP)/builds/downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME)))) $@
-endif
-
 downloads/microsoft.netcore.app.ref/selected-version: $(TOP)/configure.inc | downloads/microsoft.netcore.app.ref
 ifdef CUSTOM_DOTNET
 	ln -Fhs $(abspath $(TOP)/builds/dotnet-dev/microsoft.netcore.app.ref/6.0.0-dev) $@
@@ -163,21 +163,16 @@ else
 endif
 
 DOTNET_COMMON_TARGETS += \
-	downloads/dotnet-sdk \
 	downloads/microsoft.netcore.app.ref/selected-version \
 
 DOTNET_COMMON_DIRECTORIES += \
 	downloads \
 	downloads/microsoft.netcore.app.ref \
 
-dotnet-dev/dotnet-sdk: $(TOP)/configure.inc | dotnet-dev
-	ln -Fhs $(CUSTOM_DOTNET_PATH)/obj/Microsoft.NETCore.App.Bundle/Debug/net6.0/osx-x64/output $@
-
 dotnet-dev/microsoft.netcore.app.ref: $(TOP)/configure.inc | dotnet-dev
 	ln -Fhs $(CUSTOM_DOTNET_PATH)/bin $@
 
 DOTNET_CUSTOM_SYMLINKS = \
-	dotnet-dev/dotnet-sdk \
 	dotnet-dev/microsoft.netcore.app.ref \
 
 DOTNET_COMMON_DIRECTORIES += \

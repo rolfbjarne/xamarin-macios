@@ -1266,7 +1266,6 @@ xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int 
 	if (rv != 0)
 		xamarin_assertion_message ("xamarin_bridge_mono_jit_exec failed: %i\n", rv);
 
-	xamarin_bridge_dump_stats ();
 	xamarin_bridge_dump_monoobjects ();
 
 	fflush (stdout);

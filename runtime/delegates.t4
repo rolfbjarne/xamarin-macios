@@ -631,11 +631,6 @@
 		) {
 			WrappedManagedFunction = "FindMethod",
 			OnlyDynamicUsage = false,
-		},
-
-		new XDelegate ("void", "void", "xamarin_bridge_dump_stats") {
-			WrappedManagedFunction = "DumpStats",
-			OnlyDynamicUsage = false,
 		}
 	};
 	delegates.CalculateLengths ();

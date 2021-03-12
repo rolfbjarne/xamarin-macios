@@ -110,7 +110,7 @@ $(eval $(call FixMacCatalystAssembly,System.Net.Http))
 ifdef CUSTOM_DOTNET
 DOWNLOAD_DOTNET_VERSION=$(CUSTOM_DOTNET_VERSION)
 else
-DOWNLOAD_DOTNET_VERSION=$(OFFICIAL_DOTNET_VERSION)
+DOWNLOAD_DOTNET_VERSION=$(DOTNET6_VERSION)
 endif
 
 .stamp-download-dotnet-packages: $(TOP)/Make.config downloads/$(basename $(basename $(DOTNET6_TARBALL_NAME))) package-download/global.json package-download/NuGet.config
@@ -126,12 +126,8 @@ endif
 	$(Q) mv .stamp-download-dotnet-packages.tmp .stamp-download-dotnet-packages
 
 
-BundledNETCorePlatformsPackageVersion.txt: .stamp-download-dotnet-packages $(TOP)/configure.inc
-ifdef CUSTOM_DOTNET
-	$(Q) echo $(CUSTOM_DOTNET_VERSION) > $@
-else
-	$(CP) .stamp-download-dotnet-packages $@
-endif
+BundledNETCorePlatformsPackageVersion.txt: .stamp-download-dotnet-packages
+	$(Q) $(CP) .stamp-download-dotnet-packages $@
 
 package-download/global.json: $(TOP)/global6.json Makefile
 	$(Q) $(CP) $< $@
@@ -155,31 +151,14 @@ ifdef ENABLE_DOTNET
 all-local:: $(DOTNET_DOWNLOADS)
 endif
 
-downloads/microsoft.netcore.app.ref/selected-version: $(TOP)/configure.inc | downloads/microsoft.netcore.app.ref
-ifdef CUSTOM_DOTNET
-	ln -Fhs $(abspath $(TOP)/builds/dotnet-dev/microsoft.netcore.app.ref/6.0.0-dev) $@
-else
-	ln -Fhs $(abspath $(TOP)/builds/downloads/microsoft.netcore.app.ref/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)) $@
-endif
-
-DOTNET_COMMON_TARGETS += \
-	downloads/microsoft.netcore.app.ref/selected-version \
-
-DOTNET_COMMON_DIRECTORIES += \
-	downloads \
-	downloads/microsoft.netcore.app.ref \
-
 dotnet-dev/microsoft.netcore.app.ref: $(TOP)/configure.inc | dotnet-dev
-	ln -Fhs $(CUSTOM_DOTNET_PATH)/bin $@
+	$(Q_LN) ln -Fhs $(CUSTOM_DOTNET_PATH)/bin $@
 
 DOTNET_CUSTOM_SYMLINKS = \
 	dotnet-dev/microsoft.netcore.app.ref \
 
 DOTNET_COMMON_DIRECTORIES += \
 	dotnet-dev \
-
-x: $(DOTNET_CUSTOM_SYMLINKS)
-y: $(DOTNET_COMMON_TARGETS)
 
 ifdef CUSTOM_DOTNET
 dotnet:: $(DOTNET_CUSTOM_SYMLINKS)

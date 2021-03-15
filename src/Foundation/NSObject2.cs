@@ -66,18 +66,38 @@ namespace Foundation {
 		public static readonly Assembly PlatformAssembly = typeof (NSObject).Assembly;
 
 		IntPtr handle;
-		unsafe ObjectData* data;
+		ObjectDataPointer data = new ObjectDataPointer ();
 
-		Flags flags {
+		unsafe Flags flags {
 			get {
-				if (data == null)
-					throw new ObjectDisposedException ();
-				return data->flags;
+				return data.Data->Flags;
 			}
 			set {
-				if (data == null)
-					throw new ObjectDisposedException ();
-				data->Flags = value;
+				data.Data->Flags = value;
+			}
+		}
+
+		internal class ObjectDataPointer : CriticalHandle {
+			public IntPtr Pointer;
+			public unsafe NSObjectData *Data { get { return (NSObjectData*) Pointer; } }
+			public ObjectDataPointer ()
+				: base (IntPtr.Zero)
+			{
+				unsafe {
+					Pointer = Marshal.AllocHGlobal (sizeof (NSObjectData));
+					Data->Handle = IntPtr.Zero;
+					Data->ClassHandle = IntPtr.Zero;
+					Data->Flags = (Flags) 0;
+				}
+			}
+
+			public override bool IsInvalid { get { return Pointer == IntPtr.Zero; } }
+
+			protected override bool ReleaseHandle ()
+			{
+				Marshal.FreeHGlobal (Pointer);
+				Pointer = IntPtr.Zero;
+				return true;
 			}
 		}
 
@@ -92,7 +112,7 @@ namespace Foundation {
 #if NET
 		internal unsafe NSObjectData* GetDataPointer ()
 		{
-			return data;
+			return data.Data;
 		}
 #endif
 
@@ -110,13 +130,13 @@ namespace Foundation {
 		}
 
 		bool disposed { 
-			get { return (flags & DataFlags.Disposed) == DataFlags.Disposed; }
-			set { flags = value ? (flags | DataFlags.Disposed) : (flags & ~DataFlags.Disposed); }
+			get { return (flags & Flags.Disposed) == Flags.Disposed; }
+			set { flags = value ? (flags | Flags.Disposed) : (flags & ~Flags.Disposed); }
 		}
 
 		bool HasManagedRef {
-			get { return (flags & HasManagedRef.HasManagedRef) == HasManagedRef.HasManagedRef; }
-			set { flags = value ? (flags | HasManagedRef.HasManagedRef) : (flags & ~HasManagedRef.HasManagedRef); }
+			get { return (flags & Flags.HasManagedRef) == Flags.HasManagedRef; }
+			set { flags = value ? (flags | Flags.HasManagedRef) : (flags & ~Flags.HasManagedRef); }
 		}
 
 		internal bool IsRegisteredToggleRef { 
@@ -147,7 +167,6 @@ namespace Foundation {
 
 		[Export ("init")]
 		public NSObject () {
-			InitializeData ();
 			bool alloced = AllocIfNeeded ();
 			InitializeObject (alloced);
 		}
@@ -156,7 +175,6 @@ namespace Foundation {
 		// only do Init at the most derived class.
 		public NSObject (NSObjectFlag x)
 		{
-			InitializeData ();
 			bool alloced = AllocIfNeeded ();
 			InitializeObject (alloced);
 		}
@@ -165,7 +183,6 @@ namespace Foundation {
 		}
 
 		public NSObject (IntPtr handle, bool alloced) {
-			InitializeData ();
 			this.handle = handle;
 			InitializeObject (alloced);
 		}
@@ -186,21 +203,7 @@ namespace Foundation {
 			var obj = (NSObject) RuntimeHelpers.GetUninitializedObject (type);
 			obj.handle = handle;
 			obj.flags = flags;
-			obj.InitializeData ();
 			return Runtime.AllocGCHandle (obj);
-		}
-
-		void InitializeData ()
-		{
-			// This function may be called from native code before any constructor has executed
-			// (and in addition it will be called from our constructors).
-			unsafe {
-				if (data == null) {
-					data = (ObjectData*) Marshal.AllocHGlobal (sizeof (ObjectData));
-					data->Handle = IntPtr.Zero;
-					data->ClassHandle = IntPtr.Zero;
-				}
-			}
 		}
 
 		internal static IntPtr Initialize ()
@@ -280,7 +283,7 @@ namespace Foundation {
 		{
 #if NET
 			if (Runtime.IsCoreCLR) {
-				RegisterToggleRefCoreCLR (obj, handle, isCustomType);
+				Runtime.RegisterToggleReferenceCoreCLR (obj, handle, isCustomType);
 				return;
 			}
 #endif
@@ -326,8 +329,6 @@ namespace Foundation {
 					"It is possible to ignore this condition by setting ObjCRuntime.Class.ThrowOnInitFailure to false.",
 					new Class (ClassHandle).Name));
 			}
-
-			data = (ObjectData*) Marshal.AllocHGlobal (sizeof (ObjectData));
 
 			// The authorative value for the IsDirectBinding value is the register attribute:
 			//
@@ -529,6 +530,7 @@ namespace Foundation {
 					throw new ObjectDisposedException (GetType ().Name);
 
 				unsafe {
+					NSObjectData* data = this.data.Data;
 					if (data->ClassHandle == IntPtr.Zero)
 						data->ClassHandle = ClassHandle;
 
@@ -550,7 +552,7 @@ namespace Foundation {
 				
 				handle = value;
 				unsafe {
-					data->Handle = value;
+					data.Data->Handle = value;
 				}
 
 				if (handle != IntPtr.Zero)
@@ -863,13 +865,6 @@ namespace Foundation {
 					ReleaseManagedRef ();
 				} else {
 					NSObject_Disposer.Add (this);
-				}
-			}
-
-			unsafe {
-				if (data != null) {
-					Marshal.FreeHGlobal ((IntPtr) data);
-					data = null;
 				}
 			}
 		}

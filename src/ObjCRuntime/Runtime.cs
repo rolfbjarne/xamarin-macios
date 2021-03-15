@@ -118,11 +118,6 @@ namespace ObjCRuntime {
 			public IntPtr set_gchandle_tramp;
 			public IntPtr get_flags_tramp;
 			public IntPtr set_flags_tramp;
-#if NET
-			public IntPtr reference_tracking_begin_end_callback;
-			public IntPtr reference_tracking_is_referenced_callback;
-			public IntPtr reference_tracking_tracked_object_entered_finalization;
-#endif
 		}
 
 		[Flags]
@@ -159,6 +154,11 @@ namespace ObjCRuntime {
 #endif
 			IntPtr AssemblyLocations;
 
+#if NET
+			public IntPtr reference_tracking_begin_end_callback;
+			public IntPtr reference_tracking_is_referenced_callback;
+			public IntPtr reference_tracking_tracked_object_entered_finalization;
+#endif
 			public bool IsSimulator {
 				get {
 					return (Flags & InitializationFlags.IsSimulator) == InitializationFlags.IsSimulator;

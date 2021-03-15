@@ -18,6 +18,10 @@
 #include "runtime-internal.h"
 #include "xamarin/xamarin.h"
 
+#if defined (CORECLR_RUNTIME)
+#include "xamarin/coreclr-bridge.h"
+#endif
+
 #if defined (DEBUG)
 //extern BOOL NSZombieEnabled;
 #endif
@@ -126,11 +130,6 @@ struct Trampolines {
 	void* set_gchandle_tramp;
 	void* get_flags_tramp;
 	void* set_flags_tramp;
-#if DOTNET
-	void *reference_tracking_begin_end_callback;
-	void *reference_tracking_is_referenced_callback;
-	void *reference_tracking_tracked_object_entered_finalization;
-#endif
 };
 
 enum InitializationFlags : int {
@@ -155,6 +154,11 @@ struct InitializationOptions {
 	const char *EntryAssemblyPath;
 #endif
 	struct AssemblyLocations* AssemblyLocations;
+#if DOTNET
+	void *reference_tracking_begin_end_callback;
+	void *reference_tracking_is_referenced_callback;
+	void *reference_tracking_tracked_object_entered_finalization;
+#endif
 };
 
 static struct Trampolines trampolines = {
@@ -1472,6 +1476,12 @@ xamarin_initialize ()
 #if MONOMAC
 	options.LaunchMode = xamarin_launch_mode;
 	options.EntryAssemblyPath = xamarin_entry_assembly_path;
+#endif
+
+#if defined (CORECLR_RUNTIME)
+	options.reference_tracking_begin_end_callback = (void *) &xamarin_coreclr_reference_tracking_begin_end_callback;
+	options.reference_tracking_is_referenced_callback = (void *) &xamarin_coreclr_reference_tracking_is_referenced_callback;
+	options.reference_tracking_tracked_object_entered_finalization = (void *) &xamarin_coreclr_reference_tracking_tracked_object_entered_finalization;
 #endif
 
 	params [0] = &options;

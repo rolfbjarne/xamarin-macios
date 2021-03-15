@@ -6,7 +6,7 @@
 //
 // Copyright 2021 Microsoft Corp.
 
-#if NET
+#if NET && !COREBUILD
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,6 @@ using Foundation;
 namespace ObjCRuntime {
 
 	public partial class Runtime {
-#if !COREBUILD
 		enum MonoObjectType {
 			Unknown,
 			MonoObject,
@@ -122,16 +121,16 @@ namespace ObjCRuntime {
 		// Size: 2 pointers
 		struct TrackedObjectInfo {
 			public IntPtr GCHandle;
-			public NSObject.NSObjectData* Data;
+			public unsafe NSObject.NSObjectData* Data;
 		}
 
-		static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
+		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
 			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
 
 			unsafe {
 				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;
-				tracked_info->GCHandle = gchandle;
+				tracked_info->GCHandle = GCHandle.ToIntPtr (gchandle);
 				tracked_info->Data = obj.GetDataPointer ();
 			}
 
@@ -1023,8 +1022,7 @@ namespace ObjCRuntime {
 			log_coreclr ($"FindMethod (0x{klass_handle.ToString ("x")} = {klass.FullName}, {name}, {parameter_count}) => {rv}");
 			return AllocGCHandle (rv);
 		}
-#endif // !COREBUILD
 	}
 }
 
-#endif // NET
+#endif // NET && !COREBUILD

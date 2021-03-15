@@ -65,9 +65,8 @@ namespace Foundation {
 		// replace older Mono[Touch|Mac]Assembly field (ease code sharing across platforms)
 		public static readonly Assembly PlatformAssembly = typeof (NSObject).Assembly;
 
-		// The order of 'handle' and 'class_handle' is important: do not re-order unless SuperHandle is modified accordingly.
 		IntPtr handle;
-		IntPtr class_handle;
+		unsafe ObjectData* data;
 		Flags flags;
 
 		// This enum has a native counterpart in runtime.h
@@ -81,6 +80,13 @@ namespace Foundation {
 			HasManagedRef = 32,
 			// 64, // Used by SoM
 			IsCustomType = 128,
+		}
+
+		[StructLayout (LayoutKind.Sequential)]
+		struct ObjectData {
+			// The order of 'Handle' and 'ClassHandle' is important: do not re-order unless SuperHandle is modified accordingly.
+			public IntPtr Handle;
+			public IntPtr ClassHandle;
 		}
 
 		bool disposed { 
@@ -116,6 +122,7 @@ namespace Foundation {
 
 		[Export ("init")]
 		public NSObject () {
+			InitializeData ();
 			bool alloced = AllocIfNeeded ();
 			InitializeObject (alloced);
 		}
@@ -124,14 +131,16 @@ namespace Foundation {
 		// only do Init at the most derived class.
 		public NSObject (NSObjectFlag x)
 		{
+			InitializeData ();
 			bool alloced = AllocIfNeeded ();
 			InitializeObject (alloced);
 		}
 		
 		public NSObject (IntPtr handle) : this (handle, false) {
 		}
-		
+
 		public NSObject (IntPtr handle, bool alloced) {
+			InitializeData ();
 			this.handle = handle;
 			InitializeObject (alloced);
 		}
@@ -152,7 +161,21 @@ namespace Foundation {
 			var obj = (NSObject) RuntimeHelpers.GetUninitializedObject (type);
 			obj.handle = handle;
 			obj.flags = flags;
+			obj.InitializeData ();
 			return Runtime.AllocGCHandle (obj);
+		}
+
+		void InitializeData ()
+		{
+			// This function may be called from native code before any constructor has executed
+			// (and in addition it will be called from our constructors).
+			unsafe {
+				if (data == null) {
+					data = (ObjectData*) Marshal.AllocHGlobal (sizeof (ObjectData));
+					data->Handle = IntPtr.Zero;
+					data->ClassHandle = IntPtr.Zero;
+				}
+			}
 		}
 
 		internal static IntPtr Initialize ()
@@ -407,12 +430,13 @@ namespace Foundation {
 				if (handle == IntPtr.Zero)
 					throw new ObjectDisposedException (GetType ().Name);
 
-				if (class_handle == IntPtr.Zero)
-					class_handle = ClassHandle;
-
 				unsafe {
-					fixed (IntPtr *ptr = &handle)
-						return (IntPtr) (ptr);
+					if (data->ClassHandle == IntPtr.Zero)
+						data->ClassHandle = ClassHandle;
+
+					data->Handle = handle;
+
+					return (IntPtr) data;
 				}
 			}
 		}
@@ -427,6 +451,9 @@ namespace Foundation {
 					Runtime.UnregisterNSObject (handle);
 				
 				handle = value;
+				unsafe {
+					data->Handle = value;
+				}
 
 				if (handle != IntPtr.Zero)
 					Runtime.RegisterNSObject (this, handle);
@@ -738,6 +765,13 @@ namespace Foundation {
 					ReleaseManagedRef ();
 				} else {
 					NSObject_Disposer.Add (this);
+				}
+			}
+
+			unsafe {
+				if (data != null) {
+					Marshal.FreeHGlobal ((IntPtr) data);
+					data = null;
 				}
 			}
 		}

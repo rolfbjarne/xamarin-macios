@@ -47,6 +47,9 @@ namespace Foundation {
 		NSObjectFlag () {}
 	}
 
+#if NET && (__MACOS__ || __MACCATALYST__)
+	[TrackedNativeReference]
+#endif
 	[StructLayout (LayoutKind.Sequential)]
 	public partial class NSObject 
 #if !COREBUILD
@@ -66,40 +69,58 @@ namespace Foundation {
 		public static readonly Assembly PlatformAssembly = typeof (NSObject).Assembly;
 
 		IntPtr handle;
-		ObjectDataPointer data = new ObjectDataPointer ();
+		// Flags actual_flags;
+		//ObjectDataPointer data = new ObjectDataPointer ();
+		unsafe NSObjectData* data = CreateData ();
 
 		unsafe Flags flags {
 			get {
-				return data.Data->Flags;
+				if (data == null)
+					throw new ObjectDisposedException (GetType ().FullName);
+
+				return data->Flags;
+				//return actual_flags;
 			}
 			set {
-				data.Data->Flags = value;
+				if (data == null)
+					throw new ObjectDisposedException (GetType ().FullName);
+
+				data->Flags = value;
 			}
 		}
 
-		internal class ObjectDataPointer : CriticalHandle {
-			public IntPtr Pointer;
-			public unsafe NSObjectData *Data { get { return (NSObjectData*) Pointer; } }
-			public ObjectDataPointer ()
-				: base (IntPtr.Zero)
-			{
-				unsafe {
-					Pointer = Marshal.AllocHGlobal (sizeof (NSObjectData));
-					Data->Handle = IntPtr.Zero;
-					Data->ClassHandle = IntPtr.Zero;
-					Data->Flags = (Flags) 0;
-				}
-			}
+		//internal class ObjectDataPointer : CriticalHandle {
+		//	IntPtr originalPointer;
+		//	public IntPtr Pointer;
+		//	public unsafe NSObjectData *Data { get { return (NSObjectData*) Pointer; } }
+		//	public ObjectDataPointer ()
+		//		: base (IntPtr.Zero)
+		//	{
+		//		unsafe {
+		//			Pointer = Marshal.AllocHGlobal (sizeof (NSObjectData));
+		//			Data->Handle = IntPtr.Zero;
+		//			Data->ClassHandle = IntPtr.Zero;
+		//			Data->Flags = (Flags) 0;
+		//		}
+		//		originalPointer = Pointer;
+		//		Runtime.xamarin_log ($"ObjectDataPointer..ctor [0x{Pointer.ToString ("x")}]");
+		//	}
 
-			public override bool IsInvalid { get { return Pointer == IntPtr.Zero; } }
+		//	public override bool IsInvalid { get { return Pointer == IntPtr.Zero; } }
 
-			protected override bool ReleaseHandle ()
-			{
-				Marshal.FreeHGlobal (Pointer);
-				Pointer = IntPtr.Zero;
-				return true;
-			}
-		}
+		//	protected override bool ReleaseHandle ()
+		//	{
+		//		Runtime.xamarin_log ($"ObjectDataPointer.ReleaseHandle [0x{Pointer.ToString ("x")}]\n{Environment.StackTrace}");
+		//		Marshal.FreeHGlobal (Pointer);
+		//		Pointer = IntPtr.Zero;
+		//		return true;
+		//	}
+
+		//	public override string ToString ()
+		//	{
+		//		return $"ObjectDataPointer [0x{Pointer.ToString ("x")} Original: 0x{originalPointer.ToString ("x")}]";
+		//	}
+		//}
 
 		[StructLayout (LayoutKind.Sequential)]
 		internal struct NSObjectData {
@@ -109,10 +130,17 @@ namespace Foundation {
 			public Flags Flags;
 		}
 
+		unsafe static NSObjectData* CreateData ()
+		{
+			var rv = (NSObjectData *) Marshal.AllocHGlobal (sizeof (NSObjectData));
+			*rv = default (NSObjectData); // zero out the memory
+			return rv;
+		}
+
 #if NET
 		internal unsafe NSObjectData* GetDataPointer ()
 		{
-			return data.Data;
+			return data;
 		}
 #endif
 
@@ -189,11 +217,13 @@ namespace Foundation {
 		
 		~NSObject () {
 			Dispose (false);
+			//Runtime.xamarin_log ($"~NSObject (): {GetType ().FullName}\n{Environment.StackTrace}");
 		}
 
 		public void Dispose () {
 			Dispose (true);
 			GC.SuppressFinalize (this);
+			//Runtime.xamarin_log ($"NSObject.Dispose (): {GetType ().FullName}\n{Environment.StackTrace}");
 		}
 
 		internal static IntPtr CreateNSObject (IntPtr type_gchandle, IntPtr handle, Flags flags)
@@ -201,6 +231,9 @@ namespace Foundation {
 			// This function is called from native code before any constructors have executed.
 			var type = (Type) Runtime.GetGCHandleTarget (type_gchandle);
 			var obj = (NSObject) RuntimeHelpers.GetUninitializedObject (type);
+			unsafe {
+				obj.data = CreateData ();
+			}
 			obj.handle = handle;
 			obj.flags = flags;
 			return Runtime.AllocGCHandle (obj);
@@ -229,9 +262,6 @@ namespace Foundation {
 #endif
 
 #if NET
-		[DllImport ("__Internal")]
-		extern static void xamarin_register_toggleref_coreclr (IntPtr obj, IntPtr handle, bool isCustomType);
-
 		[DllImport ("__Internal")]
 		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain, bool user_type);
 #endif
@@ -366,6 +396,7 @@ namespace Foundation {
 				Runtime.NativeObjectHasDied (handle, this);
 			}
 			ReleaseManagedReference (handle, user_type);
+			FreeData ();
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)
@@ -530,7 +561,7 @@ namespace Foundation {
 					throw new ObjectDisposedException (GetType ().Name);
 
 				unsafe {
-					NSObjectData* data = this.data.Data;
+					NSObjectData* data = this.data;
 					if (data->ClassHandle == IntPtr.Zero)
 						data->ClassHandle = ClassHandle;
 
@@ -552,7 +583,7 @@ namespace Foundation {
 				
 				handle = value;
 				unsafe {
-					data.Data->Handle = value;
+					data->Handle = value;
 				}
 
 				if (handle != IntPtr.Zero)
@@ -866,6 +897,19 @@ namespace Foundation {
 				} else {
 					NSObject_Disposer.Add (this);
 				}
+			} else {
+				FreeData ();
+			}
+		}
+
+		unsafe void FreeData ()
+		{
+			unsafe {
+				Runtime.xamarin_log ($"FreeData () data: 0x{((IntPtr) data).ToString ("x")}");
+			}
+			if (data != null) {
+				Marshal.FreeHGlobal ((IntPtr) data);
+				data = null;
 			}
 		}
 

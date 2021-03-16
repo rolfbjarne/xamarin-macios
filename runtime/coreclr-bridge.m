@@ -27,24 +27,64 @@ bool xamarin_loaded_coreclr = false;
 unsigned int coreclr_domainId = 0;
 void *coreclr_handle = NULL;
 
+
+struct NSObjectData {
+	id handle;
+	Class class_handle;
+	enum NSObjectFlags flags;
+};
+
+struct TrackedObjectInfo {
+	GCHandle gchandle;
+	struct NSObjectData* data;
+};
+
+
 void
 xamarin_coreclr_reference_tracking_begin_end_callback (int number)
 {
-	fprintf (stderr, "LOG: %s\n", __func__);
+	fprintf (stderr, "LOG: %s (%i)\n", __func__, number);
+}
+
+static id
+get_handle (void * ptr)
+{
+	return (id) ptr;
 }
 
 int
 xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 {
+	// COOP: this is a callback called by the GC, so I assume the mode here doesn't matter
 	int rv = 0;
-	fprintf (stderr, "LOG: %s => %i\n", __func__, rv);
+	struct TrackedObjectInfo *info = (struct TrackedObjectInfo *) ptr;
+	struct NSObjectData *data = info->data;
+	MonoToggleRefStatus res;
+
+	res = xamarin_gc_toggleref_callback (data->flags, get_handle, data->handle);
+
+	switch (res) {
+	case MONO_TOGGLE_REF_DROP:
+	case MONO_TOGGLE_REF_WEAK:
+		rv = 0;
+		break;
+	case MONO_TOGGLE_REF_STRONG:
+		rv = 1;
+		break;
+	default:
+		fprintf (stderr, "LOG: INVALID toggle ref value: %i\n", res);
+		break;
+	}
+
+	fprintf (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, data->handle, data->flags, rv, res);
+
 	return rv;
 }
 
 void
 xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr)
 {
-	fprintf (stderr, "LOG: %s\n", __func__);
+	fprintf (stderr, "LOG: %s (%p)\n", __func__, ptr);
 }
 
 GCHandle
@@ -72,12 +112,6 @@ xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method)
 	LOG_CORECLR (stderr, "xamarin_bridge_get_mono_method (%p = %p) => %p = %s.%s = %p\n", reflection_method, reflection_method->gchandle, rv, rv->klass->fullname, rv->name, rv->gchandle_tmp);
 
 	return rv;
-}
-
-void
-xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType)
-{
-	LOG_CORECLR (stderr, "xamarin_register_toggleref_coreclr (%p, %p, %i) => IGNORED\n", managed_obj, self, isCustomType);
 }
 
 void

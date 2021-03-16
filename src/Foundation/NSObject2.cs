@@ -76,21 +76,21 @@ namespace Foundation {
 		IntPtr handle;
 		Flags actual_flags;
 
+#if NET
+		internal unsafe Runtime.TrackedObjectInfo* tracked_object_info;
+#endif
+
 		unsafe Flags flags {
 			get {
-				//if (data == null)
-				//	throw new ObjectDisposedException (GetType ().FullName);
-
-				//return data->Flags;
 				return actual_flags;
 			}
 			set {
-				//if (data == null)
-				//	throw new ObjectDisposedException (GetType ().FullName);
 				actual_flags = value;
-				if (data != null && data->TrackedObjectInfo != null)
-					data->TrackedObjectInfo->Flags = value;
-				//data->Flags = value;
+#if NET
+				// Update the flags value that we can access from the toggle ref callback as well.
+				if (tracked_object_info != null)
+					tracked_object_info->Flags = value;
+#endif
 			}
 		}
 
@@ -119,7 +119,6 @@ namespace Foundation {
 			// The order of 'Handle' and 'ClassHandle' is important: do not re-order unless SuperHandle is modified accordingly.
 			public IntPtr Handle;
 			public IntPtr ClassHandle;
-			public unsafe Runtime.TrackedObjectInfo* TrackedObjectInfo;
 		}
 
 		bool disposed { 

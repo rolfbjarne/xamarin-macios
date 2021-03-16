@@ -132,7 +132,7 @@ namespace ObjCRuntime {
 				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;
 				tracked_info->Handle = handle;
 				tracked_info->Flags = obj.GetFlagsDirectly ();
-				obj.GetDataPointer ()->TrackedObjectInfo = tracked_info;
+				obj.tracked_object_info = tracked_info;
 
 				xamarin_log ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) info).ToString ("x")} Flags={tracked_info->Flags}");
 			}

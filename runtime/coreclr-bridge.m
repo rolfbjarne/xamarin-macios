@@ -27,18 +27,10 @@ bool xamarin_loaded_coreclr = false;
 unsigned int coreclr_domainId = 0;
 void *coreclr_handle = NULL;
 
-
-struct NSObjectData {
+struct TrackedObjectInfo {
 	id handle;
-	Class class_handle;
 	enum NSObjectFlags flags;
 };
-
-struct TrackedObjectInfo {
-	GCHandle gchandle;
-	struct NSObjectData* data;
-};
-
 
 void
 xamarin_coreclr_reference_tracking_begin_end_callback (int number)
@@ -58,10 +50,11 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 	// COOP: this is a callback called by the GC, so I assume the mode here doesn't matter
 	int rv = 0;
 	struct TrackedObjectInfo *info = (struct TrackedObjectInfo *) ptr;
-	struct NSObjectData *data = info->data;
+	enum NSObjectFlags flags = info->flags;
+	id handle = info->handle;
 	MonoToggleRefStatus res;
 
-	res = xamarin_gc_toggleref_callback (data->flags, get_handle, data->handle);
+	res = xamarin_gc_toggleref_callback (flags, get_handle, handle);
 
 	switch (res) {
 	case MONO_TOGGLE_REF_DROP:
@@ -76,7 +69,7 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 		break;
 	}
 
-	fprintf (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, data->handle, data->flags, rv, res);
+	fprintf (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
 
 	return rv;
 }

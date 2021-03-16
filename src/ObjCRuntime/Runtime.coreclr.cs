@@ -119,21 +119,22 @@ namespace ObjCRuntime {
 		}
 
 		// Size: 2 pointers
-		struct TrackedObjectInfo {
-			public IntPtr GCHandle;
-			public unsafe NSObject.NSObjectData* Data;
+		internal struct TrackedObjectInfo {
+			public IntPtr Handle;
+			public NSObject.Flags Flags;
 		}
 
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
-			xamarin_log ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType})");
-
 			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
 
 			unsafe {
 				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;
-				tracked_info->GCHandle = GCHandle.ToIntPtr (gchandle);
-				tracked_info->Data = obj.GetDataPointer ();
+				tracked_info->Handle = handle;
+				tracked_info->Flags = obj.GetFlagsDirectly ();
+				obj.GetDataPointer ()->TrackedObjectInfo = tracked_info;
+
+				xamarin_log ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) info).ToString ("x")} Flags={tracked_info->Flags}");
 			}
 
 			// Make sure the GCHandle we have is a weak one for custom types.
@@ -246,7 +247,7 @@ namespace ObjCRuntime {
 		static byte GetFlagsForNSObject (IntPtr gchandle)
 		{
 			var obj = (NSObject) GetGCHandleTarget (gchandle);
-			return obj.GetFlagsDirectly ();
+			return (byte) obj.GetFlagsDirectly ();
 		}
 
 		static IntPtr GetTypeFullName (IntPtr gchandle)

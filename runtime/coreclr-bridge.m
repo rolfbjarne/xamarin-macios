@@ -134,7 +134,7 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	xamarin_assertion_message ("%s threw an exception: %s", method, str);
 }
 
-static void*
+void*
 xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 {
 

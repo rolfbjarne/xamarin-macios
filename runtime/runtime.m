@@ -2581,6 +2581,24 @@ xamarin_insert_dllmap ()
 #endif // defined (__i386__) || defined (__x86_64__)
 }
 
+#if DOTNET
+void*
+xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
+{
+
+	void* symbol = NULL;
+
+	if (!strcmp (libraryName, "__Internal")) {
+		symbol = dlsym (RTLD_DEFAULT, entrypointName);
+		LOG_CORECLR (stderr, "xamarin_pinvoke_override (%s, %s): %p error: %s\n", libraryName, entrypointName, symbol, dlerror ());
+	} else {
+		LOG_CORECLR (stderr, "xamarin_pinvoke_override (%s, %s) unknown library\n", libraryName, entrypointName);
+	}
+
+	return symbol;
+}
+#endif
+
 void
 xamarin_printf (const char *format, ...)
 {

@@ -111,6 +111,11 @@ run-lldb:
 launch-lldb:
 	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
+bindings-test: export XAMARIN_RUNTIME=CoreCLR
+bindings-test:
+	#cd $(TOP)/tests/bindings-test/dotnet/macOS && $(DOTNET6) restore bindings-test.csproj /bl:$(abspath $@).binlog /p:XamarinRuntime=CoreCLR
+	cd $(TOP)/tests/bindings-test/dotnet/macOS && $(DOTNET6) build bindings-test.csproj /bl:$(abspath $@).binlog $(BUILD_PARAMETERS) /p:Configuration=$(XAMARIN_RUNTIME) /p:XamarinRuntime=$(XAMARIN_RUNTIME)
+
 lldb-coreclr: export XAMARIN_RUNTIME=CoreCLR
 lldb-coreclr:
 	$(MAKE) launch-lldb

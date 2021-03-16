@@ -29,6 +29,10 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 #endif
 
+#if NET
+using System.Runtime.InteropServices.ObjectiveC;
+#endif
+
 using ObjCRuntime;
 #if !COREBUILD
 #if MONOTOUCH
@@ -47,7 +51,7 @@ namespace Foundation {
 		NSObjectFlag () {}
 	}
 
-#if NET && (__MACOS__ || __MACCATALYST__)
+#if NET && !COREBUILD
 	[TrackedNativeReference]
 #endif
 	[StructLayout (LayoutKind.Sequential)]

@@ -13,4 +13,16 @@
 #include "xamarin/xamarin.h"
 #include "xamarin/monovm-bridge.h"
 
+bool
+xamarin_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
+{
+	int rv;
+
+	rv = monovm_initialize (propertyCount, propertyKeys, propertyValues);
+
+	fprintf (stderr, "xamarin_vm_initialize (%i, %p, %p): rv: %i\n", propertyCount, propertyKeys, propertyValues, rv);
+
+	return rv == 0;
+}
+
 #endif // !CORECLR_RUNTIME

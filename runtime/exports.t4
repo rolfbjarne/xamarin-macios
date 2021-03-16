@@ -678,6 +678,17 @@
 
 		#endregion
 
+		#region mini/mono-private-unstable.
+
+		new Export ("int", "monovm_initialize",
+			"int", "propertyCount",
+			"const char **", "propertyKeys",
+			"const char **", "propertyValues"
+		) {
+			IsDotNetOnly = true,
+		},
+
+		#endregion
 	};
 #><#+
 	class Arg
@@ -694,12 +705,28 @@
 		public List<Arg> Arguments;
 		public bool Optional;
 		public bool HasBridgeFunction = true;
+		public bool IsDotNetOnly;
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)
 		{
 		}
 
+		public string DotNetIf {
+			get {
+				if (IsDotNetOnly)
+					return "#if DOTNET\n";
+				return string.Empty;
+			}
+		}
+
+		public string DotNetEndIf {
+			get {
+				if (IsDotNetOnly)
+					return "#endif\n";
+				return string.Empty;
+			}
+		}
 
 		public Export (bool optional, string returnType, string entryPoint, params string [] arguments)
 		{

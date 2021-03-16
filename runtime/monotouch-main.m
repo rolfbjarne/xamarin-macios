@@ -419,6 +419,22 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 	xamarin_initialize_cocoa_threads (NULL);
 #endif
 
+#if DOTNET
+	char *pinvokeOverride = xamarin_strdup_printf ("%p", &xamarin_pinvoke_override);
+	const char *propertyKeys[] = {
+		"APP_PATHS",
+		"PINVOKE_OVERRIDE",
+	};
+	const char *propertyValues[] = {
+		xamarin_get_bundle_path (),
+		pinvokeOverride,
+	};
+	int propertyCount = sizeof (propertyValues) / sizeof (propertyValues [0]);
+	assert (sizeof (vm_property_keys) == sizeof (vm_property_values))
+	xamarin_vm_initialize (propertyCount, propertyKeys, propertyValues);
+	xamarin_free (pinvokeOverride);
+#endif
+
 #if defined (__arm__) || defined(__aarch64__)
 	xamarin_register_modules ();
 #endif

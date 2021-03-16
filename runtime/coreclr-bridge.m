@@ -251,6 +251,26 @@ monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 // }
 
 
+bool
+xamarin_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
+{
+	int rv;
+
+	rv = coreclr_initialize (
+		"HelloWorld", // FIXME: application name
+		xamarin_executable_name,
+		propertyCount,
+		propertyKeys,
+		propertyValues,
+		&coreclr_handle,
+		&coreclr_domainId
+		);
+
+	LOG_CORECLR (stderr, "xamarin_vm_initialize (%i, %p, %p): rv: %i\n", propertyCount, propertyKeys, propertyValues, rv);
+
+	return rv == 0;
+}
+
 static void
 xamarin_load_coreclr ()
 {

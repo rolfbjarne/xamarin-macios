@@ -926,7 +926,7 @@ xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle
 	if (disposed || !has_managed_ref) {
 		res = MONO_TOGGLE_REF_DROP; /* Already disposed, we don't need the managed object around */
 	} else {
-		handle = get_handle (info);
+		handle = get_handle == NULL ? (id) info : get_handle (info);
 		if (handle == NULL) { /* This shouldn't really happen */
 			return MONO_TOGGLE_REF_DROP;
 		} else {
@@ -3133,12 +3133,6 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 
 void
 xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain, bool user_type)
-{
-	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
-}
-
-void
-xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType)
 {
 	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
 }

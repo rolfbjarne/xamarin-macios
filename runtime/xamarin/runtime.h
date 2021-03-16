@@ -297,7 +297,6 @@ MonoClass *
 xamarin_find_mono_class (GCHandle gchandle, const char *name_space = NULL, const char *name = NULL);
 
 void			xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain, bool user_type);
-void			xamarin_register_toggleref_coreclr (GCHandle managed_obj, id self, bool isCustomType);
 void			xamarin_bridge_log_monoobject (MonoObject *obj, const char *stacktrace);
 MonoMethod *    xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method);
 

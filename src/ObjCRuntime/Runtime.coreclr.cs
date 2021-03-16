@@ -126,6 +126,8 @@ namespace ObjCRuntime {
 
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
+			xamarin_log ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType})");
+
 			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
 
 			unsafe {

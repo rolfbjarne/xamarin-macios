@@ -134,22 +134,6 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	xamarin_assertion_message ("%s threw an exception: %s", method, str);
 }
 
-void*
-xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
-{
-
-	void* symbol = NULL;
-
-	if (!strcmp (libraryName, "__Internal")) {
-		symbol = dlsym (RTLD_DEFAULT, entrypointName);
-		LOG_CORECLR (stderr, "xamarin_pinvoke_override (%s, %s): %p error: %s\n", libraryName, entrypointName, symbol, dlerror ());
-	} else {
-		LOG_CORECLR (stderr, "xamarin_pinvoke_override (%s, %s) unknown library\n", libraryName, entrypointName);
-	}
-
-	return symbol;
-}
-
 static pthread_mutex_t monoobject_dict_lock;
 static CFMutableDictionaryRef monoobject_dict = NULL;
 
@@ -251,6 +235,27 @@ monoobject_dict_free_value (CFAllocatorRef allocator, const void *value)
 // }
 
 
+bool
+xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
+{
+	int rv;
+
+	const char *executablePath = [[[[NSBundle mainBundle] executableURL] path] UTF8String];
+	rv = coreclr_initialize (
+		executablePath,
+		xamarin_executable_name,
+		propertyCount,
+		propertyKeys,
+		propertyValues,
+		&coreclr_handle,
+		&coreclr_domainId
+		);
+
+	LOG_CORECLR (stderr, "xamarin_vm_initialize (%i, %p, %p): rv: %i domainId: %i handle: %p\n", propertyCount, propertyKeys, propertyValues, rv, coreclr_domainId, coreclr_handle);
+
+	return rv == 0;
+}
+
 static void
 xamarin_load_coreclr ()
 {
@@ -268,36 +273,6 @@ xamarin_load_coreclr ()
 	CFDictionaryValueCallBacks value_callbacks = { 0 };
 	value_callbacks.release = monoobject_dict_free_value;
 	monoobject_dict = CFDictionaryCreateMutable (kCFAllocatorDefault, 0, NULL, &value_callbacks);
-
-	// pthread_t monoobject_thread;
-	// pthread_create (&monoobject_thread, NULL, dump_monoobj, NULL);
-	// pthread_detach (monoobject_thread);
-
-	int rv;
-
-	char *pinvokeOverride = xamarin_strdup_printf ("%p", &xamarin_pinvoke_override);
-
-	const char *propertyKeys[] = {
-		"APP_PATHS",
-		"PINVOKE_OVERRIDE",
-	};
-	const char *propertyValues[] = {
-		xamarin_get_bundle_path (),
-		pinvokeOverride,
-	};
-	int propertyCount = sizeof (propertyValues) / sizeof (propertyValues [0]);
-
-	rv = coreclr_initialize (
-		"HelloWorld", // FIXME: application name
-		xamarin_executable_name,
-		propertyCount,
-		propertyKeys,
-		propertyValues,
-		&coreclr_handle,
-		&coreclr_domainId
-		);
-
-	xamarin_free (pinvokeOverride);
 
 	LOG_CORECLR (stderr, "xamarin_load_coreclr (): rv: %i domainId: %i handle: %p\n", rv, coreclr_domainId, coreclr_handle);
 }

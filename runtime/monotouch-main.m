@@ -419,6 +419,10 @@ xamarin_main (int argc, char *argv[], enum XamarinLaunchMode launch_mode)
 	xamarin_initialize_cocoa_threads (NULL);
 #endif
 
+#if DOTNET
+	xamarin_vm_initialize ();
+#endif
+
 #if defined (__arm__) || defined(__aarch64__)
 	xamarin_register_modules ();
 #endif

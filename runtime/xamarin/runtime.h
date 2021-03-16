@@ -204,6 +204,9 @@ uint32_t		xamarin_find_protocol_wrapper_type (uint32_t token_ref);
 void			xamarin_release_block_on_main_thread (void *obj);
 void			xamarin_handle_bridge_exception (GCHandle gchandle, const char *method);
 bool			xamarin_get_initialization_finished ();
+void			xamarin_vm_initialize ();
+bool			xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues);
+void*			xamarin_pinvoke_override (const char *libraryName, const char *entrypointName);
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
 bool			xamarin_has_managed_ref (id self);

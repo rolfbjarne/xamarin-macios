@@ -73,65 +73,34 @@ namespace Foundation {
 		public static readonly Assembly PlatformAssembly = typeof (NSObject).Assembly;
 
 		IntPtr handle;
-		// Flags actual_flags;
+		Flags actual_flags;
 		//ObjectDataPointer data = new ObjectDataPointer ();
 		unsafe NSObjectData* data = CreateData ();
 
 		unsafe Flags flags {
 			get {
-				if (data == null)
-					throw new ObjectDisposedException (GetType ().FullName);
+				//if (data == null)
+				//	throw new ObjectDisposedException (GetType ().FullName);
 
-				return data->Flags;
-				//return actual_flags;
+				//return data->Flags;
+				return actual_flags;
 			}
 			set {
-				if (data == null)
-					throw new ObjectDisposedException (GetType ().FullName);
-
-				data->Flags = value;
+				//if (data == null)
+				//	throw new ObjectDisposedException (GetType ().FullName);
+				actual_flags = value;
+				if (data != null && data->TrackedObjectInfo != null)
+					data->TrackedObjectInfo->Flags = value;
+				//data->Flags = value;
 			}
 		}
-
-		//internal class ObjectDataPointer : CriticalHandle {
-		//	IntPtr originalPointer;
-		//	public IntPtr Pointer;
-		//	public unsafe NSObjectData *Data { get { return (NSObjectData*) Pointer; } }
-		//	public ObjectDataPointer ()
-		//		: base (IntPtr.Zero)
-		//	{
-		//		unsafe {
-		//			Pointer = Marshal.AllocHGlobal (sizeof (NSObjectData));
-		//			Data->Handle = IntPtr.Zero;
-		//			Data->ClassHandle = IntPtr.Zero;
-		//			Data->Flags = (Flags) 0;
-		//		}
-		//		originalPointer = Pointer;
-		//		Runtime.xamarin_log ($"ObjectDataPointer..ctor [0x{Pointer.ToString ("x")}]");
-		//	}
-
-		//	public override bool IsInvalid { get { return Pointer == IntPtr.Zero; } }
-
-		//	protected override bool ReleaseHandle ()
-		//	{
-		//		Runtime.xamarin_log ($"ObjectDataPointer.ReleaseHandle [0x{Pointer.ToString ("x")}]\n{Environment.StackTrace}");
-		//		Marshal.FreeHGlobal (Pointer);
-		//		Pointer = IntPtr.Zero;
-		//		return true;
-		//	}
-
-		//	public override string ToString ()
-		//	{
-		//		return $"ObjectDataPointer [0x{Pointer.ToString ("x")} Original: 0x{originalPointer.ToString ("x")}]";
-		//	}
-		//}
 
 		[StructLayout (LayoutKind.Sequential)]
 		internal struct NSObjectData {
 			// The order of 'handle' and 'class_handle' is important: do not re-order unless SuperHandle is modified accordingly.
 			public IntPtr Handle;
 			public IntPtr ClassHandle;
-			public Flags Flags;
+			public unsafe Runtime.TrackedObjectInfo* TrackedObjectInfo;
 		}
 
 		unsafe static NSObjectData* CreateData ()
@@ -221,13 +190,11 @@ namespace Foundation {
 		
 		~NSObject () {
 			Dispose (false);
-			//Runtime.xamarin_log ($"~NSObject (): {GetType ().FullName}\n{Environment.StackTrace}");
 		}
 
 		public void Dispose () {
 			Dispose (true);
 			GC.SuppressFinalize (this);
-			//Runtime.xamarin_log ($"NSObject.Dispose (): {GetType ().FullName}\n{Environment.StackTrace}");
 		}
 
 		internal static IntPtr CreateNSObject (IntPtr type_gchandle, IntPtr handle, Flags flags)
@@ -259,9 +226,9 @@ namespace Foundation {
 			this.flags = (Flags) flags;
 		}
 
-		internal byte GetFlagsDirectly ()
+		internal Flags GetFlagsDirectly ()
 		{
-			return (byte) this.flags;
+			return this.flags;
 		}
 #endif
 
@@ -908,9 +875,6 @@ namespace Foundation {
 
 		unsafe void FreeData ()
 		{
-			unsafe {
-				Runtime.xamarin_log ($"FreeData () data: 0x{((IntPtr) data).ToString ("x")}");
-			}
 			if (data != null) {
 				Marshal.FreeHGlobal ((IntPtr) data);
 				data = null;

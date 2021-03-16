@@ -1,6 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup Condition="'$(CUSTOM_DOTNET_VERSION)' != ''">
 		<FrameworkReference Update="Microsoft.NETCore.App" RuntimeFrameworkVersion="$(CUSTOM_DOTNET_VERSION)" />
+		<KnownFrameworkReference Update="Microsoft.NETCore.App" TargetingPackVersion="$(CUSTOM_DOTNET_VERSION)" />
 		<KnownFrameworkReference Update="Microsoft.NETCore.App" RuntimeFrameworkVersion="$(CUSTOM_DOTNET_VERSION)" />
 	</ItemGroup>
 </Project>

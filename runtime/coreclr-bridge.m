@@ -8,6 +8,7 @@
 
 #if defined (CORECLR_RUNTIME)
 
+#include "product.h"
 #include "xamarin/xamarin.h"
 #include "xamarin/coreclr-bridge.h"
 
@@ -46,5 +47,55 @@ xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, cons
 
 	return rv == 0;
 }
+
+typedef void (*xamarin_runtime_initialize_decl)(struct InitializationOptions* options);
+void
+xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle)
+{
+	void *del = NULL;
+	int rv = coreclr_create_delegate (coreclr_handle, coreclr_domainId, PRODUCT ", Version=0.0.0.0", "ObjCRuntime.Runtime", "Initialize", &del);
+	if (rv != 0)
+		xamarin_assertion_message ("xamarin_bridge_call_runtime_initialize: failed to create delegate: %i\n", rv);
+
+	xamarin_runtime_initialize_decl func = (xamarin_runtime_initialize_decl) del;
+	func (options);
+}
+
+MonoClass *
+xamarin_get_nsnumber_class ()
+{
+	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
+}
+
+MonoClass *
+xamarin_get_nsvalue_class ()
+{
+	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
+}
+
+MonoClass *
+xamarin_get_inativeobject_class ()
+{
+	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
+}
+
+MonoClass *
+xamarin_get_nsobject_class ()
+{
+	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
+}
+
+MonoClass *
+xamarin_get_nsstring_class ()
+{
+	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
+}
+
+MonoClass *
+xamarin_get_runtime_class ()
+{
+	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
+}
+
 
 #endif // CORECLR_RUNTIME

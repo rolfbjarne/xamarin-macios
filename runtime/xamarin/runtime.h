@@ -25,6 +25,8 @@
 extern "C" {
 #endif
 
+struct InitializationOptions;
+
 typedef struct {
 	const char *name;
 	const char *type;
@@ -203,6 +205,7 @@ MonoAssembly*	xamarin_assembly_preload_hook (MonoAssemblyName *aname, char **ass
 void			xamarin_vm_initialize ();
 bool			xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues);
 void*			xamarin_pinvoke_override (const char *libraryName, const char *entrypointName);
+void			xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle);
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
 bool			xamarin_has_managed_ref (id self);
@@ -244,6 +247,10 @@ NSString *		xamarin_print_all_exceptions (GCHandle handle);
 id				xamarin_invoke_objc_method_implementation (id self, SEL sel, IMP xamarin_impl);
 MonoClass *		xamarin_get_nsnumber_class ();
 MonoClass *		xamarin_get_nsvalue_class ();
+MonoClass *		xamarin_get_inativeobject_class ();
+MonoClass *		xamarin_get_nsobject_class ();
+MonoClass *		xamarin_get_nsstring_class ();
+MonoClass *		xamarin_get_runtime_class ();
 
 bool			xamarin_is_managed_exception_marshaling_disabled ();
 

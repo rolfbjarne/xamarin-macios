@@ -46,7 +46,7 @@ xamarin_bridge_initialize ()
 void
 xamarin_coreclr_reference_tracking_begin_end_callback (int number)
 {
-	fprintf (stderr, "LOG: %s (%i)\n", __func__, number);
+	LOG_CORECLR (stderr, "LOG: %s (%i)\n", __func__, number);
 	if (number > 0) {
 		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
 	} else {
@@ -85,7 +85,7 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 		break;
 	}
 
-	fprintf (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
+	LOG_CORECLR (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
 
 	return rv;
 }
@@ -93,7 +93,7 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 void
 xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr)
 {
-	fprintf (stderr, "LOG: %s (%p)\n", __func__, ptr);
+	LOG_CORECLR (stderr, "LOG: %s (%p)\n", __func__, ptr);
 }
 
 void

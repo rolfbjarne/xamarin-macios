@@ -54,10 +54,10 @@ xamarin_bridge_initialize ()
 	monotouch_start_debugging ();
 	DEBUG_LAUNCH_TIME_PRINT ("\tDebug init time");
 #endif
-	
+
 	if (xamarin_init_mono_debug)
 		mono_debug_init (MONO_DEBUG_FORMAT_MONO);
-	
+
 	mono_install_assembly_preload_hook (xamarin_assembly_preload_hook, NULL);
 	mono_install_load_aot_data_hook (xamarin_load_aot_data, xamarin_free_aot_data, NULL);
 

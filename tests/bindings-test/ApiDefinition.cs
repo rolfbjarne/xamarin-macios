@@ -135,6 +135,22 @@ namespace Bindings.Test {
 		[Export ("V")]
 		void V ();
 
+		[Static]
+		[Export ("staticV")]
+		void StaticV ();
+
+		[Export ("getEmptyString")]
+		string GetEmptyString ();
+
+		[Export ("getShortString")]
+		string GetShortString ();
+
+		[Export ("getLongString")]
+		string GetLongString ();
+
+		[Export ("someObject")]
+		NSObject SomeObject { get; set; }
+
 		[Export ("F")]
 		float F ();
 

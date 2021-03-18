@@ -73,7 +73,7 @@ run-mysingleview:
 clean-start: $(TARGETS)
 	rm -f *.binlog
 	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
-	rm -f $(DOTNET6_DIR)/sdk-manifests/$(DOTNET6_VERSION_BAND)/Microsoft.NET.Workload.*
+	rm -Rf $(DOTNET6_DIR)/sdk-manifests/$(DOTNET6_VERSION_BAND)/Microsoft.NET.Workload.*
 	cd $(TOP)/dotnet && git clean -xfd
 	cd $(TOP)/tests/monotouch-test/dotnet && git clean -xfd
 	cd $(TOP)/tests/EmbeddedResources/dotnet && git clean -xfd
@@ -98,3 +98,9 @@ run-monotouch-test-perftest monotouch-test-perftest lldb-coreclr launch-lldb run
 	@echo "ℹ️  The target $@ has moved to the monotouch-test subdirectory. Go run 'make $@' there instead.  ℹ️"
 	@sleep 3
 	$(MAKE) -C monotouch-test $@
+
+# Deprecated targets for CoreCLRPerfTest
+build-perftest-with-mono build-perftest-with-coreclr build-perf-test run-perftest-with-mono run-perftest-with-coreclr perftest-with-mono perftest-with-coreclr run-perftest run-perftest-with-runtime:
+	@echo "ℹ️  The target $@ has moved to the CoreCLRPerfTest subdirectory. Go run 'make $@' there instead.  ℹ️"
+	@sleep 3
+	$(MAKE) -C CoreCLRPerfTest $@

@@ -77,25 +77,25 @@ namespace CoreCLRPerfTest {
 			ObjCRegistrarTest.StaticV ();
 		}
 
-		[Benchmark]
-		public void CallOverriddenInstanceMethod ()
-		{
+		// [Benchmark]
+		// public void CallOverriddenInstanceMethod ()
+		// {
 
-			MessageSend.void_objc_msgSend (subclassed.Handle, Selector.GetHandle ("v"));
-		}
+		// 	MessageSend.void_objc_msgSend (subclassed.Handle, Selector.GetHandle ("v"));
+		// }
 
-		[Benchmark]
-		public void CallExportedInstanceMethod ()
-		{
-			MessageSend.void_objc_msgSend (subclassed.Handle, Selector.GetHandle ("exportedInstanceMethod"));
+		// [Benchmark]
+		// public void CallExportedInstanceMethod ()
+		// {
+		// 	MessageSend.void_objc_msgSend (subclassed.Handle, Selector.GetHandle ("exportedInstanceMethod"));
 
-		}
+		// }
 
-		[Benchmark]
-		public void CallExportedStaticMethod ()
-		{
-			MessageSend.void_objc_msgSend (subclassed_class, Selector.GetHandle ("exportedInstanceMethod"));
-		}
+		// [Benchmark]
+		// public void CallExportedStaticMethod ()
+		// {
+		// 	MessageSend.void_objc_msgSend (subclassed_class, Selector.GetHandle ("exportedInstanceMethod"));
+		// }
 
 		class Subclassed : ObjCRegistrarTest {
 			public override void V ()
@@ -114,76 +114,76 @@ namespace CoreCLRPerfTest {
 		}
 	}
 
-	public class ArgumentMarshalling {
-		ObjCRegistrarTest obj = new ObjCRegistrarTest ();
-		IntPtr nsobject_class = Class.GetHandle (typeof (NSObject));
+	// public class ArgumentMarshalling {
+	// 	ObjCRegistrarTest obj = new ObjCRegistrarTest ();
+	// 	IntPtr nsobject_class = Class.GetHandle (typeof (NSObject));
 
-		[Benchmark]
-		public void CallReturnString_EmptyString ()
-		{
-			obj.GetEmptyString ();
-		}
+	// 	[Benchmark]
+	// 	public void CallReturnString_EmptyString ()
+	// 	{
+	// 		obj.GetEmptyString ();
+	// 	}
 
-		[Benchmark]
-		public void CallReturnString_ShortString ()
-		{
-			obj.GetShortString ();
-		}
+	// 	[Benchmark]
+	// 	public void CallReturnString_ShortString ()
+	// 	{
+	// 		obj.GetShortString ();
+	// 	}
 
-		[Benchmark]
-		public void CallReturnString_LongString ()
-		{
-			obj.GetLongString ();
-		}
+	// 	[Benchmark]
+	// 	public void CallReturnString_LongString ()
+	// 	{
+	// 		obj.GetLongString ();
+	// 	}
 
-		// CallReturnKnownManagedWrapper
+	// 	// CallReturnKnownManagedWrapper
 
-		NSObject someObjectKnownManagedWrapper;
-		[IterationSetup (Target = nameof (CallReturnKnownManagedWrapper))]
-		public void CallReturnKnownManagedWrapperSetup ()
-		{
-			// Create a new object that the bridge knows about
-			someObjectKnownManagedWrapper = new NSObject ();
-			MessageSend.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle ("setSomeObject:"), someObjectKnownManagedWrapper.Handle);
-		}
-		[Benchmark]
-		public void CallReturnKnownManagedWrapper ()
-		{
-			// Now get that value again.
-			var rv = obj.SomeObject;
-		}
-		[IterationCleanup (Target = nameof (CallReturnKnownManagedWrapper))]
-		public void CallReturnKnownManagedWrapperCleanup ()
-		{
-			// cleanup after us
-			someObjectKnownManagedWrapper.Dispose ();
-			someObjectKnownManagedWrapper = null;
-		}
+	// 	NSObject someObjectKnownManagedWrapper;
+	// 	[IterationSetup (Target = nameof (CallReturnKnownManagedWrapper))]
+	// 	public void CallReturnKnownManagedWrapperSetup ()
+	// 	{
+	// 		// Create a new object that the bridge knows about
+	// 		someObjectKnownManagedWrapper = new NSObject ();
+	// 		MessageSend.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle ("setSomeObject:"), someObjectKnownManagedWrapper.Handle);
+	// 	}
+	// 	[Benchmark]
+	// 	public void CallReturnKnownManagedWrapper ()
+	// 	{
+	// 		// Now get that value again.
+	// 		var rv = obj.SomeObject;
+	// 	}
+	// 	[IterationCleanup (Target = nameof (CallReturnKnownManagedWrapper))]
+	// 	public void CallReturnKnownManagedWrapperCleanup ()
+	// 	{
+	// 		// cleanup after us
+	// 		someObjectKnownManagedWrapper.Dispose ();
+	// 		someObjectKnownManagedWrapper = null;
+	// 	}
 
-		// CallReturnUnknownManagedWrapper
+	// 	// CallReturnUnknownManagedWrapper
 
-		IntPtr someObjectUnknownManagedWrapper;
-		[IterationSetup (Target = nameof (CallReturnUnknownManagedWrapper))]
-		public void CallReturnUnknownManagedWrapperSetup ()
-		{
-			// Create a new object that the bridge knows about
-			someObjectUnknownManagedWrapper = MessageSend.IntPtr_objc_msgSend (MessageSend.IntPtr_objc_msgSend (nsobject_class, Selector.GetHandle ("alloc")), Selector.GetHandle ("init"));
-			MessageSend.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle ("setSomeObject:"), someObjectUnknownManagedWrapper);
-		}
-		[Benchmark]
-		public void CallReturnUnknownManagedWrapper ()
-		{
-			// Now get that value again.
-			var rv = obj.SomeObject;
-		}
-		[IterationCleanup (Target = nameof (CallReturnUnknownManagedWrapper))]
-		public void CCallReturnUnknownManagedWrapperCleanup ()
-		{
-			// cleanup after us
-			MessageSend.void_objc_msgSend (someObjectUnknownManagedWrapper, Selector.GetHandle ("release"));
-			someObjectUnknownManagedWrapper = IntPtr.Zero;
-		}
-	}
+	// 	IntPtr someObjectUnknownManagedWrapper;
+	// 	[IterationSetup (Target = nameof (CallReturnUnknownManagedWrapper))]
+	// 	public void CallReturnUnknownManagedWrapperSetup ()
+	// 	{
+	// 		// Create a new object that the bridge knows about
+	// 		someObjectUnknownManagedWrapper = MessageSend.IntPtr_objc_msgSend (MessageSend.IntPtr_objc_msgSend (nsobject_class, Selector.GetHandle ("alloc")), Selector.GetHandle ("init"));
+	// 		MessageSend.void_objc_msgSend_IntPtr (obj.Handle, Selector.GetHandle ("setSomeObject:"), someObjectUnknownManagedWrapper);
+	// 	}
+	// 	[Benchmark]
+	// 	public void CallReturnUnknownManagedWrapper ()
+	// 	{
+	// 		// Now get that value again.
+	// 		var rv = obj.SomeObject;
+	// 	}
+	// 	[IterationCleanup (Target = nameof (CallReturnUnknownManagedWrapper))]
+	// 	public void CCallReturnUnknownManagedWrapperCleanup ()
+	// 	{
+	// 		// cleanup after us
+	// 		MessageSend.void_objc_msgSend (someObjectUnknownManagedWrapper, Selector.GetHandle ("release"));
+	// 		someObjectUnknownManagedWrapper = IntPtr.Zero;
+	// 	}
+	// }
 
 	public class VM {
 		[Benchmark]

@@ -76,3 +76,9 @@ run-monotouch-test-perftest monotouch-test-perftest lldb-coreclr launch-lldb run
 	@echo "ℹ️  The target $@ has moved to the monotouch-test subdirectory. Go run 'make $@' there instead.  ℹ️"
 	@sleep 3
 	$(MAKE) -C monotouch-test $@
+
+# Deprecated targets for CoreCLRPerfTest
+build-perftest-with-mono build-perftest-with-coreclr build-perf-test run-perftest-with-mono run-perftest-with-coreclr perftest-with-mono perftest-with-coreclr run-perftest run-perftest-with-runtime:
+	@echo "ℹ️  The target $@ has moved to the CoreCLRPerfTest subdirectory. Go run 'make $@' there instead.  ℹ️"
+	@sleep 3
+	$(MAKE) -C CoreCLRPerfTest $@

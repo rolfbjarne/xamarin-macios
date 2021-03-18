@@ -855,7 +855,6 @@ xamarin_gc_event (MonoGCEvent event)
 	case MONO_GC_EVENT_POST_START_WORLD:
 		pthread_mutex_unlock (&framework_peer_release_lock);
 		break;
-	
 	default: // silences a compiler warning.
 		break;
 	}

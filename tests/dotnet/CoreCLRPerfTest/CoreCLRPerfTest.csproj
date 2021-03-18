@@ -20,4 +20,7 @@
     <PackageReference Include="System.Diagnostics.EventLog" Version="5.0.0" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\bindings-test\dotnet\macOS\bindings-test.csproj" />
+  </ItemGroup>
 </Project>

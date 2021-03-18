@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.809.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCLRPerfTest", "CoreCLRPerfTest.csproj", "{50F102FB-3524-4DE8-B0EF-ABC0DCCD9787}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test", "..\..\bindings-test\dotnet\macOS\bindings-test.csproj", "{FFA03CF5-B981-4645-9BCD-4B22A626362E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{50F102FB-3524-4DE8-B0EF-ABC0DCCD9787}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50F102FB-3524-4DE8-B0EF-ABC0DCCD9787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50F102FB-3524-4DE8-B0EF-ABC0DCCD9787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFA03CF5-B981-4645-9BCD-4B22A626362E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFA03CF5-B981-4645-9BCD-4B22A626362E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFA03CF5-B981-4645-9BCD-4B22A626362E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFA03CF5-B981-4645-9BCD-4B22A626362E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

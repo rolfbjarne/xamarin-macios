@@ -4,67 +4,39 @@ using System.Linq;
 
 using Foundation;
 
+using BenchmarkDotNet.Analysers;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Loggers;
+using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Toolchains.InProcess.Emit;
+using BenchmarkDotNet.Validators;
+
 namespace CoreCLRPerfTest {
 	public class ObjCBridge {
-		public static void Run ()
-		{
-			var bridge = new ObjCBridge ();
-			RunTest (nameof (NSObjectCreated), bridge.NSObjectCreated, 100000);
-			RunTest (nameof (NSObjectCreatedAndDisposed), bridge.NSObjectCreatedAndDisposed, 100000);
-			RunTest (nameof (CustomSubClassCreated), bridge.NSObjectCreated, 100000);
-			RunTest (nameof (CustomSubClassCreatedAndDisposed), bridge.NSObjectCreatedAndDisposed, 100000);
-
-			var invokeOnNSObject = new InvokeOnNSObject ();
-			RunTest (nameof (invokeOnNSObject.CallClass), invokeOnNSObject.CallClass, 100000);
-
-			var invokeOnCustomClass = new InvokeOnCustomClass ();
-			RunTest (nameof (invokeOnCustomClass.CallInstanceMethodInNativeCode), invokeOnCustomClass.CallInstanceMethodInNativeCode, 100000);
-			RunTest (nameof (invokeOnCustomClass.CallStaticMethodInNativeCode), invokeOnCustomClass.CallStaticMethodInNativeCode, 100000);
-			RunTest (nameof (invokeOnCustomClass.CallOverriddenInstanceMethod), invokeOnCustomClass.CallOverriddenInstanceMethod, 100000);
-			RunTest (nameof (invokeOnCustomClass.CallExportedInstanceMethod), invokeOnCustomClass.CallExportedInstanceMethod, 100000);
-			RunTest (nameof (invokeOnCustomClass.CallExportedStaticMethod), invokeOnCustomClass.CallExportedStaticMethod, 100000);
-
-			var marshalling = new Marshalling ();
-			RunTest (nameof (marshalling.CallReturnString_EmptyString), marshalling.CallReturnString_EmptyString, 100000);
-			RunTest (nameof (marshalling.CallReturnString_ShortString), marshalling.CallReturnString_ShortString, 100000);
-			RunTest (nameof (marshalling.CallReturnString_LongString), marshalling.CallReturnString_LongString, 100000);
-			RunTest (nameof (marshalling.CallReturnKnownManagedWrapper), marshalling.CallReturnKnownManagedWrapper, 100000);
-			RunTest (nameof (marshalling.CallReturnUnknownManagedWrapper), marshalling.CallReturnUnknownManagedWrapper, 100000);
-
-			var vm = new VM ();
-			RunTest (nameof (vm.CreateObject), vm.CreateObject, 10000000);
-
-		}
-
-		static void RunTest (string name, Action test, int iterations)
-		{
-			test (); // warm up
-
-			var watch = Stopwatch.StartNew ();
-			for (var i = 0; i < iterations; i++)
-				test ();
-			watch.Stop ();
-
-			var perMilliSecond = iterations / (double) watch.ElapsedMilliseconds;
-			Console.WriteLine ($"Executed {name} for {iterations} iterations in {watch.Elapsed} resulting in {perMilliSecond} iterations per millisecond.");
-		}
-
-		void NSObjectCreated ()
+		[Benchmark]
+		public void NSObjectCreated ()
 		{
 			new NSObject ();
 		}
 
-		void NSObjectCreatedAndDisposed ()
+		[Benchmark]
+		public void NSObjectCreatedAndDisposed ()
 		{
 			using (var obj = new NSObject ()) { }
 		}
 
-		void CustomSubClassCreated ()
+		[Benchmark]
+		public void CustomSubClassCreated ()
 		{
 			new CustomSubClass ();
 		}
 
-		void CustomSubClassCreatedAndDisposed ()
+		[Benchmark]
+		public void CustomSubClassCreatedAndDisposed ()
 		{
 			using (var obj = new CustomSubClass ()) { }
 		}
@@ -75,70 +47,82 @@ namespace CoreCLRPerfTest {
 
 	}
 
-	class InvokeOnNSObject {
+	public class InvokeOnNSObject {
 		NSObject obj = new NSObject ();
 
+		[Benchmark]
 		public void CallClass ()
 		{
 			var c = obj.Class;
 		}
 	}
 
-	class InvokeOnCustomClass {
+	public class InvokeOnCustomClass {
+		[Benchmark]
 		public void CallInstanceMethodInNativeCode ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallStaticMethodInNativeCode ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallOverriddenInstanceMethod ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallExportedInstanceMethod ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallExportedStaticMethod ()
 		{
 
 		}
 	}
 
-	class Marshalling {
+	public class Marshalling {
+		[Benchmark]
 		public void CallReturnString_EmptyString ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallReturnString_ShortString ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallReturnString_LongString ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallReturnKnownManagedWrapper ()
 		{
 
 		}
 
+		[Benchmark]
 		public void CallReturnUnknownManagedWrapper ()
 		{
 
 		}
 	}
 
-	class VM {
+	public class VM {
+		[Benchmark]
 		public void CreateObject ()
 		{
 			new object ();

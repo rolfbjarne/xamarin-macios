@@ -8,11 +8,11 @@ export MSBuildEnableWorkloadResolver=true
 
 # This tells NuGet to use the nupkgs we're building locally,
 # and to put any extracted packages in the 'packages' directory (to not clutter up ~/.nuget/packages)
-NuGet.config: $(TOP)/NuGet.config Makefile
+NuGet.config: $(TOP)/NuGet.config Makefile $(TOP)/configure.inc
 	$(Q) $(CP) $< $@.tmp
 	$(Q) nuget sources add -Name local-dotnet-feed -Source $(abspath $(DOTNET_FEED_DIR)) -ConfigFile $@.tmp
 ifdef CUSTOM_DOTNET
-	$(Q) nuget sources add -Name dev-runtime-feed -Source $(abspath $(CUSTOM_DOTNET_PATH)/packages/Debug/Shipping) -ConfigFile $@.tmp
+	$(Q) nuget sources add -Name dev-runtime-feed -Source $(abspath $(CUSTOM_DOTNET_PATH)/packages/Release/Shipping) -ConfigFile $@.tmp
 endif
 	$(Q) nuget config -Set globalPackagesFolder=$(abspath $(CURDIR)/packages) -Config $@.tmp
 	$(Q) nuget config -Set repositorypath=$(abspath $(CURDIR)/packages) -Config $@.tmp

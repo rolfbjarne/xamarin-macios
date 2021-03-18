@@ -24,35 +24,13 @@ namespace CoreCLRPerfTest {
                 // The call to NSApplication.Init is required
                 NSApplication.Init ();
 
-                var summaries = new List<Summary> ();
-
-                summaries.AddRange (BenchmarkRunner.Run (typeof (MainClass).Assembly, new Config ()));
-
-                PrintSummary (summaries.ToArray ());
+                BenchmarkRunner.Run (typeof (MainClass).Assembly, new Config ());
             } catch (Exception e) {
                 Console.WriteLine ("Unhandled exception: {0}", e);
                 return 1;
 			}
 
             return 0;
-		}
-
-        static void PrintSummary (params Summary[] summaries)
-		{
-            if (summaries == null)
-                return;
-
-            Console.WriteLine ($"Got {summaries.Length} summaries:");
-            foreach (var s in summaries) {
-                if (s == null) {
-                    Console.WriteLine ("Null summary!");
-                    continue;
-                }
-                Console.WriteLine (s);
-                Console.WriteLine ($"Title: {s.Title}");
-                Console.WriteLine ($"TotalTime: {s.TotalTime}");
-
-            }
 		}
 	}
 
@@ -68,20 +46,13 @@ namespace CoreCLRPerfTest {
             );
 
             WithOption (ConfigOptions.DisableOptimizationsValidator, true);
+            WithOption (ConfigOptions.JoinSummary, true);
 
-            Add (JitOptimizationsValidator.DontFailOnError); // ALLOW NON-OPTIMIZED DLLS
+            // Add (JitOptimizationsValidator.DontFailOnError); // ALLOW NON-OPTIMIZED DLLS
 
-            Add (DefaultConfig.Instance.GetLoggers ().ToArray ()); // manual config has no loggers by default
-            Add (DefaultConfig.Instance.GetExporters ().ToArray ()); // manual config has no exporters by default
-            Add (DefaultConfig.Instance.GetColumnProviders ().ToArray ()); // manual config has no columns by default
-        }
-    }
-
-    public class Sleeper {
-        [Benchmark]
-        public void Sleep ()
-        {
-            System.Threading.Thread.Sleep (1);
+            AddLogger (DefaultConfig.Instance.GetLoggers ().ToArray ()); // manual config has no loggers by default
+            AddExporter (DefaultConfig.Instance.GetExporters ().ToArray ()); // manual config has no exporters by default
+            AddColumnProvider (DefaultConfig.Instance.GetColumnProviders ().ToArray ()); // manual config has no columns by default
         }
     }
 }

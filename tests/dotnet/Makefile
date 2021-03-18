@@ -121,16 +121,65 @@ lldb-coreclr: export XAMARIN_RUNTIME=CoreCLR
 lldb-coreclr:
 	$(MAKE) launch-lldb
 
-perftest:
+monotouch-test-perftest:
 	$(MAKE) clean-start
 	$(MAKE) just-build-coreclr
 	$(MAKE) just-build-mono
 	$(MAKE) run-monotouch-test-with-coreclr
 	$(MAKE) run-monotouch-test-with-mono
 
-run-perftest:
+run-monotouch-test-perftest:
 	$(MAKE) run-monotouch-test-with-mono
 	$(MAKE) run-monotouch-test-with-coreclr
 
 dotnet6:
 	@echo $(abspath $(DOTNET6))
+
+
+
+build-perftest-with-mono: export XAMARIN_RUNTIME=MonoVM
+build-perftest-with-mono: $(TARGETS)
+	$(MAKE) build-perf-test
+
+build-perftest-with-coreclr: export XAMARIN_RUNTIME=CoreCLR
+build-perftest-with-coreclr: $(TARGETS)
+	$(MAKE) build-perf-test
+
+BINLOG_TIMESTAMP:=$(shell date +%Y-%m-%d--%H:%M:%S)
+build-perf-test: $(TARGETS)
+	rm -Rf CoreCLRPerfTest/bin/$(XAMARIN_RUNTIME) CoreCLRPerfTest/obj/$(XAMARIN_RUNTIME)
+	if ! $(DOTNET6) build $(abspath CoreCLRPerfTest/CoreCLRPerfTest.csproj) "/bl:$@-$(BINLOG_TIMESTAMP).binlog" $(BUILD_PARAMETERS) /p:Configuration=$(XAMARIN_RUNTIME) /p:_XamarinRuntime=$(XAMARIN_RUNTIME) $(MSBUILD_VERBOSITY); then \
+		$(DOTNET6) build /v:diag "$@-$(BINLOG_TIMESTAMP).binlog"; \
+		echo "Performance test build failed" & \
+		exit 1; \
+	fi
+
+run-perftest-with-mono: export XAMARIN_RUNTIME=MonoVM
+run-perftest-with-mono: $(TARGETS)
+	$(MAKE) run-perftest-with-runtime
+
+run-perftest-with-coreclr: export XAMARIN_RUNTIME=CoreCLR
+run-perftest-with-coreclr: $(TARGETS)
+	$(MAKE) run-perftest-with-runtime
+
+perftest-with-mono: $(TARGETS)
+	$(MAKE) build-perftest-with-mono
+	$(MAKE) run-perftest-with-mono
+
+perftest-with-coreclr: $(TARGETS)
+	$(MAKE) build-perftest-with-coreclr
+	$(MAKE) run-perftest-with-coreclr
+
+run-perftest:
+	$(MAKE) build-perftest-with-coreclr
+	$(MAKE) build-perftest-with-mono
+	$(MAKE) run-perftest-with-mono
+	$(MAKE) run-perftest-with-coreclr
+
+PERFLOGFILENAME:=$(HOME)/test/monotouchtest-timings/perflog-$(shell date +%Y-%m-%d--%H:%M:%S).log
+run-perftest-with-runtime: $(TARGETS)
+	@echo "Running CoreCLRPerfTest and writing output to $(PERFLOGFILENAME)..."
+	@echo "VM: $(XAMARIN_RUNTIME)" > $(PERFLOGFILENAME)
+	(time $(abspath CoreCLRPerfTest/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-x64/CoreCLRPerfTest.app/Contents/MacOS/CoreCLRPerfTest) $(ARGUMENTS) 2>&1) 2>&1 | stamp | tee -a $(PERFLOGFILENAME)
+	cat $(PERFLOGFILENAME)
+

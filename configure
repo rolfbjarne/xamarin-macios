@@ -45,7 +45,7 @@ Usage: configure [options]
     --enable-legacy-xamarin  Enable building the legacy version of Xamarin.iOS/Xamarin.Mac.
     --disable-legacy-xamarin Disable building the legacy version of Xamarin.iOS/Xamarin.Mac.
 
-    --custom-dotnet=[artifacts] Use a locally built version of dotnet/runtime. [artifacts] is the absolute path to the dotnet/runtime/artifacts directory resulting from buliding dotnet/runtime locally.
+    --custom-dotnet=[artifacts] Use a locally built version of dotnet/runtime. [artifacts] is the absolute path to the dotnet/runtime/artifacts directory resulting from building dotnet/runtime locally. dotnet/runtime must be built like this: https://gist.github.com/rolfbjarne/5978889867a7067198ed3ee2439190f2
 EOL
 }
 

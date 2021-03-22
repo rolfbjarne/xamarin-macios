@@ -37,6 +37,8 @@ namespace MonoTouchFixtures.GameKit {
 			// a permanent change.
 			if (TestRuntime.CheckExactXcodeVersion (12, 2, beta: 3))
 				Assert.Inconclusive ("'LeaderboardViewControllerTest' the native 'init' method returned nil.");
+			if (TestRuntime.CheckSystemVersion (PlatformName.MacOSX, 11, 0))
+				Assert.Inconclusive ("'LeaderboardViewControllerTest' the native 'init' method returned nil.");
 #endif
 			TestRuntime.AssertSystemVersion (PlatformName.MacOSX, 10, 8, throwIfOtherPlatform: false);
 			using (var vc = new GKLeaderboardViewController ()) {

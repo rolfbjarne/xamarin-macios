@@ -125,8 +125,8 @@ monotouch-test-perftest:
 	$(MAKE) clean-start
 	$(MAKE) just-build-coreclr
 	$(MAKE) just-build-mono
-	$(MAKE) run-monotouch-test-with-coreclr
 	$(MAKE) run-monotouch-test-with-mono
+	$(MAKE) run-monotouch-test-with-coreclr
 
 run-monotouch-test-perftest:
 	$(MAKE) run-monotouch-test-with-mono

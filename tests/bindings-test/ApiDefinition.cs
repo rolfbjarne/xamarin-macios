@@ -151,6 +151,9 @@ namespace Bindings.Test {
 		[Export ("someObject")]
 		NSObject SomeObject { get; set; }
 
+		[Export ("someArray")]
+		NSObject[] SomeArray { get; set; }
+
 		[Export ("F")]
 		float F ();
 

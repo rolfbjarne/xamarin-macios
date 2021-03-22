@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 using AppKit;
-
-using BenchmarkDotNet.Analysers;
-using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
-using BenchmarkDotNet.Validators;
+using Perfolizer.Horology;
 
 namespace CoreCLRPerfTest {
 	static class MainClass {
@@ -23,7 +21,6 @@ namespace CoreCLRPerfTest {
             try {
                 // The call to NSApplication.Init is required
                 NSApplication.Init ();
-
                 BenchmarkRunner.Run (typeof (MainClass).Assembly, new Config ());
             } catch (Exception e) {
                 Console.WriteLine ("Unhandled exception: {0}", e);
@@ -37,21 +34,28 @@ namespace CoreCLRPerfTest {
     public class Config : ManualConfig {
         public Config ()
         {
-            AddJob (Job.MediumRun
+            AddJob (Job.ShortRun
                 .WithLaunchCount (1)
-                .WithToolchain (InProcessEmitToolchain.Instance)
-                .WithIterationCount (5) // speed up a bit while writing the tests
-                .WithWarmupCount (5) // speed up a bit while writing the tests
+                .WithToolchain (new InProcessEmitToolchain (TimeSpan.FromHours (1), true))
                 .WithId ("InProcess")
             );
+
+            var artifactsPath = Environment.GetEnvironmentVariable ("BENCHMARK_OUTPUT_PATH");
+            if (!string.IsNullOrEmpty (artifactsPath))
+                WithArtifactsPath (artifactsPath);
 
             WithOption (ConfigOptions.DisableOptimizationsValidator, true);
             WithOption (ConfigOptions.JoinSummary, true);
 
-            // Add (JitOptimizationsValidator.DontFailOnError); // ALLOW NON-OPTIMIZED DLLS
-
             AddLogger (DefaultConfig.Instance.GetLoggers ().ToArray ()); // manual config has no loggers by default
-            AddExporter (DefaultConfig.Instance.GetExporters ().ToArray ()); // manual config has no exporters by default
+            AddExporter (DefaultConfig.Instance.GetExporters ().Where (v => !(v is CsvExporter)).ToArray ()); // manual config has no exporters by default
+
+            var csv = new CsvExporter (
+                CsvSeparator.Semicolon,
+                new SummaryStyle (CultureInfo.CurrentCulture, true, SizeUnit.B, TimeUnit.Nanosecond, false, true)
+            );
+            AddExporter (csv);
+
             AddColumnProvider (DefaultConfig.Instance.GetColumnProviders ().ToArray ()); // manual config has no columns by default
         }
     }

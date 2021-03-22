@@ -145,6 +145,11 @@ build-perftest-with-coreclr: export XAMARIN_RUNTIME=CoreCLR
 build-perftest-with-coreclr: $(TARGETS)
 	$(MAKE) build-perf-test
 
+ifeq ("$(BENCHMARK_OUTPUT_PATH)","")
+BENCHMARK_OUTPUT_PATH:=$(abspath $(HOME)/test/CoreCLRPerfTest/output/$(shell date +%Y-%m-%d--%H:%M:%S))
+endif
+export BENCHMARK_OUTPUT_PATH
+
 BINLOG_TIMESTAMP:=$(shell date +%Y-%m-%d--%H:%M:%S)
 build-perf-test: $(TARGETS)
 	rm -Rf CoreCLRPerfTest/bin/$(XAMARIN_RUNTIME) CoreCLRPerfTest/obj/$(XAMARIN_RUNTIME)
@@ -176,10 +181,9 @@ run-perftest:
 	$(MAKE) run-perftest-with-mono
 	$(MAKE) run-perftest-with-coreclr
 
-PERFLOGFILENAME:=$(HOME)/test/monotouchtest-timings/perflog-$(shell date +%Y-%m-%d--%H:%M:%S).log
+PERFLOGFILENAME:=$(BENCHMARK_OUTPUT_PATH)/perflog-$(shell date +%Y-%m-%d--%H:%M:%S).log
 run-perftest-with-runtime: $(TARGETS)
 	@echo "Running CoreCLRPerfTest and writing output to $(PERFLOGFILENAME)..."
+	@mkdir -p $(BENCHMARK_OUTPUT_PATH)
 	@echo "VM: $(XAMARIN_RUNTIME)" > $(PERFLOGFILENAME)
 	(time $(abspath CoreCLRPerfTest/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-x64/CoreCLRPerfTest.app/Contents/MacOS/CoreCLRPerfTest) $(ARGUMENTS) 2>&1) 2>&1 | stamp | tee -a $(PERFLOGFILENAME)
-	cat $(PERFLOGFILENAME)
-

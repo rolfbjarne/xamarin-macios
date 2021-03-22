@@ -97,5 +97,18 @@ xamarin_get_runtime_class ()
 	xamarin_assertion_message ("The method %s it not implemented yet for CoreCLR", __func__);
 }
 
+void
+xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
+{
+	if (gchandle == INVALID_GCHANDLE)
+		return;
+
+	if (method == NULL)
+		method = "<unknown method";
+
+	fprintf (stderr, "%s threw an exception: %p\n", method, gchandle);
+	xamarin_assertion_message ("%s threw an exception: %p", method, gchandle);
+}
+
 
 #endif // CORECLR_RUNTIME

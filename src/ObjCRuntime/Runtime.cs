@@ -1684,8 +1684,8 @@ namespace ObjCRuntime {
 		}
 #endif // !COREBUILD
 
-			[DllImport ("__Internal", CharSet = CharSet.Unicode)]
-		internal extern static void xamarin_log (string s);
+		[DllImport ("__Internal", CharSet = CharSet.Unicode)]
+		public extern static void xamarin_log (string s);
 
 		static int MajorVersion = -1;
 		static int MinorVersion = -1;

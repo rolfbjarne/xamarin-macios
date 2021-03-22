@@ -920,6 +920,7 @@ xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle
 void
 xamarin_gc_event (MonoGCEvent event)
 {
+#if !defined (CORECLR_RUNTIME)
 	// COOP: this is a callback called by the GC, I believe the mode here doesn't matter.
 	switch (event) {
 	case MONO_GC_EVENT_PRE_STOP_WORLD:
@@ -932,6 +933,7 @@ xamarin_gc_event (MonoGCEvent event)
 	default: // silences a compiler warning.
 		break;
 	}
+#endif // !CORECLR_RUNTIME
 }
 
 static MonoClass *

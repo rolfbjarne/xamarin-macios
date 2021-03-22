@@ -26,17 +26,17 @@ namespace ObjCRuntime {
 	public unsafe partial class Runtime {
 		
 <# foreach (var d in delegates) { #>
-		internal delegate <#= d.ReturnType.MType #> <#= d.SimpleEntryPoint #>_delegate (<#= d.MArgumentSignature #>);
+<#= d.IfNet #>		internal delegate <#= d.ReturnType.MType #> <#= d.SimpleEntryPoint #>_delegate (<#= d.MArgumentSignature #>);<#= d.EndIfNet #>
 <# } #>
 
 		internal struct Delegates {
 <# foreach (var d in delegates) { #>
-			public IntPtr <#= d.SimpleEntryPoint #>;
+<#= d.IfNet #>			public IntPtr <#= d.SimpleEntryPoint #>;<#= d.EndIfNet #>
 <# } #>
 		}
 
 <# 		foreach (var d in delegates) { #>
-		[MonoPInvokeCallback (typeof (<#= d.SimpleEntryPoint #>_delegate))]
+<#= d.IfNet #>		[MonoPInvokeCallback (typeof (<#= d.SimpleEntryPoint #>_delegate))]
 		static <#= d.ReturnType.MType #> <#= d.SimpleEntryPoint #> (<#= d.MArgumentSignature #>)
 <# if (d.ExceptionHandling) { #>
 		{	
@@ -65,7 +65,7 @@ namespace ObjCRuntime {
 <# } #>
 		}
 <# } #>
-
+<#= d.EndIfNet #>
 <# } #>
 
 		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
@@ -73,7 +73,7 @@ namespace ObjCRuntime {
 		{
 <# foreach (var d in delegates) {
 	if (d.OnlyDynamicUsage) continue; #>
-			options->Delegates-><#= d.SimpleEntryPoint #> = GetFunctionPointer (new <#= d.SimpleEntryPoint #>_delegate (<#= d.SimpleEntryPoint #>));
+<#= d.IfNet #>			options->Delegates-><#= d.SimpleEntryPoint #> = GetFunctionPointer (new <#= d.SimpleEntryPoint #>_delegate (<#= d.SimpleEntryPoint #>));<#= d.EndIfNet #>
 <# } #>
 
 			// The linker will remove this condition (and the subsequent method call) if possible
@@ -85,7 +85,7 @@ namespace ObjCRuntime {
 		{
 <# foreach (var d in delegates) {
 	if (!d.OnlyDynamicUsage) continue; #>
-			options->Delegates-><#= d.SimpleEntryPoint #> = GetFunctionPointer (new <#= d.SimpleEntryPoint #>_delegate (<#= d.SimpleEntryPoint #>));
+<#= d.IfNet #>			options->Delegates-><#= d.SimpleEntryPoint #> = GetFunctionPointer (new <#= d.SimpleEntryPoint #>_delegate (<#= d.SimpleEntryPoint #>));<#= d.EndIfNet #>
 <# } #>
 		}
 	}

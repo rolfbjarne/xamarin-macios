@@ -34,6 +34,30 @@ namespace ObjCRuntime {
 		}
 
 		// Returns a retained MonoObject. Caller must release.
+		static IntPtr FindAssembly (IntPtr assembly_name)
+		{
+			var path = Marshal.PtrToStringAuto (assembly_name);
+			var name = Path.GetFileNameWithoutExtension (path);
+			log_coreclr ($"Runtime.FindAssembly (0x{assembly_name.ToString ("x")} = {name})");
+			foreach (var asm in AppDomain.CurrentDomain.GetAssemblies ()) {
+				log_coreclr ($"    Found in app domain: {asm.GetName ().Name}");
+				if (asm.GetName ().Name == name) {
+					log_coreclr ($"        Match!");
+					return GetMonoObject (asm);
+				}
+			}
+
+			var loadedAssembly = Assembly.LoadFrom (path);
+			if (loadedAssembly != null) {
+				log_coreclr ($"    Loaded {loadedAssembly.GetName ().Name}");
+				return GetMonoObject (loadedAssembly);
+			}
+
+			log_coreclr ($"Found no assembly named {name}");
+			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
+		}
+
+		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (object obj)
 		{
 			if (obj == null)

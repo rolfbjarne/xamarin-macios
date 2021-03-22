@@ -16,12 +16,12 @@
 #include "delegates.h"
 
 <# foreach (var d in delegates) { #>
-typedef <#= d.ReturnType.InterfaceCType #><#= d.AlignCReturnType #> (*func_<#= d.EntryPoint #>)<#= d.AlignEntryPoint #> (<#= d.CArgumentSignature #>);
+<#= d.IfDotNet #>typedef <#= d.ReturnType.InterfaceCType #><#= d.AlignCReturnType #> (*func_<#= d.EntryPoint #>)<#= d.AlignEntryPoint #> (<#= d.CArgumentSignature #>);<#= d.EndIfDotNet #>
 <# } #>
 
 struct Delegates {
 <# foreach (var d in delegates) { #>
-	func_<#= d.EntryPoint #><#= d.AlignEntryPoint #> <#= d.EntryPoint.Substring ("xamarin_".Length) #>;
+<#= d.IfDotNet #>	func_<#= d.EntryPoint #><#= d.AlignEntryPoint #> <#= d.EntryPoint.Substring ("xamarin_".Length) #>;<#= d.EndIfDotNet #>
 <# } #>
 };
 
@@ -37,5 +37,5 @@ create_linked_away_exception (const char *func)
 }
 
 <# foreach (var d in delegates) { #>
-<#= d.Function #>
+<#= d.IfCoreCLR #><#= d.Function #><#= d.EndIfCoreCLR #>
 <# } #>

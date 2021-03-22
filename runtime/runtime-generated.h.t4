@@ -25,7 +25,7 @@ extern "C" {
 		if (d.OnlyDynamicUsage)
 			continue;
 #>
-<#= d.ReturnType.ExposedCType #>
+<#= d.IfCoreCLR #><#= d.ReturnType.ExposedCType #>
 <#= d.EntryPoint #> (<#= d.CArgumentSignatureFunctionDeclaration #>);<#= d.EndIfCoreCLR #>
 
 <# } #>

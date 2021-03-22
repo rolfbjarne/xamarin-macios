@@ -286,6 +286,15 @@
 			WrappedManagedFunction = "CreateNSObject",
 			OnlyDynamicUsage = false,
 		},
+
+		new XDelegate ("MonoAssembly *", "IntPtr", "xamarin_find_assembly",
+			"const char *","IntPtr", "assembly_name"
+		) {
+			WrappedManagedFunction = "FindAssembly",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
 	};
 	delegates.CalculateLengths ();
 #><#+
@@ -335,10 +344,65 @@
 		public bool ExceptionHandling = true;
 		// Detemines whether the function is only used by the dynamic registrar (in which case we might be able to link the function away if the static registrar is being used)
 		public bool OnlyDynamicUsage;
+		public bool OnlyCoreCLR;
 
 		public string DelegateName {
 			get {
 				return EntryPoint.Substring ("xamarin_".Length);
+			}
+		}
+
+		// This is used for native code that should only be used in the CoreCLR bridge
+		public string IfCoreCLR {
+			get {
+				if (OnlyCoreCLR)
+					return "#if defined (CORECLR_RUNTIME)\n";
+				return string.Empty;
+			}
+		}
+
+		public string EndIfCoreCLR {
+			get {
+				if (OnlyCoreCLR)
+					return "\n#endif";
+				return string.Empty;
+			}
+		}
+
+		// "#if DOTNET": This is used for native code that should only be used in the CoreCLR bridge, but still has
+		// to exist when using MonoVM (for instance: so that a struct has the same size in native and managed code).
+		// We build our native runtime twice, once for CoreCLR and once for MonoVM, but they both have to use the 
+		// same managed code (which is only built once).
+		public string IfDotNet {
+			get {
+				if (OnlyCoreCLR)
+					return "#if DOTNET\n";
+				return string.Empty;
+			}
+		}
+
+		public string EndIfDotNet {
+			get {
+				if (OnlyCoreCLR)
+					return "\n#endif";
+				return string.Empty;
+			}
+		}
+
+		// "#if NET": This is used for managed code.
+		public string IfNet {
+			get {
+				if (OnlyCoreCLR)
+					return "#if NET\n";
+				return string.Empty;
+			}
+		}
+
+		public string EndIfNet {
+			get {
+				if (OnlyCoreCLR)
+					return "\n#endif";
+				return string.Empty;
 			}
 		}
 

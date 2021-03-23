@@ -813,6 +813,7 @@ xamarin_type_get_full_name (MonoType *type, GCHandle *exception_gchandle)
  * ToggleRef support
  */
 // #define DEBUG_TOGGLEREF 1
+#if !defined (CORECLR_RUNTIME)
 static void
 gc_register_toggleref (MonoObject *obj, id self, bool isCustomType)
 {
@@ -887,7 +888,9 @@ gc_toggleref_callback (MonoObject *object)
 
 	return res;
 }
+#endif
 
+#if !defined (CORECLR_RUNTIME)
 static void
 gc_event_callback (MonoProfiler *prof, MonoGCEvent event, int generation)
 {
@@ -905,7 +908,9 @@ gc_event_callback (MonoProfiler *prof, MonoGCEvent event, int generation)
 		break;
 	}
 }
+#endif
 
+#if !defined (CORECLR_RUNTIME)
 static void
 gc_enable_new_refcount (void)
 {
@@ -921,7 +926,9 @@ gc_enable_new_refcount (void)
 	xamarin_add_internal_call ("Foundation.NSObject::RegisterToggleRef", (const void *) gc_register_toggleref);
 	mono_profiler_install_gc (gc_event_callback, NULL);
 }
+#endif
 
+#if !defined (CORECLR_RUNTIME)
 struct _MonoProfiler {
 	int dummy;
 };
@@ -934,6 +941,7 @@ xamarin_install_mono_profiler ()
 	// (currently gc_enable_new_refcount and xamarin_install_nsautoreleasepool_hooks).
 	mono_profiler_install (&profiler, NULL);
 }
+#endif
 
 bool
 xamarin_file_exists (const char *path)
@@ -1384,9 +1392,14 @@ xamarin_initialize ()
 	xamarin_bridge_register_product_assembly (&exception_gchandle);
 	xamarin_process_managed_exception_gchandle (exception_gchandle);
 
+#if !defined (CORECLR_RUNTIME)
 	xamarin_install_mono_profiler (); // must be called before xamarin_install_nsautoreleasepool_hooks or gc_enable_new_refcount
+#endif
 
+#if !DOTNET
+	// TODO: this will be done differently in .NET.
 	xamarin_install_nsautoreleasepool_hooks ();
+#endif
 
 #if defined (DEBUG)
 	if (xamarin_gc_pump) {
@@ -1395,7 +1408,9 @@ xamarin_initialize ()
 	}
 #endif
 
+#if !defined (CORECLR_RUNTIME)
 	gc_enable_new_refcount ();
+#endif
 
 	MONO_EXIT_GC_UNSAFE;
 }

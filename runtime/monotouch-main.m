@@ -83,6 +83,7 @@ xamarin_free_aot_data (MonoAssembly *assembly, int size, gpointer user_data, voi
 	munmap (handle, (size_t) size);
 }
 
+#if !defined (CORECLR_RUNTIME)
 /*
 This hook avoids the gazillion of filesystem probes we do as part of assembly loading.
 */
@@ -147,6 +148,7 @@ xamarin_assembly_preload_hook (MonoAssemblyName *aname, char **assemblies_path, 
 
 	return mono_assembly_open (path, NULL);
 }
+#endif // !CORECLR_RUNTIME
 
 #ifdef DEBUG_LAUNCH_TIME
 uint64_t startDate = 0;

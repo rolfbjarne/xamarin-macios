@@ -25,7 +25,6 @@ namespace MonoTouchFixtures.MediaAccessibility {
 	public class ImageCaptioningTest {
 
 		[Test]
-		[Ignore ("temporary")]
 		public void GetCaption ()
 		{
 			TestRuntime.AssertXcodeVersion (11, 0);

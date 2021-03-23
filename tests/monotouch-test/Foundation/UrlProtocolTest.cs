@@ -68,7 +68,6 @@ namespace MonoTouchFixtures.Foundation {
 
 #if !__WATCHOS__
 		[Test]
-		[Ignore ("temporary")]
 		public void RegistrarTest ()
 		{
 			// Networking seems broken on our macOS 10.9 bot, so skip this test.

@@ -286,7 +286,6 @@ namespace MonoTouchFixtures.Foundation {
 
 		[Test]
 		[Timeout (5000)]
-		[Ignore ("temporary")]
 		public void InvokeTest ()
 		{
 			var evt = new ManualResetEvent (false);

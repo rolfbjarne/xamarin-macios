@@ -59,6 +59,20 @@ namespace ObjCRuntime {
 			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
 		}
 
+		static IntPtr CreateGCHandle (IntPtr gchandle, GCHandleType type)
+		{
+			object obj = null;
+			if (gchandle != IntPtr.Zero)
+				obj = GetGCHandleTarget (gchandle);
+			var rv = GCHandle.Alloc (obj, type);
+			return GCHandle.ToIntPtr (rv);
+		}
+
+		static void FreeGCHandle (IntPtr gchandle)
+		{
+			GCHandle.FromIntPtr (gchandle).Free ();
+		}
+
 		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (object obj)
 		{

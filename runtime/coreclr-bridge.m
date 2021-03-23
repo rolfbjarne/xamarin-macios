@@ -178,4 +178,25 @@ mono_assembly_get_object (MonoDomain * domain, MonoAssembly * assembly)
 	return assembly;
 }
 
+int
+mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
+{
+	LOG_CORECLR (stderr, "mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
+	for (int i = 0; i < argc; i++) {
+		LOG_CORECLR (stderr, "    Argument #%i: %s\n", i + 1, argv [i]);
+	}
+
+	unsigned int exitCode = 0;
+	char *assemblyName = xamarin_bridge_get_assembly_name (assembly->gchandle);
+	int rv = coreclr_execute_assembly (coreclr_handle, coreclr_domainId, argc, argv, assemblyName, &exitCode);
+	xamarin_free (assemblyName);
+
+	LOG_CORECLR (stderr, "mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
+
+	if (rv != 0)
+		xamarin_assertion_message ("mono_jit_exec failed: %i\n", rv);
+
+	return (int) exitCode;
+}
+
 #endif // CORECLR_RUNTIME

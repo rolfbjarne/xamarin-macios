@@ -112,6 +112,12 @@ namespace ObjCRuntime {
 
 			Marshal.StructureToPtr (obj, ptr, false);
 		}
+
+		static IntPtr GetAssemblyName (IntPtr gchandle)
+		{
+			var asm = (Assembly) GetGCHandleTarget (gchandle);
+			return Marshal.StringToHGlobalAuto (Path.GetFileName (asm.Location));
+		}
 	}
 }
 

@@ -2733,7 +2733,12 @@ xamarin_gchandle_get_target (GCHandle handle)
 {
 	if (handle == INVALID_GCHANDLE)
 		return NULL;
+
+#if defined (CORECLR_RUNTIME)
+	return xamarin_bridge_get_monoobject (handle);
+#else
 	return mono_gchandle_get_target (GPOINTER_TO_UINT (handle));
+#endif
 }
 
 void

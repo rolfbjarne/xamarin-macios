@@ -53,6 +53,7 @@ LOGFILENAME:=$(HOME)/test/monotouchtest-timings/$(shell date +%Y-%m-%d--%H:%M:%S
 clean-start: $(TARGETS)
 	rm -f *.binlog
 	rm -Rf $(TOP)/_build $(TOP)/_ios-build $(TOP)/_mac-build
+	rm -f $(DOTNET6_DIR)/sdk-manifests/$(DOTNET6_VERSION_BAND)/Microsoft.NET.Workload.*
 	cd $(TOP)/dotnet && git clean -xfd
 	cd $(TOP)/tests/monotouch-test/dotnet && git clean -xfd
 	cd $(TOP)/tests/EmbeddedResources/dotnet && git clean -xfd

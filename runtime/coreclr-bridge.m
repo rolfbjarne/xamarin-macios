@@ -1580,25 +1580,4 @@ xamarin_mono_object_release (MonoObject *mobj)
 	pthread_mutex_unlock (&monoobject_dict_lock);
 }
 
-bool
-xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
-{
-	int rv;
-
-	const char *executablePath = [[[[NSBundle mainBundle] executableURL] path] UTF8String];
-	rv = coreclr_initialize (
-		executablePath,
-		xamarin_executable_name,
-		propertyCount,
-		propertyKeys,
-		propertyValues,
-		&coreclr_handle,
-		&coreclr_domainId
-		);
-
-	LOG_CORECLR (stderr, "xamarin_vm_initialize (%i, %p, %p): rv: %i domainId: %i handle: %p\n", propertyCount, propertyKeys, propertyValues, rv, coreclr_domainId, coreclr_handle);
-
-	return rv == 0;
-}
-
 #endif // CORECLR_RUNTIME

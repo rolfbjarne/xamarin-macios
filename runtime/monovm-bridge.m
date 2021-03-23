@@ -170,6 +170,4 @@ xamarin_enable_new_refcount (void)
 	mono_profiler_install_gc (gc_event_callback, NULL);
 }
 
->>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
-
 #endif // !CORECLR_RUNTIME

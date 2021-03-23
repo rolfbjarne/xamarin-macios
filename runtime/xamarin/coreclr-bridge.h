@@ -13,9 +13,6 @@
 extern "C" {
 #endif
 
-#define LOG_CORECLR(...)
-// #define LOG_CORECLR(...) fprintf (__VA_ARGS__)
-
 struct _MonoAssembly {
 	char *name;
 	MonoImage *image;

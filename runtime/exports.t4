@@ -690,11 +690,7 @@
 			"const char **", "propertyKeys",
 			"const char **", "propertyValues"
 		) {
-<<<<<<< HEAD
 			Mode = DotNetMode.OnlyDotNet,
-=======
-			IsDotNetOnly = true,
->>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 		},
 
 		#endregion
@@ -725,13 +721,9 @@
 		public string AlternativeExpression;
 		public List<Arg> Arguments;
 		public bool Optional;
-<<<<<<< HEAD
 		public DotNetMode Mode;
 		public RuntimeMode XamarinRuntime;
-=======
 		public bool HasBridgeFunction = true;
-		public bool IsDotNetOnly;
->>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)
@@ -740,33 +732,23 @@
 
 		public string DotNetIf {
 			get {
-<<<<<<< HEAD
 				switch (Mode) {
 				case DotNetMode.OnlyLegacy:
 					return "#if !DOTNET\n";
 				case DotNetMode.OnlyDotNet:
 					return "#if DOTNET\n";
 				}
-=======
-				if (IsDotNetOnly)
-					return "#if DOTNET\n";
->>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 				return string.Empty;
 			}
 		}
 
 		public string DotNetEndIf {
 			get {
-<<<<<<< HEAD
 				switch (Mode) {
 				case DotNetMode.OnlyLegacy:
 				case DotNetMode.OnlyDotNet:
 					return "#endif\n";
 				}
-=======
-				if (IsDotNetOnly)
-					return "#endif\n";
->>>>>>> df0c8e97e0b (CoreCLR: current work (in progress))
 				return string.Empty;
 			}
 		}

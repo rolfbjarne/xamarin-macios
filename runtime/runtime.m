@@ -910,7 +910,9 @@ gc_event_callback (MonoProfiler *prof, MonoGCEvent event, int generation)
 		break;
 	}
 }
+#endif
 
+#if !defined (CORECLR_RUNTIME)
 static void
 gc_enable_new_refcount (void)
 {
@@ -1389,7 +1391,10 @@ xamarin_initialize ()
 	xamarin_install_mono_profiler (); // must be called before xamarin_install_nsautoreleasepool_hooks or gc_enable_new_refcount
 #endif
 
+#if !DOTNET
+	// TODO: this will be done differently in .NET.
 	xamarin_install_nsautoreleasepool_hooks ();
+#endif
 
 #if defined (DEBUG)
 	if (xamarin_gc_pump) {

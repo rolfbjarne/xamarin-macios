@@ -11,6 +11,8 @@
 #define LOG_CORECLR(...)
 //#define LOG_CORECLR(...) fprintf (__VA_ARGS__)
 
+#include "mono-runtime.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -153,6 +155,15 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr);
 
 void
 xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr);
+
+MonoObject *
+xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc);
+
+bool
+xamarin_bridge_coreclr_object_isinst (GCHandle obj, MonoClass * klass);
+
+MonoClass *
+xamarin_bridge_coreclr_gchandle_get_class (GCHandle obj);
 
 MonoType *
 xamarin_create_mono_type (const char *name, GCHandle gchandle, GCHandle* exception_gchandle = NULL);

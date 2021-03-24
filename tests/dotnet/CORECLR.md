@@ -14,6 +14,8 @@ RUNTIME_DIR=$(pwd)
 Build it like this:
 
 ```shell
+./build.sh clr+libs+host+packs+mono -configuration release -arch arm64 -cross /p:UseCrossGen2=false
+./build.sh libs+host+packs+mono -configuration release -arch arm64 -cross /p:UseCrossGen2=false
 ./build.sh clr+libs+host+packs+mono -configuration release
 ./build.sh libs+host+packs+mono -configuration release
 ```

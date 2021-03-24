@@ -59,6 +59,7 @@ run-perftest:
 	$(Q) $(MAKE) build-perftest-with-mono
 	$(Q) $(MAKE) run-perftest-with-mono
 	$(Q) $(MAKE) run-perftest-with-coreclr
+	@echo "Log files were stored in $(BENCHMARK_OUTPUT_PATH)"
 
 perftest-arm64: export RUNTIME_IDENTIFIER=osx-arm64
 perftest-arm64: $(TARGETS)

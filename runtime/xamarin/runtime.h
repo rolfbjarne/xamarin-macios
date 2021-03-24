@@ -163,7 +163,9 @@ const char *	xamarin_get_bundle_path (); /* Public API */
 // Sets the bundle path (where the managed executable is). By default APP/Contents/MonoBundle.
 void			xamarin_set_bundle_path (const char *path); /* Public API */
 MonoObject *	xamarin_get_managed_object_for_ptr_fast (id self, GCHandle *exception_gchandle);
+GCHandle		xamarin_get_gchandle_for_ptr_fast (id self, GCHandle *exception_gchandle, bool* free_handle);
 void			xamarin_check_for_gced_object (MonoObject *obj, SEL sel, id self, MonoMethod *method, GCHandle *exception_gchandle);
+void			xamarin_check_for_gced_gchandle (GCHandle obj, SEL sel, id self, MonoMethod *method, GCHandle *exception_gchandle);
 unsigned long 	xamarin_objc_type_size (const char *type);
 bool			xamarin_is_class_nsobject (MonoClass *cls);
 bool			xamarin_is_class_inativeobject (MonoClass *cls);
@@ -216,6 +218,7 @@ void			xamarin_enable_new_refcount ();
 void			xamarin_add_internal_call (const char *name, const void *method);
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
+GCHandle		xamarin_new_nsobject_gchandle (id self, MonoClass *klass, GCHandle *exception_gchandle);
 bool			xamarin_has_managed_ref (id self);
 bool			xamarin_has_managed_ref_safe (id self);
 void			xamarin_switch_gchandle (id self, bool to_weak);

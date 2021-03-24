@@ -639,14 +639,18 @@ xamarin_bridge_mono_runtime_invoke (MonoMethod * method, void * obj, void ** par
 		return NULL;
 	} else {
 		MonoObject *instance = (MonoObject *) obj;
-
-		MonoObject * returnValue = NULL;
-		GCHandle instanceHandle =  instance != NULL ? instance->gchandle : NULL;
-		GCHandle exception_gchandle = INVALID_GCHANDLE;
-		returnValue = xamarin_bridge_runtime_invoke_method (xamarin_get_mono_method_gchandle (method), instanceHandle, params, &exception_gchandle);
-		xamarin_handle_bridge_exception (exception_gchandle, "xamarin_bridge_runtime_invoke_method");
-		return returnValue;
+		return xamarin_bridge_coreclr_runtime_invoke (method, instance != NULL ? instance->gchandle : INVALID_GCHANDLE, params, exc);
 	}
+}
+
+MonoObject *
+xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc)
+{
+	MonoObject * returnValue = NULL;
+	GCHandle exception_gchandle = INVALID_GCHANDLE;
+	returnValue = xamarin_bridge_runtime_invoke_method (xamarin_get_mono_method_gchandle (method), obj, params, &exception_gchandle);
+	xamarin_handle_bridge_exception (exception_gchandle, __func__);
+	return returnValue;
 }
 
 MONO_API void
@@ -741,6 +745,14 @@ xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass)
 	return rv ? obj : NULL;
 }
 
+bool
+xamarin_bridge_coreclr_object_isinst (GCHandle obj, MonoClass * klass)
+{
+	bool rv = xamarin_bridge_isinstance (obj, klass->gchandle);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p => %s, %p => %s) => %i\n", obj, obj->type_name, klass, klass->fullname, rv);
+	return rv;
+}
+
 MONO_API MonoClass *
 xamarin_bridge_mono_object_get_class (MonoObject * obj)
 {
@@ -749,6 +761,18 @@ xamarin_bridge_mono_object_get_class (MonoObject * obj)
 	MonoClass *rv = xamarin_find_mono_class (type_gchandle);
 
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
+
+	return rv;
+}
+
+MonoClass *
+xamarin_bridge_coreclr_gchandle_get_class (GCHandle obj)
+{
+	GCHandle type_gchandle = xamarin_bridge_object_get_type (obj);
+
+	MonoClass *rv = xamarin_find_mono_class (type_gchandle);
+
+	LOG_CORECLR (stderr, "xamarin_bridge_coreclr_gchandle_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
 
 	return rv;
 }

@@ -18,6 +18,10 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+#include <stddef.h>
+#include <sys/types.h>
+
 /*
  * Wrapper GCHandle functions that takes pointer sized handles instead of ints,
  * so that we can adapt our code incrementally to use pointers instead of ints
@@ -45,8 +49,6 @@ typedef gboolean (*GEqualFunc)     (gconstpointer a, gconstpointer b);
 #ifndef GINT_TO_POINTER
 #define GINT_TO_POINTER(i) ((void *) (long) (i))
 #endif
-
-#include <stdint.h>
 
 const char * xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix);
 const char * xamarin_initialize_runtime_bridge ();

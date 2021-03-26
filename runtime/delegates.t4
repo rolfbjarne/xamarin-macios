@@ -651,7 +651,6 @@
 			WrappedManagedFunction = "FindMethod",
 			OnlyDynamicUsage = false,
 		},
->>>>>>> a6409fed047 (CoreCLR: current work (in progress))
 	};
 	delegates.CalculateLengths ();
 #><#+

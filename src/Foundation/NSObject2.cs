@@ -124,6 +124,7 @@ namespace Foundation {
 		bool disposed { 
 			get { return ((flags & Flags.Disposed) == Flags.Disposed); } 
 			set { flags = value ? (flags | Flags.Disposed) : (flags & ~Flags.Disposed);	}
+		}
 
 		bool HasManagedRef {
 			get { return (flags & Flags.HasManagedRef) == Flags.HasManagedRef; }

@@ -309,7 +309,21 @@ namespace ObjCRuntime {
 							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 						}
 						log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
-					} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
+
+
+
+					} else if (
+						paramType.IsClass 
+						|| 
+						paramType.IsInterface 
+						|| 
+						(paramType.IsValueType 
+							&& IsNullable (paramType)))
+
+							 {
+
+
+
 						log_coreclr ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {

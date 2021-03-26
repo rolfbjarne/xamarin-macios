@@ -318,7 +318,6 @@ void			xamarin_mono_object_retain (MonoObject *mobj);
 #if defined(CORECLR_RUNTIME)
 extern "C++" void	xamarin_mono_object_release (MonoObject **mobj);
 extern "C++" void	xamarin_mono_object_release (MonoReflectionMethod **mobj);
-extern "C++" void	xamarin_mono_object_release (MonoReflectionAssembly **mobj);
 extern "C++" void	xamarin_mono_object_release (MonoReflectionType **mobj);
 extern "C++" void	xamarin_mono_object_release (MonoArray **mobj);
 extern "C++" void	xamarin_mono_object_release (MonoString **mobj);
@@ -328,24 +327,6 @@ void			xamarin_mono_object_release_unsafe (MonoObject *mobj);
 #define			xamarin_mono_object_release(x) do { *x = NULL; } while (0);
 #define			xamarin_mono_object_release_unsafe(x)
 #endif
-
-/*
-#if defined(CORECLR_RUNTIME)
-void			xamarin_mono_object_retain (MonoObject *mobj);
-void			xamarin_mono_object_release (MonoObject **mobj);
-extern "C++" void	xamarin_mono_object_safe_release (MonoObject **mobj);
-extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionMethod **mobj);
-extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionAssembly **mobj);
-extern "C++" void	xamarin_mono_object_safe_release (MonoReflectionType **mobj);
-extern "C++" void	xamarin_mono_object_safe_release (MonoArray **mobj);
-extern "C++" void	xamarin_mono_object_safe_release (MonoString **mobj);
-#else
-// Nothing to do here.
-void			xamarin_mono_object_retain (MonoObject *mobj);
-#define			xamarin_mono_object_release(x)
-#define         xamarin_mono_object_safe_release(x) do { *x = NULL; } while (0);
-#endif
-*/
 
 /*
  * Look for an assembly in the app and open it.

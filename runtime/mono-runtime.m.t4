@@ -51,10 +51,13 @@ xamarin_initialize_runtime_bridge ()
 		return NULL;
 
 <# foreach (var export in exports) {
+	string prefix = "xamarin_bridge_";
 	if (export.Mode == DotNetMode.OnlyDotNet)
 		continue;
+	if (export.HasCoreCLRBridgeFunction)
+		prefix = string.Empty;
 #>
-<#= export.DotNetIf #>	<#= export.EntryPoint #>_func = xamarin_bridge_<#= export.EntryPoint #>;
+<#= export.DotNetIf #>	<#= export.EntryPoint #>_func = <#= prefix #><#= export.EntryPoint #>;
 <#= export.DotNetEndIf #><# } #>
 	xamarin_dynamic_runtime_initialized = 1;
 
@@ -62,6 +65,7 @@ xamarin_initialize_runtime_bridge ()
 }
 <# foreach (var export in exports) {
 	if (export.HasCoreCLRBridgeFunction) continue;
+	if (export.HasBridgeFunction) continue;
 #>
 
 MONO_API <#= export.ReturnType #>
@@ -119,7 +123,11 @@ xamarin_initialize_dynamic_runtime (const char *mono_runtime_prefix)
 }
 #endif /* CORECLR_RUNTIME */
 
-<# foreach (var export in exports) { #>
+<# foreach (var export in exports) {
+	if (export.HasCoreCLRBridgeFunction)
+		continue;
+
+#>
 <#= export.DotNetIf #>MONO_API <#= export.ReturnType #>
 <#= export.EntryPoint #> (<#= export.ArgumentSignature #>)
 {

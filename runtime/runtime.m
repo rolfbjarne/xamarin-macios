@@ -361,7 +361,7 @@ xamarin_get_gchandle_for_ptr_fast (id self, GCHandle *exception_gchandle, bool* 
 			*free_handle = true;
 			gchandle = xamarin_gchandle_new (mobj, false);
 		}
-		xamarin_mono_object_safe_release (&mobj);
+		xamarin_mono_object_release (&mobj);
 	}
 
 	return gchandle;
@@ -932,33 +932,6 @@ xamarin_type_get_full_name (MonoType *type, GCHandle *exception_gchandle)
  * ToggleRef support
  */
 // #define DEBUG_TOGGLEREF 1
-#if !defined (CORECLR_RUNTIME)
-static void
-gc_register_toggleref (MonoObject *obj, id self, bool isCustomType)
-{
-	// COOP: This is an icall, at entry we're in unsafe mode. Managed memory is accessed, so we stay in unsafe mode.
-	MONO_ASSERT_GC_UNSAFE;
-
-#ifdef DEBUG_TOGGLEREF
-	id handle = xamarin_get_nsobject_handle (obj);
-
-	PRINT ("**Registering object %p handle %p RC %d flags: %i isCustomType: %i",
-		obj,
-		handle,
-		(int) (handle ? [handle retainCount] : 0),
-		xamarin_get_nsobject_flags (obj),
-		isCustomType
-		);
-#endif
-	mono_gc_toggleref_add (obj, TRUE);
-
-	// Make sure the GCHandle we have is a weak one for custom types.
-	if (isCustomType) {
-		MONO_ENTER_GC_SAFE;
-		xamarin_switch_gchandle (self, true);
-		MONO_EXIT_GC_SAFE;
-	}
-}
 
 MonoToggleRefStatus
 xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle, void *info)
@@ -1006,9 +979,7 @@ xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle
 
 	return res;
 }
-#endif
 
-#if !defined (CORECLR_RUNTIME)
 void
 xamarin_gc_event (MonoGCEvent event)
 {
@@ -1025,26 +996,8 @@ xamarin_gc_event (MonoGCEvent event)
 	default: // silences a compiler warning.
 		break;
 	}
-}
-#endif
-
-#if !defined (CORECLR_RUNTIME)
-static void
-gc_enable_new_refcount (void)
-{
-	// COOP: this is executed at startup, I believe the mode here doesn't matter.
-	pthread_mutexattr_t attr;
-	pthread_mutexattr_init (&attr);
-	pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE);
-	pthread_mutex_init (&framework_peer_release_lock, &attr);
-	pthread_mutexattr_destroy (&attr);
-
-	mono_gc_toggleref_register_callback (gc_toggleref_callback);
-
-	xamarin_add_internal_call ("Foundation.NSObject::RegisterToggleRef", (const void *) gc_register_toggleref);
-	mono_profiler_install_gc (gc_event_callback, NULL);
-}
 #endif // !CORECLR_RUNTIME
+}
 
 #if !defined (CORECLR_RUNTIME)
 struct _MonoProfiler {
@@ -1517,7 +1470,7 @@ xamarin_initialize ()
 	xamarin_process_managed_exception_gchandle (exception_gchandle);
 
 #if !defined (CORECLR_RUNTIME)
-	xamarin_install_mono_profiler (); // must be called before xamarin_install_nsautoreleasepool_hooks or gc_enable_new_refcount
+	xamarin_install_mono_profiler (); // must be called before xamarin_install_nsautoreleasepool_hooks or xamarin_enable_new_refcount
 #endif
 
 #if !DOTNET
@@ -2932,10 +2885,6 @@ xamarin_gchandle_free (GCHandle handle)
 	if (handle == INVALID_GCHANDLE)
 		return;
 #if defined (CORECLR_RUNTIME)
-<<<<<<< HEAD
-=======
-	LOG_CORECLR (stderr, "xamarin_gchandle_free (%p) => FREED\n", handle);
->>>>>>> a6409fed047 (CoreCLR: current work (in progress))
 	xamarin_bridge_free_gchandle (handle);
 #else
 	mono_gchandle_free (GPOINTER_TO_UINT (handle));

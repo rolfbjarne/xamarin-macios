@@ -21,7 +21,6 @@ enum MonoObjectType : int {
 	MonoObjectType_Unknown,
 	MonoObjectType_Object,
 	MonoObjectType_MonoReflectionMethod,
-	MonoObjectType_MonoReflectionAssembly,
 	MonoObjectType_MonoReflectionType,
 	MonoObjectType_MonoArray,
 	MonoObjectType_MonoString,
@@ -47,7 +46,6 @@ struct _MonoObject {
 struct _MonoAssembly {
 	char *name;
 	MonoImage *image;
-	MonoReflectionAssembly *obj;
 };
 
 struct _MonoAssemblyName {
@@ -133,10 +131,6 @@ struct _MonoReflectionMethod : MonoObject {
 	char *name;
 };
 
-struct _MonoReflectionAssembly : MonoObject {
-	char *name;
-	MonoAssembly *assembly;
-};
 
 struct _MonoReflectionType : MonoObject {
 	char *name;
@@ -371,9 +365,6 @@ xamarin_bridge_mono_get_root_domain (void);
 
 MONO_API void
 xamarin_bridge_mono_domain_set_config (MonoDomain * domain, const char * base_dir, const char * config_file_name);
-
-MONO_API MonoReflectionAssembly *
-xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * assembly);
 
 MONO_API MonoReflectionMethod *
 xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method, MonoClass * refclass);

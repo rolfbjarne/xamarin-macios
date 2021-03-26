@@ -25,7 +25,6 @@ namespace ObjCRuntime {
 			Unknown,
 			MonoObject,
 			MonoReflectionMethod,
-			MonoReflectionAssembly,
 			MonoReflectionType,
 			MonoArray,
 			MonoString,
@@ -91,7 +90,6 @@ namespace ObjCRuntime {
 		struct MonoAssembly {
 			public IntPtr Name; /* char* */
 			public IntPtr Image; /* MonoImage* */
-			public IntPtr Object; /* MonoReflectionAssembly* */
 		}
 
 		[StructLayout (LayoutKind.Sequential)]

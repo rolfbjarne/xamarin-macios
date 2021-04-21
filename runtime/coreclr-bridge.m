@@ -43,15 +43,18 @@ xamarin_bridge_initialize ()
 	xamarin_initialize_runtime_bridge ();
 }
 
+static bool reference_tracking_begun = false;
+
 void
-xamarin_coreclr_reference_tracking_begin_end_callback (int number)
+xamarin_coreclr_reference_tracking_begin_end_callback ()
 {
-	LOG_CORECLR (stderr, "LOG: %s (%i)\n", __func__, number);
-	if (number > 0) {
+	LOG_CORECLR (stderr, "LOG: %s () reference_tracking_begun: %i\n", __func__, reference_tracking_begun);
+	if (reference_tracking_begun) {
 		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
 	} else {
 		xamarin_gc_event (MONO_GC_EVENT_POST_START_WORLD);
 	}
+	reference_tracking_begun = !reference_tracking_begun;
 }
 
 static id

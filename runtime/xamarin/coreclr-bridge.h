@@ -142,7 +142,7 @@ struct _MonoException : MonoObject {
 };
 
 void
-xamarin_coreclr_reference_tracking_begin_end_callback (int number);
+xamarin_coreclr_reference_tracking_begin_end_callback ();
 
 int
 xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr);

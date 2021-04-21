@@ -110,7 +110,7 @@ namespace ObjCRuntime {
 
 		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
 		{
-            delegate* unmanaged<int, void> beginEndCallback = (delegate* unmanaged<int, void>) options->reference_tracking_begin_end_callback;
+            delegate* unmanaged<void> beginEndCallback = (delegate* unmanaged<void>) options->reference_tracking_begin_end_callback;
             delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
             delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
 			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);

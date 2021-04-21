@@ -1002,17 +1002,6 @@ xamarin_gc_event (MonoGCEvent event)
 }
 
 #if !defined (CORECLR_RUNTIME)
-static void
-gc_enable_new_refcount (void)
-{
-	mono_gc_toggleref_register_callback (gc_toggleref_callback);
-
-	xamarin_add_internal_call ("Foundation.NSObject::RegisterToggleRef", (const void *) gc_register_toggleref);
-	mono_profiler_install_gc (gc_event_callback, NULL);
-}
-#endif // !CORECLR_RUNTIME
-
-#if !defined (CORECLR_RUNTIME)
 struct _MonoProfiler {
 	int dummy;
 };
@@ -1506,7 +1495,7 @@ xamarin_initialize ()
 	pthread_mutexattr_destroy (&attr);
 
 #if !defined (CORECLR_RUNTIME)
-	gc_enable_new_refcount ();
+	xamarin_enable_new_refcount ();
 #endif
 
 	initialize_finished = true;

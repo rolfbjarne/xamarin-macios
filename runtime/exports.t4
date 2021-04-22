@@ -110,26 +110,26 @@
 			"MonoObject *", "obj",
 			"mono_bool", "pinned"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export ("MonoObject *", "mono_gchandle_get_target",
 			"uint32_t", "gchandle"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export ("void", "mono_gchandle_free",
 			"uint32_t", "gchandle"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export ("uint32_t", "mono_gchandle_new_weakref",
 			"MonoObject *", "obj",
 			"mono_bool", "track_resurrection"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export ("void", "mono_raise_exception",
@@ -141,7 +141,7 @@
 			"int", "size",
 			"uintptr_t", "idx"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export ("MonoString *", "mono_string_new",
@@ -198,7 +198,7 @@
 			"void *", "slot_ptr",
 			"MonoObject *", "value"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		#endregion
@@ -505,7 +505,7 @@
 			"MonoGCFinalizerCallbacks *", "callbacks"
 		) {
 			XamarinRuntime = RuntimeMode.MonoVM,
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		#endregion
@@ -516,13 +516,13 @@
 			"MonoObject *", "object",
 			"mono_bool", "strong_ref"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export ("void", "mono_gc_toggleref_register_callback",
 			"MonoToggleRefCallback", "process_toggleref"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		#endregion
@@ -595,7 +595,7 @@
 			"int",     "argc",
 			"char **", "argv"
 		) {
-			HasCoreCLRBridgeFunction = false,
+			HasBridgeFunction = false,
 		},
 
 		new Export (true, "void", "mono_install_load_aot_data_hook",
@@ -741,7 +741,8 @@
 		public bool Optional;
 		public DotNetMode Mode;
 		public RuntimeMode XamarinRuntime;
-		public bool HasCoreCLRBridgeFunction = true;
+		public bool HasCoreCLRBridgeFunction;
+		public bool HasBridgeFunction = true;
 
 		public Export (string returnType, string entryPoint, params string [] arguments)
 			: this (false, returnType, entryPoint, arguments)

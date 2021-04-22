@@ -25,7 +25,6 @@ namespace ObjCRuntime {
 			Unknown,
 			MonoObject,
 			MonoReflectionMethod,
-			MonoReflectionAssembly,
 			MonoReflectionType,
 			MonoArray,
 			MonoString,
@@ -91,7 +90,6 @@ namespace ObjCRuntime {
 		struct MonoAssembly {
 			public IntPtr Name; /* char* */
 			public IntPtr Image; /* MonoImage* */
-			public IntPtr Object; /* MonoReflectionAssembly* */
 		}
 
 		[StructLayout (LayoutKind.Sequential)]
@@ -112,7 +110,7 @@ namespace ObjCRuntime {
 
 		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
 		{
-            delegate* unmanaged<int, void> beginEndCallback = (delegate* unmanaged<int, void>) options->reference_tracking_begin_end_callback;
+            delegate* unmanaged<void> beginEndCallback = (delegate* unmanaged<void>) options->reference_tracking_begin_end_callback;
             delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
             delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
 			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);
@@ -311,7 +309,21 @@ namespace ObjCRuntime {
 							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 						}
 						log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
-					} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
+
+
+
+					} else if (
+						paramType.IsClass 
+						|| 
+						paramType.IsInterface 
+						|| 
+						(paramType.IsValueType 
+							&& IsNullable (paramType)))
+
+							 {
+
+
+
 						log_coreclr ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {

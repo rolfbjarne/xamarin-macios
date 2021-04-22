@@ -43,15 +43,18 @@ xamarin_bridge_initialize ()
 	xamarin_initialize_runtime_bridge ();
 }
 
+static bool reference_tracking_begun = false;
+
 void
-xamarin_coreclr_reference_tracking_begin_end_callback (int number)
+xamarin_coreclr_reference_tracking_begin_end_callback ()
 {
-	LOG_CORECLR (stderr, "LOG: %s (%i)\n", __func__, number);
-	if (number > 0) {
+	LOG_CORECLR (stderr, "LOG: %s () reference_tracking_begun: %i\n", __func__, reference_tracking_begun);
+	if (reference_tracking_begun) {
 		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
 	} else {
 		xamarin_gc_event (MONO_GC_EVENT_POST_START_WORLD);
 	}
+	reference_tracking_begun = !reference_tracking_begun;
 }
 
 static id
@@ -1017,15 +1020,6 @@ xamarin_bridge_mono_domain_set_config (MonoDomain * domain, const char * base_di
 	xamarin_assertion_message ("xamarin_bridge_mono_domain_set_config not implemented\n");
 }
 
-MONO_API MonoReflectionAssembly *
-xamarin_bridge_mono_assembly_get_object (MonoDomain * domain, MonoAssembly * assembly)
-{
-	MonoReflectionAssembly *rv = (MonoReflectionAssembly *) assembly;
-	xamarin_mono_object_retain (rv);
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_assembly_get_object (%p, %p) => %p = %p\n", domain, assembly, assembly->name, rv, rv->gchandle);
-	return rv;
-}
-
 MONO_API MonoReflectionMethod *
 xamarin_bridge_mono_method_get_object (MonoDomain * domain, MonoMethod * method, MonoClass * refclass)
 {
@@ -1265,27 +1259,6 @@ xamarin_bridge_mono_jit_init (const char * file)
 {
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_jit_init (%s) => assert\n", file);
 	xamarin_assertion_message ("xamarin_bridge_mono_jit_init not implemented\n");
-}
-
-MONO_API int
-xamarin_bridge_mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
-{
-	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING\n", domain, assembly, argc, argv);
-
-	unsigned int exitCode = 0;
-	int rv = coreclr_execute_assembly (coreclr_handle, coreclr_domainId, argc > 0 ? argc - 1 : 0, argv + 1, assembly->name, &exitCode);
-
-	fprintf (stderr, "xamarin_bridge_mono_jit_exec (%p, %p, %i, %p) => EXECUTING rv: %i exitCode: %i\n", domain, assembly, argc, argv, rv, exitCode);
-
-	if (rv != 0)
-		xamarin_assertion_message ("xamarin_bridge_mono_jit_exec failed: %i\n", rv);
-
-	xamarin_bridge_dump_monoobjects ();
-
-	fflush (stdout);
-	fflush (stderr);
-
-	return (int) exitCode;
 }
 
 MONO_API void
@@ -1592,14 +1565,6 @@ xamarin_mono_object_release_unsafe (MonoObject *mobj)
 			}
 			break;
 		}
-		case MonoObjectType_MonoReflectionAssembly: {
-			MonoReflectionAssembly *mra = (MonoReflectionAssembly *) mobj;
-			if (mra->name != NULL) {
-				xamarin_free (mra->name);
-				mra->name = NULL;
-			}
-			break;
-		}
 		case MonoObjectType_MonoReflectionType: {
 			MonoReflectionType *mrt = (MonoReflectionType *) mobj;
 			if (mrt->name != NULL) {
@@ -1637,12 +1602,6 @@ xamarin_mono_object_release_unsafe (MonoObject *mobj)
 
 void
 xamarin_mono_object_release (MonoReflectionMethod **mobj)
-{
-	xamarin_mono_object_release ((MonoObject **) *mobj);
-}
-
-void
-xamarin_mono_object_release (MonoReflectionAssembly **mobj)
 {
 	xamarin_mono_object_release ((MonoObject **) *mobj);
 }
@@ -1718,6 +1677,8 @@ mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const cha
 
 	if (rv != 0)
 		xamarin_assertion_message ("mono_jit_exec failed: %i\n", rv);
+
+	xamarin_bridge_dump_monoobjects ();
 
 	return (int) exitCode;
 }

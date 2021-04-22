@@ -8,6 +8,7 @@ using AppKit;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
@@ -55,6 +56,7 @@ namespace CoreCLRPerfTest {
                 new SummaryStyle (CultureInfo.CurrentCulture, true, SizeUnit.B, TimeUnit.Nanosecond, false, true)
             );
             AddExporter (csv);
+            AddExporter (JsonExporter.Full);
 
             AddColumnProvider (DefaultConfig.Instance.GetColumnProviders ().ToArray ()); // manual config has no columns by default
         }

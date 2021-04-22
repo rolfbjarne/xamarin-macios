@@ -41,7 +41,7 @@ namespace CoreCLRPerfTest {
 			custom_obj.Dispose ();
 		}
 
-		/* 
+		/*
 		 * Runtime.GetNSObject ([[NSObject alloc] init])
 		 */
 
@@ -81,16 +81,16 @@ namespace CoreCLRPerfTest {
 			var obj = Runtime.GetNSObject (ptr);
 			Messaging.void_objc_msgSend (ptr, Selector.GetHandle ("release"));
 			Messaging.void_objc_msgSend (ptr, Selector.GetHandle ("release"));
-			return native_nsobject = obj;
+			return native_nsobject_retain_release = obj;
 		}
 
 		[IterationCleanup (Target = nameof (NativeNSObjectRetainReleaseCreation))]
 		public void NativeNSObjectRetainReleaseCreation_Cleanup ()
 		{
-			native_nsobject.Dispose ();
+			native_nsobject_retain_release.Dispose ();
 		}
 
-		/* 
+		/*
 		 * [[CustomClass alloc] init]
 		 */
 
@@ -103,7 +103,7 @@ namespace CoreCLRPerfTest {
 			Messaging.void_objc_msgSend (ptr, Selector.GetHandle ("release"));
 		}
 
-		/* 
+		/*
 		 * Runtime.GetNSObject ([[CustomClass alloc] init])
 		 */
 

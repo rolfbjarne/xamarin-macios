@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.809.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCLRPerfTest", "CoreCLRPerfTest.csproj", "{50F102FB-3524-4DE8-B0EF-ABC0DCCD9787}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "perftest.", "perftest..csproj", "{50F102FB-3524-4DE8-B0EF-ABC0DCCD9787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test", "..\..\bindings-test\dotnet\macOS\bindings-test.csproj", "{FFA03CF5-B981-4645-9BCD-4B22A626362E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test", "..\bindings-test\dotnet\macOS\bindings-test.csproj", "{FFA03CF5-B981-4645-9BCD-4B22A626362E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

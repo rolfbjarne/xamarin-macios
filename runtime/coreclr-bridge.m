@@ -1612,25 +1612,25 @@ xamarin_mono_object_release_unsafe (MonoObject *mobj)
 void
 xamarin_mono_object_release (MonoReflectionMethod **mobj)
 {
-	xamarin_mono_object_release ((MonoObject **) *mobj);
+	xamarin_mono_object_release ((MonoObject **) mobj);
 }
 
 void
 xamarin_mono_object_release (MonoReflectionType **mobj)
 {
-	xamarin_mono_object_release ((MonoObject **) *mobj);
+	xamarin_mono_object_release ((MonoObject **) mobj);
 }
 
 void
 xamarin_mono_object_release (MonoArray **mobj)
 {
-	xamarin_mono_object_release ((MonoObject **) *mobj);
+	xamarin_mono_object_release ((MonoObject **) mobj);
 }
 
 void
 xamarin_mono_object_release (MonoString **mobj)
 {
-	xamarin_mono_object_release ((MonoObject **) *mobj);
+	xamarin_mono_object_release ((MonoObject **) mobj);
 }
 
 /* Implementation of the Mono Embedding API */

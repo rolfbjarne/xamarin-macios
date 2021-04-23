@@ -100,9 +100,9 @@ xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* pt
 }
 
 void
-xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr)
+xamarin_coreclr_unhandled_exception_handler (void *context)
 {
-	GCHandle exception_gchandle = (GCHandle) ptr;
+	GCHandle exception_gchandle = (GCHandle) context;
 	xamarin_process_managed_exception_gchandle (exception_gchandle);
 
 	xamarin_assertion_message ("Failed to process managed exception.");

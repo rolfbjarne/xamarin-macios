@@ -122,7 +122,6 @@ namespace MonoTouchFixtures.Foundation {
 			}
 		}
 
-		[Ignore ("CORECLR FIXME")]
 		[Test]
 		public void ValueForInvalidKeyTest ()
 		{

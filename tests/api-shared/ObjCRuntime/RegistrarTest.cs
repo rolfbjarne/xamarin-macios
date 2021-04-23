@@ -25,9 +25,6 @@ namespace XamarinTests.ObjCRuntime {
 			}
 		}
 
-#if NET
-		[Ignore ("exception handling")]
-#endif
 		[Test]
 		public void IntPtrCtor ()
 		{

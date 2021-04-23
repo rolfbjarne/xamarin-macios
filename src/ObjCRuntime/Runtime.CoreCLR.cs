@@ -114,6 +114,15 @@ namespace ObjCRuntime {
             delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
             delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
 			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);
+
+			Bridge.UnhandledExceptionPropagation += UnhandledExceptionPropagationHandler;
+		}
+
+		static delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
+		{
+			var exceptionHandler = (delegate* unmanaged<IntPtr, void>) options->unhandled_exception_handler;
+			context = AllocGCHandle (exception);
+			return exceptionHandler;
 		}
 
 		// Size: 2 pointers

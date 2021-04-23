@@ -152,6 +152,7 @@ struct InitializationOptions {
 	void *reference_tracking_begin_end_callback;
 	void *reference_tracking_is_referenced_callback;
 	void *reference_tracking_tracked_object_entered_finalization;
+	void *unhandled_exception_handler;
 #endif
 };
 
@@ -1459,6 +1460,7 @@ xamarin_initialize ()
 	options.reference_tracking_begin_end_callback = (void *) &xamarin_coreclr_reference_tracking_begin_end_callback;
 	options.reference_tracking_is_referenced_callback = (void *) &xamarin_coreclr_reference_tracking_is_referenced_callback;
 	options.reference_tracking_tracked_object_entered_finalization = (void *) &xamarin_coreclr_reference_tracking_tracked_object_entered_finalization;
+	options.unhandled_exception_handler = (void *) &xamarin_coreclr_unhandled_exception_handler;
 #endif
 
 	xamarin_bridge_call_runtime_initialize (&options, &exception_gchandle);

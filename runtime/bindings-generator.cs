@@ -3089,6 +3089,7 @@ namespace Xamarin.BindingMethods.Generator
 		{
 			writer.WriteLine ("\t} @catch (NSException *e) {");
 			writer.WriteLine ("\t\txamarin_process_nsexception_using_mode (e, true);");
+			writer.WriteLine ("\t\treturn NULL;");
 			writer.WriteLine ("\t}");
 		}
 

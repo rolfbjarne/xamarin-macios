@@ -125,6 +125,11 @@ namespace ObjCRuntime {
 			return exceptionHandler;
 		}
 
+		static void SetPendingException (IntPtr gchandle)
+		{
+			Bridge.SetMessageSendPendingExceptionForThread ((Exception) GetGCHandleTarget (gchandle));
+		}
+
 		// Size: 2 pointers
 		internal struct TrackedObjectInfo {
 			public IntPtr Handle;
@@ -187,7 +192,7 @@ namespace ObjCRuntime {
 		{
 			GCHandle.FromIntPtr (gchandle).Free ();
 		}
-
+		
 		[StructLayout (LayoutKind.Sequential)]
 		struct MethodParameter {
 			public IntPtr TypeName;
@@ -531,7 +536,7 @@ namespace ObjCRuntime {
 		static IntPtr GetMonoObjectImpl (object obj)
 		{
 			var handle = AllocGCHandle (obj);
-			var typename = GetGCHandleType (handle);
+			var typename = GetObjectTypeFullName (handle);
 			IntPtr rv;
 			if (obj is MethodBase mb) {
 				var mobj = new MonoReflectionMethod ();

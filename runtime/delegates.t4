@@ -661,6 +661,13 @@
 			WrappedManagedFunction = "FindMethod",
 			OnlyDynamicUsage = false,
 		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_set_pending_exception",
+			"GCHandle", "IntPtr", "gchandle"
+		) {
+			WrappedManagedFunction = "SetPendingException",
+			OnlyDynamicUsage = false,
+		},
 	};
 	delegates.CalculateLengths ();
 #><#+

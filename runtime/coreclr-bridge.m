@@ -48,7 +48,7 @@ static bool reference_tracking_begun = false;
 void
 xamarin_coreclr_reference_tracking_begin_end_callback ()
 {
-	LOG_CORECLR (stderr, "LOG: %s () reference_tracking_begun: %i\n", __func__, reference_tracking_begun);
+	fprintf (stderr, "LOG: %s () reference_tracking_begun: %i\n", __func__, reference_tracking_begun);
 	if (reference_tracking_begun) {
 		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
 	} else {
@@ -852,7 +852,8 @@ xamarin_bridge_mono_thread_detach_if_exiting (void)
 MONO_API void
 xamarin_bridge_mono_runtime_set_pending_exception (MonoException * exc, mono_bool overwrite)
 {
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_runtime_set_pending_exception (%p, %i) => IGNORE NEEDS TO FIX\n", exc, overwrite);
+	fprintf (stderr, "xamarin_bridge_mono_runtime_set_pending_exception (%p -> %p, %i)\n", exc, exc->gchandle, overwrite);
+	xamarin_bridge_set_pending_exception (exc->gchandle);
 }
 
 MONO_API void

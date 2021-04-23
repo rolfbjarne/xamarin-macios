@@ -746,7 +746,7 @@ bool
 xamarin_bridge_coreclr_object_isinst (GCHandle obj, MonoClass * klass)
 {
 	bool rv = xamarin_bridge_isinstance (obj, klass->gchandle);
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p => %s, %p => %s) => %i\n", obj, obj->type_name, klass, klass->fullname, rv);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_isinst (%p, %p => %s) => %i\n", obj, klass, klass->fullname, rv);
 	return rv;
 }
 
@@ -935,7 +935,7 @@ xamarin_bridge_mono_add_internal_call (const char * name, const void * method)
 MONO_API void
 xamarin_bridge_mono_dangerous_add_raw_internal_call (const char * name, const void * method)
 {
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_dangerous_add_raw_internal_call (%s, %s) => IGNORE\n", name, method);
+	LOG_CORECLR (stderr, "xamarin_bridge_mono_dangerous_add_raw_internal_call (%s, %p) => IGNORE\n", name, method);
 }
 
 MONO_API MonoMethodSignature *

@@ -118,7 +118,7 @@ namespace ObjCRuntime {
 			Bridge.UnhandledExceptionPropagation += UnhandledExceptionPropagationHandler;
 		}
 
-		static delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
+		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
 		{
 			var exceptionHandler = (delegate* unmanaged<IntPtr, void>) options->unhandled_exception_handler;
 			context = AllocGCHandle (exception);
@@ -159,14 +159,14 @@ namespace ObjCRuntime {
 				log_coreclr ($"    Found in app domain: {asm.GetName ().Name}");
 				if (asm.GetName ().Name == name) {
 					log_coreclr ($"        Match!");
-					return AllocGCHandle (asm);
+					return GetMonoObject (asm);
 				}
 			}
 
 			var loadedAssembly = Assembly.LoadFrom (path);
 			if (loadedAssembly != null) {
 				log_coreclr ($"    Loaded {loadedAssembly.GetName ().Name}");
-				return AllocGCHandle (loadedAssembly);
+				return GetMonoObject (loadedAssembly);
 			}
 
 			log_coreclr ($"Found no assembly named {name}");

@@ -257,9 +257,6 @@ xamarin_bridge_mono_object_isinst (MonoObject * obj, MonoClass * klass);
 MONO_API MonoClass *
 xamarin_bridge_mono_object_get_class (MonoObject * obj);
 
-MONO_API MonoMethod *
-xamarin_bridge_mono_object_get_virtual_method (MonoObject * obj, MonoMethod * method);
-
 MONO_API void
 xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, void * value);
 
@@ -359,9 +356,6 @@ xamarin_bridge_mono_get_corlib (void);
 
 MONO_API MonoClass *
 xamarin_bridge_mono_get_array_class (void);
-
-MONO_API MonoClass *
-xamarin_bridge_mono_get_exception_class (void);
 
 MONO_API MonoDomain *
 xamarin_bridge_mono_get_root_domain (void);

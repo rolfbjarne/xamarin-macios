@@ -188,14 +188,6 @@ namespace ObjCRuntime {
 			GCHandle.FromIntPtr (gchandle).Free ();
 		}
 
-		static IntPtr GetGCHandleType (IntPtr gchandle)
-		{
-			var obj = GCHandle.FromIntPtr (gchandle).Target;
-			if (obj == null)
-				return IntPtr.Zero;
-			return Marshal.StringToHGlobalAuto (obj.GetType ().FullName);
-		}
-
 		[StructLayout (LayoutKind.Sequential)]
 		struct MethodParameter {
 			public IntPtr TypeName;

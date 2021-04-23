@@ -781,13 +781,6 @@ xamarin_bridge_coreclr_gchandle_get_class (GCHandle obj)
 	return rv;
 }
 
-MONO_API MonoMethod *
-xamarin_bridge_mono_object_get_virtual_method (MonoObject * obj, MonoMethod * method)
-{
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_object_get_virtual_method (%p, %p) => assert\n", obj, method);
-	xamarin_assertion_message ("xamarin_bridge_mono_object_get_virtual_method not implemented\n");
-}
-
 MONO_API void
 xamarin_bridge_mono_field_get_value (MonoObject * obj, MonoClassField * field, void * value)
 {
@@ -1011,14 +1004,6 @@ xamarin_bridge_mono_get_array_class (void)
 {
 	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "Array");
 	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_array_class () => %p = %s\n", rv, rv->name);
-	return rv;
-}
-
-MONO_API MonoClass *
-xamarin_bridge_mono_get_exception_class (void)
-{
-	MonoClass *rv = xamarin_find_mono_class (INVALID_GCHANDLE, "System", "Exception");
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_get_exception_class () => %p = %s\n", rv, rv->name);
 	return rv;
 }
 

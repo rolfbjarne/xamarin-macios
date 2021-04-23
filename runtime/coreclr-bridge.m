@@ -103,6 +103,9 @@ void
 xamarin_coreclr_unhandled_exception_handler (void *context)
 {
 	GCHandle exception_gchandle = (GCHandle) context;
+
+	fprintf (stderr, "LOG: %s (%p)\n", __func__, context);
+
 	xamarin_process_managed_exception_gchandle (exception_gchandle);
 
 	xamarin_assertion_message ("Failed to process managed exception.");

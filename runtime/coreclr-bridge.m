@@ -649,7 +649,11 @@ xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void *
 	MonoObject * returnValue = NULL;
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
 	returnValue = xamarin_bridge_runtime_invoke_method (xamarin_get_mono_method_gchandle (method), obj, params, &exception_gchandle);
-	xamarin_handle_bridge_exception (exception_gchandle, __func__);
+	if (exc == NULL) {
+		xamarin_handle_bridge_exception (exception_gchandle, __func__);
+	} else {
+		*exc = xamarin_gchandle_unwrap (exception_gchandle);
+	}
 	return returnValue;
 }
 

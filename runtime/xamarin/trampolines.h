@@ -196,12 +196,12 @@ id xamarin_nsdirectionaledgeinsets_to_nsvalue(MonoObject *value, void *context, 
 
 // These functions can be passed as xamarin_id_to_managed_func/xamarin_managed_to_id_func parameters
 id           xamarin_convert_string_to_nsstring (MonoObject *obj, void *context, GCHandle *exception_gchandle);
-void *       xamarin_convert_nsstring_to_string (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle); // REVIEWED
+void *       xamarin_convert_nsstring_to_string (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle);
 
 // These are simpler versions of the above string<->nsstring conversion functions.
 NSString *   xamarin_string_to_nsstring (MonoString *obj, bool retain);
 // domain is optional, if NULL the function will call mono_get_domain.
-MonoString * xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj); // REVIEWED
+MonoString * xamarin_nsstring_to_string (MonoDomain *domain, NSString *obj);
 
 // Either managed_type or managed_class has to be provided
 NSArray *   xamarin_managed_array_to_nsarray (MonoArray *array, MonoType *managed_type, MonoClass *managed_class, GCHandle *exception_gchandle);
@@ -217,13 +217,13 @@ MonoArray * xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoType 
 MonoArray * xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoType *array_type, MonoClass *element_class, GCHandle *exception_gchandle);
 MonoArray * xamarin_nsarray_to_managed_inativeobject_array_static (NSArray *array, MonoType *array_type, MonoClass *element_class, uint32_t iface_token_ref, uint32_t implementation_token_ref, GCHandle *exception_gchandle);
 
-void * xamarin_nsobject_to_object (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle); // REVIEWED
+void * xamarin_nsobject_to_object (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle);
 id     xamarin_object_to_nsobject (MonoObject *object, void *context, GCHandle *exception_gchandle);
 
 id     xamarin_inativeobject_to_nsobject (MonoObject *object, void *context, GCHandle *exception_gchandle);
 
-void * xamarin_nsobject_to_inativeobject (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle); // REVIEWED
-void * xamarin_nsobject_to_inativeobject_static (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle); // REVIEWED
+void * xamarin_nsobject_to_inativeobject (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle);
+void * xamarin_nsobject_to_inativeobject_static (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle);
 
 /* Copied from SGen */
 

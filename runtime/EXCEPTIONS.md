@@ -62,9 +62,9 @@ Managed exception marshaling
 This is the simplest case, we just make sure to catch any managed
 exceptions that reaches native code. There are a few sources:
 
-1. When we call mono_runtime_invoke in our trampolines. // REVIEWED
+1. When we call mono_runtime_invoke in our trampolines.
 
-   In this case mono_runtime_invoke will catch any exceptions // REVIEWED
+   In this case mono_runtime_invoke will catch any exceptions
    and return them to us (without unwinding anything else).
 
 2. When managed code gives a delegate to native code, and 

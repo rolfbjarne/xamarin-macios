@@ -46,7 +46,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_block_wrapper_creator", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_block_wrapper_creator",
 			"GCHandle->MonoReflectionMethod *", "IntPtr", "method",
 			"int", "int", "parameter"
 		) {
@@ -54,7 +54,7 @@
 			OnlyDynamicUsage = true,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_create_block_proxy", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_create_block_proxy",
 			// Don't convert the 'method' parameter, we already have a GCHandle
 			// available we can use.
 			"GCHandle", "IntPtr", "method",
@@ -81,14 +81,14 @@
 			OnlyDynamicUsage = true,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_class", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_class",
 			"Class", "IntPtr", "ptr"
 		) {
 			WrappedManagedFunction = "GetClass",
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_selector", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_selector",
 			"SEL", "IntPtr", "ptr"
 		) {
 			WrappedManagedFunction = "GetSelector",
@@ -130,14 +130,14 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_try_get_or_construct_nsobject", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_try_get_or_construct_nsobject",
 			"id", "IntPtr", "obj"
 		) {
 			WrappedManagedFunction = "TryGetOrConstructNSObjectWrapped",
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_inative_object_dynamic", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_inative_object_dynamic",
 			"id", "IntPtr", "obj",
 			"bool", "bool", "owns",
 			"GCHandle->MonoReflectionType *", "IntPtr", "type"
@@ -163,7 +163,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_inative_object_static", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_inative_object_static",
 			"id", "IntPtr", "obj",
 			"bool", "bool", "owns",
 			"unsigned int", "uint", "iface_token_ref",
@@ -173,7 +173,7 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_nsobject_with_type", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_nsobject_with_type",
 			"id", "IntPtr", "obj",
 			"GCHandle->MonoReflectionType *", "IntPtr", "type",
 			"int32_t *", "out bool", "created"
@@ -262,7 +262,7 @@
 			OnlyDynamicUsage = true,
 		},
 
-		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_convert_nsstring_to_smart_enum", // REVIEWED
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_convert_nsstring_to_smart_enum",
 			"NSString *", "IntPtr", "value",
 			"GCHandle->MonoReflectionType *", "IntPtr", "type"
 		) {
@@ -461,7 +461,7 @@
 					sb.Append ($"{ReturnType.ExposedCType} rv = ");
 					// Unwrap the GCHandle and free it
 					if (ReturnType.IsGCHandleConversion)
-						sb.Append ("xamarin_gchandle_unwrap ("); // REVIEWED
+						sb.Append ("xamarin_gchandle_unwrap (");
 				}
 
 				sb.Append ("delegates.");

@@ -95,7 +95,7 @@ xamarin_marshal_return_value_impl (MonoType *mtype, const char *type, MonoObject
 			MonoClass *r_klass = mono_object_get_class ((MonoObject *) retval);
 
 			if (desc && desc->bindas [0].original_type_handle != INVALID_GCHANDLE) {
-				MonoReflectionType *original_type = (MonoReflectionType *) xamarin_gchandle_get_target (desc->bindas [0].original_type_handle); // REVIEWED
+				MonoReflectionType *original_type = (MonoReflectionType *) xamarin_gchandle_get_target (desc->bindas [0].original_type_handle);
 				MonoType *original_tp = mono_reflection_type_get_type (original_type);
 				xamarin_mono_object_release (&original_type);
 				return xamarin_generate_conversion_to_native (retval, mono_class_get_type (r_klass), original_tp, method, (void *) INVALID_TOKEN_REF, exception_gchandle);
@@ -1159,9 +1159,9 @@ xamarin_convert_string_to_nsstring (MonoObject *obj, void *context, GCHandle *ex
 }
 
 void *
-xamarin_convert_nsstring_to_string (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle) // REVIEWED
+xamarin_convert_nsstring_to_string (id value, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
-	return xamarin_nsstring_to_string (NULL, (NSString *) value); // REVIEWED
+	return xamarin_nsstring_to_string (NULL, (NSString *) value);
 }
 
 id
@@ -1177,24 +1177,24 @@ xamarin_inativeobject_to_nsobject (MonoObject *object, void *context, GCHandle *
 }
 
 void *
-xamarin_nsobject_to_object (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle) // REVIEWED
+xamarin_nsobject_to_object (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
 	struct conversion_data * data = (struct conversion_data *) context;
-	return xamarin_get_nsobject_with_type_for_ptr (object, false, data->element_type, exception_gchandle); // REVIEWED
+	return xamarin_get_nsobject_with_type_for_ptr (object, false, data->element_type, exception_gchandle);
 }
 
 void *
-xamarin_nsobject_to_inativeobject (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle) // REVIEWED
+xamarin_nsobject_to_inativeobject (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
 	struct conversion_data * data = (struct conversion_data *) context;
-	return xamarin_get_inative_object_dynamic (object, false, data->element_reflection_type, exception_gchandle); // REVIEWED
+	return xamarin_get_inative_object_dynamic (object, false, data->element_reflection_type, exception_gchandle);
 }
 
 void *
-xamarin_nsobject_to_inativeobject_static (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle) // REVIEWED
+xamarin_nsobject_to_inativeobject_static (id object, void *ptr, MonoClass *managedType, void *context, GCHandle *exception_gchandle)
 {
 	struct conversion_data * data = (struct conversion_data *) context;
-	return xamarin_get_inative_object_static (object, false, data->iface_token_ref, data->implementation_token_ref, exception_gchandle); // REVIEWED
+	return xamarin_get_inative_object_static (object, false, data->iface_token_ref, data->implementation_token_ref, exception_gchandle);
 }
 
 NSArray *
@@ -1248,7 +1248,7 @@ xamarin_managed_array_to_nsarray (MonoArray *array, MonoType *managed_type, Mono
 MonoArray *
 xamarin_nsarray_to_managed_string_array (NSArray *array, GCHandle *exception_gchandle)
 {
-	return xamarin_convert_nsarray_to_managed_with_func (array, mono_get_string_class (), xamarin_convert_nsstring_to_string, 0, exception_gchandle); // REVIEWED
+	return xamarin_convert_nsarray_to_managed_with_func (array, mono_get_string_class (), xamarin_convert_nsstring_to_string, 0, exception_gchandle);
 }
 
 MonoArray *
@@ -1259,7 +1259,7 @@ xamarin_nsarray_to_managed_nsobject_array (NSArray *array, MonoType *array_type,
 	data.element_class = element_class == NULL ? mono_class_get_element_class (mono_class_from_mono_type (array_type)) : element_class;
 	data.element_type = mono_class_get_type (data.element_class);
 	data.element_reflection_type = mono_type_get_object (data.domain, data.element_type);
-	return xamarin_convert_nsarray_to_managed_with_func (array, data.element_class, xamarin_nsobject_to_object, &data, exception_gchandle); // REVIEWED
+	return xamarin_convert_nsarray_to_managed_with_func (array, data.element_class, xamarin_nsobject_to_object, &data, exception_gchandle);
 }
 
 MonoArray *
@@ -1270,7 +1270,7 @@ xamarin_nsarray_to_managed_inativeobject_array (NSArray *array, MonoType *array_
 	data.element_class = element_class == NULL ? mono_class_get_element_class (mono_class_from_mono_type (array_type)) : element_class;
 	data.element_type = mono_class_get_type (data.element_class);
 	data.element_reflection_type = mono_type_get_object (data.domain, data.element_type);
-	return xamarin_convert_nsarray_to_managed_with_func (array, data.element_class, xamarin_nsobject_to_inativeobject, &data, exception_gchandle); // REVIEWED
+	return xamarin_convert_nsarray_to_managed_with_func (array, data.element_class, xamarin_nsobject_to_inativeobject, &data, exception_gchandle);
 }
 
 MonoArray *
@@ -1281,7 +1281,7 @@ xamarin_nsarray_to_managed_inativeobject_array_static (NSArray *array, MonoType 
 	data.element_type = mono_class_get_type (data.element_class);
 	data.iface_token_ref = iface_token_ref;
 	data.implementation_token_ref = implementation_token_ref;
-	return xamarin_convert_nsarray_to_managed_with_func (array, data.element_class, xamarin_nsobject_to_inativeobject_static, &data, exception_gchandle); // REVIEWED
+	return xamarin_convert_nsarray_to_managed_with_func (array, data.element_class, xamarin_nsobject_to_inativeobject_static, &data, exception_gchandle);
 }
 
 MonoArray *
@@ -1491,7 +1491,7 @@ xamarin_smart_enum_to_nsstring (MonoObject *value, void *context /* token ref */
 
 		arg_ptrs [0] = mono_object_unbox (value);
 
-		retval = mono_runtime_invoke (managed_method, NULL, arg_ptrs, &exception); // REVIEWED
+		retval = mono_runtime_invoke (managed_method, NULL, arg_ptrs, &exception);
 
 		if (exception) {
 			*exception_gchandle = xamarin_gchandle_new (exception, FALSE);
@@ -1515,7 +1515,7 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 
 	if (context_ref == INVALID_TOKEN_REF) {
 		// This requires the dynamic registrar to invoke the correct conversion function
-		obj = xamarin_convert_nsstring_to_smart_enum (value, mono_type_get_object (mono_domain_get (), mono_class_get_type (managedType)), exception_gchandle); // REVIEWED
+		obj = xamarin_convert_nsstring_to_smart_enum (value, mono_type_get_object (mono_domain_get (), mono_class_get_type (managedType)), exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE)
 			return ptr;
 	} else {
@@ -1529,12 +1529,12 @@ xamarin_nsstring_to_smart_enum (id value, void *ptr, MonoClass *managedType, voi
 		managed_method = xamarin_get_managed_method_for_token (context_ref /* token ref */, exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE) return NULL;
 
-		arg0 = xamarin_get_nsobject_with_type_for_ptr (value, false, xamarin_get_parameter_type (managed_method, 0), exception_gchandle); // REVIEWED
+		arg0 = xamarin_get_nsobject_with_type_for_ptr (value, false, xamarin_get_parameter_type (managed_method, 0), exception_gchandle);
 		if (*exception_gchandle != INVALID_GCHANDLE) return NULL;
 
 		arg_ptrs [0] = arg0;
 
-		obj = mono_runtime_invoke (managed_method, NULL, arg_ptrs, &exception); // REVIEWED
+		obj = mono_runtime_invoke (managed_method, NULL, arg_ptrs, &exception);
 
 		xamarin_mono_object_release (&arg0);
 

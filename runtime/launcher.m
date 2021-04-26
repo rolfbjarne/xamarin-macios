@@ -560,7 +560,7 @@ run_application_init (xamarin_initialize_data *data)
 	if (!initialize)
 		xamarin_assertion_message ("Fatal error: failed to load the %s.%s method", "NSApplication", "Init");
 
-	mono_runtime_invoke (initialize, NULL, NULL, NULL);
+	mono_runtime_invoke (initialize, NULL, NULL, NULL); // REVIEWED
 }
 
 int xamarin_main (int argc, char **argv, enum XamarinLaunchMode launch_mode)

@@ -132,7 +132,7 @@ xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, G
 
 	params [0] = options;
 
-	mono_runtime_invoke (runtime_initialize, NULL, params, &exc);
+	mono_runtime_invoke (runtime_initialize, NULL, params, &exc); // REVIEWED
 
 	if (exc)
 		*exception_gchandle = xamarin_gchandle_new (exc, false);

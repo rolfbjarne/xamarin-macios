@@ -157,7 +157,7 @@ void			xamarin_assertion_message (const char *msg, ...) __attribute__((__noretur
 const char *	xamarin_get_bundle_path (); /* Public API */
 // Sets the bundle path (where the managed executable is). By default APP/Contents/MonoBundle.
 void			xamarin_set_bundle_path (const char *path); /* Public API */
-MonoObject *	xamarin_get_managed_object_for_ptr_fast (id self, GCHandle *exception_gchandle); // MUST REVIEW; REVIEWED
+MonoObject *	xamarin_get_managed_object_for_ptr_fast (id self, GCHandle *exception_gchandle); // REVIEWED
 void			xamarin_check_for_gced_object (MonoObject *obj, SEL sel, id self, MonoMethod *method, GCHandle *exception_gchandle);
 unsigned long 	xamarin_objc_type_size (const char *type);
 bool			xamarin_is_class_nsobject (MonoClass *cls);
@@ -169,9 +169,9 @@ bool			xamarin_is_class_nsstring (MonoClass *cls);
 bool			xamarin_is_class_nullable (MonoClass *cls, MonoClass **element_type, GCHandle *exception_gchandle);
 MonoClass *		xamarin_get_nullable_type (MonoClass *cls, GCHandle *exception_gchandle);
 MonoType *		xamarin_get_parameter_type (MonoMethod *managed_method, int index);
-MonoObject *	xamarin_get_nsobject_with_type_for_ptr (id self, bool owns, MonoType* type, GCHandle *exception_gchandle); // MUST REVIEW; REVIEWED
-MonoObject *	xamarin_get_nsobject_with_type_for_ptr_created (id self, bool owns, MonoType *type, int32_t *created, GCHandle *exception_gchandle); // MUST REVIEW; REVIEWED
-MonoObject *	xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref, int par, void *nativeBlock, GCHandle *exception_gchandle); // MUST REVIEW; REVIEWED
+MonoObject *	xamarin_get_nsobject_with_type_for_ptr (id self, bool owns, MonoType* type, GCHandle *exception_gchandle); // REVIEWED
+MonoObject *	xamarin_get_nsobject_with_type_for_ptr_created (id self, bool owns, MonoType *type, int32_t *created, GCHandle *exception_gchandle); // REVIEWED
+MonoObject *	xamarin_get_delegate_for_block_parameter (MonoMethod *method, guint32 token_ref, int par, void *nativeBlock, GCHandle *exception_gchandle); // REVIEWED
 id              xamarin_get_block_for_delegate (MonoMethod *method, MonoObject *delegate, const char *signature /* NULL allowed, but requires the dynamic registrar at runtime to compute */, guint32 token_ref /* INVALID_TOKEN_REF allowed, but requires the dynamic registrar at runtime */, GCHandle *exception_gchandle);
 id				xamarin_get_nsobject_handle (MonoObject *obj);
 uint8_t         xamarin_get_nsobject_flags (MonoObject *obj);
@@ -211,7 +211,7 @@ void			xamarin_bridge_register_product_assembly (GCHandle* exception_gchandle);
 bool			xamarin_register_monoassembly (MonoAssembly *assembly, GCHandle *exception_gchandle);
 void			xamarin_install_nsautoreleasepool_hooks ();
 
-MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle); // MUST REVIEW; REVIEWED
+MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle); // REVIEWED
 bool			xamarin_has_managed_ref (id self);
 bool			xamarin_has_managed_ref_safe (id self);
 void			xamarin_switch_gchandle (id self, bool to_weak);
@@ -279,7 +279,7 @@ GCHandle		xamarin_gchandle_new (MonoObject *obj, bool pinned);
 GCHandle		xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection);
 MonoObject *	xamarin_gchandle_get_target (GCHandle handle); // REVIEWED
 void			xamarin_gchandle_free (GCHandle handle);
-MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle // MUST REVIEW; REVIEWED
+MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle // REVIEWED
 
 /*
  * In MonoVM MonoObjects are tracked in memory/the stack directly by the GC, but that doesn't

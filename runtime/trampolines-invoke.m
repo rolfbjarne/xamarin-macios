@@ -13,9 +13,9 @@
 #include "product.h"
 
 #if defined(CORECLR_RUNTIME)
-#define S_LIST_PREPEND_CORECLR(item) release_list = s_list_prepend (release_list, item)
+#define ADD_TO_MONOOBJECT_RELEASE_LIST(item) release_list = s_list_prepend (release_list, item)
 #else
-#define S_LIST_PREPEND_CORECLR(item)
+#define ADD_TO_MONOOBJECT_RELEASE_LIST(item)
 #endif
 
 static GCHandle
@@ -169,7 +169,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 		GCHandle mthis_handle = INVALID_GCHANDLE;
 		xamarin_get_method_and_object_for_selector ([self class], sel, is_static, self, &mthis_handle, desc, &exception_gchandle);
 		mthis = xamarin_gchandle_get_target (mthis_handle);
-		S_LIST_PREPEND_CORECLR (mthis);
+		ADD_TO_MONOOBJECT_RELEASE_LIST (mthis);
 		xamarin_gchandle_free (mthis_handle);
 	}
 	if (exception_gchandle != INVALID_GCHANDLE) {
@@ -178,7 +178,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 	}
 
 	reflection_method = (MonoReflectionMethod *) xamarin_gchandle_get_target (desc->method_handle);
-	S_LIST_PREPEND_CORECLR (reflection_method);
+	ADD_TO_MONOOBJECT_RELEASE_LIST (reflection_method);
 	method = xamarin_get_reflection_method_method (reflection_method);
 	msig = mono_method_signature (method);
 	semantic = desc->semantic & ArgumentSemanticMask;
@@ -198,7 +198,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 		p = mono_signature_get_params (msig, &iter);
 		MonoObject *catobj = xamarin_get_nsobject_with_type_for_ptr (self, false, p, &exception_gchandle);
 		arg_ptrs [0] = catobj;
-		S_LIST_PREPEND_CORECLR (catobj);
+		ADD_TO_MONOOBJECT_RELEASE_LIST (catobj);
 		if (exception_gchandle != INVALID_GCHANDLE) {
 			exception_gchandle = xamarin_get_exception_for_parameter (8029, exception_gchandle, "Unable to marshal the parameter", sel, method, p, 0, true);
 			goto exception_handling;
@@ -249,7 +249,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 				goto exception_handling;
 			if (desc->bindas [i + 1].original_type_handle != INVALID_GCHANDLE) {
 				MonoReflectionType *original_type = (MonoReflectionType *) xamarin_gchandle_get_target (desc->bindas [i + 1].original_type_handle);
-				S_LIST_PREPEND_CORECLR (original_type);
+				ADD_TO_MONOOBJECT_RELEASE_LIST (original_type);
 				arg_ptrs [i + mofs] = xamarin_generate_conversion_to_managed ((id) arg, mono_reflection_type_get_type (original_type), p, method, &exception_gchandle, (void *) INVALID_TOKEN_REF, (void **) &free_list);
 				if (exception_gchandle != INVALID_GCHANDLE)
 					goto exception_handling;
@@ -269,7 +269,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							}
 							MonoReflectionMethod *rmethod = mono_method_get_object (domain, method, NULL);
 							bool is_parameter_out = xamarin_is_parameter_out (rmethod, (int) i, &exception_gchandle);
-							S_LIST_PREPEND_CORECLR (rmethod);
+							ADD_TO_MONOOBJECT_RELEASE_LIST (rmethod);
 							if (exception_gchandle != INVALID_GCHANDLE)
 								goto exception_handling;
 
@@ -295,7 +295,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							} else if (xamarin_is_class_nsobject (p_klass)) {
 								MonoObject *mobj = xamarin_get_nsobject_with_type_for_ptr (*(NSObject **) arg, false, p, &exception_gchandle);
 								arg_frame [ofs] = mobj;
-								S_LIST_PREPEND_CORECLR (mobj);
+								ADD_TO_MONOOBJECT_RELEASE_LIST (mobj);
 								if (exception_gchandle != INVALID_GCHANDLE) {
 									exception_gchandle = xamarin_get_exception_for_parameter (8029, exception_gchandle, "Unable to marshal the byref parameter", sel, method, p, (int) i, true);
 									goto exception_handling;
@@ -309,7 +309,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							} else if (p_klass == mono_get_string_class ()) {
 								MonoString *str_arg = xamarin_nsstring_to_string (domain, *(NSString **) arg);
 								arg_frame [ofs] = str_arg;
-								S_LIST_PREPEND_CORECLR (str_arg);
+								ADD_TO_MONOOBJECT_RELEASE_LIST (str_arg);
 								LOGZ (" argument %i is a ref NSString %p: %p\n", i + 1, arg, arg_frame [ofs]);
 							} else if (xamarin_is_class_array (p_klass)) {
 								arg_frame [ofs] = xamarin_nsarray_to_managed_array (*(NSArray **) arg, p, p_klass, &exception_gchandle);
@@ -340,7 +340,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							if (mono_class_is_delegate (p_klass)) {
 								MonoObject *del = xamarin_get_delegate_for_block_parameter (method, INVALID_TOKEN_REF, (int) i, arg, &exception_gchandle);
 								arg_ptrs [i + mofs] = del;
-								S_LIST_PREPEND_CORECLR (del);
+								ADD_TO_MONOOBJECT_RELEASE_LIST (del);
 								if (exception_gchandle != INVALID_GCHANDLE)
 									goto exception_handling;
 							} else if (xamarin_is_class_inativeobject (p_klass)) {
@@ -378,7 +378,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 					} else {
 						MonoObject *mclass = xamarin_get_class ((Class) arg, &exception_gchandle);
 						arg_ptrs [i + mofs] = mclass;
-						S_LIST_PREPEND_CORECLR (mclass);
+						ADD_TO_MONOOBJECT_RELEASE_LIST (mclass);
 						if (exception_gchandle != INVALID_GCHANDLE)
 							goto exception_handling;
 						LOGZ (" argument %i is Class: %p = %s\n", i + 1, arg, class_getName ((Class) arg));
@@ -393,7 +393,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 					} else {
 						MonoObject *msel = xamarin_get_selector ((SEL) arg, &exception_gchandle);
 						arg_ptrs [i + mofs] = msel;
-						S_LIST_PREPEND_CORECLR (msel);
+						ADD_TO_MONOOBJECT_RELEASE_LIST (msel);
 						if (exception_gchandle != INVALID_GCHANDLE)
 							goto exception_handling;
 						LOGZ (" argument %i is SEL: %p = %s\n", i + 1, arg, sel_getName ((SEL) arg));
@@ -408,7 +408,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 					} else {
 						MonoString *arg_str = mono_string_new (domain, (const char *) arg);
 						arg_ptrs [i + mofs] = (void *) arg_str;
-						S_LIST_PREPEND_CORECLR (arg_str);
+						ADD_TO_MONOOBJECT_RELEASE_LIST (arg_str);
 						LOGZ (" argument %i is char*: %p = %s\n", i + 1, arg, arg);
 						break;
 					}
@@ -429,7 +429,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							NSString *str = (NSString *) id_arg;
 							MonoString *str_arg = xamarin_nsstring_to_string (domain, str);
 							arg_ptrs [i + mofs] = str_arg;
-							S_LIST_PREPEND_CORECLR (str_arg);
+							ADD_TO_MONOOBJECT_RELEASE_LIST (str_arg);
 							LOGZ (" argument %i is NSString: %p = %s\n", i + 1, id_arg, [str UTF8String]);
 						} else if (xamarin_is_class_array (p_klass)) {
 							arg_ptrs [i + mofs] = xamarin_nsarray_to_managed_array ((NSArray *) id_arg, p, p_klass, &exception_gchandle);
@@ -446,7 +446,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							MonoObject *obj;
 							int32_t created = false;
 							obj = xamarin_get_nsobject_with_type_for_ptr_created (id_arg, false, p, &created, &exception_gchandle);
-							S_LIST_PREPEND_CORECLR (obj);
+							ADD_TO_MONOOBJECT_RELEASE_LIST (obj);
 							if (exception_gchandle != INVALID_GCHANDLE) {
 								exception_gchandle = xamarin_get_exception_for_parameter (8029, exception_gchandle, "Unable to marshal the parameter", sel, method, p, (int) i, true);
 								goto exception_handling;
@@ -455,7 +455,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							if (created && obj) {
 								MonoReflectionMethod *rmethod = mono_method_get_object (domain, method, NULL);
 								bool is_transient = xamarin_is_parameter_transient (rmethod, (int32_t) i, &exception_gchandle);
-								S_LIST_PREPEND_CORECLR (rmethod);
+								ADD_TO_MONOOBJECT_RELEASE_LIST (rmethod);
 								if (exception_gchandle != INVALID_GCHANDLE)
 									goto exception_handling;
 								if (is_transient)
@@ -480,7 +480,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 						} else if (mono_class_is_delegate (p_klass)) {
 							MonoObject *del = xamarin_get_delegate_for_block_parameter (method, INVALID_TOKEN_REF, (int) i, id_arg, &exception_gchandle);
 							arg_ptrs [i + mofs] = del;
-							S_LIST_PREPEND_CORECLR (del);
+							ADD_TO_MONOOBJECT_RELEASE_LIST (del);
 							if (exception_gchandle != INVALID_GCHANDLE)
 								goto exception_handling;
 						} else {
@@ -490,7 +490,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 							}
 							MonoObject *obj;
 							obj = xamarin_get_nsobject_with_type_for_ptr (id_arg, false, p, &exception_gchandle);
-							S_LIST_PREPEND_CORECLR (obj);
+							ADD_TO_MONOOBJECT_RELEASE_LIST (obj);
 							if (exception_gchandle != INVALID_GCHANDLE)
 								goto exception_handling;
 #if DEBUG
@@ -544,12 +544,12 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 		 * https://bugzilla.xamarin.com/show_bug.cgi?id=6556
 		 */
 		retval = xamarin_new_nsobject (self, mono_method_get_class (method), &exception_gchandle);
-		S_LIST_PREPEND_CORECLR (retval);
+		ADD_TO_MONOOBJECT_RELEASE_LIST (retval);
 		if (exception_gchandle != INVALID_GCHANDLE)
 			goto exception_handling;
 
 		ctorval = mono_runtime_invoke (method, retval, (void **) arg_ptrs, exception_ptr);
-		S_LIST_PREPEND_CORECLR (ctorval);
+		ADD_TO_MONOOBJECT_RELEASE_LIST (ctorval);
 		if (exception != NULL)
 			goto exception_handling;
 	} else {
@@ -563,7 +563,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 #endif
 
 		retval = mono_runtime_invoke (method, mthis, (void **) arg_ptrs, exception_ptr);
-		S_LIST_PREPEND_CORECLR (retval);
+		ADD_TO_MONOOBJECT_RELEASE_LIST (retval);
 
 #ifdef TRACE
 		fprintf (stderr, " called managed method with %i arguments: ", num_arg);

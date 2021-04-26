@@ -16,7 +16,7 @@
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG</DefineConstants>
     <DefineConstants>$(DefineConstants);CORECLR_RUNTIME</DefineConstants>
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
-    <MonoBundlingExtraArgs>--registrar:static --marshal-managed-exceptions=throwobjectivecexception</MonoBundlingExtraArgs>
+    <MonoBundlingExtraArgs>--registrar:static --marshal-managed-exceptions=throwobjectivecexception --marshal-objectivec-exceptions=throwmanagedexception</MonoBundlingExtraArgs>
     <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
   </PropertyGroup>
 

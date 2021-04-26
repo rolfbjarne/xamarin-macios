@@ -3507,11 +3507,11 @@ namespace Registrar {
 					body_setup.AppendLine ("MonoString *a{0} = NULL;", i);
 					cleanup.AppendLine ("xamarin_mono_object_release (&a{0});", i);
 					if (isRef) {
+
 						body_setup.AppendLine ("MonoString *a_copy{0} = NULL;", i);
 						cleanup.AppendLine ($"xamarin_mono_object_release (&a_copy{i});");
-						if (!isOut) {
+						if (!isOut)
 							setup_call_stack.AppendLine ("a{0} = xamarin_nsstring_to_string (NULL, *p{0});", i);
-						}
 						setup_call_stack.AppendLine ("a_copy{0} = a{0};", i);
 						setup_call_stack.AppendLine ("arg_ptrs [{0}] = &a_copy{0};", i);
 						//body_setup.AppendLine ("char *str{0} = NULL;", i);
@@ -3693,7 +3693,7 @@ namespace Registrar {
 						if (!(isRef && isOut)) {
 							var indirection = isRef ? "*" : string.Empty;
 							if (td.IsInterface) {
-								setup_call_stack.AppendLine ("inobj{0} = xamarin_get_inative_object_static ({5}p{0}, false, 0x{1:X} /* {2} */, 0x{3:X} /* {4} */, &exception_gchandle);", i, CreateTokenReference (td, TokenType.TypeDef), td.FullName, CreateTokenReference (nativeObjType, TokenType.TypeDef), nativeObjType.FullName, indirection);
+								setup_call_stack.AppendLine ("inobj{0} = xamarin_get_inative_object_static ({5}p{0}, false, 0x{1:X} /* {2} */, 0x{3:X} /* {4} */, &exception_gchandle);", i, CreateTokenReference (td, TokenType.TypeDef), td.FullName, CreateTokenReference (nativeObjType, TokenType.TypeDef), nativeObjType.FullName, indirection); // REVIEWED
 							} else {
 								setup_call_stack.AppendLine ("inobj{0} = xamarin_get_inative_object_dynamic ({1}p{0}, false, mono_type_get_object (mono_domain_get (), type{0}), &exception_gchandle);", i, indirection);
 							}
@@ -3701,14 +3701,15 @@ namespace Registrar {
 						}
 
 						if (isRef) {
+							// We need to keep a copy of the inobj argument, because it may change during the call to managed code, and we still have to release the original value.
 							body_setup.AppendLine ("MonoObject *inobj_copy{0} = NULL;", i);
 							setup_call_stack.AppendLine ("inobj_copy{0} = inobj{0};", i);
 							setup_call_stack.AppendLine ("arg_ptrs [{0}] = &inobj_copy{0};", i);
 							body_setup.AppendLine ("id handle{0} = nil;", i);
 							copyback.AppendLine ("if (inobj_copy{0} != NULL) {{", i);
 							copyback.AppendLine ("handle{0} = xamarin_get_handle_for_inativeobject (inobj_copy{0}, &exception_gchandle);", i);
-							copyback.AppendLine ("xamarin_mono_object_release (&inobj_copy{0});", i);
 							copyback.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
+							copyback.AppendLine ("xamarin_mono_object_release (&inobj_copy{0});", i);
 							copyback.AppendLine ("}");
 							copyback.AppendLine ("*p{0} = (id) handle{0};", i);
 						} else {

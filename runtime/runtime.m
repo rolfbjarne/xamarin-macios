@@ -986,7 +986,6 @@ xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle
 void
 xamarin_gc_event (MonoGCEvent event)
 {
-#if !defined (CORECLR_RUNTIME)
 	// COOP: this is a callback called by the GC, I believe the mode here doesn't matter.
 	switch (event) {
 	case MONO_GC_EVENT_PRE_STOP_WORLD:
@@ -999,7 +998,6 @@ xamarin_gc_event (MonoGCEvent event)
 	default: // silences a compiler warning.
 		break;
 	}
-#endif
 }
 
 #if !defined (CORECLR_RUNTIME)
@@ -1217,7 +1215,7 @@ xamarin_process_managed_exception_gchandle (GCHandle gchandle)
 	if (gchandle == INVALID_GCHANDLE)
 		return;
 
-	MonoObject *exc = xamarin_gchandle_get_target (gchandle);
+	MonoObject *exc = xamarin_gchandle_get_target (gchandle); // REVIEWED
 	xamarin_gchandle_free (gchandle);
 	xamarin_process_managed_exception (exc);	
 }
@@ -2851,6 +2849,7 @@ xamarin_gchandle_free (GCHandle handle)
 #endif
 }
 
+// Returns a retained MonoObject *
 MonoObject *
 xamarin_gchandle_unwrap (GCHandle handle)
 {

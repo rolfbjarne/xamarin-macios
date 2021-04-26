@@ -1647,7 +1647,7 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 			valueptr = convert ([array objectAtIndex: i], valueptr, managedElementType, context, exception_gchandle);
 #if defined (CORECLR_RUNTIME)
 			MonoObject *boxed = mono_value_box (NULL, managedElementType, valueptr);
-			xamarin_bridge_set_array_object_value (rv->gchandle, (int32_t) i, boxed->gchandle);
+			xamarin_bridge_set_array_object_value (rv->gchandle, (int32_t) i, boxed->gchandle, exception_gchandle);
 			xamarin_mono_object_release (&boxed);
 #else
 			memcpy (ptr, valueptr, element_size);

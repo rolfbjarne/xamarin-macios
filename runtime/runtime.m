@@ -363,12 +363,17 @@ xamarin_get_gchandle_for_ptr_fast (id self, GCHandle *exception_gchandle, bool* 
 	if (gchandle == INVALID_GCHANDLE) {
 		MonoObject *mobj = NULL;
 		mobj = xamarin_try_get_or_construct_nsobject (self, exception_gchandle);
-		gchandle = xamarin_get_gchandle (self); // not quite sure if this will work?
-		if (gchandle == INVALID_GCHANDLE) {
-			*free_handle = true;
-			gchandle = xamarin_gchandle_new (mobj, false);
+		if (*exception_gchandle != INVALID_GCHANDLE)
+			return INVALID_GCHANDLE;
+
+		if (mobj != NULL) {
+			gchandle = xamarin_get_gchandle (self); // not quite sure if this will work?
+			if (gchandle == INVALID_GCHANDLE) {
+				*free_handle = true;
+				gchandle = xamarin_gchandle_new (mobj, false);
+			}
+			xamarin_mono_object_release (&mobj);
 		}
-		xamarin_mono_object_release (&mobj);
 	}
 
 	return gchandle;

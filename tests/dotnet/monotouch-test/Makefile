@@ -29,7 +29,7 @@ build-monotouch-test-with-coreclr: $(TARGETS)
 	$(MAKE) build-monotouch-test
 
 just-build:
-	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:Configuration=$(XAMARIN_RUNTIME) /p:_XamarinRuntime=$(XAMARIN_RUNTIME) $(MSBUILD_VERBOSITY)
+	$(DOTNET6) build $(TOP)/tests/monotouch-test/dotnet/macOS/monotouch-test.csproj /bl:$@.binlog $(BUILD_PARAMETERS) /p:Configuration=$(XAMARIN_RUNTIME) /p:UseMonoRuntime=$(if $(subst MonoVM,,$(XAMARIN_RUNTIME)),false,true) $(MSBUILD_VERBOSITY)
 
 just-build-mono: export XAMARIN_RUNTIME=MonoVM
 just-build-mono: $(TARGETS)

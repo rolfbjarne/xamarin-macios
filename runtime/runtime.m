@@ -3153,12 +3153,6 @@ xamarin_find_mono_class (GCHandle gchandle, const char *name_space, const char *
 }
 
 void
-xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain, bool user_type)
-{
-	xamarin_assertion_message ("%s is not available on MonoVM", __func__);
-}
-
-void
 xamarin_bridge_log_monoobject (MonoObject *mobj, const char *stacktrace)
 {
 	xamarin_assertion_message ("%s is not available on MonoVM", __func__);

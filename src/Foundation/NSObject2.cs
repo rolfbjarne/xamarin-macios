@@ -256,11 +256,6 @@ namespace Foundation {
 		}
 #endif
 
-#if NET
-		[DllImport ("__Internal")]
-		static extern void xamarin_create_managed_ref_coreclr (IntPtr handle, IntPtr obj, bool retain, bool user_type);
-#endif
-
 		[MethodImplAttribute (MethodImplOptions.InternalCall)]
 		extern static void RegisterToggleRef (NSObject obj, IntPtr handle, bool isCustomType);
 

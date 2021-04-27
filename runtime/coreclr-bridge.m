@@ -144,14 +144,6 @@ xamarin_bridge_get_mono_method (MonoReflectionMethod *reflection_method)
 	return rv;
 }
 
-void
-xamarin_create_managed_ref_coreclr (id self, GCHandle managed_object, bool retain, bool user_type)
-{
-	MonoObject *mobj = xamarin_gchandle_get_target (managed_object);
-	xamarin_create_managed_ref (self, mobj, retain, user_type);
-	xamarin_mono_object_release (&mobj);
-}
-
 static pthread_mutex_t monoobject_dict_lock;
 static CFMutableDictionaryRef monoobject_dict = NULL;
 
@@ -1622,18 +1614,6 @@ xamarin_mono_object_release (MonoArray **mobj)
 
 void
 xamarin_mono_object_release (MonoString **mobj)
-{
-	xamarin_mono_object_release ((MonoObject **) mobj);
-}
-
-void
-xamarin_mono_object_release (MonoReflectionMethod **mobj)
-{
-	xamarin_mono_object_release ((MonoObject **) mobj);
-}
-
-void
-xamarin_mono_object_release (MonoReflectionType **mobj)
 {
 	xamarin_mono_object_release ((MonoObject **) mobj);
 }

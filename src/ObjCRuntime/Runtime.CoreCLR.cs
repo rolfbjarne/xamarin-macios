@@ -536,11 +536,6 @@ namespace ObjCRuntime {
 			return MarshalStructure (rv);
 		}
 
-		static IntPtr GetMonoObject (IntPtr gchandle)
-		{
-			return GetMonoObject (GetGCHandleTarget (gchandle));
-		}
-
 		// Returns a retained MonoObject. Caller must release.
 		static IntPtr GetMonoObject (IntPtr gchandle)
 		{

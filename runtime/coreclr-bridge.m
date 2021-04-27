@@ -48,15 +48,12 @@ static bool reference_tracking_end = false;
 void
 xamarin_coreclr_reference_tracking_begin_end_callback ()
 {
-	uint64_t tid;
-	pthread_threadid_np (NULL, &tid);
-	fprintf (stderr, "LOG: %s () reference_tracking_end: %i TID: %p\n", __func__, reference_tracking_end, (void *) tid);
+	LOG_CORECLR (stderr, "LOG: %s () reference_tracking_end: %i\n", __func__, reference_tracking_end);
 	if (reference_tracking_end) {
 		xamarin_gc_event (MONO_GC_EVENT_POST_START_WORLD);
 	} else {
 		xamarin_gc_event (MONO_GC_EVENT_PRE_STOP_WORLD);
 	}
-	fprintf (stderr, "LOG: %s () reference_tracking_end: %i TID: %p DONE\n", __func__, reference_tracking_end, (void *) tid);
 	reference_tracking_end = !reference_tracking_end;
 }
 

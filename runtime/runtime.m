@@ -153,6 +153,11 @@ struct InitializationOptions {
 	void *reference_tracking_is_referenced_callback;
 	void *reference_tracking_tracked_object_entered_finalization;
 	void *unhandled_exception_handler;
+	void *xamarin_objc_msgsend;
+	void *xamarin_objc_msgsend_fpret;
+	void *xamarin_objc_msgsend_stret;
+	void *xamarin_objc_msgsend_super;
+	void *xamarin_objc_msgsend_super_stret;
 #endif
 };
 
@@ -237,7 +242,6 @@ xamarin_get_nsobject_flags (MonoObject *obj)
 	
 #if defined (CORECLR_RUNTIME)
 	uint8_t rv = xamarin_get_flags_for_nsobject (obj->gchandle);
-	// LOG_CORECLR (stderr, "xamarin_get_nsobject_flags (%p) => 0x%x\n", obj, rv);
 	return rv;
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
@@ -252,7 +256,7 @@ xamarin_set_nsobject_flags (MonoObject *obj, uint8_t flags)
 	MONO_ASSERT_GC_UNSAFE;
 	
 #if defined (CORECLR_RUNTIME)
-	//LOG_CORECLRLOG_CORECLR (stderr, "xamarin_set_nsobject_flags (%p, 0x%x)\n", obj, flags);
+	//LOG_CORECLR (stderr, "xamarin_set_nsobject_flags (%p, 0x%x)\n", obj, flags);
 	xamarin_set_flags_for_nsobject (obj->gchandle, flags);
 #else
 	struct Managed_NSObject *mobj = (struct Managed_NSObject *) obj;
@@ -1410,7 +1414,14 @@ xamarin_initialize ()
 	options.reference_tracking_is_referenced_callback = (void *) &xamarin_coreclr_reference_tracking_is_referenced_callback;
 	options.reference_tracking_tracked_object_entered_finalization = (void *) &xamarin_coreclr_reference_tracking_tracked_object_entered_finalization;
 	options.unhandled_exception_handler = (void *) &xamarin_coreclr_unhandled_exception_handler;
-#endif
+#if !defined(__aarch64__) // FIXME
+	options.xamarin_objc_msgsend = (void *) xamarin_dyn_objc_msgSend;
+	// options.xamarin_objc_msgsend_fpret = (void *) xamarin_dyn_objc_msgSend_fpret;
+	options.xamarin_objc_msgsend_stret = (void *) xamarin_dyn_objc_msgSend_stret;
+	options.xamarin_objc_msgsend_super = (void *) xamarin_dyn_objc_msgSendSuper;
+	options.xamarin_objc_msgsend_super_stret = (void *) xamarin_dyn_objc_msgSendSuper_stret;
+#endif // !defined(__aarch64__)
+#endif // defined(CORECLR_RUNTIME)
 
 	xamarin_bridge_call_runtime_initialize (&options, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE) {
@@ -2301,7 +2312,7 @@ xamarin_process_nsexception (NSException *ns_exception)
 }
 
 void
-xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwManagedAsDefault)
+xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwManagedAsDefault, GCHandle *output_exception)
 {
 	XamarinGCHandle *exc_handle;
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
@@ -2342,12 +2353,16 @@ xamarin_process_nsexception_using_mode (NSException *ns_exception, bool throwMan
 				handle = exception_gchandle;
 				exception_gchandle = INVALID_GCHANDLE;
 			}
-			MONO_ENTER_GC_UNSAFE;
-			MonoObject *exc = xamarin_gchandle_get_target (handle);
-			mono_runtime_set_pending_exception ((MonoException *) exc, false);
-			xamarin_mono_object_release (&exc);
-			xamarin_gchandle_free (handle);
-			MONO_EXIT_GC_UNSAFE;
+			if (output_exception == NULL) {
+				MONO_ENTER_GC_UNSAFE;
+				MonoObject *exc = xamarin_gchandle_get_target (handle);
+				mono_runtime_set_pending_exception ((MonoException *) exc, false);
+				xamarin_mono_object_release (&exc);
+				xamarin_gchandle_free (handle);
+				MONO_EXIT_GC_UNSAFE;
+			} else {
+				*output_exception = handle;
+			}
 		}
 		break;
 	case MarshalObjectiveCExceptionModeAbort:
@@ -2551,17 +2566,18 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 		symbol = dlsym (RTLD_DEFAULT, entrypointName);
 #if defined (__i386__) || defined (__x86_64__)
 	} else if (!strcmp (libraryName, "/usr/lib/libobjc.dylib")) {
-		if (xamarin_marshal_objectivec_exception_mode != MarshalObjectiveCExceptionModeDisable) {
-			if (!strcmp (entrypointName, "objc_msgSend")) {
-				symbol = (void *) &xamarin_dyn_objc_msgSend;
-			} else if (!strcmp (entrypointName, "objc_msgSendSuper")) {
-				symbol = (void *) &xamarin_dyn_objc_msgSendSuper;
-			} else if (!strcmp (entrypointName, "objc_msgSend_stret")) {
-				symbol = (void *) &xamarin_dyn_objc_msgSend_stret;
-			} else if (!strcmp (entrypointName, "objc_msgSendSuper_stret")) {
-				symbol = (void *) &xamarin_dyn_objc_msgSendSuper_stret;
-			}
-		}
+		// if (xamarin_marshal_objectivec_exception_mode != MarshalObjectiveCExceptionModeDisable) {
+		// 	if (!strcmp (entrypointName, "objc_msgSend")) {
+		// 		symbol = (void *) &xamarin_dyn_objc_msgSend;
+		// 	} else if (!strcmp (entrypointName, "objc_msgSendSuper")) {
+		// 		symbol = (void *) &xamarin_dyn_objc_msgSendSuper;
+		// 	} else if (!strcmp (entrypointName, "objc_msgSend_stret")) {
+		// 		symbol = (void *) &xamarin_dyn_objc_msgSend_stret;
+		// 	} else if (!strcmp (entrypointName, "objc_msgSendSuper_stret")) {
+		// 		symbol = (void *) &xamarin_dyn_objc_msgSendSuper_stret;
+		// 	}
+		// }
+		fprintf (stderr, "xamarin_pinvoke_override ('%s', '%s') => %p\n", libraryName, entrypointName, symbol);
 #endif // defined (__i386__) || defined (__x86_64__)
 	}
 

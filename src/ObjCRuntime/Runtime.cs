@@ -161,6 +161,11 @@ namespace ObjCRuntime {
 			public IntPtr reference_tracking_is_referenced_callback;
 			public IntPtr reference_tracking_tracked_object_entered_finalization;
 			public IntPtr unhandled_exception_handler;
+			public IntPtr xamarin_objc_msgsend;
+			public IntPtr xamarin_objc_msgsend_fpret;
+			public IntPtr xamarin_objc_msgsend_stret;
+			public IntPtr xamarin_objc_msgsend_super;
+			public IntPtr xamarin_objc_msgsend_super_stret;
 #endif
 			public bool IsSimulator {
 				get {
@@ -1875,6 +1880,21 @@ namespace ObjCRuntime {
 			}
 		}
 #endif
+
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public static void ThrowException (IntPtr gchandle)
+		{
+			if (gchandle == IntPtr.Zero)
+				return;
+			var handle = GCHandle.FromIntPtr (gchandle);
+			var exc = handle.Target as Exception;
+			handle.Free ();
+
+			if (exc == null)
+				return;
+
+			throw exc;
+		}
 	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

@@ -116,6 +116,21 @@ namespace ObjCRuntime {
 			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);
 
 			Bridge.UnhandledExceptionPropagation += UnhandledExceptionPropagationHandler;
+
+			if (options->xamarin_objc_msgsend != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSend, options->xamarin_objc_msgsend);
+
+			if (options->xamarin_objc_msgsend_fpret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendFpret, options->xamarin_objc_msgsend_fpret);
+
+			if (options->xamarin_objc_msgsend_stret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendStret, options->xamarin_objc_msgsend_stret);
+
+			if (options->xamarin_objc_msgsend_super != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuper, options->xamarin_objc_msgsend_super);
+
+			if (options->xamarin_objc_msgsend_super_stret != IntPtr.Zero)
+				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
 		}
 
 		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
@@ -127,7 +142,9 @@ namespace ObjCRuntime {
 
 		static void SetPendingException (IntPtr gchandle)
 		{
-			Bridge.SetMessageSendPendingExceptionForThread ((Exception) GetGCHandleTarget (gchandle));
+			var exc = (Exception) GetGCHandleTarget (gchandle);
+			xamarin_log ($"Runtime.SetPendingException ({exc})");
+			Bridge.SetMessageSendPendingExceptionForThread (exc);
 		}
 
 		// Size: 2 pointers
@@ -972,12 +989,6 @@ namespace ObjCRuntime {
 			if (type.IsByRef)
 				type = type.GetElementType ();
 			return AllocGCHandle (type);
-		}
-
-		static void ThrowException (IntPtr gchandle)
-		{
-			var exc = (Exception) GCHandle.FromIntPtr (gchandle).Target;
-			throw exc;
 		}
 
 		static int SizeOf (IntPtr gchandle)

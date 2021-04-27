@@ -1655,8 +1655,10 @@ xamarin_convert_nsarray_to_managed_with_func (NSArray *array, MonoClass *managed
 #endif
 		} else {
 			mobj = (MonoObject *) convert ([array objectAtIndex: i], NULL, managedElementType, context, exception_gchandle);
-			mono_array_setref (rv, i, mobj);
-			xamarin_mono_object_release (&mobj);
+			if (*exception_gchandle == INVALID_GCHANDLE) {
+				mono_array_setref (rv, i, mobj, exception_gchandle);
+				xamarin_mono_object_release (&mobj);
+			}
 		}
 		if (*exception_gchandle != INVALID_GCHANDLE) {
 			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);

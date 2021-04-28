@@ -1850,6 +1850,21 @@ namespace ObjCRuntime {
 			}
 		}
 #endif
+
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public static void ThrowException (IntPtr gchandle)
+		{
+			if (gchandle == IntPtr.Zero)
+				return;
+			var handle = GCHandle.FromIntPtr (gchandle);
+			var exc = handle.Target as Exception;
+			handle.Free ();
+
+			if (exc == null)
+				return;
+
+			throw exc;
+		}
 	}
 	
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr>

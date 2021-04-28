@@ -97,6 +97,7 @@ public class NeedsAuditAttribute : Attribute {
 }
 
 public class MarshalNativeExceptionsAttribute : Attribute {
+	public bool ReturnException { get; set; } = true;
 }
 
 public class RetainAttribute : Attribute {

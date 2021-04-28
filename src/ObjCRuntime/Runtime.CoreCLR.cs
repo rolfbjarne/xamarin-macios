@@ -102,7 +102,7 @@ namespace ObjCRuntime {
 		}
 
 		// Comment out the attribute to get all printfs
-		[System.Diagnostics.Conditional ("UNDEFINED")]
+		//[System.Diagnostics.Conditional ("UNDEFINED")]
 		static void log_coreclr (string message)
 		{
 			NSLog (message);
@@ -153,9 +153,14 @@ namespace ObjCRuntime {
 			public NSObject.Flags Flags;
 		}
 
+		static List<NSObject> all_objects = new List<NSObject> ();
+
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
 			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
+
+			if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("KEEPALIVE")))
+				all_objects.Add (obj);
 
 			unsafe {
 				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;

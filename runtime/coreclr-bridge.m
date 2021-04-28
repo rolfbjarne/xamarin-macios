@@ -88,7 +88,7 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 		break;
 	}
 
-	LOG_CORECLR (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
+	fprintf (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
 
 	return rv;
 }

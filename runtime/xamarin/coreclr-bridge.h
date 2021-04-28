@@ -8,8 +8,8 @@
 
 #include <stdatomic.h>
 
-#define LOG_CORECLR(...)
-//#define LOG_CORECLR(...) fprintf (__VA_ARGS__)
+//#define LOG_CORECLR(...)
+#define LOG_CORECLR(...) fprintf (__VA_ARGS__)
 
 #include "mono-runtime.h"
 

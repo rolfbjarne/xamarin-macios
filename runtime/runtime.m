@@ -379,6 +379,8 @@ xamarin_get_gchandle_for_ptr_fast (id self, GCHandle *exception_gchandle, bool* 
 		}
 	}
 
+	fprintf (stderr, "%s (%p = %s) => %p\n", __func__, self, object_getClassName (self), gchandle);
+
 	return gchandle;
 }
 

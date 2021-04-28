@@ -79,6 +79,10 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 	case MONO_TOGGLE_REF_DROP:
 	case MONO_TOGGLE_REF_WEAK:
 		rv = 0;
+
+		fprintf (stderr, "LOG: %s (%p -> handle: %p flags: %i) => %i (res: %i) FORCED TOGGLEREF\n", __func__, ptr, handle, flags, rv, res);
+		return 1;
+
 		break;
 	case MONO_TOGGLE_REF_STRONG:
 		rv = 1;

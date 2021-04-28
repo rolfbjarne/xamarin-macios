@@ -43,7 +43,7 @@ run:
 	@echo "Running monotouch-test and writing output to $(LOGFILENAME)..."
 	@mkdir -p $(dir $(LOGFILENAME))
 	@echo "VM: $(XAMARIN_RUNTIME)" > $(LOGFILENAME)
-	@set -o pipefail; (time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) 2>&1 | stamp >> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
+	@set -o pipefail; (time $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-*/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS) 2>&1) 2>&1 | stamp >> $(LOGFILENAME) || (echo "❌ Test run failed" && say "Test run failed" && tail -n 50 $(LOGFILENAME) && exit 1)
 	@echo "✅ Test run succeeded"
 	@say "Test run succeeded"
 	tail -n 5 $(LOGFILENAME)
@@ -57,10 +57,10 @@ run-monotouch-test-with-coreclr: $(TARGETS)
 	$(MAKE) run
 
 run-lldb:
-	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
+	lldb -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-*/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 launch-lldb:
-	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
+	lldb -o "process launch -s" -o "process handle -s false SIGUSR1 SIGUSR2" -- $(abspath $(TOP)/tests/monotouch-test/dotnet/macOS/bin/$(XAMARIN_RUNTIME)/net6.0-macos/osx-*/monotouchtest.app/Contents/MacOS/monotouchtest) $(ARGUMENTS)
 
 lldb-coreclr: export XAMARIN_RUNTIME=CoreCLR
 lldb-coreclr:

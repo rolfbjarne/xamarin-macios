@@ -1600,13 +1600,18 @@ xamarin_convert_managed_to_nsarray_with_func (MonoArray *array, xamarin_managed_
 		MonoObject *value;
 		if (is_value_type) {
 #if defined (CORECLR_RUNTIME)
-			value = mono_array_get (array, "ignored", i);
+			value = mono_array_get (array, "ignored", i, exception_gchandle);
 #else
 			value = mono_value_box (mono_domain_get (), element_class, ptr + element_size * i);
 #endif
 		} else {
-			value = mono_array_get (array, MonoObject *, i);
+			value = mono_array_get (array, MonoObject *, i, exception_gchandle);
 		}
+		if (*exception_gchandle != INVALID_GCHANDLE) {
+			*exception_gchandle = xamarin_get_exception_for_element_conversion_failure (*exception_gchandle, i);
+			goto exception_handling;
+		}
+
 		buf [i] = convert (value, context, exception_gchandle);
 		xamarin_mono_object_release (&value);
 		if (*exception_gchandle != INVALID_GCHANDLE) {

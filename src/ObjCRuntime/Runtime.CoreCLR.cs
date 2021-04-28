@@ -337,21 +337,7 @@ namespace ObjCRuntime {
 							parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 						}
 						log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")}");
-
-
-
-					} else if (
-						paramType.IsClass 
-						|| 
-						paramType.IsInterface 
-						|| 
-						(paramType.IsValueType 
-							&& IsNullable (paramType)))
-
-							 {
-
-
-
+					} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
 						log_coreclr ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut}");
 						var obj_gchandle = IntPtr.Zero;
 						if (nativeParam != IntPtr.Zero) {
@@ -371,7 +357,7 @@ namespace ObjCRuntime {
 						if (parameters [i] is bool[] arr) {
 							log_coreclr ($"        Bool array with length {arr.Length}: first element: {(arr.Length > 0 ? arr [0].ToString () : "N/A")}");
 						}
-						log_coreclr ($"        IsClass/IsInterface (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+						log_coreclr ($"        IsClass/IsInterface/IsNullable (GCHandle: 0x{obj_gchandle.ToString ("x")}): {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
 					} else if (paramType.IsValueType) {
 						log_coreclr ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut}");
 						object vt = null;
@@ -453,7 +439,7 @@ namespace ObjCRuntime {
 						if (nativeParam != null)
 							*nativeParam = ptr;
 					}
-					log_coreclr ($"        IsClass/IsInterface: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)} -> MonoObject: 0x{ptr.ToString ("x")}");
+					log_coreclr ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)} -> MonoObject: 0x{ptr.ToString ("x")}");
 				} else if (parameterType.IsValueType) {
 					log_coreclr ($"        IsValueType");
 					IntPtr nativeParam;
@@ -568,7 +554,7 @@ namespace ObjCRuntime {
 				mobj.Object.TypeName = typename;
 				mobj.Method = CreateMonoMethod (handle, mb);
 				rv = MarshalStructure (mobj);
-				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {Marshal.PtrToStringAuto (typename)}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else if (obj is Type) {
 				var mobj = new MonoReflectionType ();
 				mobj.Object.ObjectKind = MonoObjectType.MonoReflectionType;
@@ -576,7 +562,7 @@ namespace ObjCRuntime {
 				mobj.Object.TypeName = typename;
 				mobj.Type = CreateMonoType (handle);
 				rv = MarshalStructure (mobj);
-				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {Marshal.PtrToStringAuto (typename)}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else if (obj is Array array) {
 				var mobj = new MonoArray ();
 				mobj.Object.ObjectKind = MonoObjectType.MonoArray;
@@ -584,14 +570,14 @@ namespace ObjCRuntime {
 				mobj.Object.TypeName = typename;
 				mobj.Length = (ulong) array.Length;
 				rv = MarshalStructure (mobj);
-				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {Marshal.PtrToStringAuto (typename)}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else if (obj is string str) {
 				var mobj = new MonoString ();
 				mobj.Object.ObjectKind = MonoObjectType.MonoString;
 				mobj.Object.GCHandle = handle;
 				mobj.Object.TypeName = typename;
 				rv = MarshalStructure (mobj);
-				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {Marshal.PtrToStringAuto (typename)}) => {mobj.Object.ObjectKind} => 0x{rv.ToString ("x")}");
 			} else {
 				var mobj = new MonoObject ();
 				mobj.GCHandle = handle;
@@ -599,7 +585,7 @@ namespace ObjCRuntime {
 				mobj.StructValue = WriteStructure (handle);
 				mobj.ObjectKind = MonoObjectType.MonoObject;
 				rv = MarshalStructure (mobj);
-				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {typename}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
+				log_coreclr ($"GetMonoObject (0x{handle.ToString ("x")} => {Marshal.PtrToStringAuto (typename)}) => {mobj.ObjectKind} => 0x{rv.ToString ("x")}");
 			}
 
 			unsafe {

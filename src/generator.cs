@@ -2120,15 +2120,18 @@ public partial class Generator : IMemberGatherer {
 			foreach (var mode in modes) {
 				// arm64 never requires stret, so we'll always need the non-stret variants
 				RegisterMethod (false, mi, MakeSig (mi, false, enum_mode: mode), false, mode);
-				RegisterMethod (false, mi, MakeSuperSig (mi, false, enum_mode: mode), false, mode);
+				if (!mi.IsStatic)
+					RegisterMethod (false, mi, MakeSuperSig (mi, false, enum_mode: mode), false, mode);
 
 				if (CheckNeedStret (mi)) {
 					RegisterMethod (true, mi, MakeSig (mi, true, enum_mode: mode), false, mode);
-					RegisterMethod (true, mi, MakeSuperSig (mi, true, enum_mode: mode), false, mode);
+					if (!mi.IsStatic)
+						RegisterMethod (true, mi, MakeSuperSig (mi, true, enum_mode: mode), false, mode);
 
 					if (AttributeManager.HasAttribute<AlignAttribute> (mi)) {
 						RegisterMethod (true, mi, MakeSig (mi, true, true, mode), true, mode);
-						RegisterMethod (true, mi, MakeSuperSig (mi, true, true, mode), true, mode);
+						if (!mi.IsStatic)
+							RegisterMethod (true, mi, MakeSuperSig (mi, true, true, mode), true, mode);
 					}
 				}
 			}

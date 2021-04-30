@@ -10,6 +10,7 @@ Lcatchhandler:
 	movq	%rax, %rdi
 	jne	Lnomatchexception
 
+	# add this to ARM64!
 	# check if xamarin_marshal_objectivec_exception_mode == disable, if so, just don't handle the exception
 	leal	_xamarin_marshal_objectivec_exception_mode(%rip), %edx
 	cmpl	$4, %edx

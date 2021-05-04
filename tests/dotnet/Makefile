@@ -60,3 +60,10 @@ build-dotnet: $(TARGETS)
 
 run-dotnet: $(TARGETS)
 	$(DOTNET6) build -t:Run size-comparison/MySingleView/dotnet/MySingleView.csproj --runtime ios-arm64 $(COMMON_ARGS)
+
+x:
+	cd MyCoreCLRApp && git clean -xfd && $(DOTNET6) build /bl /v:diag
+	cp $(TOP)/builds/downloads/microsoft.netcore.app.runtime.osx-x64/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/runtimes/osx-x64/native/createdump ./MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MonoBundle/
+
+xrun:
+	./MyCoreCLRApp/bin/Debug/net6.0-macos/osx-x64/MyCoreCLRApp.app/Contents/MacOS/MyCoreCLRApp

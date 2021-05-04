@@ -5,5 +5,6 @@
     <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
     <OutputType>Exe</OutputType>
     <UseMonoRuntime>false</UseMonoRuntime>
+    <MonoBundlingExtraArgs>--setenv:COMPlus_DbgEnableMiniDump=1</MonoBundlingExtraArgs>
   </PropertyGroup>
 </Project>

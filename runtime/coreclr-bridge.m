@@ -415,5 +415,11 @@ mono_class_is_valuetype (MonoClass * klass)
 	return rv;
 }
 
+mono_bool
+mono_thread_detach_if_exiting ()
+{
+	// Nothing to do here for CoreCLR.
+	return true;
+}
 
 #endif // CORECLR_RUNTIME

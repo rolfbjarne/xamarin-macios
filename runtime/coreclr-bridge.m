@@ -395,4 +395,14 @@ xamarin_is_class_string (MonoClass *cls)
 	return xamarin_bridge_is_class_of_type (cls, XamarinLookupTypes_System_String);
 }
 
+mono_bool
+mono_type_is_byref (MonoType *type)
+{
+	bool rv = xamarin_bridge_is_byref (type);
+
+	LOG_CORECLR (stderr, "%s (%p) => %i\n", __func__, type, rv);
+
+	return rv;
+}
+
 #endif // CORECLR_RUNTIME

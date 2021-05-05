@@ -18,15 +18,21 @@
 #if __arm64__
 
 .subsections_via_symbols
-.text
-.align 2
+.section	__TEXT,__text,regular,pure_instructions
+.globl _xamarin_arm64_common_trampoline
+.p2align 2
 _xamarin_arm64_common_trampoline:
-	mov x9, sp ;#Save sp to a temporary register
-	sub sp, sp, #256 ;# allocate 224 bytes from the stack (stack must always be 16-byte aligned) + 16 bytes for the stack frame + 8*2 bytes for _self and _sel
+	.cfi_startproc
 
 	# Create stack frame
-	stp x29, x30, [sp, #0x00]
-	mov x29, sp
+	stp	x29, x30, [sp, #-16]!           ; 16-byte Folded Spill
+	mov	x29, sp
+	.cfi_def_cfa w29, 16
+	.cfi_offset w30, -8
+	.cfi_offset w29, -16
+
+	add x9, sp, #16  ;# Save sp to a temporary register
+	sub sp, sp, #256 ;# allocate 224 bytes from the stack (stack must always be 16-byte aligned) + 16 bytes for the stack frame + 8*2 bytes for _self and _sel
 
 	stp x16, x9, [sp, #0x10]
 	stp  x0, x1, [sp, #0x20]
@@ -60,8 +66,10 @@ _xamarin_arm64_common_trampoline:
 	ldp	x29, x30, [sp, #0x00]
 	add sp, sp, #256 ;# deallocate 224 bytes from the stack + 16 bytes for stack frame + 8*2 bytes for _self and _sel
 
-	ret
+	ldp	x29, x30, [sp], #16             ; 16-byte Folded Reload
 
+	ret
+.cfi_endproc
 #
 # trampolines
 #

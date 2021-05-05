@@ -422,4 +422,24 @@ mono_thread_detach_if_exiting ()
 	return true;
 }
 
+const char *
+mono_class_get_namespace (MonoClass * klass)
+{
+	char *rv = xamarin_bridge_class_get_namespace (klass);
+
+	LOG_CORECLR (stderr, "%s (%p) => %s\n", __func__, klass, rv);
+
+	return rv;
+}
+
+const char *
+mono_class_get_name (MonoClass * klass)
+{
+	char *rv = xamarin_bridge_class_get_name (klass);
+
+	LOG_CORECLR (stderr, "%s (%p) => %s\n", __func__, klass, rv);
+
+	return rv;
+}
+
 #endif // CORECLR_RUNTIME

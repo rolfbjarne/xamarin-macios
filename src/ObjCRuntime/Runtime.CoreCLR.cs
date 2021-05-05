@@ -129,6 +129,20 @@ namespace ObjCRuntime {
 			return rv;
 		}
 
+		unsafe static IntPtr ClassGetNamespace (MonoObject *typeobj)
+		{
+			var type = (Type) GetMonoObjectTarget (typeobj);
+			var rv = type.Namespace;
+			return Marshal.StringToHGlobalAuto (rv);
+		}
+
+		unsafe static IntPtr ClassGetName (MonoObject *typeobj)
+		{
+			var type = (Type) GetMonoObjectTarget (typeobj);
+			var rv = type.Name;
+			return Marshal.StringToHGlobalAuto (rv);
+		}
+
 		static IntPtr CreateGCHandle (IntPtr gchandle, GCHandleType type)
 		{
 			// It's valid to create a GCHandle to a null value.

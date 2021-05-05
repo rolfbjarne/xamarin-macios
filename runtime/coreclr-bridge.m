@@ -584,7 +584,10 @@ xamarin_bridge_mono_object_get_class (MonoObject * obj) // NEEDS REVIEW (already
 MonoClass *
 xamarin_bridge_coreclr_gchandle_get_class (GCHandle obj) // NEEDS REVIEW
 {
-	MonoClass *rv = xamarin_bridge_object_get_type (obj);
+	MonoType *type = xamarin_gchandle_unwrap (obj);
+	MonoClass *rv = xamarin_bridge_object_get_type (type);
+
+	xamarin_mono_object_release (&type);
 
 	LOG_CORECLR (stderr, "xamarin_bridge_coreclr_gchandle_get_class (%p) => %p = %s\n", obj, rv, rv->fullname);
 

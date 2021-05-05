@@ -585,20 +585,6 @@ namespace ObjCRuntime {
 			return output;
 		}
 
-		static bool IsInstance (IntPtr obj_gchandle, IntPtr type_gchandle)
-		{
-			var obj = GCHandle.FromIntPtr (obj_gchandle).Target;
-			if (obj == null)
-				return false;
-
-			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
-			var rv = type.IsAssignableFrom (obj.GetType ());
-
-			log_coreclr ($"IsInstance ({obj.GetType ()}, {type})");
-
-			return rv;
-		}
-
 		static bool IsDelegate (IntPtr type_gchandle)
 		{
 			var type = (Type) GCHandle.FromIntPtr (type_gchandle).Target;
@@ -692,16 +678,6 @@ namespace ObjCRuntime {
 			if (obj == null)
 				return IntPtr.Zero;
 			return Marshal.StringToHGlobalAuto (obj.ToString ());
-		}
-
-		static unsafe MonoObject* ObjectGetType (IntPtr gchandle)
-		{
-			var obj = GCHandle.FromIntPtr (gchandle).Target;
-			if (obj == null) {
-				log_coreclr ($"ObjectGetType (0x{gchandle.ToString ("x")}) => null object");
-				return null;
-			}
-			return (MonoObject *) GetMonoObject (obj.GetType ());
 		}
 
 		static unsafe MonoObject* MonoObjectGetType (MonoObject* mobj)

@@ -349,13 +349,17 @@
 			HasCoreCLRBridgeFunction = true,
 		},
 
-		new Export ("MonoClass *", "mono_get_intptr_class"),
+		new Export ("MonoClass *", "mono_get_intptr_class") {
+			XamarinRuntime = RuntimeMode.MonoVM,
+		},
 
 		new Export ("MonoClass *", "mono_get_string_class"),
 
 		new Export ("MonoImage *", "mono_get_corlib"),
 
-		new Export ("MonoClass *", "mono_get_array_class"),
+		new Export ("MonoClass *", "mono_get_array_class") {
+			XamarinRuntime = RuntimeMode.MonoVM,
+		},
 
 		new Export ("MonoDomain *", "mono_get_root_domain") {
 			XamarinRuntime = RuntimeMode.MonoVM,

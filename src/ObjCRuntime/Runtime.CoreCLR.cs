@@ -65,6 +65,13 @@ namespace ObjCRuntime {
 			Console.WriteLine ("Not implemented: RegisterToggleReferenceCoreCLR");
 		}
 
+		static unsafe void SetPendingException (MonoObject* exception_obj)
+		{
+			var exc = (Exception) GetMonoObjectTarget (exception_obj);
+			// This requires https://github.com/dotnet/runtime/pull/52146 to be merged and packages available.
+			Console.WriteLine ("Not implemented: SetPendingException ({0})", exc);;
+		}
+
 		// Returns a retained MonoObject. Caller must release.
 		static IntPtr FindAssembly (IntPtr assembly_name)
 		{

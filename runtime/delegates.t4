@@ -491,6 +491,14 @@
 			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_set_pending_exception",
+			"MonoObject *", "MonoObject *", "exception_obj"
+		) {
+			WrappedManagedFunction = "SetPendingException",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
 	};
 	delegates.CalculateLengths ();
 #><#+

@@ -515,4 +515,16 @@ mono_object_unbox (MonoObject *obj)
 	return rv;
 }
 
+MonoType *
+mono_class_get_type (MonoClass *klass) // NEEDS REVIEW
+{
+	MonoType *rv = klass;
+
+	xamarin_mono_object_retain (rv);
+
+	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, klass, rv);
+
+	return rv;
+}
+
 #endif // CORECLR_RUNTIME

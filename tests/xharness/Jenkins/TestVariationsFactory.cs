@@ -126,6 +126,7 @@ namespace Xharness.Jenkins {
 						break;
 					case "Debug":
 						yield return new TestData { Variation = "Debug (all optimizations)", MonoBundlingExtraArgs = "--registrar:static --optimize:all,-remove-uithread-checks", Debug = true, LinkMode = "Full", Defines = "OPTIMIZEALL", Undefines = "DYNAMIC_REGISTRAR", Ignored = !(jenkins.IncludeAll && jenkins.IncludeMac) };
+						yield return new TestData { Variation = "Debug (ARM64)", XamMacArch = "ARM64", Debug = true, Ignored = !(jenkins.IncludeAll && jenkins.IncludeMac) };
 						break;
 					}
 					break;
@@ -162,6 +163,7 @@ namespace Xharness.Jenkins {
 					var known_failure = test_data.KnownFailure;
 					var candidates = test_data.Candidates;
 					var use_mono_runtime = test_data.UseMonoRuntime;
+					var xammac_arch = test_data.XamMacArch;
 
 					if (task.TestProject.IsDotNetProject)
 						variation += " [dotnet]";
@@ -217,6 +219,8 @@ namespace Xharness.Jenkins {
 							clone.Xml.SetMtouchUseLlvm (true, task.ProjectPlatform, configuration);
 						if (use_mono_runtime.HasValue)
 							clone.Xml.SetTopLevelPropertyGroupValue ("UseMonoRuntime", use_mono_runtime.Value ? "true" : "false");
+						if (!string.IsNullOrEmpty (xammac_arch))
+							clone.Xml.SetNode ("XamMacArch", xammac_arch, task.ProjectPlatform, configuration);
 						clone.Xml.Save (clone.Path);
 					});
 

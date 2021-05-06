@@ -125,7 +125,7 @@ namespace ObjCRuntime {
 				throw new ArgumentOutOfRangeException (nameof (type));
 			}
 
-			xamarin_log ($"IsClassOfType ({type}, {match}) => {rv}");
+			log_coreclr ($"IsClassOfType ({type}, {match}) => {rv}");
 
 			return rv;
 		}

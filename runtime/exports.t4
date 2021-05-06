@@ -260,6 +260,7 @@
 		)
 		{
 			AlternativeExpression = "return mono_raise_exception (exc);",
+			HasCoreCLRBridgeFunction = true,
 		},
 
 		#endregion

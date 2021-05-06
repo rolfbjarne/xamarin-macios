@@ -565,4 +565,11 @@ mono_string_new (MonoDomain *domain, const char *text)
 	return rv;
 }
 
+void
+mono_runtime_set_pending_exception (MonoException *exc, mono_bool overwrite)
+{
+	LOG_CORECLR (stderr, "%s (%p, %i)\n", __func__, exc, overwrite);
+	xamarin_bridge_set_pending_exception (exc);
+}
+
 #endif // CORECLR_RUNTIME

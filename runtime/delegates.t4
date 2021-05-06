@@ -458,8 +458,8 @@
 			OnlyCoreCLR = true,
 		},
 
-		new XDelegate ("MonoReferenceQueue *", "MonoObject *", "xamarin_bridge_gc_reference_queue_create",
-			"void *", "IntPtr", "callback"
+		new XDelegate ("MonoReferenceQueue *", "MonoObject *", "xamarin_bridge_gc_reference_queue_new",
+			"mono_reference_queue_callback", "IntPtr", "callback"
 		) {
 			WrappedManagedFunction = "CreateGCReferenceQueue",
 			OnlyDynamicUsage = false,

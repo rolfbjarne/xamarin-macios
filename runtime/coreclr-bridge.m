@@ -448,4 +448,10 @@ mono_type_get_object (MonoDomain *domain, MonoType *type) // NEEDS REVIEW
 	return rv;
 }
 
+void
+mono_free (void *ptr)
+{
+	free (ptr);
+}
+
 #endif // CORECLR_RUNTIME

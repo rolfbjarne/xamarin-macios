@@ -455,4 +455,16 @@ mono_type_get_object (MonoDomain *domain, MonoType *type) // NEEDS REVIEW
 	return rv;
 }
 
+MonoReflectionMethod *
+mono_method_get_object (MonoDomain *domain, MonoMethod *method, MonoClass *refclass)
+{
+	MonoReflectionMethod *rv = method;
+
+	xamarin_mono_object_retain (rv);
+
+	LOG_CORECLR (stderr, "%s (%p, %p, %p) => %p\n", __func__, domain, method, refclass, rv);
+
+	return rv;
+}
+
 #endif // CORECLR_RUNTIME

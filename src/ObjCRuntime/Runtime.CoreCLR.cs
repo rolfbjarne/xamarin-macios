@@ -12,6 +12,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Foundation;
 
@@ -509,6 +510,43 @@ namespace ObjCRuntime {
 				return null;
 
 			return Marshal.PtrToStructure (ptr, type);
+		}
+
+		/* Managed version of a mono_reference_queue */
+		// typedef void (* mono_reference_queue_callback) (void* user_data);
+		delegate void mono_reference_queue_callback (IntPtr user_data);
+
+		class ReferenceQueue {
+			public mono_reference_queue_callback Callback;
+			public ConditionalWeakTable<object, object> Table = new ConditionalWeakTable<object, object> ();
+		}
+
+		class ReferenceQueueEntry {
+			public ReferenceQueue Queue;
+			public IntPtr UserData;
+
+			~ReferenceQueueEntry ()
+			{
+				Queue.Callback (UserData);
+			}
+		}
+
+		unsafe static MonoObject* CreateGCReferenceQueue (IntPtr callback)
+		{
+			var queue = new ReferenceQueue ();
+			queue.Callback = Marshal.GetDelegateForFunctionPointer<mono_reference_queue_callback> (callback);
+			return (MonoObject *) GetMonoObject (queue);
+		}
+
+		unsafe static void GCReferenceQueueAdd (MonoObject* mqueue, MonoObject* mobj, IntPtr user_data)
+		{
+			var queue = (ReferenceQueue) GetMonoObjectTarget (mqueue);
+			var obj = GetMonoObjectTarget (mobj);
+			var entry = new ReferenceQueueEntry () {
+				Queue = queue,
+				UserData = user_data,
+			};
+			queue.Table.Add (obj, entry);
 		}
 
 		[DllImport ("__Internal")]

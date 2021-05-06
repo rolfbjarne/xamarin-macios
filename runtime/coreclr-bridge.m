@@ -156,6 +156,8 @@ xamarin_mono_object_release (MonoObject **mobj_ref)
 			mobj->gchandle = INVALID_GCHANDLE;
 		}
 
+		xamarin_free (mobj->struct_value); // allocated using Marshal.AllocHGlobal.
+
 		xamarin_free (mobj); // allocated using Marshal.AllocHGlobal.
 	}
 
@@ -497,6 +499,19 @@ mono_string_new (MonoDomain *domain, const char *text) // NEEDS REVIEW
 	MonoString *rv = xamarin_bridge_new_string (text);
 
 	LOG_CORECLR (stderr, "%s (%p, %s) => %p\n", __func__, domain, text, rv);
+
+	return rv;
+}
+
+void *
+mono_object_unbox (MonoObject *obj)
+{
+	void *rv = obj->struct_value;
+
+	if (rv == NULL)
+		xamarin_assertion_message ("xamarin_bridge_mono_object_unbox (%p) => no struct value?\n");
+
+	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, obj, rv);
 
 	return rv;
 }

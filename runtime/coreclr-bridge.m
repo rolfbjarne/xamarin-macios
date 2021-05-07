@@ -588,4 +588,12 @@ mono_array_length (MonoArray *array)
 	return rv;
 }
 
+MonoClass *
+mono_get_string_class ()
+{
+	MonoClass *rv = xamarin_bridge_get_string_class ();
+	LOG_CORECLR (stderr, "%s () => %p.\n", __func__, rv);
+	return rv;
+}
+
 #endif // CORECLR_RUNTIME

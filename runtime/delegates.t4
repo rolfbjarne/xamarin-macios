@@ -545,6 +545,37 @@
 			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},
+
+		new XDelegate ("void", "void", "mono_array_setref",
+			"MonoArray *", "MonoObject *", "arrayobj",
+			"uint64_t", "ulong", "index",
+			"MonoObject *", "MonoObject *", "valueobj"
+		) {
+			WrappedManagedFunction = "SetArrayObjectValue",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_set_array_struct_value",
+			"MonoArray *", "MonoObject *", "arrayobj",
+			"uint64_t", "ulong", "index",
+			"MonoClass *", "MonoObject *", "typeobj",
+			"void *", "IntPtr", "valueptr"
+		) {
+			WrappedManagedFunction = "SetArrayStructValue",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "mono_array_get",
+			"MonoArray *", "MonoObject *", "arrayobj",
+			"uint64_t", "ulong", "index"
+		) {
+			WrappedManagedFunction = "GetArrayObjectValue",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
 	};
 	delegates.CalculateLengths ();
 #><#+
@@ -598,7 +629,11 @@
 
 		public string DelegateName {
 			get {
-				return EntryPoint.Substring ("xamarin_".Length);
+				if (EntryPoint.StartsWith ("xamarin_"))
+					return EntryPoint.Substring ("xamarin_".Length);
+				if (EntryPoint.StartsWith ("mono_", StringComparison.Ordinal))
+					return EntryPoint.Substring ("mono_".Length);
+				throw new NotImplementedException ($"Unknown prefix for {EntryPoint}");
 			}
 		}
 
@@ -686,7 +721,7 @@
 				}
 
 				sb.Append ("delegates.");
-				sb.Append (EntryPoint.Substring ("xamarin_".Length));
+				sb.Append (DelegateName);
 				sb.Append (" (");
 				sb.Append (invoke_args);
 
@@ -726,7 +761,11 @@
 
 		public string SimpleEntryPoint {
 			get {
-				return EntryPoint.Substring ("xamarin_".Length);
+				if (EntryPoint.StartsWith ("xamarin_"))
+					return EntryPoint.Substring ("xamarin_".Length);
+				if (EntryPoint.StartsWith ("mono_", StringComparison.Ordinal))
+					return EntryPoint.Substring ("mono_".Length);
+				throw new NotImplementedException ($"Unknown prefix for {EntryPoint}");
 			}
 		}
 

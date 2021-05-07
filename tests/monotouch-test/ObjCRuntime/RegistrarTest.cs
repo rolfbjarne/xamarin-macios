@@ -1243,6 +1243,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("Ignored on CoreCLR for now")]
+#endif
 		public void TestConstrainedGenericType ()
 		{
 			IntPtr value;

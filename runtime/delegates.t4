@@ -546,6 +546,14 @@
 			OnlyCoreCLR = true,
 		},
 
+		new XDelegate ("uint64_t", "ulong", "xamarin_bridge_get_array_length",
+			"MonoArray *", "MonoObject *", "arrayobj"
+		) {
+			WrappedManagedFunction = "GetArrayLength",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
 		new XDelegate ("void", "void", "mono_array_setref",
 			"MonoArray *", "MonoObject *", "arrayobj",
 			"uint64_t", "ulong", "index",

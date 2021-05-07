@@ -510,6 +510,14 @@ xamarin_is_class_string (MonoClass *cls)
 	return xamarin_bridge_is_class_of_type (cls, XamarinLookupTypes_System_String);
 }
 
+MonoClass *
+mono_class_get_element_class (MonoClass *klass) // NEEDS REVIEW
+{
+	MonoClass *rv = xamarin_bridge_get_element_class (klass);
+	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, klass, rv);
+	return rv;
+}
+
 char *
 mono_string_to_utf8 (MonoString *string_obj)
 {

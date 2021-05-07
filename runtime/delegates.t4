@@ -505,6 +505,14 @@
 			OnlyCoreCLR = true,
 		},
 
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_element_class",
+			"MonoObject *", "MonoObject *", "classobj"
+		) {
+			WrappedManagedFunction = "GetElementClass",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
 		new XDelegate ("char *", "IntPtr", "xamarin_bridge_string_to_utf8",
 			"MonoObject *", "MonoObject *", "obj"
 		) {

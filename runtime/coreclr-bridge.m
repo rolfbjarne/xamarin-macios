@@ -597,4 +597,13 @@ mono_get_string_class ()
 	return rv;
 }
 
+MonoType *
+mono_reflection_type_get_type (MonoReflectionType *reftype) // MUST REVIEW
+{
+	MonoType *rv = reftype;
+	xamarin_mono_object_retain (rv);
+	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, reftype, rv);
+	return rv;
+}
+
 #endif // CORECLR_RUNTIME

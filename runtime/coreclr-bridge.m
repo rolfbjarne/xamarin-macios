@@ -458,6 +458,14 @@ mono_class_get_name (MonoClass * klass)
 	return rv;
 }
 
+MonoClass *
+mono_class_get_element_class (MonoClass *klass) // NEEDS REVIEW
+{
+	MonoClass *rv = xamarin_bridge_get_element_class (klass);
+	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, klass, rv);
+	return rv;
+}
+
 MonoReflectionType *
 mono_type_get_object (MonoDomain *domain, MonoType *type) // NEEDS REVIEW
 {

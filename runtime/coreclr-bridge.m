@@ -485,6 +485,14 @@ mono_type_get_object (MonoDomain *domain, MonoType *type) // NEEDS REVIEW
 	return rv;
 }
 
+MonoArray *
+mono_array_new (MonoDomain *domain, MonoClass *eclass, uintptr_t n)
+{
+	MonoArray *rv = xamarin_bridge_create_array (eclass, n);
+	LOG_CORECLR (stderr, "%s (%p, %" PRIdPTR ") => %p\n", __func__, domain, eclass, n, rv);
+	return rv;
+}
+
 MonoReflectionMethod *
 mono_method_get_object (MonoDomain *domain, MonoMethod *method, MonoClass *refclass)
 {

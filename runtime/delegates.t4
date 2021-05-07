@@ -487,6 +487,14 @@
 			OnlyCoreCLR = true,
 		},
 
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_element_class",
+			"MonoObject *", "MonoObject *", "classobj"
+		) {
+			WrappedManagedFunction = "GetElementClass",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
 		new XDelegate ("MonoReferenceQueue *", "MonoObject *", "xamarin_bridge_gc_reference_queue_new",
 			"mono_reference_queue_callback", "IntPtr", "callback"
 		) {

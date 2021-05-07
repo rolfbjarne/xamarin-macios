@@ -518,6 +518,14 @@ mono_class_get_element_class (MonoClass *klass) // NEEDS REVIEW
 	return rv;
 }
 
+MonoArray *
+mono_array_new (MonoDomain *domain, MonoClass *eclass, uintptr_t n)
+{
+	MonoArray *rv = xamarin_bridge_create_array (eclass, n);
+	LOG_CORECLR (stderr, "%s (%p, %" PRIdPTR ") => %p\n", __func__, domain, eclass, n, rv);
+	return rv;
+}
+
 char *
 mono_string_to_utf8 (MonoString *string_obj)
 {

@@ -433,6 +433,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("exceptions")]
+#endif
 		public void TestGeneric ()
 		{
 			var g1 = new GenericTestClass<string> ();
@@ -1240,6 +1243,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+#if NET
+		[Ignore ("Ignored on CoreCLR for now")]
+#endif
 		public void TestConstrainedGenericType ()
 		{
 			IntPtr value;

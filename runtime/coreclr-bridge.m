@@ -1202,17 +1202,6 @@ xamarin_mono_object_release (MonoObject **mobj_ref)
 
 	xamarin_assert (mobj != (void *) 0xdeadf00d);
 
-	xamarin_mono_object_release_unsafe (mobj);
-
-	*mobj_ref = (MonoObject *) 0xdeadf00d;
-}
-
-void
-xamarin_mono_object_release_unsafe (MonoObject *mobj)
-{
-	if (mobj == NULL)
-		return;
-
 	int rc = atomic_fetch_sub (&mobj->reference_count, 1) - 1;
 	if (rc == 0) {
 		LOG_CORECLR (stderr, "xamarin_mono_object_release (%p): will free! Type Name: %s Kind: %i\n", mobj, mobj->type_name, mobj->object_kind);
@@ -1236,6 +1225,8 @@ xamarin_mono_object_release_unsafe (MonoObject *mobj)
 	pthread_mutex_lock (&monoobject_dict_lock);
 	CFDictionaryRemoveValue (monoobject_dict, mobj);
 	pthread_mutex_unlock (&monoobject_dict_lock);
+
+	*mobj_ref = (MonoObject *) 0xdeadf00d;
 }
 
 /* Implementation of the Mono Embedding API */
@@ -1426,15 +1417,6 @@ mono_runtime_invoke (MonoMethod * method, void * obj, void ** params, MonoObject
 		*exc = xamarin_gchandle_unwrap (exception_gchandle);
 	}
 
-	return rv;
-}
-
-MonoObject *
-xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc)
-{
-	MonoObject *mobj = xamarin_gchandle_get_target (obj);
-	MonoObject *rv = mono_runtime_invoke (method, mobj, params, exc);
-	xamarin_mono_object_release (&mobj);
 	return rv;
 }
 

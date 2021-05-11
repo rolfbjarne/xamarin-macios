@@ -664,16 +664,6 @@
 			OnlyCoreCLR = true,
 		},
 
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_find_method",
-			"GCHandle", "IntPtr", "klass",
-			"const char *", "IntPtr", "name",
-			"int", "int", "parameter_count"
-		) {
-			WrappedManagedFunction = "FindMethod",
-			OnlyDynamicUsage = false,
-			OnlyCoreCLR = true,
-		},
-
 		new XDelegate ("void", "void", "xamarin_bridge_set_pending_exception_wrapper",
 			"GCHandle", "IntPtr", "gchandle"
 		) {

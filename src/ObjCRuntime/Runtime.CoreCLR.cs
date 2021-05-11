@@ -307,19 +307,6 @@ namespace ObjCRuntime {
 			return Marshal.StringToHGlobalAuto (method?.ToString ());
 		}
 
-		static void StructureToPtr (object obj, IntPtr ptr)
-		{
-			if (obj == null)
-				return;
-
-			if (obj is bool b)
-				Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
-			else if (obj is char c)
-				Marshal.WriteInt16 (ptr, (short) c);
-			else
-				Marshal.StructureToPtr (obj, ptr, false);
-		}
-
 		[DllImport ("__Internal")]
 		static extern void xamarin_mono_object_retain (IntPtr mono_object);
 
@@ -384,6 +371,19 @@ namespace ObjCRuntime {
 			var rv = Marshal.AllocHGlobal (Marshal.SizeOf (typeof (T)));
 			StructureToPtr (value, rv);
 			return rv;
+		}
+
+		static void StructureToPtr (object obj, IntPtr ptr)
+		{
+			if (obj == null)
+				return;
+
+			if (obj is bool b)
+				Marshal.WriteByte (ptr, b ? (byte) 1 : (byte) 0);
+			else if (obj is char c)
+				Marshal.WriteInt16 (ptr, (short) c);
+			else
+				Marshal.StructureToPtr (obj, ptr, false);
 		}
 
 		static IntPtr GetManagedType (IntPtr type_name)
@@ -722,27 +722,6 @@ namespace ObjCRuntime {
 				log_coreclr ($"     bool boxed value: {boxed}");
 
 			return boxed;
-		}
-
-		static IntPtr FindMethod (IntPtr klass_handle, IntPtr name_ptr, int parameter_count)
-		{
-			var klass = (Type) GetGCHandleTarget (klass_handle);
-			if (klass == null)
-				throw new ArgumentNullException (nameof (klass_handle));
-			var name = Marshal.PtrToStringAuto (name_ptr);
-			var methods = klass.GetMethods (BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-			MethodInfo rv = null;
-			foreach (var method in methods) {
-				if (method.GetParameters ().Length != parameter_count)
-					continue;
-				if (method.Name != name)
-					continue;
-				if (rv != null)
-					throw new AmbiguousMatchException ($"Found more than one method named '{name}' in {klass.FullName}' with {parameter_count} parameters.");
-				rv = method;
-			}
-			log_coreclr ($"FindMethod (0x{klass_handle.ToString ("x")} = {klass.FullName}, {name}, {parameter_count}) => {rv}");
-			return AllocGCHandle (rv);
 		}
 
 		static IntPtr WriteStructure (object obj)

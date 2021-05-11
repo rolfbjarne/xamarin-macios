@@ -33,17 +33,17 @@ Lbeforeinvoke:
 	;   x0-x8, x16, x19
 	;   q0-q7
 
-	stp  x0, x1, [sp, #0x10]
-	stp  x2, x3, [sp, #0x20]
-	stp  x4, x5, [sp, #0x30]
-	stp  x6, x7, [sp, #0x40]
-	stp  x8,x16, [sp, #0x50]
-	stp x21,x22, [sp, #0x60]
+	stp  x0, x1, [sp, #0x00]
+	stp  x2, x3, [sp, #0x10]
+	stp  x4, x5, [sp, #0x20]
+	stp  x6, x7, [sp, #0x30]
+	stp  x8,x16, [sp, #0x40]
+	stp x21,x22, [sp, #0x50]
 
-	stp  q0, q1, [sp, #0x80]
-	stp  q2, q3, [sp, #0xa0]
-	stp  q4, q5, [sp, #0xc0]
-	stp  q6, q7, [sp, #0xe0]
+	stp  q0, q1, [sp, #0x60]
+	stp  q2, q3, [sp, #0x80]
+	stp  q4, q5, [sp, #0xa0]
+	stp  q6, q7, [sp, #0xc0]
 
 	; potentially resolve objc_super* [handle, class_handle] to the actual instance
 	RESOLVESUPER
@@ -51,29 +51,28 @@ Lbeforeinvoke:
 	; figure out how much stack space we need
 	bl	_xamarin_get_frame_length
 
-	; x21 holds the amount of stack space we need
-	mov	x21, x0
-
+	; x0 holds the amount of stack space we need
 	; first align stack requirement to 16 bytes
-	add x21, x21, #15
-	lsr x21, x21, #4
-	lsl x21, x21, #4
+	add x0, x0, #15
+	lsr x0, x0, #4
+	lsl x0, x0, #4
 
 	; save the current stack location
 	mov x22, sp
 
-	; then make space for the arguments
+	; save how much space we need
+	mov x21, x0
 
-	sub sp, sp, x21
+	; then make space for the arguments
+	sub sp, sp, x0
 
 	; copy arguments from old location in the stack to new location in the stack
     ; x2 will hold the amount of bytes left to copy. This will be a multiple of 8.
     ; x1 the current src location
     ; x0 the current dst location
 
-    mov x2, x21       ; x2 = frame_length
-    mov x1, x29       ; x1 = address of first argument we got
-    add x1, x1, #16   ;
+    mov x2, x0        ; x2 = frame_length
+    add x1, x29, #16  ; x1 = address of first argument we got
     mov x0, sp        ; x0 = address of the bottom of the stack
 
 L_start:
@@ -85,17 +84,17 @@ L_start:
     b    L_start               ; }
 L_end:
 
-	; restore original input registers, except x21 and x22, which we're using
-	ldp  x0, x1, [x22, #0x10]
-	ldp  x2, x3, [x22, #0x20]
-	ldp  x4, x5, [x22, #0x30]
-	ldp  x6, x7, [x22, #0x40]
-	ldp  x8,x16, [x22, #0x50]
+	; restore original input registers, except x21 and x22, which we're still using
+	ldp  x0, x1, [x22, #0x00]
+	ldp  x2, x3, [x22, #0x10]
+	ldp  x4, x5, [x22, #0x20]
+	ldp  x6, x7, [x22, #0x30]
+	ldp  x8,x16, [x22, #0x40]
 
-	ldp  q0, q1, [x22, #0x80]
-	ldp  q2, q3, [x22, #0xa0]
-	ldp  q4, q5, [x22, #0xc0]
-	ldp  q6, q7, [x22, #0xe0]
+	ldp  q0, q1, [x22, #0x60]
+	ldp  q2, q3, [x22, #0x80]
+	ldp  q4, q5, [x22, #0xa0]
+	ldp  q6, q7, [x22, #0xc0]
 
 	bl	OBJCMSGCALL
 
@@ -104,7 +103,7 @@ Lafterinvoke:
 	add sp, sp, x21
 
 	; now restore x21 and x22
-	ldp x21,x22, [sp, #0x60]
+	ldp x21, x22, [sp, #0x50]
 
 	add sp, sp, #400
 
@@ -133,6 +132,9 @@ Lnomatchexception:
 	brk	#0x1
 Lfunc_end2:
 	.cfi_endproc
+
+
+
 	.section	__TEXT,__gcc_except_tab
 	.p2align	2
 GCC_except_table0:
@@ -174,6 +176,8 @@ Ltmp8:                                  ; TypeInfo 1
 Lttbase0:
 	.p2align	2
                                         ; -- End function
+
+
 	.section	__DATA,__objc_imageinfo,regular,no_dead_strip
 L_OBJC_IMAGE_INFO:
 	.long	0

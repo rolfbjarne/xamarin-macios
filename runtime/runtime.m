@@ -2807,34 +2807,6 @@ xamarin_gchandle_unwrap (GCHandle handle)
 	return rv;
 }
 
-GCHandle
-xamarin_gchandle_duplicate (GCHandle handle, enum XamarinGCHandleType handle_type)
-{
-	if (handle == INVALID_GCHANDLE)
-		return INVALID_GCHANDLE;
-
-	GCHandle rv = INVALID_GCHANDLE;
-	MonoObject *mobj = xamarin_gchandle_get_target (handle);
-	switch (handle_type) {
-	case XamarinGCHandleTypeWeak:
-		rv = xamarin_gchandle_new_weakref (mobj, false);
-		break;
-	case XamarinGCHandleTypeWeakTrackResurrection:
-		rv = xamarin_gchandle_new_weakref (mobj, true);
-		break;
-	case XamarinGCHandleTypeNormal:
-		rv = xamarin_gchandle_new (mobj, false);
-		break;
-	case XamarinGCHandleTypePinned:
-		rv = xamarin_gchandle_new (mobj, true);
-		break;
-	default:
-		xamarin_assertion_message (PRODUCT ": Unknown GCHandle type: %i", handle_type);
-		break;
-	}
-	xamarin_mono_object_release (&mobj);
-	return rv;
-}
 /*
  * Object unregistration:
  *

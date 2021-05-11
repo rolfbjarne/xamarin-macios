@@ -296,7 +296,6 @@ GCHandle		xamarin_gchandle_new_weakref (MonoObject *obj, bool track_resurrection
 MonoObject *	xamarin_gchandle_get_target (GCHandle handle);
 void			xamarin_gchandle_free (GCHandle handle);
 MonoObject *	xamarin_gchandle_unwrap (GCHandle handle); // Will get the target and free the GCHandle
-GCHandle		xamarin_gchandle_duplicate (GCHandle handle, enum XamarinGCHandleType handle_type);
 
 typedef id (*xamarin_get_handle_func) (void *info);
 MonoToggleRefStatus	xamarin_gc_toggleref_callback (uint8_t flags, xamarin_get_handle_func get_handle, void *info);
@@ -327,7 +326,6 @@ void			xamarin_mono_object_release_unsafe (MonoObject *mobj);
 // Nothing to do here.
 #define			xamarin_mono_object_retain(x)
 #define			xamarin_mono_object_release(x) do { *x = NULL; } while (0);
-#define			xamarin_mono_object_release_unsafe(x)
 #endif
 
 /*

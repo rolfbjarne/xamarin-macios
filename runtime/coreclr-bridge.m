@@ -1394,6 +1394,15 @@ mono_runtime_invoke (MonoMethod * method, void * obj, void ** params, MonoObject
 	return rv;
 }
 
+MonoObject *
+xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc)
+{
+	MonoObject *mobj = xamarin_gchandle_get_target (obj);
+	MonoObject *rv = mono_runtime_invoke (method, mobj, params, exc);
+	xamarin_mono_object_release (&mobj);
+	return rv;
+}
+
 MonoMethodSignature *
 mono_method_signature (MonoMethod* method)
 {

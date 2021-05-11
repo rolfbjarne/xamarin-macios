@@ -149,6 +149,9 @@ xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* pt
 void
 xamarin_coreclr_unhandled_exception_handler (void *context);
 
+MonoObject *
+xamarin_bridge_coreclr_runtime_invoke (MonoMethod * method, GCHandle obj, void ** params, MonoObject ** exc);
+
 bool
 xamarin_bridge_coreclr_object_isinst (GCHandle obj, MonoClass * klass);
 

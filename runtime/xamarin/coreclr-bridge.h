@@ -365,16 +365,6 @@ xamarin_bridge_mono_config_parse_memory (const char * buffer);
 MONO_API int
 xamarin_bridge_mono_gc_max_generation (void);
 
-MONO_API MonoGHashTable *
-xamarin_bridge_mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type);
-
-/* REVIEW COMPLETE */
-MONO_API gpointer
-xamarin_bridge_mono_g_hash_table_lookup (MonoGHashTable * hash, gconstpointer key);
-
-MONO_API void
-xamarin_bridge_mono_g_hash_table_insert (MonoGHashTable * hash, gpointer k, gpointer v);
-
 MONO_API MonoException *
 xamarin_bridge_mono_get_exception_execution_engine (const char * msg);
 

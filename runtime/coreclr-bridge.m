@@ -851,36 +851,6 @@ xamarin_bridge_mono_gc_max_generation (void)
 	return 2;
 }
 
-MONO_API MonoGHashTable *
-xamarin_bridge_mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type)
-{
-	MonoGHashTable *rv;
-
-	rv = (MonoGHashTable *) calloc (1, sizeof (MonoGHashTable));
-	rv->gchandle = xamarin_bridge_mono_hash_table_create ((void *) hash_func, (void *) key_equal_func, (int) type);
-
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_new_type (%p, %p, %u) => %p = %p\n", hash_func, key_equal_func, type, rv, rv->gchandle);
-
-	return rv;
-}
-
-// Return value: a retained MonoObject*, caller must release with xamarin_mono_object_release
-MONO_API gpointer
-xamarin_bridge_mono_g_hash_table_lookup (MonoGHashTable * hash, gconstpointer key)
-{
-	MonoObject *rv = xamarin_bridge_mono_hash_table_lookup (hash->gchandle, (void *) key);
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_lookup (%p = %p, %p) => %p\n", hash, hash->gchandle, key, rv);
-	return rv;
-}
-
-MONO_API void
-xamarin_bridge_mono_g_hash_table_insert (MonoGHashTable * hash, gpointer k, gpointer v)
-{
-	MonoObject *obj = (MonoObject *) v;
-	LOG_CORECLR (stderr, "xamarin_bridge_mono_g_hash_table_insert (%p = %p, %p, %p = %p)\n", hash, hash->gchandle, k, v, obj->gchandle);
-	xamarin_bridge_mono_hash_table_insert (hash->gchandle, k, obj->gchandle);
-}
-
 MONO_API MonoException *
 xamarin_bridge_mono_get_exception_execution_engine (const char * msg)
 {

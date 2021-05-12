@@ -503,39 +503,6 @@
 			OnlyDynamicUsage = false,
 		},
 
-		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_element_class",
-			"MonoObject *", "MonoObject *", "classobj"
-		) {
-			WrappedManagedFunction = "GetElementClass",
-			OnlyDynamicUsage = false,
-		},
-
-		new XDelegate ("GCHandle", "IntPtr", "xamarin_bridge_mono_hash_table_create",
-			"void *", "IntPtr", "hash_func",
-			"void *", "IntPtr", "compare_func",
-			"int", "int", "type"
-		) {
-			WrappedManagedFunction = "CreateMonoHashTable",
-			OnlyDynamicUsage = false,
-		},
-
-		new XDelegate ("void", "void", "xamarin_bridge_mono_hash_table_insert",
-			"GCHandle", "IntPtr", "gchandle",
-			"void *", "IntPtr", "key",
-			"GCHandle", "IntPtr", "value_gchandle"
-		) {
-			WrappedManagedFunction = "MonoHashTableInsert",
-			OnlyDynamicUsage = false,
-		},
-
-		new XDelegate ("MonoObject*", "IntPtr", "xamarin_bridge_mono_hash_table_lookup",
-			"GCHandle", "IntPtr", "gchandle",
-			"void *", "IntPtr", "key"
-		) {
-			WrappedManagedFunction = "MonoHashTableLookup",
-			OnlyDynamicUsage = false,
-		},
-
 		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_get_nullable_element_type",
 			"MonoObject *", "MonoObject *", "typeobj"
 		) {
@@ -625,6 +592,35 @@
 			"GCHandle", "IntPtr", "gchandle"
 		) {
 			WrappedManagedFunction = "GetMonoObject",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoGHashTable *", "MonoObject *", "xamarin_bridge_mono_hash_table_create",
+			"GHashFunc", "IntPtr", "hash_func",
+			"GEqualFunc", "IntPtr", "compare_func",
+			"MonoGHashGCType", "int", "type"
+		) {
+			WrappedManagedFunction = "CreateMonoHashTable",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("void", "void", "xamarin_bridge_mono_hash_table_insert",
+			"MonoGHashTable *", "MonoObject *", "tableobj",
+			"gconstpointer", "IntPtr", "key",
+			"MonoObject *", "MonoObject *", "valueobj"
+		) {
+			WrappedManagedFunction = "MonoHashTableInsert",
+			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
+		},
+
+		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_mono_hash_table_lookup",
+			"MonoGHashTable *", "MonoObject *", "tableobj",
+			"gconstpointer", "IntPtr", "key"
+		) {
+			WrappedManagedFunction = "MonoHashTableLookup",
 			OnlyDynamicUsage = false,
 			OnlyCoreCLR = true,
 		},

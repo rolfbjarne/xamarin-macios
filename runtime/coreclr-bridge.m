@@ -571,6 +571,9 @@ mono_class_value_size (MonoClass *klass, uint32_t *align)
 {
 	int32_t rv = xamarin_bridge_sizeof (klass);
 
+	if (align)
+		xamarin_assertion_message ("%s (..., align) not implemented\n", __func__);
+
 	LOG_CORECLR (stderr, "%s (%p, %p) => %i\n", __func__, klass, align, rv);
 
 	return rv;

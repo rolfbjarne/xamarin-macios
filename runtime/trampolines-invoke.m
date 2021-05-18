@@ -283,7 +283,7 @@ xamarin_invoke_trampoline (enum TrampolineType type, id self, SEL sel, iterator_
 								arg_copy = (void **) calloc (managed_arg_count, sizeof (void *));
 								writeback = (bool *) calloc (managed_arg_count, sizeof (bool));
 								if (!arg_copy || !writeback) {
-									exception = (MonoObject *) mono_get_exception_out_of_memory ();
+									exception = (MonoObject *) xamarin_create_system_out_of_memory_exception ();
 									goto exception_handling;
 								}
 							}

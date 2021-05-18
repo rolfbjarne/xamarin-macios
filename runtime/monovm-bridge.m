@@ -385,6 +385,12 @@ xamarin_create_system_entry_point_not_found_exception (const char *entrypoint)
 	return (MonoException *) mono_exception_from_name_msg (mono_get_corlib (), "System", "EntryPointNotFoundException", entrypoint);
 }
 
+MonoException *
+xamarin_create_system_out_of_memory_exception ()
+{
+	return (MonoException *) mono_get_exception_out_of_memory ();
+}
+
 #if DOTNET
 
 bool

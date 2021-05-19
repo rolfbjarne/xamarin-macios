@@ -8,7 +8,10 @@ include $(TOP)/Make.config
 .libs/macos:
 	$(Q) mkdir -p $@
 
+ifdef INCLUDE_XAMARIN_LEGACY
 TARGETS += \
 	.libs/macos/custom-type-assembly.dll \
+
+endif
 
 build-assembly: $(TARGETS)

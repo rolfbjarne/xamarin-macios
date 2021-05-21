@@ -17,7 +17,6 @@
     <DefineConstants Condition="'$(Platform)' != 'iPhoneSimulator'">$(DefineConstants);DEVICE</DefineConstants>
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
     <MtouchLink>None</MtouchLink>
-    <MtouchExtraArgs>-xml=${ProjectDir}/../extra-linker-defs.xml</MtouchExtraArgs>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +25,10 @@
     <ProjectReference Include="..\..\..\..\external\Touch.Unit\Touch.Client\dotnet\iOS\Touch.Client-iOS.dotnet.csproj" />
     <!-- MonoTouch.Dialog references System.Json, which isn't shipped with .NET5, so reference the NuGet instead -->
     <PackageReference Include="System.Json" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <LinkDescription Include="$(RootTestsDirectory)\monotouch-test\dotnet\extra-linker-defs.xml" />
   </ItemGroup>
 
   <ItemGroup>

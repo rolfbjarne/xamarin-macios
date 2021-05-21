@@ -9,6 +9,7 @@
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.LinkNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SymbolStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.MergeAppBundles" AssemblyFile="$(_XamarinTaskAssembly)" />
 
 	<!-- Project types and how do we distinguish between them
 
@@ -156,7 +157,8 @@
 
 	<!-- Inject our custom logic into *DependsOn variables -->
 	<PropertyGroup>
-		<BuildDependsOn>
+		<!-- single-rid build -->
+		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' == ''">
 			_ComputePublishTrimmed;
 			BuildOnlySettings;
 			_CollectBundleResources;
@@ -164,6 +166,23 @@
 			_UnpackLibraryResources;
 			$(BuildDependsOn);
 			_CreateAppBundle;
+			Codesign;
+		</BuildDependsOn>
+
+		<!-- inner build for multi-rid build -->
+		<BuildDependsOn Condition="'$(_IsMultiRidBuild)' == 'true'">
+			_ComputePublishTrimmed;
+			BuildOnlySettings;
+			_CollectBundleResources;
+			_PackLibraryResources;
+			_UnpackLibraryResources;
+			$(BuildDependsOn);
+			_CreateAppBundle;
+		</BuildDependsOn>
+
+		<!-- outer build for multi-rid build -->
+		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' != ''">
+			_RunRidSpecificBuild;
 			Codesign;
 		</BuildDependsOn>
 
@@ -211,6 +230,46 @@
 		<PropertyGroup>
 			<PublishTrimmed Condition="'$(PublishTrimmed)' == '' And '$(RuntimeIdentifier)' != '' And ($(_ProjectType.EndsWith('ExecutableProject')) Or $(_ProjectType.EndsWith('AppExtensionProject'))) And '$(IsMacEnabled)' == 'true'">true</PublishTrimmed>
 		</PropertyGroup>
+	</Target>
+
+	<!-- If we have multiple runtime identifiers, then we need to run an inner build for each of them -->
+	<Target Name="_BuildRidSpecificAppBundle"
+		DependsOnTargets="Build"
+		Returns="@(_AssemblyPublishDirectory)"
+		>
+		<ItemGroup>
+			<_AssemblyPublishDirectory Include="$(MSBuildProjectDirectory)/$(_AppBundlePath)" RuntimeIdentifier="$(RuntimeIdentifier)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- Verify that we're not mixing simulator + device RIDs in a single build -->
+	<Target Name="_RunRidSpecificBuild" Condition="'$(RuntimeIdentifiers)' != '' And '$(RuntimeIdentifier)' == ''" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName">
+		<ItemGroup>
+			<_RIDs Include="$(RuntimeIdentifiers)" Condition=" '$(RuntimeIdentifiers)' != '' " />
+		</ItemGroup>
+		<MSBuild
+			Projects="$(MSBuildProjectFile)"
+			Targets="_BuildRidSpecificAppBundle"
+			Properties="RuntimeIdentifier=%(_RIDs.Identity);RuntimeIdentifiers=;_IsMultiRidBuild=true">
+			<Output TaskParameter="TargetOutputs" ItemName="_AssemblyPublishDirectories" />
+		</MSBuild>
+		<Warning Text="Published apps: @(_AssemblyPublishDirectories)" />
+
+		<ItemGroup>
+			<_AssemblyPublishDirectories>
+				<SpecificSubDirectory>.xamarin/%(RuntimeIdentifier)</SpecificSubDirectory>
+			</_AssemblyPublishDirectories>
+		</ItemGroup>
+
+		<!-- TODO: figure out inputs and outputs -->
+		<MergeAppBundles
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			InputAppBundles="@(_AssemblyPublishDirectories)"
+			OutputAppBundle="$(MSBuildProjectDirectory)/$(_AppBundlePath)"
+			SdkDevPath="$(_SdkDevPath)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		/>
 	</Target>
 
 	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;">
@@ -770,7 +829,7 @@
 				Condition="'$(_PlatformName)' != 'macOS' And '$(InvariantGlobalization)' != 'true' And '%(Filename)%(Extension)' == 'icudt.dat'" />
 
 			<!-- Remove the libxamarin-*.dylib files we don't want -->
-			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dylib' And '%(Filename)%(Extension)' != '$(_LibXamarinName)' And '$([System.String]::new('%(Filename)').StartsWith ('libxamarin-dotnet-'))" />
+			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.dylib' And '%(Filename)%(Extension)' != '$(_LibXamarinName)' And $([System.String]::new('%(Filename)').StartsWith('libxamarin-dotnet-'))" />
 		</ItemGroup>
 	</Target>
 

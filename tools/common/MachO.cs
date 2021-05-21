@@ -495,6 +495,27 @@ namespace Xamarin
 			
 			return true;
 		}
+
+		public static bool IsMachOFile (string filename)
+		{
+			using (var fs = new FileStream (filename, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				if (fs.Length < 4)
+					return false;
+				using (var reader = new BinaryReader (fs)) {
+					var magic = reader.ReadUInt32 ();
+					reader.BaseStream.Position = 0;
+					switch (magic) {
+					case MH_MAGIC:
+					case MH_MAGIC_64:
+					case FAT_MAGIC: // little-endian fat binary
+					case FAT_CIGAM: // big-endian fat binary
+						return true;
+					default:
+						return false;
+					}
+				}
+			}
+		}
 	}
 
 	public class StaticLibrary
@@ -573,13 +594,27 @@ namespace Xamarin
 			var pos = reader.BaseStream.Position;
 
 			var bytes = reader.ReadBytes (8);
-			var rv = bytes [0] == '!' && bytes [1] == '<' && bytes [2] == 'a' && bytes [3] == 'r' && bytes [4] == 'c' && bytes [5] == 'h' && bytes [6] == '>' && bytes [7] == 0xa;
+			bool rv;
+			if (bytes.Length < 8) {
+				rv = false;
+			} else {
+				rv = bytes [0] == '!' && bytes [1] == '<' && bytes [2] == 'a' && bytes [3] == 'r' && bytes [4] == 'c' && bytes [5] == 'h' && bytes [6] == '>' && bytes [7] == 0xa;
+			}
 			reader.BaseStream.Position = pos;
 
 			if (throw_if_error && !rv)
 				throw ErrorHelper.CreateError (1601, Errors.MT1601, System.Text.Encoding.ASCII.GetString (bytes, 0, 7));
 
 			return rv;
+		}
+
+		public static bool IsStaticLibrary (string filename, bool throw_if_error = false)
+		{
+			using (var fs = new FileStream (filename, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (var reader = new BinaryReader (fs)) {
+					return IsStaticLibrary (reader, throw_if_error);
+				}
+			}
 		}
 	}
 

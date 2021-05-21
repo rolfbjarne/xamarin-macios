@@ -18,6 +18,9 @@
 
   -->
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;NETFRAMEWORK;NET472;BUNDLER</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" HintPath="$(MSBuildBinPath)\Microsoft.Build.dll" />
     <Reference Include="Microsoft.Build.Framework" HintPath="$(MSBuildBinPath)\Microsoft.Build.Framework.dll" />
@@ -53,6 +56,15 @@
     </Compile>
     <Compile Include="..\..\common\Profile.cs">
       <Link>external\Profile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\ObjCRuntime\ErrorHelper.cs">
+      <Link>external\ErrorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\tools\common\error.cs">
+      <Link>external\error.cs</Link>
+    </Compile>
+    <Compile Include="..\..\common\ErrorHelper.tests.cs">
+      <Link>external\ErrorHelper.tests.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

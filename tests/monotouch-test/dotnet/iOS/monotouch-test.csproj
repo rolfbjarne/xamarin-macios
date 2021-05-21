@@ -2,7 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0-ios</TargetFramework>
-    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(Platform)' == ''">iossimulator-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers Condition="'$(Platform)' == 'iPhoneSimulator'">iossimulator-x64;iossimulator-x86</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
     <DefineConstants>NET</DefineConstants>
     <LangVersion>latest</LangVersion>

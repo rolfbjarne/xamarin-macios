@@ -316,24 +316,6 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	xamarin_assertion_message ("%s threw an exception: %s", method, str);
 }
 
-const char *
-mono_assembly_name_get_name (MonoAssemblyName *aname)
-{
-	xamarin_assertion_message ("%s not implemented\n", __func__);
-}
-
-const char *
-mono_assembly_name_get_culture (MonoAssemblyName *aname)
-{
-	xamarin_assertion_message ("%s not implemented\n", __func__);
-}
-
-MonoAssemblyName *
-mono_assembly_get_name (MonoAssembly *assembly)
-{
-	xamarin_assertion_message ("%s not implemented\n", __func__);
-}
-
 typedef void (*xamarin_runtime_initialize_decl)(struct InitializationOptions* options);
 void
 xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle)

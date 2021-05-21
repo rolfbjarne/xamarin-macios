@@ -163,6 +163,7 @@
 			_PackLibraryResources;
 			_UnpackLibraryResources;
 			$(BuildDependsOn);
+			_RunRidSpecificBuild;
 			_CreateAppBundle;
 			Codesign;
 		</BuildDependsOn>
@@ -211,6 +212,25 @@
 		<PropertyGroup>
 			<PublishTrimmed Condition="'$(PublishTrimmed)' == '' And '$(RuntimeIdentifier)' != '' And ($(_ProjectType.EndsWith('ExecutableProject')) Or $(_ProjectType.EndsWith('AppExtensionProject'))) And '$(IsMacEnabled)' == 'true'">true</PublishTrimmed>
 		</PropertyGroup>
+	</Target>
+
+	<!-- If we have multiple runtime identifiers, then we need to run an inner build for each of them -->
+	<Target Name="_BuildRidSpecificAppBundle"
+		DependsOnTargets="Build"
+		Returns="@(ResolvedFileToPublish)"
+		>
+	</Target>
+
+	<Target Name="_RunRidSpecificBuild" Condition="'$(RuntimeIdentifiers)' != '' And '$(RuntimeIdentifier)' == ''">
+		<ItemGroup>
+			<_RIDs Include="$(RuntimeIdentifiers)" Condition=" '$(RuntimeIdentifiers)' != '' " />
+		</ItemGroup>
+		<MSBuild
+			Projects="$(MSBuildProjectFile)"
+			Targets="_BuildRidSpecificAppBundle"
+			Properties="RuntimeIdentifier=%(_RIDs.Identity)">
+			<Output TaskParameter="TargetOutputs" ItemName="ResolvedFileToPublish" />
+		</MSBuild>
 	</Target>
 
 	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;">

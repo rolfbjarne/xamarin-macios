@@ -2475,7 +2475,7 @@ xamarin_vprintf (const char *format, va_list args)
  *
  * The platform assembly (Xamarin.[iOS|TVOS|WatchOS].dll) and any assemblies
  * the platform assembly references (mscorlib.dll, System.dll) may be in a
- * pointer-size subdirectory (ARCH_SUBDIR).
+ * pointer-size subdirectory (ARCH_SUBDIR), or an arch-specific subdirectory.
  * 
  * AOT data files will have an arch-specific infix.
  */
@@ -2532,6 +2532,14 @@ xamarin_locate_assembly_resource_for_root (const char *root, const char *culture
 		return true;
 	}
 #endif // !MONOMAC
+
+	// arch-specific subdirectory
+	if (snprintf (path, pathlen, "%s/.xamarin-%s/%s", root, xamarin_arch_name, resource) < 0) {
+		LOG (PRODUCT ": Failed to construct path for resource: %s (5): %s", resource, strerror (errno));
+		return false;
+	} else if (xamarin_file_exists (path)) {
+		return true;
+	}
 
 	// just the file, no extensions, etc.
 	if (snprintf (path, pathlen, "%s/%s", root, resource) < 0) {

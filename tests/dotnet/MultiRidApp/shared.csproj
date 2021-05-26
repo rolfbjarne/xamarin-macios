@@ -6,6 +6,8 @@
 		<ApplicationTitle>MultiRidApp</ApplicationTitle>
 		<ApplicationId>com.xamarin.multiridapp</ApplicationId>
 		<ApplicationVersion>1.0</ApplicationVersion>
+
+		<!-- https://github.com/dotnet/runtime/issues/53307 -->
 		<UseAppHost>false</UseAppHost>
 		<_RuntimeIdentifierUsesAppHost>false</_RuntimeIdentifierUsesAppHost>
 	</PropertyGroup>

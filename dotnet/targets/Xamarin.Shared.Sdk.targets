@@ -9,6 +9,7 @@
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.LinkNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SymbolStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.MergeAppBundles" AssemblyFile="$(_XamarinTaskAssembly)" />
 
 	<!-- Project types and how do we distinguish between them
 
@@ -232,6 +233,15 @@
 			<Output TaskParameter="TargetOutputs" ItemName="_AssemblyPublishDirectories" />
 		</MSBuild>
 		<Warning Text="Published apps: @(_AssemblyPublishDirectories)" />
+
+		<!-- TODO: figure out inputs and outputs -->
+		<MergeAppBundles
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			InputAppBundles="@(_AssemblyPublishDirectories)"
+			OutputAppBundle="$(MSBuildProjectDirectory)/$(_AppBundlePath)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		/>
 	</Target>
 
 	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;">

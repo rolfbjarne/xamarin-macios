@@ -441,6 +441,7 @@
 		) {
 			WrappedManagedFunction = "ObjectToString",
 			OnlyDynamicUsage = false,
+			OnlyCoreCLR = true,
 		},
 
 		new XDelegate ("MonoObject *", "MonoObject *", "xamarin_bridge_box",

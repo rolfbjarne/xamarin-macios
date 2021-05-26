@@ -217,7 +217,7 @@
 	<!-- If we have multiple runtime identifiers, then we need to run an inner build for each of them -->
 	<Target Name="_BuildRidSpecificAppBundle"
 		DependsOnTargets="Build"
-		Returns="@(ResolvedFileToPublish)"
+		Returns="$(MSBuildProjectDirectory)/$(_AppBundlePath)"
 		>
 	</Target>
 
@@ -228,9 +228,10 @@
 		<MSBuild
 			Projects="$(MSBuildProjectFile)"
 			Targets="_BuildRidSpecificAppBundle"
-			Properties="RuntimeIdentifier=%(_RIDs.Identity)">
-			<Output TaskParameter="TargetOutputs" ItemName="ResolvedFileToPublish" />
+			Properties="RuntimeIdentifier=%(_RIDs.Identity);RuntimeIdentifiers=;_IsMultiRidBuild=true">
+			<Output TaskParameter="TargetOutputs" ItemName="_AssemblyPublishDirectories" />
 		</MSBuild>
+		<Warning Text="Published apps: @(_AssemblyPublishDirectories)" />
 	</Target>
 
 	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;">

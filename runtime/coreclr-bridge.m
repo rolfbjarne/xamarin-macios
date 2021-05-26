@@ -239,7 +239,9 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 void
 xamarin_coreclr_reference_tracking_tracked_object_entered_finalization (void* ptr)
 {
-	LOG_CORECLR (stderr, "%s (%p)\n", __func__, ptr);
+	struct TrackedObjectInfo *info = (struct TrackedObjectInfo *) ptr;
+	info->flags = (enum NSObjectFlags) (info->flags | NSObjectFlagsInFinalizerQueue);
+	LOG_CORECLR (stderr, "%s (%p) flags: %i\n", __func__, ptr, (int) info->flags);
 }
 
 void

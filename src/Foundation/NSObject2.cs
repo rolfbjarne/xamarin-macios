@@ -53,7 +53,7 @@ namespace Foundation {
 	}
 
 #if NET && !COREBUILD
-	[TrackedNativeReference]
+	[ObjectiveCTrackedType]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public partial class NSObject 

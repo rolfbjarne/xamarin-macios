@@ -85,23 +85,21 @@ namespace ObjCRuntime {
 		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
 		{
 			if (options->xamarin_objc_msgsend != IntPtr.Zero)
-				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSend, options->xamarin_objc_msgsend);
+				ObjectiveCMarshal.SetMessageSendCallback (ObjectiveCMarshal.MessageSendFunction.MsgSend, options->xamarin_objc_msgsend);
 
 			if (options->xamarin_objc_msgsend_super != IntPtr.Zero)
-				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuper, options->xamarin_objc_msgsend_super);
+				ObjectiveCMarshal.SetMessageSendCallback (ObjectiveCMarshal.MessageSendFunction.MsgSendSuper, options->xamarin_objc_msgsend_super);
 
 			if (options->xamarin_objc_msgsend_stret != IntPtr.Zero)
-				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendStret, options->xamarin_objc_msgsend_stret);
+				ObjectiveCMarshal.SetMessageSendCallback (ObjectiveCMarshal.MessageSendFunction.MsgSendStret, options->xamarin_objc_msgsend_stret);
 
 			if (options->xamarin_objc_msgsend_super_stret != IntPtr.Zero)
-				Bridge.SetMessageSendCallback (Bridge.MsgSendFunction.ObjCMsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
-
-			Bridge.UnhandledExceptionPropagation += UnhandledExceptionPropagationHandler;
+				ObjectiveCMarshal.SetMessageSendCallback (ObjectiveCMarshal.MessageSendFunction.MsgSendSuperStret, options->xamarin_objc_msgsend_super_stret);
 
 			delegate* unmanaged<void> beginEndCallback = (delegate* unmanaged<void>) options->reference_tracking_begin_end_callback;
 			delegate* unmanaged<IntPtr, int> isReferencedCallback = (delegate* unmanaged<IntPtr, int>) options->reference_tracking_is_referenced_callback;
 			delegate* unmanaged<IntPtr, void> trackedObjectEnteredFinalization = (delegate* unmanaged<IntPtr, void>) options->reference_tracking_tracked_object_entered_finalization;
-			Bridge.InitializeReferenceTracking (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization);
+			ObjectiveCMarshal.Initialize (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization, UnhandledExceptionPropagationHandler);
 		}
 
 		static unsafe delegate* unmanaged<IntPtr, void> UnhandledExceptionPropagationHandler (Exception exception, RuntimeMethodHandle lastMethod, out IntPtr context)
@@ -119,16 +117,18 @@ namespace ObjCRuntime {
 
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
-			var gchandle = Bridge.CreateReferenceTrackingHandle (obj, out var info);
+			var gchandle = ObjectiveCMarshal.CreateReferenceTrackingHandle (obj, out var info);
 
 			unsafe {
-				TrackedObjectInfo* tracked_info = (TrackedObjectInfo*) info;
+				TrackedObjectInfo* tracked_info;
+				fixed (void* ptr = info)
+					tracked_info = (TrackedObjectInfo *) ptr;
 				tracked_info->Handle = handle;
 				tracked_info->Flags = obj.FlagsInternal;
 				obj.tracked_object_info = tracked_info;
 				obj.tracked_object_handle = gchandle;
 
-				log_coreclr ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) info).ToString ("x")} Flags={tracked_info->Flags}");
+				log_coreclr ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags}");
 			}
 
 			// Make sure the GCHandle we have is a weak one for custom types.
@@ -194,7 +194,7 @@ namespace ObjCRuntime {
 		{
 			var exc = (Exception) GetMonoObjectTarget (exception_obj);
 			log_coreclr ($"Runtime.SetPendingException ({exc})");
-			Bridge.SetMessageSendPendingExceptionForThread (exc);
+			ObjectiveCMarshal.SetMessageSendPendingException (exc);
 		}
 
 		unsafe static bool IsClassOfType (MonoObject *typeobj, TypeLookup match)

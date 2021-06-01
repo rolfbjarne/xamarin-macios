@@ -240,6 +240,7 @@
 			Condition="'$(IsMacEnabled)' == 'true'"
 			InputAppBundles="@(_AssemblyPublishDirectories)"
 			OutputAppBundle="$(MSBuildProjectDirectory)/$(_AppBundlePath)"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		/>
 	</Target>

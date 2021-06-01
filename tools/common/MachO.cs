@@ -495,6 +495,25 @@ namespace Xamarin
 			
 			return true;
 		}
+
+		public static bool IsMachOFile (string filename)
+		{
+			using (var fs = new FileStream (filename, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (var reader = new BinaryReader (fs)) {
+					var magic = reader.ReadUInt32 ();
+					reader.BaseStream.Position = 0;
+					switch (magic) {
+					case MH_MAGIC:
+					case MH_MAGIC_64:
+					case FAT_MAGIC: // little-endian fat binary
+					case FAT_CIGAM: // big-endian fat binary
+						return true;
+					default:
+						return false;
+					}
+				}
+			}
+		}
 	}
 
 	public class StaticLibrary
@@ -580,6 +599,15 @@ namespace Xamarin
 				throw ErrorHelper.CreateError (1601, Errors.MT1601, System.Text.Encoding.ASCII.GetString (bytes, 0, 7));
 
 			return rv;
+		}
+
+		public static bool IsStaticLibrary (string filename, bool throw_if_error = false)
+		{
+			using (var fs = new FileStream (filename, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (var reader = new BinaryReader (fs)) {
+					return IsStaticLibrary (filename, throw_if_error);
+				}
+			}
 		}
 	}
 

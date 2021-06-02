@@ -16,14 +16,35 @@ namespace Xamarin.MacDev.Tasks {
 		[OneTimeSetUp]
 		public void SetUp ()
 		{
-			Assert.AreEqual (0, ExecutionHelper.Execute ("make", new string [] { "-C", Path.Combine (Configuration.RootPath, "tests", "test-libraries"), "-j8" }, TimeSpan.FromSeconds (30)));
-			Assert.AreEqual (0, ExecutionHelper.Execute ("make", new string [] { "-C", Path.Combine (Configuration.RootPath, "tests", "ComplexAssembly"), "-j8" }, TimeSpan.FromSeconds (30)));
+			var env = new Dictionary<string, string> {
+				{ "MSBUILD_EXE_PATH", null }, // Comes from VSMac (when running tests from inside the IDE), and it confuses 'dotnet build', so remove it.
+			};
+
+			Assert.AreEqual (0, ExecutionHelper.Execute ("make",
+				new string [] { "-C", Path.Combine (Configuration.RootPath, "tests", "test-libraries"), "-j8" },
+				output: out var _,
+				working_directory: null,
+				timeout: TimeSpan.FromSeconds (30),
+				environment_variables: env));
+
+			Assert.AreEqual (0, ExecutionHelper.Execute ("make",
+				new string [] { "-C", Path.Combine (Configuration.RootPath, "tests", "common", "TestProjects", "ComplexAssembly"), "-j8", "V=1" },
+				output: out var output,
+				working_directory: null,
+				timeout: TimeSpan.FromSeconds (30),
+				environment_variables: env));
 		}
 
 		MergeAppBundles CreateTask (string outputBundle, params string[] inputBundles)
 		{
+			var inputItems = new List<TaskItem> ();
+			for (var i = 0; i < inputBundles.Length; i++) {
+				var item = new TaskItem (inputBundles [i]);
+				item.SetMetadata ("SpecificSubdirectory", $"SubDir{i + 1}");
+				inputItems.Add (item);
+			}
 			var task = CreateTask<MergeAppBundles> ();
-			task.InputAppBundles = inputBundles.Select (v => new TaskItem (v)).ToArray ();
+			task.InputAppBundles = inputItems.ToArray ();
 			task.OutputAppBundle = outputBundle;
 			return task;
 		}
@@ -47,6 +68,7 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var file in files) {
 				var inputPath = Path.Combine (directory, file);
 				var outputPath = Path.Combine (appBundle, file);
+				Directory.CreateDirectory (Path.GetDirectoryName (outputPath));
 				File.Copy (inputPath, outputPath, true);
 			}
 			return appBundle;
@@ -76,7 +98,7 @@ namespace Xamarin.MacDev.Tasks {
 		[Test]
 		public void TestPEAssembly ()
 		{
-			var complexAssemblyPath = Path.Combine (Configuration.RootPath, "tests", "ComplexAssembly", "bin", "Debug", "net6.0");
+			var complexAssemblyPath = Path.Combine (Configuration.RootPath, "tests", "common", "TestProjects", "ComplexAssembly", "bin", "Debug", "net6.0");
 			var complexFiles = new string [] {
 				"ComplexAssembly.dll",
 				"ComplexAssembly.pdb",

@@ -162,6 +162,7 @@ namespace Xamarin.MacDev.Tasks {
 					};
 					entries.Add (entry);
 				}
+				inputFiles [i] = entries;
 			}
 
 			// Group dependent files for assemblies

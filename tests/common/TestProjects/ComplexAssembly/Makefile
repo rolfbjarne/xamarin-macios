@@ -1,4 +1,4 @@
-TOP=../..
+TOP=../../../..
 
 include $(TOP)/Make.config
 
@@ -7,6 +7,6 @@ prepare:
 	$(Q) $(CP) $(TOP)/tests/dotnet/global.json $(TOP)/tests/dotnet/NuGet.config .
 
 .build-stamp.binlog: Makefile $(wildcard *.cs) $(wildcard *.csproj) $(wildcard *.resx) $(wildcard *.config) prepare
-	$(DOTNET6) build *.csproj $(MSBUILD_VERBOSITY) /bl:$@
+	$(Q) $(DOTNET6) build *.csproj $(MSBUILD_VERBOSITY) /bl:$@
 
 all-local:: .build-stamp.binlog

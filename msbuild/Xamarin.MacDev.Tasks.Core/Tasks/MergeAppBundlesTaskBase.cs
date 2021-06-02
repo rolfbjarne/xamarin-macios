@@ -177,7 +177,7 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var list in inputFiles) {
 				Console.WriteLine ($"Input files found in {list.BundlePath}:");
 				foreach (var file in list) {
-					Console.WriteLine ($"    {file} Type: {file.Type} Dependent assemblies: {file.DependentFiles?.Count?.ToString () ?? "0"}");
+					Console.WriteLine ($"    {file} Type: {file.Type} Dependent assemblies: {file.DependentFiles?.Count.ToString () ?? "0"}");
 					if (file.DependentFiles?.Any () == true) {
 						foreach (var df in file.DependentFiles) {
 							Console.WriteLine ($"        {file} Type: {file.Type}");
@@ -202,7 +202,7 @@ namespace Xamarin.MacDev.Tasks {
 				var types = kvp.Value.Select (v => v.Type).Distinct ();
 				if (types.Count () > 1) {
 					// Files of different types.
-					Console.WriteLine ("// FIXME: show error");
+					Log.LogError ("// FIXME: show error about different types");
 					return false;
 				}
 			}

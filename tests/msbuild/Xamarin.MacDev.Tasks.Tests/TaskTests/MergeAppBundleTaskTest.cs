@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Microsoft.Build.Utilities;
 
@@ -9,6 +10,7 @@ using NUnit.Framework;
 
 using Xamarin.iOS.Tasks;
 using Xamarin.Tests;
+using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	[TestFixture]
@@ -137,8 +139,101 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask (outputBundle, bundles);
 			Assert.IsFalse (task.Execute (), "Task execution");
 			Assert.AreEqual (1, Engine.Logger.ErrorEvents.Count, "Errors");
-			Assert.AreEqual ("Message", Engine.Logger.ErrorEvents [0].Message, "Error message");
+			Assert.AreEqual ("Unknown merge file type: Other", Engine.Logger.ErrorEvents [0].Message, "Error message"); // FIXME: error
 		}
 
+		[Test]
+		public void TestSymlinks ()
+		{
+			var bundleA = Path.Combine (Cache.CreateTemporaryDirectory (), "MergeMe.app");
+			var bundleB = Path.Combine (Cache.CreateTemporaryDirectory (), "MergeMe.app");
+			var fileA = Path.Combine (bundleA, "A.txt");
+			var fileB = Path.Combine (bundleB, "A.txt");
+			Directory.CreateDirectory (Path.GetDirectoryName (fileA));
+			File.WriteAllText (fileA, "A");
+			Directory.CreateDirectory (Path.GetDirectoryName (fileB));
+			File.WriteAllText (fileB, "A");
+			var linkA = Path.Combine (bundleA, "B.txt");
+			var linkB = Path.Combine (bundleB, "B.txt");
+			Assert.IsTrue (PathUtils.Symlink ("A.txt", linkA), "Link A");
+			Assert.IsTrue (PathUtils.Symlink ("A.txt", linkB), "Link B");
+
+
+			var outputBundle = Path.Combine (Cache.CreateTemporaryDirectory (), "Merged.app");
+			var task = CreateTask (outputBundle, bundleA, bundleB);
+			Assert.IsTrue (task.Execute (), "Task execution");
+			Assert.IsTrue (PathUtils.IsSymlink (Path.Combine (outputBundle, "B.txt")), "IsSymlink");
+		}
+
+		[Test]
+		public void TestSymlinksWithDifferentTargets ()
+		{
+			var bundleA = Path.Combine (Cache.CreateTemporaryDirectory (), "MergeMe.app");
+			var bundleB = Path.Combine (Cache.CreateTemporaryDirectory (), "MergeMe.app");
+			var fileA = Path.Combine (bundleA, "A.txt");
+			var fileB = Path.Combine (bundleB, "A.txt");
+			var fileAC = Path.Combine (bundleA, "C.txt");
+			var fileBC = Path.Combine (bundleB, "C.txt");
+			Directory.CreateDirectory (Path.GetDirectoryName (fileA));
+			File.WriteAllText (fileA, "A");
+			File.WriteAllText (fileAC, "C");
+			Directory.CreateDirectory (Path.GetDirectoryName (fileB));
+			File.WriteAllText (fileB, "A");
+			File.WriteAllText (fileBC, "C");
+			// There's a symlink in both apps, but they have different targets.
+			var linkA = Path.Combine (bundleA, "B.txt");
+			var linkB = Path.Combine (bundleB, "B.txt");
+			Assert.IsTrue (PathUtils.Symlink ("A.txt", linkA), "Link A");
+			Assert.IsTrue (PathUtils.Symlink ("C.txt", linkB), "Link B");
+
+
+			var outputBundle = Path.Combine (Cache.CreateTemporaryDirectory (), "Merged.app");
+			var task = CreateTask (outputBundle, bundleA, bundleB);
+			Assert.IsFalse (task.Execute (), "Task execution");
+			Assert.AreEqual (1, Engine.Logger.ErrorEvents.Count, "Errors");
+			Assert.AreEqual ("Can't merge symlinks with different targets.", Engine.Logger.ErrorEvents [0].Message, "Error message"); // FIXME: error
+		}
+		[Test]
+
+		public void TestDirectories ()
+		{
+			var bundleA = Path.Combine (Cache.CreateTemporaryDirectory (), "MergeMe.app");
+			var bundleB = Path.Combine (Cache.CreateTemporaryDirectory (), "MergeMe.app");
+			var onlyA = "A";
+			var onlyB = "B";
+			var bothAB = "AB";
+			var nestedOnlyA = "AA/AA";
+			var nestedOnlyB = "BB/BB";
+			var nestedBothAB = "ABAB/ABAB";
+			var nestedSharedOnlyA = "ABS/A";
+			var nestedSharedOnlyB = "ABS/B";
+
+			Directory.CreateDirectory (Path.Combine (bundleA, onlyA));
+			Directory.CreateDirectory (Path.Combine (bundleA, bothAB));
+			Directory.CreateDirectory (Path.Combine (bundleA, nestedOnlyA));
+			Directory.CreateDirectory (Path.Combine (bundleA, nestedBothAB));
+			Directory.CreateDirectory (Path.Combine (bundleA, nestedSharedOnlyA));
+			Directory.CreateDirectory (Path.Combine (bundleB, onlyB));
+			Directory.CreateDirectory (Path.Combine (bundleB, nestedOnlyB));
+			Directory.CreateDirectory (Path.Combine (bundleB, bothAB));
+			Directory.CreateDirectory (Path.Combine (bundleB, nestedBothAB));
+			Directory.CreateDirectory (Path.Combine (bundleB, nestedSharedOnlyB));
+
+			var outputBundle = Path.Combine (Cache.CreateTemporaryDirectory (), "Merged.app");
+			var task = CreateTask (outputBundle, bundleA, bundleB);
+			Assert.IsTrue (task.Execute (), "Task execution");
+			Assert.That (Path.Combine (outputBundle, onlyA), Does.Exist, "onlyA");
+			Assert.That (Path.Combine (outputBundle, onlyB), Does.Exist, "onlyB");
+			Assert.That (Path.Combine (outputBundle, bothAB), Does.Exist, "bothAB");
+			Assert.That (Path.Combine (outputBundle, nestedOnlyA), Does.Exist, "nestedOnlyA");
+			Assert.That (Path.Combine (outputBundle, nestedOnlyB), Does.Exist, "nestedOnlyB");
+			Assert.That (Path.Combine (outputBundle, nestedBothAB), Does.Exist, "nestedBothAB");
+			Assert.That (Path.Combine (outputBundle, nestedSharedOnlyA), Does.Exist, "nestedSharedOnlyA");
+			Assert.That (Path.Combine (outputBundle, nestedSharedOnlyB), Does.Exist, "nestedSharedOnlyB");
+
+
+			// Verify that there aren't any other directories
+			Assert.AreEqual (7, Directory.GetFileSystemEntries (outputBundle).Length, "Directories in bundle");
+		}
 	}
 }

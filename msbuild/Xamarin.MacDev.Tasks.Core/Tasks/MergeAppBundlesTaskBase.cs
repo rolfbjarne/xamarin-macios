@@ -26,6 +26,8 @@ namespace Xamarin.MacDev.Tasks {
 		enum FileType {
 			MachO,
 			PEAssembly,
+			Directory,
+			Symlink,
 			Other,
 		}
 
@@ -42,17 +44,85 @@ namespace Xamarin.MacDev.Tasks {
 
 			public string FullPath => Path.Combine (AppBundle.BundlePath, RelativePath);
 
-			void FindDependentFiles (List<Entry> list, Func<Entry, bool> condition)
+			void FindDependentFiles (Func<Entry, bool> condition)
 			{
-				var dependentFiles = list.Where (condition).ToArray ();
-				if (dependentFiles.Length == 1) {
-					var dependentFile = dependentFiles [0];
-					list.Remove (dependentFile);
+				var dependentFiles = AppBundle.Where (v => v != this).Where (condition).ToArray ();
+
+				if (dependentFiles.Length > 0) {
 					if (DependentFiles == null)
 						DependentFiles = new List<Entry> ();
-					DependentFiles.Add (dependentFile);
-				} else {
-					Console.WriteLine ($"// TODO: show error.");
+
+					foreach (var dependentFile in dependentFiles) {
+						AppBundle.Remove (dependentFile);
+						DependentFiles.Add (dependentFile);
+						Console.WriteLine ($"Added dependent file {dependentFile.RelativePath} to {RelativePath}");
+					}
+				}
+			}
+
+			public void FindDependentFiles ()
+			{
+				Console.WriteLine ($"Finding dependencies for {RelativePath}");
+				// pdb
+				FindDependentFiles (v => string.Equals (v.RelativePath, Path.ChangeExtension (RelativePath, "pdb"), StringComparison.OrdinalIgnoreCase));
+
+				// config
+				FindDependentFiles (v => string.Equals (v.RelativePath, RelativePath + ".config", StringComparison.OrdinalIgnoreCase));
+
+				// satellite assemblies
+				var satelliteName = Path.GetFileNameWithoutExtension (RelativePath) + ".resources.dll";
+				FindDependentFiles (v => {
+					if (v.Type != FileType.PEAssembly)
+						return false;
+
+					// if the name isn't the satellite name, it's not a dependent assembly of ours
+					if (!string.Equals (Path.GetFileName (v.RelativePath), satelliteName, StringComparison.OrdinalIgnoreCase)) {
+						Console.WriteLine ($"Not the right satellite assembly name: {v.RelativePath} Name: {Path.GetFileName (v.RelativePath)} satelliteName: {satelliteName}");
+						return false;
+					}
+
+					// if it's not in an immediate subdirectory, it's not a dependent assembly of ours
+					if (!string.Equals (Path.GetDirectoryName (Path.GetDirectoryName (v.RelativePath)), Path.GetDirectoryName (RelativePath), StringComparison.OrdinalIgnoreCase)) {
+						Console.WriteLine ($"Not immediate subdir: {v.RelativePath}");
+						return false;
+					}
+
+					// if the name of the immediate subdirectory isn't a valid culture, then it's not a dependent assembly of ours
+					var immediateSubDir = Path.GetFileName (Path.GetDirectoryName (v.RelativePath));
+					var cultureInfo = CultureInfo.GetCultureInfo (immediateSubDir);
+					if (cultureInfo == null) {
+						Console.WriteLine ($"Not a culture: {v.RelativePath}");
+						return false;
+					}
+
+
+					Console.WriteLine ($"Found: {v.RelativePath}");
+
+					return true;
+				});
+
+				// also add the directories where the satellite assemblies are
+				if (DependentFiles?.Any () == true) {
+					Console.WriteLine ($"Check for subdirs for dependent files for: {RelativePath}");
+					FindDependentFiles (v => {
+						if (v.Type != FileType.Directory && v.Type != FileType.Symlink)
+							return false;
+
+						Console.WriteLine ($"    Testing: {v.RelativePath}");
+
+						return DependentFiles.Any (df => {
+							if (df.Type != FileType.PEAssembly) {
+								Console.WriteLine ($"    {df.RelativePath} is of the wrong type.");
+								return false;
+							}
+							if (Path.GetDirectoryName (df.RelativePath) != v.RelativePath) {
+								Console.WriteLine ($"    {Path.GetDirectoryName (df.RelativePath)} and {v.RelativePath} don't match.");
+								return false;
+							}
+							Console.WriteLine ($"    {df.RelativePath} is of the CORRECT type.");
+							return true;
+						});
+					});
 				}
 			}
 
@@ -61,13 +131,26 @@ namespace Xamarin.MacDev.Tasks {
 				if (other is null)
 					throw new ArgumentNullException (nameof (other));
 
+				if (other.Type != Type)
+					return false;
+
+				if (Type == FileType.Directory)
+					return true;
+
+				if (Type == FileType.Symlink) {
+					var thisTarget = PathUtils.GetSymlinkTarget (FullPath);
+					var otherTarget = PathUtils.GetSymlinkTarget (other.FullPath);
+					return string.Equals (thisTarget, otherTarget, StringComparison.Ordinal);
+				}
+
 				if (!FileUtils.CompareFiles (FullPath, other.FullPath))
 					return false;
 
 				if (DependentFiles != null && other.DependentFiles != null) {
-					// there are different number of dependent files
+					// check if there are different number of dependent files, if so, we're different
 					if (DependentFiles.Count != other.DependentFiles.Count)
 						return false;
+
 					// group by relative path
 					var grouped = DependentFiles.Union (other.DependentFiles).GroupBy (v => v.RelativePath);
 					foreach (var group in grouped) {
@@ -75,47 +158,29 @@ namespace Xamarin.MacDev.Tasks {
 						var files = group.ToArray ();
 						if (files.Length != 2)
 							return false;
-						if (!FileUtils.CompareFiles (files [0].FullPath, files [1].FullPath))
+
+						// compare the dependent files.
+						if (!files [0].IsIdenticalTo (files [1]))
 							return false;
 					}
 				}
 
 				return true;
-			}			
-
-			public void FindDependentFiles (List<Entry> list)
-			{
-				// pdb
-				FindDependentFiles (list, v => string.Equals (v.RelativePath, Path.ChangeExtension (RelativePath, "pdb"), StringComparison.OrdinalIgnoreCase));
-
-				// config
-				FindDependentFiles (list, v => string.Equals (v.RelativePath, RelativePath + ".config", StringComparison.OrdinalIgnoreCase));
-
-				// satellite assemblies
-				var satelliteName = Path.GetFileNameWithoutExtension (RelativePath) + "resources.dll";
-				FindDependentFiles (list, v => {
-					// if the name isn't the satellite name, it's not a dependent assembly of ours
-					if (!string.Equals (Path.GetFileName (v.RelativePath), satelliteName, StringComparison.OrdinalIgnoreCase))
-						return false;
-
-					// if it's not in an immediate subdirectory, it's not a dependent assembly of ours
-					if (!string.Equals (Path.GetDirectoryName (Path.GetDirectoryName (v.RelativePath)), Path.GetDirectoryName (RelativePath), StringComparison.OrdinalIgnoreCase))
-						return false;
-
-					// if the name of the immediate subdirectory isn't a valid culture, then it's not a dependent assembly of ours
-					var immediateSubDir = Path.GetFileName (Path.GetDirectoryName (v.RelativePath));
-					var cultureInfo = CultureInfo.GetCultureInfo (immediateSubDir);
-					if (cultureInfo == null)
-						return false;
-
-					return true;
-				});
 			}
 
 			public void CopyTo (string outputDirectory)
 			{
 				var outputFile = Path.Combine (outputDirectory, RelativePath);
-				File.Copy (FullPath, outputFile, true);
+				if (Type == FileType.Directory) {
+					Directory.CreateDirectory (outputFile);
+				} else if (Type == FileType.Symlink) {
+					Directory.CreateDirectory (Path.GetDirectoryName (outputFile));
+					PathUtils.Symlink (PathUtils.GetSymlinkTarget (FullPath), Path.Combine (outputDirectory, RelativePath));
+				} else {
+					Directory.CreateDirectory (Path.GetDirectoryName (outputFile));
+					File.Copy (FullPath, outputFile, true);
+				}
+
 				if (DependentFiles != null) {
 					foreach (var file in DependentFiles)
 						file.CopyTo (outputDirectory);
@@ -148,7 +213,7 @@ namespace Xamarin.MacDev.Tasks {
 				if (fullInput[fullInput.Length - 1] == Path.DirectorySeparatorChar)
 					fullInput = fullInput.Substring (0, fullInput.Length - 1);
 				// get all the files and subdirectories in the input app bundle
-				var files = Directory.GetFileSystemEntries (fullInput);
+				var files = Directory.GetFileSystemEntries (fullInput, "*", SearchOption.AllDirectories);
 				var entries = new Entries () {
 					BundlePath = fullInput,
 					SpecificSubdirectory = specificSubdirectory,
@@ -161,6 +226,7 @@ namespace Xamarin.MacDev.Tasks {
 						Type = GetFileType (file),
 					};
 					entries.Add (entry);
+					Console.WriteLine ($"File: {file} RelativePath: {relativePath} Type: {entry.Type}");
 				}
 				inputFiles [i] = entries;
 			}
@@ -170,7 +236,7 @@ namespace Xamarin.MacDev.Tasks {
 				var list = inputFiles [i];
 				var assemblies = list.Where (v => v.Type == FileType.PEAssembly).ToArray ();
 				foreach (var assembly in assemblies) {
-					assembly.FindDependentFiles (list);
+					assembly.FindDependentFiles ();
 				}
 			}
 
@@ -178,10 +244,10 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var list in inputFiles) {
 				Console.WriteLine ($"Input files found in {list.BundlePath}:");
 				foreach (var file in list) {
-					Console.WriteLine ($"    {file} Type: {file.Type} Dependent assemblies: {file.DependentFiles?.Count.ToString () ?? "0"}");
+					Console.WriteLine ($"    {file.RelativePath} Type: {file.Type} Dependent files: {file.DependentFiles?.Count.ToString () ?? "0"}");
 					if (file.DependentFiles?.Any () == true) {
 						foreach (var df in file.DependentFiles) {
-							Console.WriteLine ($"        {file} Type: {file.Type}");
+							Console.WriteLine ($"        {df.RelativePath} Type: {df.Type}");
 						}
 					}
 				}
@@ -245,6 +311,9 @@ namespace Xamarin.MacDev.Tasks {
 				case FileType.PEAssembly:
 					MergePEAssembly (outputFile, entries);
 					break;
+				case FileType.Symlink:
+					Log.LogError ($"Can't merge symlinks with different targets."); // FIXME: better error
+					break;
 				default:
 					Log.LogError ($"Unknown merge file type: {entries [0].Type}"); // FIXME: show error
 					break;
@@ -280,6 +349,12 @@ namespace Xamarin.MacDev.Tasks {
 
 		static FileType GetFileType (string path)
 		{
+			if (Directory.Exists (path))
+				return FileType.Directory;
+
+			if (PathUtils.IsSymlink (path))
+				return FileType.Symlink;
+
 			if (path.EndsWith (".exe", StringComparison.Ordinal) || path.EndsWith (".dll", StringComparison.Ordinal))
 				return FileType.PEAssembly;
 
@@ -293,4 +368,3 @@ namespace Xamarin.MacDev.Tasks {
 		}
 	}
 }
-

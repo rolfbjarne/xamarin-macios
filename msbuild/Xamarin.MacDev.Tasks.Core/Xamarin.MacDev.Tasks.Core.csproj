@@ -60,6 +60,9 @@
     <Compile Include="..\..\src\ObjCRuntime\RuntimeException.cs">
       <Link>external\RuntimeException.cs</Link>
     </Compile>
+    <Compile Include="..\..\tools\common\FileUtils.cs">
+      <Link>external\FileUtils.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\tools\mtouch\errors.resx">

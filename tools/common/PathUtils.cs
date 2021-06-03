@@ -117,16 +117,24 @@ namespace Xamarin.Utils
 		}
 
 
-		[DllImport ("/usr/lib/libSystem.dylib")]
+		[DllImport ("/usr/lib/libSystem.dylib", SetLastError = true)]
 		static extern int symlink (string path1, string path2);
 
-		public static bool Symlink (string path1, string path2)
+		public static bool Symlink (string target, string symlink)
 		{
-			return symlink (path1, path2) == 0;
+			return PathUtils.symlink (target, symlink) == 0;
+		}
+
+		public static void CreateSymlink (string symlink, string target)
+		{
+			FileDelete (symlink); // Delete any existing symlinks.
+			var rv = PathUtils.symlink (target, symlink);
+			if (rv != 0)
+				throw new Exception (string.Format ("Could not create the symlink '{0}': {1}", symlink, Marshal.GetLastWin32Error ()));
 		}
 
 		[DllImport ("/usr/lib/libSystem.dylib", SetLastError = true)]
-		static extern int readlink (string path, [Out] byte[] buffer, nint len);
+		static extern int readlink (string path, [Out] byte[] buffer, IntPtr len);
 
 		public static string GetSymlinkTarget (string path)
 		{
@@ -134,7 +142,7 @@ namespace Xamarin.Utils
 			int rv;
 			do {
 				buffer = new byte [(buffer?.Length ?? 0) + 1024];
-				rv = readlink (path, buffer, buffer.Length - 1);
+				rv = readlink (path, buffer, (IntPtr) (buffer.Length - 1));
 			} while (rv == buffer.Length - 1);
 
 			if (rv == -1)

@@ -242,7 +242,8 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_RunRidSpecificBuild" Condition="'$(RuntimeIdentifiers)' != '' And '$(RuntimeIdentifier)' == ''">
+	<!-- Verify that we're not mixing simulator + device RIDs in a single build -->
+	<Target Name="_RunRidSpecificBuild" Condition="'$(RuntimeIdentifiers)' != '' And '$(RuntimeIdentifier)' == ''" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName">
 		<ItemGroup>
 			<_RIDs Include="$(RuntimeIdentifiers)" Condition=" '$(RuntimeIdentifiers)' != '' " />
 		</ItemGroup>

@@ -146,6 +146,18 @@ struct InitializationOptions {
 	const char *EntryAssemblyPath;
 #endif
 	struct AssemblyLocations* AssemblyLocations;
+#if DOTNET
+	// This struct must be kept in sync with the corresponding struct in Runtime.cs, and since we use the same managed code for both MonoVM and CoreCLR,
+	// we can't restrict the following fields to CORECLR_RUNTIME only, we can only exclude it from legacy Xamarin.
+	void *xamarin_objc_msgsend;
+	void *xamarin_objc_msgsend_super;
+	void *xamarin_objc_msgsend_stret;
+	void *xamarin_objc_msgsend_super_stret;
+	void *unhandled_exception_handler;
+	void *reference_tracking_begin_end_callback;
+	void *reference_tracking_is_referenced_callback;
+	void *reference_tracking_tracked_object_entered_finalization;
+#endif
 };
 
 static struct Trampolines trampolines = {
@@ -262,8 +274,10 @@ xamarin_get_parameter_type (MonoMethod *managed_method, int index)
 	if (index == -1) {
 		p = mono_signature_get_return_type (msig);
 	} else {
-		for (int i = 0; i < index + 1; i++)
+		for (int i = 0; i < index + 1; i++) {
+			xamarin_mono_object_release (&p);
 			p = mono_signature_get_params (msig, &iter);
+		}
 	}
 	
 	xamarin_bridge_free_mono_signature (&msig);
@@ -1253,6 +1267,19 @@ xamarin_initialize ()
 	options.EntryAssemblyPath = xamarin_entry_assembly_path;
 #endif
 
+#if defined (CORECLR_RUNTIME)
+	options.xamarin_objc_msgsend = (void *) xamarin_dyn_objc_msgSend;
+	options.xamarin_objc_msgsend_super = (void *) xamarin_dyn_objc_msgSendSuper;
+#if !defined(__aarch64__)
+	options.xamarin_objc_msgsend_stret = (void *) xamarin_dyn_objc_msgSend_stret;
+	options.xamarin_objc_msgsend_super_stret = (void *) xamarin_dyn_objc_msgSendSuper_stret;
+#endif // !defined(__aarch64__)
+	options.unhandled_exception_handler = (void *) &xamarin_coreclr_unhandled_exception_handler;
+	options.reference_tracking_begin_end_callback = (void *) &xamarin_coreclr_reference_tracking_begin_end_callback;
+	options.reference_tracking_is_referenced_callback = (void *) &xamarin_coreclr_reference_tracking_is_referenced_callback;
+	options.reference_tracking_tracked_object_entered_finalization = (void *) &xamarin_coreclr_reference_tracking_tracked_object_entered_finalization;
+#endif // defined(CORECLR_RUNTIME)
+
 	xamarin_bridge_call_runtime_initialize (&options, &exception_gchandle);
 	if (exception_gchandle != INVALID_GCHANDLE) {
 		NSLog (@PRODUCT ": An exception occurred when calling Runtime.Initialize:\n%@", xamarin_print_all_exceptions (exception_gchandle));
@@ -2044,6 +2071,22 @@ xamarin_get_block_for_delegate (MonoMethod *method, MonoObject *delegate, const 
 }
 
 void
+xamarin_release_static_dictionaries ()
+{
+#if defined (CORECLR_RUNTIME)
+	// Release static dictionaries of cached objects. If we end up trying to
+	// add objects to these dictionaries after this point (on a background
+	// thread), the dictionaries will be re-created (and leak) - which
+	// shouldn't be a problem, because at this point the process is about to
+	// exit anyway.
+	pthread_mutex_lock (&wrapper_hash_lock);
+	xamarin_mono_object_release (&block_wrapper_queue);
+	xamarin_mono_object_release (&xamarin_wrapper_hash);
+	pthread_mutex_unlock (&wrapper_hash_lock);
+#endif
+}
+
+void
 xamarin_set_use_sgen (bool value)
 {
 }
@@ -2368,6 +2411,7 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 
 	if (!strcmp (libraryName, "__Internal")) {
 		symbol = dlsym (RTLD_DEFAULT, entrypointName);
+#if !defined (CORECLR_RUNTIME) // we're intercepting objc_msgSend calls using the managed System.Runtime.InteropServices.ObjectiveC.Bridge.SetMessageSendCallback instead.
 #if defined (__i386__) || defined (__x86_64__) || defined (__arm64__)
 	} else if (!strcmp (libraryName, "/usr/lib/libobjc.dylib")) {
 		if (xamarin_marshal_objectivec_exception_mode != MarshalObjectiveCExceptionModeDisable) {
@@ -2384,6 +2428,7 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 			}
 		}
 #endif // defined (__i386__) || defined (__x86_64__) || defined (__arm64__)
+#endif // !defined (CORECLR_RUNTIME)
 	}
 
 	return symbol;

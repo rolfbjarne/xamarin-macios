@@ -6,7 +6,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+#if !NET // https://github.com/xamarin/xamarin-macios/issues/11710
 using System.Json;
+#endif
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -623,6 +625,7 @@ namespace LinkSdk {
 			Assert.NotNull (getInstance (), "Location");
 		}
 		
+#if !NET // https://github.com/xamarin/xamarin-macios/issues/11710
 		[Test]
 		[Culture ("en")]
 		public void Json_Parse_4415 ()
@@ -635,6 +638,7 @@ namespace LinkSdk {
 			f *= 10;
 			Assert.AreNotEqual (f, (float) v, "non-equal");
 		}
+#endif // !NET
 		
 		[Test]
 		[Culture ("en")]
@@ -1063,6 +1067,20 @@ namespace LinkSdk {
 			// empty means a `ret` instruction (and that's true even if IL is stripped)
 			Assert.That (il.Length, Is.EqualTo (1), "il == 1");
 #endif
+		}
+
+		[Test]
+		public void EnsureEventAndDelegateAreNotMismatched ()
+		{
+			var m = typeof (UIApplication).GetMethod ("EnsureEventAndDelegateAreNotMismatched", BindingFlags.Static | BindingFlags.NonPublic);
+			CheckILLinkStubbedMethod (m);
+		}
+
+		[Test]
+		public void EnsureDelegateAssignIsNotOverwritingInternalDelegate ()
+		{
+			var m = typeof (UIApplication).GetMethod ("EnsureDelegateAssignIsNotOverwritingInternalDelegate", BindingFlags.Static | BindingFlags.NonPublic);
+			CheckILLinkStubbedMethod (m);
 		}
 #endif
 

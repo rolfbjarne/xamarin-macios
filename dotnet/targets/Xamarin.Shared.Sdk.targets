@@ -237,6 +237,12 @@
 		</MSBuild>
 		<Warning Text="Published apps: @(_AssemblyPublishDirectories)" />
 
+		<ItemGroup>
+			<_AssemblyPublishDirectories>
+				<SpecificSubDirectory>.xamarin/%(RuntimeIdentifier)</SpecificSubDirectory>
+			</_AssemblyPublishDirectories>
+		</ItemGroup>
+
 		<!-- TODO: figure out inputs and outputs -->
 		<MergeAppBundles
 			SessionId="$(BuildSessionId)"

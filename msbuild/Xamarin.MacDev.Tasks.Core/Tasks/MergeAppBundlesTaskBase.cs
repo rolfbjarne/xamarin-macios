@@ -285,6 +285,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				if (entries.Count == 1) {
 					// just copy the file(s) if there's only one
+					Console.WriteLine ($"The file '{entries [0].RelativePath}' only exists in '{entries [0].AppBundle.BundlePath}' and will be copied to the merged app bundle.");
 					entries [0].CopyTo (OutputAppBundle);
 					continue;
 				}
@@ -299,6 +300,7 @@ namespace Xamarin.MacDev.Tasks {
 				}
 				if (identical) {
 					// All the input files are identical. Just copy the first one into the bundle.
+					Console.WriteLine ($"All the files for '{entries [0].RelativePath}' between all the input app bundles, and will be copied to the merged app bundle.");
 					entries [0].CopyTo (OutputAppBundle); // TODO: only if changed
 					continue;
 				}
@@ -309,7 +311,7 @@ namespace Xamarin.MacDev.Tasks {
 					MergeMachOFiles (outputFile, entries);
 					break;
 				case FileType.PEAssembly:
-					MergePEAssembly (outputFile, entries);
+					MergePEAssembly (entries);
 					break;
 				case FileType.Symlink:
 					Log.LogError ($"Can't merge symlinks with different targets."); // FIXME: better error
@@ -323,10 +325,11 @@ namespace Xamarin.MacDev.Tasks {
 			return !Log.HasLoggedErrors;
 		}
 
-		void MergePEAssembly (string output, IList<Entry> inputs)
+		void MergePEAssembly (IList<Entry> inputs)
 		{
 			foreach (var input in inputs) {
 				var targetDirectory = Path.Combine (input.AppBundle.BundlePath, input.AppBundle.SpecificSubdirectory);
+				Console.WriteLine ($"Copying '{input.RelativePath}' to the specific subdirectory {input.AppBundle.SpecificSubdirectory} for the merged app bundle.");
 				input.CopyTo (targetDirectory);
 			}
 		}
@@ -337,6 +340,8 @@ namespace Xamarin.MacDev.Tasks {
 				Log.LogError ($"// TODO: Should not have dependent files");
 				return;
 			}
+
+			Console.WriteLine ($"Lipoing '{input [0].RelativePath}' for the merged app bundle from the following sources:\n\t{string.Join ("\n\t", input.Select (v => v.FullPath))}");
 
 			// TODO: only if changed
 			var arguments = new List<string> ();

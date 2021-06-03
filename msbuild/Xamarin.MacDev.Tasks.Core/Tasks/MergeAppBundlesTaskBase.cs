@@ -168,9 +168,21 @@ namespace Xamarin.MacDev.Tasks {
 				return true;
 			}
 
-			public void CopyTo (string outputDirectory)
+			public void CopyTo (string outputDirectory, string subDirectory = null)
 			{
-				var outputFile = Path.Combine (outputDirectory, RelativePath);
+				string outputFile;
+
+				if (subDirectory == null) {
+					outputFile = Path.Combine (outputDirectory, RelativePath);
+				} else {
+					var relativeAppDir = Path.GetDirectoryName (RelativePath);
+					if (string.IsNullOrEmpty (relativeAppDir)) {
+						outputFile = Path.Combine (outputDirectory, subDirectory, RelativePath);
+					} else {
+						outputFile = Path.Combine (outputDirectory, relativeAppDir, subDirectory, Path.GetFileName (RelativePath));
+					}
+				}
+
 				if (Type == FileType.Directory) {
 					Directory.CreateDirectory (outputFile);
 				} else if (Type == FileType.Symlink) {
@@ -183,7 +195,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				if (DependentFiles != null) {
 					foreach (var file in DependentFiles)
-						file.CopyTo (outputDirectory);
+						file.CopyTo (outputDirectory, subDirectory);
 				}
 			}
 		}
@@ -300,7 +312,7 @@ namespace Xamarin.MacDev.Tasks {
 				}
 				if (identical) {
 					// All the input files are identical. Just copy the first one into the bundle.
-					Console.WriteLine ($"All the files for '{entries [0].RelativePath}' between all the input app bundles, and will be copied to the merged app bundle.");
+					Console.WriteLine ($"All the files for '{entries [0].RelativePath}' are identical between all the input app bundles, and will be copied to the merged app bundle.");
 					entries [0].CopyTo (OutputAppBundle); // TODO: only if changed
 					continue;
 				}
@@ -328,9 +340,8 @@ namespace Xamarin.MacDev.Tasks {
 		void MergePEAssembly (IList<Entry> inputs)
 		{
 			foreach (var input in inputs) {
-				var targetDirectory = Path.Combine (input.AppBundle.BundlePath, input.AppBundle.SpecificSubdirectory);
 				Console.WriteLine ($"Copying '{input.RelativePath}' to the specific subdirectory {input.AppBundle.SpecificSubdirectory} for the merged app bundle.");
-				input.CopyTo (targetDirectory);
+				input.CopyTo (OutputAppBundle, input.AppBundle.SpecificSubdirectory);
 			}
 		}
 

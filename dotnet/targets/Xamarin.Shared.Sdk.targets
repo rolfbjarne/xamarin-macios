@@ -218,8 +218,11 @@
 	<!-- If we have multiple runtime identifiers, then we need to run an inner build for each of them -->
 	<Target Name="_BuildRidSpecificAppBundle"
 		DependsOnTargets="Build"
-		Returns="$(MSBuildProjectDirectory)/$(_AppBundlePath)"
+		Returns="@(_AssemblyPublishDirectory)"
 		>
+		<ItemGroup>
+			<_AssemblyPublishDirectory Include="$(MSBuildProjectDirectory)/$(_AppBundlePath)" RuntimeIdentifier="$(RuntimeIdentifier)" />
+		</ItemGroup>
 	</Target>
 
 	<Target Name="_RunRidSpecificBuild" Condition="'$(RuntimeIdentifiers)' != '' And '$(RuntimeIdentifier)' == ''">

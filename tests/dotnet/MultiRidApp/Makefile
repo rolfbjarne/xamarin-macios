@@ -16,7 +16,7 @@ all-mac: prepare install-stuff
 
 build-mac:
 	$(DOTNET6) build macOS/*.csproj /bl $(MSBUILD_VERBOSITY)
-	ls -la macOS/bin/Debug/net6.0-macos/*.app
+	ls -laR macOS/bin/Debug/net6.0-macos/*.app
 
 run-mac:
 	./macOS/bin/Debug/net6.0-macos/osx-x64/$(notdir $(CURDIR)).app/Contents/MacOS/$(notdir $(CURDIR))

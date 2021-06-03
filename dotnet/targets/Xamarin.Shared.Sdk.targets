@@ -157,15 +157,32 @@
 
 	<!-- Inject our custom logic into *DependsOn variables -->
 	<PropertyGroup>
-		<BuildDependsOn>
+		<!-- single-rid build -->
+		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' == ''">
 			_ComputePublishTrimmed;
 			BuildOnlySettings;
 			_CollectBundleResources;
 			_PackLibraryResources;
 			_UnpackLibraryResources;
 			$(BuildDependsOn);
-			_RunRidSpecificBuild;
 			_CreateAppBundle;
+			Codesign;
+		</BuildDependsOn>
+
+		<!-- inner build for multi-rid build -->
+		<BuildDependsOn Condition="'$(_IsMultiRidBuild)' == 'true'">
+			_ComputePublishTrimmed;
+			BuildOnlySettings;
+			_CollectBundleResources;
+			_PackLibraryResources;
+			_UnpackLibraryResources;
+			$(BuildDependsOn);
+			_CreateAppBundle;
+		</BuildDependsOn>
+
+		<!-- outer build for multi-rid build -->
+		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' != ''">
+			_RunRidSpecificBuild;
 			Codesign;
 		</BuildDependsOn>
 

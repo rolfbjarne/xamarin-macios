@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0-ios</TargetFramework>
 		<RuntimeIdentifiers Condition="'$(Platform)' != 'iPhoneSimulator'">ios-arm;ios-arm64</RuntimeIdentifiers>
-		<RuntimeIdentifiers Condition="'$(Platform)' == 'iPhoneSimulator'">ios-x86;ios-64</RuntimeIdentifiers>
+		<RuntimeIdentifiers Condition="'$(Platform)' == 'iPhoneSimulator'">iossimulator-x86;iossimulator-x64</RuntimeIdentifiers>
 	</PropertyGroup>
 	<Import Project="..\shared.csproj" />
 </Project>

@@ -183,12 +183,14 @@
 		<!-- outer build for multi-rid build -->
 		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' != ''">
 			_RunRidSpecificBuild;
+			_CreateMergedAppBundle;
 			Codesign;
 		</BuildDependsOn>
 
 		<!-- We re-use ComputeFilesToPublish & CopyFilesToPublishDirectory to copy files to the .app -->
 		<!-- ComputeFilesToPublish will run ILLink -->
-		<CreateAppBundleDependsOn>
+		<!-- single-rid build (either plain single, or inner build for multi-rid build) -->
+		<CreateAppBundleDependsOn Condition="'$(RuntimeIdentifiers)' == ''">
 			_DetectAppManifest;
 			_CopyResourcesToBundle;
 			_CompileCoreMLModels;
@@ -212,10 +214,16 @@
 			_CopyAppExtensionsToBundle;
 		</CreateAppBundleDependsOn>
 
-		<CreateAppBundleDependsOn Condition="'$(_PlatformName)' != 'macOS'">
+		<!-- single-rid build (either plain single, or inner build for multi-rid build) -->
+		<CreateAppBundleDependsOn Condition="'$(_PlatformName)' != 'macOS' And '$(RuntimeIdentifiers)' == ''">
 			_CreateDebugSettings;
 			_CreateDebugConfiguration;
 			$(CreateAppBundleDependsOn);
+		</CreateAppBundleDependsOn>
+
+		<!-- outer build for multi-rid build -->
+		<CreateAppBundleDependsOn Condition="'$(RuntimeIdentifiers)' != ''">
+			_CreateMergedAppBundle;
 		</CreateAppBundleDependsOn>
 	</PropertyGroup>
 
@@ -260,7 +268,9 @@
 				<SpecificSubDirectory>.xamarin/%(RuntimeIdentifier)</SpecificSubDirectory>
 			</_AssemblyPublishDirectories>
 		</ItemGroup>
+	</Target>
 
+	<Target Name="_CreateMergedAppBundle" DependsOnTargets="_RunRidSpecificBuild">
 		<!-- TODO: figure out inputs and outputs -->
 		<MergeAppBundles
 			SessionId="$(BuildSessionId)"
@@ -510,7 +520,13 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_ComputeVariables" DependsOnTargets="_GenerateBundleName;_ComputeFrameworkVariables;ComputeResolvedFilesToPublishList">
+	<PropertyGroup>
+		<_ComputeVariablesDependsOn>_GenerateBundleName;_ComputeFrameworkVariables</_ComputeVariablesDependsOn>
+		<!-- Don't execute ComputeResolvedFileToPublishList if we're in the outer build of a multi-rid build -->
+		<_ComputeVariablesDependsOn Condition="'$(RuntimeIdentifiers)' == ''">$(_ComputeVariablesDependsOn);ComputeResolvedFilesToPublishList</_ComputeVariablesDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_ComputeVariables" DependsOnTargets="$(_ComputeVariablesDependsOn)">
 		<PropertyGroup>
 			<_IntermediateNativeLibraryDir>$(IntermediateOutputPath)nativelibraries/</_IntermediateNativeLibraryDir>
 			<_NativeExecutableName>$(_AppBundleName)</_NativeExecutableName>

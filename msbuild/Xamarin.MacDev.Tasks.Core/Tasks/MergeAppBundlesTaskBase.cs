@@ -202,6 +202,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
+
+			Console.WriteLine ($"Got has {InputAppBundles.Length} inputs:");
+			foreach (var input in InputAppBundles)
+				Console.WriteLine (input);
+
 			// Some validation
 			foreach (var input in InputAppBundles) {
 				if (!Directory.Exists (input.ItemSpec)) {
@@ -285,6 +290,8 @@ namespace Xamarin.MacDev.Tasks {
 					return false;
 				}
 			}
+
+			Console.WriteLine ($"Map has {map.Count} entries");
 
 			// Merge stuff
 			Directory.CreateDirectory (OutputAppBundle);

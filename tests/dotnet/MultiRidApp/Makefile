@@ -19,7 +19,7 @@ build-ios:
 build-iossimulator:
 	rm -Rf iOS/bin iOS/obj
 	$(DOTNET6) build iOS/*.csproj /bl /p:Platform=iPhoneSimulator $(MSBUILD_VERBOSITY)
-	ls -laR iOS/bin/Debug/net6.0-ios/*.app
+	ls -laR iOS/bin/iPhoneSimulator/Debug/net6.0-ios/*.app
 
 all-mac: prepare install-stuff
 	$(MAKE) build-mac

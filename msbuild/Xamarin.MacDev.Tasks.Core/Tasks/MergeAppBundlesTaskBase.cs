@@ -37,6 +37,7 @@ namespace Xamarin.MacDev.Tasks {
 		}
 
 		class Entry {
+			public MergeAppBundlesTaskBase Task;
 			public Entries AppBundle;
 			public string RelativePath;
 			public FileType Type;
@@ -55,14 +56,14 @@ namespace Xamarin.MacDev.Tasks {
 					foreach (var dependentFile in dependentFiles) {
 						AppBundle.Remove (dependentFile);
 						DependentFiles.Add (dependentFile);
-						Console.WriteLine ($"Added dependent file {dependentFile.RelativePath} to {RelativePath}");
+						Task.Log.LogMessage (MessageImportance.Low, $"Added dependent file {dependentFile.RelativePath} to {RelativePath}");
 					}
 				}
 			}
 
 			public void FindDependentFiles ()
 			{
-				Console.WriteLine ($"Finding dependencies for {RelativePath}");
+				Task.Log.LogMessage (MessageImportance.Low, $"Finding dependencies for {RelativePath}");
 				// pdb
 				FindDependentFiles (v => string.Equals (v.RelativePath, Path.ChangeExtension (RelativePath, "pdb"), StringComparison.OrdinalIgnoreCase));
 
@@ -77,13 +78,13 @@ namespace Xamarin.MacDev.Tasks {
 
 					// if the name isn't the satellite name, it's not a dependent assembly of ours
 					if (!string.Equals (Path.GetFileName (v.RelativePath), satelliteName, StringComparison.OrdinalIgnoreCase)) {
-						Console.WriteLine ($"Not the right satellite assembly name: {v.RelativePath} Name: {Path.GetFileName (v.RelativePath)} satelliteName: {satelliteName}");
+						Task.Log.LogMessage (MessageImportance.Low, $"Not the right satellite assembly name: {v.RelativePath} Name: {Path.GetFileName (v.RelativePath)} satelliteName: {satelliteName}");
 						return false;
 					}
 
 					// if it's not in an immediate subdirectory, it's not a dependent assembly of ours
 					if (!string.Equals (Path.GetDirectoryName (Path.GetDirectoryName (v.RelativePath)), Path.GetDirectoryName (RelativePath), StringComparison.OrdinalIgnoreCase)) {
-						Console.WriteLine ($"Not immediate subdir: {v.RelativePath}");
+						Task.Log.LogMessage (MessageImportance.Low, $"Not immediate subdir: {v.RelativePath}");
 						return false;
 					}
 
@@ -91,35 +92,35 @@ namespace Xamarin.MacDev.Tasks {
 					var immediateSubDir = Path.GetFileName (Path.GetDirectoryName (v.RelativePath));
 					var cultureInfo = CultureInfo.GetCultureInfo (immediateSubDir);
 					if (cultureInfo == null) {
-						Console.WriteLine ($"Not a culture: {v.RelativePath}");
+						Task.Log.LogMessage (MessageImportance.Low, $"Not a culture: {v.RelativePath}");
 						return false;
 					}
 
 
-					Console.WriteLine ($"Found: {v.RelativePath}");
+					Task.Log.LogMessage (MessageImportance.Low, $"Found: {v.RelativePath}");
 
 					return true;
 				});
 
 				// also add the directories where the satellite assemblies are
 				if (DependentFiles?.Any () == true) {
-					Console.WriteLine ($"Check for subdirs for dependent files for: {RelativePath}");
+					Task.Log.LogMessage (MessageImportance.Low, $"Check for subdirs for dependent files for: {RelativePath}");
 					FindDependentFiles (v => {
 						if (v.Type != FileType.Directory && v.Type != FileType.Symlink)
 							return false;
 
-						Console.WriteLine ($"    Testing: {v.RelativePath}");
+						Task.Log.LogMessage (MessageImportance.Low, $"    Testing: {v.RelativePath}");
 
 						return DependentFiles.Any (df => {
 							if (df.Type != FileType.PEAssembly) {
-								Console.WriteLine ($"    {df.RelativePath} is of the wrong type.");
+								Task.Log.LogMessage (MessageImportance.Low, $"    {df.RelativePath} is of the wrong type.");
 								return false;
 							}
 							if (Path.GetDirectoryName (df.RelativePath) != v.RelativePath) {
-								Console.WriteLine ($"    {Path.GetDirectoryName (df.RelativePath)} and {v.RelativePath} don't match.");
+								Task.Log.LogMessage (MessageImportance.Low, $"    {Path.GetDirectoryName (df.RelativePath)} and {v.RelativePath} don't match.");
 								return false;
 							}
-							Console.WriteLine ($"    {df.RelativePath} is of the CORRECT type.");
+							Task.Log.LogMessage (MessageImportance.Low, $"    {df.RelativePath} is of the CORRECT type.");
 							return true;
 						});
 					});
@@ -203,9 +204,9 @@ namespace Xamarin.MacDev.Tasks {
 		public override bool Execute ()
 		{
 
-			Console.WriteLine ($"Got has {InputAppBundles.Length} inputs:");
+			Log.LogMessage (MessageImportance.Low, $"Got has {InputAppBundles.Length} inputs:");
 			foreach (var input in InputAppBundles)
-				Console.WriteLine (input);
+				Log.LogMessage (MessageImportance.Low, input.ItemSpec);
 
 			// Some validation
 			foreach (var input in InputAppBundles) {
@@ -238,12 +239,13 @@ namespace Xamarin.MacDev.Tasks {
 				foreach (var file in files) {
 					var relativePath = file.Substring (fullInput.Length + 1);
 					var entry = new Entry {
+						Task = this,
 						RelativePath = relativePath,
 						AppBundle = entries,
 						Type = GetFileType (file),
 					};
 					entries.Add (entry);
-					Console.WriteLine ($"File: {file} RelativePath: {relativePath} Type: {entry.Type}");
+					Log.LogMessage (MessageImportance.Low, $"File: {file} RelativePath: {relativePath} Type: {entry.Type}");
 				}
 				inputFiles [i] = entries;
 			}
@@ -259,12 +261,12 @@ namespace Xamarin.MacDev.Tasks {
 
 			// List the input
 			foreach (var list in inputFiles) {
-				Console.WriteLine ($"Input files found in {list.BundlePath}:");
+				Log.LogMessage (MessageImportance.Low, $"Input files found in {list.BundlePath}:");
 				foreach (var file in list) {
-					Console.WriteLine ($"    {file.RelativePath} Type: {file.Type} Dependent files: {file.DependentFiles?.Count.ToString () ?? "0"}");
+					Log.LogMessage (MessageImportance.Low, $"    {file.RelativePath} Type: {file.Type} Dependent files: {file.DependentFiles?.Count.ToString () ?? "0"}");
 					if (file.DependentFiles?.Any () == true) {
 						foreach (var df in file.DependentFiles) {
-							Console.WriteLine ($"        {df.RelativePath} Type: {df.Type}");
+							Log.LogMessage (MessageImportance.Low, $"        {df.RelativePath} Type: {df.Type}");
 						}
 					}
 				}
@@ -291,7 +293,7 @@ namespace Xamarin.MacDev.Tasks {
 				}
 			}
 
-			Console.WriteLine ($"Map has {map.Count} entries");
+			Log.LogMessage (MessageImportance.Low, $"Map has {map.Count} entries");
 
 			// Merge stuff
 			Directory.CreateDirectory (OutputAppBundle);
@@ -304,7 +306,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				if (entries.Count == 1) {
 					// just copy the file(s) if there's only one
-					Console.WriteLine ($"The file '{entries [0].RelativePath}' only exists in '{entries [0].AppBundle.BundlePath}' and will be copied to the merged app bundle.");
+					Log.LogMessage (MessageImportance.Low, $"The file '{entries [0].RelativePath}' only exists in '{entries [0].AppBundle.BundlePath}' and will be copied to the merged app bundle.");
 					entries [0].CopyTo (OutputAppBundle);
 					continue;
 				}
@@ -319,7 +321,7 @@ namespace Xamarin.MacDev.Tasks {
 				}
 				if (identical) {
 					// All the input files are identical. Just copy the first one into the bundle.
-					Console.WriteLine ($"All the files for '{entries [0].RelativePath}' are identical between all the input app bundles, and will be copied to the merged app bundle.");
+					Log.LogMessage (MessageImportance.Low, $"All the files for '{entries [0].RelativePath}' are identical between all the input app bundles, and will be copied to the merged app bundle.");
 					entries [0].CopyTo (OutputAppBundle); // TODO: only if changed
 					continue;
 				}
@@ -336,7 +338,7 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogError ($"Can't merge symlinks with different targets."); // FIXME: better error
 					break;
 				default:
-					Log.LogError ($"Unknown merge file type: {entries [0].Type}"); // FIXME: show error
+					Log.LogError ($"Unknown merge file type: {entries [0].Type} for '{entries [0].FullPath}"); // FIXME: show error
 					break;
 				}
 			}
@@ -347,7 +349,7 @@ namespace Xamarin.MacDev.Tasks {
 		void MergePEAssembly (IList<Entry> inputs)
 		{
 			foreach (var input in inputs) {
-				Console.WriteLine ($"Copying '{input.RelativePath}' to the specific subdirectory {input.AppBundle.SpecificSubdirectory} for the merged app bundle.");
+				Log.LogMessage (MessageImportance.Low, $"Copying '{input.RelativePath}' to the specific subdirectory {input.AppBundle.SpecificSubdirectory} for the merged app bundle.");
 				input.CopyTo (OutputAppBundle, input.AppBundle.SpecificSubdirectory);
 			}
 		}
@@ -359,7 +361,7 @@ namespace Xamarin.MacDev.Tasks {
 				return;
 			}
 
-			Console.WriteLine ($"Lipoing '{input [0].RelativePath}' for the merged app bundle from the following sources:\n\t{string.Join ("\n\t", input.Select (v => v.FullPath))}");
+			Log.LogMessage (MessageImportance.Low, $"Lipoing '{input [0].RelativePath}' for the merged app bundle from the following sources:\n\t{string.Join ("\n\t", input.Select (v => v.FullPath))}");
 
 			// TODO: only if changed
 			var arguments = new List<string> ();

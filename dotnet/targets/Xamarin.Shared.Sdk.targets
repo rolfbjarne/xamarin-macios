@@ -158,7 +158,7 @@
 	<!-- Inject our custom logic into *DependsOn variables -->
 	<PropertyGroup>
 		<!-- single-rid build -->
-		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' == ''">
+		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' == '' And '$(_IsMultiRidBuild)' != 'true'">
 			_ComputePublishTrimmed;
 			BuildOnlySettings;
 			_CollectBundleResources;

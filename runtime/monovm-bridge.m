@@ -397,6 +397,10 @@ xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, cons
 {
 	int rv;
 
+	if (xamarin_runtime_configuration_name != NULL) {
+		fprintf (stderr, "TODO: monovm_runtimeconfig_initialize (args, cleanup, NULL);\n");
+	}
+
 	rv = monovm_initialize (propertyCount, propertyKeys, propertyValues);
 
 	LOG_MONOVM (stderr, "xamarin_vm_initialize (%i, %p, %p): rv: %i\n", propertyCount, propertyKeys, propertyValues, rv);

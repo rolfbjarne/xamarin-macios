@@ -511,9 +511,9 @@
 
 	<!-- App bundle creation tasks -->
 
-	<Target Name="_CreateRuntimeConfiguration" DependsOnTargets="GenerateBuildRuntimeConfigurationFiles;_ComputePublishLocation">
+	<Target Name="_CreateRuntimeConfiguration" Condition="'$(UseMonoRuntime)' != 'false'" DependsOnTargets="GenerateBuildRuntimeConfigurationFiles;_ComputePublishLocation">
 		<PropertyGroup>
-			<_ParsedRuntimeConfigFilePath Condition="'$(_ParsedRuntimeConfigFilePath)' == ''">$(_AssemblyPublishDir)(_RuntimeConfigurationFile)</_ParsedRuntimeConfigFilePath>
+			<_ParsedRuntimeConfigFilePath Condition="'$(_ParsedRuntimeConfigFilePath)' == ''">$(_AssemblyPublishDir)\$(_RuntimeConfigurationFile)</_ParsedRuntimeConfigFilePath>
 		</PropertyGroup>
 		<ItemGroup>
 			<!-- List all the properties passed to xamarin_bridge_vm_initialize in xamarin_vm_initialize (in runtime.m) -->
@@ -712,7 +712,7 @@
 
 	<Target Name="_ComputePublishLocation" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments">
 		<PropertyGroup>
-			<_AssemblyPublishDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(MSBuildProjectDirectory)$(_AppBundlePath)\</_AssemblyPublishDir>
+			<_AssemblyPublishDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(MSBuildProjectDirectory)\$(_AppBundlePath)\</_AssemblyPublishDir>
 			<_AssemblyPublishDir Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(MSBuildProjectDirectory)$(_AppBundlePath)\Contents\$(_CustomBundleName)\</_AssemblyPublishDir>
 			<_DylibPublishDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(MSBuildProjectDirectory)$(_AppBundlePath)\</_DylibPublishDir>
 			<_DylibPublishDir Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(MSBuildProjectDirectory)$(_AppBundlePath)\Contents\$(_CustomBundleName)\</_DylibPublishDir>

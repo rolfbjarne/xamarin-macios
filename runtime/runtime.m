@@ -79,6 +79,7 @@ enum MarshalObjectiveCExceptionMode xamarin_marshal_objectivec_exception_mode = 
 enum MarshalManagedExceptionMode xamarin_marshal_managed_exception_mode = MarshalManagedExceptionModeDefault;
 enum XamarinLaunchMode xamarin_launch_mode = XamarinLaunchModeApp;
 bool xamarin_supports_dynamic_registration = true;
+const char *xamarin_runtime_configuration_name = NULL;
 
 /* Callbacks */
 

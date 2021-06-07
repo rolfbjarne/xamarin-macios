@@ -14,3 +14,6 @@ prepare:
 
 today:
 	$(MAKE) prepare && $(MAKE) build; say today done
+
+run:
+	$(DOTNET6) build /t:Run /bl /v:diag

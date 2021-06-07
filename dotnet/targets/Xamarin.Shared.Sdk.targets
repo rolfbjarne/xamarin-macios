@@ -10,8 +10,6 @@
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.LinkNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SymbolStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
 
-	<UsingTask TaskName="RuntimeConfigParserTask" AssemblyFile="$(RuntimeConfigParserTasksAssemblyPath)" />
-
 	<!-- Project types and how do we distinguish between them
 
 									  OutputType   Custom variable
@@ -513,10 +511,9 @@
 
 	<!-- App bundle creation tasks -->
 
-	<Target Name="_CreateRuntimeConfiguration">
+	<Target Name="_CreateRuntimeConfiguration" DependsOnTargets="GenerateBuildRuntimeConfigurationFiles;_ComputePublishLocation">
 		<PropertyGroup>
-			<_RuntimeConfigFilePath>$(PublishDir)$(AssemblyName).runtimeconfig.json</_RuntimeConfigFilePath>
-			<_ParsedRuntimeConfigFilePath>$(_AssemblyPublishDir)(_RuntimeConfigurationFile)</_ParsedRuntimeConfigFilePath>
+			<_ParsedRuntimeConfigFilePath Condition="'$(_ParsedRuntimeConfigFilePath)' == ''">$(_AssemblyPublishDir)(_RuntimeConfigurationFile)</_ParsedRuntimeConfigFilePath>
 		</PropertyGroup>
 		<ItemGroup>
 			<!-- List all the properties passed to xamarin_bridge_vm_initialize in xamarin_vm_initialize (in runtime.m) -->
@@ -525,7 +522,7 @@
 			<_RuntimeConfigReservedProperties Include="ICU_DAT_FILE_PATH" />
 		</ItemGroup>
 		<RuntimeConfigParserTask
-			RuntimeConfigFile="$(_RuntimeConfigFilePath)"
+			RuntimeConfigFile="$(ProjectRuntimeConfigFilePath)"
 			OutputFile="$(_ParsedRuntimeConfigFilePath)"
 			RuntimeConfigReservedProperties="@(_RuntimeConfigReservedProperties)">
 		</RuntimeConfigParserTask>

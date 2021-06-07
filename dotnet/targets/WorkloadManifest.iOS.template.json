@@ -8,10 +8,15 @@
 				"Microsoft.@PLATFORM@.Windows.Sdk",
 				"Microsoft.@PLATFORM@.Ref",
 				"Microsoft.@PLATFORM@.Templates",
+				"Microsoft.NET.Runtime.RuntimeConfigParser.Task",
 			],
 		}
 	},
 	"packs": {
+		"Microsoft.NET.Runtime.RuntimeConfigParser.Task": {
+			"kind": "Sdk",
+			"version": "@BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION@"
+		},
 		"Microsoft.@PLATFORM@.Sdk": {
 			"kind": "sdk",
 			"version": "@VERSION@"

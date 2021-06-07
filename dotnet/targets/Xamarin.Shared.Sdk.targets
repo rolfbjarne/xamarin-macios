@@ -10,6 +10,8 @@
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.LinkNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SymbolStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
 
+	<UsingTask TaskName="RuntimeConfigParserTask" AssemblyFile="$(RuntimeConfigParserTasksAssemblyPath)" />
+
 	<!-- Project types and how do we distinguish between them
 
 									  OutputType   Custom variable
@@ -213,7 +215,7 @@
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;">
+	<Target Name="_ComputeLinkerArguments" DependsOnTargets="_ComputeLinkMode;_ComputeFrameworkVariables;_ComputeFrameworkAssemblies;ComputeResolvedFilesToPublishList;_ParseBundlerArguments;_ComputeVariables;_CreateRuntimeConfiguration">
 		<!-- Validate the linker mode -->
 		<Error Text="Invalid link mode: '$(_LinkMode)'. Valid link modes are: 'None', 'SdkOnly' and 'Full'" Condition="'$(_LinkMode)' != 'None' And '$(_LinkMode)' != 'SdkOnly' And '$(_LinkMode)' != 'Full'" />
 
@@ -254,6 +256,7 @@
 				Platform=$(_PlatformName)
 				PlatformAssembly=$(_PlatformAssemblyName).dll
 				Registrar=$(_BundlerRegistrar)
+				RuntimeConfigurationFile=$(_RuntimeConfigurationFile)
 				SdkDevPath=$(_SdkDevPath)
 				SdkRootDirectory=$(_XamarinSdkRootDirectory)
 				SdkVersion=$(_SdkVersion)
@@ -486,6 +489,8 @@
 
 			<_EmbeddedFrameworksRPath Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">@executable_path/Frameworks</_EmbeddedFrameworksRPath>
 			<_EmbeddedFrameworksRPath Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">@executable_path/../Frameworks/</_EmbeddedFrameworksRPath>
+
+			<_RuntimeConfigurationFile>runtimeconfig.bin</_RuntimeConfigurationFile>
 		</PropertyGroup>
 
 		<ItemGroup>
@@ -507,6 +512,25 @@
 	</Target>
 
 	<!-- App bundle creation tasks -->
+
+	<Target Name="_CreateRuntimeConfiguration">
+		<PropertyGroup>
+			<_RuntimeConfigFilePath>$(PublishDir)$(AssemblyName).runtimeconfig.json</_RuntimeConfigFilePath>
+			<_ParsedRuntimeConfigFilePath>$(_AssemblyPublishDir)(_RuntimeConfigurationFile)</_ParsedRuntimeConfigFilePath>
+		</PropertyGroup>
+		<ItemGroup>
+			<!-- List all the properties passed to xamarin_bridge_vm_initialize in xamarin_vm_initialize (in runtime.m) -->
+			<_RuntimeConfigReservedProperties Include="APP_PATHS" />
+			<_RuntimeConfigReservedProperties Include="PINVOKE_OVERRIDE" />
+			<_RuntimeConfigReservedProperties Include="ICU_DAT_FILE_PATH" />
+		</ItemGroup>
+		<RuntimeConfigParserTask
+			RuntimeConfigFile="$(_RuntimeConfigFilePath)"
+			OutputFile="$(_ParsedRuntimeConfigFilePath)"
+			RuntimeConfigReservedProperties="@(_RuntimeConfigReservedProperties)">
+		</RuntimeConfigParserTask>
+	</Target>
+
 	<Target Name="_AOTCompile"
 			Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS'"
 			DependsOnTargets="_ComputeVariables"

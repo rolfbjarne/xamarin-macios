@@ -12,6 +12,8 @@
 
 #include <TargetConditionals.h>
 #include <pthread.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 
 #if !DOTNET && TARGET_OS_OSX
 #define LEGACY_XAMARIN_MAC 1
@@ -392,14 +394,71 @@ xamarin_create_system_entry_point_not_found_exception (const char *entrypoint)
 
 #if DOTNET
 
+static void
+xamarin_runtime_config_cleanup (MonovmRuntimeConfigArguments *args, void *user_data)
+{
+	munmap ((void *) args->runtimeconfig.data.data, (size_t) args->runtimeconfig.data.data_len);
+	free (args);
+}
+
+static void
+xamarin_initialize_runtime_config ()
+{
+	if (xamarin_runtime_configuration_name == NULL) {
+		LOG (PRODUCT ": No runtime config file provided at build time.\n");
+		return;
+	}
+
+	const char *app_path = xamarin_get_bundle_path ();
+	char path [1024];
+	if (!xamarin_locate_assembly_resource_for_root (app_path, NULL, xamarin_runtime_configuration_name, path, sizeof (path))) {
+		LOG (PRODUCT ": Could not locate the runtime config file '%s' in the app bundle: %s\n", xamarin_runtime_configuration_name, app_path);
+		return;
+	}
+
+	int fd = open (path, O_RDONLY);
+	if (fd < 0) {
+		LOG (PRODUCT ": Could not load the runtime config file %s: %s\n", path, strerror (errno));
+		return;
+	}
+
+	struct stat fdstat;
+	if (fstat (fd, &fdstat) == -1) {
+		LOG (PRODUCT ": Unable to get the size of the config file %s: %s\n", path, strerror (errno));
+		close (fd);
+		return;
+	}
+
+	size_t size = (size_t) fdstat.st_size;
+	void *ptr = mmap (NULL, size, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
+	if (ptr == MAP_FAILED) {
+		LOG (PRODUCT ": Could not mmap the runtime config file %s: %s\n", path, strerror (errno));
+		close (fd);
+		return;
+	}
+
+	close (fd);
+
+	MonovmRuntimeConfigArguments *args = (MonovmRuntimeConfigArguments *) calloc (sizeof (MonovmRuntimeConfigArguments), 1);
+	args->kind = 1; // pointer to image data
+	args->runtimeconfig.data.data = (const char *) ptr;
+	args->runtimeconfig.data.data_len = (uint32_t) size;
+
+	int rv = monovm_runtimeconfig_initialize (args, xamarin_runtime_config_cleanup, NULL);
+	if (rv != 0) {
+		LOG_MONOVM (PRODUCT ": Failed to load the runtime config file %s: %i\n", path, rv);
+		return;
+	}
+
+	LOG_MONOVM (PRODUCT ": Loaded the runtime config file %s\n", path);
+}
+
 bool
 xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
 {
 	int rv;
 
-	if (xamarin_runtime_configuration_name != NULL) {
-		fprintf (stderr, "TODO: monovm_runtimeconfig_initialize (args, cleanup, NULL);\n");
-	}
+	xamarin_initialize_runtime_config ();
 
 	rv = monovm_initialize (propertyCount, propertyKeys, propertyValues);
 

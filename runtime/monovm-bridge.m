@@ -397,7 +397,7 @@ xamarin_create_system_entry_point_not_found_exception (const char *entrypoint)
 static void
 xamarin_runtime_config_cleanup (MonovmRuntimeConfigArguments *args, void *user_data)
 {
-	munmap ((void *) args->runtimeconfig.data.data, (size_t) args->runtimeconfig.data.data_len);
+	free ((char *) args->runtimeconfig.name.path);
 	free (args);
 }
 
@@ -416,33 +416,9 @@ xamarin_initialize_runtime_config ()
 		return;
 	}
 
-	int fd = open (path, O_RDONLY);
-	if (fd < 0) {
-		LOG (PRODUCT ": Could not load the runtime config file %s: %s\n", path, strerror (errno));
-		return;
-	}
-
-	struct stat fdstat;
-	if (fstat (fd, &fdstat) == -1) {
-		LOG (PRODUCT ": Unable to get the size of the config file %s: %s\n", path, strerror (errno));
-		close (fd);
-		return;
-	}
-
-	size_t size = (size_t) fdstat.st_size;
-	void *ptr = mmap (NULL, size, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
-	if (ptr == MAP_FAILED) {
-		LOG (PRODUCT ": Could not mmap the runtime config file %s: %s\n", path, strerror (errno));
-		close (fd);
-		return;
-	}
-
-	close (fd);
-
 	MonovmRuntimeConfigArguments *args = (MonovmRuntimeConfigArguments *) calloc (sizeof (MonovmRuntimeConfigArguments), 1);
-	args->kind = 1; // pointer to image data
-	args->runtimeconfig.data.data = (const char *) ptr;
-	args->runtimeconfig.data.data_len = (uint32_t) size;
+	args->kind = 0; // Path of runtimeconfig.blob
+	args->runtimeconfig.name.path = strdup (path);
 
 	int rv = monovm_runtimeconfig_initialize (args, xamarin_runtime_config_cleanup, NULL);
 	if (rv != 0) {

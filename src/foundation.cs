@@ -68,7 +68,7 @@ using UIKit;
 using System;
 using System.ComponentModel;
 
-#if MONOMAC
+#if MONOMAC || __MACCATALYST__
 // In Apple headers, this is a typedef to a pointer to a private struct
 using NSAppleEventManagerSuspensionID = System.IntPtr;
 // These two are both four char codes i.e. defined on a uint with constant like 'xxxx'
@@ -98,6 +98,11 @@ using CoreImage;
 
 #if !IOS
 using APActivationPayload = Foundation.NSObject;
+#endif
+
+#if __MACCATALYST__
+using NSAppleEventSendOptions = Foundation.NSObject;
+using NSBezierPath = Foundation.NSObject;
 #endif
 
 namespace Foundation {
@@ -13870,9 +13875,12 @@ namespace Foundation
 		[Export ("createCommandInstance")]
 		IntPtr CreateCommandInstancePtr ();
 	}
+#endif // MONOMAC
 
+#if MONOMAC || __MACCATALYST__
 	[BaseType (typeof (NSObject))]
 	[DesignatedDefaultCtor]
+	[MacCatalyst (13, 0)]
 	interface NSAffineTransform : NSSecureCoding, NSCopying {
 		[Export ("initWithTransform:")]
 		IntPtr Constructor (NSAffineTransform transform);
@@ -13907,6 +13915,7 @@ namespace Foundation
 		[Export ("transformSize:")]
 		CGSize TransformSize (CGSize aSize);
 		
+		[NoMacCatalyst]
 		[Export ("transformBezierPath:")]
 		NSBezierPath TransformBezierPath (NSBezierPath path);
 
@@ -13919,7 +13928,9 @@ namespace Foundation
 		[Export ("transformStruct")]
 		CGAffineTransform TransformStruct { get; set; }
 	}
+#endif // MONOMAC || __MACCATALYST
 
+#if MONOMAC
 	[Deprecated (PlatformName.MacOSX, 10, 13, message : "Use 'NSXpcConnection' instead.")]
 	[Deprecated (PlatformName.iOS, 11, 0, message : "Use 'NSXpcConnection' instead.")]
 	[Deprecated (PlatformName.WatchOS, 2, 0, message : "Use 'NSXpcConnection' instead.")]
@@ -14124,8 +14135,10 @@ namespace Foundation
 		void Invert ();
 
 	}
+#endif // MONOMAC
 
 	[BaseType (typeof (NSObject))]
+	[MacCatalyst (15, 0)]
 	interface NSAppleEventDescriptor : NSSecureCoding, NSCopying {
 		[Static]
 		[Export ("nullDescriptor")]
@@ -14321,6 +14334,7 @@ namespace Foundation
 		double DoubleValue { get; }
 
 		[Mac (10,11)]
+		[NoMacCatalyst]
 		[Export ("sendEventWithOptions:timeout:error:")]
 		[return: NullAllowed]
 		NSAppleEventDescriptor SendEvent (NSAppleEventSendOptions sendOptions, double timeoutInSeconds, [NullAllowed] out NSError error);
@@ -14338,6 +14352,7 @@ namespace Foundation
 		NSUrl FileURLValue { get; }
 	}
 
+#if MONOMAC
 	[BaseType (typeof (NSObject))]
 	interface NSAppleEventManager {
 		[Static]
@@ -14597,7 +14612,9 @@ namespace Foundation
 		[Export ("userNotificationCenter:shouldPresentNotification:"), DelegateName ("UNCShouldPresentNotification"), DefaultValue (false)]
 		bool ShouldPresentNotification (NSUserNotificationCenter center, NSUserNotification notification);
 	}
+#endif // MONOMAC
 
+	[MacCatalyst (13, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSAppleScript : NSCopying {
@@ -14635,7 +14652,6 @@ namespace Foundation
 		[Export ("richTextSource", ArgumentSemantic.Retain)]
 		NSAttributedString RichTextSource { get; }
 	}
-#endif // MONOMAC
 
 	[iOS (10,0)][TV (10,0)][Watch (3,0)][Mac (10,12)]
 	[BaseType (typeof (NSFormatter), Name = "NSISO8601DateFormatter")]

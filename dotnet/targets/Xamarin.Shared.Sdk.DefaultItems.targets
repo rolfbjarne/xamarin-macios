@@ -29,6 +29,20 @@
     <TargetArchitectures Condition=" '$(_PlatformName)' != 'macOS' And '$(MtouchArch)' != '' ">$(MtouchArch)</TargetArchitectures>
   </PropertyGroup>
   <!-- If the old-style variables aren't set, figure it out using RuntimeIdentifier. -->
+  <!-- First set the default RuntimeIdentifier if not already specified. -->
+  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == '' And '$(RuntimeIdentifiers)' == '' ">
+    <!--
+      We can't actually set RuntimeIdentifier here, because there has been
+      logic executed earlier that have already made some decisions based on
+      the (inexistent) RuntimeIdentifier. Instead we set RuntimeIdentifiers
+      of a single architecture, which will cause us to do an inner build
+      with RuntimeIdentifier set.
+    -->
+    <RuntimeIdentifiers Condition="'$(_PlatformName)' == 'iOS'">iossimulator-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="'$(_PlatformName)' == 'tvOS'">tvossimulator-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="'$(_PlatformName)' == 'macOS'">osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="'$(_PlatformName)' == 'MacCatalyst'">maccatalyst-x64</RuntimeIdentifiers>
+  </PropertyGroup>
   <!-- This is a variation of https://github.com/dotnet/sdk/blob/873d79d861cbd001488414b9875e53acbeaed890/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.RuntimeIdentifierInference.targets#L68-L96 -->
   <!-- This doesn't cover every single possibility (in particular it does not handle ARMv7s, either as a thin or fat option, and the same for ARMv7k), but that can be done by passing /p:TargetArchitectures=ARMv7s to msbuild -->
   <PropertyGroup Condition=" '$(TargetArchitectures)' == '' And '$(_PlatformName)' == 'iOS' ">

@@ -39,12 +39,22 @@ using CoreFoundation;
 using CoreImage;
 using CoreAnimation;
 using CoreData;
+#if !__MACCATALYST__
 using OpenGL;
+#endif
 using CoreVideo;
 using CloudKit;
 using UniformTypeIdentifiers;
+#if __MACCATALYST__
+using UIKit;
+#endif
 
 using CGGlyph = System.UInt16;
+#if __MACCATALYST__
+using CAOpenGLLayer = Foundation.NSObject;
+using CGLContext = Foundation.NSObject;
+using CGLPixelFormat = Foundation.NSObject;
+#endif
 
 namespace AppKit {
 	//[BaseType (typeof (NSObject))]
@@ -8555,6 +8565,7 @@ namespace AppKit {
 	[ThreadSafe]
 	[BaseType (typeof (NSObject))]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message : "Use 'Metal' Framework instead.")] 
+	[NoMacCatalyst]
 	interface NSOpenGLPixelFormat : NSCoding {
 		[Export ("initWithData:")]
 		IntPtr Constructor (NSData attribs);
@@ -8604,6 +8615,7 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // warns with "invalid context" at runtime
 	[Deprecated (PlatformName.MacOSX, 10, 14, message : "Use 'Metal' Framework instead.")] 
+	[NoMacCatalyst]
 	interface NSOpenGLContext {
 		[Export ("initWithFormat:shareContext:")]
 		IntPtr Constructor (NSOpenGLPixelFormat format, [NullAllowed] NSOpenGLContext shareContext);
@@ -20763,7 +20775,7 @@ namespace AppKit {
 		[Export ("animationBehavior")]
 		NSWindowAnimationBehavior AnimationBehavior { get; set; }
 
-#if !MONOMAC
+#if !MONOMAC && !__MACCATALYST__
 		//
 		// Fields
 		//
@@ -25769,6 +25781,7 @@ namespace AppKit {
 		CKShare GetCloudShare (INSValidatedUserInterfaceItem item);
 	}
 
+	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message : "Use 'Metal' Framework instead.")]
 	[BaseType (typeof(CAOpenGLLayer))]
 	interface NSOpenGLLayer

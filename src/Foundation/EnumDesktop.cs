@@ -25,7 +25,7 @@
 // FIXME: EnumDesktop.cs should be merged into Enums.cs
 using System;
 
-#if MONOMAC
+#if MONOMAC || __MACCATALYST__
 
 using ObjCRuntime;
 

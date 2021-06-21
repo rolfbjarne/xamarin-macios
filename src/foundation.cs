@@ -68,7 +68,6 @@ using UIKit;
 using System;
 using System.ComponentModel;
 
-#if MONOMAC || __MACCATALYST__
 // In Apple headers, this is a typedef to a pointer to a private struct
 using NSAppleEventManagerSuspensionID = System.IntPtr;
 // These two are both four char codes i.e. defined on a uint with constant like 'xxxx'
@@ -77,6 +76,7 @@ using OSType = System.UInt32;
 // typedef double NSTimeInterval;
 using NSTimeInterval = System.Double;
 
+#if MONOMAC || __MACCATALYST__
 // dummy usings to make code compile without having the actual types available (for [NoMac] to work)
 using NSDirectionalEdgeInsets = Foundation.NSObject;
 using UIEdgeInsets = Foundation.NSObject;
@@ -101,8 +101,13 @@ using APActivationPayload = Foundation.NSObject;
 #endif
 
 #if __MACCATALYST__
-using NSAppleEventSendOptions = Foundation.NSObject;
 using NSBezierPath = Foundation.NSObject;
+#endif
+
+#if !__MACOS__ && !__MACCATALYST__
+using AEEventClass = System.UInt32;
+using AEEventID = System.UInt32;
+using NSAppleEventSendOptions = System.UInt64;
 #endif
 
 namespace Foundation {
@@ -14139,6 +14144,9 @@ namespace Foundation
 
 	[BaseType (typeof (NSObject))]
 	[MacCatalyst (15, 0)]
+	[NoTV]
+	[NoiOS]
+	[NoWatch]
 	interface NSAppleEventDescriptor : NSSecureCoding, NSCopying {
 		[Static]
 		[Export ("nullDescriptor")]
@@ -14619,6 +14627,9 @@ namespace Foundation
 	}
 #endif // MONOMAC
 
+	[NoiOS]
+	[NoTV]
+	[NoWatch]
 	[MacCatalyst (13, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]

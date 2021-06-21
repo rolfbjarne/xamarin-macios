@@ -36,14 +36,19 @@ using NSWindow=System.Object;
 using NSTextContainer=System.Object;
 using NSTextStorage=System.Object;
 #endif // WATCH
+#else
+using UICollectionLayoutListConfiguration=System.Object;
+using UIContentInsetsReference=System.Object;
 #endif // !MONOMAC
 
 #if MONOMAC
 using TextAlignment=AppKit.NSTextAlignment;
 using LineBreakMode=AppKit.NSLineBreakMode;
+using CollectionLayoutSectionOrthogonalScrollingBehavior=AppKit.NSCollectionLayoutSectionOrthogonalScrollingBehavior;
 #else
 using TextAlignment=UIKit.UITextAlignment;
 using LineBreakMode=UIKit.UILineBreakMode;
+using CollectionLayoutSectionOrthogonalScrollingBehavior=UIKit.UICollectionLayoutSectionOrthogonalScrollingBehavior;
 #endif
 
 #if MONOMAC
@@ -1611,7 +1616,7 @@ namespace UIKit {
 		UIContentInsetsReference ContentInsetsReference { get; set; }
 
 		[Export ("orthogonalScrollingBehavior", ArgumentSemantic.Assign)]
-		UICollectionLayoutSectionOrthogonalScrollingBehavior OrthogonalScrollingBehavior { get; set; }
+		CollectionLayoutSectionOrthogonalScrollingBehavior OrthogonalScrollingBehavior { get; set; }
 
 		[Export ("boundarySupplementaryItems", ArgumentSemantic.Copy)]
 		NSCollectionLayoutBoundarySupplementaryItem [] BoundarySupplementaryItems { get; set; }

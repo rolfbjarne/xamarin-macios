@@ -1225,6 +1225,7 @@ namespace AppKit {
 		Natural = 4
 	}
 
+#if !__MACCATALYST__ // This enum exists in the Foundation namespace as well
 	[Flags]
 	[Native]
 	public enum NSWritingDirection : long {
@@ -1235,6 +1236,7 @@ namespace AppKit {
 		Override = 2,
 #endif
 	}
+#endif // !__MACCATALYST__
 
 #if !XAMCORE_4_0
 	[Native]
@@ -1278,6 +1280,7 @@ namespace AppKit {
 		AsKeyedArchive = 4
 	}
 
+#if !__MACCATALYST__ // This enum is also defined in the Foundation namespace.
 	[Native]
 	public enum NSUnderlineStyle : long {
 		None                = 0x00,
@@ -1291,6 +1294,7 @@ namespace AppKit {
 		PatternDashDotDot 	= 0x0400,
 		ByWord 				= 0x8000
 	}
+#endif // !__MACCATALYST__
 
 	// Convenience enum, untyped in ObjC
 	public enum NSUnderlinePattern : int {

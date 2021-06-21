@@ -37,6 +37,7 @@ namespace Foundation {
 		DocFormat
 	}
 
+#if !__MACCATALYST__
 	// Utility enum, ObjC uses NSString.  Not passed to the API, so doesn't need nint.
 	public enum NSDocumentType {
 		Unknown = -1,
@@ -51,6 +52,7 @@ namespace Foundation {
 		WebArchive,
 		OpenDocument
 	}
+#endif // !__MACCATALYST__
 
 	// NSTask.h:typedef NS_ENUM(NSInteger, NSTaskTerminationReason)
 	[Native]
@@ -123,4 +125,4 @@ namespace Foundation {
 	}
 }
 
-#endif // MONOMAC
+#endif // MONOMAC || __MACCATALYST

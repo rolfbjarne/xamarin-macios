@@ -242,7 +242,12 @@ namespace Xamarin.MacDev.Tasks {
 					sourceDirectory += Path.DirectorySeparatorChar;
 
 				Log.LogMessage (MessageImportance.Low, $"Copying the single input directory {sourceDirectory} to {targetDirectory}");
-				FileCopier.UpdateDirectory (sourceDirectory, targetDirectory);
+				try {
+					FileCopier.Task = this;
+					FileCopier.UpdateDirectory (sourceDirectory, targetDirectory);
+				} finally {
+					FileCopier.Task = null;
+				}
 				return !Log.HasLoggedErrors;
 			}
 

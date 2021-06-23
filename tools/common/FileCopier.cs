@@ -4,6 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
+#if MSBUILD_TASKS
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+#endif
+
 namespace Xamarin.Bundler {
 	public static class FileCopier 
 	{
@@ -68,9 +73,21 @@ namespace Xamarin.Bundler {
 #if MMP || MTOUCH
 		public static void Log (int min_verbosity, string format, params object[] args) => Driver.Log (min_verbosity, format, args);
 		public static Exception CreateError (int code, string message, params object[] args) => ErrorHelper.CreateError (code, message, args);
-#else
+#elif MSBUILD_TASKS
 		// LogMessage and LogError are instance objects on the tasks themselves and bubbling an event up is not ideal
 		// msbuild handles uncaught exceptions as a task error
+		[ThreadStatic]
+		internal static Task Task;
+		public static void Log (int min_verbosity, string format, params object [] args)
+		{
+			if (Task != null) {
+				Task.Log.LogMessage (MessageImportance.High, format, args);
+			} else {
+				Console.WriteLine (format, args);
+			}
+		}
+		public static Exception CreateError (int code, string message, params object [] args) => throw new Exception ($"{code} {string.Format (message, args)}");
+#else
 		public static void Log (int min_verbosity, string format, params object[] args) => Console.WriteLine (format, args);
 		public static Exception CreateError (int code, string message, params object[] args) => throw new Exception ($"{code} {string.Format (message, args)}");
 #endif

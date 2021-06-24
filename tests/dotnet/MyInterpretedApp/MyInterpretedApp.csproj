@@ -4,6 +4,6 @@
     <TargetFramework>net6.0-ios</TargetFramework>
     <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
     <OutputType>Exe</OutputType>
-    <MtouchInterpreter>all</MtouchInterpreter>
+    <UseInterpreter>all</UseInterpreter>
   </PropertyGroup>
 </Project>

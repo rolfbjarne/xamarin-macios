@@ -704,8 +704,13 @@
 		<Warning Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Text="Some features may not work correctly, because the generation of the runtime configure file (*.runtimeconfig.json) has been disabled." />
 	</Target>
 
+	<PropertyGroup>
+		<_RunAotCompiler Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS'">true</_RunAotCompiler>
+		<_RunAotCompiler Condition="'$(MtouchInterpreter)' == 'true'">true</_RunAotCompiler>
+	</PropertyGroup>
+
 	<Target Name="_AOTCompile"
-			Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS'"
+			Condition="'$(_RunAotCompiler)' == 'true'"
 			DependsOnTargets="_ComputeVariables"
 			Inputs="@(_AssembliesToAOT)"
 			Outputs="@(_AssembliesToAOT -> '$(_AOTOutputDirectory)%(Arch)\%(Filename)%(Extension).o')">

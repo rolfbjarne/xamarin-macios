@@ -1708,56 +1708,15 @@ namespace UIKit {
 
 	interface INSCollectionLayoutVisibleItem { }
 
-// MOVED // 	[Mac (10,15)]
-// MOVED // 	[Protocol]
-// MOVED // 	interface NSCollectionLayoutVisibleItem
-// MOVED // 	{
-// MOVED // 		// PORTED // 	[Abstract]
-// MOVED // 		// PORTED // 	[Export ("alpha")]
-// MOVED // 		// PORTED // 	nfloat Alpha { get; set; }
-// MOVED //
-// MOVED // 		// PORTED // 	[Abstract]
-// MOVED // 		// PORTED // 	[Export ("zIndex")]
-// MOVED // 		// PORTED // 	nint ZIndex { get; set; }
-// MOVED //
-// MOVED // 		// PORTED // 	[Abstract]
-// MOVED // 		// PORTED // 	[Export ("hidden")]
-// MOVED // 		// PORTED // 	bool Hidden { [Bind ("isHidden")] get; set; }
-// MOVED //
-// MOVED // // INHERITED //		[Abstract]
-// MOVED // // INHERITED //		[Export ("center", ArgumentSemantic.Assign)]
-// MOVED // // INHERITED //		CGPoint Center { get; set; }
-// MOVED //
-// MOVED // // PORTED //		[Abstract]
-// MOVED // // PORTED //		[Export ("name")]
-// MOVED // // PORTED //		string Name { get; }
-// MOVED //
-// MOVED // // PORTED //		[Abstract]
-// MOVED // // PORTED //		[Export ("indexPath")]
-// MOVED // // PORTED //		NSIndexPath IndexPath { get; }
-// MOVED // // PORTED //
-// MOVED // // PORTED //		[Abstract]
-// MOVED // // PORTED //		[Export ("frame")]
-// MOVED // // PORTED //		CGRect Frame { get; }
-// MOVED //
-// MOVED // // INHERITED //		[Abstract]
-// MOVED // // INHERITED //		[Export ("bounds")]
-// MOVED // // INHERITED //		CGRect Bounds { get; }
-// MOVED // // INHERITED //
-// MOVED // // PORTED //		[Abstract]
-// MOVED // // PORTED //		[Export ("representedElementCategory")]
-// MOVED // // PORTED //		NSCollectionElementCategory RepresentedElementCategory { get; }
-// MOVED // // PORTED //
-// MOVED // // PORTED //		[Abstract]
-// MOVED // // PORTED //		[NullAllowed, Export ("representedElementKind")]
-// MOVED // // PORTED //		string RepresentedElementKind { get; }
-// MOVED // 	}
-
 	[NoWatch, TV (13,0), iOS (13,0)]
 	[Mac (10,15)]
 	[MacCatalyst (13,0)]
 	[Protocol]
-	interface NSCollectionLayoutVisibleItem : UIDynamicItem {
+	interface NSCollectionLayoutVisibleItem
+#if !MONOMAC
+	: UIDynamicItem
+#endif
+	{
 
 		[Abstract]
 		[Export ("alpha")]
@@ -1771,14 +1730,20 @@ namespace UIKit {
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
-		// Inherited from UIDynamicItem
-		// [Abstract]
-		// [Export ("center", ArgumentSemantic.Assign)]
-		// CGPoint Center { get; set; }
+#if MONOMAC
+		// Inherited from UIDynamicItem for !MONOMAC
+		[Abstract]
+		[Export ("center", ArgumentSemantic.Assign)]
+		CGPoint Center { get; set; }
 
-		// [Abstract]
-		// [Export ("transform", ArgumentSemantic.Assign)]
-		// CGAffineTransform Transform { get; set; }
+		[Abstract]
+		[Export ("transform", ArgumentSemantic.Assign)]
+		CGAffineTransform Transform { get; set; }
+
+		[Abstract]
+		[Export ("bounds")]
+		CGRect Bounds { get; }
+#endif
 
 		[NoMac]
 		[Abstract]
@@ -1796,11 +1761,6 @@ namespace UIKit {
 		[Abstract]
 		[Export ("frame")]
 		CGRect Frame { get; }
-
-		// Inherited from UIDynamicItem
-		// [Abstract]
-		// [Export ("bounds")]
-		// CGRect Bounds { get; }
 
 		[Abstract]
 		[Export ("representedElementCategory")]

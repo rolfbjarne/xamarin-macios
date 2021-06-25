@@ -18497,6 +18497,7 @@ namespace AppKit {
 		bool HidesEmptyCells { get; set; }
 	}
 
+#if !__MACCATALYST__ // there's a version in UIKit, use that one instead
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextContainer : NSSecureCoding {
 		[Export ("initWithContainerSize:"), Internal]
@@ -18563,6 +18564,7 @@ namespace AppKit {
 		[Export ("lineFragmentRectForProposedRect:atIndex:writingDirection:remainingRect:")]
 		CGRect GetLineFragmentRect (CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, ref CGRect remainingRect);
 	}
+#endif // !__MACCATALYST__
 
 	[BaseType (typeof (NSMutableAttributedString), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextStorageDelegate)})]
 	partial interface NSTextStorage {

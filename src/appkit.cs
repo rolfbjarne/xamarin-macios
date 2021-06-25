@@ -874,6 +874,7 @@ namespace AppKit {
 	delegate void ContinueUserActivityRestorationHandler (NSObject [] restorableObjects);
 //#endif
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -1035,6 +1036,7 @@ namespace AppKit {
 		bool ReadSelectionFromPasteboard (NSPasteboard pboard);
 	}
 
+	[NoMacCatalyst]
 	[Mac (10, 12, 2)]
 	[Category]
 	[BaseType (typeof(NSApplication))]

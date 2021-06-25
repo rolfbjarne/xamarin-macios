@@ -460,6 +460,7 @@ namespace AppKit {
 	}
 
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSApplicationDelegate) })]
 	[DisableDefaultCtor] // An uncaught exception was raised: Creating more than one Application
 	interface NSApplication : NSAccessibilityElementProtocol, NSUserInterfaceValidations, NSMenuItemValidation, NSAccessibility, NSAppearanceCustomization {

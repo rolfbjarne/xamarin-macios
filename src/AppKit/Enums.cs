@@ -1427,6 +1427,7 @@ namespace AppKit {
 	}
 #endif
 
+#if !__MACCATALYST__ // Use the UIKit version
 	[Mac (10,11)]
 	[Native]
 	[Flags]
@@ -1435,6 +1436,7 @@ namespace AppKit {
 		Attributes = (1 << 0),
 		Characters = (1 << 1)
 	}
+#endif // !__MACCATALYST__
 
 	[Native]
 	public enum NSPrinterTableStatus : ulong {

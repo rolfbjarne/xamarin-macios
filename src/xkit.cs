@@ -5,6 +5,9 @@ using System.Diagnostics;
 using System.ComponentModel;
 using Foundation;
 using ObjCRuntime;
+#if !WATCH
+using CoreAnimation;
+#endif
 using CoreGraphics;
 
 using CGGlyph=System.UInt16;
@@ -33,8 +36,10 @@ using NSTypesetterBehavior=System.Object;
 using NSView=System.Object;
 using NSWindow=System.Object;
 #if WATCH
+using CATransform3D=System.Object;
 using NSTextContainer=System.Object;
 using NSTextStorage=System.Object;
+using UIDynamicItem=System.Object;
 using UITraitCollection = Foundation.NSObject;
 #endif // WATCH
 #else
@@ -47,10 +52,12 @@ using UITraitCollection=System.Object;
 using TextAlignment=AppKit.NSTextAlignment;
 using LineBreakMode=AppKit.NSLineBreakMode;
 using CollectionLayoutSectionOrthogonalScrollingBehavior=AppKit.NSCollectionLayoutSectionOrthogonalScrollingBehavior;
+using CollectionElementCategory=AppKit.NSCollectionElementCategory;
 #else
 using TextAlignment=UIKit.UITextAlignment;
 using LineBreakMode=UIKit.UILineBreakMode;
 using CollectionLayoutSectionOrthogonalScrollingBehavior=UIKit.UICollectionLayoutSectionOrthogonalScrollingBehavior;
+using CollectionElementCategory=UIKit.UICollectionElementCategory;
 #endif
 
 #if MONOMAC
@@ -1713,7 +1720,7 @@ namespace UIKit {
 	[MacCatalyst (13,0)]
 	[Protocol]
 	interface NSCollectionLayoutVisibleItem
-#if !MONOMAC
+#if !MONOMAC && !WATCH
 	: UIDynamicItem
 #endif
 	{
@@ -1762,9 +1769,14 @@ namespace UIKit {
 		[Export ("frame")]
 		CGRect Frame { get; }
 
+		[NoMac]
 		[Abstract]
 		[Export ("representedElementCategory")]
-		UICollectionElementCategory RepresentedElementCategory { get; }
+		CollectionElementCategory RepresentedElementCategory {
+			get;
+			[NoiOS][NoTV][NoMacCatalyst]
+			set;
+		}
 
 		[Abstract]
 		[NullAllowed, Export ("representedElementKind")]

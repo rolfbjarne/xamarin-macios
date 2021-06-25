@@ -8706,6 +8706,7 @@ namespace AppKit {
 		NSOpenGLPixelFormat PixelFormat { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message : "Use 'Metal' Framework instead.")] 
 	partial interface NSOpenGLView {

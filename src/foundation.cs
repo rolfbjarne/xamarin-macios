@@ -79,8 +79,12 @@ using NSTimeInterval = System.Double;
 #if MONOMAC || __MACCATALYST__
 // dummy usings to make code compile without having the actual types available (for [NoMac] to work)
 using NSDirectionalEdgeInsets = Foundation.NSObject;
-using UIEdgeInsets = Foundation.NSObject;
 using UIOffset = Foundation.NSObject;
+#endif
+
+#if MONOMAC
+// dummy usings to make code compile without having the actual types available (for [NoMac] to work)
+using UIEdgeInsets = Foundation.NSObject;
 #endif
 
 #if WATCH

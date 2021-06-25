@@ -1350,8 +1350,10 @@ namespace Xamarin.Bundler {
 			if (Platform == ApplePlatform.MacOSX)
 				throw ErrorHelper.CreateError (99, Errors.MX0099, "IsInterpreted isn't a valid operation for macOS apps.");
 
+#if !NET
 			if (IsSimulatorBuild)
 				return false;
+#endif
 
 			// IsAOTCompiled and IsInterpreted are not opposites: mscorlib.dll can be both.
 			if (!UseInterpreter)

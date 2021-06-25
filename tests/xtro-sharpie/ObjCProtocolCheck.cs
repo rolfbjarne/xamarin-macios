@@ -35,6 +35,7 @@ namespace Extrospection {
 	public class ObjCProtocolCheck : BaseVisitor {
 
 		Dictionary<string, TypeDefinition> protocol_map = new Dictionary<string, TypeDefinition> ();
+		Dictionary<string, List<TypeDefinition>> clashing_types = new Dictionary<string, List<TypeDefinition>> ();
 
 		public override void VisitManagedType (TypeDefinition type)
 		{
@@ -67,8 +68,18 @@ namespace Extrospection {
 					break;
 				}
 			}
-			if (!informal && !String.IsNullOrEmpty (pname))
-				protocol_map.Add (pname, type);
+			if (!informal && !String.IsNullOrEmpty (pname)) {
+				if (clashing_types.TryGetValue (pname, out var list)) {
+					list.Add (type);
+				} else if (protocol_map.TryGetValue (pname, out var value)) {
+					clashing_types [pname] = list = new List<TypeDefinition> ();
+					list.Add (type);
+					list.Add (value);
+					Console.WriteLine ($"Clash: {pname}");
+				} else {
+					protocol_map.Add (pname, type);
+				}
+			}
 		}
 
 		public override void VisitObjCProtocolDecl (ObjCProtocolDecl decl, VisitKind visitKind)
@@ -225,6 +236,15 @@ namespace Extrospection {
 				var extra = kvp.Key;
 				var fx = kvp.Value.Namespace;
 				Log.On (fx).Add ($"!unknown-protocol! {extra} bound");
+			}
+
+			if (clashing_types.Count > 0) {
+				foreach (var kvp in clashing_types) {
+					Console.WriteLine ($"Type named '{kvp.Key}' found in multiple places:");
+					foreach (var entry in kvp.Value)
+						Console.WriteLine ($"    {entry.FullName}");
+				}
+				throw new InvalidOperationException ("Found multiple types with the same name");
 			}
 		}
 	}

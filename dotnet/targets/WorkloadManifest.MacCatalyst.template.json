@@ -6,7 +6,8 @@
 			"packs": [
 				"Microsoft.@PLATFORM@.Sdk",
 				"Microsoft.@PLATFORM@.Ref",
-				"Microsoft.@PLATFORM@.Templates"
+				"Microsoft.@PLATFORM@.Templates",
+										"Microsoft.NETCore.App.Runtime.AOT.Cross.maccatalyst-arm64.SDKWorkaround",
 			]
 		}
 	},
@@ -22,6 +23,14 @@
 		"Microsoft.@PLATFORM@.Templates": {
 			"kind": "template",
 			"version": "@VERSION@"
-		}
+		},
+									    "Microsoft.NETCore.App.Runtime.AOT.Cross.maccatalyst-arm64.SDKWorkaround": {
+									      "kind": "Sdk",
+									      "version": "@BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION@",
+									      "alias-to": {
+									        "osx-x64": "Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.maccatalyst-arm64",
+									        "osx-arm64": "Microsoft.NETCore.App.Runtime.AOT.osx-x64.Cross.maccatalyst-arm64",
+									      }
+									    },
 	}
 }

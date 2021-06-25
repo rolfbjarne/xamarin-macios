@@ -1,4 +1,4 @@
-TOP=../../..
+TOP=../../../..
 
 include $(TOP)/Make.config
 
@@ -8,7 +8,7 @@ prepare-and-build:
 	$(MAKE) -C $(TOP) -j8 install
 	git clean -xfdq
 	$(MAKE) -C $(TOP)/tests/dotnet
-	cp $(TOP)/tests/dotnet/global.json $(TOP)/tests/dotnet/NuGet.config .
+	cp $(TOP)/tests/dotnet/global.json $(TOP)/tests/dotnet/NuGet.config ..
 	$(MAKE) build
 
 build:

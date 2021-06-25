@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0-ios</TargetFramework>
     <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-    <OutputType>Exe</OutputType>
-    <UseInterpreter>all</UseInterpreter>
+    <_LibMonoLinkMode>static</_LibMonoLinkMode>
   </PropertyGroup>
+  <Import Project="../shared.csproj" />
 </Project>

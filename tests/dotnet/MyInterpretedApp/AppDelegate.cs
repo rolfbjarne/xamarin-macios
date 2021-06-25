@@ -15,7 +15,7 @@ namespace MySingleView
 
 			var dvc = new UIViewController ();
 			var button = new UIButton (window.Bounds);
-			button.SetTitle ("net6!", UIControlState.Normal);
+			button.SetTitle ("MyInterpretedApp in net6!", UIControlState.Normal);
 			dvc.Add (button);
 
 			window.RootViewController = dvc;

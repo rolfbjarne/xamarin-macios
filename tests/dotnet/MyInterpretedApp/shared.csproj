@@ -2,7 +2,10 @@
 <Project>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <UseInterpreter>all</UseInterpreter>
+    <UseInterpreter>true</UseInterpreter>
+
+    <!-- FIXME -->
+    <_LibMonoLinkMode>static</_LibMonoLinkMode>
 
     <ApplicationTitle>MyInterpretedApp</ApplicationTitle>
     <ApplicationId>com.xamarin.myinterpretedapp</ApplicationId>

@@ -5,6 +5,9 @@
     <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
     <OutputType>Exe</OutputType>
 
+    <!-- FIXME -->
+    <_LibMonoLinkMode>static</_LibMonoLinkMode>
+
     <ApplicationTitle>MyCatalystApp</ApplicationTitle>
     <ApplicationId>com.xamarin.mycatalystapp</ApplicationId>
     <ApplicationVersion>3.14</ApplicationVersion>

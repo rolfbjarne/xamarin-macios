@@ -26,6 +26,7 @@ using NSGlyphStorageOptions=System.Object;
 using NSImageScaling=System.Object;
 using NSRulerMarker=System.Object;
 using NSRulerView=System.Object;
+using NSTextAttachmentCell=System.Object;
 using NSTextBlock=System.Object;
 using NSTextList=System.Object;
 using NSTextTableBlock=System.Object;
@@ -49,11 +50,13 @@ using UITraitCollection=System.Object;
 #endif // !MONOMAC
 
 #if MONOMAC
+using Image=AppKit.NSImage;
 using TextAlignment=AppKit.NSTextAlignment;
 using LineBreakMode=AppKit.NSLineBreakMode;
 using CollectionLayoutSectionOrthogonalScrollingBehavior=AppKit.NSCollectionLayoutSectionOrthogonalScrollingBehavior;
 using CollectionElementCategory=AppKit.NSCollectionElementCategory;
 #else
+using Image=UIKit.UIImage;
 using TextAlignment=UIKit.UITextAlignment;
 using LineBreakMode=UIKit.UILineBreakMode;
 using CollectionLayoutSectionOrthogonalScrollingBehavior=UIKit.UICollectionLayoutSectionOrthogonalScrollingBehavior;
@@ -2081,7 +2084,7 @@ namespace UIKit {
 		string Identifier { get; set; }
 	}
 
-#if !WATCH
+	[NoWatch]
 	[Mac (10,11)]
 	[MacCatalyst (13,0)]
 	[Model]
@@ -2107,7 +2110,7 @@ namespace UIKit {
 	[MacCatalyst (13,0)]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextAttachment : NSTextAttachmentContainer, NSSecureCoding
-#if !WATCH
+#if !WATCH && !MONOMAC
 	, UIAccessibilityContentSizeCategoryImageAdjusting
 #endif // !WATCH
 	{
@@ -2134,7 +2137,7 @@ namespace UIKit {
 		[Mac (10,11)]
 		[NullAllowed]
 		[Export ("image", ArgumentSemantic.Retain)]
-		UIImage Image { get; set; }
+		Image Image { get; set; }
 
 		[Mac (10,11)]
 		[Export ("bounds")]
@@ -2148,9 +2151,10 @@ namespace UIKit {
 		[Export ("attachmentCell", ArgumentSemantic.Retain)]
 		NSTextAttachmentCell AttachmentCell { get; set; }
 
+		[NoMac]
 		[Watch (6,0), TV (13,0), iOS (13,0)]
 		[Static]
 		[Export ("textAttachmentWithImage:")]
-		NSTextAttachment Create (UIImage image);
+		NSTextAttachment Create (Image image);
 	}
 }

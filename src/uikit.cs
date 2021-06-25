@@ -411,6 +411,7 @@ namespace UIKit {
 		UIColor ShadowColor { get; set;  }
 	}
 
+#if !WATCH
 	[Protocol]
 	// no [Model] since it's not exposed in any API 
 	// only NSTextContainer conforms to it but it's only queried by iOS itself

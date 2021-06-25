@@ -4,9 +4,11 @@
     <TargetFramework>net6.0-maccatalyst</TargetFramework>
     <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
     <OutputType>Exe</OutputType>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
 
     <!-- FIXME -->
     <_LibMonoLinkMode>static</_LibMonoLinkMode>
+    <_LibXamarinLinkMode>static</_LibXamarinLinkMode>
 
     <ApplicationTitle>MyCatalystApp</ApplicationTitle>
     <ApplicationId>com.xamarin.mycatalystapp</ApplicationId>

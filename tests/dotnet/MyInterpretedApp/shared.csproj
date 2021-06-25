@@ -6,6 +6,7 @@
 
     <!-- FIXME -->
     <_LibMonoLinkMode>static</_LibMonoLinkMode>
+    <_LibXamarinLinkMode>static</_LibXamarinLinkMode>
 
     <ApplicationTitle>MyInterpretedApp</ApplicationTitle>
     <ApplicationId>com.xamarin.myinterpretedapp</ApplicationId>

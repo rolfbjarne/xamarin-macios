@@ -203,7 +203,7 @@ namespace MonoTouch.Tuner {
 
 			bool rv;
 			if (!ci_filter_types.TryGetValue (type, out rv)) {
-				rv = type.Is (Namespaces.CoreImage, "CIFilter") || IsCIFilter (Context.Resolve (type).BaseType);
+				rv = type.Is (Namespaces.CoreImage, "CIFilter") || IsCIFilter (Context.Resolve (type)?.BaseType);
 				ci_filter_types [type] = rv;
 			}
 			return rv;

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0-ios</TargetFramework>
     <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
   </PropertyGroup>
   <Import Project="../shared.csproj" />
 </Project>

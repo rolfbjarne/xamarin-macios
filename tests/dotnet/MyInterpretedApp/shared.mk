@@ -16,6 +16,9 @@ prepare-and-run: prepare
 build:
 	$(DOTNET6) build /bl *.csproj $(MSBUILD_VERBOSITY)
 
+dev:
+	$(DOTNET6) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:RuntimeIdentifier=ios-arm64
+
 run:
 	$(DOTNET6) build /bl *.csproj $(MSBUILD_VERBOSITY) -t:Run
 

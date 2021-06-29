@@ -667,12 +667,12 @@ namespace Xamarin.Bundler {
 			foreach (var s in assemblies) {
 				if (!s.IsAOTCompiled)
 					continue;
-				if ((abi & Abi.SimulatorArchMask) == 0) {
-					var info = s.AssemblyDefinition.Name.Name;
-					info = EncodeAotSymbol (info);
-					assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
-					assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
-				}
+
+				var info = s.AssemblyDefinition.Name.Name;
+				info = EncodeAotSymbol (info);
+				assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
+				assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
+
 				string sname = s.FileName;
 				if (assembly_name != sname && IsBoundAssembly (s)) {
 					register_assemblies.Append ("\txamarin_open_and_register (\"").Append (sname).Append ("\", &exception_gchandle);").AppendLine ();
@@ -680,7 +680,7 @@ namespace Xamarin.Bundler {
 				}
 			}
 
-			if ((abi & Abi.SimulatorArchMask) == 0 || app.Embeddinator) {
+			if (true) {
 				var frameworks = assemblies.Where ((a) => a.BuildTarget == AssemblyBuildTarget.Framework)
 										   .OrderBy ((a) => a.Identity, StringComparer.Ordinal);
 				foreach (var asm_fw in frameworks) {

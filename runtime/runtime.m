@@ -27,6 +27,9 @@
 //extern BOOL NSZombieEnabled;
 #endif
 
+// #define LOG_RESOURCELOOKUP(...) do { NSLog (@ __VA_ARGS__); } while (0);
+#define LOG_RESOURCELOOKUP(...)
+
 /*
  * These are values that can be configured in xamarin_setup.
  *
@@ -2513,7 +2516,19 @@ bool
 xamarin_locate_app_resource (const char *resource, char *path, size_t pathlen)
 {
 	const char *app_path = xamarin_get_bundle_path ();
-	return xamarin_locate_assembly_resource_for_root (app_path, NULL, resource, path, pathlen);
+	if (xamarin_locate_assembly_resource_for_root (app_path, NULL, resource, path, pathlen))
+		return true;
+
+#if TARGET_OS_MACCATALYST || TARGET_OS_OSX
+	char root [1024];
+	snprintf (root, sizeof (root), "%s/Contents/%s", app_path, [xamarin_custom_bundle_name UTF8String]);
+	if (xamarin_locate_assembly_resource_for_root (root, NULL, resource, path, pathlen)) {
+		LOG_RESOURCELOOKUP (PRODUCT ": Located resource '%s' from macOS content bundle: %s\n", resource, path);
+		return true;
+	}
+#endif
+
+	return false;
 }
 
 static bool
@@ -2585,10 +2600,6 @@ xamarin_locate_assembly_resource_for_name (MonoAssemblyName *assembly_name, cons
 	return xamarin_locate_assembly_resource (aname, culture, resource, path, pathlen);
 }
 #endif
-
-// #define LOG_RESOURCELOOKUP(...) do { NSLog (@ __VA_ARGS__); } while (0);
-#define LOG_RESOURCELOOKUP(...)
-
 
 bool
 xamarin_locate_assembly_resource (const char *assembly_name, const char *culture, const char *resource, char *path, size_t pathlen)

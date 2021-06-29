@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <UseInterpreter>true</UseInterpreter>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
 
     <!-- FIXME -->
     <_LibMonoLinkMode>static</_LibMonoLinkMode>

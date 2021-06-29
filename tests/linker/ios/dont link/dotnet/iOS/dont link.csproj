@@ -10,6 +10,7 @@
     <AssemblyName>dont link</AssemblyName>
     <MtouchLink>None</MtouchLink>
     <AssetTargetFallback>xamarinios10;$(AssetTargetFallback)</AssetTargetFallback>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
   </PropertyGroup>
 
   <ItemGroup>

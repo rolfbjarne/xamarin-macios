@@ -66,6 +66,7 @@ namespace AppKit {
 	//	void DrawAtPoint (CGPoint atPoint, CGRect fromRect, NSCompositingOperation operation, float fractionDelta);
 	//}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSCell))]
 	interface NSActionCell {
 		[Export ("initTextCell:")]
@@ -286,6 +287,7 @@ namespace AppKit {
 		bool AllowsImplicitAnimation { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSAlertDelegate)})]
 	interface NSAlert {
 		[Static, Export ("alertWithError:")]
@@ -354,6 +356,7 @@ namespace AppKit {
 		NSPanel Window  { get; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -1549,6 +1552,7 @@ namespace AppKit {
 		NSString FallbackBackgroundColor { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSBox {
 		[Export ("initWithFrame:")]
@@ -1612,7 +1616,8 @@ namespace AppKit {
 		[Export ("fillColor", ArgumentSemantic.Copy)]
 		NSColor FillColor { get; set; }
 	}
-		
+	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 		// , Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSBrowserDelegate)})]
 	partial interface NSBrowser {
@@ -2004,6 +2009,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSCell))]
 	interface NSBrowserCell {
 		[Mac (10,12)]
@@ -2048,6 +2054,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell))]
 	interface NSButtonCell {
 		[DesignatedInitializer]
@@ -2164,6 +2171,7 @@ namespace AppKit {
 	
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSButton : NSAccessibilityButton, NSUserInterfaceCompression, NSUserInterfaceValidations {
 		[Export ("initWithFrame:")]
@@ -2686,6 +2694,7 @@ namespace AppKit {
 		nint NumberOfTouchesRequired { get; set; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSClipView {
 		[Export ("initWithFrame:")]
@@ -2752,6 +2761,7 @@ namespace AppKit {
 		NSColor DecodeNXColor ();
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSViewController))]
 	interface NSCollectionViewItem : NSCopying {
 		[Export ("initWithNibName:bundle:")]
@@ -2778,6 +2788,7 @@ namespace AppKit {
 		NSCollectionViewItemHighlightState HighlightState { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSCollectionView : NSDraggingSource, NSDraggingDestination {
 		[Export ("initWithFrame:")]
@@ -3032,6 +3043,7 @@ namespace AppKit {
 	}
 
 	// @protocol NSCollectionViewDataSource <NSObject>
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface NSCollectionViewDataSource
@@ -3054,6 +3066,7 @@ namespace AppKit {
 		NSView GetView (NSCollectionView collectionView, NSString kind, NSIndexPath indexPath);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -3456,6 +3469,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,11)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSCollectionViewDelegateFlowLayout: NSCollectionViewDelegate
@@ -4156,6 +4170,7 @@ namespace AppKit {
 		NSColor GetColor ([NullAllowed] string colorName, Func<NSAppearance, NSColor> dynamicProvider);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSColorList : NSSecureCoding {
 		[Static]
@@ -4205,6 +4220,7 @@ namespace AppKit {
 		bool WriteToUrl ([NullAllowed] NSUrl url, [NullAllowed] out NSError error);
 	}
 
+	[NoMacCatalyst]
 	[Mac (10, 14)]
 	[Protocol]
 	interface NSColorChanging
@@ -4215,6 +4231,7 @@ namespace AppKit {
 		void ChangeColor ([NullAllowed] NSColorPanel sender);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSPanel))]
 	partial interface NSColorPanel {
 		[Static, Export ("sharedColorPanel")]
@@ -4269,6 +4286,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSColorPicker {
 		[Export ("initWithPickerMask:colorPanel:")]
@@ -4419,6 +4437,7 @@ namespace AppKit {
 		NSString Custom { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSColorWell {
 		[Export ("initWithFrame:")]
@@ -4448,6 +4467,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextField),
 		Delegates = new [] { "Delegate" },
 		Events = new [] { typeof (NSComboBoxDelegate) }
@@ -4578,6 +4598,7 @@ namespace AppKit {
 		nint IndexOfItem (NSComboBox comboBox, string value);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldCell))]
 	partial interface NSComboBoxCell {
 		[Export ("initTextCell:")]
@@ -4675,6 +4696,7 @@ namespace AppKit {
 		
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -4967,6 +4989,7 @@ namespace AppKit {
 		bool IsEditing { get; }
 	}
 
+	[MacCatalyst (13,0)]
 	[BaseType (typeof (NSObject))]
 	interface NSCursor : NSCoding {
 		[Static]
@@ -5054,6 +5077,7 @@ namespace AppKit {
 		[Export ("initWithImage:hotSpot:")]
 		IntPtr Constructor (NSImage newImage, CGPoint aPoint);
 
+		[NoMacCatalyst]
 		[Availability (Deprecated = Platform.Mac_10_12, Message = "Color hints are ignored. Use NSCursor (NSImage newImage, CGPoint aPoint) instead.")]
 		[Export ("initWithImage:foregroundColorHint:backgroundColorHint:hotSpot:")]
 		IntPtr Constructor (NSImage newImage, NSColor fg, NSColor bg, CGPoint hotSpot);
@@ -5127,6 +5151,7 @@ namespace AppKit {
 		NSObject Delegate { get; }  
 	}	
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl), Delegates=new string [] {"WeakDelegate"}, Events=new Type [] {typeof (NSDatePickerCellDelegate)})]
 	interface NSDatePicker {
 		[Export ("initWithFrame:")]
@@ -5193,6 +5218,7 @@ namespace AppKit {
 		NSDatePickerCellDelegate Delegate { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell), Delegates=new string [] {"WeakDelegate"}, Events=new Type [] {typeof (NSDatePickerCellDelegate)})]
 	interface NSDatePickerCell {
 		[DesignatedInitializer]
@@ -5251,6 +5277,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -5326,6 +5353,7 @@ namespace AppKit {
 		string BadgeLabel { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -5341,6 +5369,7 @@ namespace AppKit {
 
 	delegate void NSDocumentCompletionHandler (IntPtr nsErrorPointerOrZero);
 	
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	partial interface NSDocument /* : NSUserActivityRestoring radar://42781537 */ {
@@ -5711,6 +5740,7 @@ namespace AppKit {
 
 	delegate void OpenDocumentCompletionHandler (NSDocument document, bool documentWasAlreadyOpen, NSError error);
 
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	partial interface NSDocumentController : NSWindowRestoration, NSCoding {
@@ -6150,6 +6180,7 @@ namespace AppKit {
 		nfloat TrailingOffset { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -6178,6 +6209,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[Mac (10, 14)]
 	[Protocol]
 	interface NSFontChanging
@@ -6190,6 +6222,7 @@ namespace AppKit {
 		NSFontPanelModeMask GetValidModes (NSFontPanel fontPanel);
 	}
 
+	[NoMacCatalyst]
 	[ThreadSafe]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // crash at runtime (e.g. description). Documentation state: "You don’t create NSFont objects using the alloc and init methods."
@@ -6755,6 +6788,7 @@ namespace AppKit {
 		NSFontDescriptor GetPreferredFont (string textStyle, NSDictionary options);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSFontManager : NSMenuItemValidation {
 		[Static, Export ("setFontPanelFactory:")]
@@ -6907,6 +6941,7 @@ namespace AppKit {
 		void OrderFrontStylesPanel (NSObject sender);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSPanel))]
 	interface NSFontPanel {
 		[Static]
@@ -7038,6 +7073,7 @@ namespace AppKit {
 		void SetTextBaseWritingDirection (NSWritingDirection writingDirection);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell))]
 	partial interface NSFormCell {
 		[DesignatedInitializer]
@@ -7220,6 +7256,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSView))]
 	interface NSGridView
 	{
@@ -7319,6 +7356,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSGridRow : NSCoding
@@ -7355,6 +7393,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSGridColumn : NSCoding
@@ -7388,6 +7427,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSGridCell : NSCoding
@@ -7949,6 +7989,7 @@ namespace AppKit {
 		bool ShouldReceiveTouch (NSGestureRecognizer gestureRecognizer, NSTouch touch);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[ThreadSafe] // Not documented anywhere, but their Finder extension sample uses it on non-ui thread
 	partial interface NSMenu : NSCoding, NSCopying, NSAccessibility, NSAccessibilityElement, NSAppearanceCustomization, NSUserInterfaceItemIdentification  {
@@ -8125,6 +8166,7 @@ namespace AppKit {
 
 	interface INSMenuDelegate { }
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -8729,6 +8771,7 @@ namespace AppKit {
 		NSOpenGLPixelFormat PixelFormat { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSSavePanel))]
 	[DisableDefaultCtor]
 	interface NSOpenPanel {
@@ -8788,6 +8831,7 @@ namespace AppKit {
 	interface NSRemoteOpenPanel {}
 #endif
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -8929,6 +8973,7 @@ namespace AppKit {
 		bool StronglyReferencesItems { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -9047,6 +9092,7 @@ namespace AppKit {
 		NSTintConfiguration GetTintConfiguration (NSOutlineView outlineView, NSObject item);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -9961,6 +10007,7 @@ namespace AppKit {
 		void DidLoadRepresentation (NSImage image, NSImageRep rep, NSImageLoadStatus status);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSCell))]
 	interface NSImageCell {
 		//Detected properties
@@ -10133,6 +10180,7 @@ namespace AppKit {
 		NSImageLayoutDirection LayoutDirection { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSImageView : NSAccessibilityImage, NSMenuItemValidation {
 		[Export ("initWithFrame:")]
@@ -10176,6 +10224,7 @@ namespace AppKit {
 		NSImageSymbolConfiguration SymbolConfiguration { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSMatrixDelegate)})]
 	partial interface NSMatrix {
 		[Export ("initWithFrame:")]
@@ -10422,6 +10471,7 @@ namespace AppKit {
 		NSObject KeyCell { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSLevelIndicator {
 		[Export ("initWithFrame:")]
@@ -10491,6 +10541,7 @@ namespace AppKit {
 		bool Editable { [Bind ("isEditable")] get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell))]
 	interface NSLevelIndicatorCell {
 		[Export ("initTextCell:")]
@@ -10545,6 +10596,7 @@ namespace AppKit {
 #endif
 
 	[Mac (10,11)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSLayoutGuide : NSCoding, NSUserInterfaceItemIdentification
 	{
@@ -10646,6 +10698,7 @@ namespace AppKit {
 		void ControlTextDidChange (NSNotification obj);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSPageLayout {
 		[Static]
@@ -10674,6 +10727,7 @@ namespace AppKit {
 		NSPrintInfo PrintInfo { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSWindow))]
 	interface NSPanel {
 		//Detected properties
@@ -11084,6 +11138,7 @@ namespace AppKit {
 #endif
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell), Events=new Type [] { typeof (NSPathCellDelegate) }, Delegates=new string [] { "WeakDelegate" })]
 	interface NSPathCell : NSMenuItemValidation {
 		[Export ("initTextCell:")]
@@ -11149,6 +11204,7 @@ namespace AppKit {
 		void SetControlSize (NSControlSize size);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -11160,6 +11216,7 @@ namespace AppKit {
 		void WillPopupMenu (NSPathCell pathCell, NSMenu menu);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldCell))]
 	interface NSPathComponentCell {
 		[Export ("initTextCell:")]
@@ -11172,7 +11229,7 @@ namespace AppKit {
 		NSUrl Url { get; set; }
 	}
 
-
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSPathControl {
 		[Export ("initWithFrame:")]
@@ -11238,6 +11295,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -11279,6 +11337,7 @@ namespace AppKit {
 		NSUrl Url { get; }
 	}
 
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSResponder))]
 	interface NSPopover : NSAppearanceCustomization, NSAccessibilityElementProtocol, NSAccessibility {
@@ -11483,7 +11542,7 @@ namespace AppKit {
 		nint SelectedTag { get; }
 	}
 
-
+	[NoMacCatalyst]
 	[BaseType (typeof (NSMenuItemCell))]
 	partial interface NSPopUpButtonCell {
 		[Export ("initTextCell:")]
@@ -11879,6 +11938,7 @@ namespace AppKit {
 		NSPrintInfo PrintInfo { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -11892,6 +11952,7 @@ namespace AppKit {
 		NSSet KeyPathsForValuesAffectingPreview ();
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSPrintPanel {
 		[Static]
@@ -11933,6 +11994,7 @@ namespace AppKit {
 		string JobStyleHint { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSProgressIndicator : NSAccessibilityProgressIndicator {
 		[Export ("initWithFrame:")]
@@ -12468,6 +12530,7 @@ namespace AppKit {
 // 		void RestoreUserActivityState (NSUserActivity userActivity);
 // 	}
 
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSResponder))]
 	interface NSResponder_NSTouchBarProvider : INSTouchBarProvider
@@ -12498,6 +12561,7 @@ namespace AppKit {
 		nfloat RotationInDegrees { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSRulerMarker : NSCoding, NSCopying {
 		[DesignatedInitializer]
@@ -12542,6 +12606,7 @@ namespace AppKit {
 		NSObject RepresentedObject { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	partial interface NSRulerView {
 		[Export ("initWithFrame:")]
@@ -12640,6 +12705,7 @@ namespace AppKit {
 
 	delegate void NSSavePanelComplete (nint result);
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSPanel), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSOpenSavePanelDelegate)})]
 	[DisableDefaultCtor]
 	interface NSSavePanel {
@@ -12858,6 +12924,7 @@ namespace AppKit {
 		string LocalizedName { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSScroller {
 		[Export ("initWithFrame:")]
@@ -12951,6 +13018,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	partial interface NSScrollView : NSTextFinderBarContainer {
 		[Availability (Deprecated = Platform.Mac_10_7)]
@@ -13137,6 +13205,7 @@ namespace AppKit {
 		void AddFloatingSubview (NSView view, NSEventGestureAxis axis);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextField), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSSearchFieldDelegate)})]
 	interface NSSearchField {
 		[Export ("initWithFrame:")]
@@ -13222,6 +13291,7 @@ namespace AppKit {
 		void SearchingEnded (NSSearchField sender);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldCell))]
 	interface NSSearchFieldCell {
 		[DesignatedInitializer]
@@ -13268,6 +13338,7 @@ namespace AppKit {
 		bool SendsSearchStringImmediately { get; set; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSSegmentedControl : NSUserInterfaceCompression {
 		[Export ("initWithFrame:")]
@@ -13394,6 +13465,7 @@ namespace AppKit {
 		NSSegmentDistribution SegmentDistribution { get; set; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell))]
 	interface NSSegmentedCell {
 		[Export ("initTextCell:")]
@@ -13484,6 +13556,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSSlider : NSAccessibilitySlider {
 		[Export ("initWithFrame:")]
@@ -13578,6 +13651,7 @@ namespace AppKit {
 		NSColor TrackFillColor { get; set; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell))]
 	interface NSSliderCell {
 		[Export ("initTextCell:")]
@@ -13675,6 +13749,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSSliderTouchBarItem
@@ -13891,6 +13966,7 @@ namespace AppKit {
 		NSString DocumentAuthorKey { get; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSSpellChecker {
 		[Static]
@@ -14137,6 +14213,7 @@ namespace AppKit {
 		void DidFinishPlaying (NSSound sound, bool finished);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	partial interface NSSplitView {
 		[Export ("initWithFrame:")]
@@ -14221,6 +14298,7 @@ namespace AppKit {
 	interface INSSplitViewDelegate {}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSViewController))]
 	interface NSSplitViewController : NSSplitViewDelegate, NSUserInterfaceValidations {
 		[Export ("initWithNibName:bundle:")]
@@ -14284,6 +14362,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSSplitViewItem : NSAnimatablePropertyContainer, NSCoding {
 		[Export ("viewController", ArgumentSemantic.Strong)]
@@ -14348,6 +14427,7 @@ namespace AppKit {
 		NSTitlebarSeparatorStyle TitlebarSeparatorStyle { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model, Protocol]
 	interface NSSplitViewDelegate {
@@ -14416,6 +14496,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,9)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSStackView {
 		[Export ("initWithFrame:")]
@@ -14518,6 +14599,7 @@ namespace AppKit {
 		void RemoveArrangedSubview (NSView view);
 	}
 
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSStackViewDelegate {
@@ -14547,6 +14629,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSButton))]
 	interface NSStatusBarButton {
 		[Export ("initWithFrame:")]
@@ -14556,6 +14639,7 @@ namespace AppKit {
 		bool AppearsDisabled { get; set; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[PrivateDefaultCtor]
 	partial interface NSStatusItem {
@@ -14816,6 +14900,7 @@ namespace AppKit {
 	delegate NSObject NSStoryboardControllerCreator (NSCoder coder);
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSStoryboard {
 		[Static, Export ("storyboardWithName:bundle:")]
@@ -14924,6 +15009,7 @@ namespace AppKit {
 		string Identifier { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[Protocol]
 #if !XAMCORE_4_0
 	[Model]
@@ -15031,6 +15117,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject)), Model, Protocol]
 	partial interface NSTextFinderBarContainer {
 		[Abstract, Export ("findBarVisible")]
@@ -15046,6 +15133,7 @@ namespace AppKit {
 		NSView ContentView { get; }
 	}
 
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextFinder : NSCoding {
@@ -15083,6 +15171,7 @@ namespace AppKit {
 		void NoteClientStringWillChange ();
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSResponder))]
 	partial interface NSView : NSDraggingDestination, NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification, NSAppearanceCustomization, NSAccessibilityElementProtocol, NSAccessibility, NSObjectAccessibilityExtensions {
 		[DesignatedInitializer]
@@ -16041,6 +16130,7 @@ namespace AppKit {
 		NSString FadeOutEffect { get; }
 	}
 
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSView))]
 	interface NSView_NSTouchBar
@@ -16053,6 +16143,7 @@ namespace AppKit {
 		void SetAllowedTouchTypes (NSTouchTypeMask touchTypes);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSResponder))]
 	interface NSViewController : NSResponder, NSUserInterfaceItemIdentification, NSEditor, NSSeguePerforming , NSExtensionRequestHandling
 	{
@@ -16217,6 +16308,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSViewControllerPresentationAnimator {
@@ -16231,6 +16323,7 @@ namespace AppKit {
 
 	interface INSViewControllerPresentationAnimator {}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSViewController),
 		Delegates = new [] { "WeakDelegate" },
 		Events = new [] { typeof (NSPageControllerDelegate) })]
@@ -16274,6 +16367,7 @@ namespace AppKit {
 		void NavigateForward (NSObject sender);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject)), Model, Protocol]
 	partial interface NSPageControllerDelegate {
 
@@ -16318,6 +16412,7 @@ namespace AppKit {
 		nint PageCount { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTableColumn : NSUserInterfaceItemIdentification, NSCoding {
 		[Export ("initWithIdentifier:")]
@@ -16373,6 +16468,7 @@ namespace AppKit {
 		string Title { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSTableRowView : NSAccessibilityRow {
 		[Export ("initWithFrame:")]
@@ -16435,6 +16531,7 @@ namespace AppKit {
 		bool NextRowSelected { [Bind ("isNextRowSelected")] get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	partial interface NSTableCellView {
 		[Export ("initWithFrame:")]
@@ -16471,6 +16568,7 @@ namespace AppKit {
 		}
 	}
 
+	[NoMacCatalyst]
 	delegate void NSTableViewRowHandler (NSTableRowView rowView, nint row);
 	
 	[NoMacCatalyst]
@@ -16855,6 +16953,7 @@ namespace AppKit {
 		NSTableViewStyle EffectiveStyle { get; }
 	} 
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -16946,6 +17045,7 @@ namespace AppKit {
 		NSTableViewRowAction[] RowActions (NSTableView tableView, nint row, NSTableRowActionEdge edge);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -16992,6 +17092,7 @@ namespace AppKit {
 	//
 	// This is the mixed NSTableViewDataSource and NSTableViewDelegate
 	//
+	[NoMacCatalyst]
 	[Model]
 	[Synthetic]
 	[BaseType (typeof (NSObject))]
@@ -17123,6 +17224,7 @@ namespace AppKit {
 		void UpdateDraggingItems (NSTableView tableView, [Protocolize (4)] NSDraggingInfo draggingInfo);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldCell))]
 	interface NSTableHeaderCell {
 		[Export ("initTextCell:")]
@@ -17135,6 +17237,7 @@ namespace AppKit {
 		CGRect GetSortIndicatorRect (CGRect theRect );
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSTableHeaderView : NSViewToolTipOwner {
 		[Export ("initWithFrame:")]
@@ -17161,6 +17264,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,11)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSTableViewRowAction : NSCopying
 	{
@@ -17183,6 +17287,7 @@ namespace AppKit {
 		NSColor BackgroundColor { get; set; }
 	}
 		
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTabViewDelegate)})]
 	partial interface NSTabView {
 		[Export ("initWithFrame:")]
@@ -17293,6 +17398,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSViewController))]
 	interface NSTabViewController : NSTabViewDelegate, NSToolbarDelegate {
 		[Export ("initWithNibName:bundle:")]
@@ -17370,6 +17476,7 @@ namespace AppKit {
 		new string [] SelectableItemIdentifiers (NSToolbar toolbar);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model, Protocol]
 	interface NSTabViewDelegate {
@@ -17386,6 +17493,7 @@ namespace AppKit {
 		void NumberOfItemsChanged (NSTabView tabView);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSTabViewItem : NSCoding {
 		[Export ("initWithIdentifier:")]
@@ -17434,6 +17542,7 @@ namespace AppKit {
 		NSTabViewItem GetTabViewItem (NSViewController viewController);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextDelegate)})]
 	partial interface NSText {
 		[DesignatedInitializer]
@@ -17843,6 +17952,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 12, 1)]
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSTextField))]
 	interface NSTextField_NSTouchBar
@@ -17861,7 +17971,7 @@ namespace AppKit {
 		void SetAllowsCharacterPickerTouchBarItem (bool allows);
 	}
 
-
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextField))]
 	interface NSSecureTextField 
 	{
@@ -17920,6 +18030,7 @@ namespace AppKit {
 		bool ShouldSelectCandidate (NSTextField textField, NSTextView textView, nuint index);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldDelegate))]
 	[Model]
 	[Protocol]
@@ -17937,6 +18048,7 @@ namespace AppKit {
 		void SelectionIsChanging (NSNotification notification);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[Model]
 	[Protocol]
@@ -18013,6 +18125,7 @@ namespace AppKit {
 		bool WantsNotificationForMarkedText { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof(NSTextFieldCell))]
 	[DisableDefaultCtor]
 	interface NSTokenFieldCell {
@@ -18044,6 +18157,7 @@ namespace AppKit {
 		NSTokenFieldCellDelegate Delegate { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldCell))]
 	interface NSSecureTextFieldCell {
 		[Export ("initTextCell:")]
@@ -19079,7 +19193,7 @@ namespace AppKit {
 
 	}
 	
-	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextField))]
 	interface NSTokenField {
 		[Export ("initWithFrame:")]
@@ -19111,6 +19225,7 @@ namespace AppKit {
 		NSCharacterSet CharacterSet { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -19383,6 +19498,7 @@ namespace AppKit {
 		bool Navigational { [Bind ("isNavigational")] get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSToolbarItem))]
 	interface NSToolbarItemGroup
 	{
@@ -19447,6 +19563,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 12, 2)]
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSTouch))]
 	interface NSTouch_NSTouchBar
@@ -19514,6 +19631,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[MacCatalyst (13, 0)]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSTouchBarItem : NSCoding
@@ -19531,9 +19649,11 @@ namespace AppKit {
 		[Export ("visibilityPriority")]
 		float VisibilityPriority { get; set; }
 
+		[NoMacCatalyst]
 		[NullAllowed, Export ("view")]
 		NSView View { get; }
 
+		[NoMacCatalyst]
 		[NullAllowed, Export ("viewController")]
 		NSViewController ViewController { get; }
 
@@ -20659,6 +20779,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSViewController))]
 	interface NSTitlebarAccessoryViewController : NSAnimationDelegate, NSAnimatablePropertyContainer {
 		[Export ("initWithNibName:bundle:")]
@@ -20692,6 +20813,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface NSVisualEffectView {
 		[Export ("initWithFrame:")]
@@ -20737,6 +20859,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSResponder))]
 	interface NSWindowController : NSCoding, NSSeguePerforming {
 		[DesignatedInitializer]
@@ -20814,6 +20937,7 @@ namespace AppKit {
 		void DismissController (NSObject sender);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -21416,6 +21540,7 @@ namespace AppKit {
 		bool OwnsMenuBar { get; }
 	}	
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl))]
 	interface NSStepper : NSAccessibilityStepper {
 		[Export ("initWithFrame:")]
@@ -21439,6 +21564,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof(NSActionCell))]
 	interface NSStepperCell
 	{
@@ -21458,7 +21584,7 @@ namespace AppKit {
 		bool Autorepeat { get; set; }
 	}
 
-	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSPredicateEditorRowTemplate : NSCoding, NSCopying {
 		[Export ("matchForPredicate:")]
@@ -21530,6 +21656,7 @@ namespace AppKit {
 		void Set ();
 	}
    
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSRuleEditorDelegate)})]
 	partial interface NSRuleEditor {
 		[Export ("initWithFrame:")]
@@ -21631,6 +21758,7 @@ namespace AppKit {
 		string DisplayValuesKeyPath { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -21666,6 +21794,7 @@ namespace AppKit {
 
 	}
    
+	[NoMacCatalyst]
 	[BaseType (typeof (NSRuleEditor))]
 	interface NSPredicateEditor {
 		//Detected properties
@@ -22107,6 +22236,7 @@ namespace AppKit {
 		void SetBidiLevels (IntPtr levels, NSRange glyphRange);
 	}
 
+	[NoMacCatalyst]
 	partial interface NSCollectionViewDelegate {
 		[Export ("collectionView:pasteboardWriterForItemAtIndex:")]
 		INSPasteboardWriting PasteboardWriterForItem (NSCollectionView collectionView, nuint index);
@@ -22123,6 +22253,7 @@ namespace AppKit {
 			CGPoint screenPoint, NSDragOperation dragOperation);
 	}
 
+	[NoMacCatalyst]
 	partial interface NSColor {
 		[Static, Export ("colorWithGenericGamma22White:alpha:")]
 		NSColor FromGamma22White (nfloat white, nfloat alpha);
@@ -22134,6 +22265,7 @@ namespace AppKit {
 		NSString SystemColorsChanged { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSDocumentController {
 		[Export ("duplicateDocumentWithContentsOfURL:copying:displayName:error:")]
 		NSDocument DuplicateDocumentWithContentsOfUrl (NSUrl url, bool duplicateByCopying,
@@ -22182,6 +22314,7 @@ namespace AppKit {
 		NSObject Item { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSOutlineView : NSAccessibilityOutline {
 
 		[Notification, Field ("NSOutlineViewSelectionDidChangeNotification")]
@@ -22266,6 +22399,7 @@ namespace AppKit {
 		NSColorSpace OldColorSpace { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSWindow {
 		//
 		// Fields + Notifications
@@ -22451,6 +22585,7 @@ namespace AppKit {
 	}
 
 #if !XAMCORE_4_0
+	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
  	partial interface NSControlEditingSupport {
  		[Export ("validateProposedFirstResponder:forEvent:")]
@@ -22480,12 +22615,14 @@ namespace AppKit {
 		void ChangeMode (NSEvent withEvent);
 	}
 
+	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
 	partial interface NSStandardKeyBindingMethods {
 		[Export ("quickLookPreviewItems:")]
 		void QuickLookPreviewItems (NSObject sender);
 	}
 
+	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSView))]
 	partial interface NSRulerMarkerClientViewDelegation {
 		[Export ("rulerView:locationForPoint:")]
@@ -22495,6 +22632,7 @@ namespace AppKit {
 		CGPoint RulerViewPoint (NSRulerView ruler, nfloat pointForLocation);
 	}
 
+	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
 	partial interface NSTextFinderSupport {
 		[Export ("performTextFinderAction:")]
@@ -22681,6 +22819,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 14)]
+	[NoMacCatalyst]
 	[Protocol]
 	interface NSViewToolTipOwner
 	{
@@ -22696,18 +22835,21 @@ namespace AppKit {
 		bool AutoRecalculatesCellSize { get; set; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSForm {
 
 		[Export ("preferredTextFieldWidth")]
 		nfloat PreferredTextFieldWidth { get; set; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSFormCell {
 
 		[Export ("preferredTextFieldWidth")]
 		nfloat PreferredTextFieldWidth { get; set; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSColor {
 
 		[Static, Export ("underPageBackgroundColor")]
@@ -22802,6 +22944,7 @@ namespace AppKit {
 	delegate void NSDocumentControllerOpenPanelWithCompletionHandler (NSArray urlsToOpen);
 	delegate void NSDocumentControllerOpenPanelResultHandler (nint result);
 
+	[NoMacCatalyst]
 	partial interface NSDocumentController : NSMenuItemValidation 
 #if XAMCORE_4_0
 	, NSUserInterfaceValidations // ValidateUserInterfaceItem was bound with NSObject and fix would break API compat  
@@ -22968,6 +23111,7 @@ namespace AppKit {
 		string BaseString { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSTableViewDelegate {
 
 		[Export ("tableView:toolTipForCell:rect:tableColumn:row:mouseLocation:"), DelegateName ("NSTableViewToolTip"), DefaultValue ("null")]
@@ -23000,6 +23144,7 @@ namespace AppKit {
 		NSString ContextHelpModeDidDeactivateNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSDrawer {
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSSplitViewController' instead.")]
 		[Notification, Field ("NSDrawerWillOpenNotification")]
@@ -23028,6 +23173,7 @@ namespace AppKit {
 		NSMenu MenuItem { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSMenu {
 		[Notification (typeof (NSMenuItemEventArgs))]
 		[Field ("NSMenuWillSendActionNotification")]
@@ -23062,21 +23208,25 @@ namespace AppKit {
 		NSString WillPopUpNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSPopUpButton {
 		[Notification, Field ("NSPopUpButtonWillPopUpNotification")]
 		NSString WillPopUpNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSRuleEditor {
 		[Notification, Field ("NSRuleEditorRowsDidChangeNotification")]
 		NSString RowsDidChangeNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSScreen {
 		[Notification, Field ("NSScreenColorSpaceDidChangeNotification")]
 		NSString ColorSpaceDidChangeNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSTableView : NSUserInterfaceValidations {
 		[Notification, Field ("NSTableViewSelectionDidChangeNotification")]
 		NSString SelectionDidChangeNotification { get; }
@@ -23093,6 +23243,7 @@ namespace AppKit {
 		NSString ColumnDidResizeNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSTextDidEndEditingEventArgs {
 		// FIXME: I think this is essentially a flags value
 		// of movements and characters. The docs are a bit
@@ -24036,6 +24187,7 @@ namespace AppKit {
 		NSAccessibilityCustomAction[] AccessibilityCustomActions { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[Protocol]
 	interface NSCollectionViewSectionHeaderView : NSCollectionViewElement
 	{
@@ -25474,6 +25626,7 @@ namespace AppKit {
 		void Draw (NSOpenGLContext context, NSOpenGLPixelFormat pixelFormat, double t, ref CVTimeStamp ts);
 	}
 
+	[NoMacCatalyst]
 	[Protocol (IsInformal=true)]
 	interface NSToolTipOwner
 	{
@@ -25517,6 +25670,7 @@ namespace AppKit {
 	delegate NSAttributedString AttributedStringForCandidateHandler (NSObject candidate, nint index);
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSCandidateListTouchBarItem
@@ -25580,6 +25734,7 @@ namespace AppKit {
 		void ChangedCandidateListVisibility (NSCandidateListTouchBarItem anItem, bool isVisible);
 	}
 
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSView))]
 	interface NSView_NSCandidateListTouchBarItem
@@ -25588,8 +25743,9 @@ namespace AppKit {
 		[Export ("candidateListTouchBarItem")]
 		NSCandidateListTouchBarItem GetCandidateListTouchBarItem (); 
 	}
-
+	
 	[Mac (10,12,2)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSColorPickerTouchBarItem
@@ -25641,6 +25797,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSCustomTouchBarItem
@@ -25673,6 +25830,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSGroupTouchBarItem
@@ -25723,6 +25881,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSPopoverTouchBarItem
@@ -25765,6 +25924,7 @@ namespace AppKit {
 	interface INSScrubberDataSource {}
 	interface INSScrubberDelegate {}
 
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface NSScrubberDataSource
@@ -25780,6 +25940,7 @@ namespace AppKit {
 		NSScrubberItemView GetViewForItem (NSScrubber scrubber, nint index);
 	}
 
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface NSScrubberDelegate
@@ -25811,6 +25972,7 @@ namespace AppKit {
 
 	[DesignatedDefaultCtor]
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSScrubberSelectionStyle : NSCoding
 	{
@@ -25827,6 +25989,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSView))]
 	interface NSScrubber
 	{
@@ -25917,6 +26080,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSView))]
 	interface NSScrubberArrangedView
 	{
@@ -25936,18 +26100,21 @@ namespace AppKit {
 
 	// These are empty but types used in other bindings
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSScrubberArrangedView))]
 	interface NSScrubberItemView
 	{
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSScrubberArrangedView))]
 	interface NSScrubberSelectionView
 	{
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSScrubberItemView))]
 	interface NSScrubberTextItemView
 	{
@@ -25959,6 +26126,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSScrubberItemView))]
 	interface NSScrubberImageItemView
 	{
@@ -25973,6 +26141,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSScrubberLayoutAttributes : NSCopying
 	{
@@ -25992,6 +26161,7 @@ namespace AppKit {
 
 	[DesignatedDefaultCtor]
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSScrubberLayout : NSCoding
 	{
@@ -26034,6 +26204,7 @@ namespace AppKit {
 		bool AutomaticallyMirrorsInRightToLeftLayout { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSScrubberFlowLayoutDelegate : NSScrubberDelegate
@@ -26043,6 +26214,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSScrubberLayout))]
 	interface NSScrubberFlowLayout
 	{
@@ -26057,6 +26229,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSScrubberLayout))]
 	interface NSScrubberProportionalLayout
 	{
@@ -26306,6 +26479,7 @@ namespace AppKit {
 		void DownloadFontAssets (DownloadFontAssetsRequestCompletionHandler completionHandler);
 	}
 
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSObject))]
 	interface NSObject_NSFontPanelValidationAdditions
@@ -26383,6 +26557,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,13)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSWindowTab
 	{
@@ -26400,6 +26575,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,13)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSWindowTabGroup
@@ -26430,6 +26606,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSButtonTouchBarItem
@@ -26530,6 +26707,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSPickerTouchBarItem
@@ -26619,6 +26797,7 @@ namespace AppKit {
 		void ShowSampler (Action<NSColor> selectionHandler);
 	}
 
+	[NoMacCatalyst]
 	[Mac (10,15)]
 	[BaseType (typeof (NSControl))]
 	[DesignatedDefaultCtor]
@@ -26629,6 +26808,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSToolbarItem))]
 	interface NSMenuToolbarItem
 	{
@@ -26737,6 +26917,7 @@ namespace AppKit {
 
 	[Protocol]
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	interface NSTextCheckingClient : NSTextInputTraits, NSTextInputClient
 	{
 		[Abstract]
@@ -26832,6 +27013,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSTextCheckingController
@@ -27014,7 +27196,7 @@ namespace AppKit {
 		NSObject[] GetItems (NSSharingServicePickerToolbarItem pickerToolbarItem);
 	}
 
-	[Unavailable (PlatformName.MacCatalyst)]
+	[NoMacCatalyst]
 	[Mac (11,0)]
 	[BaseType (typeof(NSToolbarItem))]
 	[DisableDefaultCtor]
@@ -27040,11 +27222,15 @@ namespace AppKit {
 		void EndSearchInteraction ();
 	}
 
+	[NoMacCatalyst]
 	delegate NSView NSTableViewDiffableDataSourceCellProvider (NSTableView tableView, NSTableColumn column, nint row, NSObject itemId);
+	[NoMacCatalyst]
 	delegate NSTableRowView NSTableViewDiffableDataSourceRowProvider (NSTableView tableView, nint row, NSObject identifier);
+	[NoMacCatalyst]
 	delegate NSView NSTableViewDiffableDataSourceSectionHeaderViewProvider (NSTableView tableView, nint row, NSObject sectionId);
 
 	[Mac (11,0)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSTableViewDiffableDataSource<SectionIdentifierType,ItemIdentifierType> : NSTableViewDataSource
@@ -27113,6 +27299,7 @@ namespace AppKit {
 	}
 
 	[Mac (11,0)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface NSTintConfiguration : NSCopying, NSSecureCoding
@@ -27144,6 +27331,7 @@ namespace AppKit {
 	}
 
 	[Mac (11,0)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSToolbarItem))]
 	[DisableDefaultCtor]
 	interface NSTrackingSeparatorToolbarItem

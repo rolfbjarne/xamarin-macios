@@ -3,7 +3,7 @@ using System;
 using Foundation;
 using UIKit;
 
-namespace MySingleView
+namespace MyInterpretedApp
 {
 	public partial class AppDelegate : UIApplicationDelegate
 	{

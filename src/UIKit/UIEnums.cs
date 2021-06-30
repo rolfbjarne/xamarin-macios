@@ -1186,43 +1186,6 @@ namespace UIKit {
 		GreaterThanOrEqual = 1
 	}
 
-	// NSInteger -> NSLayoutConstraint.h
-	[Native]
-	[NoWatch]
-	public enum NSLayoutAttribute : long {
-		NoAttribute = 0,
-		Left = 1,
-		Right,
-		Top,
-		Bottom,
-		Leading,
-		Trailing,
-		Width,
-		Height,
-		CenterX,
-		CenterY,
-		Baseline,
-		LastBaseline = Baseline,
-		FirstBaseline,
-   
-		[iOS (8,0)]
-		LeftMargin,
-		[iOS (8,0)]
-		RightMargin,
-		[iOS (8,0)]
-		TopMargin,
-		[iOS (8,0)]
-		BottomMargin,
-		[iOS (8,0)]
-		LeadingMargin,
-		[iOS (8,0)]
-		TrailingMargin,
-		[iOS (8,0)]
-		CenterXWithinMargins,
-		[iOS (8,0)]
-		CenterYWithinMargins,
-	}
-
 	// NSUInteger -> NSLayoutConstraint.h
 	[Native]
 	[Flags]

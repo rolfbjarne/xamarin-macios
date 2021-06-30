@@ -133,6 +133,54 @@ namespace UIKit {
 		NonBaseCharacter = (1 << 3),
 	}
 
+	// NSInteger -> NSLayoutConstraint.h
+	[Native]
+	[NoWatch]
+	[MacCatalyst (13,0)]
+	public enum NSLayoutAttribute : long {
+		NoAttribute = 0,
+		Left = 1,
+		Right,
+		Top,
+		Bottom,
+		Leading,
+		Trailing,
+		Width,
+		Height,
+		CenterX,
+		CenterY,
+		Baseline,
+		[Mac (10,11)]
+		LastBaseline = Baseline,
+		[Mac (10,11)]
+		FirstBaseline,
+
+		[NoMac]
+		[iOS (8,0)]
+		LeftMargin,
+		[NoMac]
+		[iOS (8,0)]
+		RightMargin,
+		[NoMac]
+		[iOS (8,0)]
+		TopMargin,
+		[NoMac]
+		[iOS (8,0)]
+		BottomMargin,
+		[NoMac]
+		[iOS (8,0)]
+		LeadingMargin,
+		[NoMac]
+		[iOS (8,0)]
+		TrailingMargin,
+		[NoMac]
+		[iOS (8,0)]
+		CenterXWithinMargins,
+		[NoMac]
+		[iOS (8,0)]
+		CenterYWithinMargins,
+	}
+
 	[NoWatch] // Header is not present in watchOS SDK.
 	[iOS (7,0)]
 	[DesignatedDefaultCtor]

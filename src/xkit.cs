@@ -2752,9 +2752,9 @@ namespace UIKit {
 		nfloat ShadowBlurRadius { get; set;  }
 
 #if MONOMAC
-		[Export ("shadowColor", ArgumentSemantic.Retain), NullAllowed]
-#else
 		[Export ("shadowColor", ArgumentSemantic.Copy)]
+#else
+		[Export ("shadowColor", ArgumentSemantic.Retain), NullAllowed]
 #endif
 		UIColor ShadowColor { get; set;  }
 	}

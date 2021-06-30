@@ -2768,7 +2768,7 @@ namespace UIKit {
 		[DesignatedInitializer]
 		[Export ("initWithTextAlignment:location:options:")]
 		[PostGet ("Options")]
-		IntPtr Constructor (UITextAlignment alignment, nfloat location, NSDictionary options);
+		IntPtr Constructor (TextAlignment alignment, nfloat location, NSDictionary options);
 
 		[NoiOS][NoMacCatalyst][NoTV][NoWatch]
 		[Export ("initWithType:location:")]

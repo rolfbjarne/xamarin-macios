@@ -9145,6 +9145,7 @@ namespace AppKit {
 	}
 
 	[BaseType (typeof (NSObject), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSImageDelegate)})]
+	[MacCatalyst (13,0)]
 	[ThreadSafe]
 	partial interface NSImage : NSCopying, NSSecureCoding, NSPasteboardReading, NSPasteboardWriting {
 		[return: NullAllowed]
@@ -26950,14 +26951,17 @@ namespace AppKit {
 		Caption2,
 	}
 
-	[Mac (10,15), iOS (10,13)]
+	[Mac (10,15)]
+	[MacCatalyst (13, 0)]
 	[BaseType (typeof (NSToolbarItem))]
 	interface NSSharingServicePickerToolbarItem
 	{
+		[NoMacCatalyst]
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSSharingServicePickerToolbarItemDelegate Delegate { get; set; }
 
+		[NoMacCatalyst]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 	}

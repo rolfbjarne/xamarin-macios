@@ -4,6 +4,9 @@ using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 using CoreGraphics;
+#if __MACCATALYST__
+using UIKit;
+#endif
 
 namespace AppKit {
 

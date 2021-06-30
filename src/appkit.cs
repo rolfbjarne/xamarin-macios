@@ -2323,6 +2323,7 @@ namespace AppKit {
 		CGRect Rectangle { get; }
 	}
 	
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	interface NSCell : NSUserInterfaceItemIdentification, NSCoding, NSCopying, NSAccessibilityElementProtocol, NSAccessibility, NSObjectAccessibilityExtensions {
@@ -4691,6 +4692,7 @@ namespace AppKit {
 		nuint IndexOfItem (NSComboBoxCell comboBox, string value);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	partial interface NSControl {
 		[DesignatedInitializer]
@@ -8265,6 +8267,7 @@ namespace AppKit {
 		bool AllowsKeyEquivalentWhenHidden { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSButtonCell))]
 	interface NSMenuItemCell {
 		[DesignatedInitializer]
@@ -10600,12 +10603,14 @@ namespace AppKit {
 		nfloat Magnification { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[Model]
 	[BaseType (typeof (NSObject))]
 	[Protocol]
 	interface NSMatrixDelegate : NSControlTextEditingDelegate {
 	}
 
+	[NoMacCatalyst]
 	[Model]
 	[BaseType (typeof (NSObject))]
 	[Protocol]
@@ -13203,6 +13208,7 @@ namespace AppKit {
 		CGRect CancelButtonBounds { get; }
 	}
 		
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSSearchFieldDelegate : NSTextFieldDelegate
@@ -16467,6 +16473,7 @@ namespace AppKit {
 
 	delegate void NSTableViewRowHandler (NSTableRowView rowView, nint row);
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTableViewDelegate)})]
 	partial interface NSTableView : NSDraggingSource, NSAccessibilityTable {
 		[DesignatedInitializer]
@@ -17718,6 +17725,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSControl), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextFieldDelegate)})]
 	partial interface NSTextField : NSAccessibilityNavigableStaticText, NSUserInterfaceValidations, NSTextContent {
 		[Export ("initWithFrame:")]
@@ -17863,6 +17871,7 @@ namespace AppKit {
 
 	interface INSTextFieldDelegate { }
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -17964,6 +17973,7 @@ namespace AppKit {
 		NSTokenStyle GetStyle (NSTokenFieldCell tokenFieldCell, NSObject representedObject);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSActionCell))]
 	interface NSTextFieldCell {
 		[DesignatedInitializer]
@@ -18367,6 +18377,7 @@ namespace AppKit {
 		NSString [] ValidAttributesForMarkedText { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSText), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextViewDelegate)})]
 	partial interface NSTextView : NSTextInputClient, NSTextLayoutOrientationProvider, NSDraggingSource, NSTextFinderClient, NSAccessibilityNavigableStaticText, NSCandidateListTouchBarItemDelegate, NSTouchBarDelegate, NSMenuItemValidation, NSUserInterfaceValidations, NSTextInput, NSTextContent
 #if XAMCORE_4_0
@@ -18974,6 +18985,7 @@ namespace AppKit {
 		bool DrawsVertically (nuint charIndex);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextDelegate))]
 	[Model]
 	[Protocol]
@@ -19755,6 +19767,7 @@ namespace AppKit {
 
 	delegate void NSWindowTrackEventsMatchingCompletionHandler (NSEvent evt, ref bool stop);
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSWindowDelegate)})]
 	[DisableDefaultCtor]
 	partial interface NSWindow : NSAnimatablePropertyContainer, NSUserInterfaceItemIdentification, NSAppearanceCustomization, NSAccessibilityElementProtocol, NSAccessibility, NSMenuItemValidation, NSUserInterfaceValidations {
@@ -22676,6 +22689,7 @@ namespace AppKit {
 		string GetStringForToolTip (NSView view, nint tag, CGPoint point, IntPtr data);
 	}
 
+	[NoMacCatalyst]
 	partial interface NSMatrix : NSUserInterfaceValidations, NSViewToolTipOwner {
 
 		[Export ("autorecalculatesCellSize")]
@@ -22876,6 +22890,7 @@ namespace AppKit {
 		NSString SharingServiceNamePostVideoOnTudou { get; }
 	}
 
+	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSTextView))]
 	partial interface NSTextView_SharingService {
 
@@ -23041,6 +23056,7 @@ namespace AppKit {
 		NSString DidEndTrackingNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSPopUpButtonCell : NSMenuItemValidation {
 		[Notification, Field ("NSPopUpButtonCellWillPopUpNotification")]
 		NSString WillPopUpNotification { get; }
@@ -23085,6 +23101,7 @@ namespace AppKit {
 		nint Movement { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSText {
 		[Notification, Field ("NSTextDidBeginEditingNotification")]
 		NSString DidBeginEditingNotification { get; }
@@ -26064,6 +26081,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12,2)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSSharingServicePickerTouchBarItem
@@ -26072,6 +26090,7 @@ namespace AppKit {
 		[DesignatedInitializer]
 		IntPtr Constructor (string identifier);
 
+		[NoMacCatalyst]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		INSSharingServicePickerTouchBarItemDelegate Delegate { get; set; }
 
@@ -26967,14 +26986,17 @@ namespace AppKit {
 		Caption2,
 	}
 
-	[Mac (10,15), iOS (10,13)]
+	[Mac (10,15)]
+	[MacCatalyst (13, 0)]
 	[BaseType (typeof (NSToolbarItem))]
 	interface NSSharingServicePickerToolbarItem
 	{
+		[NoMacCatalyst]
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSSharingServicePickerToolbarItemDelegate Delegate { get; set; }
 
+		[NoMacCatalyst]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 	}

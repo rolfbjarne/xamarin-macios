@@ -2434,24 +2434,6 @@ namespace AppKit {
 		GreaterThanOrEqual = 1
 	}
 
-	[Native]
-	public enum NSLayoutAttribute : long {
-		NoAttribute = 0,
-		Left = 1,
-		Right,
-		Top,
-		Bottom,
-		Leading,
-		Trailing,
-		Width,
-		Height,
-		CenterX,
-		CenterY,
-		Baseline,
-		[Mac (10,11)] LastBaseline = Baseline,
-		[Mac (10,11)] FirstBaseline,
-	}
-
 	[Flags]
 	[Native]
 	public enum NSLayoutFormatOptions : ulong {

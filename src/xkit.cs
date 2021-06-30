@@ -2758,7 +2758,7 @@ namespace UIKit {
 #else
 		[Export ("shadowColor", ArgumentSemantic.Retain), NullAllowed]
 #endif
-		UIColor ShadowColor { get; set;  }
+		NSColor ShadowColor { get; set;  }
 	}
 
 	[iOS (7,0)]

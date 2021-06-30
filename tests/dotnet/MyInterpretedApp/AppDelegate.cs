@@ -15,7 +15,7 @@ namespace MyInterpretedApp
 
 			var dvc = new UIViewController ();
 			var button = new UIButton (window.Bounds);
-			button.SetTitle ("MyInterpretedApp in net6!", UIControlState.Normal);
+			button.SetTitle ($"Execution mode: {Application.GetExecutionMode ()}", UIControlState.Normal);
 			dvc.Add (button);
 
 			window.RootViewController = dvc;

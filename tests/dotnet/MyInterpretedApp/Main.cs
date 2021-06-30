@@ -14,11 +14,11 @@ namespace MyInterpretedApp
 			UIApplication.Main (args, null, typeof (AppDelegate));
 		}
 
-		public string GetExecutionMode()
+		public static string GetExecutionMode()
 		{
 			if (!RuntimeFeature.IsDynamicCodeSupported)
 				return "AOT";
-			if (RutnimeFeature.IsDynamicCodeCompiled)
+			if (RuntimeFeature.IsDynamicCodeCompiled)
 				return "JIT";
 			return "Interpreter";
 		}

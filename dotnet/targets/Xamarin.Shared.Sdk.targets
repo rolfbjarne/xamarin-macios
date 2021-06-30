@@ -661,6 +661,17 @@
 			<_RuntimeConfigurationFile>runtimeconfig.bin</_RuntimeConfigurationFile>
 		</PropertyGroup>
 
+		<PropertyGroup Condition="'$(_RunAotCompiler)' == ''">
+			<!-- Don't run the AOT compiler by default -->
+			<_RunAotCompiler>false</_RunAotCompiler>
+			<!-- We need it for device builds for mobile platforms -->
+			<_RunAotCompiler Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'">true</_RunAotCompiler>
+			<!-- We need it if the interpreter is enabled, no matter where -->
+			<_RunAotCompiler Condition="'$(MtouchInterpreter)' != ''">true</_RunAotCompiler>
+			<!-- We need it for Mac Catalyst on arm64 -->
+			<_RunAotCompiler Condition="'$(RuntimeIdentifier)' == 'maccatalyst-arm64'">true</_RunAotCompiler>
+		</PropertyGroup>
+
 		<ItemGroup>
 			<!-- Select the native libraries from mono we need to link with and potentially copy into the app -->
 			<_MonoLibrary
@@ -698,13 +709,6 @@
 
 		<Warning Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Text="Some features may not work correctly, because the generation of the runtime configure file (*.runtimeconfig.json) has been disabled." />
 	</Target>
-
-	<PropertyGroup>
-		<_RunAotCompiler Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS'">true</_RunAotCompiler>
-		<_RunAotCompiler Condition="'$(MtouchInterpreter)' == 'true'">true</_RunAotCompiler>
-		<_RunAotCompiler Condition="'$(RuntimeIdentifier)' == 'maccatalyst-arm64'">true</_RunAotCompiler>
-		<_RunAotCompiler Condition="'$(_RunAotCompiler)' == ''">false</_RunAotCompiler>
-	</PropertyGroup>
 
 	<Target Name="_AOTCompile"
 			Condition="'$(_RunAotCompiler)' == 'true'"

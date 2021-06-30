@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-   <!-- <UseInterpreter>true</UseInterpreter>-->
+    <UseInterpreter>true</UseInterpreter>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <AssemblyName>MyInterpretedApp2</AssemblyName>
     <CodesignEntitlements>../Entitlements.plist</CodesignEntitlements>

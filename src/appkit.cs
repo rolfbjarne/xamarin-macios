@@ -7081,6 +7081,7 @@ namespace AppKit {
 		NSAttributedString AttributedTitle { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSGlyphGenerator {
 		[Export ("generateGlyphsForGlyphStorage:desiredNumberOfCharacters:glyphIndex:characterIndex:")]
@@ -7415,6 +7416,7 @@ namespace AppKit {
 		NSLayoutConstraint[] CustomPlacementConstraints { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSGraphicsContext))]
 	[DisableDefaultCtor]
 	interface NSPrintPreviewGraphicsContext {
@@ -8334,6 +8336,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 0, 0, PlatformArchitecture.Arch32)] // kept for the arch limitation
+	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 15, message: "API only available on 32bits platforms.")]
 	[BaseType (typeof (NSView))]
 	interface NSMenuView {
@@ -8775,7 +8778,7 @@ namespace AppKit {
 		nint RunModal (string [] types);
 	}
 
-#if !XAMCORE_4_0
+#if !XAMCORE_4_0 && !__MACCATALYST__
 	// This class doesn't show up in any documentation
 	[BaseType (typeof (NSOpenPanel))]
 	[DisableDefaultCtor] // should not be created by (only returned to) user code
@@ -12737,7 +12740,7 @@ namespace AppKit {
 		
 	}
 
-#if !XAMCORE_4_0
+#if !XAMCORE_4_0 && !__MACCATALYST__
 	// This class doesn't show up in any documentation.
 	[BaseType (typeof (NSSavePanel))]
 	[DisableDefaultCtor] // should not be created by (only returned to) user code
@@ -17574,6 +17577,7 @@ namespace AppKit {
 		bool VerticallyResizable { [Bind ("isVerticallyResizable")]get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -17594,6 +17598,7 @@ namespace AppKit {
 		void TextDidChange (NSNotification notification);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSCell))]
 	interface NSTextAttachmentCell {
 		[Export ("initImageCell:")]
@@ -17637,6 +17642,7 @@ namespace AppKit {
 		NSTextAttachment Attachment { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	interface NSTextBlock : NSCoding, NSCopying, NSSecureCoding {
@@ -18069,6 +18075,7 @@ namespace AppKit {
 		string LocalizedNameForInputSource (string inputSourceIdentifier);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSTextList : NSCoding, NSCopying, NSSecureCoding {
 		[Export ("initWithMarkerFormat:options:")]
@@ -18170,6 +18177,7 @@ namespace AppKit {
 		Decimal,
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextBlock))]
 	[DisableDefaultCtor]
 	interface NSTextTableBlock {
@@ -18193,6 +18201,7 @@ namespace AppKit {
 		nint ColumnSpan { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTextBlock))]
 	interface NSTextTable {
 		[Export ("rectForBlock:layoutAtPoint:inRect:textContainer:characterRange:")]
@@ -19181,6 +19190,7 @@ namespace AppKit {
 		void DidRemoveItem (NSNotification notification);
 	}
 
+	[NoMacCatalyst]
 	[Mac (10, 14)]
 	[Protocol]
 	interface NSToolbarItemValidation
@@ -19657,6 +19667,7 @@ namespace AppKit {
 		string LeafKeyPathForNode (NSTreeNode node);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTypesetter {
 
@@ -21806,6 +21817,7 @@ namespace AppKit {
 		void DidChooseSharingService (NSSharingServicePicker sharingServicePicker, NSSharingService service);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSTypesetter))]
 	interface NSATSTypesetter {
 		[Static]
@@ -22797,6 +22809,7 @@ namespace AppKit {
 		string AlternativeString { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextAlternatives : NSSecureCoding {
 
@@ -22817,6 +22830,7 @@ namespace AppKit {
 		NSString SelectedAlternativeStringNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSGlyphInfo : NSCoding, NSCopying, NSSecureCoding {
 
@@ -25376,6 +25390,7 @@ namespace AppKit {
 		nint Tag { get; }
 	}
 
+	[NoMacCatalyst]
 	[Protocol]
 	[Mac (10,12)]
 	interface NSCloudSharingValidation
@@ -26014,6 +26029,7 @@ namespace AppKit {
 
 	public interface INSSharingServicePickerTouchBarItemDelegate {}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSSharingServicePickerTouchBarItemDelegate : NSSharingServicePickerDelegate
@@ -26540,6 +26556,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSCollectionViewCompositionalLayoutConfiguration : NSCopying
 	{
@@ -26584,6 +26601,7 @@ namespace AppKit {
 	delegate NSCollectionLayoutSection NSCollectionViewCompositionalLayoutSectionProvider (nint section, INSCollectionLayoutEnvironment layout);
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSCollectionViewLayout))]
 	[DisableDefaultCtor]
 	interface NSCollectionViewCompositionalLayout
@@ -26847,6 +26865,7 @@ namespace AppKit {
 	delegate NSView NSCollectionViewDiffableDataSourceSupplementaryViewProvider (NSCollectionView collectionView, string str, NSIndexPath indexPath);
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSCollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> : NSCollectionViewDataSource
@@ -26942,6 +26961,7 @@ namespace AppKit {
 	public interface INSSharingServicePickerToolbarItemDelegate { }
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[Protocol, Model (AutoGeneratedName = true)]
 	[BaseType (typeof (NSSharingServicePickerDelegate))]
 	interface NSSharingServicePickerToolbarItemDelegate

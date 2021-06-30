@@ -6,14 +6,8 @@
 	<array>
 		<integer>1</integer>
 	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
 	<key>MinimumOSVersion</key>
-	<string>10.0</string>
+	<string>15.0</string>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
 	<key>XSLaunchImageAssets</key>

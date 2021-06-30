@@ -4,8 +4,8 @@
     <OutputType>Exe</OutputType>
     <UseInterpreter>true</UseInterpreter>
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
-    <AssemblyName>MyInterpretedApp2</AssemblyName>
-    <CodesignEntitlements>../Entitlements.plist</CodesignEntitlements>
+    <AssemblyName>MySingleView</AssemblyName>
+    <!-- <CodesignEntitlements>../Entitlements.plist</CodesignEntitlements> -->
 
     <!-- FIXME -->
     <_LibMonoLinkMode>static</_LibMonoLinkMode>

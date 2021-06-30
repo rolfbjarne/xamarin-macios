@@ -2,15 +2,17 @@
 <Project>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <UseInterpreter>true</UseInterpreter>
+   <!-- <UseInterpreter>true</UseInterpreter>-->
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <AssemblyName>MyInterpretedApp2</AssemblyName>
+    <CodesignEntitlements>../Entitlements.plist</CodesignEntitlements>
 
     <!-- FIXME -->
     <_LibMonoLinkMode>static</_LibMonoLinkMode>
     <_LibXamarinLinkMode>static</_LibXamarinLinkMode>
 
-    <ApplicationTitle>MyInterpretedApp</ApplicationTitle>
-    <ApplicationId>com.xamarin.myinterpretedapp</ApplicationId>
+    <ApplicationTitle>MyInterpretedApp2</ApplicationTitle>
+    <ApplicationId>com.xamarin.myinterpretedapp2</ApplicationId>
     <ApplicationVersion>1.0</ApplicationVersion>
   </PropertyGroup>
 

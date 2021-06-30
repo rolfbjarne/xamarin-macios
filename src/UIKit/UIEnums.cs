@@ -1186,38 +1186,6 @@ namespace UIKit {
 		GreaterThanOrEqual = 1
 	}
 
-	// NSUInteger -> NSLayoutConstraint.h
-	[Native]
-	[Flags]
-	[NoWatch]
-	public enum NSLayoutFormatOptions : ulong {
-		AlignAllLeft = (1 << (int) NSLayoutAttribute.Left),
-		AlignAllRight = (1 << (int) NSLayoutAttribute.Right),
-		AlignAllTop = (1 << (int) NSLayoutAttribute.Top),
-		AlignAllBottom = (1 << (int) NSLayoutAttribute.Bottom),
-		AlignAllLeading = (1 << (int) NSLayoutAttribute.Leading),
-		AlignAllTrailing = (1 << (int) NSLayoutAttribute.Trailing),
-		AlignAllCenterX = (1 << (int) NSLayoutAttribute.CenterX),
-		AlignAllCenterY = (1 << (int) NSLayoutAttribute.CenterY),
-		AlignAllBaseline = (1 << (int) NSLayoutAttribute.Baseline),
-		AlignAllLastBaseline = (1 << (int) NSLayoutAttribute.LastBaseline),
-		AlignAllFirstBaseline = (1 << (int) NSLayoutAttribute.FirstBaseline),
-		
-		AlignmentMask = 0xFFFF,
-		
-		/* choose only one of these three
-		 */
-		DirectionLeadingToTrailing = 0 << 16, // default
-		DirectionLeftToRight = 1 << 16,
-		DirectionRightToLeft = 2 << 16,
-
-		SpacingEdgeToEdge = 0 << 19,
-		SpacingBaselineToBaseline = 1 << 19,
-		SpacingMask = 1 << 19,
-		
-		DirectionMask = 0x3 << 16,
-	}
-
 	// float (and not even a CGFloat) -> NSLayoutConstraint.h
 	// the API were fixed (a long time ago to use `float`) and the enum
 	// values can still be used (and useful) since they will be casted

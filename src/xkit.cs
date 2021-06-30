@@ -181,6 +181,46 @@ namespace UIKit {
 		CenterYWithinMargins,
 	}
 
+	// NSUInteger -> NSLayoutConstraint.h
+	[Native]
+	[Flags]
+	[NoWatch]
+	[MacCatalyst (13,0)]
+	public enum NSLayoutFormatOptions : ulong {
+		None = 0,
+
+		AlignAllLeft = (1 << (int) NSLayoutAttribute.Left),
+		AlignAllRight = (1 << (int) NSLayoutAttribute.Right),
+		AlignAllTop = (1 << (int) NSLayoutAttribute.Top),
+		AlignAllBottom = (1 << (int) NSLayoutAttribute.Bottom),
+		AlignAllLeading = (1 << (int) NSLayoutAttribute.Leading),
+		AlignAllTrailing = (1 << (int) NSLayoutAttribute.Trailing),
+		AlignAllCenterX = (1 << (int) NSLayoutAttribute.CenterX),
+		AlignAllCenterY = (1 << (int) NSLayoutAttribute.CenterY),
+		AlignAllBaseline = (1 << (int) NSLayoutAttribute.Baseline),
+		[Mac (10,11)]
+		AlignAllLastBaseline = (1 << (int) NSLayoutAttribute.LastBaseline),
+		[Mac (10,11)]
+		AlignAllFirstBaseline = (1 << (int) NSLayoutAttribute.FirstBaseline),
+
+		AlignmentMask = 0xFFFF,
+
+		/* choose only one of these three
+		 */
+		DirectionLeadingToTrailing = 0 << 16, // default
+		DirectionLeftToRight = 1 << 16,
+		DirectionRightToLeft = 2 << 16,
+
+		[NoMac]
+		SpacingEdgeToEdge = 0 << 19,
+		[NoMac]
+		SpacingBaselineToBaseline = 1 << 19,
+		[NoMac]
+		SpacingMask = 1 << 19,
+
+		DirectionMask = 0x3 << 16,
+	}
+
 	[NoWatch] // Header is not present in watchOS SDK.
 	[iOS (7,0)]
 	[DesignatedDefaultCtor]

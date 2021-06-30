@@ -2535,4 +2535,27 @@ namespace UIKit {
 		[Export ("typeIdentifier")] // Uniform Type Identifier
 		NSString TypeIdentifier { get; }
 	}
+
+	[MacCatalyst (13,0)]
+	[Watch (6,0)]
+	[BaseType (typeof (NSObject))]
+	[DesignatedDefaultCtor]
+	interface NSShadow : NSSecureCoding, NSCopying {
+		[NoiOS][NoMacCatalyst][NoTV][NoWatch]
+		[Export ("set")]
+		void Set ();
+
+		[Export ("shadowOffset", ArgumentSemantic.Assign)]
+		CGSize ShadowOffset { get; set; }
+
+		[Export ("shadowBlurRadius", ArgumentSemantic.Assign)]
+		nfloat ShadowBlurRadius { get; set;  }
+
+#if MONOMAC
+		[Export ("shadowColor", ArgumentSemantic.Retain), NullAllowed]
+#else
+		[Export ("shadowColor", ArgumentSemantic.Copy)]
+#endif
+		UIColor ShadowColor { get; set;  }
+	}
 }

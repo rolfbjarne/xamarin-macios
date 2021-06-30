@@ -26395,14 +26395,6 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
-	[Native]
-	public enum NSTextScalingType : long
-	{
-		Standard = 0,
-		iOS,
-	}
-
-	[Mac (10,15)]
 	[BaseType (typeof(NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSButtonTouchBarItem

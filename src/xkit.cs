@@ -1777,8 +1777,9 @@ namespace UIKit {
 		[Export ("representedElementCategory")]
 		CollectionElementCategory RepresentedElementCategory {
 			get;
-			[NoiOS][NoTV][NoMacCatalyst]
+#if MONOMAC
 			set;
+#endif
 		}
 
 		[Abstract]

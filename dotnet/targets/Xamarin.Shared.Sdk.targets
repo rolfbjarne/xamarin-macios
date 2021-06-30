@@ -703,6 +703,7 @@
 		<_RunAotCompiler Condition="'$(_SdkIsSimulator)' != 'true' And '$(_PlatformName)' != 'macOS'">true</_RunAotCompiler>
 		<_RunAotCompiler Condition="'$(MtouchInterpreter)' == 'true'">true</_RunAotCompiler>
 		<_RunAotCompiler Condition="'$(RuntimeIdentifier)' == 'maccatalyst-arm64'">true</_RunAotCompiler>
+		<_RunAotCompiler Condition="'$(_RunAotCompiler)' == ''">false</_RunAotCompiler>
 	</PropertyGroup>
 
 	<Target Name="_AOTCompile"

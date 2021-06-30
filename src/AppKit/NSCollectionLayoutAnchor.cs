@@ -1,12 +1,10 @@
+#if !__MACCATALYST__
 using System;
 using System.Runtime.InteropServices;
 using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 using CoreGraphics;
-#if __MACCATALYST__
-using UIKit;
-#endif
 
 namespace AppKit {
 
@@ -26,3 +24,4 @@ namespace AppKit {
 		    };
 	}
 }
+#endif // !__MACCATALYST__

@@ -40,7 +40,9 @@ namespace AppKit
 		public static Selector DoubleAction = new Selector (dkey);
 		public EventHandler Activated;
 		public EventHandler DoubleActivated;
+#if !__MACCATALYST__
 		public Func<NSMenuItem, bool> ValidateMenuItemFunc;
+#endif // !__MACCATALYST__
 
 		[Preserve, Export (skey)]
 		public void OnActivated (NSObject sender)
@@ -105,6 +107,7 @@ namespace AppKit
 			ctarget.DoubleActivated -= doubleHandler;
 		}
 
+#if !__MACCATALYST__
 		public bool ValidateMenuItem (NSMenuItem menuItem)
 		{
 			if (ValidateMenuItemFunc != null)
@@ -112,6 +115,7 @@ namespace AppKit
 
 			return true;
 		}
+#endif // !__MACCATALYST__
 
 		[Preserve]
 		public bool WorksWhenModal {

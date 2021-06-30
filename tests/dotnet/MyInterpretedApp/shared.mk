@@ -2,7 +2,7 @@ TOP=../../../..
 include $(TOP)/Make.config
 
 prepare:
-	rm -Rf $(TOP)/tests/packages
+	rm -Rf $(TOP)/tests/dotnet/packages
 	$(MAKE) -C $(TOP) -j8 all
 	$(MAKE) -C $(TOP) -j8 install
 	git clean -xfdq

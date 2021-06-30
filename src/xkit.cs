@@ -30,6 +30,7 @@ using NSTextAttachmentCell=System.Object;
 using NSTextBlock=System.Object;
 using NSTextList=System.Object;
 using NSTextTableBlock=System.Object;
+using NSTextTabType=System.Object;
 using NSTextStorageEditedFlags=System.Object;
 using NSTextView=System.Object;
 using NSTypesetter=System.Object;
@@ -2774,7 +2775,7 @@ namespace UIKit {
 		IntPtr Constructor (NSTextTabType type, nfloat location);
 
 		[Export ("alignment")]
-		NSTextAlignment Alignment { get; }
+		TextAlignment Alignment { get; }
 
 		[Export ("options")]
 		NSDictionary Options { get; }
@@ -2782,6 +2783,7 @@ namespace UIKit {
 		[Export ("location")]
 		nfloat Location { get; }
 
+		[NoiOS][NoMacCatalyst][NoTV][NoWatch]
 		[Export ("tabStopType")]
 		NSTextTabType TabStopType { get; }
 

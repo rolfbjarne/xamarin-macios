@@ -227,7 +227,7 @@ namespace UIKit {
 	public enum NSLayoutRelation : long {
 		LessThanOrEqual = -1,
 		Equal = 0,
-		GreaterThanOrEqual = 1
+		GreaterThanOrEqual = 1,
 	}
 
 	[Watch (7,0), TV (14,0), iOS (14,0)]

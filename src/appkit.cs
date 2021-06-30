@@ -100,6 +100,7 @@ namespace AppKit {
 
 	// @interface NSAlignmentFeedbackFilter : NSObject
 	[Mac (10,11)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSAlignmentFeedbackFilter
 	{
@@ -2686,6 +2687,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSClickGestureRecognizer : NSCoding {
 		[Export ("initWithTarget:action:")]
@@ -5150,10 +5152,12 @@ namespace AppKit {
 
 		[Export ("mouseEntered:")]
 		[Deprecated (PlatformName.MacOSX, 10, 13)]
+		[NoMacCatalyst]
 		void MouseEntered (NSEvent theEvent);
 
 		[Export ("mouseExited:")]
 		[Deprecated (PlatformName.MacOSX, 10, 13)]
+		[NoMacCatalyst]
 		void MouseExited (NSEvent theEvent);
 	}
 
@@ -6052,6 +6056,7 @@ namespace AppKit {
 		void ResetSpringLoading ();
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -7849,6 +7854,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject), Delegates=new string [] {"WeakDelegate"}, Events=new Type[] {typeof (NSGestureRecognizerDelegate)})]
 	interface NSGestureRecognizer : NSCoding {
 		[DesignatedInitializer]
@@ -7985,6 +7991,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSGestureRecognizerDelegate {
@@ -10674,6 +10681,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSMagnificationGestureRecognizer {
 		[Export ("initWithTarget:action:")]
@@ -10773,6 +10781,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSPanGestureRecognizer : NSCoding {
 		[Export ("initWithTarget:action:")]
@@ -10796,6 +10805,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSPressGestureRecognizer {
 		[Export ("initWithTarget:action:")]
@@ -12579,6 +12589,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSRotationGestureRecognizer {
 		[Export ("initWithTarget:action:")]
@@ -14502,6 +14513,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,11)]
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface NSSpringLoadingDestination
@@ -18201,6 +18213,7 @@ namespace AppKit {
 
 	interface INSTextInputClient {}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextInputContext {
 		[Export ("initWithClient:")]
@@ -19479,6 +19492,7 @@ namespace AppKit {
 		[Export ("toolTip"), NullAllowed]
 		string ToolTip { get; set; }
 
+		[NoMacCatalyst]
 		[Export ("menuFormRepresentation", ArgumentSemantic.Retain)]
 		NSMenuItem MenuFormRepresentation { get; set; }
 
@@ -22026,6 +22040,7 @@ namespace AppKit {
 
 	[Protocol, Model]
 	[Mac (10, 12)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSSharingServiceDelegate))]
 	interface NSCloudSharingServiceDelegate
 	{
@@ -22042,6 +22057,7 @@ namespace AppKit {
 		void Stopped (NSSharingService sharingService, CKShare share);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject),
 	           Delegates=new string [] {"WeakDelegate"},
 	Events=new Type [] { typeof (NSSharingServicePickerDelegate) })]
@@ -22064,6 +22080,7 @@ namespace AppKit {
 
 	interface INSSharingServicePickerDelegate {}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -23310,6 +23327,7 @@ namespace AppKit {
 		NSString MovementUserInfoKey { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSTextInputContext {
 		[Notification, Field ("NSTextInputContextKeyboardSelectionDidChangeNotification")]
 		NSString KeyboardSelectionDidChangeNotification { get; }
@@ -25947,10 +25965,12 @@ namespace AppKit {
 		nfloat PreferredItemWidth { get; set; }
 
 		[Mac (10, 13)]
+		[NoMacCatalyst]
 		[Export ("effectiveCompressionOptions")]
 		NSUserInterfaceCompressionOptions EffectiveCompressionOptions { get; }
 
 		[Mac (10, 13)]
+		[NoMacCatalyst]
 		[Export ("prioritizedCompressionOptions", ArgumentSemantic.Copy)]
 		NSUserInterfaceCompressionOptions[] PrioritizedCompressionOptions { get; set; }
 	}

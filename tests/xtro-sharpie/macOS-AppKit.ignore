@@ -1019,7 +1019,6 @@
 !missing-type! NSPDFPanel not bound
 !missing-type! NSPersistentDocument not bound
 !missing-type! NSPICTImageRep not bound
-!unknown-field! item bound
 !unknown-field! MenuItem bound
 !unknown-field! NSAlternativeString bound
 !unknown-field! NSFieldEditor bound

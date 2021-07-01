@@ -13157,6 +13157,7 @@ namespace AppKit {
 	}
 
 	// @interface NSExtendedStringDrawing (NSAttributedString)
+	[NoMacCatalyst]
 	[ThreadSafe]
 	[Category]
 	[BaseType (typeof(NSAttributedString))]
@@ -13173,6 +13174,7 @@ namespace AppKit {
 
 	// Pending: @interface NSAttributedString (NSExtendedStringDrawing)
 
+	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSMutableAttributedString))]
 	interface NSMutableAttributedStringAppKitAddons {
 		[Export ("readFromURL:options:documentAttributes:error:")]
@@ -13272,6 +13274,7 @@ namespace AppKit {
 		IntPtr Constructor (NSImage  image);
 	}
 
+	[NoMacCatalyst]
 	[Static]
 	partial interface NSImageHint {
 		[Field ("NSImageHintCTM")]
@@ -14387,8 +14390,8 @@ namespace AppKit {
 		[Obsolete ("It will never be called.")]
 		NSObject InitWithPasteboardPropertyList (NSObject propertyList, string type);
 #else
-		FIXME: (compiler error to not forget)
-		FIXME: figure out how to bind constructors in protocols.
+#error		FIXME: (compiler error to not forget)
+#error		FIXME: figure out how to bind constructors in protocols.
 #endif
 	}
 	
@@ -15000,6 +15003,7 @@ namespace AppKit {
 		NSDictionary DeviceDescription { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSPrintInfo : NSCoding, NSCopying {
 		[DesignatedInitializer]
@@ -15305,6 +15309,7 @@ namespace AppKit {
 	// Technically on NSResponder but responder subclasses can implement any that make sense
 	// So bound for user classes but not added to NSResponder binding
 	[Mac (10, 14)]
+	[NoMacCatalyst]
 	[Protocol]
 	interface NSStandardKeyBindingResponding
 	{
@@ -15948,6 +15953,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 13)]
+	[NoMacCatalyst]
 	enum NSRulerViewUnits
 	{
 		[Field ("NSRulerViewUnitInches")]
@@ -16095,6 +16101,7 @@ namespace AppKit {
 	interface NSRemoteSavePanel {}
 #endif
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSScreen {
 
@@ -17061,6 +17068,7 @@ namespace AppKit {
 		nfloat MaximumSliderWidth { get; set; }
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSSpeechRecognizer {
 		[Export ("startListening")]
@@ -17090,6 +17098,7 @@ namespace AppKit {
 		bool BlocksOtherRecognizers { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -17177,6 +17186,7 @@ namespace AppKit {
 		bool UsesFeedbackWindow { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -17197,6 +17207,7 @@ namespace AppKit {
 		void DidEncounterSyncMessage (NSSpeechSynthesizer sender, string message);
 	}
 
+	[NoMacCatalyst]
 	[StrongDictionary ("NSTextCheckingKey")]
 	interface NSTextCheckingOptions {
 		NSOrthography Orthography { get; set; }
@@ -17209,6 +17220,7 @@ namespace AppKit {
 		string DocumentAuthor { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[Internal, Static]
 	interface NSTextCheckingKey {
 		[Field ("NSTextCheckingOrthographyKey")]
@@ -18195,6 +18207,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSStoryboardSegue {
 		[DesignatedInitializer]
@@ -18218,6 +18231,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,10)]
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSSeguePerforming {
@@ -19359,6 +19373,7 @@ namespace AppKit {
 		NSLayoutGuide LayoutMarginsGuide { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSAnimation))]
 	interface NSViewAnimation { 
 		[Export ("initWithViewAnimations:")]

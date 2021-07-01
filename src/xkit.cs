@@ -2813,4 +2813,79 @@ namespace UIKit {
 #endif
 		}
 	}
+
+	[NoWatch]
+	[iOS (7,0)]
+	[BaseType (typeof (NSObject))]
+	partial interface NSTextContainer : NSTextLayoutOrientationProvider, NSSecureCoding {
+		[Mac (10,11)]
+		[DesignatedInitializer]
+		[Export ("initWithSize:")]
+		IntPtr Constructor (CGSize size);
+
+		[NoiOS][NoMacCatalyst][NoTV]
+		[Export ("initWithContainerSize:"), Internal]
+		[Sealed]
+		IntPtr InitWithContainerSize (CGSize size);
+
+		[NullAllowed] // by default this property is null
+		[Export ("layoutManager", ArgumentSemantic.Assign)]
+		NSLayoutManager LayoutManager { get; set; }
+
+		[Mac (10,11)]
+		[Export ("size")]
+		CGSize Size { get; set; }
+
+		[Mac (10,11)]
+		[NullAllowed] // by default this property is null
+		[Export ("exclusionPaths", ArgumentSemantic.Copy)]
+		UIBezierPath [] ExclusionPaths { get; set; }
+
+		[Mac (10,11)]
+		[Export ("lineBreakMode")]
+		UILineBreakMode LineBreakMode { get; set; }
+
+		[Export ("lineFragmentPadding")]
+		nfloat LineFragmentPadding { get; set; }
+
+		[Mac (10,11)]
+		[Export ("maximumNumberOfLines")]
+		nuint MaximumNumberOfLines { get; set; }
+
+		[Mac (10,11)]
+		[Export ("lineFragmentRectForProposedRect:atIndex:writingDirection:remainingRect:")]
+#if MONOMAC && !XAMCORE_4_0
+		CGRect GetLineFragmentRect (CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, ref CGRect remainingRect);
+#else
+		CGRect GetLineFragmentRect (CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, out CGRect remainingRect);
+#endif
+
+		[Export ("widthTracksTextView")]
+		bool WidthTracksTextView { get; set; }
+
+		[Export ("heightTracksTextView")]
+		bool HeightTracksTextView { get; set; }
+
+		[iOS (9,0)]
+		[Export ("replaceLayoutManager:")]
+		void ReplaceLayoutManager (NSLayoutManager newLayoutManager);
+
+		[iOS (9,0)]
+		[Export ("simpleRectangularTextContainer")]
+		bool IsSimpleRectangularTextContainer { [Bind ("isSimpleRectangularTextContainer")] get; }
+
+		[NoiOS][NoMacCatalyst][NoTV]
+		[Deprecated (PlatformName.MacOSX, 10, 11)]
+		[Export ("containsPoint:")]
+		bool ContainsPoint (CGPoint point);
+
+		[NoiOS][NoMacCatalyst][NoTV]
+		[Export ("textView", ArgumentSemantic.Weak)]
+		NSTextView TextView { get; set; }
+
+		[NoiOS][NoMacCatalyst][NoTV]
+		[Availability (Deprecated = Platform.Mac_10_11, Message = "Use Size instead.")]
+		[Export ("containerSize")]
+		CGSize ContainerSize { get; set; }
+	}
 }

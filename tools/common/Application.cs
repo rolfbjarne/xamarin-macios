@@ -254,7 +254,7 @@ namespace Xamarin.Bundler {
 		public bool OnlyStaticLibraries {
 			get {
 				if (Platform == ApplePlatform.MacOSX)
-					throw ErrorHelper.CreateError (99, Errors.MX0099, "Using assembly_build_targets isn't a valid operation for macOS apps.");
+					throw ErrorHelper.CreateError (99, Errors.MX0099, "Using assembly_build_targets (for OnlyStaticLibraries) isn't a valid operation for macOS apps");
 
 				return assembly_build_targets.All ((abt) => abt.Value.Item1 == AssemblyBuildTarget.StaticObject);
 			}
@@ -264,7 +264,7 @@ namespace Xamarin.Bundler {
 		public bool HasDynamicLibraries {
 			get {
 				if (Platform == ApplePlatform.MacOSX)
-					throw ErrorHelper.CreateError (99, Errors.MX0099, "Using assembly_build_targets isn't a valid operation for macOS apps.");
+					throw ErrorHelper.CreateError (99, Errors.MX0099, "Using assembly_build_targets (for HasDynamicLibraries) isn't a valid operation for macOS apps");
 
 				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.DynamicLibrary);
 			}
@@ -274,7 +274,7 @@ namespace Xamarin.Bundler {
 		public bool HasFrameworks {
 			get {
 				if (Platform == ApplePlatform.MacOSX)
-					throw ErrorHelper.CreateError (99, Errors.MX0099, "Using assembly_build_targets isn't a valid operation for macOS apps.");
+					throw ErrorHelper.CreateError (99, Errors.MX0099, "Using assembly_build_targets (for HasFrameworks) isn't a valid operation for macOS apps");
 
 				return assembly_build_targets.Any ((abt) => abt.Value.Item1 == AssemblyBuildTarget.Framework);
 			}

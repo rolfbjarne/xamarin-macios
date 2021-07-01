@@ -19,11 +19,13 @@ namespace ObjCRuntime {
 	static partial class ErrorHelper {
 		public static ProductException CreateError (int code, string message, params object [] args)
 		{
+			Console.WriteLine (Environment.StackTrace);
 			return new ProductException (code, true, message, args);
 		}
 
 		public static ProductException CreateError (int code, Exception innerException, string message, params object [] args)
 		{
+			Console.WriteLine (Environment.StackTrace);
 			return new ProductException (code, true, innerException, message, args);
 		}
 

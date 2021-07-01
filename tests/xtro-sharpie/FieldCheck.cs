@@ -58,8 +58,6 @@ namespace Extrospection {
 					continue;
 
 				var name = ca.ConstructorArguments [0].Value as string;
-				if (name == "item")
-					Console.WriteLine ("STOP");
 
 				if (!fields.TryGetValue (name, out var mr))
 					fields.Add (name, p as MemberReference);
@@ -97,7 +95,7 @@ namespace Extrospection {
 			foreach (var kvp in fields) {
 				var extra = kvp.Key;
 				var framework = Helpers.GetFramework (kvp.Value);
-				Log.On (framework).Add ($"!unknown-field! {extra} bound for {kvp.Value.FullName}");
+				Log.On (framework).Add ($"!unknown-field! {extra} bound");
 			}
 		}
 	}

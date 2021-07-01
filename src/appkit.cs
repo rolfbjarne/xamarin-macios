@@ -1153,7 +1153,7 @@ namespace AppKit {
 		ColorList,
 		Wheel,
 		Crayon,
-	};
+	}
 
 	[Flags]
 	[Native]
@@ -3150,7 +3150,62 @@ namespace AppKit {
 		Medium = 2,
 		Large = 3,
 	}
-	
+
+	[Native]
+	public enum NSPrintRenderingQuality : long {
+		Best,
+		Responsive,
+	}
+
+	[Native]
+	public enum NSCorrectionIndicatorType : long {
+		Default = 0,
+		Reversion,
+		Guesses,
+	}
+
+	[Native]
+	public enum NSCorrectionResponse : long {
+		None,
+		Accepted,
+		Rejected,
+		Ignored,
+		Edited,
+		Reverted,
+	}
+
+	[Native]
+	public enum NSTextFinderMatchingType : long {
+		Contains = 0,
+		StartsWith = 1,
+		FullWord = 2,
+		EndsWith = 3,
+	}
+
+	[Native]
+	public enum NSCharacterCollection : ulong {
+		IdentityMapping = 0,
+		AdobeCns1 = 1,
+		AdobeGb1 = 2,
+		AdobeJapan1 = 3,
+		AdobeJapan2 = 4,
+		AdobeKorea1 = 5,
+	}
+
+	// Untyped enum (NSAttributedString.h). Only used as a convience enum in our API.
+	[Flags]
+	public enum NSSpellingState :
+#if XAMCORE_4_0
+		nint
+#else
+		int
+#endif
+	{
+		None = 0x0,
+		Spelling = 0x1,
+		Grammar = 0x2,
+	}
+
 	[NoMacCatalyst]
 	[BaseType (typeof (NSCell))]
 	interface NSActionCell {

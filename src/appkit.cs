@@ -2672,6 +2672,7 @@ namespace AppKit {
 		CGRect GetFocusRingMaskBounds (CGRect cellFrame, NSView controlView);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSCIImageRep init]: unrecognized selector sent to instance 0x1b682a0
 	interface NSCIImageRep {
@@ -4602,6 +4603,7 @@ namespace AppKit {
 		NSString WillPopUpNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -5161,6 +5163,7 @@ namespace AppKit {
 		void MouseExited (NSEvent theEvent);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSCustomImageRep init]: unrecognized selector sent to instance 0x54a870
 	partial interface NSCustomImageRep {
@@ -5354,6 +5357,7 @@ namespace AppKit {
 		string LocalizedKeyTable { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSDockTile {
 		[Export ("size")]
@@ -6087,8 +6091,10 @@ namespace AppKit {
 		bool WantsPeriodicDraggingUpdates { get; }
 	}
 
+	[NoMacCatalyst]
 	delegate void NSDraggingEnumerator (NSDraggingItem draggingItem, nint idx, ref bool stop);
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // warning on dispose - created using NSView.BeginDraggingSession
 	interface NSDraggingSession {
@@ -6115,6 +6121,7 @@ namespace AppKit {
 		void EnumerateDraggingItems (NSDraggingItemEnumerationOptions enumOpts, NSView view, IntPtr classArray, [NullAllowed] NSDictionary searchOptions, NSDraggingEnumerator enumerator);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -6143,6 +6150,7 @@ namespace AppKit {
 		void DraggedImageEndedAtDeposited (NSImage image, CGPoint screenPoint, bool deposited);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSResponder), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSDrawerDelegate)})]
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSSplitViewController' instead.")]
 	partial interface NSDrawer : NSAccessibilityElementProtocol, NSAccessibility {
@@ -6739,6 +6747,7 @@ namespace AppKit {
 		NSMutableFontCollection FromName (string name, NSFontCollectionVisibility visibility);
 	}	
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSFontDescriptor : NSSecureCoding, NSCopying {
 		[Export ("postscriptName")]
@@ -7491,6 +7500,7 @@ namespace AppKit {
 	interface NSPrintPreviewGraphicsContext {
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSEPSImageRep init]: unrecognized selector sent to instance 0x1db2d90
 	interface NSEPSImageRep {
@@ -9224,7 +9234,11 @@ namespace AppKit {
 	}
 
 	[MacCatalyst (13,0)]
-	[BaseType (typeof (NSObject), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] { typeof (NSImageDelegate)})]
+	[BaseType (typeof (NSObject), Delegates=new string [] { "WeakDelegate" }
+#if __MACCATALYST__
+		, Events=new Type [] { typeof (NSImageDelegate) })
+#endif
+	]
 	[ThreadSafe]
 	partial interface NSImage : NSCopying, NSSecureCoding, NSPasteboardReading, NSPasteboardWriting {
 		[Static]
@@ -9276,6 +9290,7 @@ namespace AppKit {
 		[Export ("drawInRect:")]
 		void Draw (CGRect rect);
 
+		[NoMacCatalyst]
 		[Export ("drawRepresentation:inRect:")]
 		bool Draw (NSImageRep imageRep, CGRect rect);
 
@@ -9288,15 +9303,19 @@ namespace AppKit {
 		[Export ("TIFFRepresentationUsingCompression:factor:")]
 		NSData AsTiff (NSTiffCompression comp, float /* float, not CGFloat */ aFloat);
 
+		[NoMacCatalyst]
 		[Export ("representations")]
 		NSImageRep [] Representations ();
 
+		[NoMacCatalyst]
 		[Export ("addRepresentations:")]
 		void AddRepresentations (NSImageRep [] imageReps);
 
+		[NoMacCatalyst]
 		[Export ("addRepresentation:")]
 		void AddRepresentation (NSImageRep imageRep);
 
+		[NoMacCatalyst]
 		[Export ("removeRepresentation:")]
 		void RemoveRepresentation (NSImageRep imageRep);
 
@@ -9312,6 +9331,7 @@ namespace AppKit {
 		[Export ("unlockFocus")]
 		void UnlockFocus ();
 
+		[NoMacCatalyst]
 		[Export ("bestRepresentationForDevice:")]
 		NSImageRep BestRepresentationForDevice ([NullAllowed] NSDictionary deviceDescription);
 
@@ -9356,12 +9376,15 @@ namespace AppKit {
 		[Export ("initWithCGImage:size:")]
 		IntPtr Constructor (CGImage cgImage, CGSize size);
 
+		[NoMacCatalyst]
 		[Export ("CGImageForProposedRect:context:hints:")]
 		CGImage AsCGImage (ref CGRect proposedDestRect, [NullAllowed] NSGraphicsContext referenceContext, [NullAllowed] NSDictionary hints);
 
+		[NoMacCatalyst]
 		[Export ("bestRepresentationForRect:context:hints:")]
 		NSImageRep BestRepresentation (CGRect rect, [NullAllowed] NSGraphicsContext referenceContext, [NullAllowed] NSDictionary hints);
 
+		[NoMacCatalyst]
 		[Export ("hitTestRect:withImageDestinationRect:context:hints:flipped:")]
 		bool HitTestRect (CGRect testRectDestSpace, CGRect imageRectDestSpace, NSGraphicsContext context, NSDictionary hints, bool flipped);
 
@@ -9393,6 +9416,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
+		[NoMacCatalyst]
 		[Wrap ("WeakDelegate")]
 		[Protocolize]
 		NSImageDelegate Delegate { get; set; }
@@ -9435,6 +9459,7 @@ namespace AppKit {
 		NSImage GetSystemSymbol (string symbolName, [NullAllowed] string accessibilityDescription);
 
 		[Mac (11,0)]
+		[NoMacCatalyst]
 		[Export ("imageWithSymbolConfiguration:")]
 		[return: NullAllowed]
 		NSImage GetImage (NSImageSymbolConfiguration configuration);
@@ -10022,6 +10047,7 @@ namespace AppKit {
 		void UpdateAttachmentsFromPath (string path);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -10076,6 +10102,7 @@ namespace AppKit {
 		NSString UserInterfaceLayoutDirection { get; }
 	}
 
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	partial interface NSImageRep : NSCoding, NSCopying {
@@ -14654,6 +14681,7 @@ namespace AppKit {
 		void DidReattachViews (NSStackView stackView, NSView [] views);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSStatusBar {
 		[Static, Export ("systemStatusBar")]
@@ -16437,6 +16465,7 @@ namespace AppKit {
 		void DidEndLiveTransition (NSPageController pageController);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSImageRep), Name="NSPDFImageRep")]
 	[DisableDefaultCtor] // -[NSPDFImageRep init]: unrecognized selector sent to instance 0x2652460
 	interface NSPdfImageRep {
@@ -19515,6 +19544,7 @@ namespace AppKit {
 		[Export ("image", ArgumentSemantic.Retain), NullAllowed]
 		NSImage Image { get; set; }
 
+		[NoMacCatalyst]
 		[Export ("view", ArgumentSemantic.Retain)]
 		NSView View { get; set; }
 
@@ -20894,8 +20924,10 @@ namespace AppKit {
 		bool Emphasized { [Bind ("isEmphasized")] get; set; }
 	}
 	
+	[NoMacCatalyst]
 	delegate void NSWindowCompletionHandler (NSWindow window, NSError error);
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -23348,6 +23380,7 @@ namespace AppKit {
 		NSString NSToolbarDidRemoveItemNotification { get; }
 	}
 
+	[NoMacCatalyst]
 	partial interface NSImageRep {
 		[Notification, Field ("NSImageRepRegistryDidChangeNotification")]
 		NSString RegistryDidChangeNotification { get; }
@@ -25965,6 +25998,7 @@ namespace AppKit {
 		string CustomizationLabel { get; set; }
 	}
 
+	[NoMacCatalyst]
 	[Category]
 	[BaseType (typeof(NSGestureRecognizer))]
 	interface NSGestureRecognizer_NSTouchBar
@@ -26048,6 +26082,7 @@ namespace AppKit {
 		[Export ("customizationLabel")]
 		string CustomizationLabel { get; set; }
 
+		[NoMacCatalyst]
 		[Export ("collapsedRepresentation", ArgumentSemantic.Strong)]
 		NSView CollapsedRepresentation { get; set; }
 
@@ -26069,6 +26104,7 @@ namespace AppKit {
 		[Export ("dismissPopover:")]
 		void DismissPopover ([NullAllowed] NSObject sender);
 
+		[NoMacCatalyst]
 		[Export ("makeStandardActivatePopoverGestureRecognizer")]
 		NSGestureRecognizer MakeStandardActivatePopoverGestureRecognizer ();
 	}
@@ -26814,6 +26850,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[Native]
 	public enum NSCollectionLayoutSectionOrthogonalScrollingBehavior : long
 	{
@@ -26826,6 +26863,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[Native]
 	public enum NSPickerTouchBarItemControlRepresentation : long
 	{
@@ -26835,6 +26873,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[Native]
 	public enum NSPickerTouchBarItemSelectionMode : long
 	{
@@ -26844,6 +26883,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextInputTraitType : long
 	{
@@ -26853,6 +26893,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[Native]
 	public enum NSToolbarItemGroupControlRepresentation : long
 	{
@@ -26862,6 +26903,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[Native]
 	public enum NSToolbarItemGroupSelectionMode : long
 	{
@@ -26984,6 +27026,7 @@ namespace AppKit {
 		bool ShowsIndicator { get; set; }
 	}
 
+	[NoMacCatalyst]
 	delegate NSCollectionLayoutSection NSCollectionViewCompositionalLayoutSectionProvider (nint section, INSCollectionLayoutEnvironment layout);
 
 	[Mac (10,15)]
@@ -27009,6 +27052,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof (NSTouchBarItem))]
 	[DisableDefaultCtor]
 	interface NSStepperTouchBarItem
@@ -27045,6 +27089,7 @@ namespace AppKit {
 
 	[Protocol]
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	interface NSTextInputTraits
 	{
 		[Export ("autocorrectionType", ArgumentSemantic.Assign)]
@@ -27121,6 +27166,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,15)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSWorkspaceOpenConfiguration : NSCopying
@@ -27247,8 +27293,10 @@ namespace AppKit {
 		nint SpellCheckerDocumentTag { get; set; }
 	}
 
+	[NoMacCatalyst]
 	delegate NSCollectionViewItem NSCollectionViewDiffableDataSourceItemProvider (NSCollectionView collectionView, NSIndexPath indexPath, NSObject itemIdentifierType);
 
+	[NoMacCatalyst]
 	delegate NSView NSCollectionViewDiffableDataSourceSupplementaryViewProvider (NSCollectionView collectionView, string str, NSIndexPath indexPath);
 
 	[Mac (10,15)]
@@ -27281,6 +27329,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 15)]
+	[NoMacCatalyst]
 	public enum NSFontDescriptorSystemDesign 
 	{
 		[Field ("NSFontDescriptorSystemDesignDefault")]
@@ -27297,6 +27346,7 @@ namespace AppKit {
 	}
 
 	[Mac (11, 0)]
+	[NoMacCatalyst]
 	public enum NSFontTextStyle
 	{
 		[Field ("NSFontTextStyleLargeTitle")]
@@ -27439,6 +27489,7 @@ namespace AppKit {
 	}
 
 	[Mac (11, 0)]
+	[NoMacCatalyst]
 	[Protocol]
 	interface NSTextContent
 	{
@@ -27452,6 +27503,7 @@ namespace AppKit {
 	}
 
 	[Mac (11, 0)]
+	[NoMacCatalyst]
 	enum NSTextContentType {
 		[Field ("NSTextContentTypeUsername")]
 		Username,
@@ -27517,6 +27569,7 @@ namespace AppKit {
 	}
 
 	[Mac (11,0)]
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSImageSymbolConfiguration : NSCopying

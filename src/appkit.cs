@@ -12697,12 +12697,15 @@ namespace AppKit {
 		[Export ("initWithDataIgnoringOrientation:"), Internal]
 		IntPtr InitWithDataIgnoringOrientation (NSData data);
 
+		[NoMacCatalyst]
 		[Export ("drawAtPoint:fromRect:operation:fraction:")]
 		void Draw (CGPoint point, CGRect fromRect, NSCompositingOperation op, nfloat delta);
 
+		[NoMacCatalyst]
 		[Export ("drawInRect:fromRect:operation:fraction:")]
 		void Draw (CGRect rect, CGRect fromRect, NSCompositingOperation op, nfloat delta);
 
+		[NoMacCatalyst]
 		[Export ("drawInRect:fromRect:operation:fraction:respectFlipped:hints:")]
 		void Draw (CGRect dstSpacePortionRect, CGRect srcSpacePortionRect, NSCompositingOperation op, nfloat requestedAlpha, bool respectContextIsFlipped, [NullAllowed] NSDictionary hints);
 
@@ -12720,6 +12723,7 @@ namespace AppKit {
 		[Export ("TIFFRepresentation")]
 		NSData AsTiff ();
 
+		[NoMacCatalyst]
 		[Export ("TIFFRepresentationUsingCompression:factor:")]
 		NSData AsTiff (NSTiffCompression comp, float /* float, not CGFloat */ aFloat);
 
@@ -12844,6 +12848,7 @@ namespace AppKit {
 		[Protocolize]
 		NSImageDelegate Delegate { get; set; }
 
+		[NoMacCatalyst]
 		[Export ("cacheMode")]
 		NSImageCacheMode CacheMode { get; set; }
 
@@ -12853,6 +12858,7 @@ namespace AppKit {
 		[Export ("template")]
 		bool Template { [Bind ("isTemplate")]get; set; }
 
+		[NoMacCatalyst]
 		[Export ("drawInRect:fromRect:operation:fraction:")]
 		[Sealed]
 		void DrawInRect (CGRect dstRect, CGRect srcRect, NSCompositingOperation operation, nfloat delta);
@@ -12866,6 +12872,7 @@ namespace AppKit {
 		NSEdgeInsets CapInsets { get; set; }
 
 		[Mac (10,10)]
+		[NoMacCatalyst]
 		[Export ("resizingMode")]
 		NSImageResizingMode ResizingMode { get; set; }
 
@@ -29375,6 +29382,7 @@ namespace AppKit {
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
 		[Mac (10, 13)]
+		[NoMacCatalyst]
 		[NullAllowed, Export ("allowedColorSpaces", ArgumentSemantic.Copy)]
 		NSColorSpace[] AllowedColorSpaces { get; set; }
 	}
@@ -29445,6 +29453,7 @@ namespace AppKit {
 		NSGroupTouchBarItem CreateAlertStyleGroupItem (string identifier);
 
 		[Mac (10, 13)]
+		[NoMacCatalyst]
 		[Export ("groupUserInterfaceLayoutDirection", ArgumentSemantic.Assign)]
 		NSUserInterfaceLayoutDirection GroupUserInterfaceLayoutDirection { get; set; }
 

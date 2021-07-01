@@ -14249,7 +14249,7 @@ namespace Foundation
 		[Export ("typeCodeValue")]
 		OSType TypeCodeValue { get; }
 
-		[return: NullAllowed]
+		[NullAllowed]
 		[Export ("stringValue")]
 		string StringValue { get; }
 
@@ -14650,7 +14650,7 @@ namespace Foundation
 		IntPtr Constructor (string source);
 
 		// @property (readonly, copy) NSString * source;
-		[return: NullAllowed]
+		[NullAllowed]
 		[Export ("source")]
 		string Source { get; }
 

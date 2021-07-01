@@ -70,6 +70,7 @@ namespace AppKit {
 	//	void DrawAtPoint (CGPoint atPoint, CGRect fromRect, NSCompositingOperation operation, float fractionDelta);
 	//}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSRunResponse : long {
 		Stopped = -1000,
@@ -143,6 +144,7 @@ namespace AppKit {
 	}
 
 #if !XAMCORE_4_0
+	[NoMacCatalyst]
 	[Native]
 	public enum NSApplicationLayoutDirection : long {
 		LeftToRight = 0,
@@ -159,6 +161,7 @@ namespace AppKit {
 		High,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSComposite : ulong {
 		Clear,
@@ -208,6 +211,7 @@ namespace AppKit {
 		Luminosity,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSBackingStore : ulong {
 		[Deprecated (PlatformName.MacOSX, 10, 13, message : "Use 'Buffered' instead.")]
@@ -283,6 +287,7 @@ namespace AppKit {
 	}
 #endif
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextTabType : ulong {
 		Left,
@@ -302,6 +307,7 @@ namespace AppKit {
 	}
 
 #if !XAMCORE_4_0
+	[NoMacCatalyst]
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 10, message : "Use formatters instead.")]
 	public enum NSType : ulong {
@@ -358,6 +364,7 @@ namespace AppKit {
 		ImageTrailing,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSImageScale : ulong {
 		ProportionallyDown = 0,
@@ -366,6 +373,7 @@ namespace AppKit {
 		ProportionallyUpOrDown,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSCellStateValue : long {
 		Mixed = -1,
@@ -383,6 +391,7 @@ namespace AppKit {
 		ChangeBackgroundCell = 1 << 3,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSCellHit : ulong {
@@ -453,6 +462,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,9)]
+	[NoMacCatalyst]
 	[Native]
 	public enum NSModalResponse : long {
 		OK = 1,
@@ -545,6 +555,7 @@ namespace AppKit {
 		AnyEvent              = unchecked ((ulong)UInt64.MaxValue),
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSEventModifierMask : ulong {
@@ -575,6 +586,7 @@ namespace AppKit {
 		PenUpper = 4,
 	}
 
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSKey : ulong {
@@ -700,6 +712,7 @@ namespace AppKit {
 		UpArrow        = 0x7E,
 	}
 
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSFunctionKey : ulong {
@@ -799,6 +812,7 @@ namespace AppKit {
 #endif
 	}
 
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSSystemDefinedEvents : ulong {
@@ -808,6 +822,7 @@ namespace AppKit {
 		NSPowerOffEventType = 1,
 	}
 
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSEventMouseSubtype : ulong {
@@ -824,6 +839,7 @@ namespace AppKit {
 		Touch,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSViewResizingMask : ulong {
@@ -877,6 +893,7 @@ namespace AppKit {
 	}
 
 	[Flags]
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSWindowStyle : ulong {
@@ -954,6 +971,7 @@ namespace AppKit {
 		Previous,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowButton : ulong {
 		CloseButton,
@@ -1005,6 +1023,7 @@ namespace AppKit {
 		BelowBottom,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSBoxType : ulong {
 		NSBoxPrimary,
@@ -1030,6 +1049,7 @@ namespace AppKit {
 		MultiLevelAccelerator, // 10.10.3
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSBezelStyle : ulong {
 		Rounded = 1,
@@ -1155,6 +1175,7 @@ namespace AppKit {
 		Crayon,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSColorPanelFlags : ulong {
@@ -1308,6 +1329,7 @@ namespace AppKit {
 #endif
 	}
 
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSTextMovement : long {
@@ -1325,6 +1347,7 @@ namespace AppKit {
 		Cancel = 0x17,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSMenuProperty : ulong {
@@ -1405,6 +1428,7 @@ namespace AppKit {
 		EnabledDuringMouseDrag    = 0x400,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSLineSweepDirection : ulong {
 		NSLineSweepLeft,
@@ -1413,6 +1437,7 @@ namespace AppKit {
 		NSLineSweepUp,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSLineMovementDirection : ulong {
 		None,
@@ -1484,6 +1509,7 @@ namespace AppKit {
 		Clip,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 #if !XAMCORE_4_0
 	[Native]
@@ -1498,6 +1524,7 @@ namespace AppKit {
 	}
 
 #if !XAMCORE_4_0
+	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 11, message : "Use NSTextStorageEditActions instead.")]
 	[Flags]
 	[Native]
@@ -1582,12 +1609,14 @@ namespace AppKit {
 		ShowsPreview = 131072,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockValueType : ulong {
 		Absolute,
 		Percentage,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockDimension : ulong {
 		Width = 0,
@@ -1598,6 +1627,7 @@ namespace AppKit {
 		MaximumHeight = 6,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockLayer : long {
 		Padding = -1,
@@ -1605,6 +1635,7 @@ namespace AppKit {
 		Margin,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockVerticalAlignment : ulong {
 		Top,
@@ -1613,12 +1644,14 @@ namespace AppKit {
 		Baseline,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTextTableLayoutAlgorithm : ulong {
 		Automatic,
 		Fixed,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSTextListOptions : ulong {
@@ -1692,6 +1725,7 @@ namespace AppKit {
 		Small,
 	}
 
+	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 10, message : "Use NSAlertButtonReturn instead.")]
 #if !XAMCORE_4_0
 	[Native]
@@ -1706,6 +1740,7 @@ namespace AppKit {
 	}
 
 #if !XAMCORE_4_0
+	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 10, message : "Use NSModalResponse instead.")]
 	[Native]
 	public enum NSPanelButtonType : long {
@@ -1746,6 +1781,7 @@ namespace AppKit {
 		Above,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSTableColumnResizing : long {
@@ -1754,6 +1790,7 @@ namespace AppKit {
 		UserResizingMask = ( 1 << 1 ),
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSTableViewGridStyle : ulong {
@@ -1849,6 +1886,7 @@ namespace AppKit {
 		MomentaryAccelerator, // 10.10.3
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTickMarkPosition : ulong {
 		Below,
@@ -1874,6 +1912,7 @@ namespace AppKit {
 		PlainSquared = 4,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 11, 0)]
@@ -2139,6 +2178,7 @@ namespace AppKit {
 		Version4_1Core  = 0x4100,
 	}
 
+	[NoMacCatalyst]
 #if !XAMCORE_4_0
 	[Native]
 	public enum NSAlertButtonReturn : long {
@@ -2416,6 +2456,7 @@ namespace AppKit {
 	}
 
 	[Native]
+	[NoMacCatalyst]
 	public enum NSWindowLevel : long {
 		Normal = 0,
 		[Deprecated (PlatformName.MacOSX, 10, 13)]
@@ -2444,6 +2485,7 @@ namespace AppKit {
 		Simple,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 11, message : "Use 'NSGlyphProperty' instead.")]
 	public enum NSGlyphInscription : ulong {
@@ -2454,6 +2496,7 @@ namespace AppKit {
 		OverBelow,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSTypesetterBehavior : long {
 		Latest = -1,
@@ -2526,6 +2569,7 @@ namespace AppKit {
 		Vertical,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSLayoutConstraintOrientation : long {
 		Horizontal,
@@ -2580,6 +2624,7 @@ namespace AppKit {
 		Destructive,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSTableViewAnimation : ulong {
@@ -2640,6 +2685,7 @@ namespace AppKit {
 		HideReplaceInterface = 13,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 #if !XAMCORE_4_0
 	[Native]
@@ -2675,6 +2721,7 @@ namespace AppKit {
 		Full,
 	}
 
+	[NoMacCatalyst]
 	[Flags]
 	[Native]
 	public enum NSTypesetterControlCharacterAction : ulong {
@@ -3004,6 +3051,7 @@ namespace AppKit {
 		Next,
 	}
 
+	[NoMacCatalyst]
 	[Mac (10,13)]
 	[Native]
 	public enum NSAccessibilityCustomRotorType : long {
@@ -3182,6 +3230,7 @@ namespace AppKit {
 		EndsWith = 3,
 	}
 
+	[NoMacCatalyst]
 	[Native]
 	public enum NSCharacterCollection : ulong {
 		IdentityMapping = 0,
@@ -3589,6 +3638,7 @@ namespace AppKit {
 	interface INSAppearanceCustomization {} 
 
 	[Mac (10,9)]
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSAppearanceCustomization {
@@ -8114,6 +8164,7 @@ namespace AppKit {
 		bool CommitEditing ([NullAllowed] out NSError error);
 	}
 
+	[NoMacCatalyst]
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	interface NSController : NSCoding, NSEditorRegistration 
@@ -14254,6 +14305,7 @@ namespace AppKit {
 		nint PrepareForNewContents (NSPasteboardContentsOptions options);
 	}
 	
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -14268,6 +14320,7 @@ namespace AppKit {
 		NSObject GetPasteboardPropertyListForType (string type);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface NSPasteboardItem : NSPasteboardWriting, NSPasteboardReading {
 		[Export ("types")]
@@ -14298,6 +14351,7 @@ namespace AppKit {
 		NSObject GetPropertyListForType (string type);
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -14314,6 +14368,7 @@ namespace AppKit {
 	interface INSPasteboardReading {}
 	interface INSPasteboardWriting {}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 #if !XAMCORE_4_0
 	// A class that implements only NSPasteboardReading does not make sense, it's
@@ -18214,6 +18269,7 @@ namespace AppKit {
 
 	interface INSUserInterfaceItemIdentification {}
 
+	[NoMacCatalyst]
 	[Protocol]
 	interface NSUserInterfaceItemIdentification {
 		[Export ("identifier", ArgumentSemantic.Copy)]
@@ -21458,6 +21514,7 @@ namespace AppKit {
 
 	}
 
+	[NoMacCatalyst]
 	enum NSTextListMarkerFormats
 	{
 		[Mac (10, 13)]
@@ -21648,6 +21705,7 @@ namespace AppKit {
 	}
 #endif // !__MACCATALYST__
 
+	[NoMacCatalyst]
 	[Protocol]
 	interface NSTextInput
 	{
@@ -21657,7 +21715,7 @@ namespace AppKit {
 		void InsertText (NSObject insertString);
 
 		// DoCommandBySelector conflicts with NSTextViewDelegate in generated code
-#if XAMCORE_4_0
+#if XAMCORE_4_0 
 		[Abstract]
 		[Export ("doCommandBySelector:")]
 		void DoCommandBySelector (Selector selector);
@@ -22262,6 +22320,7 @@ namespace AppKit {
 		}
 	}
 
+	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSTextInputClient
@@ -28810,6 +28869,7 @@ namespace AppKit {
 	}
 
 	[Mac (10, 10)]
+	[NoMacCatalyst]
 	interface NSWorkspaceAccessibilityExtensions {
 		[Export ("accessibilityDisplayShouldIncreaseContrast")]
 		bool AccessibilityDisplayShouldIncreaseContrast { get; }
@@ -28841,6 +28901,7 @@ namespace AppKit {
 
 	[DesignatedDefaultCtor]
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSFilePromiseProvider : NSPasteboardWriting
 	{
@@ -28858,6 +28919,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSFilePromiseProviderDelegate
@@ -28874,6 +28936,7 @@ namespace AppKit {
 	}
 
 	[Mac (10,12)]
+	[NoMacCatalyst]
 	[BaseType (typeof(NSObject))]
 	interface NSFilePromiseReceiver : NSPasteboardReading
 	{

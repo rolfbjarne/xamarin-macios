@@ -1535,16 +1535,7 @@ namespace AppKit {
 	}
 #endif
 
-	[Mac (10,11)]
-	[NoMacCatalyst] // Use the UIKit version
-	[Native]
-	[Flags]
-	public enum NSTextStorageEditActions : ulong
-	{
-		Attributes = (1 << 0),
-		Characters = (1 << 1),
-	}
-
+	[NoMacCatalyst]
 	[Native]
 	public enum NSPrinterTableStatus : ulong {
 		Ok,

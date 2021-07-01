@@ -506,12 +506,16 @@ namespace Xamarin.Bundler {
 
 		public void ComputeLinkerFlags ()
 		{
+			Driver.Log ($"Computing linker flags for {Identity}...");
 			foreach (var m in AssemblyDefinition.Modules) {
 				if (!m.HasModuleReferences)
 					continue;
 				
 				foreach (var mr in m.ModuleReferences) {
 					string name = mr.Name;
+
+					Driver.Log ($"    Module Reference: {name}");
+
 					if (string.IsNullOrEmpty (name))
 						continue; // obfuscated assemblies.
 					
@@ -604,6 +608,7 @@ namespace Xamarin.Bundler {
 						break;
 					}
 				}
+				Driver.Log ($"Computed linker flags for {Identity}: {string.Join (" ", LinkerFlags)}");
 			}
 		}
 

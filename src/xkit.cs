@@ -51,6 +51,7 @@ using UITraitCollection=System.Object;
 #endif // !MONOMAC
 
 #if MONOMAC
+using BezierPath=AppKit.NSBezierPath;
 using Image=AppKit.NSImage;
 using TextAlignment=AppKit.NSTextAlignment;
 using LineBreakMode=AppKit.NSLineBreakMode;
@@ -58,6 +59,7 @@ using CollectionLayoutSectionOrthogonalScrollingBehavior=AppKit.NSCollectionLayo
 using CollectionElementCategory=AppKit.NSCollectionElementCategory;
 using StringAttributes=AppKit.NSStringAttributes;
 #else
+using BezierPath=UIKit.UIBezierPath;
 using Image=UIKit.UIImage;
 using TextAlignment=UIKit.UITextAlignment;
 using LineBreakMode=UIKit.UILineBreakMode;
@@ -2830,7 +2832,7 @@ namespace UIKit {
 	[iOS (7,0)]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextContainer : NSTextLayoutOrientationProvider, NSSecureCoding {
-		[Mac (10,11)]
+		[NoMac]
 		[DesignatedInitializer]
 		[Export ("initWithSize:")]
 		IntPtr Constructor (CGSize size);
@@ -2839,6 +2841,12 @@ namespace UIKit {
 		[Export ("initWithContainerSize:"), Internal]
 		[Sealed]
 		IntPtr InitWithContainerSize (CGSize size);
+
+		[NoiOS][NoMacCatalyst][NoTV]
+		[Mac (10,11)]
+		[Export ("initWithSize:"), Internal]
+		[Sealed]
+		IntPtr InitWithSize (CGSize size);
 
 		[NullAllowed] // by default this property is null
 		[Export ("layoutManager", ArgumentSemantic.Assign)]
@@ -2851,11 +2859,11 @@ namespace UIKit {
 		[Mac (10,11)]
 		[NullAllowed] // by default this property is null
 		[Export ("exclusionPaths", ArgumentSemantic.Copy)]
-		UIBezierPath [] ExclusionPaths { get; set; }
+		BezierPath [] ExclusionPaths { get; set; }
 
 		[Mac (10,11)]
 		[Export ("lineBreakMode")]
-		UILineBreakMode LineBreakMode { get; set; }
+		LineBreakMode LineBreakMode { get; set; }
 
 		[Export ("lineFragmentPadding")]
 		nfloat LineFragmentPadding { get; set; }

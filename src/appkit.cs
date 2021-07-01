@@ -25563,12 +25563,6 @@ namespace AppKit {
 			bool displayDocument, OpenDocumentCompletionHandler completionHandler);
 	}
 
-	[Model]
-	interface NSTextLayoutOrientationProvider {
-		[Export ("layoutOrientation")]
-		NSTextLayoutOrientation LayoutOrientation { get; }
-	}
-
 	partial interface NSLayoutManager {
 		// FIXME: This may need some generator work, or use IntPtr for glyphs?
 		//

@@ -16,6 +16,7 @@
     <DefineConstants Condition="'$(Platform)' != 'iPhoneSimulator'">$(DefineConstants);DEVICE</DefineConstants>
     <RootTestsDirectory>..\..\..</RootTestsDirectory>
     <MtouchLink>None</MtouchLink>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
   </PropertyGroup>
 
   <ItemGroup>

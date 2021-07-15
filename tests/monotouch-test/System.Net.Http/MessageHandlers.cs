@@ -88,6 +88,10 @@ namespace MonoTests.System.Net.Http
 		[Test]
 		public void TestNSUrlSessionHandlerCookies ()
 		{
+#if __MACCATALYST__
+			if (Runtime.IsARM64CallingConvention)
+				Assert.Ignore ("https://github.com/dotnet/runtime/issues/55736");
+#endif
 			var managedCookieResult = false;
 			var nativeCookieResult = false;
 			Exception ex = null;
@@ -133,6 +137,11 @@ namespace MonoTests.System.Net.Http
 		[Test]
 		public void TestNSUrlSessionHandlerCookieContainer ()
 		{
+#if __MACCATALYST__
+			if (Runtime.IsARM64CallingConvention)
+				Assert.Ignore ("https://github.com/dotnet/runtime/issues/55736");
+#endif
+
 			var url = NetworkResources.Httpbin.CookiesUrl;
 			var cookie = new Cookie ("cookie", "chocolate-chip");
 			var cookieContainer = new CookieContainer ();
@@ -368,6 +377,11 @@ namespace MonoTests.System.Net.Http
 #if __MACOS__
 			if (handlerType == typeof (NSUrlSessionHandler) && TestRuntime.CheckSystemVersion (PlatformName.MacOSX, 10, 10, 0) && !TestRuntime.CheckSystemVersion (PlatformName.MacOSX, 10, 11, 0))
 				Assert.Ignore ("Fails on macOS 10.10: https://github.com/xamarin/maccore/issues/1645");
+#endif
+
+#if __MACCATALYST__
+			if (Runtime.IsARM64CallingConvention)
+				Assert.Ignore ("https://github.com/dotnet/runtime/issues/55736");
 #endif
 
 			bool validationCbWasExecuted = false;

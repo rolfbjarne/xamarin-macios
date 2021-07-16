@@ -148,6 +148,10 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<ArchiveOnBuild Condition="'$(ArchiveOnBuild)' == ''">false</ArchiveOnBuild>
+		<IsAppExtension Condition="'$(IsAppExtension)' == ''">false</IsAppExtension>
+		<EnableSGenConc Condition="'$(EnableSGenConc)' == ''">false</EnableSGenConc>
+
 		<!-- Debug -->
 		<!-- Xamarin.Mac: use MmpDebug -->
 		<_BundlerDebug Condition="'$(_BundlerDebug)' == '' And '$(_PlatformName)' == 'macOS'">$(MmpDebug)</_BundlerDebug>

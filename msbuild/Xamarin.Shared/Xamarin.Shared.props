@@ -152,6 +152,13 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<IsAppExtension Condition="'$(IsAppExtension)' == ''">false</IsAppExtension>
 		<EnableSGenConc Condition="'$(EnableSGenConc)' == ''">false</EnableSGenConc>
 
+		<IsWatchExtension Condition="'$(IsWatchExtension)' == ''">false</IsWatchExtension>
+		<IsWatchApp Condition="'$(IsWatchApp)' == ''">false</IsWatchApp>
+
+		<_CanArchive>false</_CanArchive>
+		<_CanArchive Condition="('$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst') And '$(OutputType)' == 'Exe'">true</_CanArchive>
+		<_CanArchive Condition="('$(_PlatformName)' == 'iOS'  Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS') And '$(OutputType)' == 'Exe' And '$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'">true</_CanArchive>
+
 		<!-- Debug -->
 		<!-- Xamarin.Mac: use MmpDebug -->
 		<_BundlerDebug Condition="'$(_BundlerDebug)' == '' And '$(_PlatformName)' == 'macOS'">$(MmpDebug)</_BundlerDebug>

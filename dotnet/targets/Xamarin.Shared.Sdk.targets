@@ -172,6 +172,7 @@
 			_CreateAppBundle;
 			Codesign;
 			CreateIpa;
+			_CreateInstaller;
 			Archive;
 		</BuildDependsOn>
 
@@ -194,6 +195,7 @@
 			_CreateMergedAppBundle;
 			Codesign;
 			CreateIpa;
+			_CreateInstaller;
 			Archive;
 		</BuildDependsOn>
 

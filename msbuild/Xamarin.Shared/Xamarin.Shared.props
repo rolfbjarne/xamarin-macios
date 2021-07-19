@@ -115,10 +115,13 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_SdkVersion Condition="'$(_PlatformName)' == 'macOS'">$(MacOSXSdkVersion)</_SdkVersion>
 		<_SdkVersion Condition="'$(_PlatformName)' != 'macOS'">$(MtouchSdkVersion)</_SdkVersion>
 
-		<!-- Other variables that are used in code signing, but that are by default empty (so no need for any logic): -->
+		<!-- Other variables that are used in code signing / packaging, but that are by default empty (so no need for any logic): -->
 		<!-- CodesignProvision: the name of the provisioning profile to use when signing the bundle -->
 		<!-- CodesignEntitlements: the path to the Entitlements.plist to use when signing the bundle -->
 		<!-- CodesignExtraArgs: any extra arguments to pass to 'codesign' -->
+		<!-- PackageSigningKey: the certificate used to sign packages (.pkg). Applicable to macOS and Mac Catalyst -->
+		<!-- PackagingExtraArgs: any extra arguments passed to the productbuild tool when creating packages (.pkg). Applicable to macOS and Mac Catalyst -->
+		<!-- ProductDefinition: the product definition template (plist) used when creating the product definition to pass to the product build tool when creating packages (.pkg). Applicable to mcOS and Mac Catalyst -->
 
 		<!-- _RequireProvisioningProfile -->
 		<!-- Default: false -->
@@ -149,8 +152,11 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_SpecifiedCodesignKey Condition="'$(_PlatformName)' != 'macOS'">$(CodesignKey)</_SpecifiedCodesignKey> <!-- Xamarin.iOS projects use 'CodesignKey' -->
 
 		<!-- If we should create a .pkg or not (only relevant for macOS / Mac Catalyst) -->
-		<!-- The equivalent property for the other platforms is BuildIpa -->
+		<!-- The equivalent property for the other platforms is 'BuildIpa' -->
 		<CreatePackage Condition="'$(CreatePackage)' == ''">false</CreatePackage>
+
+		<!-- If the .pkg should be signed or not. Applicable to macOS and Mac Catalyst. Defaults to false. -->
+		<EnablePackageSigning Condition="'$(EnablePackageSigning)' == ''">false</EnablePackageSigning>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(UsingAppleNETSdk)' != 'true'">

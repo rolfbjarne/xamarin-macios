@@ -44,10 +44,6 @@ Copyright (C) 2013-2014 Xamarin. All rights reserved.
 
 	<PropertyGroup>
 		<HttpClientHandler Condition="'$(HttpClientHandler)' == ''">HttpClientHandler</HttpClientHandler>
-		<EnablePackageSigning Condition="'$(EnablePackageSigning)' == ''">false</EnablePackageSigning>
-		<PackageSigningKey Condition="'$(PackageSigningKey)' == ''"></PackageSigningKey>
-		<ProductDefinition Condition="'$(ProductDefinition)' == ''"></ProductDefinition>
-		<PackagingExtraArgs Condition="'$(PackagingExtraArgs)' == ''"></PackagingExtraArgs>
 		<I18n Condition="'$(I18n)' == ''"></I18n>
 		<IncludeMonoRuntime Condition="'$(IncludeMonoRuntime)' == ''">true</IncludeMonoRuntime>
 		<AotScope Condition="'$(AotScope)' == ''">None</AotScope>

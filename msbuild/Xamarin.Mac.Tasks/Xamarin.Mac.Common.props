@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 ***********************************************************************************************
 Xamarin.Mac.Common.props
 
@@ -43,9 +43,6 @@ Copyright (C) 2013-2014 Xamarin. All rights reserved.
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<CodesignProvision Condition="'$(CodesignProvision)' == ''"></CodesignProvision>
-		<CodesignEntitlements Condition="'$(CodesignEntitlements)' == ''"></CodesignEntitlements>
-		<CodesignExtraArgs Condition="'$(CodesignExtraArgs)' == ''"></CodesignExtraArgs>
 		<CreatePackage Condition="'$(CreatePackage)' == ''">false</CreatePackage>
 		<HttpClientHandler Condition="'$(HttpClientHandler)' == ''">HttpClientHandler</HttpClientHandler>
 		<EnablePackageSigning Condition="'$(EnablePackageSigning)' == ''">false</EnablePackageSigning>

@@ -115,6 +115,21 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<_SdkVersion Condition="'$(_PlatformName)' == 'macOS'">$(MacOSXSdkVersion)</_SdkVersion>
 		<_SdkVersion Condition="'$(_PlatformName)' != 'macOS'">$(MtouchSdkVersion)</_SdkVersion>
 
+		<!-- Other variables that are used in code signing, but that are by default empty (so no need for any logic): -->
+		<!-- CodesignProvision: the name of the provisioning profile to use when signing the bundle -->
+		<!-- CodesignEntitlements: the path to the Entitlements.plist to use when signing the bundle -->
+		<!-- CodesignExtraArgs: any extra arguments to pass to 'codesign' -->
+
+		<!-- _RequireProvisioningProfile -->
+		<!-- Default: false -->
+		<!-- macOS: true if a provisioning profile is used -->
+		<!-- iOS/tvOS/watchOS: true if building for device or if a custom entitlements file is used -->
+		<!-- Mac Catalyst: true if a provisioning profile is used -->
+		<_RequireProvisioningProfile Condition="'$(_RequireProvisioningProfile)' == '' And '$(_PlatformName)' == 'macOS' And '$(CodesignProvision)' != ''">true</_RequireProvisioningProfile>
+		<_RequireProvisioningProfile Condition="'$(_RequireProvisioningProfile)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS') And ('$(ComputedPlatform)' == 'iPhone' Or '$(CodesignEntitlements)' != '')">true</_RequireProvisioningProfile>
+		<_RequireProvisioningProfile Condition="'$(_RequireProvisioningProfile)' == '' And '$(_PlatformName)' == 'MacCatalyst' And '$(CodesignProvision)' != ''">true</_RequireProvisioningProfile>
+		<_RequireProvisioningProfile Condition="'$(_RequireProvisioningProfile)' == ''">false</_RequireProvisioningProfile>
+
 		<!-- RequireCodeSigning -->
 		<!-- iOS/watchOS/tvOS is simple: device builds require code signing, simulator builds do not. This is a big lie, for some simulator builds need to be signed, but the _DetectCodeSigning task handles those cases. -->
 		<_RequireCodeSigning Condition="'$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst' And '$(_RequireCodeSigning)' == ''">false</_RequireCodeSigning> <!-- Xamarin.iOS builds are not signed by default -->

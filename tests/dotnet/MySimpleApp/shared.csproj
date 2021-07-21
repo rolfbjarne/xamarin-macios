@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	    <PackageReference Include="NUnitLite" Version="3.12.0" />
 		<Compile Include="../*.cs" />
 		<None Include="Info.plist" />
 	</ItemGroup>

@@ -72,7 +72,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 					}
 
 					try {
-						//Console.WriteLine ($"    Test log server listening on: localhost:{port}");
+						Console.WriteLine ($"    Test log server listening on: localhost:{port}");
 						do {
 							var context = listener.GetContext ();
 							var request = context.Request;
@@ -86,7 +86,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 						} while (true);
 					} catch (Exception e) {
 						if (e is HttpListenerException hle && ((uint) hle.HResult) == 0x80004005) {
-							// Console.WriteLine ($"    Listener closed successfully");
+							Console.WriteLine ($"    Listener closed successfully");
 						} else {
 							Console.WriteLine ($"    Exception during request processing: {e}");
 						}
@@ -94,7 +94,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 				} catch (Exception e) {
 					Console.WriteLine (e);
 				}
-				// Console.WriteLine ("    Listener thread completed");
+				Console.WriteLine ("    Listener thread completed");
 			});
 			listener_thread.IsBackground = true;
 			listener_thread.Start ();

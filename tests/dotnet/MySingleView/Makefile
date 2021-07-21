@@ -7,3 +7,6 @@ build:
 
 run:
 	$(DOTNET6) build /bl $(MSBUILD_VERBOSITY) /t:Run
+
+run-llvm:
+	$(DOTNET6) build /bl $(MSBUILD_VERBOSITY) /t:Run /p:MtouchUseLlvm=true /p:RuntimeIdentifier=ios-arm64

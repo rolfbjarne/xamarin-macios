@@ -1,7 +1,10 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Threading;
 
 using Compression;
 using Foundation;
@@ -17,54 +20,63 @@ namespace MySingleView
 	{
 		UIWindow window;
 
-		static byte [] compressed_data = { 0xf3, 0x48, 0xcd, 0xc9, 0xc9,
-			0xe7, 0x02, 0x00 };
-
-
-		void ThrowA ()
+		static string SelectHostName ()
 		{
-			throw new ArgumentNullException ();
+			return SelectHostName (new string [] { "192.168.1.82", "169.254.34.163", "fe80::48d:fb00:89bf:c36c", "fe80::aede:48ff:fe00:1122", "fe80::14a6:1e61:2f4e:e2c5", "fe80::6aa3:6295:30dd:b552"}, 49681);
 		}
 
-		void ThrowB ()
+		static string SelectHostName (string[] names, int port)
 		{
-			Assert.Throws<ArgumentNullException> (ThrowA, "ThrowA message");
-			Assert.Throws (typeof (ArgumentNullException), ThrowA, "ThrowA message B");
+			if (names.Length == 0)
+				return null;
 
-			MemoryStream backing = new MemoryStream (compressed_data);
-			DeflateStream decompressing = new DeflateStream (backing, CompressionMode.Decompress, CompressionAlgorithm.Zlib);
-			Assert.Throws<NotSupportedException> (() => { var length = decompressing.Length; });
+			if (names.Length == 1)
+				return names [0];
 
+			object lock_obj = new object ();
+			string result = null;
+			int failures = 0;
 
-			Console.WriteLine ("✅ SUCCESS");
-		}
+			using (var evt = new ManualResetEvent (false)) {
+				for (int i = names.Length - 1; i >= 0; i--) {
+					var name = names [i];
+					ThreadPool.QueueUserWorkItem ((v) =>
+						{
+							try {
+								var client = new TcpClient (name, port);
+								using (var writer = new StreamWriter (client.GetStream ())) {
+									writer.WriteLine ("ping");
+								}
+								lock (lock_obj) {
+									if (result == null)
+										result = name;
+								}
+								evt.Set ();
+							} catch (Exception e) {
+								lock (lock_obj) {
+									Console.WriteLine ("TCP connection failed when selecting 'hostname': {0} and 'port': {1}. {2}", name, port, e);
+									failures++;
+									if (failures == names.Length)
+										evt.Set ();
+								}
+							}
+						});
+				}
 
-		void ThrowC ()
-		{
-			try {
-				ThrowB ();
-				Console.WriteLine ("✅ Caught no exception C!");
-			} catch (Exception e) {
-				Console.WriteLine ("❌ Caught Exception: {0}", e);
+				// Wait for 1 success or all failures
+				evt.WaitOne ();
 			}
-		}
 
-		void ThrowD ()
-		{
-			try {
-				GetType ().GetMethod ("ThrowB", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Invoke (this, new object [0]);
-				Console.WriteLine ("✅ Caught no exception D!");
-			} catch (Exception e) {
-				Console.WriteLine ("❌ Caught Exception: {0}", e);
-			}
+			Console.WriteLine ($"Selected host name: {result}");
+
+			return result;
 		}
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 
-			ThrowC ();
-			ThrowD ();
+			SelectHostName ();
 
 			var dvc = new UIViewController ();
 			var button = new UIButton (window.Bounds);

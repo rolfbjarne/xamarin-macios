@@ -24,6 +24,7 @@ namespace MonoTests.System.Net.Http
 {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
+	[Ignore ("testing")]
 	public class MessageHandlerTest
 	{
 		public MessageHandlerTest ()

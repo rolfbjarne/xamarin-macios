@@ -8,5 +8,12 @@ build:
 run:
 	$(DOTNET6) build /bl $(MSBUILD_VERBOSITY) /t:Run
 
+run-dev:
+	rm -Rf bin obj
+	$(DOTNET6) build /bl:build.binlog $(MSBUILD_VERBOSITY) /p:RuntimeIdentifier=ios-arm64
+	$(DOTNET6) build /bl:run.binlog   /v:diag              /p:RuntimeIdentifier=ios-arm64 /t:Run
+
 run-llvm:
-	$(DOTNET6) build /bl $(MSBUILD_VERBOSITY) /t:Run /p:MtouchUseLlvm=true /p:RuntimeIdentifier=ios-arm64
+	rm -Rf bin obj
+	$(DOTNET6) build /bl:build.binlog $(MSBUILD_VERBOSITY) /p:RuntimeIdentifier=ios-arm64         /p:MtouchUseLlvm=true
+	$(DOTNET6) build /bl:run.binlog   /v:diag              /p:RuntimeIdentifier=ios-arm64 /t:Run  /p:MtouchUseLlvm=true

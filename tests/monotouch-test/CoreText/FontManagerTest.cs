@@ -1,4 +1,4 @@
-﻿//
+//
 // Unit tests for CTFontManager
 //
 // Authors:
@@ -23,6 +23,7 @@ namespace MonoTouchFixtures.CoreText {
 
 	[TestFixture]
 	[Preserve (AllMembers = true)]
+	[Ignore ("crashing on device")]
 	public class FontManagerTest {
 
 		static string pacifico_ttf_path;

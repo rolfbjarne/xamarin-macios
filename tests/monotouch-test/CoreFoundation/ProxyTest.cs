@@ -51,6 +51,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 		{
 			var listening = new ManualResetEvent (false);
 			listener_thread = new Thread (() => {
+				Console.WriteLine ("    ProxyTest: Listener thread started");
 				try {
 					listener = new HttpListener ();
 
@@ -67,12 +68,12 @@ namespace MonoTouchFixtures.CoreFoundation {
 							port = newPort;
 							break;
 						} catch (Exception ex) {
-							Console.WriteLine ($"    Failed to listen on port {newPort}: {ex.Message}");
+							Console.WriteLine ($"    ProxyTest: Failed to listen on port {newPort}: {ex.Message}");
 						}
 					}
 
 					try {
-						Console.WriteLine ($"    Test log server listening on: localhost:{port}");
+						Console.WriteLine ($"    ProxyTest: Test log server listening on: localhost:{port}");
 						do {
 							var context = listener.GetContext ();
 							var request = context.Request;
@@ -86,15 +87,15 @@ namespace MonoTouchFixtures.CoreFoundation {
 						} while (true);
 					} catch (Exception e) {
 						if (e is HttpListenerException hle && ((uint) hle.HResult) == 0x80004005) {
-							Console.WriteLine ($"    Listener closed successfully");
+							Console.WriteLine ($"    ProxyTest: Listener closed successfully");
 						} else {
-							Console.WriteLine ($"    Exception during request processing: {e}");
+							Console.WriteLine ($"    ProxyTest: Exception during request processing: {e}");
 						}
 					}
 				} catch (Exception e) {
 					Console.WriteLine (e);
 				}
-				Console.WriteLine ("    Listener thread completed");
+				Console.WriteLine ("    ProxyTest: Listener thread completed");
 			});
 			listener_thread.IsBackground = true;
 			listener_thread.Start ();

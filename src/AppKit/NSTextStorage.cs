@@ -1,7 +1,11 @@
 using CoreText;
 using Foundation;
 
+#if __MACCATALYST__
+namespace UIKit {
+#else
 namespace AppKit {
+#endif
 	public partial class NSTextStorage {
 		public NSTextStorage (string str, NSDictionary attributes) : base (str, attributes) {
 		}

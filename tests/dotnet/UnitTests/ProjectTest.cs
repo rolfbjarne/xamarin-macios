@@ -460,6 +460,24 @@ namespace Xamarin.Tests {
 		}
 
 		[Test]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		public void AbsoluteOutputPath (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "MySimpleApp";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+
+			var tmpDir = Cache.CreateTemporaryDirectory ();
+			var project_path = GetProjectPath (project, platform: platform);
+			Clean (project_path);
+			var properties = new Dictionary<string, string> (verbosity);
+			properties ["RuntimeIdentifiers"] = runtimeIdentifiers;
+			properties ["OutputPath"] = tmpDir;
+			var rv = DotNet.AssertBuild (project_path, properties);
+			var errors = BinLog.GetBuildMessages (rv.BinLogPath).Where (v => v.Type == BuildLogEventType.Error).ToArray ();
+			Assert.AreEqual (0, errors.Length, "Error count");
+		}
+
+		[Test]
 		[TestCase (ApplePlatform.iOS, "ios-arm;ios-arm64;iossimulator-x64;iossimulator-x86")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64;iossimulator-x64")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm;iossimulator-x64")]

@@ -380,6 +380,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_CoreCompileInterfaceDefinitions"
+		Condition="@(InterfaceDefinition->Count()) > 0"
 		Inputs="@(InterfaceDefinition);$(_AppManifest)"
 		Outputs="$(_IBToolCache)"
 		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CompileAppManifest;_ReadAppManifest;_DetectSigningIdentity">

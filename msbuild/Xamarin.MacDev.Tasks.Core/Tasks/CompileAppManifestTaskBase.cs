@@ -35,9 +35,6 @@ namespace Xamarin.MacDev.Tasks
 		public string AssemblyName { get; set; }
 
 		[Required]
-		public string BundleIdentifier { get; set; }
-
-		[Required]
 		public string CompiledAppManifest { get; set; }
 
 		[Required]

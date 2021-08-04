@@ -57,9 +57,6 @@ namespace Xamarin.MacDev.Tasks
 
 		public bool IsWatchExtension { get; set; }
 
-		[Required]
-		public string MinimumOSVersion { get; set; }
-
 		public ITaskItem[] PartialAppManifests { get; set; }
 
 		public string ResourceRules { get; set; }
@@ -85,8 +82,6 @@ namespace Xamarin.MacDev.Tasks
 				LogAppManifestError (MSBStrings.E0010, AppManifest, ex.Message);
 				return false;
 			}
-
-			plist.SetIfNotPresent (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform), MinimumOSVersion);
 
 			if (!string.IsNullOrEmpty (TargetArchitectures) && !Enum.TryParse (TargetArchitectures, out architectures)) {
 				LogAppManifestError (MSBStrings.E0012, TargetArchitectures);

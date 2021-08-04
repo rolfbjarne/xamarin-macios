@@ -119,6 +119,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			_PrepareResourceRules;
 			_CompileEntitlements;
 			_CompileAppManifest;
+			_ReadAppManifest;
 			_GetNativeExecutableName;
 			_ParseBundlerArguments;
 			_CompileToNative;
@@ -224,7 +225,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CompileITunesMetadata" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'"
-		DependsOnTargets="_DetectSdkLocations;_DetectAppManifest;_GenerateBundleName;_CompileAppManifest"
+		DependsOnTargets="_DetectSdkLocations;_DetectAppManifest;_GenerateBundleName;_CompileAppManifest;_ReadAppManifest"
 		Inputs="$(_AppManifest);@(ITunesMetadata)"
 		Outputs="$(DeviceSPecificOutputPath)iTunesMetadata.plist" >
 		<CompileITunesMetadata
@@ -267,6 +268,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			_DetectSigningIdentity;
 			_CompileEntitlements;
 			_CompileAppManifest;
+			_ReadAppManifest;
 			_ResolveAppExtensionReferences;
 			_ExtendAppExtensionReferences;
 			_GetNativeExecutableName;

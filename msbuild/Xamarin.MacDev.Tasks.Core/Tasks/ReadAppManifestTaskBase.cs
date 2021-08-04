@@ -34,8 +34,8 @@ namespace Xamarin.MacDev.Tasks {
 				}
 			}
 
-			BundleIdentifier = plist.GetCFBundleIdentifier ();
-			ExecutableName = plist.GetCFBundleExecutable ();
+			BundleIdentifier = plist?.GetCFBundleIdentifier ();
+			ExecutableName = plist?.GetCFBundleExecutable ();
 
 			var minimumOSVersionInManifest = plist?.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform))?.Value;
 			if (string.IsNullOrEmpty (minimumOSVersionInManifest)) {

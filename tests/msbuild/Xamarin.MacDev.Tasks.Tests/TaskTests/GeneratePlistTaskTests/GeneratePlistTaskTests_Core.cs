@@ -36,8 +36,6 @@ namespace Xamarin.iOS.Tasks
 			Task.CompiledAppManifest = Path.Combine (Cache.CreateTemporaryDirectory (), "AppBundlePath", "Info.plist");
 			Task.AssemblyName = assemblyName;
 			Task.AppManifest = CreateTempFile ("foo.plist");
-			Task.BundleIdentifier = bundleIdentifier;
-			Task.MinimumOSVersion = string.Empty;
 			Task.SdkPlatform = "iPhoneSimulator";
 
 			Plist = new PDictionary ();

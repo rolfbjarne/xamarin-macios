@@ -34,17 +34,17 @@ namespace Xamarin.iOS.Tasks
 		{
 			Task = CreateTask<CompileAppManifest> ();
 
+			Task.ApplicationId = identifier;
 			Task.AppBundleName = appBundleName;
 			Task.CompiledAppManifest = new TaskItem (Path.Combine (Cache.CreateTemporaryDirectory (), "AppBundlePath", "Info.plist"));
 			Task.AssemblyName = assemblyName;
 			Task.AppManifest = CreateTempFile ("foo.plist");
-			Task.BundleIdentifier = bundleIdentifier;
-			Task.MinimumOSVersion = string.Empty;
 			Task.SdkPlatform = "iPhoneSimulator";
+			Task.SdkVersion = "10.0";
 
 			Plist = new PDictionary ();
 			Plist ["CFBundleDisplayName"] = displayName;
-			Plist ["CFBundleIdentifier"] = identifier;
+			Plist ["CFBundleIdentifier"] = bundleIdentifier;
 			Plist.Save (Task.AppManifest);
 		}
 
@@ -55,7 +55,7 @@ namespace Xamarin.iOS.Tasks
 			ConfigureTask ();
 
 			Task.Execute ();
-			CompiledPlist = PDictionary.FromFile (Task.CompiledAppManifest.ItemSpec);
+			CompiledPlist = PDictionary.FromFile (Task.CompiledAppManifest);
 		}
 
 		#region General tests
@@ -63,7 +63,8 @@ namespace Xamarin.iOS.Tasks
 		public void PlistMissing ()
 		{
 			File.Delete (Task.AppManifest);
-			Assert.IsFalse (Task.Execute (), "#1");
+			Assert.IsTrue (Task.Execute (), "#1");
+			Assert.That (Task.CompiledAppManifest, Does.Exist, "#2");
 		}
 
 		[Test]

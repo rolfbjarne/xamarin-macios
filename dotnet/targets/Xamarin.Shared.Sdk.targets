@@ -194,7 +194,7 @@
 		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' != ''">
 			_RunRidSpecificBuild;
 			_CompileEntitlements;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_CreateMergedAppBundle;
 			Codesign;
 			CreateIpa;
@@ -207,7 +207,6 @@
 		<!-- single-rid build (either plain single, or inner build for multi-rid build) -->
 		<CreateAppBundleDependsOn Condition="'$(RuntimeIdentifiers)' == ''">
 			$(CreateAppBundleDependsOn);
-			_DetectAppManifest;
 			_CopyResourcesToBundle;
 			_CompileCoreMLModels;
 			_CreatePkgInfo;
@@ -215,7 +214,7 @@
 			_ForgeMetal;
 			_TemperMetal;
 			_CompileEntitlements;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_ResolveAppExtensionReferences;
 			_ExtendAppExtensionReferences;
 			_ComputeLinkerArguments;
@@ -366,6 +365,7 @@
 			_ComputeVariables;
 			_CreateRuntimeConfiguration;
 			_ComputeMonoLibraries;
+			_CreateFinalAppManifest;
 		</_ComputeLinkerArgumentsDependsOn>
 	</PropertyGroup>
 
@@ -780,9 +780,16 @@
 		<Warning Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Text="Some features may not work correctly, because the generation of the runtime configure file (*.runtimeconfig.json) has been disabled." />
 	</Target>
 
+	<PropertyGroup>
+		<_AOTCompileDependsOn>
+			_ComputeVariables;
+			_CreateFinalAppManifest;
+		</_AOTCompileDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_AOTCompile"
 			Condition="'$(_RunAotCompiler)' == 'true'"
-			DependsOnTargets="_ComputeVariables"
+			DependsOnTargets="$(_AOTCompileDependsOn)"
 			Inputs="@(_AssembliesToAOT)"
 			Outputs="@(_AssembliesToAOT -> '%(ObjectFile)');@(_AssembliesToAOT -> '%(LLVMFile)');">
 
@@ -859,8 +866,19 @@
 		</ItemGroup>
 	</Target>
 
+	<PropertyGroup>
+		<_CompileNativeExecutableDependsOn>
+			_DetectSdkLocations;
+			_ComputeTargetArchitectures;
+			_GenerateBundleName;
+			_CreateFinalAppManifest;
+			_ComputeNativeExecutableInputs;
+			_AOTCompile;
+		</_CompileNativeExecutableDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_CompileNativeExecutable"
-		DependsOnTargets="_DetectSdkLocations;_ComputeTargetArchitectures;_GenerateBundleName;_GetMinimumOSVersion;_ComputeNativeExecutableInputs;_AOTCompile;"
+		DependsOnTargets="$(_CompileNativeExecutableDependsOn)"
 		Inputs="@(_CompileNativeExecutableFile)"
 		Outputs="@(_CompileNativeExecutableFile -> '%(OutputFile)')"
 		>
@@ -884,8 +902,19 @@
 		</ItemGroup>
 	</Target>
 
+	<PropertyGroup>
+		<_LinkNativeExecutableDependsOn>
+			$(_LinkNativeExecutableDependsOn);
+			_DetectSdkLocations;
+			_ComputeTargetArchitectures;
+			_GenerateBundleName;
+			_CompileNativeExecutable;
+			_CreateFinalAppManifest;
+		</_LinkNativeExecutableDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_LinkNativeExecutable"
-			DependsOnTargets="_DetectSdkLocations;_ComputeTargetArchitectures;_GenerateBundleName;_CompileNativeExecutable;_CompileAppManifest"
+			DependsOnTargets="$(_LinkNativeExecutableDependsOn)"
 			Inputs="@(_NativeExecutableObjectFiles)"
 			Outputs="$(_IntermediateNativeLibraryDir)$(_NativeExecutableName)"
 		>
@@ -1061,7 +1090,7 @@
 		<GetMlaunchArguments
 			SessionId="$(BuildSessionId)"
 			AppBundlePath="$(_AppBundlePath)"
-			AppManifestPath="$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist"
+			AppManifestPath="$(_FinalAppManifest)"
 			DeviceName="$(_DeviceName)"
 			InstallApp="$(_AppBundlePath)"
 			MlaunchPath="$(_MlaunchPath)"
@@ -1088,7 +1117,7 @@
 		<GetMlaunchArguments
 			SessionId="$(BuildSessionId)"
 			AppBundlePath="$(_AppBundlePath)"
-			AppManifestPath="$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist"
+			AppManifestPath="$(_FinalAppManifest)"
 			CaptureOutput="$(_MlaunchCaptureOutput)"
 			DeviceName="$(_DeviceName)"
 			LaunchApp="$(_AppBundlePath)"

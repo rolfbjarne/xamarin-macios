@@ -1,8 +1,9 @@
+using Microsoft.Build.Framework;
 using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks
 {
-	public class GetMinimumOSVersion : GetMinimumOSVersionTaskBase
+	public class MergeAppManifest : MergeAppManifestTaskBase, ICancelableTask
 	{
 		public override bool Execute ()
 		{
@@ -11,5 +12,12 @@ namespace Xamarin.MacDev.Tasks
 
 			return base.Execute ();
 		}
+
+		public void Cancel ()
+		{
+			if (ShouldExecuteRemotely ())
+				BuildConnection.CancelAsync (SessionId, BuildEngine4).Wait ();
+		}
 	}
 }
+

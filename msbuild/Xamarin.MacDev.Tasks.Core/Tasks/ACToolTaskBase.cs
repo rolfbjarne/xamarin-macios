@@ -29,6 +29,8 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public ITaskItem[] ImageAssets { get; set; }
 
+		public string InputAppManifest { get; set; }
+
 		public bool IsWatchApp { get; set; }
 
 		[Required]
@@ -36,6 +38,10 @@ namespace Xamarin.MacDev.Tasks
 
 		[Required]
 		public string OutputPath { get; set; }
+
+		public string XSAppIconAssets { get; set; }
+
+		public string XSLaunchImageAssets { get; set; }
 
 		#endregion
 
@@ -89,10 +95,10 @@ namespace Xamarin.MacDev.Tasks
 
 				var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId))));
 
-				if (plist.TryGetValue (ManifestKeys.XSAppIconAssets, out value) && !string.IsNullOrEmpty (value.Value)) {
-					int index = value.Value.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
+				if (!string.IsNullOrEmpty (XSAppIconAssets)) {
+					int index = XSAppIconAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
 					string assetDir = null;
-					var rpath = value.Value;
+					var rpath = XSAppIconAssets;
 
 					if (index != -1)
 						assetDir = rpath.Substring (0, index + ".xcassets".Length);
@@ -115,10 +121,10 @@ namespace Xamarin.MacDev.Tasks
 					}
 				}
 
-				if (plist.TryGetValue (ManifestKeys.XSLaunchImageAssets, out value) && !string.IsNullOrEmpty (value.Value)) {
-					int index = value.Value.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
+				if (!string.IsNullOrEmpty (XSLaunchImageAssets)) {
+					int index = XSLaunchImageAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
 					string assetDir = null;
-					var rpath = value.Value;
+					var rpath = XSLaunchImageAssets;
 
 					if (index != -1)
 						assetDir = rpath.Substring (0, index + ".xcassets".Length);
@@ -231,11 +237,11 @@ namespace Xamarin.MacDev.Tasks
 			var items = new List<ITaskItem> ();
 			var specs = new PArray ();
 
-			if (AppManifest != null) {
+			if (!string.IsNullOrEmpty (InputAppManifest)) {
 				try {
-					plist = PDictionary.FromFile (AppManifest.ItemSpec);
+					plist = PDictionary.FromFile (InputAppManifest);
 				} catch (Exception ex) {
-					Log.LogError (null, null, null, AppManifest.ItemSpec, 0, 0, 0, 0, "{0}", ex.Message);
+					Log.LogError (null, null, null, InputAppManifest, 0, 0, 0, 0, "{0}", ex.Message);
 					return false;
 				}
 			}

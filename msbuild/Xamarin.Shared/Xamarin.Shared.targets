@@ -809,7 +809,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</MetalLib>
 	</Target>
 
-	<Target Name="_DetectAppManifest">
+	<Target Name="_DetectAppManifest" DependsOnTargets="_GenerateBundleName">
 		<!--
 			This targets runs for Library projects as well, so that Library
 			projects can specify an Info.plist with MinimumOSVersion to pass
@@ -843,7 +843,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</FindItemWithLogicalName>
 		<Error Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 		<PropertyGroup>
-			<_AppBundleManifestPath>$(_AppBundlePath)$(_AppBundleManifestRelativePath)$(_AppManifest)</_AppBundleManifestPath>
+			<_FinalAppManifest>$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist</_FinalAppManifest>
 		</PropertyGroup>
 	</Target>
 

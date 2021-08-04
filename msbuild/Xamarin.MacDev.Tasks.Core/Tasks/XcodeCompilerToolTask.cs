@@ -25,8 +25,6 @@ namespace Xamarin.MacDev.Tasks
 
 		#region Inputs
 
-		public ITaskItem AppManifest { get; set; }
-
 		public string BundleIdentifier { get; set; }
 
 		[Required]
@@ -66,6 +64,22 @@ namespace Xamarin.MacDev.Tasks
 
 		#endregion
 
+		#region Inputs from the app manifest
+
+		public string CLKComplicationGroup { get; set; }
+
+		public string NSExtensionPointIdentifier { get; set; }
+
+		public string XSAppIconAssets { get; set; }
+
+		public string XSLaunchImageAssets { get; set; }
+
+		public bool WKWatchKitApp { get; set; }
+
+		public string UIDeviceFamily { get; set; }
+
+		#endregion
+
 		#region Outputs
 
 		[Output]
@@ -75,6 +89,14 @@ namespace Xamarin.MacDev.Tasks
 		public ITaskItem[] OutputManifests { get; set; }
 
 		#endregion
+
+		public IPhoneDeviceType ParsedUIDeviceFamily {
+			get {
+				if (!string.IsNullOrEmpty (UIDeviceFamily))
+					return (IPhoneDeviceType) Enum.Parse (typeof (IPhoneDeviceType), UIDeviceFamily);
+				return IPhoneDeviceType.NotSet;
+			}
+		}
 
 		protected abstract string DefaultBinDir {
 			get;
@@ -99,21 +121,17 @@ namespace Xamarin.MacDev.Tasks
 			get { return false; }
 		}
 
-		protected static bool IsWatchExtension (PDictionary plist)
+		protected bool IsWatchExtension ()
 		{
-			PDictionary extension;
-			PString id;
-
-			if (!plist.TryGetValue ("NSExtension", out extension))
-				return false;
-
-			if (!extension.TryGetValue ("NSExtensionPointIdentifier", out id))
-				return false;
-
-			return id.Value == "com.apple.watchkit";
+			return NSExtensionPointIdentifier == "com.apple.watchkit";
 		}
 
-		protected IEnumerable<string> GetTargetDevices (PDictionary plist)
+		protected bool IsMessagesExtension ()
+		{
+			return NSExtensionPointIdentifier == "com.apple.message-payload-provider";
+		}
+
+		protected IEnumerable<string> GetTargetDevices ()
 		{
 			var devices = IPhoneDeviceType.NotSet;
 			bool watch = false;
@@ -121,18 +139,18 @@ namespace Xamarin.MacDev.Tasks
 			if (Platform == ApplePlatform.MacOSX)
 				yield break;
 
-			if (plist != null) {
-				if (!(watch = plist.GetWKWatchKitApp ())) {
+			if (!string.IsNullOrEmpty (UIDeviceFamily)) {
+				if (!(watch = WKWatchKitApp)) {
 					// the project is either a normal iOS project or an extension
-					if ((devices = plist.GetUIDeviceFamily ()) == IPhoneDeviceType.NotSet) {
+					if ((devices = ParsedUIDeviceFamily) == IPhoneDeviceType.NotSet) {
 						// library projects and extension projects will not have this key, but
 						// we'll want them to work for both iPhones and iPads if the
 						// xib or storyboard supports them
 						devices = IPhoneDeviceType.IPhoneAndIPad;
 					}
 
-					// if the project is a watch extension, we'll also want to include watch support
-					watch = IsWatchExtension (plist);
+					// if the project is a watch extension, we'll also want to incldue watch support
+					watch = IsWatchExtension ();
 				} else {
 					// the project is a WatchApp, only include watch support
 				}

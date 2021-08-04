@@ -195,7 +195,7 @@
 		<BuildDependsOn Condition="'$(RuntimeIdentifiers)' != ''">
 			_RunRidSpecificBuild;
 			_CompileEntitlements;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_CreateMergedAppBundle;
 			Codesign;
 			CreateIpa;
@@ -208,7 +208,6 @@
 		<!-- single-rid build (either plain single, or inner build for multi-rid build) -->
 		<CreateAppBundleDependsOn Condition="'$(RuntimeIdentifiers)' == ''">
 			$(CreateAppBundleDependsOn);
-			_DetectAppManifest;
 			_CopyResourcesToBundle;
 			_CompileCoreMLModels;
 			_CreatePkgInfo;
@@ -216,7 +215,7 @@
 			_ForgeMetal;
 			_TemperMetal;
 			_CompileEntitlements;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_ResolveAppExtensionReferences;
 			_ExtendAppExtensionReferences;
 			_ComputeLinkerArguments;
@@ -367,6 +366,7 @@
 			_ComputeVariables;
 			_CreateRuntimeConfiguration;
 			_ComputeMonoLibraries;
+			_CreateFinalAppManifest;
 		</_ComputeLinkerArgumentsDependsOn>
 	</PropertyGroup>
 
@@ -784,6 +784,7 @@
 	<PropertyGroup>
 		<_AOTCompileDependsOn>
 			_ComputeVariables;
+			_CreateFinalAppManifest;
 		</_AOTCompileDependsOn>
 	</PropertyGroup>
 
@@ -871,7 +872,7 @@
 			_DetectSdkLocations;
 			_ComputeTargetArchitectures;
 			_GenerateBundleName;
-			_GetMinimumOSVersion;
+			_CreateFinalAppManifest;
 			_ComputeNativeExecutableInputs;
 			_AOTCompile;
 		</_CompileNativeExecutableDependsOn>
@@ -908,7 +909,7 @@
 			_DetectSdkLocations;
 			_ComputeTargetArchitectures;
 			_GenerateBundleName;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_CompileNativeExecutable;
 		</_LinkNativeExecutableDependsOn>
 	</PropertyGroup>

@@ -16,6 +16,9 @@ namespace Xamarin.MacDev.Tasks {
 		public string BundleIdentifier { get; set; }
 
 		[Output]
+		public string ExecutableName { get; set; }
+
+		[Output]
 		public string MinimumOSVersion { get; set; }
 
 		public override bool Execute ()
@@ -32,6 +35,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			BundleIdentifier = plist.GetCFBundleIdentifier ();
+			ExecutableName = plist.GetCFBundleExecutable ();
 
 			var minimumOSVersionInManifest = plist?.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform))?.Value;
 			if (string.IsNullOrEmpty (minimumOSVersionInManifest)) {

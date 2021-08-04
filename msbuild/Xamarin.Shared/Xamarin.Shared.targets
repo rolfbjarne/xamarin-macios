@@ -284,8 +284,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_CompileAppManifest"
 		DependsOnTargets="$(_CompileAppManifestDependsOn)"
-		Inputs="$(_AppManifest);@(PartialAppManifest)"
-		Outputs="$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist" >
+		Inputs="$(_InputAppManifest);@(PartialAppManifest)"
+		Outputs="$(_AppManifest)" >
 		<CompileAppManifest
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -293,10 +293,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ApplicationTitle="$(ApplicationTitle)"
 			ApplicationVersion="$(ApplicationVersion)"
 			AppBundleName="$(_AppBundleName)"
-			AppManifest="$(_AppManifest)"
-			AppManifestBundleDirectory="$(_AppBundlePath)$(_AppBundleManifestRelativePath)"
+			AppManifest="$(_InputAppManifest)"
 			AssemblyName="$(AssemblyName)"
 			BundleIdentifier="$(_BundleIdentifier)"
+			CompiledAppManifest="$(_AppManifest)"
 			Debug="$(_BundlerDebug)"
 			DefaultSdkVersion="$(_SdkVersion)"
 			GenerateApplicationManifest="$(GenerateApplicationManifest)"
@@ -799,27 +799,27 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ResourcePrefix="$(_ResourcePrefix)"
 			LogicalName="Info.plist"
 			Items="@(None)">
-			<Output TaskParameter="Item" PropertyName="_AppManifest" />
+			<Output TaskParameter="Item" PropertyName="_InputAppManifest" />
 		</FindItemWithLogicalName>
-		<FindItemWithLogicalName Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'"
+		<FindItemWithLogicalName Condition="'$(_InputAppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'"
 			SessionId="$(BuildSessionId)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
 			LogicalName="Info.plist"
 			Items="@(BundleResource)">
-			<Output TaskParameter="Item" PropertyName="_AppManifest" />
+			<Output TaskParameter="Item" PropertyName="_InputAppManifest" />
 		</FindItemWithLogicalName>
-		<FindItemWithLogicalName Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'"
+		<FindItemWithLogicalName Condition="'$(_InputAppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'"
 			SessionId="$(BuildSessionId)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
 			LogicalName="Info.plist"
 			Items="@(Content)">
-			<Output TaskParameter="Item" PropertyName="_AppManifest" />
+			<Output TaskParameter="Item" PropertyName="_InputAppManifest" />
 		</FindItemWithLogicalName>
-		<Error Condition="'$(_AppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
+		<Error Condition="'$(_InputAppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 		<PropertyGroup>
-			<_AppBundleManifestPath>$(_AppBundlePath)$(_AppBundleManifestRelativePath)$(_AppManifest)</_AppBundleManifestPath>
+			<_AppManifest>$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist</_AppManifest>
 		</PropertyGroup>
 	</Target>
 

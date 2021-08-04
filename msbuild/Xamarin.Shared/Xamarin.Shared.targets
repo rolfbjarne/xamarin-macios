@@ -446,10 +446,23 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadItemsFromFile>
 	</Target>
 
+	<PropertyGroup>
+		<_CoreCompileImageAssetsDependsOn>
+			$(_CoreCompileImageAssets);
+			_DetectAppManifest;
+			_GetMinimumOSVersion;
+			_DetectSdkLocations;
+			_BeforeCoreCompileImageAssets;
+			_GetMinimumOSVersion;
+			_DetectSigningIdentity;
+			_ComputeTargetFrameworkMoniker;
+		</_CoreCompileImageAssetsDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_CoreCompileImageAssets"
 		Inputs="@(ImageAsset);$(_AppManifest)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
-		DependsOnTargets="_DetectAppManifest;_GetMinimumOSVersion;_DetectSdkLocations;_BeforeCoreCompileImageAssets;_GetMinimumOSVersion;_DetectSigningIdentity;_ComputeTargetFrameworkMoniker">
+		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn)">
 
 		<ACTool
 			SessionId="$(BuildSessionId)"
@@ -710,10 +723,19 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadItemsFromFile>
 	</Target>
 
+	<PropertyGroup>
+		<_CoreCompileCoreMLModelsDependsOn>
+			$(_CoreCompileCoreMLModelsDependsOn);
+			_DetectAppManifest;
+			_DetectSdkLocations;
+			_BeforeCompileCoreMLModels;
+		</_CoreCompileCoreMLModelsDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_CoreCompileCoreMLModels" 
 		Inputs="@(CoreMLModel);$(_AppManifest)"
 		Outputs="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)"
-		DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_BeforeCompileCoreMLModels">
+		DependsOnTargets="$(_CoreCompileCoreMLModelsDependsOn)">
 
 		<CoreMLCompiler
 			SessionId="$(BuildSessionId)"

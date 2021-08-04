@@ -13,6 +13,9 @@ namespace Xamarin.MacDev.Tasks
 	{
 		#region Inputs
 
+		// Single-project property that maps to CFBundleIdentifier for Apple platforms
+		public string ApplicationId { get; set; }
+
 		// Single-project property that maps to CFBundleShortVersionString for Apple platforms
 		public string AppleShortVersion { get; set; }
 
@@ -93,7 +96,8 @@ namespace Xamarin.MacDev.Tasks
 				return false;
 			}
 
-			plist.SetCFBundleIdentifier (BundleIdentifier); // no ifs and buts, we've computed the final bundle identifier (BundleIdentifier) in DetectSigningIdentityTask.
+			if (GenerateApplicationManifest && !string.IsNullOrEmpty (ApplicationId))
+				plist.SetIfNotPresent (ManifestKeys.CFBundleIdentifier, ApplicationId);
 			plist.SetIfNotPresent (ManifestKeys.CFBundleInfoDictionaryVersion, "6.0");
 			plist.SetIfNotPresent (ManifestKeys.CFBundlePackageType, IsAppExtension ? "XPC!" : "APPL");
 			plist.SetIfNotPresent (ManifestKeys.CFBundleSignature, "????");

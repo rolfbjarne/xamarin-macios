@@ -105,11 +105,7 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string AppManifest { get; set; }
 
-		// Single-project property that maps to CFBundleIdentifier for Apple platforms
-		public string ApplicationId { get; set; }
-
-		// Single-project property that determines whether other single-project properties should have any effect
-		public bool GenerateApplicationManifest { get; set; }
+		public string BundleIdentifier { get; set; }
 
 		public string Keychain { get; set; }
 
@@ -132,9 +128,6 @@ namespace Xamarin.MacDev.Tasks
 
 		[Output]
 		public string DetectedAppId { get; set; }
-
-		[Output]
-		public string DetectedBundleId { get; set; }
 
 		// This is input too
 		[Output]
@@ -240,7 +233,7 @@ namespace Xamarin.MacDev.Tasks
 				Log.LogMessage (MessageImportance.High, "  Code Signing Key: \"{0}\" ({1})", codesignCommonName, DetectedCodeSigningKey);
 			if (provisioningProfileName != null)
 				Log.LogMessage (MessageImportance.High, "  Provisioning Profile: \"{0}\" ({1})", provisioningProfileName, DetectedProvisioningProfile);
-			Log.LogMessage (MessageImportance.High, "  Bundle Id: {0}", DetectedBundleId);
+			Log.LogMessage (MessageImportance.High, "  Bundle Id: {0}", BundleIdentifier);
 			Log.LogMessage (MessageImportance.High, "  App Id: {0}", DetectedAppId);
 		}
 
@@ -522,17 +515,8 @@ namespace Xamarin.MacDev.Tasks
 			DetectedCodesignAllocate = Path.Combine (DeveloperRoot, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", "codesign_allocate");
 			DetectedDistributionType = type.ToString ();
 
-			identity.BundleId = plist.GetCFBundleIdentifier ();
-			if (string.IsNullOrEmpty (identity.BundleId)) {
-				if (GenerateApplicationManifest && !string.IsNullOrEmpty (ApplicationId)) {
-					identity.BundleId = ApplicationId;
-				} else {
-					Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0139, AppManifest);
-					return false;
-				}
-			}
-			DetectedBundleId = identity.BundleId;
-			DetectedAppId = DetectedBundleId; // default value that can be changed below
+			identity.BundleId = BundleIdentifier;
+			DetectedAppId = BundleIdentifier; // default value that can be changed below
 
 			if (Platform == ApplePlatform.MacOSX) {
 				if (!RequireCodeSigning || !string.IsNullOrEmpty (DetectedCodeSigningKey)) {

@@ -274,9 +274,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<PropertyGroup>
 		<_CompileAppManifestDependsOn>
 			$(_CompileAppManifestDependsOn);
+			_DetectAppManifest;
 			_DetectSdkLocations;
 			_GenerateBundleName;
-			_DetectSigningIdentity;
 			_ComputeTargetFrameworkMoniker;
 			_ComputeTargetArchitectures;
 		</_CompileAppManifestDependsOn>
@@ -382,7 +382,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CoreCompileInterfaceDefinitions"
 		Inputs="@(InterfaceDefinition);$(_AppManifest)"
 		Outputs="$(_IBToolCache)"
-		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_ReadAppManifest;_DetectSigningIdentity">
+		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CompileAppManifest;_ReadAppManifest;_DetectSigningIdentity">
 
 		<IBTool
 			SessionId="$(BuildSessionId)"
@@ -444,10 +444,23 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadItemsFromFile>
 	</Target>
 
+	<PropertyGroup>
+		<_CoreCompileImageAssetsDependsOn>
+			$(_CoreCompileImageAssets);
+			_DetectAppManifest;
+			_CompileAppManifest;
+			_ReadAppManifest;
+			_DetectSdkLocations;
+			_BeforeCoreCompileImageAssets;
+			_DetectSigningIdentity;
+			_ComputeTargetFrameworkMoniker;
+		</_CoreCompileImageAssetsDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_CoreCompileImageAssets"
 		Inputs="@(ImageAsset);$(_AppManifest)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
-		DependsOnTargets="_DetectAppManifest;_ReadAppManifest;_DetectSdkLocations;_BeforeCoreCompileImageAssets;_DetectSigningIdentity;_ComputeTargetFrameworkMoniker">
+		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn">
 
 		<ACTool
 			SessionId="$(BuildSessionId)"
@@ -708,10 +721,21 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadItemsFromFile>
 	</Target>
 
+	<PropertyGroup>
+		<_CoreCompileCoreMLModelsDependsOn>
+			$(_CoreCompileCoreMLModelsDependsOn);
+			_DetectAppManifest;
+			_CompileAppManifest;
+			_ReadAppManifest;
+			_DetectSdkLocations;
+			_BeforeCompileCoreMLModels;
+		</_CoreCompileCoreMLModelsDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_CoreCompileCoreMLModels" 
 		Inputs="@(CoreMLModel);$(_AppManifest)"
 		Outputs="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)"
-		DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_BeforeCompileCoreMLModels">
+		DependsOnTargets="$(_CoreCompileCoreMLModelsDependsOn)">
 
 		<CoreMLCompiler
 			SessionId="$(BuildSessionId)"
@@ -904,7 +928,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_ReadAppManifest" DependsOnTargets="_CompileAppManifest">
+	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;">
 		<ReadAppManifest
 			Condition="'$(IsMacEnabled)' == 'true'"
 			SessionId="$(BuildSessionId)"
@@ -921,6 +945,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<_DetectSigningIdentityDependsOn>
 			$(_DetectSigningIdentityDependsOn);
 			_DetectAppManifest;
+			_CompileAppManifest;
+			_ReadAppManifest;
 			_DetectSdkLocations;
 			_ComputeTargetFrameworkMoniker;
 			_GenerateBundleName_
@@ -1632,7 +1658,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_DetectAppManifest;_ComputeTargetArchitectures">
+	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;_ReadAppManifest;_ComputeTargetArchitectures">
 		<CompileProductDefinition
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -1645,7 +1671,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CompileProductDefinition>
 	</Target>
 
-	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition">
+	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_DetectAppManifest;_CompileAppManifest;_ReadAppManifest">
 		<CreateInstallerPackage
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"

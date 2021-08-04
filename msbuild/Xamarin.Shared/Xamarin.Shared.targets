@@ -917,7 +917,17 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadAppManifest>
 	</Target>
 
-	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_GenerateBundleName">
+	<PropertyGroup>
+		<_DetectSigningIdentityDependsOn>
+			$(_DetectSigningIdentityDependsOn);
+			_DetectAppManifest;
+			_DetectSdkLocations;
+			_ComputeTargetFrameworkMoniker;
+			_GenerateBundleName_
+		</_DetectSigningIdentityDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(_DetectSigningIdentityDependsOn">
 		<DetectSigningIdentity
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"

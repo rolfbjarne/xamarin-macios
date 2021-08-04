@@ -1,8 +1,8 @@
-﻿using Xamarin.Messaging.Build.Client;
+using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks
 {
-	public class GetMinimumOSVersion : GetMinimumOSVersionTaskBase
+	public class ReadAppManifest : ReadAppManifestTaskBase
 	{
 		public override bool Execute ()
 		{

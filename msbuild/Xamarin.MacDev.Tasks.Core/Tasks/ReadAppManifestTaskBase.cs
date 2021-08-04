@@ -6,11 +6,14 @@ using Xamarin.Localization.MSBuild;
 using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
-	public abstract class GetMinimumOSVersionTaskBase : XamarinTask {
+	public abstract class ReadAppManifestTaskBase : XamarinTask {
 		public ITaskItem AppManifest { get; set; }
 
 		[Required]
 		public string SdkVersion { get; set; }
+
+		[Output]
+		public string BundleIdentifier { get; set; }
 
 		[Output]
 		public string MinimumOSVersion { get; set; }
@@ -27,6 +30,8 @@ namespace Xamarin.MacDev.Tasks {
 					return false;
 				}
 			}
+
+			BundleIdentifier = plist.GetCFBundleIdentifier ();
 
 			var minimumOSVersionInManifest = plist?.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform))?.Value;
 			if (string.IsNullOrEmpty (minimumOSVersionInManifest)) {

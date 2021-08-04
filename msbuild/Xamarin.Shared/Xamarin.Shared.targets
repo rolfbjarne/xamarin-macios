@@ -460,7 +460,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CoreCompileImageAssets"
 		Inputs="@(ImageAsset);$(_AppManifest)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
-		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn">
+		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn)">
 
 		<ACTool
 			SessionId="$(BuildSessionId)"

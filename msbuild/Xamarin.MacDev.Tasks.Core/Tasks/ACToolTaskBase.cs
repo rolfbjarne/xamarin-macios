@@ -29,6 +29,8 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public ITaskItem[] ImageAssets { get; set; }
 
+		public string InputAppManifest { get; set; }
+
 		public bool IsWatchApp { get; set; }
 
 		[Required]
@@ -235,11 +237,11 @@ namespace Xamarin.MacDev.Tasks
 			var items = new List<ITaskItem> ();
 			var specs = new PArray ();
 
-			if (AppManifest != null) {
+			if (!string.IsNullOrEmpty (InputAppManifest)) {
 				try {
-					plist = PDictionary.FromFile (AppManifest.ItemSpec);
+					plist = PDictionary.FromFile (InputAppManifest);
 				} catch (Exception ex) {
-					Log.LogError (null, null, null, AppManifest.ItemSpec, 0, 0, 0, 0, "{0}", ex.Message);
+					Log.LogError (null, null, null, InputAppManifest, 0, 0, 0, 0, "{0}", ex.Message);
 					return false;
 				}
 			}

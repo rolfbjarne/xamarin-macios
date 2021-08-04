@@ -313,6 +313,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			DebugIPAddresses="$(_DebugIPAddresses)"
 			>
+			<Output TaskParameter="XSAppIconAssets" PropertyName="_XSAppIconAssets" />
+			<Output TaskParameter="XSLaunchImageAssets" PropertyName="_XSLaunchImageAssets" />
 		</CompileAppManifest>
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).dSYM" />

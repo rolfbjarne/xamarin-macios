@@ -15,7 +15,7 @@ namespace Xamarin.iOS.Tasks
 		#region Inputs
 
 		[Required]
-		public string AppBundleDir { get; set; }
+		public string AppManifest { get; set; }
 
 		public ITaskItem[] ITunesMetadata { get; set; }
 
@@ -44,7 +44,7 @@ namespace Xamarin.iOS.Tasks
 					return false;
 				}
 			} else {
-				var manifest = Path.Combine (AppBundleDir, "Info.plist");
+				var manifest = AppManifest;
 				PDictionary plist;
 
 				try {

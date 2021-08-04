@@ -77,6 +77,10 @@ namespace Xamarin.MacDev.Tasks
 
 		[Output]
 		public ITaskItem CompiledAppManifest { get; set; }
+		public string XSLaunchImageAssets { get; set; }
+
+		[Output]
+		public string XSAppIconAssets { get; set; }
 
 		#endregion
 
@@ -128,6 +132,12 @@ namespace Xamarin.MacDev.Tasks
 			
 			if (!Compile (plist))
 				return false;
+
+			// Fetch & remove any IDE specific keys
+			XSLaunchImageAssets = plist.Get<PString> (ManifestKeys.XSLaunchImageAssets)?.Value;
+			plist.Remove (ManifestKeys.XSLaunchImageAssets);
+			XSAppIconAssets = plist.Get<PString> (ManifestKeys.XSAppIconAssets)?.Value;
+			plist.Remove (ManifestKeys.XSAppIconAssets);
 
 			// Merge with any partial plists...
 			MergePartialPlistTemplates (plist);

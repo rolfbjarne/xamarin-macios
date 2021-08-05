@@ -292,6 +292,15 @@ namespace Xharness {
 				});
 			}
 
+			MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "introspection", "dotnet", "macOS", "introspection.csproj"))) {
+				Name = "introspection",
+				IsDotNetProject = true,
+				TargetFrameworkFlavors = MacFlavors.DotNet,
+				Platform = "AnyCPU",
+				Ignore = !ENABLE_DOTNET,
+				TestPlatform = TestPlatform.Mac,
+			});
+
 			MacTestProjects.Add (new MacTestProject (Path.GetFullPath (Path.Combine (RootDirectory, "introspection", "dotnet", "MacCatalyst", "introspection.csproj"))) {
 				Name = "introspection",
 				IsDotNetProject = true,

@@ -282,10 +282,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CompileAppManifest"
-		Condition="'$(_InputAppManifest)' != ''"
 		DependsOnTargets="$(_CompileAppManifestDependsOn)"
 		Inputs="$(_InputAppManifest);@(PartialAppManifest)"
 		Outputs="$(_AppManifest)" >
+			<!--
+				The CompileAppManifest task is required to run to set _MinimumOSVersion
+				(if there's no app manifest, we default to the _SdkVersion value).
+			-->
 		<CompileAppManifest
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -310,9 +313,26 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			SdkPlatform="$(_SdkPlatform)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
+			SdkVersion="$(_SdkVersion)"
 			DebugIPAddresses="$(_DebugIPAddresses)"
+			WriteAppManifest="$(_WriteAppManifest)"
 			>
+
+			<!-- If this target isn't built (because the app manifest is up-to-date), then this value will be set in the _ReadAppManifest target -->
+			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
 		</CompileAppManifest>
+
+		<PropertyGroup>
+			<!--
+				If _AppManifest points to a file that doesn't exist, then a app manifest isn't required.
+				To ease existing code (which checks whether the variable is empty whenever it's optional,
+				instead of checking whether the app manifest exists), we clear out the variable here.
+
+				The ReadAppManifest task is required to run to get _MinimumOSVersion set
+				(if there's no app manifest, we default to the _SdkVersion value).
+			-->
+			<_AppManifest Condition="!Exists('$(_AppManifest)')" />
+		</PropertyGroup>
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).dSYM" />
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
@@ -844,6 +864,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<Error Condition="'$(_InputAppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 		<PropertyGroup>
 			<_AppManifest>$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist</_AppManifest>
+			<!-- We should only write out a compiled app manifest if we're creating an app bundle -->
+			<_WriteAppManifest>$(_CanOutputAppBundle)</_WriteAppManifest>
 		</PropertyGroup>
 	</Target>
 
@@ -928,18 +950,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;">
-		<PropertyGroup>
-			<!--
-				If _AppManifest points to a file that doesn't exist, then a app manifest isn't required.
-				To ease existing code (which checks whether the variable is empty whenever it's optional,
-				instead of checking whether the app manifest exists), we clear out the variable here.
-
-				The ReadAppManifest task is required to run to get _MinimumOSVersion set
-				(if there's no app manifest, we default to the _SdkVersion value).
-			-->
-			<_AppManifest Condition="!Exists('$(_AppManifest)')" />
-		</PropertyGroup>
+	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;" Condition="'$(_AppManifest)' != ''">
 		<ReadAppManifest
 			Condition="'$(IsMacEnabled)' == 'true'"
 			SessionId="$(BuildSessionId)"

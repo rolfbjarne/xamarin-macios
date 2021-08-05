@@ -48,6 +48,10 @@ namespace Xamarin.MacDev.Tasks
 		// Single-project property that determines whether other single-project properties should have any effect
 		public bool GenerateApplicationManifest { get; set; }
 
+		// If we should write out the app manifest
+		[Required]
+		public bool WriteAppManifest { get; set; }
+
 		[Required]
 		public bool IsAppExtension { get; set; }
 
@@ -67,20 +71,32 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public bool SdkIsSimulator { get; set; }
 
+		[Required]
+		public string SdkVersion { get; set; }
+
 		public string TargetArchitectures { get; set; }
+		#endregion
+
+		#region Outputs
+		[Output]
+		public string MinimumOSVersion { get; set; }
 		#endregion
 
 		protected TargetArchitecture architectures;
 
 		public override bool Execute ()
 		{
-			PDictionary plist;
+			PDictionary plist = null;
 
-			try {
-				plist = PDictionary.FromFile (AppManifest);
-			} catch (Exception ex) {
-				LogAppManifestError (MSBStrings.E0010, AppManifest, ex.Message);
-				return false;
+			if (File.Exists (AppManifest)) {
+				try {
+					plist = PDictionary.FromFile (AppManifest);
+				} catch (Exception ex) {
+					LogAppManifestError (MSBStrings.E0010, AppManifest, ex.Message);
+					return false;
+				}
+			} else {
+				plist = new PDictionary ();
 			}
 
 			if (!string.IsNullOrEmpty (TargetArchitectures) && !Enum.TryParse (TargetArchitectures, out architectures)) {
@@ -114,16 +130,45 @@ namespace Xamarin.MacDev.Tasks
 			if (string.IsNullOrEmpty (defaultBundleShortVersion))
 				defaultBundleShortVersion = plist.GetCFBundleVersion ();
 			plist.SetIfNotPresent (ManifestKeys.CFBundleShortVersionString, defaultBundleShortVersion);
-			
+
+			if (!SetMinimumOSVersion (plist))
+				return false;
+
 			if (!Compile (plist))
 				return false;
 
 			// Merge with any partial plists...
 			MergePartialPlistTemplates (plist);
 
-			plist.Save (CompiledAppManifest, true, true);
+			if (WriteAppManifest)
+				plist.Save (CompiledAppManifest, true, true);
 
 			return !Log.HasLoggedErrors;
+		}
+
+		bool SetMinimumOSVersion (PDictionary plist)
+		{
+			var minimumOSVersionInManifest = plist?.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform))?.Value;
+			if (string.IsNullOrEmpty (minimumOSVersionInManifest)) {
+				MinimumOSVersion = SdkVersion;
+			} else if (!IAppleSdkVersion_Extensions.TryParse (minimumOSVersionInManifest, out var _)) {
+				Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0011, minimumOSVersionInManifest);
+				return false;
+			} else {
+				MinimumOSVersion = minimumOSVersionInManifest;
+			}
+
+			if (Platform == ApplePlatform.MacCatalyst) {
+				// Convert the min macOS version to the min iOS version, which the rest of our tooling expects.
+				if (!MacCatalystSupport.TryGetiOSVersion (Sdks.GetAppleSdk (Platform).GetSdkPath (SdkVersion, false), MinimumOSVersion, out var convertedVersion))
+					Log.LogError (MSBStrings.E0187, MinimumOSVersion);
+				MinimumOSVersion = convertedVersion;
+			}
+
+			// Write out our value
+			plist [PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform)] = MinimumOSVersion;
+
+			return true;
 		}
 
 		protected abstract bool Compile (PDictionary plist);

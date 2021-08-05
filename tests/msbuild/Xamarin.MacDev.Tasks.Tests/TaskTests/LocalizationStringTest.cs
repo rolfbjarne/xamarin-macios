@@ -15,6 +15,7 @@ using Xamarin.Tests;
 
 namespace Xamarin.iOS.Tasks {
 	[TestFixture]
+	[Ignore ("skip this")]
 	public class LocalizationStringTest : TestBase {
 		[TestCase ("cs-CZ", "došlo k chybě: neznámý formát image")]
 		[TestCase ("de-DE", "Unbekanntes Imageformat.")]

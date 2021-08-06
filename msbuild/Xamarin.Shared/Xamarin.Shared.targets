@@ -117,7 +117,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ParseBundlerArguments" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PrepareResourceRules" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PropertyListEditor" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask TaskName="Xamarin.MacDev.Tasks.ReadAppManifest" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ReadItemsFromFile" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ResolveNativeReferences" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SmartCopy" AssemblyFile="$(_TaskAssemblyName)" />
@@ -283,12 +282,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_CompileAppManifest"
 		DependsOnTargets="$(_CompileAppManifestDependsOn)"
-		Inputs="$(_InputAppManifest);@(PartialAppManifest)"
 		Outputs="$(_AppManifest)" >
-			<!--
-				The CompileAppManifest task is required to run to set _MinimumOSVersion
-				(if there's no app manifest, we default to the _SdkVersion value).
-			-->
+		<!--
+			The CompileAppManifest task must always execute, in order to compute _MinimumOSVersion.
+			This is why this target has no Inputs. It may create _AppManifest (if we're creating an app bundle).
+		-->
 		<CompileAppManifest
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -318,7 +316,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			WriteAppManifest="$(_WriteAppManifest)"
 			>
 
-			<!-- If this target isn't built (because the app manifest is up-to-date), then this value will be set in the _ReadAppManifest target -->
+			<Output TaskParameter="BundleIdentifier" PropertyName="_BundleIdentifier" />
+			<Output TaskParameter="ExecutableName" PropertyName="_ExecutableName" />
 			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
 		</CompileAppManifest>
 
@@ -327,9 +326,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				If _AppManifest points to a file that doesn't exist, then a app manifest isn't required.
 				To ease existing code (which checks whether the variable is empty whenever it's optional,
 				instead of checking whether the app manifest exists), we clear out the variable here.
-
-				The ReadAppManifest task is required to run to get _MinimumOSVersion set
-				(if there's no app manifest, we default to the _SdkVersion value).
 			-->
 			<_AppManifest Condition="!Exists('$(_AppManifest)')" />
 		</PropertyGroup>
@@ -402,7 +398,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Condition="@(InterfaceDefinition->Count()) > 0"
 		Inputs="@(InterfaceDefinition);$(_AppManifest)"
 		Outputs="$(_IBToolCache)"
-		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CompileAppManifest;_ReadAppManifest;_DetectSigningIdentity">
+		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CompileAppManifest;_DetectSigningIdentity">
 
 		<IBTool
 			SessionId="$(BuildSessionId)"
@@ -469,7 +465,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			$(_CoreCompileImageAssets);
 			_DetectAppManifest;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_DetectSdkLocations;
 			_BeforeCoreCompileImageAssets;
 			_DetectSigningIdentity;
@@ -746,7 +741,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			$(_CoreCompileCoreMLModelsDependsOn);
 			_DetectAppManifest;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_DetectSdkLocations;
 			_BeforeCompileCoreMLModels;
 		</_CoreCompileCoreMLModelsDependsOn>
@@ -784,7 +778,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_ReadAppManifest">
+	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_CompileAppManifest">
 		<Metal
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' and '%(Metal.Identity)' != ''"
@@ -950,26 +944,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_ReadAppManifest" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;" Condition="'$(_AppManifest)' != ''">
-		<ReadAppManifest
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
-			AppManifest="$(_AppManifest)"
-			SdkVersion="$(_SdkVersion)"
-			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
-			>
-			<Output TaskParameter="BundleIdentifier" PropertyName="_BundleIdentifier" />
-			<Output TaskParameter="ExecutableName" PropertyName="_ExecutableName" />
-			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
-		</ReadAppManifest>
-	</Target>
-
 	<PropertyGroup>
 		<_DetectSigningIdentityDependsOn>
 			$(_DetectSigningIdentityDependsOn);
 			_DetectAppManifest;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_DetectSdkLocations;
 			_ComputeTargetFrameworkMoniker;
 			_GenerateBundleName;
@@ -1409,7 +1388,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_GetNativeExecutableName" DependsOnTargets="_DetectAppManifest;_GenerateBundleName;_CompileAppManifest;_ReadAppManifest">
+	<Target Name="_GetNativeExecutableName" DependsOnTargets="_DetectAppManifest;_GenerateBundleName;_CompileAppManifest">
 		<PropertyGroup>
 			<_NativeExecutable Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(_AppBundlePath)$(_ExecutableName)</_NativeExecutable>
 			<_NativeExecutable Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(_AppBundlePath)Contents\MacOS\$(_ExecutableName)</_NativeExecutable>
@@ -1670,7 +1649,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;_ReadAppManifest;_ComputeTargetArchitectures">
+	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;_ComputeTargetArchitectures">
 		<CompileProductDefinition
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -1683,7 +1662,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CompileProductDefinition>
 	</Target>
 
-	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_DetectAppManifest;_CompileAppManifest;_ReadAppManifest">
+	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_DetectAppManifest;_CompileAppManifest">
 		<CreateInstallerPackage
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"

@@ -55,7 +55,6 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			_TemperMetal;
 			_CompileEntitlements;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_ParseBundlerArguments;
 			_CompileToNative;
 			_CreatePkgInfo;
@@ -126,7 +125,6 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 			ResolveReferences;
 			_CompileEntitlements;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_GetNativeExecutableName;
 			_GetCompileToNativeInputs;
 			_ExpandNativeReferences;

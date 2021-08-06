@@ -192,7 +192,6 @@
 			_RunRidSpecificBuild;
 			_CompileEntitlements;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_CreateMergedAppBundle;
 			Codesign;
 			CreateIpa;
@@ -214,7 +213,6 @@
 			_TemperMetal;
 			_CompileEntitlements;
 			_CompileAppManifest;
-			_ReadAppManifest;
 			_ResolveAppExtensionReferences;
 			_ExtendAppExtensionReferences;
 			_ComputeLinkerArguments;
@@ -365,7 +363,7 @@
 			_ComputeVariables;
 			_CreateRuntimeConfiguration;
 			_ComputeMonoLibraries;
-			_ReadAppManifest;
+			_CompileAppManifest;
 		</_ComputeLinkerArgumentsDependsOn>
 	</PropertyGroup>
 
@@ -773,7 +771,7 @@
 	<PropertyGroup>
 		<_AOTCompileDependsOn>
 			_ComputeVariables;
-			_ReadAppManifest;
+			_CompileAppManifest;
 		</_AOTCompileDependsOn>
 	</PropertyGroup>
 
@@ -861,7 +859,7 @@
 			_DetectSdkLocations;
 			_ComputeTargetArchitectures;
 			_GenerateBundleName;
-			_ReadAppManifest;
+			_CompileAppManifest;
 			_ComputeNativeExecutableInputs;
 			_AOTCompile;
 		</_CompileNativeExecutableDependsOn>
@@ -900,7 +898,6 @@
 			_GenerateBundleName;
 			_CompileNativeExecutable;
 			_CompileAppManifest;
-			_ReadAppManifest;
 		</_LinkNativeExecutableDependsOn>
 	</PropertyGroup>
 

@@ -28,7 +28,6 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string AppBundleName { get; set; }
 
-		[Required]
 		public string AppManifest { get; set; }
 
 		[Required]
@@ -78,6 +77,12 @@ namespace Xamarin.MacDev.Tasks
 		#endregion
 
 		#region Outputs
+		[Output]
+		public string BundleIdentifier { get; set; }
+
+		[Output]
+		public string ExecutableName { get; set; }
+
 		[Output]
 		public string MinimumOSVersion { get; set; }
 		#endregion
@@ -140,8 +145,26 @@ namespace Xamarin.MacDev.Tasks
 			// Merge with any partial plists...
 			MergePartialPlistTemplates (plist);
 
-			if (WriteAppManifest)
-				plist.Save (CompiledAppManifest, true, true);
+			// Output return values
+			BundleIdentifier = plist.GetCFBundleIdentifier ();
+			ExecutableName = plist.GetCFBundleExecutable ();
+			MinimumOSVersion = plist.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform)).Value;
+
+			// write the resulting app manifest if requested to do so
+			if (WriteAppManifest) {
+				var tmpFile = Path.GetTempFileName ();
+				try {
+					plist.Save (tmpFile, true, true);
+					if (File.Exists (CompiledAppManifest) && FileUtils.CompareFiles (tmpFile, CompiledAppManifest)) {
+						Log.LogMessage (MessageImportance.Low, "The app manifest '{0}' is up-to-date.", CompiledAppManifest);
+					} else {
+						Directory.CreateDirectory (Path.GetDirectoryName (CompiledAppManifest));
+						File.Copy (tmpFile, CompiledAppManifest, true);
+					}
+				} finally {
+					File.Delete (tmpFile);
+				}
+			}
 
 			return !Log.HasLoggedErrors;
 		}

@@ -441,7 +441,10 @@ namespace Xamarin.iOS.Tasks
 			// We unpack 4 embedded resources from the library project into BundleResources
 			RunTarget (MonoTouchProject, TargetName.Build);
 			var bundleResources = MonoTouchProjectInstance.GetItems ("_BundleResourceWithLogicalName").ToArray ();
-			Assert.IsTrue (bundleResources.Length >= 33, "#1");
+			Console.WriteLine ($"_BundleResourceWithLogicalName: {bundleResources.Length}");
+			foreach (var br in bundleResources.OrderBy (v => v.EvaluatedInclude))
+				Console.WriteLine ($"\t{br.EvaluatedInclude}");
+			Assert.That (bundleResources.Length, Is.GreaterThanOrEqualTo (33), "#1");
 		}
 
 		[Test]

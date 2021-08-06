@@ -319,6 +319,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<Output TaskParameter="BundleIdentifier" PropertyName="_BundleIdentifier" />
 			<Output TaskParameter="ExecutableName" PropertyName="_ExecutableName" />
 			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
+			<Output TaskParameter="XSAppIconAssets" PropertyName="_XSAppIconAssets" />
+			<Output TaskParameter="XSLaunchImageAssets" PropertyName="_XSLaunchImageAssets" />
 		</CompileAppManifest>
 
 		<PropertyGroup>
@@ -501,6 +503,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			SdkPlatform="$(_SdkPlatform)"
 			SdkVersion="$(_SdkVersion)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			XSAppIconAssets="$(_XSAppIconAssets)"
+			XSLaunchImageAssets="$(_XSLaunchImageAssets)"
 			>
 			<Output TaskParameter="PartialAppManifest" ItemName="PartialAppManifest" />
 			<Output TaskParameter="BundleResources" ItemName="_BundleResourceWithLogicalName" />

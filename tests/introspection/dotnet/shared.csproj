@@ -25,8 +25,6 @@
     <ProjectReference Include="$(RootTestsDirectory)\..\external\Touch.Unit\Touch.Client\dotnet\$(_PlatformName)\Touch.Client-$(_PlatformName).dotnet.csproj" />
     <!-- MonoTouch.Dialog references System.Json, which isn't shipped with .NET5, so reference the NuGet instead -->
     <PackageReference Include="System.Json" Version="4.7.1" />
-
-    <ProjectReference Include="$(RootTestsDirectory)\bindings-framework-test\dotnet\$(_PlatformName)\bindings-framework-test.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.EndsWith('-macos'))">
@@ -63,6 +61,10 @@
     <Compile Include="$(IntrospectionTestDirectory)\iOS\iOSApiTypoTest.cs" />
     <Compile Include="$(IntrospectionTestDirectory)\iOS\iOSCoreImageFiltersTest.cs" />
 
+    <Compile Include="$(IntrospectionTestDirectory)\ApiCMAttachmentTest.cs">
+      <Link>ApiCMAttachmentTest.cs</Link>
+    </Compile>
+
     <InterfaceDefinition Include="$(IntrospectionTestDirectory)\iOS\LaunchScreen.storyboard" />
 
     <ImageAsset Include="$(IntrospectionTestDirectory)\iOS\Assets.xcassets\AppIcons.appiconset\Contents.json" />
@@ -83,9 +85,6 @@
     </Compile>
     <Compile Include="$(IntrospectionTestDirectory)\ApiClassPtrTest.cs">
       <Link>ApiClassPtrTest.cs</Link>
-    </Compile>
-    <Compile Include="$(IntrospectionTestDirectory)\ApiCMAttachmentTest.cs">
-      <Link>ApiCMAttachmentTest.cs</Link>
     </Compile>
     <Compile Include="$(IntrospectionTestDirectory)\ApiCoreImageFiltersTest.cs">
       <Link>ApiCoreImageFiltersTest.cs</Link>

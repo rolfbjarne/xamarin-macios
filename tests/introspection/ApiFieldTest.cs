@@ -22,6 +22,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using NUnit.Framework;
@@ -119,16 +120,24 @@ namespace Introspection {
 
 			properties = new List<PropertyInfo> ();
 			foreach (Type t in Assembly.GetTypes ()) {
-				if (Skip (t) || SkipDueToAttribute (t))
+				Console.WriteLine ($"AllProperties: {t}");
+				if (Skip (t) || SkipDueToAttribute (t)) {
+					Console.WriteLine ($"AllProperties: {t} SKIPPED");
 					continue;
+				}
 
 				foreach (var p in t.GetProperties (BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)) {
 					// looking for properties with getters only
-					if (p.CanWrite || !p.CanRead)
+					if (p.CanWrite || !p.CanRead) {
+						Console.WriteLine ($"AllProperties: {t}.{p.Name} SKIPPED not only getter");
 						continue;
-					if (Skip (p) || SkipDueToAttribute (p))
+					}
+					if (Skip (p) || SkipDueToAttribute (p)) {
+						Console.WriteLine ($"AllProperties: {t}.{p.Name} SKIPPED SKIPPED");
 						continue;
+					}
 
+					Console.WriteLine ($"AllProperties: {t}.{p.Name} ADDED");
 					properties.Add (p);
 				}
 			}
@@ -216,19 +225,27 @@ namespace Introspection {
 		[Test]
 		public void FieldExists ()
 		{
+			LogProgress = true;
+
 			var failed_fields = new List<string> ();
 
 			Errors = 0;
 			int n = 0;
+			var allProps = AllProperties ().ToArray ();
+			Console.WriteLine ($"FieldExists: {allProps.Length} fields");
 			foreach (var p in AllProperties ()) {
 				var f = p.GetCustomAttribute<FieldAttribute> ();
+				Console.WriteLine ($"FieldExists ({p.DeclaringType.FullName}.{p.Name}) -> {f?.SymbolName}");
 				if (f == null)
 					continue;
 
 				string name = f.SymbolName;
-				if (Skip (name, f.LibraryName))
+				if (Skip (name, f.LibraryName)) {
+					Console.WriteLine ($"FieldExists ({name}) => Skip 1");
 					continue;
+				}
 
+				Console.WriteLine ($"FieldExists ({p}) -> checking {name}");
 				string path = FindLibrary (f.LibraryName);
 				IntPtr lib = Dlfcn.dlopen (path, 0);
 				if (lib == IntPtr.Zero) {

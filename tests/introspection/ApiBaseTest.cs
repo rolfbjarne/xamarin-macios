@@ -147,9 +147,13 @@ namespace Introspection {
 			if (member == null)
 				return false;
 
-			return !member.IsAvailableOnHostPlatform () ||
-				          SkipDueToAttribute (member.DeclaringType) ||
-				          SkipDueToAttributeInProperty (member);
+			var availableOnHostPlatform = member.IsAvailableOnHostPlatform ();
+			var skipDeclaringTypeDueToAttribute = SkipDueToAttribute (member.DeclaringType);
+			var skipDueToAttributeInProperty = SkipDueToAttributeInProperty (member);
+			var rv = !availableOnHostPlatform || skipDeclaringTypeDueToAttribute || skipDueToAttributeInProperty;
+			if (LogProgress)
+				Console.WriteLine ($"SkipDueToAttribute ({member.DeclaringType?.FullName}.{member.Name}): {availableOnHostPlatform} {skipDeclaringTypeDueToAttribute} {skipDueToAttributeInProperty} -> {rv}");
+			return rv;
 		}
 
 		// We need to check Availability info on PropertyInfo attributes too

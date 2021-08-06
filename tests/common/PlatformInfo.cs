@@ -151,14 +151,24 @@ namespace Xamarin.Tests
 		{
 #if NET
 			var list = new List<AvailabilityBaseAttribute> ();
-			foreach (var ca in attributeProvider.GetCustomAttributes (true)) {
+			var cas = attributeProvider.GetCustomAttributes (true);
+			var member = attributeProvider as MemberInfo;
+			Console.WriteLine ($"IsAvailable ({member?.DeclaringType?.FullName}.{member?.Name}): {cas.Count ()} attributes");
+			foreach (var ca in cas) {
+				Console.WriteLine ($"IsAvailable ({member?.DeclaringType?.FullName}.{member?.Name}): {ca.GetType ()} -> {ca}");
 				if (ca is OSPlatformAttribute aa)
 					list.Add (aa.Convert ());
 				// FIXME - temporary, while older attributes co-exists (in manual bindings)
 				if (ca is AvailabilityBaseAttribute old)
 					list.Add (old);
+				if (ca is ObsoleteAttribute oa) {
+					Console.WriteLine ($"IsAvailable ({member?.DeclaringType?.FullName}.{member?.Name}): NO");
+					return false;
+				}
 			}
-			return list.IsAvailable (targetPlatform);
+			var rv = list.IsAvailable (targetPlatform);
+			Console.WriteLine ($"IsAvailable ({member?.DeclaringType?.FullName}.{member?.Name}): {cas.Count ()} attributes: {rv}");
+			return rv;
 #else
 			return attributeProvider
 				.GetCustomAttributes (true)
@@ -171,6 +181,14 @@ namespace Xamarin.Tests
 		{
 			return attributes.IsAvailable (PlatformInfo.Host);
 		}
+
+#if NET
+		public static bool IsAvailable (this ObsoleteAttribute attribute, PlatformInfo targetPlatform)
+		{
+			// FIXME: there's no explicit platform info, but maybe we could parse the obsolete message?
+			return false;
+		}
+#endif
 
 		public static bool IsAvailable (this IEnumerable<AvailabilityBaseAttribute> attributes, PlatformInfo targetPlatform)
 		{

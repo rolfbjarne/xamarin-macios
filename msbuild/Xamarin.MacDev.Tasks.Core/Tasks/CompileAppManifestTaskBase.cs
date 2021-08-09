@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Build.Framework;
@@ -169,13 +170,18 @@ namespace Xamarin.MacDev.Tasks
 				try {
 					plist.Save (tmpFile, true, true);
 					if (File.Exists (CompiledAppManifest) && FileUtils.CompareFiles (tmpFile, CompiledAppManifest)) {
-						Log.LogMessage (MessageImportance.Low, "The app manifest '{0}' is up-to-date.", CompiledAppManifest);
+						Log.LogMessage (MessageImportance.High, "The app manifest '{0}' is up-to-date.", CompiledAppManifest);
 					} else {
+						var copy = Path.GetTempFileName ();
+						if (File.Exists (CompiledAppManifest))
+							File.Copy (CompiledAppManifest, copy, true);
+						Log.LogMessage (MessageImportance.High, "The app manifest '{0}' NOT is up-to-date. Exists: {1} Copy: {2}", CompiledAppManifest, File.Exists (copy), copy);
 						Directory.CreateDirectory (Path.GetDirectoryName (CompiledAppManifest));
 						File.Copy (tmpFile, CompiledAppManifest, true);
 					}
 				} finally {
-					File.Delete (tmpFile);
+					Log.LogMessage (MessageImportance.High, "The app manifest '{0}' NOT is up-to-date tmpfile: {1} manifest: {2}", CompiledAppManifest, tmpFile, CompiledAppManifest);
+					// File.Delete (tmpFile);
 				}
 			}
 
@@ -232,7 +238,7 @@ namespace Xamarin.MacDev.Tasks
 				dict[key] = value;
 		}
 
-		protected void MergePartialPlistDictionary (PDictionary plist, PDictionary partial)
+		public static void MergePartialPlistDictionary (PDictionary plist, PDictionary partial)
 		{
 			foreach (var property in partial) {
 				if (plist.ContainsKey (property.Key)) {
@@ -249,23 +255,28 @@ namespace Xamarin.MacDev.Tasks
 			}
 		}
 
-		protected void MergePartialPlistTemplates (PDictionary plist)
+		public static void MergePartialPLists (Task task, PDictionary plist, IEnumerable<ITaskItem> partialLists)
 		{
-			if (PartialAppManifests == null)
+			if (partialLists == null)
 				return;
 
-			foreach (var template in PartialAppManifests) {
+			foreach (var template in partialLists) {
 				PDictionary partial;
 
 				try {
 					partial = PDictionary.FromFile (template.ItemSpec);
 				} catch (Exception ex) {
-					Log.LogError (MSBStrings.E0107, template.ItemSpec, ex.Message);
+					task.Log.LogError (MSBStrings.E0107, template.ItemSpec, ex.Message);
 					continue;
 				}
 
 				MergePartialPlistDictionary (plist, partial);
 			}
+		}
+
+		protected void MergePartialPlistTemplates (PDictionary plist)
+		{
+			MergePartialPLists (this, plist, PartialAppManifests);
 		}
 	}
 }

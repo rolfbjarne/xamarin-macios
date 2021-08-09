@@ -299,8 +299,15 @@ namespace Xamarin.iOS.Tasks
 			RunTarget (MonoTouchProject, TargetName.Build);
 			var newTimestamps = Directory.EnumerateFiles (AppBundlePath, "*.*", SearchOption.AllDirectories).ToDictionary (file => file, file => GetLastModified (file));
 
-			foreach (var file in timestamps.Keys)
-				Assert.AreEqual (timestamps [file], newTimestamps [file], "#1: " + file);
+			var failures = new List<string> ();
+			foreach (var file in timestamps.Keys) {
+				if (timestamps [file] == newTimestamps [file])
+					continue;
+				var msg = $"{file} Expected: {timestamps [file]} Actual: {newTimestamps [file]}";
+				failures.Add (msg);
+				Console.WriteLine (msg);
+			}
+			Assert.That (failures, Is.Empty, "Failures");
 		}
 
 		[Test]
@@ -577,7 +584,7 @@ namespace Xamarin.iOS.Tasks
 			MonoTouchProjectInstance.RemoveItems ("None");
 
 			RunTarget (MonoTouchProject, TargetName.DetectAppManifest, expectedErrorCount: 1);
-			Assert.That (MonoTouchProjectInstance.GetPropertyValue ("_AppManifest"), Is.Null.Or.Empty, "#1");
+			Assert.That (MonoTouchProjectInstance.GetPropertyValue ("_InputAppManifest"), Is.Null.Or.Empty, "#1");
 		}
 
 		[Test]
@@ -602,7 +609,7 @@ namespace Xamarin.iOS.Tasks
 			MonoTouchProjectInstance.AddItem ("None", linkedPlist, new Dictionary<string, string> { { "Link", "Info.plist" } });
 
 			RunTarget (MonoTouchProject, TargetName.DetectAppManifest);
-			Assert.AreEqual (linkedPlist, MonoTouchProjectInstance.GetPropertyValue ("_AppManifest"), "#1");
+			Assert.AreEqual (linkedPlist, MonoTouchProjectInstance.GetPropertyValue ("_InputAppManifest"), "#1");
 		}
 
 		[Test]
@@ -615,14 +622,14 @@ namespace Xamarin.iOS.Tasks
 			MonoTouchProjectInstance.AddItem ("None", logicalPlist, new Dictionary<string, string> { { "LogicalName", "Info.plist" } });
 
 			RunTarget (MonoTouchProject, TargetName.DetectAppManifest);
-			Assert.AreEqual (logicalPlist, MonoTouchProjectInstance.GetPropertyValue ("_AppManifest"), "#1");
+			Assert.AreEqual (logicalPlist, MonoTouchProjectInstance.GetPropertyValue ("_InputAppManifest"), "#1");
 		}
 
 		[Test]
 		public void DetectAppManifest_LibraryProject ()
 		{
 			RunTarget (LibraryProject, TargetName.DetectAppManifest);
-			Assert.That (LibraryProjectInstance.GetPropertyValue ("_AppManifest"), Is.Null.Or.Empty, "#1");
+			Assert.That (LibraryProjectInstance.GetPropertyValue ("_InputAppManifest"), Is.Null.Or.Empty, "#1");
 		}
 	}
 }

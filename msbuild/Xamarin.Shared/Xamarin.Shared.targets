@@ -113,6 +113,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.GetDirectories" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.GetFullPath" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.GetPropertyListValue" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.MergeAppManifest" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PackLibraryResources" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ParseBundlerArguments" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PrepareResourceRules" AssemblyFile="$(_TaskAssemblyName)" />
@@ -280,12 +281,20 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</_CompileAppManifestDependsOn>
 	</PropertyGroup>
 
+	<!-- The app manifest
+
+		1. Take the Info.plist specified in the project file + a few other MSBuild variables + partial user Info.plists (PartialAppManifest) => write to a temporary location + output a few MSBuild variables.
+		2. Do some other stuff that creates more entries suppoed to be in the final Info.plist. These are stored in separate plists, which are added to _PostCompilePartialAppManifest.
+		3. Merge the output from 1. + @(_PostCompilePartialAppManifest) and write it out to the final app manifest location.
+	-->
+
 	<Target Name="_CompileAppManifest"
 		DependsOnTargets="$(_CompileAppManifestDependsOn)"
-		Outputs="$(_AppManifest)" >
+		Outputs="$(_CompiledAppManifest)"
+		>
 		<!--
 			The CompileAppManifest task must always execute, in order to compute _MinimumOSVersion.
-			This is why this target has no Inputs. It may create _AppManifest (if we're creating an app bundle).
+			This is why this target has no Inputs. It may create _CompiledAppManifest (if we're creating an app bundle).
 		-->
 		<CompileAppManifest
 			SessionId="$(BuildSessionId)"
@@ -297,7 +306,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			AppBundleName="$(_AppBundleName)"
 			AppManifest="$(_InputAppManifest)"
 			AssemblyName="$(AssemblyName)"
-			CompiledAppManifest="$(_AppManifest)"
+			CompiledAppManifest="$(_CompiledAppManifest)"
 			Debug="$(_BundlerDebug)"
 			DefaultSdkVersion="$(_SdkVersion)"
 			GenerateApplicationManifest="$(GenerateApplicationManifest)"
@@ -325,15 +334,39 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<PropertyGroup>
 			<!--
-				If _AppManifest points to a file that doesn't exist, then a app manifest isn't required.
+				If we're not generating an app manifest, then an app manifest isn't required.
 				To ease existing code (which checks whether the variable is empty whenever it's optional,
 				instead of checking whether the app manifest exists), we clear out the variable here.
 			-->
-			<_AppManifest Condition="!Exists('$(_AppManifest)')" />
+			<_AppManifest Condition="'$(GenerateApplicationManifest)' != 'true'" />
 		</PropertyGroup>
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).dSYM" />
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
+	</Target>
+
+	<PropertyGroup>
+		<_CreateAppManifestDependsOn>
+			_CompileAppManifest;
+			_CompileImageAssets;
+			_CompileCoreMLModels;
+		</_CreateAppManifestDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_CreateAppManifest"
+		Condition="'$(_AppManifest)' != ''"
+		DependsOnTargets="$(_WriteAppManifestDependsOn)"
+		Inputs="@(PartialAppManifest);$(_CompiledAppManifest)"
+		Outputs="$(_AppManifest)"
+		>
+
+		<MergeAppManifest
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AppManifests="@(_PostCompilePartialAppManifest);$(_CompiledAppManifest)"
+			MergedAppManifest="$(_AppManifest)"
+			>
+		</MergeAppManifest>
 	</Target>
 
 	<PropertyGroup>
@@ -455,7 +488,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<!-- If _BeforeCoreCompileImageAssets did not delete the generated items lists from _CoreCompileImageAsset, then we read them
 		     since that target won't run and we need the output items that are cached in those files, which includes full metadata -->
 		<ReadItemsFromFile File="$(_ACTool_PartialAppManifestCache)" Condition="Exists('$(_ACTool_PartialAppManifestCache)')">
-			<Output TaskParameter="Items" ItemName="PartialAppManifest" />
+			<Output TaskParameter="Items" ItemName="_PostCompilePartialAppManifest" />
 		</ReadItemsFromFile>
 		<ReadItemsFromFile File="$(_ACTool_BundleResourceCache)" Condition="Exists('$(_ACTool_BundleResourceCache)')">
 			<Output TaskParameter="Items" ItemName="_BundleResourceWithLogicalName" />
@@ -466,7 +499,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<_CoreCompileImageAssetsDependsOn>
 			$(_CoreCompileImageAssets);
 			_DetectAppManifest;
-			_CompileAppManifest;
 			_DetectSdkLocations;
 			_BeforeCoreCompileImageAssets;
 			_DetectSigningIdentity;
@@ -484,12 +516,12 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Condition="'$(IsMacEnabled)' == 'true' And '@(ImageAsset)' != ''"
 			ToolExe="$(ACToolExe)"
 			ToolPath="$(ACToolPath)"
-			AppManifest="$(_AppManifest)"
 			BundleIdentifier="$(_BundleIdentifier)"
 			DeviceModel="$(TargetDeviceModel)"
 			DeviceOSVersion="$(TargetDeviceOSVersion)"
 			EnableOnDemandResources="$(EnableOnDemandResources)"
 			ImageAssets="@(ImageAsset)"
+			InputAppManifest="$(_InputAppManifest)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
 			OptimizePNGs="$(OptimizePNGs)"
 			OutputPath="$(DeviceSpecificOutputPath)"
@@ -506,7 +538,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			XSAppIconAssets="$(_XSAppIconAssets)"
 			XSLaunchImageAssets="$(_XSLaunchImageAssets)"
 			>
-			<Output TaskParameter="PartialAppManifest" ItemName="PartialAppManifest" />
+			<Output TaskParameter="PartialAppManifest" ItemName="_PostCompilePartialAppManifest" />
 			<Output TaskParameter="BundleResources" ItemName="_BundleResourceWithLogicalName" />
 
 			<!-- Local items to be persisted to items files -->
@@ -515,7 +547,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ACTool>
 
 		<!-- Cache the generated outputs items for incremental build support -->
-		<WriteItemsToFile Items="@(_ACTool_PartialAppManifest)" ItemName="PartialAppManifest" File="$(_ACTool_PartialAppManifestCache)" Overwrite="true" IncludeMetadata="true" />
+		<WriteItemsToFile Items="@(_ACTool_PartialAppManifest)" ItemName="_PostCompilePartialAppManifest" File="$(_ACTool_PartialAppManifestCache)" Overwrite="true" IncludeMetadata="true" />
 		<WriteItemsToFile Items="@(_ACTool_BundleResources)" ItemName="_BundleResourceWithLogicalName" File="$(_ACTool_BundleResourceCache)" Overwrite="true" IncludeMetadata="true" />
 		<ItemGroup>
 			<FileWrites Include="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)" />
@@ -658,6 +690,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<PropertyGroup>
 			<_MtouchSymbolsList>$(DeviceSpecificIntermediateOutputPath)mtouch-symbols.list</_MtouchSymbolsList>
 
+			<!-- computed app manifest (not including additional partial app manifests) -->
+			<_CompiledAppManifest>$(DeviceSpecificIntermediateOutputPath)_CompiledAppManifest.plist</_CompiledAppManifest>
+
 			<!-- actool output caches -->
 			<_ACTool_PartialAppManifestCache>$(DeviceSpecificIntermediateOutputPath)actool\_PartialAppManifest.items</_ACTool_PartialAppManifestCache>
 			<_ACTool_BundleResourceCache>$(DeviceSpecificIntermediateOutputPath)actool\_BundleResourceWithLogicalName.items</_ACTool_BundleResourceCache>
@@ -733,7 +768,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<!-- If _BeforeCompileCoreMLModels did not delete the generated items lists from _CoreCompileCoreMLModels, then we read them
 		     since that target won't run and we need the output items that are cached in those files, which includes full metadata -->
 		<ReadItemsFromFile File="$(_CoreMLModel_PartialAppManifestCache)" Condition="Exists('$(_CoreMLModel_PartialAppManifestCache)')">
-			<Output TaskParameter="Items" ItemName="PartialAppManifest" />
+			<Output TaskParameter="Items" ItemName="_PostCompilePartialAppManifest" />
 		</ReadItemsFromFile>
 		<ReadItemsFromFile File="$(_CoreMLModel_BundleResourceCache)" Condition="Exists('$(_CoreMLModel_BundleResourceCache)')">
 			<Output TaskParameter="Items" ItemName="_BundleResourceWithLogicalName" />
@@ -767,7 +802,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ResourcePrefix="$(_ResourcePrefix)"
 			SdkDevPath="$(_SdkDevPath)">
 			<Output TaskParameter="BundleResources" ItemName="_BundleResourceWithLogicalName" />
-			<Output TaskParameter="PartialAppManifests" ItemName="PartialAppManifest" />
+			<Output TaskParameter="PartialAppManifests" ItemName="_PostCompilePartialAppManifest" />
 
 			<!-- Local items to be persisted to items files -->
 			<Output TaskParameter="PartialAppManifests" ItemName="_CoreMLModel_PartialAppManifest" />
@@ -775,7 +810,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CoreMLCompiler>
 
 		<!-- Cache the generated outputs items for incremental build support -->
-		<WriteItemsToFile Items="@(_CoreMLModel_PartialAppManifest)" ItemName="PartialAppManifest" File="$(_CoreMLModel_PartialAppManifestCache)" Overwrite="true" IncludeMetadata="true" />
+		<WriteItemsToFile Items="@(_CoreMLModel_PartialAppManifest)" ItemName="_PostCompilePartialAppManifest" File="$(_CoreMLModel_PartialAppManifestCache)" Overwrite="true" IncludeMetadata="true" />
 		<WriteItemsToFile Items="@(_CoreMLModel_BundleResources)" ItemName="_BundleResourceWithLogicalName" File="$(_CoreMLModel_BundleResourceCache)" Overwrite="true" IncludeMetadata="true" />
 		<ItemGroup>
 			<FileWrites Include="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)" />

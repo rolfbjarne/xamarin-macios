@@ -353,6 +353,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</_CreateAppManifestDependsOn>
 	</PropertyGroup>
 
+	<!-- This target will create the _AppManifest - any task that takes $(_AppManifest) must depend on this target -->
 	<Target Name="_CreateAppManifest"
 		Condition="'$(_AppManifest)' != ''"
 		DependsOnTargets="$(_WriteAppManifestDependsOn)"
@@ -372,6 +373,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<PropertyGroup>
 		<_CompileEntitlementsDependsOn>
 			$(_CompileEntitlementsDependsOn);
+			_CompileAppManifest;
 			_DetectSdkLocations;
 			_GenerateBundleName;
 			_DetectSigningIdentity;
@@ -433,7 +435,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Condition="@(InterfaceDefinition->Count()) > 0"
 		Inputs="@(InterfaceDefinition);$(_AppManifest)"
 		Outputs="$(_IBToolCache)"
-		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CompileAppManifest;_DetectSigningIdentity">
+		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CreateAppManifest;_DetectSigningIdentity">
 
 		<IBTool
 			SessionId="$(BuildSessionId)"
@@ -472,8 +474,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CompileImageAssets" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetArchitectures;_BeforeCoreCompileImageAssets;_ReadCompileImageAssets;_CoreCompileImageAssets" />
 
 	<Target Name="_BeforeCoreCompileImageAssets"
-		Inputs="@(ImageAsset);$(_AppManifest)"
-		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)">
+		Inputs="@(ImageAsset)"
+		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
+		DependsOnTargets="_CreateAppManifest"
+		>
 
 		<!-- If any ImageAsset or AppManifest is newer than the generated items list, we delete them so that the _CoreCompileImageAssets
 		     target runs again and updates those lists for the next run
@@ -498,7 +502,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<PropertyGroup>
 		<_CoreCompileImageAssetsDependsOn>
 			$(_CoreCompileImageAssets);
-			_DetectAppManifest;
+			_CompileAppManifest;
 			_DetectSdkLocations;
 			_BeforeCoreCompileImageAssets;
 			_DetectSigningIdentity;
@@ -507,7 +511,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CoreCompileImageAssets"
-		Inputs="@(ImageAsset);$(_AppManifest)"
+		Inputs="@(ImageAsset);$(_InputAppManifest)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn)">
 
@@ -713,7 +717,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<!-- TODO: check for duplicate items -->
-	<Target Name="_ComputeBundleResourceOutputPaths" DependsOnTargets="_CollectBundleResources;_GenerateBundleName;_DetectSigningIdentity">
+	<Target Name="_ComputeBundleResourceOutputPaths" DependsOnTargets="_CollectBundleResources;_GenerateBundleName;_DetectSigningIdentity;_CompileAppManifest">
 		<ComputeBundleResourceOutputPaths
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -755,7 +759,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CompileCoreMLModels" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_ComputeTargetArchitectures;_BeforeCompileCoreMLModels;_ReadCompileCoreMLModels;_CoreCompileCoreMLModels" />
 
 	<Target Name="_BeforeCompileCoreMLModels"
-		Inputs="@(CoreMLModel);$(_AppManifest)"
+		Inputs="@(CoreMLModel)"
 		Outputs="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)">
 		<!-- If any CoreMLModel or AppManifest is newer than the generated items list, we delete them so that the _CoreCompileCoreMLModels
 		     target runs again and updates those lists for the next run
@@ -786,7 +790,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CoreCompileCoreMLModels" 
-		Inputs="@(CoreMLModel);$(_AppManifest)"
+		Inputs="@(CoreMLModel)"
 		Outputs="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileCoreMLModelsDependsOn)">
 
@@ -1687,7 +1691,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_DetectAppManifest;_CompileAppManifest;_ComputeTargetArchitectures">
+	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_CreateAppManifest;_ComputeTargetArchitectures">
 		<CompileProductDefinition
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -1700,7 +1704,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CompileProductDefinition>
 	</Target>
 
-	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_DetectAppManifest;_CompileAppManifest">
+	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_CreateAppManifest">
 		<CreateInstallerPackage
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"

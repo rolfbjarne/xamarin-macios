@@ -102,9 +102,6 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string AppBundleName { get; set; }
 
-		[Required]
-		public string AppManifest { get; set; }
-
 		public string BundleIdentifier { get; set; }
 
 		public string Keychain { get; set; }
@@ -444,7 +441,7 @@ namespace Xamarin.MacDev.Tasks
 			}
 
 			if (matches.Count == 0) {
-				Log.LogWarning (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.W0137);
+				Log.LogWarning (MSBStrings.W0137);
 				return identity;
 			}
 
@@ -505,13 +502,6 @@ namespace Xamarin.MacDev.Tasks
 			else if (ProvisioningProfile == AutomaticAdHocProvision)
 				type = MobileProvisionDistributionType.AdHoc;
 
-			try {
-				plist = PDictionary.FromFile (AppManifest);
-			} catch (Exception ex) {
-				Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0010, AppManifest, ex.Message);
-				return false;
-			}
-
 			DetectedCodesignAllocate = Path.Combine (DeveloperRoot, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", "codesign_allocate");
 			DetectedDistributionType = type.ToString ();
 
@@ -554,7 +544,7 @@ namespace Xamarin.MacDev.Tasks
 
 							identity.AppId = ConstructValidAppId (identity.Profile, identity.BundleId);
 							if (identity.AppId == null) {
-								Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0141, identity.BundleId, ProvisioningProfile);
+								Log.LogError (MSBStrings.E0141, identity.BundleId, ProvisioningProfile);
 								return false;
 							}
 
@@ -643,7 +633,7 @@ namespace Xamarin.MacDev.Tasks
 
 				identity.AppId = ConstructValidAppId (identity.Profile, identity.BundleId);
 				if (identity.AppId == null) {
-					Log.LogError (null, null, null, AppManifest, 0, 0, 0, 0, MSBStrings.E0141, identity.BundleId, ProvisioningProfile);
+					Log.LogError (MSBStrings.E0141, identity.BundleId, ProvisioningProfile);
 					return false;
 				}
 

@@ -108,7 +108,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	<PropertyGroup Condition="'$(UsingAppleNETSdk)' != 'true'">
 		<CreateAppBundleDependsOn>
 			$(CreateAppBundleDependsOn);
-			_DetectAppManifest;
 			_DetectSigningIdentity;
 			_CopyResourcesToBundle;
 			_CreateAssetPackManifest;
@@ -118,7 +117,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			_CompileCoreMLModels;
 			_PrepareResourceRules;
 			_CompileEntitlements;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_GetNativeExecutableName;
 			_ParseBundlerArguments;
 			_CompileToNative;
@@ -224,13 +223,13 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CompileITunesMetadata" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false' And '$(IsWatchApp)' == 'false'"
-		DependsOnTargets="_DetectSdkLocations;_DetectAppManifest;_GenerateBundleName;_CompileAppManifest"
-		Inputs="$(_AppManifest);@(ITunesMetadata)"
+		DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;_CreateFinalAppManifest"
+		Inputs="$(_FinalAppManifest);@(ITunesMetadata)"
 		Outputs="$(DeviceSPecificOutputPath)iTunesMetadata.plist" >
 		<CompileITunesMetadata
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			AppManifest="$(_AppManifest)"
+			AppManifest="$(_FinalAppManifest)"
 			ITunesMetadata="@(ITunesMetadata)"
 			OutputPath="$(DeviceSpecificOutputPath)iTunesMetadata.plist"
 		/>
@@ -261,12 +260,11 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		<_CompileToNativeDependsOn>
 			_ComputeLinkMode;
 			_ComputeTargetFrameworkMoniker;
-			_DetectAppManifest;
 			_DetectSdkLocations;
 			_GenerateBundleName;
 			_DetectSigningIdentity;
 			_CompileEntitlements;
-			_CompileAppManifest;
+			_CreateFinalAppManifest;
 			_ResolveAppExtensionReferences;
 			_ExtendAppExtensionReferences;
 			_GetNativeExecutableName;
@@ -468,7 +466,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</CreateItem>
 	</Target>
 
-	<Target Name="_CompileTextureAtlases" DependsOnTargets="_DetectAppManifest;_DetectSdkLocations;_BeforeCompileTextureAtlases;_ReadCoreCompileTextureAtlases;_CoreCompileTextureAtlases" />
+	<Target Name="_CompileTextureAtlases" DependsOnTargets="_DetectSdkLocations;_BeforeCompileTextureAtlases;_ReadCoreCompileTextureAtlases;_CoreCompileTextureAtlases" />
 
 	<Target Name="_BeforeCompileTextureAtlases"
 		Inputs="@(AtlasTexture)"

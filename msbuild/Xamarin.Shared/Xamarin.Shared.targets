@@ -338,7 +338,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				To ease existing code (which checks whether the variable is empty whenever it's optional,
 				instead of checking whether the app manifest exists), we clear out the variable here.
 			-->
-			<_AppManifest Condition="'$(GenerateApplicationManifest)' != 'true'" />
+			<_FinalAppManifest Condition="'$(GenerateApplicationManifest)' != 'true'" />
 		</PropertyGroup>
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).dSYM" />
@@ -346,26 +346,26 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<PropertyGroup>
-		<_CreateAppManifestDependsOn>
+		<_CreateFinalAppManifestDependsOn>
 			_CompileAppManifest;
 			_CompileImageAssets;
 			_CompileCoreMLModels;
-		</_CreateAppManifestDependsOn>
+		</_CreateFinalAppManifestDependsOn>
 	</PropertyGroup>
 
-	<!-- This target will create the _AppManifest - any task that takes $(_AppManifest) must depend on this target -->
-	<Target Name="_CreateAppManifest"
-		Condition="'$(_AppManifest)' != ''"
-		DependsOnTargets="$(_WriteAppManifestDependsOn)"
+	<!-- This target will create the $(_FinalAppManifest) file - any task that takes $(_FinalAppManifest) must depend on this target -->
+	<Target Name="_CreateFinalAppManifest"
+		Condition="'$(_FinalAppManifest)' != ''"
+		DependsOnTargets="$(_CreateFinalAppManifestDependsOn)"
 		Inputs="@(PartialAppManifest);$(_CompiledAppManifest)"
-		Outputs="$(_AppManifest)"
+		Outputs="$(_FinalAppManifest)"
 		>
 
 		<MergeAppManifest
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			AppManifests="@(_PostCompilePartialAppManifest);$(_CompiledAppManifest)"
-			MergedAppManifest="$(_AppManifest)"
+			MergedAppManifest="$(_FinalAppManifest)"
 			>
 		</MergeAppManifest>
 	</Target>
@@ -433,16 +433,16 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_CoreCompileInterfaceDefinitions"
 		Condition="@(InterfaceDefinition->Count()) > 0"
-		Inputs="@(InterfaceDefinition);$(_AppManifest)"
+		Inputs="@(InterfaceDefinition);$(_InputAppManifest)"
 		Outputs="$(_IBToolCache)"
-		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CreateAppManifest;_DetectSigningIdentity">
+		DependsOnTargets="_BeforeCoreCompileInterfaceDefinitions;_CreateFinalAppManifest;_DetectSigningIdentity">
 
 		<IBTool
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			ToolExe="$(IBToolExe)"
 			ToolPath="$(IBToolPath)"
-			AppManifest="$(_AppManifest)"
+			AppManifest="$(_InputAppManifest)"
 			BundleIdentifier="$(_BundleIdentifier)"
 			EnableOnDemandResources="$(EnableOnDemandResources)"
 			InterfaceDefinitions="@(InterfaceDefinition)"
@@ -476,7 +476,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_BeforeCoreCompileImageAssets"
 		Inputs="@(ImageAsset)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
-		DependsOnTargets="_CreateAppManifest"
+		DependsOnTargets="_CompileAppManifest"
 		>
 
 		<!-- If any ImageAsset or AppManifest is newer than the generated items list, we delete them so that the _CoreCompileImageAssets
@@ -900,7 +900,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</FindItemWithLogicalName>
 		<Error Condition="'$(_InputAppManifest)' == '' And '$(_CanOutputAppBundle)' == 'true'" Text="Info.plist not found."/>
 		<PropertyGroup>
-			<_AppManifest>$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist</_AppManifest>
+			<_FinalAppManifest>$(_AppBundlePath)$(_AppBundleManifestRelativePath)Info.plist</_FinalAppManifest>
 			<!-- We should only write out a compiled app manifest if we're creating an app bundle -->
 			<_WriteAppManifest>$(_CanOutputAppBundle)</_WriteAppManifest>
 		</PropertyGroup>
@@ -1691,11 +1691,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_CreateAppManifest;_ComputeTargetArchitectures">
+	<Target Name="_CompileProductDefinition" Condition="$(CreatePackage)" DependsOnTargets="_CreateFinalAppManifest;_ComputeTargetArchitectures">
 		<CompileProductDefinition
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			AppManifest="$(_AppManifest)"
+			AppManifest="$(_FinalAppManifest)"
 			OutputDirectory="$(IntermediateOutputPath)"
 			ProductDefinition="$(ProductDefinition)"
 			TargetArchitectures="$(TargetArchitectures)"
@@ -1704,12 +1704,12 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CompileProductDefinition>
 	</Target>
 
-	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_CreateAppManifest">
+	<Target Name="_CreateInstaller" Condition="$(CreatePackage)" DependsOnTargets="Codesign;_CompileProductDefinition;_CreateFinalAppManifest">
 		<CreateInstallerPackage
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			AppBundleDir="$(AppBundleDir)"
-			AppManifest="$(_AppManifest)"
+			AppManifest="$(_FinalAppManifest)"
 			EnablePackageSigning="$(EnablePackageSigning)"
 			MainAssembly="$(TargetPath)"
 			Name="$(AssemblyName)"

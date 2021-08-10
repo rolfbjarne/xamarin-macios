@@ -48,10 +48,6 @@ namespace Xamarin.MacDev.Tasks
 		// Single-project property that determines whether other single-project properties should have any effect
 		public bool GenerateApplicationManifest { get; set; }
 
-		// If we should write out the app manifest
-		[Required]
-		public bool WriteAppManifest { get; set; }
-
 		[Required]
 		public bool IsAppExtension { get; set; }
 
@@ -164,26 +160,8 @@ namespace Xamarin.MacDev.Tasks
 			ExecutableName = plist.GetCFBundleExecutable ();
 			MinimumOSVersion = plist.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform)).Value;
 
-			// write the resulting app manifest if requested to do so
-			if (WriteAppManifest) {
-				var tmpFile = Path.GetTempFileName ();
-				try {
-					plist.Save (tmpFile, true, true);
-					if (File.Exists (CompiledAppManifest) && FileUtils.CompareFiles (tmpFile, CompiledAppManifest)) {
-						Log.LogMessage (MessageImportance.High, "The app manifest '{0}' is up-to-date.", CompiledAppManifest);
-					} else {
-						var copy = Path.GetTempFileName ();
-						if (File.Exists (CompiledAppManifest))
-							File.Copy (CompiledAppManifest, copy, true);
-						Log.LogMessage (MessageImportance.High, "The app manifest '{0}' NOT is up-to-date. Exists: {1} Copy: {2}", CompiledAppManifest, File.Exists (copy), copy);
-						Directory.CreateDirectory (Path.GetDirectoryName (CompiledAppManifest));
-						File.Copy (tmpFile, CompiledAppManifest, true);
-					}
-				} finally {
-					Log.LogMessage (MessageImportance.High, "The app manifest '{0}' NOT is up-to-date tmpfile: {1} manifest: {2}", CompiledAppManifest, tmpFile, CompiledAppManifest);
-					// File.Delete (tmpFile);
-				}
-			}
+			// write the resulting app manifest
+			FileUtils.UpdateFile (CompiledAppManifest, (tmpfile) => plist.Save (tmpfile, true, true));
 
 			return !Log.HasLoggedErrors;
 		}

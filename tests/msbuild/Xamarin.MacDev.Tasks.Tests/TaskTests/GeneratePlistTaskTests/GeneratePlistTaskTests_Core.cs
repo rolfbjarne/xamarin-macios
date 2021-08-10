@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 using NUnit.Framework;
 
@@ -38,7 +38,6 @@ namespace Xamarin.iOS.Tasks
 			Task.AssemblyName = assemblyName;
 			Task.AppManifest = CreateTempFile ("foo.plist");
 			Task.SdkPlatform = "iPhoneSimulator";
-			Task.WriteAppManifest = true;
 			Task.SdkVersion = "10.0";
 
 			Plist = new PDictionary ();

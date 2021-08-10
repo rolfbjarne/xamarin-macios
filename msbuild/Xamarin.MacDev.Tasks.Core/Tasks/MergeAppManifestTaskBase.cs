@@ -41,6 +41,8 @@ namespace Xamarin.MacDev.Tasks
 				}
 
 				CompileAppManifestTaskBase.MergePartialPLists (this, plist, AppManifests.Skip (1));
+
+				FileUtils.UpdateFile (MergedAppManifest, (tmpfile) => plist.Save (tmpfile, true, true));
 			}
 
 			return !Log.HasLoggedErrors;

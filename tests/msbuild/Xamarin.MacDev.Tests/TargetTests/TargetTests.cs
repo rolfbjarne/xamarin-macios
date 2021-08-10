@@ -575,7 +575,7 @@ namespace Xamarin.iOS.Tasks
 		public void DetectAppManifest_ExecutableProject ()
 		{
 			RunTarget (MonoTouchProject, TargetName.DetectAppManifest);
-			Assert.IsFalse (string.IsNullOrEmpty(MonoTouchProjectInstance.GetPropertyValue ("_AppManifest")), "#1");
+			Assert.That (MonoTouchProjectInstance.GetPropertyValue ("_InputAppManifest"), Is.Not.Null.And.Not.Empty, "#1");
 		}
 
 		[Test]
@@ -596,7 +596,7 @@ namespace Xamarin.iOS.Tasks
 			MonoTouchProjectInstance.AddItem ("None", "Info.plist");
 
 			RunTarget (MonoTouchProject, TargetName.DetectAppManifest);
-			Assert.AreEqual ("Info.plist", MonoTouchProjectInstance.GetPropertyValue ("_AppManifest"), "#1");
+			Assert.AreEqual ("Info.plist", MonoTouchProjectInstance.GetPropertyValue ("_InputAppManifest"), "#1");
 		}
 
 		[Test]

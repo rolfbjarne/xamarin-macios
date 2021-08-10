@@ -28,7 +28,7 @@ namespace Xamarin.MacDev.Tasks
 
 			if (AppManifests.Length == 1) {
 				// If there's only one input, then copy straight to output
-				File.Copy (AppManifests [0].ItemSpec, MergedAppManifest);
+				File.Copy (AppManifests [0].ItemSpec, MergedAppManifest, true);
 			} else {
 				PDictionary plist;
 

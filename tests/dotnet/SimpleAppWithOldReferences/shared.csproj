@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+
+		<ApplicationTitle>MySimpleApp</ApplicationTitle>
+		<ApplicationId>com.xamarin.mysimpleapp</ApplicationId>
+		<ApplicationVersion>3.14</ApplicationVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="../*.cs" />
+		<None Include="Info.plist" />
+
+		<PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
+	</ItemGroup>
+</Project>

@@ -95,6 +95,12 @@ namespace Xamarin.MacDev.Tasks
 		[Output]
 		public string XSAppIconAssets { get; set; }
 
+		[Output]
+		public string UIDeviceFamily { get; set; }
+
+		[Output]
+		public bool WKWatchKitApp { get; set; }
+
 		#endregion
 
 		protected TargetArchitecture architectures;
@@ -168,6 +174,8 @@ namespace Xamarin.MacDev.Tasks
 
 			NSExtensionPointIdentifier = plist.Get<PDictionary> ("NSExtension")?.Get<PString> ("NSExtensionPointIdentifier")?.Value;
 			CLKComplicationGroup = plist.Get<PString> (ManifestKeys.CLKComplicationGroup)?.Value;
+			UIDeviceFamily = plist.GetUIDeviceFamily (ManifestKeys.UIDeviceFamily).ToString ();
+			WKWatchKitApp = plist.GetBoolean (ManifestKeys.WKWatchKitApp);
 
 			// write the resulting app manifest
 			FileUtils.UpdateFile (CompiledAppManifest, (tmpfile) => plist.Save (tmpfile, true, true));

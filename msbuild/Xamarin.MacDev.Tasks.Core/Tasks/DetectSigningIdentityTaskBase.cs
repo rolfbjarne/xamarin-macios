@@ -471,7 +471,6 @@ namespace Xamarin.MacDev.Tasks
 			IList<MobileProvision> profiles;
 			IList<X509Certificate2> certs;
 			List<CodeSignIdentity> pairs;
-			PDictionary plist;
 
 			switch (SdkPlatform) {
 			case "AppleTVSimulator":

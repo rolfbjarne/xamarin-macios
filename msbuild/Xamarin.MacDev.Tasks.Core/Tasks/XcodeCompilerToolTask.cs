@@ -13,6 +13,7 @@ using Microsoft.Build.Utilities;
 using Xamarin.Localization.MSBuild;
 
 using Xamarin.MacDev;
+using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks
 {
@@ -23,8 +24,6 @@ namespace Xamarin.MacDev.Tasks
 		string toolExe;
 
 		#region Inputs
-
-		public ITaskItem AppManifest { get; set; }
 
 		public string BundleIdentifier { get; set; }
 
@@ -65,6 +64,22 @@ namespace Xamarin.MacDev.Tasks
 
 		#endregion
 
+		#region Inputs from the app manifest
+
+		public string CLKComplicationGroup { get; set; }
+
+		public string NSExtensionPointIdentifier { get; set; }
+
+		public string XSAppIconAssets { get; set; }
+
+		public string XSLaunchImageAssets { get; set; }
+
+		public bool WKWatchKitApp { get; set; }
+
+		public string UIDeviceFamily { get; set; }
+
+		#endregion
+
 		#region Outputs
 
 		[Output]
@@ -74,6 +89,14 @@ namespace Xamarin.MacDev.Tasks
 		public ITaskItem[] OutputManifests { get; set; }
 
 		#endregion
+
+		public IPhoneDeviceType ParsedUIDeviceFamily {
+			get {
+				if (!string.IsNullOrEmpty (UIDeviceFamily))
+					return (IPhoneDeviceType) Enum.Parse (typeof (IPhoneDeviceType), UIDeviceFamily);
+				return IPhoneDeviceType.NotSet;
+			}
+		}
 
 		protected abstract string DefaultBinDir {
 			get;
@@ -98,9 +121,51 @@ namespace Xamarin.MacDev.Tasks
 			get { return false; }
 		}
 
-		protected virtual IEnumerable<string> GetTargetDevices (PDictionary plist)
+		protected bool IsWatchExtension ()
 		{
-			yield break;
+			return NSExtensionPointIdentifier == "com.apple.watchkit";
+		}
+
+		protected bool IsMessagesExtension ()
+		{
+			return NSExtensionPointIdentifier == "com.apple.message-payload-provider";
+		}
+
+		protected IEnumerable<string> GetTargetDevices ()
+		{
+			var devices = IPhoneDeviceType.NotSet;
+			bool watch = false;
+
+			if (Platform == ApplePlatform.MacOSX)
+				yield break;
+
+			if (!string.IsNullOrEmpty (UIDeviceFamily)) {
+				if (!(watch = WKWatchKitApp)) {
+					// the project is either a normal iOS project or an extension
+					if ((devices = ParsedUIDeviceFamily) == IPhoneDeviceType.NotSet) {
+						// library projects and extension projects will not have this key, but
+						// we'll want them to work for both iPhones and iPads if the
+						// xib or storyboard supports them
+						devices = IPhoneDeviceType.IPhoneAndIPad;
+					}
+
+					// if the project is a watch extension, we'll also want to incldue watch support
+					watch = IsWatchExtension ();
+				} else {
+					// the project is a WatchApp, only include watch support
+				}
+			} else {
+				devices = IPhoneDeviceType.IPhoneAndIPad;
+			}
+
+			if ((devices & IPhoneDeviceType.IPhone) != 0)
+				yield return "iphone";
+
+			if ((devices & IPhoneDeviceType.IPad) != 0)
+				yield return "ipad";
+
+			if (watch)
+				yield return "watch";
 		}
 
 		protected abstract void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineArgumentBuilder args, ITaskItem[] items);

@@ -331,6 +331,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<Output TaskParameter="NSExtensionPointIdentifier" PropertyName="_NSExtensionPointIdentifier" />
 			<Output TaskParameter="XSAppIconAssets" PropertyName="_XSAppIconAssets" />
 			<Output TaskParameter="XSLaunchImageAssets" PropertyName="_XSLaunchImageAssets" />
+			<Output TaskParameter="UIDeviceFamily" PropertyName="_UIDeviceFamily" />
+			<Output TaskParameter="WKWatchKitApp" PropertyName="_WKWatchKitApp" />
 		</CompileAppManifest>
 
 		<PropertyGroup>
@@ -527,7 +529,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			DeviceOSVersion="$(TargetDeviceOSVersion)"
 			EnableOnDemandResources="$(EnableOnDemandResources)"
 			ImageAssets="@(ImageAsset)"
-			InputAppManifest="$(_InputAppManifest)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
 			NSExtensionPointIdentifier="$(_NSExtensionPointIdentifier)"
 			OptimizePNGs="$(OptimizePNGs)"
@@ -544,6 +545,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			XSAppIconAssets="$(_XSAppIconAssets)"
 			XSLaunchImageAssets="$(_XSLaunchImageAssets)"
+			WKWatchKitApp="$(_WKWatchKitApp)"
+			UIDeviceFamily="$(_UIDeviceFamily)"
 			>
 			<Output TaskParameter="PartialAppManifest" ItemName="_PostCompilePartialAppManifest" />
 			<Output TaskParameter="BundleResources" ItemName="_BundleResourceWithLogicalName" />

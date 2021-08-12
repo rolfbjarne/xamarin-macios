@@ -16,7 +16,6 @@ namespace Xamarin.MacDev.Tasks
 	{
 		ITaskItem partialAppManifest;
 		string outputSpecs;
-		PDictionary plist;
 
 		#region Inputs
 
@@ -29,8 +28,6 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public ITaskItem[] ImageAssets { get; set; }
 
-		public string InputAppManifest { get; set; }
-
 		public bool IsWatchApp { get; set; }
 
 		[Required]
@@ -38,15 +35,6 @@ namespace Xamarin.MacDev.Tasks
 
 		[Required]
 		public string OutputPath { get; set; }
-
-		public string CLKComplicationGroup { get; set; }
-
-		public string NSExtensionPointIdentifier { get; set; }
-
-		public string XSAppIconAssets { get; set; }
-
-		public string XSLaunchImageAssets { get; set; }
-
 		#endregion
 
 		#region Outputs
@@ -62,25 +50,6 @@ namespace Xamarin.MacDev.Tasks
 
 		protected override string ToolName {
 			get { return "actool"; }
-		}
-
-		static bool IsWatchExtension (PDictionary plist)
-		{
-			PDictionary extension;
-			PString id;
-
-			if (!plist.TryGetValue ("NSExtension", out extension))
-				return false;
-
-			if (!extension.TryGetValue ("NSExtensionPointIdentifier", out id))
-				return false;
-
-			return id.Value == "com.apple.watchkit";
-		}
-
-		bool IsMessagesExtension ()
-		{
-			return NSExtensionPointIdentifier == "com.apple.message-payload-provider";
 		}
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineArgumentBuilder args, ITaskItem[] items)
@@ -164,10 +133,8 @@ namespace Xamarin.MacDev.Tasks
 				args.Add ("uikit");
 			}				
 
-			if (plist != null) {
-				foreach (var targetDevice in GetTargetDevices (plist))
-					args.Add ("--target-device", targetDevice);
-			}
+			foreach (var targetDevice in GetTargetDevices ())
+				args.Add ("--target-device", targetDevice);
 
 			args.Add ("--minimum-deployment-target", MinimumOSVersion);
 
@@ -228,15 +195,6 @@ namespace Xamarin.MacDev.Tasks
 			var clones = new HashSet<string> ();
 			var items = new List<ITaskItem> ();
 			var specs = new PArray ();
-
-			if (!string.IsNullOrEmpty (InputAppManifest)) {
-				try {
-					plist = PDictionary.FromFile (InputAppManifest);
-				} catch (Exception ex) {
-					Log.LogError (null, null, null, InputAppManifest, 0, 0, 0, 0, "{0}", ex.Message);
-					return false;
-				}
-			}
 
 			for (int i = 0; i < ImageAssets.Length; i++) {
 				var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, ImageAssets[i], !string.IsNullOrEmpty (SessionId));
@@ -471,43 +429,6 @@ namespace Xamarin.MacDev.Tasks
 			OutputManifests = outputManifests.ToArray ();
 
 			return !Log.HasLoggedErrors;
-		}
-
-		protected override IEnumerable<string> GetTargetDevices (PDictionary plist)
-		{
-			var devices = IPhoneDeviceType.NotSet;
-			bool watch = false;
-
-			if (Platform == ApplePlatform.MacOSX)
-				yield break;
-
-			if (plist != null) {
-				if (!(watch = plist.GetWKWatchKitApp ())) {
-					// the project is either a normal iOS project or an extension
-					if ((devices = plist.GetUIDeviceFamily ()) == IPhoneDeviceType.NotSet) {
-						// library projects and extension projects will not have this key, but
-						// we'll want them to work for both iPhones and iPads if the
-						// xib or storyboard supports them
-						devices = IPhoneDeviceType.IPhoneAndIPad;
-					}
-
-					// if the project is a watch extension, we'll also want to incldue watch support
-					watch = IsWatchExtension (plist);
-				} else {
-					// the project is a WatchApp, only include watch support
-				}
-			} else {
-				devices = IPhoneDeviceType.IPhoneAndIPad;
-			}
-
-			if ((devices & IPhoneDeviceType.IPhone) != 0)
-				yield return "iphone";
-
-			if ((devices & IPhoneDeviceType.IPad) != 0)
-				yield return "ipad";
-
-			if (watch)
-				yield return "watch";
 		}
 	}
 }

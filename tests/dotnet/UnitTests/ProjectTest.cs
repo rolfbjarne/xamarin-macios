@@ -593,10 +593,9 @@ namespace Xamarin.Tests {
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
-
 			DotNet.AssertBuild (project_path, GetDefaultProperties (runtimeIdentifiers));
 
-			var appExecutable = GetNativeExecutable (platform, appPath);
+			var appExecutable = Path.Combine (appPath, "Contents", "MacOS", Path.GetFileNameWithoutExtension (project_path));
 			Assert.That (appExecutable, Does.Exist, "There is an executable");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 		}
@@ -704,31 +703,6 @@ namespace Xamarin.Tests {
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-arm64")), File.Exists (arm64txt), "arm64.txt");
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-arm")), File.Exists (armtxt), "arm.txt");
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-x64")), File.Exists (x64txt), "x64.txt");
-		}
-
-		void ExecuteWithMagicWordAndAssert (ApplePlatform platform, string runtimeIdentifiers, string executable)
-		{
-			if (!CanExecute (platform, runtimeIdentifiers))
-				return;
-
-			ExecuteWithMagicWordAndAssert (executable);
-		}
-
-		void ExecuteWithMagicWordAndAssert (string executable)
-		{
-			if (!File.Exists (executable))
-				throw new FileNotFoundException ($"The executable '{executable}' does not exists.");
-
-			var magicWord = Guid.NewGuid ().ToString ();
-			var env = new Dictionary<string, string> {
-				{ "MAGIC_WORD", magicWord },
-				{ "DYLD_FALLBACK_LIBRARY_PATH", null }, // VSMac might set this, which may cause tests to crash.
-			};
-
-			var output = new StringBuilder ();
-			var rv = Execution.RunWithStringBuildersAsync (executable, Array.Empty<string> (), environment: env, standardOutput: output, standardError: output, timeout: TimeSpan.FromSeconds (15)).Result;
-			Assert.That (output.ToString (), Does.Contain (magicWord), "Contains magic word");
-			Assert.AreEqual (0, rv.ExitCode, "ExitCode");
 		}
 
 		void AssertThatLinkerExecuted (ExecutionResult result)

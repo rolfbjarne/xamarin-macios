@@ -81,7 +81,13 @@ namespace Xamarin.MacDev.Tasks
 		public string ExecutableName { get; set; }
 
 		[Output]
+		public string CLKComplicationGroup { get; set; }
+
+		[Output]
 		public string MinimumOSVersion { get; set; }
+
+		[Output]
+		public string NSExtensionPointIdentifier { get; set; }
 
 		[Output]
 		public string XSLaunchImageAssets { get; set; }
@@ -159,6 +165,9 @@ namespace Xamarin.MacDev.Tasks
 			BundleIdentifier = plist.GetCFBundleIdentifier ();
 			ExecutableName = plist.GetCFBundleExecutable ();
 			MinimumOSVersion = plist.Get<PString> (PlatformFrameworkHelper.GetMinimumOSVersionKey (Platform)).Value;
+
+			NSExtensionPointIdentifier = plist.Get<PDictionary> ("NSExtension")?.Get<PString> ("NSExtensionPointIdentifier")?.Value;
+			CLKComplicationGroup = plist.Get<PString> (ManifestKeys.CLKComplicationGroup)?.Value;
 
 			// write the resulting app manifest
 			FileUtils.UpdateFile (CompiledAppManifest, (tmpfile) => plist.Save (tmpfile, true, true));

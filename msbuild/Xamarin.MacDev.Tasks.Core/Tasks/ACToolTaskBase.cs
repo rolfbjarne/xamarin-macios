@@ -39,6 +39,10 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public string OutputPath { get; set; }
 
+		public string CLKComplicationGroup { get; set; }
+
+		public string NSExtensionPointIdentifier { get; set; }
+
 		public string XSAppIconAssets { get; set; }
 
 		public string XSLaunchImageAssets { get; set; }
@@ -74,18 +78,9 @@ namespace Xamarin.MacDev.Tasks
 			return id.Value == "com.apple.watchkit";
 		}
 
-		static bool IsMessagesExtension (PDictionary plist)
+		bool IsMessagesExtension ()
 		{
-			PDictionary extension;
-			PString id;
-
-			if (!plist.TryGetValue ("NSExtension", out extension))
-				return false;
-
-			if (!extension.TryGetValue ("NSExtensionPointIdentifier", out id))
-				return false;
-
-			return id.Value == "com.apple.message-payload-provider";
+			return NSExtensionPointIdentifier == "com.apple.message-payload-provider";
 		}
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineArgumentBuilder args, ITaskItem[] items)
@@ -116,7 +111,7 @@ namespace Xamarin.MacDev.Tasks
 						args.Add ("--app-icon");
 						args.AddQuoted (assetName);
 
-						if (IsMessagesExtension (plist))
+						if (IsMessagesExtension ())
 							args.Add ("--product-type com.apple.product-type.app-extension.messages");
 					}
 				}
@@ -144,8 +139,8 @@ namespace Xamarin.MacDev.Tasks
 					}
 				}
 
-				if (plist.TryGetValue (ManifestKeys.CLKComplicationGroup, out value) && !string.IsNullOrEmpty (value.Value))
-					args.Add ("--complication", value);
+				if (!string.IsNullOrEmpty (CLKComplicationGroup))
+					args.Add ("--complication", CLKComplicationGroup);
 			}
 
 			if (OptimizePNGs)

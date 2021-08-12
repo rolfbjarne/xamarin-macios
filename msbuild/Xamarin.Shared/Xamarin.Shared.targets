@@ -326,7 +326,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 			<Output TaskParameter="BundleIdentifier" PropertyName="_BundleIdentifier" />
 			<Output TaskParameter="ExecutableName" PropertyName="_ExecutableName" />
+			<Output TaskParameter="CLKComplicationGroup" PropertyName="_CLKComplicationGroup" />
 			<Output TaskParameter="MinimumOSVersion" PropertyName="_MinimumOSVersion" />
+			<Output TaskParameter="NSExtensionPointIdentifier" PropertyName="_NSExtensionPointIdentifier" />
 			<Output TaskParameter="XSAppIconAssets" PropertyName="_XSAppIconAssets" />
 			<Output TaskParameter="XSLaunchImageAssets" PropertyName="_XSLaunchImageAssets" />
 		</CompileAppManifest>
@@ -520,12 +522,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ToolExe="$(ACToolExe)"
 			ToolPath="$(ACToolPath)"
 			BundleIdentifier="$(_BundleIdentifier)"
+			CLKComplicationGroup="$(_CLKComplicationGroup)"
 			DeviceModel="$(TargetDeviceModel)"
 			DeviceOSVersion="$(TargetDeviceOSVersion)"
 			EnableOnDemandResources="$(EnableOnDemandResources)"
 			ImageAssets="@(ImageAsset)"
 			InputAppManifest="$(_InputAppManifest)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
+			NSExtensionPointIdentifier="$(_NSExtensionPointIdentifier)"
 			OptimizePNGs="$(OptimizePNGs)"
 			OutputPath="$(DeviceSpecificOutputPath)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"

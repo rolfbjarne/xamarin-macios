@@ -51,6 +51,8 @@
 
 		<!-- Always use the latest C# version everywhere -->
 		<LangVersion>latest</LangVersion>
+
+		<RootTestsDirectory Condition="'$(RootTestsDirectory)' == ''">$(MSBuildThisFileDirectory)/..</RootTestsDirectory>
 	</PropertyGroup>
 
 	<ItemGroup>

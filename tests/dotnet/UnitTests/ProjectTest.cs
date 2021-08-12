@@ -565,6 +565,23 @@ namespace Xamarin.Tests {
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
+			DotNet.AssertBuild (project_path, GetDefaultProperties (runtimeIdentifiers));
+
+			var appExecutable = Path.Combine (appPath, "Contents", "MacOS", Path.GetFileNameWithoutExtension (project_path));
+			Assert.That (appExecutable, Does.Exist, "There is an executable");
+			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "BundleStructure";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			Clean (project_path);
 
 			DotNet.AssertBuild (project_path, GetDefaultProperties (runtimeIdentifiers));
 
@@ -680,10 +697,23 @@ namespace Xamarin.Tests {
 
 		void ExecuteWithMagicWordAndAssert (ApplePlatform platform, string runtimeIdentifiers, string executable)
 		{
-			if (!CanExecute (platform, runtimeIdentifiers))
-				return;
+			//if (!CanExecute (platform, runtimeIdentifiers))
+			//	return;
 
-			ExecuteWithMagicWordAndAssert (executable);
+			//ExecuteWithMagicWordAndAssert (executable);
+			//var properties = new Dictionary<string, string> (verbosity);
+			//SetRuntimeIdentifiers (properties, runtimeIdentifiers);
+
+			//// Build
+			//DotNet.AssertBuild (project_path, properties);
+
+			//var aPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "A.txt");
+			//var bPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "SubDir", "B.txt");
+			//var readmePath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "C.txt");
+
+			//Assert.That (aPath, Does.Exist, "A.txt");
+			//Assert.That (bPath, Does.Exist, "B.txt");
+			//Assert.That (readmePath, Does.Exist, "README.md");
 		}
 
 		void ExecuteWithMagicWordAndAssert (string executable)

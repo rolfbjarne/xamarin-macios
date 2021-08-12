@@ -724,6 +724,7 @@
 			<_PackageIdInfix Condition="'$(UseMonoRuntime)' == 'true'">Mono.</_PackageIdInfix>
 
 			<_MonoNugetPackageId>Microsoft.NETCore.App.Runtime.$(_PackageIdInfix)$(RuntimeIdentifier)</_MonoNugetPackageId>
+			<_XamarinNugetPackageId>Microsoft.$(_PlatformName).Runtime.$(RuntimeIdentifier)</_XamarinNugetPackageId>
 		</PropertyGroup>
 		<ItemGroup>
 			<!-- Look in the ResolvedFrameworkReference for our Microsoft.* package. This should only find a single package. -->
@@ -1114,6 +1115,21 @@
 			<_ParsedRuntimeConfigFilePath Condition="'$(_ParsedRuntimeConfigFilePath)' == ''">$([MSBuild]::MakeRelative($(MSBuildProjectDirectory),$(_AbsolutePublishDir)\$(_AssemblyPublishDir)\$(_RuntimeConfigurationFile)))</_ParsedRuntimeConfigFilePath>
 		</PropertyGroup>
 		<ItemGroup>
+			<!--
+				Items with TargetPath set come from @(None) and @(Content) item groups (maybe others too?), with 'CopyToOutputDirectory=PreserveNewest|Always'
+				For these cases we define that TargetPath is relative to the directory in the app bundle where the assemblies are (not taking into account runtime-specific assemblies).
+				The 'Link' metadata can be set on such to change the TargetPath to anywhere in the app bundle if need be.
+			-->
+			<ResolvedFileToPublish
+				Update="@(ResolvedFileToPublish)"
+				RelativePath="$(_AssemblyPublishDir)\%(ResolvedFileToPublish.TargetPath)"
+				Condition="'%(ResolvedFileToPublish.TargetPath)' != ''" />
+
+			<!--
+				Remove any items we've already handled elsewhere
+			-->
+			<ResolvedFileToPublish Remove="@(_BundleResourceWithOutputPath)" />
+
 			<!-- include .dll, .exe and, for debugging only, .pdb files inside the .app -->
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
@@ -1155,6 +1171,14 @@
 				            '%(ResolvedFileToPublish.RuntimeIdentifier)' == '$(RuntimeIdentifier)' And
 				            '%(ResolvedFileToPublish.Extension)' == '.a' And
 				            '%(ResolvedFileToPublish.NuGetPackageId)' == '$(_MonoNugetPackageId)'
+				            "
+			/>
+			<ResolvedFileToPublish
+				Remove="@(ResolvedFileToPublish)"
+				Condition=" '%(ResolvedFileToPublish.AssetType)' == 'native' And
+				            '%(ResolvedFileToPublish.RuntimeIdentifier)' == '$(RuntimeIdentifier)' And
+				            '%(ResolvedFileToPublish.Extension)' == '.a' And
+				            '%(ResolvedFileToPublish.NuGetPackageId)' == '$(_XamarinNugetPackageId)'
 				            "
 			/>
 

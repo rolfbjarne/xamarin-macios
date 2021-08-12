@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+
+		<ApplicationTitle>MySimpleApp</ApplicationTitle>
+		<ApplicationId>com.xamarin.mysimpleapp</ApplicationId>
+		<ApplicationVersion>3.14</ApplicationVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="../*.cs" />
+		<None Include="Info.plist" />
+
+		<!-- None items -->
+
+		<!-- Set CopyToOutputDirectory=true for some items -->
+		<None Update="A.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="B.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="C.pdb">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="D.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="E.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="F.a">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Sub/G.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<!-- from outside the project directory -->
+		<None Include="../H.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<!-- With Link -->
+		<None Update="I.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>Somewhere/I.txt</Link>
+		</None>
+		<!-- With Link + relative path -->
+		<None Update="J.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link Condition=" $(TargetFramework.EndsWith('-macos'))">../Somewhere/Else/J.txt</Link>
+			<Link Condition="!$(TargetFramework.EndsWith('-macos'))">Contents/Somewhere/Else/J.txt</Link>
+		</None>
+		<!-- CopyToPublishDirectory instead of CopyToOutputDirectory -->
+		<None Update="K.txt">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+
+		<!-- Content items -->
+
+		<!-- Content without any metadata -->
+		<Content Include="L.txt" />
+		<!-- Content with CopyToOutputDirectory -->
+		<Content Include="M.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<!-- Content with CopyToPublishDirectory -->
+		<Content Include="N.txt">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+
+		<!-- EmbeddedResource items -->
+
+		<!-- Content without any metadata -->
+		<EmbeddedResource Include="O.txt" />
+		<!-- Content with CopyToOutputDirectory -->
+		<EmbeddedResource Include="P.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<!-- Content with CopyToPublishDirectory -->
+		<EmbeddedResource Include="Q.txt">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</EmbeddedResource>
+
+		<!-- BundleResource items -->
+
+		<!-- Content without any metadata -->
+		<BundleResource Include="R.txt" />
+		<!-- Content with CopyToOutputDirectory -->
+		<BundleResource Include="S.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</BundleResource>
+		<!-- Content with CopyToPublishDirectory -->
+		<BundleResource Include="T.txt">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</BundleResource>
+
+
+		<None Remove="@(Content)" />
+		<None Remove="@(EmbeddedResource)" />
+	</ItemGroup>
+</Project>

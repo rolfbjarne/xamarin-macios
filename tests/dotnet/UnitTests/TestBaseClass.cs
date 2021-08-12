@@ -77,5 +77,20 @@ namespace Xamarin.Tests {
 				Directory.Delete (dir, true);
 			}
 		}
+
+		protected string GetRelativeResourcesDirectory (ApplePlatform platform)
+		{
+			switch (platform) {
+			case ApplePlatform.iOS:
+			case ApplePlatform.TVOS:
+			case ApplePlatform.WatchOS:
+				return "Resources";
+			case ApplePlatform.MacOSX:
+			case ApplePlatform.MacCatalyst:
+				return Path.Combine ("Contents", "Resources");
+			default:
+				throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
+			}
+		}
 	}
 }

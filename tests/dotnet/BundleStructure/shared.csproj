@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+
+		<ApplicationTitle>MySimpleApp</ApplicationTitle>
+		<ApplicationId>com.xamarin.mysimpleapp</ApplicationId>
+		<ApplicationVersion>3.14</ApplicationVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="../*.cs" />
+		<None Include="Info.plist" />
+
+		<!-- Set CopyToOutputDirectory=true for some items -->
+		<None Update="None/A.txt">
+			<CopyToOutputDirectory>true</CopyToOutputDirectory>
+		</None>
+		<None Update="None/Sub/B.txt">
+			<CopyToOutputDirectory>true</CopyToOutputDirectory>
+		</None>
+		<!-- outside the project directory -->
+		<None Include="../README.md">
+			<CopyToOutputDirectory>true</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>

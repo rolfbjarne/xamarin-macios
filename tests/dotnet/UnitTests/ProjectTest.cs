@@ -616,6 +616,32 @@ namespace Xamarin.Tests {
 				ExecuteWithMagicWordAndAssert (appExecutable);
 		}
 
+		[Test]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "BundleStructure";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			Clean (project_path);
+
+			var properties = new Dictionary<string, string> (verbosity);
+			SetRuntimeIdentifiers (properties, runtimeIdentifiers);
+
+			// Build
+			DotNet.AssertBuild (project_path, properties);
+
+			var aPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "None", "A.txt");
+			var bPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "None", "Sub", "B.txt");
+			var readmePath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "README.md");
+
+			Assert.That (aPath, Does.Exist, "A.txt");
+			Assert.That (bPath, Does.Exist, "B.txt");
+			Assert.That (readmePath, Does.Exist, "README.md");
+		}
+
 		void ExecuteWithMagicWordAndAssert (string executable)
 		{
 			var magicWord = Guid.NewGuid ().ToString ();

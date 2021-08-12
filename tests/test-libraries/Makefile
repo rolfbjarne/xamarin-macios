@@ -1,7 +1,7 @@
 TOP=../..
 include $(TOP)/Make.config
 
-SUBDIRS += custom-type-assembly
+SUBDIRS += custom-type-assembly xtest2 nugets
 
 # without this many compiler warnings about unused functions and variables
 # in system headers show up.
@@ -326,6 +326,32 @@ ifdef INCLUDE_MACCATALYST
 XCPLATFORMS+= maccatalyst
 endif
 
+define ZippedFrameworkTemplate
+.libs/$(1)/XTest.framework.zip: $$($(2)_TARGETS)
+	$$(Q) cd .libs/$(1) && zip -9r XTest.framework.zip XTest.framework
+
+ZIPPED_TARGETS += .libs/$(1)/XTest.framework.zip
+endef
+
+ifdef INCLUDE_IOS
+$(eval $(call ZippedFrameworkTemplate,ios-fat,IPHONESIMULATOR))
+endif
+ifdef INCLUDE_TVOS
+$(eval $(call ZippedFrameworkTemplate,tvos-fat,TVSIMULATOR))
+endif
+ifdef INCLUDE_WATCH
+$(eval $(call ZippedFrameworkTemplate,watchos-fat,WATCHSIMULATOR))
+endif
+ifdef INCLUDE_MACCATALYST
+$(eval $(call ZippedFrameworkTemplate,maccatalyst-fat,MACCATALYST))
+endif
+ifdef INCLUDE_MAC
+$(eval $(call ZippedFrameworkTemplate,macos-fat,MACOS))
+endif
+
+all-local:: $(ZIPPED_TARGETS)
+zip: $(ZIPPED_TARGETS)
+
 XTEST_XCFRAMEWORKS += $(foreach platform,$(XCPLATFORMS),.libs/$(platform)/XTest.framework)
 XTEST_XCTARGETS += \
 	$(foreach platform,$(XCPLATFORMS),.libs/$(platform)/XTest.framework.stamp) \
@@ -351,6 +377,11 @@ LIBTEST2_XCFRAMEWORKS += $(foreach platform,$(XCPLATFORMS),.libs/$(platform)/lib
 	$(Q_GEN) $(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $(foreach lib,$(LIBTEST2_XCFRAMEWORKS),-library $(lib)) -output $@
 
 all-local:: .libs/libtest2.xcframework
+
+.libs/XTest.xcframework.zip: .libs/XTest.xcframework
+	$(Q) cd .libs && zip -9r "$(notdir $@)" "$(notdir $<)"
+
+all-local:: .libs/XTest.xcframework.zip
 
 # Xamarin.Mac
 

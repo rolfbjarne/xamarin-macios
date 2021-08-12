@@ -85,63 +85,60 @@ namespace Xamarin.MacDev.Tasks
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineArgumentBuilder args, ITaskItem[] items)
 		{
-			if (plist != null) {
-				PString value;
 
-				var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId))));
+			var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId))));
 
-				if (!string.IsNullOrEmpty (XSAppIconAssets)) {
-					int index = XSAppIconAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
-					string assetDir = null;
-					var rpath = XSAppIconAssets;
+			if (!string.IsNullOrEmpty (XSAppIconAssets)) {
+				int index = XSAppIconAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
+				string assetDir = null;
+				var rpath = XSAppIconAssets;
 
-					if (index != -1)
-						assetDir = rpath.Substring (0, index + ".xcassets".Length);
+				if (index != -1)
+					assetDir = rpath.Substring (0, index + ".xcassets".Length);
 
-					if (assetDirs != null && assetDirs.Contains (assetDir)) {
-						var assetName = Path.GetFileNameWithoutExtension (rpath);
+				if (assetDirs != null && assetDirs.Contains (assetDir)) {
+					var assetName = Path.GetFileNameWithoutExtension (rpath);
 
-						if (PartialAppManifest == null) {
-							args.Add ("--output-partial-info-plist");
-							args.AddQuoted (partialAppManifest.GetMetadata ("FullPath"));
+					if (PartialAppManifest == null) {
+						args.Add ("--output-partial-info-plist");
+						args.AddQuoted (partialAppManifest.GetMetadata ("FullPath"));
 
-							PartialAppManifest = partialAppManifest;
-						}
-
-						args.Add ("--app-icon");
-						args.AddQuoted (assetName);
-
-						if (IsMessagesExtension ())
-							args.Add ("--product-type com.apple.product-type.app-extension.messages");
+						PartialAppManifest = partialAppManifest;
 					}
+
+					args.Add ("--app-icon");
+					args.AddQuoted (assetName);
+
+					if (IsMessagesExtension ())
+						args.Add ("--product-type com.apple.product-type.app-extension.messages");
 				}
-
-				if (!string.IsNullOrEmpty (XSLaunchImageAssets)) {
-					int index = XSLaunchImageAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
-					string assetDir = null;
-					var rpath = XSLaunchImageAssets;
-
-					if (index != -1)
-						assetDir = rpath.Substring (0, index + ".xcassets".Length);
-
-					if (assetDirs != null && assetDirs.Contains (assetDir)) {
-						var assetName = Path.GetFileNameWithoutExtension (rpath);
-
-						if (PartialAppManifest == null) {
-							args.Add ("--output-partial-info-plist");
-							args.AddQuoted (partialAppManifest.GetMetadata ("FullPath"));
-
-							PartialAppManifest = partialAppManifest;
-						}
-
-						args.Add ("--launch-image");
-						args.AddQuoted (assetName);
-					}
-				}
-
-				if (!string.IsNullOrEmpty (CLKComplicationGroup))
-					args.Add ("--complication", CLKComplicationGroup);
 			}
+
+			if (!string.IsNullOrEmpty (XSLaunchImageAssets)) {
+				int index = XSLaunchImageAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
+				string assetDir = null;
+				var rpath = XSLaunchImageAssets;
+
+				if (index != -1)
+					assetDir = rpath.Substring (0, index + ".xcassets".Length);
+
+				if (assetDirs != null && assetDirs.Contains (assetDir)) {
+					var assetName = Path.GetFileNameWithoutExtension (rpath);
+
+					if (PartialAppManifest == null) {
+						args.Add ("--output-partial-info-plist");
+						args.AddQuoted (partialAppManifest.GetMetadata ("FullPath"));
+
+						PartialAppManifest = partialAppManifest;
+					}
+
+					args.Add ("--launch-image");
+					args.AddQuoted (assetName);
+				}
+			}
+
+			if (!string.IsNullOrEmpty (CLKComplicationGroup))
+				args.Add ("--complication", CLKComplicationGroup);
 
 			if (OptimizePNGs)
 				args.Add ("--compress-pngs");

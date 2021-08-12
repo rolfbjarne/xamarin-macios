@@ -12,6 +12,6 @@
 		<Compile Include="../*.cs" />
 		<None Include="Info.plist" />
 
-		<PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
+		<PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
 	</ItemGroup>
 </Project>

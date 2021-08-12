@@ -12,6 +12,7 @@ namespace MySimpleApp
 			GC.KeepAlive (typeof (NSObject)); // prevent linking away the platform assembly
 
 			Console.WriteLine (Environment.GetEnvironmentVariable ("MAGIC_WORD"));
+			Console.WriteLine (typeof (BenchmarkDotNet.Reports.Summary));
 
 			return args.Length;
 		}

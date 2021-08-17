@@ -633,9 +633,9 @@ namespace Xamarin.Tests {
 			// Build
 			DotNet.AssertBuild (project_path, properties);
 
-			var aPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "None", "A.txt");
-			var bPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "None", "Sub", "B.txt");
-			var readmePath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "README.md");
+			var aPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "A.txt");
+			var bPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "SubDir", "B.txt");
+			var readmePath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "C.txt");
 
 			Assert.That (aPath, Does.Exist, "A.txt");
 			Assert.That (bPath, Does.Exist, "B.txt");

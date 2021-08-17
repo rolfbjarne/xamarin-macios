@@ -13,15 +13,18 @@
 		<None Include="Info.plist" />
 
 		<!-- Set CopyToOutputDirectory=true for some items -->
-		<None Update="None/A.txt">
-			<CopyToOutputDirectory>true</CopyToOutputDirectory>
+		<None Update="A.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="None/Sub/B.txt">
-			<CopyToOutputDirectory>true</CopyToOutputDirectory>
+		<None Update="D.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Sub/B.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<!-- outside the project directory -->
-		<None Include="../README.md">
-			<CopyToOutputDirectory>true</CopyToOutputDirectory>
+		<None Include="../C.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 </Project>

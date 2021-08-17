@@ -26,5 +26,15 @@
 		<None Include="../C.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<!-- With Link -->
+		<None Include="A.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>Somewhere</Link>
+		</None>
+		<!-- With Link + relative path -->
+		<None Include="A.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>../Somewhere/Else</Link>
+		</None>
 	</ItemGroup>
 </Project>

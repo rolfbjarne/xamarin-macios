@@ -8,6 +8,11 @@ namespace Foundation {
 
 		// check helpers to avoid native exceptions
 
+		public NSMutableString (long capacity)
+		{
+			throw new NotImplementedException ();
+		}
+
 		void Check (NSRange range)
 		{
 			if (range.Location + range.Length > Length)

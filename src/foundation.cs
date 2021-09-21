@@ -7988,9 +7988,11 @@ namespace Foundation
 		[Export ("initWithSet:")]
 		IntPtr Constructor (NSSet other);
 		
+#if !NET
 		[DesignatedInitializer]
 		[Export ("initWithCapacity:")]
 		IntPtr Constructor (nint capacity);
+#endif
 
 		[Internal]
 		[Sealed]
@@ -8508,8 +8510,10 @@ namespace Foundation
 	[BaseType (typeof (NSString))]
 	// hack: it seems that generator.cs can't track NSCoding correctly ? maybe because the type is named NSString2 at that time
 	interface NSMutableString : NSCoding {
+#if !NET
 		[Export ("initWithCapacity:")]
 		IntPtr Constructor (nint capacity);
+#endif
 
 		[PreSnippet ("Check (index);", Optimizable = true)]
 		[Export ("insertString:atIndex:")]
@@ -9310,9 +9314,11 @@ namespace Foundation
 		[Export ("initWithOrderedSet:")]
 		IntPtr Constructor (NSOrderedSet source);
 
+#if !NET
 		[DesignatedInitializer]
 		[Export ("initWithCapacity:")]
 		IntPtr Constructor (nint capacity);
+#endif
 
 		[Export ("initWithArray:"), Internal]
 		IntPtr Constructor (NSArray array);
@@ -11241,6 +11247,7 @@ namespace Foundation
 		[Export ("initWithBool:")]
 		IntPtr Constructor (bool value);
 
+#if !NET
 		[DesignatedInitializer]
 		[Export ("initWithInteger:")]
 		IntPtr Constructor (nint value);
@@ -11248,6 +11255,7 @@ namespace Foundation
 		[DesignatedInitializer]
 		[Export ("initWithUnsignedInteger:")]
 		IntPtr Constructor (nuint value);
+#endif
 	
 		[Export ("numberWithChar:")][Static]
 		NSNumber FromSByte (sbyte value);
@@ -13462,9 +13470,11 @@ namespace Foundation
 	[BaseType (typeof(NSObject))]
 	interface NSConditionLock : NSLocking {
 
+#if !NET
 		[DesignatedInitializer]
 		[Export ("initWithCondition:")]
 		IntPtr Constructor (nint condition);
+#endif
 
 		[Export ("condition")]
 		nint Condition { get; }

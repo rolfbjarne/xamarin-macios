@@ -30,8 +30,15 @@ namespace Foundation {
 		{
 		}
 
+#if !NET
 		public NSMutableOrderedSet (nint capacity) : base (capacity)
 		{
+		}
+#endif
+
+		public NSMutableOrderedSet (long capacity)
+		{
+			throw new NotImplementedException ();
 		}
 
 		public NSMutableOrderedSet (TKey start) : base (start)

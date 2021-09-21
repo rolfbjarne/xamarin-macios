@@ -34,7 +34,11 @@ using System.Runtime.InteropServices;
 using ObjCRuntime;
 using Foundation;
 
+#if NET
+using CFIndex = System.IntPtr;
+#else
 using CFIndex = System.nint;
+#endif
 
 namespace CoreFoundation {
 

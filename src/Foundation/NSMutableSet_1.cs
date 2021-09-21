@@ -64,9 +64,16 @@ namespace Foundation {
 		{
 		}
 
+#if !NET
 		public NSMutableSet (nint capacity)
 			: base (capacity)
 		{
+		}
+#endif
+
+		public NSMutableSet (long capacity)
+		{
+			throw new NotImplementedException ();
 		}
 
 		// Strongly typed versions of API from NSSet

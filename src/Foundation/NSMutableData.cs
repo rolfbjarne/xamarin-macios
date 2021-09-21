@@ -16,6 +16,11 @@ using System.Collections.Generic;
 namespace Foundation {
 	public partial class NSMutableData : IEnumerable, IEnumerable<byte> {
 
+		public NSMutableData (long capacity)
+		{
+			throw new NotImplementedException ();
+		}
+
 		public override byte this [nint idx] {
 			set {
 				if (idx < 0 || (ulong) idx > Length)

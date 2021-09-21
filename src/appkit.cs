@@ -26635,9 +26635,11 @@ namespace AppKit {
 		[Export ("numberOfVisibleItems")]
 		nint NumberOfVisibleItems { get; set; }
 
+#if !NET
 		[Export ("initWithNumberOfVisibleItems:")]
 		[DesignatedInitializer]
 		IntPtr Constructor (nint numberOfVisibleItems);
+#endif
 	}
 
 	public interface INSSharingServicePickerTouchBarItemDelegate {}

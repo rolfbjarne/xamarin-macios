@@ -719,6 +719,8 @@ namespace Registrar {
 					case "System.UInt32":
 					case "System.Int64":
 					case "System.UInt64":
+					case "System.IntPtr":
+					case "System.UIntPtr":
 					case "System.nint":
 					case "System.nuint":
 					case "System.Single":
@@ -2624,6 +2626,7 @@ namespace Registrar {
 			var typeFullName = GetTypeFullName (type);
 
 			switch (typeFullName) {
+			case "System.UIntPtr":
 			case "System.IntPtr": return "^v";
 			case "System.SByte": return "c";
 			case "System.Byte": return "C";

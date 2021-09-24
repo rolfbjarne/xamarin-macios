@@ -5,6 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <MergeSystemAssemblies>false</MergeSystemAssemblies>
     <RuntimeIdentifier>win</RuntimeIdentifier>
+    <IncludeMSBuildAssets Condition="'$(IncludeMSBuildAssets)' == ''">compile</IncludeMSBuildAssets>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip" Version="1.14.0" />
@@ -14,6 +15,10 @@
     <PackageReference Include="Xamarin.Messaging.Server" Version="$(MessagingVersion)" IncludeAssets="contentFiles" />
     <PackageReference Include="Xamarin.iOS.HotRestart.Client" Version="$(HotRestartVersion)" GeneratePathProperty="true" />
     <PackageReference Include="System.Diagnostics.Tracer" Version="2.0.8" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.Build" Version="15.9.20" IncludeAssets="$(IncludeMSBuildAssets)" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.8.0" IncludeAssets="$(IncludeMSBuildAssets)" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.8.0" IncludeAssets="$(IncludeMSBuildAssets)" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.8.0" IncludeAssets="$(IncludeMSBuildAssets)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Messaging\Xamarin.Messaging.Build\Xamarin.Messaging.Build.csproj">

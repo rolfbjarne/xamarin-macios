@@ -256,7 +256,7 @@ endif
 .libs/$(1)/libtest.dylib: .libs/$(2)/libtest.dylib .libs/$(3)/libtest.dylib | .libs/$(1)
 	$(Q) lipo -create -output $$@ $$^
 
-$(3)_TARGETS += \
+$(4)_TARGETS += \
 	.libs/$(1)/XTest.framework$($(4)_BINARY_INFIX)/XTest \
 	.libs/$(1)/XTest.framework$($(4)_INFO_PLIST_INFIX)/Info.plist \
 	.libs/$(1)/XStaticObjectTest.framework/XStaticObjectTest \
@@ -265,7 +265,7 @@ $(3)_TARGETS += \
 	.libs/$(1)/libtest.a \
 	.libs/$(1)/libtest2.a \
 
-all-local:: $$($(3)_TARGETS)
+all-local:: $$($(4)_TARGETS)
 endef
 
 $(eval $(call FatFrameworkTemplate,ios-fat,iphoneos,iphonesimulator,IPHONESIMULATOR))
@@ -295,12 +295,12 @@ define FatFrameworkSymlinksTemplate
 	$(Q) mkdir -p $$(dir $$@)
 	$(Q) ln -fs A $$@
 
-$(3)_TARGETS += \
+$(4)_TARGETS += \
 	.libs/$(1)/XTest.framework/XTest \
 	.libs/$(1)/XTest.framework/Resources \
 	.libs/$(1)/XTest.framework/Versions/Current \
 
-all-local:: $$($(3)_TARGETS)
+all-local:: $$($(4)_TARGETS)
 endef
 
 ifdef INCLUDE_MACCATALYST
@@ -326,6 +326,32 @@ ifdef INCLUDE_MACCATALYST
 XCPLATFORMS+= maccatalyst
 endif
 
+define ZippedFrameworkTemplate
+.libs/$(1)/XTest.framework.zip: $$($(2)_TARGETS)
+	$$(Q) cd .libs/$(1) && zip -9r XTest.framework.zip XTest.framework
+
+ZIPPED_TARGETS += .libs/$(1)/XTest.framework.zip
+endef
+
+ifdef INCLUDE_IOS
+$(eval $(call ZippedFrameworkTemplate,ios-fat,IPHONESIMULATOR))
+endif
+ifdef INCLUDE_TVOS
+$(eval $(call ZippedFrameworkTemplate,tvos-fat,TVSIMULATOR))
+endif
+ifdef INCLUDE_WATCH
+$(eval $(call ZippedFrameworkTemplate,watchos-fat,WATCHSIMULATOR))
+endif
+ifdef INCLUDE_MACCATALYST
+$(eval $(call ZippedFrameworkTemplate,maccatalyst-fat,MACCATALYST))
+endif
+ifdef INCLUDE_MAC
+$(eval $(call ZippedFrameworkTemplate,macos-fat,MACOS))
+endif
+
+all-local:: $(ZIPPED_TARGETS)
+zip: $(ZIPPED_TARGETS)
+
 XTEST_XCFRAMEWORKS += $(foreach platform,$(XCPLATFORMS),.libs/$(platform)/XTest.framework)
 XTEST_XCTARGETS += \
 	$(foreach platform,$(XCPLATFORMS),.libs/$(platform)/XTest.framework.stamp) \
@@ -335,6 +361,11 @@ XTEST_XCTARGETS += \
 	$(Q_GEN) $(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $(foreach fw,$(XTEST_XCFRAMEWORKS),-framework $(fw)) -output $@
 
 all-local:: .libs/XTest.xcframework
+
+.libs/XTest.xcframework.zip: .libs/XTest.xcframework
+	$(Q) cd .libs && zip -9r "$(notdir $@)" "$(notdir $<)"
+
+all-local:: .libs/XTest.xcframework.zip
 
 # Xamarin.Mac
 

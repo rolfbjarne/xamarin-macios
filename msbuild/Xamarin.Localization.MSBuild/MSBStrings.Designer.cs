@@ -1940,6 +1940,24 @@ namespace Xamarin.Localization.MSBuild {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;PublishFolderType&apos; metadata value &apos;{0}&apos; on the item &apos;{1}&apos; is not recognized. The file will not be copied to the app bundle..
+        /// </summary>
+        public static string E7088 {
+            get {
+                return ResourceManager.GetString("E7088", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not specify a &apos;PublishFolderType&apos; metadata, and a default value could not be calcuated. The file will not be copied to the app bundle..
+        /// </summary>
+        public static string E7089 {
+            get {
+                return ResourceManager.GetString("E7089", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid framework: {0}.
         /// </summary>
         public static string InvalidFramework {

@@ -40,4 +40,7 @@
 	</PropertyGroup>
 
 	<!-- Logic for all test suites -->
+	<PropertyGroup>
+		<RootTestsDirectory Condition="'$(RootTestsDirectory)' == ''">$(MSBuildThisFileDirectory)/..</RootTestsDirectory>
+	</PropertyGroup>
 </Project>

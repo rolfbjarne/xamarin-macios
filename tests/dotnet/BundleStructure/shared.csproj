@@ -14,87 +14,155 @@
 
 		<!-- None items -->
 
-		<!-- Set CopyToOutputDirectory=true for some items -->
-		<None Update="A.txt">
+		<!-- Set CopyToOutputDirectory=true for some items with different extensions -->
+		<None Update="NoneA.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="B.dll">
+		<None Update="NoneB.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="C.pdb">
+		<None Update="NoneB.pdb">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="D.exe">
+		<None Update="NoneB.dll.mdb">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="E.dylib">
+		<None Update="NoneB.config">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="F.a">
+		<None Update="NoneC.pdb">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Sub/G.txt">
+		<None Update="NoneD.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="NoneE.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="NoneF.a">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Sub/NoneG.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<!-- from outside the project directory -->
-		<None Include="../H.txt">
+		<None Include="../NoneH.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<!-- With Link -->
-		<None Update="I.txt">
+		<None Update="NoneI.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>Somewhere/I.txt</Link>
 		</None>
 		<!-- With Link + relative path -->
-		<None Update="J.txt">
+		<None Update="NoneJ.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link Condition=" $(TargetFramework.EndsWith('-macos'))">../Somewhere/Else/J.txt</Link>
-			<Link Condition="!$(TargetFramework.EndsWith('-macos'))">Contents/Somewhere/Else/J.txt</Link>
+			<Link Condition=" $(TargetFramework.EndsWith('-macos'))">../Somewhere/Else/NoneJ.txt</Link>
+			<Link Condition="!$(TargetFramework.EndsWith('-macos'))">Contents/Somewhere/Else/NoneJ.txt</Link>
 		</None>
 		<!-- CopyToPublishDirectory instead of CopyToOutputDirectory -->
-		<None Update="K.txt">
+		<None Update="NoneK.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</None>
+		<!-- .config file without a related assembly (should be copied) -->
+		<None Update="NoneL.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<!-- unknown file (should not be copied, warning should be shown) -->
+		<None Update="NoneM.unknown">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(CompressedFramework)' != 'true'">
+		<!-- native framework (unzipped) -->
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/XTest" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="!($(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Versions/A/Resources/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Versions/A/XTest" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Versions/Current" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Resources" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
+
+		<!-- native xcframework (unzipped) -->
+		<None Include="$(RootTestsDirectory)/.libs//XTest.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(CompressedFramework)' == 'true'">
+		<!-- native framework (zipped) -->
+		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework.zip" CopyToOutputDirectory="PreserveNewest" />
+
+		<!-- native xcframework (zipped) -->
+		<None Include="$(RootTestsDirectory)/.libs//XTest.xcframework.zip" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- TODO: add test case for: "*.resources/* files next to an assembly with the same name is treated as a third-party binding, and we handle it as such (the exact details are not relevant for this discussion)." -->
+
+		<!-- random png image -->
+		<None Include="$(RootTestsDirectory)/monotouch-test/basn3p08.png" CopyToOutputDirectory="PreserveNewest" />
+
+		<!-- random jpg image -->
+		<None Include="$(RootTestsDirectory)/msbuild/Xamarin.MacDev.Tasks.Tests/Resources/iTunesArtwork.jpg" CopyToOutputDirectory="PreserveNewest" />
+
+		<!-- Unknown types of 'None' items with specific 'PublishFolderType' set -->
+
+		<None Update="UnknownA.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="None" />
+		<None Update="UnknownB.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Assembly" />
+		<None Update="UnknownC.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Resource" />
+		<None Update="UnknownD.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="AppleFramework" />
+		<None Update="UnknownE.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="CompressedAppleFramework" />
+		<None Update="UnknownF.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="AppleBindingResource" />
+		<None Update="UnknownG.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="PlugIns" />
+		<None Update="UnknownH.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="CompressedPlugIns" />
+		<None Update="UnknownI.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Unknown" />
+		<None Update="UnknownJ.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="RootDirectory" />
+
+		<None Update="NotQuiteUnknownA.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownA.bin" PublishFolderType="Assembly" />
+		<None Update="NotQuiteUnknownB.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownB.bin" PublishFolderType="Resource" />
+		<None Update="NotQuiteUnknownC.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownC.bin" PublishFolderType="AppleFramework" />
+		<None Update="NotQuiteUnknownD.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownD.bin" PublishFolderType="CompressedAppleFramework" />
+		<None Update="NotQuiteUnknownE.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownE.bin" PublishFolderType="AppleBindingResource" />
+		<None Update="NotQuiteUnknownF.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownF.bin" PublishFolderType="PlugIns" />
+		<None Update="NotQuiteUnknownG.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownG.bin" PublishFolderType="CompressedPlugIns" />
+		<None Update="NotQuiteUnknownH.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownH.bin" PublishFolderType="RootDirectory" />
 
 		<!-- Content items -->
 
 		<!-- Content without any metadata -->
-		<Content Include="L.txt" />
+		<Content Include="ContentA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<Content Include="M.txt">
+		<Content Include="ContentB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<!-- Content with CopyToPublishDirectory -->
-		<Content Include="N.txt">
+		<Content Include="ContentC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 
 		<!-- EmbeddedResource items -->
 
 		<!-- Content without any metadata -->
-		<EmbeddedResource Include="O.txt" />
+		<EmbeddedResource Include="ContentA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<EmbeddedResource Include="P.txt">
+		<EmbeddedResource Include="ContentB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<!-- Content with CopyToPublishDirectory -->
-		<EmbeddedResource Include="Q.txt">
+		<EmbeddedResource Include="ContentC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</EmbeddedResource>
 
 		<!-- BundleResource items -->
 
 		<!-- Content without any metadata -->
-		<BundleResource Include="R.txt" />
+		<BundleResource Include="EmbeddedResourceA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<BundleResource Include="S.txt">
+		<BundleResource Include="EmbeddedResourceB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</BundleResource>
 		<!-- Content with CopyToPublishDirectory -->
-		<BundleResource Include="T.txt">
+		<BundleResource Include="EmbeddedResourceC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</BundleResource>
-
 
 		<None Remove="@(Content)" />
 		<None Remove="@(EmbeddedResource)" />

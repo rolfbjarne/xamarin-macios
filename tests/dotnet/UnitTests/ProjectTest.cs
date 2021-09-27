@@ -579,9 +579,21 @@ namespace Xamarin.Tests {
 		}
 
 		[Test]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers)
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64", true)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm", true)]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64", true)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", true)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", true)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", true)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", true)]
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64", false)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm", false)]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64", false)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", false)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", false)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", false)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", false)]
+		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers, bool compressed)
 		{
 			var project = "BundleStructure";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -589,10 +601,11 @@ namespace Xamarin.Tests {
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
 
-			DotNet.AssertBuild (project_path, GetDefaultProperties (runtimeIdentifiers));
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["CompressedFramework"] = compressed ? "true" : "false";
+			DotNet.AssertBuild (project_path, properties);
 
 			var appExecutable = GetNativeExecutable (platform, appPath);
-			Assert.That (appExecutable, Does.Exist, "There is an executable");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 		}
 

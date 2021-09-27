@@ -45,6 +45,7 @@
 	<PropertyGroup>
 		<!-- Disable the implicit FSharp.Core reference, because sometimes the implicit reference wants a version that isn't available anywhere -->
 		<DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+		<RootTestsDirectory Condition="'$(RootTestsDirectory)' == ''">$(MSBuildThisFileDirectory)/..</RootTestsDirectory>
 	</PropertyGroup>
 
 	<ItemGroup>

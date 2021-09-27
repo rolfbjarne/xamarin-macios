@@ -586,7 +586,7 @@
 	<!-- Look in the _FrameworkNativeReference items for frameworks that need to be added to the app bundle, and add all those frameworks to _FrameworkToPublish -->
 	<Target Name="_ComputeFrameworkFilesToPublish" DependsOnTargets="_ExpandNativeReferences;_ComputeVariables;_LoadLinkerOutput">
 		<ItemGroup>
-			<!-- Collect the list of frameworks to publish from _FrameworkNativeReference. The ExtractBindingLibrariesStep in the linker might also add frameworks to _FrameworkToPublish -->
+			<!-- Collect the list of frameworks to publish from _FrameworkNativeReference. The ExtractBindingLibrariesStep in the linker and the _DecompressAppleFrameworks target might also add frameworks to _FrameworkToPublish -->
 			<_FrameworkToPublish Include="@(_FrameworkNativeReference)" Condition="'%(_FrameworkNativeReference.Kind)' == 'Framework' And '%(_FrameworkNativeReference.CopyToAppBundle)' != 'false'" />
 
 			<!-- Set TargetDirectory and SourceDirectory for all frameworks we have to publish -->
@@ -1204,6 +1204,77 @@
 				            "
 			/>
 		</ItemGroup>
+
+		<ComputeBundleLocation
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			ProjectDir="$(MSBuildProjectDirectory)"
+			ResolvedFileToPublish="@(ResolvedFileToPublish)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		>
+			<Output TaskParameter="ResolvedFileToPublish" ItemName="ResolvedFileToPublish" />
+		</ComputeBundleLocation>
+
+		<ItemGroup>
+			<_CompressedAppleFrameworks Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedAppleFramework'" />
+
+			<!-- we link with static libraries, but we don't copy them to the app bundle -->
+			<_ResolvedFileToPublish_StaticLibrary Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'StaticLibrary'" />
+			<_FileNativeReference Include="@(_ResolvedFileToPublish_StaticLibrary)" Kind="Static" />
+			<ResolvedFileToPublish Remove="@(_ResolvedFileToPublish_StaticLibrary)" />
+
+			<!-- we link with dynamic libraries, and we copy them to the app bundle (the copying part is handled in _ComputeDynamicLibrariesToPublish) -->
+			<_ResolvedFileToPublish_DynamicLibrary Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'DynamicLibrary'" />
+			<_FileNativeReference Include="@(_ResolvedFileToPublish_DynamicLibrary)" Kind="Dynamic" />
+			<ResolvedFileToPublish Remove="@(_ResolvedFileToPublish_DynamicLibrary)" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_DecompressAppleFrameworks"
+		Inputs="@(_CompressedAppleFrameworks)"
+		Outputs="@(_CompressedAppleFrameworks -> '%(Identity).stamp')"
+		>
+
+		<PropertyGroup>
+			<_IntermediateFrameworksDir>$(DeviceSpecificIntermediateOutputPath)frameworks</_IntermediateFrameworksDir>
+		</PropertyGroup>
+
+		<!-- FIXME: use the ditto task (need to add -x -k support) -->
+		<Exec
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Command="ditto -x -k &quot;%(_CompressedAppleFrameworks.Identity)&quot; &quot;$(_IntermediateFrameworksDir)/%(Filename)%(Extension)/&quot;">
+		</Exec>
+
+		<ItemGroup>
+			<!-- include any normal frameworks directly in _FrameworkNativeReference -->
+			<_FrameworkNativeReference Include="@(_DecompressedFramework)" Kind="Framework" />
+			<!-- .xcframeworks need to be resolved to a platform-specific .framework-->
+			<_DecompressedXCFramework Include="$(_IntermediateFrameworksDir)/%(Filename)%(Extension)/*.xcframework" />
+		</ItemGroup>
+
+		<!-- resolve the .xcframeworks -->
+		<ResolveXCFramework
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			XCFramework="@(_DecompressedXCFramework)"
+		>
+			<Output TaskParameter="Frameworks" ItemName="_ResolvedXCFramework" />
+		</ResolveXCFramework>
+
+		<ItemGroup>
+			<!-- include the resolved frameworks in _FrameworkNativeReference -->
+			<_FrameworkNativeReference Include="@(_ResolvedXCFramework)" Kind="Framework" />
+		</ItemGroup>
+
+		<Touch
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AlwaysCreate="true"
+			Files="@(_CompressedAppleFrameworks -> '%(Identity).stamp')"
+			>
+			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
+		</Touch>
 	</Target>
 
 	<Target Name="_ValidateRuntimeIdentifier"

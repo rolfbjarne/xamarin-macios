@@ -1343,4 +1343,21 @@
         <value>Expected a 'manifest' file in the directory {0}.</value>
         <comment>The following are literal names and should not be translated: manifest</comment>
     </data>
+
+    <data name="E7088" xml:space="preserve">
+        <value>The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle.</value>
+        <comment>
+            PublishFolderType: do not translate (name of metadata)
+            {0}: metadata value (read from a user file)
+            {1}: path to a file
+        </comment>
+    </data>
+
+    <data name="E7089" xml:space="preserve">
+        <value>The file '{0}' does not specify a 'PublishFolderType' metadata, and a default value could not be calcuated. The file will not be copied to the app bundle.</value>
+        <comment>
+            PublishFolderType: do not translate (name of metadata)
+            {0}: path to a file
+        </comment>
+    </data>
 </root>

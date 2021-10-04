@@ -150,6 +150,15 @@ namespace ObjCRuntime {
 			Marshal.WriteByte (xblock_descriptor->descriptor.signature + bytes.Length, 0); // null terminate string
 		}
 
+#if NET
+		// trampoline must be an unmanaged function pointer
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public unsafe void SetupBlockSafe (void* trampoline, object state)
+		{
+			throw new NotImplementedException ();
+		}
+#endif
+
 		// trampoline must be static, and someone else needs to keep a ref to it
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public void SetupBlockUnsafe (Delegate trampoline, Delegate userDelegate)

@@ -183,9 +183,15 @@ namespace AudioToolbox {
 
 		delegate void TrampolineCallback (IntPtr blockPtr);
 
+#if !NET
 		static unsafe readonly TrampolineCallback static_action = TrampolineAction;
+#endif
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (TrampolineCallback))]
+#endif
 		static unsafe void TrampolineAction (IntPtr blockPtr)
 		{
 			var block = (BlockLiteral *) blockPtr;
@@ -210,7 +216,11 @@ namespace AudioToolbox {
 				BlockLiteral block_handler;
 				block_handler = new BlockLiteral ();
 				block_ptr_handler = &block_handler;
+#if NET
+				block_handler.SetupBlockSafe ((delegate* unmanaged<IntPtr, void>) &TrampolineAction, onCompletion);
+#else
 				block_handler.SetupBlockUnsafe (static_action, onCompletion);
+#endif
 
 				AudioServicesPlayAlertSoundWithCompletion (soundId, block_ptr_handler);
 
@@ -246,7 +256,11 @@ namespace AudioToolbox {
 				BlockLiteral block_handler;
 				block_handler = new BlockLiteral ();
 				block_ptr_handler = &block_handler;
+#if NET
+				block_handler.SetupBlockSafe ((delegate* unmanaged<IntPtr, void>) &TrampolineAction, onCompletion);
+#else
 				block_handler.SetupBlockUnsafe (static_action, onCompletion);
+#endif
 
 				AudioServicesPlaySystemSoundWithCompletion (soundId, block_ptr_handler);
 

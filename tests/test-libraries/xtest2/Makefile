@@ -3,84 +3,141 @@ include $(TOP)/Make.config
 
 NAME=XTest2
 
-define Template
+# a few lookup tables, because the data we have is not always in the format we need it
 
-$(1)_$(NAME)_TARGETS += \
-	.libs/$(1)/$(NAME).framework$($(2)_BINARY_INFIX)/$(NAME) \
-	.libs/$(1)/$(NAME).framework$($(2)_INFO_PLIST_INFIX)/Info.plist \
-	.libs/$(1)/lib$(NAME).dylib \
-	.libs/$(1)/$(NAME).framework \
+COMMON_DYLIB_ARGS=-g -dynamiclib -gdwarf-2 -fms-extensions $(NAME).c -Wall -framework Foundation -lz
+iphonesimulator_DYLIB_FLAGS=$(COMMON_DYLIB_ARGS) -mios-simulator-version-min=8.0 -isysroot $(SIMULATOR_SDK)
+iphoneos_DYLIB_FLAGS=$(COMMON_DYLIB_ARGS) -miphoneos-version-min=8.0 -isysroot $(DEVICE_SDK)
+tvsimulator_DYLIB_FLAGS=$(COMMON_DYLIB_ARGS) -mtvos-simulator-version-min=9.0 -isysroot $(SIMULATORTV_SDK)
+tvos_DYLIB_FLAGS=$(COMMON_DYLIB_ARGS) -mtvos-version-min=9.0 -fembed-bitcode -isysroot $(DEVICETV_SDK)
+maccatalyst_DYLIB_FLAGS=$(COMMON_DYLIB_ARGS) $(MACCATALYST_COMMON_CFLAGS)
+mac_DYLIB_FLAGS=$(COMMON_DYLIB_ARGS) -mmacosx-version-min=$(MIN_OSX_VERSION_FOR_MAC) -isysroot $(XCODE_DEVELOPER_ROOT)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(OSX_SDK_VERSION).sdk
 
-$(1)_TARGETS += \
-	$($(1)_$(NAME)_TARGETS) \
-	.libs/$(1)/$(NAME).framework.stamp \
+maccatalyst-x64_DYLIB_FLAGS=$(MACCATALYST_X86_64_CFLAGS)
+maccatalyst-arm64_DYLIB_FLAGS=$(MACCATALYST_ARM64_CFLAGS)
 
-all-local:: $$($(1)_TARGETS)
+iossimulator-x64_ARCHITECTURES=x86_64
+iossimulator-x86_ARCHITECTURES=i386
+ios-arm_ARCHITECTURES=armv7 armv7s
+ios-arm64_ARCHITECTURES=arm64
+tvossimulator-x64_ARCHITECTURES=x86_64
+tvos-arm64_ARCHITECTURES=arm64
+osx-x64_ARCHITECTURES=x86_64
+osx-arm64_ARCHITECTURES=arm64
+maccatalyst-x64_ARCHITECTURES=x86_64
+maccatalyst-arm64_ARCHITECTURES=arm64
 
-.libs/$(1)/$(NAME).framework.stamp: $$($(1)_$(NAME)_TARGETS)
+mac_SYMLINKS=1
+mac_INFO_PLIST_INFIX=/Versions/A/Resources
+mac_BINARY_INFIX=/Versions/A
+maccatalyst_SYMLINKS=1
+maccatalyst_INFO_PLIST_INFIX=/Versions/A/Resources
+maccatalyst_BINARY_INFIX=/Versions/A
+
+define DotNetTemplate
+
+$(2)_$(NAME)_TARGETS += \
+	.libs/$(2)/$(NAME).framework$($(1)_BINARY_INFIX)/$(NAME) \
+	.libs/$(2)/$(NAME).framework$($(1)_INFO_PLIST_INFIX)/Info.plist \
+	.libs/$(2)/lib$(NAME).dylib \
+	.libs/$(2)/$(NAME).framework \
+
+ifeq ($($(1)_SYMLINKS),1)
+$(2)_$(NAME)_TARGETS += \
+	.libs/$(2)/$(NAME).framework/$(NAME) \
+	.libs/$(2)/$(NAME).framework/Resources \
+	.libs/$(2)/$(NAME).framework/Versions/Current \
+	.libs/$(2)/$(NAME).framework/Versions/A/Resources/Info.plist \
+
+endif
+
+$(2)_TARGETS += \
+	$($(2)_$(NAME)_TARGETS) \
+	.libs/$(2)/$(NAME).framework.stamp \
+
+all-local:: $$($(2)_TARGETS)
+
+.libs/$(2)/$(NAME).framework.stamp: $$($(2)_$(NAME)_TARGETS)
 	$$(Q) touch $$@
 
-COMMON_DYLIB_ARGS=-g -dynamiclib -gdwarf-2 -fms-extensions $(NAME).c -o $$@ -Wall -framework Foundation -lz
-.libs/$(1)/x86/lib$(NAME).dylib: ARCH=i386
-.libs/$(1)/%/lib$(NAME).dylib: $(NAME).c | .libs/$(1)/%
-	$$(call Q_2,CC,    [$(1)]) $$(XCODE_CC) $$(COMMON_DYLIB_ARGS) -arch $$(if $$(ARCH),$$(ARCH),$$*) $(4) $$($(2)_$$(shell echo $$* | tr a-z A-Z)_OBJC_CFLAGS)
-	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -id @rpath/libtest.dylib $$@
+.libs/$(2)/lib$(NAME).dylib: $(NAME).c | .libs/$(2)
+	$$(call Q_2,CC,    [$(1)]) $$(XCODE_CC) -o $$@ $$(foreach arch,$$($(2)_ARCHITECTURES),-arch $$(arch)) $$($(1)_DYLIB_FLAGS) $$($(2)_DYLIB_FLAGS)
+	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -id @rpath/lib$(NAME).dylib $$@
 
-.libs/$(1)/lib$(NAME).dylib: $$(foreach arch,$(3),.libs/$(1)/$$(arch)/lib$(NAME).dylib)
-	$$(call Q_2,LIPO   [$(1)]) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo $$^ -create -output $$@
-
-.libs/$(1)/$(NAME).framework$($(2)_BINARY_INFIX)/$(NAME): .libs/$(1)/lib$(NAME).dylib | .libs/$(1)/$(NAME).framework$($(2)_BINARY_INFIX)
+.libs/$(2)/$(NAME).framework$($(1)_BINARY_INFIX)/$(NAME): .libs/$(2)/lib$(NAME).dylib | .libs/$(2)/$(NAME).framework$($(1)_BINARY_INFIX)
 	$$(Q) $(CP) $$^ $$@
 	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -id @rpath/$(NAME).framework/$(NAME) $$@
 
-.libs/$(1)/$(NAME).framework$($(2)_INFO_PLIST_INFIX)/Info.plist: $(NAME)-Info-$(1).plist | .libs/$(1)/$(NAME).framework$($(2)_INFO_PLIST_INFIX)
+.libs/$(2)/$(NAME).framework$($(1)_INFO_PLIST_INFIX)/Info.plist: $(NAME)-Info-$(1).plist | .libs/$(2)/$(NAME).framework$($(1)_INFO_PLIST_INFIX)
 	$$(Q) $(CP) $$^ $$@
 
-$(1)_XTEST2_DIRECTORIES = \
-	.libs/$(1)/$(NAME).framework \
-	.libs/$(1)/$(NAME).framework/Versions \
-	$$(foreach arch,$(3),.libs/$(1)/$$(arch)) \
+$(2)_$(NAME)_DIRECTORIES = \
+	.libs/$(2) \
+	.libs/$(2)/$(NAME).framework \
+	.libs/$(2)/$(NAME).framework/Versions \
 
-$$($(1)_XTEST2_DIRECTORIES):
+$$($(2)_$(NAME)_DIRECTORIES):
 	$$(Q) mkdir -p $$@
+
+.libs/$(2)/$(NAME).framework.zip: $$($(2)_TARGETS)
+	$$(Q) cd $$(dir $$@) && zip -9r $$(notdir $$@) $(NAME).framework
+
+ZIPPED_TARGETS += .libs/$(2)/$(NAME).framework.zip
+
+# some additional targets if the framework has macOS-like structure (i.e. has symlinks)
+ifeq ($($(1)_SYMLINKS),1)
+.libs/$(2)/$(NAME).framework$($(1)_BINARY_INFIX) .libs/$(2)/$(NAME).framework$($(1)_INFO_PLIST_INFIX):
+	$$(Q) mkdir -p $$@
+
+.libs/$(2)/$(NAME).framework/$(NAME): | .libs/$(2)/$(NAME).framework
+	$$(Q) ln -fs Versions/A/$(NAME) $$@
+
+.libs/$(2)/$(NAME).framework/Resources: | .libs/$(2)/$(NAME).framework
+	$$(Q) ln -fs Versions/Current/Resources $$@
+
+.libs/$(2)/$(NAME).framework/Versions/Current: | .libs/$(2)/$(NAME).framework/Versions
+	$$(Q) ln -fs A $$@
+endif
 
 endef
 
-# 1: platform infix
-# 2: platform variable
-# 3: architectures
-# 4: extra clang arguments
-ifdef INCLUDE_IOS
-$(eval $(call Template,iphonesimulator,IOSSIMULATOR,x86 x86_64,-mios-simulator-version-min=8.0 -isysroot $(SIMULATOR_SDK)))
-$(eval $(call Template,iphoneos,IPHONEOS,armv7 armv7s arm64,-miphoneos-version-min=8.0 -isysroot $(DEVICE_SDK)))
-XCPLATFORMS+= iphoneos iphonesimulator
-endif
-ifdef INCLUDE_TVOS
-$(eval $(call Template,tvsimulator,TVSIMULATOR,x86_64,-mtvos-simulator-version-min=9.0 -isysroot $(SIMULATORTV_SDK)))
-$(eval $(call Template,tvos,TVOS,arm64,-mtvos-version-min=9.0 -fembed-bitcode -isysroot $(DEVICETV_SDK)))
-XCPLATFORMS+= tvos tvsimulator
-endif
-ifdef INCLUDE_WATCH
-$(eval $(call Template,watchsimulator,WATCHSIMULATOR,x86 x86_64,-mwatchos-simulator-version-min=2.0 -isysroot $(SIMULATORWATCH_SDK)))
-$(eval $(call Template,watchos,WATCHOS,armv7k arm64_32,-mwatchos-version-min=2.0 -fembed-bitcode -isysroot $(DEVICEWATCH_SDK)))
-XCPLATFORMS+= watchos watchsimulator
-endif
-ifdef INCLUDE_MAC
-$(eval $(call Template,macos,MACOS,x86_64 arm64,-mmacosx-version-min=$(MIN_OSX_VERSION_FOR_MAC) -isysroot $(XCODE_DEVELOPER_ROOT)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(OSX_SDK_VERSION).sdk))
-XCPLATFORMS+= macos
-endif
-ifdef INCLUDE_MACCATALYST
-$(eval $(call Template,maccatalyst,MACCATALYST,x86_64 arm64,$(MACCATALYST_COMMON_CFLAGS)))
-XCPLATFORMS+= maccatalyst
-endif
+# 1: sdk platform (iphoneos, iphonesimulator, tvos, tvsimulator, maccatalyst, mac)
+# 2: runtime identifier
+$(foreach platform,$(DOTNET_PLATFORMS),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(eval $(call DotNetTemplate,$(DOTNET_$(rid)_SDK_PLATFORM),$(rid)))))
 
-$(NAME)_XCFRAMEWORKS = $(foreach platform,$(XCPLATFORMS),-framework .libs/$(platform)/$(NAME).framework)
-$(NAME)_XCTARGETS = $(foreach platform,$(XCPLATFORMS),.libs/$(platform)/$(NAME).framework.stamp) \
+# For XCFrameworks, we have to lipo some of the RID-specific frameworks together (the ones with multiple RIDs just below)
+iphonesimulator_XC_RUNTIMEIDENTIFIERS=iossimulator-x86 iossimulator-x64
+iphoneos_XC_RUNTIMEIDENTIFIERS=ios-arm ios-arm64
+tvsimulator_XC_RUNTIMEIDENTIFIERS=tvossimulator-x64
+tvos_XC_RUNTIMEIDENTIFIERS=tvos-arm64
+mac_XC_RUNTIMEIDENTIFIERS=osx-x64 osx-arm64
+maccatalyst_XC_RUNTIMEIDENTIFIERS=maccatalyst-x64 maccatalyst-arm64
 
-.libs/$(NAME).xcframework: $($(NAME)_XCTARGETS) Makefile
-	$(Q) rm -rf $@
-	$(Q_GEN) $(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $($(NAME)_XCFRAMEWORKS) -output $@
+define DotNetXCTemplate
+.libs/$(2)/$(NAME).framework.stamp: $$(foreach rid,$$($(2)_XC_RUNTIMEIDENTIFIERS),.libs/$$(rid)/$(NAME).framework.stamp) .libs/$(2)
+	$$(Q) rm -Rf .libs/$(2)/$(NAME).framework
+	$$(Q) $(CP) -R .libs/$$(firstword $$($(2)_XC_RUNTIMEIDENTIFIERS))/$(NAME).framework .libs/$(2)/$(NAME).framework
+ifneq ($$(words $($(2)_XC_RUNTIMEIDENTIFIERS)),1)
+	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo $$(foreach rid,$$($(2)_XC_RUNTIMEIDENTIFIERS),.libs/$$(rid)/$(NAME).framework$($(2)_BINARY_INFIX)/$(NAME)) -create -output .libs/$(2)/$(NAME).framework$($(2)_BINARY_INFIX)/$(NAME)
+endif
+	$$(Q) touch $$@
 
-all-local:: .libs/$(NAME).xcframework
+.libs/$(2):
+	$$(Q) mkdir -p $$@
 
-include $(TOP)/mk/rules.mk
+XCPLATFORMS += $(2)
+XCTARGETS += .libs/$(2)/$(NAME).framework.stamp
+XCFRAMEWORKS += -framework .libs/$(2)/$(NAME).framework
+endef
+
+$(foreach platform,$(DOTNET_PLATFORMS),$(foreach xcplatform,$(DOTNET_$(platform)_SDK_PLATFORMS),$(eval $(call DotNetXCTemplate,$(platform),$(xcplatform)))))
+
+zip: $(ZIPPED_TARGETS)
+all-local:: $(ZIPPED_TARGETS)
+
+.libs/$(NAME).xcframework.stamp: $(XCTARGETS) Makefile
+	$(Q) rm -rf .libs/$(NAME).xcframework
+	$(Q_GEN) $(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $(XCFRAMEWORKS) -output .libs/$(NAME).xcframework
+	$(Q) touch $@
+
+all-local:: .libs/$(NAME).xcframework.stamp

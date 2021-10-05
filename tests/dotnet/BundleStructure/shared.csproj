@@ -6,6 +6,8 @@
 		<ApplicationTitle>BundleStructure</ApplicationTitle>
 		<ApplicationId>com.xamarin.bundlestructure</ApplicationId>
 		<ApplicationVersion>1.0</ApplicationVersion>
+
+		<AppManifestDetectionEnabled>false</AppManifestDetectionEnabled>
 	</PropertyGroup>
 
 	<Import Project="../../common/shared-dotnet.csproj" />
@@ -80,18 +82,16 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(CompressedFramework)' != 'true'">
+	<!-- Only uncompressed for mobile platforms, because macOS and Mac Catalyst frameworks have symlinks, which MSBuild doesn't handle very well, so for now we're just supporting compressed versions in that case -->
+	<ItemGroup Condition="'$(CompressedFramework)' != 'true' And !($(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst')))">
 		<!-- native framework (unzipped) -->
 		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/XTest" CopyToOutputDirectory="PreserveNewest" />
-		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="!($(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst')))"  />
-		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Versions/A/Resources/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
-		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Versions/A/XTest" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
-		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Versions/Current" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
-		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Resources" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Info.plist" CopyToOutputDirectory="PreserveNewest" />
 
 		<!-- native xcframework (unzipped) -->
 		<None Include="$(RootTestsDirectory)/test-libraries/.libs//XTest.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
+
 	<ItemGroup Condition="'$(CompressedFramework)' == 'true'">
 		<!-- native framework (zipped) -->
 		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework.zip" CopyToOutputDirectory="PreserveNewest" />
@@ -147,26 +147,26 @@
 		<!-- EmbeddedResource items -->
 
 		<!-- Content without any metadata -->
-		<EmbeddedResource Include="ContentA.txt" />
+		<EmbeddedResource Include="EmbeddedResourceA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<EmbeddedResource Include="ContentB.txt">
+		<EmbeddedResource Include="EmbeddedResourceB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<!-- Content with CopyToPublishDirectory -->
-		<EmbeddedResource Include="ContentC.txt">
+		<EmbeddedResource Include="EmbeddedResourceC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</EmbeddedResource>
 
 		<!-- BundleResource items -->
 
 		<!-- Content without any metadata -->
-		<BundleResource Include="EmbeddedResourceA.txt" />
+		<BundleResource Include="BundleResourceA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<BundleResource Include="EmbeddedResourceB.txt">
+		<BundleResource Include="BundleResourceB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</BundleResource>
 		<!-- Content with CopyToPublishDirectory -->
-		<BundleResource Include="EmbeddedResourceC.txt">
+		<BundleResource Include="BundleResourceC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</BundleResource>
 

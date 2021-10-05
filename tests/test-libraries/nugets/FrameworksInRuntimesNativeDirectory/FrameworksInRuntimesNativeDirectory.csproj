@@ -16,42 +16,42 @@
   <!-- XTest.framework -->
   <ItemGroup>
     <!-- iOS -->
-    <None Include="$(XTestDirectory)/.libs/iphoneos/XTest.framework/*"                    Pack="true" PackagePath="runtimes/ios-arm64/native/XTest.framework/" />
-    <None Include="$(XTestDirectory)/.libs/iphoneos/XTest.framework/*"                    Pack="true" PackagePath="runtimes/ios-arm/native/XTest.framework/" />
-    <None Include="$(XTestDirectory)/.libs/iphonesimulator/XTest.framework/*"             Pack="true" PackagePath="runtimes/iossimulator-x64/native/XTest.framework/" />
-    <None Include="$(XTestDirectory)/.libs/iphonesimulator/XTest.framework/*"             Pack="true" PackagePath="runtimes/iossimulator-x86/native/XTest.framework/" />
+    <None Include="$(XTestDirectory)/.libs/iphoneos/XTest.framework/*"              Pack="true" PackagePath="runtimes/ios-arm64/native/XTest.framework/" />
+    <None Include="$(XTestDirectory)/.libs/iphoneos/XTest.framework/*"              Pack="true" PackagePath="runtimes/ios-arm/native/XTest.framework/" />
+    <None Include="$(XTestDirectory)/.libs/iphonesimulator/XTest.framework/*"       Pack="true" PackagePath="runtimes/iossimulator-x64/native/XTest.framework/" />
+    <None Include="$(XTestDirectory)/.libs/iphonesimulator/XTest.framework/*"       Pack="true" PackagePath="runtimes/iossimulator-x86/native/XTest.framework/" />
 
     <!-- tvOS -->
     <None Include="$(XTestDirectory)/.libs/tvos/XTest.framework/*"                  Pack="true" PackagePath="runtimes/tvos-arm64/native/XTest.framework/" />
     <None Include="$(XTestDirectory)/.libs/tvsimulator/XTest.framework/*"           Pack="true" PackagePath="runtimes/tvossimulator-x64/native/XTest.framework/" />
 
     <!-- macOS -->
-    <None Include="$(XTestDirectory)/.libs/macos-fat/XTest.framework.zip"                    Pack="true" PackagePath="runtimes/osx-x64/native/XTest.framework.zip" />
-    <None Include="$(XTestDirectory)/.libs/macos-fat/XTest.framework.zip"                    Pack="true" PackagePath="runtimes/osx-arm64/native/XTest.framework.zip" />
+    <None Include="$(XTestDirectory)/.libs/macos-fat/XTest.framework.zip"           Pack="true" PackagePath="runtimes/osx-x64/native/XTest.framework.zip" />
+    <None Include="$(XTestDirectory)/.libs/macos-fat/XTest.framework.zip"           Pack="true" PackagePath="runtimes/osx-arm64/native/XTest.framework.zip" />
 
     <!-- Mac Catalyst -->
-    <None Include="$(XTestDirectory)/.libs/maccatalyst-fat/XTest.framework.zip"              Pack="true" PackagePath="runtimes/maccatalyst-x64/native/XTest.framework.zip" />
-    <None Include="$(XTestDirectory)/.libs/maccatalyst-fat/XTest.framework.zip"              Pack="true" PackagePath="runtimes/maccatalyst-arm64/native/XTest.framework.zip" />
+    <None Include="$(XTestDirectory)/.libs/maccatalyst-fat/XTest.framework.zip"     Pack="true" PackagePath="runtimes/maccatalyst-x64/native/XTest.framework.zip" />
+    <None Include="$(XTestDirectory)/.libs/maccatalyst-fat/XTest.framework.zip"     Pack="true" PackagePath="runtimes/maccatalyst-arm64/native/XTest.framework.zip" />
   </ItemGroup>
 
   <!-- XTest2.framework -->
   <ItemGroup>
     <!-- iOS -->
-    <None Include="$(XTest2Directory)/.libs/ios-arm64/XTest2.framework/*"                 Pack="true" PackagePath="runtimes/ios-arm64/native/XTest2.framework/" />
-    <None Include="$(XTest2Directory)/.libs/ios-arm/XTest2.framework/*"                   Pack="true" PackagePath="runtimes/ios-arm/native/XTest2.framework/" />
-    <None Include="$(XTest2Directory)/.libs/iossimulator-x64/XTest2.framework/*"          Pack="true" PackagePath="runtimes/iossimulator-x64/native/XTest2.framework/" />
-    <None Include="$(XTest2Directory)/.libs/iossimulator-x86/XTest2.framework/*"          Pack="true" PackagePath="runtimes/iossimulator-x86/native/XTest2.framework/" />
+    <None Include="$(XTest2Directory)/.libs/ios-arm64/XTest2.framework/*"           Pack="true" PackagePath="runtimes/ios-arm64/native/XTest2.framework/" />
+    <None Include="$(XTest2Directory)/.libs/ios-arm/XTest2.framework/*"             Pack="true" PackagePath="runtimes/ios-arm/native/XTest2.framework/" />
+    <None Include="$(XTest2Directory)/.libs/iossimulator-x64/XTest2.framework/*"    Pack="true" PackagePath="runtimes/iossimulator-x64/native/XTest2.framework/" />
+    <None Include="$(XTest2Directory)/.libs/iossimulator-x86/XTest2.framework/*"    Pack="true" PackagePath="runtimes/iossimulator-x86/native/XTest2.framework/" />
 
     <!-- tvOS -->
-    <None Include="$(XTest2Directory)/.libs/tvos-arm64/XTest2.framework/*"                Pack="true" PackagePath="runtimes/tvos-arm64/native/XTest2.framework/" />
-    <None Include="$(XTest2Directory)/.libs/tvossimulator-x64/XTest2.framework/*"         Pack="true" PackagePath="runtimes/tvossimulator-x64/native/XTest2.framework/" />
+    <None Include="$(XTest2Directory)/.libs/tvos-arm64/XTest2.framework/*"          Pack="true" PackagePath="runtimes/tvos-arm64/native/XTest2.framework/" />
+    <None Include="$(XTest2Directory)/.libs/tvossimulator-x64/XTest2.framework/*"   Pack="true" PackagePath="runtimes/tvossimulator-x64/native/XTest2.framework/" />
 
     <!-- macOS -->
-    <None Include="$(XTest2Directory)/.libs/osx-x64/XTest2.framework.zip"                      Pack="true" PackagePath="runtimes/osx-x64/native/XTest2.framework.zip" />
-    <None Include="$(XTest2Directory)/.libs/osx-arm64/XTest2.framework.zip"                    Pack="true" PackagePath="runtimes/osx-arm64/native/XTest2.framework.zip" />
+    <None Include="$(XTest2Directory)/.libs/osx-x64/XTest2.framework.zip"           Pack="true" PackagePath="runtimes/osx-x64/native/XTest2.framework.zip" />
+    <None Include="$(XTest2Directory)/.libs/osx-arm64/XTest2.framework.zip"         Pack="true" PackagePath="runtimes/osx-arm64/native/XTest2.framework.zip" />
 
     <!-- Mac Catalyst -->
-    <None Include="$(XTest2Directory)/.libs/maccatalyst-x64/XTest2.framework.zip"              Pack="true" PackagePath="runtimes/maccatalyst-x64/native/XTest2.framework.zip" />
-    <None Include="$(XTest2Directory)/.libs/maccatalyst-arm64/XTest2.framework.zip"            Pack="true" PackagePath="runtimes/maccatalyst-arm64/native/XTest2.framework.zip" />
+    <None Include="$(XTest2Directory)/.libs/maccatalyst-x64/XTest2.framework.zip"   Pack="true" PackagePath="runtimes/maccatalyst-x64/native/XTest2.framework.zip" />
+    <None Include="$(XTest2Directory)/.libs/maccatalyst-arm64/XTest2.framework.zip" Pack="true" PackagePath="runtimes/maccatalyst-arm64/native/XTest2.framework.zip" />
   </ItemGroup>
 </Project>

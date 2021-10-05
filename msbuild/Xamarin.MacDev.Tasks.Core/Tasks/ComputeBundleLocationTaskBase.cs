@@ -15,23 +15,26 @@ using Xamarin.Localization.MSBuild;
 
 namespace Xamarin.MacDev.Tasks {
 	public abstract class ComputeBundleLocationTaskBase : XamarinTask {
-		public string? AssemblyDirectory { get; set; }
-
-		public string? FrameworksDirectory { get; set; }
-
-		public string? PlugInsDirectory { get; set; }
+		// not required because this can be the root directory (so an empty string)
+		public string AssemblyDirectory { get; set; } = string.Empty;
 
 		[Required]
-		public string? ProjectDir { get; set; }
-
-		public string? ResourceDirectory { get; set; }
+		public string FrameworksDirectory { get; set; } = string.Empty;
 
 		[Required]
-		[Output]
-		public ITaskItem[]? ResolvedFileToPublish { get; set; }
+		public string PlugInsDirectory { get; set; } = string.Empty;
+
+		[Required]
+		public string ProjectDir { get; set; } = string.Empty;
+
+		// not required because this can be the root directory (so an empty string)
+		public string ResourceDirectory { get; set; } = string.Empty;
+
+		[Required]
+		public ITaskItem []? ResolvedFileToPublish { get; set; }
 
 		[Output]
-		public ITaskItem[]? CompressedFrameworks { get; set; }
+		public ITaskItem []? UpdatedResolvedFileToPublish { get; set; }
 
 		public override bool Execute ()
 		{
@@ -40,28 +43,13 @@ namespace Xamarin.MacDev.Tasks {
 
 			var list = ResolvedFileToPublish.ToList ();
 
-			// First remove all with unknown PublishFolderType or where it's 'None'
-			list.RemoveAll (v => {
-				var publishFolderType = ParsePublishFolderType (v);
-				switch (publishFolderType) {
-				case PublishFolderType.None:
-					return true;
-				case PublishFolderType.Unknown:
-					Log.LogWarning (MSBStrings.E7088 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. */, v.GetMetadata ("PublishFolderType"), v.ItemSpec);
-					return true;
-				}
-				return false;
-			});
-
-			for (var i = list.Count - 1; i >= 0; i--) {
-				var item = list [i];
+			foreach (var item in list) { 
 				var publishFolderType = ParsePublishFolderType (item);
 				if (publishFolderType == PublishFolderType.Unset) {
 					publishFolderType = ComputePublishFolderType (list, item);
 					item.SetMetadata ("PublishFolderType", publishFolderType.ToString ());
 				}
 
-				var virtualProjectPath = BundleResource.GetVirtualProjectPath (ProjectDir, item, !string.IsNullOrEmpty (SessionId));
 				var relativePath = string.Empty;
 				switch (publishFolderType) {
 				case PublishFolderType.Assembly:
@@ -79,35 +67,63 @@ namespace Xamarin.MacDev.Tasks {
 				case PublishFolderType.AppleBindingResource:
 					throw new NotImplementedException ();
 				case PublishFolderType.CompressedPlugIns: // FIXME
-					relativePath = FrameworksDirectory;
+					relativePath = PlugInsDirectory;
 					break;
 				case PublishFolderType.PlugIns:
 					relativePath = PlugInsDirectory;
 					break;
 				case PublishFolderType.RootDirectory:
 					break;
-				case PublishFolderType.None:
-					list.RemoveAt (i);
+				case PublishFolderType.DynamicLibrary:
+					// FIXME: don't copy at all for release mobile builds?
+					relativePath = AssemblyDirectory;
 					break;
+				case PublishFolderType.None:
+					continue;
 				case PublishFolderType.Unknown:
 				default:
-					Log.LogWarning (MSBStrings.E7088 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. */, item.GetMetadata ("PublishFolderType"), item.ItemSpec);
-					list.RemoveAt (i);
-					break;
+					item.SetMetadata ("PublishFolderType", "None");
+					ReportUnknownPublishFolderType (item);
+					continue;
 				}
 
-				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
+				// var virtualProjectPath = BundleResource.GetVirtualProjectPath (ProjectDir, item, !string.IsNullOrEmpty (SessionId));
+				// item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
+				item.SetMetadata ("RelativePath", Path.Combine (relativePath, Path.GetFileName (item.ItemSpec)));
 			}
 
-			ResolvedFileToPublish = list.ToArray ();
+			UpdatedResolvedFileToPublish = list.ToArray ();
 
 			return !Log.HasLoggedErrors;
 		}
 
+		void ReportUnknownPublishFolderType (ITaskItem item)
+		{
+			var publishFolderType = item.GetMetadata ("PublishFolderType");
+
+			var metadata = item.GetMetadata ("CopyToOutputDirectory");
+			if (!string.IsNullOrEmpty (metadata)) {
+				Log.LogWarning (MSBStrings.E7090 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the '{2}' metadata on the item. */, publishFolderType, item.ItemSpec, "CopyToOutputDirectory");
+				return;
+			}
+
+			metadata = item.GetMetadata ("CopyToPublishDirectory");
+			if (!string.IsNullOrEmpty (metadata)) {
+				Log.LogWarning (MSBStrings.E7090 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the '{2}' metadata on the item. */, publishFolderType, item.ItemSpec, "CopyToPublishDirectory");
+				return;
+			}
+
+			Log.LogWarning (MSBStrings.E7088 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. */, publishFolderType, item.ItemSpec);
+		}
 
 		PublishFolderType ComputePublishFolderType (IList<ITaskItem> items, ITaskItem item)
 		{
 			var filename = item.ItemSpec;
+
+			var publishedItems = items.Where (v => {
+				var type = ParsePublishFolderType (v);
+				return type != PublishFolderType.None && type != PublishFolderType.Unknown;
+			});
 
 			// Assemblies and their related files
 			if (filename.EndsWith (".dll", StringComparison.OrdinalIgnoreCase)) {
@@ -123,7 +139,7 @@ namespace Xamarin.MacDev.Tasks {
 				// If we're publishing any assemblies that matches this .config file, then consider the .config as an assembly file
 				var dllName = Path.ChangeExtension (filename, "dll");
 				var exeName = Path.ChangeExtension (filename, "exe");
-				if (items.Any (v => string.Equals (v.ItemSpec, dllName, StringComparison.OrdinalIgnoreCase) || string.Equals (v.ItemSpec, exeName, StringComparison.OrdinalIgnoreCase)))
+				if (publishedItems.Any (v => string.Equals (v.ItemSpec, dllName, StringComparison.OrdinalIgnoreCase) || string.Equals (v.ItemSpec, exeName, StringComparison.OrdinalIgnoreCase)))
 					return PublishFolderType.Assembly;
 			}
 
@@ -185,7 +201,7 @@ namespace Xamarin.MacDev.Tasks {
 		static PublishFolderType ParsePublishFolderType (string value)
 		{
 			if (string.IsNullOrEmpty (value))
-				return PublishFolderType.Unknown;
+				return PublishFolderType.Unset;
 
 			if (!Enum.TryParse<PublishFolderType> (value, out var result))
 				result = PublishFolderType.Unknown;

@@ -1,6 +1,7 @@
 TOP=../..
 
 include $(TOP)/Make.config
+include $(TOP)/tests/test.config
 
 # This tells NuGet to use the nupkgs we're building locally,
 # and to put any extracted packages in the 'packages' directory (to not clutter up ~/.nuget/packages)
@@ -9,6 +10,7 @@ NuGet.config: $(TOP)/NuGet.config Makefile
 ifdef CUSTOM_DOTNET
 	$(Q) nuget sources add -Name dev-runtime-feed -Source $(abspath $(DOTNET_RUNTIME_PATH)/artifacts/packages/Release/Shipping) -ConfigFile $@.tmp
 endif
+	$(Q) nuget sources add -Name local-tests-feed -Source $(abspath $(NUGET_TEST_FEED)) -ConfigFile $@.tmp
 	$(Q) nuget config -Set globalPackagesFolder=$(abspath $(CURDIR)/packages) -Config $@.tmp
 	$(Q) nuget config -Set repositorypath=$(abspath $(CURDIR)/packages) -Config $@.tmp
 	$(Q) mv $@.tmp $@

@@ -3,14 +3,20 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 
-		<ApplicationTitle>MySimpleApp</ApplicationTitle>
-		<ApplicationId>com.xamarin.mysimpleapp</ApplicationId>
-		<ApplicationVersion>3.14</ApplicationVersion>
+		<ApplicationTitle>BundleStructure</ApplicationTitle>
+		<ApplicationId>com.xamarin.bundlestructure</ApplicationId>
+		<ApplicationVersion>1.0</ApplicationVersion>
 	</PropertyGroup>
+
+	<Import Project="../../common/shared-dotnet.csproj" />
+
+	<ItemGroup>
+		<!-- This is a NuGet with multiple frameworks (either .framework directoroes or .framework.zip files depending on the platform) in the runtimes/<rid>/native folder -->
+		<PackageReference Include="Xamarin.Tests.FrameworksInRuntimesNativeDirectory" Version="1.0.0" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Include="../*.cs" />
-		<None Include="Info.plist" />
 
 		<!-- None items -->
 
@@ -76,22 +82,22 @@
 
 	<ItemGroup Condition="'$(CompressedFramework)' != 'true'">
 		<!-- native framework (unzipped) -->
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/XTest" CopyToOutputDirectory="PreserveNewest" />
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="!($(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Versions/A/Resources/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Versions/A/XTest" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Versions/Current" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework/Resources" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos') Or $(TargetFramework.EndsWith('-maccatalyst')"  />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/XTest" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="!($(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst')))"  />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Versions/A/Resources/Info.plist" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Versions/A/XTest" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Versions/Current" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework/Resources" CopyToOutputDirectory="PreserveNewest" Condition="$(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst'))"  />
 
 		<!-- native xcframework (unzipped) -->
-		<None Include="$(RootTestsDirectory)/.libs//XTest.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs//XTest.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(CompressedFramework)' == 'true'">
 		<!-- native framework (zipped) -->
-		<None Include="$(RootTestsDirectory)/.libs/$(NativeLibName)/XTest.framework.zip" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs/$(NativeLibName)/XTest.framework.zip" CopyToOutputDirectory="PreserveNewest" />
 
 		<!-- native xcframework (zipped) -->
-		<None Include="$(RootTestsDirectory)/.libs//XTest.xcframework.zip" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/.libs//XTest.xcframework.zip" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<ItemGroup>

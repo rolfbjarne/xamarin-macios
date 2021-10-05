@@ -20,6 +20,8 @@ export MSBuildExtensionsPathFallbackPathsOverride=$(IOS_DESTDIR)/Library/Framewo
 export XAMMAC_FRAMEWORK_PATH=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 export XamarinMacFrameworkRoot=$(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current
 
+NUGET_TEST_FEED=$(abspath $(TOP)/tests/.nuget/packages)
+
 ifneq ($(RELEASE),)
 ifneq ($(BITCODE),)
 CONFIG=Release-bitcode
@@ -76,6 +78,7 @@ test.config: Makefile $(TOP)/Make.config $(TOP)/mk/mono.mk $(TOP)/eng/Version.De
 	@echo "OSX_SDK_VERSION=$(OSX_SDK_VERSION)" >> $@
 	@echo "DOTNET6_BCL_DIR=$(DOTNET6_BCL_DIR)" >> $@
 	@echo "ENABLE_DOTNET=$(ENABLE_DOTNET)" >> $@
+	@echo "NUGET_TEST_FEED=$(NUGET_TEST_FEED)" >> $@
 
 test-system.config: Makefile $(TOP)/Make.config $(TOP)/mk/mono.mk $(TOP)/eng/Version.Details.xml
 	@rm -f $@

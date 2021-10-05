@@ -583,8 +583,18 @@
 		<WriteLinesToFile SessionId="$(BuildSessionId)" File="$(_CustomLinkerOptionsFile)" Lines="$(_CustomLinkerOptions)" Overwrite="true" />
 	</Target>
 
+	<PropertyGroup>
+		<_ComputeFrameworkFilesToPublishDependsOn>
+			$(_ComputeFrameworkFilesToPublishDependsOn);
+			_DecompressAppleFrameworks;
+			_ExpandNativeReferences;
+			_ComputeVariables;
+			_LoadLinkerOutput;
+		</_ComputeFrameworkFilesToPublishDependsOn>
+	</PropertyGroup>
+
 	<!-- Look in the _FrameworkNativeReference items for frameworks that need to be added to the app bundle, and add all those frameworks to _FrameworkToPublish -->
-	<Target Name="_ComputeFrameworkFilesToPublish" DependsOnTargets="_ExpandNativeReferences;_ComputeVariables;_LoadLinkerOutput">
+	<Target Name="_ComputeFrameworkFilesToPublish" DependsOnTargets="$(_ComputeFrameworkFilesToPublishDependsOn)">
 		<ItemGroup>
 			<!-- Collect the list of frameworks to publish from _FrameworkNativeReference. The ExtractBindingLibrariesStep in the linker and the _DecompressAppleFrameworks target might also add frameworks to _FrameworkToPublish -->
 			<_FrameworkToPublish Include="@(_FrameworkNativeReference)" Condition="'%(_FrameworkNativeReference.Kind)' == 'Framework' And '%(_FrameworkNativeReference.CopyToAppBundle)' != 'false'" />
@@ -1185,7 +1195,6 @@
 			<!-- Ref: https://github.com/xamarin/xamarin-macios/issues/11432 -->
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
-				RelativePath="$(_DylibPublishDir)\%(Filename)%(Extension)"
 				Condition=" '$(UseMonoRuntime)' == 'false' And
 				            '%(ResolvedFileToPublish.Filename)' == 'createdump' And
 				            '%(ResolvedFileToPublish.Extension)' == '' And
@@ -1193,6 +1202,7 @@
 				            '%(ResolvedFileToPublish.RuntimeIdentifier)' == '$(RuntimeIdentifier)' And
 				            '%(ResolvedFileToPublish.NuGetPackageId)' == '$(_MonoNugetPackageId)'
 				            "
+				PublishFolderType="Assembly"
 			/>
 
 			<!-- Remove any dylibs Mono told us not to link with -->
@@ -1208,15 +1218,32 @@
 		<ComputeBundleLocation
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
+			AssemblyDirectory="$(_AppContentsRelativePath)"
+			FrameworksDirectory="$(_AppFrameworksRelativePath)"
+			PlugInsDirectory="$(_AppPlugInsRelativePath)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResolvedFileToPublish="@(ResolvedFileToPublish)"
+			ResourceDirectory="$(_AppResourcesRelativePath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
-			<Output TaskParameter="ResolvedFileToPublish" ItemName="ResolvedFileToPublish" />
+			<Output TaskParameter="UpdatedResolvedFileToPublish" ItemName="_UpdatedResolvedFileToPublish" />
 		</ComputeBundleLocation>
 
 		<ItemGroup>
+			<!-- Remove everything we've decided not to publish -->
+			<_UpdatedResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(_UpdatedResolvedFileToPublish.PublishFolderType)' == 'None'" />
+
+			<!-- Re-populate ResolvedFileToPublish -->
+			<ResolvedFileToPublish Remove="@(_UpdatedResolvedFileToPublish)" />
+			<ResolvedFileToPublish Include="@(_UpdatedResolvedFileToPublish)" />
+
+			<!-- compressed frameworks are uncompressed, but the compressed file is not copied to the app bundle -->
 			<_CompressedAppleFrameworks Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedAppleFramework'" />
+			<ResolvedFileToPublish Remove="@(_CompressedAppleFrameworks)" />
+
+			<!-- compressed plugins are uncompressed, but the compressed file is not copied to the app bundle -->
+			<_CompressedPlugIns Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedPlugIns'" />
+			<ResolvedFileToPublish Remove="@(_CompressedPlugIns)" />
 
 			<!-- we link with static libraries, but we don't copy them to the app bundle -->
 			<_ResolvedFileToPublish_StaticLibrary Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'StaticLibrary'" />
@@ -1233,18 +1260,22 @@
 	<Target Name="_DecompressAppleFrameworks"
 		Inputs="@(_CompressedAppleFrameworks)"
 		Outputs="@(_CompressedAppleFrameworks -> '%(Identity).stamp')"
+		DependsOnTargets="_ComputePublishLocation"
+		BeforeTargets="_ExpandNativeReferences"
 		>
 
 		<PropertyGroup>
 			<_IntermediateFrameworksDir>$(DeviceSpecificIntermediateOutputPath)frameworks</_IntermediateFrameworksDir>
 		</PropertyGroup>
 
-		<!-- FIXME: use the ditto task (need to add -x -k support) -->
-		<Exec
+		<Ditto
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			Command="ditto -x -k &quot;%(_CompressedAppleFrameworks.Identity)&quot; &quot;$(_IntermediateFrameworksDir)/%(Filename)%(Extension)/&quot;">
-		</Exec>
+			AdditionalArguments="-x -k"
+			Source="%(_CompressedAppleFrameworks.Identity)"
+			Destination="$(_IntermediateFrameworksDir)/%(Filename)%(Extension)"
+			>
+		</Ditto>
 
 		<ItemGroup>
 			<!-- include any normal frameworks directly in _FrameworkNativeReference -->
@@ -1254,18 +1285,17 @@
 		</ItemGroup>
 
 		<!-- resolve the .xcframeworks -->
-		<ResolveXCFramework
+		<ResolveNativeReferences
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			XCFramework="@(_DecompressedXCFramework)"
-		>
-			<Output TaskParameter="Frameworks" ItemName="_ResolvedXCFramework" />
-		</ResolveXCFramework>
-
-		<ItemGroup>
-			<!-- include the resolved frameworks in _FrameworkNativeReference -->
-			<_FrameworkNativeReference Include="@(_ResolvedXCFramework)" Kind="Framework" />
-		</ItemGroup>
+			Architectures="$(TargetArchitectures)"
+			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
+			NativeReferences="@(_DecompressedXCFramework)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
+			<Output TaskParameter="NativeFrameworks" ItemName="_FrameworkNativeReference" />
+		</ResolveNativeReferences>
 
 		<Touch
 			SessionId="$(BuildSessionId)"

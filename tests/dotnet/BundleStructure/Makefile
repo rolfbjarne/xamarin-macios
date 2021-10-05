@@ -21,6 +21,7 @@ diag:
 
 create-files:
 	echo H > H.txt
+	echo NoneH > NoneH.txt
 	for i in iOS tvOS macOS MacCatalyst; do \
 		cd "$$i"; \
 		echo A > A.txt; \

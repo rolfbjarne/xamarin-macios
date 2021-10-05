@@ -1170,8 +1170,12 @@
 		<ComputeBundleLocation
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
+			AssemblyDirectory="$(_AppContentsRelativePath)"
+			FrameworksDirectory="$(_AppFrameworksRelativePath)"
+			PlugInsDirectory="$(_AppPlugInsRelativePath)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResolvedFileToPublish="@(ResolvedFileToPublish)"
+			ResourceDirectory="$(_AppResourcesRelativePath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 			<Output TaskParameter="ResolvedFileToPublish" ItemName="ResolvedFileToPublish" />

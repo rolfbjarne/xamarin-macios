@@ -15,16 +15,20 @@ using Xamarin.Localization.MSBuild;
 
 namespace Xamarin.MacDev.Tasks {
 	public abstract class ComputeBundleLocationTaskBase : XamarinTask {
-		public string? AssemblyDirectory { get; set; }
-
-		public string? FrameworksDirectory { get; set; }
-
-		public string? PlugInsDirectory { get; set; }
+		// not required because this can be the root directory (so an empty string)
+		public string AssemblyDirectory { get; set; } = string.Empty;
 
 		[Required]
-		public string? ProjectDir { get; set; }
+		public string FrameworksDirectory { get; set; } = string.Empty;
 
-		public string? ResourceDirectory { get; set; }
+		[Required]
+		public string PlugInsDirectory { get; set; } = string.Empty;
+
+		[Required]
+		public string ProjectDir { get; set; } = string.Empty;
+
+		// not required because this can be the root directory (so an empty string)
+		public string ResourceDirectory { get; set; } = string.Empty;
 
 		[Required]
 		[Output]
@@ -88,12 +92,12 @@ namespace Xamarin.MacDev.Tasks {
 					break;
 				case PublishFolderType.None:
 					list.RemoveAt (i);
-					break;
+					continue;
 				case PublishFolderType.Unknown:
 				default:
 					Log.LogWarning (MSBStrings.E7088 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. */, item.GetMetadata ("PublishFolderType"), item.ItemSpec);
 					list.RemoveAt (i);
-					break;
+					continue;
 				}
 
 				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
@@ -185,7 +189,7 @@ namespace Xamarin.MacDev.Tasks {
 		static PublishFolderType ParsePublishFolderType (string value)
 		{
 			if (string.IsNullOrEmpty (value))
-				return PublishFolderType.Unknown;
+				return PublishFolderType.Unset;
 
 			if (!Enum.TryParse<PublishFolderType> (value, out var result))
 				result = PublishFolderType.Unknown;

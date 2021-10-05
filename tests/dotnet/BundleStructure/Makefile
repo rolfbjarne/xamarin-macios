@@ -43,5 +43,11 @@ create-files:
 		echo R > R.txt; \
 		echo S > S.txt; \
 		echo T > T.txt; \
+		echo ContentA > ContentA.txt; \
+		echo ContentB > ContentB.txt; \
+		echo ContentC > ContentC.txt; \
+		echo EmbeddedResourceA > EmbeddedResourceA.txt; \
+		echo EmbeddedResourceB > EmbeddedResourceB.txt; \
+		echo EmbeddedResourceC > EmbeddedResourceC.txt; \
 		cd ..; \
 	done

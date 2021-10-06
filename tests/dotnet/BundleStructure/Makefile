@@ -50,5 +50,8 @@ create-files:
 		echo EmbeddedResourceA > EmbeddedResourceA.txt; \
 		echo EmbeddedResourceB > EmbeddedResourceB.txt; \
 		echo EmbeddedResourceC > EmbeddedResourceC.txt; \
+		echo BundleResourceA > BundleResourceA.txt; \
+		echo BundleResourceB > BundleResourceB.txt; \
+		echo BundleResourceC > BundleResourceC.txt; \
 		cd ..; \
 	done

@@ -147,26 +147,26 @@
 		<!-- EmbeddedResource items -->
 
 		<!-- Content without any metadata -->
-		<EmbeddedResource Include="ContentA.txt" />
+		<EmbeddedResource Include="EmbeddedResourceA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<EmbeddedResource Include="ContentB.txt">
+		<EmbeddedResource Include="EmbeddedResourceB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<!-- Content with CopyToPublishDirectory -->
-		<EmbeddedResource Include="ContentC.txt">
+		<EmbeddedResource Include="EmbeddedResourceC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</EmbeddedResource>
 
 		<!-- BundleResource items -->
 
 		<!-- Content without any metadata -->
-		<BundleResource Include="EmbeddedResourceA.txt" />
+		<BundleResource Include="BundleResourceA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<BundleResource Include="EmbeddedResourceB.txt">
+		<BundleResource Include="BundleResourceB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</BundleResource>
 		<!-- Content with CopyToPublishDirectory -->
-		<BundleResource Include="EmbeddedResourceC.txt">
+		<BundleResource Include="BundleResourceC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</BundleResource>
 

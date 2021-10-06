@@ -1114,7 +1114,10 @@
 		</_ComputeLinkModeDependsOn>
 	</PropertyGroup>
 
-	<Target Name="_ComputePublishLocation" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeMonoLibraries">
+	<Target Name="_ComputePublishLocation"
+		DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeMonoLibraries"
+		Condition="'$(_CanOutputAppBundle)' == 'true'"
+		>
 		<PropertyGroup>
 			<_AssemblyPublishDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(_RelativeAppBundlePath)\</_AssemblyPublishDir>
 			<_AssemblyPublishDir Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(_RelativeAppBundlePath)\Contents\$(_CustomBundleName)\</_AssemblyPublishDir>
@@ -1124,16 +1127,6 @@
 			<_ParsedRuntimeConfigFilePath Condition="'$(_ParsedRuntimeConfigFilePath)' == ''">$([MSBuild]::MakeRelative($(MSBuildProjectDirectory),$(_AbsolutePublishDir)\$(_AssemblyPublishDir)\$(_RuntimeConfigurationFile)))</_ParsedRuntimeConfigFilePath>
 		</PropertyGroup>
 		<ItemGroup>
-			<!--
-				Items with TargetPath set come from @(None) and @(Content) item groups (maybe others too?), with 'CopyToOutputDirectory=PreserveNewest|Always'
-				For these cases we define that TargetPath is relative to the directory in the app bundle where the assemblies are (not taking into account runtime-specific assemblies).
-				The 'Link' metadata can be set on such to change the TargetPath to anywhere in the app bundle if need be.
-			-->
-			<ResolvedFileToPublish
-				Update="@(ResolvedFileToPublish)"
-				RelativePath="$(_AssemblyPublishDir)\%(ResolvedFileToPublish.TargetPath)"
-				Condition="'%(ResolvedFileToPublish.TargetPath)' != ''" />
-
 			<!--
 				Remove any items we've already handled elsewhere
 			-->
@@ -1213,12 +1206,18 @@
 				            '%(ResolvedFileToPublish.NuGetPackageId)' == '$(_MonoNugetPackageId)'
 				            "
 			/>
+
+			<!-- We don't ship the runtimeconfig.json file -->
+			<ResolvedFileToPublish Remove="$(ProjectRuntimeConfigFilePath)" Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'" />
 		</ItemGroup>
 
 		<ComputeBundleLocation
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			AssemblyDirectory="$(_AppContentsRelativePath)"
+			BundleResource="@(BundleResource)"
+			Content="@(Content)"
+			EmbeddedResource="@(EmbeddedResource)"
 			FrameworksDirectory="$(_AppFrameworksRelativePath)"
 			PlugInsDirectory="$(_AppPlugInsRelativePath)"
 			ProjectDir="$(MSBuildProjectDirectory)"
@@ -1254,12 +1253,15 @@
 			<_ResolvedFileToPublish_DynamicLibrary Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'DynamicLibrary'" />
 			<_FileNativeReference Include="@(_ResolvedFileToPublish_DynamicLibrary)" Kind="Dynamic" />
 			<ResolvedFileToPublish Remove="@(_ResolvedFileToPublish_DynamicLibrary)" />
+
+			<!-- Rewrite the relative path so that everything ends up in the app bundle -->
+			<ResolvedFileToPublish RelativePath="$(_RelativeAppBundlePath)\%(RelativePath)" />
 		</ItemGroup>
 	</Target>
 
 	<Target Name="_DecompressAppleFrameworks"
 		Inputs="@(_CompressedAppleFrameworks)"
-		Outputs="@(_CompressedAppleFrameworks -> '%(Identity).stamp')"
+		Outputs="@(_CompressedAppleFrameworks -> '$(_IntermediateFrameworksDir)/%(Filename)%(Extension).stamp')"
 		DependsOnTargets="_ComputePublishLocation"
 		BeforeTargets="_ExpandNativeReferences"
 		>
@@ -1301,7 +1303,7 @@
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			AlwaysCreate="true"
-			Files="@(_CompressedAppleFrameworks -> '%(Identity).stamp')"
+			Files="@(_CompressedAppleFrameworks -> '$(_IntermediateFrameworksDir)/%(Filename)%(Extension).stamp')"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Touch>

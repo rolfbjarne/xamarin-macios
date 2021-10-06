@@ -18,6 +18,10 @@ namespace Xamarin.MacDev.Tasks {
 		// not required because this can be the root directory (so an empty string)
 		public string AssemblyDirectory { get; set; } = string.Empty;
 
+		public ITaskItem []? BundleResource { get; set; }
+		public ITaskItem []? Content { get; set; }
+		public ITaskItem []? EmbeddedResource { get; set; }
+
 		[Required]
 		public string FrameworksDirectory { get; set; } = string.Empty;
 
@@ -36,12 +40,21 @@ namespace Xamarin.MacDev.Tasks {
 		[Output]
 		public ITaskItem []? UpdatedResolvedFileToPublish { get; set; }
 
+		HashSet<string> resourceFilesSet = new HashSet<string> ();
+		
 		public override bool Execute ()
 		{
 			if (ResolvedFileToPublish == null)
 				return !Log.HasLoggedErrors;
 
 			var list = ResolvedFileToPublish.ToList ();
+
+			if (BundleResource != null)
+				resourceFilesSet.UnionWith (BundleResource.Select (v => Path.GetFullPath (v.ItemSpec)));
+			if (Content != null)
+				resourceFilesSet.UnionWith (Content.Select (v => Path.GetFullPath (v.ItemSpec)));
+			if (EmbeddedResource != null)
+				resourceFilesSet.UnionWith (EmbeddedResource.Select (v => Path.GetFullPath (v.ItemSpec)));
 
 			foreach (var item in list) { 
 				var publishFolderType = ParsePublishFolderType (item);
@@ -116,9 +129,14 @@ namespace Xamarin.MacDev.Tasks {
 			Log.LogWarning (MSBStrings.E7088 /* The 'PublishFolderType' metadata value '{0}' on the item '{1}' is not recognized. The file will not be copied to the app bundle. */, publishFolderType, item.ItemSpec);
 		}
 
+		// 'item' is not supposed to have a PublishFolderType set
 		PublishFolderType ComputePublishFolderType (IList<ITaskItem> items, ITaskItem item)
 		{
 			var filename = item.ItemSpec;
+
+			// Check if the item came from @(BundleResource), @(Content) or @(EmbeddedResource)
+			if (resourceFilesSet.Contains (Path.GetFullPath (item.ItemSpec)))
+				return PublishFolderType.Resource;
 
 			var publishedItems = items.Where (v => {
 				var type = ParsePublishFolderType (v);
@@ -212,14 +230,14 @@ namespace Xamarin.MacDev.Tasks {
 		enum PublishFolderType {
 			Unset,
 			None,
+			RootDirectory,
 			Assembly,
 			Resource,
+			AppleBindingResource,
 			AppleFramework,
 			CompressedAppleFramework,
-			AppleBindingResource,
-			CompressedPlugIns,
 			PlugIns,
-			RootDirectory,
+			CompressedPlugIns,
 			DynamicLibrary, // link with + copy to app bundle
 			StaticLibrary, // link with (but not copy to app bundle)
 			Unknown,

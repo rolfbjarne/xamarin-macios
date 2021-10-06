@@ -53,15 +53,17 @@
 		<None Update="Sub/NoneG.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+
 		<!-- from outside the project directory -->
-		<None Include="../NoneH.txt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+		<!-- this will show: The file '[...]/xamarin-macios/tests/dotnet/BundleStructure/NoneH.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calcuated. The file will not be copied to the app bundle. -->
+		<None Include="../NoneH.txt" CopyToOutputDirectory="PreserveNewest" />
+
 		<!-- With Link -->
 		<None Update="NoneI.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>Somewhere/I.txt</Link>
 		</None>
+
 		<!-- With Link + relative path -->
 		<None Update="NoneJ.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

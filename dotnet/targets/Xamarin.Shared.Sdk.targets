@@ -1175,12 +1175,18 @@
 				            '%(ResolvedFileToPublish.NuGetPackageId)' == '$(_MonoNugetPackageId)'
 				            "
 			/>
+
+			<!-- We don't ship the runtimeconfig.json file -->
+			<ResolvedFileToPublish Remove="@(ProjectRuntimeConfigFilePath)" Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'" />
 		</ItemGroup>
 
 		<ComputeBundleLocation
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			AssemblyDirectory="$(_AppContentsRelativePath)"
+			BundleResource="@(BundleResource)"
+			Content="@(Content)"
+			EmbeddedResource="@(EmbeddedResource)"
 			FrameworksDirectory="$(_AppFrameworksRelativePath)"
 			PlugInsDirectory="$(_AppPlugInsRelativePath)"
 			ProjectDir="$(MSBuildProjectDirectory)"

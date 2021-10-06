@@ -579,37 +579,6 @@ namespace Xamarin.Tests {
 		}
 
 		[Test]
-		[TestCase (ApplePlatform.iOS, "iossimulator-x64", true)]
-		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm", true)]
-		[TestCase (ApplePlatform.TVOS, "tvos-arm64", true)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", true)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", true)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64", true)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", true)]
-		[TestCase (ApplePlatform.iOS, "iossimulator-x64", false)]
-		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm", false)]
-		[TestCase (ApplePlatform.TVOS, "tvos-arm64", false)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", false)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", false)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64", false)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", false)]
-		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers, bool compressed)
-		{
-			var project = "BundleStructure";
-			Configuration.IgnoreIfIgnoredPlatform (platform);
-
-			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
-			Clean (project_path);
-
-			var properties = GetDefaultProperties (runtimeIdentifiers);
-			properties ["CompressedFramework"] = compressed ? "true" : "false";
-			DotNet.AssertBuild (project_path, properties);
-
-			var appExecutable = GetNativeExecutable (platform, appPath);
-			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
-		}
-
-		[Test]
 		[TestCase (ApplePlatform.iOS)]
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacCatalyst)]
@@ -712,44 +681,6 @@ namespace Xamarin.Tests {
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-arm64")), File.Exists (arm64txt), "arm64.txt");
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-arm")), File.Exists (armtxt), "arm.txt");
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-x64")), File.Exists (x64txt), "x64.txt");
-		}
-
-		void ExecuteWithMagicWordAndAssert (ApplePlatform platform, string runtimeIdentifiers, string executable)
-		{
-			//if (!CanExecute (platform, runtimeIdentifiers))
-			//	return;
-
-			//ExecuteWithMagicWordAndAssert (executable);
-			//var properties = new Dictionary<string, string> (verbosity);
-			//SetRuntimeIdentifiers (properties, runtimeIdentifiers);
-
-			//// Build
-			//DotNet.AssertBuild (project_path, properties);
-
-			//var aPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "A.txt");
-			//var bPath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "SubDir", "B.txt");
-			//var readmePath = Path.Combine (appPath, GetRelativeResourcesDirectory (platform), "C.txt");
-
-			//Assert.That (aPath, Does.Exist, "A.txt");
-			//Assert.That (bPath, Does.Exist, "B.txt");
-			//Assert.That (readmePath, Does.Exist, "README.md");
-		}
-
-		void ExecuteWithMagicWordAndAssert (string executable)
-		{
-			if (!File.Exists (executable))
-				throw new FileNotFoundException ($"The executable '{executable}' does not exists.");
-
-			var magicWord = Guid.NewGuid ().ToString ();
-			var env = new Dictionary<string, string> {
-				{ "MAGIC_WORD", magicWord },
-				{ "DYLD_FALLBACK_LIBRARY_PATH", null }, // VSMac might set this, which may cause tests to crash.
-			};
-
-			var output = new StringBuilder ();
-			var rv = Execution.RunWithStringBuildersAsync (executable, Array.Empty<string> (), environment: env, standardOutput: output, standardError: output, timeout: TimeSpan.FromSeconds (15)).Result;
-			Assert.That (output.ToString (), Does.Contain (magicWord), "Contains magic word");
-			Assert.AreEqual (0, rv.ExitCode, "ExitCode");
 		}
 
 		void AssertThatLinkerExecuted (ExecutionResult result)

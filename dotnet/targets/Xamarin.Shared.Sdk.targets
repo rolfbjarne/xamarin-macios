@@ -1177,7 +1177,7 @@
 			/>
 
 			<!-- We don't ship the runtimeconfig.json file -->
-			<ResolvedFileToPublish Remove="@(ProjectRuntimeConfigFilePath)" Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'" />
+			<ResolvedFileToPublish Remove="$(ProjectRuntimeConfigFilePath)" Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'" />
 		</ItemGroup>
 
 		<ComputeBundleLocation

@@ -12,45 +12,96 @@
     <XTest2Directory>$(RootTestDirectory)/test-libraries/xtest2</XTest2Directory>
   </PropertyGroup>
 
-  <!-- FrameworksInRuntimesNativeDirectory1.framework -->
+  <Import Project="..\..\..\..\eng\Versions.props" />
+  <!-- Code to automatically create FrameworkList.xml or RuntimeList.xml -->
+
   <ItemGroup>
-    <!-- iOS -->
-    <None Include="$(XTest2Directory)/.libs/ios-arm64/FrameworksInRuntimesNativeDirectory1.framework/*"           Pack="true" PackagePath="runtimes/ios-arm64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/ios-arm/FrameworksInRuntimesNativeDirectory1.framework/*"             Pack="true" PackagePath="runtimes/ios-arm/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/iossimulator-x64/FrameworksInRuntimesNativeDirectory1.framework/*"    Pack="true" PackagePath="runtimes/iossimulator-x64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/iossimulator-x86/FrameworksInRuntimesNativeDirectory1.framework/*"    Pack="true" PackagePath="runtimes/iossimulator-x86/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-
-    <!-- tvOS -->
-    <None Include="$(XTest2Directory)/.libs/tvos-arm64/FrameworksInRuntimesNativeDirectory1.framework/*"          Pack="true" PackagePath="runtimes/tvos-arm64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/tvossimulator-x64/FrameworksInRuntimesNativeDirectory1.framework/*"   Pack="true" PackagePath="runtimes/tvossimulator-x64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-
-    <!-- macOS -->
-    <None Include="$(XTest2Directory)/.libs/osx-x64/FrameworksInRuntimesNativeDirectory1.framework.zip"           Pack="true" PackagePath="runtimes/osx-x64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
-    <None Include="$(XTest2Directory)/.libs/osx-arm64/FrameworksInRuntimesNativeDirectory1.framework.zip"         Pack="true" PackagePath="runtimes/osx-arm64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
-
-    <!-- Mac Catalyst -->
-    <None Include="$(XTest2Directory)/.libs/maccatalyst-x64/FrameworksInRuntimesNativeDirectory1.framework.zip"   Pack="true" PackagePath="runtimes/maccatalyst-x64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
-    <None Include="$(XTest2Directory)/.libs/maccatalyst-arm64/FrameworksInRuntimesNativeDirectory1.framework.zip" Pack="true" PackagePath="runtimes/maccatalyst-arm64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Feed" Version="$(MicrosoftDotNetBuildTasksFeedPackageVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Packaging" Version="$(MicrosoftDotNetBuildTasksFeedPackageVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.DotNet.Arcade.Sdk" Version="$(MicrosoftDotNetBuildTasksFeedPackageVersion)" PrivateAssets="all" GeneratePathProperty="true" />
   </ItemGroup>
 
-  <!-- FrameworksInRuntimesNativeDirectory2.framework -->
-  <ItemGroup>
-    <!-- iOS -->
-    <None Include="$(XTest2Directory)/.libs/ios-arm64/FrameworksInRuntimesNativeDirectory1.framework/*"           Pack="true" PackagePath="runtimes/ios-arm64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/ios-arm/FrameworksInRuntimesNativeDirectory1.framework/*"             Pack="true" PackagePath="runtimes/ios-arm/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/iossimulator-x64/FrameworksInRuntimesNativeDirectory1.framework/*"    Pack="true" PackagePath="runtimes/iossimulator-x64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/iossimulator-x86/FrameworksInRuntimesNativeDirectory1.framework/*"    Pack="true" PackagePath="runtimes/iossimulator-x86/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+  <Import Project="Sdk.props" Sdk="Microsoft.DotNet.SharedFramework.Sdk" Version="$(MicrosoftDotNetBuildTasksFeedPackageVersion)" />
+  <UsingTask TaskName="CreateFrameworkListFile" AssemblyFile="$(DotNetSharedFrameworkTaskFile)"/>
+  <UsingTask TaskName="GenerateBuildManifest" AssemblyFile="$(_MicrosoftDotNetBuildTasksFeedTaskDir)Microsoft.DotNet.Build.Tasks.Feed.dll" />
 
-    <!-- tvOS -->
-    <None Include="$(XTest2Directory)/.libs/tvos-arm64/FrameworksInRuntimesNativeDirectory1.framework/*"          Pack="true" PackagePath="runtimes/tvos-arm64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
-    <None Include="$(XTest2Directory)/.libs/tvossimulator-x64/FrameworksInRuntimesNativeDirectory1.framework/*"   Pack="true" PackagePath="runtimes/tvossimulator-x64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+  <PropertyGroup>
+    <PackageType>Dependency</PackageType>
+  </PropertyGroup>
 
-    <!-- macOS -->
-    <None Include="$(XTest2Directory)/.libs/osx-x64/FrameworksInRuntimesNativeDirectory1.framework.zip"           Pack="true" PackagePath="runtimes/osx-x64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
-    <None Include="$(XTest2Directory)/.libs/osx-arm64/FrameworksInRuntimesNativeDirectory1.framework.zip"         Pack="true" PackagePath="runtimes/osx-arm64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
+  <Target Name="_GenerateFrameworkListFile">
+    <!-- https://github.com/dotnet/runtime/blob/0647ec314948904319da5eb15e9931f7c85ed1e2/src/installer/pkg/projects/Directory.Build.targets#L281 -->
+    <PropertyGroup>
+      <_FrameworkListFile>$(IntermediateOutputPath)data/RuntimeList.xml</_FrameworkListFile>
+      <_PackNativePath>runtimes/$(_RuntimeIdentifier)/native</_PackNativePath>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- FrameworksInRuntimesNativeDirectory1.framework -->
+      <!-- iOS -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/ios-arm64/FrameworksInRuntimesNativeDirectory1.framework/*"           IsNative="true" PackagePath="runtimes/ios-arm64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/ios-arm/FrameworksInRuntimesNativeDirectory1.framework/*"             IsNative="true" PackagePath="runtimes/ios-arm/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/iossimulator-x64/FrameworksInRuntimesNativeDirectory1.framework/*"    IsNative="true" PackagePath="runtimes/iossimulator-x64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/iossimulator-x86/FrameworksInRuntimesNativeDirectory1.framework/*"    IsNative="true" PackagePath="runtimes/iossimulator-x86/native/FrameworksInRuntimesNativeDirectory1.framework/" />
 
-    <!-- Mac Catalyst -->
-    <None Include="$(XTest2Directory)/.libs/maccatalyst-x64/FrameworksInRuntimesNativeDirectory1.framework.zip"   Pack="true" PackagePath="runtimes/maccatalyst-x64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
-    <None Include="$(XTest2Directory)/.libs/maccatalyst-arm64/FrameworksInRuntimesNativeDirectory1.framework.zip" Pack="true" PackagePath="runtimes/maccatalyst-arm64/native/FrameworksInRuntimesNativeDirectory1.framework.zip" />
-  </ItemGroup>
+      <!-- tvOS -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/tvos-arm64/FrameworksInRuntimesNativeDirectory1.framework/*"          IsNative="true" PackagePath="runtimes/tvos-arm64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/tvossimulator-x64/FrameworksInRuntimesNativeDirectory1.framework/*"   IsNative="true" PackagePath="runtimes/tvossimulator-x64/native/FrameworksInRuntimesNativeDirectory1.framework/" />
+
+      <!-- macOS -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/osx-x64/FrameworksInRuntimesNativeDirectory1.framework.zip"           IsNative="true" PackagePath="runtimes/osx-x64/native/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/osx-arm64/FrameworksInRuntimesNativeDirectory1.framework.zip"         IsNative="true" PackagePath="runtimes/osx-arm64/native/"  />
+
+      <!-- Mac Catalyst -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/maccatalyst-x64/FrameworksInRuntimesNativeDirectory1.framework.zip"   IsNative="true" PackagePath="runtimes/maccatalyst-x64/native/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/maccatalyst-arm64/FrameworksInRuntimesNativeDirectory1.framework.zip" IsNative="true" PackagePath="runtimes/maccatalyst-arm64/native/" />
+
+      <!-- FrameworksInRuntimesNativeDirectory2.framework -->
+      <!-- iOS -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/ios-arm64/FrameworksInRuntimesNativeDirectory2.framework/*"           IsNative="true" PackagePath="runtimes/ios-arm64/native/FrameworksInRuntimesNativeDirectory2.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/ios-arm/FrameworksInRuntimesNativeDirectory2.framework/*"             IsNative="true" PackagePath="runtimes/ios-arm/native/FrameworksInRuntimesNativeDirectory2.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/iossimulator-x64/FrameworksInRuntimesNativeDirectory2.framework/*"    IsNative="true" PackagePath="runtimes/iossimulator-x64/native/FrameworksInRuntimesNativeDirectory2.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/iossimulator-x86/FrameworksInRuntimesNativeDirectory2.framework/*"    IsNative="true" PackagePath="runtimes/iossimulator-x86/native/FrameworksInRuntimesNativeDirectory2.framework/" />
+
+      <!-- tvOS -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/tvos-arm64/FrameworksInRuntimesNativeDirectory2.framework/*"          IsNative="true" PackagePath="runtimes/tvos-arm64/native/FrameworksInRuntimesNativeDirectory2.framework/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/tvossimulator-x64/FrameworksInRuntimesNativeDirectory2.framework/*"   IsNative="true" PackagePath="runtimes/tvossimulator-x64/native/FrameworksInRuntimesNativeDirectory2.framework/" />
+
+      <!-- macOS -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/osx-x64/FrameworksInRuntimesNativeDirectory2.framework.zip"           IsNative="true" PackagePath="runtimes/osx-x64/native/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/osx-arm64/FrameworksInRuntimesNativeDirectory2.framework.zip"         IsNative="true" PackagePath="runtimes/osx-arm64/native/"  />
+
+      <!-- Mac Catalyst -->
+      <_PackageFiles Include="$(XTest2Directory)/.libs/maccatalyst-x64/FrameworksInRuntimesNativeDirectory2.framework.zip"   IsNative="true" PackagePath="runtimes/maccatalyst-x64/native/" />
+      <_PackageFiles Include="$(XTest2Directory)/.libs/maccatalyst-arm64/FrameworksInRuntimesNativeDirectory2.framework.zip" IsNative="true" PackagePath="runtimes/maccatalyst-arm64/native/" />
+
+      <!-- Set TargetPath=PackagePath for all files -->
+      <_PackageFiles TargetPath="%(PackagePath)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <!-- Hardcode framework attributes -->
+      <_FrameworkListRootAttributes Include="Name" Value="Microsoft $(_PlatformName) - NET 6.0" />
+      <_FrameworkListRootAttributes Include="TargetFrameworkIdentifier" Value=".NETCoreApp" />
+      <_FrameworkListRootAttributes Include="TargetFrameworkVersion" Value="6.0" />
+      <_PackageFiles Include="$(_FrameworkListFile)" PackagePath="data" />
+
+      <!-- The CreateFrameworkListFile task will add _PackageFiles to the files to pack, so remove them if they're already there -->
+      <None Remove="@(_PackageFiles)" />
+    </ItemGroup>
+    <!-- https://github.com/dotnet/arcade/blob/5824baf1c9a900ee00c167f96201c750bba6a574/src/Microsoft.DotNet.SharedFramework.Sdk/src/CreateFrameworkListFile.cs -->
+    <CreateFrameworkListFile
+        Files="@(_PackageFiles)"
+        TargetFile="$(_FrameworkListFile)"
+        TargetFilePrefixes="ref;runtimes"
+        RootAttributes="@(_FrameworkListRootAttributes)"
+    />
+  </Target>
+
+  <PropertyGroup>
+    <BeforePack>
+      _GenerateFrameworkListFile;
+      $(BeforePack);
+    </BeforePack>
+  </PropertyGroup>
+
 </Project>

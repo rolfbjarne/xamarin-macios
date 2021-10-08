@@ -599,7 +599,12 @@ namespace Xamarin.Tests
 
 		static string GetBaseLibraryName (TargetFramework targetFramework)
 		{
-			switch (targetFramework.Platform) {
+			return GetBaseLibraryName (targetFramework.Platform);
+		}
+
+		public static string GetBaseLibraryName (ApplePlatform platform)
+		{
+			switch (platform) {
 			case ApplePlatform.iOS:
 				return "Xamarin.iOS.dll";
 			case ApplePlatform.TVOS:
@@ -608,8 +613,10 @@ namespace Xamarin.Tests
 				return "Xamarin.WatchOS.dll";
 			case ApplePlatform.MacOSX:
 				return "Xamarin.Mac.dll";
+			case ApplePlatform.MacCatalyst:
+				return "Xamarin.MacCatalyst.dll";
 			default:
-				throw new InvalidOperationException (targetFramework.ToString ());
+				throw new InvalidOperationException (platform.ToString ());
 			}
 		}
 

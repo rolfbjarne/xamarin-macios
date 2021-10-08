@@ -1,7 +1,8 @@
 TOP=../../..
 include $(TOP)/Make.config
 
-NAMES=XTest2 XTest3 XTest4 XTest5 XTest6
+NAMES+=FrameworksInRuntimesNativeDirectory1 FrameworksInRuntimesNativeDirectory2
+NAMES+=FrameworkTest1 FrameworkTest2 FrameworkTest3 FrameworkTest4 FrameworkTest5
 
 # a few lookup tables, because the data we have is not always in the format we need it
 
@@ -138,16 +139,21 @@ $(foreach platform,$(DOTNET_PLATFORMS),$(foreach xcplatform,$(DOTNET_$(platform)
 $(foreach platform,$(DOTNET_PLATFORMS),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),.libs/$(rid))):
 	$(Q) mkdir -p $@
 
-zip: $(ZIPPED_TARGETS)
-all-local:: $(ZIPPED_TARGETS)
-
 define DotNetXCFrameworkTemplate
 .libs/$(1).xcframework.stamp: $$($(1)_XCTARGETS) Makefile
 	$$(Q) rm -rf .libs/$(1).xcframework
 	$$(Q_GEN) $(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $$($(1)_XCFRAMEWORKS) -output .libs/$(1).xcframework
 	$$(Q) touch $$@
 
+.libs/$(1).xcframework.zip: .libs/$(1).xcframework.stamp
+	$$(Q) cd $$(dir $$@) && zip -9r $$(notdir $$@) $(1).xcframework
+
+ZIPPED_TARGETS += .libs/$(1).xcframework.zip
+
 all-local:: .libs/$(1).xcframework.stamp
 endef
 
 $(foreach name,$(NAMES),$(eval $(call DotNetXCFrameworkTemplate,$(name))))
+
+zip: $(ZIPPED_TARGETS)
+all-local:: $(ZIPPED_TARGETS)

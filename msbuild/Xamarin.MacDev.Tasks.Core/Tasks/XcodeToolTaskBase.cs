@@ -76,7 +76,7 @@ namespace Xamarin.MacDev.Tasks
 
 		protected virtual string GetBundleRelativeOutputPath (IList<string> prefixes, ITaskItem input)
 		{
-			return BundleResource.GetLogicalName (ProjectDir, prefixes, input, !string.IsNullOrEmpty(SessionId));
+			return BundleResource.GetLogicalName (ProjectDir, prefixes, input, !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
 		}
 
 		protected virtual IEnumerable<ITaskItem> GetCompiledBundleResources (ITaskItem input, ITaskItem output)

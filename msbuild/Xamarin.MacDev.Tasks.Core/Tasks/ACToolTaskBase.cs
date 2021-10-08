@@ -61,7 +61,7 @@ namespace Xamarin.MacDev.Tasks
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineArgumentBuilder args, ITaskItem[] items)
 		{
-			var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId))));
+			var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet)));
 
 			if (!string.IsNullOrEmpty (XSAppIconAssets)) {
 				int index = XSAppIconAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
@@ -203,7 +203,7 @@ namespace Xamarin.MacDev.Tasks
 			var specs = new PArray ();
 
 			for (int i = 0; i < ImageAssets.Length; i++) {
-				var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, ImageAssets[i], !string.IsNullOrEmpty (SessionId));
+				var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, ImageAssets[i], !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
 
 				// Ignore MacOS .DS_Store files...
 				if (Path.GetFileName (vpath).Equals (".DS_Store", StringComparison.OrdinalIgnoreCase))
@@ -244,7 +244,7 @@ namespace Xamarin.MacDev.Tasks
 				items.Clear ();
 
 				for (int i = 0; i < ImageAssets.Length; i++) {
-					var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, ImageAssets[i], !string.IsNullOrEmpty (SessionId));
+					var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, ImageAssets[i], !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
 					var clone = false;
 					ITaskItem item;
 
@@ -295,7 +295,7 @@ namespace Xamarin.MacDev.Tasks
 
 			// Note: `items` contains only the Contents.json files at this point
 			for (int i = 0; i < items.Count; i++) {
-				var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, items[i], !string.IsNullOrEmpty (SessionId));
+				var vpath = BundleResource.GetVirtualProjectPath (ProjectDir, items[i], !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
 				var path = items[i].GetMetadata ("FullPath");
 
 				// get the parent (which will typically be .appiconset, .launchimage, .imageset, .iconset, etc)

@@ -26,9 +26,7 @@
 
 	<!-- Default SceneKit assets inclusion -->
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
-		<SceneKitAsset Include="**\*.scnassets\*" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
-			<IsDefaultItem>true</IsDefaultItem>
-		</SceneKitAsset>
+		<SceneKitAsset Include="**\*.scnassets\*" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
 
 	<!-- Default Asset Catalog file inclusion -->
@@ -36,7 +34,6 @@
 		<ImageAsset Include="**\*.xcassets\**\*.png;**\*.xcassets\*\*.jpg;**\*.xcassets\**\*.pdf;**\*.xcassets\**\*.json" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)">
 			<Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
 			<Visible>false</Visible>
-			<IsDefaultItem>true</IsDefaultItem>
 		</ImageAsset>
 	</ItemGroup>
 
@@ -44,7 +41,6 @@
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
 		<InterfaceDefinition Include="**\*.storyboard;**\*.xib" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
 			<Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
-			<IsDefaultItem>true</IsDefaultItem>
 		</InterfaceDefinition>
 	</ItemGroup>
 
@@ -52,7 +48,6 @@
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
 		<AtlasTexture Include="**\*.atlas\*.png" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
 			<Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
-			<IsDefaultItem>true</IsDefaultItem>
 		</AtlasTexture>
 	</ItemGroup>
 
@@ -60,7 +55,6 @@
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
 		<CoreMLModel Include="**\*.mlmodel" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
 			<Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
-			<IsDefaultItem>true</IsDefaultItem>
 		</CoreMLModel>
 	</ItemGroup>
 
@@ -68,14 +62,12 @@
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
 		<Metal Include="**\*.metal" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
 			<Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
-			<IsDefaultItem>true</IsDefaultItem>
 		</Metal>
 	</ItemGroup>
 
 	<!-- Default SceneKit assets inclusion -->
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
 		<SceneKitAsset Include="**\*.scnassets\*" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
-			<IsDefaultItem>true</IsDefaultItem>
 		</SceneKitAsset>
 	</ItemGroup>
 
@@ -83,7 +75,6 @@
 	<ItemGroup Condition="'$(EnableDefault@PLATFORM@Items)' == 'true'">
 		<BundleResource Include="$(_ResourcePrefix)\**\*.ttf;$(_ResourcePrefix)\**\*.otf;$(_ResourcePrefix)\**\*.ttc" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" >
 			<Link>$([MSBuild]::MakeRelative ('$(MSBuildProjectDirectory)', '%(Identity)'))</Link>
-			<IsDefaultItem>true</IsDefaultItem>
 		</BundleResource>
 	</ItemGroup>
 </Project>

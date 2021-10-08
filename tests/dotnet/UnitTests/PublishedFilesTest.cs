@@ -65,7 +65,10 @@ namespace Xamarin.Tests {
 
 		void CheckAppBundleContents (ApplePlatform platform, string appPath)
 		{
-			var allFiles = Directory.GetFileSystemEntries (appPath, "*", SearchOption.AllDirectories).Select (v => v.Substring (appPath.Length + 1)).ToList ();
+			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
+			Assert.AreEqual (0, ExecutionHelper.Execute ("find", new string [] { appPath }, out var output), "find");
+
+			var allFiles = output.ToString ().Split ('\n').Select (v => v.Substring (appPath.Length + 1)).ToList ();
 
 			// Remove files from the BCL, the exact set can vary between .NET versions
 			Predicate<string?> predicate = (v) => {

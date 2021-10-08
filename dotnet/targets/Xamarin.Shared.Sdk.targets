@@ -606,7 +606,7 @@
 	<Target Name="_CopyFrameworksToBundle"
 		DependsOnTargets="_ComputeFrameworkFilesToPublish"
 		Inputs="@(_FrameworkToPublish)"
-		Outputs="@(_FrameworkToPublish -> '%(TargetDirectory)%(Filename)')"
+		Outputs="@(_FrameworkToPublish -> '%(TargetDirectory)/%(Filename)')"
 		>
 		<!-- We specifically do *not* use the publishing logic in .NET to (ResolvedFileToPublish) copy frameworks to the app bundle, because symlinks aren't handled correctly.
 			 In particular, MSBuild can't handle symlinks to directories: https://github.com/dotnet/msbuild/issues/6821.
@@ -767,6 +767,7 @@
 			<_RelativeAppBundlePath>$([MSBuild]::MakeRelative($(_AbsolutePublishDir),$(MSBuildProjectDirectory)/$(_AppBundlePath)))</_RelativeAppBundlePath>
 
 			<_IntermediateNativeLibraryDir>$(IntermediateOutputPath)nativelibraries/</_IntermediateNativeLibraryDir>
+			<_IntermediateFrameworksDir>$(DeviceSpecificIntermediateOutputPath)frameworks</_IntermediateFrameworksDir>
 			<_NativeExecutableName>$(_AppBundleName)</_NativeExecutableName>
 			<_NativeExecutablePublishDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(_RelativeAppBundlePath)\</_NativeExecutablePublishDir>
 			<_NativeExecutablePublishDir Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(_RelativeAppBundlePath)\Contents\MacOS\</_NativeExecutablePublishDir>
@@ -1195,8 +1196,12 @@
 			<_UpdatedResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(_UpdatedResolvedFileToPublish.PublishFolderType)' == 'None'" />
 
 			<!-- Re-populate ResolvedFileToPublish -->
-			<ResolvedFileToPublish Remove="@(_UpdatedResolvedFileToPublish)" />
+			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" />
 			<ResolvedFileToPublish Include="@(_UpdatedResolvedFileToPublish)" />
+
+			<!-- apple frameworks are not copied to the app bundle by using the built-in .NET logic of ResolvedFileToPublish due to symlinks -->
+			<_FrameworkNativeReference Include="@(ResolvedFileToPublish -> '%(Identity)/%(Filename)')" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'AppleFramework' And '%(Extension)' == '.framework'" Kind="Framework" />
+			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'AppleFramework'" />
 
 			<!-- compressed frameworks are uncompressed, but the compressed file is not copied to the app bundle -->
 			<_CompressedAppleFrameworks Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedAppleFramework'" />
@@ -1219,18 +1224,31 @@
 			<!-- Rewrite the relative path so that everything ends up in the app bundle -->
 			<ResolvedFileToPublish RelativePath="$(_RelativeAppBundlePath)\%(RelativePath)" />
 		</ItemGroup>
+
+		<!-- resolve any .xcframeworks -->
+		<ResolveNativeReferences
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true' And '%(ResolvedFileToPublish.PublishFolderType)' == 'AppleFramework' And '%(ResolvedFileToPublish.Extension)' == '.xcframework'"
+			Architectures="$(TargetArchitectures)"
+			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
+			NativeReferences="@(ResolvedFileToPublish)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
+			<Output TaskParameter="NativeFrameworks" ItemName="_FrameworkNativeReference" />
+		</ResolveNativeReferences>
+
 	</Target>
+
+	<PropertyGroup>
+	</PropertyGroup>
 
 	<Target Name="_DecompressAppleFrameworks"
 		Inputs="@(_CompressedAppleFrameworks)"
 		Outputs="@(_CompressedAppleFrameworks -> '$(_IntermediateFrameworksDir)/%(Filename)%(Extension).stamp')"
-		DependsOnTargets="_ComputePublishLocation"
+		DependsOnTargets="_ComputePublishLocation;_ComputeVariables"
 		BeforeTargets="_ExpandNativeReferences"
 		>
-
-		<PropertyGroup>
-			<_IntermediateFrameworksDir>$(DeviceSpecificIntermediateOutputPath)frameworks</_IntermediateFrameworksDir>
-		</PropertyGroup>
 
 		<Ditto
 			SessionId="$(BuildSessionId)"
@@ -1243,7 +1261,7 @@
 
 		<ItemGroup>
 			<!-- include any normal frameworks directly in _FrameworkNativeReference -->
-			<_FrameworkNativeReference Include="@(_DecompressedFramework)" Kind="Framework" />
+			<_FrameworkNativeReference Include="@(_DecompressedFramework -> '%(Identity)/%(Filename)')" Kind="Framework" />
 			<!-- .xcframeworks need to be resolved to a platform-specific .framework-->
 			<_DecompressedXCFramework Include="$(_IntermediateFrameworksDir)/%(Filename)%(Extension)/*.xcframework" />
 		</ItemGroup>

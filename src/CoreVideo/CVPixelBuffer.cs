@@ -128,7 +128,11 @@ namespace CoreVideo {
 		
 		static CVPixelBufferReleaseBytesCallback releaseBytesCallback = new CVPixelBufferReleaseBytesCallback (ReleaseBytesCallback);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallbackAttribute (typeof (CVPixelBufferReleaseBytesCallback))]
+#endif
 		static void ReleaseBytesCallback (IntPtr releaseRefCon, IntPtr baseAddress)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (releaseRefCon);
@@ -193,7 +197,11 @@ namespace CoreVideo {
 
 		static CVPixelBufferReleasePlanarBytesCallback releasePlanarBytesCallback = new CVPixelBufferReleasePlanarBytesCallback (ReleasePlanarBytesCallback);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallbackAttribute (typeof (CVPixelBufferReleasePlanarBytesCallback))]
+#endif
 		static void ReleasePlanarBytesCallback (IntPtr releaseRefCon, IntPtr dataPtr, nint dataSize, nint numberOfPlanes, IntPtr planeAddresses)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (releaseRefCon);

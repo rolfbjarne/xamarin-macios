@@ -627,7 +627,11 @@ namespace CoreFoundation {
 		}
 
 		// callback that will sent the client info
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CFProxyAutoConfigurationResultCallbackInternal))]
+#endif
 		static void ExecutePacCallback (IntPtr client, IntPtr proxyList, IntPtr error)
 		{
 			// grab the required structure and set the data, according apple docs:

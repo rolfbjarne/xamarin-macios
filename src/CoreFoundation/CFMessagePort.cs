@@ -304,7 +304,11 @@ namespace CoreFoundation {
 		//
 		// Proxy callbacks
 		//
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (Func<IntPtr, IntPtr>))]
+#endif
 		static IntPtr RetainProxy (IntPtr info)
 		{
 			INativeObject result = null;
@@ -320,7 +324,11 @@ namespace CoreFoundation {
 			return result == null ? IntPtr.Zero : result.Handle;
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (Action<IntPtr>))]
+#endif
 		static void ReleaseProxy (IntPtr info)
 		{
 			CFMessagePortContext context;
@@ -332,7 +340,11 @@ namespace CoreFoundation {
 				context.Release ();
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (Func<IntPtr, IntPtr>))]
+#endif
 		static IntPtr CopyDescriptionProxy (IntPtr info)
 		{
 			NSString result = null;
@@ -347,7 +359,11 @@ namespace CoreFoundation {
 			return result == null ? IntPtr.Zero : result.Handle;
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CFMessagePortCallBackProxy))]
+#endif
 		static IntPtr MessagePortCallback (IntPtr local, int msgid, IntPtr data, IntPtr info)
 		{
 			CFMessagePortCallBack callback;
@@ -366,7 +382,11 @@ namespace CoreFoundation {
 			}
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CFMessagePortInvalidationCallBackProxy))]
+#endif
 		static void MessagePortInvalidationCallback (IntPtr messagePort, IntPtr info)
 		{
 			Action callback;

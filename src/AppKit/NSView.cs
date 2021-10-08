@@ -23,7 +23,11 @@ namespace AppKit {
 			public Func<NSView, NSView, NSComparisonResult> Comparer;
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (view_compare_func))]
+#endif
 		static nint view_compare (IntPtr view1, IntPtr view2, IntPtr context)
 		{
 			var data = (SortData) GCHandle.FromIntPtr (context).Target;

@@ -534,7 +534,11 @@ namespace AudioToolbox
 		//
 		// outDataPacketDescription should be `ref IntPtr' but using IntPtr we get easier access to pointer address
 		//
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (AudioConverterComplexInputDataShared))]
+#endif
 		static AudioConverterError FillComplexBufferShared (IntPtr inAudioConverter, ref int ioNumberDataPackets, IntPtr ioData,
 		                                                    IntPtr outDataPacketDescription, IntPtr inUserData)
 		{

@@ -645,7 +645,11 @@ namespace CoreFoundation {
 
 		protected delegate void CFStreamCallback (IntPtr s, nint type, IntPtr info);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof(CFStreamCallback))]
+#endif
 		static void OnCallback (IntPtr s, nint type, IntPtr info)
 		{
 			var stream = GCHandle.FromIntPtr (info).Target as CFStream;

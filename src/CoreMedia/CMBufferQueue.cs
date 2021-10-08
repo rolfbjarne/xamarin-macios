@@ -319,7 +319,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (BufferGetTimeCallback))]
+#endif
 #endif
 		static CMTime GetDecodeTimeStamp (IntPtr buffer, IntPtr refcon)
 		{
@@ -328,7 +332,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (BufferGetTimeCallback))]
+#endif
 #endif
 		static CMTime GetPresentationTimeStamp (IntPtr buffer, IntPtr refcon)
 		{
@@ -337,7 +345,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (BufferGetTimeCallback))]
+#endif
 #endif
 		static CMTime GetDuration (IntPtr buffer, IntPtr refcon)
 		{
@@ -346,7 +358,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (BufferGetBooleanCallback))]
+#endif
 #endif
 		static bool GetDataReady (IntPtr buffer, IntPtr refcon)
 		{
@@ -355,7 +371,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (BufferCompareCallback))]
+#endif
 #endif
 		static int Compare (IntPtr buffer1, IntPtr buffer2, IntPtr refcon)
 		{
@@ -364,7 +384,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (BufferGetSizeCallback))]
+#endif
 #endif
 		static nint GetTotalSize (IntPtr buffer, IntPtr refcon)
 		{

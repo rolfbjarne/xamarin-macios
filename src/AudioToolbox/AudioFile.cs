@@ -1732,7 +1732,11 @@ namespace AudioToolbox {
 			dSetSize = SourceSetSize;
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(ReadProc))]
+#endif
 		static int SourceRead (IntPtr clientData, long inPosition, int requestCount, IntPtr buffer, out int actualCount)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (clientData);
@@ -1742,7 +1746,11 @@ namespace AudioToolbox {
 
 		public abstract bool Read (long position, int requestCount, IntPtr buffer, out int actualCount);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(WriteProc))]
+#endif
 		static int SourceWrite (IntPtr clientData, long position, int requestCount, IntPtr buffer, out int actualCount)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (clientData);
@@ -1751,7 +1759,11 @@ namespace AudioToolbox {
 		}
 		public abstract bool Write (long position, int requestCount, IntPtr buffer, out int actualCount);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(GetSizeProc))]
+#endif
 		static long SourceGetSize (IntPtr clientData)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (clientData);
@@ -1759,7 +1771,11 @@ namespace AudioToolbox {
 			return audioSource.Size;
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(SetSizeProc))]
+#endif
 		static int SourceSetSize (IntPtr clientData, long size)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (clientData);

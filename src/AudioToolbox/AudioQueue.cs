@@ -742,7 +742,11 @@ namespace AudioToolbox {
 
 		Hashtable listeners;
 		
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(AudioQueuePropertyListenerProc))]
+#endif
 		static void property_changed (IntPtr userData, IntPtr AQ, AudioQueueProperty id)
 		{
 			GCHandle gch = GCHandle.FromIntPtr (userData);
@@ -1245,7 +1249,11 @@ namespace AudioToolbox {
 			return AudioQueueProcessingTapGetQueueTime (TapHandle, out sampleTime, out frameCount);
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (AudioQueueProcessingTapCallbackShared))]
+#endif
 		static void TapCallback (IntPtr clientData, IntPtr tap, uint numberFrames, ref AudioTimeStamp timeStamp, ref AudioQueueProcessingTapFlags flags,
 		                         out uint outNumberFrames, IntPtr data)
 		{
@@ -1266,7 +1274,11 @@ namespace AudioToolbox {
 							    IntPtr userData, IntPtr cfrunLoop_callbackRunloop, IntPtr cfstr_runMode,
 							    uint flags, out IntPtr audioQueue);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(AudioQueueOutputCallback))]
+#endif
 		static void output_callback (IntPtr userData, IntPtr AQ, IntPtr audioQueueBuffer)
 		{
 			GCHandle gch = GCHandle.FromIntPtr (userData);
@@ -1351,7 +1363,11 @@ namespace AudioToolbox {
 	public class InputAudioQueue : AudioQueue {
 		static unsafe readonly AudioQueueInputCallback dInputCallback = input_callback;
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(AudioQueueInputCallback))]
+#endif
 		unsafe static void input_callback (IntPtr userData, IntPtr AQ, IntPtr audioQueueBuffer,
 					    AudioTimeStamp *startTime, int descriptors, IntPtr inPacketDesc)
 		{

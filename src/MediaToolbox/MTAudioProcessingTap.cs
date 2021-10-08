@@ -196,7 +196,11 @@ namespace MediaToolbox
 		//
 		// Proxy callbacks
 		//
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MTAudioProcessingTapInitCallbackProxy))]
+#endif
 		unsafe static void InitializeProxy (IntPtr tap, IntPtr /*void**/ clientInfo, out void* tapStorage)
 		{
 			// at this stage the handle is not yet known (or part of the `handles` dictionary
@@ -205,7 +209,11 @@ namespace MediaToolbox
 			apt.callbacks.Initialize (apt, out tapStorage);
 		}	
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MTAudioProcessingTapProcessCallbackProxy))]
+#endif
 		static void ProcessProxy (IntPtr tap, IntPtr numberFrames, MTAudioProcessingTapFlags flags,
 			IntPtr bufferList, out IntPtr numberFramesOut, out MTAudioProcessingTapFlags flagsOut)
 		{
@@ -219,7 +227,11 @@ namespace MediaToolbox
 			numberFramesOut = (IntPtr) numberOut;
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (Action_IntPtr))]
+#endif
 		static void FinalizeProxy (IntPtr tap)
 		{
 			MTAudioProcessingTap apt;
@@ -228,7 +240,11 @@ namespace MediaToolbox
 			apt.callbacks.Finalize (apt);
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MTAudioProcessingTapPrepareCallbackProxy))]
+#endif
 		static void PrepareProxy (IntPtr tap, IntPtr maxFrames, ref AudioStreamBasicDescription processingFormat)
 		{
 			MTAudioProcessingTap apt;
@@ -237,7 +253,11 @@ namespace MediaToolbox
 			apt.callbacks.Prepare (apt, (nint) maxFrames, ref processingFormat);
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (Action_IntPtr))]
+#endif
 		static void UnprepareProxy (IntPtr tap)
 		{
 			MTAudioProcessingTap apt;

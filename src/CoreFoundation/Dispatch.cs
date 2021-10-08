@@ -316,7 +316,11 @@ namespace CoreFoundation {
 		internal delegate void dispatch_callback_iterations_t (IntPtr context, IntPtr count);
 		internal static readonly dispatch_callback_iterations_t static_dispatch_iterations = static_dispatcher_iterations_to_managed;
 		
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (dispatch_callback_t))]
+#endif
 		static void static_dispatcher_to_managed (IntPtr context)
 		{
 			GCHandle gch = GCHandle.FromIntPtr (context);
@@ -344,7 +348,11 @@ namespace CoreFoundation {
 
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (dispatch_callback_iterations_t))]
+#endif
 		static void static_dispatcher_iterations_to_managed (IntPtr context, IntPtr count)
 		{
 			GCHandle gch = GCHandle.FromIntPtr (context);
@@ -374,7 +382,11 @@ namespace CoreFoundation {
 						     
 		internal static readonly dispatch_callback_t free_gchandle = static_free_gchandle;
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (dispatch_callback_t))]
+#endif
 		static void static_free_gchandle (IntPtr context)
 		{
 			GCHandle.FromIntPtr (context).Free ();

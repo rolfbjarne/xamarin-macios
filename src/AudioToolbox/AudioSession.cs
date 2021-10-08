@@ -305,7 +305,11 @@ namespace AudioToolbox {
 
 		delegate void InterruptionListener (IntPtr userData, uint state);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (InterruptionListener))]
+#endif
 		static void Interruption (IntPtr userData, uint state)
 		{
 			EventHandler h;
@@ -734,7 +738,11 @@ namespace AudioToolbox {
 		delegate void _PropertyListener (IntPtr userData, AudioSessionProperty prop, int size, IntPtr data);
 		public delegate void PropertyListener (AudioSessionProperty prop, int size, IntPtr data);
 		
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (_PropertyListener))]
+#endif
 		static void Listener (IntPtr userData, AudioSessionProperty prop, int size, IntPtr data)
 		{
 			ArrayList a = (ArrayList) listeners [prop];

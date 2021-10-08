@@ -407,7 +407,11 @@ namespace AddressBook {
 
 		delegate void ABExternalChangeCallback (IntPtr addressBook, IntPtr info, IntPtr context);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (ABExternalChangeCallback))]
+#endif
 		static void ExternalChangeCallback (IntPtr addressBook, IntPtr info, IntPtr context)
 		{
 			GCHandle s = GCHandle.FromIntPtr (context);

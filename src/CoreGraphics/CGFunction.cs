@@ -135,7 +135,11 @@ namespace CoreGraphics {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CGFunctionReleaseCallback))]
+#endif
 #endif
 		static void ReleaseCallback (IntPtr info)
 		{
@@ -143,7 +147,11 @@ namespace CoreGraphics {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CGFunctionEvaluateCallback))]
+#endif
 #endif
 		unsafe static void EvaluateCallback (IntPtr info, nfloat *input, nfloat *output)
 		{

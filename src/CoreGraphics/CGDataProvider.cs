@@ -135,21 +135,33 @@ namespace CoreGraphics {
 		static CGDataProviderReleaseDataCallback release_buffer_callback = ReleaseBuffer;
 		static CGDataProviderReleaseDataCallback release_func_callback = ReleaseFunc;
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CGDataProviderReleaseDataCallback))]
+#endif
 		private static void ReleaseGCHandle (IntPtr info, IntPtr data, nint size)
 		{
 			var gch = GCHandle.FromIntPtr (info);
 			gch.Free ();
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CGDataProviderReleaseDataCallback))]
+#endif
 		private static void ReleaseBuffer (IntPtr info, IntPtr data, nint size)
 		{
 			if (data != IntPtr.Zero)
 				Marshal.FreeHGlobal (data);
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CGDataProviderReleaseDataCallback))]
+#endif
 		private static void ReleaseFunc (IntPtr info, IntPtr data, nint size)
 		{
 			var gch = GCHandle.FromIntPtr (info);

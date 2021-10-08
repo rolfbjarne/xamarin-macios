@@ -608,7 +608,11 @@ namespace CoreMidi {
 		public event EventHandler<IOErrorEventArgs> IOError;
 		
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MidiNotifyProc))]
+#endif
 #endif
 		static void ClientCallback (IntPtr message, IntPtr context)
 		{
@@ -958,7 +962,11 @@ namespace CoreMidi {
 		public event EventHandler<MidiPacketsEventArgs> MessageReceived;
 		
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MidiReadProc))]
+#endif
 #endif
 		static void Read (IntPtr packetList, IntPtr context, IntPtr srcPtr)
 		{
@@ -2053,7 +2061,11 @@ namespace CoreMidi {
 		public event EventHandler<MidiPacketsEventArgs> MessageReceived;
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MidiReadProc))]
+#endif
 #endif
 		static void Read (IntPtr packetList, IntPtr context, IntPtr srcPtr)
 		{

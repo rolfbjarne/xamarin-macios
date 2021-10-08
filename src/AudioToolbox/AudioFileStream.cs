@@ -172,7 +172,11 @@ namespace AudioToolbox {
 		static readonly AudioFileStream_PacketsProc dInPackets = InPackets;
 		static readonly AudioFileStream_PropertyListenerProc dPropertyListener = PropertyListener;
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(AudioFileStream_PacketsProc))]
+#endif
 		static void InPackets (IntPtr clientData, int numberBytes, int numberPackets, IntPtr inputData, IntPtr packetDescriptions)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (clientData);
@@ -201,7 +205,11 @@ namespace AudioToolbox {
 			}
 		}
 		
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(AudioFileStream_PropertyListenerProc))]
+#endif
 		static void PropertyListener (IntPtr clientData, AudioFileStreamID audioFileStream, AudioFileStreamProperty propertyID, ref AudioFileStreamPropertyFlag ioFlags)
 		{
 			GCHandle handle = GCHandle.FromIntPtr (clientData);

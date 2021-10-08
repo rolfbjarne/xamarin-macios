@@ -287,7 +287,11 @@ namespace AudioToolbox {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (MusicSequenceUserCallbackProxy))]
+#endif
 #endif
 		static void UserCallbackProxy (IntPtr inClientData, IntPtr inSequence, IntPtr inTrack, double inEventTime, IntPtr inEventData, double inStartSliceBeat, double inEndSliceBeat)
 		{

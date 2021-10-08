@@ -478,7 +478,11 @@ namespace CoreGraphics {
 		delegate void CGPathApplierFunction (/* void* */ IntPtr info, /* const CGPathElement* */ IntPtr element);
 		
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CGPathApplierFunction))]
+#endif
 #endif
 		static void ApplierCallback (IntPtr info, IntPtr element_ptr)
 		{

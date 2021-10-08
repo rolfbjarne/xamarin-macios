@@ -168,7 +168,11 @@ namespace AudioUnit
 
 		HashSet<RenderDelegate> graphUserCallbacks = new HashSet<RenderDelegate> ();
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback(typeof(CallbackShared))]
+#endif
 		static AudioUnitStatus renderCallback(IntPtr inRefCon,
 					ref AudioUnitRenderActionFlags _ioActionFlags,
 					ref AudioTimeStamp _inTimeStamp,
@@ -337,7 +341,11 @@ namespace AudioUnit
 			return AUGraphSetNodeInputCallback (handle, destNode, destInputNumber, ref cb);
 		}
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CallbackShared))]
+#endif
 		static AudioUnitStatus RenderCallbackImpl (IntPtr clientData, ref AudioUnitRenderActionFlags actionFlags, ref AudioTimeStamp timeStamp, uint busNumber, uint numberFrames, IntPtr data)
 		{
 			GCHandle gch = GCHandle.FromIntPtr (clientData);

@@ -160,7 +160,11 @@ namespace CoreMedia {
 			sampleBuffer, int index, /* void* */ IntPtr refcon);
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CMSampleBufferCallForEachSampleCallback))]
+#endif
 #endif
 		static CMSampleBufferError ForEachSampleHandler (IntPtr sbuf, int index, IntPtr refCon)
 		{
@@ -607,7 +611,11 @@ namespace CoreMedia {
 		static CMSampleBufferInvalidateCallback invalidate_handler = InvalidateHandler;
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CMSampleBufferInvalidateCallback))]
+#endif
 #endif
 		static void InvalidateHandler (IntPtr sbuf, ulong invalidateRefCon)
 		{

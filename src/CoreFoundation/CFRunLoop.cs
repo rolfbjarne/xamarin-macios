@@ -172,7 +172,11 @@ namespace CoreFoundation {
 
 		delegate void ScheduleCallback (IntPtr info, IntPtr runLoop, IntPtr mode);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof(ScheduleCallback))]
+#endif
 		static void Schedule (IntPtr info, IntPtr runLoop, IntPtr mode)
 		{
 			var source = GCHandle.FromIntPtr (info).Target as CFRunLoopSourceCustom;
@@ -187,7 +191,11 @@ namespace CoreFoundation {
 
 		delegate void CancelCallback (IntPtr info, IntPtr runLoop, IntPtr mode);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof(CancelCallback))]
+#endif
 		static void Cancel (IntPtr info, IntPtr runLoop, IntPtr mode)
 		{
 			var source = GCHandle.FromIntPtr (info).Target as CFRunLoopSourceCustom;
@@ -202,7 +210,11 @@ namespace CoreFoundation {
 
 		delegate void PerformCallback (IntPtr info);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof(PerformCallback))]
+#endif
 		static void Perform (IntPtr info)
 		{
 			var source = GCHandle.FromIntPtr (info).Target as CFRunLoopSourceCustom;

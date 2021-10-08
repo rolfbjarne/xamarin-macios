@@ -96,7 +96,11 @@ namespace CoreGraphics {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (DrawPatternCallback))]
+#endif
 #endif
 		static void DrawCallback (IntPtr voidptr, IntPtr cgcontextptr)
 		{
@@ -107,7 +111,11 @@ namespace CoreGraphics {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (ReleaseInfoCallback))]
+#endif
 #endif
 		static void ReleaseCallback (IntPtr voidptr)
 		{

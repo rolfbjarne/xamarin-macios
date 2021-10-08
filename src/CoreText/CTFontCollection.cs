@@ -203,7 +203,11 @@ namespace CoreText {
 
 		delegate CFIndex CTFontCollectionSortDescriptorsCallback (IntPtr first, IntPtr second, IntPtr refCon);
 
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CTFontCollectionSortDescriptorsCallback))]
+#endif
 		static CFIndex CompareDescriptors (IntPtr first, IntPtr second, IntPtr context)
 		{
 			GCHandle c = GCHandle.FromIntPtr (context);

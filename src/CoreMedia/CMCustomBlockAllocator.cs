@@ -50,7 +50,11 @@ namespace CoreMedia {
 		static CMFreeCallback static_FreeCallback = FreeCallback;
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CMAllocateCallback))]
+#endif
 #endif
 		static IntPtr AllocateCallback (IntPtr refCon, nuint sizeInBytes)
 		{
@@ -64,7 +68,11 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
+#if NET
+		[UnmanagedCallersOnly]
+#else
 		[MonoPInvokeCallback (typeof (CMFreeCallback))]
+#endif
 #endif
 		static void FreeCallback (IntPtr refCon, IntPtr doomedMemoryBlock, nuint sizeInBytes)
 		{

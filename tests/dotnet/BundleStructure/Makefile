@@ -24,26 +24,40 @@ create-files:
 	echo NoneH > NoneH.txt
 	for i in iOS tvOS macOS MacCatalyst; do \
 		cd "$$i"; \
-		echo A > A.txt; \
-		echo B > B.dll; \
-		echo C > C.pdb; \
-		echo D > D.exe; \
-		echo E > E.dylib; \
-		echo F > F.a; \
+		echo NoneA > NoneA.txt; \
+		echo NoneB.dll > NoneB.dll; \
+		echo NoneB.pdb > NoneB.pdb; \
+		echo NoneB.dll.mdb > NoneB.dll.mdb; \
+		echo NoneB.config > NoneB.config; \
+		echo NoneC > NoneC.pdb; \
+		echo NoneD > NoneD.exe; \
+		echo NoneE > NoneE.dylib; \
+		echo NoneF > NoneF.a; \
 		mkdir -p Sub; \
-		echo G > Sub/G.txt; \
-		echo I > I.txt; \
-		echo J > J.txt; \
-		echo K > K.txt; \
-		echo L > L.txt; \
-		echo M > M.txt; \
-		echo N > N.txt; \
-		echo O > O.txt; \
-		echo P > P.txt; \
-		echo Q > Q.txt; \
-		echo R > R.txt; \
-		echo S > S.txt; \
-		echo T > T.txt; \
+		echo NoneG > Sub/NoneG.txt; \
+		echo NoneI > NoneI.txt; \
+		echo NoneJ > NoneJ.txt; \
+		echo NoneK > NoneK.txt; \
+		echo NoneL > NoneL.config; \
+		echo NoneM > NoneM.unknown; \
+		echo UnknownA > UnknownA.bin; \
+		echo UnknownB > UnknownB.bin; \
+		echo UnknownC > UnknownC.bin; \
+		echo UnknownD > UnknownD.bin; \
+		echo UnknownE.bin > UnknownE.bin; zip -9 UnknownE.bin.zip UnknownE.bin; mv UnknownE.bin.zip UnknownE.bin; \
+		echo UnknownF > UnknownF.bin; \
+		echo UnknownG > UnknownG.bin; \
+		echo UnknownH.bin > UnknownH.bin; zip -9 UnknownH.bin.zip UnknownH.bin; mv UnknownH.bin.zip UnknownH.bin; \
+		echo UnknownI > UnknownI.bin; \
+		echo UnknownJ > UnknownJ.bin; \
+		echo SomewhatUnknownA > SomewhatUnknownA.bin; \
+		echo SomewhatUnknownB > SomewhatUnknownB.bin; \
+		echo SomewhatUnknownC > SomewhatUnknownC.bin; \
+		echo SomewhatUnknownD > SomewhatUnknownD.bin; \
+		echo SomewhatUnknownE.bin > SomewhatUnknownE.bin; zip -9 SomewhatUnknownE.bin.zip SomewhatUnknownE.bin; mv SomewhatUnknownE.bin.zip SomewhatUnknownE.bin; \
+		echo SomewhatUnknownF > SomewhatUnknownF.bin; \
+		echo SomewhatUnknownG > SomewhatUnknownG.bin; \
+		echo SomewhatUnknownH.bin > SomewhatUnknownH.bin; zip -9 SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; mv SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; \
 		echo ContentA > ContentA.txt; \
 		echo ContentB > ContentB.txt; \
 		echo ContentC > ContentC.txt; \

@@ -1260,8 +1260,9 @@
 		</Ditto>
 
 		<ItemGroup>
-			<!-- include any normal frameworks directly in _FrameworkNativeReference -->
-			<_FrameworkNativeReference Include="@(_DecompressedFramework -> '%(Identity)/%(Filename)')" Kind="Framework" />
+			<!-- include any normal frameworks directly in _FrameworkNativeReference. This is a two-step process because _FrameworkNativeReference is the executable inside the .framework, not the .framework directory itself. -->
+			<_DecompressedFramework Include="@(_DecompressedFramework -> '$(_IntermediateFrameworksDir)/%(Identity)/%(Filename)/*.framework')" Kind="Framework" />
+			<_FrameworkNativeReference Include="@(_DecompressedFramework -> '%(Identity)/%(Filename)')" />
 			<!-- .xcframeworks need to be resolved to a platform-specific .framework-->
 			<_DecompressedXCFramework Include="$(_IntermediateFrameworksDir)/%(Filename)%(Extension)/*.xcframework" />
 		</ItemGroup>

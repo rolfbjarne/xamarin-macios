@@ -47,11 +47,11 @@
 			<!-- Bundled -->
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="NoneE.dylib">
+		<None Include="$(RootTestsDirectory)/test-libraries/libraries/.libs/$(RuntimeIdentifier)/libNoneE.dylib">
 			<!-- Bundled, linked with -->
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="NoneF.a">
+		<None Include="$(RootTestsDirectory)/test-libraries/libraries/.libs/$(RuntimeIdentifier)/libNoneF.a">
 			<!-- Not bundled; linked with -->
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -119,14 +119,16 @@
 		<None Update="UnknownI.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Unknown" />
 		<None Update="UnknownJ.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="RootDirectory" />
 
-		<None Update="NotQuiteUnknownA.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownA.bin" PublishFolderType="Assembly" />
-		<None Update="NotQuiteUnknownB.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownB.bin" PublishFolderType="Resource" />
-		<None Update="NotQuiteUnknownC.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownC.bin" PublishFolderType="AppleFramework" />
-		<None Update="NotQuiteUnknownD.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownD.bin" PublishFolderType="CompressedAppleFramework" />
-		<None Update="NotQuiteUnknownE.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownE.bin" PublishFolderType="AppleBindingResource" />
-		<None Update="NotQuiteUnknownF.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownF.bin" PublishFolderType="PlugIns" />
-		<None Update="NotQuiteUnknownG.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownG.bin" PublishFolderType="CompressedPlugIns" />
-		<None Update="NotQuiteUnknownH.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownH.bin" PublishFolderType="RootDirectory" />
+		<None Update="SomewhatUnknownA.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownA.bin" PublishFolderType="None" />
+		<None Update="SomewhatUnknownB.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownB.bin" PublishFolderType="Assembly" />
+		<None Update="SomewhatUnknownC.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownC.bin" PublishFolderType="Resource" />
+		<None Update="SomewhatUnknownD.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownD.bin" PublishFolderType="AppleFramework" />
+		<None Update="SomewhatUnknownE.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownE.bin" PublishFolderType="CompressedAppleFramework" />
+		<None Update="SomewhatUnknownF.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownF.bin" PublishFolderType="AppleBindingResource" />
+		<None Update="SomewhatUnknownG.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownG.bin" PublishFolderType="PlugIns" />
+		<None Update="SomewhatUnknownH.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownH.bin" PublishFolderType="CompressedPlugIns" />
+		<None Update="SomewhatUnknownI.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownI.bin" PublishFolderType="Unknown" />
+		<None Update="SomewhatUnknownJ.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatKnownJ.bin" PublishFolderType="RootDirectory" />
 
 		<!-- Content items -->
 
@@ -187,20 +189,20 @@
 	<!-- Only uncompressed for mobile platforms, because macOS and Mac Catalyst frameworks have symlinks, which MSBuild doesn't handle very well, so for now we're just supporting compressed versions in that case -->
 	<ItemGroup Condition="!($(TargetFramework.EndsWith('-macos')) Or $(TargetFramework.EndsWith('-maccatalyst')))">
 		<!-- native framework (unzipped) -->
-		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/XTest2.framework/**/*" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/FrameworkTest2.framework/**/*" CopyToOutputDirectory="PreserveNewest" />
 
 		<!-- native xcframework (unzipped) -->
-		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/XTest3.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/FrameworkTest3.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<!-- native framework (zipped) -->
 		<!-- should be unzipped, linked with, and bundled -->
-		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/XTest4.framework.zip" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/FrameworkTest4.framework.zip" CopyToOutputDirectory="PreserveNewest" />
 
 		<!-- native xcframework (zipped) -->
 		<!-- should be unzipped, linked with, and bundled -->
-		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/XTest5.xcframework.zip" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/FrameworkTest5.xcframework.zip" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<ItemGroup>

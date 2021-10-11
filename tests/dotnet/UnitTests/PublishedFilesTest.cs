@@ -68,7 +68,10 @@ namespace Xamarin.Tests {
 			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
 			Assert.AreEqual (0, ExecutionHelper.Execute ("find", new string [] { appPath }, out var output), "find");
 
-			var allFiles = output.ToString ().Split ('\n').Select (v => v.Substring (appPath.Length + 1)).ToList ();
+			var allFiles = output.ToString ().
+								Split ('\n', StringSplitOptions.RemoveEmptyEntries).
+								Where (v => v.Length > appPath.Length).
+								Select (v => v.Substring (appPath.Length + 1)).ToList ();
 
 			// Remove files from the BCL, the exact set can vary between .NET versions
 			Predicate<string?> predicate = (v) => {
@@ -158,16 +161,16 @@ namespace Xamarin.Tests {
 																   // UnknownI.bin: Unknown -- this should show a warning
 			expectedFiles.Add ($"UnknownJ.bin"); // UnknownJ.bin: RootDirectory
 
-			// NotQuiteUnknownA.bin: None
-			expectedFiles.Add ($"{assemblyDirectory}Subfolder/NotQuiteUnknownB.bin"); // NotQuiteUnknownB.bin: Assembly
-			expectedFiles.Add ($"{resourcesDirectory}Subfolder/NotQuiteUnknownC.bin"); // NotQuiteUnknownC.bin: Resource
-			expectedFiles.Add ($"{frameworksDirectory}Subfolder/NotQuiteUnknownD.bin"); // NotQuiteUnknownD.bin: AppleFramework
-																						// NotQuiteUnknownE.bin: CompressedAppleFramework - this should show an error
-																						// NotQuiteUnknownF.bin: AppleBindingResource // FIXME UNDEFINED
-			expectedFiles.Add ($"{pluginsDirectory}Subfolder/NotQuiteUnknownG.bin"); // NotQuiteUnknownG.bin: PlugIns
-																					// NotQuiteUnknownH.bin: CompressedPlugIns -- this should show an error
-																					// NotQuiteUnknownI.bin: NotQuiteUnknown -- this should show a warning
-			expectedFiles.Add ($"Subfolder/NotQuiteUnknownJ.bin"); // NotQuiteUnknownJ.bin: RootDirectory
+			// SomewhatUnknownA.bin: None
+			expectedFiles.Add ($"{assemblyDirectory}Subfolder/SomewhatUnknownB.bin"); // SomewhatUnknownB.bin: Assembly
+			expectedFiles.Add ($"{resourcesDirectory}Subfolder/SomewhatUnknownC.bin"); // SomewhatUnknownC.bin: Resource
+			expectedFiles.Add ($"{frameworksDirectory}Subfolder/SomewhatUnknownD.bin"); // SomewhatUnknownD.bin: AppleFramework
+																						// SomewhatUnknownE.bin: CompressedAppleFramework - this should show an error
+																						// SomewhatUnknownF.bin: AppleBindingResource // FIXME UNDEFINED
+			expectedFiles.Add ($"{pluginsDirectory}Subfolder/SomewhatUnknownG.bin"); // SomewhatUnknownG.bin: PlugIns
+																					// SomewhatUnknownH.bin: CompressedPlugIns -- this should show an error
+																					// SomewhatUnknownI.bin: SomewhatUnknown -- this should show a warning
+			expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
 
 			expectedFiles.Add ($"{resourcesDirectory}ContentA.txt");
 			expectedFiles.Add ($"{resourcesDirectory}ContentB.txt");

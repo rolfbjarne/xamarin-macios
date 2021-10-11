@@ -14,7 +14,7 @@ NuGet.config global.json:
 
 
 PACKAGE_ID=$(shell grep PackageId FrameworksInRuntimesNativeDirectory.csproj | sed 's_.*<PackageId>\(.*\)</PackageId>.*_\1_')
-PACKAGE_VERSION=$(shell grep PackageVersion FrameworksInRuntimesNativeDirectory.csproj | sed 's_.*<PackageVersion>\(.*\)</PackageVersion>.*_\1_')
+PACKAGE_VERSION=$(shell grep '<PackageVersion>' FrameworksInRuntimesNativeDirectory.csproj | sed 's_.*<PackageVersion>\(.*\)</PackageVersion>.*_\1_')
 
 # Test case for https://github.com/xamarin/xamarin-macios/issues/12440
 .libs/FrameworksInRuntimesNativeDirectory.nupkg: FrameworksInRuntimesNativeDirectory.csproj NuGet.config global.json | .libs

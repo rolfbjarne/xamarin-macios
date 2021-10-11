@@ -37,6 +37,24 @@ create-files:
 		echo NoneK > NoneK.txt; \
 		echo NoneL > NoneL.config; \
 		echo NoneM > NoneM.unknown; \
+		echo UnknownA > UnknownA.bin; \
+		echo UnknownB > UnknownB.bin; \
+		echo UnknownC > UnknownC.bin; \
+		echo UnknownD > UnknownD.bin; \
+		echo UnknownE > UnknownE.bin; \
+		echo UnknownF > UnknownF.bin; \
+		echo UnknownG > UnknownG.bin; \
+		echo UnknownH > UnknownH.bin; \
+		echo UnknownI > UnknownI.bin; \
+		echo UnknownJ > UnknownJ.bin; \
+		echo SomewhatUnknownA > SomewhatUnknownA.bin; \
+		echo SomewhatUnknownB > SomewhatUnknownB.bin; \
+		echo SomewhatUnknownC > SomewhatUnknownC.bin; \
+		echo SomewhatUnknownD > SomewhatUnknownD.bin; \
+		echo SomewhatUnknownE > SomewhatUnknownE.bin; \
+		echo SomewhatUnknownF > SomewhatUnknownF.bin; \
+		echo SomewhatUnknownG > SomewhatUnknownG.bin; \
+		echo SomewhatUnknownH > SomewhatUnknownH.bin; \
 		echo ContentA > ContentA.txt; \
 		echo ContentB > ContentB.txt; \
 		echo ContentC > ContentC.txt; \

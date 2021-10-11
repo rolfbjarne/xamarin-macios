@@ -39,8 +39,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="NoneC.pdb">
-			<!-- No matching NoneC.dll -->
-			<!-- Bundled -->
+			<!-- No matching NoneC.dll, but still bundled. -->
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="NoneD.exe">

@@ -25,7 +25,10 @@ create-files:
 	for i in iOS tvOS macOS MacCatalyst; do \
 		cd "$$i"; \
 		echo NoneA > NoneA.txt; \
-		echo NoneB > NoneB.dll; \
+		echo NoneB.dll > NoneB.dll; \
+		echo NoneB.pdb > NoneB.pdb; \
+		echo NoneB.dll.mdb > NoneB.dll.mdb; \
+		echo NoneB.config > NoneB.config; \
 		echo NoneC > NoneC.pdb; \
 		echo NoneD > NoneD.exe; \
 		echo NoneE > NoneE.dylib; \
@@ -50,11 +53,11 @@ create-files:
 		echo SomewhatUnknownA > SomewhatUnknownA.bin; \
 		echo SomewhatUnknownB > SomewhatUnknownB.bin; \
 		echo SomewhatUnknownC > SomewhatUnknownC.bin; \
-		echo SomewhatUnknownD > SomewhatUnknownD.bin; \
-		echo SomewhatUnknownE > SomewhatUnknownE.bin; \
+		echo SomewhatUnknownD.bin > SomewhatUnknownD.bin; zip -9 SomewhatUnknownD.bin.zip SomewhatUnknownD.bin; mv SomewhatUnknownD.bin.zip SomewhatUnknownD.bin; \
+		echo SomewhatUnknownE.bin > SomewhatUnknownE.bin; zip -9 SomewhatUnknownE.bin.zip SomewhatUnknownE.bin; mv SomewhatUnknownE.bin.zip SomewhatUnknownE.bin; \
 		echo SomewhatUnknownF > SomewhatUnknownF.bin; \
 		echo SomewhatUnknownG > SomewhatUnknownG.bin; \
-		echo SomewhatUnknownH > SomewhatUnknownH.bin; \
+		echo SomewhatUnknownH.bin > SomewhatUnknownH.bin; zip -9 SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; mv SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; \
 		echo ContentA > ContentA.txt; \
 		echo ContentB > ContentB.txt; \
 		echo ContentC > ContentC.txt; \

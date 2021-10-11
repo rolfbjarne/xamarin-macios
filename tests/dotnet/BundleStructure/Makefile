@@ -24,26 +24,19 @@ create-files:
 	echo NoneH > NoneH.txt
 	for i in iOS tvOS macOS MacCatalyst; do \
 		cd "$$i"; \
-		echo A > A.txt; \
-		echo B > B.dll; \
-		echo C > C.pdb; \
-		echo D > D.exe; \
-		echo E > E.dylib; \
-		echo F > F.a; \
+		echo NoneA > NoneA.txt; \
+		echo NoneB > NoneB.dll; \
+		echo NoneC > NoneC.pdb; \
+		echo NoneD > NoneD.exe; \
+		echo NoneE > NoneE.dylib; \
+		echo NoneF > NoneF.a; \
 		mkdir -p Sub; \
-		echo G > Sub/G.txt; \
-		echo I > I.txt; \
-		echo J > J.txt; \
-		echo K > K.txt; \
-		echo L > L.txt; \
-		echo M > M.txt; \
-		echo N > N.txt; \
-		echo O > O.txt; \
-		echo P > P.txt; \
-		echo Q > Q.txt; \
-		echo R > R.txt; \
-		echo S > S.txt; \
-		echo T > T.txt; \
+		echo NoneG > Sub/NoneG.txt; \
+		echo NoneI > NoneI.txt; \
+		echo NoneJ > NoneJ.txt; \
+		echo NoneK > NoneK.txt; \
+		echo NoneL > NoneL.config; \
+		echo NoneM > NoneM.unknown; \
 		echo ContentA > ContentA.txt; \
 		echo ContentB > ContentB.txt; \
 		echo ContentC > ContentC.txt; \

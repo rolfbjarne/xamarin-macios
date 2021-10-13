@@ -7,11 +7,15 @@ using System.Runtime.InteropServices;
 using Foundation;
 using CoreFoundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 
 	public abstract class BaseWrapper : INativeObject, IDisposable {
 
-		public BaseWrapper (IntPtr handle, bool owns)
+		public BaseWrapper (NativeHandle handle, bool owns)
 		{
 			Handle = handle;
 			if (!owns)
@@ -23,7 +27,7 @@ namespace ObjCRuntime {
 			Dispose (false);
 		}
 
-		public IntPtr Handle { get; protected set; }
+		public NativeHandle Handle { get; protected set; }
 
 		public void Dispose ()
 		{

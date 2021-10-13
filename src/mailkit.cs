@@ -5,6 +5,10 @@ using ObjCRuntime;
 using AVFoundation;
 using AppKit;
 
+#if !NET
+using NativeHandle=System.IntPtr;
+#endif
+
 namespace MailKit {
 	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (12,0)]
 	[Native]
@@ -148,7 +152,7 @@ namespace MailKit {
 	{
 		[Export ("initWithEncodedMessage:signingError:encryptionError:")]
 		[DesignatedInitializer]
-		IntPtr Constructor ([NullAllowed] MEEncodedOutgoingMessage encodedMessage, [NullAllowed] NSError signingError, [NullAllowed] NSError encryptionError);
+		NativeHandle Constructor ([NullAllowed] MEEncodedOutgoingMessage encodedMessage, [NullAllowed] NSError signingError, [NullAllowed] NSError encryptionError);
 
 		[NullAllowed, Export ("encodedMessage", ArgumentSemantic.Copy)]
 		MEEncodedOutgoingMessage EncodedMessage { get; }
@@ -166,10 +170,10 @@ namespace MailKit {
 	interface MEMessageSecurityInformation : NSSecureCoding
 	{
 		[Export ("initWithSigners:isEncrypted:signingError:encryptionError:")]
-		IntPtr Constructor (MEMessageSigner[] signers, bool isEncrypted, [NullAllowed] NSError signingError, [NullAllowed] NSError encryptionError);
+		NativeHandle Constructor (MEMessageSigner[] signers, bool isEncrypted, [NullAllowed] NSError signingError, [NullAllowed] NSError encryptionError);
 
 		[Export ("initWithSigners:isEncrypted:signingError:encryptionError:shouldBlockRemoteContent:localizedRemoteContentBlockingReason:")]
-		IntPtr Constructor (MEMessageSigner[] signers, bool isEncrypted, [NullAllowed] NSError signingError, [NullAllowed] NSError encryptionError, bool shouldBlockRemoteContent, [NullAllowed] string localizedRemoteContentBlockingReason);
+		NativeHandle Constructor (MEMessageSigner[] signers, bool isEncrypted, [NullAllowed] NSError signingError, [NullAllowed] NSError encryptionError, bool shouldBlockRemoteContent, [NullAllowed] string localizedRemoteContentBlockingReason);
 
 		[Export ("signers", ArgumentSemantic.Strong)]
 		MEMessageSigner[] Signers { get; }
@@ -196,7 +200,7 @@ namespace MailKit {
 	interface MEMessageSigner : NSSecureCoding
 	{
 		[Export ("initWithEmailAddresses:signatureLabel:context:")]
-		IntPtr Constructor (MEEmailAddress[] emailAddresses, string label, [NullAllowed] NSData context);
+		NativeHandle Constructor (MEEmailAddress[] emailAddresses, string label, [NullAllowed] NSData context);
 
 		[Export ("emailAddresses", ArgumentSemantic.Copy)]
 		MEEmailAddress[] EmailAddresses { get; }
@@ -214,7 +218,7 @@ namespace MailKit {
 	interface MEOutgoingMessageEncodingStatus : NSSecureCoding
 	{
 		[Export ("initWithCanSign:canEncrypt:securityError:addressesFailingEncryption:")]
-		IntPtr Constructor (bool canSign, bool canEncrypt, [NullAllowed] NSError securityError, MEEmailAddress[] addressesFailingEncryption);
+		NativeHandle Constructor (bool canSign, bool canEncrypt, [NullAllowed] NSError securityError, MEEmailAddress[] addressesFailingEncryption);
 
 		[Export ("canSign")]
 		bool CanSign { get; }
@@ -269,7 +273,7 @@ namespace MailKit {
 	interface MEDecodedMessage : NSSecureCoding
 	{
 		[Export ("initWithData:securityInformation:")]
-		IntPtr Constructor ([NullAllowed] NSData rawData, MEMessageSecurityInformation securityInformation);
+		NativeHandle Constructor ([NullAllowed] NSData rawData, MEMessageSecurityInformation securityInformation);
 
 		[NullAllowed, Export ("rawData", ArgumentSemantic.Copy)]
 		NSData RawData { get; }
@@ -283,7 +287,7 @@ namespace MailKit {
 	interface MEEncodedOutgoingMessage : NSSecureCoding
 	{
 		[Export ("initWithRawData:isSigned:isEncrypted:")]
-		IntPtr Constructor (NSData rawData, bool isSigned, bool isEncrypted);
+		NativeHandle Constructor (NSData rawData, bool isSigned, bool isEncrypted);
 
 		[Export ("rawData", ArgumentSemantic.Copy)]
 		NSData RawData { get; }
@@ -301,7 +305,7 @@ namespace MailKit {
 	interface MEEmailAddress : NSSecureCoding, NSCopying
 	{
 		[Export ("initWithRawString:")]
-		IntPtr Constructor (string rawString);
+		NativeHandle Constructor (string rawString);
 
 		[Export ("rawString")]
 		string RawString { get; }
@@ -423,7 +427,7 @@ namespace MailKit {
 		[DesignatedInitializer]
 		[Protected]
 		[Export ("initWithNibName:bundle:")]
-		IntPtr Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
+		NativeHandle Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
 	}
 
 	[NoWatch, NoTV, NoMacCatalyst, NoiOS, Mac (12,0)]

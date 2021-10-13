@@ -21,6 +21,10 @@ using CoreFoundation;
 using Foundation;
 using System.Runtime.Versioning;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Security {
 
 	[Flags]
@@ -98,9 +102,9 @@ namespace Security {
 #endif
 	public partial class SecAccessControl : NativeObject {
 #if !COREBUILD
-		protected override IntPtr ComputeHandle (IntPtr current)
+		protected override NativeHandle ComputeHandle (NativeHandle current)
 		{
-			if (current == IntPtr.Zero)
+			if (current == NativeHandle.Zero)
 				current = SecAccessControlCreateWithFlags (IntPtr.Zero, KeysAccessible.FromSecAccessible (Accessible), (nint) (long) Flags, out var _);
 			return current;
 		}

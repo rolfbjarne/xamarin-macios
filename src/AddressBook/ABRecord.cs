@@ -53,19 +53,15 @@ namespace AddressBook {
 	[Obsolete ("Starting with maccatalyst14.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
 #endif
 #endif
-	public class ABRecord : INativeObject, IDisposable {
+	public class ABRecord : NativeObject {
 
 		public const int InvalidRecordId = -1;
 		public const int InvalidPropertyId = -1;
 
-		IntPtr handle;
-
 		[Preserve (Conditional = true)]
 		internal ABRecord (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
 		}
 
 		public static ABRecord FromHandle (IntPtr handle)
@@ -102,43 +98,14 @@ namespace AddressBook {
 			return rec;
 		}
 
-		~ABRecord ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero)
-				CFObject.CFRelease (handle);
-			handle = IntPtr.Zero;
 			AddressBook = null;
-		}
-
-		void AssertValid ()
-		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("");
+			base.Dispose (disposing);
 		}
 
 		internal ABAddressBook AddressBook {
 			get; set;
-		}
-
-		public IntPtr Handle {
-			get {
-				AssertValid ();
-				return handle;
-			}
-			internal set {
-				handle = value;				
-			}
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]

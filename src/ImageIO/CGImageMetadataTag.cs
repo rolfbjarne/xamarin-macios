@@ -21,7 +21,7 @@ namespace ImageIO {
 #if !NET
 	[iOS (7,0)]
 #endif
-	public class CGImageMetadataTag : INativeObject, IDisposable {
+	public class CGImageMetadataTag : NativeObject {
 
 		// note: CGImageMetadataType is always an int (4 bytes) so it's ok to use in the pinvoke declaration
 		[DllImport (Constants.ImageIOLibrary)]
@@ -29,20 +29,16 @@ namespace ImageIO {
 			/* CFStringRef __nonnull */ IntPtr xmlns, /* CFStringRef __nullable */ IntPtr prefix,
 			/* CFStringRef __nonnull */ IntPtr name, CGImageMetadataType type, /* CFTypeRef __nonnull */ IntPtr value);
 
+		[Obsolete ("FIXME", error: true)] // TEMPORARY
 		public CGImageMetadataTag (IntPtr handle)
-			: this (handle, false)
+			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGImageMetadataTag (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (handle == IntPtr.Zero)
-				throw new Exception ("Invalid handle");
-
-			Handle = handle;
-			if (!owns)
-				CFObject.CFRetain (handle);
 		}
 
 		// According to header file the CFType value can be:
@@ -75,27 +71,6 @@ namespace ImageIO {
 
 			var p = (prefix == null) ? IntPtr.Zero : prefix.Handle;
 			Handle = CGImageMetadataTagCreate (xmlns.Handle, p, name.Handle, type, value);
-		}
-
-		public IntPtr Handle { get; internal set; }
-
-		~CGImageMetadataTag ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (Handle != IntPtr.Zero){
-				CFObject.CFRelease (Handle);
-				Handle = IntPtr.Zero;
-			}
 		}
 
 		[DllImport (Constants.ImageIOLibrary, EntryPoint="CGImageMetadataTagGetTypeID")]

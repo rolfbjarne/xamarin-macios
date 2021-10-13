@@ -43,7 +43,11 @@ using CoreServices;
 using ObjCRuntime;
 using Foundation;
 
+#if NET
+using CFIndex = System.IntPtr;
+#else
 using CFIndex = System.nint;
+#endif
 
 namespace CoreFoundation {
 
@@ -532,7 +536,7 @@ namespace CoreFoundation {
 				return;
 			CheckHandle ();
 			if (loop != null) {
-				DoSetClient (null, 0, IntPtr.Zero);
+				DoSetClient (null, (CFIndex) 0, IntPtr.Zero);
 				UnscheduleFromRunLoop (loop, loopMode);
 				loop = null;
 				loopMode = null;
@@ -699,7 +703,7 @@ namespace CoreFoundation {
 			var ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof (CFStreamClientContext)));
 			try {
 				Marshal.StructureToPtr (ctx, ptr, false);
-				if (!DoSetClient (OnCallbackDelegate, (nint) (long) args, ptr))
+				if (!DoSetClient (OnCallbackDelegate, (CFIndex) (long) args, ptr))
 					throw new InvalidOperationException ("Stream does not support async events.");
 			} finally {
 				Marshal.FreeHGlobal (ptr);

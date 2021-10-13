@@ -44,7 +44,7 @@ namespace CoreServices {
 					throw new InvalidCastException ();
 				}
 
-				using (var url = new CFUrl (handle))
+				using (var url = new CFUrl (handle, false))
 					return new Uri (url.ToString ());
 			}
 		}

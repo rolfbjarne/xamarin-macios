@@ -7,12 +7,15 @@
 // Copyright 2012-2014 Xamarin Inc.
 //
 
+#nullable enable
+
 #if !WATCH
 
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 #if !COREBUILD
@@ -34,15 +37,12 @@ namespace AudioToolbox {
 #endif
 
 	// MusicPlayer.h
-	public class MusicSequence : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public class MusicSequence : NonRefcountedNativeObject
 		{
 #if !COREBUILD
-		IntPtr handle;
-		internal MusicSequence (IntPtr handle) {
-			this.handle = handle;
+		internal MusicSequence (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
 
 		static Dictionary <IntPtr, MusicSequenceUserCallback> userCallbackHandles = new Dictionary <IntPtr, MusicSequenceUserCallback> (Runtime.IntPtrEqualityComparer);
@@ -55,43 +55,34 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus DisposeMusicSequence (/* MusicSequence */ IntPtr inSequence);
 		
+		static IntPtr Create ()
+		{
+			var rv = NewMusicSequence (out var handle);
+			if (rv != 0)
+				throw new Exception ("Unable to create MusicSequence: " + rv);
+			return handle;
+		}
+
 		public MusicSequence ()
+			: base (Create (), true)
 		{
-			NewMusicSequence (out handle);
 			lock (sequenceMap)
-				sequenceMap [handle] = new WeakReference (this);
-		}
-		
-		~MusicSequence ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
+				sequenceMap [base.Handle] = new WeakReference (this);
 		}
 
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
-		protected virtual void Dispose (bool disposing)
+		protected override void Free ()
 		{
-			if (handle != IntPtr.Zero){
-
+			if (base.Handle != IntPtr.Zero && Owns) {
 				lock (userCallbackHandles)
-					userCallbackHandles.Remove (handle);
+					userCallbackHandles.Remove (base.Handle);
 
 				// Remove native user callback
-				MusicSequenceSetUserCallback (handle, null, IntPtr.Zero);
+				MusicSequenceSetUserCallback (base.Handle, null, IntPtr.Zero);
 
-				DisposeMusicSequence (handle);
-				lock (sequenceMap){
-					sequenceMap.Remove (handle);
+				DisposeMusicSequence (base.Handle);
+				lock (sequenceMap) {
+					sequenceMap.Remove (base.Handle);
 				}
-				handle = IntPtr.Zero;
 			}
 		}
 
@@ -109,7 +100,7 @@ namespace AudioToolbox {
 					}
 					sequenceMap.Remove (handle);
 				}
-				var ms = new MusicSequence (handle);
+				var ms = new MusicSequence (handle, false);
 				sequenceMap [handle] = new WeakReference (ms);
 				return ms;
 			}
@@ -122,19 +113,19 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicSequenceGetAUGraph (/* MusicSequence */ IntPtr inSequence, /* AUGraph* */ out IntPtr outGraph);
 
-		public AUGraph AUGraph {
+		public AUGraph? AUGraph {
 			get {
 				IntPtr h;
-				if (MusicSequenceGetAUGraph (handle, out h) != MusicPlayerStatus.Success)
+				if (MusicSequenceGetAUGraph (Handle, out h) != MusicPlayerStatus.Success)
 					return null;
 
-				return new AUGraph (h);
+				return new AUGraph (h, false);
 			}
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 
-				MusicSequenceSetAUGraph (handle, value.Handle);
+				MusicSequenceSetAUGraph (Handle, value.Handle);
 			}
 		}
 
@@ -147,11 +138,11 @@ namespace AudioToolbox {
 		public MusicSequenceType SequenceType {
 			get {
 				MusicSequenceType type;
-				MusicSequenceGetSequenceType (handle, out type);
+				MusicSequenceGetSequenceType (Handle, out type);
 				return type;
 			}
 			set {
-				MusicSequenceSetSequenceType (handle, value);
+				MusicSequenceSetSequenceType (Handle, value);
 			}
 		}
 
@@ -175,7 +166,7 @@ namespace AudioToolbox {
 
 		public NSDictionary GetInfoDictionary ()
 		{
-			return Runtime.GetNSObject<NSDictionary> (MusicSequenceGetInfoDictionary (handle));
+			return Runtime.GetNSObject<NSDictionary> (MusicSequenceGetInfoDictionary (Handle));
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -184,7 +175,7 @@ namespace AudioToolbox {
 		public MusicTrack CreateTrack ()
 		{
 			IntPtr trackHandle;
-			if (MusicSequenceNewTrack (handle, out trackHandle) == MusicPlayerStatus.Success)
+			if (MusicSequenceNewTrack (Handle, out trackHandle) == MusicPlayerStatus.Success)
 				return new MusicTrack (this, trackHandle, owns: true);
 			else
 				return null;
@@ -198,7 +189,7 @@ namespace AudioToolbox {
 			get {
 				int count;
 				
-				if (MusicSequenceGetTrackCount (handle, out count) == MusicPlayerStatus.Success)
+				if (MusicSequenceGetTrackCount (Handle, out count) == MusicPlayerStatus.Success)
 					return count;
 				return 0;
 			}
@@ -211,7 +202,7 @@ namespace AudioToolbox {
 		{
 			IntPtr outTrack;
 			
-			if (MusicSequenceGetIndTrack (handle, trackIndex, out outTrack) == MusicPlayerStatus.Success)
+			if (MusicSequenceGetIndTrack (Handle, trackIndex, out outTrack) == MusicPlayerStatus.Success)
 				return new MusicTrack (this, outTrack, owns: false);
 			else
 				return null;
@@ -225,7 +216,7 @@ namespace AudioToolbox {
 			if (track == null)
 				throw new ArgumentNullException ("track");
 
-			return MusicSequenceGetTrackIndex (handle, track.Handle, out index);
+			return MusicSequenceGetTrackIndex (Handle, track.Handle, out index);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -235,7 +226,7 @@ namespace AudioToolbox {
 		{
 			IntPtr outTrack;
 
-			if (MusicSequenceGetTempoTrack (handle, out outTrack) == MusicPlayerStatus.Success)
+			if (MusicSequenceGetTempoTrack (Handle, out outTrack) == MusicPlayerStatus.Success)
 				return new MusicTrack (this, outTrack, owns: false);
 			else
 				return null;
@@ -249,7 +240,7 @@ namespace AudioToolbox {
 		{
 			if (endpoint == null)
 				throw new ArgumentNullException ("endpoint");
-			return MusicSequenceSetMIDIEndpoint (handle, endpoint.handle);
+			return MusicSequenceSetMIDIEndpoint (Handle, endpoint.handle);
 		}
 #endif // IOS
 
@@ -259,7 +250,7 @@ namespace AudioToolbox {
 		public double GetSecondsForBeats (double beats)
 		{
 			double sec;
-			if (MusicSequenceGetSecondsForBeats (handle, beats, out sec) == MusicPlayerStatus.Success)
+			if (MusicSequenceGetSecondsForBeats (Handle, beats, out sec) == MusicPlayerStatus.Success)
 				return sec;
 			return 0;
 		}
@@ -270,7 +261,7 @@ namespace AudioToolbox {
 		public double GetBeatsForSeconds (double seconds)
 		{
 			double beats;
-			if (MusicSequenceGetBeatsForSeconds (handle, seconds, out beats) == MusicPlayerStatus.Success)
+			if (MusicSequenceGetBeatsForSeconds (Handle, seconds, out beats) == MusicPlayerStatus.Success)
 				return beats;
 			return 0;
 		}
@@ -281,9 +272,9 @@ namespace AudioToolbox {
 		public void SetUserCallback (MusicSequenceUserCallback callback)
 		{
 			lock (userCallbackHandles)
-				userCallbackHandles [handle] = callback;
+				userCallbackHandles [Handle] = callback;
 
-			MusicSequenceSetUserCallback (handle, userCallbackProxy, IntPtr.Zero);
+			MusicSequenceSetUserCallback (Handle, userCallbackProxy, IntPtr.Zero);
 		}
 
 #if !MONOMAC
@@ -309,14 +300,14 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus BeatsToBarBeatTime (double beats, int subbeatDivisor, out CABarBeatTime barBeatTime)
 		{
-			return MusicSequenceBeatsToBarBeatTime (handle, beats, subbeatDivisor, out barBeatTime);
+			return MusicSequenceBeatsToBarBeatTime (Handle, beats, subbeatDivisor, out barBeatTime);
 		}
 		
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicSequenceBarBeatTimeToBeats (/* MusicSequence */ IntPtr inSequence, CABarBeatTime inBarBeatTime, /* MusicTimeStamp*/ out double outBeats);
 		public MusicPlayerStatus BarBeatTimeToBeats (CABarBeatTime barBeatTime, out double beats)
 		{
-			return MusicSequenceBarBeatTimeToBeats (handle, barBeatTime, out beats);
+			return MusicSequenceBarBeatTimeToBeats (Handle, barBeatTime, out beats);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -324,7 +315,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus Reverse ()
 		{
-			return MusicSequenceReverse (handle);
+			return MusicSequenceReverse (Handle);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -335,7 +326,7 @@ namespace AudioToolbox {
 			if (url == null)
 				throw new ArgumentNullException ("url");
 			
-			return MusicSequenceFileLoad (handle, url.Handle, fileTypeId, loadFlags);
+			return MusicSequenceFileLoad (Handle, url.Handle, fileTypeId, loadFlags);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -346,7 +337,7 @@ namespace AudioToolbox {
 			if (data == null)
 				throw new ArgumentNullException ("data");
 			
-			return MusicSequenceFileLoadData (handle, data.Handle, fileTypeId, loadFlags);
+			return MusicSequenceFileLoadData (Handle, data.Handle, fileTypeId, loadFlags);
 		}
 			
 			
@@ -359,7 +350,7 @@ namespace AudioToolbox {
 			if (url == null)
 				throw new ArgumentNullException ("url");
 			
-			return MusicSequenceFileCreate (handle, url.Handle, fileType, flags, resolution);
+			return MusicSequenceFileCreate (Handle, url.Handle, fileType, flags, resolution);
 		}
 		
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -369,7 +360,7 @@ namespace AudioToolbox {
 		public NSData CreateData (MusicSequenceFileTypeID fileType, MusicSequenceFileFlags flags = 0, ushort resolution = 0)
 		{
 			IntPtr theData;
-			if (MusicSequenceFileCreateData (handle, fileType, flags, resolution, out theData) == MusicPlayerStatus.Success)
+			if (MusicSequenceFileCreateData (Handle, fileType, flags, resolution, out theData) == MusicPlayerStatus.Success)
 				return Runtime.GetNSObject<NSData> (theData);
 			return null;
 		}

@@ -35,44 +35,15 @@ using Foundation;
 namespace CoreFoundation {
 
 	// CFNumber.h
-	partial class CFBoolean : INativeObject, IDisposable {
-		IntPtr handle;
-
+	partial class CFBoolean : NativeObject {
 		[Preserve (Conditional = true)]
 		internal CFBoolean (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CFObject.CFRetain (handle);
-		}
-
-		~CFBoolean ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFBooleanGetTypeID")]
 		public extern static /* CFTypeID */ nint GetTypeID ();
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
 
 		public static implicit operator bool (CFBoolean value)
 		{
@@ -99,7 +70,7 @@ namespace CoreFoundation {
 		extern static /* Boolean */ bool CFBooleanGetValue (/* CFBooleanRef */ IntPtr boolean);
 
 		public bool Value {
-			get {return CFBooleanGetValue (handle);}
+			get { return CFBooleanGetValue (Handle); }
 		}
 
 		public static bool GetValue (IntPtr boolean)

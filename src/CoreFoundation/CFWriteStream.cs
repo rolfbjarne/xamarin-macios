@@ -33,7 +33,11 @@ using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
+#if NET
+using CFIndex = System.IntPtr;
+#else
 using CFIndex = System.nint;
+#endif
 
 namespace CoreFoundation {
 
@@ -121,7 +125,7 @@ namespace CoreFoundation {
 		protected override bool DoSetClient (CFStreamCallback callback, CFIndex eventTypes,
 		                                     IntPtr context)
 		{
-			return CFWriteStreamSetClient (Handle, eventTypes, callback, context);
+			return CFWriteStreamSetClient (Handle, (nint) eventTypes, callback, context);
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary)]

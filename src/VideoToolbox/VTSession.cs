@@ -23,45 +23,16 @@ namespace VideoToolbox {
 #else
 	[iOS (8,0), TV (10,2)]
 #endif
-	public class VTSession : INativeObject, IDisposable {
-		IntPtr handle;
-
-		/* invoked by marshallers */
+	public class VTSession : NativeObject {
 		protected internal VTSession (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
-			CFObject.CFRetain (this.handle);
-		}
-
-		public IntPtr Handle {
-			get {return handle; }
 		}
 
 		[Preserve (Conditional=true)]
 		internal VTSession (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CFObject.CFRetain (this.handle);
-		}
-		
-		~VTSession ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
 		}
 
 		// All of them returns OSStatus mapped to VTStatus enum
@@ -84,23 +55,23 @@ namespace VideoToolbox {
 		public VTStatus SetProperties (VTPropertyOptions options)
 		{
 			if (options == null)
-				throw new ArgumentNullException ("options");
+				throw new ArgumentNullException (nameof (options));
 
-			return VTSessionSetProperties (handle, options.Dictionary.Handle);
+			return VTSessionSetProperties (Handle, options.Dictionary.Handle);
 		}
 
 		public VTStatus SetProperty (NSString propertyKey, NSObject value)
 		{
 			if (propertyKey == null)
-				throw new ArgumentNullException ("propertyKey");
+				throw new ArgumentNullException (nameof (propertyKey));
 
-			return VTSessionSetProperty (handle, propertyKey.Handle, value != null ? value.Handle : IntPtr.Zero);
+			return VTSessionSetProperty (Handle, propertyKey.Handle, value != null ? value.Handle : IntPtr.Zero);
 		}
 
 		public VTPropertyOptions GetProperties ()
 		{
 			IntPtr ret;
-			var result = VTSessionCopySerializableProperties (handle, IntPtr.Zero, out ret);
+			var result = VTSessionCopySerializableProperties (Handle, IntPtr.Zero, out ret);
 			if (result != VTStatus.Ok || ret == IntPtr.Zero)
 				return null;
 
@@ -111,10 +82,10 @@ namespace VideoToolbox {
 		public NSObject GetProperty (NSString propertyKey)
 		{
 			if (propertyKey == null)
-				throw new ArgumentNullException ("propertyKey");
+				throw new ArgumentNullException (nameof (propertyKey));
 
 			IntPtr ret;
-			if (VTSessionCopyProperty (handle, propertyKey.Handle, IntPtr.Zero, out ret) != VTStatus.Ok || ret == IntPtr.Zero)
+			if (VTSessionCopyProperty (Handle, propertyKey.Handle, IntPtr.Zero, out ret) != VTStatus.Ok || ret == IntPtr.Zero)
 				return null;
 			var obj = Runtime.GetNSObject (ret);
 			obj.DangerousRelease ();

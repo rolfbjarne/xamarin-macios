@@ -39,23 +39,17 @@ using System.Runtime.Versioning;
 #endif
 
 namespace Security {
-	public partial class SecTrust : INativeObject, IDisposable {
-		IntPtr handle;
+	public partial class SecTrust : NativeObject {
 
 		public SecTrust (IntPtr handle) 
-			: this (handle, false)
+			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional=true)]
 		internal SecTrust (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (handle == IntPtr.Zero)
-				throw new Exception ("Invalid handle");
-
-			this.handle = handle;
-			if (!owns)
-				CFObject.CFRetain (handle);
 		}
 
 #if !COREBUILD
@@ -123,9 +117,10 @@ namespace Security {
 
 		void Initialize (IntPtr certHandle, SecPolicy policy)
 		{
-			SecStatusCode result = SecTrustCreateWithCertificates (certHandle, policy == null ? IntPtr.Zero : policy.Handle, out handle);
+			SecStatusCode result = SecTrustCreateWithCertificates (certHandle, policy == null ? IntPtr.Zero : policy.Handle, out var handle);
 			if (result != SecStatusCode.Success)
 				throw new ArgumentException (result.ToString ());
+			InitializeHandle (handle);
 		}
 
 #if !NET
@@ -167,11 +162,8 @@ namespace Security {
 #endif
 		public SecTrustResult Evaluate ()
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
 			SecTrustResult trust;
-			SecStatusCode result = SecTrustEvaluate (handle, out trust);
+			SecStatusCode result = SecTrustEvaluate (GetCheckedHandle (), out trust);
 			if (result != SecStatusCode.Success)
 				throw new InvalidOperationException (result.ToString ());
 			return trust;
@@ -182,9 +174,9 @@ namespace Security {
 
 		public int Count {
 			get {
-				if (handle == IntPtr.Zero)
+				if (Handle == IntPtr.Zero)
 					return 0;
-				return (int) SecTrustGetCertificateCount (handle);
+				return (int) SecTrustGetCertificateCount (Handle);
 			}
 		}
 
@@ -236,12 +228,10 @@ namespace Security {
 #endif
 		public SecCertificate this [nint index] {
 			get {
-				if (handle == IntPtr.Zero)
-					throw new ObjectDisposedException ("SecTrust");
 				if ((index < 0) || (index >= Count))
-					throw new ArgumentOutOfRangeException ("index");
+					throw new ArgumentOutOfRangeException (nameof (index));
 
-				return new SecCertificate (SecTrustGetCertificateAtIndex (handle, index));
+				return new SecCertificate (SecTrustGetCertificateAtIndex (GetCheckedHandle (), index));
 			}
 		}
 
@@ -265,7 +255,7 @@ namespace Security {
 		[Watch (8,0), TV (15,0), Mac (12,0), iOS (15,0), MacCatalyst (15,0)]
 #endif
 		public SecCertificate[] GetCertificateChain ()
-			=> NSArray.ArrayFromHandle<SecCertificate> (SecTrustCopyCertificateChain (handle));
+			=> NSArray.ArrayFromHandle<SecCertificate> (SecTrustCopyCertificateChain (Handle));
 
 #if !NET
 		[Deprecated (PlatformName.iOS, 14,0)]
@@ -299,10 +289,7 @@ namespace Security {
 #endif
 		public SecKey GetPublicKey ()
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
-			return new SecKey (SecTrustCopyPublicKey (handle), true);
+			return new SecKey (SecTrustCopyPublicKey (GetCheckedHandle ()), true);
 		}
 
 #if !NET
@@ -334,10 +321,7 @@ namespace Security {
 #endif
 		public SecKey GetKey ()
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
-			return new SecKey (SecTrustCopyKey (handle), true);
+			return new SecKey (SecTrustCopyKey (GetCheckedHandle ()), true);
 		}
 
 #if !NET
@@ -351,10 +335,7 @@ namespace Security {
 #endif
 		public NSData GetExceptions ()
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
-			return new NSData (SecTrustCopyExceptions (handle), false); // inverted boolean?
+			return new NSData (SecTrustCopyExceptions (GetCheckedHandle ()), false); // inverted boolean?
 		}
 
 #if !NET
@@ -369,11 +350,7 @@ namespace Security {
 #endif
 		public bool SetExceptions (NSData data)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
-			IntPtr p = data == null ? IntPtr.Zero : data.Handle;
-			return SecTrustSetExceptions (handle, p);
+			return SecTrustSetExceptions (GetCheckedHandle (), data.GetHandle ());
 		}
 
 		[DllImport (Constants.SecurityLibrary)]
@@ -381,10 +358,7 @@ namespace Security {
 
 		public double GetVerifyTime ()
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
-			return SecTrustGetVerifyTime (handle);
+			return SecTrustGetVerifyTime (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.SecurityLibrary)]
@@ -392,12 +366,9 @@ namespace Security {
 
 		public SecStatusCode SetVerifyDate (DateTime date)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
 			// CFDateRef amd NSDate are toll-freee bridged
 			using (NSDate d = (NSDate) date) {
-				return SecTrustSetVerifyDate (handle, d.Handle);
+				return SecTrustSetVerifyDate (GetCheckedHandle (), d.Handle);
 			}
 		}
 
@@ -406,10 +377,8 @@ namespace Security {
 
 		public SecStatusCode SetAnchorCertificates (X509CertificateCollection certificates)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
 			if (certificates == null)
-				return SecTrustSetAnchorCertificates (handle, IntPtr.Zero);
+				return SecTrustSetAnchorCertificates (GetCheckedHandle (), IntPtr.Zero);
 
 			SecCertificate[] array = new SecCertificate [certificates.Count];
 			int i = 0;
@@ -420,10 +389,8 @@ namespace Security {
 
 		public SecStatusCode SetAnchorCertificates (X509Certificate2Collection certificates)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
 			if (certificates == null)
-				return SecTrustSetAnchorCertificates (handle, IntPtr.Zero);
+				return SecTrustSetAnchorCertificates (GetCheckedHandle (), IntPtr.Zero);
 
 			SecCertificate[] array = new SecCertificate [certificates.Count];
 			int i = 0;
@@ -435,9 +402,9 @@ namespace Security {
 		public SecStatusCode SetAnchorCertificates (SecCertificate[] array)
 		{
 			if (array == null)
-				return SecTrustSetAnchorCertificates (handle, IntPtr.Zero);
+				return SecTrustSetAnchorCertificates (Handle, IntPtr.Zero);
 			using (var certs = CFArray.FromNativeObjects (array)) {
-				return SecTrustSetAnchorCertificates (handle, certs.Handle);
+				return SecTrustSetAnchorCertificates (Handle, certs.Handle);
 			}
 		}
 
@@ -446,35 +413,8 @@ namespace Security {
 
 		public SecStatusCode SetAnchorCertificatesOnly (bool anchorCertificatesOnly)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("SecTrust");
-
-			return SecTrustSetAnchorCertificatesOnly (handle, anchorCertificatesOnly);
+			return SecTrustSetAnchorCertificatesOnly (GetCheckedHandle (), anchorCertificatesOnly);
 		}
 #endif
-
-
-		~SecTrust ()
-		{
-			Dispose (false);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
 	}
 }

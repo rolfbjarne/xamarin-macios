@@ -11,10 +11,14 @@ using System.Runtime.InteropServices;
 
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 	public partial class Protocol : INativeObject {
 #if !COREBUILD
-		IntPtr handle;
+		NativeHandle handle;
 
 		public Protocol (string name)
 		{
@@ -41,7 +45,7 @@ namespace ObjCRuntime {
 			this.handle = handle;
 		}
 
-		public IntPtr Handle {
+		public NativeHandle Handle {
 			get { return this.handle; }
 		}
 

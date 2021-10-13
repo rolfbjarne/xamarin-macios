@@ -68,6 +68,11 @@ namespace CoreFoundation {
 			return new DispatchBlock (dispatch_block_create_with_qos_class ((nuint) (ulong) flags, qosClass, relative_priority, GetCheckedHandle ()), true);
 		}
 
+		internal unsafe BlockLiteral *GetCheckedBlockLiteral ()
+		{
+			return (BlockLiteral *) (IntPtr) GetCheckedHandle ();
+		}
+
 		protected override void Retain ()
 		{
 			Handle = BlockLiteral._Block_copy (GetCheckedHandle ());
@@ -181,9 +186,9 @@ namespace CoreFoundation {
 				return null;
 
 			unsafe {
-				BlockLiteral *handle = (BlockLiteral *) block.GetCheckedHandle ();
+				var handle = block.GetCheckedBlockLiteral ();
 				var del = handle->GetDelegateForBlock<DispatchBlockCallback> ();
-				return new Action (() => del (block.GetCheckedHandle ()));
+				return new Action (() => del ((IntPtr) block.GetCheckedBlockLiteral ()));
 			}
 		}
 
@@ -207,6 +212,17 @@ namespace CoreFoundation {
 			block.SetupBlockUnsafe (Trampolines.SDAction.Handler, codeToRun);
 			invoker ((IntPtr) block_ptr);
 			block_ptr->CleanupBlock ();
+		}
+
+		unsafe internal delegate void ActionInvoker (BlockLiteral* block);
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal static unsafe void Invoke (Action codeToRun, ActionInvoker invoker)
+		{
+			var block = new BlockLiteral ();
+			block.SetupBlockUnsafe (Trampolines.SDAction.Handler, codeToRun);
+			invoker (&block);
+			block.CleanupBlock ();
 		}
 	}
 

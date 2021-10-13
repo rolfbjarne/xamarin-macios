@@ -117,7 +117,7 @@ namespace ImageIO {
 	}
 #endif
 
-	public partial class CGImageSource : INativeObject, IDisposable
+	public partial class CGImageSource : NativeObject
 	{
 #if !COREBUILD
 		[DllImport (Constants.ImageIOLibrary, EntryPoint="CGImageSourceGetTypeID")]
@@ -135,43 +135,16 @@ namespace ImageIO {
 			}
 		}
 #endif
-		internal IntPtr handle;
-
 		// invoked by marshallers
-		internal CGImageSource (IntPtr handle) : this (handle, false)
+		internal CGImageSource (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGImageSource (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CFObject.CFRetain (handle);
-		}
-
-		~CGImageSource ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-		
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
 		}
 
 #if !COREBUILD

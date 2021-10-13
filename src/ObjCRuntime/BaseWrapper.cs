@@ -9,34 +9,21 @@ using CoreFoundation;
 
 namespace ObjCRuntime {
 
-	public abstract class BaseWrapper : INativeObject, IDisposable {
+	public abstract class BaseWrapper : NativeObject {
 
 		public BaseWrapper (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			Handle = handle;
-			if (!owns)
-				Messaging.void_objc_msgSend (Handle, Selector.GetHandle ("retain"));
 		}
 
-		~BaseWrapper ()
+		protected override void Retain ()
 		{
-			Dispose (false);
+			Messaging.void_objc_msgSend (Handle, Selector.GetHandle ("retain"));
 		}
 
-		public IntPtr Handle { get; protected set; }
-
-		public void Dispose ()
+		protected override void Release ()
 		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (Handle != IntPtr.Zero) {
-				Messaging.void_objc_msgSend (Handle, Selector.GetHandle ("release"));
-				Handle = IntPtr.Zero;
-			}
+			Messaging.void_objc_msgSend (Handle, Selector.GetHandle ("release"));
 		}
 	}
 }

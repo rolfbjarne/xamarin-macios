@@ -35,7 +35,7 @@ using ObjCRuntime;
 namespace CoreFoundation {	
 
 	// CFBase.h
-	public partial class CFAllocator : INativeObject, IDisposable 
+	public partial class CFAllocator : NativeObject
 	{
 #if !COREBUILD
 		static CFAllocator Default_cf;
@@ -44,42 +44,17 @@ namespace CoreFoundation {
 		static CFAllocator MallocZone_cf;
 		static CFAllocator Null_cf;
 #endif
-		IntPtr handle;
 
 		public CFAllocator (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		public CFAllocator (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
 		}
 
-		~CFAllocator ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-		
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
 #if !COREBUILD
 		public static CFAllocator Default {
 			get {
@@ -117,7 +92,7 @@ namespace CoreFoundation {
 
 		public IntPtr Allocate (long size)
 		{
-			return CFAllocatorAllocate (handle, (nint)size, 0);
+			return CFAllocatorAllocate (Handle, (nint)size, 0);
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary)]
@@ -125,7 +100,7 @@ namespace CoreFoundation {
 
 		public void Deallocate (IntPtr ptr)
 		{
-			CFAllocatorDeallocate (handle, ptr);
+			CFAllocatorDeallocate (Handle, ptr);
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFAllocatorGetTypeID")]

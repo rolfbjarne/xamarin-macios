@@ -27,7 +27,7 @@ namespace CoreGraphics {
 #else
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
-	public sealed class CGEvent : IDisposable, INativeObject {
+	public sealed class CGEvent : NativeObject {
 		public delegate IntPtr CGEventTapCallback (IntPtr tapProxyEvent, CGEventType eventType, IntPtr eventRef, IntPtr userInfo);
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
@@ -69,35 +69,34 @@ namespace CoreGraphics {
 		extern static IntPtr CGEventCreate (IntPtr eventSourceHandle);
 		
 		public CGEvent (CGEventSource eventSource)
-		{
-			handle = CGEventCreate (eventSource == null ? IntPtr.Zero : eventSource.Handle);
-		}
-
-		public CGEvent (IntPtr handle) : this (handle, false)
+			: base (CGEventCreate (eventSource.GetHandle (), true)
 		{
 		}
 
-		internal CGEvent (IntPtr handle, bool ownsHandle)
+		public CGEvent (IntPtr handle)
+			: base (handle, false)
 		{
-			if (!ownsHandle)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
+		}
+
+		internal CGEvent (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateMouseEvent(IntPtr source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton);
 			
 		public CGEvent (CGEventSource source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton)
+			: base (CGEventCreateMouseEvent (source.GetHandle (), mouseType, mouseCursorPosition, mouseButton), true)
 		{
-			handle = CGEventCreateMouseEvent (source == null ? IntPtr.Zero : source.Handle, mouseType, mouseCursorPosition, mouseButton);
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateKeyboardEvent (IntPtr source, ushort virtualKey, [MarshalAs (UnmanagedType.I1)] bool keyDown);
 
 		public CGEvent (CGEventSource source, ushort virtualKey, bool keyDown)
+			: base (CGEventCreateKeyboardEvent (source.GetHandle (), virtualKey, keyDown), true)
 		{
-			handle = CGEventCreateKeyboardEvent (source == null ? IntPtr.Zero : source.Handle, virtualKey, keyDown);
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
@@ -109,11 +108,14 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateScrollWheelEvent (IntPtr source, CGScrollEventUnit units, uint /* uint32_t */ wheelCount, int /* uint32_t */ wheel1, int /* uint32_t */ wheel2, int /* uint32_t */ wheel3);
 
-		public CGEvent (CGEventSource source, CGScrollEventUnit units, params int []  wheel)
+		// FIXME: this doesn't work on ARM64
+
+		static IntPtr Create (CGEventSource source, CGScrollEventUnit units, params int [] wheel)
 		{
-			IntPtr shandle = source == null ? IntPtr.Zero : source.Handle;
-			
-			switch (wheel.Length){
+			IntPtr handle;
+			IntPtr shandle = source.GetHandle ();
+
+			switch (wheel.Length) {
 			case 0:
 				throw new ArgumentException ("At least one wheel must be provided");
 			case 1:
@@ -128,31 +130,12 @@ namespace CoreGraphics {
 			default:
 				throw new ArgumentException ("Only one to three wheels are supported on this constructor");
 			}
-		}
-	
-		~CGEvent ()
-		{
-			Dispose (false);
+			return handle;
 		}
 
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-		public void Dispose ()
+		public CGEvent (CGEventSource source, CGScrollEventUnit units, params int []  wheel)
+			: base (Create (source, units, wheel), true)
 		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]

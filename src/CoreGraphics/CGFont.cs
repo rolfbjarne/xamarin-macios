@@ -37,53 +37,29 @@ using CoreText;
 namespace CoreGraphics {
 
 	// CGFont.h
-	public class CGFont : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public class CGFont : NativeObject
 		{
 #if !COREBUILD
-		internal IntPtr handle;
-
 		[Preserve (Conditional=true)]
 		internal CGFont (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ArgumentNullException ("handle");
-
-			this.handle = handle;
-
-			if (!owns)
-				CGFontRetain (handle);
-		}
-		
-		~CGFont ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
 		}
 
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGFontRef */ IntPtr CGFontRetain (/* CGFontRef */ IntPtr font);
 	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGFontRelease (/* CGFontRef */ IntPtr font);
 		
-		protected virtual void Dispose (bool disposing)
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
-				CGFontRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			CGFontRetain (GetCheckedHandle ());
+		}
+
+		protected override void Release ()
+		{
+			CGFontRelease (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]

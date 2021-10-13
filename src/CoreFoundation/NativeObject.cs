@@ -91,4 +91,35 @@ namespace CoreFoundation {
 			return handle;
 		}
 	}
+
+	public abstract class NonRefcountedNativeObject : NativeObject {
+		readonly bool owns;
+
+		protected bool Owns { get => owns; }
+
+		protected NonRefcountedNativeObject (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
+			this.owns = owns;
+		}
+
+		protected sealed override void Retain ()
+		{
+			// Nothing to do here
+		}
+
+		protected sealed override void Release ()
+		{
+			// Nothing to do here
+		}
+
+		protected abstract void Free ();
+
+		// Handle will be Zero after this call
+		protected override void Dispose (bool disposing)
+		{
+			Free ();
+			base.Dispose (disposing);
+		}
+	}
 }

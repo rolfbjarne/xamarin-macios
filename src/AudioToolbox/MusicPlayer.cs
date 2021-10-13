@@ -13,6 +13,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 
@@ -70,49 +71,36 @@ namespace AudioToolbox {
 	}
 
 	// MusicPlayer.h
-	public class MusicPlayer : INativeObject, IDisposable {
-		IntPtr handle;
-
+	public class MusicPlayer : NonRefcountedNativeObject {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus NewMusicPlayer (/* MusicPlayer* */ out IntPtr outPlayer);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus DisposeMusicPlayer (/* MusicPlayer */ IntPtr inPlayer);
 							      
-		private MusicPlayer (IntPtr handle) {
-			this.handle = handle;
+		MusicPlayer (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
 
-		~MusicPlayer ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
-		protected virtual void Dispose (bool disposing)
+		protected override void Free ()
 		{
 			currentSequence = null;
-			if (handle != IntPtr.Zero){
-				DisposeMusicPlayer (handle);
-				handle = IntPtr.Zero;
-			}
+			if (Handle != IntPtr.Zero && Owns)
+				DisposeMusicPlayer (Handle);
+		}
+
+		static IntPtr Create ()
+		{
+			var result = NewMusicPlayer (out var handle);
+			if (result == MusicPlayerStatus.Success)
+				return handle;
+			throw new Exception ("Unable to create MusicPlayer: " + result);
 		}
 
 		public MusicPlayer ()
+			: base (Create (), true)
 		{
-			var result = NewMusicPlayer (out handle);
-			if (result == MusicPlayerStatus.Success)
-				return;
-			throw new Exception ("Unable to create MusicPlayer: " + result);
 		}
 
 		static public MusicPlayer Create (out MusicPlayerStatus OSstatus)
@@ -120,7 +108,7 @@ namespace AudioToolbox {
 			IntPtr handle;
 			OSstatus = NewMusicPlayer (out handle);
 			if (OSstatus == 0)
-				return new MusicPlayer (handle);
+				return new MusicPlayer (handle, true);
 			return null;
 		}
 

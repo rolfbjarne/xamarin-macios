@@ -1642,6 +1642,7 @@ tvOS_APIS=$(TVOS_APIS)
 MacCatalyst_APIS=$(MACCATALYST_APIS)
 macOS_APIS=$(MAC_APIS)
 
+ifdef ENABLE_DOTNET
 define DotNetProjectFiles
 $(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj: dotnet.tmpl.csproj Makefile $$(wildcard $(CURDIR)/*.sources)
 	@mkdir -p $$(dir $$@)
@@ -1650,9 +1651,10 @@ $(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj: dotnet.tmpl.csproj Makefile $$(wi
 		-e 's*<!--%FILES%-->*$$(foreach file,$$($(1)_SOURCES),<Compile Include="..\\..\\..\\..\\$$(file)"/>)*' \
 		-e 's*<!--%APIS%-->*$$(foreach file,$$($(1)_APIS),<None Include="..\\..\\..\\..\\$$(file)"/>)*' \
 		$$< | xmllint --format - > $$@
+PROJECT_FILES += $(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj
 endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetProjectFiles,$(platform))))
-
+endif
 
 dotnet: $(DOTNET_TARGETS)
 ifdef ENABLE_DOTNET

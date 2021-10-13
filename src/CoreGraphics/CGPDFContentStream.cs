@@ -6,6 +6,8 @@
 //     
 // Copyright 2014 Xamarin Inc. All rights reserved.
 
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 using Foundation;
@@ -15,7 +17,7 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFContentStream.h
-	public class CGPDFContentStream : INativeObject, IDisposable {
+	public class CGPDFContentStream : NativeObject {
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFContentStreamRef */ IntPtr CGPDFContentStreamCreateWithPage (/* CGPDFPageRef */ IntPtr page);
@@ -31,57 +33,43 @@ namespace CoreGraphics {
 		extern static void CGPDFContentStreamRelease (/* CGPDFContentStreamRef */ IntPtr cs);
 
 		public CGPDFContentStream (IntPtr handle)
+			: base (handle, false)
 		{
-			CGPDFContentStreamRetain (handle);
-			Handle = handle;
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGPDFContentStream (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CGPDFContentStreamRetain (handle);
-
-			Handle = handle;
 		}
 
 		public CGPDFContentStream (CGPDFPage page)
+			: base (CGPDFContentStreamCreateWithPage (page == null ? throw new ArgumentNullException (nameof (page)) : page.Handle))
 		{
-			if (page == null)
-				throw new ArgumentNullException ("page");
-			Handle = CGPDFContentStreamCreateWithPage (page.Handle);
+		}
+
+		static IntPtr Create (CGPDFStream stream, NSDictionary streamResources = null, CGPDFContentStream parent = null)
+		{
+			if (stream == null)
+				throw new ArgumentNullException (nameof (stream));
+
+			return CGPDFContentStreamCreateWithStream (stream.Handle, streamResources.GetHandle (), parent.GetHandle ());
 		}
 
 		public CGPDFContentStream (CGPDFStream stream, NSDictionary streamResources = null, CGPDFContentStream parent = null)
+			: base (Create (stream, streamResources, parent), true)
 		{
-			if (stream == null)
-				throw new ArgumentNullException ("stream");
-
-			var dh = streamResources == null ? IntPtr.Zero : streamResources.Handle;
-			var ph = parent == null ? IntPtr.Zero : parent.Handle;
-			Handle = CGPDFContentStreamCreateWithStream (stream.Handle, dh, ph);
 		}
 
-		~CGPDFContentStream ()
+		protected override void Retain ()
 		{
-			Dispose (false);
+			CGPDFContentStreamRetain (GetCheckedHandle ());
 		}
 
-		public void Dispose ()
+		protected override void Release ()
 		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
+			CGPDFContentStreamRelease (GetCheckedHandle ());
 		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (Handle != IntPtr.Zero){
-				CGPDFContentStreamRelease (Handle);
-				Handle = IntPtr.Zero;
-			}
-		}
-
-		public IntPtr Handle { get; private set; }
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CFArrayRef */ IntPtr CGPDFContentStreamGetStreams (/* CGPDFContentStreamRef */ IntPtr cs);

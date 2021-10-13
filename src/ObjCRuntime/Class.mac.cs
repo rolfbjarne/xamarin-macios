@@ -38,7 +38,7 @@ using System.Runtime.InteropServices;
 using Foundation;
 
 namespace ObjCRuntime {
-	public partial class Class : INativeObject {
+	public partial class Class : NativeObject {
 #if !COREBUILD
 		internal static string GetName (IntPtr @class)
 		{

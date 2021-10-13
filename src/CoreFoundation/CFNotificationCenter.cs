@@ -47,31 +47,16 @@ namespace CoreFoundation {
 	}
 			
 	
-	public class CFNotificationCenter : INativeObject, IDisposable {
-		internal IntPtr handle;
-		
+	public class CFNotificationCenter : NativeObject {
 		// If this becomes public for some reason, and more than three instances are created, you should revisit the lookup code
 		internal CFNotificationCenter (CFNotificationCenterRef handle) : this (handle, false)
 		{
 		}
 
 		// If this becomes public for some reason, and more than three instances are created, you should revisit the lookup code
-		internal CFNotificationCenter (CFNotificationCenterRef handle, bool ownsHandle)
+		internal CFNotificationCenter (CFNotificationCenterRef handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!ownsHandle)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
-		}
-
-		~CFNotificationCenter ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
 		}
 
 		static CFNotificationCenter darwinnc, localnc;
@@ -107,20 +92,6 @@ namespace CoreFoundation {
 			}
 		}
 
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
-
 		Dictionary<string,List<CFNotificationObserverToken>> listeners = new Dictionary<string,List<CFNotificationObserverToken>> ();
 		const string NullNotificationName = "NullNotificationName";
 		public CFNotificationObserverToken AddObserver (string name, INativeObject objectToObserve, Action<string,NSDictionary> notificationHandler,
@@ -135,7 +106,7 @@ namespace CoreFoundation {
 			name = name ?? NullNotificationName;
 			var token = new CFNotificationObserverToken () {
 				stringName = name,
-				centerHandle = handle,
+				centerHandle = Handle,
 				nameHandle = strHandle,
 				observedObject = objectToObserve == null ? IntPtr.Zero : objectToObserve.Handle,
 				listener = notificationHandler
@@ -151,8 +122,8 @@ namespace CoreFoundation {
 			lock (listeners){
 				if (!listeners.TryGetValue (name, out listenersForName)){
 					listenersForName = new List<CFNotificationObserverToken> (1);
-					CFNotificationCenterAddObserver (center: handle,
-									 observer: handle,
+					CFNotificationCenterAddObserver (center: Handle,
+									 observer: Handle,
 									 callback: NotificationCallback,
 									 name: strHandle,
 									 obj: token.observedObject,

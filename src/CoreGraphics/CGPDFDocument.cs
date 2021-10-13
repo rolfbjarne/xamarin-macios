@@ -34,68 +34,44 @@ using CoreFoundation;
 
 namespace CoreGraphics {
 
-	public class CGPDFDocument : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public class CGPDFDocument : NativeObject
 	{
 #if !COREBUILD
-		internal IntPtr handle;
-
-		~CGPDFDocument ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFDocumentRelease (/* CGPDFDocumentRef */ IntPtr document);
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFDocumentRetain (/* CGPDFDocumentRef */ IntPtr document);
-		
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CGPDFDocumentRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
 
-		/* invoked by marshallers */
 		public CGPDFDocument (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
-			CGPDFDocumentRetain (handle);
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGPDFDocument (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CGPDFDocumentRetain (handle);
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFDocumentCreateWithProvider (/* CGDataProviderRef */ IntPtr provider);
 		
 		public CGPDFDocument (CGDataProvider provider)
+			: base (CGPDFDocumentCreateWithProvider (ThrowHelper.ThrowArgumentNullExceptionIfNeeded (provider, nameof (provider).Handle)), true)
 		{
-			if (provider == null)
-				throw new ArgumentNullException ("provider");
-			handle = CGPDFDocumentCreateWithProvider (provider.Handle);
 		}
-		
+
+		protected override void Retain ()
+		{
+			CGPDFDocumentRetain (GetCheckedHandle ());
+		}
+
+		protected override void Release ()
+		{
+			CGPDFDocumentRelease (GetCheckedHandle ());
+		}
+
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFDocumentCreateWithURL (/* CFURLRef */ IntPtr url);
 

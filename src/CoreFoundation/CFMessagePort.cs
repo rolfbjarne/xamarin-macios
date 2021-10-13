@@ -37,7 +37,7 @@ namespace CoreFoundation {
 		public Func<NSString> CopyDescription { get; set; }
 	}
 
-	public class CFMessagePort : INativeObject, IDisposable {
+	public class CFMessagePort : NativeObject {
 
 		// CFMessagePortContext
 		[StructLayout (LayoutKind.Sequential)]
@@ -65,31 +65,24 @@ namespace CoreFoundation {
 
 		static CFMessagePortInvalidationCallBackProxy messageInvalidationCallback = new CFMessagePortInvalidationCallBackProxy (MessagePortInvalidationCallback);
 
-		IntPtr handle;
 		IntPtr contextHandle = IntPtr.Zero;
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
 
 		public bool IsRemote {
 			get {
 				Check ();
-				return CFMessagePortIsRemote (handle);
+				return CFMessagePortIsRemote (Handle);
 			}
 		}
 
 		public string Name {
 			get {
 				Check ();
-				return CFString.FromHandle (CFMessagePortGetName (handle));
+				return CFString.FromHandle (CFMessagePortGetName (Handle));
 			}
 			set {
 				Check ();
 				IntPtr n = NSString.CreateNative (value);
-				CFMessagePortSetName (handle, n);
+				CFMessagePortSetName (Handle, n);
 				NSString.ReleaseNative (n);
 			}
 		}
@@ -97,7 +90,7 @@ namespace CoreFoundation {
 		public bool IsValid {
 			get {
 				Check ();
-				return CFMessagePortIsValid (handle);
+				return CFMessagePortIsValid (Handle);
 			}
 		}
 
@@ -107,7 +100,7 @@ namespace CoreFoundation {
 
 				CFMessagePortContext result;
 				ContextProxy context = new ContextProxy ();
-				CFMessagePortGetContext (handle, ref context);
+				CFMessagePortGetContext (Handle, ref context);
 
 				if (context.info == IntPtr.Zero)
 					return null;
@@ -125,7 +118,7 @@ namespace CoreFoundation {
 				Action result;
 
 				lock (invalidationHandles)
-					invalidationHandles.TryGetValue (handle, out result);
+					invalidationHandles.TryGetValue (Handle, out result);
 
 				return result;
 			}
@@ -134,48 +127,36 @@ namespace CoreFoundation {
 
 				lock (invalidationHandles) {
 					if (value == null)
-						invalidationHandles [handle] = null;
+						invalidationHandles [Handle] = null;
 					else
-						invalidationHandles.Add (handle, value);
+						invalidationHandles.Add (Handle, value);
 				}
 
-				CFMessagePortSetInvalidationCallBack (handle, messageInvalidationCallback);
+				CFMessagePortSetInvalidationCallBack (Handle, messageInvalidationCallback);
 			}
 		}
 
-		internal CFMessagePort (IntPtr handle) : this (handle, false)
+		internal CFMessagePort (IntPtr handle)
+			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional = true)]
 		internal CFMessagePort (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CFObject.CFRetain (handle);
 		}
 
-		~CFMessagePort ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
+			if (Handle != IntPtr.Zero) {
 
 				lock (outputHandles)
-					outputHandles.Remove (handle);
+					outputHandles.Remove (Handle);
 
 				lock (invalidationHandles) {
-					if (invalidationHandles.ContainsKey (handle))
-						invalidationHandles.Remove (handle);
+					if (invalidationHandles.ContainsKey (Handle))
+						invalidationHandles.Remove (Handle);
 				}
 
 				lock (messagePortContexts) {
@@ -183,10 +164,10 @@ namespace CoreFoundation {
 						invalidationHandles.Remove (contextHandle);
 				}
 
-				CFObject.CFRelease (handle);
 				contextHandle = IntPtr.Zero;
-				handle = IntPtr.Zero;
 			}
+
+			base.Dispose (disposing);
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary)]
@@ -390,7 +371,7 @@ namespace CoreFoundation {
 		public void Invalidate ()
 		{
 			Check ();
-			CFMessagePortInvalidate (handle);
+			CFMessagePortInvalidate (Handle);
 		}
 
 		public CFMessagePortSendRequestStatus SendRequest (int msgid, NSData data, double sendTimeout, double rcvTimeout, NSString replyMode, out NSData returnData)
@@ -401,7 +382,7 @@ namespace CoreFoundation {
 			IntPtr returnDataHandle = IntPtr.Zero;
 			IntPtr dataHandle = data == null ? IntPtr.Zero : data.Handle;
 
-			var result = CFMessagePortSendRequest (handle, msgid, dataHandle, sendTimeout, rcvTimeout, replyModeHandle, ref returnDataHandle);
+			var result = CFMessagePortSendRequest (Handle, msgid, dataHandle, sendTimeout, rcvTimeout, replyModeHandle, ref returnDataHandle);
 
 			returnData = Runtime.GetINativeObject<NSData> (returnDataHandle, false);
 
@@ -411,7 +392,7 @@ namespace CoreFoundation {
 		public CFRunLoopSource CreateRunLoopSource ()
 		{
 			// note: order is currently ignored by CFMessagePort object run loop sources. Pass 0 for this value.
-			var runLoopHandle = CFMessagePortCreateRunLoopSource (IntPtr.Zero, handle, 0);
+			var runLoopHandle = CFMessagePortCreateRunLoopSource (IntPtr.Zero, Handle, 0);
 			return new CFRunLoopSource (runLoopHandle, false);
 		}
 
@@ -420,12 +401,12 @@ namespace CoreFoundation {
 			IntPtr q = queue == null ? IntPtr.Zero : queue.Handle;
 
 			Check ();
-			CFMessagePortSetDispatchQueue (handle, q);
+			CFMessagePortSetDispatchQueue (Handle, q);
 		}
 
 		protected void Check ()
 		{
-			if (handle == IntPtr.Zero)
+			if (Handle == IntPtr.Zero)
 				throw new ObjectDisposedException (GetType ().ToString ());
 		}
 	}

@@ -547,43 +547,19 @@ namespace AudioToolbox {
 		}
 	}
 
-	public class AudioFile : IDisposable, INativeObject {
-
-		internal IntPtr handle;
-		
-		protected internal AudioFile (bool x)
+	public class AudioFile : NonRefcountedNativeObject {
+		internal AudioFile (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			// This ctor is used by AudioSource that will set the handle later.
-		}
-		
-		internal AudioFile (IntPtr handle)
-		{
-			this.handle = handle;
-		}
-
-		~AudioFile ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static OSStatus AudioFileClose (AudioFileID handle);
 
-		protected virtual void Dispose (bool disposing)
+		protected override void Free ()
 		{
-			if (handle != IntPtr.Zero){
-				AudioFileClose (handle);
-				handle = IntPtr.Zero;
+			if (Handle != IntPtr.Zero && Owns) {
+				AudioFileClose (Handle);
 			}
 		}
 
@@ -1782,12 +1758,14 @@ namespace AudioToolbox {
 			IntPtr inClientData, ReadProc inReadFunc, WriteProc inWriteFunc, GetSizeProc inGetSizeFunc, SetSizeProc inSetSizeFunc,
 			AudioFileType inFileType, ref AudioStreamBasicDescription format, uint flags, out IntPtr id);
 
-		public AudioSource (AudioFileType inFileType, AudioStreamBasicDescription format) : base (true)
+		public AudioSource (AudioFileType inFileType, AudioStreamBasicDescription format)
+			: base (IntPtr.Zero, false)
 		{
 			Initialize (inFileType, format);
 		}
 
-		public AudioSource () : base (true)
+		public AudioSource ()
+			: base (IntPtr.Zero, false)
 		{
 		}
 			
@@ -1798,7 +1776,7 @@ namespace AudioToolbox {
 			gch = GCHandle.Alloc (this);
 			var code = AudioFileInitializeWithCallbacks (GCHandle.ToIntPtr (gch), dRead, dWrite, dGetSize, dSetSize, inFileType, ref format, 0, out h);
 			if (code == 0){
-				handle = h;
+				InitializeHandle (h);
 				return;
 			}
 			throw new Exception (String.Format ("Unable to create AudioSource, code: 0x{0:x}", code));
@@ -1809,7 +1787,8 @@ namespace AudioToolbox {
 			IntPtr inClientData, ReadProc inReadFunc, WriteProc inWriteFunc,
 			GetSizeProc inGetSizeFunc, SetSizeProc	inSetSizeFunc, AudioFileType inFileTypeHint, out IntPtr outAudioFile);
 		
-		public AudioSource (AudioFileType fileTypeHint) : base (true)
+		public AudioSource (AudioFileType fileTypeHint)
+			: base (IntPtr.Zero, false)
 		{
 			Open (fileTypeHint);
 		}
@@ -1821,7 +1800,7 @@ namespace AudioToolbox {
 			gch = GCHandle.Alloc (this);
 			var code = AudioFileOpenWithCallbacks (GCHandle.ToIntPtr (gch), dRead, dWrite, dGetSize, dSetSize, fileTypeHint, out h);
 			if (code == 0){
-				handle = h;
+				InitializeHandle (h);
 				return;
 			}
 			throw new Exception (String.Format ("Unable to create AudioSource, code: 0x{0:x}", code));

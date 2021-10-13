@@ -27,6 +27,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -244,17 +246,18 @@ namespace AudioUnit
 #endif // !COREBUILD
 
 
-	public class AudioComponent : INativeObject {
+	public class AudioComponent : NonRefcountedNativeObject {
 #if !COREBUILD
-		internal IntPtr handle;
-
-		public IntPtr Handle { get { return handle; } }
-
-		internal AudioComponent(IntPtr handle)
-		{ 
-			this.handle = handle;
+		internal AudioComponent (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
-			
+
+		protected override void Free ()
+		{
+			// Nothing to do here
+		}
+
 		public AudioUnit CreateAudioUnit ()
 		{
 			return new AudioUnit (this);
@@ -264,7 +267,7 @@ namespace AudioUnit
 		{
 			var handle = cmp == null ? IntPtr.Zero : cmp.Handle;
 			handle = AudioComponentFindNext (handle, ref cd);
-			return  (handle != IntPtr.Zero) ? new AudioComponent (handle) : null;
+			return  (handle != IntPtr.Zero) ? new AudioComponent (handle, false) : null;
 		}
 
 		public static AudioComponent FindComponent (ref AudioComponentDescription cd)
@@ -323,7 +326,7 @@ namespace AudioUnit
 		public string Name {
 			get {
 				IntPtr r;
-				if (AudioComponentCopyName (handle, out r) == 0)
+				if (AudioComponentCopyName (Handle, out r) == 0)
 					return CFString.FromHandle (r);
 				return null;
 			}
@@ -336,7 +339,7 @@ namespace AudioUnit
 			get {
 				AudioComponentDescription desc;
 
-				if (AudioComponentGetDescription (handle, out desc) == 0)
+				if (AudioComponentGetDescription (Handle, out desc) == 0)
 					return desc;
 
 				return null;
@@ -349,7 +352,7 @@ namespace AudioUnit
 		public Version Version {
 			get {
 				int ret;
-				if (AudioComponentGetVersion (handle, out ret) == 0)
+				if (AudioComponentGetVersion (Handle, out ret) == 0)
 					return new Version (ret >> 16, (ret >> 8) & 0xff, ret & 0xff);
 
 				return null;
@@ -379,7 +382,7 @@ namespace AudioUnit
 #endif
 		public UIImage CopyIcon ()
 		{
-			var ptr = AudioComponentCopyIcon (handle);
+			var ptr = AudioComponentCopyIcon (Handle);
 			return Runtime.GetNSObject<UIImage> (ptr, owns: true);
 		}
 
@@ -405,7 +408,7 @@ namespace AudioUnit
 #endif
 		public UIKit.UIImage GetIcon (float desiredPointSize)
 		{
-			return new UIKit.UIImage (AudioComponentGetIcon (handle, desiredPointSize));
+			return new UIKit.UIImage (AudioComponentGetIcon (Handle, desiredPointSize));
 		}
 #endif // !__MACCATALYST__
 
@@ -436,7 +439,7 @@ namespace AudioUnit
 #endif
 		public double LastActiveTime {
 			get {
-				return AudioComponentGetLastActiveTime (handle);
+				return AudioComponentGetLastActiveTime (Handle);
 			}
 		}
 #else

@@ -291,12 +291,12 @@ namespace ObjCRuntime {
 
 		public static nuint GetNUInt (IntPtr handle, string symbol)
 		{
-			return (nuint)GetIntPtr (handle, symbol);
+			return (nuint)(ulong)(long) GetIntPtr (handle, symbol); // FIXME TEMPORARY
 		}
 
 		public static void SetNUInt (IntPtr handle, string symbol, nuint value)
 		{
-			SetIntPtr (handle, symbol, (IntPtr) value);
+			SetIntPtr (handle, symbol, (IntPtr) (long) (ulong) value);// FIXME TEMPORARY
 		}
 
 		public static nfloat GetNFloat (IntPtr handle, string symbol)

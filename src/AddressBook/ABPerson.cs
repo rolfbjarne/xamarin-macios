@@ -882,7 +882,7 @@ namespace AddressBook {
 		{
 			if (handle == IntPtr.Zero)
 				return null;
-			return new ABMultiValue<string> (handle, ToString, ToIntPtr);
+			return new ABMultiValue<string> (handle, ToString, ToIntPtr, false);
 		}
 
 		public void SetEmails (ABMultiValue<string> value)

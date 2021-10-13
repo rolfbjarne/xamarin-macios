@@ -59,14 +59,9 @@ namespace CoreGraphics {
 		Xyz,
 	}
 
-	public class CGColorSpace : INativeObject
-#if !COREBUILD 
-		, IDisposable
-#endif
+	public class CGColorSpace : NativeObject
 	{
 #if !COREBUILD
-		internal IntPtr handle;
-
 #if !XAMCORE_3_0
 #if !NET
 		[Obsolete ("Use a real 'null' value instead of this managed wrapper over a null native instance.")]
@@ -76,42 +71,27 @@ namespace CoreGraphics {
 		public readonly static CGColorSpace Null = new CGColorSpace (IntPtr.Zero);
 #endif
 
-		// Invoked by the marshallers, we need to take a ref
 		public CGColorSpace (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
-			CGColorSpaceRetain (handle);
 		}
 
-		public CGColorSpace (CFPropertyList propertyList)
+		static IntPtr Create (CFPropertyList propertyList)
 		{
 			if (propertyList == null)
 				throw new ArgumentNullException (nameof (propertyList));
-			this.handle = CGColorSpaceCreateWithPropertyList (propertyList.Handle);
+			return CGColorSpaceCreateWithPropertyList (propertyList.GetCheckedHandle ());
+		}
+
+		public CGColorSpace (CFPropertyList propertyList)
+			: base (Create (propertyList), true)
+		{
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGColorSpace (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CGColorSpaceRetain (handle);
-
-			this.handle = handle;
-		}
-
-		~CGColorSpace ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -119,15 +99,17 @@ namespace CoreGraphics {
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGColorSpaceRef */ IntPtr CGColorSpaceRetain (/* CGColorSpaceRef */ IntPtr space);
-		
-		protected virtual void Dispose (bool disposing)
+
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
-				CGColorSpaceRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			CGColorSpaceRetain (GetCheckedHandle ());
 		}
-		
+
+		protected override void Release ()
+		{
+			CGColorSpaceRelease (GetCheckedHandle ());
+		}
+
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGColorSpaceRef */ IntPtr CGColorSpaceCreateDeviceGray ();
 

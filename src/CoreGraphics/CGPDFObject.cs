@@ -36,14 +36,16 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFObject.h
-	public class CGPDFObject : INativeObject {
+	public class CGPDFObject : NonRefcountedNativeObject {
 
-		public IntPtr Handle { get; private set; }
-
-		/* invoked by marshallers */
 		public CGPDFObject (IntPtr handle)
+			: base (handle, false)
 		{
-			Handle = handle;
+		}
+
+		protected override void Free ()
+		{
+			// Nothing to do here.
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -61,9 +63,11 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFObjectGetValue (/* CGPDFObjectRef */IntPtr pdfobj, CGPDFObjectType type, /* void* */ out nfloat value);
 
+#if !NET
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFObjectGetValue (/* CGPDFObjectRef */IntPtr pdfobj, CGPDFObjectType type, /* void* */ out IntPtr value);
+#endif
 
 		public CGPDFObjectType Type {
 			get { return CGPDFObjectGetType (Handle); }

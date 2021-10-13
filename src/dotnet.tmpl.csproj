@@ -6,15 +6,29 @@
     <OutputType>Library</OutputType>
     <AssemblyName>Xamarin.iOS</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\..\..\product.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\..\..\..\product.snk</AssemblyOriginatorKeyFile>
     <LangVersion>latest</LangVersion>
-    <DefineConstants>IPHONE;IOS;MINIMAL;MONOTOUCH</DefineConstants>
+    <DefineConstants>IPHONE;IOS;MINIMAL;MONOTOUCH;NET_TODO</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>3021,3014,3003</NoWarn>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_TargetPlatform)' == 'iOS'">
+    <DefineConstants>$(DefineConstants);__IOS__</DefineConstants>
+    <CompilerResponseFile>..\..\..\ios-defines.rsp</CompilerResponseFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_TargetPlatform)' == 'tvOS'">
+    <DefineConstants>$(DefineConstants);__TVOS__</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_TargetPlatform)' == 'macOS'">
+    <DefineConstants>$(DefineConstants);__MACOS__</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(_TargetPlatform)' == 'MacCatalyst'">
+    <DefineConstants>$(DefineConstants);__IOS__;__MACCATALYST__</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\build\ios\native\**\*.cs">
-      <Link>build\ios\native\%(RecursiveDir)%(Filename).cs</Link>
+    <Compile Include="..\..\$(_TargetPlatform)\generated-sources\**\*.cs">
+      <Link>build\$(_TargetPlatform)\native\%(RecursiveDir)%(Filename).cs</Link>
     </Compile>
     <!--%FILES%-->
     <!--%APIS%-->

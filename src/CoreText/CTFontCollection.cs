@@ -35,7 +35,11 @@ using Foundation;
 using CoreFoundation;
 using CoreGraphics;
 
+#if NET
+using CFIndex = System.IntPtr;
+#else
 using CFIndex = System.nint;
+#endif
 
 namespace CoreText {
 
@@ -209,8 +213,8 @@ namespace CoreText {
 			GCHandle c = GCHandle.FromIntPtr (context);
 			var comparer = c.Target as Comparison<CTFontDescriptor>;
 			if (comparer == null)
-				return 0;
-			return comparer (new CTFontDescriptor (first, false), new CTFontDescriptor (second, false));
+				return default (CFIndex);
+			return (CFIndex) comparer (new CTFontDescriptor (first, false), new CTFontDescriptor (second, false));
 		}
 
 		public CTFontDescriptor[] GetMatchingFontDescriptors (Comparison<CTFontDescriptor> comparer)

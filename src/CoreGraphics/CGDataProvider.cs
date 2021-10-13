@@ -25,60 +25,48 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 
 namespace CoreGraphics {
 
 	// CGDataProvider.h
-	public partial class CGDataProvider : INativeObject, IDisposable {
-		IntPtr handle;
-
+	public partial class CGDataProvider : NativeObject {
 		// invoked by marshallers
 		public CGDataProvider (IntPtr handle)
-			: this (handle, false)
+			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGDataProvider (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CGDataProviderRetain (handle);
-		}
-		
-		~CGDataProvider ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
 		}
 
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGDataProviderRelease (/* CGDataProviderRef */ IntPtr provider);
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGDataProviderRef */ IntPtr CGDataProviderRetain (/* CGDataProviderRef */ IntPtr provider);
 		
-		protected virtual void Dispose (bool disposing)
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
-				CGDataProviderRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			CGDataProviderRetain (GetCheckedHandle ());
 		}
+
+		protected override void Release ()
+		{
+			CGDataProviderRelease (GetCheckedHandle ());
+		}
+
 #if !COREBUILD
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGDataProviderRef */ IntPtr CGDataProviderCreateWithFilename (/* const char* */ string filename);
@@ -95,36 +83,52 @@ namespace CoreGraphics {
 			return new CGDataProvider (handle, true);
 		}
 
-		public CGDataProvider (string file)
+		static IntPtr Create (string file)
 		{
 			if (file == null)
-				throw new ArgumentNullException ("file");
+				throw new ArgumentNullException (nameof (file));
 
-			handle = CGDataProviderCreateWithFilename (file);
+			var handle = CGDataProviderCreateWithFilename (file);
 			if (handle == IntPtr.Zero)
 				throw new ArgumentException ("Could not create provider from the specified file");
+			return handle;
+		}
+
+		public CGDataProvider (string file)
+			: base (Create (file), true)
+		{
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern /* CGDataProviderRef */ IntPtr CGDataProviderCreateWithURL (/* CFURLRef __nullable */ IntPtr url);
 
-		public CGDataProvider (NSUrl url)
+		static IntPtr Create (NSUrl url)
 		{
 			// not it's a __nullable parameter but it would return nil (see unit tests) and create an invalid instance
 			if (url == null)
-				throw new ArgumentNullException ("url");
-			handle = CGDataProviderCreateWithURL (url.Handle);
+				throw new ArgumentNullException (nameof (url));
+			return CGDataProviderCreateWithURL (url.Handle);
+		}
+
+		public CGDataProvider (NSUrl url)
+			: base (Create (url), true)
+		{
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern /* CGDataProviderRef */ IntPtr CGDataProviderCreateWithCFData (/* CFDataRef __nullable */ IntPtr data);
 
-		public CGDataProvider (NSData data)
+		static IntPtr Create (NSData data)
 		{
 			// not it's a __nullable parameter but it would return nil (see unit tests) and create an invalid instance
 			if (data == null)
-				throw new ArgumentNullException ("data");
-			handle = CGDataProviderCreateWithCFData (data.Handle);
+				throw new ArgumentNullException (nameof (data));
+			return CGDataProviderCreateWithCFData (data.Handle);
+		}
+
+		public CGDataProvider (NSData data)
+			: base (Create (data), true)
+		{
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -166,34 +170,49 @@ namespace CoreGraphics {
 		{
 		}
 
-		public CGDataProvider (IntPtr memoryBlock, int size, bool ownBuffer)
+		static IntPtr Create (IntPtr memoryBlock, int size, bool ownBuffer)
 		{
 			if (!ownBuffer)
 				memoryBlock = Runtime.CloneMemory (memoryBlock, size);
-			handle = CGDataProviderCreateWithData (IntPtr.Zero, memoryBlock, size, release_buffer_callback);
+			return CGDataProviderCreateWithData (IntPtr.Zero, memoryBlock, size, release_buffer_callback);
 		}
 
-		public CGDataProvider (IntPtr memoryBlock, int size, Action<IntPtr> releaseMemoryBlockCallback)
+		public CGDataProvider (IntPtr memoryBlock, int size, bool ownBuffer)
+			: base (Create (memoryBlock, size, ownBuffer), true)
+		{
+		}
+
+		static IntPtr Create (IntPtr memoryBlock, int size, Action<IntPtr> releaseMemoryBlockCallback)
 		{
 			if (releaseMemoryBlockCallback == null)
 				throw new ArgumentNullException (nameof (releaseMemoryBlockCallback));
-			
+
 			var gch = GCHandle.Alloc (releaseMemoryBlockCallback);
-			handle = CGDataProviderCreateWithData (GCHandle.ToIntPtr (gch), memoryBlock, size, release_func_callback);
+			return CGDataProviderCreateWithData (GCHandle.ToIntPtr (gch), memoryBlock, size, release_func_callback);
 		}
 
-		public CGDataProvider (byte [] buffer, int offset, int count)
+		public CGDataProvider (IntPtr memoryBlock, int size, Action<IntPtr> releaseMemoryBlockCallback)
+			: base (Create (memoryBlock, size, releaseMemoryBlockCallback), true)
+		{
+		}
+
+		static IntPtr Create (byte [] buffer, int offset, int count)
 		{
 			if (buffer == null)
-				throw new ArgumentNullException ("buffer");
+				throw new ArgumentNullException (nameof (buffer));
 			if (offset < 0 || offset > buffer.Length)
-				throw new ArgumentException ("offset");
+				throw new ArgumentException (nameof (offset));
 			if (offset + count > buffer.Length)
-				throw new ArgumentException ("offset");
+				throw new ArgumentException (nameof (offset));
 
 			var gch = GCHandle.Alloc (buffer, GCHandleType.Pinned); // This requires a pinned GCHandle, because unsafe code is scoped to the current block, and the address of the byte array will be used after this function returns.
 			var ptr = gch.AddrOfPinnedObject () + offset;
-			handle = CGDataProviderCreateWithData (GCHandle.ToIntPtr (gch), ptr, count, release_gchandle_callback);
+			return CGDataProviderCreateWithData (GCHandle.ToIntPtr (gch), ptr, count, release_gchandle_callback);
+		}
+
+		public CGDataProvider (byte [] buffer, int offset, int count)
+			: base (Create (buffer, offset, count), true)
+		{
 		}
 
 		public CGDataProvider (byte [] buffer)

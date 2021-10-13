@@ -29,6 +29,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 
@@ -124,56 +125,35 @@ namespace CoreGraphics {
 	}
 
 	// CGImage.h
-	public class CGImage : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public class CGImage : NativeObject
 	{
 #if !COREBUILD
-		internal IntPtr handle;
-
 		// invoked by marshallers
 		public CGImage (IntPtr handle)
-			: this (handle, false)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGImage (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CGImageRetain (handle);
-		}
-		
-		~CGImage ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
 		}
 
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGImageRelease (/* CGImageRef */ IntPtr image);
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGImageRef */ IntPtr CGImageRetain (/* CGImageRef */ IntPtr image);
-		
-		protected virtual void Dispose (bool disposing)
+
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
-				CGImageRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			CGImageRetain (GetCheckedHandle ());
+		}
+
+		protected override void Release ()
+		{
+			CGImageRelease (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -182,46 +162,58 @@ namespace CoreGraphics {
 			/* CGColorSpaceRef */ IntPtr space, CGBitmapFlags bitmapInfo, /* CGDataProviderRef */ IntPtr provider,
 			/* CGFloat[] */ nfloat [] decode, [MarshalAs (UnmanagedType.I1)] bool shouldInterpolate, CGColorRenderingIntent intent);
 
-		public CGImage (int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
+		static IntPtr Create (int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
 				CGColorSpace colorSpace, CGBitmapFlags bitmapFlags, CGDataProvider provider,
 				nfloat [] decode, bool shouldInterpolate, CGColorRenderingIntent intent)
 		{
 			if (width < 0)
-				throw new ArgumentException ("width");
+				throw new ArgumentException (nameof (width));
 			if (height < 0)
-				throw new ArgumentException ("height");
+				throw new ArgumentException (nameof (height));
 			if (bitsPerPixel < 0)
-				throw new ArgumentException ("bitsPerPixel");
+				throw new ArgumentException (nameof (bitsPerPixel));
 			if (bitsPerComponent < 0)
-				throw new ArgumentException ("bitsPerComponent");
+				throw new ArgumentException (nameof (bitsPerComponent));
 			if (bytesPerRow < 0)
-				throw new ArgumentException ("bytesPerRow");
+				throw new ArgumentException (nameof (bytesPerRow));
 
-			handle = CGImageCreate (width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
-						colorSpace == null ? IntPtr.Zero : colorSpace.Handle, bitmapFlags, provider == null ? IntPtr.Zero : provider.Handle,
-						decode,
-						shouldInterpolate, intent);
+			return CGImageCreate (width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
+						colorSpace.GetHandle (), bitmapFlags, provider.GetHandle (),
+						decode, shouldInterpolate, intent);
+		}
+
+		public CGImage (int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
+				CGColorSpace colorSpace, CGBitmapFlags bitmapFlags, CGDataProvider provider,
+				nfloat [] decode, bool shouldInterpolate, CGColorRenderingIntent intent)
+			: base (Create (width, height, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpace, bitmapFlags, provider, decode, shouldInterpolate, intent), true)
+		{
+		}
+
+		static IntPtr Create (int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
+				CGColorSpace colorSpace, CGImageAlphaInfo alphaInfo, CGDataProvider provider,
+				nfloat [] decode, bool shouldInterpolate, CGColorRenderingIntent intent)
+		{
+			if (width < 0)
+				throw new ArgumentException (nameof (width));
+			if (height < 0)
+				throw new ArgumentException (nameof (height));
+			if (bitsPerPixel < 0)
+				throw new ArgumentException (nameof (bitsPerPixel));
+			if (bitsPerComponent < 0)
+				throw new ArgumentException (nameof (bitsPerComponent));
+			if (bytesPerRow < 0)
+				throw new ArgumentException (nameof (bytesPerRow));
+
+			return CGImageCreate (width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
+						colorSpace.GetHandle (), (CGBitmapFlags) alphaInfo, provider.GetHandle (),
+						decode, shouldInterpolate, intent);
 		}
 
 		public CGImage (int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
 				CGColorSpace colorSpace, CGImageAlphaInfo alphaInfo, CGDataProvider provider,
 				nfloat [] decode, bool shouldInterpolate, CGColorRenderingIntent intent)
+			: base (Create (width, height, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpace, alphaInfo, provider, decode, shouldInterpolate, intent), true)
 		{
-			if (width < 0)
-				throw new ArgumentException ("width");
-			if (height < 0)
-				throw new ArgumentException ("height");
-			if (bitsPerPixel < 0)
-				throw new ArgumentException ("bitsPerPixel");
-			if (bitsPerComponent < 0)
-				throw new ArgumentException ("bitsPerComponent");
-			if (bytesPerRow < 0)
-				throw new ArgumentException ("bytesPerRow");
-
-			handle = CGImageCreate (width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
-						colorSpace == null ? IntPtr.Zero : colorSpace.Handle, (CGBitmapFlags) alphaInfo, provider == null ? IntPtr.Zero : provider.Handle,
-						decode,
-						shouldInterpolate, intent);
 		}
 
 #if MONOMAC || __MACCATALYST__

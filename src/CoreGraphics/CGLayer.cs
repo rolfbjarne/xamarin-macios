@@ -29,65 +29,41 @@
 using System;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 
 namespace CoreGraphics {
 
 	// CGLayer.h
-	public class CGLayer : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public class CGLayer : NativeObject
 	{
 #if !COREBUILD
-		IntPtr handle;
-
 		internal CGLayer (IntPtr handle)
+			: base (handle, false)
 		{
-			if (handle == IntPtr.Zero)
-				throw new Exception ("Invalid parameters to layer creation");
-					
-			this.handle = handle;
-			CGLayerRetain (handle);
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGLayer (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CGLayerRetain (handle);
-
-			this.handle = handle;
 		}
 
-		~CGLayer ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGLayerRelease (/* CGLayerRef */ IntPtr layer);
 		
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGLayerRef */ IntPtr CGLayerRetain (/* CGLayerRef */ IntPtr layer);
 		
-		protected virtual void Dispose (bool disposing)
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
-				CGLayerRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			CGLayerRetain (GetCheckedHandle ());
+		}
+
+		protected override void Release ()
+		{
+			CGLayerRelease (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]

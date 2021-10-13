@@ -36,18 +36,18 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFDictionary.h
-	public class CGPDFDictionary : INativeObject {
-		internal IntPtr handle;
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-
-		/* invoked by marshallers */
+	public class CGPDFDictionary : NonRefcountedNativeObject {
 		public CGPDFDictionary (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
+
+		protected override void Free ()
+		{
+			// Nothing to do here.
+			// Lifetime is tied to the containing CGPDFDocument
+		}
+
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* size_t */ nint CGPDFDictionaryGetCount (/* CGPDFDictionaryRef */ IntPtr dict);

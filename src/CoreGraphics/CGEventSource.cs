@@ -26,52 +26,23 @@ namespace CoreGraphics {
 #else
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
-	public sealed class CGEventSource : IDisposable, INativeObject {
-		IntPtr handle;
-
-#region Lifecycle
-		public CGEventSource (IntPtr handle) : this (handle, false)
+	public sealed class CGEventSource : NativeObject {
+		public CGEventSource (IntPtr handle)
+			: base (handle, false)
 		{
 		}
 
-		public CGEventSource (IntPtr handle, bool ownsHandle)
+		public CGEventSource (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!ownsHandle)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
 		}
 
-		~CGEventSource ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
-#endregion
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventSourceCreate (CGEventSourceStateID stateID);
 	
 		public CGEventSource (CGEventSourceStateID stateID)
+			: base (CGEventSourceCreate (stateID), true)
 		{
-			handle = CGEventSourceCreate (stateID);
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]

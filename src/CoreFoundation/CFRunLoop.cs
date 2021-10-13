@@ -34,7 +34,11 @@ using System.Runtime.InteropServices;
 using ObjCRuntime;
 using Foundation;
 
+#if NET
+using CFIndex = System.IntPtr;
+#else
 using CFIndex = System.nint;
+#endif
 
 namespace CoreFoundation {
 
@@ -61,30 +65,15 @@ namespace CoreFoundation {
 		public IntPtr Perform;
 	}
 
-	public class CFRunLoopSource : INativeObject, IDisposable {
-		internal IntPtr handle;
-
+	public class CFRunLoopSource : NativeObject {
 		public CFRunLoopSource (IntPtr handle)
-			: this (handle, false)
+			: base (handle, false)
 		{
 		}
 
-		public CFRunLoopSource (IntPtr handle, bool ownsHandle)
+		public CFRunLoopSource (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!ownsHandle)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
-		}
-
-		~CFRunLoopSource ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary)]
@@ -92,7 +81,7 @@ namespace CoreFoundation {
 
 		public nint Order {
 			get {
-				return CFRunLoopSourceGetOrder (handle);
+				return CFRunLoopSourceGetOrder (Handle);
 			}
 		}
 
@@ -101,7 +90,7 @@ namespace CoreFoundation {
 
 		public void Invalidate ()
 		{
-			CFRunLoopSourceInvalidate (handle);
+			CFRunLoopSourceInvalidate (Handle);
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary)]
@@ -110,7 +99,7 @@ namespace CoreFoundation {
 
 		public bool IsValid {
 			get {
-				return CFRunLoopSourceIsValid (handle);
+				return CFRunLoopSourceIsValid (Handle);
 			}
 		}
 
@@ -119,21 +108,7 @@ namespace CoreFoundation {
 
 		public void Signal ()
 		{
-			CFRunLoopSourceSignal (handle);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			CFRunLoopSourceSignal (Handle);
 		}
 	}
 
@@ -147,7 +122,7 @@ namespace CoreFoundation {
 		static ScheduleCallback ScheduleDelegate = (ScheduleCallback) Schedule;
 		static CancelCallback CancelDelegate = (CancelCallback) Cancel;
 		static PerformCallback PerformDelegate = (PerformCallback) Perform;
-		
+
 		protected CFRunLoopSourceCustom ()
 			: base (IntPtr.Zero, true)
 		{
@@ -158,6 +133,7 @@ namespace CoreFoundation {
 			ctx.Cancel = Marshal.GetFunctionPointerForDelegate (CancelDelegate);
 			ctx.Perform = Marshal.GetFunctionPointerForDelegate (PerformDelegate);
 
+			IntPtr handle;
 			var ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(CFRunLoopSourceContext)));
 			try {
 				Marshal.StructureToPtr (ctx, ptr, false);
@@ -166,8 +142,7 @@ namespace CoreFoundation {
 				Marshal.FreeHGlobal (ptr);
 			}
 
-			if (handle == IntPtr.Zero)
-				throw new NotSupportedException ();
+			InitializeHandle (handle);
 		}
 
 		delegate void ScheduleCallback (IntPtr info, IntPtr runLoop, IntPtr mode);
@@ -222,14 +197,9 @@ namespace CoreFoundation {
 	}
 #endif
 
-	public partial class CFRunLoop
-#if !COREBUILD
-		: INativeObject, IDisposable
-#endif
+	public partial class CFRunLoop : NativeObject
 	{
 #if !COREBUILD
-		internal IntPtr handle;
-
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFRunLoopRef */ IntPtr CFRunLoopGetCurrent ();
 
@@ -336,41 +306,14 @@ namespace CoreFoundation {
 		}
 
 		internal CFRunLoop (IntPtr handle)
-			: this (handle, false)
+			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional = true)]
 		internal CFRunLoop (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
-		}
-
-		~CFRunLoop ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
 		}
 
 		public static bool operator == (CFRunLoop a, CFRunLoop b)
@@ -388,6 +331,7 @@ namespace CoreFoundation {
 			return handle.GetHashCode ();
 		}
 
+		// CHECK: the Equals implementation (checks Handle) doesn't match the == implementation (object equality)
 		public override bool Equals (object other)
 		{
 			CFRunLoop cfother = other as CFRunLoop;

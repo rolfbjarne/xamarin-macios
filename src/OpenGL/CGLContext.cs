@@ -41,58 +41,34 @@ namespace OpenGL {
 	[Obsolete ("Starting with macos10.14 Use 'Metal' Framework instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
 #endif
 #endif
-	public class CGLContext : INativeObject, IDisposable {
-		IntPtr handle;
-
+	public class CGLContext : NativeObject {
 		public CGLContext (IntPtr handle)
+			: base (handle, false)
 		{
 			if (handle == IntPtr.Zero)
 				throw new Exception ("Invalid parameters to context creation");
-
-			CGLRetainContext (handle);
-			this.handle = handle;
-		}
-
-		internal CGLContext ()
-		{
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGLContext (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CGLRetainContext (handle);
-
-			this.handle = handle;
 		}
 
-		~CGLContext ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
 		[DllImport (Constants.OpenGLLibrary)]
 		extern static void CGLRetainContext (IntPtr handle);
 
 		[DllImport (Constants.OpenGLLibrary)]
 		extern static void CGLReleaseContext (IntPtr handle);
 
-		protected virtual void Dispose (bool disposing)
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
-				CGLReleaseContext (handle);
-				handle = IntPtr.Zero;
-			}
+			CGLRetainContext (GetCheckedHandle ());
+		}
+
+		protected override void Release ()
+		{
+			CGLReleaseContext (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.OpenGLLibrary)]

@@ -28,6 +28,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
@@ -84,7 +85,7 @@ namespace AudioToolbox
 	public delegate AudioConverterError AudioConverterComplexInputData (ref int numberDataPackets, AudioBuffers data,
 		ref AudioStreamPacketDescription[] dataPacketDescription);
 
-	public class AudioConverter : IDisposable, INativeObject
+	public class AudioConverter : NonRefcountedNativeObject
 	{
 		delegate AudioConverterError AudioConverterComplexInputDataShared (IntPtr inAudioConverter, ref int ioNumberDataPackets, IntPtr ioData,
 			IntPtr outDataPacketDescription, IntPtr inUserData);
@@ -92,29 +93,13 @@ namespace AudioToolbox
 		IntPtr handle;
 		IntPtr packetDescriptions;
 		int packetDescriptionSize;
-		readonly bool owns;
 		static readonly AudioConverterComplexInputDataShared ComplexInputDataShared = FillComplexBufferShared;
 
 		public event AudioConverterComplexInputData InputData;
 
-		private AudioConverter (IntPtr handle)
-			: this (handle, false)
-		{
-		}
-
 		internal AudioConverter (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ArgumentException ("address");
-
-			this.handle = handle;
-			this.owns = owns;
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
 		}
 
 		public uint MinimumInputBufferSize {
@@ -443,29 +428,15 @@ namespace AudioToolbox
 			}
 		}
 
-		~AudioConverter ()
+		protected override void Free ()
 		{
-			Dispose (false);
-		}
+			if (Handle != IntPtr.Zero && Owns)
+				AudioConverterDispose (Handle);
 
-		public void Dispose ()
-		{
-			Dispose (true);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				if (owns)
-					AudioConverterDispose (handle);
-
-				handle = IntPtr.Zero;
-			}
 			if (packetDescriptions != IntPtr.Zero) {
 				Marshal.FreeHGlobal (packetDescriptions);
 				packetDescriptions = IntPtr.Zero;
 			}
-			GC.SuppressFinalize (this);
 		}
 
 		public AudioConverterError ConvertBuffer (byte[] input, byte[] output)

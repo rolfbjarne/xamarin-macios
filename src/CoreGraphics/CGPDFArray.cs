@@ -37,17 +37,21 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFArray.h
-	public class CGPDFArray : INativeObject {
-		internal IntPtr handle;
-
-		public IntPtr Handle {
-			get { return handle; }
+	public class CGPDFArray : NonRefcountedNativeObject {
+		public CGPDFArray (IntPtr handle)
+			: base (handle, false)
+		{
 		}
 
-		/* invoked by marshallers */
-		public CGPDFArray (IntPtr handle)
+		internal CGPDFArray (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
+		}
+
+		protected override void Free ()
+		{
+			// Nothing to do here.
+			// Lifetime is tied to the containing CGPDFDocument
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]

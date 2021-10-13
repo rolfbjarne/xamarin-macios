@@ -64,10 +64,12 @@ namespace Foundation {
 		{
 		}
 
+#if !NET // HACK TEMPORARY
 		public NSMutableSet (nint capacity)
 			: base (capacity)
 		{
 		}
+#endif
 
 		// Strongly typed versions of API from NSSet
 

@@ -226,6 +226,13 @@ namespace ObjCRuntime
 			if (type.IsNested)
 				return false;
 
+#if NET
+			if (type.Namespace == "ObjCRuntime" && type.Name == "NativeHandle") {
+				type_size = is_64_bits ? 8 : 4;
+				return true;
+			}
+#endif
+
 			if (type.Namespace != "System")
 				return false;
 

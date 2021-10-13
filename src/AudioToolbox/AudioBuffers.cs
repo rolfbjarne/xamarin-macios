@@ -35,17 +35,21 @@ using System.Runtime.InteropServices;
 using CoreFoundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace AudioToolbox
 {
 	// CoreAudio.framework - CoreAudioTypes.h
 	public class AudioBuffers : NonRefcountedNativeObject
 	{
-		public AudioBuffers (IntPtr address)
+		public AudioBuffers (NativeHandle address)
 			: base (address, false)
 		{
 		}
 
-		public AudioBuffers (IntPtr address, bool owns)
+		public AudioBuffers (NativeHandle address, bool owns)
 			: base (address, owns)
 		{
 		}

@@ -51,6 +51,10 @@ using UIKit;
 using pfloat = System.Single;
 #endif
 
+#if !NET
+using NativeHandle=System.IntPtr;
+#endif
+
 namespace GLKit {
 
 	[Deprecated (PlatformName.iOS, 12,0, message: "Use 'Metal' instead.")]
@@ -263,7 +267,7 @@ namespace GLKit {
 	interface GLKMesh
 	{
 		[Export ("initWithMesh:error:")]
-		IntPtr Constructor (MDLMesh mesh, out NSError error);
+		NativeHandle Constructor (MDLMesh mesh, out NSError error);
 
 		// generator does not like `out []` -> https://trello.com/c/sZYNalbB/524-generator-support-out
 		[Internal] // there's another, manual, public API exposed
@@ -497,10 +501,10 @@ namespace GLKit {
 
 #if MONOMAC
 		[Export ("initWithShareContext:")]
-		IntPtr Constructor (NSOpenGLContext context);
+		NativeHandle Constructor (NSOpenGLContext context);
 #else
 		[Export ("initWithSharegroup:")]
-		IntPtr Constructor (EAGLSharegroup sharegroup);
+		NativeHandle Constructor (EAGLSharegroup sharegroup);
 #endif
 
 		[Export ("textureWithContentsOfFile:options:queue:completionHandler:")]
@@ -572,7 +576,7 @@ namespace GLKit {
 	[BaseType (typeof (UIView), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] {typeof (GLKViewDelegate)})]
 	interface GLKView {
 		[Export ("initWithFrame:")]
-		IntPtr Constructor (CGRect frame);
+		NativeHandle Constructor (CGRect frame);
 
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set;  }
@@ -607,7 +611,7 @@ namespace GLKit {
 		bool EnableSetNeedsDisplay { get; set;  }
 
 		[Export ("initWithFrame:context:")]
-		IntPtr Constructor (CGRect frame, EAGLContext context);
+		NativeHandle Constructor (CGRect frame, EAGLContext context);
 
 		[Export ("bindDrawable")]
 		void BindDrawable ();
@@ -639,7 +643,7 @@ namespace GLKit {
 	interface GLKViewController : GLKViewDelegate {
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
-		IntPtr Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
+		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
 		[Export ("preferredFramesPerSecond")]
 		nint PreferredFramesPerSecond { get; set;  }

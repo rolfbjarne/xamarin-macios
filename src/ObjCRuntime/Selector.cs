@@ -28,6 +28,10 @@ using System.Runtime.InteropServices;
 using CoreFoundation;
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 #nullable enable
 
 namespace ObjCRuntime {
@@ -43,7 +47,7 @@ namespace ObjCRuntime {
 
 		string? name;
 
-		public Selector (IntPtr sel)
+		public Selector (NativeHandle sel)
 			: base (sel, false)
 		{
 			if (!sel_isMapped (sel))

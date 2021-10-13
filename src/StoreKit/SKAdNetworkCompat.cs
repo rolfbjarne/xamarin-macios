@@ -14,6 +14,10 @@ using System.Runtime.Versioning;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 #if TVOS && !XAMCORE_4_0
 namespace StoreKit {
 	[Obsolete ("Not usable from tvOS and will be removed in the future.")]
@@ -25,9 +29,9 @@ namespace StoreKit {
 	public class SKAdNetwork : NSObject {
 
 		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
-		static readonly IntPtr class_ptr = Class.GetHandle ("SKAdNetwork");
+		static readonly NativeHandle class_ptr = Class.GetHandle ("SKAdNetwork");
 		
-		public override IntPtr ClassHandle { get { return class_ptr; } }
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
 		
 		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
@@ -35,7 +39,7 @@ namespace StoreKit {
 
 		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
-		protected internal SKAdNetwork (IntPtr handle) : base (handle) { }
+		protected internal SKAdNetwork (NativeHandle handle) : base (handle) { }
 
 		[Obsolete ("Throws a 'NotSupportedException'.")]
 		public static void RegisterAppForAdNetworkAttribution () => throw new NotSupportedException ();

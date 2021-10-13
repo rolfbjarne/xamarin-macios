@@ -250,7 +250,7 @@ namespace ImageIO {
 			/* CGImageSourceRef __nonnull */ IntPtr sourceHandle, /* size_t */ nint index, 
 			/* CFDictionaryRef __nullable */ IntPtr properties);
 
-		public void AddImage (CGImageSource source, int index, CGImageDestinationOptions options = null)
+		public void AddImage (CGImageSource source, int index, CGImageDestinationOptions? options = null)
 		{
 			if (source is null)
 				throw new ArgumentNullException (nameof (source));

@@ -21,6 +21,10 @@ using UIKit;
 #endif
 using System;
 
+#if !NET
+using NativeHandle=System.IntPtr;
+#endif
+
 namespace MediaPlayer {
 	[Mac (10,12,2)] // type exists only to expose fields
 	[BaseType (typeof (NSObject))]
@@ -263,11 +267,11 @@ namespace MediaPlayer {
 		[TV (10,0)]
 		[Export ("initWithBoundsSize:requestHandler:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (CGSize boundsSize, Func<CGSize, UIImage> requestHandler);
+		NativeHandle Constructor (CGSize boundsSize, Func<CGSize, UIImage> requestHandler);
 
 		[Deprecated (PlatformName.iOS, 10, 0)]
 		[Export ("initWithImage:")]
-		IntPtr Constructor (UIImage image);
+		NativeHandle Constructor (UIImage image);
 		
 		[Export ("imageWithSize:")]
 		[return: NullAllowed]
@@ -275,7 +279,7 @@ namespace MediaPlayer {
 #else
 		[Export ("initWithBoundsSize:requestHandler:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (CGSize boundsSize, Func<CGSize, NSImage> requestHandler);
+		NativeHandle Constructor (CGSize boundsSize, Func<CGSize, NSImage> requestHandler);
 
 		[Export ("imageWithSize:")]
 		[return: NullAllowed]
@@ -314,7 +318,7 @@ namespace MediaPlayer {
 
 		[DesignatedInitializer]
 		[Export ("initWithItems:")]
-		IntPtr Constructor (MPMediaItem [] items);
+		NativeHandle Constructor (MPMediaItem [] items);
 
 		[Export ("items")]
 		MPMediaItem [] Items { get; }
@@ -383,7 +387,7 @@ namespace MediaPlayer {
 	interface MPMediaPickerController {
 		[DesignatedInitializer]
 		[Export ("initWithMediaTypes:")]
-		IntPtr Constructor (MPMediaType mediaTypes);
+		NativeHandle Constructor (MPMediaType mediaTypes);
 
 		[Export ("mediaTypes")]
 		MPMediaType MediaTypes { get; }
@@ -431,7 +435,7 @@ namespace MediaPlayer {
 	[DisableDefaultCtor]
 	interface MPMediaPlaylist : NSSecureCoding {
 		[Export ("initWithItems:")]
-		IntPtr Constructor (MPMediaItem [] items);
+		NativeHandle Constructor (MPMediaItem [] items);
 
 		[Static, Export ("canFilterByProperty:")]
 		bool CanFilterByProperty (string property);
@@ -519,7 +523,7 @@ namespace MediaPlayer {
 	interface MPMediaQuery : NSSecureCoding, NSCopying {
 		[DesignatedInitializer]
 		[Export ("initWithFilterPredicates:")]
-		IntPtr Constructor ([NullAllowed] NSSet filterPredicates);
+		NativeHandle Constructor ([NullAllowed] NSSet filterPredicates);
 
 		[NullAllowed] // by default this property is null
 		[Export ("filterPredicates", ArgumentSemantic.Retain)]
@@ -824,7 +828,7 @@ namespace MediaPlayer {
 		[NoWatch]
 		[DesignatedInitializer]
 		[Export ("initWithContentURL:")]
-		IntPtr Constructor (NSUrl url);
+		NativeHandle Constructor (NSUrl url);
 
 		[NoWatch]
 		[Export ("backgroundColor", ArgumentSemantic.Retain)]
@@ -1166,7 +1170,7 @@ namespace MediaPlayer {
 	interface MPMoviePlayerViewController {
 		[DesignatedInitializer]
 		[Export ("initWithContentURL:")]
-		IntPtr Constructor (NSUrl url);
+		NativeHandle Constructor (NSUrl url);
 
 		[Export ("moviePlayer")]
 		MPMoviePlayerController MoviePlayer { get; }
@@ -1188,7 +1192,7 @@ namespace MediaPlayer {
 		[Export ("init")]
 		[Deprecated (PlatformName.iOS, 11,3)]
 		[NoTV]
-		IntPtr Constructor ();
+		NativeHandle Constructor ();
 
 		[Static, Export ("applicationMusicPlayer")]
 		MPMusicPlayerController ApplicationMusicPlayer { get; }
@@ -1290,7 +1294,7 @@ namespace MediaPlayer {
 	[BaseType (typeof (UIView))]
 	interface MPVolumeView {
 		[Export ("initWithFrame:")]
-		IntPtr Constructor (CGRect frame);
+		NativeHandle Constructor (CGRect frame);
 
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'AVRoutePickerView' instead.")]
 		[Export ("showsRouteButton")]
@@ -1498,7 +1502,7 @@ namespace MediaPlayer {
 
 		[DesignatedInitializer]
 		[Export ("initWithIdentifier:")]
-		IntPtr Constructor (string identifier);
+		NativeHandle Constructor (string identifier);
 
 		[NullAllowed]
 		[Export ("artwork")]
@@ -1956,7 +1960,7 @@ namespace MediaPlayer {
 	[DisableDefaultCtor] // pre-emptive
 	interface MPNowPlayingInfoLanguageOption {
 		[Export ("initWithType:languageTag:characteristics:displayName:identifier:")]
-		IntPtr Constructor (MPNowPlayingInfoLanguageOptionType languageOptionType, string languageTag, [NullAllowed] NSString[] languageOptionCharacteristics, string displayName, string identifier);
+		NativeHandle Constructor (MPNowPlayingInfoLanguageOptionType languageOptionType, string languageTag, [NullAllowed] NSString[] languageOptionCharacteristics, string displayName, string identifier);
 
 		[Export ("languageOptionType")]
 		MPNowPlayingInfoLanguageOptionType LanguageOptionType { get; }
@@ -1989,7 +1993,7 @@ namespace MediaPlayer {
 	[DisableDefaultCtor] // pre-emptive
 	interface MPNowPlayingInfoLanguageOptionGroup {
 		[Export ("initWithLanguageOptions:defaultLanguageOption:allowEmptySelection:")]
-		IntPtr Constructor (MPNowPlayingInfoLanguageOption[] languageOptions, [NullAllowed] MPNowPlayingInfoLanguageOption defaultLanguageOption, bool allowEmptySelection);
+		NativeHandle Constructor (MPNowPlayingInfoLanguageOption[] languageOptions, [NullAllowed] MPNowPlayingInfoLanguageOption defaultLanguageOption, bool allowEmptySelection);
 
 		[Export ("languageOptions")]
 		MPNowPlayingInfoLanguageOption[] LanguageOptions { get; }
@@ -2062,7 +2066,7 @@ namespace MediaPlayer {
 	interface MPMediaPlaylistCreationMetadata {
 		[Export ("initWithName:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (string name);
+		NativeHandle Constructor (string name);
 
 		[Export ("name")]
 		string Name { get; }
@@ -2085,7 +2089,7 @@ namespace MediaPlayer {
 
 		[Export ("init")]
 		[Deprecated (PlatformName.iOS, 11,3)]
-		IntPtr Constructor ();
+		NativeHandle Constructor ();
 	}
 
 	[NoMac]
@@ -2096,10 +2100,10 @@ namespace MediaPlayer {
 	interface MPMusicPlayerMediaItemQueueDescriptor
 	{
 		[Export ("initWithQuery:")]
-		IntPtr Constructor (MPMediaQuery query);
+		NativeHandle Constructor (MPMediaQuery query);
 
 		[Export ("initWithItemCollection:")]
-		IntPtr Constructor (MPMediaItemCollection itemCollection);
+		NativeHandle Constructor (MPMediaItemCollection itemCollection);
 
 		[Export ("query", ArgumentSemantic.Copy)]
 		MPMediaQuery Query { get; }
@@ -2125,7 +2129,7 @@ namespace MediaPlayer {
 	interface MPMusicPlayerStoreQueueDescriptor
 	{
 		[Export ("initWithStoreIDs:")]
-		IntPtr Constructor (string[] storeIDs);
+		NativeHandle Constructor (string[] storeIDs);
 
 		[NullAllowed, Export ("storeIDs", ArgumentSemantic.Copy)]
 		string[] StoreIDs { get; set; }
@@ -2190,7 +2194,7 @@ namespace MediaPlayer {
 	[DisableDefaultCtor]
 	interface MPMusicPlayerPlayParameters : NSSecureCoding {
 		[Export ("initWithDictionary:")]
-		IntPtr Constructor (NSDictionary dictionary);
+		NativeHandle Constructor (NSDictionary dictionary);
 
 		[Export ("dictionary", ArgumentSemantic.Copy)]
 		NSDictionary Dictionary { get; }
@@ -2204,7 +2208,7 @@ namespace MediaPlayer {
 	[DisableDefaultCtor]
 	interface MPMusicPlayerPlayParametersQueueDescriptor {
 		[Export ("initWithPlayParametersQueue:")]
-		IntPtr Constructor (MPMusicPlayerPlayParameters[] playParametersQueue);
+		NativeHandle Constructor (MPMusicPlayerPlayParameters[] playParametersQueue);
 
 		[Export ("playParametersQueue", ArgumentSemantic.Copy)]
 		MPMusicPlayerPlayParameters[] PlayParametersQueue { get; set; }
@@ -2288,7 +2292,7 @@ namespace MediaPlayer {
 	interface MPNowPlayingSession {
 
 		[Export ("initWithPlayers:")]
-		IntPtr Constructor (AVPlayer[] players);
+		NativeHandle Constructor (AVPlayer[] players);
 
 		[Export ("players", ArgumentSemantic.Strong)]
 		AVPlayer[] Players { get; }

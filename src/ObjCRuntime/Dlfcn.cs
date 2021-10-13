@@ -257,7 +257,7 @@ namespace ObjCRuntime {
 			Marshal.WriteIntPtr (indirect, CFString.CreateNative (value));
 		}
 
-		public static void SetString (IntPtr handle, string symbol, NSString? value)
+		public static void SetString (IntPtr handle, string symbol, NSString value)
 		{
 			var indirect = dlsym (handle, symbol);
 			if (indirect == IntPtr.Zero)
@@ -268,7 +268,7 @@ namespace ObjCRuntime {
 			Marshal.WriteIntPtr (indirect, strHandle);
 		}
 
-		public static void SetArray (IntPtr handle, string symbol, NSArray? array)
+		public static void SetArray (IntPtr handle, string symbol, NSArray array)
 		{
 			var indirect = dlsym (handle, symbol);
 			if (indirect == IntPtr.Zero)

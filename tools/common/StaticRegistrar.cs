@@ -3133,8 +3133,13 @@ namespace Registrar {
 					continue;
 				if (method.Parameters.Count != 2)
 					continue;
-				if (!method.Parameters [0].ParameterType.Is ("System", "IntPtr"))
-					continue;
+				if (Driver.IsDotNet) {
+					if (!method.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
+						continue;
+				} else {
+					if (!method.Parameters [0].ParameterType.Is ("System", "IntPtr"))
+						continue;
+				}
 				if (method.Parameters [1].ParameterType.Is ("System", "Boolean"))
 					return true;
 			}

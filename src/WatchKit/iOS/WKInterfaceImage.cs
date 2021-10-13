@@ -6,20 +6,24 @@ using System.Runtime.Versioning;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace WatchKit {
 	[Register ("WKInterfaceImage", SkipRegistration = true)]
 	[Unavailable (PlatformName.iOS, PlatformArchitecture.All)]
 	[Obsolete (Constants.WatchKitRemoved)]
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public class WKInterfaceImage : WKInterfaceObject, IWKImageAnimatable {
-		public override IntPtr ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
+		public override NativeHandle ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
 
 		protected WKInterfaceImage (NSObjectFlag t) : base (t)
 		{
 			throw new PlatformNotSupportedException (Constants.WatchKitRemoved);
 		}
 
-		protected internal WKInterfaceImage (IntPtr handle) : base (handle)
+		protected internal WKInterfaceImage (NativeHandle handle) : base (handle)
 		{
 			throw new PlatformNotSupportedException (Constants.WatchKitRemoved);
 		}

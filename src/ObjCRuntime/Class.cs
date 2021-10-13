@@ -19,6 +19,10 @@ using Foundation;
 using Registrar;
 #endif
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 	public partial class Class : INativeObject
 #if !COREBUILD
@@ -26,7 +30,7 @@ namespace ObjCRuntime {
 #endif
 	{
 #if !COREBUILD
-		IntPtr handle;
+		NativeHandle handle;
 
 		public static bool ThrowOnInitFailure = true;
 
@@ -86,7 +90,7 @@ namespace ObjCRuntime {
 			this.handle = handle;
 		}
 
-		public IntPtr Handle {
+		public NativeHandle Handle {
 			get { return this.handle; }
 		}
 

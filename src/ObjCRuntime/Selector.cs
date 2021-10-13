@@ -28,6 +28,10 @@ using Foundation;
 
 #nullable enable
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 	public partial class Selector : IEquatable<Selector>, INativeObject {
 		internal const string Alloc = "alloc";
@@ -41,7 +45,7 @@ namespace ObjCRuntime {
 		internal const string PerformSelectorWithObjectAfterDelay = "performSelector:withObject:afterDelay:";
 #endif
 
-		IntPtr handle;
+		NativeHandle handle;
 		string? name;
 
 		public Selector (IntPtr sel)
@@ -69,6 +73,12 @@ namespace ObjCRuntime {
 		public IntPtr Handle {
 			get { return handle; }
 		}
+
+#if NET && !COREBUILD
+		NativeHandle INativeObject.Handle {
+			get => Handle;
+		}
+#endif
 
 		public string Name {
 			get {

@@ -5,6 +5,9 @@
 //   Miguel de Icaza
 //
 // Copyright 2013 Xamarin Inc.
+
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1290,11 +1293,11 @@ namespace ObjCRuntime {
 			return null;
 		}
 
-		public static NSObject GetNSObject (IntPtr ptr) {
+		public static NSObject? GetNSObject (IntPtr ptr) {
 			return GetNSObject (ptr, MissingCtorResolution.ThrowConstructor1NotFound);
 		}
 
-		internal static NSObject GetNSObject (IntPtr ptr, MissingCtorResolution missingCtorResolution, bool evenInFinalizerQueue = false) {
+		internal static NSObject? GetNSObject (IntPtr ptr, MissingCtorResolution missingCtorResolution, bool evenInFinalizerQueue = false) {
 			if (ptr == IntPtr.Zero)
 				return null;
 
@@ -1306,7 +1309,7 @@ namespace ObjCRuntime {
 			return ConstructNSObject (ptr, Class.GetClassForObject (ptr), missingCtorResolution);
 		}
 
-		static public T GetNSObject<T> (IntPtr ptr) where T : NSObject
+		static public T? GetNSObject<T> (IntPtr ptr) where T : NSObject
 		{
 			if (ptr == IntPtr.Zero)
 				return null;
@@ -1346,7 +1349,7 @@ namespace ObjCRuntime {
 			return o;
 		}
 
-		static public T GetNSObject<T> (IntPtr ptr, bool owns) where T : NSObject
+		static public T? GetNSObject<T> (IntPtr ptr, bool owns) where T : NSObject
 		{
 			var obj = GetNSObject<T> (ptr);
 			if (owns)

@@ -74,7 +74,7 @@ include $(TOP)/opentk/Makefile.include
 # reporting all warnings as errors.
 #
 # https://github.com/dotnet/roslyn/issues/41605
-NULLABILITY_WARNINGS=nullable
+#NULLABILITY_WARNINGS=/warnaserror:nullable
 GENERATOR_WARNASERROR=
 IOS_GENERATOR_WARNASERROR=$(GENERATOR_WARNASERROR)
 WATCH_GENERATOR_WARNASERROR=$(GENERATOR_WARNASERROR)
@@ -224,7 +224,7 @@ $(IOS_BUILD_DIR)/native-$(1)%Xamarin.iOS.dll $(IOS_BUILD_DIR)/native-$(1)%Xamari
 		$$(ARGS_$(1)) \
 		-publicsign -keyfile:$(PRODUCT_KEY_PATH) $$(IOS_DEFINES) \
 		-nowarn:219,618,114,414,1635,3021,$$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$$(WARNINGS_TO_IGNORE) \
-		-warnaserror:$(NULLABILITY_WARNINGS) \
+		$(NULLABILITY_WARNINGS) \
 		$$(IOS_CSC_FLAGS_XI) \
 		@$(BUILD_DIR)/ios-defines.rsp \
 		$$(IOS_SOURCES) @$(IOS_BUILD_DIR)/native/generated_sources
@@ -559,7 +559,7 @@ $(MAC_BUILD_DIR)/$(1)-64/Xamarin.Mac%dll $(MAC_BUILD_DIR)/$(1)-64/Xamarin.Mac%pd
 		$$(ARGS_64) \
 		-publicsign -keyfile:$(SN_KEY) \
 		-nowarn:3021,1635,612,618,0219,0414,$(MAC_WARNINGS_TO_FIX),$(WARNINGS_TO_IGNORE) \
-		-warnaserror:$(NULLABILITY_WARNINGS) \
+		$(NULLABILITY_WARNINGS) \
 		$$(MAC_CSC_FLAGS_XM) \
 		$(MAC_CFNETWORK_SOURCES) $(MAC_HTTP_SOURCES) \
 		$(2) \
@@ -864,7 +864,7 @@ $(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS%dll $(WATCHOS_DOTNET_BUILD_DIR)/3
 		$(WATCH_DEFINES) \
 		$(ARGS_32) \
 		$(WATCHOS_WARNINGS_TO_FIX) \
-		-warnaserror:$(NULLABILITY_WARNINGS) \
+		$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(WATCHOS_SOURCES) \
 		@$(BUILD_DIR)/watchos-defines.rsp \
@@ -879,7 +879,7 @@ $(WATCHOS_DOTNET_BUILD_DIR)/64/Xamarin.WatchOS%dll $(WATCHOS_DOTNET_BUILD_DIR)/6
 		$(WATCH_DEFINES) \
 		$(ARGS_64) \
 		$(WATCHOS_WARNINGS_TO_FIX) \
-		-warnaserror:$(NULLABILITY_WARNINGS) \
+		$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(WATCHOS_SOURCES) \
 		@$(BUILD_DIR)/watchos-defines.rsp \
@@ -1157,7 +1157,7 @@ $(TVOS_DOTNET_BUILD_DIR)/64/Xamarin.TVOS%dll $(TVOS_DOTNET_BUILD_DIR)/64/Xamarin
 		$(TVOS_DEFINES) \
 		$(ARGS_64) \
 		$(TVOS_WARNINGS_TO_FIX) \
-		-warnaserror:$(NULLABILITY_WARNINGS) \
+		$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(TVOS_SOURCES) \
 		@$(BUILD_DIR)/tvos-defines.rsp \
@@ -1369,7 +1369,7 @@ $(MACCATALYST_DOTNET_BUILD_DIR)/64/Xamarin.MacCatalyst%dll $(MACCATALYST_DOTNET_
 		$(MACCATALYST_DEFINES) \
 		$(ARGS_64) \
 		$(MACCATALYST_WARNINGS_TO_FIX) \
-		-warnaserror:$(NULLABILITY_WARNINGS) \
+		$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(MACCATALYST_SOURCES) \
 		@$(BUILD_DIR)/maccatalyst-defines.rsp \
@@ -1642,6 +1642,7 @@ tvOS_APIS=$(TVOS_APIS)
 MacCatalyst_APIS=$(MACCATALYST_APIS)
 macOS_APIS=$(MAC_APIS)
 
+ifdef ENABLE_DOTNET
 define DotNetProjectFiles
 $(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj: dotnet.tmpl.csproj Makefile $$(wildcard $(CURDIR)/*.sources)
 	@mkdir -p $$(dir $$@)
@@ -1650,9 +1651,10 @@ $(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj: dotnet.tmpl.csproj Makefile $$(wi
 		-e 's*<!--%FILES%-->*$$(foreach file,$$($(1)_SOURCES),<Compile Include="..\\..\\..\\..\\$$(file)"/>)*' \
 		-e 's*<!--%APIS%-->*$$(foreach file,$$($(1)_APIS),<None Include="..\\..\\..\\..\\$$(file)"/>)*' \
 		$$< | xmllint --format - > $$@
+PROJECT_FILES += $(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj
 endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetProjectFiles,$(platform))))
-
+endif
 
 dotnet: $(DOTNET_TARGETS)
 ifdef ENABLE_DOTNET

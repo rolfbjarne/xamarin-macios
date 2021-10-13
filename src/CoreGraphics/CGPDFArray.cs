@@ -27,6 +27,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -37,17 +40,21 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFArray.h
-	public class CGPDFArray : INativeObject {
-		internal IntPtr handle;
-
-		public IntPtr Handle {
-			get { return handle; }
+	public class CGPDFArray : NonRefcountedNativeObject {
+		public CGPDFArray (IntPtr handle)
+			: base (handle, false)
+		{
 		}
 
-		/* invoked by marshallers */
-		public CGPDFArray (IntPtr handle)
+		internal CGPDFArray (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
+		}
+
+		protected override void Free ()
+		{
+			// Nothing to do here.
+			// Lifetime is tied to the containing CGPDFDocument
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -55,7 +62,7 @@ namespace CoreGraphics {
 		
 		public nint Count {
 			get {
-				return CGPDFArrayGetCount (handle);
+				return CGPDFArrayGetCount (Handle);
 			}
 		}
 
@@ -67,13 +74,13 @@ namespace CoreGraphics {
 
 		public bool GetBoolean (nint idx, out bool result)
 		{
-			return CGPDFArrayGetBoolean (handle, idx, out result);
+			return CGPDFArrayGetBoolean (Handle, idx, out result);
 		}
 
 #if !XAMCORE_4_0
 		public bool GetBoolean (int idx, out bool result)
 		{
-			return CGPDFArrayGetBoolean (handle, idx, out result);
+			return CGPDFArrayGetBoolean (Handle, idx, out result);
 		}
 #endif
 
@@ -85,13 +92,13 @@ namespace CoreGraphics {
 
 		public bool GetInt (nint idx, out nint result)
 		{
-			return CGPDFArrayGetInteger (handle, idx, out result);
+			return CGPDFArrayGetInteger (Handle, idx, out result);
 		}
 
 #if !XAMCORE_4_0
 		public bool GetInt (int idx, out nint result)
 		{
-			return CGPDFArrayGetInteger (handle, idx, out result);
+			return CGPDFArrayGetInteger (Handle, idx, out result);
 		}
 #endif
 
@@ -103,13 +110,13 @@ namespace CoreGraphics {
 
 		public bool GetFloat (nint idx, out nfloat result)
 		{
-			return CGPDFArrayGetNumber (handle, idx, out result);
+			return CGPDFArrayGetNumber (Handle, idx, out result);
 		}
 
 #if !XAMCORE_4_0
 		public bool GetFloat (int idx, out nfloat result)
 		{
-			return CGPDFArrayGetNumber (handle, idx, out result);
+			return CGPDFArrayGetNumber (Handle, idx, out result);
 		}
 #endif
 
@@ -117,16 +124,16 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFArrayGetName (/* CGPDFArrayRef */ IntPtr array, /* size_t */ nint index, /* const char** */ out IntPtr value);
 
-		public bool GetName (nint idx, out string result)
+		public bool GetName (nint idx, out string? result)
 		{
 			IntPtr res;
-			var r = CGPDFArrayGetName (handle, idx, out res);
+			var r = CGPDFArrayGetName (Handle, idx, out res);
 			result = r ? Marshal.PtrToStringAnsi (res) : null;
 			return r;
 		}
 
 #if !XAMCORE_4_0
-		public bool GetName (int idx, out string result)
+		public bool GetName (int idx, out string? result)
 		{
 			return GetName ((nint) idx, out result);
 		}
@@ -136,16 +143,16 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFArrayGetDictionary (/* CGPDFArrayRef */ IntPtr array, /* size_t */ nint index, /* CGPDFDictionaryRef* */ out IntPtr value);
 
-		public bool GetDictionary (nint idx, out CGPDFDictionary result)
+		public bool GetDictionary (nint idx, out CGPDFDictionary? result)
 		{
 			IntPtr res;
-			var r = CGPDFArrayGetDictionary (handle, idx, out res);
+			var r = CGPDFArrayGetDictionary (Handle, idx, out res);
 			result = r ? new CGPDFDictionary (res) : null;
 			return r;
 		}
 
 #if !XAMCORE_4_0
-		public bool GetDictionary (int idx, out CGPDFDictionary result)
+		public bool GetDictionary (int idx, out CGPDFDictionary? result)
 		{
 			return GetDictionary ((nint) idx, out result);
 		}
@@ -155,16 +162,16 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFArrayGetStream (/* CGPDFArrayRef */ IntPtr array, /* size_t */ nint index, /* CGPDFStreamRef* */ out IntPtr value);
 
-		public bool GetStream (nint idx, out CGPDFStream result)
+		public bool GetStream (nint idx, out CGPDFStream? result)
 		{
 			IntPtr ptr;
-			var r = CGPDFArrayGetStream (handle, idx, out ptr); 
+			var r = CGPDFArrayGetStream (Handle, idx, out ptr); 
 			result = r ? new CGPDFStream (ptr) : null;
 			return r;
 		}
 
 #if !XAMCORE_4_0
-		public bool GetStream (int idx, out CGPDFStream result)
+		public bool GetStream (int idx, out CGPDFStream? result)
 		{
 			return GetStream ((nint) idx, out result);
 		}
@@ -174,16 +181,16 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFArrayGetArray (/* CGPDFArrayRef */ IntPtr array, /* size_t */ nint index, /* CGPDFArrayRef* */ out IntPtr value);
 
-		public bool GetArray (nint idx, out CGPDFArray array)
+		public bool GetArray (nint idx, out CGPDFArray? array)
 		{
 			IntPtr ptr;
-			var r = CGPDFArrayGetArray (handle, idx, out ptr);
+			var r = CGPDFArrayGetArray (Handle, idx, out ptr);
 			array = r ? new CGPDFArray (ptr) : null;
 			return r;
 		}
 
 #if !XAMCORE_4_0
-		public bool GetArray (int idx, out CGPDFArray array)
+		public bool GetArray (int idx, out CGPDFArray? array)
 		{
 			return GetArray ((nint) idx, out array);
 		}
@@ -193,16 +200,16 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFArrayGetString (/* CGPDFArrayRef */ IntPtr array, /* size_t */ nint index, /* CGPDFStringRef* */ out IntPtr value);
 
-		public bool GetString (nint idx, out string result)
+		public bool GetString (nint idx, out string? result)
 		{
 			IntPtr res;
-			var r = CGPDFArrayGetString (handle, idx, out res);
+			var r = CGPDFArrayGetString (Handle, idx, out res);
 			result = r ? CGPDFString.ToString (res) : null;
 			return r;
 		}
 
 #if !XAMCORE_4_0
-		public bool GetString (int idx, out string result)
+		public bool GetString (int idx, out string? result)
 		{
 			return GetString ((nint) idx, out result);
 		}
@@ -223,7 +230,7 @@ namespace CoreGraphics {
 			return false;
 		}
 
-		public delegate bool ApplyCallback (nint index, object value, object info);
+		public delegate bool ApplyCallback (nint index, object? value, object? info);
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 #if !NET
@@ -242,16 +249,16 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("tvos12.0")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public bool Apply (ApplyCallback callback, object info = null)
+		public bool Apply (ApplyCallback callback, object? info = null)
 		{
-			if (callback == null)
+			if (callback is null)
 				throw new ArgumentNullException (nameof (callback));
 
 			BlockLiteral block_handler = new BlockLiteral ();
 			block_handler.SetupBlockUnsafe (applyblock_handler, callback);
 			var gc_handle = info == null ? default (GCHandle) : GCHandle.Alloc (info);
 			try {
-				return CGPDFArrayApplyBlock (handle, ref block_handler, info == null ? IntPtr.Zero : GCHandle.ToIntPtr (gc_handle));
+				return CGPDFArrayApplyBlock (Handle, ref block_handler, info == null ? IntPtr.Zero : GCHandle.ToIntPtr (gc_handle));
 			} finally {
 				block_handler.CleanupBlock ();
 				if (info != null)

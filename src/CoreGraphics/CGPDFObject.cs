@@ -27,6 +27,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 using Foundation;
@@ -36,14 +39,16 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFObject.h
-	public class CGPDFObject : INativeObject {
+	public class CGPDFObject : NonRefcountedNativeObject {
 
-		public IntPtr Handle { get; private set; }
-
-		/* invoked by marshallers */
 		public CGPDFObject (IntPtr handle)
+			: base (handle, false)
 		{
-			Handle = handle;
+		}
+
+		protected override void Free ()
+		{
+			// Nothing to do here.
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -61,9 +66,11 @@ namespace CoreGraphics {
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFObjectGetValue (/* CGPDFObjectRef */IntPtr pdfobj, CGPDFObjectType type, /* void* */ out nfloat value);
 
+#if !NET
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		[return: MarshalAs (UnmanagedType.I1)]
 		extern static bool CGPDFObjectGetValue (/* CGPDFObjectRef */IntPtr pdfobj, CGPDFObjectType type, /* void* */ out IntPtr value);
+#endif
 
 		public CGPDFObjectType Type {
 			get { return CGPDFObjectGetType (Handle); }
@@ -95,7 +102,7 @@ namespace CoreGraphics {
 			return CGPDFObjectGetValue (Handle, CGPDFObjectType.Real, out value);
 		}
 
-		public bool TryGetValue (out string value)
+		public bool TryGetValue (out string? value)
 		{
 			IntPtr ip;
 			if (CGPDFObjectGetValue (Handle, CGPDFObjectType.String, out ip)) {
@@ -107,7 +114,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		public bool TryGetValue (out CGPDFArray value)
+		public bool TryGetValue (out CGPDFArray? value)
 		{
 			IntPtr ip;
 			if (CGPDFObjectGetValue (Handle, CGPDFObjectType.Array, out ip)) {
@@ -119,7 +126,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		public bool TryGetValue (out CGPDFDictionary value)
+		public bool TryGetValue (out CGPDFDictionary? value)
 		{
 			IntPtr ip;
 			if (CGPDFObjectGetValue (Handle, CGPDFObjectType.Dictionary, out ip)) {
@@ -131,7 +138,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		public bool TryGetValue (out CGPDFStream value)
+		public bool TryGetValue (out CGPDFStream? value)
 		{
 			IntPtr ip;
 			if (CGPDFObjectGetValue (Handle, CGPDFObjectType.Stream, out ip)) {
@@ -143,7 +150,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		public bool TryGetName (out string name)
+		public bool TryGetName (out string? name)
 		{
 			IntPtr ip;
 			if (CGPDFObjectGetValue (Handle, CGPDFObjectType.Name, out ip)) {
@@ -155,7 +162,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		internal static object FromHandle (IntPtr handle)
+		internal static object? FromHandle (IntPtr handle)
 		{
 			IntPtr ip;
 

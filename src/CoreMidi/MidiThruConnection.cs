@@ -64,9 +64,9 @@ namespace CoreMidi {
 			MidiThruConnectionRef ret;
 
 			using (var data = connectionParams.WriteStruct ()) {
-				var retStr = NSString.CreateNative (persistentOwnerID);
+				var retStr = CFString.CreateNative (persistentOwnerID);
 				error = MIDIThruConnectionCreate (retStr, data.Handle, out ret);
-				NSString.ReleaseNative (retStr);
+				CFString.ReleaseNative (retStr);
 			}
 
 			if (error != MidiError.Ok)
@@ -96,7 +96,7 @@ namespace CoreMidi {
 			if (error != MidiError.Ok || ret == IntPtr.Zero)
 				return null;
 			using (var data = Runtime.GetNSObject<NSData> (ret, true)) {
-				if (data == null)
+				if (data is null)
 					return null;
 				var cnnParams = new MidiThruConnectionParams ();
 				cnnParams.ReadStruct (data);
@@ -135,7 +135,7 @@ namespace CoreMidi {
 
 		public static MidiThruConnection[] Find (string persistentOwnerID, out MidiError error)
 		{
-			if (persistentOwnerID == null)
+			if (persistentOwnerID is null)
 				throw new ArgumentNullException (nameof (persistentOwnerID));
 
 			IntPtr ret;
@@ -148,10 +148,14 @@ namespace CoreMidi {
 				if (totalObjs == 0)
 					return null;
 
-				var basePtr = data.Bytes.ToInt32 ();
+				var basePtr = (IntPtr) data.Bytes;
 				var connections = new MidiThruConnection[totalObjs];
-				for (int i = 0; i < totalObjs; i++)
-					connections[i] = new MidiThruConnection ((uint)(basePtr + i * typeSize));
+				unsafe {
+					uint* handles = (uint*) (IntPtr) data.Bytes;
+					for (int i = 0; i < totalObjs; i++) {
+						connections [i] = new MidiThruConnection (handles [i]);
+					}
+				}
 				
 				return connections;
 			}

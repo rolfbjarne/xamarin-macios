@@ -23,45 +23,21 @@ namespace VideoToolbox {
 #else
 	[Mac (10,10), iOS (8,0), TV (10,2)]
 #endif
-	public class VTFrameSilo : INativeObject, IDisposable {
-		IntPtr handle;
-
-		/* invoked by marshallers */
+	public class VTFrameSilo : NativeObject {
 		protected internal VTFrameSilo (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
-			CFObject.CFRetain (this.handle);
-		}
-
-		public IntPtr Handle {
-			get {return handle; }
 		}
 
 		[Preserve (Conditional=true)]
 		internal VTFrameSilo (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (!owns)
-				CFObject.CFRetain (this.handle);
 		}
 
-		~VTFrameSilo ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			base.Dispose (disposing);
 		}
 
 		[DllImport (Constants.VideoToolboxLibrary)]
@@ -98,7 +74,7 @@ namespace VideoToolbox {
 			if (sampleBuffer == null)
 				throw new ArgumentNullException ("sampleBuffer");
 
-			var status = VTFrameSiloAddSampleBuffer (handle, sampleBuffer.Handle);
+			var status = VTFrameSiloAddSampleBuffer (Handle, sampleBuffer.Handle);
 			return status;
 		}
 
@@ -115,10 +91,10 @@ namespace VideoToolbox {
 
 			if (ranges.Length > 0)
 				fixed (CMTimeRange *first = &ranges [0]) {
-					return VTFrameSiloSetTimeRangesForNextPass (handle, ranges.Length, (IntPtr)first);
+					return VTFrameSiloSetTimeRangesForNextPass (Handle, ranges.Length, (IntPtr)first);
 				}
 			else
-				return VTFrameSiloSetTimeRangesForNextPass (handle, ranges.Length, IntPtr.Zero);
+				return VTFrameSiloSetTimeRangesForNextPass (Handle, ranges.Length, IntPtr.Zero);
 		}
 
 		[DllImport (Constants.VideoToolboxLibrary)]
@@ -128,7 +104,7 @@ namespace VideoToolbox {
 
 		public VTStatus GetProgressOfCurrentPass (out float progress)
 		{
-			return VTFrameSiloGetProgressOfCurrentPass (handle, out progress);
+			return VTFrameSiloGetProgressOfCurrentPass (Handle, out progress);
 		}
 
 #if !NET
@@ -167,9 +143,9 @@ namespace VideoToolbox {
 		{
 			var callbackHandle = GCHandle.Alloc (callback);
 #if NET
-			var foreachResult = VTFrameSiloCallFunctionForEachSampleBuffer (handle, range ?? CMTimeRange.InvalidRange, GCHandle.ToIntPtr (callbackHandle), &BufferCallback);
+			var foreachResult = VTFrameSiloCallFunctionForEachSampleBuffer (Handle, range ?? CMTimeRange.InvalidRange, GCHandle.ToIntPtr (callbackHandle), &BufferCallback);
 #else
-			var foreachResult = VTFrameSiloCallFunctionForEachSampleBuffer (handle, range ?? CMTimeRange.InvalidRange, GCHandle.ToIntPtr (callbackHandle), static_EachSampleBufferCallback);
+			var foreachResult = VTFrameSiloCallFunctionForEachSampleBuffer (Handle, range ?? CMTimeRange.InvalidRange, GCHandle.ToIntPtr (callbackHandle), static_EachSampleBufferCallback);
 #endif
 			callbackHandle.Free ();
 			return foreachResult;

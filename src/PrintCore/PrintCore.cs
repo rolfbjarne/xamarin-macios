@@ -6,6 +6,9 @@
 //
 // Copyright 2016 Microsoft Inc
 //
+
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -18,51 +21,38 @@ using PMObject=System.IntPtr;
 using OSStatus=System.Int32;
 
 namespace PrintCore {
-	class NativeInvoke {
+	public class PMPrintCoreBase : NativeObject {
+		[Obsolete ("FIXME", error: true)] // TEMPORARY
+		internal PMPrintCoreBase ()
+		{
+			// For delayed initialization cases.
+		}
+		
+		[Obsolete ("FIXME", error: true)] // TEMPORARY
+		internal PMPrintCoreBase (IntPtr handle)
+			: base (handle, false)
+		{
+		}
+
+		internal PMPrintCoreBase (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
+		}
+
 		[DllImport (Constants.PrintCoreLibrary)]
 		internal extern static OSStatus PMRetain (PMObject obj);
 
 		[DllImport (Constants.PrintCoreLibrary)]
 		internal extern static OSStatus PMRelease (PMObject obj);
 
-		
-	}
-	
-	public class PMPrintCoreBase : IDisposable, INativeObject {
-		internal IntPtr handle;
-
-		internal PMPrintCoreBase ()
+		protected override void Retain ()
 		{
-			// For delayed initialization cases.
-		}
-		
-		internal PMPrintCoreBase (IntPtr handle) : this (handle, false) {}
-		internal PMPrintCoreBase (IntPtr handle, bool owns)
-		{
-			if (!owns)
-				NativeInvoke.PMRetain (handle);
-			this.handle = handle;
+			NativeInvoke.PMRetain (Handle);
 		}
 
-		~PMPrintCoreBase ()
+		protected override void Release ()
 		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle => handle;
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				NativeInvoke.PMRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			NativeInvoke.PMRelease (Handle);
 		}
 	}
 

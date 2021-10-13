@@ -30,6 +30,10 @@ using System.Collections.Generic;
 
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Foundation {
 	[Register ("NSMutableSet", SkipRegistration = true)]
 	public sealed partial class NSMutableSet<TKey> : NSMutableSet, IEnumerable<TKey>
@@ -44,7 +48,7 @@ namespace Foundation {
 		{
 		}
 
-		internal NSMutableSet (IntPtr handle)
+		internal NSMutableSet (NativeHandle handle)
 			: base (handle)
 		{
 		}
@@ -64,12 +68,10 @@ namespace Foundation {
 		{
 		}
 
-#if !NET // HACK TEMPORARY
 		public NSMutableSet (nint capacity)
 			: base (capacity)
 		{
 		}
-#endif
 
 		public NSMutableSet (long capacity)
 		{

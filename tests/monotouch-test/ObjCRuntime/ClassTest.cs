@@ -17,6 +17,10 @@ using Foundation;
 using ObjCRuntime;
 using NUnit.Framework;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace MonoTouchFixtures.ObjCRuntime {
 	
 	[TestFixture]
@@ -139,7 +143,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 		[Register ("Inexistent", true)]
 		public class InexistentClass : NSObject {
-			public override IntPtr ClassHandle {
+			public override NativeHandle ClassHandle {
 				get {
 					return Class.GetHandle (GetType ().Name);
 				}

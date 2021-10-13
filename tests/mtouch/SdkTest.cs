@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using NUnit.Framework;
 
 using Xamarin.Tests;
+using Xamarin.Utils;
 
 namespace Xamarin.Linker {
 	public class ProfilePoker : MobileProfile {
@@ -372,5 +374,6 @@ namespace Xamarin.Linker {
 			Assert.AreEqual (expected_exit_code, rv, "AOT compilation");
 			Assert.IsEmpty (string.Join ("\n", llvm_failed), "LLVM failed");
 		}
+
 	}
 }

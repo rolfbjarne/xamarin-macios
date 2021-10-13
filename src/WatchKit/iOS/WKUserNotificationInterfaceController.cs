@@ -6,6 +6,10 @@ using System.Runtime.Versioning;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace WatchKit {
 	[Register ("WKUserNotificationInterfaceController", SkipRegistration = true)]
 #if NET
@@ -16,7 +20,7 @@ namespace WatchKit {
 	[Obsolete (Constants.WatchKitRemoved)]
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public class WKUserNotificationInterfaceController : WKInterfaceController {
-		public override IntPtr ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
+		public override NativeHandle ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
 
 		protected WKUserNotificationInterfaceController (NSObjectFlag t) : base (t)
 		{

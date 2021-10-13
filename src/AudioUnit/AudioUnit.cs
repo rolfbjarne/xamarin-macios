@@ -40,6 +40,8 @@ using ObjCRuntime;
 using CoreFoundation;
 using Foundation;
 
+// #nullable enable
+
 namespace AudioUnit
 {
 #if !COREBUILD
@@ -295,20 +297,9 @@ namespace AudioUnit
 		public EventValuesStruct EventValues;
 	}
 
-	public class AudioUnit : IDisposable, ObjCRuntime.INativeObject
+	public class AudioUnit : NativeObject
 	{
-#pragma warning disable 649 // Field 'AudioUnit.handle' is never assigned to, and will always have its default value
-		IntPtr handle;
-#pragma warning restore 649
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-#if COREBUILD
-		public void Dispose () { /* FAKE DURING COREBUILD */ }
-#else
+#if !COREBUILD
 		static readonly CallbackShared CreateRenderCallback = RenderCallbackImpl;
 		static readonly CallbackShared CreateInputCallback = InputCallbackImpl;
 
@@ -325,10 +316,9 @@ namespace AudioUnit
 		}
 
 		internal AudioUnit (IntPtr ptr, bool owns)
+			: base (ptr, owns)
 		{
-			handle = ptr;
 			gcHandle = GCHandle.Alloc(this);
-			this.owns = owns;
 		}
 		
 		public AudioUnit (AudioComponent component)
@@ -348,7 +338,7 @@ namespace AudioUnit
 
 		public AudioComponent Component {
 			get {
-				return new AudioComponent (AudioComponentInstanceGetComponent (handle));
+				return new AudioComponent (AudioComponentInstanceGetComponent (Handle));
 			}
 		}
 
@@ -791,25 +781,29 @@ namespace AudioUnit
 			return AudioUnitScheduleParameters (handle, inParameterEvent, inNumParamEvents);
 		}
 
-		public void Dispose()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-		
 		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioComponentInstanceDispose(IntPtr inInstance);
 
-		protected virtual void Dispose (bool disposing)
+		protected override void Retain ()
 		{
-			if (handle != IntPtr.Zero){
+			// There's no retain/release for this class
+		}
+
+		protected override void Release ()
+		{
+			// There's no retain/release for this class
+		}
+
+		protected override void Dispose (bool disposing)
+		{
+			if (Handle != NativeObject.Zero) {
 				if (owns) {
 					Stop ();
 					AudioUnitUninitialize (handle);
 					AudioComponentInstanceDispose (handle);
 				}
 				gcHandle.Free();
-				handle = IntPtr.Zero;
+				handle = NativeObject.Zero;
 			}
 		}
 

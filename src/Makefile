@@ -1632,6 +1632,28 @@ all-local:: $(ALL_TARGETS)
 $(DOTNET_TARGETS_DIRS):
 	$(Q) mkdir -p $@
 
+iOS_SOURCES=$(IOS_SOURCES)
+tvOS_SOURCES=$(TVOS_SOURCES)
+MacCatalyst_SOURCES=$(MACCATALYST_SOURCES)
+macOS_SOURCES=$(MAC_SOURCES)
+
+iOS_APIS=$(IOS_APIS)
+tvOS_APIS=$(TVOS_APIS)
+MacCatalyst_APIS=$(MACCATALYST_APIS)
+macOS_APIS=$(MAC_APIS)
+
+define DotNetProjectFiles
+$(DOTNET_BUILD_DIR)/projects/$(1)/$(1).csproj: dotnet.tmpl.csproj Makefile $$(wildcard $(CURDIR)/*.sources)
+	@mkdir -p $$(dir $$@)
+	@sed \
+		-e 's*%PLATFORM%*$(1)*' \
+		-e 's*<!--%FILES%-->*$$(foreach file,$$($(1)_SOURCES),<Compile Include="..\\..\\..\\..\\$$(file)"/>)*' \
+		-e 's*<!--%APIS%-->*$$(foreach file,$$($(1)_APIS),<None Include="..\\..\\..\\..\\$$(file)"/>)*' \
+		$$< | xmllint --format - > $$@
+endef
+$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetProjectFiles,$(platform))))
+
+
 dotnet: $(DOTNET_TARGETS)
 ifdef ENABLE_DOTNET
 all-local:: $(DOTNET_TARGETS)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <_TargetPlatform>%PLATFORM%</_TargetPlatform>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Xamarin.iOS</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\..\product.snk</AssemblyOriginatorKeyFile>
+    <LangVersion>latest</LangVersion>
+    <DefineConstants>IPHONE;IOS;MINIMAL;MONOTOUCH</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>3021,3014,3003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\build\ios\native\**\*.cs">
+      <Link>build\ios\native\%(RecursiveDir)%(Filename).cs</Link>
+    </Compile>
+    <!--%FILES%-->
+    <!--%APIS%-->
+  </ItemGroup>
+</Project>

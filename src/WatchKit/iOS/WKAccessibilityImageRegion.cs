@@ -7,13 +7,17 @@ using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace WatchKit {
 	[Register ("WKAccessibilityImageRegion", SkipRegistration = true)]
 	[Unavailable (PlatformName.iOS, PlatformArchitecture.All)]
 	[Obsolete (Constants.WatchKitRemoved)]
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public class WKAccessibilityImageRegion : NSObject {
-		public override IntPtr ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
+		public override NativeHandle ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
 
 		public WKAccessibilityImageRegion () : base (NSObjectFlag.Empty)
 		{

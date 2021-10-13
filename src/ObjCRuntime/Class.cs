@@ -20,6 +20,10 @@ using Foundation;
 using Registrar;
 #endif
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 	public partial class Class : NonRefcountedNativeObject
 #if !COREBUILD
@@ -70,16 +74,16 @@ namespace ObjCRuntime {
 		{
 		}
 
-		public Class (IntPtr handle)
+		public Class (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional = true)]
 #if NET
-		internal Class (IntPtr handle, bool owns)
+		internal Class (NativeHandle handle, bool owns)
 #else
-		public Class (IntPtr handle, bool owns)
+		public Class (NativeHandle handle, bool owns)
 #endif
 			: base (handle, owns)
 		{
@@ -90,7 +94,7 @@ namespace ObjCRuntime {
 			// Nothing to do here
 		}
 
-		internal static Class Construct (IntPtr handle) 
+		internal static Class Construct (NativeHandle handle) 
 		{
 			return new Class (handle);
 		}
@@ -106,7 +110,7 @@ namespace ObjCRuntime {
 			}
 		}
 
-		public static IntPtr GetHandle (string name)
+		public static NativeHandle GetHandle (string name)
 		{
 			return objc_getClass (name);
 		}

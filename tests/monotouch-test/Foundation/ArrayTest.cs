@@ -13,6 +13,10 @@ using ObjCRuntime;
 using Security;
 using NUnit.Framework;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace MonoTouchFixtures.Foundation {
 	
 	[TestFixture]
@@ -46,7 +50,11 @@ namespace MonoTouchFixtures.Foundation {
 		NSComparisonResult Comparator (NSObject obj1, NSObject obj2)
 		{
 			comparator_count++;
+#if NET
+			return (NSComparisonResult) (((long) (IntPtr) obj2.Handle - (long) (IntPtr) obj1.Handle));
+#else
 			return (NSComparisonResult) (long) ((nint) obj2.Handle - (nint) obj1.Handle);
+#endif
 		}
 		
 		[Test]

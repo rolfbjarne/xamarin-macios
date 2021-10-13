@@ -14,6 +14,10 @@ using Intents;
 using ObjCRuntime;
 using UIKit;
 
+#if !NET
+using NativeHandle=System.IntPtr;
+#endif
+
 namespace IntentsUI {
 
 	[iOS (10, 0)]
@@ -112,7 +116,7 @@ namespace IntentsUI {
 
 		[NoMacCatalyst]
 		[Export ("initWithShortcut:")]
-		IntPtr Constructor (INShortcut shortcut);
+		NativeHandle Constructor (INShortcut shortcut);
 	}
 
 	interface IINUIAddVoiceShortcutViewControllerDelegate { }
@@ -145,7 +149,7 @@ namespace IntentsUI {
 
 		[NoMacCatalyst]
 		[Export ("initWithVoiceShortcut:")]
-		IntPtr Constructor (INVoiceShortcut voiceShortcut);
+		NativeHandle Constructor (INVoiceShortcut voiceShortcut);
 	}
 
 	interface IINUIEditVoiceShortcutViewControllerDelegate { }
@@ -176,7 +180,7 @@ namespace IntentsUI {
 		[MacCatalyst (13, 4)]
 		[Export ("initWithStyle:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (INUIAddVoiceShortcutButtonStyle style);
+		NativeHandle Constructor (INUIAddVoiceShortcutButtonStyle style);
 
 		[Export ("style")]
 		INUIAddVoiceShortcutButtonStyle Style { get; }

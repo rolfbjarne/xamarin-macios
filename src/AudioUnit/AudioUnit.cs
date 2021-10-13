@@ -33,7 +33,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Threading;
@@ -42,6 +41,9 @@ using ObjCRuntime;
 using CoreFoundation;
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
 
 namespace AudioUnit
 {
@@ -846,6 +848,12 @@ namespace AudioUnit
 		static extern AudioUnitStatus AudioUnitSetProperty (IntPtr inUnit, AudioUnitPropertyIDType inID, AudioUnitScopeType inScope, uint inElement,
 						       ref IntPtr inData, int inDataSize);
 
+#if NET
+		[DllImport (Constants.AudioUnitLibrary)]
+		static extern AudioUnitStatus AudioUnitSetProperty (IntPtr inUnit, AudioUnitPropertyIDType inID, AudioUnitScopeType inScope, uint inElement,
+							   ref NativeHandle inData, int inDataSize);
+#endif
+
 		[DllImport(Constants.AudioUnitLibrary)]
 		static extern AudioUnitStatus AudioUnitSetProperty (IntPtr inUnit, AudioUnitPropertyIDType inID, AudioUnitScopeType inScope, uint inElement,
 						       ref AURenderCallbackStruct inData, int inDataSize);
@@ -1014,30 +1022,30 @@ namespace AudioUnit
 	{
 		AURenderEvent *current;
 
-		public IntPtr Handle { get; private set; }
+		public NativeHandle Handle { get; private set; }
 		public bool IsEmpty { get { return Handle == IntPtr.Zero; } }
 		public bool IsAtEnd { get { return current is null; }}
 
-		public AURenderEventEnumerator (IntPtr ptr)
+		public AURenderEventEnumerator (NativeHandle ptr)
 			: this (ptr, false)
 		{
 		}
 
-		internal AURenderEventEnumerator (IntPtr handle, bool owns)
+		internal AURenderEventEnumerator (NativeHandle handle, bool owns)
 		{
 			Handle = handle;
-			current = (AURenderEvent *) handle;
+			current = (AURenderEvent *) (IntPtr) handle;
 		}
 
 		public void Dispose ()
 		{
-			Handle = IntPtr.Zero;
+			Handle = NativeHandle.Zero;
 			current = null;
 		}
 
 		public AURenderEvent * UnsafeFirst {
 			get {
-				return (AURenderEvent*) Handle;
+				return (AURenderEvent*) (IntPtr) Handle;
 			}
 		}
 
@@ -1045,7 +1053,7 @@ namespace AudioUnit
 			get {
 				if (IsEmpty)
 					throw new InvalidOperationException ("Can not get First on AURenderEventEnumerator when empty");
-				return *(AURenderEvent *) Handle;
+				return *(AURenderEvent *) (IntPtr) Handle;
 			}
 		}
 
@@ -1087,12 +1095,12 @@ namespace AudioUnit
 
 		public void /*IEnumerator<AURenderEvent>.*/Reset ()
 		{
-			current = (AURenderEvent *) Handle;
+			current = (AURenderEvent *) (IntPtr) Handle;
 		}
 	}
 #endif // !COREBUILD
 
-	public enum AURenderEventType : byte
+		public enum AURenderEventType : byte
 	{
 		Parameter = 1,
 		ParameterRamp = 2,

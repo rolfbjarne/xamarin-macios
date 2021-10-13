@@ -101,7 +101,7 @@ namespace Security {
 
 		public override int GetHashCode ()
 		{
-			return (int) Handle;
+			return ((IntPtr) Handle).ToInt32 ();
 		}
 	}
 }

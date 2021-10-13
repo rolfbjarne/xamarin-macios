@@ -15,6 +15,10 @@ using Foundation;
 
 #nullable enable
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreFoundation {
 	//
 	// The NativeObject class is intended to be a base class for many CoreFoundation
@@ -29,8 +33,8 @@ namespace CoreFoundation {
 	// systems.
 	//
 	public abstract class NativeObject : INativeObject, IDisposable {
-		IntPtr handle;
-		public IntPtr Handle {
+		NativeHandle handle;
+		public NativeHandle Handle {
 			get => handle = ComputeHandle (handle);
 			protected set => InitializeHandle (value);
 		}
@@ -39,7 +43,7 @@ namespace CoreFoundation {
 		{
 		}
 
-		protected NativeObject (IntPtr handle, bool owns)
+		protected NativeObject (NativeHandle handle, bool owns)
 			: this (handle, owns, false)
 		{
 		}
@@ -70,9 +74,9 @@ namespace CoreFoundation {
 
 		protected virtual void Dispose (bool disposing)
 		{
-			if (Handle != IntPtr.Zero) {
+			if (handle != NativeHandle.Zero) {
 				Release ();
-				handle = IntPtr.Zero;
+				handle = NativeHandle.Zero;
 			}
 		}
 
@@ -84,12 +88,12 @@ namespace CoreFoundation {
 		// https://developer.apple.com/documentation/corefoundation/1521153-cfrelease
 		protected virtual void Release () => CFObject.CFRelease (GetCheckedHandle ());
 
-		protected virtual IntPtr ComputeHandle (IntPtr current)
+		protected virtual NativeHandle ComputeHandle (NativeHandle current)
 		{
 			return current;
 		}
 
-		protected virtual void InitializeHandle (IntPtr handle)
+		protected virtual void InitializeHandle (NativeHandle handle)
 		{
 #if !COREBUILD
 			if (handle == IntPtr.Zero && Class.ThrowOnInitFailure) {
@@ -100,7 +104,7 @@ namespace CoreFoundation {
 			this.handle = handle;
 		}
 
-		public IntPtr GetCheckedHandle ()
+		public NativeHandle GetCheckedHandle ()
 		{
 			if (handle == IntPtr.Zero)
 				ObjCRuntime.ThrowHelper.ThrowObjectDisposedException (this);

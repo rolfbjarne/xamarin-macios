@@ -9,6 +9,10 @@ using Foundation;
 using ObjCRuntime;
 using UIKit;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace WatchKit {
 	[Register ("WKInterfaceController", SkipRegistration = true)]
 #if NET
@@ -19,7 +23,7 @@ namespace WatchKit {
 	[Obsolete (Constants.WatchKitRemoved)]
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public abstract class WKInterfaceController : NSObject {
-		public override IntPtr ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
+		public override NativeHandle ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
 
 		protected WKInterfaceController (NSObjectFlag t) : base (t)
 		{

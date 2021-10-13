@@ -73,7 +73,7 @@ public class BindingTouch {
 		get { return "bgen"; }
 	}
 
-	bool IsDotNet {
+	internal bool IsDotNet {
 		get { return TargetFramework.IsDotNet; }
 	}
 

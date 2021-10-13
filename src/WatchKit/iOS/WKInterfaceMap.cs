@@ -7,6 +7,10 @@ using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace WatchKit {
 	[Register ("WKInterfaceMap", SkipRegistration = true)]
 #if NET
@@ -17,7 +21,7 @@ namespace WatchKit {
 	[Obsolete (Constants.WatchKitRemoved)]
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public class WKInterfaceMap : WKInterfaceObject {
-		public override IntPtr ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
+		public override NativeHandle ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
 
 		protected WKInterfaceMap (NSObjectFlag t) : base (t)
 		{

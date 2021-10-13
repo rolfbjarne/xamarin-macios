@@ -15,6 +15,10 @@ using Foundation;
 
 #nullable enable
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 	//
 	// The DisposableObject class is intended to be a base class for many native data
@@ -25,10 +29,10 @@ namespace ObjCRuntime {
 	// pattern.
 	//
 	public abstract class DisposableObject : INativeObject, IDisposable {
-		IntPtr handle;
+		NativeHandle handle;
 		readonly bool owns;
 
-		public IntPtr Handle {
+		public NativeHandle Handle {
 			get => handle;
 			protected set => InitializeHandle (value);
 		}
@@ -39,12 +43,12 @@ namespace ObjCRuntime {
 		{
 		}
 
-		protected DisposableObject (IntPtr handle, bool owns)
+		protected DisposableObject (NativeHandle handle, bool owns)
 			: this (handle, owns, true)
 		{
 		}
 
-		protected DisposableObject (IntPtr handle, bool owns, bool verify)
+		protected DisposableObject (NativeHandle handle, bool owns, bool verify)
 		{
 			InitializeHandle (handle, verify);
 			this.owns = owns;
@@ -68,13 +72,13 @@ namespace ObjCRuntime {
 
 		protected void ClearHandle ()
 		{
-			handle = IntPtr.Zero;
+			handle = NativeHandle.Zero;
 		}
 
-		void InitializeHandle (IntPtr handle, bool verify)
+		void InitializeHandle (NativeHandle handle, bool verify)
 		{
 #if !COREBUILD
-			if (verify && handle == IntPtr.Zero && Class.ThrowOnInitFailure) {
+			if (verify && handle == NativeHandle.Zero && Class.ThrowOnInitFailure) {
 				throw new Exception ($"Could not initialize an instance of the type '{GetType ().FullName}': handle is null.\n" +
 				    "It is possible to ignore this condition by setting ObjCRuntime.Class.ThrowOnInitFailure to false.");
 			}
@@ -82,14 +86,14 @@ namespace ObjCRuntime {
 			this.handle = handle;
 		}
 
-		protected virtual void InitializeHandle (IntPtr handle)
+		protected virtual void InitializeHandle (NativeHandle handle)
 		{
 			InitializeHandle (handle, true);
 		}
 
-		public IntPtr GetCheckedHandle ()
+		public NativeHandle GetCheckedHandle ()
 		{
-			if (handle == IntPtr.Zero)
+			if (handle == NativeHandle.Zero)
 				ObjCRuntime.ThrowHelper.ThrowObjectDisposedException (this);
 			return handle;
 		}

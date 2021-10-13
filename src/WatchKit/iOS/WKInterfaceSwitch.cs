@@ -6,13 +6,17 @@ using System.Runtime.Versioning;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace WatchKit {
 	[Register ("WKInterfaceSwitch", SkipRegistration = true)]
 	[Unavailable (PlatformName.iOS, PlatformArchitecture.All)]
 	[Obsolete (Constants.WatchKitRemoved)]
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public class WKInterfaceSwitch : WKInterfaceObject {
-		public override IntPtr ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
+		public override NativeHandle ClassHandle { get { throw new PlatformNotSupportedException (Constants.WatchKitRemoved); } }
 
 		protected WKInterfaceSwitch (NSObjectFlag t) : base (t)
 		{

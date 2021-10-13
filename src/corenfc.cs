@@ -12,6 +12,10 @@ using ObjCRuntime;
 using CoreFoundation;
 using Foundation;
 
+#if !NET
+using NativeHandle=System.IntPtr;
+#endif
+
 namespace CoreNFC {
 
 	[iOS (11,0)]
@@ -82,7 +86,7 @@ namespace CoreNFC {
 
 		[Export ("initWithDelegate:queue:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (INFCReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
+		NativeHandle Constructor (INFCReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
 
 		[Static]
 		[Export ("readingAvailable")]
@@ -107,10 +111,10 @@ namespace CoreNFC {
 		NSData RequestParameters { get; set; }
 
 		[Export ("initWithManufacturerCode:customCommandCode:requestParameters:")]
-		IntPtr Constructor (nuint manufacturerCode, nuint customCommandCode, [NullAllowed] NSData requestParameters);
+		NativeHandle Constructor (nuint manufacturerCode, nuint customCommandCode, [NullAllowed] NSData requestParameters);
 
 		[Export ("initWithManufacturerCode:customCommandCode:requestParameters:maximumRetries:retryInterval:")]
-		IntPtr Constructor (nuint manufacturerCode, nuint customCommandCode, [NullAllowed] NSData requestParameters, nuint maximumRetries, double retryInterval);
+		NativeHandle Constructor (nuint manufacturerCode, nuint customCommandCode, [NullAllowed] NSData requestParameters, nuint maximumRetries, double retryInterval);
 	}
 
 	//[iOS (11,0), NoTV, NoWatch, NoMac]
@@ -125,10 +129,10 @@ namespace CoreNFC {
 		nuint ChunkSize { get; set; }
 
 		[Export ("initWithRange:chunkSize:")]
-		IntPtr Constructor (NSRange range, nuint chunkSize);
+		NativeHandle Constructor (NSRange range, nuint chunkSize);
 
 		[Export ("initWithRange:chunkSize:maximumRetries:retryInterval:")]
-		IntPtr Constructor (NSRange range, nuint chunkSize, nuint maximumRetries, double retryInterval);
+		NativeHandle Constructor (NSRange range, nuint chunkSize, nuint maximumRetries, double retryInterval);
 	}
 
 	delegate void NFCGetSystemInfoCompletionHandler (nint dsfid, nint afi, nint blockSize, nint blockCount, nint icReference, NSError error);
@@ -423,11 +427,11 @@ namespace CoreNFC {
 
 		[iOS (13,0)]
 		[Export ("initWithFormat:type:identifier:payload:")]
-		IntPtr Constructor (NFCTypeNameFormat format, NSData type, NSData identifier, NSData payload);
+		NativeHandle Constructor (NFCTypeNameFormat format, NSData type, NSData identifier, NSData payload);
 
 		[iOS (13,0)]
 		[Export ("initWithFormat:type:identifier:payload:chunkSize:")]
-		IntPtr Constructor (NFCTypeNameFormat format, NSData type, NSData identifier, NSData payload, nuint chunkSize);
+		NativeHandle Constructor (NFCTypeNameFormat format, NSData type, NSData identifier, NSData payload, nuint chunkSize);
 	}
 
 	[iOS (11,0)]
@@ -446,7 +450,7 @@ namespace CoreNFC {
 
 		[iOS (13,0)]
 		[Export ("initWithNDEFRecords:")]
-		IntPtr Constructor (NFCNdefPayload[] records);
+		NativeHandle Constructor (NFCNdefPayload[] records);
 
 		[iOS (13,0)]
 		[Export ("length")]
@@ -484,7 +488,7 @@ namespace CoreNFC {
 
 		[Export ("initWithDelegate:queue:invalidateAfterFirstRead:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (INFCNdefReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue, bool invalidateAfterFirstRead);
+		NativeHandle Constructor (INFCNdefReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue, bool invalidateAfterFirstRead);
 
 		[Static]
 		[Export ("readingAvailable")]
@@ -911,10 +915,10 @@ namespace CoreNFC {
 	interface NFCIso7816Apdu : NSCopying {
 
 		[Export ("initWithInstructionClass:instructionCode:p1Parameter:p2Parameter:data:expectedResponseLength:")]
-		IntPtr Constructor (byte instructionClass, byte instructionCode, byte p1Parameter, byte p2Parameter, NSData data, nint expectedResponseLength);
+		NativeHandle Constructor (byte instructionClass, byte instructionCode, byte p1Parameter, byte p2Parameter, NSData data, nint expectedResponseLength);
 
 		[Export ("initWithData:")]
-		IntPtr Constructor (NSData data);
+		NativeHandle Constructor (NSData data);
 
 		[Export ("instructionClass")]
 		byte InstructionClass { get; }
@@ -991,7 +995,7 @@ namespace CoreNFC {
 	interface NFCTagReaderSession {
 
 		[Export ("initWithPollingOption:delegate:queue:")]
-		IntPtr Constructor (NFCPollingOption pollingOption, INFCTagReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
+		NativeHandle Constructor (NFCPollingOption pollingOption, INFCTagReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
 
 		[NullAllowed, Export ("connectedTag", ArgumentSemantic.Retain)]
 		INFCTag ConnectedTag { get; }
@@ -1048,7 +1052,7 @@ namespace CoreNFC {
 
 		[Export ("initWithVASMode:passTypeIdentifier:url:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (VasMode mode, string passTypeIdentifier, [NullAllowed] NSUrl url);
+		NativeHandle Constructor (VasMode mode, string passTypeIdentifier, [NullAllowed] NSUrl url);
 
 		[Export ("mode", ArgumentSemantic.Assign)]
 		VasMode Mode { get; set; }
@@ -1068,6 +1072,6 @@ namespace CoreNFC {
 
 		[Export ("initWithVASCommandConfigurations:delegate:queue:")]
 		[DesignatedInitializer]
-		IntPtr Constructor (NFCVasCommandConfiguration[] commandConfigurations, INFCVasReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
+		NativeHandle Constructor (NFCVasCommandConfiguration[] commandConfigurations, INFCVasReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
 	}
 }

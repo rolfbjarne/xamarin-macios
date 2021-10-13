@@ -8,6 +8,10 @@ using System.Runtime.InteropServices;
 using CoreFoundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Foundation {
 
 	// Helper to (mostly) support NS[Mutable]Copying protocols
@@ -26,7 +30,7 @@ namespace Foundation {
 		}
 
 #if !NET
-		public NSZone (IntPtr handle)
+		public NSZone (NativeHandle handle)
 		{
 			this.Handle = handle;
 		}
@@ -34,16 +38,16 @@ namespace Foundation {
 
 		[Preserve (Conditional = true)]
 #if NET
-		internal NSZone (IntPtr handle, bool owns)
+		internal NSZone (NativeHandle handle, bool owns)
 #else
-		public NSZone (IntPtr handle, bool owns)
+		public NSZone (NativeHandle handle, bool owns)
 #endif
 		{
 			// NSZone is just an opaque pointer without reference counting, so we ignore the 'owns' parameter.
 			this.Handle = handle;
 		}
 
-		public IntPtr Handle { get; private set; }
+		public NativeHandle Handle { get; private set; }
 
 #if !COREBUILD
 		public string? Name {

@@ -28,6 +28,10 @@ using System.Runtime.InteropServices;
 
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 #if XAMCORE_4_0
 #error Turn this entire file into generated code.
 #endif
@@ -40,7 +44,7 @@ namespace Foundation {
 #endif
 	{
 #if !COREBUILD
-		public override IntPtr ClassHandle { get { return Class.GetHandle ("NSAutoreleasePool"); } }
+		public override NativeHandle ClassHandle { get { return Class.GetHandle ("NSAutoreleasePool"); } }
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		[Export ("init")]
@@ -65,7 +69,7 @@ namespace Foundation {
 #else
 		public
 #endif
-		NSAutoreleasePool (IntPtr handle) : base (handle) {}
+		NSAutoreleasePool (NativeHandle handle) : base (handle) {}
 
 #endif
 	}

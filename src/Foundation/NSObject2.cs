@@ -962,7 +962,7 @@ namespace Foundation {
 			}
 
 			[Preserve (Conditional = true)]
-			public override void ObserveValue (NSString keyPath, NSObject ofObject, NSDictionary change, IntPtr context)
+			public override void ObserveValue (NSString keyPath, NSObject ofObject, NSDictionary change, NativeHandle context)
 			{
 				if (keyPath == key && context == Handle)
 					cback (new NSObservedChange (change));

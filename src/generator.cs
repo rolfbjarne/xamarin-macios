@@ -2290,7 +2290,7 @@ public partial class Generator : IMemberGatherer {
 		this.types = types;
 		this.strong_dictionaries = strong_dictionaries;
 		basedir = ".";
-		NativeHandleType = binding_touch.IsDotNet ? "NativeType" : "IntPtr";
+		NativeHandleType = binding_touch.IsDotNet ? "NativeHandle" : "IntPtr";
 	}
 
 	bool SkipGenerationOfType (Type t)

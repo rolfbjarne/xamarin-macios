@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#nullable enable
+
 #if MONOMAC
 
 using System;
@@ -52,9 +54,9 @@ namespace ObjCRuntime {
 		unsafe delegate sbyte *get_sbyteptr_func ();
 
 		static volatile bool originalWorkingDirectoryIsSet;
-		static string originalWorkingDirectory;
+		static string? originalWorkingDirectory;
 
-		public unsafe static string OriginalWorkingDirectory {
+		public unsafe static string? OriginalWorkingDirectory {
 			get {
 				if (originalWorkingDirectoryIsSet)
 					return originalWorkingDirectory;
@@ -80,6 +82,9 @@ namespace ObjCRuntime {
 		internal static T LookupInternalFunction<T> (string name) where T: class
 		{
 			IntPtr rv;
+
+			if (name is null)
+				throw new ArgumentNullException (nameof (name));
 
 			if (runtime_library == IntPtr.Zero) {
 				runtime_library = new IntPtr (-2 /* RTLD_DEFAULT */);
@@ -118,11 +123,11 @@ namespace ObjCRuntime {
 			// Verify that the system mono we're running against is of a supported version.
 			// Only verify if we're able to get the mono version (we don't want to fail if the Mono.Runtime type was linked away for instance).
 			var type = Type.GetType ("Mono.Runtime");
-			if (type == null)
+			if (type is null)
 				return;
 
 			var displayName = type.GetMethod ("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
-			if (displayName == null)
+			if (displayName is null)
 				return;
 
 			var actual = displayName.Invoke (null, null) as string;

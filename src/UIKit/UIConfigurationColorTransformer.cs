@@ -52,7 +52,7 @@ namespace UIKit {
 		static unsafe IntPtr Invoke (IntPtr block, IntPtr color) {
 			var descriptor = (BlockLiteral *) block;
 			var del = (UIConfigurationColorTransformerHandler) (descriptor->Target);
-			var retval = del (Runtime.GetNSObject<UIColor> (color));
+			var retval = del == null ? null : del (Runtime.GetNSObject<UIColor> (color));
 			return retval != null ? retval.Handle : IntPtr.Zero;
 		}
 	} /* class SDUIConfigurationColorTransformerHandler */
@@ -77,7 +77,7 @@ namespace UIKit {
 		}
 		
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		UIColor Invoke (UIColor color)
+		UIColor? Invoke (UIColor color)
 		{
 			return Runtime.GetNSObject<UIColor> (invoker (BlockPointer, color.GetHandle ()));
 		}

@@ -196,16 +196,22 @@ namespace CoreFoundation {
 			return s;
 		}
 
-		public static implicit operator string? (CFString x)
+		public static implicit operator string? (CFString? x)
 		{
+			if (x is null)
+				return null;
+
 			if (x.str == null)
 				x.str = FromHandle (x.Handle);
 			
 			return x.str;
 		}
 
-		public static implicit operator CFString (string s)
+		public static implicit operator CFString (string? s)
 		{
+			if (s is null)
+				return null;
+
 			return new CFString (s);
 		}
 

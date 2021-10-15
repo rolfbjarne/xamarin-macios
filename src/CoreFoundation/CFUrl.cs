@@ -76,7 +76,7 @@ namespace CoreFoundation {
 			/* CFStringRef */ IntPtr URLString, 
 			/* CFStringRef */ IntPtr baseURL);
 
-		static public CFUrl? FromUrlString (string url, CFUrl baseurl)
+		static public CFUrl? FromUrlString (string url, CFUrl? baseurl)
 		{
 			// CFString ctor will throw an ANE if null
 			using (var str = new CFString (url)){

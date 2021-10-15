@@ -27,21 +27,29 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
+
 using CoreFoundation;
+using ObjCRuntime;
+
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
 
 namespace AudioToolbox
 {
 	// CoreAudio.framework - CoreAudioTypes.h
 	public class AudioBuffers : NonRefcountedNativeObject
 	{
-		public AudioBuffers (IntPtr address)
+		public AudioBuffers (NativeHandle address)
 			: base (address, false)
 		{
 		}
 
-		public AudioBuffers (IntPtr address, bool owns)
+		public AudioBuffers (NativeHandle address, bool owns)
 			: base (address, owns)
 		{
 		}
@@ -80,14 +88,14 @@ namespace AudioToolbox
 
 		public unsafe int Count {
 			get {
-				return *(int *) Handle;
+				return *(int *) (IntPtr) Handle;
 			}
 		}
 
 		public AudioBuffer this [int index] {
 			get {
 				if (index >= Count)
-					throw new ArgumentOutOfRangeException ("index");
+					throw new ArgumentOutOfRangeException (nameof (index));
 
 				//
 				// Decodes
@@ -99,7 +107,7 @@ namespace AudioToolbox
 				// }
 				//
 				unsafe {
-					byte *baddress = (byte *) Handle;
+					byte *baddress = (byte *) (IntPtr) Handle;
 					
 					var ptr = baddress + IntPtr.Size + index * sizeof (AudioBuffer);
 					return *(AudioBuffer *) ptr;
@@ -107,10 +115,10 @@ namespace AudioToolbox
 			}
 			set {
 				if (index >= Count)
-					throw new ArgumentOutOfRangeException ("index");
+					throw new ArgumentOutOfRangeException (nameof (index));
 
 				unsafe {
-					byte *baddress = (byte *) Handle;
+					byte *baddress = (byte *) (IntPtr) Handle;
 					var ptr = (AudioBuffer *) (baddress + IntPtr.Size + index * sizeof (AudioBuffer));
 					*ptr = value;
 				}
@@ -125,10 +133,10 @@ namespace AudioToolbox
 		public void SetData (int index, IntPtr data)
 		{
 			if (index >= Count)
-				throw new ArgumentOutOfRangeException ("index");
+				throw new ArgumentOutOfRangeException (nameof (index));
 
 			unsafe {
-				byte * baddress = (byte *) Handle;
+				byte * baddress = (byte *) (IntPtr) Handle;
 				var ptr = (IntPtr *)(baddress + IntPtr.Size + index * sizeof (AudioBuffer) + sizeof (int) + sizeof (int));
 				*ptr = data;
 			}
@@ -137,10 +145,10 @@ namespace AudioToolbox
 		public void SetData (int index, IntPtr data, int dataByteSize)
 		{
 			if (index >= Count)
-				throw new ArgumentOutOfRangeException ("index");
+				throw new ArgumentOutOfRangeException (nameof (index));
 
 			unsafe {
-				byte *baddress = (byte *) Handle;
+				byte *baddress = (byte *) (IntPtr) Handle;
 				var ptr = (int *)(baddress + IntPtr.Size + index * sizeof (AudioBuffer) + sizeof (int));
 				*ptr = dataByteSize;
 				ptr++;

@@ -20,6 +20,11 @@ namespace ObjCRuntime {
 			return left.handle == right;
 		}
 
+		public static bool operator == (NativeHandle left, NativeHandle right)
+		{
+			return left.handle == right.handle;
+		}
+
 		public static bool operator == (IntPtr left, NativeHandle right)
 		{
 			return left == right.Handle;
@@ -33,6 +38,28 @@ namespace ObjCRuntime {
 		public static bool operator != (IntPtr left, NativeHandle right)
 		{
 			return left != right.Handle;
+		}
+
+		public static bool operator != (NativeHandle left, NativeHandle right)
+		{
+			return left.handle != right.Handle;
+		}
+
+#if IMPLICITWHILEIMPLEMENTING
+		public static explicit operator IntPtr (NativeHandle value)
+#else
+		public static implicit operator IntPtr (NativeHandle value)
+#endif
+		{
+			return value.Handle;
+		}
+#if IMPLICITWHILEIMPLEMENTING
+		public static explicit operator NativeHandle (IntPtr value)
+#else
+		public static implicit operator NativeHandle (IntPtr value)
+#endif
+		{
+			return new NativeHandle (value);
 		}
 
 		public override bool Equals (object o)

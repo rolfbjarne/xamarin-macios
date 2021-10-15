@@ -7,6 +7,10 @@ using System;
 using System.Runtime.InteropServices;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreFoundation {
 	public class CFType {
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFGetTypeID")]
@@ -41,8 +45,8 @@ namespace CoreFoundation {
 
 	// FIXME: different file
 	public class CFTypeObject : CFType, INativeObject, IDisposable, ICFType {
-		IntPtr handle;
-		public IntPtr Handle {
+		NativeHandle handle;
+		public NativeHandle Handle {
 			get => handle;
 			protected set => InitializeHandle (value);
 		}
@@ -51,15 +55,15 @@ namespace CoreFoundation {
 		{
 		}
 
-		protected CFTypeObject (IntPtr handle, bool owns)
+		protected CFTypeObject (NativeHandle handle, bool owns)
 			: this (handle, owns, false)
 		{
 		}
 
-		protected CFTypeObject (IntPtr handle, bool owns, bool verify)
+		protected CFTypeObject (NativeHandle handle, bool owns, bool verify)
 		{
 #if !COREBUILD
-			if (verify && handle == IntPtr.Zero && Class.ThrowOnInitFailure)
+			if (verify && handle == NativeHandle.Zero && Class.ThrowOnInitFailure)
 				throw new Exception ($"Could not initialize an instance of the type '{GetType ().FullName}': handle is null.\n" +
 					"It is possible to ignore this condition by setting ObjCRuntime.Class.ThrowOnInitFailure to false.");
 #endif
@@ -82,9 +86,9 @@ namespace CoreFoundation {
 
 		protected virtual void Dispose (bool disposing)
 		{
-			if (handle != IntPtr.Zero) {
+			if (handle != NativeHandle.Zero) {
 				Release ();
-				handle = IntPtr.Zero;
+				handle = NativeHandle.Zero;
 			}
 		}
 
@@ -107,9 +111,9 @@ namespace CoreFoundation {
 			this.handle = handle;
 		}
 
-		public IntPtr GetCheckedHandle ()
+		public NativeHandle GetCheckedHandle ()
 		{
-			if (handle == IntPtr.Zero)
+			if (handle == NativeHandle.Zero)
 				ObjCRuntime.ThrowHelper.ThrowObjectDisposedException (this);
 			return handle;
 		}

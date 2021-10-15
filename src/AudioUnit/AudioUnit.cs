@@ -42,7 +42,6 @@ using ObjCRuntime;
 using CoreFoundation;
 using Foundation;
 
-// #nullable enable
 
 namespace AudioUnit
 {

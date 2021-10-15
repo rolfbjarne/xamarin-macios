@@ -32,7 +32,7 @@ namespace ObjCRuntime {
 		// We use the last significant bit of the IntPtr to store if this is a custom class or not.
 #pragma warning disable CS8618 // "Non-nullable field must contain a non-null value when exiting constructor." - we ensure these fields are non-null in other ways
 		static Dictionary<Type, IntPtr> type_to_class; // accessed from multiple threads, locking required.
-		static Type[] class_to_type;
+		static Type?[] class_to_type;
 #pragma warning restore CS8618
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
@@ -44,7 +44,7 @@ namespace ObjCRuntime {
 			if (map is null)
 				return;
 
-			class_to_type = new Type [map->map_count];
+			class_to_type = new Type? [map->map_count];
 
 			if (!Runtime.DynamicRegistrationSupported)
 				return; // Only the dynamic registrar needs the list of registered assemblies.
@@ -367,7 +367,7 @@ namespace ObjCRuntime {
 
 			is_custom_type = (map->map [mapIndex].flags & Runtime.MTTypeFlags.CustomType) == Runtime.MTTypeFlags.CustomType;
 
-			Type type = class_to_type [mapIndex];
+			var type = class_to_type [mapIndex];
 			if (type is not null)
 				return type;
 
@@ -384,7 +384,7 @@ namespace ObjCRuntime {
 			return type;
 		}
 
-		internal unsafe static MemberInfo ResolveFullTokenReference (uint token_reference)
+		internal unsafe static MemberInfo? ResolveFullTokenReference (uint token_reference)
 		{
 			// sizeof (MTFullTokenReference) = IntPtr.Size + 4 + 4
 			var entry = Runtime.options->RegistrationMap->full_token_references + (IntPtr.Size + 8) * (int) (token_reference >> 1);

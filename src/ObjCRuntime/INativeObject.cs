@@ -1,7 +1,6 @@
 #nullable enable
 
 using System;
-using Foundation;
 
 #if !NET
 using NativeHandle = System.IntPtr;

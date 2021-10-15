@@ -21,9 +21,9 @@ namespace ObjCRuntime {
 
 		// help to avoid the (too common pattern)
 		// 	var p = x == null ? IntPtr.Zero : x.Handle;
-		static public NativeHandle GetHandle (this INativeObject self)
+		static public NativeHandle GetHandle (this INativeObject? self)
 		{
-			return self == null ? NativeHandle.Zero : self.Handle;
+			return self is null ? NativeHandle.Zero : self.Handle;
 		}
 
 		static public NativeHandle GetNonNullHandle (this INativeObject self, string argumentName)

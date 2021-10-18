@@ -24,16 +24,16 @@
 
 using System;
 using System.Runtime.InteropServices;
+
+using CoreFoundation;
 using Foundation;
 
 #nullable enable
 
 namespace ObjCRuntime {
-	public partial class Selector : IEquatable<Selector>, INativeObject {
+	public partial class Selector : NonRefcountedNativeObject, IEquatable<Selector> {
 		internal const string Alloc = "alloc";
 		internal const string Class = "class";
-		internal const string Release = "release";
-		internal const string Retain = "retain";
 		internal const string Autorelease = "autorelease";
 		internal const string PerformSelectorOnMainThreadWithObjectWaitUntilDone = "performSelectorOnMainThread:withObject:waitUntilDone:";
 #if MONOMAC
@@ -41,39 +41,38 @@ namespace ObjCRuntime {
 		internal const string PerformSelectorWithObjectAfterDelay = "performSelector:withObject:afterDelay:";
 #endif
 
-		IntPtr handle;
 		string? name;
 
 		public Selector (IntPtr sel)
+			: base (sel, false)
 		{
 			if (!sel_isMapped (sel))
 				ObjCRuntime.ThrowHelper.ThrowArgumentException (nameof (sel), "Not a selector handle.");
-
-			this.handle = sel;
 		}
 
 		// this .ctor is required, like for any INativeObject implementation
 		// even if selectors are not disposable
 		[Preserve (Conditional = true)]
 		internal Selector (IntPtr handle, bool /* unused */ owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
+		}
+
+		protected override void Free ()
+		{
+			// Nothing to do here.
 		}
 
 		public Selector (string name)
+			: base (GetHandle (name), false)
 		{
 			this.name = name;
-			handle = GetHandle (name);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
 		}
 
 		public string Name {
 			get {
 				if (name == null)
-					name = GetName (handle);
+					name = GetName (Handle);
 				return name;
 			}
 		}
@@ -90,7 +89,7 @@ namespace ObjCRuntime {
 
 			// note: there's a sel_isEqual function but it's safe to compare pointers
 			// ref: https://opensource.apple.com/source/objc4/objc4-551.1/runtime/objc-sel.mm.auto.html
-			return left.handle == right.handle;
+			return left.Handle == right.Handle;
 		}
 
 		public override bool Equals (object? right)
@@ -103,12 +102,12 @@ namespace ObjCRuntime {
 			if (right is null)
 				return false;
 
-			return handle == right.handle;
+			return Handle == right.Handle;
 		}
 
 		public override int GetHashCode ()
 		{
-			return handle.GetHashCode ();
+			return Handle.GetHashCode ();
 		}
 
 		internal static string GetName (IntPtr handle)

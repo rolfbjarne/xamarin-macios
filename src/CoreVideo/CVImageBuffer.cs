@@ -43,14 +43,12 @@ namespace CoreVideo {
 #endif
 	public partial class CVImageBuffer : CVBuffer {
 #if !COREBUILD
-		internal CVImageBuffer (IntPtr handle) : base (handle)
-		{
-		}
-
-		internal CVImageBuffer () {}
+		//[Obsolete ("FIXME", error: true)] // TEMPORARY
+		//internal CVImageBuffer () {}
 		
 		[Preserve (Conditional=true)]
-		internal CVImageBuffer (IntPtr handle, bool owns) : base (handle, owns)
+		internal CVImageBuffer (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
 		}
 		
@@ -59,7 +57,7 @@ namespace CoreVideo {
 
 		public CGRect CleanRect {
 			get {
-				return CVImageBufferGetCleanRect (handle);
+				return CVImageBufferGetCleanRect (Handle);
 			}
 		}
 
@@ -68,7 +66,7 @@ namespace CoreVideo {
 
 		public CGSize DisplaySize {
 			get {
-				return CVImageBufferGetDisplaySize (handle);
+				return CVImageBufferGetDisplaySize (Handle);
 			}
 		}
 
@@ -77,7 +75,7 @@ namespace CoreVideo {
 
 		public CGSize EncodedSize {
 			get {
-				return CVImageBufferGetDisplaySize (handle);
+				return CVImageBufferGetDisplaySize (Handle);
 			}
 		}
 
@@ -87,7 +85,7 @@ namespace CoreVideo {
 		
 		public bool IsFlipped {
 			get {
-				return CVImageBufferIsFlipped (handle);
+				return CVImageBufferIsFlipped (Handle);
 			}
 		}
 
@@ -105,8 +103,8 @@ namespace CoreVideo {
 #endif
 		public CGColorSpace? ColorSpace {
 			get {
-				var h = CVImageBufferGetColorSpace (handle);
-				return h == IntPtr.Zero ? null : new CGColorSpace (h);
+				var h = CVImageBufferGetColorSpace (Handle);
+				return h == IntPtr.Zero ? null : new CGColorSpace (h, false);
 			}
 		}
 #elif !XAMCORE_3_0
@@ -133,10 +131,10 @@ namespace CoreVideo {
 
 		public static CGColorSpace? CreateFrom (NSDictionary attachments)
 		{
-			if (attachments == null)
-				throw new ArgumentNullException ("attachments");
+			if (attachments is null)
+				throw new ArgumentNullException (nameof (attachments));
 			var h = CVImageBufferCreateColorSpaceFromAttachments (attachments.Handle);
-			return h == IntPtr.Zero ? null : new CGColorSpace (h);
+			return h == IntPtr.Zero ? null : new CGColorSpace (h, true);
 		}
 #endif
 

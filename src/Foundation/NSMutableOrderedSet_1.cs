@@ -30,7 +30,7 @@ namespace Foundation {
 		{
 		}
 
-#if !NET
+#if !NET // FIXME TEMPORARY
 		public NSMutableOrderedSet (nint capacity) : base (capacity)
 		{
 		}
@@ -149,19 +149,19 @@ namespace Foundation {
 			_RemoveObjects (NSArray.FromNativeObjects (objects));
 		}
 
-		#region IEnumerable<TKey>
+#region IEnumerable<TKey>
 		IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator ()
 		{
 			return new NSFastEnumerator<TKey> (this);
 		}
-		#endregion
+#endregion
 
-		#region IEnumerable implementation
+#region IEnumerable implementation
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return new NSFastEnumerator<TKey> (this);
 		}
-		#endregion
+#endregion
 
 		public static NSMutableOrderedSet<TKey> operator + (NSMutableOrderedSet<TKey> first, NSMutableOrderedSet<TKey> second)
 		{

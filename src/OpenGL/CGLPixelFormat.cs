@@ -50,6 +50,7 @@ namespace OpenGL {
 		public CGLPixelFormat (IntPtr handle)
 			: base (handle, false, verify: true)
 		{
+			CGLRetainPixelFormat (GetCheckedHandle ());
 		}
 #endif
 

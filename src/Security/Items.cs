@@ -30,6 +30,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -107,18 +110,21 @@ namespace Security {
 		Default = 1953261156,
 	}
 
-	public class SecKeyChain : INativeObject {
+	public class SecKeyChain : NonRefcountedNativeObject {
 
-		internal SecKeyChain (IntPtr handle)
+		internal SecKeyChain (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			Handle = handle;
 		}
 
-		public IntPtr Handle { get; internal set; }
-
-		static NSNumber SetLimit (NSMutableDictionary dict, int max)
+		protected override void Free ()
 		{
-			NSNumber n = null;
+			// Nothing to do here?
+		}
+
+		static NSNumber? SetLimit (NSMutableDictionary dict, int max)
+		{
+			NSNumber? n = null;
 			IntPtr val;
 			if (max == -1)
 				val = SecMatchLimit.MatchLimitAll;
@@ -133,10 +139,10 @@ namespace Security {
 			return n;
 		}
 		
-		public static NSData QueryAsData (SecRecord query, bool wantPersistentReference, out SecStatusCode status)
+		public static NSData? QueryAsData (SecRecord query, bool wantPersistentReference, out SecStatusCode status)
 		{
-			if (query == null)
-				throw new ArgumentNullException ("query");
+			if (query is null)
+				throw new ArgumentNullException (nameof (query));
 
 			using (var copy = NSMutableDictionary.FromDictionary (query.queryDict)){
 				SetLimit (copy, 1);
@@ -153,10 +159,10 @@ namespace Security {
 			}
 		}
 
-		public static NSData [] QueryAsData (SecRecord query, bool wantPersistentReference, int max, out SecStatusCode status)
+		public static NSData []? QueryAsData (SecRecord query, bool wantPersistentReference, int max, out SecStatusCode status)
 		{
-			if (query == null)
-				throw new ArgumentNullException ("query");
+			if (query is null)
+				throw new ArgumentNullException (nameof (query));
 
 			using (var copy = NSMutableDictionary.FromDictionary (query.queryDict)){
 				var n = SetLimit (copy, max);
@@ -182,22 +188,22 @@ namespace Security {
 			}
 		}
 		
-		public static NSData QueryAsData (SecRecord query)
+		public static NSData? QueryAsData (SecRecord query)
 		{
 			SecStatusCode status;
 			return QueryAsData (query, false, out status);
 		}
 
-		public static NSData [] QueryAsData (SecRecord query, int max)
+		public static NSData []? QueryAsData (SecRecord query, int max)
 		{
 			SecStatusCode status;
 			return QueryAsData (query, false, max, out status);
 		}
 		
-		public static SecRecord QueryAsRecord (SecRecord query, out SecStatusCode result)
+		public static SecRecord? QueryAsRecord (SecRecord query, out SecStatusCode result)
 		{
-			if (query == null)
-				throw new ArgumentNullException ("query");
+			if (query is null)
+				throw new ArgumentNullException (nameof (query));
 			
 			using (var copy = NSMutableDictionary.FromDictionary (query.queryDict)){
 				SetLimit (copy, 1);
@@ -211,10 +217,10 @@ namespace Security {
 			}
 		}
 		
-		public static SecRecord [] QueryAsRecord (SecRecord query, int max, out SecStatusCode result)
+		public static SecRecord []? QueryAsRecord (SecRecord query, int max, out SecStatusCode result)
 		{
-			if (query == null)
-				throw new ArgumentNullException ("query");
+			if (query is null)
+				throw new ArgumentNullException (nameof (query));
 			
 			using (var copy = NSMutableDictionary.FromDictionary (query.queryDict)){
 				copy.LowlevelSetObject (CFBoolean.TrueHandle, SecItem.ReturnAttributes);
@@ -235,9 +241,9 @@ namespace Security {
 			}
 		}
 
-		public static INativeObject[] QueryAsReference (SecRecord query, int max, out SecStatusCode result)
+		public static INativeObject?[]? QueryAsReference (SecRecord query, int max, out SecStatusCode result)
 		{
-			if (query == null){
+			if (query is null) {
 				result = SecStatusCode.Param;
 				return null;
 			}
@@ -268,25 +274,25 @@ namespace Security {
 
 		public static SecStatusCode Add (SecRecord record)
 		{
-			if (record == null)
-				throw new ArgumentNullException ("record");
+			if (record is null)
+				throw new ArgumentNullException (nameof (record));
 			return SecItem.SecItemAdd (record.queryDict.Handle, IntPtr.Zero);
 			
 		}
 
 		public static SecStatusCode Remove (SecRecord record)
 		{
-			if (record == null)
-				throw new ArgumentNullException ("record");
+			if (record is null)
+				throw new ArgumentNullException (nameof (record));
 			return SecItem.SecItemDelete (record.queryDict.Handle);
 		}
 		
 		public static SecStatusCode Update (SecRecord query, SecRecord newAttributes)
 		{
-			if (query == null)
-				throw new ArgumentNullException ("record");
-			if (newAttributes == null)
-				throw new ArgumentNullException ("newAttributes");
+			if (query is null)
+				throw new ArgumentNullException (nameof (query));
+			if (newAttributes is null)
+				throw new ArgumentNullException (nameof (newAttributes));
 
 			return SecItem.SecItemUpdate (query.queryDict.Handle, newAttributes.queryDict.Handle);
 
@@ -359,9 +365,9 @@ namespace Security {
 			byte[] password,
 			SecProtocol protocolType = SecProtocol.Http,
 			short port = 0,
-			string path = null,
+			string? path = null,
 			SecAuthenticationType authenticationType = SecAuthenticationType.Default,
-			string securityDomain = null)
+			string? securityDomain = null)
 		{
 			byte[] serverNameBytes = null;
 			byte[] securityDomainBytes = null;
@@ -529,9 +535,9 @@ namespace Security {
 			}
 		}
 #else
-		public static object QueryAsConcreteType (SecRecord query, out SecStatusCode result)
+		public static object? QueryAsConcreteType (SecRecord query, out SecStatusCode result)
 		{
-			if (query == null){
+			if (query is null) {
 				result = SecStatusCode.Param;
 				return null;
 			}
@@ -561,8 +567,8 @@ namespace Security {
 
 		public static void AddIdentity (SecIdentity identity)
 		{
-			if (identity == null)
-				throw new ArgumentNullException ("identity");
+			if (identity is null)
+				throw new ArgumentNullException (nameof (identity));
 			using (var record = new SecRecord ()) {
 				record.SetValueRef (identity);
 
@@ -575,8 +581,8 @@ namespace Security {
 
 		public static void RemoveIdentity (SecIdentity identity)
 		{
-			if (identity == null)
-				throw new ArgumentNullException ("identity");
+			if (identity is null)
+				throw new ArgumentNullException (nameof (identity));
 			using (var record = new SecRecord ()) {
 				record.SetValueRef (identity);
 
@@ -587,10 +593,10 @@ namespace Security {
 			}
 		}
 
-		public static SecIdentity FindIdentity (SecCertificate certificate, bool throwOnError = false)
+		public static SecIdentity? FindIdentity (SecCertificate certificate, bool throwOnError = false)
 		{
-			if (certificate == null)
-				throw new ArgumentNullException ("certificate");
+			if (certificate is null)
+				throw new ArgumentNullException (nameof (certificate));
 			var identity = FindIdentity (cert => SecCertificate.Equals (certificate, cert));
 			if (!throwOnError || identity != null)
 				return identity;
@@ -598,7 +604,7 @@ namespace Security {
 			throw new InvalidOperationException (string.Format ("Could not find SecIdentity for certificate '{0}' in keychain.", certificate.SubjectSummary));
 		}
 
-		static SecIdentity FindIdentity (Predicate<SecCertificate> filter)
+		static SecIdentity? FindIdentity (Predicate<SecCertificate> filter)
 		{
 			/*
 			 * Unfortunately, SecItemCopyMatching() does not allow any search
@@ -610,12 +616,12 @@ namespace Security {
 			using (var record = new SecRecord (SecKind.Identity)) {
 				SecStatusCode status;
 				var result = SecKeyChain.QueryAsReference (record, -1, out status);
-				if (status != SecStatusCode.Success || result == null)
+				if (status != SecStatusCode.Success || result is null)
 					return null;
 
 				for (int i = 0; i < result.Length; i++) {
-					var identity = (SecIdentity)result [i];
-					if (filter (identity.Certificate))
+					var identity = (SecIdentity?)result [i];
+					if (filter (identity?.Certificate!))
 						return identity;
 				}
 			}
@@ -635,36 +641,33 @@ namespace Security {
 			get {
 				return _queryDict;
 			}
-			set {
-				_queryDict = value != null ? (NSMutableDictionary)value.MutableCopy () : null;
-			}
 		}
 
 		internal SecRecord (NSMutableDictionary dict)
 		{
-			queryDict = dict;
+			_queryDict = (NSMutableDictionary) dict.MutableCopy ();
 		}
 
 		// it's possible to query something without a class
 		public SecRecord ()
 		{
-			queryDict = new NSMutableDictionary ();
+			_queryDict = new NSMutableDictionary ();
 		}
 
 		public SecRecord (SecKind secKind)
 		{
 			var kind = SecClass.FromSecKind (secKind);
 #if MONOMAC
-			queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
+			_queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
 #elif WATCH
-			queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
+			_queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
 #else
 			// Apple changed/fixed this in iOS7 (not the only change, see comments above)
 			// test suite has a test case that needs to work on both pre-7.0 and post-7.0
 			if ((kind == SecClass.Identity) && !UIDevice.CurrentDevice.CheckSystemVersion (7,0))
-				queryDict = new NSMutableDictionary ();
+				_queryDict = new NSMutableDictionary ();
 			else
-				queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
+				_queryDict = (NSMutableDictionary) NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey).MutableCopy ();
 #endif
 		}
 
@@ -727,12 +730,8 @@ namespace Security {
 
 		protected virtual void Dispose (bool disposing)
 		{
-			if (queryDict != null){
-				if (disposing){
-					queryDict.Dispose ();
-					queryDict = null;
-				}
-			}
+			if (disposing)
+				queryDict?.Dispose ();
 		}
 
 		~SecRecord ()
@@ -745,31 +744,31 @@ namespace Security {
 			return queryDict.LowlevelObjectForKey (key);
 		}
 
-		NSObject FetchObject (IntPtr key)
+		NSObject? FetchObject (IntPtr key)
 		{
 			return Runtime.GetNSObject (Fetch (key));
 		}
 
-		string FetchString (IntPtr key)
+		string? FetchString (IntPtr key)
 		{
-			return (NSString) FetchObject (key);
+			return (NSString?) FetchObject (key);
 		}
 
 		int FetchInt (IntPtr key)
 		{
-			var obj = (NSNumber) FetchObject (key);
-			return obj == null ? -1 : obj.Int32Value;
+			var obj = (NSNumber?) FetchObject (key);
+			return obj is null ? -1 : obj.Int32Value;
 		}
 
 		bool FetchBool (IntPtr key, bool defaultValue)
 		{
-			var obj = (NSNumber) FetchObject (key);
-			return obj == null ? defaultValue : obj.Int32Value != 0;
+			var obj = (NSNumber?) FetchObject (key);
+			return obj is null ? defaultValue : obj.Int32Value != 0;
 		}
 
-		T Fetch<T> (IntPtr key) where T : NSObject
+		T? Fetch<T> (IntPtr key) where T : NSObject
 		{
-			return (T) FetchObject (key);
+			return (T?) FetchObject (key);
 		}
 		
 
@@ -787,11 +786,11 @@ namespace Security {
 		{
 			// FIXME: it's not clear that we should not allow null (i.e. that null should remove entries)
 			// but this is compatible with the exiting behaviour of older XI/XM
-			if (value == null)
+			if (value is null)
 				throw new ArgumentNullException (nameof (value));
-			var ptr = NSString.CreateNative (value);
+			var ptr = CFString.CreateNative (value);
 			queryDict.LowlevelSetObject (ptr, key);
-			NSString.ReleaseNative (ptr);
+			CFString.ReleaseNative (ptr);
 		}
 		
 		//
@@ -829,12 +828,12 @@ namespace Security {
 #if !NET
 		[iOS (9,0)]
 #endif
-		public string SyncViewHint {
+		public string? SyncViewHint {
 			get {
 				return FetchString (SecAttributeKey.SyncViewHint);
 			}
 			set {
-				SetValue (value, SecAttributeKey.SyncViewHint);
+				SetValue (value!, SecAttributeKey.SyncViewHint);
 			}
 		}
 
@@ -843,56 +842,56 @@ namespace Security {
 #endif
 		public SecTokenID TokenID {
 			get {
-				return SecTokenIDExtensions.GetValue (Fetch<NSString> (SecKeyGenerationAttributeKeys.TokenIDKey.GetHandle ()));
+				return SecTokenIDExtensions.GetValue (Fetch<NSString> (SecKeyGenerationAttributeKeys.TokenIDKey.GetHandle ())!);
 			}
 			set {
 				// choose wisely to avoid NSString -> string -> NSString conversion
-				SetValue ((NSObject) value.GetConstant (), SecKeyGenerationAttributeKeys.TokenIDKey.GetHandle ());
+				SetValue ((NSObject) value.GetConstant ()!, SecKeyGenerationAttributeKeys.TokenIDKey.GetHandle ());
 			}
 		}
 #endif
 
-		public NSDate CreationDate {
+		public NSDate? CreationDate {
 			get {
-				return (NSDate) FetchObject (SecAttributeKey.CreationDate);
+				return (NSDate?) FetchObject (SecAttributeKey.CreationDate);
 			}
 			
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value, SecAttributeKey.CreationDate);
 			}
 		}
 
-		public NSDate ModificationDate {
+		public NSDate? ModificationDate {
 			get {
-				return (NSDate) FetchObject (SecAttributeKey.ModificationDate);
+				return (NSDate?) FetchObject (SecAttributeKey.ModificationDate);
 			}
 			
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value, SecAttributeKey.ModificationDate);
 			}
 		}
 
-		public string Description {
+		public string? Description {
 			get {
 				return FetchString (SecAttributeKey.Description);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.Description);
+				SetValue (value!, SecAttributeKey.Description);
 			}
 		}
 
-		public string Comment {
+		public string? Comment {
 			get {
 				return FetchString (SecAttributeKey.Comment);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.Comment);
+				SetValue (value!, SecAttributeKey.Comment);
 			}
 		}
 
@@ -916,13 +915,13 @@ namespace Security {
 			}
 		}
 
-		public string Label {
+		public string? Label {
 			get {
 				return FetchString (SecAttributeKeys.LabelKey.Handle);
 			}
 
 			set {
-				SetValue (value, SecAttributeKeys.LabelKey.Handle);
+				SetValue (value!, SecAttributeKeys.LabelKey.Handle);
 			}
 		}
 
@@ -946,33 +945,33 @@ namespace Security {
 			}
 		}
 
-		public string Account {
+		public string? Account {
 			get {
 				return FetchString (SecAttributeKey.Account);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.Account);
+				SetValue (value!, SecAttributeKey.Account);
 			}
 		}
 
-		public string Service {
+		public string? Service {
 			get {
 				return FetchString (SecAttributeKey.Service);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.Service);
+				SetValue (value!, SecAttributeKey.Service);
 			}
 		}
 
 #if !MONOMAC
-		public string UseOperationPrompt {
+		public string? UseOperationPrompt {
 			get {
 				return FetchString (SecItem.UseOperationPrompt);
 			}
 			set {
-				SetValue (value, SecItem.UseOperationPrompt);
+				SetValue (value!, SecItem.UseOperationPrompt);
 			}
 		}
 
@@ -1002,10 +1001,10 @@ namespace Security {
 		public SecAuthenticationUI AuthenticationUI {
 			get {
 				var s = Fetch<NSString> (SecItem.UseAuthenticationUI);
-				return s == null ? SecAuthenticationUI.NotSet : SecAuthenticationUIExtensions.GetValue (s);
+				return s is null ? SecAuthenticationUI.NotSet : SecAuthenticationUIExtensions.GetValue (s);
 			}
 			set {
-				SetValue ((NSObject) value.GetConstant (), SecItem.UseAuthenticationUI);
+				SetValue ((NSObject) value.GetConstant ()!, SecItem.UseAuthenticationUI);
 			}
 		}
 
@@ -1013,12 +1012,12 @@ namespace Security {
 #if !NET
 		[iOS (9, 0), Mac (10, 11)]
 #endif
-		public LocalAuthentication.LAContext AuthenticationContext {
+		public LocalAuthentication.LAContext? AuthenticationContext {
 			get {
 				return Fetch<LocalAuthentication.LAContext> (SecItem.UseAuthenticationContext);
 			}
 			set {
-				if (value == null)
+				if (value is null)
 					throw new ArgumentNullException (nameof (value));
 				SetValue (value.Handle, SecItem.UseAuthenticationContext);
 			}
@@ -1027,48 +1026,48 @@ namespace Security {
 
 		// Must store the _secAccessControl here, since we have no way of inspecting its values if
 		// it is ever returned from a dictionary, so return what we cached.
-		SecAccessControl _secAccessControl;
-		public SecAccessControl AccessControl {
+		SecAccessControl? _secAccessControl;
+		public SecAccessControl? AccessControl {
 			get {
 				return _secAccessControl;
 			}
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				_secAccessControl = value;
 				SetValue (value.Handle, SecAttributeKeys.AccessControlKey.Handle);
 			}
 		}
 
-		public NSData Generic {
+		public NSData? Generic {
 			get {
 				return Fetch<NSData> (SecAttributeKey.Generic);
 			}
 
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value, SecAttributeKey.Generic);
 			}
 		}
 
-		public string SecurityDomain {
+		public string? SecurityDomain {
 			get {
 				return FetchString (SecAttributeKey.SecurityDomain);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.SecurityDomain);
+				SetValue (value!, SecAttributeKey.SecurityDomain);
 			}
 		}
 
-		public string Server {
+		public string? Server {
 			get {
 				return FetchString (SecAttributeKey.Server);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.Server);
+				SetValue (value!, SecAttributeKey.Server);
 			}
 		}
 
@@ -1106,7 +1105,7 @@ namespace Security {
 			}
 		}
 
-		public string Path {
+		public string? Path {
 			get {
 				return FetchString (SecAttributeKey.Path);
 			}
@@ -1117,49 +1116,49 @@ namespace Security {
 		}
 
 		// read only
-		public string Subject {
+		public string? Subject {
 			get {
 				return FetchString (SecAttributeKey.Subject);
 			}
 		}
 
 		// read only
-		public NSData Issuer {
+		public NSData? Issuer {
 			get {
 				return Fetch<NSData> (SecAttributeKey.Issuer);
 			}
 		}
 
 		// read only
-		public NSData SerialNumber {
+		public NSData? SerialNumber {
 			get {
 				return Fetch<NSData> (SecAttributeKey.SerialNumber);
 			}
 		}
 
 		// read only
-		public NSData SubjectKeyID {
+		public NSData? SubjectKeyID {
 			get {
 				return Fetch<NSData> (SecAttributeKey.SubjectKeyID);
 			}
 		}
 
 		// read only
-		public NSData PublicKeyHash {
+		public NSData? PublicKeyHash {
 			get {
 				return Fetch<NSData> (SecAttributeKey.PublicKeyHash);
 			}
 		}
 
 		// read only
-		public NSNumber CertificateType {
+		public NSNumber? CertificateType {
 			get {
 				return Fetch<NSNumber> (SecAttributeKey.CertificateType);
 			}
 		}
 
 		// read only
-		public NSNumber CertificateEncoding {
+		public NSNumber? CertificateEncoding {
 			get {
 				return Fetch<NSNumber> (SecAttributeKey.CertificateEncoding);
 			}
@@ -1175,13 +1174,13 @@ namespace Security {
 			}
 			set {
 				var k = value.GetConstant ();
-				if (k == null)
-					throw new ArgumentException ("Unknown value");
+				if (k is null)
+					throw new ArgumentException (nameof (value));
 				SetValue ((NSObject) k, SecAttributeKey.KeyClass);
 			}
 		}
 
-		public string ApplicationLabel {
+		public string? ApplicationLabel {
 			get {
 				return FetchString (SecAttributeKey.ApplicationLabel);
 			}
@@ -1221,14 +1220,14 @@ namespace Security {
 			}
 		}
 
-		public NSData ApplicationTag {
+		public NSData? ApplicationTag {
 			get {
 				return Fetch<NSData> (SecAttributeKeys.ApplicationTagKey.Handle);
 			}
 			
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value, SecAttributeKeys.ApplicationTagKey.Handle);
 			}
 		}
@@ -1244,8 +1243,8 @@ namespace Security {
 			
 			set {
 				var k = value.GetConstant ();
-				if (k == null)
-					throw new ArgumentException ("Unknown value");
+				if (k is null)
+					throw new ArgumentException (nameof (value));
 				SetValue ((NSObject) k, SecKeyGenerationAttributeKeys.KeyTypeKey.Handle);
 			}
 		}
@@ -1340,13 +1339,13 @@ namespace Security {
 			}
 		}
 
-		public string AccessGroup {
+		public string? AccessGroup {
 			get {
 				return FetchString (SecAttributeKey.AccessGroup);
 			}
 
 			set {
-				SetValue (value, SecAttributeKey.AccessGroup);
+				SetValue (value!, SecAttributeKey.AccessGroup);
 			}
 		}
 
@@ -1369,61 +1368,61 @@ namespace Security {
 		// Matches
 		//
 
-		public SecPolicy MatchPolicy {
+		public SecPolicy? MatchPolicy {
 			get {
 				var pol = Fetch (SecItem.MatchPolicy);
-				return (pol == IntPtr.Zero) ? null : new SecPolicy (pol);
+				return (pol == IntPtr.Zero) ? null : new SecPolicy (pol, false);
 			}
 
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value.Handle, SecItem.MatchPolicy);
 			}
 		}
 
-		public SecKeyChain[] MatchItemList {
+		public SecKeyChain? []? MatchItemList {
 			get {
 				return NSArray.ArrayFromHandle<SecKeyChain> (Fetch (SecItem.MatchItemList));
 			}
 
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				using (var array = NSArray.FromNativeObjects (value))
 					SetValue (array, SecItem.MatchItemList);
 			}
 		}
 
-		public NSData [] MatchIssuers {
+		public NSData? []? MatchIssuers {
 			get {
 				return NSArray.ArrayFromHandle<NSData> (Fetch (SecItem.MatchIssuers));
 			}
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				
 				SetValue (NSArray.FromNSObjects (value), SecItem.MatchIssuers);
 			}
 		}
 
-		public string MatchEmailAddressIfPresent {
+		public string? MatchEmailAddressIfPresent {
 			get {
 				return FetchString (SecItem.MatchEmailAddressIfPresent);
 			}
 
 			set {
-				SetValue (value, SecItem.MatchEmailAddressIfPresent);
+				SetValue (value!, SecItem.MatchEmailAddressIfPresent);
 			}
 		}
 
-		public string MatchSubjectContains {
+		public string? MatchSubjectContains {
 			get {
 				return FetchString (SecItem.MatchSubjectContains);
 			}
 
 			set {
-				SetValue (value, SecItem.MatchSubjectContains);
+				SetValue (value!, SecItem.MatchSubjectContains);
 			}
 		}
 
@@ -1447,26 +1446,26 @@ namespace Security {
 			}
 		}
 
-		public NSDate MatchValidOnDate {
+		public NSDate? MatchValidOnDate {
 			get {
-				return (NSDate) (Runtime.GetNSObject (Fetch (SecItem.MatchValidOnDate)));
+				return Runtime.GetNSObject<NSDate> (Fetch (SecItem.MatchValidOnDate));
 			}
 			
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value, SecItem.MatchValidOnDate);
 			}
 		}
 
-		public NSData ValueData {
+		public NSData? ValueData {
 			get {
 				return Fetch<NSData> (SecItem.ValueData);
 			}
 
 			set {
-				if (value == null)
-					throw new ArgumentNullException ("value");
+				if (value is null)
+					throw new ArgumentNullException (nameof (value));
 				SetValue (value, SecItem.ValueData);
 			}
 		}
@@ -1479,7 +1478,7 @@ namespace Security {
 		// This can be used to store SecKey, SecCertificate, SecIdentity and SecKeyChainItem (not bound yet, and not availble on iOS)
 		public void SetValueRef (INativeObject value)
 		{
-			SetValue (value == null ? IntPtr.Zero : value.Handle, SecItem.ValueRef);
+			SetValue (value.GetHandle (), SecItem.ValueRef);
 		}
 
 		public void SetCertificate (SecCertificate cert) => SetValueRef (cert);
@@ -1519,7 +1518,7 @@ namespace Security {
 			case SecKind.Identity:
 				return Identity;
 			default:
-				throw new ArgumentException ("secKind");
+				throw new ArgumentException (nameof (secKind));
 			}
 		}
 	}
@@ -1543,7 +1542,7 @@ namespace Security {
 			case SecAccessible.WhenPasscodeSetThisDeviceOnly:
 				return WhenPasscodeSetThisDeviceOnly;
 			default:
-				throw new ArgumentException ("accessible");
+				throw new ArgumentException (nameof (accessible));
 			}
 		}
 			
@@ -1607,7 +1606,7 @@ namespace Security {
 			case SecProtocol.Ircs:return IRCS;
 			case SecProtocol.Pop3s: return POP3S;
 			}
-			throw new ArgumentException ("protocol");
+			throw new ArgumentException (nameof (protocol));
 		}
 
 		public static SecProtocol ToSecProtocol (IntPtr handle)
@@ -1724,7 +1723,7 @@ namespace Security {
 			case SecAuthenticationType.Default:
 				return Default;
 			default:
-				throw new ArgumentException ("type");
+				throw new ArgumentException (nameof (type));
 			}
 		}
 	}
@@ -1765,7 +1764,7 @@ namespace Security {
 				return _secAccessControl;
 			}
 			set {
-				if (value == null)
+				if (value is null)
 					throw new ArgumentNullException (nameof (value));
 				_secAccessControl = value;
 				SetNativeValue (SecAttributeKeys.AccessControlKey, value);
@@ -1777,15 +1776,15 @@ namespace Security {
 		public SecKeyType KeyType {
 			get {
 				var type = GetNSStringValue (SecKeyGenerationAttributeKeys.KeyTypeKey);
-				if (type == null)
+				if (type is null)
 					return SecKeyType.Invalid;
 				return SecKeyTypeExtensions.GetValue (type);
 			}
 
 			set {
 				var k = value.GetConstant ();
-				if (k == null)
-					throw new ArgumentException ("Unknown value for KeyType.");
+				if (k is null)
+					throw new ArgumentException (nameof (value));
 				SetStringValue (SecKeyGenerationAttributeKeys.KeyTypeKey, k);
 			}
 		}
@@ -1802,7 +1801,7 @@ namespace Security {
 			}
 
 			set {
-				if (value == null)
+				if (value is null)
 					throw new ArgumentNullException (nameof (value));
 				_secAccessControl = value;
 				SetNativeValue (SecAttributeKeys.AccessControlKey, value);
@@ -1814,7 +1813,7 @@ namespace Security {
 #endif
 		public SecTokenID TokenID {
 			get {
-				return SecTokenIDExtensions.GetValue (GetNSStringValue (SecKeyGenerationAttributeKeys.TokenIDKey));
+				return SecTokenIDExtensions.GetValue (GetNSStringValue (SecKeyGenerationAttributeKeys.TokenIDKey)!);
 			}
 
 			set {

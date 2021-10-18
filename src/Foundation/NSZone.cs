@@ -1,13 +1,17 @@
 // Copyright 2013 Xamarin Inc. All rights reserved
 
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
+
+using CoreFoundation;
 using ObjCRuntime;
 
 namespace Foundation {
 
 	// Helper to (mostly) support NS[Mutable]Copying protocols
-	public class NSZone : INativeObject {
+	public class NSZone : NonRefcountedNativeObject {
 		[DllImport (Constants.FoundationLibrary)]
 		static extern /* NSZone* */ IntPtr NSDefaultMallocZone ();
 
@@ -17,13 +21,9 @@ namespace Foundation {
 		[DllImport (Constants.FoundationLibrary)]
 		static extern void NSSetZoneName (/* NSZone* */ IntPtr zone, /* NSString* */ IntPtr name);
 
-		internal NSZone ()
-		{
-		}
-
 		public NSZone (IntPtr handle)
+			: base (handle, false)
 		{
-			this.Handle = handle;
 		}
 
 		[Preserve (Conditional = true)]
@@ -33,16 +33,23 @@ namespace Foundation {
 			// NSZone is just an opaque pointer without reference counting, so we ignore the 'owns' parameter.
 		}
 
-		public IntPtr Handle { get; private set; }
+		protected override void Free ()
+		{
+			// NSZone is just an opaque pointer without reference counting, so there's nothing to free
+		}
 
 #if !COREBUILD
-		public string Name {
+		public string? Name {
 			get {
-				return new NSString (NSZoneName (Handle)).ToString ();
+				return CFString.FromHandle (NSZoneName (Handle));
 			}
 			set {
-				using (var ns = new NSString (value))
-					NSSetZoneName (Handle, ns.Handle);
+				var nsHandle = CFString.CreateNative (value);
+				try {
+					NSSetZoneName (Handle, nsHandle);
+				} finally {
+					CFString.ReleaseNative (nsHandle);
+				}
 			}
 		}
 

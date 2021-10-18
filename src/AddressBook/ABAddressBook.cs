@@ -124,11 +124,10 @@ namespace AddressBook {
 	[Obsolete ("Starting with maccatalyst14.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
 #endif
 #endif
-	public class ABAddressBook : INativeObject, IDisposable, IEnumerable<ABRecord> {
+	public class ABAddressBook : NativeObject, IEnumerable<ABRecord> {
 
 		public static readonly NSString ErrorDomain;
 
-		IntPtr handle;
 		GCHandle sender;
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -143,10 +142,8 @@ namespace AddressBook {
 #endif
 #endif
 		public ABAddressBook ()
+			: this (ABAddressBookCreate (), true)
 		{
-			this.handle = ABAddressBookCreate ();
-
-			InitConstants.Init ();
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -166,17 +163,14 @@ namespace AddressBook {
 		}
 			
 		internal ABAddressBook (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
 			InitConstants.Init ();
-			if (!owns)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
 		}
 
-		internal ABAddressBook (IntPtr handle)
+		ABAddressBook (IntPtr handle)
+			: this (handle, false)
 		{
-			InitConstants.Init ();
-			this.handle = handle;
 		}
 		
 		static ABAddressBook ()
@@ -184,37 +178,11 @@ namespace AddressBook {
 			ErrorDomain = Dlfcn.GetStringConstant (Libraries.AddressBook.Handle, "ABAddressBookErrorDomain");
 		}
 
-		~ABAddressBook ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero)
-				CFObject.CFRelease (handle);
 			if (sender.IsAllocated)
 				sender.Free ();
-			handle = IntPtr.Zero;
-		}
-
-		void AssertValid ()
-		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("");
-		}
-
-		public IntPtr Handle {
-			get {
-				AssertValid ();
-				return handle;
-			}
+			base.Dispose (disposing);
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -261,8 +229,7 @@ namespace AddressBook {
 		extern static bool ABAddressBookHasUnsavedChanges (IntPtr addressBook);
 		public bool HasUnsavedChanges {
 			get {
-				AssertValid ();
-				return ABAddressBookHasUnsavedChanges (Handle);
+				return ABAddressBookHasUnsavedChanges (GetCheckedHandle ());
 			}
 		}
 
@@ -271,9 +238,8 @@ namespace AddressBook {
 		extern static bool ABAddressBookSave (IntPtr addressBook, out IntPtr error);
 		public void Save ()
 		{
-			AssertValid ();
 			IntPtr error;
-			if (!ABAddressBookSave (Handle, out error))
+			if (!ABAddressBookSave (GetCheckedHandle (), out error))
 				throw CFException.FromCFError (error);
 		}
 
@@ -281,8 +247,7 @@ namespace AddressBook {
 		extern static void ABAddressBookRevert (IntPtr addressBook);
 		public void Revert ()
 		{
-			AssertValid ();
-			ABAddressBookRevert (Handle);
+			ABAddressBookRevert (GetCheckedHandle ());
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -291,11 +256,10 @@ namespace AddressBook {
 		public void Add (ABRecord record)
 		{
 			if (record == null)
-				throw new ArgumentNullException ("record");
+				throw new ArgumentNullException (nameof (record));
 
-			AssertValid ();
 			IntPtr error;
-			if (!ABAddressBookAddRecord (Handle, record.Handle, out error))
+			if (!ABAddressBookAddRecord (GetCheckedHandle (), record.Handle, out error))
 				throw CFException.FromCFError (error);
 			record.AddressBook = this;
 		}
@@ -306,11 +270,10 @@ namespace AddressBook {
 		public void Remove (ABRecord record)
 		{
 			if (record == null)
-				throw new ArgumentNullException ("record");
+				throw new ArgumentNullException (nameof (record));
 
-			AssertValid ();
 			IntPtr error;
-			if (!ABAddressBookRemoveRecord (Handle, record.Handle, out error))
+			if (!ABAddressBookRemoveRecord (GetCheckedHandle (), record.Handle, out error))
 				throw CFException.FromCFError (error);
 			record.AddressBook = null;
 		}
@@ -319,8 +282,7 @@ namespace AddressBook {
 		extern static nint ABAddressBookGetPersonCount (IntPtr addressBook);
 		public nint PeopleCount {
 			get {
-				AssertValid ();
-				return ABAddressBookGetPersonCount (Handle);
+				return ABAddressBookGetPersonCount (GetCheckedHandle ());
 			}
 		}
 
@@ -328,8 +290,7 @@ namespace AddressBook {
 		extern static IntPtr ABAddressBookCopyArrayOfAllPeople (IntPtr addressBook);
 		public ABPerson [] GetPeople ()
 		{
-			AssertValid ();
-			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllPeople (Handle);
+			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllPeople (GetCheckedHandle ());
 			return NSArray.ArrayFromHandle (cfArrayRef, h => new ABPerson (h, this));
 		}
 
@@ -339,9 +300,8 @@ namespace AddressBook {
 		public ABPerson [] GetPeople (ABRecord source)
 		{
 			if (source == null)
-				throw new ArgumentNullException ("source");
-			AssertValid ();
-			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllPeopleInSource (Handle, source.Handle);
+				throw new ArgumentNullException (nameof (source));
+			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllPeopleInSource (GetCheckedHandle (), source.Handle);
 			return NSArray.ArrayFromHandle (cfArrayRef, l => new ABPerson (l, this));
 		}
 
@@ -351,9 +311,8 @@ namespace AddressBook {
 		public ABPerson [] GetPeople (ABRecord source, ABPersonSortBy sortOrdering)
 		{
 			if (source == null)
-				throw new ArgumentNullException ("source");
-			AssertValid ();
-			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering (Handle, source.Handle, sortOrdering);
+				throw new ArgumentNullException (nameof (source));
+			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering (GetCheckedHandle (), source.Handle, sortOrdering);
 			return NSArray.ArrayFromHandle (cfArrayRef, l => new ABPerson (l, this));
 		}		
 
@@ -361,8 +320,7 @@ namespace AddressBook {
 		extern static nint ABAddressBookGetGroupCount (IntPtr addressBook);
 		public nint GroupCount {
 			get {
-				AssertValid ();
-				return ABAddressBookGetGroupCount (Handle);
+				return ABAddressBookGetGroupCount (GetCheckedHandle ());
 			}
 		}
 
@@ -370,8 +328,7 @@ namespace AddressBook {
 		extern static IntPtr ABAddressBookCopyArrayOfAllGroups (IntPtr addressBook);
 		public ABGroup [] GetGroups ()
 		{
-			AssertValid ();
-			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllGroups (Handle);
+			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllGroups (GetCheckedHandle ());
 			return NSArray.ArrayFromHandle (cfArrayRef, h => new ABGroup (h, this));
 		}
 
@@ -381,10 +338,9 @@ namespace AddressBook {
 		public ABGroup[] GetGroups (ABRecord source)
 		{
 			if (source == null)
-				throw new ArgumentNullException ("source");
+				throw new ArgumentNullException (nameof (source));
 
-			AssertValid ();
-			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllGroupsInSource (Handle, source.Handle);
+			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllGroupsInSource (GetCheckedHandle (), source.Handle);
 			return NSArray.ArrayFromHandle (cfArrayRef, l => new ABGroup (l, this));
 		}
 
@@ -425,7 +381,7 @@ namespace AddressBook {
 
 		protected virtual void OnExternalChange (ExternalChangeEventArgs e)
 		{
-			AssertValid ();
+			GetCheckedHandle ();
 			EventHandler<ExternalChangeEventArgs> h = externalChange;
 			if (h != null)
 				h (this, e);
@@ -459,7 +415,7 @@ namespace AddressBook {
 
 		public IEnumerator<ABRecord> GetEnumerator ()
 		{
-			AssertValid ();
+			GetCheckedHandle ();
 			foreach (var p in GetPeople ())
 				yield return p;
 			foreach (var g in GetGroups ())
@@ -503,8 +459,7 @@ namespace AddressBook {
 		extern static IntPtr /* CFArrayRef */ ABAddressBookCopyArrayOfAllSources (IntPtr /* ABAddressBookRef */ addressBook);
 		public ABSource [] GetAllSources ()
 		{
-			AssertValid ();
-			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllSources (Handle);
+			IntPtr cfArrayRef = ABAddressBookCopyArrayOfAllSources (GetCheckedHandle ());
 			return NSArray.ArrayFromHandle (cfArrayRef, h => new ABSource (h, this));
 		}
 
@@ -512,8 +467,7 @@ namespace AddressBook {
 		extern static IntPtr /* ABRecordRef */ ABAddressBookCopyDefaultSource (IntPtr /* ABAddressBookRef */ addressBook);
 		public ABSource GetDefaultSource ()
 		{
-			AssertValid ();
-			IntPtr h = ABAddressBookCopyDefaultSource (Handle);
+			IntPtr h = ABAddressBookCopyDefaultSource (GetCheckedHandle ());
 			if (h == IntPtr.Zero)
 				return null;
 			return new ABSource (h, this);
@@ -523,8 +477,7 @@ namespace AddressBook {
 		extern static IntPtr /* ABRecordRef */ ABAddressBookGetSourceWithRecordID (IntPtr /* ABAddressBookRef */ addressBook, int /* ABRecordID */ sourceID);
 		public ABSource GetSource (int sourceID)
 		{
-			AssertValid ();
-			var h = ABAddressBookGetSourceWithRecordID (Handle, sourceID);
+			var h = ABAddressBookGetSourceWithRecordID (GetCheckedHandle (), sourceID);
 			if (h == IntPtr.Zero)
 				return null;
 			return new ABSource (h, this);

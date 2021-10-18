@@ -8,14 +8,16 @@
  *    Miguel de Icaza
  */
 
+#nullable enable
+
 #if MONOMAC || __MACCATALYST__
 
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-#if !NO_SYSTEM_DRAWING
-using System.Drawing;
-#endif
+//#if !NO_SYSTEM_DRAWING
+//using System.Drawing;
+//#endif
 using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
@@ -27,13 +29,13 @@ namespace CoreGraphics {
 #else
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
-	public sealed class CGEvent : IDisposable, INativeObject {
+	public sealed class CGEvent : NativeObject {
 		public delegate IntPtr CGEventTapCallback (IntPtr tapProxyEvent, CGEventType eventType, IntPtr eventRef, IntPtr userInfo);
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventTapCreate (CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data);
 
-		public static CFMachPort CreateTap (CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data)
+		public static CFMachPort? CreateTap (CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data)
 		{
 			var r = CGEventTapCreate (location, place, options, mask, cback, data);
 			if (r == IntPtr.Zero)
@@ -44,7 +46,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventTapCreateForPSN (IntPtr processSerialNumer, CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data);
 		
-		public static CFMachPort CreateTap (IntPtr processSerialNumber, CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data)
+		public static CFMachPort? CreateTap (IntPtr processSerialNumber, CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data)
 		{
 			var r = CGEventTapCreateForPSN (processSerialNumber, location, place, options, mask, cback, data);
 			if (r == IntPtr.Zero)
@@ -59,8 +61,8 @@ namespace CoreGraphics {
 
 		public CGEvent (NSData source) 
 		{
-			if (source == null)
-				throw new ArgumentNullException ("source");
+			if (source is null)
+				throw new ArgumentNullException (nameof (source));
 
 			handle = CGEventCreateFromData (IntPtr.Zero, source.Handle);
 		}
@@ -69,35 +71,38 @@ namespace CoreGraphics {
 		extern static IntPtr CGEventCreate (IntPtr eventSourceHandle);
 		
 		public CGEvent (CGEventSource eventSource)
-		{
-			handle = CGEventCreate (eventSource == null ? IntPtr.Zero : eventSource.Handle);
-		}
-
-		public CGEvent (IntPtr handle) : this (handle, false)
+			: base (CGEventCreate (eventSource.GetHandle ()), true)
 		{
 		}
 
-		internal CGEvent (IntPtr handle, bool ownsHandle)
+#if XAMCORE_4_0
+		protected CGEvent (IntPtr handle)
+#else
+		public CGEvent (IntPtr handle)
+#endif
+			: base (handle, false)
 		{
-			if (!ownsHandle)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
+		}
+
+		internal CGEvent (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateMouseEvent(IntPtr source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton);
 			
 		public CGEvent (CGEventSource source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton)
+			: base (CGEventCreateMouseEvent (source.GetHandle (), mouseType, mouseCursorPosition, mouseButton), true)
 		{
-			handle = CGEventCreateMouseEvent (source == null ? IntPtr.Zero : source.Handle, mouseType, mouseCursorPosition, mouseButton);
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateKeyboardEvent (IntPtr source, ushort virtualKey, [MarshalAs (UnmanagedType.I1)] bool keyDown);
 
 		public CGEvent (CGEventSource source, ushort virtualKey, bool keyDown)
+			: base (CGEventCreateKeyboardEvent (source.GetHandle (), virtualKey, keyDown), true)
 		{
-			handle = CGEventCreateKeyboardEvent (source == null ? IntPtr.Zero : source.Handle, virtualKey, keyDown);
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
@@ -109,11 +114,14 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateScrollWheelEvent (IntPtr source, CGScrollEventUnit units, uint /* uint32_t */ wheelCount, int /* uint32_t */ wheel1, int /* uint32_t */ wheel2, int /* uint32_t */ wheel3);
 
-		public CGEvent (CGEventSource source, CGScrollEventUnit units, params int []  wheel)
+		// FIXME: this doesn't work on ARM64
+
+		static IntPtr Create (CGEventSource source, CGScrollEventUnit units, params int [] wheel)
 		{
-			IntPtr shandle = source == null ? IntPtr.Zero : source.Handle;
-			
-			switch (wheel.Length){
+			IntPtr handle;
+			IntPtr shandle = source.GetHandle ();
+
+			switch (wheel.Length) {
 			case 0:
 				throw new ArgumentException ("At least one wheel must be provided");
 			case 1:
@@ -128,31 +136,12 @@ namespace CoreGraphics {
 			default:
 				throw new ArgumentException ("Only one to three wheels are supported on this constructor");
 			}
-		}
-	
-		~CGEvent ()
-		{
-			Dispose (false);
+			return handle;
 		}
 
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-		public void Dispose ()
+		public CGEvent (CGEventSource source, CGScrollEventUnit units, params int []  wheel)
+			: base (Create (source, units, wheel), true)
 		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
 		}
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
@@ -174,7 +163,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateSourceFromEvent (IntPtr evthandle);
 
-		public CGEventSource CreateEventSource ()
+		public CGEventSource? CreateEventSource ()
 		{
 			var esh = CGEventCreateSourceFromEvent (handle);
 			if (esh == IntPtr.Zero)
@@ -288,8 +277,8 @@ namespace CoreGraphics {
        
 		public void SetEventSource (CGEventSource eventSource)
 		{
-			if (eventSource == null)
-				throw new ArgumentNullException ("eventSource");
+			if (eventSource is null)
+				throw new ArgumentNullException (nameof (eventSource));
 			CGEventSetSource (handle, eventSource.Handle);
 		}
 
@@ -341,15 +330,15 @@ namespace CoreGraphics {
 
 		public static void TapEnable (CFMachPort machPort)
 		{
-			if (machPort == null)
-				throw new ArgumentNullException ("machPort");
+			if (machPort is null)
+				throw new ArgumentNullException (nameof (machPort));
 			CGEventTapEnable (machPort.Handle, true);
 		}
 
 		public static void TapDisable (CFMachPort machPort)
 		{
-			if (machPort == null)
-				throw new ArgumentNullException ("machPort");
+			if (machPort is null)
+				throw new ArgumentNullException (nameof (machPort));
 			CGEventTapEnable (machPort.Handle, false);
 		}
 
@@ -359,8 +348,8 @@ namespace CoreGraphics {
 
 		public static bool IsTapEnabled (CFMachPort machPort)
 		{
-			if (machPort == null)
-				throw new ArgumentNullException ("machPort");
+			if (machPort is null)
+				throw new ArgumentNullException (nameof (machPort));
 			return CGEventTapIsEnabled (machPort.Handle);
 		}
 
@@ -370,7 +359,7 @@ namespace CoreGraphics {
 		public unsafe string GetUnicodeString ()
 		{
 			char *buffer = stackalloc char [40];
-		        nuint actual;
+			nuint actual;
 			
 			CGEventKeyboardGetUnicodeString (handle, 40, out actual, buffer);
 			return new String (buffer, 0, (int) actual);
@@ -389,8 +378,8 @@ namespace CoreGraphics {
 
 		public static void TapPostEven (IntPtr tapProxyEvent, CGEvent evt)
 		{
-			if (evt == null)
-				throw new ArgumentNullException ("evt");
+			if (evt is null)
+				throw new ArgumentNullException (nameof (evt));
 			
 			CGEventTapPostEvent (tapProxyEvent, evt.Handle);
 		}
@@ -400,8 +389,8 @@ namespace CoreGraphics {
 
 		public static void Post (CGEvent evt, CGEventTapLocation location)
 		{
-			if (evt == null)
-				throw new ArgumentNullException ("evt");
+			if (evt is null)
+				throw new ArgumentNullException (nameof (evt));
 			
 			CGEventPost (location, evt.Handle);
 		}
@@ -411,12 +400,11 @@ namespace CoreGraphics {
 
 		public static void PostToPSN (CGEvent evt, IntPtr processSerialNumber)
 		{
-			if (evt == null)
-				throw new ArgumentNullException ("evt");
+			if (evt is null)
+				throw new ArgumentNullException (nameof (evt));
 			
 			CGEventPostToPSN (processSerialNumber, evt.Handle);
 		}
-
 		
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		unsafe extern static int /* CGError = int32_t */ CGGetEventTapList (
@@ -424,7 +412,7 @@ namespace CoreGraphics {
 			CGEventTapInformation *tapList,
 			out uint /* uint32_t* */ eventTapCount);
 
-		public unsafe CGEventTapInformation [] GetEventTapList ()
+		public unsafe CGEventTapInformation []? GetEventTapList ()
 		{
 			uint count;
 			if (CGGetEventTapList (0, null, out count) != 0)

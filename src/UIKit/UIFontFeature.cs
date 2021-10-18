@@ -6,12 +6,12 @@
 //
 // Copyright 2013, Xamarin Inc
 //
+
+#nullable enable
+
 #if !WATCH
 using System;
-using System.Runtime.InteropServices;
-using System.Collections;
 
-using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 using CoreText;
@@ -24,7 +24,7 @@ namespace UIKit {
 
 		// To easily implement ToString
 		FontFeatureGroup fontFeature;
-		object fontFeatureValue;  
+		object? fontFeatureValue;  
 
 		IntPtr INativeObject.Handle {
 			get {
@@ -43,7 +43,7 @@ namespace UIKit {
 		internal UIFontFeature (NSDictionary dict)
 		{
 			dictionary = dict;
-			NSNumber v = dict [UIFontDescriptor.UIFontFeatureTypeIdentifierKey] as NSNumber;
+			NSNumber? v = dict [UIFontDescriptor.UIFontFeatureTypeIdentifierKey] as NSNumber;
 			fontFeature = (FontFeatureGroup) (v == null ? -1 : v.Int32Value);
 			
 			v = dict [UIFontDescriptor.UIFontFeatureSelectorIdentifierKey] as NSNumber;
@@ -165,7 +165,7 @@ namespace UIKit {
 				fontFeatureValue = (CTFontFeatureCJKRomanSpacing.Selector) n;
 				break;
 			}
-			if (v == null)
+			if (v is null)
 				fontFeatureValue = "InvalidKeyFound";
 		}
 		
@@ -175,7 +175,7 @@ namespace UIKit {
 			}
 		}
 		
-		public object FontFeatureValue {
+		public object? FontFeatureValue {
 			get {
 				return fontFeatureValue;
 			}

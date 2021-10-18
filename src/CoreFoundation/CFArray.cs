@@ -34,7 +34,11 @@ using System.Runtime.InteropServices;
 using Foundation;
 using ObjCRuntime;
 
+#if NET
+using CFIndex = System.IntPtr;
+#else
 using CFIndex = System.nint;
+#endif
 using CFArrayRef = System.IntPtr;
 using CFAllocatorRef = System.IntPtr;
 
@@ -181,6 +185,14 @@ namespace CoreFoundation {
 					ret [i] = Runtime.GetINativeObject<T> (val, false);
 			}
 			return ret;
+		}
+
+		public static T? []? ArrayFromHandle<T> (IntPtr handle, bool releaseHandle) where T : class, INativeObject
+		{
+			var rv = ArrayFromHandle<T> (handle);
+			if (releaseHandle)
+				CFObject.CFRelease (handle);
+			return rv;
 		}
 	}
 }

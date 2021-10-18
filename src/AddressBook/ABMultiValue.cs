@@ -213,69 +213,35 @@ namespace AddressBook {
 	[Obsolete ("Starting with ios9.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
 #endif
 #endif
-	public class ABMultiValue<T> : INativeObject, IDisposable, IEnumerable<ABMultiValueEntry<T>>
+	public class ABMultiValue<T> : NativeObject, IEnumerable<ABMultiValueEntry<T>>
 	{
-		IntPtr handle;
 		internal Converter<IntPtr, T> toManaged;
 		internal Converter<T, IntPtr> toNative;
 
-		internal ABMultiValue (IntPtr handle)
+		internal ABMultiValue (IntPtr handle, bool owns)
 			: this (handle, 
 					v => (T) (object) Runtime.GetNSObject (v), 
-					v => v == null ? IntPtr.Zero : ((INativeObject) v).Handle)
+					v => v == null ? IntPtr.Zero : ((INativeObject) v).Handle, owns)
 		{
 			if (!typeof (NSObject).IsAssignableFrom (typeof (T)))
 				throw new InvalidOperationException ("T must be an NSObject!");
 		}
 
-		internal ABMultiValue (IntPtr handle, Converter<IntPtr, T> toManaged, Converter<T, IntPtr> toNative)
+		internal ABMultiValue (IntPtr handle, Converter<IntPtr, T> toManaged, Converter<T, IntPtr> toNative, bool owns)
+			: base (handle, owns)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ArgumentException ("Handle must not be null.", "handle");
 			if (toManaged == null)
-				throw new ArgumentNullException ("toManaged");
+				throw new ArgumentNullException (nameof (toManaged));
 			if (toNative == null)
-				throw new ArgumentNullException ("toNative");
+				throw new ArgumentNullException (nameof (toNative));
 
-			this.handle = handle;
 			this.toManaged = toManaged;
 			this.toNative  = toNative;
 		}
 
-		~ABMultiValue ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero)
-				CFObject.CFRelease (handle);
-			handle = IntPtr.Zero;
-		}
-
-		internal void AssertValid ()
-		{
-			if (handle == IntPtr.Zero)
-				throw new ObjectDisposedException ("");
-		}
-
-		public IntPtr Handle {
-			get {
-				AssertValid ();
-				return handle;
-			}
-		}
-
 		public virtual bool IsReadOnly {
 			get {
-				AssertValid ();
+				GetCheckedHandle ();
 				return true;
 			}
 		}
@@ -349,18 +315,18 @@ namespace AddressBook {
 	public class ABMutableMultiValue<T> : ABMultiValue<T>
 	{
 		internal ABMutableMultiValue (IntPtr handle)
-			: base (handle)
+			: base (handle, false)
 		{
 		}
 
 		internal ABMutableMultiValue (IntPtr handle, Converter<IntPtr, T> toManaged, Converter<T, IntPtr> toNative)
-			: base (handle, toManaged, toNative)
+			: base (handle, toManaged, toNative, false)
 		{
 		}
 
 		public override bool IsReadOnly {
 			get {
-				AssertValid ();
+				GetCheckedHandle ();
 				return false;
 			}
 		}

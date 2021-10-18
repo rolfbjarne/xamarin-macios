@@ -37,7 +37,7 @@ namespace Security {
 	[Obsolete ("Starting with macos10.15 use 'Network.framework' instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
 #endif
 #endif
-	public class SslContext : INativeObject, IDisposable {
+	public class SslContext : NativeObject {
 
 		SslConnection connection;
 		SslStatus result;
@@ -46,33 +46,15 @@ namespace Security {
 		extern static /* SSLContextRef */ IntPtr SSLCreateContext (/* CFAllocatorRef */ IntPtr alloc, SslProtocolSide protocolSide, SslConnectionType connectionType);
 
 		public SslContext (SslProtocolSide protocolSide, SslConnectionType connectionType)
+			: base (SSLCreateContext (IntPtr.Zero, protocolSide, connectionType), true)
 		{
-			Handle = SSLCreateContext (IntPtr.Zero, protocolSide, connectionType);
 		}
 
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLClose (/* SSLContextRef */ IntPtr context);
 
-		~SslContext ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		bool disposed;
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (disposed)
-				return;
-
-			disposed = true;
-
 			if (Handle != IntPtr.Zero)
 				result = SSLClose (Handle);
 
@@ -83,14 +65,8 @@ namespace Security {
 				connection = null;
 			}
 
-			// SSLCreateContext -> CFRelease (not SSLDisposeContext)
-			if (Handle != IntPtr.Zero) {
-				CFObject.CFRelease (Handle);
-				Handle = IntPtr.Zero;
-			}
+			base.Dispose (disposing);
 		}
-
-		public IntPtr Handle { get; private set; }
 
 		public SslStatus GetLastStatus ()
 		{

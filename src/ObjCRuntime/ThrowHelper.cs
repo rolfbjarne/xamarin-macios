@@ -33,5 +33,12 @@ namespace ObjCRuntime {
 		{
 			throw new ObjectDisposedException (o.GetType ().ToString ());
 		}
+
+		public static T ThrowArgumentNullExceptionIfNeeded<T> (T? obj, string argumentName) where T: class
+		{
+			if (obj == null)
+				throw new ArgumentException (argumentName);
+			return obj;
+		}
 	}
 }

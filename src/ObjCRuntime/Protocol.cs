@@ -4,50 +4,48 @@
 // Copyright 2014 Xamarin Inc. All rights reserved.
 //
 
+#nullable enable
+
 using System;
-using System.Reflection;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using Foundation;
 
 namespace ObjCRuntime {
-	public partial class Protocol : INativeObject {
+	public partial class Protocol : NonRefcountedNativeObject {
 #if !COREBUILD
-		IntPtr handle;
-
 		public Protocol (string name)
+			: base (objc_getProtocol (name), false)
 		{
-			this.handle = objc_getProtocol (name);
-
-			if (this.handle == IntPtr.Zero)
+			if (Handle == IntPtr.Zero)
 				throw new ArgumentException (String.Format ("'{0}' is an unknown protocol", name));
 		}
 
 		public Protocol (Type type)
+			: base (Runtime.GetProtocolForType (type), false)
 		{
-			this.handle = Runtime.GetProtocolForType (type);
 		}
 
 		public Protocol (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		[Preserve (Conditional = true)]
 		internal Protocol (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			// protocols can't be freed, so we ignore the 'owns' parameter.
-			this.handle = handle;
 		}
 
-		public IntPtr Handle {
-			get { return this.handle; }
+		protected override void Free ()
+		{
+			// Nothing to do here, protocols can't be freed.
 		}
 
-		public string Name {
+		public string? Name {
 			get {
-				IntPtr ptr = protocol_getName (this.handle);
+				IntPtr ptr = protocol_getName (Handle);
 				return Marshal.PtrToStringAuto (ptr);
 			}
 		}

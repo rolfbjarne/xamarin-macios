@@ -21,6 +21,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+#nullable enable
+
 using System;
 using System.Reflection;
 using System.Collections;
@@ -40,53 +43,53 @@ namespace Foundation {
 		// this is so it makes it simpler for the generator to support
 		// [NullAllowed] on array parameters.
 		//
-		static public NSArray FromNSObjects (params NSObject [] items)
+		static public NSArray FromNSObjects (params NSObject? []? items)
 		{
 			return FromNativeObjects (items);
 		}
 
-		static public NSArray FromNSObjects (int count, params NSObject [] items)
+		static public NSArray? FromNSObjects (int count, params NSObject? []? items)
 		{
 			return FromNativeObjects (items, count);
 		}
 
-		public static NSArray FromNSObjects (params INativeObject [] items)
+		public static NSArray? FromNSObjects (params INativeObject? []? items)
 		{
 			return FromNativeObjects (items);
 		}
 
-		public static NSArray FromNSObjects (int count, params INativeObject [] items)
+		public static NSArray? FromNSObjects (int count, params INativeObject? []? items)
 		{
 			return FromNativeObjects (items, count);
 		}
 
-		public static NSArray FromNSObjects<T> (params T [] items) where T: class, INativeObject
+		public static NSArray? FromNSObjects<T> (params T? []? items) where T: class, INativeObject
 		{
 			return FromNativeObjects (items);
 		}
-		public static NSArray FromNSObjects<T> (params T [][] items) where T: class, INativeObject
+		public static NSArray? FromNSObjects<T> (params T? [][]? items) where T: class, INativeObject
 		{
-			if (items == null)
+			if (items is null)
 				return null;
 			
 			var ret = new NSMutableArray ((nuint)items.Length);
 			for (var i = 0; i < items.Length; i++) {
 				var row = items [i];
-				if (row == null)
+				if (row is null)
 					throw new ArgumentNullException (nameof (items), $"Element [{i}] is null");
 				for (var j = 0; j < row.Length; j++) {
 					var element = row [j];
-					if (element == null)
+					if (element is null)
 						throw new ArgumentNullException (nameof (items), $"Element [{i}][{j}] is null");
 				}
-				ret.Add (NSArray.FromNSObjects (row));
+				ret.Add (NSArray.FromNSObjects (row)!);
 			}
 
 			return ret;
 		}
-		public static NSArray FromNSObjects<T> (T [,] items) where T: class, INativeObject
+		public static NSArray? FromNSObjects<T> (T? [,] items) where T: class, INativeObject
 		{
-			if (items == null)
+			if (items is null)
 				return null;
 			
 			var width = items.GetLength (0);
@@ -101,19 +104,19 @@ namespace Foundation {
 			}
 			return FromNSObjects (ret);
 		}
-		public static NSArray FromNSObjects<T> (int count, params T [] items) where T: class, INativeObject
+		public static NSArray? FromNSObjects<T> (int count, params T? [] items) where T: class, INativeObject
 		{
 			return FromNativeObjects (items, count);
 		}
 
-		public static NSArray FromNSObjects<T> (Func<T, NSObject> nsobjectificator, params T [] items)
+		public static NSArray? FromNSObjects<T> (Func<T?, NSObject?> nsobjectificator, params T? []? items)
 		{
-			if (nsobjectificator == null)
+			if (nsobjectificator is null)
 				throw new ArgumentNullException (nameof (nsobjectificator));
-			if (items == null)
+			if (items is null)
 				return null;
 
-			var arr = new NSObject [items.Length];
+			var arr = new NSObject? [items.Length];
 			for (int i = 0; i < items.Length; i++) {
 				arr [i] = nsobjectificator (items [i]);
 			}
@@ -121,51 +124,51 @@ namespace Foundation {
 			return FromNativeObjects (arr);
 		}
 
-		public static NSArray FromObjects (params object [] items)
+		public static NSArray? FromObjects (params object? []? items)
 		{
 			return From<object> (items);
 		}
 
-		public static NSArray FromObjects (nint count, params object [] items)
+		public static NSArray? FromObjects (nint count, params object? []? items)
 		{
 			return From<object> (items, count);
 		}
 
-		internal static NSArray From<T> (T[] items, long count = -1)
+		internal static NSArray From<T> (T?[]? items, long count = -1)
 		{
-			if ((items == null) || (count == 0))
+			if ((items is null) || (count == 0))
 				return new NSArray ();
 
 			if (count == -1)
 				count = items.Length;
 			else if (count > items.Length)
-				throw new ArgumentException ("count is larger than the number of items", "count");
+				throw new ArgumentException ("count is larger than the number of items", nameof (count));
 
-			NSObject [] nsoa = new NSObject [count];
+			var nsoa = new NSObject [count];
 			for (nint i = 0; i < count; i++){
 				var k = NSObject.FromObject (items [i]);
 				if (k == null)
-					throw new ArgumentException (String.Format ("Do not know how to marshal object of type '{0}' to an NSObject", items [i].GetType ()));
+					throw new ArgumentException (String.Format ("Do not know how to marshal object of type '{0}' to an NSObject", items [i]?.GetType ()));
 				nsoa [i] = k;
 			}
 			return FromNSObjects (nsoa);
 		}
 		
-		internal static NSArray FromNativeObjects<T> (T[] items) where T: class, INativeObject
+		internal static NSArray FromNativeObjects<T> (T?[]? items) where T: class, INativeObject
 		{
-			if (items == null)
+			if (items is null)
 				return new NSArray ();
 
 			return FromNativeObjects<T> (items, items.Length);
 		}
 
-		internal static NSArray FromNativeObjects<T> (T [] items, nint count) where T: class, INativeObject
+		internal static NSArray FromNativeObjects<T> (T?[]? items, nint count) where T: class, INativeObject
 		{
-			if (items == null)
+			if (items is null)
 				return new NSArray ();
 
 			if (count > items.Length)
-				throw new ArgumentException ("count is larger than the number of items", "count");
+				throw new ArgumentException ("count is larger than the number of items", nameof (count));
 
 			IntPtr buf = Marshal.AllocHGlobal ((IntPtr) (count * IntPtr.Size));
 			for (nint i = 0; i < count; i++) {
@@ -173,28 +176,28 @@ namespace Foundation {
 				IntPtr h = item == null ? NSNull.Null.Handle : item.Handle;
 				Marshal.WriteIntPtr (buf, (int)(i * IntPtr.Size), h);
 			}
-			NSArray arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, count));
+			var arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, count));
 			Marshal.FreeHGlobal (buf);
-			return arr;
+			return arr!;
 		}
 		
-		internal static NSArray FromNSObjects (IList<NSObject> items)
+		internal static NSArray FromNSObjects (IList<NSObject>? items)
 		{
-			if (items == null)
+			if (items is null)
 				return new NSArray ();
 
 			int count = items.Count;
 			IntPtr buf = Marshal.AllocHGlobal (count * IntPtr.Size);
 			for (int i = 0; i < count; i++)
 				Marshal.WriteIntPtr (buf, i * IntPtr.Size, items [i].Handle);
-			NSArray arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, count));
+			var arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, count));
 			Marshal.FreeHGlobal (buf);
-			return arr;
+			return arr!;
 		}
 
-		static public NSArray FromStrings (params string [] items)
+		static public NSArray FromStrings (params string? []? items)
 		{
-			if (items == null)
+			if (items is null)
 				throw new ArgumentNullException (nameof (items));
 			
 			IntPtr buf = Marshal.AllocHGlobal (items.Length * IntPtr.Size);
@@ -202,7 +205,7 @@ namespace Foundation {
 				for (int i = 0; i < items.Length; i++){
 					IntPtr val;
 					
-					if (items [i] == null)
+					if (items [i] is null)
 						val = NSNull.Null.Handle;
 					else {
 						val = NSString.CreateNative (items [i], true);
@@ -210,26 +213,26 @@ namespace Foundation {
 	
 					Marshal.WriteIntPtr (buf, i * IntPtr.Size, val);
 				}
-				NSArray arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, items.Length));
-				return arr;
+				var arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, items.Length));
+				return arr!;
 			} finally {
 				Marshal.FreeHGlobal (buf);
 			}
 		}
 
-		static public NSArray FromIntPtrs (IntPtr [] vals)
+		static public NSArray FromIntPtrs (IntPtr []? vals)
 		{
-			if (vals == null)
-				throw new ArgumentNullException ("vals");
+			if (vals is null)
+				throw new ArgumentNullException (nameof (vals));
 			int n = vals.Length;
 			IntPtr buf = Marshal.AllocHGlobal (n * IntPtr.Size);
 			for (int i = 0; i < n; i++)
 				Marshal.WriteIntPtr (buf, i * IntPtr.Size, vals [i]);
 
-			NSArray arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, vals.Length));
+			var arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects (buf, vals.Length));
 
 			Marshal.FreeHGlobal (buf);
-			return arr;
+			return arr!;
 		}
 
 		internal static nuint GetCount (IntPtr handle)
@@ -251,26 +254,26 @@ namespace Foundation {
 		}
 			
 		[Obsolete ("Use of 'CFArray.StringArrayFromHandle' offers better performance.")]
-		static public string [] StringArrayFromHandle (IntPtr handle)
+		static public string? []? StringArrayFromHandle (IntPtr handle)
 		{
 			if (handle == IntPtr.Zero)
 				return null;
 
 			var c = GetCount (handle);
-			string [] ret = new string [c];
+			var ret = new string? [c];
 
 			for (nuint i = 0; i < c; i++)
 				ret [i] = CFString.FromHandle (GetAtIndex (handle, i));
 			return ret;
 		}
 
-		static public T [] ArrayFromHandle<T> (IntPtr handle) where T : class, INativeObject
+		static public T? []? ArrayFromHandle<T> (IntPtr handle) where T : class, INativeObject
 		{
 			if (handle == IntPtr.Zero)
 				return null;
 
 			var c = GetCount (handle);
-			T [] ret = new T [c];
+			var ret = new T? [c];
 
 			for (uint i = 0; i < c; i++) {
 				ret [i] = UnsafeGetItem<T> (handle, i);
@@ -278,7 +281,7 @@ namespace Foundation {
 			return ret;
 		}
 
-		static public T [] EnumsFromHandle<T> (IntPtr handle) where T : struct, IConvertible
+		static public T? []? EnumsFromHandle<T> (IntPtr handle) where T : struct, IConvertible
 		{
 			if (handle == IntPtr.Zero)
 				return null;
@@ -286,21 +289,21 @@ namespace Foundation {
 				throw new ArgumentException ("T must be an enum");
 
 			var c = GetCount (handle);
-			T [] ret = new T [c];
+			var ret = new T? [c];
 
 			for (uint i = 0; i < c; i++) {
-				ret [i] = (T) Convert.ChangeType (UnsafeGetItem<NSNumber> (handle, i).LongValue, typeof (T));
+				ret [i] = (T) Convert.ChangeType (UnsafeGetItem<NSNumber> (handle, i)?.LongValue ?? 0L, typeof (T));
 			}
 			return ret;
 		}
 
-		static public T [] FromArray<T> (NSArray weakArray) where T : NSObject
+		static public T? []? FromArray<T> (NSArray? weakArray) where T : NSObject
 		{
-			if (weakArray == null || weakArray.Handle == IntPtr.Zero)
+			if (weakArray is null || weakArray.Handle == IntPtr.Zero)
 				return null;
 			try {
 				nuint n = weakArray.Count;
-				T [] ret = new T [n];
+				var ret = new T? [n];
 				for (nuint i = 0; i < n; i++){
 					ret [i] = Runtime.GetNSObject<T> (weakArray.ValueAt (i));
 				}
@@ -310,9 +313,9 @@ namespace Foundation {
 			}
 		}
 
-		static public T [] FromArrayNative<T> (NSArray weakArray) where T : class, INativeObject
+		static public T? []? FromArrayNative<T> (NSArray? weakArray) where T : class, INativeObject
 		{
-			if (weakArray == null || weakArray.Handle == IntPtr.Zero)
+			if (weakArray is null || weakArray.Handle == IntPtr.Zero)
 				return null;
 			try {
 				nuint n = weakArray.Count;
@@ -327,13 +330,13 @@ namespace Foundation {
 		}
 		
 		// Used when we need to provide our constructor
-		static public T [] ArrayFromHandleFunc<T> (IntPtr handle, Func<IntPtr,T> createObject) 
+		static public T? []? ArrayFromHandleFunc<T> (IntPtr handle, Func<IntPtr,T?> createObject) 
 		{
 			if (handle == IntPtr.Zero)
 				return null;
 
 			var c = GetCount (handle);
-			T [] ret = new T [c];
+			var ret = new T? [c];
 
 			for (uint i = 0; i < c; i++)
 				ret [i] = createObject (GetAtIndex (handle, i));
@@ -341,13 +344,13 @@ namespace Foundation {
 			return ret;
 		}
 		
-		static public T [] ArrayFromHandle<T> (IntPtr handle, Converter<IntPtr, T> creator) 
+		static public T? []? ArrayFromHandle<T> (IntPtr handle, Converter<IntPtr, T?> creator) 
 		{
 			if (handle == IntPtr.Zero)
 				return null;
 
 			var c = GetCount (handle);
-			T [] ret = new T [c];
+			var ret = new T? [c];
 
 			for (uint i = 0; i < c; i++)
 				ret [i] = creator (GetAtIndex (handle, i));
@@ -366,7 +369,7 @@ namespace Foundation {
 		// FIXME: before proving a real `this` indexer we need to clean the issues between
 		// NSObject and INativeObject coexistance across all the API (it can not return T)
 
-		static T UnsafeGetItem<T> (IntPtr handle, nuint index) where T : class, INativeObject
+		static T? UnsafeGetItem<T> (IntPtr handle, nuint index) where T : class, INativeObject
 		{
 			var val = GetAtIndex (handle, index);
 			// A native code could return NSArray with NSNull.Null elements
@@ -379,33 +382,34 @@ namespace Foundation {
 		}
 
 		// can return an INativeObject or an NSObject
-		public T GetItem<T> (nuint index) where T : class, INativeObject
+		public T? GetItem<T> (nuint index) where T : class, INativeObject
 		{
 			if (index >= GetCount (Handle))
-				throw new ArgumentOutOfRangeException ("index");
+				throw new ArgumentOutOfRangeException (nameof (index));
 
 			return UnsafeGetItem<T> (Handle, index);
 		}
 
-		public static NSObject[][] FromArrayOfArray (NSArray weakArray)
+		public static NSObject?[][]? FromArrayOfArray (NSArray? weakArray)
 		{
-			if (weakArray == null || weakArray.Handle == IntPtr.Zero)
+			if (weakArray is null || weakArray.Handle == IntPtr.Zero)
 				return null;
 
 			try {
 				nuint n = weakArray.Count;
-				var ret = new NSObject[n][];
-				for (nuint i = 0; i < n; i++)
-					ret [i] = NSArray.FromArray<NSObject> (weakArray.GetItem<NSArray> (i));
+				var ret = new NSObject?[n][];
+				for (nuint i = 0; i < n; i++) {
+					ret [i] = NSArray.FromArray<NSObject> (weakArray.GetItem<NSArray> (i)!)!;
+				}
 				return ret;
 			} catch {
 				return null;
 			}
 		}
 
-		public static NSArray From (NSObject[][] items)
+		public static NSArray? From (NSObject?[][]? items)
 		{
-			if (items == null)
+			if (items is null)
 				return null;
 
 			try {

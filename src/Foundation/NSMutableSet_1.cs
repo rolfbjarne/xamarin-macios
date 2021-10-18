@@ -64,7 +64,7 @@ namespace Foundation {
 		{
 		}
 
-#if !NET
+#if !NET // HACK TEMPORARY
 		public NSMutableSet (nint capacity)
 			: base (capacity)
 		{

@@ -16,7 +16,7 @@ using CoreFoundation;
 namespace CoreGraphics {
 
 	// CGPDFOperatorTable.h
-	public class CGPDFOperatorTable : INativeObject, IDisposable {
+	public class CGPDFOperatorTable : NativeObject {
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFOperatorTableRef */ IntPtr CGPDFOperatorTableCreate ();
@@ -31,45 +31,30 @@ namespace CoreGraphics {
 		delegate void CGPDFOperatorCallback (/* CGPDFScannerRef */ IntPtr scanner, /* void* */ IntPtr info);
 
 		public CGPDFOperatorTable ()
+			: base (CGPDFOperatorTableCreate (), true)
 		{
-			Handle = CGPDFOperatorTableCreate ();
 		}
 
 		public CGPDFOperatorTable (IntPtr handle)
+			: base (handle, false)
 		{
-			CGPDFOperatorTableRetain (handle);
-			Handle = handle;
 		}
 
 		[Preserve (Conditional=true)]
 		internal CGPDFOperatorTable (IntPtr handle, bool owns)
+			 : base (handle, owns)
 		{
-			if (!owns)
-				CGPDFOperatorTableRetain (handle);
-
-			Handle = handle;
 		}
 
-		~CGPDFOperatorTable ()
+		protected override void Retain ()
 		{
-			Dispose (false);
+			CGPDFOperatorTableRetain (GetCheckedHandle ());
 		}
 
-		public void Dispose ()
+		protected override void Release ()
 		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
+			CGPDFOperatorTableRelease (GetCheckedHandle ());
 		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (Handle != IntPtr.Zero) {
-				CGPDFOperatorTableRelease (Handle);
-				Handle = IntPtr.Zero;
-			}
-		}
-
-		public IntPtr Handle { get; private set; }
 
 		// We need this P/Invoke for legacy AOT scenarios (since we have public API taking a 'Action<IntPtr, IntPtr>', and with this particular native function we can't wrap the delegate)
 		// Unfortunately CoreCLR doesn't support generic Action delegates in P/Invokes: https://github.com/dotnet/runtime/issues/32963
@@ -116,8 +101,8 @@ namespace CoreGraphics {
 #endif
 		public void SetCallback (string name, Action<IntPtr,IntPtr> callback)
 		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
+			if (name is null)
+				throw new ArgumentNullException (nameof (name));
 
 			CGPDFOperatorTableSetCallback (Handle, name, callback);
 		}

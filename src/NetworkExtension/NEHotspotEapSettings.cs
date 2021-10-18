@@ -16,7 +16,7 @@ using Foundation;
 namespace NetworkExtension {
 	public partial class NEHotspotEapSettings {
 
-		public NEHotspotConfigurationEapType [] SupportedEapTypes {
+		public NEHotspotConfigurationEapType? []? SupportedEapTypes {
 			get {
 				return NSArray.EnumsFromHandle<NEHotspotConfigurationEapType> (_SupportedEapTypes)!;
 			}

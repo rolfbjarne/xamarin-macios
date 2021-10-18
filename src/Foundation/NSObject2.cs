@@ -489,7 +489,7 @@ namespace Foundation {
 #if MONOMAC
 			Messaging.void_objc_msgSend (handle, Selector.ReleaseHandle);
 #else
-			Messaging.void_objc_msgSend (handle, Selector.GetHandle (Selector.Release));
+			Messaging.void_objc_msgSend (handle, Selector.GetHandle ("release"));
 #endif
 		}
 
@@ -500,7 +500,7 @@ namespace Foundation {
 #if MONOMAC
 			Messaging.void_objc_msgSend (handle, Selector.RetainHandle);
 #else
-			Messaging.void_objc_msgSend (handle, Selector.GetHandle (Selector.Retain));
+			Messaging.void_objc_msgSend (handle, Selector.GetHandle ("retain"));
 #endif
 		}
 			
@@ -519,7 +519,7 @@ namespace Foundation {
 #if MONOMAC
 			Messaging.void_objc_msgSend (handle, Selector.RetainHandle);
 #else
-			Messaging.void_objc_msgSend (handle, Selector.GetHandle (Selector.Retain));
+			Messaging.void_objc_msgSend (handle, Selector.GetHandle ("retain"));
 #endif
 			return this;
 		}

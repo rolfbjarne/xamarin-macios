@@ -1,7 +1,11 @@
 // Copyright 2013 Xamarin Inc. All rights reserved
 
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
+
+using CoreFoundation;
 using ObjCRuntime;
 
 namespace Foundation {
@@ -21,33 +25,43 @@ namespace Foundation {
 		{
 		}
 
+#if !NET
 		public NSZone (IntPtr handle)
 		{
 			this.Handle = handle;
 		}
+#endif
 
 		[Preserve (Conditional = true)]
+#if NET
+		internal NSZone (IntPtr handle, bool owns)
+#else
 		public NSZone (IntPtr handle, bool owns)
-			: this (handle)
+#endif
 		{
 			// NSZone is just an opaque pointer without reference counting, so we ignore the 'owns' parameter.
+			this.Handle = handle;
 		}
 
 		public IntPtr Handle { get; private set; }
 
 #if !COREBUILD
-		public string Name {
+		public string? Name {
 			get {
-				return new NSString (NSZoneName (Handle)).ToString ();
+				return CFString.FromHandle (NSZoneName (Handle));
 			}
 			set {
-				using (var ns = new NSString (value))
-					NSSetZoneName (Handle, ns.Handle);
+				var nsHandle = CFString.CreateNative (value);
+				try {
+					NSSetZoneName (Handle, nsHandle);
+				} finally {
+					CFString.ReleaseNative (nsHandle);
+				}
 			}
 		}
 
 		// note: Copy(NSZone) and MutableCopy(NSZone) with a nil pointer == default
-		public static readonly NSZone Default = new NSZone (NSDefaultMallocZone ());
+		public static readonly NSZone Default = new NSZone (NSDefaultMallocZone (), false);
 #endif
 	}
 }

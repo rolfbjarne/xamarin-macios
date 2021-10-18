@@ -43,7 +43,7 @@ namespace AudioToolbox {
 		Vibrate = 0x00000FFF,
 	}
 
-	public class SystemSound : INativeObject, IDisposable {
+	public class SystemSound : NonRefcountedNativeObject {
 #if MONOMAC
 		// TODO:
 #else
@@ -51,7 +51,6 @@ namespace AudioToolbox {
 #endif
 
 		uint soundId;
-		bool ownsHandle;
 
 		Action? completionRoutine;
 		GCHandle gc_handle;
@@ -60,26 +59,13 @@ namespace AudioToolbox {
 		static readonly AddSystemSoundCompletionCallback SoundCompletionCallback = SoundCompletionShared;
 #endif
 
-		internal SystemSound (uint soundId, bool ownsHandle)
+		internal SystemSound (uint soundId, bool owns)
+			: base (unchecked ((IntPtr) soundId), owns)
 		{
 			this.soundId = soundId;
-			this.ownsHandle = ownsHandle;
 		}
 
 		public SystemSound (uint soundId) : this (soundId, false) {}
-			
-
-		~SystemSound ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				AssertNotDisposed ();
-				return (IntPtr) soundId;
-			}
-		}
 
 		public bool IsUISound {
 			get {
@@ -129,13 +115,7 @@ namespace AudioToolbox {
 				throw new ObjectDisposedException ("SystemSound");
 		}
 
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
+		protected override void Free ()
 		{
 			Cleanup (false);
 		}
@@ -145,7 +125,7 @@ namespace AudioToolbox {
 
 		void Cleanup (bool checkForError)
 		{
-			if (soundId == 0 || !ownsHandle)
+			if (soundId == 0 || !Owns)
 				return;
 
 			if (gc_handle.IsAllocated) {
@@ -290,7 +270,7 @@ namespace AudioToolbox {
 		}
 
 		public SystemSound (NSUrl fileUrl)
-			: this (Create (fileUrl))
+			: this (Create (fileUrl), true)
 		{
 		}
 			

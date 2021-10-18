@@ -42,6 +42,7 @@ using ObjCRuntime;
 using CoreFoundation;
 using Foundation;
 
+
 namespace AudioUnit
 {
 #if !COREBUILD
@@ -297,26 +298,14 @@ namespace AudioUnit
 		public EventValuesStruct EventValues;
 	}
 
-	public class AudioUnit : IDisposable, ObjCRuntime.INativeObject
+	public class AudioUnit : NonRefcountedNativeObject
 	{
-#pragma warning disable 649 // Field 'AudioUnit.handle' is never assigned to, and will always have its default value
-		IntPtr handle;
-#pragma warning restore 649
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-#if COREBUILD
-		public void Dispose () { /* FAKE DURING COREBUILD */ }
-#else
+#if !COREBUILD
 		static readonly CallbackShared CreateRenderCallback = RenderCallbackImpl;
 		static readonly CallbackShared CreateInputCallback = InputCallbackImpl;
 
 		GCHandle gcHandle;
 		bool _isPlaying;
-		bool owns;
 
 		Dictionary<uint, RenderDelegate>? renderer;
 		Dictionary<uint, InputDelegate>? inputs;
@@ -327,10 +316,9 @@ namespace AudioUnit
 		}
 
 		internal AudioUnit (IntPtr ptr, bool owns)
+			: base (ptr, owns)
 		{
-			handle = ptr;
-			gcHandle = GCHandle.Alloc(this);
-			this.owns = owns;
+			gcHandle = GCHandle.Alloc (this);
 		}
 
 		static IntPtr Create (AudioComponent component)
@@ -352,7 +340,7 @@ namespace AudioUnit
 
 		public AudioComponent Component {
 			get {
-				return new AudioComponent (AudioComponentInstanceGetComponent (Handle));
+				return new AudioComponent (AudioComponentInstanceGetComponent (Handle), false);
 			}
 		}
 
@@ -798,33 +786,25 @@ namespace AudioUnit
 			return AudioUnitScheduleParameters (Handle, inParameterEvent, inNumParamEvents);
 		}
 
-		public void Dispose()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-		
 		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int AudioComponentInstanceDispose(IntPtr inInstance);
 
-		protected virtual void Dispose (bool disposing)
+		protected override void Free ()
 		{
-			if (Handle != IntPtr.Zero) {
-				if (owns) {
-					Stop ();
-					AudioUnitUninitialize (Handle);
-					AudioComponentInstanceDispose (Handle);
-				}
-				gcHandle.Free();
-				handle = IntPtr.Zero;
+			if (Handle != IntPtr.Zero && Owns) {
+				Stop ();
+				AudioUnitUninitialize (Handle);
+				AudioComponentInstanceDispose (Handle);
 			}
+			if (gcHandle.IsAllocated)
+				gcHandle.Free ();
 		}
 
 		internal IntPtr GetCheckedHandle ()
 		{
-			if (handle == IntPtr.Zero)
+			if (Handle == IntPtr.Zero)
 				ObjCRuntime.ThrowHelper.ThrowObjectDisposedException (this);
-			return handle;
+			return Handle;
 		}
 
 		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentInstanceNew")]

@@ -18,6 +18,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 #if IOS
@@ -204,44 +205,21 @@ namespace AudioToolbox {
 	}
 #endif
 	
-	public class MusicTrack : INativeObject
-#if !COREBUILD
-	, IDisposable
-#endif
+	public class MusicTrack : NonRefcountedNativeObject
 	{
 #if !COREBUILD
 		MusicSequence? sequence;
-		IntPtr handle;
-		bool owns;
 
 		internal MusicTrack (MusicSequence sequence, IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
 			this.sequence = sequence;
-			this.handle = handle;
-			this.owns = owns;
 		}
 
-		~MusicTrack ()
+		protected override void Free ()
 		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				if (owns && sequence is not null)
-					MusicSequenceDisposeTrack (sequence.Handle, handle);
-				handle = IntPtr.Zero;
+			if (Handle != IntPtr.Zero && Owns) {
+				MusicSequenceDisposeTrack (sequence.Handle, Handle);
 			}
 			sequence = null;
 		}

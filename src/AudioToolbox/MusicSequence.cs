@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 #if !COREBUILD
@@ -36,15 +37,12 @@ namespace AudioToolbox {
 #endif
 
 	// MusicPlayer.h
-	public class MusicSequence : INativeObject
-#if !COREBUILD
-		, IDisposable
-#endif
+	public class MusicSequence : NonRefcountedNativeObject
 		{
 #if !COREBUILD
-		IntPtr handle;
-		internal MusicSequence (IntPtr handle) {
-			this.handle = handle;
+		internal MusicSequence (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
 
 		static Dictionary <IntPtr, MusicSequenceUserCallback> userCallbackHandles = new Dictionary <IntPtr, MusicSequenceUserCallback> (Runtime.IntPtrEqualityComparer);
@@ -57,29 +55,22 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus DisposeMusicSequence (/* MusicSequence */ IntPtr inSequence);
 		
-		public MusicSequence ()
+		static IntPtr Create ()
 		{
-			NewMusicSequence (out handle);
-			lock (sequenceMap)
-				sequenceMap [handle] = new WeakReference (this);
-		}
-		
-		~MusicSequence ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
+			var rv = NewMusicSequence (out var handle);
+			if (rv != 0)
+				throw new Exception ("Unable to create MusicSequence: " + rv);
+			return handle;
 		}
 
-		public IntPtr Handle {
-			get { return handle; }
+		public MusicSequence ()
+			: base (Create (), true)
+		{
+			lock (sequenceMap)
+				sequenceMap [base.Handle] = new WeakReference (this);
 		}
-	
-		protected virtual void Dispose (bool disposing)
+
+		protected override void Free ()
 		{
 			if (Handle != IntPtr.Zero){
 
@@ -93,7 +84,6 @@ namespace AudioToolbox {
 				lock (sequenceMap){
 					sequenceMap.Remove (Handle);
 				}
-				handle = IntPtr.Zero;
 			}
 		}
 
@@ -109,7 +99,7 @@ namespace AudioToolbox {
 					}
 					sequenceMap.Remove (handle);
 				}
-				var ms = new MusicSequence (handle);
+				var ms = new MusicSequence (handle, false);
 				sequenceMap [handle] = new WeakReference (ms);
 				return ms;
 			}

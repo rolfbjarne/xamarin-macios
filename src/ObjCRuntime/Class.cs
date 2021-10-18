@@ -14,13 +14,14 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using Foundation;
 #if !COREBUILD
 using Registrar;
 #endif
 
 namespace ObjCRuntime {
-	public partial class Class : INativeObject
+	public partial class Class : NonRefcountedNativeObject
 #if !COREBUILD
 	, IEquatable<Class>
 #endif
@@ -58,21 +59,20 @@ namespace ObjCRuntime {
 		}
 
 		public Class (string name)
+			: base (objc_getClass (name), false)
 		{
-			this.handle = objc_getClass (name);
-
-			if (this.handle == IntPtr.Zero)
+			if (Handle == IntPtr.Zero)
 				throw new ArgumentException (String.Format ("'{0}' is an unknown class", name));
 		}
 
 		public Class (Type type)
+			: base (GetClassHandle (type), false)
 		{
-			this.handle = GetClassHandle (type);
 		}
 
 		public Class (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		[Preserve (Conditional = true)]
@@ -81,13 +81,18 @@ namespace ObjCRuntime {
 #else
 		public Class (IntPtr handle, bool owns)
 #endif
+			: base (handle, owns)
 		{
-			// Class(es) can't be freed, so we ignore the 'owns' parameter.
-			this.handle = handle;
 		}
 
-		public IntPtr Handle {
-			get { return this.handle; }
+		protected override void Free ()
+		{
+			// Nothing to do here
+		}
+
+		internal static Class Construct (IntPtr handle) 
+		{
+			return new Class (handle);
 		}
 
 		public IntPtr SuperClass {
@@ -203,7 +208,7 @@ namespace ObjCRuntime {
 			return Lookup (@class.Handle, true)!;
 		}
 
-		internal static Type Lookup (IntPtr klass)
+		internal static Type? Lookup (IntPtr klass)
 		{
 			return LookupClass (klass, true)!;
 		}
@@ -638,6 +643,12 @@ namespace ObjCRuntime {
 		internal struct objc_attribute_prop {
 			[MarshalAs (UnmanagedType.LPStr)] internal string name;
 			[MarshalAs (UnmanagedType.LPStr)] internal string value;
+		}
+
+		[Obsolete ("FIXME", error: true)]
+		internal static string GetName (IntPtr @class)
+		{
+			return Marshal.PtrToStringAuto (class_getName (@class));
 		}
 #endif // !COREBUILD
 	}

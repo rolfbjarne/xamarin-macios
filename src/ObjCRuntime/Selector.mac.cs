@@ -33,8 +33,8 @@ namespace ObjCRuntime {
 		internal static readonly IntPtr InitWithCoder = Selector.GetHandle ("initWithCoder:");
 
 		internal static IntPtr AllocHandle = Selector.GetHandle (Alloc);
-		internal static IntPtr ReleaseHandle = Selector.GetHandle (Release);
-		internal static IntPtr RetainHandle = Selector.GetHandle (Retain);
+		internal static IntPtr ReleaseHandle = Selector.GetHandle ("release");
+		internal static IntPtr RetainHandle = Selector.GetHandle ("retain");
 		internal static IntPtr AutoreleaseHandle = Selector.GetHandle (Autorelease);
 		internal static IntPtr DoesNotRecognizeSelectorHandle = Selector.GetHandle (DoesNotRecognizeSelector);
 		internal static IntPtr PerformSelectorOnMainThreadWithObjectWaitUntilDoneHandle = GetHandle (PerformSelectorOnMainThreadWithObjectWaitUntilDone);

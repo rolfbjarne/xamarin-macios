@@ -110,14 +110,17 @@ namespace Security {
 		Default = 1953261156,
 	}
 
-	public class SecKeyChain : INativeObject {
+	public class SecKeyChain : NonRefcountedNativeObject {
 
-		internal SecKeyChain (IntPtr handle)
+		internal SecKeyChain (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			Handle = handle;
 		}
 
-		public IntPtr Handle { get; internal set; }
+		protected override void Free ()
+		{
+			// Nothing to do here?
+		}
 
 		static NSNumber? SetLimit (NSMutableDictionary dict, int max)
 		{
@@ -636,29 +639,29 @@ namespace Security {
 
 		internal SecRecord (NSMutableDictionary dict)
 		{
-			queryDict = dict;
+			_queryDict = (NSMutableDictionary) dict.MutableCopy ();
 		}
 
 		// it's possible to query something without a class
 		public SecRecord ()
 		{
-			queryDict = new NSMutableDictionary ();
+			_queryDict = new NSMutableDictionary ();
 		}
 
 		public SecRecord (SecKind secKind)
 		{
 			var kind = SecClass.FromSecKind (secKind);
 #if MONOMAC
-			queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
+			_queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
 #elif WATCH
-			queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
+			_queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
 #else
 			// Apple changed/fixed this in iOS7 (not the only change, see comments above)
 			// test suite has a test case that needs to work on both pre-7.0 and post-7.0
 			if ((kind == SecClass.Identity) && !SystemVersion.CheckiOS (7,0))
-				queryDict = new NSMutableDictionary ();
+				_queryDict = new NSMutableDictionary ();
 			else
-				queryDict = NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey);
+				_queryDict = (NSMutableDictionary) NSMutableDictionary.LowlevelFromObjectAndKey (kind, SecClass.SecClassKey).MutableCopy ();
 #endif
 		}
 

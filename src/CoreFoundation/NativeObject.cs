@@ -29,8 +29,8 @@ namespace CoreFoundation {
 	// systems.
 	//
 	public abstract class NativeObject : INativeObject, IDisposable {
-		IntPtr handle;
-		public IntPtr Handle {
+		NativeHandle handle;
+		public NativeHandle Handle {
 			get => handle;
 			protected set => InitializeHandle (value);
 		}
@@ -83,7 +83,7 @@ namespace CoreFoundation {
 		// https://developer.apple.com/documentation/corefoundation/1521153-cfrelease
 		protected virtual void Release () => CFObject.CFRelease (GetCheckedHandle ());
 
-		void InitializeHandle (IntPtr handle, bool verify)
+		void InitializeHandle (NativeHandle handle, bool verify)
 		{
 #if !COREBUILD
 			if (verify && handle == IntPtr.Zero && Class.ThrowOnInitFailure) {
@@ -104,6 +104,45 @@ namespace CoreFoundation {
 			if (handle == IntPtr.Zero)
 				ObjCRuntime.ThrowHelper.ThrowObjectDisposedException (this);
 			return handle;
+		}
+	}
+
+	public abstract class NonRefcountedNativeObject : NativeObject {
+		readonly bool owns;
+
+		protected bool Owns { get => owns; }
+
+#if COREBUILD
+		protected NonRefcountedNativeObject () {} // Make it so that constructors in subclasses can stay inside a !COREBUILD block
+#endif
+
+		protected NonRefcountedNativeObject (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
+			this.owns = owns;
+		}
+
+		protected sealed override void Retain ()
+		{
+			// Nothing to do here
+		}
+
+		protected sealed override void Release ()
+		{
+			// Nothing to do here
+		}
+
+#if COREBUILD
+		protected virtual void Free () {} // Make this optional for COREBUILD
+#else
+		protected abstract void Free ();
+#endif
+
+		// Handle will be Zero after this call
+		protected override void Dispose (bool disposing)
+		{
+			Free ();
+			base.Dispose (disposing);
 		}
 	}
 }

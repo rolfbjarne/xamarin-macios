@@ -28,6 +28,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -45,56 +47,21 @@ namespace CoreFoundation {
 	};
 
 	// CFURL.h
-	public class CFUrl
-#if !COREBUILD
-		: INativeObject, IDisposable
-#endif
+	public class CFUrl : NativeObject
 	{
 #if !COREBUILD
-		internal IntPtr handle;
-
-		~CFUrl ()
-		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-		
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
-
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFURLRef */ IntPtr CFURLCreateWithFileSystemPath (/* CFAllocatorRef */ IntPtr allocator, 
 			/* CFStringRef */ IntPtr filePath, 
 			/* CFURLPathStyle */ nint pathStyle, 
 			/* Boolean */ [MarshalAs (UnmanagedType.I1)] bool isDirectory);
 		
-		internal CFUrl (IntPtr handle)
+		internal CFUrl (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
 		}
 		
-		internal CFUrl (IntPtr handle, bool owned)
-		{
-			if (!owned)
-				CFObject.CFRetain (handle);
-			this.handle = handle;
-		}
-		
-		static public CFUrl FromFile (string filename)
+		static public CFUrl? FromFile (string filename)
 		{
 			using (var str = new CFString (filename)){
 				IntPtr handle = CFURLCreateWithFileSystemPath (IntPtr.Zero, str.Handle, (nint)(long)CFUrlPathStyle.POSIX, false);
@@ -109,7 +76,7 @@ namespace CoreFoundation {
 			/* CFStringRef */ IntPtr URLString, 
 			/* CFStringRef */ IntPtr baseURL);
 
-		static public CFUrl FromUrlString (string url, CFUrl baseurl)
+		static public CFUrl? FromUrlString (string url, CFUrl? baseurl)
 		{
 			// CFString ctor will throw an ANE if null
 			using (var str = new CFString (url)){
@@ -117,7 +84,7 @@ namespace CoreFoundation {
 			}
 		}
 
-		internal static CFUrl FromStringHandle (IntPtr cfstringHandle, CFUrl baseurl)
+		internal static CFUrl? FromStringHandle (IntPtr cfstringHandle, CFUrl baseurl)
 		{
 			IntPtr handle = CFURLCreateWithString (IntPtr.Zero, cfstringHandle, baseurl != null ? baseurl.Handle : IntPtr.Zero);
 			if (handle == IntPtr.Zero)
@@ -130,7 +97,7 @@ namespace CoreFoundation {
 		
 		public override string ToString ()
 		{
-			using (var str = new CFString (CFURLGetString (handle))) {
+			using (var str = new CFString (CFURLGetString (Handle))) {
 				return str.ToString ();
 			}
 		}
@@ -141,7 +108,7 @@ namespace CoreFoundation {
 		
 		public string FileSystemPath {
 			get {
-				return GetFileSystemPath (handle);
+				return GetFileSystemPath (Handle);
 			}
 		}
 
@@ -163,7 +130,7 @@ namespace CoreFoundation {
 #endif
 		public bool IsFileReference {
 			get {
-				return CFURLIsFileReferenceURL (handle);
+				return CFURLIsFileReferenceURL (Handle);
 			}
 		}
 		

@@ -11,15 +11,14 @@
 // Authors: miguel de icaza
 //
 #if COREBUILD
+using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 using System;
 namespace AddressBook {
-	public class ABAddressBook : INativeObject {
-		public IntPtr Handle { get; set; }
+	public class ABAddressBook : NativeObject {
 	}
 	public class ABRecord : INativeObject {
-		public IntPtr Handle { get; set; }
 	}
 	public class ABPerson : ABRecord {
 	}

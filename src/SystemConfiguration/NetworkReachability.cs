@@ -41,9 +41,7 @@ namespace SystemConfiguration {
 	}
 	
 	// http://developer.apple.com/library/ios/#documentation/SystemConfiguration/Reference/SCNetworkReachabilityRef/Reference/reference.html
-	public class NetworkReachability : INativeObject, IDisposable {
-		internal IntPtr handle;
-
+	public class NetworkReachability : NativeObject {
 		// netinet/in.h
 		[StructLayout (LayoutKind.Explicit, Size = 28)]
 		struct sockaddr_in {
@@ -126,75 +124,68 @@ namespace SystemConfiguration {
 			/* const struct sockaddr * __nullable */ ref sockaddr_in localAddress, 
 			/* const struct sockaddr * __nullable */ IntPtr remoteAddress);
 		
-		public NetworkReachability (IPAddress ip)
+		static IntPtr CheckFailure (IntPtr handle)
+		{
+			if (handle == IntPtr.Zero)
+				throw SystemConfigurationException.FromMostRecentCall ();
+			return handle;
+		}
+
+		static IntPtr Create (IPAddress ip)
 		{
 			if (ip == null)
-				throw new ArgumentNullException ("ip");
-				
+				throw new ArgumentNullException (nameof (ip));
+
 			var s = new sockaddr_in (ip);
-			handle = SCNetworkReachabilityCreateWithAddress (IntPtr.Zero, ref s);
-			if (handle == IntPtr.Zero)
-				throw SystemConfigurationException.FromMostRecentCall ();
+			return CheckFailure (SCNetworkReachabilityCreateWithAddress (IntPtr.Zero, ref s));
 		}
-		
-		public NetworkReachability (string address)
+
+		public NetworkReachability (IPAddress ip)
+			: base (Create (ip), true)
+		{
+		}
+
+		static IntPtr Create (string address)
 		{
 			if (address == null)
-				throw new ArgumentNullException ("address");
-			
-			handle = SCNetworkReachabilityCreateWithName (IntPtr.Zero, address);
-			if (handle == IntPtr.Zero)
-				throw SystemConfigurationException.FromMostRecentCall ();
+				throw new ArgumentNullException (nameof (address));
+
+			return CheckFailure (SCNetworkReachabilityCreateWithName (IntPtr.Zero, address));
 		}
-		
-		public NetworkReachability (IPAddress localAddress, IPAddress remoteAddress)
+
+		public NetworkReachability (string address)
+			: base (Create (address), true)
+		{
+		}
+
+		static IntPtr Create (IPAddress localAddress, IPAddress remoteAddress)
 		{
 			if (localAddress == null && remoteAddress == null)
 				throw new ArgumentException ("At least one address is required");
-				
+
+			IntPtr handle;
 			if (localAddress == null) {
 				var remote = new sockaddr_in (remoteAddress);
-				
+
 				handle = SCNetworkReachabilityCreateWithAddressPair (IntPtr.Zero, IntPtr.Zero, ref remote);
 			} else if (remoteAddress == null) {
 				var local = new sockaddr_in (localAddress);
-				
+
 				handle = SCNetworkReachabilityCreateWithAddressPair (IntPtr.Zero, ref local, IntPtr.Zero);
 			} else {
 				var local = new sockaddr_in (localAddress);
 				var remote = new sockaddr_in (remoteAddress);
-			
+
 				handle = SCNetworkReachabilityCreateWithAddressPair (IntPtr.Zero, ref local, ref remote);
 			}
-			
-			if (handle == IntPtr.Zero)
-				throw SystemConfigurationException.FromMostRecentCall ();
+
+			return CheckFailure (handle);
+		}
+
+		public NetworkReachability (IPAddress localAddress, IPAddress remoteAddress)
+			: base (Create (localAddress, remoteAddress), true)
+		{
 		} 
-
-		~NetworkReachability ()
-		{
-			Dispose (false);
-		}
-
-		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
-		}
 
 		[DllImport (Constants.SystemConfigurationLibrary)]
 		static extern int SCNetworkReachabilityGetFlags (/* SCNetworkReachabilityRef __nonnull */ IntPtr target, 
@@ -207,7 +198,7 @@ namespace SystemConfiguration {
 		
 		public StatusCode GetFlags (out NetworkReachabilityFlags flags)
 		{
-			return SCNetworkReachabilityGetFlags (handle, out flags) == 0 ?
+			return SCNetworkReachabilityGetFlags (Handle, out flags) == 0 ?
 				StatusCodeError.SCError () : StatusCode.OK;
 		}
 
@@ -257,13 +248,13 @@ namespace SystemConfiguration {
 						callouth = Callback;
 				}
 				
-				if (!SCNetworkReachabilitySetCallback (handle, callouth, ref ctx))
+				if (!SCNetworkReachabilitySetCallback (Handle, callouth, ref ctx))
 					return StatusCodeError.SCError ();
 			} else {
 				if (callback == null){
 					this.notification = null;
 					callouth = null;
-					if (!SCNetworkReachabilitySetCallback (handle, null, IntPtr.Zero))
+					if (!SCNetworkReachabilitySetCallback (Handle, null, IntPtr.Zero))
 						return StatusCodeError.SCError ();
 					
 					return StatusCode.OK;
@@ -287,7 +278,7 @@ namespace SystemConfiguration {
 
 			// new CFString already does a null check			
 			using (var cfstring = new CFString (mode)){
-				return SCNetworkReachabilityScheduleWithRunLoop (handle, runLoop.Handle, cfstring.Handle);
+				return SCNetworkReachabilityScheduleWithRunLoop (Handle, runLoop.Handle, cfstring.Handle);
 			}
 		}
 
@@ -308,7 +299,7 @@ namespace SystemConfiguration {
 				throw new ArgumentNullException ("mode");
 			
 			using (var cfstring = new CFString (mode)){
-				return SCNetworkReachabilityUnscheduleFromRunLoop (handle, runLoop.Handle, cfstring.Handle) != 0;
+				return SCNetworkReachabilityUnscheduleFromRunLoop (Handle, runLoop.Handle, cfstring.Handle) != 0;
 			}
 		}
 
@@ -325,7 +316,7 @@ namespace SystemConfiguration {
 
 		public bool SetDispatchQueue (DispatchQueue queue)
 		{
-			return SCNetworkReachabilitySetDispatchQueue (handle, queue == null ? IntPtr.Zero : queue.Handle);
+			return SCNetworkReachabilitySetDispatchQueue (Handle, queue.GetCheckedHandle ());
 		}
 	}
 }

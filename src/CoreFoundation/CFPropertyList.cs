@@ -14,7 +14,7 @@ using Foundation;
 
 namespace CoreFoundation
 {
-	public class CFPropertyList : INativeObject, IDisposable
+	public class CFPropertyList : NativeObject
 	{
 		static nint CFDataTypeID = CFData.GetTypeID ();
 		static nint CFStringTypeID = CFString.GetTypeID ();
@@ -32,16 +32,9 @@ namespace CoreFoundation
 
 		static nint CFNumberTypeID = CFNumberGetTypeID ();
 
-		IntPtr handle;
-		public IntPtr Handle {
-			get { return handle; }
-		}
-
 		public CFPropertyList (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			this.handle = handle;
-			if (owns == false)
-				CFObject.CFRetain (handle);
 		}
 
 		public CFPropertyList (IntPtr handle) : this (handle, false)
@@ -72,7 +65,7 @@ namespace CoreFoundation
 
 		public CFPropertyList DeepCopy (CFPropertyListMutabilityOptions options = CFPropertyListMutabilityOptions.MutableContainersAndLeaves)
 		{
-			return new CFPropertyList (CFPropertyListCreateDeepCopy (IntPtr.Zero, handle, (nuint) (ulong) options), owns: true);
+			return new CFPropertyList (CFPropertyListCreateDeepCopy (IntPtr.Zero, Handle, (nuint) (ulong) options), owns: true);
 		}
 
 		[DllImport (Constants.CoreFoundationLibrary)]
@@ -81,7 +74,7 @@ namespace CoreFoundation
 		public (NSData Data, NSError Error) AsData (CFPropertyListFormat format = CFPropertyListFormat.BinaryFormat1)
 		{
 			IntPtr error;
-			var x = CFPropertyListCreateData (IntPtr.Zero, handle, (nint) (long) format, 0, out error);
+			var x = CFPropertyListCreateData (IntPtr.Zero, Handle, (nint) (long) format, 0, out error);
 			if (x == IntPtr.Zero)
 				return (null, new NSError (error));
 			return (Runtime.GetNSObject<NSData> (x, owns: true), null);
@@ -93,50 +86,31 @@ namespace CoreFoundation
 
 		public bool IsValid (CFPropertyListFormat format)
 		{
-			return CFPropertyListIsValid (handle, (nint) (long) format);
-		}
-
-		~CFPropertyList ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero) {
-				CFObject.CFRelease (handle);
-				handle = IntPtr.Zero;
-			}
+			return CFPropertyListIsValid (Handle, (nint) (long) format);
 		}
 
 		public object Value {
 			get {
-				if (handle == IntPtr.Zero) {
+				if (Handle == IntPtr.Zero) {
 					return null;
 				}
 
-				var typeid = CFType.GetTypeID (handle);
+				var typeid = CFType.GetTypeID (Handle);
 
 				if (typeid == CFDataTypeID) {
-					return Runtime.GetNSObject<NSData> (handle);
+					return Runtime.GetNSObject<NSData> (Handle);
 				} else if (typeid == CFStringTypeID) {
-					return Runtime.GetNSObject<NSString> (handle);
+					return Runtime.GetNSObject<NSString> (Handle);
 				} else if (typeid == CFArrayTypeID) {
-					return Runtime.GetNSObject<NSArray> (handle);
+					return Runtime.GetNSObject<NSArray> (Handle);
 				} else if (typeid == CFDictionaryTypeID) {
-					return Runtime.GetNSObject<NSDictionary> (handle);
+					return Runtime.GetNSObject<NSDictionary> (Handle);
 				} else if (typeid == CFDateTypeID) {
-					return Runtime.GetNSObject<NSDate> (handle);
+					return Runtime.GetNSObject<NSDate> (Handle);
 				} else if (typeid == CFBooleanTypeID) {
-					return (bool) Runtime.GetNSObject<NSNumber> (handle);
+					return (bool) Runtime.GetNSObject<NSNumber> (Handle);
 				} else if (typeid == CFNumberTypeID) {
-					return Runtime.GetNSObject<NSNumber> (handle);
+					return Runtime.GetNSObject<NSNumber> (Handle);
 				}
 
 				return null;

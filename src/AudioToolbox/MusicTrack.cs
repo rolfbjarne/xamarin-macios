@@ -16,6 +16,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 #if IOS
@@ -190,44 +191,21 @@ namespace AudioToolbox {
 	}
 #endif
 	
-	public class MusicTrack : INativeObject
-#if !COREBUILD
-	, IDisposable
-#endif
+	public class MusicTrack : NonRefcountedNativeObject
 	{
 #if !COREBUILD
 		MusicSequence sequence;
-		IntPtr handle;
-		bool owns;
 
 		internal MusicTrack (MusicSequence sequence, IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
 			this.sequence = sequence;
-			this.handle = handle;
-			this.owns = owns;
 		}
 
-		~MusicTrack ()
+		protected override void Free ()
 		{
-			Dispose (false);
-		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		public IntPtr Handle {
-			get { return handle; }
-		}
-	
-		protected virtual void Dispose (bool disposing)
-		{
-			if (handle != IntPtr.Zero){
-				if (owns)
-					MusicSequenceDisposeTrack (sequence.Handle, handle);
-				handle = IntPtr.Zero;
+			if (Handle != IntPtr.Zero && Owns) {
+				MusicSequenceDisposeTrack (sequence.Handle, Handle);
 			}
 			sequence = null;
 		}
@@ -249,7 +227,7 @@ namespace AudioToolbox {
 			get {
 				IntPtr seqHandle;
 				
-				if (MusicTrackGetSequence (handle, out seqHandle) == MusicPlayerStatus.Success)
+				if (MusicTrackGetSequence (Handle, out seqHandle) == MusicPlayerStatus.Success)
 					return MusicSequence.Lookup (seqHandle);
 				return null;
 			}
@@ -261,7 +239,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus SetDestMidiEndpoint (MidiEndpoint endpoint)
 		{
-			return MusicTrackSetDestMIDIEndpoint (handle, endpoint == null ? MidiObject.InvalidRef : endpoint.MidiHandle);
+			return MusicTrackSetDestMIDIEndpoint (Handle, endpoint == null ? MidiObject.InvalidRef : endpoint.MidiHandle);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -270,7 +248,7 @@ namespace AudioToolbox {
 		public MusicPlayerStatus GetDestMidiEndpoint (out MidiEndpoint outEndpoint)
 		{
 			MidiEndpointRef midiHandle; 
-			var result = MusicTrackGetDestMIDIEndpoint (handle, out midiHandle);
+			var result = MusicTrackGetDestMIDIEndpoint (Handle, out midiHandle);
 			outEndpoint = (result == MusicPlayerStatus.Success)? new MidiEndpoint (midiHandle): null;
 			return result;
 		}
@@ -281,7 +259,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus SetDestNode (int node)
 		{
-			return MusicTrackSetDestNode (handle, node);
+			return MusicTrackSetDestNode (Handle, node);
 		}
 		
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -312,13 +290,13 @@ namespace AudioToolbox {
 				byte val;
 				unsafe {
 					int len = 1;
-					MusicTrackGetProperty (handle, SequenceTrackProperty.MuteStatus, &val, ref len);
+					MusicTrackGetProperty (Handle, SequenceTrackProperty.MuteStatus, &val, ref len);
 					return val != 0;
 				}
 			}
 			set {
 				unsafe {
-					MusicTrackSetProperty (handle, SequenceTrackProperty.MuteStatus, &value, 1);
+					MusicTrackSetProperty (Handle, SequenceTrackProperty.MuteStatus, &value, 1);
 				}
 			}
 		}
@@ -328,13 +306,13 @@ namespace AudioToolbox {
 				byte val;
 				unsafe {
 					int len = 1;
-					MusicTrackGetProperty (handle, SequenceTrackProperty.SoloStatus, &val, ref len);
+					MusicTrackGetProperty (Handle, SequenceTrackProperty.SoloStatus, &val, ref len);
 					return val != 0;
 				}
 			}
 			set {
 				unsafe {
-					MusicTrackSetProperty (handle, SequenceTrackProperty.SoloStatus, &value, 1);
+					MusicTrackSetProperty (Handle, SequenceTrackProperty.SoloStatus, &value, 1);
 				}
 			}
 		}
@@ -343,11 +321,11 @@ namespace AudioToolbox {
 			get {
 				double value = 0;
 				int len = sizeof (double);
-				MusicTrackGetProperty (handle, SequenceTrackProperty.TrackLength, ref value, ref len);
+				MusicTrackGetProperty (Handle, SequenceTrackProperty.TrackLength, ref value, ref len);
 				return value;
 			}
 			set {
-				MusicTrackSetProperty (handle, SequenceTrackProperty.TrackLength, ref value, sizeof (double));	
+				MusicTrackSetProperty (Handle, SequenceTrackProperty.TrackLength, ref value, sizeof (double));	
 			}
 		}
 		
@@ -356,7 +334,7 @@ namespace AudioToolbox {
 
 		public unsafe MusicPlayerStatus AddMidiNoteEvent (double timeStamp, MidiNoteMessage message)
 		{
-			return MusicTrackNewMIDINoteEvent (handle, timeStamp, &message);
+			return MusicTrackNewMIDINoteEvent (Handle, timeStamp, &message);
 		}
 		
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -364,7 +342,7 @@ namespace AudioToolbox {
 
 		public unsafe MusicPlayerStatus AddMidiChannelEvent (double timestamp, MidiChannelMessage channelMessage)
 		{
-			return MusicTrackNewMIDIChannelEvent (handle, timestamp, &channelMessage);
+			return MusicTrackNewMIDIChannelEvent (Handle, timestamp, &channelMessage);
 		}
 		
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -376,7 +354,7 @@ namespace AudioToolbox {
 				throw new ArgumentNullException ("rawData");
 			
 			var native = rawData.ToUnmanaged ();
-			var r = MusicTrackNewMIDIRawDataEvent (handle, timestamp, native);
+			var r = MusicTrackNewMIDIRawDataEvent (Handle, timestamp, native);
 			Marshal.FreeHGlobal (native);
 			return r;
 		}
@@ -387,7 +365,7 @@ namespace AudioToolbox {
 		public MusicPlayerStatus AddNewExtendedNoteEvent (double timestamp, ExtendedNoteOnEvent evt)
 		{
 			unsafe {
-				return MusicTrackNewExtendedNoteEvent (handle, timestamp, &evt);
+				return MusicTrackNewExtendedNoteEvent (Handle, timestamp, &evt);
 			}
 		}
 
@@ -396,7 +374,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus AddExtendedTempoEvent (double timestamp, double bmp)
 		{
-			return MusicTrackNewExtendedTempoEvent (handle, timestamp, bmp);
+			return MusicTrackNewExtendedTempoEvent (Handle, timestamp, bmp);
 		}
 			      
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -408,7 +386,7 @@ namespace AudioToolbox {
 				throw new ArgumentNullException ("metaEvent");
 			
 			var ptr = metaEvent.ToUnmanaged ();
-			var ret = MusicTrackNewMetaEvent (handle, timestamp, ptr);
+			var ret = MusicTrackNewMetaEvent (Handle, timestamp, ptr);
 			Marshal.FreeHGlobal (ptr);
 			return ret;
 		}
@@ -421,7 +399,7 @@ namespace AudioToolbox {
 			if (userData == null)
 				throw new ArgumentNullException ("userData");
 			var ptr = userData.ToUnmanaged ();
-			var ret = MusicTrackNewUserEvent (handle, timestamp, ptr);
+			var ret = MusicTrackNewUserEvent (Handle, timestamp, ptr);
 			Marshal.FreeHGlobal (ptr);
 			return ret;
 		}
@@ -431,7 +409,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus MoveEvents (double startTime, double endTime, double moveTime)
 		{
-			return MusicTrackMoveEvents (handle, startTime, endTime, moveTime);
+			return MusicTrackMoveEvents (Handle, startTime, endTime, moveTime);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -439,7 +417,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus Clear (double startTime, double endTime)
 		{
-			return MusicTrackClear (handle, startTime, endTime);
+			return MusicTrackClear (Handle, startTime, endTime);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -447,7 +425,7 @@ namespace AudioToolbox {
 
 		public MusicPlayerStatus Cut (double startTime, double endTime)
 		{
-			return MusicTrackCut (handle, startTime, endTime);
+			return MusicTrackCut (Handle, startTime, endTime);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -457,7 +435,7 @@ namespace AudioToolbox {
 		{
 			if (targetTrack == null)
 				throw new ArgumentNullException ("targetTrack");
-			return MusicTrackCopyInsert (handle, sourceStartTime, sourceEndTime, targetTrack.Handle, targetInsertTime);
+			return MusicTrackCopyInsert (Handle, sourceStartTime, sourceEndTime, targetTrack.Handle, targetInsertTime);
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -467,7 +445,7 @@ namespace AudioToolbox {
 		{
 			if (targetTrack == null)
 				throw new ArgumentNullException ("targetTrack");
-			return MusicTrackMerge (handle, sourceStartTime, sourceEndTime, targetTrack.Handle, targetInsertTime);
+			return MusicTrackMerge (Handle, sourceStartTime, sourceEndTime, targetTrack.Handle, targetInsertTime);
 		}
 #endif // !COREBUILD
 

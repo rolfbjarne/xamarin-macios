@@ -27,6 +27,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -244,71 +246,72 @@ namespace AudioUnit
 #endif // !COREBUILD
 
 
-	public class AudioComponent : INativeObject {
+	public class AudioComponent : NonRefcountedNativeObject {
 #if !COREBUILD
-		internal IntPtr handle;
-
-		public IntPtr Handle { get { return handle; } }
-
-		internal AudioComponent(IntPtr handle)
-		{ 
-			this.handle = handle;
+		internal AudioComponent (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
-			
+
+		protected override void Free ()
+		{
+			// Nothing to do here
+		}
+
 		public AudioUnit CreateAudioUnit ()
 		{
 			return new AudioUnit (this);
 		}
 
-		public static AudioComponent FindNextComponent (AudioComponent cmp, ref AudioComponentDescription cd)
+		public static AudioComponent? FindNextComponent (AudioComponent? cmp, ref AudioComponentDescription cd)
 		{
-			var handle = cmp == null ? IntPtr.Zero : cmp.Handle;
+			var handle = cmp.GetHandle ();
 			handle = AudioComponentFindNext (handle, ref cd);
-			return  (handle != IntPtr.Zero) ? new AudioComponent (handle) : null;
+			return  (handle != IntPtr.Zero) ? new AudioComponent (handle, false) : null;
 		}
 
-		public static AudioComponent FindComponent (ref AudioComponentDescription cd)
+		public static AudioComponent? FindComponent (ref AudioComponentDescription cd)
 		{
 			return FindNextComponent (null, ref cd);
 		}
 
-		public static AudioComponent FindComponent (AudioTypeOutput output)
+		public static AudioComponent? FindComponent (AudioTypeOutput output)
 		{
 			var cd = AudioComponentDescription.CreateOutput (output);
 			return FindComponent (ref cd);
 		}
 
-		public static AudioComponent FindComponent (AudioTypeMusicDevice musicDevice)
+		public static AudioComponent? FindComponent (AudioTypeMusicDevice musicDevice)
 		{
 			var cd = AudioComponentDescription.CreateMusicDevice (musicDevice);
 			return FindComponent (ref cd);
 		}
 		
-		public static AudioComponent FindComponent (AudioTypeConverter conveter)
+		public static AudioComponent? FindComponent (AudioTypeConverter conveter)
 		{
 			var cd = AudioComponentDescription.CreateConverter (conveter);
 			return FindComponent (ref cd);
 		}
 		
-		public static AudioComponent FindComponent (AudioTypeEffect effect)
+		public static AudioComponent? FindComponent (AudioTypeEffect effect)
 		{
 			var cd = AudioComponentDescription.CreateEffect (effect);
 			return FindComponent (ref cd);
 		}
 		
-		public static AudioComponent FindComponent (AudioTypeMixer mixer)
+		public static AudioComponent? FindComponent (AudioTypeMixer mixer)
 		{
 			var cd = AudioComponentDescription.CreateMixer (mixer);
 			return FindComponent (ref cd);
 		}
 		
-		public static AudioComponent FindComponent (AudioTypePanner panner)
+		public static AudioComponent? FindComponent (AudioTypePanner panner)
 		{
 			var cd = AudioComponentDescription.CreatePanner (panner);
 			return FindComponent (ref cd);
 		}
 		
-		public static AudioComponent FindComponent (AudioTypeGenerator generator)
+		public static AudioComponent? FindComponent (AudioTypeGenerator generator)
 		{
 			var cd = AudioComponentDescription.CreateGenerator (generator);
 			return FindComponent (ref cd);
@@ -320,10 +323,10 @@ namespace AudioUnit
 		[DllImport(Constants.AudioUnitLibrary, EntryPoint = "AudioComponentCopyName")]
 		static extern int /* OSStatus */ AudioComponentCopyName (IntPtr component, out IntPtr cfstr);
 		
-		public string Name {
+		public string? Name {
 			get {
 				IntPtr r;
-				if (AudioComponentCopyName (handle, out r) == 0)
+				if (AudioComponentCopyName (Handle, out r) == 0)
 					return CFString.FromHandle (r);
 				return null;
 			}
@@ -336,7 +339,7 @@ namespace AudioUnit
 			get {
 				AudioComponentDescription desc;
 
-				if (AudioComponentGetDescription (handle, out desc) == 0)
+				if (AudioComponentGetDescription (Handle, out desc) == 0)
 					return desc;
 
 				return null;
@@ -346,10 +349,10 @@ namespace AudioUnit
 		[DllImport(Constants.AudioUnitLibrary)]
 		static extern int /* OSStatus */ AudioComponentGetVersion (IntPtr component, out int /* UInt32* */ version);
 
-		public Version Version {
+		public Version? Version {
 			get {
 				int ret;
-				if (AudioComponentGetVersion (handle, out ret) == 0)
+				if (AudioComponentGetVersion (Handle, out ret) == 0)
 					return new Version (ret >> 16, (ret >> 8) & 0xff, ret & 0xff);
 
 				return null;
@@ -379,7 +382,7 @@ namespace AudioUnit
 #endif
 		public UIImage CopyIcon ()
 		{
-			var ptr = AudioComponentCopyIcon (handle);
+			var ptr = AudioComponentCopyIcon (Handle);
 			return Runtime.GetNSObject<UIImage> (ptr, owns: true);
 		}
 
@@ -405,7 +408,7 @@ namespace AudioUnit
 #endif
 		public UIKit.UIImage GetIcon (float desiredPointSize)
 		{
-			return new UIKit.UIImage (AudioComponentGetIcon (handle, desiredPointSize));
+			return new UIKit.UIImage (AudioComponentGetIcon (Handle, desiredPointSize));
 		}
 #endif // !__MACCATALYST__
 
@@ -436,7 +439,7 @@ namespace AudioUnit
 #endif
 		public double LastActiveTime {
 			get {
-				return AudioComponentGetLastActiveTime (handle);
+				return AudioComponentGetLastActiveTime (Handle);
 			}
 		}
 #else
@@ -452,7 +455,7 @@ namespace AudioUnit
 #endif
 		public AppKit.NSImage GetIcon ()
 		{
-			return new AppKit.NSImage (AudioComponentGetIcon (handle));
+			return new AppKit.NSImage (AudioComponentGetIcon (Handle));
 		}
 #endif
 
@@ -478,14 +481,14 @@ namespace AudioUnit
 #else
 		[SupportedOSPlatform ("ios11.0")]
 #endif
-		public AudioComponentInfo[] ComponentList {
+		public AudioComponentInfo[]? ComponentList {
 			get {
-				using (var cfString = new CFString (Name)) {
+				using (var cfString = new CFString (Name!)) {
 					var cHandle = AudioUnitExtensionCopyComponentList (cfString.Handle);
 					if (cHandle == IntPtr.Zero)
 						return null;
 					using (var nsArray = Runtime.GetNSObject<NSArray> (cHandle, owns: true)) {
-						if (nsArray == null)
+						if (nsArray is null)
 							return null;
 						// make things easier for developers since we do not know how to have an implicit conversion from NSObject to AudioComponentInfo
 						var dics = NSArray.FromArray <NSDictionary> (nsArray);
@@ -498,9 +501,9 @@ namespace AudioUnit
 				}
 			}
 			set {
-				if (value == null)
+				if (value is null)
 					throw new ArgumentNullException	(nameof	(value));
-				using (var cfString = new CFString (Name)) {
+				using (var cfString = new CFString (Name!)) {
 					var dics = new NSDictionary [value.Length];
 					for (var i = 0; i < value.Length; i++) {
 						dics [i] = value [i].Dictionary;

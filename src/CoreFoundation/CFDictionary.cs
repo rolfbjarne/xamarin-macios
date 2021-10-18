@@ -35,45 +35,22 @@ using ObjCRuntime;
 
 namespace CoreFoundation {
 
-	class CFDictionary : INativeObject, IDisposable {
-		public IntPtr Handle { get; private set; }
-	
+	class CFDictionary : NativeObject {
 		public static IntPtr KeyCallbacks;
 		public static IntPtr ValueCallbacks;
 
 		public CFDictionary (IntPtr handle)
-			: this (handle, false)
+			: base (handle, false)
 		{
 		}
 
 		public CFDictionary (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			if (!owns)
-				CFObject.CFRetain (handle);
-			this.Handle = handle;
 		}
 		
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFDictionaryGetTypeID")]
 		public extern static nint GetTypeID ();
-
-		~CFDictionary ()
-		{
-			Dispose (false);
-		}
-
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (Handle != IntPtr.Zero){
-				CFObject.CFRelease (Handle);
-				Handle = IntPtr.Zero;
-			}
-		}
 
 		static CFDictionary ()
 		{

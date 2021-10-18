@@ -48,5 +48,18 @@ namespace CoreText {
 			var message = string.Format ("Unable to create {0} instance.", self.GetType().Name);
 			return new ArgumentException (message);
 		}
+
+		public static Exception Unknown (Type type)
+		{
+			var message = string.Format ("Unable to create {0} instance.", type.Name);
+			return new ArgumentException (message);
+		}
+
+		public static IntPtr VerifyNonZero (IntPtr handle, string parameterName)
+		{
+			if (handle == IntPtr.Zero)
+				throw new ArgumentNullException (parameterName);
+			return handle;
+		}
 	}
 }

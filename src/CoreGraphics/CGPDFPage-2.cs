@@ -25,10 +25,12 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
+#nullable enable
+
 using System;
 using System.Runtime.InteropServices;
 using ObjCRuntime;
-using Foundation;
 
 namespace CoreGraphics {
 
@@ -45,12 +47,8 @@ namespace CoreGraphics {
 	public partial class CGPDFPage {
 #if !COREBUILD
 		public CGPDFPage (IntPtr handle)
+			: base (handle, false)
 		{
-			if (handle == IntPtr.Zero)
-				throw new Exception ("Invalid parameters to CGPDFPage creation");
-
-			CGPDFPageRetain (handle);
-			this.handle = handle;
 		}
 		
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -58,7 +56,7 @@ namespace CoreGraphics {
 
 		public CGPDFDocument Document {
 			get {
-				return new CGPDFDocument (CGPDFPageGetDocument (handle));
+				return new CGPDFDocument (CGPDFPageGetDocument (Handle));
 			}
 		}
 
@@ -67,7 +65,7 @@ namespace CoreGraphics {
 
 		public nint PageNumber {
 			get {
-				return CGPDFPageGetPageNumber (handle);
+				return CGPDFPageGetPageNumber (Handle);
  			}
 		}
 		
@@ -76,7 +74,7 @@ namespace CoreGraphics {
 
 		public CGRect GetBoxRect (CGPDFBox box)
 		{
-			return CGPDFPageGetBoxRect (handle, box);
+			return CGPDFPageGetBoxRect (Handle, box);
 		}
 		
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -84,7 +82,7 @@ namespace CoreGraphics {
 
 		public int RotationAngle {
 			get {
-				return CGPDFPageGetRotationAngle (handle);
+				return CGPDFPageGetRotationAngle (Handle);
 			}
 		}
 		
@@ -93,7 +91,7 @@ namespace CoreGraphics {
 
 		public CGAffineTransform GetDrawingTransform (CGPDFBox box, CGRect rect, int rotate, bool preserveAspectRatio)
 		{
-			return CGPDFPageGetDrawingTransform (handle, box, rect, rotate, preserveAspectRatio);
+			return CGPDFPageGetDrawingTransform (Handle, box, rect, rotate, preserveAspectRatio);
 		}
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
@@ -101,7 +99,7 @@ namespace CoreGraphics {
 
 		public CGPDFDictionary Dictionary {
 			get {
-				return new CGPDFDictionary (CGPDFPageGetDictionary (handle));
+				return new CGPDFDictionary (CGPDFPageGetDictionary (Handle));
 			}
 		}
 #endif // !COREBUILD

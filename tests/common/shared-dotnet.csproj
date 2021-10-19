@@ -11,7 +11,7 @@
 		<SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 	<ItemGroup Condition="'$(_PlatformName)' == 'iOS'">
-		<PackageReference Include="MonoTouch.Dialog" Version="2.0.0-pre1" />
+		<ProjectReference Include="../../external/MonoTouch.Dialog/MonoTouch.Dialog/$(_PlatformName)/MonoTouch.Dialog.csproj" />
 	</ItemGroup>
 
 	<!-- Logic for tvOS -->
@@ -22,7 +22,7 @@
 		<SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework.EndsWith('-tvos'))">
-		<PackageReference Include="MonoTouch.Dialog" Version="2.0.0-pre1" />
+		<ProjectReference Include="../../external/MonoTouch.Dialog/MonoTouch.Dialog/$(_PlatformName)/MonoTouch.Dialog.csproj" />
 	</ItemGroup>
 
 	<!-- Logic for macOS -->

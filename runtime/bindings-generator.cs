@@ -30,7 +30,6 @@ namespace Xamarin.BindingMethods.Generator
 
 			var fn = args [0];
 
-			var data = GetFunctionData ();
 
 			using (var writer = new StringWriter ()) {
 				writer.WriteLine ("/* This file is generated */");
@@ -43,22 +42,13 @@ namespace Xamarin.BindingMethods.Generator
 				writer.WriteLine ("#endif");
 				writer.WriteLine ();
 
-				foreach (var func in data) {
-					writer.WriteLine (func.Comment);
-					writer.WriteLine ();
-					if ((func.Variants & Variants.msgSend) == Variants.msgSend) {
-						Write_objc_msgSend (writer, func);
-					}
-					if ((func.Variants & Variants.msgSendSuper) == Variants.msgSendSuper) {
-						Write_objc_msgSendSuper (writer, func);
-					}
-					if ((func.Variants & Variants.msgSend_stret) == Variants.msgSend_stret) {
-						Write_objc_msgSend_stret (writer, func);
-					}
-					if ((func.Variants & Variants.msgSendSuper_stret) == Variants.msgSendSuper_stret) {
-						Write_objc_msgSendSuper_stret (writer, func);
-					}
-				}
+				writer.WriteLine ("#if !DOTNET");
+				var data = GetFunctionData ();
+				WriteData (writer, data);
+				writer.WriteLine ("#else");
+				var dotNetData = GetFunctionData (true);
+				WriteData (writer, dotNetData);
+				writer.WriteLine ("#endif // DOTNET");
 
 				writer.WriteLine ("#ifdef __cplusplus");
 				writer.WriteLine ("} /* extern \"C\" */");
@@ -72,9 +62,39 @@ namespace Xamarin.BindingMethods.Generator
 			}
 		}
 
-		static IEnumerable<FunctionData> GetFunctionData ()
+		static void WriteData (StringWriter writer, IEnumerable<FunctionData> data)
+		{
+			var writtenData = new HashSet<string> ();
+			foreach (var func in data) {
+				var funcName = GetFuncName (func, string.Empty);
+				if (!writtenData.Add (funcName)) {
+					Console.WriteLine ("Already generated {0}", funcName);
+					continue;
+				}
+
+				writer.WriteLine (func.Comment);
+				writer.WriteLine ();
+				if ((func.Variants & Variants.msgSend) == Variants.msgSend) {
+					Write_objc_msgSend (writer, func);
+				}
+				if ((func.Variants & Variants.msgSendSuper) == Variants.msgSendSuper) {
+					Write_objc_msgSendSuper (writer, func);
+				}
+				if ((func.Variants & Variants.msgSend_stret) == Variants.msgSend_stret) {
+					Write_objc_msgSend_stret (writer, func);
+				}
+				if ((func.Variants & Variants.msgSendSuper_stret) == Variants.msgSendSuper_stret) {
+					Write_objc_msgSendSuper_stret (writer, func);
+				}
+			}
+		}
+
+		static IEnumerable<FunctionData> GetFunctionData (bool isDotNet = false)
 		{
 			var data = new List<FunctionData> ();
+
+			Types.NInt = isDotNet ? Types.IntPtr : Types.nint;
+			Types.NUInt = isDotNet ? Types.UIntPtr : Types.nuint;
 
 			data.Add (
 				new FunctionData {
@@ -1449,6 +1469,23 @@ namespace Xamarin.BindingMethods.Generator
 					},
 				}
 			);
+
+			if (isDotNet) {
+				data.Add (
+					new FunctionData {
+						Comment = " // IntPtr func (IntPtr, int, UInt32, IntPtr)",
+						Prefix = "simd__",
+						Variants = Variants.NonStret,
+						ReturnType = Types.IntPtr,
+						Parameters = new ParameterData[] {
+							new ParameterData { TypeData = Types.IntPtr },
+							new ParameterData { TypeData = Types.Int32 },
+							new ParameterData { TypeData = Types.UInt32 },
+							new ParameterData { TypeData = Types.IntPtr },
+						},
+					}
+				);
+			}
 
 			data.Add (
 				new FunctionData {
@@ -3347,6 +3384,12 @@ namespace Xamarin.BindingMethods.Generator
 				NativeWrapperType = "void *",
 				RequireMarshal = false,
 			};
+			public static TypeData UIntPtr = new TypeData {
+				ManagedType = "UIntPtr",
+				NativeType = "void *",
+				NativeWrapperType = "void *",
+				RequireMarshal = false,
+			};
 			public static TypeData Float = new TypeData {
 				ManagedType = "float",
 				NativeType = "float",
@@ -3377,18 +3420,20 @@ namespace Xamarin.BindingMethods.Generator
 				NativeWrapperType = "uint64_t",
 				RequireMarshal = false,
 			};
-			public static TypeData NInt = new TypeData {
+			public static TypeData nint = new TypeData {
 				ManagedType = "nint",
 				NativeType = "xm_nint_t",
 				NativeWrapperType = "xm_nint_t",
 				RequireMarshal = false,
 			};
-			public static TypeData NUInt = new TypeData {
+			public static TypeData nuint = new TypeData {
 				ManagedType = "nuint",
 				NativeType = "xm_nuint_t",
 				NativeWrapperType = "xm_nuint_t",
 				RequireMarshal = false,
 			};
+			public static TypeData NInt;
+			public static TypeData NUInt;
 			public static TypeData NFloat = new TypeData {
 				ManagedType = "nfloat",
 				NativeType = "xm_nfloat_t",

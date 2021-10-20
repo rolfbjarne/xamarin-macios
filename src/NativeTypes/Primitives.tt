@@ -28,6 +28,11 @@
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections.Generic" #>
 
+#if NET
+#define SKIP_nint
+#define SKIP_nuint
+#endif
+
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -41,10 +46,8 @@ namespace System
 {
 <#
 	foreach (var type in new [] {
-#if !NET
 		new { NSName = "nint", CilName32 = "Int32", CilName64 = "Int64", IsIntegerType = true },
 		new { NSName = "nuint", CilName32 = "UInt32", CilName64 = "UInt64", IsIntegerType = true },
-#endif
 		new { NSName = "nfloat", CilName32 = "Single", CilName64 = "Double", IsIntegerType = false }
 	}) {
 		var unops = new List<string> { "+" };
@@ -63,6 +66,7 @@ namespace System
 			binops.Add ("^");
 		}
 #>
+#if !SKIP_<#= type.NSName #>
 	[Serializable]
 	[DebuggerDisplay ("{v,nq}")]
 	public unsafe struct <#= type.NSName #> : IFormattable, IConvertible, IComparable, IComparable<<#= type.NSName #>>, IEquatable <<#= type.NSName #>>
@@ -436,5 +440,6 @@ namespace System
 				Marshal.WriteIntPtr (destination, i * <#= type.NSName #>.Size, (IntPtr)source [i + startIndex]);
 		}
 	}
+#endif // !SKIP_<#= type.NSName #>
 <# } #>
 }

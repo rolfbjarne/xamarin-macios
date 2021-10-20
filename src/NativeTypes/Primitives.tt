@@ -38,7 +38,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
+#if NET
+namespace ObjCRuntime
+#else
 namespace System
+#endif
 {
 <#
 	foreach (var type in new [] {

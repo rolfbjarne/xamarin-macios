@@ -137,7 +137,7 @@ namespace Xamarin.Tests {
 			expectedFiles.Add ($"{assemblyDirectory}NoneB.config");
 			expectedFiles.Add ($"{assemblyDirectory}NoneC.pdb");
 			expectedFiles.Add ($"{assemblyDirectory}NoneD.exe");
-			expectedFiles.Add ($"{assemblyDirectory}NoneE.dylib");
+			expectedFiles.Add ($"{assemblyDirectory}libNoneE.dylib");
 			// NoneF.a is not bundled
 			// Sub/NoneG.txt is not bundled
 			// Sub/NoneH.txt is not bundled
@@ -153,10 +153,10 @@ namespace Xamarin.Tests {
 			// UnknownA.bin: None
 			expectedFiles.Add ($"{assemblyDirectory}UnknownB.bin"); // UnknownB.bin: Assembly
 			expectedFiles.Add ($"{resourcesDirectory}UnknownC.bin"); // UnknownC.bin: Resource
-			expectedFiles.Add ($"{frameworksDirectory}UnknownD.bin"); // UnknownD.bin: AppleFramework
+			expectedFiles.Add ($"{frameworksDirectory}/UnknownD.bin"); // UnknownD.bin: AppleFramework
 																	  // UnknownE.bin: CompressedAppleFramework - this should show an error
 																	  // UnknownF.bin: AppleBindingResource // FIXME UNDEFINED
-			expectedFiles.Add ($"{pluginsDirectory}UnknownG.bin"); // UnknownG.bin: PlugIns
+			expectedFiles.Add ($"{pluginsDirectory}/UnknownG.bin"); // UnknownG.bin: PlugIns
 																   // UnknownH.bin: CompressedPlugIns -- this should show an error
 																   // UnknownI.bin: Unknown -- this should show a warning
 			expectedFiles.Add ($"UnknownJ.bin"); // UnknownJ.bin: RootDirectory
@@ -164,19 +164,19 @@ namespace Xamarin.Tests {
 			// SomewhatUnknownA.bin: None
 			expectedFiles.Add ($"{assemblyDirectory}Subfolder/SomewhatUnknownB.bin"); // SomewhatUnknownB.bin: Assembly
 			expectedFiles.Add ($"{resourcesDirectory}Subfolder/SomewhatUnknownC.bin"); // SomewhatUnknownC.bin: Resource
-			expectedFiles.Add ($"{frameworksDirectory}Subfolder/SomewhatUnknownD.bin"); // SomewhatUnknownD.bin: AppleFramework
+			expectedFiles.Add ($"{frameworksDirectory}/Subfolder/SomewhatUnknownD.bin"); // SomewhatUnknownD.bin: AppleFramework
 																						// SomewhatUnknownE.bin: CompressedAppleFramework - this should show an error
 																						// SomewhatUnknownF.bin: AppleBindingResource // FIXME UNDEFINED
-			expectedFiles.Add ($"{pluginsDirectory}Subfolder/SomewhatUnknownG.bin"); // SomewhatUnknownG.bin: PlugIns
-																					// SomewhatUnknownH.bin: CompressedPlugIns -- this should show an error
-																					// SomewhatUnknownI.bin: SomewhatUnknown -- this should show a warning
+			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownG.bin"); // SomewhatUnknownG.bin: PlugIns
+			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownH.bin"); // SomewhatUnknownH.bin: CompressedPlugIns
+																					  // SomewhatUnknownI.bin: SomewhatUnknown -- this should show a warning
 			expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
 
 			expectedFiles.Add ($"{resourcesDirectory}ContentA.txt");
 			expectedFiles.Add ($"{resourcesDirectory}ContentB.txt");
 			expectedFiles.Add ($"{resourcesDirectory}ContentC.txt");
 
-			expectedFiles.Add ($"{resourcesDirectory}EmbeddedResourceA.txt");
+			// expectedFiles.Add ($"{resourcesDirectory}EmbeddedResourceA.txt");
 			expectedFiles.Add ($"{resourcesDirectory}EmbeddedResourceB.txt");
 			expectedFiles.Add ($"{resourcesDirectory}EmbeddedResourceC.txt");
 
@@ -191,13 +191,13 @@ namespace Xamarin.Tests {
 			switch (platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-				AddExpectedFrameworkFiles (platform, expectedFiles, "XTest2");
-				AddExpectedFrameworkFiles (platform, expectedFiles, "XTest3");
+				AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkTest2");
+				AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkTest3");
 				break;
 			}
 
-			AddExpectedFrameworkFiles (platform, expectedFiles, "XTest4");
-			AddExpectedFrameworkFiles (platform, expectedFiles, "XTest5");
+			AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkTest4");
+			AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkTest5");
 
 			expectedFiles.Add ($"{assemblyDirectory}bindings-framework-test.dll");
 			expectedFiles.Add ($"{assemblyDirectory}bindings-framework-test.pdb");
@@ -208,7 +208,8 @@ namespace Xamarin.Tests {
 			expectedFiles.Add ($"{assemblyDirectory}BundleStructure.pdb");
 			expectedFiles.Add ($"{assemblyDirectory}{Configuration.GetBaseLibraryName (platform)}");
 			expectedFiles.Add ($"{assemblyDirectory}runtimeconfig.bin");
-			expectedFiles.Add ($"{frameworksDirectory}");
+			expectedFiles.Add (frameworksDirectory);
+			expectedFiles.Add (pluginsDirectory);
 
 			if (platform == ApplePlatform.MacOSX)
 				expectedFiles.Add ("Contents/MonoBundle/createdump");

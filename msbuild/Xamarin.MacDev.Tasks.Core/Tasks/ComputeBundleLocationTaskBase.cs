@@ -78,7 +78,9 @@ namespace Xamarin.MacDev.Tasks {
 					relativePath = FrameworksDirectory;
 					break;
 				case PublishFolderType.AppleBindingResource:
-					throw new NotImplementedException ();
+					//throw new NotImplementedException ();
+					Console.WriteLine ("NIEX"); // FIXME
+					break;
 				case PublishFolderType.CompressedPlugIns: // FIXME
 					relativePath = PlugInsDirectory;
 					break;
@@ -152,14 +154,16 @@ namespace Xamarin.MacDev.Tasks {
 				return PublishFolderType.Assembly;
 			} else if (filename.EndsWith (".dll.mdb", StringComparison.OrdinalIgnoreCase) || filename.EndsWith (".exe.mdb", StringComparison.OrdinalIgnoreCase)) {
 				return PublishFolderType.Assembly;
+			} else if (filename.EndsWith (".config", StringComparison.OrdinalIgnoreCase)) {
+				return PublishFolderType.Assembly;
 			}
-			if (filename.EndsWith (".config", StringComparison.OrdinalIgnoreCase)) {
-				// If we're publishing any assemblies that matches this .config file, then consider the .config as an assembly file
-				var dllName = Path.ChangeExtension (filename, "dll");
-				var exeName = Path.ChangeExtension (filename, "exe");
-				if (publishedItems.Any (v => string.Equals (v.ItemSpec, dllName, StringComparison.OrdinalIgnoreCase) || string.Equals (v.ItemSpec, exeName, StringComparison.OrdinalIgnoreCase)))
-					return PublishFolderType.Assembly;
-			}
+			//if (filename.EndsWith (".config", StringComparison.OrdinalIgnoreCase)) {
+			//	// If we're publishing any assemblies that matches this .config file, then consider the .config as an assembly file
+			//	var dllName = Path.ChangeExtension (filename, "dll");
+			//	var exeName = Path.ChangeExtension (filename, "exe");
+			//	if (publishedItems.Any (v => string.Equals (v.ItemSpec, dllName, StringComparison.OrdinalIgnoreCase) || string.Equals (v.ItemSpec, exeName, StringComparison.OrdinalIgnoreCase)))
+			//		return PublishFolderType.Assembly;
+			//}
 
 			// Native (xc)frameworks
 			var pathComponents = filename.Split (Path.DirectorySeparatorChar);

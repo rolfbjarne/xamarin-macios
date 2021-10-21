@@ -44,16 +44,16 @@ create-files:
 		echo UnknownB > UnknownB.bin; \
 		echo UnknownC > UnknownC.bin; \
 		echo UnknownD > UnknownD.bin; \
-		echo UnknownE > UnknownE.bin; \
+		echo UnknownE.bin > UnknownE.bin; zip -9 UnknownE.bin.zip UnknownE.bin; mv UnknownE.bin.zip UnknownE.bin; \
 		echo UnknownF > UnknownF.bin; \
 		echo UnknownG > UnknownG.bin; \
-		echo UnknownH > UnknownH.bin; \
+		echo UnknownH.bin > UnknownH.bin; zip -9 UnknownH.bin.zip UnknownH.bin; mv UnknownH.bin.zip UnknownH.bin; \
 		echo UnknownI > UnknownI.bin; \
 		echo UnknownJ > UnknownJ.bin; \
 		echo SomewhatUnknownA > SomewhatUnknownA.bin; \
 		echo SomewhatUnknownB > SomewhatUnknownB.bin; \
 		echo SomewhatUnknownC > SomewhatUnknownC.bin; \
-		echo SomewhatUnknownD.bin > SomewhatUnknownD.bin; zip -9 SomewhatUnknownD.bin.zip SomewhatUnknownD.bin; mv SomewhatUnknownD.bin.zip SomewhatUnknownD.bin; \
+		echo SomewhatUnknownD > SomewhatUnknownD.bin; \
 		echo SomewhatUnknownE.bin > SomewhatUnknownE.bin; zip -9 SomewhatUnknownE.bin.zip SomewhatUnknownE.bin; mv SomewhatUnknownE.bin.zip SomewhatUnknownE.bin; \
 		echo SomewhatUnknownF > SomewhatUnknownF.bin; \
 		echo SomewhatUnknownG > SomewhatUnknownG.bin; \

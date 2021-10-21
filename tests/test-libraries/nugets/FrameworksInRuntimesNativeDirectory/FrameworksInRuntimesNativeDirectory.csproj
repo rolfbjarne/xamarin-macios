@@ -12,9 +12,6 @@
     <XTest2Directory>$(RootTestDirectory)/test-libraries/xtest2</XTest2Directory>
   </PropertyGroup>
 
-
-
-
   <Import Project="..\..\..\..\eng\Versions.props" />
   <!-- Code to automatically create FrameworkList.xml or RuntimeList.xml -->
 
@@ -27,6 +24,10 @@
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.SharedFramework.Sdk" Version="$(MicrosoftDotNetBuildTasksFeedPackageVersion)" />
   <UsingTask TaskName="CreateFrameworkListFile" AssemblyFile="$(DotNetSharedFrameworkTaskFile)"/>
   <UsingTask TaskName="GenerateBuildManifest" AssemblyFile="$(_MicrosoftDotNetBuildTasksFeedTaskDir)Microsoft.DotNet.Build.Tasks.Feed.dll" />
+
+  <PropertyGroup>
+    <PackageType>Dependency</PackageType>
+  </PropertyGroup>
 
   <Target Name="_GenerateFrameworkListFile">
     <!-- https://github.com/dotnet/runtime/blob/0647ec314948904319da5eb15e9931f7c85ed1e2/src/installer/pkg/projects/Directory.Build.targets#L281 -->

@@ -930,7 +930,7 @@ namespace CoreBluetooth {
 		[iOS (7,0)]
 		NSString RestoredStateAdvertisementDataKey { get; }
 
-#if !MONOMAC || !XAMCORE_4_0
+#if !MONOMAC && !XAMCORE_4_0
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'CBManager.Authorization' instead.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Use 'CBManager.Authorization' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'CBManager.Authorization' instead.")]

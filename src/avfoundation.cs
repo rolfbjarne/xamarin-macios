@@ -9901,7 +9901,8 @@ namespace AVFoundation {
 		[NullAllowed, Export ("embeddedThumbnailPhotoFormat", ArgumentSemantic.Copy)]
 		NSDictionary WeakEmbeddedThumbnailPhotoFormat { get; set; }
 
-		[Warp ("WeakEmbeddedThumbnailPhotoFormat")]
+		[iOS (11, 0)]
+		[Wrap ("WeakEmbeddedThumbnailPhotoFormat")]
 		AVCapturePhotoSettingsThumbnailFormat EmbeddedThumbnailPhotoFormat { get; set; }
 #else
 		[iOS (11, 0)]

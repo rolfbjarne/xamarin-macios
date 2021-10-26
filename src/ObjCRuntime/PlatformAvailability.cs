@@ -549,7 +549,11 @@ namespace ObjCRuntime
 	public sealed class MacAttribute : AvailabilityAttribute
 	{
 		public MacAttribute (byte major, byte minor)
+#if XAMCORE_4_0
+			: this (major, minor, 0)
+#else
 			: this (major, minor, 0, false)
+#endif
 		{
 		}
 
@@ -559,15 +563,20 @@ namespace ObjCRuntime
 			: this (major, minor, 0, onlyOn64)
 		{
 		}
-#endif
 		
+		[Obsolete ("Use the overload that takes '(major, minor, subminor)', since macOS is always 64-bit.")]
 		public MacAttribute (byte major, byte minor, PlatformArchitecture arch)
 			: this (major, minor, 0, arch)
 		{
 		}
+#endif
 
 		public MacAttribute (byte major, byte minor, byte subminor)
+#if XAMCORE_4_0
+			: base ((Platform)((ulong)major << 48 | (ulong)minor << 40 | (ulong)subminor << 32))
+#else
 			: this (major, minor, subminor, false)
+#endif
 		{
 		}
 

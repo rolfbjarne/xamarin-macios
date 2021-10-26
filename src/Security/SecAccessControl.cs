@@ -88,7 +88,11 @@ namespace Security {
 #if !NET
 		[iOS (9,0)][Mac (10,12,1)]
 #endif
+#if XAMCORE_4_0
+		ApplicationPassword = 1UL << 31,
+#else
 		ApplicationPassword = 1 << 31,
+#endif
 	}
 	
 #if !NET

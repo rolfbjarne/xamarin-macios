@@ -1418,6 +1418,8 @@ namespace CoreImage {
 		[return: NullAllowed]
 		CIFilter FilterWithName (string name);
 	}
+
+	interface ICIFilterConstructor {}
 	
 	[Static]
 	[iOS (9,0)]

@@ -25,7 +25,11 @@ SOFTWARE.
 using System;
 using System.Runtime.InteropServices;
 
+#if NET
+namespace CoreNumerics
+#else
 namespace OpenTK
+#endif
 {
     /// <summary>
     /// Represents a 4x4 Matrix with double-precision components.

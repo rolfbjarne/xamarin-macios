@@ -25,7 +25,11 @@ SOFTWARE.
 using System;
 using System.Runtime.InteropServices;
 
+#if NET
+namespace CoreNumerics
+#else
 namespace OpenTK
+#endif
 {
     // Todo: Remove this warning when the code goes public.
     #pragma warning disable 3019

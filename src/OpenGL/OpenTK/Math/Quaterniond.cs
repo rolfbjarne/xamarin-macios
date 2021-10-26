@@ -27,7 +27,11 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
+#if NET
+namespace CoreNumerics
+#else
 namespace OpenTK
+#endif
 {
     /// <summary>
     /// Represents a double-precision Quaternion.

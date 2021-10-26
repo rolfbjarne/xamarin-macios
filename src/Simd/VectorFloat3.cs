@@ -12,7 +12,11 @@
 using System;
 using System.Runtime.InteropServices;
 
+#if NET
+namespace CoreNumerics
+#else
 namespace OpenTK
+#endif
 {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct NVector3 : IEquatable<NVector3>

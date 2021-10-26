@@ -13,7 +13,11 @@
 using System;
 using System.Runtime.InteropServices;
 
+#if NET
+namespace CoreNumerics
+#else
 namespace OpenTK
+#endif
 {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct NMatrix2 : IEquatable<NMatrix2>

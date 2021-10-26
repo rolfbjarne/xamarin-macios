@@ -14,7 +14,11 @@ using System.Runtime.InteropServices;
 
 using VectorFloat4=global::OpenTK.Vector4;
 
+#if NET
+namespace CoreNumerics
+#else
 namespace OpenTK
+#endif
 {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct NMatrix4x3 : IEquatable<NMatrix4x3>

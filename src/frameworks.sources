@@ -750,6 +750,7 @@ FOUNDATION_CORE_SOURCES = \
 	Foundation/NSDecimal.cs \
 	Foundation/NSDimension.cs \
 	Foundation/NSError.cs \
+	Foundation/NSMutableDictionary_2.cs \
 	Foundation/NSNumber.mac.cs \
 	Foundation/NSNumber2.cs \
 	Foundation/NSObject2.cs \
@@ -812,7 +813,6 @@ FOUNDATION_SOURCES = \
 	Foundation/NSMutableAttributedString.iOS.cs \
 	Foundation/NSMutableData.cs \
 	Foundation/NSMutableDictionary.cs \
-	Foundation/NSMutableDictionary_2.cs \
 	Foundation/NSMutableOrderedSet_1.cs \
 	Foundation/NSMutableSet.cs \
 	Foundation/NSMutableSet_1.cs \

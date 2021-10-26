@@ -10166,6 +10166,8 @@ namespace UIKit {
 		nint GetRowsInComponent (UIPickerView pickerView, nint component);
 	}
 
+	interface IUIPickerViewDataSource {}
+
 	[NoTV]
 	[BaseType (typeof (NSObject))]
 	[Model]

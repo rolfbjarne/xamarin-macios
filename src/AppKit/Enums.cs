@@ -670,8 +670,8 @@ namespace AppKit {
 	}
 #endif // !NET
 
-#if !XAMCORE_4_0
 	[NoMacCatalyst]
+#if !XAMCORE_4_0
 	[Native]
 	public enum NSFunctionKey : ulong {
 #else

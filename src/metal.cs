@@ -24,6 +24,10 @@ using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
+#if TVOS
+using MTLAccelerationStructureSizes = Foundation.NSObject;
+#endif
+
 namespace Metal {
 
 	delegate void MTLDeallocator (IntPtr pointer, nuint length);

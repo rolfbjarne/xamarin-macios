@@ -2393,7 +2393,7 @@ namespace SceneKit {
 	}
 
 #if XAMCORE_4_0
-	delegate void SCNBufferBindingHandler (ISCNBufferStream buffer, SCNNode node, SCNShadable shadable, SCNRenderer renderer);
+	delegate void SCNBufferBindingHandler (ISCNBufferStream buffer, SCNNode node, ISCNShadable shadable, SCNRenderer renderer);
 #else
 	[Obsolete ("Use 'SCNBufferBindingHandler2' instead.")]
 	delegate void SCNBufferBindingHandler (ISCNBufferStream buffer, SCNNode node, SCNShadable shadable, SCNRenderer renderer);

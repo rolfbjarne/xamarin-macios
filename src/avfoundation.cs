@@ -1669,7 +1669,11 @@ namespace AVFoundation {
 
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Export ("audioPlayerEndInterruption:withOptions:")]
+#if NET
+		void EndInterruption (AVAudioPlayer player, AVAudioSessionInterruptionOptions flags);
+#else
 		void EndInterruption (AVAudioPlayer player, AVAudioSessionInterruptionFlags flags);
+#endif
 #endif
 	}
 
@@ -1853,12 +1857,13 @@ namespace AVFoundation {
 
 		// Deprecated in iOS 6.0 but we have same C# signature as a method that was deprecated in iOS 8.0
 		[Deprecated (PlatformName.iOS, 8, 0)]
+#if !NET
 		[Export ("audioRecorderEndInterruption:withFlags:")]
 		void EndInterruption (AVAudioRecorder recorder, AVAudioSessionInterruptionFlags flags);
-
-		//[Deprecated (PlatformName.iOS, 8, 0)]
-		//[Export ("audioRecorderEndInterruption:withOptions:")]
-		//void EndInterruption (AVAudioRecorder recorder, AVAudioSessionInterruptionFlags flags);
+#else
+		[Export ("audioRecorderEndInterruption:withOptions:")]
+		void EndInterruption (AVAudioRecorder recorder, AVAudioSessionInterruptionOptions flags);
+#endif // !NET
 #endif
 	}
 
@@ -2521,7 +2526,11 @@ namespace AVFoundation {
 		void InputIsAvailableChanged (bool isInputAvailable);
 	
 		[Export ("endInterruptionWithFlags:")]
+#if NET
+		void EndInterruption (AVAudioSessionInterruptionOptions flags);
+#else
 		void EndInterruption (AVAudioSessionInterruptionFlags flags);
+#endif
 	}
 
 	[NoMac]

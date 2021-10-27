@@ -102,7 +102,7 @@ namespace CoreGraphics {
 		{
 			GCHandle gch = GCHandle.FromIntPtr (voidptr);
 			DrawPattern draw_pattern = (DrawPattern) gch.Target;
-			using (var ctx = new CGContext (cgcontextptr))
+			using (var ctx = new CGContext (cgcontextptr, false))
 				draw_pattern (ctx);
 		}
 

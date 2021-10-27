@@ -8631,9 +8631,11 @@ namespace Foundation
 		NSInputStream FromUrl (NSUrl url);
 
 #if XAMCORE_4_0
+		[Protected]
 		[Export ("propertyForKey:"), Override]
 		NSObject GetProperty (NSString key);
 
+		[Protected]
 		[Export ("setProperty:forKey:"), Override]
 		bool SetProperty ([NullAllowed] NSObject property, NSString key);
 
@@ -9509,9 +9511,11 @@ namespace Foundation
 		NSOutputStream CreateFile (string path, bool shouldAppend);
 
 #if XAMCORE_4_0
+		[Protected]
 		[Export ("propertyForKey:"), Override]
 		NSObject GetProperty (NSString key);
 
+		[Protected]
 		[Export ("setProperty:forKey:"), Override]
 		bool SetProperty ([NullAllowed] NSObject property, NSString key);
 

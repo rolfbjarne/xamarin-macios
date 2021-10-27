@@ -113,7 +113,7 @@ namespace CoreMedia {
 	{
 #if !NET
 		public CMTimebase (IntPtr handle)
-			: base (handle)
+			: base (handle, false)
 		{
 		}
 #endif

@@ -6144,6 +6144,8 @@ namespace AppKit {
 		void ResetSpringLoading ();
 	}
 
+	interface INSDraggingInfo {}
+
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[Model]

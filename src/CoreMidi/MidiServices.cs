@@ -73,13 +73,15 @@ namespace CoreMidi {
 		NotPermitted = -10844
 	}
 
-#if !MONOMAC || !XAMCORE_4_0
+
+	[Mac (10,14)]
+	[Watch (8,0)]
+	[TV (15,0)]
 	// NSUInteger -> MIDINetworkSession.h
 	[Native]
 	public enum MidiNetworkConnectionPolicy : ulong {
 		NoOne, HostsInContactsList, Anyone
 	}
-#endif
 
 	[Flags]
 	// SInt32 - MIDIServices.h

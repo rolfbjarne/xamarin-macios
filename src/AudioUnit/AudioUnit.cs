@@ -968,7 +968,7 @@ namespace AudioUnit
 #endif // !COREBUILD
 	}
 
-#if !XAMCORE_3_0 || MONOMAC
+#if !XAMCORE_3_0 || MONOMAC || __MACCATALYST__
 	[StructLayout(LayoutKind.Sequential)]
 	struct AudioObjectPropertyAddress
 	{
@@ -992,7 +992,7 @@ namespace AudioUnit
 		}
 #endif // !COREBUILD
 	}
-#endif // !XAMCORE_3_0 || MONOMAC
+#endif // !XAMCORE_3_0 || MONOMAC || __MACCATALYST__
 
 	public unsafe class AURenderEventEnumerator : INativeObject
 #if COREBUILD

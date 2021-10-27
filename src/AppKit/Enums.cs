@@ -912,12 +912,8 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	[Flags]
-#if !XAMCORE_4_0
 	[Native]
 	public enum NSWindowNumberListOptions : ulong {
-#else
-	public enum NSWindowNumberListOptions : int {
-#endif
 		AllApplication = 1 << 0,
 		AllSpaces = 1 << 4
 	}

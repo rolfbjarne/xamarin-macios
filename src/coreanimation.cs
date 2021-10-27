@@ -1404,7 +1404,7 @@ namespace CoreAnimation {
 		CAGradientLayerType LayerType {
 			[Wrap ("CAGradientLayerTypeExtensions.GetValue (WeakLayerType)")]
 			get;
-			[Wrap ("WeakLayerType = value.GetConstant ()")]
+			[Wrap ("WeakLayerType = value.GetConstant ()!")]
 			set;
 		}
 

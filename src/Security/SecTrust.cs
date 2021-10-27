@@ -231,7 +231,7 @@ namespace Security {
 			var del = BlockLiteral.GetTarget<SecTrustWithErrorCallback> (block);
 			if (del != null) {
 				var t = trust == IntPtr.Zero ? null : new SecTrust (trust, false);
-				var e = error == IntPtr.Zero ? null : new NSError (error);
+				var e = Runtime.GetNSObject<NSError> (error, false);
 				del (t, result, e);
 			}
 		}

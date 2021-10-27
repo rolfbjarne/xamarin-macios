@@ -53,7 +53,7 @@ namespace PdfKit {
 		}
 
 		public PdfAnnotationKey AnnotationType {
-			get { return PdfAnnotationKeyExtensions.GetValue ((NSString) Type); }
+			get { return PdfAnnotationKeyExtensions.GetValue ((NSString) Type!); }
 			set { Type = value.GetConstant (); }
 		}
 

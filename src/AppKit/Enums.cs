@@ -751,7 +751,8 @@ namespace AppKit {
 		ModeSwitch     = 0xF747
 	}
 
-#if !XAMCORE_4_0 && !__MACCATALYST__
+	[NoMacCatalyst]
+#if !XAMCORE_4_0
 	[Native]
 	public enum NSEventSubtype : ulong {
 #else

@@ -12904,9 +12904,11 @@ namespace AppKit {
 
 		[Export ("measurementUnits")]
 #if XAMCORE_4_0
-		[BindAs (typeof (NSRulerViewUnits))] 
-#endif
+		[BindAs (typeof (NSRulerViewUnits))]
+		NSString MeasurementUnits { get; set; }
+#else
 		string MeasurementUnits { get; set; }
+#endif
 
 		[Export ("originOffset")]
 		nfloat OriginOffset { get; set; }

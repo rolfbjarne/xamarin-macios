@@ -916,14 +916,22 @@ namespace Metal {
 #endif
 		[iOS (14,0), TV (14,0), Mac (10,15)]
 		[Export ("sampleCountersInBuffer:atSampleIndex:withBarrier:")]
+#if XAMCORE_4_0
+		void SampleCounters (IMTLCounterSampleBuffer sampleBuffer, nuint sampleIndex, bool barrier);
+#else
 		void SampleCounters (MTLCounterSampleBuffer sampleBuffer, nuint sampleIndex, bool barrier);
+#endif
 
 #if XAMCORE_4_0
 		[Abstract]
 #endif
 		[iOS (14,0), TV (14,0), Mac (10,15)]
 		[Export ("resolveCounters:inRange:destinationBuffer:destinationOffset:")]
+#if XAMCORE_4_0
+		void ResolveCounters (IMTLCounterSampleBuffer sampleBuffer, NSRange range, IMTLBuffer destinationBuffer, nuint destinationOffset);
+#else
 		void ResolveCounters (MTLCounterSampleBuffer sampleBuffer, NSRange range, IMTLBuffer destinationBuffer, nuint destinationOffset);
+#endif
 	}
 	
 	interface IMTLFence {}
@@ -3356,7 +3364,11 @@ namespace Metal {
 #endif
 		[iOS (14,0), TV (14,0), Mac (10,15)]
 		[Export ("sampleCountersInBuffer:atSampleIndex:withBarrier:")]
+#if XAMCORE_4_0
+		void SampleCounters (IMTLCounterSampleBuffer sampleBuffer, nuint sampleIndex, bool barrier);
+#else
 		void SampleCounters (MTLCounterSampleBuffer sampleBuffer, nuint sampleIndex, bool barrier);
+#endif
 
 #if XAMCORE_4_0
 		[Abstract]
@@ -5424,7 +5436,11 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("sampleCountersInBuffer:atSampleIndex:withBarrier:")]
+#if XAMCORE_4_0
+		void SampleCountersInBuffer (IMTLCounterSampleBuffer sampleBuffer, nuint sampleIndex, bool barrier);
+#else
 		void SampleCountersInBuffer (MTLCounterSampleBuffer sampleBuffer, nuint sampleIndex, bool barrier);
+#endif
 
 #if XAMCORE_4_0 
 		[Abstract]

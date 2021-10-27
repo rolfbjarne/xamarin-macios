@@ -28,6 +28,10 @@ using ObjCRuntime;
 using NativeHandle = System.IntPtr;
 #endif
 
+#if TVOS
+using MTLAccelerationStructureSizes = Foundation.NSObject;
+#endif
+
 namespace Metal {
 
 	delegate void MTLDeallocator (IntPtr pointer, nuint length);

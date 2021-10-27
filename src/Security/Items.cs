@@ -1372,7 +1372,7 @@ namespace Security {
 		public SecPolicy MatchPolicy {
 			get {
 				var pol = Fetch (SecItem.MatchPolicy);
-				return (pol == IntPtr.Zero) ? null : new SecPolicy (pol);
+				return (pol == IntPtr.Zero) ? null : new SecPolicy (pol, false);
 			}
 
 			set {

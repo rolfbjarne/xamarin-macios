@@ -306,6 +306,7 @@ namespace CoreFoundation {
 		}
 
 		CFSocket (int family, int type, int proto, CFRunLoop loop)
+			: base (IntPtr.Zero, true) // FIXME
 		{
 			var cbTypes = CFSocketCallBackType.DataCallBack | CFSocketCallBackType.ConnectCallBack;
 
@@ -331,6 +332,7 @@ namespace CoreFoundation {
 		}
 
 		internal CFSocket (CFSocketNativeHandle sock)
+			: base (IntPtr.Zero, true) // FIXME
 		{
 			var cbTypes = CFSocketCallBackType.DataCallBack | CFSocketCallBackType.WriteCallBack;
 
@@ -356,6 +358,7 @@ namespace CoreFoundation {
 		}
 
 		CFSocket (IntPtr handle)
+			: base (handle, true) // FIXME
 		{
 			this.handle = handle;
 			gch = GCHandle.Alloc (this);

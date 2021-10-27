@@ -424,7 +424,7 @@ namespace CoreGraphics {
 		public CGColorSpace ColorSpace {
 			get {
 				var h = CGImageGetColorSpace (handle);
-				return h == IntPtr.Zero ? null : new CGColorSpace (h);
+				return h == IntPtr.Zero ? null : new CGColorSpace (h, false);
 			}
 		}
 

@@ -104,7 +104,7 @@ namespace CoreGraphics {
 
 		public CGContext Context {
 			get {
-				return new CGContext (CGLayerGetContext (handle));
+				return new CGContext (CGLayerGetContext (handle), false);
 			}
 		}
 

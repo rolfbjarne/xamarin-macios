@@ -712,8 +712,8 @@ namespace CoreFoundation {
 		                                     IntPtr context);
 
 		protected CFStream (IntPtr handle)
+			: base (handle, false)
 		{
-			this.handle = handle;
 		}
 
 		protected void CheckHandle ()

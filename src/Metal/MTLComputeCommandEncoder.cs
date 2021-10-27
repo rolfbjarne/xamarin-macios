@@ -14,9 +14,9 @@ namespace Metal {
 
 		public static void SetBuffers (this IMTLComputeCommandEncoder table, IMTLBuffer[] buffers, nuint[] offsets, NSRange range)
 		{
-			if (buffers == null)
+			if (buffers is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (buffers));
-			if (offsets == null)
+			if (offsets is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (offsets));
 
 			var bufferPtrArray = buffers.Length <= 1024 ? stackalloc IntPtr[buffers.Length] : new IntPtr [buffers.Length];
@@ -31,7 +31,7 @@ namespace Metal {
 					table.SetBuffers ((IntPtr) buffersPtr, (IntPtr) offsetsPtr, range);
 				}
 			}
-			GC.KeepAlive (buffers)
+			GC.KeepAlive (buffers);
 		}
 	}
 #endif

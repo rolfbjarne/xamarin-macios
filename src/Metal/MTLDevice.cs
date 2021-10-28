@@ -185,8 +185,13 @@ namespace Metal {
 
 			if (positions.Length < (nint)count)
 				throw new ArgumentException ("Length of 'positions' cannot be less than 'count'.");
-			fixed (void * handle = positions)
+			fixed (void * handle = positions) {
+#if NET
+				This.GetDefaultSamplePositions ((IntPtr)handle, count);
+#else
 				GetDefaultSamplePositions (This, (IntPtr)handle, count);
+#endif
+			}
 		}
 #if IOS
 

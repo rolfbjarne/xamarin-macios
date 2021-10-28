@@ -243,7 +243,7 @@ namespace AudioUnit
 #endif
 		Main = 0, // 0
 	}
-#endif // !XAMCORE_3_0 || MONOMAC
+#endif // !XAMCORE_3_0 || MONOMAC || __MACCATALYST__
 
 #if XAMCORE_3_0
 	[Internal]

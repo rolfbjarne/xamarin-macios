@@ -7643,13 +7643,9 @@ namespace Foundation
 		[Export ("levelsOfUndo")]
 		nint LevelsOfUndo { get; set; }
 		
-#if XAMCORE_4_0
-		[Internal]
+#if NET
 		[Export ("runLoopModes")]
-		NSString [] _RunLoopModes { get; set; } 
-
-		[Wrap ("RunLoopModes.GetConstants ()")]
-		NSRunLoop [] RunLoopModes { get; set; } 
+		NSString [] WeakRunLoopModes { get; set; }
 #else
 		[Export ("runLoopModes")]
 		string [] RunLoopModes { get; set; } 
@@ -7694,9 +7690,14 @@ namespace Foundation
 		[Export ("redoActionName")]
 		string RedoActionName { get; }
 
+#if NET
+		[Export ("setActionName:")]
+		void SetActionName (string actionName);
+#else
 		[Advice ("Use the correctly named method: 'SetActionName'.")]
 		[Export ("setActionName:")]
 		void SetActionname (string actionName); 
+#endif
 
 		[Export ("undoMenuItemTitle")]
 		string UndoMenuItemTitle { get; }

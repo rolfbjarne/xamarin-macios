@@ -66,7 +66,7 @@ namespace CoreMedia {
 		{
 			IntPtr ptr;
 			clockError = CMAudioClockCreate (IntPtr.Zero, out ptr);
-			return clockError == CMClockError.None ? new CMClock (ptr) : null;
+			return clockError == CMClockError.None ? new CMClock (ptr, true) : null;
 		}
 #endif
 
@@ -111,10 +111,12 @@ namespace CoreMedia {
 #endif
 	public class CMTimebase : CMClockOrTimebase
 	{
+#if !NET
 		public CMTimebase (IntPtr handle)
-			: base (handle)
+			: base (handle, false)
 		{
 		}
+#endif
 
 		private CMTimebase (IntPtr handle, bool owns) 
 			: base (handle, owns)

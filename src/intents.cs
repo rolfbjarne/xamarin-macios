@@ -7362,7 +7362,11 @@ namespace Intents {
 	}
 
 	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'INStartCallIntentHandling' instead.")]
+#if NET
+	[NoMac]
+#elif MONOMAC
 	[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'INStartCallIntentHandling' instead.")]
+#endif
 	[Deprecated (PlatformName.WatchOS, 6, 0, message: "Use 'INStartCallIntentHandling' instead.")]
 	[iOS (10, 0)]
 	[Mac (10, 12, 0)]

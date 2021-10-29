@@ -15,6 +15,7 @@ using ObjCRuntime;
 namespace Intents {
 	public partial class INMessageAttributeResolutionResult {
 
+#if !(NET && MONOMAC) // INMessageAttribute has been removed from macOS in .NET
 		public static INMessageAttributeResolutionResult GetSuccess (INMessageAttribute resolvedValue)
 		{
 #if IOS
@@ -42,6 +43,7 @@ namespace Intents {
 			else
 				return ConfirmationRequiredWithValueToConfirm (valueToConfirm);
 		}
+#endif // (NET && MONOMAC)
 	}
 }
 #endif

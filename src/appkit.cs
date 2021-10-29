@@ -5054,7 +5054,7 @@ namespace AppKit {
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	interface NSController : NSCoding, NSEditorRegistration 
-#if XAMCORE_4_0
+#if NET
 	, NSEditor // Conflict over if CommitEditing is a property or a method. NSViewController has it right so can't "fix" NSEditor to match existing API
 #endif
 	{
@@ -5078,8 +5078,10 @@ namespace AppKit {
 		void ObjectDidEndEditing (NSObject editor);
 #endif
 
+#if !NET // We get CommitEditing from the NSEditor protocol in .NET.
 		[Export ("commitEditing")]
 		bool CommitEditing { get; }
+#endif
 
 		[Export ("isEditing")]
 		bool IsEditing { get; }

@@ -901,6 +901,9 @@ public partial class Generator : IMemberGatherer {
 
 	public int XamcoreVersion {
 		get {
+#if NET
+			return 4;
+#else
 			switch (CurrentPlatform) {
 			case PlatformName.MacOSX:
 			case PlatformName.iOS:
@@ -911,6 +914,7 @@ public partial class Generator : IMemberGatherer {
 			default:
 				return 4;
 			}
+#endif
 		}
 	}
 	Type [] types, strong_dictionaries;

@@ -2225,7 +2225,7 @@ namespace Intents {
 		School,
 	}
 
-#if XAMCORE_4_0
+#if NET
 	[NoMac]
 #elif MONOMAC
 	[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]
@@ -4439,9 +4439,19 @@ namespace Intents {
 		[NullAllowed, Export ("customIdentifier")]
 		string CustomIdentifier { get; }
 
+#if NET
+		[NoMac]
+#else
+		[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]
+#endif
 		[NullAllowed, Export ("relationship"), Protected]
 		NSString WeakRelationship { get; }
 
+#if NET
+		[NoMac]
+#else
+		[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]
+#endif
 		[Wrap ("INPersonRelationshipExtensions.GetValue (WeakRelationship)")]
 		INPersonRelationship Relationship { get; }
 

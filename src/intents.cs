@@ -6198,7 +6198,11 @@ namespace Intents {
 		nuint RecipientCount { get; set; }
 	}
 
-	[Mac (12, 0)]
+#if NET
+	[NoMac]
+#elif MONOMAC
+	[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]
+#endif
 	[iOS (10, 0)]
 	[Watch (3, 2)]
 	[NoTV]

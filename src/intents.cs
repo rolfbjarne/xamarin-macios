@@ -354,7 +354,7 @@ namespace Intents {
 		FailurePreviousRideNeedsFeedback,
 	}
 
-#if XAMCORE_4_0 // TODO: Double check this if XAMCORE_4_0 happens, its been 2 years (2018) and still not usable in macOS
+#if NET
 	[NoMac]
 #else
 	[Mac (10, 12, 0)]
@@ -373,7 +373,7 @@ namespace Intents {
 		Played,
 	}
 
-#if XAMCORE_4_0
+#if NET
 	[NoMac]
 #elif MONOMAC
 	[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]

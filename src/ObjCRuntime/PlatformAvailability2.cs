@@ -288,7 +288,7 @@ namespace ObjCRuntime
 		{
 		}
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use the overload that takes '(major, minor)', since tvOS is always 64-bit.")]
 		public TVAttribute (byte major, byte minor, bool onlyOn64 = false)
 			: base (PlatformName.TvOS, (int)major, (int)minor, onlyOn64 ? PlatformArchitecture.Arch64 : PlatformArchitecture.All)
@@ -301,7 +301,7 @@ namespace ObjCRuntime
 		{
 		}
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use the overload that takes '(major, minor, subminor)', since tvOS is always 64-bit.")]
 		public TVAttribute (byte major, byte minor, byte subminor, bool onlyOn64)
 			: base (PlatformName.TvOS, (int)major, (int)minor, (int)subminor, onlyOn64 ? PlatformArchitecture.Arch64 : PlatformArchitecture.All)
@@ -317,7 +317,7 @@ namespace ObjCRuntime
 		{
 		}
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use the overload that takes '(major, minor)', since watchOS is never 64-bit.")] // not yet at least
 		public WatchAttribute (byte major, byte minor, bool onlyOn64 = false)
 			: base (PlatformName.WatchOS, (int)major, (int)minor, onlyOn64 ? PlatformArchitecture.Arch64 : PlatformArchitecture.All)
@@ -330,7 +330,7 @@ namespace ObjCRuntime
 		{
 		}
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use the overload that takes '(major, minor)', since watchOS is never 64-bit.")] // not yet at least
 		public WatchAttribute (byte major, byte minor, byte subminor, bool onlyOn64)
 			: base (PlatformName.WatchOS, (int)major, (int)minor, (int)subminor, onlyOn64 ? PlatformArchitecture.Arch64 : PlatformArchitecture.All)

@@ -7100,7 +7100,7 @@ namespace Intents {
 		IntPtr Constructor (string spokenPhrase);
 	}
 
-#if XAMCORE_4_0
+#if NET
 	[NoMac]
 #elif MONOMAC
 	[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]

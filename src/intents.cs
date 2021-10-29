@@ -2993,7 +2993,13 @@ namespace Intents {
 		[Export ("initWithEKRecurrenceRule:")]
 		IntPtr Constructor (EKRecurrenceRule recurrenceRule);
 
-		[Watch (4,0), Mac (10,13), iOS (11,0), NoTV]
+#if NET
+		[NoMac]
+#else
+		[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]
+		[Mac (10,13)]
+#endif
+		[Watch (4,0), iOS (11,0), NoTV]
 		[Export ("initWithStartDateComponents:endDateComponents:recurrenceRule:")]
 		[DesignatedInitializer]
 		IntPtr Constructor ([NullAllowed] NSDateComponents startDateComponents, [NullAllowed] NSDateComponents endDateComponents, [NullAllowed] INRecurrenceRule recurrenceRule);
@@ -3004,7 +3010,13 @@ namespace Intents {
 		[NullAllowed, Export ("endDateComponents", ArgumentSemantic.Copy)]
 		NSDateComponents EndDateComponents { get; }
 
-		[Watch (4,0), Mac (10,13), iOS (11,0), NoTV]
+#if NET
+		[NoMac]
+#else
+		[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]
+		[Mac (10,13)]
+#endif
+		[Watch (4,0), iOS (11,0), NoTV]
 		[NullAllowed, Export ("recurrenceRule", ArgumentSemantic.Copy)]
 		INRecurrenceRule RecurrenceRule { get; }
 
@@ -9824,7 +9836,7 @@ namespace Intents {
 		nuint GetIndex (string subKeyPath);
 	}
 
-#if XAMCORE_4_0
+#if NET
 	[NoMac]
 #elif MONOMAC
 	[Obsoleted (PlatformName.MacOSX, 10,0, message: "Unavailable on macOS, will be removed in the future.")]

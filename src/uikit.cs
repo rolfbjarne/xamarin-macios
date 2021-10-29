@@ -6255,7 +6255,7 @@ namespace UIKit {
 		[Notification (typeof (UIKeyboardEventArgs))]
 		NSString DidChangeFrameNotification { get; }
 
-#if !XAMCORE_3_0
+#if !XAMCORE_3_0 && !NET
 		//
 		// Deprecated methods
 		//

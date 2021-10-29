@@ -18695,12 +18695,8 @@ namespace AppKit {
 		[Export ("insertText:")]
 		void InsertText (NSObject insertString);
 
-		// DoCommandBySelector conflicts with NSTextViewDelegate in generated code
-#if XAMCORE_4_0 
-		[Abstract]
-		[Export ("doCommandBySelector:")]
-		void DoCommandBySelector (Selector selector);
-#endif
+		// The doCommandBySelector: conflicts with NSTextViewDelegate in generated code
+		// It's also deprecated in NSTextINput, and why we're not adding it here
 
 		[Abstract]
 		[Export ("setMarkedText:selectedRange:")]

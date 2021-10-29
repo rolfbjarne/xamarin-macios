@@ -18529,11 +18529,7 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	interface NSTextList : NSCoding, NSCopying, NSSecureCoding {
 		[Export ("initWithMarkerFormat:options:")]
-		IntPtr Constructor (
-#if XAMCORE_4_0
-		[BindAs (typeof (NSTextListMarkerFormats))] 
-#endif
-		string format, NSTextListOptions mask);
+		IntPtr Constructor (string format, NSTextListOptions mask);
 
 		[Wrap ("this (format.GetConstant(), mask)")]
 		IntPtr Constructor (NSTextListMarkerFormats format, NSTextListOptions mask);

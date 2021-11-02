@@ -13,11 +13,13 @@ using Foundation;
 using ObjCRuntime;
 
 namespace Intents {
+#if !NET && __MACOS__ // INSearchCallHistoryIntent isn't in macOS
 	public partial class INSearchCallHistoryIntent {
 
 		public bool? Unseen {
 			get { return WeakUnseen?.BoolValue; }
 		}
 	}
+#endif // !NET && __MACOS__
 }
-#endif
+#endif // !TVOS

@@ -18640,11 +18640,13 @@ namespace AppKit {
 		[Wrap ("this (format.GetConstant(), mask)")]
 		IntPtr Constructor (NSTextListMarkerFormats format, NSTextListOptions mask);
 
+		[Export ("markerFormat")]
 #if XAMCORE_4_0
 		[BindAs (typeof (NSTextListMarkerFormats))] 
-#endif
-		[Export ("markerFormat")]
+		NSString MarkerFormat { get; }
+#else
 		string MarkerFormat { get; }
+#endif
 
 		[Export ("listOptions")]
 		NSTextListOptions ListOptions { get; }

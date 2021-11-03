@@ -7,7 +7,7 @@ using ObjCRuntime;
 namespace Foundation {
 
 	// Helper to (mostly) support NS[Mutable]Copying protocols
-	public class NSZone : INativeObject {
+	public class NSZone : DisposableObject {
 		[DllImport (Constants.FoundationLibrary)]
 		static extern /* NSZone* */ IntPtr NSDefaultMallocZone ();
 
@@ -17,23 +17,24 @@ namespace Foundation {
 		[DllImport (Constants.FoundationLibrary)]
 		static extern void NSSetZoneName (/* NSZone* */ IntPtr zone, /* NSString* */ IntPtr name);
 
-		internal NSZone ()
-		{
-		}
-
+#if !NET
 		public NSZone (IntPtr handle)
+			: base (handle, false)
 		{
-			this.Handle = handle;
 		}
+#endif
 
 		[Preserve (Conditional = true)]
+#if NET
+		internal NSZone (IntPtr handle, bool owns)
+#else
 		public NSZone (IntPtr handle, bool owns)
-			: this (handle)
+#endif
+			: base (handle, owns)
 		{
-			// NSZone is just an opaque pointer without reference counting, so we ignore the 'owns' parameter.
 		}
 
-		public IntPtr Handle { get; private set; }
+		// NSZone is just an opaque pointer without reference counting, so there's nothing to dispose
 
 #if !COREBUILD
 		public string Name {
@@ -47,7 +48,7 @@ namespace Foundation {
 		}
 
 		// note: Copy(NSZone) and MutableCopy(NSZone) with a nil pointer == default
-		public static readonly NSZone Default = new NSZone (NSDefaultMallocZone ());
+		public static readonly NSZone Default = new NSZone (NSDefaultMallocZone (), false);
 #endif
 	}
 }

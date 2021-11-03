@@ -110,14 +110,12 @@ namespace Security {
 		Default = 1953261156,
 	}
 
-	public class SecKeyChain : INativeObject {
+	public class SecKeyChain : DisposableObject {
 
-		internal SecKeyChain (IntPtr handle)
+		internal SecKeyChain (IntPtr handle, bool owns)
+			: base (handle, owns)
 		{
-			Handle = handle;
 		}
-
-		public IntPtr Handle { get; internal set; }
 
 		static NSNumber? SetLimit (NSMutableDictionary dict, int max)
 		{

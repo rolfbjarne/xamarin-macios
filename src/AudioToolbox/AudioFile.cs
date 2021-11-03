@@ -319,31 +319,26 @@ namespace AudioToolbox {
 		CAFKeySignature				= 0x6b736967,	// 'ksig'
 	}
 
-	public class AudioFileMarkerList : IDisposable
+	public class AudioFileMarkerList : DisposableObject
 	{
-		IntPtr ptr;
-		readonly bool owns;
-
+#if NET
+		internal AudioFileMarkerList (IntPtr ptr, bool owns)
+#else
 		public AudioFileMarkerList (IntPtr ptr, bool owns)
+#endif
+			: base (ptr, owns)
 		{
-			this.ptr = ptr;
-			this.owns = owns;
-		}
-
-		~AudioFileMarkerList ()
-		{
-			Dispose (false);
 		}
 
 		public SmpteTimeType SmpteTimeType {
 			get {
-				return (SmpteTimeType) Marshal.ReadInt32 (ptr);
+				return (SmpteTimeType) Marshal.ReadInt32 (Handle);
 			}
 		}
 
 		public uint Count {
 			get {
-				return (uint) Marshal.ReadInt32 (ptr, 4);
+				return (uint) Marshal.ReadInt32 (Handle, 4);
 			}
 		}
 
@@ -363,29 +358,23 @@ namespace AudioToolbox {
 				// }
 				//
 				unsafe {
-					var ptr = (AudioFileMarker *) this.ptr + 2 * sizeof (int) + index * sizeof (AudioFileMarker);
+					var ptr = (AudioFileMarker *) this.Handle + 2 * sizeof (int) + index * sizeof (AudioFileMarker);
 					return *ptr;
 				}
 			}
 		}
 
-		public void Dispose ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (true);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (!owns || ptr == IntPtr.Zero)
+			if (!Owns || Handle == IntPtr.Zero)
 				return;
 
 			for (int i = 0; i < Count; ++i) {
 				CFObject.CFRelease (this [i].Name_cfstringref);
 			}
 
-			Marshal.FreeHGlobal (ptr);
-			ptr = IntPtr.Zero;
-			GC.SuppressFinalize (this);
+			Marshal.FreeHGlobal (Handle);
+			base.Dispose (disposing);
 		}
 	}
 
@@ -474,31 +463,26 @@ namespace AudioToolbox {
 		PlayBackward = 4
 	}
 
-	public class AudioFileRegionList : IDisposable
+	public class AudioFileRegionList : DisposableObject
 	{
-		IntPtr ptr;
-		readonly bool owns;
-
+#if NET
+		internal AudioFileRegionList (IntPtr ptr, bool owns)
+#else
 		public AudioFileRegionList (IntPtr ptr, bool owns)
+#endif
+			: base (ptr, owns)
 		{
-			this.ptr = ptr;
-			this.owns = owns;
-		}
-
-		~AudioFileRegionList ()
-		{
-			Dispose (false);
 		}
 
 		public SmpteTimeType SmpteTimeType {
 			get {
-				return (SmpteTimeType) Marshal.ReadInt32 (ptr);
+				return (SmpteTimeType) Marshal.ReadInt32 (Handle);
 			}
 		}
 
 		public uint Count {
 			get {
-				return (uint) Marshal.ReadInt32 (ptr, sizeof (uint));
+				return (uint) Marshal.ReadInt32 (Handle, sizeof (uint));
 			}
 		}
 
@@ -518,7 +502,7 @@ namespace AudioToolbox {
 				// }
 				//
 				unsafe {
-					var ptr = (byte *) this.ptr + 2 * sizeof (uint);
+					var ptr = (byte *) this.Handle + 2 * sizeof (uint);
 					for (int i = 0; i < index; ++i) {
 						var region = new AudioFileRegion ((IntPtr) ptr);
 						ptr += region.TotalSize;
@@ -529,64 +513,45 @@ namespace AudioToolbox {
 			}
 		}
 
-		public void Dispose ()
+		protected override void Dispose (bool disposing)
 		{
-			Dispose (true);
-		}
-
-		protected virtual void Dispose (bool disposing)
-		{
-			if (!owns || ptr == IntPtr.Zero)
+			if (!Owns || Handle == IntPtr.Zero)
 				return;
 
 			for (int i = 0; i < Count; ++i) {
 				CFObject.CFRelease (this [i].NameWeak);
 			}
 
-			Marshal.FreeHGlobal (ptr);
-			ptr = IntPtr.Zero;
-			GC.SuppressFinalize (this);
+			Marshal.FreeHGlobal (Handle);
+			base.Dispose (disposing);
 		}
 	}
 
-	public class AudioFile : IDisposable, INativeObject {
-
-		internal IntPtr handle;
-		
-		protected internal AudioFile (bool x)
+	public class AudioFile : DisposableObject {
+		internal AudioFile ()
 		{
 			// This ctor is used by AudioSource that will set the handle later.
 		}
-		
-		internal AudioFile (IntPtr handle)
-		{
-			this.handle = handle;
-		}
 
-		~AudioFile ()
+#if !NET
+		protected internal AudioFile (bool x)
 		{
-			Dispose (false);
 		}
-		
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
+#endif
 
-		public IntPtr Handle {
-			get { return handle; }
+		internal AudioFile (IntPtr handle, bool owns)
+			: base (handle, owns)
+		{
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static OSStatus AudioFileClose (AudioFileID handle);
 
-		protected virtual void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
-			if (handle != IntPtr.Zero){
-				AudioFileClose (handle);
-				handle = IntPtr.Zero;
-			}
+			if (Handle != IntPtr.Zero)
+				AudioFileClose (Handle);
+			base.Dispose (disposing);
 		}
 
 		public long Length {
@@ -615,7 +580,7 @@ namespace AudioToolbox {
 			IntPtr h;
 
 			if (AudioFileCreateWithURL (url.Handle, fileType, ref format, inFlags, out h) == 0)
-				return new AudioFile (h);
+				return new AudioFile (h, true);
 			return null;
 		}
 
@@ -627,7 +592,7 @@ namespace AudioToolbox {
 			IntPtr h;
 
 			if (AudioFileCreateWithURL (url.Handle, fileType, ref format, inFlags, out h) == 0)
-				return new AudioFile (h);
+				return new AudioFile (h, true);
 			return null;
 		}
 
@@ -713,7 +678,7 @@ namespace AudioToolbox {
 			IntPtr file;
 			error = AudioFileOpenURL (urlHandle, (byte) permissions, fileTypeHint, out file);
 			if (error == AudioFileError.Success)
-				return new AudioFile (file);
+				return new AudioFile (file, true);
 			return null;
 		}
 		
@@ -1786,23 +1751,21 @@ namespace AudioToolbox {
 			IntPtr inClientData, ReadProc inReadFunc, WriteProc inWriteFunc, GetSizeProc inGetSizeFunc, SetSizeProc inSetSizeFunc,
 			AudioFileType inFileType, ref AudioStreamBasicDescription format, uint flags, out IntPtr id);
 
-		public AudioSource (AudioFileType inFileType, AudioStreamBasicDescription format) : base (true)
+		public AudioSource (AudioFileType inFileType, AudioStreamBasicDescription format)
 		{
 			Initialize (inFileType, format);
 		}
 
-		public AudioSource () : base (true)
+		public AudioSource ()
 		{
 		}
 			
 		protected void Initialize (AudioFileType inFileType, AudioStreamBasicDescription format) 
 		{
-			IntPtr h;
-
 			gch = GCHandle.Alloc (this);
-			var code = AudioFileInitializeWithCallbacks (GCHandle.ToIntPtr (gch), dRead, dWrite, dGetSize, dSetSize, inFileType, ref format, 0, out h);
+			var code = AudioFileInitializeWithCallbacks (GCHandle.ToIntPtr (gch), dRead, dWrite, dGetSize, dSetSize, inFileType, ref format, 0, out var handle);
 			if (code == 0){
-				handle = h;
+				InitializeHandle (handle);
 				return;
 			}
 			throw new Exception (String.Format ("Unable to create AudioSource, code: 0x{0:x}", code));
@@ -1813,19 +1776,17 @@ namespace AudioToolbox {
 			IntPtr inClientData, ReadProc inReadFunc, WriteProc inWriteFunc,
 			GetSizeProc inGetSizeFunc, SetSizeProc	inSetSizeFunc, AudioFileType inFileTypeHint, out IntPtr outAudioFile);
 		
-		public AudioSource (AudioFileType fileTypeHint) : base (true)
+		public AudioSource (AudioFileType fileTypeHint)
 		{
 			Open (fileTypeHint);
 		}
 		
 		protected void Open (AudioFileType fileTypeHint)
 		{
-			IntPtr h;
-
 			gch = GCHandle.Alloc (this);
-			var code = AudioFileOpenWithCallbacks (GCHandle.ToIntPtr (gch), dRead, dWrite, dGetSize, dSetSize, fileTypeHint, out h);
+			var code = AudioFileOpenWithCallbacks (GCHandle.ToIntPtr (gch), dRead, dWrite, dGetSize, dSetSize, fileTypeHint, out var handle);
 			if (code == 0){
-				handle = h;
+				InitializeHandle (handle);
 				return;
 			}
 			throw new Exception (String.Format ("Unable to create AudioSource, code: 0x{0:x}", code));

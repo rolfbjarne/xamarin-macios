@@ -117,7 +117,7 @@ namespace CoreGraphics {
 		
 		public CGPDFPage? GetPage (nint page)
 		{
-			var h = CGPDFDocumentGetPage (handle, page);
+			var h = CGPDFDocumentGetPage (Handle, page);
 			return h == IntPtr.Zero ? null : new CGPDFPage (h, false);
 		}
 

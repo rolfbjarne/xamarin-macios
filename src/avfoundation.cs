@@ -850,11 +850,9 @@ namespace AVFoundation {
 		[Export ("initWithLayoutTag:")]
 		IntPtr Constructor (/* UInt32 */ uint layoutTag);
 
-#if !NET
 		[DesignatedInitializer]
 		[Export ("initWithLayout:"), Internal]
 		IntPtr Constructor (nint /* This is really an IntPtr, but it conflicts with the default (Handle) ctor. */ layout);
-#endif
 
 		[Export ("layoutTag")]
 		uint /* AudioChannelLayoutTag = UInt32 */ LayoutTag { get; }

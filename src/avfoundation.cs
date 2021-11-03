@@ -383,7 +383,7 @@ namespace AVFoundation {
 
 	}
 
-#if !XAMCORE_4_0
+#if !NET
 	[NoWatch]
 	[Obsolete ("Use AVMediaCharacteristics enum values")]
 	[BaseType (typeof (NSObject))][Static]
@@ -564,7 +564,7 @@ namespace AVFoundation {
 		Scc = 22,
 	}
 
-#if !XAMCORE_4_0
+#if !NET
 	[NoWatch]
 	[BaseType (typeof (NSObject))][Static]
 	[Obsolete ("Use AVFileTypes enum values")]
@@ -1115,7 +1115,7 @@ namespace AVFoundation {
 		AVAudioEnvironmentReverbParameters ReverbParameters { get; }
 
 		[Export ("applicableRenderingAlgorithms")]
-#if XAMCORE_4_0
+#if NET
 		NSNumber [] ApplicableRenderingAlgorithms { get; }
 #else
 		NSObject [] ApplicableRenderingAlgorithms ();
@@ -1311,7 +1311,7 @@ namespace AVFoundation {
 		[Export ("position")]
 		Vector3 Position { get; set; }
 
-#if XAMCORE_4_0
+#if NET
 		[Abstract]
 		[TV (13,0), NoWatch, Mac (10,15), iOS (13,0)]
 		[Export ("sourceMode", ArgumentSemantic.Assign)]
@@ -1351,7 +1351,7 @@ namespace AVFoundation {
 	{
 
 		[iOS (9,0), Mac (10,11)]
-#if XAMCORE_4_0
+#if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
 #endif
@@ -1934,12 +1934,12 @@ namespace AVFoundation {
 		[Export ("setActive:error:")]
 		bool SetActive (bool beActive, out NSError outError);
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoTV, NoMac]
 		[Export ("setActive:withFlags:error:")]
 		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'SetActive (bool, AVAudioSessionSetActiveOptions, out NSError)' instead.")]
 		bool SetActive (bool beActive, AVAudioSessionFlags flags, out NSError outError);
-#endif // !XAMCORE_4_0
+#endif // !NET
 
 		[NoMac]
 		[Export ("setCategory:error:")]
@@ -2583,7 +2583,7 @@ namespace AVFoundation {
 
 		[iOS (7,0)]
 		[Export ("dataSources"), NullAllowed]
-#if XAMCORE_4_0
+#if NET
 		AVAudioSessionDataSourceDescription [] DataSources { get; }
 #else
 		AVAudioSessionDataSourceDescription [] DataSourceDescriptions { get; }
@@ -3064,7 +3064,7 @@ namespace AVFoundation {
 		[Export ("availableMetadataFormats")]
 		string [] AvailableMetadataFormats { get;  }
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use 'GetMetadataForFormat' with enum values AVMetadataFormat.")]
 		[Wrap ("GetMetadataForFormat (new NSString (format))", IsVirtual = true)]
 		AVMetadataItem [] MetadataForFormat (string format);
@@ -3249,7 +3249,7 @@ namespace AVFoundation {
 	[iOS (12, 0), TV (12,0), Watch (6,0)]
 	interface AVFragmentMinding {
 
-#if !MONOMAC || XAMCORE_4_0
+#if !MONOMAC || NET
 		[Abstract] // not kept in Mac OS because is a breaking change, in other paltforms we are ok
 #endif
 		[Export ("isAssociatedWithFragmentMinder")]
@@ -3363,8 +3363,9 @@ namespace AVFoundation {
 
 #endif // MONOMAC
 
-#if XAMCORE_4_0
-	[Abstract] // Abstract superclass.
+#if NET
+	// Making a class abstract has problems: https://github.com/xamarin/xamarin-macios/issues/4969, so we're not doing this yet
+	// [Abstract] // Abstract superclass.
 #endif
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[NoWatch, NoTV, iOS (11,0)]
@@ -3382,7 +3383,7 @@ namespace AVFoundation {
 	[DisableDefaultCtor]
 	interface AVCaptureSynchronizedDataCollection : INSFastEnumeration
 	{
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use 'GetSynchronizedData' instead.")]
 		[Wrap ("GetSynchronizedData (captureOutput)", isVirtual: true)]
 		[return: NullAllowed]
@@ -4006,7 +4007,7 @@ namespace AVFoundation {
 	[Model]
 	[Protocol]
 	interface AVAssetResourceLoaderDelegate {
-#if !XAMCORE_4_0
+#if !NET
 		[Abstract]
 #endif
 		[NoWatch]
@@ -5100,7 +5101,7 @@ namespace AVFoundation {
 		[Field ("AVMetadataCommonKeyAccessibilityDescription")]
 		NSString CommonKeyAccessibilityDescription { get; }
 
-#if !XAMCORE_4_0
+#if !NET
 		[Field ("AVMetadataFormatQuickTimeUserData")]
 		[Obsolete ("Use 'AVMetadataFormat' enum values")]
 		NSString FormatQuickTimeUserData { get; }
@@ -5282,7 +5283,7 @@ namespace AVFoundation {
 		[Field ("AVMetadata3GPUserDataKeyMediaRating")]
 		NSString K3GPUserDataKeyMediaRating { get; }
 
-#if !XAMCORE_4_0
+#if !NET
 		[iOS (7,0), Mac (10, 9)]
 		[Field ("AVMetadataFormatISOUserData")]
 		[Obsolete ("Use 'AVMetadataFormat' enum values")]
@@ -5431,7 +5432,7 @@ namespace AVFoundation {
 		[Field ("AVMetadataQuickTimeMetadataKeyIsMontage")]
 		NSString QuickTimeMetadataKeyIsMontage { get; }
 		
-#if !XAMCORE_4_0
+#if !NET
 		[Field ("AVMetadataFormatiTunesMetadata")]
 		[Obsolete ("Use 'AVMetadataFormat' enum values")]
 		NSString FormatiTunesMetadata { get; }
@@ -5585,7 +5586,7 @@ namespace AVFoundation {
 		[Field ("AVMetadataiTunesMetadataKeyExecProducer")]
 		NSString iTunesMetadataKeyExecProducer { get; }
 		
-#if !XAMCORE_4_0
+#if !NET
 		[Field ("AVMetadataFormatID3Metadata")]
 		[Obsolete ("Use 'AVMetadataFormat' enum values")]
 		NSString FormatID3Metadata { get; }
@@ -5905,7 +5906,7 @@ namespace AVFoundation {
 		[Field ("AVMetadataIcyMetadataKeyStreamURL")]
 		NSString IcyMetadataKeyStreamUrl { get; }
 		
-#if !XAMCORE_4_0
+#if !NET
 		[iOS (8,0)][Mac (10,10)]
 		[Field ("AVMetadataFormatHLSMetadata")]
 		[Obsolete ("Use 'AVMetadataFormat' enum values")]
@@ -6985,7 +6986,7 @@ namespace AVFoundation {
 		[Export ("time")]
 		CMTime Time{ get;}
 
-#if !XAMCORE_4_0
+#if !NET
 		[Field ("AVMetadataObjectTypeFace")]
 		NSString TypeFace { get; }
 
@@ -7059,7 +7060,7 @@ namespace AVFoundation {
 #endif
 	}
 
-#if XAMCORE_4_0
+#if NET
 	[NoWatch]
 	[NoTV]
 #endif
@@ -7728,7 +7729,7 @@ namespace AVFoundation {
 	[DisableDefaultCtor]
 	interface AVFragmentedMovieTrack
 	{
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS, NoWatch]
 		[Field ("AVFragmentedMovieTrackTimeRangeDidChangeNotification")]
 		NSString ATimeRangeDidChangeNotification { get; }
@@ -8115,7 +8116,7 @@ namespace AVFoundation {
 		string PresetName { get;  }
 
 		[Export ("supportedFileTypes")]
-#if XAMCORE_4_0
+#if NET
 		string [] SupportedFileTypes { get;  }
 #else
 		NSObject [] SupportedFileTypes { get;  }
@@ -9317,8 +9318,9 @@ namespace AVFoundation {
 	[NoWatch]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
-#if XAMCORE_4_0
-	[Abstract] // as per docs
+#if NET
+	// Making a class abstract has problems (see https://github.com/xamarin/xamarin-macios/issues/4969), so not doing this (yet).
+	// [Abstract] // as per docs
 #endif
 	// Objective-C exception thrown.  Name: NSGenericException Reason: Cannot instantiate AVCaptureOutput because it is an abstract superclass.
 	[DisableDefaultCtor]
@@ -9496,7 +9498,7 @@ namespace AVFoundation {
 		void SetSampleBufferDelegateQueue ([NullAllowed] IAVCaptureVideoDataOutputSampleBufferDelegate sampleBufferDelegate, [NullAllowed] DispatchQueue sampleBufferCallbackQueue);
 
 		// 5.0 APIs
-#if XAMCORE_4_0
+#if NET
 		[BindAs (typeof (CoreVideo.CVPixelFormatType []))]
 #endif
 		[Export ("availableVideoCVPixelFormatTypes")]
@@ -9565,7 +9567,7 @@ namespace AVFoundation {
 		[NullAllowed, Export ("sampleBufferCallbackQueue")]
 		DispatchQueue SampleBufferCallbackQueue { get;  }
 
-#if XAMCORE_4_0
+#if NET
 		[Export ("setSampleBufferDelegate:queue:")]
 		void SetSampleBufferDelegate ([NullAllowed] IAVCaptureAudioDataOutputSampleBufferDelegate sampleBufferDelegate, [NullAllowed] DispatchQueue sampleBufferCallbackDispatchQueue);
 #else
@@ -9905,7 +9907,7 @@ namespace AVFoundation {
 		[Export ("availableEmbeddedThumbnailPhotoCodecTypes")]
 		NSString[] _GetAvailableEmbeddedThumbnailPhotoCodecTypes { get; }
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use 'AvailableEmbeddedThumbnailPhotoCodecTypes' instead.")]
 		[iOS (11, 0)]
 		[Wrap ("Array.ConvertAll (_GetAvailableEmbeddedThumbnailPhotoCodecTypes, s => AVVideoCodecTypeExtensions.GetValue (s))", IsVirtual = false)]
@@ -9915,7 +9917,7 @@ namespace AVFoundation {
 		[Wrap ("Array.ConvertAll (_GetAvailableEmbeddedThumbnailPhotoCodecTypes, s => AVVideoCodecTypeExtensions.GetValue (s))", IsVirtual = true)]
 		AVVideoCodecType[] AvailableEmbeddedThumbnailPhotoCodecTypes { get; }
 
-#if XAMCORE_4_0
+#if NET
 		[iOS (11, 0)]
 		[NullAllowed, Export ("embeddedThumbnailPhotoFormat", ArgumentSemantic.Copy)]
 		NSDictionary WeakEmbeddedThumbnailPhotoFormat { get; set; }
@@ -10178,7 +10180,7 @@ namespace AVFoundation {
 		bool IsStillImageStabilizationScene { get; }
 
 		[NoMac]
-#if XAMCORE_4_0
+#if NET
 		[BindAs (typeof (AVCaptureFlashMode []))]
 #endif		
 		[Export ("supportedFlashModes")]
@@ -10613,7 +10615,7 @@ namespace AVFoundation {
 		[return: NullAllowed]
 		AVCaptureDevice GetDefaultDevice (AVMediaTypes mediaType);
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoWatch]
 		[Obsolete ("Use 'GetDefaultDevice (AVMediaTypes)'.")]
 		[Static]
@@ -11282,7 +11284,7 @@ namespace AVFoundation {
 
 		[iOS (10,0), Mac (10,15)]
 		[Export ("supportedColorSpaces")]
-#if XAMCORE_4_0
+#if NET
 		[BindAs (typeof (AVCaptureColorSpace []))]
 #endif
 		NSNumber[] SupportedColorSpaces { get; }
@@ -12030,7 +12032,7 @@ namespace AVFoundation {
 		bool CanPlayFastForward { get; }
 
 		[Field ("AVPlayerItemTimeJumpedNotification")]
-#if !XAMCORE_4_0 
+#if !NET
 		[Notification]
 #else
 		[Notification (typeof (AVPlayerItemTimeJumpedEventArgs))]
@@ -12947,9 +12949,6 @@ namespace AVFoundation {
 		[DesignatedInitializer]
 		NativeHandle Constructor (AVQueuePlayer player, AVPlayerItem itemToLoop, CMTimeRange loopRange);
 
-#if !XAMCORE_4_0 // This API got introduced in Xcode 8.0 binding but is not currently present nor in Xcode 8.3 or Xcode 9.0 needs research
-		[PostSnippet ("loopingEnabled = false;", Optimizable = true)]
-#endif
 		[Export ("disableLooping")]
 		void DisableLooping ();
 
@@ -13136,8 +13135,8 @@ namespace AVFoundation {
 	interface AVAsynchronousKeyValueLoading {
 		[Abstract]
 		[Export ("statusOfValueForKey:error:")]
-#if XAMCORE_4_0
-		AVKeyValueStatus StatusOfValueForKeyerror (string key, out NSError error);
+#if NET
+		AVKeyValueStatus GetStatusOfValue (string forKey, out NSError error);
 #else
 		AVKeyValueStatus StatusOfValueForKeyerror (string key, [NullAllowed] IntPtr outError);
 #endif
@@ -13285,7 +13284,7 @@ namespace AVFoundation {
 		[Export ("enqueueSampleBuffer:")]
 		void Enqueue (CMSampleBuffer sampleBuffer);
 
-#if !XAMCORE_4_0
+#if !NET
 		[Wrap ("Enqueue (sampleBuffer)", IsVirtual = true)]
 		[Obsolete ("Use the 'Enqueue' method instead.")]
 		void EnqueueSampleBuffer (CMSampleBuffer sampleBuffer);
@@ -13300,7 +13299,7 @@ namespace AVFoundation {
 		[Export ("requestMediaDataWhenReadyOnQueue:usingBlock:")]
 		void RequestMediaData (DispatchQueue queue, Action handler);
 
-#if !XAMCORE_4_0
+#if !NET
 		[Wrap ("RequestMediaData (queue, enqueuer)", IsVirtual = true)]
 		[Obsolete ("Use the 'RequestMediaData' method instead.")]
 		void RequestMediaDataWhenReadyOnQueue (DispatchQueue queue, Action enqueuer);
@@ -14758,7 +14757,7 @@ namespace AVFoundation {
 		[Export ("replacementFormatDescription")]
 		CMFormatDescription ReplacementFormatDescription { get; }
 	}
-#if XAMCORE_4_0
+#if NET
 	delegate /* OSStatus */ int AVAudioSourceNodeRenderHandler (ref bool isSilence, ref AudioTimeStamp timestamp, uint frameCount, ref AudioBuffers outputData);
 #else
 	delegate /* OSStatus */ int AVAudioSourceNodeRenderHandler (bool isSilence, AudioToolbox.AudioTimeStamp timestamp, uint frameCount, ref AudioBuffers outputData);
@@ -14770,7 +14769,7 @@ namespace AVFoundation {
 	interface AVAudioSourceNode : AVAudioMixing {
 		[Export ("initWithRenderBlock:")]
 		[DesignatedInitializer]
-#if XAMCORE_4_0
+#if NET
 		NativeHandle Constructor (AVAudioSourceNodeRenderHandler renderHandler);
 #else
 		NativeHandle Constructor (AVAudioSourceNodeRenderHandler2 renderHandler);
@@ -14778,7 +14777,7 @@ namespace AVFoundation {
 
 		[Export ("initWithFormat:renderBlock:")]
 		[DesignatedInitializer]
-#if XAMCORE_4_0
+#if NET
 		NativeHandle Constructor (AVAudioFormat format, AVAudioSourceNodeRenderHandler renderHandler);
 #else
 		NativeHandle Constructor (AVAudioFormat format, AVAudioSourceNodeRenderHandler2 renderHandler);

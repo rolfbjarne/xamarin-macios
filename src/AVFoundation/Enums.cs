@@ -986,7 +986,7 @@ namespace AVFoundation {
 		Unavailable = 4
 	}
 
-#if XAMCORE_4_0
+#if NET
 	[NoMac]
 #endif
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]

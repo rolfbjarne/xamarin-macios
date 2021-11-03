@@ -3664,11 +3664,10 @@ namespace Vision {
 	[BaseType (typeof (VNVideoProcessorCadence))]
 	[DisableDefaultCtor]
 	interface VNVideoProcessorFrameRateCadence {
-#if !NET
+
 		[Export ("initWithFrameRate:")]
 		[DesignatedInitializer]
 		IntPtr Constructor (nint frameRate);
-#endif
 
 		[Export ("frameRate")]
 		nint FrameRate { get; }

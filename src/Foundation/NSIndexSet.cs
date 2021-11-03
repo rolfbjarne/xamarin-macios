@@ -113,25 +113,18 @@ namespace Foundation {
 		{
 		}
 
-#if !NET
 		public NSIndexSet (nint value) : this ((nuint)value)
 		{
 			if (value < 0)
 				throw new ArgumentException ("value must be positive");
 			// init done by the base ctor
 		}
-#endif
 
 		public NSIndexSet (int value) : this ((nuint)(uint)value)
 		{
 			if (value < 0)
 				throw new ArgumentException ("value must be positive");
 			// init done by the base ctor
-		}
-
-		public NSIndexSet (long value)
-		{
-			throw new NotImplementedException ();
 		}
 	}
 }

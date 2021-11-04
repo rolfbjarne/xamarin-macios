@@ -1,3 +1,4 @@
+#if BGENERATOR || !NET
 using System;
 using PlatformArchitecture = ObjCRuntime.PlatformArchitecture;
 using PlatformName = ObjCRuntime.PlatformName;
@@ -175,3 +176,4 @@ public class AvailabilityAttribute : Attribute
 	}
 }
 #endif
+#endif // !NET

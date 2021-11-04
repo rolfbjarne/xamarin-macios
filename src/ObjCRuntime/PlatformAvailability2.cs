@@ -16,7 +16,7 @@
 //
 // Copyright 2015 Xamarin Inc. All rights reserved.
 
-#if !NET
+#if COREBUILD || BGENERATOR || !NET
 using System;
 using System.Text;
 

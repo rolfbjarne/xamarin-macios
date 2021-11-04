@@ -16,6 +16,7 @@
 //
 // Copyright 2015 Xamarin Inc. All rights reserved.
 
+#if !NET
 using System;
 using System.Text;
 
@@ -38,8 +39,10 @@ namespace ObjCRuntime
 		WatchOS,
 		TvOS,
 		MacCatalyst,
+#if !NET
 		[Obsolete ("Use 'MacCatalyst' instead.")]
 		UIKitForMac = MacCatalyst, // temporary
+#endif
 	}
 
 	public enum AvailabilityKind
@@ -392,3 +395,5 @@ namespace ObjCRuntime
 		}
 	}
 }
+
+#endif // !NET

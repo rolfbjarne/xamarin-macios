@@ -651,7 +651,7 @@ public class CategoryAttribute : Attribute {
 	public bool AllowStaticMembers;
 	public CategoryAttribute () { }
 #if XAMCORE_4_0
-	[Obsolete ("Inline the static members in this category in the category's class (and remove this obsolete once fixed)"]
+	[Obsolete ("Inline the static members in this category in the category's class (and remove this obsolete once fixed)")]
 #endif
 	public CategoryAttribute (bool allowStaticMembers)
 	{

@@ -318,19 +318,27 @@ namespace CoreBluetooth {
 		[Export ("centralManagerDidUpdateState:")]
 		void UpdatedState (CBCentralManager central);
 
+#if !NET
 		[NoTV]
 		[NoWatch]
-		[Availability (Deprecated = Platform.iOS_7_0, Obsoleted = Platform.iOS_8_4)] // Available in iOS 5.0 through iOS 8.4. Deprecated in iOS 7.0.
+		// Available in iOS 5.0 through iOS 8.4. Deprecated in iOS 7.0.
+		[Deprecated (PlatformName.iOS, 7, 0)]
+		[Obsoleted (PlatformName.iOS, 8, 4)]
 		[NoMacCatalyst]
 		[Export ("centralManager:didRetrievePeripherals:"), EventArgs ("CBPeripherals")]
 		void RetrievedPeripherals (CBCentralManager central, CBPeripheral [] peripherals);
+#endif
 
+#if !NET
 		[NoTV]
 		[NoWatch]
-		[Availability (Deprecated = Platform.iOS_7_0, Obsoleted = Platform.iOS_8_4)] // Available in iOS 5.0 through iOS 8.4. Deprecated in iOS 7.0.
+		// Available in iOS 5.0 through iOS 8.4. Deprecated in iOS 7.0.
+		[Deprecated (PlatformName.iOS, 7, 0)]
+		[Obsoleted (PlatformName.iOS, 8, 4)]
 		[NoMacCatalyst]
 		[Export ("centralManager:didRetrieveConnectedPeripherals:"), EventArgs ("CBPeripherals")]
 		void RetrievedConnectedPeripherals (CBCentralManager central, CBPeripheral [] peripherals);
+#endif
 
 		[Export ("centralManager:didDiscoverPeripheral:advertisementData:RSSI:"), EventArgs ("CBDiscoveredPeripheral")]
 		void DiscoveredPeripheral (CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI);
@@ -497,11 +505,14 @@ namespace CoreBluetooth {
 		[NullAllowed]
 		NSNumber RSSI { get;  }
 
+#if !NET
 		[NoTV]
 		[NoWatch]
-		[Availability (Deprecated = Platform.iOS_7_0, Obsoleted = Platform.iOS_9_0)]
+		[Deprecated (PlatformName.iOS, 7, 0)]
+		[Obsoleted (PlatformName.iOS, 9, 0)]
 		[Export ("isConnected")]
 		bool IsConnected { get;  }
+#endif
 
 		[Export ("services", ArgumentSemantic.Retain)]
 		[NullAllowed]
@@ -614,7 +625,8 @@ namespace CoreBluetooth {
 
 		[NoTV]
 		[NoWatch]
-		[Availability (Deprecated = Platform.iOS_7_0, Obsoleted = Platform.iOS_8_4)]
+		[Deprecated (PlatformName.iOS, 7, 0)]
+		[Obsoleted (PlatformName.iOS, 8, 4)]
 		[NoMacCatalyst]
 		[Export ("peripheralDidInvalidateServices:")]
 		void InvalidatedService (CBPeripheral peripheral);	
@@ -997,13 +1009,16 @@ namespace CoreBluetooth {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // CBPeer.h: - (instancetype)init NS_UNAVAILABLE;
 	interface CBPeer : NSCopying {
+#if !NET
 		[Internal]
 		[NoTV]
 		[NoWatch]
 		[NoMac]
-		[Availability (Deprecated = Platform.iOS_7_0, Obsoleted = Platform.iOS_9_0)]
+		[Deprecated (PlatformName.iOS, 7, 0)]
+		[Obsoleted (PlatformName.iOS, 9, 0)]
 		[Export ("UUID")]
 		IntPtr _UUID { get;  }
+#endif
 	
 		[iOS (7, 0)]
 		[Export ("identifier")]

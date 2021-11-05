@@ -5085,8 +5085,10 @@ namespace AppKit {
 		[Export ("discardEditing")]
 		void DiscardEditing ();
 
+#if !NET // We get this method from the NSEditor protocol
 		[Export ("commitEditingWithDelegate:didCommitSelector:contextInfo:")]
 		void CommitEditingWithDelegate ([NullAllowed] NSObject delegate1, [NullAllowed] Selector didCommitSelector, IntPtr contextInfo);
+#endif // !NET
 
 #if XAMCORE_4_0
 		[Export ("objectDidBeginEditing:")]

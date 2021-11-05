@@ -1089,7 +1089,9 @@ namespace Registrar {
 		protected abstract ConnectAttribute GetConnectAttribute (TProperty property); // Return null if no attribute is found. Do not consider inherited properties.
 		public abstract ProtocolAttribute GetProtocolAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract IEnumerable<ProtocolMemberAttribute> GetProtocolMemberAttributes (TType type); // Return null if no attributes found. Do not consider base types.
+#if MTOUCH || MMP || BUNDLER
 		protected abstract List<AvailabilityBaseAttribute> GetAvailabilityAttributes (TType obj); // must only return attributes for the current platform.
+#endif
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
@@ -1538,6 +1540,7 @@ namespace Registrar {
 
 		void VerifyTypeInSDK (ref List<Exception> exceptions, TType type, ObjCMethod parameterIn = null, ObjCMethod returnTypeOf = null, ObjCProperty propertyTypeOf = null, TType baseTypeOf = null)
 		{
+#if MTOUCH || MMP || BUNDLER
 			var attribs = GetAvailabilityAttributes (type);
 			if (attribs == null || attribs.Count == 0)
 				return;
@@ -1594,6 +1597,7 @@ namespace Registrar {
 					break;
 				}
 			}
+#endif
 		}
 
 		protected static void AddException (ref List<Exception> exceptions, Exception mex)

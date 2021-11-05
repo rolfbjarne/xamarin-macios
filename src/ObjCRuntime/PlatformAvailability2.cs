@@ -16,7 +16,7 @@
 //
 // Copyright 2015 Xamarin Inc. All rights reserved.
 
-#if COREBUILD || BGENERATOR || !NET
+#if COREBUILD || BGENERATOR || MTOUCH || MMP || BUNDLER || !NET
 using System;
 using System.Text;
 

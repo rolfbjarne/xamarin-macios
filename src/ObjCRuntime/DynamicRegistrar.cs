@@ -308,11 +308,13 @@ namespace Registrar {
 			}
 		}
 
+#if false
 		protected override List<AvailabilityBaseAttribute> GetAvailabilityAttributes (Type obj)
 		{
 			// No need to implement this until GetSDKVersion is implemented.
 			return null;
 		}
+#endif
 
 		protected override Version GetSDKVersion ()
 		{

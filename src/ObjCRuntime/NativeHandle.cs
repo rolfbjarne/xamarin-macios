@@ -1,9 +1,10 @@
 #if NET
 
 using System;
+using System.Collections.Generic;
 
 namespace ObjCRuntime {
-	public readonly struct NativeHandle {
+	public readonly struct NativeHandle : IEquatable<NativeHandle> {
 		readonly IntPtr handle;
 
 		public IntPtr Handle {
@@ -73,6 +74,11 @@ namespace ObjCRuntime {
 		public override int GetHashCode ()
 		{
 			return handle.GetHashCode ();
+		}
+
+		public bool Equals (NativeHandle other)
+		{
+			return other.handle == handle;
 		}
 	}
 }

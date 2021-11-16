@@ -98,7 +98,7 @@ namespace Extrospection
 
 		public void ProcessItem (ICustomAttributeProvider item, string itemName, VersionTuple objcVersion, string framework)
 		{
-			// Our bindings do not need have [Deprecated] for ancicent versions we don't support anymore
+			// Our bindings do not need have [Deprecated] for ancient versions we don't support anymore
 			if (VersionHelpers.VersionTooOldToCare (objcVersion))
 				return;
 
@@ -108,6 +108,8 @@ namespace Extrospection
 				return;
 
 			if (!AttributeHelpers.HasAnyDeprecationForCurrentPlatform (item)) {
+				if (itemName == "AudioComponentGetIcon")
+					Console.WriteLine ("STOP");
 				Log.On (framework).Add ($"!deprecated-attribute-missing! {itemName} missing a [Deprecated] attribute");
 				return;
 			}

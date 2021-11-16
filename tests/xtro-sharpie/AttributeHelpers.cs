@@ -56,6 +56,16 @@ namespace Extrospection
 			return false;
 		}
 
+		public static bool HasUnsupportedOSPlatform (CustomAttribute attribute, Platforms platform)
+		{
+			if (attribute.Constructor.DeclaringType.Name == "UnsupportedOSPlatformAttribute") {
+				var platformName = (string) attribute.ConstructorArguments [0].Value;
+				if (platformName.StartsWith (platform.AsPlatformAttributeString (), StringComparison.OrdinalIgnoreCase))
+					return true;
+			}
+			return false;
+		}
+
 		static bool GetPlatformVersion (CustomAttribute attribute, out Version version)
 		{
 			// Three different Attribute flavors
@@ -99,6 +109,12 @@ namespace Extrospection
 			Platforms[] platforms = GetRelatedPlatforms ();
 			foreach (var attribute in item.CustomAttributes) {
 				if (platforms.Any (x => AttributeHelpers.HasDeprecated (attribute, x)) || platforms.Any (x => AttributeHelpers.HasObsoleted (attribute, x)))
+					return true;
+
+				// The only related platforms for .NET is iOS for Mac Catalyst
+				if (AttributeHelpers.HasUnsupportedOSPlatform (attribute, Helpers.Platform))
+					return true;
+				if (Helpers.Platform == Platforms.MacCatalyst && AttributeHelpers.HasUnsupportedOSPlatform (attribute, Platforms.iOS))
 					return true;
 			}
 			return false;

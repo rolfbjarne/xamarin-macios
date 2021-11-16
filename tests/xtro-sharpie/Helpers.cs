@@ -202,9 +202,13 @@ namespace Extrospection {
 				// for iOS we won't report missing members that were deprecated before 5.0
 				if (!avail.Deprecated.IsEmpty && availName == "ios" && avail.Deprecated.Major < 5)
 					return false;
-				// can't return true right away as it can be deprecated too
-				if (!avail.Introduced.IsEmpty && (availName == platform))
-					result = true;
+				if (availName == platform) {
+					if (!avail.Deprecated.IsEmpty)
+						return false;
+					// can't return true right away as it can be deprecated too
+					if (!avail.Introduced.IsEmpty)
+						result = true;
+				}
 			}
 			return result;
 		}

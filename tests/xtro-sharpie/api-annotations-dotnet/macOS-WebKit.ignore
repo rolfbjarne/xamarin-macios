@@ -12,8 +12,6 @@
 !missing-enum! DOMXPathExceptionCode not bound
 !missing-enum! WebViewInsertAction not bound
 !missing-enum! WKUserInterfaceDirectionPolicy not bound
-!missing-enum-native! WebDragDestinationAction
-!missing-enum-native! WebDragSourceAction
 !missing-enum-native! WebNavigationType
 !missing-field! DOMEventException not bound
 !missing-field! DOMException not bound

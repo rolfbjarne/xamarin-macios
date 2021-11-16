@@ -214,7 +214,7 @@ else
 classify-maccatalyst: ; @true
 endif
 
-classify: build $(PCH_FILES)
+classify: xtro-sanity/bin/Debug/xtro-sanity.exe
 	rm -f $(ANNOTATIONS_DIR)/*.unclassified
 	$(MAKE) -j8 classify-ios classify-tvos classify-watchos classify-macos classify-maccatalyst
 	$(MONO) xtro-sanity/bin/Debug/xtro-sanity.exe $(abspath $(ANNOTATIONS_DIR)) $(INCLUDED_PLATFORMS)

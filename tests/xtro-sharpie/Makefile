@@ -18,9 +18,12 @@ clean-local::
 	rm -f *.tmp
 	rm -rf *os*.pch*
 
-bin/Debug/xtro-sharpie.exe xtro-report/bin/Debug/xtro-report.exe xtro-sanity/bin/Debug/xtro-sanity.exe build: $(wildcard *.cs)
+bin/Debug/xtro-sharpie.exe xtro-report/bin/Debug/xtro-report.exe xtro-sanity/bin/Debug/xtro-sanity.exe build: .stamp-build
+
+.stamp-build: $(wildcard *.cs)
 	$(Q) $(SYSTEM_XIBUILD) -t -- /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore xtro-sharpie.sln
 	$(Q_BUILD) $(SYSTEM_MSBUILD) $(MSBUILD_VERBOSITY) xtro-sharpie.sln
+	$(Q) touch $@
 
 XIOS ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/git/lib/64bits/iOS/Xamarin.iOS.dll
 XIOS_GL ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/OpenTK-1.0.dll
@@ -224,7 +227,7 @@ insane:
 remove-empty:
 	find . -size 0 | xargs git rm
 
-all: report report-dotnet
+all: report dotnet-report
 
 .stamp-check-sharpie:
 	@$(TOP)/system-dependencies.sh --ignore-all --enforce-sharpie

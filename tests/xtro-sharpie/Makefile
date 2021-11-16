@@ -18,9 +18,12 @@ clean-local::
 	rm -f *.tmp
 	rm -rf *os*.pch*
 
-bin/Debug/xtro-sharpie.exe xtro-report/bin/Debug/xtro-report.exe xtro-sanity/bin/Debug/xtro-sanity.exe build: $(wildcard *.cs)
+bin/Debug/xtro-sharpie.exe xtro-report/bin/Debug/xtro-report.exe xtro-sanity/bin/Debug/xtro-sanity.exe build: .stamp-build
+
+.stamp-build: $(wildcard *.cs)
 	$(Q) $(SYSTEM_XIBUILD) -t -- /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore xtro-sharpie.sln
 	$(Q_BUILD) $(SYSTEM_MSBUILD) $(MSBUILD_VERBOSITY) xtro-sharpie.sln
+	$(Q) touch $@
 
 XIOS ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/git/lib/64bits/iOS/Xamarin.iOS.dll
 XIOS_GL ?= $(TOP)/_ios-build/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/OpenTK-1.0.dll
@@ -142,14 +145,17 @@ endif
 
 gen-all: gen-ios gen-tvos gen-watchos gen-macos gen-maccatalyst
 
-wrench: classify
-dotnet-wrench: dotnet-classify
+wrench:
+	$(MAKE) -j8 classify
 
-report: build
+dotnet-wrench:
+	$(MAKE) -j8 dotnet-classify
+
+report: xtro-report/bin/Debug/xtro-report.exe .stamp-classify
 	rm -rf report/
 	$(MONO) xtro-report/bin/Debug/xtro-report.exe $(ANNOTATIONS_DIR) report
 
-dotnet-report:
+dotnet-report: xtro-report/bin/Debug/xtro-report.exe .stamp-classify-dotnet
 	rm -rf report-dotnet
 	$(MONO) xtro-report/bin/Debug/xtro-report.exe $(DOTNET_ANNOTATIONS_DIR) report-dotnet
 
@@ -167,64 +173,53 @@ endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetClassify,$(platform),$(shell echo $(platform) | tr a-z A-Z))))
 
 ifdef INCLUDE_IOS
-PCH_FILES+=$(XIOS_PCH)
 INCLUDED_PLATFORMS+=iOS
-
-classify-ios:
+classify-ios: bin/Debug/xtro-sharpie.exe $(XIOS_PCH) $(XIOS) $(XIOS_GL)
 	$(MONO) bin/Debug/xtro-sharpie.exe --output-directory $(ANNOTATIONS_DIR) $(XIOS_PCH) $(XIOS) $(XIOS_GL)
-else
-classify-ios: ; @true
+CLASSIFY+=classify-ios
 endif
 
 ifdef INCLUDE_TVOS
-PCH_FILES+=$(XTVOS_PCH)
 INCLUDED_PLATFORMS+=tvOS
-
-classify-tvos:
+classify-tvos: bin/Debug/xtro-sharpie.exe $(XTVOS_PCH) $(XTVOS) $(XTVOS_GL)
 	$(MONO) bin/Debug/xtro-sharpie.exe --output-directory $(ANNOTATIONS_DIR) $(XTVOS_PCH) $(XTVOS) $(XTVOS_GL)
-else
-classify-tvos: ; @true
+CLASSIFY+=classify-tvos
 endif
 
 ifdef INCLUDE_WATCH
-PCH_FILES+=$(XWATCHOS_PCH)
 INCLUDED_PLATFORMS+=watchOS
-
-classify-watchos:
+classify-watchos: bin/Debug/xtro-sharpie.exe $(XWATCHOS_PCH) $(XWATCHOS)
 	$(MONO) bin/Debug/xtro-sharpie.exe --output-directory $(ANNOTATIONS_DIR) $(XWATCHOS_PCH) $(XWATCHOS)
-else
-classify-watchos: ; @true
+CLASSIFY+=classify-watchos
 endif
 
 ifdef INCLUDE_MAC
-PCH_FILES+=$(XMACOS_PCH)
 INCLUDED_PLATFORMS+=macOS
-classify-macos:
+classify-macos: bin/Debug/xtro-sharpie.exe $(XMACOS_PCH) $(XMACOS)
 	$(MONO) bin/Debug/xtro-sharpie.exe --output-directory $(ANNOTATIONS_DIR) $(XMACOS_PCH) $(XMACOS)
-else
-classify-macos: ; @true
+CLASSIFY+=classify-macos
 endif
 
 ifdef INCLUDE_MACCATALYST
-PCH_FILES+=$(XMACCATALYST_PCH)
 INCLUDED_PLATFORMS+=MacCatalyst
-classify-maccatalyst: bin/Debug/xtro-sharpie.exe $(XMACCATALYST_PCH)
+classify-maccatalyst: bin/Debug/xtro-sharpie.exe $(XMACCATALYST_PCH) $(XMACCATALYST)
 	$(MONO) bin/Debug/xtro-sharpie.exe --output-directory $(ANNOTATIONS_DIR) $(XMACCATALYST_PCH) $(XMACCATALYST)
-else
-classify-maccatalyst: ; @true
+CLASSIFY+=classify-maccatalyst
 endif
 
-classify: xtro-sanity/bin/Debug/xtro-sanity.exe
-	rm -f $(ANNOTATIONS_DIR)/*.unclassified
-	$(MAKE) -j8 classify-ios classify-tvos classify-watchos classify-macos classify-maccatalyst
+.stamp-classify: xtro-sanity/bin/Debug/xtro-sanity.exe $(CLASSIFY)
 	$(MONO) xtro-sanity/bin/Debug/xtro-sanity.exe $(abspath $(ANNOTATIONS_DIR)) $(INCLUDED_PLATFORMS)
 	rm -f $(ANNOTATIONS_DIR)/*.raw
+	$(Q) touch $@
 
-dotnet-classify: xtro-sanity/bin/Debug/xtro-sanity.exe
-	rm -f $(DOTNET_ANNOTATIONS_DIR)/*.unclassified
-	$(MAKE) -j8 $(DOTNET_CLASSIFY)
+classify: .stamp-classify
+
+.stamp-classify-dotnet: xtro-sanity/bin/Debug/xtro-sanity.exe $(DOTNET_CLASSIFY)
 	$(MONO) xtro-sanity/bin/Debug/xtro-sanity.exe $(abspath $(DOTNET_ANNOTATIONS_DIR)) $(DOTNET_PLATFORMS)
 	rm -f $(DOTNET_ANNOTATIONS_DIR)/*.raw
+	$(Q) touch $@
+
+dotnet-classify: .stamp-classify-dotnet
 
 insane:
 	XTRO_SANITY_SKIP=1 make all
@@ -232,7 +227,7 @@ insane:
 remove-empty:
 	find . -size 0 | xargs git rm
 
-all: classify report
+all: report dotnet-report
 
 .stamp-check-sharpie:
 	@$(TOP)/system-dependencies.sh --ignore-all --enforce-sharpie

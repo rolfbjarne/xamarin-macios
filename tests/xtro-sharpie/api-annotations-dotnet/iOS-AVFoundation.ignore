@@ -12,3 +12,4 @@
 !missing-protocol-conformance! AVSampleBufferDisplayLayer should conform to AVQueuedSampleBufferRendering (defined in 'AVSampleBufferDisplayLayerQueueManagement' category)
 
 # Deprecated in iOS 6.0 but we have same C# signature as a method that was deprecated in iOS 8.0
+!deprecated-attribute-wrong! AVAudioRecorderDelegate::audioRecorderEndInterruption:withFlags: has 8.0 not 6.0 on [Deprecated] attribute

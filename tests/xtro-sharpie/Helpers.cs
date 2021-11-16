@@ -493,5 +493,23 @@ namespace Extrospection {
 
 			return argSem.ToString ();
 		}
+
+		public static string AsPlatformAttributeString (this Platforms platform)
+		{
+			switch (platform) {
+			case Platforms.iOS:
+				return "ios";
+			case Platforms.MacCatalyst:
+				return "maccatalyst";
+			case Platforms.macOS:
+				return "macos";
+			case Platforms.tvOS:
+				return "tvos";
+			case Platforms.watchOS:
+				return "watchos";
+			default:
+				throw new NotImplementedException (platform.ToString ());
+			}
+		}
 	}
 }

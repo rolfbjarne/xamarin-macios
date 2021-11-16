@@ -34,7 +34,6 @@
 # only for iOS and tvOS (not watchOS) and macOS uses OpenGL
 
 ## xamarin type
-!unknown-type! CADisplayLinkTimeSource bound
 
 ## we use OpenTK for bindings
 

@@ -982,6 +982,7 @@
 !unknown-pinvoke! dispatch_write bound
 !unknown-pinvoke! open bound
 !unknown-pinvoke! write bound
+!unknown-pinvoke! uname bound
 !missing-field! kCFStreamErrorDomainSOCKS not bound
 !missing-field! kCFStreamErrorDomainSSL not bound
 !missing-field! kCFStreamPropertyShouldCloseNativeSocket not bound

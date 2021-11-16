@@ -93,7 +93,7 @@ X$(2)_DOTNET ?= $(DOTNET_DESTDIR)/Microsoft.$(1).Runtime.$(X$(2)_RID)/runtimes/$
 dotnet-$(1)-$($(2)_SDK_VERSION).g.cs: .stamp-check-sharpie
 	$$(SHARPIE) query -bind $$(X$(2)_PCH) > $$@
 endef
-$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetGenerate,$(platform),$(shell echo $(platform) | tr a-z A-Z))))
+$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetAssembly,$(platform),$(shell echo $(platform) | tr a-z A-Z))))
 
 ios-$(IOS_SDK_VERSION).g.cs: $(XIOS_PCH)
 

@@ -189,6 +189,9 @@ namespace Extrospection {
 
 				long n = 0;
 				foreach (var value in decl.Values) {
+					if (!value.IsAvailable ())
+						continue;
+
 					if ((value.InitExpr != null) && value.InitExpr.EvaluateAsInt (decl.AstContext, out var integer))
 						n = integer.SExtValue;
 
@@ -225,6 +228,8 @@ namespace Extrospection {
 
 				ulong n = 0;
 				foreach (var value in decl.Values) {
+					if (!value.IsAvailable ())
+						continue;
 					if ((value.InitExpr != null) && value.InitExpr.EvaluateAsInt (decl.AstContext, out var integer))
 						n = integer.ZExtValue;
 

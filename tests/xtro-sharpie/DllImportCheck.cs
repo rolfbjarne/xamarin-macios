@@ -54,6 +54,9 @@ namespace Extrospection {
 			if (name [0] == '_')
 				return;
 
+			if (name == "AudioFileReadPackets")
+				Console.WriteLine ("STOP");
+
 			var framework = Helpers.GetFramework (decl);
 			if (framework == null)
 				return;

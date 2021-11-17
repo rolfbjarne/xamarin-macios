@@ -582,7 +582,9 @@
 !missing-null-allowed! 'AppKit.NSTextInputContext AppKit.NSTextInputContext::get_CurrentInputContext()' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'AppKit.NSTextInputContext AppKit.NSView::get_InputContext()' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'AppKit.NSTextStorage AppKit.NSTextView::get_TextStorage()' is missing an [NullAllowed] on return type
+!missing-null-allowed! 'AppKit.NSTextTab AppKit.NSTypesetter::GetTextTab(ObjCRuntime.nfloat,Foundation.NSWritingDirection,ObjCRuntime.nfloat)' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'AppKit.NSTextView AppKit.NSCell::FieldEditorForView(AppKit.NSView)' is missing an [NullAllowed] on return type
+!missing-null-allowed! 'AppKit.NSTouchBar AppKit.NSResponder_NSTouchBarProvider::GetTouchBar(AppKit.NSResponder)' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'AppKit.NSTouchBar AppKit.NSResponder_NSTouchBarProvider::MakeTouchBar(AppKit.NSResponder)' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'AppKit.NSTrackingArea AppKit.NSEvent::get_TrackingArea()' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'AppKit.NSTreeNode AppKit.NSTreeNode::DescendantNode(Foundation.NSIndexPath)' is missing an [NullAllowed] on return type

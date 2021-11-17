@@ -116,6 +116,28 @@ namespace Cecil.Tests {
 					return true;
 			}
 
+			// base (handle, owns, validate: false|true)
+			if (instructions.Count >= 5 &&
+				instructions [0].OpCode == OpCodes.Ldarg_0 &&
+				instructions [1].OpCode == OpCodes.Ldarg_1 &&
+				instructions [2].OpCode == OpCodes.Ldc_I4_0 &&
+				(instructions [3].OpCode == OpCodes.Ldc_I4_0 || instructions [3].OpCode == OpCodes.Ldc_I4_1) &&
+				instructions [4].OpCode == OpCodes.Call) {
+				var targetMethod = (instructions [4].Operand as MethodReference).Resolve ();
+				if (!targetMethod.IsConstructor) {
+					reason = $"Calls another method which is not a constructor (2): {targetMethod.FullName}";
+					return false;
+				}
+				var isChainedCtorCall = targetMethod.DeclaringType == method.DeclaringType || targetMethod.DeclaringType == method.DeclaringType.BaseType;
+				if (!isChainedCtorCall) {
+					reason = $"Calls unknown (unchained) constructor (2): {targetMethod.FullName}";
+					return false;
+				}
+
+				if (IsFunctionEnd (instructions, 5))
+					return true;
+			}
+
 			if (reason is null)
 				reason = $"Sequence of instructions didn't match any known sequence.";
 
@@ -155,6 +177,17 @@ namespace Cecil.Tests {
 			return ImplementsINativeObject (type.BaseType?.Resolve ());
 		}
 
+		public static bool SubclassesNSObject (TypeDefinition type)
+		{
+			if (type is null)
+				return false;
+
+			if (type.Namespace == "Foundation" && type.Name == "NSObject")
+				return true;
+
+			return SubclassesNSObject (type.BaseType?.Resolve ());
+		}
+
 		[Test]
 		[TestCase (ApplePlatform.iOS)]
 		[TestCase (ApplePlatform.TVOS)]
@@ -182,12 +215,12 @@ namespace Cecil.Tests {
 						// Find classes that implement INativeObject, but doesn't subclass NSObject.
 						if (!type.IsClass)
 							continue;
-						if (!type.HasInterfaces)
-							continue;
 
 						// Does type implement INativeObject?
 						if (!ImplementsINativeObject (type))
 							continue;
+
+						var isNSObjectSubclass = SubclassesNSObject (type);
 
 						// Find the constructors constructors we care about
 						var intptrCtor = GetConstructor (type, ("System", "IntPtr"));
@@ -223,7 +256,7 @@ namespace Cecil.Tests {
 							}
 						}
 
-						var skipILVerification = false;
+						var skipILVerification = isNSObjectSubclass;
 						switch (type.Name) {
 						case "CGPDFObject": // root class
 						case "SecKeyChain": // root class

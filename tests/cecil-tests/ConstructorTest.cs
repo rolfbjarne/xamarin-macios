@@ -175,6 +175,7 @@ namespace Cecil.Tests {
 						case "Class": // not really refcounted
 						case "Protocol": // not really refcounted
 						case "AURenderEventEnumerator": // this class shouldn't really be an INativeObject in the first place
+						case "AudioBuffers": // this class shouldn't really be an INativeObject in the first place
 							continue;
 						}
 
@@ -194,7 +195,7 @@ namespace Cecil.Tests {
 						var nativeHandleCtor = GetConstructor (type, ("ObjCRuntime", "NativeHandle"));
 						var nativeHandleBoolCtor = GetConstructor (type, ("ObjCRuntime", "NativeHandle"), ("System", "bool"));
 
-						if (intptrCtor is not null) {
+						if (intptrCtor is not null && (intptrCtor.IsPublic || intptrCtor.IsFamilyOrAssembly || intptrCtor.IsFamily)) {
 							var msg = $"{type}: (IntPtr) constructor found. It should not exist.";
 							Console.WriteLine ($"{GetLocation (intptrCtor)}{msg}");
 							failures.Add (msg);
@@ -224,6 +225,8 @@ namespace Cecil.Tests {
 
 						var skipILVerification = false;
 						switch (type.Name) {
+						case "CGPDFObject": // root class
+						case "SecKeyChain": // root class
 						case "NSObject": // NSObject is a base class and needs custom constructor logic
 							skipILVerification = true;
 							break;

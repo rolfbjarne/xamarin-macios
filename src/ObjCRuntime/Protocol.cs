@@ -39,7 +39,7 @@ namespace ObjCRuntime {
 		}
 
 		[Preserve (Conditional = true)]
-		internal Protocol (IntPtr handle, bool owns)
+		internal Protocol (NativeHandle handle, bool owns)
 		{
 			// protocols can't be freed, so we ignore the 'owns' parameter.
 			this.handle = handle;

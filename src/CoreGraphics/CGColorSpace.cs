@@ -78,7 +78,7 @@ namespace CoreGraphics {
 #endif
 
 #if !XAMCORE_4_0
-		public CGColorSpace (IntPtr handle)
+		public CGColorSpace (NativeHandle handle)
 			: base (handle, false)
 		{
 		}

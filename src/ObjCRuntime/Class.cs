@@ -81,9 +81,9 @@ namespace ObjCRuntime {
 
 		[Preserve (Conditional = true)]
 #if NET
-		internal Class (IntPtr handle, bool owns)
+		internal Class (NativeHandle handle, bool owns)
 #else
-		public Class (IntPtr handle, bool owns)
+		public Class (NativeHandle handle, bool owns)
 #endif
 		{
 			// Class(es) can't be freed, so we ignore the 'owns' parameter.

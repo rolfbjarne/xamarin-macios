@@ -35,17 +35,21 @@ using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreGraphics {
 
 	// CGDataProvider.h
 	public partial class CGDataProvider : NativeObject {
-		public CGDataProvider (IntPtr handle)
+		public CGDataProvider (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional=true)]
-		internal CGDataProvider (IntPtr handle, bool owns)
+		internal CGDataProvider (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 		}

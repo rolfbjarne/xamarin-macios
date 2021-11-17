@@ -32,6 +32,10 @@ using CoreFoundation;
 using ObjCRuntime;
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreGraphics {
 
 	// untyped enum -> CGPattern.h
@@ -57,13 +61,13 @@ namespace CoreGraphics {
 	{
 #if !COREBUILD
 		/* invoked by marshallers */
-		public CGPattern (IntPtr handle)
+		public CGPattern (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
 
 		[Preserve (Conditional=true)]
-		internal CGPattern (IntPtr handle, bool owns)
+		internal CGPattern (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 		}

@@ -39,6 +39,10 @@ using System.Runtime.InteropServices;
 using ObjCRuntime;
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 #nullable enable
 
 namespace CoreFoundation {
@@ -150,13 +154,13 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFStringGetTypeID")]
 		public extern static nint GetTypeID ();
 		
-		public CFString (IntPtr handle)
+		public CFString (NativeHandle handle)
 			: this (handle, false)
 		{
 		}
 		
 		[Preserve (Conditional = true)]
-		protected internal CFString (IntPtr handle, bool owns)
+		protected internal CFString (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 		}

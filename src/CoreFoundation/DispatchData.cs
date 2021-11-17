@@ -31,15 +31,19 @@ using System.Threading;
 using ObjCRuntime;
 using Foundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreFoundation {
 
 	public partial class DispatchData : DispatchObject {
 #if !COREBUILD
-		public DispatchData (IntPtr handle, bool owns) : base (handle, owns)
+		public DispatchData (NativeHandle handle, bool owns) : base (handle, owns)
 		{
 		}
 
-		public DispatchData (IntPtr handle) : base (handle, false)
+		public DispatchData (NativeHandle handle) : base (handle, false)
 		{
 		}
 

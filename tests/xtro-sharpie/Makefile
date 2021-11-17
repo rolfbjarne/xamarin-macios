@@ -209,14 +209,14 @@ endif
 
 .stamp-classify: xtro-sanity/bin/Debug/xtro-sanity.exe $(CLASSIFY)
 	$(MONO) xtro-sanity/bin/Debug/xtro-sanity.exe $(abspath $(ANNOTATIONS_DIR)) $(INCLUDED_PLATFORMS)
-	rm -f $(ANNOTATIONS_DIR)/*.raw
+	#rm -f $(ANNOTATIONS_DIR)/*.raw
 	$(Q) touch $@
 
 classify: .stamp-classify
 
 .stamp-classify-dotnet: xtro-sanity/bin/Debug/xtro-sanity.exe $(DOTNET_CLASSIFY)
 	$(MONO) xtro-sanity/bin/Debug/xtro-sanity.exe $(abspath $(DOTNET_ANNOTATIONS_DIR)) $(DOTNET_PLATFORMS)
-	rm -f $(DOTNET_ANNOTATIONS_DIR)/*.raw
+	#rm -f $(DOTNET_ANNOTATIONS_DIR)/*.raw
 	$(Q) touch $@
 
 dotnet-classify: .stamp-classify-dotnet

@@ -84,6 +84,7 @@ namespace Extrospection {
 		}
 
 		public static Platforms Platform { get; set; }
+		public static bool IsDotNet { get; set; }
 
 		public static int GetPlatformManagedValue (Platforms platform)
 		{
@@ -150,6 +151,10 @@ namespace Extrospection {
 					break;
 				case "NoMacAttribute":
 					if (Platform == Platforms.macOS)
+						return false;
+					break;
+				case "UnsupportedOSPlatformAttribute":
+					if (AttributeHelpers.IsOSPlatformAttribute (ca, Platform))
 						return false;
 					break;
 				}

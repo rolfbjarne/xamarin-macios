@@ -154,13 +154,19 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary, EntryPoint="CFStringGetTypeID")]
 		public extern static nint GetTypeID ();
 		
+#if !NET
 		public CFString (NativeHandle handle)
 			: this (handle, false)
 		{
 		}
+#endif
 		
 		[Preserve (Conditional = true)]
+#if NET
+		internal CFString (NativeHandle handle, bool owns)
+#else
 		protected internal CFString (NativeHandle handle, bool owns)
+#endif
 			: base (handle, owns)
 		{
 		}

@@ -898,7 +898,7 @@ namespace AudioToolbox {
 				if (res != 0)
 					return null;
 
-				return new CFString (sptr, true);
+				return CFString.FromHandle (sptr, true);
 			}
 		}
 
@@ -914,7 +914,7 @@ namespace AudioToolbox {
 				if (res != 0)
 					return null;
 
-				return new CFString (sptr, true);
+				return CFString.FromHandle (sptr, true);
 			}
 		}
 

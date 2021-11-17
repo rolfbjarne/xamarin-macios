@@ -44,13 +44,13 @@ namespace CoreFoundation
 	{
 		delegate void CFMachPortCallBack (IntPtr cfmachport, IntPtr msg, nint len, IntPtr context);
 
-#if !XAMCORE_4_0
+#if !NET
 		public CFMachPort (NativeHandle handle) : base (handle, false)
 		{
 		}
 #endif
 
-#if XAMCORE_4_0
+#if NET
 		internal CFMachPort (NativeHandle handle, bool owns)
 #else
 		public CFMachPort (NativeHandle handle, bool owns)

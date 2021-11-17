@@ -97,7 +97,7 @@ namespace CoreGraphics {
 		{
 		}
 
-#if !XAMCORE_4_0
+#if !NET
 		public CGPath (NativeHandle handle)
 			: base (handle, false)
 		{

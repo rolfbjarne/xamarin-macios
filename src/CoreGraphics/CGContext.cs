@@ -45,7 +45,7 @@ namespace CoreGraphics {
 	public class CGContext : NativeObject
 	{
 #if !COREBUILD
-#if !XAMCORE_4_0
+#if !NET
 		public CGContext (NativeHandle handle)
 			: base (handle, false)
 		{

@@ -48,7 +48,7 @@ namespace CoreAnimation {
 	public partial class CAGradientLayer {
 		public CGColor CreateColor (IntPtr p)
 		{
-			return new CGColor (p);
+			return new CGColor (p, false);
 		}
 		
 		public CGColor [] Colors {

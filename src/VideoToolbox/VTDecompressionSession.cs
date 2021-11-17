@@ -34,7 +34,7 @@ namespace VideoToolbox {
 
 		GCHandle callbackHandle;
 
-#if !XAMCORE_4_0
+#if !NET
 		protected internal VTDecompressionSession (NativeHandle handle) : base (handle)
 		{
 		}

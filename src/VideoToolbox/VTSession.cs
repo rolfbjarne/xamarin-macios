@@ -31,10 +31,12 @@ namespace VideoToolbox {
 	[iOS (8,0), TV (10,2)]
 #endif
 	public class VTSession : NativeObject {
+#if !NET
 		protected internal VTSession (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
+#endif
 
 		[Preserve (Conditional=true)]
 		internal VTSession (NativeHandle handle, bool owns)

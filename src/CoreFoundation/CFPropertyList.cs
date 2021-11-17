@@ -38,7 +38,7 @@ namespace CoreFoundation
 
 		static nint CFNumberTypeID = CFNumberGetTypeID ();
 
-#if XAMCORE_4_0
+#if NET
 		internal CFPropertyList (NativeHandle handle, bool owns)
 #else
 		public CFPropertyList (NativeHandle handle, bool owns)
@@ -47,7 +47,7 @@ namespace CoreFoundation
 		{
 		}
 
-#if !XAMCORE_4_0
+#if !NET
 		public CFPropertyList (NativeHandle handle) : this (handle, false)
 		{
 		}

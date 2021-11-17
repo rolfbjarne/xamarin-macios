@@ -45,7 +45,7 @@ using NativeHandle = System.IntPtr;
 
 namespace Security {
 	public partial class SecTrust : NativeObject {
-#if !XAMCORE_4_0
+#if !NET
 		public SecTrust (NativeHandle handle) 
 			: base (handle, false)
 		{

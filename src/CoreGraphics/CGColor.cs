@@ -46,10 +46,12 @@ namespace CoreGraphics {
 	public class CGColor : NativeObject
 	{
 #if !COREBUILD
+#if !NET
 		public CGColor (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
+#endif
 
 		[Preserve (Conditional=true)]
 		internal CGColor (NativeHandle handle, bool owns)

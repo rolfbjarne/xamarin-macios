@@ -28,7 +28,7 @@ namespace CoreMedia {
 #endif
 	public class CMClock : CMClockOrTimebase
 	{
-#if !XAMCORE_4_0
+#if !NET
 		public CMClock (NativeHandle handle) : base (handle)
 		{
 		}
@@ -70,7 +70,7 @@ namespace CoreMedia {
 		{
 			IntPtr ptr;
 			clockError = CMAudioClockCreate (IntPtr.Zero, out ptr);
-			return clockError == CMClockError.None ? new CMClock (ptr) : null;
+			return clockError == CMClockError.None ? new CMClock (ptr, true) : null;
 		}
 #endif
 
@@ -115,10 +115,12 @@ namespace CoreMedia {
 #endif
 	public class CMTimebase : CMClockOrTimebase
 	{
+#if !NET
 		public CMTimebase (NativeHandle handle)
 			: base (handle)
 		{
 		}
+#endif
 
 		private CMTimebase (NativeHandle handle, bool owns)
 			: base (handle, owns)
@@ -732,7 +734,7 @@ namespace CoreMedia {
 #endif
 	public class CMClockOrTimebase : NativeObject
 	{
-#if !XAMCORE_4_0
+#if !NET
 		public CMClockOrTimebase (NativeHandle handle)
 			: base (handle, false)
 		{

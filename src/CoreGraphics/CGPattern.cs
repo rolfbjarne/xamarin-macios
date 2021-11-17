@@ -60,11 +60,12 @@ namespace CoreGraphics {
 	public class CGPattern : NativeObject
 	{
 #if !COREBUILD
-		/* invoked by marshallers */
+#if !NET
 		public CGPattern (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
+#endif
 
 		[Preserve (Conditional=true)]
 		internal CGPattern (NativeHandle handle, bool owns)
@@ -106,7 +107,7 @@ namespace CoreGraphics {
 		{
 			GCHandle gch = GCHandle.FromIntPtr (voidptr);
 			DrawPattern draw_pattern = (DrawPattern) gch.Target;
-			using (var ctx = new CGContext (cgcontextptr))
+			using (var ctx = new CGContext (cgcontextptr, false))
 				draw_pattern (ctx);
 		}
 

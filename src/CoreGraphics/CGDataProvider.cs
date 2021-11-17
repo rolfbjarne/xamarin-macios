@@ -43,10 +43,12 @@ namespace CoreGraphics {
 
 	// CGDataProvider.h
 	public partial class CGDataProvider : NativeObject {
+#if !NET
 		public CGDataProvider (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
+#endif
 
 		[Preserve (Conditional=true)]
 		internal CGDataProvider (NativeHandle handle, bool owns)

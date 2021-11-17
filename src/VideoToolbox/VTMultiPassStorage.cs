@@ -33,10 +33,12 @@ namespace VideoToolbox {
 		bool closed;
 		VTStatus closedStatus;
 
+#if !NET
 		protected internal VTMultiPassStorage (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
+#endif
 
 		[Preserve (Conditional=true)]
 		internal VTMultiPassStorage (NativeHandle handle, bool owns)

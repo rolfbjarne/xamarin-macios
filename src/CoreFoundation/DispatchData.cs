@@ -39,13 +39,19 @@ namespace CoreFoundation {
 
 	public partial class DispatchData : DispatchObject {
 #if !COREBUILD
+#if NET
+		internal DispatchData (NativeHandle handle, bool owns) : base (handle, owns)
+#else
 		public DispatchData (NativeHandle handle, bool owns) : base (handle, owns)
+#endif
 		{
 		}
 
+#if !NET
 		public DispatchData (NativeHandle handle) : base (handle, false)
 		{
 		}
+#endif
 
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_data_create (IntPtr buffer, nuint size, IntPtr dispatchQueue, IntPtr destructor);

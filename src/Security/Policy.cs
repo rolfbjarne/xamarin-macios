@@ -42,7 +42,7 @@ using NativeHandle = System.IntPtr;
 
 namespace Security {
 	public partial class SecPolicy : NativeObject {
-#if !XAMCORE_4_0
+#if !NET
 		public SecPolicy (NativeHandle handle)
 			: base (handle, false, true)
 		{

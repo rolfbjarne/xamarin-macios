@@ -34,6 +34,7 @@ static MonoClass* nsvalue_class = NULL;
 static MonoClass* nsnumber_class = NULL;
 static MonoClass* nsstring_class = NULL;
 static MonoClass* runtime_class = NULL;
+static MonoClass* nativehandle_class = NULL;
 
 #if !LEGACY_XAMARIN_MAC
 void
@@ -126,6 +127,7 @@ xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, G
 
 	runtime_class = get_class_from_name (platform_image, objcruntime, "Runtime");
 	inativeobject_class = get_class_from_name (platform_image, objcruntime, "INativeObject");
+	nativehandle_class = get_class_from_name (platform_image, objcruntime, "NativeHandle");
 	nsobject_class = get_class_from_name (platform_image, foundation, "NSObject");
 	nsnumber_class = get_class_from_name (platform_image, foundation, "NSNumber", true);
 	nsvalue_class = get_class_from_name (platform_image, foundation, "NSValue", true);
@@ -168,6 +170,14 @@ xamarin_get_inativeobject_class ()
 	if (inativeobject_class == NULL)
 		xamarin_assertion_message ("Internal consistency error, please file a bug (https://github.com/xamarin/xamarin-macios/issues/new). Additional data: can't get the %s class because it's been linked away.\n", "INativeObject");
 	return inativeobject_class;
+}
+
+MonoClass *
+xamarin_get_nativehandle_class ()
+{
+	if (nativehandle_class == NULL)
+		xamarin_assertion_message ("Internal consistency error, please file a bug (https://github.com/xamarin/xamarin-macios/issues/new). Additional data: can't get the %s class because it's been linked away.\n", "NativeHandle");
+	return nativehandle_class;
 }
 
 MonoClass *
@@ -313,6 +323,12 @@ xamarin_is_class_inativeobject (MonoClass *cls)
 	MONO_ASSERT_GC_UNSAFE;
 
 	return mono_class_is_subclass_of (cls, xamarin_get_inativeobject_class (), true);
+}
+
+bool
+xamarin_is_class_nativehandle (MonoClass *cls)
+{
+	return cls == xamarin_get_nativehandle_class ();
 }
 
 bool

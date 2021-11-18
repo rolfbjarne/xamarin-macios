@@ -36,7 +36,7 @@ using NativeHandle = System.IntPtr;
 #endif
 
 namespace Foundation {
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 	public sealed class NSUrlProtocolClient : NSObject
 	{
 		public NSUrlProtocolClient (IntPtr handle)

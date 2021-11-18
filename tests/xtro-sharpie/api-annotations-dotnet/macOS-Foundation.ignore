@@ -12,7 +12,6 @@
 
 ## The AppKit version will be removed in XAMCORE_4_0.
 ## See https://github.com/xamarin/xamarin-macios/issues/6573
-!duplicate-type-name! NSWritingDirection enum exists as both Foundation.NSWritingDirection and AppKit.NSWritingDirection
 
 ## unsorted
 

@@ -62,7 +62,14 @@ namespace Cecil.Tests {
 		{
 			reason = null;
 
-			if (instructions [0].OpCode == OpCodes.Ldarg_0 && instructions [1].OpCode == OpCodes.Ldarg_1 && instructions [2].OpCode == OpCodes.Call) {
+			// base (owns)
+			// optional additional statements (either statement, not both):
+			//     IsDirectBinding = false;
+			//     MarkDirtyIfDerived ()
+			if (instructions.Count >= 3 &&
+				instructions [0].OpCode == OpCodes.Ldarg_0 &&
+				instructions [1].OpCode == OpCodes.Ldarg_1 &&
+				instructions [2].OpCode == OpCodes.Call) {
 				var targetMethod = (instructions [2].Operand as MethodReference).Resolve ();
 				if (!targetMethod.IsConstructor) {
 					reason = $"Calls another method which is not a constructor: {targetMethod.FullName}";
@@ -100,7 +107,12 @@ namespace Cecil.Tests {
 				}
 			}
 
-			if (instructions [0].OpCode == OpCodes.Ldarg_0 && instructions [1].OpCode == OpCodes.Ldarg_1 && instructions [2].OpCode == OpCodes.Ldc_I4_0 && instructions [3].OpCode == OpCodes.Call) {
+			// base (handle, owns|false)
+			if (instructions.Count >= 4 &&
+				instructions [0].OpCode == OpCodes.Ldarg_0 &&
+				instructions [1].OpCode == OpCodes.Ldarg_1 &&
+				(instructions [2].OpCode == OpCodes.Ldarg_2 || instructions [2].OpCode == OpCodes.Ldc_I4_0) &&
+				instructions [3].OpCode == OpCodes.Call) {
 				var targetMethod = (instructions [3].Operand as MethodReference).Resolve ();
 				if (!targetMethod.IsConstructor) {
 					reason = $"Calls another method which is not a constructor (2): {targetMethod.FullName}";
@@ -116,11 +128,11 @@ namespace Cecil.Tests {
 					return true;
 			}
 
-			// base (handle, owns, validate: false|true)
+			// base (handle, owns|false, validate: false|true)
 			if (instructions.Count >= 5 &&
 				instructions [0].OpCode == OpCodes.Ldarg_0 &&
 				instructions [1].OpCode == OpCodes.Ldarg_1 &&
-				instructions [2].OpCode == OpCodes.Ldc_I4_0 &&
+				(instructions [2].OpCode == OpCodes.Ldarg_2 || instructions [2].OpCode == OpCodes.Ldc_I4_0) &&
 				(instructions [3].OpCode == OpCodes.Ldc_I4_0 || instructions [3].OpCode == OpCodes.Ldc_I4_1) &&
 				instructions [4].OpCode == OpCodes.Call) {
 				var targetMethod = (instructions [4].Operand as MethodReference).Resolve ();
@@ -188,6 +200,31 @@ namespace Cecil.Tests {
 			return SubclassesNSObject (type.BaseType?.Resolve ());
 		}
 
+		static bool IsVisible (TypeDefinition type)
+		{
+			if (type.IsNested) {
+				if (!IsVisible (type.DeclaringType))
+					return false;
+				return type.IsNestedPublic || type.IsNestedFamily || type.IsNestedFamilyOrAssembly;
+			} else {
+				return type.IsPublic;
+			}
+		}
+
+		static bool IsVisible (MethodDefinition method)
+		{
+			if (!IsVisible (method.DeclaringType))
+				return false;
+			return method.IsPublic || method.IsFamilyOrAssembly || method.IsFamily;
+		}
+
+		static bool IsPublic (MethodDefinition method)
+		{
+			if (!IsVisible (method.DeclaringType))
+				return false;
+			return method.IsPublic;
+		}
+
 		[Test]
 		[TestCase (ApplePlatform.iOS)]
 		[TestCase (ApplePlatform.TVOS)]
@@ -224,14 +261,19 @@ namespace Cecil.Tests {
 
 						// Find the constructors constructors we care about
 						var intptrCtor = GetConstructor (type, ("System", "IntPtr"));
-						var intptrBoolCtor = GetConstructor (type, ("System", "IntPtr"), ("System", "bool"));
+						var intptrBoolCtor = GetConstructor (type, ("System", "IntPtr"), ("System", "Boolean"));
 						var nativeHandleCtor = GetConstructor (type, ("ObjCRuntime", "NativeHandle"));
-						var nativeHandleBoolCtor = GetConstructor (type, ("ObjCRuntime", "NativeHandle"), ("System", "bool"));
+						var nativeHandleBoolCtor = GetConstructor (type, ("ObjCRuntime", "NativeHandle"), ("System", "Boolean"));
 
-						if (intptrCtor is not null && (intptrCtor.IsPublic || intptrCtor.IsFamilyOrAssembly || intptrCtor.IsFamily)) {
-							var msg = $"{type}: (IntPtr) constructor found. It should not exist.";
-							Console.WriteLine ($"{GetLocation (intptrCtor)}{msg}");
-							failures.Add (msg);
+						if (intptrCtor is not null) {
+							if (IsVisible (intptrCtor)) {
+								var msg = $"{type}: (IntPtr) constructor found. It should not exist.";
+								Console.WriteLine ($"{GetLocation (intptrCtor)}{msg}");
+								failures.Add (msg);
+							} else {
+								var msg = $"{type}: private (IntPtr) constructor found. It should probably not exist.";
+								Console.WriteLine ($"{GetLocation (intptrCtor)}{msg}");
+							}
 						}
 
 						if (intptrBoolCtor is not null) {
@@ -241,7 +283,7 @@ namespace Cecil.Tests {
 						}
 
 						if (nativeHandleCtor is not null) {
-							if (nativeHandleCtor.IsPublic) {
+							if (IsPublic (nativeHandleCtor)) {
 								var msg = $"{type}: public (NativeHandle) constructor found. If it exists it should not be public.";
 								Console.WriteLine ($"{GetLocation (nativeHandleCtor)}{msg}");
 								failures.Add (msg);
@@ -249,7 +291,7 @@ namespace Cecil.Tests {
 						}
 
 						if (nativeHandleBoolCtor is not null) {
-							if (nativeHandleBoolCtor.IsPublic) {
+							if (IsPublic (nativeHandleBoolCtor)) {
 								var msg = $"{type}: public (NativeHandle, bool) constructor found. If it exists it should not be public.";
 								Console.WriteLine ($"{GetLocation (nativeHandleBoolCtor)}{msg}");
 								failures.Add (msg);
@@ -261,6 +303,9 @@ namespace Cecil.Tests {
 						case "CGPDFObject": // root class
 						case "SecKeyChain": // root class
 						case "NSObject": // NSObject is a base class and needs custom constructor logic
+						case "NSZone": // root class
+						case "ABAddressBook": // needs a custom ctor implementation
+						case "CFSocket": // needs a custom ctor implementation
 							skipILVerification = true;
 							break;
 						}

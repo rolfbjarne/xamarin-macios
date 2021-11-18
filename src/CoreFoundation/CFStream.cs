@@ -767,7 +767,7 @@ namespace CoreFoundation {
 #endif
 		public DispatchQueue ReadDispatchQueue {
 			get {
-				return new DispatchQueue (CFReadStreamCopyDispatchQueue (Handle));
+				return new DispatchQueue (CFReadStreamCopyDispatchQueue (Handle), true);
 			}
 			set {
 				CFReadStreamSetDispatchQueue (Handle, value.GetHandle ());
@@ -779,7 +779,7 @@ namespace CoreFoundation {
 #endif
 		public DispatchQueue WriteDispatchQueue {
 			get {
-				return new DispatchQueue (CFWriteStreamCopyDispatchQueue (Handle));
+				return new DispatchQueue (CFWriteStreamCopyDispatchQueue (Handle), true);
 			}
 			set {
 				CFWriteStreamSetDispatchQueue (Handle, value.GetHandle ());

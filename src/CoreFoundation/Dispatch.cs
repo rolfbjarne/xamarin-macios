@@ -186,9 +186,11 @@ namespace CoreFoundation {
 		{
 		}
 
+#if !NET
 		public DispatchQueue (NativeHandle handle) : base (handle, false)
 		{
 		}
+#endif
 		
 		public DispatchQueue (string label)
 			: base (dispatch_queue_create (label, IntPtr.Zero), true)

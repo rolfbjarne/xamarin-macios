@@ -19,6 +19,10 @@ using nw_advertise_descriptor_t=System.IntPtr;
 using OS_nw_advertise_descriptor=System.IntPtr;
 using OS_nw_txt_record=System.IntPtr;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Network {
 #if !NET
 	[TV (12,0), Mac (10,14), iOS (12,0)]
@@ -28,7 +32,7 @@ namespace Network {
 	[SupportedOSPlatform ("tvos12.0")]
 #endif
 	public class NWAdvertiseDescriptor : NativeObject {
-		public NWAdvertiseDescriptor (IntPtr handle, bool owns) : base (handle, owns)
+		public NWAdvertiseDescriptor (NativeHandle handle, bool owns) : base (handle, owns)
 		{ }
 
 		[DllImport (Constants.NetworkLibrary)]

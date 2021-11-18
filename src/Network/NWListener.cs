@@ -18,6 +18,10 @@ using CoreFoundation;
 
 using nw_connection_group_t=System.IntPtr;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Network {
 
 #if !NET
@@ -30,7 +34,7 @@ namespace Network {
 	public class NWListener : NativeObject {
 		bool connectionHandlerWasSet = false;
 		object connectionHandlerLock = new object ();
-		public NWListener (IntPtr handle, bool owns) : base (handle, owns)
+		public NWListener (NativeHandle handle, bool owns) : base (handle, owns)
 		{
 		}
 

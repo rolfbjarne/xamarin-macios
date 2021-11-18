@@ -351,7 +351,7 @@ namespace CoreText {
 	}
 
 	public class CTFontDescriptor : NativeObject {
-		internal CTFontDescriptor (IntPtr handle, bool owns)
+		internal CTFontDescriptor (NativeHandle handle, bool owns)
 			: base (handle, owns, true)
 		{
 		}

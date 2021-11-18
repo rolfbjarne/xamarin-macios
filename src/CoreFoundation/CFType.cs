@@ -28,7 +28,7 @@ namespace CoreFoundation {
 		}
 #endif
 
-		internal CFType (IntPtr handle, bool owns)
+		internal CFType (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 		}

@@ -38,6 +38,10 @@ using Foundation;
 
 using CFIndex = System.nint;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreFoundation {
 
 	// anonymous and typeless native enum - System/Library/Frameworks/CoreFoundation.framework/Headers/CFRunLoop.h
@@ -309,7 +313,7 @@ namespace CoreFoundation {
 		}
 
 		[Preserve (Conditional = true)]
-		internal CFRunLoop (IntPtr handle, bool owns)
+		internal CFRunLoop (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 		}

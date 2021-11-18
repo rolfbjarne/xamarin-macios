@@ -40,18 +40,23 @@ using CFAllocatorRef = System.IntPtr;
 
 #nullable enable
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreFoundation {
 	
 	// interesting bits: https://github.com/opensource-apple/CF/blob/master/CFArray.c
 	public partial class CFArray : NativeObject {
-
-		internal CFArray (IntPtr handle)
+#if !NET
+		internal CFArray (NativeHandle handle)
 			: base (handle, false)
 		{
 		}
+#endif
 
 		[Preserve (Conditional = true)]
-		internal CFArray (IntPtr handle, bool owns)
+		internal CFArray (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 		}

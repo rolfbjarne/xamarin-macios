@@ -312,7 +312,7 @@ namespace AudioUnit
 		Dictionary<uint, RenderDelegate>? renderer;
 		Dictionary<uint, InputDelegate>? inputs;
 
-		internal AudioUnit (IntPtr handle, bool owns)
+		internal AudioUnit (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
 			gcHandle = GCHandle.Alloc(this);

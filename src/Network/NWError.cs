@@ -17,6 +17,10 @@ using ObjCRuntime;
 using Foundation;
 using CoreFoundation;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Network {
 #if !NET
 	[TV (12,0), Mac (10,14), iOS (12,0)]
@@ -26,7 +30,7 @@ namespace Network {
 	[SupportedOSPlatform ("tvos12.0")]
 #endif
 	public class NWError : NativeObject {
-		public NWError (IntPtr handle, bool owns) : base (handle, owns)
+		public NWError (NativeHandle handle, bool owns) : base (handle, owns)
 		{
 		}
 

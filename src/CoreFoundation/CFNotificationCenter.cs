@@ -21,6 +21,10 @@ using Foundation;
 using CoreFoundation;
 using System.Collections.Generic;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace CoreFoundation {
 
 	[Native] // CFIndex

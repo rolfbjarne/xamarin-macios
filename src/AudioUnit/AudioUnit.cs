@@ -315,7 +315,6 @@ namespace AudioUnit
 		internal AudioUnit (NativeHandle handle, bool owns)
 			: base (handle, owns)
 		{
-			gcHandle = GCHandle.Alloc(this);
 		}
 
 		static IntPtr Create (AudioComponent component)
@@ -603,6 +602,9 @@ namespace AudioUnit
 				Interlocked.CompareExchange (ref renderer, new Dictionary<uint, RenderDelegate> (), null);
 
 			renderer [audioUnitElement] = renderDelegate;
+
+			if (!gcHandle.IsAllocated)
+				gcHandle = GCHandle.Alloc (this);
 
 			var cb = new AURenderCallbackStruct ();
 			cb.Proc = CreateRenderCallback;

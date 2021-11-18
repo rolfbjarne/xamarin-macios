@@ -168,7 +168,6 @@
 
 ## It got renamed from UITextWritingDirection to NSWritingDirection but it is a breaking change
 ## Fixed in XAMCORE_4_0
-!unknown-native-enum! UITextWritingDirection bound
 
 ## macro is used in UIBarCommon.h: #define UIToolbarPosition UIBarPosition
 !unknown-native-enum! UIToolbarPosition bound

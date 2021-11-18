@@ -242,3 +242,7 @@ unclassified2todo:
 	@for filename in $(git status -s | cut -c4- | grep .todo); do \
 		sort -o "$filename" "$filename"; \
 	done
+
+unclassified2todo-dotnet:
+	$(SYSTEM_CSC) -features:strict Filter.cs u2todo/u2todo.cs
+	cd $(DOTNET_ANNOTATIONS_DIR) && $(MONO) ../u2todo.exe

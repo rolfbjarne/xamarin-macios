@@ -72,10 +72,8 @@ namespace CoreFoundation {
 		//
 		[Preserve (Conditional = true)]
 		internal DispatchObject (NativeHandle handle, bool owns)
-			: base (handle, owns)
+			: base (handle, owns, verify: true)
 		{
-			if (handle == IntPtr.Zero)
-				throw new ArgumentNullException ("handle");
 		}
 
 		internal DispatchObject ()

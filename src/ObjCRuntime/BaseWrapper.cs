@@ -17,7 +17,11 @@ namespace ObjCRuntime {
 
 	public abstract class BaseWrapper : NativeObject {
 
+#if NET
+		protected BaseWrapper (NativeHandle handle, bool owns)
+#else
 		public BaseWrapper (NativeHandle handle, bool owns)
+#endif
 			: base (handle, owns)
 		{
 		}

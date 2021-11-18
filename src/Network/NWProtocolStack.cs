@@ -22,6 +22,10 @@ using nw_service_class_t=System.IntPtr;
 using nw_protocol_stack_t=System.IntPtr;
 using nw_protocol_options_t=System.IntPtr;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace Network {
 
 #if !NET
@@ -32,7 +36,11 @@ namespace Network {
 	[SupportedOSPlatform ("tvos12.0")]
 #endif
 	public class NWProtocolStack : NativeObject {
-		public NWProtocolStack (IntPtr handle, bool owns) : base (handle, owns) {}
+#if NET
+		internal NWProtocolStack (NativeHandle handle, bool owns) : base (handle, owns) {}
+#else
+		public NWProtocolStack (NativeHandle handle, bool owns) : base (handle, owns) {}
+#endif
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern void nw_protocol_stack_prepend_application_protocol (nw_protocol_stack_t stack, nw_protocol_options_t options);

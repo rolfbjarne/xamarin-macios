@@ -952,7 +952,11 @@ namespace Introspection {
 			var fi = type.GetField ("class_ptr", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 			if (fi == null)
 				return IntPtr.Zero; // e.g. *Delegate
+#if NET
+			return (NativeHandle) fi.GetValue (null);
+#else
 			return (IntPtr) fi.GetValue (null);
+#endif
 		}
 
 		[Test]

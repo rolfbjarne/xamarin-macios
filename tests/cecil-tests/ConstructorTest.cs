@@ -306,6 +306,9 @@ namespace Cecil.Tests {
 						case "NSZone": // root class
 						case "ABAddressBook": // needs a custom ctor implementation
 						case "CFSocket": // needs a custom ctor implementation
+						case "NWBrowser": // needs a custom ctor implementation
+						case "NWListener": // needs a custom ctor implementation
+						case "CFNotificationCenter": // needs a custom ctor implementation
 							skipILVerification = true;
 							break;
 						}

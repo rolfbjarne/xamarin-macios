@@ -59,7 +59,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		{
 			Assert.DoesNotThrow (() => new Class (typeof (NSObject)), "NSObject");
 			if (Runtime.DynamicRegistrationSupported) {
-				Assert.AreEqual (IntPtr.Zero, new Class (typeof (string)).Handle, "string");
+				Assert.AreEqual (NativeHandle.Zero, new Class (typeof (string)).Handle, "string");
 			} else {
 				try {
 					new Class (typeof (string));

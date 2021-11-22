@@ -33,7 +33,7 @@ namespace MonoTouchFixtures.Photos {
 			return null;
 		};
 
-		delegate NativeHandle DPHLivePhotoFrameProcessingBlock2 (IntPtr block, NativeHandle frame, ref IntPtr error);
+		delegate NativeHandle DPHLivePhotoFrameProcessingBlock2 (IntPtr block, NativeHandle frame, ref NativeHandle error);
 
 #if !MONOMAC
 		// on macOS `initWithLivePhotoEditingInput:` returns `nil` and we throw

@@ -23,14 +23,7 @@ using NativeHandle = System.IntPtr;
 
 namespace AddressBookUI {
 
-#if !NET
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
-#else
-	[UnsupportedOSPlatform ("ios9.0")]
-#if IOS
-	[Obsolete ("Starting with ios9.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#endif
-#endif
 	[BaseType (typeof (UIViewController))]
 	interface ABNewPersonViewController {
 		[Export ("initWithNibName:bundle:")]
@@ -65,14 +58,7 @@ namespace AddressBookUI {
 		void DidCompleteWithNewPerson (ABNewPersonViewController controller, [NullAllowed]ABPerson person);
 	}
 
-#if !NET
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
-#else
-	[UnsupportedOSPlatform ("ios9.0")]
-#if IOS
-	[Obsolete ("Starting with ios9.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#endif
-#endif
 	[BaseType (typeof (UINavigationController))]
 	interface ABPeoplePickerNavigationController : UIAppearance {
 		[Export ("initWithNibName:bundle:")]

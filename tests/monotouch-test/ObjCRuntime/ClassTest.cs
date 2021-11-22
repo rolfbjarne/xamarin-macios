@@ -73,9 +73,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void GetHandle ()
 		{
-			Assert.AreNotEqual (IntPtr.Zero, Class.GetHandle (typeof (NSObject)), "NSObject");
+			Assert.AreNotEqual (NativeHandle.Zero, Class.GetHandle (typeof (NSObject)), "NSObject");
 			if (Runtime.DynamicRegistrationSupported) {
-				Assert.AreEqual (IntPtr.Zero, Class.GetHandle (typeof (string)), "string 1");
+				Assert.AreEqual (NativeHandle.Zero, Class.GetHandle (typeof (string)), "string 1");
 			} else {
 				try {
 					Class.GetHandle (typeof (string));
@@ -84,9 +84,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 					Assert.AreEqual ("Can't register the class System.String when the dynamic registrar has been linked away.", e.Message, "exc message");
 				}
 			}
-			Assert.AreEqual (IntPtr.Zero, Class.GetHandle (typeof (NSObject).MakeByRefType ()), "NSObject&");
-			Assert.AreEqual (IntPtr.Zero, Class.GetHandle (typeof (NSObject).MakeArrayType ()), "NSObject[]");
-			Assert.AreEqual (IntPtr.Zero, Class.GetHandle (typeof (NSObject).MakePointerType ()), "NSObject*");
+			Assert.AreEqual (NativeHandle.Zero, Class.GetHandle (typeof (NSObject).MakeByRefType ()), "NSObject&");
+			Assert.AreEqual (NativeHandle.Zero, Class.GetHandle (typeof (NSObject).MakeArrayType ()), "NSObject[]");
+			Assert.AreEqual (NativeHandle.Zero, Class.GetHandle (typeof (NSObject).MakePointerType ()), "NSObject*");
 		}
 
 		[Test]

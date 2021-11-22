@@ -118,7 +118,7 @@ namespace Cecil.Tests {
 					reason = $"Calls another method which is not a constructor (2): {targetMethod.FullName}";
 					return false;
 				}
-				var isChainedCtorCall = targetMethod.DeclaringType == method.DeclaringType || targetMethod.DeclaringType == method.DeclaringType.BaseType;
+				var isChainedCtorCall = targetMethod.DeclaringType.Resolve () == method.DeclaringType.Resolve () || targetMethod.DeclaringType.Resolve () == method.DeclaringType.BaseType.Resolve ();
 				if (!isChainedCtorCall) {
 					reason = $"Calls unknown (unchained) constructor (2): {targetMethod.FullName}";
 					return false;
@@ -246,6 +246,7 @@ namespace Cecil.Tests {
 						case "Protocol": // not really refcounted
 						case "AURenderEventEnumerator": // this class shouldn't really be an INativeObject in the first place
 						case "AudioBuffers": // this class shouldn't really be an INativeObject in the first place
+						case "AVAudioChannelLayout": // has a private IntPtr constructor which is a void* in native code (i.e. not a mistake).
 							continue;
 						}
 
@@ -309,6 +310,8 @@ namespace Cecil.Tests {
 						case "NWBrowser": // needs a custom ctor implementation
 						case "NWListener": // needs a custom ctor implementation
 						case "CFNotificationCenter": // needs a custom ctor implementation
+						case "AUGraph": // needs a custom ctor implementation
+						case "ABMultiValue`1": // has a custom ctor implementation
 							skipILVerification = true;
 							break;
 						}

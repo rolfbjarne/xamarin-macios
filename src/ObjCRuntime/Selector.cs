@@ -122,7 +122,7 @@ namespace ObjCRuntime {
 
 		// return null, instead of throwing, if an invalid pointer is used (e.g. IntPtr.Zero)
 		// so this looks better in the debugger watch when no selector is assigned (ref: #10876)
-		public static Selector? FromHandle (IntPtr sel)
+		public static Selector? FromHandle (NativeHandle sel)
 		{
 			if (!sel_isMapped (sel))
 				return null;
@@ -130,7 +130,7 @@ namespace ObjCRuntime {
 			return new Selector (sel, false);
 		}
 
-		public static Selector Register (IntPtr handle)
+		public static Selector Register (NativeHandle handle)
 		{
 			return new Selector (handle);
 		}
@@ -141,7 +141,7 @@ namespace ObjCRuntime {
 
 		// objc/runtime.h
 		[DllImport ("/usr/lib/libobjc.dylib", EntryPoint="sel_registerName")]
-		public extern static /* SEL */ IntPtr GetHandle (/* const char* */ string name);
+		public extern static /* SEL */ NativeHandle GetHandle (/* const char* */ string name);
 
 		// objc/objc.h
 		[DllImport ("/usr/lib/libobjc.dylib")]

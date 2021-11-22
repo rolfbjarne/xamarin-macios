@@ -791,9 +791,9 @@ namespace Foundation {
 			default:
 #if NET
 				if (t == typeof (NativeHandle))
-#else
-				if (t == typeof (IntPtr))
+					return NSValue.ValueFromPointer ((NativeHandle) obj);
 #endif
+				if (t == typeof (IntPtr))
 					return NSValue.ValueFromPointer ((IntPtr) obj);
 #if !NO_SYSTEM_DRAWING
 				if (t == typeof (SizeF))

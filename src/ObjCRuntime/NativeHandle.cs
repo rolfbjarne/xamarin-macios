@@ -80,6 +80,11 @@ namespace ObjCRuntime {
 		{
 			return other.handle == handle;
 		}
+
+		public override string ToString ()
+		{
+			return "0x" + handle.ToString ("x");
+		}
 	}
 }
 #endif

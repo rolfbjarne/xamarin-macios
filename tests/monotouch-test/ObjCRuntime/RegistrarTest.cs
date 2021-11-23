@@ -1312,7 +1312,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 						void_objc_msgSend_out_IntPtr (obj.Handle, Selector.GetHandle ("m2:"), out value);
 						Assert.AreEqual (NativeHandle.Zero, value);
 
-						value = new NativeHandle ((IntPtr) (unchecked ((int) 0xdeadbeef)));
+						value = (NativeHandle) new IntPtr ((unchecked ((int) 0xdeadbeef)));
 						void_objc_msgSend_out_IntPtr (obj.Handle, Selector.GetHandle ("m2:"), out value);
 						Assert.AreEqual (NativeHandle.Zero, value);
 
@@ -1732,7 +1732,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 		[Register ("FakeType1")]
 		class FakeType1 : NSObject {
-			public FakeType1 (IntPtr ptr)
+			public FakeType1 (NativeHandle ptr)
 				: base (ptr)
 			{
 			}

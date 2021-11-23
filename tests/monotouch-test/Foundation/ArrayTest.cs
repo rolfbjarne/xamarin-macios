@@ -68,8 +68,8 @@ namespace MonoTouchFixtures.Foundation {
 				a.Add (a);
 				a.Add (obj2);
 				using (var s = a.Sort (Comparator)) {
-					Assert.That ((IntPtr) s.ValueAt (0), Is.GreaterThan ((IntPtr) s.ValueAt (1)), "0");
-					Assert.That ((IntPtr) s.ValueAt (1), Is.GreaterThan ((IntPtr) s.ValueAt (2)), "1");
+					Assert.That ((long) (IntPtr) s.ValueAt (0), Is.GreaterThan ((long) (IntPtr) s.ValueAt (1)), "0");
+					Assert.That ((long) (IntPtr) s.ValueAt (1), Is.GreaterThan ((long) (IntPtr) s.ValueAt (2)), "1");
 				}
 			}
 			Assert.That (comparator_count, Is.GreaterThanOrEqualTo (2), "2+");

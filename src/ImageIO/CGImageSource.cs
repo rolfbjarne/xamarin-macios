@@ -298,7 +298,11 @@ namespace ImageIO {
 		{
 			using (var dict = options?.ToDictionary ()) {
 				var ret = CGImageSourceCreateThumbnailAtIndex (Handle, index, dict.GetHandle ());
+#if NET
 				return CGImage.FromHandle (ret, true);
+#else
+				return new CGImage (ret, true);
+#endif
 			}
 		}
 

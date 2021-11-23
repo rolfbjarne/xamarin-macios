@@ -2,6 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0-ios</TargetFramework>
+    <RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->

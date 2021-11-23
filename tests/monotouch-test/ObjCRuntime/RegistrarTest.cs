@@ -179,8 +179,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			Assert.False (Messaging.bool_objc_msgSend_IntPtr (receiver, new Selector ("INativeObject1:").Handle, NativeHandle.Zero), "#a1");
 			Assert.True (Messaging.bool_objc_msgSend_IntPtr (receiver, new Selector ("INativeObject1:").Handle, new CGPath ().Handle), "#a2");
 			
-			Assert.That (Messaging.IntPtr_objc_msgSend_bool (receiver, new Selector ("INativeObject2:").Handle, false), Is.EqualTo (NativeHandle.Zero), "#b1");
-			Assert.That (Messaging.IntPtr_objc_msgSend_bool (receiver, new Selector ("INativeObject2:").Handle, true), Is.Not.EqualTo (NativeHandle.Zero), "#b2");
+			Assert.That ((NativeHandle) Messaging.IntPtr_objc_msgSend_bool (receiver, new Selector ("INativeObject2:").Handle, false), Is.EqualTo (NativeHandle.Zero), "#b1");
+			Assert.That ((NativeHandle) Messaging.IntPtr_objc_msgSend_bool (receiver, new Selector ("INativeObject2:").Handle, true), Is.Not.EqualTo (NativeHandle.Zero), "#b2");
 			
 			void_objc_msgSend_out_IntPtr_bool (receiver, new Selector ("INativeObject3:create:").Handle, out ptr, true);
 			Assert.That (ptr, Is.Not.EqualTo (NativeHandle.Zero), "#c1");
@@ -1374,7 +1374,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		public void TestCopyWithZone ()
 		{
 			using (var cc = new CopyClass ()) {
-				Assert.AreEqual (cc.Handle, Messaging.IntPtr_objc_msgSend_IntPtr (cc.Handle, Selector.GetHandle ("copyWithZone:"), IntPtr.Zero), "a");
+				Assert.AreEqual (cc.Handle, (NativeHandle) Messaging.IntPtr_objc_msgSend_IntPtr (cc.Handle, Selector.GetHandle ("copyWithZone:"), NativeHandle.Zero), "a");
 				Assert.IsFalse (cc.had_zone.Value, "had_zone");
 			}
 		}
@@ -2322,7 +2322,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 		class ABPeoplePickerNavigationControllerDelegateImpl : ABPeoplePickerNavigationControllerDelegate
 		{
-			public IntPtr personHandle;
+			public NativeHandle personHandle;
 			public override void DidSelectPerson (ABPeoplePickerNavigationController peoplePicker, ABPerson selectedPerson)
 			{
 				personHandle = selectedPerson.Handle;

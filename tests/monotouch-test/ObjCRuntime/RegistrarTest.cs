@@ -2423,10 +2423,10 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		public void SelectorReturnValue ()
 		{
 			using (var obj = new Bug34440Class ()) {
-				var ptr = (NativeHandle) Messaging.IntPtr_objc_msgSend (obj.Handle, Selector.GetHandle ("bug34440"));
+				var ptr = (IntPtr) Messaging.IntPtr_objc_msgSend (obj.Handle, Selector.GetHandle ("bug34440"));
 				Assert.AreEqual (Selector.GetHandle ("bug34440"), ptr, "selector");
 				ptr = Messaging.IntPtr_objc_msgSend (obj.Handle, Selector.GetHandle ("classReturn"));
-				Assert.AreEqual (Class.GetHandle (typeof (Bug34440Class)), ptr, "class");
+				Assert.AreEqual ((IntPtr) Class.GetHandle (typeof (Bug34440Class)), (IntPtr) ptr, "class");
 			}
 		}
 
@@ -3758,8 +3758,8 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void RefOutTest_Sel ()
 		{
-			var refValue = NativeHandle.Zero;
-			var outValue = NativeHandle.Zero;
+			var refValue = IntPtr.Zero;
+			var outValue = IntPtr.Zero;
 
 			using (var obj = new RefOutParametersSubclass ()) {
 				var sel = Selector.GetHandle ("testSelector:a:b:");
@@ -3795,15 +3795,15 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				//Marshal.WriteIntPtr (x, 8, (IntPtr) 0xbabebabe);
 				//Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, x, x);
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-				Assert.AreEqual (NativeHandle.Zero, refValue, "Selector-1DA-ref");
-				Assert.AreEqual (NativeHandle.Zero, outValue, "Selector-1DA-out");
+				Assert.AreEqual (IntPtr.Zero, refValue, "Selector-1DA-ref");
+				Assert.AreEqual (IntPtr.Zero, outValue, "Selector-1DA-out");
 
 				// direct managed
 				refValue = dummyObjHandle; // set to non-null
 				outValue = dummyObjHandle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-				Assert.AreEqual (NativeHandle.Zero, refValue, "Selector-1DM-ref");
-				Assert.AreEqual (NativeHandle.Zero, outValue, "Selector-1DM-out");
+				Assert.AreEqual (IntPtr.Zero, refValue, "Selector-1DM-ref");
+				Assert.AreEqual (IntPtr.Zero, outValue, "Selector-1DM-out");
 
 				/// 2: verify that refValue points to something
 				action = 2;
@@ -3826,15 +3826,15 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refValue = dummyObjHandle; // set to non-null
 				outValue = dummyObjHandle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 0, ref refValue, out outValue);
-				Assert.AreEqual (dummyObj.Handle, refValue, "Selector-2DA-ref");
-				Assert.AreEqual (NativeHandle.Zero, outValue, "Selector-2DA-out");
+				Assert.AreEqual ((IntPtr) dummyObj.Handle, refValue, "Selector-2DA-ref");
+				Assert.AreEqual (IntPtr.Zero, outValue, "Selector-2DA-out");
 
 				// direct managed
 				refValue = dummyObjHandle; // set to non-null
 				outValue = dummyObjHandle; // set to non-null
 				Messaging.void_objc_msgSend_int_IntPtr_IntPtr (obj.Handle, sel, action << 8, ref refValue, out outValue);
-				Assert.AreEqual (dummyObj.Handle, refValue, "Selector-2DM-ref");
-				Assert.AreEqual (NativeHandle.Zero, outValue, "Selector-2DM-out");
+				Assert.AreEqual ((IntPtr) dummyObj.Handle, refValue, "Selector-2DM-ref");
+				Assert.AreEqual (IntPtr.Zero, outValue, "Selector-2DM-out");
 
 
 				/// 3 set both parameteres to the same selector
@@ -3844,15 +3844,15 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refObj = dummyObj; // set to non-null
 				outObj = dummyObj; // set to non-null
 				test (action << 0, ref refObj, out outObj);
-				Assert.AreEqual (Selector.GetHandle ("testSelector"), refObj.Handle, "Selector-3A-ref");
-				Assert.AreEqual (Selector.GetHandle ("testSelector"), outObj.Handle, "Selector-3A-out");
+				Assert.AreEqual (Selector.GetHandle ("testSelector"), (IntPtr) refObj.Handle, "Selector-3A-ref");
+				Assert.AreEqual (Selector.GetHandle ("testSelector"), (IntPtr) outObj.Handle, "Selector-3A-out");
 
 				// managed
 				refObj = dummyObj; // set to non-null
 				outObj = dummyObj; // set to non-null
 				test (action << 8, ref refObj, out outObj);
-				Assert.AreEqual (Selector.GetHandle ("testManagedSelector"), refObj.Handle, "Selector-3M-ref");
-				Assert.AreEqual (Selector.GetHandle ("testManagedSelector"), outObj.Handle, "Selector-3M-out");
+				Assert.AreEqual (Selector.GetHandle ("testManagedSelector"), (IntPtr) refObj.Handle, "Selector-3M-ref");
+				Assert.AreEqual (Selector.GetHandle ("testManagedSelector"), (IntPtr) outObj.Handle, "Selector-3M-out");
 
 				// direct native
 				refValue = dummyObjHandle; // set to non-null
@@ -3878,15 +3878,15 @@ namespace MonoTouchFixtures.ObjCRuntime {
 				refObj = null; // set to null
 				outObj = null; // set to null
 				test (action << 0, ref refObj, out outObj);
-				Assert.AreEqual (Selector.GetHandle ("testSelector:a:"), refObj.Handle, "Selector-4A-ref-value");
-				Assert.AreEqual (Selector.GetHandle ("testSelector:b:"), outObj.Handle, "Selector-4A-out-value");
+				Assert.AreEqual (Selector.GetHandle ("testSelector:a:"), (IntPtr) refObj.Handle, "Selector-4A-ref-value");
+				Assert.AreEqual (Selector.GetHandle ("testSelector:b:"), (IntPtr) outObj.Handle, "Selector-4A-out-value");
 
 				// managed
 				refObj = null; // set to null
 				outObj = null; // set to null
 				test (action << 8, ref refObj, out outObj);
-				Assert.AreEqual (Selector.GetHandle ("testManagedSelectorA"), refObj.Handle, "Selector-4M-ref-value");
-				Assert.AreEqual (Selector.GetHandle ("testManagedSelectorB"), outObj.Handle, "Selector-4M-out-value");
+				Assert.AreEqual (Selector.GetHandle ("testManagedSelectorA"), (IntPtr) refObj.Handle, "Selector-4M-ref-value");
+				Assert.AreEqual (Selector.GetHandle ("testManagedSelectorB"), (IntPtr) outObj.Handle, "Selector-4M-out-value");
 
 				// direct native
 				refValue = IntPtr.Zero; // set to null

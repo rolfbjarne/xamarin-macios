@@ -67,4 +67,9 @@
 	<PropertyGroup Condition="'$(MtouchUseLlvm)' == '' And '$(Configuration)' == 'Release' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS')">
 		<MtouchUseLlvm>true</MtouchUseLlvm>
 	</PropertyGroup>
+
+	<!-- Enable the interpreter by default for simulator/ARM64 -->
+	<PropertyGroup Condition="'$(MtouchInterpreter)' == '' And '$(UseInterpreter)' == '' And ('$(RuntimeIdentifier)' == 'iossimulator-arm64' Or '$(RuntimeIdentifier)' == 'tvossimulator-arm64')">
+		<!-- <MtouchInterpreter>all</MtouchInterpreter> -->
+	</PropertyGroup>
 </Project>

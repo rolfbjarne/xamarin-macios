@@ -41,6 +41,17 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
+		static string? GetActualLibrary (string? path)
+		{
+			if (path is null)
+				return null;
+
+			if (path.EndsWith (".framework", StringComparison.OrdinalIgnoreCase))
+				return Path.Combine (path, Path.GetFileNameWithoutExtension (path));
+
+			return path;
+		}
+
 		public override bool Execute ()
 		{
 			var native_frameworks = new List<ITaskItem> ();
@@ -54,7 +65,7 @@ namespace Xamarin.MacDev.Tasks {
 					case "":
 						name = Path.GetDirectoryName (name);
 						if (Path.GetExtension (name) == ".xcframework") {
-							var resolved = ResolveXCFramework (name);
+							var resolved = GetActualLibrary (ResolveXCFramework (name));
 							if (resolved == null)
 								return false;
 							var t = new TaskItem (resolved);
@@ -111,7 +122,7 @@ namespace Xamarin.MacDev.Tasks {
 						var name = referenceNode.Attributes ["Name"].Value;
 						switch (Path.GetExtension (name)) {
 						case ".xcframework":
-							var resolved = ResolveXCFramework (Path.Combine (resources, name));
+							var resolved = GetActualLibrary (ResolveXCFramework (Path.Combine (resources, name)));
 							if (resolved == null)
 								return false;
 							t = new TaskItem (resolved);
@@ -151,7 +162,7 @@ namespace Xamarin.MacDev.Tasks {
 			return !Log.HasLoggedErrors;
 		}
 
-		protected string? ResolveXCFramework (string xcframework)
+		string? ResolveXCFramework (string xcframework)
 		{
 			string platformName;
 
@@ -227,7 +238,7 @@ namespace Xamarin.MacDev.Tasks {
 				}
 				var library_path = (PString) item ["LibraryPath"];
 				var library_identifier = (PString) item ["LibraryIdentifier"];
-				return Path.Combine (library_identifier, library_path, Path.GetFileNameWithoutExtension (library_path));
+				return Path.Combine (library_identifier, library_path);
 			}
 			return String.Empty;
 		}

@@ -500,6 +500,10 @@ namespace Xamarin.Bundler {
 
 		public void ParseInterpreter (string value)
 		{
+			if (!string.IsNullOrEmpty (value) && Driver.TryParseBool (value, out var enable) && !enable) {
+				UseInterpreter = false;
+				return;
+			}
 			UseInterpreter = true;
 			if (!string.IsNullOrEmpty (value))
 				InterpretedAssemblies.AddRange (value.Split (new char [] { ',' }, StringSplitOptions.RemoveEmptyEntries));
@@ -1445,6 +1449,9 @@ namespace Xamarin.Bundler {
 			if (!UseInterpreter) {
 				if (Platform == ApplePlatform.MacCatalyst)
 					return IsArchEnabled (Abi.ARM64);
+
+				if (IsSimulatorBuild && IsArchEnabled (Abi.ARM64))
+					return true;
 
 				return IsDeviceBuild;
 			}

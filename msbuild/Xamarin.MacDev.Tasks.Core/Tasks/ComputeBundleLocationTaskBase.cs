@@ -5,6 +5,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -44,6 +45,7 @@ namespace Xamarin.MacDev.Tasks {
 		
 		public override bool Execute ()
 		{
+			var sb = new StringBuilder ();
 			if (ResolvedFileToPublish == null)
 				return !Log.HasLoggedErrors;
 
@@ -108,14 +110,36 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				}
 
-				// var virtualProjectPath = BundleResource.GetVirtualProjectPath (ProjectDir, item, !string.IsNullOrEmpty (SessionId));
-				// item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
-				item.SetMetadata ("RelativePath", Path.Combine (relativePath, Path.GetFileName (item.ItemSpec)));
+				var virtualProjectPath = GetVirtualAppBundlePath (item);
+				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
+				Dump (sb, item);
 			}
 
 			UpdatedResolvedFileToPublish = list.ToArray ();
 
+			Console.WriteLine (sb);
+			Log.LogWarning (sb.ToString ());
+			File.WriteAllText ("/tmp/log", sb.ToString ());
+			Log.LogWarning ("Wrote output to /tmp/log");
+
 			return !Log.HasLoggedErrors;
+		}
+
+		static string GetVirtualAppBundlePath (ITaskItem item)
+		{
+			var link = item.GetMetadata ("Link");
+			if (string.IsNullOrEmpty (link))
+				return Path.GetFileName (item.ItemSpec);
+
+			return Path.Combine (link, Path.GetFileName (item.ItemSpec));
+		}
+
+		static void Dump (StringBuilder sb, ITaskItem item)
+		{
+			sb.AppendLine ($"Item: {item.ItemSpec}");
+			foreach (var name in item.MetadataNames) {
+				sb.AppendLine ($"    {name}: {item.GetMetadata ((string) name)}");
+			}
 		}
 
 		void ReportUnknownPublishFolderType (ITaskItem item)

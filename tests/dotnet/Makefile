@@ -37,7 +37,7 @@ run-unit-tests:
 all-local:: $(TARGETS)
 
 reload: $(TARGETS)
-	$(Q) $(DOTNET6) build-server shutdown # try to make #13355 either go away or more reproducible
+	#$(Q) $(DOTNET6) build-server shutdown # try to make #13355 either go away or more reproducible
 	$(Q) $(MAKE) -C $(TOP) -j8 all
 	$(Q) $(MAKE) -C $(TOP) -j8 install
 

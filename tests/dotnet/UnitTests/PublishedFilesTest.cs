@@ -304,12 +304,12 @@ namespace Xamarin.Tests {
 
 		[Test]
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm")]
-		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64")]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64")]
+		//[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm")]
+		//[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		//[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		//[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64")]
+		//[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		//[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64")]
 		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			var project = "BundleStructure";

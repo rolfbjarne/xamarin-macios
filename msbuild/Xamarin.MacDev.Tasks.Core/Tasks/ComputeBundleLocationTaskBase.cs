@@ -49,6 +49,12 @@ namespace Xamarin.MacDev.Tasks {
 
 			var list = ResolvedFileToPublish.ToList ();
 
+			// Make sure we use the correct path separator, these are relative paths, so it doesn't look
+			// like MSBuild does this automatically
+			FrameworksDirectory = FrameworksDirectory.Replace ('\\', Path.DirectorySeparatorChar);
+			PlugInsDirectory = PlugInsDirectory.Replace ('\\', Path.DirectorySeparatorChar);
+			ResourceDirectory = ResourceDirectory.Replace ('\\', Path.DirectorySeparatorChar);
+
 			if (BundleResource != null)
 				resourceFilesSet.UnionWith (BundleResource.Select (v => Path.GetFullPath (v.ItemSpec)));
 			if (Content != null)

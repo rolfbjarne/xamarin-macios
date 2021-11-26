@@ -18,6 +18,7 @@ PACKAGE_VERSION=$(shell grep '<PackageVersion>' FrameworksInRuntimesNativeDirect
 
 # Test case for https://github.com/xamarin/xamarin-macios/issues/12440
 .libs/FrameworksInRuntimesNativeDirectory.nupkg: FrameworksInRuntimesNativeDirectory.csproj NuGet.config global.json | .libs
+	mkdir -p $(abspath $(NUGET_TEST_FEED))
 	$(Q_GEN) $(DOTNET6) pack /nologo /bl /verbosity:quiet $<
 	$(Q) $(CP) bin/Debug/Xamarin.Tests.FrameworksInRuntimesNativeDirectory.$(PACKAGE_VERSION).nupkg $@
 
@@ -26,6 +27,7 @@ INSTALLED_PACKAGE=$(NUGET_TEST_FEED)/packages/xamarin.tests.frameworksinruntimes
 $(INSTALLED_PACKAGE): .libs/FrameworksInRuntimesNativeDirectory.nupkg
 	if test -d $(NUGET_TEST_FEED)/$(PACKAGE_ID)/$(PACKAGE_VERSION); then nuget delete $(PACKAGE_ID) $(PACKAGE_VERSION) -source $(abspath $(NUGET_TEST_FEED)) -NonInteractive; fi
 	rm -Rf $(TOP)/tests/dotnet/packages/xamarin.tests.frameworksinruntimesnativedirectory
+	mkdir -p $(abspath $(NUGET_TEST_FEED))
 	nuget add "$<" -source $(abspath $(NUGET_TEST_FEED)) -NonInteractive
 
 all-local:: $(INSTALLED_PACKAGE)

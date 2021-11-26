@@ -86,6 +86,15 @@ namespace Xamarin.Tests {
 				case "libmscordaccore.dylib":
 				case "libmscordbi.dylib":
 					return platform == ApplePlatform.MacOSX;
+				case "libSystem.Native.dylib":
+				case "libSystem.Net.Security.Native.dylib":
+				case "libSystem.IO.Compression.Native.dylib":
+				case "libSystem.Security.Cryptography.Native.Apple.dylib":
+				case "libmono-component-debugger.dylib":
+				case "libmono-component-diagnostics_tracing.dylib":
+				case "libmono-component-hot_reload.dylib":
+				case "libmonosgen-2.0.dylib":
+					return platform != ApplePlatform.MacOSX;
 				case "mscorlib.dll":
 				case "WindowsBase.dll":
 				case "netstandard.dll":
@@ -206,6 +215,12 @@ namespace Xamarin.Tests {
 			// misc other files not directly related to the test itself
 			expectedFiles.Add ($"{assemblyDirectory}BundleStructure.dll");
 			expectedFiles.Add ($"{assemblyDirectory}BundleStructure.pdb");
+			expectedFiles.Add ($"{assemblyDirectory}MonoTouch.Dialog.dll");
+			expectedFiles.Add ($"{assemblyDirectory}MonoTouch.Dialog.pdb");
+			expectedFiles.Add ($"{assemblyDirectory}nunit.framework.dll");
+			expectedFiles.Add ($"{assemblyDirectory}nunitlite.dll");
+			expectedFiles.Add ($"{assemblyDirectory}Touch.Client.dll");
+			expectedFiles.Add ($"{assemblyDirectory}Touch.Client.pdb");
 			expectedFiles.Add ($"{assemblyDirectory}{Configuration.GetBaseLibraryName (platform)}");
 			expectedFiles.Add ($"{assemblyDirectory}runtimeconfig.bin");
 			expectedFiles.Add (frameworksDirectory);
@@ -217,8 +232,13 @@ namespace Xamarin.Tests {
 			switch (platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-				expectedFiles.Add ("Info.plist");
 				expectedFiles.Add ("BundleStructure");
+				expectedFiles.Add ("Info.plist");
+				expectedFiles.Add ("MonoTouchDebugConfiguration.txt");
+				expectedFiles.Add ("PkgInfo");
+				expectedFiles.Add ("Settings.bundle");
+				expectedFiles.Add ("Settings.bundle/Root.plist");
+				expectedFiles.Add ("libxamarin-dotnet-debug.dylib");
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:

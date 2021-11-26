@@ -166,7 +166,7 @@ namespace Xamarin.MacDev.Tasks
 				Directory.CreateDirectory (coremlcOutputDir);
 
 				foreach (var model in Models) {
-					var logicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, model, !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
+					var logicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, model, !string.IsNullOrEmpty (SessionId));
 					var bundleName = GetPathWithoutExtension (logicalName) + ".mlmodelc";
 					var outputPath = Path.Combine (coremlcOutputDir, bundleName);
 					var outputDir = Path.GetDirectoryName (outputPath);

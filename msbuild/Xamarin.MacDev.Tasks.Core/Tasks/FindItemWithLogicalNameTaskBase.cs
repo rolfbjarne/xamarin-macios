@@ -36,7 +36,7 @@ namespace Xamarin.MacDev.Tasks
 				var prefixes = BundleResource.SplitResourcePrefixes (ResourcePrefix);
 
 				foreach (var item in Items) {
-					var logical = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
+					var logical = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty(SessionId));
 
 					if (logical == LogicalName) {
 						Log.LogMessage (MessageImportance.Low, MSBStrings.M0149, LogicalName, item.ItemSpec);

@@ -48,7 +48,7 @@ namespace Xamarin.MacDev.Tasks
 
 			if (BundleResources != null) {
 				foreach (var item in BundleResources) {
-					var logicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty (SessionId), TargetFramework.IsDotNet);
+					var logicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty(SessionId));
 					// We need a physical path here, ignore the Link element
 					var path = item.GetMetadata ("FullPath");
 					string illegal;

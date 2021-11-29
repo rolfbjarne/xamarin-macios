@@ -22,6 +22,12 @@ diag:
 create-files:
 	echo H > H.txt
 	echo NoneH > NoneH.txt
+	echo BundleResourceA > BundleResourceA.txt
+	echo BundleResourceB > BundleResourceB.txt
+	echo BundleResourceC > BundleResourceC.txt
+	echo ContentA > ContentA.txt
+	echo ContentB > ContentB.txt
+	echo ContentC > ContentC.txt
 	for i in iOS tvOS macOS MacCatalyst; do \
 		cd "$$i"; \
 		echo NoneA > NoneA.txt; \
@@ -58,14 +64,8 @@ create-files:
 		echo SomewhatUnknownF > SomewhatUnknownF.bin; \
 		echo SomewhatUnknownG > SomewhatUnknownG.bin; \
 		echo SomewhatUnknownH.bin > SomewhatUnknownH.bin; zip -9 SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; mv SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; \
-		echo ContentA > ContentA.txt; \
-		echo ContentB > ContentB.txt; \
-		echo ContentC > ContentC.txt; \
 		echo EmbeddedResourceA > EmbeddedResourceA.txt; \
 		echo EmbeddedResourceB > EmbeddedResourceB.txt; \
 		echo EmbeddedResourceC > EmbeddedResourceC.txt; \
-		echo BundleResourceA > BundleResourceA.txt; \
-		echo BundleResourceB > BundleResourceB.txt; \
-		echo BundleResourceC > BundleResourceC.txt; \
 		cd ..; \
 	done

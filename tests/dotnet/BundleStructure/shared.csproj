@@ -132,13 +132,13 @@
 		<!-- Content items -->
 
 		<!-- Content without any metadata -->
-		<Content Include="ContentA.txt" />
+		<Content Include="../ContentA.txt" />
 		<!-- Content with CopyToOutputDirectory -->
-		<Content Include="ContentB.txt">
+		<Content Include="../ContentB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<!-- Content with CopyToPublishDirectory -->
-		<Content Include="ContentC.txt">
+		<Content Include="../ContentC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 
@@ -158,13 +158,13 @@
 		<!-- BundleResource items -->
 
 		<!-- BundleResource without any metadata: bundled -->
-		<BundleResource Include="BundleResourceA.txt" />
+		<BundleResource Include="../BundleResourceA.txt" />
 		<!-- Content with CopyToOutputDirectory: bundled -->
-		<BundleResource Include="BundleResourceB.txt">
+		<BundleResource Include="../BundleResourceB.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</BundleResource>
 		<!-- Content with CopyToPublishDirectory: bundled -->
-		<BundleResource Include="BundleResourceC.txt">
+		<BundleResource Include="../BundleResourceC.txt">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</BundleResource>
 

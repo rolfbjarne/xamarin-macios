@@ -15,6 +15,9 @@ all-mac: prepare
 run-mac:
 	./macOS/bin/Debug/net6.0-macos/osx-x64/$(notdir $(CURDIR)).app/Contents/MacOS/$(notdir $(CURDIR))
 
+clean:
+	rm -Rf */bin */obj
+
 diag:
 	cd .. && $(MAKE) global.json NuGet.config
 	$(DOTNET6) build /v:diag *binlog
@@ -64,6 +67,8 @@ create-files:
 		echo SomewhatUnknownF > SomewhatUnknownF.bin; \
 		echo SomewhatUnknownG > SomewhatUnknownG.bin; \
 		echo SomewhatUnknownH.bin > SomewhatUnknownH.bin; zip -9 SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; mv SomewhatUnknownH.bin.zip SomewhatUnknownH.bin; \
+		echo SomewhatUnknownI > SomewhatUnknownI.bin; \
+		echo SomewhatUnknownJ > SomewhatUnknownJ.bin; \
 		echo EmbeddedResourceA > EmbeddedResourceA.txt; \
 		echo EmbeddedResourceB > EmbeddedResourceB.txt; \
 		echo EmbeddedResourceC > EmbeddedResourceC.txt; \

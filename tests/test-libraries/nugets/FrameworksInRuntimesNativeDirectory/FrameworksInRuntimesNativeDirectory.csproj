@@ -27,6 +27,7 @@
 
   <PropertyGroup>
     <PackageType>Dependency</PackageType>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
   </PropertyGroup>
 
   <Target Name="_GenerateFrameworkListFile">

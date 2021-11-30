@@ -17,7 +17,7 @@ PACKAGE_ID=$(shell grep PackageId FrameworksInRuntimesNativeDirectory.csproj | s
 PACKAGE_VERSION=$(shell grep '<PackageVersion>' FrameworksInRuntimesNativeDirectory.csproj | sed 's_.*<PackageVersion>\(.*\)</PackageVersion>.*_\1_')
 
 # Test case for https://github.com/xamarin/xamarin-macios/issues/12440
-.libs/FrameworksInRuntimesNativeDirectory.nupkg: FrameworksInRuntimesNativeDirectory.csproj NuGet.config global.json | .libs
+.libs/FrameworksInRuntimesNativeDirectory.nupkg: FrameworksInRuntimesNativeDirectory.csproj NuGet.config global.json $(wildcard *.cs) | .libs
 	mkdir -p $(abspath $(NUGET_TEST_FEED))
 	$(Q_GEN) $(DOTNET6) pack /nologo /bl /verbosity:quiet $<
 	$(Q) $(CP) bin/Debug/Xamarin.Tests.FrameworksInRuntimesNativeDirectory.$(PACKAGE_VERSION).nupkg $@

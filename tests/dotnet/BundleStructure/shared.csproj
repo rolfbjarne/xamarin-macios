@@ -110,9 +110,8 @@
 		<None Update="UnknownA.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="None" />
 		<None Update="UnknownB.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Assembly" />
 		<None Update="UnknownC.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Resource" />
-		<None Update="UnknownD.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="AppleFramework" />
-		<None Update="UnknownE.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="CompressedAppleFramework" />
-		<None Update="UnknownF.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="AppleBindingResource" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/UnknownD.framework.zip" CopyToPublishDirectory="PreserveNewest" PublishFolderType="CompressedAppleFramework" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/UnknownE.framework"     CopyToPublishDirectory="PreserveNewest" PublishFolderType="AppleFramework" />
 		<None Update="UnknownG.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="PlugIns" />
 		<None Update="UnknownH.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="CompressedPlugIns" />
 		<None Update="UnknownI.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Unknown" />
@@ -121,8 +120,8 @@
 		<None Update="SomewhatUnknownA.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownA.bin" PublishFolderType="None" />
 		<None Update="SomewhatUnknownB.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownB.bin" PublishFolderType="Assembly" />
 		<None Update="SomewhatUnknownC.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownC.bin" PublishFolderType="Resource" />
-		<None Update="SomewhatUnknownD.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownD.bin" PublishFolderType="AppleFramework" />
-		<None Update="SomewhatUnknownE.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownE.bin" PublishFolderType="CompressedAppleFramework" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/SomewhatUnknownD.framework.zip" CopyToPublishDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownD.bin" PublishFolderType="CompressedAppleFramework" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/SomewhatUnknownE.framework"     CopyToPublishDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownE.bin" PublishFolderType="AppleFramework" />
 		<None Update="SomewhatUnknownF.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownF.bin" PublishFolderType="AppleBindingResource" />
 		<None Update="SomewhatUnknownG.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownG.bin" PublishFolderType="PlugIns" />
 		<None Update="SomewhatUnknownH.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownH.bin" PublishFolderType="CompressedPlugIns" />
@@ -191,7 +190,7 @@
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/FrameworkTest2.framework/**/*" CopyToOutputDirectory="PreserveNewest" />
 
 		<!-- native xcframework (unzipped) -->
-		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/FrameworkTest3.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/FrameworkTest3.xcframework/**/*" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<ItemGroup>

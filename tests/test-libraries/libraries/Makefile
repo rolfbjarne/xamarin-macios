@@ -1,7 +1,7 @@
 TOP=../../..
 include $(TOP)/Make.config
 
-NAMES+=NoneE NoneF
+NAMES+=NoneE NoneF UnknownD SomewhatUnknownD
 
 # a few lookup tables, because the data we have is not always in the format we need it
 

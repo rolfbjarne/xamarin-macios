@@ -5,11 +5,11 @@
         <key>CFBundleDevelopmentRegion</key>
         <string>en</string>
         <key>CFBundleIdentifier</key>
-        <string>xamarin.ios.xtest</string>
+        <string>xamarin.ios.%NAME%</string>
         <key>CFBundleInfoDictionaryVersion</key>
         <string>6.0</string>
         <key>CFBundleName</key>
-        <string>XTest</string>
+        <string>%NAME%</string>
         <key>CFBundlePackageType</key>
         <string>FMWK</string>
         <key>CFBundleShortVersionString</key>
@@ -21,7 +21,7 @@
         <key>NSPrincipalClass</key>
         <string></string>
         <key>CFBundleExecutable</key>
-        <string>XTest</string>
+        <string>%NAME%</string>
         <key>BuildMachineOSBuild</key>
         <string>13F34</string>
         <key>CFBundleDevelopmentRegion</key>

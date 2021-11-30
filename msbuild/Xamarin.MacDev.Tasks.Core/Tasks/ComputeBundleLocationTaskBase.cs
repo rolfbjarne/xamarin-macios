@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,13 +63,15 @@ namespace Xamarin.MacDev.Tasks {
 			if (EmbeddedResource != null)
 				resourceFilesSet.UnionWith (EmbeddedResource.Select (v => Path.GetFullPath (v.ItemSpec)));
 
-			foreach (var item in list) { 
+			var appleFrameworks = new Dictionary<string, List<ITaskItem>> ();
+			foreach (var item in list.ToArray ()) { 
 				var publishFolderType = ParsePublishFolderType (item);
 				if (publishFolderType == PublishFolderType.Unset) {
 					publishFolderType = ComputePublishFolderType (list, item);
 					item.SetMetadata ("PublishFolderType", publishFolderType.ToString ());
 				}
 
+				var virtualProjectPath = GetVirtualAppBundlePath (item, out var withLink);
 				var relativePath = string.Empty;
 				switch (publishFolderType) {
 				case PublishFolderType.Assembly:
@@ -80,17 +81,34 @@ namespace Xamarin.MacDev.Tasks {
 					relativePath = ResourceDirectory;
 					break;
 				case PublishFolderType.AppleFramework:
-					relativePath = FrameworksDirectory;
-					break;
+					if (TryGetFrameworkDirectory (item.ItemSpec, out var frameworkDirectory)) {
+						if (!appleFrameworks.TryGetValue (frameworkDirectory!, out var items))
+							appleFrameworks [frameworkDirectory!] = items = new List<ITaskItem> ();
+						items.Add (item);
+						// Remove AppleFramework entries, we'll add back one entry per framework at the end
+						list.Remove (item);
+						continue;
+					}
+
+					Console.WriteLine ("NIEX"); // FIXME: show error
+					continue;
 				case PublishFolderType.CompressedAppleFramework:
 					relativePath = FrameworksDirectory;
+					if (!withLink && string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
+						// Remove the .zip extension of the input file
+						virtualProjectPath = Path.Combine (Path.GetDirectoryName (virtualProjectPath), Path.GetFileNameWithoutExtension (virtualProjectPath));
+					}
 					break;
 				case PublishFolderType.AppleBindingResource:
 					//throw new NotImplementedException ();
 					Console.WriteLine ("NIEX"); // FIXME
 					break;
-				case PublishFolderType.CompressedPlugIns: // FIXME
+				case PublishFolderType.CompressedPlugIns:
 					relativePath = PlugInsDirectory;
+					if (!withLink && string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
+						// Remove the .zip extension of the input file
+						virtualProjectPath = Path.Combine (Path.GetDirectoryName (virtualProjectPath), Path.GetFileNameWithoutExtension (virtualProjectPath));
+					}
 					break;
 				case PublishFolderType.PlugIns:
 					relativePath = PlugInsDirectory;
@@ -110,9 +128,17 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				}
 
-				var virtualProjectPath = GetVirtualAppBundlePath (item);
 				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
 				Dump (sb, item);
+			}
+
+			// Add back the .framework directory (only) for AppleFramework
+			foreach (var entry in appleFrameworks) {
+				var items = entry.Value;
+				var item = new TaskItem (entry.Key);
+				item.SetMetadata ("PublishFolderType", "AppleFramework");
+				item.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (entry.Key)));
+				list.Add (item);
 			}
 
 			UpdatedResolvedFileToPublish = list.ToArray ();
@@ -120,18 +146,47 @@ namespace Xamarin.MacDev.Tasks {
 			Console.WriteLine (sb);
 			Log.LogWarning (sb.ToString ());
 			File.WriteAllText ("/tmp/log", sb.ToString ());
-			Log.LogWarning ("Wrote output to /tmp/log");
+			Log.LogWarning ("Wrote output to /tmp/log!!");
 
 			return !Log.HasLoggedErrors;
 		}
 
-		static string GetVirtualAppBundlePath (ITaskItem item)
+		static bool TryGetFrameworkDirectory (string path, out string? frameworkDirectory)
+		{
+			if (string.IsNullOrEmpty (path)) {
+				frameworkDirectory = null;
+				return false;
+			}
+
+			if (path.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase)) {
+				frameworkDirectory = path;
+				return true;
+			}
+
+			if (path.EndsWith (".framework", StringComparison.OrdinalIgnoreCase)) {
+				// We might be inside a .xcframework, so check for that first
+				if (TryGetFrameworkDirectory (Path.GetDirectoryName (path), out var xcframeworkDirectory) && xcframeworkDirectory!.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase)) {
+					frameworkDirectory = xcframeworkDirectory;
+					return true;
+				}
+
+				frameworkDirectory = path;
+				return true;
+			}
+
+			return TryGetFrameworkDirectory (Path.GetDirectoryName (path), out frameworkDirectory);
+		}
+
+		static string GetVirtualAppBundlePath (ITaskItem item, out bool withLink)
 		{
 			var link = item.GetMetadata ("Link");
-			if (string.IsNullOrEmpty (link))
+			if (string.IsNullOrEmpty (link)) {
+				withLink = false;
 				return Path.GetFileName (item.ItemSpec);
+			}
 
-			return Path.Combine (link, Path.GetFileName (item.ItemSpec));
+			withLink = true;
+			return link;
 		}
 
 		static void Dump (StringBuilder sb, ITaskItem item)
@@ -196,12 +251,8 @@ namespace Xamarin.MacDev.Tasks {
 			//}
 
 			// Native (xc)frameworks
-			var pathComponents = filename.Split (Path.DirectorySeparatorChar);
-			if (pathComponents.Any (v => v.EndsWith (".framework", StringComparison.OrdinalIgnoreCase))) {
+			if (TryGetFrameworkDirectory (filename, out _))
 				return PublishFolderType.AppleFramework;
-			} else if (pathComponents.Any (v => v.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase))) {
-				return PublishFolderType.AppleFramework;
-			}
 
 			// *.resources
 			// FIXME: implement this somehow

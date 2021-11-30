@@ -3,6 +3,7 @@
 There are a few items that are automatically included during the build, and that we're supposed to copy to the app bundle somehow.
 
 * `@(None)`, `@(Content)` and `@(EmbeddedResource)` items with the `CopyToOutputDirectory` or the `CopyToPublishDirectory` metadata set (to either `Always` or `PreserveNewest`).
+    * `CopyToOutputDirectory` doesn't work with directories (for frameworks), in that case `CopyToPublishDirectory` must be used.
 
 It goes like this:
 
@@ -83,8 +84,15 @@ Treated as a third-party binding resource.
 
 ### AppleFramework
 
-* If the item is a \*.framework or \*.xcframework directory, these directories will be copied to the app bundle's Frameworks directory.
-* If any of the item's containing directories is a \*.framework or \*.xcframework directory, select that directory instead and go to the previous point.
+* If the item is a \*.framework or \*.xcframework directory, these directories
+  will be copied to the app bundle's Frameworks directory.
+* If any of the item's containing directories is an \*.xcframework directory,
+  then select that directory instead.
+* If any of the item's containing directories is a \*.framework directory,
+  then select that directory instead.
+    * This means that if a MyFramework.framework/MyFramework file is listed,
+      any other files in the MyFramework.framework directory will also be
+      copied to the app bundle.
 * Otherwise an error is shown.
 
 We'll also link the native executable with the framework.

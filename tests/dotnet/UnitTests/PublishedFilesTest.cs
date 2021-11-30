@@ -162,19 +162,20 @@ namespace Xamarin.Tests {
 			// UnknownA.bin: None
 			expectedFiles.Add ($"{assemblyDirectory}UnknownB.bin"); // UnknownB.bin: Assembly
 			expectedFiles.Add ($"{resourcesDirectory}UnknownC.bin"); // UnknownC.bin: Resource
-			expectedFiles.Add ($"{frameworksDirectory}/UnknownD.bin"); // UnknownD.bin: AppleFramework
-																	  // UnknownE.bin: CompressedAppleFramework - this should show an error
-																	  // UnknownF.bin: AppleBindingResource // FIXME UNDEFINED
+			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownD"); // UnknownD: AppleFramework
+			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownE"); // UnknownE: CompressedAppleFramework
+																			 // UnknownF.bin: AppleBindingResource // FIXME UNDEFINED
 			expectedFiles.Add ($"{pluginsDirectory}/UnknownG.bin"); // UnknownG.bin: PlugIns
-																   // UnknownH.bin: CompressedPlugIns -- this should show an error
-																   // UnknownI.bin: Unknown -- this should show a warning
+			expectedFiles.Add ($"{pluginsDirectory}/UnknownH.bin"); // UnknownH.bin: CompressedPlugIns
+																	// UnknownI.bin: Unknown -- this should show a warning
 			expectedFiles.Add ($"UnknownJ.bin"); // UnknownJ.bin: RootDirectory
 
 			// SomewhatUnknownA.bin: None
 			expectedFiles.Add ($"{assemblyDirectory}Subfolder/SomewhatUnknownB.bin"); // SomewhatUnknownB.bin: Assembly
 			expectedFiles.Add ($"{resourcesDirectory}Subfolder/SomewhatUnknownC.bin"); // SomewhatUnknownC.bin: Resource
-			expectedFiles.Add ($"{frameworksDirectory}/Subfolder/SomewhatUnknownD.bin"); // SomewhatUnknownD.bin: AppleFramework
-																						// SomewhatUnknownE.bin: CompressedAppleFramework - this should show an error
+
+			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownD"); // SomewhatUnknownD.bin: AppleFramework
+			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownE"); // SomewhatUnknownE.bin: CompressedAppleFramework
 																						// SomewhatUnknownF.bin: AppleBindingResource // FIXME UNDEFINED
 			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownG.bin"); // SomewhatUnknownG.bin: PlugIns
 			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownH.bin"); // SomewhatUnknownH.bin: CompressedPlugIns
@@ -252,11 +253,18 @@ namespace Xamarin.Tests {
 				break;
 			}
 
-			var unexpectedFiles = allFiles.Except (expectedFiles);
+			var unexpectedFiles = allFiles.Except (expectedFiles).OrderBy (v => v).ToArray ();
+			var missingFiles = expectedFiles.Except (allFiles).OrderBy (v => v).ToArray ();
+			if (unexpectedFiles.Any () || missingFiles.Any ()) {
+				Console.WriteLine ($"All files in the bundle ({allFiles.Count ()})");
+				foreach (var file in allFiles.OrderBy (v => v)) {
+					Console.WriteLine ($"    {file}");
+				}
+				Console.WriteLine ("---------------------------------------");
+			}
 			Console.WriteLine ($"Found {unexpectedFiles.Count ()} unexpected files");
 			foreach (var file in unexpectedFiles)
 				Console.WriteLine ($"Unexpected file: {file}");
-			var missingFiles = expectedFiles.Except (allFiles);
 			Console.WriteLine ($"Found {missingFiles.Count ()} missing files");
 			foreach (var file in missingFiles)
 				Console.WriteLine ($"Missing file: {file}");
@@ -300,6 +308,9 @@ namespace Xamarin.Tests {
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
 			}
+
+			expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/_CodeSignature");
+			expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/_CodeSignature/CodeResources");
 		}
 
 		[Test]

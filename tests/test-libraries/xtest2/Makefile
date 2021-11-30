@@ -1,8 +1,10 @@
 TOP=../../..
 include $(TOP)/Make.config
 
+# TODO: list where each framework is used (which test)
 NAMES+=FrameworksInRuntimesNativeDirectory1 FrameworksInRuntimesNativeDirectory2
 NAMES+=FrameworkTest1 FrameworkTest2 FrameworkTest3 FrameworkTest4 FrameworkTest5
+NAMES+=UnknownD UnknownE SomewhatUnknownD SomewhatUnknownE
 
 # a few lookup tables, because the data we have is not always in the format we need it
 

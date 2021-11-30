@@ -41,9 +41,9 @@ wrong, then developers can override the target location by:
 * `@(Content)` or `@(EmbeddedResource)` items: `Resource`
 * `@(BundleResource)` items: `Resource`
 * Assemblies and their related files (\*.dll, \*.exe, \*.pdb, \*.mdb, \*.config): `Assembly`.
+* A \*.resources directory or a \*.resources.zip file next to an assembly with the same name is treated as a third-party binding, and we handle it as such (the exact details are not relevant for this discussion).
 * Native frameworks (\*.framework/\*): `AppleFramework`
 * Native xc frameworks (\*.xcframework/\*): `AppleFramework`
-* \*.resources/\* files next to an assembly with the same name is treated as a third-party binding, and we handle it as such (the exact details are not relevant for this discussion).
 * Resources (*.jpg, *.png, ...?): `Resource`
 * \*.framework.zip and \*.xcframework.zip: `CompressedAppleFramework`
 * \*.dylib: `DynamicLibrary`
@@ -78,9 +78,15 @@ The target directory is:
     * iOS, tvOS: the root directory of the app bundle
     * macOS, Mac Catalyst: the `Contents/Resources/` subdirectory.
 
-### AppleBindingResource
+### AppleBindingResourcePackage
 
-Treated as a third-party binding resource.
+Treated as a third-party binding resource package.
+
+Setting the `Link` metadata has no effect these items.
+
+### CompressedAppleBindingResourcePackaged
+
+Treated as a zipped third-party binding resource (first unzipped, and then treated as AppleBindingResourcePackage)
 
 ### AppleFramework
 

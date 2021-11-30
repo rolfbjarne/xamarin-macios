@@ -164,9 +164,11 @@ namespace Xamarin.Tests {
 			expectedFiles.Add ($"{resourcesDirectory}UnknownC.bin"); // UnknownC.bin: Resource
 			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownD"); // UnknownD: AppleFramework
 			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownE"); // UnknownE: CompressedAppleFramework
-																			 // UnknownF.bin: AppleBindingResource // FIXME UNDEFINED
+			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownF1"); // UnknownF1.bin: AppleBindingResource 
+			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownF2"); // UnknownF2.bin: AppleBindingResource (compressed)
 			expectedFiles.Add ($"{pluginsDirectory}/UnknownG.bin"); // UnknownG.bin: PlugIns
-			expectedFiles.Add ($"{pluginsDirectory}/UnknownH.bin"); // UnknownH.bin: CompressedPlugIns
+			expectedFiles.Add ($"{pluginsDirectory}/UnknownH.bin");
+			expectedFiles.Add ($"{pluginsDirectory}/UnknownH.bin/UnknownH.bin"); // UnknownH.bin: CompressedPlugIns
 																	// UnknownI.bin: Unknown -- this should show a warning
 			expectedFiles.Add ($"UnknownJ.bin"); // UnknownJ.bin: RootDirectory
 
@@ -176,10 +178,13 @@ namespace Xamarin.Tests {
 
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownD"); // SomewhatUnknownD.bin: AppleFramework
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownE"); // SomewhatUnknownE.bin: CompressedAppleFramework
-																						// SomewhatUnknownF.bin: AppleBindingResource // FIXME UNDEFINED
+			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownF1"); // SomewhatUnknownF1.bin: AppleBindingResource
+			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownF2"); // SomewhatUnknownF2.bin: AppleBindingResource (compressed)
 			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownG.bin"); // SomewhatUnknownG.bin: PlugIns
-			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownH.bin"); // SomewhatUnknownH.bin: CompressedPlugIns
-																					  // SomewhatUnknownI.bin: SomewhatUnknown -- this should show a warning
+			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownH.bin");
+			expectedFiles.Add ($"{pluginsDirectory}/Subfolder/SomewhatUnknownH.bin/SomewhatUnknownH.bin"); // SomewhatUnknownH.bin: CompressedPlugIns
+																										   // SomewhatUnknownI.bin: SomewhatUnknown -- this should show a warning
+			expectedFiles.Add ($"Subfolder");
 			expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
 
 			expectedFiles.Add ($"{resourcesDirectory}ContentA.txt");
@@ -226,6 +231,7 @@ namespace Xamarin.Tests {
 			expectedFiles.Add ($"{assemblyDirectory}runtimeconfig.bin");
 			expectedFiles.Add (frameworksDirectory);
 			expectedFiles.Add (pluginsDirectory);
+			expectedFiles.Add ($"{pluginsDirectory}/Subfolder");
 
 			if (platform == ApplePlatform.MacOSX)
 				expectedFiles.Add ("Contents/MonoBundle/createdump");

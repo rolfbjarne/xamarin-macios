@@ -4,7 +4,7 @@ include $(TOP)/Make.config
 # TODO: list where each framework is used (which test)
 NAMES+=FrameworksInRuntimesNativeDirectory1 FrameworksInRuntimesNativeDirectory2
 NAMES+=FrameworkTest1 FrameworkTest2 FrameworkTest3 FrameworkTest4 FrameworkTest5
-NAMES+=UnknownD UnknownE SomewhatUnknownD SomewhatUnknownE
+NAMES+=UnknownD UnknownE UnknownF1 UnknownF2 SomewhatUnknownD SomewhatUnknownE SomewhatUnknownF1 SomewhatUnknownF2
 
 # a few lookup tables, because the data we have is not always in the format we need it
 
@@ -101,6 +101,27 @@ ifeq ($($(2)_SYMLINKS),1)
 	$$(Q) ln -fs A $$@
 endif
 
+# create binding resource package
+
+.libs/$(3)/$(1).resources/manifest: .libs/$(3)/$(1).framework.zip manifest-framework.in
+	$$(Q) mkdir -p .libs/$(3)/$(1).resources
+	$$(Q) $$(CP) -r .libs/$(3)/$(1).framework .libs/$(3)/$(1).resources/
+	$$(Q) sed 's/%NAME%/$(1)/g' manifest-framework.in > $$@
+
+.libs/$(3)/$(1).resources.zip: .libs/$(3)/$(1).resources/manifest
+	$$(Q) rm -f $$@
+	$$(Q) cd .libs/$(3)/$(1).resources && zip -9r $$(abspath .libs/$(3)/$(1).resources.zip) .
+
+## a binding resource package needs an adjacent assembly to be considered a binding resource package, so create a dummy assembly.
+.libs/$(3)/$(1).dll:
+	$$(Q) printf "Fake assembly named $(3)\n" > $$@
+
+$(3)_BINDING_RESOURCE_PACKAGE_TARGETS += \
+	.libs/$(3)/$(1).resources/manifest \
+	.libs/$(3)/$(1).resources.zip \
+	.libs/$(3)/$(1).dll \
+
+all-local:: $$($(3)_BINDING_RESOURCE_PACKAGE_TARGETS)
 endef
 
 # 1: name

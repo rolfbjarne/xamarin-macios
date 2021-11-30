@@ -44,14 +44,12 @@ namespace Xamarin.MacDev.Tasks {
 		
 		public override bool Execute ()
 		{
-			var sb = new StringBuilder ();
 			if (ResolvedFileToPublish == null)
 				return !Log.HasLoggedErrors;
 
-			var list = ResolvedFileToPublish.ToList ();
 
 			// Make sure we use the correct path separator, these are relative paths, so it doesn't look
-			// like MSBuild does this automatically
+			// like MSBuild does the conversion automatically
 			FrameworksDirectory = FrameworksDirectory.Replace ('\\', Path.DirectorySeparatorChar);
 			PlugInsDirectory = PlugInsDirectory.Replace ('\\', Path.DirectorySeparatorChar);
 			ResourceDirectory = ResourceDirectory.Replace ('\\', Path.DirectorySeparatorChar);
@@ -64,7 +62,9 @@ namespace Xamarin.MacDev.Tasks {
 				resourceFilesSet.UnionWith (EmbeddedResource.Select (v => Path.GetFullPath (v.ItemSpec)));
 
 			var appleFrameworks = new Dictionary<string, List<ITaskItem>> ();
-			foreach (var item in list.ToArray ()) { 
+			var list = ResolvedFileToPublish.ToList ();
+			foreach (var item in list.ToArray ()) { // iterate over a copy of the list, because we might modify the original list
+				// Compute the publish folder type if it's not specified
 				var publishFolderType = ParsePublishFolderType (item);
 				if (publishFolderType == PublishFolderType.Unset) {
 					publishFolderType = ComputePublishFolderType (list, item);
@@ -89,34 +89,37 @@ namespace Xamarin.MacDev.Tasks {
 						list.Remove (item);
 						continue;
 					}
-
-					Console.WriteLine ("NIEX"); // FIXME: show error
+					Log.LogError (7094, item.ItemSpec, MSBStrings.E7094 /* The file or directory '{0}' is not a framework nor a file within a framework. */, item.ItemSpec);
 					continue;
 				case PublishFolderType.CompressedAppleFramework:
 					relativePath = FrameworksDirectory;
 					if (!withLink && string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
-						// Remove the .zip extension of the input file
+						// Remove the .zip extension of the input file before using the input file as the target filename
 						virtualProjectPath = Path.Combine (Path.GetDirectoryName (virtualProjectPath), Path.GetFileNameWithoutExtension (virtualProjectPath));
 					}
 					break;
-				case PublishFolderType.AppleBindingResource:
-					//throw new NotImplementedException ();
-					Console.WriteLine ("NIEX"); // FIXME
+				case PublishFolderType.AppleBindingResourcePackage:
+					// Nothing to do here, this is handled fully in the targets file
 					break;
-				case PublishFolderType.CompressedPlugIns:
-					relativePath = PlugInsDirectory;
+				case PublishFolderType.CompressedAppleBindingResourcePackage:
 					if (!withLink && string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
-						// Remove the .zip extension of the input file
+						// Remove the .zip extension of the input file before using the input file as the target filename
 						virtualProjectPath = Path.Combine (Path.GetDirectoryName (virtualProjectPath), Path.GetFileNameWithoutExtension (virtualProjectPath));
 					}
 					break;
 				case PublishFolderType.PlugIns:
 					relativePath = PlugInsDirectory;
 					break;
+				case PublishFolderType.CompressedPlugIns:
+					relativePath = PlugInsDirectory;
+					if (!withLink && string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
+						// Remove the .zip extension of the input file before using the input file as the target filename
+						virtualProjectPath = Path.Combine (Path.GetDirectoryName (virtualProjectPath), Path.GetFileNameWithoutExtension (virtualProjectPath));
+					}
+					break;
 				case PublishFolderType.RootDirectory:
 					break;
 				case PublishFolderType.DynamicLibrary:
-					// FIXME: don't copy at all for release mobile builds?
 					relativePath = AssemblyDirectory;
 					break;
 				case PublishFolderType.None:
@@ -129,7 +132,6 @@ namespace Xamarin.MacDev.Tasks {
 				}
 
 				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
-				Dump (sb, item);
 			}
 
 			// Add back the .framework directory (only) for AppleFramework
@@ -143,14 +145,10 @@ namespace Xamarin.MacDev.Tasks {
 
 			UpdatedResolvedFileToPublish = list.ToArray ();
 
-			Console.WriteLine (sb);
-			Log.LogWarning (sb.ToString ());
-			File.WriteAllText ("/tmp/log", sb.ToString ());
-			Log.LogWarning ("Wrote output to /tmp/log!!");
-
 			return !Log.HasLoggedErrors;
 		}
 
+		// Check if the input, or any of it's parent directories is either an *.xcframework, or a *.framework
 		static bool TryGetFrameworkDirectory (string path, out string? frameworkDirectory)
 		{
 			if (string.IsNullOrEmpty (path)) {
@@ -177,6 +175,26 @@ namespace Xamarin.MacDev.Tasks {
 			return TryGetFrameworkDirectory (Path.GetDirectoryName (path), out frameworkDirectory);
 		}
 
+		// Check if the input, or any of it's parent directories is a *.resources directory or a *.resources.zip file
+		static bool IsBindingResourcePackage (string path, out PublishFolderType type)
+		{
+			type = PublishFolderType.None;
+			if (string.IsNullOrEmpty (path))
+				return false;
+
+			if (path.EndsWith (".resources", StringComparison.OrdinalIgnoreCase) && File.Exists (Path.ChangeExtension (path, "dll"))) {
+				type = PublishFolderType.AppleBindingResourcePackage;
+				return true;
+			}
+
+			if (path.EndsWith (".resources.zip", StringComparison.OrdinalIgnoreCase) && File.Exists (Path.ChangeExtension (Path.GetFileNameWithoutExtension (path), "dll"))) {
+				type = PublishFolderType.CompressedAppleBindingResourcePackage;
+				return true;
+			}
+
+			return IsBindingResourcePackage (Path.GetDirectoryName (path), out type);
+		}
+
 		static string GetVirtualAppBundlePath (ITaskItem item, out bool withLink)
 		{
 			var link = item.GetMetadata ("Link");
@@ -187,14 +205,6 @@ namespace Xamarin.MacDev.Tasks {
 
 			withLink = true;
 			return link;
-		}
-
-		static void Dump (StringBuilder sb, ITaskItem item)
-		{
-			sb.AppendLine ($"Item: {item.ItemSpec}");
-			foreach (var name in item.MetadataNames) {
-				sb.AppendLine ($"    {name}: {item.GetMetadata ((string) name)}");
-			}
 		}
 
 		void ReportUnknownPublishFolderType (ITaskItem item)
@@ -250,22 +260,14 @@ namespace Xamarin.MacDev.Tasks {
 			//		return PublishFolderType.Assembly;
 			//}
 
-			// Native (xc)frameworks
+			// Binding resource package (*.resources / *.resources.zip)
+			if (IsBindingResourcePackage (filename, out var type))
+				return type;
+
+			// Native (xc)frameworks.
+			// We do this after checking for binding resource packages, because those might contain frameworks.
 			if (TryGetFrameworkDirectory (filename, out _))
 				return PublishFolderType.AppleFramework;
-
-			// *.resources
-			// FIXME: implement this somehow
-			//var resourcesIndex = Array.FindLastIndex<string> (pathComponents, (v) => v.EndsWith (".resources", StringComparison.OrdinalIgnoreCase));
-			//if (pathComponents.Any (v => v.EndsWith (".resources", StringComparison.OrdinalIgnoreCase)) {
-			//	string resourcesDir = filename;
-			//	if (!filename.EndsWith (".resources", StringComparison.OrdinalIgnoreCase))
-			//		resourcesDir = filename.Substring (0, filename.LastIndexOf (".resources" + Path.DirectorySeparatorChar));
-			//	var assemblyName = 
-			//	if (Directory.Exists (resourcesDir))
-			//		return PublishFolderType.
-			//	var resourcesPath = GetPathRoot" string.Join (Path.DirectorySeparatorChar.ToString (), pathComponents, 0, resourcesIndex + 1);
-			//}
 
 			// resources (png, jpg)
 			if (filename.EndsWith (".jpg", StringComparison.OrdinalIgnoreCase)) {
@@ -318,7 +320,8 @@ namespace Xamarin.MacDev.Tasks {
 			RootDirectory,
 			Assembly,
 			Resource,
-			AppleBindingResource,
+			AppleBindingResourcePackage,
+			CompressedAppleBindingResourcePackage,
 			AppleFramework,
 			CompressedAppleFramework,
 			PlugIns,

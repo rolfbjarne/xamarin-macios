@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.FilterStaticFrameworks" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.FindAotCompiler" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.LinkNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SymbolStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
@@ -587,6 +588,7 @@
 		<_ComputeFrameworkFilesToPublishDependsOn>
 			$(_ComputeFrameworkFilesToPublishDependsOn);
 			_DecompressAppleFrameworks;
+			_DecompressAppleBindingResourcePackages;
 			_ExpandNativeReferences;
 			_ComputeVariables;
 			_LoadLinkerOutput;
@@ -596,7 +598,8 @@
 	<!-- Look in the _FrameworkNativeReference items for frameworks that need to be added to the app bundle, and add all those frameworks to _FrameworkToPublish -->
 	<Target Name="_ComputeFrameworkFilesToPublish" DependsOnTargets="$(_ComputeFrameworkFilesToPublishDependsOn)">
 		<ItemGroup>
-			<!-- Collect the list of frameworks to publish from _FrameworkNativeReference. The ExtractBindingLibrariesStep in the linker and the _DecompressAppleFrameworks target might also add frameworks to _FrameworkToPublish -->
+			<!-- Collect the list of frameworks to publish from _FrameworkNativeReference. The ExtractBindingLibrariesStep in the linker and
+			     the _DecompressAppleFrameworks and _DecompressAppleBindingResourcePackages targets might also add frameworks to _FrameworkToPublish -->
 			<_FrameworkToPublish Include="@(_FrameworkNativeReference)" Condition="'%(_FrameworkNativeReference.Kind)' == 'Framework' And '%(_FrameworkNativeReference.CopyToAppBundle)' != 'false'" />
 
 			<!-- Set TargetDirectory and SourceDirectory for all frameworks we have to publish -->
@@ -605,12 +608,25 @@
 				<SourceDirectory>%(RootDir)%(Directory)</SourceDirectory>
 			</_FrameworkToPublish>
 
-			<_DirectoriesToPublish Include="@(_FrameworkToPublish)" />
+		</ItemGroup>
+
+		<!-- Figure out which frameworks are really static libraries, and don't publish those -->
+		<FilterStaticFrameworks
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			FrameworkToPublish="@(_FrameworkToPublish)"
+		>
+			<Output TaskParameter="FrameworkToPublish" ItemName="_FilteredFrameworkToPublish" />
+		</FilterStaticFrameworks>
+
+
+		<ItemGroup>
+			<_DirectoriesToPublish Include="@(_FilteredFrameworkToPublish)" />
 		</ItemGroup>
 	</Target>
 
 	<Target Name="_CopyDirectoriesToBundle"
-		DependsOnTargets="_DecompressFilesToPublish;_ComputeFrameworkFilesToPublish"
+		DependsOnTargets="_DecompressPlugIns;_ComputeFrameworkFilesToPublish"
 		Inputs="@(_DirectoriesToPublish)"
 		Outputs="@(_DirectoriesToPublish -> '%(TargetDirectory)/%(Filename)')"
 		>
@@ -1267,15 +1283,22 @@
 			<_FileNativeReference Include="@(_ResolvedFileToPublish_DynamicLibrary)" Kind="Dynamic" />
 			<ResolvedFileToPublish Remove="@(_ResolvedFileToPublish_DynamicLibrary)" />
 
+			<!-- we link with the contents of binding resource packages, but the packages themselves aren't copied to the app bundle, so remove them here -->
+			<_AppleBindingResourcePackage Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'AppleBindingResourcePackage'" />
+			<_CompressedAppleBindingResourcePackage Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedAppleBindingResourcePackage'" />
+			<ResolvedFileToPublish Remove="@(_AppleBindingResourcePackage)" />
+			<ResolvedFileToPublish Remove="@(_CompressedAppleBindingResourcePackage)" />
+
 			<!-- Rewrite the relative path so that everything ends up in the app bundle -->
 			<ResolvedFileToPublish RelativePath="$(_RelativeAppBundlePath)\%(RelativePath)" />
 		</ItemGroup>
 
-		<!-- resolve any .xcframeworks -->
+		<!-- resolve any .xcframeworks and binding resource packages -->
 		<ResolveNativeReferences
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			Architectures="$(TargetArchitectures)"
+			BindingResourcePackages="@(_AppleBindingResourcePackage)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReferences="@(_UnresolvedXCFrameworks)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
@@ -1285,10 +1308,49 @@
 		</ResolveNativeReferences>
 	</Target>
 
-	<PropertyGroup>
-	</PropertyGroup>
+	<Target Name="_DecompressAppleBindingResourcePackages"
+		Inputs="@(_CompressedAppleBindingResourcePackage)"
+		DependsOnTargets="_ComputePublishLocation;_ComputeVariables"
+		Outputs="@(_CompressedAppleBindingResourcePackage -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension).stamp')"
+		>
 
-	<Target Name="_DecompressFilesToPublish"
+		<Ditto
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AdditionalArguments="-x -k"
+			Source="%(_CompressedAppleBindingResourcePackage.Identity)"
+			Destination="$(_IntermediateDecompressionDir)/%(Filename)"
+			>
+		</Ditto>
+
+		<ItemGroup>
+			<_DecompressedAppleBindingResourcePackage Include="@(_CompressedAppleBindingResourcePackage -> '$(_IntermediateDecompressionDir)/%(Filename)')" />
+		</ItemGroup>
+
+		<!-- resolve any .xcframeworks and binding resource packages -->
+		<ResolveNativeReferences
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Architectures="$(TargetArchitectures)"
+			BindingResourcePackages="@(_DecompressedAppleBindingResourcePackage)"
+			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
+			<Output TaskParameter="NativeFrameworks" ItemName="_FrameworkNativeReference" />
+		</ResolveNativeReferences>
+
+		<Touch
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AlwaysCreate="true"
+			Files="@(_CompressedAppleBindingResourcePackage -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension).stamp')"
+			>
+			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
+		</Touch>
+	</Target>
+
+	<Target Name="_DecompressPlugIns"
 		Inputs="@(_CompressedPlugIns)"
 		DependsOnTargets="_ComputePublishLocation;_ComputeVariables"
 		Outputs="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension).stamp')"
@@ -1305,12 +1367,12 @@
 
 		<ItemGroup>
 			<!-- Set TargetDirectory and SourceDirectory for all directories we have to publish -->
-			<_DecompressedFilesToPublish Include="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension)')" />
+			<_DecompressedPlugins Include="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension)')" />
 
-			<_DecompressedFilesToPublish Update="@(_DecompressedFilesToPublish)">
+			<_DecompressedPlugins Update="@(_DecompressedPlugins)">
 				<TargetDirectory>$(_RelativePublishDir)$(_RelativeAppBundlePath)%(RelativePath)</TargetDirectory>
-				<SourceDirectory>%(RootDir)%(Directory)</SourceDirectory>
-			</_DecompressedFilesToPublish>
+				<SourceDirectory>$(_IntermediateDecompressionDir)/%(Filename)%(Extension)</SourceDirectory>
+			</_DecompressedPlugins>
 		</ItemGroup>
 
 		<Touch
@@ -1323,7 +1385,7 @@
 		</Touch>
 
 		<ItemGroup>
-			<_DirectoriesToPublish Include="@(_DecompressedFilesToPublish)" />
+			<_DirectoriesToPublish Include="@(_DecompressedPlugins)" />
 		</ItemGroup>
 	</Target>
 

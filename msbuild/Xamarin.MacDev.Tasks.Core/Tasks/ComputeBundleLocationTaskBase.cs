@@ -122,12 +122,15 @@ namespace Xamarin.MacDev.Tasks {
 				case PublishFolderType.DynamicLibrary:
 					relativePath = AssemblyDirectory;
 					break;
+				case PublishFolderType.StaticLibrary:
+					// Nothing to do here.
+					continue;
 				case PublishFolderType.None:
 					continue;
 				case PublishFolderType.Unknown:
 				default:
-					item.SetMetadata ("PublishFolderType", "None");
 					ReportUnknownPublishFolderType (item);
+					item.SetMetadata ("PublishFolderType", "None");
 					continue;
 				}
 
@@ -293,7 +296,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			// no other files are copied
 
-			Log.LogWarning (MSBStrings.E7089 /* The file '{0}' does not specify a 'PublishFolderType' metadata, and a default value could not be calcuated. The file will not be copied to the app bundle. */, item.ItemSpec);
+			Log.LogWarning (MSBStrings.E7089 /* The file '{0}' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle. */, item.ItemSpec);
 
 			return PublishFolderType.None;
 		}

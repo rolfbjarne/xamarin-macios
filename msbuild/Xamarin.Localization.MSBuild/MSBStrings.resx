@@ -1354,7 +1354,7 @@
     </data>
 
     <data name="E7089" xml:space="preserve">
-        <value>The file '{0}' does not specify a 'PublishFolderType' metadata, and a default value could not be calcuated. The file will not be copied to the app bundle.</value>
+        <value>The file '{0}' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.</value>
         <comment>
             PublishFolderType: do not translate (name of metadata)
             {0}: path to a file

@@ -1,7 +1,7 @@
 TOP=../..
 include $(TOP)/Make.config
 
-SUBDIRS += custom-type-assembly xtest2 nugets
+SUBDIRS += custom-type-assembly xtest2 nugets libraries
 
 # without this many compiler warnings about unused functions and variables
 # in system headers show up.

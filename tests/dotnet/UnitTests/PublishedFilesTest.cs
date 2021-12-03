@@ -282,12 +282,12 @@ namespace Xamarin.Tests {
 
 		[Test]
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		//[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm")]
-		//[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		//[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		//[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64")]
-		//[TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		//[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64")]
 		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			var project = "BundleStructure";
@@ -307,7 +307,19 @@ namespace Xamarin.Tests {
 			var platformString = platform.AsString ();
 			var tfm = platform.ToFramework ();
 			var testsDirectory = Path.GetDirectoryName (Path.GetDirectoryName (project_dir));
-			var warningMessages = warnings.Select (v => v.Message).OrderBy (v => v).ToArray ();
+			var warningMessages = warnings.Select (v => v?.Message!).Where (v => v is not null);
+			warningMessages = warningMessages
+				// Remove warnings of the form "This call site is reachable on: '...' and later. 'TheAPI' is only supported on: '...' and later."
+				.Where (v => !v.StartsWith ("This call site is reachable on:"))
+				// Remove CLSCompliant warnings
+				.Where (v => !v.Contains ("does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute"))
+				// Remove obsolete warnings
+				.Where (v => !v.Contains (" is obsolete: "))
+				// More obsolete warnings
+				.Where (v => !v.Contains (" overrides obsolete member "))
+				;
+			// Sort the messages so that comparison against the expected array is faster
+			warningMessages = warningMessages.OrderBy (v => v).ToArray ();
 			var expectedWarnings = new string [] {
 				$"The file '{project_dir}/{platformString}/NoneA.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 				$"The file '{project_dir}/{platformString}/Sub/NoneG.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",

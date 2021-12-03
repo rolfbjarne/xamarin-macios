@@ -294,6 +294,7 @@ namespace Xamarin.Tests {
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			var project_dir = Path.GetDirectoryName (Path.GetDirectoryName (project_path));
 			Clean (project_path);
 
 			var properties = GetDefaultProperties (runtimeIdentifiers);
@@ -302,6 +303,27 @@ namespace Xamarin.Tests {
 			Console.WriteLine ($"Found {warnings.Length} warnings:");
 			foreach (var w in warnings)
 				Console.WriteLine ($"    Warning: {w.Message}");
+
+			var platformString = platform.AsString ();
+			var tfm = platform.ToFramework ();
+			var testsDirectory = Path.GetDirectoryName (Path.GetDirectoryName (project_dir));
+			var warningMessages = warnings.Select (v => v.Message).OrderBy (v => v).ToArray ();
+			var expectedWarnings = new string [] {
+				$"The file '{project_dir}/{platformString}/NoneA.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/{platformString}/Sub/NoneG.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/NoneH.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/{platformString}/NoneI.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/{platformString}/NoneJ.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/{platformString}/NoneK.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/{platformString}/NoneM.unknown' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/SomewhatUnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
+				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/UnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
+				$"The framework {testsDirectory}/bindings-framework-test/dotnet/{platform}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.",
+				$"The framework {testsDirectory}/bindings-framework-test/dotnet/{platform}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.",
+			}.OrderBy (v => v).ToArray ();
+
+			Assert.AreEqual (11, warnings.Length, $"Warning Count:\n\t{string.Join ("\n\t", warningMessages)}");
+			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings");
 
 			CheckAppBundleContents (platform, appPath);
 

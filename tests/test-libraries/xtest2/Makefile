@@ -82,7 +82,7 @@ $$($(3)_$(1)_DIRECTORIES):
 	$$(Q) mkdir -p $$@
 
 .libs/$(3)/$(1).framework.zip: $$($(3)_TARGETS)
-	$$(Q) cd $$(dir $$@) && zip -9r $$(notdir $$@) $(1).framework
+	$$(Q) cd $$(dir $$@) && zip -9r --symlinks $$(notdir $$@) $(1).framework
 
 ZIPPED_TARGETS += .libs/$(3)/$(1).framework.zip
 
@@ -105,12 +105,12 @@ endif
 
 .libs/$(3)/$(1).resources/manifest: .libs/$(3)/$(1).framework.zip manifest-framework.in
 	$$(Q) mkdir -p .libs/$(3)/$(1).resources
-	$$(Q) $$(CP) -r .libs/$(3)/$(1).framework .libs/$(3)/$(1).resources/
+	$$(Q) $$(CP) -R .libs/$(3)/$(1).framework .libs/$(3)/$(1).resources/
 	$$(Q) sed 's/%NAME%/$(1)/g' manifest-framework.in > $$@
 
 .libs/$(3)/$(1).resources.zip: .libs/$(3)/$(1).resources/manifest
 	$$(Q) rm -f $$@
-	$$(Q) cd .libs/$(3)/$(1).resources && zip -9r $$(abspath .libs/$(3)/$(1).resources.zip) .
+	$$(Q) cd .libs/$(3)/$(1).resources && zip -9r --symlinks $$(abspath .libs/$(3)/$(1).resources.zip) .
 
 ## a binding resource package needs an adjacent assembly to be considered a binding resource package, so create a dummy assembly.
 .libs/$(3)/$(1).dll:
@@ -169,7 +169,7 @@ define DotNetXCFrameworkTemplate
 	$$(Q) touch $$@
 
 .libs/$(1).xcframework.zip: .libs/$(1).xcframework.stamp
-	$$(Q) cd $$(dir $$@) && zip -9r $$(notdir $$@) $(1).xcframework
+	$$(Q) cd $$(dir $$@) && zip -9r --symlinks $$(notdir $$@) $(1).xcframework
 
 ZIPPED_TARGETS += .libs/$(1).xcframework.zip
 

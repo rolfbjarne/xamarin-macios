@@ -1949,7 +1949,7 @@ namespace Xamarin.Localization.MSBuild {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not specify a &apos;PublishFolderType&apos; metadata, and a default value could not be calcuated. The file will not be copied to the app bundle..
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not specify a &apos;PublishFolderType&apos; metadata, and a default value could not be calculated. The file will not be copied to the app bundle..
         /// </summary>
         public static string E7089 {
             get {

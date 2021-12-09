@@ -114,8 +114,8 @@
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/UnknownE.framework"     CopyToPublishDirectory="PreserveNewest" PublishFolderType="AppleFramework" />
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/UnknownF1.resources.zip"   CopyToPublishDirectory="PreserveNewest" PublishFolderType="CompressedAppleBindingResourcePackage" />
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/UnknownF2.resources"       CopyToPublishDirectory="PreserveNewest" PublishFolderType="AppleBindingResourcePackage" />
-		<None Update="UnknownG.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="PlugIns" />
-		<None Update="UnknownH.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="CompressedPlugIns" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/PlugInA.bundle" CopyToPublishDirectory="PreserveNewest" PublishFolderType="PlugIns" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/CompressedPlugInB.bundle.zip" CopyToPublishDirectory="PreserveNewest" PublishFolderType="CompressedPlugIns" />
 		<None Update="UnknownI.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="Unknown" />
 		<!-- any files in the root directory will make macOS or Mac Catalyst app bundles invalid, and code signing will fail, so skip the following for those platforms -->
 		<None Update="UnknownJ.bin" CopyToOutputDirectory="PreserveNewest" PublishFolderType="RootDirectory" Condition="'$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'" />
@@ -127,8 +127,8 @@
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/SomewhatUnknownE.framework"     CopyToPublishDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownE.bin" PublishFolderType="AppleFramework" />
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/SomewhatUnknownF1.resources.zip"     CopyToPublishDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownF1.bin" PublishFolderType="CompressedAppleBindingResourcePackage" />
 		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/SomewhatUnknownF2.resources" CopyToPublishDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownF2.bin" PublishFolderType="AppleBindingResourcePackage" />
-		<None Update="SomewhatUnknownG.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownG.bin" PublishFolderType="PlugIns" />
-		<None Update="SomewhatUnknownH.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownH.bin" PublishFolderType="CompressedPlugIns" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/PlugInC.bundle" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownG.bin"  PublishFolderType="PlugIns" />
+		<None Include="$(RootTestsDirectory)/test-libraries/xtest2/.libs/$(RuntimeIdentifier)/CompressedPlugInD.bundle.zip" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownH.bin"  PublishFolderType="CompressedPlugIns" />
 		<None Update="SomewhatUnknownI.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownI.bin" PublishFolderType="Unknown" />
 		<None Update="SomewhatUnknownJ.bin" CopyToOutputDirectory="PreserveNewest" Link="Subfolder/SomewhatUnknownJ.bin" PublishFolderType="RootDirectory" Condition="'$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'" />
 

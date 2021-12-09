@@ -6,6 +6,9 @@ NAMES+=FrameworksInRuntimesNativeDirectory1 FrameworksInRuntimesNativeDirectory2
 NAMES+=FrameworkTest1 FrameworkTest2 FrameworkTest3 FrameworkTest4 FrameworkTest5
 NAMES+=UnknownD UnknownE UnknownF1 UnknownF2 SomewhatUnknownD SomewhatUnknownE SomewhatUnknownF1 SomewhatUnknownF2
 
+# TODO: list where each plugin is used (which test)
+PLUGINS=PlugInA PlugInB
+
 # a few lookup tables, because the data we have is not always in the format we need it
 
 COMMON_DYLIB_ARGS=-g -dynamiclib -gdwarf-2 -fms-extensions shared.c -Wall -framework Foundation -lz
@@ -20,10 +23,12 @@ maccatalyst-x64_DYLIB_FLAGS=$(MACCATALYST_X86_64_CFLAGS)
 maccatalyst-arm64_DYLIB_FLAGS=$(MACCATALYST_ARM64_CFLAGS)
 
 iossimulator-x64_ARCHITECTURES=x86_64
+iossimulator-arm64_ARCHITECTURES=arm64
 iossimulator-x86_ARCHITECTURES=i386
 ios-arm_ARCHITECTURES=armv7 armv7s
 ios-arm64_ARCHITECTURES=arm64
 tvossimulator-x64_ARCHITECTURES=x86_64
+tvossimulator-arm64_ARCHITECTURES=arm64
 tvos-arm64_ARCHITECTURES=arm64
 osx-x64_ARCHITECTURES=x86_64
 osx-arm64_ARCHITECTURES=arm64
@@ -36,6 +41,14 @@ mac_BINARY_INFIX=/Versions/A
 maccatalyst_SYMLINKS=1
 maccatalyst_INFO_PLIST_INFIX=/Versions/A/Resources
 maccatalyst_BINARY_INFIX=/Versions/A
+
+# For XCFrameworks, we have to lipo some of the RID-specific frameworks together (the ones with multiple RIDs below)
+iphonesimulator_XC_RUNTIMEIDENTIFIERS=iossimulator-x86 iossimulator-x64  iossimulator-arm64
+iphoneos_XC_RUNTIMEIDENTIFIERS=ios-arm ios-arm64
+tvsimulator_XC_RUNTIMEIDENTIFIERS=tvossimulator-x64 tvossimulator-arm64
+tvos_XC_RUNTIMEIDENTIFIERS=tvos-arm64
+mac_XC_RUNTIMEIDENTIFIERS=osx-x64 osx-arm64
+maccatalyst_XC_RUNTIMEIDENTIFIERS=maccatalyst-x64 maccatalyst-arm64
 
 define DotNetTemplate
 
@@ -129,14 +142,6 @@ endef
 # 3: runtime identifier
 $(foreach name,$(NAMES),$(foreach platform,$(DOTNET_PLATFORMS),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(eval $(call DotNetTemplate,$(name),$(DOTNET_$(rid)_SDK_PLATFORM),$(rid))))))
 
-# For XCFrameworks, we have to lipo some of the RID-specific frameworks together (the ones with multiple RIDs just below)
-iphonesimulator_XC_RUNTIMEIDENTIFIERS=iossimulator-x86 iossimulator-x64
-iphoneos_XC_RUNTIMEIDENTIFIERS=ios-arm ios-arm64
-tvsimulator_XC_RUNTIMEIDENTIFIERS=tvossimulator-x64
-tvos_XC_RUNTIMEIDENTIFIERS=tvos-arm64
-mac_XC_RUNTIMEIDENTIFIERS=osx-x64 osx-arm64
-maccatalyst_XC_RUNTIMEIDENTIFIERS=maccatalyst-x64 maccatalyst-arm64
-
 define DotNetXCTemplate
 .libs/$(3)/$(1).framework.stamp: $$(foreach rid,$$($(3)_XC_RUNTIMEIDENTIFIERS),.libs/$$(rid)/$(1).framework.stamp) | .libs/$(3)
 	$$(Q) rm -Rf .libs/$(3)/$(1).framework
@@ -180,3 +185,74 @@ $(foreach name,$(NAMES),$(eval $(call DotNetXCFrameworkTemplate,$(name))))
 
 zip: $(ZIPPED_TARGETS)
 all-local:: $(ZIPPED_TARGETS)
+
+define DotNetPlugInTemplate
+
+$(1)_$(3)_PLUGIN_TARGETS += \
+	.libs/$(3)/$(1).bundle$($(2)_BINARY_INFIX)/$(1) \
+	.libs/$(3)/$(1).bundle$($(2)_INFO_PLIST_INFIX)/Info.plist \
+	.libs/$(3)/lib$(1).dylib \
+	.libs/$(3)/$(1).bundle \
+
+ifeq ($($(2)_SYMLINKS),1)
+$(1)_$(3)_PLUGIN_TARGETS += \
+	.libs/$(3)/$(1).bundle/$(1) \
+	.libs/$(3)/$(1).bundle/Resources \
+	.libs/$(3)/$(1).bundle/Versions/Current \
+	.libs/$(3)/$(1).bundle/Versions/A/Resources/Info.plist \
+
+endif
+
+$(3)_PLUGIN_TARGETS += \
+	$($(1)_$(3)_PLUGIN_TARGETS) \
+	.libs/$(3)/$(1).bundle.stamp \
+
+all-local:: $$($(3)_PLUGIN_TARGETS)
+
+.libs/$(3)/$(1).bundle.stamp: $$($(1)_$(3)_PLUGIN_TARGETS)
+	$$(Q) touch $$@
+
+.libs/$(3)/lib$(1).dylib: shared.c | .libs/$(3)
+	$$(call Q_2,CC,    [$(3)]) $$(XCODE_CC) -o $$@ $$(foreach arch,$$($(3)_ARCHITECTURES),-arch $$(arch)) $$($(2)_DYLIB_FLAGS) $$($(3)_DYLIB_FLAGS) -DNAME=$(1)
+	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -id @rpath/lib$(1).dylib $$@
+
+.libs/$(3)/$(1).bundle$($(2)_BINARY_INFIX)/$(1): .libs/$(3)/lib$(1).dylib | .libs/$(3)/$(1).bundle$($(2)_BINARY_INFIX)
+	$$(Q) $(CP) $$^ $$@
+	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -id @rpath/implementme $$@
+
+.libs/$(3)/$(1).bundle$($(2)_INFO_PLIST_INFIX)/Info.plist: Info-$(2).plist | .libs/$(3)/$(1).bundle$($(2)_INFO_PLIST_INFIX)
+	$$(Q) sed 's/%NAME%/$(1)/g' $$^ > $$@
+
+$(3)_$(1)_PLUGIN_DIRECTORIES = \
+	.libs/$(3)/$(1).bundle \
+	.libs/$(3)/$(1).bundle/Versions \
+
+$$($(3)_$(1)_PLUGIN_DIRECTORIES):
+	$$(Q) mkdir -p $$@
+
+.libs/$(3)/$(1).bundle.zip: $$($(3)_PLUGIN_TARGETS)
+	echo Deps: $$($(3)_PLUGIN_TARGETS)
+	$$(Q) cd $$(dir $$@) && zip -9r --symlinks $$(notdir $$@) $(1).bundle
+
+PLUGIN_TARGETS += .libs/$(3)/$(1).bundle.zip
+
+# some additional targets if the bundle has macOS-like structure (i.e. has symlinks)
+ifeq ($($(2)_SYMLINKS),1)
+.libs/$(3)/$(1).bundle$($(2)_BINARY_INFIX) .libs/$(3)/$(1).bundle$($(2)_INFO_PLIST_INFIX):
+	$$(Q) mkdir -p $$@
+
+.libs/$(3)/$(1).bundle/$(1): | .libs/$(3)/$(1).bundle
+	$$(Q) ln -fs Versions/A/$(1) $$@
+
+.libs/$(3)/$(1).bundle/Resources: | .libs/$(3)/$(1).bundle
+	$$(Q) ln -fs Versions/Current/Resources $$@
+
+.libs/$(3)/$(1).bundle/Versions/Current: | .libs/$(3)/$(1).bundle/Versions
+	$$(Q) ln -fs A $$@
+endif
+endef
+$(foreach plugin,$(PLUGINS),$(foreach platform,$(DOTNET_PLATFORMS),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(eval $(call DotNetPlugInTemplate,$(plugin),$(DOTNET_$(rid)_SDK_PLATFORM),$(rid))))))
+
+plugins: $(PLUGIN_TARGETS)
+all-local:: $(PLUGIN_TARGETS)
+

@@ -330,8 +330,8 @@ namespace Xamarin.Tests {
 				$"The file '{project_dir}/{platformString}/NoneM.unknown' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/SomewhatUnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
 				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/UnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
-				$"The framework {testsDirectory}/bindings-framework-test/dotnet/{platform}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.",
-				$"The framework {testsDirectory}/bindings-framework-test/dotnet/{platform}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.",
+				$"The framework obj/Debug/{tfm}/{runtimeIdentifiers}/bindings-framework-test.resources.zip/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.",
+				$"The framework obj/Debug/{tfm}/{runtimeIdentifiers}/bindings-framework-test.resources.zip/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.",
 			}.OrderBy (v => v).ToArray ();
 
 			Assert.AreEqual (11, warnings.Length, $"Warning Count:\n\t{string.Join ("\n\t", warningMessages)}");

@@ -1289,6 +1289,17 @@
 			<_CompressedAppleFrameworks Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedAppleFramework'" />
 			<ResolvedFileToPublish Remove="@(_CompressedAppleFrameworks)" />
 
+			<!-- plugins are not copied to the app bundle by using the built-in .NET logic of ResolvedFileToPublish due to symlinks -->
+			<_PlugIns Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'PlugIns'" />
+			<_PlugIns Update="@(_PlugIns">
+				<!-- Set TargetDirectory and SourceDirectory for all plugins we have to publish -->
+				<TargetDirectory>$(_RelativePublishDir)$(_RelativeAppBundlePath)%(RelativePath)</TargetDirectory>
+				<SourceDirectory>%(RootDir)%(Directory)</SourceDirectory>
+			</_PlugIns>
+			<_DirectoriesToPublish Include="@(_PlugIns)" />
+			<!-- Finally remove from ResolvedFileToPublish -->
+			<ResolvedFileToPublish Remove="@(_PlugIns)" />
+
 			<!-- compressed plugins are uncompressed, but the compressed file is not copied to the app bundle -->
 			<_CompressedPlugIns Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PublishFolderType)' == 'CompressedPlugIns'" />
 			<ResolvedFileToPublish Remove="@(_CompressedPlugIns)" />

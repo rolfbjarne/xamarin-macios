@@ -7,7 +7,7 @@ NAMES+=FrameworkTest1 FrameworkTest2 FrameworkTest3 FrameworkTest4 FrameworkTest
 NAMES+=UnknownD UnknownE UnknownF1 UnknownF2 SomewhatUnknownD SomewhatUnknownE SomewhatUnknownF1 SomewhatUnknownF2
 
 # TODO: list where each plugin is used (which test)
-PLUGINS=PlugInA PlugInB
+PLUGINS=PlugInA CompressedPlugInB PlugInC CompressedPlugInD
 
 # a few lookup tables, because the data we have is not always in the format we need it
 

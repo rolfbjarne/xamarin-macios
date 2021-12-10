@@ -232,7 +232,7 @@ $$($(3)_$(1)_PLUGIN_DIRECTORIES):
 
 .libs/$(3)/$(1).bundle.zip: $$($(3)_PLUGIN_TARGETS)
 	echo Deps: $$($(3)_PLUGIN_TARGETS)
-	$$(Q) cd $$(dir $$@) && zip -9r --symlinks $$(notdir $$@) $(1).bundle
+	$$(Q) cd $$(dir $$@)/$(1).bundle && zip -9r --symlinks $$(abspath $$@) .
 
 PLUGIN_TARGETS += .libs/$(3)/$(1).bundle.zip
 

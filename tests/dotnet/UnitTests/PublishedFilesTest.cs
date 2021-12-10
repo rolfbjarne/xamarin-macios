@@ -31,7 +31,7 @@ namespace Xamarin.Tests {
 								Where (v => v.Length > appPath.Length).
 								Select (v => v.Substring (appPath.Length + 1)).ToList ();
 
-			// Remove files from the BCL, the exact set can vary between .NET versions
+			// Remove various files we don't care about (for this test) from the list of files in the app bundle.
 			Predicate<string?> predicate = (v) => {
 				var fn = Path.GetFileName (v!);
 
@@ -59,7 +59,14 @@ namespace Xamarin.Tests {
 				case "libxamarin-dotnet-debug.dylib":
 				case "libxamarin-dotnet.dylib":
 					return true;
+
+				case "embedded.mobileprovision":
+				case "archived-expanded-entitlements.xcent":
+					return true;
 				}
+
+				if (fn.EndsWith (".aotdata.arm64", StringComparison.Ordinal) || fn.EndsWith (".aotdata.armv7", StringComparison.Ordinal))
+					return true;
 
 				if (fn.StartsWith ("System.", StringComparison.Ordinal) && (fn.EndsWith (".dll", StringComparison.Ordinal) || fn.EndsWith (".pdb", StringComparison.Ordinal)))
 					return true;
@@ -140,12 +147,15 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
+				if (!isSigned)
+					expectedFiles.Add ($"UnknownJ.bin"); // UnknownJ.bin: RootDirectory
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
 			}
 
 			// SomewhatUnknownA.bin: None
+			expectedFiles.Add ($"{assemblyDirectory}Subfolder");
 			expectedFiles.Add ($"{assemblyDirectory}Subfolder/SomewhatUnknownB.bin"); // SomewhatUnknownB.bin: Assembly
 			expectedFiles.Add ($"{resourcesDirectory}Subfolder");
 			expectedFiles.Add ($"{resourcesDirectory}Subfolder/SomewhatUnknownC.bin"); // SomewhatUnknownC.bin: Resource
@@ -167,6 +177,10 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
+				if (!isSigned) {
+					expectedFiles.Add ($"Subfolder");
+					expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
+				}
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -214,7 +228,8 @@ namespace Xamarin.Tests {
 			if (!isCoreCLR)
 				expectedFiles.Add ($"{assemblyDirectory}icudt.dat");
 			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "BundleStructure", runtimeIdentifiers);
-			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "MonoTouch.Dialog", runtimeIdentifiers);
+			if (platform != ApplePlatform.MacOSX)
+				AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "MonoTouch.Dialog", runtimeIdentifiers);
 			expectedFiles.Add ($"{assemblyDirectory}nunit.framework.dll");
 			expectedFiles.Add ($"{assemblyDirectory}nunitlite.dll");
 			expectedFiles.Add ($"{assemblyDirectory}Touch.Client.dll");
@@ -234,7 +249,6 @@ namespace Xamarin.Tests {
 				expectedFiles.Add ("PkgInfo");
 				expectedFiles.Add ("Settings.bundle");
 				expectedFiles.Add ("Settings.bundle/Root.plist");
-				expectedFiles.Add ("libxamarin-dotnet-debug.dylib");
 				break;
 			case ApplePlatform.MacCatalyst:
 				expectedFiles.Add ("Contents/Resources/MonoTouchDebugConfiguration.txt");
@@ -297,9 +311,9 @@ namespace Xamarin.Tests {
 				expectedFiles.Add ($"{assemblyDirectory}{assemblyName}.pdb");
 			} else {
 				foreach (var rid in runtimeIdentifiers) {
-					expectedFiles.Add ($"{assemblyDirectory}/.xamarin/{rid}");
-					expectedFiles.Add ($"{assemblyDirectory}/.xamarin/{rid}/{assemblyName}.dll");
-					expectedFiles.Add ($"{assemblyDirectory}/.xamarin/{rid}/{assemblyName}.pdb");
+					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}");
+					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.dll");
+					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.pdb");
 				}
 			}
 		}
@@ -458,19 +472,23 @@ namespace Xamarin.Tests {
 				.OrderBy (v => v)
 				.ToArray ();
 			var expectedWarnings = new string [] {
+				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/SomewhatUnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
+				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/UnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
 				$"The file '{project_dir}/{platformString}/NoneA.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
-				$"The file '{project_dir}/{platformString}/Sub/NoneG.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
-				$"The file '{project_dir}/NoneH.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 				$"The file '{project_dir}/{platformString}/NoneI.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 				$"The file '{project_dir}/{platformString}/NoneJ.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 				$"The file '{project_dir}/{platformString}/NoneK.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 				$"The file '{project_dir}/{platformString}/NoneM.unknown' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
-				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/SomewhatUnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
-				$"The 'PublishFolderType' metadata value 'Unknown' on the item '{project_dir}/{platformString}/UnknownI.bin' is not recognized. The file will not be copied to the app bundle. If the file is not supposed to be copied to the app bundle, remove the 'CopyToOutputDirectory' metadata on the item.",
+				$"The file '{project_dir}/{platformString}/Sub/NoneG.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
+				$"The file '{project_dir}/NoneH.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 			}.ToList ();
 
-			expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platform}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.");
-			expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platform}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.");
+			expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platformString}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.");
+			expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platformString}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.");
+
+			if (platform == ApplePlatform.MacOSX) {
+				expectedWarnings.Add ($"The file '{testsDirectory}/dotnet/BundleStructure/macOS/obj/Debug/{tfm}/{runtimeIdentifiers}/apphost' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.");
+			}
 
 			// Sort the messages so that comparison against the expected array is faster
 			expectedWarnings = expectedWarnings

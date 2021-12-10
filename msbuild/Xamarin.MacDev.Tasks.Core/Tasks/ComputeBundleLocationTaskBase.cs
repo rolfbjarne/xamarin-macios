@@ -112,7 +112,7 @@ namespace Xamarin.MacDev.Tasks {
 					break;
 				case PublishFolderType.CompressedPlugIns:
 					relativePath = PlugInsDirectory;
-					if (!withLink && string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
+					if (string.Equals (Path.GetExtension (virtualProjectPath), ".zip", StringComparison.OrdinalIgnoreCase)) {
 						// Remove the .zip extension of the input file before using the input file as the target filename
 						virtualProjectPath = Path.Combine (Path.GetDirectoryName (virtualProjectPath), Path.GetFileNameWithoutExtension (virtualProjectPath));
 					}
@@ -134,6 +134,8 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				}
 
+				item.SetMetadata ("WithLink", withLink.ToString ()); // TEMPORARY FOR DEBUGGING
+				item.SetMetadata ("VirtualProjectPath", virtualProjectPath); // TEMPORARY FOR DEBUGGING
 				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
 			}
 

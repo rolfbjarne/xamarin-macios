@@ -1293,7 +1293,7 @@
 			<_PlugIns Update="@(_PlugIns">
 				<!-- Set TargetDirectory and SourceDirectory for all plugins we have to publish -->
 				<TargetDirectory>$(_RelativePublishDir)$(_RelativeAppBundlePath)%(RelativePath)</TargetDirectory>
-				<SourceDirectory>%(RootDir)%(Directory)</SourceDirectory>
+				<SourceDirectory>%(Identity)</SourceDirectory>
 			</_PlugIns>
 			<_DirectoriesToPublish Include="@(_PlugIns)" />
 			<!-- Finally remove from ResolvedFileToPublish -->
@@ -1397,12 +1397,13 @@
 
 		<ItemGroup>
 			<!-- Set TargetDirectory and SourceDirectory for all directories we have to publish -->
-			<_DecompressedPlugins Include="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension)')" />
-
-			<_DecompressedPlugins Update="@(_DecompressedPlugins)">
+			<_DecompressedPlugIns Include="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension)')" />
+		</ItemGroup>
+		<ItemGroup>
+			<_DecompressedPlugIns Update="@(_DecompressedPlugIns)">
 				<TargetDirectory>$(_RelativePublishDir)$(_RelativeAppBundlePath)%(RelativePath)</TargetDirectory>
 				<SourceDirectory>$(_IntermediateDecompressionDir)/%(Filename)%(Extension)</SourceDirectory>
-			</_DecompressedPlugins>
+			</_DecompressedPlugIns>
 		</ItemGroup>
 
 		<Touch
@@ -1415,7 +1416,7 @@
 		</Touch>
 
 		<ItemGroup>
-			<_DirectoriesToPublish Include="@(_DecompressedPlugins)" />
+			<_DirectoriesToPublish Include="@(_DecompressedPlugIns)" />
 		</ItemGroup>
 	</Target>
 

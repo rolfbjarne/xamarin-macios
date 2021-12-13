@@ -19,7 +19,7 @@ namespace Xamarin.Tests {
 			Assert.That (File.ReadAllText (fullPath).Trim (), Is.EqualTo (contents), "Contents: " + relativePath);
 		}
 
-		void CheckAppBundleContents (ApplePlatform platform, string appPath, string[] runtimeIdentifiers, bool isSigned)
+		void CheckAppBundleContents (ApplePlatform platform, string appPath, string[] runtimeIdentifiers, CodeSignature isSigned)
 		{
 			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
 			Console.WriteLine ($"App bundle: {appPath}");
@@ -133,7 +133,7 @@ namespace Xamarin.Tests {
 			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownE", isSigned); // UnknownE: CompressedAppleFramework
 			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownF1", isSigned); // UnknownF1.bin: AppleBindingResource 
 			AddExpectedFrameworkFiles (platform, expectedFiles, "UnknownF2", isSigned); // UnknownF2.bin: AppleBindingResource (compressed)
-			if (!isSigned) { // we don't support signing apps with plugins (yet)
+			if (isSigned == CodeSignature.None) { // we don't support signing apps with plugins (yet)
 				AddExpectedPlugInFiles (platform, expectedFiles, "PlugInA", isSigned); // PlugIns
 				AddExpectedPlugInFiles (platform, expectedFiles, "CompressedPlugInB", isSigned); // CompressedPlugIns
 			}
@@ -147,7 +147,7 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				if (!isSigned)
+				if (isSigned == CodeSignature.None)
 					expectedFiles.Add ($"UnknownJ.bin"); // UnknownJ.bin: RootDirectory
 				break;
 			default:
@@ -164,7 +164,7 @@ namespace Xamarin.Tests {
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownE", isSigned); // SomewhatUnknownE.bin: CompressedAppleFramework
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownF1", isSigned); // SomewhatUnknownF1.bin: AppleBindingResource
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownF2", isSigned); // SomewhatUnknownF2.bin: AppleBindingResource (compressed)
-			if (!isSigned) {
+			if (isSigned == CodeSignature.None) {
 				AddExpectedPlugInFiles (platform, expectedFiles, "PlugInC", isSigned, "Subfolder"); // PlugIns
 				AddExpectedPlugInFiles (platform, expectedFiles, "CompressedPlugInD", isSigned, "Subfolder"); // CompressedPlugIns
 			}
@@ -177,7 +177,7 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				if (!isSigned) {
+				if (isSigned == CodeSignature.None) {
 					expectedFiles.Add ($"Subfolder");
 					expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
 				}
@@ -219,7 +219,7 @@ namespace Xamarin.Tests {
 
 			// various directories
 			expectedFiles.Add (frameworksDirectory);
-			if (!isSigned) {
+			if (isSigned == CodeSignature.None) {
 				expectedFiles.Add (pluginsDirectory);
 				expectedFiles.Add ($"{pluginsDirectory}/Subfolder");
 			}
@@ -229,12 +229,12 @@ namespace Xamarin.Tests {
 				expectedFiles.Add ($"{assemblyDirectory}icudt.dat");
 			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "BundleStructure", runtimeIdentifiers);
 			if (platform != ApplePlatform.MacOSX)
-				AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "MonoTouch.Dialog", runtimeIdentifiers);
+				AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "MonoTouch.Dialog", runtimeIdentifiers, forceSingleRid: true);
 			expectedFiles.Add ($"{assemblyDirectory}nunit.framework.dll");
 			expectedFiles.Add ($"{assemblyDirectory}nunitlite.dll");
 			expectedFiles.Add ($"{assemblyDirectory}Touch.Client.dll");
 			expectedFiles.Add ($"{assemblyDirectory}Touch.Client.pdb");
-			expectedFiles.Add ($"{assemblyDirectory}{Configuration.GetBaseLibraryName (platform)}");
+			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, Path.GetFileNameWithoutExtension (Configuration.GetBaseLibraryName (platform)), runtimeIdentifiers, forceSingleRid: platform == ApplePlatform.MacCatalyst || platform == ApplePlatform.MacOSX, hasPdb: false);
 			expectedFiles.Add ($"{assemblyDirectory}runtimeconfig.bin");
 
 			if (platform == ApplePlatform.MacOSX)
@@ -266,7 +266,7 @@ namespace Xamarin.Tests {
 				throw new NotImplementedException ($"Unknown platform: {platform}");
 			}
 
-			if (isSigned) {
+			if (isSigned == CodeSignature.All) {
 				switch (platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
@@ -304,22 +304,26 @@ namespace Xamarin.Tests {
 		}
 
 
-		static void AddMultiRidAssembly (ApplePlatform platform, List<string> expectedFiles, string assemblyDirectory, string assemblyName, string[] runtimeIdentifiers)
+		static void AddMultiRidAssembly (ApplePlatform platform, List<string> expectedFiles, string assemblyDirectory, string assemblyName, string[] runtimeIdentifiers, bool forceSingleRid = false, bool hasPdb = true)
 		{
-			if (runtimeIdentifiers.Length == 1) {
+			if (forceSingleRid || runtimeIdentifiers.Length == 1) {
 				expectedFiles.Add ($"{assemblyDirectory}{assemblyName}.dll");
-				expectedFiles.Add ($"{assemblyDirectory}{assemblyName}.pdb");
+				if (hasPdb)
+					expectedFiles.Add ($"{assemblyDirectory}{assemblyName}.pdb");
 			} else {
+				expectedFiles.Add ($"{assemblyDirectory}.xamarin");
 				foreach (var rid in runtimeIdentifiers) {
 					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}");
 					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.dll");
-					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.pdb");
+					if (hasPdb)
+						expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.pdb");
 				}
 			}
 		}
 
-		static void AddExpectedPlugInFiles (ApplePlatform platform, List<string> expectedFiles, string pluginName, bool isSigned, string subdirectory = "")
+		static void AddExpectedPlugInFiles (ApplePlatform platform, List<string> expectedFiles, string pluginName, CodeSignature signature, string subdirectory = "")
 		{
+			var isSigned = signature != CodeSignature.None;
 			var pluginsDirectory = "PlugIns";
 			switch (platform) {
 			case ApplePlatform.iOS:
@@ -374,8 +378,9 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		static void AddExpectedFrameworkFiles (ApplePlatform platform, List<string> expectedFiles, string frameworkName, bool isSigned, string subdirectory = "")
+		static void AddExpectedFrameworkFiles (ApplePlatform platform, List<string> expectedFiles, string frameworkName, CodeSignature signature, string subdirectory = "")
 		{
+			var isSigned = signature != CodeSignature.None;
 			var frameworksDirectory = "Frameworks";
 			switch (platform) {
 			case ApplePlatform.iOS:
@@ -428,15 +433,21 @@ namespace Xamarin.Tests {
 			}
 		}
 
+		public enum CodeSignature {
+			None,
+			Frameworks,
+			All,
+		}
+
 		[Test]
-		[TestCase (ApplePlatform.iOS, "iossimulator-x64", false)]
-		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm", true)]
-		[TestCase (ApplePlatform.TVOS, "tvos-arm64", true)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", true)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", true)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64", false)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", false)]
-		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers, bool isSigned)
+		[TestCase (ApplePlatform.iOS, "ios-arm64;ios-arm", CodeSignature.All)]
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64", CodeSignature.Frameworks)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", CodeSignature.All)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", CodeSignature.All)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", CodeSignature.None)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", CodeSignature.None)]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64", CodeSignature.All)]
+		public void BundleStructure (ApplePlatform platform, string runtimeIdentifiers, CodeSignature signature)
 		{
 			var project = "BundleStructure";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -446,7 +457,7 @@ namespace Xamarin.Tests {
 			Clean (project_path);
 
 			var properties = GetDefaultProperties (runtimeIdentifiers);
-			properties ["_IsAppSigned"] = isSigned ? "true" : "false";
+			properties ["_IsAppSigned"] = signature != CodeSignature.None ? "true" : "false";
 			var rv = DotNet.AssertBuild (project_path, properties);
 			var warnings = BinLog.GetBuildLogWarnings (rv.BinLogPath).ToArray ();
 			Console.WriteLine ($"Found {warnings.Length} warnings:");
@@ -468,6 +479,8 @@ namespace Xamarin.Tests {
 				.Where (v => !v.Contains (" overrides obsolete member "))
 				// Don't care about this
 				.Where (v => !v.Contains ("Supported iPhone orientations have not been set"))
+				// Skip compiler warnings
+				.Where (v => !v.Contains ("The field 'DialogViewController.Source.checkForRefresh' is never used"))
 				// Sort the messages so that comparison against the expected array is faster
 				.OrderBy (v => v)
 				.ToArray ();
@@ -483,11 +496,26 @@ namespace Xamarin.Tests {
 				$"The file '{project_dir}/NoneH.txt' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.",
 			}.ToList ();
 
-			expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platformString}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.");
-			expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platformString}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.");
+			var rids = runtimeIdentifiers.Split (';');
+			if (rids.Length > 1) {
+				// All warnings show up twice if we're building for multiple architectures
+				expectedWarnings.AddRange (expectedWarnings);
+			}
+
+			var zippedFrameworks = platform == ApplePlatform.MacCatalyst || platform == ApplePlatform.MacOSX;
+			foreach (var rid in rids) {
+				if (zippedFrameworks) {
+					expectedWarnings.Add ($"The framework obj/Debug/{tfm}/{rid}/bindings-framework-test.resources.zip/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.");
+					expectedWarnings.Add ($"The framework obj/Debug/{tfm}/{rid}/bindings-framework-test.resources.zip/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.");
+				} else {
+					expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platformString}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticObjectTest.framework is a framework of static libraries, and will not be copied to the app.");
+					expectedWarnings.Add ($"The framework {testsDirectory}/bindings-framework-test/dotnet/{platformString}/bin/Debug/{tfm}/bindings-framework-test.resources/XStaticArTest.framework is a framework of static libraries, and will not be copied to the app.");
+				}
+			}
 
 			if (platform == ApplePlatform.MacOSX) {
-				expectedWarnings.Add ($"The file '{testsDirectory}/dotnet/BundleStructure/macOS/obj/Debug/{tfm}/{runtimeIdentifiers}/apphost' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.");
+				foreach (var rid in rids)
+					expectedWarnings.Add ($"The file '{testsDirectory}/dotnet/BundleStructure/macOS/obj/Debug/{tfm}/{rid}/apphost' does not specify a 'PublishFolderType' metadata, and a default value could not be calculated. The file will not be copied to the app bundle.");
 			}
 
 			// Sort the messages so that comparison against the expected array is faster
@@ -495,9 +523,9 @@ namespace Xamarin.Tests {
 				.OrderBy (v => v)
 				.ToList ();
 
-			CheckAppBundleContents (platform, appPath, runtimeIdentifiers.Split (';'), isSigned);
+			CheckAppBundleContents (platform, appPath, rids, signature);
 
-			Assert.AreEqual (11, warningMessages.Length, $"Warning Count:\n\t{string.Join ("\n\t", warningMessages)}");
+			Assert.AreEqual (expectedWarnings.Count, warningMessages.Length, $"Warning Count:\n\t{string.Join ("\n\t", warningMessages)}");
 			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings");
 
 			var appExecutable = GetNativeExecutable (platform, appPath);

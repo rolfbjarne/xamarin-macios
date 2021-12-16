@@ -7,11 +7,11 @@ using ObjCRuntime;
 
 namespace Foundation {
 
-#if XAMCORE_4_0
-	static
-#endif
+#if NET
+	public static class NSSecureCoding {
+#else
 	public partial class NSSecureCoding {
-
+#endif
 		const string selConformsToProtocol = "conformsToProtocol:";
 		const string selSupportsSecureCoding = "supportsSecureCoding";
 #if !MONOMAC

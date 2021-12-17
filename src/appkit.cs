@@ -27852,4 +27852,50 @@ namespace AppKit {
 		[Export ("configurationByApplyingConfiguration:")]
 		NSImageSymbolConfiguration Create (NSImageSymbolConfiguration configuration);
 	}
+
+#if NET
+	[Category]
+	[BaseType (typeof (NSObject))]
+	interface NSObject_NSKeyValueBindingCreation {
+		// Static members are still manually inlined, because otherwise it becomes difficult to use the API
+		// [Static]
+		// [Export ("exposeBinding:")]
+		// void ExposeBinding (NSString binding);
+
+		[Export ("exposedBindings")]
+		NSString[] ExposedBindings { get; }
+
+		[return: NullAllowed]
+		[Export ("valueClassForBinding:")]
+		Class GetBindingValueClass (NSString binding);
+
+		[Export ("bind:toObject:withKeyPath:options:")]
+		void Bind (NSString binding, NSObject observable, string keyPath, [NullAllowed] NSDictionary options);
+
+		[Export ("unbind:")]
+		void Unbind (NSString binding);
+
+		[return: NullAllowed]
+		[Export ("infoForBinding:")]
+		NSDictionary<NSString, NSObject> GetBindingInfo (NSString binding);
+
+		[Export ("optionDescriptionsForBinding:")]
+		NSAttributeDescription[] GetBindingOptionDescriptions (NSString binding);
+	}
+
+	[Category]
+	[BaseType (typeof (NSObject))]
+	interface NSObject_NSPlaceholders {
+		[Deprecated (PlatformName.MacOSX, 10,15, "Use 'NSBindingSelectionMarker.SetDefaultPlaceholder' instead.")]
+		[Static]
+		[Export ("setDefaultPlaceholder:forMarker:withBinding:")]
+		void SetDefaultPlaceholder ([NullAllowed] NSObject placeholder, [NullAllowed] NSObject marker, NSString binding);
+
+		[return: NullAllowed]
+		[Deprecated (PlatformName.MacOSX, 10,15, "Use 'NSBindingSelectionMarker.GetDefaultPlaceholder' instead.")]
+		[Static]
+		[Export ("defaultPlaceholderForMarker:withBinding:")]
+		NSObject GetDefaultPlaceholder ([NullAllowed] NSObject marker, NSString binding);
+	}
+#endif
 }

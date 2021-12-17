@@ -8794,15 +8794,13 @@ namespace Foundation
 
 		[Field ("NSKeyValueChangeNotificationIsPriorKey")]
 		NSString ChangeNotificationIsPriorKey { get; }
-#if MONOMAC
+
+#if MONOMAC && !NET
 		// Cocoa Bindings added by Kenneth J. Pouncey 2010/11/17
-#if !XAMCORE_4_0
 		[Sealed]
-#endif
 		[Export ("valueClassForBinding:")]
 		Class GetBindingValueClass (NSString binding);
 
-#if !XAMCORE_4_0
 		[Obsolete ("Use 'Bind (NSString binding, NSObject observable, string keyPath, [NullAllowed] NSDictionary options)' instead.")]
 		[Export ("bind:toObject:withKeyPath:options:")]
 		void Bind (string binding, NSObject observable, string keyPath, [NullAllowed] NSDictionary options);
@@ -8834,32 +8832,20 @@ namespace Foundation
 
 		[Export ("exposedBindings")]
 		NSString[] ExposedBindings ();
-#else
-		[Export ("exposedBindings")]
-		NSString[] ExposedBindings { get; }
-#endif
 
-#if !XAMCORE_4_0
 		[Sealed]
-#endif
 		[Export ("bind:toObject:withKeyPath:options:")]
 		void Bind (NSString binding, NSObject observable, string keyPath, [NullAllowed] NSDictionary options);
 
-#if !XAMCORE_4_0
 		[Sealed]
-#endif
 		[Export ("unbind:")]
 		void Unbind (NSString binding);
 
-#if !XAMCORE_4_0
 		[Sealed]
-#endif
 		[Export ("infoForBinding:")]
 		NSDictionary GetBindingInfo (NSString binding);
 
-#if !XAMCORE_4_0
 		[Sealed]
-#endif
 		[Export ("optionDescriptionsForBinding:")]
 		NSObject[] GetBindingOptionDescriptions (NSString aBinding);
 
@@ -8886,7 +8872,14 @@ namespace Foundation
 		[Export ("commitEditingWithDelegate:didCommitSelector:contextInfo:")]
 		//void CommitEditingWithDelegateDidCommitSelectorContextInfo (NSObject objDelegate, Selector didCommitSelector, IntPtr contextInfo);
 		void CommitEditing (NSObject objDelegate, Selector didCommitSelector, IntPtr contextInfo);
-#endif
+#endif // MONOMAC && !NET
+
+		// Inlined from the NSKeyValueBindingCreation category
+		[NoiOS, NoTV, NoWatch, NoMacCatalyst]
+		[Static]
+		[Export ("exposeBinding:")]
+		void ExposeBinding (NSString binding);
+
 		[Export ("methodForSelector:")]
 		IntPtr GetMethodForSelector (Selector sel);
 

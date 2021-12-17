@@ -912,7 +912,7 @@ namespace Foundation  {
 		None, Default, All 
 	}
 
-#if !XAMCORE_4_0
+#if !NET
 	[Flags]
 	[Native]
 	public enum NSDateComponentsWrappingBehavior : ulong {

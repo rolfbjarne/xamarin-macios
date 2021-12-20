@@ -957,7 +957,7 @@ namespace UIKit {
 		[Export ("characterIndexForPoint:inTextContainer:fractionOfDistanceBetweenInsertionPoints:")]
 		nuint GetCharacterIndex (CGPoint point, NSTextContainer container, out nfloat fractionOfDistanceBetweenInsertionPoints);
 
-#if !XAMCORE_4_0
+#if !NET
 		[Obsolete ("Use 'GetCharacterIndex' instead.")]
 		[Export ("characterIndexForPoint:inTextContainer:fractionOfDistanceBetweenInsertionPoints:")]
 #if MONOMAC
@@ -1112,7 +1112,7 @@ namespace UIKit {
 		void AddTemporaryAttribute (string attrName, NSObject value, NSRange charRange);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]

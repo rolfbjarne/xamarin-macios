@@ -22,7 +22,7 @@ PACKAGE_VERSION=$(shell grep '<PackageVersion>' FrameworksInRuntimesNativeDirect
 INSTALLED_PACKAGE=$(NUGET_TEST_FEED)/packages/xamarin.tests.frameworksinruntimesnativedirectory/$(PACKAGE_VERSION)/xamarin.tests.frameworksinruntimesnativedirectory.$(PACKAGE_VERSION).nupkg
 
 $(INSTALLED_PACKAGE): .libs/FrameworksInRuntimesNativeDirectory.nupkg
-	if test -d $(NUGET_TEST_FEED)/$(PACKAGE_ID)/$(PACKAGE_VERSION); then nuget delete $(PACKAGE_ID) $(PACKAGE_VERSION) -source $(abspath $(NUGET_TEST_FEED)) -NonInteractive; fi
+	if test -d $(NUGET_TEST_FEED)/$(PACKAGE_ID)/$(PACKAGE_VERSION); then nuget delete $(PACKAGE_ID) $(PACKAGE_VERSION) -source $(abspath $(NUGET_TEST_FEED)) -NonInteractive || true; fi
 	rm -Rf $(TOP)/tests/dotnet/packages/xamarin.tests.frameworksinruntimesnativedirectory
 	mkdir -p $(abspath $(NUGET_TEST_FEED))
 	nuget add "$<" -source $(abspath $(NUGET_TEST_FEED)) -NonInteractive

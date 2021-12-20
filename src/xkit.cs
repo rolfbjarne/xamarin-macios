@@ -539,7 +539,7 @@ namespace UIKit {
 		nuint GlyphIndexForCharacterAtIndex (nuint charIndex);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'GetGlyphs' instead).")]
 		[Export ("intAttribute:forGlyphAtIndex:")]

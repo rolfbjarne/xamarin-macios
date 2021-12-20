@@ -547,42 +547,42 @@ namespace UIKit {
 #endif
 
 		[Export ("setTextContainer:forGlyphRange:")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		void SetTextContainer (NSTextContainer container, NSRange glyphRange);
 #else
 		void SetTextContainerForRange (NSTextContainer container, NSRange glyphRange);
 #endif
 
 		[Export ("setLineFragmentRect:forGlyphRange:usedRect:")]
-#if XAMCORE_4_0
+#if NET
 		void SetLineFragment (CGRect fragmentRect, NSRange glyphRange, CGRect usedRect);
 #else
 		void SetLineFragmentRect (CGRect fragmentRect, NSRange glyphRange, CGRect usedRect);
 #endif
 
 		[Export ("setExtraLineFragmentRect:usedRect:textContainer:")]
-#if XAMCORE_4_0
+#if NET
 		void SetExtraLineFragment (CGRect fragmentRect, CGRect usedRect, NSTextContainer container);
 #else
 		void SetExtraLineFragmentRect (CGRect fragmentRect, CGRect usedRect, NSTextContainer container);
 #endif
 
 		[Export ("setLocation:forStartOfGlyphRange:")]
-#if MONOMAC || XAMCORE_4_0
+#if MONOMAC || NET
 		void SetLocation (CGPoint location, NSRange forStartOfGlyphRange);
 #else
 		void SetLocation (CGPoint location, NSRange glyphRange);
 #endif
 
 		[Export ("setNotShownAttribute:forGlyphAtIndex:")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		void SetNotShownAttribute (bool flag, nuint glyphIndex);
 #else
 		void SetNotShownAttribute (bool flag, nint glyphIndex);
 #endif
 
 		[Export ("setDrawsOutsideLineFragment:forGlyphAtIndex:")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		void SetDrawsOutsideLineFragment (bool flag, nuint glyphIndex);
 #else
 		void SetDrawsOutsideLineFragment (bool flag, nint glyphIndex);
@@ -592,28 +592,28 @@ namespace UIKit {
 		void SetAttachmentSize (CGSize attachmentSize, NSRange glyphRange);
 
 		[Export ("getFirstUnlaidCharacterIndex:glyphIndex:")]
-#if XAMCORE_4_0
+#if NET
 		void GetFirstUnlaid (out nuint characterIndex, out nuint glyphIndex);
 #else
 		void GetFirstUnlaidCharacterIndex (ref nuint charIndex, ref nuint glyphIndex);
 #endif
 
 		[Export ("firstUnlaidCharacterIndex")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		nuint FirstUnlaidCharacterIndex { get; }
 #else
 		nint FirstUnlaidCharacterIndex { get; }
 #endif
 
 		[Export ("firstUnlaidGlyphIndex")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		nuint FirstUnlaidGlyphIndex { get; }
 #else
 		nint FirstUnlaidGlyphIndex { get; }
 #endif
 
 		/* GetTextContainer */
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Protected]
 #else
 		[Sealed][Internal]
@@ -624,13 +624,13 @@ namespace UIKit {
 		[Wrap ("GetTextContainer (glyphIndex, IntPtr.Zero)")]
 		NSTextContainer GetTextContainer (nuint glyphIndex);
 
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Sealed]
 #endif
 		[Export ("textContainerForGlyphAtIndex:effectiveRange:")]
 		NSTextContainer GetTextContainer (nuint glyphIndex, /* nullable NSRangePointer */ out NSRange effectiveGlyphRange);
 
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Protected]
 #else
 		[Sealed][Internal]
@@ -641,14 +641,14 @@ namespace UIKit {
 		[Wrap ("GetTextContainer (glyphIndex, IntPtr.Zero, flag)")]
 		NSTextContainer GetTextContainer (nuint glyphIndex, bool flag);
 
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Sealed]
 #endif
 		[Export ("textContainerForGlyphAtIndex:effectiveRange:withoutAdditionalLayout:")]
 		NSTextContainer GetTextContainer (nuint glyphIndex, /* nullable NSRangePointer */ out NSRange effectiveGlyphRange, bool withoutAdditionalLayout);
 
 		[Export ("usedRectForTextContainer:")]
-#if XAMCORE_4_0
+#if NET
 		CGRect GetUsedRect (NSTextContainer container);
 #else
 		CGRect GetUsedRectForTextContainer (NSTextContainer container);
@@ -668,7 +668,7 @@ namespace UIKit {
 
 		/* GetLineFragmentRect (NSUInteger, NSRangePointer, bool) */
 		[iOS (9,0)]
-#if MONOMAC || XAMCORE_4_0
+#if MONOMAC || NET
 		[Protected]
 #else
 		[Sealed][Internal]
@@ -681,7 +681,7 @@ namespace UIKit {
 		CGRect GetLineFragmentRect (nuint glyphIndex, bool withoutAdditionalLayout);
 
 		[iOS (9,0)]
-#if MONOMAC || XAMCORE_4_0
+#if MONOMAC || NET
 		[Sealed]
 #endif
 		[Export ("lineFragmentRectForGlyphAtIndex:effectiveRange:withoutAdditionalLayout:")]
@@ -701,7 +701,7 @@ namespace UIKit {
 
 		/* GetLineFragmentUsedRect (NSUInteger, NSRangePointer, bool) */
 		[iOS (9,0)]
-#if MONOMAC || XAMCORE_4_0
+#if MONOMAC || NET
 		[Protected]
 #else
 		[Sealed][Internal]
@@ -714,7 +714,7 @@ namespace UIKit {
 		CGRect GetLineFragmentUsedRect (nuint glyphIndex, bool withoutAdditionalLayout);
 
 		[iOS (9,0)]
-#if MONOMAC || XAMCORE_4_0
+#if MONOMAC || NET
 		[Sealed]
 #endif
 		[Export ("lineFragmentUsedRectForGlyphAtIndex:effectiveRange:withoutAdditionalLayout:")]
@@ -730,7 +730,7 @@ namespace UIKit {
 		NSTextContainer ExtraLineFragmentTextContainer { get; }
 
 		[Export ("locationForGlyphAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		CGPoint GetLocationForGlyph (nuint glyphIndex);
 #elif MONOMAC
 		CGPoint LocationForGlyphAtIndex (nint glyphIndex);
@@ -739,7 +739,7 @@ namespace UIKit {
 #endif
 
 		[Export ("notShownAttributeForGlyphAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		bool NotShownAttributeForGlyph (nuint glyphIndex);
 #elif MONOMAC
 		bool NotShownAttributeForGlyphAtIndex (nint glyphIndex);
@@ -748,7 +748,7 @@ namespace UIKit {
 #endif
 
 		[Export ("drawsOutsideLineFragmentForGlyphAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		bool DrawsOutsideLineFragmentForGlyph (nuint glyphIndex);
 #elif MONOMAC
 		bool DrawsOutsideLineFragmentForGlyphAt (nint glyphIndex);
@@ -757,7 +757,7 @@ namespace UIKit {
 #endif
 
 		[Export ("attachmentSizeForGlyphAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		CGSize GetAttachmentSizeForGlyph (nuint glyphIndex);
 #elif MONOMAC
 		CGSize AttachmentSizeForGlyphAt (nint glyphIndex);
@@ -778,7 +778,7 @@ namespace UIKit {
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("layoutRectForTextBlock:glyphRange:")]
-#if XAMCORE_4_0
+#if NET
 		CGRect GetLayoutRect (NSTextBlock block, NSRange glyphRange);
 #else
 		CGRect LayoutRect (NSTextBlock block, NSRange glyphRange);
@@ -787,7 +787,7 @@ namespace UIKit {
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("boundsRectForTextBlock:glyphRange:")]
-#if XAMCORE_4_0
+#if NET
 		CGRect GetBoundsRect (NSTextBlock block, NSRange glyphRange);
 #else
 		CGRect BoundsRect (NSTextBlock block, NSRange glyphRange);
@@ -833,7 +833,7 @@ namespace UIKit {
 
 		/* GetGlyphRange (NSRange, nullable NSRangePointer) */
 
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		[Protected]
 #else
 		[Internal][Sealed]

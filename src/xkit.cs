@@ -857,7 +857,7 @@ namespace UIKit {
 #endif
 
 		/* GetCharacterRange (NSRange, nullable NSRangePointer) */
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		[Protected]
 #else
 		[Internal][Sealed]

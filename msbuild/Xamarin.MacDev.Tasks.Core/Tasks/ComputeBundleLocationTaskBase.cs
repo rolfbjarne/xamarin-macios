@@ -74,6 +74,10 @@ namespace Xamarin.MacDev.Tasks {
 				// Figure out the relative directory inside the app bundle where the item is supposed to be placed.
 				var virtualProjectPath = GetVirtualAppBundlePath (item, out var withLink);
 				var relativePath = string.Empty;
+				// We need to take "DestinationSubDirectory" into account - this is used to specify the subdirectory for resource assemblies for instance.
+				// Ref: https://github.com/dotnet/sdk/blob/0fc72ddb758dd136182972c2aea1d504ea046cfd/src/Tasks/Common/ItemUtilities.cs#L126-L128
+				// The Link metadata should override any DestinationSubDirectory value though.
+				var destinationSubDirectory = withLink ? string.Empty : item.GetMetadata ("DestinationSubDirectory");
 				switch (publishFolderType) {
 				case PublishFolderType.Assembly:
 					relativePath = AssemblyDirectory;
@@ -124,7 +128,7 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				}
 
-				item.SetMetadata ("RelativePath", Path.Combine (relativePath, virtualProjectPath));
+				item.SetMetadata ("RelativePath", Path.Combine (relativePath, destinationSubDirectory, virtualProjectPath));
 			}
 
 			// We may have multiple input items for each framework, but we only want to return a single

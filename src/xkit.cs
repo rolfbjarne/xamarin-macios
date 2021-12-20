@@ -484,7 +484,7 @@ namespace UIKit {
 #endif
 
 		[Export ("numberOfGlyphs")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		/* NSUInteger */ nuint NumberOfGlyphs { get; }
 #else
 		/* NSUInteger */ nint NumberOfGlyphs { get; }
@@ -513,7 +513,7 @@ namespace UIKit {
 #endif // !NET
 
 		[Export ("isValidGlyphIndex:")]
-#if XAMCORE_4_0
+#if NET
 		bool IsValidGlyph (nuint glyphIndex);
 #elif MONOMAC
 		bool IsValidGlyphIndex (nint glyphIndex);
@@ -522,7 +522,7 @@ namespace UIKit {
 #endif
 
 		[Export ("characterIndexForGlyphAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		nuint GetCharacterIndex (nuint glyphIndex);
 #elif MONOMAC
 		nuint CharacterIndexForGlyphAtIndex (nint glyphIndex);
@@ -531,7 +531,7 @@ namespace UIKit {
 #endif
 
 		[Export ("glyphIndexForCharacterAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		nuint GetGlyphIndex (nuint characterIndex);
 #elif MONOMAC
 		nuint GlyphIndexForCharacterAtIndex (nint charIndex);

@@ -848,7 +848,7 @@ namespace UIKit {
 		[Export ("glyphRangeForCharacterRange:actualCharacterRange:")]
 		NSRange GetGlyphRange (NSRange characterRange, out NSRange actualCharacterRange);
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Obsolete ("Use 'GetGlyphRange' instead.")]

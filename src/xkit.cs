@@ -106,7 +106,7 @@ namespace UIKit {
 		ParagraphBreak = (1 << 4),
 		ContainerBreak = (1 << 5),
 
-#if !XAMCORE_4_0 && !__MACCATALYST__ && !MONOMAC
+#if !NET && !__MACCATALYST__ && !MONOMAC
 		[Obsolete ("Use 'ZeroAdvancement' instead.")]
 		ZeroAdvancementAction = ZeroAdvancement,
 		[Obsolete ("Use 'Whitespace' instead.")]
@@ -308,7 +308,7 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	partial interface NSLayoutManager : NSSecureCoding {
 
-#if !XAMCORE_4_0
+#if !NET
 		// This was removed in the headers in the macOS 10.11 SDK
 		[NoiOS][NoTV]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'TextStorage' instead.")]

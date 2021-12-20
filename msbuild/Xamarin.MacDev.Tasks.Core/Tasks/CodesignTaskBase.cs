@@ -98,23 +98,46 @@ namespace Xamarin.MacDev.Tasks
 			return false;
 		}
 
+		bool ParseBoolean (string metadataValue, bool fallbackValue)
+		{
+			if (string.IsNullOrEmpty (metadataValue))
+				return fallbackValue;
+			return string.Equals (metadataValue, "true", StringComparison.OrdinalIgnoreCase);
+		}
+
+		string GetNonEmptyStringOrFallback (string metadataValue, string fallbackValue)
+		{
+			if (string.IsNullOrEmpty (metadataValue))
+				return fallbackValue;
+			return metadataValue;
+		}
+
 		IList<string> GenerateCommandLineArguments (ITaskItem item)
 		{
 			var args = new List<string> ();
+			var isDeep = ParseBoolean (item.GetMetadata ("CodesignDeep"), IsAppExtension);
+			var useHardenedRuntime = ParseBoolean (item.GetMetadata ("CodesignUseHardenedRuntime"), UseHardenedRuntime);
+			var useSecureTimestamp = ParseBoolean (item.GetMetadata ("CodesignUseSecureTimestamp"), UseSecureTimestamp);
+			var disableTimestamp = ParseBoolean (item.GetMetadata ("CodesignDisableTimestamp"), DisableTimestamp);
+			var signingKey = GetNonEmptyStringOrFallback (item.GetMetadata ("CodesignSigningKey"), SigningKey);
+			var keychain = GetNonEmptyStringOrFallback (item.GetMetadata ("CodesignKeychain"), Keychain);
+			var resourceRules = GetNonEmptyStringOrFallback (item.GetMetadata ("CodesignResourceRules"), ResourceRules);
+			var entitlements = GetNonEmptyStringOrFallback (item.GetMetadata ("CodesignEntitlements"), Entitlements);
+			var extraArgs = GetNonEmptyStringOrFallback (item.GetMetadata ("CodesignExtraArgs"), ExtraArgs);
 
 			args.Add ("-v");
 			args.Add ("--force");
 
-			if (IsAppExtension)
+			if (isDeep)
 				args.Add ("--deep");
 
-			if (UseHardenedRuntime) {
+			if (useHardenedRuntime) {
 				args.Add ("-o");
 				args.Add ("runtime");
 			}
 
-			if (UseSecureTimestamp) {
-				if (DisableTimestamp) {
+			if (useSecureTimestamp) {
+				if (disableTimestamp) {
 					// Conflicting '{0}' and '{1}' options. '{1}' will be ignored.
 					Log.LogWarning (MSBStrings.W0176, "UseSecureTimestamp", "DisableTimestamp");
 				}
@@ -123,25 +146,25 @@ namespace Xamarin.MacDev.Tasks
 				args.Add ("--timestamp=none");
 
 			args.Add ("--sign");
-			args.Add (SigningKey);
+			args.Add (signingKey);
 
-			if (!string.IsNullOrEmpty (Keychain)) {
+			if (!string.IsNullOrEmpty (keychain)) {
 				args.Add ("--keychain");
-				args.Add (Path.GetFullPath (Keychain));
+				args.Add (Path.GetFullPath (keychain));
 			}
 
-			if (!string.IsNullOrEmpty (ResourceRules)) {
+			if (!string.IsNullOrEmpty (resourceRules)) {
 				args.Add ("--resource-rules");
-				args.Add (Path.GetFullPath (ResourceRules));
+				args.Add (Path.GetFullPath (resourceRules));
 			}
 
-			if (!string.IsNullOrEmpty (Entitlements)) {
+			if (!string.IsNullOrEmpty (entitlements)) {
 				args.Add ("--entitlements");
-				args.Add (Path.GetFullPath (Entitlements));
+				args.Add (Path.GetFullPath (entitlements));
 			}
 
-			if (!string.IsNullOrEmpty (ExtraArgs))
-				args.Add (ExtraArgs);
+			if (!string.IsNullOrEmpty (extraArgs))
+				args.Add (extraArgs);
 
 			// signing a framework and a file inside a framework is not *always* identical
 			// on macOS apps {item.ItemSpec} can be a symlink to `Versions/Current/{item.ItemSpec}`

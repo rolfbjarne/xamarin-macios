@@ -19,7 +19,7 @@ PACKAGE_VERSION=$(shell grep '<PackageVersion>' FrameworksInRuntimesNativeDirect
 	$(Q_GEN) $(DOTNET6) pack /bl $(DOTNET_PACK_VERBOSITY) $<
 	$(Q) $(CP) bin/Debug/Xamarin.Tests.FrameworksInRuntimesNativeDirectory.$(PACKAGE_VERSION).nupkg $@
 
-INSTALLED_PACKAGE=$(NUGET_TEST_FEED)/packages/xamarin.tests.frameworksinruntimesnativedirectory/$(PACKAGE_VERSION)/xamarin.tests.frameworksinruntimesnativedirectory.$(PACKAGE_VERSION).nupkg
+INSTALLED_PACKAGE=$(NUGET_TEST_FEED)/xamarin.tests.frameworksinruntimesnativedirectory/$(PACKAGE_VERSION)/xamarin.tests.frameworksinruntimesnativedirectory.$(PACKAGE_VERSION).nupkg
 
 $(INSTALLED_PACKAGE): .libs/FrameworksInRuntimesNativeDirectory.nupkg
 	if test -d $(NUGET_TEST_FEED)/$(PACKAGE_ID)/$(PACKAGE_VERSION); then nuget delete $(PACKAGE_ID) $(PACKAGE_VERSION) -source $(abspath $(NUGET_TEST_FEED)) -NonInteractive || true; fi

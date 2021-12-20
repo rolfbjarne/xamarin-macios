@@ -348,7 +348,7 @@ namespace UIKit {
 		bool HasNonContiguousLayout { get; }
 
 		/* InvalidateGlyphs */
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Protected]
 #else
 		[Internal][Sealed]
@@ -359,18 +359,18 @@ namespace UIKit {
 		[Wrap ("InvalidateGlyphs (characterRange, delta, IntPtr.Zero)")]
 		void InvalidateGlyphs (NSRange characterRange, /* NSInteger */ nint delta);
 
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Sealed]
 #endif
 		[Export ("invalidateGlyphsForCharacterRange:changeInLength:actualCharacterRange:")]
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		void InvalidateGlyphs (NSRange characterRange, /* NSInteger */ nint delta, /* nullable NSRangePointer */ out NSRange actualCharacterRange);
 #else
 		void InvalidateGlyphs (NSRange charRange, /* NSInteger */ nint delta, /* nullable NSRangePointer */ out NSRange actualCharRange);
 #endif
 
 		/* InvalidateLayout */
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Protected]
 #else
 		[Internal][Sealed]
@@ -381,18 +381,18 @@ namespace UIKit {
 		[Wrap ("InvalidateLayout (characterRange, IntPtr.Zero)")]
 		void InvalidateLayout (NSRange characterRange);
 
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		[Sealed]
 #endif
 		[Export ("invalidateLayoutForCharacterRange:actualCharacterRange:")]
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		void InvalidateLayout (NSRange characterRange, /* nullable NSRangePointer */ out NSRange actualCharacterRange);
 #else
 		void InvalidateLayout (NSRange charRange, /* nullable NSRangePointer */ out NSRange actualCharRange);
 #endif
 
 		[Export ("invalidateDisplayForCharacterRange:")]
-#if XAMCORE_4_0
+#if NET
 		void InvalidateDisplayForCharacterRange (NSRange characterRange);
 #else
 		void InvalidateDisplayForCharacterRange (NSRange charRange);
@@ -410,7 +410,7 @@ namespace UIKit {
 #endif
 
 		[Export ("ensureGlyphsForCharacterRange:")]
-#if XAMCORE_4_0
+#if NET
 		void EnsureGlyphsForCharacterRange (NSRange characterRange);
 #else
 		void EnsureGlyphsForCharacterRange (NSRange charRange);
@@ -420,7 +420,7 @@ namespace UIKit {
 		void EnsureGlyphsForGlyphRange (NSRange glyphRange);
 
 		[Export ("ensureLayoutForCharacterRange:")]
-#if XAMCORE_4_0
+#if NET
 		void EnsureLayoutForCharacterRange (NSRange characterRange);
 #else
 		void EnsureLayoutForCharacterRange (NSRange charRange);

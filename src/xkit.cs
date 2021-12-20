@@ -872,7 +872,7 @@ namespace UIKit {
 		[Export ("characterRangeForGlyphRange:actualGlyphRange:")]
 		NSRange GetCharacterRange (NSRange glyphRange, out NSRange actualGlyphRange);
 
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		[Obsolete ("Use 'GetCharacterRange' instead.")]
 		[Export ("characterRangeForGlyphRange:actualGlyphRange:")]
 		NSRange CharacterRangeForGlyphRange (NSRange glyphRange, out NSRange actualGlyphRange);
@@ -1228,7 +1228,7 @@ namespace UIKit {
 		[Export ("propertyForGlyphAtIndex:")]
 		NSGlyphProperty GetProperty (nuint glyphIndex);
 
-#if !XAMCORE_4_0 && !MONOMAC
+#if !NET && !MONOMAC
 		[Obsolete ("Use 'GetProperty' instead.")]
 		[Export ("propertyForGlyphAtIndex:")]
 		NSGlyphProperty PropertyForGlyphAtIndex (nuint glyphIndex);
@@ -1630,7 +1630,7 @@ namespace UIKit {
 		[Export ("defaultWritingDirectionForLanguage:")]
 		NSWritingDirection GetDefaultWritingDirection ([NullAllowed] string languageName);
 
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		[Obsolete ("Use the 'GetDefaultWritingDirection' method instead.")]
 		[Static]
 		[Export ("defaultWritingDirectionForLanguage:")]
@@ -1641,7 +1641,7 @@ namespace UIKit {
 		[Export ("defaultParagraphStyle", ArgumentSemantic.Copy)]
 		NSParagraphStyle Default { get; }
 
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		[Obsolete ("Use the 'Default' property instead.")]
 		[Static]
 		[Export ("defaultParagraphStyle", ArgumentSemantic.Copy)]

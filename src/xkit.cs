@@ -882,7 +882,7 @@ namespace UIKit {
 		NSRange GetGlyphRange (NSTextContainer container);
 
 		[Export ("rangeOfNominallySpacedGlyphsContainingIndex:")]
-#if XAMCORE_4_0
+#if NET
 		NSRange GetRangeOfNominallySpacedGlyphsContainingIndex (nuint glyphIndex);
 #elif MONOMAC
 		NSRange RangeOfNominallySpacedGlyphsContainingIndex (nint glyphIndex);
@@ -898,28 +898,28 @@ namespace UIKit {
 		IntPtr GetRectArray (NSRange glyphRange, NSRange selectedGlyphRange, IntPtr textContainerHandle, out nuint rectCount);
 
 		[Export ("boundingRectForGlyphRange:inTextContainer:")]
-#if XAMCORE_4_0
+#if NET
 		CGRect GetBoundingRect (NSRange glyphRange, NSTextContainer container);
 #else
 		CGRect BoundingRectForGlyphRange (NSRange glyphRange, NSTextContainer container);
 #endif
 
 		[Export ("glyphRangeForBoundingRect:inTextContainer:")]
-#if XAMCORE_4_0
+#if NET
 		NSRange GetGlyphRangeForBoundingRect (CGRect bounds, NSTextContainer container);
 #else
 		NSRange GlyphRangeForBoundingRect (CGRect bounds, NSTextContainer container);
 #endif
 
 		[Export ("glyphRangeForBoundingRectWithoutAdditionalLayout:inTextContainer:")]
-#if XAMCORE_4_0
+#if NET
 		NSRange GetGlyphRangeForBoundingRectWithoutAdditionalLayout (CGRect bounds, NSTextContainer container);
 #else
 		NSRange GlyphRangeForBoundingRectWithoutAdditionalLayout (CGRect bounds, NSTextContainer container);
 #endif
 
 		[Export ("glyphIndexForPoint:inTextContainer:fractionOfDistanceThroughGlyph:")]
-#if XAMCORE_4_0
+#if NET
 		nuint GetGlyphIndex (CGPoint point, NSTextContainer container, /* nullable CGFloat */ out nfloat fractionOfDistanceThroughGlyph);
 #elif MONOMAC
 		nuint GlyphIndexForPointInTextContainer (CGPoint point, NSTextContainer container, ref nfloat fractionOfDistanceThroughGlyph);
@@ -928,21 +928,21 @@ namespace UIKit {
 #endif
 
 		[Export ("glyphIndexForPoint:inTextContainer:")]
-#if XAMCORE_4_0
+#if NET
 		nuint GetGlyphIndex (CGPoint point, NSTextContainer container);
 #else
 		nuint GlyphIndexForPoint (CGPoint point, NSTextContainer container);
 #endif
 
 		[Export ("fractionOfDistanceThroughGlyphForPoint:inTextContainer:")]
-#if XAMCORE_4_0
+#if NET
 		nfloat GetFractionOfDistanceThroughGlyph (CGPoint point, NSTextContainer container);
 #else
 		nfloat FractionOfDistanceThroughGlyphForPoint (CGPoint point, NSTextContainer container);
 #endif
 
 		// GetCharacterIndex (CGPoint, NSTextContainer, nullable CGFloat*)
-#if XAMCORE_4_0
+#if NET
 		[Protected]
 #else
 		[Sealed][Internal]
@@ -967,11 +967,11 @@ namespace UIKit {
 #endif
 #endif
 
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		[Protected]
 #endif
 		[Export ("getLineFragmentInsertionPointsForCharacterAtIndex:alternatePositions:inDisplayOrder:positions:characterIndexes:")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		nuint GetLineFragmentInsertionPoints (nuint characterIndex, bool alternatePositions, bool inDisplayOrder, IntPtr positions, IntPtr characterIndexes);
 #else
 		nuint GetLineFragmentInsertionPoints (nuint charIndex, bool aFlag, bool dFlag, IntPtr positions, IntPtr charIndexes);
@@ -1004,7 +1004,7 @@ namespace UIKit {
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("addTemporaryAttributes:forCharacterRange:")]
-#if XAMCORE_4_0
+#if NET
 		void AddTemporaryAttributes (NSDictionary<NSString, NSObject> attributes, NSRange characterRange);
 #else
 		void AddTemporaryAttributes (NSDictionary attrs, NSRange charRange);
@@ -1013,7 +1013,7 @@ namespace UIKit {
 		// This API can take an NSString or managed string, but some related API
 		// takes a generic dictionary that can't use a managed string, so for symmetry
 		// provide an NSString overload as well.
-#if !XAMCORE_4_0
+#if !NET
 		[Sealed]
 #endif
 		[NoiOS][NoTV]
@@ -1021,13 +1021,13 @@ namespace UIKit {
 		[Export ("removeTemporaryAttribute:forCharacterRange:")]
 		void RemoveTemporaryAttribute (NSString attributeName, NSRange characterRange);
 
-#if XAMCORE_4_0
+#if NET
 		[Sealed]
 #endif
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("removeTemporaryAttribute:forCharacterRange:")]
-#if XAMCORE_4_0
+#if NET
 		void RemoveTemporaryAttribute (string attributeName, NSRange characterRange);
 #else
 		void RemoveTemporaryAttribute (string attrName, NSRange charRange);
@@ -1092,7 +1092,7 @@ namespace UIKit {
 		// This method can take an NSString or managed string, but some related API
 		// takes a generic dictionary that can't use a managed string, so for symmetry
 		// provide an NSString overload as well.
-#if !XAMCORE_4_0
+#if !NET
 		[Sealed]
 #endif
 		[NoiOS][NoTV]
@@ -1100,13 +1100,13 @@ namespace UIKit {
 		[Export ("addTemporaryAttribute:value:forCharacterRange:")]
 		void AddTemporaryAttribute (NSString attributeName, NSObject value, NSRange characterRange);
 
-#if XAMCORE_4_0
+#if NET
 		[Sealed]
 #endif
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("addTemporaryAttribute:value:forCharacterRange:")]
-#if XAMCORE_4_0
+#if NET
 		void AddTemporaryAttribute (string attributeName, NSObject value, NSRange characterRange);
 #else
 		void AddTemporaryAttribute (string attrName, NSObject value, NSRange charRange);

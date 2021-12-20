@@ -401,7 +401,7 @@ namespace UIKit {
 		[Export ("invalidateDisplayForGlyphRange:")]
 		void InvalidateDisplayForGlyphRange (NSRange glyphRange);
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use ProcessEditing (NSTextStorage textStorage, NSTextStorageEditActions editMask, NSRange newCharacterRange, nint delta, NSRange invalidatedCharacterRange) instead).")]
@@ -435,7 +435,7 @@ namespace UIKit {
 		[Export ("ensureLayoutForBoundingRect:inTextContainer:")]
 		void EnsureLayoutForBoundingRect (CGRect bounds, NSTextContainer container);
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SetGlyphs' instead.")]
@@ -443,7 +443,7 @@ namespace UIKit {
 		void InsertGlyph (NSGlyph glyph, nint glyphIndex, nint charIndex);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SetGlyphs' instead.")]
@@ -451,7 +451,7 @@ namespace UIKit {
 		void ReplaceGlyphAtIndex (nint glyphIndex, NSGlyph newGlyph);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SetGlyphs' instead.")]
@@ -459,7 +459,7 @@ namespace UIKit {
 		void DeleteGlyphs (NSRange glyphRange);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SetGlyphs' instead.")]
@@ -467,7 +467,7 @@ namespace UIKit {
 		void SetCharacterIndex (nint charIndex, nint glyphIndex);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SetGlyphs' instead.")]
@@ -475,7 +475,7 @@ namespace UIKit {
 		void SetIntAttribute (nint attributeTag, nint value, nint glyphIndex);
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SetGlyphs' instead.")]
@@ -490,7 +490,7 @@ namespace UIKit {
 		/* NSUInteger */ nint NumberOfGlyphs { get; }
 #endif
 
-#if !XAMCORE_4_0
+#if !NET
 		[Export ("glyphAtIndex:isValidIndex:")]
 #if MONOMAC
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'GetCGGlyph' instead).")]
@@ -499,9 +499,9 @@ namespace UIKit {
  		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'GetGlyph' instead.")]
 		CGGlyph GlyphAtIndex (nuint glyphIndex, ref bool isValidIndex);
 #endif // MONOMAC
-#endif // !XAMCORE_4_0
+#endif // !NET
 
-#if !XAMCORE_4_0
+#if !NET
 		[Export ("glyphAtIndex:")]
 #if MONOMAC
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'GetCGGlyph' instead).")]
@@ -510,7 +510,7 @@ namespace UIKit {
  		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'GetGlyph' instead.")]
 		CGGlyph GlyphAtIndex (nuint glyphIndex);
 #endif // MONOMAC
-#endif // !XAMCORE_4_0
+#endif // !NET
 
 		[Export ("isValidGlyphIndex:")]
 #if XAMCORE_4_0

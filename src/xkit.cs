@@ -1123,7 +1123,7 @@ namespace UIKit {
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("defaultLineHeightForFont:")]
-#if XAMCORE_4_0
+#if NET
 		nfloat GetDefaultLineHeight (NSFont font);
 #else
 		nfloat DefaultLineHeightForFont (NSFont theFont);
@@ -1132,7 +1132,7 @@ namespace UIKit {
 		[NoiOS][NoTV]
 		[NoMacCatalyst]
 		[Export ("defaultBaselineOffsetForFont:")]
-#if XAMCORE_4_0
+#if NET
 		nfloat GetDefaultBaselineOffset (NSFont font);
 #else
 		nfloat DefaultBaselineOffsetForFont (NSFont theFont);
@@ -1203,14 +1203,14 @@ namespace UIKit {
 		bool UsesFontLeading { get; set; }
 
 		[Export ("drawBackgroundForGlyphRange:atPoint:")]
-#if XAMCORE_4_0
+#if NET
 		void DrawBackground (NSRange glyphsToShow, CGPoint origin);
 #else
 		void DrawBackgroundForGlyphRange (NSRange glyphsToShow, CGPoint origin);
 #endif
 
 		[Export ("drawGlyphsForGlyphRange:atPoint:")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		void DrawGlyphs (NSRange glyphsToShow, CGPoint origin);
 #else
 		void DrawGlyphsForGlyphRange (NSRange glyphsToShow, CGPoint origin);
@@ -1221,7 +1221,7 @@ namespace UIKit {
 		[Export ("getGlyphsInRange:glyphs:properties:characterIndexes:bidiLevels:")]
 		nuint GetGlyphs (NSRange glyphRange, IntPtr glyphBuffer, IntPtr properties, IntPtr characterIndexBuffer, IntPtr bidiLevelBuffer);
 
-#if !XAMCORE_4_0 && !MONOMAC
+#if !NET && !MONOMAC
 		[Sealed]
 #endif
 		[Mac (10,10)]
@@ -1237,7 +1237,7 @@ namespace UIKit {
 		[Mac (10,11)]
 		[iOS (9,0)] // Show up in the iOS 7.0 headers, but they can't be found at runtime until iOS 9.
 		[Export ("CGGlyphAtIndex:isValidIndex:")]
-#if XAMCORE_4_0
+#if NET
 		CGGlyph GetGlyph (nuint glyphIndex, out bool isValidIndex);
 #elif MONOMAC
 		CGGlyph GetCGGlyph (nuint glyphIndex, out bool isValidIndex);
@@ -1248,7 +1248,7 @@ namespace UIKit {
 		[Mac (10,11)]
 		[iOS (9,0)] // Show up in the iOS 7.0 headers, but they can't be found at runtime until iOS 9.
 		[Export ("CGGlyphAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		CGGlyph GetGlyph (nuint glyphIndex);
 #elif MONOMAC
 		CGGlyph GetCGGlyph (nuint glyphIndex);
@@ -1258,7 +1258,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("processEditingForTextStorage:edited:range:changeInLength:invalidatedRange:")]
-#if XAMCORE_4_0
+#if NET
 		void ProcessEditing (NSTextStorage textStorage, NSTextStorageEditActions editMask, NSRange newCharacterRange, /* NSInteger */ nint delta, NSRange invalidatedCharacterRange);
 #else
 		void ProcessEditing (NSTextStorage textStorage, NSTextStorageEditActions editMask, NSRange newCharRange, /* NSInteger */ nint delta, NSRange invalidatedCharRange);
@@ -1273,20 +1273,20 @@ namespace UIKit {
 		// fix the generator to have support for C-style arrays.
 		[Mac (10,11)]
 		[Export ("setGlyphs:properties:characterIndexes:font:forGlyphRange:")]
-#if XAMCORE_4_0
+#if NET
 		void SetGlyphs (IntPtr glyphs, IntPtr properties, IntPtr characterIndexes, NSFont font, NSRange glyphRange);
 #else
 		void SetGlyphs (IntPtr glyphs, IntPtr props, IntPtr charIndexes, NSFont aFont, NSRange glyphRange);
 #endif
 
-#if !(XAMCORE_4_0 || MONOMAC)
+#if !(NET || MONOMAC)
 		[Sealed]
 #endif
 		[Mac (10,11)]
 		[Export ("truncatedGlyphRangeInLineFragmentForGlyphAtIndex:")]
 		NSRange GetTruncatedGlyphRangeInLineFragment (nuint glyphIndex);
 
-#if !(XAMCORE_4_0 || MONOMAC)
+#if !(NET || MONOMAC)
 		[Obsolete ("Use 'GetTruncatedGlyphRangeInLineFragment' instead.")]
 		[Mac (10,11)]
 		[Export ("truncatedGlyphRangeInLineFragmentForGlyphAtIndex:")]
@@ -1383,7 +1383,7 @@ namespace UIKit {
 	[Protocol]
 	interface NSLayoutManagerDelegate {
 		[Export ("layoutManagerDidInvalidateLayout:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		void LayoutInvalidated (NSLayoutManager sender);
 #else
 		void DidInvalidatedLayout (NSLayoutManager sender);
@@ -1391,7 +1391,7 @@ namespace UIKit {
 
 		[iOS (7,0)]
 		[Export ("layoutManager:didCompleteLayoutForTextContainer:atEnd:")]
-#if XAMCORE_4_0 || !MONOMAC
+#if NET || !MONOMAC
 		void DidCompleteLayout (NSLayoutManager layoutManager, NSTextContainer textContainer, bool layoutFinishedFlag);
 #else
 		void LayoutCompleted (NSLayoutManager layoutManager, NSTextContainer textContainer, bool layoutFinishedFlag);
@@ -1399,7 +1399,7 @@ namespace UIKit {
 
 		[NoiOS][NoTV]
 		[Export ("layoutManager:shouldUseTemporaryAttributes:forDrawingToScreen:atCharacterIndex:effectiveRange:")]
-#if XAMCORE_4_0
+#if NET
 		NSDictionary<NSString, NSObject> ShouldUseTemporaryAttributes (NSLayoutManager layoutManager, NSDictionary<NSString, NSObject> temporaryAttributes, bool drawingToScreen, nuint characterIndex, ref NSRange effectiveCharacterRange);
 #else
 		NSDictionary ShouldUseTemporaryAttributes (NSLayoutManager layoutManager, NSDictionary temporaryAttributes, bool drawingToScreen, nint charIndex, IntPtr effectiveCharRange);
@@ -1407,7 +1407,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:shouldGenerateGlyphs:properties:characterIndexes:font:forGlyphRange:")]
-#if XAMCORE_4_0
+#if NET
 		nuint ShouldGenerateGlyphs (NSLayoutManager layoutManager, IntPtr glyphBuffer, IntPtr properties, IntPtr characterIndexes, NSFont font, NSRange glyphRange);
 #else
 		nuint ShouldGenerateGlyphs (NSLayoutManager layoutManager, IntPtr glyphBuffer, IntPtr props, IntPtr charIndexes, NSFont aFont, NSRange glyphRange);
@@ -1415,7 +1415,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:lineSpacingAfterGlyphAtIndex:withProposedLineFragmentRect:")]
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		nfloat GetLineSpacingAfterGlyph (NSLayoutManager layoutManager, nuint glyphIndex, CGRect rect);
 #else
 		nfloat LineSpacingAfterGlyphAtIndex (NSLayoutManager layoutManager, nuint glyphIndex, CGRect rect);
@@ -1423,7 +1423,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:paragraphSpacingBeforeGlyphAtIndex:withProposedLineFragmentRect:")]
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		nfloat GetParagraphSpacingBeforeGlyph (NSLayoutManager layoutManager, nuint glyphIndex, CGRect rect);
 #else
 		nfloat ParagraphSpacingBeforeGlyphAtIndex (NSLayoutManager layoutManager, nuint glyphIndex, CGRect rect);
@@ -1431,7 +1431,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:paragraphSpacingAfterGlyphAtIndex:withProposedLineFragmentRect:")]
-#if XAMCORE_4_0 || MONOMAC
+#if NET || MONOMAC
 		nfloat GetParagraphSpacingAfterGlyph (NSLayoutManager layoutManager, nuint glyphIndex, CGRect rect);
 #else
 		nfloat ParagraphSpacingAfterGlyphAtIndex (NSLayoutManager layoutManager, nuint glyphIndex, CGRect rect);
@@ -1439,7 +1439,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:shouldUseAction:forControlCharacterAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		NSControlCharacterAction ShouldUseAction (NSLayoutManager layoutManager, NSControlCharacterAction action, nuint characterIndex);
 #else
 		NSControlCharacterAction ShouldUseAction (NSLayoutManager layoutManager, NSControlCharacterAction action, nuint charIndex);
@@ -1447,7 +1447,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:shouldBreakLineByWordBeforeCharacterAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		bool ShouldBreakLineByWordBeforeCharacter (NSLayoutManager layoutManager, nuint characterIndex);
 #else
 		bool ShouldBreakLineByWordBeforeCharacter (NSLayoutManager layoutManager, nuint charIndex);
@@ -1455,7 +1455,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:shouldBreakLineByHyphenatingBeforeCharacterAtIndex:")]
-#if XAMCORE_4_0
+#if NET
 		bool ShouldBreakLineByHyphenatingBeforeCharacter (NSLayoutManager layoutManager, nuint characterIndex);
 #else
 		bool ShouldBreakLineByHyphenatingBeforeCharacter (NSLayoutManager layoutManager, nuint charIndex);
@@ -1463,7 +1463,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("layoutManager:boundingBoxForControlGlyphAtIndex:forTextContainer:proposedLineFragment:glyphPosition:characterIndex:")]
-#if XAMCORE_4_0
+#if NET
 		CGRect GetBoundingBox (NSLayoutManager layoutManager, nuint glyphIndex, NSTextContainer textContainer, CGRect proposedRect, CGPoint glyphPosition, nuint characterIndex);
 #elif MONOMAC
 		CGRect GetBoundingBox (NSLayoutManager layoutManager, nuint glyphIndex, NSTextContainer textContainer, CGRect proposedRect, CGPoint glyphPosition, nuint charIndex);
@@ -1664,7 +1664,7 @@ namespace UIKit {
 
 		[NoiOS, NoTV, NoWatch]
 		[Export ("textBlocks")]
-#if XAMCORE_4_0
+#if NET
 		NSTextBlock [] TextBlocks { get; [NotImplemented] set; }
 #else
 		NSTextTableBlock [] TextBlocks { get; [NotImplemented] set; }
@@ -1779,7 +1779,7 @@ namespace UIKit {
 		[NoMacCatalyst]
 		[Override]
 		[Export ("textBlocks")]
-#if XAMCORE_4_0
+#if NET
 		NSTextBlock [] TextBlocks { get; set; }
 #else
 		NSTextTableBlock [] TextBlocks { get; set; }
@@ -1818,7 +1818,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("horizontalGroupWithLayoutSize:subitem:count:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutGroup CreateHorizontalGroup (NSCollectionLayoutSize layoutSize, NSCollectionLayoutItem subitem, nint count);
 #else
 		NSCollectionLayoutGroup CreateHorizontal (NSCollectionLayoutSize layoutSize, NSCollectionLayoutItem subitem, nint count);
@@ -1826,7 +1826,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("horizontalGroupWithLayoutSize:subitems:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutGroup CreateHorizontalGroup (NSCollectionLayoutSize layoutSize, NSCollectionLayoutItem [] subitems);
 #else
 		NSCollectionLayoutGroup CreateHorizontal (NSCollectionLayoutSize layoutSize, params NSCollectionLayoutItem [] subitems);
@@ -1834,7 +1834,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("verticalGroupWithLayoutSize:subitem:count:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutGroup CreateVerticalGroup (NSCollectionLayoutSize layoutSize, NSCollectionLayoutItem subitem, nint count);
 #else
 		NSCollectionLayoutGroup CreateVertical (NSCollectionLayoutSize layoutSize, NSCollectionLayoutItem subitem, nint count);
@@ -1842,7 +1842,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("verticalGroupWithLayoutSize:subitems:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutGroup CreateVerticalGroup (NSCollectionLayoutSize layoutSize, NSCollectionLayoutItem [] subitems);
 #else
 		NSCollectionLayoutGroup CreateVertical (NSCollectionLayoutSize layoutSize, params NSCollectionLayoutItem [] subitems);
@@ -1850,7 +1850,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("customGroupWithLayoutSize:itemProvider:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutGroup CreateCustomGroup (NSCollectionLayoutSize layoutSize, NSCollectionLayoutGroupCustomItemProvider itemProvider);
 #else
 		NSCollectionLayoutGroup CreateCustom (NSCollectionLayoutSize layoutSize, NSCollectionLayoutGroupCustomItemProvider itemProvider);
@@ -2062,42 +2062,42 @@ namespace UIKit {
 	interface NSLayoutAnchor<AnchorType> : NSCopying, NSCoding
 	{
 		[Export ("constraintEqualToAnchor:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintEqualToAnchor (NSLayoutAnchor<AnchorType> anchor);
 #else
 		NSLayoutConstraint ConstraintEqualTo (NSLayoutAnchor<AnchorType> anchor);
 #endif
 
 		[Export ("constraintGreaterThanOrEqualToAnchor:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintGreaterThanOrEqualToAnchor (NSLayoutAnchor<AnchorType> anchor);
 #else
 		NSLayoutConstraint ConstraintGreaterThanOrEqualTo (NSLayoutAnchor<AnchorType> anchor);
 #endif
 
 		[Export ("constraintLessThanOrEqualToAnchor:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintLessThanOrEqualToAnchor (NSLayoutAnchor<AnchorType> anchor);
 #else
 		NSLayoutConstraint ConstraintLessThanOrEqualTo (NSLayoutAnchor<AnchorType> anchor);
 #endif
 
 		[Export ("constraintEqualToAnchor:constant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintEqualToAnchor (NSLayoutAnchor<AnchorType> anchor, nfloat constant);
 #else
 		NSLayoutConstraint ConstraintEqualTo (NSLayoutAnchor<AnchorType> anchor, nfloat constant);
 #endif
 
 		[Export ("constraintGreaterThanOrEqualToAnchor:constant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintGreaterThanOrEqualToAnchor (NSLayoutAnchor<AnchorType> anchor, nfloat constant);
 #else
 		NSLayoutConstraint ConstraintGreaterThanOrEqualTo (NSLayoutAnchor<AnchorType> anchor, nfloat constant);
 #endif
 
 		[Export ("constraintLessThanOrEqualToAnchor:constant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintLessThanOrEqualToAnchor (NSLayoutAnchor<AnchorType> anchor, nfloat constant);
 #else
 		NSLayoutConstraint ConstraintLessThanOrEqualTo (NSLayoutAnchor<AnchorType> anchor, nfloat constant);
@@ -2136,7 +2136,7 @@ namespace UIKit {
 		[iOS (10,0)]
 		[Mac (10,12)]
 		[Export ("anchorWithOffsetToAnchor:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutDimension GetAnchorWithOffset (NSLayoutXAxisAnchor otherAnchor);
 #else
 		NSLayoutDimension CreateAnchorWithOffset (NSLayoutXAxisAnchor otherAnchor);
@@ -2170,7 +2170,7 @@ namespace UIKit {
 		[iOS (10,0)]
 		[Mac (10,12)]
 		[Export ("anchorWithOffsetToAnchor:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutDimension GetAnchorWithOffset (NSLayoutYAxisAnchor otherAnchor);
 #else
 		NSLayoutDimension CreateAnchorWithOffset (NSLayoutYAxisAnchor otherAnchor);
@@ -2200,63 +2200,63 @@ namespace UIKit {
 	interface NSLayoutDimension
 	{
 		[Export ("constraintEqualToConstant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintEqualToConstant (nfloat constant);
 #else
 		NSLayoutConstraint ConstraintEqualTo (nfloat constant);
 #endif
 
 		[Export ("constraintGreaterThanOrEqualToConstant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintGreaterThanOrEqualToConstant (nfloat constant);
 #else
 		NSLayoutConstraint ConstraintGreaterThanOrEqualTo (nfloat constant);
 #endif
 
 		[Export ("constraintLessThanOrEqualToConstant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintLessThanOrEqualToConstant (nfloat constant);
 #else
 		NSLayoutConstraint ConstraintLessThanOrEqualTo (nfloat constant);
 #endif
 
 		[Export ("constraintEqualToAnchor:multiplier:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintEqualToAnchor (NSLayoutDimension anchor, nfloat multiplier);
 #else
 		NSLayoutConstraint ConstraintEqualTo (NSLayoutDimension anchor, nfloat multiplier);
 #endif
 
 		[Export ("constraintGreaterThanOrEqualToAnchor:multiplier:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintGreaterThanOrEqualToAnchor (NSLayoutDimension anchor, nfloat multiplier);
 #else
 		NSLayoutConstraint ConstraintGreaterThanOrEqualTo (NSLayoutDimension anchor, nfloat multiplier);
 #endif
 
 		[Export ("constraintLessThanOrEqualToAnchor:multiplier:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintLessThanOrEqualToAnchor (NSLayoutDimension anchor, nfloat multiplier);
 #else
 		NSLayoutConstraint ConstraintLessThanOrEqualTo (NSLayoutDimension anchor, nfloat multiplier);
 #endif
 
 		[Export ("constraintEqualToAnchor:multiplier:constant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintEqualToAnchor (NSLayoutDimension anchor, nfloat multiplier, nfloat constant);
 #else
 		NSLayoutConstraint ConstraintEqualTo (NSLayoutDimension anchor, nfloat multiplier, nfloat constant);
 #endif
 
 		[Export ("constraintGreaterThanOrEqualToAnchor:multiplier:constant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintGreaterThanOrEqualToAnchor (NSLayoutDimension anchor, nfloat multiplier, nfloat constant);
 #else
 		NSLayoutConstraint ConstraintGreaterThanOrEqualTo (NSLayoutDimension anchor, nfloat multiplier, nfloat constant);
 #endif
 
 		[Export ("constraintLessThanOrEqualToAnchor:multiplier:constant:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSLayoutConstraint ConstraintLessThanOrEqualToAnchor (NSLayoutDimension anchor, nfloat multiplier, nfloat constant);
 #else
 		NSLayoutConstraint ConstraintLessThanOrEqualTo (NSLayoutDimension anchor, nfloat multiplier, nfloat constant);
@@ -2357,7 +2357,7 @@ namespace UIKit {
 		[Abstract]
 		[Export ("imageForBounds:textContainer:characterIndex:")]
 		[return: NullAllowed]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		Image GetImage (CGRect imageBounds, [NullAllowed] NSTextContainer textContainer, nuint charIndex);
 #else
 		Image GetImageForBounds (CGRect bounds, [NullAllowed] NSTextContainer textContainer, nuint characterIndex);
@@ -2468,13 +2468,13 @@ namespace UIKit {
 	[iOS (7,0)]
 	[BaseType (typeof (NSMutableAttributedString), Delegates=new string [] { "Delegate" }, Events=new Type [] { typeof (NSTextStorageDelegate)})]
 	partial interface NSTextStorage : NSSecureCoding {
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		[Export ("initWithString:")]
 		NativeHandle Constructor (string str);
 #endif
 
 		[Export ("layoutManagers")]
-#if MONOMAC || XAMCORE_4_0
+#if MONOMAC || NET
 		NSLayoutManager [] LayoutManagers { get; }
 #else
 		NSObject [] LayoutManagers { get; }
@@ -2489,13 +2489,13 @@ namespace UIKit {
 		void RemoveLayoutManager (NSLayoutManager aLayoutManager);
 
 		[Export ("editedMask")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSTextStorageEditedFlags EditedMask {
 #else
 		NSTextStorageEditActions EditedMask {
 #endif
 			get;
-#if !XAMCORE_4_0 && !MONOMAC && !__MACCATALYST__
+#if !NET && !MONOMAC && !__MACCATALYST__
 			[NotImplemented] set;
 #endif
 		}
@@ -2524,7 +2524,7 @@ namespace UIKit {
 		INSTextStorageDelegate Delegate { get; set; }
 
 		[Export ("edited:range:changeInLength:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		void Edited (nuint editedMask, NSRange editedRange, nint delta);
 #else
 		void Edited (NSTextStorageEditActions editedMask, NSRange editedRange, nint delta);
@@ -2544,14 +2544,14 @@ namespace UIKit {
 
 		[iOS (7,0)]
 		[Notification, Field ("NSTextStorageWillProcessEditingNotification")]
-#if !MONOMAC || XAMCORE_4_0
+#if !MONOMAC || NET
 		[Internal]
 #endif
 		NSString WillProcessEditingNotification { get; }
 
 		[iOS (7,0)]
 		[Notification, Field ("NSTextStorageDidProcessEditingNotification")]
-#if !MONOMAC || XAMCORE_4_0
+#if !MONOMAC || NET
 		[Internal]
 #endif
 		NSString DidProcessEditingNotification { get; }
@@ -2630,7 +2630,7 @@ namespace UIKit {
 	{
 		[Static]
 		[Export ("fractionalWidthDimension:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutDimension CreateFractionalWidthDimension (nfloat fractionalWidth);
 #else
 		NSCollectionLayoutDimension CreateFractionalWidth (nfloat fractionalWidth);
@@ -2638,7 +2638,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("fractionalHeightDimension:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutDimension CreateFractionalHeightDimension (nfloat fractionalHeight);
 #else
 		NSCollectionLayoutDimension CreateFractionalHeight (nfloat fractionalHeight);
@@ -2646,7 +2646,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("absoluteDimension:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutDimension CreateAbsoluteDimension (nfloat absoluteDimension);
 #else
 		NSCollectionLayoutDimension CreateAbsolute (nfloat absoluteDimension);
@@ -2654,7 +2654,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("estimatedDimension:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutDimension CreateEstimatedDimension (nfloat estimatedDimension);
 #else
 		NSCollectionLayoutDimension CreateEstimated (nfloat estimatedDimension);
@@ -2704,7 +2704,7 @@ namespace UIKit {
 	{
 		[Static]
 		[Export ("flexibleSpacing:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutSpacing CreateFlexibleSpacing (nfloat flexibleSpacing);
 #else
 		NSCollectionLayoutSpacing CreateFlexible (nfloat flexibleSpacing);
@@ -2712,7 +2712,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("fixedSpacing:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutSpacing CreateFixedSpacing (nfloat fixedSpacing);
 #else
 		NSCollectionLayoutSpacing CreateFixed (nfloat fixedSpacing);
@@ -2737,7 +2737,7 @@ namespace UIKit {
 	{
 		[Static]
 		[Export ("spacingForLeading:top:trailing:bottom:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		NSCollectionLayoutEdgeSpacing CreateSpacing ([NullAllowed] NSCollectionLayoutSpacing leading, [NullAllowed] NSCollectionLayoutSpacing top, [NullAllowed] NSCollectionLayoutSpacing trailing, [NullAllowed] NSCollectionLayoutSpacing bottom);
 #else
 		NSCollectionLayoutEdgeSpacing Create ([NullAllowed] NSCollectionLayoutSpacing leading, [NullAllowed] NSCollectionLayoutSpacing top, [NullAllowed] NSCollectionLayoutSpacing trailing, [NullAllowed] NSCollectionLayoutSpacing bottom);
@@ -3001,7 +3001,7 @@ namespace UIKit {
 
 		[Mac (10,11)]
 		[Export ("lineFragmentRectForProposedRect:atIndex:writingDirection:remainingRect:")]
-#if MONOMAC && !XAMCORE_4_0
+#if MONOMAC && !NET
 		CGRect GetLineFragmentRect (CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, ref CGRect remainingRect);
 #else
 		CGRect GetLineFragmentRect (CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, out CGRect remainingRect);

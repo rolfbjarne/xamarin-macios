@@ -1718,6 +1718,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<_CodesignAppBundleDependsOn>
 			$(_CodesignAppBundleDependsOn);
 			_CleanAppBundleRootDirectory;
+			_EmbedProvisionProfile;
+			_CodesignNativeLibraries;
+			_CollectFrameworks;
+			_CodesignFrameworks;
 		</_CodesignAppBundleDependsOn>
 
 		<CoreCodesignDependsOn>

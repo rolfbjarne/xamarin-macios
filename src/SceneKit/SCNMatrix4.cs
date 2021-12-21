@@ -26,6 +26,8 @@ SOFTWARE.
 
  */
 
+#if !NET
+
 using System;
 using System.Runtime.InteropServices;
 using Foundation;
@@ -1176,3 +1178,6 @@ namespace SceneKit
 #endif
     }
 }
+
+#endif // !NET
+

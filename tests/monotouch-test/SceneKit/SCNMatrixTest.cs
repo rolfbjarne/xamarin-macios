@@ -13,9 +13,7 @@ using System;
 using CoreAnimation;
 using Foundation;
 using SceneKit;
-#if !NET
 using OpenTK;
-#endif
 
 using NUnit.Framework;
 
@@ -34,8 +32,36 @@ namespace MonoTouchFixtures.SceneKit {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
 	public class SCNMatrix4Test {
-		public SCNMatrix4Test ()
+		static pfloat OneThird = (pfloat) (1.0 / 3.0);
+		static pfloat OneFifteenth = (pfloat) (1.0 / 15.0);
+		static pfloat TwoThirds = (pfloat) (2.0 / 3.0);
+		static pfloat TwoFifteenths = (pfloat) (2.0 / 15.0); // 0.1333333333..
+		static pfloat SqrtTwo = (pfloat) (Math.Sqrt (2));
+		static pfloat SqrtTwoHalved = (pfloat) (Math.Sqrt (2) / 2);
+		static pfloat SqrtThree = (pfloat) (Math.Sqrt (3));
+		static pfloat SqrtThreeHalved = (pfloat) (Math.Sqrt (3) / 2);
+		static pfloat SqrtThreeInverted = (pfloat) (1 / Math.Sqrt (3));
+		static pfloat SqrtSix = (pfloat) (Math.Sqrt (6));
+		static pfloat SqrtSixInverted = (pfloat)  (1 / Math.Sqrt (6));
+		static pfloat SqrtTwelve = (pfloat) (Math.Sqrt (12)); // 3.464102
+		static pfloat OhPointFive = (pfloat) 0.5;
+
+		public static bool CloseEnough (double a, double b, double epsilon = 0.00001)
 		{
+			const double MinNormal = 2.2250738585072014E-308d;
+			var absA = Math.Abs (a);
+			var absB = Math.Abs (b);
+			var diff = Math.Abs (a - b);
+
+			if (a == b) {
+				return true;
+			} else if (a == 0 || b == 0 || absA + absB < MinNormal) {
+				// a or b is zero or both are extremely close to it
+				// relative error is less meaningful here
+				return diff < (epsilon * MinNormal);
+			} else { // use relative error
+				return diff / (absA + absB) < epsilon;
+			}
 		}
 
 		void AssertEqual (SCNMatrix4 matrix, string message,
@@ -45,20 +71,19 @@ namespace MonoTouchFixtures.SceneKit {
 			pfloat m41, pfloat m42, pfloat m43, pfloat m44
 		)
 		{
-			if (m11 == matrix.M11 && m12 == matrix.M12 && m13 == matrix.M13 && m14 == matrix.M14 &&
-				m21 == matrix.M21 && m22 == matrix.M22 && m23 == matrix.M23 && m24 == matrix.M24 &&
-				m31 == matrix.M31 && m32 == matrix.M32 && m33 == matrix.M33 && m34 == matrix.M34 &&
-				m41 == matrix.M41 && m42 == matrix.M42 && m43 == matrix.M43 && m44 == matrix.M44)
+			if (CloseEnough (m11, matrix.M11) && CloseEnough (m12, matrix.M12) && CloseEnough (m13, matrix.M13) && CloseEnough (m14, matrix.M14) &&
+				CloseEnough (m21, matrix.M21) && CloseEnough (m22, matrix.M22) && CloseEnough (m23, matrix.M23) && CloseEnough (m24, matrix.M24) &&
+				CloseEnough (m31, matrix.M31) && CloseEnough (m32, matrix.M32) && CloseEnough (m33, matrix.M33) && CloseEnough (m34, matrix.M34) &&
+				CloseEnough (m41, matrix.M41) && CloseEnough (m42, matrix.M42) && CloseEnough (m43, matrix.M43) && CloseEnough (m44, matrix.M44))
 				return;
 
-			var expectedString = matrix.ToString ();
+			var actualString = matrix.ToString ();
 
 			var row1 = $"({m11}, {m12}, {m13}, {m14})";
 			var row2 = $"({m21}, {m22}, {m23}, {m24})";
 			var row3 = $"({m31}, {m32}, {m33}, {m34})";
 			var row4 = $"({m41}, {m42}, {m43}, {m44})";
-			var actualString = $"{row1}\n{row2}\n{row3}\n{row4}";
-
+			var expectedString = $"{row1}\n{row2}\n{row3}\n{row4}";
 			Assert.Fail ($"Expected matrix:\n{expectedString}\nActual matrix:\n{actualString}\n{message}");
 		}
 
@@ -119,22 +144,22 @@ namespace MonoTouchFixtures.SceneKit {
 		public void Constructor_CATransform3d ()
 		{
 			var transform = new CATransform3D () {
-				m11 = 11,
-				m12 = 12,
-				m13 = 13,
-				m14 = 14,
-				m21 = 21,
-				m22 = 22,
-				m23 = 23,
-				m24 = 24,
-				m31 = 31,
-				m32 = 32,
-				m33 = 33,
-				m34 = 34,
-				m41 = 41,
-				m42 = 42,
-				m43 = 43,
-				m44 = 44,
+				M11 = 11,
+				M12 = 12,
+				M13 = 13,
+				M14 = 14,
+				M21 = 21,
+				M22 = 22,
+				M23 = 23,
+				M24 = 24,
+				M31 = 31,
+				M32 = 32,
+				M33 = 33,
+				M34 = 34,
+				M41 = 41,
+				M42 = 42,
+				M43 = 43,
+				M44 = 44,
 			};
 			var matrix = new SCNMatrix4 (transform);
 			AssertEqual (matrix, "Constructor",
@@ -179,22 +204,22 @@ namespace MonoTouchFixtures.SceneKit {
 				21, 22, 23, 24,
 				31, 32, 33, 34,
 				41, 42, 43, 44);
-			Assert.AreEqual (11, matrix.M11, "M11");
-			Assert.AreEqual (12, matrix.M12, "M12");
-			Assert.AreEqual (13, matrix.M13, "M13");
-			Assert.AreEqual (14, matrix.M14, "M14");
-			Assert.AreEqual (21, matrix.M21, "M21");
-			Assert.AreEqual (22, matrix.M22, "M22");
-			Assert.AreEqual (23, matrix.M23, "M23");
-			Assert.AreEqual (24, matrix.M24, "M24");
-			Assert.AreEqual (31, matrix.M31, "M31");
-			Assert.AreEqual (32, matrix.M32, "M32");
-			Assert.AreEqual (33, matrix.M33, "M33");
-			Assert.AreEqual (34, matrix.M34, "M34");
-			Assert.AreEqual (41, matrix.M41, "M41");
-			Assert.AreEqual (42, matrix.M42, "M42");
-			Assert.AreEqual (43, matrix.M43, "M43");
-			Assert.AreEqual (44, matrix.M44, "M44");
+			Assert.AreEqual ((pfloat) 11, matrix.M11, "M11");
+			Assert.AreEqual ((pfloat) 12, matrix.M12, "M12");
+			Assert.AreEqual ((pfloat) 13, matrix.M13, "M13");
+			Assert.AreEqual ((pfloat) 14, matrix.M14, "M14");
+			Assert.AreEqual ((pfloat) 21, matrix.M21, "M21");
+			Assert.AreEqual ((pfloat) 22, matrix.M22, "M22");
+			Assert.AreEqual ((pfloat) 23, matrix.M23, "M23");
+			Assert.AreEqual ((pfloat) 24, matrix.M24, "M24");
+			Assert.AreEqual ((pfloat) 31, matrix.M31, "M31");
+			Assert.AreEqual ((pfloat) 32, matrix.M32, "M32");
+			Assert.AreEqual ((pfloat) 33, matrix.M33, "M33");
+			Assert.AreEqual ((pfloat) 34, matrix.M34, "M34");
+			Assert.AreEqual ((pfloat) 41, matrix.M41, "M41");
+			Assert.AreEqual ((pfloat) 42, matrix.M42, "M42");
+			Assert.AreEqual ((pfloat) 43, matrix.M43, "M43");
+			Assert.AreEqual ((pfloat) 44, matrix.M44, "M44");
 		}
 
 		[Test]
@@ -207,11 +232,15 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (41, 42, 43, 44));
 			matrix.Invert ();
 			AssertEqual (matrix, "Invert",
-				11, 12, 13, 14,
-				21, 22, 23, 24,
-				31, 32, 33, 34,
-				41, 42, 43, 44);
-			/// NEEDS CORRECT ANSWER
+				(pfloat) (-331402.12), (pfloat) (454382.8), (pfloat) (85439.67), (pfloat) (-208420.62),
+				(pfloat) (248551.25), (pfloat) (-209715.2), (pfloat) (-326223.66), (pfloat) (287387.53),
+				(pfloat) (497102.5), (pfloat) (-943718.4), (pfloat) (396128.7), (pfloat) (50487.074),
+				(pfloat) (-414251.66), (pfloat) (699050.75), (pfloat) (-155344.66), (pfloat) (-129453.984));
+			//AssertEqual (matrix, "Invert",
+			//	(pfloat) 114377133393536.02, (pfloat) 0.03125, (pfloat) (-343131400180608.94), (pfloat) 228754266787072.72,
+			//	(pfloat) 0, (pfloat) (-281474976710656), (pfloat) 562949953421312, (pfloat) (-281474976710656),
+			//	(pfloat) (-343131400180609.8), (pfloat) 562949953421312, (pfloat) (-96505706300796.34), (pfloat) (-123312846939906.23),
+			//	(pfloat) 228754266787073.78, (pfloat) (-281474976710656), (pfloat) (-123312846939906.75), (pfloat) 176033556863489.56);
 		}
 
 		[Test]
@@ -264,121 +293,111 @@ namespace MonoTouchFixtures.SceneKit {
 		[Test]
 		public void CreateFromAxisAngle_pfloat_Out ()
 		{
-			SCNMatrix4.CreateFromAxisAngle (new SCNVector3 (2, 2, 2), (pfloat) (Math.PI / 2), out var matrix);
+			SCNMatrix4.CreateFromAxisAngle (new SCNVector3 (2, 2, 2), (pfloat) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateFromAxisAngle",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				TwoThirds, TwoThirds, -OneThird, 0,
+				-OneThird, TwoThirds, TwoThirds, 0,
+				TwoThirds, -OneThird, TwoThirds, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateFromAxisAngle_float_Out ()
 		{
-			SCNMatrix4.CreateFromAxisAngle (new Vector3 (2, 2, 2), (float) (Math.PI / 2), out var matrix);
+			SCNMatrix4.CreateFromAxisAngle (new Vector3 (2, 2, 2), (float) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateFromAxisAngle",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				TwoThirds, TwoThirds, -OneThird, 0,
+				-OneThird, TwoThirds, TwoThirds, 0,
+				TwoThirds, -OneThird, TwoThirds, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateFromAxisAngle_double_Out ()
 		{
-			SCNMatrix4.CreateFromAxisAngle (new Vector3d (2, 2, 2), (double) (Math.PI / 2), out var matrix);
+			SCNMatrix4.CreateFromAxisAngle (new Vector3d (2, 2, 2), (double) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateFromAxisAngle",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				TwoThirds, TwoThirds, -OneThird, 0,
+				-OneThird, TwoThirds, TwoThirds, 0,
+				TwoThirds, -OneThird, TwoThirds, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateFromAxisAngle ()
 		{
-			var matrix = SCNMatrix4.CreateFromAxisAngle (new SCNVector3 (2, 2, 2), (pfloat) (Math.PI / 2));
+			var matrix = SCNMatrix4.CreateFromAxisAngle (new SCNVector3 (2, 2, 2), (pfloat) (Math.PI / 3));
 			AssertEqual (matrix, "CreateFromAxisAngle",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				TwoThirds, TwoThirds, -OneThird, 0,
+				-OneThird, TwoThirds, TwoThirds, 0,
+				TwoThirds, -OneThird, TwoThirds, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateRotationX_Out ()
 		{
-			SCNMatrix4.CreateRotationX ((pfloat) (Math.PI / 2), out var matrix);
+			SCNMatrix4.CreateRotationX ((pfloat) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateRotationX",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, OhPointFive, SqrtThreeHalved, 0,
+				0, -SqrtThreeHalved, OhPointFive, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateRotationX ()
 		{
-			var matrix = SCNMatrix4.CreateRotationX ((pfloat) (Math.PI / 2));
+			var matrix = SCNMatrix4.CreateRotationX ((pfloat) (Math.PI / 3));
 			AssertEqual (matrix, "CreateRotationX",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, OhPointFive, SqrtThreeHalved, 0,
+				0, -SqrtThreeHalved, OhPointFive, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateRotationY_Out ()
 		{
-			SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 2), out var matrix);
+			SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateRotationY",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				OhPointFive, 0, -SqrtThreeHalved, 0,
+				0, 1, 0, 0,
+				SqrtThreeHalved, 0, OhPointFive, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateRotationY ()
 		{
-			var matrix = SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 2));
+			var matrix = SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 3));
 			AssertEqual (matrix, "CreateRotationY",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				OhPointFive, 0, -SqrtThreeHalved, 0,
+				0, 1, 0, 0,
+				SqrtThreeHalved, 0, OhPointFive, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateRotationZ_Out ()
 		{
-			SCNMatrix4.CreateRotationZ ((pfloat) (Math.PI / 2), out var matrix);
+			SCNMatrix4.CreateRotationZ ((pfloat) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateRotationZ",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				OhPointFive, SqrtThreeHalved, 0, 0,
+				-SqrtThreeHalved, OhPointFive, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
 		public void CreateRotationZ ()
 		{
-			var matrix = SCNMatrix4.CreateRotationZ ((pfloat) (Math.PI / 2));
+			var matrix = SCNMatrix4.CreateRotationZ ((pfloat) (Math.PI / 3));
 			AssertEqual (matrix, "CreateRotationZ",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				OhPointFive, SqrtThreeHalved, 0, 0,
+				-SqrtThreeHalved, OhPointFive, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
@@ -386,11 +405,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			SCNMatrix4.CreateTranslation (1, 2, 3, out var matrix);
 			AssertEqual (matrix, "CreateTranslation",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				1, 2, 3, 1);
 		}
 
 		[Test]
@@ -399,11 +417,10 @@ namespace MonoTouchFixtures.SceneKit {
 			var translation = new SCNVector3 (1, 2, 3);
 			SCNMatrix4.CreateTranslation (ref translation, out var matrix);
 			AssertEqual (matrix, "CreateTranslation",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				1, 2, 3, 1);
 		}
 
 		[Test]
@@ -411,11 +428,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.CreateTranslation (1, 2, 3);
 			AssertEqual (matrix, "CreateTranslation",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				1, 2, 3, 1);
 		}
 
 		[Test]
@@ -424,11 +440,10 @@ namespace MonoTouchFixtures.SceneKit {
 			var translation = new SCNVector3 (1, 2, 3);
 			var matrix = SCNMatrix4.CreateTranslation (translation);
 			AssertEqual (matrix, "CreateTranslation",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				1, 2, 3, 1);
 		}
 
 		[Test]
@@ -436,11 +451,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			SCNMatrix4.CreateOrthographic (1, 2, 3, 4, out var matrix);
 			AssertEqual (matrix, "CreateOrthographic",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				2, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, -2, 0,
+				0, 0, -7, 1);
 		}
 
 		[Test]
@@ -448,11 +462,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.CreateOrthographic (1, 2, 3, 4);
 			AssertEqual (matrix, "CreateOrthographic",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				2, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, -2, 0,
+				0, 0, -7, 1);
 		}
 
 		[Test]
@@ -460,11 +473,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			SCNMatrix4.CreateOrthographicOffCenter (1, 2, 3, 4, 5, 6, out var matrix);
 			AssertEqual (matrix, "CreateOrthographicOffCenter",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				2, 0, 0, 0,
+				0, 2, 0, 0,
+				0, 0, -2, 0,
+				-3, -7, -11, 1);
 		}
 
 		[Test]
@@ -472,35 +484,32 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.CreateOrthographicOffCenter (1, 2, 3, 4, 5, 6);
 			AssertEqual (matrix, "CreateOrthographicOffCenter",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				2, 0, 0, 0,
+				0, 2, 0, 0,
+				0, 0, -2, 0,
+				-3, -7, -11, 1);
 		}
 
 		[Test]
 		public void CreatePerspectiveFieldOfView_Out ()
 		{
-			SCNMatrix4.CreatePerspectiveFieldOfView (1, 2, 3, 4, out var matrix);
+			SCNMatrix4.CreatePerspectiveFieldOfView ((pfloat) (Math.PI / 3), 2, 3, 4, out var matrix);
 			AssertEqual (matrix, "CreatePerspectiveFieldOfView",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				SqrtThreeHalved, 0, 0, 0,
+				0, SqrtThree, 0, 0,
+				0, 0, -7, -1,
+				0, 0, -24, 0);
 		}
 
 		[Test]
 		public void CreatePerspectiveFieldOfView ()
 		{
-			var matrix = SCNMatrix4.CreatePerspectiveFieldOfView (1, 2, 3, 4);
+			var matrix = SCNMatrix4.CreatePerspectiveFieldOfView ((pfloat) (Math.PI / 3), 2, 3, 4);
 			AssertEqual (matrix, "CreatePerspectiveFieldOfView",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				SqrtThreeHalved, 0, 0, 0,
+				0, SqrtThree, 0, 0,
+				0, 0, -7, -1,
+				0, 0, -24, 0);
 		}
 
 		[Test]
@@ -508,11 +517,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			SCNMatrix4.CreatePerspectiveOffCenter (1, 2, 3, 4, 5, 6, out var matrix);
 			AssertEqual (matrix, "CreatePerspectiveOffCenter",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				10, 0, 0, 0,
+				0, 10, 0, 0,
+				3, 7, -11, -1,
+				0, 0, -60, 0);
 		}
 
 		[Test]
@@ -520,11 +528,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.CreatePerspectiveOffCenter (1, 2, 3, 4, 5, 6);
 			AssertEqual (matrix, "CreatePerspectiveOffCenter",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				10, 0, 0, 0,
+				0, 10, 0, 0,
+				3, 7, -11, -1,
+				0, 0, -60, 0);
 		}
 
 		[Test]
@@ -532,11 +539,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.Scale (2);
 			AssertEqual (matrix, "CreateScale",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				2, 0, 0, 0,
+				0, 2, 0, 0,
+				0, 0, 2, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
@@ -544,11 +550,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.Scale (new SCNVector3 (1, 2, 3));
 			AssertEqual (matrix, "CreateScale",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, 2, 0, 0,
+				0, 0, 3, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
@@ -556,11 +561,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.Scale (1, 2, 3);
 			AssertEqual (matrix, "CreateScale",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				1, 0, 0, 0,
+				0, 2, 0, 0,
+				0, 0, 3, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
@@ -569,11 +573,10 @@ namespace MonoTouchFixtures.SceneKit {
 			var quaternion = new Quaternion (1, 2, 3, 4);
 			var matrix = SCNMatrix4.Rotate (quaternion);
 			AssertEqual (matrix, "Rotate",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				TwoFifteenths, 7 * TwoFifteenths, -OneThird, 0,
+				-TwoThirds, OneThird, TwoThirds, 0,
+				11 * OneFifteenth, TwoFifteenths, TwoThirds, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
@@ -582,11 +585,10 @@ namespace MonoTouchFixtures.SceneKit {
 			var quaternion = new Quaterniond (1, 2, 3, 4);
 			var matrix = SCNMatrix4.Rotate (quaternion);
 			AssertEqual (matrix, "Rotate",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				TwoFifteenths, 7 * TwoFifteenths, -OneThird, 0,
+				-TwoThirds, OneThird, TwoThirds, 0,
+				11 * OneFifteenth, TwoFifteenths, TwoThirds, 0,
+				0, 0, 0, 1);
 		}
 
 		[Test]
@@ -594,11 +596,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.LookAt (new SCNVector3 (1, 2, 3), new SCNVector3 (4, 5, 6), new SCNVector3 (7, 8, 9));
 			AssertEqual (matrix, "LookAt",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				SqrtSixInverted, -SqrtTwoHalved, -SqrtThreeInverted, 0,
+				-2 * SqrtSixInverted, 0, -SqrtThreeInverted, 0,
+				SqrtSixInverted, SqrtTwoHalved, -SqrtThreeInverted, 0,
+				0, -SqrtTwo, SqrtTwelve, 1);
 		}
 
 		[Test]
@@ -606,11 +607,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.LookAt (1, 2, 3, 4, 5, 6, 7, 8, 9);
 			AssertEqual (matrix, "LookAt",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
-			/// NEEDS CORRECT ANSWER
+				SqrtSixInverted, -SqrtTwoHalved, -SqrtThreeInverted, 0,
+				-2 * SqrtSixInverted, 0, -SqrtThreeInverted, 0,
+				SqrtSixInverted, SqrtTwoHalved, -SqrtThreeInverted, 0,
+				0, -SqrtTwo, SqrtTwelve, 1);
 		}
 
 		[Test]
@@ -628,10 +628,10 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (941, 942, 943, 944));
 			var matrix = SCNMatrix4.Mult (a, b);
 			AssertEqual (matrix, "Mult",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
+				46350, 46400, 46450, 46500,
+				83390, 83480, 83570, 83660,
+				120430, 120560, 120690, 120820,
+				157470, 157640, 157810, 157980);
 		}
 
 		[Test]
@@ -649,10 +649,10 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (941, 942, 943, 944));
 			SCNMatrix4.Mult (ref a, ref b, out var matrix);
 			AssertEqual (matrix, "Mult",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
+				46350, 46400, 46450, 46500,
+				83390, 83480, 83570, 83660,
+				120430, 120560, 120690, 120820,
+				157470, 157640, 157810, 157980);
 		}
 
 		[Test]
@@ -665,10 +665,15 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (41, 42, 43, 44));
 			var matrix = SCNMatrix4.Invert (a);
 			AssertEqual (matrix, "Invert",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
+				(pfloat) (-331402.12), (pfloat) (454382.8), (pfloat) (85439.67), (pfloat) (-208420.62),
+				(pfloat) (248551.25), (pfloat) (-209715.2), (pfloat) (-326223.66), (pfloat) (287387.53),
+				(pfloat) (497102.5), (pfloat) (-943718.4), (pfloat) (396128.7), (pfloat) (50487.074),
+				(pfloat) (-414251.66), (pfloat) (699050.75), (pfloat) (-155344.66), (pfloat) (-129453.984));
+			//AssertEqual (matrix, "Invert",
+			//	(pfloat) 114377133393536.02, (pfloat) 0.03125, (pfloat) (-343131400180608.94), (pfloat) 228754266787072.72,
+			//	(pfloat) 0, (pfloat) (-281474976710656), (pfloat) 562949953421312, (pfloat) (-281474976710656),
+			//	(pfloat) (-343131400180609.8), (pfloat) 562949953421312, (pfloat) (-96505706300796.34), (pfloat) (-123312846939906.23),
+			//	(pfloat) 228754266787073.78, (pfloat) (-281474976710656), (pfloat) (-123312846939906.75), (pfloat) 176033556863489.56);
 		}
 
 		[Test]
@@ -718,10 +723,10 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (941, 942, 943, 944));
 			var matrix = a * b;
 			AssertEqual (matrix, "*",
-				11, 21, 31, 41,
-				12, 22, 32, 42,
-				13, 23, 33, 43,
-				14, 24, 34, 44);
+				46350, 46400, 46450, 46500,
+				83390, 83480, 83570, 83660,
+				120430, 120560, 120690, 120820,
+				157470, 157640, 157810, 157980);
 		}
 
 		[Test]

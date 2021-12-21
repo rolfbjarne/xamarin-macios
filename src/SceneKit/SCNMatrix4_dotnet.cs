@@ -270,7 +270,7 @@ namespace SceneKit {
 		/// <summary>
 		/// Gets or sets the value at row 3, column 4 of this instance.
 		/// </summary>
-		public pfloat M34 { get { return Column2.Z; } set { Column2.Z = value; } }
+		public pfloat M34 { get { return Column3.Z; } set { Column3.Z = value; } }
 
 		/// <summary>
 		/// Gets or sets the value at row 4, column 1 of this instance.
@@ -324,6 +324,8 @@ namespace SceneKit {
 
 		#region Static
 
+		#region CreateFromColumns
+
 		public static SCNMatrix4 CreateFromColumns (SCNVector4 column0, SCNVector4 column1, SCNVector4 column2, SCNVector4 column3)
 		{
 			var result = new SCNMatrix4 ();
@@ -342,6 +344,8 @@ namespace SceneKit {
 			result.Column2 = column2;
 			result.Column3 = column3;
 		}
+
+		#endregion
 
 		#region CreateFromAxisAngle
 
@@ -511,7 +515,7 @@ namespace SceneKit {
 		public static void CreateTranslation (pfloat x, pfloat y, pfloat z, out SCNMatrix4 result)
 		{
 			result = Identity;
-			result.Column3 = new SCNVector4 (x, y, z, 1);
+			result.Row3 = new SCNVector4 (x, y, z, 1);
 		}
 
 		/// <summary>

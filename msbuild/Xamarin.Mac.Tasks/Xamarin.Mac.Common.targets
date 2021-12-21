@@ -68,7 +68,6 @@ Copyright (C) 2014 Xamarin. All rights reserved.
 	<PropertyGroup>
 		<_CodesignAppBundleDependsOn>
 			$(_CodesignAppBundleDependsOn);
-			_CreateAppBundle;
 			_EmbedProvisionProfile;
 			_CodesignNativeLibraries;
 			_CollectFrameworks;

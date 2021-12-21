@@ -1728,6 +1728,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<CodesignDependsOn>
 			$(CodesignDependsOn);
+			_CreateAppBundle;
 			BeforeCodeSign;
 			CoreCodeSign;
 			AfterCodeSign;

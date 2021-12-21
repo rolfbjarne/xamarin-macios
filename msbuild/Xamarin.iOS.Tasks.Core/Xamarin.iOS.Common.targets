@@ -111,11 +111,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			_PrepareCodesignAppExtension;
 			_CalculateCodesignAppBundleInputs;
 		</_CodesignAppBundleDependsOn>
-
-		<CoreCodesignDependsOn>
-			$(_CodesignAppBundleDependsOn);
-			$(CoreCodesignDependsOn);
-		</CoreCodesignDependsOn>
 	</PropertyGroup>
 
 	<Target Name="ValidateAppStoreBundle" DependsOnTargets="_DetectSdkLocations;_ComputeTargetFrameworkMoniker">

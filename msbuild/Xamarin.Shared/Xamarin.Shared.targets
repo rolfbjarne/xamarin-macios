@@ -1722,6 +1722,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<CoreCodesignDependsOn>
 			$(CoreCodesignDependsOn);
+			$(_CodesignAppBundleDependsOn);
 			_CodesignAppBundle;
 			_CodesignVerify;
 		</CoreCodesignDependsOn>

@@ -28,6 +28,10 @@ SOFTWARE.
 
 #if NET
 
+#if !MONOMAC
+#define PFLOAT_SINGLE
+#endif
+
 using System;
 using System.Runtime.InteropServices;
 using Foundation;
@@ -37,14 +41,11 @@ using Vector3d = global::OpenTK.Vector3d;
 using Vector4 = global::OpenTK.Vector4;
 using Quaternion = global::OpenTK.Quaternion;
 using Quaterniond = global::OpenTK.Quaterniond;
-#if MONOMAC
-#if NET
-using pfloat = ObjCRuntime.nfloat;
-#else
-using pfloat = System.nfloat;
-#endif
-#else
+
+#if PFLOAT_SINGLE
 using pfloat = System.Single;
+#else
+using pfloat = ObjCRuntime.nfloat;
 #endif
 
 #nullable enable
@@ -132,10 +133,10 @@ namespace SceneKit {
 #if !WATCH
 		public SCNMatrix4 (CoreAnimation.CATransform3D transform)
 		{
-			Column0 = new SCNVector4 ((pfloat) transform.m11, (pfloat) transform.m21, (pfloat) transform.m31, (pfloat) transform.m41);
-			Column1 = new SCNVector4 ((pfloat) transform.m12, (pfloat) transform.m22, (pfloat) transform.m32, (pfloat) transform.m42);
-			Column2 = new SCNVector4 ((pfloat) transform.m13, (pfloat) transform.m23, (pfloat) transform.m33, (pfloat) transform.m43);
-			Column3 = new SCNVector4 ((pfloat) transform.m14, (pfloat) transform.m24, (pfloat) transform.m34, (pfloat) transform.m44);
+			Column0 = new SCNVector4 ((pfloat) transform.M11, (pfloat) transform.M21, (pfloat) transform.M31, (pfloat) transform.M41);
+			Column1 = new SCNVector4 ((pfloat) transform.M12, (pfloat) transform.M22, (pfloat) transform.M32, (pfloat) transform.M42);
+			Column2 = new SCNVector4 ((pfloat) transform.M13, (pfloat) transform.M23, (pfloat) transform.M33, (pfloat) transform.M43);
+			Column3 = new SCNVector4 ((pfloat) transform.M14, (pfloat) transform.M24, (pfloat) transform.M34, (pfloat) transform.M44);
 		}
 #endif
 
@@ -270,7 +271,7 @@ namespace SceneKit {
 		/// <summary>
 		/// Gets or sets the value at row 3, column 4 of this instance.
 		/// </summary>
-		public pfloat M34 { get { return Column2.Z; } set { Column2.Z = value; } }
+		public pfloat M34 { get { return Column3.Z; } set { Column3.Z = value; } }
 
 		/// <summary>
 		/// Gets or sets the value at row 4, column 1 of this instance.
@@ -324,6 +325,8 @@ namespace SceneKit {
 
 		#region Static
 
+		#region CreateFromColumns
+
 		public static SCNMatrix4 CreateFromColumns (SCNVector4 column0, SCNVector4 column1, SCNVector4 column2, SCNVector4 column3)
 		{
 			var result = new SCNMatrix4 ();
@@ -342,6 +345,8 @@ namespace SceneKit {
 			result.Column2 = column2;
 			result.Column3 = column3;
 		}
+
+		#endregion
 
 		#region CreateFromAxisAngle
 
@@ -363,6 +368,34 @@ namespace SceneKit {
 								 t * axis.X * axis.Y + sin * axis.Z, t * axis.Y * axis.Y + cos, t * axis.Y * axis.Z - sin * axis.X, 0.0f,
 								 t * axis.X * axis.Z - sin * axis.Y, t * axis.Y * axis.Z + sin * axis.X, t * axis.Z * axis.Z + cos, 0.0f,
 								 0, 0, 0, 1);
+		}
+
+		public static void CreateFromAxisAngle (Vector3 axis, float angle, out SCNMatrix4 result)
+		{
+			pfloat cos = (float) System.Math.Cos (-angle);
+			pfloat sin = (float) System.Math.Sin (-angle);
+			pfloat t = 1.0f - cos;
+
+			axis.Normalize ();
+
+			result = new SCNMatrix4 (t * axis.X * axis.X + cos, t * axis.X * axis.Y - sin * axis.Z, t * axis.X * axis.Z + sin * axis.Y, 0.0f,
+								 t * axis.X * axis.Y + sin * axis.Z, t * axis.Y * axis.Y + cos, t * axis.Y * axis.Z - sin * axis.X, 0.0f,
+								 t * axis.X * axis.Z - sin * axis.Y, t * axis.Y * axis.Z + sin * axis.X, t * axis.Z * axis.Z + cos, 0.0f,
+								 0, 0, 0, 1);
+		}
+
+		public static void CreateFromAxisAngle (Vector3d axis, double angle, out SCNMatrix4 result)
+		{
+			double cos = System.Math.Cos (-angle);
+			double sin = System.Math.Sin (-angle);
+			double t = 1.0f - cos;
+
+			axis.Normalize ();
+
+			result = new SCNMatrix4 ((pfloat) (t * axis.X * axis.X + cos), (pfloat) (t * axis.X * axis.Y - sin * axis.Z), (pfloat) (t * axis.X * axis.Z + sin * axis.Y), (pfloat) (0.0f),
+					(pfloat) ( t * axis.X * axis.Y + sin * axis.Z), (pfloat) (t * axis.Y * axis.Y + cos), (pfloat) (t * axis.Y * axis.Z - sin * axis.X), (pfloat) 0.0f,
+					(pfloat) (t * axis.X * axis.Z - sin * axis.Y), (pfloat) (t * axis.Y * axis.Z + sin * axis.X), (pfloat) (t * axis.Z * axis.Z + cos), (pfloat) 0.0f,
+					0, 0, 0, 1);
 		}
 
 		/// <summary>
@@ -483,7 +516,7 @@ namespace SceneKit {
 		public static void CreateTranslation (pfloat x, pfloat y, pfloat z, out SCNMatrix4 result)
 		{
 			result = Identity;
-			result.Column3 = new SCNVector4 (x, y, z, 1);
+			result.Row3 = new SCNVector4 (x, y, z, 1);
 		}
 
 		/// <summary>
@@ -908,14 +941,119 @@ namespace SceneKit {
 
 		#region Invert Functions
 
+
+		static string GetIndices (int[] indices)
+		{
+			return $"{indices[0]} {indices[1]} {indices[2]} {indices[3]}";
+		}
+
+		static void Dump (string message, pfloat[,] matrix, int[] colIdx, int[] rowIdx, int[] pivotIdx)
+		{
+			var debug = $"{message} " +
+				$"{matrix [0,0]:0.0000000000000000} {matrix [0,1]:0.0000000000000000} {matrix [0,2]:0.0000000000000000} {matrix [0,3]:0.0000000000000000} " +
+				$"{matrix [1,0]:0.0000000000000000} {matrix [1,1]:0.0000000000000000} {matrix [1,2]:0.0000000000000000} {matrix [1,3]:0.0000000000000000} " +
+				$"{matrix [2,0]:0.0000000000000000} {matrix [2,1]:0.0000000000000000} {matrix [2,2]:0.0000000000000000} {matrix [2,3]:0.0000000000000000} " +
+				$"{matrix [3,0]:0.0000000000000000} {matrix [3,1]:0.0000000000000000} {matrix [3,2]:0.0000000000000000} {matrix [3,3]:0.0000000000000000} " +
+				$"colIdx: {GetIndices (colIdx)} rowIdx: {GetIndices (rowIdx)} pivotIdx: {GetIndices (pivotIdx)}";
+			Console.WriteLine (debug);
+		}
+
+		public static bool InvertSoftware (SCNMatrix4 matrix, out SCNMatrix4 result)
+		{
+			// https://github.com/dotnet/runtime/blob/79ae74f5ca5c8a6fe3a48935e85bd7374959c570/src/libraries/System.Private.CoreLib/src/System/Numerics/Matrix4x4.cs#L1556
+				
+			pfloat a = matrix.M11, b = matrix.M12, c = matrix.M13, d = matrix.M14;
+			pfloat e = matrix.M21, f = matrix.M22, g = matrix.M23, h = matrix.M24;
+			pfloat i = matrix.M31, j = matrix.M32, k = matrix.M33, l = matrix.M34;
+			pfloat m = matrix.M41, n = matrix.M42, o = matrix.M43, p = matrix.M44;
+
+			pfloat kp_lo = k * p - l * o;
+			pfloat jp_ln = j * p - l * n;
+			pfloat jo_kn = j * o - k * n;
+			pfloat ip_lm = i * p - l * m;
+			pfloat io_km = i * o - k * m;
+			pfloat in_jm = i * n - j * m;
+
+			pfloat a11 = +(f * kp_lo - g * jp_ln + h * jo_kn);
+			pfloat a12 = -(e * kp_lo - g * ip_lm + h * io_km);
+			pfloat a13 = +(e * jp_ln - f * ip_lm + h * in_jm);
+			pfloat a14 = -(e * jo_kn - f * io_km + g * in_jm);
+
+			pfloat det = a * a11 + b * a12 + c * a13 + d * a14;
+
+#if PFLOAT_SINGLE
+			Console.WriteLine ($"det: {det} MathF.Abs (det): {MathF.Abs (det)} Epsilon: {pfloat.Epsilon} singular: {MathF.Abs (det) < pfloat.Epsilon}");
+			if (MathF.Abs (det) < pfloat.Epsilon)
+#else
+			Console.WriteLine ($"det: {det} Math.Abs (det): {Math.Abs (det)} Epsilon: {pfloat.Epsilon} singular: {Math.Abs (det) < pfloat.Epsilon}");
+			if (Math.Abs (det) < pfloat.Epsilon)
+#endif
+			{
+				result = new SCNMatrix4 (pfloat.NaN, pfloat.NaN, pfloat.NaN, pfloat.NaN,
+				                         pfloat.NaN, pfloat.NaN, pfloat.NaN, pfloat.NaN,
+				                         pfloat.NaN, pfloat.NaN, pfloat.NaN, pfloat.NaN,
+				                         pfloat.NaN, pfloat.NaN, pfloat.NaN, pfloat.NaN);
+				return false;
+			}
+
+			result = default (SCNMatrix4);
+
+			pfloat invDet = 1.0f / det;
+
+			result.M11 = a11 * invDet;
+			result.M21 = a12 * invDet;
+			result.M31 = a13 * invDet;
+			result.M41 = a14 * invDet;
+
+			result.M12 = -(b * kp_lo - c * jp_ln + d * jo_kn) * invDet;
+			result.M22 = +(a * kp_lo - c * ip_lm + d * io_km) * invDet;
+			result.M32 = -(a * jp_ln - b * ip_lm + d * in_jm) * invDet;
+			result.M42 = +(a * jo_kn - b * io_km + c * in_jm) * invDet;
+
+			pfloat gp_ho = g * p - h * o;
+			pfloat fp_hn = f * p - h * n;
+			pfloat fo_gn = f * o - g * n;
+			pfloat ep_hm = e * p - h * m;
+			pfloat eo_gm = e * o - g * m;
+			pfloat en_fm = e * n - f * m;
+
+			result.M13 = +(b * gp_ho - c * fp_hn + d * fo_gn) * invDet;
+			result.M23 = -(a * gp_ho - c * ep_hm + d * eo_gm) * invDet;
+			result.M33 = +(a * fp_hn - b * ep_hm + d * en_fm) * invDet;
+			result.M43 = -(a * fo_gn - b * eo_gm + c * en_fm) * invDet;
+
+			pfloat gl_hk = g * l - h * k;
+			pfloat fl_hj = f * l - h * j;
+			pfloat fk_gj = f * k - g * j;
+			pfloat el_hi = e * l - h * i;
+			pfloat ek_gi = e * k - g * i;
+			pfloat ej_fi = e * j - f * i;
+
+			result.M14 = -(b * gl_hk - c * fl_hj + d * fk_gj) * invDet;
+			result.M24 = +(a * gl_hk - c * el_hi + d * ek_gi) * invDet;
+			result.M34 = -(a * fl_hj - b * el_hi + d * ej_fi) * invDet;
+			result.M44 = +(a * fk_gj - b * ek_gi + c * ej_fi) * invDet;
+
+			return true;
+		}
+
+		public static SCNMatrix4 Invert (SCNMatrix4 matrix)
+		{
+			if (!InvertSoftware (matrix, out var inverse))
+				throw new InvalidOperationException ("Matrix is singular and cannot be inverted.");
+			// Dump ("Final result: ", inverse, new int[4], new int[4], new int[4]);
+			return inverse;
+		}
+
 		/// <summary>
 		/// Calculate the inverse of the given matrix
 		/// </summary>
 		/// <param name="mat">The matrix to invert</param>
 		/// <returns>The inverse of the given matrix if it has one, or the input if it is singular</returns>
 		/// <exception cref="InvalidOperationException">Thrown if the SCNMatrix4 is singular.</exception>
-		public static SCNMatrix4 Invert (SCNMatrix4 mat)
+		public static SCNMatrix4 Invert2 (SCNMatrix4 mat)
 		{
+			Console.WriteLine ($"pfloat: {typeof (pfloat)} size: {Marshal.SizeOf (typeof (pfloat))}");
 			int [] colIdx = { 0, 0, 0, 0 };
 			int [] rowIdx = { 0, 0, 0, 0 };
 			int [] pivotIdx = { -1, -1, -1, -1 };
@@ -925,6 +1063,8 @@ namespace SceneKit {
 								{mat.Row1.X, mat.Row1.Y, mat.Row1.Z, mat.Row1.W},
 								{mat.Row2.X, mat.Row2.Y, mat.Row2.Z, mat.Row2.W},
 								{mat.Row3.X, mat.Row3.Y, mat.Row3.Z, mat.Row3.W} };
+
+			Dump ("Start inverse:", inverse, colIdx, rowIdx, pivotIdx);
 			int icol = 0;
 			int irow = 0;
 			for (int i = 0; i < 4; i++) {
@@ -946,9 +1086,12 @@ namespace SceneKit {
 						}
 					}
 				}
+				Dump ($"Loop A #{i}  :", inverse, colIdx, rowIdx, pivotIdx);
+				Console.WriteLine ($"Loop a #{i}  : icol={icol} irow={irow}");
 
 				++(pivotIdx [icol]);
 
+				Dump ($"Loop B #{i}  :", inverse, colIdx, rowIdx, pivotIdx);
 				// Swap rows over so pivot is on diagonal
 				if (irow != icol) {
 					for (int k = 0; k < 4; ++k) {
@@ -957,6 +1100,7 @@ namespace SceneKit {
 						inverse [icol, k] = f;
 					}
 				}
+				Dump ($"Loop C #{i}  :", inverse, colIdx, rowIdx, pivotIdx);
 
 				rowIdx [i] = irow;
 				colIdx [i] = icol;
@@ -967,6 +1111,7 @@ namespace SceneKit {
 					throw new InvalidOperationException ("Matrix is singular and cannot be inverted.");
 					//return mat;
 				}
+				Dump ($"Loop D #{i}  :", inverse, colIdx, rowIdx, pivotIdx);
 
 				// Scale row so it has a unit diagonal
 				pfloat oneOverPivot = 1.0f / pivot;
@@ -974,17 +1119,24 @@ namespace SceneKit {
 				for (int k = 0; k < 4; ++k)
 					inverse [icol, k] *= oneOverPivot;
 
+				Dump ($"Loop E #{i}  :", inverse, colIdx, rowIdx, pivotIdx);
 				// Do elimination of non-diagonal elements
 				for (int j = 0; j < 4; ++j) {
 					// check this isn't on the diagonal
 					if (icol != j) {
 						pfloat f = inverse [j, icol];
+						Console.WriteLine ($"    EZ1: j={j} icol={icol} f={f:0.0000000000000000} {inverse [j, 0]:0.0000000000000000} {inverse [j, 1]:0.0000000000000000} {inverse [j, 2]:0.0000000000000000} {inverse [j, 3]:0.0000000000000000}");
 						inverse [j, icol] = 0.0f;
 						for (int k = 0; k < 4; ++k)
 							inverse [j, k] -= inverse [icol, k] * f;
+						Console.WriteLine ($"    EZ2: j={j} icol={icol} f={f:0.0000000000000000} {inverse [j, 0]:0.0000000000000000} {inverse [j, 1]:0.0000000000000000} {inverse [j, 2]:0.0000000000000000} {inverse [j, 3]:0.0000000000000000}");
 					}
 				}
+
+				Dump ($"Loop Z #{i}  :", inverse, colIdx, rowIdx, pivotIdx);
 			}
+
+			Dump ("Post pivot:   ", inverse, colIdx, rowIdx, pivotIdx);
 
 			for (int j = 3; j >= 0; --j) {
 				int ir = rowIdx [j];
@@ -995,6 +1147,7 @@ namespace SceneKit {
 					inverse [k, ic] = f;
 				}
 			}
+			Dump ("Final result: ", inverse, colIdx, rowIdx, pivotIdx);
 
 			mat.Row0 = new SCNVector4 (inverse [0, 0], inverse [0, 1], inverse [0, 2], inverse [0, 3]);
 			mat.Row1 = new SCNVector4 (inverse [1, 0], inverse [1, 1], inverse [1, 2], inverse [1, 3]);

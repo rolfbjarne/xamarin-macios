@@ -132,10 +132,10 @@ namespace SceneKit {
 #if !WATCH
 		public SCNMatrix4 (CoreAnimation.CATransform3D transform)
 		{
-			Column0 = new SCNVector4 ((pfloat) transform.m11, (pfloat) transform.m21, (pfloat) transform.m31, (pfloat) transform.m41);
-			Column1 = new SCNVector4 ((pfloat) transform.m12, (pfloat) transform.m22, (pfloat) transform.m32, (pfloat) transform.m42);
-			Column2 = new SCNVector4 ((pfloat) transform.m13, (pfloat) transform.m23, (pfloat) transform.m33, (pfloat) transform.m43);
-			Column3 = new SCNVector4 ((pfloat) transform.m14, (pfloat) transform.m24, (pfloat) transform.m34, (pfloat) transform.m44);
+			Column0 = new SCNVector4 ((pfloat) transform.M11, (pfloat) transform.M21, (pfloat) transform.M31, (pfloat) transform.M41);
+			Column1 = new SCNVector4 ((pfloat) transform.M12, (pfloat) transform.M22, (pfloat) transform.M32, (pfloat) transform.M42);
+			Column2 = new SCNVector4 ((pfloat) transform.M13, (pfloat) transform.M23, (pfloat) transform.M33, (pfloat) transform.M43);
+			Column3 = new SCNVector4 ((pfloat) transform.M14, (pfloat) transform.M24, (pfloat) transform.M34, (pfloat) transform.M44);
 		}
 #endif
 
@@ -363,6 +363,34 @@ namespace SceneKit {
 								 t * axis.X * axis.Y + sin * axis.Z, t * axis.Y * axis.Y + cos, t * axis.Y * axis.Z - sin * axis.X, 0.0f,
 								 t * axis.X * axis.Z - sin * axis.Y, t * axis.Y * axis.Z + sin * axis.X, t * axis.Z * axis.Z + cos, 0.0f,
 								 0, 0, 0, 1);
+		}
+
+		public static void CreateFromAxisAngle (Vector3 axis, float angle, out SCNMatrix4 result)
+		{
+			pfloat cos = (float) System.Math.Cos (-angle);
+			pfloat sin = (float) System.Math.Sin (-angle);
+			pfloat t = 1.0f - cos;
+
+			axis.Normalize ();
+
+			result = new SCNMatrix4 (t * axis.X * axis.X + cos, t * axis.X * axis.Y - sin * axis.Z, t * axis.X * axis.Z + sin * axis.Y, 0.0f,
+								 t * axis.X * axis.Y + sin * axis.Z, t * axis.Y * axis.Y + cos, t * axis.Y * axis.Z - sin * axis.X, 0.0f,
+								 t * axis.X * axis.Z - sin * axis.Y, t * axis.Y * axis.Z + sin * axis.X, t * axis.Z * axis.Z + cos, 0.0f,
+								 0, 0, 0, 1);
+		}
+
+		public static void CreateFromAxisAngle (Vector3d axis, double angle, out SCNMatrix4 result)
+		{
+			double cos = System.Math.Cos (-angle);
+			double sin = System.Math.Sin (-angle);
+			double t = 1.0f - cos;
+
+			axis.Normalize ();
+
+			result = new SCNMatrix4 ((pfloat) (t * axis.X * axis.X + cos), (pfloat) (t * axis.X * axis.Y - sin * axis.Z), (pfloat) (t * axis.X * axis.Z + sin * axis.Y), (pfloat) (0.0f),
+					(pfloat) ( t * axis.X * axis.Y + sin * axis.Z), (pfloat) (t * axis.Y * axis.Y + cos), (pfloat) (t * axis.Y * axis.Z - sin * axis.X), (pfloat) 0.0f,
+					(pfloat) (t * axis.X * axis.Z - sin * axis.Y), (pfloat) (t * axis.Y * axis.Z + sin * axis.X), (pfloat) (t * axis.Z * axis.Z + cos), (pfloat) 0.0f,
+					0, 0, 0, 1);
 		}
 
 		/// <summary>

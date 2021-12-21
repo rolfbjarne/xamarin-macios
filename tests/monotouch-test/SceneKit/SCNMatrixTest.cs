@@ -273,7 +273,6 @@ namespace MonoTouchFixtures.SceneKit {
 			/// NEEDS CORRECT ANSWER
 		}
 
-#if !NET
 		[Test]
 		public void CreateFromAxisAngle_float_Out ()
 		{
@@ -297,7 +296,6 @@ namespace MonoTouchFixtures.SceneKit {
 				14, 24, 34, 44);
 			/// NEEDS CORRECT ANSWER
 		}
-#endif
 
 		[Test]
 		public void CreateFromAxisAngle ()

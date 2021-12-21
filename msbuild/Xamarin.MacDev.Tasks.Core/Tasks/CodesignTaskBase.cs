@@ -38,7 +38,7 @@ namespace Xamarin.MacDev.Tasks
 
 		public string ResourceRules { get; set; }
 
-		[Required]
+		// [Required]
 		public string SigningKey { get; set; }
 
 		public string ExtraArgs { get; set; }

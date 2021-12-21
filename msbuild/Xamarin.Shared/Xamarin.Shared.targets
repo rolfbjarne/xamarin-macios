@@ -1721,7 +1721,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_EmbedProvisionProfile;
 			_CodesignNativeLibraries;
 			_CollectFrameworks;
-			_CodesignFrameworks;
 			_ReadAppExtensionCodesignProperties;
 			_CodesignAppExtensions;
 			_PrepareCodesignAppExtension;
@@ -1828,6 +1827,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<PropertyGroup>
 		<_CollectFrameworksDependsOn>
 			$(_CollectFrameworksDependsOn);
+			_DetectSigningIdentity;
 			_CompileToNative;
 		</_CollectFrameworksDependsOn>
 	</PropertyGroup>
@@ -1844,10 +1844,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			>
 			<Output TaskParameter="Frameworks" ItemName="_Frameworks"/>
 		</CollectFrameworks>
-	</Target>
-
-	<Target Name="_CodesignFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(_Frameworks)' != ''" DependsOnTargets="_DetectSigningIdentity;_CollectFrameworks"
-		Inputs="%(_Frameworks.Identity)" Outputs="$(DeviceSpecificIntermediateOutputPath)codesign\%(_Frameworks.Filename)%(_Frameworks.Extension)">
 
 		<PropertyGroup>
 			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
@@ -1856,31 +1852,20 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<_FrameworkCodeSigningKey Condition="'$(_FrameworkCodeSigningKey)' == ''">-</_FrameworkCodeSigningKey>
 		</PropertyGroup>
 
-		<Codesign
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
-			ToolExe="$(CodesignExe)"
-			ToolPath="$(CodesignPath)"
-			CodesignAllocate="$(_CodesignAllocate)"
-			DisableTimestamp="$(_CodesignDisableTimestamp)"
-			Keychain="$(CodesignKeychain)"
-			Resources="@(_Frameworks)"
-			SigningKey="$(_FrameworkCodeSigningKey)"
-			ExtraArgs="$(CodesignExtraArgs)"
-			UseSecureTimestamp="$(UseHardenedRuntime)"
-			>
-		</Codesign>
-
-		<MakeDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(DeviceSpecificIntermediateOutputPath)codesign" />
-
-		<Touch
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			AlwaysCreate="true"
-			Files="$(DeviceSpecificIntermediateOutputPath)codesign\%(_Frameworks.Filename)%(_Frameworks.Extension)"
-			>
-			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
-		</Touch>
+		<ItemGroup>
+			<_CodesignItems Include="@(Frameworks)">
+				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
+				<!-- no entitlements apparently -->
+				<!-- <CodesignEntitlements>$(_AppBundleCodesignEntitlements)</CodesignEntitlements> -->
+				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
+				<!-- <CodesignIsAppExtension>$(IsAppExtension)</CodesignIsAppExtension> -->
+				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
+				<!-- <CodesignResourceRules>$(_PreparedResourceRules)</CodesignResourceRules> -->
+				<CodesignSigningKey>$(_FrameworkCodeSigningKey)</CodesignSigningKey>
+				<!-- <CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime> -->
+				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
+			</_CodesignItems>
+		</ItemGroup>
 	</Target>
 
 	<Target Name="_ReadAppExtensionCodesignProperties">
@@ -2039,22 +2024,27 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'">$(_CompiledCodesignEntitlements)</_AppBundleCodesignEntitlements>
 		</PropertyGroup>
 
+		<ItemGroup>
+			<_CodesignItems Include="$(AppBundleDir)">
+				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
+				<CodesignEntitlements>$(_AppBundleCodesignEntitlements)</CodesignEntitlements>
+				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
+				<CodesignIsAppExtension>$(IsAppExtension)</CodesignIsAppExtension>
+				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
+				<CodesignResourceRules>$(_PreparedResourceRules)</CodesignResourceRules>
+				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
+				<CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
+				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
+			</_CodesignItems>
+		</ItemGroup>
+
 		<Codesign
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			CodesignAllocate="$(_CodesignAllocate)"
-			DisableTimestamp="$(_CodesignDisableTimestamp)"
-			Entitlements="$(_AppBundleCodesignEntitlements)"
-			ExtraArgs="$(CodesignExtraArgs)"
-			IsAppExtension="$(IsAppExtension)"
-			Keychain="$(CodesignKeychain)"
-			ResourceRules="$(_PreparedResourceRules)"
-			Resources="$(AppBundleDir)"
-			SigningKey="$(_CodeSigningKey)"
+			Resources="@(_CodesignItems)"
 			ToolExe="$(CodesignExe)"
 			ToolPath="$(CodesignPath)"
-			UseHardenedRuntime="$(UseHardenedRuntime)"
-			UseSecureTimestamp="$(UseHardenedRuntime)"
 			>
 		</Codesign>
 

@@ -664,6 +664,31 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (31, 32, 33, 34),
 				new SCNVector4 (41, 42, 43, 44));
 			var matrix = SCNMatrix4.Invert (a);
+
+			var X = new SCNMatrix4 (
+				(pfloat) (-331402.12), (pfloat) (454382.8), (pfloat) (85439.67), (pfloat) (-208420.62),
+				(pfloat) (248551.25), (pfloat) (-209715.2), (pfloat) (-326223.66), (pfloat) (287387.53),
+				(pfloat) (497102.5), (pfloat) (-943718.4), (pfloat) (396128.7), (pfloat) (50487.074),
+				(pfloat) (-414251.66), (pfloat) (699050.75), (pfloat) (-155344.66), (pfloat) (-129453.984));
+			var Y = new SCNMatrix4 (
+				(pfloat) 114377133393536.02, (pfloat) 0.03125, (pfloat) (-343131400180608.94), (pfloat) 228754266787072.72,
+				(pfloat) 0, (pfloat) (-281474976710656), (pfloat) 562949953421312, (pfloat) (-281474976710656),
+				(pfloat) (-343131400180609.8), (pfloat) 562949953421312, (pfloat) (-96505706300796.34), (pfloat) (-123312846939906.23),
+				(pfloat) 228754266787073.78, (pfloat) (-281474976710656), (pfloat) (-123312846939906.75), (pfloat) 176033556863489.56);
+
+			var ax = a * X;
+			var ay = a * Y;
+
+			Console.WriteLine ($"ax:\n{ax.ToString ()}");
+			Console.WriteLine ($"ay:\n{ay.ToString ()}");
+
+
+			var xa = X * a;
+			var ya = Y * a;
+
+			Console.WriteLine ($"xa:\n{xa.ToString ()}");
+			Console.WriteLine ($"ya:\n{ya.ToString ()}");
+
 			AssertEqual (matrix, "Invert",
 				(pfloat) (-331402.12), (pfloat) (454382.8), (pfloat) (85439.67), (pfloat) (-208420.62),
 				(pfloat) (248551.25), (pfloat) (-209715.2), (pfloat) (-326223.66), (pfloat) (287387.53),

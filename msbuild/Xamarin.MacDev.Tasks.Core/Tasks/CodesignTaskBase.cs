@@ -24,7 +24,7 @@ namespace Xamarin.MacDev.Tasks
 
 		public string StampPath { get; set; }
 
-		[Required]
+		// [Required]
 		public string CodesignAllocate { get; set; }
 
 		public bool DisableTimestamp { get; set; }
@@ -38,7 +38,6 @@ namespace Xamarin.MacDev.Tasks
 
 		public string ResourceRules { get; set; }
 
-		// [Required]
 		public string SigningKey { get; set; }
 
 		public string ExtraArgs { get; set; }
@@ -81,12 +80,29 @@ namespace Xamarin.MacDev.Tasks
 		{
 			var path = item.ItemSpec;
 			var app = path.LastIndexOf (".app/");
-			return Path.Combine (StampPath, path.Substring (app + ".app/".Length));
+			return Path.Combine (GetCodesignStampPath (item), path.Substring (app + ".app/".Length));
+		}
+
+		string GetCodesignStampPath (ITaskItem item)
+		{
+			var rv = item.GetMetadata ("CodesignStampPath");
+			if (!string.IsNullOrEmpty (rv))
+				return rv;
+			return StampPath;
+		}
+
+		string GetCodesignAllocate (ITaskItem item)
+		{
+			var rv = item.GetMetadata ("CodesignAllocate");
+			if (!string.IsNullOrEmpty (rv))
+				return rv;
+			return CodesignAllocate;
 		}
 
 		bool NeedsCodesign (ITaskItem item)
 		{
-			if (string.IsNullOrEmpty (StampPath))
+			var stampPath = GetCodesignStampPath (item);
+			if (string.IsNullOrEmpty (stampPath))
 				return true;
 
 			var output = GetOutputPath (item);
@@ -189,7 +205,7 @@ namespace Xamarin.MacDev.Tasks
 			var fileName = GetFullPathToTool ();
 			var arguments = GenerateCommandLineArguments (item);
 			var environment = new Dictionary<string, string> () {
-				{ "CODESIGN_ALLOCATE", CodesignAllocate },
+				{ "CODESIGN_ALLOCATE", GetCodesignAllocate (item) },
 			};
 			var rv = ExecuteAsync (fileName, arguments, null, environment, mergeOutput: false).Result;
 			var exitCode = rv.ExitCode;
@@ -204,7 +220,7 @@ namespace Xamarin.MacDev.Tasks
 					Log.LogError (MSBStrings.E0004, item.ItemSpec, errors);
 				else
 					Log.LogError (MSBStrings.E0005, item.ItemSpec);
-			} else if (!string.IsNullOrEmpty (StampPath)) {
+			} else if (!string.IsNullOrEmpty (GetCodesignStampPath (item))) {
 				var outputPath = GetOutputPath (item);
 				Directory.CreateDirectory (Path.GetDirectoryName (outputPath));
 				File.WriteAllText (outputPath, string.Empty);

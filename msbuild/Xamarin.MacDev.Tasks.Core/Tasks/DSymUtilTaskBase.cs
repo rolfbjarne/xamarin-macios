@@ -21,6 +21,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public ITaskItem [] Executable { get; set; } = Array.Empty<ITaskItem> ();
 
+		// the executable is a relative path to this directory
+		public string OutputDirectory { get; set; } = string.Empty;
+
 		#endregion
 
 		#region Outputs
@@ -59,7 +62,8 @@ namespace Xamarin.MacDev.Tasks
 			args.Add ("-o");
 			args.Add (dSymDir);
 
-			args.Add (Path.GetFullPath (item.ItemSpec));
+			var outputDirectory = GetNonEmptyStringOrFallback (item, "OutputDirectory", OutputDirectory, required: true);
+			args.Add (Path.GetFullPath (Path.Combine (outputDirectory, item.ItemSpec)));
 			ExecuteAsync ("xcrun", args).Wait ();
 
 			var contentsDir = Path.Combine (dSymDir, "Contents");

@@ -23,6 +23,10 @@ namespace Xamarin.MacDev.Tasks
 
 		// This can also be specified as metadata on the Executable item  (as 'IsFramework')
 		public bool IsFramework { get; set; }
+
+		// the executable is a relative path to this directory
+		[Required]
+		public string OutputDirectory { get; set; } = string.Empty;
 		#endregion
 
 		bool GetIsFramework (ITaskItem item)
@@ -50,7 +54,8 @@ namespace Xamarin.MacDev.Tasks
 				args.Add ("-x");
 			}
 
-			args.Add (Path.GetFullPath (item.ItemSpec));
+			var outputDirectory = GetNonEmptyStringOrFallback (item, "OutputDirectory", OutputDirectory, required: true);
+			args.Add (Path.GetFullPath (Path.Combine (outputDirectory, item.ItemSpec)));
 
 			ExecuteAsync ("xcrun", args).Wait ();
 		}

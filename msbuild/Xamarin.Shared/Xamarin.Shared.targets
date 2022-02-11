@@ -1048,7 +1048,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ParseDeviceSpecificBuildInformation>
 
 		<PropertyGroup>
-			<_MtouchSymbolsList>$(DeviceSpecificIntermediateOutputPath)mtouch-symbols.list</_MtouchSymbolsList>
+			<_MtouchSymbolsList Condition="'$(_MtouchSymbolsList)' == ''">$(DeviceSpecificIntermediateOutputPath)mtouch-symbols.list</_MtouchSymbolsList>
 
 			<!-- actool output caches -->
 			<_ACTool_PartialAppManifestCache>$(DeviceSpecificIntermediateOutputPath)actool\_PartialAppManifest.items</_ACTool_PartialAppManifestCache>
@@ -2278,201 +2278,284 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="_ReadAppExtensionDebugSymbolProperties">
-		<ReadItemsFromFile File="%(_ResolvedAppExtensionReferences.Identity)\..\dsym.items" Condition="Exists('%(_ResolvedAppExtensionReferences.Identity)\..\dsym.items')">
-			<Output TaskParameter="Items" ItemName="_AppExtensionDebugSymbolProperties" />
+	<!--
+
+		Generating debug symbols (dSYM directories) and stripping binaries.
+
+		* First we collect all the frameworks, dylibs and executable files from both the current project and any contained app extensions.
+		* We write a list of all these items in a dsym.items file (so that container projects can load them if need be).
+		* If not building a .NET universal app, we run dsymutil/symbolstrip in the executable project.
+		* If we're building a universal app in .NET, we don't run dsymutil/symbolstrip for each rid-specific build, but instead delay until we've created the universal app bundle.
+
+		* Metadata on items:
+			* NoSymbolStrip: set to true to not strip native symbols for this item (and false to dot it)
+			* NoDSymUtil: set to true to do not run dsymutil for this item (and false do it)
+			* SymbolsListPath: The path to a file that contains a list of exported names that should be	kept after stripping.
+
+		* To change the default behavior for the executable itself, set
+		  NoSymbolStrip=true/NoDSYmUtil=true in the project file (this will
+		  also change the behavior for all frameworks and dylibs in the
+		  project, unless it's overriden per framework/dylib using metadata on
+		  each item).
+
+		By default, we generate debug symbols and strip native binaries:
+
+		* For iOS, tvOS and watchOS: always
+		* For macOS and Mac Catalyst: when creating an archive (ArchiveOnBuild=true)
+
+	-->
+
+	<!-- Compute a few variables for debug symbol generation and native file stripping -->
+	<PropertyGroup>
+		<_PrepareForDebugSymbolsGenerationDependsOn>
+			$(_PrepareForDebugSymbolsGenerationDependsOn);
+			_PlaceAppExtensions;
+		</_PrepareForDebugSymbolsGenerationDependsOn>
+		<_PrepareForDebugSymbolsGenerationDependsOn Condition="'$(_PlatformName)' != 'macOS'">
+			$(_PrepareForDebugSymbolsGenerationDependsOn);
+			_ResolveWatchAppReferences;
+		</_PrepareForDebugSymbolsGenerationDependsOn>
+	</PropertyGroup>
+	<Target
+		Name="_PrepareForDebugSymbolsGeneration"
+		DependsOnTargets="$(_PrepareForDebugSymbolsGenerationDependsOn)"
+		>
+		<PropertyGroup>
+			<_DebugSymbolGenerationItemPath Condition="'$(_DebugSymbolGenerationItemPath)' == ''">$(DeviceSpecificOutputPath)dsym.items</_DebugSymbolGenerationItemPath>
+			<_OutputDsymLocation>$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))/</_OutputDsymLocation>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<_AppExtensionDebugSymbolGenerationItemPath Include="@(_ResolvedAppExtensionReferences -> '%(Identity)\..\dsym.items')" Condition="Exists('%(Identity)\..\dsym.items')" />
+			<_WatchAppDebugSymbolGenerationItemPath Include="@(_ResolvedWatchAppReferences -> '%(Identity)\..\dsym.items')" Condition="'%(Identity)\..\dsym.items')"/>
+		</ItemGroup>
+	</Target>
+
+	<!--
+		This target will collect every item in the current project and any app extensions that might need debug symbols / stripping
+		This target runs always, because container projects might want to create debug symbols or strip even if this project doesn't want to, and
+		in that case the container project would still need to know what to do for contained projects.
+	-->
+	<Target
+		Name="_CollectItemsForDebugSymbolsGeneration"
+		DependsOnTargets="_CompileToNative;_ParseBundlerArguments;_ExpandNativeReferences;_CollectFrameworks;_PrepareForDebugSymbolsGeneration"
+		>
+
+		<!-- read any data from app extensions -->
+		<ReadItemsFromFile File="@(_AppExtensionDebugSymbolGenerationItemPath)">
+			<Output TaskParameter="Items" ItemName="_AppExtensionDebugSymbolGenerationItem" />
 		</ReadItemsFromFile>
-	</Target>
 
-	<Target Name="_GenerateAppExtensionDebugSymbols" Condition="'$(ComputedPlatform)' == 'iPhone' And '$(IsAppExtension)' == 'false'"
-		DependsOnTargets="_ParseBundlerArguments;_CompileToNative;_ReadAppExtensionDebugSymbolProperties;_PlaceAppExtensions"
-		Inputs="$(_AppExtensionRoot)PlugIns\%(_AppExtensionDebugSymbolProperties.Identity)\%(_AppExtensionDebugSymbolProperties.NativeExecutable)"
-		Outputs="$(AppBundleDir)\..\%(_AppExtensionDebugSymbolProperties.Identity).dSYM\Contents\Info.plist">
+		<!-- read any data from watch apps -->
+		<ReadItemsFromFile File="@(_WatchAppDebugSymbolGenerationItemPath)">
+			<Output TaskParameter="Items" ItemName="_WatchAppDebugSymbolGenerationItem" />
+		</ReadItemsFromFile>
 
-		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir)\..\%(_AppExtensionDebugSymbolProperties.Identity).dSYM" />
-
-		<!-- run dsymutil on the main bundle -->
-		<DSymUtil
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '%(_AppExtensionDebugSymbolProperties.NoDSymUtil)' == 'false'"
-			DSymDir="$(AppBundleDir)\..\%(_AppExtensionDebugSymbolProperties.Identity).dSYM"
-			Executable="$(_AppExtensionRoot)PlugIns\%(_AppExtensionDebugSymbolProperties.Identity)\%(_AppExtensionDebugSymbolProperties.NativeExecutable)"
-			ToolExe="$(DSymUtilExe)"
-			ToolPath="$(DSymUtilPath)"
-		>
-		</DSymUtil>
-
-		<!-- strip the debug symbols from the $(_NativeExecutable) -->
-		<SymbolStrip
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '%(_AppExtensionDebugSymbolProperties.NoSymbolStrip)' == 'false'"
-			Executable="$(_AppExtensionRoot)PlugIns\%(_AppExtensionDebugSymbolProperties.Identity)\%(_AppExtensionDebugSymbolProperties.NativeExecutable)"
-			IsFramework="false"
-			SymbolFile="%(_AppExtensionDebugSymbolProperties.SymbolsList)"
-		>
-		</SymbolStrip>
-
-		<!-- touch the dSYM Info.plist so that its mtime is newer than the stripped $(_NativeExecutable) -->
-		<Touch
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '%(_AppExtensionDebugSymbolProperties.NoSymbolStrip)' == 'false'"
-			Files="$(AppBundleDir)\..\%(_AppExtensionDebugSymbolProperties.Identity).dSYM\Contents\Info.plist"
-		>
-		</Touch>
-	</Target>
-
-	<Target Name="_CopyUserFrameworkDebugSymbols" Condition="('$(_PlatformName)' == 'macOS') Or ('$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false')" DependsOnTargets="_CompileToNative;_ParseBundlerArguments;"
-		Inputs="%(_FrameworkNativeReference.Name)"
-		Outputs="$(AppBundleDir)\..\%(_FrameworkNativeReference.Filename).framework.dSYM\Contents\Info.plist"
-		>
-
-		<PropertyGroup>
-			<_Source>$([System.IO.Path]::GetDirectoryName(%(_FrameworkNativeReference.Name)))\..\dSYMs\%(_FrameworkNativeReference.Filename).framework.dSYM\</_Source>
-			<_Destination>$(AppBundleDir)\..\%(_FrameworkNativeReference.Filename).framework.dSYM</_Destination>
-		</PropertyGroup>
-
-		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(_Destination)" />
-
-		<!-- if available copy the provided user frameworks .dSYM -->
-		<Ditto
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And Exists ('$(_Source)')"
-			Source="$(_Source)"
-			Destination="$(_Destination)"
-		>
-		</Ditto>
-	</Target>
-
-	<Target Name="_CalculateFrameworkDebugSymbolPath" DependsOnTargets="_CopyUserFrameworkDebugSymbols;_CollectFrameworks">
 		<ItemGroup>
-			<_Frameworks>
-				<_Destination>$(AppBundleDir)\..\%(Filename).framework.dSYM</_Destination>
-			</_Frameworks>
-			<_Frameworks>
-				<_DestinationExists>$([System.IO.File]::Exists('%(_Destination)'))</_DestinationExists>
-			</_Frameworks>
+			<_DebugSymbolGenerationItem Include="@(_ResolvedNativeReference)" Condition="@(_ResolvedNativeReference->Count()) &gt; 0">
+				<!-- If the item in question came with a .dSYM directory, this would be the path to it: -->
+				<dSYMSourcePath>$([System.IO.Path]::GetDirectoryName('%(_ResolvedNativeReference.Identity)')).dSYM</dSYMSourcePath>
+				<!-- This is the name of the dSYM that will be created (if that's the case) -->
+				<DSymName>%(_ResolvedNativeReference.Filename)%(_ResolvedNativeReference.Extension).dSYM</DSymName>
+			</_DebugSymbolGenerationItem>
+			<_DebugSymbolGenerationItem Include="$(_NativeExecutable)" Condition="'$(IsWatchApp)' != 'true'">
+				<SymbolsListPath>$(_MtouchSymbolsList)</SymbolsListPath>
+				<DSymName>$(_AppBundleName)$(AppBundleExtension).dSYM</DSymName>
+			</_DebugSymbolGenerationItem>
+
+			<_DebugSymbolGenerationItem>
+				<NoSymbolStrip Condition="'%(_DebugSymbolGenerationItem.NoSymbolStrip)' == ''">$(NoSymbolStrip)</NoSymbolStrip>
+				<NoDSymUtil Condition="'%(_DebugSymbolGenerationItem.NoDSymUtil)' == ''">$(NoDSymUtil)</NoDSymUtil>
+				<!-- Did the item in question come with a .dSYM directory? -->
+				<dSYMSourcePathExists Condition="'$(dSYMSourcePathExists)' == '' And Exists('%(_DebugSymbolGenerationItem.dSYMSourcePath)')">true</dSYMSourcePathExists>
+				<dSYMSourcePathExists Condition="'$(dSYMSourcePathExists)' == ''">false</dSYMSourcePathExists>
+				<!-- compute info.plist path inside the dSYM -->
+				<dSYMInfoPlistRelativePath>%(DSymName)\Contents\Info.plist</dSYMInfoPlistRelativePath>
+				<BCSymbolMapName>%(Filename)%(Extension).bcsymbolmap</BCSymbolMapName>
+				<InputRelativePath>$([MSBuild]::MakeRelative('$([System.IO.Path]::GetDirectoryName('$(MSBuildProjectDirectory)\$(AppBundleDir)'))','$(MSBuildProjectDirectory)\%(Identity)'))</InputRelativePath>
+			</_DebugSymbolGenerationItem>
+
+			<!-- add any items from app extensions -->
+			<_DebugSymbolGenerationItem Include="@(_AppExtensionDebugSymbolGenerationItem -> '$(_AppPlugInsPath)%(InputRelativePath)')" Condition="@(_AppExtensionDebugSymbolGenerationItem->Count()) &gt; 0">
+				<SymbolsListPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)','%(_AppExtensionDebugSymbolGenerationItem.SourceProjectPath)/%(_AppExtensionDebugSymbolGenerationItem.SymbolsListPath)'))</SymbolsListPath>
+				<InputRelativePath>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))/$(_AppPlugInsRelativePath)%(InputRelativePath)</InputRelativePath>
+			</_DebugSymbolGenerationItem>
+
+			<!-- add any items from watch apps -->
+			<_DebugSymbolGenerationItem Include="@(_WatchAppDebugSymbolGenerationItem -> '$(_AppBundlePath)Watch/%(InputRelativePath)')" Condition="@(_WatchAppDebugSymbolGenerationItem->Count()) &gt; 0">
+				<SymbolsListPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)','%(_WatchAppDebugSymbolGenerationItem.SourceProjectPath)/%(_WatchAppDebugSymbolGenerationItem.SymbolsListPath)'))</SymbolsListPath>
+				<InputRelativePath>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))/$(_AppPlugInsRelativePath)%(InputRelativePath)</InputRelativePath>
+			</_DebugSymbolGenerationItem>
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_GenerateFrameworkDebugSymbols" Condition="(('$(_PlatformName)' == 'macOS') Or (('$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false') and '$(IsMacEnabled)' == 'true'))" DependsOnTargets="_CopyUserFrameworkDebugSymbols;_CollectFrameworks;_CalculateFrameworkDebugSymbolPath"
-		Inputs="%(_Frameworks.Identity)"
-		Outputs="%(_Frameworks._Destination)\Contents\Info.plist"
+	<Target
+		Name="_StoreCollectedItemsForDebugSymbolsGeneration"
+		DependsOnTargets="_CollectItemsForDebugSymbolsGeneration"
 		>
-
-		<!-- Due to MSB4116 we can not check _DestinationExists in the condition for this target, thus all tasks must check it themselves -->
-
-		<!-- run dsymutil on embedded frameworks -->
-		<DSymUtil
-			SessionId="$(BuildSessionId)"
-			Condition="'$(NoDSymUtil)' == 'false' and '%(_Frameworks._DestinationExists)' != 'true' "
-			DSymDir="%(_Frameworks._Destination)"
-			Executable="%(_Frameworks.Identity)"
-			ToolExe="$(DSymUtilExe)"
-			ToolPath="$(DSymUtilPath)">
-		</DSymUtil>
-
-		<!-- strip embedded frameworks -->
-		<SymbolStrip
-			SessionId="$(BuildSessionId)"
-			Condition="'$(NoSymbolStrip)' == 'false' and '%(_Frameworks._DestinationExists)' != 'true' "
-			Executable="%(_Frameworks.Identity)"
-			IsFramework="true"
-			SymbolFile="">
-		</SymbolStrip>
-
-		<!-- _GenerateDebugSymbols will run spotlight to index the dSYMs -->
-	</Target>
-
-	<Target Name="_PrepareDebugSymbolGeneration" Condition="('$(_PlatformName)' == 'macOS') Or ('$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false')" DependsOnTargets="_CompileToNative;_ParseBundlerArguments"
-			Inputs="$(_NativeExecutable)" Outputs="$(DeviceSpecificOutputPath)dsym.items">
-
-		<!-- For App Extensions, we delay running dsymutil & strip until it has been copied into the main app bundle... -->
-		<!-- This needs to be executed in a task (and not here inside the target) so the execution always occur on the mac, even when the build is done from Windows -->
-		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(_MtouchSymbolsList)">
-			<Output TaskParameter="FullPath" PropertyName="_SymbolsListFullPath" />
-		</GetFullPath>
-
-		<!-- For App Extensions, we delay running dsymutil & strip until it has been copied into the main app bundle... -->
-		<PropertyGroup>
-			<!-- [System.IO.Path]::GetFileName() is safe to use -->
-			<_NativeExecutableFileName>$([System.IO.Path]::GetFileName('$(_NativeExecutable)'))</_NativeExecutableFileName>
-			<_AppBundleFileName>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))</_AppBundleFileName>
-		</PropertyGroup>
-
 		<ItemGroup>
-			<_AppExtensionDebugSymbolProperties Remove="@(_AppExtensionDebugSymbolProperties)" />
-
-			<_AppExtensionDebugSymbolProperties Include="$(_AppBundleFileName)">
-				<NativeExecutable>$(_NativeExecutableFileName)</NativeExecutable>
-				<NoSymbolStrip>$(NoSymbolStrip)</NoSymbolStrip>
-				<SymbolsList>$(_SymbolsListFullPath)</SymbolsList>
-				<NoDSymUtil>$(NoDSymUtil)</NoDSymUtil>
-			</_AppExtensionDebugSymbolProperties>
+			<_DebugSymbolGenerationItem>
+				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
+			</_DebugSymbolGenerationItem>
 		</ItemGroup>
-
 		<WriteItemsToFile
-			Condition="'$(IsMacEnabled)' == 'true'"
-			Items="@(_AppExtensionDebugSymbolProperties)"
-			ItemName="_AppExtensionDebugSymbolProperties"
-			File="$(DeviceSpecificOutputPath)dsym.items"
+			Condition="'$(IsMacEnabled)' == 'true' And '$(_DebugSymbolGenerationItemPath)' != ''"
+			Items="@(_DebugSymbolGenerationItem)"
+			ItemName="_DebugSymbolGenerationItem"
+			File="$(_DebugSymbolGenerationItemPath)"
 			IncludeMetadata="true"
 			Overwrite="true"
-		/>
+			/>
 	</Target>
 
 	<PropertyGroup>
 		<GenerateDebugSymbolsDependsOn>
+			$(GenerateDebugSymbolsDependsOn);
 			_CompileToNative;
+			_GetNativeExecutableName;
 			_ParseBundlerArguments;
-			_CalculateFrameworkDebugSymbolPath;
-			_GenerateFrameworkDebugSymbols;
-			_GenerateAppExtensionDebugSymbols;
-			_PrepareDebugSymbolGeneration
+		</GenerateDebugSymbolsDependsOn>
+		<GenerateDebugSymbolsDependsOn Condition="'$(UsingAppleNETSdk)' == 'true'">
+			$(GenerateDebugSymbolsDependsOn);
+			_CollectRidSpecificSymbolLists;
+			_CollectRidSpecificUserFrameworksWithoutDebugSymbols;
+		</GenerateDebugSymbolsDependsOn>
+		<GenerateDebugSymbolsDependsOn>
+			$(GenerateDebugSymbolsDependsOn);
+			_CollectItemsForDebugSymbolsGeneration;
+			_StoreCollectedItemsForDebugSymbolsGeneration;
 		</GenerateDebugSymbolsDependsOn>
 	</PropertyGroup>
 
-	<Target Name="_GenerateDebugSymbols" Condition="('$(_PlatformName)' == 'macOS') Or ('$(ComputedPlatform)' == 'iPhone' And '$(IsWatchApp)' == 'false')" DependsOnTargets="$(GenerateDebugSymbolsDependsOn)"
-		Inputs="$(_NativeExecutable)" Outputs="$(AppBundleDir).dSYM\Contents\Info.plist">
+	<PropertyGroup Condition="'$(_PostProcess)' == ''">
+		<_PostProcess Condition="'$(IsAppExtension)' == 'true'">false</_PostProcess> <!-- we don't run dsymutil/strip in app extensions, only in the main executable project -->
+		<_PostProcess Condition="'$(_PostProcess)' == '' And '$(ComputedPlatform)' == 'iPhone'">true</_PostProcess> <!-- default to true when building for device -->
+		<_PostProcess Condition="'$(_PostProcess)' == '' And ('$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst')">true</_PostProcess> <!-- default to true when building for desktop -->
+		<_PostProcess Condition="'$(_PostProcess)' == ''">false</_PostProcess> <!-- otherwise default to false -->
+	</PropertyGroup>
 
-		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false'" Directories="$(AppBundleDir).dSYM" />
-		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
+	<PropertyGroup>
+		<_PostProcessAppBundleDependsOn>
+			$(_PostProcessAppBundleDependsOn);
+			$(GenerateDebugSymbolsDependsOn);
+			_CollectItemsForDebugSymbolsGeneration;
+			_StoreCollectedItemsForDebugSymbolsGeneration;
+			_PreparePostProcessing;
+			_GenerateDSym;
+			_NativeStripFiles;
+			_NotifySpotlight;
+		</_PostProcessAppBundleDependsOn>
+	</PropertyGroup>
 
-		<!-- run dsymutil on the main bundle -->
+	<Target Name="_PostProcessAppBundle" DependsOnTargets="$(_PostProcessAppBundleDependsOn)" />
+
+	<Target Name="_PreparePostProcessing" DependsOnTargets="_CollectItemsForDebugSymbolsGeneration">
+		<ItemGroup>
+			<_GenerateDSymItem Include="@(_DebugSymbolGenerationItem)" Condition="'%(NoDSymUtil)' != 'true'">
+				<DSymDir>$(_OutputDsymLocation)%(DSymName)</DSymDir>
+				<BCSymbolMapPath>$(_OutputDsymLocation)%(BCSymbolMapName)</BCSymbolMapPath>
+				<dSYMInfoPlist>$(_OutputDsymLocation)%(dSYMInfoPlistRelativePath)</dSYMInfoPlist>
+			</_GenerateDSymItem>
+			<_NativeStripItem Include="@(_DebugSymbolGenerationItem)" Condition="'%(NoSymbolStrip)' != 'true'">
+				<StripStampFile>$(DeviceSpecificIntermediateOutputPath)strip/%(Identity)</StripStampFile>
+			</_NativeStripItem>
+		</ItemGroup>
+	</Target>
+
+	<!-- This target will execute dsymutil on items in the _GenerateDSymItem item group -->
+	<Target
+		Name="_GenerateDSym"
+		Condition="'$(_PostProcess)' == 'true'"
+		Inputs="@(_GenerateDSymItem)"
+		Outputs="@(_GenerateDSymItem -> '%(dSYMInfoPlist)')"
+		DependsOnTargets="_PreparePostProcessing"
+		>
+
+		<!-- Remove any pre-existing dSYM directories -->
+		<RemoveDir
+				SessionId="$(BuildSessionId)"
+				Condition="'$(IsMacEnabled)' == 'true'"
+				Directories="%(_GenerateDSymItem.DSymDir)"
+		/>
+
+		<!-- Remove any pre-existing bcsymbolmap files as well -->
+		<Delete
+				SessionId="$(BuildSessionId)"
+				Condition="'$(IsMacEnabled)' == 'true'"
+				Files="%(_GenerateDSymItem.BCSymbolMapPath)"
+		/>
+
+		<!-- run dsymutil on the item in question -->
 		<DSymUtil
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(NoDSymUtil)' == 'false' And '$(IsAppExtension)' == 'false'"
-			DSymDir="$(AppBundleDir).dSYM"
-			Executable="$(_NativeExecutable)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			DSymDir="%(_GenerateDSymItem.DSymDir)"
+			Executable="%(_GenerateDSymItem.Identity)"
 			ToolExe="$(DSymUtilExe)"
 			ToolPath="$(DSymUtilPath)"
 		>
 		</DSymUtil>
+	</Target>
 
-		<!-- strip the debug symbols from the $(_NativeExecutable) -->
+	<!-- This target will execute strip on items in the _NativeStripItem item group -->
+	<Target
+		Name="_NativeStripFiles"
+		Condition="'$(_PostProcess)' == 'true'"
+		Inputs="@(_NativeStripItem)"
+		Outputs="@(_NativeStripItem -> '%(StripStampFile)')"
+		DependsOnTargets="_PreparePostProcessing"
+		>
+
+		<ItemGroup>
+			<_NativeStripItem>
+				<IsFramework Condition="'%(_NativeStripItem.Kind)' == 'Framework' Or '%(_NativeStripItem.Kind)' == 'Dynamic'">true</IsFramework>
+				<IsFramework Condition="'%(_NativeStripItem.IsFramework)' == ''">false</IsFramework>
+			</_NativeStripItem>
+		</ItemGroup>
+
+		<!-- strip the debug symbols from the executable -->
 		<SymbolStrip
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(NoSymbolStrip)' == 'false' And '$(IsAppExtension)' == 'false'"
-			Executable="$(_NativeExecutable)"
-			IsFramework="false"
-			SymbolFile="$(_MtouchSymbolsList)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Executable="%(_NativeStripItem.Identity)"
+			IsFramework="%(_NativeStripItem.IsFramework)"
+			SymbolFile="%(_NativeStripItem.SymbolsListPath)"
 		>
 		</SymbolStrip>
 
-		<!-- touch the dSYM Info.plist so that its mtime is newer than the stripped $(_NativeExecutable) -->
+		<!-- Create/touch the stamp file. -->
+		<MakeDir
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Directories="$([System.IO.Path]::GetDirectoryName('%(_NativeStripItem.StripStampFile)'))" />
 		<Touch
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(NoSymbolStrip)' == 'false' And '$(IsAppExtension)' == 'false' And Exists('$(AppBundleDir).dSYM')"
-			Files="$(AppBundleDir).dSYM\Contents\Info.plist"
-		>
-		</Touch>
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Files="%(_NativeStripItem.StripStampFile)"
+			AlwaysCreate="true"
+		/>
 
-		<!-- make sure spotlight indexes everything we've built -->
+		<!--
+			Also touch the dSYM Info.plist so that its mtime is newer than the stripped executable,
+			otherwise we might end up re-executing dsymutil on a stripped binary
+		-->
+		<Touch
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true' And Exists('%(_NativeStripItem.dSYMInfoPlist)')"
+			Files="%(_NativeStripItem.dSYMInfoPlist)"
+		/>
+	</Target>
+
+	<!-- make sure spotlight indexes everything we've built -->
+	<Target
+		Name="_NotifySpotlight"
+		Condition="'$(_PostProcess)' == 'true'"
+		>
 		<SpotlightIndexer
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(NoDSymUtil)' == 'false' And '$(IsAppExtension)' == 'false'"
-			Input="$(AppBundleDir)/../"
-		>
-		</SpotlightIndexer>
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Input="$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))"
+		/>
 	</Target>
 
 	<Target Name="_CreateDebugSettings" Condition="'$(_BundlerDebug)' == 'true' And '$(IsWatchApp)' == 'false' And '$(_PlatformName)' != 'MacCatalyst' And '$(_PlatformName)' != 'macOS'"

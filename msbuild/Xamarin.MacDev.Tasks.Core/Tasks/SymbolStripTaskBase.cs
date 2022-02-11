@@ -1,64 +1,75 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
+
+using Parallel = System.Threading.Tasks.Parallel;
+using ParallelOptions = System.Threading.Tasks.ParallelOptions;
 
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
+
+#nullable enable
 
 namespace Xamarin.MacDev.Tasks
 {
-	public abstract class SymbolStripTaskBase : XamarinToolTask
+	public abstract class SymbolStripTaskBase : XamarinTask
 	{
 		#region Inputs
 
 		[Required]
-		public string Executable { get; set; }
+		public ITaskItem[] Executable { get; set; } = Array.Empty<ITaskItem> ();
 
-		public string SymbolFile { get; set; }
+		public string SymbolFile { get; set; } = string.Empty;
 
-		[Required]
 		public bool IsFramework { get; set; }
 
+		// the executable is a relative path to this directory
+		[Required]
+		public string OutputDirectory { get; set; } = string.Empty;
 		#endregion
 
-		protected override string ToolName {
-			get { return "strip"; }
+		string GetSymbolFile (ITaskItem item)
+		{
+			return GetNonEmptyStringOrFallback (item, "SymbolFile", SymbolFile);
 		}
 
-		protected override string GenerateFullPathToTool ()
+		bool GetIsFramework (ITaskItem item)
 		{
-			if (!string.IsNullOrEmpty (ToolPath))
-				return Path.Combine (ToolPath, ToolExe);
-
-			var path = Path.Combine (AppleSdkSettings.DeveloperRoot, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", ToolExe);
-
-			return File.Exists (path) ? path : ToolExe;
+			var value = GetNonEmptyStringOrFallback (item, "IsFramework", IsFramework ? "true" : "false", required: true);
+			return string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		void ExecuteStrip (ITaskItem item)
 		{
-			var args = new CommandLineBuilder ();
+			var args = new List<string> ();
 
-			if (!string.IsNullOrEmpty (SymbolFile)) {
-				args.AppendSwitch ("-i");
-				args.AppendSwitch ("-s");
-				args.AppendFileNameIfNotNull (SymbolFile);
+			args.Add ("strip");
+
+			var symbolFile = GetSymbolFile (item);
+			if (!string.IsNullOrEmpty (symbolFile)) {
+				args.Add ("-i");
+				args.Add ("-s");
+				args.Add (symbolFile);
 			}
 
-			if (IsFramework) {
+			if (GetIsFramework (item)) {
 				// Only remove debug symbols from frameworks.
-				args.AppendSwitch ("-S");
-				args.AppendSwitch ("-x");
+				args.Add ("-S");
+				args.Add ("-x");
 			}
 
-			args.AppendFileNameIfNotNull (Executable);
+			var outputDirectory = GetNonEmptyStringOrFallback (item, "OutputDirectory", OutputDirectory, required: true);
+			args.Add (Path.GetFullPath (Path.Combine (outputDirectory, item.ItemSpec)));
 
-			return args.ToString ();
+			ExecuteAsync ("xcrun", args).Wait ();
 		}
 
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
+		public override bool Execute ()
 		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			Parallel.ForEach (Executable, new ParallelOptions { MaxDegreeOfParallelism = Math.Max (Environment.ProcessorCount / 2, 1) }, (item) => {
+				ExecuteStrip (item);
+			});
+
+			return !Log.HasLoggedErrors;
 		}
 	}
 }

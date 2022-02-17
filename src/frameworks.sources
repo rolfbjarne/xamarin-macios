@@ -1842,7 +1842,6 @@ WKWEBKIT_SOURCES = \
 
 SHARED_API_SOURCES = \
 	ObjCRuntime/ObsoleteConstants.cs \
-	ObjCRuntime/NFloat.cs \
 
 SHARED_CORE_SOURCES = \
 	MinimumVersions.cs \

@@ -3,7 +3,6 @@ using ObjCRuntime;
 using System;
 
 namespace CoreTelephony {
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[Deprecated (PlatformName.iOS, 10,0, message: Constants.UseCallKitInstead)]
 	[BaseType (typeof (NSObject))]
 	interface CTCall {
@@ -15,7 +14,6 @@ namespace CoreTelephony {
 
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[iOS (9,0)]
 	[BaseType (typeof (NSObject))]
 	interface CTCellularData {
@@ -27,7 +25,6 @@ namespace CoreTelephony {
 	}
 	
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[Static]
 	[iOS (7,0)]
 	interface CTRadioAccessTechnology {
@@ -75,7 +72,6 @@ namespace CoreTelephony {
 
 	interface ICTTelephonyNetworkInfoDelegate {}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[iOS (13,0)]
 #if NET
 	[Protocol, Model]
@@ -89,7 +85,6 @@ namespace CoreTelephony {
 		void DataServiceIdentifierDidChange (string identifier);
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[BaseType (typeof (NSObject))]
 	interface CTTelephonyNetworkInfo {
 		[Deprecated (PlatformName.iOS, 12,0, message: "Use 'ServiceSubscriberCellularProviders' instead.")]
@@ -122,7 +117,6 @@ namespace CoreTelephony {
 		[Export ("serviceSubscriberCellularProvidersDidUpdateNotifier", ArgumentSemantic.Copy)]
 		Action<NSString> ServiceSubscriberCellularProvidersDidUpdateNotifier { get; set; }
 
-		[Obsoleted (PlatformName.iOS, 14,0, message: "Use the 'CallKit' API instead.")]
 		[iOS (12,0)]
 		[Notification]
 		[Field ("CTServiceRadioAccessTechnologyDidChangeNotification")]
@@ -142,7 +136,6 @@ namespace CoreTelephony {
 		NSObject WeakDelegate { get; set; }
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: "Replaced by 'CXCallObserver' from 'CallKit'.")]
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Replaced by 'CXCallObserver' from 'CallKit'.")]
 	[BaseType (typeof (NSObject))]
 	interface CTCallCenter {
@@ -156,7 +149,6 @@ namespace CoreTelephony {
 
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[BaseType (typeof (NSObject))]
 	interface CTCarrier {
 		[NullAllowed]
@@ -181,7 +173,6 @@ namespace CoreTelephony {
 
 	interface ICTSubscriberDelegate {}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[Protocol]
 	[iOS (12,1)]
 	interface CTSubscriberDelegate {
@@ -190,7 +181,6 @@ namespace CoreTelephony {
 		void SubscriberTokenRefreshed (CTSubscriber subscriber);
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[BaseType (typeof (NSObject))]
 	[iOS (7,0)]
 	partial interface CTSubscriber {
@@ -213,7 +203,6 @@ namespace CoreTelephony {
 		ICTSubscriberDelegate Delegate { get; set; }
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[BaseType (typeof (NSObject))]
 	partial interface CTSubscriberInfo {
 		[Deprecated (PlatformName.iOS, 12, 1, message : "Use 'Subscribers' instead.")]
@@ -227,7 +216,6 @@ namespace CoreTelephony {
 		CTSubscriber[] Subscribers { get; }
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[iOS (12,0)]
 	[BaseType (typeof (NSObject))]
 	interface CTCellularPlanProvisioningRequest : NSSecureCoding {
@@ -250,7 +238,6 @@ namespace CoreTelephony {
 		string Eid { get; set; }
 	}
 
-	[Obsoleted (PlatformName.iOS, 14,0, message: Constants.UseCallKitInstead)]
 	[iOS (12,0)]
 	[BaseType (typeof (NSObject))]
 	interface CTCellularPlanProvisioning {

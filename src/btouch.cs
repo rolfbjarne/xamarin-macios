@@ -229,6 +229,7 @@ public class BindingTouch : IDisposable {
 		var defines = new List<string> ();
 		string? generate_file_list = null;
 		bool process_enums = false;
+		bool noNFloatUsing = false;
 
 		ErrorHelper.ClearWarningLevels ();
 
@@ -314,6 +315,10 @@ public class BindingTouch : IDisposable {
 					} catch (Exception ex) {
 						throw ErrorHelper.CreateError (26, ex.Message);
 					}
+				}
+			},
+			{ "no-nfloat-using:", "If a global using alias directive for 'nfloat = System.Runtime.InteropServices.NFloat' should automatically be created.", (v) => {
+					noNFloatUsing = string.Equals ("true", v, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty (v);
 				}
 			},
 			new Mono.Options.ResponseFileSource (),

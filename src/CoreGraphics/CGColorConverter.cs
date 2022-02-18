@@ -23,6 +23,7 @@ using Foundation;
 
 namespace CoreGraphics {
 
+#if !NET
 	[TV (9,2)]
 	[iOS (9,3)]
 	[Obsoleted (PlatformName.TvOS, 10,0, message: "Replaced by 'CGColorConversionInfoTriple'.")]
@@ -33,8 +34,10 @@ namespace CoreGraphics {
 		public CGColorConverterTransformType Transform;
 		public CGColorRenderingIntent Intent;
 	}
+#endif // !NET
 
 	// CGColorConverter.h
+#if !NET
 	[TV (9,2)]
 	[iOS (9,3)]
 	[Obsoleted (PlatformName.TvOS, 10,0, message: "Replaced by 'CGColorConversionInfo'.")]
@@ -45,6 +48,7 @@ namespace CoreGraphics {
 		{
 		}
 	}
+#endif // !NET
 }
 
 #endif // !MONOMAC && !WATCH

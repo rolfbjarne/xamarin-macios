@@ -878,6 +878,13 @@ namespace GeneratorTests
 			verifyDelegate ("NSTableViewColumnRowPredicate");
 		}
 
+		[Test]
+		public void NIntType ()
+		{
+			var bgen = BuildFile (Profile.iOS, "tests/nint.cs");
+
+		}
+
 		BGenTool BuildFile (Profile profile, params string [] filenames)
 		{
 			return BuildFile (profile, true, false, filenames);

@@ -471,6 +471,14 @@ public class BindingTouch : IDisposable {
 			if (!string.IsNullOrEmpty (Path.GetDirectoryName (baselibdll)))
 				cargs.Add ("-lib:" + Path.GetDirectoryName (baselibdll));
 
+#if NET
+			var tmpusing = Path.Combine (tmpdir, "GlobalUsings.g.cs");
+			if (!noNFloatUsing) {
+				File.WriteAllText (tmpusing, "global using nfloat = global::System.Runtime.InteropServices.NFloat;\n");
+				cargs.Add (tmpusing);
+			}
+#endif
+
 			Compile (cargs, 2);
 
 			universe = new MetadataLoadContext (
@@ -596,6 +604,11 @@ public class BindingTouch : IDisposable {
 			}
 			if (!string.IsNullOrEmpty (Path.GetDirectoryName (baselibdll)))
 				cargs.Add ("-lib:" + Path.GetDirectoryName (baselibdll));
+
+#if NET
+			if (!noNFloatUsing)
+				cargs.Add (tmpusing);
+#endif
 
 			Compile (cargs, 1000);
 		} finally {

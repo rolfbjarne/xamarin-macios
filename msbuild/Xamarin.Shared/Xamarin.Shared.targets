@@ -340,8 +340,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</GetDirectories>
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).mSYM;@(_DebugSymbolDir)" />
-		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
-		<Delete SessionId="$(BuildSessionId)" Condition="(('$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'true') Or '$(_PlatformName)' == 'macOS')" Files="$(DeviceSpecificOutputPath)dsym.items" />
+		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
+		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)dsym.items" />
 	</Target>
 
 	<Target Name="_CleanITunesArtwork" Condition="'$(_CanArchive)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures">
@@ -1755,6 +1755,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_CodesignAppExtensions;
 			_PrepareCodesignAppExtension;
 			_CalculateCodesignAppBundleInputs;
+			_GetNativeStripStampFilesForCodeSigning;
+			_GetDSymStampFilesForCodeSigning;
 		</_CodesignAppBundleDependsOn>
 
 		<CoreCodesignDependsOn>
@@ -2041,7 +2043,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<ItemGroup Condition="'$(_CodesignAppBundleCondition)' == 'true'">
 			<_CodesignItems Include="$(AppBundleDir)">
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
-				<CodesignAdditionalFilesToTouch>$(AppBundleDir).dSYM\Contents\Info.plist</CodesignAdditionalFilesToTouch>
+				<CodesignAdditionalFilesToTouch></CodesignAdditionalFilesToTouch>
 				<CodesignDeep>$(IsAppExtension)</CodesignDeep>
 				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
 				<CodesignEntitlements>$(_AppBundleCodesignEntitlements)</CodesignEntitlements>
@@ -2078,6 +2080,50 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<_CodesignItems Condition="'%(_CodesignItems.CodesignStampFile)' == ''">
 				<CodesignStampFile Condition="'%(_CodesignItems.IsInputDirectory)' != 'true'">%(_CodesignItems.CodesignStampPath)\%(_CodesignItems.CodesignRelativeAppBundlePath)</CodesignStampFile>
 				<CodesignStampFile Condition="'%(_CodesignItems.IsInputDirectory)' == 'true'">%(_CodesignItems.CodesignStampPath)\%(_CodesignItems.CodesignRelativeAppBundlePath)\.directory-stamp</CodesignStampFile>
+			</_CodesignItems>
+		</ItemGroup>
+	</Target>
+
+	<!-- If any of the files we're signing were stripped, we need to touch the _NativeStrip's stamp file again,
+	     because we changed the executable by signing it, and we mustn't re-strip it in the next build.
+	     We use target-batching here to add metadata from one itemgroup in items in a different item group.
+	 -->
+	<Target
+		Name="_GetNativeStripStampFilesForCodeSigning"
+		Inputs="@(_NativeStripItem)"
+		Outputs="@(_NativeStripItem->'%(Identity)/make/this/batch')"
+	>
+		<PropertyGroup>
+			<_CodesignItemIdentityForPostProcessing>$([System.IO.Path]::GetDirectoryName('%(_NativeStripItem.Identity)'))</_CodesignItemIdentityForPostProcessing>
+			<_CodesignItemStampFileForPostProcessing>%(_NativeStripItem.StripStampFile)</_CodesignItemStampFileForPostProcessing>
+		</PropertyGroup>
+		<ItemGroup>
+			<_CodesignItems Condition="'%(_CodesignItems.Identity)' == '$(_CodesignItemIdentityForPostProcessing)'">
+				<AMetadata>hoorah</AMetadata>
+				<StripStampFileForCodesign>$(_CodesignItemStampFileForPostProcessing)</StripStampFileForCodesign>
+				<CodesignAdditionalFilesToTouch>%(_CodesignItems.CodesignAdditionalFilesToTouch);$(_CodesignItemStampFileForPostProcessing)</CodesignAdditionalFilesToTouch>
+			</_CodesignItems>
+		</ItemGroup>
+	</Target>
+
+	<!-- If any of the files we're signing were dsymutil'ed, we need to touch the _GenerateDSym's stamp file again,
+	     because we changed the executable by signing it, and we mustn't re-dsymutil it in the next build.
+	     We use target-batching here to add metadata from one itemgroup in items in a different item group.
+	 -->
+	<Target
+		Name="_GetDSymStampFilesForCodeSigning"
+		Inputs="@(_GenerateDSymItem)"
+		Outputs="@(_GenerateDSymItem->'%(Identity)/make/this/batch')"
+	>
+		<PropertyGroup>
+			<_GenerateDSymItemIdentityForCodeSigning>$([System.IO.Path]::GetDirectoryName('%(_GenerateDSymItem.Identity)'))</_GenerateDSymItemIdentityForCodeSigning>
+			<_GenerateDSymItemStampFileForCodeSigning>%(_GenerateDSymItem.dSYMInfoPlist)</_GenerateDSymItemStampFileForCodeSigning>
+		</PropertyGroup>
+		<ItemGroup>
+			<_CodesignItems Condition="'%(_CodesignItems.Identity)' == '$(_GenerateDSymItemIdentityForCodeSigning)'">
+				<BMetadata>hooraay</BMetadata>
+				<dSYMStampFileForCodeSigning>$(_GenerateDSymItemStampFileForCodeSigning)</dSYMStampFileForCodeSigning>
+				<CodesignAdditionalFilesToTouch>%(CodesignAdditionalFilesToTouch);$(_GenerateDSymItemStampFileForCodeSigning)</CodesignAdditionalFilesToTouch>
 			</_CodesignItems>
 		</ItemGroup>
 	</Target>
@@ -2282,10 +2328,18 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		Generating debug symbols (dSYM directories) and stripping binaries.
 
-		* First we collect all the frameworks, dylibs and executable files from both the current project and any contained app extensions.
-		* We write a list of all these items in a dsym.items file (so that container projects can load them if need be).
-		* If not building a .NET universal app, we run dsymutil/symbolstrip in the executable project.
-		* If we're building a universal app in .NET, we don't run dsymutil/symbolstrip for each rid-specific build, but instead delay until we've created the universal app bundle.
+		* First we collect all the frameworks, dylibs and executable files
+		  from both the current project and any contained app extensions.
+		* We write a list of all these items in a dsym.items file (so that
+		  container projects can load them if need be).
+		* If not building a .NET universal app, we run dsymutil/symbolstrip in
+		  the executable project.
+		* If we're building a universal app in .NET, we don't run
+		  dsymutil/symbolstrip for each rid-specific build, but instead delay
+		  until we've created the universal app bundle.
+		* Watch apps are treated as a separate app bundle (signed, dsymutil'ed
+		  and stripped by itself, and then copied into the main executable's
+		  app bundle).
 
 		* Metadata on items:
 			* NoSymbolStrip: set to true to not strip native symbols for this item (and false to dot it)
@@ -2327,7 +2381,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<ItemGroup>
 			<_AppExtensionDebugSymbolGenerationItemPath Include="@(_ResolvedAppExtensionReferences -> '%(Identity)\..\dsym.items')" Condition="Exists('%(Identity)\..\dsym.items')" />
-			<_WatchAppDebugSymbolGenerationItemPath Include="@(_ResolvedWatchAppReferences -> '%(Identity)\..\dsym.items')" Condition="'%(Identity)\..\dsym.items')"/>
+			<!-- <_WatchAppDebugSymbolGenerationItemPath Include="@(_ResolvedWatchAppReferences -> '%(Identity)\..\dsym.items')" Condition="'%(Identity)\..\dsym.items')"/> -->
 		</ItemGroup>
 	</Target>
 
@@ -2347,9 +2401,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadItemsFromFile>
 
 		<!-- read any data from watch apps -->
-		<ReadItemsFromFile File="@(_WatchAppDebugSymbolGenerationItemPath)">
+<!-- 		<ReadItemsFromFile File="@(_WatchAppDebugSymbolGenerationItemPath)">
 			<Output TaskParameter="Items" ItemName="_WatchAppDebugSymbolGenerationItem" />
-		</ReadItemsFromFile>
+		</ReadItemsFromFile> -->
 
 		<ItemGroup>
 			<_DebugSymbolGenerationItem Include="@(_ResolvedNativeReference)" Condition="@(_ResolvedNativeReference->Count()) &gt; 0">
@@ -2382,10 +2436,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			</_DebugSymbolGenerationItem>
 
 			<!-- add any items from watch apps -->
-			<_DebugSymbolGenerationItem Include="@(_WatchAppDebugSymbolGenerationItem -> '$(_AppBundlePath)Watch/%(InputRelativePath)')" Condition="@(_WatchAppDebugSymbolGenerationItem->Count()) &gt; 0">
+			<!-- <_DebugSymbolGenerationItem Include="@(_WatchAppDebugSymbolGenerationItem -> '$(_AppBundlePath)Watch/%(InputRelativePath)')" Condition="@(_WatchAppDebugSymbolGenerationItem->Count()) &gt; 0">
 				<SymbolsListPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)','%(_WatchAppDebugSymbolGenerationItem.SourceProjectPath)/%(_WatchAppDebugSymbolGenerationItem.SymbolsListPath)'))</SymbolsListPath>
 				<InputRelativePath>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))/$(_AppPlugInsRelativePath)%(InputRelativePath)</InputRelativePath>
-			</_DebugSymbolGenerationItem>
+			</_DebugSymbolGenerationItem> -->
 		</ItemGroup>
 	</Target>
 
@@ -2513,6 +2567,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			</_NativeStripItem>
 		</ItemGroup>
 
+		<Exec Command="stat -f %Fm @(_NativeStripItem) @(_NativeStripItem -> '%(StripStampFile)')" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" />
+
 		<!-- strip the debug symbols from the executable -->
 		<SymbolStrip
 			SessionId="$(BuildSessionId)"
@@ -2544,6 +2600,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Condition="'$(IsMacEnabled)' == 'true' And Exists('%(_NativeStripItem.dSYMInfoPlist)')"
 			Files="%(_NativeStripItem.dSYMInfoPlist)"
 		/>
+
+		<Exec Command="stat -f %Fm @(_NativeStripItem) @(_NativeStripItem -> '%(StripStampFile)')" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true"/>
 	</Target>
 
 	<!-- make sure spotlight indexes everything we've built -->

@@ -33,7 +33,7 @@ namespace Xamarin.MacDev.Tasks {
 			try {
 				Environment.CurrentDirectory = tmpdir;
 				var codesignItems = new List<ITaskItem> ();
-				var codesignProperties = new List<ITaskItem> ();
+				var codesignBundle = new List<ITaskItem> ();
 				var generateDSymItems = new List<ITaskItem> ();
 				var nativeStripItems = new List<ITaskItem> ();
 
@@ -111,13 +111,57 @@ namespace Xamarin.MacDev.Tasks {
 					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/SubDir/W3M4.metallib", P.All),
 				};
 
+				codesignItems = new List<ITaskItem> {
+					new TaskItem ("Bundle.app"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex"),
+					new TaskItem ("Bundle.app/Watch/W1.app"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex"),
+				};
+
+				codesignBundle = new List<ITaskItem> {
+					new TaskItem ("Bundle.app"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex"),
+					new TaskItem ("Bundle.app/Watch/W1.app"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex"),
+				};
+
+				nativeStripItems = new List<ITaskItem> {
+					new TaskItem ("Bundle.app/Bundle"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/P1"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/P2"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/P3"),
+					new TaskItem ("Bundle.app/Watch/W1.app/W1"),
+					new TaskItem ("Bundle.app/Watch/W1W1app/PlugIns/WP1.appex/WP1"),
+					new TaskItem ("Bundle.app/Watch/Watch.app/PlugIns/WP1.appex/PlugIns/WP2.appex/WP2"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/WP3"),
+				};
+
+				generateDSymItems = new List<ITaskItem> {
+					new TaskItem ("Bundle.app/Bundle"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/P1"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/P2"),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/P3"),
+					new TaskItem ("Bundle.app/Watch/W1.app/W1"),
+					new TaskItem ("Bundle.app/Watch/W1W1app/PlugIns/WP1.appex/WP1"),
+					new TaskItem ("Bundle.app/Watch/Watch.app/PlugIns/WP1.appex/PlugIns/WP2.appex/WP2"),
+					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/WP3"),
+				};
+
 				var allFiles = infos.Select (v => Path.Combine ("Bundle.app", v.ItemSpec)).ToArray ();
 				Touch (Path.Combine (tmpdir, "Bundle.app"), allFiles);
 
 				var task = CreateTask<ComputeCodesignItems> ();
 				task.AppBundleDir = "Bundle.app";
+				task.CodesignBundle = codesignBundle.ToArray ();
 				task.CodesignItems = codesignItems.ToArray ();
-				task.CodesignProperties = codesignProperties.ToArray ();
 				task.GenerateDSymItem = generateDSymItems.ToArray ();
 				task.NativeStripItem = nativeStripItems.ToArray ();
 				task.TargetFrameworkMoniker = TargetFramework.GetTargetFramework (platform, isDotNet).ToString ();
@@ -125,11 +169,11 @@ namespace Xamarin.MacDev.Tasks {
 
 				// FIXME: validate
 				var outputCodesignItems = (ITaskItem []) task.OutputCodesignItems;
-				Assert.That (outputCodesignItems.Select (v => v.ItemSpec), Is.All.Unique, "Uniqueness");
+				Assert.That (outputCodesignItems.Select (v => v.ItemSpec), Is.Unique, "Uniqueness");
 
 				var failures = new List<string> ();
 				foreach (var info in infos) {
-					info.CodesignItem = outputCodesignItems.SingleOrDefault (v => v.ItemSpec == Path.Combine ("Bundle.app", info.ItemSpec));
+					info.CodesignItem = outputCodesignItems.SingleOrDefault (v => string.Equals (v.ItemSpec, Path.Combine ("Bundle.app", info.ItemSpec), StringComparison.OrdinalIgnoreCase));
 					if (IsPlatform (info.SignedOn, platform)) {
 						if (info.CodesignItem is null) {
 							failures.Add ($"Expected '{info.ItemSpec}' to be signed.");
@@ -140,6 +184,9 @@ namespace Xamarin.MacDev.Tasks {
 						}
 					}
 				}
+				Console.WriteLine ($"{failures.Count} failures:");
+				foreach (var f in failures)
+					Console.WriteLine (f);
 				Assert.That (failures, Is.Empty, "Failures");
 			} finally {
 				Environment.CurrentDirectory = currentDir;

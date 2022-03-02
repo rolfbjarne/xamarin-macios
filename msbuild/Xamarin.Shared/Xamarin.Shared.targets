@@ -377,7 +377,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)codesign.items" />
-		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)codesign-properties.items" />
+		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)codesign-bundle.items" />
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="@(_IpaPackageFile)" />
 	</Target>
 
@@ -1913,20 +1913,20 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<!-- This target reads any code signing properties from contained app extensions or watch apps, and store them in the _CodesigningProperties. -->
 	<!-- Fix dependency on _ResolveWatchAppReferences FIXME -->
 	<Target
-		Name="_ReadCodesigningProperties"
+		Name="_ComputeCodesigningData"
 		DependsOnTargets="_PlaceAppExtensions;"
 		>
 
-		<ReadItemsFromFile File="%(_ResolvedAppExtensionReferences.Identity)\..\codesign-properties.items" Condition="Exists('%(_ResolvedAppExtensionReferences.Identity)\..\codesign-properties.items')">
-			<Output TaskParameter="Items" ItemName="_CodesignProperties" />
+		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign-bundle.items')">
+			<Output TaskParameter="Items" ItemName="_CodesignAppExtensionBundle" />
 		</ReadItemsFromFile>
 
-		<ReadItemsFromFile File="%(_ResolvedWatchAppReferences.Identity)\..\codesign-properties.items" Condition="Exists('%(_ResolvedWatchAppReferences.Identity)\..\codesign-properties.items')">
-			<Output TaskParameter="Items" ItemName="_CodesignProperties" />
+		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign-bundle.items')">
+			<Output TaskParameter="Items" ItemName="_CodesignWatchBundle" />
 		</ReadItemsFromFile>
 
 		<ItemGroup>
-			<_CodesignProperties Include="$(AppBundleDir)">
+			<_CodesignBundle Include="$(AppBundleDir)">
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
 				<DisableTimestamp>false</DisableTimestamp>
 				<DisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">true</DisableTimestamp>
@@ -1936,76 +1936,29 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<ResourceRules>$(_PreparedResourceRules)</ResourceRules>
 				<SigningKey>$(_CodeSigningKey)</SigningKey>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
-			</_CodesignProperties>
+			</_CodesignBundle>
+
+			<_CodesignBundle Include="@(_CodesignAppExtensionBundle->'$(_AppPlugInsRelativePath)/%(Identity)')" />
+			<_CodesignBundle Include="@(_CodesignWatchBundle->'Watch/%(Identity)')" />
 		</ItemGroup>
 	</Target>
 
 	<!-- This target writes all the properties required to sign items for this project, so that they can be read in container projects.
-	     The _CodesignProperties item group also contains items for contained projects this project may have (extension projects may have extension projects). -->
+	     The _CodesignBundle item group also contains items for contained projects this project may have (extension projects may have extension projects). -->
 	<Target
-		Name="_WriteCodesigningProperties"
-		DependsOnTargets="_ReadCodesigningProperties"
+		Name="_WriteCodesigningData"
+		DependsOnTargets="_ComputeCodesigningData"
 		>
 
 		<WriteItemsToFile
 			Condition="'$(IsMacEnabled)' == 'true'"
 			SessionId="$(BuildSessionId)'"
-			Items="@(_CodesignProperties)"
-			ItemName="_CodesignProperties"
-			File="$(DeviceSpecificOutputPath)codesign-properties.items"
+			Items="@(_CodesignBundle)"
+			ItemName="_CodesignBundle"
+			File="$(DeviceSpecificOutputPath)codesign-bundle.items"
 			IncludeMetadata="true"
 			Overwrite="true"
 		/>
-	</Target>
-
-	<Target Name="_WriteCodesigningProperties" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' == 'true' And '@(_ResolvedAppBundleExtensions)' == ''">
-		<!-- For App Extensions, we delay running codesign until it has been copied into the main app bundle... -->
-		<PropertyGroup>
-			<_CompiledEntitlementsFullPath></_CompiledEntitlementsFullPath>
-			<_ResourceRulesFullPath></_ResourceRulesFullPath>
-		</PropertyGroup>
-
-		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(AppBundleDir)">
-			<Output TaskParameter="FullPath" PropertyName="_AppBundleFullPath" />
-		</GetFullPath>
-
-		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(_CompiledCodesignEntitlements)' != ''" RelativePath="$(_CompiledCodesignEntitlements)">
-			<Output TaskParameter="FullPath" PropertyName="_CompiledEntitlementsFullPath" />
-		</GetFullPath>
-
-		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(_PreparedResourceRules)' != ''" RelativePath="$(_PreparedResourceRules)">
-			<Output TaskParameter="FullPath" PropertyName="_ResourceRulesFullPath" />
-		</GetFullPath>
-
-		<GetFiles SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(_AppBundleFullPath)" Pattern="*.*" Option="AllDirectories">
-			<Output TaskParameter="Files" ItemName="_AppExtensionBundleFiles" />
-		</GetFiles>
-
-		<PropertyGroup>
-			<!-- [System.IO.Path]::GetFileName() is safe to use -->
-			<_AppBundleFileName>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))</_AppBundleFileName>
-			<_NativeExecutableFileName>$([System.IO.Path]::GetFileName('$(_NativeExecutable)'))</_NativeExecutableFileName>
-
-			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
-			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">True</_CodesignDisableTimestamp>
-		</PropertyGroup>
-
-		<ItemGroup>
-			<_CodesignItems Include="$(_AppBundleFileName)">
-				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
-				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
-				<CodesignEntitlements>$(_CompiledEntitlementsFullPath)</CodesignEntitlements>
-				<CodesignResourceRules>$(_ResourceRulesFullPath)</CodesignResourceRules>
-				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
-				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
-				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
-			</_CodesignItems>
-
-			<!-- add a property to say the directory these items are relative to -->
-			<CodesignItems>
-				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
-			</CodesignItems>
-		</ItemGroup>
 
 		<WriteItemsToFile
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -2019,15 +1972,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_WriteCodesignItems">
-		<WriteItemsToFile
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)'"
-			Items="@(_CodesignItems)"
-			ItemName="_CodesignItems"
-			File="$(DeviceSpecificOutputPath)codesign.items"
-			IncludeMetadata="true"
-			Overwrite="true"
-		/>
 	</Target>
 
 	<Target Name="_CalculateCodesignAppBundleInputs">
@@ -2074,8 +2018,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Condition="'$(IsMacEnabled)' == 'true'"
 			SessionId="$(BuildSessionId)'"
 			AppBundleDir="$(AppBundleDir)"
+			CodesignBundle="@(_CodesignBundle)"
 			CodesignItems="@(_CodesignItems)"
-			CodesignProperties="@(_CodesignProperties)"
 			GenerateDSymItem="@(_GenerateDSymItem)"
 			NativeStripItem="@(_NativeStripItem)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"

@@ -18,7 +18,7 @@ namespace Xamarin.MacDev.Tasks {
 		public string AppBundleDir { get; set; } = string.Empty;
 		[Required]
 		public ITaskItem [] CodesignItems { get; set; } = Array.Empty<ITaskItem> ();
-		public ITaskItem [] CodesignProperties { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] CodesignBundle { get; set; } = Array.Empty<ITaskItem> ();
 		public ITaskItem [] GenerateDSymItem { get; set; } = Array.Empty<ITaskItem> ();
 		public ITaskItem [] NativeStripItem { get; set; } = Array.Empty<ITaskItem> ();
 
@@ -33,13 +33,15 @@ namespace Xamarin.MacDev.Tasks {
 			var appBundlePath = EnsureTrailingSlash (Path.GetFullPath (AppBundleDir));
 
 			// Find all *.dylib files
-			foreach (var properties in CodesignProperties) {
-				var bundlePath = Path.Combine (appBundlePath, properties.GetMetadata ("AppBundleRelativePath"));
+			foreach (var bundle in CodesignBundle) {
+				var bundlePath = Path.Combine (appBundlePath, bundle.ItemSpec);
+				Console.WriteLine ($"    Looking in {bundlePath} for native libraries");
 				var nativeLibraries = FindNativeLibraries (bundlePath);
+				Console.WriteLine ($"    Found {nativeLibraries.Count ()} native libraries in {bundlePath}");
 				foreach (var lib in nativeLibraries) {
 					var relativeLib = lib.Substring (appBundlePath.Length);
 					var item = new TaskItem (relativeLib);
-					properties.CopyMetadataTo (item);
+					bundle.CopyMetadataTo (item);
 					output.Add (item);
 				}
 			}

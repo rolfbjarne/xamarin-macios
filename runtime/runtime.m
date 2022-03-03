@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <objc/runtime.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <dlfcn.h>
 
 #include "product.h"
@@ -1103,10 +1104,9 @@ void
 xamarin_unhandled_exception_handler (MonoObject *exc, gpointer user_data)
 {
 	GCHandle exception_gchandle = xamarin_gchandle_new (exc, false);
-	PRINT ("Unhandled managed exception: %@", xamarin_print_all_exceptions (exception_gchandle));
+	NSString *message = [NSString stringWithFormat: @"Unhandled managed exception: %@", xamarin_print_all_exceptions (exception_gchandle)];
+	xamarin_assertion_message ([message UTF8String]);
 	xamarin_gchandle_free (exception_gchandle);
-
-	abort ();
 }
 
 static void
@@ -1430,10 +1430,11 @@ xamarin_assertion_message (const char *msg, ...)
 	vasprintf (&formatted, msg, args);
 	if (formatted) {
 		PRINT ( PRODUCT ": %s", formatted);
-		free (formatted);
 	}
 	va_end (args);
-	abort ();
+	xamarin_abort_with_message_in_thread_names (formatted);
+	if (formatted)
+		free (formatted);
 }
 
 static const char *
@@ -2977,6 +2978,90 @@ xamarin_gchandle_unwrap (GCHandle handle)
 	xamarin_gchandle_free (handle);
 	return rv;
 }
+
+#if DEBUG
+// This is an absolute insane hack to get additional information in crash reports
+// The only piece of information in the crash report we can control at runtime
+// is the name of a thread.
+// So we create numerous threads, each with a name which is part of the message
+// we want to convey. To make things more complicated, nothing at all shows up
+// in the crash report if the name is >63 characters, so we split on length as well.
+// This is too hackish to enable in a release build, so keep it debug-only.
+pthread_mutex_t crash_info_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t crash_info_condition = PTHREAD_COND_INITIALIZER;
+int crash_info_thread_count = 0;
+
+static void *
+crash_info_thread_entry_point (void *info)
+{
+	// set the name of the thread to the text we want to show
+	char *text = (char *) info;
+	pthread_setname_np (text);
+	// tell the main thread we're done
+	pthread_mutex_lock (&crash_info_mutex);
+	crash_info_thread_count--;
+	pthread_cond_signal(&crash_info_condition);
+	pthread_mutex_unlock (&crash_info_mutex);
+	// wait for 30 seconds before finishing, just in case
+	sleep (30);
+	// don't leak!
+	free (text);
+
+	return NULL;
+}
+
+void
+xamarin_abort_with_message_in_thread_names (const char *message)
+{
+	const char *ptr = message;
+	const char *currentName = message;
+
+	do {
+		ptrdiff_t length = ptr - currentName;
+		if (*ptr == '\n' || *ptr == 0 || length >= 63) {
+			if (length > 0) { // don't waste threads reporting empty lines
+				char *line = strndup (currentName, (size_t) length);
+				pthread_t thread;
+				pthread_create (&thread, NULL, crash_info_thread_entry_point, line);
+				crash_info_thread_count++;
+			}
+			currentName = ptr + 1;
+		}
+
+		// did we reach the end?
+		if (*ptr == 0)
+			break;
+
+		// 100 threads is hopefully enough...
+		if (crash_info_thread_count >= 100)
+			break;
+		ptr++;
+	} while (true);
+
+	// Wait until all the threads have set their name (but only for 5 seconds)
+	struct timespec timeToWait = { 0 };
+	struct timeval now;
+	gettimeofday (&now, NULL);
+	timeToWait.tv_sec = now.tv_sec + 5;
+	timeToWait.tv_nsec  = now.tv_usec * 1000L;
+
+	pthread_mutex_lock (&crash_info_mutex);
+	int waitResult = 0;
+	while (waitResult != ETIMEDOUT && crash_info_thread_count > 0) {
+		waitResult = pthread_cond_timedwait (&crash_info_condition, &crash_info_mutex, &timeToWait);
+	}
+	pthread_mutex_unlock (&crash_info_mutex);
+
+	// Let's create a crash report!
+	abort ();
+}
+#else
+void
+xamarin_abort_with_message_in_thread_names (const char *message)
+{
+	abort ();
+}
+#endif
 
 /*
  * Object unregistration:

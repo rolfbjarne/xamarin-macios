@@ -75,7 +75,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.Codesign" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CodesignVerify" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CollectBundleResources" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask TaskName="Xamarin.MacDev.Tasks.CollectFrameworks" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileEntitlements" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ComputeBundleLocation" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ComputeBundleResourceOutputPaths" AssemblyFile="$(_TaskAssemblyName)" />
@@ -1751,16 +1750,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			$(_CodesignAppBundleDependsOn);
 			_CleanAppBundleRootDirectory;
 			_EmbedProvisionProfile;
-			_CodesignNativeLibraries;
-			_CollectFrameworks;
-			_CodesignFrameworks;
-			_ReadCodesigningProperties;
-			_WriteCodesigningProperties;
-			_CodesignAppExtensions;
-			_PrepareCodesignAppExtension;
-			_CalculateCodesignAppBundleInputs;
-			_GetNativeStripStampFilesForCodeSigning;
-			_GetDSymStampFilesForCodeSigning;
+			_ComputeCodesigningData;
+			_WriteCodesigningData;
 		</_CodesignAppBundleDependsOn>
 
 		<CoreCodesignDependsOn>
@@ -1784,56 +1775,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="AfterCodesign" />
 
 	<Target Name="Codesign" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(CodesignDependsOn)" />
-
-	<PropertyGroup>
-		<_CodesignNativeLibrariesDependsOn>
-			$(_CodesignNativeLibrariesDependsOn);
-			_DetectSigningIdentity;
-			_CompileToNative;
-			_PlaceAppExtensions;
-		</_CodesignNativeLibrariesDependsOn>
-	</PropertyGroup>
-
-	<!-- Note:
-		Always codesign *.dylibs even for Simulator builds for iOS/tvOS/watchOS. We use $(_CanOutputAppBundle) because dylibs can exist in app extensions as well.
-		For macOS we sign if _RequireCodeSigning is true
-	-->
-	<Target Name="_CodesignNativeLibraries" Condition="'$(_CanOutputAppBundle)' == 'true' And ('$(_RequireCodeSigning)' == 'true' Or '$(_PlatformName)' != 'macOS')" DependsOnTargets="$(_CodesignNativeLibrariesDependsOn)">
-
-		<PropertyGroup>
-			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
-			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">True</_CodesignDisableTimestamp>
-			<_LibraryCodeSigningKey>$(_CodeSigningKey)</_LibraryCodeSigningKey>
-			<_LibraryCodeSigningKey Condition="'$(_LibraryCodeSigningKey)' == ''">-</_LibraryCodeSigningKey>
-		</PropertyGroup>
-
-		<ItemGroup Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">
-			<_CodesignNativeLibrary Include="$(_AppContentsPath)\**\*.dylib" />
-			<_CodesignNativeLibrary Include="$(_AppResourcesPath)\**\*.metallib" />
-		</ItemGroup>
-		<ItemGroup Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">
-			<_CodesignNativeLibrary
-				Include="$(_AppBundlePath)\**\*.dylib;$(_AppBundlePath)\**\*.metallib"
-				Exclude="$(_AppBundlePath)\Watch\**;$(_AppExtensionRoot)\PlugIns\**"
-				/>
-		</ItemGroup>
-
-		<ItemGroup>
-			<_CodesignItems Include="@(_CodesignNativeLibrary)">
-				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
-				<CodesignDeep>$(IsAppExtension)</CodesignDeep>
-				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
-				<!-- CodesignEntitlements -->
-				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
-				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
-				<!-- CodesignResourceRules -->
-				<CodesignSigningKey>$( )</CodesignSigningKey>
-				<CodesignStampPath>$(DeviceSpecificIntermediateOutputPath)codesign\</CodesignStampPath>
-				<!-- CodesignUseHardenedRuntime-->
-				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-			</_CodesignItems>
-		</ItemGroup>
-	</Target>
 
 	<Target	Name="_CodesignVerify" Condition="'$(_RequireCodeSigning)' == 'true' And '$(IsAppExtension)' != 'true'" DependsOnTargets="_CodesignAppBundle" >
 		<CodesignVerify
@@ -1859,87 +1800,77 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CodesignVerify>
 	</Target>
 
-	<PropertyGroup>
-		<_CollectFrameworksDependsOn>
-			$(_CollectFrameworksDependsOn);
-			_DetectSigningIdentity;
-			_CompileToNative;
-		</_CollectFrameworksDependsOn>
-	</PropertyGroup>
-
-	<Target Name="_CollectFrameworks" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(_CollectFrameworksDependsOn)">
-		<PropertyGroup>
-			<_FrameworksDirectory Condition="'$(_FrameworksDirectory)' == '' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS')">$(_AppBundlePath)/Frameworks</_FrameworksDirectory>
-			<_FrameworksDirectory Condition="'$(_FrameworksDirectory)' == '' And ('$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst')">$(_AppBundlePath)/Contents/Frameworks</_FrameworksDirectory>
-		</PropertyGroup>
-		<CollectFrameworks
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			FrameworksDirectory="$(_FrameworksDirectory)"
-			>
-			<Output TaskParameter="Frameworks" ItemName="_Frameworks"/>
-		</CollectFrameworks>
-		<PropertyGroup>
-			<_MustCodesignFrameworks Condition="'$(_PlatformName)' == 'macOS' And '$(_RequireCodeSigning)' == 'true' And '@(_Frameworks)' != ''">true</_MustCodesignFrameworks>
-			<_MustCodesignFrameworks Condition="'$(_PlatformName)' != 'macOS' And '$(_CanOutputAppBundle)' == 'true' And '@(_Frameworks)' != ''">true</_MustCodesignFrameworks>
-		</PropertyGroup>
-	</Target>
-
-	<Target Name="_CodesignFrameworks" Condition="'$(_MustCodesignFrameworks)' == 'true'" DependsOnTargets="_DetectSigningIdentity;_CollectFrameworks">
-
-		<PropertyGroup>
-			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
-			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">True</_CodesignDisableTimestamp>
-			<_FrameworkCodeSigningKey>$(_CodeSigningKey)</_FrameworkCodeSigningKey>
-			<_FrameworkCodeSigningKey Condition="'$(_FrameworkCodeSigningKey)' == ''">-</_FrameworkCodeSigningKey>
-		</PropertyGroup>
-
-		<ItemGroup>
-			<_CodesignItems Include="@(_Frameworks)">
-				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
-				<!-- CodesignDeep -->
-				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
-				<!-- CodesignEntitlements -->
-				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
-				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
-				<!-- CodesignResourceRules -->
-				<CodesignSigningKey>$(_FrameworkCodeSigningKey)</CodesignSigningKey>
-				<!-- CodesignUseHardenedRuntime -->
-				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-			</_CodesignItems>
-		</ItemGroup>
-	</Target>
-
 	<!-- This target reads any code signing properties from contained app extensions or watch apps, and store them in the _CodesigningProperties. -->
 	<!-- Fix dependency on _ResolveWatchAppReferences FIXME -->
+
+	<!--
+
+		_CodesignAppBundle:
+			All the app bundles that must be signed (current app bundle + contained app bundles (recursively)).
+			ItemSpec: the app bundle directory, relative to the output directory.
+
+	-->
 	<Target
 		Name="_ComputeCodesigningData"
 		DependsOnTargets="_PlaceAppExtensions;"
 		>
 
+		<!-- Get app bundles to sign from app extensions -->
 		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign-bundle.items')">
 			<Output TaskParameter="Items" ItemName="_CodesignAppExtensionBundle" />
 		</ReadItemsFromFile>
+		<ItemGroup>
+			<_CodesignBundle Include="@(_CodesignAppExtensionBundle->'$(_AppBundleName)$(AppBundleExtension)/$(_AppPlugInsRelativePath)/%(Identity)')" />
+		</ItemGroup>
+		<!-- Get items to sign from app extensions -->
+		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign.items')">
+			<Output TaskParameter="Items" ItemName="_CodesignAppExtensionItem" />
+		</ReadItemsFromFile>
+		<ItemGroup>
+			<_CodesignItems Include="@(_CodesignAppExtensionItem->'$(_AppBundleName)$(AppBundleExtension)/$(_AppPlugInsRelativePath)/%(Identity)')" />
+		</ItemGroup>
 
+		<!-- Get app bundles to sign from watch apps -->
 		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign-bundle.items')">
 			<Output TaskParameter="Items" ItemName="_CodesignWatchBundle" />
 		</ReadItemsFromFile>
-
 		<ItemGroup>
-			<_CodesignBundle Include="$(AppBundleDir)">
+			<_CodesignBundle Include="@(_CodesignWatchBundle->'$(_AppBundleName)$(AppBundleExtension)/Watch/%(Identity)')" />
+		</ItemGroup>
+		<!-- Get items to sign from watch apps -->
+		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign.items')">
+			<Output TaskParameter="Items" ItemName="_CodesignWatchItem" />
+		</ReadItemsFromFile>
+		<ItemGroup>
+			<_CodesignItems Include="@(_CodesignWatchItem->'$(_AppBundleName)$(AppBundleExtension)/Watch/%(Identity)')" />
+		</ItemGroup>
+
+		<!-- Add this app bundle -->
+		<PropertyGroup>
+			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' == 'macOS'">$(IntermediateOutputPath)Entitlements.xcent</_AppBundleCodesignEntitlements>
+			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' != 'macOS'">$(_CompiledCodesignEntitlements)</_AppBundleCodesignEntitlements>
+
+			<_CodesignExecutable Condition="'$(IsAppExtension)' == 'true'">true</_CodesignExecutable>
+			<_CodesignExecutable Condition="'$(_PlatformName)' == 'macOS' And '$(_RequireCodeSigning)'">true</_CodesignExecutable>
+			<_CodesignExecutable Condition="'$(_PlatformName)' != 'macOS' And ('$(_CanOutputAppBundle)' == 'true' And '$(_CodeSigningKey)' != '') And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')">true</_CodesignExecutable>
+		</PropertyGroup>
+
+		<!-- The app bundle is added to _CodesignBundle -->
+		<ItemGroup>
+			<_CodesignBundle Include="$(_AppBundleName)$(AppBundleExtension)">
+				<CodesignExecutable>$(_CodesignExecutable)</CodesignExecutable>
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
-				<DisableTimestamp>false</DisableTimestamp>
-				<DisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">true</DisableTimestamp>
-				<Entitlements>$(_CompiledCodesignEntitlements)</Entitlements>
-				<ExtraArgs>$(CodesignExtraArgs)</ExtraArgs>
-				<Keychain>$(CodesignKeychain)</Keychain>
-				<ResourceRules>$(_PreparedResourceRules)</ResourceRules>
-				<SigningKey>$(_CodeSigningKey)</SigningKey>
+				<CodesignDisableTimestamp>false</CodesignDisableTimestamp>
+				<CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">true</CodesignDisableTimestamp>
+				<CodesignEntitlements>$(_AppBundleCodesignEntitlements)</CodesignEntitlements>
+				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
+				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
+				<CodesignResourceRules>$(_PreparedResourceRules)</CodesignResourceRules>
+				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
+				<CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
+				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
 			</_CodesignBundle>
-
-			<_CodesignBundle Include="@(_CodesignAppExtensionBundle->'$(_AppPlugInsRelativePath)/%(Identity)')" />
-			<_CodesignBundle Include="@(_CodesignWatchBundle->'Watch/%(Identity)')" />
 		</ItemGroup>
 	</Target>
 
@@ -1971,156 +1902,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		/>
 	</Target>
 
-	<Target Name="_WriteCodesignItems">
-	</Target>
-
-	<Target Name="_CalculateCodesignAppBundleInputs">
-
-		<ItemGroup>
-			<_CodesignItems Remove="@(_CodesignItems)" />
-			<_CodesignItems Include="@(_OutputCodesignItems)" />
-		</ItemGroup>
-
-		<ItemGroup>
-			<_CodesignAppBundleInputs Include="$(_AppBundlePath)**\*.*" Exclude="$(_AppCodeSignaturePath)_CodeSignature\CodeResources" />
-		</ItemGroup>
-
-		<PropertyGroup>
-			<_CodesignDisableTimestamp>False</_CodesignDisableTimestamp>
-			<_CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">True</_CodesignDisableTimestamp>
-
-			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' == 'macOS'">$(IntermediateOutputPath)Entitlements.xcent</_AppBundleCodesignEntitlements>
-			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' != 'macOS'">$(_CompiledCodesignEntitlements)</_AppBundleCodesignEntitlements>
-
-			<_CodesignAppBundleCondition Condition="'$(_PlatformName)' == 'macOS' And '$(_RequireCodeSigning)'">true</_CodesignAppBundleCondition>
-			<_CodesignAppBundleCondition Condition="'$(_PlatformName)' != 'macOS' And ('$(_CanOutputAppBundle)' == 'true' And '$(_CodeSigningKey)' != '') And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')">true</_CodesignAppBundleCondition>
-		</PropertyGroup>
-
-		<ItemGroup Condition="'$(_CodesignAppBundleCondition)' == 'true'">
-			<_CodesignItems Include="$(AppBundleDir)">
-				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
-				<CodesignAdditionalFilesToTouch></CodesignAdditionalFilesToTouch>
-				<CodesignDeep>$(IsAppExtension)</CodesignDeep>
-				<CodesignDisableTimestamp>$(_CodesignDisableTimestamp)</CodesignDisableTimestamp>
-				<CodesignEntitlements>$(_AppBundleCodesignEntitlements)</CodesignEntitlements>
-				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
-				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
-				<CodesignResourceRules>$(_PreparedResourceRules)</CodesignResourceRules>
-				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
-				<CodesignStampFile>$(_AppCodeSignaturePath)_CodeSignature\CodeResources</CodesignStampFile>
-				<!-- CodesignStampPath -->
-				<CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
-				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-			</_CodesignItems>
-		</ItemGroup>
-
-		<ComputeCodesignItems
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)'"
-			AppBundleDir="$(AppBundleDir)"
-			CodesignBundle="@(_CodesignBundle)"
-			CodesignItems="@(_CodesignItems)"
-			GenerateDSymItem="@(_GenerateDSymItem)"
-			NativeStripItem="@(_NativeStripItem)"
-			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
-			>
-			<Output TaskParameter="OutputCodesignItems" ItemName="_OutputCodesignItems" />
-		</ComputeCodesignItems>
-
-		<!-- Compute some metadata for the items -->
-		<ItemGroup>
-			<!-- Compute the relative path of the item in the app bundle -->
-			<_CodesignItems>
-				<CodesignRelativeAppBundlePath>$([System.String]::new('%(Identity)').Substring($([MSBuild]::Add($([System.String]::new('%(Identity)').LastIndexOf('.app/')),5))))</CodesignRelativeAppBundlePath>
-			</_CodesignItems>
-			<!-- Set CodesignStampPath if it's not set already -->
-			<_CodesignItems Condition="'%(_CodesignItems.CodesignStampPath)' == ''">
-				<CodesignStampPath>$(DeviceSpecificIntermediateOutputPath)codesign\</CodesignStampPath>
-				<IsInputDirectory Condition="Exists('%(_CodesignItems.Identity)') And !$([System.IO.File]::Exists('%(_CodesignItems.Identity)'))">true</IsInputDirectory>
-			</_CodesignItems>
-			<!-- Set CodesignStampFile if it's not set already -->
-			<!-- Don't use a directory as a stamp file, instead use a file inside that directory -->
-			<!-- This checks if the input is a directory, because we can't check if the stamp location might be (it might not exist yet) -->
-			<!-- Unfortunately System.IO.Directory.Exists can't be called from MSBuild, so we combine two other methods:
-				1. The built-in 'Exists' condition returns true if the input is either a file or a directory (and it exists)
-				2. We can call System.IO.File.Exists, which only returns true if the input is a file (and it exists).
-				3. So we can determine that the input is a directory, if the built-in 'Exists' return true, but System.IO.File.Exists return false
-			-->
-			<_CodesignItems Condition="'%(_CodesignItems.CodesignStampFile)' == ''">
-				<CodesignStampFile Condition="'%(_CodesignItems.IsInputDirectory)' != 'true'">%(_CodesignItems.CodesignStampPath)\%(_CodesignItems.CodesignRelativeAppBundlePath)</CodesignStampFile>
-				<CodesignStampFile Condition="'%(_CodesignItems.IsInputDirectory)' == 'true'">%(_CodesignItems.CodesignStampPath)\%(_CodesignItems.CodesignRelativeAppBundlePath)\.directory-stamp</CodesignStampFile>
-			</_CodesignItems>
-		</ItemGroup>
-	</Target>
-
-	<!-- If any of the files we're signing were stripped, we need to touch the _NativeStrip's stamp file again,
-	     because we changed the executable by signing it, and we mustn't re-strip it in the next build.
-	 -->
-	<Target
-		Name="_GetNativeStripStampFilesForCodeSigning"
-		Condition="@(_NativeStripItem->Count()) &gt; 0"
-	>
-		<!--
-		     Static property functions don't work in an item transform (https://github.com/dotnet/msbuild/issues/3163), so we need this workaround,
-		     instead of just doing this for the SourceItemGroup parameter: @(_NativeStripItem->'$([System.IO.Path]::GetDirectoryName('%(Identity)'))')
-		-->
-		<ItemGroup>
-			<_GetNativeStripStampFilesForCodeSigningItemInterim Include="@(_NativeStripItem)" />
-			<_GetNativeStripStampFilesForCodeSigningItemInterim>
-				<IdentityDirectory>$([System.IO.Path]::GetDirectoryName('%(Identity)'))</IdentityDirectory>
-			</_GetNativeStripStampFilesForCodeSigningItemInterim>
-			<_GetNativeStripStampFilesForCodeSigningItem Include="@(_GetNativeStripStampFilesForCodeSigningItemInterim->'%(IdentityDirectory)')" />
-		</ItemGroup>
-		<MergeMetadata
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SourceItemGroup="@(_GetNativeStripStampFilesForCodeSigningItem)"
-			TargetItemGroup="@(_CodesignItems)"
-			MetadataToCopy="StripStampFile"
-			>
-			<Output TaskParameter="OutputItemGroup" ItemName="_NativeStripItemMergedMetadata" />
-		</MergeMetadata>
-		<ItemGroup>
-			<_CodesignItems Remove="@(_CodesignItems)" />
-			<_CodesignItems Include="@(_NativeStripItemMergedMetadata)" />
-			<_CodesignItems>
-				<CodesignAdditionalFilesToTouch>%(_CodesignItems.CodesignAdditionalFilesToTouch);%(_CodesignItems.StripStampFile)</CodesignAdditionalFilesToTouch>
-			</_CodesignItems>
-		</ItemGroup>
-	</Target>
-
-	<!-- If any of the files we're signing were dsymutil'ed, we need to touch the _GenerateDSym's stamp file again,
-	     because we changed the executable by signing it, and we mustn't re-dsymutil it in the next build.
-	 -->
-	<Target
-		Name="_GetDSymStampFilesForCodeSigning"
-		Condition="@(_GenerateDSymItem->Count()) &gt; 0"
-	>
-		<ItemGroup>
-			<_GetDSymStampFilesForCodeSigningItemInterim Include="@(_GenerateDSymItem)" />
-			<_GetDSymStampFilesForCodeSigningItemInterim>
-				<IdentityDirectory>$([System.IO.Path]::GetDirectoryName('%(Identity)'))</IdentityDirectory>
-			</_GetDSymStampFilesForCodeSigningItemInterim>
-			<_GetDSymStampFilesForCodeSigningItem Include="@(_GetDSymStampFilesForCodeSigningItemInterim->'%(IdentityDirectory)')" />
-		</ItemGroup>
-		<MergeMetadata
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SourceItemGroup="@(_GetDSymStampFilesForCodeSigningItem)"
-			TargetItemGroup="@(_CodesignItems)"
-			MetadataToCopy="dSYMInfoPlist"
-			>
-			<Output TaskParameter="OutputItemGroup" ItemName="_GenerateDSymItemMergedMetadata" />
-		</MergeMetadata>
-		<ItemGroup>
-			<_CodesignItems Remove="@(_CodesignItems)" />
-			<_CodesignItems Include="@(_GenerateDSymItemMergedMetadata)" />
-			<_CodesignItems>
-				<CodesignAdditionalFilesToTouch>%(_CodesignItems.CodesignAdditionalFilesToTouch);%(_CodesignItems.dSYMInfoPlist)</CodesignAdditionalFilesToTouch>
-			</_CodesignItems>
-		</ItemGroup>
-	</Target>
-
 	<!-- sign the app bundle and anything inside that needs signing -->
 	<!-- This target does not have Inputs/Outputs, because computing what needs signing or not is quite complex:
 		* If any file inside a directory has been modified, we need to (re)sign
@@ -2128,14 +1909,28 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		This logic is implemented in the Codesign task.
 	-->
 	<Target Name="_CodesignAppBundle"
-			Condition="'$(IsAppExtension)' != 'true'"
+			Condition="'$(IsAppExtension)' != 'true' And '$(IsWatchApp)' != 'true' And '$(_CanOutputAppBundle)' == 'true'"
 			DependsOnTargets="$(_CodesignAppBundleDependsOn)"
 		>
+
+		<ComputeCodesignItems
+			Condition="'$(IsMacEnabled)' == 'true'"
+			SessionId="$(BuildSessionId)'"
+			AppBundleDir="$(AppBundleDir)"
+			CodesignBundle="@(_CodesignBundle)"
+			CodesignItems="@(_CodesignItems)"
+			CodesignStampPath="$(DeviceSpecificIntermediateOutputPath)codesign\"
+			GenerateDSymItem="@(_GenerateDSymItem)"
+			NativeStripItem="@(_NativeStripItem)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
+			<Output TaskParameter="OutputCodesignItems" ItemName="_ComputedCodesignItems" />
+		</ComputeCodesignItems>
 
 		<Codesign
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			Resources="@(_CodesignItems)"
+			Resources="@(_ComputedCodesignItems)"
 			ToolExe="$(CodesignExe)"
 			ToolPath="$(CodesignPath)"
 			>
@@ -2386,7 +2181,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	-->
 	<Target
 		Name="_CollectItemsForDebugSymbolsGeneration"
-		DependsOnTargets="_CompileToNative;_ParseBundlerArguments;_ExpandNativeReferences;_CollectFrameworks;_PrepareForDebugSymbolsGeneration"
+		DependsOnTargets="_CompileToNative;_ParseBundlerArguments;_ExpandNativeReferences;_PrepareForDebugSymbolsGeneration"
 		>
 
 		<!-- read any data from app extensions -->

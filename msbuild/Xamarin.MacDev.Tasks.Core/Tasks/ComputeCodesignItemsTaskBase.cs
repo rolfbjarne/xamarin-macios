@@ -14,12 +14,21 @@ using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public abstract class ComputeCodesignItemsTaskBase : XamarinTask {
+
 		[Required]
 		public string AppBundleDir { get; set; } = string.Empty;
+
+		[Required]
+		public ITaskItem [] CodesignBundle { get; set; } = Array.Empty<ITaskItem> ();
+
 		[Required]
 		public ITaskItem [] CodesignItems { get; set; } = Array.Empty<ITaskItem> ();
-		public ITaskItem [] CodesignBundle { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Required]
+		public string CodesignStampPath { get; set; } = string.Empty;
+
 		public ITaskItem [] GenerateDSymItem { get; set; } = Array.Empty<ITaskItem> ();
+
 		public ITaskItem [] NativeStripItem { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Output]
@@ -32,21 +41,56 @@ namespace Xamarin.MacDev.Tasks {
 			// Make sure AppBundleDir has a trailing slash
 			var appBundlePath = EnsureTrailingSlash (Path.GetFullPath (AppBundleDir));
 
-			// Find all *.dylib files
+			// Add the app bundles themselves
 			foreach (var bundle in CodesignBundle) {
-				var bundlePath = Path.Combine (appBundlePath, bundle.ItemSpec);
-				Console.WriteLine ($"    Looking in {bundlePath} for native libraries");
-				var nativeLibraries = FindNativeLibraries (bundlePath);
-				Console.WriteLine ($"    Found {nativeLibraries.Count ()} native libraries in {bundlePath}");
-				foreach (var lib in nativeLibraries) {
-					var relativeLib = lib.Substring (appBundlePath.Length);
+				var codesignExecutable = bundle.GetMetadata ("CodesignExecutable");
+				if (!string.Equals (codesignExecutable, "true"))
+					continue;
+
+				var bundlePath = Path.Combine (Path.GetDirectoryName (AppBundleDir), bundle.ItemSpec);
+				var item = new TaskItem (bundlePath);
+				bundle.CopyMetadataTo (item);
+
+				// Compute the stamp file to use
+				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (CodeSignatureRelativePath, "_CodeSignature", "CodeResources"));
+
+				output.Add (item);
+			}
+
+			// Find all:
+			//	- *.dylib and *.metallib files
+			//	- *.framework directories
+			Log.LogWarning ($"    Looking in {CodesignBundle.Length} bundles for files to sign");
+			foreach (var bundle in CodesignBundle) {
+				var bundlePath = Path.Combine (Path.GetDirectoryName (Path.GetDirectoryName (appBundlePath)), bundle.ItemSpec);
+				Log.LogWarning ($"    Looking in {bundlePath} for files to sign");
+				var filesToSign = FindFilesToSign (bundlePath);
+				Log.LogWarning ($"    Found {filesToSign.Count ()} native libraries in {bundlePath}");
+				foreach (var lib in filesToSign) {
+					var relativeLib = Path.Combine (AppBundleDir, lib.Substring (appBundlePath.Length));
 					var item = new TaskItem (relativeLib);
 					bundle.CopyMetadataTo (item);
+
+					// Native libraries are a bit special, because they're always signed. This is done
+					// by setting the signing key to '-' if it's not set.
+					item.SetMetadataIfNotSet ("CodesignSigningKey", "-");
+
+					// Set the stamp file even if already set (because any existing values would be copied from the bundle, which would be the wrong stamp file, so it must be overridden)
+					if (Directory.Exists (relativeLib)) {
+						item.SetMetadata ("CodesignStampFile", Path.Combine (CodesignStampPath, relativeLib, ".stampfile"));
+					} else {
+						item.SetMetadata ("CodesignStampFile", Path.Combine (CodesignStampPath, relativeLib));
+					}
+
 					output.Add (item);
 				}
 			}
 
+			// Add all additional items
 			foreach (var item in CodesignItems) {
+				// Set the stamp file if not already set.
+				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (CodesignStampPath, item.ItemSpec));
+
 				output.Add (item);
 			}
 
@@ -62,7 +106,24 @@ namespace Xamarin.MacDev.Tasks {
 			return path;
 		}
 
-		IEnumerable<string> FindNativeLibraries (string appPath)
+		string CodeSignatureRelativePath {
+			get {
+
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return string.Empty;
+				case ApplePlatform.MacOSX:
+				case ApplePlatform.MacCatalyst:
+					return "Contents";
+				default:
+					throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, Platform));
+				}
+			}
+		}
+
+		IEnumerable<string> FindFilesToSign (string appPath)
 		{
 			var rv = new List<string> ();
 
@@ -71,17 +132,20 @@ namespace Xamarin.MacDev.Tasks {
 
 			string dylibDirectory;
 			string metallibDirectory;
+			string frameworksDirectory;
 			switch (Platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
 			case ApplePlatform.WatchOS:
 				dylibDirectory = appPath;
 				metallibDirectory = appPath;
+				frameworksDirectory = Path.Combine (appPath, "Frameworks");
 				break;
 			case ApplePlatform.MacOSX:
 			case ApplePlatform.MacCatalyst:
 				dylibDirectory = Path.Combine (appPath, "Contents");
 				metallibDirectory = Path.Combine (appPath, "Contents", "Resources");
+				frameworksDirectory = Path.Combine (appPath, "Content", "Frameworks");
 				break;
 			default:
 				throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, Platform));
@@ -90,17 +154,19 @@ namespace Xamarin.MacDev.Tasks {
 			dylibDirectory = EnsureTrailingSlash (dylibDirectory);
 			metallibDirectory = EnsureTrailingSlash (metallibDirectory);
 
-			foreach (var file in Directory.EnumerateFileSystemEntries (appPath)) {
-				var relativePath = file.Substring (appPath.Length);
+			foreach (var entry in Directory.EnumerateFileSystemEntries (appPath, "*", SearchOption.AllDirectories)) {
+				var relativePath = entry.Substring (appPath.Length);
 				if (relativePath.StartsWith ("PlugIns" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
 					continue;
 				if (relativePath.StartsWith ("Watch" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
 					continue;
 
-				if (file.EndsWith (".dylib", StringComparison.OrdinalIgnoreCase) && file.StartsWith (dylibDirectory)) {
-					rv.Add (file);
-				} else if (file.EndsWith (".metallib", StringComparison.OrdinalIgnoreCase) && file.StartsWith (metallibDirectory)) {
-					rv.Add (file);
+				if (entry.EndsWith (".dylib", StringComparison.OrdinalIgnoreCase) && entry.StartsWith (dylibDirectory)) {
+					rv.Add (entry);
+				} else if (entry.EndsWith (".metallib", StringComparison.OrdinalIgnoreCase) && entry.StartsWith (metallibDirectory)) {
+					rv.Add (entry);
+				} else if (entry.EndsWith (".framework", StringComparison.OrdinalIgnoreCase) && string.Equals (Path.GetDirectoryName (entry), frameworksDirectory, StringComparison.OrdinalIgnoreCase)) {
+					rv.Add (entry);
 				}
 			}
 
@@ -110,6 +176,15 @@ namespace Xamarin.MacDev.Tasks {
 		void ResolveMetadata (ITaskItem metadata)
 		{
 
+		}
+	}
+
+	public static class ITaskItem_Extensions {
+		public static void SetMetadataIfNotSet (this ITaskItem self, string metadata, string value)
+		{
+			if (!string.IsNullOrEmpty (self.GetMetadata (metadata)))
+				return;
+			self.SetMetadata (metadata, value);
 		}
 	}
 }

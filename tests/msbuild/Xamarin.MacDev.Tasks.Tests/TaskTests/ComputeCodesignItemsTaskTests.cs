@@ -12,6 +12,8 @@ using NUnit.Framework;
 using Xamarin.iOS.Tasks;
 using Xamarin.Utils;
 
+#nullable enable
+
 namespace Xamarin.MacDev.Tasks {
 	[TestFixture]
 	public class ComputeCodesignItemsTaskTests : TestBase {
@@ -37,94 +39,116 @@ namespace Xamarin.MacDev.Tasks {
 				var generateDSymItems = new List<ITaskItem> ();
 				var nativeStripItems = new List<ITaskItem> ();
 
+				var bundleAppMetadata = new Dictionary<string, string> {
+					{ "CodesignDisableTimestamp", "true" },
+					{ "CodesignEntitlements" , "CompiledEntitlements.plist" },
+					{ "CodesignExecutable", "true" },
+					{ "CodesignExtraArgs", "bundle-app-extra-args" },
+					{ "CodesignKeychain", "bundle-app-keychain" },
+					{ "CodesignResourceRules", "bundle-app-resource-rules" },
+					{ "CodesignSigningKey", "bundle-app-signing-key" },
+					{ "CodesignStampFile", "bundle-app-stamp-file" },
+					{ "CodesignUseHardenedRuntime", "bundle-app-use-hardened-runtime" },
+					{ "CodesignUseSecureTimestamp", "bundle-app-use-secure-timestamp" },
+				};
+
+				var p1Metadata = new Dictionary<string, string> {
+					{ "CodesignDisableTimestamp", "true" },
+					{ "CodesignEntitlements" , "p1.appex-entitlements" },
+					{ "CodesignExecutable", "true" },
+					{ "CodesignExtraArgs", "p1.appex-extra-args" },
+					{ "CodesignKeychain", "p1.appex-keychain" },
+					{ "CodesignResourceRules", "p1.appex-resource-rules" },
+					{ "CodesignSigningKey", "" }, // empty code signing key
+					{ "CodesignStampFile", "" }, // empty stamp file
+					{ "CodesignUseHardenedRuntime", "p1.appex-use-hardened-runtime" },
+					{ "CodesignUseSecureTimestamp", "p1.appex-use-secure-timestamp" },
+				};
+				var p1MetadataNativeLibraries = new Dictionary<string, string> (p1Metadata);
+				p1MetadataNativeLibraries ["CodesignSigningKey"] = "-";
+				p1MetadataNativeLibraries ["CodesignStampFile"] = "_CodeSignature/CodeResources";
+
+
 				var infos = new CodesignInfo [] {
-					new CodesignInfo ("a.dylib", P.All),
-					new CodesignInfo ("Contents/b.dylib", P.All),
-					new CodesignInfo ("Contents/MonoBundle/c.dylib", P.All),
-					new CodesignInfo ("Contents/MonoBundle/SubDir/d.dylib", P.All),
-					new CodesignInfo ("M1.metallib", P.All),
-					new CodesignInfo ("Resources/M2.metallib", P.All),
-					new CodesignInfo ("Contents/Resources/M3.metallib", P.All),
-					new CodesignInfo ("Contents/Resources/SubDir/M4.metallib", P.All),
-					new CodesignInfo ("Bundle", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/P1", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/P1a.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/Contents/P1b.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/PM1.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/Resources/PM2.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/Contents/Resources/PM3.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/P2", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/P2a.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/Contents/P2b.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/P2c.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/SubDir/P2d.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/P2M1.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/Resources/P2M2.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/P2M3.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/SubDir/P2M4.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3a.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/P3c.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/SubDir/P3d.dylib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3M1.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Resources/P3M2.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/P3M3.metallib", P.All),
-					new CodesignInfo ("PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/SubDir/P3M4.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/W1", P.All),
-					new CodesignInfo ("Watch/W1.app/Contents/b.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/Contents/MonoBundle/c.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/Contents/MonoBundle/SubDir/d.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/W1M1.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/Resources/W1M2.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/Contents/Resources/W1M3.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/Contents/Resources/SubDir/W1M4.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/WP1", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/W1a.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/W1c.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/SubDir/W1d.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/W1M1.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/Resources/W1M2.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/W1M3.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/SubDir/W1M4.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/WP2", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/W2c.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/SubDir/W2c.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2M1.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Resources/W2M2.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/W2M3.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/SubDir/W2M4.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/WP3", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/W3c.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/SubDir/W3c.dylib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3M1.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Resources/W3M2.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/W3M3.metallib", P.All),
-					new CodesignInfo ("Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/SubDir/W3M4.metallib", P.All),
+					new CodesignInfo ("Bundle.app", P.All, bundleAppMetadata),
+					new CodesignInfo ("Bundle.app/a.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/a.dylib")),
+					new CodesignInfo ("Bundle.app/Contents/b.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/b.dylib")),
+					new CodesignInfo ("Bundle.app/Contents/MonoBundle/c.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/MonoBundle/c.dylib")),
+					new CodesignInfo ("Bundle.app/Contents/MonoBundle/SubDir/d.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/MonoBundle/SubDir/d.dylib")),
+					new CodesignInfo ("Bundle.app/M1.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/M1.metallib")),
+					new CodesignInfo ("Bundle.app/Resources/M2.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Resources/M2.metallib")),
+					new CodesignInfo ("Bundle.app/Contents/Resources/M3.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/Resources/M3.metallib")),
+					new CodesignInfo ("Bundle.app/Contents/Resources/SubDir/M4.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/Resources/SubDir/M4.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex", P.All, p1Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/P1a.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/P1a.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/P1b.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/P1b.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/PM1.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PM1.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Resources/PM2.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Resources/PM2.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/Resources/PM3.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/Resources/PM3.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2a.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/P2b.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/P2c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/SubDir/P2d.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2M1.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Resources/P2M2.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/P2M3.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/SubDir/P2M4.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3a.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/P3c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/SubDir/P3d.dylib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3M1.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Resources/P3M2.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/P3M3.metallib", P.All),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/SubDir/P3M4.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/b.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/SubDir/d.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/W1M1.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Resources/W1M2.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/Resources/W1M3.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/Resources/SubDir/W1M4.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1a.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/W1c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/SubDir/W1d.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1M1.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Resources/W1M2.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/W1M3.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/SubDir/W1M4.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/W2c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/SubDir/W2c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2M1.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Resources/W2M2.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/W2M3.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/SubDir/W2M4.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/W3c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/SubDir/W3c.dylib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3M1.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Resources/W3M2.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/W3M3.metallib", P.All),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/SubDir/W3M4.metallib", P.All),
 				};
 
 				codesignItems = new List<ITaskItem> {
-					new TaskItem ("Bundle.app"),
-					new TaskItem ("Bundle.app/PlugIns/P1.appex"),
-					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex"),
-					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex"),
-					new TaskItem ("Bundle.app/Watch/W1.app"),
-					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex"),
-					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex"),
-					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex"),
 				};
 
 				codesignBundle = new List<ITaskItem> {
-					new TaskItem ("Bundle.app"),
-					new TaskItem ("Bundle.app/PlugIns/P1.appex"),
+					new TaskItem ("Bundle.app", bundleAppMetadata),
+					new TaskItem ("Bundle.app/PlugIns/P1.appex", p1Metadata),
 					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex"),
 					new TaskItem ("Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex"),
 					new TaskItem ("Bundle.app/Watch/W1.app"),
@@ -155,35 +179,61 @@ namespace Xamarin.MacDev.Tasks {
 					new TaskItem ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/WP3"),
 				};
 
-				var allFiles = infos.Select (v => Path.Combine ("Bundle.app", v.ItemSpec)).ToArray ();
-				Touch (Path.Combine (tmpdir, "Bundle.app"), allFiles);
+				var allFiles = infos.Select (v => v.ItemSpec).ToArray ();
+				Touch (tmpdir, allFiles);
 
 				var task = CreateTask<ComputeCodesignItems> ();
 				task.AppBundleDir = "Bundle.app";
 				task.CodesignBundle = codesignBundle.ToArray ();
 				task.CodesignItems = codesignItems.ToArray ();
+				task.CodesignStampPath = "codesign-stamp-path/";
 				task.GenerateDSymItem = generateDSymItems.ToArray ();
 				task.NativeStripItem = nativeStripItems.ToArray ();
 				task.TargetFrameworkMoniker = TargetFramework.GetTargetFramework (platform, isDotNet).ToString ();
 				Assert.IsTrue (task.Execute (), "Execute");
 
-				// FIXME: validate
-				var outputCodesignItems = (ITaskItem []) task.OutputCodesignItems;
+				var outputCodesignItems = task.OutputCodesignItems;
 				Assert.That (outputCodesignItems.Select (v => v.ItemSpec), Is.Unique, "Uniqueness");
 
+				foreach (var item in outputCodesignItems)
+					Console.WriteLine ($"Item to sign: {item.ItemSpec}");
+
 				var failures = new List<string> ();
+				var itemsFound = new List<ITaskItem> ();
 				foreach (var info in infos) {
-					info.CodesignItem = outputCodesignItems.SingleOrDefault (v => string.Equals (v.ItemSpec, Path.Combine ("Bundle.app", info.ItemSpec), StringComparison.OrdinalIgnoreCase));
+					var item = outputCodesignItems.SingleOrDefault (v => string.Equals (v.ItemSpec, info.ItemSpec, StringComparison.OrdinalIgnoreCase));
+					info.CodesignItem = item;
 					if (IsPlatform (info.SignedOn, platform)) {
-						if (info.CodesignItem is null) {
+						if (item is null) {
 							failures.Add ($"Expected '{info.ItemSpec}' to be signed.");
+							continue;
 						}
 					} else {
-						if (info.CodesignItem is not null) {
+						if (item is not null) {
 							failures.Add ($"Did not expect '{info.ItemSpec}' to be signed.");
+							continue;
+						}
+					}
+
+					if (item is null)
+						continue;
+					itemsFound.Add (item);
+
+					foreach (var kvp in info.Metadata) {
+						var metadata = item.GetMetadata (kvp.Key);
+						if (metadata == string.Empty && kvp.Value != string.Empty) {
+							failures.Add ($"Item '{info.ItemSpec}': Expected metadata '{kvp.Key}' not found (with value '{kvp.Value}').");
+						} else if (!string.Equals (metadata, kvp.Value)) {
+							failures.Add ($"Item '{info.ItemSpec}': Expected value '{kvp.Value}' for metadata '{kvp.Key}', but got '{metadata}' instead.");
 						}
 					}
 				}
+
+				var itemsNotFound = outputCodesignItems.Where (v => !itemsFound.Contains (v)).ToArray ();
+				foreach (var itemNotFound in itemsNotFound) {
+					failures.Add ($"Did not expect '{itemNotFound.ItemSpec}' to be signed.");
+				}
+
 				Console.WriteLine ($"{failures.Count} failures:");
 				foreach (var f in failures)
 					Console.WriteLine (f);
@@ -206,7 +256,8 @@ namespace Xamarin.MacDev.Tasks {
 				return (platforms & P.watchOS) == P.watchOS;
 			case ApplePlatform.MacCatalyst:
 				return (platforms & P.MacCatalyst) == P.MacCatalyst;
-			default: throw new NotImplementedException ();
+			default:
+				throw new NotImplementedException ();
 			}
 		}
 
@@ -214,8 +265,12 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			foreach (var f in files) {
 				var file = Path.Combine (root, f);
-				Directory.CreateDirectory (Path.GetDirectoryName (file));
-				File.WriteAllText (file, string.Empty);
+				if (file.EndsWith (".appex", StringComparison.OrdinalIgnoreCase) || file.EndsWith (".app", StringComparison.OrdinalIgnoreCase)) {
+					Directory.CreateDirectory (f);
+				} else {
+					Directory.CreateDirectory (Path.GetDirectoryName (file));
+					File.WriteAllText (file, string.Empty);
+				}
 			}
 		}
 
@@ -223,12 +278,13 @@ namespace Xamarin.MacDev.Tasks {
 			public string ItemSpec;
 			public P SignedOn;
 			public Dictionary<string, string> Metadata;
-			public ITaskItem CodesignItem;
+			public ITaskItem? CodesignItem;
 
-			public CodesignInfo (string item, P signedOn)
+			public CodesignInfo (string item, P signedOn, Dictionary<string, string>? metadata = null)
 			{
 				ItemSpec = item;
 				SignedOn = signedOn;
+				Metadata = metadata ?? new Dictionary<string, string> ();
 			}
 		}
 
@@ -243,6 +299,15 @@ namespace Xamarin.MacDev.Tasks {
 			Mobile = iOS | tvOS | watchOS,
 			Desktop = macOS | MacCatalyst,
 			All = Mobile | Desktop,
+		}
+
+	}
+	public static class Dictionary_Extensions {
+		public static Dictionary<string, string> Set (this Dictionary<string, string> self, string key, string value)
+		{
+			var rv = new Dictionary<string, string> (self);
+			rv [key] = value;
+			return rv;
 		}
 	}
 }

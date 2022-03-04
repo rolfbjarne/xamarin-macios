@@ -18,6 +18,10 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public ITaskItem Executable { get; set; }
 
+		// the executable is a relative path to this directory
+		[Required]
+		public string OutputDirectory { get; set; }
+
 		#endregion
 
 		#region Outputs
@@ -62,7 +66,7 @@ namespace Xamarin.MacDev.Tasks
 			args.AppendSwitch ("-z");
 			args.AppendSwitch ("-o");
 			args.AppendFileNameIfNotNull (DSymDir);
-			args.AppendFileNameIfNotNull (Executable.ItemSpec);
+			args.AppendFileNameIfNotNull (Path.GetFullPath (Path.Combine (OutputDirectory, Executable.ItemSpec)));
 
 			return args.ToString ();
 		}

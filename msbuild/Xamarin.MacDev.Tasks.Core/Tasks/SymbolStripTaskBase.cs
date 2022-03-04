@@ -18,6 +18,9 @@ namespace Xamarin.MacDev.Tasks
 		[Required]
 		public bool IsFramework { get; set; }
 
+		// the executable is a relative path to this directory
+		[Required]
+		public string OutputDirectory { get; set; }
 		#endregion
 
 		protected override string ToolName {
@@ -50,7 +53,7 @@ namespace Xamarin.MacDev.Tasks
 				args.AppendSwitch ("-x");
 			}
 
-			args.AppendFileNameIfNotNull (Executable);
+			args.AppendFileNameIfNotNull (Path.GetFullPath (Path.Combine (OutputDirectory, Executable)));
 
 			return args.ToString ();
 		}

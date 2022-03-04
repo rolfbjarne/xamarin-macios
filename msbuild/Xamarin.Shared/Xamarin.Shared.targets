@@ -342,7 +342,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(AppBundleDir).mSYM;@(_DebugSymbolDir)" />
 		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)*.bcsymbolmap" />
-		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)dsym.items" />
+		<Delete SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Files="$(DeviceSpecificOutputPath)postprocessing.items" />
 	</Target>
 
 	<Target Name="_CleanITunesArtwork" Condition="'$(_CanArchive)' == 'true'" DependsOnTargets="_ComputeTargetArchitectures">
@@ -1746,12 +1746,21 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<!-- Code signing -->
 
 	<PropertyGroup>
+		<_CollectCodesigningDataDependsOn>
+			$(_CollectCodesigningData);
+			_PlaceAppExtensions;
+		</_CollectCodesigningDataDependsOn>
+		<_CollectCodesigningDataDependsOn Condition="'$(_PlatformName)' != 'macOS'">
+			$(_CollectCodesigningData);
+			_ResolveWatchAppReferences;
+		</_CollectCodesigningDataDependsOn>
+
 		<_CodesignAppBundleDependsOn>
 			$(_CodesignAppBundleDependsOn);
 			_CleanAppBundleRootDirectory;
 			_EmbedProvisionProfile;
-			_ComputeCodesigningData;
-			_WriteCodesigningData;
+			_CollectCodesigningData;
+			_StoreCodesigningData;
 		</_CodesignAppBundleDependsOn>
 
 		<CoreCodesignDependsOn>
@@ -1776,25 +1785,18 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="Codesign" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(CodesignDependsOn)" />
 
-	<Target	Name="_CodesignVerify" Condition="'$(_RequireCodeSigning)' == 'true' And '$(IsAppExtension)' != 'true'" DependsOnTargets="_CodesignAppBundle" >
-		<CodesignVerify
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '@(_ResolvedAppExtensionReferences)' != ''"
-			ToolExe="$(CodesignExe)"
-			ToolPath="$(CodesignPath)"
-			CodesignAllocate="$(_CodesignAllocate)"
-			Resource="$(_AppExtensionRoot)PlugIns\%(_ResolvedAppExtensionReferences.Filename)%(_ResolvedAppExtensionReferences.Extension)"
-			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+	<Target
+		Name="_CodesignVerify"
+		Condition="'$(_CodesignAppBundleCondition)' == 'true'"
+		DependsOnTargets="_CodesignAppBundle"
 		>
-		</CodesignVerify>
-
 		<CodesignVerify
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			ToolExe="$(CodesignExe)"
 			ToolPath="$(CodesignPath)"
 			CodesignAllocate="$(_CodesignAllocate)"
-			Resource="$(AppBundleDir)"
+			Resource="$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))\%(_CodesignBundle.Identity)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 		</CodesignVerify>
@@ -1811,8 +1813,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	-->
 	<Target
-		Name="_ComputeCodesigningData"
-		DependsOnTargets="_PlaceAppExtensions;"
+		Name="_CollectCodesigningData"
+		DependsOnTargets="$(_CollectCodesigningDataDependsOn)"
 		>
 
 		<!-- Get app bundles to sign from app extensions -->
@@ -1871,14 +1873,29 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
 			</_CodesignBundle>
+
+			<!-- Set the SourceProjectPath metadata on all items that don't have it already -->
+			<_CodesignItems>
+				<SourceProjectPath Condition="'%(_CodesignItems.SourceProjectPath)' == ''">$(MSBuildProjectDirectory)</SourceProjectPath>
+			</_CodesignItems>
 		</ItemGroup>
+
+		<PropertyGroup>
+			<!--
+				We only run the CodesignAppBundle target on the outer-most executable project
+			    * Not on app extensions
+			    * Not on watch apps
+			-->
+			<_CodesignAppBundleCondition Condition="'$(_CodesignAppBundleCondition)' == '' And '$(IsAppExtension)' != 'true' And '$(IsWatchApp)' != 'true' And '$(_CanOutputAppBundle)' == 'true'">true</_CodesignAppBundleCondition>
+			<_CodesignAppBundleCondition Condition="'$(_CodesignAppBundleCondition)' == ''">false</_CodesignAppBundleCondition>
+		</PropertyGroup>
 	</Target>
 
 	<!-- This target writes all the properties required to sign items for this project, so that they can be read in container projects.
 	     The _CodesignBundle item group also contains items for contained projects this project may have (extension projects may have extension projects). -->
 	<Target
-		Name="_WriteCodesigningData"
-		DependsOnTargets="_ComputeCodesigningData"
+		Name="_StoreCodesigningData"
+		DependsOnTargets="_CollectCodesigningData"
 		>
 
 		<WriteItemsToFile
@@ -1909,7 +1926,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		This logic is implemented in the Codesign task.
 	-->
 	<Target Name="_CodesignAppBundle"
-			Condition="'$(IsAppExtension)' != 'true' And '$(IsWatchApp)' != 'true' And '$(_CanOutputAppBundle)' == 'true'"
+			Condition="'$(_CodesignAppBundleCondition)' == 'true'"
 			DependsOnTargets="$(_CodesignAppBundleDependsOn)"
 		>
 
@@ -1920,8 +1937,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			CodesignBundle="@(_CodesignBundle)"
 			CodesignItems="@(_CodesignItems)"
 			CodesignStampPath="$(DeviceSpecificIntermediateOutputPath)codesign\"
-			GenerateDSymItem="@(_GenerateDSymItem)"
-			NativeStripItem="@(_NativeStripItem)"
+			GenerateDSymItems="@(_GenerateDSymItems)"
+			NativeStripItems="@(_NativeStripItems)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
 			<Output TaskParameter="OutputCodesignItems" ItemName="_ComputedCodesignItems" />
@@ -2108,27 +2125,40 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_GetNativeExecutableName" DependsOnTargets="_DetectAppManifest;_GenerateBundleName;_ReadAppManifest">
 		<PropertyGroup>
-			<_NativeExecutable Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(_AppBundlePath)$(_ExecutableName)</_NativeExecutable>
-			<_NativeExecutable Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(_AppBundlePath)Contents\MacOS\$(_ExecutableName)</_NativeExecutable>
+			<_NativeExecutableRelativePath Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">$(_ExecutableName)</_NativeExecutableRelativePath>
+			<_NativeExecutableRelativePath Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">Contents\MacOS\$(_ExecutableName)</_NativeExecutableRelativePath>
+			<_NativeExecutable>$(_AppBundlePath)$(_NativeExecutableRelativePath)</_NativeExecutable>
 		</PropertyGroup>
 	</Target>
 
 	<!--
 
+		Post processing: this is what happens to the app bundle once it's built.
+
+		We must (the order here is important):
+
+		a) Run dsymutil on native binaries
+		b) Strip native binaries
+		c) Notify spotlight about our finished app bundle
+
+		A final step done later is to codesign the app bundle (and all its contained native binaries).
+
 		Generating debug symbols (dSYM directories) and stripping binaries.
 
 		* First we collect all the frameworks, dylibs and executable files
 		  from both the current project and any contained app extensions.
-		* We write a list of all these items in a dsym.items file (so that
-		  container projects can load them if need be).
-		* If not building a .NET universal app, we run dsymutil/symbolstrip in
-		  the executable project.
-		* If we're building a universal app in .NET, we don't run
-		  dsymutil/symbolstrip for each rid-specific build, but instead delay
-		  until we've created the universal app bundle.
-		* Watch apps are treated as a separate app bundle (signed, dsymutil'ed
-		  and stripped by itself, and then copied into the main executable's
-		  app bundle).
+		  Note: We don't iterate over all the *.framework and *.dylib files in
+		  the app bundle, we only look in the native references in the project
+		  file (one reason being that we need the metadata from those native
+		  references; although there are ways around that if need be).
+		* We write a list of all these items in a postprocessing.items file
+		  (so that container projects can load them if need be).
+		* If we're building the outermost app bundle (not an app extension nor
+		  a watch app, and additionally not building a .NET universal app), we
+		  run dsymutil/symbolstrip in the executable project.
+			* If we're building a universal app in .NET, we don't run
+			  dsymutil/symbolstrip for each rid-specific build, but instead
+			  delay until we've created the universal app bundle.
 
 		* Metadata on items:
 			* NoSymbolStrip: set to true to not strip native symbols for this item (and false to dot it)
@@ -2150,27 +2180,27 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<!-- Compute a few variables for debug symbol generation and native file stripping -->
 	<PropertyGroup>
-		<_PrepareForDebugSymbolsGenerationDependsOn>
-			$(_PrepareForDebugSymbolsGenerationDependsOn);
+		<_PrepareForPostProcessingDependsOn>
+			$(_PrepareForPostProcessingDependsOn);
 			_PlaceAppExtensions;
-		</_PrepareForDebugSymbolsGenerationDependsOn>
-		<_PrepareForDebugSymbolsGenerationDependsOn Condition="'$(_PlatformName)' != 'macOS'">
-			$(_PrepareForDebugSymbolsGenerationDependsOn);
+		</_PrepareForPostProcessingDependsOn>
+		<_PrepareForPostProcessingDependsOn Condition="'$(_PlatformName)' != 'macOS'">
+			$(_PrepareForPostProcessingDependsOn);
 			_ResolveWatchAppReferences;
-		</_PrepareForDebugSymbolsGenerationDependsOn>
+		</_PrepareForPostProcessingDependsOn>
 	</PropertyGroup>
 	<Target
-		Name="_PrepareForDebugSymbolsGeneration"
-		DependsOnTargets="$(_PrepareForDebugSymbolsGenerationDependsOn)"
+		Name="_PrepareForPostProcessing"
+		DependsOnTargets="$(_PrepareForPostProcessingDependsOn)"
 		>
 		<PropertyGroup>
-			<_DebugSymbolGenerationItemPath Condition="'$(_DebugSymbolGenerationItemPath)' == ''">$(DeviceSpecificOutputPath)dsym.items</_DebugSymbolGenerationItemPath>
+			<_PostProcessingItemPath Condition="'$(_PostProcessingItemPath)' == ''">$(DeviceSpecificOutputPath)postprocessing.items</_PostProcessingItemPath>
 			<_OutputDsymLocation>$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))/</_OutputDsymLocation>
 		</PropertyGroup>
 
 		<ItemGroup>
-			<_AppExtensionDebugSymbolGenerationItemPath Include="@(_ResolvedAppExtensionReferences -> '%(Identity)\..\dsym.items')" Condition="Exists('%(Identity)\..\dsym.items')" />
-			<!-- <_WatchAppDebugSymbolGenerationItemPath Include="@(_ResolvedWatchAppReferences -> '%(Identity)\..\dsym.items')" Condition="'%(Identity)\..\dsym.items')"/> -->
+			<_AppExtensionPostProcessingItemsPath Include="@(_ResolvedAppExtensionReferences -> '%(Identity)\..\postprocessing.items')" Condition="Exists('%(Identity)\..\postprocessing.items')" />
+			<_WatchAppPostProcessingItemPath Include="@(_ResolvedWatchAppReferences -> '%(Identity)\..\postprocessing.items')" Condition="Exists('%(Identity)\..\postprocessing.items')"/>
 		</ItemGroup>
 	</Target>
 
@@ -2180,61 +2210,69 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		in that case the container project would still need to know what to do for contained projects.
 	-->
 	<Target
-		Name="_CollectItemsForDebugSymbolsGeneration"
-		DependsOnTargets="_CompileToNative;_ParseBundlerArguments;_ExpandNativeReferences;_PrepareForDebugSymbolsGeneration"
+		Name="_CollectItemsForPostProcessing"
+		DependsOnTargets="_CompileToNative;_ParseBundlerArguments;_ExpandNativeReferences;_PrepareForPostProcessing"
 		>
 
 		<!-- read any data from app extensions -->
-		<ReadItemsFromFile File="@(_AppExtensionDebugSymbolGenerationItemPath)">
-			<Output TaskParameter="Items" ItemName="_AppExtensionDebugSymbolGenerationItem" />
+		<ReadItemsFromFile File="@(_AppExtensionPostProcessingItemsPath)">
+			<Output TaskParameter="Items" ItemName="_AppExtensionPostProcessingItems" />
+		</ReadItemsFromFile>
+
+		<!-- read any data from watch apps -->
+		<ReadItemsFromFile File="@(_WatchAppPostProcessingItemPath)">
+			<Output TaskParameter="Items" ItemName="_WatchAppPostProcessingItems" />
 		</ReadItemsFromFile>
 
 		<ItemGroup>
-			<_DebugSymbolGenerationItem Include="@(_ResolvedNativeReference)" Condition="@(_ResolvedNativeReference->Count()) &gt; 0">
+			<_PostProcessingItem Include="@(_ResolvedNativeReference)" Condition="@(_ResolvedNativeReference->Count()) &gt; 0"> <!-- The condition here shouldn't be necessary, but https://github.com/dotnet/msbuild/issues/4056 -->
 				<!-- If the item in question came with a .dSYM directory, this would be the path to it: -->
 				<dSYMSourcePath>$([System.IO.Path]::GetDirectoryName('%(_ResolvedNativeReference.Identity)')).dSYM</dSYMSourcePath>
 				<!-- This is the name of the dSYM that will be created (if that's the case) -->
 				<DSymName>%(_ResolvedNativeReference.Filename)%(_ResolvedNativeReference.Extension).dSYM</DSymName>
-			</_DebugSymbolGenerationItem>
-			<_DebugSymbolGenerationItem Include="$(_NativeExecutable)" Condition="'$(IsWatchApp)' != 'true'">
+			</_PostProcessingItem>
+			<_PostProcessingItem Include="$([System.IO.Path]::GetFileName('$(AppBundleDir)'))/$(_NativeExecutableRelativePath)" Condition="'$(IsWatchApp)' != 'true'">
 				<SymbolsListPath>$(_MtouchSymbolsList)</SymbolsListPath>
 				<DSymName>$(_AppBundleName)$(AppBundleExtension).dSYM</DSymName>
-			</_DebugSymbolGenerationItem>
+			</_PostProcessingItem>
 
-			<_DebugSymbolGenerationItem>
-				<NoSymbolStrip Condition="'%(_DebugSymbolGenerationItem.NoSymbolStrip)' == ''">$(NoSymbolStrip)</NoSymbolStrip>
-				<NoDSymUtil Condition="'%(_DebugSymbolGenerationItem.NoDSymUtil)' == ''">$(NoDSymUtil)</NoDSymUtil>
+			<_PostProcessingItem>
+				<NoSymbolStrip Condition="'%(_PostProcessingItem.NoSymbolStrip)' == ''">$(NoSymbolStrip)</NoSymbolStrip>
+				<NoDSymUtil Condition="'%(_PostProcessingItem.NoDSymUtil)' == ''">$(NoDSymUtil)</NoDSymUtil>
 				<!-- Did the item in question come with a .dSYM directory? -->
-				<dSYMSourcePathExists Condition="'$(dSYMSourcePathExists)' == '' And Exists('%(_DebugSymbolGenerationItem.dSYMSourcePath)')">true</dSYMSourcePathExists>
+				<dSYMSourcePathExists Condition="'$(dSYMSourcePathExists)' == '' And Exists('%(_PostProcessingItem.dSYMSourcePath)')">true</dSYMSourcePathExists>
 				<dSYMSourcePathExists Condition="'$(dSYMSourcePathExists)' == ''">false</dSYMSourcePathExists>
-				<!-- compute info.plist path inside the dSYM -->
+				<!-- Compute info.plist path inside the dSYM -->
 				<dSYMInfoPlistRelativePath>%(DSymName)\Contents\Info.plist</dSYMInfoPlistRelativePath>
 				<BCSymbolMapName>%(Filename)%(Extension).bcsymbolmap</BCSymbolMapName>
-				<InputRelativePath>$([MSBuild]::MakeRelative('$([System.IO.Path]::GetDirectoryName('$(MSBuildProjectDirectory)\$(AppBundleDir)'))','$(MSBuildProjectDirectory)\%(Identity)'))</InputRelativePath>
-			</_DebugSymbolGenerationItem>
+			</_PostProcessingItem>
 
-			<!-- add any items from app extensions -->
-			<_DebugSymbolGenerationItem Include="@(_AppExtensionDebugSymbolGenerationItem -> '$(_AppPlugInsPath)%(InputRelativePath)')" Condition="@(_AppExtensionDebugSymbolGenerationItem->Count()) &gt; 0">
-				<SymbolsListPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)','%(_AppExtensionDebugSymbolGenerationItem.SourceProjectPath)/%(_AppExtensionDebugSymbolGenerationItem.SymbolsListPath)'))</SymbolsListPath>
-				<InputRelativePath>$([System.IO.Path]::GetFileName('$(AppBundleDir)'))/$(_AppPlugInsRelativePath)%(InputRelativePath)</InputRelativePath>
-			</_DebugSymbolGenerationItem>
+			<!-- Add any items from app extensions -->
+			<!-- We must update metadata with paths relative to the root of the contained app bundle to be relative to the root of the current app bundle -->
+			<_PostProcessingItem Include="@(_AppExtensionPostProcessingItems -> '$(_AppBundleName)$(AppBundleExtension)\$(_AppPlugInsRelativePath)%(Identity)')" Condition="@(_AppExtensionPostProcessingItems->Count()) &gt; 0"> <!-- The condition here shouldn't be necessary, but https://github.com/dotnet/msbuild/issues/4056 -->
+				<SymbolsListPath>$([MSBuild]::MakeRelative('$(MSBuildProjectDirectory)','%(_AppExtensionPostProcessingItems.SourceProjectPath)/%(_AppExtensionPostProcessingItems.SymbolsListPath)'))</SymbolsListPath>
+			</_PostProcessingItem>
+
+			<!-- Add any items from watch app -->
+			<!-- We must update metadata with paths relative to the root of the app bundle to be relative to the root of the current app bundle -->
+			<_PostProcessingItem Include="@(_WatchAppPostProcessingItems -> '$(_AppBundleName)$(AppBundleExtension)/Watch/%(Identity)')" />
+
+			<!-- Set the SourceProjectPath metadata on all items that don't have it already -->
+			<_PostProcessingItem>
+				<SourceProjectPath Condition="'%(_PostProcessingItem.SourceProjectPath)' == ''" >$(MSBuildProjectDirectory)</SourceProjectPath>
+			</_PostProcessingItem>
 		</ItemGroup>
 	</Target>
 
 	<Target
-		Name="_StoreCollectedItemsForDebugSymbolsGeneration"
-		DependsOnTargets="_CollectItemsForDebugSymbolsGeneration"
+		Name="_StoreCollectedItemsForPostProcessing"
+		DependsOnTargets="_CollectItemsForPostProcessing"
 		>
-		<ItemGroup>
-			<_DebugSymbolGenerationItem>
-				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
-			</_DebugSymbolGenerationItem>
-		</ItemGroup>
 		<WriteItemsToFile
-			Condition="'$(IsMacEnabled)' == 'true' And '$(_DebugSymbolGenerationItemPath)' != ''"
-			Items="@(_DebugSymbolGenerationItem)"
-			ItemName="_DebugSymbolGenerationItem"
-			File="$(_DebugSymbolGenerationItemPath)"
+			Condition="'$(IsMacEnabled)' == 'true' And '$(_PostProcessingItemPath)' != ''"
+			Items="@(_PostProcessingItem)"
+			ItemName="_PostProcessingItem"
+			File="$(_PostProcessingItemPath)"
 			IncludeMetadata="true"
 			Overwrite="true"
 			/>
@@ -2254,24 +2292,24 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</GenerateDebugSymbolsDependsOn>
 		<GenerateDebugSymbolsDependsOn>
 			$(GenerateDebugSymbolsDependsOn);
-			_CollectItemsForDebugSymbolsGeneration;
-			_StoreCollectedItemsForDebugSymbolsGeneration;
+			_CollectItemsForPostProcessing;
+			_StoreCollectedItemsForPostProcessing;
 		</GenerateDebugSymbolsDependsOn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(_PostProcess)' == ''">
 		<_PostProcess Condition="'$(IsAppExtension)' == 'true'">false</_PostProcess> <!-- we don't run dsymutil/strip in app extensions, only in the main executable project -->
-		<_PostProcess Condition="'$(_PostProcess)' == '' And '$(ComputedPlatform)' == 'iPhone'">true</_PostProcess> <!-- default to true when building for device -->
-		<_PostProcess Condition="'$(_PostProcess)' == '' And ('$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst')">true</_PostProcess> <!-- default to true when building for desktop -->
-		<_PostProcess Condition="'$(_PostProcess)' == ''">false</_PostProcess> <!-- otherwise default to false -->
+		<_PostProcess Condition="'$(IsWatchApp)' == 'true'">false</_PostProcess> <!-- we don't post-process watch apps, only the main executable project -->
+		<_PostProcess Condition="'$(_IsMultiRidBuild)' == 'true'">false</_PostProcess> <!-- we don't post-process inner builds of multi-rid builds (in .NET), only the outermost build -->
+		<_PostProcess Condition="'$(_PostProcess)' == ''">true</_PostProcess> <!-- otherwise post-process -->
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<_PostProcessAppBundleDependsOn>
 			$(_PostProcessAppBundleDependsOn);
 			$(GenerateDebugSymbolsDependsOn);
-			_CollectItemsForDebugSymbolsGeneration;
-			_StoreCollectedItemsForDebugSymbolsGeneration;
+			_CollectItemsForPostProcessing;
+			_StoreCollectedItemsForPostProcessing;
 			_PreparePostProcessing;
 			_GenerateDSym;
 			_NativeStripFiles;
@@ -2281,25 +2319,28 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_PostProcessAppBundle" DependsOnTargets="$(_PostProcessAppBundleDependsOn)" />
 
-	<Target Name="_PreparePostProcessing" DependsOnTargets="_CollectItemsForDebugSymbolsGeneration">
+	<Target Name="_PreparePostProcessing" DependsOnTargets="_CollectItemsForPostProcessing">
 		<ItemGroup>
-			<_GenerateDSymItem Include="@(_DebugSymbolGenerationItem)" Condition="'%(NoDSymUtil)' != 'true'">
+			<_PostProcessingItem>
 				<DSymDir>$(_OutputDsymLocation)%(DSymName)</DSymDir>
 				<BCSymbolMapPath>$(_OutputDsymLocation)%(BCSymbolMapName)</BCSymbolMapPath>
 				<dSYMInfoPlist>$(_OutputDsymLocation)%(dSYMInfoPlistRelativePath)</dSYMInfoPlist>
-			</_GenerateDSymItem>
-			<_NativeStripItem Include="@(_DebugSymbolGenerationItem)" Condition="'%(NoSymbolStrip)' != 'true'">
+			</_PostProcessingItem>
+			<_PostProcessingItem>
+				<dSYMUtilStampFile>%(dSYMInfoPlist)</dSYMUtilStampFile>
 				<StripStampFile>$(DeviceSpecificIntermediateOutputPath)strip/%(Identity)</StripStampFile>
-			</_NativeStripItem>
+			</_PostProcessingItem>
+			<_GenerateDSymItems Include="@(_PostProcessingItem)" Condition="'%(NoDSymUtil)' != 'true'" />
+			<_NativeStripItems Include="@(_PostProcessingItem)" Condition="'%(NoSymbolStrip)' != 'true'" />
 		</ItemGroup>
 	</Target>
 
-	<!-- This target will execute dsymutil on items in the _GenerateDSymItem item group -->
+	<!-- This target will execute dsymutil on items in the _GenerateDSymItems item group -->
 	<Target
 		Name="_GenerateDSym"
 		Condition="'$(_PostProcess)' == 'true'"
-		Inputs="@(_GenerateDSymItem)"
-		Outputs="@(_GenerateDSymItem -> '%(dSYMInfoPlist)')"
+		Inputs="@(_GenerateDSymItems -> '$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))/%(Identity)')"
+		Outputs="@(_GenerateDSymItems -> '%(dSYMUtilStampFile)')"
 		DependsOnTargets="_PreparePostProcessing"
 		>
 
@@ -2307,53 +2348,56 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<RemoveDir
 				SessionId="$(BuildSessionId)"
 				Condition="'$(IsMacEnabled)' == 'true'"
-				Directories="%(_GenerateDSymItem.DSymDir)"
+				Directories="%(_GenerateDSymItems.DSymDir)"
 		/>
 
 		<!-- Remove any pre-existing bcsymbolmap files as well -->
 		<Delete
 				SessionId="$(BuildSessionId)"
 				Condition="'$(IsMacEnabled)' == 'true'"
-				Files="%(_GenerateDSymItem.BCSymbolMapPath)"
+				Files="%(_GenerateDSymItems.BCSymbolMapPath)"
 		/>
 
-		<!-- run dsymutil on the item in question -->
+		<!-- run dsymutil on the items in question -->
+		<!-- the identity of the items is relative to the parent directory of the app bundle (the output directory) -->
 		<DSymUtil
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			DSymDir="%(_GenerateDSymItem.DSymDir)"
-			Executable="%(_GenerateDSymItem.Identity)"
+			DSymDir="%(_GenerateDSymItems.DSymDir)"
+			Executable="%(_GenerateDSymItems.Identity)"
+			OutputDirectory="$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))"
 			ToolExe="$(DSymUtilExe)"
 			ToolPath="$(DSymUtilPath)"
 		>
 		</DSymUtil>
+
+		<!-- There's no need to touch the stamp file, because it's a file created by dsymutil -->
 	</Target>
 
-	<!-- This target will execute strip on items in the _NativeStripItem item group -->
+	<!-- This target will execute strip on items in the _NativeStripItems item group -->
 	<Target
 		Name="_NativeStripFiles"
 		Condition="'$(_PostProcess)' == 'true'"
-		Inputs="@(_NativeStripItem)"
-		Outputs="@(_NativeStripItem -> '%(StripStampFile)')"
+		Inputs="@(_NativeStripItems -> '$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))/%(Identity)')"
+		Outputs="@(_NativeStripItems -> '%(StripStampFile)')"
 		DependsOnTargets="_PreparePostProcessing"
 		>
 
 		<ItemGroup>
-			<_NativeStripItem>
-				<IsFramework Condition="'%(_NativeStripItem.Kind)' == 'Framework' Or '%(_NativeStripItem.Kind)' == 'Dynamic'">true</IsFramework>
-				<IsFramework Condition="'%(_NativeStripItem.IsFramework)' == ''">false</IsFramework>
-			</_NativeStripItem>
+			<_NativeStripItems>
+				<IsFramework Condition="'%(_NativeStripItems.Kind)' == 'Framework' Or '%(_NativeStripItems.Kind)' == 'Dynamic'">true</IsFramework>
+				<IsFramework Condition="'%(_NativeStripItems.IsFramework)' == ''">false</IsFramework>
+			</_NativeStripItems>
 		</ItemGroup>
-
-		<Exec Command="stat -f %Fm @(_NativeStripItem) @(_NativeStripItem -> '%(StripStampFile)')" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" />
 
 		<!-- strip the debug symbols from the executable -->
 		<SymbolStrip
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			Executable="%(_NativeStripItem.Identity)"
-			IsFramework="%(_NativeStripItem.IsFramework)"
-			SymbolFile="%(_NativeStripItem.SymbolsListPath)"
+			Executable="%(_NativeStripItems.Identity)"
+			IsFramework="%(_NativeStripItems.IsFramework)"
+			OutputDirectory="$([System.IO.Path]::GetDirectoryName('$(AppBundleDir)'))"
+			SymbolFile="%(_NativeStripItems.SymbolsListPath)"
 		>
 		</SymbolStrip>
 
@@ -2361,11 +2405,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<MakeDir
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			Directories="$([System.IO.Path]::GetDirectoryName('%(_NativeStripItem.StripStampFile)'))" />
+			Directories="$([System.IO.Path]::GetDirectoryName('%(_NativeStripItems.StripStampFile)'))" />
 		<Touch
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			Files="%(_NativeStripItem.StripStampFile)"
+			Files="%(_NativeStripItems.StripStampFile)"
 			AlwaysCreate="true"
 		/>
 
@@ -2375,11 +2419,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		-->
 		<Touch
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And Exists('%(_NativeStripItem.dSYMInfoPlist)')"
-			Files="%(_NativeStripItem.dSYMInfoPlist)"
+			Condition="'$(IsMacEnabled)' == 'true' And Exists('%(_NativeStripItems.dSYMInfoPlist)')"
+			Files="%(_NativeStripItems.dSYMInfoPlist)"
 		/>
-
-		<Exec Command="stat -f %Fm @(_NativeStripItem) @(_NativeStripItem -> '%(StripStampFile)')" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true"/>
 	</Target>
 
 	<!-- make sure spotlight indexes everything we've built -->

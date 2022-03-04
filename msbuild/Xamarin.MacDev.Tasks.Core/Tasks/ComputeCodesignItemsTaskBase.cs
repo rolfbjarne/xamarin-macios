@@ -27,9 +27,9 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string CodesignStampPath { get; set; } = string.Empty;
 
-		public ITaskItem [] GenerateDSymItem { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] GenerateDSymItems { get; set; } = Array.Empty<ITaskItem> ();
 
-		public ITaskItem [] NativeStripItem { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] NativeStripItems { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Output]
 		public ITaskItem[] OutputCodesignItems { get; set; } = Array.Empty<ITaskItem> ();
@@ -92,6 +92,27 @@ namespace Xamarin.MacDev.Tasks {
 				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (CodesignStampPath, item.ItemSpec));
 
 				output.Add (item);
+			}
+
+			foreach (var item in output) {
+				// Get any additional stamp files we must touch when the item is signed.
+				var additionalStampFiles = new List<string> ();
+				// We must touch the dSYM directory's Info.plist, to ensure that we don't want to run dsymutil again after codesigning in the next build
+				var generateDSymItem = GenerateDSymItems.FirstOrDefault (v => {
+					return string.Equals (Path.Combine (Path.GetDirectoryName (AppBundleDir), Path.GetDirectoryName (v.ItemSpec)), item.ItemSpec, StringComparison.OrdinalIgnoreCase);
+				});
+				if (generateDSymItem is not null)
+					additionalStampFiles.Add (generateDSymItem.GetMetadata ("dSYMUtilStampFile"));
+				// We must touch the stamp file for native stripping, to ensure that we don't want to run strip again after codesigning in the next build
+				var nativeStripItem = NativeStripItems.FirstOrDefault (v => string.Equals (Path.Combine (Path.GetDirectoryName (AppBundleDir), Path.GetDirectoryName (v.ItemSpec)), item.ItemSpec, StringComparison.OrdinalIgnoreCase));
+				if (nativeStripItem is not null)
+					additionalStampFiles.Add (nativeStripItem.GetMetadata ("StripStampFile"));
+				// Set the CodesignAdditionalFilesToTouch metadata
+				if (additionalStampFiles.Count > 0) {
+					additionalStampFiles.AddRange (item.GetMetadata ("CodesignAdditionalFilesToTouch").Split (','));
+					additionalStampFiles.RemoveAll (v => string.IsNullOrEmpty (v));
+					item.SetMetadata ("CodesignAdditionalFilesToTouch", string.Join (";", additionalStampFiles));
+				}
 			}
 
 			OutputCodesignItems = output.ToArray ();
@@ -171,11 +192,6 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			return rv;
-		}
-
-		void ResolveMetadata (ITaskItem metadata)
-		{
-
 		}
 	}
 

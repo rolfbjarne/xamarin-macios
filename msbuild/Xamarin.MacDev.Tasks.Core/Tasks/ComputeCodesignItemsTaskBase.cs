@@ -60,12 +60,12 @@ namespace Xamarin.MacDev.Tasks {
 			// Find all:
 			//	- *.dylib and *.metallib files
 			//	- *.framework directories
-			Log.LogWarning ($"    Looking in {CodesignBundle.Length} bundles for files to sign");
+			//Log.LogWarning ($"    Looking in {CodesignBundle.Length} bundles for files to sign");
 			foreach (var bundle in CodesignBundle) {
 				var bundlePath = Path.Combine (Path.GetDirectoryName (Path.GetDirectoryName (appBundlePath)), bundle.ItemSpec);
-				Log.LogWarning ($"    Looking in {bundlePath} for files to sign");
+				//Log.LogWarning ($"    Looking in {bundlePath} for files to sign");
 				var filesToSign = FindFilesToSign (bundlePath);
-				Log.LogWarning ($"    Found {filesToSign.Count ()} native libraries in {bundlePath}");
+				//Log.LogWarning ($"    Found {filesToSign.Count ()} native libraries in {bundlePath}");
 				foreach (var lib in filesToSign) {
 					var relativeLib = Path.Combine (AppBundleDir, lib.Substring (appBundlePath.Length));
 					var item = new TaskItem (relativeLib);

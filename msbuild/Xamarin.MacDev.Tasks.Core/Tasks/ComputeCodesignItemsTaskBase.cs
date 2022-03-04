@@ -43,7 +43,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			// Add the app bundles themselves
 			foreach (var bundle in CodesignBundle) {
-				var codesignExecutable = bundle.GetMetadata ("CodesignExecutable");
+				var codesignExecutable = bundle.GetMetadata ("RequireCodeSigning");
 				if (!string.Equals (codesignExecutable, "true"))
 					continue;
 

@@ -43,7 +43,6 @@ namespace Xamarin.MacDev.Tasks {
 				var bundleAppMetadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "CompiledEntitlements.plist" },
-					{ "CodesignExecutable", "true" },
 					{ "CodesignExtraArgs", "bundle-app-extra-args" },
 					{ "CodesignKeychain", "bundle-app-keychain" },
 					{ "CodesignResourceRules", "bundle-app-resource-rules" },
@@ -51,12 +50,12 @@ namespace Xamarin.MacDev.Tasks {
 					{ "CodesignStampFile", "bundle-app-stamp-file" },
 					{ "CodesignUseHardenedRuntime", "bundle-app-use-hardened-runtime" },
 					{ "CodesignUseSecureTimestamp", "bundle-app-use-secure-timestamp" },
+					{ "RequireCodeSigning", "true" },
 				};
 
 				var p1Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "p1.appex-entitlements" },
-					{ "CodesignExecutable", "true" },
 					{ "CodesignExtraArgs", "p1.appex-extra-args" },
 					{ "CodesignKeychain", "p1.appex-keychain" },
 					{ "CodesignResourceRules", "p1.appex-resource-rules" },
@@ -64,6 +63,7 @@ namespace Xamarin.MacDev.Tasks {
 					{ "CodesignStampFile", "" }, // empty stamp file
 					{ "CodesignUseHardenedRuntime", "p1.appex-use-hardened-runtime" },
 					{ "CodesignUseSecureTimestamp", "p1.appex-use-secure-timestamp" },
+					{ "RequireCodeSigning", "false" }, // don't require code signing
 				};
 				var p1MetadataNativeLibraries = new Dictionary<string, string> (p1Metadata);
 				p1MetadataNativeLibraries ["CodesignSigningKey"] = "-";
@@ -72,7 +72,7 @@ namespace Xamarin.MacDev.Tasks {
 				var p2Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "p2.appex-entitlements" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "p2.appex-extra-args" },
 					{ "CodesignKeychain", "p2.appex-keychain" },
 					{ "CodesignResourceRules", "p2.appex-resource-rules" },
@@ -87,7 +87,7 @@ namespace Xamarin.MacDev.Tasks {
 				var p3Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "p3.appex-entitlements" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "p3.appex-extra-args" },
 					{ "CodesignKeychain", "p3.appex-keychain" },
 					{ "CodesignResourceRules", "p3.appex-resource-rules" },
@@ -102,7 +102,7 @@ namespace Xamarin.MacDev.Tasks {
 				var w1Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "CompiledEntitlements.plist" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "bundle-app-extra-args" },
 					{ "CodesignKeychain", "bundle-app-keychain" },
 					{ "CodesignResourceRules", "bundle-app-resource-rules" },
@@ -115,7 +115,7 @@ namespace Xamarin.MacDev.Tasks {
 				var wp1Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "wp1.appex-entitlements" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "wp1.appex-extra-args" },
 					{ "CodesignKeychain", "wp1.appex-keychain" },
 					{ "CodesignResourceRules", "wp1.appex-resource-rules" },
@@ -131,7 +131,7 @@ namespace Xamarin.MacDev.Tasks {
 				var wp2Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "wp2.appex-entitlements" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "wp2.appex-extra-args" },
 					{ "CodesignKeychain", "wp2.appex-keychain" },
 					{ "CodesignResourceRules", "wp2.appex-resource-rules" },
@@ -146,7 +146,7 @@ namespace Xamarin.MacDev.Tasks {
 				var wp3Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "wp3.appex-entitlements" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "wp3.appex-extra-args" },
 					{ "CodesignKeychain", "wp3.appex-keychain" },
 					{ "CodesignResourceRules", "wp3.appex-resource-rules" },
@@ -161,7 +161,7 @@ namespace Xamarin.MacDev.Tasks {
 				var createDumpMetadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "createdump-entitlements" },
-					{ "CodesignExecutable", "true" },
+					{ "RequireCodeSigning", "true" },
 					{ "CodesignExtraArgs", "createdump-extra-args" },
 					{ "CodesignKeychain", "createdump-keychain" },
 					{ "CodesignResourceRules", "createdump-resource-rules" },

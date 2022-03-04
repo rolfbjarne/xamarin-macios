@@ -606,7 +606,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CompileEntitlements"
-		Condition="'$(_RequireCodeSigning)' == 'true' Or ('$(CodesignEntitlements)' != '' And '$(_PlatformName)' != 'macOS')"
+		Condition="'$(_RequireCodeSigning)' == 'true' Or '$(CodesignEntitlements)' != ''"
 		DependsOnTargets="$(_CompileEntitlementsDependsOn)"
 		Outputs="$(DeviceSpecificIntermediateOutputPath)Entitlements.xcent">
 		<CompileEntitlements
@@ -630,7 +630,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<!-- $(_CompiledEntitlements) will be passed to the MTouch task, it's used to embed the entitlements in the executable -->
 			<Output TaskParameter="EntitlementsInExecutable" PropertyName="_CompiledEntitlements" />
 
-			<!-- $(_CompiledCodesignEntitlements) will be used only with Codesign tasks when building for device. MUST NOT BE SET for iOS Simulator builds. -->
+			<!-- $(_CompiledCodesignEntitlements) will be used only with Codesign tasks when building for device or desktop. MUST NOT BE SET for iOS Simulator builds. -->
 			<Output TaskParameter="EntitlementsInSignature" PropertyName="_CompiledCodesignEntitlements" />
 		</CompileEntitlements>
 	</Target>
@@ -1787,7 +1787,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target
 		Name="_CodesignVerify"
-		Condition="'$(_CodesignAppBundleCondition)' == 'true'"
+		Condition="'$(_CodesignAppBundleCondition)' == 'true' And '$(_RequireCodeSigning)' == 'true'"
 		DependsOnTargets="_CodesignAppBundle"
 		>
 		<CodesignVerify
@@ -1818,14 +1818,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		>
 
 		<!-- Get app bundles to sign from app extensions -->
-		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign-bundle.items')">
+		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign-bundle.items')" Condition="Exists('%(Identity)\..\codesign-bundle.items')">
 			<Output TaskParameter="Items" ItemName="_CodesignAppExtensionBundle" />
 		</ReadItemsFromFile>
 		<ItemGroup>
 			<_CodesignBundle Include="@(_CodesignAppExtensionBundle->'$(_AppBundleName)$(AppBundleExtension)/$(_AppPlugInsRelativePath)/%(Identity)')" />
 		</ItemGroup>
 		<!-- Get items to sign from app extensions -->
-		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign.items')">
+		<ReadItemsFromFile File="@(_ResolvedAppExtensionReferences->'%(Identity)\..\codesign.items')" Condition="Exists('%(Identity)\..\codesign.items')">
 			<Output TaskParameter="Items" ItemName="_CodesignAppExtensionItem" />
 		</ReadItemsFromFile>
 		<ItemGroup>
@@ -1833,14 +1833,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 
 		<!-- Get app bundles to sign from watch apps -->
-		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign-bundle.items')">
+		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign-bundle.items')" Condition="Exists('%(Identity)\..\codesign-bundle.items')">
 			<Output TaskParameter="Items" ItemName="_CodesignWatchBundle" />
 		</ReadItemsFromFile>
 		<ItemGroup>
 			<_CodesignBundle Include="@(_CodesignWatchBundle->'$(_AppBundleName)$(AppBundleExtension)/Watch/%(Identity)')" />
 		</ItemGroup>
 		<!-- Get items to sign from watch apps -->
-		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign.items')">
+		<ReadItemsFromFile File="@(_ResolvedWatchAppReferences->'%(Identity)\..\codesign.items')" Condition="Exists('%(Identity)\..\codesign.items')">
 			<Output TaskParameter="Items" ItemName="_CodesignWatchItem" />
 		</ReadItemsFromFile>
 		<ItemGroup>
@@ -1849,18 +1849,12 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<!-- Add this app bundle -->
 		<PropertyGroup>
-			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' == 'macOS'">$(IntermediateOutputPath)Entitlements.xcent</_AppBundleCodesignEntitlements>
-			<_AppBundleCodesignEntitlements Condition="'$(_PlatformName)' != 'macOS'">$(_CompiledCodesignEntitlements)</_AppBundleCodesignEntitlements>
-
-			<_CodesignExecutable Condition="'$(IsAppExtension)' == 'true'">true</_CodesignExecutable>
-			<_CodesignExecutable Condition="'$(_PlatformName)' == 'macOS' And '$(_RequireCodeSigning)'">true</_CodesignExecutable>
-			<_CodesignExecutable Condition="'$(_PlatformName)' != 'macOS' And ('$(_CanOutputAppBundle)' == 'true' And '$(_CodeSigningKey)' != '') And ('$(IsAppExtension)' == 'false' Or '@(_ResolvedAppExtensionReferences)' != '')">true</_CodesignExecutable>
+			<_AppBundleCodesignEntitlements>$(_CompiledCodesignEntitlements)</_AppBundleCodesignEntitlements>
 		</PropertyGroup>
 
 		<!-- The app bundle is added to _CodesignBundle -->
 		<ItemGroup>
 			<_CodesignBundle Include="$(_AppBundleName)$(AppBundleExtension)">
-				<CodesignExecutable>$(_CodesignExecutable)</CodesignExecutable>
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
 				<CodesignDisableTimestamp>false</CodesignDisableTimestamp>
 				<CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">true</CodesignDisableTimestamp>
@@ -1871,6 +1865,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
 				<CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
 				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
+				<RequireCodeSigning>$(_RequireCodeSigning)</RequireCodeSigning>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
 			</_CodesignBundle>
 

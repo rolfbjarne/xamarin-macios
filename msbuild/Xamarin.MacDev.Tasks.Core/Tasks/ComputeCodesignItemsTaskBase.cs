@@ -43,7 +43,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			// Add the app bundles themselves
 			foreach (var bundle in CodesignBundle) {
-				var codesignExecutable = bundle.GetMetadata ("CodesignExecutable");
+				var codesignExecutable = bundle.GetMetadata ("RequireCodeSigning");
 				if (!string.Equals (codesignExecutable, "true"))
 					continue;
 
@@ -52,7 +52,7 @@ namespace Xamarin.MacDev.Tasks {
 				bundle.CopyMetadataTo (item);
 
 				// Compute the stamp file to use
-				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (CodeSignatureRelativePath, "_CodeSignature", "CodeResources"));
+				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (AppBundleDir, CodeSignatureRelativePath, "_CodeSignature", "CodeResources"));
 
 				output.Add (item);
 			}

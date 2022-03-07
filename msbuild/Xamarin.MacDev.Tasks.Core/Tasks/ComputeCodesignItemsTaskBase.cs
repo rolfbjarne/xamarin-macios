@@ -44,7 +44,8 @@ namespace Xamarin.MacDev.Tasks {
 			// Add the app bundles themselves
 			foreach (var bundle in CodesignBundle) {
 				var codesignExecutable = bundle.GetMetadata ("RequireCodeSigning");
-				if (!string.Equals (codesignExecutable, "true"))
+				var codesignSigningKey = bundle.GetMetadata ("CodesignSigningKey");
+				if (!string.Equals (codesignExecutable, "true") && string.IsNullOrEmpty (codesignSigningKey))
 					continue;
 
 				var bundlePath = Path.Combine (Path.GetDirectoryName (AppBundleDir), bundle.ItemSpec);
@@ -166,7 +167,7 @@ namespace Xamarin.MacDev.Tasks {
 			case ApplePlatform.MacCatalyst:
 				dylibDirectory = Path.Combine (appPath, "Contents");
 				metallibDirectory = Path.Combine (appPath, "Contents", "Resources");
-				frameworksDirectory = Path.Combine (appPath, "Content", "Frameworks");
+				frameworksDirectory = Path.Combine (appPath, "Contents", "Frameworks");
 				break;
 			default:
 				throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, Platform));

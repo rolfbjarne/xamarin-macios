@@ -162,6 +162,21 @@ namespace Xamarin.MacDev.Tasks
 			return fallbackValue;
 		}
 
+		string ResolvePath (ITaskItem item, string path)
+		{
+			if (string.IsNullOrEmpty (path))
+				return path;
+
+			if (Path.IsPathRooted (path))
+				return path;
+
+			var sourceProjectPath = GetNonEmptyStringOrFallback (item, "SourceProjectPath", null);
+			if (sourceProjectPath is null)
+				return path;
+
+			return Path.Combine (sourceProjectPath, path);
+		}
+
 		IList<string> GenerateCommandLineArguments (ITaskItem item)
 		{
 			var args = new List<string> ();
@@ -174,6 +189,10 @@ namespace Xamarin.MacDev.Tasks
 			var resourceRules = GetNonEmptyStringOrFallback (item, "CodesignResourceRules", ResourceRules);
 			var entitlements = GetNonEmptyStringOrFallback (item, "CodesignEntitlements", Entitlements);
 			var extraArgs = GetNonEmptyStringOrFallback (item, "CodesignExtraArgs", ExtraArgs);
+
+			// Properties that might be relative paths must be resolved according to the location of the project that defined them.
+			resourceRules = ResolvePath (item, resourceRules);
+			entitlements = ResolvePath (item, entitlements);
 
 			args.Add ("-v");
 			args.Add ("--force");

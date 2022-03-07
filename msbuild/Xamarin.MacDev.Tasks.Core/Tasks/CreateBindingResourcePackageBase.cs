@@ -113,16 +113,17 @@ namespace Xamarin.MacDev.Tasks {
 					writer.WriteStartElement ("NativeReference");
 					writer.WriteAttributeString ("Name", Path.GetFileName (nativeRef.ItemSpec));
 
-					var namesNotAdded = new HashSet<string> (NativeReferenceAttributeNames, StringComparer.OrdinalIgnoreCase);
-					foreach (DictionaryEntry kvp in nativeRef.CloneCustomMetadata ()) {
-						var key = (string) kvp.Key;
-						namesNotAdded.Remove (key);
+					var customMetadata = nativeRef.CloneCustomMetadataToDictionary ();
+					var allKeys = customMetadata.Keys.Union (NativeReferenceAttributeNames, StringComparer.OrdinalIgnoreCase);
+					foreach (var key in allKeys.OrderBy (v => v)) {
 						writer.WriteStartElement (key);
-						writer.WriteString ((string) kvp.Value);
+						if (customMetadata.TryGetValue (key, out var value)) {
+							writer.WriteString (value);
+						} else {
+							writer.WriteString (string.Empty);
+						}
 						writer.WriteEndElement ();
 					}
-					foreach (var item in namesNotAdded)
-						writer.WriteElementString (item, string.Empty);
 					writer.WriteEndElement ();
 				}
 				writer.WriteEndElement ();

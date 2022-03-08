@@ -53,7 +53,7 @@ namespace Xamarin.MacDev.Tasks {
 				bundle.CopyMetadataTo (item);
 
 				// Compute the stamp file to use
-				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (AppBundleDir, CodeSignatureRelativePath, "_CodeSignature", "CodeResources"));
+				item.SetMetadataIfNotSet ("CodesignStampFile", Path.Combine (bundlePath, CodeSignatureRelativePath, "_CodeSignature", "CodeResources"));
 
 				output.Add (item);
 			}

@@ -40,6 +40,14 @@ namespace Xamarin.MacDev.Tasks {
 				var generateDSymItems = new List<ITaskItem> ();
 				var nativeStripItems = new List<ITaskItem> ();
 
+				string codeSignatureSubdirectory = string.Empty;
+				switch (platform) {
+				case ApplePlatform.MacCatalyst:
+				case ApplePlatform.MacOSX:
+					codeSignatureSubdirectory = "Contents/";
+					break;
+				}
+
 				var bundleAppMetadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
 					{ "CodesignEntitlements" , "CompiledEntitlements.plist" },
@@ -111,6 +119,7 @@ namespace Xamarin.MacDev.Tasks {
 					{ "CodesignUseHardenedRuntime", "bundle-app-use-hardened-runtime" },
 					{ "CodesignUseSecureTimestamp", "bundle-app-use-secure-timestamp" },
 				};
+				var w1MetadataNativeLibraries = new Dictionary<string, string> (w1Metadata);
 
 				var wp1Metadata = new Dictionary<string, string> {
 					{ "CodesignDisableTimestamp", "true" },
@@ -209,79 +218,116 @@ namespace Xamarin.MacDev.Tasks {
 				};
 
 				var infos = new CodesignInfo [] {
-					new CodesignInfo ("Bundle.app", P.All, bundleAppMetadata),
-					new CodesignInfo ("Bundle.app/a.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/a.dylib")),
-					new CodesignInfo ("Bundle.app/Contents/b.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/b.dylib")),
-					new CodesignInfo ("Bundle.app/Contents/MonoBundle/c.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/MonoBundle/c.dylib")),
-					new CodesignInfo ("Bundle.app/Contents/MonoBundle/SubDir/d.dylib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/MonoBundle/SubDir/d.dylib")),
-					new CodesignInfo ("Bundle.app/M1.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/M1.metallib")),
-					new CodesignInfo ("Bundle.app/Resources/M2.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Resources/M2.metallib")),
-					new CodesignInfo ("Bundle.app/Contents/Resources/M3.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/Resources/M3.metallib")),
-					new CodesignInfo ("Bundle.app/Contents/Resources/SubDir/M4.metallib", P.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/Resources/SubDir/M4.metallib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex", P.All, p1Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/P1a.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/P1a.dylib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/P1b.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/P1b.dylib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/PM1.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PM1.metallib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Resources/PM2.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Resources/PM2.metallib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/Resources/PM3.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/Resources/PM3.metallib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib", P.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex", P.All, p2Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2a.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/P2b.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/P2c.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/SubDir/P2d.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2M1.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Resources/P2M2.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/P2M3.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/SubDir/P2M4.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex", P.All, p3Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3a.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/P3c.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/SubDir/P3d.dylib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3M1.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Resources/P3M2.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/P3M3.metallib", P.All),
-					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/SubDir/P3M4.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app", P.All, w1Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/b.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/c.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/SubDir/d.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/W1M1.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/Resources/W1M2.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/Resources/W1M3.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/Resources/SubDir/W1M4.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex", P.All, wp1Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1a.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/W1c.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/SubDir/W1d.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1M1.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Resources/W1M2.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/W1M3.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/SubDir/W1M4.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex", P.All, wp2Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/W2c.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/SubDir/W2c.dylib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2M1.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Resources/W2M2.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/W2M3.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/SubDir/W2M4.metallib", P.All),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex", P.All, wp3Metadata.Set ("CodesignStampFile", "_CodeSignature/CodeResources")),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/W3c.dylib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/SubDir/W3c.dylib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3M1.metallib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Resources/W3M2.metallib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/W3M3.metallib", P.All, wp3MetadataNativeLibraries),
-					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/SubDir/W3M4.metallib", P.All, wp3MetadataNativeLibraries),
+					new CodesignInfo ("Bundle.app", Platforms.All, bundleAppMetadata.Set ("CodesignAdditionalFilesToTouch", "bundle-strip-stamp-file")),
+					new CodesignInfo ("Bundle.app/a.dylib", Platforms.Mobile, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/a.dylib")),
+					new CodesignInfo ("Bundle.app/Contents/b.dylib", Platforms.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/b.dylib")),
+					new CodesignInfo ("Bundle.app/Contents/MonoBundle/c.dylib", Platforms.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/MonoBundle/c.dylib")),
+					new CodesignInfo ("Bundle.app/Contents/MonoBundle/SubDir/d.dylib", Platforms.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/MonoBundle/SubDir/d.dylib")),
+					new CodesignInfo ("Bundle.app/M1.metallib", Platforms.Mobile, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/M1.metallib")),
+					new CodesignInfo ("Bundle.app/Resources/M2.metallib", Platforms.Mobile, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Resources/M2.metallib")),
+					new CodesignInfo ("Bundle.app/Contents/Resources/M3.metallib", Platforms.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/Resources/M3.metallib")),
+					new CodesignInfo ("Bundle.app/Contents/Resources/SubDir/M4.metallib", Platforms.All, bundleAppMetadata.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Contents/Resources/SubDir/M4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/PlugIns/P1.appex",
+						Platforms.None,
+						p1Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+					),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/P1a.dylib", Platforms.Mobile, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/P1a.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/P1b.dylib", Platforms.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/P1b.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib", Platforms.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/P1c.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib", Platforms.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/MonoBundle/SubDir/P1d.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/PM1.metallib", Platforms.Mobile, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PM1.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Resources/PM2.metallib", Platforms.Mobile, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Resources/PM2.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/Resources/PM3.metallib", Platforms.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/Resources/PM3.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib", Platforms.All, p1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/Contents/Resources/SubDir/PM4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/PlugIns/P1.appex/plugins/P2.appex",
+						Platforms.All,
+						p2Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+					),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2a.dylib", Platforms.Mobile, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/P2a.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/P2b.dylib", Platforms.All, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Contents/P2b.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/P2c.dylib", Platforms.All, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Contents/MonoBundle/P2c.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/MonoBundle/SubDir/P2d.dylib", Platforms.All, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Contents/MonoBundle/SubDir/P2d.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2M1.metallib", Platforms.Mobile, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/P2M1.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Resources/P2M2.metallib", Platforms.Mobile, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Resources/P2M2.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/P2M3.metallib", Platforms.All, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Contents/Resources/P2M3.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/Resources/SubDir/P2M4.metallib", Platforms.All, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Contents/Resources/SubDir/P2M4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex",
+						Platforms.All,
+						p3Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
+							Set ("CodesignAdditionalFilesToTouch", "p3-strip-stamp-file")
+					),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3a.dylib", Platforms.Mobile, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/P3a.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib", Platforms.All, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/P3c.dylib", Platforms.All, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/P3c.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/SubDir/P3d.dylib", Platforms.All, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Contents/MonoBundle/SubDir/P3d.dylib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3M1.metallib", Platforms.Mobile, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/P3M1.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Resources/P3M2.metallib", Platforms.Mobile, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Resources/P3M2.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/P3M3.metallib", Platforms.All, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Contents/Resources/P3M3.metallib")),
+					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/Resources/SubDir/P3M4.metallib", Platforms.All, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Contents/Resources/SubDir/P3M4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/Watch/W1.app",
+						Platforms.All,
+						w1Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+					),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/b.dylib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/b.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/c.dylib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/MonoBundle/c.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/SubDir/d.dylib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/MonoBundle/SubDir/d.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/W1M1.metallib", Platforms.Mobile, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/W1M1.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Resources/W1M2.metallib", Platforms.Mobile, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Resources/W1M2.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/Resources/W1M3.metallib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/Resources/W1M3.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/Resources/SubDir/W1M4.metallib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/Resources/SubDir/W1M4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/Watch/W1.app/PlugIns/WP1.appex",
+						Platforms.All,
+						wp1Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+					),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1a.dylib", Platforms.Mobile, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1a.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib", Platforms.All, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/W1c.dylib", Platforms.All, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/W1c.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/SubDir/W1d.dylib", Platforms.All, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/MonoBundle/SubDir/W1d.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1M1.metallib", Platforms.Mobile, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1M1.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Resources/W1M2.metallib", Platforms.Mobile, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Resources/W1M2.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/W1M3.metallib", Platforms.All, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/W1M3.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/SubDir/W1M4.metallib", Platforms.All, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/Resources/SubDir/W1M4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex",
+						Platforms.All,
+						wp2Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+					),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib", Platforms.Mobile, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib", Platforms.All, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/W2c.dylib", Platforms.All, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/W2c.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/SubDir/W2c.dylib", Platforms.All, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/MonoBundle/SubDir/W2c.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2M1.metallib", Platforms.Mobile, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2M1.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Resources/W2M2.metallib", Platforms.Mobile, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Resources/W2M2.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/W2M3.metallib", Platforms.All, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/W2M3.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/SubDir/W2M4.metallib", Platforms.All, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/Resources/SubDir/W2M4.metallib")),
+					new CodesignInfo (
+						"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex",
+						Platforms.All,
+						wp3Metadata.
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
+							Set ("CodesignAdditionalFilesToTouch", "wp3-strip-stamp-file")
+					),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib", Platforms.Mobile, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib", Platforms.All, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/W3c.dylib", Platforms.All, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/W3c.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/SubDir/W3c.dylib", Platforms.All, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/MonoBundle/SubDir/W3c.dylib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3M1.metallib", Platforms.Mobile, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3M1.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Resources/W3M2.metallib", Platforms.Mobile, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Resources/W3M2.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/W3M3.metallib", Platforms.All, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/W3M3.metallib")),
+					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/SubDir/W3M4.metallib", Platforms.All, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/Resources/SubDir/W3M4.metallib")),
 
-					new CodesignInfo ("Bundle.app/Contents/MonoBundle/createdump", P.All, createDumpMetadata),
+					new CodesignInfo ("Bundle.app/Contents/MonoBundle/createdump", Platforms.All, createDumpMetadata),
 				};
 
 				var allFiles = infos.Select (v => v.ItemSpec).ToArray ();
@@ -299,9 +345,6 @@ namespace Xamarin.MacDev.Tasks {
 
 				var outputCodesignItems = task.OutputCodesignItems;
 				Assert.That (outputCodesignItems.Select (v => v.ItemSpec), Is.Unique, "Uniqueness");
-
-				foreach (var item in outputCodesignItems)
-					Console.WriteLine ($"Item to sign: {item.ItemSpec}");
 
 				var failures = new List<string> ();
 				var itemsFound = new List<ITaskItem> ();
@@ -329,17 +372,18 @@ namespace Xamarin.MacDev.Tasks {
 						if (metadata == string.Empty && kvp.Value != string.Empty) {
 							failures.Add ($"Item '{info.ItemSpec}': Expected metadata '{kvp.Key}' not found (with value '{kvp.Value}').");
 						} else if (!string.Equals (metadata, kvp.Value)) {
-							failures.Add ($"Item '{info.ItemSpec}': Expected value '{kvp.Value}' for metadata '{kvp.Key}', but got '{metadata}' instead.");
+							failures.Add ($"Item '{info.ItemSpec}': Expected value '{kvp.Value}' for metadata '{kvp.Key}', but got '{metadata}' instead.\nExpected: {kvp.Value}\nActual:   {metadata}");
 						}
 					}
 
 					var customMetadata = item.CopyCustomMetadata ();
-					foreach (var key in customMetadata.Keys.ToList ()) {
-						if (info.Metadata?.ContainsKey (key) == true)
-							customMetadata.Remove (key);
-					}
-					foreach (var custom in customMetadata) {
-						failures.Add ($"Item '{info.ItemSpec}': Unexpected metadata '{custom.Key}' (with value '{custom.Value}').");
+					var unexpectedMetadata = customMetadata.Keys.ToHashSet ();
+					unexpectedMetadata.ExceptWith (info.Metadata.Keys);
+					unexpectedMetadata.Remove ("OriginalItemSpec");
+					foreach (var unexpected in unexpectedMetadata) {
+						if (string.IsNullOrEmpty (customMetadata [unexpected]))
+							continue;
+						failures.Add ($"Item '{info.ItemSpec}': Unexpected metadata '{unexpected}' with value '{customMetadata [unexpected]}'.");
 					}
 				}
 
@@ -348,29 +392,31 @@ namespace Xamarin.MacDev.Tasks {
 					failures.Add ($"Did not expect '{itemNotFound.ItemSpec}' to be signed.");
 				}
 
-				Console.WriteLine ($"{failures.Count} failures");
-				foreach (var f in failures)
-					Console.WriteLine (f);
-				Console.WriteLine ($"{failures.Count} failures");
+				if (failures.Count > 0) {
+					Console.WriteLine ($"{failures.Count} failures");
+					foreach (var f in failures)
+						Console.WriteLine (f);
+					Console.WriteLine ($"{failures.Count} failures");
+				}
 				Assert.That (failures, Is.Empty, "Failures");
 			} finally {
 				Environment.CurrentDirectory = currentDir;
 			}
 		}
 
-		bool IsPlatform (P platforms, ApplePlatform platform)
+		bool IsPlatform (Platforms platforms, ApplePlatform platform)
 		{
 			switch (platform) {
 			case ApplePlatform.iOS:
-				return (platforms & P.iOS) == P.iOS;
+				return (platforms & Platforms.iOS) == Platforms.iOS;
 			case ApplePlatform.TVOS:
-				return (platforms & P.tvOS) == P.tvOS;
+				return (platforms & Platforms.tvOS) == Platforms.tvOS;
 			case ApplePlatform.MacOSX:
-				return (platforms & P.macOS) == P.macOS;
+				return (platforms & Platforms.macOS) == Platforms.macOS;
 			case ApplePlatform.WatchOS:
-				return (platforms & P.watchOS) == P.watchOS;
+				return (platforms & Platforms.watchOS) == Platforms.watchOS;
 			case ApplePlatform.MacCatalyst:
-				return (platforms & P.MacCatalyst) == P.MacCatalyst;
+				return (platforms & Platforms.MacCatalyst) == Platforms.MacCatalyst;
 			default:
 				throw new NotImplementedException ();
 			}
@@ -391,11 +437,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		class CodesignInfo {
 			public string ItemSpec;
-			public P SignedOn;
+			public Platforms SignedOn;
 			public Dictionary<string, string> Metadata;
 			public ITaskItem? CodesignItem;
 
-			public CodesignInfo (string item, P signedOn, Dictionary<string, string>? metadata = null)
+			public CodesignInfo (string item, Platforms signedOn, Dictionary<string, string>? metadata = null)
 			{
 				ItemSpec = item;
 				SignedOn = signedOn;
@@ -403,8 +449,9 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
+		// As opposed to ApplePlatform, this enum is a bitfield, and can represent multiple platforms in a single value.
 		[Flags]
-		enum P {
+		enum Platforms {
 			None = 0,
 			iOS = 1,
 			tvOS = 2,

@@ -218,19 +218,13 @@ namespace Xamarin.Tests {
 					if (verbose)
 						Console.WriteLine ($"ℹ️ BuildMessage: {buildMessage.Message}");
 					var ea = buildMessage;
-					string eaMessage;
-					try {
-						eaMessage = ea.Message;
-					} catch (Exception e) {
-						eaMessage = $"Unable to fetch message: {e.Message}";
-					}
 					MessageEvents.Add (new LogEvent {
 						File = ea.File,
 						LineNumber = ea.LineNumber,
 						EndLineNumber = ea.EndLineNumber,
 						ColumnNumber = ea.ColumnNumber,
 						EndColumnNumber = ea.EndColumnNumber,
-						Message = eaMessage,
+						Message = ea.Message,
 						ProjectFile = ea.ProjectFile,
 						Code = ea.Code,
 						SubCategory = ea.Subcategory,

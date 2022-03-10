@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+
 using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks
@@ -29,7 +31,15 @@ namespace Xamarin.MacDev.Tasks
 				BuildConnection.CancelAsync (SessionId, BuildEngine4).Wait ();
 		}
 
-		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied () => Enumerable.Empty<ITaskItem> ();
+		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied ()
+		{
+			// ShouldCopyToBuildServer only works with files, and ditto can take directories (and that's why we use ditto often).
+			// So here we must enumerate all the items inside the source directory.
+			var dir = Source.ItemSpec;
+			if (!Directory.Exists (dir))
+				return Enumerable.Empty<ITaskItem> ();
+			return Directory.EnumerateFiles (dir, "*", SearchOption.TopDirectoryOnly).Select (v => new TaskItem (v));
+		}
 
 		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
 

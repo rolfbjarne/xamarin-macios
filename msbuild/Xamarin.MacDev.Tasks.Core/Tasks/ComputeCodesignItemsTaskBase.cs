@@ -72,7 +72,7 @@ namespace Xamarin.MacDev.Tasks {
 				// Get any additional stamp files we must touch when the item is signed.
 				var additionalStampFiles = new List<string> ();
 				// We must touch the dSYM directory's Info.plist, to ensure that we don't end up running dsymutil again after codesigning in the next build
-				var dSYMUtilStampFile = Path.Combine (AppBundleDir + ".dSYM", "Contents", "Info.plist");
+				var dSYMUtilStampFile = Path.Combine (Path.GetDirectoryName (AppBundleDir), Path.GetFileName (item.ItemSpec) + ".dSYM", "Contents", "Info.plist");
 				additionalStampFiles.Add (dSYMUtilStampFile);
 				// Set the CodesignAdditionalFilesToTouch metadata (merge with any existing values)
 				if (additionalStampFiles.Count > 0) {

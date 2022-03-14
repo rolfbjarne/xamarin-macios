@@ -221,7 +221,8 @@ namespace Xamarin.MacDev.Tasks {
 						"Bundle.app/PlugIns/P1.appex/plugins/P2.appex",
 						Platforms.All,
 						p2Metadata.
-							Set ("CodesignStampFile", $"Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+							Set ("CodesignStampFile", $"Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
+							Set ("CodesignAdditionalFilesToTouch", "P2.appex.dSYM/Contents/Info.plist")
 					),
 					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/P2a.dylib", Platforms.Mobile, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/P2a.dylib")),
 					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/Contents/P2b.dylib", Platforms.All, p2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/Contents/P2b.dylib")),
@@ -236,7 +237,7 @@ namespace Xamarin.MacDev.Tasks {
 						Platforms.All,
 						p3Metadata.
 							Set ("CodesignStampFile", $"Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
-							Set ("CodesignAdditionalFilesToTouch", "p3-strip-stamp-file")
+							Set ("CodesignAdditionalFilesToTouch", "P3.appex.dSYM/Contents/Info.plist")
 					),
 					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/P3a.dylib", Platforms.Mobile, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/P3a.dylib")),
 					new CodesignInfo ("Bundle.app/PlugIns/P1.appex/plugins/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib", Platforms.All, p3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/PlugIns/P1.appex/PlugIns/P2.appex/PlugIns/P3.appex/Contents/P3b.dylib")),
@@ -250,7 +251,8 @@ namespace Xamarin.MacDev.Tasks {
 						"Bundle.app/Watch/W1.app",
 						Platforms.All,
 						w1Metadata.
-							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
+							Set ("CodesignAdditionalFilesToTouch", "W1.app.dSYM/Contents/Info.plist")
 					),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/b.dylib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/b.dylib")),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/Contents/MonoBundle/c.dylib", Platforms.All, w1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/Contents/MonoBundle/c.dylib")),
@@ -263,7 +265,8 @@ namespace Xamarin.MacDev.Tasks {
 						"Bundle.app/Watch/W1.app/PlugIns/WP1.appex",
 						Platforms.All,
 						wp1Metadata.
-							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
+							Set ("CodesignAdditionalFilesToTouch", "WP1.appex.dSYM/Contents/Info.plist")
 					),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1a.dylib", Platforms.Mobile, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/W1a.dylib")),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib", Platforms.All, wp1MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/Contents/W1b.dylib")),
@@ -277,7 +280,8 @@ namespace Xamarin.MacDev.Tasks {
 						"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex",
 						Platforms.All,
 						wp2Metadata.
-							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources")
+							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
+							Set ("CodesignAdditionalFilesToTouch", "WP2.appex.dSYM/Contents/Info.plist")
 					),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib", Platforms.Mobile, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/W2a.dylib")),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib", Platforms.All, wp2MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/Contents/W2b.dylib")),
@@ -292,7 +296,7 @@ namespace Xamarin.MacDev.Tasks {
 						Platforms.All,
 						wp3Metadata.
 							Set ("CodesignStampFile", $"Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/{codeSignatureSubdirectory}_CodeSignature/CodeResources").
-							Set ("CodesignAdditionalFilesToTouch", "wp3-strip-stamp-file")
+							Set ("CodesignAdditionalFilesToTouch", "WP3.appex.dSYM/Contents/Info.plist")
 					),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib", Platforms.Mobile, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/W3a.dylib")),
 					new CodesignInfo ("Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib", Platforms.All, wp3MetadataNativeLibraries.Set ("CodesignStampFile", "codesign-stamp-path/Bundle.app/Watch/W1.app/PlugIns/WP1.appex/PlugIns/WP2.appex/PlugIns/WP3.appex/Contents/W3b.dylib")),

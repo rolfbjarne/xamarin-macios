@@ -21,6 +21,12 @@ namespace Xamarin.MacDev.Tasks {
 			Log.LogError ($"The task {GetType ().Name} requires TargetFrameworkMoniker to be set.");
 		}
 
+		public string DotNetTfm {
+			get {
+				return "net" + TargetFramework.Version.Major + "." + TargetFramework.Version.Minor;
+			}
+		}
+
 		public string Product {
 			get {
 				if (IsDotNet)

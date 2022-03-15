@@ -1971,7 +1971,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<WriteItemsToFile
 			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)'"
+			SessionId="$(BuildSessionId)"
 			Items="@(_CodesignBundle)"
 			ItemName="_CodesignBundle"
 			File="$(DeviceSpecificOutputPath)codesign-bundle.items"
@@ -1981,7 +1981,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<WriteItemsToFile
 			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)'"
+			SessionId="$(BuildSessionId)"
 			Items="@(_CodesignItems)"
 			ItemName="_CodesignItems"
 			File="$(DeviceSpecificOutputPath)codesign.items"
@@ -2015,7 +2015,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<ComputeCodesignItems
 			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)'"
+			SessionId="$(BuildSessionId)"
 			AppBundleDir="$(AppBundleDir)"
 			CodesignBundle="@(_CodesignBundle)"
 			CodesignItems="@(_CodesignItems)"

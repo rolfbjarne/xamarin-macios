@@ -147,6 +147,9 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var rv = new List<string> ();
 
+			// Canonicalize the app path, so string comparisons work later on
+			appPath = PathUtils.ResolveSymbolicLinks (Path.GetFullPath (appPath));
+
 			// Make sure path ends with trailing slash to ease logic
 			appPath = PathUtils.EnsureTrailingSlash (appPath);
 

@@ -95,6 +95,9 @@ namespace Xamarin.MacDev.Tasks {
 					var item = new TaskItem (relativeLib);
 					bundle.CopyMetadataTo (item);
 
+					// These items must not use the entitlements for the app
+					item.RemoveMetadata ("CodesignEntitlements");
+
 					// These files are a bit special, because they're always signed. This is done
 					// by setting the signing key to '-' if it's not set.
 					item.SetMetadataIfNotSet ("CodesignSigningKey", "-");

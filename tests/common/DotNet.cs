@@ -147,9 +147,11 @@ namespace Xamarin.Tests {
 
 		public static void CompareApps (string old_app, string new_app)
 		{
+#if false
 			Console.WriteLine ($"Comparing:");
 			Console.WriteLine ($"    {old_app}");
 			Console.WriteLine ($"    {new_app}");
+#endif
 
 			var all_old_files = Directory.GetFiles (old_app, "*.*", SearchOption.AllDirectories).Select ((v) => v.Substring (old_app.Length + 1));
 			var all_new_files = Directory.GetFiles (new_app, "*.*", SearchOption.AllDirectories).Select ((v) => v.Substring (new_app.Length + 1));

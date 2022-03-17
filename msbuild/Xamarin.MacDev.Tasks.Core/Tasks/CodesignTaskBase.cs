@@ -441,19 +441,18 @@ namespace Xamarin.MacDev.Tasks
 				Log.LogWarning ("Unable to sign '{0}': file or directory not found.", res.ItemSpec);
 			}
 
-#if false
-			Log.LogWarning ("Codesigning {0} buckets", buckets.Count);
+			Log.LogMessage (MessageImportance.Low, $"Codesigning {buckets.Count} buckets");
 			for (var b = 0; b < buckets.Count; b++) {
 				var bucket = buckets [b];
-				Log.LogWarning ($"    Bucket #{b + 1} contains {bucket.Count} items:");
+				Log.LogMessage (MessageImportance.Low, $"    Bucket #{b + 1} contains {bucket.Count} items:");
 				foreach (var item in bucket) {
-					Log.LogWarning ($"        {item.ItemSpec}");
+					Log.LogMessage (MessageImportance.Low, $"        {item.ItemSpec}");
 				}
 			}
-#endif
 
 			for (var b = 0; b < buckets.Count; b++) {
 				var bucket = buckets [b];
+				Log.LogMessage (MessageImportance.Low, $"Codesigning bucket #{b + 1}...");
 				Parallel.ForEach (bucket, new ParallelOptions { MaxDegreeOfParallelism = Math.Max (Environment.ProcessorCount / 2, 1) }, (item) => {
 					Codesign (item);
 
@@ -461,6 +460,7 @@ namespace Xamarin.MacDev.Tasks
 					lock (codesignedFiles)
 						codesignedFiles.AddRange (files);
 				});
+				Log.LogMessage (MessageImportance.Low, $"Codesigned bucket #{b + 1}");
 			}
 
 			CodesignedFiles = codesignedFiles.ToArray ();

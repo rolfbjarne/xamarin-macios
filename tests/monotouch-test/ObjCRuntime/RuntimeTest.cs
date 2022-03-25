@@ -639,6 +639,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 
 #if DYNAMIC_REGISTRAR
 		[Test]
+		[Ignore ("testing")]
 		public void MX8029_b ()
 		{
 			try {
@@ -670,6 +671,7 @@ Additional information:
 		}
 
 		[Test]
+		[Ignore ("testing")]
 		public void MX8033 ()
 		{
 			try {
@@ -717,7 +719,7 @@ Additional information:
 			{
 			}
 
-#if DYNAMIC_REGISTRAR
+#if false
 			// This function makes the static registrar show an error, so it's only built when using the dynamic registrar.
 			[Export ("intArray")]
 			static int[] GetIntArray ()

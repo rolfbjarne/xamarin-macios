@@ -28,9 +28,43 @@ namespace MonoTests.System.Net.Http
 {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
+	[TestFixtureSource ("Repeats")]
 	public class MessageHandlerTest
 	{
-		public MessageHandlerTest ()
+		// const int RepeatCount = 10000;
+
+		static int[] repeats;
+
+		static MessageHandlerTest ()
+		{
+			Console.WriteLine ("Collection thread!");
+			var t = new Thread (() =>
+			{
+				Console.WriteLine ("Collecting!");
+				while (true) {
+					GC.Collect ();
+					Console.WriteLine ("Collected!");
+					Thread.Sleep (1000);
+				}
+			}) {
+				IsBackground = true,
+				Name = "Collectioner",
+			};
+			t.Start ();
+
+			if (!int.TryParse (Environment.GetEnvironmentVariable ("REPEATCOUNT"), out var repeatCount))
+				repeatCount = 1;
+			var rv = new int [repeatCount];
+			for (var i = 0; i < rv.Length; i++)
+				rv [i] = i + 1;
+			repeats = rv;
+		}
+
+		public static int[] Repeats {
+			get { return repeats; }
+		}
+
+		public MessageHandlerTest (int dummy)
 		{
 			// Https seems broken on our macOS 10.9 bot, so skip this test.
 			TestRuntime.AssertSystemVersion (ApplePlatform.MacOSX, 10, 10, throwIfOtherPlatform: false);
@@ -75,6 +109,7 @@ namespace MonoTests.System.Net.Http
 #endif
 #endif
 		[TestCase (typeof (NSUrlSessionHandler))]
+		// [Repeat (RepeatCount)]
 		public void DnsFailure (Type handlerType)
 		{
 			TestRuntime.AssertSystemVersion (ApplePlatform.MacOSX, 10, 9, throwIfOtherPlatform: false);
@@ -106,6 +141,7 @@ namespace MonoTests.System.Net.Http
 #if !__WATCHOS__
 		// ensure that we do get the same cookies as the managed handler
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void TestNSUrlSessionHandlerCookies ()
 		{
 			var managedCookieResult = false;
@@ -154,6 +190,7 @@ namespace MonoTests.System.Net.Http
 
 		// ensure that we can use a cookie container to set the cookies for a url
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void TestNSUrlSessionHandlerCookieContainer ()
 		{
 			var url = NetworkResources.Httpbin.CookiesUrl;
@@ -201,6 +238,7 @@ namespace MonoTests.System.Net.Http
 
 		// ensure that the Set-Cookie headers do update the CookieContainer
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void TestNSurlSessionHandlerCookieContainerSetCookie ()
 		{
 			var url = NetworkResources.Httpbin.GetSetCookieUrl ("cookie", "chocolate-chip");
@@ -237,6 +275,7 @@ namespace MonoTests.System.Net.Http
 		}
 
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void TestNSUrlSessionDefaultDisabledCookies ()
 		{
 			// simple test. send a request with a set-cookie url, get the data
@@ -282,6 +321,7 @@ namespace MonoTests.System.Net.Http
 		}
 
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void TestNSUrlSessionDefaultDisableCookiesWithManagedContainer ()
 		{
 			// simple test. send a request with a set-cookie url, get the data
@@ -330,6 +370,7 @@ namespace MonoTests.System.Net.Http
 		}
 
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void TestNSUrlSessionEphemeralDisabledCookies ()
 		{
 			// assert we do throw an exception with ephmeral configs.
@@ -350,6 +391,7 @@ namespace MonoTests.System.Net.Http
 		[TestCase (typeof (CFNetworkHandler))]
 #endif
 		[TestCase (typeof (NSUrlSessionHandler))]
+		// [Repeat (RepeatCount)]
 		public void RedirectionWithAuthorizationHeaders (Type handlerType)
 		{
 
@@ -400,6 +442,7 @@ namespace MonoTests.System.Net.Http
 		[TestCase (typeof (SocketsHttpHandler))]
 #endif
 		[TestCase (typeof (NSUrlSessionHandler))]
+		// [Repeat (RepeatCount)]
 		public void RejectSslCertificatesServicePointManager (Type handlerType)
 		{
 			TestRuntime.AssertSystemVersion (ApplePlatform.MacOSX, 10, 9, throwIfOtherPlatform: false);
@@ -493,6 +536,7 @@ namespace MonoTests.System.Net.Http
 		[TestCase (typeof (HttpClientHandler))]
 #endif
 		[TestCase (typeof (NSUrlSessionHandler))]
+		// [Repeat (RepeatCount)]
 		public void AcceptSslCertificatesServicePointManager (Type handlerType)
 		{
 			TestRuntime.AssertSystemVersion (ApplePlatform.MacOSX, 10, 9, throwIfOtherPlatform: false);
@@ -547,6 +591,7 @@ namespace MonoTests.System.Net.Http
 		}
 
 		[Test]
+		// [Repeat (RepeatCount)]
 		public void AssertDefaultValuesNSUrlSessionHandler ()
 		{
 			using (var handler = new NSUrlSessionHandler ()) {
@@ -564,6 +609,7 @@ namespace MonoTests.System.Net.Http
 		[TestCase (HttpStatusCode.OK, "mandel", "12345678", "mandel", "12345678")]
 		[TestCase (HttpStatusCode.Unauthorized, "mandel", "12345678", "mandel", "87654321")]
 		[TestCase (HttpStatusCode.Unauthorized, "mandel", "12345678", "", "")]
+		// [Repeat (RepeatCount)]
 		public void GHIssue8342 (HttpStatusCode expectedStatus, string validUsername, string validPassword, string username, string password)
 		{ 
 			// create a http client to use with some creds that we do know are not valid
@@ -599,6 +645,7 @@ namespace MonoTests.System.Net.Http
 		}
 
 		[TestCase]
+		// [Repeat (RepeatCount)]
 		public void GHIssue8344 ()
 		{
 			var username = "mandel";

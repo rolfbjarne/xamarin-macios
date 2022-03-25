@@ -4,6 +4,7 @@
     <TargetFramework>net6.0-macos</TargetFramework>
     <DefineConstants>$(DefineConstants);XAMMAC_TESTS</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DYNAMIC_REGISTRAR</DefineConstants>
+    <MonoBundlingExtraArgs>--registrar:static</MonoBundlingExtraArgs>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->

@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0-maccatalyst</TargetFramework>
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DYNAMIC_REGISTRAR</DefineConstants>
+    <MonoBundlingExtraArgs>--registrar:static</MonoBundlingExtraArgs>
+    <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->

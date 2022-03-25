@@ -774,7 +774,12 @@ namespace ObjCRuntime {
 		static IntPtr GetNSObjectWithType (IntPtr ptr, IntPtr type_ptr, out bool created)
 		{
 			var type = (System.Type) GetGCHandleTarget (type_ptr)!;
-			return AllocGCHandle (GetNSObject (ptr, type, MissingCtorResolution.ThrowConstructor1NotFound, true, out created));
+			var obj = GetNSObject (ptr, type, MissingCtorResolution.ThrowConstructor1NotFound, true, true, out created);
+			if (obj is not null) {
+				if (!type.IsAssignableFrom (obj.GetType ()))
+					NSLog ($"GetNSObjectWithType (0x{ptr.ToString ("x")}, 0x{type_ptr.ToString ("x")} => {type.FullName}, {created}) Return value is of type {obj.GetType ()}, which is not compatible with {type.FullName} 1");
+			}
+			return AllocGCHandle (obj);
 		}
 
 		static void Dispose (IntPtr gchandle)
@@ -1464,7 +1469,7 @@ namespace ObjCRuntime {
 		//
 
 		// The 'selector' and 'method' arguments are only used in error messages.
-		static NSObject? GetNSObject (IntPtr ptr, Type target_type, MissingCtorResolution missingCtorResolution, bool evenInFinalizerQueue, out bool created) {
+		static NSObject? GetNSObject (IntPtr ptr, Type target_type, MissingCtorResolution missingCtorResolution, bool evenInFinalizerQueue, bool createNewInstanceIfWrongType, out bool created) {
 			created = false;
 
 			if (ptr == IntPtr.Zero)
@@ -1472,8 +1477,22 @@ namespace ObjCRuntime {
 
 			var o = TryGetNSObject (ptr, evenInFinalizerQueue);
 
-			if (o is not null)
-				return o;
+			if (o is not null) {
+				if (!createNewInstanceIfWrongType) {
+					// We don't care if we found an instance of the wrong type or not, so just return whatever we got.
+					return o;
+				}
+
+				if (target_type.IsAssignableFrom (o.GetType ())) {
+					// We found an instance of an acceptable type! We're done here.
+					return o;
+				}
+
+				// We found an instance of the wrong type, and we're asked to not return that.
+				// So fall through to create a new instance instead.
+				NSLog ($"GetNSObject (0x{ptr.ToString ("x")}, {target_type.FullName}, {missingCtorResolution}, {evenInFinalizerQueue}, {createNewInstanceIfWrongType}, ?) => creating new instance, because existing instance of type {o.GetType ().FullName} is not compatible with the target type.");
+				// return o; // temporary to see if this is hit
+			}
 
 			// Try to get the managed type that correspond to this exact native type
 			IntPtr p = Class.GetClassForObject (ptr);

@@ -127,7 +127,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		// Not sure what to do about this one, it doesn't compile with the static registrar (since linking fails)
-#if DYNAMIC_REGISTRAR
+#if false
 		[Test]
 		public void ThrowOnMissingNativeClassTest ()
 		{

@@ -317,6 +317,7 @@ steps:
 - bash: |
     set -x
     set -e
+    exit 1
     time make -C $(Build.SourcesDirectory)/xamarin-macios/ reset
     time make -C $(Build.SourcesDirectory)/xamarin-macios/ all -j8
     time make -C $(Build.SourcesDirectory)/xamarin-macios/ install -j8
@@ -516,3 +517,13 @@ steps:
 - template: ../common/teardown.yml
   parameters:
     keyringPass: ${{ parameters.keyringPass }}
+
+- pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\GitHub.psm1
+    New-GitHubComment -Header "Build failed" -Emoji ":fire:"
+  condition: failed()
+  displayName: 'Report build failure'
+    BUILD_REVISION: $(Build.SourceVersion)
+    CONTEXT: "Build"
+    GITHUB_TOKEN: $(GitHub.Token)
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)

@@ -523,6 +523,7 @@ steps:
     New-GitHubComment -Header "Build failed" -Emoji ":fire:"
   condition: failed()
   displayName: 'Report build failure'
+  env:
     BUILD_REVISION: $(Build.SourceVersion)
     CONTEXT: "Build"
     GITHUB_TOKEN: $(GitHub.Token)

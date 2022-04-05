@@ -374,8 +374,12 @@ namespace Foundation {
 				}
 			}
 
-			if (retain)
+			if (retain) {
 				DangerousRetain ();
+				Runtime.NSLog ($"{GetType().Name}.CreateManagedRef ({retain}) handle: {Handle.ToString ()} user_type: {isUserType} retainCount: {RetainCount}");
+			} else {
+				Runtime.NSLog ($"{GetType().Name}.CreateManagedRef ({retain}) handle: {Handle.ToString ()} user_type: {isUserType} retainCount: ?");
+			}
 		}
 
 		void ReleaseManagedRef ()
@@ -390,6 +394,9 @@ namespace Foundation {
 			xamarin_release_managed_ref (handle, user_type);
 			FreeData ();
 #if NET
+			unsafe {
+				Runtime.NSLog ($"{GetType().Name}.ReleaseManagedRef () handle: {handle.ToString ()} user_type: {user_type} tracked_object_info: 0x{((IntPtr) tracked_object_info).ToString ("x")} tracked_object_handle.HasValue: {tracked_object_handle.HasValue} => 0x{(tracked_object_handle.HasValue ? GCHandle.ToIntPtr (tracked_object_handle.Value).ToString ("x") : "N/A")}");
+			}
 			if (tracked_object_handle.HasValue) {
 				tracked_object_handle.Value.Free ();
 				tracked_object_handle = null;
@@ -913,6 +920,7 @@ namespace Foundation {
 				return;
 			disposed = true;
 			
+			Runtime.NSLog ($"{GetType().Name}.Dispose ({disposing}) handle: {handle.ToString ()}");
 			if (handle != NativeHandle.Zero) {
 				if (disposing) {
 					ReleaseManagedRef ();

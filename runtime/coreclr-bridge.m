@@ -317,7 +317,7 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 	enum NSObjectFlags flags = info->flags;
 	bool isRegisteredToggleRef = (flags & NSObjectFlagsRegisteredToggleRef) == NSObjectFlagsRegisteredToggleRef;
 	id handle = info->handle;
-	MonoToggleRefStatus res;
+	MonoToggleRefStatus res = (MonoToggleRefStatus) 0;
 
 	if (isRegisteredToggleRef) {
 		res = xamarin_gc_toggleref_callback (flags, handle, NULL, NULL);
@@ -340,7 +340,7 @@ xamarin_coreclr_reference_tracking_is_referenced_callback (void* ptr)
 		rv = 0;
 	}
 
-	LOG_CORECLR (stderr, "%s (%p -> handle: %p flags: %i) => %i (res: %i)\n", __func__, ptr, handle, flags, rv, res);
+	LOG_CORECLR (stderr, "%s (%p -> handle: %p flags: %i) => %i (res: %i) isRegisteredToggleRef: %i\n", __func__, ptr, handle, flags, rv, res, isRegisteredToggleRef);
 
 	return rv;
 }
@@ -901,7 +901,7 @@ MonoException *
 mono_get_exception_out_of_memory ()
 {
 	MonoException *rv = xamarin_bridge_create_exception (XamarinExceptionTypes_System_OutOfMemoryException, NULL);
-	LOG_CORECLR (stderr, "%s (%p) => %p\n", __func__, entrypoint, rv);
+	LOG_CORECLR (stderr, "%s () => %p\n", __func__, rv);
 	return rv;
 }
 

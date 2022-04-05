@@ -716,7 +716,9 @@ namespace ObjCRuntime {
 
 		static IntPtr GetHandleForINativeObject (IntPtr ptr)
 		{
-			return ((INativeObject) GetGCHandleTarget (ptr)!).Handle;
+			var rv = ((INativeObject) GetGCHandleTarget (ptr)!).Handle;
+			NSLog ($"GetHandleForINativeObject (0x{ptr.ToString ("x")}) => {rv.ToString ()}");
+			return rv;
 		}
 
 		static void UnregisterNSObject (IntPtr native_obj, IntPtr managed_obj) 
@@ -1070,8 +1072,19 @@ namespace ObjCRuntime {
 
 		internal static void UnregisterNSObject (IntPtr ptr) {
 			lock (lock_obj) {
-				if (object_map.Remove (ptr, out var value))
+				if (object_map.Remove (ptr, out var value)) {
+					Runtime.NSLog ($"UnregisterNSObject (0x{ptr.ToString ("x")}): removed GCHandle 0x{GCHandle.ToIntPtr (value).ToString ("x")} with target {value.Target?.GetType ().Name} from map");
+#if NET
+					if (!Runtime.IsCoreCLR) {
+						// The GCHandle is freed in NSObject.ReleaseManagedRef when executing with CoreCLR
+						value.Free ();
+					}
+#else
 					value.Free ();
+#endif
+				} else {
+					Runtime.NSLog ($"UnregisterNSObject (0x{ptr.ToString ("x")}): not found in map");
+				}
 			}
 		}
 					
@@ -1081,6 +1094,7 @@ namespace ObjCRuntime {
 				if (object_map.TryGetValue (ptr, out var wr)) {
 					if (managed_obj is null || wr.Target == (object) managed_obj) {
 						object_map.Remove (ptr);
+						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): removed GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")} from map");
 #if NET
 						if (!Runtime.IsCoreCLR) {
 							// The GCHandle is freed in NSObject.ReleaseManagedRef when executing with CoreCLR
@@ -1089,8 +1103,13 @@ namespace ObjCRuntime {
 #else
 						wr.Free ();
 #endif
+					} else if (wr.Target is not null) {
+						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): different object in map using GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")}");
+					} else {
+						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): null object in map for GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")}");
 					}
-
+				} else {
+					Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): not found in map");
 				}
 
 				if (managed_obj is not null)
@@ -1111,6 +1130,11 @@ namespace ObjCRuntime {
 #endif
 
 			lock (lock_obj) {
+				if (object_map.TryGetValue (ptr, out var wr)) {
+					Runtime.NSLog ($"RegisterNSObject ({obj.GetType ().FullName}), 0x{ptr.ToString ("x")}) entry already exists with GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")}: overwriting with GCHandle 0x{GCHandle.ToIntPtr (handle).ToString ("x")}");
+				} else {
+					Runtime.NSLog ($"RegisterNSObject ({obj.GetType ().FullName}), 0x{ptr.ToString ("x")}) new entry with GCHandle 0x{GCHandle.ToIntPtr (handle).ToString ("x")}");
+				}
 				object_map [ptr] = handle;
 				obj.Handle = ptr;
 			}
@@ -1374,12 +1398,15 @@ namespace ObjCRuntime {
 			lock (lock_obj) {
 				if (object_map.TryGetValue (ptr, out var reference)) {
 					var target = (NSObject?) reference.Target;
-					if (target is null)
+					if (target is null) {
+						Runtime.NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => found in map, but target is null");
 						return null;
+					}
 
 					if (target.InFinalizerQueue) {
 						if (!evenInFinalizerQueue) {
 							// Don't return objects that's been queued for finalization unless requested to.
+							Runtime.NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => found in map, and non-null target, but in finalizer queue, so returning null");
 							return null;
 						}
 
@@ -1391,10 +1418,12 @@ namespace ObjCRuntime {
 							// the existing managed wrapper (which is the one we just found).
 							// Returning null here will cause us to re-create the managed wrapper.
 							// See bug #37670 for a real-world scenario.
+							Runtime.NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => found in map, and non-null target, but in finalizer queue and a direct binding which isn't a toggle ref, so returning null");
 							return null;
 						}
 					}
 					    
+					Runtime.NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => found in map: {target.GetType ().Name}");
 					return target;
 				}
 			}
@@ -1452,7 +1481,7 @@ namespace ObjCRuntime {
 			} else {
 				o = obj as T;
 				if (o is null)
-					throw new InvalidCastException ($"Unable to cast object of type '{obj.GetType ().FullName}' to type '{typeof(T).FullName}'.");
+					throw new InvalidCastException ($"Unable to cast (3) object 0x{ptr.ToString ("x")} of type '{obj.GetType ().FullName}' to type '{typeof(T).FullName}'.");
 			}
 
 			return o;
@@ -1603,7 +1632,7 @@ namespace ObjCRuntime {
 				// found an existing object, but with an incompatible type.
 				if (!interface_check_type.IsInterface) {
 					// if the target type is another class, there's nothing we can do.
-					throw new InvalidCastException ($"Unable to cast object of type '{o.GetType ().FullName}' to type '{target_type.FullName}'.");
+					throw new InvalidCastException ($"Unable to cast (1) object 0x{ptr.ToString ("x")} of type '{o.GetType ().FullName}' to type '{target_type.FullName}'.");
 				}
 			}
 
@@ -1648,7 +1677,7 @@ namespace ObjCRuntime {
 				// found an existing object, but with an incompatible type.
 				if (!typeof (T).IsInterface && typeof(NSObject).IsAssignableFrom (typeof (T))) {
 					// if the target type is another NSObject subclass, there's nothing we can do.
-					throw new InvalidCastException ($"Unable to cast object of type '{o.GetType ().FullName}' to type '{typeof (T).FullName}'.");
+					throw new InvalidCastException ($"Unable to cast (2) object 0x{ptr.ToString ("x")} of type '{o.GetType ().FullName}' to type '{typeof (T).FullName}'.");
 				}
 			}
 

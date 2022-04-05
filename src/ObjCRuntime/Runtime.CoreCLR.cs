@@ -78,7 +78,7 @@ namespace ObjCRuntime {
 #endif
 
 		// Comment out the attribute to get all printfs
-		[System.Diagnostics.Conditional ("UNDEFINED")]
+		// [System.Diagnostics.Conditional ("UNDEFINED")]
 		static void log_coreclr (string message)
 		{
 			NSLog (message);
@@ -137,6 +137,9 @@ namespace ObjCRuntime {
 
 				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags} Created new");
 			}
+
+			if (obj is Foundation.NSUrl)
+				log_coreclr (Environment.StackTrace);
 
 			return gchandle;
 		}
@@ -561,6 +564,31 @@ namespace ObjCRuntime {
 			return (MonoObject *) GetMonoObject (rv);
 		}
 
+		static string RenderObject (object obj)
+		{
+			if (obj is null)
+				return "<null>";
+
+			if (obj is IntPtr ptr)
+				return $"0x{ptr.ToString ("x")} (IntPtr)";
+
+			if (obj.GetType ().IsValueType)
+				return $"{obj.ToString ()} ({obj.GetType ()})";
+
+			// Don't call ToString on an INativeObject, we may end up with infinite recursion.
+			if (obj is INativeObject inativeobj)
+				return $"{inativeobj.Handle.ToString ()} ({obj.GetType ()})";
+
+			var toString = obj.ToString();
+			var eol = toString.IndexOf ('\n');
+			if (eol != -1)
+				toString = toString.Substring (0, eol - 1) + " [...]";
+			if (toString.Length > 256)
+				toString = toString.Substring (0, 256) + " [...]";
+
+			return $"{toString} ({obj.GetType ()})";
+		}
+
 		// Return value: NULL or a MonoObject* that must be released with xamarin_mono_object_safe_release.
 		// Any MonoObject* ref parameters must also be retained and must be released with xamarin_mono_object_release.
 		static object InvokeMethod (MethodBase method, object instance, IntPtr native_parameters)
@@ -579,7 +607,7 @@ namespace ObjCRuntime {
 			}
 
 			// Log our input
-			log_coreclr ($"InvokeMethod ({method.DeclaringType.FullName}::{method}, {instance}, 0x{native_parameters.ToString ("x")})");
+			log_coreclr ($"InvokeMethod ({method.DeclaringType.FullName}::{method}, {(instance is null ? "<null>" : instance.GetType ().FullName)}, 0x{native_parameters.ToString ("x")})");
 			for (var i = 0; i < methodParameters.Length; i++) {
 				var nativeParam = nativeParameters [i];
 				var p = methodParameters [i];
@@ -597,7 +625,7 @@ namespace ObjCRuntime {
 				var isByRef = paramType.IsByRef;
 				if (isByRef)
 					paramType = paramType.GetElementType ();
-				log_coreclr ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName} [...]");
+				log_coreclr ($"    Marshalling #{i + 1}: IntPtr => 0x{nativeParam.ToString ("x")} => {p.ParameterType.FullName}");
 
 				if (paramType == typeof (IntPtr)) {
 					log_coreclr ($"        IntPtr");
@@ -610,7 +638,7 @@ namespace ObjCRuntime {
 					} else {
 						parameters [i] = nativeParam == IntPtr.Zero ? IntPtr.Zero : Marshal.ReadIntPtr (nativeParam);
 					}
-					log_coreclr ($"            => 0x{((IntPtr) parameters [i]).ToString ("x")}");
+					log_coreclr ($"            => {RenderObject (parameters [i])}");
 				} else if (paramType.IsClass || paramType.IsInterface || (paramType.IsValueType && IsNullable (paramType))) {
 					log_coreclr ($"        IsClass/IsInterface/IsNullable IsByRef: {isByRef} IsOut: {p.IsOut} ParameterType: {paramType}");
 					if (nativeParam != IntPtr.Zero) {
@@ -623,7 +651,7 @@ namespace ObjCRuntime {
 							parameters [i] = GetMonoObjectTarget (mono_obj);
 						}
 					}
-					log_coreclr ($"            => {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
+					log_coreclr ($"            => {RenderObject (parameters [i])}");
 				} else if (paramType.IsValueType) {
 					log_coreclr ($"        IsValueType IsByRef: {isByRef} IsOut: {p.IsOut} nativeParam: 0x{nativeParam.ToString ("x")} ParameterType: {paramType}");
 					if (nativeParam != IntPtr.Zero) {
@@ -643,7 +671,7 @@ namespace ObjCRuntime {
 							vt = Enum.ToObject (enumType, vt);
 						parameters [i] = vt;
 					}
-					log_coreclr ($"            => {(parameters [i] == null ? "<null>" : parameters [i].ToString ())}");
+					log_coreclr ($"            => {RenderObject (parameters [i])}");
 				} else {
 					throw ErrorHelper.CreateError (8037, Errors.MX8037 /* Don't know how to marshal the parameter of type {p.ParameterType.FullName} for parameter {p.Name} in call to {method} */, p.ParameterType.FullName, p.Name, method);
 				}
@@ -674,12 +702,12 @@ namespace ObjCRuntime {
 
 				byrefParameterCount++;
 
-				log_coreclr ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) value: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}");
-
 				var parameterType = p.ParameterType.GetElementType ();
 				var isMonoObject = parameterType.IsClass || parameterType.IsInterface || (parameterType.IsValueType && IsNullable (parameterType));
 
 				var nativeParam = nativeParameters [i];
+
+				log_coreclr ($"    Marshalling #{i + 1} back (Type: {p.ParameterType.FullName}) nativeParam: 0x{nativeParam.ToString ("x")} value: {RenderObject (parameters [i])}");
 
 				if (nativeParam == IntPtr.Zero) {
 					log_coreclr ($"    No output pointer was provided.");
@@ -697,21 +725,21 @@ namespace ObjCRuntime {
 
 				if (parameterType == typeof (IntPtr)) {
 					Marshal.WriteIntPtr (nativeParam, (IntPtr) parameters [i]);
-					log_coreclr ($"        IntPtr: 0x{((IntPtr) parameters [i]).ToString ("x")} => Type: {parameters [i]?.GetType ()} nativeParam: 0x{nativeParam.ToString ("x")}");
+					log_coreclr ($"        IntPtr");
 				} else if (isMonoObject) {
 					var ptr = GetMonoObject (parameters [i]);
 					Marshal.WriteIntPtr (nativeParam, ptr);
-					log_coreclr ($"        IsClass/IsInterface/IsNullable: {(parameters [i] == null ? "<null>" : parameters [i].GetType ().FullName)}  nativeParam: 0x{nativeParam.ToString ("x")} -> MonoObject: 0x{ptr.ToString ("x")}");
+					log_coreclr ($"        IsClass/IsInterface/IsNullable  MonoObject: 0x{ptr.ToString ("x")}");
 				} else if (parameterType.IsValueType) {
 					StructureToPtr (parameters [i], nativeParam);
-					log_coreclr ($"        IsValueType: {(parameters [i] == null ? "<null>" : parameters [i].ToString ())} nativeParam: 0x{nativeParam.ToString ("x")}");
+					log_coreclr ($"        IsValueType");
 				} else {
 					throw ErrorHelper.CreateError (8038, Errors.MX8038 /* Don't know how to marshal back the parameter of type {p.ParameterType.FullName} for parameter {p.Name} in call to {method} */, p.ParameterType.FullName, p.Name, method);
 				}
 			}
 
 			// we're done!
-			log_coreclr ($"    Invoke complete with {byrefParameterCount} ref parameters and return value of type {rv?.GetType ()}");
+			log_coreclr ($"    Invoke complete with {byrefParameterCount} ref parameters and return value: {RenderObject (rv)})");
 
 			return rv;
 		}

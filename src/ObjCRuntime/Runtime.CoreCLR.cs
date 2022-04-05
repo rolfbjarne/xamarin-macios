@@ -117,9 +117,13 @@ namespace ObjCRuntime {
 			public NSObject.Flags Flags;
 		}
 
-		// See  "Toggle-ref support for CoreCLR" in coreclr-bridge.m for more information.
-		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
+		internal static GCHandle GetOrCreateTrackingGCHandle (NSObject obj, IntPtr handle)
 		{
+			if (obj.tracked_object_handle.HasValue) {
+				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Flags={obj.FlagsInternal} Used existing");
+				return obj.tracked_object_handle.Value;
+			}
+
 			var gchandle = ObjectiveCMarshal.CreateReferenceTrackingHandle (obj, out var info);
 
 			unsafe {
@@ -130,6 +134,19 @@ namespace ObjCRuntime {
 				tracked_info->Flags = obj.FlagsInternal;
 				obj.tracked_object_info = tracked_info;
 				obj.tracked_object_handle = gchandle;
+
+				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags} Created new");
+			}
+
+			return gchandle;
+		}
+
+		// See  "Toggle-ref support for CoreCLR" in coreclr-bridge.m for more information.
+		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
+		{
+			unsafe {
+				TrackedObjectInfo* tracked_info = obj.tracked_object_info;
+				tracked_info->Flags = obj.FlagsInternal;
 
 				log_coreclr ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags}");
 			}

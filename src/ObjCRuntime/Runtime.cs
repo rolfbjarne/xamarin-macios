@@ -1081,7 +1081,14 @@ namespace ObjCRuntime {
 				if (object_map.TryGetValue (ptr, out var wr)) {
 					if (managed_obj is null || wr.Target == (object) managed_obj) {
 						object_map.Remove (ptr);
+#if NET
+						if (!Runtime.IsCoreCLR) {
+							// The GCHandle is freed in NSObject.ReleaseManagedRef when executing with CoreCLR
+							wr.Free ();
+						}
+#else
 						wr.Free ();
+#endif
 					}
 
 				}
@@ -1092,7 +1099,17 @@ namespace ObjCRuntime {
 		}
 		
 		internal static void RegisterNSObject (NSObject obj, IntPtr ptr) {
+#if NET
+			GCHandle handle;
+			if (Runtime.IsCoreCLR) {
+				handle = GetOrCreateTrackingGCHandle (obj, ptr);
+			} else {
+				handle = GCHandle.Alloc (obj, GCHandleType.WeakTrackResurrection);
+			}
+#else
 			var handle = GCHandle.Alloc (obj, GCHandleType.WeakTrackResurrection);
+#endif
+
 			lock (lock_obj) {
 				object_map [ptr] = handle;
 				obj.Handle = ptr;

@@ -19,6 +19,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using CoreFoundation;
 using Foundation;
 using Registrar;
 
@@ -1529,7 +1530,10 @@ namespace ObjCRuntime {
 					return o;
 				}
 
-				if (target_type.IsAssignableFrom (o.GetType ())) {
+				var acceptibleTargetType = target_type;
+				if (acceptibleTargetType.IsByRef)
+					acceptibleTargetType = acceptibleTargetType.GetElementType ()!;
+				if (acceptibleTargetType.IsAssignableFrom (o.GetType ())) {
 					// We found an instance of an acceptable type! We're done here.
 					return o;
 				}
@@ -1872,6 +1876,25 @@ namespace ObjCRuntime {
 				(char) (byte) (value >> 16),
 				(char) (byte) (value >> 8),
 				(char) (byte) value });
+		}
+
+		static void RetainNativeObject (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle) as NativeObject;
+			obj?.Retain ();
+		}
+
+		static bool AttemptRetainNSObject (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle) as NSObject;
+			obj?.DangerousRetain ();
+			return obj is not null;
+		}
+
+		static void ReleaseNativeObject (IntPtr gchandle)
+		{
+			var obj = GetGCHandleTarget (gchandle) as NativeObject;
+			obj?.Release ();
 		}
 #endif // !COREBUILD
 

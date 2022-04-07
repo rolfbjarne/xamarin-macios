@@ -138,8 +138,8 @@ namespace ObjCRuntime {
 				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags} Created new");
 			}
 
-			if (obj is Foundation.NSUrl)
-				log_coreclr (Environment.StackTrace);
+			// if (obj is Foundation.NSUrl)
+			// 	log_coreclr (Environment.StackTrace);
 
 			return gchandle;
 		}

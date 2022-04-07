@@ -117,13 +117,8 @@ namespace ObjCRuntime {
 			public NSObject.Flags Flags;
 		}
 
-		internal static GCHandle GetOrCreateTrackingGCHandle (NSObject obj, IntPtr handle)
+		internal static GCHandle CreateTrackingGCHandle (NSObject obj, IntPtr handle)
 		{
-			if (obj.tracked_object_handle.HasValue) {
-				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Flags={obj.FlagsInternal} Used existing");
-				return obj.tracked_object_handle.Value;
-			}
-
 			var gchandle = ObjectiveCMarshal.CreateReferenceTrackingHandle (obj, out var info);
 
 			unsafe {
@@ -133,7 +128,6 @@ namespace ObjCRuntime {
 				tracked_info->Handle = handle;
 				tracked_info->Flags = obj.FlagsInternal;
 				obj.tracked_object_info = tracked_info;
-				obj.tracked_object_handle = gchandle;
 
 				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags} Created new");
 			}

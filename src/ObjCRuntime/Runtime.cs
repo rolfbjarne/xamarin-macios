@@ -1075,14 +1075,7 @@ namespace ObjCRuntime {
 			lock (lock_obj) {
 				if (object_map.Remove (ptr, out var value)) {
 					Runtime.NSLog ($"UnregisterNSObject (0x{ptr.ToString ("x")}): removed GCHandle 0x{GCHandle.ToIntPtr (value).ToString ("x")} with target {value.Target?.GetType ().Name} from map");
-#if NET
-					if (!Runtime.IsCoreCLR) {
-						// The GCHandle is freed in NSObject.ReleaseManagedRef when executing with CoreCLR
-						value.Free ();
-					}
-#else
 					value.Free ();
-#endif
 				} else {
 					Runtime.NSLog ($"UnregisterNSObject (0x{ptr.ToString ("x")}): not found in map");
 				}
@@ -1095,18 +1088,13 @@ namespace ObjCRuntime {
 				if (object_map.TryGetValue (ptr, out var wr)) {
 					if (managed_obj is null || wr.Target == (object) managed_obj) {
 						object_map.Remove (ptr);
-						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): removed GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")} from map");
-#if NET
-						if (!Runtime.IsCoreCLR) {
-							// The GCHandle is freed in NSObject.ReleaseManagedRef when executing with CoreCLR
-							wr.Free ();
-						}
-#else
 						wr.Free ();
-#endif
+						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): removed GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")} from map");
 					} else if (wr.Target is not null) {
 						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): different object in map using GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")}");
 					} else {
+						object_map.Remove (ptr);
+						wr.Free ();
 						Runtime.NSLog ($"NativeObjectHasDied (0x{ptr.ToString ("x")}, {(managed_obj is null ? "null" : managed_obj.GetType ().FullName)}): null object in map for GCHandle 0x{GCHandle.ToIntPtr (wr).ToString ("x")}");
 					}
 				} else {
@@ -1122,7 +1110,7 @@ namespace ObjCRuntime {
 #if NET
 			GCHandle handle;
 			if (Runtime.IsCoreCLR) {
-				handle = GetOrCreateTrackingGCHandle (obj, ptr);
+				handle = CreateTrackingGCHandle (obj, ptr);
 			} else {
 				handle = GCHandle.Alloc (obj, GCHandleType.WeakTrackResurrection);
 			}

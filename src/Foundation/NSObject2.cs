@@ -94,7 +94,6 @@ namespace Foundation {
 		// See  "Toggle-ref support for CoreCLR" in coreclr-bridge.m for more information.
 		Flags actual_flags;
 		internal unsafe Runtime.TrackedObjectInfo* tracked_object_info;
-		internal GCHandle? tracked_object_handle;
 
 		unsafe Flags flags {
 			get {
@@ -395,11 +394,7 @@ namespace Foundation {
 			FreeData ();
 #if NET
 			unsafe {
-				Runtime.NSLog ($"{GetType().Name}.ReleaseManagedRef () handle: {handle.ToString ()} user_type: {user_type} tracked_object_info: 0x{((IntPtr) tracked_object_info).ToString ("x")} tracked_object_handle.HasValue: {tracked_object_handle.HasValue} => 0x{(tracked_object_handle.HasValue ? GCHandle.ToIntPtr (tracked_object_handle.Value).ToString ("x") : "N/A")}");
-			}
-			if (tracked_object_handle.HasValue) {
-				tracked_object_handle.Value.Free ();
-				tracked_object_handle = null;
+				Runtime.NSLog ($"{GetType().Name}.ReleaseManagedRef () handle: {handle.ToString ()} user_type: {user_type} tracked_object_info: 0x{((IntPtr) tracked_object_info).ToString ("x")}");
 			}
 #endif
 		}

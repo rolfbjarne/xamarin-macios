@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 using Microsoft.Build.Framework;
@@ -14,6 +15,9 @@ namespace Xamarin.MacDev.Tasks {
 		// Inputs
 		[Required]
 		public ITaskItem? ProjectPath { get; set; }
+
+		[Required]
+		public string IntermediateOutputPath { get; set; } = string.Empty;
 
 		public string TargetFrameworkIdentifier { get; set; } = string.Empty;
 
@@ -44,11 +48,16 @@ namespace Xamarin.MacDev.Tasks {
 		// we execute a sub-build that computes those properties.
 		void ComputeProperties ()
 		{
-			var projectPath = Path.GetTempFileName ();
-			var outputFile = Path.GetTempFileName ();
-			var binlog = Path.GetTempFileName () + ".binlog";
+			var projectDir = Path.GetFullPath (Path.Combine (IntermediateOutputPath, $"ComputeRemoteGeneratorProperties"));
+			var projectPath = Path.Combine (projectDir, "ComputeRemoteGeneratorProperties.csproj");
+			var outputFile = Path.Combine (projectDir, "ComputedProperties.txt");
+			var binlog = Path.Combine (projectDir, "ComputeRemoteGeneratorProperties.binlog");
 			string executable;
 			string csproj;
+
+			if (Directory.Exists (projectDir))
+				Directory.Delete (projectDir, true);
+			Directory.CreateDirectory (projectDir);
 
 			if (IsDotNet) {
 				csproj = $@"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -102,40 +111,34 @@ namespace Xamarin.MacDev.Tasks {
 
 			arguments.Add (projectPath);
 
-			try {
-				ExecuteAsync (executable, arguments).Wait ();
-				var computedPropertes = File.ReadAllLines (outputFile);
-				foreach (var line in computedPropertes) {
-					var property = line.Substring (0, line.IndexOf ('='));
-					var value = line.Substring (property.Length + 1);
+			ExecuteAsync (executable, arguments).Wait ();
+			var computedPropertes = File.ReadAllLines (outputFile);
+			foreach (var line in computedPropertes) {
+				var property = line.Substring (0, line.IndexOf ('='));
+				var value = line.Substring (property.Length + 1);
 
-					Log.LogMessage (MessageImportance.Low, $"Computed the property {property}={value}");
+				Log.LogMessage (MessageImportance.Low, $"Computed the property {property}={value}");
 
-					switch (property) {
-					case "BaseLibDllPath":
-						BaseLibDllPath = value;
-						break;
-					case "BTouchToolExe":
-						BTouchToolExe = value;
-						break;
-					case "BTouchToolPath":
-						BTouchToolPath = value;
-						break;
-					case "_DotNetCscCompiler":
-						DotNetCscCompiler = value;
-						break;
-					case "_GeneratorAttributeAssembly":
-						GeneratorAttributeAssembly = value;
-						break;
-					default:
-						Log.LogError (MSBStrings.E7101 /* Unknown property '{0}' with value '{1}'. */, property, value);
-						break;
-					}
+				switch (property) {
+				case "BaseLibDllPath":
+					BaseLibDllPath = value;
+					break;
+				case "BTouchToolExe":
+					BTouchToolExe = value;
+					break;
+				case "BTouchToolPath":
+					BTouchToolPath = value;
+					break;
+				case "_DotNetCscCompiler":
+					DotNetCscCompiler = value;
+					break;
+				case "_GeneratorAttributeAssembly":
+					GeneratorAttributeAssembly = value;
+					break;
+				default:
+					Log.LogError (MSBStrings.E7101 /* Unknown property '{0}' with value '{1}'. */, property, value);
+					break;
 				}
-			} finally {
-				File.Delete (outputFile);
-				File.Delete (projectPath);
-				File.Delete (binlog);
 			}
 		}
 	}

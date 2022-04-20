@@ -1609,6 +1609,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<ComputeRemoteGeneratorProperties
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'              "
+			IntermediateOutputPath="$(IntermediateOutputPath)"
 			ProjectPath="$(MSBuildThisFileFullPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>

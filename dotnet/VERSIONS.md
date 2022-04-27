@@ -51,5 +51,26 @@ This is the scheme: `OsMajor.OsMinor.InternalRelease[-prereleaseX]+sha.1b2c3d4`.
               we’d still be able to figure out it’s not a stable version by
               using the commit hash.
 
+## API changes in service releases.
+
+The managed API must be both forward and backward compatible between service
+releases. 
+
+1. It must be possible to use an assembly build with release v1.0.100 by
+   somebody else who has v1.0.101 installed (backwards compatibility).
+2. It must be possible to use an assembly built with v1.0.101 by somebody show
+   has v1.0.100 installed (forward compatibility).
+
+This means that there can't be any changes in v1.0.101 that changes the API
+shape in any way (such as adding a class or method), because then an assembly
+can build with v1.0.101 using this new API, and it won't work on v1.0.100,
+because the new API doesn't exist there.
+
+A safe assumption is to _always_ bump the feature version number when there
+are _any_ API changes.
+
+Sidenote: the feature version number is what we're typically calling the
+version band.
+
 [1]: https://github.com/dotnet/designs/blob/master/accepted/2018/sdk-version-scheme.md
 [2]: https://semver.org

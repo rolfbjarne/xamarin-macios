@@ -207,63 +207,83 @@ endif
 
 define ApiDiffReport
 	if ! grep "No change detected" $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<h2><a href='dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1)-api-diff.html'>Microsoft.$(1) (.NET) API diff</a></h2>" >> $(2); \
+		echo "<li><a href='dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1)-api-diff.html'>$(1)</a></li>" >> $(2); \
 	else \
-		echo "<h2>Microsoft.$(1) (.NET) API diff is empty</h2>" >> $(2); \
+		echo "<li><s>$(1)</s> (empty)</li>" >> $(2); \
 	fi;
 endef
 
 $(APIDIFF_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
 	$(QF_GEN) echo "<h1>API diffs</h1>" > $@
+ifdef INCLUDE_XAMARIN_LEGACY
+	$(Q) echo "<h2>Legacy Xamarin</h2>" >> $@
+	$(Q) echo "<ul>" >> $@
 ifdef INCLUDE_IOS
 	$(Q) if ! grep "No change detected" $(APIDIFF_DIR)/ios-api-diff.html >/dev/null 2>&1; then  \
-		echo "<h2><a href='ios-api-diff.html'>Xamarin.iOS API diff</a></h2>" >> $@; \
+		echo "<li><a href='ios-api-diff.html'>Xamarin.iOS API diff</a></li>" >> $@; \
 	else \
-		echo "<h2>Xamarin.iOS API diff is empty</h2>" >> $@; \
+		echo "<li><s>Xamarin.iOS</s> (empty)</li>" >> $@; \
 	fi;
+endif
 ifdef INCLUDE_TVOS
 	$(Q) if ! grep "No change detected" $(APIDIFF_DIR)/tvos-api-diff.html >/dev/null 2>&1; then  \
-		echo "<h2><a href='tvos-api-diff.html'>Xamarin.TVOS API diff</a></h2>" >> $@; \
+		echo "<li><a href='tvos-api-diff.html'>Xamarin.TVOS API diff</a></li>" >> $@; \
 	else \
-		echo "<h2>Xamarin.TVOS API diff is empty</h2>" >> $@; \
+		echo "<li><s>Xamarin.TVOS</s> (empty)</li>" >> $@; \
 	fi;
 endif
 ifdef INCLUDE_WATCH
 	$(Q) if ! grep "No change detected" $(APIDIFF_DIR)/watchos-api-diff.html >/dev/null 2>&1; then  \
-		echo "<h2><a href='watchos-api-diff.html'>Xamarin.WatchOS API diff</a></h2>" >> $@; \
+		echo "<li><a href='watchos-api-diff.html'>Xamarin.WatchOS API diff</a></li>" >> $@; \
 	else \
-		echo "<h2>Xamarin.WatchOS API diff is empty</h2>" >> $@; \
+		echo "<li><s>Xamarin.WatchOS</s> (empty)</li>" >> $@; \
 	fi;
-endif
 endif
 ifdef INCLUDE_MAC
 	$(Q) if ! grep "No change detected" $(APIDIFF_DIR)/mac-api-diff.html >/dev/null 2>&1; then  \
-		echo "<h2><a href='mac-api-diff.html'>Xamarin.Mac API diff</a></h2>" >> $@; \
+		echo "<li><a href='mac-api-diff.html'>Xamarin.Mac API diff</a></li>" >> $@; \
 	else \
-		echo "<h2>Xamarin.Mac API diff is empty</h2>" >> $@; \
+		echo "<li><s>Xamarin.Mac</s> (empty)</li>" >> $@; \
 	fi;
 endif
+	$(Q) echo "</ul>" >> $@
+endif # INCLUDE_XAMARIN_LEGACY
 
-# New Dotnet vs Stable Dotnet
+ifdef ENABLE_DOTNET
+	$(Q) echo "<h2>.NET</h2>" >> $@
+	$(Q) echo "<ul>" >> $@
+
+	# New .NET vs Stable .NET
 	$(Q) $(foreach platform,$(DOTNET_PLATFORMS),$(call ApiDiffReport,$(platform),$@))
 
-# New Dotnet vs. Stable Legacy
-ifdef INCLUDE_IOS
-	echo "<h2><a href='dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS-api-diff.html'>Microsoft.iOS (.NET) vs Xamarin.iOS (stable) API diff</a></h2>" >> $@
-endif
-ifdef INCLUDE_TVOS
-	echo "<h2><a href='dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS-api-diff.html'>Microsoft.tvOS (.NET) vs Xamarin.TVOS (stable) API diff</a></h2>" >> $@
-endif
-ifdef INCLUDE_MAC
-	echo "<h2><a href='dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS-api-diff.html'>Microsoft.macOS (.NET) vs Xamarin.Mac (stable) API diff</a></h2>" >> $@
-endif
-
-# Dotnet iOS vs. Dotnet MacCatalyst
+	# Dotnet iOS vs. Dotnet MacCatalyst
 ifdef INCLUDE_IOS
 ifdef INCLUDE_MACCATALYST
-	echo "<h2><a href='dotnet/iOS-MacCatalyst-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.MacCatalyst-api-diff.html'>Microsoft.iOS vs Microsoft.MacCatalyst API diff</a></h2>" >> $@
+	$(Q) echo "<li><a href='dotnet/iOS-MacCatalyst-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.MacCatalyst-api-diff.html'>Microsoft.iOS vs Microsoft.MacCatalyst</a></li>" >> $@
 endif
 endif
+
+	$(Q) echo "</ul>" >> $@
+endif # ENABLE_DOTNET
+
+ifdef ENABLE_DOTNET
+ifdef INCLUDE_XAMARIN_LEGACY
+	$(Q) echo "<h2>Legacy Xamarin (stable) vs .NET</h2>" >> $@
+	$(Q) echo "<ul>" >> $@
+# New Dotnet vs. Stable Legacy
+ifdef INCLUDE_IOS
+	$(Q) echo "<li><a href='dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS-api-diff.html'>iOS</a></li>" >> $@
+endif
+ifdef INCLUDE_TVOS
+	$(Q) echo "<li><a href='dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS-api-diff.html'>tvOS</a></li>" >> $@
+endif
+ifdef INCLUDE_MAC
+	$(Q) echo "<li><a href='dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS-api-diff.html'>macOS</a></li>" >> $@
+endif
+	$(Q) echo "</ul>" >> $@
+endif # INCLUDE_XAMARIN_LEGACY
+endif # ENABLE_DOTNET
+
 
 # easy-to-type helper targets.
 # one rule to create all the api diffs

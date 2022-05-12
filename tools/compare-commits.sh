@@ -41,6 +41,8 @@ ORIGINAL_ARGS=("$@")
 FAILURE_FILE=
 USE_EXISTING_BUILD=
 KEEP_BUILD=$KEEP_BUILD
+ENABLE_API_DIFF=1
+ENABLE_GENERATOR_DIFF=1
 while ! test -z "$1"; do
 	case "$1" in
 		--help|-\?|-h)
@@ -81,6 +83,14 @@ while ! test -z "$1"; do
 			;;
 		--keep-build)
 			KEEP_BUILD=1
+			shift
+			;;
+		--skip-generator-diff)
+			ENABLE_GENERATOR_DIFF=
+			shift
+			;;
+		--skip-api-diff)
+			ENABLE_API_DIFF=
 			shift
 			;;
 		*)

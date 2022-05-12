@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -30,6 +31,9 @@ class Merger {
 		string to = "unknown";
 		bool lookForVersion = false;
 		foreach (var file in files) {
+			Console.WriteLine (file);
+			if (new FileInfo (file).Length == 0)
+				continue;
 			// skip everything before and including title (single #) from each file, we already have one
 			string? foundTitle = null;
 			foreach (var line in File.ReadAllLines (file)) {

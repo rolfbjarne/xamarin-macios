@@ -32,15 +32,15 @@ function show_help ()
 	echo "Usage is: $(basename "$0") --base=[TREEISH] [options]"
 	echo "   -h, -?, --help          Displays the help"
 	echo "   -b, --base=[TREEISH]    The treeish to compare the currently built assemblies against."
-	#not quite implemented yet# echo "   -c, --compare=[TREEISH] Optional, if specified use this hash to build the 'after' assemblies for the comparison."
-	echo ""
-	printf "${BLUE} WARNING: This tool will temporarily change the current HEAD of your git checkout.${CLEAR}\\n"
-	printf "${BLUE} WARNING: The tool will try to restore the current HEAD when done (or if cancelled), but this is not guaranteed.${CLEAR}\\n"
+	echo "   --use-existing-build    Use an existing built tree instead of cloning & building TREEISH"
+	echo "   --keep-build            Don't remove the cloned & built working copy once done"
 	echo ""
 }
 
 ORIGINAL_ARGS=("$@")
 FAILURE_FILE=
+USE_EXISTING_BUILD=
+KEEP_BUILD=$KEEP_BUILD
 while ! test -z "$1"; do
 	case "$1" in
 		--help|-\?|-h)
@@ -74,6 +74,14 @@ while ! test -z "$1"; do
 		--failure-file)
 			FAILURE_FILE="$2"
 			shift 2
+			;;
+		--use-existing-build)
+			USE_EXISTING_BUILD=1
+			shift
+			;;
+		--keep-build)
+			KEEP_BUILD=1
+			shift
 			;;
 		*)
 			echo "Error: Unknown argument: $1"
@@ -137,9 +145,11 @@ function upon_exit ()
 	fi
 
 	# Clean up after ourselves (but leave the comparison)
-	rm -Rf "$OUTPUT_SRC_DIR"
-	rm -Rf "$OUTPUT_DIR/build"
-	rm -Rf "$OUTPUT_DIR/build-new"
+	if test -z "$KEEP_BUILD"; then
+		rm -Rf "$OUTPUT_SRC_DIR"
+		rm -Rf "$OUTPUT_DIR/build"
+		rm -Rf "$OUTPUT_DIR/build-new"
+	fi
 }
 
 trap upon_exit EXIT
@@ -151,28 +161,30 @@ else
 fi
 echo "${BLUE}Checking out ${WHITE}$(git log -1 --pretty="%h: %s" "$BASE_HASH")${CLEAR}...${CLEAR}"
 
-rm -Rf "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_SRC_DIR"
+if test -z "$USE_EXISTING_BUILD"; then
+	rm -Rf "$OUTPUT_DIR"
+	mkdir -p "$OUTPUT_DIR"
+	mkdir -p "$OUTPUT_SRC_DIR"
 
-cd "$OUTPUT_SRC_DIR"
-git clone https://github.com/xamarin/xamarin-macios --reference "$ROOT_DIR"
-cd xamarin-macios
-git reset --hard "$BASE_HASH"
-cp "$ROOT_DIR/configure.inc" .
-make reset
-make check-versions
-if ! ./system-dependencies.sh; then
-	report_error_line "${RED}Error: The system requirements for the hash to compare against ($WHITE$BASE_HASH$CLEAR) are different than for the current hash. Comparison is currently not supported in this scenario.${CLEAR}"
-	exit 1
-fi
-if ! make all -j8; then
-	report_error_line "${RED}Error: 'make' failed for the hash $WHITE$BASE_HASH$CLEAR.${CLEAR}"
-	exit 1
-fi
-if ! make install -j8; then
-	report_error_line "${RED}Error: 'make install' failed for the hash $WHITE$BASE_HASH$CLEAR.${CLEAR}"
-	exit 1
+	cd "$OUTPUT_SRC_DIR"
+	git clone https://github.com/xamarin/xamarin-macios --reference "$ROOT_DIR"
+	cd xamarin-macios
+	git reset --hard "$BASE_HASH"
+	cp "$ROOT_DIR/configure.inc" .
+	make reset
+	make check-versions
+	if ! ./system-dependencies.sh; then
+		report_error_line "${RED}Error: The system requirements for the hash to compare against ($WHITE$BASE_HASH$CLEAR) are different than for the current hash. Comparison is currently not supported in this scenario.${CLEAR}"
+		exit 1
+	fi
+	if ! make all -j8; then
+		report_error_line "${RED}Error: 'make' failed for the hash $WHITE$BASE_HASH$CLEAR.${CLEAR}"
+		exit 1
+	fi
+	if ! make install -j8; then
+		report_error_line "${RED}Error: 'make install' failed for the hash $WHITE$BASE_HASH$CLEAR.${CLEAR}"
+		exit 1
+	fi
 fi
 
 #
@@ -184,6 +196,7 @@ fi
 
 # Calculate apidiff references according to the temporary build
 echo "${BLUE}Updating apidiff references...${CLEAR}"
+rm -rf "$OUTPUT_DIR/apidiff"
 if ! make update-refs -C "$ROOT_DIR/tools/apidiff" -j8 APIDIFF_DIR="$OUTPUT_DIR/apidiff" IOS_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_ios-build" MAC_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_mac-build" DOTNET_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_build"; then
 	EC=$?
 	report_error_line "${RED}Failed to update apidiff references${CLEAR}"
@@ -197,6 +210,8 @@ fi
 # We make a copy of the generated source code to compare against,
 # so that we can remove files we don't want to compare without
 # affecting that build.
+rm -rf "$OUTPUT_DIR/build-new"
+rm -rf "$OUTPUT_DIR/build"
 $CP -R "$ROOT_DIR/src/build" "$OUTPUT_DIR/build-new"
 $CP -R "$OUTPUT_SRC_DIR/xamarin-macios/src/build" "$OUTPUT_DIR/build"
 

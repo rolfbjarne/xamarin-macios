@@ -108,6 +108,7 @@ stages:
       # set the branch variable name, this is required by jenkins and we have a lot of scripts that depend on it
       BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
       XHARNESS_LABELS: $[ dependencies.configure.outputs['labels.xharness-labels'] ]
+      SKIP_ALL_TESTS: $[ dependencies.configure.outputs['labels.skip-all-tests'] ]
       ${{ if eq(parameters.testPool, '') }}:
         AgentPoolComputed: $(PRBuildPool)
       ${{ else }}:
@@ -123,17 +124,14 @@ stages:
       workspace:
         clean: all
     steps:
-    - template: build.yml
-      parameters:
-        testsLabels: ${{ parameters.testsLabels }}
-        statusContext: ${{ parameters.statusContext }}
-        useXamarinStorage: ${{ parameters.useXamarinStorage }}
-        vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
-        keyringPass: ${{ parameters.keyringPass }}
-        testPrefix: ${{ parameters.testPrefix }}
-        makeTarget: ${{ parameters.makeTarget }}
-        gitHubToken: ${{ parameters.gitHubToken }}
-        xqaCertPass: ${{ parameters.xqaCertPass }}
+    - ${{ if contains(variables['SKIP_ALL_TESTS'], 'True') }}:
+      - pwsh: |
+          Write-Host "Skipped tests because the 'skip-all-tests' label was set."
+        displayName: 'Skipped all tests.'
+    - ${{ else }}:
+      - pwsh: |
+          Write-Host "Did not skip all tests: SKIP_ALL_TESTS=$Env:SKIP_ALL_TESTS"
+        displayName: 'Skipped all tests (not really).'
 
   - job: upload_vsdrops
     displayName: 'Upload report to vsdrops'

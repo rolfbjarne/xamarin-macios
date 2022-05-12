@@ -57,7 +57,7 @@ jobs:
   - ${{ if eq(parameters.pool, 'automatic') }}:
     - AgentPoolSelector
   - configure
-  displayName: 'Generate API diff'
+  displayName: 'Detect API changes'
   timeoutInMinutes: 1000
   variables:
     ${{ if eq(parameters.pool, 'automatic') }}:
@@ -78,19 +78,25 @@ jobs:
   workspace:
     clean: all
 
+  # build the source code (build.yml) and detect changes (the nested api-diff.yml)
   steps:
-  - template: build-api-diff.yml
+  - template: build.yml
     parameters:
       vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
       keyringPass: ${{ parameters.keyringPass }}
       gitHubToken: ${{ parameters.gitHubToken }}
       xqaCertPass: ${{ parameters.xqaCertPass }}
       enableDotnet: ${{ parameters.enableDotnet }}
+      buildSteps:
+        - template: api-diff.yml
+          parameters:
+            prID: variables['PrID']
 
+# Upload results to vsdrops
 - job: upload_vsdrops
-  displayName: 'Upload API diff to VSDrops'
+  displayName: 'Upload change detection results to VSDrops'
   timeoutInMinutes: 1000
-  dependsOn: # can start as soon as the tests are done and the api diff
+  dependsOn: # can start as soon as the api diff is done
   - api_diff
   condition: succeededOrFailed() 
 
@@ -104,14 +110,12 @@ jobs:
   steps:
   - template: upload-vsdrops.yml
     parameters:
-      testPrefix: sim
-      runTests: false
-
+      testPrefix: change-detection
 
 - job: api_diff_github_comment
-  displayName: 'Publish API diff to GitHub'
+  displayName: 'Publish change detection results to GitHub'
   timeoutInMinutes: 1000
-  dependsOn: # has to wait for the tests to be done AND the data to be uploaded
+  dependsOn: # has to wait for the change detection to be done and data to be uploaded
   - configure
   - api_diff
   - upload_vsdrops

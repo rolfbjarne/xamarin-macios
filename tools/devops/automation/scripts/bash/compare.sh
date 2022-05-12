@@ -19,24 +19,38 @@
 #    c. Execute 'PR_ID=4614 ./compare.sh'
 #
 
-API_COMPARISON="$WORKSPACE/apicomparison"
-BUILD_URL="$SYSTEM_TEAMFOUNDATIONCOLLECTIONURI$SYSTEM_TEAMPROJECT/_build/index?buildId=$BUILD_BUILDID&view=ms.vss-test-web.test-result-details"
-URL_PREFIX="$VSDROPSPREFIX/$BUILD_BUILDNUMBER/$BUILD_BUILDID/apigeneratordiff/;/"
-API_URL="$URL_PREFIX/api-diff.html"
-GENERATOR_URL="$URL_PREFIX/generator-diff/index.html"
-
 # env var should have been defined by the CI
 if test -z "$XAM_TOP"; then
     echo "Variable XAM_TOP is missing."
     exit 1
 fi
 
-if test -z "$WORKSPACE"; then
-	echo "Variable WORKSPACE is missing."
-	exit 1
+env | sort # FIXME: debug spew
+
+export WORKSPACE="$BUILD_ARTIFACTSTAGINGDIRECTORY"
+
+CHANGE_DETECTION_OUTPUT_DIR="$WORKSPACE/change-detection"
+BUILD_URL="$SYSTEM_TEAMFOUNDATIONCOLLECTIONURI$SYSTEM_TEAMPROJECT/_build/index?buildId=$BUILD_BUILDID&view=ms.vss-test-web.test-result-details"
+URL_PREFIX="$VSDROPSPREFIX/$BUILD_BUILDNUMBER/$BUILD_BUILDID/change-detection/;/"
+API_URL="$URL_PREFIX/api-diff.html"
+GENERATOR_URL="$URL_PREFIX/generator-diff/index.html"
+
+export APIDIFF_LINK_PREFIX=$URL_PREFIX
+
+cd "$XAM_TOP"
+
+if [[ $PR_ID ]]; then
+    git fetch --no-tags --progress https://github.com/xamarin/xamarin-macios +refs/pull/$PR_ID/*:refs/remotes/origin/pr/$PR_ID/*
+
+    # Compute the correct base hash to use for comparison by getting the merge base between the target branch and the commit we're building.
+    if MERGE_BASE=$(git merge-base "$SYSTEM_PULLREQUEST_SOURCECOMMITID" "refs/remotes/origin/$SYSTEM_PULLREQUEST_TARGETBRANCH"); then
+        if test -n "$MERGE_BASE"; then
+            echo "Computed merge base: $MERGE_BASE"
+            export BASE=$MERGE_BASE
+        fi
+    fi
 fi
 
-cd $XAM_TOP
 
 MARKDOWN_INDENT="&nbsp;&nbsp;&nbsp;&nbsp;"
 echo "*** Comparing API & creating generator diff... ***"
@@ -76,7 +90,6 @@ fi
 mkdir -p "$API_COMPARISON"
 
 cp -R ./tools/comparison/apidiff/diff "$API_COMPARISON"
-cp -R ./tools/comparison/apidiff/dotnet "$API_COMPARISON"
 cp    ./tools/comparison/apidiff/*.html "$API_COMPARISON"
 cp    ./tools/comparison/apidiff/*.md "$API_COMPARISON"
 cp -R ./tools/comparison/generator-diff "$API_COMPARISON"
@@ -119,3 +132,6 @@ set +x
 echo "##vso[task.setvariable variable=API_GENERATOR_DIFF_MESSAGE;isOutput=true]$MESSAGE"
 echo "##vso[task.setvariable variable=API_GENERATOR_BUILT;isOutput=true]True"
 set -x
+
+zip -9 "$CHANGE_DETECTION_OUTPUT_DIR.zip" "$CHANGE_DETECTION_OUTPUT_DIR"
+

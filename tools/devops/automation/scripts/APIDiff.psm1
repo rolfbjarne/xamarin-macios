@@ -71,6 +71,7 @@ class APIDiffComment {
     [object] $FromPR = $null
     [object] $FromStable = $null
     [string] $Generator = $null
+    [string] $AdditionalMessage = $null
 
     APIDiffComment (
         [object] $prContent,
@@ -177,6 +178,11 @@ class APIDiffComment {
             $StringBuilder.AppendLine("")
         }
         $StringBuilder.AppendLine("")
+
+        if ($null -ne $this.AdditionalMessage) {
+            $StringBuilder.AppendLine($this.AdditionalMessage)
+            $StringBuilder.AppendLine("")
+        }
     }
 
     [void] WriteComment($stringBuilder) {
@@ -208,6 +214,11 @@ class APIDiffComment {
             } else {
                 $stringBuilder.AppendLine("* :warning: Path $($this.Generator) was not found!")
             }
+        }
+
+        if ($null -ne $this.AdditionalMessage) {
+            $StringBuilder.AppendLine($this.AdditionalMessage)
+            $StringBuilder.AppendLine("")
         }
     }
 }

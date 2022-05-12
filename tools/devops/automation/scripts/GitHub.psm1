@@ -1307,6 +1307,37 @@ function Push-RepositoryDispatch {
     Write-Host $request.Content
 }
 
+# This function replaces paths in one file with links to gists.
+#     1. InputContents: string to process
+#     2. Replacements: an array listing the paths in InputContents that we want to create a gist for, as well as the text to find in InputContents and replace with the gist url.
+# It also takes a root directory parameter, which where the relative paths in Replacements should be resolved against.
+function Convert-PathsToGists {
+    param (
+        [string]
+        $RootDirectory,
+
+        [string]
+        $InputContents,
+
+        [string[]]
+        $Replacements
+    )
+
+    # Iterate over each file we're supposed to gist in the $ReplacementFile, each line is of the format:
+    #     TEXTTOREPLACEWITHURL=path/to/file
+    foreach ($line in $Replacements) {
+        $split = $line.Split('=')
+        $find = $split[0]
+        $fileToGist = $split[1]
+        $fullPath = Join-Path -Path $RootDirectory -ChildPath $fileToGist
+        $obj = New-GistObjectDefinition -Name $fileToGist -Path $fullPath -Type "markdown"
+        $filesToGist = ($obj)
+        $gistUrl = New-GistWithFiles $fileToGist $filesToGist
+        $InputContents = $InputContents.Replace("%$find%", $gistUrl)
+    }
+    return $InputContents
+}
+
 # module exports, any other functions are private and should not be used outside the module.
 Export-ModuleMember -Function New-GitHubComment
 Export-ModuleMember -Function New-GitHubCommentFromFile
@@ -1317,6 +1348,7 @@ Export-ModuleMember -Function New-GistWithFiles
 Export-ModuleMember -Function New-GistObjectDefinition 
 Export-ModuleMember -Function New-GistWithContent 
 Export-ModuleMember -Function Push-RepositoryDispatch 
+Export-ModuleMember -Function Convert-PathsToGists
 
 # new future API that uses objects.
 Export-ModuleMember -Function New-GitHubCommentsObject

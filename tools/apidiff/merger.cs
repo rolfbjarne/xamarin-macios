@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -30,6 +31,9 @@ class Merger {
 		string to = "unknown";
 		bool lookForVersion = false;
 		foreach (var file in files) {
+			Console.WriteLine (file);
+			if (new FileInfo (file).Length == 0)
+				continue;
 			// skip everything before and including title (single #) from each file, we already have one
 			string? foundTitle = null;
 			foreach (var line in File.ReadAllLines (file)) {
@@ -88,7 +92,6 @@ class Merger {
 		if (alldiffs.Length == 0)
 			alldiffs = "No changes were found between both versions."; // should not happen for releases (versions change)
 		File.AppendAllText (filePath, alldiffs);
-		Console.WriteLine ($"@MonkeyWrench: AddFile: {Path.GetFullPath (filePath)}");
 
 		if (File.Exists ("api-diff.html"))
 			File.AppendAllText ("api-diff.html", $"\n<h2><a href=\"{filePath}\">{platform} API diff (markdown)</a></h2>");

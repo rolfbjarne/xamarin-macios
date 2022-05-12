@@ -399,3 +399,54 @@ Describe 'Get-GitHubPRInfo' {
         }
     }
 }
+
+
+Describe 'Convert-PathsToGists' {
+    Context 'with all env variables present' {
+        BeforeAll {
+            $Script:envVariables = @{
+                "GITHUB_TOKEN" = "GITHUB_TOKEN";
+            }
+
+            $Script:envVariables.GetEnumerator() | ForEach-Object { 
+                $key = $_.Key
+                Set-Item -Path "Env:$key" -Value $_.Value
+            }
+        }
+
+        It 'calls the method succesfully' {
+            Mock Invoke-RestMethod {
+                return @{"status"=200;}
+            }
+            $rootDirectory = "root"
+            $inputContents = "a%file%b"
+            $replacements = ("file=file")
+
+            $fullPath = Join-Path -Path $rootDirectory -ChildPath "file"
+            New-Item -Path "." -Name $rootDirectory -ItemType "directory" -Force
+            Set-Content -Path $fullPath -Value "content"
+
+            $converted = Convert-PathsToGists -RootDirectory $rootDirectory -InputContents $inputContents -Replacements $replacements
+
+            # assert the call and compare the expected parameters to the received ones
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 1 -Scope It -ParameterFilter {
+                # validate each of the params and the payload
+                if ($Uri -ne "https://api.github.com/repos/xamarin/xamarin-macios/pulls/$changeId") {
+                    return $False
+                }
+                if ($Headers.Authorization -ne ("token {0}" -f $envVariables["GITHUB_TOKEN"])) {
+                    return $False
+                }
+                if ($Method -ne "POST") {
+                    return $False
+                }
+                if ($ContentType -ne "application/json") {
+                    return $False
+                }
+
+                return $True
+            }
+
+        }
+    }
+}

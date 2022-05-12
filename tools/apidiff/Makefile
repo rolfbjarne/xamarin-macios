@@ -192,7 +192,9 @@ API_DIFF_DEPENDENCIES += $(foreach assembly,$(DOTNET_LEGACY_ASSEMBLIES),$(APIDIF
 endif
 
 define ApiDiffReport
-	if ! grep "No change detected" $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then  \
+	if ! test -s $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
+		echo "<li><s>$(1)</s> (empty)</li>" >> $(2); \
+	elif ! grep "No change detected" $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
 		echo "<li><a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>$(1)</a></li>" >> $(2); \
 	else \
 		echo "<li><s>$(1)</s> (empty)</li>" >> $(2); \

@@ -155,7 +155,7 @@ steps:
 
     foreach ($key in $filePatterns.Keys) {
       $filter = $filePatterns[$key]
-      if ($key.StartsWith ("^")) {
+      if ($key.StartsWith("^")) {
         $fileName = Get-ChildItem $apiDiffRoot -Name | Where-Object{$_ -match $filter}
       } else {
         $fileName = $key

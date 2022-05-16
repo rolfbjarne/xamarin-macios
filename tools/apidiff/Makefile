@@ -272,7 +272,6 @@ endif
 endif # INCLUDE_XAMARIN_LEGACY
 endif # ENABLE_DOTNET
 
-
 # easy-to-type helper targets.
 # one rule to create all the api diffs
 

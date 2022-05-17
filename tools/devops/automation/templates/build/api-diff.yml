@@ -84,6 +84,8 @@ steps:
     }
     trap report_error ERR
 
+    export APIDIFF_LINK_PREFIX="$VSDROPSPREFIX/$BUILD_BUILDNUMBER/$BUILD_BUILDID/apigeneratordiff/;/"
+
     make -j8 -C $(Build.SourcesDirectory)/xamarin-macios/tools/apidiff jenkins-api-diff
 
     # remove some files that do not need to be uploaded

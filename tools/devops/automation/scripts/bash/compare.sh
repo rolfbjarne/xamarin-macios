@@ -25,6 +25,8 @@ URL_PREFIX="$VSDROPSPREFIX/$BUILD_BUILDNUMBER/$BUILD_BUILDID/apigeneratordiff/;/
 API_URL="$URL_PREFIX/api-diff.html"
 GENERATOR_URL="$URL_PREFIX/generator-diff/index.html"
 
+export APIDIFF_LINK_PREFIX=$URL_PREFIX
+
 # env var should have been defined by the CI
 if test -z "$XAM_TOP"; then
     echo "Variable XAM_TOP is missing."

@@ -1576,10 +1576,6 @@ $(DOTNET_BUILD_DIR)/Constants.%.generated.cs: Makefile $(DOTNET_GENERATE_FRAMEWO
 	$(Q) mono --debug $(DOTNET_GENERATE_FRAMEWORKS_CONSTANTS) "$*" "$@.tmp"
 	$(Q) mv "$@.tmp" "$@"
 
-# This tells NuGet to use the exact same dotnet version we've configured in Make.config
-global.json: $(TOP)/global6.json
-	$(Q) $(CP) $< $@
-
 install-local:: $(INSTALL_TARGETS)
 all-local:: $(ALL_TARGETS)
 

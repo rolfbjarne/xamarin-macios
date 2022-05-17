@@ -13,7 +13,6 @@ Xcode ("@XCODE_XIP_NAME@").XcodeSelect (allowUntrusted: true);
 Item ("@MONO_PACKAGE@");
 Item ("@MIN_SHARPIE_URL@");
 Item ("@VS_PACKAGE@");
-DotNetCoreSdk ("@SYSTEM_DOTNET_VERSION@");
 
 var appleSdkOverride = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "Library", "Preferences", "Xamarin", "Settings.plist");
 Item ("Override Apple SDK Settings")

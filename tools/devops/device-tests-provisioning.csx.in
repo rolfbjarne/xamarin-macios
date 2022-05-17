@@ -15,8 +15,6 @@ Item ("@VS_PACKAGE@");
 Item ("@XI_PACKAGE@");
 Item ("@MIN_SHARPIE_URL@");
 
-DotNetCoreSdk ("@SYSTEM_DOTNET_VERSION@");
-
 BrewPackages ("p7zip");
 
 var appleSdkOverride = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "Library", "Preferences", "Xamarin", "Settings.plist");

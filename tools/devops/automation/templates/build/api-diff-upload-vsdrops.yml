@@ -1,0 +1,26 @@
+
+# job that downloads the html report from the artifacts and uploads them into vsdrops.
+
+steps:
+
+- template: ../common/checkout.yml
+
+# Download the change detection artifact
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download change detection artifacts'
+  inputs:
+    patterns: 'change-detection/change-detection.zip'
+    allowFailedBuilds: true
+    path: $(System.DefaultWorkingDirectory)/Reports
+
+# Upload the change detection results to vsdrops
+- task: ms-vscs-artifact.build-tasks.artifactDropTask-1.artifactDropTask@0
+  displayName: 'Publish change detection results to Artifact Services Drop'
+  continueOnError: true
+  inputs:
+    dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
+    dropMetadataContainerName: 'DropMetadata-ChangeDetection'
+    buildNumber: 'xamarin-macios/detected-changes/$(Build.BuildNumber)/$(Build.BuildId)'
+    sourcePath: 'change-detection/change-detection.zip'
+    detailedLog: true
+    usePat: true

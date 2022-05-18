@@ -10,23 +10,17 @@
 # on mac os x points on the top dir while on windows 
 # is the checked out dir
 
-parameters:
-
-- name: statusContext
-  type: string 
-  default: 'iOS Device Tests' # default context, since we started dealing with iOS devices. 
-
 steps:
 
 - template: ../common/checkout.yml
 
-# download the change detection results
+# Download the change detection artifact
 - task: DownloadPipelineArtifact@2
-  displayName: 'Download change detection results'
+  displayName: 'Download change detection artifacts'
   inputs:
     patterns: 'change-detection/change-detection.zip'
     allowFailedBuilds: true
-    path: $(System.DefaultWorkingDirectory)/ChangeDetectionResults
+    path: $(System.DefaultWorkingDirectory)/Reports
 
 # process the github comment and publish it
 - pwsh: |

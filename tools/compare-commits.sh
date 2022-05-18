@@ -45,13 +45,14 @@ BASE_HASH=
 OUTPUT_DIR=
 PULL_REQUEST_ID=
 PULL_REQUEST_TARGET_BRANCH=
-FAILURE_FILE=
 USE_EXISTING_BUILD=
 KEEP_BUILD=
 ENABLE_GENERATOR_DIFF=1
 ENABLE_API_DIFF=1
 ENABLE_STABLE_API_COMPARISON=1
 SKIP_DIRTY_CHECK=
+GH_COMMENTS_FILE=
+GH_COMMENTS_FIXUPS=
 while ! test -z "${1:-}"; do
 	case "$1" in
 		--help|-\?|-h)
@@ -94,14 +95,6 @@ while ! test -z "${1:-}"; do
 			OUTPUT_DIR="$2"
 			shift 2
 			;;
-		--failure-file=*)
-			FAILURE_FILE="${1#*=}"
-			shift
-			;;
-		--failure-file)
-			FAILURE_FILE="$2"
-			shift 2
-			;;
 		--use-existing-build)
 			USE_EXISTING_BUILD=1
 			shift
@@ -126,6 +119,22 @@ while ! test -z "${1:-}"; do
 			SKIP_DIRTY_CHECK=1
 			shift
 			;;
+		--gh-comments-file=*)
+			GH_COMMENTS_FILE="${1#*=}"
+			shift
+			;;
+		--gh-comments-file)
+			GH_COMMENTS_FILE="$2"
+			shift 2
+			;;
+		--gh-comments-fixup-file=*)
+			GH_COMMENTS_FIXUPS="${1#*=}"
+			shift
+			;;
+		--gh-comments-fixup-file)
+			GH_COMMENTS_FIXUPS="$2"
+			shift 2
+			;;
 		*)
 			echo "${RED}Error: Unknown argument: $1${CLEAR}"
 			exit 1
@@ -136,10 +145,12 @@ done
 function report_error_line ()
 {
 	echo "$@"
-	if test -n "$FAILURE_FILE"; then
+	if test -n "$GH_COMMENTS_FILE"; then
 		# remove color codes when writing to failure file
+		printf ":fire: Failed to compare API and create generator diff :fire:\\n" >> "$CHANGE_DETECTION_GH_COMMENTS_FILE"
+		printf "\\n"  >> "$CHANGE_DETECTION_GH_COMMENTS_FILE"
 		# shellcheck disable=SC2001
-		echo "$@" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' >> "$FAILURE_FILE"
+		echo "$@" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' >> "$GH_COMMENTS_FILE"
 	fi
 }
 
@@ -235,6 +246,12 @@ APIDIFF_FILE=
 OUTPUT_RESULTS_DIR=$OUTPUT_DIR/results
 OUTPUT_TMP_DIR=$OUTPUT_DIR/tmp
 OUTPUT_SRC_DIR=$OUTPUT_TMP_DIR/src
+
+GH_COMMENTS_FILE=$OUTPUT_RESULTS_DIR/gh-comment.md
+GH_COMMENTS_FIXUPS=$OUTPUT_RESULTS_DIR/gh-comment-fixups.txt
+
+rm -f "$GH_COMMENTS_FILE"
+rm -f "$GH_COMMENTS_FIXUPS"
 
 function upon_exit ()
 {
@@ -410,101 +427,95 @@ if [ -z ${DOTNET_TFM+x} ]; then DOTNET_TFM=$(make -C "$ROOT_DIR"/tools/devops pr
 
 # Create the GH comment
 
-JSON_FILE=$OUTPUT_RESULTS_DIR/gh-comment.md
-JSON_FILE_FIXUPS=$OUTPUT_RESULTS_DIR/gh-comment-fixups.txt
-
-rm -f "$JSON_FILE"
-rm -f "$JSON_FILE_FIXUPS"
-
-echo ":clipboard: Change detection :clipboard:" >> "$JSON_FILE"
-echo "" >> "$JSON_FILE"
+echo ":clipboard: Change detection :clipboard:" >> "$GH_COMMENTS_FILE"
+echo "" >> "$GH_COMMENTS_FILE"
 if test -n "$ENABLE_API_DIFF"; then
-	echo " # API diff (for current PR)" >> "$JSON_FILE"
-	echo "" >> "$JSON_FILE"
-	echo ":information_source: API Diff (from PR only) (please review changes)" >> "$JSON_FILE"
-	echo "" >> "$JSON_FILE"
+	echo " # API diff (for current PR)" >> "$GH_COMMENTS_FILE"
+	echo "" >> "$GH_COMMENTS_FILE"
+	echo ":information_source: API Diff (from PR only) (please review changes)" >> "$GH_COMMENTS_FILE"
+	echo "" >> "$GH_COMMENTS_FILE"
 
-	echo "API diff:  [vsdrops](%VSDROPS_PREFIX%api-diff.html) [gist](%GIST_PREVIOUS_api-diff.html%)" >> "$JSON_FILE"
-	echo "GIST_PREVIOUS_api-diff.html=api-diff.html" >> "$JSON_FILE_FIXUPS"
+	echo "API diff:  [vsdrops](%VSDROPS_PREFIX%api-diff.html) [gist](%GIST_PREVIOUS_api-diff.html%)" >> "$GH_COMMENTS_FILE"
+	echo "GIST_PREVIOUS_api-diff.html=api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 
-	echo "<details><summary>Xamarin</summary>" >> "$JSON_FILE"
+	echo "<details><summary>Xamarin</summary>" >> "$GH_COMMENTS_FILE"
 
 	if [[ -n "$INCLUDE_IOS" ]]; then
-		echo "* iOS [vsdrops](%VSDROPS_PREFIX%ios-api-diff.html) [gist](%GIST_PREVIOUS_ios-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_PREVIOUS_ios-api-diff.html=iOS-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* iOS [vsdrops](%VSDROPS_PREFIX%ios-api-diff.html) [gist](%GIST_PREVIOUS_ios-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_PREVIOUS_ios-api-diff.html=iOS-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
 	if [[ -n "$INCLUDE_MAC" ]]; then
-		echo "* macOS [vsdrops](%VSDROPS_PREFIX%mac-api-diff.html) [gist](%GIST_PREVIOUS_mac-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_PREVIOUS_mac-api-diff.html=mac-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* macOS [vsdrops](%VSDROPS_PREFIX%mac-api-diff.html) [gist](%GIST_PREVIOUS_mac-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_PREVIOUS_mac-api-diff.html=mac-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
 	if [[ -n "$INCLUDE_TVOS" ]]; then
-		echo "* tvOS [vsdrops](%VSDROPS_PREFIX%tvos-api-diff.html) [gist](%GIST_PREVIOUS_tvos-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_PREVIOUS_tvos-api-diff.html=tvos-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* tvOS [vsdrops](%VSDROPS_PREFIX%tvos-api-diff.html) [gist](%GIST_PREVIOUS_tvos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_PREVIOUS_tvos-api-diff.html=tvos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
 	if [[ -n "$INCLUDE_WATCH" ]]; then
-		echo "* watchOS [vsdrops](%VSDROPS_PREFIX%watchos-api-diff.html) [gist](%GIST_PREVIOUS_watchos-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_PREVIOUS_watchos-api-diff.html=watchos-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* watchOS [vsdrops](%VSDROPS_PREFIX%watchos-api-diff.html) [gist](%GIST_PREVIOUS_watchos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_PREVIOUS_watchos-api-diff.html=watchos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
-	echo "</details>" >> "$JSON_FILE"
+	echo "</details>" >> "$GH_COMMENTS_FILE"
 
-	echo "<details><summary>.NET</summary>" >> "$JSON_FILE"
+	echo "<details><summary>.NET</summary>" >> "$GH_COMMENTS_FILE"
 
 	for dotnet_platform in $DOTNET_PLATFORMS; do
-		echo "* $dotnet_platform [vsdrops](%VSDROPS_PREFIX%dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html) [gist](%GIST_PREVIOUS_DOTNET_$dotnet_platform.html)" >> "$JSON_FILE"
-		echo "GIST_PREVIOUS_DOTNET_$dotnet_platform.html=dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html" >> "$JSON_FILE_FIXUPS"
+		echo "* $dotnet_platform [vsdrops](%VSDROPS_PREFIX%dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html) [gist](%GIST_PREVIOUS_DOTNET_$dotnet_platform.html)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_PREVIOUS_DOTNET_$dotnet_platform.html=dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html" >> "$GH_COMMENTS_FIXUPS"
 	done
-	echo "</details>" >> "$JSON_FILE"
+	echo "</details>" >> "$GH_COMMENTS_FILE"
 fi
 
 if test -n "$ENABLE_STABLE_API_COMPARISON"; then
-	echo " # API diff (vs stable)" >> "$JSON_FILE"
-	echo "" >> "$JSON_FILE"
-	echo ":information_source: API Diff (vs stable) (please review changes)" >> "$JSON_FILE"
-	echo "" >> "$JSON_FILE"
+	echo " # API diff (vs stable)" >> "$GH_COMMENTS_FILE"
+	echo "" >> "$GH_COMMENTS_FILE"
+	echo ":information_source: API Diff (vs stable) (please review changes)" >> "$GH_COMMENTS_FILE"
+	echo "" >> "$GH_COMMENTS_FILE"
 
-	echo "API diff:  [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/api-diff.html) [gist](%GIST_STABLE_api-diff.html%)" >> "$JSON_FILE"
-	echo "GIST_STABLE_api-diff.html=stable-api-comparison/api-diff.html" >> "$JSON_FILE_FIXUPS"
+	echo "API diff:  [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/api-diff.html) [gist](%GIST_STABLE_api-diff.html%)" >> "$GH_COMMENTS_FILE"
+	echo "GIST_STABLE_api-diff.html=stable-api-comparison/api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 
-	echo "<details><summary>Xamarin</summary>" >> "$JSON_FILE"
+	echo "<details><summary>Xamarin</summary>" >> "$GH_COMMENTS_FILE"
 
 	if [[ -n "$INCLUDE_IOS" ]]; then
-		echo "* iOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/ios-api-diff.html) [gist](%GIST_STABLE_ios-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_STABLE_ios-api-diff.html=stable-api-comparison/iOS-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* iOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/ios-api-diff.html) [gist](%GIST_STABLE_ios-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_STABLE_ios-api-diff.html=stable-api-comparison/iOS-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
 	if [[ -n "$INCLUDE_MAC" ]]; then
-		echo "* macOS [vsdrops](%VSDROPS_PREFIX%mstable-api-comparison/ac-api-diff.html) [gist](%GIST_STABLE_mac-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_STABLE_mac-api-diff.html=stable-api-comparison/mac-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* macOS [vsdrops](%VSDROPS_PREFIX%mstable-api-comparison/ac-api-diff.html) [gist](%GIST_STABLE_mac-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_STABLE_mac-api-diff.html=stable-api-comparison/mac-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
 	if [[ -n "$INCLUDE_TVOS" ]]; then
-		echo "* tvOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/tvos-api-diff.html) [gist](%GIST_STABLE_tvos-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_STABLE_tvos-api-diff.html=stable-api-comparison/tvos-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* tvOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/tvos-api-diff.html) [gist](%GIST_STABLE_tvos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_STABLE_tvos-api-diff.html=stable-api-comparison/tvos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
 	if [[ -n "$INCLUDE_WATCH" ]]; then
-		echo "* watchOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/watchos-api-diff.html) [gist](%GIST_STABLE_watchos-api-diff.html%)" >> "$JSON_FILE"
-		echo "GIST_STABLE_watchos-api-diff.html=stable-api-comparison/watchos-api-diff.html" >> "$JSON_FILE_FIXUPS"
+		echo "* watchOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/watchos-api-diff.html) [gist](%GIST_STABLE_watchos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_STABLE_watchos-api-diff.html=stable-api-comparison/watchos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
 	fi
-	echo "</details>" >> "$JSON_FILE"
+	echo "</details>" >> "$GH_COMMENTS_FILE"
 
-	echo "<details><summary>.NET</summary>" >> "$JSON_FILE"
+	echo "<details><summary>.NET</summary>" >> "$GH_COMMENTS_FILE"
 
 	for dotnet_platform in $DOTNET_PLATFORMS; do
-		echo "* $dotnet_platform [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html) [gist](%GIST_STABLE_DOTNET_$dotnet_platform.html%)" >> "$JSON_FILE"
-		echo "GIST_STABLE_DOTNET_$dotnet_platform.html=stable-api-comparison/dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html" >> "$JSON_FILE_FIXUPS"
+		echo "* $dotnet_platform [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html) [gist](%GIST_STABLE_DOTNET_$dotnet_platform.html%)" >> "$GH_COMMENTS_FILE"
+		echo "GIST_STABLE_DOTNET_$dotnet_platform.html=stable-api-comparison/dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html" >> "$GH_COMMENTS_FIXUPS"
 	done
-	echo "</details>" >> "$JSON_FILE"
+	echo "</details>" >> "$GH_COMMENTS_FILE"
 
 	# TODO: other comparisons (Xamarin vs .NET, iOS vs Mac Catalyst)
 fi
 
 if test -n "$ENABLE_GENERATOR_DIFF"; then
-	echo "# Generator diff" >> "$JSON_FILE"
+	echo "# Generator diff" >> "$GH_COMMENTS_FILE"
 
-	echo ":information_source: Generator Diff: [vsdrops](%VSDROPS_PREFIX%/generator-diff/index.html) [gist](%GIST_GENERATOR_DIFF%) (please review changes)" >> "$JSON_FILE"
-	echo "GIST_GENERATOR_DIFF=generator-diff/index.html" >> "$JSON_FILE_FIXUPS"
+	echo ":information_source: Generator Diff: [vsdrops](%VSDROPS_PREFIX%/generator-diff/index.html) [gist](%GIST_GENERATOR_DIFF%) (please review changes)" >> "$GH_COMMENTS_FILE"
+	echo "GIST_GENERATOR_DIFF=generator-diff/index.html" >> "$GH_COMMENTS_FIXUPS"
 fi
 
-echo "JSON_FILE: $JSON_FILE"
-echo "JSON_FILE_FIXUPS: $JSON_FILE_FIXUPS	"
-
-cat "$JSON_FILE"
-cat "$JSON_FILE_FIXUPS"
+echo "GH_COMMENTS_FILE: $GH_COMMENTS_FILE"
+cat "$GH_COMMENTS_FILE"
+echo ""
+echo "GH_COMMENTS_FIXUPS: $GH_COMMENTS_FIXUPS"
+cat "$GH_COMMENTS_FIXUPS"

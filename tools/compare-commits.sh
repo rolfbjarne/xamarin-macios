@@ -208,6 +208,9 @@ mkdir -p "$OUTPUT_DIR"
 if test -z "${BUILD_REVISION:-}"; then
 	GIT_COLOR=--color=always
 	GIT_COLOR_P=(-c "color.status=always")
+else
+	GIT_COLOR=
+	GIT_COLOR_P=()
 fi
 
 if test -z "$SKIP_DIRTY_CHECK"; then

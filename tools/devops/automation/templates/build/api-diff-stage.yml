@@ -139,6 +139,3 @@ jobs:
   - template: api-diff-github-comment.yml
     parameters:
       statusContext: "Build"
-      vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
-      enableAPIDiff: true
-      testPrefix: sim

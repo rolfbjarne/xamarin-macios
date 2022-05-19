@@ -39,7 +39,7 @@ steps:
     if (Test-Path $replacementsPath -PathType leaf) {
       $replacements = Get-Content -Path $replacementsPath
     } else {
-      $replacements = ()
+      $replacements = @()
     }
 
     $converted = Convert-PathsToGists -RootDirectory $rootDirectory -InputContents $inputContents -Replacements $replacements

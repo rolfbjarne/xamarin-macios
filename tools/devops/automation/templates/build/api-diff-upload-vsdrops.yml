@@ -11,15 +11,17 @@ steps:
   inputs:
     patterns: 'change-detection/change-detection.zip'
     allowFailedBuilds: true
-    path: $(System.DefaultWorkingDirectory)/Reports
+    path: $(System.DefaultWorkingDirectory)/Artifacts
 
+# Unzip the change detection artifact
+- task: ExtractFiles@1
+  displayName: 'Decompress change detection artifacts'
+  inputs:
+    archiveFilePatterns: '$(System.DefaultWorkingDirectory)/Artifacts/change-detection/change-detection.zip'
+    destinationFolder: '$(System.DefaultWorkingDirectory)/change-detection'
 # Debug stuff
 - bash: |
-    find $SYSTEM_DEFAULTWORKINGDIRECTORY/Reports
-    find $SYSTEM_DEFAULTWORKINGDIRECTORY
-    find .
-    find "${SYSTEM_DEFAULTWORKINGDIRECTORY//\\//}"
-    find "${SYSTEM_DEFAULTWORKINGDIRECTORY//\\//}/Reports"
+    find "${SYSTEM_DEFAULTWORKINGDIRECTORY//\\//}/Artifacts"
     exit 0
   displayName: "Dump Downloaded contents"
   continueOnError: true
@@ -32,6 +34,6 @@ steps:
     dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
     dropMetadataContainerName: 'DropMetadata-ChangeDetection'
     buildNumber: 'xamarin-macios/detected-changes/$(Build.BuildNumber)/$(Build.BuildId)'
-    sourcePath: '$(System.DefaultWorkingDirectory)/Reports/'
+    sourcePath: '$(System.DefaultWorkingDirectory)/change-detection/'
     detailedLog: true
     usePat: true

@@ -52,7 +52,6 @@ ENABLE_API_DIFF=1
 ENABLE_STABLE_API_COMPARISON=1
 SKIP_DIRTY_CHECK=
 GH_COMMENTS_FILE=
-GH_COMMENTS_FIXUPS=
 while ! test -z "${1:-}"; do
 	case "$1" in
 		--help|-\?|-h)
@@ -125,14 +124,6 @@ while ! test -z "${1:-}"; do
 			;;
 		--gh-comments-file)
 			GH_COMMENTS_FILE="$2"
-			shift 2
-			;;
-		--gh-comments-fixup-file=*)
-			GH_COMMENTS_FIXUPS="${1#*=}"
-			shift
-			;;
-		--gh-comments-fixup-file)
-			GH_COMMENTS_FIXUPS="$2"
 			shift 2
 			;;
 		*)
@@ -248,10 +239,8 @@ OUTPUT_TMP_DIR=$OUTPUT_DIR/tmp
 OUTPUT_SRC_DIR=$OUTPUT_TMP_DIR/src
 
 GH_COMMENTS_FILE=$OUTPUT_RESULTS_DIR/gh-comment.md
-GH_COMMENTS_FIXUPS=$OUTPUT_RESULTS_DIR/gh-comment-fixups.txt
 
 rm -f "$GH_COMMENTS_FILE"
-rm -f "$GH_COMMENTS_FIXUPS"
 
 function upon_exit ()
 {
@@ -362,6 +351,8 @@ else
 	echo "${BLUE}Skipped generator diff.${CLEAR}"
 fi
 
+APIDIFF_RESULTS_DIR=$OUTPUT_RESULTS_DIR/previous-api-comparison
+APIDIFF_TMP_DIR=$OUTPUT_TMP_DIR/previous-api-comparison
 if test -n "$ENABLE_API_DIFF"; then
 	#
 	# API diff vs another commit
@@ -373,8 +364,6 @@ if test -n "$ENABLE_API_DIFF"; then
 
 	# Calculate apidiff references according to the temporary build
 	echo "    ${BLUE}Updating apidiff references...${CLEAR}"
-	APIDIFF_RESULTS_DIR=$OUTPUT_RESULTS_DIR/previous-api-comparison
-	APIDIFF_TMP_DIR=$OUTPUT_TMP_DIR/previous-api-comparison
 	rm -rf "$APIDIFF_RESULTS_DIR" "$APIDIFF_TMP_DIR"
 	if ! make update-refs -C "$ROOT_DIR/tools/apidiff" -j8 APIDIFF_DIR="$APIDIFF_TMP_DIR" OUTPUT_DIR="$APIDIFF_RESULTS_DIR" IOS_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_ios-build" MAC_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_mac-build" DOTNET_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_build" 2>&1 | sed 's/^/        /'; then
 		EC=$?
@@ -404,10 +393,10 @@ else
 	echo "${BLUE}Skipped API diff vs ${WHITE}${BASE_HASH}${BLUE}.${CLEAR}"
 fi
 
+STABLE_API_COMPARISON_RESULTS_DIR="$OUTPUT_RESULTS_DIR/stable-api-comparison"
+STABLE_API_COMPARISON_TMP_DIR="$OUTPUT_TMP_DIR/stable-api-comparison"
 if test -n "$ENABLE_STABLE_API_COMPARISON"; then
 	echo "💪 ${BLUE}Computing API diff vs stable${CLEAR} 💪"
-	STABLE_API_COMPARISON_RESULTS_DIR="$OUTPUT_RESULTS_DIR/stable-api-comparison"
-	STABLE_API_COMPARISON_TMP_DIR="$OUTPUT_TMP_DIR/stable-api-comparison"
 	rm -Rf "$STABLE_API_COMPARISON_RESULTS_DIR" "$STABLE_API_COMPARISON_TMP_DIR"
 	mkdir -p "$STABLE_API_COMPARISON_RESULTS_DIR" "$STABLE_API_COMPARISON_TMP_DIR"
 	make -j8 -C "$ROOT_DIR/tools/apidiff" APIDIFF_DIR="$STABLE_API_COMPARISON_TMP_DIR" OUTPUT_DIR="$STABLE_API_COMPARISON_RESULTS_DIR" 2>&1 | sed 's/^/        /'
@@ -427,95 +416,47 @@ if [ -z ${DOTNET_TFM+x} ]; then DOTNET_TFM=$(make -C "$ROOT_DIR"/tools/devops pr
 
 # Create the GH comment
 
-echo ":clipboard: Change detection :clipboard:" >> "$GH_COMMENTS_FILE"
-echo "" >> "$GH_COMMENTS_FILE"
-if test -n "$ENABLE_API_DIFF"; then
-	echo " # API diff (for current PR)" >> "$GH_COMMENTS_FILE"
+if test -n "$ENABLE_API_DIFF"debug; then
+	MSG=" # API diff for current PR "
+	if grep BreakingChangesDetected "$APIDIFF_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
+		EMOJII="❗️"
+		MSG=" (Breaking changes)"
+	else
+		EMOJII="✅"
+		MSG=""
+	fi
+	echo " # $EMOJII API diff for current PR$MSG" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
-	echo ":information_source: API Diff (from PR only) (please review changes)" >> "$GH_COMMENTS_FILE"
+	cat "$APIDIFF_RESULTS_DIR/api-diff.md" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
-
-	echo "API diff:  [vsdrops](%VSDROPS_PREFIX%api-diff.html) [gist](%GIST_PREVIOUS_api-diff.html%)" >> "$GH_COMMENTS_FILE"
-	echo "GIST_PREVIOUS_api-diff.html=api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-
-	echo "<details><summary>Xamarin</summary>" >> "$GH_COMMENTS_FILE"
-
-	if [[ -n "$INCLUDE_IOS" ]]; then
-		echo "* iOS [vsdrops](%VSDROPS_PREFIX%ios-api-diff.html) [gist](%GIST_PREVIOUS_ios-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_PREVIOUS_ios-api-diff.html=iOS-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	if [[ -n "$INCLUDE_MAC" ]]; then
-		echo "* macOS [vsdrops](%VSDROPS_PREFIX%mac-api-diff.html) [gist](%GIST_PREVIOUS_mac-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_PREVIOUS_mac-api-diff.html=mac-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	if [[ -n "$INCLUDE_TVOS" ]]; then
-		echo "* tvOS [vsdrops](%VSDROPS_PREFIX%tvos-api-diff.html) [gist](%GIST_PREVIOUS_tvos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_PREVIOUS_tvos-api-diff.html=tvos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	if [[ -n "$INCLUDE_WATCH" ]]; then
-		echo "* watchOS [vsdrops](%VSDROPS_PREFIX%watchos-api-diff.html) [gist](%GIST_PREVIOUS_watchos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_PREVIOUS_watchos-api-diff.html=watchos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	echo "</details>" >> "$GH_COMMENTS_FILE"
-
-	echo "<details><summary>.NET</summary>" >> "$GH_COMMENTS_FILE"
-
-	for dotnet_platform in $DOTNET_PLATFORMS; do
-		echo "* $dotnet_platform [vsdrops](%VSDROPS_PREFIX%dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html) [gist](%GIST_PREVIOUS_DOTNET_$dotnet_platform.html)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_PREVIOUS_DOTNET_$dotnet_platform.html=dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html" >> "$GH_COMMENTS_FIXUPS"
-	done
-	echo "</details>" >> "$GH_COMMENTS_FILE"
 fi
 
-if test -n "$ENABLE_STABLE_API_COMPARISON"; then
-	echo " # API diff (vs stable)" >> "$GH_COMMENTS_FILE"
+if test -n "$ENABLE_STABLE_API_COMPARISON"debug; then
+	if grep BreakingChangesDetected "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
+		EMOJII="❗️"
+		MSG=" (Breaking changes)"
+	else
+		EMOJII="✅"
+		MSG=""
+	fi
+	echo " # $EMOJII API diff vs stable$MSG" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
-	echo ":information_source: API Diff (vs stable) (please review changes)" >> "$GH_COMMENTS_FILE"
+	cat "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
-
-	echo "API diff:  [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/api-diff.html) [gist](%GIST_STABLE_api-diff.html%)" >> "$GH_COMMENTS_FILE"
-	echo "GIST_STABLE_api-diff.html=stable-api-comparison/api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-
-	echo "<details><summary>Xamarin</summary>" >> "$GH_COMMENTS_FILE"
-
-	if [[ -n "$INCLUDE_IOS" ]]; then
-		echo "* iOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/ios-api-diff.html) [gist](%GIST_STABLE_ios-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_STABLE_ios-api-diff.html=stable-api-comparison/iOS-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	if [[ -n "$INCLUDE_MAC" ]]; then
-		echo "* macOS [vsdrops](%VSDROPS_PREFIX%mstable-api-comparison/ac-api-diff.html) [gist](%GIST_STABLE_mac-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_STABLE_mac-api-diff.html=stable-api-comparison/mac-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	if [[ -n "$INCLUDE_TVOS" ]]; then
-		echo "* tvOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/tvos-api-diff.html) [gist](%GIST_STABLE_tvos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_STABLE_tvos-api-diff.html=stable-api-comparison/tvos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	if [[ -n "$INCLUDE_WATCH" ]]; then
-		echo "* watchOS [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/watchos-api-diff.html) [gist](%GIST_STABLE_watchos-api-diff.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_STABLE_watchos-api-diff.html=stable-api-comparison/watchos-api-diff.html" >> "$GH_COMMENTS_FIXUPS"
-	fi
-	echo "</details>" >> "$GH_COMMENTS_FILE"
-
-	echo "<details><summary>.NET</summary>" >> "$GH_COMMENTS_FILE"
-
-	for dotnet_platform in $DOTNET_PLATFORMS; do
-		echo "* $dotnet_platform [vsdrops](%VSDROPS_PREFIX%stable-api-comparison/dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html) [gist](%GIST_STABLE_DOTNET_$dotnet_platform.html%)" >> "$GH_COMMENTS_FILE"
-		echo "GIST_STABLE_DOTNET_$dotnet_platform.html=stable-api-comparison/dotnet/Microsoft.$dotnet_platform.Ref/ref/$DOTNET_TFM/Microsoft.$dotnet_platform.html" >> "$GH_COMMENTS_FIXUPS"
-	done
-	echo "</details>" >> "$GH_COMMENTS_FILE"
-
-	# TODO: other comparisons (Xamarin vs .NET, iOS vs Mac Catalyst)
 fi
 
-if test -n "$ENABLE_GENERATOR_DIFF"; then
-	echo "# Generator diff" >> "$GH_COMMENTS_FILE"
-
-	echo ":information_source: Generator Diff: [vsdrops](%VSDROPS_PREFIX%/generator-diff/index.html) [gist](%GIST_GENERATOR_DIFF%) (please review changes)" >> "$GH_COMMENTS_FILE"
-	echo "GIST_GENERATOR_DIFF=generator-diff/index.html" >> "$GH_COMMENTS_FIXUPS"
+if test -n "$ENABLE_GENERATOR_DIFF"debug; then
+	if test -s "$GENERATOR_DIFF_FILE"; then
+		echo "# :information_source: Generator diff" >> "$GH_COMMENTS_FILE"
+		echo "" >> "$GH_COMMENTS_FILE"
+		echo "Generator Diff: [vsdrops](generator-diff/index.html) [gist](generator-diff/index.html) (please review changes)" >> "$GH_COMMENTS_FILE"
+	else
+		echo "# ✅ Generator diff" >> "$GH_COMMENTS_FILE"
+		echo "" >> "$GH_COMMENTS_FILE"
+		echo "Generator Diff: [vsdrops](generator-diff/index.html) [gist](generator-diff/index.html) (empty diff)" >> "$GH_COMMENTS_FILE"
+	fi
 fi
 
 echo "GH_COMMENTS_FILE: $GH_COMMENTS_FILE"
 cat "$GH_COMMENTS_FILE"
 echo ""
-echo "GH_COMMENTS_FIXUPS: $GH_COMMENTS_FIXUPS"
-cat "$GH_COMMENTS_FIXUPS"

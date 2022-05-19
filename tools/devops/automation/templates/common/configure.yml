@@ -90,6 +90,7 @@ steps:
         "skip-packages",
         "skip-nugets",
         "skip-signing",
+        "skip-all-tests",
         "skip-external-tests",
         "trigger-device-tests",
         "run-sample-tests",

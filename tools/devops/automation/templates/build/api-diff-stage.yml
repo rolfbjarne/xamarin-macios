@@ -90,32 +90,17 @@ jobs:
       enableDotnet: ${{ parameters.enableDotnet }}
       prID: variables['PrID']
 
-# Upload results to vsdrops
-- job: upload_vsdrops
-  displayName: 'Upload change detection results to VSDrops'
+# Upload results to vsdrops & publish to github
+- job: publish_change_detection_results
+  displayName: 'Upload / Publish change detection results to VSDrops / GitHub'
   timeoutInMinutes: 1000
   dependsOn: # can start as soon as the api diff is done
-  - api_diff
-  condition: succeededOrFailed()
-  pool:
-    vmImage: 'windows-latest'
-    workspace:
-      clean: all
-  steps:
-  - template: api-diff-upload-vsdrops.yml
-
-# Publish GitHub comment
-- job: api_diff_github_comment
-  displayName: 'Publish change detection results to GitHub'
-  timeoutInMinutes: 1000
-  dependsOn: # has to wait for the change detection to be done and data to be uploaded
   - configure
   - api_diff
-  - upload_vsdrops
   condition: succeededOrFailed()
   pool:
     vmImage: 'windows-latest'
     workspace:
       clean: all
   steps:
-  - template: api-diff-github-comment.yml
+  - template: api-diff-process-results.yml

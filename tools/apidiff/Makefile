@@ -200,18 +200,36 @@ API_DIFF_DEPENDENCIES += $(foreach assembly,$(DOTNET_LEGACY_ASSEMBLIES),$(OUTPUT
 endif
 endif
 
-define ApiDiffReport
-	if ! test -s $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
-		echo "<li><s>$(1)</s> (no change detected)</li>" >> $(2); \
-	elif ! grep "No change detected" $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "<li><a href='$(APIDIFF_LINK_PREFIX)diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>$(1)</a></li>" >> $(2); \
+$(OUTPUT_DIR)/index.html: $(OUTPUT_DIR)/api-diff.html
+	$(Q) $(CP) $< $@
+
+#
+# Collect all the diffs into a single api-diff.html file
+#
+
+define ApiDiffReportHtml
+	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
+		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> (❗️Breaking changes❗️)</li>" >> $@; \
+	elif ! grep "No change detected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
+		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> (No breaking changes ✅)</li>" >> $@; \
+	elif ! test -f $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
+		echo "<li><s>$(1)</s> (no diff detected)</li>" >> $(2); \
 	else \
 		echo "<li><s>$(1)</s> (no change detected)</li>" >> $(2); \
 	fi;
 endef
 
-$(OUTPUT_DIR)/index.html: $(OUTPUT_DIR)/api-diff.html
-	$(Q) $(CP) $< $@
+define ApiDiffLegacyReportHtml
+	$(Q) if grep "BreakingChangesDetected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
+		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> (❗️Breaking changes❗️)</li>" >> $@; \
+	elif ! grep "No change detected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
+		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> (No breaking changes ✅)</li>" >> $@; \
+	elif ! test -f $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
+		echo "<li><s>$(2)</s> (no diff detected)</li>" >> $@; \
+	else \
+		echo "<li><s>$(2)</s> (no change detected)</li>" >> $@; \
+	fi;
+endef
 
 $(OUTPUT_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
 	$(QF_GEN) echo "<h1>API diffs</h1>" > $@
@@ -220,32 +238,16 @@ ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) echo "<h2>Legacy Xamarin</h2>" >> $@
 	$(Q) echo "<ul>" >> $@
 ifdef INCLUDE_IOS
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/ios-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>iOS: <a href='$(APIDIFF_LINK_PREFIX)ios-api-diff.html'>html</a> <a href='$(APIDIFF_LINK_PREFIX)ios-api-diff.md'>markdown</a></li>" >> $@; \
-	else \
-		echo "<li><s>iOS</s> (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportHtml,ios,iOS)
 endif
 ifdef INCLUDE_TVOS
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/tvos-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>tvOS: <a href='$(APIDIFF_LINK_PREFIX)tvos-api-diff.html'>html</a> a href='$(APIDIFF_LINK_PREFIX)tvos-api-diff.md'>markdown</a></li>" >> $@; \
-	else \
-		echo "<li><s>tvOS</s> (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportHtml,tvos,tvOS)
 endif
 ifdef INCLUDE_WATCH
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/watchos-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>watchOS: <a href='$(APIDIFF_LINK_PREFIX)watchos-api-diff.html'>html</a> <a href='$(APIDIFF_LINK_PREFIX)watchos-api-diff.md'>markdown</a></li>" >> $@; \
-	else \
-		echo "<li><s>watchOS</s> (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportHtml,watchos,watchOS)
 endif
 ifdef INCLUDE_MAC
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/mac-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>macOS: <a href='$(APIDIFF_LINK_PREFIX)mac-api-diff.html'>html</a> <a href='$(APIDIFF_LINK_PREFIX)mac-api-diff.md'>markdown</a></li>" >> $@; \
-	else \
-		echo "<li><s>macOS</s> (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportHtml,mac,macOS)
 endif
 	$(Q) echo "</ul>" >> $@
 endif # INCLUDE_XAMARIN_LEGACY
@@ -255,7 +257,17 @@ ifdef ENABLE_DOTNET
 	$(Q) echo "<ul>" >> $@
 
 	@# New .NET vs Stable .NET
-	$(Q) $(foreach platform,$(DOTNET_PLATFORMS),$(call ApiDiffReport,$(platform),$@))
+	$(Q) $(foreach platform,$(DOTNET_PLATFORMS),$(call ApiDiffReportHtml,$(platform),$@))
+
+	@# .NET: Microsoft.iOS vs Microsoft.MacCatalyst
+ifdef INCLUDE_IOS
+ifdef INCLUDE_MACCATALYST
+ifdef INCLUDE_IOS_VS_MACCATALYST
+	$(Q) echo "<li>Microsoft.iOS vs Microsoft.MacCatalyst: <a href='diff/dotnet/iOS-MacCatalyst-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.MacCatalyst.html'>html</a> <a href='diff/dotnet/iOS-MacCatalyst-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.MacCatalyst.md'>markdown</a></li>" >> $@
+endif
+endif
+endif
+	$(Q) echo "</ul>" >> $@
 
 ifdef INCLUDE_XAMARIN_LEGACY
 ifdef INCLUDE_XAMARIN_VS_DOTNET
@@ -263,84 +275,63 @@ ifdef INCLUDE_XAMARIN_VS_DOTNET
 	$(Q) echo "<ul>" >> $@
 	@# .NET vs legacy (stable)
 ifdef INCLUDE_IOS
-	$(Q) echo "<li><a href='$(APIDIFF_LINK_PREFIX)diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.html'>iOS</a></li>" >> $@
+	$(Q) echo "<li>iOS: <a href='diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.html'>html</a> <a href='diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.md'>markdown</a></li>" >> $@
 endif
 ifdef INCLUDE_TVOS
-	$(Q) echo "<li><a href='$(APIDIFF_LINK_PREFIX)diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.html'>tvOS</a></li>" >> $@
+	$(Q) echo "<li>tvOS: <a href='diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.html'>html</a> <a href='diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.md'>markdown</a></li>" >> $@
 endif
 ifdef INCLUDE_MAC
-	$(Q) echo "<li><a href='$(APIDIFF_LINK_PREFIX)diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.html'>macOS</a></li>" >> $@
+	$(Q) echo "<li>macOS: <a href='diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.html'>html</a> <a href='diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.md'>markdown</a></li>" >> $@
 endif
 	$(Q) echo "</ul>" >> $@
 endif # INCLUDE_XAMARIN_VS_DOTNET
 endif # INCLUDE_XAMARIN_LEGACY
 
-	@# .NET: Microsoft.iOS vs Microsoft.MacCatalyst
-ifdef INCLUDE_IOS
-ifdef INCLUDE_MACCATALYST
-ifdef INCLUDE_IOS_VS_MACCATALYST
-	$(Q) echo "<li><a href='$(APIDIFF_LINK_PREFIX)dotnet/iOS-MacCatalyst-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.MacCatalyst.html'>Microsoft.iOS vs Microsoft.MacCatalyst</a></li>" >> $@
-endif
-endif
-endif
-	$(Q) echo "</ul>" >> $@
 endif # DOTNET
 
+#
+# Collect all the diffs into a single api-diff.md file
+#
+
 define ApiDiffReportMarkdown
-	if ! test -s $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
-		echo "* ~$(1)~: (no change detected)" >> $(2); \
-	elif ! grep "No change detected" $(APIDIFF_DIR)/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html)" >> $(2); \
+	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
+		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) (❗️Breaking changes❗️)</li>" >> $@; \
+	elif ! grep "No change detected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
+		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) (No breaking changes ✅)</li>" >> $@; \
+	elif ! test -f $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
+		echo "* ~$(1)~: (no diff detected)" >> $(2); \
 	else \
 		echo "* ~$(1)~: (no change detected)" >> $(2); \
 	fi;
 endef
 
-
-ifdef INCLUDE_XAMARIN_LEGACY
-ifdef INCLUDE_XAMARIN_VS_DOTNET
-INCLUDE_OTHER=1
-endif
-endif
-ifdef INCLUDE_IOS
-ifdef INCLUDE_MACCATALYST
-ifdef INCLUDE_IOS_VS_MACCATALYST
-INCLUDE_OTHER=1
-endif
-endif
-endif
+define ApiDiffLegacyReportMarkdown
+	$(Q) if grep "BreakingChangesDetected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
+		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) (❗️Breaking changes❗️)</li>" >> $@; \
+	elif ! grep "No change detected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
+		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) (No breaking changes ✅)</li>" >> $@; \
+	elif ! test -f $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
+		echo "* ~$(1)~: (no diff detected)" >> $(2); \
+	else \
+		echo "* ~$(1)~: (no change detected)" >> $(2); \
+	fi;
+endef
 
 $(OUTPUT_DIR)/api-diff.md: $(API_DIFF_DEPENDENCIES)
 ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) echo "<details><summary>Legacy Xamarin</summary>" >> "$@"
 	$(Q) echo "" >> $@
 ifdef INCLUDE_IOS
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/ios-api-diff.html >/dev/null 2>&1; then  \
-		echo "* iOS: [vsdrops](ios-api-diff.html) [gist](ios-api-diff.md)" >> $@; \
-	else \
-		echo "* ~iOS~ (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportMarkdown,ios,iOS)
 endif
 ifdef INCLUDE_TVOS
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/tvos-api-diff.html >/dev/null 2>&1; then  \
-		echo "* tvOS: [vsdrops](tvos-api-diff.html) [gist](tvos-api-diff.md)" >> $@; \
-	else \
-		echo "* ~tvOS~ (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportMarkdown,tvos,tvOS)
 endif
 ifdef INCLUDE_WATCH
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/watchos-api-diff.html >/dev/null 2>&1; then  \
-		echo "* watchOS: [vsdrops](watchos-api-diff.html) [gist](watchos-api-diff.md)" >> $@; \
-	else \
-		echo "* ~watchOS~ (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportMarkdown,watchos,watchOS)
 endif
 ifdef INCLUDE_MAC
-	$(Q) if ! grep "No change detected" $(OUTPUT_DIR)/mac-api-diff.html >/dev/null 2>&1; then  \
-		echo "* macOS: [vsdrops](mac-api-diff.html) [gist](mac-api-diff.md)" >> $@; \
-	else \
-		echo "* ~macOS~ (no change detected)</li>" >> $@; \
-	fi;
+	$(Q) $(call ApiDiffLegacyReportMarkdown,mac,macOS)
 endif
 	$(Q) echo "" >> $@
 	$(Q) echo "</details>" >> "$@"
@@ -350,30 +341,9 @@ endif # INCLUDE_XAMARIN_LEGACY
 ifdef ENABLE_DOTNET
 	$(Q) echo "<details><summary>.NET</summary>" >> "$@"
 	$(Q) echo "" >> $@
+
 	@# New .NET vs Stable .NET
 	$(Q) $(foreach platform,$(DOTNET_PLATFORMS),$(call ApiDiffReportMarkdown,$(platform),$@))
-	$(Q) echo "" >> $@
-	$(Q) echo "</details>" >> "$@"
-	$(Q) echo "" >> $@
-
-ifdef INCLUDE_OTHER
-	$(Q) echo "<details><summary>Other</summary>" >> "$@"
-	$(Q) echo "" >> $@
-
-	@# .NET vs legacy (stable)
-ifdef INCLUDE_XAMARIN_LEGACY
-ifdef INCLUDE_XAMARIN_VS_DOTNET
-ifdef INCLUDE_IOS
-	$(Q) echo "* Legacy iOS (stable) vs .NET: [vsdrops](diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.html) [gist](diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.md)" >> $@
-endif
-ifdef INCLUDE_TVOS
-	$(Q) echo "* Legacy tvOS (stable) vs .NET: [vsdrops](diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.html) [gist](diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.md)" >> $@
-endif
-ifdef INCLUDE_MAC
-	$(Q) echo "* Legacy macOS (stable) vs .NET: [vsdrops](diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.html) [gist](diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.md)" >> $@
-endif
-endif # INCLUDE_XAMARIN_VS_DOTNET
-endif # INCLUDE_XAMARIN_LEGACY
 
 	@# .NET: Microsoft.iOS vs Microsoft.MacCatalyst
 ifdef INCLUDE_IOS
@@ -383,11 +353,30 @@ ifdef INCLUDE_IOS_VS_MACCATALYST
 endif # INCLUDE_IOS_VS_MACCATALYST
 endif # INCLUDE_MACCATALYST
 endif # INCLUDE_IOS
-
 	$(Q) echo "" >> $@
 	$(Q) echo "</details>" >> "$@"
 	$(Q) echo "" >> $@
-endif # INCLUDE_OTHER
+
+	@# .NET vs legacy (stable)
+ifdef INCLUDE_XAMARIN_LEGACY
+ifdef INCLUDE_XAMARIN_VS_DOTNET
+	$(Q) echo "<details><summary>Legacy Xamarin (stable) vs .NET</summary>" >> "$@"
+	$(Q) echo "" >> $@
+ifdef INCLUDE_IOS
+	$(Q) echo "* iOS: [vsdrops](diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.html) [gist](diff/dotnet/legacy-diff/Microsoft.iOS.Ref/ref/$(DOTNET_TFM)/Microsoft.iOS.md)" >> $@
+endif
+ifdef INCLUDE_TVOS
+	$(Q) echo "* tvOS: [vsdrops](diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.html) [gist](diff/dotnet/legacy-diff/Microsoft.tvOS.Ref/ref/$(DOTNET_TFM)/Microsoft.tvOS.md)" >> $@
+endif
+ifdef INCLUDE_MAC
+	$(Q) echo "* macOS: [vsdrops](diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.html) [gist](diff/dotnet/legacy-diff/Microsoft.macOS.Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.md)" >> $@
+endif
+	$(Q) echo "" >> $@
+	$(Q) echo "</details>" >> "$@"
+	$(Q) echo "" >> $@
+endif # INCLUDE_XAMARIN_VS_DOTNET
+endif # INCLUDE_XAMARIN_LEGACY
+
 endif # DOTNET
 
 # easy-to-type helper targets.

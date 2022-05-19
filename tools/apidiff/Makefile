@@ -211,9 +211,9 @@ $(OUTPUT_DIR)/index.html: $(OUTPUT_DIR)/api-diff.html
 
 define ApiDiffReportHtml
 	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> ($(BREAKING_CHANGES_MESSAGE))</li>" >> $@; \
+		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(2); \
 	elif ! grep "No change detected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> (No breaking changes ✅)</li>" >> $@; \
+		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> (No breaking changes ✅)</li>" >> $(2); \
 	elif ! test -f $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
 		echo "<li><s>$(1)</s> (no diff detected)</li>" >> $(2); \
 	else \
@@ -223,13 +223,13 @@ endef
 
 define ApiDiffLegacyReportHtml
 	$(Q) if grep "BreakingChangesDetected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> ($(BREAKING_CHANGES_MESSAGE))</li>" >> $@; \
+		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(3); \
 	elif ! grep "No change detected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> (No breaking changes ✅)</li>" >> $@; \
+		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> (No breaking changes ✅)</li>" >> $(3); \
 	elif ! test -f $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li><s>$(2)</s> (no diff detected)</li>" >> $@; \
+		echo "<li><s>$(2)</s> (no diff detected)</li>" >> $(3); \
 	else \
-		echo "<li><s>$(2)</s> (no change detected)</li>" >> $@; \
+		echo "<li><s>$(2)</s> (no change detected)</li>" >> $(3); \
 	fi;
 endef
 
@@ -240,16 +240,16 @@ ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) echo "<h2>Legacy Xamarin</h2>" >> $@
 	$(Q) echo "<ul>" >> $@
 ifdef INCLUDE_IOS
-	$(Q) $(call ApiDiffLegacyReportHtml,ios,iOS)
+	$(Q) $(call ApiDiffLegacyReportHtml,ios,iOS,$@)
 endif
 ifdef INCLUDE_TVOS
-	$(Q) $(call ApiDiffLegacyReportHtml,tvos,tvOS)
+	$(Q) $(call ApiDiffLegacyReportHtml,tvos,tvOS,$@)
 endif
 ifdef INCLUDE_WATCH
-	$(Q) $(call ApiDiffLegacyReportHtml,watchos,watchOS)
+	$(Q) $(call ApiDiffLegacyReportHtml,watchos,watchOS,$@)
 endif
 ifdef INCLUDE_MAC
-	$(Q) $(call ApiDiffLegacyReportHtml,mac,macOS)
+	$(Q) $(call ApiDiffLegacyReportHtml,mac,macOS,$@)
 endif
 	$(Q) echo "</ul>" >> $@
 endif # INCLUDE_XAMARIN_LEGACY
@@ -291,7 +291,9 @@ endif # INCLUDE_XAMARIN_LEGACY
 
 endif # DOTNET
 	$(Q) if grep "$(BREAKING_CHANGES_MESSAGE)" $@ >/dev/null 2>&1; then \
+		echo "" >> $@; \
 		echo "<!-- BreakingChangesDetected -->" >> $@; \
+		echo "" >> $@; \
 	fi
 
 #
@@ -300,9 +302,9 @@ endif # DOTNET
 
 define ApiDiffReportMarkdown
 	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) ($(BREAKING_CHANGES_MESSAGE))</li>" >> $@; \
+		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(2); \
 	elif ! grep "No change detected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) (No breaking changes ✅)</li>" >> $@; \
+		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) (No breaking changes ✅)</li>" >> $(2); \
 	elif ! test -f $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
 		echo "* ~$(1)~: (no diff detected)" >> $(2); \
 	else \
@@ -312,13 +314,13 @@ endef
 
 define ApiDiffLegacyReportMarkdown
 	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) ($(BREAKING_CHANGES_MESSAGE))</li>" >> $@; \
+		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(3); \
 	elif ! grep "No change detected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) (No breaking changes ✅)</li>" >> $@; \
+		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) (No breaking changes ✅)</li>" >> $(3); \
 	elif ! test -f $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "* ~$(1)~: (no diff detected)" >> $(2); \
+		echo "* ~$(1)~: (no diff detected)" >> $(3); \
 	else \
-		echo "* ~$(1)~: (no change detected)" >> $(2); \
+		echo "* ~$(1)~: (no change detected)" >> $(3); \
 	fi;
 endef
 
@@ -327,16 +329,16 @@ ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) echo "<details><summary>Legacy Xamarin</summary>" >> "$@"
 	$(Q) echo "" >> $@
 ifdef INCLUDE_IOS
-	$(Q) $(call ApiDiffLegacyReportMarkdown,ios,iOS)
+	$(Q) $(call ApiDiffLegacyReportMarkdown,ios,iOS,$@)
 endif
 ifdef INCLUDE_TVOS
-	$(Q) $(call ApiDiffLegacyReportMarkdown,tvos,tvOS)
+	$(Q) $(call ApiDiffLegacyReportMarkdown,tvos,tvOS,$@)
 endif
 ifdef INCLUDE_WATCH
-	$(Q) $(call ApiDiffLegacyReportMarkdown,watchos,watchOS)
+	$(Q) $(call ApiDiffLegacyReportMarkdown,watchos,watchOS,$@)
 endif
 ifdef INCLUDE_MAC
-	$(Q) $(call ApiDiffLegacyReportMarkdown,mac,macOS)
+	$(Q) $(call ApiDiffLegacyReportMarkdown,mac,macOS,$@)
 endif
 	$(Q) echo "" >> $@
 	$(Q) echo "</details>" >> "$@"
@@ -385,7 +387,8 @@ endif # INCLUDE_XAMARIN_LEGACY
 endif # DOTNET
 	$(Q) if grep "$(BREAKING_CHANGES_MESSAGE)" $@ >/dev/null 2>&1; then \
 		echo "" >> $@; \
-		echo "[comment]: <> BreakingChangesDetected" >> $@; \
+		echo "<!-- BreakingChangesDetected -->" >> $@; \
+		echo "" >> $@; \
 	fi
 
 # easy-to-type helper targets.

@@ -43,7 +43,8 @@ steps:
     }
 
     $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"
-    $result = $gihubComments.NewCommentFromMessage("Change detection", ":clipboard:", $converted)
+    $githubComments = New-GitHubCommentsObject -Org "xamarin" -Repo "xamarin-macios" -Token $Env:GITHUB_TOKEN -Hash $Env:GIT_HASH
+    $result = $githubComments.NewCommentFromMessage("Change detection", ":clipboard:", $converted)
   displayName: 'Publish GitHub comment for change detection'
   timeoutInMinutes: 10
   condition: always() # We always want to post something on github

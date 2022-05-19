@@ -13,6 +13,13 @@ steps:
     allowFailedBuilds: true
     path: $(System.DefaultWorkingDirectory)/Reports
 
+# Debug stuff
+- bash: |
+    find $(System.DefaultWorkingDirectory)/Reports
+    find $(System.DefaultWorkingDirectory)
+  displayName: "Dump Downloaded contents"
+  continueOnError: true
+
 # Upload the change detection results to vsdrops
 - task: ms-vscs-artifact.build-tasks.artifactDropTask-1.artifactDropTask@0
   displayName: 'Publish change detection results to Artifact Services Drop'
@@ -21,6 +28,6 @@ steps:
     dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
     dropMetadataContainerName: 'DropMetadata-ChangeDetection'
     buildNumber: 'xamarin-macios/detected-changes/$(Build.BuildNumber)/$(Build.BuildId)'
-    sourcePath: 'change-detection/change-detection.zip'
+    sourcePath: '$(System.DefaultWorkingDirectory)/Reports/change-detection.zip'
     detailedLog: true
     usePat: true

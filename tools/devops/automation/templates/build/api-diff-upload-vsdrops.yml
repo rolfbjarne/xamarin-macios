@@ -15,8 +15,12 @@ steps:
 
 # Debug stuff
 - bash: |
-    find $(System.DefaultWorkingDirectory)/Reports
-    find $(System.DefaultWorkingDirectory)
+    find $SYSTEM_DEFAULTWORKINGDIRECTORY/Reports
+    find $SYSTEM_DEFAULTWORKINGDIRECTORY
+    find .
+    find "${SYSTEM_DEFAULTWORKINGDIRECTORY//\\//}"
+    find "${SYSTEM_DEFAULTWORKINGDIRECTORY//\\//}/Reports"
+    exit 0
   displayName: "Dump Downloaded contents"
   continueOnError: true
 
@@ -28,6 +32,6 @@ steps:
     dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
     dropMetadataContainerName: 'DropMetadata-ChangeDetection'
     buildNumber: 'xamarin-macios/detected-changes/$(Build.BuildNumber)/$(Build.BuildId)'
-    sourcePath: '$(System.DefaultWorkingDirectory)/Reports/change-detection.zip'
+    sourcePath: '$(System.DefaultWorkingDirectory)/Reports/'
     detailedLog: true
     usePat: true

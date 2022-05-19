@@ -42,7 +42,7 @@ steps:
       $replacements = @()
     }
 
-    $converted = Convert-PathsToGists -RootDirectory $rootDirectory -InputContents $inputContents -Replacements $replacements
+    $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"
     $result = $gihubComments.NewCommentFromMessage("Change detection", ":clipboard:", $converted)
   displayName: 'Publish GitHub comment for change detection'
   timeoutInMinutes: 10

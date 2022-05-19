@@ -1159,11 +1159,11 @@ function Push-RepositoryDispatch {
     Write-Host $request.Content
 }
 
-# This function replaces paths in one file with links to gists.
-#     1. InputContents: string to process
-#     2. Replacements: an array listing the paths in InputContents that we want to create a gist for, as well as the text to find in InputContents and replace with the gist url.
-# It also takes a root directory parameter, which where the relative paths in Replacements should be resolved against.
-function Convert-PathsToGists {
+# This function processes markdown, and replaces:
+#     1. "[vsdrops](" with "[vsdrops](https://link/to/vsdrops/".
+#     2. "[gist](file)" with "[gist](url)" after uploading "file" to a gist.
+# It also takes a root directory parameter, which is where files to gist should be searched for
+function Convert-Markdown {
     param (
         [string]
         $RootDirectory,
@@ -1171,22 +1171,34 @@ function Convert-PathsToGists {
         [string]
         $InputContents,
 
-        [string[]]
-        $Replacements
+        [string]
+        $VSDropsPrefix
     )
 
-    # Iterate over each file we're supposed to gist in the $ReplacementFile, each line is of the format:
-    #     TEXTTOREPLACEWITHURL=path/to/file
-    foreach ($line in $Replacements) {
-        $split = $line.Split('=')
-        $find = $split[0]
-        $fileToGist = $split[1]
-        $fullPath = Join-Path -Path $RootDirectory -ChildPath $fileToGist
-        $obj = New-GistObjectDefinition -Name $fileToGist -Path $fullPath -Type "markdown"
-        $filesToGist = ($obj)
-        $gistUrl = New-GistWithFiles $fileToGist $filesToGist
-        $InputContents = $InputContents.Replace("%$find%", $gistUrl)
+    $InputContents = $InputContents.Replace("[vsdrops](", "[vsdrops](" + $VSDropsPrefix)
+
+    $startIndex = $InputContents.IndexOf("[gist](", $index)
+    while ($startIndex -gt 0) {
+        $endIndex =$InputContents.IndexOf(")", $startIndex + 7)
+        if ($endIndex -gt $startIndex) {
+            $fileToGist = $InputContents.Substring($startIndex + 7, $endIndex - $startIndex - 7)
+            $fullPath = Join-Path -Path $RootDirectory -ChildPath $fileToGist
+            if (Test-Path $fullPath -PathType leaf) {
+                $obj = New-GistObjectDefinition -Name $fileToGist -Path $fullPath -Type "markdown"
+                $filesToGist = ($obj)
+                $gistUrl = New-GistWithFiles $fileToGist $filesToGist
+                $gistText = "[gist](" + $gistUrl + ")"
+            } else {
+                $gistText = "(could not create gist: file '$fullPath' does not exist)"
+            }
+            $InputContents = $InputContents.Substring(0, $startIndex) + $gistText + $InputContents.Substring($endIndex + 1)
+        } else {
+            break
+        }
+
+        $startIndex = $InputContents.IndexOf("[gist](", $endIndex)
     }
+
     return $InputContents
 }
 
@@ -1200,7 +1212,7 @@ Export-ModuleMember -Function New-GistWithFiles
 Export-ModuleMember -Function New-GistObjectDefinition 
 Export-ModuleMember -Function New-GistWithContent 
 Export-ModuleMember -Function Push-RepositoryDispatch 
-Export-ModuleMember -Function Convert-PathsToGists
+Export-ModuleMember -Function Convert-Markdown
 
 # new future API that uses objects.
 Export-ModuleMember -Function New-GitHubCommentsObject

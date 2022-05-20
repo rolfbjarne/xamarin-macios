@@ -45,7 +45,7 @@ steps:
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1
 
-    $rootDirectory = Join-Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY" "change-detection"
+    $rootDirectory = Join-Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY" "change-detection" "results"
 
     $inputContentsPath = Join-Path -Path $rootDirectory -ChildPath "gh-comment.md"
     if (Test-Path $inputContentsPath -PathType leaf) {

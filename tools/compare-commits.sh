@@ -138,8 +138,8 @@ function report_error_line ()
 	echo "$@"
 	if test -n "$GH_COMMENTS_FILE"; then
 		# remove color codes when writing to failure file
-		printf ":fire: Failed to compare API and create generator diff :fire:\\n" >> "$CHANGE_DETECTION_GH_COMMENTS_FILE"
-		printf "\\n"  >> "$CHANGE_DETECTION_GH_COMMENTS_FILE"
+		printf ":fire: Failed to compare API and create generator diff :fire:\\n" >> "$GH_COMMENTS_FILE"
+		printf "\\n"  >> "$GH_COMMENTS_FILE"
 		# shellcheck disable=SC2001
 		echo "$@" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' >> "$GH_COMMENTS_FILE"
 	fi

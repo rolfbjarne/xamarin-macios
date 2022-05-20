@@ -49,6 +49,6 @@ RC=0
 ./tools/compare-commits.sh --base="$BASE" "--output-dir=$CHANGE_DETECTION_OUTPUT_DIR" "--gh-comments-file=$CHANGE_DETECTION_GH_COMMENTS_FILE" || RC=$?
 
 rm -f "$CHANGE_DETECTION_OUTPUT_DIR/change-detection.zip"
-zip -9r "$CHANGE_DETECTION_OUTPUT_DIR/change-detection.zip" "$CHANGE_DETECTION_RESULTS_DIR"
+cd "$CHANGE_DETECTION_OUTPUT_DIR" && zip -9r "change-detection.zip" .
 
 exit $RC

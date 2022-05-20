@@ -45,20 +45,13 @@ steps:
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1
 
-    $rootDirectory = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/change-detection"
+    $rootDirectory = Join-Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY" "change-detection" "results"
 
     $inputContentsPath = Join-Path -Path $rootDirectory -ChildPath "gh-comment.md"
     if (Test-Path $inputContentsPath -PathType leaf) {
       $inputContents = Get-Content -Path $inputContentsPath -Raw
     } else {
-      $inputContents = ":fire: Unable to find the contents for the comment :fire"
-    }
-
-    $replacementsPath = Join-Path -Path $rootDirectory -ChildPath "gh-comment-fixups.txt"
-    if (Test-Path $replacementsPath -PathType leaf) {
-      $replacements = Get-Content -Path $replacementsPath
-    } else {
-      $replacements = @()
+      $inputContents = ":fire: Unable to find the contents for the comment: $inputContentsPath does not exist :fire"
     }
 
     $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"

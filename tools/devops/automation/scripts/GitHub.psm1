@@ -1186,8 +1186,14 @@ function Convert-Markdown {
             if (Test-Path $fullPath -PathType leaf) {
                 $obj = New-GistObjectDefinition -Name $fileToGist -Path $fullPath -Type "markdown"
                 $filesToGist = ($obj)
-                $gistUrl = New-GistWithFiles $fileToGist $filesToGist
-                $gistText = "[gist](" + $gistUrl + ")"
+                try {
+                    $gistUrl = New-GistWithFiles $fileToGist $filesToGist
+                    $gistText = "[gist](" + $gistUrl + ")"
+                } catch {
+                    throw $_.Exception
+                    Write-Host "Unable to create gist: $_"
+                    $gistText = "Unable to create gist: $($_.Exception.Message)"
+                }
             } else {
                 $gistText = "(could not create gist: file '$fullPath' does not exist)"
             }

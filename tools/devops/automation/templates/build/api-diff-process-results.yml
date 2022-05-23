@@ -54,7 +54,11 @@ steps:
       $inputContents = ":fire: Unable to find the contents for the comment: $inputContentsPath does not exist :fire"
     }
 
-    $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"
+    try {
+      $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"
+    } catch {
+      $converted = $converted + "`n`nUnable to convert markdown: $_`n`n"
+    }
     $githubComments = New-GitHubCommentsObject -Org "xamarin" -Repo "xamarin-macios" -Token $Env:GITHUB_TOKEN -Hash $Env:GIT_HASH
     $result = $githubComments.NewCommentFromMessage("Change detection", ":clipboard:", $converted)
   displayName: 'Publish GitHub comment for change detection'

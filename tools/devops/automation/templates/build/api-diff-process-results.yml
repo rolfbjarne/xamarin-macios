@@ -57,7 +57,7 @@ steps:
     try {
       $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"
     } catch {
-      $converted = $converted + "`n`nUnable to convert markdown: $_`n`n"
+      $converted = $inputContents + "`n`nUnable to convert markdown: $_`n`n"
     }
     $githubComments = New-GitHubCommentsObject -Org "xamarin" -Repo "xamarin-macios" -Token $Env:GITHUB_TOKEN -Hash $Env:GIT_HASH
     $result = $githubComments.NewCommentFromMessage("Change detection", ":clipboard:", $converted)

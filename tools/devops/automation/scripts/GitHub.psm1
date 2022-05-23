@@ -1190,7 +1190,6 @@ function Convert-Markdown {
                     $gistUrl = New-GistWithFiles $fileToGist $filesToGist
                     $gistText = "[gist](" + $gistUrl + ")"
                 } catch {
-                    throw $_.Exception
                     Write-Host "Unable to create gist: $_"
                     $gistText = "Unable to create gist: $($_.Exception.Message)"
                 }

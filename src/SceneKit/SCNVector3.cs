@@ -850,10 +850,7 @@ namespace SceneKit
         /// <returns>The transformed position</returns>
         public static SCNVector3 TransformPosition(SCNVector3 pos, SCNMatrix4 mat)
         {
-            SCNVector3 p;
-            p.X = SCNVector3.Dot(pos, new SCNVector3(mat.Column0)) + mat.Row3.X;
-            p.Y = SCNVector3.Dot(pos, new SCNVector3(mat.Column1)) + mat.Row3.Y;
-            p.Z = SCNVector3.Dot(pos, new SCNVector3(mat.Column2)) + mat.Row3.Z;
+            TransformPosition (ref pos, ref mat, out var p);
             return p;
         }
 

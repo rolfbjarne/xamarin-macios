@@ -1,7 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+
 #if !__WATCHOS__
 using ModelIO;
 using MetalPerformanceShaders;
+#endif
+#if HAS_SCENEKIT
+using SceneKit;
 #endif
 
 #if NET
@@ -29,6 +36,16 @@ using MatrixFloat4x4 = global::OpenTK.NMatrix4;
 using VectorFloat3 = global::OpenTK.NVector3;
 using MatrixDouble4x4 = global::OpenTK.NMatrix4d;
 using VectorDouble3 = global::OpenTK.NVector3d;
+#endif
+
+#if __MACOS__
+#if NET
+using pfloat = System.Runtime.InteropServices.NFloat;
+#else
+using pfloat = System.nfloat;
+#endif
+#else
+using pfloat = System.Single;
 #endif
 
 using NUnit.Framework;
@@ -714,4 +731,276 @@ public static class Asserts
 		AreEqual (expected.M34, actual.M34, $"{message} (M34) expected: {expected} actual: {actual}");
 	}
 #endregion
+
+#if HAS_SCENEKIT
+	public static void AreEqual (SCNVector3 expected, SCNVector3 actual, string message)
+	{
+		if (Is.EqualTo (expected.X).ApplyTo (actual.X).IsSuccess &&
+			Is.EqualTo (expected.Y).ApplyTo (actual.Y).IsSuccess &&
+			Is.EqualTo (expected.Z).ApplyTo (actual.Z).IsSuccess)
+			return;
+		Assert.Fail ($"{message} expected: {expected} to be equal to: {actual}");
+	}
+
+	public static void AreEqual (SCNVector3 expected, SCNVector3 actual, float delta, string message)
+	{
+		if ((actual.X >= expected.X - delta) && (actual.X <= expected.X + delta) &&
+			(actual.Y >= expected.Y - delta) && (actual.Y <= expected.Y + delta) &&
+			(actual.Z >= expected.Z - delta) && (actual.Z <= expected.Z + delta))
+			return;
+		Assert.Fail ($"{message} expected: {expected} to be equal to: {actual} with delta {delta}");
+	}
+
+	public static void AreEqual (SCNVector4 expected, SCNVector4 actual, string message)
+	{
+		if (Is.EqualTo (expected.X).ApplyTo (actual.X).IsSuccess &&
+			Is.EqualTo (expected.Y).ApplyTo (actual.Y).IsSuccess &&
+			Is.EqualTo (expected.Z).ApplyTo (actual.Z).IsSuccess &&
+			Is.EqualTo (expected.W).ApplyTo (actual.W).IsSuccess)
+			return;
+		Assert.That (actual.X, Is.EqualTo (expected.X), $"{message} (X) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.Y, Is.EqualTo (expected.Y), $"{message} (Y) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.Z, Is.EqualTo (expected.Z), $"{message} (Z) expected: {expected} to be equal to: {actual}");
+		Assert.Fail ("huh?");
+	}
+
+
+	public static void AreEqual (SCNVector4 expected, SCNVector4 actual, float delta, string message)
+	{
+		if (Is.EqualTo (expected.X).Within (delta).ApplyTo (actual.X).IsSuccess &&
+			Is.EqualTo (expected.Y).Within (delta).ApplyTo (actual.Y).IsSuccess &&
+			Is.EqualTo (expected.Z).Within (delta).ApplyTo (actual.Z).IsSuccess &&
+			Is.EqualTo (expected.W).Within (delta).ApplyTo (actual.W).IsSuccess)
+			return;
+		Assert.That (actual.X, Is.EqualTo (expected.X).Within (delta), $"{message} (X) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.Y, Is.EqualTo (expected.Y).Within (delta), $"{message} (Y) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.Z, Is.EqualTo (expected.Z).Within (delta), $"{message} (Z) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.W, Is.EqualTo (expected.W).Within (delta), $"{message} (W) expected: {expected} to be equal to: {actual}");
+		Assert.Fail ("huh?");
+	}
+
+	public static void AreEqual (SCNQuaternion expected, SCNQuaternion actual, string message)
+	{
+		if (Is.EqualTo (expected.X).ApplyTo (actual.X).IsSuccess &&
+			Is.EqualTo (expected.Y).ApplyTo (actual.Y).IsSuccess &&
+			Is.EqualTo (expected.Z).ApplyTo (actual.Z).IsSuccess &&
+			Is.EqualTo (expected.W).ApplyTo (actual.W).IsSuccess)
+			return;
+		Assert.Fail ($"{message} expected: {expected} to be equal to: {actual}");
+	}
+
+	public static void AreEqual (SCNQuaternion expected, SCNQuaternion actual, float delta, string message)
+	{
+		if (Is.EqualTo (expected.X).Within (delta).ApplyTo (actual.X).IsSuccess &&
+			Is.EqualTo (expected.Y).Within (delta).ApplyTo (actual.Y).IsSuccess &&
+			Is.EqualTo (expected.Z).Within (delta).ApplyTo (actual.Z).IsSuccess &&
+			Is.EqualTo (expected.W).Within (delta).ApplyTo (actual.W).IsSuccess)
+			return;
+		Assert.That (actual.X, Is.EqualTo (expected.X).Within (delta), $"{message} (X) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.Y, Is.EqualTo (expected.Y).Within (delta), $"{message} (Y) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.Z, Is.EqualTo (expected.Z).Within (delta), $"{message} (Z) expected: {expected} to be equal to: {actual}");
+		Assert.That (actual.W, Is.EqualTo (expected.W).Within (delta), $"{message} (W) expected: {expected} to be equal to: {actual}");
+		Assert.Fail ("huh?");
+	}
+
+	public static void AreEqual (SCNMatrix4 expected, SCNMatrix4 actual, string message)
+	{
+		if (Is.EqualTo (expected.M11).ApplyTo (actual.M11).IsSuccess &&
+			Is.EqualTo (expected.M21).ApplyTo (actual.M21).IsSuccess &&
+			Is.EqualTo (expected.M31).ApplyTo (actual.M31).IsSuccess &&
+			Is.EqualTo (expected.M41).ApplyTo (actual.M41).IsSuccess &&
+			Is.EqualTo (expected.M12).ApplyTo (actual.M12).IsSuccess &&
+			Is.EqualTo (expected.M22).ApplyTo (actual.M22).IsSuccess &&
+			Is.EqualTo (expected.M32).ApplyTo (actual.M32).IsSuccess &&
+			Is.EqualTo (expected.M42).ApplyTo (actual.M42).IsSuccess &&
+			Is.EqualTo (expected.M13).ApplyTo (actual.M13).IsSuccess &&
+			Is.EqualTo (expected.M23).ApplyTo (actual.M23).IsSuccess &&
+			Is.EqualTo (expected.M33).ApplyTo (actual.M33).IsSuccess &&
+			Is.EqualTo (expected.M43).ApplyTo (actual.M43).IsSuccess &&
+			Is.EqualTo (expected.M14).ApplyTo (actual.M14).IsSuccess &&
+			Is.EqualTo (expected.M24).ApplyTo (actual.M24).IsSuccess &&
+			Is.EqualTo (expected.M34).ApplyTo (actual.M34).IsSuccess &&
+			Is.EqualTo (expected.M44).ApplyTo (actual.M44).IsSuccess) {
+
+			var size = Marshal.SizeOf (typeof (SCNMatrix4));
+			unsafe {
+				byte* e = (byte*) (void*) &expected;
+				byte* a = (byte*) (void*) &actual;
+				AreEqual (e, a, size, message);
+			}
+			return;
+		}
+
+		var actualString = actual.ToString ();
+
+		var expectedString = expected.ToString ();
+
+		var d11 = Is.EqualTo (expected.M11).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
+		var d21 = Is.EqualTo (expected.M21).ApplyTo (actual.M21).IsSuccess ? "✅" : "❌";
+		var d31 = Is.EqualTo (expected.M31).ApplyTo (actual.M31).IsSuccess ? "✅" : "❌";
+		var d41 = Is.EqualTo (expected.M41).ApplyTo (actual.M41).IsSuccess ? "✅" : "❌";
+		var d12 = Is.EqualTo (expected.M12).ApplyTo (actual.M12).IsSuccess ? "✅" : "❌";
+		var d22 = Is.EqualTo (expected.M22).ApplyTo (actual.M22).IsSuccess ? "✅" : "❌";
+		var d32 = Is.EqualTo (expected.M32).ApplyTo (actual.M32).IsSuccess ? "✅" : "❌";
+		var d42 = Is.EqualTo (expected.M42).ApplyTo (actual.M42).IsSuccess ? "✅" : "❌";
+		var d13 = Is.EqualTo (expected.M13).ApplyTo (actual.M13).IsSuccess ? "✅" : "❌";
+		var d23 = Is.EqualTo (expected.M23).ApplyTo (actual.M23).IsSuccess ? "✅" : "❌";
+		var d33 = Is.EqualTo (expected.M33).ApplyTo (actual.M33).IsSuccess ? "✅" : "❌";
+		var d43 = Is.EqualTo (expected.M43).ApplyTo (actual.M43).IsSuccess ? "✅" : "❌";
+		var d14 = Is.EqualTo (expected.M14).ApplyTo (actual.M14).IsSuccess ? "✅" : "❌";
+		var d24 = Is.EqualTo (expected.M24).ApplyTo (actual.M24).IsSuccess ? "✅" : "❌";
+		var d34 = Is.EqualTo (expected.M34).ApplyTo (actual.M34).IsSuccess ? "✅" : "❌";
+		var d44 = Is.EqualTo (expected.M44).ApplyTo (actual.M44).IsSuccess ? "✅" : "❌";
+		var diffRow1 = $"({d11}, {d12}, {d13}, {d14})";
+		var diffRow2 = $"({d21}, {d22}, {d23}, {d24})";
+		var diffRow3 = $"({d31}, {d32}, {d33}, {d34})";
+		var diffRow4 = $"({d41}, {d42}, {d43}, {d44})";
+		var diffString = $"{diffRow1}\n{diffRow2}\n{diffRow3}\n{diffRow4}";
+
+		var msg = $"Expected:\n{expectedString}\nActual:\n{actualString}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
+	}
+
+	public static void AreEqual (SCNMatrix4 expected, SCNMatrix4 actual, float delta, string message)
+	{
+		if (Is.EqualTo (expected.M11).Within (delta).ApplyTo (actual.M11).IsSuccess &&
+			Is.EqualTo (expected.M21).Within (delta).ApplyTo (actual.M21).IsSuccess &&
+			Is.EqualTo (expected.M31).Within (delta).ApplyTo (actual.M31).IsSuccess &&
+			Is.EqualTo (expected.M41).Within (delta).ApplyTo (actual.M41).IsSuccess &&
+			Is.EqualTo (expected.M12).Within (delta).ApplyTo (actual.M12).IsSuccess &&
+			Is.EqualTo (expected.M22).Within (delta).ApplyTo (actual.M22).IsSuccess &&
+			Is.EqualTo (expected.M32).Within (delta).ApplyTo (actual.M32).IsSuccess &&
+			Is.EqualTo (expected.M42).Within (delta).ApplyTo (actual.M42).IsSuccess &&
+			Is.EqualTo (expected.M13).Within (delta).ApplyTo (actual.M13).IsSuccess &&
+			Is.EqualTo (expected.M23).Within (delta).ApplyTo (actual.M23).IsSuccess &&
+			Is.EqualTo (expected.M33).Within (delta).ApplyTo (actual.M33).IsSuccess &&
+			Is.EqualTo (expected.M43).Within (delta).ApplyTo (actual.M43).IsSuccess &&
+			Is.EqualTo (expected.M14).Within (delta).ApplyTo (actual.M14).IsSuccess &&
+			Is.EqualTo (expected.M24).Within (delta).ApplyTo (actual.M24).IsSuccess &&
+			Is.EqualTo (expected.M34).Within (delta).ApplyTo (actual.M34).IsSuccess &&
+			Is.EqualTo (expected.M44).Within (delta).ApplyTo (actual.M44).IsSuccess)
+			return;
+
+		var actualString = actual.ToString ();
+
+		var expectedString = expected.ToString ();
+
+		var d11 = Is.EqualTo (expected.M11).Within (delta).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
+		var d21 = Is.EqualTo (expected.M21).Within (delta).ApplyTo (actual.M21).IsSuccess ? "✅" : "❌";
+		var d31 = Is.EqualTo (expected.M31).Within (delta).ApplyTo (actual.M31).IsSuccess ? "✅" : "❌";
+		var d41 = Is.EqualTo (expected.M41).Within (delta).ApplyTo (actual.M41).IsSuccess ? "✅" : "❌";
+		var d12 = Is.EqualTo (expected.M12).Within (delta).ApplyTo (actual.M12).IsSuccess ? "✅" : "❌";
+		var d22 = Is.EqualTo (expected.M22).Within (delta).ApplyTo (actual.M22).IsSuccess ? "✅" : "❌";
+		var d32 = Is.EqualTo (expected.M32).Within (delta).ApplyTo (actual.M32).IsSuccess ? "✅" : "❌";
+		var d42 = Is.EqualTo (expected.M42).Within (delta).ApplyTo (actual.M42).IsSuccess ? "✅" : "❌";
+		var d13 = Is.EqualTo (expected.M13).Within (delta).ApplyTo (actual.M13).IsSuccess ? "✅" : "❌";
+		var d23 = Is.EqualTo (expected.M23).Within (delta).ApplyTo (actual.M23).IsSuccess ? "✅" : "❌";
+		var d33 = Is.EqualTo (expected.M33).Within (delta).ApplyTo (actual.M33).IsSuccess ? "✅" : "❌";
+		var d43 = Is.EqualTo (expected.M43).Within (delta).ApplyTo (actual.M43).IsSuccess ? "✅" : "❌";
+		var d14 = Is.EqualTo (expected.M14).Within (delta).ApplyTo (actual.M14).IsSuccess ? "✅" : "❌";
+		var d24 = Is.EqualTo (expected.M24).Within (delta).ApplyTo (actual.M24).IsSuccess ? "✅" : "❌";
+		var d34 = Is.EqualTo (expected.M34).Within (delta).ApplyTo (actual.M34).IsSuccess ? "✅" : "❌";
+		var d44 = Is.EqualTo (expected.M44).Within (delta).ApplyTo (actual.M44).IsSuccess ? "✅" : "❌";
+		var diffRow1 = $"({d11}, {d12}, {d13}, {d14})";
+		var diffRow2 = $"({d21}, {d22}, {d23}, {d24})";
+		var diffRow3 = $"({d31}, {d32}, {d33}, {d34})";
+		var diffRow4 = $"({d41}, {d42}, {d43}, {d44})";
+		var diffString = $"{diffRow1}\n{diffRow2}\n{diffRow3}\n{diffRow4}";
+
+		var msg = $"Expected:\n{expectedString}\nActual:\n{actualString}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
+	}
+
+	public static void AreEqual (SCNMatrix4 actual, string message,
+		pfloat m11, pfloat m12, pfloat m13, pfloat m14,
+		pfloat m21, pfloat m22, pfloat m23, pfloat m24,
+		pfloat m31, pfloat m32, pfloat m33, pfloat m34,
+		pfloat m41, pfloat m42, pfloat m43, pfloat m44,
+		double delta
+	)
+	{
+		if (Is.EqualTo (m11).Within (delta).ApplyTo (actual.M11).IsSuccess &&
+			Is.EqualTo (m21).Within (delta).ApplyTo (actual.M21).IsSuccess &&
+			Is.EqualTo (m31).Within (delta).ApplyTo (actual.M31).IsSuccess &&
+			Is.EqualTo (m41).Within (delta).ApplyTo (actual.M41).IsSuccess &&
+			Is.EqualTo (m12).Within (delta).ApplyTo (actual.M12).IsSuccess &&
+			Is.EqualTo (m22).Within (delta).ApplyTo (actual.M22).IsSuccess &&
+			Is.EqualTo (m32).Within (delta).ApplyTo (actual.M32).IsSuccess &&
+			Is.EqualTo (m42).Within (delta).ApplyTo (actual.M42).IsSuccess &&
+			Is.EqualTo (m13).Within (delta).ApplyTo (actual.M13).IsSuccess &&
+			Is.EqualTo (m23).Within (delta).ApplyTo (actual.M23).IsSuccess &&
+			Is.EqualTo (m33).Within (delta).ApplyTo (actual.M33).IsSuccess &&
+			Is.EqualTo (m43).Within (delta).ApplyTo (actual.M43).IsSuccess &&
+			Is.EqualTo (m14).Within (delta).ApplyTo (actual.M14).IsSuccess &&
+			Is.EqualTo (m24).Within (delta).ApplyTo (actual.M24).IsSuccess &&
+			Is.EqualTo (m34).Within (delta).ApplyTo (actual.M34).IsSuccess &&
+			Is.EqualTo (m44).Within (delta).ApplyTo (actual.M44).IsSuccess)
+			return;
+
+		var actualString = actual.ToString ();
+
+		var row1 = $"({m11}, {m12}, {m13}, {m14})";
+		var row2 = $"({m21}, {m22}, {m23}, {m24})";
+		var row3 = $"({m31}, {m32}, {m33}, {m34})";
+		var row4 = $"({m41}, {m42}, {m43}, {m44})";
+		var expectedString = $"{row1}\n{row2}\n{row3}\n{row4}";
+
+		var d11 = Is.EqualTo (m11).Within (delta).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
+		var d21 = Is.EqualTo (m21).Within (delta).ApplyTo (actual.M21).IsSuccess ? "✅" : "❌";
+		var d31 = Is.EqualTo (m31).Within (delta).ApplyTo (actual.M31).IsSuccess ? "✅" : "❌";
+		var d41 = Is.EqualTo (m41).Within (delta).ApplyTo (actual.M41).IsSuccess ? "✅" : "❌";
+		var d12 = Is.EqualTo (m12).Within (delta).ApplyTo (actual.M12).IsSuccess ? "✅" : "❌";
+		var d22 = Is.EqualTo (m22).Within (delta).ApplyTo (actual.M22).IsSuccess ? "✅" : "❌";
+		var d32 = Is.EqualTo (m32).Within (delta).ApplyTo (actual.M32).IsSuccess ? "✅" : "❌";
+		var d42 = Is.EqualTo (m42).Within (delta).ApplyTo (actual.M42).IsSuccess ? "✅" : "❌";
+		var d13 = Is.EqualTo (m13).Within (delta).ApplyTo (actual.M13).IsSuccess ? "✅" : "❌";
+		var d23 = Is.EqualTo (m23).Within (delta).ApplyTo (actual.M23).IsSuccess ? "✅" : "❌";
+		var d33 = Is.EqualTo (m33).Within (delta).ApplyTo (actual.M33).IsSuccess ? "✅" : "❌";
+		var d43 = Is.EqualTo (m43).Within (delta).ApplyTo (actual.M43).IsSuccess ? "✅" : "❌";
+		var d14 = Is.EqualTo (m14).Within (delta).ApplyTo (actual.M14).IsSuccess ? "✅" : "❌";
+		var d24 = Is.EqualTo (m24).Within (delta).ApplyTo (actual.M24).IsSuccess ? "✅" : "❌";
+		var d34 = Is.EqualTo (m34).Within (delta).ApplyTo (actual.M34).IsSuccess ? "✅" : "❌";
+		var d44 = Is.EqualTo (m44).Within (delta).ApplyTo (actual.M44).IsSuccess ? "✅" : "❌";
+		var diffRow1 = $"({d11}, {d12}, {d13}, {d14})";
+		var diffRow2 = $"({d21}, {d22}, {d23}, {d24})";
+		var diffRow3 = $"({d31}, {d32}, {d33}, {d34})";
+		var diffRow4 = $"({d41}, {d42}, {d43}, {d44})";
+		var diffString = $"{diffRow1}\n{diffRow2}\n{diffRow3}\n{diffRow4}";
+
+		var msg = $"Expected:\n{expectedString}\nActual:\n{actualString}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
+	}
+
+	public unsafe static void AreEqual (byte* expected, byte* actual, int length, string message)
+	{
+		// Check if the byte arrays are identical
+		var equal = true;
+		for (var i = 0; i < length; i++) {
+			var e = expected [i];
+			var a = actual [i];
+			equal &= e == a;
+		}
+		if (equal)
+			return;
+		// They're not. Create the assertion message and assert.
+		var e_sb = new StringBuilder ();
+		var a_sb = new StringBuilder ();
+		var d_sb = new StringBuilder ();
+		for (var i = 0; i < length; i++) {
+			var e = expected [i];
+			var a = actual [i];
+			e_sb.Append ($"0x{e:X2} ");
+			a_sb.Append ($"0x{a:X2} ");
+			if (e == a) {
+				d_sb.Append ("     ");
+			} else {
+				d_sb.Append ("^^^^ ");
+			}
+		}
+		Assert.Fail ($"{message}\nExpected: {e_sb}\nActual:   {a_sb}\n          {d_sb}");
+	}
+#endif // HAS_SCENEKIT
 }

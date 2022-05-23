@@ -12,6 +12,7 @@
 #nullable enable
 
 using System;
+using System.Runtime.InteropServices;
 using CoreAnimation;
 using Foundation;
 using SceneKit;
@@ -57,24 +58,6 @@ namespace MonoTouchFixtures.SceneKit {
 		static pfloat SqrtTwelve = (pfloat) (Math.Sqrt (12)); // 3.464102
 		static pfloat OhPointFive = (pfloat) 0.5;
 
-		public static bool CloseEnough (double a, double b, double epsilon = 0.00001)
-		{
-			const double MinNormal = 2.2250738585072014E-308d;
-			var absA = Math.Abs (a);
-			var absB = Math.Abs (b);
-			var diff = Math.Abs (a - b);
-
-			if (a == b) {
-				return true;
-			} else if (a == 0 || b == 0 || absA + absB < MinNormal) {
-				// a or b is zero or both are extremely close to it
-				// relative error is less meaningful here
-				return diff < (epsilon * MinNormal);
-			} else { // use relative error
-				return diff / (absA + absB) < epsilon;
-			}
-		}
-
 		void AssertEqual (SCNMatrix4 matrix, string message,
 			pfloat m11, pfloat m12, pfloat m13, pfloat m14,
 			pfloat m21, pfloat m22, pfloat m23, pfloat m24,
@@ -82,20 +65,12 @@ namespace MonoTouchFixtures.SceneKit {
 			pfloat m41, pfloat m42, pfloat m43, pfloat m44
 		)
 		{
-			if (CloseEnough (m11, matrix.M11) && CloseEnough (m12, matrix.M12) && CloseEnough (m13, matrix.M13) && CloseEnough (m14, matrix.M14) &&
-				CloseEnough (m21, matrix.M21) && CloseEnough (m22, matrix.M22) && CloseEnough (m23, matrix.M23) && CloseEnough (m24, matrix.M24) &&
-				CloseEnough (m31, matrix.M31) && CloseEnough (m32, matrix.M32) && CloseEnough (m33, matrix.M33) && CloseEnough (m34, matrix.M34) &&
-				CloseEnough (m41, matrix.M41) && CloseEnough (m42, matrix.M42) && CloseEnough (m43, matrix.M43) && CloseEnough (m44, matrix.M44))
-				return;
-
-			var actualString = matrix.ToString ();
-
-			var row1 = $"({m11}, {m12}, {m13}, {m14})";
-			var row2 = $"({m21}, {m22}, {m23}, {m24})";
-			var row3 = $"({m31}, {m32}, {m33}, {m34})";
-			var row4 = $"({m41}, {m42}, {m43}, {m44})";
-			var expectedString = $"{row1}\n{row2}\n{row3}\n{row4}";
-			Assert.Fail ($"Expected matrix:\n{expectedString}\nActual matrix:\n{actualString}\n{message}");
+			Asserts.AreEqual (matrix, message,
+				m11, m12, m13, m14,
+				m21, m22, m23, m24,
+				m31, m32, m33, m34,
+				m41, m42, m43, m44,
+				0.00001);
 		}
 
 		void AssertEqual (SCNVector4 vector, string message, pfloat m1, pfloat m2, pfloat m3, pfloat m4)
@@ -354,67 +329,85 @@ namespace MonoTouchFixtures.SceneKit {
 		[Test]
 		public void CreateRotationX_Out ()
 		{
-			SCNMatrix4.CreateRotationX ((pfloat) (Math.PI / 3), out var matrix);
+			var angle = (pfloat) (Math.PI / 3);
+			SCNMatrix4.CreateRotationX (angle, out var matrix);
 			AssertEqual (matrix, "CreateRotationX",
 				1, 0, 0, 0,
 				0, OhPointFive, SqrtThreeHalved, 0,
 				0, -SqrtThreeHalved, OhPointFive, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 1, 0, 0), matrix, 0.00001f, "Native");
 		}
 
 		[Test]
 		public void CreateRotationX ()
 		{
-			var matrix = SCNMatrix4.CreateRotationX ((pfloat) (Math.PI / 3));
+			var angle = (pfloat) (Math.PI / 3);
+			var matrix = SCNMatrix4.CreateRotationX (angle);
 			AssertEqual (matrix, "CreateRotationX",
 				1, 0, 0, 0,
 				0, OhPointFive, SqrtThreeHalved, 0,
 				0, -SqrtThreeHalved, OhPointFive, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 1, 0, 0), matrix, 0.00001f, "Native");
 		}
 
 		[Test]
 		public void CreateRotationY_Out ()
 		{
+			var angle = (pfloat) (Math.PI / 3);
 			SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateRotationY",
 				OhPointFive, 0, -SqrtThreeHalved, 0,
 				0, 1, 0, 0,
 				SqrtThreeHalved, 0, OhPointFive, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 0, 1, 0), matrix, 0.00001f, "Native");
 		}
 
 		[Test]
 		public void CreateRotationY ()
 		{
-			var matrix = SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 3));
+			var angle = (pfloat) (Math.PI / 3);
+			var matrix = SCNMatrix4.CreateRotationY (angle);
 			AssertEqual (matrix, "CreateRotationY",
 				OhPointFive, 0, -SqrtThreeHalved, 0,
 				0, 1, 0, 0,
 				SqrtThreeHalved, 0, OhPointFive, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 0, 1, 0), matrix, 0.00001f, "Native");
 		}
 
 		[Test]
 		public void CreateRotationZ_Out ()
 		{
-			SCNMatrix4.CreateRotationZ ((pfloat) (Math.PI / 3), out var matrix);
+			var angle = (pfloat) (Math.PI / 3);
+			SCNMatrix4.CreateRotationZ (angle, out var matrix);
 			AssertEqual (matrix, "CreateRotationZ",
 				OhPointFive, SqrtThreeHalved, 0, 0,
 				-SqrtThreeHalved, OhPointFive, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 0, 0, 1), matrix, 0.00001f, "Native");
 		}
 
 		[Test]
 		public void CreateRotationZ ()
 		{
-			var matrix = SCNMatrix4.CreateRotationZ ((pfloat) (Math.PI / 3));
+			var angle = (pfloat) (Math.PI / 3);
+			var matrix = SCNMatrix4.CreateRotationZ (angle);
 			AssertEqual (matrix, "CreateRotationZ",
 				OhPointFive, SqrtThreeHalved, 0, 0,
 				-SqrtThreeHalved, OhPointFive, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 0, 0, 1), matrix, 0.00001f, "Native");
 		}
 
 		[Test]
@@ -426,6 +419,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 1, 0, 0,
 				0, 0, 1, 0,
 				1, 2, 3, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeTranslation (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
 
 		[Test]
@@ -438,6 +433,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 1, 0, 0,
 				0, 0, 1, 0,
 				1, 2, 3, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeTranslation (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
 
 		[Test]
@@ -449,6 +446,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 1, 0, 0,
 				0, 0, 1, 0,
 				1, 2, 3, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeTranslation (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
 
 		[Test]
@@ -461,6 +460,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 1, 0, 0,
 				0, 0, 1, 0,
 				1, 2, 3, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeTranslation (translation), matrix, "Native");
 		}
 
 		[Test]
@@ -560,6 +561,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 2, 0, 0,
 				0, 0, 2, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeScale (new SCNVector3 (2, 2, 2)), matrix, "Native");
 		}
 
 		[Test]
@@ -571,6 +574,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 2, 0, 0,
 				0, 0, 3, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeScale (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
 
 		[Test]
@@ -582,6 +587,8 @@ namespace MonoTouchFixtures.SceneKit {
 				0, 2, 0, 0,
 				0, 0, 3, 0,
 				0, 0, 0, 1);
+
+			Asserts.AreEqual (SCNMatrix4MakeScale (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
 
 		[Test]
@@ -827,6 +834,156 @@ namespace MonoTouchFixtures.SceneKit {
 				new SCNVector4 (941, 942, 943, 944));
 			Assert.IsFalse (((IEquatable<SCNMatrix4>) a).Equals (b), "object.Equals");
 		}
+
+		void Dump (SCNNode node)
+		{
+			Console.WriteLine ();
+			Console.WriteLine ($"EulerAngles: {node.EulerAngles}");
+			Console.WriteLine ($"Orientation: {node.Orientation}");
+			Console.WriteLine ($"Position: {node.Position}");
+			Console.WriteLine ($"Rotation: {node.Rotation}");
+			Console.WriteLine ($"Scale: {node.Scale}");
+			Console.WriteLine ($"Transform:\n{node.Transform}");
+		}
+
+		[Test]
+		public void CreateRotationX_NodeComparison ()
+		{
+			// Create a test node (it defaults to position 0,0,0)
+			var node = SCNNode.Create ();
+			// Create a translation matrix
+			var angle = (pfloat) (Math.PI / 2);
+			// Use that matrix to transform the node
+			node.Transform = SCNMatrix4.CreateRotationX (angle);
+			Asserts.AreEqual (new SCNVector3 (angle, 0, 0), node.EulerAngles, "EulerAngles");
+			Asserts.AreEqual (new SCNQuaternion (SqrtTwoHalved, 0, 0, SqrtTwoHalved), node.Orientation, 0.000001f, "Orientation");
+			Asserts.AreEqual (new SCNVector3 (0, 0, 0), node.Position, "Position");
+			Asserts.AreEqual (new SCNVector4 (1, 0, 0, angle), node.Rotation, 0.000001f, "Rotation");
+			Asserts.AreEqual (new SCNVector3 (1, 1, 1), node.Scale, "Scale");
+		}
+
+		[Test]
+		public void CreateTranslationAndTransformPosition ()
+		{
+			// Create test point
+			var point = new SCNVector3 (1, 2, 3);
+			// Create translation
+			var matrix = SCNMatrix4.CreateTranslation (10, 0, 0);
+			// Transform the point
+			var newPoint = SCNVector3.TransformPosition (point, matrix);
+			Asserts.AreEqual (new SCNVector3 (11, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void TranslationPosition_ret ()
+		{
+			// Create test point
+			var point = new SCNVector3 (1, 2, 3);
+			// Create translation
+			var matrix =
+				SCNMatrix4.CreateTranslation (-1, 0, 0) *
+				SCNMatrix4.Scale (10, 1, 1);
+			// Transform the point
+			var newPoint = SCNVector3.TransformPosition (point, matrix);
+			Asserts.AreEqual (new SCNVector3 (0, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void TranslationPosition_out ()
+		{
+			// Create test point
+			var point = new SCNVector3 (1, 2, 3);
+			// Create translation
+			var matrix =
+				SCNMatrix4.CreateTranslation (-1, 0, 0) *
+				SCNMatrix4.Scale (10, 1, 1);
+			// Transform the point
+			SCNVector3.TransformPosition (ref point, ref matrix, out var newPoint);
+			Asserts.AreEqual (new SCNVector3 (0, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void CreateTranslations_ret_floats ()
+		{
+			// Create a test node (it defaults to position 0,0,0)
+			var node = SCNNode.Create ();
+			// Create a translation matrix
+			var matrix = SCNMatrix4.CreateTranslation (1, 2, 3);
+			// Use that matrix to transform the node
+			node.Transform = matrix;
+			// Ask the node to extract just the translation part of the matrix
+			var newPoint = node.Position;
+			// Verify that it is now positioned at (1,2,3)
+			Asserts.AreEqual (new SCNVector3 (1, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void CreateTranslations_ret_SCNVector3 ()
+		{
+			// Create a test node (it defaults to position 0,0,0)
+			var node = SCNNode.Create ();
+			// Create a translation matrix
+			var matrix = SCNMatrix4.CreateTranslation (new SCNVector3 (1, 2, 3));
+			// Use that matrix to transform the node
+			node.Transform = matrix;
+			// Ask the node to extract just the translation part of the matrix
+			var newPoint = node.Position;
+			// Verify that it is now positioned at (1,2,3)
+			Asserts.AreEqual (new SCNVector3 (1, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void CreateTranslations_out_floats ()
+		{
+			// Create a test node (it defaults to position 0,0,0)
+			var node = SCNNode.Create ();
+			// Create a translation matrix
+			SCNMatrix4.CreateTranslation (1, 2, 3, out var matrix);
+			// Use that matrix to transform the node
+			node.Transform = matrix;
+			// Ask the node to extract just the translation part of the matrix
+			var newPoint = node.Position;
+			// Verify that it is now positioned at (1,2,3)
+			Asserts.AreEqual (new SCNVector3 (1, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void CreateTranslations_out_SCNVector3 ()
+		{
+			// Create a test node (it defaults to position 0,0,0)
+			var node = SCNNode.Create ();
+			// Create a translation matrix
+			var vector = new SCNVector3 (1, 2, 3);
+			SCNMatrix4.CreateTranslation (ref vector, out var matrix);
+			// Use that matrix to transform the node
+			node.Transform = matrix;
+			// Ask the node to extract just the translation part of the matrix
+			var newPoint = node.Position;
+			// Verify that it is now positioned at (1,2,3)
+			Asserts.AreEqual (new SCNVector3 (1, 2, 3), newPoint, "A");
+		}
+
+		[Test]
+		public void SCNMatrix4Translate ()
+		{
+			var translationVector = new SCNVector3 (1, 2, 3);
+			var managedTranslation = SCNMatrix4.CreateTranslation (translationVector);
+			var nativeTranslation = SCNMatrix4MakeTranslation (translationVector);
+			Asserts.AreEqual (nativeTranslation, managedTranslation, "A");
+		}
+
+		static SCNMatrix4 SCNMatrix4MakeTranslation (SCNVector3 v)
+		{
+			return global::Bindings.Test.CFunctions.x_SCNMatrix4MakeTranslation (v.X, v.Y, v.Z);
+		}
+
+		static SCNMatrix4 SCNMatrix4MakeScale (SCNVector3 v)
+		{
+			return global::Bindings.Test.CFunctions.x_SCNMatrix4MakeScale (v.X, v.Y, v.Z);
+		}
+
+		[DllImport (global::ObjCRuntime.Constants.SceneKitLibrary)]
+		static extern SCNMatrix4 SCNMatrix4MakeRotation (pfloat angle, pfloat x, pfloat y, pfloat z);
 	}
 }
 #endif // !__WATCHOS__

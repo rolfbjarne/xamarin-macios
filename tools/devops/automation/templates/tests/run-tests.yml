@@ -70,6 +70,7 @@ steps:
     set -x
     set -e
 
+    make global.json
     make -C builds dotnet
   workingDirectory: $(System.DefaultWorkingDirectory)/xamarin-macios
   displayName: Bootstrap dotnet

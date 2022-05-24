@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+# shellcheck disable=SC2129
 
 # This script will detect changes between the current hash and another hash.
 # The other hash is by default the previous commit, but can also be any other commit (for a PR it could be the commit before the PR).
@@ -233,6 +234,7 @@ BASE_HASH=$(git log -1 --pretty=%H "$BASE_HASH")
 
 GENERATOR_DIFF_FILE=
 APIDIFF_FILE=
+STABLE_API_COMPARISON_FILE=
 
 OUTPUT_RESULTS_DIR=$OUTPUT_DIR/results
 OUTPUT_TMP_DIR=$OUTPUT_DIR/tmp
@@ -249,6 +251,9 @@ function upon_exit ()
 	fi
 	if ! test -z "$APIDIFF_FILE"; then
 		echo "API diff: $APIDIFF_FILE"
+	fi
+	if ! test -z "$STABLE_API_COMPARISON_FILE"; then
+		echo "API diff (vs stable): $STABLE_API_COMPARISON_FILE"
 	fi
 
 	# Clean up after ourselves
@@ -351,8 +356,9 @@ else
 	echo "${BLUE}Skipped generator diff.${CLEAR}"
 fi
 
-APIDIFF_RESULTS_DIR=$OUTPUT_RESULTS_DIR/previous-api-comparison
-APIDIFF_TMP_DIR=$OUTPUT_TMP_DIR/previous-api-comparison
+APIDIFF_RESULTS_RELATIVE_DIR=previous-api-comparison
+APIDIFF_RESULTS_DIR=$OUTPUT_RESULTS_DIR/$APIDIFF_RESULTS_RELATIVE_DIR
+APIDIFF_TMP_DIR=$OUTPUT_TMP_DIR/$APIDIFF_RESULTS_RELATIVE_DIR
 if test -n "$ENABLE_API_DIFF"; then
 	#
 	# API diff vs another commit
@@ -393,8 +399,9 @@ else
 	echo "${BLUE}Skipped API diff vs ${WHITE}${BASE_HASH}${BLUE}.${CLEAR}"
 fi
 
-STABLE_API_COMPARISON_RESULTS_DIR="$OUTPUT_RESULTS_DIR/stable-api-comparison"
-STABLE_API_COMPARISON_TMP_DIR="$OUTPUT_TMP_DIR/stable-api-comparison"
+STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR=stable-api-comparison
+STABLE_API_COMPARISON_RESULTS_DIR="$OUTPUT_RESULTS_DIR/$STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR"
+STABLE_API_COMPARISON_TMP_DIR="$OUTPUT_TMP_DIR/$STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR"
 if test -n "$ENABLE_STABLE_API_COMPARISON"; then
 	echo "💪 ${BLUE}Computing API diff vs stable${CLEAR} 💪"
 	rm -Rf "$STABLE_API_COMPARISON_RESULTS_DIR" "$STABLE_API_COMPARISON_TMP_DIR"
@@ -403,6 +410,7 @@ if test -n "$ENABLE_STABLE_API_COMPARISON"; then
 	# remove empty files
 	find "$STABLE_API_COMPARISON_RESULTS_DIR" -size 0 -print0 | xargs -0 rm
 	echo "    ${BLUE}Computed API diff vs stable: ${WHITE}$STABLE_API_COMPARISON_RESULTS_DIR/index.html${BLUE}${CLEAR}"
+	STABLE_API_COMPARISON_FILE=$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.html
 else
 	echo "${BLUE}Skipped API diff vs stable.${CLEAR}"
 fi
@@ -416,47 +424,44 @@ if [ -z ${DOTNET_TFM+x} ]; then DOTNET_TFM=$(make -C "$ROOT_DIR"/tools/devops pr
 
 # Create the GH comment
 
-if test -n "$ENABLE_API_DIFF"debug; then
+if test -n "$ENABLE_API_DIFF"; then
 	MSG=" # API diff for current PR "
 	if grep BreakingChangesDetected "$APIDIFF_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
-		EMOJII="❗️"
+		EMOJII=":heavy_exclamation_mark:"
 		MSG=" (Breaking changes)"
 	else
-		EMOJII="✅"
+		EMOJII=":white_check_mark:"
 		MSG=""
 	fi
 	echo " # $EMOJII API diff for current PR$MSG" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
-	cat "$APIDIFF_RESULTS_DIR/api-diff.md" >> "$GH_COMMENTS_FILE"
+	sed < "$APIDIFF_RESULTS_DIR/api-diff.md" -e "s/[[]vsdrops[]][\(]/[vsdrops]($APIDIFF_RESULTS_RELATIVE_DIR\//g" -e "s/[[]gist[]][\(]/[gist]($APIDIFF_RESULTS_RELATIVE_DIR\//g" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
 fi
 
-if test -n "$ENABLE_STABLE_API_COMPARISON"debug; then
+if test -n "$ENABLE_STABLE_API_COMPARISON"; then
 	if grep BreakingChangesDetected "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
-		EMOJII="❗️"
+		EMOJII=":heavy_exclamation_mark:"
 		MSG=" (Breaking changes)"
 	else
-		EMOJII="✅"
+		EMOJII=":white_check_mark:"
 		MSG=""
 	fi
 	echo " # $EMOJII API diff vs stable$MSG" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
-	cat "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" >> "$GH_COMMENTS_FILE"
+	sed < "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" -e "s/[[]vsdrops[]][\(]/[vsdrops]($STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR\//g" -e "s/[[]gist[]][\(]/[gist]($STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR\//g"  >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
 fi
 
-if test -n "$ENABLE_GENERATOR_DIFF"debug; then
+if test -n "$ENABLE_GENERATOR_DIFF"; then
 	if test -s "$GENERATOR_DIFF_FILE"; then
 		echo "# :information_source: Generator diff" >> "$GH_COMMENTS_FILE"
 		echo "" >> "$GH_COMMENTS_FILE"
 		echo "Generator Diff: [vsdrops](generator-diff/index.html) [gist](generator-diff/index.html) (please review changes)" >> "$GH_COMMENTS_FILE"
 	else
-		echo "# ✅ Generator diff" >> "$GH_COMMENTS_FILE"
+		echo "# :white_check_mark: Generator diff" >> "$GH_COMMENTS_FILE"
 		echo "" >> "$GH_COMMENTS_FILE"
 		echo "Generator Diff: [vsdrops](generator-diff/index.html) [gist](generator-diff/index.html) (empty diff)" >> "$GH_COMMENTS_FILE"
 	fi
 fi
 
-echo "GH_COMMENTS_FILE: $GH_COMMENTS_FILE"
-cat "$GH_COMMENTS_FILE"
-echo ""

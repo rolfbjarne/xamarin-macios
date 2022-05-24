@@ -1184,7 +1184,9 @@ function Convert-Markdown {
             $fileToGist = $InputContents.Substring($startIndex + 7, $endIndex - $startIndex - 7)
             $fullPath = Join-Path -Path $RootDirectory -ChildPath $fileToGist
             if (Test-Path $fullPath -PathType leaf) {
-                $obj = New-GistObjectDefinition -Name $fileToGist -Path $fullPath -Type "markdown"
+                # github only accepts filename without path components
+                $filenameForGist = [System.Linq.Enumerable]::Last($fileToGist.Split("/", [StringSplitOptions]::RemoveEmptyEntries))
+                $obj = New-GistObjectDefinition -Name $filenameForGist -Path $fullPath -Type "markdown"
                 $filesToGist = ($obj)
                 try {
                     $gistUrl = New-GistWithFiles $fileToGist $filesToGist

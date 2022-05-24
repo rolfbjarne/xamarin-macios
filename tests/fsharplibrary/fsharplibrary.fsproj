@@ -42,7 +42,6 @@
     <Reference Include="System.Core" />
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" Condition="'$(TargetFrameworkIdentifier)' != 'Xamarin.MacCatalyst'" />
-    <PackageReference Include="FSharp.Core" Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.MacCatalyst'" Version="5.0.0" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +51,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="ObjCRuntime\RegistrarTest.fs" />
+    <None Include="Info.plist" />
+    <PackageReference Include="FSharp.Core" Condition="'$(TargetFrameworkIdentifier)' == 'Xamarin.MacCatalyst'" Version="5.0.0" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.FSharp.targets" />
 </Project>

@@ -44,6 +44,7 @@ steps:
 # Process the github comment and publish it
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1
+    $vsdropsChangeDetectionPrefix = "https://vsdrop.corp.microsoft.com/file/v1/xamarin-macios/detected-changes/$Env:BUILD_BUILDNUMBER/$Env:BUILD_BUILDID/;/"
 
     $rootDirectory = Join-Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY" "change-detection" "results"
 
@@ -55,7 +56,7 @@ steps:
     }
 
     try {
-      $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix "$Env:VSDROPS_INDEX"
+      $converted = Convert-Markdown -RootDirectory $rootDirectory -InputContents $inputContents -VSDropsPrefix $vsdropsChangeDetectionPrefix
     } catch {
       $converted = $inputContents + "`n`nUnable to convert markdown: $_`n`n"
     }

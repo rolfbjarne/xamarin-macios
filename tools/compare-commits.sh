@@ -243,6 +243,7 @@ OUTPUT_SRC_DIR=$OUTPUT_TMP_DIR/src
 GH_COMMENTS_FILE=$OUTPUT_RESULTS_DIR/gh-comment.md
 
 rm -f "$GH_COMMENTS_FILE"
+mkdir -p "$(dirname "$GH_COMMENTS_FILE")"
 
 function upon_exit ()
 {

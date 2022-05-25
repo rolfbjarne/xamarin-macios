@@ -1184,16 +1184,21 @@ function Convert-Markdown {
             $fileToGist = $InputContents.Substring($startIndex + 7, $endIndex - $startIndex - 7)
             $fullPath = Join-Path -Path $RootDirectory -ChildPath $fileToGist
             if (Test-Path $fullPath -PathType leaf) {
-                # github only accepts filename without path components
-                $filenameForGist = [System.Linq.Enumerable]::Last($fileToGist.Split("/", [StringSplitOptions]::RemoveEmptyEntries))
-                $obj = New-GistObjectDefinition -Name $filenameForGist -Path $fullPath -Type "markdown"
-                $filesToGist = ($obj)
-                try {
-                    $gistUrl = New-GistWithFiles $fileToGist $filesToGist
-                    $gistText = "[gist](" + $gistUrl + ")"
-                } catch {
-                    Write-Host "Unable to create gist: $_"
-                    $gistText = "Unable to create gist: $($_.Exception.Message)"
+                $gistContent = Get-Content -Path $fullPath -Raw
+                if ($gistContent.Length -eq 0) {
+                        $gistText = "[empty gist]"
+                } else {
+                    # github only accepts filename without path components
+                    $filenameForGist = [System.Linq.Enumerable]::Last($fileToGist.Split("/", [StringSplitOptions]::RemoveEmptyEntries))
+                    $obj = New-GistObjectDefinition -Name $filenameForGist -Path $fullPath -Type "markdown"
+                    $filesToGist = ($obj)
+                    try {
+                        $gistUrl = New-GistWithFiles $fileToGist $filesToGist
+                        $gistText = "[gist](" + $gistUrl + ")"
+                    } catch {
+                        Write-Host "Unable to create gist: $_"
+                        $gistText = "Unable to create gist: $($_.Exception.Message)"
+                    }
                 }
             } else {
                 $gistText = "(could not create gist: file '$fullPath' does not exist)"

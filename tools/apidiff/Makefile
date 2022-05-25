@@ -24,14 +24,17 @@ ifndef SKIP_IOS_VS_MACCATALYST
 INCLUDE_IOS_VS_MACCATALYST=1
 endif
 
-BREAKING_CHANGES_MESSAGE=❗️Breaking changes❗️
-
 MONO_API_INFO = $(API_TOOLS_PATH)/mono-api-info/bin/Debug/net6.0/mono-api-info.dll
 MONO_API_HTML = $(API_TOOLS_PATH)/mono-api-html/bin/Debug/net6.0/mono-api-html.dll
 MONO_BUILD = $(SYSTEM_MONO)
 
 MONO_API_INFO_EXEC = $(SYSTEM_DOTNET) $(MONO_API_INFO) --ignore-inherited-interfaces
 MONO_API_HTML_EXEC = $(SYSTEM_DOTNET) $(MONO_API_HTML)
+
+export HTML_BREAKING_CHANGES_MESSAGE="❗️Breaking changes❗️"
+export HTML_NO_BREAKING_CHANGES_MESSAGE="No breaking changes ✅"
+export MARKDOWN_BREAKING_CHANGES_MESSAGE=":heavy_exclamation_mark: Breaking changes :heavy_exclamation_mark:"
+export MARKDOWN_NO_BREAKING_CHANGES_MESSAGE="No breaking changes :white_check_mark:"
 
 # I18N are excluded - but otherwise if should be like ../../builds/Makefile + what XI adds
 # in the order to the api-diff.html merged file
@@ -210,27 +213,11 @@ $(OUTPUT_DIR)/index.html: $(OUTPUT_DIR)/api-diff.html
 #
 
 define ApiDiffReportHtml
-	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(2); \
-	elif ! grep "No change detected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "<li>$(1): <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html'>html</a> <a href='diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md'>markdown</a> (No breaking changes ✅)</li>" >> $(2); \
-	elif ! test -f $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
-		echo "<li><s>$(1)</s> (no diff detected)</li>" >> $(2); \
-	else \
-		echo "<li><s>$(1)</s> (no change detected)</li>" >> $(2); \
-	fi;
+	./report-status.sh "$(1)" "$(OUTPUT_DIR)" html "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
 endef
 
 define ApiDiffLegacyReportHtml
-	$(Q) if grep "BreakingChangesDetected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(3); \
-	elif ! grep "No change detected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li>$(2): <a href='$(1)-api-diff.html'>html</a> <a href='$(1)-api-diff.md'>markdown</a> (No breaking changes ✅)</li>" >> $(3); \
-	elif ! test -f $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "<li><s>$(2)</s> (no diff detected)</li>" >> $(3); \
-	else \
-		echo "<li><s>$(2)</s> (no change detected)</li>" >> $(3); \
-	fi;
+	./report-status.sh "$(1)" "$(OUTPUT_DIR)" html "$(1)-api-diff.html" "$(1)-api-diff.md" "$(2)"
 endef
 
 $(OUTPUT_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
@@ -290,7 +277,7 @@ endif # INCLUDE_XAMARIN_VS_DOTNET
 endif # INCLUDE_XAMARIN_LEGACY
 
 endif # DOTNET
-	$(Q) if grep "$(BREAKING_CHANGES_MESSAGE)" $@ >/dev/null 2>&1; then \
+	$(Q) if grep "$(HTML_BREAKING_CHANGES_MESSAGE)" $@ >/dev/null 2>&1; then \
 		echo "" >> $@; \
 		echo "<!-- BreakingChangesDetected -->" >> $@; \
 		echo "" >> $@; \
@@ -301,27 +288,11 @@ endif # DOTNET
 #
 
 define ApiDiffReportMarkdown
-	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(2); \
-	elif ! grep "No change detected" $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html >/dev/null 2>&1; then \
-		echo "* $(1): [vsdrops](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html) [gist](diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md) (No breaking changes ✅)</li>" >> $(2); \
-	elif ! test -f $(OUTPUT_DIR)/diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html; then \
-		echo "* ~$(1)~: (no diff detected)" >> $(2); \
-	else \
-		echo "* ~$(1)~: (no change detected)" >> $(2); \
-	fi;
+	./report-status.sh "$(1)" "$(OUTPUT_DIR)" markdown "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
 endef
 
 define ApiDiffLegacyReportMarkdown
-	if grep "BreakingChangesDetected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) ($(BREAKING_CHANGES_MESSAGE))</li>" >> $(3); \
-	elif ! grep "No change detected" $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "* $(2): [vsdrops]($(1)-api-diff.html) [gist]($(1)-api-diff.md) (No breaking changes ✅)</li>" >> $(3); \
-	elif ! test -f $(OUTPUT_DIR)/$(1)-api-diff.html >/dev/null 2>&1; then  \
-		echo "* ~$(1)~: (no diff detected)" >> $(3); \
-	else \
-		echo "* ~$(1)~: (no change detected)" >> $(3); \
-	fi;
+	./report-status.sh "$(1)" "$(OUTPUT_DIR)" markdown "$(1)-api-diff.html" "$(1)-api-diff.md" "$(2)"
 endef
 
 $(OUTPUT_DIR)/api-diff.md: $(API_DIFF_DEPENDENCIES)
@@ -385,7 +356,7 @@ endif # INCLUDE_XAMARIN_VS_DOTNET
 endif # INCLUDE_XAMARIN_LEGACY
 
 endif # DOTNET
-	$(Q) if grep "$(BREAKING_CHANGES_MESSAGE)" $@ >/dev/null 2>&1; then \
+	$(Q) if grep "$(MARKDOWN_BREAKING_CHANGES_MESSAGE)" $@ >/dev/null 2>&1; then \
 		echo "" >> $@; \
 		echo "<!-- BreakingChangesDetected -->" >> $@; \
 		echo "" >> $@; \

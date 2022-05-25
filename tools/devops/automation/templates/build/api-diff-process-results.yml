@@ -37,7 +37,7 @@ steps:
     dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
     dropMetadataContainerName: 'DropMetadata-ChangeDetection'
     buildNumber: 'xamarin-macios/detected-changes/$(Build.BuildNumber)/$(Build.BuildId)'
-    sourcePath: '$(System.DefaultWorkingDirectory)/change-detection/'
+    sourcePath: '$(System.DefaultWorkingDirectory)/change-detection/results/'
     detailedLog: true
     usePat: true
 

@@ -425,7 +425,7 @@ if [ -z ${DOTNET_TFM+x} ]; then DOTNET_TFM=$(make -C "$ROOT_DIR"/tools/devops pr
 # Create the GH comment
 
 if test -n "$ENABLE_API_DIFF"; then
-	MSG=" # API diff for current PR "
+	MSG=" # API diff for current PR / commit "
 	if grep BreakingChangesDetected "$APIDIFF_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
 		EMOJII=":heavy_exclamation_mark:"
 		MSG=" (Breaking changes)"

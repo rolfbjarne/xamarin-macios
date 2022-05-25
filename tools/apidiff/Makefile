@@ -221,7 +221,11 @@ $(OUTPUT_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
 	$(QF_GEN) echo "<h1>API diffs</h1>" > $@
 
 ifdef INCLUDE_XAMARIN_LEGACY
-	$(Q) echo "<h2>Legacy Xamarin</h2>" >> $@
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/*-api-diff.html"; then \
+		echo "<h2>Legacy Xamarin ($(HTML_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
+	else; \
+		echo "<h2>Legacy Xamarin ($(HTML_NO_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
+	fi
 	$(Q) echo "<ul>" >> $@
 ifdef INCLUDE_IOS
 	./report-status.sh "iOS" "$(OUTPUT_DIR)" html "ios-api-diff.html" "ios-api-diff.md" "$@"
@@ -239,7 +243,11 @@ endif
 endif # INCLUDE_XAMARIN_LEGACY
 
 ifdef ENABLE_DOTNET
-	$(Q) echo "<h2>.NET</h2>" >> $@
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/diff/dotnet/Microsoft.*.Ref/ref/$(DOTNET_TFM)/Microsoft.*.html"; then \
+		echo "<h2>.NET ($(HTML_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
+	else; \
+		echo "<h2>.NET ($(HTML_NO_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
+	fi
 	$(Q) echo "<ul>" >> $@
 
 	@# New .NET vs Stable .NET
@@ -291,7 +299,11 @@ endef
 
 $(OUTPUT_DIR)/api-diff.md: $(API_DIFF_DEPENDENCIES)
 ifdef INCLUDE_XAMARIN_LEGACY
-	$(Q) echo "<details><summary>Legacy Xamarin</summary>" >> "$@"
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/*-api-diff.html"; then \
+		echo "<details><summary>Legacy Xamarin ($(MARKDOWN_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
+	else; \
+		echo "<details><summary>Legacy Xamarin ($(MARKDOWN_NO_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
+	fi
 	$(Q) echo "" >> $@
 ifdef INCLUDE_IOS
 	./report-status.sh "iOS" "$(OUTPUT_DIR)" markdown "ios-api-diff.html" "ios-api-diff.md" "$@"
@@ -311,7 +323,11 @@ endif
 endif # INCLUDE_XAMARIN_LEGACY
 
 ifdef ENABLE_DOTNET
-	$(QF_GEN) echo "<details><summary>.NET</summary>" >> "$@"
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/diff/dotnet/Microsoft.*.Ref/ref/$(DOTNET_TFM)/Microsoft.*.html"; then \
+		echo "<details><summary>.NET ($(HTML_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
+	else; \
+		echo "<details><summary>.NET ($(HTML_NO_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
+	fi
 	$(Q) echo "" >> $@
 
 	@# New .NET vs Stable .NET

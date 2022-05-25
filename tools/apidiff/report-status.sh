@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 PLATFORM=$1
 OUTPUT_DIR=$2
@@ -6,6 +6,12 @@ FORMAT=$3
 HTML=$4
 MARKDOWN=$5
 OUTPUT=$6
+
+if test -n "$7"; then
+	shift 6
+	echo "Too many arguments: $*"
+	exit 1
+fi
 
 if [[ $FORMAT == html ]]; then
 	echo -n "<li>" >> "$OUTPUT"
@@ -39,7 +45,7 @@ elif [[ $FORMAT == markdown ]]; then
 		echo -n "~$PLATFORM~ (no change detected)" >> "$OUTPUT"
 	fi
 
-	echo "" > "$OUTPUT"
+	echo "" >> "$OUTPUT"
 else
 	echo "Unknown output format: $FORMAT"
 	exit 1

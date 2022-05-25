@@ -31,10 +31,10 @@ MONO_BUILD = $(SYSTEM_MONO)
 MONO_API_INFO_EXEC = $(SYSTEM_DOTNET) $(MONO_API_INFO) --ignore-inherited-interfaces
 MONO_API_HTML_EXEC = $(SYSTEM_DOTNET) $(MONO_API_HTML)
 
-export HTML_BREAKING_CHANGES_MESSAGE="❗️Breaking changes❗️"
-export HTML_NO_BREAKING_CHANGES_MESSAGE="No breaking changes ✅"
-export MARKDOWN_BREAKING_CHANGES_MESSAGE=":heavy_exclamation_mark: Breaking changes :heavy_exclamation_mark:"
-export MARKDOWN_NO_BREAKING_CHANGES_MESSAGE="No breaking changes :white_check_mark:"
+export HTML_BREAKING_CHANGES_MESSAGE=❗️Breaking changes❗️
+export HTML_NO_BREAKING_CHANGES_MESSAGE=No breaking changes ✅
+export MARKDOWN_BREAKING_CHANGES_MESSAGE=:heavy_exclamation_mark: Breaking changes :heavy_exclamation_mark:
+export MARKDOWN_NO_BREAKING_CHANGES_MESSAGE=No breaking changes :white_check_mark:
 
 # I18N are excluded - but otherwise if should be like ../../builds/Makefile + what XI adds
 # in the order to the api-diff.html merged file
@@ -214,10 +214,7 @@ $(OUTPUT_DIR)/index.html: $(OUTPUT_DIR)/api-diff.html
 
 define ApiDiffReportHtml
 	./report-status.sh "$(1)" "$(OUTPUT_DIR)" html "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
-endef
 
-define ApiDiffLegacyReportHtml
-	./report-status.sh "$(1)" "$(OUTPUT_DIR)" html "$(1)-api-diff.html" "$(1)-api-diff.md" "$(2)"
 endef
 
 $(OUTPUT_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
@@ -227,16 +224,16 @@ ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) echo "<h2>Legacy Xamarin</h2>" >> $@
 	$(Q) echo "<ul>" >> $@
 ifdef INCLUDE_IOS
-	$(Q) $(call ApiDiffLegacyReportHtml,ios,iOS,$@)
+	./report-status.sh "iOS" "$(OUTPUT_DIR)" html "ios-api-diff.html" "ios-api-diff.md" "$@"
 endif
 ifdef INCLUDE_TVOS
-	$(Q) $(call ApiDiffLegacyReportHtml,tvos,tvOS,$@)
+	./report-status.sh "tvOS" "$(OUTPUT_DIR)" html "tvos-api-diff.html" "tvos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_WATCH
-	$(Q) $(call ApiDiffLegacyReportHtml,watchos,watchOS,$@)
+	./report-status.sh "watchOS" "$(OUTPUT_DIR)" html "watchos-api-diff.html" "watchos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_MAC
-	$(Q) $(call ApiDiffLegacyReportHtml,mac,macOS,$@)
+	./report-status.sh "macOS" "$(OUTPUT_DIR)" html "mac-api-diff.html" "mac-api-diff.md" "$@"
 endif
 	$(Q) echo "</ul>" >> $@
 endif # INCLUDE_XAMARIN_LEGACY
@@ -289,10 +286,7 @@ endif # DOTNET
 
 define ApiDiffReportMarkdown
 	./report-status.sh "$(1)" "$(OUTPUT_DIR)" markdown "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
-endef
 
-define ApiDiffLegacyReportMarkdown
-	./report-status.sh "$(1)" "$(OUTPUT_DIR)" markdown "$(1)-api-diff.html" "$(1)-api-diff.md" "$(2)"
 endef
 
 $(OUTPUT_DIR)/api-diff.md: $(API_DIFF_DEPENDENCIES)
@@ -300,16 +294,16 @@ ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) echo "<details><summary>Legacy Xamarin</summary>" >> "$@"
 	$(Q) echo "" >> $@
 ifdef INCLUDE_IOS
-	$(Q) $(call ApiDiffLegacyReportMarkdown,ios,iOS,$@)
+	./report-status.sh "iOS" "$(OUTPUT_DIR)" markdown "ios-api-diff.html" "ios-api-diff.md" "$@"
 endif
 ifdef INCLUDE_TVOS
-	$(Q) $(call ApiDiffLegacyReportMarkdown,tvos,tvOS,$@)
+	./report-status.sh "tvOS" "$(OUTPUT_DIR)" markdown "tvos-api-diff.html" "tvos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_WATCH
-	$(Q) $(call ApiDiffLegacyReportMarkdown,watchos,watchOS,$@)
+	./report-status.sh "watchOS" "$(OUTPUT_DIR)" markdown "watchos-api-diff.html" "watchos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_MAC
-	$(Q) $(call ApiDiffLegacyReportMarkdown,mac,macOS,$@)
+	./report-status.sh "macOS" "$(OUTPUT_DIR)" markdown "mac-api-diff.html" "mac-api-diff.md" "$@"
 endif
 	$(Q) echo "" >> $@
 	$(Q) echo "</details>" >> "$@"

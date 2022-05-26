@@ -426,7 +426,6 @@ if [ -z ${DOTNET_TFM+x} ]; then DOTNET_TFM=$(make -C "$ROOT_DIR"/tools/devops pr
 # Create the GH comment
 
 if test -n "$ENABLE_API_DIFF"; then
-	MSG=" # API diff for current PR / commit "
 	if grep BreakingChangesDetected "$APIDIFF_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
 		EMOJII=":heavy_exclamation_mark:"
 		MSG=" (Breaking changes)"
@@ -434,7 +433,7 @@ if test -n "$ENABLE_API_DIFF"; then
 		EMOJII=":white_check_mark:"
 		MSG=""
 	fi
-	echo " # $EMOJII API diff for current PR$MSG" >> "$GH_COMMENTS_FILE"
+	echo "## $EMOJII API diff for current PR / commit$MSG" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
 	sed < "$APIDIFF_RESULTS_DIR/api-diff.md" -e "s/[[]vsdrops[]][\(]/[vsdrops]($APIDIFF_RESULTS_RELATIVE_DIR\//g" -e "s/[[]gist[]][\(]/[gist]($APIDIFF_RESULTS_RELATIVE_DIR\//g" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
@@ -448,7 +447,7 @@ if test -n "$ENABLE_STABLE_API_COMPARISON"; then
 		EMOJII=":white_check_mark:"
 		MSG=""
 	fi
-	echo " # $EMOJII API diff vs stable$MSG" >> "$GH_COMMENTS_FILE"
+	echo "## $EMOJII API diff vs stable$MSG" >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
 	sed < "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" -e "s/[[]vsdrops[]][\(]/[vsdrops]($STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR\//g" -e "s/[[]gist[]][\(]/[gist]($STABLE_API_COMPARISON_RESULTS_RELATIVE_DIR\//g"  >> "$GH_COMMENTS_FILE"
 	echo "" >> "$GH_COMMENTS_FILE"
@@ -456,13 +455,13 @@ fi
 
 if test -n "$ENABLE_GENERATOR_DIFF"; then
 	if test -s "$GENERATOR_DIFF_FILE"; then
-		echo "# :information_source: Generator diff" >> "$GH_COMMENTS_FILE"
+		echo "## :information_source: Generator diff" >> "$GH_COMMENTS_FILE"
 		echo "" >> "$GH_COMMENTS_FILE"
-		echo "Generator Diff: [vsdrops](generator-diff/index.html) [gist](generator-diff/index.html) (please review changes)" >> "$GH_COMMENTS_FILE"
+		echo "Generator Diff: [vsdrops](generator-diff/index.html) (html) [vsdrops](generator-diff/generator.diff) (raw diff) [gist](generator-diff/generator.diff) (raw diff) - Please review changes)" >> "$GH_COMMENTS_FILE"
 	else
-		echo "# :white_check_mark: Generator diff" >> "$GH_COMMENTS_FILE"
+		echo "## :white_check_mark: Generator diff" >> "$GH_COMMENTS_FILE"
 		echo "" >> "$GH_COMMENTS_FILE"
-		echo "Generator Diff: [vsdrops](generator-diff/index.html) [gist](generator-diff/index.html) (empty diff)" >> "$GH_COMMENTS_FILE"
+		echo "Generator diff is empty" >> "$GH_COMMENTS_FILE"
 	fi
 fi
 

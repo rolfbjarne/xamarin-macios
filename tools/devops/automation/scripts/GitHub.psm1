@@ -248,6 +248,10 @@ class GitHubComments {
         [string] $commentTitle,
         [string] $commentEmoji
     ) {
+        # Don't write a header if none was provided
+        if ($commentTitle.Length -eq 0)
+            return
+
         if ([string]::IsNullOrEmpty($Env:PR_ID)) {
             $prefix = "[CI Build]"
         } else {
@@ -255,6 +259,7 @@ class GitHubComments {
         }
 
         $stringBuilder.AppendLine("# $commentEmoji $prefix $commentTitle $commentEmoji")
+        $stringBuilder.AppendLine()
     }
 
     [void] WriteCommentFooter(
@@ -263,13 +268,16 @@ class GitHubComments {
         $targetUrl = Get-TargetUrl
         $stringBuilder.AppendLine("[Pipeline]($targetUrl) on Agent $Env:TESTS_BOT") # Env:TESTS_BOT is added by the pipeline as a variable coming from the execute tests job
         $hashUrl = $null
+        $hashSource = $null
         if ([GitHubComments]::IsPR()) {
             $changeId = [GitHubComments]::GetPRID()
             $hashUrl = "https://github.com/$($this.Org)/$($this.Repo)/pull/$changeId/commits/$($this.Hash)"
+            $hashSource = " [PR build]"
         } else {
             $hashUrl= "https://github.com/$($this.Org)/$($this.Repo)/commit/$($this.Hash)"
+            $hashSource = " [CI build]"
         }
-        $stringBuilder.AppendLine("Hash: [$($this.Hash)]($hashUrl)")
+        $stringBuilder.AppendLine("Hash: [$($this.Hash)]($hashUrl) $hashSource")
     }
 
     [string] GetCommentUrl() {
@@ -324,7 +332,6 @@ class GitHubComments {
 
         # header
         $this.WriteCommentHeader($msg, $commentTitle, $commentEmoji)
-        $msg.AppendLine()
 
         # content
         $commentObject.WriteComment($msg)
@@ -346,7 +353,6 @@ class GitHubComments {
 
         # header
         $this.WriteCommentHeader($msg, $commentTitle, $commentEmoji)
-        $msg.AppendLine()
 
         if (-not (Test-Path $filePath -PathType Leaf)) {
             throw [System.IO.FileNotFoundException]::new($filePath)
@@ -374,7 +380,6 @@ class GitHubComments {
 
         # header
         $this.WriteCommentHeader($msg, $commentTitle, $commentEmoji)
-        $msg.AppendLine()
 
         # content
         $msg.AppendLine($content)

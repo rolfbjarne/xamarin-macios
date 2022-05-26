@@ -221,7 +221,7 @@ $(OUTPUT_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
 	$(QF_GEN) echo "<h1>API diffs</h1>" > $@
 
 ifdef INCLUDE_XAMARIN_LEGACY
-	$(Q) if $(foreach html,$(wildcard "$(OUTPUT_DIR)"/*-api-diff.html),! test -s "$(html)" &&) true; then \
+	$(Q) if $(foreach html,$(wildcard $(OUTPUT_DIR)/*-api-diff.html),! test -s "$(html)" &&) true; then \
 		echo "<h2>Legacy Xamarin (empty diffs)</h2>" >> "$@"; \
 	elif grep BreakingChangesDetected "$(OUTPUT_DIR)"/*-api-diff.html &> /dev/null; then \
 		echo "<h2>Legacy Xamarin ($(HTML_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
@@ -245,7 +245,7 @@ endif
 endif # INCLUDE_XAMARIN_LEGACY
 
 ifdef ENABLE_DOTNET
-	$(Q) if $(foreach html,$(wildcard "$(OUTPUT_DIR)"/diff/dotnet/Microsoft.*.Ref/ref/"$(DOTNET_TFM)"/Microsoft.*.html),! test -s "$(html)" &&) true; then \
+	$(Q) if $(foreach html,$(wildcard $(OUTPUT_DIR)/diff/dotnet/Microsoft.*.Ref/ref/$(DOTNET_TFM)/Microsoft.*.html),! test -s "$(html)" &&) true; then \
 		echo "<h2>.NET (empty diffs)</h2>" >> "$@"; \
 	elif grep BreakingChangesDetected "$(OUTPUT_DIR)"/diff/dotnet/Microsoft.*.Ref/ref/"$(DOTNET_TFM)"/Microsoft.*.html &> /dev/null; then \
 		echo "<h2>.NET ($(HTML_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
@@ -303,7 +303,7 @@ endef
 
 $(OUTPUT_DIR)/api-diff.md: $(API_DIFF_DEPENDENCIES)
 ifdef INCLUDE_XAMARIN_LEGACY
-	$(Q) if $(foreach html,$(wildcard "$(OUTPUT_DIR)"/*-api-diff.html),! test -s "$(html)" &&) true; then \
+	$(Q) if $(foreach html,$(wildcard $(OUTPUT_DIR)/*-api-diff.html),! test -s "$(html)" &&) true; then \
 		echo "<details><summary>Legacy Xamarin (empty diffs)</summary>" >> "$@"; \
 	elif grep BreakingChangesDetected "$(OUTPUT_DIR)"/*-api-diff.html &> /dev/null; then \
 		echo "<details><summary>Legacy Xamarin ($(MARKDOWN_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
@@ -329,7 +329,7 @@ endif
 endif # INCLUDE_XAMARIN_LEGACY
 
 ifdef ENABLE_DOTNET
-	$(Q) if $(foreach html,$(wildcard "$(OUTPUT_DIR)"/diff/dotnet/Microsoft.*.Ref/ref/"$(DOTNET_TFM)"/Microsoft.*.html),! test -s "$(html)" &&) true; then \
+	$(Q) if $(foreach html,$(wildcard $(OUTPUT_DIR)/diff/dotnet/Microsoft.*.Ref/ref/$(DOTNET_TFM)/Microsoft.*.html),! test -s "$(html)" &&) true; then \
 		echo "<details><summary>NET (empty diffs)</summary>" >> "$@"; \
 	elif grep BreakingChangesDetected "$(OUTPUT_DIR)"/diff/dotnet/Microsoft.*.Ref/ref/"$(DOTNET_TFM)"/Microsoft.*.html &> /dev/null; then \
 		echo "<details><summary>.NET ($(MARKDOWN_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \

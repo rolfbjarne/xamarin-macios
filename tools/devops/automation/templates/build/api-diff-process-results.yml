@@ -68,4 +68,3 @@ steps:
   condition: always() # We always want to post something on github
   env:
     GITHUB_TOKEN: $(GitHub.Token)
-    GIT_HASH: $[ dependencies.api_diff.outputs['fix_commit.GIT_HASH'] ]

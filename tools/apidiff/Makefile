@@ -213,7 +213,7 @@ $(OUTPUT_DIR)/index.html: $(OUTPUT_DIR)/api-diff.html
 #
 
 define ApiDiffReportHtml
-	./report-status.sh "$(1)" "$(OUTPUT_DIR)" html "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
+	$(Q) ./report-status.sh "$(1)" "$(OUTPUT_DIR)" html "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
 
 endef
 
@@ -221,31 +221,31 @@ $(OUTPUT_DIR)/api-diff.html: $(API_DIFF_DEPENDENCIES)
 	$(QF_GEN) echo "<h1>API diffs</h1>" > $@
 
 ifdef INCLUDE_XAMARIN_LEGACY
-	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/*-api-diff.html"; then \
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)"/*-api-diff.html &> /dev/null; then \
 		echo "<h2>Legacy Xamarin ($(HTML_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
-	else; \
+	else \
 		echo "<h2>Legacy Xamarin ($(HTML_NO_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
 	fi
 	$(Q) echo "<ul>" >> $@
 ifdef INCLUDE_IOS
-	./report-status.sh "iOS" "$(OUTPUT_DIR)" html "ios-api-diff.html" "ios-api-diff.md" "$@"
+	$(Q) ./report-status.sh "iOS" "$(OUTPUT_DIR)" html "ios-api-diff.html" "ios-api-diff.md" "$@"
 endif
 ifdef INCLUDE_TVOS
-	./report-status.sh "tvOS" "$(OUTPUT_DIR)" html "tvos-api-diff.html" "tvos-api-diff.md" "$@"
+	$(Q) ./report-status.sh "tvOS" "$(OUTPUT_DIR)" html "tvos-api-diff.html" "tvos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_WATCH
-	./report-status.sh "watchOS" "$(OUTPUT_DIR)" html "watchos-api-diff.html" "watchos-api-diff.md" "$@"
+	$(Q) ./report-status.sh "watchOS" "$(OUTPUT_DIR)" html "watchos-api-diff.html" "watchos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_MAC
-	./report-status.sh "macOS" "$(OUTPUT_DIR)" html "mac-api-diff.html" "mac-api-diff.md" "$@"
+	$(Q) ./report-status.sh "macOS" "$(OUTPUT_DIR)" html "mac-api-diff.html" "mac-api-diff.md" "$@"
 endif
 	$(Q) echo "</ul>" >> $@
 endif # INCLUDE_XAMARIN_LEGACY
 
 ifdef ENABLE_DOTNET
-	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/diff/dotnet/Microsoft.*.Ref/ref/$(DOTNET_TFM)/Microsoft.*.html"; then \
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)"/diff/dotnet/Microsoft.*.Ref/ref/"$(DOTNET_TFM)"/Microsoft.*.html &> /dev/null; then \
 		echo "<h2>.NET ($(HTML_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
-	else; \
+	else \
 		echo "<h2>.NET ($(HTML_NO_BREAKING_CHANGES_MESSAGE))</h2>" >> "$@"; \
 	fi
 	$(Q) echo "<ul>" >> $@
@@ -293,29 +293,29 @@ endif # DOTNET
 #
 
 define ApiDiffReportMarkdown
-	./report-status.sh "$(1)" "$(OUTPUT_DIR)" markdown "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
+	$(Q) ./report-status.sh "$(1)" "$(OUTPUT_DIR)" markdown "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).html" "diff/dotnet/Microsoft.$(1).Ref/ref/$(DOTNET_TFM)/Microsoft.$(1).md" "$(2)"
 
 endef
 
 $(OUTPUT_DIR)/api-diff.md: $(API_DIFF_DEPENDENCIES)
 ifdef INCLUDE_XAMARIN_LEGACY
-	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/*-api-diff.html"; then \
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)"/*-api-diff.html &> /dev/null; then \
 		echo "<details><summary>Legacy Xamarin ($(MARKDOWN_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
-	else; \
+	else \
 		echo "<details><summary>Legacy Xamarin ($(MARKDOWN_NO_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
 	fi
 	$(Q) echo "" >> $@
 ifdef INCLUDE_IOS
-	./report-status.sh "iOS" "$(OUTPUT_DIR)" markdown "ios-api-diff.html" "ios-api-diff.md" "$@"
+	$(Q) ./report-status.sh "iOS" "$(OUTPUT_DIR)" markdown "ios-api-diff.html" "ios-api-diff.md" "$@"
 endif
 ifdef INCLUDE_TVOS
-	./report-status.sh "tvOS" "$(OUTPUT_DIR)" markdown "tvos-api-diff.html" "tvos-api-diff.md" "$@"
+	$(Q) ./report-status.sh "tvOS" "$(OUTPUT_DIR)" markdown "tvos-api-diff.html" "tvos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_WATCH
-	./report-status.sh "watchOS" "$(OUTPUT_DIR)" markdown "watchos-api-diff.html" "watchos-api-diff.md" "$@"
+	$(Q) ./report-status.sh "watchOS" "$(OUTPUT_DIR)" markdown "watchos-api-diff.html" "watchos-api-diff.md" "$@"
 endif
 ifdef INCLUDE_MAC
-	./report-status.sh "macOS" "$(OUTPUT_DIR)" markdown "mac-api-diff.html" "mac-api-diff.md" "$@"
+	$(Q) ./report-status.sh "macOS" "$(OUTPUT_DIR)" markdown "mac-api-diff.html" "mac-api-diff.md" "$@"
 endif
 	$(Q) echo "" >> $@
 	$(Q) echo "</details>" >> "$@"
@@ -323,9 +323,9 @@ endif
 endif # INCLUDE_XAMARIN_LEGACY
 
 ifdef ENABLE_DOTNET
-	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)/diff/dotnet/Microsoft.*.Ref/ref/$(DOTNET_TFM)/Microsoft.*.html"; then \
+	$(Q) if grep BreakingChangesDetected "$(OUTPUT_DIR)"/diff/dotnet/Microsoft.*.Ref/ref/"$(DOTNET_TFM)"/Microsoft.*.html &> /dev/null; then \
 		echo "<details><summary>.NET ($(HTML_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
-	else; \
+	else \
 		echo "<details><summary>.NET ($(HTML_NO_BREAKING_CHANGES_MESSAGE))</summary>" >> "$@"; \
 	fi
 	$(Q) echo "" >> $@

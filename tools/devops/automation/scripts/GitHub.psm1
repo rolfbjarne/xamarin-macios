@@ -249,8 +249,9 @@ class GitHubComments {
         [string] $commentEmoji
     ) {
         # Don't write a header if none was provided
-        if ($commentTitle.Length -eq 0)
+        if ($commentTitle.Length -eq 0) {
             return
+        }
 
         if ([string]::IsNullOrEmpty($Env:PR_ID)) {
             $prefix = "[CI Build]"

@@ -4,9 +4,15 @@
 		"@PLATFORM_LOWERCASE@": {
 			"description": ".NET SDK Workload for building @PLATFORM@ applications.",
 			"packs": [
-				"Microsoft.@PLATFORM@.Sdk",
+				"Microsoft.@PLATFORM@.Sdk.NET7",
+				"Microsoft.@PLATFORM@.Sdk.NET6",
 				"Microsoft.@PLATFORM@.Windows.Sdk.Aliased",
-				"Microsoft.@PLATFORM@.Ref",
+				"Microsoft.@PLATFORM@.Ref.NET7",
+				"Microsoft.@PLATFORM@.Runtime.ios-arm.NET7",
+				"Microsoft.@PLATFORM@.Runtime.ios-arm64.NET7",
+				"Microsoft.@PLATFORM@.Runtime.iossimulator-x86.NET7",
+				"Microsoft.@PLATFORM@.Runtime.iossimulator-x64.NET7",
+				"Microsoft.@PLATFORM@.Runtime.iossimulator-arm64.NET7",
 				"Microsoft.@PLATFORM@.Runtime.ios-arm",
 				"Microsoft.@PLATFORM@.Runtime.ios-arm64",
 				"Microsoft.@PLATFORM@.Runtime.iossimulator-x86",
@@ -20,9 +26,12 @@
 		}
 	},
 	"packs": {
-		"Microsoft.@PLATFORM@.Sdk": {
+		"Microsoft.@PLATFORM@.Sdk.NET7": {
 			"kind": "sdk",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Sdk",
+			}
 		},
 		"Microsoft.@PLATFORM@.Windows.Sdk.Aliased": {
 			"kind": "sdk",
@@ -33,33 +42,83 @@
 				"win-arm64": "Microsoft.@PLATFORM@.Windows.Sdk",
 			}
 		},
-		"Microsoft.@PLATFORM@.Ref": {
+		"Microsoft.@PLATFORM@.Ref.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Ref",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.ios-arm": {
+		"Microsoft.@PLATFORM@.Runtime.ios-arm.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.ios-arm",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.ios-arm64": {
+		"Microsoft.@PLATFORM@.Runtime.ios-arm64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.ios-arm64",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.iossimulator-x86": {
+		"Microsoft.@PLATFORM@.Runtime.iossimulator-x86.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.iossimulator-x86",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.iossimulator-x64": {
+		"Microsoft.@PLATFORM@.Runtime.iossimulator-x64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.iossimulator-x64",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.iossimulator-arm64": {
+		"Microsoft.@PLATFORM@.Runtime.iossimulator-arm64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.iossimulator-arm64",
+			}
 		},
 		"Microsoft.@PLATFORM@.Templates": {
 			"kind": "template",
 			"version": "@VERSION@"
-		}
+		},
+
+		"Microsoft.@PLATFORM@.Sdk.NET6": {
+			"kind": "sdk",
+			"version": "@NET6_VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Sdk"
+			}
+		},
+		"Microsoft.@PLATFORM@.Ref": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.ios-arm": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.ios-arm64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.iossimulator-x86": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.iossimulator-x64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.iossimulator-arm64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
 	}
 }

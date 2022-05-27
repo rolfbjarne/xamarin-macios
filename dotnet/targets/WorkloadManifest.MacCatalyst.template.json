@@ -4,7 +4,11 @@
 		"@PLATFORM_LOWERCASE@": {
 			"description": ".NET SDK Workload for building macOS applications with @PLATFORM@.",
 			"packs": [
-				"Microsoft.@PLATFORM@.Sdk",
+				"Microsoft.@PLATFORM@.Sdk.NET7",
+				"Microsoft.@PLATFORM@.Ref.NET7",
+				"Microsoft.@PLATFORM@.Runtime.maccatalyst-arm64.NET7",
+				"Microsoft.@PLATFORM@.Runtime.maccatalyst-x64.NET7",
+				"Microsoft.@PLATFORM@.Sdk.NET6",
 				"Microsoft.@PLATFORM@.Ref",
 				"Microsoft.@PLATFORM@.Runtime.maccatalyst-arm64",
 				"Microsoft.@PLATFORM@.Runtime.maccatalyst-x64",
@@ -16,25 +20,57 @@
 		}
 	},
 	"packs": {
-		"Microsoft.@PLATFORM@.Sdk": {
+		"Microsoft.@PLATFORM@.Sdk.NET7": {
 			"kind": "sdk",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Sdk",
+			}
 		},
-		"Microsoft.@PLATFORM@.Ref": {
+		"Microsoft.@PLATFORM@.Ref.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Ref",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.maccatalyst-arm64": {
+		"Microsoft.@PLATFORM@.Runtime.maccatalyst-arm64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.maccatalyst-arm64",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.maccatalyst-x64": {
+		"Microsoft.@PLATFORM@.Runtime.maccatalyst-x64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.maccatalyst-x64",
+			}
 		},
 		"Microsoft.@PLATFORM@.Templates": {
 			"kind": "template",
 			"version": "@VERSION@"
-		}
+		},
+
+		"Microsoft.@PLATFORM@.Sdk.NET6": {
+			"kind": "sdk",
+			"version": "@NET6_VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Sdk",
+			}
+		},
+		"Microsoft.@PLATFORM@.Ref": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@",
+		},
+		"Microsoft.@PLATFORM@.Runtime.maccatalyst-arm64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@",
+		},
+		"Microsoft.@PLATFORM@.Runtime.maccatalyst-x64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@",
+		},
 	}
 }

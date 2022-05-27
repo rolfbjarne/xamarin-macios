@@ -97,9 +97,9 @@
                             RuntimeFrameworkName="Microsoft.$(_PlatformName)"
                             DefaultRuntimeFrameworkVersion="**FromWorkload**"
                             LatestRuntimeFrameworkVersion="**FromWorkload**"
-                            TargetingPackName="Microsoft.$(_PlatformName).Ref"
+                            TargetingPackName="Microsoft.$(_PlatformName).Ref.NET7"
                             TargetingPackVersion="**FromWorkload**"
-                            RuntimePackNamePatterns="Microsoft.$(_PlatformName).Runtime.**RID**"
+                            RuntimePackNamePatterns="Microsoft.$(_PlatformName).Runtime.**RID**.NET7"
                             RuntimePackRuntimeIdentifiers="$(_RuntimePackRuntimeIdentifiers)"
                             Profile="$(_PlatformName)"
                             />

@@ -4,7 +4,12 @@
 		"@PLATFORM_LOWERCASE@": {
 			"description": ".NET SDK Workload for building @PLATFORM@ applications.",
 			"packs": [
-				"Microsoft.@PLATFORM@.Sdk",
+				"Microsoft.@PLATFORM@.Sdk.NET7",
+				"Microsoft.@PLATFORM@.Ref.NET7",
+				"Microsoft.@PLATFORM@.Runtime.tvos-arm64.NET7",
+				"Microsoft.@PLATFORM@.Runtime.tvossimulator-x64.NET7",
+				"Microsoft.@PLATFORM@.Runtime.tvossimulator-arm64.NET7",
+				"Microsoft.@PLATFORM@.Sdk.NET6",
 				"Microsoft.@PLATFORM@.Ref",
 				"Microsoft.@PLATFORM@.Runtime.tvos-arm64",
 				"Microsoft.@PLATFORM@.Runtime.tvossimulator-x64",
@@ -17,29 +22,68 @@
 		}
 	},
 	"packs": {
-		"Microsoft.@PLATFORM@.Sdk": {
+		"Microsoft.@PLATFORM@.Sdk.NET7": {
 			"kind": "sdk",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Sdk",
+			}
 		},
-		"Microsoft.@PLATFORM@.Ref": {
+		"Microsoft.@PLATFORM@.Ref.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Ref",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.tvos-arm64": {
+		"Microsoft.@PLATFORM@.Runtime.tvos-arm64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.tvos-arm64",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.tvossimulator-x64": {
+		"Microsoft.@PLATFORM@.Runtime.tvossimulator-x64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.tvossimulator-x64",
+			}
 		},
-		"Microsoft.@PLATFORM@.Runtime.tvossimulator-arm64": {
+		"Microsoft.@PLATFORM@.Runtime.tvossimulator-arm64.NET7": {
 			"kind": "framework",
-			"version": "@VERSION@"
+			"version": "@VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Runtime.tvossimulator-arm64",
+			}
 		},
 		"Microsoft.@PLATFORM@.Templates": {
 			"kind": "template",
 			"version": "@VERSION@"
-		}
+		},
+
+		"Microsoft.@PLATFORM@.Sdk.NET6": {
+			"kind": "sdk",
+			"version": "@NET6_VERSION@",
+			"alias-to": {
+				"any": "Microsoft.@PLATFORM@.Sdk",
+			}
+		},
+		"Microsoft.@PLATFORM@.Ref": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.tvos-arm64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.tvossimulator-x64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
+		"Microsoft.@PLATFORM@.Runtime.tvossimulator-arm64": {
+			"kind": "framework",
+			"version": "@NET6_VERSION@"
+		},
 	}
 }

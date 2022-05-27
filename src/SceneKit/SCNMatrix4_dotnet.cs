@@ -1,7 +1,4 @@
 /*
- * This keeps the code of OpenTK's Matrix4 almost intact, except we replace the
- * Vector4 with a SCNVector4
- 
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 Copyright (c) 2014 Xamarin Inc.  All rights reserved
 
@@ -59,139 +56,45 @@ namespace SceneKit {
 	public struct SCNMatrix4 : IEquatable<SCNMatrix4> {
 		#region Fields
 
-#if XAMCORE_5_0
-		pfloat m11, m12, m13, m14;
-		pfloat m21, m22, m23, m24;
-		pfloat m31, m32, m33, m34;
-		pfloat m41, m42, m43, m44;
+		/*
+		 * SCNMatrix4 is defined like this for iOS, tvOS and watchOS:
+		 *
+		 * 	typedef struct SCNMatrix4 {
+		 * 	    float m11, m12, m13, m14;
+		 * 	    float m21, m22, m23, m24;
+		 * 	    float m31, m32, m33, m34;
+		 * 	    float m41, m42, m43, m44;
+		 * 	} SCNMatrix4;
+		 *
+		 * and like this for macOS:
+		 *
+		 * 	struct CATransform3D
+		 * 	{
+		 * 	  CGFloat m11, m12, m13, m14;
+		 * 	  CGFloat m21, m22, m23, m24;
+		 * 	  CGFloat m31, m32, m33, m34;
+		 * 	  CGFloat m41, m42, m43, m44;
+		 * 	};
+		 * 	typedef CATransform3D SCNMatrix4;
+		 *
+		 **/
 
-		public SCNVector4 Column0 {
-			get { return new SCNVector4 (m11, m21, m31, m41); }
-			set {
-				m11 = value.X;
-				m21 = value.Y;
-				m31 = value.Z;
-				m41 = value.W;
-			}
-		}
-
-		public SCNVector4 Column1 {
-			get { return new SCNVector4 (m12, m22, m32, m42); }
-			set {
-				m12 = value.X;
-				m22 = value.Y;
-				m32 = value.Z;
-				m42 = value.W;
-			}
-		}
-
-		public SCNVector4 Column2 {
-			get { return new SCNVector4 (m13, m23, m33, m43); }
-			set {
-				m13 = value.X;
-				m23 = value.Y;
-				m33 = value.Z;
-				m43 = value.W;
-			}
-		}
-
-		public SCNVector4 Column3 {
-			get { return new SCNVector4 (m14, m24, m34, m44); }
-			set {
-				m14 = value.X;
-				m24 = value.Y;
-				m34 = value.Z;
-				m44 = value.W;
-			}
-		}
-
-#if !XAMCORE_6_0
-		[Obsolete ("Use 'Column0' instead.")]
-		public SCNVector ColumnA { get => Column0; set => Column0 = value; }
-
-		[Obsolete ("Use 'Column1' instead.")]
-		public SCNVector ColumnB { get => Column1; set => Column1 = value; }
-
-		[Obsolete ("Use 'Column2' instead.")]
-		public SCNVector ColumnC { get => Column2; set => Column2 = value; }
-
-		[Obsolete ("Use 'Column3' instead.")]
-		public SCNVector ColumnD { get => Column3; set => Column3 = value; }
-#endif
-#else
-		[Obsolete ("Use 'ColumnA' instead, this field is named incorrectly (it's the first row).")]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public SCNVector4 Column0;
-
-		[Obsolete ("Use 'ColumnB' instead, this field is named incorrectly (it's the second row).")]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public SCNVector4 Column1;
-
-		[Obsolete ("Use 'ColumnC' instead, this field is named incorrectly (it's the third row).")]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public SCNVector4 Column2;
-
-		[Obsolete ("Use 'ColumnD' instead, this field is named incorrectly (it's the fourth row).")]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public SCNVector4 Column3;
-
-		public SCNVector4 ColumnA {
-			get { return new SCNVector4 (Column0.X, Column1.X, Column2.X, Column3.X); }
-			set {
-				Column0.X = value.X;
-				Column1.X = value.Y;
-				Column2.X = value.Z;
-				Column3.X = value.W;
-			}
-		}
-
-		public SCNVector4 ColumnB {
-			get { return new SCNVector4 (Column0.Y, Column1.Y, Column2.Y, Column3.Y); }
-			set {
-				Column0.Y = value.X;
-				Column1.Y = value.Y;
-				Column2.Y = value.Z;
-				Column3.Y = value.W;
-			}
-		}
-
-		public SCNVector4 ColumnC {
-			get { return new SCNVector4 (Column0.Z, Column1.Z, Column2.Z, Column3.Z); }
-			set {
-				Column0.Z = value.X;
-				Column1.Z = value.Y;
-				Column2.Z = value.Z;
-				Column3.Z = value.W;
-			}
-		}
-
-		public SCNVector4 ColumnD {
-			get { return new SCNVector4 (Column0.W, Column1.W, Column2.W, Column3.W); }
-			set {
-				Column0.W = value.X;
-				Column1.W = value.Y;
-				Column2.W = value.Z;
-				Column3.W = value.W;
-			}
-		}
-
-		pfloat m11 { get { return Column0.X; } set { Column0.X = value; } }
-		pfloat m12 { get { return Column0.Y; } set { Column0.Y = value; } }
-		pfloat m13 { get { return Column0.Z; } set { Column0.Z = value; } }
-		pfloat m14 { get { return Column0.W; } set { Column0.W = value; } }
-		pfloat m21 { get { return Column1.X; } set { Column1.X = value; } }
-		pfloat m22 { get { return Column1.Y; } set { Column1.Y = value; } }
-		pfloat m23 { get { return Column1.Z; } set { Column1.Z = value; } }
-		pfloat m24 { get { return Column1.W; } set { Column1.W = value; } }
-		pfloat m31 { get { return Column2.X; } set { Column2.X = value; } }
-		pfloat m32 { get { return Column2.Y; } set { Column2.Y = value; } }
-		pfloat m33 { get { return Column2.Z; } set { Column2.Z = value; } }
-		pfloat m34 { get { return Column2.W; } set { Column2.W = value; } }
-		pfloat m41 { get { return Column3.X; } set { Column3.X = value; } }
-		pfloat m42 { get { return Column3.Y; } set { Column3.Y = value; } }
-		pfloat m43 { get { return Column3.Z; } set { Column3.Z = value; } }
-		pfloat m44 { get { return Column3.W; } set { Column3.W = value; } }
-#endif
+		/// <summary>
+		/// Left-most column of the matrix
+		/// </summary>
+		public SCNVector4 Column0; // m11, m12, m13, m14
+		/// <summary>
+		/// 2nd column of the matrix
+		/// </summary>
+		public SCNVector4 Column1; // m21, m22, m23, m24
+		/// <summary>
+		/// 3rd column of the matrix
+		/// </summary>
+		public SCNVector4 Column2; // m31, m32, m33, m34
+		/// <summary>
+		/// Right-most column of the matrix
+		/// </summary>
+		public SCNVector4 Column3; // m41, m42, m43, m44
 
 		/// <summary>
 		/// The identity matrix
@@ -211,74 +114,15 @@ namespace SceneKit {
 		/// <param name="row3">Bottom row of the matrix</param>
 		public SCNMatrix4 (SCNVector4 row0, SCNVector4 row1, SCNVector4 row2, SCNVector4 row3)
 		{
-#if XAMCORE_5_0
-			m11 = row0.X;
-			m12 = row0.Y;
-			m13 = row0.Z;
-			m14 = row0.W;
-			m21 = row1.X;
-			m22 = row1.Y;
-			m23 = row1.Z;
-			m24 = row1.W;
-			m31 = row2.X;
-			m32 = row2.Y;
-			m33 = row2.Z;
-			m34 = row2.W;
-			m41 = row3.X;
-			m42 = row3.Y;
-			m43 = row3.Z;
-			m44 = row3.W;
-#else
-			Column0 = row0;
-			Column1 = row1;
-			Column2 = row2;
-			Column3 = row3;
-#endif
+			Column0 = new SCNVector4 (row0.X, row1.X, row2.X, row3.X);
+			Column1 = new SCNVector4 (row0.Y, row1.Y, row2.Y, row3.Y);
+			Column2 = new SCNVector4 (row0.Z, row1.Z, row2.Z, row3.Z);
+			Column3 = new SCNVector4 (row0.W, row1.W, row2.W, row3.W);
 		}
 
 		/// <summary>
 		/// Constructs a new instance.
 		/// </summary>
-#if XAMCORE_5_0
-		/// <param name="m11">First item of the first row of the matrix.</param>
-		/// <param name="m12">Second item of the first row of the matrix.</param>
-		/// <param name="m13">Third item of the first row of the matrix.</param>
-		/// <param name="m14">Fourth item of the first row of the matrix.</param>
-		/// <param name="m21">First item of the second row of the matrix.</param>
-		/// <param name="m22">Second item of the second row of the matrix.</param>
-		/// <param name="m23">Third item of the second row of the matrix.</param>
-		/// <param name="m24">Fourth item of the second row of the matrix.</param>
-		/// <param name="m31">First item of the third row of the matrix.</param>
-		/// <param name="m32">Second item of the third row of the matrix.</param>
-		/// <param name="m33">Third item of the third row of the matrix.</param>
-		/// <param name="m34">First item of the third row of the matrix.</param>
-		/// <param name="m41">Fourth item of the fourth row of the matrix.</param>
-		/// <param name="m42">Second item of the fourth row of the matrix.</param>
-		/// <param name="m43">Third item of the fourth row of the matrix.</param>
-		/// <param name="m44">Fourth item of the fourth row of the matrix.</param>
-		public SCNMatrix4 (
-			pfloat m11, pfloat m12, pfloat m13, pfloat m14,
-			pfloat m21, pfloat m22, pfloat m23, pfloat m24,
-			pfloat m31, pfloat m32, pfloat m33, pfloat m34,
-			pfloat m41, pfloat m42, pfloat m43, pfloat m44)
-		{
-			this.m11 = m11;
-			this.m12 = m12;
-			this.m13 = m13;
-			this.m14 = m14;
-			this.m21 = m21;
-			this.m22 = m22;
-			this.m23 = m23;
-			this.m24 = m24;
-			this.m31 = m31;
-			this.m32 = m32;
-			this.m33 = m33;
-			this.m34 = m34;
-			this.m41 = m41;
-			this.m42 = m42;
-			this.m43 = m43;
-			this.m44 = m44;
-#else
 		/// <param name="m00">First item of the first row of the matrix.</param>
 		/// <param name="m01">Second item of the first row of the matrix.</param>
 		/// <param name="m02">Third item of the first row of the matrix.</param>
@@ -301,39 +145,19 @@ namespace SceneKit {
 			pfloat m20, pfloat m21, pfloat m22, pfloat m23,
 			pfloat m30, pfloat m31, pfloat m32, pfloat m33)
 		{
-			Column0 = new SCNVector4 (m00, m01, m02, m03);
-			Column1 = new SCNVector4 (m10, m11, m12, m13);
-			Column2 = new SCNVector4 (m20, m21, m22, m23);
-			Column3 = new SCNVector4 (m30, m31, m32, m33);
-#endif
+			Column0 = new SCNVector4 (m00, m10, m20, m30);
+			Column1 = new SCNVector4 (m01, m11, m21, m31);
+			Column2 = new SCNVector4 (m02, m12, m22, m32);
+			Column3 = new SCNVector4 (m03, m13, m23, m33);
 		}
 
 #if !WATCH
 		public SCNMatrix4 (CoreAnimation.CATransform3D transform)
 		{
-#if XAMCORE_5_0
-			m11 = (pfloat) transform.M11;
-			m12 = (pfloat) transform.M12;
-			m13 = (pfloat) transform.M13;
-			m14 = (pfloat) transform.M14;
-			m21 = (pfloat) transform.M21;
-			m22 = (pfloat) transform.M22;
-			m23 = (pfloat) transform.M23;
-			m24 = (pfloat) transform.M24;
-			m31 = (pfloat) transform.M31;
-			m32 = (pfloat) transform.M32;
-			m33 = (pfloat) transform.M33;
-			m34 = (pfloat) transform.M34;
-			m41 = (pfloat) transform.M41;
-			m42 = (pfloat) transform.M42;
-			m43 = (pfloat) transform.M43;
-			m44 = (pfloat) transform.M44;
-#else
 			Column0 = new SCNVector4 ((pfloat) transform.M11, (pfloat) transform.M12, (pfloat) transform.M13, (pfloat) transform.M14);
 			Column1 = new SCNVector4 ((pfloat) transform.M21, (pfloat) transform.M22, (pfloat) transform.M23, (pfloat) transform.M24);
 			Column2 = new SCNVector4 ((pfloat) transform.M31, (pfloat) transform.M32, (pfloat) transform.M33, (pfloat) transform.M34);
 			Column3 = new SCNVector4 ((pfloat) transform.M41, (pfloat) transform.M42, (pfloat) transform.M43, (pfloat) transform.M44);
-#endif
 		}
 #endif
 
@@ -349,21 +173,12 @@ namespace SceneKit {
 		public pfloat Determinant {
 			get {
 				return
-#if XAMCORE_5_0
 					Column0.X * Column1.Y * Column2.Z * Column3.W - Column0.X * Column1.Y * Column2.W * Column3.Z + Column0.X * Column1.Z * Column2.W * Column3.Y - Column0.X * Column1.Z * Column2.Y * Column3.W
 				  + Column0.X * Column1.W * Column2.Y * Column3.Z - Column0.X * Column1.W * Column2.Z * Column3.Y - Column0.Y * Column1.Z * Column2.W * Column3.X + Column0.Y * Column1.Z * Column2.X * Column3.W
 				  - Column0.Y * Column1.W * Column2.X * Column3.Z + Column0.Y * Column1.W * Column2.Z * Column3.X - Column0.Y * Column1.X * Column2.Z * Column3.W + Column0.Y * Column1.X * Column2.W * Column3.Z
 				  + Column0.Z * Column1.W * Column2.X * Column3.Y - Column0.Z * Column1.W * Column2.Y * Column3.X + Column0.Z * Column1.X * Column2.Y * Column3.W - Column0.Z * Column1.X * Column2.W * Column3.Y
 				  + Column0.Z * Column1.Y * Column2.W * Column3.X - Column0.Z * Column1.Y * Column2.X * Column3.W - Column0.W * Column1.X * Column2.Y * Column3.Z + Column0.W * Column1.X * Column2.Z * Column3.Y
 				  - Column0.W * Column1.Y * Column2.Z * Column3.X + Column0.W * Column1.Y * Column2.X * Column3.Z - Column0.W * Column1.Z * Column2.X * Column3.Y + Column0.W * Column1.Z * Column2.Y * Column3.X;
-#else
-					ColumnA.X * ColumnB.Y * ColumnC.Z * ColumnD.W - ColumnA.X * ColumnB.Y * ColumnC.W * ColumnD.Z + ColumnA.X * ColumnB.Z * ColumnC.W * ColumnD.Y - ColumnA.X * ColumnB.Z * ColumnC.Y * ColumnD.W
-				  + ColumnA.X * ColumnB.W * ColumnC.Y * ColumnD.Z - ColumnA.X * ColumnB.W * ColumnC.Z * ColumnD.Y - ColumnA.Y * ColumnB.Z * ColumnC.W * ColumnD.X + ColumnA.Y * ColumnB.Z * ColumnC.X * ColumnD.W
-				  - ColumnA.Y * ColumnB.W * ColumnC.X * ColumnD.Z + ColumnA.Y * ColumnB.W * ColumnC.Z * ColumnD.X - ColumnA.Y * ColumnB.X * ColumnC.Z * ColumnD.W + ColumnA.Y * ColumnB.X * ColumnC.W * ColumnD.Z
-				  + ColumnA.Z * ColumnB.W * ColumnC.X * ColumnD.Y - ColumnA.Z * ColumnB.W * ColumnC.Y * ColumnD.X + ColumnA.Z * ColumnB.X * ColumnC.Y * ColumnD.W - ColumnA.Z * ColumnB.X * ColumnC.W * ColumnD.Y
-				  + ColumnA.Z * ColumnB.Y * ColumnC.W * ColumnD.X - ColumnA.Z * ColumnB.Y * ColumnC.X * ColumnD.W - ColumnA.W * ColumnB.X * ColumnC.Y * ColumnD.Z + ColumnA.W * ColumnB.X * ColumnC.Z * ColumnD.Y
-				  - ColumnA.W * ColumnB.Y * ColumnC.Z * ColumnD.X + ColumnA.W * ColumnB.Y * ColumnC.X * ColumnD.Z - ColumnA.W * ColumnB.Z * ColumnC.X * ColumnD.Y + ColumnA.W * ColumnB.Z * ColumnC.Y * ColumnD.X;
-#endif
 			}
 		}
 
@@ -371,12 +186,12 @@ namespace SceneKit {
 		/// The top row of this matrix
 		/// </summary>
 		public SCNVector4 Row0 {
-			get { return new SCNVector4 (M11, M12, M13, M14); }
+			get { return new SCNVector4 (Column0.X, Column1.X, Column2.X, Column3.X); }
 			set {
-				M11 = value.X;
-				M12 = value.Y;
-				M13 = value.Z;
-				M14 = value.W;
+				Column0.X = value.X;
+				Column1.X = value.Y;
+				Column2.X = value.Z;
+				Column3.X = value.W;
 			}
 		}
 
@@ -384,12 +199,12 @@ namespace SceneKit {
 		/// The second row of this matrix
 		/// </summary>
 		public SCNVector4 Row1 {
-			get { return new SCNVector4 (M21, M22, M23, M24); }
+			get { return new SCNVector4 (Column0.Y, Column1.Y, Column2.Y, Column3.Y); }
 			set {
-				M21 = value.X;
-				M22 = value.Y;
-				M23 = value.Z;
-				M24 = value.W;
+				Column0.Y = value.X;
+				Column1.Y = value.Y;
+				Column2.Y = value.Z;
+				Column3.Y = value.W;
 			}
 		}
 
@@ -397,12 +212,12 @@ namespace SceneKit {
 		/// The third row of this matrix
 		/// </summary>
 		public SCNVector4 Row2 {
-			get { return new SCNVector4 (M31, M32, M33, M34); }
+			get { return new SCNVector4 (Column0.Z, Column1.Z, Column2.Z, Column3.Z); }
 			set {
-				M31 = value.X;
-				M32 = value.Y;
-				M33 = value.Z;
-				M34 = value.W;
+				Column0.Z = value.X;
+				Column1.Z = value.Y;
+				Column2.Z = value.Z;
+				Column3.Z = value.W;
 			}
 		}
 
@@ -410,94 +225,94 @@ namespace SceneKit {
 		/// The last row of this matrix
 		/// </summary>
 		public SCNVector4 Row3 {
-			get { return new SCNVector4 (M41, M42, M43, M44); }
+			get { return new SCNVector4 (Column0.W, Column1.W, Column2.W, Column3.W); }
 			set {
-				M41 = value.X;
-				M42 = value.Y;
-				M43 = value.Z;
-				M44 = value.W;
+				Column0.W = value.X;
+				Column1.W = value.Y;
+				Column2.W = value.Z;
+				Column3.W = value.W;
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets the value at row 1, column 1 of this instance.
+		/// Gets or sets the value at column 1, row 1 of this instance.
 		/// </summary>
-		public pfloat M11 { get { return m11; } set { m11 = value; } }
+		public pfloat M11 { get { return Column0.X; } set { Column0.X = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 1, column 2 of this instance.
+		/// Gets or sets the value at column 1, row 2 of this instance.
 		/// </summary>
-		public pfloat M12 { get { return m12; } set { m12 = value; } }
+		public pfloat M12 { get { return Column0.Y; } set { Column0.Y = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 1, column 3 of this instance.
+		/// Gets or sets the value at column 1, row 3 of this instance.
 		/// </summary>
-		public pfloat M13 { get { return m13; } set { m13 = value; } }
+		public pfloat M13 { get { return Column0.Z; } set { Column0.Z = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 1, column 4 of this instance.
+		/// Gets or sets the value at column 1, row 4 of this instance.
 		/// </summary>
-		public pfloat M14 { get { return m14; } set { m14 = value; } }
+		public pfloat M14 { get { return Column0.W; } set { Column0.W = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 2, column 1 of this instance.
+		/// Gets or sets the value at column 2, row 1 of this instance.
 		/// </summary>
-		public pfloat M21 { get { return m21; } set { m21 = value; } }
+		public pfloat M21 { get { return Column1.X; } set { Column1.X = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 2, column 2 of this instance.
+		/// Gets or sets the value at column 2, row 2 of this instance.
 		/// </summary>
-		public pfloat M22 { get { return m22; } set { m22 = value; } }
+		public pfloat M22 { get { return Column1.Y; } set { Column1.Y = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 2, column 3 of this instance.
+		/// Gets or sets the value at column 2, row 3 of this instance.
 		/// </summary>
-		public pfloat M23 { get { return m23; } set { m23 = value; } }
+		public pfloat M23 { get { return Column1.Z; } set { Column1.Z = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 2, column 4 of this instance.
+		/// Gets or sets the value at column 2, row 4 of this instance.
 		/// </summary>
-		public pfloat M24 { get { return m24; } set { m24 = value; } }
+		public pfloat M24 { get { return Column1.W; } set { Column1.W = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 3, column 1 of this instance.
+		/// Gets or sets the value at column 3, row 1 of this instance.
 		/// </summary>
-		public pfloat M31 { get { return m31; } set { m31 = value; } }
+		public pfloat M31 { get { return Column2.X; } set { Column2.X = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 3, column 2 of this instance.
+		/// Gets or sets the value at column 3, row 2 of this instance.
 		/// </summary>
-		public pfloat M32 { get { return m32; } set { m32 = value; } }
+		public pfloat M32 { get { return Column2.Y; } set { Column2.Y = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 3, column 3 of this instance.
+		/// Gets or sets the value at column 3, row 3 of this instance.
 		/// </summary>
-		public pfloat M33 { get { return m33; } set { m33 = value; } }
+		public pfloat M33 { get { return Column2.Z; } set { Column2.Z = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 3, column 4 of this instance.
+		/// Gets or sets the value at column 3, row 4 of this instance.
 		/// </summary>
-		public pfloat M34 { get { return m34; } set { m34 = value; } }
+		public pfloat M34 { get { return Column2.W; } set { Column2.W = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 4, column 1 of this instance.
+		/// Gets or sets the value at column 4, row 1 of this instance.
 		/// </summary>
-		public pfloat M41 { get { return m41; } set { m41 = value; } }
+		public pfloat M41 { get { return Column3.X; } set { Column3.X = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 4, column 2 of this instance.
+		/// Gets or sets the value at column 4, row 2 of this instance.
 		/// </summary>
-		public pfloat M42 { get { return m42; } set { m42 = value; } }
+		public pfloat M42 { get { return Column3.Y; } set { Column3.Y = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 4, column 3 of this instance.
+		/// Gets or sets the value at column 4, row 3 of this instance.
 		/// </summary>
-		public pfloat M43 { get { return m43; } set { m43 = value; } }
+		public pfloat M43 { get { return Column3.Z; } set { Column3.Z = value; } }
 
 		/// <summary>
-		/// Gets or sets the value at row 4, column 4 of this instance.
+		/// Gets or sets the value at column 4, row 4 of this instance.
 		/// </summary>
-		public pfloat M44 { get { return m44; } set { m44 = value; } }
+		public pfloat M44 { get { return Column3.W; } set { Column3.W = value; } }
 
 		#endregion
 
@@ -536,34 +351,20 @@ namespace SceneKit {
 		public static SCNMatrix4 CreateFromColumns (SCNVector4 column0, SCNVector4 column1, SCNVector4 column2, SCNVector4 column3)
 		{
 			var result = new SCNMatrix4 ();
-#if XAMCORE_5_0
 			result.Column0 = column0;
 			result.Column1 = column1;
 			result.Column2 = column2;
 			result.Column3 = column3;
-#else
-			result.ColumnA = column0;
-			result.ColumnB = column1;
-			result.ColumnC = column2;
-			result.ColumnD = column3;
-#endif
 			return result;
 		}
 
 		public static void CreateFromColumns (SCNVector4 column0, SCNVector4 column1, SCNVector4 column2, SCNVector4 column3, out SCNMatrix4 result)
 		{
 			result = new SCNMatrix4 ();
-#if XAMCORE_5_0
 			result.Column0 = column0;
 			result.Column1 = column1;
 			result.Column2 = column2;
 			result.Column3 = column3;
-#else
-			result.ColumnA = column0;
-			result.ColumnB = column1;
-			result.ColumnC = column2;
-			result.ColumnD = column3;
-#endif
 		}
 
 		#endregion
@@ -645,11 +446,11 @@ namespace SceneKit {
 			pfloat cos = (pfloat) System.Math.Cos (angle);
 			pfloat sin = (pfloat) System.Math.Sin (angle);
 
-			result = new SCNMatrix4 ();
-			result.Row0 = SCNVector4.UnitX;
-			result.Row1 = new SCNVector4 (0.0f, cos, sin, 0.0f);
-			result.Row2 = new SCNVector4 (0.0f, -sin, cos, 0.0f);
-			result.Row3 = SCNVector4.UnitW;
+			result = new SCNMatrix4 (
+				1,    0,    0,    0,
+				0,  cos, -sin,    0,
+				0,  sin,  cos,    0,
+				0,    0,    0,    1);
 		}
 
 		/// <summary>
@@ -674,11 +475,11 @@ namespace SceneKit {
 			pfloat cos = (pfloat) System.Math.Cos (angle);
 			pfloat sin = (pfloat) System.Math.Sin (angle);
 
-			result = new SCNMatrix4 ();
-			result.Row0 = new SCNVector4 (cos, 0.0f, -sin, 0.0f);
-			result.Row1 = SCNVector4.UnitY;
-			result.Row2 = new SCNVector4 (sin, 0.0f, cos, 0.0f);
-			result.Row3 = SCNVector4.UnitW;
+			result = new SCNMatrix4 (
+				 cos,    0,  sin,    0,
+				   0,    1,    0,    0,
+				-sin,    0,  cos,    0,
+				   0,    0,    0,    1);
 		}
 
 		/// <summary>
@@ -703,11 +504,11 @@ namespace SceneKit {
 			pfloat cos = (pfloat) System.Math.Cos (angle);
 			pfloat sin = (pfloat) System.Math.Sin (angle);
 
-			result = new SCNMatrix4 ();
-			result.Row0 = new SCNVector4 (cos, sin, 0.0f, 0.0f);
-			result.Row1 = new SCNVector4 (-sin, cos, 0.0f, 0.0f);
-			result.Row2 = SCNVector4.UnitZ;
-			result.Row3 = SCNVector4.UnitW;
+			result = new SCNMatrix4 (
+				 cos, -sin,    0,    0,
+				 sin,  cos,    0,    0,
+				   0,    0,    1,    0,
+				   0,    0,    0,    1);
 		}
 
 		/// <summary>
@@ -735,8 +536,11 @@ namespace SceneKit {
 		/// <param name="result">The resulting SCNMatrix4 instance.</param>
 		public static void CreateTranslation (pfloat x, pfloat y, pfloat z, out SCNMatrix4 result)
 		{
-			result = Identity;
-			result.Row3 = new SCNVector4 (x, y, z, 1);
+			result = new SCNMatrix4 (
+				1, 0, 0, x,
+				0, 1, 0, y,
+				0, 0, 1, z,
+				0, 0, 0, 1);
 		}
 
 		/// <summary>
@@ -746,8 +550,7 @@ namespace SceneKit {
 		/// <param name="result">The resulting SCNMatrix4 instance.</param>
 		public static void CreateTranslation (ref SCNVector3 vector, out SCNMatrix4 result)
 		{
-			result = Identity;
-			result.Row3 = new SCNVector4 (vector.X, vector.Y, vector.Z, 1);
+			CreateTranslation (vector.X, vector.Y, vector.Z, out result);
 		}
 
 		/// <summary>
@@ -1027,12 +830,11 @@ namespace SceneKit {
 		/// <returns>A scaling matrix</returns>
 		public static SCNMatrix4 Scale (pfloat x, pfloat y, pfloat z)
 		{
-			var result = new SCNMatrix4 ();
-			result.Row0 = SCNVector4.UnitX * x;
-			result.Row1 = SCNVector4.UnitY * y;
-			result.Row2 = SCNVector4.UnitZ * z;
-			result.Row3 = SCNVector4.UnitW;
-			return result;
+			return new SCNMatrix4 (
+				x, 0, 0, 0,
+				0, y, 0, 0,
+				0, 0, z, 0,
+				0, 0, 0, 1);
 		}
 
 		#endregion
@@ -1263,11 +1065,7 @@ namespace SceneKit {
 		/// <returns>The transpose of the given matrix</returns>
 		public static SCNMatrix4 Transpose (SCNMatrix4 mat)
 		{
-#if XAMCORE_5_0
 			return new SCNMatrix4 (mat.Column0, mat.Column1, mat.Column2, mat.Column3);
-#else
-			return new SCNMatrix4 (mat.ColumnA, mat.ColumnB, mat.ColumnC, mat.ColumnD);
-#endif
 		}
 
 
@@ -1278,11 +1076,7 @@ namespace SceneKit {
 		/// <param name="result">The result of the calculation</param>
 		public static void Transpose (ref SCNMatrix4 mat, out SCNMatrix4 result)
 		{
-#if XAMCORE_5_0
 			result = new SCNMatrix4 (mat.Column0, mat.Column1, mat.Column2, mat.Column3);
-#else
-			result = new SCNMatrix4 (mat.ColumnA, mat.ColumnB, mat.ColumnC, mat.ColumnD);
-#endif
 		}
 
 		#endregion
@@ -1349,11 +1143,7 @@ namespace SceneKit {
 		/// <returns>A System.Int32 containing the unique hashcode for this instance.</returns>
 		public override int GetHashCode ()
 		{
-#if XAMCORE_5_0
 			return Column0.GetHashCode () ^ Column1.GetHashCode () ^ Column2.GetHashCode () ^ Column3.GetHashCode ();
-#else
-			return ColumnA.GetHashCode () ^ ColumnB.GetHashCode () ^ ColumnC.GetHashCode () ^ ColumnD.GetHashCode ();
-#endif
 		}
 
 		#endregion
@@ -1387,29 +1177,10 @@ namespace SceneKit {
 		public bool Equals (SCNMatrix4 other)
 		{
 			return
-#if XAMCORE_5_0
-				m11 == other.m11 &&
-				m12 == other.m12 &&
-				m13 == other.m13 &&
-				m14 == other.m14 &&
-				m21 == other.m21 &&
-				m22 == other.m22 &&
-				m23 == other.m23 &&
-				m24 == other.m24 &&
-				m31 == other.m31 &&
-				m32 == other.m32 &&
-				m33 == other.m33 &&
-				m34 == other.m34 &&
-				m41 == other.m41 &&
-				m42 == other.m42 &&
-				m43 == other.m43 &&
-				m44 == other.m44;
-#else
-				ColumnA == other.ColumnA &&
-				ColumnB == other.ColumnB &&
-				ColumnC == other.ColumnC &&
-				ColumnD == other.ColumnD;
-#endif
+				Column0 == other.Column0 &&
+				Column1 == other.Column1 &&
+				Column2 == other.Column2 &&
+				Column3 == other.Column3;
 		}
 
 		#endregion

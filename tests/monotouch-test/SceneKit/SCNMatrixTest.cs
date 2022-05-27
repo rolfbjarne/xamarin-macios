@@ -59,10 +59,21 @@ namespace MonoTouchFixtures.SceneKit {
 		static pfloat OhPointFive = (pfloat) 0.5;
 
 		void AssertEqual (SCNMatrix4 matrix, string message,
+			// First four arguments are the first row, and so on
+			// The naming is inverted with regards to the M## fields in SCNMatrix4 in .NET,
+			// where it's M[Column][Row], which is why the argument order
+			// is different
+#if NET
+			pfloat m11, pfloat m21, pfloat m31, pfloat m41,
+			pfloat m12, pfloat m22, pfloat m32, pfloat m42,
+			pfloat m13, pfloat m23, pfloat m33, pfloat m43,
+			pfloat m14, pfloat m24, pfloat m34, pfloat m44
+#else
 			pfloat m11, pfloat m12, pfloat m13, pfloat m14,
 			pfloat m21, pfloat m22, pfloat m23, pfloat m24,
 			pfloat m31, pfloat m32, pfloat m33, pfloat m34,
 			pfloat m41, pfloat m42, pfloat m43, pfloat m44
+#endif
 		)
 		{
 			Asserts.AreEqual (matrix, message,
@@ -118,6 +129,7 @@ namespace MonoTouchFixtures.SceneKit {
 				21, 22, 23, 24,
 				31, 32, 33, 34,
 				41, 42, 43, 44);
+			Console.WriteLine ($"M:\n{matrix}");
 			AssertEqual (matrix, "Constructor",
 				11, 12, 13, 14,
 				21, 22, 23, 24,
@@ -130,33 +142,28 @@ namespace MonoTouchFixtures.SceneKit {
 		public void Constructor_CATransform3d ()
 		{
 			var transform = new CATransform3D () {
-				M11 = 11,
-				M12 = 12,
-				M13 = 13,
-				M14 = 14,
-				M21 = 21,
-				M22 = 22,
-				M23 = 23,
-				M24 = 24,
-				M31 = 31,
-				M32 = 32,
-				M33 = 33,
-				M34 = 34,
-				M41 = 41,
-				M42 = 42,
-				M43 = 43,
-				M44 = 44,
+				M11 = 11, M12 = 12, M13 = 13, M14 = 14,
+				M21 = 21, M22 = 22, M23 = 23, M24 = 24,
+				M31 = 31, M32 = 32, M33 = 33, M34 = 34,
+				M41 = 41, M42 = 42, M43 = 43, M44 = 44,
 			};
 			var matrix = new SCNMatrix4 (transform);
 			AssertEqual (matrix, "Constructor",
+#if NET
+				11, 21, 31, 41,
+				12, 22, 32, 42,
+				13, 23, 33, 43,
+				14, 24, 34, 44);
+#else
 				11, 12, 13, 14,
 				21, 22, 23, 24,
 				31, 32, 33, 34,
 				41, 42, 43, 44);
+#endif
 		}
 #endif
 
-		[Test]
+				[Test]
 		public void Determinant ()
 		{
 			var matrix = new SCNMatrix4 (
@@ -333,8 +340,8 @@ namespace MonoTouchFixtures.SceneKit {
 			SCNMatrix4.CreateRotationX (angle, out var matrix);
 			AssertEqual (matrix, "CreateRotationX",
 				1, 0, 0, 0,
-				0, OhPointFive, SqrtThreeHalved, 0,
-				0, -SqrtThreeHalved, OhPointFive, 0,
+				0, OhPointFive, -SqrtThreeHalved, 0,
+				0, SqrtThreeHalved, OhPointFive, 0,
 				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 1, 0, 0), matrix, 0.00001f, "Native");
@@ -347,8 +354,8 @@ namespace MonoTouchFixtures.SceneKit {
 			var matrix = SCNMatrix4.CreateRotationX (angle);
 			AssertEqual (matrix, "CreateRotationX",
 				1, 0, 0, 0,
-				0, OhPointFive, SqrtThreeHalved, 0,
-				0, -SqrtThreeHalved, OhPointFive, 0,
+				0, OhPointFive, -SqrtThreeHalved, 0,
+				0, SqrtThreeHalved, OhPointFive, 0,
 				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 1, 0, 0), matrix, 0.00001f, "Native");
@@ -360,9 +367,9 @@ namespace MonoTouchFixtures.SceneKit {
 			var angle = (pfloat) (Math.PI / 3);
 			SCNMatrix4.CreateRotationY ((pfloat) (Math.PI / 3), out var matrix);
 			AssertEqual (matrix, "CreateRotationY",
-				OhPointFive, 0, -SqrtThreeHalved, 0,
+				OhPointFive, 0, SqrtThreeHalved, 0,
 				0, 1, 0, 0,
-				SqrtThreeHalved, 0, OhPointFive, 0,
+				-SqrtThreeHalved, 0, OhPointFive, 0,
 				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 0, 1, 0), matrix, 0.00001f, "Native");
@@ -374,9 +381,9 @@ namespace MonoTouchFixtures.SceneKit {
 			var angle = (pfloat) (Math.PI / 3);
 			var matrix = SCNMatrix4.CreateRotationY (angle);
 			AssertEqual (matrix, "CreateRotationY",
-				OhPointFive, 0, -SqrtThreeHalved, 0,
+				OhPointFive, 0, SqrtThreeHalved, 0,
 				0, 1, 0, 0,
-				SqrtThreeHalved, 0, OhPointFive, 0,
+				-SqrtThreeHalved, 0, OhPointFive, 0,
 				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeRotation (angle, 0, 1, 0), matrix, 0.00001f, "Native");
@@ -388,8 +395,8 @@ namespace MonoTouchFixtures.SceneKit {
 			var angle = (pfloat) (Math.PI / 3);
 			SCNMatrix4.CreateRotationZ (angle, out var matrix);
 			AssertEqual (matrix, "CreateRotationZ",
-				OhPointFive, SqrtThreeHalved, 0, 0,
-				-SqrtThreeHalved, OhPointFive, 0, 0,
+				OhPointFive, -SqrtThreeHalved, 0, 0,
+				SqrtThreeHalved, OhPointFive, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1);
 
@@ -402,8 +409,8 @@ namespace MonoTouchFixtures.SceneKit {
 			var angle = (pfloat) (Math.PI / 3);
 			var matrix = SCNMatrix4.CreateRotationZ (angle);
 			AssertEqual (matrix, "CreateRotationZ",
-				OhPointFive, SqrtThreeHalved, 0, 0,
-				-SqrtThreeHalved, OhPointFive, 0, 0,
+				OhPointFive, -SqrtThreeHalved, 0, 0,
+				SqrtThreeHalved, OhPointFive, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1);
 
@@ -415,10 +422,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			SCNMatrix4.CreateTranslation (1, 2, 3, out var matrix);
 			AssertEqual (matrix, "CreateTranslation",
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				1, 2, 3, 1);
+				1, 0, 0, 1,
+				0, 1, 0, 2,
+				0, 0, 1, 3,
+				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeTranslation (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
@@ -429,10 +436,10 @@ namespace MonoTouchFixtures.SceneKit {
 			var translation = new SCNVector3 (1, 2, 3);
 			SCNMatrix4.CreateTranslation (ref translation, out var matrix);
 			AssertEqual (matrix, "CreateTranslation",
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				1, 2, 3, 1);
+				1, 0, 0, 1,
+				0, 1, 0, 2,
+				0, 0, 1, 3,
+				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeTranslation (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
@@ -442,10 +449,10 @@ namespace MonoTouchFixtures.SceneKit {
 		{
 			var matrix = SCNMatrix4.CreateTranslation (1, 2, 3);
 			AssertEqual (matrix, "CreateTranslation",
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				1, 2, 3, 1);
+				1, 0, 0, 1,
+				0, 1, 0, 2,
+				0, 0, 1, 3,
+				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeTranslation (new SCNVector3 (1, 2, 3)), matrix, "Native");
 		}
@@ -456,10 +463,10 @@ namespace MonoTouchFixtures.SceneKit {
 			var translation = new SCNVector3 (1, 2, 3);
 			var matrix = SCNMatrix4.CreateTranslation (translation);
 			AssertEqual (matrix, "CreateTranslation",
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				1, 2, 3, 1);
+				1, 0, 0, 1,
+				0, 1, 0, 2,
+				0, 0, 1, 3,
+				0, 0, 0, 1);
 
 			Asserts.AreEqual (SCNMatrix4MakeTranslation (translation), matrix, "Native");
 		}
@@ -656,6 +663,8 @@ namespace MonoTouchFixtures.SceneKit {
 				83390, 83480, 83570, 83660,
 				120430, 120560, 120690, 120820,
 				157470, 157640, 157810, 157980);
+
+			Asserts.AreEqual (SCNMatrix4Mult (a, b), matrix, "Native");
 		}
 
 		[Test]
@@ -677,6 +686,8 @@ namespace MonoTouchFixtures.SceneKit {
 				83390, 83480, 83570, 83660,
 				120430, 120560, 120690, 120820,
 				157470, 157640, 157810, 157980);
+
+			Asserts.AreEqual (SCNMatrix4Mult (a, b), matrix, "Native");
 		}
 
 #if NET // The legacy Invert implementation seems very wrong, so only verify .NET behavior
@@ -984,6 +995,9 @@ namespace MonoTouchFixtures.SceneKit {
 
 		[DllImport (global::ObjCRuntime.Constants.SceneKitLibrary)]
 		static extern SCNMatrix4 SCNMatrix4MakeRotation (pfloat angle, pfloat x, pfloat y, pfloat z);
+
+		[DllImport (global::ObjCRuntime.Constants.SceneKitLibrary)]
+		static extern SCNMatrix4 SCNMatrix4Mult (SCNMatrix4 a, SCNMatrix4 b);
 	}
 }
 #endif // !__WATCHOS__

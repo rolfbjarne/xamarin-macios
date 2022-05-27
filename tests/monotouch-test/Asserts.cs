@@ -913,6 +913,8 @@ public static class Asserts
 		Assert.Fail (message + "\n" + msg);
 	}
 
+	// The m## arguments correspond with the M## fields in SCNMatrix4
+	// For .NET this means the first four values are the first column (and the first row for legacy Xamarin).
 	public static void AreEqual (SCNMatrix4 actual, string message,
 		pfloat m11, pfloat m12, pfloat m13, pfloat m14,
 		pfloat m21, pfloat m22, pfloat m23, pfloat m24,
@@ -941,10 +943,17 @@ public static class Asserts
 
 		var actualString = actual.ToString ();
 
+#if NET
+		var row1 = $"({m11}, {m21}, {m31}, {m41})";
+		var row2 = $"({m12}, {m22}, {m32}, {m42})";
+		var row3 = $"({m13}, {m23}, {m33}, {m43})";
+		var row4 = $"({m14}, {m24}, {m34}, {m44})";
+#else
 		var row1 = $"({m11}, {m12}, {m13}, {m14})";
 		var row2 = $"({m21}, {m22}, {m23}, {m24})";
 		var row3 = $"({m31}, {m32}, {m33}, {m34})";
 		var row4 = $"({m41}, {m42}, {m43}, {m44})";
+#endif
 		var expectedString = $"{row1}\n{row2}\n{row3}\n{row4}";
 
 		var d11 = Is.EqualTo (m11).Within (delta).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
@@ -1003,4 +1012,4 @@ public static class Asserts
 		Assert.Fail ($"{message}\nExpected: {e_sb}\nActual:   {a_sb}\n          {d_sb}");
 	}
 #endif // HAS_SCENEKIT
-}
+	}

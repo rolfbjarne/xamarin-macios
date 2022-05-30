@@ -921,43 +921,92 @@ namespace SceneKit {
 		#region Multiply Functions
 
 		/// <summary>
-		/// Multiplies two instances.
+		/// Combines two transformation matrices.
 		/// </summary>
-		/// <param name="left">The left operand of the multiplication.</param>
-		/// <param name="right">The right operand of the multiplication.</param>
-		/// <returns>A new instance that is the result of the multiplication</returns>
-		public static SCNMatrix4 Mult (SCNMatrix4 left, SCNMatrix4 right)
+#if XAMCORE_5_0
+		/// <remarks>
+		/// Combining two transformation matrices means using matrix multiplication to multiply them in the reverse order (secondTransformation * firstTransformation).
+		/// </remarks>
+		/// <param name="firstTransformation">The first transformation of the combination.</param>
+		/// <param name="secondTransformation">The second transformation of the combination.</param>
+#else
+		/// <remarks>
+		/// Combining two transformation matrices means using matrix multiplication to multiply them in the reverse order (right * left).
+		/// </remarks>
+		/// <param name="left">The first transformation of the combination.</param>
+		/// <param name="right">The second transformation of the combination.</param>
+#endif
+		/// <returns>A new instance that is the result of the combination</returns>
+#if XAMCORE_5_0
+		public static SCNMatrix4 Mult (SCNMatrix4 firstTransformation, SCNMatrix4 secondTransformation)
+#else
+		public static SCNMatrix4 Mult(SCNMatrix4 left, SCNMatrix4 right)
+#endif
 		{
 			SCNMatrix4 result;
-			Mult (ref left, ref right, out result);
+			// the matrices are reversed: https://github.com/xamarin/xamarin-macios/issues/15094#issuecomment-1139699662
+#if XAMCORE_5_0
+			MatrixMultiply (ref secondTransformation, ref firstTransformation, out result);
+#else
+			MatrixMultiply (ref right, ref left, out result);
+#endif
 			return result;
 		}
 
 		/// <summary>
-		/// Multiplies two instances.
+		/// Combines two transformation matrices.
 		/// </summary>
-		/// <param name="left">The left operand of the multiplication.</param>
-		/// <param name="right">The right operand of the multiplication.</param>
-		/// <param name="result">A new instance that is the result of the multiplication</param>
-		public static void Mult (ref SCNMatrix4 left, ref SCNMatrix4 right, out SCNMatrix4 result)
+#if XAMCORE_5_0
+		/// <remarks>
+		/// Combining two transformation matrices means using matrix multiplication to multiply them in the reverse order (secondTransformation * firstTransformation).
+		/// </remarks>
+		/// <param name="firstTransformation">The first transformation of the combination.</param>
+		/// <param name="secondTransformation">The second transformation of the combination.</param>
+#else
+		/// <remarks>
+		/// Combining two transformation matrices means using matrix multiplication to multiply them in the reverse order (right * left).
+		/// </remarks>
+		/// <param name="left">The first transformation of the combination.</param>
+		/// <param name="right">The second transformation of the combination.</param>
+#endif
+		/// <param name="result">A new instance that is the result of the combination</param>
+#if XAMCORE_5_0
+		public static void Mult (ref SCNMatrix4 firstTransformation, ref SCNMatrix4 secondTransformation, out SCNMatrix4 result)
+#else
+		public static void Mult(ref SCNMatrix4 left, ref SCNMatrix4 right, out SCNMatrix4 result)
+#endif
 		{
-			result = new SCNMatrix4 (
-				left.M11 * right.M11 + left.M12 * right.M21 + left.M13 * right.M31 + left.M14 * right.M41,
-				left.M11 * right.M12 + left.M12 * right.M22 + left.M13 * right.M32 + left.M14 * right.M42,
-				left.M11 * right.M13 + left.M12 * right.M23 + left.M13 * right.M33 + left.M14 * right.M43,
-				left.M11 * right.M14 + left.M12 * right.M24 + left.M13 * right.M34 + left.M14 * right.M44,
-				left.M21 * right.M11 + left.M22 * right.M21 + left.M23 * right.M31 + left.M24 * right.M41,
-				left.M21 * right.M12 + left.M22 * right.M22 + left.M23 * right.M32 + left.M24 * right.M42,
-				left.M21 * right.M13 + left.M22 * right.M23 + left.M23 * right.M33 + left.M24 * right.M43,
-				left.M21 * right.M14 + left.M22 * right.M24 + left.M23 * right.M34 + left.M24 * right.M44,
-				left.M31 * right.M11 + left.M32 * right.M21 + left.M33 * right.M31 + left.M34 * right.M41,
-				left.M31 * right.M12 + left.M32 * right.M22 + left.M33 * right.M32 + left.M34 * right.M42,
-				left.M31 * right.M13 + left.M32 * right.M23 + left.M33 * right.M33 + left.M34 * right.M43,
-				left.M31 * right.M14 + left.M32 * right.M24 + left.M33 * right.M34 + left.M34 * right.M44,
-				left.M41 * right.M11 + left.M42 * right.M21 + left.M43 * right.M31 + left.M44 * right.M41,
-				left.M41 * right.M12 + left.M42 * right.M22 + left.M43 * right.M32 + left.M44 * right.M42,
-				left.M41 * right.M13 + left.M42 * right.M23 + left.M43 * right.M33 + left.M44 * right.M43,
-				left.M41 * right.M14 + left.M42 * right.M24 + left.M43 * right.M34 + left.M44 * right.M44);
+			// the matrices are reversed: https://github.com/xamarin/xamarin-macios/issues/15094#issuecomment-1139699662
+#if XAMCORE_5_0
+			MatrixMultiply (ref secondTransformation, ref firstTransformation, out result);
+#else
+			MatrixMultiply (ref right, ref left, out result);
+#endif
+		}
+
+		// Multiply two matrices in the order you'd expect (left * right).
+		static void MatrixMultiply (ref SCNMatrix4 left, ref SCNMatrix4 right, out SCNMatrix4 result)
+		{
+			result = new SCNMatrix4(
+				left.Column0.X * right.Column0.X + left.Column1.X * right.Column0.Y + left.Column2.X * right.Column0.Z + left.Column3.X * right.Column0.W,
+				left.Column0.X * right.Column1.X + left.Column1.X * right.Column1.Y + left.Column2.X * right.Column1.Z + left.Column3.X * right.Column1.W,
+				left.Column0.X * right.Column2.X + left.Column1.X * right.Column2.Y + left.Column2.X * right.Column2.Z + left.Column3.X * right.Column2.W,
+				left.Column0.X * right.Column3.X + left.Column1.X * right.Column3.Y + left.Column2.X * right.Column3.Z + left.Column3.X * right.Column3.W,
+
+				left.Column0.Y * right.Column0.X + left.Column1.Y * right.Column0.Y + left.Column2.Y * right.Column0.Z + left.Column3.Y * right.Column0.W,
+				left.Column0.Y * right.Column1.X + left.Column1.Y * right.Column1.Y + left.Column2.Y * right.Column1.Z + left.Column3.Y * right.Column1.W,
+				left.Column0.Y * right.Column2.X + left.Column1.Y * right.Column2.Y + left.Column2.Y * right.Column2.Z + left.Column3.Y * right.Column2.W,
+				left.Column0.Y * right.Column3.X + left.Column1.Y * right.Column3.Y + left.Column2.Y * right.Column3.Z + left.Column3.Y * right.Column3.W,
+
+				left.Column0.Z * right.Column0.X + left.Column1.Z * right.Column0.Y + left.Column2.Z * right.Column0.Z + left.Column3.Z * right.Column0.W,
+				left.Column0.Z * right.Column1.X + left.Column1.Z * right.Column1.Y + left.Column2.Z * right.Column1.Z + left.Column3.Z * right.Column1.W,
+				left.Column0.Z * right.Column2.X + left.Column1.Z * right.Column2.Y + left.Column2.Z * right.Column2.Z + left.Column3.Z * right.Column2.W,
+				left.Column0.Z * right.Column3.X + left.Column1.Z * right.Column3.Y + left.Column2.Z * right.Column3.Z + left.Column3.Z * right.Column3.W,
+
+				left.Column0.W * right.Column0.X + left.Column1.W * right.Column0.Y + left.Column2.W * right.Column0.Z + left.Column3.W * right.Column0.W,
+				left.Column0.W * right.Column1.X + left.Column1.W * right.Column1.Y + left.Column2.W * right.Column1.Z + left.Column3.W * right.Column1.W,
+				left.Column0.W * right.Column2.X + left.Column1.W * right.Column2.Y + left.Column2.W * right.Column2.Z + left.Column3.W * right.Column2.W,
+				left.Column0.W * right.Column3.X + left.Column1.W * right.Column3.Y + left.Column2.W * right.Column3.Z + left.Column3.W * right.Column3.W);
 		}
 
 		#endregion

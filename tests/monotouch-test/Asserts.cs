@@ -735,92 +735,105 @@ public static class Asserts
 #if HAS_SCENEKIT
 	public static void AreEqual (SCNVector3 expected, SCNVector3 actual, string message)
 	{
-		if (Is.EqualTo (expected.X).ApplyTo (actual.X).IsSuccess &&
-			Is.EqualTo (expected.Y).ApplyTo (actual.Y).IsSuccess &&
-			Is.EqualTo (expected.Z).ApplyTo (actual.Z).IsSuccess)
+		if (AreEqual (expected.X, actual.X, out var dX) &
+			AreEqual (expected.Y, actual.Y, out var dY) &
+			AreEqual (expected.Z, actual.Z, out var dZ))
 			return;
-		Assert.Fail ($"{message} expected: {expected} to be equal to: {actual}");
+
+		var diffString = $"[{dX}, {dY}, {dZ}]";
+		var msg = $"Expected:\n{expected}\nActual:\n{actual}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
 	}
 
-	public static void AreEqual (SCNVector3 expected, SCNVector3 actual, float delta, string message)
+	public static void AreEqual (SCNVector3 expected, SCNVector3 actual, pfloat delta, string message)
 	{
-		if ((actual.X >= expected.X - delta) && (actual.X <= expected.X + delta) &&
-			(actual.Y >= expected.Y - delta) && (actual.Y <= expected.Y + delta) &&
-			(actual.Z >= expected.Z - delta) && (actual.Z <= expected.Z + delta))
+		if (AreEqual (expected.X, actual.X, delta, out var dX) &
+			AreEqual (expected.Y, actual.Y, delta, out var dY) &
+			AreEqual (expected.Z, actual.Z, delta, out var dZ))
 			return;
-		Assert.Fail ($"{message} expected: {expected} to be equal to: {actual} with delta {delta}");
+
+		var diffString = $"[{dX}, {dY}, {dZ}]";
+		var msg = $"Expected:\n{expected}\nActual:\n{actual}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
 	}
 
 	public static void AreEqual (SCNVector4 expected, SCNVector4 actual, string message)
 	{
-		if (Is.EqualTo (expected.X).ApplyTo (actual.X).IsSuccess &&
-			Is.EqualTo (expected.Y).ApplyTo (actual.Y).IsSuccess &&
-			Is.EqualTo (expected.Z).ApplyTo (actual.Z).IsSuccess &&
-			Is.EqualTo (expected.W).ApplyTo (actual.W).IsSuccess)
+		if (AreEqual (expected.X, actual.X, out var dX) &
+			AreEqual (expected.Y, actual.Y, out var dY) &
+			AreEqual (expected.Z, actual.Z, out var dZ) &
+			AreEqual (expected.W, actual.W, out var dW))
 			return;
-		Assert.That (actual.X, Is.EqualTo (expected.X), $"{message} (X) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.Y, Is.EqualTo (expected.Y), $"{message} (Y) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.Z, Is.EqualTo (expected.Z), $"{message} (Z) expected: {expected} to be equal to: {actual}");
-		Assert.Fail ("huh?");
+
+		var diffString = $"[{dX}, {dY}, {dZ}, {dW}]";
+		var msg = $"Expected:\n{expected}\nActual:\n{actual}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
 	}
 
 
-	public static void AreEqual (SCNVector4 expected, SCNVector4 actual, float delta, string message)
+	public static void AreEqual (SCNVector4 expected, SCNVector4 actual, pfloat delta, string message)
 	{
-		if (Is.EqualTo (expected.X).Within (delta).ApplyTo (actual.X).IsSuccess &&
-			Is.EqualTo (expected.Y).Within (delta).ApplyTo (actual.Y).IsSuccess &&
-			Is.EqualTo (expected.Z).Within (delta).ApplyTo (actual.Z).IsSuccess &&
-			Is.EqualTo (expected.W).Within (delta).ApplyTo (actual.W).IsSuccess)
+		if (AreEqual (expected.X, actual.X, delta, out var dX) &
+			AreEqual (expected.Y, actual.Y, delta, out var dY) &
+			AreEqual (expected.Z, actual.Z, delta, out var dZ) &
+			AreEqual (expected.W, actual.W, delta, out var dW))
 			return;
-		Assert.That (actual.X, Is.EqualTo (expected.X).Within (delta), $"{message} (X) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.Y, Is.EqualTo (expected.Y).Within (delta), $"{message} (Y) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.Z, Is.EqualTo (expected.Z).Within (delta), $"{message} (Z) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.W, Is.EqualTo (expected.W).Within (delta), $"{message} (W) expected: {expected} to be equal to: {actual}");
-		Assert.Fail ("huh?");
+
+		var diffString = $"[{dX}, {dY}, {dZ}, {dW}]";
+		var msg = $"Expected:\n{expected}\nActual:\n{actual}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
 	}
 
 	public static void AreEqual (SCNQuaternion expected, SCNQuaternion actual, string message)
 	{
-		if (Is.EqualTo (expected.X).ApplyTo (actual.X).IsSuccess &&
-			Is.EqualTo (expected.Y).ApplyTo (actual.Y).IsSuccess &&
-			Is.EqualTo (expected.Z).ApplyTo (actual.Z).IsSuccess &&
-			Is.EqualTo (expected.W).ApplyTo (actual.W).IsSuccess)
+		if (AreEqual (expected.X, actual.X, out var dX) &
+			AreEqual (expected.Y, actual.Y, out var dY) &
+			AreEqual (expected.Z, actual.Z, out var dZ) &
+			AreEqual (expected.W, actual.W, out var dW))
 			return;
-		Assert.Fail ($"{message} expected: {expected} to be equal to: {actual}");
+
+		var diffString = $"[{dX}, {dY}, {dZ}, {dW}]";
+		var msg = $"Expected:\n{expected}\nActual:\n{actual}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
 	}
 
-	public static void AreEqual (SCNQuaternion expected, SCNQuaternion actual, float delta, string message)
+	public static void AreEqual (SCNQuaternion expected, SCNQuaternion actual, pfloat delta, string message)
 	{
-		if (Is.EqualTo (expected.X).Within (delta).ApplyTo (actual.X).IsSuccess &&
-			Is.EqualTo (expected.Y).Within (delta).ApplyTo (actual.Y).IsSuccess &&
-			Is.EqualTo (expected.Z).Within (delta).ApplyTo (actual.Z).IsSuccess &&
-			Is.EqualTo (expected.W).Within (delta).ApplyTo (actual.W).IsSuccess)
+		if (AreEqual (expected.X, actual.X, delta, out var dX) &
+			AreEqual (expected.Y, actual.Y, delta, out var dY) &
+			AreEqual (expected.Z, actual.Z, delta, out var dZ) &
+			AreEqual (expected.W, actual.W, delta, out var dW))
 			return;
-		Assert.That (actual.X, Is.EqualTo (expected.X).Within (delta), $"{message} (X) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.Y, Is.EqualTo (expected.Y).Within (delta), $"{message} (Y) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.Z, Is.EqualTo (expected.Z).Within (delta), $"{message} (Z) expected: {expected} to be equal to: {actual}");
-		Assert.That (actual.W, Is.EqualTo (expected.W).Within (delta), $"{message} (W) expected: {expected} to be equal to: {actual}");
-		Assert.Fail ("huh?");
+
+		var diffString = $"[{dX}, {dY}, {dZ}, {dW}]";
+		var msg = $"Expected:\n{expected}\nActual:\n{actual}\nDiff:\n{diffString}";
+		Console.WriteLine (msg);
+		Assert.Fail (message + "\n" + msg);
 	}
 
 	public static void AreEqual (SCNMatrix4 expected, SCNMatrix4 actual, string message)
 	{
-		if (Is.EqualTo (expected.M11).ApplyTo (actual.M11).IsSuccess &&
-			Is.EqualTo (expected.M21).ApplyTo (actual.M21).IsSuccess &&
-			Is.EqualTo (expected.M31).ApplyTo (actual.M31).IsSuccess &&
-			Is.EqualTo (expected.M41).ApplyTo (actual.M41).IsSuccess &&
-			Is.EqualTo (expected.M12).ApplyTo (actual.M12).IsSuccess &&
-			Is.EqualTo (expected.M22).ApplyTo (actual.M22).IsSuccess &&
-			Is.EqualTo (expected.M32).ApplyTo (actual.M32).IsSuccess &&
-			Is.EqualTo (expected.M42).ApplyTo (actual.M42).IsSuccess &&
-			Is.EqualTo (expected.M13).ApplyTo (actual.M13).IsSuccess &&
-			Is.EqualTo (expected.M23).ApplyTo (actual.M23).IsSuccess &&
-			Is.EqualTo (expected.M33).ApplyTo (actual.M33).IsSuccess &&
-			Is.EqualTo (expected.M43).ApplyTo (actual.M43).IsSuccess &&
-			Is.EqualTo (expected.M14).ApplyTo (actual.M14).IsSuccess &&
-			Is.EqualTo (expected.M24).ApplyTo (actual.M24).IsSuccess &&
-			Is.EqualTo (expected.M34).ApplyTo (actual.M34).IsSuccess &&
-			Is.EqualTo (expected.M44).ApplyTo (actual.M44).IsSuccess) {
+		if (AreEqual (expected.M11, actual.M11, out var d11) &
+			AreEqual (expected.M21, actual.M21, out var d21) &
+			AreEqual (expected.M31, actual.M31, out var d31) &
+			AreEqual (expected.M41, actual.M41, out var d41) &
+			AreEqual (expected.M12, actual.M12, out var d12) &
+			AreEqual (expected.M22, actual.M22, out var d22) &
+			AreEqual (expected.M32, actual.M32, out var d32) &
+			AreEqual (expected.M42, actual.M42, out var d42) &
+			AreEqual (expected.M13, actual.M13, out var d13) &
+			AreEqual (expected.M23, actual.M23, out var d23) &
+			AreEqual (expected.M33, actual.M33, out var d33) &
+			AreEqual (expected.M43, actual.M43, out var d43) &
+			AreEqual (expected.M14, actual.M14, out var d14) &
+			AreEqual (expected.M24, actual.M24, out var d24) &
+			AreEqual (expected.M34, actual.M34, out var d34) &
+			AreEqual (expected.M44, actual.M44, out var d44)) {
 
 			var size = Marshal.SizeOf (typeof (SCNMatrix4));
 			unsafe {
@@ -835,22 +848,6 @@ public static class Asserts
 
 		var expectedString = expected.ToString ();
 
-		var d11 = Is.EqualTo (expected.M11).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
-		var d21 = Is.EqualTo (expected.M21).ApplyTo (actual.M21).IsSuccess ? "✅" : "❌";
-		var d31 = Is.EqualTo (expected.M31).ApplyTo (actual.M31).IsSuccess ? "✅" : "❌";
-		var d41 = Is.EqualTo (expected.M41).ApplyTo (actual.M41).IsSuccess ? "✅" : "❌";
-		var d12 = Is.EqualTo (expected.M12).ApplyTo (actual.M12).IsSuccess ? "✅" : "❌";
-		var d22 = Is.EqualTo (expected.M22).ApplyTo (actual.M22).IsSuccess ? "✅" : "❌";
-		var d32 = Is.EqualTo (expected.M32).ApplyTo (actual.M32).IsSuccess ? "✅" : "❌";
-		var d42 = Is.EqualTo (expected.M42).ApplyTo (actual.M42).IsSuccess ? "✅" : "❌";
-		var d13 = Is.EqualTo (expected.M13).ApplyTo (actual.M13).IsSuccess ? "✅" : "❌";
-		var d23 = Is.EqualTo (expected.M23).ApplyTo (actual.M23).IsSuccess ? "✅" : "❌";
-		var d33 = Is.EqualTo (expected.M33).ApplyTo (actual.M33).IsSuccess ? "✅" : "❌";
-		var d43 = Is.EqualTo (expected.M43).ApplyTo (actual.M43).IsSuccess ? "✅" : "❌";
-		var d14 = Is.EqualTo (expected.M14).ApplyTo (actual.M14).IsSuccess ? "✅" : "❌";
-		var d24 = Is.EqualTo (expected.M24).ApplyTo (actual.M24).IsSuccess ? "✅" : "❌";
-		var d34 = Is.EqualTo (expected.M34).ApplyTo (actual.M34).IsSuccess ? "✅" : "❌";
-		var d44 = Is.EqualTo (expected.M44).ApplyTo (actual.M44).IsSuccess ? "✅" : "❌";
 		var diffRow1 = $"({d11}, {d12}, {d13}, {d14})";
 		var diffRow2 = $"({d21}, {d22}, {d23}, {d24})";
 		var diffRow3 = $"({d31}, {d32}, {d33}, {d34})";
@@ -862,46 +859,29 @@ public static class Asserts
 		Assert.Fail (message + "\n" + msg);
 	}
 
-	public static void AreEqual (SCNMatrix4 expected, SCNMatrix4 actual, float delta, string message)
+	public static void AreEqual (SCNMatrix4 expected, SCNMatrix4 actual, pfloat delta, string message)
 	{
-		if (Is.EqualTo (expected.M11).Within (delta).ApplyTo (actual.M11).IsSuccess &&
-			Is.EqualTo (expected.M21).Within (delta).ApplyTo (actual.M21).IsSuccess &&
-			Is.EqualTo (expected.M31).Within (delta).ApplyTo (actual.M31).IsSuccess &&
-			Is.EqualTo (expected.M41).Within (delta).ApplyTo (actual.M41).IsSuccess &&
-			Is.EqualTo (expected.M12).Within (delta).ApplyTo (actual.M12).IsSuccess &&
-			Is.EqualTo (expected.M22).Within (delta).ApplyTo (actual.M22).IsSuccess &&
-			Is.EqualTo (expected.M32).Within (delta).ApplyTo (actual.M32).IsSuccess &&
-			Is.EqualTo (expected.M42).Within (delta).ApplyTo (actual.M42).IsSuccess &&
-			Is.EqualTo (expected.M13).Within (delta).ApplyTo (actual.M13).IsSuccess &&
-			Is.EqualTo (expected.M23).Within (delta).ApplyTo (actual.M23).IsSuccess &&
-			Is.EqualTo (expected.M33).Within (delta).ApplyTo (actual.M33).IsSuccess &&
-			Is.EqualTo (expected.M43).Within (delta).ApplyTo (actual.M43).IsSuccess &&
-			Is.EqualTo (expected.M14).Within (delta).ApplyTo (actual.M14).IsSuccess &&
-			Is.EqualTo (expected.M24).Within (delta).ApplyTo (actual.M24).IsSuccess &&
-			Is.EqualTo (expected.M34).Within (delta).ApplyTo (actual.M34).IsSuccess &&
-			Is.EqualTo (expected.M44).Within (delta).ApplyTo (actual.M44).IsSuccess)
+		if (AreEqual (expected.M11, actual.M11, delta, out var d11) &
+			AreEqual (expected.M21, actual.M21, delta, out var d21) &
+			AreEqual (expected.M31, actual.M31, delta, out var d31) &
+			AreEqual (expected.M41, actual.M41, delta, out var d41) &
+			AreEqual (expected.M12, actual.M12, delta, out var d12) &
+			AreEqual (expected.M22, actual.M22, delta, out var d22) &
+			AreEqual (expected.M32, actual.M32, delta, out var d32) &
+			AreEqual (expected.M42, actual.M42, delta, out var d42) &
+			AreEqual (expected.M13, actual.M13, delta, out var d13) &
+			AreEqual (expected.M23, actual.M23, delta, out var d23) &
+			AreEqual (expected.M33, actual.M33, delta, out var d33) &
+			AreEqual (expected.M43, actual.M43, delta, out var d43) &
+			AreEqual (expected.M14, actual.M14, delta, out var d14) &
+			AreEqual (expected.M24, actual.M24, delta, out var d24) &
+			AreEqual (expected.M34, actual.M34, delta, out var d34) &
+			AreEqual (expected.M44, actual.M44, delta, out var d44))
 			return;
 
 		var actualString = actual.ToString ();
-
 		var expectedString = expected.ToString ();
 
-		var d11 = Is.EqualTo (expected.M11).Within (delta).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
-		var d21 = Is.EqualTo (expected.M21).Within (delta).ApplyTo (actual.M21).IsSuccess ? "✅" : "❌";
-		var d31 = Is.EqualTo (expected.M31).Within (delta).ApplyTo (actual.M31).IsSuccess ? "✅" : "❌";
-		var d41 = Is.EqualTo (expected.M41).Within (delta).ApplyTo (actual.M41).IsSuccess ? "✅" : "❌";
-		var d12 = Is.EqualTo (expected.M12).Within (delta).ApplyTo (actual.M12).IsSuccess ? "✅" : "❌";
-		var d22 = Is.EqualTo (expected.M22).Within (delta).ApplyTo (actual.M22).IsSuccess ? "✅" : "❌";
-		var d32 = Is.EqualTo (expected.M32).Within (delta).ApplyTo (actual.M32).IsSuccess ? "✅" : "❌";
-		var d42 = Is.EqualTo (expected.M42).Within (delta).ApplyTo (actual.M42).IsSuccess ? "✅" : "❌";
-		var d13 = Is.EqualTo (expected.M13).Within (delta).ApplyTo (actual.M13).IsSuccess ? "✅" : "❌";
-		var d23 = Is.EqualTo (expected.M23).Within (delta).ApplyTo (actual.M23).IsSuccess ? "✅" : "❌";
-		var d33 = Is.EqualTo (expected.M33).Within (delta).ApplyTo (actual.M33).IsSuccess ? "✅" : "❌";
-		var d43 = Is.EqualTo (expected.M43).Within (delta).ApplyTo (actual.M43).IsSuccess ? "✅" : "❌";
-		var d14 = Is.EqualTo (expected.M14).Within (delta).ApplyTo (actual.M14).IsSuccess ? "✅" : "❌";
-		var d24 = Is.EqualTo (expected.M24).Within (delta).ApplyTo (actual.M24).IsSuccess ? "✅" : "❌";
-		var d34 = Is.EqualTo (expected.M34).Within (delta).ApplyTo (actual.M34).IsSuccess ? "✅" : "❌";
-		var d44 = Is.EqualTo (expected.M44).Within (delta).ApplyTo (actual.M44).IsSuccess ? "✅" : "❌";
 		var diffRow1 = $"({d11}, {d12}, {d13}, {d14})";
 		var diffRow2 = $"({d21}, {d22}, {d23}, {d24})";
 		var diffRow3 = $"({d31}, {d32}, {d33}, {d34})";
@@ -920,25 +900,25 @@ public static class Asserts
 		pfloat m21, pfloat m22, pfloat m23, pfloat m24,
 		pfloat m31, pfloat m32, pfloat m33, pfloat m34,
 		pfloat m41, pfloat m42, pfloat m43, pfloat m44,
-		double delta
+		pfloat delta
 	)
 	{
-		if (Is.EqualTo (m11).Within (delta).ApplyTo (actual.M11).IsSuccess &&
-			Is.EqualTo (m21).Within (delta).ApplyTo (actual.M21).IsSuccess &&
-			Is.EqualTo (m31).Within (delta).ApplyTo (actual.M31).IsSuccess &&
-			Is.EqualTo (m41).Within (delta).ApplyTo (actual.M41).IsSuccess &&
-			Is.EqualTo (m12).Within (delta).ApplyTo (actual.M12).IsSuccess &&
-			Is.EqualTo (m22).Within (delta).ApplyTo (actual.M22).IsSuccess &&
-			Is.EqualTo (m32).Within (delta).ApplyTo (actual.M32).IsSuccess &&
-			Is.EqualTo (m42).Within (delta).ApplyTo (actual.M42).IsSuccess &&
-			Is.EqualTo (m13).Within (delta).ApplyTo (actual.M13).IsSuccess &&
-			Is.EqualTo (m23).Within (delta).ApplyTo (actual.M23).IsSuccess &&
-			Is.EqualTo (m33).Within (delta).ApplyTo (actual.M33).IsSuccess &&
-			Is.EqualTo (m43).Within (delta).ApplyTo (actual.M43).IsSuccess &&
-			Is.EqualTo (m14).Within (delta).ApplyTo (actual.M14).IsSuccess &&
-			Is.EqualTo (m24).Within (delta).ApplyTo (actual.M24).IsSuccess &&
-			Is.EqualTo (m34).Within (delta).ApplyTo (actual.M34).IsSuccess &&
-			Is.EqualTo (m44).Within (delta).ApplyTo (actual.M44).IsSuccess)
+		if (AreEqual (m11, actual.M11, delta, out var d11) &
+			AreEqual (m21, actual.M21, delta, out var d21) &
+			AreEqual (m31, actual.M31, delta, out var d31) &
+			AreEqual (m41, actual.M41, delta, out var d41) &
+			AreEqual (m12, actual.M12, delta, out var d12) &
+			AreEqual (m22, actual.M22, delta, out var d22) &
+			AreEqual (m32, actual.M32, delta, out var d32) &
+			AreEqual (m42, actual.M42, delta, out var d42) &
+			AreEqual (m13, actual.M13, delta, out var d13) &
+			AreEqual (m23, actual.M23, delta, out var d23) &
+			AreEqual (m33, actual.M33, delta, out var d33) &
+			AreEqual (m43, actual.M43, delta, out var d43) &
+			AreEqual (m14, actual.M14, delta, out var d14) &
+			AreEqual (m24, actual.M24, delta, out var d24) &
+			AreEqual (m34, actual.M34, delta, out var d34) &
+			AreEqual (m44, actual.M44, delta, out var d44))
 			return;
 
 		var actualString = actual.ToString ();
@@ -956,22 +936,6 @@ public static class Asserts
 #endif
 		var expectedString = $"{row1}\n{row2}\n{row3}\n{row4}";
 
-		var d11 = Is.EqualTo (m11).Within (delta).ApplyTo (actual.M11).IsSuccess ? "✅" : "❌";
-		var d21 = Is.EqualTo (m21).Within (delta).ApplyTo (actual.M21).IsSuccess ? "✅" : "❌";
-		var d31 = Is.EqualTo (m31).Within (delta).ApplyTo (actual.M31).IsSuccess ? "✅" : "❌";
-		var d41 = Is.EqualTo (m41).Within (delta).ApplyTo (actual.M41).IsSuccess ? "✅" : "❌";
-		var d12 = Is.EqualTo (m12).Within (delta).ApplyTo (actual.M12).IsSuccess ? "✅" : "❌";
-		var d22 = Is.EqualTo (m22).Within (delta).ApplyTo (actual.M22).IsSuccess ? "✅" : "❌";
-		var d32 = Is.EqualTo (m32).Within (delta).ApplyTo (actual.M32).IsSuccess ? "✅" : "❌";
-		var d42 = Is.EqualTo (m42).Within (delta).ApplyTo (actual.M42).IsSuccess ? "✅" : "❌";
-		var d13 = Is.EqualTo (m13).Within (delta).ApplyTo (actual.M13).IsSuccess ? "✅" : "❌";
-		var d23 = Is.EqualTo (m23).Within (delta).ApplyTo (actual.M23).IsSuccess ? "✅" : "❌";
-		var d33 = Is.EqualTo (m33).Within (delta).ApplyTo (actual.M33).IsSuccess ? "✅" : "❌";
-		var d43 = Is.EqualTo (m43).Within (delta).ApplyTo (actual.M43).IsSuccess ? "✅" : "❌";
-		var d14 = Is.EqualTo (m14).Within (delta).ApplyTo (actual.M14).IsSuccess ? "✅" : "❌";
-		var d24 = Is.EqualTo (m24).Within (delta).ApplyTo (actual.M24).IsSuccess ? "✅" : "❌";
-		var d34 = Is.EqualTo (m34).Within (delta).ApplyTo (actual.M34).IsSuccess ? "✅" : "❌";
-		var d44 = Is.EqualTo (m44).Within (delta).ApplyTo (actual.M44).IsSuccess ? "✅" : "❌";
 		var diffRow1 = $"({d11}, {d12}, {d13}, {d14})";
 		var diffRow2 = $"({d21}, {d22}, {d23}, {d24})";
 		var diffRow3 = $"({d31}, {d32}, {d33}, {d34})";
@@ -981,6 +945,35 @@ public static class Asserts
 		var msg = $"Expected:\n{expectedString}\nActual:\n{actualString}\nDiff:\n{diffString}";
 		Console.WriteLine (msg);
 		Assert.Fail (message + "\n" + msg);
+	}
+#endif // HAS_SCENEKIT
+
+	static bool AreEqual (pfloat expected, pfloat actual, out string emojii)
+	{
+		return AreEqual (expected, actual, 0, out emojii);
+	}
+
+	// Use our own implementation to compare two floating point numbers with a tolerance, because
+	// the NUnit version doesn't seem to work correctly in legacy Xamarin (older NUnit version?).
+	static bool AreEqual (pfloat expected, pfloat actual, pfloat tolerance, out string emojii)
+	{
+		bool rv;
+
+		if (pfloat.IsNaN (expected) && pfloat.IsNaN (actual)) {
+			rv = true;
+		} else if (pfloat.IsInfinity (expected) || pfloat.IsNaN (expected) || pfloat.IsNaN (actual)) {
+			// Handle infinity specially since subtracting two infinite values gives 
+			// NaN and the following test fails. mono also needs NaN to be handled
+			// specially although ms.net could use either method. Also, handle
+			// situation where no tolerance is used.
+			rv = expected.Equals (actual);
+		} else {
+			rv = Math.Abs (expected - actual) <= tolerance;
+		}
+
+		emojii = rv ? "✅" : "❌";
+
+		return rv;
 	}
 
 	public unsafe static void AreEqual (byte* expected, byte* actual, int length, string message)
@@ -1011,5 +1004,4 @@ public static class Asserts
 		}
 		Assert.Fail ($"{message}\nExpected: {e_sb}\nActual:   {a_sb}\n          {d_sb}");
 	}
-#endif // HAS_SCENEKIT
-	}
+}

@@ -138,8 +138,9 @@ namespace Xamarin.MacDev.Tasks
 
 				asset.RemoveMetadata ("LogicalName");
 
-				var bundleName = BundleResource.GetLogicalName (ProjectDir, prefixes, asset, !string.IsNullOrEmpty(SessionId));
+				var bundleName = BundleResource.GetLogicalName (ProjectDir, prefixes, asset, !string.IsNullOrEmpty(SessionId), this);
 				var output = new TaskItem (Path.Combine (intermediate, bundleName));
+				Log.LogWarning ($"ProjectDir: {ProjectDir} prefixes: {string.Join (", ", prefixes)} asset: {asset} bundleName: {bundleName} output: {output.ItemSpec}");
 
 				if (!modified.Contains (scnassets) && (!File.Exists (output.ItemSpec) || File.GetLastWriteTimeUtc (asset.ItemSpec) > File.GetLastWriteTimeUtc (output.ItemSpec))) {
 					// Base the new item on @asset, to get the `DefiningProject*` metadata too
@@ -157,6 +158,7 @@ namespace Xamarin.MacDev.Tasks
 					if (!string.IsNullOrEmpty (link)) {
 						link = link.Substring (0, link.Length - (asset.ItemSpec.Length - scnassets.Length));
 						scnassetsItem.SetMetadata ("Link", link);
+						Log.LogWarning ($"Set Link metadata '{link}' for {scnassetsItem.ItemSpec}");
 					}
 
 					var assetMetadata = asset.GetMetadata ("DefiningProjectFullPath");
@@ -187,8 +189,9 @@ namespace Xamarin.MacDev.Tasks
 
 			var tasks = new List<Task> ();
 			foreach (var item in items) {
-				var bundleDir = BundleResource.GetLogicalName (ProjectDir, prefixes, new TaskItem (item), !string.IsNullOrEmpty(SessionId));
+				var bundleDir = BundleResource.GetLogicalName (ProjectDir, prefixes, new TaskItem (item), !string.IsNullOrEmpty(SessionId), this);
 				var output = Path.Combine (intermediate, bundleDir);
+				Log.LogWarning ($"GetOutput: ProjectDir: {ProjectDir} prefixes: {string.Join (", ", prefixes)} item: {item.ItemSpec} bundleDir: {bundleDir} output: {output} intermediate: {intermediate}");
 
 				tasks.Add (CopySceneKitAssets (item.ItemSpec, output, intermediate));
 			}

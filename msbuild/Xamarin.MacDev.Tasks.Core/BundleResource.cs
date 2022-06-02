@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 using Xamarin.Utils;
 
@@ -57,7 +58,7 @@ namespace Xamarin.MacDev
 				.ToList ();
 		}
 
-		public static string GetVirtualProjectPath (string projectDir, ITaskItem item, bool isVSBuild)
+		public static string GetVirtualProjectPath (string projectDir, ITaskItem item, bool isVSBuild, Task task = null)
 		{
 			var link = item.GetMetadata ("Link");
 
@@ -66,6 +67,7 @@ namespace Xamarin.MacDev
 				if (Path.DirectorySeparatorChar != '\\')
 					return link.Replace ('\\', '/');
 
+				task?.Log?.LogWarning ($"GetVirtuaProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => link: {link}");
 				return link;
 			}
 
@@ -92,31 +94,45 @@ namespace Xamarin.MacDev
 
 			baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
 			path = PathUtils.ResolveSymbolicLinks (path);
-			
-			return PathUtils.AbsoluteToRelative (baseDir, path);
+
+			var rv = PathUtils.AbsoluteToRelative (baseDir, path);
+			task?.Log?.LogWarning ($"GetVirtuaProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => AbsoluteToRelative ({baseDir}, {path}) => {rv}");
+			return rv;
 		}
 
-		public static string GetLogicalName (string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild)
+		public static string GetLogicalName (string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild, Task task = null)
 		{
 			var logicalName = item.GetMetadata ("LogicalName");
 
 			if (!string.IsNullOrEmpty (logicalName)) {
 				if (Path.DirectorySeparatorChar != '\\')
 					return logicalName.Replace ('\\', '/');
-
+				task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => logicalName: {logicalName}");
 				return logicalName;
 			}
 
-			var vpath = GetVirtualProjectPath (projectDir, item, isVSBuild);
+			var vpath = GetVirtualProjectPath (projectDir, item, isVSBuild, task);
+			task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => vpath: {vpath}");
 			int matchlen = 0;
 
 			foreach (var prefix in prefixes) {
-				if (vpath.StartsWith (prefix, StringComparison.OrdinalIgnoreCase) && prefix.Length > matchlen)
+				var starts = vpath.StartsWith (prefix, StringComparison.OrdinalIgnoreCase);
+				task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => checking prefix {prefix}: {starts} prefix length: {prefix.Length} matchlen: {matchlen}");
+				if (starts && prefix.Length > matchlen) {
 					matchlen = prefix.Length;
+					task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => checking prefix {prefix}: {starts} prefix length: {prefix.Length} matchlen: {matchlen} yeah");
+				} else {
+					task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => checking prefix {prefix}: {starts} prefix length: {prefix.Length} matchlen: {matchlen} nope");
+				}
 			}
 
-			if (matchlen > 0)
-				return vpath.Substring (matchlen);
+			if (matchlen > 0) {
+				var rv = vpath.Substring (matchlen);
+				task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => vpath substring: {rv} matchlen: {matchlen}");
+				return rv;
+			}
+
+			task?.Log?.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (", ", prefixes)}, {item.ItemSpec}, {isVSBuild}) => vpath: {vpath} yeah");
 
 			return vpath;
 		}

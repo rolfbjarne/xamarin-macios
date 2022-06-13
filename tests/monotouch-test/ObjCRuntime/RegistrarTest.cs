@@ -5427,6 +5427,35 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 #endif // !__WATCHOS__ && !__TVOS__
 
+		[Test]
+		public void AAAAAAAAANSRangeOutParameter ()
+		{
+			using var obj = new NSRangeOutParameterClass ();
+			var a = new NSRange (-1, -2);
+			var c = new NSRange (-5, -6);
+			Messaging.void_objc_msgSend_NSRange_out_NSRange_ref_NSRange (obj.Handle, Selector.GetHandle ("passRange:getRange:refRange:"), a, out var b, ref c);
+			Assert.AreEqual (a.Location, -1, "post a Location");
+			Assert.AreEqual (a.Length, -2, "post a Length");
+			Assert.AreEqual (b.Location, 3, "post b Location");
+			Assert.AreEqual (b.Length, 4, "post b Length");
+			Assert.AreEqual (c.Location, 5, "post c Location");
+			Assert.AreEqual (c.Length, 6, "post c Length");
+		}
+
+		class NSRangeOutParameterClass : NSObject {
+			[Export ("passRange:getRange:refRange:")]
+			public void DoIt (NSRange a, out NSRange b, ref NSRange c)
+			{
+				Assert.AreEqual (a.Location, -1, "a Location");
+				Assert.AreEqual (a.Length, -2, "a Length");
+				Assert.AreEqual (c.Location, -5, "c Location");
+				Assert.AreEqual (c.Length, -6, "c Length");
+
+				a = new NSRange (1, 2);
+				b = new NSRange (3, 4);
+				c = new NSRange (5, 6);
+			}
+		}
 	}
 
 #if !__WATCHOS__

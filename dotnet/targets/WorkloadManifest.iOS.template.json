@@ -5,6 +5,7 @@
 			"description": ".NET SDK Workload for building @PLATFORM@ applications.",
 			"packs": [
 				"Microsoft.@PLATFORM@.Sdk",
+				"Microsoft.@PLATFORM@.Sdk.NET6",
 				"Microsoft.@PLATFORM@.Windows.Sdk.Aliased",
 				"Microsoft.@PLATFORM@.Ref",
 				"Microsoft.@PLATFORM@.Runtime.ios-arm",

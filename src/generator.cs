@@ -1378,7 +1378,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		if (originalType.IsByRef)
-			throw new BindingException (1080, true, originalType.Name.Replace ("&", string.Empty));
+			throw new BindingException (1080, true, originalType.Name.Replace ("&", string.Empty, StringComparison.Ordinal));
 
 		var retType = TypeManager.GetUnderlyingNullableType (attrib.Type) ?? attrib.Type;
 		var isNullable = attrib.IsNullable (this);
@@ -1599,7 +1599,7 @@ public partial class Generator : IMemberGatherer {
 
 	public string MakeTrampolineName (Type t)
 	{
-		var trampoline_name = t.Name.Replace ("`", "Arity");
+		var trampoline_name = t.Name.Replace ("`", "Arity", StringComparison.Ordinal);
 		if (t.IsGenericType) {
 			var gdef = t.GetGenericTypeDefinition ();
 
@@ -2863,7 +2863,7 @@ public partial class Generator : IMemberGatherer {
 		foreach (var library_info in libraries.OrderBy (v => v.Key, StringComparer.Ordinal)) {
 			var library_name = library_info.Key;
 			var library_path = library_info.Value;
-			print ("static public class {0} {{", library_name.Replace (".", string.Empty)); indent++;
+			print ("static public class {0} {{", library_name.Replace (".", string.Empty, StringComparison.Ordinal)); indent++;
 			if (BindThirdPartyLibrary && library_name == "__Internal") {
 				print ("static public readonly IntPtr Handle = Dlfcn.dlopen (null, 0);");
 			} else if (BindThirdPartyLibrary && library_path != null && IsNotSystemLibrary (library_name)) {
@@ -2920,7 +2920,7 @@ public partial class Generator : IMemberGatherer {
 						keyname = keyContainerType + "." + pi.Name + suffix + "!";
 					else {
 						keyname = attrs [0].Selector;
-						if (keyname.IndexOf ('.') == -1)
+						if (keyname.IndexOf ('.', StringComparison.Ordinal) == -1)
 							keyname = keyContainerType + "." + keyname + "!";
 					}
 
@@ -3125,7 +3125,7 @@ public partial class Generator : IMemberGatherer {
 					kn = "str.Handle";
 					indent++;
 				} else {
-					var lib = propNamespace.Substring (propNamespace.IndexOf ('.') + 1);
+					var lib = propNamespace.Substring (propNamespace.IndexOf ('.', StringComparison.Ordinal) + 1);
 					print ("[Field (\"{0}\", \"{1}\")]", export.Selector, lib);
 					print ("static IntPtr {0};", kn);
 					print ("");
@@ -3913,7 +3913,7 @@ public partial class Generator : IMemberGatherer {
 
 		var objcClassName = FormatType (null, bta.BaseType);
 
-		if (objcClassName.Contains ("global::"))
+		if (objcClassName.Contains ("global::", StringComparison.Ordinal))
 			objcClassName = objcClassName.Substring (objcClassName.LastIndexOf ('.') + 1);
 
 		return objcClassName;
@@ -4003,7 +4003,7 @@ public partial class Generator : IMemberGatherer {
 
 	static string RemoveArity (string typeName)
 	{
-		var arity = typeName.IndexOf ('`');
+		var arity = typeName.IndexOf ('`', StringComparison.Ordinal);
 		return arity > 0 ? typeName.Substring (0, arity) : typeName;
 	}
 
@@ -5699,7 +5699,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		// async wrapper don't have to be abstract (it's counter productive)
-		var modifier = minfo.GetModifiers ().Replace ("abstract ", String.Empty);
+		var modifier = minfo.GetModifiers ().Replace ("abstract ", String.Empty, StringComparison.Ordinal);
 
 		print ("{0} {1}{2} {3}",
 		       minfo.GetVisibility (),
@@ -6042,7 +6042,7 @@ public partial class Generator : IMemberGatherer {
 		if (bindOnType.Length > 0)
 			return bindOnType [0].Selector;
 		else if (type.IsGenericTypeDefinition)
-			return type.Name.Substring (0, type.Name.IndexOf ('`'));
+			return type.Name.Substring (0, type.Name.IndexOf ('`', StringComparison.Ordinal));
 		else
 			return type.Name;
 	}
@@ -6760,8 +6760,8 @@ public partial class Generator : IMemberGatherer {
 				} else {
 					library_name = Path.GetFileNameWithoutExtension (library_name);
 				}
-				if (library_name.Contains ("."))
-					library_name = library_name.Replace (".", string.Empty);
+				if (library_name.Contains ('.', StringComparison.Ordinal))
+					library_name = library_name.Replace (".", string.Empty, StringComparison.Ordinal);
 			}
 		} else if (BindThirdPartyLibrary) {
 			// User should provide a LibraryName
@@ -6963,7 +6963,7 @@ public partial class Generator : IMemberGatherer {
 						continue;
 
 					string nonInterfaceName = protocolType.Name.Substring (1);
-					if (!types.Any (x => x.Name.Contains (nonInterfaceName)))
+					if (!types.Any (x => x.Name.Contains (nonInterfaceName, StringComparison.Ordinal)))
 						continue;
 
 					if (is_category_class)
@@ -7015,7 +7015,7 @@ public partial class Generator : IMemberGatherer {
 
 			if (type.IsNested){
 				var nestedName = type.FullName.Substring (type.Namespace.Length+1);
-				var container = nestedName.Substring (0, nestedName.IndexOf ('+'));
+				var container = nestedName.Substring (0, nestedName.IndexOf ('+', StringComparison.Ordinal));
 
 				print ("partial class {0} {{", container);
 				indent++;
@@ -8587,7 +8587,7 @@ public partial class Generator : IMemberGatherer {
 		if (s == string.Empty)
 			return @"""""";
 
-		return $"@\"{s.Replace ("\"", "\"\"")}\"";
+		return $"@\"{s.Replace ("\"", "\"\"", StringComparison.Ordinal)}\"";
 	}
 
 	private static string FormatPropertyInfo (PropertyInfo pi)

@@ -169,7 +169,7 @@ public partial class Generator {
 				// the attributes (availability and field) are important for our tests
 				PrintPlatformAttributes (f);
 				libraries.TryGetValue (library_name, out var libPath);
-				var libname = fa.LibraryName?.Replace ("+", string.Empty);
+				var libname = fa.LibraryName?.Replace ("+", string.Empty, StringComparison.Ordinal);
 				// We need to check for special cases inside FieldAttributes
 				// fa.LibraryName could contain a different framework i.e UITrackingRunLoopMode (UIKit) inside NSRunLoopMode enum (Foundation).
 				// libPath could have a custom path i.e. CoreImage which in macOS is inside Quartz

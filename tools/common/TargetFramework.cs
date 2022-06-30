@@ -198,11 +198,11 @@ namespace Xamarin.Utils
 		{
 			var hash = 0;
 			if (Identifier != null)
-				hash ^= Identifier.ToLowerInvariant ().GetHashCode ();
+				hash ^= Identifier.ToLowerInvariant ().GetHashCode (StringComparison.Ordinal);
 			if (Version != null)
 				hash ^= Version.GetHashCode ();
 			if (Profile != null)
-				hash ^= Profile.GetHashCode ();
+				hash ^= Profile.GetHashCode (StringComparison.Ordinal);
 			return hash;
 		}
 

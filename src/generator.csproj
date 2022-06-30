@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>bgen</AssemblyName>
     <RootNamespace>bgen</RootNamespace>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <BuildDir Condition="'$(BUILD_DIR)' != ''">$(BUILD_DIR)\</BuildDir>
     <BuildDir Condition="'$(BUILD_DIR)' == ''">build\</BuildDir>
     <LangVersion>latest</LangVersion>

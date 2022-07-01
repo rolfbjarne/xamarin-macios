@@ -201,7 +201,8 @@
       <DefineConstants Condition="'$(ComputedPlatform)' == 'iPhone'">$(DefineConstants);AOT</DefineConstants>
       <DefineConstants Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'">$(DefineConstants);AOT</DefineConstants>
       <DefineConstants Condition="'$(RuntimeIdentifier)' == 'tvossimulator-arm64'">$(DefineConstants);AOT</DefineConstants>
-      <DefineConstants Condition="'$(ComputedPlatform)' == 'iPhoneSimulator'">$(DefineConstants);DYNAMIC_REGISTRAR</DefineConstants>
+      <DefineConstants Condition="'$(ComputedPlatform)' == 'iPhoneSimulator' And '$(Registrar)' == ''">$(DefineConstants);DYNAMIC_REGISTRAR</DefineConstants>
+      <DefineConstants Condition="'$(Registrar)' == 'dynamic'">$(DefineConstants);DYNAMIC_REGISTRAR</DefineConstants>
     </PropertyGroup>
   </Target>
 </Project>

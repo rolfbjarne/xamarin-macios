@@ -27,6 +27,7 @@ namespace MySimpleApp {
 				if (gchandle != IntPtr.Zero) {
 					var gch = GCHandle.FromIntPtr (gchandle);
 					var exc = (Exception) gch.Target;
+					Console.WriteLine ($"EXC: {exc}");
 					gch.Free ();
 					throw exc;
 				}

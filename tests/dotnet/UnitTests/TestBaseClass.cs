@@ -316,26 +316,26 @@ namespace Xamarin.Tests {
 			ExecuteWithMagicWordAndAssert (executable);
 		}
 
-		protected void ExecuteWithMagicWordAndAssert (string executable)
+		protected void ExecuteWithMagicWordAndAssert (string executable, Dictionary<string, string?>? environment = null)
 		{
-			var rv = Execute (executable, out var output, out string magicWord);
+			var rv = Execute (executable, out var output, out string magicWord, environment);
 			Assert.That (output.ToString (), Does.Contain (magicWord), "Contains magic word");
 			Assert.AreEqual (0, rv.ExitCode, "ExitCode");
 		}
 
-		protected Execution Execute (string executable, out StringBuilder output, out string magicWord)
+		protected Execution Execute (string executable, out StringBuilder output, out string magicWord, Dictionary<string, string?>? environment = null)
 		{
 			if (!File.Exists (executable))
 				throw new FileNotFoundException ($"The executable '{executable}' does not exists.");
 
 			magicWord = Guid.NewGuid ().ToString ();
-			var env = new Dictionary<string, string?> {
-				{ "MAGIC_WORD", magicWord },
-				{ "DYLD_FALLBACK_LIBRARY_PATH", null }, // VSMac might set this, which may cause tests to crash.
-			};
+			if (environment is null)
+				environment = new Dictionary<string, string?> ();
+			environment ["MAGIC_WORD"] = magicWord;
+			environment ["DYLD_FALLBACK_LIBRARY_PATH"] = null; // VSMac might set this, which may cause tests to crash.
 
 			output = new StringBuilder ();
-			return Execution.RunWithStringBuildersAsync (executable, Array.Empty<string> (), environment: env, standardOutput: output, standardError: output, timeout: TimeSpan.FromSeconds (15)).Result;
+			return Execution.RunWithStringBuildersAsync (executable, Array.Empty<string> (), environment: environment, standardOutput: output, standardError: output, timeout: TimeSpan.FromSeconds (15)).Result;
 		}
 
 		public static StringBuilder AssertExecute (string executable, params string [] arguments)
@@ -354,14 +354,14 @@ namespace Xamarin.Tests {
 			return output;
 		}
 
-		protected void ExecuteProjectWithMagicWordAndAssert (string csproj, ApplePlatform platform, string? runtimeIdentifiers = null)
+		protected void ExecuteProjectWithMagicWordAndAssert (string csproj, ApplePlatform platform, string? runtimeIdentifiers = null, Dictionary<string, string?>? environment = null)
 		{
 			if (runtimeIdentifiers is null)
 				runtimeIdentifiers = GetDefaultRuntimeIdentifier (platform);
 
 			var appPath = GetAppPath (csproj, platform, runtimeIdentifiers);
 			var appExecutable = GetNativeExecutable (platform, appPath);
-			ExecuteWithMagicWordAndAssert (appExecutable);
+			ExecuteWithMagicWordAndAssert (appExecutable, environment);
 		}
 
 		protected bool IsRuntimeIdentifierSigned (string runtimeIdentifiers)

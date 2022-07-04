@@ -44,6 +44,15 @@ namespace Xamarin.Tests {
 				var rv = base.Execute (GetNativeExecutable (platform, appDir), out var output, out _);
 				Assert.AreEqual (1, rv.ExitCode, "Expected no validation");
 			}
+
+			{
+				// Try again, this time disabling the static registrar
+				// This should work just fine
+				var env = new Dictionary<string, string?> ();
+				env ["XAMARIN_DISABLE_STATIC_REGISTRAR"] = "1";
+				var rv = Execute (GetNativeExecutable (platform, appDir), out _, out _, environment: env);
+				Assert.AreEqual (1, rv.ExitCode, "Expected no validation");
+			}
 		}
 	}
 }

@@ -2802,6 +2802,15 @@ namespace Registrar {
 				map_init.AppendLine ("void xamarin_create_classes_{0} () {{", single_assembly.Replace ('.', '_').Replace ('-', '_'));
 			}
 
+			if (App.DynamicRegistrationSupported) {
+				map_init.AppendLine ();
+				map_init.AppendLine ("const char *static_registrar_disabled = getenv (\"XAMARIN_DISABLE_STATIC_REGISTRAR\");");
+				map_init.AppendLine ("bool is_static_registrar_disabled = static_registrar_disabled != NULL && *static_registrar_disabled != 0;");
+				map_init.AppendLine ("if (is_static_registrar_disabled)");
+				map_init.AppendLine ("\treturn;");
+				map_init.AppendLine ();
+			}
+
 			// Select the types that needs to be registered.
 			var allTypes = new List<ObjCType> ();
 			foreach (var @class in Types.Values) {

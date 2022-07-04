@@ -480,9 +480,11 @@ namespace ObjCRuntime {
 		static bool verified_static_registrar_code;
 		unsafe static void VerifyStaticRegistrarCode ()
 		{
+			Console.WriteLine ($"VerifyStaticRegistrarCode: {verified_static_registrar_code}");
 			if (verified_static_registrar_code)
 				return;
 			verified_static_registrar_code = true;
+			Console.WriteLine (Environment.StackTrace);
 
 			if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("XAMARIN_SKIP_STATIC_REGISTRAR_CODE_VALIDATION")))
 				return;
@@ -522,6 +524,7 @@ namespace ObjCRuntime {
 
 		static Assembly ResolveAssembly (IntPtr assembly_name)
 		{
+			Console.WriteLine ($"ResolveAssembly (0x{assembly_name.ToString ("x")}, {Marshal.PtrToStringAuto (assembly_name)})");
 #if __MACOS__ || __MACCATALYST__
 			VerifyStaticRegistrarCode ();
 #endif

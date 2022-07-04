@@ -294,6 +294,7 @@ namespace ObjCRuntime {
 		unsafe static bool CompareTokenReference (string asm_name, int mod_token, int type_token, uint token_reference)
 		{
 			var map = Runtime.options->RegistrationMap;
+			Console.WriteLine ($"CompareTokenReference ({asm_name}, 0x{mod_token.ToString ("x")}, 0x{type_token.ToString ("x")}, 0x{token_reference.ToString ("x")}");
 			IntPtr assembly_name;
 
 			if ((token_reference & 0x1) == 0x1) {

@@ -198,18 +198,20 @@ endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call NupkgDefinition,$(platform))))
 
 # Create the nuget in a temporary directory (nupkgs/)
+# Disable the compiler server (UseSharedCompilation=false) due to https://github.com/xamarin/xamarin-macios/issues/13355
 define CreateNuGetTemplate
 nupkgs/$(1)$(4).$(2).nupkg: $(TEMPLATED_FILES) $(WORKLOAD_TARGETS) $(3) package/$(1)/package.csproj $(wildcard package/*.csproj) $(wildcard $(DOTNET_DESTDIR)/$(1)/* $(DOTNET_DESTDIR)/$(1)/*/* $(DOTNET_DESTDIR)/$(1)/*/*/* $(DOTNET_DESTDIR)/$(1)/*/*/*/*) .stamp-workaround-for-maccore-issue-2427
 	@# Delete any versions of the nuget we're building
 	$$(Q) rm -f nupkgs/$(1).*.nupkg
-	$$(Q_PACK) $(DOTNET) pack package/$(1)/package.csproj -p:VersionBand=$(5) --output "$$(dir $$@)" $(DOTNET_PACK_VERBOSITY) "/bl:$$@.binlog"
+	$$(Q_PACK) $(DOTNET) pack /p:UseSharedCompilation=false package/$(1)/package.csproj -p:VersionBand=$(5) --output "$$(dir $$@)" $(DOTNET_PACK_VERBOSITY) "/bl:$$@.binlog"
 endef
 
+# Disable the compiler server (UseSharedCompilation=false) due to https://github.com/xamarin/xamarin-macios/issues/13355
 define CreateWindowsNuGetTemplate
 nupkgs/$(1).$(2).nupkg: $(3) $(WORKLOAD_TARGETS) package/$(1)/package.csproj $(wildcard package/*.csproj) $(wildcard $(DOTNET_DESTDIR)/$(1)/* $(DOTNET_DESTDIR)/$(1)/*/* $(DOTNET_DESTDIR)/$(1)/*/*/* $(DOTNET_DESTDIR)/$(1)/*/*/*/*) .stamp-workaround-for-maccore-issue-2427
 	@# Delete any versions of the nuget we're building
 	$$(Q) rm -f nupkgs/$(1).*.nupkg
-	$$(Q_PACK) $(DOTNET) pack package/$(1)/package.csproj --output "$$(dir $$@)" $(DOTNET_PACK_VERBOSITY) "/bl:$$@.binlog"
+	$$(Q_PACK) $(DOTNET) pack /p:UseSharedCompilation=false package/$(1)/package.csproj --output "$$(dir $$@)" $(DOTNET_PACK_VERBOSITY) "/bl:$$@.binlog"
 endef
 
 # Create the NuGet packaging targets. It's amazing what make allows you to do...

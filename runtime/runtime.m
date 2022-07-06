@@ -1051,8 +1051,20 @@ compare_mtclassmap (const void *a, const void *b)
 void
 xamarin_add_registration_map (struct MTRegistrationMap *map, bool partial)
 {
+	if (!strcmp (map->product_hash, PRODUCT_HASH)) {
+		fprintf (stderr, PRODUCT ": The static registrar map for %s (and %i other assemblies) is invalid. It was build using a runtime with hash %s, but the current runtime was built with hash %s.\n", map->assemblies [0].name, map->assembly_count - 1, map->product_hash, PRODUCT_HASH);
+		return;
+	}
+
 	// COOP: no managed memory access: any mode
-	options.RegistrationData = map;
+	if (options.RegistrationData == NULL) {
+		options.RegistrationData = map;
+	} else {
+		struct MTRegistrationMap *previous = options.RegistrationData;
+		while (previous->next_map != NULL)
+			previous = previous->next_map;
+		previous->next_map = map;
+	}
 	if (partial)
 		options.flags = (InitializationFlags) (options.flags | InitializationFlagsIsPartialStaticRegistrar);
 

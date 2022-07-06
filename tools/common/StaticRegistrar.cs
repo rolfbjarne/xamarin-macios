@@ -3205,6 +3205,7 @@ namespace Registrar {
 			}
 			map.AppendLine ("static struct MTRegistrationMap __xamarin_registration_map = {");
 			map.AppendLine ($"\"{Xamarin.ProductConstants.Hash}\",");
+			map.AppendLine ("NULL,");
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
 			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");

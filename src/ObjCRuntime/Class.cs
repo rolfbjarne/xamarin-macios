@@ -286,13 +286,14 @@ namespace ObjCRuntime {
 
 		unsafe static bool CompareTokenReference (string? asm_name, int mod_token, int type_token, uint token_reference)
 		{
-			var map = Runtime.options->RegistrationMap;
+			Console.WriteLine ($"CompareTokenReference ({asm_name}, 0x{mod_token.ToString ("x")}, 0x{type_token.ToString ("x")}, 0x{token_reference.ToString ("x")}");
+			var map = FindMap (asm_name);
 			IntPtr assembly_name;
 
 			if ((token_reference & 0x1) == 0x1) {
 				// full token reference
 				var idx = (int) (token_reference >> 1);
-				var entry = Runtime.options->RegistrationMap->full_token_references [idx];
+				var entry = map->full_token_references [idx];
 				// first compare what's most likely to fail (the type's metadata token)
 				var token = entry.token;
 				type_token |= 0x02000000 /* TypeDef - the token type is explicit in the full token reference, but not present in the type_token argument, so we have to add it before comparing */;

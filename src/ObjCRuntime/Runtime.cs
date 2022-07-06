@@ -56,6 +56,7 @@ namespace ObjCRuntime {
 #pragma warning disable 649 // Field 'X' is never assigned to, and will always have its default value
 		internal unsafe struct MTRegistrationMap {
 			public IntPtr product_hash;
+			public MTRegistrationMap* next_map;
 			public MTAssembly *assemblies;
 			public MTClassMap *map;
 			public MTFullTokenReference *full_token_references;
@@ -1714,13 +1715,14 @@ namespace ObjCRuntime {
 			// Check if the static registrar knows about this protocol
 			unsafe {
 				var map = options->RegistrationMap;
-				if (map is not null) {
+				while (map is not null) {
 					var token = Class.GetTokenReference (map, type, throw_exception: false);
 					if (token != INVALID_TOKEN_REF) {
 						var wrapper_token = xamarin_find_protocol_wrapper_type (token);
 						if (wrapper_token != INVALID_TOKEN_REF)
 							return Class.ResolveTypeTokenReference (map, wrapper_token);
 					}
+					map = map->next_map;
 				}
 			}
 

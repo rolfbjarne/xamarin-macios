@@ -1057,7 +1057,14 @@ xamarin_add_registration_map (struct MTRegistrationMap *map, bool partial)
 	}
 
 	// COOP: no managed memory access: any mode
-	options.RegistrationData = map;
+	if (options.RegistrationData == NULL) {
+		options.RegistrationData = map;
+	} else {
+		struct MTRegistrationMap *previous = options.RegistrationData;
+		while (previous->next_map != NULL)
+			previous = previous->next_map;
+		previous->next_map = map;
+	}
 	if (partial)
 		options.flags = (InitializationFlags) (options.flags | InitializationFlagsIsPartialStaticRegistrar);
 

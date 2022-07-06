@@ -239,7 +239,19 @@ namespace ObjCRuntime {
 
 		static unsafe Runtime.MTRegistrationMap* FindMap (string asm_name)
 		{
-			return Runtime.options->RegistrationMap;
+			var map = Runtime.options->RegistrationMap;
+			if (map is null)
+				return null;
+
+			while (map != null) {
+				for (var i = 0; i < map->assembly_count; i++) {
+					if (Runtime.StringEquals (map->assemblies [i].name, asm_name))
+						return map;
+				}
+				map = map->next_map;
+			}
+
+			return null;
 		}
 
 		static unsafe Runtime.MTRegistrationMap* FindMap (Assembly assembly)
@@ -364,7 +376,15 @@ namespace ObjCRuntime {
 
 		internal unsafe static Type? FindType (NativeHandle @class, out bool is_custom_type)
 		{
-			return FindType (Runtime.options->RegistrationMap, @class, out is_custom_type);
+			Runtime.MTRegistrationMap* map = Runtime.options->RegistrationMap;
+			while (map is not null) {
+				var rv = FindType (map, @class, out is_custom_type);
+				if (rv is not null)
+					return rv;
+				map = map->next_map;
+			}
+			is_custom_type = false;
+			return null;
 		}
 
 		internal unsafe static Type? FindType (Runtime.MTRegistrationMap* map, NativeHandle @class, out bool is_custom_type)

@@ -802,6 +802,9 @@ namespace Xamarin.Bundler {
 			if (assembly_location.Length > 0)
 				sw.WriteLine ("\txamarin_set_assembly_directories (&assembly_locations);");
 
+			if (app.Registrar == RegistrarMode.StaticPerAssembly)
+				sw.WriteLine ("\txamarin_set_registrar_per_assembly ();");
+
 			sw.WriteLine ("\txamarin_invoke_registration_methods ();");
 
 			if (app.MonoNativeMode != MonoNativeMode.None) {

@@ -108,6 +108,7 @@ struct MTRegistrationMap;
 
 struct MTRegistrationMap {
 	const char *product_hash;
+	struct MTRegistrationMap *next_map;
 	const MTAssembly *assemblies;
 	MTClassMap *map;
 	const MTFullTokenReference *full_token_references;

@@ -5,6 +5,8 @@
     </type>
     <type fullname="ObjCRuntime.Runtime">
       <method signature="System.Boolean get_IsCoreCLR()" body="stub" value="false" />
+      <method signature="System.Boolean get_IsRegistrarPerAssembly()" body="stub" value="false" feature="PerAssemblyRegistrar" featurevalue="false" />
+      <method signature="System.Boolean get_IsRegistrarPerAssembly()" body="stub" value="true" feature="PerAssemblyRegistrar" featurevalue="true" />
       <method signature="System.Int32 GetRuntimeArch()" body="stub" feature="ObjCRuntime.Runtime.Arch.IsSimulator" featurevalue="false" value="0" />
       <method signature="System.Int32 GetRuntimeArch()" body="stub" feature="ObjCRuntime.Runtime.Arch.IsSimulator" featurevalue="true" value="1" />
     </type>

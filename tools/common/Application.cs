@@ -53,6 +53,7 @@ namespace Xamarin.Bundler {
 		Dynamic,
 		PartialStatic,
 		Static,
+		StaticPerAssembly,
 	}
 
 	public partial class Application
@@ -843,6 +844,9 @@ namespace Xamarin.Bundler {
 
 			SetObjectiveCExceptionMode ();
 			SetManagedExceptionMode ();
+#if NET
+			SelectRegistrar ();
+#endif
 
 			if (SymbolMode == SymbolMode.Default) {
 #if MONOTOUCH
@@ -1025,9 +1029,9 @@ namespace Xamarin.Bundler {
 #endif
 			var registrar = new Registrar.StaticRegistrar (this);
 			if (RootAssemblies.Count == 1)
-				registrar.GenerateSingleAssembly (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m, Path.GetFileNameWithoutExtension (RootAssembly));
+				registrar.GenerateSingleAssembly (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m, Path.GetFileNameWithoutExtension (RootAssembly), out var _);
 			else
-				registrar.Generate (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m);
+				registrar.Generate (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m, out var _);
 		}
 
 		public IEnumerable<Abi> Abis {
@@ -1245,6 +1249,12 @@ namespace Xamarin.Bundler {
 			case "partial":
 			case "partial-static":
 				Registrar = RegistrarMode.PartialStatic;
+				break;
+#endif
+#if NET
+			case "staticperassembly":
+			case "static-per-assembly":
+				Registrar = RegistrarMode.StaticPerAssembly;
 				break;
 #endif
 			default:

@@ -56,6 +56,7 @@ namespace ObjCRuntime {
 #pragma warning disable 649 // Field 'X' is never assigned to, and will always have its default value
 		internal unsafe struct MTRegistrationMap {
 			public IntPtr product_hash;
+			public MTRegistrationMap* next_map;
 			public MTAssembly *assemblies;
 			public MTClassMap *map;
 			public MTFullTokenReference *full_token_references;
@@ -157,6 +158,7 @@ namespace ObjCRuntime {
 #if NET
 			IsCoreCLR				= 0x20,
 #endif
+			IsRegistrarPerAssembly	= 0x40,
 		}
 
 #if MONOMAC
@@ -210,6 +212,15 @@ namespace ObjCRuntime {
 				return (options->Flags.HasFlag (InitializationFlags.IsCoreCLR));
 			}
 		}
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal unsafe static bool IsRegistrarPerAssembly {
+			get {
+				// The linker may turn calls to this property into a constant
+				return (options->Flags.HasFlag (InitializationFlags.IsRegistrarPerAssembly));
+			}
+		}
+
 #endif
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
@@ -511,9 +522,9 @@ namespace ObjCRuntime {
 			return AllocGCHandle (CreateBlockProxy ((MethodInfo) GetGCHandleTarget (method)!, block));
 		}
 			
-		static IntPtr CreateDelegateProxy (IntPtr method, IntPtr @delegate, IntPtr signature, uint token_ref)
+		unsafe static IntPtr CreateDelegateProxy (IntPtr method, IntPtr @delegate, IntPtr signature, uint token_ref)
 		{
-			return BlockLiteral.GetBlockForDelegate ((MethodInfo) GetGCHandleTarget (method)!, GetGCHandleTarget (@delegate), token_ref, Marshal.PtrToStringAuto (signature));
+			return BlockLiteral.GetBlockForDelegate ((MethodInfo) GetGCHandleTarget (method)!, GetGCHandleTarget (@delegate), options->RegistrationMap, token_ref, Marshal.PtrToStringAuto (signature));
 		}
 
 		static IntPtr GetExceptionMessage (IntPtr exception_gchandle)
@@ -746,7 +757,12 @@ namespace ObjCRuntime {
 
 		static unsafe IntPtr GetMethodFromToken (uint token_ref)
 		{
-			var method = Class.ResolveMethodTokenReference (token_ref);
+			return GetMethodFromMapAndToken (options->RegistrationMap, token_ref);
+		}
+
+		static unsafe IntPtr GetMethodFromMapAndToken (MTRegistrationMap* map, uint token_ref)
+		{
+			var method = Class.ResolveMethodTokenReference (map, token_ref);
 			if (method is not null)
 				return AllocGCHandle (method);
 
@@ -755,7 +771,12 @@ namespace ObjCRuntime {
 
 		static unsafe IntPtr GetGenericMethodFromToken (IntPtr obj, uint token_ref)
 		{
-			var method = Class.ResolveMethodTokenReference (token_ref);
+			return GetGenericMethodFromMapAndToken (obj, options->RegistrationMap, token_ref);
+		}
+
+		static unsafe IntPtr GetGenericMethodFromMapAndToken (IntPtr obj, MTRegistrationMap* map, uint token_ref)
+		{
+			var method = Class.ResolveMethodTokenReference (map, token_ref);
 			if (method is null)
 				return IntPtr.Zero;
 
@@ -765,7 +786,6 @@ namespace ObjCRuntime {
 
 			return AllocGCHandle (FindClosedMethod (nsobj.GetType (), method));
 		}
-
 		static IntPtr TryGetOrConstructNSObjectWrapped (IntPtr ptr)
 		{
 			return AllocGCHandle (GetNSObject (ptr, MissingCtorResolution.Ignore, true));
@@ -780,14 +800,19 @@ namespace ObjCRuntime {
 			return AllocGCHandle (GetINativeObject (ptr, owns, type, null));
 		}
 			
-		static IntPtr GetINativeObject_Static (IntPtr ptr, bool owns, uint iface_token, uint implementation_token)
+		unsafe static IntPtr GetINativeObject_Static (IntPtr ptr, bool owns, uint iface_token, uint implementation_token)
+		{
+			return GetINativeObject_StaticWithMap (ptr, owns, options->RegistrationMap, iface_token, implementation_token);
+		}
+
+		unsafe static IntPtr GetINativeObject_StaticWithMap (IntPtr ptr, bool owns, MTRegistrationMap* map, uint iface_token, uint implementation_token)
 		{
 			/* 
 			 * This method is called from generated code from the static registrar.
 			 */
 
-			var iface = Class.ResolveTypeTokenReference (iface_token)!;
-			var type = Class.ResolveTypeTokenReference (implementation_token);
+			var iface = Class.ResolveTypeTokenReference (map, iface_token)!;
+			var type = Class.ResolveTypeTokenReference (map, implementation_token);
 			return AllocGCHandle (GetINativeObject (ptr, owns, iface, type));
 		}
 
@@ -1699,13 +1724,14 @@ namespace ObjCRuntime {
 			// Check if the static registrar knows about this protocol
 			unsafe {
 				var map = options->RegistrationMap;
-				if (map is not null) {
-					var token = Class.GetTokenReference (type, throw_exception: false);
+				while (map is not null) {
+					var token = Class.GetTokenReference (map, type, throw_exception: false);
 					if (token != INVALID_TOKEN_REF) {
 						var wrapper_token = xamarin_find_protocol_wrapper_type (token);
 						if (wrapper_token != INVALID_TOKEN_REF)
-							return Class.ResolveTypeTokenReference (wrapper_token);
+							return Class.ResolveTypeTokenReference (map, wrapper_token);
 					}
+					map = map->next_map;
 				}
 			}
 
@@ -1733,7 +1759,7 @@ namespace ObjCRuntime {
 			unsafe {
 				var map = options->RegistrationMap;
 				if (map is not null && map->protocol_count > 0) {
-					var token = Class.GetTokenReference (type);
+					var token = Class.GetTokenReference (map, type);
 					var tokens = map->protocol_map.protocol_tokens;
 					for (int i = 0; i < map->protocol_count; i++) {
 						if (tokens [i] == token)
@@ -2156,6 +2182,72 @@ namespace ObjCRuntime {
 		[DllImport ("__Internal")]
 		static extern IntPtr xamarin_get_original_working_directory_path ();
 #endif // NET || !__MACOS__
+
+#if NET && (__MACOS__ || __MACCATALYST__)
+		static void LoadRegistrarLibrary (string assemblyPath)
+		{
+			var static_registrar_disabled = Environment.GetEnvironmentVariable ("XAMARIN_DISABLE_STATIC_REGISTRAR");
+			if (!string.IsNullOrEmpty (static_registrar_disabled)) {
+				NSLog ($"Skipped looking for a registrar library for the assembly {assemblyPath} because the static registrar has been disabled.");
+				return;
+			}
+
+			var registrarPath = Path.Combine (Path.GetDirectoryName (assemblyPath)!, "lib" + Path.GetFileNameWithoutExtension (assemblyPath)! + ".registrar.dylib");
+			registrarPath = Path.GetFullPath (registrarPath);
+			if (!File.Exists (registrarPath)) {
+				NSLog ($"The registrar library {registrarPath} does not exist (for the assembly {assemblyPath})");
+				return;
+			}
+
+			var lib = Dlfcn.dlopen (registrarPath, Dlfcn.Mode.Lazy);
+			if (lib == IntPtr.Zero) {
+				NSLog ($"Failed to load the registrar library {registrarPath}: {Dlfcn.dlerror ()}");
+				return;
+			}
+
+			try {
+				var symbolName = "xamarin_create_classes_" + Path.GetFileNameWithoutExtension (assemblyPath).Replace ('.', '_').Replace ('-', '_');
+				var symbol = Dlfcn.dlsym (lib, symbolName);
+				if (symbol == IntPtr.Zero) {
+					NSLog ($"Failed to load the symbol '{symbolName}' in the registrar library {registrarPath}: {Dlfcn.dlerror ()}");
+				} else {
+					var del = Marshal.GetDelegateForFunctionPointer<Action> (symbol);
+					del ();
+				}
+			} finally {
+				Dlfcn.dlclose (lib);
+			}
+		}
+
+		static void AssemblyLoadedEventHandler (object? sender, AssemblyLoadEventArgs eventArgs)
+		{
+			var assemblyPath = eventArgs.LoadedAssembly.Location;
+			LoadRegistrarLibrary (assemblyPath);
+		}
+#endif // NET && (__MACOS__ || __MACCATALYST__)
+
+		static bool InvokeConformsToProtocol (IntPtr handle, IntPtr protocol)
+		{
+			var obj = Runtime.GetNSObject (handle);
+			if (obj is null)
+				return false;
+			return obj.ConformsToProtocol (protocol);
+		}
+
+#if NET
+		public static void EnablePerAssemblyRegistrar (bool value)
+		{
+#if __MACOS__ || __MACCATALYST__
+			if (value) {
+				AppDomain.CurrentDomain.AssemblyLoad += AssemblyLoadedEventHandler;
+			} else {
+				AppDomain.CurrentDomain.AssemblyLoad -= AssemblyLoadedEventHandler;
+			}
+#else
+			throw new PlatformNotSupportedException ();
+#endif
+		}
+#endif // NET
 
 	}
 	

@@ -10,6 +10,9 @@
 		<ExcludeTouchUnitReference>true</ExcludeTouchUnitReference>
 
 		<DefineConstants>$(DefineConstants);$(AdditionalDefineConstants)</DefineConstants>
+		<MtouchExtraArgs>--optimize=-remove-dynamic-registrar</MtouchExtraArgs>
+		<MtouchLink>Full</MtouchLink>
+		<Registrar>staticperassembly</Registrar>
 	</PropertyGroup>
 
 	<Import Project="../../common/shared-dotnet.csproj" />

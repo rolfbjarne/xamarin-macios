@@ -255,14 +255,14 @@ namespace ObjCRuntime {
 			return descriptor->copy_helper == ((BlockDescriptor *) literal->block_descriptor)->copy_helper;
 		}
 
-		static Type GetDelegateProxyType (MethodInfo minfo, uint token_ref, out MethodInfo baseMethod)
+		unsafe static Type GetDelegateProxyType (MethodInfo minfo, Runtime.MTRegistrationMap* registration_map, uint token_ref, out MethodInfo baseMethod)
 		{
 			// A mirror of this method is also implemented in StaticRegistrar:GetDelegateProxyType
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
 			baseMethod = null;
 
 			if (token_ref != Runtime.INVALID_TOKEN_REF)
-				return Class.ResolveTypeTokenReference (token_ref);
+				return Class.ResolveTypeTokenReference (registration_map, token_ref);
 
 			baseMethod = minfo.GetBaseDefinition ();
 			var delegateProxies = baseMethod.ReturnTypeCustomAttributes.GetCustomAttributes (typeof (DelegateProxyAttribute), false);
@@ -298,7 +298,7 @@ namespace ObjCRuntime {
 		}
 
 		[BindingImpl(BindingImplOptions.Optimizable)]
-		internal static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate, uint token_ref, string signature)
+		internal unsafe static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate, Runtime.MTRegistrationMap* map, uint token_ref, string signature)
 		{
 			if (@delegate is null)
 				return IntPtr.Zero;
@@ -306,7 +306,7 @@ namespace ObjCRuntime {
 			if (!(@delegate is Delegate))
 				throw ErrorHelper.CreateError (8016, $"Unable to convert delegate to block for the return value for the method {minfo.DeclaringType.FullName}.{minfo.Name}, because the input isn't a delegate, it's a {@delegate.GetType ().FullName}. {Constants.PleaseFileBugReport}");
 				
-			Type delegateProxyType = GetDelegateProxyType (minfo, token_ref, out var baseMethod);
+			Type delegateProxyType = GetDelegateProxyType (minfo, map, token_ref, out var baseMethod);
 			if (baseMethod is null)
 				baseMethod = minfo; // 'baseMethod' is only used in error messages, and if it's null, we just use the closest alternative we have (minfo).
 			if (delegateProxyType == null)

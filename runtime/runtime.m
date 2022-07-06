@@ -141,6 +141,7 @@ enum InitializationFlags : int {
 	/* unused									= 0x08,*/
 	InitializationFlagsIsSimulator				= 0x10,
 	InitializationFlagsIsCoreCLR                = 0x20,
+	InitializationFlagsIsRegistrarPerAssembly	= 0x40,
 };
 
 struct InitializationOptions {
@@ -1070,6 +1071,12 @@ xamarin_add_registration_map (struct MTRegistrationMap *map, bool partial)
 
 	// Sort the type map according to Class
 	qsort (map->map, (size_t) map->map_count, sizeof (MTClassMap), compare_mtclassmap);
+}
+
+void
+xamarin_set_registrar_per_assembly ()
+{
+	options.flags = (InitializationFlags) (options.flags | InitializationFlagsIsRegistrarPerAssembly);
 }
 
 /*

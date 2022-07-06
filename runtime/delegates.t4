@@ -172,11 +172,30 @@
 		},
 
 		// Do not automatically unwrap the return value, because otherwise we might need to immediately wrap it in a GCHandle again.
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_get_method_from_map_and_token",
+			"struct MTRegistrationMap *", "MTRegistrationMap *", "map",
+			"unsigned int", "uint", "token_ref"
+		) {
+			WrappedManagedFunction = "GetMethodFromMapAndToken",
+			OnlyDynamicUsage = false,
+		},
+
+		// Do not automatically unwrap the return value, because otherwise we might need to immediately wrap it in a GCHandle again.
 		new XDelegate ("GCHandle", "IntPtr", "xamarin_get_generic_method_from_token",
 			"GCHandle->MonoObject *", "IntPtr", "obj_handle",
 			"unsigned int", "uint", "token_ref"
 		) {
 			WrappedManagedFunction = "GetGenericMethodFromToken",
+			OnlyDynamicUsage = false,
+		},
+
+		// Do not automatically unwrap the return value, because otherwise we might need to immediately wrap it in a GCHandle again.
+		new XDelegate ("GCHandle", "IntPtr", "xamarin_get_generic_method_from_map_and_token",
+			"GCHandle->MonoObject *", "IntPtr", "obj_handle",
+			"struct MTRegistrationMap *", "MTRegistrationMap *", "map",
+			"unsigned int", "uint", "token_ref"
+		) {
+			WrappedManagedFunction = "GetGenericMethodFromMapAndToken",
 			OnlyDynamicUsage = false,
 		},
 
@@ -187,6 +206,17 @@
 			"unsigned int", "uint", "implementation_token_ref"
 		) {
 			WrappedManagedFunction = "GetINativeObject_Static",
+			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("GCHandle->MonoObject *", "IntPtr", "xamarin_get_inative_object_static_with_map",
+			"id", "IntPtr", "obj",
+			"bool", "bool", "owns",
+			"struct MTRegistrationMap *", "MTRegistrationMap *", "map",
+			"unsigned int", "uint", "iface_token_ref",
+			"unsigned int", "uint", "implementation_token_ref"
+		) {
+			WrappedManagedFunction = "GetINativeObject_StaticWithMap",
 			OnlyDynamicUsage = false,
 		},
 
@@ -677,6 +707,13 @@
 		) {
 			WrappedManagedFunction = "AttemptRetainNSObject",
 			OnlyDynamicUsage = false,
+		},
+
+		new XDelegate ("bool", "bool", "xamarin_invoke_conforms_to_protocol",
+			"id", "IntPtr", "obj",
+			"Protocol *", "IntPtr", "protocol"
+		) {
+			WrappedManagedFunction = "InvokeConformsToProtocol",
 		},
 	};
 	delegates.CalculateLengths ();

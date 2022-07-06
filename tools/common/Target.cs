@@ -604,7 +604,7 @@ namespace Xamarin.Bundler {
 			sw.WriteLine ("#include <xamarin/xamarin.h>");
 #if !NET
 			if (App.Registrar == RegistrarMode.PartialStatic)
-				sw.WriteLine ("extern \"C\" void xamarin_create_classes_Xamarin_Mac ();");
+				sw.WriteLine ($"extern \"C\" void {StaticRegistrar.GetInitializationMethodName ("Xamarin.Mac")} ();");
 #endif
 			sw.WriteLine ();
 			sw.WriteLine ();
@@ -625,13 +625,6 @@ namespace Xamarin.Bundler {
 			if (App.DisableOmitFramePointer ?? App.EnableDebug)
 				sw.WriteLine ("\txamarin_disable_omit_fp = true;");
 			sw.WriteLine ();
-
-#if !NET
-			if (App.Registrar == RegistrarMode.Static)
-				sw.WriteLine ("\txamarin_create_classes ();");
-			else if (App.Registrar == RegistrarMode.PartialStatic)
-				sw.WriteLine ("\txamarin_create_classes_Xamarin_Mac ();");
-#endif
 
 			if (App.EnableDebug)
 				sw.WriteLine ("\txamarin_debug_mode = TRUE;");
@@ -786,6 +779,9 @@ namespace Xamarin.Bundler {
 
 			if (assembly_location.Length > 0)
 				sw.WriteLine ("\txamarin_set_assembly_directories (&assembly_locations);");
+
+			if (app.Registrar == RegistrarMode.StaticPerAssembly)
+				sw.WriteLine ("\txamarin_set_registrar_per_assembly ();");
 
 			sw.WriteLine ("\txamarin_invoke_registration_methods ();");
 

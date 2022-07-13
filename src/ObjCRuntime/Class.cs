@@ -5,7 +5,7 @@
 // Copyright 2011 - 2015 Xamarin Inc. All rights reserved.
 //
 
-// #define LOG_TYPELOAD
+#define LOG_TYPELOAD
 
 #nullable enable
 

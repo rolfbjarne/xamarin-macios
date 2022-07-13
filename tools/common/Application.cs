@@ -53,6 +53,7 @@ namespace Xamarin.Bundler {
 		Dynamic,
 		PartialStatic,
 		Static,
+		StaticPerAssembly,
 	}
 
 	public partial class Application {
@@ -841,6 +842,9 @@ namespace Xamarin.Bundler {
 
 			SetObjectiveCExceptionMode ();
 			SetManagedExceptionMode ();
+#if NET
+			SelectRegistrar ();
+#endif
 
 			if (SymbolMode == SymbolMode.Default) {
 #if MONOTOUCH
@@ -1249,6 +1253,12 @@ namespace Xamarin.Bundler {
 			case "partial":
 			case "partial-static":
 				Registrar = RegistrarMode.PartialStatic;
+				break;
+#endif
+#if NET
+			case "staticperassembly":
+			case "static-per-assembly":
+				Registrar = RegistrarMode.StaticPerAssembly;
 				break;
 #endif
 			default:

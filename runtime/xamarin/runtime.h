@@ -228,6 +228,7 @@ void			xamarin_install_nsautoreleasepool_hooks ();
 void			xamarin_enable_new_refcount ();
 const char * const	xamarin_get_original_working_directory_path ();
 int				xamarin_get_runtime_arch ();
+void			xamarin_set_registrar_per_assembly ();
 
 MonoObject *	xamarin_new_nsobject (id self, MonoClass *klass, GCHandle *exception_gchandle);
 bool			xamarin_has_managed_ref (id self);

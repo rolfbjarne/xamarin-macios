@@ -3360,6 +3360,14 @@ namespace Registrar {
 				return;
 			}
 
+			if (method.Selector == "conformsToProtocol:" && method.Method.DeclaringType.Is ("Foundation", "NSObject") && method.Method.Name == "InvokeConformsToProtocol" && method.Parameters.Length == 1 && method.Parameters [0].Is ("ObjCRuntime", "NativeHandle")) {
+				sb.AppendLine ("-(BOOL) conformsToProtocol: (void *) protocol");
+				sb.AppendLine ("{");
+				sb.AppendLine ("return xamarin_invoke_conforms_to_protocol (self, (Protocol *) protocol);");
+				sb.AppendLine ("}");
+				return;
+			}
+
 			var rettype = string.Empty;
 			var returntype = method.ReturnType;
 			var isStatic = method.IsStatic;

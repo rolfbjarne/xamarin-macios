@@ -262,7 +262,7 @@ namespace Xamarin.Bundler {
 				InlineDynamicRegistrationSupported = true;
 
 			// By default always enable static block-to-delegate lookup (it won't make a difference unless the static registrar is used though)
-			if (!StaticBlockToDelegateLookup.HasValue)
+			if (!StaticBlockToDelegateLookup.HasValue && app.Registrar == RegistrarMode.Static)
 				StaticBlockToDelegateLookup = true;
 
 			if (!RemoveDynamicRegistrar.HasValue) {

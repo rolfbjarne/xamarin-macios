@@ -18,6 +18,7 @@
     <CodesignEntitlements Condition="'$(Platform)' == 'iPhoneSimulator'">$(MonoTouchTestDirectory)\Entitlements.plist</CodesignEntitlements>
 
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG</DefineConstants>
+    <Registrar>staticperassembly</Registrar>
   </PropertyGroup>
 
   <Import Project="$(RootTestsDirectory)/common/shared-dotnet.csproj" />

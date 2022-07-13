@@ -5205,6 +5205,13 @@ namespace Registrar {
 			methods = new AutoIndentStringBuilder ();
 			interfaces = new AutoIndentStringBuilder ();
 
+			var ifndef_symbol = string.Empty;
+			if (IsSingleAssembly) {
+				ifndef_symbol = single_assembly.Replace ('.', '_').Replace ('-', '_').ToUpperInvariant () + "_STATIC_REGISTRAR";
+				header.WriteLine ($"#ifndef {ifndef_symbol}");
+				header.WriteLine ($"#define {ifndef_symbol}");
+			}
+
 			header.WriteLine ("#pragma clang diagnostic ignored \"-Wdeprecated-declarations\"");
 			header.WriteLine ("#pragma clang diagnostic ignored \"-Wtypedef-redefinition\""); // temporary hack until we can stop including glib.h
 			header.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-designated-initializers\"");
@@ -5244,6 +5251,9 @@ namespace Registrar {
 			methods.AppendLine (method_impls.ToString ());
 
 			methods.StringBuilder.AppendLine ("} /* extern \"C\" */");
+
+			if (IsSingleAssembly)
+				header.WriteLine ($"#endif // {ifndef_symbol}");
 
 			FlushTrace ();
 

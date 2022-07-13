@@ -880,7 +880,7 @@ namespace Registrar {
 
 		protected override string GetAssemblyName (AssemblyDefinition assembly)
 		{
-			return assembly.Name.Name;
+			return assembly?.Name?.Name;
 		}
 
 		protected override string GetTypeFullName (TypeReference type)
@@ -2344,7 +2344,12 @@ namespace Registrar {
 
 			ProcessStructure (name, body, structure, ref size, descriptiveMethodName, structure, inMember);
 
-			n = "struct trampoline_struct_" + name.ToString ();
+			var prefix = string.Empty;
+			if (RegistrarMode == RegistrarMode.StaticPerAssembly)
+				prefix = inMember.Module.Assembly.Name.Name.Replace ('.', '_').Replace ('-', '_') + "_";
+
+			n = $"struct {prefix}trampoline_struct_{name}";
+
 			if (!structures.Contains (n)) {
 				structures.Add (n);
 				declarations.WriteLine ($"// {structure.FullName} (+other structs with same layout)");
@@ -2781,6 +2786,12 @@ namespace Registrar {
 			public uint SkippedTokenReference;
 			public uint ActualTokenReference;
 		}
+
+		RegistrarMode RegistrarMode { get {
+				return Target?.App?.Registrar ?? RegistrarMode.Static;
+			}
+		}
+
 		List<SkippedType> skipped_types = new List<SkippedType> ();
 		protected override void OnSkipType (TypeReference type, ObjCType registered_type)
 		{
@@ -3938,7 +3949,9 @@ namespace Registrar {
 							if (isOut) {
 								// Do nothing
 							} else if (td.IsInterface && tdTokenRef != INVALID_TOKEN_REF && nativeObjectTypeTokenRef != INVALID_TOKEN_REF) {
-								setup_call_stack.AppendLine ("inobj{0} = xamarin_get_inative_object_static (*p{0}, false, 0x{1:X} /* {2} */, 0x{3:X} /* {4} */, &exception_gchandle);", i, tdTokenRef, td.FullName, nativeObjectTypeTokenRef, nativeObjType.FullName);
+								var with_map = RegistrarMode == RegistrarMode.StaticPerAssembly ? "_with_map" : "";
+								var the_map = RegistrarMode == RegistrarMode.StaticPerAssembly ? "&__xamarin_registration_map, " : "";
+								setup_call_stack.AppendLine ($"inobj{i} = xamarin_get_inative_object_static{with_map} (*p{i}, false, {the_map}0x{tdTokenRef:X} /* {td.FullName} */, 0x{nativeObjectTypeTokenRef:X} /* {nativeObjType.FullName} */, &exception_gchandle);");
 								setup_call_stack.AppendLine ("if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 							} else {
 								body_setup.AppendLine ("MonoReflectionType *reflectiontype{0} = NULL;", i);
@@ -3960,7 +3973,9 @@ namespace Registrar {
 							copyback.AppendLine ("*p{0} = (id) handle{0};", i);
 						} else {
 							if (td.IsInterface && tdTokenRef != INVALID_TOKEN_REF && nativeObjectTypeTokenRef != INVALID_TOKEN_REF) {
-								setup_call_stack.AppendLine ($"inobj{i} = xamarin_get_inative_object_static (p{i}, false, 0x{tdTokenRef:X} /* {td.FullName} */, 0x{nativeObjectTypeTokenRef:X} /* {nativeObjType.FullName} */, &exception_gchandle);");
+								var with_map = RegistrarMode == RegistrarMode.StaticPerAssembly ? "_with_map" : "";
+								var the_map = RegistrarMode == RegistrarMode.StaticPerAssembly ? "&__xamarin_registration_map, " : "";
+								setup_call_stack.AppendLine ($"inobj{i} = xamarin_get_inative_object_static{with_map} (p{i}, false, {the_map}0x{tdTokenRef:X} /* {td.FullName} */, 0x{nativeObjectTypeTokenRef:X} /* {nativeObjType.FullName} */, &exception_gchandle);");
 							} else {
 								body_setup.AppendLine ("MonoReflectionType *reflectiontype{0} = NULL;", i);
 								cleanup.AppendLine ("xamarin_mono_object_release (&reflectiontype{0});", i);
@@ -4209,10 +4224,19 @@ namespace Registrar {
 			// no locking should be required here, it doesn't matter if we overwrite the field (it'll be the same value).
 			body.WriteLine ("if (!managed_method) {");
 			body.Write ("GCHandle reflection_method_handle = ");
-			if (isGeneric)
-				body.Write ("xamarin_get_generic_method_from_token (mthis, ");
-			else
-				body.Write ("xamarin_get_method_from_token (");
+			if (RegistrarMode == RegistrarMode.StaticPerAssembly) {
+				if (isGeneric) {
+					body.Write ("xamarin_get_generic_method_from_map_and_token (mthis, &__xamarin_registration_map, ");
+				} else {
+					body.Write ("xamarin_get_method_from_map_and_token (&__xamarin_registration_map, ");
+				}
+			} else {
+				if (isGeneric) {
+					body.Write ("xamarin_get_generic_method_from_token (mthis, ");
+				} else {
+					body.Write ("xamarin_get_method_from_token (");
+				}
+			}
 
 			if (merge_bodies) {
 				body.WriteLine ("token_ref, &exception_gchandle);");
@@ -5166,6 +5190,11 @@ namespace Registrar {
 			pinfo.EntryPoint = wrapperName;
 		}
 
+		public int	GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, AssemblyDefinition assembly, out string initialization_method)
+		{
+			return GenerateSingleAssembly (resolver, assemblies	, header_path, source_path, GetAssemblyName (assembly), out initialization_method);
+		}
+
 		public int GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method)
 		{
 			single_assembly = assembly;
@@ -5233,6 +5262,50 @@ namespace Registrar {
 			header.WriteLine ("#include <objc/objc.h>");
 			header.WriteLine ("#include <objc/runtime.h>");
 			header.WriteLine ("#include <objc/message.h>");
+
+			if (IsSingleAssembly) {
+				foreach (var asm in input_assemblies) {
+					foreach (var asmref in asm.MainModule.AssemblyReferences) {
+						switch (asmref.Name) {
+						case "System.Runtime":
+						case "System.Runtime.InteropServices":
+						case "System":
+						case "System.Numerics.Vectors":
+						case "System.Xml":
+						case "System.Collections":
+						case "System.Core":
+						case "System.Drawing.Common":
+						case "System.Net.Http":
+						case "System.Net.Primitives":
+						case "System.Security.Cryptography.X509Certificates":
+						case "mscorlib":
+						case "System.Xml.ReaderWriter":
+						case "System.Threading":
+						case "System.Net.NameResolution":
+						case "System.Threading.Thread":
+						case "System.Net.Sockets":
+						case "System.Drawing.Primitives":
+						case "System.Net.ServicePoint":
+						case "System.IO.Compression":
+						case "System.Net.Security":
+						case "System.Linq":
+						case "System.Collections.NonGeneric":
+						case "System.Runtime.CompilerServices.Unsafe":
+						case "System.Memory":
+						case "System.Console":
+						case "System.Net.Requests":
+							continue;
+						default:
+							if (asmref.Name.StartsWith ("System.", StringComparison.Ordinal))
+								continue;
+							if (asmref.Name.StartsWith ("Microsoft.", StringComparison.Ordinal))
+								continue;
+							break;
+						}
+						header.WriteLine ($"#include \"{asmref.Name}.registrar.h\"");
+					}
+				}
+			}
 
 			methods.WriteLine ($"#include \"{Path.GetFileName (header_path)}\"");
 			methods.StringBuilder.AppendLine ("extern \"C\" {");

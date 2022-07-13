@@ -156,6 +156,7 @@ namespace ObjCRuntime {
 #if NET
 			IsCoreCLR				= 0x20,
 #endif
+			IsRegistrarPerAssembly	= 0x40,
 		}
 
 #if MONOMAC
@@ -209,6 +210,15 @@ namespace ObjCRuntime {
 				return (options->Flags.HasFlag (InitializationFlags.IsCoreCLR));
 			}
 		}
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal unsafe static bool IsRegistrarPerAssembly {
+			get {
+				// The linker may turn calls to this property into a constant
+				return (options->Flags.HasFlag (InitializationFlags.IsRegistrarPerAssembly));
+			}
+		}
+
 #endif
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
@@ -2182,6 +2192,49 @@ namespace ObjCRuntime {
 		static extern IntPtr xamarin_get_original_working_directory_path ();
 #endif // NET || !__MACOS__
 
+#if NET && (__MACOS__ || __MACCATALYST__)
+		static void LoadRegistrarLibrary (string assemblyPath)
+		{
+			var static_registrar_disabled = Environment.GetEnvironmentVariable ("XAMARIN_DISABLE_STATIC_REGISTRAR");
+			if (!string.IsNullOrEmpty (static_registrar_disabled)) {
+				NSLog ($"Skipped looking for a registrar library for the assembly {assemblyPath} because the static registrar has been disabled.");
+				return;
+			}
+
+			var registrarPath = Path.Combine (Path.GetDirectoryName (assemblyPath)!, "lib" + Path.GetFileNameWithoutExtension (assemblyPath)! + ".registrar.dylib");
+			registrarPath = Path.GetFullPath (registrarPath);
+			if (!File.Exists (registrarPath)) {
+				NSLog ($"The registrar library {registrarPath} does not exist (for the assembly {assemblyPath})");
+				return;
+			}
+
+			var lib = Dlfcn.dlopen (registrarPath, Dlfcn.Mode.Lazy);
+			if (lib == IntPtr.Zero) {
+				NSLog ($"Failed to load the registrar library {registrarPath}: {Dlfcn.dlerror ()}");
+				return;
+			}
+
+			try {
+				var symbolName = "xamarin_create_classes_" + Path.GetFileNameWithoutExtension (assemblyPath).Replace ('.', '_').Replace ('-', '_');
+				var symbol = Dlfcn.dlsym (lib, symbolName);
+				if (symbol == IntPtr.Zero) {
+					NSLog ($"Failed to load the symbol '{symbolName}' in the registrar library {registrarPath}: {Dlfcn.dlerror ()}");
+				} else {
+					var del = Marshal.GetDelegateForFunctionPointer<Action> (symbol);
+					del ();
+				}
+			} finally {
+				Dlfcn.dlclose (lib);
+			}
+		}
+
+		static void AssemblyLoadedEventHandler (object? sender, AssemblyLoadEventArgs eventArgs)
+		{
+			var assemblyPath = eventArgs.LoadedAssembly.Location;
+			LoadRegistrarLibrary (assemblyPath);
+		}
+#endif // NET && (__MACOS__ || __MACCATALYST__)
+
 		static sbyte InvokeConformsToProtocol (IntPtr handle, IntPtr protocol)
 		{
 			var obj = Runtime.GetNSObject (handle);
@@ -2190,6 +2243,21 @@ namespace ObjCRuntime {
 			var rv = obj.ConformsToProtocol (protocol);
 			return (sbyte) (rv ? 1 : 0);
 		}
+
+#if NET
+		public static void EnablePerAssemblyRegistrar (bool value)
+		{
+#if __MACOS__ || __MACCATALYST__
+			if (value) {
+				AppDomain.CurrentDomain.AssemblyLoad += AssemblyLoadedEventHandler;
+			} else {
+				AppDomain.CurrentDomain.AssemblyLoad -= AssemblyLoadedEventHandler;
+			}
+#else
+			throw new PlatformNotSupportedException ();
+#endif
+		}
+#endif // NET
 
 	}
 

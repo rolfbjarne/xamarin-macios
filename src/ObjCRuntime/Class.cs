@@ -5,7 +5,7 @@
 // Copyright 2011 - 2015 Xamarin Inc. All rights reserved.
 //
 
-// #define LOG_TYPELOAD
+#define LOG_TYPELOAD
 
 #nullable enable
 
@@ -506,7 +506,7 @@ namespace ObjCRuntime {
 			case 0x06000000: // Method
 				var method = module.ResolveMethod ((int) token);
 #if LOG_TYPELOAD
-				Console.WriteLine ($"ResolveToken (0x{token:X}) => Method: {method?.DeclaringType?.FullName}.{method.Name}");
+				Console.WriteLine ($"ResolveToken (0x{token:X}) => Method: {method?.DeclaringType?.FullName}.{method?.Name}");
 #endif
 				return method;
 			default:

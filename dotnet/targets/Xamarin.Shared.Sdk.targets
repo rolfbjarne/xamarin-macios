@@ -234,8 +234,10 @@
 			_ComputeStripAssemblyIL;
 			_StripAssemblyIL;
 			_LoadLinkerOutput;
-			_CompileNativeExecutable;
+			_CompileNativeLibraries;
 			_LinkNativeExecutable;
+			_CompileNativeExecutable;
+			_LinkNativeLibraries;
 			_ComputePublishLocation;
 			_ComputeCodesignItems;
 			CopyFilesToPublishDirectory;
@@ -556,6 +558,10 @@
 
 			<!-- Enable serialization discovery. Ref: https://github.com/xamarin/xamarin-macios/issues/15676 -->
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --enable-serialization-discovery</_ExtraTrimmerArgs>
+
+			<!-- Set linker feature flags for the registrar -->
+			<_ExtraTrimmerArgs Condition="'$(Registrar)' == 'staticperassembly'">$(_ExtraTrimmerArgs) --feature PerAssemblyRegistrar true</_ExtraTrimmerArgs>
+			<_ExtraTrimmerArgs Condition="'$(Registrar)' != 'staticperassembly'">$(_ExtraTrimmerArgs) --feature PerAssemblyRegistrar false</_ExtraTrimmerArgs>
 
 			<!-- We always want the linker to process debug symbols, even when building in Release mode, because the AOT compiler uses the managed debug symbols to output DWARF debugging symbols -->
 			<TrimmerRemoveSymbols Condition="'$(TrimmerRemoveSymbols)' == ''">false</TrimmerRemoveSymbols>
@@ -1096,13 +1102,22 @@
 			<_CompileNativeExecutableFile Include="@(_MainFile)">
 				<OutputFile>$(_IntermediateNativeLibraryDir)%(Filename).o</OutputFile>
 			</_CompileNativeExecutableFile>
-			<_CompileNativeExecutableFile Include="@(_RegistrarFile)">
+			<_CompileNativeExecutableFile Include="@(_RegistrarFile)" Condition="'$(Registrar)' != 'staticperassembly'">
 				<OutputFile>$(_IntermediateNativeLibraryDir)%(Filename).o</OutputFile>
 			</_CompileNativeExecutableFile>
 			<_CompileNativeExecutableFile Include="@(_ReferencesFile)">
 				<OutputFile>$(_IntermediateNativeLibraryDir)%(Filename).o</OutputFile>
 			</_CompileNativeExecutableFile>
 			<_XamarinMainIncludeDirectory Include="$(_XamarinIncludeDirectory)" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_ComputeNativeLibraryInputs" DependsOnTargets="_ComputeVariables">
+		<ItemGroup>
+			<_CompileNativeLibraryFile Include="@(_RegistrarFile)" Condition="'$(Registrar)' == 'staticperassembly'">
+				<OutputFile>$(_IntermediateNativeLibraryDir)%(Filename).o</OutputFile>
+				<LibraryFile>$(_IntermediateNativeLibraryDir)lib%(Filename).dylib</LibraryFile>
+			</_CompileNativeLibraryFile>
 		</ItemGroup>
 	</Target>
 
@@ -1146,6 +1161,112 @@
 	</Target>
 
 	<PropertyGroup>
+		<_CompileNativeLibrariesDependsOn>
+			$(_CompileNativeLibrariesDependsOn);
+			_DetectSdkLocations;
+			_ComputeTargetArchitectures;
+			_GenerateBundleName;
+			_DetectAppManifest;
+			_ReadAppManifest;
+			_WriteAppManifest;
+			_ComputeNativeLibraryInputs;
+			_AOTCompile;
+			_LoadLinkerOutput;
+		</_CompileNativeLibrariesDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_CompileNativeLibraries"
+		DependsOnTargets="$(_CompileNativeLibrariesDependsOn)"
+		Inputs="@(_CompileNativeLibraryFile)"
+		Outputs="@(_CompileNativeLibraryFile -> '%(OutputFile)')"
+		>
+
+		<MakeDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(_IntermediateNativeLibraryDir)" />
+
+		<CompileNativeCode
+			SessionId="$(BuildSessionId)"
+			CompileInfo="@(_CompileNativeLibraryFile)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
+			IncludeDirectories="$(_XamarinIncludeDirectory)"
+			SdkDevPath="$(_SdkDevPath)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			SdkRoot="$(_SdkRoot)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		>
+		</CompileNativeCode>
+	</Target>
+
+	<PropertyGroup>
+		<_LinkNativeLibrariesDependsOn>
+			$(_LinkNativeLibrariesDependsOn);
+			_DetectSdkLocations;
+			_ComputeTargetArchitectures;
+			_GenerateBundleName;
+			_DetectAppManifest;
+			_ReadAppManifest;
+			_WriteAppManifest;
+			_CompileNativeExecutable;
+			_ReidentifyDynamicLibraries;
+			_ComputeNativeLibraryInputs;
+			_ComputeLinkNativeLibraryInputs;
+		</_LinkNativeLibrariesDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_ComputeLinkNativeLibraryInputs">
+		<ItemGroup Condition="'$(IsMacEnabled)' == 'true'">
+			<_NativeLibrariesLinkWithLibraries Include="$(_XamarinNativeLibraryDirectory)/$(_LibXamarinName)" />
+			<!-- Link with the libraries shipped with the mono runtime pack -->
+			<_NativeLibrariesLinkWithLibraries Include="@(_MonoLibrary)" />
+
+			<!-- The frameworks we need to link with (both weakly and normally) -->
+			<_NativeLibrariesFrameworks Include="@(_LinkerFrameworks)" />
+
+			<!-- We're building a shared library! -->
+			<_NativeLibrariesLinkerFlags Include="-shared" />
+
+			<!-- Tell the linker where to find other native libraries if need be -->
+			<_NativeLibrariesLinkerFlags Include="-L$(_IntermediateNativeLibraryDir)" />
+
+			<!-- Mono requires zlib, iconv, and the "Compression framework" -->
+			<_NativeLibrariesLinkerFlags Include="-lz" />
+			<_NativeLibrariesLinkerFlags Include="-liconv" />
+			<_NativeLibrariesLinkerFlags Include="-lcompression" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_LinkNativeLibraries"
+			DependsOnTargets="$(_LinkNativeLibrariesDependsOn)"
+			Inputs="@(_CompileNativeLibraryFile -> '%(OutputFile)')"
+			Outputs="@(_CompileNativeLibraryFile -> '%(LibraryFile)')"
+		>
+
+		<LinkNativeCode
+			SessionId="$(BuildSessionId)"
+			Frameworks="@(_NativeLibrariesFrameworks)"
+			LinkerFlags="@(_NativeLibrariesLinkerFlags)"
+			LinkWithLibraries="@(_NativeLibrariesLinkWithLibraries);%(_CompileNativeLibraryFile.ReferencedAssemblies)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
+			NativeReferences="@(_FileNativeReference);@(_FrameworkNativeReference)"
+			ObjectFiles="%(_CompileNativeLibraryFile.OutputFile)"
+			OutputFile="%(_CompileNativeLibraryFile.LibraryFile)"
+			SdkDevPath="$(_SdkDevPath)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			SdkRoot="$(_SdkRoot)"
+			TargetArchitectures="$(TargetArchitectures)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		/>
+
+		<ItemGroup>
+			<!-- Copy the libraries from the intermediate directory to the .app -->
+			<ResolvedFileToPublish Include="@(_CompileNativeLibraryFile -> '%(LibraryFile)')">
+				<RelativePath>$(_DylibPublishDir)\$([System.IO.Path]::GetFileName('%(_CompileNativeLibraryFile.LibraryFile)'))</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>
+
+
+	<PropertyGroup>
 		<_LinkNativeExecutableDependsOn>
 			$(_LinkNativeExecutableDependsOn);
 			_DetectSdkLocations;
@@ -1156,6 +1277,7 @@
 			_WriteAppManifest;
 			_CompileNativeExecutable;
 			_ReidentifyDynamicLibraries;
+			_LinkNativeLibraries;
 			_ComputeLinkNativeExecutableInputs;
 		</_LinkNativeExecutableDependsOn>
 	</PropertyGroup>
@@ -1165,6 +1287,10 @@
 			<_XamarinMainLibraries Include="$(_XamarinNativeLibraryDirectory)/$(_LibXamarinName)" />
 			<!-- Link with the libraries shipped with the mono runtime pack -->
 			<_XamarinMainLibraries Include="@(_MonoLibrary)" />
+
+			<!-- Link with the static registrar library for our product assembly -->
+			<_XamarinMainLibraries Include="@(_CompileNativeLibraryFile -> '%(LibraryFile)')" Condition="'%(_CompileNativeLibraryFile.IsProductAssembly)' == 'true'" />
+			<_MainLinkerFlags Include="-L$(_IntermediateNativeLibraryDir)" />
 
 			<!-- The frameworks we need to link with (both weakly and normally) -->
 			<_NativeExecutableFrameworks Include="@(_LinkerFrameworks)" />

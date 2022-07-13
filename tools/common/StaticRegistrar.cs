@@ -2802,7 +2802,7 @@ namespace Registrar {
 			List<Exception> exceptions = new List<Exception> ();
 			List<ObjCMember> skip = new List<ObjCMember> ();
 
-			var map = new AutoIndentStringBuilder (1);
+			var map = new AutoIndentStringBuilder ();
 			var map_init = new AutoIndentStringBuilder ();
 			var private_interfaces = new AutoIndentStringBuilder ();
 			var impl = new AutoIndentStringBuilder ();

@@ -2096,7 +2096,9 @@ namespace Registrar {
 		static bool trace = false;
 		AutoIndentStringBuilder header;
 		AutoIndentStringBuilder declarations; // forward declarations, struct definitions
-		AutoIndentStringBuilder methods; // c methods that contain the actual implementations
+		AutoIndentStringBuilder method_decls; // forward declarations for c methods that contain the actual implementations
+		AutoIndentStringBuilder method_impls; // c methods that contain the actual implementations
+		AutoIndentStringBuilder methods;
 		AutoIndentStringBuilder interfaces; // public objective-c @interface declarations
 		AutoIndentStringBuilder nslog_start = new AutoIndentStringBuilder ();
 		AutoIndentStringBuilder nslog_end = new AutoIndentStringBuilder ();
@@ -2802,6 +2804,8 @@ namespace Registrar {
 
 			var map = new AutoIndentStringBuilder (1);
 			var map_init = new AutoIndentStringBuilder ();
+			var private_interfaces = new AutoIndentStringBuilder ();
+			var impl = new AutoIndentStringBuilder ();
 			var map_dict = new Dictionary<ObjCType, int> (); // maps ObjCType to its index in the map
 			var map_entries = 0;
 			var protocol_wrapper_map = new Dictionary<uint, Tuple<ObjCType, uint>> ();
@@ -2948,7 +2952,7 @@ namespace Registrar {
 				var td = @class.Type.Resolve ();
 				AutoIndentStringBuilder iface;
 				if (td.IsNotPublic || td.IsNestedPrivate || td.IsNestedAssembly || td.IsNestedFamilyAndAssembly) {
-					iface = sb;
+					iface = private_interfaces;
 				} else {
 					iface = interfaces;
 				}
@@ -3107,42 +3111,42 @@ namespace Registrar {
 				if (!is_protocol && !@class.IsWrapper) {
 					var hasClangDiagnostic = @class.IsModel;
 					if (hasClangDiagnostic)
-						sb.WriteLine ("#pragma clang diagnostic push");
+						impl.WriteLine ("#pragma clang diagnostic push");
 					if (@class.IsModel) {
-						sb.WriteLine ("#pragma clang diagnostic ignored \"-Wprotocol\"");
-						sb.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-protocol-property-synthesis\"");
-						sb.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-property-implementation\"");
+						impl.WriteLine ("#pragma clang diagnostic ignored \"-Wprotocol\"");
+						impl.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-protocol-property-synthesis\"");
+						impl.WriteLine ("#pragma clang diagnostic ignored \"-Wobjc-property-implementation\"");
 					}
 					if (@class.IsCategory) {
-						sb.WriteLine ("@implementation {0} ({1})", EncodeNonAsciiCharacters (@class.BaseType.ExportedName), @class.CategoryName);
+						impl.WriteLine ("@implementation {0} ({1})", EncodeNonAsciiCharacters (@class.BaseType.ExportedName), @class.CategoryName);
 					} else {
-						sb.WriteLine ("@implementation {0} {{", class_name);
+						impl.WriteLine ("@implementation {0} {{", class_name);
 						if (implementation_fields != null) {
-							sb.Indent ();
-							sb.Append (implementation_fields);
-							sb.Unindent ();
+							impl.Indent ();
+							impl.Append (implementation_fields);
+							impl.Unindent ();
 						}
-						sb.WriteLine ("}");
+						impl.WriteLine ("}");
 					}
-					sb.Indent ();
+					impl.Indent ();
 					if (@class.Methods != null) {
 						foreach (var method in @class.Methods) {
 							if (skip.Contains (method))
 								continue;
 
 							try {
-								Specialize (sb, method, exceptions);
+								Specialize (impl, method, exceptions);
 							} catch (Exception ex) {
 								exceptions.Add (ex);
 							}
 						}
 					}
-					sb.Unindent ();
-					sb.WriteLine ("@end");
+					impl.Unindent ();
+					impl.WriteLine ("@end");
 					if (hasClangDiagnostic)
-						sb.AppendLine ("#pragma clang diagnostic pop");
+						impl.AppendLine ("#pragma clang diagnostic pop");
 				}
-				sb.WriteLine ();
+				impl.WriteLine ();
 			}
 
 			map.AppendLine ("{ NULL, 0 },");
@@ -3247,6 +3251,8 @@ namespace Registrar {
 			map_init.AppendLine ("}");
 
 			sb.WriteLine (map.ToString ());
+			sb.WriteLine (private_interfaces.ToString ());
+			sb.WriteLine (impl.ToString ());
 			sb.WriteLine (map_init.ToString ());
 
 			ErrorHelper.ThrowIfErrors (exceptions);
@@ -4281,19 +4287,23 @@ namespace Registrar {
 				b.Name = "native_to_managed_trampoline_" + bodies.Count.ToString ();
 
 				if (merge_bodies) {
-					methods.Append ("static ");
-					methods.Append (rettype).Append (" ").Append (b.Name).Append (" (id self, SEL _cmd, MonoMethod **managed_method_ptr");
+					var decl = new AutoIndentStringBuilder ();
+					decl.Append ("static ");
+					decl.Append (rettype).Append (" ").Append (b.Name).Append (" (id self, SEL _cmd, MonoMethod **managed_method_ptr");
 					var pcount = method.Method.HasParameters ? method.NativeParameters.Length : 0;
 					for (int i = (isInstanceCategory ? 1 : 0); i < pcount; i++) {
-						methods.Append (", ").Append (ToSimpleObjCParameterType (method.NativeParameters [i], descriptiveMethodName, exceptions, method.Method));
-						methods.Append (" ").Append ("p").Append (i.ToString ());
+						decl.Append (", ").Append (ToSimpleObjCParameterType (method.NativeParameters [i], descriptiveMethodName, exceptions, method.Method));
+						decl.Append (" ").Append ("p").Append (i.ToString ());
 					}
 					if (isCtor)
-						methods.Append (", bool* call_super");
-					methods.Append (", uint32_t token_ref");
-					methods.AppendLine (")");
-					methods.AppendLine (body);
-					methods.AppendLine ();
+						decl.Append (", bool* call_super");
+					decl.Append (", uint32_t token_ref");
+					decl.Append (")");
+					method_decls.Append (decl).Append (";").AppendLine ();
+
+					method_impls.AppendLine (decl);
+					method_impls.AppendLine (body);
+					method_impls.AppendLine ();
 				}
 			}
 			b.Count++;
@@ -4971,22 +4981,36 @@ namespace Registrar {
 			return true;
 		}
 
-		public void GeneratePInvokeWrappersStart (AutoIndentStringBuilder hdr, AutoIndentStringBuilder decls, AutoIndentStringBuilder mthds, AutoIndentStringBuilder ifaces)
+		public void GeneratePInvokeWrappersStart (AutoIndentStringBuilder hdr, AutoIndentStringBuilder decls, AutoIndentStringBuilder mthd_decls, AutoIndentStringBuilder mthd_impls, AutoIndentStringBuilder mthds, AutoIndentStringBuilder ifaces)
 		{
 			header = hdr;
 			declarations = decls;
+			method_decls = mthd_decls;
+			method_impls = mthd_impls;
 			methods = mthds;
 			interfaces = ifaces;
 		}
 
 		public void GeneratePInvokeWrappersEnd ()
 		{
+			Clear ();
+		}
+
+		void Clear ()
+		{
 			header = null;
 			declarations = null;
+			method_decls = null;
+			method_impls = null;
 			methods = null;
 			interfaces = null;
+			trampoline_names.Clear ();
+			full_token_references.Clear ();
+			full_token_reference_count = 0;
 			namespaces.Clear ();
 			structures.Clear ();
+			bodies.Clear ();
+			registered_assemblies.Clear ();
 
 			FlushTrace ();
 		}
@@ -5143,6 +5167,7 @@ namespace Registrar {
 
 		public void Generate (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, out string initialization_method)
 		{
+			Clear ();
 			this.resolver = resolver;
 
 			if (Target?.CachedLink == true)
@@ -5163,6 +5188,8 @@ namespace Registrar {
 			var sb = new AutoIndentStringBuilder ();
 			header = new AutoIndentStringBuilder ();
 			declarations = new AutoIndentStringBuilder ();
+			method_decls = new AutoIndentStringBuilder ();
+			method_impls = new AutoIndentStringBuilder ();
 			methods = new AutoIndentStringBuilder ();
 			interfaces = new AutoIndentStringBuilder ();
 
@@ -5197,7 +5224,12 @@ namespace Registrar {
 
 			methods.WriteLine ();
 			methods.AppendLine ();
+
+			methods.AppendLine (method_decls.ToString ());
+
 			methods.AppendLine (sb);
+
+			methods.AppendLine (method_impls.ToString ());
 
 			methods.StringBuilder.AppendLine ("} /* extern \"C\" */");
 
@@ -5214,6 +5246,10 @@ namespace Registrar {
 			header = null;
 			declarations.Dispose ();
 			declarations = null;
+			method_decls.Dispose ();
+			method_decls = null;
+			method_impls.Dispose ();
+			method_impls = null;
 			methods.Dispose ();
 			methods = null;
 			interfaces.Dispose ();

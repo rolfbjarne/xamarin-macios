@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
@@ -14,8 +15,6 @@ namespace Xamarin.Linker {
 		protected override void TryEndProcess ()
 		{
 			var app = Configuration.Application;
-
-			app.SelectRegistrar ();
 
 			switch (app.Registrar) {
 			case RegistrarMode.Dynamic:

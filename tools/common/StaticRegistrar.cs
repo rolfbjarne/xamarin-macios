@@ -2797,7 +2797,7 @@ namespace Registrar {
 			}
 		}
 
-		void Specialize (AutoIndentStringBuilder sb, out string initialization_method)
+		int Specialize (AutoIndentStringBuilder sb, out string initialization_method)
 		{
 			List<Exception> exceptions = new List<Exception> ();
 			List<ObjCMember> skip = new List<ObjCMember> ();
@@ -3268,6 +3268,8 @@ namespace Registrar {
 			sb.WriteLine (map_init.ToString ());
 
 			ErrorHelper.ThrowIfErrors (exceptions);
+
+			return i;
 		}
 
 		bool HasIntPtrBoolCtor (TypeDefinition type, List<Exception> exceptions)
@@ -5164,18 +5166,18 @@ namespace Registrar {
 			pinfo.EntryPoint = wrapperName;
 		}
 
-		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method)
+		public int GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method)
 		{
 			single_assembly = assembly;
-			Generate (resolver, assemblies, header_path, source_path, out initialization_method);
+			return Generate (resolver, assemblies, header_path, source_path, out initialization_method);
 		}
 
-		public void Generate (IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, out string initialization_method)
+		public int Generate (IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, out string initialization_method)
 		{
-			Generate (null, assemblies, header_path, source_path, out initialization_method);
+			return Generate (null, assemblies, header_path, source_path, out initialization_method);
 		}
 
-		public void Generate (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, out string initialization_method)
+		public int Generate (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, out string initialization_method)
 		{
 			Clear ();
 			this.resolver = resolver;
@@ -5190,11 +5192,12 @@ namespace Registrar {
 				RegisterAssembly (assembly);
 			}
 
-			Generate (header_path, source_path, out initialization_method);
+			return Generate (header_path, source_path, out initialization_method);
 		}
 
-		void Generate (string header_path, string source_path, out string initialization_method)
+		int Generate (string header_path, string source_path, out string initialization_method)
 		{
+			int specialized_types;
 			var sb = new AutoIndentStringBuilder ();
 			header = new AutoIndentStringBuilder ();
 			declarations = new AutoIndentStringBuilder ();
@@ -5237,7 +5240,7 @@ namespace Registrar {
 			if (App.Embeddinator)
 				methods.WriteLine ("void xamarin_embeddinator_initialize ();");
 
-			Specialize (sb, out initialization_method);
+			specialized_types = Specialize (sb, out initialization_method);
 
 			methods.WriteLine ();
 			methods.AppendLine ();
@@ -5275,6 +5278,8 @@ namespace Registrar {
 			interfaces.Dispose ();
 			interfaces = null;
 			sb.Dispose ();
+
+			return specialized_types;
 		}
 
 		protected override bool SkipRegisterAssembly (AssemblyDefinition assembly)

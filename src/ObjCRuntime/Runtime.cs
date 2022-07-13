@@ -509,9 +509,9 @@ namespace ObjCRuntime {
 			return AllocGCHandle (CreateBlockProxy ((MethodInfo) GetGCHandleTarget (method)!, block));
 		}
 
-		static IntPtr CreateDelegateProxy (IntPtr method, IntPtr @delegate, IntPtr signature, uint token_ref)
+		unsafe static IntPtr CreateDelegateProxy (IntPtr method, IntPtr @delegate, IntPtr signature, uint token_ref)
 		{
-			return BlockLiteral.GetBlockForDelegate ((MethodInfo) GetGCHandleTarget (method)!, GetGCHandleTarget (@delegate), token_ref, Marshal.PtrToStringAuto (signature));
+			return BlockLiteral.GetBlockForDelegate ((MethodInfo) GetGCHandleTarget (method)!, GetGCHandleTarget (@delegate), options->RegistrationMap, token_ref, Marshal.PtrToStringAuto (signature));
 		}
 
 		static IntPtr GetExceptionMessage (IntPtr exception_gchandle)
@@ -744,7 +744,12 @@ namespace ObjCRuntime {
 
 		static unsafe IntPtr GetMethodFromToken (uint token_ref)
 		{
-			var method = Class.ResolveMethodTokenReference (token_ref);
+			return GetMethodFromMapAndToken (options->RegistrationMap, token_ref);
+		}
+
+		static unsafe IntPtr GetMethodFromMapAndToken (MTRegistrationMap* map, uint token_ref)
+		{
+			var method = Class.ResolveMethodTokenReference (map, token_ref);
 			if (method is not null)
 				return AllocGCHandle (method);
 
@@ -753,7 +758,12 @@ namespace ObjCRuntime {
 
 		static unsafe IntPtr GetGenericMethodFromToken (IntPtr obj, uint token_ref)
 		{
-			var method = Class.ResolveMethodTokenReference (token_ref);
+			return GetGenericMethodFromMapAndToken (obj, options->RegistrationMap, token_ref);
+		}
+
+		static unsafe IntPtr GetGenericMethodFromMapAndToken (IntPtr obj, MTRegistrationMap* map, uint token_ref)
+		{
+			var method = Class.ResolveMethodTokenReference (map, token_ref);
 			if (method is null)
 				return IntPtr.Zero;
 
@@ -777,15 +787,19 @@ namespace ObjCRuntime {
 			var type = (System.Type) GetGCHandleTarget (type_ptr)!;
 			return AllocGCHandle (GetINativeObject (ptr, owns != 0, type, null));
 		}
+		unsafe static IntPtr GetINativeObject_Static (IntPtr ptr, bool owns, uint iface_token, uint implementation_token)
+		{
+			return GetINativeObject_StaticWithMap (ptr, owns, options->RegistrationMap, iface_token, implementation_token);
+		}
 
-		static IntPtr GetINativeObject_Static (IntPtr ptr, sbyte owns, uint iface_token, uint implementation_token)
+		unsafe static IntPtr GetINativeObject_StaticWithMap (IntPtr ptr, bool owns, MTRegistrationMap* map, uint iface_token, uint implementation_token)
 		{
 			/* 
 			 * This method is called from generated code from the static registrar.
 			 */
 
-			var iface = Class.ResolveTypeTokenReference (iface_token)!;
-			var type = Class.ResolveTypeTokenReference (implementation_token);
+			var iface = Class.ResolveTypeTokenReference (map, iface_token)!;
+			var type = Class.ResolveTypeTokenReference (map, implementation_token);
 			return AllocGCHandle (GetINativeObject (ptr, owns != 0, iface, type));
 		}
 
@@ -1738,11 +1752,11 @@ namespace ObjCRuntime {
 			unsafe {
 				var map = options->RegistrationMap;
 				if (map is not null) {
-					var token = Class.GetTokenReference (type, throw_exception: false);
+					var token = Class.GetTokenReference (map, type, throw_exception: false);
 					if (token != INVALID_TOKEN_REF) {
 						var wrapper_token = xamarin_find_protocol_wrapper_type (token);
 						if (wrapper_token != INVALID_TOKEN_REF)
-							return Class.ResolveTypeTokenReference (wrapper_token);
+							return Class.ResolveTypeTokenReference (map, wrapper_token);
 					}
 				}
 			}
@@ -1771,7 +1785,7 @@ namespace ObjCRuntime {
 			unsafe {
 				var map = options->RegistrationMap;
 				if (map is not null && map->protocol_count > 0) {
-					var token = Class.GetTokenReference (type);
+					var token = Class.GetTokenReference (map, type);
 					var tokens = map->protocol_map.protocol_tokens;
 					for (int i = 0; i < map->protocol_count; i++) {
 						if (tokens [i] == token)

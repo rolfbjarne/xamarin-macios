@@ -34,6 +34,12 @@ steps:
   - ${{ each pair in step }}:
       ${{ pair.key }}: ${{ pair.value }}       
 
+# make sure we don't have packages from previous builds
+- bash: |
+    rm -rf "$(Build.SourcesDirectory)/package"
+    mkdir -p "$(Build.SourcesDirectory)/package"
+  displayName: 'Clean the package directory'
+
 - task: DownloadPipelineArtifact@2
   displayName: Download not notarized build
   inputs:

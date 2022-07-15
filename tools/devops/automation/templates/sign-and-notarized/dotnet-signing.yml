@@ -13,8 +13,14 @@ steps:
   parameters:
     isPR: ${{ parameters.isPR }}
 
+# make sure we don't have packages from previous builds
+- bash: |
+    rm -rf "$(Build.SourcesDirectory)/package"
+    mkdir -p "$(Build.SourcesDirectory)/package"
+  displayName: 'Clean the package directory'
+
 - task: DownloadPipelineArtifact@2
-  displayName: Download not notaraized build
+  displayName: Download not notarized build
   inputs:
     artifact: 'not-signed-package'
     patterns: '!*.pkg'

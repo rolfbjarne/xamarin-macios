@@ -116,6 +116,12 @@ steps:
     AUTH_TOKEN_VSENG_XAMARIN_MAC_DEVICES_P12: ${{ parameters.xqaCertPass }}
     AUTH_TOKEN_VSENG_XAMARIN_MAC_DEVICES_2_P12: ${{ parameters.xqaCertPass }}
 
+# make sure we don't have packages from previous builds
+- bash: |
+    rm -rf "$(Build.SourcesDirectory)/artifacs"
+    mkdir -p "$(Build.SourcesDirectory)/artifacts"
+  displayName: 'Clean the artifacts directory'
+
 - task: DownloadPipelineArtifact@2
   displayName: Download artifacts
   inputs:

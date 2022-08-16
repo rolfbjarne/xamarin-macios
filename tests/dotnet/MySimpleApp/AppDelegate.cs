@@ -11,9 +11,14 @@ namespace MySimpleApp
 		{
 			GC.KeepAlive (typeof (NSObject)); // prevent linking away the platform assembly
 
-			Console.WriteLine (Environment.GetEnvironmentVariable ("MAGIC_WORD"));
+			try {
+				new System.Runtime.Loader.AssemblyDependencyResolver ("/tmp");
+			} catch (Exception e) {
+				Console.WriteLine ($"❌ {e}");
+				return 1;
+			}
 
-			return args.Length;
+			return 0;
 		}
 	}
 }

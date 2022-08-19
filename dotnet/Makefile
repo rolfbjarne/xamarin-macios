@@ -155,7 +155,7 @@ endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call SupportedTargetPlatforms,$(platform))))
 
 define WorkloadTargets
-Workloads/Microsoft.NET.Sdk.$(1)/WorkloadManifest.json: targets/WorkloadManifest.$(1).template.json Makefile $(TOP)/Make.config.inc $(TOP)/.git/HEAD $(TOP)/.git/index Makefile generate-workloadmanifest-json.csharp
+Workloads/Microsoft.NET.Sdk.$(1)/WorkloadManifest.json: Makefile $(TOP)/Make.config.inc $(TOP)/.git/HEAD $(TOP)/.git/index Makefile generate-workloadmanifest-json.csharp
 	$$(Q) rm -f $$@.tmp
 	$$(Q_GEN) ./generate-workloadmanifest-json.csharp "$(1)" "$(3)" "$(4)" "$$(DOTNET_$(5)_RUNTIME_IDENTIFIERS)" "$$@.tmp" "$$(DOTNET_WINDOWS_PLATFORMS)"
 	$$(Q) mv $$@.tmp $$@

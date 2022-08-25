@@ -74,6 +74,7 @@ DOTNET_PACK_VERBOSITY=--verbosity:quiet --nologo
 DOTNET_BUILD_VERBOSITY=--verbosity quiet --nologo -consoleLoggerParameters:NoSummary
 NUGET_VERBOSITY=-verbosity quiet
 INSTALLER_VERBOSITY=
+ZIP_VERBOSITY=--quiet
 else
 # CI build
 XBUILD_VERBOSITY=/nologo /verbosity:normal
@@ -84,6 +85,7 @@ DOTNET_PACK_VERBOSITY=
 DOTNET_BUILD_VERBOSITY=
 NUGET_VERBOSITY=
 INSTALLER_VERBOSITY=
+ZIP_VERBOSITY=
 endif
 else
 # verbose build
@@ -95,6 +97,7 @@ DOTNET_PACK_VERBOSITY=--verbosity:detailed
 DOTNET_BUILD_VERBOSITY=--verbosity detailed
 NUGET_VERBOSITY=-verbosity detailed
 INSTALLER_VERBOSITY=-verbose -dumplog
+ZIP_VERBOSITY=--verbose
 endif
 MSBUILD_VERBOSITY=$(XBUILD_VERBOSITY)
 MSBUILD_VERBOSITY_QUIET=$(XBUILD_VERBOSITY_QUIET)

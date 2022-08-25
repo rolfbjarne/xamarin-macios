@@ -7,7 +7,7 @@ APP_DIR=Xamarin.PreBuilt.iOS/bin/Debug/$(DOTNET_TFM)-ios/ios-arm64/Xamarin.PreBu
 
 Xamarin.PreBuilt.iOS.app.zip: .build-stamp
 	$(Q) rm -rf $@
-	$(Q_GEN) cd $(APP_DIR) && zip -9r $(abspath $@) .
+	$(Q_GEN) cd $(APP_DIR) && zip -9r $(ZIP_VERBOSITY) $(abspath $@) .
 
 $(TOP)/tests/dotnet/%:
 	$(Q) $(MAKE) -C $(dir $@) $*

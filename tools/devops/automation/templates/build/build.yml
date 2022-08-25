@@ -208,6 +208,10 @@ steps:
       CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-dotnet"
     fi
 
+    # DON'T MERGE
+    CONFIGURE_FLAGS="$CONFIGURE_FLAGS --disable-legacy-xamarin"
+    # DON'T MERGE
+
     CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-install-source"
     echo "Configuration falgs are '$CONFIGURE_FLAGS'"
 

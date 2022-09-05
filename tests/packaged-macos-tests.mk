@@ -32,9 +32,15 @@ RUN_WITH_TIMEOUT=./run-with-timeout.sh 300
 	$(Q) touch $@
 
 PACKAGES_CONFIG:=$(shell git ls-files -- '*.csproj' '*/packages.config' | sed 's/ /\\ /g')
+ifdef INCLUDE_XAMARIN_LEGACY
 .stamp-nuget-restore-mac: tests-mac.sln $(PACKAGES_CONFIG)
 	$(Q_XBUILD) $(SYSTEM_XIBUILD) -t -- /Library/Frameworks/Mono.framework/Versions/Current/lib/mono/nuget/NuGet.exe restore tests-mac.sln
 	$(Q) touch $@
+else
+.stamp-nuget-restore-mac:
+	$(Q) echo "Legacy Xamarin is disabled, so nothing to restore"
+	$(Q) touch $@
+endif
 
 #
 # dont link

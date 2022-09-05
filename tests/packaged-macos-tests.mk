@@ -184,7 +184,9 @@ endif
 
 build-$(1): .stamp-nuget-restore-mac
 	$$(Q) rm -f ".$$@-failure.stamp"
+ifdef INCLUDE_XAMARIN_LEGACY
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-legacy-$(1)                   || echo "build-legacy-$(1) failed"                   >> ".$$@-failure.stamp"
+endif
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-mac-dotnet-x64-$(1)           || echo "build-mac-dotnet-x64-$(1) failed"           >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-mac-dotnet-arm64-$(1)         || echo "build-mac-dotnet-arm64-$(1) failed"         >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-maccatalyst-dotnet-x64-$(1)   || echo "build-maccatalyst-dotnet-x64-$(1) failed"   >> ".$$@-failure.stamp"
@@ -193,7 +195,9 @@ build-$(1): .stamp-nuget-restore-mac
 
 exec-$(1):
 	$$(Q) rm -f ".$$@-failure.stamp"
+ifdef INCLUDE_XAMARIN_LEGACY
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-legacy-$(1)                   || echo "exec-legacy-$(1) failed"                   >> ".$$@-failure.stamp"
+endif
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-mac-dotnet-x64-$(1)           || echo "exec-mac-dotnet-x64-$(1) failed"           >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-mac-dotnet-arm64-$(1)         || echo "exec-mac-dotnet-arm64-$(1) failed"         >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-maccatalyst-dotnet-x64-$(1)   || echo "exec-maccatalyst-dotnet-x64-$(1) failed"   >> ".$$@-failure.stamp"
@@ -253,7 +257,9 @@ endif
 
 build-$(1): .stamp-nuget-restore-mac
 	$$(Q) rm -f ".$$@-failure.stamp"
+ifdef INCLUDE_XAMARIN_LEGACY
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-legacy-$(1)                   || echo "build-legacy-$(1) failed"                   >> ".$$@-failure.stamp"
+endif
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-mac-dotnet-x64-$(1)           || echo "build-mac-dotnet-x64-$(1) failed"           >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-mac-dotnet-arm64-$(1)         || echo "build-mac-dotnet-arm64-$(1) failed"         >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk build-maccatalyst-dotnet-x64-$(1)   || echo "build-maccatalyst-dotnet-x64-$(1) failed"   >> ".$$@-failure.stamp"
@@ -262,7 +268,9 @@ build-$(1): .stamp-nuget-restore-mac
 
 exec-$(1):
 	$$(Q) rm -f ".$$@-failure.stamp"
+ifdef INCLUDE_XAMARIN_LEGACY
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-legacy-$(1)                   || echo "exec-legacy-$(1) failed"                   >> ".$$@-failure.stamp"
+endif
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-mac-dotnet-x64-$(1)           || echo "exec-mac-dotnet-x64-$(1) failed"           >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-mac-dotnet-arm64-$(1)         || echo "exec-mac-dotnet-arm64-$(1) failed"         >> ".$$@-failure.stamp"
 	$$(Q) $$(MAKE) -f packaged-macos-tests.mk exec-maccatalyst-dotnet-x64-$(1)   || echo "exec-maccatalyst-dotnet-x64-$(1) failed"   >> ".$$@-failure.stamp"

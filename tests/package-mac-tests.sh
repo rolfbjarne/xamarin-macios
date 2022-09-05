@@ -33,8 +33,16 @@ if test -n "$INCLUDE_XAMARIN_LEGACY"; then
 	../tools/xibuild/xibuild -- /r bindings-test/macOS/bindings-test.csproj
 fi
 
-make -C bindings-test/dotnet/macOS build
-make -C bindings-test/dotnet/MacCatalyst build
+TEST_SUITE_DEPENDENCIES+=(bindings-test)
+TEST_SUITE_DEPENDENCIES+=(EmbeddedResources)
+TEST_SUITE_DEPENDENCIES+=(fsharplibrary)
+TEST_SUITE_DEPENDENCIES+=(BundledResources)
+
+for dep in "${TEST_SUITE_DEPENDENCIES[@]}"; do
+	make -C $dep/dotnet/macOS build &
+	make -C $dep/dotnet/MacCatalyst build &
+	wait
+done
 
 TEST_SUITES+=(build-dontlink)
 TEST_SUITES+=(build-linksdk)

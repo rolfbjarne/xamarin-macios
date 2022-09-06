@@ -325,31 +325,51 @@ build-legacy-linksdk: .stamp-nuget-restore-mac
 # execution targets
 
 exec-legacy-dontlink:
+ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) rm -f ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-modern-dontlink       || echo "exec-mac-modern-dont link failed"       >> ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-full-dontlink         || echo "exec-mac-full-dont link failed"         >> ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-system-dontlink       || echo "exec-mac-system-dont link failed"       >> ".$@-failure.stamp"
 	$(Q) if test -e ".$@-failure.stamp"; then cat ".$@-failure.stamp"; rm ".$@-failure.stamp"; exit 1; fi
+else
+	$(Q) echo "Not executing $@, because legacy Xamarin is not enabled"
+endif
 
 exec-legacy-introspection:
+ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) rm -f ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-modern-introspection               || echo "exec-mac-modern-introspection failed"               >> ".$@-failure.stamp"
 	$(Q) if test -e ".$@-failure.stamp"; then cat ".$@-failure.stamp"; rm ".$@-failure.stamp"; exit 1; fi
+else
+	$(Q) echo "Not executing $@, because legacy Xamarin is not enabled"
+endif
 
 exec-xammac_tests:
+ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) rm -f ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-modern-xammac_tests || echo "exec-mac-modern-xammac_tests failed" >> ".$@-failure.stamp"
 	$(Q) if test -e ".$@-failure.stamp"; then cat ".$@-failure.stamp"; rm ".$@-failure.stamp"; exit 1; fi
+else
+	$(Q) echo "Not executing $@, because legacy Xamarin is not enabled"
+endif
 
 exec-legacy-monotouch-test: ;
 	# nothing to do here
 
 exec-legacy-linkall:
+ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) rm -f ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-modern-linkall || echo "exec-mac-modern-linkall failed"               >> ".$@-failure.stamp"
 	$(Q) if test -e ".$@-failure.stamp"; then cat ".$@-failure.stamp"; rm ".$@-failure.stamp"; exit 1; fi
+else
+	$(Q) echo "Not executing $@, because legacy Xamarin is not enabled"
+endif
 
 exec-legacy-linksdk:
+ifdef INCLUDE_XAMARIN_LEGACY
 	$(Q) rm -f ".$@-failure.stamp"
 	$(Q) $(MAKE) -f packaged-macos-tests.mk exec-mac-modern-linksdk || echo "exec-mac-modern-link sdk failed"              >> ".$@-failure.stamp"
 	$(Q) if test -e ".$@-failure.stamp"; then cat ".$@-failure.stamp"; rm ".$@-failure.stamp"; exit 1; fi
+else
+	$(Q) echo "Not executing $@, because legacy Xamarin is not enabled"
+endif

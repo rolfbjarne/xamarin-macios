@@ -415,9 +415,9 @@ package-introspection-dependencies.zip: simlauncher32-sgen simlauncher64-sgen
 	$(Q) rm -rf $@.tmpdir
 else
 package-introspection-dependencies.zip:
-	@# This is dumb, but it makes things much easier in Azure DevOps if we just always have a zip file.
+	@# This is dumb, but it makes things much easier in Azure DevOps if we just always have a zip file with something in it (doesn't matter what, so I'm just adding the Makefile)
 	$(Q) rm -f "$@"
-	$(Q) zip --quiet "$@" Makefile && zip --quiet -d "$@" Makefile
+	$(Q) zip --quiet "$@" Makefile
 endif
 
 clean-dotnet:

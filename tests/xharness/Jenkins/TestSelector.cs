@@ -27,6 +27,18 @@ namespace Xharness.Jenkins {
 			PlatformLabel.LegacyXamarin |
 			PlatformLabel.Dotnet;
 
+		TestLabel testsNotApplicableInDotNet =
+			TestLabel.Bcl |
+			TestLabel.InstallSource |
+			TestLabel.Mmp |
+			TestLabel.Mononative |
+			TestLabel.Mtouch |
+			TestLabel.Xammac;
+
+		PlatformLabel platformsNotApplicableInDotNet =
+			PlatformLabel.watchOS |
+			PlatformLabel.LegacyXamarin;
+
 		public bool ForceExtensionBuildOnly { get; set; }
 
 		public TestLabel SelectedTests {
@@ -35,6 +47,13 @@ namespace Xharness.Jenkins {
 		}
 		
 		public PlatformLabel SelectedPlatforms => platform;
+
+		public void DisableDotNetTests (ILog? log, bool initial)
+		{
+			if (!initial && (selection & testsNotApplicableInDotNet) != TestLabel.None)
+				log?.WriteLine ($"The legacy Xamarin build is disabled, so some legacy Xamarin tests will be disabled even though they were requested: {selection & testsNotApplicableInDotNet}");
+			selection &= ~testsNotApplicableInDotNet;
+		}
 
 		public void SetEnabled (TestLabel label, bool enable)
 		{
@@ -296,6 +315,13 @@ namespace Xharness.Jenkins {
 			if (!Harness.INCLUDE_XAMARIN_LEGACY) {
 				MainLog?.WriteLine ("The legacy Xamarin build is disabled, so any legacy Xamarin tests will be disabled as well.");
 				selection.SetEnabled (PlatformLabel.LegacyXamarin, false);
+				selection.SetEnabled (PlatformLabel.watchOS, false);
+				selection.SetEnabled (TestLabel.Bcl, false);
+				selection.SetEnabled (TestLabel.InstallSource, false);
+				selection.SetEnabled (TestLabel.Mmp, false);
+				selection.SetEnabled (TestLabel.Mononative, false);
+				selection.SetEnabled (TestLabel.Mtouch, false);
+				selection.SetEnabled (TestLabel.Xammac, false);
 			}
 		}
 	}

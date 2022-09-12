@@ -1,0 +1,52 @@
+name: Autoformat code
+on:
+  pull_request:
+    types: [opened, reopened, labeled, unlabeled, synchronize]
+
+jobs:
+  autoformat-code:
+    name: Autoformat code
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'actions-skip-autoformat') == false
+
+    steps:
+    - name: 'Checkout repo'
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: 'Autoformat'
+      id: autoformat
+      run: |
+        set -exo pipefail
+
+        dotnet format tools/xibuild/xibuild.csproj
+        # add more projects here...
+
+        if git diff --exit-code; then
+          echo "No code formatting occurred"
+          exit 0
+        fi
+
+        git add -- .
+        git config --global user.email "github-actions-autoformatter@xamarin.com"
+        git config --global user.name "GitHub Actions Autoformatter"
+        git checkout "$GITHUB_HEAD_REF"
+        git commit -m "Auto-format source code"
+        git push
+        echo "::set-output name=autoformatted::true"
+
+    - name: 'Yell at user'
+      uses: actions/github-script@v6
+      if: steps.autoformat.output.autoformatted == true
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: 'Your code has been automatically reformatted. If this is not desired, add the `actions-skip-autoformat` label, and revert the reformatting commit.'
+          })

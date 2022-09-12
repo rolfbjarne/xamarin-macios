@@ -89,21 +89,19 @@ namespace Xharness.Jenkins {
 
 		public bool IsIncluded (TestProject project)
 		{
-			MainLog.WriteLine ($"Testing {project.Name} with label {project.Label.ToString ()} is included.");
 			if (!project.IsExecutableProject) {
-				MainLog.WriteLine ($"Ignoring {project.Name} because is not a executable project.");
+				MainLog.WriteLine ($"Ignoring {project.Name} with label {project.Label} because is not a executable project.");
 				return false;
 			}
 
 			if (!TestSelection.IsEnabled(TestLabel.SystemPermission) && project.Label == TestLabel.Introspection) {
-				MainLog.WriteLine ($"Ignoring {project.Name} because we cannot include the system permission tests");
+				MainLog.WriteLine ($"Ignoring {project.Name} with label {project.Label} because we cannot include the system permission tests");
 				return false;
 			}
 
-			MainLog.WriteLine ($"Selected tests are {TestSelection.SelectedTests.ToString ()}");
-			MainLog.WriteLine ($"Selected platforms are {TestSelection.SelectedPlatforms.ToString () }");
-			MainLog.WriteLine ($"Prohect {project.Name} is included: {TestSelection.IsEnabled (project.Label)}");
-			return TestSelection.IsEnabled (project.Label);
+			var rv = TestSelection.IsEnabled (project.Label);
+			MainLog.WriteLine ($"Including {project.Name} with label {project.Label.ToString ()}: {rv}");
+			return rv;
 		}
 
 		public bool IsBetaXcode => Harness.XcodeRoot.IndexOf ("beta", StringComparison.OrdinalIgnoreCase) >= 0;

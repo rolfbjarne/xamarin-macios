@@ -48,13 +48,6 @@ namespace Xharness.Jenkins {
 		
 		public PlatformLabel SelectedPlatforms => platform;
 
-		public void DisableDotNetTests (ILog? log, bool initial)
-		{
-			if (!initial && (selection & testsNotApplicableInDotNet) != TestLabel.None)
-				log?.WriteLine ($"The legacy Xamarin build is disabled, so some legacy Xamarin tests will be disabled even though they were requested: {selection & testsNotApplicableInDotNet}");
-			selection &= ~testsNotApplicableInDotNet;
-		}
-
 		public void SetEnabled (TestLabel label, bool enable)
 		{
 			if (enable) {
@@ -323,6 +316,8 @@ namespace Xharness.Jenkins {
 				selection.SetEnabled (TestLabel.Mtouch, false);
 				selection.SetEnabled (TestLabel.Xammac, false);
 			}
+
+			MainLog?.WriteLine ($"Final test selection: tests: {selection.SelectedTests} platforms: {selection.SelectedPlatforms}");
 		}
 	}
 }

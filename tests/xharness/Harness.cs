@@ -227,6 +227,24 @@ namespace Xharness {
 			processManager = new MlaunchProcessManager (XcodeRoot, MlaunchPath);
 			AppBundleLocator = new AppBundleLocator (processManager, () => HarnessLog, XIBuildPath, "/usr/local/share/dotnet/dotnet", config ["DOTNET"]);
 			TunnelBore = new TunnelBore (processManager);
+
+			Log ($"Full configuration:");
+			foreach (var key in config.Keys.OrderBy (v => v))
+				Log ($"    {key}={config [key]}");
+			Log ($"Resulting settings:");
+			Log ($"    ENABLE_DOTNET={ENABLE_DOTNET}");
+			Log ($"    ENABLE_XAMARIN={ENABLE_XAMARIN}");
+			Log ($"    INCLUDE_IOS={INCLUDE_IOS}");
+			Log ($"    INCLUDE_MAC={INCLUDE_MAC}");
+			Log ($"    INCLUDE_TVOS={INCLUDE_TVOS}");
+			Log ($"    INCLUDE_WATCH={INCLUDE_WATCH}");
+			Log ($"    INCLUDE_XAMARIN_LEGACY={INCLUDE_XAMARIN_LEGACY}");
+			Log ($"    IOS_DESTDIR={IOS_DESTDIR}");
+			Log ($"    JENKINS_RESULTS_DIRECTORY={JENKINS_RESULTS_DIRECTORY}");
+			Log ($"    MAC_DESTDIR={MAC_DESTDIR}");
+			Log ($"    MONO_IOS_SDK_DESTDIR={MONO_IOS_SDK_DESTDIR}");
+			Log ($"    MONO_MAC_SDK_DESTDIR={MONO_MAC_SDK_DESTDIR}");
+			Log ($"    MONO_PATH={MONO_PATH}");
 		}
 
 		public bool GetIncludeSystemPermissionTests (TestPlatform platform, bool device)
@@ -562,6 +580,7 @@ namespace Xharness {
 
 		void ParseConfigFile (string file, Dictionary<string, string> configuration)
 		{
+			Log ($"Parsing config file {file}");
 			if (string.IsNullOrEmpty (file))
 				return;
 

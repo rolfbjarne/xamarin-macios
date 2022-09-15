@@ -5,6 +5,8 @@ on:
     types:
       - completed
 
+# See autoformat.yml for a description of what happens here.
+
 jobs:
   push-and-notify:
     name: Push autoformatted code and notify user

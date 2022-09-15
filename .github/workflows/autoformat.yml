@@ -16,6 +16,7 @@ on: pull_request
 #
 # Ref:
 #     https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+#     https://github.com/actions/checkout/issues/455
 #
 
 jobs:

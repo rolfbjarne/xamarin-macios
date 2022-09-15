@@ -71,16 +71,3 @@ jobs:
       with:
         name: autoformat
         path: autoformat/
-
-    - name: 'Yell at user'
-      uses: actions/github-script@v6
-      if: steps.autoformat.outputs.autoformatted == 'true'
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-            body: 'Your code has been automatically reformatted. If this is not desired, add the `actions-skip-autoformat` label, and revert the reformatting commit.'
-          })

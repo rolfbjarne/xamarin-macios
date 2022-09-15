@@ -44,7 +44,7 @@ jobs:
         # add more projects here...
         cd "$SRC_DIR"
 
-        if git diff --exit-code; then
+        if git diff --exit-code >/dev/null; then
           echo "No code formatting occurred"
           exit 0
         fi
@@ -58,7 +58,7 @@ jobs:
         mkdir -p autoformat
         echo ${{ github.event.number }} > ./autoformat/PR
         git format-patch HEAD^..HEAD --stdout > ./autoformat/autoformat.patch
-        cat ./autoformat/autoformat.patch
+        #cat ./autoformat/autoformat.patch
 
         echo "::set-output name=autoformatted::true"
 

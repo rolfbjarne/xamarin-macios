@@ -60,18 +60,21 @@ jobs:
         git format-patch HEAD^..HEAD --stdout > ./autoformat/autoformat.patch
         #cat ./autoformat/autoformat.patch
 
-        echo "::set-output name=autoformatted::true"
+        echo "   name=autoformatted::true"
+
+    - name: 'Debug'
+      run: echo "Yay? ${{ steps.autoformat.outputs.autoformatted }}"
 
     - name: 'Upload patch'
       uses: actions/upload-artifact@v2
-      if: steps.autoformat.output.autoformatted == true
+      if: steps.autoformat.outputs.autoformatted == true
       with:
         name: autoformat
         path: autoformat/
 
     - name: 'Yell at user'
       uses: actions/github-script@v6
-      if: steps.autoformat.output.autoformatted == true
+      if: steps.autoformat.outputs.autoformatted == true
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |

@@ -60,7 +60,7 @@ jobs:
         git format-patch HEAD^..HEAD --stdout > ./autoformat/autoformat.patch
         #cat ./autoformat/autoformat.patch
 
-        echo "   name=autoformatted::true"
+        echo "::set-output name=autoformatted::true"
 
     - name: 'Debug'
       run: echo "Yay? ${{ steps.autoformat.outputs.autoformatted }}"

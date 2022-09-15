@@ -12,7 +12,7 @@ jobs:
     name: Push autoformatted code and notify user
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.pull_request.labels.*.name, 'actions-skip-autoformat') == false &&
+      contains(github.event.pull_request.labels.*.name, 'actions-autoformat') &&
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
 
@@ -59,9 +59,11 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          github.rest.issues.createComment({
+          let fs = require('fs');
+          let issue_number = Number(fs.readFileSync('./PR'));
+          await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: context.issue.number,
+            issue_number: issue_number,
             body: '# :warning: Your code has been automatically reformatted. :warning:\n\nIf this is not desired, add the `actions-skip-autoformat` label, and revert the reformatting commit.'
-          })
+          });

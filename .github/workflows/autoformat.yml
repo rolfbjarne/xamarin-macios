@@ -23,7 +23,7 @@ jobs:
   autoformat-code:
     name: Autoformat code
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'actions-skip-autoformat') == false
+    if: contains(github.event.pull_request.labels.*.name, 'actions-autoformat')
 
     steps:
     - name: 'Checkout repo'

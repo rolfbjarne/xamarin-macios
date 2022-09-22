@@ -88,7 +88,7 @@ namespace Cecil.Tests {
 			if (type is null && tr.FullName == "System.Runtime.InteropServices.NFloat")
 				return true;
 
-			if (type.IsEnum)
+			if (type!.IsEnum)
 				return true;
 
 			if ((type.Attributes & TypeAttributes.ExplicitLayout) == TypeAttributes.ExplicitLayout)

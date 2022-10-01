@@ -21,9 +21,11 @@ parameters:
 
 - name: enableLegacyXamarin
   type: string
+  default: ''
 
 - name: disableLegacyXamarin
   type: string
+  default: ''
 
 - name: isPR
   type: boolean

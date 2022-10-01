@@ -238,9 +238,9 @@ steps:
       IsPR: 'False'
     ${{ if eq(parameters.enableDotnet, true) }}:
       EnableDotNet: 'True'
-    ${{ if ne(parameters.enableLegacyXamarin, "") }}:
+    ${{ if ne(parameters.enableLegacyXamarin, '') }}:
       EnableLegacyXamarin: '1'
-    ${{ if ne(parameters.disableLegacyXamarin, "") }}:
+    ${{ if ne(parameters.disableLegacyXamarin, '') }}:
       DisableLegacyXamarin: '1'
   displayName: "Configure build"
   timeoutInMinutes: 5

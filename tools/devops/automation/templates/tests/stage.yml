@@ -149,8 +149,6 @@ stages:
           makeTarget: ${{ parameters.makeTarget }}
           gitHubToken: ${{ parameters.gitHubToken }}
           xqaCertPass: ${{ parameters.xqaCertPass }}
-          enableLegacyXamarin: $[ dependencies.configure.outputs['labels.enable-legacy-xamarin'] ]
-          disableLegacyXamarin: $[ dependencies.configure.outputs['labels.disable-legacy-xamarin'] ]
 
   - job: publish_test_results
     ${{ if eq(parameters.parseLabels, true) }}:

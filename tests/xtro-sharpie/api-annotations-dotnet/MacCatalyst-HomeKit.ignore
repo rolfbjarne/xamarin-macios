@@ -1,10 +1,18 @@
+# Only supported in iOS 8
+
+# Only supported in iOS 8
+
+# Only supported in iOS 11.3
+
+
+# Only supported in iOS 13
+
+# Only supported in iOS 13
+
+# Webdocs say it is supported in MacCatalyst 13, but the parameter type HMAddAccessoryRequest
+# is only supported in iOS 13
+
+# Only supported in iOS 15
+
 # Deprecated
 !missing-selector! HMHome::removeUser:completionHandler: not bound
-
-# Other
-!missing-selector! HMMutablePresenceEvent::setPresenceEventType: not bound
-!missing-selector! HMMutablePresenceEvent::setPresenceUserType: not bound
-!missing-null-allowed! 'HomeKit.HMService HomeKit.HMCharacteristic::get_Service()' is missing an [NullAllowed] on return type
-!missing-null-allowed! 'HomeKit.HMAccessory HomeKit.HMService::get_Accessory()' is missing an [NullAllowed] on return type
-!missing-null-allowed! 'HomeKit.HMRoom HomeKit.HMAccessory::get_Room()' is missing an [NullAllowed] on return type
-!missing-null-allowed! 'System.Void HomeKit.HMCharacteristic::WriteValue(Foundation.NSObject,System.Action`1<Foundation.NSError>)' is missing an [NullAllowed] on parameter #0

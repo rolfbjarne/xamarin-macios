@@ -508,5 +508,3 @@
 !missing-selector! NSValue::pointValue not bound
 !missing-selector! NSValue::rectValue not bound
 !missing-selector! NSValue::sizeValue not bound
-!missing-selector! NSAppleEventDescriptor::initListDescriptor not bound
-!missing-selector! NSAppleEventDescriptor::initRecordDescriptor not bound

@@ -2,8 +2,4 @@
 !missing-field! kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID not bound
 !missing-field! kVTVideoDecoderSpecification_RequiredDecoderGPURegistryID not bound
 
-## Other
-!unknown-field! kVTCompressionPropertyKey_UsingHardwareAcceleratedVideoEncoder bound
-!unknown-field! kVTDecompressionPropertyKey_UsingHardwareAcceleratedVideoDecoder bound
-!unknown-field! kVTVideoDecoderSpecification_EnableHardwareAcceleratedVideoDecoder bound
-!unknown-field! kVTVideoDecoderSpecification_RequireHardwareAcceleratedVideoDecoder bound
+## marked not available on iOS/tvOS/watchOS - no mention of newComputePipelineStateWithAdditionalBinaryFunctions

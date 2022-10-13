@@ -4,6 +4,4 @@
 !missing-field! kCFURLFileProtectionCompleteUntilFirstUserAuthentication not bound
 !missing-field! kCFURLFileProtectionKey not bound
 !missing-field! kCFURLFileProtectionNone not bound
-!missing-field! kCFURLVolumeAvailableCapacityForImportantUsageKey not bound
-!missing-field! kCFURLVolumeAvailableCapacityForOpportunisticUsageKey not bound
 !missing-pinvoke! CFCopyHomeDirectoryURL is not bound

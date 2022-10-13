@@ -1,4 +1,3 @@
-!missing-selector! +CNGroup::predicateForSubgroupsInGroupWithIdentifier: not bound
 !missing-selector! +CNContainer::predicateForContainerOfContactWithIdentifier: not bound
 !missing-selector! +CNContainer::predicateForContainerOfGroupWithIdentifier: not bound
 !missing-selector! +CNContainer::predicateForContainersWithIdentifiers: not bound

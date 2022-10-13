@@ -1,5 +1,1 @@
-
-## deprecated in favor of metal
-
-# ignored as with macOS
-
+!missing-pinvoke! CVImageBufferCreateColorSpaceFromAttachments is not bound

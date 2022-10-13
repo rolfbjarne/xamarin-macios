@@ -7,7 +7,7 @@ namespace Extrospection {
 	class Sanitizer {
 
 		static List<string> Platforms;
-		static int AllPlatformCount;
+		static List<string> AllPlatforms;
 		static bool Autosanitize = !string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("AUTO_SANITIZE"));
 
 		static bool IsEntry (string line)
@@ -176,7 +176,7 @@ namespace Extrospection {
 		public static int Main (string [] args)
 		{
 			directory = args.Length == 0 ? "." : args [0];
-			AllPlatformCount = int.Parse (args.Skip (1).First ());
+			AllPlatforms = args.Skip (1).First ().Split (' ').ToList ();
 			Platforms = args.Skip (2).ToList ();
 
 			// cache stuff
@@ -246,7 +246,7 @@ namespace Extrospection {
 					if (rawCount == 0) {
 						Log ($"?unknown-entry? {entry} in '{Path.Combine (directory, $"common-{fx}.ignore")}'");
 						unknownFailures.Add (entry);
-					} else if (rawCount < AllPlatformCount) {
+					} else if (rawCount < GetPlatformCount (fx)) {
 						var notFound = raws.Where (v => !v.Entries.Contains (entry));
 						Log ($"?not-common? {entry} in '{Path.Combine (directory, $"common-{fx}.ignore")}': not in {string.Join (", ", notFound.Select (v => v.Platform))}");
 						unknownFailures.Add (entry);
@@ -324,6 +324,41 @@ namespace Extrospection {
 				!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("XTRO_SANITY_SKIP"))
 				|| Autosanitize;
 			return sanitizedOrSkippedSanity ? 0 : count;
+		}
+
+		static List<Frameworks> AllFrameworks;
+		static int GetPlatformCount (string framework)
+		{
+			if (AllFrameworks is null) {
+				AllFrameworks = new List<Frameworks> ();
+				foreach (var platform in AllPlatforms) {
+					switch (platform) {
+					case "iOS":
+						AllFrameworks.Add (Frameworks.GetiOSFrameworks (false));
+						break;
+					case "tvOS":
+						AllFrameworks.Add (Frameworks.TVOSFrameworks);
+						break;
+					case "watchOS":
+						AllFrameworks.Add (Frameworks.GetwatchOSFrameworks (false));
+						break;
+					case "macOS":
+						AllFrameworks.Add (Frameworks.MacFrameworks);
+						break;
+					case "MacCatalyst":
+						AllFrameworks.Add (Frameworks.GetMacCatalystFrameworks ());
+						break;
+					default:
+						throw new NotImplementedException (platform);
+					}
+				}
+			}
+			var rv = AllFrameworks.Count (v => v.ContainsKey (framework));
+			if (rv == 0) {
+				Console.WriteLine ($"huh? {framework}");
+				return AllPlatforms.Count;
+			}
+			return rv;
 		}
 	}
 

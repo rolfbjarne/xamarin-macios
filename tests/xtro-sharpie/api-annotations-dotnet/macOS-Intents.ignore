@@ -37,3 +37,4 @@
 !missing-selector! INDateComponentsRange::recurrenceRule not bound
 !missing-selector! INSendMessageIntentResponse::sentMessage not bound
 !missing-selector! INSendMessageIntentResponse::setSentMessage: not bound
+!missing-selector! +CLPlacemark::placemarkWithLocation:name:postalAddress: not bound

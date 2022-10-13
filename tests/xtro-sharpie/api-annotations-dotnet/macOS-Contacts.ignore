@@ -1,0 +1,1 @@
+!missing-protocol-conformance! NSString should conform to CNKeyDescriptor (defined in 'Contacts' category)

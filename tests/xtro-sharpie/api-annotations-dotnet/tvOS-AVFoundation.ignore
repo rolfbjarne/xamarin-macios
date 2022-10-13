@@ -6,3 +6,4 @@
 
 # not used on tvOS
 !missing-enum! AVAudioSessionInterruptionReason not bound
+!missing-protocol-member! AVAudioPlayerDelegate::audioPlayerEndInterruption:withFlags: not found

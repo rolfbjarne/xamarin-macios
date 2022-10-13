@@ -15,3 +15,8 @@
 
 ## type was marked as available in 3.0 - but it's now iOS 11 only (even if members are marked with 10.0)
 !unknown-type! HKCDADocument bound
+!missing-field! HKSourceRevisionAnyOperatingSystem not bound
+!extra-null-allowed! 'HealthKit.HKCategoryType HealthKit.HKObjectType::GetCategoryType(Foundation.NSString)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'HealthKit.HKCharacteristicType HealthKit.HKObjectType::GetCharacteristicType(Foundation.NSString)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'HealthKit.HKCorrelationType HealthKit.HKObjectType::GetCorrelationType(Foundation.NSString)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'HealthKit.HKQuantityType HealthKit.HKObjectType::GetQuantityType(Foundation.NSString)' has a extraneous [NullAllowed] on parameter #0

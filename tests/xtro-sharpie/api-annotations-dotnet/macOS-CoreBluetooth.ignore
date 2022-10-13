@@ -3,3 +3,4 @@
 
 # not to be added since it is not needed in any API on macOS as of xcode13 beta 3.
 !missing-enum! CBCentralManagerFeature not bound
+!missing-selector! CBManager::authorization not bound

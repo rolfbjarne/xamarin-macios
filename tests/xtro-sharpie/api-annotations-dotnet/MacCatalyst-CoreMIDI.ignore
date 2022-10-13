@@ -1,8 +1,3 @@
-# deprecated pinvokes and not binded.
-!missing-pinvoke! MIDIDriverEnableMonitoring is not bound
-
-!missing-field! kMIDIDriverPropertyUsesSerial not bound
-
 # manually added in MidiServices.cs (not bindings)
 !missing-field! kMIDIPropertyAdvanceScheduleTimeMuSec not bound
 !missing-field! kMIDIPropertyCanRoute not bound

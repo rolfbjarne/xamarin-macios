@@ -1,4 +1,4 @@
-  ## https://bugzilla.xamarin.com/show_bug.cgi?id=30717 
+## https://bugzilla.xamarin.com/show_bug.cgi?id=30717
 !duplicate-register! _NSDatePickerCellDelegate exists as both AppKit.NSDatePickerCell/_NSDatePickerCellDelegate and AppKit.NSDatePicker/_NSDatePickerCellDelegate
 
 ## Proxy class for NSGraphicsContext internal to AppKit

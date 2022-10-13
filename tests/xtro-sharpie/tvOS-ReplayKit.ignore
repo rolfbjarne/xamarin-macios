@@ -1,3 +1,2 @@
 ## Not used on tvOS (no camera)
 !missing-enum! RPCameraPosition not bound
-!missing-selector! RPBroadcastHandler::updateBroadcastURL: not bound

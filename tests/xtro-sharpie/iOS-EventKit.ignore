@@ -1,4 +1,2 @@
 ## only available on OSX (NA or unused in iOS)
 !missing-enum! EKAlarmType not bound
-!extra-enum-value! Managed value 0 for EKWeekday.NotSet not found in native headers
-!missing-enum-value! EKErrorCode native value EKErrorLast = 37 not bound

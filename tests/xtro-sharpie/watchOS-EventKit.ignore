@@ -1,2 +1,0 @@
-!extra-enum-value! Managed value 0 for EKWeekday.NotSet not found in native headers
-!missing-enum-value! EKErrorCode native value EKErrorLast = 37 not bound

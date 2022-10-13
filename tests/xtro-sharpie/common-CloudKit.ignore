@@ -12,3 +12,6 @@
 !missing-selector! CKRecord::encryptedValues not bound
 
 # all of them deprecated and marked with the [Obsoleted] attr.
+!unknown-native-enum! CKSubscriptionOptions bound
+!unknown-type! CKDiscoverAllContactsOperation bound
+!unknown-type! CKDiscoveredUserInfo bound

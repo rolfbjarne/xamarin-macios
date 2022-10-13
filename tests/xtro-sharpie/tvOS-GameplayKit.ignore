@@ -1,4 +1,0 @@
-!incorrect-protocol-member! GKGameModelPlayer::playerId is REQUIRED and should be abstract
-!missing-protocol-conformance! GKBehavior should conform to NSFastEnumeration
-!missing-protocol-conformance! GKComponentSystem should conform to NSFastEnumeration
-!unknown-type! GKHybridStrategist bound

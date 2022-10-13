@@ -1,2 +1,1 @@
 !missing-enum! CMFallDetectionEventUserResolution not bound
-!missing-protocol-conformance! CMSensorDataList should conform to NSFastEnumeration

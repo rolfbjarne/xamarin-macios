@@ -108,7 +108,6 @@ steps:
       CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-legacy-xamarin"
     fi
 
-    if test -n "$"
     if test -n "$INCLUDE_DOTNET_IOS"; then
       CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-ios"
     else

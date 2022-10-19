@@ -30,6 +30,17 @@ dotnet format whitespace "$SRC_DIR/tests/xtro-sharpie/xtro-sanity/xtro-sanity.cs
 dotnet format whitespace --folder "$SRC_DIR/src/Accelerate"
 dotnet format whitespace --folder "$SRC_DIR/src/Accessibility"
 dotnet format whitespace --folder "$SRC_DIR/src/Accounts"
+dotnet format whitespace --folder "$SRC_DIR/src/AddressBook"
+dotnet format whitespace --folder "$SRC_DIR/src/AddressBookUI"
+dotnet format whitespace --folder "$SRC_DIR/src/AdSupport/"
+dotnet format whitespace --folder "$SRC_DIR/src/AppKit/"
+dotnet format whitespace --folder "$SRC_DIR/src/ARKit/"
+dotnet format whitespace --folder "$SRC_DIR/src/AssetsLibrary/"
+dotnet format whitespace --folder "$SRC_DIR/src/AudioToolbox/"
+dotnet format whitespace --folder "$SRC_DIR/src/AudioUnit/"
+dotnet format whitespace --folder "$SRC_DIR/src/AuthenticationServices/"
+dotnet format whitespace --folder "$SRC_DIR/src/AVFoundation/"
+dotnet format whitespace --folder "$SRC_DIR/src/AVKit/"
 
 # dotnet format "$SRC_DIR/[...]"
 # add more projects here...

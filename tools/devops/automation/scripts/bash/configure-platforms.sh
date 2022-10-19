@@ -34,9 +34,9 @@ rm -f "$FILE"
 
 env -0 | sort -z | tr '\0' '\n' || true
 
-if [[ "${enable_legacy_xamarin:-}" == "true" ]]; then
+if [[ "${LABELS_ENABLE_LEGACY_XAMARIN:-}" == "True" ]]; then
 	INCLUDE_XAMARIN_LEGACY=1
-elif [[ "${disable_legacy_xamarin:-}" == "true" ]]; then
+elif [[ "${LABELS_DISABLE_LEGACY_XAMARIN:-}" == "True" ]]; then
 	INCLUDE_XAMARIN_LEGACY=
 fi
 

@@ -76,6 +76,11 @@ stages:
     variables:
       PR_ID: $[ dependencies.configure.outputs['labels.pr-number'] ]
       GIT_HASH: $[ stageDependencies.build_packages.build.outputs['fix_commit.GIT_HASH'] ]
+      INCLUDE_LEGACY_MAC: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'] ]
+      INCLUDE_DOTNET_MACOS: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'] ]
+      INCLUDE_DOTNET_MACCATALYST: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'] ]
+      ALL_DEPS: $[ dependencies ]
+      ALL_STAGE_DEPS: $[ stageDependencies ]
 
     condition: |
       and(
@@ -89,8 +94,78 @@ stages:
       )
 
     steps:
+    - bash: |
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Environment"
+
     - template: build.yml
       parameters:
         isPR: ${{ parameters.isPR }}
         statusContext: ${{ parameters.statusContext }}
         keyringPass: ${{ parameters.keyringPass }} 
+
+  - job: check_legacy_mac
+    dependsOn:
+    - configure
+    displayName: 'Check Legacy Mac'
+    condition: |
+      and(
+        succeeded(),
+        ne(dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'], '')
+      )
+    variables:
+      INCLUDE_LEGACY_MAC: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'] ]
+      INCLUDE_DOTNET_MACOS: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'] ]
+      INCLUDE_DOTNET_MACCATALYST: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'] ]
+      ALL_DEPS: $[ dependencies ]
+      ALL_STAGE_DEPS: $[ stageDependencies ]
+    steps:
+    - bash: |
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Environment"
+
+
+  - job: check_dotnet_mac
+    dependsOn:
+    - configure
+    displayName: 'Check .NET macOS'
+    condition: |
+      and(
+        succeeded(),
+        ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'], '')
+      )
+    variables:
+      INCLUDE_LEGACY_MAC: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'] ]
+      INCLUDE_DOTNET_MACOS: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'] ]
+      INCLUDE_DOTNET_MACCATALYST: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'] ]
+      ALL_DEPS: $[ dependencies ]
+      ALL_STAGE_DEPS: $[ stageDependencies ]
+    steps:
+    - bash: |
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Environment"
+
+
+  - job: check_dotnet_maccatalyst
+    dependsOn:
+    - configure
+    displayName: 'Check .NET MacCatalyst'
+    condition: |
+      and(
+        succeeded(),
+        ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'], '')
+      )
+    variables:
+      INCLUDE_LEGACY_MAC: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'] ]
+      INCLUDE_DOTNET_MACOS: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'] ]
+      INCLUDE_DOTNET_MACCATALYST: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'] ]
+      ALL_DEPS: $[ dependencies ]
+      ALL_STAGE_DEPS: $[ stageDependencies ]
+    steps:
+    - bash: |
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Environment"
+
+
+
+

@@ -77,6 +77,17 @@ stages:
       PR_ID: $[ dependencies.configure.outputs['labels.pr-number'] ]
       GIT_HASH: $[ stageDependencies.build_packages.build.outputs['fix_commit.GIT_HASH'] ]
 
+    condition: |
+      and(
+        succeeded(),
+        or(
+          ne(dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'], ''),
+          ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'], ''),
+          ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'], ''),
+          ne(dependencies.configure.outputs['labels.skip-all-tests'], 'True')
+        )
+    )
+
     steps:
     - template: build.yml
       parameters:

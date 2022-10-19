@@ -107,7 +107,7 @@ stages:
   - ${{ each label in parameters.simTestsConfigurations }}:
     - job: "tests_${{ replace(label, '-', '_') }}"
       ${{ if eq(parameters.parseLabels, true) }}:
-        condition: ne(dependencies.configure.outputs['labels.skip-all-tests'], 'True')
+        condition: ne(dependencies.configure.outputs['labels.skip_all_tests'], 'True')
       dependsOn:
       - ${{ if eq(parameters.parseLabels, true) }}:
         - configure
@@ -116,7 +116,7 @@ stages:
 
       variables:
         # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
-        PR_ID: $[ dependencies.configure.outputs['labels.pr-number'] ]
+        PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
         # set the branch variable name, this is required by jenkins and we have a lot of scripts that depend on it
         BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
         XHARNESS_LABELS: $[ dependencies.configure.outputs['labels.xharness-labels'] ]
@@ -163,7 +163,7 @@ stages:
 
   - job: publish_test_results
     ${{ if eq(parameters.parseLabels, true) }}:
-      condition: and(ne(dependencies.configure.outputs['labels.skip-all-tests'], 'True'),  succeededOrFailed())
+      condition: and(ne(dependencies.configure.outputs['labels.skip_all_tests'], 'True'),  succeededOrFailed())
     ${{ else }}:
       condition: succeededOrFailed()
     displayName: 'GitHub comment - Publish results'
@@ -194,7 +194,7 @@ stages:
 
   - job: publish_skipped_tests
     ${{ if eq(parameters.parseLabels, true) }}:
-      condition: eq(dependencies.configure.outputs['labels.skip-all-tests'], 'True')
+      condition: eq(dependencies.configure.outputs['labels.skip_all_tests'], 'True')
     ${{ else }}:
       condition: false
     displayName: 'GitHub comment - Skipped tests'
@@ -218,7 +218,7 @@ stages:
 
         $gihubComments = New-GitHubCommentsObject -Org "xamarin" -Repo "xamarin-macios" -Token $Env:GITHUB_TOKEN -Hash $Env:GIT_HASH -Debug
         $sb = [System.Text.StringBuilder]::new()
-        $sb.AppendLine("All tests have been skipped because the label 'skip-all-tests' was set.")
+        $sb.AppendLine("All tests have been skipped because the label 'skip_all_tests' was set.")
         $result = $gihubComments.NewCommentFromMessage("Test results", ":seedling:", $sb.ToString())
       displayName: 'Set comment'
       env:

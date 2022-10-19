@@ -127,6 +127,7 @@ jobs:
     BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
     BUILD_REVISION: $[ variables['Build.SourceVersion'] ]
     XHARNESS_LABELS: $[ dependencies.configure.outputs['labels.xharness-labels'] ]
+    RUN_MAC_TESTS: $[ dependencies.configure.outputs['decisions.RUN_MAC_TESTS'] ]
   pool:
     name: $(AgentPoolComputed)
     demands:

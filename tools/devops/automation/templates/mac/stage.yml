@@ -62,6 +62,7 @@ stages:
     dependsOn:
     - configure
     displayName: 'macOS tests'
+    condition: and(succeeded(), eq(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
     timeoutInMinutes: 1000
     workspace:
       clean: all

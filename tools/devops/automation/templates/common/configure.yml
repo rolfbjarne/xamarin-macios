@@ -142,6 +142,10 @@ steps:
   name: labels
   displayName: 'Configure build'
 
+- bash: ./xamarin-macios/tools/devops/automation/scripts/bash/configure-decisions.sh
+  name: decisions
+  displayName: 'Make decisions'
+
 # upload config to be consumed later
 - ${{ if eq(parameters.uploadArtifacts, true) }}:
   - task: PublishPipelineArtifact@1

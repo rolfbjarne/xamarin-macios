@@ -82,16 +82,7 @@ stages:
       ALL_DEPS: $[ dependencies ]
       ALL_STAGE_DEPS: $[ stageDependencies ]
 
-    condition: |
-      and(
-        succeeded(),
-        or(
-          ne(dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'], ''),
-          ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'], ''),
-          ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'], ''),
-          ne(dependencies.configure.outputs['labels.skip-all-tests'], 'True')
-        )
-      )
+    condition: and(succeeded(), ne(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], ''))
 
     steps:
     - bash: |

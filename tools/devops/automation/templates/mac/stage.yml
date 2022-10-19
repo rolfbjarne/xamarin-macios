@@ -86,7 +86,7 @@ stages:
           ne(dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'], ''),
           ne(dependencies.configure.outputs['labels.skip-all-tests'], 'True')
         )
-    )
+      )
 
     steps:
     - template: build.yml

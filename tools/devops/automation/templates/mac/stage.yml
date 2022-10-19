@@ -32,13 +32,31 @@ parameters:
   type: boolean
 
 stages:
+- stage: DebugStage
+  displayName: Debug stage
+  dependsOn:
+  - build_packages
+
+  jobs:
+  - job: DebugJonb
+    displayName: 'Debug job'
+    pool:
+      vmImage: windows-latest
+
+    steps:
+    - bash:
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Env"
+      variables:
+        STAGE_DEPS: $[ convertToJson(stageDependencies) ]
+        DEPS: $[ convertToJson(dependencies) ]
+
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}
   dependsOn:
   - build_packages
   # we need to have the pkgs built and the device sets to be ran, that is decided via the labels or type of build during the build_packages stage
-  condition: succeeded()
-
+  condition: and(succeeded(), eq(stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
   variables:
     GITHUB_FAILURE_COMMENT_FILE: $(System.DefaultWorkingDirectory)/github-comment-file.md
 
@@ -53,6 +71,12 @@ stages:
       isScheduled: $[eq(variables['Build.Reason'], 'Schedule')]
 
     steps:
+    - bash:
+        env -0 | sort -z | tr '\0' '\n' || true
+      variables:
+        STAGE_DEPS: $[ convertToJson(stageDependencies) ]
+        DEPS: $[ convertToJson(dependencies) ]
+
     - template: ../common/configure.yml
       parameters: 
         uploadArtifacts: false
@@ -62,6 +86,7 @@ stages:
     dependsOn:
     - configure
     displayName: 'macOS tests'
+    condition: and(succeeded(), eq(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
     timeoutInMinutes: 1000
     workspace:
       clean: all

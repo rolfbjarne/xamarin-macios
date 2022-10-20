@@ -168,6 +168,11 @@ steps:
   env:
     RUN_DEVICE_TESTS: '${{ parameters.runDeviceTests }}'
 
+- bash: 'env -0 | sort -z | tr '\0' '\n' || true'
+  displayName: Debug variables
+  env:
+    THE_VARIABLES: ${{ convertToJson(variables) }}
+
 - ${{ if contains(variables['Build.DefinitionName'], 'private') }}:
   - task: PowerShell@2
     displayName: Setup Private Feeds Credentials

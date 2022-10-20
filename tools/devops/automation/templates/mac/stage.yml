@@ -79,8 +79,8 @@ stages:
       INCLUDE_LEGACY_MAC: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_LEGACY_MAC'] ]
       INCLUDE_DOTNET_MACOS: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACOS'] ]
       INCLUDE_DOTNET_MACCATALYST: $[ dependencies.configure.outputs['configure_platforms.INCLUDE_DOTNET_MACCATALYST'] ]
-      ALL_DEPS: $[ dependencies ]
-      ALL_STAGE_DEPS: $[ stageDependencies ]
+      ALL_DEPS: $[ convertToJson(dependencies) ]
+      ALL_STAGE_DEPS: $[ convertToJson(stageDependencies) ]
 
     steps:
     - bash: |
@@ -99,8 +99,8 @@ stages:
     displayName: 'Check Me'
     condition: and(succeeded(), eq(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
     variables:
-      ALL_DEPS: $[ dependencies ]
-      ALL_STAGE_DEPS: $[ stageDependencies ]
+      ALL_DEPS: $[ convertToJson(dependencies) ]
+      ALL_STAGE_DEPS: $[ convertToJson(stageDependencies) ]
     steps:
     - bash: |
         env -0 | sort -z | tr '\0' '\n' || true
@@ -112,8 +112,8 @@ stages:
     - configure
     displayName: 'Check Me2'
     variables:
-      ALL_DEPS: $[ dependencies ]
-      ALL_STAGE_DEPS: $[ stageDependencies ]
+      ALL_DEPS: $[ convertToJson(dependencies) ]
+      ALL_STAGE_DEPS: $[ convertToJson(stageDependencies) ]
     steps:
     - bash: |
         env -0 | sort -z | tr '\0' '\n' || true

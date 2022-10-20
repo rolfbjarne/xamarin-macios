@@ -113,7 +113,7 @@ steps:
       continueOnError: true
 
     # funny enough we need these profiles to build the mac tests
-    - bash: "$BUILD_SOURCESDIRECTORY"/maccore/tools/install-qa-provisioning-profiles.sh -v
+    - bash: '"$BUILD_SOURCESDIRECTORY"/maccore/tools/install-qa-provisioning-profiles.sh -v'
       displayName: 'Add tests provisioning profiles'
       timeoutInMinutes: 30
       continueOnError: true # should not stop the build will result in test failures but we do want the pkg

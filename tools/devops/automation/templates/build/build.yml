@@ -168,7 +168,8 @@ steps:
   env:
     RUN_DEVICE_TESTS: '${{ parameters.runDeviceTests }}'
 
-- bash: 'env -0 | sort -z | tr '\0' '\n' || true'
+- bash: |
+    env -0 | sort -z | tr '\0' '\n' || true
   displayName: Debug variables
   env:
     THE_VARIABLES: ${{ convertToJson(variables) }}

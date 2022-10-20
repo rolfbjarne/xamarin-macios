@@ -82,8 +82,6 @@ stages:
       ALL_DEPS: $[ dependencies ]
       ALL_STAGE_DEPS: $[ stageDependencies ]
 
-    # condition: and(succeeded(), ne(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], ''))
-
     steps:
     - bash: |
         env -0 | sort -z | tr '\0' '\n' || true
@@ -95,11 +93,27 @@ stages:
         statusContext: ${{ parameters.statusContext }}
         keyringPass: ${{ parameters.keyringPass }} 
 
-  - job: check_legacy_mac
+  - job: check_me
     dependsOn:
     - configure
     displayName: 'Check Me'
-    condition: and(succeeded(), ne(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], ''))
+    condition: and(succeeded(), eq(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
+    variables:
+      ALL_DEPS: $[ dependencies ]
+      ALL_STAGE_DEPS: $[ stageDependencies ]
+    steps:
+    - bash: |
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Environment"
+
+
+  - job: check_me2
+    dependsOn:
+    - configure
+    displayName: 'Check Me2'
+    variables:
+      ALL_DEPS: $[ dependencies ]
+      ALL_STAGE_DEPS: $[ stageDependencies ]
     steps:
     - bash: |
         env -0 | sort -z | tr '\0' '\n' || true

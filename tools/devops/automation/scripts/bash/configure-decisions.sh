@@ -13,16 +13,16 @@ function AddOutputVariable () {
 }
 
 # Run mac tests if any desktop platform is enabled, and they've not been disabled.
-if [[ "$LABELS_SKIP_PACKAGED_XAMARIN_MAC_TESTS" == "True" ]]; then
+if [[ "${LABELS_SKIP_PACKAGED_XAMARIN_MAC_TESTS:-}" == "True" ]]; then
 	# They've been skipped: don't run them
 	RUN_MAC_TESTS=false
-elif [[ "$LABELS_SKIP_ALL_TESTS" == "True" ]]; then
+elif [[ "${LABELS_SKIP_ALL_TESTS:-}" == "True" ]]; then
 	# All tests have been skipped
 	RUN_MAC_TESTS=false
-elif [[ "$INCLUDE_DOTNET_MACOS" != "" ]]; then
+elif [[ "${INCLUDE_DOTNET_MACOS:-}" != "" ]]; then
 	# Run mac tests if a .NET desktop platform is enabled
 	RUN_MAC_TESTS=true
-elif [[ "$INCLUDE_LEGACY_MAC" != "" ]]; then
+elif [[ "${INCLUDE_LEGACY_MAC:-}" != "" ]]; then
 	# Run mac tests if a legacy desktop platform is enabled
 	RUN_MAC_TESTS=true
 else

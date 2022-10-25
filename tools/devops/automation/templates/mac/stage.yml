@@ -42,14 +42,14 @@ stages:
     displayName: 'Debug job'
     pool:
       vmImage: windows-latest
+    variables:
+      STAGE_DEPS: $[ convertToJson(stageDependencies) ]
+      DEPS: $[ convertToJson(dependencies) ]
 
     steps:
     - bash:
         env -0 | sort -z | tr '\0' '\n' || true
       displayName: "Show Env"
-      variables:
-        STAGE_DEPS: $[ convertToJson(stageDependencies) ]
-        DEPS: $[ convertToJson(dependencies) ]
 
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}

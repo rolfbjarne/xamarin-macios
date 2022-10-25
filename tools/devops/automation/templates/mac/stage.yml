@@ -69,13 +69,12 @@ stages:
     variables:
       isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
       isScheduled: $[eq(variables['Build.Reason'], 'Schedule')]
+      STAGE_DEPS: $[ convertToJson(stageDependencies) ]
+      DEPS: $[ convertToJson(dependencies) ]
 
     steps:
     - bash:
         env -0 | sort -z | tr '\0' '\n' || true
-      variables:
-        STAGE_DEPS: $[ convertToJson(stageDependencies) ]
-        DEPS: $[ convertToJson(dependencies) ]
 
     - template: ../common/configure.yml
       parameters: 

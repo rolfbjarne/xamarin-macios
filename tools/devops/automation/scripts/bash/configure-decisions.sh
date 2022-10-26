@@ -17,7 +17,7 @@ function AddOutputVariable () {
 if [[ "${LABELS_SKIP_PACKAGED_MACOS_TESTS:-}" == "True" ]]; then
 	# They've been skipped: don't run them
 	RUN_MAC_TESTS=false
-elif [ "${LABELS_RUN_PACKAGED_MACOS_TESTS:-}" == "True" ]]; then
+elif [[ "${LABELS_RUN_PACKAGED_MACOS_TESTS:-}" == "True" ]]; then
 	# They've been explicitly enabled: run them
 	RUN_MAC_TESTS=true
 elif [[ "${LABELS_SKIP_ALL_TESTS:-}" == "True" ]]; then

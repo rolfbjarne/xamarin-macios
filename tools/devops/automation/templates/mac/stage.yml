@@ -38,13 +38,35 @@ stages:
   - build_packages
 
   jobs:
-  - job: DebugJonb
+  - job: DebugJob
     displayName: 'Debug job'
     pool:
       vmImage: windows-latest
     variables:
       STAGE_DEPS: $[ convertToJson(stageDependencies) ]
       DEPS: $[ convertToJson(dependencies) ]
+      JOB_CONDITION: $[ stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'] ]
+
+    steps:
+    - bash:
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Env"
+
+- stage: TestStage
+  displayName: Test stage
+  dependsOn:
+  - build_packages
+  condition: and(succeeded(), eq(stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
+
+  jobs:
+  - job: DebugJob
+    displayName: 'Debug job'
+    pool:
+      vmImage: windows-latest
+    variables:
+      STAGE_DEPS: $[ convertToJson(stageDependencies) ]
+      DEPS: $[ convertToJson(dependencies) ]
+      JOB_CONDITION: $[ stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'] ]
 
     steps:
     - bash:
@@ -55,7 +77,6 @@ stages:
   displayName: ${{ parameters.displayName }}
   dependsOn:
   - build_packages
-  # we need to have the pkgs built and the device sets to be ran, that is decided via the labels or type of build during the build_packages stage
   condition: and(succeeded(), eq(stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
   variables:
     GITHUB_FAILURE_COMMENT_FILE: $(System.DefaultWorkingDirectory)/github-comment-file.md
@@ -85,7 +106,6 @@ stages:
     dependsOn:
     - configure
     displayName: 'macOS tests'
-    condition: and(succeeded(), eq(dependencies.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
     timeoutInMinutes: 1000
     workspace:
       clean: all

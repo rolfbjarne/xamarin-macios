@@ -52,6 +52,12 @@ stages:
         env -0 | sort -z | tr '\0' '\n' || true
       displayName: "Show Env"
 
+    steps:
+    - bash:
+        env -0 | sort -z | tr '\0' '\n' || true
+      displayName: "Show Env 2"
+    condition: and(succeeded(), eq(stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
+
 - stage: TestStage
   displayName: Test stage
   dependsOn:

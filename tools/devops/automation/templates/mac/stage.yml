@@ -61,7 +61,7 @@ stages:
   displayName: Test stage
   dependsOn:
   - build_packages
-  condition: and(succeeded(), eq(stageDependencies.build_packages.configure.outputs['decisions.RUN_MAC_TESTS'], 'true'))
+  condition: and(succeeded(), eq(dependencies.build_packages.outputs['configure.decisions.RUN_MAC_TESTS'], 'true'))
 
   jobs:
   - job: DebugJob

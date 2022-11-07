@@ -55,25 +55,25 @@ public partial class AppDelegate : UIApplicationDelegate {
 
 public static class MainClass {
 #if __MACCATALYST__
-		[DllImport ("/usr/lib/libSystem.dylib")]
-		static extern void _exit (int exit_code);
+	[DllImport ("/usr/lib/libSystem.dylib")]
+	static extern void _exit (int exit_code);
 #endif
 
 	static void Main (string [] args)
 	{
 #if __MACCATALYST__
 
-			var thread = new Thread ((v) => {
-				if (!AppDelegate.FinishedLaunchingEvent.WaitOne (TimeSpan.FromSeconds (10))) {
-					Console.Error.WriteLine ("Launch timeout of 10 seconds reached! Will now exit the process abruptly.");
-					_exit (99);
-				} else {
-					Console.Error.WriteLine ("Finished launching reached as expected, launch watchdog cancelled.");
-				}
-			}) {
-				IsBackground = true,
-			};
-			thread.Start ();
+		var thread = new Thread ((v) => {
+			if (!AppDelegate.FinishedLaunchingEvent.WaitOne (TimeSpan.FromSeconds (10))) {
+				Console.Error.WriteLine ("Launch timeout of 10 seconds reached! Will now exit the process abruptly.");
+				_exit (99);
+			} else {
+				Console.Error.WriteLine ("Finished launching reached as expected, launch watchdog cancelled.");
+			}
+		}) {
+			IsBackground = true,
+		};
+		thread.Start ();
 #endif
 #if !__MACOS__
 		UIApplication.Main (args, null, typeof (AppDelegate));

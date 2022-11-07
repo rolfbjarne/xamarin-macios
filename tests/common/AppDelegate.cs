@@ -14,8 +14,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 
 [Register ("AppDelegate")]
-public partial class AppDelegate : UIApplicationDelegate
-{
+public partial class AppDelegate : UIApplicationDelegate {
 #if __MACCATALYST__
 	public static ManualResetEvent FinishedLaunchingEvent = new ManualResetEvent (false);
 #endif
@@ -60,8 +59,8 @@ public static class MainClass {
 		static extern void _exit (int exit_code);
 #endif
 
-		static void Main (string[] args)
-		{
+	static void Main (string [] args)
+	{
 #if __MACCATALYST__
 
 			var thread = new Thread ((v) => {
@@ -77,7 +76,7 @@ public static class MainClass {
 			thread.Start ();
 #endif
 #if !__MACOS__
-			UIApplication.Main (args, null, typeof (AppDelegate));
+		UIApplication.Main (args, null, typeof (AppDelegate));
 #endif
-		}
+	}
 }

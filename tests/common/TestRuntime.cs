@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -1372,6 +1373,11 @@ partial class TestRuntime {
 		IgnoreInCIfHttpStatusCodes (ex, HttpStatusCode.BadGateway, HttpStatusCode.GatewayTimeout, HttpStatusCode.ServiceUnavailable);
 	}
 
+	public static void IgnoreInCIIfForbidden (Exception ex)
+	{
+		IgnoreInCIfHttpStatusCodes (ex, HttpStatusCode.BadGateway, HttpStatusCode.GatewayTimeout, HttpStatusCode.ServiceUnavailable, HttpStatusCode.Forbidden);
+	}
+
 	public static void IgnoreInCIIfBadNetwork (HttpStatusCode status)
 	{
 		IgnoreInCIfHttpStatusCodes (status, HttpStatusCode.BadGateway, HttpStatusCode.GatewayTimeout, HttpStatusCode.ServiceUnavailable);
@@ -1399,6 +1405,14 @@ partial class TestRuntime {
 	static bool TryGetHttpStatusCode (Exception ex, out HttpStatusCode status)
 	{
 		status = (HttpStatusCode) 0;
+
+		if (ex is HttpRequestException hre) {
+			if (hre.StatusCode.HasValue) {
+				status = hre.StatusCode.Value;
+				return true;
+			}
+			return false;
+		}
 
 		var we = ex as WebException;
 		if (we is null)

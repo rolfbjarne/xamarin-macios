@@ -228,6 +228,14 @@ namespace ObjCRuntime {
 		static extern int _NSGetExecutablePath (byte[] buf, ref int bufsize);
 #endif
 
+#if NET
+		[UnmanagedCallersOnly (EntryPoint = "xamarin_objcruntime_runtime_nativeaotinitialize")]
+		unsafe static void NativeAotInitialize (InitializationOptions* options)
+		{
+			Initialize (options);
+		}
+#endif
+
 		[Preserve] // called from native - runtime.m.
 		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
 		unsafe static void Initialize (InitializationOptions* options)

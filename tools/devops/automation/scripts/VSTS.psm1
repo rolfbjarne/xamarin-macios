@@ -335,6 +335,8 @@ class BuildConfiguration {
             "run-sample-tests",
             "skip-packaged-xamarin-mac-tests",
             "skip-api-comparison",
+            "run-windows-tests",
+            "skip-windows-tests",
             "skip-all-tests"
           )
 

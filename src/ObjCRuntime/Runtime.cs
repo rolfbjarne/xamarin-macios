@@ -229,10 +229,16 @@ namespace ObjCRuntime {
 #endif
 
 #if NET
+		[Preserve] // called from native - nativeaot-bridge.m.
 		[UnmanagedCallersOnly (EntryPoint = "xamarin_objcruntime_runtime_nativeaotinitialize")]
-		unsafe static void NativeAotInitialize (InitializationOptions* options)
+		unsafe static void NativeAotInitialize (InitializationOptions* options, IntPtr* exception_gchandle)
 		{
-			Initialize (options);
+			*exception_gchandle = null;
+			try {
+				Initialize (options);
+			} catch (Exception e) {
+				*exception_gchandle = AllocGCHandle (e);
+			}
 		}
 #endif
 

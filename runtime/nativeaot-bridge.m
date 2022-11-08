@@ -6,11 +6,13 @@
 *
 */
 
-#if defined (CORECLR_RUNTIME)
+#if defined (CORECLR_RUNTIME) && defined (NATIVEAOT)
 
 #include <sys/stat.h>
 #include <inttypes.h>
 #include <pthread.h>
+#include <sys/mman.h>
+#include <dlfcn.h>
 
 #include "product.h"
 #include "runtime-internal.h"
@@ -537,17 +539,16 @@ xamarin_handle_bridge_exception (GCHandle gchandle, const char *method)
 	xamarin_assertion_message ("%s threw an exception: %p = %s", method, gchandle, [xamarin_print_all_exceptions (gchandle) UTF8String]);
 }
 
-typedef void (*xamarin_runtime_initialize_decl)(struct InitializationOptions* options);
+typedef void (*xamarin_runtime_initialize_decl)(struct InitializationOptions* options, GCHandle* exception_gchandle);
 void
 xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle)
 {
-	void *del = NULL;
-	int rv = coreclr_create_delegate (coreclr_handle, coreclr_domainId, PRODUCT ", Version=0.0.0.0", "ObjCRuntime.Runtime", "Initialize", &del);
-	if (rv != 0)
-		xamarin_assertion_message ("xamarin_bridge_call_runtime_initialize: failed to create delegate: %i\n", rv);
+	void *del = dlsym (RTLD_DEFAULT, "xamarin_objcruntime_runtime_nativeaotinitialize");
+	if (del == NULL)
+		xamarin_assertion_message ("xamarin_bridge_call_runtime_initialize: failed to load xamarin_objcruntime_runtime_nativeaotinitialize: %s\n", dlerror ());
 
 	xamarin_runtime_initialize_decl runtime_initialize = (xamarin_runtime_initialize_decl) del;
-	runtime_initialize (options);
+	runtime_initialize (options, exception_gchandle);
 }
 
 void

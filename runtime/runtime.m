@@ -1298,7 +1298,7 @@ xamarin_initialize ()
 	options.EntryAssemblyPath = xamarin_entry_assembly_path;
 #endif
 
-#if defined (CORECLR_RUNTIME)
+#if defined (CORECLR_RUNTIME) && !defined (NATIVEAOT) // FIXME: the functions below must likely be implemented a some point for NativeAOT
 	options.xamarin_objc_msgsend = (void *) xamarin_dyn_objc_msgSend;
 	options.xamarin_objc_msgsend_super = (void *) xamarin_dyn_objc_msgSendSuper;
 #if !defined(__aarch64__)

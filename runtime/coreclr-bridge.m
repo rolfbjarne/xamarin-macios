@@ -6,7 +6,7 @@
 *
 */
 
-#if defined (CORECLR_RUNTIME)
+#if defined (CORECLR_RUNTIME) && !defined (NATIVEAOT)
 
 #include <sys/stat.h>
 #include <inttypes.h>

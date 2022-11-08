@@ -27,6 +27,136 @@ steps:
     gci env: | format-table -autosize -wrap
   displayName: 'Dump Environment'
 
+- task: DownloadPipelineArtifact@2
+  displayName: Download artifacts
+  inputs:
+    allowFailedBuilds: true
+    path: $(Build.SourcesDirectory)/artifacts
+
+- pwsh: |
+    try {
+      Write-Host "Looking in '$(Build.SourcesDirectory)\artifacts"
+      Get-ChildItem "$(Build.SourcesDirectory)\artifacts" -Recurse
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+  displayName: 'List downloaded artifacts'
+  continueOnError: true
+
+
+# FIXME: parameterize platforms
+# FIXME: SOURCES?
+
+- pwsh: |
+    & dotnet --version
+    & dotnet --info
+    & dotnet workload list
+  displayName: 'Show .NET info'
+  continueOnError: true
+
+- pwsh: |
+    try {
+      Write-Host "Looking in 'C:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "C:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "D:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Printing in 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'"
+      Get-Content -Raw -Path 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\" -Name "Shared" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\Shared\" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+  displayName: 'Show NuGet configuration'
+  continueOnError: true
+
+- pwsh: |
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
+    --verbosity quiet `
+    "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" `
+    -p:DisableImplicitNuGetFallbackFolder=true
+  displayName: 'Install custom .NET'
+  continueOnError: true
+
+- pwsh: |
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
+      --verbosity quiet `
+      "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install-workloads.binlog" `
+      -p:DisableImplicitNuGetFallbackFolder=true `
+      -t:Install
+  displayName: 'Install workloads'
+  continueOnError: true
+
+- pwsh: |
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+      --filter Category=Windows `
+      --verbosity quiet `
+      "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"
+  displayName: 'Run .NET tests'
+  continueOnError: true
+
+# - pwsh: |
+#     Write-Host "Trying to ssh to the mac bot..."
+#     & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
+#   displayName: Diagnostics with pwsh 1
+#   continueOnError: true
+#   timeoutInMinutes: 1
+
+# - pwsh: |
+#     Write-Host "Trying to ssh to the mac bot..."
+#     (Get-Command New-PSSession).ParameterSets.Name
+#     $session = New-PSSession -HostName builder@$($Env:MAC_AGENT_IP)
+#     $session
+#     Invoke-Command $session -ScriptBlock { Get-Process powershell }
+#   displayName: Diagnostics with pwsh 2
+#   continueOnError: true
+#   timeoutInMinutes: 1
+
+# - pwsh: |
+#     Write-Host "Sending ping to $($Env:MAC_AGENT_IP)..."
+#     Test-Connection -TargetName "$($Env:MAC_AGENT_IP)" -Count 3
+#   displayName: "Diagnostics with pwsh - ping"
+#   continueOnError: true
+#   timeoutInMinutes: 1
+
 - pwsh: |
     Write-Host "Run windows tests."
     Write-Host "Mac agent to be used:"
@@ -34,6 +164,35 @@ steps:
     Write-Host "Mac agent name: $Env:MAC_AGENT_NAME"
     Write-Host "Mac agent IP: $Env:MAC_AGENT_IP"
   displayName: Run tests
+
+# Upload all the binlogs
+# Copy all the binlogs to a separate directory, keeping directory structure.
+- pwsh: |
+    $sourceDir = '$(Build.SourcesDirectory)\xamarin-macios'
+    $targetDir = '$(Build.ArtifactStagingDirectory)\windows-binlogs'
+
+    Write-Host "Looking for files in $sourceDir"
+    $binlogs = Get-ChildItem $sourceDir -Recurse -Include "*.binlog"
+    Write-Host "Found $($binlogs.Count) binlogs"
+    foreach ($binlog in $binlogs) {
+        $targetFile = $targetDir + $binlog.FullName.SubString($sourceDir.Length);
+        Write-Host "Found $binlog and copying to $targetFile"
+        New-Item -ItemType File -Path $targetFile -Force
+        Copy-Item $binlog.FullName -destination $targetFile
+    }
+    Write-Host "Done looking for files in $sourceDir"
+  displayName: Copy all binlogs
+  continueOnError: true
+  condition: succeededOrFailed()
+
+# Publish all the binlogs we collected in the previous step
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Artifact: Windows binlogs'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)/windows-binlogs
+    artifactName: windows-binlogs-test-$(Build.BuildId)-$(System.JobAttempt)
+  continueOnError: true
+  condition: succeededOrFailed()
 
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1

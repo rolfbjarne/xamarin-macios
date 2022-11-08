@@ -1406,6 +1406,7 @@ partial class TestRuntime {
 	{
 		status = (HttpStatusCode) 0;
 
+#if NET // HttpRequestException.StatusCode only exists in .NET 5+
 		if (ex is HttpRequestException hre) {
 			if (hre.StatusCode.HasValue) {
 				status = hre.StatusCode.Value;
@@ -1413,6 +1414,7 @@ partial class TestRuntime {
 			}
 			return false;
 		}
+#endif
 
 		var we = ex as WebException;
 		if (we is null)

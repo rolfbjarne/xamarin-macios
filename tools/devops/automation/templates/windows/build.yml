@@ -19,12 +19,12 @@ steps:
 
 - bash: |
     set -ex
-    ssh builder@MAC_AGENT_IP 'ls -la'
+    ssh builder@$MAC_AGENT_IP 'ls -la'
   displayName: Diagnostics with bash
   continueOnError: true
 
-- pws: |
-    & ssh builder@MAC_AGENT_IP 'ls -la'
+- pwsh: |
+    & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
   displayName: Diagnostics with pwsh
   continueOnError: true
 

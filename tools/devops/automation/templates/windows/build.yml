@@ -62,6 +62,22 @@ steps:
 
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1
+    $gihubComments = New-GitHubCommentsObject -Org "xamarin" -Repo "xamarin-macios" -Token $Env:GITHUB_TOKEN -Hash $Env:GIT_HASH -Debug
+    $sb = [System.Text.StringBuilder]::new()
+    $sb.AppendLine("Reporting in from the Windows integration tests")
+    $sb.AppendLine()
+    $sb.AppendLine("Current status: $($Env:AGENT_JOBSTATUS)")
+    $result = $gihubComments.NewCommentFromMessage("Test results", ":sparkles:", $sb.ToString())
+  displayName: 'Add GitHub comment'
+  env:
+    CONTEXT: ${{ parameters.statusContext }}
+    DEVICE_PREFIX: windows-integration-tests
+    GITHUB_TOKEN: $(GitHub.Token)
+    ACCESSTOKEN: $(System.AccessToken)
+  condition: always()
+
+- pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1
     $vsts = New-VSTS -Org "devdiv" -Project "DevDiv" -Token $(MacPoolAccessToken)
 
     # get the pool and the agent objects and disable the bot

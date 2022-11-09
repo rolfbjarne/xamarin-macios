@@ -20,7 +20,13 @@ steps:
 - bash: |
     set -ex
     ssh builder@MAC_AGENT_IP 'ls -la'
-  displayName: Diagnostics
+  displayName: Diagnostics with bash
+  continueOnError: true
+
+- pws: |
+    & ssh builder@MAC_AGENT_IP 'ls -la'
+  displayName: Diagnostics with pwsh
+  continueOnError: true
 
 - pwsh: |
     Write-Host "Run windows tests."

@@ -804,10 +804,12 @@ namespace ObjCRuntime {
 			return AllocGCHandle (GetINativeObject (ptr, owns, iface, type));
 		}
 
-		static IntPtr GetNSObjectWithType (IntPtr ptr, IntPtr type_ptr, out bool created)
+		unsafe static IntPtr GetNSObjectWithType (IntPtr ptr, IntPtr type_ptr, bool* createdPtr)
 		{
 			var type = (System.Type) GetGCHandleTarget (type_ptr)!;
-			return AllocGCHandle (GetNSObject (ptr, type, MissingCtorResolution.ThrowConstructor1NotFound, true, true, out created));
+			var rv = AllocGCHandle (GetNSObject (ptr, type, MissingCtorResolution.ThrowConstructor1NotFound, true, true, out var created));
+			*createdPtr = created;
+			return rv;
 		}
 
 		static void Dispose (IntPtr gchandle)
@@ -839,13 +841,15 @@ namespace ObjCRuntime {
 			return parameters [parameter].IsOut;
 		}
 
-		static void GetMethodAndObjectForSelector (IntPtr klass, IntPtr sel, bool is_static, IntPtr obj, ref IntPtr mthis, IntPtr desc)
+		unsafe static void GetMethodAndObjectForSelector (IntPtr klass, IntPtr sel, bool is_static, IntPtr obj, IntPtr* mthisPtr, IntPtr desc)
 		{
+			IntPtr mthis = *mthisPtr;
 			Registrar.GetMethodDescriptionAndObject (Class.Lookup (klass), sel, is_static, obj, ref mthis, desc);
+			*mthisPtr = mthis;
 		}
 
 		// If inner_exception_gchandle is provided, it will be freed.
-		static IntPtr CreateProductException (int code, IntPtr inner_exception_gchandle, string msg)
+		static IntPtr CreateProductException (int code, IntPtr inner_exception_gchandle, IntPtr utf8Message)
 		{
 			Exception? inner_exception = null;
 			if (inner_exception_gchandle != IntPtr.Zero) {
@@ -853,6 +857,7 @@ namespace ObjCRuntime {
 				inner_exception = (Exception?) gchandle.Target;
 				gchandle.Free ();
 			}
+			var msg = Marshal.PtrToStringAuto (utf8Message)!;
 			Exception ex = ErrorHelper.CreateError (code, inner_exception, msg);
 			return AllocGCHandle (ex);
 		}

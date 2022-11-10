@@ -26,9 +26,19 @@ steps:
 - pwsh: |
     Write-Host "Trying to ssh to the mac bot..."
     & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
-  displayName: Diagnostics with pwsh
+  displayName: Diagnostics with pwsh 1
   continueOnError: true
-  timeoutInMinutes: 10
+  timeoutInMinutes: 1
+
+- pwsh: |
+    Write-Host "Trying to ssh to the mac bot..."
+    (Get-Command New-PSSession).ParameterSets.Name
+    $session = New-PSSession -HostName builder@$($Env:MAC_AGENT_IP)
+    $session
+    Invoke-Command $session -ScriptBlock { Get-Process powershell }
+  displayName: Diagnostics with pwsh 2
+  continueOnError: true
+  timeoutInMinutes: 1
 
 - pwsh: |
     Write-Host "Run windows tests."

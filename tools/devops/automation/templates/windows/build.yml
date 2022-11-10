@@ -41,6 +41,13 @@ steps:
   timeoutInMinutes: 1
 
 - pwsh: |
+    Write-Host "Sending ping to $($Env:MAC_AGENT_IP)..."
+    Test-Connection -TargetName "$($Env:MAC_AGENT_IP)" -Count 3
+  displayName: "Diagnostics with pwsh - ping"
+  continueOnError: true
+  timeoutInMinutes: 1
+
+- pwsh: |
     Write-Host "Run windows tests."
     Write-Host "Mac agent to be used:"
     Write-Host "Mac agent pool: $Env:MAC_AGENT_POOL"

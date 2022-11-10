@@ -233,7 +233,7 @@ namespace ObjCRuntime {
 		[UnmanagedCallersOnly (EntryPoint = "xamarin_objcruntime_runtime_nativeaotinitialize")]
 		unsafe static void NativeAotInitialize (InitializationOptions* options, IntPtr* exception_gchandle)
 		{
-			*exception_gchandle = null;
+			*exception_gchandle = IntPtr.Zero;
 			try {
 				Initialize (options);
 			} catch (Exception e) {

@@ -73,6 +73,8 @@ stages:
     timeoutInMinutes: 1000
     workspace:
       clean: all
+    strategy:
+      parallel: 10 # run 10 times
 
     pool:
       ${{ if eq(parameters.useImage, false) }}:

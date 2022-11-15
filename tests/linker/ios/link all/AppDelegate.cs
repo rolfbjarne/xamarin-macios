@@ -7,6 +7,8 @@ using Foundation;
 using UIKit;
 using MonoTouch.NUnit.UI;
 
+using Bindings.Test;
+
 namespace LinkAll
 {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -28,6 +30,8 @@ namespace LinkAll
 		//
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
+			var x = new UltimateMachine2();
+
 #if __MACCATALYST__
 			// Debug spew to track down https://github.com/xamarin/maccore/issues/2414
 			Console.WriteLine ("AppDelegate.FinishedLaunching");

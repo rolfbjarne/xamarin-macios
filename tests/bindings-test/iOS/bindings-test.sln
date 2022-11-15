@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1704.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bindings-test", "bindings-test.csproj", "{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug32|Any CPU = Debug32|Any CPU
+		Debug64|Any CPU = Debug64|Any CPU
+		Debug64_32|Any CPU = Debug64_32|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Release32|Any CPU = Release32|Any CPU
+		Release64|Any CPU = Release64|Any CPU
+		Release-bitcode|Any CPU = Release-bitcode|Any CPU
+		Release64_32|Any CPU = Release64_32|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug32|Any CPU.ActiveCfg = Debug32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug32|Any CPU.Build.0 = Debug32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug64|Any CPU.ActiveCfg = Debug64|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug64|Any CPU.Build.0 = Debug64|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug64_32|Any CPU.ActiveCfg = Debug64_32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Debug64_32|Any CPU.Build.0 = Debug64_32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release32|Any CPU.ActiveCfg = Release32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release32|Any CPU.Build.0 = Release32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release64|Any CPU.ActiveCfg = Release64|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release64|Any CPU.Build.0 = Release64|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release-bitcode|Any CPU.ActiveCfg = Release-bitcode|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release-bitcode|Any CPU.Build.0 = Release-bitcode|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release64_32|Any CPU.ActiveCfg = Release64_32|Any CPU
+		{D6667423-EDD8-4B50-9D98-1AC5D8A8A4EA}.Release64_32|Any CPU.Build.0 = Release64_32|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7901C1A-ECE3-4365-8067-66C23AC32E20}
+	EndGlobalSection
+EndGlobal

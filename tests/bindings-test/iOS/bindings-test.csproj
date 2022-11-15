@@ -48,10 +48,10 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <ObjcBindingApiDefinition Include="..\ApiDefinition.cs" />
     <ObjcBindingApiDefinition Include="..\..\generator\tests\ref-out-parameters.cs" />
     <ObjcBindingApiDefinition Include="..\ApiDefinition.generated.cs" />
     <ObjcBindingApiDefinition Include="..\ApiProtocol.cs" />
+    <ObjcBindingApiDefinition Include="..\ApiDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingCoreSource Include="..\StructsAndEnums.cs" />
@@ -62,9 +62,9 @@
     <TestLibrariesDirectory>..\..\..\tests\test-libraries</TestLibrariesDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <ObjcBindingNativeLibrary Include="..\..\..\tests\test-libraries\.libs\ios-fat\libtest.a">
+<!--     <ObjcBindingNativeLibrary Include="libtest.a">
       <Link>libtest.a</Link>
-    </ObjcBindingNativeLibrary>
+    </ObjcBindingNativeLibrary> -->
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\common\ConditionalCompilation.cs">
@@ -78,15 +78,15 @@
       <Link>Registrar.cs</Link>
     </Compile>
     <Compile Include="..\RegistrarBindingTest.cs" />
-    <Compile Include="..\..\common\TestRuntime.cs">
-      <Link>TestRuntime.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\tools\common\ApplePlatform.cs">
       <Link>ApplePlatform.cs</Link>
     </Compile>
-    <Compile Include="..\RuntimeTest.cs" />
     <Compile Include="..\CodeBehind.cs" />
     <Compile Include="..\Messaging.cs" />
+    <Compile Include="..\RuntimeTest.cs" />
+    <Compile Include="..\..\common\TestRuntime.cs">
+      <Link>TestRuntime.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\tests\test-libraries\libtest.m">

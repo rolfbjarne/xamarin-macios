@@ -14,6 +14,16 @@ namespace Xamarin.Tests
 	[Preserve (AllMembers = true)]
 	public class RuntimeTest
 	{
+		static void Y ()
+		{
+		}
+
+		static void X ()
+		{
+			var x = new UltimateMachine3();
+		}
+
+
 		[Test]
 		public void WrapperTypeLookupTest ()
 		{

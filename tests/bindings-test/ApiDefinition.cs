@@ -18,6 +18,17 @@ namespace Bindings.Test {
 	}
 #endif
 
+	[BaseType(typeof(NSObject))]
+	public interface UltimateMachine3
+	{
+		[Export("getAnswer")]
+		int GetAnswer();
+
+		[Export("sharedInstance")]
+		[Static]
+		UltimateMachine SharedInstance { get; }
+	}
+
 	[BaseType (typeof (NSObject))]
 	public interface UltimateMachine
 	{

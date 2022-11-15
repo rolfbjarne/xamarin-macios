@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 
 using Foundation;
 
+using MyApiDefinition;
+
 namespace MySimpleApp
 {
 	public class Program

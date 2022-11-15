@@ -5,6 +5,8 @@
 
 		<ApplicationTitle>AppWithBindingProject</ApplicationTitle>
 		<ApplicationId>com.xamarin.appwithbindingproject</ApplicationId>
+		<ExcludeNUnitLiteReference>false</ExcludeNUnitLiteReference>
+		<ExcludeTouchUnitReference>false</ExcludeTouchUnitReference>
 	</PropertyGroup>
 
 	<Import Project="../../common/shared-dotnet.csproj" />

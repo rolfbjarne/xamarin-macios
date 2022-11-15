@@ -1619,7 +1619,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Inputs="$(MSBuildAllProjects);@(ObjcBindingApiDefinition);@(ObjcBindingCoreSource);@(ReferencePath);@(ObjcBindingNativeLibrary)"
 		Outputs="$(_GeneratedSourcesFileList)"
 		DependsOnTargets="$(_GenerateBindingsDependsOn)"
-		Condition="'$(IsBindingProject)' == 'true' And '$(DesignTimeBuild)' != 'true'">
+		Condition="'$(IsBindingProject)' == 'true' And ('$(DesignTimeBuild)' != 'true' Or '$(IsMacEnabled)' == 'true')">
 
 		<ItemGroup>
 			<BTouchReferencePath Include="@(ReferenceCopyLocalPaths)" Condition="'%(Extension)' == '.dll'" />

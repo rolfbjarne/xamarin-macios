@@ -48,7 +48,7 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 
 	<Target Name="_CollectGeneratedSources"
 		DependsOnTargets="_GenerateBindings;_CompressNativeFrameworkResources"
-		Condition="'$(DesignTimeBuild)' != 'true'"
+		Condition="'$(DesignTimeBuild)' != 'true' Or '$(IsMacEnabled)' == 'true'"
 	>
 
 		<ReadLinesFromFile File="$(_GeneratedSourcesFileList)" >

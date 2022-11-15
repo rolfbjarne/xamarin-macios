@@ -65,7 +65,7 @@ public static class MainClass {
 
 		var thread = new Thread ((v) => {
 			if (!AppDelegate.FinishedLaunchingEvent.WaitOne (TimeSpan.FromSeconds (10))) {
-				Console.Error.WriteLine ("Launch timeout of 10 seconds reached! Will now exit the process abruptly.");
+				Console.Error.WriteLine ("Launch timeout of 10 seconds reached! Will now exit with exit code 99 to request another attempt.");
 				_exit (99);
 			} else {
 				Console.Error.WriteLine ("Finished launching reached as expected, launch watchdog cancelled.");

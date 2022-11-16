@@ -109,11 +109,20 @@ namespace MonoTouchFixtures.Foundation {
 		[Test]
 		public void Precision32022 ()
 		{
-			var a = NSDate.Now;
-			var b = a.SecondsSinceReferenceDate - ((NSDate) (DateTime) a).SecondsSinceReferenceDate;
+			NSDate a = null;
+			DateTime a1 = default (DateTime);
+			NSDate a2 = null;
 
-			// ensure decimals are not truncated - but there's an unavoidable loss of precision from ns to ms
-			Assert.AreEqual (b, 0, 0.001, "1");
+			try {
+				a = NSDate.Now;
+				a1 = (DateTime) a;
+				a2 = (NSDate) a1;
+				var b = a.SecondsSinceReferenceDate - a2.SecondsSinceReferenceDate;
+				// ensure decimals are not truncated - but there's an unavoidable loss of precision from ns to ms
+				Assert.AreEqual (b, 0, 0.001, "1");
+			} catch (Exception e) {
+				Assert.Fail ($"Unexpected exception. a: {a} a1.Ticks: {a1.Ticks} a2: {a2} Exception: {e}");
+			}
 		}
 
 		[TestCase (1, 1, 1, 1, 1, 1, 1)]

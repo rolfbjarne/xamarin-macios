@@ -121,7 +121,7 @@ namespace MonoTouchFixtures.Foundation {
 				// ensure decimals are not truncated - but there's an unavoidable loss of precision from ns to ms
 				Assert.AreEqual (b, 0, 0.001, "1");
 			} catch (Exception e) {
-				Assert.Fail ($"Unexpected exception. a: {a} a1.Ticks: {a1.Ticks} a2: {a2} Exception: {e}");
+				Assert.Fail ($"Unexpected exception. a: {a} a.SecondsSinceReferenceDate: {a.SecondsSinceReferenceDate.ToString ("R")} a1.Ticks: {a1.Ticks} a2: {a2} Exception: {e}");
 			}
 		}
 

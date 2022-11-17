@@ -65,9 +65,20 @@ namespace Foundation {
 
 			using var calComponents = calendar.Components (units, d);
 
-			// DateTime doesn't support dates starting with year 10.000
-			if (calComponents.Year >= 10000)
-				throw new ArgumentOutOfRangeException (nameof (d), d, "The date is outside the range of DateTime.");
+			// DateTime doesn't support dates starting with year 10.000.
+			// Except for the year 10.000 on the dot: we convert it to DateTime.MaxValue.
+			//
+			// DateTime.MaxValue is actually one tick before year 10.000. This
+			// means that when we convert DateTime.MaxValue to NSDate, we
+			// actually end up with a date in year 10.000 due to precision
+			// differences. In order to be able to roundtrip a
+			// DateTime.MaxValue value, we hardcode the corresponding
+			// NSDate.SecondsSinceReferenceDate here.
+			if (calComponents.Year >= 10000) {
+				if (d.SecondsSinceReferenceDate == 252423993600)
+					return DateTime.SpecifyKind (DateTime.MaxValue, DateTimeKind.Utc);
+				throw new ArgumentOutOfRangeException (nameof (d), d, $"The date is outside the range of DateTime: {d.SecondsSinceReferenceDate}");
+			}
 
 			// DateTime doesn't support BC dates (AD dates have Era = 1)
 			if (calComponents.Era != 1)

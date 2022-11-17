@@ -36,6 +36,8 @@ namespace MonoTouchFixtures.Foundation {
 			Assert.AreEqual (DateTime.MinValue, (DateTime) NSDate.FromTimeIntervalSinceReferenceDate (-63114076800), "-63114076800");
 
 			Asserts.AreEqual (DateTime.MaxValue, (DateTime) NSDate.FromTimeIntervalSinceReferenceDate (252423993599.9999), tolerance, "DateTime.MaxValue");
+			Asserts.AreEqual (DateTime.MaxValue, (DateTime) NSDate.FromTimeIntervalSinceReferenceDate (252423993599.9999999), tolerance, "DateTime.MaxValue");
+			Asserts.AreEqual (DateTime.MaxValue, (DateTime) NSDate.FromTimeIntervalSinceReferenceDate (252423993600), tolerance, "DateTime.MaxValue");
 
 			Assert.AreEqual (new DateTime (9999, 12, 31, 23, 59, 58), (DateTime) NSDate.FromTimeIntervalSinceReferenceDate (252423993598), "252423993598");
 			Assert.AreEqual (new DateTime (9999, 12, 31, 23, 59, 59), (DateTime) NSDate.FromTimeIntervalSinceReferenceDate (252423993599), "252423993599");
@@ -43,11 +45,11 @@ namespace MonoTouchFixtures.Foundation {
 
 		static IEnumerable<object []> GetArgumentOutOfRangeExceptionValues ()
 		{
-			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (252423993600), "252423993600" };
-			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (252423993599.99999), "252423993599.99999" };
 			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (double.MaxValue), "double.MaxValue" };
 			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (double.MinValue), "double.MinValue" };
 			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (-63114076801), "-63114076801" };
+			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (252423993601), "252423993601" };
+			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (252423993600.0001), "252423993600.0001" };
 		}
 
 		[Test]
@@ -80,6 +82,9 @@ namespace MonoTouchFixtures.Foundation {
 		{
 			yield return new DateTime (0, DateTimeKind.Utc);
 			yield return DateTime.MaxValue.ToUniversalTime ();
+			yield return DateTime.SpecifyKind (DateTime.MaxValue, DateTimeKind.Utc);
+			yield return DateTime.MinValue.ToUniversalTime ();
+			yield return DateTime.SpecifyKind (DateTime.MinValue, DateTimeKind.Utc);
 			yield return DateTime.UtcNow;
 		}
 
@@ -87,24 +92,26 @@ namespace MonoTouchFixtures.Foundation {
 		[TestCaseSource (nameof (GetRoundTripFromDateTimeValues))]
 		public void RoundTripFromDateTime (DateTime start)
 		{
-			var nsdate = (NSDate) start;
-			var backAgain = (DateTime) nsdate;
-			var range = 10000; // ticks per millisecond; allow for up to a millisecond off
-			Assert.That (backAgain.Ticks, Is.InRange (start.Ticks - range, start.Ticks + range), "RoundTrip");
+			NSDate nsdate = null;
+			DateTime backAgain = default (DateTime);
+			Assert.DoesNotThrow (() => nsdate = (NSDate) start, $"Start ticks: {start.Ticks}");
+			Assert.DoesNotThrow (() => backAgain = (DateTime) nsdate, $"Start ticks: {start.Ticks} Subsequent seconds: {nsdate.SecondsSinceReferenceDate:R}");
+			Asserts.AreEqual (start, backAgain, tolerance, "RoundTrip");
 		}
 
 		static IEnumerable<object []> GetRoundTripFromNSDateValues ()
 		{
 			yield return new object [] { NSDate.DistantPast, "DistantPast" };
 			yield return new object [] { NSDate.DistantFuture, "DistantFuture" };
+			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (252423993600.00001), "252423993600.00001" };
 		}
 
 		[Test]
 		[TestCaseSource (nameof (GetRoundTripFromNSDateValues))]
 		public void RoundTripFromNSDate (NSDate start, string message)
 		{
-			var nsdate = (DateTime) start;
-			var backAgain = (NSDate) nsdate;
+			var date = (DateTime) start;
+			var backAgain = (NSDate) date;
 			Assert.AreEqual (start, backAgain, message);
 		}
 

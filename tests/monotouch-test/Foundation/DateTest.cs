@@ -89,8 +89,6 @@ namespace MonoTouchFixtures.Foundation {
 		{
 			yield return new object [] { NSDate.DistantPast, "DistantPast" };
 			yield return new object [] { NSDate.DistantFuture, "DistantFuture" };
-			yield return new object [] { NSDate.FromTimeIntervalSinceReferenceDate (690323233.999529), "https://github.com/xamarin/maccore/issues/2632" };
-			yield return new object [] { NSDate.Now, "Now" };
 		}
 
 		[Test]
@@ -99,14 +97,32 @@ namespace MonoTouchFixtures.Foundation {
 		{
 			var nsdate = (DateTime) start;
 			var backAgain = (NSDate) nsdate;
-			// ensure decimals are not truncated - but there's an unavoidable loss of precision from ns to ms
-			Assert.AreEqual (start.SecondsSinceReferenceDate, backAgain.SecondsSinceReferenceDate, 0.001, "SecondsSinceReferenceDate");
+			Assert.AreEqual (start, backAgain, message);
 		}
 
 		[Test]
 		public void DescriptionWithLocale ()
 		{
 			Assert.IsNotNull (NSDate.Now.DescriptionWithLocale (NSLocale.CurrentLocale), "1");
+		}
+
+		[Test]
+		public void Precision32022 ()
+		{
+			NSDate a = null;
+			DateTime a1 = default (DateTime);
+			NSDate a2 = null;
+
+			try {
+				a = NSDate.Now;
+				a1 = (DateTime) a;
+				a2 = (NSDate) a1;
+				var b = a.SecondsSinceReferenceDate - a2.SecondsSinceReferenceDate;
+				// ensure decimals are not truncated - but there's an unavoidable loss of precision from ns to ms
+				Assert.AreEqual (b, 0, 0.001, "1");
+			} catch (Exception e) {
+				Assert.Fail ($"Unexpected exception. a: {a} a.SecondsSinceReferenceDate: {a.SecondsSinceReferenceDate.ToString ("R")} a1.Ticks: {a1.Ticks} a2: {a2} Exception: {e}");
+			}
 		}
 
 		[TestCase (1, 1, 1, 1, 1, 1, 1)]

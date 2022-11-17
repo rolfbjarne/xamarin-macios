@@ -38,7 +38,7 @@ using ObjCRuntime;
 namespace Foundation {
 
 	public partial class NSDate {
-		const int NANOSECS_PER_MILLISEC = 1000000;
+		const double NANOSECS_PER_MILLISEC = 1000000.0;
 
 		static readonly NSCalendar calendar = new NSCalendar (NSCalendarType.Gregorian) { TimeZone = NSTimeZone.FromName ("UTC") };
 
@@ -60,7 +60,7 @@ namespace Foundation {
 				(int) calComponents.Hour,
 				(int) calComponents.Minute,
 				(int) calComponents.Second,
-				(int) calComponents.Nanosecond / NANOSECS_PER_MILLISEC,
+				Convert.ToInt32 (calComponents.Nanosecond / NANOSECS_PER_MILLISEC),
 				DateTimeKind.Utc);
 		}
 
@@ -80,7 +80,7 @@ namespace Foundation {
 			dateComponents.Hour = dtUnv.Hour;
 			dateComponents.Minute = dtUnv.Minute;
 			dateComponents.Second = dtUnv.Second;
-			dateComponents.Nanosecond = dtUnv.Millisecond * NANOSECS_PER_MILLISEC;
+			dateComponents.Nanosecond = (int) (dtUnv.Millisecond * NANOSECS_PER_MILLISEC);
 
 			var retDate = calendar.DateFromComponents (dateComponents);
 			if (retDate is null)

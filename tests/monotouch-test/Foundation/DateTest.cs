@@ -23,7 +23,7 @@ namespace MonoTouchFixtures.Foundation {
 		// Converting NSDate -> DateTime limits precision. The exact amount
 		// depends on the date (the further in the future the bigger the
 		// loss), but at DateTime.MaxValue it's around 91.5 microseconds.
-		TimeSpan tolerance = TimeSpan.FromMicroseconds (92);
+		TimeSpan tolerance = TimeSpan.FromTicks (920 /* 92 microseconds */);
 
 		[Test]
 		public void InLimits ()

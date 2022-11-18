@@ -1,0 +1,74 @@
+#!/usr/bin/env /Library/Frameworks/Mono.framework/Commands/csharp -s
+
+// arguments are: <platform> <outputPath>
+
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Xml;
+
+var args = Environment.GetCommandLineArgs ();
+var initialArgumentCount = 3;
+if (args.Length <= initialArgumentCount + 1 /* 2 default arguments (executable + script + -s) */) {
+	// first arg is "/Library/Frameworks/Mono.framework/Versions/4.8.0/lib/mono/4.5/csharp.exe"
+	// second arg the script itself
+	// then comes the ones we care about
+	Console.WriteLine ($"Need at least two arguments, got {args.Length - initialArgumentCount}");
+	Environment.Exit (1);
+	return;
+}
+
+var launchTimeout = TimeSpan.FromSeconds (10); // must launch within a few seconds.
+var argIndex = initialArgumentCount;
+var executionTimeout = TimeSpan.FromSeconds (int.Parse (args [argIndex++]));
+var commands = args.Skip (argIndex).ToArray ();
+
+
+var pid = Process.GetCurrentProcess ().Id;
+var maxLaunchAttempts = 10;
+var exitCode = -1;
+for (var attempt = 0; attempt < maxLaunchAttempts; attempt++) {
+	var launchTimeoutFile = Path.GetFullPath ($"launch-timeout-sentinel-{pid}-{attempt}.txt");
+
+	var launchTimedOut = new ManualResetEvent (false);
+
+	var p = new Process ();
+	p.StartInfo.FileName = commands [0];
+	p.StartInfo.Arguments = string.Join (" ", commands.Skip (1));
+	p.StartInfo.UseShellExecute = false;
+	p.StartInfo.EnvironmentVariables ["LAUNCH_SENTINEL_FILE"] = launchTimeoutFile;
+	p.Start ();
+
+	Console.WriteLine ($"Launching (attempt #{attempt + 1}):");
+	Console.WriteLine ($"    {p.StartInfo.FileName} {p.StartInfo.Arguments}");
+
+	var launchTimer = new Thread ((v) => {
+		Thread.Sleep (launchTimeout);
+		if (!File.Exists (launchTimeoutFile)) {
+			Console.WriteLine ($"Launch timed out after {launchTimeout.TotalSeconds} seconds.");
+			launchTimedOut.Set ();
+			p.Kill ();
+		}
+		File.Delete (launchTimeoutFile);
+	}) {
+		IsBackground = true,
+	};
+	launchTimer.Start ();
+
+	if (!p.WaitForExit ((int) executionTimeout.TotalMilliseconds)) {
+		Console.WriteLine ($"Execution timed out after {executionTimeout.TotalSeconds} seconds.");
+		p.Kill ();
+		p.WaitForExit ();
+	}
+
+	exitCode = p.ExitCode;
+	p.Dispose ();
+
+	if (launchTimedOut.WaitOne (0)) {
+		Console.WriteLine ($"Launching again since the launch timeout triggered.");
+		continue;
+	}
+	break;
+}
+
+Environment.Exit (exitCode);

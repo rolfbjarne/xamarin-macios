@@ -130,7 +130,7 @@ namespace Foundation {
 				rv = rv.AddTicks (ticks);
 #else
 			if (microseconds > 0 || ticks > 0)
-				rv = rv.AddTicks (ticks + 10000 * (int) microseconds);
+				rv = rv.AddTicks (ticks + 10 * (int) microseconds);
 #endif
 
 

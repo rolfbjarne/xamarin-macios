@@ -3,6 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-macos</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<SupportedOSPlatformVersion>10.14</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
 	</PropertyGroup>
 </Project>

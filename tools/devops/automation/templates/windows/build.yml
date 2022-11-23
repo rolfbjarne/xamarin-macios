@@ -39,12 +39,12 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    & dotnet build $(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl
   displayName: 'Install custom .NET'
   continueOnError: true
 
 - pwsh: |
-    & dotnet build $(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -t:Install
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -t:Install
   displayName: 'Install workloads'
   continueOnError: true
 

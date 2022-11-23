@@ -518,7 +518,7 @@ namespace Xharness.TestImporter.Templates.Managed {
 							projectData [appType] = data;
 						} // foreach app type
 
-						var rootPlist = InfoPlistGenerator.GenerateCode (Platform.WatchOS, GetPlistTemplate(Platform.WatchOS), projectDefinition.Name);
+						var rootPlist = InfoPlistGenerator.GenerateCode (Platform.WatchOS, GetPlistTemplate (Platform.WatchOS), projectDefinition.Name);
 						var infoPlistPath = GetPListPath (generatedCodeDir, Platform.WatchOS);
 						using (var file = new StreamWriter (infoPlistPath, false)) { // false is do not append
 							await file.WriteAsync (rootPlist);

@@ -20,22 +20,21 @@ namespace Xharness.TestImporter {
 		Extension
 	}
 
-	public static class Platform_Extensions
-	{
+	public static class Platform_Extensions {
 		public static string GetMinOSVersion (this Platform @this)
 		{
 			switch (@this) {
-				case Platform.iOS:
-					return global::Xamarin.SdkVersions.MiniOS;
-				case Platform.MacOSFull:
-				case Platform.MacOSModern:
-					return global::Xamarin.SdkVersions.MinOSX;
-				case Platform.TvOS:
-					return global::Xamarin.SdkVersions.MinTVOS;
-				case Platform.WatchOS:
-					return global::Xamarin.SdkVersions.MinWatchOS;
-				default:
-					throw new NotImplementedException (@this.ToString ());
+			case Platform.iOS:
+				return global::Xamarin.SdkVersions.MiniOS;
+			case Platform.MacOSFull:
+			case Platform.MacOSModern:
+				return global::Xamarin.SdkVersions.MinOSX;
+			case Platform.TvOS:
+				return global::Xamarin.SdkVersions.MinTVOS;
+			case Platform.WatchOS:
+				return global::Xamarin.SdkVersions.MinWatchOS;
+			default:
+				throw new NotImplementedException (@this.ToString ());
 			}
 		}
 	}

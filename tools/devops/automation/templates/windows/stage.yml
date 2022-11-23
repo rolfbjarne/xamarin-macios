@@ -24,6 +24,14 @@ parameters:
 - name: isPR
   type: boolean
 
+- name: repositoryAlias
+  type: string
+  default: self
+
+- name: commit
+  type: string
+  default: HEAD
+
 stages:
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}
@@ -46,6 +54,8 @@ stages:
     steps:
     - template: reserve-mac.yml
       parameters:
+        repositoryAlias: ${{ parameters.repositoryAlias }}
+        commit: ${{ parameters.commit }}
         macPool: ${{ parameters.macPool }}
 
   - job: run_tests
@@ -69,5 +79,7 @@ stages:
     steps:
     - template: build.yml
       parameters:
+        repositoryAlias: ${{ parameters.repositoryAlias }}
+        commit: ${{ parameters.commit }}
         isPR: ${{ parameters.isPR }}
         statusContext: ${{ parameters.statusContext }}

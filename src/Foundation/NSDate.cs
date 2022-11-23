@@ -98,19 +98,6 @@ namespace Foundation {
 			var microseconds = nanosecondsLeft / NANOSECS_PER_MICROSEC;
 			nanosecondsLeft -= microseconds * NANOSECS_PER_MICROSEC;
 			var ticks = nanosecondsLeft / NANOSECS_PER_TICKS;
-			// Console.WriteLine ($"ToDateTimeNew1 ({d.SecondsSinceReferenceDate:R} secs = {d}) " +
-			// 		$"Era: {calComponents.Era} " +
-			// 		$"Year: {calComponents.Year} " +
-			// 		$"Month: {calComponents.Month} " +
-			// 		$"Day: {calComponents.Day} " +
-			// 		$"Hour: {calComponents.Hour} " +
-			// 		$"Minute: {calComponents.Minute} " +
-			// 		$"Second: {calComponents.Second} " +
-			// 		$"Cal.Nanosecond: {calComponents.Nanosecond} " +
-			// 		$"milliseconds: {milliseconds}" +
-			// 		$"microseconds: {microseconds}" +
-			// 		$"ticks: {ticks}"
-			// 		);
 
 			var rv = new DateTime (
 				(int) calComponents.Year,
@@ -156,8 +143,6 @@ namespace Foundation {
 			dateComponents.Minute = dtUnv.Minute;
 			dateComponents.Second = dtUnv.Second;
 			dateComponents.Nanosecond = (int) nanoseconds;
-
-			// Console.WriteLine ($"ToNSDateNew1 ({dt.Ticks} ticks) Hour: {dateComponents.Hour} Minute: {dateComponents.Minute} Second: {dateComponents.Second} Nanosecond: {dateComponents.Nanosecond} (Millisecond: {dtUnv.Millisecond} Nanosecond: {dtUnv.Nanosecond} nanoseconds: {nanoseconds} subsecondTicks: {subsecondTicks} ticks: {dtUnv.Ticks})");
 
 			var retDate = calendar.DateFromComponents (dateComponents);
 			if (retDate is null)

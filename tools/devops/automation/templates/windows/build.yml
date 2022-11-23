@@ -39,6 +39,16 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    & dotnet build $(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl
+  displayName: 'Install custom .NET'
+  continueOnError: true
+
+- pwsh: |
+    & dotnet build $(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -t:Install
+  displayName: 'Install workloads'
+  continueOnError: true
+
+- pwsh: |
     Write-Host "Trying to ssh to the mac bot..."
     & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
   displayName: Diagnostics with pwsh 1

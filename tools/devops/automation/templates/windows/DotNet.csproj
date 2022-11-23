@@ -1,8 +1,29 @@
-<Project Sdk="Microsoft.Build.NoTargets">
-  <Import Project="$(MSBuildThisFileDirectory)/../../../../../eng/Versions.props" />
+<Project Sdk="Microsoft.Build.NoTargets/3.3.0">
+
+  <PropertyGroup>
+    <RootSourceDirectory>$(MSBuildThisFileDirectory)\..\..\..\..\..\</RootSourceDirectory>
+    <DotNetOutputPath>$(MSBuildThisFileDirectory)bin\</DotNetOutputPath>
+    <DotNetTempDirectory>$(DotNetOutputPath)temp/</DotNetTempDirectory>
+    <DotNetDirectory>$(DotNetOutputPath)dotnet\</DotNetDirectory>
+    <DotNetToolPath>$(DotNetDirectory)dotnet</DotNetToolPath>
+    <DotNetPacksDirectory>$(DotNetDirectory)packs\</DotNetPacksDirectory>
+    <DotNetLibraryPacksDirectory>$(DotNetDirectory)library-packs\</DotNetLibraryPacksDirectory>
+    <DotNetSdkManifestsDirectory>$(DotNetDirectory)sdk-manifests/$(DotNetSdkManifestsFolder)/</DotNetSdkManifestsDirectory>
+    <DotNetTemplatePacksDirectory>$(DotNetDirectory)template-packs/</DotNetTemplatePacksDirectory>
+
+    <MauiRootDirectory>$(RootSourceDirectory)</MauiRootDirectory>
+    <PackageOutputPath>$(RootSourceDirectory)artifacts\</PackageOutputPath>
+    <RollbackFile>$(PackageOutputPath)WorkloadRollback\WorkloadRollback.json</RollbackFile>
+    <RollbackSource>$(PackageOutputPath)not-signed-package\</RollbackSource>
+  </PropertyGroup>
+
+
+
+  <Import Project="$(RootSourceDirectory)/eng/Versions.props" />
   <!--
-    This is a copy of https://github.com/dotnet/maui/blob/47f8d3ba07661801094578f2d842426ba8a1fed9/src/DotNet/DotNet.csproj
+    This is a heavily modified copy of https://github.com/dotnet/maui/blob/47f8d3ba07661801094578f2d842426ba8a1fed9/src/DotNet/DotNet.csproj
   -->
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsPackable>false</IsPackable>
@@ -32,7 +53,6 @@
     <_ProvisionDependsOn>
       _DownloadDotNetInstallScript;
       _InstallDotNet;
-      _AcquireWorkloadManifests;
       _InstallWorkloadPacks;
     </_ProvisionDependsOn>
   </PropertyGroup>
@@ -45,7 +65,7 @@
     Running this with ./bin/dotnet/dotnet will work without elevation.
     For a system install, you will need to run this in an admin command-prompt on Windows, or use 'sudo' on Mac.
   -->
-  <Target Name="Install" DependsOnTargets="SetVersions">
+  <Target Name="Install">
 
     <Error
         Condition=" '$(MSBuildRuntimeType)' != 'Core' "
@@ -55,31 +75,13 @@
       <_InstallTempDirectory>$(DotNetTempDirectory)install/</_InstallTempDirectory>
     </PropertyGroup>
 
-    <!-- Setup Microsoft.NET.Sdk.Maui/WorkloadManifest.* -->
-    <ItemGroup>
-      <_PackagesToUnzip Include="$(PackageOutputPath)/Microsoft.NET.Sdk.Maui.Manifest-$(DotNetMauiManifestVersionBand).*.nupkg" />
-    </ItemGroup>
-    <Unzip
-        SourceFiles="@(_PackagesToUnzip)"
-        DestinationFolder="$(_InstallTempDirectory)"
-    />
-    <ItemGroup>
-      <_WorkloadFiles Include="$(_InstallTempDirectory)data/WorkloadManifest.*" />
-    </ItemGroup>
-    <CopyWorkloadFiles
-        Name="microsoft.net.sdk.maui"
-        Files="@(_WorkloadFiles)"
-        WorkloadDirectory="$(MSBuildExtensionsPath)../../sdk-manifests/$(DotNetSdkManifestsFolder)"
-    />
-    <RemoveDir Directories="$(_InstallTempDirectory)" />
-
     <!-- Run 'dotnet workload install' for the current running 'dotnet' install -->
     <ItemGroup>
       <_WorkloadSource Include="$(PackageOutputPath)" />
     </ItemGroup>
     <Copy SourceFiles="$(MauiRootDirectory)NuGet.config" DestinationFolder="$(DotNetTempDirectory)" />
     <Exec Command="dotnet nuget add source &quot;$(PackageOutputPath)&quot; --name artifacts --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot;" />
-    <Exec Command="&quot;$(MSBuildExtensionsPath)../../dotnet&quot; workload install tizen maui --skip-manifest-update --verbosity diag --temp-dir &quot;$(DotNetTempDirectory)&quot; --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot;" WorkingDirectory="$(MauiRootDirectory)" />
+    <Exec Command="&quot;$(DotNetToolPath)&quot; workload install ios tvos maccatalyst macos --verbosity diag --temp-dir &quot;$(DotNetTempDirectory)&quot; --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot; --from-rollback-file &quot;$(RollbackFile)&quot; --source &quot;$(RollbackSource)&quot;" WorkingDirectory="$(MauiRootDirectory)" />
 
   </Target>
 
@@ -126,46 +128,11 @@
     <_PacksToRemove Include="microsoft.net.workload.emscripten" />
     <_PacksToRemove Include="microsoft.net.workload.mono.toolchain" />
     <!-- Ids for 'dotnet workload install' -->
-    <_WorkloadIds Include="android" />
     <_WorkloadIds Include="maccatalyst" />
     <_WorkloadIds Include="macos" />
     <_WorkloadIds Include="ios" />
     <_WorkloadIds Include="tvos" />
-    <_WorkloadIds Include="tizen" />
-  </ItemGroup>
-
-  <Target Name="_AcquireWorkloadManifests"
-      Inputs="$(_Inputs);Dependencies/Workloads.csproj"
-      Outputs="$(DotNetSdkManifestsDirectory).stamp">
-    <PropertyGroup>
-      <_WorkloadManifestDir>$(DotNetTempDirectory)workload/</_WorkloadManifestDir>
-    </PropertyGroup>
-    <ItemGroup>
-      <_WorkloadDirectoriesToRemove Include="$(DotNetDirectory)sdk-manifests/$(DotNetVersionBand)" />
-      <_WorkloadDirectoriesToRemove Include="@(_PacksToRemove->'$(DotNetDirectory)sdk-manifests/$(DotNetSdkManifestsFolder)/%(Identity)')" />
-    </ItemGroup>
-    <RemoveDir Directories="$(_WorkloadManifestDir);@(_WorkloadDirectoriesToRemove)" />
-    <MakeDir Directories="$(_WorkloadManifestDir)" />
-    <Exec
-        Command="&quot;$(DotNetToolPath)&quot; restore &quot;$(MSBuildThisFileDirectory)Dependencies/Workloads.csproj&quot; -bl:$(PackageOutputPath)/DotNetWorkloads.binlog"
-        EnvironmentVariables="NUGET_PACKAGES=$(_WorkloadManifestDir);DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1"
-    />
-    <!--
-      NOTE: Workloads need to go in dotnet/sdk-manifests/6.0.100/microsoft.net.*/
-      Workloads only contain two files: data/WorkloadManifest.targets & data/WorkloadManifest.json
-      We downloaded these to $(_WorkloadManifestDir), so we could move files individually.
-    -->
-    <ItemGroup>
-      <_WorkloadFiles Include="$(_WorkloadManifestDir)microsoft.net.*/*/data/WorkloadManifest.*" />
-      <_WorkloadFiles Include="$(_WorkloadManifestDir)samsung.net.sdk.*/*/data/WorkloadManifest.*" />
-    </ItemGroup>
-    <CopyWorkloadFiles
-        Files="@(_WorkloadFiles)"
-        WorkloadDirectory="$(DotNetSdkManifestsDirectory)"
-    />
-
-    <Touch Files="$(DotNetSdkManifestsDirectory).stamp" AlwaysCreate="true" />
-  </Target>
+   </ItemGroup>
 
   <Target Name="_InstallWorkloadPacks"
       Condition=" '$(InstallWorkloadPacks)' == 'true' "
@@ -173,41 +140,10 @@
       Outputs="$(DotNetPacksDirectory).stamp">
     <Exec
         Command="&quot;$(DotNetToolPath)&quot; workload install %(_WorkloadIds.Identity) --skip-manifest-update --verbosity diag --temp-dir &quot;$(DotNetTempDirectory)&quot; --configfile &quot;$(MauiRootDirectory)NuGet.config&quot;"
-        WorkingDirectory="$(MauiRootDirectory)"
+        WorkingDirectory="$(MSBuildThisFileDirectory)"
         EnvironmentVariables="DOTNET_MULTILEVEL_LOOKUP=0"
     />
     <Touch Files="$(DotNetPacksDirectory).stamp" AlwaysCreate="true" />
   </Target>
-
-  <UsingTask TaskName="CopyWorkloadFiles"
-      TaskFactory="RoslynCodeTaskFactory"
-      AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-    <ParameterGroup>
-      <Name ParameterType="System.String" />
-      <Files ParameterType="System.String[]" Required="true" />
-      <WorkloadDirectory ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System.IO" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
-          // This is only in C#, because the equivalent MSBuild XML would not be pretty.
-          foreach (var file in Files)
-          {
-              var name = string.IsNullOrEmpty(Name) ? Directory.GetParent (file).Parent.Parent.Name : Name;
-              var index = name.IndexOf(".manifest-", StringComparison.OrdinalIgnoreCase);
-              if (index != -1) {
-                  name = name.Substring(0, index);
-              }
-              var directory = Path.Combine(WorkloadDirectory, name);
-              Directory.CreateDirectory(directory);
-              var destination = Path.Combine(directory, Path.GetFileName(file));
-              Log.LogMessage($"Copying {file} to {destination}");
-              File.Copy(file, destination, overwrite: true);
-          }
-        ]]>
-      </Code>
-    </Task>
-  </UsingTask>
 
 </Project>

@@ -137,17 +137,6 @@ namespace Xharness.Targets {
 
 		protected virtual void ProcessProject ()
 		{
-			if (SupportsBitcode) {
-				inputProject.CloneConfiguration ("iPhone", "Release", "Release-bitcode");
-				inputProject.AddExtraMtouchArgs ("--bitcode:full", "iPhone", "Release-bitcode");
-				inputProject.SetMtouchUseLlvm (true, "iPhone", "Release-bitcode");
-			}
-
-			if (!IsMultiArchitecture && IsExe) {
-				inputProject.DeleteConfiguration ("iPhone", "Debug32");
-				inputProject.DeleteConfiguration ("iPhone", "Debug64");
-			}
-
 			inputProject.SetOutputPath ("bin\\$(Platform)\\$(Configuration)" + Suffix);
 			inputProject.SetIntermediateOutputPath ("obj\\$(Platform)\\$(Configuration)" + Suffix);
 

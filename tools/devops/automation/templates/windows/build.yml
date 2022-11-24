@@ -49,12 +49,12 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true
   displayName: 'Install custom .NET'
   continueOnError: true
 
 - pwsh: |
-    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true -t:Install
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install2.binlog" -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true -t:Install
   displayName: 'Install workloads'
   continueOnError: true
 

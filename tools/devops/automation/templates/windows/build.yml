@@ -49,12 +49,12 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -p:RestoreFallbackFolders=clear
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true
   displayName: 'Install custom .NET'
   continueOnError: true
 
 - pwsh: |
-    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -p:RestoreFallbackFolders=clear -t:Install
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag -bl -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true -t:Install
   displayName: 'Install workloads'
   continueOnError: true
 
@@ -96,12 +96,15 @@ steps:
     $sourceDir = '$(Build.SourcesDirectory)/xamarin-macios'
     $targetDir = ' $(Build.ArtifactStagingDirectory)/all-binlogs'
 
+    Write-Host "Looking for files in $sourceDir"
     Get-ChildItem $sourceDir -filter "*.binlog" -recurse | `
         foreach{
             $targetFile = $targetDir + $_.FullName.SubString($sourceDir.Length);
             New-Item -ItemType File -Path $targetFile -Force;
             Copy-Item $_.FullName -destination $targetFile
+            Write-Host "Found $_ and copying to $targetFile"
         }
+    Write-Host "Done looking for files in $sourceDir"
   displayName: Copy all binlogs
   continueOnError: true
   condition: succeededOrFailed()

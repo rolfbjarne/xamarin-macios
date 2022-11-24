@@ -53,9 +53,9 @@ namespace CoreData {
 		Boolean = 800,
 		Date = 900,
 		Binary = 1000,
-		[iOS (11, 0), TV (11, 0), Mac (10, 13), Watch (4, 0)]
+		[iOS (11, 0), TV (11, 0), Watch (4, 0)]
 		Uuid = 1100,
-		[iOS (11, 0), TV (11, 0), Mac (10, 13), Watch (4, 0)]
+		[iOS (11, 0), TV (11, 0), Watch (4, 0)]
 		Uri = 1200,
 		Transformable = 1800,
 		ObjectID = 2000
@@ -122,7 +122,6 @@ namespace CoreData {
 		UpdatedObjectsCount = 2
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Native]
 	public enum NSBatchDeleteRequestResultType : ulong {
 		StatusOnly = 0,
@@ -146,7 +145,7 @@ namespace CoreData {
 		StringTooLong = 1660,
 		StringTooShort = 1670,
 		StringPatternMatching = 1680,
-		[iOS (11, 0), TV (11, 0), Mac (10, 13), Watch (4, 0)]
+		[iOS (11, 0), TV (11, 0), Watch (4, 0)]
 		InvalidUri = 1690,
 	}
 
@@ -184,18 +183,18 @@ namespace CoreData {
 		EntityMigrationPolicy = 134170,
 		InferredMappingModel = 134190,
 		ExternalRecordImport = 134200,
-		[iOS (11, 0), TV (11, 0), Mac (10, 13), Watch (4, 0)]
+		[iOS (11, 0), TV (11, 0), Watch (4, 0)]
 		HistoryTokenExpired = 134301,
 	}
 
-	[Watch (4, 0), TV (11, 0), Mac (10, 13), iOS (11, 0)]
+	[Watch (4, 0), TV (11, 0), iOS (11, 0)]
 	[Native]
 	public enum NSFetchIndexElementType : ulong {
 		Binary,
 		RTree
 	}
 
-	[Watch (4, 0), TV (11, 0), Mac (10, 13), iOS (11, 0)]
+	[Watch (4, 0), TV (11, 0), iOS (11, 0)]
 	[Native]
 	public enum NSPersistentHistoryChangeType : long {
 		Insert,
@@ -203,7 +202,7 @@ namespace CoreData {
 		Delete
 	}
 
-	[Watch (4, 0), TV (11, 0), Mac (10, 13), iOS (11, 0)]
+	[Watch (4, 0), TV (11, 0), iOS (11, 0)]
 	[Native]
 	public enum NSPersistentHistoryResultType : long {
 		StatusOnly = 0,

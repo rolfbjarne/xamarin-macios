@@ -41,7 +41,6 @@ namespace CoreVideo {
 
 	// untyped enum, some are 4CC -> CVPixelBuffer.h
 #if !NET
-	[Watch (3, 0)]
 #endif
 	public enum CVPixelFormatType : uint {
 		// FIXME: These all start with integers; what should we do here?

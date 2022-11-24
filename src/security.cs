@@ -15,7 +15,6 @@ using CoreFoundation;
 namespace Security {
 
 	[Static]
-	[iOS (7,0)]
 	interface SecPolicyIdentifier {
 		// they are CFString -> https://github.com/Apple-FOSS-Mirror/libsecurity_keychain/blob/master/lib/SecPolicy.cpp
 
@@ -47,7 +46,6 @@ namespace Security {
 		[Field ("kSecPolicyAppleCodeSigning")]
 		NSString AppleCodeSigning { get; }
 
-		[iOS (9,0)]
 		[Field ("kSecPolicyMacAppStoreReceipt")]
 		NSString MacAppStoreReceipt { get; }
 
@@ -57,21 +55,17 @@ namespace Security {
 		[Field ("kSecPolicyAppleTimeStamping")]
 		NSString AppleTimeStamping { get; }
 
-		[Mac (10, 9)]
 		[Field ("kSecPolicyAppleRevocation")]
 		NSString AppleRevocation { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecPolicyApplePassbookSigning")]
 		NSString ApplePassbookSigning { get; }
 
-		[Mac(10,11), iOS (9,0)]
 		[Field ("kSecPolicyApplePayIssuerEncryption")]
 		NSString ApplePayIssuerEncryption { get; }
 	}
 
 	[Static]
-	[iOS (7,0)]
 	interface SecPolicyPropertyKey {
 		[Field ("kSecPolicyOid")]
 		NSString Oid { get; }
@@ -82,17 +76,15 @@ namespace Security {
 		[Field ("kSecPolicyClient")]
 		NSString Client { get; }
 
-		[Mac (10, 9)]
 		[Field ("kSecPolicyRevocationFlags")]
 		NSString RevocationFlags { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecPolicyTeamIdentifier")]
 		NSString TeamIdentifier { get; }
 	}
 	
 	[Static]
-	[iOS (8,0), NoWatch]
+	[NoWatch]
 	[Mac (11,0)]
 	[Introduced (PlatformName.MacCatalyst, 14,0)]
 	[NoTV] // removed in tvOS 10
@@ -103,7 +95,6 @@ namespace Security {
 	
 
 	[Static]
-	[iOS (7,0)]
 	interface SecTrustPropertyKey {
 		[Field ("kSecPropertyTypeTitle")]
 		NSString Title { get; }
@@ -113,7 +104,6 @@ namespace Security {
 	}
 
 	[Static]
-	[iOS (7,0), Mac (10, 9)]
 	interface SecTrustResultKey {
 		[Field ("kSecTrustEvaluationDate")]
 		NSString EvaluationDate { get; }
@@ -133,15 +123,13 @@ namespace Security {
 		[Field ("kSecTrustRevocationValidUntilDate")]
 		NSString RevocationValidUntilDate { get; }
 
-		[iOS (9,0)]
-		[Mac (10,12)] // headers says 10.11 but it's not present in 10.11
 		[Field ("kSecTrustCertificateTransparency")]
 		NSString CertificateTransparency { get; }
 
-		[iOS (10,0)][Deprecated (PlatformName.iOS, 11,0)]
-		[Mac (10,12)][Deprecated (PlatformName.MacOSX, 10,13)]
-		[Watch (3,0)][Deprecated (PlatformName.WatchOS, 4,0)]
-		[TV (10,0)][Deprecated (PlatformName.TvOS, 11,0)]
+		[Deprecated (PlatformName.iOS, 11,0)]
+		[Deprecated (PlatformName.MacOSX, 10,13)]
+		[Deprecated (PlatformName.WatchOS, 4,0)]
+		[Deprecated (PlatformName.TvOS, 11,0)]
 		[Field ("kSecTrustCertificateTransparencyWhiteList")]
 		NSString CertificateTransparencyWhiteList { get; }
 	}
@@ -161,14 +149,9 @@ namespace Security {
 		[Field ("kSecAttrKeyTypeRSA")]
 		RSA = 0,
 
-		[Mac (10,9)]
 		[Field ("kSecAttrKeyTypeEC")]
 		EC = 1,
 
-		[iOS (10,0)]
-		[Mac (10,12)]
-		[Watch (3,0)]
-		[TV (10,0)]
 		[Field ("kSecAttrKeyTypeECSECPrimeRandom")]
 		ECSecPrimeRandom = 2,
 	}
@@ -311,32 +294,24 @@ namespace Security {
 
 	[Static][Internal]
 	interface KeysAccessible {
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessibleWhenUnlocked")]
 		IntPtr WhenUnlocked { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessibleAfterFirstUnlock")]
 		IntPtr AfterFirstUnlock { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessibleAlways")]
 		IntPtr Always { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessibleWhenUnlockedThisDeviceOnly")]
 		IntPtr WhenUnlockedThisDeviceOnly { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly")]
 		IntPtr AfterFirstUnlockThisDeviceOnly { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessibleAlwaysThisDeviceOnly")]
 		IntPtr AlwaysThisDeviceOnly { get; }
 
-		[iOS (8,0)]
-		[Mac (10,10)]
 		[Field ("kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly")]
 		IntPtr WhenPasscodeSetThisDeviceOnly { get; }
 	}
@@ -393,7 +368,6 @@ namespace Security {
 		[Field ("kSecAttrEffectiveKeySize")]
 		NSString EffectiveKeySizeKey { get; }
 
-		[iOS (8, 0), Mac (10, 10)]
 		[Field ("kSecAttrAccessControl")]
 		NSString AccessControlKey { get; }
 
@@ -430,7 +404,6 @@ namespace Security {
 		[Field ("kSecPublicKeyAttrs")]
 		NSString PublicKeyAttrsKey { get; }
 
-		[iOS (9, 0), Mac (10, 12)]
 		[Field ("kSecAttrTokenID")]
 		NSString TokenIDKey { get; }
 
@@ -498,26 +471,18 @@ namespace Security {
 
 	[Static][Internal]
 	interface SecAttributeKey {
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessible")]
 		IntPtr Accessible { get; }
 
-		[iOS (7,0)]
-		[Mac (10,9)]
 		[Field ("kSecAttrSynchronizableAny")]
 		IntPtr SynchronizableAny { get; }
 
-		[iOS (7,0)]
-		[Mac (10,9)]
 		[Field ("kSecAttrSynchronizable")]
 		IntPtr Synchronizable { get; }
 
-		[iOS (9,0)]
-		[Mac (10,11)]
 		[Field ("kSecAttrSyncViewHint")]
 		IntPtr SyncViewHint { get; }
 
-		[Mac (10,9)]
 		[Field ("kSecAttrAccessGroup")]
 		IntPtr AccessGroup { get; }
 
@@ -605,20 +570,14 @@ namespace Security {
 		[Field ("kSecAttrIsExtractable")]
 		IntPtr IsExtractable { get; }
 
-		[iOS (9,0)]
-		[Mac (10,12)]
 		[Field ("kSecAttrTokenIDSecureEnclave")]
 		IntPtr SecureEnclave { get; }
 
-		[iOS (10,0)]
-		[Mac (10,12)]
-		[Watch (3,0)]
-		[TV (10,0)]
 		[Field ("kSecAttrAccessGroupToken")]
 		IntPtr AccessGroupToken { get; }
 
 		// note: 'kSecAttrPersistantReference' with the word "persistent" (correct) written with an 'a', so "persistant" (incorrect) was a typo in Xcode 9 beta 1
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecAttrPersistentReference")]
 		IntPtr PersistentReference { get; }
 	}
@@ -731,20 +690,17 @@ namespace Security {
 		[Deprecated (PlatformName.iOS, 14,0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
 		[Deprecated (PlatformName.TvOS, 14,0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
 		[Deprecated (PlatformName.WatchOS, 7,0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
-		[iOS (8,0)][Mac (10,10)]
 		[Field ("kSecUseOperationPrompt")]
 		IntPtr UseOperationPrompt { get; }
 
-		[iOS (8, 0), Deprecated (PlatformName.iOS, 9, 0)]
-		[Mac (10, 10), Deprecated (PlatformName.MacOSX, 10, 11)]
+		[Deprecated (PlatformName.iOS, 9, 0)]
+		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		[Field ("kSecUseNoAuthenticationUI")]
 		IntPtr UseNoAuthenticationUI { get; }
 
-		[iOS (9,0)][Mac (10,11)]
 		[Field ("kSecUseAuthenticationUI")]
 		IntPtr UseAuthenticationUI { get; }
 
-		[iOS (9,0)][Mac (10,11)]
 		[Field ("kSecUseAuthenticationContext")]
 		IntPtr UseAuthenticationContext { get; }
 	}
@@ -774,7 +730,6 @@ namespace Security {
 		IntPtr Value { get; }
 	}
 
-	[Watch (3,0)][TV (10,0)][Mac (10,12)][iOS (10,0)]
 	enum SecKeyAlgorithm {
 		[Field ("kSecKeyAlgorithmRSASignatureRaw")]
 		RsaSignatureRaw,
@@ -950,80 +905,79 @@ namespace Security {
 		[Field ("kSecKeyAlgorithmECDHKeyExchangeCofactorX963SHA512")]
 		EcdhKeyExchangeCofactorX963Sha512,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureDigestPSSSHA1")]
 		RsaSignatureDigestPssSha1,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureDigestPSSSHA224")]
 		RsaSignatureDigestPssSha224,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureDigestPSSSHA256")]
 		RsaSignatureDigestPssSha256,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureDigestPSSSHA384")]
 		RsaSignatureDigestPssSha384,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureDigestPSSSHA512")]
 		RsaSignatureDigestPssSha512,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureMessagePSSSHA1")]
 		RsaSignatureMessagePssSha1,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureMessagePSSSHA224")]
 		RsaSignatureMessagePssSha224,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureMessagePSSSHA256")]
 		RsaSignatureMessagePssSha256,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureMessagePSSSHA384")]
 		RsaSignatureMessagePssSha384,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmRSASignatureMessagePSSSHA512")]
 		RsaSignatureMessagePssSha512,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionStandardVariableIVX963SHA224AESGCM")]
 		EciesEncryptionStandardVariableIvx963Sha224AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionStandardVariableIVX963SHA256AESGCM")]
 		EciesEncryptionStandardVariableIvx963Sha256AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionStandardVariableIVX963SHA384AESGCM")]
 		EciesEncryptionStandardVariableIvx963Sha384AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionStandardVariableIVX963SHA512AESGCM")]
 		EciesEncryptionStandardVariableIvx963Sha512AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionCofactorVariableIVX963SHA224AESGCM")]
 		EciesEncryptionCofactorVariableIvx963Sha224AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionCofactorVariableIVX963SHA256AESGCM")]
 		EciesEncryptionCofactorVariableIvx963Sha256AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionCofactorVariableIVX963SHA384AESGCM")]
 		EciesEncryptionCofactorVariableIvx963Sha384AesGcm,
 
-		[iOS (11,0)][TV (11,0)][Watch (4,0)][Mac (10,13)]
+		[iOS (11,0)][TV (11,0)][Watch (4,0)]
 		[Field ("kSecKeyAlgorithmECIESEncryptionCofactorVariableIVX963SHA512AESGCM")]
 		EciesEncryptionCofactorVariableIvx963Sha512AesGcm,
 	}
 
-	[iOS (10,0)][TV (10,0)][Watch (3,0)][Mac (10,12)]
 	enum SslSessionConfig {
 		[Deprecated (PlatformName.iOS, 11,0)]
 		[Deprecated (PlatformName.MacOSX, 10,13)]
@@ -1067,8 +1021,6 @@ namespace Security {
 		[Field ("kSSLSessionConfig_anonymous")]
 		Anonymous,
 
-		[iOS (10,2)][TV (10,1)][Mac (10,12,2)]
-		[Watch (3,2)]
 		[Deprecated (PlatformName.iOS, 11,0)]
 		[Deprecated (PlatformName.MacOSX, 10,13)]
 		[Deprecated (PlatformName.WatchOS, 4,0)]
@@ -1076,8 +1028,6 @@ namespace Security {
 		[Field ("kSSLSessionConfig_3DES_fallback")]
 		ThreeDesFallback,
 
-		[iOS (10,2)][TV (10,1)][Mac (10,12,2)]
-		[Watch (3,2)]
 		[Deprecated (PlatformName.iOS, 11,0)]
 		[Deprecated (PlatformName.MacOSX, 10,13)]
 		[Deprecated (PlatformName.WatchOS, 4,0)]
@@ -1086,7 +1036,6 @@ namespace Security {
 		Tls1ThreeDesFallback,
 	}
 
-	[iOS (10,0)][TV (10,0)][Watch (3,0)][Mac (10,12)]
 	[Internal][Static]
 	interface SecKeyKeyExchangeParameterKey {
 		[Field ("kSecKeyKeyExchangeParameterRequestedSize")]
@@ -1096,7 +1045,6 @@ namespace Security {
 		NSString SharedInfoKey { get; }
 	}
 
-	[iOS (10,0)][TV (10,0)][Watch (3,0)][Mac (10,12)]
 	[StrongDictionary ("SecKeyKeyExchangeParameterKey")]
 	interface SecKeyKeyExchangeParameter {
 
@@ -1105,7 +1053,7 @@ namespace Security {
 		NSData SharedInfo { get; set; }
 	}
 
-	[iOS (8,0)][NoTV][NoWatch]
+	[NoTV][NoWatch]
 	[Mac (11,0)][MacCatalyst (13,1)]
 	[Internal][Static]
 	interface SecSharedCredentialKeys {
@@ -1123,7 +1071,7 @@ namespace Security {
 		NSString PortKey { get; }
 	}
 
-	[iOS (8,0)][NoTV][NoWatch]
+	[NoTV][NoWatch]
 	[Mac (11,0)]
 	[StrongDictionary ("SecSharedCredentialKeys")]
 	interface SecSharedCredentialInfo {

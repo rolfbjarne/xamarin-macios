@@ -22,7 +22,6 @@ using NativeHandle = System.IntPtr;
 namespace Messages {
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[Native]
 	public enum MSMessagesAppPresentationStyle : ulong
 	{
@@ -32,7 +31,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[Native]
 	public enum MSStickerSize : long
 	{
@@ -80,7 +78,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(UIViewController))]
 	interface MSMessagesAppViewController : MSMessagesAppTranscriptPresentation
 	{
@@ -139,7 +136,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(NSObject))]
 	interface MSConversation
 	{
@@ -190,7 +186,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor] // designated
 	interface MSMessage : NSCopying, NSSecureCoding
@@ -233,14 +228,12 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(NSObject))]
 	[Abstract] // as per docs
 	[DisableDefaultCtor]
 	interface MSMessageLayout : NSCopying {}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(MSMessageLayout))]
 	interface MSMessageTemplateLayout
 	{
@@ -270,12 +263,10 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(NSObject))]
 	interface MSSession : NSSecureCoding {}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
 	interface MSSticker
@@ -292,7 +283,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(UIView))]
 	interface MSStickerView
 	{
@@ -322,7 +312,6 @@ namespace Messages {
 	interface IMSStickerBrowserViewDataSource { }
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface MSStickerBrowserViewDataSource
@@ -337,7 +326,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(UIView))]
 	interface MSStickerBrowserView
 	{
@@ -369,7 +357,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14,0)]
-	[iOS (10,0)]
 	[BaseType (typeof(UIViewController))]
 	interface MSStickerBrowserViewController : MSStickerBrowserViewDataSource
 	{

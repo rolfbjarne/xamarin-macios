@@ -4,12 +4,10 @@ using Foundation;
 
 namespace LocalAuthentication {
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[NoTV]
 	[Native]
 	public enum LAPolicy : long {
-		[Mac (10, 12, 2), NoWatch]
+		[NoWatch]
 		DeviceOwnerAuthenticationWithBiometrics = 1,
 		DeviceOwnerAuthentication = 2,
 		[NoiOS]
@@ -29,8 +27,6 @@ namespace LocalAuthentication {
 		DeviceOwnerAuthenticationWithWristDetection = 5,
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[NoTV]
 	[Native ("LAError")]
 	[ErrorDomain ("LAErrorDomain")]
@@ -81,7 +77,7 @@ namespace LocalAuthentication {
 		NotInteractive = -1004,
 	}
 
-	[iOS (9, 0), Mac (10, 11), Watch (3, 0), NoTV]
+	[NoTV]
 	[Native]
 	public enum LACredentialType : long {
 		ApplicationPassword = 0,
@@ -89,8 +85,6 @@ namespace LocalAuthentication {
 		SmartCardPin = -3,
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[NoTV]
 	[Native]
 	public enum LAAccessControlOperation : long {
@@ -98,11 +92,7 @@ namespace LocalAuthentication {
 		UseItem,
 		CreateKey,
 		UseKeySign,
-		[iOS (10, 0)]
-		[Mac (10, 12)]
 		UseKeyDecrypt,
-		[iOS (10, 0)]
-		[Mac (10, 12)]
 		UseKeyKeyExchange,
 	}
 

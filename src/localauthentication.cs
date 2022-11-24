@@ -9,7 +9,7 @@ using NativeHandle = System.IntPtr;
 
 namespace LocalAuthentication {
 
-	[Mac (10,13,2)][iOS (11,0)][NoWatch][NoTV]
+	[iOS (11,0)][NoWatch][NoTV]
 	[Native]
 	public enum LABiometryType : long {
 		None,
@@ -23,10 +23,9 @@ namespace LocalAuthentication {
 #endif
 	}
 
-	[iOS (8,0), Mac (10,10)]
 	delegate void LAContextReplyHandler (bool success, NSError error);
 
-	[iOS (8,0), Mac (10,10), NoTV] // ".objc_class_name_LAContext", referenced from: '' not found
+	[NoTV] // ".objc_class_name_LAContext", referenced from: '' not found
 	[BaseType (typeof (NSObject))]
 	interface LAContext {
 		[NoWatch]
@@ -35,7 +34,7 @@ namespace LocalAuthentication {
 		string LocalizedFallbackTitle { get; set; }
 
 #if !NET
-		[iOS (8,3), NoTV]
+		[NoTV]
 		[Field ("LAErrorDomain")]
 		NSString ErrorDomain { get; }
 #endif
@@ -47,57 +46,51 @@ namespace LocalAuthentication {
 		[Export ("evaluatePolicy:localizedReason:reply:")]
 		void EvaluatePolicy (LAPolicy policy, string localizedReason, LAContextReplyHandler reply);
 
-		[iOS (9,0), Mac(10,11)]
 		[Export ("invalidate")]
 		void Invalidate ();
 
-		[iOS (9,0), Mac(10,11)]
 		[Export ("setCredential:type:")]
 		bool SetCredentialType ([NullAllowed] NSData credential, LACredentialType type);
 
 		
-		[iOS (9,0), Mac(10,11)]
 		[Export ("isCredentialSet:")]
 		bool IsCredentialSet (LACredentialType type);
 
 		
-		[iOS (9,0), Mac(10,11)]
 		[Export ("evaluateAccessControl:operation:localizedReason:reply:")]
 		void EvaluateAccessControl (SecAccessControl accessControl, LAAccessControlOperation operation, string localizedReason, Action<bool,NSError> reply);
 		
 		
-		[iOS (9,0), Mac(10,11)]
 		[Export ("evaluatedPolicyDomainState")]
 		[NullAllowed]
 		NSData EvaluatedPolicyDomainState { get; }
 
-		[iOS (10,0)][Mac (10,12)][NoWatch]
+		[NoWatch]
 		[NullAllowed, Export ("localizedCancelTitle")]
 		string LocalizedCancelTitle { get; set; }
 
-		[iOS (9,0)][Mac (10,12,4)][NoWatch]
+		[NoWatch]
 		[Field ("LATouchIDAuthenticationMaximumAllowableReuseDuration")]
 		double /* NSTimeInterval */ TouchIdAuthenticationMaximumAllowableReuseDuration { get; }
 
-		[iOS (9,0)][Mac (10,12,4)]
 		[Export ("touchIDAuthenticationAllowableReuseDuration")]
 		double /* NSTimeInterval */ TouchIdAuthenticationAllowableReuseDuration { get; set; }
 
-		[iOS (8, 3), Deprecated (PlatformName.iOS, 9, 0)]
-		[Mac (10, 10, 3), Deprecated (PlatformName.MacOSX, 10, 11)]
+		[Deprecated (PlatformName.iOS, 9, 0)]
+		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		[NullAllowed]
 		[Export ("maxBiometryFailures")]
 		NSNumber MaxBiometryFailures { get; set; }
 
-		[NoWatch, NoTV, Mac (10, 13), iOS (11, 0)]
+		[NoWatch, NoTV, iOS (11, 0)]
 		[Export ("localizedReason")]
 		string LocalizedReason { get; set; }
 
-		[Watch (9,0), NoTV, Mac (10, 13), iOS (11, 0)]
+		[Watch (9,0), NoTV, iOS (11, 0)]
 		[Export ("interactionNotAllowed")]
 		bool InteractionNotAllowed { get; set; }
 
-		[Mac (10,13,2)][iOS (11,0)][NoWatch]
+		[iOS (11,0)][NoWatch]
 		[Export ("biometryType")]
 		LABiometryType BiometryType { get; }
 	}

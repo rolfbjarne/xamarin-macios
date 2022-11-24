@@ -25,7 +25,6 @@ using NativeHandle = System.IntPtr;
 namespace IntentsUI {
 
 	[NoMac]
-	[iOS (10, 0)]
 	[MacCatalyst (13, 0)]
 	[Native]
 	public enum INUIHostedViewContext : ulong {
@@ -62,7 +61,6 @@ namespace IntentsUI {
 	delegate void INUIHostedViewControllingConfigureViewHandler (bool success, NSSet<INParameter> configuredParameters, CGSize desiredSize);
 
 	[NoMac]
-	[iOS (10, 0)]
 	[MacCatalyst (13, 0)]
 	[Protocol]
 	interface INUIHostedViewControlling {
@@ -79,7 +77,6 @@ namespace IntentsUI {
 	}
 
 	[NoMac]
-	[iOS (10, 0)]
 	[MacCatalyst (13, 0)]
 	[Category]
 	[BaseType (typeof (NSExtensionContext))]
@@ -97,7 +94,6 @@ namespace IntentsUI {
 	}
 
 	[NoMac]
-	[iOS (10, 0)]
 	[MacCatalyst (13, 0)]
 	[Protocol]
 	interface INUIHostedViewSiriProviding {

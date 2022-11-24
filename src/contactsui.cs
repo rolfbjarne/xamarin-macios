@@ -27,7 +27,7 @@ using NativeHandle = System.IntPtr;
 namespace ContactsUI {
 
 #if !MONOMAC
-	[iOS (9,0)][NoMac]
+	[NoMac]
 	[BaseType (typeof (UIViewController))]
 	interface CNContactPickerViewController {
 		[Export ("initWithNibName:bundle:")]
@@ -59,7 +59,6 @@ namespace ContactsUI {
 
 #if MONOMAC
 	[NoiOS][NoMacCatalyst][NoTV]
-	[Mac (10,11)]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface CNContactPickerDelegate
@@ -78,7 +77,6 @@ namespace ContactsUI {
 	}
 #else
 	[NoMac]
-	[iOS (9,0)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface CNContactPickerDelegate {
@@ -100,8 +98,6 @@ namespace ContactsUI {
 	}
 #endif // MONOMAC
 
-	[Mac (10,11)]
-	[iOS (9,0)]
 #if MONOMAC
 	[BaseType (typeof (NSViewController))]
 #else
@@ -194,7 +190,6 @@ namespace ContactsUI {
 
 	interface ICNContactViewControllerDelegate {}
 
-	[iOS (9,0)]
 	[NoMac]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
@@ -207,7 +202,6 @@ namespace ContactsUI {
 		void DidComplete (CNContactViewController viewController, [NullAllowed] CNContact contact);
 	}
 
-	[Mac (10,11)]
 	[NoiOS][NoTV][NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface CNContactPicker

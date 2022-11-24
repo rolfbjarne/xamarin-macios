@@ -10,8 +10,6 @@ using Foundation;
 
 namespace ReplayKit {
 
-	[iOS (9, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[Native ("RPRecordingErrorCode")]
 	[ErrorDomain ("RPRecordingErrorDomain")]
@@ -57,7 +55,6 @@ namespace ReplayKit {
 	}
 
 	[NoiOS]
-	[TV (10, 0)]
 	[NoMac]
 	[Native]
 	public enum RPPreviewViewControllerMode : long {
@@ -66,8 +63,6 @@ namespace ReplayKit {
 	}
 
 	[Native]
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	public enum RPSampleBufferType : long {
 		Video = 1,

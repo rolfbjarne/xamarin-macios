@@ -122,10 +122,8 @@ namespace AppKit {
 #endif
 
 #if NET
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 13)]
 #endif
 		public unsafe void Append (uint [] glyphs, NSFont font)
 		{

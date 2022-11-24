@@ -30,13 +30,12 @@ namespace Foundation {
 
 #if NET
 		[SupportedOSPlatform ("tvos11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[Watch (4,0)]
 		[TV (11,0)]
-		[Mac (10,13)]
 		[iOS (11,0)]
 #endif
 		public NSProgress LoadObject<T> (Action<T, NSError> completionHandler) where T: NSObject, INSItemProviderReading
@@ -52,13 +51,12 @@ namespace Foundation {
 
 #if NET
 		[SupportedOSPlatform ("tvos11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[Watch (4,0)]
 		[TV (11,0)]
-		[Mac (10,13)]
 		[iOS (11,0)]
 #endif
 		public Task<T> LoadObjectAsync<T> () where T: NSObject, INSItemProviderReading
@@ -75,13 +73,12 @@ namespace Foundation {
 
 #if NET
 		[SupportedOSPlatform ("tvos11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[Watch (4,0)]
 		[TV (11,0)]
-		[Mac (10,13)]
 		[iOS (11,0)]
 #endif
 		public Task<T> LoadObjectAsync<T> (out NSProgress result) where T: NSObject, INSItemProviderReading

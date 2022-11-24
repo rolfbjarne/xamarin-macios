@@ -192,12 +192,10 @@ namespace WatchKit {
 		[Export ("dismissMediaPlayerController")]
 		void DismissMediaPlayerController ();
 
-		[Watch (2,0)]
 		[Export ("presentAudioRecorderControllerWithOutputURL:preset:options:completion:")]
 		[Async]
 		void PresentAudioRecorderController (NSUrl outputUrl, WKAudioRecorderPreset preset, [NullAllowed] NSDictionary options, Action<bool, NSError> completion);
 
-		[Watch (2,0)]
 		[Export ("dismissAudioRecorderController")]
 		void DismissAudioRecorderController ();
 
@@ -237,7 +235,6 @@ namespace WatchKit {
 		void PresentMediaPlayerController (NSUrl url, [NullAllowed] NSDictionary options, Action<bool, double, NSError> completion);
 #endif
 
-		[Watch (3,0)]
 		[Export ("crownSequencer", ArgumentSemantic.Strong)]
 		WKCrownSequencer CrownSequencer { get; }
 
@@ -288,7 +285,6 @@ namespace WatchKit {
 		void DidReceiveLocalNotification (UILocalNotification localNotification, Action<WKUserNotificationInterfaceType> completionHandler);
 
 		[Deprecated (PlatformName.WatchOS, 5,0, message: "Use 'DidReceiveNotification(UNNotification)' instead.")]
-		[Watch (3,0)]
 		[Export ("didReceiveNotification:withCompletion:")]
 		void DidReceiveNotification (UNNotification notification, Action<WKUserNotificationInterfaceType> completionHandler);
 
@@ -300,7 +296,6 @@ namespace WatchKit {
 		[Export ("suggestionsForResponseToActionWithIdentifier:forLocalNotification:inputLanguage:")]
 		string[] GetSuggestionsForResponseToAction (string identifier, UILocalNotification localNotification, string inputLanguage);
 
-		[Watch (3,0)]
 		[Export ("suggestionsForResponseToActionWithIdentifier:forNotification:inputLanguage:")]
 		string[] GetSuggestionsForResponseToAction (string identifier, UNNotification notification, string inputLanguage);
 
@@ -321,7 +316,6 @@ namespace WatchKit {
 		void PerformDismissAction ();
 
 		[Deprecated (PlatformName.WatchOS, 5,0, message: "Use 'PerformDismissAction' instead.")]
-		[Watch (2,0)]
 		[Export ("dismissController")]
 		void DismissController ();
 
@@ -347,7 +341,6 @@ namespace WatchKit {
 		[Export ("setHeight:")]
 		void SetHeight (nfloat height);
 
-		[Watch (2,1)]
 		[Export ("setSemanticContentAttribute:")]
 		void SetSemanticContentAttribute (WKInterfaceSemanticContentAttribute semanticContentAttribute);
 
@@ -395,7 +388,6 @@ namespace WatchKit {
 		[Export ("setAccessibilityIdentifier:")]
 		void SetAccessibilityIdentifier ([NullAllowed] string accessibilityIdentifier);
 
-		[Watch (2,0)]
 		[Notification]
 		[Field ("WKAccessibilityVoiceOverStatusChanged")]
 		NSString VoiceOverStatusChanged { get; }
@@ -444,48 +436,37 @@ namespace WatchKit {
 		[Export ("removeAllCachedImages")]
 		void RemoveAllCachedImages ();
 
-		[Watch (2,0)]
 		[Export ("systemVersion")]
 		string SystemVersion { get; }
 
-		[Watch (2,0)]
 		[Export ("name")]
 		string Name { get; }
 
-		[Watch (2,0)]
 		[Export ("model")]
 		string Model { get; }
 
-		[Watch (2,0)]
 		[Export ("localizedModel")]
 		string LocalizedModel { get; }
 
-		[Watch (2,0)]
 		[Export ("systemName")]
 		string SystemName { get; }
 
-		[Watch (3,0)]
 		[Export ("waterResistanceRating")]
 		WKWaterResistanceRating WaterResistanceRating { get; }
 
-		[Watch (2,0)]
 		[Export ("playHaptic:")]
 		void PlayHaptic (WKHapticType type);
 
-		[Watch (2,1)]
 		[Export ("layoutDirection")]
 		WKInterfaceLayoutDirection LayoutDirection { get; }
 
-		[Watch (2,1)]
 		[Static]
 		[Export ("interfaceLayoutDirectionForSemanticContentAttribute:")]
 		WKInterfaceLayoutDirection GetInterfaceLayoutDirection (WKInterfaceSemanticContentAttribute semanticContentAttribute);
 
-		[Watch (3,0)]
 		[Export ("wristLocation")]
 		WKInterfaceDeviceWristLocation WristLocation { get; }
 
-		[Watch (3,0)]
 		[Export ("crownOrientation")]
 		WKInterfaceDeviceCrownOrientation CrownOrientation { get; }
 
@@ -657,7 +638,6 @@ namespace WatchKit {
 		[Export ("scrollToRowAtIndex:")]
 		void ScrollToRow (nint index);
 
-		[Watch (3,0)]
 		[Export ("performSegueForRow:")]
 		void PerformSegue (nint row);
 
@@ -908,27 +888,22 @@ namespace WatchKit {
 		double CurrentTime {
 			get;
 #if NET
-			[Watch (3,2)]
 			set;
 		}
 #else
 		}
-		[Watch (3,2)]
 		[Export ("setCurrentTime:")]
 		void SetCurrentTime (double time);
 #endif
 
-		[Watch (2,0)]
 		[Notification]
 		[Field ("WKAudioFilePlayerItemTimeJumpedNotification")]
 		NSString TimeJumpedNotification { get; }
 
-		[Watch (2,0)]
 		[Notification]
 		[Field ("WKAudioFilePlayerItemDidPlayToEndTimeNotification")]
 		NSString DidPlayToEndTimeNotification { get; }
 
-		[Watch (2,0)]
 		[Notification]
 		[Field ("WKAudioFilePlayerItemFailedToPlayToEndTimeNotification")]
 		NSString FailedToPlayToEndTimeNotification { get; }
@@ -955,7 +930,6 @@ namespace WatchKit {
 		[NullAllowed, Export ("rootInterfaceController")]
 		WKInterfaceController RootInterfaceController { get; }
 
-		[Watch (3,0)]
 		[Export ("applicationState")]
 		WKApplicationState ApplicationState { get; }
 
@@ -1036,11 +1010,9 @@ namespace WatchKit {
 		[Export ("applicationWillResignActive")]
 		void ApplicationWillResignActive ();
 
-		[Watch (3,0)]
 		[Export ("applicationWillEnterForeground")]
 		void ApplicationWillEnterForeground ();
 
-		[Watch (3,0)]
 		[Export ("applicationDidEnterBackground")]
 		void ApplicationDidEnterBackground ();
 
@@ -1063,7 +1035,6 @@ namespace WatchKit {
 		[Export ("handleUserActivity:")]
 		void HandleUserActivity ([NullAllowed] NSDictionary userInfo);
 
-		[Watch (3,2)] // TODO: Check if this is equal/similar to HandleUserActivity once docs are available
 		[Export ("handleActivity:")]
 		void HandleUserActivity (NSUserActivity userActivity);
 
@@ -1075,11 +1046,9 @@ namespace WatchKit {
 		[Export ("didReceiveLocalNotification:")]
 		void DidReceiveLocalNotification (UILocalNotification notification);
 
-		[Watch (3,0)]
 		[Export ("handleBackgroundTasks:")]
 		void HandleBackgroundTasks (NSSet<WKRefreshBackgroundTask> backgroundTasks);
 
-		[Watch (3,0)]
 		[Export ("handleWorkoutConfiguration:")]
 		void HandleWorkoutConfiguration (HKWorkoutConfiguration workoutConfiguration);
 
@@ -1120,7 +1089,7 @@ namespace WatchKit {
 		void UserDidAcceptCloudKitShare (CKShareMetadata cloudKitShareMetadata);
 	}
 
-	[Watch (2,2), NoiOS]
+	[NoiOS]
 	[BaseType (typeof(WKInterfaceObject))]
 	[DisableDefaultCtor] // The super class' init method is unavailable.
 	interface WKInterfaceActivityRing
@@ -1224,7 +1193,7 @@ namespace WatchKit {
 
 	// to be made [Internal] once #34656 is fixed
 	[Static]
-	[Watch (2,0)][NoiOS]
+	[NoiOS]
 	interface WKMediaPlayerControllerOptionsKeys {
 		[Field ("WKMediaPlayerControllerOptionsAutoplayKey")]
 		NSString AutoplayKey { get; }
@@ -1241,7 +1210,7 @@ namespace WatchKit {
 
 	// to be made [Internal] once #34656 is fixed
 	[Static]
-	[Watch (2,0)][NoiOS]
+	[NoiOS]
 	interface WKAudioRecorderControllerOptionsKey {
 		[Field ("WKAudioRecorderControllerOptionsActionTitleKey")]
 		NSString ActionTitleKey { get; }
@@ -1256,7 +1225,7 @@ namespace WatchKit {
 		NSString MaximumDurationKey { get; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (NSObject))]
 	interface WKRefreshBackgroundTask {
 		
@@ -1276,12 +1245,12 @@ namespace WatchKit {
 		Action ExpirationHandler { get; set; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKRefreshBackgroundTask))]
 	interface WKApplicationRefreshBackgroundTask {
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKRefreshBackgroundTask))]
 	interface WKSnapshotRefreshBackgroundTask {
 
@@ -1297,7 +1266,7 @@ namespace WatchKit {
 		void SetTaskCompleted (bool restoredDefaultState, [NullAllowed] NSDate estimatedSnapshotExpiration, [NullAllowed] INSSecureCoding userInfo);
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKRefreshBackgroundTask), Name = "WKURLSessionRefreshBackgroundTask")]
 	interface WKUrlSessionRefreshBackgroundTask {
 
@@ -1305,7 +1274,7 @@ namespace WatchKit {
 		string SessionIdentifier { get; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKRefreshBackgroundTask))]
 	interface WKWatchConnectivityRefreshBackgroundTask {
 	}
@@ -1320,7 +1289,7 @@ namespace WatchKit {
 	interface WKIntentDidRunRefreshBackgroundTask {
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Category]
 	[BaseType (typeof (WKExtension))]
 	interface WKExtension_WKBackgroundTasks {
@@ -1332,7 +1301,7 @@ namespace WatchKit {
 		void ScheduleSnapshotRefresh (NSDate preferredFireDate, [NullAllowed] INSSecureCoding userInfo, Action<NSError> scheduledCompletion);
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface WKCrownSequencer {
@@ -1359,7 +1328,7 @@ namespace WatchKit {
 
 	interface IWKCrownDelegate {}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Protocol][Model]
 	[BaseType (typeof (NSObject))]
 	interface WKCrownDelegate {
@@ -1370,7 +1339,7 @@ namespace WatchKit {
 		void CrownDidBecomeIdle ([NullAllowed] WKCrownSequencer crownSequencer);
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Abstract]
 	[BaseType (typeof (NSObject))]
 	interface WKGestureRecognizer {
@@ -1388,7 +1357,7 @@ namespace WatchKit {
 		CGRect ObjectBounds { get; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKGestureRecognizer))]
 	interface WKTapGestureRecognizer {
 
@@ -1396,7 +1365,7 @@ namespace WatchKit {
 		nuint NumberOfTapsRequired { get; set; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKGestureRecognizer))]
 	interface WKLongPressGestureRecognizer {
 
@@ -1410,7 +1379,7 @@ namespace WatchKit {
 		nfloat AllowableMovement { get; set; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKGestureRecognizer))]
 	interface WKSwipeGestureRecognizer {
 
@@ -1418,7 +1387,7 @@ namespace WatchKit {
 		WKSwipeGestureRecognizerDirection Direction { get; set; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKGestureRecognizer))]
 	interface WKPanGestureRecognizer {
 		[Export ("translationInObject")]
@@ -1428,7 +1397,7 @@ namespace WatchKit {
 		CGPoint VelocityInObject { get; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKInterfaceObject))]
 	[DisableDefaultCtor] // Do not subclass or create instances of this class yourself. -> Handle is nil if init is called
 	interface WKInterfaceHMCamera {
@@ -1443,7 +1412,7 @@ namespace WatchKit {
 		void SetCameraSource ([NullAllowed] HMCameraSource cameraSource);
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKInterfaceObject))]
 	[DisableDefaultCtor] // Do not subclass or create instances of this class yourself. -> Handle is nil if init is called
 	interface WKInterfaceInlineMovie {
@@ -1478,7 +1447,7 @@ namespace WatchKit {
 		void Pause ();
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKInterfaceObject))]
 	[DisableDefaultCtor] // Do not subclass or create instances of this class yourself. -> Handle is nil if init is called
 	interface WKInterfacePaymentButton {
@@ -1488,7 +1457,7 @@ namespace WatchKit {
 		NativeHandle Constructor ([NullAllowed] NSObject target, Selector action);
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKInterfaceObject))]
 	[DisableDefaultCtor] // Do not subclass or create instances of this class yourself. -> Handle is nil if init is called
 	interface WKInterfaceSCNScene : SCNSceneRenderer {
@@ -1509,7 +1478,7 @@ namespace WatchKit {
 		SCNAntialiasingMode AntialiasingMode { get; set; }
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[BaseType (typeof (WKInterfaceObject))]
 	[DisableDefaultCtor] // Do not subclass or create instances of this class yourself. -> Handle is nil if init is called
 	interface WKInterfaceSKScene {

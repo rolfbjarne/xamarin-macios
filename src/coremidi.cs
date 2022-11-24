@@ -40,7 +40,6 @@ using NativeHandle = System.IntPtr;
 namespace CoreMidi {
 
 
-	[Mac (10,14)]
 	[Watch (8,0)]
 	[TV (15,0)]
 	// NSUInteger -> MIDINetworkSession.h
@@ -288,7 +287,7 @@ namespace CoreMidi {
 
 	}
 
-	[NoWatch, NoTV, Mac (10,14), iOS (12,0)]
+	[NoWatch, NoTV, iOS (12,0)]
 	[BaseType (typeof(NSObject), Name="MIDICIProfile")]
 	[DisableDefaultCtor]
 	interface MidiCIProfile : NSSecureCoding
@@ -308,7 +307,7 @@ namespace CoreMidi {
 		NativeHandle Constructor (NSData data);
 	}
 
-	[NoWatch, NoTV, Mac (10,14), iOS (12,0)]
+	[NoWatch, NoTV, iOS (12,0)]
 	[BaseType (typeof(NSObject), Name="MIDICIProfileState")]
 	[DisableDefaultCtor]
 	interface MidiCIProfileState : NSSecureCoding
@@ -341,7 +340,7 @@ namespace CoreMidi {
 	delegate void MidiCIProfileSpecificDataHandler (MidiCISession session, byte channel, MidiCIProfile profile, NSData data);
 	delegate void MidiCISessionDisconnectHandler (MidiCISession session, NSError error);
 
-	[NoWatch, NoTV, Mac (10,14), iOS (12,0)]
+	[NoWatch, NoTV, iOS (12,0)]
 	[BaseType (typeof(NSObject), Name="MIDICISession")]
 	[DisableDefaultCtor]
 	interface MidiCISession

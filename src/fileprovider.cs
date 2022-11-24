@@ -33,7 +33,6 @@ namespace FileProvider {
 
 	[NoWatch]
 	[NoTV]
-	[iOS (8,0)]
 	[NoMac]
 	[Unavailable (PlatformName.MacCatalyst)][Advice ("This API is not available when using Catalyst on macOS.")]
 	[ThreadSafe]

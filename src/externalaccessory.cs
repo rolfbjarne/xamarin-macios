@@ -18,7 +18,6 @@ using NativeHandle = System.IntPtr;
 
 namespace ExternalAccessory {
 
-	[Mac (10, 13)][TV (10,0)]
 	[BaseType (typeof (NSObject), Delegates=new string [] { "WeakDelegate" }, Events=new Type [] {typeof(EAAccessoryDelegate)})]
 	// Objective-C exception thrown.  Name: EAAccessoryInitException Reason: -init not supported. EAAccessoryManager is responsible for creating all objects.
 	[DisableDefaultCtor]
@@ -57,7 +56,6 @@ namespace ExternalAccessory {
 		[Protocolize]
 		EAAccessoryDelegate Delegate { get; set; }
 
-		[iOS (9,0)]
 		[Deprecated (PlatformName.iOS, 13,0)]
 		[Deprecated (PlatformName.TvOS, 13,0)]
 		[Deprecated (PlatformName.MacOSX, 10,14)]
@@ -65,7 +63,6 @@ namespace ExternalAccessory {
 		string DockType { get; }
 	}
 
-	[Mac (10, 13)][TV (10,0)]
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -74,7 +71,6 @@ namespace ExternalAccessory {
 		void Disconnected (EAAccessory accessory);
 	}
 
-	[Mac (10, 13)][TV (10,0)]
 	interface EAAccessoryEventArgs {
 		[Export ("EAAccessoryKey")]
 		EAAccessory Accessory { get; }
@@ -83,7 +79,6 @@ namespace ExternalAccessory {
 		EAAccessory Selected { get; }
 	}
 	
-	[Mac (10, 13)][TV (10,0)]
 	[BaseType (typeof (NSObject))]
 	// Objective-C exception thrown.  Name: EAAccessoryManagerInitException Reason: -init is not supported. Use +sharedAccessoryManager.
 	[DisableDefaultCtor]
@@ -122,7 +117,6 @@ namespace ExternalAccessory {
 		void ShowBluetoothAccessoryPicker ([NullAllowed] NSPredicate predicate, [NullAllowed] Action<NSError> completion);
 	}
 
-	[Mac (10, 13)][TV (10,0)]
 	[BaseType (typeof (NSObject))]
 	// Objective-C exception thrown.  Name: EASessionInitException Reason: -init not supported. use -initWithAccessory:forProtocol.
 	[DisableDefaultCtor]
@@ -148,8 +142,6 @@ namespace ExternalAccessory {
 	}
 
 	[NoMac]
-	[TV (10,0)]
-	[iOS (8,0)]
 	[BaseType (typeof (NSObject))]
 	interface EAWiFiUnconfiguredAccessory {
 		[Export ("name")]
@@ -176,9 +168,8 @@ namespace ExternalAccessory {
 	
 	// This class is exposed for tvOS in the headers, but there's no available initializer (so it can't be constructed)
 	// The API is also clearly unusable (you can list the unconfigured accessories, but you can't search for them first...)
-	[NoTV] // [TV (10,0)]
+	[NoTV] // 
 	[NoMac]
-	[iOS (8,0)]
 #if TVOS
 	[BaseType (typeof (NSObject))]
 #else
@@ -229,7 +220,6 @@ namespace ExternalAccessory {
 
 	[NoMac]
 	[NoTV] // no member is available
-	[iOS (8,0)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface EAWiFiUnconfiguredAccessoryBrowserDelegate {

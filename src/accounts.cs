@@ -45,7 +45,7 @@ namespace Accounts {
 		NSString ErrorDomain { get; }
 #endif
 
-		[iOS (7,0)][NoMac]
+		[NoMac]
 		[Export ("userFullName")]
 		string UserFullName { get; }
 	}
@@ -151,14 +151,11 @@ namespace Accounts {
 
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Tencent Weibo SDK instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Tencent Weibo SDK instead.")]
-		[iOS (7,0)]
-		[Mac (10,9)]
 		[Field ("ACAccountTypeIdentifierTencentWeibo")]
 		NSString TencentWeibo { get; }
 
 		[NoiOS][NoTV][NoWatch]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use LinkedIn SDK instead.")]
-		[Mac (10,9)]
 		[Field ("ACAccountTypeIdentifierLinkedIn")]
 		NSString LinkedIn { get; }
 	}
@@ -195,8 +192,6 @@ namespace Accounts {
 
 	[Deprecated (PlatformName.iOS, 11, 0, message: "Use Tencent Weibo SDK instead.")]
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Tencent Weibo SDK instead.")]
-	[iOS (7,0)]
-	[Mac (10,9)]
 	[Static]
 	interface ACTencentWeiboKey {
 		[Field ("ACTencentWeiboAppIdKey")]
@@ -205,7 +200,6 @@ namespace Accounts {
 
 	[NoiOS][NoTV][NoWatch]
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use LinkedIn SDK instead.")]
-	[Mac (10,9)]
 	[Static]
 	interface ACLinkedInKey {
 		[Field ("ACLinkedInAppIdKey")]

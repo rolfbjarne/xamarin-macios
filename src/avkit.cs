@@ -50,7 +50,6 @@ using NativeHandle = System.IntPtr;
 
 namespace AVKit {
 	[TV (14, 0)]
-	[iOS (9,0)]
 	[Mac (10,15)]
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
@@ -141,7 +140,7 @@ namespace AVKit {
 	
 	interface IAVPictureInPictureControllerDelegate {}
 
-	[iOS (9,0), Mac (10,15), TV (14,0)]
+	[Mac (10,15), TV (14,0)]
 	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface AVPictureInPictureControllerDelegate
@@ -166,7 +165,6 @@ namespace AVKit {
 	}
 
 	[NoMac]
-	[iOS (8,0)]
 	[BaseType (typeof (UIViewController))]
 	interface AVPlayerViewController {
 		[Export ("initWithNibName:bundle:")]
@@ -200,12 +198,10 @@ namespace AVKit {
 		UILayoutGuide UnobscuredContentGuide { get; }
 
 		[TV (14, 0)]
-		[iOS (9,0)]
 		[Export ("allowsPictureInPicturePlayback")]
 		bool AllowsPictureInPicturePlayback { get; set; }
 
 		[NoTV]
-		[iOS (10,0)]
 		[Export ("updatesNowPlayingInfoCenter")]
 		bool UpdatesNowPlayingInfoCenter { get; set; }
 
@@ -224,41 +220,38 @@ namespace AVKit {
 		[Protocolize]
 		AVPlayerViewControllerDelegate Delegate { get; set; }
 
-		[iOS (9,0)]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
 		[NoMac]
-		[TV (9,0), iOS (14, 0)]
+		[iOS (14, 0)]
 		[Export ("requiresLinearPlayback")]
 		bool RequiresLinearPlayback { get; set; }
 
 #region AVPlayerViewControllerSubtitleOptions
 		[NoiOS][NoMac]
-		[TV (9,0)]
 		[NullAllowed, Export ("allowedSubtitleOptionLanguages", ArgumentSemantic.Copy)]
 		string[] AllowedSubtitleOptionLanguages { get; set; }
 
 		[NoiOS][NoMac]
-		[TV (9,0)]
 		[Export ("requiresFullSubtitles")]
 		bool RequiresFullSubtitles { get; set; }
 #endregion
 
 		[NullAllowed]
-		[NoiOS, TV (10, 0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("contentProposalViewController", ArgumentSemantic.Assign)]
 		AVContentProposalViewController ContentProposalViewController { get; set; }
 
-		[NoiOS, TV (10, 0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("skippingBehavior", ArgumentSemantic.Assign)]
 		AVPlayerViewControllerSkippingBehavior SkippingBehavior { get; set; }
 
-		[NoiOS, TV (10, 0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("skipForwardEnabled")]
 		bool SkipForwardEnabled { [Bind ("isSkipForwardEnabled")] get; set; }
 
-		[NoiOS, TV (10, 0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("skipBackwardEnabled")]
 		bool SkipBackwardEnabled { [Bind ("isSkipBackwardEnabled")] get; set; }
 
@@ -282,7 +275,7 @@ namespace AVKit {
 		[Export ("appliesPreferredDisplayCriteriaAutomatically")]
 		bool AppliesPreferredDisplayCriteriaAutomatically { get; set; }
 		
-		[iOS (9,0), TV (13,0), NoWatch]
+		[TV (13,0), NoWatch]
 		[NullAllowed, Export ("pixelBufferAttributes", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, NSObject> PixelBufferAttributes { get; set; }
 		
@@ -370,7 +363,6 @@ namespace AVKit {
 		void RestoreUserInterfaceForPictureInPicture (AVPlayerViewController playerViewController, Action<bool> completionHandler);
 
 		[iOS (16,0)][NoMac][NoMacCatalyst][NoWatch]
-		[TV (9,0)]
 		[Export ("playerViewController:didPresentInterstitialTimeRange:")]
 		void DidPresentInterstitialTimeRange (AVPlayerViewController playerViewController, AVInterstitialTimeRange interstitial);
 
@@ -390,46 +382,42 @@ namespace AVKit {
 		void DidEndDismissalTransition (AVPlayerViewController playerViewController);
 
 		[iOS (16,0)][NoMac][NoWatch][NoMacCatalyst]
-		[TV (9,0)]
 		[Export ("playerViewController:willPresentInterstitialTimeRange:")]
 		void WillPresentInterstitialTimeRange (AVPlayerViewController playerViewController, AVInterstitialTimeRange interstitial);
 
 		[NoiOS][NoMac]
-		[TV (9,0)]
 		[Export ("playerViewController:willResumePlaybackAfterUserNavigatedFromTime:toTime:")]
 		void WillResumePlaybackAfterUserNavigatedFromTime (AVPlayerViewController playerViewController, CMTime oldTime, CMTime targetTime);
 
 		[NoiOS][NoMac]
-		[TV (9,0)]
 		[Export ("playerViewController:didSelectMediaSelectionOption:inMediaSelectionGroup:")]
 		void DidSelectMediaSelectionOption (AVPlayerViewController playerViewController, [NullAllowed] AVMediaSelectionOption mediaSelectionOption, AVMediaSelectionGroup mediaSelectionGroup);
 
 		[NoiOS][NoMac]
-		[TV (9,0)]
 		[Export ("playerViewController:didSelectExternalSubtitleOptionLanguage:")]
 		void DidSelectExternalSubtitleOptionLanguage (AVPlayerViewController playerViewController, string language);
 
-		[NoiOS, TV (10,0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("playerViewController:timeToSeekAfterUserNavigatedFromTime:toTime:")]
 		CMTime GetTimeToSeekAfterUserNavigated (AVPlayerViewController playerViewController, CMTime oldTime, CMTime targetTime);
 
-		[NoiOS, TV (10,0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("skipToNextItemForPlayerViewController:")]
 		void SkipToNextItem (AVPlayerViewController playerViewController);
 
-		[NoiOS, TV (10,0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("skipToPreviousItemForPlayerViewController:")]
 		void SkipToPreviousItem (AVPlayerViewController playerViewController);
 
-		[NoiOS, TV (10,0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("playerViewController:shouldPresentContentProposal:")]
 		bool ShouldPresentContentProposal (AVPlayerViewController playerViewController, AVContentProposal proposal);
 
-		[NoiOS, TV (10,0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("playerViewController:didAcceptContentProposal:")]
 		void DidAcceptContentProposal (AVPlayerViewController playerViewController, AVContentProposal proposal);
 
-		[NoiOS, TV (10,0), NoWatch, NoMac]
+		[NoiOS, NoWatch, NoMac]
 		[Export ("playerViewController:didRejectContentProposal:")]
 		void DidRejectContentProposal (AVPlayerViewController playerViewController, AVContentProposal proposal);
 
@@ -488,7 +476,6 @@ namespace AVKit {
 	}
 
 	[NoiOS, NoWatch, NoTV]
-	[Mac (10,9)]
 	[BaseType (typeof (NSView))]
 	interface AVPlayerView {
 		[Export ("initWithFrame:")]
@@ -501,24 +488,19 @@ namespace AVKit {
 		[Export ("controlsStyle")]
 		AVPlayerViewControlsStyle ControlsStyle { get; set; }
 
-		[Mac (10,10)]
 		[Export ("videoGravity")]
 		string VideoGravity { get; set; }
 
-		[Mac (10,10)]
 		[Export ("readyForDisplay")]
 		bool ReadyForDisplay { [Bind ("isReadyForDisplay")] get; }
 
-		[Mac (10,10)]
 		[Export ("videoBounds")]
 		CGRect VideoBounds { get; }
 
 		[NullAllowed]
-		[Mac (10,10)]
 		[Export ("contentOverlayView")]
 		NSView ContentOverlayView { get; }
 
-		[Mac (10,13)]
 		[Export ("updatesNowPlayingInfoCenter")]
 		bool UpdatesNowPlayingInfoCenter { get; set; }
 
@@ -635,7 +617,6 @@ namespace AVKit {
 	}
 
 	[NoiOS, NoWatch, NoTV]
-	[Mac (10,10)]
 	[BaseType (typeof (NSView))]
 	interface AVCaptureView {
 		[Export ("initWithFrame:")]
@@ -665,7 +646,6 @@ namespace AVKit {
 
 	[NoiOS, NoWatch, NoTV]
 	[Protocol, Model]
-	[Mac (10,10)]
 	[BaseType (typeof (NSObject))]
 	interface AVCaptureViewDelegate {
 		[Abstract]
@@ -674,7 +654,6 @@ namespace AVKit {
 	}
 
 	[iOS (16,0)][NoMac][NoMacCatalyst][NoWatch]
-	[TV (9,0)]
 	[BaseType (typeof (NSObject))]
 	interface AVInterstitialTimeRange : NSCopying, NSSecureCoding {
 		[Export ("initWithTimeRange:")]
@@ -686,7 +665,6 @@ namespace AVKit {
 	}
 
 	[NoiOS][NoMac]
-	[TV (9,0)]
 	[DisableDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	interface AVNavigationMarkersGroup {
@@ -709,7 +687,7 @@ namespace AVKit {
 	}
 	
 	[NoMac]
-	[NoiOS, TV (10,0), NoWatch]
+	[NoiOS, NoWatch]
 	[BaseType (typeof(UIViewController))]
 	interface AVContentProposalViewController
 	{
@@ -738,7 +716,7 @@ namespace AVKit {
 
 	[Static]
 	[NoMac]
-	[NoiOS, TV (10,1), NoWatch]
+	[NoiOS, NoWatch]
 	interface AVKitMetadataIdentifier {
 
 		[Field ("AVKitMetadataIdentifierExternalContentIdentifier")]
@@ -994,7 +972,6 @@ namespace AVKit {
 		void RestoreUserInterfaceForFullScreenExit (AVPlayerView playerView, Action<bool> completionHandler);
 	}
 
-	[Mac (10,10)]
 	[NoiOS][NoTV][NoWatch][NoMacCatalyst]
 	[Native]
 	public enum AVCaptureViewControlsStyle : long {
@@ -1004,7 +981,6 @@ namespace AVKit {
 		Default = Inline,
 	}
 
-	[Mac (10,9)]
 	[NoiOS][NoTV][NoWatch][NoMacCatalyst]
 	[Native]
 	public enum AVPlayerViewTrimResult : long {

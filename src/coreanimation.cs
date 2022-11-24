@@ -176,14 +176,12 @@ namespace CoreAnimation {
 		[Export ("duration")]
 		double Duration { get; }
 
-		[Watch (3,0)][TV (10,0)][iOS (10,0)]
 		[Export ("targetTimestamp")]
 		double TargetTimestamp { get; }
 
 		[Deprecated (PlatformName.iOS, 15,0, message: "Use 'PreferredFrameRateRange' property.")]
 		[Deprecated (PlatformName.TvOS, 15,0, message: "Use 'PreferredFrameRateRange' property.")]
 		[Deprecated (PlatformName.WatchOS, 8,0, message: "Use 'PreferredFrameRateRange' property.")]
-		[Watch (3,0)][TV (10,0)][iOS (10,0)]
 		[Export ("preferredFramesPerSecond")]
 		nint PreferredFramesPerSecond { get; set; }
 
@@ -192,7 +190,6 @@ namespace CoreAnimation {
 		CAFrameRateRange PreferredFrameRateRange { get; set; }
 	}
 
-	[Watch (3,0)][TV (10,0)][Mac (10,12)][iOS (10,0)]
 	enum CAContentsFormat {
 		[Field ("kCAContentsFormatGray8Uint")]
 		Gray8Uint,
@@ -522,7 +519,6 @@ namespace CoreAnimation {
 		[Field ("kCAOnOrderOut")]
 		NSString OnOrderOut { get; }
 
-		[Watch (3,0)][TV (10,0)][Mac (10,12)][iOS (10,0)]
 		[Internal]
 		[Export ("contentsFormat")]
 		NSString _ContentsFormat { get; set; }
@@ -584,11 +580,9 @@ namespace CoreAnimation {
 		[Export ("drawsAsynchronously")]
 		bool DrawsAsynchronously { get; set; }
 
-		[iOS (7,0), Mac (10, 9)]
 		[Export ("allowsEdgeAntialiasing")]
 		bool AllowsEdgeAntialiasing { get; set; }
 
-		[iOS (7,0), Mac (10, 9)]
 		[Export ("allowsGroupOpacity")]
 		bool AllowsGroupOpacity { get; set; }
 
@@ -597,7 +591,7 @@ namespace CoreAnimation {
 		NSObject CompositingFilter { get; set; }
 
 		[NoWatch] // headers not updated
-		[TV (11,0)][Mac (10,13)][iOS (11,0)]
+		[TV (11,0)][iOS (11,0)]
 		[Export ("maskedCorners", ArgumentSemantic.Assign)]
 		CACornerMask MaskedCorners { get; set; }
 
@@ -627,7 +621,6 @@ namespace CoreAnimation {
 	interface ICAMetalDrawable {}
 
 	[Protocol]
-	[iOS (8,0)][Mac (10,11)]
 	interface CAMetalDrawable : MTLDrawable {
 		[Abstract]
 		[Export ("texture")]
@@ -638,7 +631,7 @@ namespace CoreAnimation {
 		CAMetalLayer Layer { get; }
 	}
 
-	[iOS (8,0)][Mac (10,11)][MacCatalyst (13,0)]
+	[MacCatalyst (13,0)]
 	[BaseType (typeof (CALayer))]
 	interface CAMetalLayer {
 		[NullAllowed] // by default this property is null
@@ -662,18 +655,17 @@ namespace CoreAnimation {
 		bool PresentsWithTransaction { [Bind ("presentsWithTransaction")] get; set; }
 
 		[NoWatch][NoTV][NoiOS]
-		[Mac (10,13)]
 		[MacCatalyst (13,0)]
 		[Export ("displaySyncEnabled")]
 		bool DisplaySyncEnabled { get; set; }
 
 		[NoWatch] // headers not updated
-		[TV (11,0)][Mac (10,13)][iOS (11,0)]
+		[TV (11,0)][iOS (11,0)]
 		[Export ("allowsNextDrawableTimeout")]
 		bool AllowsNextDrawableTimeout { get; set; }
 
 		[NoWatch] // headers not updated
-		[TV (11,2)][Mac (10,13,2)][iOS (11,2)]
+		[TV (11,2)][iOS (11,2)]
 		[Export ("maximumDrawableCount")]
 		nuint MaximumDrawableCount { get; set; }
 
@@ -978,7 +970,6 @@ namespace CoreAnimation {
 		NSString AlignmentJustified { get; }
 #endif // !NET
 
-		[iOS(9,0)]
 		[Export ("allowsFontSubpixelQuantization")]
 		bool AllowsFontSubpixelQuantization { get; set; }
 	}
@@ -1001,7 +992,6 @@ namespace CoreAnimation {
 		[Export ("drawLayer:inContext:"), EventArgs ("CALayerDrawEventArgs")]
 		void DrawLayer (CALayer layer, CGContext context);
 
-		[Watch (3,0)][TV (10,0)][Mac (10,12)][iOS (10,0)]
 		[Export ("layerWillDraw:")]
 		void WillDrawLayer (CALayer layer);
 
@@ -1023,7 +1013,6 @@ namespace CoreAnimation {
 		[Export ("layer"), New, Static]
 		CALayer Create ();
 
-		[iOS (9,0)]
 		[Export ("presentsWithTransaction")]
 		bool PresentsWithTransaction { get; set; }
 	}
@@ -1132,24 +1121,20 @@ namespace CoreAnimation {
 
 		#region SceneKitAdditions
 
-		[TV (11,0), Mac (10,13), iOS (11,0), NoWatch]
+		[TV (11,0), iOS (11,0), NoWatch]
 		[Static]
 		[Export ("animationWithSCNAnimation:")]
 		CAAnimation FromSCNAnimation (SCNAnimation animation);
 
-		[iOS (8,0)][Mac (10,9)]
 		[Export ("usesSceneTimeBase")]
 		bool UsesSceneTimeBase { get; set; }
 
-		[iOS (8,0)][Mac (10,9)]
 		[Export ("fadeInDuration")]
 		nfloat FadeInDuration { get; set; }
 
-		[iOS (8,0)][Mac (10,9)]
 		[Export ("fadeOutDuration")]
 		nfloat FadeOutDuration { get; set; }
 
-		[Mac (10,9), iOS (8, 0)]
 		[NullAllowed] // by default this property is null
 		[Export ("animationEvents", ArgumentSemantic.Retain)]
 		SCNAnimationEvent [] AnimationEvents { get; set; }
@@ -1228,7 +1213,6 @@ namespace CoreAnimation {
 		NSObject By { get; set; }
 	}
 
-	[iOS(9,0), Mac(10,11)]
 	[BaseType (typeof (CABasicAnimation))]
 	interface CASpringAnimation {
 		[Static, New, Export ("animationWithKeyPath:")]
@@ -1450,12 +1434,12 @@ namespace CoreAnimation {
 		[Field ("kCAGradientLayerAxial")]
 		Axial,
 
-		[iOS (12,0)][TV (12,0)][Mac (10,14)]
+		[iOS (12,0)][TV (12,0)]
 		[NoWatch]
 		[Field ("kCAGradientLayerRadial")]
 		Radial,
 
-		[iOS (12,0)][TV (12,0)][Mac (10,14)]
+		[iOS (12,0)][TV (12,0)]
 		[NoWatch]
 		[Field ("kCAGradientLayerConic")]
 		Conic,
@@ -1692,7 +1676,6 @@ namespace CoreAnimation {
 		[Export ("alphaRange")]
 		float AlphaRange { get; set; } /* float, not CGFloat */
 
-		[iOS(9,0)][Mac (10,11)]
 		[Export ("contentsScale")]
 		nfloat ContentsScale { get; set; }
 	}
@@ -1802,7 +1785,6 @@ namespace CoreAnimation {
 // 'initWithType:', 'behaviorWithType:' and 'behaviorTypes' API now cause rejection
 // https://trello.com/c/J8BDDUV9/86-33590997-coreanimation-quartzcore-api-removals
 #if !NET
-	[iOS (7,0), Mac (10, 9)]
 	[BaseType (typeof (NSObject))]
 	interface CAEmitterBehavior : NSSecureCoding {
 
@@ -1828,7 +1810,6 @@ namespace CoreAnimation {
 		[Field ("kCAEmitterBehaviorAttractor")]
 		NSString Attractor { get; }			
 
-		[Watch (3,0)][TV (10,0)][Mac (10,12)][iOS (10,0)]
 		[Field ("kCAEmitterBehaviorSimpleAttractor")]
 		NSString SimpleAttractor { get; }
 
@@ -1856,7 +1837,6 @@ namespace CoreAnimation {
 		[Field ("kCARendererColorSpace")]
 		NSString ColorSpace { get; }
 
-		[Mac (10,14)]
 		[Field ("kCARendererMetalCommandQueue")]
 		NSString MetalCommandQueue { get; }
 	}
@@ -1868,7 +1848,6 @@ namespace CoreAnimation {
 		[Export ("ColorSpace")]
 		CGColorSpace ColorSpace { get; set; }
 
-		[Mac (10,14)]
 		[Export ("MetalCommandQueue")]
 		IMTLCommandQueue MetalCommandQueue { get; set; }
 	}
@@ -1877,12 +1856,10 @@ namespace CoreAnimation {
 	[NoiOS][NoTV][NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface CARenderer {
-		[Mac (10,13)]
 		[Static]
 		[Export ("rendererWithMTLTexture:options:")]
 		CARenderer Create (IMTLTexture tex, [NullAllowed] NSDictionary dict);
 
-		[Mac (10,13)]
 		[Static]
 		[Wrap ("Create (tex, options.GetDictionary ())")]
 		CARenderer Create (IMTLTexture tex, [NullAllowed] CARendererOptions options);
@@ -1918,7 +1895,6 @@ namespace CoreAnimation {
 		[Export ("endFrame")]
 		void EndFrame ();
 
-		[Mac (10,14)]
 		[Export ("setDestination:")]
 		void SetDestination (IMTLTexture tex);
 	}

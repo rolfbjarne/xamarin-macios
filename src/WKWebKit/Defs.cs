@@ -14,8 +14,6 @@ using ObjCRuntime;
 #nullable enable
 
 namespace WebKit {
-	[Mac (10, 10)]
-	[iOS (8, 0)]
 	[Native]
 	public enum WKNavigationType : long {
 		LinkActivated,
@@ -26,8 +24,6 @@ namespace WebKit {
 		Other = -1
 	}
 
-	[Mac (10, 10)]
-	[iOS (8, 0)]
 	[Native]
 	public enum WKNavigationActionPolicy : long {
 		Cancel,
@@ -37,8 +33,6 @@ namespace WebKit {
 		Download,
 	}
 
-	[Mac (10, 10)]
-	[iOS (8, 0)]
 	[Native]
 	public enum WKNavigationResponsePolicy : long {
 		Cancel,
@@ -48,16 +42,12 @@ namespace WebKit {
 		Download,
 	}
 
-	[Mac (10, 10)]
-	[iOS (8, 0)]
 	[Native]
 	public enum WKUserScriptInjectionTime : long {
 		AtDocumentStart,
 		AtDocumentEnd
 	}
 
-	[Mac (10, 10)]
-	[iOS (8, 0)]
 	[Native]
 	[ErrorDomain ("WKErrorDomain")]
 	public enum WKErrorCode : long {
@@ -88,13 +78,11 @@ namespace WebKit {
 #if NET
 	[NoMac]
 #endif
-	[iOS (8, 0)]
 	[Native]
 	public enum WKSelectionGranularity : long {
 		Dynamic, Character
 	}
 
-	[iOS (10, 0)]
 	[NoMac]
 	[Native]
 	[Flags]
@@ -111,8 +99,6 @@ namespace WebKit {
 		All = UInt64.MaxValue
 	}
 
-	[iOS (10, 0)]
-	[Mac (10, 12)]
 	[Native]
 	[Flags]
 	public enum WKAudiovisualMediaTypes : ulong {

@@ -141,7 +141,6 @@ namespace UIKit {
 		Touches,
 		Motion,
 		RemoteControl,
-		[iOS (9, 0)]
 		Presses,
 		[iOS (13, 4), TV (13, 4)]
 		Scroll = 10,
@@ -201,7 +200,6 @@ namespace UIKit {
 		Highlighted = 1 << 0,
 		Disabled = 1 << 1,
 		Selected = 1 << 2,
-		[iOS (9, 0)]
 		Focused = 1 << 3,
 		Application = 0x00FF0000,
 		Reserved = 0xFF000000
@@ -289,7 +287,6 @@ namespace UIKit {
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UIBarMetrics.Compat' instead.")]
 		LandscapePhone = Compact,
 
-		[iOS (7, 0)]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UIBarMetrics.CompactPrompt' instead.")]
 		LandscapePhonePrompt = CompactPrompt
 	}
@@ -506,7 +503,6 @@ namespace UIKit {
 		DecimalPad,
 		Twitter,
 		WebSearch,
-		[iOS (10, 0)]
 		AsciiCapableNumberPad
 	}
 
@@ -600,7 +596,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UITouchType : long {
 		Direct,
@@ -611,7 +606,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 1)]
 	[Native]
 	[Flags]
 	public enum UITouchProperties : long {
@@ -694,7 +688,6 @@ namespace UIKit {
 		DetailDisclosureButton,
 		Checkmark,
 		[NoTV]
-		[iOS (7, 0)]
 		DetailButton
 	}
 
@@ -744,7 +737,6 @@ namespace UIKit {
 	[Native]
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	public enum UIInterfaceOrientation : long {
 		Unknown = UIDeviceOrientation.Unknown,
 		Portrait = UIDeviceOrientation.Portrait,
@@ -793,11 +785,8 @@ namespace UIKit {
 		Address = 1 << 2,
 		CalendarEvent = 1 << 3,
 
-		[iOS (10, 0)]
 		ShipmentTrackingNumber = 1 << 4,
-		[iOS (10, 0)]
 		FlightNumber = 1 << 5,
-		[iOS (10, 0)]
 		LookupSuggestion = 1 << 6,
 		[NoWatch, NoTV, iOS (16, 0), MacCatalyst (16, 0)]
 		Money = 1 << 7,
@@ -1034,11 +1023,8 @@ namespace UIKit {
 		TransitionFlipFromTop = 6 << 20,
 		TransitionFlipFromBottom = 7 << 20,
 
-		[iOS (10, 3)]
 		PreferredFramesPerSecondDefault = 0 << 24,
-		[iOS (10, 3)]
 		PreferredFramesPerSecond60 = 3 << 24,
-		[iOS (10, 3)]
 		PreferredFramesPerSecond30 = 7 << 24,
 	}
 
@@ -1460,7 +1446,6 @@ namespace UIKit {
 
 	// NSUInteger -> UIView.h
 	[Native]
-	[iOS (7, 0)]
 	[NoWatch]
 	public enum UIViewKeyframeAnimationOptions : ulong {
 		LayoutSubviews = UIViewAnimationOptions.LayoutSubviews,
@@ -1517,7 +1502,6 @@ namespace UIKit {
 	// NSUInteger -> UISearchBar.h
 	[Native]
 	[NoWatch]
-	[iOS (7, 0)]
 	public enum UISearchBarStyle : ulong {
 		Default,
 		Prominent,
@@ -1527,7 +1511,6 @@ namespace UIKit {
 	// NSInteger -> UIInputView.h
 	[Native]
 	[NoWatch]
-	[iOS (7, 0)]
 	public enum UIInputViewStyle : long {
 		Default,
 		Keyboard
@@ -1535,7 +1518,6 @@ namespace UIKit {
 
 	[Native]
 	[NoWatch]
-	[iOS (8, 0)]
 	public enum UIUserInterfaceSizeClass : long {
 		Unspecified = 0,
 		Compact = 1,
@@ -1544,14 +1526,12 @@ namespace UIKit {
 
 	[Native]
 	[NoWatch]
-	[iOS (8, 0)]
 	public enum UIAlertActionStyle : long {
 		Default, Cancel, Destructive
 	}
 
 	[Native]
 	[NoWatch]
-	[iOS (8, 0)]
 	public enum UIAlertControllerStyle : long {
 		ActionSheet,
 		Alert
@@ -1559,14 +1539,11 @@ namespace UIKit {
 
 	[Native]
 	[NoWatch]
-	[iOS (8, 0)]
 	public enum UIBlurEffectStyle : long {
 		ExtraLight, Light, Dark,
-		[TV (10, 0), NoiOS, NoWatch]
+		[NoiOS, NoWatch]
 		ExtraDark,
-		[iOS (10, 0)]
 		Regular = 4,
-		[iOS (10, 0)]
 		Prominent = 5,
 		[iOS (13, 0), NoTV]
 		SystemUltraThinMaterial,
@@ -1603,7 +1580,6 @@ namespace UIKit {
 	[Native]
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	public enum UIPrinterJobTypes : long {
 		Unknown = 0,
 		Document = 1 << 0,
@@ -1618,7 +1594,6 @@ namespace UIKit {
 
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'UNAuthorizationOptions' instead.")]
 	[Native]
 	[Flags]
@@ -1631,7 +1606,6 @@ namespace UIKit {
 
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'UNNotificationActionOptions' instead.")]
 	[Native]
 	public enum UIUserNotificationActivationMode : ulong {
@@ -1641,7 +1615,6 @@ namespace UIKit {
 
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'UNNotificationCategory.Actions' instead.")]
 	[Native]
 	public enum UIUserNotificationActionContext : ulong {
@@ -1652,7 +1625,6 @@ namespace UIKit {
 	[Deprecated (PlatformName.iOS, 11, 0)]
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	[Native]
 	public enum UIDocumentMenuOrder : ulong {
 		First,
@@ -1662,7 +1634,6 @@ namespace UIKit {
 	[Deprecated (PlatformName.iOS, 14, 0, message: "Use the designated constructors instead.")]
 	[NoTV]
 	[NoWatch]
-	[iOS (8, 0)]
 	[Native]
 	public enum UIDocumentPickerMode : ulong {
 		Import,
@@ -1671,7 +1642,6 @@ namespace UIKit {
 		MoveToService
 	}
 
-	[iOS (8, 0)]
 	[Native]
 	public enum UIAccessibilityNavigationStyle : long {
 
@@ -1725,7 +1695,6 @@ namespace UIKit {
 	}
 
 	// note [Native] since it maps to UIFontWeightConstants fields (CGFloat)
-	[iOS (8, 2)]
 	public enum UIFontWeight {
 		UltraLight,
 		Thin,
@@ -1747,7 +1716,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UIStackViewDistribution : long {
 		Fill,
@@ -1758,7 +1726,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UIStackViewAlignment : long {
 		Fill,
@@ -1771,7 +1738,6 @@ namespace UIKit {
 		LastBaseline
 	}
 
-	[iOS (9, 0)]
 	[Native]
 	[Flags]
 	public enum NSWritingDirectionFormatType : long {
@@ -1781,7 +1747,6 @@ namespace UIKit {
 
 	[NoTV]
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UIPrinterCutterBehavior : long {
 		NoCut,
@@ -1793,7 +1758,6 @@ namespace UIKit {
 
 	[NoTV]
 	[NoWatch]
-	[iOS (9, 0)]
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'UNNotificationAction' or 'UNTextInputNotificationAction' instead.")]
 	[Native]
 	public enum UIUserNotificationActionBehavior : ulong {
@@ -1802,7 +1766,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UISemanticContentAttribute : long {
 		Unspecified = 0,
@@ -1813,7 +1776,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UIDynamicItemCollisionBoundsType : ulong {
 		Rectangle,
@@ -1823,7 +1785,6 @@ namespace UIKit {
 
 	[Native]
 	[NoWatch]
-	[iOS (9, 0)]
 	public enum UIForceTouchCapability : long {
 		Unknown = 0,
 		Unavailable = 1,
@@ -1832,13 +1793,11 @@ namespace UIKit {
 
 	[Native]
 	[NoWatch]
-	[iOS (9, 0)]
 	public enum UIPreviewActionStyle : long {
 		Default, Selected, Destructive
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UIPressPhase : long {
 		Began,
@@ -1849,7 +1808,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum UIPressType : long {
 		UpArrow,
@@ -1868,7 +1826,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (9, 0)] // introduced in Xcode 7.1 SDK (iOS 9.1 but hidden in 9.0)
 	[Native]
 	public enum UITableViewCellFocusStyle : long {
 		Default,
@@ -1876,7 +1833,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UIDisplayGamut : long {
 		Unspecified = -1,
@@ -1885,7 +1841,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UITraitEnvironmentLayoutDirection : long {
 		Unspecified = -1,
@@ -1893,7 +1848,7 @@ namespace UIKit {
 		RightToLeft = UIUserInterfaceLayoutDirection.RightToLeft
 	}
 
-	[TV (10, 0), NoWatch, iOS (12, 0)]
+	[NoWatch, iOS (12, 0)]
 	[Native]
 	public enum UIUserInterfaceStyle : long {
 		Unspecified,
@@ -1902,7 +1857,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UITextItemInteraction : long {
 		InvokeDefaultAction,
@@ -1911,7 +1865,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UIViewAnimatingState : long {
 		Inactive,
@@ -1920,7 +1873,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UIViewAnimatingPosition : long {
 		End,
@@ -1929,7 +1881,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UITimingCurveType : long {
 		Builtin,
@@ -1940,7 +1891,6 @@ namespace UIKit {
 
 	[NoWatch]
 	[NoTV]
-	[iOS (10, 0)]
 	[Native]
 	public enum UIAccessibilityHearingDeviceEar : ulong {
 		None = 0,
@@ -1950,7 +1900,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[iOS (10, 0)]
 	[Native]
 	public enum UIAccessibilityCustomRotorDirection : long {
 		Previous,
@@ -1961,9 +1910,7 @@ namespace UIKit {
 	[NoTV]
 #else
 	// Xcode 8.2 beta 1 added __TVOS_PROHIBITED but we need to keep it for binary compatibility
-	[TV (10, 0)]
 #endif
-	[iOS (10, 0)]
 	[NoWatch]
 	[Native]
 	[Flags]
@@ -1975,7 +1922,7 @@ namespace UIKit {
 		AllowReadWrite = 1 << 3
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch]
+	[NoWatch]
 	[Native]
 	public enum UITextFieldDidEndEditingReason : long {
 		Unknown = -1, // helper value (not in headers)
@@ -1984,7 +1931,7 @@ namespace UIKit {
 		Cancelled
 	}
 
-	[iOS (10, 3), TV (10, 2), NoWatch]
+	[NoWatch]
 	[Native]
 	public enum UIScrollViewIndexDisplayMode : long {
 		Automatic,
@@ -3075,7 +3022,6 @@ namespace UIKit {
 	// NSInteger -> UIGuidedAccessRestrictions.h
 	[Native]
 	[NoWatch]
-	[iOS (7, 0)]
 	public enum UIGuidedAccessRestrictionState : long {
 		Allow,
 		Deny,

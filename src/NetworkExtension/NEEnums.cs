@@ -2,8 +2,6 @@ using ObjCRuntime;
 
 namespace NetworkExtension {
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[ErrorDomain ("NEVPNErrorDomain")]
 	[Native]
 	public enum NEVpnError : long {
@@ -15,8 +13,6 @@ namespace NetworkExtension {
 		ConfigurationUnknown = 6
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native]
 	public enum NEVpnStatus : long {
 		Invalid = 0,
@@ -27,8 +23,6 @@ namespace NetworkExtension {
 		Disconnecting = 5
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native]
 	public enum NEVpnIkeAuthenticationMethod : long {
 		None = 0,
@@ -36,27 +30,19 @@ namespace NetworkExtension {
 		SharedSecret = 2
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native ("NEVPNIKEv2EncryptionAlgorithm")]
 	public enum NEVpnIke2EncryptionAlgorithm : long {
 		DES = 1,
 		TripleDES = 2,
 		AES128 = 3,
 		AES256 = 4,
-		[iOS (8, 3)]
-		[Mac (10, 11)]
 		AES128GCM = 5,
-		[iOS (8, 3)]
-		[Mac (10, 11)]
 		AES256GCM = 6,
 		[Mac (10, 15)]
 		[iOS (13, 0)]
 		ChaCha20Poly1305 = 7,
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native ("NEVPNIKEv2IntegrityAlgorithm")]
 	public enum NEVpnIke2IntegrityAlgorithm : long {
 		SHA96 = 1,
@@ -66,8 +52,6 @@ namespace NetworkExtension {
 		SHA512 = 5
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native ("NEVPNIKEv2DeadPeerDetectionRate")]
 	public enum NEVpnIke2DeadPeerDetectionRate : long {
 		None = 0,
@@ -76,8 +60,6 @@ namespace NetworkExtension {
 		High = 3
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native ("NEVPNIKEv2DiffieHellmanGroup")]
 	public enum NEVpnIke2DiffieHellman : long {
 		Invalid = 0,
@@ -98,8 +80,6 @@ namespace NetworkExtension {
 		Group31 = 31,
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native]
 	public enum NEOnDemandRuleAction : long {
 		Connect = 1,
@@ -108,8 +88,6 @@ namespace NetworkExtension {
 		Ignore = 4
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Native]
 	public enum NEOnDemandRuleInterfaceType : long {
 		Any = 0,
@@ -118,16 +96,12 @@ namespace NetworkExtension {
 		Cellular = 3
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 10)]
 	[Native]
 	public enum NEEvaluateConnectionRuleAction : long {
 		ConnectIfNeeded = 1,
 		NeverConnect = 2
 	}
 
-	[iOS (8, 3)]
-	[Mac (10, 11)]
 	[Native ("NEVPNIKEv2CertificateType")] // NSInteger
 	public enum NEVpnIke2CertificateType : long {
 		RSA = 1,
@@ -140,7 +114,6 @@ namespace NetworkExtension {
 	}
 
 	// in Xcode7 SDK but marked as 8.0
-	[iOS (8, 0)]
 	[ErrorDomain ("NEFilterErrorDomain")]
 	[Native]
 	public enum NEFilterManagerError : long {
@@ -153,7 +126,6 @@ namespace NetworkExtension {
 		ConfigurationInternalError = 6,
 	}
 
-	[iOS (9, 0)]
 	[ErrorDomain ("NETunnelProviderErrorDomain")]
 	[Native]
 	public enum NETunnelProviderError : long {
@@ -163,7 +135,6 @@ namespace NetworkExtension {
 		Failed = 3
 	}
 
-	[iOS (9, 0)]
 	[ErrorDomain ("NEAppProxyErrorDomain")]
 	[Native]
 	public enum NEAppProxyFlowError : long {
@@ -181,7 +152,6 @@ namespace NetworkExtension {
 		ReadAlreadyPending = 10,
 	}
 
-	[iOS (9, 0)]
 	[Native]
 	public enum NEProviderStopReason : long {
 		None = 0,
@@ -207,7 +177,6 @@ namespace NetworkExtension {
 		AppUpdate,
 	}
 
-	[iOS (9, 0)]
 	[Native]
 	public enum NWPathStatus : long {
 		Invalid = 0,
@@ -216,7 +185,6 @@ namespace NetworkExtension {
 		Satisfiable = 3
 	}
 
-	[iOS (9, 0)]
 	[Native]
 	public enum NWTcpConnectionState : long {
 		Invalid = 0,
@@ -227,7 +195,6 @@ namespace NetworkExtension {
 		Cancelled = 5
 	}
 
-	[iOS (9, 0)]
 	[Native]
 	public enum NWUdpSessionState : long {
 		Invalid = 0,
@@ -238,8 +205,6 @@ namespace NetworkExtension {
 		Cancelled = 5
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[Native]
 	public enum NETunnelProviderRoutingMethod : long {
 		DestinationIP = 1,
@@ -251,7 +216,6 @@ namespace NetworkExtension {
 
 #if !MONOMAC
 	[NoMac]
-	[iOS (9, 0)]
 	[Native]
 	public enum NEHotspotHelperCommandType : long {
 		None = 0,
@@ -264,7 +228,6 @@ namespace NetworkExtension {
 	}
 
 	[NoMac]
-	[iOS (9, 0)]
 	[Native]
 	public enum NEHotspotHelperConfidence : long {
 		None = 0,
@@ -273,7 +236,6 @@ namespace NetworkExtension {
 	}
 
 	[NoMac]
-	[iOS (9, 0)]
 	[Native]
 	public enum NEHotspotHelperResult : long {
 		Success = 0,

@@ -54,13 +54,12 @@ namespace AudioToolbox {
 		WAVE = 0x57415645, // WAVE
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[NoWatch]
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 #endif
 		RF64 = 0x52463634, // RF64
@@ -80,13 +79,12 @@ namespace AudioToolbox {
 		AMR = 0x616d7266, // amrf
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[NoWatch]
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 #endif
 		FLAC = 0x666c6163, // flac

@@ -33,7 +33,6 @@ using NativeHandle = System.IntPtr;
 namespace CoreLocation {
 
 	[NoTV][NoWatch]
-	[iOS (7,0)]
 	[Native] // NSInteger -> CLRegion.h
 	public enum CLRegionState : long {
 		Unknown,
@@ -43,7 +42,6 @@ namespace CoreLocation {
 
 	[Mac (10,15)]
 	[NoTV][NoWatch]
-	[iOS (7,0)]
 	[Native] // NSInteger -> CLRegion.h
 	public enum CLProximity : long {
 		Unknown,
@@ -108,7 +106,6 @@ namespace CoreLocation {
 		double VerticalAccuracy { get;  }
 	
 		[TV (13,0)] // API_UNAVAILABLE(tvos) removed in Xcode 11 beta 1
-		[Watch (3,0)] // __WATCHOS_PROHIBITED removed in Xcode 8 beta 3
 		[Export ("course")]
 		double Course { get;  }
 
@@ -117,7 +114,6 @@ namespace CoreLocation {
 		double CourseAccuracy { get; }
 
 		[TV (13,0)] // API_UNAVAILABLE(tvos) removed in Xcode 11 beta 1
-		[Watch (3,0)] // __WATCHOS_PROHIBITED removed in Xcode 8 beta 3
 		[Export ("speed")]
 		double Speed { get;  }
 
@@ -151,7 +147,6 @@ namespace CoreLocation {
 		// Apple keep changing the 'introduction' of this field (5.0->8.0->5.0) but it was not available in 6.1
 		// nor in 7.0 - but it works on my iPad3 running iOS 7.1
 		[NoTV][NoWatch]
-		[iOS (7,1)]
 		[Field ("kCLErrorUserInfoAlternateRegionKey")]
 		NSString ErrorUserInfoAlternateRegionKey { get; }
 
@@ -179,7 +174,6 @@ namespace CoreLocation {
 		double AccuracyReduced { get; }
 
 		[Mac (10,15)]
-		[iOS (8,0)]
 		[NullAllowed, Export ("floor", ArgumentSemantic.Copy)]
 		CLFloor Floor { get; }
 
@@ -193,7 +187,6 @@ namespace CoreLocation {
 	}
 
 	[Mac (10,15)]
-	[iOS (8,0)]
 	[BaseType (typeof(NSObject))]
 	partial interface CLFloor : NSSecureCoding, NSCopying {
 	        [Export ("level")]
@@ -221,7 +214,6 @@ namespace CoreLocation {
 		CLLocation Location { get;  }
 	
 		 // __WATCHOS_PROHIBITED removed in Xcode 8.0 beta 2, assuming it's valid for 3.0+
-		[Watch (3,0)]
 		[NoTV]
 		[Export ("startUpdatingLocation")]
 		void StartUpdatingLocation ();
@@ -354,40 +346,36 @@ namespace CoreLocation {
 		void DisallowDeferredLocationUpdates ();
 
 		[NoWatch][NoTV]
-		[Mac (10,9)]
 		[Deprecated (PlatformName.iOS, 13,0, message: "Not used anymore. It will always return 'false'.")]
 		[Deprecated (PlatformName.MacOSX, 10,15, message: "Not used anymore. It will always return 'false'.")]
 		[Static]
 		[Export ("deferredLocationUpdatesAvailable")]
 		bool DeferredLocationUpdatesAvailable { get; }
 
-		[Mac (10,14)]
 		[Field ("CLTimeIntervalMax")]
 		double MaxTimeInterval { get; }
 
 		[NoWatch][NoTV]
-		[Mac (10,10)]
-		[iOS (7,0), Static, Export ("isMonitoringAvailableForClass:")]
+		[Static, Export ("isMonitoringAvailableForClass:")]
 		bool IsMonitoringAvailable (Class regionClass);
 
 		[NoWatch][NoTV][NoMac]
 		[Deprecated (PlatformName.iOS, 13,0, message: "Use 'RangedBeaconConstraints' instead.")]
-		[iOS (7,0), Export ("rangedRegions", ArgumentSemantic.Copy)]
+		[Export ("rangedRegions", ArgumentSemantic.Copy)]
 		NSSet RangedRegions { get; }
 
 		[NoWatch, NoTV, Mac (11,0), iOS (13,0)]
 		[Export ("rangedBeaconConstraints", ArgumentSemantic.Copy)]
 		NSSet<CLBeaconIdentityConstraint> RangedBeaconConstraints { get; }
 
-		[Mac (10,10)]
 		[NoWatch][NoTV]
-		[iOS (7,0), Export ("requestStateForRegion:")]
+		[Export ("requestStateForRegion:")]
 		void RequestState (CLRegion region);
 
 		[NoWatch][NoTV][NoMac]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.iOS, 13,0, message: "Use 'StartRangingBeacons(CLBeaconIdentityConstraint)' instead.")]
-		[iOS (7,0), Export ("startRangingBeaconsInRegion:")]
+		[Export ("startRangingBeaconsInRegion:")]
 		void StartRangingBeacons (CLBeaconRegion region);
 
 		[NoWatch, NoTV, Mac (11,0), iOS (13,0)]
@@ -397,7 +385,7 @@ namespace CoreLocation {
 		[NoWatch][NoTV][NoMac]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.iOS, 13,0, message: "Use 'StopRangingBeacons(CLBeaconIdentityConstraint)' instead.")]
-		[iOS (7,0), Export ("stopRangingBeaconsInRegion:")]
+		[Export ("stopRangingBeaconsInRegion:")]
 		void StopRangingBeacons (CLBeaconRegion region);
 
 		[NoWatch, NoTV, Mac (11,0), iOS (13,0)]
@@ -405,33 +393,32 @@ namespace CoreLocation {
 		void StopRangingBeacons (CLBeaconIdentityConstraint constraint);
 
 		[NoWatch][NoTV]
-		[iOS (7,0), Mac (11,0)]
+		[Mac (11,0)]
 		[Static]
 		[Export ("isRangingAvailable")]
 		bool IsRangingAvailable { get; }
 
-		[iOS (8,0), Mac (11,0)]
+		[Mac (11,0)]
 		[Export ("requestWhenInUseAuthorization")]
 		void RequestWhenInUseAuthorization ();
 
 		[NoTV]
-		[iOS (8,0)]
 		[Mac (10,15)]
 		[Export ("requestAlwaysAuthorization")]
 		void RequestAlwaysAuthorization ();
 
 		[NoWatch][NoTV]
-		[iOS (8,0), Mac (11,0)]
+		[Mac (11,0)]
 		[Export ("startMonitoringVisits")]
 		void StartMonitoringVisits ();
 
 		[NoWatch][NoTV]
-		[iOS (8,0), Mac (11,0)]
+		[Mac (11,0)]
 		[Export ("stopMonitoringVisits")]
 		void StopMonitoringVisits ();
 
 		[NoTV]
-		[iOS (9,0), Watch (4,0), Mac (11,0)]
+		[Watch (4,0), Mac (11,0)]
 		[Export ("allowsBackgroundLocationUpdates")]
 		bool AllowsBackgroundLocationUpdates { get; set; }
 
@@ -439,8 +426,6 @@ namespace CoreLocation {
 		[Export ("showsBackgroundLocationIndicator")]
 		bool ShowsBackgroundLocationIndicator { get; set; }
 
-		[iOS (9,0)]
-		[Mac (10,14)]
 		[Export ("requestLocation")]
 		void RequestLocation ();
 
@@ -522,13 +507,12 @@ namespace CoreLocation {
 		void DidStartMonitoringForRegion (CLLocationManager manager, CLRegion region);
 
 		[NoWatch][NoTV]
-		[Mac (10,10)]
-		[iOS (7,0), Export ("locationManager:didDetermineState:forRegion:"), EventArgs ("CLRegionStateDetermined")]
+		[Export ("locationManager:didDetermineState:forRegion:"), EventArgs ("CLRegionStateDetermined")]
 		void DidDetermineState (CLLocationManager manager, CLRegionState state, CLRegion region);
 
 		[NoWatch][NoTV][NoMac]
 		[Deprecated (PlatformName.iOS, 13,0, message: "Use 'DidRangeBeaconsSatisfyingConstraint' instead.")]
-		[iOS (7,0), Export ("locationManager:didRangeBeacons:inRegion:"), EventArgs ("CLRegionBeaconsRanged")]
+		[Export ("locationManager:didRangeBeacons:inRegion:"), EventArgs ("CLRegionBeaconsRanged")]
 		void DidRangeBeacons (CLLocationManager manager, CLBeacon [] beacons, CLBeaconRegion region);
 
 		[NoWatch, NoTV, Mac (11,0), iOS (13,0)]
@@ -538,7 +522,7 @@ namespace CoreLocation {
 
 		[NoWatch][NoTV][NoMac]
 		[Deprecated (PlatformName.iOS, 13,0, message: "Use 'DidFailRangingBeacons' instead.")]
-		[iOS (7,0), Export ("locationManager:rangingBeaconsDidFailForRegion:withError:"), EventArgs ("CLRegionBeaconsFailed")]
+		[Export ("locationManager:rangingBeaconsDidFailForRegion:withError:"), EventArgs ("CLRegionBeaconsFailed")]
 		void RangingBeaconsDidFailForRegion (CLLocationManager manager, CLBeaconRegion region, NSError error);
 
 		[NoWatch, NoTV, Mac (11,0), iOS (13,0)]
@@ -547,7 +531,7 @@ namespace CoreLocation {
 		void DidFailRangingBeacons (CLLocationManager manager, CLBeaconIdentityConstraint beaconConstraint, NSError error);
 
 		[NoWatch][NoTV]
-		[iOS (8,0), Mac (11,0)]
+		[Mac (11,0)]
 		[Export ("locationManager:didVisit:"), EventArgs ("CLVisited")]
 		void DidVisit (CLLocationManager manager, CLVisit visit);
 
@@ -584,7 +568,6 @@ namespace CoreLocation {
 	[Static]
 	partial interface CLLocationDistance {
 
-		[Mac (10,14)]
 		[Field ("CLLocationDistanceMax")]
 		double MaxDistance { get; }
 
@@ -622,12 +605,10 @@ namespace CoreLocation {
 		[Export ("containsCoordinate:")]
 		bool Contains (CLLocationCoordinate2D coordinate);
 
-		[iOS (7,0), Export ("notifyOnEntry", ArgumentSemantic.Assign)]
-		[Mac (10,10)]
+		[Export ("notifyOnEntry", ArgumentSemantic.Assign)]
 		bool NotifyOnEntry { get; set; }
 
-		[iOS (7,0), Export ("notifyOnExit", ArgumentSemantic.Assign)]
-		[Mac (10,10)]
+		[Export ("notifyOnExit", ArgumentSemantic.Assign)]
 		bool NotifyOnExit { get; set; }
 	}
 
@@ -689,17 +670,15 @@ namespace CoreLocation {
 		CLRegion Region { get; }
 
 		[NullAllowed, Export ("timeZone")]
-		[iOS (9,0), Mac(10,11)]
 		NSTimeZone TimeZone { get; }
 
 		// From CLPlacemark (ContactsAdditions) category.
-		[Watch (4,0), NoTV, Mac (10,13), iOS (11,0)]
+		[Watch (4,0), NoTV, iOS (11,0)]
 		[NullAllowed, Export ("postalAddress")]
 		CNPostalAddress PostalAddress { get; }
 	}
 
-	[Mac (10,10)]
-	[iOS (7,0), BaseType (typeof (CLRegion))]
+	[BaseType (typeof (CLRegion))]
 #if MONOMAC
 	[DisableDefaultCtor]
 #endif
@@ -719,7 +698,7 @@ namespace CoreLocation {
 	}
 
 	[NoWatch][Mac (11,0)][NoTV]
-	[iOS (7,0), BaseType (typeof (CLRegion))]
+	[BaseType (typeof (CLRegion))]
 	[DisableDefaultCtor] // nil-Handle on iOS8 if 'init' is used
 	partial interface CLBeaconRegion {
 
@@ -785,7 +764,7 @@ namespace CoreLocation {
 	}
 
 	[NoWatch][Mac (11,0)][NoTV]
-	[iOS (7,0), BaseType (typeof (NSObject))]
+	[BaseType (typeof (NSObject))]
 	partial interface CLBeacon : NSCopying, NSSecureCoding {
 
 		[NoMac]
@@ -828,7 +807,7 @@ namespace CoreLocation {
 		[Async]
 		void ReverseGeocodeLocation (CLLocation location, CLGeocodeCompletionHandler completionHandler);
 
-		[Watch (4,0), TV (11,0), Mac (10,13), iOS (11,0)]
+		[Watch (4,0), TV (11,0), iOS (11,0)]
 		[Export ("reverseGeocodeLocation:preferredLocale:completionHandler:")]
 		[Async]
 		void ReverseGeocodeLocation (CLLocation location, [NullAllowed] NSLocale locale, CLGeocodeCompletionHandler completionHandler);
@@ -848,7 +827,7 @@ namespace CoreLocation {
 		[Async]
 		void GeocodeAddress (string addressString, [NullAllowed] CLRegion region, CLGeocodeCompletionHandler completionHandler);
 
-		[Watch (4,0), TV (11,0), Mac (10,13), iOS (11,0)]
+		[Watch (4,0), TV (11,0), iOS (11,0)]
 		[Async]
 		[Export ("geocodeAddressString:inRegion:preferredLocale:completionHandler:")]
 		void GeocodeAddress (string addressString, [NullAllowed] CLRegion region, [NullAllowed] NSLocale locale, CLGeocodeCompletionHandler completionHandler);
@@ -856,19 +835,19 @@ namespace CoreLocation {
 		[Export ("cancelGeocode")]
 		void CancelGeocode ();
 
-		[Watch (4,0), NoTV, Mac (10,13), iOS (11,0)]
+		[Watch (4,0), NoTV, iOS (11,0)]
 		[Export ("geocodePostalAddress:completionHandler:")]
 		[Async]
 		void GeocodePostalAddress (CNPostalAddress postalAddress, CLGeocodeCompletionHandler completionHandler);
 
-		[Watch (4,0), NoTV, Mac (10,13), iOS (11,0)]
+		[Watch (4,0), NoTV, iOS (11,0)]
 		[Export ("geocodePostalAddress:preferredLocale:completionHandler:")]
 		[Async]
 		void GeocodePostalAddress (CNPostalAddress postalAddress, [NullAllowed] NSLocale locale, CLGeocodeCompletionHandler completionHandler);
 	}
 
 	[NoWatch][NoTV]
-	[iOS (8,0), Mac (11,0)]
+	[Mac (11,0)]
 	[BaseType (typeof (NSObject))]
 	interface CLVisit : NSSecureCoding, NSCopying {
 

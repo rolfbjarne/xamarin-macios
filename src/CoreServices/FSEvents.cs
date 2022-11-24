@@ -30,15 +30,11 @@ namespace CoreServices
 		IgnoreSelf = 0x00000008,
 		FileEvents = 0x00000010,
 #if NET
-		[SupportedOSPlatform ("macos10.9")]
-#else
-		[Mac (10,9)]
+		[SupportedOSPlatform ("macos")]
 #endif
 		MarkSelf = 0x00000020,
 #if NET
-		[SupportedOSPlatform ("macos10.13")]
-#else
-		[Mac (10,13)]
+		[SupportedOSPlatform ("macos")]
 #endif
 		UseExtendedData = 0x00000040,
 #if NET
@@ -76,9 +72,7 @@ namespace CoreServices
 		ItemIsHardlink = 0x00100000,
 		ItemIsLastHardlink = 0x00200000,
 #if NET
-		[SupportedOSPlatform ("macos10.14")]
-#else
-		[Mac (10,14)]
+		[SupportedOSPlatform ("macos")]
 #endif
 		ItemCloned = 0x00400000,
 	}

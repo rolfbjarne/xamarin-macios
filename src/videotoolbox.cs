@@ -14,7 +14,6 @@ using AVFoundation;
 
 namespace VideoToolbox {
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTCompressionPropertyKey {
 		// Buffers
@@ -42,7 +41,7 @@ namespace VideoToolbox {
 		[Field ("kVTCompressionPropertyKey_AllowFrameReordering")]
 		NSString AllowFrameReordering { get; }
 
-		[Mac (10,14), iOS (12,0), TV (12,0)]
+		[iOS (12,0), TV (12,0)]
 		[Field ("kVTCompressionPropertyKey_AllowOpenGOP")]
 		NSString AllowOpenGop { get; }
 
@@ -73,7 +72,6 @@ namespace VideoToolbox {
 		NSString ProfileLevel { get; }
 
 		[Field ("kVTCompressionPropertyKey_H264EntropyMode")]
-		[Mac (10,9)]
 		NSString H264EntropyMode { get; }
 
 		[Field ("kVTCompressionPropertyKey_Depth")]
@@ -92,11 +90,10 @@ namespace VideoToolbox {
 		NSString MaxH264SliceBytes { get; }
 
 		[Field ("kVTCompressionPropertyKey_RealTime")]
-		[Mac (10,9)]
 		NSString RealTime { get; }
 
 		[Field ("kVTCompressionPropertyKey_MaximizePowerEfficiency")]
-		[Mac (10,14), iOS (12,0), TV (12,0)]
+		[iOS (12,0), TV (12,0)]
 		NSString MaximizePowerEfficiency { get; }
 
 		// Hints
@@ -115,7 +112,7 @@ namespace VideoToolbox {
 		[Field ("kVTCompressionPropertyKey_ExpectedDuration")]
 		NSString ExpectedDuration { get; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Field ("kVTCompressionPropertyKey_BaseLayerFrameRate")]
 		NSString BaseLayerFrameRate { get; }
 
@@ -169,15 +166,15 @@ namespace VideoToolbox {
 		[Field ("kVTCompressionPropertyKey_AlphaChannelMode")]
 		NSString AlphaChannelMode { get; }
 
-		[Mac (10,9), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTCompressionPropertyKey_GammaLevel")]
 		NSString GammaLevel { get; } 
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Field ("kVTCompressionPropertyKey_MasteringDisplayColorVolume")]
 		NSString MasteringDisplayColorVolume { get; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Field ("kVTCompressionPropertyKey_ContentLightLevelInfo")]
 		NSString ContentLightLevelInfo { get; }
 
@@ -189,13 +186,12 @@ namespace VideoToolbox {
 		// Multi-pass
 
 		[Field ("kVTCompressionPropertyKey_MultiPassStorage")]
-		[Mac (10,10)]
 		NSString MultiPassStorage { get; }
 
 		// Encoder information
 
 		[Field ("kVTCompressionPropertyKey_EncoderID")]
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		NSString EncoderId { get; }
 		
 		[Mac (10,15), iOS (13,0), TV (13,0)]
@@ -265,7 +261,6 @@ namespace VideoToolbox {
 		PremultipliedAlpha,
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTCompressionPropertyKey")]
 	interface VTCompressionProperties {
 
@@ -290,7 +285,7 @@ namespace VideoToolbox {
 		[Export ("AllowFrameReordering")]
 		bool AllowFrameReordering { get; set; }
 
-		[Mac (10,14), iOS (12,0), TV (12,0)]
+		[iOS (12,0), TV (12,0)]
 		[Export ("AllowOpenGop")]
 		bool AllowOpenGop { get; set; }
 
@@ -319,11 +314,10 @@ namespace VideoToolbox {
 		[Export ("MaxH264SliceBytes")]
 		int MaxH264SliceBytes { get; set; }
 
-		[Mac (10,9)]
 		[Export ("RealTime")]
 		bool RealTime { get; set; }
 
-		[Mac (10,14), iOS (12,0), TV (12,0)]
+		[iOS (12,0), TV (12,0)]
 		[Export ("MaximizePowerEfficiency")]
 		bool MaximizePowerEfficiency { get; set; }
 
@@ -336,7 +330,7 @@ namespace VideoToolbox {
 		[Export ("ExpectedDuration")]
 		double ExpectedDuration { get; set; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Export ("BaseLayerFrameRate")]
 		double BaseLayerFrameRate { get; set; }
 
@@ -365,18 +359,18 @@ namespace VideoToolbox {
 		[Export ("ICCProfile")]
 		NSData ICCProfile { get; set; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Export ("MasteringDisplayColorVolume")]
 		NSData MasteringDisplayColorVolume { get; set; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Export ("ContentLightLevelInfo")]
 		NSData ContentLightLevelInfo { get; set; }
 
 		[Export ("PixelTransferProperties")]
 		NSDictionary PixelTransferProperties { get; set; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Export ("EncoderId")]
 		string EncoderId { get; set; }
 		
@@ -384,7 +378,7 @@ namespace VideoToolbox {
 		[Export ("TargetQualityForAlpha")]
 		float TargetQualityForAlpha { get; set; }
 		
-		[Mac (10,9), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Export ("GammaLevel")]
 		double GammaLevel { get; set; }
 		
@@ -436,16 +430,15 @@ namespace VideoToolbox {
 		bool OutputBitDepth { get; set; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTProfileLevelKeys {
 		// HEVC
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Field ("kVTProfileLevel_HEVC_Main_AutoLevel")]
 		NSString Hevc_Main_AutoLevel { get; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Field ("kVTProfileLevel_HEVC_Main10_AutoLevel")]
 		NSString Hevc_Main10_AutoLevel { get; }
 
@@ -468,30 +461,24 @@ namespace VideoToolbox {
 		NSString H264_Baseline_3_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_4_0")]
-		[Mac (10,9)]
 		NSString H264_Baseline_4_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_4_1")]
 		NSString H264_Baseline_4_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_4_2")]
-		[Mac (10,9)]
 		NSString H264_Baseline_4_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_5_0")]
-		[Mac (10,9)]
 		NSString H264_Baseline_5_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_5_1")]
-		[Mac (10,9)]
 		NSString H264_Baseline_5_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_5_2")]
-		[Mac (10,9)]
 		NSString H264_Baseline_5_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_Baseline_AutoLevel")]
-		[Mac (10,9)]
 		NSString H264_Baseline_AutoLevel { get; }
 
 		[Field ("kVTProfileLevel_H264_Main_3_0")]
@@ -510,68 +497,54 @@ namespace VideoToolbox {
 		NSString H264_Main_4_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_Main_4_2")]
-		[Mac (10,9)]
 		NSString H264_Main_4_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_Main_5_0")]
 		NSString H264_Main_5_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_Main_5_1")]
-		[Mac (10,9)]
 		NSString H264_Main_5_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_Main_5_2")]
-		[Mac (10,9)]
 		NSString H264_Main_5_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_Main_AutoLevel")]
-		[Mac (10,9)]
 		NSString H264_Main_AutoLevel { get; }
 
 		[Field ("kVTProfileLevel_H264_Extended_5_0")]
 		NSString H264_Extended_5_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_Extended_AutoLevel")]
-		[Mac (10,9)]
 		NSString H264_Extended_AutoLevel { get; }
 
 		[Field ("kVTProfileLevel_H264_High_3_0")]
-		[Mac (10,9)]
 		NSString H264_High_3_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_3_1")]
-		[Mac (10,9)]
 		NSString H264_High_3_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_3_2")]
-		[Mac (10,9)]
 		NSString H264_High_3_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_4_0")]
-		[Mac (10,9)]
 		NSString H264_High_4_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_4_1")]
-		[Mac (10,9)]
 		NSString H264_High_4_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_4_2")]
-		[Mac (10,9)]
 		NSString H264_High_4_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_5_0")]
 		NSString H264_High_5_0 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_5_1")]
-		[Mac (10,9)]
 		NSString H264_High_5_1 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_5_2")]
-		[Mac (10,9)]
 		NSString H264_High_5_2 { get; }
 
 		[Field ("kVTProfileLevel_H264_High_AutoLevel")]
-		[Mac (10,9)]
 		NSString H264_High_AutoLevel { get; }
 
 		[TV (15,0), Mac (12,0), iOS (15,0), MacCatalyst (15,0)]
@@ -633,7 +606,6 @@ namespace VideoToolbox {
 	}
 
 	[Static]
-	[Mac (10,9), iOS (8,0), TV (10,2)]
 	interface VTH264EntropyModeKeys {
 		[Field ("kVTH264EntropyMode_CAVLC")]
 		NSString CAVLC { get; } 
@@ -642,15 +614,14 @@ namespace VideoToolbox {
 		NSString CABAC { get; } 
 	}
 		
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTVideoEncoderSpecificationKeys")]
 	interface VTVideoEncoderSpecification {
 
-		[Mac (10,9), NoiOS, NoTV]
+		[NoiOS, NoTV]
 		[Export ("EnableHardwareAcceleratedVideoEncoder")]
 		bool EnableHardwareAcceleratedVideoEncoder { get; set; }
 
-		[Mac (10,9), NoiOS, NoTV]
+		[NoiOS, NoTV]
 		[Export ("RequireHardwareAcceleratedVideoEncoder")]
 		bool RequireHardwareAcceleratedVideoEncoder { get; set; }
 
@@ -666,31 +637,29 @@ namespace VideoToolbox {
 		uint PreferredEncoderGpuRegistryId { get; set; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTVideoEncoderSpecificationKeys {
 
 		[Field ("kVTVideoEncoderSpecification_EnableHardwareAcceleratedVideoEncoder")]
-		[Mac (10,9), NoiOS, NoTV]
+		[NoiOS, NoTV]
 		NSString EnableHardwareAcceleratedVideoEncoder { get; }
 
 		[Field ("kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder")]
-		[Mac (10,9), NoiOS, NoTV]
+		[NoiOS, NoTV]
 		NSString RequireHardwareAcceleratedVideoEncoder { get; }
 
 		[Field ("kVTVideoEncoderSpecification_EncoderID")]
 		NSString EncoderID { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderSpecification_RequiredEncoderGPURegistryID")]
 		NSString RequiredEncoderGpuRegistryId { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderSpecification_PreferredEncoderGPURegistryID")]
 		NSString PreferredEncoderGpuRegistryId { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTEncodeFrameOptionKey")]
 	interface VTEncodeFrameOptions {
 
@@ -698,7 +667,6 @@ namespace VideoToolbox {
 		bool ForceKeyFrame { get; set; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTEncodeFrameOptionKey {
 		// Per-frame configuration
@@ -723,7 +691,6 @@ namespace VideoToolbox {
 		NSString RequireLtrAcknowledgementToken { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTDecompressionPropertyKey {
 		// Pixel buffer pools
@@ -735,7 +702,6 @@ namespace VideoToolbox {
 		NSString PixelBufferPoolIsShared { get; }
 
 		[Field ("kVTDecompressionPropertyKey_OutputPoolRequestedMinimumBufferCount")]
-		[Mac (10,9)]
 		NSString OutputPoolRequestedMinimumBufferCount { get; }
 
 		// Asynchronous state
@@ -758,17 +724,15 @@ namespace VideoToolbox {
 		// hardware acceleration is default behavior on iOS.  no opt-in required.
 		 
 		[Field ("kVTDecompressionPropertyKey_UsingHardwareAcceleratedVideoDecoder")]
-		[Mac (10,9)]
 		NSString UsingHardwareAcceleratedVideoDecoder { get; } 
 
 		// Decoder behavior
 
 		[Field ("kVTDecompressionPropertyKey_RealTime")]
-		[Mac (10,10)]
 		NSString RealTime { get; }
 
 		[Field ("kVTDecompressionPropertyKey_MaximizePowerEfficiency")]
-		[Mac (10,14), iOS (12,0), TV (12,0)]
+		[iOS (12,0), TV (12,0)]
 		NSString MaximizePowerEfficiency { get; }
 
 		[Field ("kVTDecompressionPropertyKey_ThreadCount")]
@@ -825,7 +789,7 @@ namespace VideoToolbox {
 		[Field ("kVTDecompressionProperty_OnlyTheseFrames_KeyFrames")]
 		NSString OnlyTheseFrames_KeyFrames { get; } 
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Field ("kVTDecompressionProperty_TemporalLevelLimit")]
 		NSString TemporalLevelLimit { get; }
 
@@ -857,7 +821,6 @@ namespace VideoToolbox {
 		NSString PropagatePerFrameHdrDisplayMetadata { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTDecompressionPropertyKey")]
 	interface VTDecompressionProperties	{
 		
@@ -883,14 +846,12 @@ namespace VideoToolbox {
 		// hardware acceleration is default behavior on iOS.  no opt-in required.
 
 		[Export ("UsingHardwareAcceleratedVideoDecoder")]
-		[Mac (10,9)]
 		bool UsingHardwareAcceleratedVideoDecoder { get; } 
 
-		[Mac (10,10)]
 		[Export ("RealTime")]
 		bool RealTime { get; set; }
 
-		[Mac (10,14), iOS (12,0), TV (12,0)]
+		[iOS (12,0), TV (12,0)]
 		[Export ("MaximizePowerEfficiency")]
 		bool MaximizePowerEfficiency { get; set; }
 
@@ -907,7 +868,7 @@ namespace VideoToolbox {
 		[Export ("ReducedFrameDelivery")]
 		float ReducedFrameDelivery { get; set; }
 
-		[Mac (10,13), iOS (11,0), TV (11,0)]
+		[iOS (11,0), TV (11,0)]
 		[Export ("TemporalLevelLimit")]
 		int TemporalLevelLimit { get; set; }
 
@@ -929,7 +890,6 @@ namespace VideoToolbox {
 
 		// VTPixelTransferProperties are available in iOS 9 radar://22614931 https://trello.com/c/bTl6hRu9
 		[StrongDictionary]
-		[iOS (9,0)]
 		[Export ("PixelTransferProperties")]
 		VTPixelTransferProperties PixelTransferSettings { get; set; }
 		
@@ -944,7 +904,6 @@ namespace VideoToolbox {
 		bool PropagatePerFrameHhrDisplayMetadata { get; set; }
 	}
 
-	[Mac (10,9), iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTVideoDecoderSpecificationKeys")]
 	interface VTVideoDecoderSpecification {
 		[Export ("EnableHardwareAcceleratedVideoDecoder")]
@@ -953,16 +912,15 @@ namespace VideoToolbox {
 		[Export ("RequireHardwareAcceleratedVideoDecoder")]
 		bool RequireHardwareAcceleratedVideoDecoder { get; set; }
 
-		[Mac (10, 13, 4)][NoiOS][NoTV]
+		[NoiOS][NoTV]
 		[Export ("RequiredDecoderGpuRegistryId")]
 		NSNumber RequiredDecoderGpuRegistryId { get; }
 
-		[Mac (10, 13, 4)][NoiOS][NoTV]
+		[NoiOS][NoTV]
 		[Export ("PreferredDecoderGpuRegistryId")]
 		NSNumber PreferredDecoderGpuRegistryId { get; }
 	}
 
-	[Mac (10,9), iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTVideoDecoderSpecificationKeys {
 		[Field ("kVTVideoDecoderSpecification_EnableHardwareAcceleratedVideoDecoder")]
@@ -971,16 +929,15 @@ namespace VideoToolbox {
 		[Field ("kVTVideoDecoderSpecification_RequireHardwareAcceleratedVideoDecoder")]
 		NSString RequireHardwareAcceleratedVideoDecoder { get; }
 
-		[Mac (10, 13, 4)][NoiOS][NoTV]
+		[NoiOS][NoTV]
 		[Field ("kVTVideoDecoderSpecification_RequiredDecoderGPURegistryID")]
 		NSString RequiredDecoderGpuRegistryId { get; }
 
-		[Mac (10, 13, 4)][NoiOS][NoTV]
+		[NoiOS][NoTV]
 		[Field ("kVTVideoDecoderSpecification_PreferredDecoderGPURegistryID")]
 		NSString PreferredDecoderGpuRegistryId { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTDecompressionResolutionKeys")]
 	interface VTDecompressionResolutionOptions {
 		[Export ("Width")]
@@ -990,7 +947,6 @@ namespace VideoToolbox {
 		float Height { get; set; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTDecompressionResolutionKeys {
 		[Field ("kVTDecompressionResolutionKey_Width")]
@@ -1001,7 +957,6 @@ namespace VideoToolbox {
 	}
 
 	// VTSession.h
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTPropertyKeys")]
 	interface VTPropertyOptions {
 		[Export ("ShouldBeSerialized")]
@@ -1020,7 +975,6 @@ namespace VideoToolbox {
 		NSString Documentation { get; set; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTPropertyKeys {
 		[Field ("kVTPropertyTypeKey")]
@@ -1045,7 +999,6 @@ namespace VideoToolbox {
 		NSString DocumentationKey { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTPropertyTypeKeys {
 		[Field ("kVTPropertyType_Boolean")]
@@ -1058,7 +1011,6 @@ namespace VideoToolbox {
 		NSString Number { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	interface VTPropertyReadWriteStatusKeys {
 		[Field ("kVTPropertyReadWriteStatus_ReadOnly")]
@@ -1069,7 +1021,6 @@ namespace VideoToolbox {
 	}
 
 	// VTVideoEncoderList.h
-	[iOS (8,0), TV (10,2)]
 	[Static]
 	[Internal]
 	interface VTVideoEncoderList {
@@ -1088,27 +1039,27 @@ namespace VideoToolbox {
 		[Field ("kVTVideoEncoderList_EncoderName")]
 		NSString EncoderName { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderList_GPURegistryID")]
 		NSString GpuRegistryId { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderList_SupportedSelectionProperties")]
 		NSString SupportedSelectionProperties { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderList_PerformanceRating")]
 		NSString PerformanceRating { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderList_QualityRating")]
 		NSString QualityRating { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderList_InstanceLimit")]
 		NSString InstanceLimit { get; }
 		
-		[Mac (10,14,6), iOS (13,0), TV (13,0)]
+		[iOS (13,0), TV (13,0)]
 		[Field ("kVTVideoEncoderList_IsHardwareAccelerated")]
 		NSString IsHardwareAccelerated { get; }
 
@@ -1126,14 +1077,12 @@ namespace VideoToolbox {
 	}
 
 	// VTMultiPassStorage.h
-	[Mac (10,10), iOS (8,0), TV (10,2)] // not decorated in the header files - but all other definitions are 10.10 & 8.0
 	[Static]
 	interface VTMultiPassStorageCreationOptionKeys {
 		[Field ("kVTMultiPassStorageCreationOption_DoNotDelete")]
 		NSString DoNotDelete { get; }
 	}
 
-	[iOS (8,0), TV (10,2)]
 	[StrongDictionary ("VTMultiPassStorageCreationOptionKeys")]
 	interface VTMultiPassStorageCreationOptions {
 		[Export ("DoNotDelete")]
@@ -1141,7 +1090,6 @@ namespace VideoToolbox {
 	}
 
 	// VTPixelTransferProperties are available in iOS 9 radar://22614931 https://trello.com/c/bTl6hRu9
-	[iOS (9,0), TV (10,2)]
 	[StrongDictionary ("VTPixelTransferPropertyKeys")]
 	interface VTPixelTransferProperties {
 		[StrongDictionary]
@@ -1152,7 +1100,6 @@ namespace VideoToolbox {
 		[Export ("DestinationPixelAspectRatio")]
 		AVVideoPixelAspectRatioSettings DestinationPixelAspectRatio { get; set; }
 
-		[iOS (10,0)]
 		[Export ("DestinationICCProfile")]
 		NSData DestinationICCProfile { get; set; }
 		
@@ -1162,7 +1109,6 @@ namespace VideoToolbox {
 	}
 
 	// VTPixelTransferProperties are available in iOS 9 radar://22614931 https://trello.com/c/bTl6hRu9
-	[iOS (9,0), TV (10,2)]
 	[Static]
 	[AdvancedAttribute]
 	interface VTPixelTransferPropertyKeys {
@@ -1207,19 +1153,16 @@ namespace VideoToolbox {
 
 		// DestinationColorPrimaries
 
-		[iOS (10,0)]
 		[Field ("kVTPixelTransferPropertyKey_DestinationColorPrimaries")]
 		NSString DestinationColorPrimaries { get; }
 
 		// DestinationColorPrimaries
 
-		[iOS (10,0)]
 		[Field ("kVTPixelTransferPropertyKey_DestinationTransferFunction")]
 		NSString DestinationTransferFunction { get; }
 
 		// DestinationICCProfile
 
-		[iOS (10,0)]
 		[Field ("kVTPixelTransferPropertyKey_DestinationICCProfile")]
 		NSString DestinationICCProfile { get; }
 

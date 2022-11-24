@@ -162,7 +162,6 @@ namespace PdfKit {
 		AnyArea = Int64.MaxValue,
 	}
 
-	[Mac (10,13)]
 	[iOS (11,0)]
 	[Native]
 	public enum PdfDisplayDirection : long {
@@ -186,7 +185,7 @@ namespace PdfKit {
 		Horizontal = 1,
 	}
 
-	[iOS (11,0), Mac (10,12)]
+	[iOS (11,0)]
 	[Native]
 	public enum PdfWidgetCellState : long {
 		Mixed = -1,

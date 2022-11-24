@@ -40,23 +40,17 @@ namespace Foundation {
 		Gregorian, Buddhist, Chinese, Hebrew, Islamic, IslamicCivil, Japanese, [Obsolete] RepublicOfChina, Persian, Indian, ISO8601,
 		Coptic, EthiopicAmeteAlem, EthiopicAmeteMihret,
 #if NET
-		[SupportedOSPlatform ("macos10.10")]
-		[SupportedOSPlatform ("ios8.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 10)]
-		[iOS (8, 0)]
 #endif
 		IslamicTabular,
 #if NET
-		[SupportedOSPlatform ("macos10.10")]
-		[SupportedOSPlatform ("ios8.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 10)]
-		[iOS (8, 0)]
 #endif
 		IslamicUmmAlQura,
 #pragma warning disable 612 // RepublicOfChina is obsolete

@@ -52,8 +52,6 @@ namespace GameController {
 		Disabled,
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[Native]
 	public enum GCControllerPlayerIndex : long {
 		Unset = -1,

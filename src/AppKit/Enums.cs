@@ -69,7 +69,6 @@ namespace AppKit {
 
 		FullScreen = (1 << 10),
 		AutoHideToolbar = (1 << 11),
-		[Mac (10, 11, 2)]
 		DisableCursorLocationAssistance = (1 << 12),
 	}
 
@@ -133,21 +132,21 @@ namespace AppKit {
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use NSCompositeSourceOver instead.")]
 		Highlight,
 		PlusLighter,
-		[Mac (10, 10)] Multiply,
-		[Mac (10, 10)] Screen,
-		[Mac (10, 10)] Overlay,
-		[Mac (10, 10)] Darken,
-		[Mac (10, 10)] Lighten,
-		[Mac (10, 10)] ColorDodge,
-		[Mac (10, 10)] ColorBurn,
-		[Mac (10, 10)] SoftLight,
-		[Mac (10, 10)] HardLight,
-		[Mac (10, 10)] Difference,
-		[Mac (10, 10)] Exclusion,
-		[Mac (10, 10)] Hue,
-		[Mac (10, 10)] Saturation,
-		[Mac (10, 10)] Color,
-		[Mac (10, 10)] Luminosity
+		Multiply,
+		Screen,
+		Overlay,
+		Darken,
+		Lighten,
+		ColorDodge,
+		ColorBurn,
+		SoftLight,
+		HardLight,
+		Difference,
+		Exclusion,
+		Hue,
+		Saturation,
+		Color,
+		Luminosity
 	}
 
 	[NoMacCatalyst]
@@ -305,9 +304,7 @@ namespace AppKit {
 		ImageBelow,
 		ImageAbove,
 		ImageOverlaps,
-		[Mac (10, 12)]
 		ImageLeading,
-		[Mac (10, 12)]
 		ImageTrailing,
 	}
 
@@ -404,7 +401,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 10)]
 	[Native (ConvertToNative = "NSImageResizingModeExtensions.ToNative", ConvertToManaged = "NSImageResizingModeExtensions.ToManaged")]
 	public enum NSImageResizingMode : long {
 		Stretch,
@@ -421,7 +417,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 9)]
 	[Native]
 	public enum NSModalResponse : long {
 		OK = 1,
@@ -844,7 +839,6 @@ namespace AppKit {
 		OnSetNeedsDisplay,
 		DuringViewResize,
 		BeforeViewResize,
-		[Mac (10, 9)]
 		Crossfade = 4,
 	}
 
@@ -889,7 +883,7 @@ namespace AppKit {
 		UnifiedTitleAndToolbar = 1 << 12,
 		Hud = 1 << 13,
 		FullScreenWindow = 1 << 14,
-		[Mac (10, 10)] FullSizeContentView = 1 << 15
+		FullSizeContentView = 1 << 15
 	}
 
 	[NoMacCatalyst]
@@ -919,11 +913,11 @@ namespace AppKit {
 		FullScreenPrimary = 1 << 7,
 		FullScreenAuxiliary = 1 << 8,
 		FullScreenNone = 1 << 9,
-		[Mac (10, 11)] FullScreenAllowsTiling = 1 << 11,
-		[Mac (10, 11)] FullScreenDisallowsTiling = 1 << 12,
-		[Mac (10, 13)] Primary = 1 << 16,
-		[Mac (10, 13)] Auxiliary = 1 << 17,
-		[Mac (10, 13)] CanJoinAllApplications = 1 << 18,
+		FullScreenAllowsTiling = 1 << 11,
+		FullScreenDisallowsTiling = 1 << 12,
+		Primary = 1 << 16,
+		Auxiliary = 1 << 17,
+		CanJoinAllApplications = 1 << 18,
 	}
 
 	[NoMacCatalyst]
@@ -1087,35 +1081,20 @@ namespace AppKit {
 		Highlight,
 		PlusLighter,
 
-		[Mac (10, 10)]
 		Multiply,
-		[Mac (10, 10)]
 		Screen,
-		[Mac (10, 10)]
 		Overlay,
-		[Mac (10, 10)]
 		Darken,
-		[Mac (10, 10)]
 		Lighten,
-		[Mac (10, 10)]
 		ColorDodge,
-		[Mac (10, 10)]
 		ColorBurn,
-		[Mac (10, 10)]
 		SoftLight,
-		[Mac (10, 10)]
 		HardLight,
-		[Mac (10, 10)]
 		Difference,
-		[Mac (10, 10)]
 		Exclusion,
-		[Mac (10, 10)]
 		Hue,
-		[Mac (10, 10)]
 		Saturation,
-		[Mac (10, 10)]
 		Color,
-		[Mac (10, 10)]
 		Luminosity
 	}
 
@@ -1239,7 +1218,6 @@ namespace AppKit {
 
 	#region NSGestureRecognizer
 	[NoMacCatalyst]
-	[Mac (10, 10)]
 	[Native]
 	public enum NSGestureRecognizerState : long {
 		Possible,
@@ -1284,7 +1262,6 @@ namespace AppKit {
 	#endregion
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSStackViewDistribution : long {
 		GravityAreas = -1,
@@ -1649,9 +1626,7 @@ namespace AppKit {
 		MonoSpaceTrait = (1 << 10),
 		VerticalTrait = (1 << 11),
 		UIOptimizedTrait = (1 << 12),
-		[Mac (10, 13)]
 		TraitTightLeading = 1 << 15,
-		[Mac (10, 13)]
 		TraitLooseLeading = 1 << 16,
 		TraitEmphasized = BoldTrait,
 		UnknownClass = 0 << 28,
@@ -1836,7 +1811,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSSplitViewItemBehavior : long {
 		Default,
@@ -1863,7 +1837,7 @@ namespace AppKit {
 		TexturedSquare = 4,
 		Capsule = 5,
 		SmallSquare = 6,
-		[Mac (10, 10)] Separated = 8
+		Separated = 8
 	}
 
 	[NoMacCatalyst]
@@ -1986,7 +1960,6 @@ namespace AppKit {
 	}
 
 	[MacCatalyst (13, 1)]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSCollectionViewItemHighlightState : long {
 		None = 0,
@@ -1996,7 +1969,6 @@ namespace AppKit {
 	}
 
 	[MacCatalyst (13, 0)]
-	[Mac (10, 11)] // Not marked 10.11 in the headers, but doesn't exist in the 10.10 headers
 	[Native]
 	[Flags]
 	public enum NSCollectionViewScrollPosition : ulong {
@@ -2014,7 +1986,6 @@ namespace AppKit {
 	}
 
 	[MacCatalyst (13, 1)]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSCollectionElementCategory : long {
 		Item,
@@ -2024,7 +1995,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSCollectionUpdateAction : long {
 		Insert,
@@ -2035,7 +2005,6 @@ namespace AppKit {
 	}
 
 	[MacCatalyst (13, 1)]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSCollectionViewScrollDirection : long {
 		Vertical,
@@ -2610,7 +2579,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSTableRowActionEdge : long {
 		Leading,
@@ -2618,7 +2586,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSTableViewRowActionStyle : long {
 		Regular,
@@ -2785,35 +2752,21 @@ namespace AppKit {
 		Dark,
 		Titlebar,
 		Selection,
-		[Mac (10, 11)]
 		Menu,
-		[Mac (10, 11)]
 		Popover,
-		[Mac (10, 11)]
 		Sidebar,
-		[Mac (10, 11)]
 		[Advice ("Use a semantic material instead.")]
 		MediumLight,
-		[Mac (10, 11)]
 		[Advice ("Use a semantic material instead.")]
 		UltraDark,
-		[Mac (10, 14)]
 		HeaderView = 10,
-		[Mac (10, 14)]
 		Sheet = 11,
-		[Mac (10, 14)]
 		WindowBackground = 12,
-		[Mac (10, 14)]
 		HudWindow = 13,
-		[Mac (10, 14)]
 		FullScreenUI = 15,
-		[Mac (10, 14)]
 		ToolTip = 17,
-		[Mac (10, 14)]
 		ContentBackground = 18,
-		[Mac (10, 14)]
 		UnderWindowBackground = 21,
-		[Mac (10, 14)]
 		UnderPageBackground = 22,
 	}
 
@@ -2834,7 +2787,6 @@ namespace AppKit {
 	#endregion
 
 	[NoMacCatalyst]
-	[Mac (10, 10, 3)]
 	[Native]
 	public enum NSPressureBehavior : long {
 		Unknown = -1,
@@ -2847,7 +2799,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSHapticFeedbackPattern : long {
 		Generic = 0,
@@ -2856,7 +2807,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSHapticFeedbackPerformanceTime : ulong {
 		Default = 0,
@@ -2865,7 +2815,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSSpringLoadingHighlight : long {
 		None = 0,
@@ -2875,7 +2824,6 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	[Flags]
-	[Mac (10, 11)]
 	[Native]
 	public enum NSSpringLoadingOptions : ulong {
 		Disabled = 0,
@@ -2886,14 +2834,12 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	[Flags]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSWindowListOptions : long {
 		OrderedFrontToBack = (1 << 0)
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSStatusItemBehavior : ulong {
 		RemovalAllowed = (1 << 1),
@@ -2901,7 +2847,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSWindowTabbingMode : long {
 		Automatic,
@@ -2910,7 +2855,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSWindowUserTabbingPreference : long {
 		Manual,
@@ -2919,7 +2863,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSGridCellPlacement : long {
 		Inherited = 0,
@@ -2933,7 +2876,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSGridRowAlignment : long {
 		Inherited = 0,
@@ -2943,7 +2885,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSImageLayoutDirection : long {
 		Unspecified = -1,
@@ -2952,7 +2893,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	[Flags]
 	public enum NSCloudKitSharingServiceOptions : ulong {
@@ -2964,7 +2904,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSDisplayGamut : long {
 		Srgb = 1,
@@ -2972,7 +2911,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSTabPosition : ulong {
 		None = 0,
@@ -2983,7 +2921,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSTabViewBorderType : ulong {
 		None = 0,
@@ -2992,14 +2929,12 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12)]
 	[Native]
 	public enum NSPasteboardContentsOptions : ulong {
 		CurrentHostOnly = 1,
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12, 2)]
 	[Native]
 	public enum NSTouchType : long {
 		Direct,
@@ -3007,7 +2942,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12, 2)]
 	[Native]
 	[Flags]
 	public enum NSTouchTypeMask : ulong {
@@ -3016,7 +2950,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12, 2)]
 	[Native]
 	public enum NSScrubberMode : long {
 		Fixed = 0,
@@ -3024,7 +2957,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 12, 2)]
 	[Native]
 	public enum NSScrubberAlignment : long {
 		None = 0,
@@ -3034,7 +2966,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	public enum NSFontError : int {
 		AssetDownloadError = 66304,
 		ErrorMinimum = 66304,
@@ -3042,7 +2973,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	public enum NSAccessibilityAnnotationPosition : long {
 		FullRange,
@@ -3051,7 +2981,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	public enum NSAccessibilityCustomRotorSearchDirection : long {
 		Previous,
@@ -3059,7 +2988,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	public enum NSAccessibilityCustomRotorType : long {
 		Custom = 0,
@@ -3087,7 +3015,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	public enum NSColorType : long {
 		ComponentBased,
@@ -3096,7 +3023,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	[Flags]
 	public enum NSFontAssetRequestOptions : ulong {
@@ -3104,7 +3030,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	[Flags]
 	public enum NSFontPanelModeMask : ulong {
@@ -3122,7 +3047,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	public enum NSLevelIndicatorPlaceholderVisibility : long {
 		Automatic = 0,
@@ -3131,7 +3055,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 13)]
 	[Native]
 	public enum NSSegmentDistribution : long {
 		Fit = 0,
@@ -3141,7 +3064,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 14)]
 	[Native]
 	public enum NSColorSystemEffect : long {
 		None,
@@ -3152,7 +3074,6 @@ namespace AppKit {
 	}
 
 	[NoMacCatalyst]
-	[Mac (10, 14)]
 	[Native]
 	public enum NSWorkspaceAuthorizationType : long {
 		CreateSymbolicLink,

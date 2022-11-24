@@ -21,7 +21,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 		Tls_1_3 = 10,
 		Dtls_1_2 = 11,
 
@@ -180,32 +179,21 @@ namespace Security {
 		BreakOnCertRequested,
 		BreakOnClientAuth,
 
-		[iOS (7, 0)]
-		[Mac (10, 9)]
 		FalseStart,
 
 		SendOneByteRecord,
 
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		AllowServerIdentityChange = 5,
 
-		[iOS (8, 1)]
-		[Mac (10, 10)]
 		Fallback = 6,
 
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		BreakOnClientHello = 7,
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
 		AllowRenegotiation = 8,
 
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 		EnableSessionTickets = 9,
 	}
 

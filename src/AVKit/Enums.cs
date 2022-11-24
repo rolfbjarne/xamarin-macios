@@ -19,7 +19,6 @@ namespace AVKit {
 
 	// The version of the AVError.h header file in the tvOS SDK is much newer than in the iOS SDKs,
 	// (copyright 2016 vs 2019), so this is reflecting the tvOS SDK.
-	[iOS (9, 0)]
 	[TV (13, 0)]
 #if NET
 	[NoMac]

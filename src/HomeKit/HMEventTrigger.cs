@@ -9,8 +9,8 @@ namespace HomeKit {
 	partial class HMEventTrigger {
 
 #if NET
-		[SupportedOSPlatform ("tvos10.0")]
-		[SupportedOSPlatform ("ios9.0")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst14.0")]
 		[UnsupportedOSPlatform ("tvos11.0")]
 		[UnsupportedOSPlatform ("ios11.0")]
@@ -30,8 +30,8 @@ namespace HomeKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("tvos10.0")]
-		[SupportedOSPlatform ("ios9.0")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst14.0")]
 		[UnsupportedOSPlatform ("tvos11.0")]
 		[UnsupportedOSPlatform ("ios11.0")]

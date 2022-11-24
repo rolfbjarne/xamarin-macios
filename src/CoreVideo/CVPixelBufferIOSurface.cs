@@ -20,12 +20,11 @@ namespace CoreVideo {
 
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -36,12 +35,11 @@ namespace CoreVideo {
 
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -59,12 +57,11 @@ namespace CoreVideo {
 
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -78,12 +75,11 @@ namespace CoreVideo {
 
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -108,12 +104,11 @@ namespace CoreVideo {
 
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif

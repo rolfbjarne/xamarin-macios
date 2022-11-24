@@ -110,7 +110,7 @@ namespace WatchKit {
 		Failed
 	}
 
-	[Watch (2,0), NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKAudioRecorderPreset : long {
 		NarrowBandSpeech,
@@ -126,7 +126,7 @@ namespace WatchKit {
 		Destructive
 	}
 
-	[Watch (2,0), NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKAlertControllerStyle : long {
 		Alert,
@@ -134,7 +134,7 @@ namespace WatchKit {
 		ActionSheet
 	}
 
-	[Watch (2,0), NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKVideoGravity : long {
 		Aspect,
@@ -158,7 +158,7 @@ namespace WatchKit {
 		Bottom
 	}
 
-	[Watch (2,1), NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKInterfaceLayoutDirection : long
 	{
@@ -166,7 +166,7 @@ namespace WatchKit {
 		RightToLeft
 	}
 
-	[Watch (2,1), NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKInterfaceSemanticContentAttribute : long
 	{
@@ -177,7 +177,7 @@ namespace WatchKit {
 		ForceRightToLeft
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKApplicationState : long {
 		Active,
@@ -185,7 +185,7 @@ namespace WatchKit {
 		Background
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKGestureRecognizerState : long {
 		Possible,
@@ -197,7 +197,7 @@ namespace WatchKit {
 		Recognized
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Native]
 	[Flags]
 	public enum WKSwipeGestureRecognizerDirection : ulong {
@@ -207,21 +207,21 @@ namespace WatchKit {
 		Down = 1 << 3
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKInterfaceDeviceWristLocation : long {
 		Left,
 		Right
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKInterfaceDeviceCrownOrientation : long {
 		Left,
 		Right
 	}
 
-	[Watch (3,0)][NoiOS]
+	[NoiOS]
 	[Native]
 	public enum WKWaterResistanceRating : long {
 		Ipx7,

@@ -4,7 +4,6 @@ using ObjCRuntime;
 namespace Foundation {
 
 	// Utility enum, ObjC uses NSString
-	[iOS (7, 0)]
 	public enum NSDocumentType {
 		Unknown = -1,
 		PlainText,
@@ -27,7 +26,6 @@ namespace Foundation {
 
 	// Utility enum, ObjC uses NSString
 	[NoMac]
-	[iOS (7, 0)]
 	public enum NSDocumentViewMode {
 		Normal,
 		PageLayout
@@ -62,8 +60,6 @@ namespace Foundation {
 		Other = 1000
 	}
 
-	[Mac (10, 9)]
-	[iOS (7, 0)]
 	public enum NSItemDownloadingStatus {
 		[Field (null)]
 		Unknown = -1,
@@ -78,8 +74,6 @@ namespace Foundation {
 		NotDownloaded,
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	public enum NSStringTransform {
 		[Field ("NSStringTransformLatinToKatakana")]
 		LatinToKatakana,

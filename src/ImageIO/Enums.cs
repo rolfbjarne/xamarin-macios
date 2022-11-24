@@ -15,7 +15,6 @@ namespace ImageIO {
 
 	// untyped enum -> CGImageMetadata.h
 	// note: not used in any API
-	[iOS (7, 0)]
 	[ErrorDomain ("kCFErrorDomainCGImageMetadata")]
 	public enum CGImageMetadataErrors {
 		Unknown = 0,
@@ -26,7 +25,6 @@ namespace ImageIO {
 	}
 
 	// untyped enum -> CGImageMetadata.h
-	[iOS (7, 0)]
 	public enum CGImageMetadataType {
 		Invalid = -1,
 		Default = 0,
@@ -51,8 +49,6 @@ namespace ImageIO {
 
 	// untyped enum / #defines
 	// used with kCGImagePropertyPNGCompressionFilter
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[Flags]
 	public enum CGImagePropertyPngFilters {
 		No = 0,

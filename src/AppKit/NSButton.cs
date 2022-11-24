@@ -43,10 +43,8 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSButton CreateButton (string title, NSImage image, Action action)
 		{
@@ -57,10 +55,8 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSButton CreateButton (string title, Action action)
 		{
@@ -71,10 +67,8 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSButton CreateButton (NSImage image, Action action)
 		{
@@ -85,10 +79,8 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSButton CreateCheckbox (string title, Action action)
 		{
@@ -99,10 +91,8 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSButton CreateRadioButton (string title, Action action)
 		{

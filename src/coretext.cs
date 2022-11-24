@@ -69,7 +69,7 @@ namespace CoreText {
 		[Field ("kCTFontVariationAxisNameKey")]
 		NSString Name { get; }
 
-		[iOS (11,0), Mac (10,13), Watch (4,0), TV (11,0)]
+		[iOS (11,0), Watch (4,0), TV (11,0)]
 		[Field ("kCTFontVariationAxisHiddenKey")]
 		NSString Hidden { get; }
 	}
@@ -94,7 +94,7 @@ namespace CoreText {
 		NSString ForceEmbeddingLevel { get; }
 #endif
 
-		[Watch (5,0), TV (12,0), Mac (10,14), iOS (12,0)]
+		[Watch (5,0), TV (12,0), iOS (12,0)]
 		[Field ("kCTTypesetterOptionAllowUnboundedLayout")]
 		NSString AllowUnboundedLayout { get; }
 	}

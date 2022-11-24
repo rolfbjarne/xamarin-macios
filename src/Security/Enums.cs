@@ -405,11 +405,8 @@ namespace Security {
 		PKCS1 = 1,
 
 		[NoMac]
-		[TV (10, 0)]
-		[Watch (3, 0)]
 		OAEP = 2,
 
-		[iOS (8, 3)]
 		Raw = 0x4000,
 
 		[Obsolete ("Don't use hash algorithm.")]
@@ -452,8 +449,6 @@ namespace Security {
 	}
 
 	// convenience enum mapping to kSecUseAuthenticationUI* fields
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	public enum SecAuthenticationUI {
 		NotSet = -1,
 
@@ -475,8 +470,6 @@ namespace Security {
 		Skip
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 12)]
 	public enum SecTokenID {
 		None = 0,
 
@@ -484,10 +477,6 @@ namespace Security {
 		SecureEnclave,
 	}
 
-	[Watch (3, 0)]
-	[TV (10, 0)]
-	[Mac (10, 12)]
-	[iOS (10, 0)]
 	[Native]
 	public enum SecKeyOperationType : long {
 		Sign = 0,
@@ -499,7 +488,6 @@ namespace Security {
 
 	// untyped enum in Security.framework/Headers/SecPolicy.h but the API use CFOptionFlags
 	// which is defined as in CFBase.h (do not trust Apple web documentation)
-	[iOS (7, 0)]
 	[Flags]
 	[Native]
 	public enum SecRevocation : ulong {

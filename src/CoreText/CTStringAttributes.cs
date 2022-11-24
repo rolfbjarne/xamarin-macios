@@ -204,13 +204,10 @@ namespace CoreText {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
 #endif
 		public CGColor? BackgroundColor {
 			get {
@@ -332,15 +329,10 @@ namespace CoreText {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
-		[SupportedOSPlatform ("macos10.12")]
-		[SupportedOSPlatform ("tvos10.0")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 #endif
 		public int? HorizontalInVerticalForms {
 			get {
@@ -356,12 +348,11 @@ namespace CoreText {
 
 #if NET
 		[SupportedOSPlatform ("ios11.0")]
-		[SupportedOSPlatform ("macos10.13")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
 #endif

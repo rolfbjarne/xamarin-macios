@@ -983,7 +983,7 @@ namespace WebKit {
 		[Export ("scrollHeight")]
 		int ScrollHeight { get; } /* int, not NSInteger */
 
-		[Mac (10, 9), Export ("className", ArgumentSemantic.Copy)]
+		[Export ("className", ArgumentSemantic.Copy)]
 		string ClassName { get; set; }
 
 		[Export ("firstElementChild", ArgumentSemantic.Retain)]
@@ -1993,7 +1993,6 @@ namespace WebKit {
 		[Export ("globalContext")]
 		/* JSGlobalContextRef */ IntPtr GlobalContext { get; }
 
-		[Mac (10,10)]
                 [Export ("javaScriptContext", ArgumentSemantic.Strong)]
                 JSContext JavaScriptContext { get; }
 	}
@@ -2552,7 +2551,6 @@ namespace WebKit {
 		[Export ("setException:")]
 		void SetException (string description);
 
-		[Mac (10,10)]
                 [Export ("JSValue")]
                 JSValue JSValue { get; }
 	}
@@ -3018,7 +3016,7 @@ namespace WebKit {
 		[Export ("form", ArgumentSemantic.Retain)]
 		DomHtmlFormElement Form { get; }
 
-		[Export ("files", ArgumentSemantic.Retain), Mac (10, 9)]
+		[Export ("files", ArgumentSemantic.Retain)]
 		DomFileList Files { get; set; }
 	}
 
@@ -3258,7 +3256,7 @@ namespace WebKit {
 		string Name { get; set; }
 
 		[Export ("type")]
-		string Type { get; [Mac (10,9)] set; }
+		string Type { get; set; }
 
 		[Export ("value")]
 		string Value { get; set; }

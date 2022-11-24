@@ -40,8 +40,6 @@ namespace AppKit {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSSlider FromTarget (Action action)
 		{
@@ -54,8 +52,6 @@ namespace AppKit {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#else
-		[Mac (10, 12)]
 #endif
 		public static NSSlider FromValue (double value, double minValue, double maxValue, Action action)
 		{

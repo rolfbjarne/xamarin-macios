@@ -22,7 +22,6 @@ using NativeHandle = System.IntPtr;
 namespace Messages {
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[Native]
 	public enum MSMessagesAppPresentationStyle : ulong {
 		Compact,
@@ -31,7 +30,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[Native]
 	public enum MSStickerSize : long {
 		Small,
@@ -75,7 +73,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (UIViewController))]
 	interface MSMessagesAppViewController : MSMessagesAppTranscriptPresentation {
 		// inlined ctor
@@ -133,7 +130,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MSConversation {
 		[Export ("localParticipantIdentifier")]
@@ -183,7 +179,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // designated
 	interface MSMessage : NSCopying, NSSecureCoding {
@@ -225,14 +220,12 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (NSObject))]
 	[Abstract] // as per docs
 	[DisableDefaultCtor]
 	interface MSMessageLayout : NSCopying { }
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (MSMessageLayout))]
 	interface MSMessageTemplateLayout {
 		[NullAllowed, Export ("caption")]
@@ -261,12 +254,10 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MSSession : NSSecureCoding { }
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface MSSticker {
@@ -282,7 +273,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (UIView))]
 	interface MSStickerView {
 		// inlined ctor
@@ -311,7 +301,6 @@ namespace Messages {
 	interface IMSStickerBrowserViewDataSource { }
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface MSStickerBrowserViewDataSource {
@@ -325,7 +314,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (UIView))]
 	interface MSStickerBrowserView {
 		[Export ("initWithFrame:")]
@@ -356,7 +344,6 @@ namespace Messages {
 	}
 
 	[MacCatalyst (14, 0)]
-	[iOS (10, 0)]
 	[BaseType (typeof (UIViewController))]
 	interface MSStickerBrowserViewController : MSStickerBrowserViewDataSource {
 		[Export ("initWithStickerSize:")]

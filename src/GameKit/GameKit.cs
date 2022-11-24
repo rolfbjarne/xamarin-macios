@@ -150,18 +150,12 @@ namespace GameKit {
 		FriendRequestNotAvailable = 103,
 	}
 
-	[iOS (10, 0)]
-	[Mac (10, 12)]
-	[TV (10, 0)]
 	[Native]
 	public enum GKConnectionState : long {
 		NotConnected,
 		Connected,
 	}
 
-	[iOS (10, 0)]
-	[Mac (10, 12)]
-	[TV (10, 0)]
 	[Native]
 	public enum GKTransportType : long {
 		Unreliable,
@@ -249,7 +243,6 @@ namespace GameKit {
 	}
 
 	// NSInteger -> GKChallenge.h
-	[Mac (10, 9)]
 	[Native]
 	public enum GKChallengeState : long {
 		Invalid = 0,
@@ -321,7 +314,6 @@ namespace GameKit {
 #if !NET
 	[iOS (11, 3)]
 	[Deprecated (PlatformName.iOS, 14, 0, message: "Do not use; this API was removed.")]
-	[Mac (10, 13, 4)]
 	[Deprecated (PlatformName.MacOSX, 11, 0, message: "Do not use; this API was removed.")]
 	[TV (11, 3)]
 	[Deprecated (PlatformName.TvOS, 14, 0, message: "Do not use; this API was removed.")]

@@ -15,9 +15,7 @@ using ObjCRuntime;
 
 namespace CoreBluetooth {
 
-	[Mac (10, 13)]
 	[Watch (4, 0)]
-	[iOS (10, 0)]
 	[Native]
 	public enum CBManagerState : long {
 		Unknown = 0,
@@ -61,8 +59,6 @@ namespace CoreBluetooth {
 		Disconnected,
 		Connecting,
 		Connected,
-		[iOS (9, 0)]
-		[Mac (10, 13)]
 		Disconnecting,
 	}
 
@@ -91,9 +87,7 @@ namespace CoreBluetooth {
 		Indicate = 32,
 		AuthenticatedSignedWrites = 64,
 		ExtendedProperties = 128,
-		[Mac (10, 9)]
 		NotifyEncryptionRequired = 0x100,
-		[Mac (10, 9)]
 		IndicateEncryptionRequired = 0x200
 	}
 
@@ -156,7 +150,6 @@ namespace CoreBluetooth {
 	}
 
 	// NSUInteger -> CBCharacteristic.h
-	[Mac (10, 9)]
 	[Watch (4, 0)]
 	[Flags]
 	[Native]

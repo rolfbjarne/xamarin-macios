@@ -88,7 +88,6 @@ namespace CoreGraphics {
 		kCGPDFContextOutputIntents;
 #endif
 
-		[Mac (10, 13)]
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
@@ -116,7 +115,6 @@ namespace CoreGraphics {
 	}
 
 	[Static]
-	[iOS (9, 0)]
 	interface CGColorSpaceNames {
 		[Field ("kCGColorSpaceGenericGray")]
 		NSString GenericGray { get; }
@@ -127,9 +125,6 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceGenericCMYK")]
 		NSString GenericCmyk { get; }
 
-		[iOS (9, 3)]
-		[Mac (10, 11, 2)]
-		[TV (9, 2)]
 		[Field ("kCGColorSpaceDisplayP3")]
 		NSString DisplayP3 { get; }
 
@@ -145,15 +140,12 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceGenericGrayGamma2_2")]
 		NSString GenericGrayGamma2_2 { get; }
 
-		[Mac (10, 11)]
 		[Field ("kCGColorSpaceGenericXYZ")]
 		NSString GenericXyz { get; }
 
-		[Mac (10, 11)]
 		[Field ("kCGColorSpaceACESCGLinear")]
 		NSString AcesCGLinear { get; }
 
-		[Mac (10, 11)]
 		[Field ("kCGColorSpaceITUR_709")]
 		NSString ItuR_709 { get; }
 
@@ -165,7 +157,6 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceITUR_709_HLG")]
 		NSString ItuR_709_Hlg { get; }
 
-		[Mac (10, 11)]
 		[Field ("kCGColorSpaceITUR_2020")]
 		NSString ItuR_2020 { get; }
 
@@ -173,57 +164,27 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceITUR_2020_sRGBGamma")]
 		NSString ItuR_2020_sRgbGamma { get; }
 
-		[iOS (9, 3)]
-		[Mac (10, 11)]
-		[TV (9, 2)]
 		[Field ("kCGColorSpaceROMMRGB")]
 		NSString RommRgb { get; }
 
-		[iOS (9, 3)]
-		[Mac (10, 11)]
-		[TV (9, 2)]
 		[Field ("kCGColorSpaceDCIP3")]
 		NSString Dcip3 { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 		[Field ("kCGColorSpaceExtendedSRGB")]
 		NSString ExtendedSrgb { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 		[Field ("kCGColorSpaceLinearSRGB")]
 		NSString LinearSrgb { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 		[Field ("kCGColorSpaceExtendedLinearSRGB")]
 		NSString ExtendedLinearSrgb { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 		[Field ("kCGColorSpaceExtendedGray")]
 		NSString ExtendedGray { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 		[Field ("kCGColorSpaceLinearGray")]
 		NSString LinearGray { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 		[Field ("kCGColorSpaceExtendedLinearGray")]
 		NSString ExtendedLinearGray { get; }
 
@@ -268,13 +229,11 @@ namespace CoreGraphics {
 		NSString GenericRGBLinear { get; }
 
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[Watch (4, 0)]
 		[TV (11, 0)]
 		[Field ("kCGColorSpaceGenericLab")]
 		NSString GenericLab { get; }
 
-		[Mac (10, 14, 3)]
 		[iOS (12, 3)]
 		[TV (12, 3)]
 		[Watch (5, 3)]
@@ -286,7 +245,6 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceExtendedITUR_2020")]
 		NSString ExtendedItur_2020 { get; }
 
-		[Mac (10, 14, 3)]
 		[iOS (12, 3)]
 		[TV (12, 3)]
 		[Watch (5, 3)]
@@ -298,7 +256,6 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceExtendedDisplayP3")]
 		NSString ExtendedDisplayP3 { get; }
 
-		[Mac (10, 14)]
 		[iOS (12, 0)]
 		[TV (12, 0)]
 		[Watch (5, 0)]
@@ -388,21 +345,17 @@ namespace CoreGraphics {
 
 		[Internal]
 		[Field ("kCGColorConversionTRCSize")]
-		[iOS (11, 0), Mac (10, 13), TV (11, 0), Watch (4, 0)]
+		[iOS (11, 0), TV (11, 0), Watch (4, 0)]
 		NSString TrcSizeKey { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 12)]
 	[StrongDictionary ("CGColorConversionInfo")]
 	interface CGColorConversionOptions {
 		bool BlackPointCompensation { get; set; }
 		CGSize TrcSize { get; set; }
 	}
 
-	[iOS (11, 0), Mac (10, 13)]
+	[iOS (11, 0)]
 	[TV (11, 0)]
 	[Watch (4, 0)]
 	[Static]
@@ -429,7 +382,7 @@ namespace CoreGraphics {
 		NSString AccessPermissionsKey { get; }
 	}
 
-	[iOS (11, 0), Mac (10, 13)]
+	[iOS (11, 0)]
 	[StrongDictionary ("CGPDFOutlineKeys")]
 	interface CGPDFOutlineOptions {
 		string OutlineTitle { get; set; }
@@ -486,7 +439,7 @@ namespace CoreGraphics {
 	}
 
 	// Adding suffix *Keys to avoid possible name clash
-	[NoiOS, NoTV, NoWatch, Mac (10, 9), MacCatalyst (13, 1)]
+	[NoiOS, NoTV, NoWatch, MacCatalyst (13, 1)]
 	[Static]
 	interface CGDisplayStreamKeys {
 
@@ -515,7 +468,7 @@ namespace CoreGraphics {
 		NSString YCbCrMatrix { get; }
 	}
 
-	[NoiOS, NoTV, NoWatch, Mac (10, 9), MacCatalyst (13, 1)]
+	[NoiOS, NoTV, NoWatch, MacCatalyst (13, 1)]
 	[Static]
 	interface CGDisplayStreamYCbCrMatrixOptionKeys {
 

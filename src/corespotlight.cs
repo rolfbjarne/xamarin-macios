@@ -20,16 +20,12 @@ using NativeHandle = System.IntPtr;
 namespace CoreSpotlight {
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	interface CSIndexExtensionRequestHandler : NSExtensionRequestHandling, CSSearchableIndexDelegate {
 
 	}
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	interface CSPerson : NSSecureCoding, NSCopying {
 
@@ -52,8 +48,6 @@ namespace CoreSpotlight {
 	}
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	interface CSSearchableIndex {
 
@@ -108,8 +102,6 @@ namespace CoreSpotlight {
 	delegate void CSSearchableIndexFetchHandler (NSData clientState, NSError error);
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[Category]
 	[BaseType (typeof (CSSearchableIndex))]
 	interface CSSearchableIndex_CSOptionalBatchingExtension {
@@ -127,8 +119,6 @@ namespace CoreSpotlight {
 	interface ICSSearchableIndexDelegate { }
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface CSSearchableIndexDelegate {
@@ -147,20 +137,18 @@ namespace CoreSpotlight {
 		[Export ("searchableIndexDidFinishThrottle:")]
 		void DidFinishThrottle (CSSearchableIndex searchableIndex);
 
-		[iOS (11, 0), NoTV, Mac (10, 13)]
+		[iOS (11, 0), NoTV]
 		[Export ("dataForSearchableIndex:itemIdentifier:typeIdentifier:error:")]
 		[return: NullAllowed]
 		NSData GetData (CSSearchableIndex searchableIndex, string itemIdentifier, string typeIdentifier, out NSError outError);
 
-		[iOS (11, 0), NoTV, Mac (10, 13)]
+		[iOS (11, 0), NoTV]
 		[Export ("fileURLForSearchableIndex:itemIdentifier:typeIdentifier:inPlace:error:")]
 		[return: NullAllowed]
 		NSUrl GetFileUrl (CSSearchableIndex searchableIndex, string itemIdentifier, string typeIdentifier, bool inPlace, out NSError outError);
 	}
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	interface CSSearchableItem : NSSecureCoding, NSCopying {
 
@@ -170,11 +158,9 @@ namespace CoreSpotlight {
 		[Field ("CSSearchableItemActivityIdentifier")]
 		NSString ActivityIdentifier { get; }
 
-		[iOS (10, 0)]
 		[Field ("CSQueryContinuationActionType")]
 		NSString ContinuationActionType { get; }
 
-		[iOS (10, 0)]
 		[Field ("CSSearchQueryString")]
 		NSString QueryString { get; }
 
@@ -201,8 +187,6 @@ namespace CoreSpotlight {
 	}
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSString))]
 	// hack: it seems that generator.cs can't track NSCoding correctly ? maybe because the type is named NSString2 at that time
 	interface CSLocalizedString : NSCoding {
@@ -215,8 +199,6 @@ namespace CoreSpotlight {
 	}
 
 	[NoTV] // CS_TVOS_UNAVAILABLE
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // NSInvalidArgumentException Reason: You must call -[CSCustomAttributeKey initWithKeyName...]
 	interface CSCustomAttributeKey : NSCopying, NSSecureCoding {
@@ -244,8 +226,6 @@ namespace CoreSpotlight {
 		bool MultiValued { [Bind ("isMultiValued")] get; }
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	[Static]
 	interface CSMailboxKey {
@@ -270,8 +250,6 @@ namespace CoreSpotlight {
 	}
 
 	[NoTV]
-	[iOS (9, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	interface CSSearchableItemAttributeSet : NSCopying, NSSecureCoding {
 
@@ -429,11 +407,9 @@ namespace CoreSpotlight {
 		[Export ("version")]
 		string Version { get; set; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("weakRelatedUniqueIdentifier", ArgumentSemantic.Copy)]
 		string WeakRelatedUniqueIdentifier { get; set; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("domainIdentifier")]
 		string DomainIdentifier { get; set; }
 
@@ -979,19 +955,15 @@ namespace CoreSpotlight {
 		[Export ("GPSDifferental", ArgumentSemantic.Strong)]
 		NSNumber GpsDifferental { get; set; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("fullyFormattedAddress")]
 		string FullyFormattedAddress { get; set; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("postalCode")]
 		string PostalCode { get; set; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("subThoroughfare")]
 		string SubThoroughfare { get; set; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("thoroughfare")]
 		string Thoroughfare { get; set; }
 
@@ -1084,8 +1056,6 @@ namespace CoreSpotlight {
 	}
 
 	[NoTV]
-	[iOS (10, 0)]
-	[Mac (10, 13)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface CSSearchQuery {
@@ -1215,7 +1185,7 @@ namespace CoreSpotlight {
 		AllowMail = 1L << 0,
 	}
 
-	[NoTV, Mac (10, 13), iOS (16, 0), MacCatalyst (16, 0)]
+	[NoTV, iOS (16, 0), MacCatalyst (16, 0)]
 	[Native]
 	public enum CSSuggestionKind : long {
 		None,

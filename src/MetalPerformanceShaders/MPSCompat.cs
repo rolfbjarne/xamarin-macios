@@ -43,7 +43,7 @@ namespace MetalPerformanceShaders {
 			=> throw new NotSupportedException ();
 	}
 
-	[TV (11, 0), Mac (10, 13), iOS (11, 0)]
+	[TV (11, 0), iOS (11, 0)]
 	[Obsolete ("Empty stub (not a public API).")]
 	public partial class MPSCnnConvolutionState : MPSState, IMPSImageSizeEncodingState {
 

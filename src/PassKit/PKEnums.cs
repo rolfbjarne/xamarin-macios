@@ -55,7 +55,6 @@ namespace PassKit {
 	}
 
 	[Mac (11, 0)]
-	[Watch (3, 0)]
 	[Native]
 	public enum PKPaymentAuthorizationStatus : long {
 		Success,
@@ -76,11 +75,8 @@ namespace PassKit {
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'Failure' and 'PKPaymentRequest.CreatePaymentContactInvalidError'.")]
 		InvalidShippingContact,
 
-		[iOS (9, 2)]
 		PinRequired,
-		[iOS (9, 2)]
 		PinIncorrect,
-		[iOS (9, 2)]
 		PinLockout
 	}
 
@@ -104,7 +100,6 @@ namespace PassKit {
 	}
 
 	[Mac (11, 0)]
-	[Watch (3, 0)]
 	[Native]
 	public enum PKMerchantCapability : ulong {
 		ThreeDS = 1 << 0,
@@ -114,7 +109,6 @@ namespace PassKit {
 	}
 
 	[NoMac]
-	[Watch (3, 0)]
 	[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'PKContactField' instead.")]
 	[Deprecated (PlatformName.WatchOS, 4, 0, message: "Use 'PKContactField' instead.")]
 	[Native]
@@ -124,14 +118,12 @@ namespace PassKit {
 		PostalAddress = 1 << 0,
 		Phone = 1 << 1,
 		Email = 1 << 2,
-		[iOS (8, 3)]
 		Name = 1 << 3,
 		All = PostalAddress | Phone | Email | Name
 	}
 
 	[Mac (11, 0)]
 	[NoWatch]
-	[iOS (8, 3)]
 	[Native]
 	public enum PKPaymentButtonStyle : long {
 		White,
@@ -143,16 +135,12 @@ namespace PassKit {
 
 	[Mac (11, 0)]
 	[NoWatch]
-	[iOS (8, 3)]
 	[Native]
 	public enum PKPaymentButtonType : long {
 		Plain,
 		Buy,
-		[iOS (9, 0)]
 		SetUp,
-		[iOS (10, 0)]
 		InStore,
-		[iOS (10, 2)]
 		Donate,
 #if NET
 		[iOS (12,0)]
@@ -198,8 +186,6 @@ namespace PassKit {
 	}
 
 	[Mac (11, 0)]
-	[Watch (3, 0)]
-	[iOS (8, 3)]
 	[Native]
 	public enum PKShippingType : ulong {
 		Shipping,
@@ -209,7 +195,6 @@ namespace PassKit {
 	}
 
 	[Watch (6, 0)]
-	[iOS (9, 0)]
 	[Mac (11, 0)]
 	[Native]
 	public enum PKAddPaymentPassError : long {
@@ -220,7 +205,6 @@ namespace PassKit {
 
 	[Mac (11, 0)]
 	[NoWatch]
-	[iOS (9, 0)]
 	[Native]
 	public enum PKAutomaticPassPresentationSuppressionResult : ulong {
 		NotSupported = 0,
@@ -231,8 +215,6 @@ namespace PassKit {
 	}
 
 	[Mac (11, 0)]
-	[Watch (3, 0)]
-	[iOS (9, 0)]
 	[Native]
 	public enum PKPaymentMethodType : ulong {
 		Unknown = 0,
@@ -244,8 +226,6 @@ namespace PassKit {
 	}
 
 	[Mac (11, 0)]
-	[Watch (3, 0)]
-	[iOS (9, 0)]
 	[Native]
 	public enum PKPaymentSummaryItemType : ulong {
 		Final,
@@ -254,7 +234,6 @@ namespace PassKit {
 
 	[NoWatch]
 	[NoMac] // under `#if TARGET_OS_IOS`
-	[iOS (9, 0)]
 	[Native]
 	public enum PKAddPassButtonStyle : long {
 		Black = 0,

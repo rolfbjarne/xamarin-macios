@@ -23,8 +23,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Mac (10, 13)]
 #endif
 	public struct MPSOffset {
 		public nint X;
@@ -38,8 +36,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Mac (10, 13)]
 #endif
 	public struct MPSOrigin {
 		public double X;
@@ -53,8 +49,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Mac (10, 13)]
 #endif
 	public struct MPSSize {
 		public double Width;
@@ -83,8 +77,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Mac (10, 13)]
 #endif
 	public struct MPSRegion {
 		public MPSOrigin Origin;
@@ -97,8 +89,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Mac (10, 13)]
 #endif
 	public struct MPSScaleTransform {
 		public double ScaleX;
@@ -115,7 +105,6 @@ namespace MetalPerformanceShaders {
 #else
 	[iOS (11, 3)]
 	[TV (11, 3)]
-	[Mac (10, 13, 4)]
 #endif
 	public struct MPSImageCoordinate {
 		public nuint X;
@@ -131,7 +120,6 @@ namespace MetalPerformanceShaders {
 #else
 	[iOS (11, 3)]
 	[TV (11, 3)]
-	[Mac (10, 13, 4)]
 #endif
 	public struct MPSImageRegion {
 		public MPSImageCoordinate Offset;
@@ -144,8 +132,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Mac (10, 13)]
 #endif
 	[StructLayout (LayoutKind.Explicit)]
 	public struct MPSImageHistogramInfo {
@@ -175,7 +161,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("maccatalyst")]
 #else
 	[TV (11, 0)]
-	[Mac (10, 13)]
 	[iOS (11, 0)]
 #endif
 	public struct MPSMatrixCopyOffsets {
@@ -192,7 +177,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("maccatalyst")]
 #else
 	[TV (11, 0)]
-	[Mac (10, 13)]
 	[iOS (11, 0)]
 #endif
 	public struct MPSImageReadWriteParams {
@@ -207,7 +191,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("maccatalyst")]
 #else
 	[TV (11, 0)]
-	[Mac (10, 13)]
 	[iOS (11, 0)]
 #endif
 	public struct MPSImageKeypointRangeInfo {
@@ -223,7 +206,6 @@ namespace MetalPerformanceShaders {
 #else
 	[TV (11, 3)]
 	[iOS (11, 3)]
-	[Mac (10, 13, 4)]
 #endif
 	public struct MPSStateTextureInfo {
 		public nuint Width;
@@ -267,7 +249,6 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("maccatalyst")]
 #else
 	[TV (12, 0)]
-	[Mac (10, 14)]
 	[iOS (12, 0)]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
@@ -299,7 +280,6 @@ namespace MetalPerformanceShaders {
 #else
 	[iOS (11, 2)]
 	[TV (11, 2)]
-	[Mac (10, 13, 2)]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MPSMatrixOffset {

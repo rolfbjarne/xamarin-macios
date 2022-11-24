@@ -85,14 +85,12 @@ namespace TVMLKit {
 		None,
 		Subtree,
 #if NET
-		[TV (10,0)]
 		Styles,
 		Children,
 		Self,
 #else
 		Children,
 		Self,
-		[TV (10, 0)]
 		Styles,
 #endif
 	}
@@ -723,7 +721,6 @@ namespace TVMLKit {
 		[Export ("margin")]
 		UIEdgeInsets Margin { get; }
 
-		[TV (10, 0)]
 		[Export ("focusMargin")]
 		UIEdgeInsets FocusMargin { get; }
 
@@ -862,12 +859,10 @@ namespace TVMLKit {
 		[return: NullAllowed]
 		NSUrl GetUrlForResource (string resourceName);
 
-		[TV (9, 2)]
 		[Export ("imageForResource:")]
 		[return: NullAllowed]
 		UIImage GetImageForResource (string resourceName);
 
-		[TV (10, 0)]
 		[Export ("collectionViewCellClassForElement:")]
 		[return: NullAllowed]
 		Class GetCollectionViewCellClass (TVViewElement element);

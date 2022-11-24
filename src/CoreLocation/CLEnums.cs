@@ -106,7 +106,6 @@ namespace CoreLocation {
 		[iOS (12, 0)]
 		[TV (12, 0)]
 		[Watch (5, 0)]
-		[Mac (10, 14)]
 		Airborne,
 	}
 

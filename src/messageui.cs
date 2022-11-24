@@ -111,7 +111,6 @@ namespace MessageUI {
 		[Export ("attachments")]
 		NSDictionary [] GetAttachments ();
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("message", ArgumentSemantic.Copy)]
 		MSMessage Message { get; set; }
 

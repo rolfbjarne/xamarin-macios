@@ -4,9 +4,6 @@ using ObjCRuntime;
 
 namespace PhotosUI {
 
-	[Mac (10, 12)]
-	[TV (10, 0)]
-	[iOS (9, 1)]
 	[Native]
 	public enum PHLivePhotoViewPlaybackStyle : long {
 		Undefined = 0,
@@ -16,7 +13,6 @@ namespace PhotosUI {
 
 #if MONOMAC
 	[NoiOS][NoTV][NoMacCatalyst]
-	[Mac (10,12)]
 	[Native]
 	public enum PHLivePhotoViewContentMode : long {
 		AspectFit,
@@ -24,8 +20,6 @@ namespace PhotosUI {
 	}
 #else
 	[NoMac]
-	[TV (10, 0)]
-	[iOS (9, 1)]
 	[Native]
 	[Flags] // NS_OPTIONS
 	public enum PHLivePhotoBadgeOptions : ulong {
@@ -37,7 +31,6 @@ namespace PhotosUI {
 	[NoiOS]
 	[NoTV]
 	[NoWatch]
-	[Mac (10, 14)]
 	public enum PHProjectCategory {
 		[Field ("PHProjectCategoryBook")]
 		Book,
@@ -53,7 +46,6 @@ namespace PhotosUI {
 		WallDecor,
 		[Field ("PHProjectCategoryOther")]
 		Other,
-		[Mac (10, 14, 2)]
 		[Field ("PHProjectCategoryUndefined")]
 		Undefined,
 	}

@@ -29,8 +29,6 @@ using NativeHandle = System.IntPtr;
 
 namespace ReplayKit {
 
-	[iOS (9, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[BaseType (typeof (UIViewController))]
 	interface RPPreviewViewController {
@@ -50,8 +48,6 @@ namespace ReplayKit {
 
 	interface IRPPreviewViewControllerDelegate { }
 
-	[iOS (9, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
@@ -65,8 +61,6 @@ namespace ReplayKit {
 		void DidFinish (RPPreviewViewController previewController, NSSet<NSString> activityTypes);
 	}
 
-	[iOS (9, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
@@ -86,7 +80,6 @@ namespace ReplayKit {
 		[Export ("startRecordingWithMicrophoneEnabled:handler:")]
 		void StartRecording (bool microphoneEnabled, [NullAllowed] Action<NSError> handler);
 
-		[iOS (10, 0)]
 		[Async]
 		[Export ("startRecordingWithHandler:")]
 		void StartRecording ([NullAllowed] Action<NSError> handler);
@@ -111,18 +104,17 @@ namespace ReplayKit {
 		bool MicrophoneEnabled {
 			[Bind ("isMicrophoneEnabled")]
 			get;
-			[iOS (10, 0)]
 			set;
 		}
 
 		[Export ("available", ArgumentSemantic.Assign)]
 		bool Available { [Bind ("isAvailable")] get; }
 
-		[NoTV, iOS (10, 0)]
+		[NoTV]
 		[Export ("cameraEnabled")]
 		bool CameraEnabled { [Bind ("isCameraEnabled")] get; set; }
 
-		[NoTV, iOS (10, 0)]
+		[NoTV]
 		[NullAllowed, Export ("cameraPreviewView")]
 		UIView CameraPreviewView { get; }
 
@@ -166,8 +158,6 @@ namespace ReplayKit {
 
 	interface IRPScreenRecorderDelegate { }
 
-	[iOS (9, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
@@ -188,8 +178,6 @@ namespace ReplayKit {
 		void DidChangeAvailability (RPScreenRecorder screenRecorder);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[NoMac]
 	[BaseType (typeof (UIViewController))]
 	interface RPBroadcastActivityViewController {
@@ -216,8 +204,6 @@ namespace ReplayKit {
 
 	interface IRPBroadcastActivityViewControllerDelegate { }
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[NoMac]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
@@ -227,8 +213,6 @@ namespace ReplayKit {
 		void DidFinish (RPBroadcastActivityViewController broadcastActivityViewController, [NullAllowed] RPBroadcastController broadcastController, [NullAllowed] NSError error);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[BaseType (typeof (NSObject))]
 	interface RPBroadcastController {
@@ -271,8 +255,6 @@ namespace ReplayKit {
 
 	interface IRPBroadcastControllerDelegate { }
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface RPBroadcastControllerDelegate {
@@ -287,8 +269,6 @@ namespace ReplayKit {
 		void DidUpdateBroadcastUrl (RPBroadcastController broadcastController, NSUrl broadcastUrl);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Deprecated (PlatformName.TvOS, 11, 0)]
 	[Deprecated (PlatformName.iOS, 11, 0)]
 	[NoMac]
@@ -303,8 +283,6 @@ namespace ReplayKit {
 
 	delegate void LoadBroadcastingHandler (string bundleID, string displayName, UIImage appIcon);
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[Category]
 	[BaseType (typeof (NSExtensionContext))]
@@ -324,8 +302,6 @@ namespace ReplayKit {
 		void CompleteRequest (NSUrl broadcastURL, [NullAllowed] NSDictionary<NSString, INSCoding> setupInfo);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[BaseType (typeof (NSObject))]
 	interface RPBroadcastHandler : NSExtensionRequestHandling {
@@ -339,8 +315,6 @@ namespace ReplayKit {
 		//void UpdateBroadcastUrl (NSUrl broadcastUrl);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[NoMac]
 	[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'RPBroadcastSampleHandler' instead.")]
 	[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'RPBroadcastSampleHandler' instead.")]
@@ -353,8 +327,6 @@ namespace ReplayKit {
 		void FinishedProcessingMP4Clip ([NullAllowed] RPBroadcastConfiguration broadcastConfiguration, [NullAllowed] NSError error);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Mac (11, 0)]
 	[BaseType (typeof (RPBroadcastHandler))]
 	interface RPBroadcastSampleHandler {
@@ -386,8 +358,6 @@ namespace ReplayKit {
 		[Export ("processSampleBuffer:withType:")]
 		void ProcessSampleBuffer (CMSampleBuffer sampleBuffer, RPSampleBufferType sampleBufferType);
 
-		[iOS (10, 2)]
-		[TV (10, 1)]
 		[Export ("finishBroadcastWithError:")]
 		void FinishBroadcast (NSError error);
 	}

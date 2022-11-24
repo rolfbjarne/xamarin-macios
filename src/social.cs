@@ -54,14 +54,12 @@ namespace Social {
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Tencent Weibo SDK instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Tencent Weibo SDK instead.")]
 		[Field ("SLServiceTypeTencentWeibo")]
-		[Mac (10, 9)]
 		NSString TencentWeibo { get; }
 
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use LinkedIn SDK instead.")]
 		[Field ("SLServiceTypeLinkedIn")]
 		[NoiOS]
 		[NoMacCatalyst]
-		[Mac (10, 9)]
 		NSString LinkedIn { get; }
 	}
 
@@ -142,8 +140,6 @@ namespace Social {
 		bool RemoveAllUrls ();
 	}
 
-	[Mac (10, 10)]
-	[iOS (8, 0)]
 	[BaseType (typeof (SocialViewController))]
 	interface SLComposeServiceViewController : SocialTextViewDelegate {
 		[Export ("initWithNibName:bundle:")]
@@ -210,7 +206,6 @@ namespace Social {
 
 
 	[NoMac]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // designated
 	interface SLComposeSheetConfigurationItem {

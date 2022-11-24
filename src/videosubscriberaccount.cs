@@ -24,9 +24,6 @@ using NativeHandle = System.IntPtr;
 namespace VideoSubscriberAccount {
 
 	[Native]
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[ErrorDomain ("VSErrorDomain")]
@@ -42,9 +39,6 @@ namespace VideoSubscriberAccount {
 	}
 
 	[Native]
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	public enum VSAccountAccessStatus : long {
@@ -84,9 +78,6 @@ namespace VideoSubscriberAccount {
 	}
 
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[Static]
@@ -102,15 +93,10 @@ namespace VideoSubscriberAccount {
 		[Field ("VSErrorInfoKeyUnsupportedProviderIdentifier")]
 		NSString UnsupportedProviderIdentifierKey { get; }
 
-		[TV (10, 1)]
-		[iOS (10, 2)]
 		[Field ("VSErrorInfoKeyAccountProviderResponse")]
 		NSString AccountProviderResponseKey { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[NoMacCatalyst]
 	[Unavailable (PlatformName.WatchOS)]
 	[StrongDictionary ("VSErrorInfoKeys")]
@@ -122,17 +108,12 @@ namespace VideoSubscriberAccount {
 
 		string UnsupportedProviderIdentifier { get; }
 
-		[TV (10, 1)]
-		[iOS (10, 2)]
 		string AccountProviderResponse { get; }
 	}
 
 	interface IVSAccountManagerDelegate { }
 
 	[Protocol, Model]
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -162,9 +143,6 @@ namespace VideoSubscriberAccount {
 		bool ShouldAuthenticateAccountProvider (VSAccountManager accountManager, string accountProviderIdentifier);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -190,9 +168,6 @@ namespace VideoSubscriberAccount {
 		NSString OpenTVProviderSettingsUrl { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[Static]
 	[Internal]
@@ -203,9 +178,6 @@ namespace VideoSubscriberAccount {
 		NSString CheckAccessOptionPrompt { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[StrongDictionary ("VSCheckAccessOptionKeys")]
@@ -215,9 +187,6 @@ namespace VideoSubscriberAccount {
 		bool CheckAccessOptionPrompt { get; set; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -228,9 +197,6 @@ namespace VideoSubscriberAccount {
 		void Cancel ();
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -248,15 +214,10 @@ namespace VideoSubscriberAccount {
 		[NullAllowed, Export ("SAMLAttributeQueryResponse")]
 		string SamlAttributeQueryResponse { get; }
 
-		[TV (10, 1)]
-		[iOS (10, 2)]
 		[NullAllowed, Export ("accountProviderResponse", ArgumentSemantic.Strong)]
 		VSAccountProviderResponse AccountProviderResponse { get; }
 	}
 
-	[iOS (10, 0)]
-	[Mac (10, 14)]
-	[TV (10, 0)]
 	[Unavailable (PlatformName.WatchOS)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -295,8 +256,6 @@ namespace VideoSubscriberAccount {
 		string [] AttributeNames { get; set; }
 
 		[Protected]
-		[TV (10, 1)]
-		[iOS (10, 2)]
 		[Export ("supportedAuthenticationSchemes", ArgumentSemantic.Copy)]
 		NSString [] SupportedAuthenticationSchemesString { get; set; }
 
@@ -311,9 +270,6 @@ namespace VideoSubscriberAccount {
 		VSAccountApplicationProvider [] ApplicationAccountProviders { get; set; }
 	}
 
-	[iOS (10, 2)]
-	[TV (10, 1)]
-	[Mac (10, 14)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface VSAccountProviderResponse {
@@ -332,9 +288,6 @@ namespace VideoSubscriberAccount {
 		string Body { get; }
 	}
 
-	[iOS (10, 2)]
-	[TV (10, 1)]
-	[Mac (10, 14)]
 	[NoMacCatalyst]
 	enum VSAccountProviderAuthenticationScheme {
 		[Field ("VSAccountProviderAuthenticationSchemeSAML")]
@@ -349,7 +302,6 @@ namespace VideoSubscriberAccount {
 
 	[TV (11, 0)]
 	[iOS (11, 0)]
-	[Mac (10, 14)]
 	[NoMacCatalyst]
 	[Native]
 	public enum VSSubscriptionAccessLevel : long {
@@ -360,7 +312,6 @@ namespace VideoSubscriberAccount {
 
 	[TV (11, 0)]
 	[iOS (11, 0)]
-	[Mac (10, 14)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface VSSubscription {
@@ -382,7 +333,6 @@ namespace VideoSubscriberAccount {
 
 	[TV (11, 0)]
 	[iOS (11, 0)]
-	[Mac (10, 14)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]

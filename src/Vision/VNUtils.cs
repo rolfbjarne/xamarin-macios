@@ -31,7 +31,6 @@ namespace Vision {
 	[SupportedOSPlatform ("maccatalyst")]
 #else
 	[TV (11, 0)]
-	[Mac (10, 13)]
 	[iOS (11, 0)]
 #endif
 	public static partial class VNUtils {

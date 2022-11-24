@@ -101,10 +101,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios9.1")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
-#else
-		[iOS (9, 1)]
 #endif
 		public PHLivePhoto LivePhoto {
 			get {

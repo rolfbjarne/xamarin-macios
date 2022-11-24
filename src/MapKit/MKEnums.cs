@@ -22,7 +22,6 @@ namespace MapKit {
 	// NSUInteger -> MKDirectionsTypes.h
 	[NoWatch]
 	[Native]
-	[TV (9, 2)]
 	public enum MKDirectionsTransportType : ulong {
 		Automobile = 1 << 0,
 		Walking = 1 << 1,
@@ -31,7 +30,6 @@ namespace MapKit {
 	}
 
 	// NSUInteger -> MKTypes.h
-	[TV (9, 2)]
 	[NoWatch]
 	[Native]
 	public enum MKMapType : ulong {
@@ -42,13 +40,11 @@ namespace MapKit {
 		HybridFlyover,
 		[iOS (11, 0)]
 		[TV (11, 0)]
-		[Mac (10, 13)]
 		MutedStandard,
 	}
 
 	// NSUInteger -> MKDistanceFormatter.h
 	[Native]
-	[TV (9, 2)]
 	public enum MKDistanceFormatterUnits : ulong {
 		Default,
 		Metric,
@@ -58,7 +54,6 @@ namespace MapKit {
 
 	// NSUInteger -> MKDistanceFormatter.h
 	[Native]
-	[TV (9, 2)]
 	public enum MKDistanceFormatterUnitStyle : ulong {
 		Default = 0,
 		Abbreviated,
@@ -66,7 +61,6 @@ namespace MapKit {
 	}
 
 	// NSInteger -> MKMapView.h
-	[TV (9, 2)]
 	[NoWatch]
 	[Native]
 	public enum MKOverlayLevel : long {
@@ -75,7 +69,6 @@ namespace MapKit {
 	}
 
 	// NSUInteger -> MKTypes.h
-	[TV (9, 2)]
 	[NoWatch]
 	[Native]
 	[ErrorDomain ("MKErrorDomain")]
@@ -106,7 +99,6 @@ namespace MapKit {
 	}
 
 	// NSUInteger -> MKTypes.h
-	[TV (9, 2)]
 	[NoWatch]
 	[Native]
 	public enum MKUserTrackingMode : ulong {
@@ -120,9 +112,7 @@ namespace MapKit {
 #endif
 	}
 
-	[TV (9, 2)]
 	[NoWatch]
-	[iOS (9, 3)]
 	[Native]
 	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'MKLocalSearchCompleterResultType' instead.")]
 	[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'MKLocalSearchCompleterResultType' instead.")]
@@ -135,7 +125,6 @@ namespace MapKit {
 	[TV (11, 0)]
 	[NoWatch]
 	[iOS (11, 0)]
-	[Mac (10, 13)]
 	[Native]
 	public enum MKAnnotationViewCollisionMode : long {
 		Rectangle,
@@ -159,7 +148,6 @@ namespace MapKit {
 	[TV (11, 0)]
 	[NoWatch]
 	[iOS (11, 0)]
-	[Mac (10, 13)]
 	[Native]
 	public enum MKFeatureVisibility : long {
 		Adaptive,

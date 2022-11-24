@@ -40,7 +40,7 @@ namespace Network {
 		Cancelled = 3,
 	}
 
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWConnectionState {
 		Invalid = 0,
@@ -67,7 +67,7 @@ namespace Network {
 		Collected = 2,
 	}
 
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWEndpointType {
 		Invalid = 0,
@@ -117,14 +117,14 @@ namespace Network {
 		Stable = 2,
 	}
 
-	[Watch (6, 0), TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[Watch (6, 0), TV (12, 0), iOS (12, 0)]
 	public enum NWIPVersion {
 		Any = 0,
 		Version4 = 1,
 		Version6 = 2,
 	}
 
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWInterfaceType {
 		Other = 0,
@@ -134,7 +134,7 @@ namespace Network {
 		Loopback = 4,
 	}
 
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWListenerState {
 		Invalid = 0,
@@ -144,7 +144,7 @@ namespace Network {
 		Cancelled = 4,
 	}
 
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWMultiPathService {
 		Disabled = 0,
@@ -153,7 +153,7 @@ namespace Network {
 		Aggregate = 3,
 	}
 
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWParametersExpiredDnsBehavior {
 		Default = 0,
@@ -162,7 +162,7 @@ namespace Network {
 	}
 
 	// this maps to `nw_path_status_t` in Network/Headers/path.h (and not the enum from NetworkExtension)
-	[TV (12, 0), Mac (10, 14), iOS (12, 0)]
+	[TV (12, 0), iOS (12, 0)]
 	[Watch (6, 0)]
 	public enum NWPathStatus {
 		Invalid = 0,

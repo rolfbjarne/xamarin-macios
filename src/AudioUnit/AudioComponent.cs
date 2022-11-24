@@ -65,7 +65,6 @@ namespace AudioUnit {
 #else
 	[NoWatch]
 	[NoTV]
-	[Mac (10, 13)]
 	[iOS (11, 0)]
 #endif
 #if ((WATCH || TVOS) && !NET)
@@ -133,7 +132,6 @@ namespace AudioUnit {
 #else
 	[NoWatch]
 	[NoTV]
-	[Mac (10, 13)]
 	[iOS (11, 0)]
 #endif
 #if ((WATCH || TVOS) && !NET)
@@ -476,7 +474,6 @@ namespace AudioUnit {
 		[UnsupportedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("macos11.0")]
 #else
-		[Mac (10,11)]
 		[Deprecated (PlatformName.MacOSX, 11, 0)]
 #endif
 		[DllImport (Constants.AudioUnitLibrary)]
@@ -490,7 +487,6 @@ namespace AudioUnit {
 		[UnsupportedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("macos11.0")]
 #else
-		[Mac (10,11)]
 		[Deprecated (PlatformName.MacOSX, 11, 0)]
 #endif
 		public AppKit.NSImage? GetIcon ()
@@ -683,7 +679,6 @@ namespace AudioUnit {
 #else
 		[NoWatch]
 		[NoTV]
-		[Mac (10,13)]
 		[iOS (11,0)]
 #endif
 		[DllImport (Constants.AudioUnitLibrary)]
@@ -697,7 +692,6 @@ namespace AudioUnit {
 #else
 		[NoWatch]
 		[NoTV]
-		[Mac (10,13)]
 		[iOS (11,0)]
 #endif
 		[DllImport (Constants.AudioUnitLibrary)]
@@ -711,7 +705,6 @@ namespace AudioUnit {
 #else
 		[NoWatch]
 		[NoTV]
-		[Mac (10,13)]
 		[iOS (11,0)]
 #endif
 		public AudioComponentInfo[]? ComponentList {

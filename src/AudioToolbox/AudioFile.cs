@@ -60,7 +60,6 @@ namespace AudioToolbox {
 #else
 		[NoWatch]
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 #endif
 		RF64 = 0x52463634, // RF64
@@ -86,7 +85,6 @@ namespace AudioToolbox {
 #else
 		[NoWatch]
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 #endif
 		FLAC = 0x666c6163, // flac

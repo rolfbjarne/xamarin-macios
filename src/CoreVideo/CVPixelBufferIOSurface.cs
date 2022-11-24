@@ -25,7 +25,6 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -41,7 +40,6 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -64,7 +62,6 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -83,7 +80,6 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif
@@ -113,7 +109,6 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[TV (11, 0)]
 		[NoWatch]
 #endif

@@ -22,7 +22,6 @@ namespace Metal {
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
-		[Mac (10,13)]
 		[NoiOS]
 		[NoTV]
 		[NoWatch]
@@ -39,7 +38,6 @@ namespace Metal {
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
-		[Mac (10,13)]
 		[NoiOS]
 		[NoTV]
 		[NoWatch]

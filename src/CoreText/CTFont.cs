@@ -1680,7 +1680,6 @@ namespace CoreText {
 		[SupportedOSPlatform ("maccatalyst")]
 #else
 		[iOS (11, 0)]
-		[Mac (10, 13)]
 		[Watch (4, 0)]
 		[TV (11, 0)]
 #endif

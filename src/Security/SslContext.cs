@@ -590,9 +590,9 @@ namespace Security {
 #endif
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos10.0")]
+		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos10.15")]
 		[UnsupportedOSPlatform ("tvos13.0")]
@@ -600,19 +600,14 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[TV (10, 0)]
-		[Watch (3, 0)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern int SSLSetSessionConfig (IntPtr /* SSLContextRef* */ context, IntPtr /* CFStringRef* */ config);
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos10.0")]
+		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos10.15")]
 		[UnsupportedOSPlatform ("tvos13.0")]
@@ -620,11 +615,6 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[TV (10, 0)]
-		[Watch (3, 0)]
 #endif
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		public int SetSessionConfig (NSString config)
@@ -636,9 +626,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos10.0")]
+		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos10.15")]
 		[UnsupportedOSPlatform ("tvos13.0")]
@@ -646,10 +636,6 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[TV (10, 0)]
 #endif
 		public int SetSessionConfig (SslSessionConfig config)
 		{
@@ -657,9 +643,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos10.0")]
+		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos10.15")]
 		[UnsupportedOSPlatform ("tvos13.0")]
@@ -667,19 +653,14 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern int SSLReHandshake (IntPtr /* SSLContextRef* */ context);
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos10.0")]
+		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos10.15")]
 		[UnsupportedOSPlatform ("tvos13.0")]
@@ -687,11 +668,6 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
-		[TV (10, 0)]
 #endif
 		public int ReHandshake ()
 		{
@@ -699,7 +675,7 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios9.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -709,15 +685,12 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ SslStatus SSLCopyRequestedPeerName (IntPtr /* SSLContextRef* */ context, byte [] /* char* */ peerName, ref nuint /* size_t */ peerNameLen);
 
 #if NET
-		[SupportedOSPlatform ("ios9.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -727,15 +700,12 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ SslStatus SSLCopyRequestedPeerNameLength (IntPtr /* SSLContextRef* */ context, ref nuint /* size_t */ peerNameLen);
 
 #if NET
-		[SupportedOSPlatform ("ios9.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -745,9 +715,6 @@ namespace Security {
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
-#else
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 #endif
 		public string GetRequestedPeerName ()
 		{
@@ -776,7 +743,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetSessionTicketsEnabled (IntPtr /* SSLContextRef */ context, [MarshalAs (UnmanagedType.I1)] bool /* Boolean */ enabled);
@@ -796,7 +762,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 #endif
 		public int SetSessionTickets (bool enabled)
 		{
@@ -818,7 +783,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetError (IntPtr /* SSLContextRef */ context, SecStatusCode /* OSStatus */ status);
@@ -838,7 +802,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 #endif
 		public int SetError (SecStatusCode status)
 		{
@@ -860,7 +823,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetOCSPResponse (IntPtr /* SSLContextRef */ context, IntPtr /* CFDataRef __nonnull */ response);
@@ -880,7 +842,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13)]
 #endif
 		public int SetOcspResponse (NSData response)
 		{
@@ -904,7 +865,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13, 4)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr /* CFArrayRef */ protocols);
@@ -924,7 +884,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13, 4)]
 #endif
 		public int SetAlpnProtocols (string [] protocols)
 		{
@@ -947,7 +906,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13, 4)]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLCopyALPNProtocols (IntPtr /* SSLContextRef */ context, ref IntPtr /* CFArrayRef* */ protocols);
@@ -967,7 +925,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13, 4)]
 #endif
 
 		public string? [] GetAlpnProtocols (out int error)
@@ -994,7 +951,6 @@ namespace Security {
 		[iOS (11, 0)]
 		[TV (11, 0)]
 		[Watch (4, 0)]
-		[Mac (10, 13, 4)]
 #endif
 		public string? [] GetAlpnProtocols ()
 		{

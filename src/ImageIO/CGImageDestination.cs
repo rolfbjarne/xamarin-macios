@@ -84,12 +84,9 @@ namespace ImageIO {
 
 #if NET
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios8.0")]
+		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 10)]
-		[iOS (8, 0)]
 #endif
 		public bool ShouldExcludeGPS { get; set; }
 
@@ -399,7 +396,6 @@ namespace ImageIO {
 #else
 		[Watch (4, 0)]
 		[TV (11, 0)]
-		[Mac (10, 13)]
 		[iOS (11, 0)]
 #endif
 		[DllImport (Constants.ImageIOLibrary)]
@@ -413,7 +409,6 @@ namespace ImageIO {
 #else
 		[Watch (4, 0)]
 		[TV (11, 0)]
-		[Mac (10, 13)]
 		[iOS (11, 0)]
 #endif
 		public void AddAuxiliaryDataInfo (CGImageAuxiliaryDataType auxiliaryImageDataType, CGImageAuxiliaryDataInfo? auxiliaryDataInfo)

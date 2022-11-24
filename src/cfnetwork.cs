@@ -72,8 +72,6 @@ namespace CoreServices {
 		[Field ("kCFHTTPVersion1_1", "CFNetwork")]
 		IntPtr _HTTPVersion1_1 { get; }
 
-		[Mac (10, 11)]
-		[iOS (9, 0)]
 		[Internal]
 		[Field ("kCFHTTPVersion2_0", "CFNetwork")]
 		IntPtr _HTTPVersion2_0 { get; }
@@ -116,7 +114,6 @@ namespace CoreServices {
 		// OSX headers says it's 10.9 only
 		// iOS headers says it's iOS 7.0 only (but comments talks about OSX)
 		// yet both 7.0+ and 10.9 returns null
-		[Mac (10, 9)]
 		[Internal]
 		[Field ("kCFHTTPAuthenticationSchemeOAuth1", "CFNetwork")]
 		IntPtr _AuthenticationSchemeOAuth1 { get; }

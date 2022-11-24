@@ -10,7 +10,6 @@ using NativeHandle = System.IntPtr;
 namespace PushKit {
 	[Watch (6, 0)]
 	[Mac (10, 15)]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface PKPushCredentials {
@@ -23,7 +22,6 @@ namespace PushKit {
 
 	[Watch (6, 0)]
 	[Mac (10, 15)]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface PKPushPayload {
@@ -36,7 +34,6 @@ namespace PushKit {
 
 	[Watch (6, 0)]
 	[Mac (10, 15)]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface PKPushRegistry {
@@ -61,7 +58,6 @@ namespace PushKit {
 		NativeHandle Constructor ([NullAllowed] DispatchQueue queue);
 	}
 
-	[iOS (8, 0)]
 	[Static]
 	interface PKPushType {
 
@@ -71,7 +67,6 @@ namespace PushKit {
 		[Field ("PKPushTypeVoIP")]
 		NSString Voip { get; }
 
-		[iOS (9, 0)]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use directly from watchOS instead.")]
 		[Watch (6, 0)]
 		[NoMac]
@@ -86,7 +81,6 @@ namespace PushKit {
 		NSString FileProvider { get; }
 	}
 
-	[iOS (8, 0)]
 	[Watch (6, 0)]
 	[Mac (10, 15)]
 	[Model]

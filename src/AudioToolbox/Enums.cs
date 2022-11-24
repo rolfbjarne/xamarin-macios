@@ -4,9 +4,6 @@ using ObjCRuntime;
 
 namespace AudioToolbox {
 	[NoWatch]
-	[TV (10, 0)]
-	[Mac (10, 12)]
-	[iOS (10, 0)]
 	[Flags]
 	public enum AudioSettingsFlags : uint {
 		ExpertParameter = (1u << 0),

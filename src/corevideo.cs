@@ -121,35 +121,26 @@ namespace CoreVideo {
 
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.DciP3.GetConstant ()")]
-		[iOS (9, 0), Mac (10, 12)]
 		NSString YCbCrMatrix_DCI_P3 { get; }
 
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.P3D65.GetConstant ()")]
-		[iOS (9, 0), Mac (10, 12)]
 		NSString YCbCrMatrix_P3_D65 { get; }
 
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.ItuR2020.GetConstant ()")]
-		[iOS (9, 0), Mac (10, 11)]
 		NSString YCbCrMatrix_ITU_R_2020 { get; }
 
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.DciP3.GetConstant ()")]
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		NSString ColorPrimaries_DCI_P3 { get; }
 
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.ItuR2020.GetConstant ()")]
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		NSString ColorPrimaries_ITU_R_2020 { get; }
 
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.P3D65.GetConstant ()")]
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		NSString ColorPrimaries_P3_D65 { get; }
 
 		[Field ("kCVImageBufferChromaSubsamplingKey")]
@@ -179,27 +170,25 @@ namespace CoreVideo {
 		[Wrap ("CVImageBufferTransferFunction.UseGamma.GetConstant ()")]
 		NSString TransferFunction_UseGamma { get; }
 
-		[iOS (9, 0), Mac (10, 11), TV (10, 0)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.ItuR2020.GetConstant ()")]
 		NSString TransferFunction_ITU_R_2020 { get; }
 
-		[iOS (10, 0), Mac (10, 12), TV (10, 0)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.SmpteST428_1.GetConstant ()")]
 		NSString TransferFunction_SMPTE_ST_428_1 { get; }
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.SRgb.GetConstant ()")]
 		NSString TransferFunction_sRGB { get; }
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.SmpteST2084PQ.GetConstant ()")]
 		NSString TransferFunction_SMPTE_ST_2084_PQ { get; }
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.ItuR2100Hlg.GetConstant ()")]
 		NSString TransferFunction_ITU_R_2100_HLG { get; }
@@ -250,15 +239,14 @@ namespace CoreVideo {
 		[Wrap ("CVImageBufferColorPrimaries.P22.GetConstant ()")]
 		NSString ColorPrimaries_P22 { get; }
 
-		[iOS (8, 0), Mac (10, 10)]
 		[Field ("kCVImageBufferAlphaChannelIsOpaque")]
 		NSString AlphaChannelIsOpaque { get; }
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Field ("kCVImageBufferMasteringDisplayColorVolumeKey")]
 		NSString MasteringDisplayColorVolumeKey { get; }
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Field ("kCVImageBufferContentLightLevelInfoKey")]
 		NSString ContentLightLevelInfoKey { get; }
 
@@ -290,28 +278,25 @@ namespace CoreVideo {
 		[Field ("kCVImageBufferTransferFunction_UseGamma")]
 		UseGamma,
 
-		[iOS (9, 0), Mac (10, 11), TV (10, 0)]
 		[Field ("kCVImageBufferTransferFunction_ITU_R_2020")]
 		ItuR2020,
 
-		[iOS (10, 0), Mac (10, 12), TV (10, 0)]
 		[Field ("kCVImageBufferTransferFunction_SMPTE_ST_428_1")]
 		SmpteST428_1,
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Field ("kCVImageBufferTransferFunction_sRGB")]
 		SRgb,
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Field ("kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ")]
 		SmpteST2084PQ,
 
-		[iOS (11, 0), Mac (10, 13), TV (11, 0)]
+		[iOS (11, 0), TV (11, 0)]
 		[Field ("kCVImageBufferTransferFunction_ITU_R_2100_HLG")]
 		ItuR2100Hlg,
 
 		[iOS (12, 0)]
-		[Mac (10, 14)]
 		[TV (12, 0)]
 		[Watch (5, 0)]
 		[Field ("kCVImageBufferTransferFunction_Linear")]
@@ -325,18 +310,12 @@ namespace CoreVideo {
 		Unknown = 2, // 2 (the code point for "unknown")
 
 		[Field ("kCVImageBufferColorPrimaries_DCI_P3")]
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		DciP3,
 
 		[Field ("kCVImageBufferColorPrimaries_ITU_R_2020")]
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		ItuR2020,
 
 		[Field ("kCVImageBufferColorPrimaries_P3_D65")]
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		P3D65,
 
 		[Field ("kCVImageBufferColorPrimaries_ITU_R_709_2")]
@@ -371,18 +350,15 @@ namespace CoreVideo {
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "This API is no longer supported.")]
 		[Field ("kCVImageBufferYCbCrMatrix_DCI_P3")]
-		[iOS (9, 0), Mac (10, 12)]
 		DciP3,
 
 		[Deprecated (PlatformName.iOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "This API is no longer supported.")]
 		[Field ("kCVImageBufferYCbCrMatrix_P3_D65")]
-		[iOS (9, 0), Mac (10, 12)]
 		P3D65,
 
 		[Field ("kCVImageBufferYCbCrMatrix_ITU_R_2020")]
-		[iOS (9, 0), Mac (10, 11)]
 		ItuR2020,
 	}
 
@@ -440,16 +416,13 @@ namespace CoreVideo {
 		[NoMac]
 		[NoWatch]
 		[NoMacCatalyst]
-		[iOS (9, 0)]
 		[Field ("kCVPixelBufferOpenGLESTextureCacheCompatibilityKey")]
 		NSString OpenGLESTextureCacheCompatibilityKey { get; }
 
-		[iOS (8, 0)]
-		[Mac (10, 11)]
 		[Field ("kCVPixelBufferMetalCompatibilityKey")]
 		NSString MetalCompatibilityKey { get; }
 
-		[NoiOS, NoTV, NoWatch, Mac (10, 11), NoMacCatalyst]
+		[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 		[Field ("kCVPixelBufferOpenGLTextureCacheCompatibilityKey")]
 		NSString OpenGLTextureCacheCompatibilityKey { get; }
 
@@ -532,7 +505,7 @@ namespace CoreVideo {
 	// 	IntPtr MaxTextureAge { get; }
 	// }
 
-	[iOS (11, 0), Mac (10, 13), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Static, Internal]
 	interface CVMetalTextureAttributesKeys {
 
@@ -540,7 +513,7 @@ namespace CoreVideo {
 		NSString UsageKey { get; }
 	}
 
-	[iOS (11, 0), Mac (10, 13), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[StrongDictionary ("CVMetalTextureAttributesKeys")]
 	interface CVMetalTextureAttributes {
 		// Create stub DictionaryContainer class

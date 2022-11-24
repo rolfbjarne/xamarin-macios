@@ -25,8 +25,6 @@ using NativeHandle = System.IntPtr;
 
 namespace PhotosUI {
 	[NoTV]
-	[iOS (8, 0)]
-	[Mac (10, 13)]
 	[MacCatalyst (14, 0)]
 	[Protocol]
 #if !NET && !TVOS && !MONOMAC
@@ -58,9 +56,6 @@ namespace PhotosUI {
 		bool ShouldShowCancelConfirmation { get; }
 	}
 
-	[TV (10, 0)]
-	[iOS (9, 1)]
-	[Mac (10, 12)]
 #if MONOMAC
 	[BaseType (typeof (NSView))]
 #else
@@ -122,9 +117,6 @@ namespace PhotosUI {
 		NSView LivePhotoBadgeView { get; }
 	}
 
-	[TV (10, 0)]
-	[iOS (9, 1)]
-	[Mac (10, 12)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface PHLivePhotoViewDelegate {
@@ -138,12 +130,11 @@ namespace PhotosUI {
 		[Export ("livePhotoView:didEndPlaybackWithStyle:")]
 		void DidEndPlayback (PHLivePhotoView livePhotoView, PHLivePhotoViewPlaybackStyle playbackStyle);
 
-		[TV (10, 0), iOS (9, 1), NoMac]
+		[NoMac]
 		[Export ("livePhotoView:extraMinimumTouchDurationForTouch:withStyle:")]
 		double GetExtraMinimumTouchDuration (PHLivePhotoView livePhotoView, UITouch touch, PHLivePhotoViewPlaybackStyle playbackStyle);
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[NoWatch]
@@ -153,7 +144,6 @@ namespace PhotosUI {
 		NSString Undefined { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[DisableDefaultCtor]
@@ -166,16 +156,13 @@ namespace PhotosUI {
 		[Export ("project")]
 		PHProject Project { get; }
 
-		[Mac (10, 14)]
 		[Export ("showEditorForAsset:")]
 		void ShowEditor (PHAsset asset);
 
-		[Mac (10, 14)]
 		[Export ("updatedProjectInfoFromProjectInfo:completion:")]
 		NSProgress UpdatedProjectInfo ([NullAllowed] PHProjectInfo existingProjectInfo, Action<PHProjectInfo> completionHandler);
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[DisableDefaultCtor]
@@ -192,7 +179,6 @@ namespace PhotosUI {
 		PHProjectTextElement TextElement { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[DisableDefaultCtor]
@@ -209,7 +195,6 @@ namespace PhotosUI {
 		PHProjectTextElementType TextElementType { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[Protocol]
@@ -232,7 +217,6 @@ namespace PhotosUI {
 		void FinishProject (Action completion);
 
 		[Protected]
-		[Mac (10, 14)]
 		[Export ("typeDescriptionDataSourceForCategory:invalidator:")]
 		IPHProjectTypeDescriptionDataSource GetTypeDescriptionDataSource (NSString category, IPHProjectTypeDescriptionInvalidator invalidator);
 
@@ -240,7 +224,6 @@ namespace PhotosUI {
 		IPHProjectTypeDescriptionDataSource GetTypeDescriptionDataSource (PHProjectCategory category, IPHProjectTypeDescriptionInvalidator invalidator);
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -269,31 +252,25 @@ namespace PhotosUI {
 		[Export ("initWithProjectType:title:description:image:")]
 		NativeHandle Constructor (NSString projectType, string localizedTitle, [NullAllowed] string localizedDescription, [NullAllowed] UIImage image);
 
-		[Mac (10, 14)]
 		[Export ("initWithProjectType:title:attributedDescription:image:subtypeDescriptions:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSString projectType, string localizedTitle, [NullAllowed] NSAttributedString localizedAttributedDescription, [NullAllowed] UIImage image, PHProjectTypeDescription [] subtypeDescriptions);
 
-		[Mac (10, 14)]
 		[Export ("initWithProjectType:title:attributedDescription:image:canProvideSubtypes:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSString projectType, string localizedTitle, [NullAllowed] NSAttributedString localizedAttributedDescription, [NullAllowed] UIImage image, bool canProvideSubtypes);
 
-		[Mac (10, 14)]
 		[Export ("initWithProjectType:title:description:image:canProvideSubtypes:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSString projectType, string localizedTitle, [NullAllowed] string localizedDescription, [NullAllowed] UIImage image, bool canProvideSubtypes);
 
-		[Mac (10, 14)]
 		[Export ("canProvideSubtypes")]
 		bool CanProvideSubtypes { get; }
 
-		[Mac (10, 14)]
 		[NullAllowed, Export ("localizedAttributedDescription", ArgumentSemantic.Copy)]
 		NSAttributedString LocalizedAttributedDescription { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -309,12 +286,10 @@ namespace PhotosUI {
 		[Export ("identifier")]
 		string Identifier { get; }
 
-		[Mac (10, 14)]
 		[Export ("quality")]
 		double Quality { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -328,7 +303,6 @@ namespace PhotosUI {
 		CGRect Placement { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[DisableDefaultCtor]
@@ -347,16 +321,13 @@ namespace PhotosUI {
 		[Export ("regionsOfInterest")]
 		PHProjectRegionOfInterest [] RegionsOfInterest { get; }
 
-		[Mac (10, 14)]
 		[Export ("horizontallyFlipped")]
 		bool HorizontallyFlipped { get; }
 
-		[Mac (10, 14)]
 		[Export ("verticallyFlipped")]
 		bool VerticallyFlipped { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -372,24 +343,19 @@ namespace PhotosUI {
 		[Export ("sections")]
 		PHProjectSection [] Sections { get; }
 
-		[Mac (10, 14)]
 		[Export ("brandingEnabled")]
 		bool BrandingEnabled { get; }
 
-		[Mac (10, 14)]
 		[Export ("pageNumbersEnabled")]
 		bool PageNumbersEnabled { get; }
 
-		[Mac (10, 14)]
 		[NullAllowed, Export ("productIdentifier")]
 		string ProductIdentifier { get; }
 
-		[Mac (10, 14)]
 		[NullAllowed, Export ("themeIdentifier")]
 		string ThemeIdentifier { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -406,7 +372,6 @@ namespace PhotosUI {
 		string Title { get; }
 	}
 
-	[Mac (10, 13)]
 	[NoiOS]
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -425,12 +390,10 @@ namespace PhotosUI {
 		[Export ("cloudAssetIdentifiers")]
 		PHCloudIdentifier [] CloudAssetIdentifiers { get; }
 
-		[Mac (10, 14)]
 		[NullAllowed, Export ("backgroundColor")]
 		UIColor BackgroundColor { get; }
 	}
 
-	[Mac (10, 14)]
 	[NoiOS]
 	[NoTV]
 	[DisableDefaultCtor]
@@ -456,7 +419,6 @@ namespace PhotosUI {
 	}
 
 	interface IPHProjectTypeDescriptionDataSource { }
-	[Mac (10, 14)]
 	[NoiOS]
 	[NoTV]
 	[Protocol, Model]
@@ -481,7 +443,6 @@ namespace PhotosUI {
 	}
 
 	interface IPHProjectTypeDescriptionInvalidator { }
-	[Mac (10, 14)]
 	[NoiOS]
 	[NoTV]
 	[Protocol]
@@ -495,7 +456,6 @@ namespace PhotosUI {
 		void InvalidateFooterTextForSubtypes (NSString projectType);
 	}
 
-	[iOS (8, 0)]
 	[NoMac]
 	[NoTV]
 	[DisableDefaultCtor]

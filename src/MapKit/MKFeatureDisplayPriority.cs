@@ -16,7 +16,6 @@ namespace MapKit {
 	[TV (11, 0)]
 	[NoWatch]
 	[iOS (11, 0)]
-	[Mac (10, 13)]
 #endif
 #if WATCH && !NET
 	[Obsolete ("This API is not available on this platform.")]

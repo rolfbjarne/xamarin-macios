@@ -20,7 +20,6 @@ namespace UIKit {
 #if !WATCH
 
 #if !COREBUILD
-
 	public partial class NSLayoutManager {
 		[Obsolete ("Always throws 'NotSupportedException' (not a public API).")]
 		public virtual void ReplaceTextStorage (NSTextStorage newTextStorage)

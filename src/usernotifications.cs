@@ -25,10 +25,6 @@ using UIKit;
 
 namespace UserNotifications {
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[ErrorDomain ("UNErrorDomain")]
 	[Native]
 	public enum UNErrorCode : long {
@@ -46,9 +42,6 @@ namespace UserNotifications {
 		BadgeInputInvalid = 1600,
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[Native]
 	[Flags]
@@ -59,9 +52,6 @@ namespace UserNotifications {
 		Foreground = (1 << 2)
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[Native]
 	[Flags]
@@ -78,10 +68,6 @@ namespace UserNotifications {
 		AllowAnnouncement = (1 << 4),
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Native]
 	public enum UNAuthorizationStatus : long {
 		NotDetermined = 0,
@@ -94,10 +80,6 @@ namespace UserNotifications {
 		Ephemeral,
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Native]
 	public enum UNNotificationSetting : long {
 		NotSupported = 0,
@@ -105,8 +87,6 @@ namespace UserNotifications {
 		Enabled
 	}
 
-	[iOS (10, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[Unavailable (PlatformName.WatchOS)]
 	[Native]
@@ -116,10 +96,6 @@ namespace UserNotifications {
 		Alert
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Native]
 	[Flags]
 	public enum UNAuthorizationOptions : ulong {
@@ -146,10 +122,6 @@ namespace UserNotifications {
 		TimeSensitive = (1 << 8),
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Native]
 	[Flags]
 	public enum UNNotificationPresentationOptions : ulong {
@@ -174,7 +146,6 @@ namespace UserNotifications {
 	}
 
 	[NoWatch, NoTV, iOS (11, 0)]
-	[Mac (10, 14)]
 	[Native]
 	public enum UNShowPreviewsSetting : long {
 		Always,
@@ -212,10 +183,6 @@ namespace UserNotifications {
 #endif // !XAMCORE_5_0
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs (not user created)
 	interface UNNotification : NSCopying, NSSecureCoding {
@@ -227,9 +194,6 @@ namespace UserNotifications {
 		UNNotificationRequest Request { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs (use FromIdentifier)
@@ -258,9 +222,6 @@ namespace UserNotifications {
 		UNNotificationActionIcon Icon { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (UNNotificationAction))]
 	[DisableDefaultCtor] // as per docs (use FromIdentifier)
@@ -282,9 +243,6 @@ namespace UserNotifications {
 		string TextInputPlaceholder { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs (use FromIdentifier)
@@ -305,9 +263,6 @@ namespace UserNotifications {
 		UNNotificationAttachment FromIdentifier (string identifier, NSUrl url, [NullAllowed] NSDictionary options, [NullAllowed] out NSError error);
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[Static]
 	[Internal]
@@ -326,8 +281,6 @@ namespace UserNotifications {
 		NSString ThumbnailTime { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
 	[Unavailable (PlatformName.TvOS)]
 	[StrongDictionary ("UNNotificationAttachmentOptionsKeys")]
 	interface UNNotificationAttachmentOptions {
@@ -353,9 +306,6 @@ namespace UserNotifications {
 		double ThumbnailTimeInSeconds { get; set; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs (use FromIdentifier)
@@ -397,10 +347,6 @@ namespace UserNotifications {
 
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs
 	interface UNNotificationContent : NSCopying, NSMutableCopying, NSSecureCoding {
@@ -480,10 +426,6 @@ namespace UserNotifications {
 		string FilterCriteria { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (UNNotificationContent))]
 	interface UNMutableNotificationContent {
 
@@ -555,10 +497,6 @@ namespace UserNotifications {
 		string FilterCriteria { get; set; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UNNotificationRequest : NSCopying, NSSecureCoding {
@@ -577,9 +515,6 @@ namespace UserNotifications {
 		UNNotificationRequest FromIdentifier (string identifier, UNNotificationContent content, [NullAllowed] UNNotificationTrigger trigger);
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[Static]
 	[Internal]
@@ -592,9 +527,6 @@ namespace UserNotifications {
 		NSString Dismiss { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs
@@ -620,9 +552,6 @@ namespace UserNotifications {
 		UIScene TargetScene { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (UNNotificationResponse))]
 	[DisableDefaultCtor] // as per docs
@@ -632,8 +561,6 @@ namespace UserNotifications {
 		string UserText { get; }
 	}
 
-	[iOS (10, 0)]
-	[Mac (10, 14)]
 	[Watch (6, 0)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (NSObject))]
@@ -648,10 +575,6 @@ namespace UserNotifications {
 		void TimeWillExpire ();
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs
 	interface UNNotificationSettings : NSCopying, NSSecureCoding {
@@ -718,9 +641,6 @@ namespace UserNotifications {
 		UNNotificationSetting DirectMessagesSetting { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Unavailable (PlatformName.TvOS)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // as per docs (use provided methods)
@@ -766,10 +686,6 @@ namespace UserNotifications {
 		UNNotificationSound GetCriticalSound (string name, float volume);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (NSObject))]
 	[Abstract] // as per docs
 	[DisableDefaultCtor]
@@ -779,20 +695,12 @@ namespace UserNotifications {
 		bool Repeats { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (UNNotificationTrigger))]
 	[DisableDefaultCtor] // as per docs (system created)
 	interface UNPushNotificationTrigger {
 
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (UNNotificationTrigger))]
 	[DisableDefaultCtor] // as per doc, use supplied method (CreateTrigger)
 	interface UNTimeIntervalNotificationTrigger {
@@ -808,10 +716,6 @@ namespace UserNotifications {
 		NSDate NextTriggerDate { get; }
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[DisableDefaultCtor] // as per doc, use supplied method (CreateTrigger)
 	[BaseType (typeof (UNNotificationTrigger))]
 	interface UNCalendarNotificationTrigger {
@@ -827,8 +731,6 @@ namespace UserNotifications {
 		NSDate NextTriggerDate { get; }
 	}
 
-	[iOS (10, 0)]
-	[Watch (3, 0)]
 	[NoMac]
 	[NoMacCatalyst]
 	[Unavailable (PlatformName.TvOS)]
@@ -847,10 +749,6 @@ namespace UserNotifications {
 
 	interface IUNUserNotificationCenterDelegate { }
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UNUserNotificationCenterDelegate {
@@ -862,15 +760,11 @@ namespace UserNotifications {
 		[Export ("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
 		void DidReceiveNotificationResponse (UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler);
 
-		[NoWatch, NoTV, Mac (10, 14), iOS (12, 0)]
+		[NoWatch, NoTV, iOS (12, 0)]
 		[Export ("userNotificationCenter:openSettingsForNotification:")]
 		void OpenSettings (UNUserNotificationCenter center, [NullAllowed] UNNotification notification);
 	}
 
-	[iOS (10, 0)]
-	[TV (10, 0)]
-	[Watch (3, 0)]
-	[Mac (10, 14)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UNUserNotificationCenter {

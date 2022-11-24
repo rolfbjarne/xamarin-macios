@@ -118,19 +118,12 @@ namespace MediaPlayer {
 		AudioITunesU = 1 << 3,
 		AnyAudio = 0x00ff,
 
-		[Mac (10, 12, 2)]
 		Movie = 1 << 8,
-		[Mac (10, 12, 2)]
 		TVShow = 1 << 9,
-		[Mac (10, 12, 2)]
 		VideoPodcast = 1 << 10,
-		[Mac (10, 12, 2)]
 		MusicVideo = 1 << 11,
-		[Mac (10, 12, 2)]
 		VideoITunesU = 1 << 12,
-		[Mac (10, 12, 2)]
 		HomeVideo = 1 << 13,
-		[Mac (10, 12, 2)]
 		TypeAnyVideo = 0xff00,
 		Any = 0xFFFFFFFFFFFFFFFF
 	}
@@ -235,7 +228,6 @@ namespace MediaPlayer {
 
 	public delegate void MPMediaItemEnumerator (string property, NSObject value, ref bool stop);
 
-	[Mac (10, 12, 2)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPShuffleType : long {
@@ -244,7 +236,6 @@ namespace MediaPlayer {
 		Collections
 	}
 
-	[Mac (10, 12, 2)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPRepeatType : long {
@@ -253,8 +244,6 @@ namespace MediaPlayer {
 		All
 	}
 
-	[Mac (10, 12, 2)]
-	[iOS (10, 0)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPChangeLanguageOptionSetting : long {
@@ -264,25 +253,19 @@ namespace MediaPlayer {
 	}
 
 	// NSInteger -> MPRemoteCommand.h
-	[Mac (10, 12, 2)]
-	[iOS (7, 1)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPRemoteCommandHandlerStatus : long {
 		Success = 0,
 		NoSuchContent = 100,
-		[iOS (9, 1)]
 		NoActionableNowPlayingItem = 110,
 		[iOS (11, 0)]
 		[TV (11, 0)]
-		[Mac (10, 13)]
 		DeviceNotFound = 120,
 		CommandFailed = 200
 	}
 
 	// NSUInteger -> MPRemoteCommandEvent.h
-	[Mac (10, 12, 2)]
-	[iOS (7, 1)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPSeekCommandEventType : ulong {
@@ -290,8 +273,6 @@ namespace MediaPlayer {
 		EndSeeking
 	}
 
-	[Mac (10, 12, 2)]
-	[iOS (9, 0)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPNowPlayingInfoLanguageOptionType : ulong {
@@ -299,9 +280,7 @@ namespace MediaPlayer {
 		Legible
 	}
 
-	[Mac (10, 14, 2)]
 	[Watch (7, 0)]
-	[iOS (9, 3)]
 	[Native]
 	[ErrorDomain ("MPErrorDomain")]
 	public enum MPErrorCode : long {
@@ -318,7 +297,6 @@ namespace MediaPlayer {
 	[NoMac]
 	[NoTV]
 	[NoWatch]
-	[iOS (9, 3)]
 	[Native]
 	public enum MPMediaLibraryAuthorizationStatus : long {
 		NotDetermined = 0,
@@ -327,9 +305,6 @@ namespace MediaPlayer {
 		Authorized
 	}
 
-	[Mac (10, 12, 2)]
-	[iOS (10, 0)]
-	[TV (10, 0)]
 	[Watch (5, 0)]
 	[Native]
 	public enum MPNowPlayingInfoMediaType : ulong {
@@ -338,7 +313,6 @@ namespace MediaPlayer {
 		Video
 	}
 
-	[Mac (10, 12, 2)]
 	[Watch (5, 0)]
 	[iOS (11, 0)]
 	[TV (11, 0)]

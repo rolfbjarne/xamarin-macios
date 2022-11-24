@@ -24,7 +24,6 @@ namespace CoreMotion {
 	}
 
 	[NoMac]
-	[iOS (9, 0)]
 	[BaseType (typeof (CMAccelerometerData))]
 	[DisableDefaultCtor]
 	interface CMRecordedAccelerometerData {
@@ -258,7 +257,6 @@ namespace CoreMotion {
 	}
 
 	[Mac (10, 15)]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	interface CMPedometerData : NSSecureCoding, NSCopying {
 
@@ -283,22 +281,18 @@ namespace CoreMotion {
 		[Export ("floorsDescended")]
 		NSNumber FloorsDescended { get; }
 
-		[iOS (9, 0)]
 		[NullAllowed, Export ("currentPace")]
 		NSNumber CurrentPace { get; }
 
-		[iOS (9, 0)]
 		[NullAllowed]
 		[Export ("currentCadence")]
 		NSNumber CurrentCadence { get; }
 
-		[iOS (10, 0)]
 		[NullAllowed, Export ("averageActivePace")]
 		NSNumber AverageActivePace { get; }
 	}
 
 	[Mac (10, 15)]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	interface CMPedometer {
 
@@ -325,30 +319,22 @@ namespace CoreMotion {
 		[Export ("stopPedometerUpdates")]
 		void StopPedometerUpdates ();
 
-		[iOS (9, 0)]
 		[Static]
 		[Export ("isPaceAvailable")]
 		bool IsPaceAvailable { get; }
 
-		[iOS (9, 0)]
 		[Static]
 		[Export ("isCadenceAvailable")]
 		bool IsCadenceAvailable { get; }
 
-		[Watch (3, 0)]
-		[iOS (10, 0)]
 		[Static]
 		[Export ("isPedometerEventTrackingAvailable")]
 		bool IsPedometerEventTrackingAvailable { get; }
 
-		[Watch (3, 0)]
-		[iOS (10, 0)]
 		[Async]
 		[Export ("startPedometerEventUpdatesWithHandler:")]
 		void StartPedometerEventUpdates (Action<CMPedometerEvent, NSError> handler);
 
-		[Watch (3, 0)]
-		[iOS (10, 0)]
 		[Export ("stopPedometerEventUpdates")]
 		void StopPedometerEventUpdates ();
 
@@ -413,13 +399,11 @@ namespace CoreMotion {
 		[Export ("automotive")]
 		bool Automotive { get; }
 
-		[iOS (8, 0)]
 		[Export ("cycling")]
 		bool Cycling { get; }
 	}
 
 	[NoMac]
-	[iOS (8, 0)]
 	[BaseType (typeof (CMLogItem))]
 	[DisableDefaultCtor] // this does not look to be meant to be user created (and crash when description is called)
 	interface CMAltitudeData {
@@ -431,7 +415,6 @@ namespace CoreMotion {
 	}
 
 	[NoMac]
-	[iOS (8, 0)]
 	[BaseType (typeof (NSObject))]
 	interface CMAltimeter {
 		[Static]
@@ -478,18 +461,15 @@ namespace CoreMotion {
 	}
 
 	[NoMac]
-	[iOS (9, 0)]
 	[BaseType (typeof (NSObject))]
 	interface CMSensorDataList /* NSFastEnumeration */
 	{
 	}
 
 	[NoMac]
-	[iOS (9, 0)]
 	[BaseType (typeof (NSObject))]
 	interface CMSensorRecorder {
 		[Static]
-		[iOS (9, 3)] // Apple changed the selector in 9.3 and removed the old one
 		[Export ("isAccelerometerRecordingAvailable")]
 		bool IsAccelerometerRecordingAvailable { get; }
 
@@ -499,12 +479,10 @@ namespace CoreMotion {
 		[Export ("isAuthorizedForRecording")]
 		bool IsAuthorizedForRecording { get; }
 
-		[iOS (9, 3)] // Apple changed the selector in 9.3 and removed the old one
 		[Export ("accelerometerDataFromDate:toDate:")]
 		[return: NullAllowed]
 		CMSensorDataList GetAccelerometerData (NSDate fromDate, NSDate toDate);
 
-		[iOS (9, 3)] // Apple changed the selector in 9.3 and removed the old one
 		[Export ("recordAccelerometerForDuration:")]
 		void RecordAccelerometer (double duration);
 
@@ -515,9 +493,7 @@ namespace CoreMotion {
 	}
 
 	[Mac (10, 15)]
-	[Watch (3, 0)]
 	[NoTV]
-	[iOS (10, 0)]
 	[Native]
 	public enum CMPedometerEventType : long {
 		Pause,
@@ -525,9 +501,7 @@ namespace CoreMotion {
 	}
 
 	[Mac (10, 15)]
-	[Watch (3, 0)]
 	[NoTV]
-	[iOS (10, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // instances exposed from delegate
 	interface CMPedometerEvent : NSSecureCoding, NSCopying {

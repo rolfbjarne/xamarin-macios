@@ -49,8 +49,6 @@ namespace ImageIO {
 
 	// untyped enum / #defines
 	// used with kCGImagePropertyPNGCompressionFilter
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[Flags]
 	public enum CGImagePropertyPngFilters {
 		No = 0,

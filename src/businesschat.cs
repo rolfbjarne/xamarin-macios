@@ -26,7 +26,7 @@ namespace BusinessChat {
 
 	[Deprecated (PlatformName.MacOSX, 13, 1)]
 	[Deprecated (PlatformName.iOS, 16, 2)]
-	[Mac (10, 13, 4), iOS (11, 3)]
+	[iOS (11, 3)]
 	[BaseType (typeof (UIControl))]
 	[DisableDefaultCtor]
 	interface BCChatButton {
@@ -38,7 +38,7 @@ namespace BusinessChat {
 
 	[Deprecated (PlatformName.MacOSX, 13, 1)]
 	[Deprecated (PlatformName.iOS, 16, 2)]
-	[Mac (10, 13, 4), iOS (11, 3)]
+	[iOS (11, 3)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface BCChatAction {

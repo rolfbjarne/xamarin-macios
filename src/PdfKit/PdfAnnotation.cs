@@ -24,8 +24,6 @@ namespace PdfKit {
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 12)]
 #endif
 		public bool SetValue<T> (T value, PdfAnnotationKey key) where T : class, INativeObject
 		{
@@ -40,8 +38,6 @@ namespace PdfKit {
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 12)]
 #endif
 		public bool SetValue (string str, PdfAnnotationKey key)
 		{
@@ -58,8 +54,6 @@ namespace PdfKit {
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 12)]
 #endif
 		public T GetValue<T> (PdfAnnotationKey key) where T : class, INativeObject
 		{
@@ -81,8 +75,6 @@ namespace PdfKit {
 		[SupportedOSPlatform ("ios11.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
-#else
-		[Mac (10, 13)]
 #endif
 		public CGPoint [] QuadrilateralPoints {
 			get {

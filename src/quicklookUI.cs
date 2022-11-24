@@ -169,7 +169,6 @@ namespace QuickLookUI {
 		bool Autostarts { get; set; }
 	}
 
-	[Mac (10, 13)]
 	[Protocol]
 	interface QLPreviewingController {
 #if !NET

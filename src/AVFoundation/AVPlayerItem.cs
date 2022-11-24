@@ -18,7 +18,6 @@ namespace AVFoundation {
 #else
 		[TV (11, 0)]
 		[NoWatch]
-		[Mac (10, 13)]
 		[iOS (11, 0)]
 #endif
 		public AVVideoApertureMode VideoApertureMode {

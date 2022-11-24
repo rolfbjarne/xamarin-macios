@@ -44,8 +44,6 @@ namespace Metal {
 
 	interface IMTLCommandEncoder { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLArgument {
 		[Export ("name")]
@@ -88,21 +86,19 @@ namespace Metal {
 		[Export ("textureDataType")]
 		MTLDataType TextureDataType { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("isDepthTexture")]
 		bool IsDepthTexture { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 		[Export ("arrayLength")]
 		nuint ArrayLength { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[NullAllowed, Export ("bufferPointerType")]
 		MTLPointerType BufferPointerType { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (MTLType))]
 	interface MTLArrayType {
 		[Export ("arrayLength")]
@@ -122,21 +118,19 @@ namespace Metal {
 		[return: NullAllowed]
 		MTLArrayType ElementArrayType ();
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("argumentIndexStride")]
 		nuint ArgumentIndexStride { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[NullAllowed, Export ("elementTextureReferenceType")]
 		MTLTextureReferenceType ElementTextureReferenceType { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[NullAllowed, Export ("elementPointerType")]
 		MTLPointerType ElementPointerType { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLCommandEncoder {
 		[Abstract, Export ("device")]
@@ -160,8 +154,6 @@ namespace Metal {
 
 	interface IMTLBuffer { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLBuffer : MTLResource {
 		[Abstract, Export ("length")]
@@ -174,7 +166,6 @@ namespace Metal {
 		[Abstract, Export ("didModifyRange:")]
 		void DidModify (NSRange range);
 
-		[Mac (10, 13)]
 		[return: NullAllowed]
 #if NET || !MONOMAC
 		[Abstract]
@@ -183,14 +174,14 @@ namespace Metal {
 		[return: Release]
 		IMTLTexture CreateTexture (MTLTextureDescriptor descriptor, nuint offset, nuint bytesPerRow);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("addDebugMarker:range:")]
 		void AddDebugMarker (string marker, NSRange range);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -214,7 +205,7 @@ namespace Metal {
 		IMTLBuffer CreateRemoteBuffer (IMTLDevice device);
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLBufferLayoutDescriptor : NSCopying {
 		[Export ("stride")]
@@ -227,7 +218,7 @@ namespace Metal {
 		nuint StepRate { get; set; }
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLBufferLayoutDescriptorArray {
 		[Internal]
@@ -242,8 +233,6 @@ namespace Metal {
 
 	interface IMTLCommandBuffer { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLCommandBuffer {
 
@@ -289,7 +278,7 @@ namespace Metal {
 		[Abstract, Export ("computeCommandEncoder")]
 		IMTLComputeCommandEncoder ComputeCommandEncoder { get; }
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -297,14 +286,14 @@ namespace Metal {
 		[return: NullAllowed]
 		IMTLComputeCommandEncoder ComputeCommandEncoderDispatch (MTLDispatchType dispatchType);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("encodeWaitForEvent:value:")]
 		void EncodeWait (IMTLEvent @event, ulong value);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -331,8 +320,6 @@ namespace Metal {
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
 		[Introduced (PlatformName.MacCatalyst, 13, 4)]
-		[iOS (10, 3)]
-		[TV (10, 2)]
 		[Mac (10, 15, 4)]
 		[Export ("presentDrawable:afterMinimumDuration:")]
 		void PresentDrawableAfter (IMTLDrawable drawable, double duration);
@@ -344,47 +331,35 @@ namespace Metal {
 #if NET
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
-		[iOS (10, 3)]
-		[TV (10, 2)]
-		[Mac (10, 12, 4)]
 		[Export ("kernelStartTime")]
 		double /* CFTimeInterval */ KernelStartTime { get; }
 
 #if NET
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
-		[iOS (10, 3)]
-		[TV (10, 2)]
-		[Mac (10, 12, 4)]
 		[Export ("kernelEndTime")]
 		double /* CFTimeInterval */ KernelEndTime { get; }
 
 #if NET
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
-		[iOS (10, 3)]
-		[TV (10, 2)]
-		[Mac (10, 12, 4)]
 		[Export ("GPUStartTime")]
 		double /* CFTimeInterval */ GpuStartTime { get; }
 
 #if NET
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
-		[iOS (10, 3)]
-		[TV (10, 2)]
-		[Mac (10, 12, 4)]
 		[Export ("GPUEndTime")]
 		double /* CFTimeInterval */ GpuEndTime { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
 		[Export ("pushDebugGroup:")]
 		void PushDebugGroup (string @string);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
@@ -444,8 +419,6 @@ namespace Metal {
 
 	interface IMTLCommandQueue { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLCommandQueue {
 
@@ -482,11 +455,9 @@ namespace Metal {
 
 	interface IMTLComputeCommandEncoder { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLComputeCommandEncoder : MTLCommandEncoder {
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -517,7 +488,6 @@ namespace Metal {
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
 		[Export ("dispatchThreadgroupsWithIndirectBuffer:indirectBufferOffset:threadsPerThreadgroup:")]
 		void DispatchThreadgroups (IMTLBuffer indirectBuffer, nuint indirectBufferOffset, MTLSize threadsPerThreadgroup);
 
@@ -544,45 +514,42 @@ namespace Metal {
 		[Export ("setTextures:withRange:")]
 		void SetTextures (IMTLTexture [] textures, NSRange range);
 
-		[iOS (8, 3)]
 		[Abstract]
 		[Export ("setBufferOffset:atIndex:")]
 		void SetBufferOffset (nuint offset, nuint index);
 
-		[iOS (8, 3)]
 		[Abstract]
 		[Export ("setBytes:length:atIndex:")]
 		void SetBytes (IntPtr bytes, nuint length, nuint index);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setStageInRegion:")]
 		void SetStage (MTLRegion region);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setStageInRegionWithIndirectBuffer:indirectBufferOffset:")]
 		void SetStageInRegion (IMTLBuffer indirectBuffer, nuint indirectBufferOffset);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("updateFence:")]
 		void Update (IMTLFence fence);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("waitForFence:")]
 		void Wait (IMTLFence fence);
 
-		[Mac (10, 13)]
 		[iOS (11, 0)]
 		[TV (14, 5)]
 #if NET
@@ -591,28 +558,28 @@ namespace Metal {
 		[Export ("dispatchThreads:threadsPerThreadgroup:")]
 		void DispatchThreads (MTLSize threadsPerGrid, MTLSize threadsPerThreadgroup);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useResource:usage:")]
 		void UseResource (IMTLResource resource, MTLResourceUsage usage);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useResources:count:usage:")]
 		void UseResources (IMTLResource [] resources, nuint count, MTLResourceUsage usage);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useHeap:")]
 		void UseHeap (IMTLHeap heap);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -628,14 +595,14 @@ namespace Metal {
 		[Export ("setImageblockWidth:height:")]
 		void SetImageblock (nuint width, nuint height);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("memoryBarrierWithScope:")]
 		void MemoryBarrier (MTLBarrierScope scope);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -705,8 +672,6 @@ namespace Metal {
 
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLComputePipelineReflection {
 		[Export ("arguments")]
@@ -718,8 +683,6 @@ namespace Metal {
 	}
 
 	interface IMTLComputePipelineState { }
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLComputePipelineState {
 		[Abstract, Export ("device")]
@@ -731,14 +694,14 @@ namespace Metal {
 		[Abstract, Export ("threadExecutionWidth")]
 		nuint ThreadExecutionWidth { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[NullAllowed, Export ("label")]
 		string Label { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -795,8 +758,6 @@ namespace Metal {
 
 	interface IMTLBlitCommandEncoder { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLBlitCommandEncoder : MTLCommandEncoder {
 
@@ -814,7 +775,6 @@ namespace Metal {
 		[Abstract, Export ("copyFromBuffer:sourceOffset:sourceBytesPerRow:sourceBytesPerImage:sourceSize:toTexture:destinationSlice:destinationLevel:destinationOrigin:")]
 		void CopyFromBuffer (IMTLBuffer sourceBuffer, nuint sourceOffset, nuint sourceBytesPerRow, nuint sourceBytesPerImage, MTLSize sourceSize, IMTLTexture destinationTexture, nuint destinationSlice, nuint destinationLevel, MTLOrigin destinationOrigin);
 
-		[iOS (9, 0)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -825,7 +785,6 @@ namespace Metal {
 		[Abstract, Export ("copyFromTexture:sourceSlice:sourceLevel:sourceOrigin:sourceSize:toBuffer:destinationOffset:destinationBytesPerRow:destinationBytesPerImage:")]
 		void CopyFromTexture (IMTLTexture sourceTexture, nuint sourceSlice, nuint sourceLevel, MTLOrigin sourceOrigin, MTLSize sourceSize, IMTLBuffer destinationBuffer, nuint destinationOffset, nuint destinatinBytesPerRow, nuint destinationBytesPerImage);
 
-		[iOS (9, 0)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -842,63 +801,63 @@ namespace Metal {
 		[Abstract, Export ("copyFromBuffer:sourceOffset:toBuffer:destinationOffset:size:")]
 		void CopyFromBuffer (IMTLBuffer sourceBuffer, nuint sourceOffset, IMTLBuffer destinationBuffer, nuint destinationOffset, nuint size);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("updateFence:")]
 		void Update (IMTLFence fence);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("waitForFence:")]
 		void Wait (IMTLFence fence);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("optimizeContentsForGPUAccess:")]
 		void OptimizeContentsForGpuAccess (IMTLTexture texture);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("optimizeContentsForGPUAccess:slice:level:")]
 		void OptimizeContentsForGpuAccess (IMTLTexture texture, nuint slice, nuint level);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("optimizeContentsForCPUAccess:")]
 		void OptimizeContentsForCpuAccess (IMTLTexture texture);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("optimizeContentsForCPUAccess:slice:level:")]
 		void OptimizeContentsForCpuAccess (IMTLTexture texture, nuint slice, nuint level);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("resetCommandsInBuffer:withRange:")]
 		void ResetCommands (IMTLIndirectCommandBuffer buffer, NSRange range);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("copyIndirectCommandBuffer:sourceRange:destination:destinationIndex:")]
 		void Copy (IMTLIndirectCommandBuffer source, NSRange sourceRange, IMTLIndirectCommandBuffer destination, nuint destinationIndex);
 
-		[Mac (10, 14), iOS (12, 0)]
+		[iOS (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -958,7 +917,7 @@ namespace Metal {
 
 	interface IMTLFence { }
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+	[NoWatch]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	interface MTLFence {
 		[Abstract]
@@ -972,8 +931,6 @@ namespace Metal {
 
 	interface IMTLDevice { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLDevice {
 
@@ -983,7 +940,6 @@ namespace Metal {
 #if NET
 		[Abstract] // new required member, but that breaks our binary compat, so we can't do that in our existing code.
 #endif
-		[iOS (9, 0)]
 		[Export ("maxThreadsPerThreadgroup")]
 		MTLSize MaxThreadsPerThreadgroup { get; }
 
@@ -1005,7 +961,7 @@ namespace Metal {
 		[Export ("headless")]
 		bool Headless { [Bind ("isHeadless")] get; }
 
-		[NoiOS, NoTV, NoWatch, Mac (10, 12), MacCatalyst (15, 0)]
+		[NoiOS, NoTV, NoWatch, MacCatalyst (15, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1021,21 +977,21 @@ namespace Metal {
 		[Export ("depth24Stencil8PixelFormatSupported")]
 		bool Depth24Stencil8PixelFormatSupported { [Bind ("isDepth24Stencil8PixelFormatSupported")] get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("heapTextureSizeAndAlignWithDescriptor:")]
 		MTLSizeAndAlign GetHeapTextureSizeAndAlign (MTLTextureDescriptor desc);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("heapBufferSizeAndAlignWithLength:options:")]
 		MTLSizeAndAlign GetHeapBufferSizeAndAlignWithLength (nuint length, MTLResourceOptions options);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -1082,13 +1038,13 @@ namespace Metal {
 #if NET
 		[Abstract]
 #endif
-		[iOS (11, 0), TV (11, 0), NoWatch, Mac (10, 11)]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[return: NullAllowed]
 		[return: Release]
 		[Export ("newTextureWithDescriptor:iosurface:plane:")]
 		IMTLTexture CreateTexture (MTLTextureDescriptor descriptor, IOSurface.IOSurface iosurface, nuint plane);
 
-		[iOS (13, 0), TV (13, 0), Mac (10, 14)]
+		[iOS (13, 0), TV (13, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1097,7 +1053,7 @@ namespace Metal {
 		[return: Release]
 		IMTLTexture CreateSharedTexture (MTLTextureDescriptor descriptor);
 
-		[iOS (13, 0), TV (13, 0), Mac (10, 14)]
+		[iOS (13, 0), TV (13, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1144,7 +1100,7 @@ namespace Metal {
 #if NET
 		[Abstract]
 #endif
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("newDefaultLibraryWithBundle:error:")]
 		[return: Release]
 		[return: NullAllowed]
@@ -1187,7 +1143,6 @@ namespace Metal {
 		[Abstract, Export ("newComputePipelineStateWithFunction:options:completionHandler:")]
 		void CreateComputePipelineState (IMTLFunction computeFunction, MTLPipelineOption options, Action<IMTLComputePipelineState, MTLComputePipelineReflection, NSError> completionHandler);
 
-		[iOS (9, 0)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -1196,7 +1151,6 @@ namespace Metal {
 		[return: Release]
 		IMTLComputePipelineState CreateComputePipelineState (MTLComputePipelineDescriptor descriptor, MTLPipelineOption options, out MTLComputePipelineReflection reflection, out NSError error);
 
-		[iOS (9, 0)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -1204,7 +1158,7 @@ namespace Metal {
 		[Export ("newComputePipelineStateWithDescriptor:options:completionHandler:")]
 		void CreateComputePipelineState (MTLComputePipelineDescriptor descriptor, MTLPipelineOption options, MTLNewComputePipelineStateWithReflectionCompletionHandler completionHandler);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -1215,7 +1169,6 @@ namespace Metal {
 		[Abstract, Export ("supportsFeatureSet:")]
 		bool SupportsFeatureSet (MTLFeatureSet featureSet);
 
-		[iOS (9, 0)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -1223,35 +1176,35 @@ namespace Metal {
 		[Export ("supportsTextureSampleCount:")]
 		bool SupportsTextureSampleCount (nuint sampleCount);
 
-		[Mac (10, 13), NoiOS, NoWatch, NoTV, MacCatalyst (15, 0)]
+		[NoiOS, NoWatch, NoTV, MacCatalyst (15, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("removable")]
 		bool Removable { [Bind ("isRemovable")] get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("readWriteTextureSupport")]
 		MTLReadWriteTextureTier ReadWriteTextureSupport { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("argumentBuffersSupport")]
 		MTLArgumentBuffersTier ArgumentBuffersSupport { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("rasterOrderGroupsSupported")]
 		bool RasterOrderGroupsSupported { [Bind ("areRasterOrderGroupsSupported")] get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -1260,49 +1213,49 @@ namespace Metal {
 		[return: Release]
 		IMTLLibrary CreateLibrary (NSUrl url, [NullAllowed] out NSError error);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("minimumLinearTextureAlignmentForPixelFormat:")]
 		nuint GetMinimumLinearTextureAlignment (MTLPixelFormat format);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("minimumTextureBufferAlignmentForPixelFormat:")]
 		nuint GetMinimumTextureBufferAlignment (MTLPixelFormat format);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("maxThreadgroupMemoryLength")]
 		nuint MaxThreadgroupMemoryLength { get; }
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("maxArgumentBufferSamplerCount")]
 		nuint MaxArgumentBufferSamplerCount { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("programmableSamplePositionsSupported")]
 		bool ProgrammableSamplePositionsSupported { [Bind ("areProgrammableSamplePositionsSupported")] get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("getDefaultSamplePositions:count:")]
 		void GetDefaultSamplePositions (IntPtr positions, nuint count);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -1311,7 +1264,7 @@ namespace Metal {
 		[return: Release]
 		IMTLArgumentEncoder CreateArgumentEncoder (MTLArgumentDescriptor [] arguments);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1320,7 +1273,7 @@ namespace Metal {
 		[return: Release]
 		IMTLIndirectCommandBuffer CreateIndirectCommandBuffer (MTLIndirectCommandBufferDescriptor descriptor, nuint maxCount, MTLResourceOptions options);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1329,7 +1282,7 @@ namespace Metal {
 		[Export ("newEvent")]
 		IMTLEvent CreateEvent ();
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1338,7 +1291,7 @@ namespace Metal {
 		[Export ("newSharedEvent")]
 		IMTLSharedEvent CreateSharedEvent ();
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1347,21 +1300,21 @@ namespace Metal {
 		[return: Release]
 		IMTLSharedEvent CreateSharedEvent (MTLSharedEventHandle sharedEventHandle);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("maxBufferLength")]
 		nuint MaxBufferLength { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("registryID")]
 		ulong RegistryId { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -1369,17 +1322,17 @@ namespace Metal {
 		nuint CurrentAllocatedSize { get; }
 
 #if false // https://bugzilla.xamarin.com/show_bug.cgi?id=59342
-		[Mac (10,13), NoiOS, NoTV, NoWatch]
+		[NoiOS, NoTV, NoWatch]
 		[Notification]
 		[Field ("MTLDeviceWasAddedNotification")]
 		NSString DeviceWasAdded { get; }
 
-		[Mac (10,13), NoiOS, NoTV, NoWatch]
+		[NoiOS, NoTV, NoWatch]
 		[Notification]
 		[Field ("MTLDeviceRemovalRequestedNotification")]
 		NSString DeviceRemovalRequested { get; }
 
-		[Mac (10,13), NoiOS, NoTV, NoWatch]
+		[NoiOS, NoTV, NoWatch]
 		[Notification]
 		[Field ("MTLDeviceWasRemovedNotification")]
 		NSString DeviceWasRemoved { get; }
@@ -1727,8 +1680,6 @@ namespace Metal {
 	}
 
 	interface IMTLDrawable { }
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLDrawable {
@@ -1742,8 +1693,6 @@ namespace Metal {
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
 		[Introduced (PlatformName.MacCatalyst, 13, 4)]
-		[iOS (10, 3)]
-		[TV (10, 2)]
 		[Mac (10, 15, 4)]
 		[Export ("presentAfterMinimumDuration:")]
 		void PresentAfter (double duration);
@@ -1752,8 +1701,6 @@ namespace Metal {
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
 		[Introduced (PlatformName.MacCatalyst, 13, 4)]
-		[iOS (10, 3)]
-		[TV (10, 2)]
 		[Mac (10, 15, 4)]
 		[Export ("addPresentedHandler:")]
 		void AddPresentedHandler (Action<IMTLDrawable> block);
@@ -1762,8 +1709,6 @@ namespace Metal {
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
 		[Introduced (PlatformName.MacCatalyst, 13, 4)]
-		[iOS (10, 3)]
-		[TV (10, 2)]
 		[Mac (10, 15, 4)]
 		[Export ("presentedTime")]
 		double /* CFTimeInterval */ PresentedTime { get; }
@@ -1772,8 +1717,6 @@ namespace Metal {
 		[Abstract] // @required but we can't add abstract members in C# and keep binary compatibility
 #endif
 		[Introduced (PlatformName.MacCatalyst, 13, 4)]
-		[iOS (10, 3)]
-		[TV (10, 2)]
 		[Mac (10, 15, 4)]
 		[Export ("drawableID")]
 #if NET
@@ -1787,11 +1730,8 @@ namespace Metal {
 
 	// Apple added several new *required* members in iOS 9,
 	// but that breaks our binary compat, so we can't do that in our existing code.
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLTexture : MTLResource {
-		[iOS (8, 0)]
 		[Deprecated (PlatformName.iOS, 10, 0)]
 		[Abstract, Export ("rootResource")]
 		IMTLResource RootResource { get; }
@@ -1799,8 +1739,6 @@ namespace Metal {
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		[NullAllowed] // by default this property is null
 		[Export ("parentTexture")]
 		IMTLTexture ParentTexture { get; }
@@ -1808,24 +1746,18 @@ namespace Metal {
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		[Export ("parentRelativeLevel")]
 		nuint ParentRelativeLevel { get; }
 
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		[Export ("parentRelativeSlice")]
 		nuint ParentRelativeSlice { get; }
 
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		[NullAllowed] // by default this property is null
 		[Export ("buffer")]
 		IMTLBuffer Buffer { get; }
@@ -1833,16 +1765,12 @@ namespace Metal {
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		[Export ("bufferOffset")]
 		nuint BufferOffset { get; }
 
 #if NET
 		[Abstract]
 #endif
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 		[Export ("bufferBytesPerRow")]
 		nuint BufferBytesPerRow { get; }
 
@@ -1873,7 +1801,7 @@ namespace Metal {
 		[Abstract, Export ("framebufferOnly")]
 		bool FramebufferOnly { [Bind ("isFramebufferOnly")] get; }
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -1922,28 +1850,28 @@ namespace Metal {
 		[Export ("replaceRegion:mipmapLevel:withBytes:bytesPerRow:")]
 		void ReplaceRegion (MTLRegion region, nuint level, IntPtr pixelBytes, nuint bytesPerRow);
 
-		[Mac (10, 11), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[NullAllowed, Export ("iosurface")]
 		IOSurface.IOSurface IOSurface { get; }
 
-		[Mac (10, 11), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("iosurfacePlane")]
 		nuint IOSurfacePlane { get; }
 
-		[iOS (13, 0), TV (13, 0), Mac (10, 14)]
+		[iOS (13, 0), TV (13, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("shareable")]
 		bool Shareable { [Bind ("isShareable")] get; }
 
-		[iOS (13, 0), TV (13, 0), Mac (10, 14)]
+		[iOS (13, 0), TV (13, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -2008,8 +1936,6 @@ namespace Metal {
 	}
 
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLTextureDescriptor : NSCopying {
 
@@ -2046,23 +1972,20 @@ namespace Metal {
 		[Static, Export ("textureCubeDescriptorWithPixelFormat:size:mipmapped:")]
 		MTLTextureDescriptor CreateTextureCubeDescriptor (MTLPixelFormat pixelFormat, nuint size, bool mipmapped);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 		[Static, Export ("textureBufferDescriptorWithPixelFormat:width:resourceOptions:usage:")]
 		MTLTextureDescriptor CreateTextureBufferDescriptor (MTLPixelFormat pixelFormat, nuint width, MTLResourceOptions resourceOptions, MTLTextureUsage usage);
 
-		[iOS (9, 0)]
 		[Export ("cpuCacheMode", ArgumentSemantic.Assign)]
 		MTLCpuCacheMode CpuCacheMode { get; set; }
 
-		[iOS (9, 0)]
 		[Export ("storageMode", ArgumentSemantic.Assign)]
 		MTLStorageMode StorageMode { get; set; }
 
-		[iOS (9, 0)]
 		[Export ("usage", ArgumentSemantic.Assign)]
 		MTLTextureUsage Usage { get; set; }
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 		[Export ("allowGPUOptimizedContents")]
 		bool AllowGpuOptimizedContents { get; set; }
 
@@ -2079,8 +2002,6 @@ namespace Metal {
 		MTLTextureSwizzleChannels Swizzle { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLSamplerDescriptor : NSCopying {
 
@@ -2114,15 +2035,14 @@ namespace Metal {
 		[Export ("lodMaxClamp")]
 		float LodMaxClamp { get; set; } /* float, not CGFloat */
 
-		[iOS (9, 0), Mac (11, 0)]
+		[Mac (11, 0)]
 		[Export ("lodAverage")]
 		bool LodAverage { get; set; }
 
-		[iOS (14, 0), NoTV, NoWatch, Mac (10, 12)]
+		[iOS (14, 0), NoTV, NoWatch]
 		[Export ("borderColor", ArgumentSemantic.Assign)]
 		MTLSamplerBorderColor BorderColor { get; set; }
 
-		[iOS (9, 0)]
 		[Export ("compareFunction")]
 		MTLCompareFunction CompareFunction { get; set; }
 
@@ -2130,14 +2050,12 @@ namespace Metal {
 		[NullAllowed]
 		string Label { get; set; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("supportArgumentBuffers")]
 		bool SupportArgumentBuffers { get; set; }
 	}
 
 	interface IMTLSamplerState { }
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLSamplerState {
 
@@ -2148,8 +2066,6 @@ namespace Metal {
 		IMTLDevice Device { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLRenderPipelineDescriptor : NSCopying {
 
@@ -2199,47 +2115,47 @@ namespace Metal {
 		[Export ("inputPrimitiveTopology", ArgumentSemantic.Assign)]
 		MTLPrimitiveTopologyClass InputPrimitiveTopology { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("tessellationPartitionMode", ArgumentSemantic.Assign)]
 		MTLTessellationPartitionMode TessellationPartitionMode { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("maxTessellationFactor")]
 		nuint MaxTessellationFactor { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("tessellationFactorScaleEnabled")]
 		bool IsTessellationFactorScaleEnabled { [Bind ("isTessellationFactorScaleEnabled")] get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("tessellationFactorFormat", ArgumentSemantic.Assign)]
 		MTLTessellationFactorFormat TessellationFactorFormat { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("tessellationControlPointIndexType", ArgumentSemantic.Assign)]
 		MTLTessellationControlPointIndexType TessellationControlPointIndexType { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("tessellationFactorStepFunction", ArgumentSemantic.Assign)]
 		MTLTessellationFactorStepFunction TessellationFactorStepFunction { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("tessellationOutputWindingOrder", ArgumentSemantic.Assign)]
 		MTLWinding TessellationOutputWindingOrder { get; set; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("vertexBuffers")]
 		MTLPipelineBufferDescriptorArray VertexBuffers { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("fragmentBuffers")]
 		MTLPipelineBufferDescriptorArray FragmentBuffers { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("rasterSampleCount")]
 		nuint RasterSampleCount { get; set; }
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 		[Export ("supportIndirectCommandBuffers")]
 		bool SupportIndirectCommandBuffers { get; set; }
 
@@ -2285,8 +2201,6 @@ namespace Metal {
 		MTLLinkedFunctions FragmentLinkedFunctions { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLRenderPipelineColorAttachmentDescriptorArray {
 
@@ -2299,8 +2213,6 @@ namespace Metal {
 
 	interface IMTLRenderPipelineState { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLRenderPipelineState {
 
@@ -2342,7 +2254,7 @@ namespace Metal {
 		[Export ("imageblockMemoryLengthForDimensions:")]
 		nuint GetImageblockMemoryLength (MTLSize imageblockDimensions);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 		[MacCatalyst (14, 0)]
 #if NET
 		[Abstract]
@@ -2386,8 +2298,6 @@ namespace Metal {
 		IMTLRenderPipelineState NewRenderPipelineStateWithAdditionalBinaryFunctions (MTLRenderPipelineFunctionsDescriptor additionalBinaryFunctions, [NullAllowed] out NSError error);
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLVertexBufferLayoutDescriptor : NSCopying {
 		[Export ("stride", ArgumentSemantic.UnsafeUnretained)]
@@ -2400,8 +2310,6 @@ namespace Metal {
 		nuint StepRate { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLVertexBufferLayoutDescriptorArray {
 		[Export ("objectAtIndexedSubscript:"), Internal]
@@ -2411,7 +2319,7 @@ namespace Metal {
 		void SetObject ([NullAllowed] MTLVertexBufferLayoutDescriptor bufferDesc, nuint index);
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLAttribute {
 		[Export ("name")]
@@ -2433,7 +2341,7 @@ namespace Metal {
 		bool IsPatchControlPointData { [Bind ("isPatchControlPointData")] get; }
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLAttributeDescriptor : NSCopying {
 		[Export ("format", ArgumentSemantic.Assign)]
@@ -2446,7 +2354,7 @@ namespace Metal {
 		nuint BufferIndex { get; set; }
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLAttributeDescriptorArray {
 		[Internal]
@@ -2458,8 +2366,6 @@ namespace Metal {
 		void SetObject ([NullAllowed] MTLAttributeDescriptor attributeDesc, nuint index);
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLVertexAttributeDescriptor : NSCopying {
 		[Export ("format", ArgumentSemantic.Assign)]
@@ -2472,8 +2378,6 @@ namespace Metal {
 		nuint BufferIndex { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLVertexAttributeDescriptorArray {
 		[Export ("objectAtIndexedSubscript:"), Internal]
@@ -2483,8 +2387,6 @@ namespace Metal {
 		void SetObject ([NullAllowed] MTLVertexAttributeDescriptor attributeDesc, nuint index);
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLVertexDescriptor : NSCopying {
 		[Static, Export ("vertexDescriptor")]
@@ -2500,14 +2402,11 @@ namespace Metal {
 		MTLVertexAttributeDescriptorArray Attributes { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLVertexAttribute {
 		[Export ("attributeIndex")]
 		nuint AttributeIndex { get; }
 
-		[iOS (8, 3)]
 		[Export ("attributeType")]
 		MTLDataType AttributeType { get; }
 
@@ -2517,20 +2416,20 @@ namespace Metal {
 		[Export ("name")]
 		string Name { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("patchData")]
 		bool PatchData { [Bind ("isPatchData")] get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[Export ("patchControlPointData")]
 		bool PatchControlPointData { [Bind ("isPatchControlPointData")] get; }
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface MTLFunctionConstantValues : NSCopying {
-		[iOS (11, 0), TV (11, 0), Mac (10, 13)]
+		[iOS (11, 0), TV (11, 0)]
 		[Export ("init")]
 		NativeHandle Constructor ();
 
@@ -2547,7 +2446,7 @@ namespace Metal {
 		void Reset ();
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLFunctionConstant {
 		[Export ("name")]
@@ -2564,12 +2463,10 @@ namespace Metal {
 	}
 
 	interface IMTLFunction { }
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLFunction {
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -2588,35 +2485,35 @@ namespace Metal {
 		[Abstract, Export ("name")]
 		string Name { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("patchType")]
 		MTLPatchType PatchType { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("patchControlPointCount")]
 		nint PatchControlPointCount { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[NullAllowed, Export ("stageInputAttributes")]
 		MTLAttribute [] StageInputAttributes { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("functionConstantsDictionary")]
 		NSDictionary<NSString, MTLFunctionConstant> FunctionConstants { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -2624,7 +2521,7 @@ namespace Metal {
 		[return: Release]
 		IMTLArgumentEncoder CreateArgumentEncoder (nuint bufferIndex);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -2642,8 +2539,6 @@ namespace Metal {
 
 	interface IMTLLibrary { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLLibrary {
 
@@ -2660,7 +2555,7 @@ namespace Metal {
 		[return: Release]
 		IMTLFunction CreateFunction (string functionName);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -2669,7 +2564,7 @@ namespace Metal {
 		[return: Release]
 		IMTLFunction CreateFunction (string name, MTLFunctionConstantValues constantValues, out NSError error);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -2728,8 +2623,6 @@ namespace Metal {
 		string InstallName { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLCompileOptions : NSCopying {
 
@@ -2744,7 +2637,6 @@ namespace Metal {
 		[Export ("fastMathEnabled")]
 		bool FastMathEnabled { get; set; }
 
-		[iOS (9, 0)]
 		[Export ("languageVersion", ArgumentSemantic.Assign)]
 		MTLLanguageVersion LanguageVersion { get; set; }
 
@@ -2766,8 +2658,6 @@ namespace Metal {
 		bool PreserveInvariance { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLStencilDescriptor : NSCopying {
 		[Export ("stencilCompareFunction")]
@@ -2789,8 +2679,6 @@ namespace Metal {
 		uint WriteMask { get; set; } /* uint32_t */
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLStructMember {
 		[Export ("name")]
@@ -2820,21 +2708,19 @@ namespace Metal {
 		MTLArrayType ArrayType ();
 #endif
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("argumentIndex")]
 		nuint ArgumentIndex { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[NullAllowed, Export ("textureReferenceType")]
 		MTLTextureReferenceType TextureReferenceType { get; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[NullAllowed, Export ("pointerType")]
 		MTLPointerType PointerType { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (MTLType))]
 	interface MTLStructType {
 		[Export ("members")]
@@ -2847,8 +2733,6 @@ namespace Metal {
 
 	interface IMTLDepthStencilState { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLDepthStencilState {
 		[Abstract]
@@ -2860,8 +2744,6 @@ namespace Metal {
 		IMTLDevice Device { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	partial interface MTLDepthStencilDescriptor : NSCopying {
 
@@ -2886,8 +2768,6 @@ namespace Metal {
 
 	interface IMTLParallelRenderCommandEncoder { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	interface MTLParallelRenderCommandEncoder : MTLCommandEncoder {
 		[Abstract]
@@ -2896,42 +2776,42 @@ namespace Metal {
 		[return: NullAllowed]
 		IMTLRenderCommandEncoder CreateRenderCommandEncoder ();
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setColorStoreAction:atIndex:")]
 		void SetColorStoreAction (MTLStoreAction storeAction, nuint colorAttachmentIndex);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setDepthStoreAction:")]
 		void SetDepthStoreAction (MTLStoreAction storeAction);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setStencilStoreAction:")]
 		void SetStencilStoreAction (MTLStoreAction storeAction);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setColorStoreActionOptions:atIndex:")]
 		void SetColorStoreActionOptions (MTLStoreActionOptions storeActionOptions, nuint colorAttachmentIndex);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setDepthStoreActionOptions:")]
 		void SetDepthStoreActionOptions (MTLStoreActionOptions storeActionOptions);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -2941,8 +2821,6 @@ namespace Metal {
 
 	interface IMTLRenderCommandEncoder { }
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLRenderCommandEncoder : MTLCommandEncoder {
 
@@ -2970,8 +2848,7 @@ namespace Metal {
 		[Abstract, Export ("setCullMode:")]
 		void SetCullMode (MTLCullMode cullMode);
 
-		[iOS (9, 0)] // Current headers claim this member was introduced in iOS 11, but it also shows up in Xcode 7's header (as introduced in iOS 9)
-		[Mac (10, 11), TV (11, 0), NoWatch]
+		[TV (11, 0), NoWatch]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -2991,11 +2868,9 @@ namespace Metal {
 		[Abstract, Export ("setFragmentBuffer:offset:atIndex:")]
 		void SetFragmentBuffer (IMTLBuffer buffer, nuint offset, nuint index);
 
-		[iOS (8, 3)]
 		[Abstract, Export ("setFragmentBufferOffset:atIndex:")]
 		void SetFragmentBufferOffset (nuint offset, nuint index);
 
-		[iOS (8, 3)]
 		[Abstract, Export ("setFragmentBytes:length:atIndex:")]
 		void SetFragmentBytes (IntPtr bytes, nuint length, nuint index);
 
@@ -3017,8 +2892,6 @@ namespace Metal {
 		[Abstract, Export ("setStencilReferenceValue:")]
 		void SetStencilReferenceValue (uint /* uint32_t */ referenceValue);
 
-		[iOS (9, 0)]
-		[Mac (10, 11)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
@@ -3029,21 +2902,21 @@ namespace Metal {
 		[Abstract, Export ("setVisibilityResultMode:offset:")]
 		void SetVisibilityResultMode (MTLVisibilityResultMode mode, nuint offset);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setColorStoreAction:atIndex:")]
 		void SetColorStoreAction (MTLStoreAction storeAction, nuint colorAttachmentIndex);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setDepthStoreAction:")]
 		void SetDepthStoreAction (MTLStoreAction storeAction);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -3066,7 +2939,6 @@ namespace Metal {
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
 #endif
-		[iOS (9, 0)]
 		[Export ("drawPrimitives:vertexStart:vertexCount:instanceCount:baseInstance:")]
 		void DrawPrimitives (MTLPrimitiveType primitiveType, nuint vertexStart, nuint vertexCount, nuint instanceCount, nuint baseInstance);
 
@@ -3074,7 +2946,6 @@ namespace Metal {
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
 #endif
-		[iOS (9, 0)]
 		[Export ("drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferOffset:instanceCount:baseVertex:baseInstance:")]
 		void DrawIndexedPrimitives (MTLPrimitiveType primitiveType, nuint indexCount, MTLIndexType indexType, IMTLBuffer indexBuffer, nuint indexBufferOffset, nuint instanceCount, nint baseVertex, nuint baseInstance);
 
@@ -3082,7 +2953,6 @@ namespace Metal {
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
 #endif
-		[iOS (9, 0)]
 		[Export ("drawPrimitives:indirectBuffer:indirectBufferOffset:")]
 		void DrawPrimitives (MTLPrimitiveType primitiveType, IMTLBuffer indirectBuffer, nuint indirectBufferOffset);
 
@@ -3090,7 +2960,6 @@ namespace Metal {
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
 		[Abstract]
 #endif
-		[iOS (9, 0)]
 		[Export ("drawIndexedPrimitives:indexType:indexBuffer:indexBufferOffset:indirectBuffer:indirectBufferOffset:")]
 		void DrawIndexedPrimitives (MTLPrimitiveType primitiveType, MTLIndexType indexType, IMTLBuffer indexBuffer, nuint indexBufferOffset, IMTLBuffer indirectBuffer, nuint indirectBufferOffset);
 
@@ -3109,11 +2978,9 @@ namespace Metal {
 		[Abstract, Export ("setVertexBuffers:offsets:withRange:")]
 		void SetVertexBuffers (IMTLBuffer [] buffers, IntPtr uintArrayPtrOffsets, NSRange range);
 
-		[iOS (8, 3)]
 		[Abstract, Export ("setVertexBufferOffset:atIndex:")]
 		void SetVertexBufferOffset (nuint offset, nuint index);
 
-		[iOS (8, 3)]
 		[Abstract, Export ("setVertexBytes:length:atIndex:")]
 		void SetVertexBytes (IntPtr bytes, nuint length, nuint index);
 
@@ -3127,7 +2994,7 @@ namespace Metal {
 		[Export ("setVertexTextures:withRange:")]
 		void SetVertexTextures (IMTLTexture [] textures, NSRange range);
 
-		[NoiOS, NoTV, NoWatch, Mac (10, 11)]
+		[NoiOS, NoTV, NoWatch]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'MemoryBarrier (MTLBarrierScope, MTLRenderStages, MTLRenderStages)' instead.")]
 #if NET
 		[Abstract]
@@ -3135,35 +3002,35 @@ namespace Metal {
 		[Export ("textureBarrier")]
 		void TextureBarrier ();
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("updateFence:afterStages:")]
 		void Update (IMTLFence fence, MTLRenderStages stages);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("waitForFence:beforeStages:")]
 		void Wait (IMTLFence fence, MTLRenderStages stages);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setTessellationFactorBuffer:offset:instanceStride:")]
 		void SetTessellationFactorBuffer ([NullAllowed] IMTLBuffer buffer, nuint offset, nuint instanceStride);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setTessellationFactorScale:")]
 		void SetTessellationFactorScale (float scale);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -3171,7 +3038,7 @@ namespace Metal {
 		void DrawPatches (nuint numberOfPatchControlPoints, nuint patchStart, nuint patchCount, [NullAllowed] IMTLBuffer patchIndexBuffer, nuint patchIndexBufferOffset, nuint instanceCount, nuint baseInstance);
 
 		[iOS (12, 0)]
-		[NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[TV (14, 5)]
 #if NET
 		[Abstract]
@@ -3179,7 +3046,7 @@ namespace Metal {
 		[Export ("drawPatches:patchIndexBuffer:patchIndexBufferOffset:indirectBuffer:indirectBufferOffset:")]
 		void DrawPatches (nuint numberOfPatchControlPoints, [NullAllowed] IMTLBuffer patchIndexBuffer, nuint patchIndexBufferOffset, IMTLBuffer indirectBuffer, nuint indirectBufferOffset);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -3187,7 +3054,7 @@ namespace Metal {
 		void DrawIndexedPatches (nuint numberOfPatchControlPoints, nuint patchStart, nuint patchCount, [NullAllowed] IMTLBuffer patchIndexBuffer, nuint patchIndexBufferOffset, IMTLBuffer controlPointIndexBuffer, nuint controlPointIndexBufferOffset, nuint instanceCount, nuint baseInstance);
 
 		[iOS (12, 0)]
-		[NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[TV (14, 5)]
 #if NET
 		[Abstract]
@@ -3196,7 +3063,7 @@ namespace Metal {
 		void DrawIndexedPatches (nuint numberOfPatchControlPoints, [NullAllowed] IMTLBuffer patchIndexBuffer, nuint patchIndexBufferOffset, IMTLBuffer controlPointIndexBuffer, nuint controlPointIndexBufferOffset, IMTLBuffer indirectBuffer, nuint indirectBufferOffset);
 
 		[iOS (12, 0)]
-		[Mac (10, 13), NoWatch]
+		[NoWatch]
 		[TV (14, 5)]
 #if NET
 		[Abstract]
@@ -3205,7 +3072,7 @@ namespace Metal {
 		void SetViewports (IntPtr viewports, nuint count);
 
 		[iOS (12, 0)]
-		[Mac (10, 13), NoWatch]
+		[NoWatch]
 		[TV (14, 5)]
 #if NET
 		[Abstract]
@@ -3213,77 +3080,77 @@ namespace Metal {
 		[Export ("setScissorRects:count:")]
 		void SetScissorRects (IntPtr scissorRects, nuint count);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setColorStoreActionOptions:atIndex:")]
 		void SetColorStoreActionOptions (MTLStoreActionOptions storeActionOptions, nuint colorAttachmentIndex);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setDepthStoreActionOptions:")]
 		void SetDepthStoreActionOptions (MTLStoreActionOptions storeActionOptions);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setStencilStoreActionOptions:")]
 		void SetStencilStoreActionOptions (MTLStoreActionOptions storeActionOptions);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useResource:usage:")]
 		void UseResource (IMTLResource resource, MTLResourceUsage usage);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useResources:count:usage:")]
 		void UseResources (IMTLResource [] resources, nuint count, MTLResourceUsage usage);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useHeap:")]
 		void UseHeap (IMTLHeap heap);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("useHeaps:count:")]
 		void UseHeaps (IMTLHeap [] heaps, nuint count);
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("executeCommandsInBuffer:withRange:")]
 		void ExecuteCommands (IMTLIndirectCommandBuffer indirectCommandBuffer, NSRange executionRange);
 
-		[iOS (13, 0), TV (13, 0), Mac (10, 14)]
+		[iOS (13, 0), TV (13, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("executeCommandsInBuffer:indirectBuffer:indirectBufferOffset:")]
 		void ExecuteCommands (IMTLIndirectCommandBuffer indirectCommandbuffer, IMTLBuffer indirectRangeBuffer, nuint indirectBufferOffset);
 
-		[NoiOS, NoTV, Mac (10, 14), MacCatalyst (15, 0)]
+		[NoiOS, NoTV, MacCatalyst (15, 0)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("memoryBarrierWithScope:afterStages:beforeStages:")]
 		void MemoryBarrier (MTLBarrierScope scope, MTLRenderStages after, MTLRenderStages before);
 
-		[NoiOS, NoTV, Mac (10, 14), MacCatalyst (15, 0)]
+		[NoiOS, NoTV, MacCatalyst (15, 0)]
 #if NET
 		[Abstract]
 #endif
@@ -3555,8 +3422,6 @@ namespace Metal {
 		void SetTileVisibleFunctionTables (IMTLVisibleFunctionTable [] functionTables, NSRange range);
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLRenderPipelineColorAttachmentDescriptor : NSCopying {
 
@@ -3588,8 +3453,6 @@ namespace Metal {
 		MTLColorWriteMask WriteMask { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLRenderPipelineReflection {
 		[Export ("vertexArguments")]
@@ -3615,8 +3478,6 @@ namespace Metal {
 		MTLArgument [] TileArguments { get; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLRenderPassAttachmentDescriptor : NSCopying {
 
@@ -3652,35 +3513,27 @@ namespace Metal {
 		[Export ("storeAction")]
 		MTLStoreAction StoreAction { get; set; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("storeActionOptions", ArgumentSemantic.Assign)]
 		MTLStoreActionOptions StoreActionOptions { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (MTLRenderPassAttachmentDescriptor))]
 	interface MTLRenderPassColorAttachmentDescriptor {
 		[Export ("clearColor")]
 		MTLClearColor ClearColor { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (MTLRenderPassAttachmentDescriptor))]
 	interface MTLRenderPassDepthAttachmentDescriptor {
 
 		[Export ("clearDepth")]
 		double ClearDepth { get; set; }
 
-		[iOS (9, 0)]
-		[Mac (10, 14)]
 		[Export ("depthResolveFilter")]
 		MTLMultisampleDepthResolveFilter DepthResolveFilter { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (MTLRenderPassAttachmentDescriptor))]
 	interface MTLRenderPassStencilAttachmentDescriptor {
 
@@ -3689,13 +3542,10 @@ namespace Metal {
 
 		[iOS (12, 0)]
 		[TV (14, 5)]
-		[Mac (10, 14)]
 		[Export ("stencilResolveFilter", ArgumentSemantic.Assign)]
 		MTLMultisampleStencilResolveFilter StencilResolveFilter { get; set; }
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLRenderPassColorAttachmentDescriptorArray {
 		[Export ("objectAtIndexedSubscript:"), Internal]
@@ -3705,8 +3555,6 @@ namespace Metal {
 		void SetObject ([NullAllowed] MTLRenderPassColorAttachmentDescriptor attachment, nuint attachmentIndex);
 	}
 
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLRenderPassDescriptor : NSCopying {
 
@@ -3734,11 +3582,11 @@ namespace Metal {
 		[Export ("renderTargetArrayLength")]
 		nuint RenderTargetArrayLength { get; set; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("setSamplePositions:count:")]
 		unsafe void SetSamplePositions ([NullAllowed] IntPtr positions, nuint count);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("getSamplePositions:count:")]
 		nuint GetSamplePositions ([NullAllowed] IntPtr positions, nuint count);
 
@@ -3799,7 +3647,7 @@ namespace Metal {
 	}
 
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	// note: type works only on devices, symbol is missing on the simulator
 	interface MTLHeapDescriptor : NSCopying {
@@ -3826,7 +3674,7 @@ namespace Metal {
 
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+	[NoWatch]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	interface MTLHeap {
 		[Abstract]
@@ -3873,7 +3721,7 @@ namespace Metal {
 		[Export ("setPurgeableState:")]
 		MTLPurgeableState SetPurgeableState (MTLPurgeableState state);
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -3922,8 +3770,6 @@ namespace Metal {
 
 	interface IMTLResource { }
 	interface IMTLHeap { }
-	[iOS (8, 0)]
-	[Mac (10, 11)]
 	[MacCatalyst (13, 1)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
 	partial interface MTLResource {
@@ -3940,35 +3786,34 @@ namespace Metal {
 #if NET
 		[Abstract] // new required member, but that breaks our binary compat, so we can't do that in our existing code.
 #endif
-		[iOS (9, 0)]
 		[Export ("storageMode")]
 		MTLStorageMode StorageMode { get; }
 
 		[Abstract, Export ("setPurgeableState:")]
 		MTLPurgeableState SetPurgeableState (MTLPurgeableState state);
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[NullAllowed, Export ("heap")]
 		IMTLHeap Heap { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("makeAliasable")]
 		void MakeAliasable ();
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
 		[Export ("isAliasable")]
 		bool IsAliasable { get; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 13)]
+		[NoWatch]
 #if NET
 		[Abstract]
 #endif
@@ -3997,8 +3842,6 @@ namespace Metal {
 		MTLHazardTrackingMode HazardTrackingMode { get; }
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface MTLComputePipelineDescriptor : NSCopying {
 
@@ -4016,15 +3859,15 @@ namespace Metal {
 		[Export ("reset")]
 		void Reset ();
 
-		[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+		[iOS (12, 0), TV (12, 0)]
 		[Export ("maxTotalThreadsPerThreadgroup")]
 		nuint MaxTotalThreadsPerThreadgroup { get; set; }
 
-		[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+		[NoWatch]
 		[NullAllowed, Export ("stageInputDescriptor", ArgumentSemantic.Copy)]
 		MTLStageInputOutputDescriptor StageInputDescriptor { get; set; }
 
-		[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		[Export ("buffers")]
 		MTLPipelineBufferDescriptorArray Buffers { get; }
 
@@ -4062,7 +3905,7 @@ namespace Metal {
 		IMTLDynamicLibrary [] PreloadedLibraries { get; set; }
 	}
 
-	[iOS (10, 0), TV (10, 0), NoWatch, Mac (10, 12)]
+	[NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLStageInputOutputDescriptor : NSCopying {
 		[Static]
@@ -4085,14 +3928,14 @@ namespace Metal {
 		void Reset ();
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLType {
 		[Export ("dataType")]
 		MTLDataType DataType { get; }
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (MTLType))]
 	interface MTLPointerType {
 		[Export ("elementType")]
@@ -4117,7 +3960,7 @@ namespace Metal {
 		MTLArrayType ElementArrayType { get; }
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (MTLType))]
 	interface MTLTextureReferenceType {
 		[Export ("textureDataType")]
@@ -4133,10 +3976,10 @@ namespace Metal {
 		bool IsDepthTexture { get; }
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	interface IMTLCaptureScope { }
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 #if NET
 	[Protocol, Model]
 #else
@@ -4166,7 +4009,7 @@ namespace Metal {
 	}
 
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface MTLCaptureManager {
@@ -4218,14 +4061,14 @@ namespace Metal {
 		bool StartCapture (MTLCaptureDescriptor descriptor, [NullAllowed] out NSError error);
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLPipelineBufferDescriptor : NSCopying {
 		[Export ("mutability", ArgumentSemantic.Assign)]
 		MTLMutability Mutability { get; set; }
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLPipelineBufferDescriptorArray {
 		[Internal]
@@ -4237,7 +4080,7 @@ namespace Metal {
 		void SetObject ([NullAllowed] MTLPipelineBufferDescriptor buffer, nuint bufferIndex);
 	}
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[BaseType (typeof (NSObject))]
 	interface MTLArgumentDescriptor : NSCopying {
 		[Static]
@@ -4265,7 +4108,7 @@ namespace Metal {
 
 	interface IMTLArgumentEncoder { }
 
-	[Mac (10, 13), iOS (11, 0), TV (11, 0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Protocol]
 	interface MTLArgumentEncoder {
 		[Abstract]
@@ -4327,7 +4170,6 @@ namespace Metal {
 		IntPtr GetConstantData (nuint index);
 
 		[iOS (13, 0), TV (13, 0)]
-		[Mac (10, 14)]
 #if NET
 		[Abstract]
 #endif
@@ -4335,21 +4177,18 @@ namespace Metal {
 		void SetRenderPipelineState ([NullAllowed] IMTLRenderPipelineState pipeline, nuint index);
 
 		[iOS (13, 0), TV (13, 0)]
-		[Mac (10, 14)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setRenderPipelineStates:withRange:")]
 		void SetRenderPipelineStates (IMTLRenderPipelineState [] pipelines, NSRange range);
 
-		[Mac (10, 14)]
 #if NET
 		[Abstract]
 #endif
 		[Export ("setIndirectCommandBuffer:atIndex:")]
 		void SetIndirectCommandBuffer ([NullAllowed] IMTLIndirectCommandBuffer indirectCommandBuffer, nuint index);
 
-		[Mac (10, 14)]
 #if NET
 		[Abstract]
 #endif
@@ -4534,7 +4373,7 @@ namespace Metal {
 
 	interface IMTLEvent { }
 
-	[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+	[iOS (12, 0), TV (12, 0)]
 	[Protocol]
 	interface MTLEvent {
 		[Abstract]
@@ -4546,7 +4385,7 @@ namespace Metal {
 		string Label { get; set; }
 	}
 
-	[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+	[iOS (12, 0), TV (12, 0)]
 	[BaseType (typeof (NSObject))]
 	[DesignatedDefaultCtor]
 	interface MTLSharedEventListener {
@@ -4562,7 +4401,7 @@ namespace Metal {
 
 	interface IMTLSharedEvent { }
 
-	[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+	[iOS (12, 0), TV (12, 0)]
 	[Protocol]
 	interface MTLSharedEvent : MTLEvent {
 		[Abstract]
@@ -4579,7 +4418,7 @@ namespace Metal {
 		ulong SignaledValue { get; set; }
 	}
 
-	[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+	[iOS (12, 0), TV (12, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLSharedEventHandle : NSSecureCoding {
 		[NullAllowed, Export ("label")]
@@ -4588,7 +4427,7 @@ namespace Metal {
 
 	interface IMTLIndirectRenderCommand { }
 
-	[Mac (10, 14), iOS (12, 0)]
+	[iOS (12, 0)]
 	[Protocol]
 	interface MTLIndirectRenderCommand {
 
@@ -4637,7 +4476,7 @@ namespace Metal {
 		void Reset ();
 	}
 
-	[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+	[iOS (12, 0), TV (12, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLIndirectCommandBufferDescriptor : NSCopying {
 		[Export ("commandTypes", ArgumentSemantic.Assign)]
@@ -4663,7 +4502,7 @@ namespace Metal {
 
 	interface IMTLIndirectCommandBuffer { }
 
-	[Mac (10, 14), iOS (12, 0), TV (12, 0)]
+	[iOS (12, 0), TV (12, 0)]
 	[Protocol]
 	interface MTLIndirectCommandBuffer : MTLResource {
 		[Abstract]
@@ -4686,7 +4525,7 @@ namespace Metal {
 		IMTLIndirectComputeCommand GetIndirectComputeCommand (nuint commandIndex);
 	}
 
-	[iOS (13, 0), TV (13, 0), Mac (10, 14)]
+	[iOS (13, 0), TV (13, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface MTLSharedTextureHandle : NSSecureCoding {

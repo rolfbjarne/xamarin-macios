@@ -20,13 +20,11 @@ namespace Contacts {
 
 	interface ICNKeyDescriptor { }
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Protocol]
 	// Headers say "This protocol is reserved for Contacts framework usage.", so don't create a model
 	interface CNKeyDescriptor : NSObjectProtocol, NSSecureCoding, NSCopying {
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNContact : NSCopying, NSMutableCopying, NSSecureCoding, NSItemProviderReading, NSItemProviderWriting {
 
@@ -66,9 +64,6 @@ namespace Contacts {
 		[Export ("phoneticFamilyName")]
 		string PhoneticFamilyName { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
 		[Export ("phoneticOrganizationName")]
 		string PhoneticOrganizationName { get; }
 
@@ -92,7 +87,6 @@ namespace Contacts {
 		[Export ("thumbnailImageData", ArgumentSemantic.Copy)]
 		NSData ThumbnailImageData { get; }
 
-		[Mac (10, 12)]
 		[Export ("imageDataAvailable")]
 		bool ImageDataAvailable { get; }
 
@@ -169,12 +163,12 @@ namespace Contacts {
 		[Export ("predicateForContactsMatchingName:")]
 		NSPredicate GetPredicateForContacts (string matchingName);
 
-		[Watch (4, 0), Mac (10, 13), iOS (11, 0)]
+		[Watch (4, 0), iOS (11, 0)]
 		[Static]
 		[Export ("predicateForContactsMatchingEmailAddress:")]
 		NSPredicate GetPredicateForContactsMatchingEmailAddress (string emailAddress);
 
-		[Watch (4, 0), Mac (10, 13), iOS (11, 0)]
+		[Watch (4, 0), iOS (11, 0)]
 		[Static]
 		[Export ("predicateForContactsMatchingPhoneNumber:")]
 		NSPredicate GetPredicateForContacts (CNPhoneNumber phoneNumber);
@@ -192,7 +186,6 @@ namespace Contacts {
 		NSPredicate GetPredicateForContactsInContainer (string containerIdentifier);
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNContactKey {
@@ -230,9 +223,6 @@ namespace Contacts {
 		[Field ("CNContactPhoneticFamilyNameKey")]
 		NSString PhoneticFamilyName { get; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
 		[Field ("CNContactPhoneticOrganizationNameKey")]
 		NSString PhoneticOrganizationName { get; }
 
@@ -257,7 +247,6 @@ namespace Contacts {
 		[Field ("CNContactImageDataKey")]
 		NSString ImageData { get; }
 
-		[Mac (10, 12)]
 		[Field ("CNContactImageDataAvailableKey")]
 		NSString ImageDataAvailable { get; }
 
@@ -292,7 +281,6 @@ namespace Contacts {
 		NSString InstantMessageAddresses { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (CNFetchRequest))]
 	[DisableDefaultCtor] // using init raises an exception according to docs
 	interface CNContactFetchRequest : NSSecureCoding {
@@ -311,8 +299,6 @@ namespace Contacts {
 		// cannot be exposed as NSString since they could be internalized types, like CNAggregateKeyDescriptor
 		NSArray KeysToFetch { get; set; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)] // API existed previously ? maybe it was not working before now ?
 		[Export ("mutableObjects")]
 		bool MutableObjects { get; set; }
 
@@ -323,7 +309,6 @@ namespace Contacts {
 		CNContactSortOrder SortOrder { get; set; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSFormatter))]
 	interface CNContactFormatter : NSSecureCoding {
 
@@ -374,7 +359,6 @@ namespace Contacts {
 		ICNKeyDescriptor RequiredKeysForNameOrder { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNContactProperty : NSCopying, NSSecureCoding {
 
@@ -397,7 +381,6 @@ namespace Contacts {
 		string Label { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNContactRelation : NSCopying, NSSecureCoding, INSCopying, INSSecureCoding {
 
@@ -412,7 +395,6 @@ namespace Contacts {
 		string Name { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNLabelContactRelationKey {
@@ -450,12 +432,12 @@ namespace Contacts {
 		[Field ("CNLabelContactRelationManager")]
 		NSString Manager { get; }
 
-		[iOS (11, 0), Mac (10, 13)]
+		[iOS (11, 0)]
 		[Field ("CNLabelContactRelationSon")]
 		[Watch (4, 0)]
 		NSString Son { get; }
 
-		[iOS (11, 0), Mac (10, 13)]
+		[iOS (11, 0)]
 		[Watch (4, 0)]
 		[Field ("CNLabelContactRelationDaughter")]
 		NSString Daughter { get; }
@@ -1437,7 +1419,7 @@ namespace Contacts {
 
 	// this type is new in Xcode11 but is decorated with earlier versions since it's used as a
 	// base type for older types (and that confuse the generator for 32bits availability)
-	[iOS (9, 0), Mac (10, 15), Watch (6, 0)]
+	[Mac (10, 15), Watch (6, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface CNFetchRequest { }
@@ -1476,7 +1458,6 @@ namespace Contacts {
 		NSData CurrentHistoryToken { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNContactStore {
 
@@ -1552,7 +1533,6 @@ namespace Contacts {
 		NSString NotificationDidChange { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	[ThreadSafe (false)]
 	interface CNContactsUserDefaults {
@@ -1568,7 +1548,6 @@ namespace Contacts {
 		string CountryCode { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNContactVCardSerialization {
 
@@ -1588,7 +1567,6 @@ namespace Contacts {
 	}
 
 #if !NET
-	[iOS (9, 0), Mac (10, 11)]
 #pragma warning disable 0618 // warning CS0618: 'CategoryAttribute.CategoryAttribute(bool)' is obsolete: 'Inline the static members in this category in the category's class (and remove this obsolete once fixed)'
 	[Category (allowStaticMembers: true)]
 #pragma warning disable
@@ -1612,7 +1590,6 @@ namespace Contacts {
 	}
 #endif
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNContainer : NSCopying, NSSecureCoding {
 
@@ -1652,7 +1629,6 @@ namespace Contacts {
 		#endregion
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNContainerKey { // Can be used in KVO
@@ -1667,7 +1643,6 @@ namespace Contacts {
 		NSString Type { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNErrorUserInfoKey {
@@ -1686,7 +1661,6 @@ namespace Contacts {
 	}
 
 #if !NET
-	[iOS (9, 0), Mac (10, 11)]
 #pragma warning disable 0618 // warning CS0618: 'CategoryAttribute.CategoryAttribute(bool)' is obsolete: 'Inline the static members in this category in the category's class (and remove this obsolete once fixed)'
 	[Category (allowStaticMembers: true)]
 #pragma warning disable
@@ -1712,7 +1686,6 @@ namespace Contacts {
 	}
 #endif
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNGroup : NSCopying, NSMutableCopying, NSSecureCoding {
 
@@ -1751,7 +1724,6 @@ namespace Contacts {
 		#endregion
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNGroupKey { // Can be used in KVO
@@ -1763,7 +1735,6 @@ namespace Contacts {
 		NSString Name { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNInstantMessageAddress : NSCopying, NSSecureCoding, INSCopying, INSSecureCoding {
 
@@ -1785,7 +1756,6 @@ namespace Contacts {
 		string LocalizeService (NSString service);
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNInstantMessageAddressKey { // Can be used in KVO
@@ -1797,7 +1767,6 @@ namespace Contacts {
 		NSString Service { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNInstantMessageServiceKey {
@@ -1833,7 +1802,6 @@ namespace Contacts {
 		NSString Yahoo { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNLabeledValue<ValueType> : NSCopying, NSSecureCoding
 		where ValueType : INSCopying, INSSecureCoding {
@@ -1870,7 +1838,6 @@ namespace Contacts {
 		string LocalizeLabel (NSString labelKey);
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNLabelKey {
@@ -1898,7 +1865,6 @@ namespace Contacts {
 		NSString DateAnniversary { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (CNContact))]
 	interface CNMutableContact {
 
@@ -1946,9 +1912,6 @@ namespace Contacts {
 		[Export ("phoneticFamilyName")]
 		string PhoneticFamilyName { get; set; }
 
-		[iOS (10, 0)]
-		[Mac (10, 12)]
-		[Watch (3, 0)]
 		[New]
 		[Export ("phoneticOrganizationName")]
 		string PhoneticOrganizationName { get; set; }
@@ -2017,7 +1980,6 @@ namespace Contacts {
 		CNLabeledValue<NSDateComponents> [] Dates { get; set; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (CNGroup))]
 	interface CNMutableGroup {
 
@@ -2026,7 +1988,6 @@ namespace Contacts {
 		string Name { get; set; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (CNPostalAddress))]
 	interface CNMutablePostalAddress {
 
@@ -2034,8 +1995,6 @@ namespace Contacts {
 		[Export ("street")]
 		string Street { get; set; }
 
-		[iOS (10, 3), Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[New]
 		[Export ("subLocality")]
 		string SubLocality { get; set; }
@@ -2044,8 +2003,6 @@ namespace Contacts {
 		[Export ("city")]
 		string City { get; set; }
 
-		[iOS (10, 3), Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[New]
 		[Export ("subAdministrativeArea")]
 		string SubAdministrativeArea { get; set; }
@@ -2067,7 +2024,6 @@ namespace Contacts {
 		string IsoCountryCode { get; set; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // Apple doc: no handle (nil) if no string (or nil string) is given
 	interface CNPhoneNumber : NSCopying, NSSecureCoding, INSCopying, INSSecureCoding {
@@ -2083,7 +2039,6 @@ namespace Contacts {
 		string StringValue { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNLabelPhoneNumberKey {
@@ -2115,26 +2070,18 @@ namespace Contacts {
 		NSString Pager { get; }
 	}
 
-	[iOS (9, 0)]
-	[Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNPostalAddress : NSCopying, NSMutableCopying, NSSecureCoding, INSCopying, INSSecureCoding {
 
 		[Export ("street")]
 		string Street { get; }
 
-		[iOS (10, 3)]
-		[Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[Export ("subLocality")]
 		string SubLocality { get; }
 
 		[Export ("city")]
 		string City { get; }
 
-		[iOS (10, 3)]
-		[Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[Export ("subAdministrativeArea")]
 		string SubAdministrativeArea { get; }
 
@@ -2160,7 +2107,6 @@ namespace Contacts {
 	}
 
 #if !NET
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNPostalAddressKey { // Can be used in KVO
@@ -2168,18 +2114,12 @@ namespace Contacts {
 		[Field ("CNPostalAddressStreetKey")]
 		NSString Street { get; }
 
-		[iOS (10, 3)]
-		[Mac (10, 12, 4)]
 		[Field ("CNPostalAddressSubLocalityKey")]
-		[Watch (3, 3)]
 		NSString SubLocality { get; }
 
 		[Field ("CNPostalAddressCityKey")]
 		NSString City { get; }
 
-		[iOS (10, 3)]
-		[Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[Field ("CNPostalAddressSubAdministrativeAreaKey")]
 		NSString SubAdministrativeArea { get; }
 
@@ -2197,7 +2137,6 @@ namespace Contacts {
 	}
 #endif
 
-	[iOS (9, 0), Mac (10, 11)]
 	public enum CNPostalAddressKeyOption {
 		[Field ("CNPostalAddressStreetKey")]
 		Street,
@@ -2212,20 +2151,13 @@ namespace Contacts {
 		[Field ("CNPostalAddressISOCountryCodeKey")]
 		IsoCountryCode,
 
-		[iOS (10, 3)]
-		[Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[Field ("CNPostalAddressSubLocalityKey")]
 		SubLocality,
 
-		[iOS (10, 3)]
-		[Mac (10, 12, 4)]
-		[Watch (3, 3)]
 		[Field ("CNPostalAddressSubAdministrativeAreaKey")]
 		SubAdministrativeArea,
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSFormatter))]
 	interface CNPostalAddressFormatter {
 
@@ -2254,7 +2186,6 @@ namespace Contacts {
 	}
 
 #if !WATCH
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNSaveRequest {
 
@@ -2300,7 +2231,6 @@ namespace Contacts {
 	}
 #endif // !WATCH
 
-	[iOS (9, 0), Mac (10, 11)]
 	[BaseType (typeof (NSObject))]
 	interface CNSocialProfile : NSCopying, NSSecureCoding, INSCopying, INSSecureCoding {
 
@@ -2333,7 +2263,6 @@ namespace Contacts {
 		string LocalizeService (NSString service);
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNSocialProfileKey { // Can be used in KVO
@@ -2351,7 +2280,6 @@ namespace Contacts {
 		NSString Service { get; }
 	}
 
-	[iOS (9, 0), Mac (10, 11)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNSocialProfileServiceKey {

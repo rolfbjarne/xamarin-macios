@@ -80,7 +80,7 @@
       <_WorkloadSource Include="$(PackageOutputPath)" />
     </ItemGroup>
     <Copy SourceFiles="$(MauiRootDirectory)NuGet.config" DestinationFolder="$(DotNetTempDirectory)" />
-    <Exec Command="dotnet nuget add source &quot;$(PackageOutputPath)&quot; --name artifacts --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot;" />
+    <Exec Command="&quot;$(DotNetToolPath)&quot; nuget add source &quot;$(PackageOutputPath)&quot; --name artifacts --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot;" />
     <Exec Command="&quot;$(DotNetToolPath)&quot; workload install ios tvos maccatalyst macos --verbosity diag --temp-dir &quot;$(DotNetTempDirectory)&quot; --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot; --from-rollback-file &quot;$(RollbackFile)&quot; --source &quot;$(RollbackSource)&quot;" WorkingDirectory="$(MauiRootDirectory)" />
 
   </Target>

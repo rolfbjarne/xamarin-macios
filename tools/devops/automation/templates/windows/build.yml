@@ -49,6 +49,14 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    Write-Host "Looking in 'C:\Program Files (x86)\NuGet\Config'"
+    Get-ChildItem "C:\Program Files (x86)\NuGet\Config\" -Recurse
+    Write-Host "Looking in 'D:\Program Files (x86)\NuGet\Config'"
+    Get-ChildItem "D:\Program Files (x86)\NuGet\Config\" -Recurse
+  displayName: 'Show NuGet configuration'
+  continueOnError: true
+
+- pwsh: |
     & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true
   displayName: 'Install custom .NET'
   continueOnError: true

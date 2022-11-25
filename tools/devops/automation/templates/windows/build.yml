@@ -62,8 +62,19 @@ steps:
       Write-Host "Exception occured: $_"
     }
     try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
       Write-Host "Printing in 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'"
       Get-Content -Raw -Path 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\" -Name "NuGetPackages" -ItemType "directory"
     } catch {
       Write-Host "Exception occured: $_"
     }
@@ -71,12 +82,12 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" -p:DisableImplicitNuGetFallbackFolder=true
   displayName: 'Install custom .NET'
   continueOnError: true
 
 - pwsh: |
-    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install2.binlog" -p:RestoreFallbackFolders=clear -p:DisableImplicitNuGetFallbackFolder=true -t:Install
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" --verbosity diag "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install2.binlog" -p:DisableImplicitNuGetFallbackFolder=true -t:Install
   displayName: 'Install workloads'
   continueOnError: true
 

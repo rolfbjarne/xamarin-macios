@@ -93,8 +93,8 @@ steps:
 # Upload all the binlogs
 # Copy all the binlogs to a separate directory, keeping directory structure.
 - pwsh: |
-    $sourceDir = '$(Build.SourcesDirectory)/xamarin-macios'
-    $targetDir = ' $(Build.ArtifactStagingDirectory)/all-binlogs'
+    $sourceDir = '$(Build.SourcesDirectory)\xamarin-macios'
+    $targetDir = '$(Build.ArtifactStagingDirectory)\windows-binlogs'
 
     Write-Host "Looking for files in $sourceDir"
     $binlogs = Get-ChildItem $sourceDir -Recurse -Include "*.binlog"

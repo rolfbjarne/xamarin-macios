@@ -47,7 +47,6 @@ namespace Xharness.Targets {
 		protected virtual string TargetFrameworkIdentifier { get { throw new NotImplementedException (); } }
 		protected virtual string Imports { get { throw new NotImplementedException (); } }
 		protected virtual string BindingsImports { get { throw new NotImplementedException (); } }
-		protected virtual bool SupportsBitcode { get { return false; } }
 		public virtual bool IsMultiArchitecture { get { return false; } }
 		public virtual string SimulatorArchitectures { get { throw new NotImplementedException (); } }
 		public virtual string DeviceArchitectures { get { throw new NotImplementedException (); } }

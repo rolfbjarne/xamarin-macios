@@ -114,12 +114,6 @@ namespace Xharness.Targets {
 			}
 		}
 
-		protected override bool SupportsBitcode {
-			get {
-				return true;
-			}
-		}
-
 		public override string DotNetSdk => "Microsoft.iOS.Sdk";
 		public override string RuntimeIdentifier => "iossimulator-x64";
 		public override DevicePlatform ApplePlatform => DevicePlatform.iOS;

@@ -61,6 +61,12 @@ steps:
     } catch {
       Write-Host "Exception occured: $_"
     }
+    try {
+      Write-Host "Printing in 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'"
+      Get-Content -Raw -Path 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
   displayName: 'Show NuGet configuration'
   continueOnError: true
 

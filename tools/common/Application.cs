@@ -38,7 +38,6 @@ namespace Xamarin.Bundler {
 
 	public enum MonoNativeMode {
 		None,
-		Compat,
 		Unified,
 	}
 
@@ -912,21 +911,8 @@ namespace Xamarin.Bundler {
 			switch (Platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-				MonoNativeMode = DeploymentTarget.Major >= 10 ? MonoNativeMode.Unified : MonoNativeMode.Compat;
-				break;
 			case ApplePlatform.WatchOS:
-				if (IsArchEnabled (Abis, Abi.ARM64_32)) {
-					MonoNativeMode = MonoNativeMode.Unified;
-				} else {
-					MonoNativeMode = DeploymentTarget.Major >= 3 ? MonoNativeMode.Unified : MonoNativeMode.Compat;
-				}
-				break;
 			case ApplePlatform.MacOSX:
-				if (DeploymentTarget >= new Version (10, 12))
-					MonoNativeMode = MonoNativeMode.Unified;
-				else
-					MonoNativeMode = MonoNativeMode.Compat;
-				break;
 			case ApplePlatform.MacCatalyst:
 				MonoNativeMode = MonoNativeMode.Unified;
 				break;
@@ -943,8 +929,6 @@ namespace Xamarin.Bundler {
 					return "libmono-native";
 
 				return "libmono-native-unified";
-			case MonoNativeMode.Compat:
-				return "libmono-native-compat";
 			default:
 				throw ErrorHelper.CreateError (99, Errors.MX0099, $"Invalid mono native type: '{MonoNativeMode}'");
 			}

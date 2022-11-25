@@ -33,6 +33,17 @@ steps:
     allowFailedBuilds: true
     path: $(Build.SourcesDirectory)/artifacts
 
+- pwsh: |
+    try {
+      Write-Host "Looking in '$(Build.SourcesDirectory)\artifacts"
+      Get-ChildItem "$(Build.SourcesDirectory)\artifacts" -Recurse
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+  displayName: 'List downloaded artifacts'
+  continueOnError: true
+
+
 # FIXME: parameterize platforms
 # FIXME: SOURCES?
 
@@ -91,29 +102,29 @@ steps:
   displayName: 'Install workloads'
   continueOnError: true
 
-- pwsh: |
-    Write-Host "Trying to ssh to the mac bot..."
-    & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
-  displayName: Diagnostics with pwsh 1
-  continueOnError: true
-  timeoutInMinutes: 1
+# - pwsh: |
+#     Write-Host "Trying to ssh to the mac bot..."
+#     & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
+#   displayName: Diagnostics with pwsh 1
+#   continueOnError: true
+#   timeoutInMinutes: 1
 
-- pwsh: |
-    Write-Host "Trying to ssh to the mac bot..."
-    (Get-Command New-PSSession).ParameterSets.Name
-    $session = New-PSSession -HostName builder@$($Env:MAC_AGENT_IP)
-    $session
-    Invoke-Command $session -ScriptBlock { Get-Process powershell }
-  displayName: Diagnostics with pwsh 2
-  continueOnError: true
-  timeoutInMinutes: 1
+# - pwsh: |
+#     Write-Host "Trying to ssh to the mac bot..."
+#     (Get-Command New-PSSession).ParameterSets.Name
+#     $session = New-PSSession -HostName builder@$($Env:MAC_AGENT_IP)
+#     $session
+#     Invoke-Command $session -ScriptBlock { Get-Process powershell }
+#   displayName: Diagnostics with pwsh 2
+#   continueOnError: true
+#   timeoutInMinutes: 1
 
-- pwsh: |
-    Write-Host "Sending ping to $($Env:MAC_AGENT_IP)..."
-    Test-Connection -TargetName "$($Env:MAC_AGENT_IP)" -Count 3
-  displayName: "Diagnostics with pwsh - ping"
-  continueOnError: true
-  timeoutInMinutes: 1
+# - pwsh: |
+#     Write-Host "Sending ping to $($Env:MAC_AGENT_IP)..."
+#     Test-Connection -TargetName "$($Env:MAC_AGENT_IP)" -Count 3
+#   displayName: "Diagnostics with pwsh - ping"
+#   continueOnError: true
+#   timeoutInMinutes: 1
 
 - pwsh: |
     Write-Host "Run windows tests."

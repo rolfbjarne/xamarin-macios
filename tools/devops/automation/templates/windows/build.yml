@@ -49,10 +49,18 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    Write-Host "Looking in 'C:\Program Files (x86)\NuGet\Config'"
-    Get-ChildItem "C:\Program Files (x86)\NuGet\Config\" -Recurse
-    Write-Host "Looking in 'D:\Program Files (x86)\NuGet\Config'"
-    Get-ChildItem "D:\Program Files (x86)\NuGet\Config\" -Recurse
+    try {
+      Write-Host "Looking in 'C:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "C:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "D:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
   displayName: 'Show NuGet configuration'
   continueOnError: true
 

@@ -3517,6 +3517,9 @@ public partial class Generator : IMemberGatherer {
 	bool IsInSupportedFramework (MemberInfo klass, PlatformName platform)
 	{
 		string ns = FindNamespace (klass);
+		// Hack - WebKit namespace is named 'WKWebKit' in our source code for some platforms
+		if (ns == "WebKit" && platform == PlatformName.iOS)
+			ns = "WKWebKit";
 		var list = GetFrameworkListForPlatform (platform);
 		return list.Contains (ns.ToLower (CultureInfo.InvariantCulture));
 	}

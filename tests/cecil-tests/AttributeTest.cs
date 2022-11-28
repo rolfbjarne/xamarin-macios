@@ -236,8 +236,8 @@ namespace Cecil.Tests {
 						if (IgnoreElementsThatDoNotExistInThatAssembly (member)) {
 							continue;
 						}
-						string detailedPlatformBreakdown = string.Join ("\n", info.Select (x => ($"Assembly {x.Key} => Declares ({string.Join (" ", x.Value)})")));
-						string errorMessage = $"{member} was not found on {platform} despite being declared supported there.";
+						string detailedPlatformBreakdown = string.Join ("\n\t", info.Select (x => ($"Assembly {x.Key} => Declares ({string.Join (" ", x.Value)})")));
+						string errorMessage = $"{member} was not found on {platform} despite being declared supported there: \n\t{detailedPlatformBreakdown}";
 						doesNotExistWhereClaimed.Add (errorMessage);
 #if DEBUG
 						Console.Error.WriteLine (errorMessage);

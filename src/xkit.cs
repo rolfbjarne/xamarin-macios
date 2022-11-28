@@ -147,7 +147,6 @@ namespace UIKit {
 	// NSInteger -> NSLayoutConstraint.h
 	[Native]
 	[NoWatch]
-	[iOS (6,0)]
 	[MacCatalyst (13,0)]
 	public enum NSLayoutAttribute : long {
 		NoAttribute = 0,
@@ -188,7 +187,6 @@ namespace UIKit {
 	[Flags]
 	[NoWatch]
 	[MacCatalyst (13,0)]
-	[iOS (6,0)]
 	public enum NSLayoutFormatOptions : ulong {
 		None = 0,
 
@@ -1357,7 +1355,6 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
-	[Mac (10,0)]
 	[MacCatalyst (13,1)]
 	interface NSLayoutManagerDelegate {
 		[Export ("layoutManagerDidInvalidateLayout:")]
@@ -1549,8 +1546,6 @@ namespace UIKit {
 
 	[ThreadSafe]
 	[BaseType (typeof (NSObject))]
-	[iOS (6,0)]
-	[Mac (10,0)]
 	[MacCatalyst (13,1)]
 	interface NSParagraphStyle : NSSecureCoding, NSMutableCopying {
 		[Export ("lineSpacing")]
@@ -1655,8 +1650,6 @@ namespace UIKit {
 
 	[ThreadSafe]
 	[BaseType (typeof (NSParagraphStyle))]
-	[iOS (6,0)]
-	[Mac (10,0)]
 	[MacCatalyst (13,1)]
 	interface NSMutableParagraphStyle {
 		[Export ("lineSpacing")]
@@ -2228,7 +2221,6 @@ namespace UIKit {
 #endif
 	}
 
-	[iOS (6, 0)]
 	[NoWatch]
 	[MacCatalyst (13,1)]
 	[BaseType (typeof (NSObject))]
@@ -2326,7 +2318,6 @@ namespace UIKit {
 		CGRect GetAttachmentBounds ([NullAllowed] NSTextContainer textContainer, CGRect proposedLineFragment, CGPoint glyphPosition, nuint characterIndex);
 	}
 
-	[Mac (10,0)]
 	[MacCatalyst (13,1)]
 	[NoWatch]
 	[BaseType (typeof (NSObject))]
@@ -2516,7 +2507,6 @@ namespace UIKit {
 	interface INSTextStorageDelegate {}
 
 	[NoWatch]
-	[Mac (10,6)]
 	[MacCatalyst (13,0)]
 	[Model]
 	[BaseType (typeof (NSObject))]
@@ -2853,7 +2843,6 @@ namespace UIKit {
 		NSColor ShadowColor { get; set;  }
 	}
 
-	[Mac (10,0)]
 	[MacCatalyst (13,0)]
 	[BaseType (typeof (NSObject))]
 	interface NSTextTab : NSSecureCoding, NSCopying {
@@ -2904,7 +2893,6 @@ namespace UIKit {
 	}
 
 	[NoWatch]
-	[Mac (10,0)]
 	[MacCatalyst (13,0)]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextContainer : NSTextLayoutOrientationProvider, NSSecureCoding {
@@ -3922,7 +3910,7 @@ namespace UIKit {
 		NSTextRange GetAdjustedRange (NSTextRange textRange, bool forEditingTextSelection);
 	}
 
-	[NoWatch, Mac (10,0), MacCatalyst (13,0)]
+	[NoWatch, MacCatalyst (13,0)]
 	[BaseType (typeof (NSObject))]
 	interface NSTextList : NSCoding, NSCopying, NSSecureCoding {
 		[Export ("initWithMarkerFormat:options:")]

@@ -692,7 +692,6 @@ namespace CoreText {
 		}
 #endif
 
-		// [Mac (10,7)]
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern unsafe /* CTFontDescriptorRef _Nullable */ IntPtr CTFontManagerCreateFontDescriptorFromData (/* CFDataRef */ IntPtr data);
 

@@ -546,7 +546,7 @@ namespace CoreImage {
 		[Export ("registerFilterName:constructor:classAttributes:")]
 		void RegisterFilterName (string name, NSObject constructorObject, NSDictionary classAttributes);
 #else
-		[Mac (10,4)][MacCatalyst (13,1)][NoWatch]
+		[MacCatalyst (13,1)][NoWatch]
 		[Static]
 		[Export ("registerFilterName:constructor:classAttributes:")]
 #if NET
@@ -1707,12 +1707,10 @@ namespace CoreImage {
 		[Export ("initWithCVImageBuffer:options:")]
 		NativeHandle Constructor (CVImageBuffer imageBuffer, [NullAllowed] NSDictionary dict);
 #else
-		[Mac (10,4)]
 		[MacCatalyst (13,1)]
 		[Export ("initWithCVImageBuffer:options:")]
 		NativeHandle Constructor (CVImageBuffer imageBuffer, [NullAllowed] NSDictionary<NSString, NSObject> dict);
 
-		[Mac (10,4)]
 		[MacCatalyst (13,1)]
 		[Internal] // This overload is needed for our strong dictionary support (but only for Unified, since for Classic the generic version is transformed to this signature)
 		[Sealed]
@@ -2297,7 +2295,7 @@ namespace CoreImage {
 		[Export ("name")]
 		string Name { get; }
 
- 		[NoiOS][NoWatch][NoTV][Mac (10,4)][MacCatalyst (13,1)]
+		[NoiOS][NoWatch][NoTV][MacCatalyst (13,1)]
 		[Export ("setROISelector:")]
 		void SetRegionOfInterestSelector (Selector aMethod);
 
@@ -2934,7 +2932,6 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("outputImageNonMPS")]
 		CIImage OutputImageNonMps { get; }
 
-		[Mac (10, 5)]
 		[NoiOS][NoTV][NoWatch][NoMacCatalyst]
 		[CoreImageFilterProperty ("outputImageMPS")]
 		CIImage OutputImageMps { get; }

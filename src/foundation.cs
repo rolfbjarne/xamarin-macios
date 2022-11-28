@@ -565,7 +565,7 @@ namespace Foundation
 		[Export ("boundingRectWithSize:options:context:")]
 		CGRect GetBoundingRect (CGSize size, NSStringDrawingOptions options, [NullAllowed] NSStringDrawingContext context);
 
-		[MacCatalyst (13, 1)][Mac (10, 0)][iOS (6, 0)]
+		[MacCatalyst (13, 1)]
 		[Export ("size")]
 		CGSize Size { get; }
 
@@ -10992,7 +10992,6 @@ namespace Foundation
 		NSValue FromCGPoint (CGPoint point);
 
 #if MONOMAC
-		[Mac (10,0)]
 		[Export ("rectValue")]
 #else
 		[MacCatalyst (15,0)]
@@ -11001,7 +11000,6 @@ namespace Foundation
 		CGRect CGRectValue { get; }
 
 #if MONOMAC
-		[Mac (10,0)]
 		[Export ("sizeValue")]
 #else
 		[MacCatalyst (15,0)]
@@ -11010,7 +11008,6 @@ namespace Foundation
 		CGSize CGSizeValue { get; }
 
 #if MONOMAC
-		[Mac (10,0)]
 		[Export ("pointValue")]
 #else
 		[MacCatalyst (15,0)]

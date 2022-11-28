@@ -48,11 +48,6 @@ steps:
 # FIXME: SOURCES?
 
 - pwsh: |
-    & dotnet workload install --from-rollback-file "$(Build.SourcesDirectory)/artifacts/WorkloadRollback/WorkloadRollback.json" --source "$(Build.SourcesDirectory)/artifacts/not-signed-package" --verbosity diag ios tvos macos maccatalyst
-  displayName: 'Install workloads'
-  continueOnError: true
-
-- pwsh: |
     & dotnet --version
     & dotnet --info
     & dotnet workload list

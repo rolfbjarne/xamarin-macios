@@ -14,7 +14,7 @@
     <MauiRootDirectory>$(RootSourceDirectory)</MauiRootDirectory>
     <PackageOutputPath>$(RootSourceDirectory)..\artifacts\</PackageOutputPath>
     <RollbackFile>$(PackageOutputPath)WorkloadRollback\WorkloadRollback.json</RollbackFile>
-    <RollbackSource>$(PackageOutputPath)not-signed-package</RollbackSource>
+    <RollbackSource>$(PackageOutputPath)dotnet-signed</RollbackSource>
   </PropertyGroup>
 
 

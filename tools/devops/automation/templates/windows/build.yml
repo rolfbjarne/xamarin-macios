@@ -100,6 +100,11 @@ steps:
     } catch {
       Write-Host "Exception occured: $_"
     }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
   displayName: 'Show NuGet configuration'
   continueOnError: true
 

@@ -17,6 +17,15 @@
     <RollbackSource>$(PackageOutputPath)dotnet-signed</RollbackSource>
   </PropertyGroup>
 
+  <Target Name="GetNuGetSources">
+    <Exec Command="grep https://pkgs.dev.azure.com $(RootSourceDirectory)/NuGet.config | sed -e 's/.*value=&quot;//'  -e 's/&quot;.*//'" ConsoleToMsBuild="true" IgnoreStandardErrorWarningFormat="true">
+      <Output TaskParameter="ConsoleOutput" ItemName="NuGetSourceLines" />
+    </Exec>
+    <PropertyGroup>
+      <NuGetSourceList>--source @(NuGetSourceLines,' --source ')</NuGetSourceList>
+    </PropertyGroup>
+    <!-- <Warning Text="SourceList: $(NuGetSourceList)" /> -->
+  </Target>
 
 
   <Import Project="$(RootSourceDirectory)/eng/Versions.props" />
@@ -65,7 +74,7 @@
     Running this with ./bin/dotnet/dotnet will work without elevation.
     For a system install, you will need to run this in an admin command-prompt on Windows, or use 'sudo' on Mac.
   -->
-  <Target Name="Install">
+  <Target Name="Install" DependsOnTargets="GetNuGetSources">
 
     <Error
         Condition=" '$(MSBuildRuntimeType)' != 'Core' "
@@ -81,7 +90,7 @@
     </ItemGroup>
     <Copy SourceFiles="$(MauiRootDirectory)NuGet.config" DestinationFolder="$(DotNetTempDirectory)" />
     <Exec Command="&quot;$(DotNetToolPath)&quot; nuget add source &quot;$(PackageOutputPath)&quot; --name artifacts --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot;" />
-    <Exec Command="&quot;$(DotNetToolPath)&quot; workload install ios tvos maccatalyst macos --verbosity diag --temp-dir &quot;$(DotNetTempDirectory)&quot; --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot; --from-rollback-file &quot;$(RollbackFile)&quot; --source $(RollbackSource) --skip-sign-check" WorkingDirectory="$(MauiRootDirectory)" />
+    <Exec Command="&quot;$(DotNetToolPath)&quot; workload install ios tvos maccatalyst macos --verbosity diag --temp-dir &quot;$(DotNetTempDirectory)&quot; --configfile &quot;$(DotNetTempDirectory)NuGet.config&quot; --from-rollback-file &quot;$(RollbackFile)&quot; --source $(RollbackSource) --skip-sign-check $(NuGetSourceList)" WorkingDirectory="$(MauiRootDirectory)" />
 
   </Target>
 

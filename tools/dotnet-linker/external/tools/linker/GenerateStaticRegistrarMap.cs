@@ -27,13 +27,20 @@ namespace Xamarin.Linker
 		{
 			base.TryProcessAssembly (assembly);
 
-			if (assembly.Name.Name == base.Configuration.PlatformAssembly)
+			if (assembly.Name.Name == Configuration.PlatformAssembly)
 				productAssembly = assembly;
 			else if (assembly.Name.Name == Driver.CorlibName)
 				corlibAssembly = assembly;
 
 			if (!assembly.MainModule.HasTypes)
 				return;
+
+			// There's no need to process assemblies that don't reference our platform assembly (unless it's the platform assembly itself)
+			if (!assembly.MainModule.HasAssemblyReferences)
+				return;
+			if (assembly == productAssembly || !assembly.MainModule.AssemblyReferences.Any(v => v.Name == Configuration.PlatformAssembly))
+				return;
+
 			Types.AddRange(assembly.MainModule.Types);
 			foreach (var type in assembly.MainModule.Types)
 				ProcessType(type);
@@ -55,85 +62,136 @@ namespace Xamarin.Linker
 		protected override void TryEndProcess()
 		{
 
-			var runtime_type = productAssembly!.MainModule.Types.First(v => v.Is("ObjCRuntime", "Class"));
+			var class_type = productAssembly!.MainModule.Types.First(v => v.Is("ObjCRuntime", "Class"));
 
-			var system_type = corlibAssembly!.MainModule.Types.First(v => v.Is("System", "Type"));
-			var system_type_gettype = system_type.Methods.First(v => v.Name == "GetType" && v.HasParameters && v.Parameters.Count == 1 && v.Parameters[0].ParameterType.Is("System", "String"));
-			var gettype_ref = runtime_type.Module.ImportReference(system_type_gettype);
+			var system_runtimetypehandle = corlibAssembly!.MainModule.Types.First(v => v.Is("System", "RuntimeTypeHandle"));
+			var system_runtimetypehandle_getmethodfromhandle = system_runtimetypehandle.Methods.First(v => v.Name == "GetMethodFromHandle");
+			var system_runtimetypehandle_system_runtimetypehandle_getmethodfromhandle_ref = class_type.Module.ImportReference(system_runtimetypehandle_getmethodfromhandle);
+
+			var system_runtimetypehandle_equals = system_runtimetypehandle.Methods.First(v => v.Name == "Equals" && v.HasParameters && v.Parameters.Count == 1 && v.Parameters[0].ParameterType.Is ("System", "RuntimeTypeHandle"));
+			var system_runtimetypehandle_equals_ref = class_type.Module.ImportReference(system_runtimetypehandle_equals);
+
+			var system_type = corlibAssembly.MainModule.Types.First(v => v.Is("System", "Type"));
+			var system_type_gettypefromhandle = system_type.Methods.Single(v => v.Name == "GetTypeFromHandle" && v.HasParameters && v.Parameters.Count == 1 && v.Parameters[0].ParameterType.Is("System", "RuntimeTypeHandle"));
+			var system_type_gettypefromhandle_ref = class_type.Module.ImportReference(system_type_gettypefromhandle);
+
+			var system_methodbase = corlibAssembly.MainModule.Types.First(v => v.Is("System", "MethodBase"));
+			var system_methodbase_getmethodfromhandle = system_type.Methods.Single(v => v.Name == "GetMethodFromHandle" && v.HasParameters && v.Parameters.Count == 1 && v.Parameters[0].ParameterType.Is("System", "RuntimeMethodHandle"));
+			var system_methodbase_getmethodfromhandle_ref = class_type.Module.ImportReference(system_methodbase_getmethodfromhandle);
 
 			var system_runtimemethodhandle = corlibAssembly.MainModule.Types.First(v => v.Is("System", "RuntimeMethodHandle"));
 			var system_runtimemethodhandle_tointptr = system_runtimemethodhandle.Methods.Single(v => v.Name == "ToIntPtr");
-			var system_runtimemethodhandle_tointptr_ref = runtime_type.Module.ImportReference(system_runtimemethodhandle_tointptr);
+			var system_runtimemethodhandle_tointptr_ref = class_type.Module.ImportReference(system_runtimemethodhandle_tointptr);
 
-			long counter = 0;
+			int counter = 0;
 
 			Console.WriteLine($"GenerateStaticRegistrarMap: Adding {Types.Count} types and {Methods.Count} methods");
 
+			var mapTypeToTokenMethod = class_type.Methods.Single(m => m.Name == "TryMapRuntimeTypeHandleToToken");
+			mapTypeToTokenMethod.Body = new MethodBody(mapTypeToTokenMethod);
+			var mapTypeToToken = mapTypeToTokenMethod.Body.GetILProcessor();
+
+			var mapToMemberMethod = class_type.Methods.Single(m => m.Name == "TryMapTokenToMember");
+			mapToMemberMethod.Body = new MethodBody(mapToMemberMethod);
+			var mapToMember = mapToMemberMethod.Body.GetILProcessor();
+			for (var i = 0; i < Types.Count; i++)
 			{
-				var resolveMethod = runtime_type.Methods.Single(m => m.Name == "TryResolveTypeTokenReferenceUsingReflection");
-				var body = new MethodBody(resolveMethod);
-				var il = body.GetILProcessor();
-				for (var i = 0; i < Types.Count; i++)
-				{
-					var token = counter++;
-					var type = Types[i];
-					TypeReference tr = type;
-					if (type.Module.Assembly != productAssembly)
-						tr = productAssembly.MainModule.ImportReference(type);
+				var token = 0x02000000 /* TypeDef */ | counter++;
+				var type = Types[i];
+				TypeReference tr = type;
+				if (type.Module.Assembly != productAssembly)
+					tr = productAssembly.MainModule.ImportReference(type);
 
-					var neqTarget = il.Create(OpCodes.Nop);
-					il.Emit(OpCodes.Ldarg_0);
-					il.Emit(OpCodes.Ldc_I4, unchecked((int)token));
-					il.Emit(OpCodes.Bne_Un, neqTarget);
-					il.Emit(OpCodes.Ldarg_1);
-					il.Emit(OpCodes.Ldstr, $"{tr.FullName}, {tr.Module.Assembly.Name.FullName}");
-					il.Emit(OpCodes.Call, gettype_ref);
-					il.Emit(OpCodes.Stind_Ref);
-					il.Emit(OpCodes.Ldc_I4_1);
-					il.Emit(OpCodes.Ret);
-					il.Append(neqTarget);
+				//
+				// TryMapTokenToMember
+				//
+				var neqTarget = mapToMember.Create(OpCodes.Nop);
+				// if (token_reference == <constant>) {
+				mapToMember.Emit(OpCodes.Ldarg_0);
+				mapToMember.Emit(OpCodes.Ldc_I4, token);
+				mapToMember.Emit(OpCodes.Bne_Un, neqTarget);
+				//     member = Type.GetTypeFromHandle (ldtoken <type>);
+				mapToMember.Emit(OpCodes.Ldarg_1);
+				mapToMember.Emit(OpCodes.Ldtoken, tr);
+				mapToMember.Emit(OpCodes.Call, system_type_gettypefromhandle_ref);
+				mapToMember.Emit(OpCodes.Stind_Ref);
+				mapToMember.Emit(OpCodes.Ldc_I4_1);
+				//     return;
+				mapToMember.Emit(OpCodes.Ret);
+				// }
+				mapToMember.Append(neqTarget);
 
-				}
-				il.Emit(OpCodes.Ldarg_1);
-				il.Emit(OpCodes.Ldnull);
-				il.Emit(OpCodes.Stind_Ref);
-				il.Emit(OpCodes.Ldc_I4_0);
-				il.Emit(OpCodes.Ret);
-				resolveMethod.Body = body;
+				//
+				// TryMapRuntimeTypeHandleToToken
+				//
+				neqTarget = mapTypeToToken.Create(OpCodes.Nop);
+				// if (runtimetypehandle.Equals (ldtoken <type>)) {
+				mapTypeToToken.Emit(OpCodes.Ldarg_0);
+				mapTypeToToken.Emit(OpCodes.Ldtoken, tr);
+				mapTypeToToken.Emit(OpCodes.Call, system_runtimetypehandle_equals_ref);
+				mapTypeToToken.Emit(OpCodes.Ldc_I4_1);
+				mapTypeToToken.Emit(OpCodes.Bne_Un, neqTarget);
+				//     token = <constant>;
+				mapTypeToToken.Emit(OpCodes.Ldarg_1);
+				mapTypeToToken.Emit(OpCodes.Ldc_I4, token);
+				mapTypeToToken.Emit(OpCodes.Stind_Ref);
+				//     return;
+				mapTypeToToken.Emit(OpCodes.Ret);
+				// } 
+				mapTypeToToken.Append(neqTarget);
 			}
 
+			for (var i = 0; i < Methods.Count; i++)
 			{
-				var resolveMethod = runtime_type.Methods.Single(m => m.Name == "TryResolveMethodTokenReferenceUsingReflection");
-				var body = new MethodBody(resolveMethod);
-				var il = body.GetILProcessor();
-				for (var i = 0; i < Methods.Count; i++)
-				{
-					var token = counter++;
-					var method = Methods[i];
-					MethodReference mr = method;
-					if (method.Module.Assembly != productAssembly)
-						mr = productAssembly.MainModule.ImportReference(method);
+				var token = 0x06000000 /* Method */ | counter++;
+				var method = Methods[i];
+				MethodReference mr = method;
+				if (method.Module.Assembly != productAssembly)
+					mr = productAssembly.MainModule.ImportReference(method);
 
-					var neqTarget = il.Create(OpCodes.Nop);
-					il.Emit(OpCodes.Ldarg_0);
-					il.Emit(OpCodes.Ldc_I4, unchecked((int)token));
-					il.Emit(OpCodes.Bne_Un, neqTarget);
-					il.Emit(OpCodes.Ldarg_1);
-					il.Emit(OpCodes.Ldtoken, mr);
-					il.Emit(OpCodes.Call, system_runtimemethodhandle_tointptr_ref);
-					il.Emit(OpCodes.Stind_Ref);
-					il.Emit(OpCodes.Ldc_I4_1);
-					il.Emit(OpCodes.Ret);
-					il.Append(neqTarget);
-
-				}
-				il.Emit(OpCodes.Ldarg_1);
-				il.Emit(OpCodes.Ldnull);
-				il.Emit(OpCodes.Stind_Ref);
-				il.Emit(OpCodes.Ldc_I4_0);
-				il.Emit(OpCodes.Ret);
-				resolveMethod.Body = body;
+				//
+				// TryMapTokenToMember
+				//
+				var neqTarget = mapToMember.Create(OpCodes.Nop);
+				// if (token_reference == <constant>) {
+				mapToMember.Emit(OpCodes.Ldarg_0);
+				mapToMember.Emit(OpCodes.Ldc_I4, token);
+				mapToMember.Emit(OpCodes.Bne_Un, neqTarget);
+				mapToMember.Emit(OpCodes.Ldarg_1);
+				mapToMember.Emit(OpCodes.Ldtoken, mr);
+				//     member = MethodBase.GetMethodFromHandle (ldtoken <type>);
+				mapToMember.Emit(OpCodes.Call, system_methodbase_getmethodfromhandle_ref);
+				mapToMember.Emit(OpCodes.Stind_Ref);
+				mapToMember.Emit(OpCodes.Ldc_I4_1);
+				//     return;
+				mapToMember.Emit(OpCodes.Ret);
+				// }
+				mapToMember.Append(neqTarget);
 			}
+
+			//
+			// TryMapTokenToMember epilogue
+			//
+			//     member = null;
+			mapToMember.Emit(OpCodes.Ldarg_1);
+			mapToMember.Emit(OpCodes.Ldnull);
+			mapToMember.Emit(OpCodes.Stind_Ref);
+			mapToMember.Emit(OpCodes.Ldc_I4_0);
+			//     return false;
+			mapToMember.Emit(OpCodes.Ret);
+			// }
+
+			//
+			// TryMapRuntimeTypeHandleToToken epilogue:
+			//
+			//     token = 0;
+			mapTypeToToken.Emit(OpCodes.Ldarg_1);
+			mapTypeToToken.Emit(OpCodes.Ldc_I4_0);
+			mapTypeToToken.Emit(OpCodes.Stind_Ref);
+			mapTypeToToken.Emit(OpCodes.Ldc_I4_0);
+			//     return false;
+			mapTypeToToken.Emit(OpCodes.Ret);
+			// }
 
 			Console.WriteLine($"GenerateStaticRegistrarMap: previons action: {Context.Annotations.GetAction(productAssembly)}");
 			Context.Annotations.SetAction(productAssembly, Mono.Linker.AssemblyAction.Save);

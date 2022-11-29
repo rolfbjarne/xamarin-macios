@@ -31,6 +31,7 @@ using Registrar;
 using Foundation;
 using ObjCRuntime;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Mono.Linker;
 using Mono.Tuner;
 
@@ -575,6 +576,7 @@ namespace Registrar {
 
 		public Target Target { get; private set; }
 		public bool IsSingleAssembly { get { return !string.IsNullOrEmpty (single_assembly); } }
+		bool GenerateRuntimeMapForMetadataTokens { get { return !IsSingleAssembly; } }
 
 		string single_assembly;
 		IEnumerable<AssemblyDefinition> input_assemblies;
@@ -977,34 +979,42 @@ namespace Registrar {
 			return method.ReturnType;
 		}
 
-		TypeReference system_void;
-		protected override TypeReference GetSystemVoidType ()
+		IList<AssemblyDefinition> GetCorlib ()
 		{
-			if (system_void != null)
-				return system_void;
-
 			// find corlib
+			// FIXME: cache return value
 			var corlib_name = Driver.CorlibName;
 			AssemblyDefinition corlib = null;
-			var candidates = new List<AssemblyDefinition> ();
+			var candidates = new List<AssemblyDefinition>();
 
-			foreach (var assembly in input_assemblies) {
-				if (corlib_name == assembly.Name.Name) {
+			foreach (var assembly in input_assemblies)
+			{
+				if (corlib_name == assembly.Name.Name)
+				{
 					corlib = assembly;
 					break;
 				}
 			}
 
 			if (corlib == null)
-				corlib = Resolver.Resolve (AssemblyNameReference.Parse (corlib_name), new ReaderParameters ());
+				corlib = Resolver.Resolve(AssemblyNameReference.Parse(corlib_name), new ReaderParameters());
 
 			if (corlib != null)
-				candidates.Add (corlib);
+				candidates.Add(corlib);
 
 			if (Resolver != null)
-				candidates.AddRange (Resolver.ToResolverCache ().Values.Cast<AssemblyDefinition> ());
+				candidates.AddRange(Resolver.ToResolverCache().Values.Cast<AssemblyDefinition>());
 
-			foreach (var candidate in candidates) {
+			return candidates;
+		}
+
+		TypeReference system_void;
+		protected override TypeReference GetSystemVoidType ()
+		{
+			if (system_void != null)
+				return system_void;
+
+			foreach (var candidate in GetCorlib ()) {
 				foreach (var type in candidate.MainModule.Types) {
 					if (type.Namespace == "System" && type.Name == "Void")
 						return system_void = type;
@@ -4946,6 +4956,10 @@ namespace Registrar {
 		{
 			var token = member.MetadataToken;
 
+			/* FIXME: Simplify to only use full tokens if creating a runtime map instead of actually using metadatatokens as metadatatokens */
+			 if (GenerateRuntimeMapForMetadataTokens)
+				return TryCreateFullTokenReference (member, out token_ref, out exception);
+
 			/* We can't create small token references if we're in partial mode, because we may have multiple arrays of registered assemblies, and no way of saying which one we refer to with the assembly index */
 			if (IsSingleAssembly)
 				return TryCreateFullTokenReference (member, out token_ref, out exception);
@@ -5217,6 +5231,115 @@ namespace Registrar {
 			interfaces.Dispose ();
 			interfaces = null;
 			sb.Dispose ();
+
+			if (GenerateRuntimeMapForMetadataTokens && false)
+			{
+				var runtime_type = GetRuntimeType();
+				var resolve_methods = runtime_type.Methods.Single(m => m.Name == "TryResolveMethodTokenReferenceUsingReflection");
+				var resolve_types = runtime_type.Methods.Single(m => m.Name == "TryResolveTypeTokenReferenceUsingReflection");
+				resolve_methods.Body = new MethodBody(resolve_methods);
+				var resolve_methods_il = resolve_methods.Body.GetILProcessor();
+				resolve_types.Body = new MethodBody(resolve_types);
+				var resolve_types_il = resolve_types.Body.GetILProcessor();
+				
+				var corlib = GetCorlib();
+				var system_type = corlib.Select(v => v.MainModule.Types.FirstOrDefault(v => v.Is("System", "Type"))).Where(v => v is not null).First();
+				var system_type_gettype = system_type.Methods.First(v => v.Name == "GetType" && v.HasParameters && v.Parameters.Count == 1 && v.Parameters[0].ParameterType.Is("System", "String"));
+				var gettype_ref = runtime_type.Module.ImportReference(system_type_gettype);
+
+				var system_runtimemethodhandle = corlib.Select(v => v.MainModule.Types.FirstOrDefault(v => v.Is("System", "RuntimeMethodHandle"))).Where(v => v is not null).First();
+				var system_runtimemethodhandle_tointptr = system_runtimemethodhandle.Methods.Single(v => v.Name == "ToIntPtr");
+				var system_runtimemethodhandle_tointptr_ref = runtime_type.Module.ImportReference(system_runtimemethodhandle_tointptr);
+				foreach (var kvp in token_ref_cache)
+				{
+					var member = kvp.Key.Item1;
+					var token = kvp.Value;
+
+					if (member is TypeReference td)
+					{
+						var neqTarget = resolve_types_il.Create(OpCodes.Nop);
+						resolve_types_il.Emit(OpCodes.Ldarg_0);
+						resolve_types_il.Emit(OpCodes.Ldc_I4, unchecked((int)token));
+						resolve_types_il.Emit(OpCodes.Bne_Un, neqTarget);
+						resolve_types_il.Emit(OpCodes.Ldarg_1);
+						resolve_types_il.Emit(OpCodes.Ldstr, $"{td.FullName}, {td.Module.Assembly.Name.FullName}");
+						resolve_types_il.Emit (OpCodes.Call, gettype_ref);
+						resolve_types_il.Emit(OpCodes.Stind_Ref);
+						resolve_types_il.Emit(OpCodes.Ldc_I4_1);
+						resolve_types_il.Emit(OpCodes.Ret);
+						resolve_types_il.Append(neqTarget);
+					} else if (member is MethodReference md)
+					{
+						var neqTarget = resolve_methods_il.Create(OpCodes.Nop);
+						resolve_methods_il.Emit(OpCodes.Ldarg_0);
+						resolve_methods_il.Emit(OpCodes.Ldc_I4, unchecked((int)token));
+						resolve_methods_il.Emit(OpCodes.Bne_Un, neqTarget);
+						resolve_methods_il.Emit(OpCodes.Ldarg_1);
+						resolve_methods_il.Emit(OpCodes.Ldtoken, md);
+						resolve_methods_il.Emit(OpCodes.Call, system_runtimemethodhandle_tointptr_ref);
+						resolve_methods_il.Emit(OpCodes.Stind_Ref);
+						resolve_methods_il.Emit(OpCodes.Ldc_I4_1);
+						resolve_methods_il.Emit(OpCodes.Ret);
+						resolve_methods_il.Append(neqTarget);
+					} else
+					{
+						throw new NotImplementedException();
+					}
+				}
+
+				resolve_methods_il.Emit(OpCodes.Ldarg_1);
+				resolve_methods_il.Emit(OpCodes.Ldnull);
+				resolve_methods_il.Emit(OpCodes.Stind_Ref);
+				resolve_methods_il.Emit(OpCodes.Ldc_I4_0);
+				resolve_methods_il.Emit(OpCodes.Ret);
+
+				resolve_types_il.Emit(OpCodes.Ldarg_1);
+				resolve_types_il.Emit(OpCodes.Ldnull);
+				resolve_types_il.Emit(OpCodes.Stind_Ref);
+				resolve_types_il.Emit(OpCodes.Ldc_I4_0);
+				resolve_types_il.Emit(OpCodes.Ret);
+			}
+		}
+
+		TypeDefinition objcruntime_runtime;
+		TypeDefinition GetRuntimeType()
+		{
+			if (objcruntime_runtime is not null)
+				return objcruntime_runtime;
+
+			// find corlib
+			var platformName = PlatformAssembly;
+			AssemblyDefinition platformAssembly = null;
+			var candidates = new List<AssemblyDefinition>();
+
+			foreach (var assembly in input_assemblies)
+			{
+				if (platformName == assembly.Name.Name)
+				{
+					platformAssembly = assembly;
+					break;
+				}
+			}
+
+			if (platformAssembly == null)
+				platformAssembly = Resolver.Resolve(AssemblyNameReference.Parse(platformName), new ReaderParameters());
+
+			if (platformAssembly != null)
+				candidates.Add(platformAssembly);
+
+			if (Resolver != null)
+				candidates.AddRange(Resolver.ToResolverCache().Values.Cast<AssemblyDefinition>());
+
+			foreach (var candidate in candidates)
+			{
+				foreach (var type in candidate.MainModule.Types)
+				{
+					if (type.Is ("ObjCRuntime", "Class"))
+						return objcruntime_runtime = type;
+				}
+			}
+
+			throw ErrorHelper.CreateError(4165, Errors.MT4165); // FIXME: update/use different error
 		}
 
 		protected override bool SkipRegisterAssembly (AssemblyDefinition assembly)

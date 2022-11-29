@@ -2006,7 +2006,7 @@ namespace ObjCRuntime {
 
 			// Find the closed method.
 			foreach (var mi in closed_type.GetMethods (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly)) {
-				if (mi.MetadataToken == open_method.MetadataToken) {
+				if (mi.MethodHandle == open_method.MethodHandle) {
 					return mi;
 				}
 			}

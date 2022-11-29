@@ -18,15 +18,42 @@
   </PropertyGroup>
 
   <Target Name="GetNuGetSources">
-    <Exec Command="grep https://pkgs.dev.azure.com $(RootSourceDirectory)/NuGet.config | sed -e 's/.*value=&quot;//'  -e 's/&quot;.*//'" ConsoleToMsBuild="true" IgnoreStandardErrorWarningFormat="true">
-      <Output TaskParameter="ConsoleOutput" ItemName="NuGetSourceLines" />
-    </Exec>
+    <GetNuGetSourcesTask RootSourceDirectory="$(RootSourceDirectory)">
+      <Output TaskParameter="NuGetSourceLines" ItemName="NuGetSourceLines" />
+    </GetNuGetSourcesTask>
+
     <PropertyGroup>
       <NuGetSourceList>--source @(NuGetSourceLines,' --source ')</NuGetSourceList>
     </PropertyGroup>
-    <!-- <Warning Text="SourceList: $(NuGetSourceList)" /> -->
+    <!-- <Warning Text="SourceList:&#xA;$(NuGetSourceList)" /> -->
   </Target>
 
+
+  <UsingTask TaskName="GetNuGetSourcesTask"
+      TaskFactory="RoslynCodeTaskFactory"
+      AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <RootSourceDirectory ParameterType="System.String" />
+      <NuGetSourceLines ParameterType="System.String[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          // This is only in C#, because the equivalent MSBuild XML would not be pretty.
+          var path = Path.Combine (RootSourceDirectory, "NuGet.config");
+          var contents = File.ReadAllLines (path);
+          var sourceLines = contents
+            .Where (v => v.Contains ("https://pkgs.dev.azure.com"))
+            .Select (v => v.Substring (v.IndexOf ("value=\"") + "value=\"".Length))
+            .Select (v => v.Substring (0, v.IndexOf ("\"")))
+            .ToArray ();
+          NuGetSourceLines = sourceLines;
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
 
   <Import Project="$(RootSourceDirectory)/eng/Versions.props" />
   <!--

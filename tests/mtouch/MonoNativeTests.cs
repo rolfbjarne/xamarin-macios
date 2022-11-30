@@ -112,11 +112,8 @@ namespace Xamarin
 		}
 
 		[Test]
-		[TestCase (Profile.iOS, "9.3", "libmono-native-compat.dylib")]
-		[TestCase (Profile.iOS, "10.0", "libmono-native-unified.dylib")]
-		[TestCase (Profile.tvOS, "9.0", "libmono-native-compat.dylib")]
-		[TestCase (Profile.tvOS, "10.0", "libmono-native-unified.dylib")]
-		[TestCase (Profile.watchOS, "2.0", "libmono-native-compat.dylib")]
+		[TestCase (Profile.iOS, "11.0", "libmono-native-unified.dylib")]
+		[TestCase (Profile.tvOS, "11.0", "libmono-native-unified.dylib")]
 		[TestCase (Profile.watchOS, "5.0", "libmono-native-unified.dylib")]
 		public void TestDeviceDylib (Profile profile, string version, string mono_native_dylib)
 		{
@@ -167,7 +164,7 @@ namespace Xamarin
 				mtouch.CreateTemporaryApp ();
 				mtouch.Linker = LinkerOption.LinkAll;
 				mtouch.AssemblyBuildTargets.Add ("@all=framework");
-				mtouch.TargetVer = "10.0";
+				mtouch.TargetVer = SdkVersions.MiniOS;
 
 				mtouch.AssertExecute (MTouchAction.BuildDev, "build");
 

@@ -125,6 +125,13 @@ steps:
   displayName: 'Install workloads'
   continueOnError: true
 
+- pwsh: |
+    & .\bin\dotnet\dotnet test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+      --verbosity diag `
+      "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"
+  displayName: 'Run .NET tests'
+  continueOnError: true
+
 # - pwsh: |
 #     Write-Host "Trying to ssh to the mac bot..."
 #     & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'

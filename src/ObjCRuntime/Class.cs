@@ -445,16 +445,24 @@ namespace ObjCRuntime {
 
 		internal unsafe static MemberInfo? ResolveFullTokenReference (uint token_reference)
 		{
-			if (TryMapTokenToMember (token_reference, out var member))
-				return member;
-
 			// sizeof (MTFullTokenReference) = IntPtr.Size + 4 + 4
 			var idx = (int) (token_reference >> 1);
-			var entry = Runtime.options->RegistrationMap->full_token_references [idx];
-			var assembly_name = Runtime.options->RegistrationMap->assemblies [entry.assembly_index].name;
-			var module_token = entry.module_token;
-			var token = entry.token;
 
+			Console.WriteLine ($"ResolveFullTokenReference ({token_reference} = 0x{token_reference.ToString ("x")}): idx: {idx} = 0x{idx.ToString ("x")}");
+
+			var entry = Runtime.options->RegistrationMap->full_token_references [idx];
+			var token = entry.token;
+			Console.WriteLine ($"ResolveFullTokenReference ({token_reference} = 0x{token_reference.ToString ("x")}): idx: {idx} = 0x{idx.ToString ("x")} token: {token} = 0x{token.ToString ("x")}");
+
+			if (TryMapTokenToMemberTimed (token, out var member)) {
+				Console.WriteLine ($"ResolveFullTokenReference ({token_reference} = 0x{token_reference.ToString ("x")}): token: {token} = 0x{token.ToString ("x")} => {member}");
+				return member;
+			}
+
+			Console.WriteLine ($"ResolveFullTokenReference ({token_reference} = 0x{token_reference.ToString ("x")}): token: {token} = 0x{token.ToString ("x")} => Failed to map");
+
+			var module_token = entry.module_token;
+			var assembly_name = Runtime.options->RegistrationMap->assemblies [entry.assembly_index].name;
 #if LOG_TYPELOAD
 			Console.WriteLine ($"ResolveFullTokenReference (0x{token_reference:X}) assembly name: {assembly_name} module token: 0x{module_token:X} token: 0x{token:X}.");
 #endif
@@ -496,7 +504,13 @@ namespace ObjCRuntime {
 
 		static bool TryMapTypeToToken (Type type, out uint token)
 		{
-			return TryMapRuntimeTypeHandleToToken (type.TypeHandle, out token);
+			if (mapWatch is null)
+				mapWatch = new System.Diagnostics.Stopwatch ();
+			mapWatch.Start ();
+			var rv = TryMapRuntimeTypeHandleToToken (type.TypeHandle, out token);
+			mapWatch.Stop ();
+			Console.WriteLine ($"TryMapTypeToToken ({type}, {token} = 0x{token.ToString ("x")}) => {rv} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Accumulated Milliseconds: {mapWatch.ElapsedMilliseconds}");
+			return rv;
 		}
 
 		static bool TryMapTokenToMember (uint token_reference, out MemberInfo? member)
@@ -504,6 +518,19 @@ namespace ObjCRuntime {
 			// The static registrar will inject code here at build time.
 			member = null;
 			return false;
+		}
+
+		[ThreadStatic]
+		static System.Diagnostics.Stopwatch? mapWatch;
+		static bool TryMapTokenToMemberTimed (uint token_reference, out MemberInfo? member)
+		{
+			if (mapWatch is null)
+				mapWatch = new System.Diagnostics.Stopwatch ();
+			mapWatch.Start ();
+			var rv = TryMapTokenToMember (token_reference, out member);
+			mapWatch.Stop ();
+			Console.WriteLine ($"TryMapTokenToMemberTimed (0x{token_reference.ToString ("x")}, {member}) => {rv} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Accumulated Milliseconds: {mapWatch.ElapsedMilliseconds}");
+			return rv;
 		}
 
 		unsafe static MemberInfo? ResolveTokenReference (uint token_reference, uint implicit_token_type)
@@ -548,9 +575,15 @@ namespace ObjCRuntime {
 			}
 		}
 
+		internal static void VerifyRegistrarMode (string message)
+		{
+			Console.WriteLine(Environment.StackTrace);
+			throw new InvalidOperationException ($"Static Registrar Map Mode: {message}");
+		}
+
 		static Module ResolveModule (Assembly assembly, uint token)
 		{
-			throw new InvalidOperationException ("Static Registrar Map Mode");
+			VerifyRegistrarMode ("ResolveModule");
 			foreach (var mod in assembly.GetModules ()) {
 				if (mod.MetadataToken != token)
 					continue;
@@ -648,7 +681,7 @@ namespace ObjCRuntime {
 			if (TryMapTypeToToken (type, out var tr))
 				return tr;
 
-			throw new InvalidOperationException ("Static Registrar Map Mode");
+			VerifyRegistrarMode ("GetTokenReference");
 			var asm_name = type.Module.Assembly.GetName ().Name!;
 
 			// First check if there's a full token reference to this type

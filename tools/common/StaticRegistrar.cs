@@ -4922,9 +4922,16 @@ namespace Registrar {
 				return false;
 			}
 			var assemblyName = registered_assemblies [assemblyIndex].Name;
+#if NET
+			var moduleToken = uint.MaxValue;
+			var md = (MemberReference)member.Resolve();
+			Console.WriteLine($"Key: {md} => {md.GetType().FullName}");
+			var memberToken = (uint)FindMemberCallback(md);
+#else
 			var moduleToken = member.Module.MetadataToken.ToUInt32 ();
-			var moduleName = member.Module.Name;
 			var memberToken = member.MetadataToken.ToUInt32 ();
+#endif
+			var moduleName = member.Module.Name;
 			var memberName = member.FullName;
 			exception = null;
 			full_token_references.Append ($"\t\t{{ /* #{full_token_reference_count} = 0x{token_ref:X} */ {assemblyIndex} /* {assemblyName} */, 0x{moduleToken:X} /* {moduleName} */, 0x{memberToken:X} /* {memberName} */ }},\n");
@@ -4951,6 +4958,8 @@ namespace Registrar {
 			}
 			return true;
 		}
+
+		public Func<MemberReference, int> FindMemberCallback;
 
 		bool TryCreateTokenReferenceUncached (MemberReference member, TokenType implied_type, out uint token_ref, out Exception exception)
 		{

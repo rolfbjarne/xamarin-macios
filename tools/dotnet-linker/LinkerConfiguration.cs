@@ -13,6 +13,7 @@ using Xamarin.Utils;
 using Xamarin.Tuner;
 
 using ObjCRuntime;
+using System.Text;
 
 namespace Xamarin.Linker {
 	public class LinkerConfiguration {
@@ -56,6 +57,69 @@ namespace Xamarin.Linker {
 		string user_optimize_flags;
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
+
+		public Dictionary<string, int> MemberToTokenMap = new Dictionary<string, int>();
+		public void AddToMap(MemberReference member, int token)
+		{
+			var key = MemberToString(member);
+			Console.WriteLine($"ADDED: {key} => {token}");
+			MemberToTokenMap[key] = token;
+		}
+		public int FindInMap(MemberReference member)
+		{
+			return MemberToTokenMap[MemberToString(member)];
+		}
+		string MemberToString(MemberReference member)
+		{
+			if (member is TypeDefinition td)
+			{
+				return td.Module.Name + ":" + td.FullName;
+			}
+			else if (member is TypeSpecification ts)
+			{
+				return ts.Module.Name + ":" + ts.FullName;
+			}
+			else if (member is GenericParameter gp)
+			{
+				return "{" + gp.FullName + "}";
+			}
+		else if (member is TypeReference tr)
+			{
+				var td2 = tr.Resolve();
+				if (td2 is not null)
+					return MemberToString(td2);
+				return tr.Module.Name + ":" + tr.FullName;
+			}
+			else if (member is MethodDefinition md)
+			{
+				var rv = new StringBuilder(MemberToString(md.DeclaringType));
+				rv.Append('.');
+				rv.Append(md.Name);
+				if (md.HasGenericParameters)
+				{
+					rv.Append('`');
+					rv.Append(md.GenericParameters.Count);
+				}
+				rv.Append('(');
+				if (md.HasParameters)
+				{
+					var first = true;
+					foreach (var p in md.Parameters)
+					{
+						if (!first)
+							rv.Append(", ");
+						first = false;
+						rv.Append(MemberToString(p.ParameterType));
+					}
+				}
+				rv.Append(')');
+				return rv.ToString();
+			}
+			else
+			{
+				throw new NotImplementedException(member.GetType().FullName);
+			}
+		}
 
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 

@@ -874,6 +874,26 @@ namespace Xamarin.Tests {
 			args.Add ($"-lib:{Path.GetDirectoryName (GetBaseLibrary (profile))}");
 			return "/Library/Frameworks/Mono.framework/Commands/csc";
 		}
+
+		public static void AssertRuntimeIdentifierAvailable (ApplePlatform platform, string runtimeIdentifier)
+		{
+			if (string.IsNullOrEmpty (runtimeIdentifier))
+				return;
+
+			if (GetRuntimeIdentifiers (platform).Contains (runtimeIdentifier))
+				return;
+
+			Assert.Ignore ($"The runtime identifier {runtimeIdentifier} is not available on {platform}");
+		}
+
+		public static void AssertRuntimeIdentifiersAvailable (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			if (string.IsNullOrEmpty (runtimeIdentifiers))
+				return;
+
+			foreach (var rid in runtimeIdentifiers.Split (new char [] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+				AssertRuntimeIdentifierAvailable (platform, rid);
+		}
 #endif // !XAMMAC_TESTS
 
 		public static IEnumerable<ApplePlatform> GetIncludedPlatforms (bool dotnet)

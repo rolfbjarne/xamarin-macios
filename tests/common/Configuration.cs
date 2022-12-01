@@ -874,20 +874,20 @@ namespace Xamarin.Tests {
 			return "/Library/Frameworks/Mono.framework/Commands/csc";
 		}
 
-		public static void AssertRuntimeIdentifierAvailable(ApplePlatform platform, string runtimeIdentifier)
+		public static void AssertRuntimeIdentifierAvailable (ApplePlatform platform, string runtimeIdentifier)
 		{
-			if (string.IsNullOrEmpty(runtimeIdentifier))
+			if (string.IsNullOrEmpty (runtimeIdentifier))
 				return;
 
 			if (GetRuntimeIdentifiers (platform).Contains (runtimeIdentifier))
 				return;
 
-			Assert.Ignore($"The runtime identifier {runtimeIdentifier} is not available on {platform}");
+			Assert.Ignore ($"The runtime identifier {runtimeIdentifier} is not available on {platform}");
 		}
 
 		public static void AssertRuntimeIdentifiersAvailable (ApplePlatform platform, string runtimeIdentifiers)
 		{
-			if (string.IsNullOrEmpty(runtimeIdentifiers))
+			if (string.IsNullOrEmpty (runtimeIdentifiers))
 				return;
 
 			foreach (var rid in runtimeIdentifiers.Split (new char [] { ';' }, StringSplitOptions.RemoveEmptyEntries))

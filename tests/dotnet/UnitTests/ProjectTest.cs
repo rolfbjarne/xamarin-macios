@@ -22,7 +22,7 @@ namespace Xamarin.Tests {
 			var platform = ApplePlatform.iOS;
 			var project_path = GetProjectPath ("MySingleView", runtimeIdentifiers: runtimeIdentifier, platform: platform, out var appPath);
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifier);
 			var result = DotNet.AssertBuild (project_path, properties);
@@ -45,7 +45,7 @@ namespace Xamarin.Tests {
 			var platform = ApplePlatform.MacOSX;
 			var project_path = GetProjectPath ("MyCocoaApp", runtimeIdentifiers: runtimeIdentifier, platform: platform, out var appPath);
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifier);
 			var result = DotNet.AssertBuild (project_path, properties);
@@ -63,7 +63,7 @@ namespace Xamarin.Tests {
 			var platform = ApplePlatform.TVOS;
 			var project_path = GetProjectPath ("MyTVApp", runtimeIdentifiers: runtimeIdentifier, platform: platform, out var appPath);
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifier);
 			var result = DotNet.AssertBuild (project_path, properties);
@@ -80,7 +80,7 @@ namespace Xamarin.Tests {
 			var platform = ApplePlatform.MacCatalyst;
 			var project_path = GetProjectPath ("MyCatalystApp", runtimeIdentifiers: runtimeIdentifier, platform: platform, out var appPath);
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifier);
 			var result = DotNet.AssertBuild (project_path, properties);
@@ -322,7 +322,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "MySimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -346,7 +346,7 @@ namespace Xamarin.Tests {
 		public void BuildFatMonoTouchTest (ApplePlatform platform, string runtimeIdentifiers, params string [] additionalProperties)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = Path.Combine (Configuration.SourceRoot, "tests", "monotouch-test", "dotnet", platform.AsString (), "monotouch-test.csproj");
 			Clean (project_path);
@@ -442,7 +442,7 @@ namespace Xamarin.Tests {
 		public void BuildAndExecuteNativeReferencesTestApp (string project, ApplePlatform platform, string runtimeIdentifier)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifier, platform: platform, out var appPath);
 			Clean (project_path);
@@ -525,7 +525,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "MySimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -575,7 +575,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "MySimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -605,7 +605,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "MySimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var outputPath = Cache.CreateTemporaryDirectory ();
 			var project_path = GetProjectPath (project, platform: platform);
@@ -628,7 +628,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "SimpleAppWithOldReferences";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -680,7 +680,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "AppWithResources";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -757,7 +757,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "AppWithResources";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var projectPath = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out _);
 			Clean (projectPath);
@@ -885,7 +885,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "AppWithGenericLibraryReference";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 			if (platform == ApplePlatform.MacOSX) {
 				Configuration.IgnoreIfIgnoredPlatform (ApplePlatform.iOS); // This test requires iOS as well when testing macOS
 			} else {
@@ -940,7 +940,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "CatalystAppOptimizedForMacOS";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 
 			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
@@ -960,7 +960,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "CatalystAppOptimizedForMacOS";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifier);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 
 			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
@@ -982,7 +982,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "Net6_0SimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, netVersion: "net6.0");
 			Clean (project_path);
@@ -1012,7 +1012,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "MySimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -1052,7 +1052,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "MySimpleApp";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
@@ -1068,7 +1068,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "CustomizedCodeSigning";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 			var properties = GetDefaultProperties (runtimeIdentifiers);
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 
@@ -1161,7 +1161,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "Entitlements";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			Configuration.AssertRuntimeIdentifiersAvailable(platform, runtimeIdentifiers);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, configuration: configuration);
 			Clean (project_path);

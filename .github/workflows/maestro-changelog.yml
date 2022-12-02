@@ -43,3 +43,18 @@ jobs:
             if (changelogComment)
               commentId = changelogComment.id
           })
+          if (commentId == "") {
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '${{ env.CHANGELOG_MESSAGE }}'
+            })
+          } else {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: '${{ env.CHANGELOG_MESSAGE }}'
+            })
+          }

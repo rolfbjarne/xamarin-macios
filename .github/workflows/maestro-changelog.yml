@@ -18,13 +18,8 @@ jobs:
         # need to replace newlines with actual "\n"
         CHANGELOG_FILE=changelog2.txt
         rm -f "$CHANGELOG_FILE"
-        echo "CHANGELOG_MESSAGE<<EOF" >> "$CHANGELOG_FILE"
         cat changelog.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g' >> "$CHANGELOG_FILE"
-        echo EOF >> "$CHANGELOG_FILE"
         cat "$CHANGELOG_FILE"
-
-        # export the changelog message
-        cat "$CHANGELOG_FILE" >> $GITHUB_ENV
 
         cp "$CHANGELOG_FILE" /tmp/changelog.txt
 

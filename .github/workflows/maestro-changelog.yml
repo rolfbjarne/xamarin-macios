@@ -16,14 +16,17 @@ jobs:
         dotnet run https://github.com/$GITHUB_REPOSITORY/pull/${GITHUB_REF_NAME/\/*/} > changelog.txt 2>&1
 
         # need to replace newlines with actual "\n"
-        rm -f changelog2.txt
-        echo "CHANGELOG_MESSAGE<<EOF" >> changelog2.txt
-        cat changelog.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g' >> changelog2.txt
-        echo EOF >> changelog2.txt
-        cat changelog2.txt
+        CHANGELOG_FILE=changelog2.txt
+        rm -f "$CHANGELOG_FILE"
+        echo "CHANGELOG_MESSAGE<<EOF" >> "$CHANGELOG_FILE"
+        cat changelog.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g' >> "$CHANGELOG_FILE"
+        echo EOF >> "$CHANGELOG_FILE"
+        cat "$CHANGELOG_FILE"
 
         # export the changelog message
-        cat changelog2.txt >> $GITHUB_ENV
+        cat "$CHANGELOG_FILE" >> $GITHUB_ENV
+
+        cp "$CHANGELOG_FILE" /tmp/changelog.txt
 
     - name: 'Add changelog'
       uses: actions/github-script@v6.3.3
@@ -31,7 +34,7 @@ jobs:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           const fs = require('fs');
-          const changelog_message = fs.readFileSync('changelog2.txt', 'utf8');
+          const changelog_message = fs.readFileSync('/tmp/changelog.txt', 'utf8');
           // check if we've already added a changelog to this PR, and if so, update that comment, otherwise add a new comment
           var commentId = ""
           await github.paginate (github.rest.issues.listComments,

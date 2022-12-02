@@ -78,8 +78,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios12.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (12,0)]
-		[iOS (12,0)]
+		[TV (12, 0)]
+		[iOS (12, 0)]
 #endif
 		[DllImport (Constants.MetalPerformanceShadersLibrary)]
 		static extern void MPSHintTemporaryMemoryHighWaterMark (IntPtr commandBuffer, nuint bytes);
@@ -90,8 +90,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios12.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (12,0)]
-		[iOS (12,0)]
+		[TV (12, 0)]
+		[iOS (12, 0)]
 #endif
 		public static void HintTemporaryMemoryHighWaterMark (IMTLCommandBuffer commandBuffer, nuint sizeInBytes) => MPSHintTemporaryMemoryHighWaterMark (commandBuffer.GetHandle (), sizeInBytes);
 
@@ -101,8 +101,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios12.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (12,0)]
-		[iOS (12,0)]
+		[TV (12, 0)]
+		[iOS (12, 0)]
 #endif
 		[DllImport (Constants.MetalPerformanceShadersLibrary)]
 		static extern void MPSSetHeapCacheDuration (IntPtr commandBuffer, double seconds);
@@ -113,8 +113,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios12.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (12,0)]
-		[iOS (12,0)]
+		[TV (12, 0)]
+		[iOS (12, 0)]
 #endif
 		public static void SetHeapCacheDuration (IMTLCommandBuffer commandBuffer, double seconds) => MPSSetHeapCacheDuration (commandBuffer.GetHandle (), seconds);
 #endif
@@ -423,8 +423,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios11.3")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (11,3)]
-		[iOS (11,3)]
+		[TV (11, 3)]
+		[iOS (11, 3)]
 #endif
 		public static MPSCnnBinaryConvolutionNode Create (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float [] outputBiasTerms, float [] outputScaleTerms, float [] inputBiasTerms, float [] inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags)
 		{
@@ -443,8 +443,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios11.3")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (11,3)]
-		[iOS (11,3)]
+		[TV (11, 3)]
+		[iOS (11, 3)]
 #endif
 		public MPSCnnBinaryConvolutionNode (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float [] outputBiasTerms, float [] outputScaleTerms, float [] inputBiasTerms, float [] inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags) : base (NSObjectFlag.Empty)
 		{
@@ -465,8 +465,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios11.3")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (11,3)]
-		[iOS (11,3)]
+		[TV (11, 3)]
+		[iOS (11, 3)]
 #endif
 		public new static MPSCnnBinaryFullyConnectedNode Create (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float [] outputBiasTerms, float [] outputScaleTerms, float [] inputBiasTerms, float [] inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags)
 		{
@@ -485,8 +485,8 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("ios11.3")]
 		[SupportedOSPlatform ("maccatalyst")]
 #else
-		[TV (11,3)]
-		[iOS (11,3)]
+		[TV (11, 3)]
+		[iOS (11, 3)]
 #endif
 		public MPSCnnBinaryFullyConnectedNode (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float [] outputBiasTerms, float [] outputScaleTerms, float [] inputBiasTerms, float [] inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags) : base (NSObjectFlag.Empty)
 		{

@@ -103,8 +103,8 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 #else
-	[iOS (11,3)]
-	[TV (11,3)]
+	[iOS (11, 3)]
+	[TV (11, 3)]
 #endif
 	public struct MPSImageCoordinate {
 		public nuint X;
@@ -118,8 +118,8 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 #else
-	[iOS (11,3)]
-	[TV (11,3)]
+	[iOS (11, 3)]
+	[TV (11, 3)]
 #endif
 	public struct MPSImageRegion {
 		public MPSImageCoordinate Offset;
@@ -278,8 +278,8 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 #else
-	[iOS (11,2)]
-	[TV (11,2)]
+	[iOS (11, 2)]
+	[TV (11, 2)]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MPSMatrixOffset {

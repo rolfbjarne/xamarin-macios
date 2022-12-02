@@ -50,7 +50,7 @@ namespace iAd {
 		Manual,
 	}
 
-	[Obsoleted (PlatformName.iOS, 15,0, PlatformArchitecture.None, Constants.iAdRemoved)]
+	[Obsoleted (PlatformName.iOS, 15, 0, PlatformArchitecture.None, Constants.iAdRemoved)]
 	[Native]
 	[ErrorDomain ("ADClientErrorDomain")]
 	public enum ADClientError : long {

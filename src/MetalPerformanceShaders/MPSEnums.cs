@@ -29,11 +29,11 @@ namespace MetalPerformanceShaders {
 	public enum MPSImageEdgeMode : ulong {
 		Zero,
 		Clamp = 1,
-		[iOS (12,1), TV (12,1)]
+		[iOS (12, 1), TV (12, 1)]
 		Mirror,
-		[iOS (12,1), TV (12,1)]
+		[iOS (12, 1), TV (12, 1)]
 		MirrorWithEdge,
-		[iOS (12,1), TV (12,1)]
+		[iOS (12, 1), TV (12, 1)]
 		Constant,
 	}
 
@@ -156,11 +156,11 @@ namespace MetalPerformanceShaders {
 		Elu,
 		PReLU,
 		ReLun,
-		[TV (11,3), iOS (11,3)]
+		[TV (11, 3), iOS (11, 3)]
 		Power,
-		[TV (11,3), iOS (11,3)]
+		[TV (11, 3), iOS (11, 3)]
 		Exponential,
-		[TV (11,3), iOS (11,3)]
+		[TV (11, 3), iOS (11, 3)]
 		Logarithm,
 		[TV (13, 0), Mac (10, 15), iOS (13, 0)]
 		GeLU,
@@ -358,7 +358,7 @@ namespace MetalPerformanceShaders {
 
 	[Flags]
 	[Native]
-	[TV (12,0), iOS (12,0)]
+	[TV (12, 0), iOS (12, 0)]
 	public enum MPSNNConvolutionAccumulatorPrecisionOption : ulong {
 		Half = 0x0,
 		Float = 1uL << 0,
@@ -393,7 +393,7 @@ namespace MetalPerformanceShaders {
 	}
 
 	[Native]
-	[TV (12,0), iOS (12,0)]
+	[TV (12, 0), iOS (12, 0)]
 	public enum MPSRnnMatrixId : ulong {
 		SingleGateInputWeights = 0,
 		SingleGateRecurrentWeights,
@@ -427,7 +427,7 @@ namespace MetalPerformanceShaders {
 		//Count, // must always be last, and because of this it will cause breaking changes.
 	}
 
-	[iOS (11,3), TV (11,3)]
+	[iOS (11, 3), TV (11, 3)]
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	public enum MPSCustomKernelIndex : uint {
 		DestIndex = 0,
@@ -440,9 +440,8 @@ namespace MetalPerformanceShaders {
 	}
 
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
-	[TV (11,3), iOS (11,3)]
-	public enum MPSImageType : uint
-	{
+	[TV (11, 3), iOS (11, 3)]
+	public enum MPSImageType : uint {
 		Type2d = 0,
 		Type2dArray = 1,
 		Array2d = 2,
@@ -476,9 +475,8 @@ namespace MetalPerformanceShaders {
 	[Flags]
 	[Native]
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
-	[TV (12,2), iOS (12,2)]
-	public enum MPSDeviceOptions : ulong
-	{
+	[TV (12, 2), iOS (12, 2)]
+	public enum MPSDeviceOptions : ulong {
 		Default = 0x0,
 		LowPower = 0x1,
 		SkipRemovable = 0x2,

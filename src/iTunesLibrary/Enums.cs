@@ -130,8 +130,7 @@ namespace iTunesLibrary {
 		LazyLoadData = 1,
 	}
 
-	public enum MediaItemProperty
-	{
+	public enum MediaItemProperty {
 		[Field ("ITLibMediaItemPropertyAlbumTitle")]
 		AlbumTitle,
 		[Field ("ITLibMediaItemPropertySortAlbumTitle")]

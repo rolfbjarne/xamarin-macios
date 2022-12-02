@@ -99,7 +99,7 @@ namespace Metal {
 		StoreAndMultisampleResolve,
 		[NoWatch]
 		Unknown,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		CustomSampleDepthStore,
 	}
 
@@ -113,9 +113,9 @@ namespace Metal {
 		kCube = 5,
 		kCubeArray = 6,
 		k3D = 7,
-		[iOS (12,0), TV (12,0)]
+		[iOS (12, 0), TV (12, 0)]
 		k2DMultisampleArray = 8,
-		[iOS (12,0), TV (12,0)]
+		[iOS (12, 0), TV (12, 0)]
 		kTextureBuffer = 9,
 	}
 
@@ -139,7 +139,7 @@ namespace Metal {
 		Repeat = 2,
 		MirrorRepeat = 3,
 		ClampToZero = 4,
-		[iOS (14,0)]
+		[iOS (14, 0)]
 		ClampToBorderColor = 5,
 	}
 
@@ -467,16 +467,17 @@ namespace Metal {
 		[NoWatch]
 		X32_Stencil8 = 261,
 
-		[NoiOS][NoTV]
+		[NoiOS]
+		[NoTV]
 		X24_Stencil8 = 262,
 
-		[Mac (11,0)]
+		[Mac (11, 0)]
 		BGRA10_XR = 552,
-		[Mac (11,0)]
+		[Mac (11, 0)]
 		BGRA10_XR_sRGB = 553,
-		[Mac (11,0)]
+		[Mac (11, 0)]
 		BGR10_XR = 554,
-		[Mac (11,0)]
+		[Mac (11, 0)]
 		BGR10_XR_sRGB = 555,
 	}
 
@@ -713,9 +714,9 @@ namespace Metal {
 		Bool3 = 55,
 		Bool4 = 56,
 
-		[iOS (11,0), TV (11,0), NoWatch] Texture = 58,
-		[iOS (11,0), TV (11,0), NoWatch] Sampler = 59,
-		[iOS (11,0), TV (11,0), NoWatch] Pointer = 60,
+		[iOS (11, 0), TV (11, 0), NoWatch] Texture = 58,
+		[iOS (11, 0), TV (11, 0), NoWatch] Sampler = 59,
+		[iOS (11, 0), TV (11, 0), NoWatch] Pointer = 60,
 
 		[NoMac, iOS (11, 0), TV (14, 5), NoWatch] R8Unorm = 62,
 		[NoMac, iOS (11, 0), TV (14, 5), NoWatch] R8Snorm = 63,
@@ -734,23 +735,23 @@ namespace Metal {
 		[NoMac, iOS (11, 0), TV (14, 5), NoWatch] Rg11B10Float = 76,
 		[NoMac, iOS (11, 0), TV (14, 5), NoWatch] Rgb9E5Float = 77,
 
-		[iOS (12,0), TV (12,0)] RenderPipeline = 78,
-		[Mac (11,0), iOS (13,0), TV (13,0)] ComputePipeline = 79,
-		[iOS (12,0), TV (12,0)] IndirectCommandBuffer = 80,
-		
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] Long = 81,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] Long2 = 82,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] Long3 = 83,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] Long4 = 84,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] ULong = 85,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] ULong2 = 86,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] ULong3 = 87,
-		[Mac (12,0), iOS (15,0), TV (15,0), MacCatalyst (15,0), NoWatch] ULong4 = 88,
-		
-		[Mac (11,0), iOS (14,0), NoTV] VisibleFunctionTable = 115,
-		[Mac (11,0), iOS (14,0), NoTV] IntersectionFunctionTable = 116,
-		[Mac (11,0), iOS (14,0), NoTV] PrimitiveAccelerationStructure = 117,
-		[Mac (11,0), iOS (14,0), NoTV] InstanceAccelerationStructure = 118,
+		[iOS (12, 0), TV (12, 0)] RenderPipeline = 78,
+		[Mac (11, 0), iOS (13, 0), TV (13, 0)] ComputePipeline = 79,
+		[iOS (12, 0), TV (12, 0)] IndirectCommandBuffer = 80,
+
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] Long = 81,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] Long2 = 82,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] Long3 = 83,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] Long4 = 84,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] ULong = 85,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] ULong2 = 86,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] ULong3 = 87,
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), MacCatalyst (15, 0), NoWatch] ULong4 = 88,
+
+		[Mac (11, 0), iOS (14, 0), NoTV] VisibleFunctionTable = 115,
+		[Mac (11, 0), iOS (14, 0), NoTV] IntersectionFunctionTable = 116,
+		[Mac (11, 0), iOS (14, 0), NoTV] PrimitiveAccelerationStructure = 117,
+		[Mac (11, 0), iOS (14, 0), NoTV] InstanceAccelerationStructure = 118,
 	}
 
 	[Native]
@@ -898,9 +899,9 @@ namespace Metal {
 		v1_1 = (1 << 16) + 1,
 		[NoWatch]
 		v1_2 = (1 << 16) + 2,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		v2_0 = (2 << 16),
-		[iOS (12,0), TV (12,0), NoWatch]
+		[iOS (12, 0), TV (12, 0), NoWatch]
 		v2_1 = (2 << 16) + 1,
 		[Mac (10, 15), iOS (13, 0), TV (13, 0), NoWatch]
 		v2_2 = (2 << 16) + 2,
@@ -946,7 +947,7 @@ namespace Metal {
 #if NET
 	[NoTV]
 #endif
-	[iOS (14,0)]
+	[iOS (14, 0)]
 	[Native]
 	public enum MTLSamplerBorderColor : ulong {
 		TransparentBlack = 0,
@@ -954,8 +955,8 @@ namespace Metal {
 		OpaqueWhite = 2
 	}
 
-	[TV (13,0)]
-	[iOS (12,0)]
+	[TV (13, 0)]
+	[iOS (12, 0)]
 	[Native]
 	public enum MTLPrimitiveTopologyClass : ulong {
 		Unspecified = 0,
@@ -1049,25 +1050,25 @@ namespace Metal {
 		UInt4 = 39,
 		Int1010102Normalized = 40,
 		UInt1010102Normalized = 41,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		UChar4Normalized_Bgra = 42,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		UChar = 45,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		Char = 46,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		UCharNormalized = 47,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		CharNormalized = 48,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		UShort = 49,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		Short = 50,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		UShortNormalized = 51,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		ShortNormalized = 52,
-		[iOS (11,0), TV (11,0), NoWatch]
+		[iOS (11, 0), TV (11, 0), NoWatch]
 		Half = 53,
 	}
 
@@ -1094,7 +1095,7 @@ namespace Metal {
 		Tile = (1uL << 2),
 	}
 
-	[iOS (11,0), TV (11,0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Native, Flags]
 	public enum MTLResourceUsage : ulong {
 		Read = 1 << 0,
@@ -1102,7 +1103,7 @@ namespace Metal {
 		Sample = 1 << 2,
 	}
 
-	[iOS (11,0), TV (11,0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Native]
 	public enum MTLMutability : ulong {
 		Default = 0,
@@ -1110,7 +1111,7 @@ namespace Metal {
 		Immutable = 2,
 	}
 
-	[iOS (11,0), TV (11,0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Native]
 	public enum MTLReadWriteTextureTier : ulong {
 		None = 0,
@@ -1118,28 +1119,28 @@ namespace Metal {
 		Two = 2,
 	}
 
-	[iOS (11,0), TV (11,0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Native]
 	public enum MTLArgumentBuffersTier : ulong {
 		One = 0,
 		Two = 1,
 	}
 
-	[iOS (11,0), TV (11,0), NoWatch]
+	[iOS (11, 0), TV (11, 0), NoWatch]
 	[Native, Flags]
 	public enum MTLStoreActionOptions : ulong {
 		None = 0,
 		CustomSamplePositions = 1 << 0,
 	}
 
-	[iOS (12,0), TV (12,0)]
+	[iOS (12, 0), TV (12, 0)]
 	[Native]
 	public enum MTLDispatchType : ulong {
 		Serial,
 		Concurrent,
 	}
 
-	[Flags, iOS (12,0), TV (12,0)]
+	[Flags, iOS (12, 0), TV (12, 0)]
 	[Native]
 	public enum MTLBarrierScope : ulong {
 		Buffers = 1 << 0,
@@ -1148,7 +1149,7 @@ namespace Metal {
 		RenderTargets = 1 << 2,
 	}
 
-	[Flags, iOS (12,0), TV (12,0)]
+	[Flags, iOS (12, 0), TV (12, 0)]
 	[Native]
 	public enum MTLIndirectCommandType : ulong {
 		Draw = 1 << 0,
@@ -1163,8 +1164,8 @@ namespace Metal {
 		ConcurrentDispatchThreads = 1 << 6,
 	}
 
-	[iOS (12,0)]
-	[TV (14,5)]
+	[iOS (12, 0)]
+	[TV (14, 5)]
 	[Native]
 	public enum MTLMultisampleStencilResolveFilter : ulong {
 		Sample0 = 0,

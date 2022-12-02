@@ -52,4 +52,11 @@ jobs:
               issue_number: context.issue.number,
               body: changelog_message
             })
+          } else {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: '${{ env.CHANGELOG_MESSAGE }}'
+            })
           }

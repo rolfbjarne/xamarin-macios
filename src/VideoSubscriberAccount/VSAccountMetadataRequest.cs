@@ -15,7 +15,7 @@ namespace VideoSubscriberAccount {
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
-		public VSAccountProviderAuthenticationScheme[] SupportedAuthenticationSchemes {
+		public VSAccountProviderAuthenticationScheme [] SupportedAuthenticationSchemes {
 			get {
 				return VSAccountProviderAuthenticationSchemeExtensions.GetValues (SupportedAuthenticationSchemesString);
 			}

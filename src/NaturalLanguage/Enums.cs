@@ -184,7 +184,7 @@ namespace NaturalLanguage {
 		[Field ("NLLanguageVietnamese")]
 		Vietnamese,
 
-		[iOS (16,0), Mac (13,0), Watch (9,0), TV (16,0), MacCatalyst (16,0)]
+		[iOS (16, 0), Mac (13, 0), Watch (9, 0), TV (16, 0), MacCatalyst (16, 0)]
 		[Field ("NLLanguageKazakh")]
 		Kazakh,
 	}
@@ -205,7 +205,7 @@ namespace NaturalLanguage {
 		Language,
 		[Field ("NLTagSchemeScript")]
 		Script,
-		[iOS (13,0), Mac (10,15), TV (13,0), Watch (6,0)]
+		[iOS (13, 0), Mac (10, 15), TV (13, 0), Watch (6, 0)]
 		[Field ("NLTagSchemeSentimentScore")]
 		SentimentScore,
 	}

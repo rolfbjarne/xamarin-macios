@@ -63,9 +63,9 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("macos10.15")]
 	[SupportedOSPlatform ("maccatalyst")]
 #else
-	[iOS (13,0)]
-	[TV (13,0)]
-	[Mac (10,15)]
+	[iOS (13, 0)]
+	[TV (13, 0)]
+	[Mac (10, 15)]
 #endif
 	public struct MPSDimensionSlice {
 		public nuint Start;
@@ -263,8 +263,7 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
-	public static class MPSConstants
-	{
+	public static class MPSConstants {
 		public const uint FunctionConstantIndex = 127;
 		public const uint BatchSizeIndex = 126;
 		public const uint UserConstantIndex = 125;
@@ -283,8 +282,7 @@ namespace MetalPerformanceShaders {
 	[TV (11,2)]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
-	public struct MPSMatrixOffset
-	{
+	public struct MPSMatrixOffset {
 		public uint RowOffset;
 		public uint ColumnOffset;
 	}

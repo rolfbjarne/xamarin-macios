@@ -38,7 +38,7 @@ namespace MultipeerConnectivity {
 	[Native ("MCErrorCode")]
 	[ErrorDomain ("MCErrorDomain")]
 	public enum MCError : long {
-		Unknown ,
+		Unknown,
 		NotConnected,
 		InvalidParameter,
 		Unsupported,

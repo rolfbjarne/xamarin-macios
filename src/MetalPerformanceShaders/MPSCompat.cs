@@ -12,7 +12,7 @@ namespace MetalPerformanceShaders {
 	public partial class MPSCnnConvolutionTransposeNode {
 
 		[Obsolete ("Always return null (not a public API).")]
-		static public MPSCnnConvolutionTransposeNode Create (MPSNNImageNode sourceNode,  MPSCnnConvolutionStateNode convolutionState, IMPSCnnConvolutionDataSource weights)
+		static public MPSCnnConvolutionTransposeNode Create (MPSNNImageNode sourceNode, MPSCnnConvolutionStateNode convolutionState, IMPSCnnConvolutionDataSource weights)
 		{
 			return null;
 		}
@@ -32,7 +32,7 @@ namespace MetalPerformanceShaders {
 
 	public partial class MPSCnnConvolutionTranspose {
 		[Obsolete ("Always throws 'NotSupportedException' (not a public API).")]
-		public virtual MPSImage EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSImage sourceImage, MPSCnnConvolutionState convolutionState) 
+		public virtual MPSImage EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSImage sourceImage, MPSCnnConvolutionState convolutionState)
 			=> throw new NotSupportedException ();
 	}
 

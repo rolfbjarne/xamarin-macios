@@ -2,10 +2,8 @@ using System;
 using System.Runtime.InteropServices;
 using ObjCRuntime;
 
-namespace OpenGLES
-{
-	public partial class EAGLContext
-	{
+namespace OpenGLES {
+	public partial class EAGLContext {
 		public enum PresentationMode {
 			AtTime = 0,
 			AfterMinimumDuration = 1,

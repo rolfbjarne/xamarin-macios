@@ -36,7 +36,7 @@ namespace ModelIO {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public static class MDLVertexFormatExtensions {
-		
+
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -54,8 +54,8 @@ namespace ModelIO {
 #endif
 		public static MTLVertexFormat ToMetalVertexFormat (this MDLVertexFormat vertexFormat)
 		{
-			nuint mtlVertexFormat = MTKMetalVertexFormatFromModelIO ((nuint)(ulong)vertexFormat);
-			return (MTLVertexFormat)(ulong)mtlVertexFormat;
+			nuint mtlVertexFormat = MTKMetalVertexFormatFromModelIO ((nuint) (ulong) vertexFormat);
+			return (MTLVertexFormat) (ulong) mtlVertexFormat;
 		}
 	}
 #endif
@@ -81,7 +81,7 @@ namespace ModelIO {
 
 #if !NET
 	[Obsolete ("Use 'MDLVoxelIndexExtent2' instead.")]
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout (LayoutKind.Sequential)]
 	public struct MDLVoxelIndexExtent {
 		public MDLVoxelIndexExtent (Vector4 minimumExtent, Vector4 maximumExtent)
 		{

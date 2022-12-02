@@ -21,7 +21,7 @@ namespace WatchKit {
 	}
 
 	[NoiOS]
-	[Deprecated (PlatformName.WatchOS, 7,0)]
+	[Deprecated (PlatformName.WatchOS, 7, 0)]
 	[Native]
 	public enum WKMenuItemIcon : long {
 		Accept,
@@ -41,7 +41,7 @@ namespace WatchKit {
 		Speaker,
 		Trash
 	}
-		
+
 	[NoiOS]
 	[Native]
 	public enum WKUserNotificationInterfaceType : long {
@@ -82,15 +82,15 @@ namespace WatchKit {
 		Start,
 		Stop,
 		Click,
-		[Watch (7,0)]
+		[Watch (7, 0)]
 		NavigationLeftTurn,
-		[Watch (7,0)]
+		[Watch (7, 0)]
 		NavigationRightTurn,
-		[Watch (7,0)]
+		[Watch (7, 0)]
 		NavigationGenericManeuver,
-		[Watch (9,0)]
+		[Watch (9, 0)]
 		UnderwaterDepthPrompt,
-    	[Watch (9,0)]
+		[Watch (9, 0)]
 		UnderwaterDepthCriticalPrompt,
 	}
 
@@ -160,16 +160,14 @@ namespace WatchKit {
 
 	[NoiOS]
 	[Native]
-	public enum WKInterfaceLayoutDirection : long
-	{
+	public enum WKInterfaceLayoutDirection : long {
 		LeftToRight,
 		RightToLeft
 	}
 
 	[NoiOS]
 	[Native]
-	public enum WKInterfaceSemanticContentAttribute : long
-	{
+	public enum WKInterfaceSemanticContentAttribute : long {
 		Unspecified,
 		Playback,
 		Spatial,
@@ -226,11 +224,12 @@ namespace WatchKit {
 	public enum WKWaterResistanceRating : long {
 		Ipx7,
 		Wr50,
-		[Watch (9,0)]
+		[Watch (9, 0)]
 		WR100,
 	}
 
-	[Watch (4,0)][NoiOS]
+	[Watch (4, 0)]
+	[NoiOS]
 	[Native]
 	public enum WKSnapshotReason : long {
 		AppScheduled = 0,
@@ -240,14 +239,16 @@ namespace WatchKit {
 		AppBackgrounded,
 	}
 
-	[Watch (4,0)][NoiOS]
+	[Watch (4, 0)]
+	[NoiOS]
 	[Native]
 	public enum WKPageOrientation : long {
 		Horizontal,
 		Vertical,
 	}
 
-	[Watch (4,0)][NoiOS]
+	[Watch (4, 0)]
+	[NoiOS]
 	[Native]
 	public enum WKInterfaceScrollPosition : long {
 		Top,
@@ -255,7 +256,8 @@ namespace WatchKit {
 		Bottom,
 	}
 
-	[Watch (4,0)][NoiOS]
+	[Watch (4, 0)]
+	[NoiOS]
 	[Native]
 	public enum WKInterfaceDeviceBatteryState : long {
 		Unknown,
@@ -264,10 +266,10 @@ namespace WatchKit {
 		Full,
 	}
 
-	[Watch (9,0), NoiOS]
+	[Watch (9, 0), NoiOS]
 	[Native]
 	enum WKExtendedRuntimeSessionAutoLaunchAuthorizationStatus : long {
-		Unknown, 
+		Unknown,
 		Inactive,
 		Active,
 	}

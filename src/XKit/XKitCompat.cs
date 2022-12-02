@@ -30,7 +30,7 @@ namespace UIKit {
 
 #if !MONOMAC
 		[Obsolete ("Always throws 'NotSupportedException' (not a public API).")]
-		public virtual void SetTemporaryAttributes (Foundation.NSDictionary<Foundation.NSString,Foundation.NSObject> attributes, Foundation.NSRange characterReange)
+		public virtual void SetTemporaryAttributes (Foundation.NSDictionary<Foundation.NSString, Foundation.NSObject> attributes, Foundation.NSRange characterReange)
 			=> throw new NotSupportedException ();
 #endif
 

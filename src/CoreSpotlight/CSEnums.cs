@@ -17,7 +17,7 @@ namespace CoreSpotlight {
 	[Native]
 	[ErrorDomain ("CSIndexErrorDomain")]
 	public enum CSIndexErrorCode : long {
-		UnknownError =	-1,
+		UnknownError = -1,
 		IndexUnavailableError = -1000,
 		InvalidItemError = -1001,
 		InvalidClientStateError = -1002,
@@ -36,7 +36,8 @@ namespace CoreSpotlight {
 		Cancelled = -2003
 	}
 
-	[NoTV][NoMac]
+	[NoTV]
+	[NoMac]
 	public enum CSFileProtection {
 		None,
 		Complete,

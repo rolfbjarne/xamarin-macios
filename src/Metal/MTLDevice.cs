@@ -37,7 +37,7 @@ namespace Metal {
 		extern static IntPtr MTLCreateSystemDefaultDevice ();
 
 		static IMTLDevice? system_default;
-		
+
 		public static IMTLDevice? SystemDefault {
 			get {
 				// Metal could be unavailable on the hardware (and we don't want to return an invalid instance)
@@ -47,16 +47,14 @@ namespace Metal {
 						var h = MTLCreateSystemDefaultDevice ();
 						if (h != IntPtr.Zero)
 							system_default = new MTLDeviceWrapper (h, false);
-					}
-					catch (EntryPointNotFoundException) {
-					}
-					catch (DllNotFoundException) {
+					} catch (EntryPointNotFoundException) {
+					} catch (DllNotFoundException) {
 					}
 				}
 				return system_default;
 			}
 		}
-		
+
 #if MONOMAC || __MACCATALYST__
 
 #if NET
@@ -87,7 +85,7 @@ namespace Metal {
 		}
 
 #endif
-		
+
 #if MONOMAC
 
 #if NET
@@ -189,7 +187,7 @@ namespace Metal {
 			var handle = GCHandle.Alloc (data, GCHandleType.Pinned); // This requires a pinned GCHandle, since it's not possible to use unsafe code to get the address of a generic object.
 			try {
 				IntPtr ptr = handle.AddrOfPinnedObject ();
-				return This.CreateBuffer (ptr, (nuint)(data.Length * Marshal.SizeOf (typeof (T))) , options);
+				return This.CreateBuffer (ptr, (nuint) (data.Length * Marshal.SizeOf (typeof (T))), options);
 			} finally {
 				handle.Free ();
 			}
@@ -204,7 +202,7 @@ namespace Metal {
 
 			var handle = GCHandle.Alloc (data, GCHandleType.Pinned); // This requires a pinned GCHandle, since it's not possible to use unsafe code to get the address of a generic object.
 			IntPtr ptr = handle.AddrOfPinnedObject ();
-			return This.CreateBufferNoCopy (ptr, (nuint)(data.Length * Marshal.SizeOf (typeof (T))), options, (pointer, length) => {
+			return This.CreateBufferNoCopy (ptr, (nuint) (data.Length * Marshal.SizeOf (typeof (T))), options, (pointer, length) => {
 				handle.Free ();
 				deallocator (pointer, length);
 			});
@@ -216,13 +214,13 @@ namespace Metal {
 			if (positions is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (positions));
 
-			if (positions.Length < (nint)count)
+			if (positions.Length < (nint) count)
 				throw new ArgumentException ("Length of 'positions' cannot be less than 'count'.");
-			fixed (void * handle = positions)
+			fixed (void* handle = positions)
 #if NET
 				This.GetDefaultSamplePositions ((IntPtr) handle, count);
 #else
-				GetDefaultSamplePositions (This, (IntPtr)handle, count);
+				GetDefaultSamplePositions (This, (IntPtr) handle, count);
 #endif
 		}
 #if IOS

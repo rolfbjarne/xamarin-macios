@@ -57,6 +57,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: commentId,
-              body: '${{ env.CHANGELOG_MESSAGE }}'
+              body: changelog_message
             })
           }

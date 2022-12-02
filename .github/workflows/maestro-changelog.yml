@@ -31,7 +31,7 @@ jobs:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           const fs = require('fs');
-          const changelog_message = fs.readFileSync('changelog2', 'utf8');
+          const changelog_message = fs.readFileSync('changelog2.txt', 'utf8');
           // check if we've already added a changelog to this PR, and if so, update that comment, otherwise add a new comment
           var commentId = ""
           await github.paginate (github.rest.issues.listComments,

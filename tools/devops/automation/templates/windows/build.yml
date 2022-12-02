@@ -110,7 +110,7 @@ steps:
 
 - pwsh: |
     & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
-    --verbosity diag `
+    --verbosity quiet `
     "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" `
     -p:DisableImplicitNuGetFallbackFolder=true
   displayName: 'Install custom .NET'
@@ -118,7 +118,7 @@ steps:
 
 - pwsh: |
     & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
-      --verbosity diag `
+      --verbosity quiet `
       "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install-workloads.binlog" `
       -p:DisableImplicitNuGetFallbackFolder=true `
       -t:Install
@@ -128,7 +128,7 @@ steps:
 - pwsh: |
     & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
       --filter Category=Windows `
-      --verbosity diag `
+      --verbosity quiet `
       "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"
   displayName: 'Run .NET tests'
   continueOnError: true

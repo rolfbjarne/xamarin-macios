@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using NUnit.Framework;
 
@@ -38,18 +39,15 @@ namespace Cecil.Tests {
 			return ad;
 		}
 
-		public static IEnumerable<MethodDefinition> FilterMethods (AssemblyDefinition assembly, Func<MethodDefinition, bool>? filter)
+		public static IEnumerable<MethodDefinition> FilterMethods (AssemblyDefinition assembly, Func<MethodDefinition, bool>? filter = null)
 		{
-			foreach (var module in assembly.Modules) {
-				foreach (var type in module.Types) {
-					foreach (var method in FilterMethods (type, filter))
-						yield return method;
-				}
+			foreach (var type in FilterTypes(assembly)) {
+				foreach (var method in FilterMethods(type, filter))
+					yield return method;
 			}
-			yield break;
 		}
 
-		static IEnumerable<MethodDefinition> FilterMethods (TypeDefinition type, Func<MethodDefinition, bool>? filter)
+		static IEnumerable<MethodDefinition> FilterMethods (TypeDefinition type, Func<MethodDefinition, bool>? filter )
 		{
 			if (type.HasMethods) {
 				foreach (var method in type.Methods) {
@@ -57,24 +55,14 @@ namespace Cecil.Tests {
 						yield return method;
 				}
 			}
-			if (type.HasNestedTypes) {
-				foreach (var nested in type.NestedTypes) {
-					foreach (var method in FilterMethods (nested, filter))
-						yield return method;
-				}
-			}
-			yield break;
 		}
 
-		public static IEnumerable<PropertyDefinition> FilterProperties (AssemblyDefinition assembly, Func<PropertyDefinition, bool>? filter)
+		public static IEnumerable<PropertyDefinition> FilterProperties (AssemblyDefinition assembly, Func<PropertyDefinition, bool>? filter = null)
 		{
-			foreach (var module in assembly.Modules) {
-				foreach (var type in module.Types) {
-					foreach (var property in FilterProperties (type, filter))
-						yield return property;
-				}
+			foreach (var type in FilterTypes (assembly)) {
+				foreach (var property in FilterProperties (type, filter))
+					yield return property;
 			}
-			yield break;
 		}
 
 		static IEnumerable<PropertyDefinition> FilterProperties (TypeDefinition type, Func<PropertyDefinition, bool>? filter)
@@ -85,21 +73,34 @@ namespace Cecil.Tests {
 						yield return property;
 				}
 			}
-			if (type.HasNestedTypes) {
-				foreach (var nested in type.NestedTypes) {
-					foreach (var property in FilterProperties (nested, filter))
-						yield return property;
-				}
-			}
-			yield break;
 		}
 
-		public static IEnumerable<TypeDefinition> FilterTypes (AssemblyDefinition assembly, Func<TypeDefinition, bool>? filter)
+		static IEnumerable<TypeDefinition> FilterNestedTypes (TypeDefinition type, Func<TypeDefinition, bool>? filter)
+		{
+			if (!type.HasNestedTypes)
+				yield break;
+
+			foreach (var nestedType in type.NestedTypes)
+			{
+				foreach (var nn in FilterNestedTypes(nestedType, filter))
+						yield return nn;
+
+				if ((filter is null) || filter(nestedType))
+					yield return nestedType;
+			}
+		}
+
+		public static IEnumerable<TypeDefinition> FilterTypes (AssemblyDefinition assembly, Func<TypeDefinition, bool>? filter = null)
 		{
 			foreach (var module in assembly.Modules) {
+				if (!module.HasTypes)
+					continue;
+
 				foreach (var type in module.Types) {
 					if ((filter is null) || filter (type))
 						yield return type;
+					foreach (var nestedType in FilterNestedTypes(type, filter))
+						yield return nestedType;
 				}
 			}
 			yield break;
@@ -107,13 +108,10 @@ namespace Cecil.Tests {
 
 		public static IEnumerable<FieldDefinition> FilterFields (AssemblyDefinition assembly, Func<FieldDefinition, bool>? filter)
 		{
-			foreach (var module in assembly.Modules) {
-				foreach (var type in module.Types) {
-					foreach (var field in FilterFields (type, filter))
-						yield return field;
-				}
+			foreach (var type in FilterTypes (assembly)) {
+				foreach (var field in FilterFields (type, filter))
+					yield return field;
 			}
-			yield break;
 		}
 
 		static IEnumerable<FieldDefinition> FilterFields (TypeDefinition type, Func<FieldDefinition, bool>? filter)
@@ -121,12 +119,6 @@ namespace Cecil.Tests {
 			if (type.HasFields) {
 				foreach (var field in type.Fields) {
 					if ((filter is null) || filter (field))
-						yield return field;
-				}
-			}
-			if (type.HasNestedTypes) {
-				foreach (var nested in type.NestedTypes) {
-					foreach (var field in FilterFields (nested, filter))
 						yield return field;
 				}
 			}
@@ -190,7 +182,7 @@ namespace Cecil.Tests {
 			}
 		}
 
-		public static IEnumerable NetPlatformAssemblies => Configuration.GetRefLibraries ();
+		public static IEnumerable<string> NetPlatformAssemblies => Configuration.GetRefLibraries ();
 
 		public static IEnumerable NetPlatformImplementationAssemblies => Configuration.GetBaseLibraryImplementations ();
 

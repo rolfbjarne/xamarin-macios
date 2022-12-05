@@ -15,7 +15,7 @@ using Xamarin.Utils;
 
 namespace Cecil.Tests {
 
-	public class Helper {
+	public static class Helper {
 
 		static Dictionary<string, AssemblyDefinition> cache = new Dictionary<string, AssemblyDefinition> ();
 
@@ -39,7 +39,7 @@ namespace Cecil.Tests {
 			return ad;
 		}
 
-		public static IEnumerable<MethodDefinition> FilterMethods (AssemblyDefinition assembly, Func<MethodDefinition, bool>? filter = null)
+		public static IEnumerable<MethodDefinition> FilterMethods (this AssemblyDefinition assembly, Func<MethodDefinition, bool>? filter = null)
 		{
 			foreach (var type in FilterTypes(assembly)) {
 				foreach (var method in FilterMethods(type, filter))
@@ -57,7 +57,7 @@ namespace Cecil.Tests {
 			}
 		}
 
-		public static IEnumerable<PropertyDefinition> FilterProperties (AssemblyDefinition assembly, Func<PropertyDefinition, bool>? filter = null)
+		public static IEnumerable<PropertyDefinition> FilterProperties (this AssemblyDefinition assembly, Func<PropertyDefinition, bool>? filter = null)
 		{
 			foreach (var type in FilterTypes (assembly)) {
 				foreach (var property in FilterProperties (type, filter))
@@ -90,7 +90,7 @@ namespace Cecil.Tests {
 			}
 		}
 
-		public static IEnumerable<TypeDefinition> FilterTypes (AssemblyDefinition assembly, Func<TypeDefinition, bool>? filter = null)
+		public static IEnumerable<TypeDefinition> FilterTypes (this AssemblyDefinition assembly, Func<TypeDefinition, bool>? filter = null)
 		{
 			foreach (var module in assembly.Modules) {
 				if (!module.HasTypes)
@@ -106,7 +106,7 @@ namespace Cecil.Tests {
 			yield break;
 		}
 
-		public static IEnumerable<FieldDefinition> FilterFields (AssemblyDefinition assembly, Func<FieldDefinition, bool>? filter)
+		public static IEnumerable<FieldDefinition> FilterFields (this AssemblyDefinition assembly, Func<FieldDefinition, bool>? filter = null)
 		{
 			foreach (var type in FilterTypes (assembly)) {
 				foreach (var field in FilterFields (type, filter))
@@ -123,6 +123,21 @@ namespace Cecil.Tests {
 				}
 			}
 			yield break;
+		}
+
+		public static IEnumerable<ICustomAttributeProvider> EnumerateAttributeProviders(this AssemblyDefinition assembly, Func<ICustomAttributeProvider, bool>? filter = null)
+		{
+			foreach (var item in assembly.FilterTypes(filter))
+				yield return item;
+
+			foreach (var item in assembly.FilterFields(filter))
+				yield return item;
+
+			foreach (var item in assembly.FilterMethods(filter))
+				yield return item;
+
+			foreach (var item in assembly.FilterProperties(filter))
+				yield return item;
 		}
 
 		public static string GetBCLDirectory (string assembly)
@@ -190,7 +205,7 @@ namespace Cecil.Tests {
 				if (platform_assembly_definitions is null)
 				{
 					platform_assembly_definitions = PlatformAssemblies
-						.Select(v => new AssemblyInfo(v, GetAssembly(v, readSymbols: true)))
+						.Select(v => new AssemblyInfo(v, GetAssembly(v, readSymbols: true), false))
 						.ToArray();
 				}
 				return platform_assembly_definitions;
@@ -208,7 +223,7 @@ namespace Cecil.Tests {
 				if (net_platform_assembly_definitions is null)
 				{
 					net_platform_assembly_definitions = NetPlatformAssemblies
-						.Select(v => new AssemblyInfo(v, GetAssembly(v, readSymbols: false)))
+						.Select(v => new AssemblyInfo(v, GetAssembly(v, readSymbols: false), true))
 						.ToArray ();
 				}
 				return net_platform_assembly_definitions;
@@ -225,7 +240,7 @@ namespace Cecil.Tests {
 				if (net_platform_assembly_implemnetation_assembly_definitions is null)
 				{
 					net_platform_assembly_implemnetation_assembly_definitions = NetPlatformImplementationAssemblies
-						.Select(v => new AssemblyInfo (v, GetAssembly(v, readSymbols: true)))
+						.Select(v => new AssemblyInfo (v, GetAssembly(v, readSymbols: true), true))
 						.ToArray();
 				}
 				return net_platform_assembly_implemnetation_assembly_definitions;
@@ -247,6 +262,28 @@ namespace Cecil.Tests {
 			rv.SetArgDisplayNames (Path.GetFileName (path));
 			return rv;
 		}
+
+		public static string RenderLocation(this IMemberDefinition member)
+		{
+			if (member is PropertyDefinition pd)
+			{
+				if (pd.GetMethod is not null)
+					return RenderLocation(pd.GetMethod);
+				if (pd.SetMethod is not null)
+					return RenderLocation(pd.SetMethod);
+				return "<no location>";
+			}
+
+			if (!(member is MethodDefinition method))
+				return "<no location> ";
+
+			if (method.DebugInformation.HasSequencePoints)
+			{
+				var seq = method.DebugInformation.SequencePoints[0];
+				return seq.Document.Url + ":" + seq.StartLine + " ";
+			}
+			return string.Empty;
+		}
 	}
 
 	public static class CompatExtensions {
@@ -262,11 +299,13 @@ namespace Cecil.Tests {
 	{
 		public AssemblyDefinition Assembly;
 		public string Path;
+		public ApplePlatform Platform;
 
-		public AssemblyInfo (string path, AssemblyDefinition assembly)
+		public AssemblyInfo (string path, AssemblyDefinition assembly, bool isDotNet)
 		{
 			Assembly = assembly;
 			Path = path;
+			Platform = Configuration.GetPlatform(path, isDotNet);
 		}
 
 		public override string ToString ()

@@ -131,14 +131,7 @@ namespace Cecil.Tests {
 
 		static string GetLocation (MethodDefinition method)
 		{
-			if (method is null)
-				return "<no location> ";
-
-			if (method.DebugInformation.HasSequencePoints) {
-				var seq = method.DebugInformation.SequencePoints [0];
-				return seq.Document.Url + ":" + seq.StartLine + " ";
-			}
-			return string.Empty;
+			return method.RenderLocation();
 		}
 	}
 }

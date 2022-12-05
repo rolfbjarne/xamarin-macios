@@ -153,7 +153,7 @@ namespace Cecil.Tests {
 			return rv;
 		}
 
-		public static IEnumerable PlatformAssemblies {
+		public static IEnumerable<string> PlatformAssemblies {
 			get {
 				if (!Configuration.include_legacy_xamarin)
 					yield break;
@@ -184,9 +184,9 @@ namespace Cecil.Tests {
 
 		public static IEnumerable<string> NetPlatformAssemblies => Configuration.GetRefLibraries ();
 
-		public static IEnumerable NetPlatformImplementationAssemblies => Configuration.GetBaseLibraryImplementations ();
+		public static IEnumerable<string> NetPlatformImplementationAssemblies => Configuration.GetBaseLibraryImplementations ();
 
-		public static IEnumerable TaskAssemblies {
+		public static IEnumerable<string> TaskAssemblies {
 			get {
 				if (Configuration.include_ios)
 					yield return CreateTestFixtureDataFromPath (Path.Combine (Configuration.SdkRootXI, "lib", "msbuild", "iOS", "Xamarin.iOS.Tasks.dll"));

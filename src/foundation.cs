@@ -669,7 +669,6 @@ namespace Foundation
 #else
 		[Field ("NSTextLayoutSectionOrientation", "UIKit")]
 #endif
-		[iOS (7,0)]
 		NSString TextLayoutSectionOrientation { get; }
 
 #if MONOMAC
@@ -677,7 +676,6 @@ namespace Foundation
 #else
 		[Field ("NSTextLayoutSectionRange", "UIKit")]
 #endif
-		[iOS (7,0)]
 		NSString TextLayoutSectionRange { get; }
 
 #if MONOMAC
@@ -685,7 +683,6 @@ namespace Foundation
 #else
 		[Field ("NSTextLayoutSectionsAttribute", "UIKit")]
 #endif
-		[iOS (7,0)]
 		NSString TextLayoutSectionsAttribute { get; }
 
 		[NoiOS, NoWatch, NoTV]

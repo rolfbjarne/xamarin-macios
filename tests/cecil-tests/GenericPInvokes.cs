@@ -25,9 +25,10 @@ namespace Cecil.Tests {
 
 	[TestFixture]
 	public class GenericPInvokesTest {
-		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformImplementationAssemblies))]
-		public void CheckSetupBlockUnsafeUsage (string assemblyPath)
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformImplementationAssemblyDefinitions))]
+		public void CheckSetupBlockUnsafeUsage (AssemblyInfo info)
 		{
+			var assembly = info.Assembly;
 			// this scans the specified assmebly for all methods
 			// that call SetupBlockUnsafe and then scans the method
 			// to see if the first argument to SetupBlockUnsafe is
@@ -56,7 +57,6 @@ namespace Cecil.Tests {
 			// So there's a little juggling to make sure we don't
 			// look past the array of parameters.
 
-			var assembly = Helper.GetAssembly (assemblyPath, readSymbols: true);
 			var callsToSetupBlock = AllSetupBlocks (assembly);
 			Assert.IsTrue (callsToSetupBlock.Count () > 0);
 			var results = callsToSetupBlock.Select (GenericCheckDelegateArgument);
@@ -80,10 +80,10 @@ namespace Cecil.Tests {
 		}
 
 
-		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformImplementationAssemblies))]
-		public void CheckAllPInvokes (string assemblyPath)
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformImplementationAssemblyDefinitions))]
+		public void CheckAllPInvokes (AssemblyInfo info)
 		{
-			var assembly = Helper.GetAssembly (assemblyPath, readSymbols: true);
+			var assembly = info.Assembly;
 			var pinvokes = AllPInvokes (assembly).Where (IsPInvokeOK);
 			Assert.IsTrue (pinvokes.Count () > 0);
 

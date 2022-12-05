@@ -111,7 +111,7 @@ namespace Cecil.Tests {
 			return Char.IsUpper (memberName [0]);
 		}
 
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		[Test]
 		public void PropertiesCapitalizationTest (AssemblyInfo info)
 		{
@@ -126,7 +126,7 @@ namespace Cecil.Tests {
 			CapitalizationTest (assembly, selectLambda);
 		}
 
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		[Test]
 		public void MethodsCapitalizationTest (AssemblyInfo info)
 		{
@@ -139,7 +139,7 @@ namespace Cecil.Tests {
 			CapitalizationTest (assembly, selectLambda);
 		}
 
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		[Test]
 		public void EventsCapitalizationTest (AssemblyInfo info)
 		{
@@ -152,7 +152,7 @@ namespace Cecil.Tests {
 			CapitalizationTest (assembly, selectLambda);
 		}
 
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		[Test]
 		public void FieldsCapitalizationTest (AssemblyInfo info)
 		{

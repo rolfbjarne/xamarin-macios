@@ -3413,7 +3413,7 @@ public partial class Generator : IMemberGatherer {
 		case PlatformName.None:
 			return ApplePlatform.None;
 		default:
-			throw new ArgumentOutOfRangeException(nameof(platform), platform, $"Unknown platform: {platform}");
+			throw new ArgumentOutOfRangeException (nameof (platform), platform, $"Unknown platform: {platform}");
 		}
 	}
 
@@ -3436,7 +3436,7 @@ public partial class Generator : IMemberGatherer {
 			// Due to the absurd API of Version, you can not pass a -1 to the revision constructor
 			// nor can you coerse to 0, as that will fail with "16.0.0 <= 16.0" => false in the registrar
 			// So determine if the revision is -1, and use the 2 or 3 param ctor...
-			var minimum = Xamarin.SdkVersions.GetMinVersion(AsApplePlatform(platform));
+			var minimum = Xamarin.SdkVersions.GetMinVersion (AsApplePlatform (platform));
 			var version = attr.Version;
 			if (version < minimum)
 				version = minimum;

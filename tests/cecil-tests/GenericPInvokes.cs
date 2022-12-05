@@ -157,26 +157,26 @@ namespace Cecil.Tests {
 
 		static bool IsCallToSetupBlockUnsafe (Instruction instr)
 		{
-			if (!IsCall(instr))
+			if (!IsCall (instr))
 				return false;
 
 			var operand = instr.Operand;
 			if (!(operand is MethodReference mr))
 				return false;
 
-			if (!mr.DeclaringType.Is("ObjCRuntime", "BlockLiteral"))
+			if (!mr.DeclaringType.Is ("ObjCRuntime", "BlockLiteral"))
 				return false;
 
 			if (mr.Name != "SetupBlockUnsafe")
 				return false;
 
-			if (!mr.ReturnType.Is("System", "Void"))
+			if (!mr.ReturnType.Is ("System", "Void"))
 				return false;
 
 			if (!mr.HasParameters || mr.Parameters.Count != 2)
 				return false;
 
-			if (!mr.Parameters[0].ParameterType.Is("System", "Delegate") || !mr.Parameters[1].ParameterType.Is("System", "Delegate"))
+			if (!mr.Parameters [0].ParameterType.Is ("System", "Delegate") || !mr.Parameters [1].ParameterType.Is ("System", "Delegate"))
 				return false;
 
 			return true;

@@ -131,7 +131,7 @@ namespace Cecil.Tests {
 
 		static string GetLocation (MethodDefinition method)
 		{
-			return method.RenderLocation();
+			return method.RenderLocation ();
 		}
 	}
 }

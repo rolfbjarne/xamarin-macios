@@ -38,7 +38,7 @@ namespace Cecil.Tests {
 		//
 		// This test should find Extension, note that it has an ios attribute,
 		// and insist that some maccatalyst must also be set.
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		public void ChildElementsListAvailabilityForAllPlatformsOnParent (AssemblyInfo info)
 		{
 			var assembly = info.Assembly;
@@ -81,7 +81,7 @@ namespace Cecil.Tests {
 		// Example #2:
 		// [Watch (5,0), NoTV, NoMac, iOS (12,0), NoTV]
 		// interface Type { }
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		public void DoubleAttributedElements (AssemblyInfo info)
 		{
 			var assembly = info.Assembly;
@@ -502,7 +502,7 @@ namespace Cecil.Tests {
 		// }
 		//
 		// When run against mac, this fails as Extension does not include a mac supported of any kind attribute
-		[TestCaseSource(typeof(Helper), nameof(Helper.NetPlatformAssemblyDefinitions))]
+		[TestCaseSource (typeof (Helper), nameof (Helper.NetPlatformAssemblyDefinitions))]
 		public void AllAttributedItemsMustIncludeCurrentPlatform (AssemblyInfo info)
 		{
 			var assembly = info.Assembly;

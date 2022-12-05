@@ -168,7 +168,6 @@ namespace CloudKit {
 		ReadWrite,
 	}
 
-	[iOS (10, 10)]
 	[Native]
 	public enum CKShareParticipantType : long {
 		Unknown = 0,

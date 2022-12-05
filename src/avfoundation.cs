@@ -11813,7 +11813,6 @@ namespace AVFoundation {
 		[Export ("selectedMediaOptionInMediaSelectionGroup:")]
 		AVMediaSelectionOption SelectedMediaOption (AVMediaSelectionGroup inMediaSelectionGroup);
 
-		[MacAttribute (10,11)]
 		[Export ("currentMediaSelection")]
 		AVMediaSelection CurrentMediaSelection { get; }
 

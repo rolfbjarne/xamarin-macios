@@ -2144,7 +2144,6 @@ namespace MediaPlayer {
 
 	[Category]
 	[BaseType (typeof (NSUserActivity))]
-	[TV (10,0,1)]
 	[NoWatch][NoMac]
 	interface NSUserActivity_MediaPlayerAdditions {
 		[return: NullAllowed]

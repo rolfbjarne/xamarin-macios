@@ -106,7 +106,7 @@ namespace UIKit {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("maccatalyst13.0")]
+	[SupportedOSPlatform ("maccatalyst")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct UIFloatRange : IEquatable<UIFloatRange> {

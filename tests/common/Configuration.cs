@@ -354,7 +354,10 @@ namespace Xamarin.Tests {
 
 		static string TestAssemblyDirectory {
 			get {
-				return TestContext.CurrentContext.WorkDirectory;
+				var rv = TestContext.CurrentContext.WorkDirectory;
+				if (string.IsNullOrEmpty (rv))
+					throw new InvalidOperationException ($"Unable to get TestAssemblyDirectory");
+				return rv;
 			}
 		}
 

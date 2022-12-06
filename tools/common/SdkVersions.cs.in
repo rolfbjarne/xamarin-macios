@@ -2,8 +2,9 @@ using System;
 
 #if MTOUCH || MMP || BUNDLER
 using Xamarin.Bundler;
-using Xamarin.Utils;
 #endif
+
+using Xamarin.Utils;
 
 #if MTOUCH
 using MonoTouch;

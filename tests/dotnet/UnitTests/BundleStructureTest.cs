@@ -638,6 +638,16 @@ namespace Xamarin.Tests {
 			CheckAppBundleContents (platform, appPath, rids, signature, isReleaseBuild);
 			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings Rebuild 3");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
+
+			// a rebuild into a different directory should also produce the correct output in the new directory
+			var customOutputDirectory = Cache.CreateTemporaryDirectory();
+			rv = DotNet.AssertBuild(project_path, properties, customOutputDirectory);
+			warnings = BinLog.GetBuildLogWarnings(rv.BinLogPath).ToArray();
+			warningMessages = FilterWarnings(warnings);
+
+			CheckAppBundleContents(platform, customOutputDirectory, rids, signature, isReleaseBuild);
+			CollectionAssert.AreEqual(expectedWarnings, warningMessages, "Warnings Rebuild 3");
+			ExecuteWithMagicWordAndAssert(platform, runtimeIdentifiers, appExecutable);
 		}
 
 		string [] FilterWarnings (IEnumerable<BuildLogEvent> warnings)

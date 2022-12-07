@@ -62,9 +62,9 @@ namespace Xamarin.Tests {
 			return Execute ("restore", project, properties, false);
 		}
 
-		public static ExecutionResult AssertBuild (string project, Dictionary<string, string>? properties = null)
+		public static ExecutionResult AssertBuild (string project, Dictionary<string, string>? properties = null, string? outputPath = null)
 		{
-			return Execute ("build", project, properties, true);
+			return Build (project, properties, true, outputPath);
 		}
 
 		public static ExecutionResult AssertBuildFailure (string project, Dictionary<string, string>? properties = null)
@@ -74,9 +74,12 @@ namespace Xamarin.Tests {
 			return rv;
 		}
 
-		public static ExecutionResult Build (string project, Dictionary<string, string>? properties = null)
+		public static ExecutionResult Build (string project, Dictionary<string, string>? properties = null, bool assert_success = false, string? outputPath = null)
 		{
-			return Execute ("build", project, properties, false);
+			string[]? additionalArguments = null;
+			if (!string.IsNullOrEmpty (outputPath))
+				additionalArguments = new string[] { "--output", outputPath }; 
+			return Execute ("build", project, properties, assert_success, additionalArguments: additionalArguments);
 		}
 
 		public static ExecutionResult AssertNew (string outputDirectory, string template, string? name = null)
@@ -104,7 +107,7 @@ namespace Xamarin.Tests {
 			return new ExecutionResult (output, output, rv.ExitCode);
 		}
 
-		public static ExecutionResult Execute (string verb, string project, Dictionary<string, string>? properties, bool assert_success = true, string? target = null)
+		public static ExecutionResult Execute (string verb, string project, Dictionary<string, string>? properties, bool assert_success = true, string? target = null, IEnumerable<string>? additionalArguments = null)
 		{
 			if (!File.Exists (project))
 				throw new FileNotFoundException ($"The project file '{project}' does not exist.");
@@ -162,6 +165,8 @@ namespace Xamarin.Tests {
 					args.Add ("/t:" + target);
 				var binlogPath = Path.Combine (Path.GetDirectoryName (project)!, $"log-{verb}-{DateTime.Now:yyyyMMdd_HHmmss}.binlog");
 				args.Add ($"/bl:{binlogPath}");
+				if (additionalArguments is not null)
+						args.AddRange (additionalArguments);
 				Console.WriteLine ($"Binlog: {binlogPath}");
 				var env = new Dictionary<string, string?> ();
 				env ["MSBuildSDKsPath"] = null;

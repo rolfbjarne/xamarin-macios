@@ -117,6 +117,7 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    $Env:DOTNET = $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet
     & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
       --verbosity quiet `
       "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install-workloads.binlog" `

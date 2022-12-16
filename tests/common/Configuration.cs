@@ -157,7 +157,7 @@ namespace Xamarin.Tests {
 		static void ParseConfigFiles ()
 		{
 			var test_config = FindConfigFiles (UseSystem ? "test-system.config" : "test.config");
-			if (!test_config.Any ()) {
+			if (!test_config.Any () && !OperatingSystem.IsWindows ()) {
 				// Run 'make test.config' in the tests/ directory
 				// First find the tests/ directory
 				var dir = TestAssemblyDirectory;
@@ -176,7 +176,8 @@ namespace Xamarin.Tests {
 				ExecutionHelper.Execute ("make", new string [] { "-C", tests_dir, "test.config" });
 				test_config = FindConfigFiles ("test.config");
 			}
-			ParseConfigFiles (test_config);
+			if (test_config.Any ())
+				ParseConfigFiles (test_config);
 			ParseConfigFiles (FindConfigFiles ("Make.config.local"));
 			ParseConfigFiles (FindConfigFiles ("Make.config"));
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -325,6 +326,10 @@ namespace Xamarin.Tests {
 			Console.WriteLine ("  INCLUDE_WATCHOS={0}", include_watchos);
 			Console.WriteLine ("  INCLUDE_MACCATALYST={0}", include_maccatalyst);
 			Console.WriteLine ("  ENABLE_DOTNET={0}", include_dotnet);
+			Console.WriteLine ("Environment:");
+			foreach (var key in Environment.GetEnvironmentVariables ().Cast<DictionaryEntry> ().Select (v => (string) v.Key).OrderBy (v => v)) {
+				Console.WriteLine ($"    {key}={Environment.GetEnvironmentVariable (key)}");
+			}
 		}
 
 		public static string RootPath {

@@ -425,7 +425,7 @@ namespace Photos {
 		bool ObjectWasDeleted { get; }
 	}
 
-				 // supports iOS (8,0) and iOS (13,0) only supports 64 bits, not 32 bits
+	// supports iOS (8,0) and iOS (13,0) only supports 64 bits, not 32 bits
 	[TV (13, 0)]
 	[Mac (10, 15)]
 	[BaseType (typeof (NSObject))]

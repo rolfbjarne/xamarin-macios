@@ -126,12 +126,30 @@ steps:
   displayName: 'Install workloads'
   continueOnError: true
 
+
+- pwsh: |
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
+        pack `
+        "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.csproj" `
+        --verbosity detailed `
+        "-bl:"$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.binlog"
+
+    & nuget `
+        add "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Debug\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `
+        -source "$(Build.SourcesDirectory)\xamarin-macios\tests\.nuget\packages" `
+        -NonInteractive
+
+  displayName: 'Build dependencies for .NET tests'
+  continueOnError: true
+
 - pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe"
-    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
-      --filter Category=Windows `
-      --verbosity quiet `
-      "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
+        test `
+        "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+        --filter Category=Windows `
+        --verbosity quiet `
+        "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"
   displayName: 'Run .NET tests'
   continueOnError: true
 

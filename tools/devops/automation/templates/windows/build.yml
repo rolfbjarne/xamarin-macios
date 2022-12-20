@@ -117,7 +117,7 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    $Env:DOTNET = $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe"
     & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
       --verbosity quiet `
       "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install-workloads.binlog" `
@@ -127,8 +127,8 @@ steps:
   continueOnError: true
 
 - pwsh: |
-    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet"
-    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe"
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
       --filter Category=Windows `
       --verbosity quiet `
       "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"

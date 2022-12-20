@@ -127,6 +127,7 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    $Env:DOTNET = $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet
     & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet test "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
       --filter Category=Windows `
       --verbosity quiet `

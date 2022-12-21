@@ -128,6 +128,7 @@ steps:
 
 
 - pwsh: |
+    $Env:DOTNET_PLATFORMS = "iOS;tvOS;macOS;MacCatalyst"
     & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
         pack `
         "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.csproj" `

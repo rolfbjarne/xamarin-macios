@@ -132,7 +132,7 @@ steps:
         pack `
         "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.csproj" `
         --verbosity detailed `
-        "-bl:"$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.binlog"
+        "-bl:$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.binlog"
 
     & nuget `
         add "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Debug\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `

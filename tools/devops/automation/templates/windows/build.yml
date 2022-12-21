@@ -134,10 +134,10 @@ steps:
         --verbosity detailed `
         "-bl:$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.binlog"
 
-    & nuget `
-        add "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Debug\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `
-        -source "$(Build.SourcesDirectory)\xamarin-macios\tests\.nuget\packages" `
-        -NonInteractive
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
+        nuget push `
+        "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Debug\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `
+        --source "$(Build.SourcesDirectory)\xamarin-macios\tests\.nuget\packages"
 
   displayName: 'Build dependencies for .NET tests'
   continueOnError: true

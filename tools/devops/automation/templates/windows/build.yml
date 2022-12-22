@@ -126,14 +126,26 @@ steps:
   displayName: 'Install workloads'
   continueOnError: true
 
+# get and expand the needed libs for monotouch
+- task: DownloadPipelineArtifact@2
+  displayName: Download test libraries dependencies 
+  inputs:
+    patterns: '**/package-test-libraries.zip'
+    allowFailedBuilds: true
+    path: $(Build.SourcesDirectory)/artifacts/tmp
+
+# this step replaces the test-libraries dir
+- pwsh: |
+    $zip = "$(Build.SourcesDirectory)/artifacts/tmp/package-test-libraries/package-test-libraries.zip"
+    $target = "$(Build.SourcesDirectory)/xamarin-macios/tests"
+    Expand-Archive -Force $zip -DestinationPath $target
+    Get-ChildItem "$target" -Recurse
+  workingDirectory: $(Build.SourcesDirectory)/xamarin-macios/tests
+  displayName: Expand test libraries.
+  timeoutInMinutes: 10
 
 - pwsh: |
     $Env:DOTNET_PLATFORMS = "iOS;tvOS;macOS;MacCatalyst"
-    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
-        pack `
-        "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.csproj" `
-        --verbosity detailed `
-        "-bl:$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\FrameworksInRuntimesNativeDirectory.binlog"
 
     & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
         nuget push `

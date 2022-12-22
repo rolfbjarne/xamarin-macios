@@ -2,6 +2,7 @@ TOP=..
 include $(TOP)/Make.config
 
 BUILD_DIR=build
+RSP_DIR=rsp
 DOTNET_BUILD_DIR=$(BUILD_DIR)/dotnet
 PROJECT_DIR=.
 
@@ -209,33 +210,33 @@ $(IOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml: $(TOP)/src/ILLink.Substitution
 	$(Q) $(CP) $< $@
 
 # core.dll
-$(IOS_BUILD_DIR)/native/core.dll: $(IOS_CORE_SOURCES) frameworks.sources $(BUILD_DIR)/ios-defines.rsp
+$(IOS_BUILD_DIR)/native/core.dll: $(IOS_CORE_SOURCES) frameworks.sources $(RSP_DIR)/ios-defines.rsp
 	$(Q) mkdir -p $(IOS_BUILD_DIR)native
 	$(call Q_PROF_CSC,ios) $(IOS_CSC) -nologo -out:$@ -target:library -debug -unsafe \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$(WARNINGS_TO_IGNORE) \
-		@$(BUILD_DIR)/ios-defines.rsp \
+		@$(RSP_DIR)/ios-defines.rsp \
 		$(IOS_CORE_DEFINES) \
 		$(IOS_CORE_SOURCES)
 
 # generated_sources
-$(IOS_BUILD_DIR)/native/generated_sources: $(IOS_GENERATOR) $(IOS_APIS) $(IOS_BUILD_DIR)/native/core.dll $(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll $(BUILD_DIR)/ios.rsp
-	$(call Q_PROF_GEN,ios) $(IOS_GENERATE) @$(BUILD_DIR)/ios.rsp
+$(IOS_BUILD_DIR)/native/generated_sources: $(IOS_GENERATOR) $(IOS_APIS) $(IOS_BUILD_DIR)/native/core.dll $(IOS_BUILD_DIR)/native/Xamarin.iOS.BindingAttributes.dll $(RSP_DIR)/ios.rsp
+	$(call Q_PROF_GEN,ios) $(IOS_GENERATE) @$(RSP_DIR)/ios.rsp
 
 ### .NET ###
 
-$(IOS_DOTNET_BUILD_DIR)/core-ios.dll: $(IOS_DOTNET_CORE_SOURCES) frameworks.sources $(DOTNET_BUILD_DIR)/ios-defines-dotnet.rsp | $(IOS_DOTNET_BUILD_DIR)
+$(IOS_DOTNET_BUILD_DIR)/core-ios.dll: $(IOS_DOTNET_CORE_SOURCES) frameworks.sources $(RSP_DIR)/dotnet/ios-defines-dotnet.rsp | $(IOS_DOTNET_BUILD_DIR)
 	$(Q_DOTNET_GEN) \
 		$(DOTNET_CSC) $(DOTNET_FLAGS) \
 		$(IOS_CORE_WARNINGS_TO_FIX) \
-		@$(DOTNET_BUILD_DIR)/ios-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/ios-defines-dotnet.rsp \
 		$(IOS_CORE_DEFINES) \
 		$(IOS_DOTNET_CORE_SOURCES) \
 		-out:$@
 
-$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources: $(DOTNET_GENERATOR) $(IOS_DOTNET_APIS) $(IOS_DOTNET_BUILD_DIR)/core-ios.dll $(DOTNET_BINDING_ATTRIBUTES) $(IOS_DOTNET_BUILD_DIR)/ios.rsp | $(IOS_DOTNET_BUILD_DIR)/generated-sources
-	$(Q_DOTNET_GEN) $< @$(IOS_DOTNET_BUILD_DIR)/ios.rsp
+$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources: $(DOTNET_GENERATOR) $(IOS_DOTNET_APIS) $(IOS_DOTNET_BUILD_DIR)/core-ios.dll $(DOTNET_BINDING_ATTRIBUTES) $(RSP_DIR)/dotnet/ios.rsp | $(IOS_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(RSP_DIR)/dotnet/ios.rsp
 
-$(BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources
+$(RSP_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources
 	$(Q_GEN) echo \
 		$(IOS_GENERATOR_FLAGS) \
 		-core \
@@ -249,10 +250,10 @@ $(BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources
 		--ns=ObjCRuntime \
 		--target-framework=Xamarin.iOS,v1.0 \
 		$(IOS_APIS) \
-		@$(BUILD_DIR)/ios-defines.rsp \
+		@$(RSP_DIR)/ios-defines.rsp \
 		> $@
 
-$(IOS_DOTNET_BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(IOS_DOTNET_BUILD_DIR)
+$(RSP_DIR)/dotnet/ios.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(IOS_DOTNET_BUILD_DIR)
 	$(Q) echo \
 		$(IOS_GENERATOR_FLAGS) \
 		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
@@ -262,7 +263,7 @@ $(IOS_DOTNET_BUILD_DIR)/ios.rsp: Makefile Makefile.generator frameworks.sources 
 		-baselib=$(IOS_DOTNET_BUILD_DIR)/core-ios.dll \
 		--target-framework=.NETCoreApp,Version=$(GENERATOR_TF_VERSION),Profile=ios \
 		$(IOS_APIS) \
-		@$(DOTNET_BUILD_DIR)/ios-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/ios-defines-dotnet.rsp \
 		> $@
 
 define IOS_TARGETS_template
@@ -277,7 +278,7 @@ $(IOS_BUILD_DIR)/native-$(1)%Xamarin.iOS.dll $(IOS_BUILD_DIR)/native-$(1)%Xamari
 		-nowarn:219,618,114,414,1635,3021,$$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$$(WARNINGS_TO_IGNORE) \
 		-warnaserror:$(NULLABILITY_WARNINGS) \
 		$$(IOS_CSC_FLAGS_XI) \
-		@$(BUILD_DIR)/ios-defines.rsp \
+		@$(RSP_DIR)/ios-defines.rsp \
 		$$(IOS_SOURCES) @$(IOS_BUILD_DIR)/native/generated_sources
 
 $(IOS_DOTNET_BUILD_DIR)/$(1)/Microsoft.iOS%dll $(IOS_DOTNET_BUILD_DIR)/$(1)/Microsoft.iOS%pdb $(2): $$(IOS_DOTNET_SOURCES) $$(IOS_DOTNET_BUILD_DIR)/ios-generated-sources $$(IOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml $$(TOP)/src/ILLink.Descriptors.xml $$(IOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml $(PRODUCT_KEY_PATH) | $(IOS_DOTNET_BUILD_DIR)/$(1) $(IOS_DOTNET_BUILD_DIR)/ref
@@ -288,7 +289,7 @@ $(IOS_DOTNET_BUILD_DIR)/$(1)/Microsoft.iOS%dll $(IOS_DOTNET_BUILD_DIR)/$(1)/Micr
 		$$(IOS_DEFINES) \
 		$$(IOS_CORE_WARNINGS_TO_FIX) \
 		$$(IOS_CSC_FLAGS_XI) \
-		@$(DOTNET_BUILD_DIR)/ios-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/ios-defines-dotnet.rsp \
 		-res:$(IOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml \
 		-res:$(TOP)/src/ILLink.Descriptors.xml \
 		-res:$(IOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml \
@@ -605,19 +606,19 @@ MAC_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 MAC_GENERATE=$(SYSTEM_MONO) --debug $(MAC_GENERATOR)
 
 define MAC_GENERATOR_template
-$(MAC_BUILD_DIR)/$(1)/core.dll: $(MACOS_CORE_SOURCES) frameworks.sources $(BUILD_DIR)/macos-defines.rsp
+$(MAC_BUILD_DIR)/$(1)/core.dll: $(MACOS_CORE_SOURCES) frameworks.sources $(RSP_DIR)/macos-defines.rsp
 	@mkdir -p $(MAC_BUILD_DIR)/$(1)
 	$$(call Q_PROF_CSC,mac/$(1)) \
 		$$(MAC_$(1)_CSC) -nologo -out:$$@ -target:library -debug -unsafe -nowarn:3021,612,618,1635 \
-		@$(BUILD_DIR)/macos-defines.rsp \
+		@$(RSP_DIR)/macos-defines.rsp \
 		$$(MAC_BOOTSTRAP_DEFINES) \
 		$(2) \
 		$$(MACOS_CORE_SOURCES)
 
-$(MAC_BUILD_DIR)/$(1)/generated-sources: $$(MAC_GENERATOR) $(MACOS_APIS) $(MAC_BUILD_DIR)/$(1)/core.dll $(MAC_BUILD_DIR)/Xamarin.Mac-$(1).BindingAttributes.dll $(BUILD_DIR)/mac-$(1).rsp
-	$$(call Q_PROF_GEN,mac/$(1)) $$(MAC_GENERATE) @$(BUILD_DIR)/mac-$(1).rsp
+$(MAC_BUILD_DIR)/$(1)/generated-sources: $$(MAC_GENERATOR) $(MACOS_APIS) $(MAC_BUILD_DIR)/$(1)/core.dll $(MAC_BUILD_DIR)/Xamarin.Mac-$(1).BindingAttributes.dll $(RSP_DIR)/mac-$(1).rsp
+	$$(call Q_PROF_GEN,mac/$(1)) $$(MAC_GENERATE) @$(RSP_DIR)/mac-$(1).rsp
 
-$(BUILD_DIR)/mac-$(1).rsp: Makefile Makefile.generator frameworks.sources
+$(RSP_DIR)/mac-$(1).rsp: Makefile Makefile.generator frameworks.sources
 	$$(Q_GEN) echo \
 		$(MAC_GENERATED_DEFINES) \
 		-compiler:$$(MAC_$(1)_CSC) \
@@ -635,7 +636,7 @@ $(BUILD_DIR)/mac-$(1).rsp: Makefile Makefile.generator frameworks.sources
 		$(2) \
 		$(xm_$(1)_profile) \
 		$(MACOS_APIS) \
-		@$(BUILD_DIR)/macos-defines.rsp \
+		@$(RSP_DIR)/macos-defines.rsp \
 		> $$@
 endef
 
@@ -658,7 +659,7 @@ $(MAC_BUILD_DIR)/$(1)-64/Xamarin.Mac%dll $(MAC_BUILD_DIR)/$(1)-64/Xamarin.Mac%pd
 		$(MAC_CFNETWORK_SOURCES) $(MAC_HTTP_SOURCES) \
 		$(2) \
 		$$(MACOS_SOURCES) \
-		@$(BUILD_DIR)/macos-defines.rsp \
+		@$(RSP_DIR)/macos-defines.rsp \
 		@$$<
 
 endef
@@ -679,19 +680,19 @@ $(DOTNET_DESTDIR)/$(MACOS_NUGET).Ref/ref/$(DOTNET_TFM)/Microsoft.macOS.dll: $(MA
 
 ### .NET ###
 
-$(MACOS_DOTNET_BUILD_DIR)/core-macos.dll: $(MACOS_DOTNET_CORE_SOURCES) frameworks.sources $(DOTNET_BUILD_DIR)/macos-defines-dotnet.rsp | $(MACOS_DOTNET_BUILD_DIR)
+$(MACOS_DOTNET_BUILD_DIR)/core-macos.dll: $(MACOS_DOTNET_CORE_SOURCES) frameworks.sources $(RSP_DIR)/dotnet/macos-defines-dotnet.rsp | $(MACOS_DOTNET_BUILD_DIR)
 	$(Q_DOTNET_GEN) \
 		$(DOTNET_CSC) $(DOTNET_FLAGS) -out:$@ \
 		$(MAC_CORE_WARNINGS_TO_FIX) \
-		@$(DOTNET_BUILD_DIR)/macos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/macos-defines-dotnet.rsp \
 		$(MAC_CORE_DEFINES) \
 		$(MACOS_DOTNET_CORE_SOURCES) \
 		-out:$@ \
 
-$(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources: $(DOTNET_GENERATOR) $(MACOS_DOTNET_APIS) $(MACOS_DOTNET_BUILD_DIR)/core-macos.dll $(DOTNET_BINDING_ATTRIBUTES) $(MACOS_DOTNET_BUILD_DIR)/macos.rsp | $(MACOS_DOTNET_BUILD_DIR)/generated-sources
-	$(Q_DOTNET_GEN) $< @$(MACOS_DOTNET_BUILD_DIR)/macos.rsp
+$(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources: $(DOTNET_GENERATOR) $(MACOS_DOTNET_APIS) $(MACOS_DOTNET_BUILD_DIR)/core-macos.dll $(DOTNET_BINDING_ATTRIBUTES) $(RSP_DIR)/dotnet/macos.rsp | $(MACOS_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(RSP_DIR)/dotnet/macos.rsp
 
-$(MACOS_DOTNET_BUILD_DIR)/macos.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(MACOS_DOTNET_BUILD_DIR)
+$(RSP_DIR)/dotnet/macos.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(MACOS_DOTNET_BUILD_DIR)
 	$(Q) echo \
 		$(MAC_GENERATED_DEFINES) \
 		$(DOTNET_GENERATOR_FLAGS) \
@@ -701,7 +702,7 @@ $(MACOS_DOTNET_BUILD_DIR)/macos.rsp: Makefile Makefile.generator frameworks.sour
 		-baselib:$(MACOS_DOTNET_BUILD_DIR)/core-macos.dll \
 		--target-framework=.NETCoreApp,Version=$(GENERATOR_TF_VERSION),Profile=macos \
 		$(MACOS_DOTNET_APIS) \
-		@$(DOTNET_BUILD_DIR)/macos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/macos-defines-dotnet.rsp \
 		> $@
 
 $(MACOS_DOTNET_BUILD_DIR)/64/Microsoft.macOS%dll $(MACOS_DOTNET_BUILD_DIR)/64/Microsoft.macOS%pdb $(MACOS_DOTNET_BUILD_DIR)/ref/Microsoft.macOS%dll: $(MACOS_DOTNET_BUILD_DIR)/macos-generated-sources $(MACOS_DOTNET_SOURCES) $(SN_KEY) $(MACOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml $(MACOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml | $(MACOS_DOTNET_BUILD_DIR)/64 $(MACOS_DOTNET_BUILD_DIR)/ref
@@ -715,7 +716,7 @@ $(MACOS_DOTNET_BUILD_DIR)/64/Microsoft.macOS%dll $(MACOS_DOTNET_BUILD_DIR)/64/Mi
 		$(MAC_CSC_FLAGS_XM) \
 		$(APPLETLS_DEFINES) -D:XAMARIN_MODERN \
 		$(MACOS_DOTNET_SOURCES) \
-		@$(DOTNET_BUILD_DIR)/macos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/macos-defines-dotnet.rsp \
 		-res:$(MACOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml \
 		-res:$(MACOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml \
 		@$<
@@ -899,19 +900,19 @@ $(WATCH_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml: $(TOP)/src/ILLink.LinkAttri
 	$(Q) mkdir -p $(WATCH_DOTNET_BUILD_DIR)
 	$(call Q_PROF_GEN,watch) sed < $< > $@ 's|@PRODUCT_NAME@|Microsoft.watchOS|g;'
 
-$(WATCH_BUILD_DIR)/watch/core.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources $(BUILD_DIR)/watchos-defines.rsp | $(WATCH_BUILD_DIR)/watch
+$(WATCH_BUILD_DIR)/watch/core.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources $(RSP_DIR)/watchos-defines.rsp | $(WATCH_BUILD_DIR)/watch
 	@mkdir -p $(WATCH_BUILD_DIR)/watch
 	$(call Q_PROF_CSC,watch) $(WATCH_CSC) -nologo -out:$@ -target:library -debug -unsafe \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$(WARNINGS_TO_IGNORE) \
-		@$(BUILD_DIR)/watchos-defines.rsp \
+		@$(RSP_DIR)/watchos-defines.rsp \
 		$(WATCHOS_CORE_DEFINES)     \
 		$(WATCHOS_CORE_SOURCES)
 
 # generated_sources
-$(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_GENERATOR) $(WATCHOS_APIS) $(WATCH_BUILD_DIR)/watch/core.dll $(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll $(BUILD_DIR)/watchos.rsp
-	$(call Q_PROF_GEN,watch) $(WATCH_GENERATE) @$(BUILD_DIR)/watchos.rsp
+$(WATCH_BUILD_DIR)/watch/generated_sources: $(WATCH_GENERATOR) $(WATCHOS_APIS) $(WATCH_BUILD_DIR)/watch/core.dll $(WATCH_BUILD_DIR)/Xamarin.WatchOS.BindingAttributes.dll $(RSP_DIR)/watchos.rsp
+	$(call Q_PROF_GEN,watch) $(WATCH_GENERATE) @$(RSP_DIR)/watchos.rsp
 
-$(BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources
+$(RSP_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources
 	$(Q_GEN) echo  \
 		-inline-selectors                                        \
 		-process-enums                                           \
@@ -928,24 +929,24 @@ $(BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources
 		--ns:ObjCRuntime                                         \
 		$(WATCHOS_APIS)                                            \
 		--target-framework=Xamarin.WatchOS,v1.0                     \
-		@$(BUILD_DIR)/watchos-defines.rsp                        \
+		@$(RSP_DIR)/watchos-defines.rsp                        \
 		> $@
 
 ### .NET ###
 
-$(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources $(DOTNET_BUILD_DIR)/watchos-defines-dotnet.rsp | $(WATCHOS_DOTNET_BUILD_DIR)
+$(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll: $(WATCHOS_CORE_SOURCES) frameworks.sources $(RSP_DIR)/dotnet/watchos-defines-dotnet.rsp | $(WATCHOS_DOTNET_BUILD_DIR)
 	$(Q_DOTNET_GEN) \
 		$(DOTNET_CSC) $(DOTNET_FLAGS) \
 		$(WATCHOS_CORE_WARNINGS_TO_FIX) \
-		@$(DOTNET_BUILD_DIR)/watchos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/watchos-defines-dotnet.rsp \
 		$(WATCHOS_CORE_DEFINES) \
 		$(WATCHOS_CORE_SOURCES) \
 		-out:$@ \
 
-$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources: $(DOTNET_GENERATOR) $(WATCHOS_APIS) $(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll $(DOTNET_BINDING_ATTRIBUTES) $(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp | $(WATCHOS_DOTNET_BUILD_DIR)/generated-sources
-	$(Q_DOTNET_GEN) $< @$(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp
+$(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources: $(DOTNET_GENERATOR) $(WATCHOS_APIS) $(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll $(DOTNET_BINDING_ATTRIBUTES) $(RSP_DIR)/dotnet/watchos.rsp | $(WATCHOS_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(RSP_DIR)/dotnet/watchos.rsp
 
-$(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(WATCHOS_DOTNET_BUILD_DIR)
+$(RSP_DIR)/dotnet/watchos.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(WATCHOS_DOTNET_BUILD_DIR)
 	$(Q) echo \
 		$(WATCH_GENERATED_DEFINES) \
 		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
@@ -955,7 +956,7 @@ $(WATCHOS_DOTNET_BUILD_DIR)/watchos.rsp: Makefile Makefile.generator frameworks.
 		-baselib=$(WATCHOS_DOTNET_BUILD_DIR)/core-watchos.dll \
 		--target-framework=.NETCoreApp,Version=$(GENERATOR_TF_VERSION),Profile=watchos \
 		$(WATCHOS_APIS) \
-		@$(DOTNET_BUILD_DIR)/watchos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/watchos-defines-dotnet.rsp \
 		> $@
 
 $(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS%dll $(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS%pdb: $(WATCHOS_DOTNET_BUILD_DIR)/watchos-generated-sources $(WATCHOS_SOURCES) $(PRODUCT_KEY_PATH) $(WATCHOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml | $(WATCHOS_DOTNET_BUILD_DIR)/32 $(WATCHOS_DOTNET_BUILD_DIR)/ref
@@ -968,7 +969,7 @@ $(WATCHOS_DOTNET_BUILD_DIR)/32/Xamarin.WatchOS%dll $(WATCHOS_DOTNET_BUILD_DIR)/3
 		-warnaserror:$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(WATCHOS_SOURCES) \
-		@$(DOTNET_BUILD_DIR)/watchos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/watchos-defines-dotnet.rsp \
 		-res:$(WATCHOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml \
 		@$<
 
@@ -983,7 +984,7 @@ $(WATCHOS_DOTNET_BUILD_DIR)/64/Xamarin.WatchOS%dll $(WATCHOS_DOTNET_BUILD_DIR)/6
 		-warnaserror:$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(WATCHOS_SOURCES) \
-		@$(DOTNET_BUILD_DIR)/watchos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/watchos-defines-dotnet.rsp \
 		-res:$(WATCHOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml \
 		@$<
 
@@ -993,7 +994,7 @@ $(WATCH_BUILD_DIR)/watch-32/Xamarin.WatchOS%dll $(WATCH_BUILD_DIR)/watch-32/Xama
 		-deterministic \
 		$(ARGS_32) \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$(WARNINGS_TO_IGNORE) \
-		@$(BUILD_DIR)/watchos-defines.rsp \
+		@$(RSP_DIR)/watchos-defines.rsp \
 		$(WATCHOS_SOURCES) @$(WATCH_BUILD_DIR)/watch/generated_sources
 
 $(WATCH_BUILD_DIR)/watch-64/Xamarin.WatchOS%dll $(WATCH_BUILD_DIR)/watch-64/Xamarin.WatchOS%pdb $(WATCH_BUILD_DIR)/reference/Xamarin.WatchOS%dll: $(WATCHOS_SOURCES) $(WATCH_BUILD_DIR)/watch/generated_sources $(PRODUCT_KEY_PATH) | $(WATCH_BUILD_DIR)/watch-64 $(WATCH_BUILD_DIR)/reference
@@ -1002,7 +1003,7 @@ $(WATCH_BUILD_DIR)/watch-64/Xamarin.WatchOS%dll $(WATCH_BUILD_DIR)/watch-64/Xama
 		-deterministic \
 		$(ARGS_64) \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$(WARNINGS_TO_IGNORE) \
-		@$(BUILD_DIR)/watchos-defines.rsp \
+		@$(RSP_DIR)/watchos-defines.rsp \
 		-refout:$(WATCH_BUILD_DIR)/reference/Xamarin.WatchOS.dll \
 		$(WATCHOS_SOURCES) @$(WATCH_BUILD_DIR)/watch/generated_sources
 
@@ -1209,19 +1210,19 @@ $(TVOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml: ILLink.LinkAttributes.tvos.x
 $(TVOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml: $(TOP)/src/ILLink.Substitutions.tvos.xml | $(TVOS_DOTNET_BUILD_DIR)
 	$(Q) $(CP) $< $@
 
-$(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefile $(BUILD_DIR)/tvos-defines.rsp | $(TVOS_BUILD_DIR)/tvos
+$(TVOS_BUILD_DIR)/tvos/core.dll: $(TVOS_CORE_SOURCES) frameworks.sources Makefile $(RSP_DIR)/tvos-defines.rsp | $(TVOS_BUILD_DIR)/tvos
 	@mkdir -p $(TVOS_BUILD_DIR)/tvos
 	$(call Q_PROF_CSC,tvos) $(TV_CSC) -nologo -out:$@ -target:library -debug -unsafe \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$(WARNINGS_TO_IGNORE) \
-		@$(BUILD_DIR)/tvos-defines.rsp \
+		@$(RSP_DIR)/tvos-defines.rsp \
 		$(TVOS_CORE_DEFINES)     \
 		$(TVOS_CORE_SOURCES)
 
 # generated_sources
-$(TVOS_BUILD_DIR)/tvos/generated_sources: $(TVOS_GENERATOR) $(TVOS_APIS) $(TVOS_BUILD_DIR)/tvos/core.dll $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(BUILD_DIR)/tvos.rsp
-	$(call Q_PROF_GEN,tvos) $(TVOS_GENERATE) @$(BUILD_DIR)/tvos.rsp
+$(TVOS_BUILD_DIR)/tvos/generated_sources: $(TVOS_GENERATOR) $(TVOS_APIS) $(TVOS_BUILD_DIR)/tvos/core.dll $(TVOS_BUILD_DIR)/Xamarin.TVOS.BindingAttributes.dll $(RSP_DIR)/tvos.rsp
+	$(call Q_PROF_GEN,tvos) $(TVOS_GENERATE) @$(RSP_DIR)/tvos.rsp
 
-$(BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
+$(RSP_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 	$(Q_GEN) echo \
 		-inline-selectors                                        \
 		-process-enums                                           \
@@ -1238,24 +1239,24 @@ $(BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources
 		--ns:ObjCRuntime                                         \
 		$(TVOS_APIS)                                            \
 		--target-framework=Xamarin.TVOS,v1.0                     \
-		@$(BUILD_DIR)/tvos-defines.rsp                           \
+		@$(RSP_DIR)/tvos-defines.rsp                           \
 		> $@
 
 ### .NET ###
 
-$(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll: $(TVOS_DOTNET_CORE_SOURCES) frameworks.sources Makefile $(DOTNET_BUILD_DIR)/tvos-defines-dotnet.rsp | $(TVOS_DOTNET_BUILD_DIR)
+$(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll: $(TVOS_DOTNET_CORE_SOURCES) frameworks.sources Makefile $(RSP_DIR)/dotnet/tvos-defines-dotnet.rsp | $(TVOS_DOTNET_BUILD_DIR)
 	$(Q_DOTNET_GEN) \
 		$(DOTNET_CSC) $(DOTNET_FLAGS) \
 		$(TVOS_CORE_WARNINGS_TO_FIX) \
-		@$(DOTNET_BUILD_DIR)/tvos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/tvos-defines-dotnet.rsp \
 		$(TVOS_CORE_DEFINES) \
 		$(TVOS_DOTNET_CORE_SOURCES) \
 		-out:$@ \
 
-$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources: $(DOTNET_GENERATOR) $(TVOS_DOTNET_APIS) $(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll $(DOTNET_BINDING_ATTRIBUTES) $(TVOS_DOTNET_BUILD_DIR)/tvos.rsp | $(TVOS_DOTNET_BUILD_DIR)/generated-sources
-	$(Q_DOTNET_GEN) $< @$(TVOS_DOTNET_BUILD_DIR)/tvos.rsp
+$(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources: $(DOTNET_GENERATOR) $(TVOS_DOTNET_APIS) $(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll $(DOTNET_BINDING_ATTRIBUTES) $(RSP_DIR)/dotnet/tvos.rsp | $(TVOS_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(RSP_DIR)/dotnet/tvos.rsp
 
-$(TVOS_DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(TVOS_DOTNET_BUILD_DIR)
+$(RSP_DIR)/dotnet/tvos.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(TVOS_DOTNET_BUILD_DIR)
 	$(Q) echo \
 		$(TVOS_GENERATOR_DEFINES) \
 		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
@@ -1265,7 +1266,7 @@ $(TVOS_DOTNET_BUILD_DIR)/tvos.rsp: Makefile Makefile.generator frameworks.source
 		-baselib=$(TVOS_DOTNET_BUILD_DIR)/core-tvos.dll \
 		--target-framework=.NETCoreApp,Version=$(GENERATOR_TF_VERSION),Profile=tvos \
 		$(TVOS_DOTNET_APIS) \
-		@$(DOTNET_BUILD_DIR)/tvos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/tvos-defines-dotnet.rsp \
 		> $@
 
 $(TVOS_DOTNET_BUILD_DIR)/64/Microsoft.tvOS%dll $(TVOS_DOTNET_BUILD_DIR)/64/Microsoft.tvOS%pdb $(TVOS_DOTNET_BUILD_DIR)/ref/Microsoft.tvOS%dll: $(TVOS_DOTNET_BUILD_DIR)/tvos-generated-sources $(TVOS_DOTNET_SOURCES) $(PRODUCT_KEY_PATH) $(TVOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml $(TOP)/src/ILLink.Descriptors.xml $(TVOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml | $(TVOS_DOTNET_BUILD_DIR)/64 $(TVOS_DOTNET_BUILD_DIR)/ref
@@ -1279,7 +1280,7 @@ $(TVOS_DOTNET_BUILD_DIR)/64/Microsoft.tvOS%dll $(TVOS_DOTNET_BUILD_DIR)/64/Micro
 		-warnaserror:$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(TVOS_DOTNET_SOURCES) \
-		@$(DOTNET_BUILD_DIR)/tvos-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/tvos-defines-dotnet.rsp \
 		-res:$(TVOS_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml \
 		-res:$(TOP)/src/ILLink.Descriptors.xml \
 		-res:$(TVOS_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml \
@@ -1291,7 +1292,7 @@ $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVOS%dll $(TVOS_BUILD_DIR)/tvos-64/Xamarin.TVO
 		-deterministic \
 		$(ARGS_64) \
 		-nowarn:219,618,114,414,1635,3021,$(IOS_WARNINGS_THAT_YOU_SHOULD_FIX),$(WARNINGS_TO_IGNORE) \
-		@$(BUILD_DIR)/tvos-defines.rsp \
+		@$(RSP_DIR)/tvos-defines.rsp \
 		-refout:$(TVOS_BUILD_DIR)/reference/Xamarin.TVOS.dll \
 		$(TVOS_SOURCES) @$(TVOS_BUILD_DIR)/tvos/generated_sources
 
@@ -1430,19 +1431,19 @@ $(MACCATALYST_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml: $(TOP)/src/ILLink.Subs
 
 ### .NET ###
 
-$(MACCATALYST_DOTNET_BUILD_DIR)/core-maccatalyst.dll: $(MACCATALYST_DOTNET_CORE_SOURCES) frameworks.sources Makefile $(DOTNET_BUILD_DIR)/maccatalyst-defines-dotnet.rsp | $(MACCATALYST_DOTNET_BUILD_DIR)
+$(MACCATALYST_DOTNET_BUILD_DIR)/core-maccatalyst.dll: $(MACCATALYST_DOTNET_CORE_SOURCES) frameworks.sources Makefile $(RSP_DIR)/dotnet/maccatalyst-defines-dotnet.rsp | $(MACCATALYST_DOTNET_BUILD_DIR)
 	$(Q_DOTNET_GEN) \
 		$(DOTNET_CSC) $(DOTNET_FLAGS) \
 		$(MACCATALYST_WARNINGS_TO_FIX) \
-		@$(DOTNET_BUILD_DIR)/maccatalyst-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/maccatalyst-defines-dotnet.rsp \
 		$(MACCATALYST_CORE_DEFINES) \
 		$(MACCATALYST_DOTNET_CORE_SOURCES) \
 		-out:$@ \
 
-$(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst-generated-sources: $(DOTNET_GENERATOR) $(MACCATALYST_DOTNET_APIS) $(MACCATALYST_DOTNET_BUILD_DIR)/core-maccatalyst.dll $(DOTNET_BINDING_ATTRIBUTES) $(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst.rsp | $(MACCATALYST_DOTNET_BUILD_DIR)/generated-sources
-	$(Q_DOTNET_GEN) $< @$(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst.rsp
+$(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst-generated-sources: $(DOTNET_GENERATOR) $(MACCATALYST_DOTNET_APIS) $(MACCATALYST_DOTNET_BUILD_DIR)/core-maccatalyst.dll $(DOTNET_BINDING_ATTRIBUTES) $(RSP_DIR)/dotnet/maccatalyst.rsp | $(MACCATALYST_DOTNET_BUILD_DIR)/generated-sources
+	$(Q_DOTNET_GEN) $< @$(RSP_DIR)/dotnet/maccatalyst.rsp
 
-$(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(MACCATALYST_DOTNET_BUILD_DIR)
+$(RSP_DIR)/dotnet/maccatalyst.rsp: Makefile Makefile.generator frameworks.sources $(DOTNET_COMPILER) | $(MACCATALYST_DOTNET_BUILD_DIR)
 	$(Q) echo \
 		$(MACCATALYST_GENERATOR_DEFINES) \
 		$(DOTNET_GENERATOR_FLAGS) -inline-selectors \
@@ -1452,7 +1453,7 @@ $(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst.rsp: Makefile Makefile.generator fra
 		-baselib=$(MACCATALYST_DOTNET_BUILD_DIR)/core-maccatalyst.dll \
 		--target-framework=.NETCoreApp,Version=$(GENERATOR_TF_VERSION),Profile=maccatalyst \
 		$(MACCATALYST_DOTNET_APIS) \
-		@$(DOTNET_BUILD_DIR)/maccatalyst-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/maccatalyst-defines-dotnet.rsp \
 		> $@
 
 $(MACCATALYST_DOTNET_BUILD_DIR)/64/Microsoft.MacCatalyst%dll $(MACCATALYST_DOTNET_BUILD_DIR)/64/Microsoft.MacCatalyst%pdb $(MACCATALYST_DOTNET_BUILD_DIR)/ref/Microsoft.MacCatalyst%dll: $(MACCATALYST_DOTNET_BUILD_DIR)/maccatalyst-generated-sources $(MACCATALYST_DOTNET_SOURCES) $(PRODUCT_KEY_PATH) $(MACCATALYST_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml $(TOP)/src/ILLink.Descriptors.xml $(MACCATALYST_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml | $(MACCATALYST_DOTNET_BUILD_DIR)/64 $(MACCATALYST_DOTNET_BUILD_DIR)/ref
@@ -1466,7 +1467,7 @@ $(MACCATALYST_DOTNET_BUILD_DIR)/64/Microsoft.MacCatalyst%dll $(MACCATALYST_DOTNE
 		-warnaserror:$(NULLABILITY_WARNINGS) \
 		$(IOS_CSC_FLAGS_XI) \
 		$(MACCATALYST_DOTNET_SOURCES) \
-		@$(DOTNET_BUILD_DIR)/maccatalyst-defines-dotnet.rsp \
+		@$(RSP_DIR)/dotnet/maccatalyst-defines-dotnet.rsp \
 		-res:$(MACCATALYST_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml \
 		-res:$(TOP)/src/ILLink.Descriptors.xml \
 		-res:$(MACCATALYST_DOTNET_BUILD_DIR)/ILLink.Substitutions.xml \

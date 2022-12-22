@@ -291,7 +291,7 @@
 			*.resources/* files for iOS and tvOS
 			*.resources.zip for macOS and Mac Catalyst
 		 -->
-		<ProjectReference Include="$(RootTestsDirectory)/bindings-framework-test/dotnet/$(_PlatformName)/bindings-framework-test.csproj" />
+		<ProjectReference Include="$(RootTestsDirectory)/bindings-framework-test/dotnet/$(_PlatformName)/bindings-framework-test.csproj" Condition="'$(IsMacEnabled)' == 'true'" />
 	</ItemGroup>
 
 	<!-- Adding resources using a custom target -->

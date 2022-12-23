@@ -1,3 +1,5 @@
+using System.IO;
+
 #nullable enable
 
 namespace Xamarin.Tests {
@@ -24,6 +26,10 @@ namespace Xamarin.Tests {
 			if (!string.IsNullOrWhiteSpace (configuration))
 				properties ["Configuration"] = configuration;
 			var rv = DotNet.AssertBuild (project_path, properties);
+			foreach (var entry in Directory.GetFileSystemEntries (appPath, "*", SearchOption.AllDirectories))
+				Console.WriteLine (entry);
+			var rids = runtimeIdentifiers.Split (';');
+			BundleStructureTest.CheckAppBundleContents (platform, appPath, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
 		}
 
 		[Test]

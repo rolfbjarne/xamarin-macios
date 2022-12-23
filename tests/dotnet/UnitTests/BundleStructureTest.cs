@@ -4,7 +4,7 @@ namespace Xamarin.Tests {
 	[TestFixture]
 	public class BundleStructureTest : TestBaseClass {
 		// Returns true if the assembly name is _any_ of our platform assemblies (Microsoft.iOS/tvOS/macOS/MacCatalyst/watchOS.dll)
-		bool IsPlatformAssembly (string assemblyName)
+		static bool IsPlatformAssembly (string assemblyName)
 		{
 			if (assemblyName.EndsWith (".dll", StringComparison.Ordinal) || assemblyName.EndsWith (".pdb", StringComparison.Ordinal))
 				assemblyName = Path.GetFileNameWithoutExtension (assemblyName);
@@ -18,7 +18,7 @@ namespace Xamarin.Tests {
 			return false;
 		}
 
-		void CheckAppBundleContents (ApplePlatform platform, string appPath, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild)
+		internal static void CheckAppBundleContents (ApplePlatform platform, string appPath, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild)
 		{
 			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
 			Console.WriteLine ($"App bundle: {appPath}");
@@ -337,7 +337,7 @@ namespace Xamarin.Tests {
 			AssertLibraryArchitectures (appPath, runtimeIdentifiers);
 		}
 
-		void AssertDynamicLibraryId (ApplePlatform platform, string appPath, string dylibDirectory, string library)
+		static void AssertDynamicLibraryId (ApplePlatform platform, string appPath, string dylibDirectory, string library)
 		{
 			var dylibPath = Path.Combine (appPath, dylibDirectory, library);
 			Assert.That (dylibPath, Does.Exist, "dylib existence");
@@ -660,7 +660,7 @@ namespace Xamarin.Tests {
 
 		}
 
-		void AssertLibraryArchitectures (string appBundle, string [] runtimeIdentifiers)
+		static void AssertLibraryArchitectures (string appBundle, string [] runtimeIdentifiers)
 		{
 			var renderArchitectures = (IEnumerable<Abi> architectures) => {
 				return string.Join (", ",

@@ -18,19 +18,54 @@ namespace Xamarin.Tests {
 			return false;
 		}
 
+		static List<string> Find (string appPath)
+		{
+			var dir = new DirectoryInfo (appPath);
+			var managedFiles = dir.GetFileSystemInfos ("*", SearchOption.AllDirectories)
+								.Select (v => v.FullName)
+								.Select (v => v.Substring (appPath.Length + 1))
+								.Order ()
+								.ToList ();
+
+			//var output = AssertExecute ("find", appPath);
+			//Console.WriteLine ("managedFiles:");
+			//foreach (var mf in managedFiles)
+			//	Console.WriteLine ($"    {mf}");
+
+			//var allFiles = output.ToString ()
+			//					.Split ('\n', StringSplitOptions.RemoveEmptyEntries)
+			//					.Where (v => v.Length > appPath.Length)
+			//					.Select (v => v.Substring (appPath.Length + 1))
+			//					.Order ()
+			//					.ToList ();
+
+			//Console.WriteLine ("allFiles:");
+			//foreach (var mf in allFiles)
+			//	Console.WriteLine ($"    {mf}");
+
+			//CollectionAssert.AreEqual (managedFiles, allFiles);
+
+			return managedFiles;
+
+			//var output = AssertExecute ("find", appPath);
+			//var allFiles = output.ToString ()
+			//					.Split ('\n', StringSplitOptions.RemoveEmptyEntries)
+			//					.Where (v => v.Length > appPath.Length)
+			//					.Select (v => v.Substring (appPath.Length + 1))
+			//					.ToList ();
+
+			//return allFiles;
+		}
+
 		internal static void CheckAppBundleContents (ApplePlatform platform, string appPath, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild)
 		{
 			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
 			Console.WriteLine ($"App bundle: {appPath}");
 			Assert.That (appPath, Does.Exist, "App bundle existence");
-			var output = AssertExecute ("find", appPath);
 
 			var isCoreCLR = platform == ApplePlatform.MacOSX;
 			var includeDebugFiles = !isReleaseBuild;
-			var allFiles = output.ToString ().
-								Split ('\n', StringSplitOptions.RemoveEmptyEntries).
-								Where (v => v.Length > appPath.Length).
-								Select (v => v.Substring (appPath.Length + 1)).ToList ();
+			var allFiles = Find (appPath);
 
 			// Remove various files we don't care about (for this test) from the list of files in the app bundle.
 			Predicate<string?> predicate = (v) => {

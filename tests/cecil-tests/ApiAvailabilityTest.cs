@@ -16,6 +16,20 @@ namespace Cecil.Tests {
 	[TestFixture]
 	public class ApiAvailabilityTest {
 		// This test will flag any API that's only obsoleted on some platforms.
+		class FailureData {
+			public string Key;
+			public ICustomAttributeProvider Api;
+			public OSPlatformAttributes [] Obsoleted;
+			public OSPlatformAttributes [] Supported;
+			public List<string>? FailureLines;
+			public FailureData (string key, ICustomAttributeProvider api, OSPlatformAttributes[] obsoleted, OSPlatformAttributes[] supported)
+			{
+				Key = key;
+				Api = api;
+				Obsoleted = obsoleted;
+				Supported = supported;
+			}
+		}
 		[Test]
 		public void FindMissingObsoleteAttributes ()
 		{
@@ -23,7 +37,7 @@ namespace Cecil.Tests {
 
 			var harvestedInfo = Helper.MappedNetApi;
 
-			var failures = new List<(string Key, ICustomAttributeProvider Api, OSPlatformAttributes [] Obsoleted, OSPlatformAttributes [] Supported)> ();
+			var failures = new List<FailureData> ();
 			var mismatchedObsoleteMessages = new List<string> ();
 			foreach (var kvp in harvestedInfo) {
 				var attributes = kvp.Value.Select (v => v.Api.GetAvailabilityAttributes (v.Platform) ?? new OSPlatformAttributes (v.Api, v.Platform) ?? new OSPlatformAttributes (v.Api, v.Platform)).ToArray ();
@@ -42,7 +56,7 @@ namespace Cecil.Tests {
 				if (!notObsoletedNorUnsupported.Any ())
 					continue;
 
-				var failure = (kvp.Key, kvp.Value.First ().Api, obsoleted, notObsoletedNorUnsupported);
+				var failure = new FailureData (kvp.Key, kvp.Value.First ().Api, obsoleted, notObsoletedNorUnsupported);
 				failures.Add (failure);
 
 				var obsoleteMessages = obsoleted.Select (v => v.Obsoleted?.Message).Distinct ().ToArray ();
@@ -64,8 +78,13 @@ namespace Cecil.Tests {
 				sb.AppendLine ($"Got {newFailures.Length} failures:");
 				foreach (var failure in newFailures.OrderBy (v => v.Key)) {
 					sb.AppendLine ($"{failure.Key}: {failure.Api.RenderLocation ()}");
-					sb.AppendLine ($"    Obsoleted in: {string.Join (", ", failure.Obsoleted.Select (v => v!.Obsoleted!.PlatformName))}");
-					sb.AppendLine ($"    Not obsoleted in: {string.Join (", ", failure.Supported.Select (v => v?.Supported?.PlatformName ?? v?.Platform.ToString ()))}");
+					var lines = new List<string> ();
+					lines.Add ($"    Obsoleted in: {string.Join (", ", failure.Obsoleted.Select (v => v!.Obsoleted!.PlatformName))}");
+					lines.Add ($"    Not obsoleted in: {string.Join (", ", failure.Supported.Select (v => v?.Supported?.PlatformName ?? v?.Platform.ToString ()))}");
+					foreach (var line in lines)
+						sb.AppendLine (line);
+					var tmp = failure;
+					tmp.FailureLines = lines;
 				}
 				Console.WriteLine (sb);
 			}
@@ -74,8 +93,12 @@ namespace Cecil.Tests {
 			if (printKnownFailures) {
 				Console.WriteLine ("Printing all known failures because they seems out of date:");
 				Console.WriteLine ("\t\tstatic HashSet<string> knownFailuresInMissingObsoleteAttributes = new HashSet<string> {");
-				foreach (var failure in failures.OrderBy (v => v.Key))
-					Console.WriteLine ($"\t\t\t\"{failure.Key}\",");
+				foreach (var failure in failures.OrderBy (v => v.Key)) {
+					string comment = string.Empty;
+					if (failure.FailureLines is not null)
+						comment = " // " + string.Join ("; ", failure.FailureLines.Select (v => v.Trim ()));
+					Console.WriteLine ($"\t\t\t\"{failure.Key}\",{comment}");
+				}
 				Console.WriteLine ("\t\t};");
 			}
 

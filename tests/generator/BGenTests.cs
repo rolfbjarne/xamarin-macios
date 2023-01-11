@@ -250,6 +250,40 @@ namespace GeneratorTests {
 			throw new NotImplementedException (obj.GetType ().FullName);
 		}
 
+		static IEnumerable<CustomAttribute> GetAvailabilityAttributes (ICustomAttributeProvider provider)
+		{
+			if (!provider.HasCustomAttributes)
+				yield break;
+
+			foreach (var ca in provider.CustomAttributes) {
+				switch (ca.AttributeType.Name) {
+#if NET
+				case "SupportedOSPlatformAttribute":
+				case "UnsupportedOSPlatformAttribute":
+				case "ObsoletedOSPlatformAttribute":
+#else
+				case "IntroducedAttribute":
+				case "ObsoletedAttribute":
+				case "DeprecatedAttribute":
+#endif
+					yield return ca;
+					break;
+				}
+			}
+		}
+
+		static string RenderSupportedOSPlatformAttributes (ICustomAttributeProvider provider)
+		{
+			var attributes = GetAvailabilityAttributes (provider).ToArray ();
+			if (attributes is null || attributes.Length == 0)
+				return string.Empty;
+			var lines = new List<string> ();
+			foreach (var ca in attributes)
+				lines.Add (RenderSupportedOSPlatformAttribute (ca));
+			lines.Sort ();
+			return string.Join ("\n", lines);
+		}
+
 		static string RenderSupportedOSPlatformAttribute (CustomAttribute ca)
 		{
 			return "[" + ca.AttributeType.Name.Replace ("Attribute", "") + "(" + string.Join (", ", ca.ConstructorArguments.Select (arg => RenderArgument (arg))) + ")]";
@@ -1112,6 +1146,25 @@ namespace GeneratorTests {
 			bgen.AssertMethod ("NS.IProtocol_Extensions", "SetIPropBOpt", parameterTypes: new string [] { "NS.IIProtocol", "Foundation.NSObject" });
 			bgen.AssertPublicMethodCount ("NS.IProtocol_Extensions", 2);
 		}
+
+#if NET
+		[Test]
+		public void GeneratedAttributeOnPropertyAccessors ()
+		{
+			var bgen = BuildFile (Profile.MacCatalyst, "tests/generated-attribute-on-property-accessors.cs");
+
+			var messaging = bgen.ApiAssembly.MainModule.Types.First (v => v.Name == "ISomething");
+			var property = messaging.Properties.First (v => v.Name == "IsLoadedInProcess");
+			var getter = messaging.Methods.First (v => v.Name == "get_IsLoadedInProcess");
+			var expectedPropertyAttributes =
+@"[SupportedOSPlatform(""maccatalyst"")]
+[SupportedOSPlatform(""macos10.15"")]
+[UnsupportedOSPlatform(""ios"")]
+[UnsupportedOSPlatform(""tvos"")]";
+			Assert.AreEqual (expectedPropertyAttributes, RenderSupportedOSPlatformAttributes (property), "Property attributes");
+			Assert.AreEqual (string.Empty, RenderSupportedOSPlatformAttributes (getter), "Getter Attributes");
+		}
+#endif
 
 		BGenTool BuildFile (Profile profile, params string [] filenames)
 		{

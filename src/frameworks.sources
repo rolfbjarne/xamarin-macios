@@ -2482,3 +2482,21 @@ MACCATALYST_CORE_SOURCES := $(MACCATALYST_DOTNET_CORE_SOURCES)
 MACCATALYST_API_SOURCES  := $(MACCATALYST_DOTNET_API_SOURCES)
 MACCATALYST_APIS         := $(MACCATALYST_DOTNET_APIS)
 MACCATALYST_SOURCES      := $(MACCATALYST_DOTNET_SOURCES)
+
+ALL_CORE_SOURCES := $(sort $(MACCATALYST_DOTNET_CORE_SOURCES))
+ALL_API_SOURCES := $(sort $(MACCATALYST_DOTNET_API_SOURCES))
+ALL_APIS := $(sort $(MACCATALYST_DOTNET_APIS))
+
+all-core-sources:
+	@echo $(ALL_CORE_SOURCES) | tr ' ' $$'\n' | sed 's@^@$(CURDIR)/@'
+all-api-sources:
+	@echo $(ALL_API_SOURCES) | tr ' ' $$'\n' | sed 's@^@$(CURDIR)/@'
+generator-input.txt:
+	rm -rf generator-input.txt
+	@echo $(ALL_CORE_SOURCES) | tr ' ' $$'\n' | sed 's@^@$(CURDIR)/@' > $@
+	@echo $(ALL_API_SOURCES) | tr ' ' $$'\n' | sed 's@^@$(CURDIR)/@' >> $@
+	@echo $(ALL_APIS) | tr ' ' $$'\n' | sed 's@^@$(CURDIR)/@' >> $@
+	@sort $@ > $@.tmp
+	@mv $@.tmp $@
+maccatalyst-defines:
+	for fw in $(filter-out $(DOTNET_REMOVED_MACCATALYST_FRAMEWORKS),$(MACCATALYST_FRAMEWORKS)); do echo $$fw | tr '[:lower:]' '[:upper:]' | sed -e 's/^/defines.Add ("/g' -e 's/$$/");/'; done | sort -u

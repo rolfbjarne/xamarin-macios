@@ -3476,11 +3476,10 @@ public partial class Generator : IMemberGatherer {
 		case PlatformName.iOS:
 		case PlatformName.TvOS:
 		case PlatformName.MacOSX:
+		case PlatformName.MacCatalyst:
 			return new IntroducedAttribute (platform);
 		case PlatformName.WatchOS:
 			throw new InvalidOperationException ("CreateNoVersionSupportedAttribute for WatchOS never makes sense");
-		case PlatformName.MacCatalyst:
-			throw new InvalidOperationException ("CreateNoVersionSupportedAttribute for Catalyst never makes sense");
 		default:
 			throw new NotImplementedException ();
 		}
@@ -3545,11 +3544,13 @@ public partial class Generator : IMemberGatherer {
 		return list.Contains (ns.ToLower (CultureInfo.InvariantCulture));
 	}
 
-	void AddUnlistedAvailability (MemberInfo containingClass, List<AvailabilityBaseAttribute> availability)
+	void AddUnlistedAvailability (MemberInfo containingClass, List<AvailabilityBaseAttribute> availability, bool skipMacCatalyst)
 	{
 		// If there are no unavailable attributes for a platform on a type
 		// add a supported introduced (without version) since it was "unlisted" (for non-catalyst platforms)
-		foreach (var platform in new [] { PlatformName.iOS, PlatformName.TvOS, PlatformName.MacOSX }) {
+		foreach (var platform in BindingTouch.AllPlatformNames) {
+			if (skipMacCatalyst && platform == PlatformName.MacCatalyst)
+				continue;
 			if (!PlatformMarkedUnavailable (platform, availability) && IsInSupportedFramework (containingClass, platform)) {
 				availability.Add (CreateNoVersionSupportedAttribute (platform));
 			}
@@ -3677,7 +3678,38 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
+	static bool DEBUG_MODE = false;
+	int counter;
 	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, Type type, MemberInfo inlinedType)
+	{
+		var newMode = GetPlatformAttributesToPrint (mi, type, inlinedType, false).ToArray ();
+		if (DEBUG_MODE) {
+			var oldMode = GetPlatformAttributesToPrint (mi, type, inlinedType, true).ToArray ();
+			var newText = newMode.Select (v => v.ToString ()).OrderBy (v => v).ToArray ();
+			var oldText = oldMode.Select (v => v.ToString ()).OrderBy (v => v).ToArray ();
+
+			var print = string.Join (",", newText) != string.Join (",", oldText);
+			// NSCoding & NSCopying are known differences.
+			print &= mi?.ToString () != "Foundation.NSCoding";
+			print &= mi?.ToString () != "Foundation.NSCopying";
+			print &= mi?.DeclaringType?.FullName != "Foundation.NSCoding";
+			print &= mi?.DeclaringType?.FullName != "Foundation.NSCopying";
+			if (print) {
+				Console.WriteLine ($"{BindingTouch.CurrentPlatform} : {++counter} Different availability for MacCatalyst on: {mi.ToString ()} (in {mi?.DeclaringType?.FullName} and inlined in: {inlinedType?.ToString ()})");
+				Console.WriteLine ("    Old availability attributes:");
+				foreach (var line in oldText)
+					Console.WriteLine ($"        {line.TrimEnd ('\n')}");
+				Console.WriteLine ($"    New availability attributes:");
+				foreach (var line in newText)
+					Console.WriteLine ($"        {line.TrimEnd ('\n')}");
+				Console.WriteLine ();
+			}
+		}
+
+		return newMode;
+	}
+
+	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, Type type, MemberInfo inlinedType, bool oldMode)
 	{
 		// Attributes are directly on the member
 		List<AvailabilityBaseAttribute> memberAvailability = AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi).ToList ();
@@ -3711,7 +3743,7 @@ public partial class Generator : IMemberGatherer {
 			availabilityToConsider = availabilityToConsider.Where (x => x.Platform != PlatformName.WatchOS).ToList ();
 
 			// Add any implied non-catalyst introduced (Catalyst will come later)
-			AddUnlistedAvailability (context, availabilityToConsider);
+			AddUnlistedAvailability (context, availabilityToConsider, oldMode);
 
 			// Copy down any unavailable from the parent before expanding, since a [NoMacCatalyst] on the type trumps [iOS] on a member
 			CopyValidAttributes (memberAvailability, availabilityToConsider.Where (attr => attr.AvailabilityKind != AvailabilityKind.Introduced));
@@ -3733,17 +3765,21 @@ public partial class Generator : IMemberGatherer {
 				}
 			}
 
-			// Add implied catalyst\TVOS from [iOS] _before_ copying down from parent if no catalyst\TVOS attributes
-			// As those take precedent. We will do this a second time later in a moment..
-			AddImpliedPlatforms (memberAvailability);
+			if (oldMode) {
+				// Add implied catalyst from [iOS] _before_ copying down from parent if no catalyst attributes
+				// As those take precedent. We will do this a second time later in a moment..
+				AddImpliedPlatforms (memberAvailability);
+			}
 
 			// Now copy it down introduced from the parent
 			CopyValidAttributes (memberAvailability, availabilityToConsider.Where (attr => attr.AvailabilityKind == AvailabilityKind.Introduced));
 
-			// Now expand the implied catalyst\TVOS from [iOS] a second time
-			// This is needed in some cases where the only iOS information is in the
-			// parent context, but we want to let any local iOS override a catalyst\TVOS on the parent
-			AddImpliedPlatforms (memberAvailability);
+			if (oldMode) {
+				// Now expand the implied catalyst from [iOS] a second time
+				// This is needed in some cases where the only iOS information is in the
+				// parent context, but we want to let any local iOS override a catalyst on the parent
+				AddImpliedPlatforms (memberAvailability);
+			}
 
 			if (!BindThirdPartyLibrary) {
 				// If all of this implication gives us something silly, like being introduced

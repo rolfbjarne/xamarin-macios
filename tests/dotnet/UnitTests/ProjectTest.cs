@@ -1009,6 +1009,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.TVOS, "tvossimulator-arm64")]
 		[TestCase (ApplePlatform.MacOSX, "osx-arm64")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[Ignore ("This test will fail until https://github.com/xamarin/xamarin-macios/commit/69b8b5a17d4d00d1d993aa0b38912d982455c780 (or something equivalent) has been backported to .NET 6")]
 		public void BuildNet7_0App (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			var project = "Net7_0SimpleApp";

@@ -65,10 +65,13 @@ namespace AudioUnit {
 		InvalidOfflineRender = -10848,
 		Unauthorized = -10847,
 		[iOS (11, 0), Mac (10, 13), TV (11, 0), NoWatch]
+		[MacCatalyst (13, 1)]
 		MidiOutputBufferFull = -66753,
 		[iOS (11, 3), Mac (10, 13, 4), TV (11, 3), NoWatch]
+		[MacCatalyst (13, 1)]
 		InvalidParameterValue = -66743,
 		[iOS (11, 0), Mac (10, 13), TV (11, 0), NoWatch]
+		[MacCatalyst (13, 1)]
 		ExtensionNotFound = -66744,
 	}
 
@@ -82,6 +85,7 @@ namespace AudioUnit {
 		InitializationTimedOut = -66747,
 		InvalidFormat = -66746,
 		[iOS (10, 0), Mac (10, 12)]
+		[MacCatalyst (13, 1)]
 		RenderTimeout = -66745,
 	}
 
@@ -139,6 +143,7 @@ namespace AudioUnit {
 		CFNameRelease = (1 << 4),
 
 		[iOS (8, 0)]
+		[MacCatalyst (13, 1)]
 		OmitFromPresets = (1 << 13),
 		PlotHistory = (1 << 14),
 		MeterReadOnly = (1 << 15),
@@ -281,11 +286,14 @@ namespace AudioUnit {
 		Nickname = 54,
 		OfflineRender = 37,
 		[iOS (8, 0)]
+		[MacCatalyst (13, 1)]
 		ParameterIDName = 34,
 		[iOS (8, 0)]
+		[MacCatalyst (13, 1)]
 		ParameterStringFromValue = 33,
 		ParameterClumpName = 35,
 		[iOS (8, 0)]
+		[MacCatalyst (13, 1)]
 		ParameterValueFromString = 38,
 		ContextName = 25,
 		PresentationLatency = 40,
@@ -293,10 +301,12 @@ namespace AudioUnit {
 		RequestViewController = 56,
 		ParametersForOverview = 57,
 		[iOS (10, 0), Mac (10, 12)]
+		[MacCatalyst (13, 1)]
 		SupportsMpe = 58,
 		[iOS (15, 0), TV (15, 0), Mac (12, 0), MacCatalyst (15, 0)]
 		LastRenderSampleTime = 61,
 		[iOS (14, 5), TV (14, 5), Mac (11, 3)]
+		[MacCatalyst (14, 5)]
 		LoadedOutOfProcess = 62,
 		[iOS (15, 0), TV (15, 0), Mac (12, 0), MacCatalyst (15, 0)]
 		MIDIOutputEventListCallback = 63,
@@ -393,6 +403,7 @@ namespace AudioUnit {
 		MatrixDimensions = 3009,
 		MeterClipping = 3011,
 		[iOS (10, 0), Mac (10, 12)]
+		[MacCatalyst (13, 1)]
 		InputAnchorTimeStamp = 3016,
 
 		// SpatialMixer
@@ -400,10 +411,13 @@ namespace AudioUnit {
 		UsesInternalReverb = 1005,
 		SpatializationAlgorithm = 3000,
 		[Deprecated (PlatformName.iOS, 9, 0)]
+		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		DistanceParams = 3010,
 		[Deprecated (PlatformName.iOS, 9, 0)]
+		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		AttenuationCurve = 3013,
 		[Deprecated (PlatformName.iOS, 9, 0)]
+		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		RenderingFlags = 3003,
 
 		// AUScheduledSoundPlayer
@@ -510,8 +524,10 @@ namespace AudioUnit {
 		ReverbFilterBandwidth = 15,
 		ReverbFilterGain = 16,
 		[iOS (8, 0)]
+		[MacCatalyst (13, 1)]
 		ReverbFilterType = 17,
 		[iOS (8, 0)]
+		[MacCatalyst (13, 1)]
 		ReverbFilterEnable = 18,
 
 		// AUMultiChannelMixer
@@ -672,6 +688,7 @@ namespace AudioUnit {
 	}
 
 	[iOS (8, 0)]
+	[MacCatalyst (13, 1)]
 	public enum SpatialMixerAttenuation {
 		Power = 0,
 		Exponential = 1,
@@ -681,9 +698,11 @@ namespace AudioUnit {
 
 	[Flags]
 	[iOS (8, 0)]
+	[MacCatalyst (13, 1)]
 	public enum SpatialMixerRenderingFlags {
 		InterAuralDelay = (1 << 0),
 		[Deprecated (PlatformName.iOS, 9, 0)]
+		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		DistanceAttenuation = (1 << 2),
 	}
 
@@ -695,12 +714,15 @@ namespace AudioUnit {
 
 		[iOS (8, 0)]
 		[Mac (10, 10)]
+		[MacCatalyst (13, 1)]
 		Loop = 0x08,
 		[iOS (8, 0)]
 		[Mac (10, 10)]
+		[MacCatalyst (13, 1)]
 		Interrupt = 0x10,
 		[iOS (8, 0)]
 		[Mac (10, 10)]
+		[MacCatalyst (13, 1)]
 		InterruptAtLoop = 0x20,
 	}
 
@@ -753,11 +775,13 @@ namespace AudioUnit {
 	}
 
 	[iOS (9, 0), Mac (10, 11)]
+	[MacCatalyst (13, 1)]
 	public enum AudioComponentInstantiationOptions : uint {
 		OutOfProcess = 1,
 		[NoiOS, NoTV, NoMacCatalyst]
 		InProcess = 2,
 		[iOS (14, 5), TV (14, 5), NoMac]
+		[MacCatalyst (14, 5)]
 		LoadedRemotely = 1u << 31,
 	}
 
@@ -854,6 +878,7 @@ namespace AudioUnit {
 		[iOS (14, 0)]
 		[TV (14, 0)]
 		[Mac (11, 0)]
+		[MacCatalyst (14, 0)]
 		UseOutputType = 7,
 	}
 
@@ -870,6 +895,7 @@ namespace AudioUnit {
 	}
 
 	[iOS (10, 0), Mac (10, 12)]
+	[MacCatalyst (13, 1)]
 	public enum AUParameterAutomationEventType : uint {
 		Value = 0,
 		Touch = 1,

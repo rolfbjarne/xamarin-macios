@@ -3680,11 +3680,11 @@ public partial class Generator : IMemberGatherer {
 
 	static bool DEBUG_MODE = false;
 	int counter;
-	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, Type type, MemberInfo inlinedType)
+	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, MemberInfo context, MemberInfo inlinedType)
 	{
-		var newMode = GetPlatformAttributesToPrint (mi, type, inlinedType, false).ToArray ();
+		var newMode = GetPlatformAttributesToPrint (mi, context, inlinedType, false).ToArray ();
 		if (DEBUG_MODE) {
-			var oldMode = GetPlatformAttributesToPrint (mi, type, inlinedType, true).ToArray ();
+			var oldMode = GetPlatformAttributesToPrint (mi, context, inlinedType, true).ToArray ();
 			var newText = newMode.Select (v => v.ToString ()).OrderBy (v => v).ToArray ();
 			var oldText = oldMode.Select (v => v.ToString ()).OrderBy (v => v).ToArray ();
 
@@ -3709,7 +3709,7 @@ public partial class Generator : IMemberGatherer {
 		return newMode;
 	}
 
-	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, Type type, MemberInfo inlinedType, bool oldMode)
+	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, MemberInfo context, MemberInfo inlinedType, bool oldMode)
 	{
 		// Attributes are directly on the member
 		List<AvailabilityBaseAttribute> memberAvailability = AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi).ToList ();
@@ -3717,7 +3717,8 @@ public partial class Generator : IMemberGatherer {
 		// Due to differences between Xamarin and NET6 availability attributes, we have to synthesize many duplicates for NET6
 		// See https://github.com/xamarin/xamarin-macios/issues/10170 for details
 #if NET
-		MemberInfo context = type ?? FindContainingContext (mi);
+		if (context is null)
+			context = FindContainingContext (mi);
 		// Attributes on the _target_ context, the class itself or the target of the protocol inlining
 		List<AvailabilityBaseAttribute> parentContextAvailability = GetAllParentAttributes (context);
 		// (Optional) Attributes from the inlined protocol type itself
@@ -3805,7 +3806,7 @@ public partial class Generator : IMemberGatherer {
 
 		AvailabilityBaseAttribute [] type_ca = null;
 
-		foreach (var availability in GetPlatformAttributesToPrint (mi, mi.DeclaringType, inlinedType)) {
+		foreach (var availability in GetPlatformAttributesToPrint (mi, null, inlinedType)) {
 			var t = inlinedType ?? (mi as TypeInfo) ?? mi.DeclaringType;
 			if (type_ca == null) {
 				if (t != null)

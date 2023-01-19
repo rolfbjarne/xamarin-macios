@@ -1135,7 +1135,9 @@ namespace GeneratorTests {
 			bgen.AssertPublicMethodCount ("NS.IProtocol_Extensions", 2);
 		}
 
-#if NET
+#if !NET
+		[Ignore ("This test only applies to .NET")]
+#endif
 		[Test]
 		public void GeneratedAttributeOnPropertyAccessors ()
 		{
@@ -1152,7 +1154,6 @@ namespace GeneratorTests {
 			Assert.AreEqual (expectedPropertyAttributes, RenderSupportedOSPlatformAttributes (property), "Property attributes");
 			Assert.AreEqual (string.Empty, RenderSupportedOSPlatformAttributes (getter), "Getter Attributes");
 		}
-#endif
 
 		BGenTool BuildFile (Profile profile, params string [] filenames)
 		{

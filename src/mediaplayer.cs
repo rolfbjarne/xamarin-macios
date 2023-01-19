@@ -42,7 +42,6 @@ using NativeHandle = System.IntPtr;
 #endif
 
 namespace MediaPlayer {
-	[Mac (10, 12, 2)] // type exists only to expose fields
 	[BaseType (typeof (NSObject))]
 #if !MONOMAC
 #if NET
@@ -55,8 +54,9 @@ namespace MediaPlayer {
 	[MacCatalyst (13, 1)]
 	interface MPMediaEntity : NSSecureCoding {
 #else
+	[Mac (10, 12, 2)] // type exists only to expose fields
 	interface MPMediaItem : NSSecureCoding {
-#endif
+#endif // !MONOMAC
 		[Static]
 		[Export ("canFilterByProperty:")]
 		bool CanFilterByProperty (NSString property);

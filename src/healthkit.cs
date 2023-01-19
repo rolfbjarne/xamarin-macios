@@ -3887,7 +3887,7 @@ namespace HealthKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface HKSeriesBuilder
-#if !MONOMAC
+#if !MONOMAC && !XAMCORE_5_0
 		: NSSecureCoding
 #endif
 {

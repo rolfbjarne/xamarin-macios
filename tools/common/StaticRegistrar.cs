@@ -756,13 +756,13 @@ namespace Registrar {
 			return GetValueTypeSize (type.Resolve (), Is64Bits);
 		}
 
-		protected override bool HasReleaseAttribute (MethodDefinition method)
+		public override bool HasReleaseAttribute (MethodDefinition method)
 		{
 			method = GetBaseMethodInTypeHierarchy (method);
 			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);
 		}
 
-		protected override bool HasThisAttribute (MethodDefinition method)
+		public override bool HasThisAttribute (MethodDefinition method)
 		{
 			return HasAttribute (method, "System.Runtime.CompilerServices", "ExtensionAttribute");
 		}
@@ -955,7 +955,7 @@ namespace Registrar {
 			return false;
 		}
 
-		protected override TypeReference GetElementType (TypeReference type)
+		public override TypeReference GetElementType (TypeReference type)
 		{
 			var ts = type as TypeSpecification;
 			if (ts is not null) {
@@ -1054,7 +1054,7 @@ namespace Registrar {
 			return HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 		}
 
-		protected override bool IsNullable (TypeReference type)
+		public override bool IsNullable (TypeReference type)
 		{
 			return GetNullableType (type) is not null;
 		}
@@ -1070,7 +1070,7 @@ namespace Registrar {
 			return type.IsEnum;
 		}
 
-		protected override bool IsArray (TypeReference type, out int rank)
+		public override bool IsArray (TypeReference type, out int rank)
 		{
 			var arrayType = type as ArrayType;
 			if (arrayType is null) {
@@ -1155,7 +1155,7 @@ namespace Registrar {
 			return TypeMatch (a, b);
 		}
 
-		protected override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
+		public override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
 		{
 			constrained_type = null;
 
@@ -1338,7 +1338,7 @@ namespace Registrar {
 			return rv;
 		}
 
-		protected override CategoryAttribute GetCategoryAttribute (TypeReference type)
+		public override CategoryAttribute GetCategoryAttribute (TypeReference type)
 		{
 			string name = null;
 
@@ -1890,7 +1890,7 @@ namespace Registrar {
 			}
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
+		public override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
 			if (property is null)
 				return null;
@@ -1903,7 +1903,7 @@ namespace Registrar {
 			return CreateBindAsAttribute (attrib, property);
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
+		public override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
 			if (method is null)
 				return null;

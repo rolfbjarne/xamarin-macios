@@ -98,6 +98,8 @@ namespace Xharness.Jenkins {
 					}
 					if (test.TestProject.IsDotNetProject)
 						yield return new TestData { Variation = "Release (LLVM)", Debug = false, UseLlvm = true, Ignored = ignore };
+					if (test.Platform == TestPlatform.iOS && test.TestProject.IsDotNetProject)
+						yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = ignore };
 					break;
 				case string name when name.StartsWith ("mscorlib", StringComparison.Ordinal):
 					if (supports_debug)
@@ -209,6 +211,7 @@ namespace Xharness.Jenkins {
 					var runtime_identifer = test_data.RuntimeIdentifier;
 					var use_llvm = test_data.UseLlvm;
 					var registrar = test_data.Registrar;
+					var publishaot = test_data.PublishAot;
 
 					if (task.TestProject.IsDotNetProject)
 						variation += " [dotnet]";
@@ -272,6 +275,8 @@ namespace Xharness.Jenkins {
 							clone.Xml.SetTopLevelPropertyGroupValue ("RuntimeIdentifier", runtime_identifer);
 						if (!string.IsNullOrEmpty (registrar))
 							clone.Xml.SetTopLevelPropertyGroupValue ("Registrar", registrar);
+						if (publishaot)
+							clone.Xml.SetTopLevelPropertyGroupValue ("PublishAot", "true");
 						clone.Xml.Save (clone.Path);
 					});
 

@@ -8,6 +8,7 @@ using System.Xml.Linq;
 
 using Mono.Cecil;
 using Mono.Linker;
+using Mono.Linker.Steps;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
@@ -57,6 +58,22 @@ namespace Xamarin.Linker {
 		string user_optimize_flags;
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
+
+		public class UnmanagedCallersEntry {
+			public string Name;
+			public int Id;
+			public MethodDefinition UnmanagedCallersMethod;
+
+			public UnmanagedCallersEntry (string name, int id, MethodDefinition unmanagedCallersMethod)
+			{
+				Name = name;
+				Id = id;
+				UnmanagedCallersMethod = unmanagedCallersMethod;
+			}
+		}
+
+		public Dictionary<MethodDefinition, UnmanagedCallersEntry> UnmanagedCallersMap = new ();
+		public Dictionary<TypeDefinition, uint> RegisteredTypesMap = new Dictionary<TypeDefinition, uint> ();
 
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 

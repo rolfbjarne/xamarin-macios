@@ -108,10 +108,10 @@ namespace CoreFoundation {
 			return CFArrayGetValueAtIndex (GetCheckedHandle (), index);
 		}
 
-		internal static unsafe NativeHandle Create (params NativeHandle [] values)
+		internal static unsafe NativeHandle Create (params NativeHandle []? values)
 		{
 			if (values is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (values));
+				return NativeHandle.Zero;
 			fixed (NativeHandle* pv = values) {
 				return CFArrayCreate (IntPtr.Zero,
 						(IntPtr) pv,
@@ -120,10 +120,10 @@ namespace CoreFoundation {
 			}
 		}
 
-		public static unsafe NativeHandle Create (params INativeObject [] values)
+		public static unsafe NativeHandle Create (params INativeObject []? values)
 		{
 			if (values is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (values));
+				return NativeHandle.Zero;
 			int c = values.Length;
 			var _values = c <= 256 ? stackalloc IntPtr [c] : new IntPtr [c];
 			for (int i = 0; i < c; ++i)
@@ -132,10 +132,10 @@ namespace CoreFoundation {
 				return CFArrayCreate (IntPtr.Zero, (IntPtr) pv, c, kCFTypeArrayCallbacks_ptr);
 		}
 
-		public static unsafe NativeHandle Create (params string [] values)
+		public static unsafe NativeHandle Create (params string []? values)
 		{
 			if (values is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (values));
+				return NativeHandle.Zero;
 			var c = values.Length;
 			var _values = c <= 256 ? stackalloc IntPtr [c] : new IntPtr [c];
 			for (var i = 0; i < c; ++i)

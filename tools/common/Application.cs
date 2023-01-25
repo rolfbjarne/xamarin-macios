@@ -53,6 +53,7 @@ namespace Xamarin.Bundler {
 		Dynamic,
 		PartialStatic,
 		Static,
+		ManagedStatic,
 	}
 
 	public partial class Application {
@@ -1250,8 +1251,18 @@ namespace Xamarin.Bundler {
 				Registrar = RegistrarMode.PartialStatic;
 				break;
 #endif
+#if NET
+			case "managed":
+			case "managed-static":
+				Registrar = RegistrarMode.ManagedStatic;
+				break;
+#endif
 			default:
+#if NET
+				throw ErrorHelper.CreateError (20, Errors.MX0020, "--registrar", "managed-static, static, dynamic or default");
+#else
 				throw ErrorHelper.CreateError (20, Errors.MX0020, "--registrar", "static, dynamic or default");
+#endif
 			}
 
 			switch (value) {

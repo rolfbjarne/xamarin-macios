@@ -11,11 +11,17 @@ namespace Xamarin.Linker {
 		protected override void TryProcess ()
 		{
 			base.TryProcess ();
+
+			if (App.Registrar != RegistrarMode.ManagedStatic)
+				return;
 		}
 
 		protected override void TryProcessAssembly (AssemblyDefinition assembly)
 		{
 			base.TryProcessAssembly (assembly);
+
+			if (App.Registrar != RegistrarMode.ManagedStatic)
+				return;
 		}
 
 	}

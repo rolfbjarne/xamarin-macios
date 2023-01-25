@@ -2205,6 +2205,9 @@ namespace ObjCRuntime {
 			return (sbyte) (rv ? 1 : 0);
 		}
 
+		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
+		{
+		}
 	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr> {

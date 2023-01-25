@@ -4146,6 +4146,56 @@ namespace Registrar {
 				nslog_start.AppendLine (");");
 			}
 
+			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
+				var staticCall = false;
+				var pinvokeMethod = name;
+				sb.AppendLine ();
+				if (!staticCall)
+					sb.Append ("typedef ");
+				if (isCtor)
+					sb.Append ("id");
+				else if (isVoid)
+					sb.Append ("void");
+				else
+					sb.Append (ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method));
+
+				if (staticCall) {
+					sb.Append (name);
+				} else {
+					sb.Append (" (*");
+					sb.Append (name);
+					sb.Append ("_function)");
+				}
+				sb.Append (" (");
+				var indexOffset = method.IsCategoryInstance ? 1 : 0;
+				for (var i = indexOffset; i < num_arg; i++) { 
+					sb.Append (ToObjCParameterType (method.NativeParameters [i], method.DescriptiveMethodName, exceptions, method.Method, delegateToBlockType: true));
+					sb.AppendFormat ("p{0}", i);
+				}
+
+				if (method.IsVariadic)
+					sb.Append (", ...");
+				sb.Append (");");
+
+				sb.WriteLine ();
+				sb.WriteLine (GetObjCSignature (method, exceptions));
+				sb.WriteLine ("{");
+				if (!staticCall) {
+					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
+					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &pinvokeMethod, \"{pinvokeMethod}\"");
+				}
+				if (!isVoid)
+					sb.Write ("return ");
+				sb.Write (pinvokeMethod);
+				sb.Write (" (");
+				for (var i = indexOffset; i < num_arg; i++) {
+					sb.AppendFormat ("p{0}", i);
+				}
+				sb.WriteLine (");");
+				sb.WriteLine ("}");
+				return;
+			}
+
 			SpecializePrepareParameters (sb, method, num_arg, descriptiveMethodName, exceptions);
 
 			// the actual invoke

@@ -101,6 +101,8 @@ namespace Xharness.Jenkins {
 						yield return new TestData { Variation = "Debug (managed static registrar)", Registrar = "managed-static", Debug = true, Profiling = false, Ignored = ignore };
 						yield return new TestData { Variation = "Release (managed static registrar, all optimizations)", BundlerArguments = "--optimize:all", Registrar = "managed-static", Debug = false, Profiling = false, LinkMode = "Full", Defines = "OPTIMIZEALL", Ignored = ignore };
 					}
+					if (test.Platform == TestPlatform.iOS && test.TestProject.IsDotNetProject)
+						yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = ignore, Defines = "NATIVEAOT" };
 					break;
 				case string name when name.StartsWith ("mscorlib", StringComparison.Ordinal):
 					if (supports_debug)
@@ -220,6 +222,7 @@ namespace Xharness.Jenkins {
 					var runtime_identifer = test_data.RuntimeIdentifier;
 					var use_llvm = test_data.UseLlvm;
 					var registrar = test_data.Registrar;
+					var publishaot = test_data.PublishAot;
 
 					if (task.TestProject.IsDotNetProject)
 						variation += " [dotnet]";
@@ -285,6 +288,8 @@ namespace Xharness.Jenkins {
 							clone.Xml.SetProperty ("RuntimeIdentifier", runtime_identifer);
 						if (!string.IsNullOrEmpty (registrar))
 							clone.Xml.SetProperty ("Registrar", registrar);
+						if (publishaot)
+							clone.Xml.SetProperty ("PublishAot", "true");
 						clone.Xml.Save (clone.Path);
 					});
 

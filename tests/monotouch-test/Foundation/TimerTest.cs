@@ -53,6 +53,7 @@ namespace MonoTouchFixtures.Foundation {
 		// https://github.com/xamarin/maccore/issues/2443
 		// This is a test almost identical to Bug17793, except that it's purely a timer test (it doesn't call "Func").
 		[Test]
+		[Ignore ("time sensitive")]
 		public void Bug2443 ()
 		{
 			var evt = new CountdownEvent (2);

@@ -8,6 +8,7 @@ using System.Xml.Linq;
 
 using Mono.Cecil;
 using Mono.Linker;
+using Mono.Linker.Steps;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
@@ -57,6 +58,18 @@ namespace Xamarin.Linker {
 		string user_optimize_flags;
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
+
+		AppBundleRewriter abr;
+		internal AppBundleRewriter AppBundleRewriter {
+			get {
+				if (abr is null)
+					abr = new AppBundleRewriter (this);
+				return abr;
+			}
+		}
+
+		// This dictionary contains information about the trampolines created for each assembly.
+		public AssemblyTrampolineInfos AssemblyTrampolineInfos = new ();
 
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 

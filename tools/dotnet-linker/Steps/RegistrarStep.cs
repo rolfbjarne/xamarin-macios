@@ -34,6 +34,7 @@ namespace Xamarin.Linker {
 				var dir = Configuration.CacheDirectory;
 				var header = Path.Combine (dir, "registrar.h");
 				var code = Path.Combine (dir, "registrar.mm");
+				Configuration.Target.StaticRegistrar.FilterTrimmedApi (Annotations);
 				Configuration.Target.StaticRegistrar.Generate (header, code, out var initialization_method, app.ClassMapPath);
 
 				var items = new List<MSBuildItem> ();

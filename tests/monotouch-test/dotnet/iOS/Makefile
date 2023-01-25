@@ -14,3 +14,9 @@ norm:
 
 run-norm:
 	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64                       /p:MtouchLink=SdkOnly /p:Configuration=Release-norm /bl:$@.binlog /t:Run"
+
+nativeaot:
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:MtouchLink=SdkOnly /p:Configuration=Release /bl:$@.binlog"
+
+run-nativeaot:
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:MtouchLink=SdkOnly /p:Configuration=Release /bl:$@.binlog /t:Run"

@@ -498,6 +498,15 @@ namespace Xamarin.Linker {
 			// ErrorHelper.Show will print our errors and warnings to stderr.
 			ErrorHelper.Show (list);
 		}
+
+		public IEnumerable<AssemblyDefinition> GetNonDeletedAssemblies (BaseStep step)
+		{
+			foreach (var assembly in Assemblies) {
+				if (step.Annotations.GetAction (assembly) == Mono.Linker.AssemblyAction.Delete)
+					continue;
+				yield return assembly;
+			}
+		}
 	}
 }
 

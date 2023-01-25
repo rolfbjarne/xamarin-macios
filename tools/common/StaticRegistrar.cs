@@ -33,8 +33,7 @@ using ObjCRuntime;
 using Mono.Cecil;
 using Mono.Linker;
 using Mono.Tuner;
-using System.Numerics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Xamarin.Tuner;
 
 namespace Registrar {
 	/*
@@ -461,7 +460,7 @@ namespace Registrar {
 			return "void *";
 		}
 
-		public string ToObjCType (TypeDefinition type, bool delegateToBlockType = false)
+		public string ToObjCType (TypeDefinition type, bool delegateToBlockType = false, bool cSyntaxForBlocks =false)
 		{
 			switch (type.FullName) {
 			case "System.IntPtr": return "void *";
@@ -496,7 +495,10 @@ namespace Registrar {
 
 				StringBuilder builder = new StringBuilder ();
 				builder.Append (ToObjCType (invokeMethod.ReturnType));
-				builder.Append (" (^)(");
+				builder.Append (" (^");
+				if (cSyntaxForBlocks)
+					builder.Append ("%PARAMETERNAME%");
+				builder.Append (")(");
 
 				var argumentTypes = invokeMethod.Parameters.Select (param => ToObjCType (param.ParameterType));
 				builder.Append (string.Join (", ", argumentTypes));
@@ -529,6 +531,11 @@ namespace Registrar {
 
 		TypeDefinition ResolveType (TypeReference tr)
 		{
+			return ResolveType (LinkContext, tr);
+		}
+
+		public static TypeDefinition ResolveType (Xamarin.Tuner.DerivedLinkContext context, TypeReference tr)
+		{
 			// The static registrar might sometimes deal with types that have been linked away
 			// It's not always possible to call .Resolve () on types that have been linked away,
 			// it might result in a NotSupportedException, or just a null value, so here we
@@ -538,29 +545,34 @@ namespace Registrar {
 			if (tr is ArrayType arrayType) {
 				return arrayType.ElementType.Resolve ();
 			} else if (tr is GenericInstanceType git) {
-				return ResolveType (git.ElementType);
+				return ResolveType (context, git.ElementType);
 			} else {
 				var td = tr.Resolve ();
 				if (td == null)
-					td = LinkContext?.GetLinkedAwayType (tr, out _);
+					td = context?.GetLinkedAwayType (tr, out _);
 				return td;
 			}
 		}
 
 		public bool IsNativeObject (TypeReference tr)
 		{
+			return IsNativeObject (LinkContext, tr);
+		}
+
+		public static bool IsNativeObject (Xamarin.Tuner.DerivedLinkContext context, TypeReference tr)
+		{
 			var gp = tr as GenericParameter;
 			if (gp != null) {
 				if (gp.HasConstraints) {
 					foreach (var constraint in gp.Constraints) {
-						if (IsNativeObject (constraint.ConstraintType))
+						if (IsNativeObject (context, constraint.ConstraintType))
 							return true;
 					}
 				}
 				return false;
 			}
 
-			var type = ResolveType (tr);
+			var type = ResolveType (context, tr);
 
 			while (type != null) {
 				if (type.HasInterfaces) {
@@ -757,13 +769,13 @@ namespace Registrar {
 			return GetValueTypeSize (type.Resolve (), Is64Bits);
 		}
 
-		protected override bool HasReleaseAttribute (MethodDefinition method)
+		public override bool HasReleaseAttribute (MethodDefinition method)
 		{
 			method = GetBaseMethodInTypeHierarchy (method);
 			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);
 		}
 
-		protected override bool HasThisAttribute (MethodDefinition method)
+		public override bool HasThisAttribute (MethodDefinition method)
 		{
 			return HasAttribute (method, "System.Runtime.CompilerServices", "ExtensionAttribute");
 		}
@@ -956,7 +968,7 @@ namespace Registrar {
 			return false;
 		}
 
-		protected override TypeReference GetElementType (TypeReference type)
+		public override TypeReference GetElementType (TypeReference type)
 		{
 			var ts = type as TypeSpecification;
 			if (ts != null) {
@@ -1055,7 +1067,7 @@ namespace Registrar {
 			return HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 		}
 
-		protected override bool IsNullable (TypeReference type)
+		public override bool IsNullable (TypeReference type)
 		{
 			return GetNullableType (type) != null;
 		}
@@ -1071,7 +1083,7 @@ namespace Registrar {
 			return type.IsEnum;
 		}
 
-		protected override bool IsArray (TypeReference type, out int rank)
+		public override bool IsArray (TypeReference type, out int rank)
 		{
 			var arrayType = type as ArrayType;
 			if (arrayType == null) {
@@ -1156,7 +1168,7 @@ namespace Registrar {
 			return TypeMatch (a, b);
 		}
 
-		protected override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
+		public override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
 		{
 			constrained_type = null;
 
@@ -1339,7 +1351,7 @@ namespace Registrar {
 			return rv;
 		}
 
-		protected override CategoryAttribute GetCategoryAttribute (TypeReference type)
+		public override CategoryAttribute GetCategoryAttribute (TypeReference type)
 		{
 			string name = null;
 
@@ -1891,7 +1903,7 @@ namespace Registrar {
 			}
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
+		public override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
 			if (property == null)
 				return null;
@@ -1904,7 +1916,7 @@ namespace Registrar {
 			return CreateBindAsAttribute (attrib, property);
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
+		public override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
 			if (method == null)
 				return null;
@@ -2002,7 +2014,7 @@ namespace Registrar {
 		}
 
 		// [Export] is not sealed anymore - so we cannot simply compare strings
-		ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
+		public static ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
 		{
 			if (!candidate.HasCustomAttributes)
 				return null;
@@ -2069,7 +2081,7 @@ namespace Registrar {
 			return true;
 		}
 
-		MethodDefinition GetBaseMethodInTypeHierarchy (MethodDefinition method)
+		public MethodDefinition GetBaseMethodInTypeHierarchy (MethodDefinition method)
 		{
 			if (!IsOverride (method))
 				return method;
@@ -2473,7 +2485,7 @@ namespace Registrar {
 			return ToObjCParameterType (type, descriptiveMethodName, exceptions, inMethod);
 		}
 
-		string ToObjCParameterType (TypeReference type, string descriptiveMethodName, List<Exception> exceptions, MemberReference inMethod, bool delegateToBlockType = false)
+		string ToObjCParameterType (TypeReference type, string descriptiveMethodName, List<Exception> exceptions, MemberReference inMethod, bool delegateToBlockType = false, bool cSyntaxForBlocks = false)
 		{
 			GenericParameter gp = type as GenericParameter;
 			if (gp != null)
@@ -2595,7 +2607,7 @@ namespace Registrar {
 					}
 					return CheckStructure (td, descriptiveMethodName, inMethod);
 				} else {
-					return ToObjCType (td, delegateToBlockType: delegateToBlockType);
+					return ToObjCType (td, delegateToBlockType: delegateToBlockType, cSyntaxForBlocks: cSyntaxForBlocks);
 				}
 			}
 		}
@@ -2783,7 +2795,7 @@ namespace Registrar {
 			public ObjCType Protocol;
 		}
 
-		class SkippedType {
+		public class SkippedType {
 			public TypeReference Skipped;
 			public ObjCType Actual;
 			public uint SkippedTokenReference;
@@ -2794,6 +2806,10 @@ namespace Registrar {
 		{
 			base.OnSkipType (type, registered_type);
 			skipped_types.Add (new SkippedType { Skipped = type, Actual = registered_type });
+		}
+
+		public List<SkippedType> SkippedTypes {
+			get => skipped_types;
 		}
 
 		public string GetInitializationMethodName (string single_assembly)
@@ -2929,8 +2945,7 @@ namespace Registrar {
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
 				}
 
-
-				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null && App.Registrar != RegistrarMode.ManagedStatic) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
 						continue;
 					if (!TryCreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef, out var protocol_wrapper_type_ref, exceptions))
@@ -4030,9 +4045,6 @@ namespace Registrar {
 			setup_return.Indentation = indent;
 			cleanup.Indentation = indent;
 
-			if (!TryCreateTokenReference (method.Method, TokenType.Method, out var token_ref, exceptions))
-				return;
-
 			// A comment describing the managed signature
 			if (trace) {
 				nslog_start.Indentation = sb.Indentation;
@@ -4121,6 +4133,113 @@ namespace Registrar {
 				nslog_start.Append (args.ToString ());
 				nslog_start.AppendLine (");");
 			}
+
+#if NET
+			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
+
+				// SpecializePrepareParameters (new AutoIndentStringBuilder (), method, num_arg, descriptiveMethodName, exceptions);
+
+				var staticCall = false;
+				var supportDynamicAssemblyLoading = true;
+				var managedMethodNotFound = false;
+				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
+					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
+					var types = App.Configuration.UnmanagedCallersMap.Keys.Where (v => v.DeclaringType.FullName == method.Method.DeclaringType.FullName);
+					pinvokeMethodInfo = new LinkerConfiguration.UnmanagedCallersEntry (name + "___FIXME___MANAGED_METHOD_NOT_FOUND", -1, method.Method);
+					managedMethodNotFound = true;
+				}
+				var pinvokeMethod = pinvokeMethodInfo.Name;
+				sb.AppendLine ();
+				if (!staticCall)
+					sb.Append ("typedef ");
+
+				var callbackReturnType = "";
+				var hasReturnType = true;
+				if (isCtor) {
+					callbackReturnType = "id";
+				} else if (isVoid) {
+					callbackReturnType = "void";
+					hasReturnType = false;
+				} else {
+					callbackReturnType = ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method);
+				}
+
+				sb.Append (callbackReturnType);
+
+				if (staticCall) {
+					sb.Append (pinvokeMethod);
+				} else {
+					sb.Append (" (*");
+					sb.Append (pinvokeMethod);
+					sb.Append ("_function)");
+				}
+				sb.Append (" (id self, SEL sel");
+				var indexOffset = method.IsCategoryInstance ? 1 : 0;
+				for (var i = indexOffset; i < num_arg; i++) {
+					sb.Append (", ");
+					var parameterType = ToObjCParameterType (method.NativeParameters [i], method.DescriptiveMethodName, exceptions, method.Method, delegateToBlockType: true, cSyntaxForBlocks: true);
+					var containsBlock = parameterType.Contains ("%PARAMETERNAME%");
+					parameterType = parameterType.Replace ("%PARAMETERNAME%", $"p{i - indexOffset}");
+					sb.Append (parameterType);
+					if (!containsBlock) {
+						sb.Append (" ");
+						sb.AppendFormat ("p{0}", i - indexOffset);
+					}
+				}
+				if (isCtor)
+					sb.Append (", bool* call_super");
+				sb.Append (", GCHandle* exception_gchandle");
+
+				if (method.IsVariadic)
+					sb.Append (", ...");
+				sb.Append (");");
+
+				sb.WriteLine ();
+				sb.WriteLine (GetObjCSignature (method, exceptions));
+				sb.WriteLine ("{");
+				sb.WriteLine ("GCHandle exception_gchandle = INVALID_GCHANDLE;");
+				if (isCtor)
+					sb.WriteLine ($"bool call_super = false;");
+				if (hasReturnType)
+					sb.WriteLine ($"{callbackReturnType} rv = {{ 0 }};");
+
+				if (managedMethodNotFound) {
+					sb.WriteLine ($"NSLog (@\"Trying to call managed method that wasn't found at build time: {pinvokeMethod}\\n\");");
+					sb.WriteLine ($"fprintf (stderr, \"Trying to call managed method that wasn't found at build time: {pinvokeMethod}\\n\");");
+				}
+				if (!staticCall) {
+					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
+					var assemblyName = supportDynamicAssemblyLoading ? "\"" + method.Method.Module.Assembly.Name.Name + "\"" : "NULL";
+					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, {assemblyName}, \"{pinvokeMethod}\", {pinvokeMethodInfo.Id});");
+				}
+				if (hasReturnType)
+					sb.Write ("rv = ");
+				sb.Write (pinvokeMethod);
+				sb.Write (" (self, _cmd");
+				for (var i = indexOffset; i < num_arg; i++) {
+					sb.AppendFormat (", p{0}", i - indexOffset);
+				}
+				if (isCtor)
+					sb.Write (", &call_super");
+				sb.Write (", &exception_gchandle");
+				sb.WriteLine (");");
+
+				sb.WriteLine ("xamarin_process_managed_exception_gchandle (exception_gchandle);");
+
+				if (isCtor) {
+					GenerateCallToSuperForConstructor (sb, method, exceptions);
+				}
+
+				if (hasReturnType)
+					sb.WriteLine ("return rv;");
+
+				sb.WriteLine ("}");
+				return;
+			}
+#endif
+
+			if (!TryCreateTokenReference (method.Method, TokenType.Method, out var token_ref, exceptions))
+				return;
 
 			SpecializePrepareParameters (sb, method, num_arg, descriptiveMethodName, exceptions);
 
@@ -4393,7 +4512,30 @@ namespace Registrar {
 			return nativeObjType;
 		}
 
-		TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)
+		public MethodDefinition GetCreateBlockMethod (TypeDefinition delegateProxyType)
+		{
+			if (!delegateProxyType.HasMethods)
+				return null;
+
+			foreach (var method in delegateProxyType.Methods) {
+				if (method.Name != "CreateBlock")
+					continue;
+				if (!method.ReturnType.Is ("ObjCRuntime", "BlockLiteral"))
+					continue;
+				if (!method.HasParameters)
+					continue;
+				if (method.Parameters.Count != 1)
+					continue;
+				if (!IsDelegate (method.Parameters [0].ParameterType))
+					continue;
+
+				return method;
+			}
+
+			return null;
+		}
+
+		public TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)
 		{
 			// A mirror of this method is also implemented in BlockLiteral:GetDelegateProxyType
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
@@ -4440,7 +4582,12 @@ namespace Registrar {
 			return null;
 		}
 
-		MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
+		//
+		// Returns a MethodInfo that represents the method that can be used to turn
+		// a the block in the given method at the given parameter into a strongly typed
+		// delegate
+		//
+		public MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
 		{
 			// A mirror of this method is also implemented in Runtime:GetBlockWrapperCreator
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
@@ -4512,6 +4659,27 @@ namespace Registrar {
 			}
 
 			return null;
+		}
+
+		public bool TryFindType (TypeDefinition type, out ObjCType objcType)
+		{
+			return Types.TryGetValue (type, out objcType);
+		}
+
+		public bool TryFindMethod (MethodDefinition method, out ObjCMethod objcMethod)
+		{
+			if (TryFindType (method.DeclaringType, out var type)) {
+				if (type.Methods is not null) {
+					foreach (var m in type.Methods) {
+						if ((object) m.Method == (object) method) {
+							objcMethod = m;
+							return true;
+						}
+					}
+				}
+			}
+			objcMethod = null;
+			return false;
 		}
 
 		MethodDefinition GetBlockProxyAttributeMethod (MethodDefinition method, int parameter)
@@ -4621,7 +4789,7 @@ namespace Registrar {
 			return false;
 		}
 
-		string GetManagedToNSNumberFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
+		public string GetManagedToNSNumberFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
 		{
 			var typeName = managedType.FullName;
 			switch (typeName) {
@@ -4649,7 +4817,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetNSNumberToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
+		public string GetNSNumberToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
 		{
 			var typeName = managedType.FullName;
 			switch (typeName) {
@@ -4679,7 +4847,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetNSValueToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
+		public string GetNSValueToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
 		{
 			var underlyingTypeName = managedType.FullName;
 
@@ -4708,7 +4876,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetManagedToNSValueFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
+		public string GetManagedToNSValueFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
 		{
 			var underlyingTypeName = managedType.FullName;
 
@@ -4751,6 +4919,7 @@ namespace Registrar {
 		void GenerateConversionToManaged (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string managedClassExpression, int parameter)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
+			// It's also a mirror of the method ManagedRegistrarStep.GenerateConversionToManaged.
 			// These methods must be kept in sync.
 			var managedType = outputType;
 			var nativeType = inputType;
@@ -4940,25 +5109,31 @@ namespace Registrar {
 
 		bool TryCreateFullTokenReference (MemberReference member, out uint token_ref, out Exception exception)
 		{
-			token_ref = (full_token_reference_count++ << 1) + 1;
 			switch (member.MetadataToken.TokenType) {
 			case TokenType.TypeDef:
 			case TokenType.Method:
 				break; // OK
 			default:
 				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"unsupported tokentype ({member.MetadataToken.TokenType}) for {member.FullName}");
+				token_ref = INVALID_TOKEN_REF;
 				return false;
 			}
-			var assemblyIndex = registered_assemblies.FindIndex (v => v.Assembly == member.Module.Assembly);
-			if (assemblyIndex == -1) {
-				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"Could not find {member.Module.Assembly.Name.Name} in the list of registered assemblies when processing {member.FullName}:\n\t{string.Join ("\n\t", registered_assemblies.Select (v => v.Assembly.Name.Name))}");
-				return false;
-			}
-			var assemblyName = registered_assemblies [assemblyIndex].Name;
 			var moduleToken = member.Module.MetadataToken.ToUInt32 ();
 			var moduleName = member.Module.Name;
 			var memberToken = member.MetadataToken.ToUInt32 ();
 			var memberName = member.FullName;
+			return WriteFullTokenReference (member.Module.Assembly, moduleToken, moduleName, memberToken, memberName, out token_ref, out exception);
+		}
+
+		bool WriteFullTokenReference (AssemblyDefinition assembly, uint moduleToken, string moduleName, uint memberToken, string memberName, out uint token_ref, out Exception exception)
+		{
+			token_ref = (full_token_reference_count++ << 1) + 1;
+			var assemblyIndex = registered_assemblies.FindIndex (v => v.Assembly == assembly);
+			if (assemblyIndex == -1) {
+				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"Could not find {assembly.Name.Name} in the list of registered assemblies when processing {memberName}:\n\t{string.Join ("\n\t", registered_assemblies.Select (v => v.Assembly.Name.Name))}");
+				return false;
+			}
+			var assemblyName = registered_assemblies [assemblyIndex].Name;
 			exception = null;
 			full_token_references.Append ($"\t\t{{ /* #{full_token_reference_count} = 0x{token_ref:X} */ {assemblyIndex} /* {assemblyName} */, 0x{moduleToken:X} /* {moduleName} */, 0x{memberToken:X} /* {memberName} */ }},\n");
 			return true;
@@ -4988,6 +5163,28 @@ namespace Registrar {
 		bool TryCreateTokenReferenceUncached (MemberReference member, TokenType implied_type, out uint token_ref, out Exception exception)
 		{
 			var token = member.MetadataToken;
+
+#if NET
+			if (App.Registrar == RegistrarMode.ManagedStatic) {
+				if (implied_type == TokenType.TypeDef && member is TypeDefinition td) {
+					if (App.Configuration.RegisteredTypesMap.TryGetValue (td, out var id)) {
+						id = id | (uint) TokenType.TypeDef;
+						return WriteFullTokenReference (member.Module.Assembly, INVALID_TOKEN_REF, member.Module.Name, id, member.FullName, out token_ref, out exception);
+					}
+					throw ErrorHelper.CreateError (99, $"Can't create a token reference to an unregistered type when using the managed static registrar: {member.FullName}");
+					token_ref = INVALID_TOKEN_REF;
+					return false;
+				}
+				if (implied_type == TokenType.Method) {
+					throw ErrorHelper.CreateError (99, $"Can't create a token reference to a method when using the managed static registrar: {member.FullName}");
+					token_ref = INVALID_TOKEN_REF;
+					return false;
+				}
+				throw ErrorHelper.CreateError (99, "Can't create a token reference to a token type {0} when using the managed static registrar.", implied_type.ToString ());
+				token_ref = INVALID_TOKEN_REF;
+				return false;				
+			}
+#endif
 
 			/* We can't create small token references if we're in partial mode, because we may have multiple arrays of registered assemblies, and no way of saying which one we refer to with the assembly index */
 			if (IsSingleAssembly)
@@ -5286,6 +5483,87 @@ namespace Registrar {
 
 			return base.SkipRegisterAssembly (assembly);
 		}
+
+		// Find the value of the [UserDelegateType] attribute on the specified delegate
+		TypeReference GetUserDelegateType (TypeReference delegateType)
+		{
+			var delegateTypeDefinition = delegateType.Resolve ();
+			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
+				var attribType = attrib.AttributeType;
+				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
+					continue;
+				return attrib.ConstructorArguments [0].Value as TypeReference;
+			}
+			return null;
+		}
+
+		MethodDefinition GetDelegateInvoke (TypeReference delegateType)
+		{
+			var td = delegateType.Resolve ();
+			foreach (var method in td.Methods) {
+				if (method.Name == "Invoke")
+					return method;
+			}
+			return null;
+		}
+
+		MethodReference InflateMethod (TypeReference inflatedDeclaringType, MethodDefinition openMethod)
+		{
+			var git = inflatedDeclaringType as GenericInstanceType;
+			if (git == null)
+				return openMethod;
+
+			var inflatedReturnType = TypeReferenceExtensions.InflateGenericType (git, openMethod.ReturnType);
+			var mr = new MethodReference (openMethod.Name, inflatedReturnType, git);
+			if (openMethod.HasParameters) {
+				for (int i = 0; i < openMethod.Parameters.Count; i++) {
+					var inflatedParameterType = TypeReferenceExtensions.InflateGenericType (git, openMethod.Parameters [i].ParameterType);
+					var p = new ParameterDefinition (openMethod.Parameters [i].Name, openMethod.Parameters [i].Attributes, inflatedParameterType);
+					mr.Parameters.Add (p);
+				}
+			}
+			return mr;
+		}
+
+		public bool TryComputeBlockSignature (ICustomAttributeProvider codeLocation, TypeReference trampolineDelegateType, out Exception exception, out string signature)
+		{
+			signature = null;
+			exception = null;
+			try {
+				// Calculate the block signature.
+				var blockSignature = false;
+				MethodReference userMethod = null;
+
+				// First look for any [UserDelegateType] attributes on the trampoline delegate type.
+				var userDelegateType = GetUserDelegateType (trampolineDelegateType);
+				if (userDelegateType != null) {
+					var userMethodDefinition = GetDelegateInvoke (userDelegateType);
+					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
+					blockSignature = true;
+				} else {
+					// Couldn't find a [UserDelegateType] attribute, use the type of the actual trampoline instead.
+					var userMethodDefinition = GetDelegateInvoke (trampolineDelegateType);
+					userMethod = InflateMethod (trampolineDelegateType, userMethodDefinition);
+					blockSignature = false;
+				}
+
+				// No luck finding the signature, so give up.
+				if (userMethod is null) {
+					exception = ErrorHelper.CreateError (App, 4187 /* Could not find a [UserDelegateType] attribute on the type '{0}'. */, codeLocation, Errors.MX4187, trampolineDelegateType.FullName);
+					return false;
+				}
+
+				var parameters = new TypeReference [userMethod.Parameters.Count];
+				for (int p = 0; p < parameters.Length; p++)
+					parameters [p] = userMethod.Parameters [p].ParameterType;
+				signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, userMethod.Resolve (), isBlockSignature: blockSignature);
+				return true;
+			} catch (Exception e) {
+				exception = ErrorHelper.CreateError (App, 4188 /* Unable to compute the block signature for the type '{0}': {1} */, e, codeLocation, Errors.MX4188, trampolineDelegateType.FullName, e.Message);
+				return false;
+			}
+		}
+
 	}
 
 	// Replicate a few attribute types here, with TypeDefinition instead of Type

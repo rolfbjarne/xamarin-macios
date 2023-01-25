@@ -1947,6 +1947,7 @@ SHARED_SOURCES = \
 	ObjCRuntime/AdoptsAttribute.cs \
 	ObjCRuntime/BackingField.cs \
 	ObjCRuntime/BaseWrapper.cs \
+	ObjCRuntime/BindAs.cs \
 	ObjCRuntime/BlockProxyAttribute.cs \
 	ObjCRuntime/BindingImplAttribute.cs \
 	ObjCRuntime/CategoryAttribute.cs \
@@ -1960,6 +1961,7 @@ SHARED_SOURCES = \
 	ObjCRuntime/ExceptionMode.cs \
 	ObjCRuntime/Method.cs \
 	ObjCRuntime/Registrar.cs \
+	ObjCRuntime/RegistrarHelper.cs \
 	ObjCRuntime/ReleaseAttribute.cs \
 	ObjCRuntime/RequiredFrameworkAttribute.cs \
 	ObjCRuntime/Runtime.cs \

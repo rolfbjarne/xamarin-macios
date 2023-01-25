@@ -57,6 +57,22 @@ namespace Xamarin.Linker {
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
 
+		public class UnmanagedCallersEntry
+		{
+			public string Name;
+			public int Id;
+			public MethodDefinition UnmanagedCallersMethod;
+
+			public UnmanagedCallersEntry (string name, int id, MethodDefinition unmanagedCallersMethod)
+			{
+				Name = name;
+				Id = id;
+				UnmanagedCallersMethod = unmanagedCallersMethod;
+			}
+		}
+
+		public Dictionary<MethodDefinition, UnmanagedCallersEntry> UnmanagedCallersMap = new ();
+
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 
 		public static LinkerConfiguration GetInstance (LinkContext context, bool createIfNotFound = true)

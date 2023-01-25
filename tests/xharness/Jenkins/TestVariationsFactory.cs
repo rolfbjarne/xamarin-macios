@@ -101,6 +101,8 @@ namespace Xharness.Jenkins {
 						yield return new TestData { Variation = "Debug (managed static registrar)", Registrar = "managed-static", Debug = true, Profiling = false, Ignored = ignore };
 						yield return new TestData { Variation = "Release (managed static registrar, all optimizations)", BundlerArguments = "--optimize:all", Registrar = "managed-static", Debug = false, Profiling = false, LinkMode = "Full", Defines = "OPTIMIZEALL", Ignored = ignore };
 					}
+					if (test.TestProject.IsDotNetProject)
+						yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = ignore, Defines = "NATIVEAOT" };
 					break;
 				case string name when name.StartsWith ("mscorlib", StringComparison.Ordinal):
 					if (supports_debug)
@@ -127,11 +129,14 @@ namespace Xharness.Jenkins {
 					yield return new TestData { Variation = "Release (all optimizations)", BundlerArguments = "--optimize:all", Registrar = "static", Debug = false, Profiling = false, LinkMode = "Full", Defines = "OPTIMIZEALL", Ignored = ignore };
 					yield return new TestData { Variation = "Debug (all optimizations)", BundlerArguments = "--optimize:all,-remove-uithread-checks", Registrar = "static", Debug = true, Profiling = false, LinkMode = "Full", Defines = "OPTIMIZEALL", Ignored = ignore ?? !jenkins.TestSelection.IsEnabled (TestLabel.All) };
 
-					if (test.TestProject.IsDotNetProject && mac_supports_arm64)
+					if (test.TestProject.IsDotNetProject && mac_supports_arm64) {
 						yield return new TestData { Variation = "Debug (ARM64)", Debug = true, Profiling = false, Ignored = !mac_supports_arm64 ? true : ignore, RuntimeIdentifier = arm64_sim_runtime_identifier, };
+						yield return new TestData { Variation = "Release (NativeAOT, ARM64)", Debug = false, PublishAot = true, Ignored = ignore, Defines = "NATIVEAOT", RuntimeIdentifier = arm64_sim_runtime_identifier, };
+					}
 					if (test.TestProject.IsDotNetProject) {
 						yield return new TestData { Variation = "Debug (managed static registrar)", Registrar = "managed-static", Debug = true, Profiling = false, Ignored = ignore };
 						yield return new TestData { Variation = "Release (managed static registrar, all optimizations)", BundlerArguments = "--optimize:all", Registrar = "managed-static", Debug = false, Profiling = false, LinkMode = "Full", Defines = "OPTIMIZEALL", Ignored = ignore };
+						yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = ignore, Defines = "NATIVEAOT" };
 					}
 					break;
 				case "introspection":
@@ -220,6 +225,7 @@ namespace Xharness.Jenkins {
 					var runtime_identifer = test_data.RuntimeIdentifier;
 					var use_llvm = test_data.UseLlvm;
 					var registrar = test_data.Registrar;
+					var publishaot = test_data.PublishAot;
 
 					if (task.TestProject.IsDotNetProject)
 						variation += " [dotnet]";
@@ -285,6 +291,8 @@ namespace Xharness.Jenkins {
 							clone.Xml.SetProperty ("RuntimeIdentifier", runtime_identifer);
 						if (!string.IsNullOrEmpty (registrar))
 							clone.Xml.SetProperty ("Registrar", registrar);
+						if (publishaot)
+							clone.Xml.SetProperty ("PublishAot", "true");
 						clone.Xml.Save (clone.Path);
 					});
 

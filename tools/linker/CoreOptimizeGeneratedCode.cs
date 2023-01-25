@@ -10,6 +10,7 @@ using Mono.Cecil.Cil;
 using Mono.Linker;
 using Mono.Tuner;
 using Xamarin.Bundler;
+using Xamarin.Tuner;
 
 using MonoTouch.Tuner;
 #if NET
@@ -986,33 +987,11 @@ namespace Xamarin.Linker {
 					return 0;
 				}
 
-				// Calculate the block signature.
-				var blockSignature = false;
-				MethodReference userMethod = null;
-
-				// First look for any [UserDelegateType] attributes on the trampoline delegate type.
-				var userDelegateType = GetUserDelegateType (trampolineDelegateType);
-				if (userDelegateType != null) {
-					var userMethodDefinition = GetDelegateInvoke (userDelegateType);
-					userMethod = InflateMethod (userDelegateType, userMethodDefinition);
-					blockSignature = true;
-				} else {
-					// Couldn't find a [UserDelegateType] attribute, use the type of the actual trampoline instead.
-					var userMethodDefinition = GetDelegateInvoke (trampolineDelegateType);
-					userMethod = InflateMethod (trampolineDelegateType, userMethodDefinition);
-					blockSignature = false;
-				}
-
-				// No luck finding the signature, so give up.
-				if (userMethod == null) {
-					ErrorHelper.Show (ErrorHelper.CreateWarning (LinkContext.App, 2106, caller, ins, Errors.MM2106_C, caller, ins.Offset, trampolineDelegateType.FullName));
+				if (!LinkContext.Target.StaticRegistrar.TryComputeBlockSignature (caller, trampolineDelegateType, out var exception, out signature)) {
+					ErrorHelper.Show (ErrorHelper.CreateWarning (LinkContext.App, 2106, exception, caller, ins, Errors.MM2106_D, caller, ins.Offset, exception.Message));
 					return 0;
-				}
 
-				var parameters = new TypeReference [userMethod.Parameters.Count];
-				for (int p = 0; p < parameters.Length; p++)
-					parameters [p] = userMethod.Parameters [p].ParameterType;
-				signature = LinkContext.Target.StaticRegistrar.ComputeSignature (userMethod.DeclaringType, false, userMethod.ReturnType, parameters, userMethod.Resolve (), isBlockSignature: blockSignature);
+				}
 			} catch (Exception e) {
 				ErrorHelper.Show (ErrorHelper.CreateWarning (LinkContext.App, 2106, e, caller, ins, Errors.MM2106_D, caller, ins.Offset, e.Message));
 				return 0;
@@ -1307,29 +1286,6 @@ namespace Xamarin.Linker {
 			default:
 				return null;
 			}
-		}
-
-		// Find the value of the [UserDelegateType] attribute on the specified delegate
-		TypeReference GetUserDelegateType (TypeReference delegateType)
-		{
-			var delegateTypeDefinition = delegateType.Resolve ();
-			foreach (var attrib in delegateTypeDefinition.CustomAttributes) {
-				var attribType = attrib.AttributeType;
-				if (!attribType.Is (Namespaces.ObjCRuntime, "UserDelegateTypeAttribute"))
-					continue;
-				return attrib.ConstructorArguments [0].Value as TypeReference;
-			}
-			return null;
-		}
-
-		MethodDefinition GetDelegateInvoke (TypeReference delegateType)
-		{
-			var td = delegateType.Resolve ();
-			foreach (var method in td.Methods) {
-				if (method.Name == "Invoke")
-					return method;
-			}
-			return null;
 		}
 
 		MethodDefinition setupblock_def;

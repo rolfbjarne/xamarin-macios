@@ -606,6 +606,11 @@
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler" />
 
 			<!--
+				pre-sweep custom steps
+			-->
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="SweepStep" Type="Xamarin.Linker.ManagedRegistrarStep" />
+
+			<!--
 				post-sweep custom steps
 			-->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" AfterStep="SweepStep" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PostSweepDispatcher" />

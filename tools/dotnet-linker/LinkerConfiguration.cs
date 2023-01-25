@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 using Mono.Cecil;
 using Mono.Linker;
+using Mono.Linker.Steps;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
@@ -56,6 +57,23 @@ namespace Xamarin.Linker {
 		string user_optimize_flags;
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
+
+		public class UnmanagedCallersEntry
+		{
+			public string Name;
+			public int Id;
+			public MethodDefinition UnmanagedCallersMethod;
+
+			public UnmanagedCallersEntry (string name, int id, MethodDefinition unmanagedCallersMethod)
+			{
+				Name = name;
+				Id = id;
+				UnmanagedCallersMethod = unmanagedCallersMethod;
+			}
+		}
+
+		public Dictionary<MethodDefinition, UnmanagedCallersEntry> UnmanagedCallersMap = new ();
+		public Dictionary<TypeDefinition, uint> RegisteredTypesMap = new Dictionary<TypeDefinition, uint> ();
 
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 
@@ -482,6 +500,15 @@ namespace Xamarin.Linker {
 			}
 			// ErrorHelper.Show will print our errors and warnings to stderr.
 			ErrorHelper.Show (list);
+		}
+
+		public IEnumerable<AssemblyDefinition> GetNonDeletedAssemblies (BaseStep step)
+		{
+			foreach (var assembly in Assemblies) {
+				if (step.Annotations.GetAction (assembly) == Mono.Linker.AssemblyAction.Delete)
+					continue;
+				yield return assembly;
+			}
 		}
 	}
 }

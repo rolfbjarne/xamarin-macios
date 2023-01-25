@@ -11,3 +11,6 @@ run:
 managed-static-registrar msr:
 	rm -rf bin obj
 	$(DOTNET) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:Registrar=managed-static /t:Run
+
+reload:
+	$(MAKE) -C tests/dotnet $@

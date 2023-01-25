@@ -26,6 +26,7 @@ namespace Xamarin.Tests {
 			if (!string.IsNullOrWhiteSpace (configuration))
 				properties ["Configuration"] = configuration;
 			properties ["IsHotRestartBuild"] = "true";
+			properties ["IsHotRestartEnvironmentReady"] = "true";
 			var rv = DotNet.AssertBuild (project_path, properties);
 			foreach (var entry in Directory.GetFileSystemEntries (appPath, "*", SearchOption.AllDirectories))
 				Console.WriteLine (entry);

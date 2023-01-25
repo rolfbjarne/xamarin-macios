@@ -2812,7 +2812,7 @@ namespace Registrar {
 			public ObjCType Protocol;
 		}
 
-		class SkippedType {
+		public class SkippedType {
 			public TypeReference Skipped;
 			public ObjCType Actual;
 			public uint SkippedTokenReference;
@@ -2823,6 +2823,10 @@ namespace Registrar {
 		{
 			base.OnSkipType (type, registered_type);
 			skipped_types.Add (new SkippedType { Skipped = type, Actual = registered_type });
+		}
+
+		public List<SkippedType> SkippedTypes {
+			get => skipped_types;
 		}
 
 		public string GetInitializationMethodName (string single_assembly)
@@ -4536,7 +4540,30 @@ namespace Registrar {
 			return nativeObjType;
 		}
 
-		TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)
+		public MethodDefinition GetCreateBlockMethod (TypeDefinition delegateProxyType)
+		{
+			if (!delegateProxyType.HasMethods)
+				return null;
+
+			foreach (var method in delegateProxyType.Methods) {
+				if (method.Name != "CreateBlock")
+					continue;
+				if (!method.ReturnType.Is ("ObjCRuntime", "BlockLiteral"))
+					continue;
+				if (!method.HasParameters)
+					continue;
+				if (method.Parameters.Count != 1)
+					continue;
+				if (!IsDelegate (method.Parameters [0].ParameterType))
+					continue;
+
+				return method;
+			}
+
+			return null;
+		}
+
+		public TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)
 		{
 			// A mirror of this method is also implemented in BlockLiteral:GetDelegateProxyType
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
@@ -4583,7 +4610,12 @@ namespace Registrar {
 			return null;
 		}
 
-		MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
+		//
+		// Returns a MethodInfo that represents the method that can be used to turn
+		// a the block in the given method at the given parameter into a strongly typed
+		// delegate
+		//
+		public MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
 		{
 			// A mirror of this method is also implemented in Runtime:GetBlockWrapperCreator
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
@@ -4655,6 +4687,27 @@ namespace Registrar {
 			}
 
 			return null;
+		}
+
+		public bool TryFindType (TypeDefinition type, out ObjCType objcType)
+		{
+			return Types.TryGetValue (type, out objcType);
+		}
+
+		public bool TryFindMethod (MethodDefinition method, out ObjCMethod objcMethod)
+		{
+			if (TryFindType (method.DeclaringType, out var type)) {
+				if (type.Methods is not null) {
+					foreach (var m in type.Methods) {
+						if ((object) m.Method == (object) method) {
+							objcMethod = m;
+							return true;
+						}
+					}
+				}
+			}
+			objcMethod = null;
+			return false;
 		}
 
 		MethodDefinition GetBlockProxyAttributeMethod (MethodDefinition method, int parameter)
@@ -4894,6 +4947,7 @@ namespace Registrar {
 		void GenerateConversionToManaged (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string managedClassExpression, int parameter)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
+			// It's also a mirror of the method ManagedRegistrarStep.GenerateConversionToManaged.
 			// These methods must be kept in sync.
 			var managedType = outputType;
 			var nativeType = inputType;
@@ -5083,25 +5137,31 @@ namespace Registrar {
 
 		bool TryCreateFullTokenReference (MemberReference member, out uint token_ref, out Exception exception)
 		{
-			token_ref = (full_token_reference_count++ << 1) + 1;
 			switch (member.MetadataToken.TokenType) {
 			case TokenType.TypeDef:
 			case TokenType.Method:
 				break; // OK
 			default:
 				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"unsupported tokentype ({member.MetadataToken.TokenType}) for {member.FullName}");
+				token_ref = INVALID_TOKEN_REF;
 				return false;
 			}
-			var assemblyIndex = registered_assemblies.FindIndex (v => v.Assembly == member.Module.Assembly);
-			if (assemblyIndex == -1) {
-				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"Could not find {member.Module.Assembly.Name.Name} in the list of registered assemblies when processing {member.FullName}:\n\t{string.Join ("\n\t", registered_assemblies.Select (v => v.Assembly.Name.Name))}");
-				return false;
-			}
-			var assemblyName = registered_assemblies [assemblyIndex].Name;
 			var moduleToken = member.Module.MetadataToken.ToUInt32 ();
 			var moduleName = member.Module.Name;
 			var memberToken = member.MetadataToken.ToUInt32 ();
 			var memberName = member.FullName;
+			return WriteFullTokenReference (member.Module.Assembly, moduleToken, moduleName, memberToken, memberName, out token_ref, out exception);
+		}
+
+		bool WriteFullTokenReference (AssemblyDefinition assembly, uint moduleToken, string moduleName, uint memberToken, string memberName, out uint token_ref, out Exception exception)
+		{
+			token_ref = (full_token_reference_count++ << 1) + 1;
+			var assemblyIndex = registered_assemblies.FindIndex (v => v.Assembly == assembly);
+			if (assemblyIndex == -1) {
+				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"Could not find {assembly.Name.Name} in the list of registered assemblies when processing {memberName}:\n\t{string.Join ("\n\t", registered_assemblies.Select (v => v.Assembly.Name.Name))}");
+				return false;
+			}
+			var assemblyName = registered_assemblies [assemblyIndex].Name;
 			exception = null;
 			full_token_references.Append ($"\t\t{{ /* #{full_token_reference_count} = 0x{token_ref:X} */ {assemblyIndex} /* {assemblyName} */, 0x{moduleToken:X} /* {moduleName} */, 0x{memberToken:X} /* {memberName} */ }},\n");
 			return true;
@@ -5131,6 +5191,22 @@ namespace Registrar {
 		bool TryCreateTokenReferenceUncached (MemberReference member, TokenType implied_type, out uint token_ref, out Exception exception)
 		{
 			var token = member.MetadataToken;
+
+#if NET
+			if (App.Registrar == RegistrarMode.ManagedStatic) {
+				if (implied_type == TokenType.TypeDef && member is TypeDefinition td) {
+					if (App.Configuration.AssemblyTrampolineInfos.TryGetValue (td.Module.Assembly, out var infos) && infos.TryGetRegisteredTypeIndex (td, out var id)) {
+						id = id | (uint) TokenType.TypeDef;
+						return WriteFullTokenReference (member.Module.Assembly, INVALID_TOKEN_REF, member.Module.Name, id, member.FullName, out token_ref, out exception);
+					}
+					throw ErrorHelper.CreateError (99, $"Can't create a token reference to an unregistered type when using the managed static registrar: {member.FullName}");
+				}
+				if (implied_type == TokenType.Method) {
+					throw ErrorHelper.CreateError (99, $"Can't create a token reference to a method when using the managed static registrar: {member.FullName}");
+				}
+				throw ErrorHelper.CreateError (99, "Can't create a token reference to a token type {0} when using the managed static registrar.", implied_type.ToString ());
+			}
+#endif
 
 			/* We can't create small token references if we're in partial mode, because we may have multiple arrays of registered assemblies, and no way of saying which one we refer to with the assembly index */
 			if (IsSingleAssembly)
@@ -5332,6 +5408,51 @@ namespace Registrar {
 				Driver.Log (3, "Generating static registrar for {0}", assembly.Name);
 				RegisterAssembly (assembly);
 			}
+		}
+
+		public static bool IsTrimmed (MemberReference tr, AnnotationStore annotations)
+		{
+			var assembly = tr.Module?.Assembly;
+			if (assembly is null) {
+				// Trimmed away
+				return true;
+			}
+
+			var action = annotations.GetAction (assembly);
+			switch (action) {
+			case AssemblyAction.Skip:
+			case AssemblyAction.Copy:
+			case AssemblyAction.CopyUsed:
+			case AssemblyAction.Save:
+				return false;
+			case AssemblyAction.Link:
+				break;
+			case AssemblyAction.Delete:
+				return true;
+			case AssemblyAction.AddBypassNGen:
+			case AssemblyAction.AddBypassNGenUsed:
+			default:
+				throw new NotImplementedException (action.ToString ());
+			}
+
+			if (annotations.IsMarked (tr))
+				return false;
+			
+			if (annotations.IsMarked (tr.Resolve ()))
+				return false;
+
+			return true;
+		}
+
+		public void FilterTrimmedApi (AnnotationStore annotations)
+		{
+			var trimmedAway = Types.Where (kvp => IsTrimmed (kvp.Value.Type, annotations)).ToArray ();
+			foreach (var trimmed in trimmedAway)
+				Types.Remove (trimmed.Key);
+
+			var skippedTrimmedAway = skipped_types.Where (v => IsTrimmed (v.Skipped, annotations)).ToArray ();
+			foreach (var trimmed in skippedTrimmedAway)
+				skipped_types.Remove (trimmed);
 		}
 
 		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method, string type_map_path)

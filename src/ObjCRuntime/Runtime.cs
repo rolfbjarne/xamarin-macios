@@ -1816,14 +1816,20 @@ namespace ObjCRuntime {
 				return null;
 
 			// Check if the static registrar knows about this protocol
-			unsafe {
-				var map = options->RegistrationMap;
-				if (map is not null) {
-					var token = Class.GetTokenReference (type, throw_exception: false);
-					if (token != INVALID_TOKEN_REF) {
-						var wrapper_token = xamarin_find_protocol_wrapper_type (token);
-						if (wrapper_token != INVALID_TOKEN_REF)
-							return Class.ResolveTypeTokenReference (wrapper_token);
+			if (IsManagedStaticRegistrar) {
+				var rv = RegistrarHelper.FindProtocolWrapperType (type);
+				if (rv is not null)
+					return rv;
+			} else {
+				unsafe {
+					var map = options->RegistrationMap;
+					if (map is not null) {
+						var token = Class.GetTokenReference (type, throw_exception: false);
+						if (token != INVALID_TOKEN_REF) {
+							var wrapper_token = xamarin_find_protocol_wrapper_type (token);
+							if (wrapper_token != INVALID_TOKEN_REF)
+								return Class.ResolveTypeTokenReference (wrapper_token);
+						}
 					}
 				}
 			}
@@ -2288,6 +2294,7 @@ namespace ObjCRuntime {
 
 		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
 		{
+			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id);
 		}
 	}
 

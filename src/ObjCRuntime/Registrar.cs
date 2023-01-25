@@ -1160,6 +1160,24 @@ namespace Registrar {
 		{
 		}
 
+		public bool IsPropertyAccessor (TMethod method, out TProperty property)
+		{
+			property = null;
+
+			if (method is null)
+				return false;
+
+			if (!method.IsSpecialName)
+				return false;
+
+			var name = method.Name;
+			if (!name.StartsWith ("get_", StringComparison.Ordinal) && !name.StartsWith ("set_", StringComparison.Ordinal))
+				return false;
+
+			property = FindProperty (method.DeclaringType, name.Substring (4));
+			return property is not null;
+		}
+
 		public bool IsArray (TType type)
 		{
 			int rank;

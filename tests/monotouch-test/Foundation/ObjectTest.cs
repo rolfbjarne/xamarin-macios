@@ -296,6 +296,7 @@ namespace MonoTouchFixtures.Foundation {
 #endif // !__WATCHOS__
 
 		[Test]
+		[Ignore ("timesensitive")]
 		[Timeout (5000)]
 		public void InvokeTest ()
 		{

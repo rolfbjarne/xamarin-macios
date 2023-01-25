@@ -4340,33 +4340,38 @@ namespace Registrar {
 				sb.Write (", 0x{0:X}", token_ref);
 				sb.WriteLine (");");
 				if (isCtor) {
-					sb.WriteLine ("if (call_super && rv) {");
-					sb.Write ("struct objc_super super = {  rv, [").Write (method.DeclaringType.SuperType.ExportedName).WriteLine (" class] };");
-					sb.Write ("rv = ((id (*)(objc_super*, SEL");
-
-					if (method.Parameters != null) {
-						for (int i = 0; i < method.Parameters.Length; i++)
-							sb.Append (", ").Append (ToObjCParameterType (method.Parameters [i], method.DescriptiveMethodName, exceptions, method.Method));
-					}
-					if (method.IsVariadic)
-						sb.Append (", ...");
-
-					sb.Write (")) objc_msgSendSuper) (&super, @selector (");
-					sb.Write (method.Selector);
-					sb.Write (")");
-					var split = method.Selector.Split (':');
-					for (int i = 0; i < split.Length - 1; i++) {
-						sb.Append (", ");
-						sb.AppendFormat ("p{0}", i);
-					}
-					sb.WriteLine (");");
-					sb.WriteLine ("}");
+					GenerateCallToSuperForConstructor (sb, method, exceptions);
 					sb.WriteLine ("return rv;");
 				}
 				sb.WriteLine ("}");
 			} else {
 				sb.WriteLine (body);
 			}
+		}
+
+		void GenerateCallToSuperForConstructor (AutoIndentStringBuilder sb, ObjCMethod method, List<Exception> exceptions)
+		{
+			sb.WriteLine ("if (call_super && rv) {");
+			sb.Write ("struct objc_super super = {  rv, [").Write (method.DeclaringType.SuperType.ExportedName).WriteLine (" class] };");
+			sb.Write ("rv = ((id (*)(objc_super*, SEL");
+
+			if (method.Parameters != null) {
+				for (int i = 0; i < method.Parameters.Length; i++)
+					sb.Append (", ").Append (ToObjCParameterType (method.Parameters [i], method.DescriptiveMethodName, exceptions, method.Method));
+			}
+			if (method.IsVariadic)
+				sb.Append (", ...");
+
+			sb.Write (")) objc_msgSendSuper) (&super, @selector (");
+			sb.Write (method.Selector);
+			sb.Write (")");
+			var split = method.Selector.Split (':');
+			for (int i = 0; i < split.Length - 1; i++) {
+				sb.Append (", ");
+				sb.AppendFormat ("p{0}", i);
+			}
+			sb.WriteLine (");");
+			sb.WriteLine ("}");
 		}
 
 		public TypeDefinition GetInstantiableType (TypeDefinition td, List<Exception> exceptions, string descriptiveMethodName)

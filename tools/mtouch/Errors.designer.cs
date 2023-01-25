@@ -4274,5 +4274,14 @@ namespace Xamarin.Bundler {
                 return ResourceManager.GetString("MX8053", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t resolve metadata tokens for methods when using the managed static registrar (token: 0x{0})..
+        /// </summary>
+        public static string MX8054 {
+            get {
+                return ResourceManager.GetString("MX8054", resourceCulture);
+            }
+        }
     }
 }

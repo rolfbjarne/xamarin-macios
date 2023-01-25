@@ -2745,7 +2745,7 @@ xamarin_registrar_dlsym (void **function_pointer, const char *symbol)
 
 	NSString *msg = [NSString stringWithFormat: @"Unable to load the symbol '%s' to call managed code: %s", symbol, dlerror ()];
 	NSLog (@"%@", msg);
-	@throw [[NSException alloc] initWithName: "SymbolNotFoundException" reason: msg userInfo: NULL];
+	@throw [[NSException alloc] initWithName: @"SymbolNotFoundException" reason: msg userInfo: NULL];
 }
 
 /*

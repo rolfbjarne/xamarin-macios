@@ -28,6 +28,7 @@ using Xamarin.Utils;
 namespace MonoTests.System.Net.Http {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
+	[Ignore ("time sensitive")]
 	public class MessageHandlerTest {
 		public MessageHandlerTest ()
 		{

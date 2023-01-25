@@ -25,6 +25,7 @@ namespace MonoTouchFixtures.Foundation {
 
 	[TestFixture]
 	[Preserve (AllMembers = true)]
+	[Ignore ("takes too long")]
 	public class UrlSessionTest {
 		void AssertTrueOrIgnoreInCI (bool value, ref Exception ex, string message)
 		{

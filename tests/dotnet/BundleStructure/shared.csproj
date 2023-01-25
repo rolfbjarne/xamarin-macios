@@ -7,7 +7,7 @@
 		<ApplicationId>com.xamarin.bundlestructure</ApplicationId>
 		<ApplicationVersion>1.0</ApplicationVersion>
 
-		<AppManifestDetectionEnabled>false</AppManifestDetectionEnabled>
+		<!-- <AppManifestDetectionEnabled>false</AppManifestDetectionEnabled> -->
 
 		<RootTestsDirectory Condition="'$(RootTestsDirectory)' == ''">$(MSBuildThisFileDirectory)/../..</RootTestsDirectory>
 		<!-- disable IL stripping, because some of our assemblies aren't actually assemblies, they're just placeholder files -->

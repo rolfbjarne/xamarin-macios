@@ -459,7 +459,7 @@ namespace Registrar {
 			return "void *";
 		}
 
-		public string ToObjCType (TypeDefinition type, bool delegateToBlockType = false)
+		public string ToObjCType (TypeDefinition type, bool delegateToBlockType = false, bool cSyntaxForBlocks =false)
 		{
 			switch (type.FullName) {
 			case "System.IntPtr": return "void *";
@@ -494,7 +494,10 @@ namespace Registrar {
 
 				StringBuilder builder = new StringBuilder ();
 				builder.Append (ToObjCType (invokeMethod.ReturnType));
-				builder.Append (" (^)(");
+				builder.Append (" (^");
+				if (cSyntaxForBlocks)
+					builder.Append ("%PARAMETERNAME%");
+				builder.Append (")(");
 
 				var argumentTypes = invokeMethod.Parameters.Select (param => ToObjCType (param.ParameterType));
 				builder.Append (string.Join (", ", argumentTypes));
@@ -2000,7 +2003,7 @@ namespace Registrar {
 		}
 
 		// [Export] is not sealed anymore - so we cannot simply compare strings
-		ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
+		public static ICustomAttribute GetExportAttribute (ICustomAttributeProvider candidate)
 		{
 			if (!candidate.HasCustomAttributes)
 				return null;
@@ -2471,7 +2474,7 @@ namespace Registrar {
 			return ToObjCParameterType (type, descriptiveMethodName, exceptions, inMethod);
 		}
 
-		string ToObjCParameterType (TypeReference type, string descriptiveMethodName, List<Exception> exceptions, MemberReference inMethod, bool delegateToBlockType = false)
+		string ToObjCParameterType (TypeReference type, string descriptiveMethodName, List<Exception> exceptions, MemberReference inMethod, bool delegateToBlockType = false, bool cSyntaxForBlocks = false)
 		{
 			GenericParameter gp = type as GenericParameter;
 			if (gp != null)
@@ -2593,7 +2596,7 @@ namespace Registrar {
 					}
 					return CheckStructure (td, descriptiveMethodName, inMethod);
 				} else {
-					return ToObjCType (td, delegateToBlockType: delegateToBlockType);
+					return ToObjCType (td, delegateToBlockType: delegateToBlockType, cSyntaxForBlocks: cSyntaxForBlocks);
 				}
 			}
 		}
@@ -4147,7 +4150,10 @@ namespace Registrar {
 #if NET
 			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
 				var staticCall = false;
-				var pinvokeMethod = name;
+				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethod)) {
+					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
+					pinvokeMethod = name + "___FIXME___MANAGED_METHOD_NOT_FOUND";
+				}
 				sb.AppendLine ();
 				if (!staticCall)
 					sb.Append ("typedef ");
@@ -4159,17 +4165,24 @@ namespace Registrar {
 					sb.Append (ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method));
 
 				if (staticCall) {
-					sb.Append (name);
+					sb.Append (pinvokeMethod);
 				} else {
 					sb.Append (" (*");
-					sb.Append (name);
+					sb.Append (pinvokeMethod);
 					sb.Append ("_function)");
 				}
-				sb.Append (" (");
+				sb.Append (" (id self, SEL sel");
 				var indexOffset = method.IsCategoryInstance ? 1 : 0;
-				for (var i = indexOffset; i < num_arg; i++) { 
-					sb.Append (ToObjCParameterType (method.NativeParameters [i], method.DescriptiveMethodName, exceptions, method.Method, delegateToBlockType: true));
-					sb.AppendFormat ("p{0}", i);
+				for (var i = indexOffset; i < num_arg; i++) {
+					sb.Append (", ");
+					var parameterType = ToObjCParameterType (method.NativeParameters [i], method.DescriptiveMethodName, exceptions, method.Method, delegateToBlockType: true, cSyntaxForBlocks: true);
+					var containsBlock = parameterType.Contains ("%PARAMETERNAME%");
+					parameterType = parameterType.Replace ("%PARAMETERNAME%", $"p{i}");
+					sb.Append (parameterType);
+					if (!containsBlock) {
+						sb.Append (" ");
+						sb.AppendFormat ("p{0}", i);
+					}
 				}
 
 				if (method.IsVariadic)
@@ -4183,12 +4196,12 @@ namespace Registrar {
 					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
 					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, \"{pinvokeMethod}\");");
 				}
-				if (!isVoid)
+				if (!isVoid || isCtor)
 					sb.Write ("return ");
 				sb.Write (pinvokeMethod);
-				sb.Write (" (self, CMD, ");
+				sb.Write (" (self, _cmd");
 				for (var i = indexOffset; i < num_arg; i++) {
-					sb.AppendFormat ("p{0}", i);
+					sb.AppendFormat (", p{0}", i);
 				}
 				sb.WriteLine (");");
 				sb.WriteLine ("}");

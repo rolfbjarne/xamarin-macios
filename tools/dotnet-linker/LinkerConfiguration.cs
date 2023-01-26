@@ -56,6 +56,7 @@ namespace Xamarin.Linker {
 		string user_optimize_flags;
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
+		public Dictionary<MethodDefinition, string> UnmanagedCallersMap = new Dictionary<MethodDefinition, string> ();
 
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 

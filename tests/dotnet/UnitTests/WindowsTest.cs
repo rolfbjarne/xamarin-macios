@@ -27,6 +27,7 @@ namespace Xamarin.Tests {
 				properties ["Configuration"] = configuration;
 			properties ["IsHotRestartBuild"] = "true";
 			properties ["IsHotRestartEnvironmentReady"] = "true";
+			properties ["EnableCodeSigning"] = "false";
 			var rv = DotNet.AssertBuild (project_path, properties);
 			foreach (var entry in Directory.GetFileSystemEntries (appPath, "*", SearchOption.AllDirectories))
 				Console.WriteLine (entry);

@@ -15,7 +15,7 @@
 	<Import Project="$(MSBuildThisFileDirectory)Xamarin.Messaging.Apple.targets" Condition="Exists('$(MSBuildThisFileDirectory)Xamarin.Messaging.Apple.targets') And '$(MessagingAppleTargetsImported)' != 'true'" />
 	
 	<Target Name="_DetectHotRestartSigningIdentity" AfterTargets="_DetectAppManifest" 
-		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsHotRestartBuild)' == 'true' And '$(IsHotRestartEnvironmentReady)' == 'true'" >
+		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsHotRestartBuild)' == 'true' And '$(IsHotRestartEnvironmentReady)' == 'true' And '$(EnableCodeSigning)' != 'false'" >
 		
 		<HotRestart.Tasks.DetectSigningIdentity 
 			GenerateApplicationManifest="$(GenerateApplicationManifest)"
@@ -297,6 +297,8 @@
 
 	<PropertyGroup>
 		<_CreateHotRestartOutputBundleDependsOn>
+			_CreateHotRestartCachedBundle;
+			_CopyFrameworksToHotRestartBundle;
 			_CodesignHotRestartAppBundle;
 			_CopyFilesToHotRestartBundle;
 			_CopyFilesToHotRestartContent;
@@ -307,7 +309,7 @@
 					AfterTargets="_CodesignAppBundle" />
 	
 	<Target Name="_CodesignHotRestartAppBundle"
-		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' == 'false' And '$(IsHotRestartBuild)' == 'true'"
+		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsAppExtension)' == 'false' And '$(IsHotRestartBuild)' == 'true' And '$(EnableCodeSigning)' != 'false'"
 		DependsOnTargets="_CreateHotRestartCachedBundle;_CopyFrameworksToHotRestartBundle;_CollectCodeSignHotRestartInputs"
 		Inputs="@(_CodeSignHotRestartInputs)"
 		Outputs="@(_CodeSignHotRestartInputs -> '%(Outputs)')">

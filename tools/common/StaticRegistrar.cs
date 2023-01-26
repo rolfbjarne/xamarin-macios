@@ -33,8 +33,6 @@ using ObjCRuntime;
 using Mono.Cecil;
 using Mono.Linker;
 using Mono.Tuner;
-using System.Numerics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Registrar {
 	/*
@@ -4146,6 +4144,7 @@ namespace Registrar {
 				nslog_start.AppendLine (");");
 			}
 
+#if NET
 			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
 				var staticCall = false;
 				var pinvokeMethod = name;
@@ -4182,12 +4181,12 @@ namespace Registrar {
 				sb.WriteLine ("{");
 				if (!staticCall) {
 					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
-					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &pinvokeMethod, \"{pinvokeMethod}\"");
+					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, \"{pinvokeMethod}\");");
 				}
 				if (!isVoid)
 					sb.Write ("return ");
 				sb.Write (pinvokeMethod);
-				sb.Write (" (");
+				sb.Write (" (self, CMD, ");
 				for (var i = indexOffset; i < num_arg; i++) {
 					sb.AppendFormat ("p{0}", i);
 				}
@@ -4195,6 +4194,7 @@ namespace Registrar {
 				sb.WriteLine ("}");
 				return;
 			}
+#endif
 
 			SpecializePrepareParameters (sb, method, num_arg, descriptiveMethodName, exceptions);
 

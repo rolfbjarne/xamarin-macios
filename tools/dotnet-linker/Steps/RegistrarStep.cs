@@ -27,6 +27,7 @@ namespace Xamarin.Linker {
 				Configuration.RegistrationMethods.Add (method);
 				Configuration.CompilerFlags.AddLinkWith (Configuration.PartialStaticRegistrarLibrary);
 				break;
+			case RegistrarMode.ManagedStatic:
 			case RegistrarMode.Static:
 				var dir = Configuration.CacheDirectory;
 				var header = Path.Combine (dir, "registrar.h");

@@ -13,4 +13,4 @@ managed-static-registrar msr:
 	$(DOTNET) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:Registrar=managed-static /t:Run
 
 reload:
-	$(MAKE) -C tests/dotnet $@
+	$(MAKE) -C $(TOP)/tests/dotnet $@

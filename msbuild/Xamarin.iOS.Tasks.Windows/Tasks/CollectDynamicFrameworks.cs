@@ -46,7 +46,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 					Log.LogMessage (MessageImportance.Normal, Resources.CollectDynamicFrameworks_InvalidFramework, Path.GetFileName (framework.ItemSpec), frameworkEx.Message);
 					continue;
 				} catch (Exception ex) {
-					Log.LogErrorFromException (ex, true, true, framework);
+					Log.LogErrorFromException (ex, true, true, framework.ItemSpec);
 					continue;
 				}
 

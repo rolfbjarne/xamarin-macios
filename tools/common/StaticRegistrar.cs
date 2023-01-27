@@ -33,6 +33,7 @@ using ObjCRuntime;
 using Mono.Cecil;
 using Mono.Linker;
 using Mono.Tuner;
+using Xamarin.Tuner;
 
 namespace Registrar {
 	/*
@@ -530,6 +531,11 @@ namespace Registrar {
 
 		TypeDefinition ResolveType (TypeReference tr)
 		{
+			return ResolveType (LinkContext, tr);
+		}
+
+		public static TypeDefinition ResolveType (Xamarin.Tuner.DerivedLinkContext context, TypeReference tr)
+		{
 			// The static registrar might sometimes deal with types that have been linked away
 			// It's not always possible to call .Resolve () on types that have been linked away,
 			// it might result in a NotSupportedException, or just a null value, so here we
@@ -539,29 +545,34 @@ namespace Registrar {
 			if (tr is ArrayType arrayType) {
 				return arrayType.ElementType.Resolve ();
 			} else if (tr is GenericInstanceType git) {
-				return ResolveType (git.ElementType);
+				return ResolveType (context, git.ElementType);
 			} else {
 				var td = tr.Resolve ();
 				if (td == null)
-					td = LinkContext?.GetLinkedAwayType (tr, out _);
+					td = context?.GetLinkedAwayType (tr, out _);
 				return td;
 			}
 		}
 
 		public bool IsNativeObject (TypeReference tr)
 		{
+			return IsNativeObject (LinkContext, tr);
+		}
+
+		public static bool IsNativeObject (Xamarin.Tuner.DerivedLinkContext context, TypeReference tr)
+		{
 			var gp = tr as GenericParameter;
 			if (gp != null) {
 				if (gp.HasConstraints) {
 					foreach (var constraint in gp.Constraints) {
-						if (IsNativeObject (constraint.ConstraintType))
+						if (IsNativeObject (context, constraint.ConstraintType))
 							return true;
 					}
 				}
 				return false;
 			}
 
-			var type = ResolveType (tr);
+			var type = ResolveType (context, tr);
 
 			while (type != null) {
 				if (type.HasInterfaces) {

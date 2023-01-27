@@ -17,4 +17,4 @@ reload:
 	$(MAKE) -C $(TOP)/tests/dotnet $@
 
 diag:
-	$(DOTNET) build /v:diag *.binlog -consoleLoggerParameters:NoSummary
+	$(DOTNET) build /v:diag *.binlog "-consoleLoggerParameters:NoSummary;NoPerformanceSummary;NoItemAndPropertyList;DisableMPLogging;ForceNoAlign"

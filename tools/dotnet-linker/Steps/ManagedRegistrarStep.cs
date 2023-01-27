@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 using Xamarin.Bundler;
 using Xamarin.Utils;
@@ -10,8 +11,8 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Linker;
 using Mono.Tuner;
-using System.Runtime.InteropServices;
 
+using Registrar;
 
 #nullable enable
 
@@ -28,110 +29,176 @@ namespace Xamarin.Linker {
 		AssemblyDefinition? corlib_assembly;
 		AssemblyDefinition? platform_assembly;
 
+		AssemblyDefinition CurrentAssembly {
+			get {
+				if (current_assembly is null)
+					throw new InvalidOperationException ($"No current assembly!");
+				return current_assembly;
+			}
+		}
+
+		AssemblyDefinition CorlibAssembly {
+			get {
+				if (corlib_assembly is null)
+					throw new InvalidOperationException ($"No corlib assembly!");
+				return corlib_assembly;
+			}
+		}
+
+		AssemblyDefinition PlatformAssembly {
+			get {
+				if (platform_assembly is null)
+					throw new InvalidOperationException ($"No platform assembly!");
+				return platform_assembly;
+			}
+		}
+
+		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> ();
+		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new Dictionary<string, (MethodDefinition, MethodReference)> ();
+
 		// FIXME: mark the types and methods we use
-		TypeReference? system_intptr;
+		TypeReference GetTypeReference (AssemblyDefinition assembly, string fullname, out TypeDefinition type)
+		{
+			if (!type_map.TryGetValue (assembly, out var map))
+				type_map.Add (assembly, map = new Dictionary<string, (TypeDefinition, TypeReference)> ());
+
+			if (!map.TryGetValue (fullname, out var tuple)) {
+				var td = assembly.MainModule.Types.SingleOrDefault (v => v.FullName == fullname);
+				if (td is null)
+					throw new InvalidOperationException ($"Unable to find the type '{fullname}' in {assembly.Name.Name}");
+				var tr = CurrentAssembly.MainModule.ImportReference (td);
+				map [fullname] = tuple = new (td, tr);
+			}
+
+			type = tuple.Item1;
+			return tuple.Item2;
+		}
+
+		// FIXME: mark the types and methods we use
+		MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name)
+		{
+			GetTypeReference (assembly, fullname, out var td);
+			return GetMethodReference (assembly, td, name, fullname + "::" + name, null, out var _);
+		}
+
+		MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name, Func<MethodDefinition, bool>? predicate)
+		{
+			GetTypeReference (assembly, fullname, out var td);
+			return GetMethodReference (assembly, td, name, fullname + "::" + name, predicate, out var _);
+		}
+
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name)
+		{
+			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, null, out var _);
+		}
+
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate)
+		{
+			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _);
+		}
+
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, out MethodDefinition method)
+		{
+			if (!method_map.TryGetValue (key, out var tuple)) {
+				var td = tr.Resolve ();
+				var md = td.Methods.SingleOrDefault (v => v.Name == name && (predicate is null || predicate (v)));
+				if (md is null)
+					throw new InvalidOperationException ($"Unable to find the method '{tr.FullName}::{name}' (for key '{key}') in {assembly.Name.Name}");
+
+				tuple.Item1 = md;
+				tuple.Item2 = CurrentAssembly.MainModule.ImportReference (md);
+				method_map.Add (key, tuple);
+			}
+
+			method = tuple.Item1;
+			return tuple.Item2;
+		}
+
 		TypeReference System_IntPtr {
 			get {
-				if (system_intptr is null) {
-					if (corlib_assembly is null)
-						throw new NotImplementedException ();
-					system_intptr = corlib_assembly.MainModule.Types.SingleOrDefault (v => v.Is ("System", "IntPtr"));
-					if (system_intptr is null)
-						throw new NotImplementedException ("System.IntPtr not found.");
-					system_intptr = current_assembly!.MainModule.ImportReference (system_intptr);
-				}
-				return system_intptr;
+				return GetTypeReference (CorlibAssembly, "System.IntPtr", out var _);
 			}
 		}
 
-		TypeReference? system_string;
 		TypeReference System_String {
 			get {
-				if (system_string is null) {
-					if (corlib_assembly is null)
-						throw new NotImplementedException ();
-					system_string = corlib_assembly.MainModule.Types.SingleOrDefault (v => v.Is ("System", "String"));
-					if (system_string is null)
-						throw new NotImplementedException ("System.String not found.");
-					system_string = current_assembly!.MainModule.ImportReference (system_string);
-				}
-				return system_string;
+				return GetTypeReference (CorlibAssembly, "System.String", out var _);
 			}
 		}
 
-		TypeDefinition? objcruntime_runtime;
-		TypeDefinition ObjCRuntime_Runtime {
+		TypeReference ObjCRuntime_Runtime {
 			get {
-				if (objcruntime_runtime is null) {
-					if (platform_assembly is null)
-						throw new NotImplementedException ();
-					objcruntime_runtime = platform_assembly.MainModule.Types.SingleOrDefault (v => v.Is ("ObjCRuntime", "Runtime"));
-					if (objcruntime_runtime is null)
-						throw new NotImplementedException ("ObjCRuntime.Runtime not found.");
-				}
-				return objcruntime_runtime;
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.Runtime", out var _);
 			}
 		}
 
-		TypeDefinition? objcruntime_nativeobjectextensions;
-		TypeDefinition ObjCRuntime_NativeObjectExtensions {
+		TypeReference ObjCRuntime_NativeHandle {
 			get {
-				if (objcruntime_nativeobjectextensions is null) {
-					if (platform_assembly is null)
-						throw new NotImplementedException ();
-					objcruntime_nativeobjectextensions = platform_assembly.MainModule.Types.SingleOrDefault (v => v.Is ("ObjCRuntime", "NativeObjectExtensions"));
-					if (objcruntime_nativeobjectextensions is null)
-						throw new NotImplementedException ("ObjCRuntime.NativeObjectExtensions not found.");
-				}
-				return objcruntime_nativeobjectextensions;
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeHandle", out var _);
 			}
 		}
 
-		MethodReference? runtime_getnsobject;
+		TypeReference ObjCRuntime_NativeObjectExtensions {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
+			}
+		}
+
 		MethodReference Runtime_GetNSObject {
 			get {
-				if (runtime_getnsobject is null) {
-					if (platform_assembly is null)
-						throw new NotImplementedException ();
-					runtime_getnsobject = ObjCRuntime_Runtime.Methods.SingleOrDefault (v => v.Name == "GetNSObject");
-					if (runtime_getnsobject is null)
-						throw new NotImplementedException ("ObjCRuntime.Runtime::GetNSObject not found.");
-					runtime_getnsobject = current_assembly!.MainModule.ImportReference (runtime_getnsobject);
-				}
-				return runtime_getnsobject;
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", (v) => 
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters);
 			}
 		}
 
-		MethodReference? nativeobjectextensions_gethandle;
+		MethodReference CFString_FromHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFString", "FromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference CFString_CreateNative {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFString", "CreateNative", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
+
 		MethodReference NativeObjectExtensions_GetHandle {
 			get {
-				if (nativeobjectextensions_gethandle is null) {
-					if (platform_assembly is null)
-						throw new NotImplementedException ();
-					nativeobjectextensions_gethandle = ObjCRuntime_NativeObjectExtensions.Methods.SingleOrDefault (v => v.Name == "GetHandle");
-					if (nativeobjectextensions_gethandle is null)
-						throw new NotImplementedException ("ObjCRuntime.NativeObjectExtensions::GetHandle not found.");
-					nativeobjectextensions_gethandle = current_assembly!.MainModule.ImportReference (nativeobjectextensions_gethandle);
-				}
-				return nativeobjectextensions_gethandle;
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_NativeObjectExtensions, "GetHandle");
 			}
 		}
 
-		MethodReference? unmanagedcallersonlyattribute_ctor;
 		MethodReference UnmanagedCallersOnlyAttribute_Constructor {
 			get {
-				if (unmanagedcallersonlyattribute_ctor is null) {
-					if (corlib_assembly is null)
-						throw new NotImplementedException ();
-					var td = corlib_assembly.MainModule.Types.SingleOrDefault (v => v.Is ("System.Runtime.InteropServices", "UnmanagedCallersOnlyAttribute"));
-					if (td is null)
-						throw new NotImplementedException ("System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute not found.");
-					unmanagedcallersonlyattribute_ctor = td.Methods.SingleOrDefault (v => v.IsDefaultConstructor ());
-					if (unmanagedcallersonlyattribute_ctor is null)
-						throw new NotImplementedException ("ObjCRuntime.NativeObjectExtensions::GetHandle not found.");
-					unmanagedcallersonlyattribute_ctor = current_assembly!.MainModule.ImportReference (unmanagedcallersonlyattribute_ctor);
-				}
-				return unmanagedcallersonlyattribute_ctor;
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute", "GetHandle", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		MethodReference Unsafe_AsRef {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) => 
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.IsPointer
+						&& v.Parameters [0].ParameterType.GetElementType ().Is ("System", "Void")
+						&& v.HasGenericParameters
+						);
 			}
 		}
 
@@ -197,10 +264,8 @@ namespace Xamarin.Linker {
 					Context.Annotations.SetAction (assembly, AssemblyAction.Save);
 			}
 
-			system_intptr = null;
-			system_string = null;
-			runtime_getnsobject = null;
-			nativeobjectextensions_gethandle = null;
+			type_map.Clear ();
+			method_map.Clear ();
 			current_assembly = null;
 		}
 
@@ -212,11 +277,11 @@ namespace Xamarin.Linker {
 					modified |= ProcessType (nested);
 			}
 
-			if (!type.IsNSObject (Configuration.DerivedLinkContext))
+			if (!IsNSObject (type))
 				return modified;
 
 			if (type.HasMethods) {
-				foreach (var method in type.Methods)
+				foreach (var method in type.Methods.ToArray ())
 					modified |= ProcessMethod (method);
 			}
 
@@ -243,21 +308,21 @@ namespace Xamarin.Linker {
 			Configuration.UnmanagedCallersMap.Add (method, name);
 
 			var callback = new MethodDefinition (name, MethodAttributes.Private | MethodAttributes.Static, GetNativeType (method, method.ReturnType));
-			callback.Parameters.Add (new ParameterDefinition ("pobj", ParameterAttributes.None, system_intptr));
-			callback.Parameters.Add (new ParameterDefinition ("sel", ParameterAttributes.None, system_intptr));
+			callback.Parameters.Add (new ParameterDefinition ("pobj", ParameterAttributes.None, System_IntPtr));
+			callback.Parameters.Add (new ParameterDefinition ("sel", ParameterAttributes.None, System_IntPtr));
 			if (method.HasParameters) {
 				for (var i = 0; i < method.Parameters.Count; i++) {
 					callback.Parameters.Add (new ParameterDefinition ($"p{i}", ParameterAttributes.None, GetNativeType (method, method.Parameters [i].ParameterType)));
 				}
 			}
-			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
+			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute2 (name));
 			callback.Body = new MethodBody (callback);
 
 			var il = callback.Body.GetILProcessor ();
 
 			if (!method.IsStatic) {
 				il.Emit (OpCodes.Ldarg_0);
-				il.Emit (OpCodes.Call, GetConversionFunction (method, System_IntPtr, method.DeclaringType, true));
+				il.Emit (OpCodes.Call, GetConversionFunction (method, method.DeclaringType, true));
 			}
 
 			if (method.HasParameters) {
@@ -273,7 +338,7 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Ldarg, p + 2);
 						break;
 					}
-					var conversion = GetConversionFunction (method, null!, method.Parameters [p].ParameterType, true);
+					var conversion = GetConversionFunction (method, method.Parameters [p].ParameterType, true);
 					if (conversion is not null)
 						il.Emit (OpCodes.Call, conversion);
 				}
@@ -282,7 +347,7 @@ namespace Xamarin.Linker {
 			il.Emit (OpCodes.Call, method);
 
 			if (!method.ReturnType.Is ("System", "Void")) {
-				var conversion = GetConversionFunction (method, null!, method.ReturnType, false);
+				var conversion = GetConversionFunction (method, method.ReturnType, false);
 				if (conversion is not null)
 					il.Emit (OpCodes.Call, conversion);
 			} else if (method.IsConstructor) {
@@ -297,7 +362,7 @@ namespace Xamarin.Linker {
 
 		static string GetMethodSignature (MethodDefinition method)
 		{
-			return $"{method.ReturnType.DeclaringType.FullName} {method.DeclaringType.FullName}::{method.Name} ({string.Join (", ", method.Parameters.Select (v => v.ParameterType.DeclaringType + "." + v.ParameterType.Name + " " + v.Name))})";
+			return $"{method?.ReturnType.DeclaringType?.FullName} {method?.DeclaringType?.FullName}::{method?.Name} ({string.Join (", ", method?.Parameters?.Select (v => v?.ParameterType?.FullName + " " + v?.Name))})";
 		}
 
 		static void Dump (MethodDefinition method, MethodDefinition trampoline)
@@ -309,35 +374,100 @@ namespace Xamarin.Linker {
 				log ($"IL_{instr.Offset:X4}: {instr.ToString ()}");
 		}
 
+		bool IsNSObject (TypeReference type)
+		{
+			if (type is ArrayType)
+				return false;
+
+			if (type is ByReferenceType)
+				return false;
+
+			if (type is PointerType)
+				return false;
+
+			if (type is GenericParameter)
+				return false;
+
+			return type.IsNSObject (DerivedLinkContext);
+		}
+
+		// This gets the type to use as return type / parameter types in the UnmanagedCallersOnly function
+		// These must all be blittable types.
+		// The implementation of this method mirrors the GetConversionFunction implementation.
 		TypeReference GetNativeType (MethodDefinition method, TypeReference type)
 		{
+			// no conversion necessary if we're a value type
 			if (type.IsValueType)
 				return type;
 
-			if (type.IsNSObject (DerivedLinkContext))
+			// reference types aren't blittable, so the managed signature must have be a pointer type
+			if (type is ByReferenceType brt)
+				return new PointerType (brt.GetElementType ());
+
+			if (type.Is ("System", "Void"))
+				return type;
+
+			if (IsNSObject (type))
+				return ObjCRuntime_NativeHandle;
+
+			if (Registrar.StaticRegistrar.IsNativeObject (DerivedLinkContext, type))
+				return ObjCRuntime_NativeHandle;
+
+			if (type.Is ("System", "String"))
+				return ObjCRuntime_NativeHandle;
+
+			if (StaticRegistrar.IsDelegate (type.Resolve ()))
 				return System_IntPtr;
 
 			AddException (ErrorHelper.CreateError (99, "Don't know how the native equivalent of {0}.", type.FullName));
 			return System_IntPtr;
 		}
 
-		MethodReference? GetConversionFunction (MethodDefinition method, TypeReference nativeType, TypeReference managedType, bool toManaged)
+		// This gets a conversion function to convert between the native and the managed representation of a parameter
+		// or return value.
+		// The implementation of this method mirrors the GetNativeType implementation.
+		MethodReference? GetConversionFunction (MethodDefinition method, TypeReference type, bool toManaged)
 		{
 			// no conversion necessary if we're a value type
-			if (managedType.IsValueType)
+			if (type.IsValueType)
 				return null;
 
-			if (managedType.IsNSObject (DerivedLinkContext))
+			// call !!0& [System.Runtime]System.Runtime.CompilerServices.Unsafe::AsRef<int32>(void*)
+			if (type is ByReferenceType brt) {
+				if (toManaged) {
+					var mr = new GenericInstanceMethod (CurrentAssembly.MainModule.ImportReference (Unsafe_AsRef));
+					mr.GenericArguments.Add (brt.GetElementType ());
+					return mr;
+				}
+				AddException (ErrorHelper.CreateError (99, "Don't know how (2) to convert {0} between managed and native code.", type.FullName));
+				return null;
+			}
+
+			if (type.Is ("System", "Void"))
+				throw new InvalidOperationException ($"Can't convert System.Void!");
+
+			if (IsNSObject (type))
 				return toManaged ? Runtime_GetNSObject : NativeObjectExtensions_GetHandle;
 
-			AddException (ErrorHelper.CreateError (99, "Don't know how to convert from {0} to {1}.", nativeType.FullName, managedType.FullName));
+			if (Registrar.StaticRegistrar.IsNativeObject (DerivedLinkContext, type))
+				return toManaged ? Runtime_GetNSObject : NativeObjectExtensions_GetHandle;
+
+			if (type.Is ("System", "String"))
+				return toManaged ? CFString_FromHandle : CFString_CreateNative;
+
+			if (StaticRegistrar.IsDelegate (type.Resolve ())) {
+				AddException (ErrorHelper.CreateError (99, "Don't know how to convert blocks/delegates yet - of type {0}.", type.FullName));
+				return null;
+			}
+
+			AddException (ErrorHelper.CreateError (99, "Don't know how (1) to convert {0} between managed and native code.", type.FullName));
 			return null;
 		}
 
-		CustomAttribute CreateUnmanagedCallersAttribute (string entryPoint)
+		CustomAttribute CreateUnmanagedCallersAttribute2 (string entryPoint)
 		{
 			var unmanagedCallersAttribute = new CustomAttribute (UnmanagedCallersOnlyAttribute_Constructor);
-			unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("EntryPoint", new CustomAttributeArgument (system_string, entryPoint)));
+			unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("EntryPoint", new CustomAttributeArgument (System_String, entryPoint)));
 			return unmanagedCallersAttribute;
 		}
 	}

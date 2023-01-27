@@ -93,7 +93,7 @@ namespace Xamarin.Tests {
 
 			if (!string.IsNullOrEmpty (language)) {
 				args.Add ("--language");
-				args.Add (language);
+				args.Add (language!);
 			}
 
 			var env = new Dictionary<string, string?> ();

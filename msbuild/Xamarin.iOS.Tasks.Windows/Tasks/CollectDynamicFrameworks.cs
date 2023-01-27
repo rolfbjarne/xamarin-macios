@@ -40,13 +40,14 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				try {
 					var frameworkPath = Path.Combine (framework.ItemSpec, Path.GetFileNameWithoutExtension (frameworkDirName));
 
+					Log.LogMessage (MessageImportance.Low, $"Loading: {frameworkPath}");
 					hotRestartClient.LoadDynamicFramework (frameworkPath);
 				} catch (AppleInvalidFrameworkException frameworkEx) {
 					Log.LogMessage (MessageImportance.Normal, Resources.CollectDynamicFrameworks_InvalidFramework, Path.GetFileName (framework.ItemSpec), frameworkEx.Message);
 					continue;
 				} catch (Exception ex) {
-					Log.LogErrorFromException (ex);
-					break;
+					Log.LogErrorFromException (ex, true, true, framework);
+					continue;
 				}
 
 				framework.SetMetadata ("FrameworkDir", $@"{frameworkDirName}\");

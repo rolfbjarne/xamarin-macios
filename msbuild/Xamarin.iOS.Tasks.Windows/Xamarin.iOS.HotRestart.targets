@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">	
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.CollectHotRestartFrameworks" AssemblyFile="Xamarin.iOS.Tasks.dll" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileEntitlements" AssemblyFile="Xamarin.iOS.Tasks.dll" />
 	<UsingTask TaskName="Xamarin.iOS.Tasks.UnpackLibraryResources" AssemblyFile="Xamarin.iOS.Tasks.dll" />
 	<UsingTask TaskName="Xamarin.iOS.HotRestart.Tasks.Codesign" AssemblyFile="Xamarin.iOS.Tasks.Windows.dll" />
@@ -96,13 +97,18 @@
 		</Touch>
 	</Target>
 
-	<Target Name="_CollectHotRestartFrameworks" >
-		<ItemGroup>
-			<_HotRestartFrameworks Include="@(None -> '%(RootDir)%(Directory)')" Condition="$([System.String]::new('%(Directory)').EndsWith('.framework\'))" KeepDuplicates="false" />
-			<_HotRestartFrameworks Include="@(_UnpackedFramework);@(NativeReference)" KeepDuplicates="false" />
-			<_HotRestartFrameworkExecutables Include="@(_HotRestartFrameworks -> '%(FullPath)\%(Filename)')" 
-																	Outputs="$(DeviceSpecificIntermediateOutputPath)DynamicFrameworks\%(Filename)%(Extension).stamp" KeepDuplicates="false" />
-		</ItemGroup>
+	<Target Name="_CollectHotRestartFrameworks" DependsOnTargets="_ComputeTargetArchitectures">
+		<CollectHotRestartFrameworks
+			Architectures="$(TargetArchitectures)"
+			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
+			NativeReference="@(NativeReference)"
+			None="@(None)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			UnpackedFramework="@(_UnpackedFramework)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
+			<Output TaskParameter="HotRestartFrameworks" ItemName="_HotRestartFrameworks" />
+		</CollectHotRestartFrameworks>
 	</Target>
 
 	<PropertyGroup>
@@ -115,8 +121,8 @@
 	
 	<Target Name="_CollectHotRestartDynamicFrameworks" DependsOnTargets="$(_CollectHotRestartDynamicFrameworksDependsOn)"
 		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsHotRestartBuild)' == 'true'"
-		Inputs="@(_HotRestartFrameworkExecutables)"
-		Outputs="@(_HotRestartFrameworkExecutables -> '%(Outputs)')" >
+		Inputs="@(_HotRestartFrameworks -> '%(FrameworkExecutable)')"
+		Outputs="@(_HotRestartFrameworks -> '%(Outputs)')" >
 
 		<CollectDynamicFrameworks
 			Frameworks="@(_HotRestartFrameworks)" >

@@ -110,6 +110,7 @@
 			_CollectHotRestartFrameworkAssemblies;
 			_UnpackHotRestartFrameworkAssemblies;
 			_CollectHotRestartFrameworks;
+			_ComputeTargetArchitectures;
 		</_CollectHotRestartDynamicFrameworksDependsOn>
 	</PropertyGroup>
 	
@@ -119,7 +120,11 @@
 		Outputs="@(_HotRestartFrameworkExecutables -> '%(Outputs)')" >
 
 		<CollectDynamicFrameworks
-			Frameworks="@(_HotRestartFrameworks)" >
+			Architectures="$(TargetArchitectures)"
+			Frameworks="@(_HotRestartFrameworks)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
 
 			<Output TaskParameter="DynamicFrameworks" ItemName="_DynamicFrameworks" />
 		</CollectDynamicFrameworks>

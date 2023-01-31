@@ -22,7 +22,7 @@ namespace Cecil.Tests {
 			public OSPlatformAttributes [] Obsoleted;
 			public OSPlatformAttributes [] Supported;
 			public List<string>? FailureLines;
-			public FailureData (string key, ICustomAttributeProvider api, OSPlatformAttributes[] obsoleted, OSPlatformAttributes[] supported)
+			public FailureData (string key, ICustomAttributeProvider api, OSPlatformAttributes [] obsoleted, OSPlatformAttributes [] supported)
 			{
 				Key = key;
 				Api = api;

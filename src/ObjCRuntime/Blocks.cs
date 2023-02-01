@@ -456,6 +456,35 @@ namespace ObjCRuntime {
 		}
 #endif // NET
 
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		public static IntPtr CreateBlockForDelegate (Delegate @delegate, Delegate delegateProxyFieldValue, string /*?*/ signature)
+		{
+			if (@delegate is null)
+				ObjCRuntime.ThrowArgumentNullException (nameof (@delegate));
+
+			if (delegateProxyFieldValue is null)
+				ObjCRuntime.ThrowArgumentNullException (nameof (delegateProxyFieldValue));
+
+			// Note that we must create a heap-allocated block, so we
+			// start off by creating a stack-allocated block, and then
+			// call _Block_copy, which will create a heap-allocated block
+			// with the proper reference count.
+			BlockLiteral block = new BlockLiteral ();
+			if (signature is null) {
+				if (Runtime.DynamicRegistrationSupported) {
+					block.SetupBlock (delegateProxyFieldValue, @delegate);
+				} else {
+					throw ErrorHelper.CreateError (8026, $"BlockLiteral.GetBlockForDelegate with a null signature is not supported when the dynamic registrar has been linked away (delegate type: {@delegate.GetType ().FullName}).");
+				}
+			} else {
+				block.SetupBlockImpl (delegateProxyFieldValue, @delegate, true, signature);
+			}
+			var rv = _Block_copy (ref block);
+			block.CleanupBlock ();
+			return rv;
+		}
+
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		internal static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate, uint token_ref, string signature)
 		{

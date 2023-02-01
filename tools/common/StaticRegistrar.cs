@@ -4514,6 +4514,11 @@ namespace Registrar {
 			return null;
 		}
 
+		//
+		// Returns a MethodInfo that represents the method that can be used to turn
+		// a the block in the given method at the given parameter into a strongly typed
+		// delegate
+		//
 		MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
 		{
 			// A mirror of this method is also implemented in Runtime:GetBlockWrapperCreator

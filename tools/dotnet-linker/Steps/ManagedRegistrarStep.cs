@@ -380,7 +380,7 @@ namespace Xamarin.Linker {
 
 			if (!method.IsStatic) {
 				il.Emit (OpCodes.Ldarg_0);
-				EmitConversion (method, il, method.DeclaringType, true);
+				EmitConversion (method, il, method.DeclaringType, true, -1);
 			}
 
 			if (method.HasParameters) {
@@ -396,14 +396,14 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Ldarg, p + 2);
 						break;
 					}
-					EmitConversion (method, il, method.Parameters [p].ParameterType, true);
+					EmitConversion (method, il, method.Parameters [p].ParameterType, true, p);
 				}
 			}
 
 			il.Emit (OpCodes.Call, method);
 
 			if (!method.ReturnType.Is ("System", "Void")) {
-				EmitConversion (method, il, method.ReturnType, false);
+				EmitConversion (method, il, method.ReturnType, false, -1);
 			} else if (method.IsConstructor) {
 				il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 			}
@@ -489,7 +489,7 @@ namespace Xamarin.Linker {
 		// This gets a conversion function to convert between the native and the managed representation of a parameter
 		// or return value.
 		// The implementation of this method mirrors the GetNativeType implementation.
-		void EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged )
+		void EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter)
 		{
 			// no conversion necessary if we're a value type
 			if (type.IsValueType)
@@ -538,15 +538,29 @@ namespace Xamarin.Linker {
 
 			if (StaticRegistrar.IsDelegate (type.Resolve ())) {
 				if (toManaged) {
-					MethodReference createMethod = DerivedLinkContext.StaticRegistrar.GetBlockWrapperCreator (DerivedLinkContext, method, null, -1, null, null); // FIXME
-					// BlockLiteral.Copy
+					MethodReference createMethod = DerivedLinkContext.StaticRegistrar.GetBlockWrapperCreator (null /* FIXME */, parameter);
 					il.Emit (OpCodes.Call, BlockLiteral_Copy);
 					il.Emit (OpCodes.Dup);
 					il.Emit (OpCodes.Call, createMethod);
 					il.Emit (OpCodes.Call, BlockLiteral_ReleaseBlockWhenDelegateIsCollected);
 				} else {
-					il.Emit (OpCodes.Ldnull); // FIXME delegateProxyFieldValue
-					il.Emit (OpCodes.Ldstr, "FIXME");
+					if (!DerivedLinkContext.StaticRegistrar.TryComputeBlockSignature (method, trampolineDelegateType: type, out var exception, out var signature)) {
+						AddException (ErrorHelper.CreateError (99, "Error while converting block/delegates: FIXME better error: {0}", exception.ToString ()));
+						return;
+					}
+					var delegateProxyType = StaticRegistrar.GetDelegateProxyType (method);
+					if (delegateProxyType is null) {
+						AddException (ErrorHelper.CreateError (99, "No delegate proxy type for {0}", method.FullName));
+						return;
+					}
+					var delegateProxyField = delegateProxyType.Fields.SingleOrDefault (v => v.Name == "Handler");
+					if (delegateProxyField is null) {
+						AddException (ErrorHelper.CreateError (99, "No delegate proxy field on {0}", delegateProxyType.FullName));
+						return;
+					}
+					// the delegate is already on the stack
+					il.Emit (OpCodes.Ldsfld, delegateProxyField);
+					il.Emit (OpCodes.Ldstr, signature);
 					il.Emit (OpCodes.Call, BlockLiteral_CreateBlockForDelegate);
 				}
 				AddException (ErrorHelper.CreateError (99, "Don't know how to convert blocks/delegates yet - of type {0}.", type.FullName));
@@ -554,6 +568,10 @@ namespace Xamarin.Linker {
 			}
 
 			AddException (ErrorHelper.CreateError (99, "Don't know how (1) to convert {0} between managed and native code.", type.FullName));
+		}
+
+		StaticRegistrar StaticRegistrar {
+			get { return DerivedLinkContext.StaticRegistrar; }
 		}
 
 		CustomAttribute CreateUnmanagedCallersAttribute2 (string entryPoint)

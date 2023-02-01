@@ -4457,7 +4457,7 @@ namespace Registrar {
 			}
 		}
 
-		TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)
+		public TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)
 		{
 			// A mirror of this method is also implemented in BlockLiteral:GetDelegateProxyType
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
@@ -4509,7 +4509,7 @@ namespace Registrar {
 		// a the block in the given method at the given parameter into a strongly typed
 		// delegate
 		//
-		MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
+		public MethodDefinition GetBlockWrapperCreator (ObjCMethod obj_method, int parameter)
 		{
 			// A mirror of this method is also implemented in Runtime:GetBlockWrapperCreator
 			// If this method is changed, that method will probably have to be updated too (tests!!!)

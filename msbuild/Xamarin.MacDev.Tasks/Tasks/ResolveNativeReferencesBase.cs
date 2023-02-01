@@ -10,7 +10,6 @@ using Xamarin;
 using Xamarin.MacDev;
 using Xamarin.MacDev.Tasks;
 using Xamarin.Localization.MSBuild;
-using Xamarin.Utils;
 
 #nullable enable
 
@@ -194,50 +193,40 @@ namespace Xamarin.MacDev.Tasks {
 
 		protected string? ResolveXCFramework (string xcframework)
 		{
-			return ResolveXCFramework (Log, Platform, SdkIsSimulator, TargetFrameworkMoniker, Architectures, xcframework);
-		}
-
-		public static string? ResolveXCFramework (TaskLoggingHelper log, bool isSimulator, string targetFrameworkMoniker, string? architectures, string xcframework)
-		{
-			return ResolveXCFramework (log, PlatformFrameworkHelper.GetFramework (targetFrameworkMoniker), isSimulator, targetFrameworkMoniker, architectures, xcframework);
-		}
-
-		public static string? ResolveXCFramework (TaskLoggingHelper log, ApplePlatform Platform, bool isSimulator, string targetFrameworkMoniker, string? architectures, string xcframework)
-		{
 			string platformName;
 
 			switch (Platform) {
-			case ApplePlatform.MacCatalyst:
+			case Utils.ApplePlatform.MacCatalyst:
 				platformName = "ios";
 				break;
-			case ApplePlatform.MacOSX:
+			case Utils.ApplePlatform.MacOSX:
 				// PlatformFrameworkHelper.GetOperatingSystem returns "osx" which does not work for xcframework
 				platformName = "macos";
 				break;
 			default:
-				platformName = PlatformFrameworkHelper.GetOperatingSystem (targetFrameworkMoniker);
+				platformName = PlatformFrameworkHelper.GetOperatingSystem (TargetFrameworkMoniker);
 				break;
 			}
 
 			string? variant = null;
-			if (Platform == ApplePlatform.MacCatalyst) {
+			if (Platform == Utils.ApplePlatform.MacCatalyst) {
 				variant = "maccatalyst";
-			} else if (isSimulator) {
+			} else if (SdkIsSimulator) {
 				variant = "simulator";
 			}
 
 			try {
 				var plist = PDictionary.FromFile (Path.Combine (xcframework, "Info.plist"))!;
-				var path = ResolveXCFramework (plist, platformName, variant, architectures!);
+				var path = ResolveXCFramework (plist, platformName, variant, Architectures!);
 				if (!String.IsNullOrEmpty (path))
 					return Path.Combine (xcframework, path);
 
 				// either the format was incorrect or we could not find a matching framework
 				// note: last part is not translated since it match the (non-translated) keys inside the `Info.plist`
-				var msg = (path == null) ? MSBStrings.E0174 : MSBStrings.E0175 + $" SupportedPlatform: '{platformName}', SupportedPlatformVariant: '{variant}', SupportedArchitectures: '{architectures}'.";
-				log.LogError (msg, xcframework);
+				var msg = (path == null) ? MSBStrings.E0174 : MSBStrings.E0175 + $" SupportedPlatform: '{platformName}', SupportedPlatformVariant: '{variant}', SupportedArchitectures: '{Architectures}'.";
+				Log.LogError (msg, xcframework);
 			} catch (Exception) {
-				log.LogError (MSBStrings.E0174, xcframework);
+				Log.LogError (MSBStrings.E0174, xcframework);
 			}
 			return null;
 		}

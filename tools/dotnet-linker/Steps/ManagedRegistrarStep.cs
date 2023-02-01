@@ -146,11 +146,47 @@ namespace Xamarin.Linker {
 
 		MethodReference Runtime_GetNSObject {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference BlockLiteral_CreateBlockForDelegate {
+			get {
+				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", "CreateBlockForDelegate", (v) => 
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "Delegate")
+						&& v.Parameters [1].ParameterType.Is ("System", "Delegate")
+						&& v.Parameters [2].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference BlockLiteral_Copy {
+			get {
+				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", "Copy", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference BlockLiteral_ReleaseBlockWhenDelegateIsCollected {
+			get {
+				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", "ReleaseBlockWhenDelegateIsCollected", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("System", "Delegate")
 						&& !v.HasGenericParameters);
 			}
 		}
@@ -177,6 +213,28 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		MethodReference CFArray_StringArrayFromHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFArray", "StringArrayFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference CFArray_Create {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFArray", "Create", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType is ArrayType at
+						&& at.GetElementType ().Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
 		MethodReference NativeObjectExtensions_GetHandle {
 			get {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_NativeObjectExtensions, "GetHandle");
@@ -185,7 +243,7 @@ namespace Xamarin.Linker {
 
 		MethodReference UnmanagedCallersOnlyAttribute_Constructor {
 			get {
-				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute", "GetHandle", (v) => v.IsDefaultConstructor ());
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute", ".ctor", (v) => v.IsDefaultConstructor ());
 			}
 		}
 
@@ -322,7 +380,7 @@ namespace Xamarin.Linker {
 
 			if (!method.IsStatic) {
 				il.Emit (OpCodes.Ldarg_0);
-				il.Emit (OpCodes.Call, GetConversionFunction (method, method.DeclaringType, true));
+				EmitConversion (method, il, method.DeclaringType, true);
 			}
 
 			if (method.HasParameters) {
@@ -338,18 +396,14 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Ldarg, p + 2);
 						break;
 					}
-					var conversion = GetConversionFunction (method, method.Parameters [p].ParameterType, true);
-					if (conversion is not null)
-						il.Emit (OpCodes.Call, conversion);
+					EmitConversion (method, il, method.Parameters [p].ParameterType, true);
 				}
 			}
 
 			il.Emit (OpCodes.Call, method);
 
 			if (!method.ReturnType.Is ("System", "Void")) {
-				var conversion = GetConversionFunction (method, method.ReturnType, false);
-				if (conversion is not null)
-					il.Emit (OpCodes.Call, conversion);
+				EmitConversion (method, il, method.ReturnType, false);
 			} else if (method.IsConstructor) {
 				il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 			}
@@ -404,6 +458,15 @@ namespace Xamarin.Linker {
 			if (type is ByReferenceType brt)
 				return new PointerType (brt.GetElementType ());
 
+			if (type is ArrayType at) {
+				var elementType = at.GetElementType ();
+				if (elementType.Is ("System", "String"))
+					return ObjCRuntime_NativeHandle;
+
+				AddException (ErrorHelper.CreateError (99, "Don't know how the native equivalent of the array type {0}.", type.FullName));
+				return System_IntPtr;
+			}
+
 			if (type.Is ("System", "Void"))
 				return type;
 
@@ -419,49 +482,78 @@ namespace Xamarin.Linker {
 			if (StaticRegistrar.IsDelegate (type.Resolve ()))
 				return System_IntPtr;
 
-			AddException (ErrorHelper.CreateError (99, "Don't know how the native equivalent of {0}.", type.FullName));
+			AddException (ErrorHelper.CreateError (99, "Don't know the native equivalent of {0}.", type.FullName));
 			return System_IntPtr;
 		}
 
 		// This gets a conversion function to convert between the native and the managed representation of a parameter
 		// or return value.
 		// The implementation of this method mirrors the GetNativeType implementation.
-		MethodReference? GetConversionFunction (MethodDefinition method, TypeReference type, bool toManaged)
+		void EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged )
 		{
 			// no conversion necessary if we're a value type
 			if (type.IsValueType)
-				return null;
+				return;
 
 			// call !!0& [System.Runtime]System.Runtime.CompilerServices.Unsafe::AsRef<int32>(void*)
 			if (type is ByReferenceType brt) {
 				if (toManaged) {
 					var mr = new GenericInstanceMethod (CurrentAssembly.MainModule.ImportReference (Unsafe_AsRef));
 					mr.GenericArguments.Add (brt.GetElementType ());
-					return mr;
+					il.Emit (OpCodes.Call, mr);
+					return;
 				}
 				AddException (ErrorHelper.CreateError (99, "Don't know how (2) to convert {0} between managed and native code.", type.FullName));
-				return null;
+				return;
+			}
+
+			if (type is ArrayType at) {
+				var elementType = at.GetElementType ();
+				if (elementType.Is ("System", "String")) {
+					il.Emit (OpCodes.Call, toManaged ? CFArray_StringArrayFromHandle : CFArray_Create);
+					return;
+				}
+
+				AddException (ErrorHelper.CreateError (99, "Don't know how (2) to convert array element type {1} for array type {0} between managed and native code.", type.FullName, elementType.FullName));
+				return;
 			}
 
 			if (type.Is ("System", "Void"))
 				throw new InvalidOperationException ($"Can't convert System.Void!");
 
-			if (IsNSObject (type))
-				return toManaged ? Runtime_GetNSObject : NativeObjectExtensions_GetHandle;
+			if (IsNSObject (type)) {
+				il.Emit (OpCodes.Call, toManaged ? Runtime_GetNSObject : NativeObjectExtensions_GetHandle);
+				return;
+			}
 
-			if (Registrar.StaticRegistrar.IsNativeObject (DerivedLinkContext, type))
-				return toManaged ? Runtime_GetNSObject : NativeObjectExtensions_GetHandle;
+			if (Registrar.StaticRegistrar.IsNativeObject (DerivedLinkContext, type)) {
+				il.Emit (OpCodes.Call, toManaged ? Runtime_GetNSObject : NativeObjectExtensions_GetHandle);
+				return;
+			}
 
-			if (type.Is ("System", "String"))
-				return toManaged ? CFString_FromHandle : CFString_CreateNative;
+			if (type.Is ("System", "String")) {
+				il.Emit (OpCodes.Call, toManaged ? CFString_FromHandle : CFString_CreateNative);
+				return;
+			}
 
 			if (StaticRegistrar.IsDelegate (type.Resolve ())) {
+				if (toManaged) {
+					MethodReference createMethod = DerivedLinkContext.StaticRegistrar.GetBlockWrapperCreator (DerivedLinkContext, method, null, -1, null, null); // FIXME
+					// BlockLiteral.Copy
+					il.Emit (OpCodes.Call, BlockLiteral_Copy);
+					il.Emit (OpCodes.Dup);
+					il.Emit (OpCodes.Call, createMethod);
+					il.Emit (OpCodes.Call, BlockLiteral_ReleaseBlockWhenDelegateIsCollected);
+				} else {
+					il.Emit (OpCodes.Ldnull); // FIXME delegateProxyFieldValue
+					il.Emit (OpCodes.Ldstr, "FIXME");
+					il.Emit (OpCodes.Call, BlockLiteral_CreateBlockForDelegate);
+				}
 				AddException (ErrorHelper.CreateError (99, "Don't know how to convert blocks/delegates yet - of type {0}.", type.FullName));
-				return null;
+				return;
 			}
 
 			AddException (ErrorHelper.CreateError (99, "Don't know how (1) to convert {0} between managed and native code.", type.FullName));
-			return null;
 		}
 
 		CustomAttribute CreateUnmanagedCallersAttribute2 (string entryPoint)

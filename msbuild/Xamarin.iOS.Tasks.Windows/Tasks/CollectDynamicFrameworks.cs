@@ -7,19 +7,20 @@ using System.Linq;
 using Xamarin.iOS.Tasks.Windows.Properties;
 using Xamarin.iOS.Windows;
 
+#nullable enable
+
 namespace Xamarin.iOS.HotRestart.Tasks {
 	public class CollectDynamicFrameworks : Task {
 		#region Inputs
 
 		[Required]
-		public ITaskItem [] Frameworks { get; set; }
-
+		public ITaskItem [] Frameworks { get; set; } = Array.Empty<ITaskItem> ();
 		#endregion
 
 		#region Outputs
 
 		[Output]
-		public ITaskItem [] DynamicFrameworks { get; set; }
+		public ITaskItem [] DynamicFrameworks { get; set; } = Array.Empty<ITaskItem> ();
 
 		#endregion
 

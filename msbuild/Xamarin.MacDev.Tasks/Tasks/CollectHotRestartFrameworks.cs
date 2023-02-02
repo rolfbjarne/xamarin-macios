@@ -9,8 +9,7 @@ using Microsoft.Build.Utilities;
 
 #nullable enable
 
-namespace Xamarin.MacDev.Tasks
-{
+namespace Xamarin.MacDev.Tasks {
 	public class CollectHotRestartFrameworks : Task {
 		#region Inputs
 
@@ -124,7 +123,7 @@ namespace Xamarin.MacDev.Tasks
 					Log.LogMessage (MessageImportance.Normal, "The framework {0} has already been included.", framework.ItemSpec);
 					continue;
 				}
-				
+
 				// Set extra metadata used in the _CollectHotRestartDynamicFrameworks target
 				var filename = framework.GetMetadata ("Filename");
 				var extension = framework.GetMetadata ("Extension");

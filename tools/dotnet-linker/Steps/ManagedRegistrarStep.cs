@@ -463,7 +463,7 @@ namespace Xamarin.Linker {
 				if (elementType.Is ("System", "String"))
 					return ObjCRuntime_NativeHandle;
 
-				AddException (ErrorHelper.CreateError (99, "Don't know how the native equivalent of the array type {0}.", type.FullName));
+				AddException (ErrorHelper.CreateError (99, "Don't know how the native equivalent of the array type {0}, where element type is {1}", type.FullName, elementType?.FullName));
 				return System_IntPtr;
 			}
 
@@ -514,7 +514,7 @@ namespace Xamarin.Linker {
 					return;
 				}
 
-				AddException (ErrorHelper.CreateError (99, "Don't know how (2) to convert array element type {1} for array type {0} between managed and native code.", type.FullName, elementType.FullName));
+				AddException (ErrorHelper.CreateError (99, "Don't know how (3) to convert array element type {1} for array type {0} between managed and native code.", type.FullName, elementType.FullName));
 				return;
 			}
 
@@ -537,8 +537,9 @@ namespace Xamarin.Linker {
 			}
 
 			if (StaticRegistrar.IsDelegate (type.Resolve ())) {
+				var objcMethod = StaticRegistrar.FindMethod (method);
 				if (toManaged) {
-					MethodReference createMethod = DerivedLinkContext.StaticRegistrar.GetBlockWrapperCreator (null /* FIXME */, parameter);
+					MethodReference createMethod = StaticRegistrar.GetBlockWrapperCreator (objcMethod, parameter);
 					il.Emit (OpCodes.Call, BlockLiteral_Copy);
 					il.Emit (OpCodes.Dup);
 					il.Emit (OpCodes.Call, createMethod);
@@ -548,7 +549,7 @@ namespace Xamarin.Linker {
 						AddException (ErrorHelper.CreateError (99, "Error while converting block/delegates: FIXME better error: {0}", exception.ToString ()));
 						return;
 					}
-					var delegateProxyType = StaticRegistrar.GetDelegateProxyType (method);
+					var delegateProxyType = StaticRegistrar.GetDelegateProxyType (objcMethod);
 					if (delegateProxyType is null) {
 						AddException (ErrorHelper.CreateError (99, "No delegate proxy type for {0}", method.FullName));
 						return;
@@ -563,11 +564,10 @@ namespace Xamarin.Linker {
 					il.Emit (OpCodes.Ldstr, signature);
 					il.Emit (OpCodes.Call, BlockLiteral_CreateBlockForDelegate);
 				}
-				AddException (ErrorHelper.CreateError (99, "Don't know how to convert blocks/delegates yet - of type {0}.", type.FullName));
 				return;
 			}
 
-			AddException (ErrorHelper.CreateError (99, "Don't know how (1) to convert {0} between managed and native code.", type.FullName));
+			AddException (ErrorHelper.CreateError (99, "Don't know how (1) to convert {0} between managed and native code: {1}", type.FullName, type.GetType ().FullName));
 		}
 
 		StaticRegistrar StaticRegistrar {

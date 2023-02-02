@@ -458,13 +458,13 @@ namespace ObjCRuntime {
 
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public static IntPtr CreateBlockForDelegate (Delegate @delegate, Delegate delegateProxyFieldValue, string /*?*/ signature)
+		static IntPtr CreateBlockForDelegate (Delegate @delegate, Delegate delegateProxyFieldValue, string /*?*/ signature)
 		{
 			if (@delegate is null)
-				ObjCRuntime.ThrowArgumentNullException (nameof (@delegate));
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (@delegate));
 
 			if (delegateProxyFieldValue is null)
-				ObjCRuntime.ThrowArgumentNullException (nameof (delegateProxyFieldValue));
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (delegateProxyFieldValue));
 
 			// Note that we must create a heap-allocated block, so we
 			// start off by creating a stack-allocated block, and then

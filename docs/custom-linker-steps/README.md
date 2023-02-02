@@ -140,13 +140,13 @@ Executes the next two steps.
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/CollectUnmarkedMembers.cs#L10
 
-The linker might remove members the static registrar needs, so store those members somewhere accessible for the static registrar later.
+The trimmer might remove members the static registrar needs, so store those members somewhere accessible for the static registrar later.
 
 #### StoreAttributesStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/StoreAttributesStep.cs#L7
 
-The linker might remove some of the attributes the static registrar needs, so store those attributes somewhere accessible for the static registrar later.
+The trimmer might remove some of the attributes the static registrar needs, so store those attributes somewhere accessible for the static registrar later.
 
 ### Xamarin.Linker.Steps.PreserveBlockCodeHandler
 
@@ -167,6 +167,8 @@ static internal class SDInnerBlock
 ```
 
 The `SDInnerBlock.Handler` field is accessed by reflection, so this step marks the field (and the method).
+
+Note: this will probably not be needed with the static registrar changes for NativeAOT.
 
 ### Xamarin.Linker.OptimizeGeneratedCodeHandler
 
@@ -205,8 +207,7 @@ class SomeObject : IDisposable {}
 
 The problem is that the fields aren't removed because they're referenced in the Dispose method (but not anywhere else).
 
-The step handles htis by removing the body of the Dispose method before the linker marks anything, and if there any fields left after the mark step is complete, then new code is added to the Dispose method to call Dispose on those fields (only).
-
+The step handles this by removing the body of the Dispose method before the linker marks anything, and if there any fields left after the mark step is complete, then new code is added to the Dispose method to call Dispose on those fields (only).
 
 ### Xamarin.Linker.MarkIProtocolHandler
 
@@ -231,7 +232,7 @@ class Program {
 
 If we're not using the static registrar, this this step will mark the `IProtocol` interface (and not remove it from the list of interfaces `MyObject` implements), because at runtime we need to be able to know all the interfaces with a [Protocol] attribute every class implements.
 
-// TODO: add description
+It might be possible to do this with a DynamicDependency attribute instead.
 
 ### Xamarin.Linker.Steps.MarkDispatcher
 
@@ -246,10 +247,10 @@ https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77
 Marks:
 
 * For all types that either subclasses NSObject (directly or indirectly) or implements the INativeObject interface:
-    * If the type is in a user assembly, the entire type.
+    * If the type is in a user assembly, mark the entire type.
     * If the type is in our platform assembly, then it preserves:
-        * For all methods with an [Export] attribute, and the method has been overridden in user code, preserves the method (conditioned on the type being marked)
-        * Preserve a specific constructor we need (conditioned on the type being marked)
+        * For all methods with an [Export] attribute, and the method has been overridden in user code, preserves the method (conditioned on the type with the override being marked)
+        * Preserve a specific constructor we need (conditioned on the type with the override being marked)
 
 #### Xamarin.Linker.Steps.ApplyPreserveAttribute 
 
@@ -260,8 +261,6 @@ Marks anything with a [Preserve] attribute.
 ### Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/linker/MonoTouch.Tuner/PreserveSmartEnumConversions.cs
-
-// TODO: add description
 
 For the following code:
 
@@ -282,11 +281,15 @@ public static class SomeEnum_Extensions {
 because we need these methods at runtime to convert between the native representation (an NSString) and the managed representation (an enum).
 
 Note: this can probably be expressed using linker dependency attributes instead.
+Note 2: this will probably also not be needed with the static registrar changes for NativeAOT.
 
 ### Xamarin.Linker.ManagedRegistrarStep
 
 Post-mark, Pre-sweep
-// TODO: add description
+
+New registrar code for NativeAOT.
+
+This step needs to know which API has been kept, and also needs to inspect API that may have been trimmed away.
 
 ### Xamarin.Linker.Steps.PostSweepDispatcher
 
@@ -294,65 +297,89 @@ Post-sweep, pre output
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/PostSweepDispatcher.cs
 
-// TODO: add description
+Runs the next step.
 
 #### RemoveAttributesStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/RemoveAttributesStep.cs#L23
 
-// TODO: add description
+Removes attributes we don't care about anymore. A comment in the code explains why the trimmer's built-in attribute removal logic isn't easy to adopt.
 
 ### Xamarin.Linker.LoadNonSkippedAssembliesStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/LoadNonSkippedAssembliesStep.cs
 
 Post-sweep, pre output
-// TODO: add description
+
+Saves the list of assemblies that haven't been linked away for use in later steps.
 
 ### Xamarin.Linker.ExtractBindingLibrariesStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/ExtractBindingLibrariesStep.cs
 
 Post-sweep, pre output
-// TODO: add description
+
+Extracts and removes certain resources from assemblies.
+
+Note that we only do this for assemblies that have not been linked away (see LoadNonSkippedAssembliesStep).)
 
 ### Xamarin.Linker.Steps.ListExportedSymbols
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/linker/MonoTouch.Tuner/ListExportedSymbols.cs
 
 Post-sweep, pre output
-// TODO: add description
+
+Creates a list of:
+
+* All P/Invokes to __Internal.
+* Managed classes that represent Objective-C classes from third-party bindings.
+* Fields with the [Field](https://learn.microsoft.com/en-us/dotnet/api/foundation.fieldattribute) attribute.
+* Native dynamic libraries and frameworks we want to link (natively) with.
+
+These lists are used to ask the native linker to not remove the corresponding native symbols (and as such these lists should only be created after the trimmer has executed).
+
+It also:
+
+* Modifies some P/Invokes to call our own custom native wrapper function instead.
 
 ### Xamarin.Linker.Steps.PreOutputDispatcher
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/PreOutputDispatcher.cs
 
 Post-sweep, pre output
-// TODO: add description
 
-#### Xamarin.Linker.Steps.ApplyPreserveAttribute
+Runs the next two steps:
 
-https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/linker/ApplyPreserveAttribute.cs#L14
+* RemoveUserResourcesSubStep
+* BackingFieldReintroductionSubStep
 
-#### Xamarin.Linker.BackingFieldDelayHandler
+#### Xamarin.Linker.RemoveUserResourcesSubStep
+
+https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/linker/RemoveUserResourcesSubStep.cs#L16
+
+Removes certain resources from assemblies.
+
+#### Xamarin.Linker.BackingFieldReintroductionSubStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/BackingFieldDelayHandler.cs#L96
+
+The second part of Xamarin.Linker.BackingFieldDelayHandler.
 
 ### Xamarin.Linker.RegistrarStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/RegistrarStep.cs
 
 Post-output.
-// TODO: add description
 
 Run the static registrar.
+
+This step needs to know which API has been kept, and also needs to inspect API that may have been trimmed away, and also has to run after the assemblies have been saved to disk (because that's when the metadata tokens are created in Cecil).
 
 ### Xamarin.GenerateMainStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/GenerateMainStep.cs
 
 Post-output.
-// TODO: add description
 
 Generate the native main function.
 
@@ -361,29 +388,37 @@ Generate the native main function.
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/GenerateReferencesStep.cs
 
 Post-output.
-// TODO: add description
+
+Generates native code based on the output from the ListExportedSymbols step.
 
 ### Xamarin.GatherFrameworksStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/GatherFrameworksStep.cs
 
 Post-output.
-// TODO: add description
+
+Computes all the frameworks the app needs to link (natively) with.
 
 ### Xamarin.Linker.ComputeNativeBuildFlagsStep
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/ComputeNativeBuildFlagsStep.cs
 
 Post-output.
-// TODO: add description
+
+Computes flags we need to pass to clang to build the native executable.
 
 ### Xamarin.Linker.ComputeAOTArguments
 
 https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/ComputeAOTArguments.cs
 
 Post-output.
-// TODO: add description
+
+Computes the arguments we need to pass to the AOT compiler.
 
 ### Xamarin.Linker.DoneStep
 
-Final cleanup. Not needed if all the other steps are removed.
+Final cleanup.
+
+Saves the output from some of the other steps to disk.
+
+Not needed if all the other steps are removed.

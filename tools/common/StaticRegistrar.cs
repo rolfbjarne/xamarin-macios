@@ -4583,6 +4583,21 @@ namespace Registrar {
 			return null;
 		}
 
+		public ObjCType FindType (TypeDefinition type)
+		{
+			return Types [type];
+		}
+
+		public ObjCMethod FindMethod (MethodDefinition method)
+		{
+			var type = FindType (method.DeclaringType);
+			foreach (var m in type.Methods)
+				if ((object) m.Method == (object) method)
+					return m;
+
+			throw new NotImplementedException ($"Unable to find the method {method.FullName} in {type.Type.FullName}");
+		}
+
 		MethodDefinition GetBlockProxyAttributeMethod (MethodDefinition method, int parameter)
 		{
 			var param = method.Parameters [parameter];

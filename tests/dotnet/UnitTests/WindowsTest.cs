@@ -28,11 +28,23 @@ namespace Xamarin.Tests {
 			properties ["IsHotRestartBuild"] = "true";
 			properties ["IsHotRestartEnvironmentReady"] = "true";
 			properties ["EnableCodeSigning"] = "false";
+			var hotRestartOutputDir = Path.Combine (Cache.CreateTemporaryDirectory (), "out");
+			properties ["HotRestartSignedAppOutputDir"] = hotRestartOutputDir;
 			var rv = DotNet.AssertBuild (project_path, properties);
-			foreach (var entry in Directory.GetFileSystemEntries (appPath, "*", SearchOption.AllDirectories))
-				Console.WriteLine (entry);
+
+			DumpDirContents (appPath);
+			DumpDirContents (hotRestartOutputDir);
+
 			var rids = runtimeIdentifiers.Split (';');
 			BundleStructureTest.CheckAppBundleContents (platform, appPath, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
+		}
+
+		static void DumpDirContents (string dir)
+		{
+			var files = Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories);
+			Console.WriteLine ($"Found {files.Count ()} in {dir}:");
+			foreach (var entry in files)
+				Console.WriteLine ($"    {entry}");
 		}
 
 		[Test]

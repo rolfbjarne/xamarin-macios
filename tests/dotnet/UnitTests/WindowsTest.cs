@@ -29,6 +29,7 @@ namespace Xamarin.Tests {
 			properties ["IsHotRestartEnvironmentReady"] = "true";
 			properties ["EnableCodeSigning"] = "false";
 			var hotRestartOutputDir = Path.Combine (Cache.CreateTemporaryDirectory (), "out");
+			Directory.CreateDirectory (hotRestartOutputDir);
 			properties ["HotRestartSignedAppOutputDir"] = hotRestartOutputDir;
 			var rv = DotNet.AssertBuild (project_path, properties);
 

@@ -30,7 +30,7 @@ namespace Xamarin.Tests {
 			properties ["EnableCodeSigning"] = "false";
 			var hotRestartOutputDir = Path.Combine (Cache.CreateTemporaryDirectory (), "out");
 			Directory.CreateDirectory (hotRestartOutputDir);
-			properties ["HotRestartSignedAppOutputDir"] = hotRestartOutputDir;
+			properties ["HotRestartSignedAppOutputDir"] = hotRestartOutputDir + Path.DirectorySeparatorChar;
 			var rv = DotNet.AssertBuild (project_path, properties);
 
 			DumpDirContents (appPath);

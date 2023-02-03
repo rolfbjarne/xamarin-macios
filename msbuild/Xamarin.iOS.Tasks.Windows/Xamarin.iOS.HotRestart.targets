@@ -103,7 +103,7 @@
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReference="@(NativeReference)"
 			None="@(None)"
-			SdkIsSimulator="$(_SdkIsSimulator)"
+			SdkIsSimulator="false"
 			UnpackedFramework="@(_UnpackedFramework)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>

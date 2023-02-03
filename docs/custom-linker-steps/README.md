@@ -6,9 +6,13 @@ All steps: https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79d
 
 ### Xamarin.SetupStep
 
+https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/SetupStep.cs
+
 Initial step to configure everything. Not needed if all the other steps are removed.
 
 ### Xamarin.Linker.CollectAssembliesStep
+
+https://github.com/xamarin/xamarin-macios/blob/d27667f48a4379e851c79de505a098b77a30074f/tools/dotnet-linker/Steps/CollectAssembliesStep.cs
 
 Loads all the assemblies in the linker, so that we know the entire set of assemblies in later steps.
 

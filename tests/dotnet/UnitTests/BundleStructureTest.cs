@@ -155,6 +155,7 @@ namespace Xamarin.Tests {
 				expectedFiles.Add ($"{assemblyDirectory}NoneC.pdb");
 			expectedFiles.Add ($"{assemblyDirectory}NoneD.exe");
 			expectedFiles.Add ($"{assemblyDirectory}libNoneE.dylib");
+			expectedFiles.Add ($"{assemblyDirectory}libNoneE.so");
 			// NoneF.a is not bundled
 			// Sub/NoneG.txt is not bundled
 			// Sub/NoneH.txt is not bundled
@@ -164,6 +165,7 @@ namespace Xamarin.Tests {
 			expectedFiles.Add ($"{assemblyDirectory}NoneL.config");
 			// NoneM.unknown is not bundled
 			expectedFiles.Add ($"{assemblyDirectory}libSkipInstallNameTool.dylib");
+			expectedFiles.Add ($"{assemblyDirectory}libSkipInstallNameTool.so");
 
 			expectedFiles.Add ($"{resourcesDirectory}basn3p08.png");
 			expectedFiles.Add ($"{resourcesDirectory}basn3p08_with_loc.png");
@@ -370,6 +372,7 @@ namespace Xamarin.Tests {
 			Assert.That (missingFiles, Is.Empty, "No missing files");
 
 			AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.dylib");
+			AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.so");
 			AssertLibraryArchitectures (appPath, runtimeIdentifiers);
 		}
 

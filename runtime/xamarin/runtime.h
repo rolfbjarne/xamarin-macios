@@ -295,7 +295,7 @@ void			xamarin_printf (const char *format, ...);
 void			xamarin_vprintf (const char *format, va_list args);
 void			xamarin_install_log_callbacks ();
 
-void			xamarin_registrar_dlsym (void **function_pointer, const char *symbol);
+void			xamarin_registrar_dlsym (void **function_pointer, const char *symbol, int32_t id);
 
 /*
  * Wrapper GCHandle functions that takes pointer sized handles instead of ints,

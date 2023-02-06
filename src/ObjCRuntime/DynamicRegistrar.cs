@@ -219,12 +219,12 @@ namespace Registrar {
 			return assembly.GetTypes ();
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (PropertyInfo property)
+		public override BindAsAttribute GetBindAsAttribute (PropertyInfo property)
 		{
 			return property?.GetCustomAttribute<BindAsAttribute> (false);
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (MethodBase method, int parameter_index)
+		public override BindAsAttribute GetBindAsAttribute (MethodBase method, int parameter_index)
 		{
 			ICustomAttributeProvider provider;
 

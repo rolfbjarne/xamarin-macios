@@ -667,6 +667,13 @@
 		) {
 			WrappedManagedFunction = "InvokeConformsToProtocol",
 		},
+
+		new XDelegate ("void *", "IntPtr", "xamarin_lookup_unmanaged_function",
+			"const char *", "IntPtr", "symbol",
+			"int32_t", "int", "id"
+		) {
+			WrappedManagedFunction = "LookupManagedFunction",
+		},
 	};
 	delegates.CalculateLengths ();
 #><#+

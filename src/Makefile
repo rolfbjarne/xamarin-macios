@@ -608,7 +608,7 @@ MAC_GENERATOR=$(BUILD_DIR)/common/bgen.exe
 MAC_GENERATE=$(SYSTEM_MONO) --debug $(MAC_GENERATOR)
 
 define MAC_GENERATOR_template
-$(MACOS_BUILD_DIR)/$(1)/core.dll: $(MACOS_CORE_SOURCES) frameworks.sources @$(RSP_DIR)/macos-defines.rsp
+$(MACOS_BUILD_DIR)/$(1)/core.dll: $(MACOS_CORE_SOURCES) frameworks.sources $(RSP_DIR)/macos-defines.rsp
 	@mkdir -p $(MACOS_BUILD_DIR)/$(1)
 	$$(call Q_PROF_CSC,mac/$(1)) \
 		$$(MAC_$(1)_CSC) -nologo -out:$$@ -target:library -debug -unsafe $(CORE_WARNINGS_TO_FIX) \

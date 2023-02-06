@@ -47,6 +47,10 @@ steps:
 # FIXME: parameterize platforms
 # FIXME: SOURCES?
 
+- task: UseDotNet@2
+  inputs:
+    version: 7.0.102
+
 - pwsh: |
     & dotnet --version
     & dotnet --info

@@ -1430,6 +1430,13 @@ namespace ObjCRuntime {
 			return null;
 		}
 
+#if NET
+		public static NSObject? GetNSObject (NativeHandle ptr)
+		{
+			return GetNSObject ((IntPtr) ptr, MissingCtorResolution.ThrowConstructor1NotFound);
+		}
+#endif
+
 		public static NSObject? GetNSObject (IntPtr ptr)
 		{
 			return GetNSObject (ptr, MissingCtorResolution.ThrowConstructor1NotFound);
@@ -2199,6 +2206,20 @@ namespace ObjCRuntime {
 			return (sbyte) (rv ? 1 : 0);
 		}
 
+		static IntPtr LookupManagedFunction (IntPtr symbol, int id)
+		{
+			var symb = Marshal.PtrToStringAuto (symbol);
+			Console.WriteLine ($"LookupManagedFunction (0x{symbol.ToString ("x")} = {symb}, {id})");
+			var rv = LookupManagedFunctionImpl (id);
+			Console.WriteLine ($"LookupManagedFunction (0x{symbol.ToString ("x")} = {symb}, {id}) => 0x{rv.ToString ("x")}");
+			return rv;
+		}
+
+		static IntPtr LookupManagedFunctionImpl (int id)
+		{
+			// The static registrar will modify this function as needed.
+			return IntPtr.Zero;
+		}
 	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr> {

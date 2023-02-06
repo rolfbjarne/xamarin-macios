@@ -2734,7 +2734,7 @@ xamarin_vprintf (const char *format, va_list args)
 }
 
 void
-xamarin_registrar_dlsym (void **function_pointer, const char *symbol)
+xamarin_registrar_dlsym (void **function_pointer, const char *symbol, int32_t id)
 {
 	if (*function_pointer != NULL)
 		return;
@@ -2742,6 +2742,14 @@ xamarin_registrar_dlsym (void **function_pointer, const char *symbol)
 	*function_pointer = dlsym (RTLD_MAIN_ONLY, symbol);
 	if (*function_pointer != NULL)
 		return;
+
+	GCHandle exception_gchandle = INVALID_GCHANDLE;
+	*function_pointer = xamarin_lookup_unmanaged_function (symbol, id, &exception_gchandle);
+	if (*function_pointer != NULL)
+		return;
+
+	if (exception_gchandle != INVALID_GCHANDLE)
+		xamarin_process_managed_exception_gchandle (exception_gchandle);
 
 	NSString *msg = [NSString stringWithFormat: @"Unable to load the symbol '%s' to call managed code: %s", symbol, dlerror ()];
 	NSLog (@"%@", msg);

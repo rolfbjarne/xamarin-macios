@@ -1111,8 +1111,8 @@ namespace Registrar {
 		protected virtual Version GetSdkIntroducedVersion (TType obj, out string message) { message = null; return null; } // returns the sdk version when the type was introduced for the current platform (null if all supported versions)
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
-		protected abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
-		protected abstract BindAsAttribute GetBindAsAttribute (TProperty property);
+		public abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
+		public abstract BindAsAttribute GetBindAsAttribute (TProperty property);
 		protected abstract IList<AdoptsAttribute> GetAdoptsAttributes (TType type);
 		public abstract TType GetNullableType (TType type); // For T? returns T. For T returns null.
 		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
@@ -1157,6 +1157,24 @@ namespace Registrar {
 
 		public Registrar ()
 		{
+		}
+
+		public bool IsPropertyAccessor (TMethod method, out TProperty property)
+		{
+			property = null;
+
+			if (method is null)
+				return false;
+
+			if (!method.IsSpecialName)
+				return false;
+
+			var name = method.Name;
+			if (!name.StartsWith ("get_", StringComparison.Ordinal) || name.StartsWith ("set_", StringComparison.Ordinal))
+				return false;
+
+			property = FindProperty (method.DeclaringType, name.Substring (4));
+			return property is not null;
 		}
 
 		protected bool IsArray (TType type)

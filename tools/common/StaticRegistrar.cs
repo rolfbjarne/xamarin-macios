@@ -1898,7 +1898,7 @@ namespace Registrar {
 			}
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
+		public override BindAsAttribute GetBindAsAttribute (PropertyDefinition property)
 		{
 			if (property == null)
 				return null;
@@ -1911,7 +1911,7 @@ namespace Registrar {
 			return CreateBindAsAttribute (attrib, property);
 		}
 
-		protected override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
+		public override BindAsAttribute GetBindAsAttribute (MethodDefinition method, int parameter_index)
 		{
 			if (method == null)
 				return null;
@@ -4151,10 +4151,11 @@ namespace Registrar {
 #if NET
 			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
 				var staticCall = false;
-				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethod)) {
+				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
-					pinvokeMethod = name + "___FIXME___MANAGED_METHOD_NOT_FOUND";
+					pinvokeMethodInfo = new LinkerConfiguration.UnmanagedCallersEntry (name + "___FIXME___MANAGED_METHOD_NOT_FOUND", -1, method.Method);
 				}
+				var pinvokeMethod = pinvokeMethodInfo.Name;
 				sb.AppendLine ();
 				if (!staticCall)
 					sb.Append ("typedef ");
@@ -4195,7 +4196,7 @@ namespace Registrar {
 				sb.WriteLine ("{");
 				if (!staticCall) {
 					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
-					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, \"{pinvokeMethod}\");");
+					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, \"{pinvokeMethod}\", {pinvokeMethodInfo.Id.ToString ()});");
 				}
 				if (!isVoid || isCtor)
 					sb.Write ("return ");
@@ -4585,7 +4586,9 @@ namespace Registrar {
 
 		public ObjCType FindType (TypeDefinition type)
 		{
-			return Types [type];
+			if (!Types.TryGetValue (type, out var value))
+				throw new Exception ($"Unable to find {type.FullName}. There are {Types.Count} types registered.\n\t{string.Join ("\n\t", Types.Take (25).Select (v => v.Key.FullName))}");
+			return value;
 		}
 
 		public ObjCMethod FindMethod (MethodDefinition method)
@@ -5255,6 +5258,26 @@ namespace Registrar {
 			pinfo.EntryPoint = wrapperName;
 		}
 
+		public void Register (IEnumerable<AssemblyDefinition> assemblies)
+		{
+			Register (null, assemblies);
+		}
+
+		public void Register (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies)
+		{
+			this.resolver = resolver;
+
+			if (Target?.CachedLink == true)
+				throw ErrorHelper.CreateError (99, Errors.MX0099, "the static registrar should not execute unless the linker also executed (or was disabled). A potential workaround is to pass '-f' as an additional " + Driver.NAME + " argument to force a full build");
+
+			this.input_assemblies = assemblies;
+
+			foreach (var assembly in assemblies) {
+				Driver.Log (3, "Generating static registrar for {0}", assembly.Name);
+				RegisterAssembly (assembly);
+			}
+		}
+
 		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method)
 		{
 			single_assembly = assembly;
@@ -5268,22 +5291,11 @@ namespace Registrar {
 
 		public void Generate (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, out string initialization_method)
 		{
-			this.resolver = resolver;
-
-			if (Target?.CachedLink == true)
-				throw ErrorHelper.CreateError (99, Errors.MX0099, "the static registrar should not execute unless the linker also executed (or was disabled). A potential workaround is to pass '-f' as an additional " + Driver.NAME + " argument to force a full build");
-
-			this.input_assemblies = assemblies;
-
-			foreach (var assembly in assemblies) {
-				Driver.Log (3, "Generating static registrar for {0}", assembly.Name);
-				RegisterAssembly (assembly);
-			}
-
+			Register (resolver, assemblies);
 			Generate (header_path, source_path, out initialization_method);
 		}
 
-		void Generate (string header_path, string source_path, out string initialization_method)
+		public void Generate (string header_path, string source_path, out string initialization_method)
 		{
 			var sb = new AutoIndentStringBuilder ();
 			header = new AutoIndentStringBuilder ();

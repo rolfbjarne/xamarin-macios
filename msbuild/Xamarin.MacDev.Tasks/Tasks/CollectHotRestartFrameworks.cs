@@ -58,7 +58,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			// split frameworks and xcframeworks
 			foreach (var item in input) {
-				var spec = item.ItemSpec.TrimEnd (Path.DirectorySeparatorChar);
+				var spec = Path.GetDirectoryName (item.ItemSpec.TrimEnd (Path.DirectorySeparatorChar));
 				if (!spec.EndsWith (".framework", StringComparison.OrdinalIgnoreCase))
 					continue;
 

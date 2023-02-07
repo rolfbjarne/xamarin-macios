@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -111,11 +112,13 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var allInput = new List<ITaskItem> ();
 
-			var noneFrameworks = None.Where (v => v.GetMetadata ("Directory").TrimEnd (Path.DirectorySeparatorChar).EndsWith (".framework"));
+			var noneFrameworks = None.Where (v => Path.GetDirectoryName (v.ItemSpec).EndsWith (".framework", StringComparison.OrdinalIgnoreCase));
 
 			allInput.AddRange (noneFrameworks);
 			allInput.AddRange (UnpackedFramework);
 			allInput.AddRange (NativeReference);
+
+			Log.LogMessage (MessageImportance.Normal, $"Found {noneFrameworks.Count ()} None framework items, {UnpackedFramework.Length} UnpackedFramework items, {NativeReference.Length} NativeReference items, for a total of {allInput.Count} items");
 
 			var frameworks = new Dictionary<string, ITaskItem> ();
 			foreach (var framework in ProcessFrameworks (allInput)) {
@@ -137,6 +140,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			HotRestartFrameworks = frameworks.Select (v => v.Value).ToArray ();
+			Log.LogMessage (MessageImportance.Normal, $"Found {HotRestartFrameworks.Length} hot restart frameworks");
 
 			return !Log.HasLoggedErrors;
 		}

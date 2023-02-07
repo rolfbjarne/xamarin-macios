@@ -82,8 +82,8 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogWarning ($"Unable to resolve the xcframework: {xcframework}");
 					continue;
 				}
-				var resolvedFullPath = Path.GetFullPath (resolved).Trim (Path.DirectorySeparatorChar);
-				var t = new TaskItem (resolved);
+				var resolvedFullPath = Path.GetFullPath (resolved);
+				var t = new TaskItem (Path.GetDirectoryName (resolved));
 				var originalTaskItems = input.Where (v => string.Equals (
 					Path.GetFullPath (v.ItemSpec).TrimEnd (Path.DirectorySeparatorChar),
 					resolvedFullPath,

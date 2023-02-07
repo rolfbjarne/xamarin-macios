@@ -124,10 +124,22 @@ namespace Xamarin.Linker {
 				return GetTypeReference (CorlibAssembly, "System.IntPtr", out var _);
 			}
 		}
+		
+		TypeReference System_Byte {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Byte", out var _);
+			}
+		}
 
 		TypeReference System_String {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.String", out var _);
+			}
+		}
+
+		TypeReference System_Console {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Console", out var _);
 			}
 		}
 
@@ -162,13 +174,24 @@ namespace Xamarin.Linker {
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
 						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
-						// && v.Parameters [1].ParameterType.Is ("Foundation", "NSObject/Flags")
+						/*&& v.Parameters [1].ParameterType.Is (null, "Flags") */&& v.Parameters [1].ParameterType.DeclaringType.Is ("Foundation", "NSObject")
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 1,
 						out var md);
-				Console.WriteLine ($"HOORAY NSObject_AllocateNSObject: Namespace: {md.Parameters [1].ParameterType.Namespace} Name: {md.Parameters [1].ParameterType.Name}");
+				Console.WriteLine ($"HOORAY NSObject_AllocateNSObject: Namespace is null: {md.Parameters [1].ParameterType.Namespace is null} Name: {md.Parameters [1].ParameterType.Name}");
 				md.IsPublic = true; // This method is usually private so that nobody can call it (i.e. not in our API), but we need it at runtime so make it public.
 				return rv;
+			}
+		}
+
+		MethodReference Console_WriteLine {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Console, "WriteLine", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
 			}
 		}
 
@@ -578,36 +601,43 @@ namespace Xamarin.Linker {
 			return true;
 		}
 
+		static string Sanitize (string str)
+		{
+			// 😐...
+			str = str.Replace ('.', '_');
+			str = str.Replace ('/', '_');
+			str = str.Replace ('\\', '_');
+			str = str.Replace ('`', '_');
+			str = str.Replace ('<', '_');
+			str = str.Replace ('>', '_');
+			str = str.Replace ('$', '_');
+			str = str.Replace ('@', '_');
+			return str;
+		}
+
 		int counter;
 		void CreateUnmanagedCallersMethod (MethodDefinition method)
 		{
-			string name = $"callback_{counter++}_{method.DeclaringType.FullName.Replace ('.', '_').Replace ('/', '_').Replace ('`', '_')}_{method.Name.Replace ('.', '_').Replace ('/', '_').Replace ('`', '_')}";
-
-			Console.WriteLine ($"Creating {name} 1");
+			string name = $"callback_{counter++}_{Sanitize (method.DeclaringType.FullName)}_{Sanitize (method.Name)}";
 
 			var callback = new MethodDefinition (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, GetNativeType (method, method.ReturnType, -1));
 			callback.DeclaringType = method.DeclaringType;
 			method.DeclaringType.Methods.Add (callback);
 
-			Console.WriteLine ($"Creating {name} 2");
 			var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
 			Configuration.UnmanagedCallersMap.Add (method, entry);
 
-			Console.WriteLine ($"Creating {name} 2a");
 			callback.Parameters.Add (new ParameterDefinition ("pobj", ParameterAttributes.None, System_IntPtr));
 			callback.Parameters.Add (new ParameterDefinition ("sel", ParameterAttributes.None, System_IntPtr));
-			Console.WriteLine ($"Creating {name} 2b");
 			if (method.HasParameters) {
 				for (var i = 0; i < method.Parameters.Count; i++) {
-					Console.WriteLine ($"Creating {name} 2c{i}");
 					callback.Parameters.Add (new ParameterDefinition ($"p{i}", ParameterAttributes.None, GetNativeType (method, method.Parameters [i].ParameterType, i)));
 				}
 			}
-			Console.WriteLine ($"Creating {name} 2d");
+
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute2 (name));
 			callback.Body = new MethodBody (callback);
 
-			Console.WriteLine ($"Creating {name} 3");
 			var il = callback.Body.GetILProcessor ();
 			var initialExceptionCount = exceptions.Count;
 
@@ -624,7 +654,6 @@ namespace Xamarin.Linker {
 				}
 			}
 
-			Console.WriteLine ($"Creating {name} 4");
 			if (method.HasParameters) {
 				for (var p = 0; p < method.Parameters.Count; p++) {
 					switch (p) {
@@ -644,7 +673,6 @@ namespace Xamarin.Linker {
 
 			il.Emit (OpCodes.Call, method);
 
-			Console.WriteLine ($"Creating {name} 5");
 			if (!method.ReturnType.Is ("System", "Void")) {
 				EmitConversion (method, il, method.ReturnType, false, -1);
 			} else if (method.IsConstructor) {
@@ -653,7 +681,6 @@ namespace Xamarin.Linker {
 
 			il.Emit (OpCodes.Ret);
 
-			Console.WriteLine ($"Creating {name} 6");
 			if (exceptions.Count != initialExceptionCount) {
 				il.Clear ();
 				var newExceptions = exceptions.Skip (initialExceptionCount);
@@ -722,7 +749,10 @@ namespace Xamarin.Linker {
 					return GetNativeType (method, bindAsAttribute.OriginalType, parameter, checkBindAs: false);
 			}
 
-			// no conversion necessary if we're a value type
+			if (type.Is ("System", "Boolean"))
+				return System_Byte;
+
+			// no conversion necessary if we're a value type (for the most part)
 			if (type.IsValueType)
 				return type;
 
@@ -782,6 +812,21 @@ namespace Xamarin.Linker {
 			if (bindAsAttribute is not null) {
 				// FIXME: make this an error
 				AddException (ErrorHelper.CreateWarning (99, "Don't know how (4) to convert BindAs {0} -> {2} between managed and native code. Method: {1}", type.FullName, method.FullName, bindAsAttribute.OriginalType.FullName));
+				return;
+			}
+
+			if (type.Is ("System", "Boolean")) {
+				if (toManaged) {
+					// nothing to do I think
+				} else {
+					var ldc_1 = il.Create (OpCodes.Ldc_I4_1);
+					var nop = il.Create (OpCodes.Nop);
+					il.Emit (OpCodes.Brtrue_S, ldc_1);
+					il.Emit (OpCodes.Ldc_I4_0);
+					il.Emit (OpCodes.Br_S, nop);
+					il.Append (ldc_1);
+					il.Append (nop);
+				}
 				return;
 			}
 
@@ -849,7 +894,7 @@ namespace Xamarin.Linker {
 					MethodReference createMethod = StaticRegistrar.GetBlockWrapperCreator (objcMethod, parameter);
 					il.Emit (OpCodes.Call, BlockLiteral_Copy);
 					il.Emit (OpCodes.Dup);
-					il.Emit (OpCodes.Call, createMethod);
+					il.Emit (OpCodes.Call, method.Module.ImportReference (createMethod));
 					il.Emit (OpCodes.Call, Runtime_ReleaseBlockWhenDelegateIsCollected);
 				} else {
 					if (!DerivedLinkContext.StaticRegistrar.TryComputeBlockSignature (method, trampolineDelegateType: type, out var exception, out var signature)) {
@@ -867,7 +912,7 @@ namespace Xamarin.Linker {
 						return;
 					}
 					// the delegate is already on the stack
-					il.Emit (OpCodes.Ldsfld, delegateProxyField);
+					il.Emit (OpCodes.Ldsfld, method.Module.ImportReference (delegateProxyField));
 					il.Emit (OpCodes.Ldstr, signature);
 					il.Emit (OpCodes.Call, BlockLiteral_CreateBlockForDelegate);
 				}

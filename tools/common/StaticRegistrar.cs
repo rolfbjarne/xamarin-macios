@@ -4189,11 +4189,11 @@ namespace Registrar {
 					sb.Append (", ");
 					var parameterType = ToObjCParameterType (method.NativeParameters [i], method.DescriptiveMethodName, exceptions, method.Method, delegateToBlockType: true, cSyntaxForBlocks: true);
 					var containsBlock = parameterType.Contains ("%PARAMETERNAME%");
-					parameterType = parameterType.Replace ("%PARAMETERNAME%", $"p{i}");
+					parameterType = parameterType.Replace ("%PARAMETERNAME%", $"p{i - indexOffset}");
 					sb.Append (parameterType);
 					if (!containsBlock) {
 						sb.Append (" ");
-						sb.AppendFormat ("p{0}", i);
+						sb.AppendFormat ("p{0}", i - indexOffset);
 					}
 				}
 
@@ -4213,7 +4213,7 @@ namespace Registrar {
 				sb.Write (pinvokeMethod);
 				sb.Write (" (self, _cmd");
 				for (var i = indexOffset; i < num_arg; i++) {
-					sb.AppendFormat (", p{0}", i);
+					sb.AppendFormat (", p{0}", i - indexOffset);
 				}
 				sb.WriteLine (");");
 				sb.WriteLine ("}");

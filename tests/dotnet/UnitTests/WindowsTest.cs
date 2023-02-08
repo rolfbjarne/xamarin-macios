@@ -16,6 +16,7 @@ namespace Xamarin.Tests {
 		{
 			var project = "BundleStructure";
 			var configuration = "Debug";
+			var tmpdir = Cache.CreateTemporaryDirectory ();
 			// FIXME Configuration.IgnoreIfIgnoredPlatform(platform);
 
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, configuration: configuration);
@@ -28,9 +29,11 @@ namespace Xamarin.Tests {
 			properties ["IsHotRestartBuild"] = "true";
 			properties ["IsHotRestartEnvironmentReady"] = "true";
 			properties ["EnableCodeSigning"] = "false";
-			var hotRestartOutputDir = Path.Combine (Cache.CreateTemporaryDirectory (), "out");
+			var hotRestartOutputDir = Path.Combine (tmpdir, "out");
 			Directory.CreateDirectory (hotRestartOutputDir);
 			properties ["HotRestartSignedAppOutputDir"] = hotRestartOutputDir + Path.DirectorySeparatorChar;
+			var hotRestartAppBundlePath = Path.Combine (tmpdir, "HotRestartAppBundlePath"); // Do not create this directory, it will be created and populated with default contents if it doesn't exist.
+			properties ["HotRestartAppBundlePath"] = hotRestartAppBundlePath; // no trailing directory separator char for this property.
 			var rv = DotNet.AssertBuild (project_path, properties);
 
 			DumpDirContents (appPath);

@@ -37,7 +37,7 @@ namespace Xamarin.Tests {
 			var rv = DotNet.AssertBuild (project_path, properties);
 
 			DumpDirContents (appPath);
-			DumpDirContents (hotRestartOutputDir);
+			DumpDirContents (tmpdir);
 
 			var rids = runtimeIdentifiers.Split (';');
 			BundleStructureTest.CheckAppBundleContents (platform, appPath, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");

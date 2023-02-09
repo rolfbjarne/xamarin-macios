@@ -136,10 +136,10 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				assemblyDirectory = "Contents/MonoBundle/";
-				resourcesDirectory = "Contents/Resources/";
-				frameworksDirectory = "Contents/Frameworks";
-				pluginsDirectory = "Contents/PlugIns";
+				assemblyDirectory = Path.Combine ("Contents", "MonoBundle") + Path.DirectorySeparatorChar;
+				resourcesDirectory = Path.Combine ("Contents", "Resources") + Path.DirectorySeparatorChar;
+				frameworksDirectory = Path.Combine ("Contents", "Frameworks");
+				pluginsDirectory = Path.Combine ("Contents", "PlugIns");
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -205,9 +205,9 @@ namespace Xamarin.Tests {
 
 			// SomewhatUnknownA.bin: None
 			expectedFiles.Add ($"{assemblyDirectory}Subfolder");
-			expectedFiles.Add ($"{assemblyDirectory}Subfolder/SomewhatUnknownB.bin"); // SomewhatUnknownB.bin: Assembly
+			expectedFiles.Add (Path.Combine ($"{assemblyDirectory}Subfolder", "SomewhatUnknownB.bin")); // SomewhatUnknownB.bin: Assembly
 			expectedFiles.Add ($"{resourcesDirectory}Subfolder");
-			expectedFiles.Add ($"{resourcesDirectory}Subfolder/SomewhatUnknownC.bin"); // SomewhatUnknownC.bin: Resource
+			expectedFiles.Add (Path.Combine ($"{resourcesDirectory}Subfolder", "SomewhatUnknownC.bin")); // SomewhatUnknownC.bin: Resource
 
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownD", isSigned); // SomewhatUnknownD.bin: AppleFramework
 			AddExpectedFrameworkFiles (platform, expectedFiles, "SomewhatUnknownE", isSigned); // SomewhatUnknownE.bin: CompressedAppleFramework
@@ -222,13 +222,13 @@ namespace Xamarin.Tests {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
 				expectedFiles.Add ($"Subfolder");
-				expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
+				expectedFiles.Add (Path.Combine ($"Subfolder", "SomewhatUnknownJ.bin")); // SomewhatUnknownJ.bin: RootDirectory
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
 				if (isSigned == CodeSignature.None) {
 					expectedFiles.Add ($"Subfolder");
-					expectedFiles.Add ($"Subfolder/SomewhatUnknownJ.bin"); // SomewhatUnknownJ.bin: RootDirectory
+					expectedFiles.Add (Path.Combine ($"Subfolder", "SomewhatUnknownJ.bin")); // SomewhatUnknownJ.bin: RootDirectory
 				}
 				break;
 			default:
@@ -259,7 +259,7 @@ namespace Xamarin.Tests {
 
 			expectedFiles.Add ($"{resourcesDirectory}AutoIncluded.txt");
 			expectedFiles.Add ($"{resourcesDirectory}SubDirectory");
-			expectedFiles.Add ($"{resourcesDirectory}SubDirectory/AutoIncluded2.txt");
+			expectedFiles.Add (Path.Combine ($"{resourcesDirectory}SubDirectory", "AutoIncluded2.txt"));
 
 			expectedFiles.Add ($"{assemblyDirectory}FrameworksInRuntimesNativeDirectory.dll");
 			AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworksInRuntimesNativeDirectory1", isSigned);
@@ -285,7 +285,7 @@ namespace Xamarin.Tests {
 			expectedFiles.Add (frameworksDirectory);
 			if (isSigned == CodeSignature.None) {
 				expectedFiles.Add (pluginsDirectory);
-				expectedFiles.Add ($"{pluginsDirectory}/Subfolder");
+				expectedFiles.Add (Path.Combine ($"{pluginsDirectory}", "Subfolder"));
 			}
 
 			// misc other files not directly related to the test itself
@@ -303,7 +303,7 @@ namespace Xamarin.Tests {
 			expectedFiles.Add ($"{assemblyDirectory}runtimeconfig.bin");
 
 			if (platform == ApplePlatform.MacOSX)
-				expectedFiles.Add ("Contents/MonoBundle/createdump");
+				expectedFiles.Add (Path.Combine ("Contents", "MonoBundle", "createdump"));
 
 			switch (platform) {
 			case ApplePlatform.iOS:
@@ -315,21 +315,21 @@ namespace Xamarin.Tests {
 				expectedFiles.Add ("PkgInfo");
 				if (!isReleaseBuild) {
 					expectedFiles.Add ("Settings.bundle");
-					expectedFiles.Add ("Settings.bundle/Root.plist");
+					expectedFiles.Add (Path.Combine ("Settings.bundle", "Root.plist"));
 				}
 				break;
 			case ApplePlatform.MacCatalyst:
 				if (!isReleaseBuild)
-					expectedFiles.Add ("Contents/Resources/MonoTouchDebugConfiguration.txt");
+					expectedFiles.Add (Path.Combine ("Contents", "Resources", "MonoTouchDebugConfiguration.txt"));
 				goto case ApplePlatform.MacOSX;
 			case ApplePlatform.MacOSX:
 				expectedFiles.Add ("Contents");
-				expectedFiles.Add ("Contents/Info.plist");
-				expectedFiles.Add ("Contents/MacOS");
-				expectedFiles.Add ("Contents/MacOS/BundleStructure");
-				expectedFiles.Add ("Contents/MonoBundle");
-				expectedFiles.Add ("Contents/PkgInfo");
-				expectedFiles.Add ("Contents/Resources");
+				expectedFiles.Add (Path.Combine ("Contents", "Info.plist"));
+				expectedFiles.Add (Path.Combine ("Contents", "MacOS"));
+				expectedFiles.Add (Path.Combine ("Contents", "MacOS/BundleStructure"));
+				expectedFiles.Add (Path.Combine ("Contents", "MonoBundle"));
+				expectedFiles.Add (Path.Combine ("Contents", "PkgInfo"));
+				expectedFiles.Add (Path.Combine ("Contents", "Resources"));
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -339,13 +339,13 @@ namespace Xamarin.Tests {
 				switch (platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
-					expectedFiles.Add ($"_CodeSignature");
-					expectedFiles.Add ($"_CodeSignature/CodeResources");
+					expectedFiles.Add ("_CodeSignature");
+					expectedFiles.Add (Path.Combine ("_CodeSignature", "CodeResources"));
 					break;
 				case ApplePlatform.MacCatalyst:
 				case ApplePlatform.MacOSX:
-					expectedFiles.Add ($"Contents/_CodeSignature");
-					expectedFiles.Add ($"Contents/_CodeSignature/CodeResources");
+					expectedFiles.Add (Path.Combine ("Contents", "_CodeSignature"));
+					expectedFiles.Add (Path.Combine ("Contents", "_CodeSignature", "CodeResources"));
 					break;
 				default:
 					throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -444,12 +444,12 @@ namespace Xamarin.Tests {
 			} else {
 				expectedFiles.Add ($"{assemblyDirectory}.xamarin");
 				foreach (var rid in runtimeIdentifiers) {
-					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}");
-					expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.dll");
+					expectedFiles.Add (Path.Combine ($"{assemblyDirectory}.xamarin", $"{rid}"));
+					expectedFiles.Add (Path.Combine ($"{assemblyDirectory}.xamarin", $"{rid}", $"{assemblyName}.dll"));
 					if (hasPdb && includeDebugFiles)
-						expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.pdb");
+						expectedFiles.Add (Path.Combine ($"{assemblyDirectory}.xamarin", $"{rid}", $"{assemblyName}.pdb"));
 					if (addConfig)
-						expectedFiles.Add ($"{assemblyDirectory}.xamarin/{rid}/{assemblyName}.dll.config");
+						expectedFiles.Add (Path.Combine ($"{assemblyDirectory}.xamarin", $"{rid}", $"{assemblyName}.dll.config"));
 				}
 			}
 		}
@@ -464,7 +464,7 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				pluginsDirectory = "Contents/PlugIns";
+				pluginsDirectory = Path.Combine ("Contents", "PlugIns");
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -472,22 +472,22 @@ namespace Xamarin.Tests {
 
 			pluginsDirectory = Path.Combine (pluginsDirectory, subdirectory);
 
-			expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle");
-			expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/{pluginName}");
+			expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle"));
+			expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", pluginName));
 			switch (platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Info.plist");
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Info.plist"));
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Resources");
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions");
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/A");
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/A/Resources");
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/A/Resources/Info.plist");
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/A/{pluginName}");
-				expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/Current");
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Resources"));
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions"));
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "A"));
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "A", "Resources"));
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "A", "Resources", "Info.plist"));
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "A", pluginName));
+				expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "Current"));
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -497,13 +497,13 @@ namespace Xamarin.Tests {
 				switch (platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
-					expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/_CodeSignature");
-					expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/_CodeSignature/CodeResources");
+					expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "_CodeSignature"));
+					expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "_CodeSignature", "CodeResources"));
 					break;
 				case ApplePlatform.MacOSX:
 				case ApplePlatform.MacCatalyst:
-					expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/A/_CodeSignature");
-					expectedFiles.Add ($"{pluginsDirectory}/{pluginName}.bundle/Versions/A/_CodeSignature/CodeResources");
+					expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "A", "_CodeSignature"));
+					expectedFiles.Add (Path.Combine (pluginsDirectory, $"{pluginName}.bundle", "Versions", "A", "_CodeSignature", "CodeResources"));
 					break;
 				default:
 					throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -521,28 +521,28 @@ namespace Xamarin.Tests {
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				frameworksDirectory = "Contents/Frameworks";
+				frameworksDirectory = Path.Combine ("Contents", "Frameworks");
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
 			}
 
-			expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework");
-			expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/{frameworkName}");
+			expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework"));
+			expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", frameworkName));
 			switch (platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Info.plist");
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Info.plist"));
 				break;
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Resources");
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions");
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/A");
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/A/Resources");
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/A/Resources/Info.plist");
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/A/{frameworkName}");
-				expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/Current");
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Resources"));
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions"));
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A"));
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", "Resources"));
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", "Resources", "Info.plist"));
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", frameworkName));
+				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "Current"));
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
@@ -552,13 +552,13 @@ namespace Xamarin.Tests {
 				switch (platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
-					expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/_CodeSignature");
-					expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/_CodeSignature/CodeResources");
+					expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "_CodeSignature"));
+					expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "_CodeSignature", "CodeResources"));
 					break;
 				case ApplePlatform.MacOSX:
 				case ApplePlatform.MacCatalyst:
-					expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/A/_CodeSignature");
-					expectedFiles.Add ($"{frameworksDirectory}/{frameworkName}.framework/Versions/A/_CodeSignature/CodeResources");
+					expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", "_CodeSignature"));
+					expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", "_CodeSignature", "CodeResources"));
 					break;
 				default:
 					throw new NotImplementedException ($"Unknown platform: {platform}");

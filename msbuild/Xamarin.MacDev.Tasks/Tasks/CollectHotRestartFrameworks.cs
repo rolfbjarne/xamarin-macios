@@ -1,9 +1,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -40,34 +40,30 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
-		const string XCFramework_Extension = ".xcframework";
-		static string? GetXCFramework (string framework)
-		{
-			framework = framework.TrimEnd (Path.DirectorySeparatorChar);
-			if (framework.EndsWith (XCFramework_Extension, StringComparison.OrdinalIgnoreCase))
-				return framework;
-			if (framework.Length <= XCFramework_Extension.Length)
-				return null;
-			return GetXCFramework (Path.GetDirectoryName (framework));
-		}
-
 		IEnumerable<ITaskItem> ProcessFrameworks (IEnumerable<ITaskItem> input)
 		{
 			var frameworks = new List<ITaskItem> ();
-			var xcframeworkPaths = new HashSet<string> ();
+			var xcframeworkPaths = new Dictionary<string, ITaskItem> ();
 
 			// split frameworks and xcframeworks
-			foreach (var item in input) {
-				var spec = Path.GetDirectoryName (item.ItemSpec.TrimEnd (Path.DirectorySeparatorChar));
-				if (!spec.EndsWith (".framework", StringComparison.OrdinalIgnoreCase))
+			// we sort the input to get predicable output
+			foreach (var item in input.OrderBy (v => v.ItemSpec)) {
+				if (!ComputeBundleLocationTaskBase.TryGetFrameworkDirectory (item.ItemSpec, out var framework, out var isXCFramework)) {
+					Log.LogMessage (MessageImportance.Low, "The item {0} is not a framework.", item.ItemSpec);
 					continue;
+				}
 
-				var xcframework = GetXCFramework (spec);
-				if (xcframework is not null) {
-					xcframeworkPaths.Add (xcframework);
+				Log.LogMessage (MessageImportance.Low, $"The item {item.ItemSpec} is {(isXCFramework ? "an xcframework" : "a framework")} with path {framework}");
+
+				if (isXCFramework) {
+					if (!xcframeworkPaths.ContainsKey (framework)) {
+						xcframeworkPaths.Add (framework, item);
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The xcframework {framework} has already been added from the path {item.ItemSpec}");
+					}
 				} else {
-					item.ItemSpec = spec;
 					frameworks.Add (item);
+					item.ItemSpec = framework;
 				}
 			}
 
@@ -76,33 +72,18 @@ namespace Xamarin.MacDev.Tasks {
 				return frameworks;
 
 			var xcframeworks = new List<ITaskItem> ();
-			foreach (var xcframework in xcframeworkPaths) {
+			foreach (var entry in xcframeworkPaths) {
+				var xcframework = entry.Key;
 				var resolved = ResolveNativeReferencesBase.ResolveXCFramework (Log, SdkIsSimulator, TargetFrameworkMoniker, Architectures, xcframework);
 				if (resolved is null) {
 					Log.LogWarning ($"Unable to resolve the xcframework: {xcframework}");
 					continue;
 				}
-				var resolvedFullPath = Path.GetFullPath (resolved);
-				var t = new TaskItem (Path.GetDirectoryName (resolved));
-				var originalTaskItems = input.Where (v => string.Equals (
-					Path.GetFullPath (v.ItemSpec).TrimEnd (Path.DirectorySeparatorChar),
-					resolvedFullPath,
-					StringComparison.OrdinalIgnoreCase));
-				if (!originalTaskItems.Any ()) {
-					Log.LogWarning ($"Could not find the original item for: {xcframework}");
-				} else if (originalTaskItems.Count () > 1) {
-					Log.LogWarning ($"Found more than one original item for: {xcframework}:\n\t{string.Join ("\n\t", originalTaskItems.Select (v => v.ItemSpec))}");
-				} else {
-					// add metadata from the original item
-					var nr = originalTaskItems.Single ();
-					nr.CopyMetadataTo (t);
-				}
+				var item = entry.Value;
+				item.ItemSpec = Path.GetFullPath (resolved);
+				xcframeworks.Add (item);
 
-				Log.LogWarning ($"Resolved {xcframework} to {resolvedFullPath}");
-
-				t.SetMetadata ("Kind", "Framework");
-				t.SetMetadata ("Name", resolved);
-				xcframeworks.Add (t);
+				Log.LogWarning ($"Resolved {xcframework} to {item.ItemSpec}");
 			}
 
 			return frameworks.Union (xcframeworks);

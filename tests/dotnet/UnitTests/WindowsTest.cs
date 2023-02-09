@@ -39,15 +39,22 @@ namespace Xamarin.Tests {
 			DumpDirContents (appPath);
 			DumpDirContents (tmpdir);
 
+			var hotRestartAppBundleFiles = BundleStructureTest.Find (hotRestartAppBundlePath);
+			var payloadFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "Payload", "BundleStructure.app"));
+			var contentFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "BundleStructure.content"));
+			var merged = hotRestartAppBundleFiles.Union (payloadFiles).ToList ();
+			var duplicates = merged.GroupBy (v => v).Where (g => g.Count () > 1).Select (v => v.Key);
+			merged = merged.Distinct ().OrderBy (v => v).ToList ();
+
 			var rids = runtimeIdentifiers.Split (';');
-			BundleStructureTest.CheckAppBundleContents (platform, appPath, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
+			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
 		}
 
 		static void DumpDirContents (string dir)
 		{
 			var files = Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories);
 			Console.WriteLine ($"Found {files.Count ()} in {dir}:");
-			foreach (var entry in files)
+			foreach (var entry in files.OrderBy (v => v))
 				Console.WriteLine ($"    {entry}");
 		}
 

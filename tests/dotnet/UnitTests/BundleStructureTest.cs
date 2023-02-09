@@ -18,8 +18,9 @@ namespace Xamarin.Tests {
 			return false;
 		}
 
-		static List<string> Find (string appPath)
+		public static List<string> Find (string appPath)
 		{
+			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
 			var dir = new DirectoryInfo (appPath);
 			var managedFiles = dir.GetFileSystemInfos ("*", SearchOption.AllDirectories)
 								.Select (v => v.FullName)
@@ -59,13 +60,16 @@ namespace Xamarin.Tests {
 
 		internal static void CheckAppBundleContents (ApplePlatform platform, string appPath, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild)
 		{
-			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
 			Console.WriteLine ($"App bundle: {appPath}");
 			Assert.That (appPath, Does.Exist, "App bundle existence");
+			var allFiles = Find (appPath);
+			CheckAppBundleContents (platform, allFiles, runtimeIdentifiers, isSigned, isReleaseBuild, appPath);
+		}
 
+		internal static void CheckAppBundleContents (ApplePlatform platform, IEnumerable<string> allFiles, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild, string? appPath = null)
+		{
 			var isCoreCLR = platform == ApplePlatform.MacOSX;
 			var includeDebugFiles = !isReleaseBuild;
-			var allFiles = Find (appPath);
 
 			// Remove various files we don't care about (for this test) from the list of files in the app bundle.
 			Predicate<string?> predicate = (v) => {
@@ -118,7 +122,7 @@ namespace Xamarin.Tests {
 				return false;
 			};
 
-			allFiles.RemoveAll (predicate);
+			allFiles = allFiles.Where (v => !predicate (v));
 
 			var expectedFiles = new List<string> ();
 
@@ -371,9 +375,11 @@ namespace Xamarin.Tests {
 			Assert.That (unexpectedFiles, Is.Empty, "No unexpected files");
 			Assert.That (missingFiles, Is.Empty, "No missing files");
 
-			AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.dylib");
-			AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.so");
-			AssertLibraryArchitectures (appPath, runtimeIdentifiers);
+			if (appPath is not null) {
+				AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.dylib");
+				AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.so");
+				AssertLibraryArchitectures (appPath, runtimeIdentifiers);
+			}
 		}
 
 		static void AssertDynamicLibraryId (ApplePlatform platform, string appPath, string dylibDirectory, string library)

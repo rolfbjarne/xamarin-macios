@@ -93,13 +93,11 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var allInput = new List<ITaskItem> ();
 
-			var noneFrameworks = None.Where (v => Path.GetDirectoryName (v.ItemSpec).EndsWith (".framework", StringComparison.OrdinalIgnoreCase));
-
-			allInput.AddRange (noneFrameworks);
+			allInput.AddRange (None);
 			allInput.AddRange (UnpackedFramework);
 			allInput.AddRange (NativeReference);
 
-			Log.LogMessage (MessageImportance.Normal, $"Found {noneFrameworks.Count ()} None framework items, {UnpackedFramework.Length} UnpackedFramework items, {NativeReference.Length} NativeReference items, for a total of {allInput.Count} items");
+			Log.LogMessage (MessageImportance.Normal, $"Found {None.Count ()} None items, {UnpackedFramework.Length} UnpackedFramework items, {NativeReference.Length} NativeReference items, for a total of {allInput.Count} items");
 
 			var frameworks = new Dictionary<string, ITaskItem> ();
 			foreach (var framework in ProcessFrameworks (allInput)) {

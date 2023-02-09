@@ -104,7 +104,28 @@
 		</Touch>
 	</Target>
 
-	<Target Name="_CollectHotRestartFrameworks" DependsOnTargets="_ComputeTargetArchitectures">
+	<Target Name="_ComputeHotRestartBundleContents" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeTargetArchitectures">
+		<ComputeBundleLocation
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AssemblyDirectory="$(_AppContentsRelativePath)"
+			BundleResource="@(BundleResource)"
+			BundlerDebug="$(_BundlerDebug)"
+			Content="@(Content)"
+			EmbeddedResource="@(EmbeddedResource)"
+			FrameworksDirectory="$(_AppFrameworksRelativePath)"
+			PackageDebugSymbols="$(PackageDebugSymbols)"
+			PlugInsDirectory="$(_AppPlugInsRelativePath)"
+			ProjectDir="$(MSBuildProjectDirectory)"
+			ResolvedFileToPublish="@(None);@(NativeReference);@(UnpackedFrameworks);@(ResolvedFileToPublish)"
+			ResourceDirectory="$(_AppResourcesRelativePath)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		>
+			<Output TaskParameter="UpdatedResolvedFileToPublish" ItemName="_ComputedHotRestartBundleContents" />
+		</ComputeBundleLocation>
+	</Target>
+
+	<Target Name="_CollectHotRestartFrameworks" DependsOnTargets="_ComputeTargetArchitectures;_ComputeHotRestartBundleContents">
 		<CollectHotRestartFrameworks
 			Architectures="$(TargetArchitectures)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"

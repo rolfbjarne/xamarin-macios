@@ -3615,18 +3615,7 @@ namespace Registrar {
 						} else if (isINativeObject) {
 							TypeDefinition nativeObjType = elementType.Resolve ();
 							var isNativeObjectInterface = nativeObjType.IsInterface;
-
-							if (isNativeObjectInterface) {
-								var wrapper_type = GetProtocolAttributeWrapperType (nativeObjType);
-								if (wrapper_type == null)
-									throw ErrorHelper.CreateError (4125, Errors.MT4125, td.FullName, descriptiveMethodName);
-
-								nativeObjType = wrapper_type.Resolve ();
-							}
-
-							// verify that the type has a ctor with two parameters
-							if (!HasIntPtrBoolCtor (nativeObjType, exceptions))
-								throw ErrorHelper.CreateError (4103, Errors.MT4103, nativeObjType.FullName, descriptiveMethodName);
+							nativeObjType = GetInstantiableType (elementType.Resolve (), exceptions, descriptiveMethodName);
 
 							body_setup.AppendLine ("MonoType *paramtype{0} = NULL;", i);
 							cleanup.AppendLine ("xamarin_mono_object_release (&paramtype{0});", i);
@@ -3742,20 +3731,7 @@ namespace Registrar {
 							}
 						}
 					} else if (IsNativeObject (td)) {
-						TypeDefinition nativeObjType = td;
-
-						if (td.IsInterface) {
-							var wrapper_type = GetProtocolAttributeWrapperType (td);
-							if (wrapper_type == null)
-								throw ErrorHelper.CreateError (4125, Errors.MT4125, td.FullName, descriptiveMethodName);
-
-							nativeObjType = wrapper_type.Resolve ();
-						}
-
-						// verify that the type has a ctor with two parameters
-						if (!HasIntPtrBoolCtor (nativeObjType, exceptions))
-							throw ErrorHelper.CreateError (4103, Errors.MT4103, nativeObjType.FullName, descriptiveMethodName);
-
+						var nativeObjType = GetInstantiableType (td, exceptions, descriptiveMethodName);
 						var findMonoClass = false;
 						var tdTokenRef = INVALID_TOKEN_REF;
 						var nativeObjectTypeTokenRef = INVALID_TOKEN_REF;
@@ -4161,20 +4137,29 @@ namespace Registrar {
 #if NET
 			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
 				var staticCall = false;
+				var managedMethodNotFound = false;
 				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
 					pinvokeMethodInfo = new LinkerConfiguration.UnmanagedCallersEntry (name + "___FIXME___MANAGED_METHOD_NOT_FOUND", -1, method.Method);
+					managedMethodNotFound = true;
 				}
 				var pinvokeMethod = pinvokeMethodInfo.Name;
 				sb.AppendLine ();
 				if (!staticCall)
 					sb.Append ("typedef ");
-				if (isCtor)
-					sb.Append ("id");
-				else if (isVoid)
-					sb.Append ("void");
-				else
-					sb.Append (ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method));
+
+				var callbackReturnType = "";
+				var hasReturnType = true;
+				if (isCtor) {
+					callbackReturnType = "id";
+				} else if (isVoid) {
+					callbackReturnType = "void";
+					hasReturnType = false;
+				} else {
+					callbackReturnType = ToObjCParameterType (method.NativeReturnType, descriptiveMethodName, exceptions, method.Method);
+				}
+
+				sb.Append (callbackReturnType);
 
 				if (staticCall) {
 					sb.Append (pinvokeMethod);
@@ -4196,6 +4181,9 @@ namespace Registrar {
 						sb.AppendFormat ("p{0}", i - indexOffset);
 					}
 				}
+				if (isCtor)
+					sb.Append (", bool* call_super");
+				sb.Append (", GCHandle* exception_gchandle");
 
 				if (method.IsVariadic)
 					sb.Append (", ...");
@@ -4204,18 +4192,41 @@ namespace Registrar {
 				sb.WriteLine ();
 				sb.WriteLine (GetObjCSignature (method, exceptions));
 				sb.WriteLine ("{");
+				sb.WriteLine ("GCHandle exception_gchandle = INVALID_GCHANDLE;");
+				if (isCtor)
+					sb.WriteLine ($"bool call_super = false;");
+				if (hasReturnType)
+					sb.WriteLine ($"{callbackReturnType} rv = {{ 0 }};");
+
+				if (managedMethodNotFound) {
+					sb.WriteLine ($"NSLog (@\"Trying to call managed method that wasn't found at build time: {pinvokeMethod}\\n\");");
+					sb.WriteLine ($"fprintf (stderr, \"Trying to call managed method that wasn't found at build time: {pinvokeMethod}\\n\");");
+				}
 				if (!staticCall) {
 					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
 					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, \"{pinvokeMethod}\", {pinvokeMethodInfo.Id.ToString ()});");
 				}
-				if (!isVoid || isCtor)
-					sb.Write ("return ");
+				if (hasReturnType)
+					sb.Write ("rv = ");
 				sb.Write (pinvokeMethod);
 				sb.Write (" (self, _cmd");
 				for (var i = indexOffset; i < num_arg; i++) {
 					sb.AppendFormat (", p{0}", i - indexOffset);
 				}
+				if (isCtor)
+					sb.Write (", &call_super");
+				sb.Write (", &exception_gchandle");
 				sb.WriteLine (");");
+
+				sb.WriteLine ("xamarin_process_managed_exception_gchandle (exception_gchandle);");
+
+				if (isCtor) {
+					GenerateCallToSuperForConstructor (sb, method, exceptions);
+				}
+
+				if (hasReturnType)
+					sb.WriteLine ("return rv;");
+
 				sb.WriteLine ("}");
 				return;
 			}
@@ -4439,33 +4450,58 @@ namespace Registrar {
 				sb.Write (", 0x{0:X}", token_ref);
 				sb.WriteLine (");");
 				if (isCtor) {
-					sb.WriteLine ("if (call_super && rv) {");
-					sb.Write ("struct objc_super super = {  rv, [").Write (method.DeclaringType.SuperType.ExportedName).WriteLine (" class] };");
-					sb.Write ("rv = ((id (*)(objc_super*, SEL");
-
-					if (method.Parameters != null) {
-						for (int i = 0; i < method.Parameters.Length; i++)
-							sb.Append (", ").Append (ToObjCParameterType (method.Parameters [i], method.DescriptiveMethodName, exceptions, method.Method));
-					}
-					if (method.IsVariadic)
-						sb.Append (", ...");
-
-					sb.Write (")) objc_msgSendSuper) (&super, @selector (");
-					sb.Write (method.Selector);
-					sb.Write (")");
-					var split = method.Selector.Split (':');
-					for (int i = 0; i < split.Length - 1; i++) {
-						sb.Append (", ");
-						sb.AppendFormat ("p{0}", i);
-					}
-					sb.WriteLine (");");
-					sb.WriteLine ("}");
+					GenerateCallToSuperForConstructor (sb, method, exceptions);
 					sb.WriteLine ("return rv;");
 				}
 				sb.WriteLine ("}");
 			} else {
 				sb.WriteLine (body);
 			}
+		}
+
+		void GenerateCallToSuperForConstructor (AutoIndentStringBuilder sb, ObjCMethod method, List<Exception> exceptions)
+		{
+			sb.WriteLine ("if (call_super && rv) {");
+			sb.Write ("struct objc_super super = {  rv, [").Write (method.DeclaringType.SuperType.ExportedName).WriteLine (" class] };");
+			sb.Write ("rv = ((id (*)(objc_super*, SEL");
+
+			if (method.Parameters != null) {
+				for (int i = 0; i < method.Parameters.Length; i++)
+					sb.Append (", ").Append (ToObjCParameterType (method.Parameters [i], method.DescriptiveMethodName, exceptions, method.Method));
+			}
+			if (method.IsVariadic)
+				sb.Append (", ...");
+
+			sb.Write (")) objc_msgSendSuper) (&super, @selector (");
+			sb.Write (method.Selector);
+			sb.Write (")");
+			var split = method.Selector.Split (':');
+			for (int i = 0; i < split.Length - 1; i++) {
+				sb.Append (", ");
+				sb.AppendFormat ("p{0}", i);
+			}
+			sb.WriteLine (");");
+			sb.WriteLine ("}");
+		}
+
+		public TypeDefinition GetInstantiableType (TypeReference tr, List<Exception> exceptions, string descriptiveMethodName)
+		{
+			var td = tr.Resolve ();
+			TypeDefinition nativeObjType = td;
+
+			if (td.IsInterface) {
+				var wrapper_type = GetProtocolAttributeWrapperType (td);
+				if (wrapper_type == null)
+					throw ErrorHelper.CreateError (4125, Errors.MT4125, td.FullName, descriptiveMethodName);
+
+				nativeObjType = wrapper_type.Resolve ();
+			}
+
+			// verify that the type has a ctor with two parameters
+			if (!HasIntPtrBoolCtor (nativeObjType, exceptions))
+				throw ErrorHelper.CreateError (4103, Errors.MT4103, nativeObjType.FullName, descriptiveMethodName);
+
+			return nativeObjType;
 		}
 
 		public TypeDefinition GetDelegateProxyType (ObjCMethod obj_method)

@@ -726,7 +726,12 @@ namespace ObjCRuntime {
 			Registrar.GetMethodDescription (Class.Lookup (cls), sel, is_static != 0, desc);
 		}
 
-		static sbyte HasNSObject (IntPtr ptr)
+		internal static bool HasNSObject (NativeHandle ptr)
+		{
+			return TryGetNSObject (ptr, evenInFinalizerQueue: false) is not null;
+		}
+
+		internal static sbyte HasNSObject (IntPtr ptr)
 		{
 			var rv = TryGetNSObject (ptr, evenInFinalizerQueue: false) is not null;
 			return (sbyte) (rv ? 1 : 0);
@@ -2136,7 +2141,13 @@ namespace ObjCRuntime {
 		}
 
 		// Allocate a GCHandle and return the IntPtr to it.
-		internal static IntPtr AllocGCHandle (object? value, GCHandleType type = GCHandleType.Normal)
+		internal static IntPtr AllocGCHandle (object? value)
+		{
+			return AllocGCHandle (value, GCHandleType.Normal);
+		}
+
+		// Allocate a GCHandle and return the IntPtr to it.
+		internal static IntPtr AllocGCHandle (object? value, GCHandleType type)
 		{
 			return GCHandle.ToIntPtr (GCHandle.Alloc (value, type));
 		}
@@ -2229,12 +2240,22 @@ namespace ObjCRuntime {
 			return (sbyte) (rv ? 1 : 0);
 		}
 
+		public static string GetCallerMethodName ()
+		{
+			var frame= new global::System.Diagnostics.StackFrame (1);
+			return frame.GetMethod ()?.Name ?? "Unknown";
+		}
+
 		static IntPtr LookupManagedFunction (IntPtr symbol, int id)
 		{
 			var symb = Marshal.PtrToStringAuto (symbol);
-			Console.WriteLine ($"LookupManagedFunction (0x{symbol.ToString ("x")} = {symb}, {id})");
-			var rv = LookupManagedFunctionImpl (id);
-			Console.WriteLine ($"LookupManagedFunction (0x{symbol.ToString ("x")} = {symb}, {id}) => 0x{rv.ToString ("x")}");
+			Console.WriteLine ("LookupManagedFunction (0x{0} = {1}, {2})", symbol.ToString ("x"), symb, id);
+			IntPtr rv;
+			if (id == -1)
+				rv = IntPtr.Zero;
+			else
+				rv = LookupManagedFunctionImpl (id);
+			Console.WriteLine ("LookupManagedFunction (0x{0} = {1}, {2}) => 0x{3}", symbol.ToString ("x"), symb, id, rv.ToString ("x"));
 			return rv;
 		}
 

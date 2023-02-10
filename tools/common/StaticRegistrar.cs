@@ -4620,21 +4620,25 @@ namespace Registrar {
 			return null;
 		}
 
-		public ObjCType FindType (TypeDefinition type)
+		public bool TryFindType (TypeDefinition type, out ObjCType objcType)
 		{
-			if (!Types.TryGetValue (type, out var value))
-				throw new Exception ($"Unable to find {type.FullName}. There are {Types.Count} types registered.\n\t{string.Join ("\n\t", Types.Take (25).Select (v => v.Key.FullName))}");
-			return value;
+			return Types.TryGetValue (type, out objcType);
 		}
 
-		public ObjCMethod FindMethod (MethodDefinition method)
+		public bool TryFindMethod (MethodDefinition method, out ObjCMethod objcMethod)
 		{
-			var type = FindType (method.DeclaringType);
-			foreach (var m in type.Methods)
-				if ((object) m.Method == (object) method)
-					return m;
-
-			throw new NotImplementedException ($"Unable to find the method {method.FullName} in {type.Type.FullName}");
+			if (TryFindType (method.DeclaringType, out var type)) {
+				if (type.Methods is not null) {
+					foreach (var m in type.Methods) {
+						if ((object) m.Method == (object) method) {
+							objcMethod = m;
+							return true;
+						}
+					}
+				}
+			}
+			objcMethod = null;
+			return false;
 		}
 
 		MethodDefinition GetBlockProxyAttributeMethod (MethodDefinition method, int parameter)

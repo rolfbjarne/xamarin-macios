@@ -2748,11 +2748,12 @@ xamarin_registrar_dlsym (void **function_pointer, const char *symbol, int32_t id
 	if (*function_pointer != NULL)
 		return;
 
-	NSLog (@PRODUCT ": Unable to load the symbol '%s' to call managed code", symbol);
+	NSLog (@PRODUCT ": Unable to load the symbol '%s' to call managed code. Exception: %p", symbol, exception_gchandle);
 
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_process_managed_exception_gchandle (exception_gchandle);
 
+	// This shouldn't really happen
 	NSString *msg = [NSString stringWithFormat: @"Unable to load the symbol '%s' to call managed code: %s", symbol, dlerror ()];
 	NSLog (@"%@", msg);
 	@throw [[NSException alloc] initWithName: @"SymbolNotFoundException" reason: msg userInfo: NULL];

@@ -2240,10 +2240,11 @@ namespace ObjCRuntime {
 			return (sbyte) (rv ? 1 : 0);
 		}
 
-		public static string GetCallerMethodName ()
+		public static void TraceCaller (string message)
 		{
-			var frame= new global::System.Diagnostics.StackFrame (1);
-			return frame.GetMethod ()?.Name ?? "Unknown";
+			var frame = new global::System.Diagnostics.StackFrame (1);
+			var caller = frame.GetMethod ()?.Name ?? "Unknown";
+			Console.WriteLine ("{0}: {1}", message, caller);
 		}
 
 		static IntPtr LookupManagedFunction (IntPtr symbol, int id)
@@ -2255,8 +2256,13 @@ namespace ObjCRuntime {
 				rv = IntPtr.Zero;
 			else
 				rv = LookupManagedFunctionImpl (id);
+
 			Console.WriteLine ("LookupManagedFunction (0x{0} = {1}, {2}) => 0x{3}", symbol.ToString ("x"), symb, id, rv.ToString ("x"));
-			return rv;
+
+			if (rv != IntPtr.Zero)
+				return rv;
+
+			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symb);;
 		}
 
 		static IntPtr LookupManagedFunctionImpl (int id)

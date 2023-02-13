@@ -4137,6 +4137,7 @@ namespace Registrar {
 #if NET
 			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
 				var staticCall = false;
+				var supportDynamicAssemblyLoading = true;
 				var managedMethodNotFound = false;
 				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
@@ -4204,7 +4205,8 @@ namespace Registrar {
 				}
 				if (!staticCall) {
 					sb.WriteLine ($"static {pinvokeMethod}_function {pinvokeMethod};");
-					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, \"{pinvokeMethod}\", {pinvokeMethodInfo.Id.ToString ()});");
+					var assemblyName = supportDynamicAssemblyLoading ? "\"" + method.Method.Module.Assembly.Name.Name + "\"" : "NULL";
+					sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{pinvokeMethod}, {assemblyName}, \"{pinvokeMethod}\", {pinvokeMethodInfo.Id});");
 				}
 				if (hasReturnType)
 					sb.Write ("rv = ");

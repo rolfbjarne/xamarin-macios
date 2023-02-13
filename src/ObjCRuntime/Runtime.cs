@@ -48,6 +48,7 @@ namespace ObjCRuntime {
 
 		internal static IntPtrEqualityComparer IntPtrEqualityComparer;
 		internal static TypeEqualityComparer TypeEqualityComparer;
+		internal static StringEqualityComparer StringEqualityComparer;
 
 		internal static DynamicRegistrar Registrar;
 #pragma warning restore 8618
@@ -283,6 +284,7 @@ namespace ObjCRuntime {
 
 			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
 			TypeEqualityComparer = new TypeEqualityComparer ();
+			StringEqualityComparer = new StringEqualityComparer ();
 
 			Runtime.options = options;
 			delegates = new List<object> ();
@@ -2247,22 +2249,77 @@ namespace ObjCRuntime {
 			Console.WriteLine ("{0}: {1}", message, caller);
 		}
 
-		static IntPtr LookupManagedFunction (IntPtr symbol, int id)
+		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
 		{
-			var symb = Marshal.PtrToStringAuto (symbol);
-			Console.WriteLine ("LookupManagedFunction (0x{0} = {1}, {2})", symbol.ToString ("x"), symb, id);
 			IntPtr rv;
-			if (id == -1)
-				rv = IntPtr.Zero;
-			else
-				rv = LookupManagedFunctionImpl (id);
+			var symb = Marshal.PtrToStringAuto (symbol);
 
-			Console.WriteLine ("LookupManagedFunction (0x{0} = {1}, {2}) => 0x{3}", symbol.ToString ("x"), symb, id, rv.ToString ("x"));
+			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4})", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id);
+
+			if (id == -1) {
+				rv = IntPtr.Zero;
+			} else if (assembly != IntPtr.Zero) {
+				rv = LookupUnmanagedFunctionInAssembly (assembly, symbol, id);
+				// FIXME -- consistency check
+				var impl = LookupManagedFunctionImpl (id);
+				if (impl != rv)
+					Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5} using assembly lookup and 0x{6} using full app lookup", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"), impl.ToString ("x"));
+				// END FIXME -- remove consistency check once everything is working
+			} else {
+				rv = LookupManagedFunctionImpl (id);
+			}
+
+			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5}", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"));
 
 			if (rv != IntPtr.Zero)
 				return rv;
 
 			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symb);;
+		}
+
+		delegate IntPtr LookupFunction (IntPtr symbol, int id);
+		static Dictionary<string, LookupFunction>? lookup_method_map;
+		static LookupFunction GetLookupMethod (IntPtr assembly_name)
+		{
+			var assembly = Marshal.PtrToStringAuto (assembly_name)!;
+			lock (lock_obj) {
+				if (lookup_method_map is null)
+					lookup_method_map = new Dictionary<string, LookupFunction> (StringEqualityComparer);
+				else if (lookup_method_map.TryGetValue (assembly, out var value))
+					return value;
+			}
+
+			Assembly? asm = null;
+			foreach (var a in AppDomain.CurrentDomain.GetAssemblies ()) {
+				if (a.GetName ().Name != assembly)
+					continue;
+				asm = a;
+				break;
+			}
+
+			if (asm is null)
+				throw ErrorHelper.CreateError (99, "Could not find the assembly '{0}' in the list of assemblies in the current AppDomain.", assembly);
+
+			var type = asm.GetType ("ObjCRuntime.__Registrar__", false);
+			if (type is null)
+				throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.Registrar' in the assembly '{0}'", assembly);
+
+			var method = type.GetMethod ("LookupUnmanagedFunction", BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
+			if (method is null)
+				throw ErrorHelper.CreateError (99, "Could not find the method 'LookupUnmanagedFunction' in the type 'ObjCRuntime.Registrar' in the assembly '{0}'", assembly);
+
+			var del = (LookupFunction) Delegate.CreateDelegate (typeof (LookupFunction), method);
+
+			lock (lock_obj)
+				lookup_method_map [assembly] = del;
+
+			return del;
+		}
+
+		static IntPtr LookupUnmanagedFunctionInAssembly (IntPtr assembly_name, IntPtr symbol, int id)
+		{
+			var del = GetLookupMethod (assembly_name);
+			return del (symbol, id);
 		}
 
 		static IntPtr LookupManagedFunctionImpl (int id)
@@ -2289,6 +2346,19 @@ namespace ObjCRuntime {
 			return (object?) x == (object?) y;
 		}
 		public int GetHashCode (Type? obj)
+		{
+			if (obj is null)
+				return 0;
+			return obj.GetHashCode ();
+		}
+	}
+
+	internal class StringEqualityComparer : IEqualityComparer<string> {
+		public bool Equals (string? x, string? y)
+		{
+			return string.Equals (x, y, StringComparison.Ordinal);
+		}
+		public int GetHashCode (string? obj)
 		{
 			if (obj is null)
 				return 0;

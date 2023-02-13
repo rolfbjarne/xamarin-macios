@@ -14,8 +14,8 @@ using Mono.Linker;
 using Mono.Tuner;
 
 using Registrar;
-using System.Diagnostics;
-using System.Xml.Linq;
+using System.Globalization;
+
 
 
 #nullable enable
@@ -69,6 +69,23 @@ namespace Xamarin.Linker {
 		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> ();
 		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new Dictionary<string, (MethodDefinition, MethodReference)> ();
 
+		class TrampolineInfo
+		{
+			public MethodDefinition Trampoline;
+			public MethodDefinition Target;
+			public int Id;
+
+			public TrampolineInfo (MethodDefinition trampoline, MethodDefinition target, int id)
+			{
+				this.Trampoline = trampoline;
+				this.Target = target;
+				this.Id = id;
+			}
+		}
+
+		List<TrampolineInfo> current_trampoline_lists = new ();
+		Dictionary<AssemblyDefinition, List<TrampolineInfo>> trampoline_map = new ();
+
 		// FIXME: mark the types and methods we use
 		TypeReference GetTypeReference (AssemblyDefinition assembly, string fullname, out TypeDefinition type)
 		{
@@ -100,6 +117,12 @@ namespace Xamarin.Linker {
 			return GetMethodReference (assembly, td, name, fullname + "::" + name, predicate, out var _);
 		}
 
+		MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name, Func<MethodDefinition, bool>? predicate, bool ensurePublic)
+		{
+			GetTypeReference (assembly, fullname, out var td);
+			return GetMethodReference (assembly, td, name, fullname + "::" + name, predicate, out var _, ensurePublic: ensurePublic);
+		}
+
 		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name)
 		{
 			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, null, out var _);
@@ -108,6 +131,11 @@ namespace Xamarin.Linker {
 		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate)
 		{
 			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _);
+		}
+
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate, bool ensurePublic = false)
+		{
+			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _, ensurePublic: ensurePublic);
 		}
 
 		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, bool ensurePublic = false)
@@ -140,7 +168,13 @@ namespace Xamarin.Linker {
 				return GetTypeReference (CorlibAssembly, "System.IntPtr", out var _);
 			}
 		}
-		
+
+		TypeReference System_Int32 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Int32", out var _);
+			}
+		}
+
 		TypeReference System_Byte {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Byte", out var _);
@@ -150,6 +184,12 @@ namespace Xamarin.Linker {
 		TypeReference System_Exception {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Exception", out var _);
+			}
+		}
+
+		TypeReference System_Object {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Object", out var _);
 			}
 		}
 
@@ -307,14 +347,14 @@ namespace Xamarin.Linker {
 		}
 		MethodReference BlockLiteral_CreateBlockForDelegate {
 			get {
-				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", "CreateBlockForDelegate", (v) => 
+				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", nameof (BlockLiteral_CreateBlockForDelegate), (v) => 
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 3
 						&& v.Parameters [0].ParameterType.Is ("System", "Delegate")
 						&& v.Parameters [1].ParameterType.Is ("System", "Delegate")
 						&& v.Parameters [2].ParameterType.Is ("System", "String")
-						&& !v.HasGenericParameters);
+						&& !v.HasGenericParameters, ensurePublic: true);
 			}
 		}
 
@@ -561,15 +601,19 @@ namespace Xamarin.Linker {
 
 			current_assembly = assembly;
 
+			current_trampoline_lists = new List<TrampolineInfo> ();
+			trampoline_map.Add (current_assembly, current_trampoline_lists);
+
 			var modified = false;
 			foreach (var type in assembly.MainModule.Types)
 				modified |= ProcessType (type);
 
 			// Make sure the linker saves any changes in the assembly.
 			if (modified) {
+				CreateRegistrarType ();
 				Save (assembly);
 			}
-			Console.WriteLine ($"LOGLOG: saving {assembly.FullName}: {modified}");
+
 			type_map.Clear ();
 			method_map.Clear ();
 			current_assembly = null;
@@ -580,7 +624,160 @@ namespace Xamarin.Linker {
 			var action = Context.Annotations.GetAction (assembly);
 			if (action == AssemblyAction.Copy)
 				Context.Annotations.SetAction (assembly, AssemblyAction.Save);
-			Console.WriteLine ($"ACTIONACTION: {assembly.FullName}: {Context.Annotations.GetAction (assembly)}");
+		}
+
+		void CreateRegistrarType ()
+		{
+			var sorted = current_trampoline_lists.OrderBy (v => v.Id).ToList ();
+			if (sorted.Count == 0)
+				return;
+
+			var td = new TypeDefinition ("ObjCRuntime", "__Registrar__", TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit);
+			td.BaseType = System_Object;
+			CurrentAssembly.MainModule.Types.Add (td);
+
+			Console.WriteLine ($"GenerateLookupMethods assembly: {CurrentAssembly.FullName}");
+
+			//
+			// The callback methods themselves are all public, and thus accessible from anywhere inside the assembly even if the containing type is not public, as long as the containing type is not nested.
+			// However, if the containing type is nested inside another type, it gets complicated.
+			//
+			// We have two options:
+			// 
+			// 1. Just change the visibility on the nested type to make it visible inside the assembly.
+			// 2. Add a method in the containing type (which has access to any directly nested private types) that can look up any unmanaged trampolines.
+			//    If the containing type is also a private nested type, when we'd have to add another method in its containing type, and so on.
+			//
+			// The second option is more complicated to implement than the first, so we're doing the first option. If someone
+			// runs into any problems (there might be with reflection: looking up a type using the wrong visibility will fail to find that type).
+			// That said, there may be all sorts of problems with reflection (we're adding methods to types, any logic that depends on a type having a certain number of methods will fail for instance).
+			//
+
+			foreach (var md in sorted) {
+				var declType = md.Trampoline.DeclaringType;
+				while (declType.IsNested) {
+					if (declType.IsNestedPrivate) {
+						declType.IsNestedAssembly = true;
+					} else if (declType.IsNestedFamilyAndAssembly || declType.IsNestedFamily) {
+						declType.IsNestedFamilyOrAssembly = true;
+					}
+					declType = declType.DeclaringType;
+				}
+			}
+
+			GenerateLookupMethods (td, sorted);
+		}
+
+		void GenerateLookupMethods (TypeDefinition type, IList<TrampolineInfo> trampolineInfos)
+		{
+			Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items");
+			// All the methods in a given assembly will have consecutive IDs (but might not start at 0).
+			if (trampolineInfos.First ().Id + trampolineInfos.Count - 1 != trampolineInfos.Last ().Id)
+				throw ErrorHelper.CreateError (99, "Invalid ID range");
+
+			const int methodsPerLevel = 100;
+			var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
+			GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1);
+		}
+
+		MethodDefinition GenerateLookupMethods (TypeDefinition type, IList<TrampolineInfo> trampolineInfos, int methodsPerLevel, int level, int levels, int startIndex, int endIndex)
+		{
+			Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items, methodsPerLevel: {methodsPerLevel}, level: {level}, levels: {levels}, startIndex: {startIndex}, endIndex: {endIndex})");
+
+			if (startIndex > endIndex)
+				throw new InvalidOperationException ($"Huh 3? startIndex: {startIndex} endIndex: {endIndex}");
+
+			var startId = trampolineInfos [startIndex].Id;
+			var name = level == 1 ? "LookupUnmanagedFunction" : $"LookupUnmanagedFunction_{level}_{levels}__{startIndex}_{endIndex}__";
+			var method = type.AddMethod (name, MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, System_IntPtr);
+			method.ReturnType = System_IntPtr; // shouldn't be necessary???
+			method.AddParameter ("symbol", System_IntPtr);
+			method.AddParameter ("id", System_Int32);
+			method.CreateBody (out var il);
+
+			if (level == levels) {
+				// This is the leaf method where we do the actual lookup.
+				var targetCount = endIndex - startIndex + 1;
+				var targets = new Instruction [targetCount];
+				for (var i = 0; i < targets.Length; i++) {
+					var md = trampolineInfos [startIndex + i].Trampoline;
+					try {
+						var mr = CurrentAssembly.MainModule.ImportReference (md);
+						targets [i] = Instruction.Create (OpCodes.Ldftn, mr);
+					} catch (Exception e) {
+						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
+						AddException (ErrorHelper.CreateWarning (99, e, str));
+						targets [i] = Instruction.Create (OpCodes.Ldstr, str);
+					}
+				}
+
+				il.Emit (OpCodes.Ldarg_1);
+				if (startId != 0) {
+					il.Emit (OpCodes.Ldc_I4, startId);
+					il.Emit (OpCodes.Sub_Ovf_Un);
+				}
+				il.Emit (OpCodes.Switch, targets);
+				for (var k = 0; k < targetCount; k++) {
+					il.Append (targets [k]);
+					il.Emit (OpCodes.Ret);
+				}
+			} else {
+				// This is an intermediate method to not have too many ldftn instructions in a single method (it takes a long time to JIT).
+				var chunkSize = (int) Math.Pow (methodsPerLevel, levels - level);
+
+				// Some validation
+				if (level == 1) {
+					if (chunkSize * methodsPerLevel < trampolineInfos.Count)
+						throw new InvalidOperationException ($"Huh 2 -- {chunkSize}?");
+				}
+
+				var count = endIndex - startIndex + 1;
+				var chunks = (int) Math.Ceiling (count / (double) chunkSize);
+				var targets = new Instruction [chunks];
+
+				Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items, methodsPerLevel: {methodsPerLevel}, level: {level}, levels: {levels}, startIndex: {startIndex}, endIndex: {endIndex}) count: {count} chunks: {chunks} chunkSize: {chunkSize}");
+
+				var lookupMethods = new MethodDefinition [targets.Length];
+				for (var i = 0; i < targets.Length; i++) {
+					try {
+						var subStartIndex = startIndex + (chunkSize) * i;
+						var subEndIndex = subStartIndex + (chunkSize)  - 1;
+						if (subEndIndex > endIndex)
+							subEndIndex = endIndex;
+						var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex);
+						lookupMethods [i] = md;
+						targets [i] = Instruction.Create (OpCodes.Ldarg_0);
+					} catch (Exception e) {
+						var str = string.Format ("Failed to generate nested lookup method: {0}", e.ToString ());
+						AddException (ErrorHelper.CreateWarning (99, e, str));
+						targets [i] = Instruction.Create (OpCodes.Ldstr, str);
+					}
+				}
+
+				il.Emit (OpCodes.Ldarg_1);
+				if (startId != 0) {
+					il.Emit (OpCodes.Ldc_I4, startId);
+					il.Emit (OpCodes.Sub_Ovf_Un);
+				}
+				il.Emit (OpCodes.Ldc_I4, chunkSize);
+				il.Emit (OpCodes.Div);
+				il.Emit (OpCodes.Switch, targets);
+				for (var k = 0; k < targets.Length; k++) {
+					il.Append (targets [k]); // OpCodes.Ldarg_0
+					il.Emit (OpCodes.Ldarg_1);
+					il.Emit (OpCodes.Call, lookupMethods [k]);
+					il.Emit (OpCodes.Ret);
+				}
+			}
+
+			// no hit? this shouldn't happen
+			il.Emit (OpCodes.Ldc_I4_M1);
+			il.Emit (OpCodes.Conv_I);
+			il.Emit (OpCodes.Ret);
+
+			// Dump (method, Console.WriteLine);
+
+			return method;
 		}
 
 		void RewriteRuntimeLookupManagedFunction ()
@@ -764,7 +961,9 @@ namespace Xamarin.Linker {
 
 			var callback = method.DeclaringType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
-			Configuration.UnmanagedCallersMap.Add (method, new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback));
+			var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
+			Configuration.UnmanagedCallersMap.Add (method, entry);
+			current_trampoline_lists.Add (new TrampolineInfo (callback, method, entry.Id));
 
 			// FIXME
 			var t = method.DeclaringType;
@@ -992,6 +1191,7 @@ namespace Xamarin.Linker {
 		static void Dump (MethodDefinition method, Action<string> log)
 		{
 			log ($"{GetMethodSignature (method)}:");
+			return;
 			foreach (var variable in method.Body.Variables)
 				Console.WriteLine ($"    {variable.VariableType?.FullName}: V_{variable.Index}");
 			foreach (var instr in method.Body.Instructions) {
@@ -1004,7 +1204,6 @@ namespace Xamarin.Linker {
 				log ($"    IL_{instr.Offset:X4}: {str}");
 			}
 		}
-
 
 
 		bool IsNSObject (TypeReference type)

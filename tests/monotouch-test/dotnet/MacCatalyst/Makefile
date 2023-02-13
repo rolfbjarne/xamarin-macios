@@ -8,8 +8,8 @@ run-llvm:
 
 managed-static-registrar msr:
 	rm -rf bin obj
-	if ! $(DOTNET) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:Registrar=managed-static; then make diag; exit 1; fi
-	./bin/Debug/net7.0-maccatalyst/maccatalyst-x64/monotouchtest.app/Contents/MacOS/monotouchtest --autostart --autoexit
+	if ! $(DOTNET) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:Registrar=managed-static; then make diag > x.log; tail -n 200 x.log; exit 1; fi
+	MONO_TRACE=E:all ./bin/Debug/net7.0-maccatalyst/maccatalyst-x64/monotouchtest.app/Contents/MacOS/monotouchtest --autostart --autoexit
 
 clean-build:
 	$(MAKE) -C $(TOP) git-clean-all

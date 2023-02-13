@@ -243,9 +243,9 @@ namespace Xamarin.Tests {
 
 		public static bool TryFindPropertyValue (string binlog, string property, [NotNullWhen (true)] out string? value)
 		{
-			var reader = new BinLogReader ();
-			var eols = new char [] { '\n', '\r' };
 			value = null;
+
+			var reader = new BinLogReader ();
 			foreach (var record in reader.ReadRecords (binlog)) {
 				var args = record?.Args;
 				if (args is null)
@@ -256,8 +256,13 @@ namespace Xamarin.Tests {
 				} else if (args is PropertyReassignmentEventArgs prea) {
 					if (string.Equals (property, prea.PropertyName, StringComparison.OrdinalIgnoreCase))
 						value = prea.NewValue;
+				} else if (args is ProjectEvaluationFinishedEventArgs pefea) {
+					var dict = pefea.Properties as IDictionary<string, string>;
+					if (dict is not null && dict.TryGetValue (property, out var pvalue))
+						value = pvalue;
 				}
 			}
+
 			return value is not null;
 		}
 

@@ -7,11 +7,6 @@ namespace Xamarin.Tests {
 	[Category ("Windows")]
 	public class WindowsTest : TestBaseClass {
 		[Test]
-		public void First ()
-		{
-		}
-
-		[Test]
 		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		public void BundleStructureWithHotRestart (ApplePlatform platform, string runtimeIdentifiers)
 		{

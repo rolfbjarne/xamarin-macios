@@ -39,6 +39,11 @@ namespace Xamarin.Tests {
 				var preBuiltAppBundlePath = Path.Combine (preBuiltAppBundleLocation, "Xamarin.PreBuilt.iOS.app.zip");
 				using var archive = System.IO.Compression.ZipFile.OpenRead (preBuiltAppBundlePath);
 				prebuiltAppFiles = archive.Entries.Select (v => v.FullName).ToHashSet ();
+
+				Console.WriteLine ($"Prebuilt app files:");
+				foreach (var pbf in prebuiltAppFiles)
+					Console.WriteLine ($"    {pbf}");
+
 			} else {
 				Console.WriteLine ("Could not find the property 'MessagingAgentsDirectory' in the binlog.");
 			}
@@ -54,14 +59,23 @@ namespace Xamarin.Tests {
 			var merged = hotRestartAppBundleFiles
 				.Union (payloadFiles)
 				.Union (contentFiles)
-				// remove files in the BundleStructure.content subdirectory
-				.Where (v => !v.StartsWith ("BundleStructure.content", StringComparison.Ordinal))
+				.Where (v => {
+					// remove files in the BundleStructure.content subdirectory
+					if (v.StartsWith ("BundleStructure.content", StringComparison.Ordinal))
+						return false;
+					// hotrestart-specific files
+					if (v == "Extracted")
+						return false;
+					if (v == "Entitlements.plist")
+						return false;
+					return true;
+				})
 				.Distinct ()
 				.OrderBy (v => v)
 				.ToList ();
 
 			var rids = runtimeIdentifiers.Split (';');
-			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
+			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.All, configuration == "Release");
 		}
 
 		static void DumpDirContents (string dir)

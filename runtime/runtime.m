@@ -2734,7 +2734,7 @@ xamarin_vprintf (const char *format, va_list args)
 }
 
 void
-xamarin_registrar_dlsym (void **function_pointer, const char *symbol, int32_t id)
+xamarin_registrar_dlsym (void **function_pointer, const char *assembly, const char *symbol, int32_t id)
 {
 	if (*function_pointer != NULL)
 		return;
@@ -2744,7 +2744,7 @@ xamarin_registrar_dlsym (void **function_pointer, const char *symbol, int32_t id
 		return;
 
 	GCHandle exception_gchandle = INVALID_GCHANDLE;
-	*function_pointer = xamarin_lookup_unmanaged_function (symbol, id, &exception_gchandle);
+	*function_pointer = xamarin_lookup_unmanaged_function (assembly, symbol, id, &exception_gchandle);
 	if (*function_pointer != NULL)
 		return;
 

@@ -1,4 +1,5 @@
 using System.IO;
+using System.IO.Compression;
 
 #nullable enable
 
@@ -36,15 +37,33 @@ namespace Xamarin.Tests {
 			properties ["HotRestartAppBundlePath"] = hotRestartAppBundlePath; // no trailing directory separator char for this property.
 			var rv = DotNet.AssertBuild (project_path, properties);
 
+			// Find the files in the prebuilt hot restart app
+			var prebuiltAppFiles = Array.Empty<string> ().ToHashSet ();
+			if (BinLog.TryFindPropertyValue (rv.BinLogPath, "MessagingAgentsDirectory", out var preBuiltAppBundleLocation)) {
+				Console.WriteLine ($"Found the property 'MessagingAgentsDirectory' in the binlog: {preBuiltAppBundleLocation}");
+				var preBuiltAppBundlePath = Path.Combine (preBuiltAppBundleLocation, "Xamarin.PreBuilt.iOS.app.zip");
+				using var archive = System.IO.Compression.ZipFile.OpenRead (preBuiltAppBundlePath);
+				prebuiltAppFiles = archive.Entries.Select (v => v.FullName).ToHashSet ();
+			} else {
+				Console.WriteLine ("Could not find the property 'MessagingAgentsDirectory' in the binlog.");
+			}
+
 			DumpDirContents (appPath);
 			DumpDirContents (tmpdir);
 
-			var hotRestartAppBundleFiles = BundleStructureTest.Find (hotRestartAppBundlePath);
+			var hotRestartAppBundleFiles = BundleStructureTest.Find (hotRestartAppBundlePath)
+				// Exclude any files from the prebuilt hot restart app
+				.Where (v => !prebuiltAppFiles.Contains (v));
 			var payloadFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "Payload", "BundleStructure.app"));
 			var contentFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "BundleStructure.content"));
-			var merged = hotRestartAppBundleFiles.Union (payloadFiles).ToList ();
-			var duplicates = merged.GroupBy (v => v).Where (g => g.Count () > 1).Select (v => v.Key);
-			merged = merged.Distinct ().OrderBy (v => v).ToList ();
+			var merged = hotRestartAppBundleFiles
+				.Union (payloadFiles)
+				.Union (contentFiles)
+				// remove files in the BundleStructure.content subdirectory
+				.Where (v => !v.StartsWith ("BundleStructure.content", StringComparison.Ordinal))
+				.Distinct ()
+				.OrderBy (v => v)
+				.ToList ();
 
 			var rids = runtimeIdentifiers.Split (';');
 			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");

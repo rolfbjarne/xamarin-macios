@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -237,6 +239,26 @@ namespace Xamarin.Tests {
 					};
 				}
 			}
+		}
+
+		public static bool TryFindPropertyValue (string binlog, string property, [NotNullWhen (true)] out string? value)
+		{
+			var reader = new BinLogReader ();
+			var eols = new char [] { '\n', '\r' };
+			value = null;
+			foreach (var record in reader.ReadRecords (binlog)) {
+				var args = record?.Args;
+				if (args is null)
+					continue;
+				if (args is PropertyInitialValueSetEventArgs pivsea) {
+					if (string.Equals (property, pivsea.PropertyName, StringComparison.OrdinalIgnoreCase))
+						value = pivsea.PropertyValue;
+				} else if (args is PropertyReassignmentEventArgs prea) {
+					if (string.Equals (property, prea.PropertyName, StringComparison.OrdinalIgnoreCase))
+						value = prea.NewValue;
+				}
+			}
+			return value is not null;
 		}
 
 		// Returns a diagnostic build log as a string

@@ -130,7 +130,7 @@
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReference="@(NativeReference)"
 			None="@(None)"
-			SdkIsSimulator="false"
+			SdkIsSimulator="$(_SdkIsSimulator)"
 			UnpackedFramework="@(_UnpackedFramework)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
@@ -241,7 +241,7 @@
 			CompiledEntitlements="$(HotRestartAppBundlePath)\Entitlements.plist"
 			IsAppExtension="$(IsAppExtension)"
 			ProvisioningProfile="$(_ProvisioningProfileId)"
-			SdkIsSimulator="False"
+			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkPlatform="iPhoneOS"
 			SdkVersion="12.2"
 			SdkDevPath=" "

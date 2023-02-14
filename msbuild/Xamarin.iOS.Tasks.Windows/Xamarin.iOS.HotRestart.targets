@@ -208,7 +208,7 @@
 													 Condition="Exists('%(RootDir)%(Directory)%(Filename).pdb')" />
 
 			<_FilesToHotRestartContent Include="@(ReferenceCopyLocalPaths -> Distinct())" 
-				Condition="Exists('$(HotRestartAppBundlePath)\%(Filename)%(Extension)') == 'false' And '%(Extension)' != '.a' And '%(Extension)' != '.dylib' And '%(Extension)' != '.dat'"/>
+				Condition="Exists('$(HotRestartAppBundlePath)\%(Filename)%(Extension)') == 'false' And '%(Extension)' != '.a' And '%(Extension)' != '.dylib' And '%(Extension)' != '.dat' And '%(ReferenceCopyLocalPaths.AssetType)' != 'native'"/>
 		</ItemGroup>
 	</Target>
 

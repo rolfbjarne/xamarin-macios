@@ -33,15 +33,29 @@ namespace Xamarin.Tests {
 			var rv = DotNet.AssertBuild (project_path, properties);
 
 			// Find the files in the prebuilt hot restart app
-			var prebuiltAppFiles = Array.Empty<string> ().ToHashSet ();
+			var prebuiltAppEntries = Array.Empty<string> ().ToHashSet ();
 			if (BinLog.TryFindPropertyValue (rv.BinLogPath, "MessagingAgentsDirectory", out var preBuiltAppBundleLocation)) {
 				Console.WriteLine ($"Found the property 'MessagingAgentsDirectory' in the binlog: {preBuiltAppBundleLocation}");
 				var preBuiltAppBundlePath = Path.Combine (preBuiltAppBundleLocation, "Xamarin.PreBuilt.iOS.app.zip");
 				using var archive = System.IO.Compression.ZipFile.OpenRead (preBuiltAppBundlePath);
-				prebuiltAppFiles = archive.Entries.Select (v => v.FullName).ToHashSet ();
+				prebuiltAppEntries = archive
+					.Entries
+					.Select (v => v.FullName)
+					.SelectMany (v => {
+						// This code has two purposes:
+						// 1 - make sure the paths are using the current platform's directory separator char (instead of '/')
+						// 2 - add both files and their containing directories to the list (since we check for directory presence later in this test)
+						var components = v.Split (new char [] { '/', Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+						var rv = new List<string> ();
+						for (var i = 0; i < components.Length; i++) {
+							rv.Add (Path.Combine (components.Take (i + 1).ToArray ()));
+						}
+						return rv;
+					})
+					.ToHashSet ();
 
 				Console.WriteLine ($"Prebuilt app files:");
-				foreach (var pbf in prebuiltAppFiles)
+				foreach (var pbf in prebuiltAppEntries)
 					Console.WriteLine ($"    {pbf}");
 
 			} else {
@@ -53,7 +67,7 @@ namespace Xamarin.Tests {
 
 			var hotRestartAppBundleFiles = BundleStructureTest.Find (hotRestartAppBundlePath)
 				// Exclude any files from the prebuilt hot restart app
-				.Where (v => !prebuiltAppFiles.Contains (v));
+				.Where (v => !prebuiltAppEntries.Contains (v));
 			var payloadFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "Payload", "BundleStructure.app"));
 			var contentFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "BundleStructure.content"));
 			var merged = hotRestartAppBundleFiles
@@ -67,6 +81,8 @@ namespace Xamarin.Tests {
 					if (v == "Extracted")
 						return false;
 					if (v == "Entitlements.plist")
+						return false;
+					if (v == "BundleStructure.hotrestartapp")
 						return false;
 					return true;
 				})

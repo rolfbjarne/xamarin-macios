@@ -67,7 +67,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 
 			foreach (var item in ResolvedFileToPublish) {
 				var publishFolderType = item.GetPublishFolderType ();
-				switch  (publishFolderType) {
+				switch (publishFolderType) {
 				case PublishFolderType.Unset:
 				case PublishFolderType.None:
 				case PublishFolderType.Unknown:
@@ -99,7 +99,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				case PublishFolderType.CompressedPlugIns:
 					// Shouldn't really happen?
 					continue;
-				}				
+				}
 			}
 
 			HotRestartAppContentDirContents = appContentDirContents.ToArray ();

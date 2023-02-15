@@ -1304,16 +1304,20 @@ namespace Xamarin.Linker {
 					} else if (elementType is ArrayType elementArrayType) {
 						// TODO
 					} else if (elementType.IsNSObject (DerivedLinkContext)) {
-						il.Emit (OpCodes.Ldind_I);
-						il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
-						if (!elementType.Is ("Foundation", "NSObject"))
-							il.Emit (OpCodes.Castclass, elementType);
-						var indirectVariable = il.Body.AddVariable (elementType);
-						il.Emit (OpCodes.Stloc, indirectVariable);
+							var indirectVariable = il.Body.AddVariable (elementType);
+						if (IsOutParameter (method, parameter)) {
+							il.Emit (OpCodes.Pop);
+						} else {
+							il.Emit (OpCodes.Ldind_I);
+							il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
+							if (!elementType.Is ("Foundation", "NSObject"))
+								il.Emit (OpCodes.Castclass, elementType);
+							il.Emit (OpCodes.Stloc, indirectVariable);
+						}
 						il.Emit (OpCodes.Ldloca, indirectVariable);
 
 						// post processing too
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter));
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
 						postProcessing.Add (il.Create (OpCodes.Call, NativeObject_op_Implicit_IntPtr));
@@ -1457,6 +1461,11 @@ namespace Xamarin.Linker {
 				AddException (ErrorHelper.CreateWarning (99, e, "Failed to process {0}: {1}", method.FullName, e.Message));
 				return false;
 			}
+		}
+
+		bool IsOutParameter (MethodDefinition method, int parameter)
+		{
+			return method.Parameters [parameter].IsOut;
 		}
 
 		StaticRegistrar StaticRegistrar {

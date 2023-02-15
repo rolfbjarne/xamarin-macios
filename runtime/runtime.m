@@ -2748,7 +2748,7 @@ xamarin_registrar_dlsym (void **function_pointer, const char *assembly, const ch
 	if (*function_pointer != NULL)
 		return;
 
-	NSLog (@PRODUCT ": Unable to load the symbol '%s' to call managed code. Exception: %p", symbol, exception_gchandle);
+	NSLog (@PRODUCT ": ❌ Unable to load the symbol '%s' to call managed code. Exception: %p\n%@", symbol, exception_gchandle, xamarin_print_all_exceptions (exception_gchandle));
 
 	if (exception_gchandle != INVALID_GCHANDLE)
 		xamarin_process_managed_exception_gchandle (exception_gchandle);

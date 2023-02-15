@@ -1127,7 +1127,7 @@ namespace Registrar {
 		protected abstract bool IsInterface (TType type);
 		protected abstract bool IsAbstract (TType type);
 		protected abstract TType GetGenericTypeDefinition (TType type);
-		protected abstract bool VerifyIsConstrainedToNSObject (TType type, out TType constrained_type);
+		public abstract bool VerifyIsConstrainedToNSObject (TType type, out TType constrained_type);
 		protected abstract TType GetEnumUnderlyingType (TType type);
 		protected abstract IEnumerable<TField> GetFields (TType type); // Must return all instance fields. May return static fields (they are filtered out automatically).
 		protected abstract TType GetFieldType (TField field);

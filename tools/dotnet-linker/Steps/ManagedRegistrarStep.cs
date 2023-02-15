@@ -347,7 +347,7 @@ namespace Xamarin.Linker {
 		}
 		MethodReference BlockLiteral_CreateBlockForDelegate {
 			get {
-				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", nameof (BlockLiteral_CreateBlockForDelegate), (v) => 
+				return GetMethodReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", "CreateBlockForDelegate", (v) => 
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 3
@@ -1285,29 +1285,41 @@ namespace Xamarin.Linker {
 			// call !!0& [System.Runtime]System.Runtime.CompilerServices.Unsafe::AsRef<int32>(void*)
 			if (type is ByReferenceType brt) {
 				if (toManaged) {
-					if (type.IsValueType) {
+					var elementType = brt.ElementType;
+					if (elementType is GenericParameter gp) {
+						if (!StaticRegistrar.VerifyIsConstrainedToNSObject (gp, out var constrained)) {
+							AddException (ErrorHelper.CreateWarning (99, "Incorrectly constrained generic parameter. Method: {0}", GetMethodSignatureWithSourceCode (method)));
+							return false;
+						}
+						elementType = constrained;
+					}
+
+					if (elementType.IsValueType) {
 						var mr = new GenericInstanceMethod (CurrentAssembly.MainModule.ImportReference (Unsafe_AsRef));
-						mr.GenericArguments.Add (brt.GetElementType ());
+						mr.GenericArguments.Add (elementType);
 						il.Emit (OpCodes.Call, mr);
 						// reference types aren't blittable, so the managed signature must have be a pointer type
-						nativeType = new PointerType (brt.GetElementType ());
+						nativeType = new PointerType (elementType);
 						return true;
-					} else if (type.IsNSObject (DerivedLinkContext)) {
+					} else if (elementType is ArrayType elementArrayType) {
+						// TODO
+					} else if (elementType.IsNSObject (DerivedLinkContext)) {
 						il.Emit (OpCodes.Ldind_I);
 						il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
-						if (!type.Is ("Foundation", "NSObject"))
-							il.Emit (OpCodes.Castclass, type);
-						var indirectVariable = il.Body.AddVariable (type);
+						if (!elementType.Is ("Foundation", "NSObject"))
+							il.Emit (OpCodes.Castclass, elementType);
+						var indirectVariable = il.Body.AddVariable (elementType);
 						il.Emit (OpCodes.Stloc, indirectVariable);
 						il.Emit (OpCodes.Ldloca, indirectVariable);
 
 						// post processing too
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Call, Runtime_GetINativeObject__IntPtr_Boolean_Type_Type));
+						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
 						postProcessing.Add (il.Create (OpCodes.Call, NativeObject_op_Implicit_IntPtr));
 						postProcessing.Add (il.Create (OpCodes.Stind_I));
 						nativeType = new PointerType (System_IntPtr);
+						return true;
 					}
 				}
 				AddException (ErrorHelper.CreateWarning (99, "Don't know how (2) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
@@ -1320,6 +1332,14 @@ namespace Xamarin.Linker {
 					il.Emit (OpCodes.Call, toManaged ? CFArray_StringArrayFromHandle : CFArray_Create);
 					nativeType = ObjCRuntime_NativeHandle;
 					return true;
+				}
+
+				if (elementType is GenericParameter gp) {
+					if (!StaticRegistrar.VerifyIsConstrainedToNSObject (gp, out var constrained)) {
+						AddException (ErrorHelper.CreateWarning (99, "Incorrectly constrained generic parameter. Method: {0}", GetMethodSignatureWithSourceCode (method)));
+						return false;
+					}
+					elementType = constrained;
 				}
 
 				if (elementType.IsNSObject (DerivedLinkContext) || StaticRegistrar.IsNativeObject (elementType)) {
@@ -1355,14 +1375,18 @@ namespace Xamarin.Linker {
 
 			if (StaticRegistrar.IsNativeObject (DerivedLinkContext, type)) {
 				if (toManaged) {
-					var nativeObjType = StaticRegistrar.GetInstantiableType (type, exceptions, GetMethodSignature (method));
-					il.Emit (OpCodes.Ldc_I4_0); // false
-					il.Emit (OpCodes.Ldtoken, method.Module.ImportReference (type)); // target type
-					il.Emit (OpCodes.Call, Type_GetTypeFromHandle);
-					il.Emit (OpCodes.Ldtoken, method.Module.ImportReference (nativeObjType)); // implementation type
-					il.Emit (OpCodes.Call, Type_GetTypeFromHandle);
-					il.Emit (OpCodes.Call, Runtime_GetINativeObject__IntPtr_Boolean_Type_Type);
-					il.Emit (OpCodes.Castclass, type);
+					if (type is GenericParameter gp) {
+						AddException (ErrorHelper.CreateWarning (99, "Unable to process generic parameter", GetMethodSignature (method)));
+					} else {
+						var nativeObjType = StaticRegistrar.GetInstantiableType (type, exceptions, GetMethodSignature (method));
+						il.Emit (OpCodes.Ldc_I4_0); // false
+						il.Emit (OpCodes.Ldtoken, method.Module.ImportReference (type)); // target type
+						il.Emit (OpCodes.Call, Type_GetTypeFromHandle);
+						il.Emit (OpCodes.Ldtoken, method.Module.ImportReference (nativeObjType)); // implementation type
+						il.Emit (OpCodes.Call, Type_GetTypeFromHandle);
+						il.Emit (OpCodes.Call, Runtime_GetINativeObject__IntPtr_Boolean_Type_Type);
+						il.Emit (OpCodes.Castclass, type);
+					}
 					nativeType = System_IntPtr;
 				} else {
 					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
@@ -1383,11 +1407,19 @@ namespace Xamarin.Linker {
 					return false;
 				}
 				if (toManaged) {
-					MethodReference createMethod = StaticRegistrar.GetBlockWrapperCreator (objcMethod, parameter);
-					il.Emit (OpCodes.Call, BlockLiteral_Copy);
-					il.Emit (OpCodes.Dup);
-					il.Emit (OpCodes.Call, method.Module.ImportReference (createMethod));
-					il.Emit (OpCodes.Call, Runtime_ReleaseBlockWhenDelegateIsCollected);
+					var createMethod = StaticRegistrar.GetBlockWrapperCreator (objcMethod, parameter);
+					if (createMethod is null) {
+						AddException (ErrorHelper.CreateWarning (99, "Unable to locate block wrapper creator in {0}", method.FullName));
+						il.Emit (OpCodes.Pop);
+						il.Emit (OpCodes.Ldstr, "Unable to locate block wrapper creator");
+						il.Emit (OpCodes.Newobj, Exception_ctor_String);
+						il.Emit (OpCodes.Throw);
+					} else {
+						il.Emit (OpCodes.Call, BlockLiteral_Copy);
+						il.Emit (OpCodes.Dup);
+						il.Emit (OpCodes.Call, method.Module.ImportReference (createMethod));
+						il.Emit (OpCodes.Call, Runtime_ReleaseBlockWhenDelegateIsCollected);
+					}
 				} else {
 					if (!DerivedLinkContext.StaticRegistrar.TryComputeBlockSignature (method, trampolineDelegateType: type, out var exception, out var signature)) {
 						AddException (ErrorHelper.CreateWarning (99, "Error while converting block/delegates: FIXME better error: {0}", exception.ToString ()));

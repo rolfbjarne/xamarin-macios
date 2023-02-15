@@ -1168,7 +1168,7 @@ namespace Registrar {
 			return TypeMatch (a, b);
 		}
 
-		protected override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
+		public override bool VerifyIsConstrainedToNSObject (TypeReference type, out TypeReference constrained_type)
 		{
 			constrained_type = null;
 
@@ -3417,6 +3417,8 @@ namespace Registrar {
 
 		void SpecializePrepareParameters (AutoIndentStringBuilder sb, ObjCMethod method, int num_arg, string descriptiveMethodName, List<Exception> exceptions)
 		{
+			if (method.MethodName.Contains ("Bar"))
+				Console.WriteLine ("STOP");
 			// prepare the parameters
 			var baseMethod = GetBaseMethodInTypeHierarchy (method.Method);
 			for (int i = 0; i < num_arg; i++) {
@@ -4136,6 +4138,9 @@ namespace Registrar {
 
 #if NET
 			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
+
+				// SpecializePrepareParameters (new AutoIndentStringBuilder (), method, num_arg, descriptiveMethodName, exceptions);
+
 				var staticCall = false;
 				var supportDynamicAssemblyLoading = true;
 				var managedMethodNotFound = false;
@@ -4488,7 +4493,7 @@ namespace Registrar {
 
 		public TypeDefinition GetInstantiableType (TypeReference tr, List<Exception> exceptions, string descriptiveMethodName)
 		{
-			var td = tr.Resolve ();
+			var td = ResolveType (tr);
 			TypeDefinition nativeObjType = td;
 
 			if (td.IsInterface) {

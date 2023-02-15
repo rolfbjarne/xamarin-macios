@@ -460,7 +460,7 @@ namespace Registrar {
 			return type.FullName;
 		}
 
-		protected override bool VerifyIsConstrainedToNSObject (Type type, out Type constrained_type)
+		public override bool VerifyIsConstrainedToNSObject (Type type, out Type constrained_type)
 		{
 			constrained_type = null;
 

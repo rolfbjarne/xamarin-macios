@@ -41,12 +41,16 @@ steps:
     $sourceDir = '$(Build.SourcesDirectory)\xamarin-macios'
     $targetDir = '$(Build.ArtifactStagingDirectory)\windows-binlogs'
 
+    Write-Host "Looking for files in $sourceDir"
     $binlogs = Get-ChildItem $sourceDir -Recurse -Include "*.binlog"
+    Write-Host "Found $($binlogs.Count) binlogs"
     foreach ($binlog in $binlogs) {
         $targetFile = $targetDir + $binlog.FullName.SubString($sourceDir.Length);
+        Write-Host "Found $binlog and copying to $targetFile"
         New-Item -ItemType File -Path $targetFile -Force
         Copy-Item $binlog.FullName -destination $targetFile
     }
+    Write-Host "Done looking for files in $sourceDir"
   displayName: Copy all binlogs
   continueOnError: true
   condition: succeededOrFailed()
@@ -62,6 +66,7 @@ steps:
 
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1
+
     $gihubComments = New-GitHubCommentsObject -Org "xamarin" -Repo "xamarin-macios" -Token $Env:GITHUB_TOKEN -Hash $Env:GIT_HASH -Debug
     $sb = [System.Text.StringBuilder]::new()
     $sb.AppendLine("Reporting in from the Windows integration tests")

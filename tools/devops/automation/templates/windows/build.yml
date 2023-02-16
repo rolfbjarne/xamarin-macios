@@ -27,6 +27,173 @@ steps:
     gci env: | format-table -autosize -wrap
   displayName: 'Dump Environment'
 
+- task: DownloadPipelineArtifact@2
+  displayName: Download artifacts
+  inputs:
+    allowFailedBuilds: true
+    path: $(Build.SourcesDirectory)/artifacts
+
+- pwsh: |
+    try {
+      Write-Host "Looking in '$(Build.SourcesDirectory)\artifacts"
+      Get-ChildItem "$(Build.SourcesDirectory)\artifacts" -Recurse
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+  displayName: 'List downloaded artifacts'
+  continueOnError: true
+
+
+# FIXME: parameterize platforms
+# FIXME: SOURCES?
+
+- task: UseDotNet@2
+  inputs:
+    version: 7.0.102
+
+- pwsh: |
+    & dotnet --version
+    & dotnet --info
+    & dotnet workload list
+  displayName: 'Show .NET info'
+  continueOnError: true
+
+- pwsh: |
+    try {
+      Write-Host "Looking in 'C:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "C:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "D:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Printing in 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'"
+      Get-Content -Raw -Path 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\" -Name "Shared" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\Shared\" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      New-Item -Path "D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" -Name "NuGetPackages" -ItemType "directory"
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+  displayName: 'Show NuGet configuration'
+  continueOnError: true
+
+- pwsh: |
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
+    --verbosity quiet `
+    "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install.binlog" `
+    -p:DisableImplicitNuGetFallbackFolder=true
+  displayName: 'Install custom .NET'
+  continueOnError: true
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe"
+    & dotnet build "$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/DotNet.csproj" `
+      --verbosity quiet `
+      "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/install-workloads.binlog" `
+      -p:DisableImplicitNuGetFallbackFolder=true `
+      -t:Install
+  displayName: 'Install workloads'
+  continueOnError: true
+
+# get and expand the needed libs for monotouch
+- task: DownloadPipelineArtifact@2
+  displayName: Download test libraries dependencies 
+  inputs:
+    patterns: '**/package-test-libraries.zip'
+    allowFailedBuilds: true
+    path: $(Build.SourcesDirectory)/artifacts/tmp
+
+# this step replaces the test-libraries dir
+- pwsh: |
+    $zip = "$(Build.SourcesDirectory)/artifacts/tmp/package-test-libraries/package-test-libraries.zip"
+    $target = "$(Build.SourcesDirectory)/xamarin-macios/tests/test-libraries"
+    Expand-Archive -Force $zip -DestinationPath $target
+    Get-ChildItem "$target" -Recurse
+  workingDirectory: $(Build.SourcesDirectory)/xamarin-macios/tests
+  displayName: Expand test libraries.
+  timeoutInMinutes: 10
+
+- pwsh: |
+    $Env:DOTNET_PLATFORMS = "iOS;tvOS;macOS;MacCatalyst"
+
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
+        nuget push `
+        "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Debug\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `
+        --source "$(Build.SourcesDirectory)\xamarin-macios\tests\.nuget\packages"
+
+  displayName: 'Build dependencies for .NET tests'
+  continueOnError: true
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe"
+    & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
+        test `
+        "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+        --filter Category=Windows `
+        --verbosity quiet `
+        "-bl:$(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/templates/windows/run-dotnet-tests.binlog"
+  displayName: 'Run .NET tests'
+  continueOnError: true
+
+# - pwsh: |
+#     Write-Host "Trying to ssh to the mac bot..."
+#     & ssh builder@$($Env:MAC_AGENT_IP) 'ls -la'
+#   displayName: Diagnostics with pwsh 1
+#   continueOnError: true
+#   timeoutInMinutes: 1
+
+# - pwsh: |
+#     Write-Host "Trying to ssh to the mac bot..."
+#     (Get-Command New-PSSession).ParameterSets.Name
+#     $session = New-PSSession -HostName builder@$($Env:MAC_AGENT_IP)
+#     $session
+#     Invoke-Command $session -ScriptBlock { Get-Process powershell }
+#   displayName: Diagnostics with pwsh 2
+#   continueOnError: true
+#   timeoutInMinutes: 1
+
+# - pwsh: |
+#     Write-Host "Sending ping to $($Env:MAC_AGENT_IP)..."
+#     Test-Connection -TargetName "$($Env:MAC_AGENT_IP)" -Count 3
+#   displayName: "Diagnostics with pwsh - ping"
+#   continueOnError: true
+#   timeoutInMinutes: 1
+
 - pwsh: |
     Write-Host "Run windows tests."
     Write-Host "Mac agent to be used:"

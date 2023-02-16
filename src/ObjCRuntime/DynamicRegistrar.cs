@@ -343,7 +343,7 @@ namespace Registrar {
 			return type.MakeByRefType ();
 		}
 
-		protected override CategoryAttribute GetCategoryAttribute (Type type)
+		public override CategoryAttribute GetCategoryAttribute (Type type)
 		{
 			return SharedDynamic.GetOneAttribute<CategoryAttribute> (type);
 		}
@@ -539,7 +539,7 @@ namespace Registrar {
 			return mi.IsDefined (typeof (System.Runtime.CompilerServices.ExtensionAttribute), false);
 		}
 
-		protected override bool HasThisAttribute (MethodBase method)
+		public override bool HasThisAttribute (MethodBase method)
 		{
 			return HasThisAttributeImpl (method);
 		}

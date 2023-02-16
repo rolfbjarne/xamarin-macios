@@ -45,6 +45,9 @@ namespace Xamarin.MacDev.Tasks {
 		public string? Architectures { get; set; }
 
 		[Required]
+		public string FrameworksDirectory { get; set; } = string.Empty;
+
+		[Required]
 		public string IntermediateOutputPath { get; set; } = string.Empty;
 
 		public ITaskItem [] NativeReferences { get; set; } = Array.Empty<ITaskItem> ();
@@ -138,12 +141,16 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = GetActualLibrary (name);
 				nr.SetMetadata ("Kind", "Framework");
+				nr.SetMetadata ("PublishFolderType", "AppleFramework");
+				nr.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (Path.GetDirectoryName (nr.ItemSpec))));
 				native_frameworks.Add (nr);
 				return;
 			} else if (parentDirectory.EndsWith (".framework", StringComparison.OrdinalIgnoreCase) && Path.GetFileName (name) == Path.GetFileNameWithoutExtension (parentDirectory)) {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = GetActualLibrary (name);
 				nr.SetMetadata ("Kind", "Framework");
+				nr.SetMetadata ("PublishFolderType", "AppleFramework");
+				nr.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (Path.GetDirectoryName (nr.ItemSpec))));
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -153,6 +160,7 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = name;
 				nr.SetMetadata ("Kind", "Dynamic");
+				nr.SetMetadata ("PublishFolderType", "DynamicLibrary");
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -162,6 +170,7 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = name;
 				nr.SetMetadata ("Kind", "Static");
+				nr.SetMetadata ("PublishFolderType", "StaticLibrary");
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -173,6 +182,8 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = GetActualLibrary (frameworkPath);
 				nr.SetMetadata ("Kind", "Framework");
+				nr.SetMetadata ("PublishFolderType", "AppleFramework");
+				nr.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (Path.GetDirectoryName (nr.ItemSpec))));
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -184,6 +195,8 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = GetActualLibrary (frameworkPath);
 				nr.SetMetadata ("Kind", "Framework");
+				nr.SetMetadata ("PublishFolderType", "AppleFramework");
+				nr.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (Path.GetDirectoryName (nr.ItemSpec))));
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -315,6 +328,8 @@ namespace Xamarin.MacDev.Tasks {
 						continue;
 					t.ItemSpec = GetActualLibrary (frameworkPath);
 					t.SetMetadata ("Kind", "Framework");
+					t.SetMetadata ("PublishFolderType", "AppleFramework");
+					t.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (Path.GetDirectoryName (t.ItemSpec))));
 					break;
 				}
 				case ".framework": {
@@ -326,6 +341,8 @@ namespace Xamarin.MacDev.Tasks {
 					}
 					t.ItemSpec = GetActualLibrary (frameworkPath);
 					t.SetMetadata ("Kind", "Framework");
+					t.SetMetadata ("PublishFolderType", "AppleFramework");
+					t.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (Path.GetDirectoryName (t.ItemSpec))));
 					break;
 				}
 				case ".dylib": // macOS
@@ -337,6 +354,7 @@ namespace Xamarin.MacDev.Tasks {
 					}
 					t.ItemSpec = dylibPath;
 					t.SetMetadata ("Kind", "Dynamic");
+					t.SetMetadata ("PublishFolderType", "DynamicLibrary");
 					break;
 				case ".a": // static library
 					string? aPath;
@@ -347,6 +365,7 @@ namespace Xamarin.MacDev.Tasks {
 					}
 					t.ItemSpec = aPath;
 					t.SetMetadata ("Kind", "Static");
+					t.SetMetadata ("PublishFolderType", "StaticLibrary");
 					break;
 				default:
 					Log.LogWarning (MSBStrings.W7105 /* Unexpected extension '{0}' for native reference '{1}' in binding resource package '{2}'. */, Path.GetExtension (name), name, r.ItemSpec);

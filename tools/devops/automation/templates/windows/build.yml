@@ -58,6 +58,36 @@ steps:
 #     error MSB4242: SDK Resolver Failure: "The SDK resolver "NuGetSdkResolver" failed while attempting to resolve the SDK "Microsoft.Build.NoTargets/3.3.0". Exception: "NuGet.Packaging.Core.PackagingException: Unable to find fallback package folder 'D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages'.
 - pwsh: |
     try {
+      Write-Host "Looking in 'C:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "C:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\NuGet\Config'"
+      Get-ChildItem "D:\Program Files (x86)\NuGet\Config\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft SDKs\NuGetPackages\" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Looking in 'D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages'"
+      Get-ChildItem "D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" -Recurse -ErrorAction SilentlyContinue
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
+      Write-Host "Printing in 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'"
+      Get-Content -Raw -Path 'D:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config'
+    } catch {
+      Write-Host "Exception occured: $_"
+    }
+    try {
       New-Item -Path "D:\Program Files (x86)\Microsoft SDKs\" -Name "NuGetPackages" -ItemType "directory"
     } catch {
       Write-Host "Exception occured: $_"

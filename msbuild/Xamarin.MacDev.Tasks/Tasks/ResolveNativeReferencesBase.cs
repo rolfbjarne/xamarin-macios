@@ -598,7 +598,7 @@ namespace Xamarin.MacDev.Tasks {
 			case ApplePlatform.MacCatalyst:
 				platformName = "ios";
 				break;
-			case Utils.ApplePlatform.MacOSX:
+			case ApplePlatform.MacOSX:
 				// PlatformFrameworkHelper.GetOperatingSystem returns "osx" which does not work for xcframework
 				platformName = "macos";
 				break;

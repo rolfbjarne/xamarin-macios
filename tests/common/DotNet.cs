@@ -18,7 +18,7 @@ namespace Xamarin.Tests {
 		public static string Executable {
 			get {
 				if (dotnet_executable is null) {
-					dotnet_executable = Configuration.GetVariable ("DOTNET", null);
+					dotnet_executable = Environment.GetEnvironmentVariable ("DOTNET") ?? Configuration.GetVariable ("DOTNET", null);
 					if (string.IsNullOrEmpty (dotnet_executable))
 						throw new Exception ($"Could not find the dotnet executable.");
 					if (!File.Exists (dotnet_executable))
@@ -97,7 +97,7 @@ namespace Xamarin.Tests {
 			if (language is not null && !string.IsNullOrEmpty (language)) {
 #endif
 				args.Add ("--language");
-				args.Add (language);
+				args.Add (language!);
 			}
 
 			var env = new Dictionary<string, string?> ();

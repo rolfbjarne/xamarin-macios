@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -108,7 +109,7 @@ namespace Xamarin.MacDev.Tasks {
 					relativePath = ResourceDirectory;
 					break;
 				case PublishFolderType.AppleFramework:
-					if (TryGetFrameworkDirectory (item.ItemSpec, out var frameworkDirectory)) {
+					if (TryGetFrameworkDirectory (item.ItemSpec, out var frameworkDirectory, out _)) {
 						if (!appleFrameworks.TryGetValue (frameworkDirectory!, out var items))
 							appleFrameworks [frameworkDirectory!] = items = new List<ITaskItem> ();
 						items.Add (item);
@@ -134,7 +135,7 @@ namespace Xamarin.MacDev.Tasks {
 					break;
 				case PublishFolderType.CompressedPlugIns:
 					relativePath = PlugInsDirectory;
-					virtualProjectPath = RemoveExtension (virtualProjectPath, ".zip");
+					virtualProjectPath = Path.GetFileNameWithoutExtension (item.ItemSpec);
 					break;
 				case PublishFolderType.RootDirectory:
 					break;
@@ -185,8 +186,15 @@ namespace Xamarin.MacDev.Tasks {
 		}
 
 		// Check if the input, or any of it's parent directories is either an *.xcframework, or a *.framework
-		static bool TryGetFrameworkDirectory (string path, out string? frameworkDirectory)
+		public static bool TryGetFrameworkDirectory (string? path, [NotNullWhen (true)] out string? frameworkDirectory, out bool isXCFramework)
 		{
+			isXCFramework = false;
+
+			if (path is null) {
+				frameworkDirectory = null;
+				return false;
+			}
+
 			if (string.IsNullOrEmpty (path)) {
 				frameworkDirectory = null;
 				return false;
@@ -194,12 +202,13 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (path.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase)) {
 				frameworkDirectory = path;
+				isXCFramework = true;
 				return true;
 			}
 
 			if (path.EndsWith (".framework", StringComparison.OrdinalIgnoreCase)) {
 				// We might be inside a .xcframework, so check for that first
-				if (TryGetFrameworkDirectory (Path.GetDirectoryName (path), out var xcframeworkDirectory) && xcframeworkDirectory!.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase)) {
+				if (TryGetFrameworkDirectory (Path.GetDirectoryName (path), out var xcframeworkDirectory, out isXCFramework) && isXCFramework) {
 					frameworkDirectory = xcframeworkDirectory;
 					return true;
 				}
@@ -208,7 +217,7 @@ namespace Xamarin.MacDev.Tasks {
 				return true;
 			}
 
-			return TryGetFrameworkDirectory (Path.GetDirectoryName (path), out frameworkDirectory);
+			return TryGetFrameworkDirectory (Path.GetDirectoryName (path), out frameworkDirectory, out isXCFramework);
 		}
 
 		// Check if the input, or any of it's parent directories is a *.resources directory or a *.resources.zip file next to a *.dll.
@@ -312,7 +321,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			// Native (xc)frameworks.
 			// We do this after checking for binding resource packages, because those might contain frameworks.
-			if (TryGetFrameworkDirectory (filename, out _))
+			if (TryGetFrameworkDirectory (filename, out _, out _))
 				return PublishFolderType.AppleFramework;
 
 			// resources (png, jpg, ...?)

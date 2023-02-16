@@ -775,7 +775,7 @@ namespace Registrar {
 			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);
 		}
 
-		protected override bool HasThisAttribute (MethodDefinition method)
+		public override bool HasThisAttribute (MethodDefinition method)
 		{
 			return HasAttribute (method, "System.Runtime.CompilerServices", "ExtensionAttribute");
 		}
@@ -1351,7 +1351,7 @@ namespace Registrar {
 			return rv;
 		}
 
-		protected override CategoryAttribute GetCategoryAttribute (TypeReference type)
+		public override CategoryAttribute GetCategoryAttribute (TypeReference type)
 		{
 			string name = null;
 
@@ -4146,6 +4146,7 @@ namespace Registrar {
 				var managedMethodNotFound = false;
 				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
+					var types = App.Configuration.UnmanagedCallersMap.Keys.Where (v => v.DeclaringType.FullName == method.Method.DeclaringType.FullName);
 					pinvokeMethodInfo = new LinkerConfiguration.UnmanagedCallersEntry (name + "___FIXME___MANAGED_METHOD_NOT_FOUND", -1, method.Method);
 					managedMethodNotFound = true;
 				}

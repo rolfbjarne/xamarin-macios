@@ -1094,7 +1094,7 @@ namespace Registrar {
 		protected abstract bool IsStatic (TField field);
 		protected abstract bool IsStatic (TMethod method);
 		protected abstract TType MakeByRef (TType type);
-		protected abstract bool HasThisAttribute (TMethod method);
+		public abstract bool HasThisAttribute (TMethod method);
 		protected abstract bool IsConstructor (TMethod method);
 		protected abstract TType GetElementType (TType type);
 		protected abstract TType GetReturnType (TMethod method);
@@ -1104,7 +1104,7 @@ namespace Registrar {
 		protected abstract ExportAttribute GetExportAttribute (TMethod method); // Return null if no attribute is found. Must check the base method (i.e. if method is overriding a method in a base class, must check the overridden method for the attribute).
 		protected abstract Dictionary<TMethod, List<TMethod>> PrepareMethodMapping (TType type);
 		public abstract RegisterAttribute GetRegisterAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
-		protected abstract CategoryAttribute GetCategoryAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
+		public abstract CategoryAttribute GetCategoryAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract ConnectAttribute GetConnectAttribute (TProperty property); // Return null if no attribute is found. Do not consider inherited properties.
 		public abstract ProtocolAttribute GetProtocolAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract IEnumerable<ProtocolMemberAttribute> GetProtocolMemberAttributes (TType type); // Return null if no attributes found. Do not consider base types.

@@ -79,7 +79,11 @@ namespace Xamarin.MacDev.Tasks {
 		// returns the Mach-O file for the given path:
 		// * for frameworks, returns foo.framework/foo
 		// * for anything else, returns the input path
+#if NET
 		[return: NotNullIfNotNull (nameof (path))]
+#else
+		[return: NotNullIfNotNull ("path")]
+#endif
 		static string? GetActualLibrary (string? path)
 		{
 			if (path is null)

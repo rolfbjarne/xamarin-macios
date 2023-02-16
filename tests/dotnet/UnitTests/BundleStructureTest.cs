@@ -4,7 +4,7 @@ namespace Xamarin.Tests {
 	[TestFixture]
 	public class BundleStructureTest : TestBaseClass {
 		// Returns true if the assembly name is _any_ of our platform assemblies (Microsoft.iOS/tvOS/macOS/MacCatalyst/watchOS.dll)
-		bool IsPlatformAssembly (string assemblyName)
+		static bool IsPlatformAssembly (string assemblyName)
 		{
 			if (assemblyName.EndsWith (".dll", StringComparison.Ordinal) || assemblyName.EndsWith (".pdb", StringComparison.Ordinal))
 				assemblyName = Path.GetFileNameWithoutExtension (assemblyName);
@@ -18,19 +18,58 @@ namespace Xamarin.Tests {
 			return false;
 		}
 
-		void CheckAppBundleContents (ApplePlatform platform, string appPath, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild)
+		public static List<string> Find (string appPath)
 		{
 			// Directory.GetFileSystemEntries will enter symlink directories and iterate inside :/
+			var dir = new DirectoryInfo (appPath);
+			var managedFiles = dir.GetFileSystemInfos ("*", SearchOption.AllDirectories)
+								.Select (v => v.FullName)
+								.Select (v => v.Substring (appPath.Length + 1))
+								.Order ()
+								.ToList ();
+
+			//var output = AssertExecute ("find", appPath);
+			//Console.WriteLine ("managedFiles:");
+			//foreach (var mf in managedFiles)
+			//	Console.WriteLine ($"    {mf}");
+
+			//var allFiles = output.ToString ()
+			//					.Split ('\n', StringSplitOptions.RemoveEmptyEntries)
+			//					.Where (v => v.Length > appPath.Length)
+			//					.Select (v => v.Substring (appPath.Length + 1))
+			//					.Order ()
+			//					.ToList ();
+
+			//Console.WriteLine ("allFiles:");
+			//foreach (var mf in allFiles)
+			//	Console.WriteLine ($"    {mf}");
+
+			//CollectionAssert.AreEqual (managedFiles, allFiles);
+
+			return managedFiles;
+
+			//var output = AssertExecute ("find", appPath);
+			//var allFiles = output.ToString ()
+			//					.Split ('\n', StringSplitOptions.RemoveEmptyEntries)
+			//					.Where (v => v.Length > appPath.Length)
+			//					.Select (v => v.Substring (appPath.Length + 1))
+			//					.ToList ();
+
+			//return allFiles;
+		}
+
+		internal static void CheckAppBundleContents (ApplePlatform platform, string appPath, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild)
+		{
 			Console.WriteLine ($"App bundle: {appPath}");
 			Assert.That (appPath, Does.Exist, "App bundle existence");
-			var output = AssertExecute ("find", appPath);
+			var allFiles = Find (appPath);
+			CheckAppBundleContents (platform, allFiles, runtimeIdentifiers, isSigned, isReleaseBuild, appPath);
+		}
 
+		internal static void CheckAppBundleContents (ApplePlatform platform, IEnumerable<string> allFiles, string [] runtimeIdentifiers, CodeSignature isSigned, bool isReleaseBuild, string? appPath = null)
+		{
 			var isCoreCLR = platform == ApplePlatform.MacOSX;
 			var includeDebugFiles = !isReleaseBuild;
-			var allFiles = output.ToString ().
-								Split ('\n', StringSplitOptions.RemoveEmptyEntries).
-								Where (v => v.Length > appPath.Length).
-								Select (v => v.Substring (appPath.Length + 1)).ToList ();
 
 			// Remove various files we don't care about (for this test) from the list of files in the app bundle.
 			Predicate<string?> predicate = (v) => {
@@ -83,7 +122,7 @@ namespace Xamarin.Tests {
 				return false;
 			};
 
-			allFiles.RemoveAll (predicate);
+			allFiles = allFiles.Where (v => !predicate (v));
 
 			var expectedFiles = new List<string> ();
 
@@ -322,7 +361,7 @@ namespace Xamarin.Tests {
 			var unexpectedFiles = allFiles.Except (expectedFiles).OrderBy (v => v).ToArray ();
 			var missingFiles = expectedFiles.Except (allFiles).OrderBy (v => v).ToArray ();
 
-#if false
+#if true
 			// Debug code to print out what we got
 			if (unexpectedFiles.Any () || missingFiles.Any ()) {
 				Console.WriteLine ($"All files in the bundle ({allFiles.Count ()})");
@@ -342,12 +381,14 @@ namespace Xamarin.Tests {
 			Assert.That (unexpectedFiles, Is.Empty, "No unexpected files");
 			Assert.That (missingFiles, Is.Empty, "No missing files");
 
-			AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.dylib");
-			AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.so");
-			AssertLibraryArchitectures (appPath, runtimeIdentifiers);
+			if (appPath is not null) {
+				AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.dylib");
+				AssertDynamicLibraryId (platform, appPath, assemblyDirectory, "libSkipInstallNameTool.so");
+				AssertLibraryArchitectures (appPath, runtimeIdentifiers);
+			}
 		}
 
-		void AssertDynamicLibraryId (ApplePlatform platform, string appPath, string dylibDirectory, string library)
+		static void AssertDynamicLibraryId (ApplePlatform platform, string appPath, string dylibDirectory, string library)
 		{
 			var dylibPath = Path.Combine (appPath, dylibDirectory, library);
 			Assert.That (dylibPath, Does.Exist, "dylib existence");
@@ -673,7 +714,7 @@ namespace Xamarin.Tests {
 
 		}
 
-		void AssertLibraryArchitectures (string appBundle, string [] runtimeIdentifiers)
+		static void AssertLibraryArchitectures (string appBundle, string [] runtimeIdentifiers)
 		{
 			var renderArchitectures = (IEnumerable<Abi> architectures) => {
 				return string.Join (", ",

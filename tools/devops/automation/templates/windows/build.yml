@@ -149,8 +149,6 @@ steps:
   timeoutInMinutes: 10
 
 - pwsh: |
-    $Env:DOTNET_PLATFORMS = "iOS;tvOS;macOS;MacCatalyst"
-
     & $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\templates\windows\bin\dotnet\dotnet.exe `
         nuget push `
         "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Debug\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `

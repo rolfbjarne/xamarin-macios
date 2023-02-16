@@ -1485,9 +1485,9 @@
 			<ResolvedFileToPublish Remove="$(ProjectRuntimeConfigFilePath)" Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'" />
 		</ItemGroup>
 
+		<!-- This task is executed on Windows as well, for hotrestart builds -->
 		<ComputeBundleLocation
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
 			AssemblyDirectory="$(_AppContentsRelativePath)"
 			BundleResource="@(BundleResource)"
 			BundlerDebug="$(_BundlerDebug)"
@@ -1562,10 +1562,10 @@
 			<ResolvedFileToPublish RelativePath="$(_RelativeAppBundlePath)\%(RelativePath)" />
 		</ItemGroup>
 
+		<!-- This task is executed on Windows as well, for hotrestart builds -->
 		<!-- resolve any .xcframeworks and binding resource packages -->
 		<ResolveNativeReferences
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
 			Architectures="$(TargetArchitectures)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReferences="@(_UnresolvedXCFrameworks);@(_AppleBindingResourcePackage);@(_CompressedAppleFrameworks);@(_CompressedAppleBindingResourcePackage)"

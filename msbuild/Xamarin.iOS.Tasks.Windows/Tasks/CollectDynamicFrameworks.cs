@@ -7,19 +7,20 @@ using System.Linq;
 using Xamarin.iOS.Tasks.Windows.Properties;
 using Xamarin.iOS.Windows;
 
+#nullable enable
+
 namespace Xamarin.iOS.HotRestart.Tasks {
 	public class CollectDynamicFrameworks : Task {
 		#region Inputs
 
 		[Required]
-		public ITaskItem [] Frameworks { get; set; }
-
+		public ITaskItem [] Frameworks { get; set; } = Array.Empty<ITaskItem> ();
 		#endregion
 
 		#region Outputs
 
 		[Output]
-		public ITaskItem [] DynamicFrameworks { get; set; }
+		public ITaskItem [] DynamicFrameworks { get; set; } = Array.Empty<ITaskItem> ();
 
 		#endregion
 
@@ -40,13 +41,14 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				try {
 					var frameworkPath = Path.Combine (framework.ItemSpec, Path.GetFileNameWithoutExtension (frameworkDirName));
 
+					Log.LogMessage (MessageImportance.Low, $"Loading: {frameworkPath}");
 					hotRestartClient.LoadDynamicFramework (frameworkPath);
 				} catch (AppleInvalidFrameworkException frameworkEx) {
 					Log.LogMessage (MessageImportance.Normal, Resources.CollectDynamicFrameworks_InvalidFramework, Path.GetFileName (framework.ItemSpec), frameworkEx.Message);
 					continue;
 				} catch (Exception ex) {
-					Log.LogErrorFromException (ex);
-					break;
+					Log.LogErrorFromException (ex, true, true, framework.ItemSpec);
+					continue;
 				}
 
 				framework.SetMetadata ("FrameworkDir", $@"{frameworkDirName}\");

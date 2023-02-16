@@ -19,11 +19,11 @@ namespace Xamarin.MacDev.Tasks.Tests {
 		[TestCase (TargetFramework.Xamarin_WatchOS_1_0_String, false, "arm64_32", "watchos-arm64_32_armv7k/Universal.framework/Universal")]
 		[TestCase (TargetFramework.DotNet_watchOS_String, true, "x86_64", "watchos-arm64_x86_64-simulator/Universal.framework/Universal")] // subset
 		[TestCase (TargetFramework.DotNet_macOS_String, false, "x86_64", "macos-arm64_x86_64/Universal.framework/Universal")] // subset
-																								 // multiple arch request (all must be present)
+																															  // multiple arch request (all must be present)
 		[TestCase (TargetFramework.DotNet_macOS_String, false, "x86_64, arm64", "macos-arm64_x86_64/Universal.framework/Universal")]
 		// failure to resolve requested architecture
 		[TestCase (TargetFramework.DotNet_iOS_String, true, "i386, x86_64", "")] // i386 not available
-															// failure to resolve mismatched variant
+																				 // failure to resolve mismatched variant
 		[TestCase (TargetFramework.DotNet_macOS_String, true, "x86_64", "")] // simulator not available on macOS
 		public void Xcode12_x (string targetFrameworkMoniker, bool isSimulator, string architecture, string expected)
 		{

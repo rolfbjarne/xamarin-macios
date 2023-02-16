@@ -100,7 +100,7 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var nr in NativeReferences) {
 				ProcessNativeReference (nr, native_frameworks, createdFiles);
 			}
-			
+
 			// or (managed) reference to an assembly that bind a framework
 			foreach (var r in References) {
 				// look for sidecar's manifest
@@ -317,7 +317,7 @@ namespace Xamarin.MacDev.Tasks {
 					string? frameworkPath;
 					if (!isCompressed) {
 						frameworkPath = Path.Combine (resources, name);
-					} else if (!TryDecompress (Log, resources, name, GetIntermediateDecompressionDir (resources), createdFiles, out frameworkPath)) { 
+					} else if (!TryDecompress (Log, resources, name, GetIntermediateDecompressionDir (resources), createdFiles, out frameworkPath)) {
 						continue;
 					}
 					t.ItemSpec = GetActualLibrary (frameworkPath);
@@ -328,7 +328,7 @@ namespace Xamarin.MacDev.Tasks {
 					string? dylibPath;
 					if (!isCompressed) {
 						dylibPath = Path.Combine (resources, name);
-					} else if (!TryDecompress (Log, resources, name, GetIntermediateDecompressionDir (resources), createdFiles, out dylibPath)) { 
+					} else if (!TryDecompress (Log, resources, name, GetIntermediateDecompressionDir (resources), createdFiles, out dylibPath)) {
 						continue;
 					}
 					t.ItemSpec = dylibPath;

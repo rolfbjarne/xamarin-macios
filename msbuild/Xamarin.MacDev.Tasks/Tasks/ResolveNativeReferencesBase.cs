@@ -131,6 +131,10 @@ namespace Xamarin.MacDev.Tasks {
 
 		void ProcessNativeReference (ITaskItem item, string name, List<ITaskItem> native_frameworks, List<string> createdFiles)
 		{
+			// '.' can be used to represent a file (instead of the directory)
+			if (Path.GetFileName (name) == ".")
+				name = Path.GetDirectoryName (name);
+
 			var parentDirectory = Path.GetDirectoryName (name);
 
 			// framework

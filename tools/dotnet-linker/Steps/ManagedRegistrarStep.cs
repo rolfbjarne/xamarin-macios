@@ -220,6 +220,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		TypeReference System_Reflection_MethodBase {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodBase", out var _);
+			}
+		}
+
 		TypeReference Foundation_NSObject {
 			get {
 				return GetTypeReference (PlatformAssembly, "Foundation.NSObject", out var _);
@@ -244,6 +250,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		MethodReference Object_GetType {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Object, "GetType", (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
 		MethodReference Type_GetTypeFromHandle {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Type, "GetTypeFromHandle", (v) =>
@@ -251,6 +266,40 @@ namespace Xamarin.Linker {
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference Type_get_TypeHandle {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Type, "get_TypeHandle", (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference MethodBase_Invoke {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "Invoke", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType is ArrayType at
+						&& at.ElementType.Is ("System", "Object")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference MethodBase_GetMethodFromHandle {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "GetMethodFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeTypeHandle")
 						&& !v.HasGenericParameters);
 			}
 		}
@@ -266,6 +315,35 @@ namespace Xamarin.Linker {
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 1,
 						ensurePublic: true);
+			}
+		}
+
+		MethodReference NSObject_DangerousRetain {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSObject, "DangerousRetain", nameof (NSObject_DangerousRetain), (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference NSObject_DangerousAutorelease {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSObject, "DangerousAutorelease", nameof (NSObject_DangerousAutorelease), (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference GC_KeepAlive {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.GC", "KeepAlive", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "object")
+						&& !v.HasGenericParameters);
 			}
 		}
 
@@ -393,6 +471,19 @@ namespace Xamarin.Linker {
 						&& !v.HasGenericParameters);
 			}
 		}
+
+		MethodReference Runtime_FindClosedMethodForObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedMethodForObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("System.Reflection", "MethodBase")
+						&& !v.HasGenericParameters);
+			}
+		}
+
 		MethodReference CFString_FromHandle {
 			get {
 				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFString", "FromHandle", (v) =>
@@ -493,6 +584,18 @@ namespace Xamarin.Linker {
 						&& v.ReturnType.Is ("System", "IntPtr")
 						&& !v.HasGenericParameters
 						);
+			}
+		}
+
+		MethodReference Runtime_RetainObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
 			}
 		}
 
@@ -675,7 +778,7 @@ namespace Xamarin.Linker {
 			if (trampolineInfos.First ().Id + trampolineInfos.Count - 1 != trampolineInfos.Last ().Id)
 				throw ErrorHelper.CreateError (99, "Invalid ID range");
 
-			const int methodsPerLevel = 100;
+			const int methodsPerLevel = 10;
 			var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
 			GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1);
 		}
@@ -697,13 +800,25 @@ namespace Xamarin.Linker {
 
 			if (level == levels) {
 				// This is the leaf method where we do the actual lookup.
+				var wrapLookup = true;
+
 				var targetCount = endIndex - startIndex + 1;
 				var targets = new Instruction [targetCount];
 				for (var i = 0; i < targets.Length; i++) {
-					var md = trampolineInfos [startIndex + i].Trampoline;
+					var ti = trampolineInfos [startIndex + i];
+					var md = ti.Trampoline;
 					try {
 						var mr = CurrentAssembly.MainModule.ImportReference (md);
-						targets [i] = Instruction.Create (OpCodes.Ldftn, mr);
+						if (wrapLookup) {
+							var wrappedLookup = type.AddMethod (name + ti.Id, MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, System_IntPtr);
+							wrappedLookup.CreateBody (out var wrappedIl);
+							wrappedIl.Emit (OpCodes.Ldftn, mr);
+							wrappedIl.Emit (OpCodes.Ret);
+
+							targets [i] = Instruction.Create (OpCodes.Call, wrappedLookup);
+						} else {
+							targets [i] = Instruction.Create (OpCodes.Ldftn, mr);
+						}
 					} catch (Exception e) {
 						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
 						AddException (ErrorHelper.CreateWarning (99, e, str));
@@ -991,7 +1106,14 @@ namespace Xamarin.Linker {
 
 			var name = $"callback_{counter++}_{Sanitize (method.DeclaringType.FullName)}_{Sanitize (method.Name)}";
 
-			var callback = method.DeclaringType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
+			var callbackType = method.DeclaringType.NestedTypes.SingleOrDefault (v => v.Name == "__Registrar_Callbacks__");
+			if (callbackType is null) {
+				callbackType = new TypeDefinition (string.Empty, "__Registrar_Callbacks__", TypeAttributes.NestedPrivate | TypeAttributes.Sealed | TypeAttributes.Class);
+				callbackType.BaseType = System_Object;
+				method.DeclaringType.NestedTypes.Add (callbackType);
+			}
+
+			var callback = callbackType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
 			var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
 			Configuration.UnmanagedCallersMap.Add (method, entry);
@@ -1013,6 +1135,7 @@ namespace Xamarin.Linker {
 			var categoryAttribute = StaticRegistrar.GetCategoryAttribute (method.DeclaringType);
 			var isCategory = categoryAttribute is not null;
 			var isInstanceCategory = isCategory && StaticRegistrar.HasThisAttribute (method);
+			var isGeneric = method.DeclaringType.HasGenericParameters;
 
 			try {
 				Trace (il, $"ENTER");
@@ -1025,6 +1148,22 @@ namespace Xamarin.Linker {
 
 				if (!isVoid || method.IsConstructor)
 					returnVariable = body.AddVariable (placeholderType);
+
+				if (isGeneric) {
+					if (method.IsStatic)
+						throw new NotImplementedException (); // probably an error?
+
+					il.Emit (OpCodes.Ldtoken, method);
+					// il.Emit (OpCodes.Ldtoken, Console_WriteLine); // DUMMY METHOD
+
+					il.Emit (OpCodes.Ldarg_0);
+					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing);
+					// FIXME: throw if null
+					// FIXME: can only be NSObject
+					il.Emit (OpCodes.Call, Object_GetType);
+					il.Emit (OpCodes.Call, Type_get_TypeHandle);
+					il.Emit (OpCodes.Call, MethodBase_GetMethodFromHandle);
+				}
 
 				if (isInstanceCategory) {
 					il.Emit (OpCodes.Ldarg_0);
@@ -1064,13 +1203,29 @@ namespace Xamarin.Linker {
 
 				callback.AddParameter ("sel", System_IntPtr);
 
+				var managedParameterCount = 0;
+				var nativeParameterOffset = isInstanceCategory ? 1 : 2;
+				var parameterStart = isInstanceCategory ? 1 : 0;
+				if (method.HasParameters)
+					managedParameterCount = method.Parameters.Count;
+
+				if (isGeneric) {
+					il.Emit (OpCodes.Ldc_I4, managedParameterCount);
+					il.Emit (OpCodes.Newarr, System_Object);
+				}
+
 				if (method.HasParameters) {
-					var nativeParameterOffset = isInstanceCategory ? 1 : 2;
-					var parameterStart = isInstanceCategory ? 1 : 0;
-					for (var p = parameterStart; p < method.Parameters.Count; p++) {
-						var parameter = callback.AddParameter ($"p{p}", placeholderType);
-						var nativeParameter = p + nativeParameterOffset;
-						switch (nativeParameter) {
+					for (var p = parameterStart; p < managedParameterCount; p++) {
+						var nativeParameter = callback.AddParameter ($"p{p}", placeholderType);
+						var nativeParameterIndex = p + nativeParameterOffset;
+						var managedParameterType = method.Parameters [p].ParameterType;
+						if (isGeneric) {
+							if (parameterStart != 0)
+								throw new NotImplementedException ("parmaeterStart");
+							il.Emit (OpCodes.Dup);
+							il.Emit (OpCodes.Ldc_I4, p);
+						}
+						switch (nativeParameterIndex) {
 						case 1:
 							il.Emit (OpCodes.Ldarg_1);
 							break;
@@ -1081,14 +1236,19 @@ namespace Xamarin.Linker {
 							il.Emit (OpCodes.Ldarg_3);
 							break;
 						default:
-							il.Emit (OpCodes.Ldarg, nativeParameter);
+							il.Emit (OpCodes.Ldarg, nativeParameterIndex);
 							break;
 						}
-						if (EmitConversion (method, il, method.Parameters [p].ParameterType, true, p, out var nativeType, postProcessing)) {
-							parameter.ParameterType = nativeType;
+						if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing)) {
+							nativeParameter.ParameterType = nativeType;
 						} else {
-							parameter.ParameterType = placeholderType;
+							nativeParameter.ParameterType = placeholderType;
 							AddException (ErrorHelper.CreateWarning (99, "Unable to emit conversion for parameter {2} of type {0}. Method: {1}", method.Parameters [p].ParameterType, GetMethodSignatureWithSourceCode (method), p));
+						}
+						if (isGeneric) {
+							if (managedParameterType.IsValueType)
+								il.Emit (OpCodes.Box, managedParameterType);
+							il.Emit (OpCodes.Stelem_Ref);
 						}
 					}
 				}
@@ -1098,7 +1258,18 @@ namespace Xamarin.Linker {
 
 				callback.AddParameter ("exception_gchandle", new PointerType (System_IntPtr));
 
-				il.Emit (OpCodes.Call, method);
+				if (isGeneric) {
+					il.Emit (OpCodes.Call, MethodBase_Invoke);
+					if (isVoid) {
+						il.Emit (OpCodes.Pop);
+					} else if (method.ReturnType.IsValueType) {
+						il.Emit (OpCodes.Unbox_Any, method.ReturnType);
+					} else {
+						il.Emit (OpCodes.Castclass, method.ReturnType);
+					}
+				} else {
+					il.Emit (OpCodes.Call, method);
+				}
 
 				if (returnVariable is not null) {
 					if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing)) {
@@ -1363,7 +1534,7 @@ namespace Xamarin.Linker {
 					} else if (elementType.IsNSObject (DerivedLinkContext)) {
 						var indirectVariable = il.Body.AddVariable (elementType);
 						if (IsOutParameter (method, parameter)) {
-							il.Emit (OpCodes.Pop);
+							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
 						} else {
 							il.Emit (OpCodes.Ldind_I);
 							il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
@@ -1424,15 +1595,14 @@ namespace Xamarin.Linker {
 				}
 
 				if (elementType.IsNSObject (DerivedLinkContext) || StaticRegistrar.IsNativeObject (elementType)) {
-					MethodReference mr;
 					if (toManaged) {
 						var gim = new GenericInstanceMethod (NSArray_ArrayFromHandle);
 						gim.GenericArguments.Add (elementType);
-						mr = gim;
+						il.Emit (OpCodes.Call, gim);
 					} else {
-						mr = NSArray_FromNSObjects__INativeObjects;
+						il.Emit (OpCodes.Call, NSArray_FromNSObjects__INativeObjects);
+						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					}
-					il.Emit (OpCodes.Call, mr);
 					nativeType = ObjCRuntime_NativeHandle;
 					return true;
 				}
@@ -1443,11 +1613,22 @@ namespace Xamarin.Linker {
 
 			if (IsNSObject (type)) {
 				if (toManaged) {
+					// FIXME: argument semantics
 					il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
-					if (!type.Is ("Foundation", "NSObject"))
+					if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
 						il.Emit (OpCodes.Castclass, type);
 					nativeType = System_IntPtr;
 				} else {
+					// if (parameter == -1) {
+					// 	var retain = StaticRegistrar.HasReleaseAttribute (method);
+					// 	il.Emit (OpCodes.Dup);
+					// 	il.Emit (OpCodes.Call, NSObject_DangerousRetain);
+					// 	if (retain) {
+					// 		il.Emit (OpCodes.Call, GC_KeepAlive); // Make sure the GC doesn't collect the return value before it's been retained
+					// 	} else {
+					// 		il.Emit (OpCodes.Call, NSObject_DangerousAutorelease);
+					// 	}
+					// }
 					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					nativeType = ObjCRuntime_NativeHandle;
 				}
@@ -1463,6 +1644,10 @@ namespace Xamarin.Linker {
 					}
 					nativeType = System_IntPtr;
 				} else {
+					// if (parameter == -1 && StaticRegistrar.HasReleaseAttribute (method)) {
+					// 	il.Emit (OpCodes.Dup);
+					// 	il.Emit (OpCodes.Call, Runtime_RetainObject);
+					// }
 					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					nativeType = ObjCRuntime_NativeHandle;
 				}
@@ -1509,6 +1694,7 @@ namespace Xamarin.Linker {
 						AddException (ErrorHelper.CreateWarning (99, "No delegate proxy field on {0}", delegateProxyType.FullName));
 						return false;
 					}
+					EnsureVisible (method, delegateProxyField);
 					// the delegate is already on the stack
 					il.Emit (OpCodes.Ldsfld, method.Module.ImportReference (delegateProxyField));
 					il.Emit (OpCodes.Ldstr, signature);
@@ -1530,6 +1716,23 @@ namespace Xamarin.Linker {
 			} catch (Exception e) {
 				AddException (ErrorHelper.CreateWarning (99, e, "Failed to process {0}: {1}", method.FullName, e.Message));
 				return false;
+			}
+		}
+
+		void EnsureVisible (MethodDefinition caller, FieldDefinition field)
+		{
+			field.IsPublic = true;
+			EnsureVisible (caller, field.DeclaringType);
+		}
+
+
+		void EnsureVisible (MethodDefinition caller, TypeDefinition type)
+		{
+			if (type.IsNested) {
+				type.IsNestedPublic = true;
+				EnsureVisible (caller, type.DeclaringType);
+			} else {
+				type.IsPublic = true;
 			}
 		}
 

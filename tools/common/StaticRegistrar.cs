@@ -769,7 +769,7 @@ namespace Registrar {
 			return GetValueTypeSize (type.Resolve (), Is64Bits);
 		}
 
-		protected override bool HasReleaseAttribute (MethodDefinition method)
+		public override bool HasReleaseAttribute (MethodDefinition method)
 		{
 			method = GetBaseMethodInTypeHierarchy (method);
 			return HasAttribute (method.MethodReturnType, ObjCRuntime, StringConstants.ReleaseAttribute);

@@ -358,7 +358,7 @@
 			<Output TaskParameter="DestinationFiles" ItemName="FileWrites"/>
 		</Copy>
 
-		<Touch AlwaysCreate="true" Files="@(_HotRestartAppContentDirContents -> '%(_HotRestartAppContentDirContents.StampFile)')" />
+		<Touch AlwaysCreate="true" Files="@(_HotRestartAppContentDirContents -> '%(StampFile)')" />
 	</Target>
 
 

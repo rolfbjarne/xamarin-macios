@@ -29,6 +29,9 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 		public string HotRestartSignedAppDir { get; set; } = string.Empty;
 
 		[Required]
+		public string RelativeAppBundlePath { get; set; } = string.Empty;
+
+		[Required]
 		public string TargetFrameworkMoniker { get; set; } = string.Empty;
 
 		[Required]
@@ -53,6 +56,8 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 		{
 			var rv = new TaskItem (item);
 			var relativePath = item.GetMetadata ("RelativePath");
+			if (relativePath.StartsWith (RelativeAppBundlePath, StringComparison.OrdinalIgnoreCase))
+				relativePath = relativePath.Substring (RelativeAppBundlePath.Length).TrimStart ('\\', '/');
 			rv.SetMetadata ("DestinationFile", Path.Combine (destinationDirectory, relativePath));
 			if (!string.IsNullOrEmpty (stampDirectory))
 				rv.SetMetadata ("StampFile", Path.Combine (stampDirectory, relativePath));

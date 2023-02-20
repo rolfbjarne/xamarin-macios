@@ -765,10 +765,15 @@ namespace ObjCRuntime {
 				return IntPtr.Zero;
 
 			var nsobj = GetGCHandleTarget (obj) as NSObject;
-			if (nsobj is null)
-				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name} (token reference: 0x{token_ref:X}). {Constants.PleaseFileBugReport}");
+			return AllocGCHandle (FindClosedMethodForObject (nsobj, method));
+		}
 
-			return AllocGCHandle (FindClosedMethod (nsobj.GetType (), method));
+		static MethodInfo FindClosedMethodForObject (NSObject? nsobj, MethodBase method)
+		{
+			if (nsobj is null)
+				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name}. {Constants.PleaseFileBugReport}");
+
+			return FindClosedMethod (nsobj.GetType (), method);
 		}
 
 		static IntPtr TryGetOrConstructNSObjectWrapped (IntPtr ptr)
@@ -1940,7 +1945,12 @@ namespace ObjCRuntime {
 		// Retain the input if it's either an NSObject or a NativeObject.
 		static void RetainNativeObject (IntPtr gchandle)
 		{
-			var obj = GetGCHandleTarget (gchandle);
+			RetainObject (GetGCHandleTarget (gchandle));
+		}
+
+		// Retain the input if it's either an NSObject or a NativeObject.
+		static void RetainObject (object? obj)
+		{
 			if (obj is NativeObject nobj)
 				nobj.Retain ();
 			else if (obj is NSObject nsobj)
@@ -2261,9 +2271,9 @@ namespace ObjCRuntime {
 			} else if (assembly != IntPtr.Zero) {
 				rv = LookupUnmanagedFunctionInAssembly (assembly, symbol, id);
 				// FIXME -- consistency check
-				var impl = LookupManagedFunctionImpl (id);
-				if (impl != rv)
-					Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5} using assembly lookup and 0x{6} using full app lookup", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"), impl.ToString ("x"));
+				// var impl = LookupManagedFunctionImpl (id);
+				// if (impl != rv)
+				// 	Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5} using assembly lookup and 0x{6} using full app lookup", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"), impl.ToString ("x"));
 				// END FIXME -- remove consistency check once everything is working
 			} else {
 				rv = LookupManagedFunctionImpl (id);

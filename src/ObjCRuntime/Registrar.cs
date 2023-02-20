@@ -1115,7 +1115,7 @@ namespace Registrar {
 		public abstract BindAsAttribute GetBindAsAttribute (TProperty property);
 		protected abstract IList<AdoptsAttribute> GetAdoptsAttributes (TType type);
 		public abstract TType GetNullableType (TType type); // For T? returns T. For T returns null.
-		protected abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
+		public abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
 		protected abstract bool IsValueType (TType type);
 		protected abstract bool IsArray (TType type, out int rank);

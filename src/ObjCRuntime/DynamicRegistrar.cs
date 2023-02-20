@@ -523,7 +523,7 @@ namespace Registrar {
 			return type.AssemblyQualifiedName;
 		}
 
-		protected override bool HasReleaseAttribute (MethodBase method)
+		public override bool HasReleaseAttribute (MethodBase method)
 		{
 			var mi = method as MethodInfo;
 			if (mi == null)

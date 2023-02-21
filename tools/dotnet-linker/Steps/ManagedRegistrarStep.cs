@@ -599,6 +599,18 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		MethodReference Runtime_RetainAndAutorelease {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainAndAutorelease", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("Foundation", "NSObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
 		MethodReference UnmanagedCallersOnlyAttribute_Constructor {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute", ".ctor", (v) => v.IsDefaultConstructor ());
@@ -1619,16 +1631,15 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Castclass, type);
 					nativeType = System_IntPtr;
 				} else {
-					// if (parameter == -1) {
-					// 	var retain = StaticRegistrar.HasReleaseAttribute (method);
-					// 	il.Emit (OpCodes.Dup);
-					// 	il.Emit (OpCodes.Call, NSObject_DangerousRetain);
-					// 	if (retain) {
-					// 		il.Emit (OpCodes.Call, GC_KeepAlive); // Make sure the GC doesn't collect the return value before it's been retained
-					// 	} else {
-					// 		il.Emit (OpCodes.Call, NSObject_DangerousAutorelease);
-					// 	}
-					// }
+					if (parameter == -1) {
+						var retain = StaticRegistrar.HasReleaseAttribute (method);
+						il.Emit (OpCodes.Dup);
+						if (retain) {
+							il.Emit (OpCodes.Call, Runtime_RetainObject);
+						} else {
+							il.Emit (OpCodes.Call, Runtime_RetainAndAutorelease);
+						}
+					}
 					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					nativeType = ObjCRuntime_NativeHandle;
 				}
@@ -1644,10 +1655,10 @@ namespace Xamarin.Linker {
 					}
 					nativeType = System_IntPtr;
 				} else {
-					// if (parameter == -1 && StaticRegistrar.HasReleaseAttribute (method)) {
-					// 	il.Emit (OpCodes.Dup);
-					// 	il.Emit (OpCodes.Call, Runtime_RetainObject);
-					// }
+					if (parameter == -1 && StaticRegistrar.HasReleaseAttribute (method)) {
+						il.Emit (OpCodes.Dup);
+						il.Emit (OpCodes.Call, Runtime_RetainObject);
+					}
 					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					nativeType = ObjCRuntime_NativeHandle;
 				}

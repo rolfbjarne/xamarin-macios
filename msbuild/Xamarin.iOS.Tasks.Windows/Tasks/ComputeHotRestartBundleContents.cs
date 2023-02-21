@@ -58,6 +58,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 			var relativePath = item.GetMetadata ("RelativePath");
 			if (relativePath.StartsWith (RelativeAppBundlePath, StringComparison.OrdinalIgnoreCase))
 				relativePath = relativePath.Substring (RelativeAppBundlePath.Length).TrimStart ('\\', '/');
+			relativePath = relativePath.Replace ('/', Path.DirectorySeparatorChar);
 			rv.SetMetadata ("DestinationFile", Path.Combine (destinationDirectory, relativePath));
 			if (!string.IsNullOrEmpty (stampDirectory))
 				rv.SetMetadata ("StampFile", Path.Combine (stampDirectory, relativePath));

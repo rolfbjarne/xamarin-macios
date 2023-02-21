@@ -105,12 +105,13 @@
 		</Touch>
 	</Target>
 
-	<Target Name="_ComputeHotRestartBundleContents" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeTargetArchitectures">
+	<Target Name="_ComputeHotRestartBundleContents" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeTargetArchitectures;_ComputeVariables">
 		<ComputeHotRestartBundleContents
 			HotRestartAppContentDir="$(HotRestartAppContentDir)"
 			HotRestartContentDir="$(HotRestartContentDir)"
 			HotRestartContentStampDir="$(HotRestartContentStampDir)"
 			HotRestartSignedAppDir="$(HotRestartSignedAppDir)"
+			RelativeAppBundlePath="$(_RelativeAppBundlePath)"
 			ResolvedFileToPublish="@(ResolvedFileToPublish)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>

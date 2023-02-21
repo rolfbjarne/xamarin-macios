@@ -1955,6 +1955,18 @@ namespace ObjCRuntime {
 				nobj.Retain ();
 			else if (obj is NSObject nsobj)
 				nsobj.DangerousRetain ();
+			// Make sure the GC doesn't collect the return value before it's been retained
+			GC.KeepAlive (obj);
+		}
+
+		static void RetainAndAutorelease (NSObject? obj)
+		{
+			if (obj is null)
+				return;
+			obj.DangerousRetain ();
+			obj.DangerousAutorelease ();
+			// Make sure the GC doesn't collect the return value before it's been retained
+			GC.KeepAlive (obj);
 		}
 
 		// Check if the input is an NSObject, and in that case retain it (and return true)

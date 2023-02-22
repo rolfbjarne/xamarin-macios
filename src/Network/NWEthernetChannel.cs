@@ -119,10 +119,14 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		unsafe static extern void nw_ethernet_channel_send (OS_nw_ethernet_channel ethernet_channel, OS_dispatch_data content, ushort vlan_tag, string remote_address, BlockLiteral* completion);
 
+#if !NET
 		delegate void nw_ethernet_channel_send_completion_t (IntPtr block, IntPtr error);
 		static nw_ethernet_channel_send_completion_t static_SendCompletion = TrampolineSendCompletion;
 
 		[MonoPInvokeCallback (typeof (nw_ethernet_channel_send_completion_t))]
+#else
+		[UnmanagedCallersOnly]
+#endif
 		static void TrampolineSendCompletion (IntPtr block, IntPtr error)
 		{
 			var del = BlockLiteral.GetTarget<Action<NWError?>> (block);
@@ -140,8 +144,13 @@ namespace Network {
 
 			using (var dispatchData = DispatchData.FromReadOnlySpan (content)) {
 				unsafe {
+#if NET
+					delegate* unmanaged<IntPtr, IntPtr, void> trampoline = &TrampolineSendCompletion;
+					using var block = new BlockLiteral (trampoline, callback, typeof (NWEthernetChannel), nameof (TrampolineSendCompletion));
+#else
 					using var block = new BlockLiteral ();
 					block.SetupBlockUnsafe (static_SendCompletion, callback);
+#endif
 					nw_ethernet_channel_send (GetCheckedHandle (), dispatchData.GetHandle (), vlanTag, remoteAddress, &block);
 				}
 			}
@@ -150,10 +159,14 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		unsafe static extern void nw_ethernet_channel_set_receive_handler (OS_nw_ethernet_channel ethernet_channel, /* [NullAllowed] */ BlockLiteral *handler);
 
+#if !NET
 		delegate void nw_ethernet_channel_receive_handler_t (IntPtr block, OS_dispatch_data content, ushort vlan_tag, IntPtr local_address, IntPtr remote_address);
 		static nw_ethernet_channel_receive_handler_t static_ReceiveHandler = TrampolineReceiveHandler;
 
 		[MonoPInvokeCallback (typeof (nw_ethernet_channel_receive_handler_t))]
+#else
+		[UnmanagedCallersOnly]
+#endif
 		static void TrampolineReceiveHandler (IntPtr block, OS_dispatch_data content, ushort vlanTag, IntPtr localAddressArray, IntPtr remoteAddressArray)
 		{
 			// localAddress and remoteAddress are defined as:
@@ -178,8 +191,13 @@ namespace Network {
 					return;
 				}
 
+#if NET
+				delegate* unmanaged<IntPtr, OS_dispatch_data, ushort, IntPtr, IntPtr, void> trampoline = &TrampolineReceiveHandler;
+				using var block = new BlockLiteral (trampoline, handler, typeof (NWEthernetChannel), nameof (TrampolineReceiveHandler));
+#else
 				using var block = new BlockLiteral ();
 				block.SetupBlockUnsafe (static_ReceiveHandler, handler);
+#endif
 				nw_ethernet_channel_set_receive_handler (GetCheckedHandle (), &block);
 			}
 		}
@@ -187,10 +205,14 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		unsafe static extern void nw_ethernet_channel_set_state_changed_handler (OS_nw_ethernet_channel ethernet_channel, /* [NullAllowed] */ BlockLiteral *handler);
 
+#if !NET
 		delegate void nw_ethernet_channel_state_changed_handler_t (IntPtr block, NWEthernetChannelState state, IntPtr error);
 		static nw_ethernet_channel_state_changed_handler_t static_StateChangesHandler = TrampolineStateChangesHandler;
 
 		[MonoPInvokeCallback (typeof (nw_ethernet_channel_state_changed_handler_t))]
+#else
+		[UnmanagedCallersOnly]
+#endif
 		static void TrampolineStateChangesHandler (IntPtr block, NWEthernetChannelState state, IntPtr error)
 		{
 			var del = BlockLiteral.GetTarget<Action<NWEthernetChannelState, NWError?>> (block);
@@ -209,8 +231,13 @@ namespace Network {
 					return;
 				}
 
+#if NET
+				delegate* unmanaged<IntPtr, NWEthernetChannelState, IntPtr, void> trampoline = &TrampolineStateChangesHandler;
+				using var block = new BlockLiteral (trampoline, handler, typeof (NWEthernetChannel), nameof (TrampolineStateChangesHandler));
+#else
 				using var block = new BlockLiteral ();
 				block.SetupBlockUnsafe (static_StateChangesHandler, handler);
+#endif
 				nw_ethernet_channel_set_state_changed_handler (GetCheckedHandle (), &block);
 			}
 		}	

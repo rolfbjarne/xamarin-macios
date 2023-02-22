@@ -17,7 +17,7 @@ namespace MonoTouchFixtures.Photos {
 
 	[TestFixture]
 	[Preserve (AllMembers = true)]
-	public class PHLivePhotoEditingContextTest {
+	public unsafe class PHLivePhotoEditingContextTest {
 
 		[SetUp]
 		public void Setup ()
@@ -30,14 +30,15 @@ namespace MonoTouchFixtures.Photos {
 
 #if NET
 		static PHLivePhotoFrameProcessingBlock managed = (IPHLivePhotoFrame frame, ref NSError error) => {
-#else
-		static PHLivePhotoFrameProcessingBlock2 managed = (IPHLivePhotoFrame frame, ref NSError error) => {
-#endif
 			error = error_faker;
+#else
+		static PHLivePhotoFrameProcessingBlock2 managed = (IPHLivePhotoFrame frame, NSError* error) => {
+			*error = error_faker;
+#endif
 			return null;
 		};
 
-		delegate NativeHandle DPHLivePhotoFrameProcessingBlock2 (IntPtr block, NativeHandle frame, ref NativeHandle error);
+		delegate NativeHandle DPHLivePhotoFrameProcessingBlock2 (IntPtr block, NativeHandle frame, NativeHandle* error);
 
 #if !MONOMAC
 		// on macOS `initWithLivePhotoEditingInput:` returns `nil` and we throw
@@ -82,7 +83,11 @@ namespace MonoTouchFixtures.Photos {
 				var b = (IntPtr) block;
 
 				// simulate a call that does not produce an error
+#if NET
+				var args = new object [] { b, NativeHandle.Zero, null };
+#else
 				var args = new object [] { b, NativeHandle.Zero, NativeHandle.Zero };
+#endif
 				error_faker = null;
 				Assert.That (m.Invoke (null, args), Is.EqualTo (NativeHandle.Zero), "1");
 

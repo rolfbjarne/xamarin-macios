@@ -43,50 +43,24 @@ namespace Xamarin.MacDev.Tasks {
 		IEnumerable<ITaskItem> ProcessFrameworks (IEnumerable<ITaskItem> input)
 		{
 			var frameworks = new List<ITaskItem> ();
-			var xcframeworkPaths = new Dictionary<string, ITaskItem> ();
 
-			// split frameworks and xcframeworks
-			// we sort the input to get predicable output
 			foreach (var item in input.OrderBy (v => v.ItemSpec)) {
-				if (!ComputeBundleLocationTaskBase.TryGetFrameworkDirectory (item.ItemSpec, out var framework, out var isXCFramework)) {
-					Log.LogMessage (MessageImportance.Low, "The item {0} is not a framework.", item.ItemSpec);
-					continue;
-				}
-
-				Log.LogMessage (MessageImportance.Low, $"The item {item.ItemSpec} is {(isXCFramework ? "an xcframework" : "a framework")} with path {framework}");
-
-				if (isXCFramework) {
-					if (!xcframeworkPaths.ContainsKey (framework)) {
-						xcframeworkPaths.Add (framework, item);
-					} else {
-						Log.LogMessage (MessageImportance.Low, $"The xcframework {framework} has already been added from the path {item.ItemSpec}");
+				var framework = item.ItemSpec.TrimEnd ('\\');
+				if (!framework.EndsWith (".framework", StringComparison.OrdinalIgnoreCase)) {
+					framework = Path.GetDirectoryName (framework);
+					if (!framework.EndsWith (".framework", StringComparison.OrdinalIgnoreCase)) {
+						Log.LogMessage (MessageImportance.Low, "The item {0} is not a framework.", item.ItemSpec);
+						continue;
 					}
-				} else {
-					frameworks.Add (item);
-					item.ItemSpec = framework;
 				}
+
+				Log.LogMessage (MessageImportance.Low, $"The item {item.ItemSpec} is a framework with path {framework}");
+
+				frameworks.Add (item);
+				item.ItemSpec = framework;
 			}
 
-			// if we got no xcframeworks, then we only have frameworks (if anything at all)
-			if (!xcframeworkPaths.Any ())
-				return frameworks;
-
-			var xcframeworks = new List<ITaskItem> ();
-			// foreach (var entry in xcframeworkPaths) {
-			// 	var xcframework = entry.Key;
-			// 	var resolved = ResolveNativeReferencesBase.ResolveXCFramework (Log, SdkIsSimulator, TargetFrameworkMoniker, Architectures, xcframework);
-			// 	if (resolved is null) {
-			// 		Log.LogWarning ($"Unable to resolve the xcframework: {xcframework}");
-			// 		continue;
-			// 	}
-			// 	var item = entry.Value;
-			// 	item.ItemSpec = Path.GetFullPath (resolved);
-			// 	xcframeworks.Add (item);
-
-			// 	Log.LogWarning ($"Resolved {xcframework} to {item.ItemSpec}");
-			// }
-
-			return frameworks.Union (xcframeworks);
+			return frameworks;
 		}
 
 		public override bool Execute ()

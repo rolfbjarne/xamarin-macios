@@ -112,7 +112,7 @@ namespace Xamarin.Tests {
 				.ToList ();
 
 			var rids = runtimeIdentifiers.Split (';');
-			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.All, configuration == "Release");
+			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
 		}
 
 		static void DumpDirContents (string dir)

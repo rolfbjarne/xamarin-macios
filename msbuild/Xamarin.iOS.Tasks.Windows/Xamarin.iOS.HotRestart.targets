@@ -112,7 +112,7 @@
 			HotRestartContentStampDir="$(HotRestartContentStampDir)"
 			HotRestartSignedAppDir="$(HotRestartSignedAppDir)"
 			RelativeAppBundlePath="$(_RelativeAppBundlePath)"
-			ResolvedFileToPublish="@(ResolvedFileToPublish)"
+			ResolvedFileToPublish="@(ResolvedFileToPublish);@(_FileNativeReference)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 			<Output TaskParameter="HotRestartAppContentDirContents" ItemName="_HotRestartAppContentDirContents" />

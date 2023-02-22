@@ -125,7 +125,7 @@
 		<CollectHotRestartFrameworks
 			Architectures="$(TargetArchitectures)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
-			NativeReference="@(NativeReference)"
+			NativeReference="@(NativeReference);@(_FrameworkNativeReference)"
 			None="@(None)"
 			SdkIsSimulator="false"
 			UnpackedFramework="@(_UnpackedFramework)"

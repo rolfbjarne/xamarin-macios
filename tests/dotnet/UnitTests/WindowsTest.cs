@@ -65,11 +65,32 @@ namespace Xamarin.Tests {
 			DumpDirContents (appPath);
 			DumpDirContents (tmpdir);
 
-			var hotRestartAppBundleFiles = BundleStructureTest.Find (hotRestartAppBundlePath)
-				// Exclude any files from the prebuilt hot restart app
-				.Where (v => !prebuiltAppEntries.Contains (v));
+			var hotRestartAppBundleFiles = BundleStructureTest.Find (hotRestartAppBundlePath);
+
+
 			var payloadFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "Payload", "BundleStructure.app"));
 			var contentFiles = BundleStructureTest.Find (Path.Combine (hotRestartOutputDir, "BundleStructure.content"));
+
+			// Exclude most files from the prebuilt hot restart app
+			var excludedPrebuiltAppEntries = prebuiltAppEntries
+				.Where (v => {
+					// We're not excluding some files that are common to all apps.
+					switch (v) {
+					case "Info.plist":
+					case "MonoTouchDebugConfiguration.txt":
+					case "PkgInfo":
+					case "Settings.bundle":
+					case "Settings.bundle\\Root.plist":
+					case "_CodeSignature":
+					case "_CodeSignature\\CodeResources":
+						return false;
+					}
+					return true;
+				});
+			hotRestartAppBundleFiles = hotRestartAppBundleFiles
+				.Except (excludedPrebuiltAppEntries)
+				.ToList ();
+
 			var merged = hotRestartAppBundleFiles
 				.Union (payloadFiles)
 				.Union (contentFiles)

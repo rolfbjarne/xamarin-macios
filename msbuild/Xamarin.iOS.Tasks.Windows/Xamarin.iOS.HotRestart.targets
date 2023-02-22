@@ -341,7 +341,7 @@
 			<Output TaskParameter="DestinationFiles" ItemName="FileWrites"/>
 		</Copy>
 
-		<MakeDir Directories="@(_HotRestartContentDirContents -> '$([System.IO.Path]::GetDirectoryName('%(StampFile)'))')"/>
+		<MakeDir Directories="@(_HotRestartContentDirContents -> '$([System.IO.Path]::GetDirectoryName('%(_HotRestartContentDirContents.StampFile)'))')"/>
 		<Touch AlwaysCreate="true" Files="@(_HotRestartContentDirContents -> '%(StampFile)')" />
 	</Target>
 

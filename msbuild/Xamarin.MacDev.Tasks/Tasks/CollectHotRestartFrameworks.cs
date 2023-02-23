@@ -22,8 +22,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		public ITaskItem [] NativeReference { get; set; } = Array.Empty<ITaskItem> ();
 
-		public ITaskItem [] None { get; set; } = Array.Empty<ITaskItem> ();
-
 		[Required]
 		public bool SdkIsSimulator { get; set; }
 
@@ -67,11 +65,10 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var allInput = new List<ITaskItem> ();
 
-			allInput.AddRange (None);
 			allInput.AddRange (UnpackedFramework);
 			allInput.AddRange (NativeReference);
 
-			Log.LogMessage (MessageImportance.Normal, $"Found {None.Count ()} None items, {UnpackedFramework.Length} UnpackedFramework items, {NativeReference.Length} NativeReference items, for a total of {allInput.Count} items");
+			Log.LogMessage (MessageImportance.Normal, $"Found {UnpackedFramework.Length} UnpackedFramework items, {NativeReference.Length} NativeReference items, for a total of {allInput.Count} items");
 
 			var frameworks = new Dictionary<string, ITaskItem> ();
 			foreach (var framework in ProcessFrameworks (allInput)) {

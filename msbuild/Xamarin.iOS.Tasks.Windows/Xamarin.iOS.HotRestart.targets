@@ -126,7 +126,6 @@
 			Architectures="$(TargetArchitectures)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReference="@(NativeReference);@(_FrameworkNativeReference)"
-			None="@(None)"
 			SdkIsSimulator="false"
 			UnpackedFramework="@(_UnpackedFramework)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"

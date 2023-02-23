@@ -1096,7 +1096,7 @@ namespace Registrar {
 		protected abstract TType MakeByRef (TType type);
 		public abstract bool HasThisAttribute (TMethod method);
 		protected abstract bool IsConstructor (TMethod method);
-		protected abstract TType GetElementType (TType type);
+		public abstract TType GetElementType (TType type);
 		protected abstract TType GetReturnType (TMethod method);
 		protected abstract void GetNamespaceAndName (TType type, out string @namespace, out string name);
 		protected abstract bool TryGetAttribute (TType type, string attributeNamespace, string attributeType, out object attribute);
@@ -1118,9 +1118,9 @@ namespace Registrar {
 		public abstract bool HasReleaseAttribute (TMethod method); // Returns true of the method's return type/value has a [Release] attribute.
 		protected abstract bool IsINativeObject (TType type);
 		protected abstract bool IsValueType (TType type);
-		protected abstract bool IsArray (TType type, out int rank);
+		public abstract bool IsArray (TType type, out int rank);
 		protected abstract bool IsEnum (TType type, out bool isNativeEnum);
-		protected abstract bool IsNullable (TType type);
+		public abstract bool IsNullable (TType type);
 		protected abstract bool IsDelegate (TType type);
 		protected abstract bool IsGenericType (TType type);
 		protected abstract bool IsGenericMethod (TMethod method);
@@ -1177,7 +1177,7 @@ namespace Registrar {
 			return property is not null;
 		}
 
-		protected bool IsArray (TType type)
+		public bool IsArray (TType type)
 		{
 			int rank;
 			return IsArray (type, out rank);

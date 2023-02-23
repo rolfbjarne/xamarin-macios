@@ -374,7 +374,7 @@ namespace Registrar {
 			return ((MethodInfo) method).GetBaseDefinition ();
 		}
 
-		protected override Type GetElementType (Type type)
+		public override Type GetElementType (Type type)
 		{
 			return type.GetElementType ();
 		}
@@ -554,7 +554,7 @@ namespace Registrar {
 			return type.IsDefined (typeof (ModelAttribute), false);
 		}
 
-		protected override bool IsArray (Type type, out int rank)
+		public override bool IsArray (Type type, out int rank)
 		{
 			if (!type.IsArray) {
 				rank = 0;
@@ -594,7 +594,7 @@ namespace Registrar {
 			return type.IsSubclassOf (typeof (System.Delegate));
 		}
 
-		protected override bool IsNullable (Type type)
+		public override bool IsNullable (Type type)
 		{
 			if (!type.IsGenericType)
 				return false;

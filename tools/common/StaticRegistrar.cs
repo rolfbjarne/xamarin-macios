@@ -968,7 +968,7 @@ namespace Registrar {
 			return false;
 		}
 
-		protected override TypeReference GetElementType (TypeReference type)
+		public override TypeReference GetElementType (TypeReference type)
 		{
 			var ts = type as TypeSpecification;
 			if (ts != null) {
@@ -1067,7 +1067,7 @@ namespace Registrar {
 			return HasAttribute (td, ObjCRuntime, StringConstants.NativeAttribute);
 		}
 
-		protected override bool IsNullable (TypeReference type)
+		public override bool IsNullable (TypeReference type)
 		{
 			return GetNullableType (type) != null;
 		}
@@ -1083,7 +1083,7 @@ namespace Registrar {
 			return type.IsEnum;
 		}
 
-		protected override bool IsArray (TypeReference type, out int rank)
+		public override bool IsArray (TypeReference type, out int rank)
 		{
 			var arrayType = type as ArrayType;
 			if (arrayType == null) {
@@ -4756,7 +4756,7 @@ namespace Registrar {
 			return false;
 		}
 
-		string GetManagedToNSNumberFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
+		public string GetManagedToNSNumberFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
 		{
 			var typeName = managedType.FullName;
 			switch (typeName) {
@@ -4784,7 +4784,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetNSNumberToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
+		public string GetNSNumberToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
 		{
 			var typeName = managedType.FullName;
 			switch (typeName) {
@@ -4814,7 +4814,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetNSValueToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
+		public string GetNSValueToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
 		{
 			var underlyingTypeName = managedType.FullName;
 
@@ -4843,7 +4843,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetManagedToNSValueFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
+		public string GetManagedToNSValueFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
 		{
 			var underlyingTypeName = managedType.FullName;
 
@@ -4886,6 +4886,7 @@ namespace Registrar {
 		void GenerateConversionToManaged (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string managedClassExpression, int parameter)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
+			// It's also a mirror of the method ManagedRegistrarStep.GenerateConversionToManaged.
 			// These methods must be kept in sync.
 			var managedType = outputType;
 			var nativeType = inputType;

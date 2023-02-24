@@ -972,7 +972,7 @@
 			>
 		</RuntimeConfigParserTask>
 
-		<ResolvedFileToPublish Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Include="$(_ParsedRuntimeConfigFilePath)" PublishFolderType="Resource" />
+		<ResolvedFileToPublish Condition="'$(GenerateRuntimeConfigurationFiles)' == 'true'" Include="$(_ParsedRuntimeConfigFilePath)" PublishFolderType="Resource" />
 
 		<Warning Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Text="Some features may not work correctly, because the generation of the runtime configure file (*.runtimeconfig.json) has been disabled." />
 	</Target>

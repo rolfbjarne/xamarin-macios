@@ -129,6 +129,10 @@ namespace Xamarin.Tests {
 
 		static void DumpDirContents (string dir)
 		{
+			if (!Directory.Exists (dir)) {
+				Console.WriteLine ($"The directory {dir} does not exist!");
+				return;
+			}
 			var files = Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories);
 			Console.WriteLine ($"Found {files.Count ()} in {dir}:");
 			foreach (var entry in files.OrderBy (v => v))

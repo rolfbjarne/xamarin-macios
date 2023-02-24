@@ -89,6 +89,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 
 				case PublishFolderType.AppleBindingResourcePackage:
 				case PublishFolderType.CompressedAppleBindingResourcePackage:
+				case PublishFolderType.StaticLibrary:
 					// These aren't copied to the bundle
 					continue;
 
@@ -96,7 +97,6 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				case PublishFolderType.PlugIns:
 				case PublishFolderType.DynamicLibrary:
 				case PublishFolderType.PluginLibrary:
-				case PublishFolderType.StaticLibrary:
 					// These have to be signed
 					signedAppDirContents.Add (CopyWithDestinationAndStamp (item, HotRestartSignedAppDir));
 					break;

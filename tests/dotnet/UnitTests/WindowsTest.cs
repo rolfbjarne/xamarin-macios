@@ -25,6 +25,7 @@ namespace Xamarin.Tests {
 			properties ["IsHotRestartBuild"] = "true";
 			properties ["IsHotRestartEnvironmentReady"] = "true";
 			properties ["EnableCodeSigning"] = "false";
+			properties ["_IsAppSigned"] = "false";
 			var hotRestartOutputDir = Path.Combine (tmpdir, "out");
 			Directory.CreateDirectory (hotRestartOutputDir);
 			properties ["HotRestartSignedAppOutputDir"] = hotRestartOutputDir + Path.DirectorySeparatorChar;
@@ -81,8 +82,6 @@ namespace Xamarin.Tests {
 					case "PkgInfo":
 					case "Settings.bundle":
 					case "Settings.bundle\\Root.plist":
-					case "_CodeSignature":
-					case "_CodeSignature\\CodeResources":
 						return false;
 					}
 					return true;
@@ -111,8 +110,21 @@ namespace Xamarin.Tests {
 				.OrderBy (v => v)
 				.ToList ();
 
+			// The reference to the bindings-framework-test project is skipped on Windows, because we can't build binding projects unless we're connected to a Mac.
+			AddOrAssert (merged, "bindings-framework-test.dll");
+			AddOrAssert (merged, "bindings-framework-test.pdb");
+			AddOrAssert (merged, Path.Combine ("Frameworks", "XTest.framework")); // XTest.framework comes from bindings-framework-test.csproj
+			AddOrAssert (merged, Path.Combine ("Frameworks", "XTest.framework", "Info.plist"));
+			AddOrAssert (merged, Path.Combine ("Frameworks", "XTest.framework", "XTest"));
+
 			var rids = runtimeIdentifiers.Split (';');
 			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
+		}
+
+		static void AddOrAssert (IList<string> list, string item)
+		{
+			Assert.That (list, Does.Not.Contain (item), $"item {item} already in list.");
+			list.Add (item);
 		}
 
 		static void DumpDirContents (string dir)

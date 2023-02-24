@@ -117,6 +117,9 @@ namespace Xamarin.Tests {
 			AddOrAssert (merged, Path.Combine ("Frameworks", "XTest.framework", "Info.plist"));
 			AddOrAssert (merged, Path.Combine ("Frameworks", "XTest.framework", "XTest"));
 
+			// The name of the executable is different.
+			AddOrAssert (merged, project);
+
 			var rids = runtimeIdentifiers.Split (';');
 			BundleStructureTest.CheckAppBundleContents (platform, merged, rids, BundleStructureTest.CodeSignature.None, configuration == "Release");
 		}

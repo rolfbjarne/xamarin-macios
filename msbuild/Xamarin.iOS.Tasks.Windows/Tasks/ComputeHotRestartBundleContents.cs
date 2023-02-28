@@ -65,6 +65,38 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 			return rv;
 		}
 
+		// The Copy task can't copy directories, so expand directories to their indivitual files
+		List<ITaskItem> ExpandDirectories (List<ITaskItem> items)
+		{
+			var rv = new List<ITaskItem> ();
+
+			foreach (var item in items) {
+				if (File.Exists (item.ItemSpec)) {
+					rv.Add (item);
+				} else if (Directory.Exists (item.ItemSpec)) {
+					var entries = Directory.GetFileSystemEntries (item.ItemSpec).ToArray ();
+					Console.WriteLine ($"Expanding {item.ItemSpec} with {entries.Length} items:");
+					foreach (var entry in entries) {
+						if (Directory.Exists (entry)) {
+							Console.WriteLine ($"    Skipped directory: {entry}");
+							continue;
+						}
+						var relativePath = Path.Combine (item.GetMetadata ("RelativePath"), entry.Substring (item.ItemSpec.Length).TrimStart ('\\', '/'));
+						var file = new TaskItem (item);
+						file.ItemSpec = entry;
+						file.SetMetadata ("RelativePath", relativePath);
+						rv.Add (file);
+						Console.WriteLine ($"    Added {file.ItemSpec} with relative path: {relativePath}");
+					}
+				} else {
+					// Trust that this will just somehow work.
+					rv.Add (item);
+				}
+			}
+
+			return rv;
+		}
+
 		public override bool Execute ()
 		{
 			var appContentDirContents = new List<ITaskItem> ();
@@ -107,6 +139,10 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 					continue;
 				}
 			}
+
+			appContentDirContents = ExpandDirectories (appContentDirContents);
+			contentDirContents = ExpandDirectories (contentDirContents);
+			signedAppDirContents = ExpandDirectories (signedAppDirContents);
 
 			HotRestartAppContentDirContents = appContentDirContents.ToArray ();
 			HotRestartContentDirContents = contentDirContents.ToArray ();

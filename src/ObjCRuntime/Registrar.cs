@@ -1171,7 +1171,7 @@ namespace Registrar {
 				return false;
 
 			var name = method.Name;
-			if (!name.StartsWith ("get_", StringComparison.Ordinal) || name.StartsWith ("set_", StringComparison.Ordinal))
+			if (!name.StartsWith ("get_", StringComparison.Ordinal) && !name.StartsWith ("set_", StringComparison.Ordinal))
 				return false;
 
 			property = FindProperty (method.DeclaringType, name.Substring (4));

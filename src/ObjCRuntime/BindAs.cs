@@ -31,12 +31,17 @@ namespace ObjCRuntime {
 
 	static class BindAs {
 		// xamarin_convert_nsarray_to_managed_with_func
+		static T Identity<T> (T obj)
+		{
+			return obj;
+		}
+
 		internal unsafe static T[]? ConvertNSArrayToManagedArray<T> (IntPtr nsarray, delegate*<IntPtr, T> convert) where T: struct
 		{
 			if (nsarray == IntPtr.Zero)
 				return null;
 
-			throw new NotImplementedException ("BindAsNotImplemented");
+			return ConvertNSArrayToManagedArray2<T, T> (nsarray, convert, &Identity<T>);
 		}
 
 		internal unsafe static IntPtr ConvertManagedArrayToNSArray<T> (T[]? array, delegate*<T, IntPtr> convert) where T: struct
@@ -44,7 +49,7 @@ namespace ObjCRuntime {
 			if (array is null)
 				return IntPtr.Zero;
 
-			throw new NotImplementedException ("BindAsNotImplemented");
+			return ConvertManagedArrayToNSArray2<T, T> (array, &Identity<T>, convert);
 		}
 
 		internal unsafe static T[]? ConvertNSArrayToManagedArray2<T,U> (IntPtr nsarray, delegate*<IntPtr, U> convert1, delegate*<U, T> convert2) where T: struct
@@ -52,7 +57,7 @@ namespace ObjCRuntime {
 			if (nsarray == IntPtr.Zero)
 				return null;
 
-			throw new NotImplementedException ("BindAsNotImplemented");
+			return NSArray.ArrayFromHandleFunc<T> (nsarray, (	ptr) => convert2 (convert1 (ptr)));
 		}
 
 		internal unsafe static IntPtr ConvertManagedArrayToNSArray2<T,U> (T[]? array, delegate*<T, U> convert1, delegate*<U, IntPtr> convert2) where T: struct
@@ -60,7 +65,28 @@ namespace ObjCRuntime {
 			if (array is null)
 				return IntPtr.Zero;
 
-			throw new NotImplementedException ("BindAsNotImplemented");
+			NSArray arr;
+			var count = array.Length;
+			if (count == 0) {
+				arr = new NSArray ();
+			} else {
+				var ptrs = new IntPtr [count];
+				for (nint i = 0; i < count; i++) {
+					var item = convert2 (convert1 (array [i]));
+					if (item == IntPtr.Zero)
+						item = NSNull.Null.Handle;
+					ptrs [i] = item;
+				}
+				fixed (void* ptr = &ptrs[0]) {
+					arr = Runtime.GetNSObject<NSArray> (NSArray.FromObjects ((IntPtr) ptr, count))!;
+				}
+			}
+
+			arr.DangerousRetain ();
+			arr.DangerousAutorelease ();
+			var rv = arr.Handle;
+			arr.Dispose ();
+			return rv;
 		}
 
 		internal unsafe static T? CreateNullable<T> (IntPtr handle, delegate*<IntPtr, T> convert) where T: struct

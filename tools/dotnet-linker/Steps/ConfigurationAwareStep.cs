@@ -18,6 +18,10 @@ namespace Xamarin.Linker {
 			get { return Configuration.DerivedLinkContext; }
 		}
 
+		public Application App {
+			get { return DerivedLinkContext.App; }
+		}
+
 		protected void Report (Exception exception)
 		{
 			LinkerConfiguration.Report (Context, exception);

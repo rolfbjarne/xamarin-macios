@@ -1629,9 +1629,13 @@
 		Outputs="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)/%(Filename)%(Extension).stamp')"
 		>
 
+		<PropertyGroup>
+			<ConnectedBuildSessionId Condition="'$(IsMacEnabled)' == 'true'">$(BuildSessionId)</ConnectedBuildSessionId>
+		</PropertyGroup>
+
 		<!-- This task is executed from Windows as well when using HotRestart -->
 		<Unzip
-			SessionId="$(BuildSessionId)"
+			SessionId="$(ConnectedBuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
 			ZipFilePath="%(_CompressedPlugIns.Identity)"
 			ExtractionPath="$(_IntermediateDecompressionDir)/%(Filename)%(Extension)"

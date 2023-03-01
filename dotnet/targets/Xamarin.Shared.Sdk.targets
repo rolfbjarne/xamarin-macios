@@ -1631,15 +1631,15 @@
 		Outputs="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)%(Extension).stamp')"
 		>
 
-		<Ditto
+		<!-- This task is executed from Windows as well when using HotRestart -->
+		<Unzip
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
-			AdditionalArguments="-x -k"
-			CopyFromWindows="true"
-			Source="%(_CompressedPlugIns.Identity)"
-			Destination="$(_IntermediateDecompressionDir)%(Filename)%(Extension)"
+			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
+			ZipFilePath="%(_CompressedPlugIns.Identity)"
+			ExtractionPath="$(_IntermediateDecompressionDir)"
 			>
-		</Ditto>
+			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
+		</Unzip>
 	</Target>
 
 	<Target Name="_CollectDecompressedPlugIns"
@@ -1657,9 +1657,10 @@
 			</_DecompressedPlugIns>
 		</ItemGroup>
 
+		<!-- This task is executed from Windows as well when using HotRestart -->
 		<Touch
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
+			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
 			AlwaysCreate="true"
 			Files="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)%(Extension).stamp')"
 			>

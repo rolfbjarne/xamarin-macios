@@ -443,7 +443,7 @@ namespace Xamarin.MacDev.Tasks {
 					return true;
 				}
 
-				var zipResource = Path.Combine (xcframework, Path.GetDirectoryName (frameworkRelativePath)).Replace ('\\', zipDirectorySeparator);
+				var zipResource = Path.Combine (xcframework, Path.GetDirectoryName (frameworkRelativePath)).Replace ('\\', Unzip.ZipDirectorySeparator);
 				if (!TryDecompress (log, resourcePath, zipResource, intermediateDecompressionDir, createdFiles, out var decompressedPath))
 					return false;
 
@@ -457,144 +457,9 @@ namespace Xamarin.MacDev.Tasks {
 			return false;
 		}
 
-		/// <summary>
-		/// Extracts the specified resource (may be either a file or a directory) from the given zip file.
-		/// A stamp file will be created to avoid re-extracting unnecessarily.s
-		///
-		/// Fails if:
-		/// * The resource is or contains a symlink and we're executing on Windows.
-		/// * The resource isn't found inside the zip file.
-		/// </summary>
-		/// <param name="log"></param>
-		/// <param name="zip">The zip to search in</param>
-		/// <param name="resource">The relative path inside the zip to extract (may be a file or a directory).</param>
-		/// <param name="decompressionDir">The location on disk to store the extracted results</param>
-		/// <param name="decompressedResource">The location on disk to the extracted resource</param>
-		/// <returns></returns>
 		static bool TryDecompress (TaskLoggingHelper log, string zip, string resource, string decompressionDir, List<string> createdFiles, [NotNullWhen (true)] out string? decompressedResource)
 		{
-			decompressedResource = Path.Combine (decompressionDir, resource);
-
-			var stampFile = decompressedResource + ".stamp";
-
-			if (FileCopier.IsUptodate (zip, stampFile, GetFileCopierReportErrorCallback (log), GetFileCopierLogCallback (log), check_stamp: false))
-				return true;
-
-			bool rv;
-			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				rv = TryDecompressUsingSystemIOCompression (log, zip, resource, decompressionDir);
-			} else if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("XAMARIN_USE_SYSTEM_IO_COMPRESSION"))) {
-				rv = TryDecompressUsingSystemIOCompression (log, zip, resource, decompressionDir);
-			} else {
-				rv = TryDecompressUsingUnzip (log, zip, resource, decompressionDir);
-			}
-
-			if (rv) {
-				Directory.CreateDirectory (Path.GetDirectoryName (stampFile));
-				using var touched = new FileStream (stampFile, FileMode.Create, FileAccess.Write);
-				createdFiles.Add (stampFile);
-			}
-
-			if (File.Exists (decompressedResource)) {
-				createdFiles.Add (decompressedResource);
-			} else if (Directory.Exists (decompressedResource)) {
-				createdFiles.AddRange (Directory.GetFiles (decompressedResource, "*", SearchOption.AllDirectories));
-			}
-
-			return rv;
-		}
-
-		// The dir separator character in zip files is always "/", even on Windows
-		const char zipDirectorySeparator = '/';
-
-		static bool TryDecompressUsingUnzip (TaskLoggingHelper log, string zip, string resource, string decompressionDir)
-		{
-			var archive = ZipFile.OpenRead (zip);
-			resource = resource.Replace ('\\', zipDirectorySeparator);
-			var entry = archive.GetEntry (resource);
-			if (entry is null) {
-				entry = archive.GetEntry (resource + zipDirectorySeparator);
-				if (entry is null) {
-					log.LogError (MSBStrings.E7112 /* Could not find the file or directory '{0}' in the zip file '{1}'. */, resource, zip);
-					return false;
-				}
-			}
-
-			var zipPattern = entry.FullName;
-			if (zipPattern.Length > 0 && zipPattern [zipPattern.Length - 1] == zipDirectorySeparator) {
-				zipPattern += "*";
-			}
-
-			var args = new string [] {
-				"-u", "-o",
-				"-d", decompressionDir,
-				zip,
-				zipPattern,
-			};
-			var rv = ExecuteAsync (log, "unzip", args).Result;
-			return rv.ExitCode == 0;
-		}
-
-		static bool TryDecompressUsingSystemIOCompression (TaskLoggingHelper log, string zip, string resource, string decompressionDir)
-		{
-			var rv = true;
-
-			// canonicalize input
-			resource = resource.TrimEnd ('/', '\\');
-			resource = resource.Replace ('\\', zipDirectorySeparator);
-			var resourceAsDir = resource + zipDirectorySeparator;
-
-			var archive = ZipFile.OpenRead (zip);
-			foreach (var entry in archive.Entries) {
-				var entryPath = entry.FullName;
-				if (entryPath.Length == 0)
-					continue;
-
-				if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
-					// yep, we want this entry
-				} else if (entryPath == resource) {
-					// we want this one too
-				} else {
-					// but otherwise nope
-					continue;
-				}
-
-				// Check if the file or directory is a symlink, and show an error if so. Symlinks are only supported
-				// on non-Windows platforms.
-				var entryAttributes = ((uint) GetExternalAttributes (entry)) >> 16;
-				const uint S_IFLNK = 0xa000; // #define S_IFLNK  0120000  /* symbolic link */
-				var isSymlink = (entryAttributes & S_IFLNK) == S_IFLNK;
-				if (isSymlink) {
-					log.LogError (MSBStrings.E7113 /* Can't process the zip file '{0}' on this platform: the file '{1}' is a symlink. */, zip, entryPath);
-					rv = false;
-					continue;
-				}
-
-				var isDir = entryPath [entryPath.Length - 1] == zipDirectorySeparator;
-				var targetPath = Path.Combine (decompressionDir, entryPath);
-				if (isDir) {
-					Directory.CreateDirectory (targetPath);
-				} else {
-					Directory.CreateDirectory (Path.GetDirectoryName (targetPath));
-					using var streamWrite = File.OpenWrite (targetPath);
-					using var streamRead = entry.Open ();
-					streamRead.CopyTo (streamWrite);
-				}
-			}
-
-			return rv;
-		}
-
-		static int GetExternalAttributes (ZipArchiveEntry self)
-		{
-			// The ZipArchiveEntry.ExternalAttributes property is available in .NET 4.7.2 (which we need to target for builds on Windows) and .NET 5+, but not netstandard2.0 (which is the latest netstandard .NET 4.7.2 supports).
-			// Since the property will always be available at runtime, just call it using reflection.
-#if NET
-			return self.ExternalAttributes;
-#else
-			var property = typeof (ZipArchiveEntry).GetProperty ("ExternalAttributes", BindingFlags.Instance | BindingFlags.Public);
-			return (int) property.GetValue (self);
-#endif
+			return Unzip.TryDecompress (log, zip, resource, decompressionDir, createdFiles, out decompressedResource);
 		}
 
 		/// <summary>

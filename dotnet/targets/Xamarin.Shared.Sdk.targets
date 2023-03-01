@@ -1628,7 +1628,7 @@
 	<Target Name="_DecompressPlugIns"
 		Inputs="@(_CompressedPlugIns)"
 		DependsOnTargets="_ComputePublishLocation;_ComputeVariables"
-		Outputs="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)%(Extension).stamp')"
+		Outputs="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename).stamp')"
 		>
 
 		<!-- This task is executed from Windows as well when using HotRestart -->
@@ -1648,12 +1648,12 @@
 
 		<ItemGroup>
 			<!-- Set TargetDirectory and SourceDirectory for all directories we have to publish -->
-			<_DecompressedPlugIns Include="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)%(Extension)')" />
+			<_DecompressedPlugIns Include="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)')" PublishFolderType="PlugIns" />
 		</ItemGroup>
 		<ItemGroup>
 			<_DecompressedPlugIns Update="@(_DecompressedPlugIns)">
 				<TargetDirectory>$(_RelativePublishDir)$(_RelativeAppBundlePath)$(_AppPlugInsRelativePath)</TargetDirectory>
-				<SourceDirectory>$(_IntermediateDecompressionDir)%(Filename)%(Extension)</SourceDirectory>
+				<SourceDirectory>$(_IntermediateDecompressionDir)%(Filename)</SourceDirectory>
 			</_DecompressedPlugIns>
 		</ItemGroup>
 
@@ -1662,7 +1662,7 @@
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
 			AlwaysCreate="true"
-			Files="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)%(Extension).stamp')"
+			Files="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename).stamp')"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Touch>

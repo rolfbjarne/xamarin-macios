@@ -116,7 +116,7 @@
 		</Touch>
 	</Target>
 
-	<Target Name="_ComputeHotRestartBundleContents" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeTargetArchitectures;_ComputeVariables">
+	<Target Name="_ComputeHotRestartBundleContents" DependsOnTargets="_GenerateBundleName;_ParseBundlerArguments;_ComputeTargetArchitectures;_ComputeVariables;_CollectDecompressedPlugIns">
 		<ComputeHotRestartBundleContents
 			HotRestartAppContentDir="$(HotRestartAppContentDir)"
 			HotRestartContentDir="$(HotRestartContentDir)"

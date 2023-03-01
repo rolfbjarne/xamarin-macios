@@ -75,18 +75,21 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 					rv.Add (item);
 				} else if (Directory.Exists (item.ItemSpec)) {
 					var entries = Directory.GetFileSystemEntries (item.ItemSpec).ToArray ();
-					Console.WriteLine ($"Expanding {item.ItemSpec} with {entries.Length} items:");
+					Log.LogMessage (MessageImportance.Low, $"Expanding {item.ItemSpec} with {entries.Length} items:");
 					foreach (var entry in entries) {
 						if (Directory.Exists (entry)) {
-							Console.WriteLine ($"    Skipped directory: {entry}");
+							Log.LogMessage (MessageImportance.Low, $"    Skipped directory: {entry}");
 							continue;
 						}
-						var relativePath = Path.Combine (item.GetMetadata ("RelativePath"), entry.Substring (item.ItemSpec.Length).TrimStart ('\\', '/'));
+						var relativePathSuffix = entry.Substring (item.ItemSpec.Length).TrimStart ('\\', '/');
+						var relativePath = Path.Combine (item.GetMetadata ("RelativePath"), relativePathSuffix);
+						var destinationFile = Path.Combine (item.GetMetadata ("DestinationFile"), relativePathSuffix);
 						var file = new TaskItem (item);
 						file.ItemSpec = entry;
 						file.SetMetadata ("RelativePath", relativePath);
+						file.SetMetadata ("DestinationFile", destinationFile);
 						rv.Add (file);
-						Console.WriteLine ($"    Added {file.ItemSpec} with relative path: {relativePath}");
+						Log.LogMessage (MessageImportance.Low, $"    Added {file.ItemSpec} with relative path: {relativePath} and destination file: {destinationFile}");
 					}
 				} else {
 					// Trust that this will just somehow work.

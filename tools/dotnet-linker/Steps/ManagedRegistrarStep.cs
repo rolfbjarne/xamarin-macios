@@ -281,6 +281,24 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		MethodReference Nullable_HasValue {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_HasValue", (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference Nullable_Value {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_Value", (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
 		MethodReference Object_GetType {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Object, "GetType", (v) =>
@@ -766,6 +784,19 @@ namespace Xamarin.Linker {
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
 						&& v.ReturnType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters
+						);
+			}
+		}
+
+		MethodReference NativeObject_op_Implicit_NativeHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_NativeHandle, "op_Implicit", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.ReturnType.Is ("ObjCRuntime", "NativeHandle")
 						&& !v.HasGenericParameters
 						);
 			}
@@ -1744,9 +1775,9 @@ namespace Xamarin.Linker {
 						if (IsOutParameter (method, parameter)) {
 							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
 						} else {
-							il.Emit (OpCodes.Ldind_I);
+							il.Emit (OpCodes.Ldobj, ObjCRuntime_NativeHandle);
 							var gim = new GenericInstanceMethod (NSArray_ArrayFromHandle);
-							gim.GenericArguments.Add (elementType);
+							gim.GenericArguments.Add (method.Module.ImportReference (elementArrayType.ElementType));
 							il.Emit (OpCodes.Call, gim);
 							il.Emit (OpCodes.Stloc, indirectVariable);
 							il.Emit (OpCodes.Ldloc, indirectVariable);
@@ -1761,13 +1792,14 @@ namespace Xamarin.Linker {
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Call, NSArray_FromNSObjects__INativeObjects));
 						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
-						postProcessing.Add (il.Create (OpCodes.Stind_I));
+						postProcessing.Add (il.Create (OpCodes.Stobj, ObjCRuntime_NativeHandle));
 						postProcessing.Add (noOutputRequired);
 
-						nativeType = new PointerType (System_IntPtr);
+						nativeType = new PointerType (ObjCRuntime_NativeHandle);
 						return true;
 					} else if (elementType.Is ("System", "String")) {
 						var indirectVariable = il.Body.AddVariable (elementType);
@@ -1775,7 +1807,7 @@ namespace Xamarin.Linker {
 						if (IsOutParameter (method, parameter)) {
 							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
 						} else {
-							il.Emit (OpCodes.Ldind_I);
+							il.Emit (OpCodes.Ldobj, ObjCRuntime_NativeHandle);
 							il.Emit (OpCodes.Call, CFString_FromHandle);
 							il.Emit (OpCodes.Stloc, indirectVariable);
 							il.Emit (OpCodes.Ldloc, indirectVariable);
@@ -1789,12 +1821,13 @@ namespace Xamarin.Linker {
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Call, CFString_CreateNative));
-						postProcessing.Add (il.Create (OpCodes.Stind_I));
+						postProcessing.Add (il.Create (OpCodes.Stobj, ObjCRuntime_NativeHandle));
 						postProcessing.Add (noOutputRequired);
 
-						nativeType = new PointerType (System_IntPtr);
+						nativeType = new PointerType (ObjCRuntime_NativeHandle);
 						return true;
 					} else if (elementType.IsNSObject (DerivedLinkContext)) {
 						var indirectVariable = il.Body.AddVariable (elementType);
@@ -2274,9 +2307,25 @@ namespace Xamarin.Linker {
 					il.Emit (OpCodes.Call, gim);
 				}
 			} else {
+				var tmpVariable = il.Body.AddVariable (managedType);
+
+				var trueTarget = il.Create (OpCodes.Nop);
+				var endTarget = il.Create (OpCodes.Nop);
+				il.Emit (OpCodes.Stloc, tmpVariable);
+				il.Emit (OpCodes.Ldloca, tmpVariable);
+				var mr = CreateMethodReferenceOnGenericType (System_Nullable_1, Nullable_HasValue, underlyingManagedType);
+				il.Emit (OpCodes.Call, mr);
+				il.Emit (OpCodes.Brtrue, trueTarget);
+				il.Emit (OpCodes.Ldc_I4_0);
+				il.Emit (OpCodes.Conv_I);
+				il.Emit (OpCodes.Br, endTarget);
+				il.Append (trueTarget);
+				il.Emit (OpCodes.Ldloca, tmpVariable);
+				il.Emit (OpCodes.Call, CreateMethodReferenceOnGenericType (System_Nullable_1, Nullable_Value, underlyingManagedType));
 				il.Emit (OpCodes.Call, conversionFunction);
 				if (conversionFunction2 is not null)
 					il.Emit (OpCodes.Call, conversionFunction2);
+				il.Append (endTarget);
 			}
 			// sb.AppendLine ($"if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 
@@ -2285,6 +2334,18 @@ namespace Xamarin.Linker {
 			// 	sb.AppendLine ($"{outputName} = NULL;");
 			// 	sb.AppendLine ($"}}");
 			// }
+		}
+
+		static MethodReference CreateMethodReferenceOnGenericType (TypeReference type, MethodReference mr, params TypeReference[] genericTypeArguments)
+		{
+			var git = new GenericInstanceType (type);
+			git.GenericArguments.AddRange (genericTypeArguments);
+
+			var rv = new MethodReference (mr.Name, mr.ReturnType, git);
+			rv.HasThis = mr.HasThis;
+			rv.ExplicitThis = mr.ExplicitThis;
+			rv.CallingConvention = mr.CallingConvention;
+			return rv;
 		}
 	}
 }

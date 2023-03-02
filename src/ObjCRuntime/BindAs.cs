@@ -180,6 +180,32 @@ namespace ObjCRuntime {
 		}
 
 		// FIXME: create helper functions that don't need a managed wrapper.
+		public static System.SByte? xamarin_nsnumber_to_nullable_sbyte (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.SByteValue ?? null; }
+		public static System.Byte? xamarin_nsnumber_to_nullable_byte (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.ByteValue ?? null; }
+		public static System.Int16? xamarin_nsnumber_to_nullable_short (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.Int16Value ?? null; }
+		public static System.UInt16? xamarin_nsnumber_to_nullable_ushort (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.UInt16Value ?? null; }
+		public static System.Int32? xamarin_nsnumber_to_nullable_int (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.Int32Value ?? null; }
+		public static System.UInt32? xamarin_nsnumber_to_nullable_uint (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.UInt32Value ?? null; }
+		public static System.Int64? xamarin_nsnumber_to_nullable_long (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.Int64Value ?? null; }
+		public static System.UInt64? xamarin_nsnumber_to_nullable_ulong (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.UInt64Value ?? null; }
+		public static nint? xamarin_nsnumber_to_nullable_nint (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.NIntValue ?? null; }
+		public static nuint? xamarin_nsnumber_to_nullable_nuint (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.NUIntValue ?? null; }
+		public static System.Single? xamarin_nsnumber_to_nullable_float (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.FloatValue ?? null; }
+		public static System.Double? xamarin_nsnumber_to_nullable_double (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.DoubleValue ?? null; }
+		public static System.Boolean? xamarin_nsnumber_to_nullable_bool (IntPtr value) { return Runtime.GetNSObject<NSNumber> (value)?.BoolValue ?? null; }
+		public static nfloat? xamarin_nsnumber_to_nullable_nfloat (IntPtr value)
+		{
+			if (value == IntPtr.Zero)
+				return null;
+			var number = Runtime.GetNSObject<NSNumber> (value);
+			if (number is null)
+				return null;
+			if (IntPtr.Size == 4)
+				return (nfloat) number.FloatValue;
+			return (nfloat) number.DoubleValue;
+		}
+
+		// FIXME: create helper functions that don't need a managed wrapper.
 		public static IntPtr xamarin_sbyte_to_nsnumber (System.SByte value) { return NSNumber.FromSByte (value).DangerousRetain ().DangerousAutorelease ().Handle; }
 		public static IntPtr xamarin_byte_to_nsnumber (System.Byte value) { return NSNumber.FromByte (value).DangerousRetain ().DangerousAutorelease ().Handle; }
 		public static IntPtr xamarin_short_to_nsnumber (System.Int16 value) { return NSNumber.FromInt16 (value).DangerousRetain ().DangerousAutorelease ().Handle; }
@@ -198,6 +224,29 @@ namespace ObjCRuntime {
 			if (IntPtr.Size == 4)
 				return NSNumber.FromFloat ((float) value).DangerousRetain ().DangerousAutorelease ().Handle;
 			return NSNumber.FromDouble ((double) value).DangerousRetain ().DangerousAutorelease ().Handle;
+		}
+
+		// FIXME: create helper functions that don't need a managed wrapper.
+		public static IntPtr xamarin_nullable_sbyte_to_nsnumber (System.SByte? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromSByte (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_byte_to_nsnumber (System.Byte? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromByte (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_short_to_nsnumber (System.Int16? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromInt16 (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_ushort_to_nsnumber (System.UInt16? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromUInt16 (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_int_to_nsnumber (System.Int32? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromInt32 (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_uint_to_nsnumber (System.UInt32? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromUInt32 (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_long_to_nsnumber (System.Int64? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromInt64 (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_ulong_to_nsnumber (System.UInt64? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromUInt64 (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_nint_to_nsnumber (nint? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromNInt (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_nuint_to_nsnumber (nuint? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromNUInt (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_float_to_nsnumber (System.Single? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromFloat (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_double_to_nsnumber (System.Double? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromDouble (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_bool_to_nsnumber (System.Boolean? value) { if (!value.HasValue) return IntPtr.Zero; return NSNumber.FromBoolean (value.Value).DangerousRetain ().DangerousAutorelease ().Handle; }
+		public static IntPtr xamarin_nullable_nfloat_to_nsnumber (nfloat? value)
+		{
+			if (!value.HasValue)
+				return IntPtr.Zero;
+			if (IntPtr.Size == 4)
+				return NSNumber.FromFloat ((float) value.Value).DangerousRetain ().DangerousAutorelease ().Handle;
+			return NSNumber.FromDouble ((double) value.Value).DangerousRetain ().DangerousAutorelease ().Handle;
 		}
 	}
 }

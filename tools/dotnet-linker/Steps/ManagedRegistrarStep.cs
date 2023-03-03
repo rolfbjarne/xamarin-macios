@@ -1923,6 +1923,9 @@ namespace Xamarin.Linker {
 					}
 
 					if (managed_to_native is not null && native_to_managed is not null) {
+						EnsureVisible (method, managed_to_native);
+						EnsureVisible (method, native_to_managed);
+
 						var indirectVariable = il.Body.AddVariable (elementType);
 						// We store a copy of the value in a separate variable, to detect if it changes.
 						var copyIndirectVariable = il.Body.AddVariable (elementType);
@@ -2126,7 +2129,6 @@ namespace Xamarin.Linker {
 			EnsureVisible (caller, field.DeclaringType);
 		}
 
-
 		void EnsureVisible (MethodDefinition caller, TypeDefinition type)
 		{
 			if (type.IsNested) {
@@ -2140,6 +2142,11 @@ namespace Xamarin.Linker {
 		bool IsOutParameter (MethodDefinition method, int parameter)
 		{
 			return method.Parameters [parameter].IsOut;
+		}
+
+		void EnsureVisible (MethodDefinition caller, MethodReference method)
+		{
+			EnsureVisible (caller, method.Resolve ().DeclaringType);
 		}
 
 		StaticRegistrar StaticRegistrar {

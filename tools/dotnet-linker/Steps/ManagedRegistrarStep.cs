@@ -1391,8 +1391,8 @@ namespace Xamarin.Linker {
 					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing);
 					// FIXME: throw if null
 					// FIXME: can only be NSObject
-					il.Emit (OpCodes.Call, Object_GetType);
-					il.Emit (OpCodes.Call, Type_get_TypeHandle);
+					il.Emit (OpCodes.Callvirt, Object_GetType);
+					il.Emit (OpCodes.Callvirt, Type_get_TypeHandle);
 					il.Emit (OpCodes.Call, MethodBase_GetMethodFromHandle);
 				}
 

@@ -2251,7 +2251,7 @@ namespace ObjCRuntime {
 		{
 			var frame = new global::System.Diagnostics.StackFrame (1);
 			var caller = frame.GetMethod ()?.Name ?? "Unknown";
-			Console.WriteLine ("{0}: {1}", message, caller);
+			NSLog ($"{message}: {caller}");
 		}
 
 		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)

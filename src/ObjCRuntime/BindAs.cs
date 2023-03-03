@@ -40,14 +40,20 @@ namespace ObjCRuntime {
 			copy = value;
 		}
 
-		unsafe static void NSArray_managed_to_native<T> (IntPtr* ptr, T[] value, T[] copy) where T: class, INativeObject
+		unsafe static void NSArray_managed_to_native<T> (IntPtr* ptr, T[] value, T[] copy, bool isOut) where T: class, INativeObject
 		{
-			if (ptr == null)
+			if (ptr == null) {
+				Runtime.NSLog ($"NSArray_managed_to_native (NULL, ?, ?)");
 				return;
+			}
 			// Note that we won't notice if individual array elements change, only if the array itself changes
-			if ((object) value == (object) copy)
+			if (!isOut && (object) value == (object) copy) {
+				Runtime.NSLog ($"NSArray_managed_to_native (0x{(*ptr).ToString ("x")}, ? == ?)");
 				return;
-			*ptr = Runtime.RetainAndAutorelease (NSArray.FromNSObjects<T> (value));
+			}
+			IntPtr rv = Runtime.RetainAndAutorelease (NSArray.FromNSObjects<T> (value));
+			Runtime.NSLog ($"NSArray_managed_to_native (0x{(*ptr).ToString ("x")}, ? != ?): 0x{rv.ToString ("x")} => {value?.GetType ()}");
+			*ptr = rv;
 		}
 
 		unsafe static void NSObject_native_to_managed<T> (IntPtr* ptr, ref T? value, ref T? copy) where T: NSObject
@@ -60,13 +66,19 @@ namespace ObjCRuntime {
 			copy = value;
 		}
 
-		unsafe static void NSObject_managed_to_native (IntPtr* ptr, NSObject value, NSObject copy)
+		unsafe static void NSObject_managed_to_native (IntPtr* ptr, NSObject value, NSObject copy, bool isOut)
 		{
-			if (ptr == null)
+			if (ptr == null) {
+				Runtime.NSLog ($"NSObject_managed_to_native (NULL, ?, ?)");
 				return;
-			if ((object) value == (object) copy)
+			}
+			if (!isOut && (object) value == (object) copy) {
+				Runtime.NSLog ($"NSObject_managed_to_native (0x{(*ptr).ToString ("x")}, ? == ?)");
 				return;
-			*ptr = Runtime.RetainAndAutorelease (value);
+			}
+			IntPtr rv = Runtime.RetainAndAutorelease (value);
+			Runtime.NSLog ($"NSObject_managed_to_native (0x{(*ptr).ToString ("x")}, ? != ?): 0x{rv.ToString ("x")} => {value?.GetType ()}");
+			*ptr = rv;
 		}
 
 		unsafe static void string_native_to_managed (NativeHandle *ptr, ref string? value, ref string? copy)
@@ -79,13 +91,19 @@ namespace ObjCRuntime {
 			copy = value;
 		}
 
-		unsafe static void string_managed_to_native (NativeHandle *ptr, string value, string copy)
+		unsafe static void string_managed_to_native (NativeHandle *ptr, string value, string copy, bool isOut)
 		{
-			if (ptr == null)
+			if (ptr == null) {
+				Runtime.NSLog ($"string_managed_to_native (NULL, ?, ?)");
 				return;
-			if ((object) value == (object) copy)
+			}
+			if (!isOut && (object) value == (object) copy) {
+				Runtime.NSLog ($"string_managed_to_native (0x{(*ptr).ToString ()}, ? == ?)");
 				return;
-			*ptr = CFString.CreateNative (value);
+			}
+			var rv = CFString.CreateNative (value);
+			Runtime.NSLog ($"string_managed_to_native (0x{(*ptr).ToString ()}, ? != ?): 0x{rv.ToString ()} => {value}");
+			*ptr = rv;
 		}
 
 		unsafe static void INativeObject_native_to_managed<T> (IntPtr* ptr, ref T? value, ref T? copy, RuntimeTypeHandle implementationType) where T: class, INativeObject
@@ -98,13 +116,19 @@ namespace ObjCRuntime {
 			copy = value;
 		}
 
-		unsafe static void INativeObject_managed_to_native (IntPtr *ptr, INativeObject value, INativeObject copy)
+		unsafe static void INativeObject_managed_to_native (IntPtr *ptr, INativeObject value, INativeObject copy, bool isOut)
 		{
-			if (ptr == null)
+			if (ptr == null) {
+				Runtime.NSLog ($"INativeObject_managed_to_native (NULL, ?, ?)");
 				return;
-			if ((object) value == (object) copy)
+			}
+			if (!isOut && (object) value == (object) copy) {
+				Runtime.NSLog ($"INativeObject_managed_to_native (0x{(*ptr).ToString ("x")}, ? == ?)");
 				return;
-			*ptr = value.GetHandle ();
+			}
+			IntPtr rv = value.GetHandle ();
+			Runtime.NSLog ($"INativeObject_managed_to_native (0x{(*ptr).ToString ("x")}, ? != ?): 0x{rv.ToString ("x")} => {value?.GetType ()}");
+			*ptr = rv;
 		}
 	}
 

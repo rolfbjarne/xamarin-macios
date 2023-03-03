@@ -1789,14 +1789,23 @@ namespace Xamarin.Linker {
 						// post processing too. We check if the array has changed, and if so, we convert it to an NSArray.
 						// Note that we won't notice if individual array elements change, only if the array itself changes
 						var noOutputRequired = il.Create (OpCodes.Nop);
+						// if (pX != null) {
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (OpCodes.Conv_I));
+						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//     if (indirectVariable != copyIndirectVariable) {
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//         *pX = Runtime.RetainAndAutorelease (NSArray.FromNSObjects (indirectVariable))
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Call, NSArray_FromNSObjects__INativeObjects));
-						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
+						postProcessing.Add (il.Create (OpCodes.Call, Runtime_RetainAndAutorelease));
 						postProcessing.Add (il.Create (OpCodes.Stobj, ObjCRuntime_NativeHandle));
+						//     } // indirectVariable != copyIndirectVariable
+						// } // pX != null
 						postProcessing.Add (noOutputRequired);
 
 						nativeType = new PointerType (ObjCRuntime_NativeHandle);
@@ -1818,13 +1827,22 @@ namespace Xamarin.Linker {
 
 						// post processing too. We check if the ref string has changed, and if so, we convert it to an NSString.
 						var noOutputRequired = il.Create (OpCodes.Nop);
+						// if (pX != null) {
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (OpCodes.Conv_I));
+						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//     if (indirectVariable != copyIndirectVariable) {
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//         *pX = (IntPtr) CFString.CreateNative (indirectVariable)
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Call, CFString_CreateNative));
 						postProcessing.Add (il.Create (OpCodes.Stobj, ObjCRuntime_NativeHandle));
+						//     } // indirectVariable != copyIndirectVariable
+						// } // pX != null
 						postProcessing.Add (noOutputRequired);
 
 						nativeType = new PointerType (ObjCRuntime_NativeHandle);
@@ -1843,11 +1861,25 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Ldloca, indirectVariable);
 
 						// post processing too
+						var noOutputRequired = il.Create (OpCodes.Nop);
+						// if (pX != null) {
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (OpCodes.Conv_I));
+						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//     if (indirectVariable != copyIndirectVariable) {
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (OpCodes.Conv_I));
+						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//         *pX = Runtime.RetainAndAutorelease (indirectVariable)
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
-						postProcessing.Add (il.Create (OpCodes.Call, NativeObject_op_Implicit_IntPtr));
+						postProcessing.Add (il.Create (OpCodes.Call, Runtime_RetainAndAutorelease));
 						postProcessing.Add (il.Create (OpCodes.Stind_I));
+						//     } // indirectVariable != copyIndirectVariable
+						// } // pX != null
+						postProcessing.Add (noOutputRequired);
 						nativeType = new PointerType (System_IntPtr);
 						return true;
 					} else if (StaticRegistrar.IsNativeObject (DerivedLinkContext, elementType)) {
@@ -1862,11 +1894,26 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Ldloca, indirectVariable);
 
 						// post processing too
+						var noOutputRequired = il.Create (OpCodes.Nop);
+						// if (pX != null) {
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (OpCodes.Conv_I));
+						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//     if (indirectVariable != copyIndirectVariable) {
+						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (OpCodes.Conv_I));
+						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
+						//         *pX = (IntPtr) indirectVariable.GetHandle ()
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
 						postProcessing.Add (il.Create (OpCodes.Call, NativeObject_op_Implicit_IntPtr));
 						postProcessing.Add (il.Create (OpCodes.Stind_I));
+						//     } // indirectVariable != copyIndirectVariable
+						// } // pX != null
+						postProcessing.Add (noOutputRequired);
 						nativeType = new PointerType (System_IntPtr);
 						return true;
 
@@ -1922,11 +1969,13 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Dup);
 						if (retain) {
 							il.Emit (OpCodes.Call, Runtime_RetainObject);
+							il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 						} else {
 							il.Emit (OpCodes.Call, Runtime_RetainAndAutorelease);
 						}
+					}  else {
+						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					}
-					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					nativeType = ObjCRuntime_NativeHandle;
 				}
 				return true;

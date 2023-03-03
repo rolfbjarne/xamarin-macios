@@ -524,10 +524,11 @@ namespace Xamarin.Linker {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_managed_to_native", (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 3
+						&& v.Parameters.Count == 4
 						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
 						&& v.Parameters [1].ParameterType is ArrayType at1 && at1.ElementType.Is ("", "T")
 						&& v.Parameters [2].ParameterType is ArrayType at2 && at2.ElementType.Is ("", "T")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 1
 						, ensurePublic: true);
@@ -554,10 +555,11 @@ namespace Xamarin.Linker {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSObject_managed_to_native", (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 3
+						&& v.Parameters.Count == 4
 						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
 						&& v.Parameters [1].ParameterType.Is ("Foundation", "NSObject")
 						&& v.Parameters [2].ParameterType.Is ("Foundation", "NSObject")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
 						&& !v.HasGenericParameters
 						, ensurePublic: true);
 			}
@@ -582,10 +584,11 @@ namespace Xamarin.Linker {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "string_managed_to_native", (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 3
+						&& v.Parameters.Count == 4
 						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("ObjCRuntime", "NativeHandle")
 						&& v.Parameters [1].ParameterType.Is ("System", "String")
 						&& v.Parameters [2].ParameterType.Is ("System", "String")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
 						&& !v.HasGenericParameters
 						, ensurePublic: true);
 			}
@@ -612,10 +615,11 @@ namespace Xamarin.Linker {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "INativeObject_managed_to_native", (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 3
+						&& v.Parameters.Count == 4
 						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
 						&& v.Parameters [1].ParameterType.Is ("ObjCRuntime", "INativeObject")
 						&& v.Parameters [2].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
 						&& !v.HasGenericParameters
 						, ensurePublic: true);
 			}
@@ -1929,7 +1933,9 @@ namespace Xamarin.Linker {
 						var indirectVariable = il.Body.AddVariable (elementType);
 						// We store a copy of the value in a separate variable, to detect if it changes.
 						var copyIndirectVariable = il.Body.AddVariable (elementType);
-						if (IsOutParameter (method, parameter)) {
+						var isOutParameter = IsOutParameter (method, parameter);
+
+						if (isOutParameter) {
 							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
 						} else {
 							il.Emit (OpCodes.Ldloca, indirectVariable);
@@ -1939,10 +1945,10 @@ namespace Xamarin.Linker {
 							il.Emit (OpCodes.Call, native_to_managed);
 						}
 						il.Emit (OpCodes.Ldloca, indirectVariable);
-
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
+						postProcessing.Add (il.Create (isOutParameter ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0));
 						postProcessing.Add (il.Create (OpCodes.Call, managed_to_native));
 						return true;
 					}

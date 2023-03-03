@@ -1638,7 +1638,7 @@
 			SessionId="$(ConnectedBuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
 			ZipFilePath="%(_CompressedPlugIns.Identity)"
-			ExtractionPath="$(_IntermediateDecompressionDir)%(Filename)"
+			ExtractionPath="$(_IntermediateDecompressionDir)"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Unzip>

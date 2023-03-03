@@ -28,6 +28,85 @@ using Foundation;
 using Registrar;
 
 namespace ObjCRuntime {
+	static class RegistrarHelper {
+		// registrar helpers
+		unsafe static void NSArray_native_to_managed<T> (IntPtr* ptr, ref T[]? value, ref T[]? copy) where T: class, INativeObject
+		{
+			if (ptr != null) {
+				value = NSArray.ArrayFromHandle<T> (*ptr);
+			} else {
+				value = null;
+			}
+			copy = value;
+		}
+
+		unsafe static void NSArray_managed_to_native<T> (IntPtr* ptr, T[] value, T[] copy) where T: class, INativeObject
+		{
+			if (ptr == null)
+				return;
+			// Note that we won't notice if individual array elements change, only if the array itself changes
+			if ((object) value == (object) copy)
+				return;
+			*ptr = Runtime.RetainAndAutorelease (NSArray.FromNSObjects<T> (value));
+		}
+
+		unsafe static void NSObject_native_to_managed<T> (IntPtr* ptr, ref T? value, ref T? copy) where T: NSObject
+		{
+			if (ptr != null) {
+				value = Runtime.GetNSObject<T> (*ptr, owns: false);
+			} else {
+				value = null;
+			}
+			copy = value;
+		}
+
+		unsafe static void NSObject_managed_to_native (IntPtr* ptr, NSObject value, NSObject copy)
+		{
+			if (ptr == null)
+				return;
+			if ((object) value == (object) copy)
+				return;
+			*ptr = Runtime.RetainAndAutorelease (value);
+		}
+
+		unsafe static void string_native_to_managed (NativeHandle *ptr, ref string? value, ref string? copy)
+		{
+			if (ptr != null) {
+				value = CFString.FromHandle (*ptr);
+			} else {
+				value = null;
+			}
+			copy = value;
+		}
+
+		unsafe static void string_managed_to_native (NativeHandle *ptr, string value, string copy)
+		{
+			if (ptr == null)
+				return;
+			if ((object) value == (object) copy)
+				return;
+			*ptr = CFString.CreateNative (value);
+		}
+
+		unsafe static void INativeObject_native_to_managed<T> (IntPtr* ptr, ref T? value, ref T? copy, RuntimeTypeHandle implementationType) where T: class, INativeObject
+		{
+			if (ptr != null) {
+				value = Runtime.GetINativeObject<T> (*ptr, implementation: Type.GetTypeFromHandle (implementationType), forced_type: false, owns: false);
+			} else {
+				value = null;
+			}
+			copy = value;
+		}
+
+		unsafe static void INativeObject_managed_to_native (IntPtr *ptr, INativeObject value, INativeObject copy)
+		{
+			if (ptr == null)
+				return;
+			if ((object) value == (object) copy)
+				return;
+			*ptr = value.GetHandle ();
+		}
+	}
 
 	static class BindAs {
 		// xamarin_convert_nsarray_to_managed_with_func

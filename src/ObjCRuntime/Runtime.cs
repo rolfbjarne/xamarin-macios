@@ -1681,6 +1681,11 @@ namespace ObjCRuntime {
 
 		public static T? GetINativeObject<T> (IntPtr ptr, bool forced_type, bool owns) where T : class, INativeObject
 		{
+			return GetINativeObject<T> (ptr, forced_type, null, owns);
+		}
+
+		internal static T? GetINativeObject<T> (IntPtr ptr, bool forced_type, Type? implementation, bool owns) where T : class, INativeObject
+		{
 			if (ptr == IntPtr.Zero)
 				return null;
 
@@ -1705,7 +1710,7 @@ namespace ObjCRuntime {
 			}
 
 			// Lookup the ObjC type of the ptr and see if we can use it.
-			var implementation = LookupINativeObjectImplementation (ptr, typeof (T), forced_type: forced_type);
+			implementation = LookupINativeObjectImplementation (ptr, typeof (T), implementation, forced_type: forced_type);
 
 			if (implementation.IsSubclassOf (typeof (NSObject))) {
 				if (o is not null && !forced_type) {
@@ -1959,7 +1964,7 @@ namespace ObjCRuntime {
 			GC.KeepAlive (obj);
 		}
 
-		static NativeHandle RetainAndAutorelease (NSObject? obj)
+		internal static NativeHandle RetainAndAutorelease (NSObject? obj)
 		{
 			if (obj is null)
 				return NativeHandle.Zero;

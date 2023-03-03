@@ -257,6 +257,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		TypeReference ObjCRuntime_RegistrarHelper {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.RegistrarHelper", out var _);
+			}
+		}
+
 		TypeReference ObjCRuntime_Runtime {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.Runtime", out var _);
@@ -494,6 +500,123 @@ namespace Xamarin.Linker {
 						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 2
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_NSArray_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType is ArrayType at1 && at1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType is ArrayType at2 && at2.ElementType.Is ("", "T")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_NSArray_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ArrayType at1 && at1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ArrayType at2 && at2.ElementType.Is ("", "T")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_NSObject_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSObject_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType.Is ("", "T")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_NSObject_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSObject_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("Foundation", "NSObject")
+						&& v.Parameters [2].ParameterType.Is ("Foundation", "NSObject")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_string_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "string_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType.Is ("System", "String")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType.Is ("System", "String")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_string_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "string_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "String")
+						&& v.Parameters [2].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_INativeObject_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "INativeObject_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType.Is ("", "T")
+						&& v.Parameters [3].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		MethodReference RegistrarHelper_INativeObject_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "INativeObject_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& v.Parameters [2].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& !v.HasGenericParameters
 						, ensurePublic: true);
 			}
 		}
@@ -1769,156 +1892,59 @@ namespace Xamarin.Linker {
 						// reference types aren't blittable, so the managed signature must have be a pointer type
 						nativeType = new PointerType (elementType);
 						return true;
-					} else if (elementType is ArrayType elementArrayType) {
-						var indirectVariable = il.Body.AddVariable (elementType);
-						var copyIndirectVariable = il.Body.AddVariable (elementType);
-						if (IsOutParameter (method, parameter)) {
-							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
-						} else {
-							il.Emit (OpCodes.Ldobj, ObjCRuntime_NativeHandle);
-							var gim = new GenericInstanceMethod (NSArray_ArrayFromHandle);
-							gim.GenericArguments.Add (method.Module.ImportReference (elementArrayType.ElementType));
-							il.Emit (OpCodes.Call, gim);
-							il.Emit (OpCodes.Stloc, indirectVariable);
-							il.Emit (OpCodes.Ldloc, indirectVariable);
-							// We store a copy of the string in a separate variable, to detect if it changes.
-							// Note that we won't notice if individual array elements change, only if the array itself changes
-							il.Emit (OpCodes.Stloc, copyIndirectVariable);
-						}
-						il.Emit (OpCodes.Ldloca, indirectVariable);
-						// post processing too. We check if the array has changed, and if so, we convert it to an NSArray.
-						// Note that we won't notice if individual array elements change, only if the array itself changes
-						var noOutputRequired = il.Create (OpCodes.Nop);
-						// if (pX != null) {
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
-						postProcessing.Add (il.Create (OpCodes.Conv_I));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//     if (indirectVariable != copyIndirectVariable) {
-						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//         *pX = Runtime.RetainAndAutorelease (NSArray.FromNSObjects (indirectVariable))
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Call, NSArray_FromNSObjects__INativeObjects));
-						postProcessing.Add (il.Create (OpCodes.Call, Runtime_RetainAndAutorelease));
-						postProcessing.Add (il.Create (OpCodes.Stobj, ObjCRuntime_NativeHandle));
-						//     } // indirectVariable != copyIndirectVariable
-						// } // pX != null
-						postProcessing.Add (noOutputRequired);
+					}
 
+					MethodReference? native_to_managed = null;
+					MethodReference? managed_to_native = null;
+					Instruction? addBeforeNativeToManagedCall = null;
+
+					if (elementType is ArrayType elementArrayType) {
+						// TODO: verify elementArrayType.ElementType?
+						native_to_managed = CreateGenericInstanceMethod (RegistrarHelper_NSArray_native_to_managed, elementArrayType.ElementType);
+						managed_to_native = CreateGenericInstanceMethod (RegistrarHelper_NSArray_managed_to_native, elementArrayType.ElementType);
 						nativeType = new PointerType (ObjCRuntime_NativeHandle);
-						return true;
 					} else if (elementType.Is ("System", "String")) {
+						native_to_managed = RegistrarHelper_string_native_to_managed;
+						managed_to_native = RegistrarHelper_string_managed_to_native;
+						nativeType = new PointerType (ObjCRuntime_NativeHandle);
+					} else if (elementType.IsNSObject (DerivedLinkContext)) {
+						native_to_managed = CreateGenericInstanceMethod (RegistrarHelper_NSObject_native_to_managed, elementType);
+						managed_to_native = RegistrarHelper_NSObject_managed_to_native;
+						nativeType = new PointerType (System_IntPtr);
+					} else if (StaticRegistrar.IsNativeObject (DerivedLinkContext, elementType)) {
+						var nativeObjType = StaticRegistrar.GetInstantiableType (type, exceptions, GetMethodSignature (method));
+						addBeforeNativeToManagedCall = il.Create (OpCodes.Ldtoken, method.Module.ImportReference (nativeObjType)); // implementation type
+						native_to_managed =  CreateGenericInstanceMethod (RegistrarHelper_INativeObject_native_to_managed, elementType);
+						managed_to_native = RegistrarHelper_INativeObject_managed_to_native;
+						nativeType = new PointerType (System_IntPtr);
+					} else {
+						AddException (ErrorHelper.CreateWarning (99, "Don't know how (4) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
+						return false;
+					}
+
+					if (managed_to_native is not null && native_to_managed is not null) {
 						var indirectVariable = il.Body.AddVariable (elementType);
+						// We store a copy of the value in a separate variable, to detect if it changes.
 						var copyIndirectVariable = il.Body.AddVariable (elementType);
 						if (IsOutParameter (method, parameter)) {
 							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
 						} else {
-							il.Emit (OpCodes.Ldobj, ObjCRuntime_NativeHandle);
-							il.Emit (OpCodes.Call, CFString_FromHandle);
-							il.Emit (OpCodes.Stloc, indirectVariable);
-							il.Emit (OpCodes.Ldloc, indirectVariable);
-							// We store a copy of the string in a separate variable, to detect if it changes.
-							il.Emit (OpCodes.Stloc, copyIndirectVariable);
+							il.Emit (OpCodes.Ldloca, indirectVariable);
+							il.Emit (OpCodes.Ldloca, copyIndirectVariable);
+							if (addBeforeNativeToManagedCall is not null)
+								il.Append (addBeforeNativeToManagedCall);
+							il.Emit (OpCodes.Call, native_to_managed);
 						}
 						il.Emit (OpCodes.Ldloca, indirectVariable);
 
-						// post processing too. We check if the ref string has changed, and if so, we convert it to an NSString.
-						var noOutputRequired = il.Create (OpCodes.Nop);
-						// if (pX != null) {
 						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
-						postProcessing.Add (il.Create (OpCodes.Conv_I));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//     if (indirectVariable != copyIndirectVariable) {
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//         *pX = (IntPtr) CFString.CreateNative (indirectVariable)
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Call, CFString_CreateNative));
-						postProcessing.Add (il.Create (OpCodes.Stobj, ObjCRuntime_NativeHandle));
-						//     } // indirectVariable != copyIndirectVariable
-						// } // pX != null
-						postProcessing.Add (noOutputRequired);
-
-						nativeType = new PointerType (ObjCRuntime_NativeHandle);
+						postProcessing.Add (il.Create (OpCodes.Call, managed_to_native));
 						return true;
-					} else if (elementType.IsNSObject (DerivedLinkContext)) {
-						var indirectVariable = il.Body.AddVariable (elementType);
-						if (IsOutParameter (method, parameter)) {
-							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
-						} else {
-							il.Emit (OpCodes.Ldind_I);
-							il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
-							if (!elementType.Is ("Foundation", "NSObject"))
-								il.Emit (OpCodes.Castclass, elementType);
-							il.Emit (OpCodes.Stloc, indirectVariable);
-						}
-						il.Emit (OpCodes.Ldloca, indirectVariable);
-
-						// post processing too
-						var noOutputRequired = il.Create (OpCodes.Nop);
-						// if (pX != null) {
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
-						postProcessing.Add (il.Create (OpCodes.Conv_I));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//     if (indirectVariable != copyIndirectVariable) {
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
-						postProcessing.Add (il.Create (OpCodes.Conv_I));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//         *pX = Runtime.RetainAndAutorelease (indirectVariable)
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Call, Runtime_RetainAndAutorelease));
-						postProcessing.Add (il.Create (OpCodes.Stind_I));
-						//     } // indirectVariable != copyIndirectVariable
-						// } // pX != null
-						postProcessing.Add (noOutputRequired);
-						nativeType = new PointerType (System_IntPtr);
-						return true;
-					} else if (StaticRegistrar.IsNativeObject (DerivedLinkContext, elementType)) {
-						var indirectVariable = il.Body.AddVariable (elementType);
-						if (IsOutParameter (method, parameter)) {
-							il.Emit (OpCodes.Pop);
-						} else {
-							il.Emit (OpCodes.Ldind_I);
-							EmitCallToGetINativeObject (method, il, type);
-							il.Emit (OpCodes.Stloc, indirectVariable);
-						}
-						il.Emit (OpCodes.Ldloca, indirectVariable);
-
-						// post processing too
-						var noOutputRequired = il.Create (OpCodes.Nop);
-						// if (pX != null) {
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
-						postProcessing.Add (il.Create (OpCodes.Conv_I));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//     if (indirectVariable != copyIndirectVariable) {
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldc_I4_0));
-						postProcessing.Add (il.Create (OpCodes.Conv_I));
-						postProcessing.Add (il.Create (OpCodes.Beq, noOutputRequired));
-						//         *pX = (IntPtr) indirectVariable.GetHandle ()
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
-						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
-						postProcessing.Add (il.Create (OpCodes.Call, NativeObjectExtensions_GetHandle));
-						postProcessing.Add (il.Create (OpCodes.Call, NativeObject_op_Implicit_IntPtr));
-						postProcessing.Add (il.Create (OpCodes.Stind_I));
-						//     } // indirectVariable != copyIndirectVariable
-						// } // pX != null
-						postProcessing.Add (noOutputRequired);
-						nativeType = new PointerType (System_IntPtr);
-						return true;
-
 					}
 				}
+
 				AddException (ErrorHelper.CreateWarning (99, "Don't know how (2) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
 				return false;
 			}
@@ -2383,6 +2409,13 @@ namespace Xamarin.Linker {
 			// 	sb.AppendLine ($"{outputName} = NULL;");
 			// 	sb.AppendLine ($"}}");
 			// }
+		}
+
+		static GenericInstanceMethod CreateGenericInstanceMethod (MethodReference mr, params TypeReference [] genericTypeArguments)
+		{
+			var gim = new GenericInstanceMethod (mr);
+			gim.GenericArguments.AddRange (genericTypeArguments);
+			return gim;
 		}
 
 		static MethodReference CreateMethodReferenceOnGenericType (TypeReference type, MethodReference mr, params TypeReference[] genericTypeArguments)

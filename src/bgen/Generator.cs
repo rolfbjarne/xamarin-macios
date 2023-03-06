@@ -1000,7 +1000,7 @@ public partial class Generator : IMemberGatherer {
 						convs!.Append ($"{safe_name} = default ({blittableType});");
 					return $"({blittableType}*) global::System.Runtime.CompilerServices.Unsafe.AsPointer<{blittableType}> (ref {safe_name})";
 				}
-				return (pi.IsOut ? "out " : "ref ") + safe_name;
+			return (pi.IsOut ? "out " : "ref ") + safe_name;
 		}
 
 		// Handle 'ValueType* foo'

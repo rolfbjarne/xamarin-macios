@@ -173,6 +173,7 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = GetActualLibrary (frameworkPath);
 				nr.SetMetadata ("Kind", "Framework");
+				nr.SetMetadata ("PublishFolderType", "AppleFramework");
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -184,6 +185,7 @@ namespace Xamarin.MacDev.Tasks {
 				var nr = new TaskItem (item);
 				nr.ItemSpec = GetActualLibrary (frameworkPath);
 				nr.SetMetadata ("Kind", "Framework");
+				nr.SetMetadata ("PublishFolderType", "AppleFramework");
 				native_frameworks.Add (nr);
 				return;
 			}
@@ -315,6 +317,7 @@ namespace Xamarin.MacDev.Tasks {
 						continue;
 					t.ItemSpec = GetActualLibrary (frameworkPath);
 					t.SetMetadata ("Kind", "Framework");
+					t.SetMetadata ("PublishFolderType", "AppleFramework");
 					break;
 				}
 				case ".framework": {

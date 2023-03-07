@@ -134,7 +134,7 @@ namespace Xamarin.MacDev.Tasks {
 					break;
 				case PublishFolderType.CompressedPlugIns:
 					relativePath = PlugInsDirectory;
-					virtualProjectPath = RemoveExtension (virtualProjectPath, ".zip");
+					virtualProjectPath = Path.GetFileNameWithoutExtension (item.ItemSpec);
 					break;
 				case PublishFolderType.RootDirectory:
 					break;
@@ -168,7 +168,7 @@ namespace Xamarin.MacDev.Tasks {
 				var items = entry.Value;
 				var item = new TaskItem (entry.Key);
 				item.SetMetadata ("PublishFolderType", "AppleFramework");
-				item.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (entry.Key)));
+				item.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.ChangeExtension (Path.GetFileName (entry.Key), "framework")));
 				list.Add (item);
 			}
 

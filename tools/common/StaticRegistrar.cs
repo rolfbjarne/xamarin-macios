@@ -3830,16 +3830,16 @@ namespace Registrar {
 				return;
 
 			switch (rettype) {
-				case "CGRect":
-					body_setup.AppendLine ("{0} res = {{{{0}}}};", rettype);
-					break;
-				default:
-					body_setup.AppendLine ("{0} res = {{0}};", rettype);
-					break;
-				}
-				var isArray = returntype is ArrayType;
-				var type = returntype.Resolve () ?? returntype;
-				var retain = method.RetainReturnValue;
+			case "CGRect":
+				body_setup.AppendLine ("{0} res = {{{{0}}}};", rettype);
+				break;
+			default:
+				body_setup.AppendLine ("{0} res = {{0}};", rettype);
+				break;
+			}
+			var isArray = returntype is ArrayType;
+			var type = returntype.Resolve () ?? returntype;
+			var retain = method.RetainReturnValue;
 
 			if (returntype != method.NativeReturnType) {
 				body_setup.AppendLine ("MonoClass *retparamclass = NULL;");

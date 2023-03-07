@@ -133,17 +133,17 @@ namespace Xamarin.Linker {
 			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _);
 		}
 
-		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate, bool ensurePublic = false)
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate, bool ensurePublic = true)
 		{
 			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _, ensurePublic: ensurePublic);
 		}
 
-		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, bool ensurePublic = false)
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, bool ensurePublic = true)
 		{
 			return GetMethodReference (assembly, tr, name, key, predicate, out var _, ensurePublic: ensurePublic);
 		}
 
-		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, out MethodDefinition method, bool ensurePublic = false)
+		MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, out MethodDefinition method, bool ensurePublic = true)
 		{
 			if (!method_map.TryGetValue (key, out var tuple)) {
 				var td = tr.Resolve ();
@@ -236,6 +236,12 @@ namespace Xamarin.Linker {
 		TypeReference System_Reflection_MethodInfo {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodInfo", out var _);
+			}
+		}
+
+		TypeReference Foundation_NSArray {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.NSArray", out var _);
 			}
 		}
 
@@ -801,18 +807,31 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		MethodReference Runtime_FindClosedMethodForObject {
+		MethodReference Runtime_FindClosedMethod {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedMethodForObject", (v) =>
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedMethod", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
-						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
-						&& v.Parameters [1].ParameterType.Is ("System.Reflection", "MethodBase")
-						&& !v.HasGenericParameters);
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& !v.HasGenericParameters, ensurePublic: true);
 			}
 		}
 
+		MethodReference Runtime_FindClosedParameterType {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedParameterType", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [2].ParameterType.Is ("System", "Int32")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
 		MethodReference CFString_FromHandle {
 			get {
 				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFString", "FromHandle", (v) =>
@@ -861,6 +880,18 @@ namespace Xamarin.Linker {
 		MethodReference NSArray_ArrayFromHandle {
 			get {
 				return GetMethodReference (PlatformAssembly, "Foundation.NSArray", "ArrayFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "Type")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		MethodReference NSArray_ArrayFromHandle_1 {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSArray, "ArrayFromHandle", "ArrayFromHandle`1", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
@@ -929,25 +960,49 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		MethodReference Runtime_RetainObject {
+		MethodReference Runtime_RetainNSObject {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainObject", (v) =>
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainNSObject", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
-						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [0].ParameterType.Is ("Foundation", "NSObject")
 						&& !v.HasGenericParameters,
 						ensurePublic: true);
 			}
 		}
 
-		MethodReference Runtime_RetainAndAutorelease {
+		MethodReference Runtime_RetainNativeObject {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainAndAutorelease", (v) =>
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainNativeObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		MethodReference Runtime_RetainAndAutoreleaseNSObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainAndAutoreleaseNSObject", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("Foundation", "NSObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		MethodReference Runtime_RetainAndAutoreleaseNativeObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainAndAutoreleaseNativeObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "INativeObject")
 						&& !v.HasGenericParameters,
 						ensurePublic: true);
 			}
@@ -1175,7 +1230,7 @@ namespace Xamarin.Linker {
 						}
 					} catch (Exception e) {
 						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
-						AddException (ErrorHelper.CreateWarning (99, e, str));
+						AddException (ErrorHelper.CreateError (99, e, str));
 						targets [i] = Instruction.Create (OpCodes.Ldstr, str);
 					}
 				}
@@ -1218,7 +1273,7 @@ namespace Xamarin.Linker {
 						targets [i] = Instruction.Create (OpCodes.Ldarg_0);
 					} catch (Exception e) {
 						var str = string.Format ("Failed to generate nested lookup method: {0}", e.ToString ());
-						AddException (ErrorHelper.CreateWarning (99, e, str));
+						AddException (ErrorHelper.CreateError (99, e, str));
 						targets [i] = Instruction.Create (OpCodes.Ldstr, str);
 					}
 				}
@@ -1283,7 +1338,7 @@ namespace Xamarin.Linker {
 						targets [k] = Instruction.Create (OpCodes.Ldftn, mr);
 					} catch (Exception e) {
 						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
-						AddException (ErrorHelper.CreateWarning (99, e, str));
+						AddException (ErrorHelper.CreateError (99, e, str));
 						targets [k] = Instruction.Create (OpCodes.Ldstr, str);
 					}
 				}
@@ -1387,7 +1442,7 @@ namespace Xamarin.Linker {
 					CreateUnmanagedCallersMethod (method);
 				} catch (Exception e) {
 					Console.WriteLine (e);
-					AddException (ErrorHelper.CreateWarning (99, e, "Failed process {0}: {1}", method.FullName, e.Message));
+					AddException (ErrorHelper.CreateError (99, e, "Failed process {0}: {1}", method.FullName, e.Message));
 				}
 			}
 
@@ -1494,7 +1549,7 @@ namespace Xamarin.Linker {
 			var isCategory = categoryAttribute is not null;
 			var isInstanceCategory = isCategory && StaticRegistrar.HasThisAttribute (method);
 			var isGeneric = method.DeclaringType.HasGenericParameters;
-
+			VariableDefinition? selfVariable = null;
 			try {
 				Trace (il, $"ENTER");
 
@@ -1515,17 +1570,20 @@ namespace Xamarin.Linker {
 					// il.Emit (OpCodes.Ldtoken, Console_WriteLine); // DUMMY METHOD
 
 					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing);
+					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
+
+					selfVariable = body.AddVariable (System_Object);
+					il.Emit (OpCodes.Stloc, selfVariable);
+					il.Emit (OpCodes.Ldloc, selfVariable);
 					// FIXME: throw if null
 					// FIXME: can only be NSObject
-					il.Emit (OpCodes.Callvirt, Object_GetType);
-					il.Emit (OpCodes.Callvirt, Type_get_TypeHandle);
-					il.Emit (OpCodes.Call, MethodBase_GetMethodFromHandle);
+					il.Emit (OpCodes.Ldtoken, method);
+					il.Emit (OpCodes.Call, Runtime_FindClosedMethod);
 				}
 
 				if (isInstanceCategory) {
 					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.Parameters [0].ParameterType, true, 0, out var nativeType, postProcessing);
+					EmitConversion (method, il, method.Parameters [0].ParameterType, true, 0, out var nativeType, postProcessing, selfVariable);
 				} else if (method.IsStatic) {
 					// nothing to do
 				} else if (method.IsConstructor) {
@@ -1555,7 +1613,7 @@ namespace Xamarin.Linker {
 				} else {
 					// instance method
 					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing);
+					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
 					//if (nativeType != callback.Parameters [0].ParameterType)
 					//	AddException (ErrorHelper.CreateWarning (99, "Unexpected parameter type for the first parameter. Expected {0}, got {1}. Method: {2}", callback.Parameters [0].ParameterType.FullName, nativeType?.FullName, GetMethodSignatureWithSourceCode (method)));
 				}
@@ -1598,11 +1656,11 @@ namespace Xamarin.Linker {
 							il.Emit (OpCodes.Ldarg, nativeParameterIndex);
 							break;
 						}
-						if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing)) {
+						if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing, selfVariable)) {
 							nativeParameter.ParameterType = nativeType;
 						} else {
 							nativeParameter.ParameterType = placeholderType;
-							AddException (ErrorHelper.CreateWarning (99, "Unable to emit conversion for parameter {2} of type {0}. Method: {1}", method.Parameters [p].ParameterType, GetMethodSignatureWithSourceCode (method), p));
+							AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for parameter {2} of type {0}. Method: {1}", method.Parameters [p].ParameterType, GetMethodSignatureWithSourceCode (method), p));
 						}
 						if (isGeneric) {
 							if (managedParameterType.IsValueType)
@@ -1631,11 +1689,11 @@ namespace Xamarin.Linker {
 				}
 
 				if (returnVariable is not null) {
-					if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing)) {
+					if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing, selfVariable)) {
 						returnVariable.VariableType = nativeReturnType;
 						callback.ReturnType = nativeReturnType;
 					} else {
-						AddException (ErrorHelper.CreateWarning (99, "Unable to emit conversion for return value of type {0}. Method: {1}", method.ReturnType, GetMethodSignatureWithSourceCode (method)));
+						AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for return value of type {0}. Method: {1}", method.ReturnType, GetMethodSignatureWithSourceCode (method)));
 					}
 					il.Emit (OpCodes.Stloc, returnVariable);
 				} else {
@@ -1821,7 +1879,7 @@ namespace Xamarin.Linker {
 
 		// This emits a conversion between the native and the managed representation of a parameter or return value,
 		// and returns the corresponding native type. The returned nativeType will (must) be a blittable type.
-		bool EmitConversionImpl (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter, [NotNullWhen (true)] out TypeReference? nativeType, List<Instruction> postProcessing)
+		bool EmitConversionImpl (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter, [NotNullWhen (true)] out TypeReference? nativeType, List<Instruction> postProcessing, VariableDefinition? selfVariable)
 		{
 			nativeType = null;
 
@@ -1843,14 +1901,14 @@ namespace Xamarin.Linker {
 			if (type.Is ("System", "Void")) {
 				if (parameter == -1 && method.IsConstructor) {
 					if (toManaged) {
-						AddException (ErrorHelper.CreateWarning (99, "Don't know how (9) to convert ctor. Method: {0}", GetMethodSignatureWithSourceCode (method)));
+						AddException (ErrorHelper.CreateError (99, "Don't know how (9) to convert ctor. Method: {0}", GetMethodSignatureWithSourceCode (method)));
 					} else {
 						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 						nativeType = ObjCRuntime_NativeHandle;
 						return true;
 					}
 				}
-				AddException (ErrorHelper.CreateWarning (99, "Can't convert System.Void. Method: {0}", GetMethodSignatureWithSourceCode (method)));
+				AddException (ErrorHelper.CreateError (99, "Can't convert System.Void. Method: {0}", GetMethodSignatureWithSourceCode (method)));
 				return false;
 			}
 
@@ -1882,7 +1940,7 @@ namespace Xamarin.Linker {
 					var elementType = brt.ElementType;
 					if (elementType is GenericParameter gp) {
 						if (!StaticRegistrar.VerifyIsConstrainedToNSObject (gp, out var constrained)) {
-							AddException (ErrorHelper.CreateWarning (99, "Incorrectly constrained generic parameter. Method: {0}", GetMethodSignatureWithSourceCode (method)));
+							AddException (ErrorHelper.CreateError (99, "Incorrectly constrained generic parameter. Method: {0}", GetMethodSignatureWithSourceCode (method)));
 							return false;
 						}
 						elementType = constrained;
@@ -1922,7 +1980,7 @@ namespace Xamarin.Linker {
 						managed_to_native = RegistrarHelper_INativeObject_managed_to_native;
 						nativeType = new PointerType (System_IntPtr);
 					} else {
-						AddException (ErrorHelper.CreateWarning (99, "Don't know how (4) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
+						AddException (ErrorHelper.CreateError (99, "Don't know how (4) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
 						return false;
 					}
 
@@ -1954,7 +2012,7 @@ namespace Xamarin.Linker {
 					}
 				}
 
-				AddException (ErrorHelper.CreateWarning (99, "Don't know how (2) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
+				AddException (ErrorHelper.CreateError (99, "Don't know how (2) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
 				return false;
 			}
 
@@ -1966,28 +2024,45 @@ namespace Xamarin.Linker {
 					return true;
 				}
 
+				var isGenericParameter = false;
 				if (elementType is GenericParameter gp) {
 					if (!StaticRegistrar.VerifyIsConstrainedToNSObject (gp, out var constrained)) {
-						AddException (ErrorHelper.CreateWarning (99, "Incorrectly constrained generic parameter. Method: {0}", GetMethodSignatureWithSourceCode (method)));
+						AddException (ErrorHelper.CreateError (99, "Incorrectly constrained generic parameter. Method: {0}", GetMethodSignatureWithSourceCode (method)));
 						return false;
 					}
 					elementType = constrained;
+					isGenericParameter = true;
 				}
 
-				if (elementType.IsNSObject (DerivedLinkContext) || StaticRegistrar.IsNativeObject (elementType)) {
+				var isNSObject = elementType.IsNSObject (DerivedLinkContext);
+				var isNativeObject = StaticRegistrar.IsNativeObject (elementType);
+				if (isNSObject || isNativeObject) {
 					if (toManaged) {
-						var gim = new GenericInstanceMethod (NSArray_ArrayFromHandle);
-						gim.GenericArguments.Add (elementType);
-						il.Emit (OpCodes.Call, gim);
+						if (isGenericParameter) {
+							il.Emit (OpCodes.Ldloc, selfVariable);
+							il.Emit (OpCodes.Ldtoken, method);
+							il.Emit (OpCodes.Ldc_I4, parameter);
+							il.Emit (OpCodes.Call, Runtime_FindClosedParameterType);
+							il.Emit (OpCodes.Call, NSArray_ArrayFromHandle);
+						} else {
+							var gim = new GenericInstanceMethod (NSArray_ArrayFromHandle_1);
+							gim.GenericArguments.Add (elementType);
+							il.Emit (OpCodes.Call, gim);
+						}
 					} else {
 						il.Emit (OpCodes.Call, NSArray_FromNSObjects__INativeObjects);
-						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
+						var retain = StaticRegistrar.HasReleaseAttribute (method);
+						if (retain) {
+							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainNSObject : Runtime_RetainNativeObject);
+						} else {
+							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainAndAutoreleaseNSObject : Runtime_RetainAndAutoreleaseNativeObject);
+						}
 					}
 					nativeType = ObjCRuntime_NativeHandle;
 					return true;
 				}
 
-				AddException (ErrorHelper.CreateWarning (99, "Don't know how (3) to convert array element type {1} for array type {0} between managed and native code. Method: {2}", type.FullName, elementType.FullName, GetMethodSignatureWithSourceCode (method)));
+				AddException (ErrorHelper.CreateError (99, "Don't know how (3) to convert array element type {1} for array type {0} between managed and native code. Method: {2}", type.FullName, elementType.FullName, GetMethodSignatureWithSourceCode (method)));
 				return false;
 			}
 
@@ -2003,10 +2078,9 @@ namespace Xamarin.Linker {
 						var retain = StaticRegistrar.HasReleaseAttribute (method);
 						il.Emit (OpCodes.Dup);
 						if (retain) {
-							il.Emit (OpCodes.Call, Runtime_RetainObject);
-							il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
+							il.Emit (OpCodes.Call, Runtime_RetainNSObject);
 						} else {
-							il.Emit (OpCodes.Call, Runtime_RetainAndAutorelease);
+							il.Emit (OpCodes.Call, Runtime_RetainAndAutoreleaseNSObject);
 						}
 					}  else {
 						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
@@ -2036,11 +2110,17 @@ namespace Xamarin.Linker {
 					}
 					nativeType = System_IntPtr;
 				} else {
-					if (parameter == -1 && StaticRegistrar.HasReleaseAttribute (method)) {
-						il.Emit (OpCodes.Dup);
-						il.Emit (OpCodes.Call, Runtime_RetainObject);
+					if (parameter == -1) {
+					 	var retain = StaticRegistrar.HasReleaseAttribute (method);
+						var isNSObject = IsNSObject (type);
+						if (retain) {
+							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainNSObject : Runtime_RetainNativeObject);
+						} else {
+							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainAndAutoreleaseNSObject : Runtime_RetainAndAutoreleaseNativeObject);
+						}
+					} else {
+						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					}
-					il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					nativeType = ObjCRuntime_NativeHandle;
 				}
 				return true;
@@ -2054,11 +2134,12 @@ namespace Xamarin.Linker {
 
 			if (StaticRegistrar.IsDelegate (type.Resolve ())) {
 				if (!StaticRegistrar.TryFindMethod (method, out var objcMethod)) {
-					AddException (ErrorHelper.CreateWarning (99, "Unable to find method {0}", GetMethodSignature (method)));
+					AddException (ErrorHelper.CreateError (99, "Unable to find method {0}", GetMethodSignature (method)));
 					return false;
 				}
 				if (toManaged) {
 					var createMethod = StaticRegistrar.GetBlockWrapperCreator (objcMethod, parameter);
+					EnsureVisible (method, createMethod);
 					if (createMethod is null) {
 						AddException (ErrorHelper.CreateWarning (App, 4174 /* Unable to locate the block to delegate conversion method for the method {0}'s parameter #{1}. */, method, Errors.MT4174, method.FullName, parameter + 1));
 						var tmpVariable = il.Body.AddVariable (System_IntPtr);
@@ -2078,7 +2159,7 @@ namespace Xamarin.Linker {
 					}
 				} else {
 					if (!DerivedLinkContext.StaticRegistrar.TryComputeBlockSignature (method, trampolineDelegateType: type, out var exception, out var signature)) {
-						AddException (ErrorHelper.CreateWarning (99, "Error while converting block/delegates: FIXME better error: {0}", exception.ToString ()));
+						AddException (ErrorHelper.CreateError (99, "Error while converting block/delegates: FIXME better error: {0}", exception.ToString ()));
 						return false;
 					}
 					var delegateProxyType = StaticRegistrar.GetDelegateProxyType (objcMethod);
@@ -2088,7 +2169,7 @@ namespace Xamarin.Linker {
 					} else {
 						delegateProxyField = delegateProxyType.Fields.SingleOrDefault (v => v.Name == "Handler");
 						if (delegateProxyField is null) {
-							AddException (ErrorHelper.CreateWarning (99, "No delegate proxy field on {0}", delegateProxyType.FullName)); // FIXME: better error message
+							AddException (ErrorHelper.CreateError (99, "No delegate proxy field on {0}", delegateProxyType.FullName)); // FIXME: better error message
 						}
 					}
 					if (delegateProxyField is null) {
@@ -2114,17 +2195,17 @@ namespace Xamarin.Linker {
 				return true;
 			}
 
-			AddException (ErrorHelper.CreateWarning (99, "Don't know how (1) to convert {0} between managed and native code: {1}. Method: {2}", type.FullName, type.GetType ().FullName, GetMethodSignatureWithSourceCode (method)));
+			AddException (ErrorHelper.CreateError (99, "Don't know how (1) to convert {0} between managed and native code: {1}. Method: {2}", type.FullName, type.GetType ().FullName, GetMethodSignatureWithSourceCode (method)));
 			return false;
 		}
 
-		bool EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter, [NotNullWhen (true)] out TypeReference? nativeType, List<Instruction> postProcessing)
+		bool EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter, [NotNullWhen (true)] out TypeReference? nativeType, List<Instruction> postProcessing, VariableDefinition? selfVariable)
 		{
 			nativeType = null;
 			try {
-				return EmitConversionImpl (method, il, type, toManaged, parameter, out nativeType, postProcessing);
+				return EmitConversionImpl (method, il, type, toManaged, parameter, out nativeType, postProcessing, selfVariable);
 			} catch (Exception e) {
-				AddException (ErrorHelper.CreateWarning (99, e, "Failed to process {0}: {1}", method.FullName, e.Message));
+				AddException (ErrorHelper.CreateError (99, e, "Failed to process {0}: {1}", method.FullName, e.Message));
 				return false;
 			}
 		}
@@ -2224,7 +2305,7 @@ namespace Xamarin.Linker {
 				// MethodDefinition getConstantMethod, getValueMethod;
 				if (!StaticRegistrar.IsSmartEnum (underlyingManagedType, out var getConstantMethod, out var getValueMethod)) {
 					// method linked away!? this should already be verified
-					AddException (ErrorHelper.CreateWarning (99, Errors.MX0099, $"the smart enum {underlyingManagedType.FullName} doesn't seem to be a smart enum after all"));
+					AddException (ErrorHelper.CreateError (99, Errors.MX0099, $"the smart enum {underlyingManagedType.FullName} doesn't seem to be a smart enum after all"));
 					//	token = "INVALID_TOKEN_REF";
 					//} else if (TryCreateTokenReference (getValueMethod, TokenType.Method, out var get_value_method_token_ref, out _)) {
 					//	token = $"0x{get_value_method_token_ref:X} /* {getValueMethod.FullName} */";
@@ -2365,7 +2446,7 @@ namespace Xamarin.Linker {
 				// func = StaticRegistrar.GetSmartEnumToNSStringFunc (underlyingManagedType, inputType, outputType, descriptiveMethodName, classVariableName);
 				if (!StaticRegistrar.IsSmartEnum (underlyingManagedType, out var getConstantMethod, out var getValueMethod)) {
 					// method linked away!? this should already be verified
-					ErrorHelper.Show (ErrorHelper.CreateWarning (99, Errors.MX0099, $"the smart enum {underlyingManagedType.FullName} doesn't seem to be a smart enum after all"));
+					ErrorHelper.Show (ErrorHelper.CreateError (99, Errors.MX0099, $"the smart enum {underlyingManagedType.FullName} doesn't seem to be a smart enum after all"));
 					return;
 				}
 

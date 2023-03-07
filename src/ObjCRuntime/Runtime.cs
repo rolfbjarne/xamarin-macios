@@ -1950,28 +1950,48 @@ namespace ObjCRuntime {
 		// Retain the input if it's either an NSObject or a NativeObject.
 		static void RetainNativeObject (IntPtr gchandle)
 		{
-			RetainObject (GetGCHandleTarget (gchandle));
+			var obj = GetGCHandleTarget (gchandle);
+			RetainNativeObject ((INativeObject?) obj);
 		}
 
 		// Retain the input if it's either an NSObject or a NativeObject.
-		static void RetainObject (object? obj)
+		static NativeHandle RetainNativeObject (INativeObject? obj)
 		{
-			if (obj is NativeObject nobj)
+			if (obj is null)
+				return NativeHandle.Zero;
+			if (obj is NSObject nsobj)
+				RetainNSObject (nsobj);
+			else if (obj is NativeObject nobj)
 				nobj.Retain ();
-			else if (obj is NSObject nsobj)
-				nsobj.DangerousRetain ();
-			// Make sure the GC doesn't collect the return value before it's been retained
-			GC.KeepAlive (obj);
+			return obj.GetHandle ();
 		}
 
-		internal static NativeHandle RetainAndAutorelease (NSObject? obj)
+		// Retain the input if it's either an NSObject or a NativeObject.
+		static NativeHandle RetainNSObject (NSObject? obj)
+		{
+			if (obj is null)
+				return NativeHandle.Zero;
+			obj.DangerousRetain ();
+			return obj.GetHandle ();
+		}
+
+		internal static NativeHandle RetainAndAutoreleaseNSObject (NSObject? obj)
 		{
 			if (obj is null)
 				return NativeHandle.Zero;
 			obj.DangerousRetain ();
 			obj.DangerousAutorelease ();
-			// Make sure the GC doesn't collect the return value before it's been retained
-			GC.KeepAlive (obj);
+			return obj.GetHandle ();
+		}
+
+		internal static NativeHandle RetainAndAutoreleaseNativeObject (INativeObject? obj)
+		{
+			if (obj is null)
+				return NativeHandle.Zero;
+			if (obj is NSObject nsobj) {
+				nsobj.DangerousRetain ();
+				nsobj.DangerousAutorelease ();
+			}
 			return obj.GetHandle ();
 		}
 
@@ -2073,6 +2093,23 @@ namespace ObjCRuntime {
 			}
 
 			throw ErrorHelper.CreateError (8003, $"Failed to find the closed generic method '{open_method.Name}' on the type '{closed_type.FullName}'.");
+		}
+
+		internal static MethodInfo FindClosedMethod (object instance, RuntimeMethodHandle open_method_handle)
+		{
+			var closed_type = instance.GetType ();
+			Runtime.NSLog ($"FindClosedMethod ({instance.GetType ()}, {open_method_handle})");
+			var closedMethod = MethodBase.GetMethodFromHandle (open_method_handle, closed_type.TypeHandle)!;
+			return (MethodInfo) closedMethod;
+		}
+
+		internal static Type FindClosedParameterType (object instance, RuntimeMethodHandle open_method_handle, int parameter)
+		{
+			var closed_type = instance.GetType ();
+			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, {open_method_handle}, {parameter})");
+			var closedMethod = MethodBase.GetMethodFromHandle (open_method_handle, closed_type.TypeHandle)!;
+			var parameters = closedMethod.GetParameters ();
+			return parameters [parameter].ParameterType.GetElementType ()!; // FIX NAMING
 		}
 
 		static void GCCollect ()

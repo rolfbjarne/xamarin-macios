@@ -168,7 +168,7 @@ namespace Xamarin.MacDev.Tasks {
 				var items = entry.Value;
 				var item = new TaskItem (entry.Key);
 				item.SetMetadata ("PublishFolderType", "AppleFramework");
-				item.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.GetFileName (entry.Key)));
+				item.SetMetadata ("RelativePath", Path.Combine (FrameworksDirectory, Path.ChangeExtension (Path.GetFileName (entry.Key), "framework")));
 				list.Add (item);
 			}
 

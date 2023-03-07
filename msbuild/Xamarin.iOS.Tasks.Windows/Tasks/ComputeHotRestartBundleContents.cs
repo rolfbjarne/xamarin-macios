@@ -111,6 +111,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				case PublishFolderType.None:
 				case PublishFolderType.Unknown:
 					// Don't copy unknown stuff anywhere
+					Log.LogMessage (MessageImportance.Low, $"    Skipped {item.ItemSpec} because PublishFolderType={publishFolderType} aren't copied to the app bundle.");
 					continue;
 
 				case PublishFolderType.RootDirectory:
@@ -124,6 +125,7 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				case PublishFolderType.CompressedAppleBindingResourcePackage:
 				case PublishFolderType.StaticLibrary:
 					// These aren't copied to the bundle
+					Log.LogMessage (MessageImportance.Low, $"    Skipped {item.ItemSpec} because PublishFolderType={publishFolderType} aren't copied to the app bundle.");
 					continue;
 
 				case PublishFolderType.AppleFramework:
@@ -137,6 +139,10 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				case PublishFolderType.CompressedAppleFramework:
 				case PublishFolderType.CompressedPlugIns:
 					// Shouldn't really happen?
+					Log.LogMessage (MessageImportance.Low, $"    Skipped {item.ItemSpec} because PublishFolderType={publishFolderType} aren't copied to the app bundle.");
+					continue;
+				default:
+					Log.LogMessage (MessageImportance.Low, $"    Skipped {item.ItemSpec} because of unknown PublishFolderType={publishFolderType}.");
 					continue;
 				}
 			}

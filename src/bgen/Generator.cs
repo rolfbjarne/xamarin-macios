@@ -785,10 +785,10 @@ public partial class Generator : IMemberGatherer {
 						clear.AppendFormat ("*{0} = {1};", safe_name, nt.IsValueType ? "default (" + FormatType (null, nt) + ")" : "null");
 					}
 				}
+				var outOrRef = pi.IsOut ? "out" : "ref";
 				if (nt.IsValueType) {
 					string fnt;
 					string invoke_name;
-					var outOrRef = pi.IsOut ? "out" : "ref";
 					var nullable = TypeManager.GetUnderlyingNullableType (nt);
 					if (nullable != null) {
 						fnt = FormatType (null, nullable);
@@ -812,13 +812,12 @@ public partial class Generator : IMemberGatherer {
 					continue;
 				} else {
 					var refname = $"__xamarin_pref{pi.Position}";
-					convert.Append ($"var {refname} = Runtime.GetINativeObject<{RenderType (nt)}> (*{safe_name}, false)!;");
+					convert.Append ($"var {refname} = Runtime.GetINativeObject<{RenderType (nt)}> ({safe_name} != null ? *{safe_name} : NativeHandle.Zero, false)!;");
 					pars.Add (new TrampolineParameterInfo ($"{NativeHandleType}*", safe_name));
-					postConvert.Append ($"*{safe_name} = {refname}.GetHandle ();");
-					if (pi.IsOut)
-						invoke.Append ("out ");
-					else
-						invoke.Append ("ref ");
+					postConvert.AppendLine ($"if ({safe_name} != null)");
+					postConvert.Append ($"\t*{safe_name} = {refname}.GetHandle ();");
+					invoke.Append (outOrRef);
+					invoke.Append (" ");
 					invoke.Append (refname);
 					continue;
 				}

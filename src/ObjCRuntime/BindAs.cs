@@ -51,8 +51,13 @@ namespace ObjCRuntime {
 				Runtime.NSLog ($"NSArray_managed_to_native (0x{(*ptr).ToString ("x")}, ? == ?)");
 				return;
 			}
+			if (value is null) {
+				Runtime.NSLog ($"NSArray_managed_to_native (0x{(*ptr).ToString ("x")}, null, !null)");
+				*ptr = IntPtr.Zero;
+				return;
+			}
 			IntPtr rv = Runtime.RetainAndAutoreleaseNSObject (NSArray.FromNSObjects<T> (value));
-			Runtime.NSLog ($"NSArray_managed_to_native (0x{(*ptr).ToString ("x")}, ? != ?): 0x{rv.ToString ("x")} => {value?.GetType ()}");
+			Runtime.NSLog ($"NSArray_managed_to_native (0x{(*ptr).ToString ("x")}, value != copy: {value?.Length} != {copy?.Length}): 0x{rv.ToString ("x")} => {value?.GetType ()}");
 			*ptr = rv;
 		}
 

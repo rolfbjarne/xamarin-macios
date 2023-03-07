@@ -2356,6 +2356,7 @@ namespace Xamarin.Linker {
 			string? func = null;
 			MethodReference? conversionFunction = null;
 			MethodReference? conversionFunction2 = null;
+			MethodReference? conversionFunction3 = null;
 			if (underlyingNativeType.Is ("Foundation", "NSNumber")) {
 				func = StaticRegistrar.GetManagedToNSNumberFunc (underlyingManagedType, inputType, outputType, descriptiveMethodName);
 			} else if (underlyingNativeType.Is ("Foundation", "NSValue")) {
@@ -2370,6 +2371,7 @@ namespace Xamarin.Linker {
 
 				conversionFunction = CurrentAssembly.MainModule.ImportReference (getConstantMethod);
 				conversionFunction2 = NativeObjectExtensions_GetHandle;
+				conversionFunction3 = NativeObject_op_Implicit_IntPtr;
  			} else {
 				AddException (ErrorHelper.CreateError (99, Errors.MX0099, $"can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}"));
 				return;
@@ -2399,21 +2401,27 @@ namespace Xamarin.Linker {
 
 				var trueTarget = il.Create (OpCodes.Nop);
 				var endTarget = il.Create (OpCodes.Nop);
-				il.Emit (OpCodes.Stloc, tmpVariable);
-				il.Emit (OpCodes.Ldloca, tmpVariable);
-				var mr = CreateMethodReferenceOnGenericType (System_Nullable_1, Nullable_HasValue, underlyingManagedType);
-				il.Emit (OpCodes.Call, mr);
-				il.Emit (OpCodes.Brtrue, trueTarget);
-				il.Emit (OpCodes.Ldc_I4_0);
-				il.Emit (OpCodes.Conv_I);
-				il.Emit (OpCodes.Br, endTarget);
-				il.Append (trueTarget);
-				il.Emit (OpCodes.Ldloca, tmpVariable);
-				il.Emit (OpCodes.Call, CreateMethodReferenceOnGenericType (System_Nullable_1, Nullable_Value, underlyingManagedType));
+				if (isManagedNullable) {
+					il.Emit (OpCodes.Stloc, tmpVariable);
+					il.Emit (OpCodes.Ldloca, tmpVariable);
+					var mr = CreateMethodReferenceOnGenericType (System_Nullable_1, Nullable_HasValue, underlyingManagedType);
+					il.Emit (OpCodes.Call, mr);
+					il.Emit (OpCodes.Brtrue, trueTarget);
+					il.Emit (OpCodes.Ldc_I4_0);
+					il.Emit (OpCodes.Conv_I);
+					il.Emit (OpCodes.Br, endTarget);
+					il.Append (trueTarget);
+					il.Emit (OpCodes.Ldloca, tmpVariable);
+					il.Emit (OpCodes.Call, CreateMethodReferenceOnGenericType (System_Nullable_1, Nullable_Value, underlyingManagedType));
+				}
 				il.Emit (OpCodes.Call, conversionFunction);
-				if (conversionFunction2 is not null)
+				if (conversionFunction2 is not null) {
 					il.Emit (OpCodes.Call, conversionFunction2);
-				il.Append (endTarget);
+					if (conversionFunction3 is not null)
+						il.Emit (OpCodes.Call, conversionFunction3);
+				}
+				if (isManagedNullable)
+					il.Append (endTarget);
 			}
 			// sb.AppendLine ($"if (exception_gchandle != INVALID_GCHANDLE) goto exception_handling;");
 

@@ -812,9 +812,10 @@ namespace Xamarin.Linker {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedMethod", (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 2
+						&& v.Parameters.Count == 3
 						&& v.Parameters [0].ParameterType.Is ("System", "Object")
-						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& v.Parameters [2].ParameterType.Is ("System", "RuntimeMethodHandle")
 						&& !v.HasGenericParameters, ensurePublic: true);
 			}
 		}
@@ -824,10 +825,11 @@ namespace Xamarin.Linker {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedParameterType", (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 3
+						&& v.Parameters.Count == 4
 						&& v.Parameters [0].ParameterType.Is ("System", "Object")
-						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeMethodHandle")
-						&& v.Parameters [2].ParameterType.Is ("System", "Int32")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& v.Parameters [2].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [3].ParameterType.Is ("System", "Int32")
 						&& !v.HasGenericParameters
 						, ensurePublic: true);
 			}
@@ -1064,6 +1066,9 @@ namespace Xamarin.Linker {
 		protected override void TryEndProcess ()
 		{
 			base.TryEndProcess ();
+
+			if (app.Registrar != RegistrarMode.ManagedStatic)
+				return;
 
 			RewriteRuntimeLookupManagedFunction ();
 
@@ -1577,6 +1582,7 @@ namespace Xamarin.Linker {
 					il.Emit (OpCodes.Ldloc, selfVariable);
 					// FIXME: throw if null
 					// FIXME: can only be NSObject
+					il.Emit (OpCodes.Ldtoken, method.DeclaringType);
 					il.Emit (OpCodes.Ldtoken, method);
 					il.Emit (OpCodes.Call, Runtime_FindClosedMethod);
 				}
@@ -2040,6 +2046,7 @@ namespace Xamarin.Linker {
 					if (toManaged) {
 						if (isGenericParameter) {
 							il.Emit (OpCodes.Ldloc, selfVariable);
+							il.Emit (OpCodes.Ldtoken, method.DeclaringType);
 							il.Emit (OpCodes.Ldtoken, method);
 							il.Emit (OpCodes.Ldc_I4, parameter);
 							il.Emit (OpCodes.Call, Runtime_FindClosedParameterType);

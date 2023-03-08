@@ -470,7 +470,7 @@ namespace ObjCRuntime {
 			// start off by creating a stack-allocated block, and then
 			// call _Block_copy, which will create a heap-allocated block
 			// with the proper reference count.
-			BlockLiteral block = new BlockLiteral ();
+			using var block = new BlockLiteral ();
 			if (signature is null) {
 				if (Runtime.DynamicRegistrationSupported) {
 					block.SetupBlock (delegateProxyFieldValue, @delegate);
@@ -480,9 +480,7 @@ namespace ObjCRuntime {
 			} else {
 				block.SetupBlockImpl (delegateProxyFieldValue, @delegate, true, signature);
 			}
-			var rv = _Block_copy (ref block);
-			block.CleanupBlock ();
-			return rv;
+			return _Block_copy (&block);
 		}
 
 		[BindingImpl (BindingImplOptions.Optimizable)]

@@ -2098,15 +2098,32 @@ namespace ObjCRuntime {
 		internal static MethodInfo FindClosedMethod (object instance, RuntimeMethodHandle open_method_handle)
 		{
 			var closed_type = instance.GetType ();
-			Runtime.NSLog ($"FindClosedMethod ({instance.GetType ()}, {open_method_handle})");
+			Runtime.NSLog ($"FindClosedMethod ({instance.GetType ()}, {open_method_handle} = 0x{open_method_handle.Value.ToString ("x")})");
 			var closedMethod = MethodBase.GetMethodFromHandle (open_method_handle, closed_type.TypeHandle)!;
 			return (MethodInfo) closedMethod;
+		}
+
+		static Type? FindClosedTypeInHierarchy (Type open_type, Type? closed_type)
+		{
+			if (closed_type is null)
+				return null;
+
+			var closed_type_definition = closed_type;
+			if (closed_type_definition.IsGenericType)
+				closed_type_definition = closed_type_definition.GetGenericTypeDefinition ();
+			if (closed_type_definition == open_type)
+				return closed_type;
+			return FindClosedTypeInHierarchy (open_type, closed_type.BaseType);
 		}
 
 		internal static Type FindClosedParameterType (object instance, RuntimeMethodHandle open_method_handle, int parameter)
 		{
 			var closed_type = instance.GetType ();
 			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, {open_method_handle}, {parameter})");
+			var open_method = MethodBase.GetMethodFromHandle (open_method_handle)!;
+			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, {open_method_handle}, {parameter}) open method: {open_method} declaring type: {open_method?.DeclaringType}");
+			closed_type = FindClosedTypeInHierarchy (open_method!.DeclaringType!, closed_type!)!;
+			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, {open_method_handle}, {parameter}) closed type: {closed_type}");
 			var closedMethod = MethodBase.GetMethodFromHandle (open_method_handle, closed_type.TypeHandle)!;
 			var parameters = closedMethod.GetParameters ();
 			return parameters [parameter].ParameterType.GetElementType ()!; // FIX NAMING

@@ -30,6 +30,37 @@ using Registrar;
 namespace ObjCRuntime {
 	static class RegistrarHelper {
 		// registrar helpers
+		unsafe static void NSArray_string_native_to_managed (IntPtr* ptr, ref string[]? value, ref string[]? copy)
+		{
+			if (ptr != null) {
+				value = NSArray.StringArrayFromHandle (*ptr);
+			} else {
+				value = null;
+			}
+			copy = value;
+		}
+
+		unsafe static void NSArray_string_managed_to_native (IntPtr* ptr, string[] value, string[] copy, bool isOut)
+		{
+			if (ptr == null) {
+				Runtime.NSLog ($"NSArray_string_managed_to_native (NULL, ?, ?)");
+				return;
+			}
+			// Note that we won't notice if individual array elements change, only if the array itself changes
+			if (!isOut && (object) value == (object) copy) {
+				Runtime.NSLog ($"NSArray_string_managed_to_native (0x{(*ptr).ToString ("x")}, ? == ?)");
+				return;
+			}
+			if (value is null) {
+				Runtime.NSLog ($"NSArray_string_managed_to_native (0x{(*ptr).ToString ("x")}, null, !null)");
+				*ptr = IntPtr.Zero;
+				return;
+			}
+			IntPtr rv = Runtime.RetainAndAutoreleaseNSObject (NSArray.FromStrings (value));
+			Runtime.NSLog ($"NSArray_string_managed_to_native (0x{(*ptr).ToString ("x")}, value != copy: {value?.Length} != {copy?.Length}): 0x{rv.ToString ("x")} => {value?.GetType ()}");
+			*ptr = rv;
+		}
+
 		unsafe static void NSArray_native_to_managed<T> (IntPtr* ptr, ref T[]? value, ref T[]? copy) where T: class, INativeObject
 		{
 			if (ptr != null) {

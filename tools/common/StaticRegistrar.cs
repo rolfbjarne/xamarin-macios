@@ -2081,7 +2081,7 @@ namespace Registrar {
 			return true;
 		}
 
-		MethodDefinition GetBaseMethodInTypeHierarchy (MethodDefinition method)
+		public MethodDefinition GetBaseMethodInTypeHierarchy (MethodDefinition method)
 		{
 			if (!IsOverride (method))
 				return method;

@@ -1193,7 +1193,7 @@ namespace ObjCRuntime {
 			Ignore,
 		}
 
-		static void MissingCtor (IntPtr ptr, IntPtr klass, Type type, MissingCtorResolution resolution)
+		static void MissingCtor (IntPtr ptr, IntPtr klass, Type type, MissingCtorResolution resolution, IntPtr sel, RuntimeMethodHandle method_handle)
 		{
 			if (resolution == MissingCtorResolution.Ignore)
 				return;
@@ -1228,6 +1228,37 @@ namespace ObjCRuntime {
 			}
 
 			msg.Append (").");
+			if (sel != IntPtr.Zero || method_handle.Value != IntPtr.Zero) {
+				msg.AppendLine ();
+				msg.AppendLine ("Additional information:");
+				if (sel != IntPtr.Zero)
+					msg.Append ("\tSelector: ").Append (Selector.GetName (sel)).AppendLine ();
+				if (method_handle.Value != IntPtr.Zero) {
+					try {
+						var method = MethodBase.GetMethodFromHandle (method_handle);
+						msg.Append ($"\tMethod: ");
+						if (method is not null) {
+							// there's no good built-in function to format a MethodInfo :/
+							msg.Append (method.DeclaringType?.FullName ?? string.Empty);
+							msg.Append (".");
+							msg.Append (method.Name);
+							msg.Append ("(");
+							var parameters = method.GetParameters ();
+							for (var i = 0; i < parameters.Length; i++) {
+								if (i > 0)
+									msg.Append (", ");
+								msg.Append (parameters [i].ParameterType.FullName);
+							}
+							msg.Append (")");
+						} else {
+							msg.Append ($"Unable to resolve RuntimeMethodHandle 0x{method_handle.Value.ToString ("x")}");
+						}
+						msg.AppendLine ();
+					} catch (Exception ex) {
+						msg.Append ($"\tMethod: Unable to resolve RuntimeMethodHandle 0x{method_handle.Value.ToString ("x")}: {ex.Message}");
+					}
+				}
+			}
 			throw ErrorHelper.CreateError (8027, msg.ToString ());
 		}
 
@@ -1251,13 +1282,20 @@ namespace ObjCRuntime {
 		// The 'selector' and 'method' arguments are only used in error messages.
 		static T? ConstructNSObject<T> (IntPtr ptr, Type type, MissingCtorResolution missingCtorResolution) where T : class, INativeObject
 		{
+			return ConstructNSObject<T> (ptr, type, missingCtorResolution, IntPtr.Zero, default (RuntimeMethodHandle));
+		}
+
+		// The generic argument T is only used to cast the return value.
+		// The 'selector' and 'method' arguments are only used in error messages.
+		static T? ConstructNSObject<T> (IntPtr ptr, Type type, MissingCtorResolution missingCtorResolution, IntPtr sel, RuntimeMethodHandle method_handle) where T : class, INativeObject
+		{
 			if (type is null)
 				throw new ArgumentNullException (nameof (type));
 
 			var ctor = GetIntPtrConstructor (type);
 
 			if (ctor is null) {
-				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution);
+				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return null;
 			}
 
@@ -1276,7 +1314,7 @@ namespace ObjCRuntime {
 		}
 
 		// The generic argument T is only used to cast the return value.
-		static T? ConstructINativeObject<T> (IntPtr ptr, bool owns, Type type, MissingCtorResolution missingCtorResolution) where T : class, INativeObject
+		static T? ConstructINativeObject<T> (IntPtr ptr, bool owns, Type type, MissingCtorResolution missingCtorResolution, IntPtr sel, RuntimeMethodHandle method_handle) where T : class, INativeObject
 		{
 			if (type is null)
 				throw new ArgumentNullException (nameof (type));
@@ -1287,7 +1325,7 @@ namespace ObjCRuntime {
 			var ctor = GetIntPtr_BoolConstructor (type);
 
 			if (ctor is null) {
-				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution);
+				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return null;
 			}
 
@@ -1469,6 +1507,11 @@ namespace ObjCRuntime {
 
 		static public T? GetNSObject<T> (IntPtr ptr) where T : NSObject
 		{
+			return GetNSObject<T> (ptr, IntPtr.Zero, default (RuntimeMethodHandle));
+		}
+
+		static T? GetNSObject<T> (IntPtr ptr, IntPtr sel, RuntimeMethodHandle method_handle) where T : NSObject
+		{
 			if (ptr == IntPtr.Zero)
 				return null;
 
@@ -1502,7 +1545,7 @@ namespace ObjCRuntime {
 				target_type = typeof (NSObject);
 			}
 
-			return ConstructNSObject<T> (ptr, target_type, MissingCtorResolution.ThrowConstructor1NotFound);
+			return ConstructNSObject<T> (ptr, target_type, MissingCtorResolution.ThrowConstructor1NotFound, sel, method_handle);
 		}
 
 		static public T? GetNSObject<T> (IntPtr ptr, bool owns) where T : NSObject
@@ -1634,6 +1677,12 @@ namespace ObjCRuntime {
 		// this method is identical in behavior to the generic one.
 		static INativeObject? GetINativeObject (IntPtr ptr, bool owns, Type target_type, Type? implementation)
 		{
+			return GetINativeObject (ptr, owns, target_type, implementation, IntPtr.Zero, default (RuntimeMethodHandle));
+		}
+
+		// this method is identical in behavior to the generic one.
+		static INativeObject? GetINativeObject (IntPtr ptr, bool owns, Type target_type, Type? implementation, IntPtr sel, RuntimeMethodHandle method_handle)
+		{
 			if (ptr == IntPtr.Zero)
 				return null;
 
@@ -1667,10 +1716,10 @@ namespace ObjCRuntime {
 					// native objects and NSObject instances.
 					throw ErrorHelper.CreateError (8004, $"Cannot create an instance of {implementation.FullName} for the native object 0x{ptr:x} (of type '{Class.class_getName (Class.GetClassForObject (ptr))}'), because another instance already exists for this native object (of type {o.GetType ().FullName}).");
 				}
-				return ConstructNSObject<INativeObject> (ptr, implementation, MissingCtorResolution.ThrowConstructor1NotFound);
+				return ConstructNSObject<INativeObject> (ptr, implementation, MissingCtorResolution.ThrowConstructor1NotFound, sel, method_handle);
 			}
 
-			return ConstructINativeObject<INativeObject> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound);
+			return ConstructINativeObject<INativeObject> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound, sel, method_handle);
 		}
 
 		// this method is identical in behavior to the non-generic one.
@@ -1685,6 +1734,11 @@ namespace ObjCRuntime {
 		}
 
 		internal static T? GetINativeObject<T> (IntPtr ptr, bool forced_type, Type? implementation, bool owns) where T : class, INativeObject
+		{
+			return GetINativeObject<T> (ptr, forced_type, implementation, owns, IntPtr.Zero, default (RuntimeMethodHandle));
+		}
+
+		static T? GetINativeObject<T> (IntPtr ptr, bool forced_type, Type? implementation, bool owns, IntPtr sel, RuntimeMethodHandle method_handle) where T : class, INativeObject
 		{
 			if (ptr == IntPtr.Zero)
 				return null;
@@ -1725,7 +1779,7 @@ namespace ObjCRuntime {
 				return rv;
 			}
 
-			return ConstructINativeObject<T> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound);
+			return ConstructINativeObject<T> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound, sel, method_handle);
 		}
 
 		static void TryReleaseINativeObject (INativeObject? obj)

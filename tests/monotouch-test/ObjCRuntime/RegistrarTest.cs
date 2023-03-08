@@ -2566,7 +2566,7 @@ return;
 		[DllImport ("/usr/lib/libobjc.dylib")]
 		static extern IntPtr class_getInstanceMethod (IntPtr cls, IntPtr sel);
 
-#if !MONOMAC // Registrar_OutExportDerivedClass is from fsharp tests
+#if !MONOMAC || NET // Registrar_OutExportDerivedClass is from fsharp tests
 		[Test]
 		public void OutOverriddenWithoutOutAttribute ()
 		{

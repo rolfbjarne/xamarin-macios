@@ -657,6 +657,7 @@
 			<_FrameworkToPublish Update="@(_FrameworkToPublish)">
 				<TargetDirectory>$(_RelativePublishDir)$(_AppBundleFrameworksDir)\%(Filename)%(Extension).framework</TargetDirectory>
 				<SourceDirectory>%(RelativeDir)</SourceDirectory>
+				<PublishFolderType>AppleFramework</PublishFolderType>
 			</_FrameworkToPublish>
 		</ItemGroup>
 

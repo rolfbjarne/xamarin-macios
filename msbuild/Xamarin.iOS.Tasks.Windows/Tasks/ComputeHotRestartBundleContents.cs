@@ -129,6 +129,13 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 					continue;
 
 				case PublishFolderType.AppleFramework:
+					var filename = Path.GetFileName (item.ItemSpec);
+					var dirname = Path.GetFileName (Path.GetDirectoryName (item.ItemSpec));
+					if (string.Equals (filename + ".framework", dirname, StringComparison.OrdinalIgnoreCase))
+						item.ItemSpec = Path.GetDirectoryName (item.ItemSpec);
+					// These have to be signed
+					signedAppDirContents.Add (CopyWithDestinationAndStamp (item, HotRestartSignedAppDir));
+					break;
 				case PublishFolderType.PlugIns:
 				case PublishFolderType.DynamicLibrary:
 				case PublishFolderType.PluginLibrary:

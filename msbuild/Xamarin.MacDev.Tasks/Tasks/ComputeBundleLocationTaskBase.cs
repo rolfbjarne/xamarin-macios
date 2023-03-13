@@ -121,6 +121,8 @@ namespace Xamarin.MacDev.Tasks {
 				case PublishFolderType.CompressedAppleFramework:
 					relativePath = FrameworksDirectory;
 					virtualProjectPath = RemoveExtension (virtualProjectPath, ".zip");
+					if (virtualProjectPath.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase))
+						virtualProjectPath = Path.ChangeExtension (virtualProjectPath, ".framework");
 					break;
 				case PublishFolderType.AppleBindingResourcePackage:
 					// Nothing to do here, this is handled fully in the targets file

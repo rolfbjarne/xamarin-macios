@@ -1351,10 +1351,10 @@ namespace Xamarin.Linker {
 			var lookupsPerMethod = 100;
 			var secondLevelMethodCount = (table.Count + lookupsPerMethod - 1) / lookupsPerMethod;
 			var secondLevelMethods = new MethodDefinition [secondLevelMethodCount];
+			var indirectLookup = true;
 			for (var i = 0; i < secondLevelMethodCount; i++) {
-				var secondLevelMethod = new MethodDefinition ("LookupManagedFunctionImpl" + i.ToString (), MethodAttributes.Static | MethodAttributes.Private, method.ReturnType);
+				var secondLevelMethod = method.DeclaringType.AddMethod ("LookupManagedFunctionImpl" + i.ToString (), MethodAttributes.Static | MethodAttributes.Private, method.ReturnType);
 				secondLevelMethod.Parameters.Add (new ParameterDefinition ("index", ParameterAttributes.None, method.Parameters [0].ParameterType));
-				method.DeclaringType.Methods.Add (secondLevelMethod);
 				secondLevelMethods [i] = secondLevelMethod;
 
 				var body = new MethodBody (secondLevelMethod);
@@ -1369,7 +1369,15 @@ namespace Xamarin.Linker {
 					var md = table [index].Value.UnmanagedCallersMethod;
 					try {
 						var mr = PlatformAssembly.MainModule.ImportReference (md);
-						targets [k] = Instruction.Create (OpCodes.Ldftn, mr);
+						if (indirectLookup) {
+							var indirectMethod = method.DeclaringType.AddMethod (md.Name + "__indirect_lookup", MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, secondLevelMethod.ReturnType);
+							var indirectIL = indirectMethod.Body.GetILProcessor ();
+							indirectIL.Emit (OpCodes.Ldftn, mr);
+							indirectIL.Emit (OpCodes.Ret);
+							targets [k] = Instruction.Create (OpCodes.Call, indirectMethod);
+						} else {
+							targets [k] = Instruction.Create (OpCodes.Ldftn, mr);
+						}
 					} catch (Exception e) {
 						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
 						AddException (ErrorHelper.CreateError (99, e, str));

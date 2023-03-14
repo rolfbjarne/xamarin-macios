@@ -1512,10 +1512,15 @@ namespace ObjCRuntime {
 
 		static T? GetNSObject<T> (IntPtr ptr, IntPtr sel, RuntimeMethodHandle method_handle) where T : NSObject
 		{
+			return GetNSObject<T> (ptr, sel, method_handle, false);
+		}
+
+		static T? GetNSObject<T> (IntPtr ptr, IntPtr sel, RuntimeMethodHandle method_handle, bool evenInFinalizerQueue) where T : NSObject
+		{
 			if (ptr == IntPtr.Zero)
 				return null;
 
-			var obj = TryGetNSObject (ptr, evenInFinalizerQueue: false);
+			var obj = TryGetNSObject (ptr, evenInFinalizerQueue: evenInFinalizerQueue);
 
 			// First check if we got an object of the expected type
 			if (obj is T o)

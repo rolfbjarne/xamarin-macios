@@ -657,15 +657,16 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		MethodReference Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle {
+		MethodReference Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle_bool {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", nameof (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle), (v) =>
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", nameof (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle_bool), (v) =>
 						v.IsStatic
 						&& v.HasParameters
-						&& v.Parameters.Count == 3
+						&& v.Parameters.Count == 4
 						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
 						&& v.Parameters [1].ParameterType.Is ("System", "IntPtr")
 						&& v.Parameters [2].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 1, ensurePublic: true);
 			}
@@ -2067,10 +2068,11 @@ namespace Xamarin.Linker {
 						// 	il.Emit (OpCodes.Castclass, type);
 					} else {
 						// FIXME: argument semantics
-						// il.Emit (OpCodes.Ldarg_1);
-						// il.Emit (OpCodes.Ldtoken, method);
-						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle, type));
-						il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr, type));
+						il.Emit (OpCodes.Ldarg_1); // SEL
+						il.Emit (OpCodes.Ldtoken, method);
+						il.Emit (parameter == -1); // evenInFinalizerQueue
+						il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle_bool, type));
+						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr, type));
 						//il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
 						// if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
 						// 	il.Emit (OpCodes.Castclass, type);
@@ -2102,7 +2104,7 @@ namespace Xamarin.Linker {
 						// FIXME: check that gp is constrained to NSObject
 						// il.Emit (OpCodes.Ldarg_1);
 						// il.Emit (OpCodes.Ldtoken, method);
-						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle, type));
+						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle_bool, type));
 						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr, type));
 						il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
 					} else {

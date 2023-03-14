@@ -30,8 +30,7 @@ namespace AVFoundation {
 
 		static AVAudioSinkNodeReceiverHandlerRaw GetHandler (AVAudioSinkNodeReceiverHandler receiverHandler)
 		{
-			AVAudioSinkNodeReceiverHandlerRaw rv = (timestamp, frameCount, inputData) =>
-			{
+			AVAudioSinkNodeReceiverHandlerRaw rv = (timestamp, frameCount, inputData) => {
 				unsafe {
 					var ts = *(AudioTimeStamp*) timestamp;
 					var abuffers = new AudioBuffers (inputData);
@@ -48,8 +47,7 @@ namespace AVFoundation {
 #if !XAMCORE_5_0
 		static AVAudioSinkNodeReceiverHandlerRaw GetHandler (AVAudioSinkNodeReceiverHandler2 receiverHandler)
 		{
-			AVAudioSinkNodeReceiverHandlerRaw rv = (timestamp, frameCount, inputData) =>
-			{
+			AVAudioSinkNodeReceiverHandlerRaw rv = (timestamp, frameCount, inputData) => {
 				unsafe {
 					var ts = *(AudioTimeStamp*) timestamp;
 					var abuffers = new AudioBuffers (inputData);

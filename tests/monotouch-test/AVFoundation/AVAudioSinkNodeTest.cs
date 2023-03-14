@@ -83,7 +83,7 @@ namespace MonoTouchFixtures.AVFoundation {
 
 		int SinkHandler2 (AudioTimeStamp ts, uint n, AudioBuffers buffers, ManualResetEvent evt)
 		{
-			var data = new float[n];
+			var data = new float [n];
 
 			int nCh = buffers.Count;
 			for (int i = 0; i < nCh; i++) {
@@ -98,7 +98,7 @@ namespace MonoTouchFixtures.AVFoundation {
 
 		unsafe int SinkHandlerRaw (IntPtr ts_ptr, uint n, IntPtr buffers_ptr, ManualResetEvent evt)
 		{
-			var ts = * (AudioTimeStamp*) ts_ptr;
+			var ts = *(AudioTimeStamp*) ts_ptr;
 			var buffers = new AudioBuffers (buffers_ptr);
 			return SinkHandler2 (ts, n, buffers, evt);
 		}

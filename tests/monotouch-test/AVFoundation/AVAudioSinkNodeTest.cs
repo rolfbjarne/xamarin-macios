@@ -51,11 +51,13 @@ namespace MonoTouchFixtures.AVFoundation {
 
 		void SinkNodeCallbackTest (ManualResetEvent callbackEvent, Func<AVAudioSinkNode> createSinkNode)
 		{
+#if !__MACOS__
 			using var session = AVAudioSession.SharedInstance ();
 			session.SetCategory (AVAudioSessionCategory.Record);
 			session.SetPreferredSampleRate (48000, out var error);
 			session.SetPreferredInputNumberOfChannels (1, out error);
 			session.SetActive (true);
+#endif
 
 			using var engine = new AVAudioEngine ();
 

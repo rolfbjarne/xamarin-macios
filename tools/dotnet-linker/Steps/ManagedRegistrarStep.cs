@@ -32,7 +32,6 @@ namespace Xamarin.Linker {
 
 		AssemblyDefinition? corlib_assembly;
 		AssemblyDefinition? platform_assembly;
-		AssemblyDefinition? system_console_assembly;
 
 		AssemblyDefinition CurrentAssembly {
 			get {
@@ -55,14 +54,6 @@ namespace Xamarin.Linker {
 				if (platform_assembly is null)
 					throw new InvalidOperationException ($"No platform assembly!");
 				return platform_assembly;
-			}
-		}
-
-		AssemblyDefinition? SystemConsoleAssembly {
-			get {
-				if (system_console_assembly is null)
-					system_console_assembly = Configuration.Assemblies.SingleOrDefault (v => v.Name.Name == "System.Console");
-				return system_console_assembly;
 			}
 		}
 
@@ -215,15 +206,6 @@ namespace Xamarin.Linker {
 		TypeReference System_Void {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Void", out var _);
-			}
-		}
-
-		TypeReference? System_Console {
-			get {
-				var assembly = SystemConsoleAssembly;
-				if (assembly is null)
-					return null;
-				return GetTypeReference (assembly, "System.Console", out var _);
 			}
 		}
 
@@ -404,24 +386,6 @@ namespace Xamarin.Linker {
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("System", "object")
-						&& !v.HasGenericParameters);
-			}
-		}
-
-		MethodReference? Console_WriteLine {
-			get {
-				var assembly = SystemConsoleAssembly;
-				if (assembly is null)
-					return null;
-				var type = System_Console;
-				if (type is null)
-					return null;
-				return GetMethodReference (assembly, type, "WriteLine", (v) =>
-						v.IsStatic
-						&& v.HasParameters
-						&& v.Parameters.Count == 2
-						&& v.Parameters [0].ParameterType.Is ("System", "String")
-						&& v.Parameters [1].ParameterType.Is ("System", "Object")
 						&& !v.HasGenericParameters);
 			}
 		}
@@ -1536,10 +1500,6 @@ namespace Xamarin.Linker {
 
 		void Trace (ILProcessor il, string message)
 		{
-			var mr = Console_WriteLine;
-			if (mr is null)
-				return;
-
 			var trace = true;
 			if (trace) {
 				il.Emit (OpCodes.Ldstr, message);
@@ -1729,8 +1689,10 @@ namespace Xamarin.Linker {
 					} else {
 						il.Emit (OpCodes.Castclass, method.ReturnType);
 					}
-				} else {
+				} else if (method.IsStatic) {
 					il.Emit (OpCodes.Call, method);
+				} else {
+					il.Emit (OpCodes.Callvirt, method);
 				}
 
 				if (returnVariable is not null) {
@@ -2004,7 +1966,7 @@ namespace Xamarin.Linker {
 
 					if (elementType is ArrayType elementArrayType) {
 						// TODO: verify elementArrayType.ElementType?
-						if (elementArrayType.Is ("System", "String")) {
+						if (elementArrayType.ElementType.Is ("System", "String")) {
 							native_to_managed = RegistrarHelper_NSArray_string_native_to_managed;
 							managed_to_native = RegistrarHelper_NSArray_string_managed_to_native;
 						} else {
@@ -2116,14 +2078,25 @@ namespace Xamarin.Linker {
 
 			if (IsNSObject (type)) {
 				if (toManaged) {
-					// FIXME: argument semantics
-					// il.Emit (OpCodes.Ldarg_1);
-					// il.Emit (OpCodes.Ldtoken, method);
-					// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle, type));
-					// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr, type));
-					il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
-					if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
-						il.Emit (OpCodes.Castclass, type);
+					if (type is GenericParameter gp || type is GenericInstanceType || type.HasGenericParameters) {
+						il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
+						if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
+							il.Emit (OpCodes.Castclass, type);
+					} else {
+						// FIXME: argument semantics
+						// il.Emit (OpCodes.Ldarg_1);
+						// il.Emit (OpCodes.Ldtoken, method);
+						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle, type));
+						if (method.Name.Contains ("DecidePolicy"))
+						 	Console.WriteLine ("HALT");
+						il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr, type));
+						//il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
+						// if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
+						// 	il.Emit (OpCodes.Castclass, type);
+						var tmpVariable = il.Body.AddVariable (type);
+						il.Emit (OpCodes.Stloc, tmpVariable);
+						il.Emit (OpCodes.Ldloc, tmpVariable);
+					}
 					nativeType = System_IntPtr;
 				} else {
 					if (parameter == -1) {

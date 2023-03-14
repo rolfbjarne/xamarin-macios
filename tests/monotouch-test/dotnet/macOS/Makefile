@@ -59,3 +59,9 @@ exec:
 	fi
 	$(Q) echo "✅ Test run succeeded"
 	$(Q) grep "Tests run:" "$(LOGFILENAME)"
+
+managed-static-registrar msr:
+	rm -rf bin obj
+	if ! $(DOTNET) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:Registrar=managed-static; then make diag > x.log; tail -n 200 x.log; exit 1; fi
+	#MONO_TRACE=E:all 
+	./bin/Debug/net7.0-*/*-x64/monotouchtest.app/Contents/MacOS/monotouchtest --autostart --autoexit

@@ -4,7 +4,6 @@ using System.Threading;
 
 using NUnit.Framework;
 
-using AppKit;
 using AudioToolbox;
 using AudioUnit;
 using AVFoundation;

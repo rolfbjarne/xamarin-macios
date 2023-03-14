@@ -1320,10 +1320,10 @@ return;
 					} catch (RuntimeException) {
 						// OK
 					} catch (Exception e) {
-						Console.WriteLine ($"Unexpectedly failed with exception of type {e.GetType ()} - expected either ArgumentException or RuntimeException: {message}");
+						Console.WriteLine ($"❌ Unexpectedly failed with exception of type {e.GetType ()} - expected either ArgumentException or RuntimeException: {message}\n{e}");
 					}
 					if (noException)
-						Console.WriteLine ($"Unexpectedly no exception occured: {message}");
+						Console.WriteLine ($"❌ Unexpectedly no exception occured: {message}");
 				}
 				return;
 			}

@@ -896,30 +896,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		MethodReference NSArray_FromNSObjects__INativeObjects {
+		MethodReference RegistrarHelper_ManagedArrayToNSArray {
 			get {
-				return GetMethodReference (PlatformAssembly, "Foundation.NSArray", "FromNSObjects", (v) => {
-
-					var rv =
-					v.IsStatic
-					&& v.HasParameters
-					&& v.Parameters.Count == 1
-					&& v.Parameters [0].ParameterType is ArrayType at
-					&& at.GetElementType ().Is ("ObjCRuntime", "INativeObject")
-					&& !v.HasGenericParameters;
-
-					Console.WriteLine (@$"DEBUGDEBUG2:
-					{v.Name}
-					v.IsStatic: {v.IsStatic}
-					&& v.HasParameters: {v.HasParameters}
-					&& v.Parameters.Count == 1 {v.Parameters.Count}
-					&& v.Parameters [0].ParameterType is ArrayType at: {v.Parameters [0].ParameterType.GetType ().FullName}
-					&& at.Is (""ObjCRuntime"", ""INativeObject""):  {(v.Parameters [0].ParameterType as ArrayType)?.GetElementType ().Is ("ObjCRuntime", "INativeObject")}
-					&& !v.HasGenericParameters {!v.HasGenericParameters}
-					*** {rv} ***");
-
-					return rv;
-				});
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "ManagedArrayToNSArray", (v) => 
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "Boolean")
+						&& !v.HasGenericParameters, ensurePublic: true);
 			}
 		}
 
@@ -2060,13 +2045,9 @@ namespace Xamarin.Linker {
 							il.Emit (OpCodes.Call, gim);
 						}
 					} else {
-						il.Emit (OpCodes.Call, NSArray_FromNSObjects__INativeObjects);
 						var retain = StaticRegistrar.HasReleaseAttribute (method);
-						if (retain) {
-							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainNSObject : Runtime_RetainNativeObject);
-						} else {
-							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainAndAutoreleaseNSObject : Runtime_RetainAndAutoreleaseNativeObject);
-						}
+						il.Emit (retain ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
+						il.Emit (OpCodes.Call, RegistrarHelper_ManagedArrayToNSArray);
 					}
 					nativeType = ObjCRuntime_NativeHandle;
 					return true;

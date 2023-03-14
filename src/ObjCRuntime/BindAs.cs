@@ -30,6 +30,25 @@ using Registrar;
 namespace ObjCRuntime {
 	static class RegistrarHelper {
 		// registrar helpers
+		static NativeHandle ManagedArrayToNSArray (object array, bool retain)
+		{
+			if (array is null)
+				return NativeHandle.Zero;
+
+			NSObject rv;
+			if (array is NSObject[] nsobjs) {
+				rv = NSArray.FromNSObjects (nsobjs);
+			} else if (array is INativeObject[] inativeobjs) {
+				rv = NSArray.FromNSObjects (inativeobjs);
+			} else {
+				throw new InvalidOperationException ($"Can't convert {array.GetType ()} to an NSArray.");
+			}
+
+			if (retain)
+				return Runtime.RetainNSObject (rv);
+			return Runtime.RetainAndAutoreleaseNSObject (rv);
+		}
+
 		unsafe static void NSArray_string_native_to_managed (IntPtr* ptr, ref string[]? value, ref string[]? copy)
 		{
 			if (ptr != null) {

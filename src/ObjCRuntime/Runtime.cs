@@ -2020,8 +2020,7 @@ namespace ObjCRuntime {
 			return obj.GetHandle ();
 		}
 
-		// Retain the input if it's either an NSObject or a NativeObject.
-		static NativeHandle RetainNSObject (NSObject? obj)
+		internal static NativeHandle RetainNSObject (NSObject? obj)
 		{
 			if (obj is null)
 				return NativeHandle.Zero;

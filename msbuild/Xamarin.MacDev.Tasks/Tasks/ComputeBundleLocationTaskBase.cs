@@ -120,7 +120,7 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				case PublishFolderType.CompressedAppleFramework:
 					relativePath = FrameworksDirectory;
-					virtualProjectPath = RemoveExtension (virtualProjectPath, ".zip");
+					virtualProjectPath = Path.GetFileNameWithoutExtension (item.ItemSpec);
 					if (virtualProjectPath.EndsWith (".xcframework", StringComparison.OrdinalIgnoreCase))
 						virtualProjectPath = Path.ChangeExtension (virtualProjectPath, ".framework");
 					break;

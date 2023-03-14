@@ -65,3 +65,6 @@ managed-static-registrar msr:
 	if ! $(DOTNET) build /bl *.csproj $(MSBUILD_VERBOSITY) /p:Registrar=managed-static; then make diag > x.log; tail -n 200 x.log; exit 1; fi
 	#MONO_TRACE=E:all 
 	./bin/Debug/net7.0-*/*-x64/monotouchtest.app/Contents/MacOS/monotouchtest --autostart --autoexit
+
+lldb:
+	lldb -- ./bin/Debug/net7.0-macos/osx-x64/monotouchtest.app/Contents/MacOS/monotouchtest --autostart --autoexit --test MonoTouchFixtures.ObjCRuntime.RegistrarTest

@@ -1311,6 +1311,8 @@ return;
 					//     <System.ArgumentException: Object of type 'Foundation.NSObject' cannot be converted to type 'Foundation.NSSet'.
 					// or a RuntimeException:
 					//     <ObjCRuntime.RuntimeException: Failed to marshal the value at index 0.
+					// or an InvalidCastException
+					//    System.InvalidCastException: Unable to cast object of type 'Foundation.NSObject' to type 'Foundation.NSSet'.
 					var noException = false;
 					try {
 						code ();
@@ -1318,6 +1320,8 @@ return;
 					} catch (ArgumentException) {
 						// OK
 					} catch (RuntimeException) {
+						// OK
+					} catch (InvalidCastException) {
 						// OK
 					} catch (Exception e) {
 						Console.WriteLine ($"❌ Unexpectedly failed with exception of type {e.GetType ()} - expected either ArgumentException or RuntimeException: {message}\n{e}");
@@ -1543,7 +1547,10 @@ return;
 			public void M2 (out T t) { t = null; }
 
 			[Export ("m3:")]
-			public void M3 (ref T t) { }
+			public void M3 (ref T t) {
+				Console.WriteLine ($"⚠️ {t is null}");
+				Console.WriteLine ($"⚠️ {t?.GetType ()?.FullName}");
+			}
 
 			[Export ("m4:")]
 			public void M4 (T [] t) { }

@@ -1495,7 +1495,7 @@ namespace Xamarin.Linker {
 		int counter;
 		void CreateUnmanagedCallersMethod (MethodDefinition method)
 		{
-			if (method.Name =="ToLower")
+			if (method.Name.Contains ("ConstrainedGenericType_1_M2"))
 				Console.WriteLine ("STOP!");
 			var baseMethod = StaticRegistrar.GetBaseMethodInTypeHierarchy (method);
 			var placeholderType = System_IntPtr;
@@ -1558,7 +1558,7 @@ namespace Xamarin.Linker {
 					// il.Emit (OpCodes.Ldtoken, Console_WriteLine); // DUMMY METHOD
 
 					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable, null);
+					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
 
 					selfVariable = body.AddVariable (System_Object);
 					il.Emit (OpCodes.Stloc, selfVariable);
@@ -1572,7 +1572,7 @@ namespace Xamarin.Linker {
 
 				if (isInstanceCategory) {
 					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.Parameters [0].ParameterType, true, 0, out var nativeType, postProcessing, selfVariable, null);
+					EmitConversion (method, il, method.Parameters [0].ParameterType, true, 0, out var nativeType, postProcessing, selfVariable);
 				} else if (method.IsStatic) {
 					// nothing to do
 				} else if (method.IsConstructor) {
@@ -1602,7 +1602,7 @@ namespace Xamarin.Linker {
 				} else {
 					// instance method
 					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable, null);
+					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
 					//if (nativeType != callback.Parameters [0].ParameterType)
 					//	AddException (ErrorHelper.CreateWarning (99, "Unexpected parameter type for the first parameter. Expected {0}, got {1}. Method: {2}", callback.Parameters [0].ParameterType.FullName, nativeType?.FullName, GetMethodSignatureWithSourceCode (method)));
 				}
@@ -1621,38 +1621,29 @@ namespace Xamarin.Linker {
 				}
 
 				if (method.HasParameters) {
+					var isDynamicInvoke = isGeneric;
 					for (var p = parameterStart; p < managedParameterCount; p++) {
 						var nativeParameter = callback.AddParameter ($"p{p}", placeholderType);
 						var nativeParameterIndex = p + nativeParameterOffset;
 						var managedParameterType = method.Parameters [p].ParameterType;
 						var baseParameter = baseMethod.Parameters [p];
-						if (isGeneric) {
+						var isOutParameter = IsOutParameter (method, p, baseParameter);
+						if (isDynamicInvoke && !isOutParameter) {
 							if (parameterStart != 0)
 								throw new NotImplementedException ("parameterStart");
 							il.Emit (OpCodes.Dup);
 							il.Emit (OpCodes.Ldc_I4, p);
 						}
-						switch (nativeParameterIndex) {
-						case 1:
-							il.Emit (OpCodes.Ldarg_1);
-							break;
-						case 2:
-							il.Emit (OpCodes.Ldarg_2);
-							break;
-						case 3:
-							il.Emit (OpCodes.Ldarg_3);
-							break;
-						default:
-							il.Emit (OpCodes.Ldarg, nativeParameterIndex);
-							break;
+						if (!isOutParameter) {
+							il.EmitLoadArgument (nativeParameterIndex);
 						}
-						if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing, selfVariable, baseParameter)) {
+						if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing, selfVariable, isOutParameter, nativeParameterIndex, isDynamicInvoke)) {
 							nativeParameter.ParameterType = nativeType;
 						} else {
 							nativeParameter.ParameterType = placeholderType;
 							AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for parameter {2} of type {0}. Method: {1}", method.Parameters [p].ParameterType, GetMethodSignatureWithSourceCode (method), p));
 						}
-						if (isGeneric) {
+						if (isDynamicInvoke && !isOutParameter) {
 							if (managedParameterType.IsValueType)
 								il.Emit (OpCodes.Box, managedParameterType);
 							il.Emit (OpCodes.Stelem_Ref);
@@ -1672,7 +1663,7 @@ namespace Xamarin.Linker {
 					} else if (method.ReturnType.IsValueType) {
 						il.Emit (OpCodes.Unbox_Any, method.ReturnType);
 					} else {
-						il.Emit (OpCodes.Castclass, method.ReturnType);
+						// il.Emit (OpCodes.Castclass, method.ReturnType);
 					}
 				} else if (method.IsStatic) {
 					il.Emit (OpCodes.Call, method);
@@ -1681,7 +1672,7 @@ namespace Xamarin.Linker {
 				}
 
 				if (returnVariable is not null) {
-					if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing, selfVariable, null)) {
+					if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing, selfVariable)) {
 						returnVariable.VariableType = nativeReturnType;
 						callback.ReturnType = nativeReturnType;
 					} else {
@@ -1859,7 +1850,7 @@ namespace Xamarin.Linker {
 
 		// This emits a conversion between the native and the managed representation of a parameter or return value,
 		// and returns the corresponding native type. The returned nativeType will (must) be a blittable type.
-		bool EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter, [NotNullWhen (true)] out TypeReference? nativeType, List<Instruction> postProcessing, VariableDefinition? selfVariable, ParameterDefinition? baseParameter = null)
+		bool EmitConversion (MethodDefinition method, ILProcessor il, TypeReference type, bool toManaged, int parameter, [NotNullWhen (true)] out TypeReference? nativeType, List<Instruction> postProcessing, VariableDefinition? selfVariable, bool isOutParameter = false, int nativeParameterIndex = -1, bool isDynamicInvoke = false)
 		{
 			nativeType = null;
 
@@ -1938,6 +1929,8 @@ namespace Xamarin.Linker {
 					if (elementType.IsValueType) {
 						// call !!0& [System.Runtime]System.Runtime.CompilerServices.Unsafe::AsRef<int32>(void*)
 						var mr = new GenericInstanceMethod (CurrentAssembly.MainModule.ImportReference (Unsafe_AsRef));
+						if (isOutParameter)
+							il.EmitLoadArgument (nativeParameterIndex);
 						mr.GenericArguments.Add (elementType);
 						il.Emit (OpCodes.Call, mr);
 						// reference types aren't blittable, so the managed signature must have be a pointer type
@@ -1985,22 +1978,27 @@ namespace Xamarin.Linker {
 						var indirectVariable = il.Body.AddVariable (elementType);
 						// We store a copy of the value in a separate variable, to detect if it changes.
 						var copyIndirectVariable = il.Body.AddVariable (elementType);
-						var isOutParameter = IsOutParameter (method, parameter, baseParameter!);
 
-						if (isOutParameter) {
-							il.Emit (OpCodes.Pop); // We don't read the input for 'out' parameters, it might be garbage.
-						} else {
+						// We don't read the input for 'out' parameters, it might be garbage.
+						if (!isOutParameter) {
 							il.Emit (OpCodes.Ldloca, indirectVariable);
 							il.Emit (OpCodes.Ldloca, copyIndirectVariable);
 							if (addBeforeNativeToManagedCall is not null)
 								il.Append (addBeforeNativeToManagedCall);
 							il.Emit (OpCodes.Call, native_to_managed);
+							if (isDynamicInvoke) {
+								il.Emit (OpCodes.Ldloc, indirectVariable);
+							} else {
+								il.Emit (OpCodes.Ldloca, indirectVariable);
+							}
+						} else {
+							if (!isDynamicInvoke)
+								il.Emit (OpCodes.Ldloca, indirectVariable);
 						}
-						il.Emit (OpCodes.Ldloca, indirectVariable);
-						postProcessing.Add (il.Create (OpCodes.Ldarg, parameter + 2));
+						postProcessing.Add (il.CreateLoadArgument (nativeParameterIndex));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, indirectVariable));
 						postProcessing.Add (il.Create (OpCodes.Ldloc, copyIndirectVariable));
-						postProcessing.Add (il.Create (isOutParameter ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0));
+						postProcessing.Add (il.Create (isOutParameter));
 						postProcessing.Add (il.Create (OpCodes.Call, managed_to_native));
 						return true;
 					}
@@ -2009,6 +2007,9 @@ namespace Xamarin.Linker {
 				AddException (ErrorHelper.CreateError (99, "Don't know how (2) to convert {0} between managed and native code. Method: {1}", type.FullName, GetMethodSignatureWithSourceCode (method)));
 				return false;
 			}
+
+			if (isOutParameter)
+				throw new InvalidOperationException ($"Parameter must be ByReferenceType to be an out parameter");
 
 			if (type is ArrayType at) {
 				var elementType = at.GetElementType ();
@@ -2061,15 +2062,14 @@ namespace Xamarin.Linker {
 				if (toManaged) {
 					if (type is GenericParameter gp || type is GenericInstanceType || type.HasGenericParameters) {
 						il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
-						if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
-							il.Emit (OpCodes.Castclass, type);
+						// il.Emit (OpCodes.Unbox_Any, type);
+						// if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
+						// 	il.Emit (OpCodes.Castclass, type);
 					} else {
 						// FIXME: argument semantics
 						// il.Emit (OpCodes.Ldarg_1);
 						// il.Emit (OpCodes.Ldtoken, method);
 						// il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle, type));
-						if (method.Name.Contains ("DecidePolicy"))
-						 	Console.WriteLine ("HALT");
 						il.Emit (OpCodes.Call, CreateGenericInstanceMethod (Runtime_GetNSObject_T___System_IntPtr, type));
 						//il.Emit (OpCodes.Call, Runtime_GetNSObject__System_IntPtr);
 						// if (!type.Is ("Foundation", "NSObject") && !type.HasGenericParameters)
@@ -2569,5 +2569,37 @@ static class Cecil_Extensions {
 		foreach (var item in items) {
 			self.Add (item);
 		}
+	}
+
+	public static void EmitLoadArgument (this ILProcessor il, int argument)
+	{
+		il.Append (il.CreateLoadArgument (argument));
+	}
+	public static Instruction CreateLoadArgument (this ILProcessor il, int argument)
+	{
+		switch (argument) {
+		case 0:
+			return il.Create (OpCodes.Ldarg_0);
+		case 1:
+			return il.Create (OpCodes.Ldarg_1);
+		case 2:
+			return il.Create (OpCodes.Ldarg_2);
+		case 3:
+			return il.Create (OpCodes.Ldarg_3);
+		default:
+			return il.Create (OpCodes.Ldarg, argument);
+		}
+	}
+
+	public static Instruction Create (this ILProcessor il, bool value)
+	{
+		if (value)
+			return il.Create (OpCodes.Ldc_I4_1);
+		return il.Create (OpCodes.Ldc_I4_0);
+	}
+
+	public static void Emit (this ILProcessor il, bool value)
+	{
+		il.Append (il.Create (value));
 	}
 }

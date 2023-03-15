@@ -51,11 +51,13 @@ namespace MonoTouchFixtures.AVFoundation {
 
 		void SinkNodeCallbackTest (ManualResetEvent callbackEvent, Func<AVAudioSinkNode> createSinkNode)
 		{
+			TestRuntime.AssertNotVirtualMachine ();
+
 #if !__MACOS__
 			using var session = AVAudioSession.SharedInstance ();
 			session.SetCategory (AVAudioSessionCategory.Record);
-			session.SetPreferredSampleRate (48000, out var error);
-			session.SetPreferredInputNumberOfChannels (1, out error);
+			session.SetPreferredSampleRate (48000, out var sampleRateError);
+			session.SetPreferredInputNumberOfChannels (1, out var inputChannelCountError);
 			session.SetActive (true);
 #endif
 
@@ -68,7 +70,7 @@ namespace MonoTouchFixtures.AVFoundation {
 				var sinkNode = createSinkNode ();
 				engine.AttachNode (sinkNode);
 				engine.Connect (inputNode, sinkNode, inputFormat);
-				engine.StartAndReturnError (out error);
+				engine.StartAndReturnError (out var error);
 
 				Assert.IsNull (error, "Start error");
 				Assert.True (callbackEvent.WaitOne (TimeSpan.FromSeconds (5)), "Called back");

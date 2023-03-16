@@ -231,7 +231,7 @@ namespace Foundation {
 			GC.SuppressFinalize (this);
 		}
 
-		static T AllocateNSObject<T> (NativeHandle handle, Flags flags) where T: NSObject
+		static T AllocateNSObject<T> (NativeHandle handle, Flags flags) where T : NSObject
 		{
 			var obj = (T) RuntimeHelpers.GetUninitializedObject (typeof (T));
 			obj.handle = handle;

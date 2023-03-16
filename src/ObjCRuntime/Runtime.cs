@@ -2427,7 +2427,7 @@ namespace ObjCRuntime {
 			if (rv != IntPtr.Zero)
 				return rv;
 
-			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symb);;
+			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symb); ;
 		}
 
 		delegate IntPtr LookupFunction (IntPtr symbol, int id);

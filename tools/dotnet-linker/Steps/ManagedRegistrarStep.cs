@@ -60,8 +60,7 @@ namespace Xamarin.Linker {
 		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> ();
 		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new Dictionary<string, (MethodDefinition, MethodReference)> ();
 
-		class TrampolineInfo
-		{
+		class TrampolineInfo {
 			public MethodDefinition Trampoline;
 			public MethodDefinition Target;
 			public int Id;
@@ -712,7 +711,7 @@ namespace Xamarin.Linker {
 
 		MethodReference BlockLiteral_CreateBlockForDelegate {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_BlockLiteral, "CreateBlockForDelegate", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BlockLiteral, "CreateBlockForDelegate", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 3
@@ -725,7 +724,7 @@ namespace Xamarin.Linker {
 
 		MethodReference RegistrarHelper_GetBlockForDelegate {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockForDelegate", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockForDelegate", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
@@ -737,7 +736,7 @@ namespace Xamarin.Linker {
 
 		MethodReference RegistrarHelper_GetBlockPointer {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockPointer", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockPointer", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
@@ -908,7 +907,7 @@ namespace Xamarin.Linker {
 
 		MethodReference RegistrarHelper_ManagedArrayToNSArray {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "ManagedArrayToNSArray", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "ManagedArrayToNSArray", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
@@ -1006,7 +1005,7 @@ namespace Xamarin.Linker {
 
 		MethodReference Unsafe_AsRef {
 			get {
-				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) => 
+				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
@@ -1061,7 +1060,7 @@ namespace Xamarin.Linker {
 			RewriteRuntimeLookupManagedFunction ();
 
 			// PlatformAssembly.Write ("/Users/rolf/Microsoft.MacCatalyst.dll");
-			
+
 			if (exceptions is null)
 				return;
 			var warnings = exceptions.Where (v => (v as ProductException)?.Error == false).ToArray ();
@@ -1137,7 +1136,7 @@ namespace Xamarin.Linker {
 			if (sorted.Count == 0)
 				return;
 
-			var td = new TypeDefinition ("ObjCRuntime", "__Registrar__", TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit);
+			var td = new TypeDefinition ("ObjCRuntime", "__Registrar__", TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit);
 			td.BaseType = System_Object;
 			CurrentAssembly.MainModule.Types.Add (td);
 
@@ -1258,7 +1257,7 @@ namespace Xamarin.Linker {
 				for (var i = 0; i < targets.Length; i++) {
 					try {
 						var subStartIndex = startIndex + (chunkSize) * i;
-						var subEndIndex = subStartIndex + (chunkSize)  - 1;
+						var subEndIndex = subStartIndex + (chunkSize) - 1;
 						if (subEndIndex > endIndex)
 							subEndIndex = endIndex;
 						var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex);
@@ -1476,7 +1475,7 @@ namespace Xamarin.Linker {
 				methods_to_wrap.Add (property.GetMethod);
 
 			if (property.SetMethod is not null)
-				methods_to_wrap.Add (property.SetMethod);	
+				methods_to_wrap.Add (property.SetMethod);
 		}
 
 		static string Sanitize (string str)
@@ -1971,7 +1970,7 @@ namespace Xamarin.Linker {
 					} else if (StaticRegistrar.IsNativeObject (DerivedLinkContext, elementType)) {
 						var nativeObjType = StaticRegistrar.GetInstantiableType (type, exceptions, GetMethodSignature (method));
 						addBeforeNativeToManagedCall = il.Create (OpCodes.Ldtoken, method.Module.ImportReference (nativeObjType)); // implementation type
-						native_to_managed =  CreateGenericInstanceMethod (RegistrarHelper_INativeObject_native_to_managed, elementType);
+						native_to_managed = CreateGenericInstanceMethod (RegistrarHelper_INativeObject_native_to_managed, elementType);
 						managed_to_native = RegistrarHelper_INativeObject_managed_to_native;
 						nativeType = new PointerType (System_IntPtr);
 					} else {
@@ -2097,7 +2096,7 @@ namespace Xamarin.Linker {
 						} else {
 							il.Emit (OpCodes.Call, Runtime_RetainAndAutoreleaseNSObject);
 						}
-					}  else {
+					} else {
 						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					}
 					nativeType = ObjCRuntime_NativeHandle;
@@ -2127,7 +2126,7 @@ namespace Xamarin.Linker {
 					nativeType = System_IntPtr;
 				} else {
 					if (parameter == -1) {
-					 	var retain = StaticRegistrar.HasReleaseAttribute (method);
+						var retain = StaticRegistrar.HasReleaseAttribute (method);
 						var isNSObject = IsNSObject (type);
 						if (retain) {
 							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainNSObject : Runtime_RetainNativeObject);
@@ -2462,11 +2461,11 @@ namespace Xamarin.Linker {
 				conversionFunction = CurrentAssembly.MainModule.ImportReference (getConstantMethod);
 				conversionFunction2 = NativeObjectExtensions_GetHandle;
 				conversionFunction3 = NativeObject_op_Implicit_IntPtr;
- 			} else {
+			} else {
 				AddException (ErrorHelper.CreateError (99, Errors.MX0099, $"can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}"));
 				return;
 			}
-			
+
 			if (func is not null) {
 				conversionFunction = GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, func, func, (v) =>
 						v.IsStatic, out MethodDefinition conversionFunctionDefinition, ensurePublic: true);
@@ -2529,7 +2528,7 @@ namespace Xamarin.Linker {
 			return gim;
 		}
 
-		static MethodReference CreateMethodReferenceOnGenericType (TypeReference type, MethodReference mr, params TypeReference[] genericTypeArguments)
+		static MethodReference CreateMethodReferenceOnGenericType (TypeReference type, MethodReference mr, params TypeReference [] genericTypeArguments)
 		{
 			var git = new GenericInstanceType (type);
 			git.GenericArguments.AddRange (genericTypeArguments);

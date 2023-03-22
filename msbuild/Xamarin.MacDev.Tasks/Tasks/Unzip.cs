@@ -58,7 +58,7 @@ namespace Xamarin.MacDev.Tasks {
 		bool ExecuteLocally ()
 		{
 			var createdFiles = new List<string> ();
-			if (!DecompressionHelper.TryDecompress (Log, ZipFilePath, Resource, ExtractionPath, createdFiles, out var _))
+			if (!CompressionHelper.TryDecompress (Log, ZipFilePath, Resource, ExtractionPath, createdFiles, out var _))
 				return false;
 
 			TouchedFiles = createdFiles.Select (v => new TaskItem (v)).ToArray ();

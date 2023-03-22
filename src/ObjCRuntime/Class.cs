@@ -404,6 +404,9 @@ namespace ObjCRuntime {
 
 		internal static Type? ResolveTypeTokenReference (uint token_reference)
 		{
+			if (Runtime.IsManagedStaticRegistrar)
+				throw ErrorHelper.Create (9999, $"Unable to resolve metadata tokens when using the managed static registrar"); // FIXME: error number
+
 			var member = ResolveTokenReference (token_reference, 0x02000000 /* TypeDef */);
 			if (member is null)
 				return null;
@@ -415,6 +418,9 @@ namespace ObjCRuntime {
 
 		internal static MethodBase? ResolveMethodTokenReference (uint token_reference)
 		{
+			if (Runtime.IsManagedStaticRegistrar)
+				throw ErrorHelper.Create (9999, $"Unable to resolve metadata tokens when using the managed static registrar"); // FIXME: error number
+
 			var member = ResolveTokenReference (token_reference, 0x06000000 /* Method */);
 			if (member is null)
 				return null;
@@ -445,18 +451,26 @@ namespace ObjCRuntime {
 			return ResolveToken (module, token | implicit_token_type);
 		}
 
-		static MemberInfo? ResolveToken (Module module, uint token)
+		static MemberInfo? ResolveToken (Assembly assembly, Module module, uint token)
 		{
 			// Finally resolve the token.
 			var token_type = token & 0xFF000000;
 			switch (token & 0xFF000000) {
 			case 0x02000000: // TypeDef
-				var type = module.ResolveType ((int) token);
+				Type type;
+				if (Runtime.IsManagedStaticRegistrar) {
+					type = Runtime.LookupRegisteredType (assembly, token);
+				} else {
+					type = module.ResolveType ((int) token);
+				}
 #if LOG_TYPELOAD
 				Console.WriteLine ($"ResolveToken (0x{token:X}) => Type: {type.FullName}");
 #endif
 				return type;
 			case 0x06000000: // Method
+				if (Runtime.IsManagedStaticRegistrar)
+					throw ErrorHelper.Create (9999, $"Unable to resolve metadata tokens when using the managed static registrar"); // FIXME: error number
+
 				var method = module.ResolveMethod ((int) token);
 #if LOG_TYPELOAD
 				Console.WriteLine ($"ResolveToken (0x{token:X}) => Method: {method?.DeclaringType?.FullName}.{method.Name}");

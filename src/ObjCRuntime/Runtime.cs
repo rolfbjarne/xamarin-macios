@@ -150,7 +150,7 @@ namespace ObjCRuntime {
 		[Flags]
 		internal enum InitializationFlags : int {
 			IsPartialStaticRegistrar = 0x01,
-			/* unused				= 0x02,*/
+			IsManagedStaticRegistrar = 0x02,
 			/* unused				= 0x04,*/
 			/* unused				= 0x08,*/
 			IsSimulator = 0x10,
@@ -211,6 +211,14 @@ namespace ObjCRuntime {
 			}
 		}
 #endif
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal unsafe static bool IsManagedStaticRegistrar {
+			get {
+				// The linker may turn calls to this property into a constant
+				return (options->Flags.HasFlag (InitializationFlags.IsManagedStaticRegistrar));
+			}
+		}
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static bool DynamicRegistrationSupported {
@@ -301,6 +309,8 @@ namespace ObjCRuntime {
 				Registrar = new DynamicRegistrar ();
 				protocol_cache = new Dictionary<IntPtr, Dictionary<IntPtr, bool>> (IntPtrEqualityComparer);
 			}
+			if (IsManagedStaticRegistrar)
+				RegistrarHelper.Initialize ();
 			RegisterDelegates (options);
 			Class.Initialize (options);
 #if !NET
@@ -1903,7 +1913,7 @@ namespace ObjCRuntime {
 			unsafe {
 				if (options->RegistrationMap is not null && options->RegistrationMap->map_count > 0) {
 					var map = options->RegistrationMap->map;
-					var idx = FindUserTypeIndex (map, 0, options->RegistrationMap->map_count - 1, cls);
+					var idx = Class.FindMapIndex (map, 0, options->RegistrationMap->map_count - 1, cls);
 					if (idx >= 0)
 						return (map [idx].flags & MTTypeFlags.UserType) == MTTypeFlags.UserType;
 					// If using the partial static registrar, we need to continue
@@ -1917,23 +1927,6 @@ namespace ObjCRuntime {
 #else
 			return Class.class_getInstanceMethod (cls, Selector.GetHandle ("xamarinSetGCHandle:flags:")) != IntPtr.Zero;
 #endif
-		}
-
-		static unsafe int FindUserTypeIndex (MTClassMap* map, int lo, int hi, IntPtr cls)
-		{
-			if (hi >= lo) {
-				int mid = lo + (hi - lo) / 2;
-
-				if (map [mid].handle == cls)
-					return mid;
-
-				if ((long) map [mid].handle > (long) cls)
-					return FindUserTypeIndex (map, lo, mid - 1, cls);
-
-				return FindUserTypeIndex (map, mid + 1, hi, cls);
-			}
-
-			return -1;
 		}
 
 		public static void ConnectMethod (Type type, MethodInfo method, Selector selector)
@@ -2386,100 +2379,19 @@ namespace ObjCRuntime {
 			return (sbyte) (rv ? 1 : 0);
 		}
 
-		public static void TraceCaller (string message)
+		static IntPtr GetBlockForDelegate (object @delegate, RuntimeMethodHandle method_handle)
 		{
-			var frame = new global::System.Diagnostics.StackFrame (1);
-			var caller = frame.GetMethod ()?.Name ?? "Unknown";
-			NSLog ($"{message}: {caller}");
+			var method = (MethodInfo) MethodBase.GetMethodFromHandle (method_handle)!;
+			return BlockLiteral.GetBlockForDelegate (method, @delegate, Runtime.INVALID_TOKEN_REF, null);
 		}
 
-		[ThreadStatic]
-		static Stopwatch? lookupWatch;
-
-		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
+		unsafe static IntPtr GetBlockPointer (BlockLiteral block)
 		{
-			IntPtr rv;
-			var symb = Marshal.PtrToStringAuto (symbol);
-
-			if (lookupWatch is null)
-				lookupWatch = new Stopwatch ();
-
-			lookupWatch.Start ();
-			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4})", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id);
-
-			if (id == -1) {
-				rv = IntPtr.Zero;
-			} else if (assembly != IntPtr.Zero) {
-				rv = LookupUnmanagedFunctionInAssembly (assembly, symbol, id);
-				// FIXME -- consistency check
-				// var impl = LookupManagedFunctionImpl (id);
-				// if (impl != rv)
-				// 	Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5} using assembly lookup and 0x{6} using full app lookup", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"), impl.ToString ("x"));
-				// END FIXME -- remove consistency check once everything is working
-			} else {
-				rv = LookupManagedFunctionImpl (id);
-			}
-
-			lookupWatch.Stop ();
-
-			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5} ElapsedMilliseconds: {6}", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"), lookupWatch.ElapsedMilliseconds);
-
-			if (rv != IntPtr.Zero)
-				return rv;
-
-			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symb);;
+			var rv = BlockLiteral._Block_copy (&block);
+			block.Dispose ();
+			return rv;
 		}
 
-		delegate IntPtr LookupFunction (IntPtr symbol, int id);
-		static Dictionary<string, LookupFunction>? lookup_method_map;
-		static LookupFunction GetLookupMethod (IntPtr assembly_name)
-		{
-			var assembly = Marshal.PtrToStringAuto (assembly_name)!;
-			lock (lock_obj) {
-				if (lookup_method_map is null)
-					lookup_method_map = new Dictionary<string, LookupFunction> (StringEqualityComparer);
-				else if (lookup_method_map.TryGetValue (assembly, out var value))
-					return value;
-			}
-
-			Assembly? asm = null;
-			foreach (var a in AppDomain.CurrentDomain.GetAssemblies ()) {
-				if (a.GetName ().Name != assembly)
-					continue;
-				asm = a;
-				break;
-			}
-
-			if (asm is null)
-				throw ErrorHelper.CreateError (99, "Could not find the assembly '{0}' in the list of assemblies in the current AppDomain.", assembly);
-
-			var type = asm.GetType ("ObjCRuntime.__Registrar__", false);
-			if (type is null)
-				throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.Registrar' in the assembly '{0}'", assembly);
-
-			var method = type.GetMethod ("LookupUnmanagedFunction", BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
-			if (method is null)
-				throw ErrorHelper.CreateError (99, "Could not find the method 'LookupUnmanagedFunction' in the type 'ObjCRuntime.Registrar' in the assembly '{0}'", assembly);
-
-			var del = (LookupFunction) Delegate.CreateDelegate (typeof (LookupFunction), method);
-
-			lock (lock_obj)
-				lookup_method_map [assembly] = del;
-
-			return del;
-		}
-
-		static IntPtr LookupUnmanagedFunctionInAssembly (IntPtr assembly_name, IntPtr symbol, int id)
-		{
-			var del = GetLookupMethod (assembly_name);
-			return del (symbol, id);
-		}
-
-		static IntPtr LookupManagedFunctionImpl (int id)
-		{
-			// The static registrar will modify this function as needed.
-			return IntPtr.Zero;
-		}
 	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr> {

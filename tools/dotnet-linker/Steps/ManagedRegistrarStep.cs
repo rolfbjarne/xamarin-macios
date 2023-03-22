@@ -1256,7 +1256,7 @@ namespace Xamarin.Linker {
 		{
 			current_assembly = PlatformAssembly;
 
-			var method = GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "LookupManagedFunctionImpl").Resolve ();
+			var method = GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "LookupManagedFunctionImpl").Resolve ();
 			var table = Configuration.UnmanagedCallersMap.ToList ().OrderBy (v => v.Value.Id).ToList ();
 
 			Console.WriteLine ($"Creating table for {table.Count} entries YAAY");

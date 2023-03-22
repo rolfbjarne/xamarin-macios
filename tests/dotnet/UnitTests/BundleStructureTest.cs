@@ -345,7 +345,7 @@ namespace Xamarin.Tests {
 			var unexpectedFiles = allFiles.Except (expectedFiles).OrderBy (v => v).ToArray ();
 			var missingFiles = expectedFiles.Except (allFiles).OrderBy (v => v).ToArray ();
 
-#if false
+#if true
 			// Debug code to print out what we got
 			if (unexpectedFiles.Any () || missingFiles.Any ()) {
 				Console.WriteLine ($"All files in the bundle ({allFiles.Count ()})");

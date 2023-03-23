@@ -31,34 +31,130 @@ using Foundation;
 using Registrar;
 
 namespace ObjCRuntime {
-	// This class contains helper methods for the managed static registrar.
-	static class RegistrarHelper {
-		static Dictionary<string, LookupMethod> lookup_method_map;
-		static Dictionary<string, LookupType> lookup_type_map;
+	// The managed static registrar will make this interface public when needed.
+	interface IManagedRegistrar {
+		IntPtr LookupUnmanagedFunction (string? symbol, int id);
+		RuntimeTypeHandle LookupType (uint id);
+		void RegisterWrapperTypes (Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> type);
+	}
 
-		delegate IntPtr LookupMethod (IntPtr symbol, int id);
-		delegate Type LookupType (int id);
+	class MapInfo {
+		public IManagedRegistrar Registrar;
+		public bool RegisteredWrapperTypes;
+
+		public MapInfo (IManagedRegistrar registrar)
+		{
+			Registrar = registrar;
+		}
+	}
+
+	// This class contains helper methods for the managed static registrar.
+	// The managed static registrar will make it public when needed.
+	static class RegistrarHelper {
+#pragma warning disable 8618
+		static Dictionary<string, MapInfo> assembly_map;
+		static Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> wrapper_types;
+#pragma warning restore 8618
+
 
 		internal static void Initialize ()
 		{
-			lookup_method_map = new Dictionary<string, LookupFunction> (StringEqualityComparer);
-			lookup_type_map = new Dictionary<string, LookupFunction> (StringEqualityComparer);
+			assembly_map = new Dictionary<string, MapInfo> (Runtime.StringEqualityComparer);
+			wrapper_types = new Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> (Runtime.RuntimeTypeHandleEqualityComparer);
 		}
 
+		unsafe static IntPtr GetBlockPointer (BlockLiteral block)
+		{
+			var rv = BlockLiteral._Block_copy (&block);
+			block.Dispose ();
+			return rv;
+		}
+
+		static IntPtr GetBlockForDelegate (object @delegate, RuntimeMethodHandle method_handle)
+		{
+			var method = (MethodInfo) MethodBase.GetMethodFromHandle (method_handle)!;
+			return BlockLiteral.GetBlockForDelegate (method, @delegate, Runtime.INVALID_TOKEN_REF, null);
+		}
+
+
+		static MapInfo GetMapEntry (Assembly assembly)
+		{
+			return GetMapEntry (assembly.GetName ().Name!, assembly);
+		}
+
+		static MapInfo GetMapEntry (IntPtr assembly)
+		{
+			return GetMapEntry (Marshal.PtrToStringAuto (assembly)!, null);
+		}
+
+		static MapInfo GetMapEntry (string assemblyName, Assembly? assembly)
+		{
+			lock (assembly_map) {
+				if (!assembly_map.TryGetValue (assemblyName, out var mapEntry)) {
+					if (assembly is null)
+						assembly = GetAssembly (assemblyName);
+					var type = assembly.GetType ("ObjCRuntime.__Registrar__", false);
+					if (type is null)
+						throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'", assembly);
+
+					var registrar = (IManagedRegistrar) Activator.CreateInstance (type)!;
+					mapEntry = new MapInfo (registrar);
+					assembly_map [assemblyName] = mapEntry;
+				}
+				return mapEntry;
+			}
+		}
+
+		static Assembly GetAssembly (string assemblyName)
+		{
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies ()) {
+				if (assembly.GetName ().Name == assemblyName)
+					return assembly;
+			}
+
+			throw ErrorHelper.CreateError (99, "Could not find the assembly '{0}' in the current AppDomain", assemblyName);
+		}
+
+		internal static Type? FindProtocolWrapperType (Type type)
+		{
+			var typeHandle = type.TypeHandle;
+
+			lock (assembly_map) {
+				// First check if the type is already in our dictionary.
+				if (wrapper_types.TryGetValue (typeHandle, out var wrapperType))
+					return Type.GetTypeFromHandle (wrapperType);
+
+				// Not in our dictionary, get the map entry to see if we've already
+				// called RegisterWrapperTypes for this assembly,
+				var entry = GetMapEntry (type.Assembly);
+				if (!entry.RegisteredWrapperTypes) {
+					entry.Registrar.RegisterWrapperTypes (wrapper_types);
+					entry.RegisteredWrapperTypes = true;
+				}
+
+				// Return whatever's in the dictionary now.
+				if (wrapper_types.TryGetValue (typeHandle, out wrapperType))
+					return Type.GetTypeFromHandle (wrapperType);
+			}
+
+			return null;
+		}
+
+#if TRACE
 		[ThreadStatic]
 		static Stopwatch? lookupWatch;
+#endif
 
-		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
+		internal static IntPtr LookupUnmanagedFunction (IntPtr assembly, string? symbol, int id)
 		{
 			IntPtr rv;
-			var symb = Marshal.PtrToStringAuto (symbol);
 
 #if TRACE
 			if (lookupWatch is null)
 				lookupWatch = new Stopwatch ();
 
 			lookupWatch.Start ();
-			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4})", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id);
+			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4})", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol, symb, id);
 #endif
 
 			if (id == -1) {
@@ -72,61 +168,19 @@ namespace ObjCRuntime {
 #if TRACE
 			lookupWatch.Stop ();
 
-			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4}) => 0x{5} ElapsedMilliseconds: {6}", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol.ToString ("x"), symb, id, rv.ToString ("x"), lookupWatch.ElapsedMilliseconds);
+			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, {2}, {3}) => 0x{4} ElapsedMilliseconds: {5}", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol, id, rv.ToString ("x"), lookupWatch.ElapsedMilliseconds);
 #endif
 
 			if (rv != IntPtr.Zero)
 				return rv;
 
-			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symb);;
+			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symbol);
 		}
 
-		static T FindLookup<T> (IntPtr assemblyNamePtr, Assembly? assembly, string methodName, Dictionary<string, T> map) where T: delegate
+		static IntPtr LookupUnmanagedFunctionInAssembly (IntPtr assembly_name, string? symbol, int id)
 		{
-			string assemblyName;
-			if (assembly is not null) {
-				assemblyName = assembly.GetName ().Name;
-			} else {
-				assemblyName = Marshal.PtrToStringAuto (assemblyNamePtr)!;
-			}
-
-			lock (lock_obj) {
-				if (map.TryGetValue (assemblyName, out var value))
-					return value;
-			}
-
-			if (assembly is null) {
-				foreach (var a in AppDomain.CurrentDomain.GetAssemblies ()) {
-					if (a.GetName ().Name != assemblyName)
-						continue;
-					assembly = a;
-					break;
-				}
-			}
-
-			if (assembly is null)
-				throw ErrorHelper.CreateError (99, "Could not find the assembly '{0}' in the list of assemblies in the current AppDomain.", assembly);
-
-			var type = assembly.GetType ("ObjCRuntime.__Registrar__", false);
-			if (type is null)
-				throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.Registrar' in the assembly '{0}'", assembly);
-
-			var method = type.GetMethod (methodName, BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
-			if (method is null)
-				throw ErrorHelper.CreateError (99, "Could not find the method '{1}' in the type '{2}' in the assembly '{0}'", assembly, methodName, type.FullName);
-
-			var del = (T) Delegate.CreateDelegate (typeof (T), method);
-
-			lock (lock_obj)
-				map [assembly] = del;
-
-			return del;
-		}
-
-		static IntPtr LookupUnmanagedFunctionInAssembly (IntPtr assembly_name, IntPtr symbol, int id)
-		{
-			var del = FindLookupMethod<LookupMethod> (assembly_name, null, "LookupUnmanagedFunction", lookup_method_map);
-			return del (symbol, id);
+			var entry = GetMapEntry (assembly_name);
+			return entry.Registrar.LookupUnmanagedFunction (symbol, id);
 		}
 
 		static IntPtr LookupManagedFunctionImpl (int id)
@@ -135,12 +189,14 @@ namespace ObjCRuntime {
 			return IntPtr.Zero;
 		}
 
-		internal Type LookupRegisteredType (Assembly assembly, int id)
+		internal static Type LookupRegisteredType (Assembly assembly, uint id)
 		{
-			var del = FindLookup<LookupType> (IntPtr.Zero, assembly, "LookupType", lookup_type_map);
-			return del (id);
+			var entry = GetMapEntry (assembly);
+			var handle = entry.Registrar.LookupType (id);
+			return Type.GetTypeFromHandle (handle)!;
 		}
 
+		// helper functions for converting between native and managed objects
 		static NativeHandle ManagedArrayToNSArray (object array, bool retain)
 		{
 			if (array is null)

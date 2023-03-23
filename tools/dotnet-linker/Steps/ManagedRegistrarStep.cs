@@ -25,6 +25,12 @@ namespace Xamarin.Linker {
 		protected override string Name { get; } = "ManagedRegistrar";
 		protected override int ErrorCode { get; } = 2430;
 
+		bool UsesUnmanagedMethodLookups {
+			get {
+				return true; // FIXME: false if AOT (and not interpreter?)
+			}
+		}
+
 		List<Exception> exceptions = new List<Exception> ();
 		Application? app;
 
@@ -78,7 +84,7 @@ namespace Xamarin.Linker {
 		Dictionary<AssemblyDefinition, List<TrampolineInfo>> trampoline_map = new ();
 
 		// FIXME: mark the types and methods we use
-		TypeReference GetTypeReference (AssemblyDefinition assembly, string fullname, out TypeDefinition type)
+		TypeReference GetTypeReference (AssemblyDefinition assembly, string fullname, out TypeDefinition type, bool ensurePublic = false)
 		{
 			if (!type_map.TryGetValue (assembly, out var map))
 				type_map.Add (assembly, map = new Dictionary<string, (TypeDefinition, TypeReference)> ());
@@ -87,6 +93,8 @@ namespace Xamarin.Linker {
 				var td = assembly.MainModule.Types.SingleOrDefault (v => v.FullName == fullname);
 				if (td is null)
 					throw new InvalidOperationException ($"Unable to find the type '{fullname}' in {assembly.Name.Name}");
+				if (ensurePublic)
+					td.IsPublic = true;
 				var tr = CurrentAssembly.MainModule.ImportReference (td);
 				map [fullname] = tuple = new (td, tr);
 			}
@@ -172,6 +180,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		TypeReference System_UInt32 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.UInt32", out var _);
+			}
+		}
+
 		TypeReference System_IntPtr {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.IntPtr", out var _);
@@ -205,6 +219,18 @@ namespace Xamarin.Linker {
 		TypeReference System_Void {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Void", out var _);
+			}
+		}
+
+		TypeReference System_RuntimeTypeHandle {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.RuntimeTypeHandle", out var _);
+			}
+		}
+
+		TypeReference System_Collections_Generic_Dictionary2 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Collections.Generic.Dictionary`2", out var _);
 			}
 		}
 
@@ -244,6 +270,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		TypeReference ObjCRuntime_IManagedRegistrar {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.IManagedRegistrar", out var _, ensurePublic: true);
+			}
+		}
+
 		TypeReference ObjCRuntime_RegistrarHelper {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.RegistrarHelper", out var _);
@@ -274,6 +306,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		MethodReference System_Object__ctor {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Object", ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
 		MethodReference Nullable_HasValue {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_HasValue", (v) =>
@@ -299,6 +337,16 @@ namespace Xamarin.Linker {
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		MethodReference Dictionary2_Add {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Collections_Generic_Dictionary2, "Add", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
 						&& !v.HasGenericParameters);
 			}
 		}
@@ -591,6 +639,39 @@ namespace Xamarin.Linker {
 						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
 						&& !v.HasGenericParameters
 						, ensurePublic: true);
+			}
+		}
+
+		MethodReference IManagedRegistrar_LookupUnmanagedFunction {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "LookupUnmanagedFunction", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& v.Parameters [1].ParameterType.Is ("System", "Int32")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+
+		MethodReference IManagedRegistrar_LookupType {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "LookupType", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "UInt32")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+
+		MethodReference IManagedRegistrar_RegisterWrapperTypes {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "RegisterWrapperTypes", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 1
+						// && v.Parameters [0].ParameterType is GenericInstanceType git && git.GetElementType ().Is ("System.Collections.Generic", "Dictionary`2")
+						&& !v.HasGenericParameters);
 			}
 		}
 
@@ -1017,8 +1098,6 @@ namespace Xamarin.Linker {
 
 			RewriteRuntimeLookupManagedFunction ();
 
-			// PlatformAssembly.Write ("/Users/rolf/Microsoft.MacCatalyst.dll");
-			
 			if (exceptions is null)
 				return;
 			var warnings = exceptions.Where (v => (v as ProductException)?.Error == false).ToArray ();
@@ -1027,7 +1106,6 @@ namespace Xamarin.Linker {
 
 			if (exceptions.Count == 1)
 				throw exceptions [0];
-			exceptions.Add (new Exception ($"Got {exceptions.Where (v => (v as ProductException)?.Error == true).Count ()} errors (of {exceptions.Count} exceptions) (HOORAY)"));
 			throw new AggregateException (exceptions);
 		}
 
@@ -1094,11 +1172,10 @@ namespace Xamarin.Linker {
 			if (sorted.Count == 0)
 				return;
 
-			var td = new TypeDefinition ("ObjCRuntime", "__Registrar__", TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit);
+			var td = new TypeDefinition ("ObjCRuntime", "__Registrar__", TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit);
 			td.BaseType = System_Object;
+			td.Interfaces.Add (new InterfaceImplementation (ObjCRuntime_IManagedRegistrar));
 			CurrentAssembly.MainModule.Types.Add (td);
-
-			Console.WriteLine ($"GenerateLookupMethods assembly: {CurrentAssembly.FullName}");
 
 			//
 			// The callback methods themselves are all public, and thus accessible from anywhere inside the assembly even if the containing type is not public, as long as the containing type is not nested.
@@ -1127,10 +1204,88 @@ namespace Xamarin.Linker {
 				}
 			}
 
-			GenerateLookupMethods (td, sorted);
+			var defaultCtor = td.AddMethod (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, System_Void);
+			defaultCtor.CreateBody (out var il);
+			il.Emit (OpCodes.Ldarg_0);
+			il.Emit (OpCodes.Call, System_Object__ctor);
+			il.Emit (OpCodes.Ret);
+
+			GenerateLookupUnmanagedFunction (td, sorted);
+			GenerateLookupType (td);
+			GenerateRegisterWrapperTypes (td);
 		}
 
-		void GenerateLookupMethods (TypeDefinition type, IList<TrampolineInfo> trampolineInfos)
+		void GenerateLookupType (TypeDefinition type)
+		{
+			var method = type.AddMethod ("LookupType", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_RuntimeTypeHandle);
+			method.AddParameter ("id", System_UInt32);
+			method.Overrides.Add (IManagedRegistrar_LookupType);
+			var body = method.CreateBody (out var il);
+
+			// switch (id) {
+			// case 0: return <ldtoken TYPE1>;
+			// case 1: return <ldtoken TYPE2>;
+			// }
+
+			var types = new List<TypeReference> ();
+			types.AddRange (StaticRegistrar.Types.Select (v => v.Value.Type));
+			foreach (var st in StaticRegistrar.SkippedTypes) {
+				if (!types.Contains (st.Skipped))
+					types.Add (st.Skipped);
+				if (!types.Contains (st.Actual.Type))
+					types.Add (st.Actual.Type);
+			}
+			types.RemoveAll (v => v.Module.Assembly != current_assembly);
+			var targets = new Instruction [types.Count];
+
+			for (var i = 0; i < targets.Length; i++) {
+				targets [i] = Instruction.Create (OpCodes.Ldtoken, types [i]);
+				Configuration.RegisteredTypesMap.Add (types [i].Resolve (), (uint) i);
+			}
+
+			il.Emit (OpCodes.Ldarg_1);
+			il.Emit (OpCodes.Switch, targets);
+			for (var i = 0; i < targets.Length; i++) {
+				il.Append (targets [i]);
+				il.Emit (OpCodes.Ret);
+			}
+
+			// return default (RuntimeTypeHandle)
+			var temporary = body.AddVariable (System_RuntimeTypeHandle);
+			il.Emit (OpCodes.Ldloca, temporary);
+			il.Emit (OpCodes.Initobj, System_RuntimeTypeHandle);
+			il.Emit (OpCodes.Ldloc, temporary);
+			il.Emit (OpCodes.Ret);
+		}
+
+		void GenerateRegisterWrapperTypes (TypeDefinition type)
+		{
+			var method = type.AddMethod ("RegisterWrapperTypes", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_Void);
+			var git = new GenericInstanceType (System_Collections_Generic_Dictionary2);
+			git.GenericArguments.Add (System_RuntimeTypeHandle);
+			git.GenericArguments.Add (System_RuntimeTypeHandle);
+			method.AddParameter ("type", git);
+			method.Overrides.Add (IManagedRegistrar_RegisterWrapperTypes);
+			method.CreateBody (out var il);
+
+			var addMethodReference = CreateMethodReferenceOnGenericType (System_Collections_Generic_Dictionary2, Dictionary2_Add, System_RuntimeTypeHandle, System_RuntimeTypeHandle);
+			var currentTypes = StaticRegistrar.Types.Where (v => v.Value.Type.Resolve ().Module.Assembly == current_assembly);
+			foreach (var ct in currentTypes) {
+				if (!ct.Value.IsProtocol)
+					continue;
+				if (ct.Value.ProtocolWrapperType is null)
+					continue;
+
+				il.Emit (OpCodes.Ldarg_1);
+				il.Emit (OpCodes.Ldtoken, type.Module.ImportReference (ct.Key));
+				il.Emit (OpCodes.Ldtoken, type.Module.ImportReference (ct.Value.ProtocolWrapperType));
+				il.Emit (OpCodes.Call, addMethodReference);
+			}
+
+			il.Emit (OpCodes.Ret);
+		}
+
+		void GenerateLookupUnmanagedFunction (TypeDefinition type, IList<TrampolineInfo> trampolineInfos)
 		{
 			Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items");
 			// All the methods in a given assembly will have consecutive IDs (but might not start at 0).
@@ -1139,10 +1294,20 @@ namespace Xamarin.Linker {
 
 			const int methodsPerLevel = 10;
 			var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
-			GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1);
+			GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1, out var md);
+
+			var method = type.AddMethod ("LookupUnmanagedFunction", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_IntPtr);
+			method.AddParameter ("symbol", System_String);
+			method.AddParameter ("id", System_Int32);
+			method.Overrides.Add (IManagedRegistrar_LookupUnmanagedFunction);
+			method.CreateBody (out var il);
+			il.Emit (OpCodes.Ldarg_1);
+			il.Emit (OpCodes.Ldarg_2);
+			il.Emit (OpCodes.Call, md);
+			il.Emit (OpCodes.Ret);
 		}
 
-		MethodDefinition GenerateLookupMethods (TypeDefinition type, IList<TrampolineInfo> trampolineInfos, int methodsPerLevel, int level, int levels, int startIndex, int endIndex)
+		MethodDefinition GenerateLookupMethods (TypeDefinition type, IList<TrampolineInfo> trampolineInfos, int methodsPerLevel, int level, int levels, int startIndex, int endIndex, out MethodDefinition method)
 		{
 			Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items, methodsPerLevel: {methodsPerLevel}, level: {level}, levels: {levels}, startIndex: {startIndex}, endIndex: {endIndex})");
 
@@ -1150,12 +1315,21 @@ namespace Xamarin.Linker {
 				throw new InvalidOperationException ($"Huh 3? startIndex: {startIndex} endIndex: {endIndex}");
 
 			var startId = trampolineInfos [startIndex].Id;
-			var name = level == 1 ? "LookupUnmanagedFunction" : $"LookupUnmanagedFunction_{level}_{levels}__{startIndex}_{endIndex}__";
-			var method = type.AddMethod (name, MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, System_IntPtr);
+			var name = level == 1 ? "LookupUnmanagedFunctionImpl" : $"LookupUnmanagedFunction_{level}_{levels}__{startIndex}_{endIndex}__";
+			method = type.AddMethod (name, MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_IntPtr);
 			method.ReturnType = System_IntPtr; // shouldn't be necessary???
-			method.AddParameter ("symbol", System_IntPtr);
+			method.AddParameter ("symbol", System_String);
 			method.AddParameter ("id", System_Int32);
 			method.CreateBody (out var il);
+
+			if (!UsesUnmanagedMethodLookups) {
+				// The app is AOT-compiled, and the generated registrar code will call the
+				// UnmanagedCallersOnly method directly using a native symbol instead of a dynamic lookup.
+				il.Emit (OpCodes.Ldc_I4_M1);
+				il.Emit (OpCodes.Conv_I);
+				il.Emit (OpCodes.Ret);
+				return method;
+			}
 
 			if (level == levels) {
 				// This is the leaf method where we do the actual lookup.
@@ -1218,7 +1392,7 @@ namespace Xamarin.Linker {
 						var subEndIndex = subStartIndex + (chunkSize)  - 1;
 						if (subEndIndex > endIndex)
 							subEndIndex = endIndex;
-						var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex);
+						var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex, out _);
 						lookupMethods [i] = md;
 						targets [i] = Instruction.Create (OpCodes.Ldarg_0);
 					} catch (Exception e) {
@@ -1268,7 +1442,7 @@ namespace Xamarin.Linker {
 			var indirectLookup = true;
 			for (var i = 0; i < secondLevelMethodCount; i++) {
 				var secondLevelMethod = method.DeclaringType.AddMethod ("LookupManagedFunctionImpl" + i.ToString (), MethodAttributes.Static | MethodAttributes.Private, method.ReturnType);
-				secondLevelMethod.Parameters.Add (new ParameterDefinition ("index", ParameterAttributes.None, method.Parameters [0].ParameterType));
+				secondLevelMethod.AddParameter ("index", method.Parameters [0].ParameterType);
 				secondLevelMethods [i] = secondLevelMethod;
 
 				var body = new MethodBody (secondLevelMethod);

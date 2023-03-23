@@ -2795,7 +2795,7 @@ namespace Registrar {
 			public ObjCType Protocol;
 		}
 
-		class SkippedType {
+		public class SkippedType {
 			public TypeReference Skipped;
 			public ObjCType Actual;
 			public uint SkippedTokenReference;
@@ -2806,6 +2806,10 @@ namespace Registrar {
 		{
 			base.OnSkipType (type, registered_type);
 			skipped_types.Add (new SkippedType { Skipped = type, Actual = registered_type });
+		}
+
+		public List<SkippedType> SkippedTypes {
+			get => skipped_types;
 		}
 
 		public string GetInitializationMethodName (string single_assembly)
@@ -2941,8 +2945,7 @@ namespace Registrar {
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
 				}
 
-
-				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null && App.Registrar != RegistrarMode.ManagedStatic) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
 						continue;
 					if (!TryCreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef, out var protocol_wrapper_type_ref, exceptions))
@@ -4042,9 +4045,6 @@ namespace Registrar {
 			setup_return.Indentation = indent;
 			cleanup.Indentation = indent;
 
-			if (!TryCreateTokenReference (method.Method, TokenType.Method, out var token_ref, exceptions))
-				return;
-
 			// A comment describing the managed signature
 			if (trace) {
 				nslog_start.Indentation = sb.Indentation;
@@ -4237,6 +4237,9 @@ namespace Registrar {
 				return;
 			}
 #endif
+
+			if (!TryCreateTokenReference (method.Method, TokenType.Method, out var token_ref, exceptions))
+				return;
 
 			SpecializePrepareParameters (sb, method, num_arg, descriptiveMethodName, exceptions);
 
@@ -5107,25 +5110,31 @@ namespace Registrar {
 
 		bool TryCreateFullTokenReference (MemberReference member, out uint token_ref, out Exception exception)
 		{
-			token_ref = (full_token_reference_count++ << 1) + 1;
 			switch (member.MetadataToken.TokenType) {
 			case TokenType.TypeDef:
 			case TokenType.Method:
 				break; // OK
 			default:
 				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"unsupported tokentype ({member.MetadataToken.TokenType}) for {member.FullName}");
+				token_ref = INVALID_TOKEN_REF;
 				return false;
 			}
-			var assemblyIndex = registered_assemblies.FindIndex (v => v.Assembly == member.Module.Assembly);
-			if (assemblyIndex == -1) {
-				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"Could not find {member.Module.Assembly.Name.Name} in the list of registered assemblies when processing {member.FullName}:\n\t{string.Join ("\n\t", registered_assemblies.Select (v => v.Assembly.Name.Name))}");
-				return false;
-			}
-			var assemblyName = registered_assemblies [assemblyIndex].Name;
 			var moduleToken = member.Module.MetadataToken.ToUInt32 ();
 			var moduleName = member.Module.Name;
 			var memberToken = member.MetadataToken.ToUInt32 ();
 			var memberName = member.FullName;
+			return WriteFullTokenReference (member.Module.Assembly, moduleToken, moduleName, memberToken, memberName, out token_ref, out exception);
+		}
+
+		bool WriteFullTokenReference (AssemblyDefinition assembly, uint moduleToken, string moduleName, uint memberToken, string memberName, out uint token_ref, out Exception exception)
+		{
+			token_ref = (full_token_reference_count++ << 1) + 1;
+			var assemblyIndex = registered_assemblies.FindIndex (v => v.Assembly == assembly);
+			if (assemblyIndex == -1) {
+				exception = ErrorHelper.CreateError (99, Errors.MX0099, $"Could not find {assembly.Name.Name} in the list of registered assemblies when processing {memberName}:\n\t{string.Join ("\n\t", registered_assemblies.Select (v => v.Assembly.Name.Name))}");
+				return false;
+			}
+			var assemblyName = registered_assemblies [assemblyIndex].Name;
 			exception = null;
 			full_token_references.Append ($"\t\t{{ /* #{full_token_reference_count} = 0x{token_ref:X} */ {assemblyIndex} /* {assemblyName} */, 0x{moduleToken:X} /* {moduleName} */, 0x{memberToken:X} /* {memberName} */ }},\n");
 			return true;
@@ -5155,6 +5164,28 @@ namespace Registrar {
 		bool TryCreateTokenReferenceUncached (MemberReference member, TokenType implied_type, out uint token_ref, out Exception exception)
 		{
 			var token = member.MetadataToken;
+
+#if NET
+			if (App.Registrar == RegistrarMode.ManagedStatic) {
+				if (implied_type == TokenType.TypeDef && member is TypeDefinition td) {
+					if (App.Configuration.RegisteredTypesMap.TryGetValue (td, out var id)) {
+						id = id | (uint) TokenType.TypeDef;
+						return WriteFullTokenReference (member.Module.Assembly, INVALID_TOKEN_REF, member.Module.Name, id, member.FullName, out token_ref, out exception);
+					}
+					throw ErrorHelper.CreateError (99, "Can't create a token reference to an unregistered type when using the managed static registrar.");
+					token_ref = INVALID_TOKEN_REF;
+					return false;
+				}
+				if (implied_type == TokenType.Method) {
+					throw ErrorHelper.CreateError (99, "Can't create a token reference to a method when using the managed static registrar.");
+					token_ref = INVALID_TOKEN_REF;
+					return false;
+				}
+				throw ErrorHelper.CreateError (99, "Can't create a token reference to a token type {0} when using the managed static registrar.", implied_type.ToString ());
+				token_ref = INVALID_TOKEN_REF;
+				return false;				
+			}
+#endif
 
 			/* We can't create small token references if we're in partial mode, because we may have multiple arrays of registered assemblies, and no way of saying which one we refer to with the assembly index */
 			if (IsSingleAssembly)

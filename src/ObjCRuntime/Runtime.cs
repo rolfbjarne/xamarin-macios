@@ -49,6 +49,7 @@ namespace ObjCRuntime {
 		internal static IntPtrEqualityComparer IntPtrEqualityComparer;
 		internal static TypeEqualityComparer TypeEqualityComparer;
 		internal static StringEqualityComparer StringEqualityComparer;
+		internal static RuntimeTypeHandleEqualityComparer RuntimeTypeHandleEqualityComparer;
 
 		internal static DynamicRegistrar Registrar;
 #pragma warning restore 8618
@@ -293,6 +294,7 @@ namespace ObjCRuntime {
 			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
 			TypeEqualityComparer = new TypeEqualityComparer ();
 			StringEqualityComparer = new StringEqualityComparer ();
+			RuntimeTypeHandleEqualityComparer = new RuntimeTypeHandleEqualityComparer ();
 
 			Runtime.options = options;
 			delegates = new List<object> ();
@@ -1828,14 +1830,20 @@ namespace ObjCRuntime {
 				return null;
 
 			// Check if the static registrar knows about this protocol
-			unsafe {
-				var map = options->RegistrationMap;
-				if (map is not null) {
-					var token = Class.GetTokenReference (type, throw_exception: false);
-					if (token != INVALID_TOKEN_REF) {
-						var wrapper_token = xamarin_find_protocol_wrapper_type (token);
-						if (wrapper_token != INVALID_TOKEN_REF)
-							return Class.ResolveTypeTokenReference (wrapper_token);
+			if (IsManagedStaticRegistrar) {
+				var rv = RegistrarHelper.FindProtocolWrapperType (type);
+				if (rv is not null)
+					return rv;
+			} else {
+				unsafe {
+					var map = options->RegistrationMap;
+					if (map is not null) {
+						var token = Class.GetTokenReference (type, throw_exception: false);
+						if (token != INVALID_TOKEN_REF) {
+							var wrapper_token = xamarin_find_protocol_wrapper_type (token);
+							if (wrapper_token != INVALID_TOKEN_REF)
+								return Class.ResolveTypeTokenReference (wrapper_token);
+						}
 					}
 				}
 			}
@@ -2379,25 +2387,16 @@ namespace ObjCRuntime {
 			return (sbyte) (rv ? 1 : 0);
 		}
 
-		static IntPtr GetBlockForDelegate (object @delegate, RuntimeMethodHandle method_handle)
+		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
 		{
-			var method = (MethodInfo) MethodBase.GetMethodFromHandle (method_handle)!;
-			return BlockLiteral.GetBlockForDelegate (method, @delegate, Runtime.INVALID_TOKEN_REF, null);
+			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id);
 		}
-
-		unsafe static IntPtr GetBlockPointer (BlockLiteral block)
-		{
-			var rv = BlockLiteral._Block_copy (&block);
-			block.Dispose ();
-			return rv;
-		}
-
 	}
 
 	internal class IntPtrEqualityComparer : IEqualityComparer<IntPtr> {
 		public bool Equals (IntPtr x, IntPtr y)
 		{
-			return x == y;
+			return x.Equals (y);
 		}
 		public int GetHashCode (IntPtr obj)
 		{
@@ -2427,6 +2426,17 @@ namespace ObjCRuntime {
 		{
 			if (obj is null)
 				return 0;
+			return obj.GetHashCode ();
+		}
+	}
+
+	internal class RuntimeTypeHandleEqualityComparer : IEqualityComparer<RuntimeTypeHandle> {
+		public bool Equals (RuntimeTypeHandle x, RuntimeTypeHandle y)
+		{
+			return x.Equals (y);
+		}
+		public int GetHashCode (RuntimeTypeHandle obj)
+		{
 			return obj.GetHashCode ();
 		}
 	}

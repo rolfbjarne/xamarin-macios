@@ -37,8 +37,11 @@ install-local:: $(DOTNET_TARGETS)
 
 vscode:
 	sed -i '' s_/dotnet-sdk-[0-9a-zA-Z.-]*/_/dotnet-sdk-$(DOTNET_VERSION)/_ .vscode/launch.json
+	sed -i '' s_/Debug/_/ManagedStaticRegistrar/_ .vscode/launch.json
+	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/sdk/.*/Sdks/Microsoft.NET.ILLink.Tasks/tools/$(DOTNET_TFM)/illink.dll_$(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/sdk/*/Sdks/Microsoft.NET.ILLink.Tasks/tools/$(DOTNET_TFM)/illink.dll))_ .vscode/launch.json
+	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/packs/Microsoft.NETCore.App.Runtime.Mono.maccatalyst-x64/.*/runtimes/maccatalyst-x64/lib/$(DOTNET_TFM)/_$(dir $(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/packs/Microsoft.NETCore.App.Runtime.Mono.maccatalyst-x64/*/runtimes/maccatalyst-x64/lib/$(DOTNET_TFM)/System.AppContext.dll)))_ .vscode/launch.json
 	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/packs/Microsoft.MacCatalyst.Sdk/.*/tools/dotnet-linker/dotnet-linker.dll_$(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/packs/Microsoft.MacCatalyst.Sdk/*-*/tools/dotnet-linker/dotnet-linker.dll))_ .vscode/launch.json
 	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/packs/Microsoft.iOS.Sdk/.*/tools/dotnet-linker/dotnet-linker.dll_$(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/packs/Microsoft.iOS.Sdk/*-*/tools/dotnet-linker/dotnet-linker.dll))_ .vscode/launch.json
 	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/packs/Microsoft.tvOS.Sdk/.*/tools/dotnet-linker/dotnet-linker.dll_$(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/packs/Microsoft.tvOS.Sdk/*-*/tools/dotnet-linker/dotnet-linker.dll))_ .vscode/launch.json
 	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/packs/Microsoft.macOS.Sdk/.*/tools/dotnet-linker/dotnet-linker.dll_$(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/packs/Microsoft.macOS.Sdk/*-*/tools/dotnet-linker/dotnet-linker.dll))_ .vscode/launch.json
-	PATH=$(DOTNET_DIR):$(PATH) "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" .
+	#PATH=$(DOTNET_DIR):$(PATH) "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" .

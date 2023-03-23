@@ -72,6 +72,7 @@ namespace Xamarin.Linker {
 		}
 
 		public Dictionary<MethodDefinition, UnmanagedCallersEntry> UnmanagedCallersMap = new ();
+		public Dictionary<TypeDefinition, uint> RegisteredTypesMap = new Dictionary<TypeDefinition, uint> ();
 
 		internal PInvokeWrapperGenerator PInvokeWrapperGenerationState;
 

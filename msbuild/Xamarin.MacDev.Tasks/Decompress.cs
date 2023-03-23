@@ -85,9 +85,13 @@ namespace Xamarin.MacDev {
 		/// <returns></returns>
 		public static bool TryDecompress (TaskLoggingHelper log, string zip, string resource, string decompressionDir, List<string> createdFiles, [NotNullWhen (true)] out string? decompressedResource)
 		{
-			decompressedResource = Path.Combine (decompressionDir, resource);
+			if (string.IsNullOrEmpty (resource)) {
+				decompressedResource = Path.Combine (decompressionDir, Path.GetFileName (zip));
+			} else {
+				decompressedResource = Path.Combine (decompressionDir, resource);
+			}
 
-			var stampFile = decompressedResource.TrimEnd ('\\', '/') + ".stamp";
+			var stampFile = Path.Combine (decompressionDir, Path.GetFileName (zip) + ".stamp");
 
 			if (FileCopier.IsUptodate (zip, stampFile, XamarinTask.GetFileCopierReportErrorCallback (log), XamarinTask.GetFileCopierLogCallback (log), check_stamp: false))
 				return true;
@@ -194,7 +198,7 @@ namespace Xamarin.MacDev {
 				}
 
 				var isDir = entryPath [entryPath.Length - 1] == zipDirectorySeparator;
-				var targetPath = Path.Combine (decompressionDir, entryPath);
+				var targetPath = Path.Combine (decompressionDir, entryPath.Replace (zipDirectorySeparator, Path.DirectorySeparatorChar));
 				if (isDir) {
 					Directory.CreateDirectory (targetPath);
 				} else {

@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 
+using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
 using Xamarin.Bundler;
@@ -86,7 +87,7 @@ namespace Xamarin.MacDev {
 		{
 			decompressedResource = Path.Combine (decompressionDir, resource);
 
-			var stampFile = decompressedResource + ".stamp";
+			var stampFile = decompressedResource.TrimEnd ('\\', '/') + ".stamp";
 
 			if (FileCopier.IsUptodate (zip, stampFile, XamarinTask.GetFileCopierReportErrorCallback (log), XamarinTask.GetFileCopierLogCallback (log), check_stamp: false))
 				return true;
@@ -117,6 +118,8 @@ namespace Xamarin.MacDev {
 				createdFiles.Add (decompressedResource);
 			} else if (Directory.Exists (decompressedResource)) {
 				createdFiles.AddRange (Directory.GetFiles (decompressedResource, "*", SearchOption.AllDirectories));
+			} else {
+				log.LogWarning ("The extracted file or directory '{0}' could not be found." /* The extracted file or directory '{0}' could not be found. */, decompressedResource);
 			}
 
 			return rv;
@@ -168,7 +171,9 @@ namespace Xamarin.MacDev {
 				if (entryPath.Length == 0)
 					continue;
 
-				if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
+				if (string.IsNullOrEmpty (resource)) {
+					// we want everything
+				} else if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
 					// yep, we want this entry
 				} else if (entryPath == resource) {
 					// we want this one too
@@ -197,6 +202,7 @@ namespace Xamarin.MacDev {
 					using var streamWrite = File.OpenWrite (targetPath);
 					using var streamRead = entry.Open ();
 					streamRead.CopyTo (streamWrite);
+					log.LogMessage (MessageImportance.Low, "Extracted {0} into {1}", entryPath, targetPath);
 				}
 			}
 

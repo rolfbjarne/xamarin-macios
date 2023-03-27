@@ -118,9 +118,7 @@ namespace Xamarin.MacDev {
 				createdFiles.Add (stampFile);
 			}
 
-			if (File.Exists (decompressedResource)) {
-				createdFiles.Add (decompressedResource);
-			} else if (Directory.Exists (decompressedResource)) {
+			if (Directory.Exists (decompressionDir)) {
 				createdFiles.AddRange (Directory.GetFiles (decompressedResource, "*", SearchOption.AllDirectories));
 			} else {
 				log.LogWarning ("The extracted file or directory '{0}' could not be found." /* The extracted file or directory '{0}' could not be found. */, decompressedResource);

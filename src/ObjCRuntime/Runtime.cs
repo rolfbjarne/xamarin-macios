@@ -6,6 +6,8 @@
 //
 // Copyright 2013 Xamarin Inc.
 
+// #define TRACE
+
 #nullable enable
 
 using System;
@@ -1287,6 +1289,10 @@ namespace ObjCRuntime {
 		{
 			Type type = Class.Lookup (klass);
 
+#if TRACE
+			NSLog ($"ConstructNSObject (0x{ptr.ToString ("x")}, 0x{klass.ToString ("x")} = {Marshal.PtrToStringAuto (Class.class_getName (klass))} = {type?.FullName}, {missingCtorResolution})");
+#endif
+
 			if (type is not null) {
 				return ConstructNSObject<NSObject> (ptr, type, missingCtorResolution);
 			} else {
@@ -1473,12 +1479,19 @@ namespace ObjCRuntime {
 			lock (lock_obj) {
 				if (object_map.TryGetValue (ptr, out var reference)) {
 					var target = (NSObject?) reference.Target;
-					if (target is null)
+					if (target is null) {
+#if TRACE
+						NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => null target");
+#endif
 						return null;
+					}
 
 					if (target.InFinalizerQueue) {
 						if (!evenInFinalizerQueue) {
 							// Don't return objects that's been queued for finalization unless requested to.
+#if TRACE
+							NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => in finalizer queue");
+#endif
 							return null;
 						}
 
@@ -1490,10 +1503,16 @@ namespace ObjCRuntime {
 							// the existing managed wrapper (which is the one we just found).
 							// Returning null here will cause us to re-create the managed wrapper.
 							// See bug #37670 for a real-world scenario.
+#if TRACE
+							NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => special case");
+#endif
 							return null;
 						}
 					}
 
+#if TRACE
+					NSLog ($"TryGetNSObject (0x{ptr.ToString ("x")}, {evenInFinalizerQueue}) => {target.GetType ().FullName}");
+#endif
 					return target;
 				}
 			}
@@ -1519,6 +1538,9 @@ namespace ObjCRuntime {
 				return null;
 
 			var o = TryGetNSObject (ptr, evenInFinalizerQueue);
+#if TRACE
+			NSLog ($"GetNSObject (0x{ptr.ToString ("x")}, {missingCtorResolution}, {evenInFinalizerQueue}) Found something: {(o is not null)} -> {o?.GetType ()}");
+#endif
 
 			if (o is not null)
 				return o;
@@ -1728,7 +1750,7 @@ namespace ObjCRuntime {
 				// found an existing object, but with an incompatible type.
 				if (!interface_check_type.IsInterface) {
 					// if the target type is another class, there's nothing we can do.
-					throw new InvalidCastException ($"Unable to cast object of type '{o.GetType ().FullName}' to type '{target_type.FullName}'.");
+					throw new InvalidCastException ($"Unable to cast object of type '{o.GetType ().FullName}' to type '{target_type.FullName}'. Pointer: 0x{ptr.ToString ("x")}");
 				}
 			}
 
@@ -1785,7 +1807,7 @@ namespace ObjCRuntime {
 				// found an existing object, but with an incompatible type.
 				if (!typeof (T).IsInterface && typeof (NSObject).IsAssignableFrom (typeof (T))) {
 					// if the target type is another NSObject subclass, there's nothing we can do.
-					throw new InvalidCastException ($"Unable to cast object of type '{o.GetType ().FullName}' to type '{typeof (T).FullName}'.");
+					throw new InvalidCastException ($"Unable to cast object of type '{o.GetType ().FullName}' to type '{typeof (T).FullName}'. Pointer: 0x{ptr.ToString ("x")}. Object: {o}");
 				}
 			}
 
@@ -1927,18 +1949,37 @@ namespace ObjCRuntime {
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		static bool SlowIsUserType (IntPtr cls)
 		{
+
+#if TRACE
+			Runtime.NSLog ($"SlowIsUserType (0x{@cls:X} = {Marshal.PtrToStringAuto (Class.class_getName (@cls))})");
+#endif
 			unsafe {
 				if (options->RegistrationMap is not null && options->RegistrationMap->map_count > 0) {
 					var map = options->RegistrationMap->map;
 					var idx = Class.FindMapIndex (map, 0, options->RegistrationMap->map_count - 1, cls);
-					if (idx >= 0)
-						return (map [idx].flags & MTTypeFlags.UserType) == MTTypeFlags.UserType;
+#if TRACE
+					Runtime.NSLog ($"SlowIsUserType (0x{@cls:X} = {Marshal.PtrToStringAuto (Class.class_getName (@cls))}) found map index {idx}");
+#endif
+					if (idx >= 0) {
+						var rv = (map [idx].flags & MTTypeFlags.UserType) == MTTypeFlags.UserType;
+#if TRACE
+						Runtime.NSLog ($"SlowIsUserType (0x{@cls:X} = {Marshal.PtrToStringAuto (Class.class_getName (@cls))}) found map index {idx}: {rv}");
+#endif
+						return rv;
+					}
 					// If using the partial static registrar, we need to continue
 					// If full static registrar, we can return false, as long as the dynamic registrar is not supported
-					if (!DynamicRegistrationSupported && (options->Flags & InitializationFlags.IsPartialStaticRegistrar) != InitializationFlags.IsPartialStaticRegistrar)
+					if (!DynamicRegistrationSupported && (options->Flags & InitializationFlags.IsPartialStaticRegistrar) != InitializationFlags.IsPartialStaticRegistrar) {
+#if TRACE
+						Runtime.NSLog ($"SlowIsUserType (0x{@cls:X} = {Marshal.PtrToStringAuto (Class.class_getName (@cls))}) !DRS");
+#endif
 						return false;
+					}
 				}
 			}
+#if TRACE
+			Runtime.NSLog ($"SlowIsUserType (0x{@cls:X} = {Marshal.PtrToStringAuto (Class.class_getName (@cls))}) end");
+#endif
 #if __MACOS__
 			return Class.class_getInstanceMethod (cls, selSetGCHandle) != IntPtr.Zero;
 #else
@@ -2167,8 +2208,17 @@ namespace ObjCRuntime {
 		{
 			var closed_type = instance.GetType ()!;
 			var open_type = Type.GetTypeFromHandle (open_type_handle)!;
+#if TRACE
+			Runtime.NSLog ($"FindClosedMethod ({instance.GetType ()}, 0x{open_type_handle.Value.ToString ("x")} = {open_type}, {open_method_handle} = 0x{open_method_handle.Value.ToString ("x")})");
+#endif
 			closed_type = FindClosedTypeInHierarchy (open_type, closed_type)!;
+#if TRACE
+			Runtime.NSLog ($"FindClosedMethod ({instance.GetType ()}, 0x{open_type_handle.Value.ToString ("x")} = {open_type}, {open_method_handle} = 0x{open_method_handle.Value.ToString ("x")}) closed_type: {closed_type}");
+#endif
 			var closedMethod = MethodBase.GetMethodFromHandle (open_method_handle, closed_type.TypeHandle)!;
+#if TRACE
+			Runtime.NSLog ($"FindClosedMethod ({instance.GetType ()}, 0x{open_type_handle.Value.ToString ("x")} = {open_type}, {open_method_handle} = 0x{open_method_handle.Value.ToString ("x")}) closed_type: {closed_type} closed method: {closedMethod}");
+#endif
 			return (MethodInfo) closedMethod;
 		}
 
@@ -2189,10 +2239,25 @@ namespace ObjCRuntime {
 		{
 			var closed_type = instance.GetType ()!;
 			var open_type = Type.GetTypeFromHandle (open_type_handle)!;
+#if TRACE
+			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, 0x{open_type_handle.Value.ToString ("x")} = {open_type}, 0x{open_method_handle.Value.ToString ("x")}, {parameter})");
+#endif
 			closed_type = FindClosedTypeInHierarchy (open_type, closed_type)!;
+#if TRACE
+			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, 0x{open_type_handle.Value.ToString ("x")} = {open_type}, 0x{open_method_handle.Value.ToString ("x")}, {parameter}) closed type: {closed_type}");
+#endif
 			var closedMethod = MethodBase.GetMethodFromHandle (open_method_handle, closed_type.TypeHandle)!;
+#if TRACE
+			Runtime.NSLog ($"FindClosedParameterType ({instance.GetType ()}, 0x{open_type_handle.Value.ToString ("x")} = {open_type}, 0x{open_method_handle.Value.ToString ("x")}, {parameter}) closed type: {closed_type} closed method: {closedMethod}");
+#endif
 			var parameters = closedMethod.GetParameters ();
 			return parameters [parameter].ParameterType.GetElementType ()!; // FIX NAMING
+		}
+
+		static void TraceCaller (string message)
+		{
+			var caller = new System.Diagnostics.StackFrame (1);
+			NSLog ($"{caller?.GetMethod ()?.ToString ()}: {message}");
 		}
 
 		static void GCCollect ()

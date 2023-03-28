@@ -1633,7 +1633,7 @@
 
 		<ItemGroup>
 			<_CompressedPlugIns Update="@(_CompressedPlugIns)">
-				<ExtractionPath>$([MSBuild]::EnsureTrailingSlash('$(_IntermediateDecompressionDir)%(_CompressedPlugIns.Filename)')</ExtractionPath>
+				<ExtractionPath>$([MSBuild]::EnsureTrailingSlash('$(_IntermediateDecompressionDir)%(_CompressedPlugIns.Filename)'))</ExtractionPath>
 			</_CompressedPlugIns>
 		</ItemGroup>
 

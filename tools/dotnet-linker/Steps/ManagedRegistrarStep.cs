@@ -857,7 +857,7 @@ namespace Xamarin.Linker {
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("System", "String")
-						&& !v.HasGenericParameters);
+						&& !v.HasGenericParameters, ensurePublic: true);
 			}
 		}
 
@@ -1168,10 +1168,6 @@ namespace Xamarin.Linker {
 
 		void CreateRegistrarType ()
 		{
-			var sorted = current_trampoline_lists.OrderBy (v => v.Id).ToList ();
-			if (sorted.Count == 0)
-				return;
-
 			var td = new TypeDefinition ("ObjCRuntime", "__Registrar__", TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit);
 			td.BaseType = System_Object;
 			td.Interfaces.Add (new InterfaceImplementation (ObjCRuntime_IManagedRegistrar));
@@ -1192,6 +1188,7 @@ namespace Xamarin.Linker {
 			// That said, there may be all sorts of problems with reflection (we're adding methods to types, any logic that depends on a type having a certain number of methods will fail for instance).
 			//
 
+			var sorted = current_trampoline_lists.OrderBy (v => v.Id).ToList ();
 			foreach (var md in sorted) {
 				var declType = md.Trampoline.DeclaringType;
 				while (declType.IsNested) {
@@ -1240,7 +1237,9 @@ namespace Xamarin.Linker {
 
 			for (var i = 0; i < targets.Length; i++) {
 				targets [i] = Instruction.Create (OpCodes.Ldtoken, types [i]);
-				Configuration.RegisteredTypesMap.Add (types [i].Resolve (), (uint) i);
+				var td = types [i].Resolve ();
+				Console.WriteLine ($"Registering {td.FullName} => {i}");
+				Configuration.RegisteredTypesMap.Add (td, (uint) i);
 			}
 
 			il.Emit (OpCodes.Ldarg_1);
@@ -1288,22 +1287,31 @@ namespace Xamarin.Linker {
 		void GenerateLookupUnmanagedFunction (TypeDefinition type, IList<TrampolineInfo> trampolineInfos)
 		{
 			Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items");
-			// All the methods in a given assembly will have consecutive IDs (but might not start at 0).
-			if (trampolineInfos.First ().Id + trampolineInfos.Count - 1 != trampolineInfos.Last ().Id)
-				throw ErrorHelper.CreateError (99, "Invalid ID range");
 
-			const int methodsPerLevel = 10;
-			var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
-			GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1, out var md);
+			MethodDefinition? lookupMethods = null;
+			if (trampolineInfos.Count > 0) {
+				// All the methods in a given assembly will have consecutive IDs (but might not start at 0).
+				if (trampolineInfos.First ().Id + trampolineInfos.Count - 1 != trampolineInfos.Last ().Id)
+					throw ErrorHelper.CreateError (99, "Invalid ID range");
+
+				const int methodsPerLevel = 10;
+				var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
+				GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1, out lookupMethods);
+			}
 
 			var method = type.AddMethod ("LookupUnmanagedFunction", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_IntPtr);
 			method.AddParameter ("symbol", System_String);
 			method.AddParameter ("id", System_Int32);
 			method.Overrides.Add (IManagedRegistrar_LookupUnmanagedFunction);
 			method.CreateBody (out var il);
-			il.Emit (OpCodes.Ldarg_1);
-			il.Emit (OpCodes.Ldarg_2);
-			il.Emit (OpCodes.Call, md);
+			if (lookupMethods is null) {
+				il.Emit (OpCodes.Ldc_I4_M1);
+				il.Emit (OpCodes.Conv_I);
+			} else {
+				il.Emit (OpCodes.Ldarg_1);
+				il.Emit (OpCodes.Ldarg_2);
+				il.Emit (OpCodes.Call, lookupMethods);
+			}
 			il.Emit (OpCodes.Ret);
 		}
 
@@ -1316,7 +1324,7 @@ namespace Xamarin.Linker {
 
 			var startId = trampolineInfos [startIndex].Id;
 			var name = level == 1 ? "LookupUnmanagedFunctionImpl" : $"LookupUnmanagedFunction_{level}_{levels}__{startIndex}_{endIndex}__";
-			method = type.AddMethod (name, MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_IntPtr);
+			method = type.AddMethod (name, MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static, System_IntPtr);
 			method.ReturnType = System_IntPtr; // shouldn't be necessary???
 			method.AddParameter ("symbol", System_String);
 			method.AddParameter ("id", System_Int32);
@@ -1560,9 +1568,6 @@ namespace Xamarin.Linker {
 				}
 			}
 
-			if (methods_to_wrap.Count == 0)
-				return modified;
-
 			foreach (var method in methods_to_wrap) {
 				try {
 					CreateUnmanagedCallersMethod (method);
@@ -1620,7 +1625,7 @@ namespace Xamarin.Linker {
 
 		void Trace (ILProcessor il, string message)
 		{
-			var trace = false;
+			var trace = !string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("MSR_TRACE"));
 			if (trace) {
 				il.Emit (OpCodes.Ldstr, message);
 				il.Emit (OpCodes.Call, Runtime_TraceCaller);
@@ -2560,6 +2565,7 @@ namespace Xamarin.Linker {
 			rv.HasThis = mr.HasThis;
 			rv.ExplicitThis = mr.ExplicitThis;
 			rv.CallingConvention = mr.CallingConvention;
+			rv.Parameters.AddRange (mr.Parameters);
 			return rv;
 		}
 	}

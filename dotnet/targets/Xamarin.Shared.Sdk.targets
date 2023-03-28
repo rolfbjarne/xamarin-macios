@@ -1631,9 +1631,11 @@
 		Outputs="@(_CompressedPlugIns -> '$(_IntermediateDecompressionDir)%(Filename)%(Extension).stamp')"
 		>
 
-		<_CompressedPlugIns Update="@(_CompressedPlugIns)">
-			<ExtractionPath>$([MSBuild]::EnsureTrailingSlash('$(_IntermediateDecompressionDir)%(_CompressedPlugIns.Filename)')</ExtractionPath>
-		</_CompressedPlugIns>
+		<ItemGroup>
+			<_CompressedPlugIns Update="@(_CompressedPlugIns)">
+				<ExtractionPath>$([MSBuild]::EnsureTrailingSlash('$(_IntermediateDecompressionDir)%(_CompressedPlugIns.Filename)')</ExtractionPath>
+			</_CompressedPlugIns>
+		</ItemGroup>
 
 		<!-- This task is executed from Windows as well when using HotRestart -->
 		<Unzip

@@ -85,12 +85,26 @@ namespace Xamarin.MacDev {
 		/// <returns></returns>
 		public static bool TryDecompress (TaskLoggingHelper log, string zip, string resource, string decompressionDir, List<string> createdFiles, [NotNullWhen (true)] out string? decompressedResource)
 		{
-			decompressedResource = Path.Combine (decompressionDir, resource);
+			if (string.IsNullOrEmpty (resource)) {
+				decompressedResource = Path.Combine (decompressionDir, Path.GetFileName (zip));
+			} else {
+				decompressedResource = Path.Combine (decompressionDir, resource);
+			}
 
-			var stampFile = decompressedResource + ".stamp";
+			var stampFile = Path.Combine (decompressionDir, Path.GetFileName (zip) + ".stamp");
 
 			if (FileCopier.IsUptodate (zip, stampFile, XamarinTask.GetFileCopierReportErrorCallback (log), XamarinTask.GetFileCopierLogCallback (log), check_stamp: false))
 				return true;
+
+			// Make sure there aren't any leftover artifacts from previous decompressions.
+			if (File.Exists (decompressedResource)) {
+				File.Delete (decompressedResource));
+			} else if (Directory.Exists (decompressedResource)) {
+				Directory.Delete (decompressedResource, true);
+			}
+
+			if (string.IsNullOrEmpty (resource))
+				decompressionDir = Path.Combine (decompressionDir, Path.GetFileName (zip));
 
 			// We use 'unzip' to extract on !Windows, and System.IO.Compression to extract on Windows.
 			// This is because System.IO.Compression doesn't handle symlinks correctly, so we can only use
@@ -171,7 +185,9 @@ namespace Xamarin.MacDev {
 				if (entryPath.Length == 0)
 					continue;
 
-				if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
+				if (string.IsNullOrEmpty (resource)) {
+					// we want everything
+				} else if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
 					// yep, we want this entry
 				} else if (entryPath == resource) {
 					// we want this one too
@@ -192,7 +208,7 @@ namespace Xamarin.MacDev {
 				}
 
 				var isDir = entryPath [entryPath.Length - 1] == zipDirectorySeparator;
-				var targetPath = Path.Combine (decompressionDir, entryPath);
+				var targetPath = Path.Combine (decompressionDir, entryPath.Replace (zipDirectorySeparator, Path.DirectorySeparatorChar));
 				if (isDir) {
 					Directory.CreateDirectory (targetPath);
 				} else {

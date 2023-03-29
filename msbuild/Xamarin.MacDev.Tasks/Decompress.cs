@@ -117,6 +117,8 @@ namespace Xamarin.MacDev {
 				createdFiles.Add (decompressedResource);
 			} else if (Directory.Exists (decompressedResource)) {
 				createdFiles.AddRange (Directory.GetFiles (decompressedResource, "*", SearchOption.AllDirectories));
+			} else {
+				log.LogWarning ("The extracted file or directory '{0}' could not be found." /* The extracted file or directory '{0}' could not be found. */, decompressedResource);
 			}
 
 			return rv;
@@ -197,6 +199,7 @@ namespace Xamarin.MacDev {
 					using var streamWrite = File.OpenWrite (targetPath);
 					using var streamRead = entry.Open ();
 					streamRead.CopyTo (streamWrite);
+					log.LogMessage (MessageImportance.Low, "Extracted {0} into {1}", entryPath, targetPath);
 				}
 			}
 

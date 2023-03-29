@@ -87,7 +87,7 @@ namespace Xamarin.MacDev {
 		{
 			decompressedResource = Path.Combine (decompressionDir, resource);
 
-			var stampFile = decompressedResource + ".stamp";
+			var stampFile = decompressedResource.TrimEnd ('\\', '/') + ".stamp";
 
 			if (FileCopier.IsUptodate (zip, stampFile, XamarinTask.GetFileCopierReportErrorCallback (log), XamarinTask.GetFileCopierLogCallback (log), check_stamp: false))
 				return true;
@@ -171,11 +171,14 @@ namespace Xamarin.MacDev {
 				if (entryPath.Length == 0)
 					continue;
 
-				if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
+				if (string.IsNullOrEmpty (resource)) {
+					// an empty resource means extract everything, so we want this
+				} else if (entryPath.StartsWith (resourceAsDir, StringComparison.Ordinal)) {
 					// yep, we want this entry
 				} else if (entryPath == resource) {
 					// we want this one too
 				} else {
+					log.LogMessage (MessageImportance.Low, "Did not extract {0} into {1} because it didn't match the resource {2}", entryPath, targetPath, resource);
 					// but otherwise nope
 					continue;
 				}

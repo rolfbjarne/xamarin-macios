@@ -178,7 +178,7 @@ namespace Xamarin.MacDev {
 				} else if (entryPath == resource) {
 					// we want this one too
 				} else {
-					log.LogMessage (MessageImportance.Low, "Did not extract {0} into {1} because it didn't match the resource {2}", entryPath, targetPath, resource);
+					log.LogMessage (MessageImportance.Low, "Did not extract {0} because it didn't match the resource {1}", entryPath, resource);
 					// but otherwise nope
 					continue;
 				}

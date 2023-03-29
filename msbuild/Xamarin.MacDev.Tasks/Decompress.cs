@@ -195,7 +195,7 @@ namespace Xamarin.MacDev {
 				}
 
 				var isDir = entryPath [entryPath.Length - 1] == zipDirectorySeparator;
-				var targetPath = Path.Combine (decompressionDir, entryPath);
+				var targetPath = Path.Combine (decompressionDir, entryPath.Replace (zipDirectorySeparator, Path.DirectorySeparatorChar));
 				if (isDir) {
 					Directory.CreateDirectory (targetPath);
 				} else {

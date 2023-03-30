@@ -1020,7 +1020,7 @@
 "unusedtypechecks",
 "--enable-serialization-discovery"
             ],
-            "cwd": "/Users/rolf/work/maccore/nativeaot/xamarin-macios/tests/monotouch-test/dotnet/MacCatalyst",
+            "cwd": "/Users/rolf/work/maccore/nativeaot/xamarin-macios/tests/monotouch-test/dotnet/iOS",
             "console": "internalConsole",
             "stopAtEntry": false
         },

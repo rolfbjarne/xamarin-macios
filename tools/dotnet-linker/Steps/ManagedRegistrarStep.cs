@@ -45,6 +45,14 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		Application App {
+			get {
+				if (app is null)
+					throw new InvalidOperationException ("No application?");
+				return app;
+			}
+		}
+
 		AssemblyDefinition CorlibAssembly {
 			get {
 				if (corlib_assembly is null)
@@ -64,8 +72,7 @@ namespace Xamarin.Linker {
 		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> ();
 		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new Dictionary<string, (MethodDefinition, MethodReference)> ();
 
-		class TrampolineInfo
-		{
+		class TrampolineInfo {
 			public MethodDefinition Trampoline;
 			public MethodDefinition Target;
 			public int Id;
@@ -169,6 +176,12 @@ namespace Xamarin.Linker {
 		TypeReference System_Exception {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Exception", out var _);
+			}
+		}
+
+		TypeReference System_UInt16 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.UInt16", out var _);
 			}
 		}
 
@@ -761,7 +774,7 @@ namespace Xamarin.Linker {
 
 		MethodReference BlockLiteral_CreateBlockForDelegate {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_BlockLiteral, "CreateBlockForDelegate", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BlockLiteral, "CreateBlockForDelegate", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 3
@@ -774,7 +787,7 @@ namespace Xamarin.Linker {
 
 		MethodReference RegistrarHelper_GetBlockForDelegate {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockForDelegate", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockForDelegate", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
@@ -786,7 +799,7 @@ namespace Xamarin.Linker {
 
 		MethodReference RegistrarHelper_GetBlockPointer {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockPointer", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockPointer", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
@@ -957,7 +970,7 @@ namespace Xamarin.Linker {
 
 		MethodReference RegistrarHelper_ManagedArrayToNSArray {
 			get {
-				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "ManagedArrayToNSArray", (v) => 
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "ManagedArrayToNSArray", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
@@ -985,7 +998,7 @@ namespace Xamarin.Linker {
 						);
 			}
 		}
-		
+
 		MethodReference Runtime_RetainNSObject {
 			get {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainNSObject", (v) =>
@@ -1042,7 +1055,7 @@ namespace Xamarin.Linker {
 
 		MethodReference Unsafe_AsRef {
 			get {
-				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) => 
+				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
@@ -1089,7 +1102,7 @@ namespace Xamarin.Linker {
 			if (app!.Registrar != RegistrarMode.ManagedStatic)
 				return;
 
-			RewriteRuntimeLookupManagedFunction ();
+			// RewriteRuntimeLookupManagedFunction ();
 
 			if (exceptions is null)
 				return;
@@ -1277,22 +1290,25 @@ namespace Xamarin.Linker {
 			il.Emit (OpCodes.Ret);
 		}
 
-		void GenerateLookupUnmanagedFunction (TypeDefinition type, IList<TrampolineInfo> trampolineInfos)
+		void GenerateLookupUnmanagedFunction (TypeDefinition registrar_type, IList<TrampolineInfo> trampolineInfos)
 		{
-			Console.WriteLine ($"GenerateLookupMethods ({type.FullName}, {trampolineInfos.Count} items");
+			Console.WriteLine ($"GenerateLookupMethods ({registrar_type.FullName}, {trampolineInfos.Count} items");
 
 			MethodDefinition? lookupMethods = null;
-			if (trampolineInfos.Count > 0) {
+			if (App.IsAOTCompiled (CurrentAssembly.Name.Name)) {
+				// Don't generate lookup code, because native code will call the EntryPoint for the UnmanagedCallerOnly methods directly.
+				Console.WriteLine ($"Not generating lookup code for {CurrentAssembly.Name.Name}, because it's AOT compiled");
+			} else if (trampolineInfos.Count > 0) {
 				// All the methods in a given assembly will have consecutive IDs (but might not start at 0).
 				if (trampolineInfos.First ().Id + trampolineInfos.Count - 1 != trampolineInfos.Last ().Id)
 					throw ErrorHelper.CreateError (99, "Invalid ID range");
 
 				const int methodsPerLevel = 10;
 				var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
-				GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1, out lookupMethods);
+				GenerateLookupMethods (registrar_type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1, out lookupMethods);
 			}
 
-			var method = type.AddMethod ("LookupUnmanagedFunction", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_IntPtr);
+			var method = registrar_type.AddMethod ("LookupUnmanagedFunction", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, System_IntPtr);
 			method.AddParameter ("symbol", System_String);
 			method.AddParameter ("id", System_Int32);
 			method.Overrides.Add (IManagedRegistrar_LookupUnmanagedFunction);
@@ -1322,15 +1338,6 @@ namespace Xamarin.Linker {
 			method.AddParameter ("symbol", System_String);
 			method.AddParameter ("id", System_Int32);
 			method.CreateBody (out var il);
-
-			if (!UsesUnmanagedMethodLookups) {
-				// The app is AOT-compiled, and the generated registrar code will call the
-				// UnmanagedCallersOnly method directly using a native symbol instead of a dynamic lookup.
-				il.Emit (OpCodes.Ldc_I4_M1);
-				il.Emit (OpCodes.Conv_I);
-				il.Emit (OpCodes.Ret);
-				return method;
-			}
 
 			if (level == levels) {
 				// This is the leaf method where we do the actual lookup.
@@ -1390,7 +1397,7 @@ namespace Xamarin.Linker {
 				for (var i = 0; i < targets.Length; i++) {
 					try {
 						var subStartIndex = startIndex + (chunkSize) * i;
-						var subEndIndex = subStartIndex + (chunkSize)  - 1;
+						var subEndIndex = subStartIndex + (chunkSize) - 1;
 						if (subEndIndex > endIndex)
 							subEndIndex = endIndex;
 						var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex, out _);
@@ -1427,107 +1434,107 @@ namespace Xamarin.Linker {
 			return method;
 		}
 
-		void RewriteRuntimeLookupManagedFunction ()
-		{
-			current_assembly = PlatformAssembly;
+		// void RewriteRuntimeLookupManagedFunction ()
+		// {
+		// 	current_assembly = PlatformAssembly;
 
-			var method = GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "LookupManagedFunctionImpl").Resolve ();
-			var table = Configuration.UnmanagedCallersMap.ToList ().OrderBy (v => v.Value.Id).ToList ();
+		// 	var method = GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "LookupManagedFunctionImpl").Resolve ();
+		// 	var table = Configuration.UnmanagedCallersMap.ToList ().OrderBy (v => v.Value.Id).ToList ();
 
-			Console.WriteLine ($"Creating table for {table.Count} entries YAAY");
+		// 	Console.WriteLine ($"Creating table for {table.Count} entries YAAY");
 
-			// Create second-level methods.
-			var lookupsPerMethod = 100;
-			var secondLevelMethodCount = (table.Count + lookupsPerMethod - 1) / lookupsPerMethod;
-			var secondLevelMethods = new MethodDefinition [secondLevelMethodCount];
-			var indirectLookup = true;
-			for (var i = 0; i < secondLevelMethodCount; i++) {
-				var secondLevelMethod = method.DeclaringType.AddMethod ("LookupManagedFunctionImpl" + i.ToString (), MethodAttributes.Static | MethodAttributes.Private, method.ReturnType);
-				secondLevelMethod.AddParameter ("index", method.Parameters [0].ParameterType);
-				secondLevelMethods [i] = secondLevelMethod;
+		// 	// Create second-level methods.
+		// 	var lookupsPerMethod = 100;
+		// 	var secondLevelMethodCount = (table.Count + lookupsPerMethod - 1) / lookupsPerMethod;
+		// 	var secondLevelMethods = new MethodDefinition [secondLevelMethodCount];
+		// 	var indirectLookup = true;
+		// 	for (var i = 0; i < secondLevelMethodCount; i++) {
+		// 		var secondLevelMethod = method.DeclaringType.AddMethod ("LookupManagedFunctionImpl" + i.ToString (), MethodAttributes.Static | MethodAttributes.Private, method.ReturnType);
+		// 		secondLevelMethod.AddParameter ("index", method.Parameters [0].ParameterType);
+		// 		secondLevelMethods [i] = secondLevelMethod;
 
-				var body = new MethodBody (secondLevelMethod);
-				secondLevelMethod.Body = body;
-				var il = body.GetILProcessor ();
-				il.Clear ();
+		// 		var body = new MethodBody (secondLevelMethod);
+		// 		secondLevelMethod.Body = body;
+		// 		var il = body.GetILProcessor ();
+		// 		il.Clear ();
 
-				var secondLevelMethodLookupCount = i == secondLevelMethodCount - 1 ? table.Count % lookupsPerMethod : lookupsPerMethod;
-				var targets = new Instruction [secondLevelMethodLookupCount];
-				for (var k = 0; k < secondLevelMethodLookupCount; k++) {
-					var index = i * lookupsPerMethod + k;
-					var md = table [index].Value.UnmanagedCallersMethod;
-					try {
-						var mr = PlatformAssembly.MainModule.ImportReference (md);
-						if (indirectLookup) {
-							var indirectMethod = method.DeclaringType.AddMethod (md.Name + "__indirect_lookup", MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, secondLevelMethod.ReturnType);
-							var indirectIL = indirectMethod.Body.GetILProcessor ();
-							indirectIL.Emit (OpCodes.Ldftn, mr);
-							indirectIL.Emit (OpCodes.Ret);
-							targets [k] = Instruction.Create (OpCodes.Call, indirectMethod);
-						} else {
-							targets [k] = Instruction.Create (OpCodes.Ldftn, mr);
-						}
-					} catch (Exception e) {
-						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
-						AddException (ErrorHelper.CreateError (99, e, str));
-						targets [k] = Instruction.Create (OpCodes.Ldstr, str);
-					}
-				}
+		// 		var secondLevelMethodLookupCount = i == secondLevelMethodCount - 1 ? table.Count % lookupsPerMethod : lookupsPerMethod;
+		// 		var targets = new Instruction [secondLevelMethodLookupCount];
+		// 		for (var k = 0; k < secondLevelMethodLookupCount; k++) {
+		// 			var index = i * lookupsPerMethod + k;
+		// 			var md = table [index].Value.UnmanagedCallersMethod;
+		// 			try {
+		// 				var mr = PlatformAssembly.MainModule.ImportReference (md);
+		// 				if (indirectLookup) {
+		// 					var indirectMethod = method.DeclaringType.AddMethod (md.Name + "__indirect_lookup", MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, secondLevelMethod.ReturnType);
+		// 					var indirectIL = indirectMethod.Body.GetILProcessor ();
+		// 					indirectIL.Emit (OpCodes.Ldftn, mr);
+		// 					indirectIL.Emit (OpCodes.Ret);
+		// 					targets [k] = Instruction.Create (OpCodes.Call, indirectMethod);
+		// 				} else {
+		// 					targets [k] = Instruction.Create (OpCodes.Ldftn, mr);
+		// 				}
+		// 			} catch (Exception e) {
+		// 				var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
+		// 				AddException (ErrorHelper.CreateError (99, e, str));
+		// 				targets [k] = Instruction.Create (OpCodes.Ldstr, str);
+		// 			}
+		// 		}
 
-				il.Emit (OpCodes.Ldarg_0);
-				il.Emit (OpCodes.Switch, targets);
-				for (var k = 0; k < secondLevelMethodLookupCount; k++) {
-					il.Append (targets [k]);
-					il.Emit (OpCodes.Ret);
-				}
+		// 		il.Emit (OpCodes.Ldarg_0);
+		// 		il.Emit (OpCodes.Switch, targets);
+		// 		for (var k = 0; k < secondLevelMethodLookupCount; k++) {
+		// 			il.Append (targets [k]);
+		// 			il.Emit (OpCodes.Ret);
+		// 		}
 
-				// no hit? this shouldn't happen
-				il.Emit (OpCodes.Ldc_I4_M1);
-				il.Emit (OpCodes.Conv_I);
-				il.Emit (OpCodes.Ret);
-			}
+		// 		// no hit? this shouldn't happen
+		// 		il.Emit (OpCodes.Ldc_I4_M1);
+		// 		il.Emit (OpCodes.Conv_I);
+		// 		il.Emit (OpCodes.Ret);
+		// 	}
 
-			// Create first-level method
-			{
-				var body = new MethodBody (method);
-				method.Body = body;
-				var il = body.GetILProcessor ();
-				il.Clear ();
+		// 	// Create first-level method
+		// 	{
+		// 		var body = new MethodBody (method);
+		// 		method.Body = body;
+		// 		var il = body.GetILProcessor ();
+		// 		il.Clear ();
 
-				var targets = new Instruction [secondLevelMethodCount];
-				var returnStatement = Instruction.Create (OpCodes.Ret);
-				for (var i = 0; i < targets.Length; i++) {
-					targets [i] = Instruction.Create (OpCodes.Call, secondLevelMethods [i]);
-				}
+		// 		var targets = new Instruction [secondLevelMethodCount];
+		// 		var returnStatement = Instruction.Create (OpCodes.Ret);
+		// 		for (var i = 0; i < targets.Length; i++) {
+		// 			targets [i] = Instruction.Create (OpCodes.Call, secondLevelMethods [i]);
+		// 		}
 
-				il.Emit (OpCodes.Ldarg_0);
-				if (lookupsPerMethod <= sbyte.MaxValue) {
-					il.Emit (OpCodes.Ldc_I4_S, (sbyte) lookupsPerMethod);
-				} else {
-					il.Emit (OpCodes.Ldc_I4, lookupsPerMethod);
-				}
-				il.Emit (OpCodes.Rem);
-				il.Emit (OpCodes.Ldarg_0);
-				if (lookupsPerMethod <= sbyte.MaxValue) {
-					il.Emit (OpCodes.Ldc_I4_S, (sbyte) lookupsPerMethod);
-				} else {
-					il.Emit (OpCodes.Ldc_I4, lookupsPerMethod);
-				}
-				il.Emit (OpCodes.Div);
-				il.Emit (OpCodes.Switch, targets);
-				for (var i = 0; i < targets.Length; i++) {
-					il.Append (targets [i]);
-					il.Emit (OpCodes.Ret);
-					il.Emit (OpCodes.Br, returnStatement);
-				}
-				il.Emit (OpCodes.Ldc_I4_M1);
-				il.Emit (OpCodes.Conv_I);
-				il.Append (returnStatement);
-			}
+		// 		il.Emit (OpCodes.Ldarg_0);
+		// 		if (lookupsPerMethod <= sbyte.MaxValue) {
+		// 			il.Emit (OpCodes.Ldc_I4_S, (sbyte) lookupsPerMethod);
+		// 		} else {
+		// 			il.Emit (OpCodes.Ldc_I4, lookupsPerMethod);
+		// 		}
+		// 		il.Emit (OpCodes.Rem);
+		// 		il.Emit (OpCodes.Ldarg_0);
+		// 		if (lookupsPerMethod <= sbyte.MaxValue) {
+		// 			il.Emit (OpCodes.Ldc_I4_S, (sbyte) lookupsPerMethod);
+		// 		} else {
+		// 			il.Emit (OpCodes.Ldc_I4, lookupsPerMethod);
+		// 		}
+		// 		il.Emit (OpCodes.Div);
+		// 		il.Emit (OpCodes.Switch, targets);
+		// 		for (var i = 0; i < targets.Length; i++) {
+		// 			il.Append (targets [i]);
+		// 			il.Emit (OpCodes.Ret);
+		// 			il.Emit (OpCodes.Br, returnStatement);
+		// 		}
+		// 		il.Emit (OpCodes.Ldc_I4_M1);
+		// 		il.Emit (OpCodes.Conv_I);
+		// 		il.Append (returnStatement);
+		// 	}
 
-			Save (PlatformAssembly);
-			current_assembly = null;
-		}
+		// 	Save (PlatformAssembly);
+		// 	current_assembly = null;
+		// }
 
 		bool ProcessType (TypeDefinition type)
 		{
@@ -1599,20 +1606,20 @@ namespace Xamarin.Linker {
 				methods_to_wrap.Add (property.GetMethod);
 
 			if (property.SetMethod is not null)
-				methods_to_wrap.Add (property.SetMethod);	
+				methods_to_wrap.Add (property.SetMethod);
 		}
 
 		static string Sanitize (string str)
 		{
-			// 😐...
 			str = str.Replace ('.', '_');
 			str = str.Replace ('/', '_');
-			str = str.Replace ('\\', '_');
 			str = str.Replace ('`', '_');
 			str = str.Replace ('<', '_');
 			str = str.Replace ('>', '_');
 			str = str.Replace ('$', '_');
 			str = str.Replace ('@', '_');
+			str = StaticRegistrar.EncodeNonAsciiCharacters (str);
+			str = str.Replace ('\\', '_');
 			return str;
 		}
 
@@ -2005,6 +2012,12 @@ namespace Xamarin.Linker {
 					return true;
 				}
 
+				if (type.Is ("System", "Char")) {
+					// no conversion necessary either way
+					nativeType = System_UInt16;
+					return true;
+				}
+
 				// no conversion necessary if we're any other value type
 				nativeType = type;
 				return true;
@@ -2067,7 +2080,7 @@ namespace Xamarin.Linker {
 					} else if (StaticRegistrar.IsNativeObject (DerivedLinkContext, elementType)) {
 						var nativeObjType = StaticRegistrar.GetInstantiableType (type.Resolve (), exceptions, GetMethodSignature (method));
 						addBeforeNativeToManagedCall = il.Create (OpCodes.Ldtoken, method.Module.ImportReference (nativeObjType)); // implementation type
-						native_to_managed =  CreateGenericInstanceMethod (RegistrarHelper_INativeObject_native_to_managed, elementType);
+						native_to_managed = CreateGenericInstanceMethod (RegistrarHelper_INativeObject_native_to_managed, elementType);
 						managed_to_native = RegistrarHelper_INativeObject_managed_to_native;
 						nativeType = new PointerType (System_IntPtr);
 					} else {
@@ -2186,7 +2199,7 @@ namespace Xamarin.Linker {
 						} else {
 							il.Emit (OpCodes.Call, Runtime_RetainAndAutoreleaseNSObject);
 						}
-					}  else {
+					} else {
 						il.Emit (OpCodes.Call, NativeObjectExtensions_GetHandle);
 					}
 					nativeType = ObjCRuntime_NativeHandle;
@@ -2216,7 +2229,7 @@ namespace Xamarin.Linker {
 					nativeType = System_IntPtr;
 				} else {
 					if (parameter == -1) {
-					 	var retain = StaticRegistrar.HasReleaseAttribute (method);
+						var retain = StaticRegistrar.HasReleaseAttribute (method);
 						var isNSObject = IsNSObject (type);
 						if (retain) {
 							il.Emit (OpCodes.Call, isNSObject ? Runtime_RetainNSObject : Runtime_RetainNativeObject);
@@ -2489,11 +2502,11 @@ namespace Xamarin.Linker {
 				conversionFunction = CurrentAssembly.MainModule.ImportReference (getConstantMethod);
 				conversionFunction2 = NativeObjectExtensions_GetHandle;
 				conversionFunction3 = NativeObject_op_Implicit_IntPtr;
- 			} else {
+			} else {
 				AddException (ErrorHelper.CreateError (99, Errors.MX0099, $"can't convert from '{inputType.FullName}' to '{outputType.FullName}' in {descriptiveMethodName}"));
 				return;
 			}
-			
+
 			if (func is not null) {
 				conversionFunction = GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, func, func, (v) =>
 						v.IsStatic, out MethodDefinition conversionFunctionDefinition, ensurePublic: true);
@@ -2549,7 +2562,7 @@ namespace Xamarin.Linker {
 			return gim;
 		}
 
-		static MethodReference CreateMethodReferenceOnGenericType (TypeReference type, MethodReference mr, params TypeReference[] genericTypeArguments)
+		static MethodReference CreateMethodReferenceOnGenericType (TypeReference type, MethodReference mr, params TypeReference [] genericTypeArguments)
 		{
 			var git = new GenericInstanceType (type);
 			git.GenericArguments.AddRange (genericTypeArguments);

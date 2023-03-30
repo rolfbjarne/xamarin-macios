@@ -159,10 +159,8 @@ namespace ObjCRuntime {
 
 			if (id == -1) {
 				rv = IntPtr.Zero;
-			} else if (assembly != IntPtr.Zero) {
-				rv = LookupUnmanagedFunctionInAssembly (assembly, symbol, id);
 			} else {
-				rv = LookupManagedFunctionImpl (id);
+				rv = LookupUnmanagedFunctionInAssembly (assembly, symbol, id);
 			}
 
 #if TRACE
@@ -181,12 +179,6 @@ namespace ObjCRuntime {
 		{
 			var entry = GetMapEntry (assembly_name);
 			return entry.Registrar.LookupUnmanagedFunction (symbol, id);
-		}
-
-		static IntPtr LookupManagedFunctionImpl (int id)
-		{
-			// The static registrar will modify this function as needed.
-			return IntPtr.Zero;
 		}
 
 		internal static Type LookupRegisteredType (Assembly assembly, uint id)

@@ -2745,7 +2745,7 @@ namespace Registrar {
 			return sb.ToString ();
 		}
 
-		static string EncodeNonAsciiCharacters (string value)
+		public static string EncodeNonAsciiCharacters (string value)
 		{
 			StringBuilder sb = null;
 			for (int i = 0; i < value.Length; i++) {
@@ -4140,13 +4140,11 @@ namespace Registrar {
 				// SpecializePrepareParameters (new AutoIndentStringBuilder (), method, num_arg, descriptiveMethodName, exceptions);
 
 				var staticCall = false;
-				var supportDynamicAssemblyLoading = true;
+				var supportDynamicAssemblyLoading = !App.IsAOTCompiled (method.DeclaringType.Type.Module.Assembly.Name.Name);
 				var managedMethodNotFound = false;
 				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
-					exceptions.Add (ErrorHelper.CreateWarning (99, "Could not find the managed callback for {0}", descriptiveMethodName));
-					var types = App.Configuration.UnmanagedCallersMap.Keys.Where (v => v.DeclaringType.FullName == method.Method.DeclaringType.FullName);
-					pinvokeMethodInfo = new LinkerConfiguration.UnmanagedCallersEntry (name + "___FIXME___MANAGED_METHOD_NOT_FOUND", -1, method.Method);
-					managedMethodNotFound = true;
+					exceptions.Add (ErrorHelper.CreateError (99, "Could not find the managed callback for {0}", descriptiveMethodName));
+					return;
 				}
 				var pinvokeMethod = pinvokeMethodInfo.Name;
 				sb.AppendLine ();
@@ -5386,6 +5384,26 @@ namespace Registrar {
 				Driver.Log (3, "Generating static registrar for {0}", assembly.Name);
 				RegisterAssembly (assembly);
 			}
+		}
+
+		static bool IsTrimmed (TypeReference tr, AnnotationStore annotations)
+		{
+			if (!annotations.IsMarked (tr) && !annotations.IsMarked (tr.Resolve ())) {
+				Driver.Log (9, $"Not registering {tr.FullName} because it was trimmed away.");
+				return true;
+			}
+			return false;
+		}
+
+		public void FilterTrimmedApi (AnnotationStore annotations)
+		{
+			var trimmedAway = Types.Where (kvp => IsTrimmed (kvp.Value.Type, annotations)).ToArray ();
+			foreach (var trimmed in trimmedAway)
+				Types.Remove (trimmed.Key);
+
+			var skippedTrimmedAway = skipped_types.Where (v => IsTrimmed (v.Skipped, annotations)).ToArray ();
+			foreach (var trimmed in skippedTrimmedAway)
+				skipped_types.Remove (trimmed);
 		}
 
 		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method)

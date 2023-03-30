@@ -136,7 +136,7 @@ namespace Xamarin.MacDev.Tasks {
 					break;
 				case PublishFolderType.CompressedPlugIns:
 					relativePath = PlugInsDirectory;
-					virtualProjectPath = Path.GetFileNameWithoutExtension (item.ItemSpec);
+					virtualProjectPath = string.Empty;
 					break;
 				case PublishFolderType.RootDirectory:
 					break;

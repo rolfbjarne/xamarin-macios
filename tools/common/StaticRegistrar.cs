@@ -460,7 +460,7 @@ namespace Registrar {
 			return "void *";
 		}
 
-		public string ToObjCType (TypeDefinition type, bool delegateToBlockType = false, bool cSyntaxForBlocks =false)
+		public string ToObjCType (TypeDefinition type, bool delegateToBlockType = false, bool cSyntaxForBlocks = false)
 		{
 			switch (type.FullName) {
 			case "System.IntPtr": return "void *";
@@ -5180,7 +5180,7 @@ namespace Registrar {
 				}
 				throw ErrorHelper.CreateError (99, "Can't create a token reference to a token type {0} when using the managed static registrar.", implied_type.ToString ());
 				token_ref = INVALID_TOKEN_REF;
-				return false;				
+				return false;
 			}
 #endif
 

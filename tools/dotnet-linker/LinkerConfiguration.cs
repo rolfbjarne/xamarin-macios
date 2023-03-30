@@ -58,8 +58,7 @@ namespace Xamarin.Linker {
 
 		Dictionary<string, List<MSBuildItem>> msbuild_items = new Dictionary<string, List<MSBuildItem>> ();
 
-		public class UnmanagedCallersEntry
-		{
+		public class UnmanagedCallersEntry {
 			public string Name;
 			public int Id;
 			public MethodDefinition UnmanagedCallersMethod;

@@ -16327,7 +16327,7 @@ namespace AVFoundation {
 #endif
 	}
 
-	delegate int AVAudioSinkNodeReceiverHandlerRaw (IntPtr timestamp, uint frameCoun, IntPtr inputData);
+	delegate int AVAudioSinkNodeReceiverHandlerRaw (IntPtr timestamp, uint frameCount, IntPtr inputData);
 
 	[Watch (6, 0), TV (13, 0), Mac (10, 15), iOS (13, 0)]
 	[MacCatalyst (13, 1)]

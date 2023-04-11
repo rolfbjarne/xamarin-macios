@@ -106,6 +106,12 @@ namespace AVFoundation {
 				return null;
 			return error;
 		}
+
+		public bool SetCategory (AVAudioSessionCategory category, AVAudioSessionCategoryOptions options, out NSError outError)
+		{
+			return SetCategory (CategoryToToken (category)!, options, out outError);
+		}
+
 	}
 #endif
 }

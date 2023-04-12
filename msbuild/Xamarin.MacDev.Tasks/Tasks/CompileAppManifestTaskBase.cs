@@ -45,7 +45,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string DebugIPAddresses { get; set; } = String.Empty;
 
-		[Required]
 		public string DefaultSdkVersion { get; set; } = String.Empty;
 
 		public ITaskItem [] FontFilesToRegister { get; set; } = Array.Empty<ITaskItem> ();
@@ -78,7 +77,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public bool SdkIsSimulator { get; set; }
 
-		[Required]
 		public string SdkVersion { get; set; } = String.Empty;
 
 		public string SupportedOSPlatformVersion { get; set; } = String.Empty;
@@ -91,6 +89,10 @@ namespace Xamarin.MacDev.Tasks {
 		protected TargetArchitecture architectures;
 		IPhoneDeviceType supportedDevices;
 		AppleSdkVersion sdkVersion;
+
+		bool OnWindows {
+			get => Environment.OSVersion.Platform == PlatformID.Win32NT;
+		}
 
 		public override bool Execute ()
 		{
@@ -273,6 +275,9 @@ namespace Xamarin.MacDev.Tasks {
 				// Nothing is specified in the Info.plist - use SupportedOSPlatformVersion, and if that's not set, then use the sdkVersion
 				if (!string.IsNullOrEmpty (convertedSupportedOSPlatformVersion)) {
 					minimumOSVersion = convertedSupportedOSPlatformVersion;
+				} else if (OnWindows && string.IsNullOrEmpty (SdkVersion)) {
+					// When building on Windows (Hot Restart), we're not using any Xcode version, so there's no SdkVersion either, so use the min OS version we support if the project doesn't specify anything.
+					minimumOSVersion = Xamarin.SdkVersions.GetMinVersion (Platform).ToString ();
 				} else {
 					minimumOSVersion = SdkVersion;
 				}
@@ -302,14 +307,21 @@ namespace Xamarin.MacDev.Tasks {
 
 		bool Compile (PDictionary plist)
 		{
-			var currentSDK = Sdks.GetAppleSdk (Platform);
+			if (!OnWindows) {
+				if (string.IsNullOrEmpty (DefaultSdkVersion)) {
+					Log.LogError (MSBStrings.E7114 /* The "{0}" task was not given a value for the parameter "{1}", which is required when building on this platform. */, GetType ().Name, "DefaultSdkVersion");
+					return false;
+				}
 
-			sdkVersion = AppleSdkVersion.Parse (DefaultSdkVersion);
-			if (!currentSDK.SdkIsInstalled (sdkVersion, SdkIsSimulator)) {
-				Log.LogError (null, null, null, null, 0, 0, 0, 0, MSBStrings.E0013, Platform, sdkVersion);
-				return false;
+				var currentSDK = Sdks.GetAppleSdk (Platform);
+
+				sdkVersion = AppleSdkVersion.Parse (DefaultSdkVersion);
+				if (!currentSDK.SdkIsInstalled (sdkVersion, SdkIsSimulator)) {
+					Log.LogError (null, null, null, null, 0, 0, 0, 0, MSBStrings.E0013, Platform, sdkVersion);
+					return false;
+				}
+				SetXcodeValues (plist, currentSDK);
 			}
-			SetXcodeValues (plist, currentSDK);
 
 			switch (Platform) {
 			case ApplePlatform.iOS:
@@ -405,7 +417,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			var supportedDevices = plist.GetUIDeviceFamily ();
 			var macCatalystOptimizedForMac = (supportedDevices & IPhoneDeviceType.MacCatalystOptimizedForMac) == IPhoneDeviceType.MacCatalystOptimizedForMac;
-			if (macCatalystOptimizedForMac) {
+			if (macCatalystOptimizedForMac && !OnWindows) {
 				if (Platform != ApplePlatform.MacCatalyst) {
 					LogAppManifestError (MSBStrings.E7098 /* The UIDeviceFamily value '6' is not valid for this platform. It's only valid for Mac Catalyst. */);
 					return; // no need to look for more errors, they will probably not make much sense.

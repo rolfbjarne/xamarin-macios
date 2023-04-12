@@ -45,7 +45,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string DebugIPAddresses { get; set; } = String.Empty;
 
-		[Required]
 		public string DefaultSdkVersion { get; set; } = String.Empty;
 
 		public ITaskItem [] FontFilesToRegister { get; set; } = Array.Empty<ITaskItem> ();
@@ -91,6 +90,10 @@ namespace Xamarin.MacDev.Tasks {
 		protected TargetArchitecture architectures;
 		IPhoneDeviceType supportedDevices;
 		AppleSdkVersion sdkVersion;
+
+		bool OnWindows {
+			get => Environment.OSVersion.Platform == PlatformID.Win32NT;
+		}
 
 		public override bool Execute ()
 		{
@@ -302,14 +305,21 @@ namespace Xamarin.MacDev.Tasks {
 
 		bool Compile (PDictionary plist)
 		{
-			var currentSDK = Sdks.GetAppleSdk (Platform);
+			if (!OnWindows) {
+				if (string.IsNullOrEmpty (DefaultSdkVersion)) {
+					Log.LogError (MSBStrings.E7114 /* The "{0}" task was not given a value for the parameter "{1}", which is required when building on this platform. */, GetType ().Name, "DefaultSdkVersion");
+					return false;
+				}
 
-			sdkVersion = AppleSdkVersion.Parse (DefaultSdkVersion);
-			if (!currentSDK.SdkIsInstalled (sdkVersion, SdkIsSimulator)) {
-				Log.LogError (null, null, null, null, 0, 0, 0, 0, MSBStrings.E0013, Platform, sdkVersion);
-				return false;
+				var currentSDK = Sdks.GetAppleSdk (Platform);
+
+				sdkVersion = AppleSdkVersion.Parse (DefaultSdkVersion);
+				if (!currentSDK.SdkIsInstalled (sdkVersion, SdkIsSimulator)) {
+					Log.LogError (null, null, null, null, 0, 0, 0, 0, MSBStrings.E0013, Platform, sdkVersion);
+					return false;
+				}
+				SetXcodeValues (plist, currentSDK);
 			}
-			SetXcodeValues (plist, currentSDK);
 
 			switch (Platform) {
 			case ApplePlatform.iOS:

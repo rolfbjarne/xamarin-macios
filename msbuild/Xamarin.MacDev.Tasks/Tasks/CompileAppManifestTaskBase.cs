@@ -72,9 +72,6 @@ namespace Xamarin.MacDev.Tasks {
 		public string ResourceRules { get; set; } = String.Empty;
 
 		[Required]
-		public string SdkPlatform { get; set; } = String.Empty;
-
-		[Required]
 		public bool SdkIsSimulator { get; set; }
 
 		public string SdkVersion { get; set; } = String.Empty;
@@ -92,6 +89,12 @@ namespace Xamarin.MacDev.Tasks {
 
 		bool OnWindows {
 			get => Environment.OSVersion.Platform == PlatformID.Win32NT;
+		}
+
+		public string SdkPlatform {
+			get {
+				return GetSdkPlatform (SdkIsSimulator);
+			}
 		}
 
 		public override bool Execute ()

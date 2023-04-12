@@ -4139,8 +4139,8 @@ namespace Registrar {
 
 				// SpecializePrepareParameters (new AutoIndentStringBuilder (), method, num_arg, descriptiveMethodName, exceptions);
 
-				var staticCall = false;
-				var supportDynamicAssemblyLoading = !App.IsAOTCompiled (method.DeclaringType.Type.Module.Assembly.Name.Name);
+				var staticCall = App.IsAOTCompiled (method.DeclaringType.Type.Module.Assembly.Name.Name);
+				var supportDynamicAssemblyLoading = true;
 				var managedMethodNotFound = false;
 				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateError (99, "Could not find the managed callback for {0}", descriptiveMethodName));

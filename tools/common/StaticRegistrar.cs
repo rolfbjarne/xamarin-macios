@@ -4168,10 +4168,11 @@ namespace Registrar {
 
 				sb.Append (callbackReturnType);
 
+				sb.Append (" ");
 				if (staticCall) {
 					sb.Append (pinvokeMethod);
 				} else {
-					sb.Append (" (*");
+					sb.Append ("(*");
 					sb.Append (pinvokeMethod);
 					sb.Append ("_function)");
 				}

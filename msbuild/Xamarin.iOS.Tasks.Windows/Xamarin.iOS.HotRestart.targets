@@ -31,21 +31,17 @@
 		</PropertyGroup>
 	</Target>
 	
-	<Target Name="_DetectHotRestartSigningIdentity" AfterTargets="_DetectAppManifest" 
+	<Target Name="_DetectHotRestartSigningIdentity" AfterTargets="_ReadAppManifest" 
 		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsHotRestartBuild)' == 'true' And '$(IsHotRestartEnvironmentReady)' == 'true'" >
 		
 		<HotRestart.Tasks.DetectSigningIdentity 
 			Condition="'$(EnableCodeSigning)' != 'false'"
-			GenerateApplicationManifest="$(GenerateApplicationManifest)"
-			ApplicationId="$(ApplicationId)"
-			ApplicationTitle="$(ApplicationTitle)"
-			AppManifest="$(AppBundleManifest)"
+			BundleIdentifier="$(_BundleIdentifier)"
 			ProvisioningProfile="$(CodesignProvision)"
 			SigningKey="$(CodesignKey)">
 
 			<Output TaskParameter="DetectedAppId" PropertyName="_AppIdentifier" />
 			<Output TaskParameter="DetectedBundleId" PropertyName="_BundleIdentifier" />
-			<Output TaskParameter="DetectedAppDisplayName" PropertyName="_AppDisplayName" />
 			<Output TaskParameter="DetectedCodeSigningPath" PropertyName="_CodeSigningPath" />
 			<Output TaskParameter="DetectedProvisioningProfileId" PropertyName="_ProvisioningProfileId" />
 			<Output TaskParameter="DetectedProvisioningProfilePath" PropertyName="_ProvisioningProfilePath" />
@@ -102,12 +98,12 @@
 		DependsOnTargets="_WriteAppManifest"
 		Condition="'$(_CanOutputAppBundle)' == 'true' And '$(IsHotRestartBuild)' == 'true'"
 		Inputs="$(_AppBundleManifestPath);$(HotRestartAppBundlePath)\Info.plist"
-		Outputs="$(HotRestartSignedAppDir)$([System.IO.Path]::GetFileName('$(AppBundleManifest)'))">
+		Outputs="$(HotRestartSignedAppDir)Info.plist">
 
 		<CompileHotRestartAppManifest
 			PrebuiltAppManifestPath="$(HotRestartAppBundlePath)\Info.plist"
 			CompiledAppManifestPath="$(_AppBundleManifestPath)"
-			OutputAppManifestPath="$(HotRestartSignedAppDir)$([System.IO.Path]::GetFileName('$(AppBundleManifest)'))"
+			OutputAppManifestPath="$(HotRestartSignedAppDir)Info.plist"
 			/>
 	</Target>
 
@@ -204,7 +200,7 @@
 
 	<Target Name="_CollectCodeSignHotRestartInputs">
 		<ItemGroup>
-			<_CodeSignHotRestartInputs Include="$(AppBundleManifest)" Outputs="$(HotRestartSignedAppDir)$([System.IO.Path]::GetFileName('$(AppBundleManifest)'))" />
+			<_CodeSignHotRestartInputs Include="$(_AppBundleManifestPath)" Outputs="$(HotRestartSignedAppDir)Info.plist" />
 			<_CodeSignHotRestartInputs Include="$(CodesignEntitlements)" Outputs="$(HotRestartSignedAppDir)$(CodesignEntitlements)" />
 			<_CodeSignHotRestartInputs Include="$(_ProvisioningProfilePath)" Outputs="$(HotRestartSignedAppDir)embedded.mobileprovision" />
 			<_CodeSignHotRestartInputs Include="@(_HotRestartSignedAppDirContents)" Outputs="%(_HotRestartSignedAppDirContents.DestinationFile)" />

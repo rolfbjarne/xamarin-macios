@@ -5391,7 +5391,7 @@ namespace Registrar {
 			}
 		}
 
-		static bool IsTrimmed (TypeReference tr, AnnotationStore annotations)
+		public static bool IsTrimmed (MemberReference tr, AnnotationStore annotations)
 		{
 			var assembly = tr.Module?.Assembly;
 			if (assembly is null) {

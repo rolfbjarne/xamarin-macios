@@ -48,6 +48,8 @@ namespace ObjCRuntime {
 
 		internal static IntPtrEqualityComparer IntPtrEqualityComparer;
 		internal static TypeEqualityComparer TypeEqualityComparer;
+		internal static StringEqualityComparer StringEqualityComparer;
+		internal static RuntimeTypeHandleEqualityComparer RuntimeTypeHandleEqualityComparer;
 
 		internal static DynamicRegistrar Registrar;
 #pragma warning restore 8618
@@ -300,6 +302,8 @@ namespace ObjCRuntime {
 
 			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
 			TypeEqualityComparer = new TypeEqualityComparer ();
+			StringEqualityComparer = new StringEqualityComparer ();
+			RuntimeTypeHandleEqualityComparer = new RuntimeTypeHandleEqualityComparer ();
 
 			Runtime.options = options;
 			delegates = new List<object> ();
@@ -316,6 +320,8 @@ namespace ObjCRuntime {
 				Registrar = new DynamicRegistrar ();
 				protocol_cache = new Dictionary<IntPtr, Dictionary<IntPtr, bool>> (IntPtrEqualityComparer);
 			}
+			if (IsManagedStaticRegistrar)
+				RegistrarHelper.Initialize ();
 			RegisterDelegates (options);
 			Class.Initialize (options);
 #if !NET
@@ -743,7 +749,12 @@ namespace ObjCRuntime {
 			Registrar.GetMethodDescription (Class.Lookup (cls), sel, is_static != 0, desc);
 		}
 
-		static sbyte HasNSObject (IntPtr ptr)
+		internal static bool HasNSObject (NativeHandle ptr)
+		{
+			return TryGetNSObject (ptr, evenInFinalizerQueue: false) is not null;
+		}
+
+		internal static sbyte HasNSObject (IntPtr ptr)
 		{
 			var rv = TryGetNSObject (ptr, evenInFinalizerQueue: false) is not null;
 			return (sbyte) (rv ? 1 : 0);
@@ -775,10 +786,15 @@ namespace ObjCRuntime {
 				return IntPtr.Zero;
 
 			var nsobj = GetGCHandleTarget (obj) as NSObject;
+			return AllocGCHandle (FindClosedMethodForObject (nsobj, method));
+		}
+
+		static MethodInfo FindClosedMethodForObject (NSObject? nsobj, MethodBase method)
+		{
 			if (nsobj is null)
 				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name} (token reference: 0x{token_ref:X}). {Constants.PleaseFileBugReport}");
 
-			return AllocGCHandle (FindClosedMethod (nsobj.GetType (), method));
+			return FindClosedMethod (nsobj.GetType (), method);
 		}
 
 		static IntPtr TryGetOrConstructNSObjectWrapped (IntPtr ptr)
@@ -1484,6 +1500,13 @@ namespace ObjCRuntime {
 
 			return null;
 		}
+
+#if NET
+		public static NSObject? GetNSObject (NativeHandle ptr)
+		{
+			return GetNSObject ((IntPtr) ptr, MissingCtorResolution.ThrowConstructor1NotFound);
+		}
+#endif
 
 		public static NSObject? GetNSObject (IntPtr ptr)
 		{

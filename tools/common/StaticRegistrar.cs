@@ -1846,19 +1846,30 @@ namespace Registrar {
 			return PrepareInterfaceMethodMapping (type);
 		}
 
+		public TypeReference GetProtocolAttributeWrapperType (TypeDefinition type)
+		{
+			return GetProtocolAttributeWrapperType ((TypeReference) type);
+		}
+
+		public static TypeReference GetProtocolAttributeWrapperType (ICustomAttribute attrib)
+		{
+			if (!attrib.HasProperties)
+				return null;
+
+			foreach (var prop in attrib.Properties) {
+				if (prop.Name == "WrapperType")
+					return (TypeReference) prop.Argument.Value;
+			}
+
+			return null;
+		}
+
 		protected override TypeReference GetProtocolAttributeWrapperType (TypeReference type)
 		{
 			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out var attrib))
 				return null;
 
-			if (attrib.HasProperties) {
-				foreach (var prop in attrib.Properties) {
-					if (prop.Name == "WrapperType")
-						return (TypeReference) prop.Argument.Value;
-				}
-			}
-
-			return null;
+			return GetProtocolAttributeWrapperType (attrib);
 		}
 
 		protected override IList<AdoptsAttribute> GetAdoptsAttributes (TypeReference type)
@@ -2828,6 +2839,20 @@ namespace Registrar {
 			}
 		}
 
+		public bool NeedsProtocolMap {
+			get {
+				var needs_protocol_map = false;
+				// Check if we need the protocol map.
+				// We don't need it if the linker removed the method ObjCRuntime.Runtime.GetProtocolForType,
+				// or if we're not registering protocols.
+				if (App.Optimizations.RegisterProtocols == true) {
+					var asm = input_assemblies.FirstOrDefault ((v) => v.Name.Name == PlatformAssembly);
+					needs_protocol_map = asm?.MainModule.GetType ("ObjCRuntime", "Runtime")?.Methods.Any ((v) => v.Name == "GetProtocolForType") == true;
+				}
+				return needs_protocol_map;
+			}
+		}
+
 		void Specialize (AutoIndentStringBuilder sb, out string initialization_method, string type_map_path)
 		{
 			List<Exception> exceptions = new List<Exception> ();
@@ -2842,14 +2867,7 @@ namespace Registrar {
 
 			var i = 0;
 
-			bool needs_protocol_map = false;
-			// Check if we need the protocol map.
-			// We don't need it if the linker removed the method ObjCRuntime.Runtime.GetProtocolForType,
-			// or if we're not registering protocols.
-			if (App.Optimizations.RegisterProtocols == true) {
-				var asm = input_assemblies.FirstOrDefault ((v) => v.Name.Name == PlatformAssembly);
-				needs_protocol_map = asm?.MainModule.GetType ("ObjCRuntime", "Runtime")?.Methods.Any ((v) => v.Name == "GetProtocolForType") == true;
-			}
+			var needs_protocol_map = NeedsProtocolMap;
 
 			map.AppendLine ("static MTClassMap __xamarin_class_map [] = {");
 
@@ -2952,7 +2970,7 @@ namespace Registrar {
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
 				}
 
-				if (@class.IsProtocol && @class.ProtocolWrapperType != null && App.Registrar != RegistrarMode.ManagedStatic) {
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
 						continue;
 					if (!TryCreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef, out var protocol_wrapper_type_ref, exceptions))
@@ -4153,11 +4171,11 @@ namespace Registrar {
 				var staticCall = App.IsAOTCompiled (method.DeclaringType.Type.Module.Assembly.Name.Name);
 				var supportDynamicAssemblyLoading = true;
 				var managedMethodNotFound = false;
-				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
+				if (!App.Configuration.AssemblyTrampolineInfos.TryFindInfo (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateError (99, "Could not find the managed callback for {0}", descriptiveMethodName));
 					return;
 				}
-				var pinvokeMethod = pinvokeMethodInfo.Name;
+				var pinvokeMethod = pinvokeMethodInfo.UnmanagedCallersOnlyEntryPoint;
 				sb.AppendLine ();
 				if (!staticCall)
 					sb.Append ("typedef ");
@@ -5177,22 +5195,16 @@ namespace Registrar {
 #if NET
 			if (App.Registrar == RegistrarMode.ManagedStatic) {
 				if (implied_type == TokenType.TypeDef && member is TypeDefinition td) {
-					if (App.Configuration.RegisteredTypesMap.TryGetValue (td, out var id)) {
+					if (App.Configuration.AssemblyTrampolineInfos.TryGetValue (td.Module.Assembly, out var infos) && infos.TryGetRegisteredTypeIndex (td, out var id)) {
 						id = id | (uint) TokenType.TypeDef;
 						return WriteFullTokenReference (member.Module.Assembly, INVALID_TOKEN_REF, member.Module.Name, id, member.FullName, out token_ref, out exception);
 					}
 					throw ErrorHelper.CreateError (99, $"Can't create a token reference to an unregistered type when using the managed static registrar: {member.FullName}");
-					token_ref = INVALID_TOKEN_REF;
-					return false;
 				}
 				if (implied_type == TokenType.Method) {
 					throw ErrorHelper.CreateError (99, $"Can't create a token reference to a method when using the managed static registrar: {member.FullName}");
-					token_ref = INVALID_TOKEN_REF;
-					return false;
 				}
 				throw ErrorHelper.CreateError (99, "Can't create a token reference to a token type {0} when using the managed static registrar.", implied_type.ToString ());
-				token_ref = INVALID_TOKEN_REF;
-				return false;
 			}
 #endif
 
@@ -5398,7 +5410,7 @@ namespace Registrar {
 			}
 		}
 
-		static bool IsTrimmed (TypeReference tr, AnnotationStore annotations)
+		public static bool IsTrimmed (MemberReference tr, AnnotationStore annotations)
 		{
 			var assembly = tr.Module?.Assembly;
 			if (assembly is null) {
@@ -5460,7 +5472,7 @@ namespace Registrar {
 			Generate (header_path, source_path, out initialization_method, type_map_path);
 		}
 
-		public void Generate (string header_path, string source_path, out string initialization_method)
+		public void Generate (string header_path, string source_path, out string initialization_method, string type_map_path = null)
 		{
 			var sb = new AutoIndentStringBuilder ();
 			header = new AutoIndentStringBuilder ();

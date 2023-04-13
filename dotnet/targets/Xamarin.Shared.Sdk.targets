@@ -593,6 +593,7 @@
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="MonoTouch.Tuner.RegistrarRemovalTrackingStep" />
 			<!-- TODO: these steps should probably run after mark. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreMarkDispatcher" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="Xamarin.Linker.ManagedRegistrarStep" />
 
 			<!--
 				IMarkHandlers which run during Mark
@@ -608,7 +609,7 @@
 			<!--
 				pre-sweep custom steps
 			-->
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="SweepStep" Type="Xamarin.Linker.ManagedRegistrarStep" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="SweepStep" Type="Xamarin.Linker.ManagedRegistrarLookupTablesStep" />
 
 			<!--
 				post-sweep custom steps

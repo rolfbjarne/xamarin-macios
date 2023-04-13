@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
@@ -444,6 +445,8 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    Verbosity: {Verbosity}");
 				Console.WriteLine ($"    XamarinNativeLibraryDirectory: {XamarinNativeLibraryDirectory}");
 				Console.WriteLine ($"    XamarinRuntime: {Application.XamarinRuntime}");
+
+				DumpSteps ();
 			}
 		}
 
@@ -512,6 +515,26 @@ namespace Xamarin.Linker {
 				if (step.Annotations.GetAction (assembly) == Mono.Linker.AssemblyAction.Delete)
 					continue;
 				yield return assembly;
+			}
+		}
+
+
+		void DumpSteps ()
+		{
+			Console.WriteLine ();
+			Console.WriteLine ("Pipeline Steps:");
+			var pipeline = typeof (LinkContext).GetProperty ("Pipeline").GetGetMethod ().Invoke (Context, null);
+			var steps = (List<IStep>) pipeline.GetType ().GetField ("_steps", BindingFlags.Instance | BindingFlags.NonPublic).GetValue (pipeline);
+			foreach (var step in steps) {
+				Console.WriteLine ($"    {step}");
+				if (step is SubStepsDispatcher) {
+					var substeps = typeof (SubStepsDispatcher).GetField ("substeps", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (step) as IEnumerable<ISubStep>;
+					if (substeps != null) {
+						foreach (var substep in substeps) {
+							Console.WriteLine ($"        {substep}");
+						}
+					}
+				}
 			}
 		}
 	}

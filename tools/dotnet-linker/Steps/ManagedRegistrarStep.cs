@@ -1053,6 +1053,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		MethodReference DynamicDependencyAttribute_Constructor_String {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", ".ctor", (v) =>
+					v.IsConstructor
+					&& v.HasParameters
+					&& v.Parameters.Count == 1
+					&& v.Parameters [0].ParameterType.Is ("System", "String"));
+			}
+		}
 		MethodReference Unsafe_AsRef {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
@@ -1178,7 +1187,7 @@ namespace Xamarin.Linker {
 			td.BaseType = System_Object;
 			td.Interfaces.Add (new InterfaceImplementation (ObjCRuntime_IManagedRegistrar));
 			CurrentAssembly.MainModule.Types.Add (td);
-
+			DerivedLinkContext.Annotations.Mark (td);
 			//
 			// The callback methods themselves are all public, and thus accessible from anywhere inside the assembly even if the containing type is not public, as long as the containing type is not nested.
 			// However, if the containing type is nested inside another type, it gets complicated.
@@ -1212,6 +1221,7 @@ namespace Xamarin.Linker {
 			il.Emit (OpCodes.Ldarg_0);
 			il.Emit (OpCodes.Call, System_Object__ctor);
 			il.Emit (OpCodes.Ret);
+			DerivedLinkContext.Annotations.Mark (defaultCtor);
 
 			GenerateLookupUnmanagedFunction (td, sorted);
 			GenerateLookupType (td);
@@ -1650,6 +1660,7 @@ namespace Xamarin.Linker {
 				callbackType = new TypeDefinition (string.Empty, "__Registrar_Callbacks__", TypeAttributes.NestedPrivate | TypeAttributes.Sealed | TypeAttributes.Class);
 				callbackType.BaseType = System_Object;
 				method.DeclaringType.NestedTypes.Add (callbackType);
+				DerivedLinkContext.Annotations.Mark (callbackType);
 			}
 
 			var callback = callbackType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
@@ -1657,6 +1668,11 @@ namespace Xamarin.Linker {
 			var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
 			Configuration.UnmanagedCallersMap.Add (method, entry);
 			current_trampoline_lists.Add (new TrampolineInfo (callback, method, entry.Id));
+
+			DerivedLinkContext.Annotations.Mark (callback);
+			DerivedLinkContext.Annotations.AddPreservedMethod (method, callback);
+			DerivedLinkContext.Annotations.AddPreservedMethod (callback, method);
+			// method.CustomAttributes.Add (CreateDynamicDependencyAttribute (name));
 
 			// FIXME
 			var t = method.DeclaringType;
@@ -2356,6 +2372,13 @@ namespace Xamarin.Linker {
 			var unmanagedCallersAttribute = new CustomAttribute (UnmanagedCallersOnlyAttribute_Constructor);
 			unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("EntryPoint", new CustomAttributeArgument (System_String, "_" + entryPoint)));
 			return unmanagedCallersAttribute;
+		}
+
+		CustomAttribute CreateDynamicDependencyAttribute (string method)
+		{
+			var attrib = new CustomAttribute (DynamicDependencyAttribute_Constructor_String);
+			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_String, method));
+			return attrib;
 		}
 
 		void GenerateConversionToManaged (MethodDefinition method, ILProcessor il, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, int parameter, out TypeReference nativeCallerType)

@@ -254,8 +254,28 @@ namespace ObjCRuntime {
 
 			// Look for the type in the type map.
 			var asm_name = type.Assembly.GetName ().Name!;
-			var mod_token = type.Module.MetadataToken;
-			var type_token = type.MetadataToken & ~0x02000000;
+			int mod_token;
+			int type_token;
+
+			if (Runtime.IsManagedStaticRegistrar) {
+				mod_token = unchecked((int) Runtime.INVALID_TOKEN_REF);
+				try {
+					type_token = unchecked((int) RegistrarHelper.LookupRegisteredTypeId (type));
+				} catch (Exception e) {
+					Runtime.NSLog ($"FindClass ({type.FullName}, {is_custom_type}): failed to find type id: {e.Message}");
+					throw;
+				}
+#if LOG_TYPELOAD
+				Runtime.NSLog ($"FindClass ({type.FullName}, {is_custom_type}): type token: 0x{type_token.ToString ("x")}");
+#endif
+
+				if (type_token == -1)
+					return IntPtr.Zero;
+			} else {
+				mod_token = type.Module.MetadataToken;
+				type_token = type.MetadataToken & ~0x02000000 /* TokenType.TypeDef */;
+			}
+
 			for (int i = 0; i < map->map_count; i++) {
 				var class_map = map->map [i];
 				var token_reference = class_map.type_reference;
@@ -308,7 +328,7 @@ namespace ObjCRuntime {
 
 				// then the module token
 				var module_token = entry.module_token;
-				if (mod_token != module_token)
+				if (unchecked((uint) mod_token) != module_token)
 					return false;
 
 				// leave the assembly name for the end, since it's the most expensive comparison (string comparison)
@@ -385,7 +405,9 @@ namespace ObjCRuntime {
 #endif
 				return null;
 			}
+#if LOG_TYPELOAD
 			Runtime.NSLog ($"FindType (0x{@class:X} = {Marshal.PtrToStringAuto (class_getName (@class))}) => found index {mapIndex}.");
+#endif
 
 			is_custom_type = (map->map [mapIndex].flags & Runtime.MTTypeFlags.CustomType) == Runtime.MTTypeFlags.CustomType;
 
@@ -611,7 +633,14 @@ namespace ObjCRuntime {
 			var asm_name = type.Module.Assembly.GetName ().Name!;
 
 			// First check if there's a full token reference to this type
-			var token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
+			uint token;
+			if (Runtime.IsManagedStaticRegistrar) {
+				var id = RegistrarHelper.LookupRegisteredTypeId (type);
+				token = GetFullTokenReference (asm_name, unchecked((int) Runtime.INVALID_TOKEN_REF), 0x2000000 /* TokenType.TypeDef */ | (int) id);
+				Runtime.NSLog ($"GetTokenReference ({type}, {throw_exception}) id: {id} token: 0x{token.ToString ("x")}");
+			} else {
+				token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
+			}
 			if (token != uint.MaxValue)
 				return token;
 
@@ -660,7 +689,7 @@ namespace ObjCRuntime {
 				if (token != metadata_token)
 					continue;
 				var mod_token = ftr.module_token;
-				if (mod_token != module_token)
+				if (unchecked((int) mod_token) != module_token)
 					continue;
 				var assembly_index = ftr.assembly_index;
 				var assembly = map->assemblies [assembly_index];

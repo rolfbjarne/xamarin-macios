@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -35,6 +36,7 @@ namespace ObjCRuntime {
 	interface IManagedRegistrar {
 		IntPtr LookupUnmanagedFunction (string? symbol, int id);
 		RuntimeTypeHandle LookupType (uint id);
+		uint LookupTypeId (RuntimeTypeHandle handle);
 		void RegisterWrapperTypes (Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> type);
 	}
 
@@ -89,20 +91,30 @@ namespace ObjCRuntime {
 
 		static MapInfo GetMapEntry (string assemblyName, Assembly? assembly)
 		{
+			if (TryGetMapEntry (assemblyName, assembly, out var rv))
+				return rv;
+			throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'", assembly);
+		}
+
+		static bool TryGetMapEntry (string assemblyName, Assembly? assembly, [NotNullWhen (true)] out MapInfo? entry)
+		{
+			entry = null;
+
 			lock (assembly_map) {
-				if (!assembly_map.TryGetValue (assemblyName, out var mapEntry)) {
+				if (!assembly_map.TryGetValue (assemblyName, out entry)) {
 					if (assembly is null)
 						assembly = GetAssembly (assemblyName);
 					var type = assembly.GetType ("ObjCRuntime.__Registrar__", false);
 					if (type is null)
-						throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'", assembly);
+						return false;
 
 					var registrar = (IManagedRegistrar) Activator.CreateInstance (type)!;
-					mapEntry = new MapInfo (registrar);
-					assembly_map [assemblyName] = mapEntry;
+					entry = new MapInfo (registrar);
+					assembly_map [assemblyName] = entry;
 				}
-				return mapEntry;
 			}
+
+			return true;
 		}
 
 		static Assembly GetAssembly (string assemblyName)
@@ -186,6 +198,13 @@ namespace ObjCRuntime {
 			var entry = GetMapEntry (assembly);
 			var handle = entry.Registrar.LookupType (id);
 			return Type.GetTypeFromHandle (handle)!;
+		}
+
+		internal static uint LookupRegisteredTypeId (Type type)
+		{
+			if (!TryGetMapEntry (type.Assembly.GetName ().Name!, null, out var entry))
+				return Runtime.INVALID_TOKEN_REF;
+			return entry.Registrar.LookupTypeId (type.TypeHandle);
 		}
 
 		// helper functions for converting between native and managed objects

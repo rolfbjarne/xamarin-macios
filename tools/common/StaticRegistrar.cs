@@ -899,7 +899,7 @@ namespace Registrar {
 
 		protected override string GetTypeFullName (TypeReference type)
 		{
-			return type.FullName;
+			return type?.FullName ?? "<unknown type>";
 		}
 
 		protected override string GetMethodName (MethodDefinition method)

@@ -5175,17 +5175,11 @@ namespace Registrar {
 						return WriteFullTokenReference (member.Module.Assembly, INVALID_TOKEN_REF, member.Module.Name, id, member.FullName, out token_ref, out exception);
 					}
 					throw ErrorHelper.CreateError (99, $"Can't create a token reference to an unregistered type when using the managed static registrar: {member.FullName}");
-					token_ref = INVALID_TOKEN_REF;
-					return false;
 				}
 				if (implied_type == TokenType.Method) {
 					throw ErrorHelper.CreateError (99, $"Can't create a token reference to a method when using the managed static registrar: {member.FullName}");
-					token_ref = INVALID_TOKEN_REF;
-					return false;
 				}
 				throw ErrorHelper.CreateError (99, "Can't create a token reference to a token type {0} when using the managed static registrar.", implied_type.ToString ());
-				token_ref = INVALID_TOKEN_REF;
-				return false;
 			}
 #endif
 

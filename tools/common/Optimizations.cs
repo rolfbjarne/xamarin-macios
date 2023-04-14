@@ -243,7 +243,7 @@ namespace Xamarin.Bundler {
 
 			// We try to optimize calls to BlockLiteral.SetupBlock and certain BlockLiteral constructors if the static registrar is enabled
 			if (!OptimizeBlockLiteralSetupBlock.HasValue) {
-				OptimizeBlockLiteralSetupBlock = app.Registrar == RegistrarMode.Static ||  app.Registrar == RegistrarMode.ManagedStatic;
+				OptimizeBlockLiteralSetupBlock = app.Registrar == RegistrarMode.Static || app.Registrar == RegistrarMode.ManagedStatic;
 			}
 
 			// We will register protocols if the static registrar is enabled and loading assemblies is not possible

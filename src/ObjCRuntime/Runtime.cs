@@ -678,7 +678,6 @@ namespace ObjCRuntime {
 		{
 			if (a is null)
 				throw new ArgumentNullException (nameof (a));
-			Console.WriteLine ($"Runtime.RegisterAssembly ({a})");
 
 			if (!DynamicRegistrationSupported)
 				throw ErrorHelper.CreateError (8026, "Runtime.RegisterAssembly is not supported when the dynamic registrar has been linked away.");
@@ -718,10 +717,8 @@ namespace ObjCRuntime {
 				Class.Register (typeof (NSObject));
 			}
 
-			if (assemblies.Contains (a)) {
-				Console.WriteLine ($"Runtime.RegisterAssembly ({a}): already registered");
+			if (assemblies.Contains (a))
 				return;
-			}
 
 			assemblies.Add (a);
 

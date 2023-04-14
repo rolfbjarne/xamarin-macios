@@ -72,6 +72,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		AppBundleRewriter abr;
+		internal AppBundleRewriter AppBundleRewriter {
+			get {
+				if (abr is null)
+					abr = new AppBundleRewriter (this);
+				return abr;
+			}
+		}
+
 		public Dictionary<MethodDefinition, UnmanagedCallersEntry> UnmanagedCallersMap = new ();
 		public Dictionary<TypeDefinition, uint> RegisteredTypesMap = new Dictionary<TypeDefinition, uint> ();
 

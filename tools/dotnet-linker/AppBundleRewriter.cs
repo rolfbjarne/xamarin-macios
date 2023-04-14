@@ -1,0 +1,1073 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Mono.Cecil;
+using Mono.Cecil.Cil;
+using Mono.Linker;
+using Mono.Tuner;
+
+using Xamarin.Bundler;
+using Xamarin.Linker;
+
+#nullable enable
+
+namespace Xamarin.Linker {
+    class AppBundleRewriter {
+		AssemblyDefinition? current_assembly;
+		AssemblyDefinition? corlib_assembly;
+		AssemblyDefinition? platform_assembly;
+
+		public AssemblyDefinition CurrentAssembly {
+			get {
+				if (current_assembly is null)
+					throw new InvalidOperationException ($"No current assembly!");
+				return current_assembly;
+			}
+		}
+
+		public AssemblyDefinition CorlibAssembly {
+			get {
+				if (corlib_assembly is null)
+					throw new InvalidOperationException ($"No corlib assembly!");
+				return corlib_assembly;
+			}
+		}
+
+		public AssemblyDefinition PlatformAssembly {
+			get {
+				if (platform_assembly is null)
+					throw new InvalidOperationException ($"No platform assembly!");
+				return platform_assembly;
+			}
+		}
+
+		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> ();
+		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new Dictionary<string, (MethodDefinition, MethodReference)> ();
+
+		public AppBundleRewriter (LinkerConfiguration configuration)
+		{
+			foreach (var asm in configuration.Assemblies) {
+				if (asm.Name.Name == Driver.CorlibName) {
+					corlib_assembly = asm;
+				} else if (asm.Name.Name == configuration.PlatformAssembly) {
+					platform_assembly = asm;
+				}
+			}
+		}
+
+		// FIXME: mark the types and methods we use
+		TypeReference GetTypeReference (AssemblyDefinition assembly, string fullname, out TypeDefinition type, bool ensurePublic = false)
+		{
+			if (!type_map.TryGetValue (assembly, out var map))
+				type_map.Add (assembly, map = new Dictionary<string, (TypeDefinition, TypeReference)> ());
+
+			if (!map.TryGetValue (fullname, out var tuple)) {
+				var td = assembly.MainModule.Types.SingleOrDefault (v => v.FullName == fullname);
+				if (td is null)
+					throw new InvalidOperationException ($"Unable to find the type '{fullname}' in {assembly.Name.Name}");
+				if (ensurePublic)
+					td.IsPublic = true;
+				var tr = CurrentAssembly.MainModule.ImportReference (td);
+				map [fullname] = tuple = new (td, tr);
+			}
+
+			type = tuple.Item1;
+			return tuple.Item2;
+		}
+
+		// FIXME: mark the types and methods we use
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name)
+		{
+			GetTypeReference (assembly, fullname, out var td);
+			return GetMethodReference (assembly, td, name, fullname + "::" + name, null, out var _);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name, Func<MethodDefinition, bool>? predicate)
+		{
+			GetTypeReference (assembly, fullname, out var td);
+			return GetMethodReference (assembly, td, name, fullname + "::" + name, predicate, out var _);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name, Func<MethodDefinition, bool>? predicate, bool ensurePublic)
+		{
+			GetTypeReference (assembly, fullname, out var td);
+			return GetMethodReference (assembly, td, name, fullname + "::" + name, predicate, out var _, ensurePublic: ensurePublic);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name)
+		{
+			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, null, out var _);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate)
+		{
+			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, Func<MethodDefinition, bool>? predicate, bool ensurePublic = true)
+		{
+			return GetMethodReference (assembly, tr, name, tr.FullName + "::" + name, predicate, out var _, ensurePublic: ensurePublic);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, bool ensurePublic = true)
+		{
+			return GetMethodReference (assembly, tr, name, key, predicate, out var _, ensurePublic: ensurePublic);
+		}
+
+		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, out MethodDefinition method, bool ensurePublic = true)
+		{
+			if (!method_map.TryGetValue (key, out var tuple)) {
+				var td = tr.Resolve ();
+				var md = td.Methods.SingleOrDefault (v => v.Name == name && (predicate is null || predicate (v)));
+				if (md is null)
+					throw new InvalidOperationException ($"Unable to find the method '{tr.FullName}::{name}' (for key '{key}') in {assembly.Name.Name}. Methods in type:\n\t{string.Join ("\n\t", td.Methods.Select (GetMethodSignature).OrderBy (v => v))}");
+
+				tuple.Item1 = md;
+				tuple.Item2 = CurrentAssembly.MainModule.ImportReference (md);
+				method_map.Add (key, tuple);
+
+				if (ensurePublic)
+					md.IsPublic = true;
+			}
+
+			method = tuple.Item1;
+			return tuple.Item2;
+		}
+
+		static string GetMethodSignature (MethodDefinition method)
+		{
+			return $"{method?.ReturnType?.FullName ?? "(null)"} {method?.DeclaringType?.FullName ?? "(null)"}::{method?.Name ?? "(null)"} ({string.Join (", ", method?.Parameters?.Select (v => v?.ParameterType?.FullName + " " + v?.Name) ?? Array.Empty<string> ())})";
+		}
+
+		public TypeReference System_Byte {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Byte", out var _);
+			}
+		}
+
+		public TypeReference System_Exception {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Exception", out var _);
+			}
+		}
+
+		public TypeReference System_UInt16 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.UInt16", out var _);
+			}
+		}
+
+		public TypeReference System_Int32 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Int32", out var _);
+			}
+		}
+
+		public TypeReference System_UInt32 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.UInt32", out var _);
+			}
+		}
+
+		public TypeReference System_IntPtr {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.IntPtr", out var _);
+			}
+		}
+
+		public TypeReference System_Nullable_1 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Nullable`1", out var _);
+			}
+		}
+
+		public TypeReference System_Object {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Object", out var _);
+			}
+		}
+
+		public TypeReference System_String {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.String", out var _);
+			}
+		}
+
+		public TypeReference System_Type {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Type", out var _);
+			}
+		}
+
+		public TypeReference System_Void {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Void", out var _);
+			}
+		}
+
+		public TypeReference System_RuntimeTypeHandle {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.RuntimeTypeHandle", out var _);
+			}
+		}
+
+		public TypeReference System_Collections_Generic_Dictionary2 {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Collections.Generic.Dictionary`2", out var _);
+			}
+		}
+
+		public TypeReference System_Reflection_MethodBase {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodBase", out var _);
+			}
+		}
+
+		public TypeReference System_Reflection_MethodInfo {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodInfo", out var _);
+			}
+		}
+
+		public TypeReference Foundation_NSArray {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.NSArray", out var _);
+			}
+		}
+
+		public TypeReference Foundation_NSObject {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.NSObject", out var _);
+			}
+		}
+
+		public TypeReference Foundation_NSString {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.NSString", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_BindAs {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BindAs", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_IManagedRegistrar {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.IManagedRegistrar", out var _, ensurePublic: true);
+			}
+		}
+
+		public TypeReference ObjCRuntime_RegistrarHelper {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.RegistrarHelper", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_Runtime {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.Runtime", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_NativeHandle {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeHandle", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_BlockLiteral {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_NativeObjectExtensions {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
+			}
+		}
+
+		public MethodReference System_Object__ctor {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Object", ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference Nullable_HasValue {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_HasValue", (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Nullable_Value {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_Value", (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Type_GetTypeFromHandle {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Type, "GetTypeFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Dictionary2_Add {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Collections_Generic_Dictionary2, "Add", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference MethodBase_Invoke {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "Invoke", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType is ArrayType at
+						&& at.ElementType.Is ("System", "Object")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference MethodBase_GetMethodFromHandle {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "GetMethodFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference NSObject_AllocateNSObject {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSObject, "AllocateNSObject", nameof (NSObject_AllocateNSObject), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType.Is ("", "Flags") && v.Parameters [1].ParameterType.DeclaringType.Is ("Foundation", "NSObject")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1,
+						ensurePublic: true);
+			}
+		}
+
+		public MethodReference NSObject_DangerousRetain {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSObject, "DangerousRetain", nameof (NSObject_DangerousRetain), (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference NSObject_DangerousAutorelease {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSObject, "DangerousAutorelease", nameof (NSObject_DangerousAutorelease), (v) =>
+						!v.IsStatic
+						&& !v.HasParameters
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference BindAs_ConvertNSArrayToManagedArray {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, "ConvertNSArrayToManagedArray", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference BindAs_ConvertNSArrayToManagedArray2 {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, "ConvertNSArrayToManagedArray2", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 2
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference BindAs_ConvertManagedArrayToNSArray {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, "ConvertManagedArrayToNSArray", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType is ArrayType at
+						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference BindAs_ConvertManagedArrayToNSArray2 {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, "ConvertManagedArrayToNSArray2", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is ArrayType at
+						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 2
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference BindAs_CreateNullable {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, "CreateNullable", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						// && v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference BindAs_CreateNullable2 {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BindAs, "CreateNullable2", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						// && v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						// && v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 2
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_NSArray_string_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_string_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType is ArrayType at1 && at1.ElementType.Is ("System", "String")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType is ArrayType at2 && at2.ElementType.Is ("System", "String")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_NSArray_string_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_string_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ArrayType at1 && at1.ElementType.Is ("System", "String")
+						&& v.Parameters [2].ParameterType is ArrayType at2 && at2.ElementType.Is ("System", "String")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_NSArray_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType is ArrayType at1 && at1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType is ArrayType at2 && at2.ElementType.Is ("", "T")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_NSArray_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSArray_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ArrayType at1 && at1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ArrayType at2 && at2.ElementType.Is ("", "T")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_NSObject_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSObject_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType.Is ("", "T")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_NSObject_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "NSObject_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("Foundation", "NSObject")
+						&& v.Parameters [2].ParameterType.Is ("Foundation", "NSObject")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_string_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "string_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType.Is ("System", "String")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType.Is ("System", "String")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_string_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "string_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "String")
+						&& v.Parameters [2].ParameterType.Is ("System", "String")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_INativeObject_native_to_managed {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "INativeObject_native_to_managed", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType is ByReferenceType brt1 && brt1.ElementType.Is ("", "T")
+						&& v.Parameters [2].ParameterType is ByReferenceType brt2 && brt2.ElementType.Is ("", "T")
+						&& v.Parameters [3].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_INativeObject_managed_to_native {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "INativeObject_managed_to_native", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType is PointerType pt && pt.ElementType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& v.Parameters [2].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+
+		public MethodReference IManagedRegistrar_LookupUnmanagedFunction {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "LookupUnmanagedFunction", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& v.Parameters [1].ParameterType.Is ("System", "Int32")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+
+		public MethodReference IManagedRegistrar_LookupType {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "LookupType", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "UInt32")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+
+		public MethodReference IManagedRegistrar_RegisterWrapperTypes {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "RegisterWrapperTypes", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 1
+						// && v.Parameters [0].ParameterType is GenericInstanceType git && git.GetElementType ().Is ("System.Collections.Generic", "Dictionary`2")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Runtime_AllocGCHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "AllocGCHandle", nameof (Runtime_AllocGCHandle), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_HasNSObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "HasNSObject", nameof (Runtime_HasNSObject), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_GetNSObject__System_IntPtr {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", nameof (Runtime_GetNSObject__System_IntPtr), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle_bool {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", nameof (Runtime_GetNSObject_T___System_IntPtr_System_IntPtr_System_RuntimeMethodHandle_bool), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& v.Parameters [2].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [3].ParameterType.Is ("System", "Boolean")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1, ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_GetNSObject_T___System_IntPtr {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", nameof (Runtime_GetNSObject_T___System_IntPtr), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1, ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_GetNSObject__ObjCRuntime_NativeHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetNSObject", nameof (Runtime_GetNSObject__ObjCRuntime_NativeHandle), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Runtime_GetINativeObject__IntPtr_Boolean_Type_Type {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetINativeObject", nameof (Runtime_GetINativeObject__IntPtr_Boolean_Type_Type), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("System", "Boolean")
+						&& v.Parameters [2].ParameterType.Is ("System", "Type")
+						&& v.Parameters [3].ParameterType.Is ("System", "Type")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		public MethodReference BlockLiteral_CreateBlockForDelegate {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BlockLiteral, "CreateBlockForDelegate", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "Delegate")
+						&& v.Parameters [1].ParameterType.Is ("System", "Delegate")
+						&& v.Parameters [2].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_GetBlockForDelegate {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockForDelegate", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference RegistrarHelper_GetBlockPointer {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "GetBlockPointer", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "BlockLiteral")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference BlockLiteral_Copy {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_BlockLiteral, "Copy", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference Runtime_ReleaseBlockWhenDelegateIsCollected {
+			get {
+				var rv = GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "ReleaseBlockWhenDelegateIsCollected", "ReleaseBlockWhenDelegateIsCollected", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "IntPtr")
+						&& v.Parameters [1].ParameterType.Is ("System", "Delegate")
+						&& !v.HasGenericParameters, out var md);
+				md.IsPublic = true;
+				return rv;
+			}
+		}
+
+		public MethodReference Runtime_GetBlockWrapperCreator {
+			get {
+				var rv = GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "GetBlockWrapperCreator", nameof (Runtime_GetBlockWrapperCreator), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System.Reflection", "MethodInfo")
+						&& v.Parameters [1].ParameterType.Is ("System", "Int32")
+						&& !v.HasGenericParameters, out var md);
+				md.IsPublic = true;
+				return rv;
+			}
+		}
+
+		public MethodReference Runtime_CreateBlockProxy {
+			get {
+				var rv = GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "CreateBlockProxy", nameof (Runtime_CreateBlockProxy), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System.Reflection", "MethodInfo")
+						&& v.Parameters [1].ParameterType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters, out var md);
+				md.IsPublic = true;
+				return rv;
+			}
+		}
+
+		public MethodReference Runtime_TraceCaller {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "TraceCaller", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_FindClosedMethod {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedMethod", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& v.Parameters [2].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_FindClosedParameterType {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "FindClosedParameterType", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 4
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& v.Parameters [2].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& v.Parameters [3].ParameterType.Is ("System", "Int32")
+						&& !v.HasGenericParameters
+						, ensurePublic: true);
+			}
+		}
+		public MethodReference CFString_FromHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFString", "FromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference CFString_CreateNative {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFString", "CreateNative", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference CFArray_StringArrayFromHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFArray", "StringArrayFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference CFArray_Create {
+			get {
+				return GetMethodReference (PlatformAssembly, "CoreFoundation.CFArray", "Create", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType is ArrayType at
+						&& at.GetElementType ().Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference NSArray_ArrayFromHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, "Foundation.NSArray", "ArrayFromHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.Parameters [1].ParameterType.Is ("System", "Type")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference NSArray_ArrayFromHandle_1 {
+			get {
+				return GetMethodReference (PlatformAssembly, Foundation_NSArray, "ArrayFromHandle", "ArrayFromHandle`1", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.HasGenericParameters
+						&& v.GenericParameters.Count == 1);
+			}
+		}
+
+		public MethodReference RegistrarHelper_ManagedArrayToNSArray {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "ManagedArrayToNSArray", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "Object")
+						&& v.Parameters [1].ParameterType.Is ("System", "Boolean")
+						&& !v.HasGenericParameters, ensurePublic: true);
+			}
+		}
+
+		public MethodReference NativeObjectExtensions_GetHandle {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_NativeObjectExtensions, "GetHandle");
+			}
+		}
+
+		public MethodReference NativeObject_op_Implicit_IntPtr {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_NativeHandle, "op_Implicit", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle")
+						&& v.ReturnType.Is ("System", "IntPtr")
+						&& !v.HasGenericParameters
+						);
+			}
+		}
+
+		public MethodReference Runtime_RetainNSObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainNSObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("Foundation", "NSObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_RetainNativeObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainNativeObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_RetainAndAutoreleaseNSObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainAndAutoreleaseNSObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("Foundation", "NSObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		public MethodReference Runtime_RetainAndAutoreleaseNativeObject {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Runtime, "RetainAndAutoreleaseNativeObject", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "INativeObject")
+						&& !v.HasGenericParameters,
+						ensurePublic: true);
+			}
+		}
+
+		public MethodReference UnmanagedCallersOnlyAttribute_Constructor {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute", ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference DynamicDependencyAttribute_Constructor_String {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", ".ctor", (v) =>
+					v.IsConstructor
+					&& v.HasParameters
+					&& v.Parameters.Count == 1
+					&& v.Parameters [0].ParameterType.Is ("System", "String"));
+			}
+		}
+		public MethodReference Unsafe_AsRef {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.IsPointer
+						&& v.Parameters [0].ParameterType.GetElementType ().Is ("System", "Void")
+						&& v.HasGenericParameters
+						);
+			}
+		}
+
+		public MethodReference Exception_ctor_String {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Exception", ".ctor", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public void SetCurrentAssembly (AssemblyDefinition value)
+        {
+			current_assembly = value;
+		}
+
+        public void ClearCurrentAssembly ()
+        {
+			current_assembly = null;
+			type_map.Clear ();
+			method_map.Clear ();
+		}
+    }
+}

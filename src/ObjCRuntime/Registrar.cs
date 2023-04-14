@@ -253,7 +253,6 @@ namespace Registrar {
 				if (method.IsCategoryInstance)
 					paramCount--;
 
-				Console.WriteLine ($"{Registrar.GetTypeFullName (Type)}.{Registrar.GetDescriptiveMethodName (method.Method)}: IsCategoryInstance: {method.IsCategoryInstance}");
 				if (nativeParamCount != paramCount) {
 					Exception ex;
 
@@ -266,7 +265,6 @@ namespace Registrar {
 					}
 
 					Registrar.AddException (ref exceptions, ex);
-					Console.WriteLine ($"	Added exception: {ex}");
 				}
 
 				if (method.IsVariadic && pars != null && Registrar.GetTypeFullName (pars [paramCount - 1]) != "System.IntPtr")
@@ -839,7 +837,6 @@ namespace Registrar {
 
 			public bool IsCategoryInstance {
 				get {
-					Console.WriteLine ($"IsCategoryInstance: {Registrar?.GetTypeFullName (Method?.DeclaringType)}.{Registrar.GetDescriptiveMethodName (Method)}: IsCategory: {IsCategory} HasThis: {IsCategory && Registrar?.HasThisAttribute (Method) == true}");
 					return IsCategory && Registrar.HasThisAttribute (Method);
 				}
 			}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Mono.Cecil;
@@ -7,6 +8,8 @@ using Mono.Linker.Steps;
 using Xamarin.Tuner;
 
 using Xamarin.Bundler;
+
+#nullable enable
 
 namespace Xamarin.Linker {
 	public abstract class ConfigurationAwareStep : BaseStep {
@@ -76,7 +79,7 @@ namespace Xamarin.Linker {
 
 		// failure overrides, with defaults
 
-		bool CollectProductExceptions (Exception e, out List<ProductException> productExceptions)
+		bool CollectProductExceptions (Exception e, [NotNullWhen (true)] out List<ProductException>? productExceptions)
 		{
 			if (e is ProductException pe) {
 				productExceptions = new List<ProductException> ();

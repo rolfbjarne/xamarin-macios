@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
+#nullable enable
+
 namespace Xamarin.Linker {
 
 	static class Cecil_Extensions {

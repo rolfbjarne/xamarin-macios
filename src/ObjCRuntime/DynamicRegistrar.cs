@@ -457,7 +457,7 @@ namespace Registrar {
 
 		protected override string GetTypeFullName (Type type)
 		{
-			return type?.FullName ?? "<unknown type";
+			return type.FullName;
 		}
 
 		public override bool VerifyIsConstrainedToNSObject (Type type, out Type constrained_type)

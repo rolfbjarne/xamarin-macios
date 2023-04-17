@@ -4146,11 +4146,11 @@ namespace Registrar {
 				var staticCall = App.IsAOTCompiled (method.DeclaringType.Type.Module.Assembly.Name.Name);
 				var supportDynamicAssemblyLoading = true;
 				var managedMethodNotFound = false;
-				if (!App.Configuration.UnmanagedCallersMap.TryGetValue (method.Method, out var pinvokeMethodInfo)) {
+				if (!App.Configuration.AssemblyTrampolineInfos.TryFindInfo (method.Method, out var pinvokeMethodInfo)) {
 					exceptions.Add (ErrorHelper.CreateError (99, "Could not find the managed callback for {0}", descriptiveMethodName));
 					return;
 				}
-				var pinvokeMethod = pinvokeMethodInfo.Name;
+				var pinvokeMethod = pinvokeMethodInfo.UnmanagedCallersOnlyEntryPoint;
 				sb.AppendLine ();
 				if (!staticCall)
 					sb.Append ("typedef ");
@@ -5170,7 +5170,7 @@ namespace Registrar {
 #if NET
 			if (App.Registrar == RegistrarMode.ManagedStatic) {
 				if (implied_type == TokenType.TypeDef && member is TypeDefinition td) {
-					if (App.Configuration.RegisteredTypesMap.TryGetValue (td, out var id)) {
+					if (App.Configuration.AssemblyTrampolineInfos.TryGetValue (td.Module.Assembly, out var infos) && infos.TryGetRegisteredTypeIndex (td, out var id)) {
 						id = id | (uint) TokenType.TypeDef;
 						return WriteFullTokenReference (member.Module.Assembly, INVALID_TOKEN_REF, member.Module.Name, id, member.FullName, out token_ref, out exception);
 					}

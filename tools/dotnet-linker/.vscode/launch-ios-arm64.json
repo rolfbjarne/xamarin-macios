@@ -472,7 +472,9 @@
 "--custom-step",
 "Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler,/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-7.0.203-servicing.23170.23/packs/Microsoft.iOS.Sdk/16.2.7360-ci.managed-static-registrar/tools/dotnet-linker/dotnet-linker.dll"
 "--custom-step",
-"-SweepStep:Xamarin.Linker.ManagedRegistrarStep,/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-7.0.203-servicing.23170.23/packs/Microsoft.iOS.Sdk/16.2.7360-ci.managed-static-registrar/tools/dotnet-linker/dotnet-linker.dll"
+"-MarkStep:Xamarin.Linker.ManagedRegistrarStep,/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-7.0.204-servicing.23204.18/packs/Microsoft.MacCatalyst.Sdk/16.4.7124-ci.managed-static-registrar/tools/dotnet-linker/dotnet-linker.dll",
+"--custom-step",
+"-SweepStep:Xamarin.Linker.ManagedRegistrarLookupTablesStep,/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-7.0.204-servicing.23204.18/packs/Microsoft.MacCatalyst.Sdk/16.4.7124-ci.managed-static-registrar/tools/dotnet-linker/dotnet-linker.dll",
 "--custom-step",
 "+SweepStep:Xamarin.Linker.Steps.PostSweepDispatcher,/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-7.0.203-servicing.23170.23/packs/Microsoft.iOS.Sdk/16.2.7360-ci.managed-static-registrar/tools/dotnet-linker/dotnet-linker.dll"
 "--custom-step",

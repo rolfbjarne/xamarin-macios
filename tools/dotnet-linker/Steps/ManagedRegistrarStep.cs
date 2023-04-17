@@ -19,20 +19,50 @@ using System.Globalization;
 #nullable enable
 
 namespace Xamarin.Linker {
-	class AssemblyTrampolineInfo : List<TrampolineInfo>
+	public class AssemblyTrampolineInfos : Dictionary<AssemblyDefinition, AssemblyTrampolineInfo>
 	{
+		Dictionary<MethodDefinition, TrampolineInfo>? map;
+		public bool TryFindInfo (MethodDefinition method, [NotNullWhen (true)] out TrampolineInfo? info)
+		{
+			if (map is null) {
+				map = new Dictionary<MethodDefinition, TrampolineInfo> ();
+				foreach (var kvp in this) {
+					foreach (var ai in kvp.Value) {
+						map.Add (ai.Target, ai);
+					}
+				}
+			}
+			return map.TryGetValue (method, out info);
+		}
 	}
 
-	class TrampolineInfo {
+	public class AssemblyTrampolineInfo : List<TrampolineInfo>
+	{
+		Dictionary<TypeDefinition, uint> registered_type_map = new ();
+
+		public void RegisterType (TypeDefinition td, uint index)
+		{
+			registered_type_map.Add (td, index);
+		}
+
+		public bool TryGetRegisteredTypeIndex (TypeDefinition td, out uint index)
+		{
+			return registered_type_map.TryGetValue (td, out index);
+		}
+	}
+
+	public class TrampolineInfo {
 		public MethodDefinition Trampoline;
 		public MethodDefinition Target;
+		public string UnmanagedCallersOnlyEntryPoint;
 		public int Id;
 
-		public TrampolineInfo (MethodDefinition trampoline, MethodDefinition target, int id)
+		public TrampolineInfo (MethodDefinition trampoline, MethodDefinition target, string entryPoint)
 		{
 			this.Trampoline = trampoline;
 			this.Target = target;
-			this.Id = id;
+			this.UnmanagedCallersOnlyEntryPoint = entryPoint;
+			this.Id = -1;
 		}
 	}
 	
@@ -108,6 +138,7 @@ namespace Xamarin.Linker {
 			abr.SetCurrentAssembly (assembly);
 
 			var current_trampoline_lists = new AssemblyTrampolineInfo ();
+			Configuration.AssemblyTrampolineInfos [assembly] = current_trampoline_lists;
 
 			var modified = false;
 			foreach (var type in assembly.MainModule.Types)
@@ -248,9 +279,9 @@ namespace Xamarin.Linker {
 
 			var callback = callbackType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
-			var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
-			Configuration.UnmanagedCallersMap.Add (method, entry);
-			infos.Add (new TrampolineInfo (callback, method, entry.Id));
+			// var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
+			// Configuration.UnmanagedCallersMap.Add (method, entry);
+			infos.Add (new TrampolineInfo (callback, method, name));
 
 			DerivedLinkContext.Annotations.Mark (callback);
 			DerivedLinkContext.Annotations.AddPreservedMethod (method, callback);

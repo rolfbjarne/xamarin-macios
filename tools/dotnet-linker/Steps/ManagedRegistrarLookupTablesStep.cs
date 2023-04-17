@@ -93,6 +93,7 @@ namespace Xamarin.Linker {
 
 			abr.SetCurrentAssembly (assembly);
 
+			trampolineInfos.SetIds ();
 			CreateRegistrarType (trampolineInfos);
 
 			abr.ClearCurrentAssembly ();
@@ -228,7 +229,7 @@ namespace Xamarin.Linker {
 			} else if (trampolineInfos.Count > 0) {
 				// All the methods in a given assembly will have consecutive IDs (but might not start at 0).
 				if (trampolineInfos.First ().Id + trampolineInfos.Count - 1 != trampolineInfos.Last ().Id)
-					throw ErrorHelper.CreateError (99, "Invalid ID range");
+					throw ErrorHelper.CreateError (99, $"Invalid ID range: {trampolineInfos.First ().Id} + {trampolineInfos.Count - 1} != {trampolineInfos.Last ().Id}");
 
 				const int methodsPerLevel = 10;
 				var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));

@@ -49,6 +49,12 @@ namespace Xamarin.Linker {
 		{
 			return registered_type_map.TryGetValue (td, out index);
 		}
+
+		public void SetIds ()
+		{
+			for (var i = 0; i < Count; i++)
+				this [i].Id = i;
+		}
 	}
 
 	public class TrampolineInfo {

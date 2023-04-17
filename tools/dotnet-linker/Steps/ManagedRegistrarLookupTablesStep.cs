@@ -141,11 +141,11 @@ namespace Xamarin.Linker {
 			DerivedLinkContext.Annotations.Mark (defaultCtor);
 
 			GenerateLookupUnmanagedFunction (td, sorted);
-			GenerateLookupType (td);
+			GenerateLookupType (infos, td);
 			GenerateRegisterWrapperTypes (td);
 		}
 
-		void GenerateLookupType (TypeDefinition type)
+		void GenerateLookupType (AssemblyTrampolineInfo infos, TypeDefinition type)
 		{
 			var method = type.AddMethod ("LookupType", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.System_RuntimeTypeHandle);
 			method.AddParameter ("id", abr.System_UInt32);
@@ -172,7 +172,7 @@ namespace Xamarin.Linker {
 				targets [i] = Instruction.Create (OpCodes.Ldtoken, types [i]);
 				var td = types [i].Resolve ();
 				Console.WriteLine ($"Registering {td.FullName} => {i}");
-				Configuration.RegisteredTypesMap.Add (td, (uint) i);
+				infos.RegisterType (td, (uint) i);
 			}
 
 			il.Emit (OpCodes.Ldarg_1);

@@ -40,6 +40,8 @@ namespace Xamarin.Linker {
 	{
 		Dictionary<TypeDefinition, uint> registered_type_map = new ();
 
+		public TypeDefinition? RegistrarType;
+
 		public void RegisterType (TypeDefinition td, uint index)
 		{
 			registered_type_map.Add (td, index);
@@ -140,8 +142,11 @@ namespace Xamarin.Linker {
 			if (!assembly.MainModule.HasTypes)
 				return;
 
-
 			abr.SetCurrentAssembly (assembly);
+
+			if (assembly == abr.PlatformAssembly) {
+				Annotations.Mark (abr.System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes.Resolve ());
+			}
 
 			var current_trampoline_lists = new AssemblyTrampolineInfo ();
 			Configuration.AssemblyTrampolineInfos [assembly] = current_trampoline_lists;
@@ -992,13 +997,6 @@ namespace Xamarin.Linker {
 			var unmanagedCallersAttribute = new CustomAttribute (abr.UnmanagedCallersOnlyAttribute_Constructor);
 			unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("EntryPoint", new CustomAttributeArgument (abr.System_String, "_" + entryPoint)));
 			return unmanagedCallersAttribute;
-		}
-
-		CustomAttribute CreateDynamicDependencyAttribute (string method)
-		{
-			var attrib = new CustomAttribute (abr.DynamicDependencyAttribute_Constructor_String);
-			attrib.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, method));
-			return attrib;
 		}
 
 		void GenerateConversionToManaged (MethodDefinition method, ILProcessor il, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, int parameter, out TypeReference nativeCallerType)

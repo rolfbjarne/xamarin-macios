@@ -62,4 +62,4 @@ vscode-prepare:
 	sed -i '' s_/Users/rolf/work/maccore/nativeaot/xamarin-macios/builds/downloads/dotnet-sdk-[0-9a-zA-Z.-]*/packs/Microsoft.MacCatalyst.Runtime.maccatalyst-arm64/.*/runtimes/maccatalyst-arm64/lib/net7.0/Microsoft.MacCatalyst.dll_$(abspath $(wildcard $(TOP)/builds/downloads/dotnet-sdk-$(DOTNET_VERSION)/packs/Microsoft.MacCatalyst.Runtime.maccatalyst-arm64/*/runtimes/maccatalyst-arm64/lib/$(DOTNET_TFM)/Microsoft.MacCatalyst.dll))_ .vscode/launch.json
 
 vscode: vscode-prepare
-	PATH=$(DOTNET_DIR):$(PATH) "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" .
+	PATH=$(DOTNET_DIR):$(PATH) code .

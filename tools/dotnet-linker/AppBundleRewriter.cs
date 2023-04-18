@@ -224,6 +224,18 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference System_Diagnostics_CodeAnalysis_DynamicallyAccessedMembersAttribute {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembersAttribute", out var _);
+			}
+		}
+
+		public TypeReference System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes", out var _);
+			}
+		}
+
 		public TypeReference System_Reflection_MethodInfo {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodInfo", out var _);
@@ -1026,15 +1038,16 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public MethodReference DynamicDependencyAttribute_Constructor_String {
+		public MethodReference DynamicallyAccessedMembersAttribute_Constructor_DynamicallyAccessedMemberTypes {
 			get {
-				return GetMethodReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", ".ctor", (v) =>
+				return GetMethodReference (CorlibAssembly, System_Diagnostics_CodeAnalysis_DynamicallyAccessedMembersAttribute, ".ctor", (v) =>
 					v.IsConstructor
 					&& v.HasParameters
 					&& v.Parameters.Count == 1
-					&& v.Parameters [0].ParameterType.Is ("System", "String"));
+					&& v.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes"));
 			}
 		}
+
 		public MethodReference Unsafe_AsRef {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
@@ -1056,6 +1069,13 @@ namespace Xamarin.Linker {
 						&& v.Parameters [0].ParameterType.Is ("System", "String")
 						&& !v.HasGenericParameters);
 			}
+		}
+
+		public CustomAttribute CreateDynamicallyAccessedMemberTypesAttribute (System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes memberTypes)
+		{
+			var attrib = new CustomAttribute (DynamicallyAccessedMembersAttribute_Constructor_DynamicallyAccessedMemberTypes);
+			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, memberTypes));
+			return attrib;
 		}
 
 		public void SetCurrentAssembly (AssemblyDefinition value)

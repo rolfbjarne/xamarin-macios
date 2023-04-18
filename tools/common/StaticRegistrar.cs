@@ -1844,19 +1844,30 @@ namespace Registrar {
 			return PrepareInterfaceMethodMapping (type);
 		}
 
+		public TypeReference GetProtocolAttributeWrapperType (TypeDefinition type)
+		{
+			return GetProtocolAttributeWrapperType ((TypeReference) type);
+		}
+
+		public static TypeReference GetProtocolAttributeWrapperType (ICustomAttribute attrib)
+		{
+			if (!attrib.HasProperties)
+				return null;
+			
+			foreach (var prop in attrib.Properties) {
+				if (prop.Name == "WrapperType")
+					return (TypeReference) prop.Argument.Value;
+			}
+		
+			return null;
+		}
+
 		protected override TypeReference GetProtocolAttributeWrapperType (TypeReference type)
 		{
 			if (!TryGetAttribute (type.Resolve (), Foundation, StringConstants.ProtocolAttribute, out var attrib))
 				return null;
 
-			if (attrib.HasProperties) {
-				foreach (var prop in attrib.Properties) {
-					if (prop.Name == "WrapperType")
-						return (TypeReference) prop.Argument.Value;
-				}
-			}
-
-			return null;
+			return GetProtocolAttributeWrapperType (attrib);
 		}
 
 		protected override IList<AdoptsAttribute> GetAdoptsAttributes (TypeReference type)
@@ -2826,6 +2837,20 @@ namespace Registrar {
 			}
 		}
 
+		public bool NeedsProtocolMap {
+			get {
+				var needs_protocol_map = false;
+				// Check if we need the protocol map.
+				// We don't need it if the linker removed the method ObjCRuntime.Runtime.GetProtocolForType,
+				// or if we're not registering protocols.
+				if (App.Optimizations.RegisterProtocols == true) {
+					var asm = input_assemblies.FirstOrDefault ((v) => v.Name.Name == PlatformAssembly);
+					needs_protocol_map = asm?.MainModule.GetType ("ObjCRuntime", "Runtime")?.Methods.Any ((v) => v.Name == "GetProtocolForType") == true;
+				}
+				return needs_protocol_map;
+			}
+		}
+
 		void Specialize (AutoIndentStringBuilder sb, out string initialization_method)
 		{
 			List<Exception> exceptions = new List<Exception> ();
@@ -2840,14 +2865,7 @@ namespace Registrar {
 
 			var i = 0;
 
-			bool needs_protocol_map = false;
-			// Check if we need the protocol map.
-			// We don't need it if the linker removed the method ObjCRuntime.Runtime.GetProtocolForType,
-			// or if we're not registering protocols.
-			if (App.Optimizations.RegisterProtocols == true) {
-				var asm = input_assemblies.FirstOrDefault ((v) => v.Name.Name == PlatformAssembly);
-				needs_protocol_map = asm?.MainModule.GetType ("ObjCRuntime", "Runtime")?.Methods.Any ((v) => v.Name == "GetProtocolForType") == true;
-			}
+			var needs_protocol_map = NeedsProtocolMap;
 
 			map.AppendLine ("static MTClassMap __xamarin_class_map [] = {");
 
@@ -2950,7 +2968,7 @@ namespace Registrar {
 					map_init.AppendLine ("__xamarin_class_map [{1}].handle = {0};", get_class, i++);
 				}
 
-				if (@class.IsProtocol && @class.ProtocolWrapperType != null && App.Registrar != RegistrarMode.ManagedStatic) {
+				if (@class.IsProtocol && @class.ProtocolWrapperType != null) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
 						continue;
 					if (!TryCreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef, out var protocol_wrapper_type_ref, exceptions))

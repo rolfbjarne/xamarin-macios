@@ -230,6 +230,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", out var _);
+			}
+		}
+
 		public TypeReference System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes", out var _);
@@ -1048,6 +1054,17 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference DynamicDependencyAttribute_Constructor_DynamicallyAccessedMemberTypes_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute, ".ctor", (v) =>
+					v.IsConstructor
+					&& v.HasParameters
+					&& v.Parameters.Count == 2
+					&& v.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes")
+					&& v.Parameters [1].ParameterType.Is ("System", "Type")
+					);
+			}
+		}
 		public MethodReference Unsafe_AsRef {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
@@ -1075,6 +1092,14 @@ namespace Xamarin.Linker {
 		{
 			var attrib = new CustomAttribute (DynamicallyAccessedMembersAttribute_Constructor_DynamicallyAccessedMemberTypes);
 			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, memberTypes));
+			return attrib;
+		}
+
+		public CustomAttribute CreateDynamicDependencyAttribute (System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes memberTypes, TypeReference type)
+		{
+			var attrib = new CustomAttribute (DynamicDependencyAttribute_Constructor_DynamicallyAccessedMemberTypes_Type);
+			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, memberTypes));
+			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Type, type));
 			return attrib;
 		}
 

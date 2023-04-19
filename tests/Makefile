@@ -343,7 +343,7 @@ verify-system-vsmac-xcode-match:
 
 package-test-libraries.zip:
 	$(Q) @$(MAKE) all -C test-libraries
-	$(Q) mkdir -p $@.tmpdir
-	$(Q) $(CP) -a test-libraries/*  $@.tmpdir
-	$(Q_GEN) cd $@.tmpdir && zip -9r --symlinks $(abspath $@) .
-	$(Q) rm -rf $@.tmpdir
+	$(Q_GEN) rm -f "$@"
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/test-libraries
+	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*[c|f]sproj' | zip -9r --symlinks $(abspath $@) -@
+	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*sln' | zip -9r --symlinks $(abspath $@) -@

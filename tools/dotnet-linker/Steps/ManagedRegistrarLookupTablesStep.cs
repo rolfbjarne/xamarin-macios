@@ -157,6 +157,11 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		bool IsLinkedAway (TypeDefinition type)
+		{
+			return StaticRegistrar.IsTrimmed (type, Annotations);
+		}
+
 		void GenerateLookupType (AssemblyTrampolineInfo infos, TypeDefinition registrarType)
 		{
 			var method = registrarType.AddMethod ("LookupType", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.System_RuntimeTypeHandle);
@@ -181,12 +186,12 @@ namespace Xamarin.Linker {
 				if (!types.Any (v => v.Reference == st.Actual.Type))
 					types.Add (new (st.Actual.Type, st.Actual.Type.Resolve ()));
 			}
-			types.RemoveAll (v => v.Reference.Module.Assembly != abr.CurrentAssembly);
-			types.RemoveAll (v => !Annotations.IsMarked (v.Definition));
+			types.RemoveAll (v => v.Definition.Module.Assembly != abr.CurrentAssembly);
+			types.RemoveAll (v => IsLinkedAway (v.Definition));
 
 			if (StaticRegistrar.NeedsProtocolMap) {
 				foreach (var type in registrarType.Module.Types) {
-					if (!Annotations.IsMarked (type))
+					if (IsLinkedAway (type))
 						continue;
 					var wrapperType = StaticRegistrar.GetProtocolAttributeWrapperType (type);
 					if (wrapperType is null)
@@ -201,7 +206,7 @@ namespace Xamarin.Linker {
 				targets [i] = Instruction.Create (OpCodes.Ldtoken, types [i].Reference);
 				var td = types [i].Definition;
 				Console.WriteLine ($"Registering {td.FullName} => {i}");
-				if (!Annotations.IsMarked (td))
+				if (IsLinkedAway (td))
 					Console.WriteLine ("Linked away?");
 				infos.RegisterType (td, (uint) i);
 			}
@@ -239,8 +244,8 @@ namespace Xamarin.Linker {
 				if (ct.Value.ProtocolWrapperType is null)
 					continue;
 
-				var keyMarked = Annotations.IsMarked (ct.Key.Resolve ());
-				var wrapperTypeMarked = Annotations.IsMarked (ct.Value.ProtocolWrapperType.Resolve ());
+				var keyMarked = !IsLinkedAway (ct.Key.Resolve ());
+				var wrapperTypeMarked = !IsLinkedAway (ct.Value.ProtocolWrapperType.Resolve ());
 				if (!keyMarked && !wrapperTypeMarked)
 					continue;
 				if (keyMarked ^ wrapperTypeMarked)

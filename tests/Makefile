@@ -345,5 +345,7 @@ package-test-libraries.zip:
 	$(Q) @$(MAKE) all -C test-libraries
 	$(Q_GEN) rm -f "$@"
 	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/test-libraries
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/mono-native/macOS/unified ./tests/mono-native/macOS/compat
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/mono-native/iOS/unified ./tests/mono-native/iOS/compat
 	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*[c|f]sproj' | zip -9r --symlinks $(abspath $@) -@
 	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*sln' | zip -9r --symlinks $(abspath $@) -@

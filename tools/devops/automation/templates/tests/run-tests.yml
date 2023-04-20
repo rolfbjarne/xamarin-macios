@@ -117,7 +117,7 @@ steps:
 - bash: |
     ls -Rla $(Build.SourcesDirectory)/artifacts/tmp
     unzip -o $(Build.SourcesDirectory)/artifacts/tmp/${{ parameters.uploadPrefix }}package-introspection-dependencies/package-introspection-dependencies.zip
-  workingDirectory: $(Build.DefaultWorkingDirectory)/xamarin-macios/tools/mtouch
+  workingDirectory: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/mtouch
   displayName: Expand introspection dependencies.
   timeoutInMinutes: 10
 
@@ -135,7 +135,7 @@ steps:
     unzip -o $(Build.SourcesDirectory)/artifacts/tmp/${{ parameters.uploadPrefix }}package-test-libraries/package-test-libraries.zip -d .
     git status || true
     find $PWD/tests || true
-  workingDirectory: $(Build.DefaultWorkingDirectory)/xamarin-macios/
+  workingDirectory: $(System.DefaultWorkingDirectory)/xamarin-macios/
   displayName: Expand test libraries.
   timeoutInMinutes: 10
 
@@ -305,7 +305,7 @@ steps:
 - script: |
     set -x
     mkdir -p $(Build.ArtifactStagingDirectory)/all-binlogs
-    rsync -av --prune-empty-dirs --include '*/' --include '*.binlog' --exclude '*' $(Build.SourcesDirectory)/xamarin-macios $(Build.ArtifactStagingDirectory)/all-binlogs
+    rsync -av --prune-empty-dirs --include '*/' --include '*.binlog' --exclude '*' $(System.DefaultWorkingDirectory)/xamarin-macios $(Build.ArtifactStagingDirectory)/all-binlogs
   displayName: Copy all binlogs
   continueOnError: true
   condition: succeededOrFailed()

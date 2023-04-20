@@ -137,6 +137,7 @@ steps:
     mv $(Build.SourcesDirectory)/artifacts/tmp/${{ parameters.uploadPrefix }}package-test-libraries/package-test-libraries.zip .
     unzip -o package-test-libraries.zip -d .
     git status || true
+    find $PWD/tests || true
   workingDirectory: $(Build.SourcesDirectory)/xamarin-macios/
   displayName: Expand test libraries.
   timeoutInMinutes: 10

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Microsoft.Build.Framework;
@@ -29,40 +28,25 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 		public override bool Execute ()
 		{
 			try {
-				Log.LogWarning ("A");
 				var hotRestartClient = new HotRestartClient ();
-				Log.LogWarning ("B");
 				var plistArgs = new Dictionary<string, string>
 				{
 					{ "CFBundleIdentifier", BundleIdentifier }
 				};
-				Log.LogWarning ("C");
 				var password = hotRestartClient.CertificatesManager.GetCertificatePassword (certificatePath: CodeSigningPath);
-				Log.LogWarning ("D");
 
 				if (password == null) {
-					Log.LogWarning ("D2");
 					throw new Exception (Resources.Codesign_MissingPasswordFile);
 				}
 
-				Log.LogWarning ("E!");
-				Log.LogWarning ($"    AppBundlePath: {AppBundlePath}");
-				Log.LogWarning ($"    ProvisioningProfilePath: {ProvisioningProfilePath}");
-				Log.LogWarning ($"    CodeSigningPath: {CodeSigningPath}");
-				Log.LogWarning ($"    password: {password} = {Marshal.PtrToStringUni (Marshal.SecureStringToGlobalAllocUnicode (password))}");
-				Log.LogWarning ($"    plistArgs: {plistArgs}");
 				hotRestartClient.Sign (AppBundlePath, ProvisioningProfilePath, CodeSigningPath, password, plistArgs);
-
-				Log.LogWarning ("F");
 			} catch (WindowsiOSException ex) {
-				Log.LogWarning ("G");
 				var message = GetFullExceptionMesage (ex);
-				Log.LogWarning ("H");
 
 				Log.LogError (null, ex.ErrorCode, null, null, 0, 0, 0, 0, message);
+			} catch (Exception ex) {
+				Log.LogErrorFromException (ex);
 			}
-
-			Log.LogWarning ("I");
 
 			return !Log.HasLoggedErrors;
 		}

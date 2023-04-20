@@ -48,14 +48,10 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 					var key = item.Key!;
 					if (!IgnorePlistKeys.Contains (key)) {
 						if (preBuiltInfoPlist.ContainsKey (key)) {
-							Log.LogMessage (MessageImportance.Low, $"Removed the key {key} with value {PObject_ToString (preBuiltInfoPlist [key])} from the prebuilt input");
 							preBuiltInfoPlist.Remove (key);
 						}
 
 						preBuiltInfoPlist.Add (key, item.Value.Clone ());
-						Log.LogMessage (MessageImportance.Low, $"Added the key {key} with value {PObject_ToString (preBuiltInfoPlist [key])} from the compiled input");
-					} else {
-						Log.LogMessage (MessageImportance.Low, $"Not copying the key {key} because it's ignored.");
 					}
 				}
 
@@ -65,29 +61,12 @@ namespace Xamarin.iOS.HotRestart.Tasks {
 				preBuiltInfoPlist.Save (PrebuiltAppManifestPath, binary: true);
 				Log.LogMessage (MessageImportance.Low, $"Saved app manifest to {PrebuiltAppManifestPath}");
 
-				Log.LogMessage (MessageImportance.Low, $"App manifest:\n{preBuiltInfoPlist.ToXml ()}");
-
 				return true;
 			} catch (Exception ex) {
 				Log.LogErrorFromException (ex);
 
 				return false;
 			}
-		}
-
-		static string? PObject_ToString (PObject? obj)
-		{
-			if (obj is PString str)
-				return str.Value;
-			else if (obj is PBoolean b)
-				return b.Value.ToString ();
-			else if (obj is PData pd)
-				return pd.Value.ToString ();
-			else if (obj is PNumber number)
-				return number.Value.ToString ();
-			else if (obj is PReal real)
-				return real.Value.ToString ();
-			return obj?.ToString ();
 		}
 	}
 }

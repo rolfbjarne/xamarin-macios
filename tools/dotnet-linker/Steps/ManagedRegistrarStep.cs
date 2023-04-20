@@ -19,8 +19,7 @@ using System.Globalization;
 #nullable enable
 
 namespace Xamarin.Linker {
-	public class AssemblyTrampolineInfos : Dictionary<AssemblyDefinition, AssemblyTrampolineInfo>
-	{
+	public class AssemblyTrampolineInfos : Dictionary<AssemblyDefinition, AssemblyTrampolineInfo> {
 		Dictionary<MethodDefinition, TrampolineInfo>? map;
 		public bool TryFindInfo (MethodDefinition method, [NotNullWhen (true)] out TrampolineInfo? info)
 		{
@@ -36,8 +35,7 @@ namespace Xamarin.Linker {
 		}
 	}
 
-	public class AssemblyTrampolineInfo : List<TrampolineInfo>
-	{
+	public class AssemblyTrampolineInfo : List<TrampolineInfo> {
 		Dictionary<TypeDefinition, uint> registered_type_map = new ();
 
 		public TypeDefinition? RegistrarType;
@@ -73,7 +71,7 @@ namespace Xamarin.Linker {
 			this.Id = -1;
 		}
 	}
-	
+
 	public class ManagedRegistrarStep : ConfigurationAwareStep {
 		protected override string Name { get; } = "ManagedRegistrar";
 		protected override int ErrorCode { get; } = 2430;
@@ -96,7 +94,7 @@ namespace Xamarin.Linker {
 			App.SelectRegistrar ();
 			if (App.Registrar != RegistrarMode.ManagedStatic)
 				return;
-			
+
 			Configuration.Target.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
 		}
 

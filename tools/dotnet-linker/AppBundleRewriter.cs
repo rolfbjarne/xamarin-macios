@@ -13,7 +13,7 @@ using Xamarin.Linker;
 #nullable enable
 
 namespace Xamarin.Linker {
-    class AppBundleRewriter {
+	class AppBundleRewriter {
 		AssemblyDefinition? current_assembly;
 		AssemblyDefinition? corlib_assembly;
 		AssemblyDefinition? platform_assembly;
@@ -1104,15 +1104,15 @@ namespace Xamarin.Linker {
 		}
 
 		public void SetCurrentAssembly (AssemblyDefinition value)
-        {
+		{
 			current_assembly = value;
 		}
 
-        public void ClearCurrentAssembly ()
-        {
+		public void ClearCurrentAssembly ()
+		{
 			current_assembly = null;
 			type_map.Clear ();
 			method_map.Clear ();
 		}
-    }
+	}
 }

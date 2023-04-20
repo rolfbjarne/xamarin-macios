@@ -1853,12 +1853,12 @@ namespace Registrar {
 		{
 			if (!attrib.HasProperties)
 				return null;
-			
+
 			foreach (var prop in attrib.Properties) {
 				if (prop.Name == "WrapperType")
 					return (TypeReference) prop.Argument.Value;
 			}
-		
+
 			return null;
 		}
 

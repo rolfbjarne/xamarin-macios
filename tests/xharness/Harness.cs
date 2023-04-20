@@ -278,6 +278,11 @@ namespace Xharness {
 			processManager = new MlaunchProcessManager (XcodeRoot, MlaunchPath);
 			AppBundleLocator = new AppBundleLocator (processManager, () => HarnessLog, XIBuildPath, "/usr/local/share/dotnet/dotnet", config ["DOTNET"]);
 			TunnelBore = new TunnelBore (processManager);
+
+			Console.WriteLine ("Full configuration:");
+			foreach (var key in config.Keys.OrderBy (v => v)) {
+				Console.WriteLine ($"  {key}={config [key]}");
+			}
 		}
 
 		public bool GetIncludeSystemPermissionTests (TestPlatform platform, bool device)

@@ -95,7 +95,14 @@ namespace Xharness {
 
 			XmlDocument doc;
 			doc = new XmlDocument ();
-			doc.LoadWithoutNetworkAccess (original_path);
+			try {
+				doc.LoadWithoutNetworkAccess (original_path);
+				Log (log, $"Loaded {original_path} root directory: {rootDirectory}");
+			} catch (Exception e) {
+				var msg = $"Failed to load {original_path} root directory: {rootDirectory}: {e.Message}";
+				Log (log, msg);
+				throw new Exception (msg, e);
+			}
 
 			var variableSubstitution = new Dictionary<string, string> ();
 			variableSubstitution.Add ("RootTestsDirectory", rootDirectory);
@@ -181,6 +188,7 @@ namespace Xharness {
 				if (!allProjectReferences.TryGetValue (prPath, out var tp)) {
 					tp = new TestProject (Label, pr.Replace ('\\', '/'));
 					tp.TestPlatform = TestPlatform;
+					Log (log, $"Found project reference {prPath} in {original_path}");
 					await tp.CreateCopyAsync (log, processManager, test, rootDirectory, allProjectReferences);
 					allProjectReferences.Add (prPath, tp);
 				}
@@ -190,6 +198,12 @@ namespace Xharness {
 			this.ProjectReferences = projectReferences;
 
 			doc.Save (Path);
+		}
+
+		void Log (ILog log, string message)
+		{
+			log.WriteLine (message);
+			Console.WriteLine (message);
 		}
 
 		void InlineSharedImports (XmlDocument doc, string original_path, Dictionary<string, string> variableSubstitution, string rootDirectory)

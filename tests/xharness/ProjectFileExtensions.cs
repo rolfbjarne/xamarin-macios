@@ -159,6 +159,10 @@ namespace Xharness {
 				if (makeFullPath) {
 					input = input.Replace ('\\', '/'); // make unix-style
 					input = Path.GetFullPath (Path.Combine (dir, input));
+					var root = Path.GetFullPath (HarnessConfiguration.RootDirectory);
+					input = input.Replace (root, "$(RootTestsDirectory)");
+					if (input == "")
+						input = "./";
 					input = input.Replace ('/', '\\'); // make windows-style again
 				}
 

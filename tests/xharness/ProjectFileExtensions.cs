@@ -18,23 +18,23 @@ using Xamarin.Utils;
 
 namespace Xharness {
 	public static class EvolvedProjectFileExtensions {
-		public static void AppendToProperty (this XmlDocument csproj, string node, string value)
+		public static void AppendToProperty (this XmlDocument csproj, string node, string value, string separator)
 		{
 			var propertyGroup = GetLastPropertyGroup (csproj);
 			var newNode = csproj.CreateElement (node, csproj.GetNamespace ());
-			newNode.InnerText = $"$({node});{value}";
+			newNode.InnerText = $"$({node}){separator}{value}";
 			propertyGroup.AppendChild (newNode);
 		}
 
 		public static void AppendExtraMtouchArgs (this XmlDocument csproj, string value)
 		{
-			csproj.AppendToProperty ("MtouchExtraArgs", value);
+			csproj.AppendToProperty ("MtouchExtraArgs", value, " ");
 		}
 
 		static XmlElement GetLastPropertyGroup (this XmlDocument csproj)
 		{
 			// Is the last property group Condition-less? If so, return it.
-			var propertyGroups = csproj.SelectNodes ("//*[local-name() = 'PropertyGroup']").Cast<XmlElement> ();
+			var propertyGroups = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'PropertyGroup']").Cast<XmlElement> ();
 			if (propertyGroups.Any ()) {
 				var last = propertyGroups.Last ();
 				if (!last.HasAttribute ("Condition"))

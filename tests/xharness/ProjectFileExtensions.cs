@@ -104,7 +104,6 @@ namespace Xharness {
 				"CodesignEntitlements",
 				"TestLibrariesDirectory",
 				"HintPath",
-				"RootTestsDirectory",
 			};
 			var attributes_with_paths = new []
 			{
@@ -168,6 +167,10 @@ namespace Xharness {
 
 				return input;
 			};
+
+			var rootTestsDirectoryNodes = csproj.SelectElementNodes ("RootTestsDirectory");
+			foreach (var node in rootTestsDirectoryNodes)
+				node.InnerText = Path.GetFullPath (HarnessConfiguration.RootDirectory);
 
 			foreach (var key in nodes_with_paths) {
 				var nodes = csproj.SelectElementNodes (key);

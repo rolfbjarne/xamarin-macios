@@ -326,6 +326,11 @@ namespace Xamarin.Tests {
 			Console.WriteLine ("  INCLUDE_WATCHOS={0}", include_watchos);
 			Console.WriteLine ("  INCLUDE_MACCATALYST={0}", include_maccatalyst);
 			Console.WriteLine ("  ENABLE_DOTNET={0}", include_dotnet);
+
+			Console.WriteLine ("Full configuration:");
+			foreach (var key in make_config.Keys.OrderBy (v => v)) {
+				Console.WriteLine ($"  {key}={make_config [key]}");
+			}
 		}
 
 		public static string RootPath {

@@ -143,8 +143,37 @@ namespace Xamarin.Linker {
 			il.Emit (OpCodes.Ret);
 			DerivedLinkContext.Annotations.Mark (defaultCtor);
 
+			// Compute the list of types that we need to register
+			var types = new List<(TypeReference Reference, TypeDefinition Definition)> ();
+			types.AddRange (StaticRegistrar.Types.Select (v => {
+				var tr = v.Value.Type;
+				var td = tr.Resolve ();
+				return (tr, td);
+			}));
+			foreach (var st in StaticRegistrar.SkippedTypes) {
+				if (!types.Any (v => v.Reference == st.Skipped))
+					types.Add (new (st.Skipped, st.Skipped.Resolve ()));
+				if (!types.Any (v => v.Reference == st.Actual.Type))
+					types.Add (new (st.Actual.Type, st.Actual.Type.Resolve ()));
+			}
+			types.RemoveAll (v => v.Definition.Module.Assembly != abr.CurrentAssembly);
+			types.RemoveAll (v => IsLinkedAway (v.Definition));
+			if (StaticRegistrar.NeedsProtocolMap) {
+				foreach (var type in registrarType.Module.Types) {
+					if (IsLinkedAway (type))
+						continue;
+					var wrapperType = StaticRegistrar.GetProtocolAttributeWrapperType (type);
+					if (wrapperType is null)
+						continue;
+					types.Add (new (wrapperType, wrapperType.Resolve ()));
+				}
+			}
+			for (var i = 0; i < types.Count; i++)
+				infos.RegisterType (types[i].Definition, (uint) i);
+			
 			GenerateLookupUnmanagedFunction (registrarType, sorted);
-			GenerateLookupType (infos, registrarType);
+			GenerateLookupType (infos, registrarType, types);
+			GenerateLookupTypeId (infos, registrarType, types);
 			GenerateRegisterWrapperTypes (registrarType);
 
 			Annotations.Mark (registrarType);
@@ -162,43 +191,43 @@ namespace Xamarin.Linker {
 			return StaticRegistrar.IsTrimmed (type, Annotations);
 		}
 
-		void GenerateLookupType (AssemblyTrampolineInfo infos, TypeDefinition registrarType)
+		void GenerateLookupTypeId (AssemblyTrampolineInfo infos, TypeDefinition registrarType, List<(TypeReference Reference, TypeDefinition Definition)> types)
 		{
-			var method = registrarType.AddMethod ("LookupType", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.System_RuntimeTypeHandle);
-			method.AddParameter ("id", abr.System_UInt32);
-			method.Overrides.Add (abr.IManagedRegistrar_LookupType);
-			var body = method.CreateBody (out var il);
+			var lookupTypeMethod = registrarType.AddMethod ("LookupTypeId", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.System_UInt32);
+			var handleParameter = lookupTypeMethod.AddParameter ("handle", abr.System_RuntimeTypeHandle);
+			lookupTypeMethod.Overrides.Add (abr.IManagedRegistrar_LookupTypeId);
+			var body = lookupTypeMethod.CreateBody (out var il);
+			
+			// This can potentially be improved to do a dictionary lookup. The downside would be higher memory usage (a simple implementation that's just a series of if conditions doesn't consume any dirty memory).
+			// One idea could be to use a dictionary lookup if we have more than X types, and then fall back to the linear search otherwise.
+
+			for (var i = 0; i < types.Count; i++) {
+				il.Emit (OpCodes.Ldarga_S, handleParameter);
+				il.Emit (OpCodes.Ldtoken, types [i].Reference);
+				il.Emit (OpCodes.Call, abr.RuntimeTypeHandle_Equals);
+				var falseTarget = il.Create (OpCodes.Nop);
+				il.Emit (OpCodes.Brfalse_S, falseTarget);
+				il.Emit (OpCodes.Ldc_I4, i);
+				il.Emit (OpCodes.Ret);
+				il.Append (falseTarget);
+			}
+
+			// No match, return -1
+			il.Emit (OpCodes.Ldc_I4_M1);
+			il.Emit (OpCodes.Ret);
+		}
+
+		void GenerateLookupType (AssemblyTrampolineInfo infos, TypeDefinition registrarType, List<(TypeReference Reference, TypeDefinition Definition)> types)
+		{
+			var lookupTypeMethod = registrarType.AddMethod ("LookupType", MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.System_RuntimeTypeHandle);
+			lookupTypeMethod.AddParameter ("id", abr.System_UInt32);
+			lookupTypeMethod.Overrides.Add (abr.IManagedRegistrar_LookupType);
+			var body = lookupTypeMethod.CreateBody (out var il);
 
 			// switch (id) {
 			// case 0: return <ldtoken TYPE1>;
 			// case 1: return <ldtoken TYPE2>;
 			// }
-
-			var types = new List<(TypeReference Reference, TypeDefinition Definition)> ();
-			types.AddRange (StaticRegistrar.Types.Select (v => {
-				var tr = v.Value.Type;
-				var td = tr.Resolve ();
-				return (tr, td);
-			}));
-			foreach (var st in StaticRegistrar.SkippedTypes) {
-				if (!types.Any (v => v.Reference == st.Skipped))
-					types.Add (new (st.Skipped, st.Skipped.Resolve ()));
-				if (!types.Any (v => v.Reference == st.Actual.Type))
-					types.Add (new (st.Actual.Type, st.Actual.Type.Resolve ()));
-			}
-			types.RemoveAll (v => v.Definition.Module.Assembly != abr.CurrentAssembly);
-			types.RemoveAll (v => IsLinkedAway (v.Definition));
-
-			if (StaticRegistrar.NeedsProtocolMap) {
-				foreach (var type in registrarType.Module.Types) {
-					if (IsLinkedAway (type))
-						continue;
-					var wrapperType = StaticRegistrar.GetProtocolAttributeWrapperType (type);
-					if (wrapperType is null)
-						continue;
-					types.Add (new (wrapperType, wrapperType.Resolve ()));
-				}
-			}
 
 			var targets = new Instruction [types.Count];
 
@@ -207,8 +236,7 @@ namespace Xamarin.Linker {
 				var td = types [i].Definition;
 				Console.WriteLine ($"Registering {td.FullName} => {i}");
 				if (IsLinkedAway (td))
-					Console.WriteLine ("Linked away?");
-				infos.RegisterType (td, (uint) i);
+					throw new NotImplementedException ($"Linked away? {td.FullName}");
 			}
 
 			il.Emit (OpCodes.Ldarg_1);

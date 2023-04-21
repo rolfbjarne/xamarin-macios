@@ -353,6 +353,16 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference RuntimeTypeHandle_Equals {
+			get {
+				return GetMethodReference (CorlibAssembly, System_RuntimeTypeHandle, "Equals", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
 		public MethodReference MethodBase_Invoke {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "Invoke", (v) =>
@@ -666,6 +676,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference IManagedRegistrar_LookupTypeId {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "LookupTypeId", (v) =>
+						v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeTypeHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
 
 		public MethodReference IManagedRegistrar_RegisterWrapperTypes {
 			get {

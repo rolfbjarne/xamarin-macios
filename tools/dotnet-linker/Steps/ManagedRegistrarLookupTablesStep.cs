@@ -169,8 +169,8 @@ namespace Xamarin.Linker {
 				}
 			}
 			for (var i = 0; i < types.Count; i++)
-				infos.RegisterType (types[i].Definition, (uint) i);
-			
+				infos.RegisterType (types [i].Definition, (uint) i);
+
 			GenerateLookupUnmanagedFunction (registrarType, sorted);
 			GenerateLookupType (infos, registrarType, types);
 			GenerateLookupTypeId (infos, registrarType, types);
@@ -197,7 +197,7 @@ namespace Xamarin.Linker {
 			var handleParameter = lookupTypeMethod.AddParameter ("handle", abr.System_RuntimeTypeHandle);
 			lookupTypeMethod.Overrides.Add (abr.IManagedRegistrar_LookupTypeId);
 			var body = lookupTypeMethod.CreateBody (out var il);
-			
+
 			// This can potentially be improved to do a dictionary lookup. The downside would be higher memory usage (a simple implementation that's just a series of if conditions doesn't consume any dirty memory).
 			// One idea could be to use a dictionary lookup if we have more than X types, and then fall back to the linear search otherwise.
 

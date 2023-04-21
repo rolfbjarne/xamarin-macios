@@ -258,9 +258,9 @@ namespace ObjCRuntime {
 			int type_token;
 
 			if (Runtime.IsManagedStaticRegistrar) {
-				mod_token = unchecked ((int) Runtime.INVALID_TOKEN_REF);
+				mod_token = unchecked((int) Runtime.INVALID_TOKEN_REF);
 				try {
-					type_token = unchecked ((int) RegistrarHelper.LookupRegisteredTypeId (type));
+					type_token = unchecked((int) RegistrarHelper.LookupRegisteredTypeId (type));
 				} catch (Exception e) {
 					Runtime.NSLog ($"FindClass ({type.FullName}, {is_custom_type}): failed to find type id: {e.Message}");
 					throw;
@@ -328,7 +328,7 @@ namespace ObjCRuntime {
 
 				// then the module token
 				var module_token = entry.module_token;
-				if (unchecked ((int) mod_token) != module_token)
+				if (unchecked((int) mod_token) != module_token)
 					return false;
 
 				// leave the assembly name for the end, since it's the most expensive comparison (string comparison)
@@ -636,7 +636,7 @@ namespace ObjCRuntime {
 			uint token;
 			if (Runtime.IsManagedStaticRegistrar) {
 				var id = RegistrarHelper.LookupRegisteredTypeId (type);
-				token = GetFullTokenReference (asm_name, unchecked ((int) Runtime.INVALID_TOKEN_REF), 0x2000000 /* TokenType.TypeDef */ | (int) id);
+				token = GetFullTokenReference (asm_name, unchecked((int) Runtime.INVALID_TOKEN_REF), 0x2000000 /* TokenType.TypeDef */ | (int) id);
 				Runtime.NSLog ($"GetTokenReference ({type}, {throw_exception}) id: {id} token: 0x{token.ToString ("x")}");
 			} else {
 				token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
@@ -689,7 +689,7 @@ namespace ObjCRuntime {
 				if (token != metadata_token)
 					continue;
 				var mod_token = ftr.module_token;
-				if (unchecked ((int) mod_token) != module_token)
+				if (unchecked((int) mod_token) != module_token)
 					continue;
 				var assembly_index = ftr.assembly_index;
 				var assembly = map->assemblies [assembly_index];

@@ -9,10 +9,8 @@ using Xharness.Targets;
 
 #nullable enable
 
-namespace Xharness
-{
-	public static class IAppBundleInformationParserExtensions
-	{
+namespace Xharness {
+	public static class IAppBundleInformationParserExtensions {
 		public async static Task<AppBundleInformation> ParseFromProject2 (this IAppBundleInformationParser @this, IAppBundleLocator? _appBundleLocator, string projectFilePath, TestTarget target, string buildConfiguration)
 		{
 			var csproj = new XmlDocument ();

@@ -241,7 +241,7 @@ namespace Xharness.Jenkins {
 						if (!string.IsNullOrEmpty (bundling_extra_args))
 							clone.Xml.AddMonoBundlingExtraArgs (bundling_extra_args, task.ProjectPlatform, configuration);
 						if (!string.IsNullOrEmpty (link_mode))
-							clone.Xml.SetNode (isMac ? "LinkMode" : "MtouchLink", link_mode, task.ProjectPlatform, configuration);
+							clone.Xml.SetProperty (isMac ? "LinkMode" : "MtouchLink", link_mode);
 						if (!string.IsNullOrEmpty (defines)) {
 							clone.Xml.AddAdditionalDefines (defines, task.ProjectPlatform, configuration);
 							if (clone.ProjectReferences != null) {
@@ -270,7 +270,7 @@ namespace Xharness.Jenkins {
 						if (test_data.EnableSGenConc)
 							clone.Xml.SetProperty ("EnableSGenConc", "true");
 						if (test_data.UseThumb) // no need to check the platform, already done at the data iterator
-							clone.Xml.SetNode ("MtouchUseThumb", "true", task.ProjectPlatform, configuration);
+							clone.Xml.SetProperty ("MtouchUseThumb", "true");
 						if (use_llvm)
 							clone.Xml.SetProperty ("MtouchUseLlvm", "true");
 
@@ -279,7 +279,7 @@ namespace Xharness.Jenkins {
 						if (use_mono_runtime.HasValue)
 							clone.Xml.SetProperty ("UseMonoRuntime", use_mono_runtime.Value ? "true" : "false");
 						if (!string.IsNullOrEmpty (xammac_arch))
-							clone.Xml.SetNode ("XamMacArch", xammac_arch, task.ProjectPlatform, configuration);
+							clone.Xml.SetProperty ("XamMacArch", xammac_arch);
 						if (!string.IsNullOrEmpty (runtime_identifer))
 							clone.Xml.SetProperty ("RuntimeIdentifier", runtime_identifer);
 						if (!string.IsNullOrEmpty (registrar))

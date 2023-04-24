@@ -158,15 +158,13 @@ namespace Xamarin.Linker {
 			}
 			types.RemoveAll (v => v.Definition.Module.Assembly != abr.CurrentAssembly);
 			types.RemoveAll (v => IsLinkedAway (v.Definition));
-			if (StaticRegistrar.NeedsProtocolMap) {
-				foreach (var type in registrarType.Module.Types) {
-					if (IsLinkedAway (type))
-						continue;
-					var wrapperType = StaticRegistrar.GetProtocolAttributeWrapperType (type);
-					if (wrapperType is null)
-						continue;
-					types.Add (new (wrapperType, wrapperType.Resolve ()));
-				}
+			foreach (var type in registrarType.Module.Types) {
+				if (IsLinkedAway (type))
+					continue;
+				var wrapperType = StaticRegistrar.GetProtocolAttributeWrapperType (type);
+				if (wrapperType is null)
+					continue;
+				types.Add (new (wrapperType, wrapperType.Resolve ()));
 			}
 			for (var i = 0; i < types.Count; i++)
 				infos.RegisterType (types [i].Definition, (uint) i);

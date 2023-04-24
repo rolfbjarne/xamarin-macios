@@ -159,7 +159,12 @@ namespace Xharness {
 					input = input.Replace ('\\', '/'); // make unix-style
 					input = Path.GetFullPath (Path.Combine (dir, input));
 					var root = Path.GetFullPath (HarnessConfiguration.RootDirectory);
-					input = input.Replace (root, "$(RootTestsDirectory)");
+					if (input.Contains (root)) {
+						input = input.Replace (root, "$(RootTestsDirectory)");
+					} else if (input.Contains (Path.GetDirectoryName (root))) {
+						input = input.Replace (Path.GetDirectoryName (root), "$(RootTestsDirectory)/..");
+					}
+
 					if (input == "")
 						input = "./";
 					input = input.Replace ('/', '\\'); // make windows-style again

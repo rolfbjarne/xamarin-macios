@@ -328,7 +328,7 @@ namespace ObjCRuntime {
 
 				// then the module token
 				var module_token = entry.module_token;
-				if (unchecked((int) mod_token) != module_token)
+				if (unchecked((uint) mod_token) != module_token)
 					return false;
 
 				// leave the assembly name for the end, since it's the most expensive comparison (string comparison)

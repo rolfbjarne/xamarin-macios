@@ -354,3 +354,4 @@ package-test-libraries.zip:
 	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/bcl-test/generated ./tests/bcl-test/templates
 	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*[c|f]sproj' | zip -9r --symlinks $(abspath $@) -@
 	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*sln' | zip -9r --symlinks $(abspath $@) -@
+	$(Q_GEN) cd $(TOP) && git ls-files -o -- 'tests/*/Info-*plist' | zip -9r --symlinks $(abspath $@) -@

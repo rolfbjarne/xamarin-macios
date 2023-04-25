@@ -270,7 +270,6 @@ namespace Xamarin.Linker {
 		{
 			var baseMethod = StaticRegistrar.GetBaseMethodInTypeHierarchy (method);
 			var placeholderType = abr.System_IntPtr;
-			var initialExceptionCount = exceptions.Count;
 			ParameterDefinition? callSuperParameter = null;
 			VariableDefinition? returnVariable = null;
 			var leaveTryInstructions = new List<Instruction> ();
@@ -288,23 +287,11 @@ namespace Xamarin.Linker {
 
 			var callback = callbackType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
-			// var entry = new LinkerConfiguration.UnmanagedCallersEntry (name, Configuration.UnmanagedCallersMap.Count, callback);
-			// Configuration.UnmanagedCallersMap.Add (method, entry);
 			infos.Add (new TrampolineInfo (callback, method, name));
 
 			DerivedLinkContext.Annotations.Mark (callback);
 			DerivedLinkContext.Annotations.AddPreservedMethod (method, callback);
 			DerivedLinkContext.Annotations.AddPreservedMethod (callback, method);
-			// method.CustomAttributes.Add (CreateDynamicDependencyAttribute (name));
-
-			// FIXME
-			var t = method.DeclaringType;
-			while (t.IsNested) {
-				t.IsNestedPublic = true;
-				t = t.DeclaringType;
-			}
-			t.IsPublic = true;
-			// END FIXME 
 
 			var body = callback.CreateBody (out var il);
 			var placeholderInstruction = il.Create (OpCodes.Nop);
@@ -315,208 +302,193 @@ namespace Xamarin.Linker {
 			var isInstanceCategory = isCategory && StaticRegistrar.HasThisAttribute (method);
 			var isGeneric = method.DeclaringType.HasGenericParameters;
 			VariableDefinition? selfVariable = null;
-			try {
-				Trace (il, $"ENTER");
 
-				if (method.IsConstructor) {
-					callback.AddParameter ("pobj", abr.ObjCRuntime_NativeHandle);
-				} else {
-					callback.AddParameter ("pobj", abr.System_IntPtr);
-				}
+			Trace (il, $"ENTER");
 
-				if (!isVoid || method.IsConstructor)
-					returnVariable = body.AddVariable (placeholderType);
+			if (method.IsConstructor) {
+				callback.AddParameter ("pobj", abr.ObjCRuntime_NativeHandle);
+			} else {
+				callback.AddParameter ("pobj", abr.System_IntPtr);
+			}
 
-				if (isGeneric) {
-					if (method.IsStatic)
-						throw new NotImplementedException (); // probably an error?
+			if (!isVoid || method.IsConstructor)
+				returnVariable = body.AddVariable (placeholderType);
 
-					il.Emit (OpCodes.Ldtoken, method);
-					// il.Emit (OpCodes.Ldtoken, Console_WriteLine); // DUMMY METHOD
+			if (isGeneric) {
+				if (method.IsStatic)
+					throw new NotImplementedException (); // probably an error?
 
-					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
+				il.Emit (OpCodes.Ldtoken, method);
 
-					selfVariable = body.AddVariable (abr.System_Object);
-					il.Emit (OpCodes.Stloc, selfVariable);
-					il.Emit (OpCodes.Ldloc, selfVariable);
-					// FIXME: throw if null
-					// FIXME: can only be NSObject
-					il.Emit (OpCodes.Ldtoken, method.DeclaringType);
-					il.Emit (OpCodes.Ldtoken, method);
-					il.Emit (OpCodes.Call, abr.Runtime_FindClosedMethod);
-				}
+				il.Emit (OpCodes.Ldarg_0);
+				EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
 
-				if (isInstanceCategory) {
-					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.Parameters [0].ParameterType, true, 0, out var nativeType, postProcessing, selfVariable);
-				} else if (method.IsStatic) {
-					// nothing to do
-				} else if (method.IsConstructor) {
-					callSuperParameter = new ParameterDefinition ("call_super", ParameterAttributes.None, new PointerType (abr.System_Byte));
-					var callAllocateNSObject = il.Create (OpCodes.Ldarg_0);
-					// if (Runtime.HasNSObject (p0)) {
-					il.Emit (OpCodes.Ldarg_0);
-					il.Emit (OpCodes.Call, abr.Runtime_HasNSObject);
-					il.Emit (OpCodes.Brfalse, callAllocateNSObject);
-					// *call_super = 1;
-					il.Emit (OpCodes.Ldarg, callSuperParameter);
-					il.Emit (OpCodes.Ldc_I4_1);
-					il.Emit (OpCodes.Stind_I1);
-					// return rv;
-					il.Emit (OpCodes.Ldarg_0);
-					il.Emit (OpCodes.Stloc, returnVariable);
-					il.Emit (OpCodes.Leave, placeholderInstruction);
-					// }
-					leaveTryInstructions.Add (il.Body.Instructions.Last ());
+				selfVariable = body.AddVariable (abr.System_Object);
+				il.Emit (OpCodes.Stloc, selfVariable);
+				il.Emit (OpCodes.Ldloc, selfVariable);
+				// FIXME: throw if null
+				// FIXME: can only be NSObject
+				il.Emit (OpCodes.Ldtoken, method.DeclaringType);
+				il.Emit (OpCodes.Ldtoken, method);
+				il.Emit (OpCodes.Call, abr.Runtime_FindClosedMethod);
+			}
 
-					var git = new GenericInstanceMethod (abr.NSObject_AllocateNSObject);
-					git.GenericArguments.Add (method.DeclaringType);
-					il.Append (callAllocateNSObject); // ldarg_0
-					il.Emit (OpCodes.Ldc_I4_2); // NSObject.Flags.NativeRef
-					il.Emit (OpCodes.Call, git);
-					il.Emit (OpCodes.Dup); // this is for the call to ObjCRuntime.NativeObjectExtensions::GetHandle after the call to the constructor
-				} else {
-					// instance method
-					il.Emit (OpCodes.Ldarg_0);
-					EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
-					//if (nativeType != callback.Parameters [0].ParameterType)
-					//	AddException (ErrorHelper.CreateWarning (99, "Unexpected parameter type for the first parameter. Expected {0}, got {1}. Method: {2}", callback.Parameters [0].ParameterType.FullName, nativeType?.FullName, GetMethodSignatureWithSourceCode (method)));
-				}
-
-				callback.AddParameter ("sel", abr.System_IntPtr);
-
-				var managedParameterCount = 0;
-				var nativeParameterOffset = isInstanceCategory ? 1 : 2;
-				var parameterStart = isInstanceCategory ? 1 : 0;
-				if (method.HasParameters)
-					managedParameterCount = method.Parameters.Count;
-
-				if (isGeneric) {
-					il.Emit (OpCodes.Ldc_I4, managedParameterCount);
-					il.Emit (OpCodes.Newarr, abr.System_Object);
-				}
-
-				if (method.HasParameters) {
-					var isDynamicInvoke = isGeneric;
-					for (var p = parameterStart; p < managedParameterCount; p++) {
-						var nativeParameter = callback.AddParameter ($"p{p}", placeholderType);
-						var nativeParameterIndex = p + nativeParameterOffset;
-						var managedParameterType = method.Parameters [p].ParameterType;
-						var baseParameter = baseMethod.Parameters [p];
-						var isOutParameter = IsOutParameter (method, p, baseParameter);
-						if (isDynamicInvoke && !isOutParameter) {
-							if (parameterStart != 0)
-								throw new NotImplementedException ("parameterStart");
-							il.Emit (OpCodes.Dup);
-							il.Emit (OpCodes.Ldc_I4, p);
-						}
-						if (!isOutParameter) {
-							il.EmitLoadArgument (nativeParameterIndex);
-						}
-						if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing, selfVariable, isOutParameter, nativeParameterIndex, isDynamicInvoke)) {
-							nativeParameter.ParameterType = nativeType;
-						} else {
-							nativeParameter.ParameterType = placeholderType;
-							AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for parameter {2} of type {0}. Method: {1}", method.Parameters [p].ParameterType, GetMethodSignatureWithSourceCode (method), p));
-						}
-						if (isDynamicInvoke && !isOutParameter) {
-							if (managedParameterType.IsValueType)
-								il.Emit (OpCodes.Box, managedParameterType);
-							il.Emit (OpCodes.Stelem_Ref);
-						}
-					}
-				}
-
-				if (callSuperParameter is not null)
-					callback.Parameters.Add (callSuperParameter);
-
-				callback.AddParameter ("exception_gchandle", new PointerType (abr.System_IntPtr));
-
-				if (isGeneric) {
-					il.Emit (OpCodes.Call, abr.MethodBase_Invoke);
-					if (isVoid) {
-						il.Emit (OpCodes.Pop);
-					} else if (method.ReturnType.IsValueType) {
-						il.Emit (OpCodes.Unbox_Any, method.ReturnType);
-					} else {
-						// il.Emit (OpCodes.Castclass, method.ReturnType);
-					}
-				} else if (method.IsStatic) {
-					il.Emit (OpCodes.Call, method);
-				} else {
-					il.Emit (OpCodes.Callvirt, method);
-				}
-
-				if (returnVariable is not null) {
-					if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing, selfVariable)) {
-						returnVariable.VariableType = nativeReturnType;
-						callback.ReturnType = nativeReturnType;
-					} else {
-						AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for return value of type {0}. Method: {1}", method.ReturnType, GetMethodSignatureWithSourceCode (method)));
-					}
-					il.Emit (OpCodes.Stloc, returnVariable);
-				} else {
-					callback.ReturnType = abr.System_Void;
-				}
-
-				body.Instructions.AddRange (postProcessing);
-
-				Trace (il, $"EXIT");
-
+			if (isInstanceCategory) {
+				il.Emit (OpCodes.Ldarg_0);
+				EmitConversion (method, il, method.Parameters [0].ParameterType, true, 0, out var nativeType, postProcessing, selfVariable);
+			} else if (method.IsStatic) {
+				// nothing to do
+			} else if (method.IsConstructor) {
+				callSuperParameter = new ParameterDefinition ("call_super", ParameterAttributes.None, new PointerType (abr.System_Byte));
+				var callAllocateNSObject = il.Create (OpCodes.Ldarg_0);
+				// if (Runtime.HasNSObject (p0)) {
+				il.Emit (OpCodes.Ldarg_0);
+				il.Emit (OpCodes.Call, abr.Runtime_HasNSObject);
+				il.Emit (OpCodes.Brfalse, callAllocateNSObject);
+				// *call_super = 1;
+				il.Emit (OpCodes.Ldarg, callSuperParameter);
+				il.Emit (OpCodes.Ldc_I4_1);
+				il.Emit (OpCodes.Stind_I1);
+				// return rv;
+				il.Emit (OpCodes.Ldarg_0);
+				il.Emit (OpCodes.Stloc, returnVariable);
 				il.Emit (OpCodes.Leave, placeholderInstruction);
+				// }
 				leaveTryInstructions.Add (il.Body.Instructions.Last ());
 
-				AddExceptionHandler (il, returnVariable, placeholderNextInstruction, out var eh, out var leaveEHInstruction);
+				var git = new GenericInstanceMethod (abr.NSObject_AllocateNSObject);
+				git.GenericArguments.Add (method.DeclaringType);
+				il.Append (callAllocateNSObject); // ldarg_0
+				il.Emit (OpCodes.Ldc_I4_2); // NSObject.Flags.NativeRef
+				il.Emit (OpCodes.Call, git);
+				il.Emit (OpCodes.Dup); // this is for the call to ObjCRuntime.NativeObjectExtensions::GetHandle after the call to the constructor
+			} else {
+				// instance method
+				il.Emit (OpCodes.Ldarg_0);
+				EmitConversion (method, il, method.DeclaringType, true, -1, out var nativeType, postProcessing, selfVariable);
+				//if (nativeType != callback.Parameters [0].ParameterType)
+				//	AddException (ErrorHelper.CreateWarning (99, "Unexpected parameter type for the first parameter. Expected {0}, got {1}. Method: {2}", callback.Parameters [0].ParameterType.FullName, nativeType?.FullName, GetMethodSignatureWithSourceCode (method)));
+			}
 
-				// Generate code to return null/default value/void
-				if (returnVariable is not null) {
-					var returnType = returnVariable.VariableType!;
-					if (returnType.IsValueType) {
-						// return default(<struct type>)
-						il.Emit (OpCodes.Ldloca, returnVariable);
-						il.Emit (OpCodes.Initobj, returnType);
-						il.Emit (OpCodes.Ldloc, returnVariable);
+			callback.AddParameter ("sel", abr.System_IntPtr);
+
+			var managedParameterCount = 0;
+			var nativeParameterOffset = isInstanceCategory ? 1 : 2;
+			var parameterStart = isInstanceCategory ? 1 : 0;
+			if (method.HasParameters)
+				managedParameterCount = method.Parameters.Count;
+
+			if (isGeneric) {
+				il.Emit (OpCodes.Ldc_I4, managedParameterCount);
+				il.Emit (OpCodes.Newarr, abr.System_Object);
+			}
+
+			if (method.HasParameters) {
+				var isDynamicInvoke = isGeneric;
+				for (var p = parameterStart; p < managedParameterCount; p++) {
+					var nativeParameter = callback.AddParameter ($"p{p}", placeholderType);
+					var nativeParameterIndex = p + nativeParameterOffset;
+					var managedParameterType = method.Parameters [p].ParameterType;
+					var baseParameter = baseMethod.Parameters [p];
+					var isOutParameter = IsOutParameter (method, p, baseParameter);
+					if (isDynamicInvoke && !isOutParameter) {
+						if (parameterStart != 0)
+							throw new NotImplementedException ("parameterStart");
+						il.Emit (OpCodes.Dup);
+						il.Emit (OpCodes.Ldc_I4, p);
+					}
+					if (!isOutParameter) {
+						il.EmitLoadArgument (nativeParameterIndex);
+					}
+					if (EmitConversion (method, il, managedParameterType, true, p, out var nativeType, postProcessing, selfVariable, isOutParameter, nativeParameterIndex, isDynamicInvoke)) {
+						nativeParameter.ParameterType = nativeType;
 					} else {
-						il.Emit (OpCodes.Ldnull);
+						nativeParameter.ParameterType = placeholderType;
+						AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for parameter {2} of type {0}. Method: {1}", method.Parameters [p].ParameterType, GetMethodSignatureWithSourceCode (method), p));
+					}
+					if (isDynamicInvoke && !isOutParameter) {
+						if (managedParameterType.IsValueType)
+							il.Emit (OpCodes.Box, managedParameterType);
+						il.Emit (OpCodes.Stelem_Ref);
 					}
 				}
-				il.Emit (OpCodes.Ret);
-
-				// Generate code to return the return value
-				Instruction leaveTryInstructionOperand;
-				if (returnVariable is not null) {
-					il.Emit (OpCodes.Ldloc, returnVariable);
-					leaveTryInstructionOperand = il.Body.Instructions.Last ();
-					il.Emit (OpCodes.Ret);
-				} else {
-					// Here we can re-use the ret instruction from the previous block.
-					leaveTryInstructionOperand = il.Body.Instructions.Last ();
-				}
-
-				// Replace any 'placeholderNextInstruction' operands with the actual next instruction.
-				foreach (var instr in body.Instructions) {
-					if (object.ReferenceEquals (instr.Operand, placeholderNextInstruction))
-						instr.Operand = instr.Next;
-				}
-
-				foreach (var instr in leaveTryInstructions)
-					instr.Operand = leaveTryInstructionOperand;
-				eh.HandlerEnd = (Instruction) leaveEHInstruction.Operand;
-
-				if (exceptions.Count != initialExceptionCount) {
-					var newExceptions = exceptions.Skip (initialExceptionCount);
-					body.Instructions.Insert (0, il.Create (OpCodes.Ldstr, $"Conversion not implemented. Exceptions during process:\n\t{string.Join ("\n\t", newExceptions.Select (v => v.ToString ()))}"));
-					body.Instructions.Insert (1, il.Create (OpCodes.Newobj, abr.Exception_ctor_String));
-					body.Instructions.Insert (2, il.Create (OpCodes.Throw));
-					while (body.Instructions [3] != eh.TryEnd)
-						body.Instructions.RemoveAt (3);
-					exceptions.RemoveRange (initialExceptionCount, exceptions.Count - initialExceptionCount);
-				}
-			} catch (Exception e) {
-				il.Emit (OpCodes.Ldstr, $"Exception occurred while creating trampoline: " + e);
-				throw;
 			}
+
+			if (callSuperParameter is not null)
+				callback.Parameters.Add (callSuperParameter);
+
+			callback.AddParameter ("exception_gchandle", new PointerType (abr.System_IntPtr));
+
+			if (isGeneric) {
+				il.Emit (OpCodes.Call, abr.MethodBase_Invoke);
+				if (isVoid) {
+					il.Emit (OpCodes.Pop);
+				} else if (method.ReturnType.IsValueType) {
+					il.Emit (OpCodes.Unbox_Any, method.ReturnType);
+				} else {
+					// il.Emit (OpCodes.Castclass, method.ReturnType);
+				}
+			} else if (method.IsStatic) {
+				il.Emit (OpCodes.Call, method);
+			} else {
+				il.Emit (OpCodes.Callvirt, method);
+			}
+
+			if (returnVariable is not null) {
+				if (EmitConversion (method, il, method.ReturnType, false, -1, out var nativeReturnType, postProcessing, selfVariable)) {
+					returnVariable.VariableType = nativeReturnType;
+					callback.ReturnType = nativeReturnType;
+				} else {
+					AddException (ErrorHelper.CreateError (99, "Unable to emit conversion for return value of type {0}. Method: {1}", method.ReturnType, GetMethodSignatureWithSourceCode (method)));
+				}
+				il.Emit (OpCodes.Stloc, returnVariable);
+			} else {
+				callback.ReturnType = abr.System_Void;
+			}
+
+			body.Instructions.AddRange (postProcessing);
+
+			Trace (il, $"EXIT");
+
+			il.Emit (OpCodes.Leave, placeholderInstruction);
+			leaveTryInstructions.Add (il.Body.Instructions.Last ());
+
+			AddExceptionHandler (il, returnVariable, placeholderNextInstruction, out var eh, out var leaveEHInstruction);
+
+			// Generate code to return null/default value/void
+			if (returnVariable is not null) {
+				var returnType = returnVariable.VariableType!;
+				if (returnType.IsValueType) {
+					// return default(<struct type>)
+					il.Emit (OpCodes.Ldloca, returnVariable);
+					il.Emit (OpCodes.Initobj, returnType);
+					il.Emit (OpCodes.Ldloc, returnVariable);
+				} else {
+					il.Emit (OpCodes.Ldnull);
+				}
+			}
+			il.Emit (OpCodes.Ret);
+
+			// Generate code to return the return value
+			Instruction leaveTryInstructionOperand;
+			if (returnVariable is not null) {
+				il.Emit (OpCodes.Ldloc, returnVariable);
+				leaveTryInstructionOperand = il.Body.Instructions.Last ();
+				il.Emit (OpCodes.Ret);
+			} else {
+				// Here we can re-use the ret instruction from the previous block.
+				leaveTryInstructionOperand = il.Body.Instructions.Last ();
+			}
+
+			// Replace any 'placeholderNextInstruction' operands with the actual next instruction.
+			foreach (var instr in body.Instructions) {
+				if (object.ReferenceEquals (instr.Operand, placeholderNextInstruction))
+					instr.Operand = instr.Next;
+			}
+
+			foreach (var instr in leaveTryInstructions)
+				instr.Operand = leaveTryInstructionOperand;
+			eh.HandlerEnd = (Instruction) leaveEHInstruction.Operand;
 		}
 
 		void AddExceptionHandler (ILProcessor il, VariableDefinition? returnVariable, Instruction placeholderNextInstruction, out ExceptionHandler eh, out Instruction leaveEHInstruction)

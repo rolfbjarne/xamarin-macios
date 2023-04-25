@@ -77,11 +77,6 @@ namespace Xamarin.Linker {
 		}
 
 		// FIXME: mark the types and methods we use
-		public MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name)
-		{
-			GetTypeReference (assembly, fullname, out var td);
-			return GetMethodReference (assembly, td, name, fullname + "::" + name, null, out var _);
-		}
 
 		public MethodReference GetMethodReference (AssemblyDefinition assembly, string fullname, string name, Func<MethodDefinition, bool>? predicate)
 		{
@@ -221,18 +216,6 @@ namespace Xamarin.Linker {
 		public TypeReference System_Reflection_MethodBase {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodBase", out var _);
-			}
-		}
-
-		public TypeReference System_Diagnostics_CodeAnalysis_DynamicallyAccessedMembersAttribute {
-			get {
-				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembersAttribute", out var _);
-			}
-		}
-
-		public TypeReference System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute {
-			get {
-				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", out var _);
 			}
 		}
 
@@ -1063,27 +1046,6 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public MethodReference DynamicallyAccessedMembersAttribute_Constructor_DynamicallyAccessedMemberTypes {
-			get {
-				return GetMethodReference (CorlibAssembly, System_Diagnostics_CodeAnalysis_DynamicallyAccessedMembersAttribute, ".ctor", (v) =>
-					v.IsConstructor
-					&& v.HasParameters
-					&& v.Parameters.Count == 1
-					&& v.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes"));
-			}
-		}
-
-		public MethodReference DynamicDependencyAttribute_Constructor_DynamicallyAccessedMemberTypes_Type {
-			get {
-				return GetMethodReference (CorlibAssembly, System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute, ".ctor", (v) =>
-					v.IsConstructor
-					&& v.HasParameters
-					&& v.Parameters.Count == 2
-					&& v.Parameters [0].ParameterType.Is ("System.Diagnostics.CodeAnalysis", "DynamicallyAccessedMemberTypes")
-					&& v.Parameters [1].ParameterType.Is ("System", "Type")
-					);
-			}
-		}
 		public MethodReference Unsafe_AsRef {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.CompilerServices.Unsafe", "AsRef", (v) =>
@@ -1095,31 +1057,6 @@ namespace Xamarin.Linker {
 						&& v.HasGenericParameters
 						);
 			}
-		}
-
-		public MethodReference Exception_ctor_String {
-			get {
-				return GetMethodReference (CorlibAssembly, "System.Exception", ".ctor", (v) =>
-						v.HasParameters
-						&& v.Parameters.Count == 1
-						&& v.Parameters [0].ParameterType.Is ("System", "String")
-						&& !v.HasGenericParameters);
-			}
-		}
-
-		public CustomAttribute CreateDynamicallyAccessedMemberTypesAttribute (System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes memberTypes)
-		{
-			var attrib = new CustomAttribute (DynamicallyAccessedMembersAttribute_Constructor_DynamicallyAccessedMemberTypes);
-			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, memberTypes));
-			return attrib;
-		}
-
-		public CustomAttribute CreateDynamicDependencyAttribute (System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes memberTypes, TypeReference type)
-		{
-			var attrib = new CustomAttribute (DynamicDependencyAttribute_Constructor_DynamicallyAccessedMemberTypes_Type);
-			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, memberTypes));
-			attrib.ConstructorArguments.Add (new CustomAttributeArgument (System_Type, type));
-			return attrib;
 		}
 
 		public void SetCurrentAssembly (AssemblyDefinition value)

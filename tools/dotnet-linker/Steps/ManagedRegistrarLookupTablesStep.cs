@@ -23,16 +23,7 @@ namespace Xamarin.Linker {
 		protected override string Name { get; } = "ManagedRegistrarLookupTables";
 		protected override int ErrorCode { get; } = 2440;
 
-		List<Exception> exceptions = new List<Exception> ();
-
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
-
-		void AddException (Exception exception)
-		{
-			if (exceptions is null)
-				exceptions = new List<Exception> ();
-			exceptions.Add (exception);
-		}
 
 		protected override void TryProcess ()
 		{
@@ -42,24 +33,6 @@ namespace Xamarin.Linker {
 				return;
 
 			Configuration.Target.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
-		}
-
-		protected override void TryEndProcess ()
-		{
-			base.TryEndProcess ();
-
-			if (App.Registrar != RegistrarMode.ManagedStatic)
-				return;
-
-			if (exceptions is null)
-				return;
-			var warnings = exceptions.Where (v => (v as ProductException)?.Error == false).ToArray ();
-			if (warnings.Length == exceptions.Count)
-				return;
-
-			if (exceptions.Count == 1)
-				throw exceptions [0];
-			throw new AggregateException (exceptions);
 		}
 
 		protected override void TryProcessAssembly (AssemblyDefinition assembly)
@@ -344,22 +317,16 @@ namespace Xamarin.Linker {
 				for (var i = 0; i < targets.Length; i++) {
 					var ti = trampolineInfos [startIndex + i];
 					var md = ti.Trampoline;
-					try {
-						var mr = abr.CurrentAssembly.MainModule.ImportReference (md);
-						if (wrapLookup) {
-							var wrappedLookup = type.AddMethod (name + ti.Id, MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, abr.System_IntPtr);
-							wrappedLookup.CreateBody (out var wrappedIl);
-							wrappedIl.Emit (OpCodes.Ldftn, mr);
-							wrappedIl.Emit (OpCodes.Ret);
+					var mr = abr.CurrentAssembly.MainModule.ImportReference (md);
+					if (wrapLookup) {
+						var wrappedLookup = type.AddMethod (name + ti.Id, MethodAttributes.Private | MethodAttributes.Static | MethodAttributes.HideBySig, abr.System_IntPtr);
+						wrappedLookup.CreateBody (out var wrappedIl);
+						wrappedIl.Emit (OpCodes.Ldftn, mr);
+						wrappedIl.Emit (OpCodes.Ret);
 
-							targets [i] = Instruction.Create (OpCodes.Call, wrappedLookup);
-						} else {
-							targets [i] = Instruction.Create (OpCodes.Ldftn, mr);
-						}
-					} catch (Exception e) {
-						var str = string.Format ("Failed to import reference {0}: {1}", GetMethodSignature (md), e.ToString ());
-						AddException (ErrorHelper.CreateError (99, e, str));
-						targets [i] = Instruction.Create (OpCodes.Ldstr, str);
+						targets [i] = Instruction.Create (OpCodes.Call, wrappedLookup);
+					} else {
+						targets [i] = Instruction.Create (OpCodes.Ldftn, mr);
 					}
 				}
 
@@ -391,19 +358,13 @@ namespace Xamarin.Linker {
 
 				var lookupMethods = new MethodDefinition [targets.Length];
 				for (var i = 0; i < targets.Length; i++) {
-					try {
-						var subStartIndex = startIndex + (chunkSize) * i;
-						var subEndIndex = subStartIndex + (chunkSize) - 1;
-						if (subEndIndex > endIndex)
-							subEndIndex = endIndex;
-						var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex, out _);
-						lookupMethods [i] = md;
-						targets [i] = Instruction.Create (OpCodes.Ldarg_0);
-					} catch (Exception e) {
-						var str = string.Format ("Failed to generate nested lookup method: {0}", e.ToString ());
-						AddException (ErrorHelper.CreateError (99, e, str));
-						targets [i] = Instruction.Create (OpCodes.Ldstr, str);
-					}
+					var subStartIndex = startIndex + (chunkSize) * i;
+					var subEndIndex = subStartIndex + (chunkSize) - 1;
+					if (subEndIndex > endIndex)
+						subEndIndex = endIndex;
+					var md = GenerateLookupMethods (type, trampolineInfos, methodsPerLevel, level + 1, levels, subStartIndex, subEndIndex, out _);
+					lookupMethods [i] = md;
+					targets [i] = Instruction.Create (OpCodes.Ldarg_0);
 				}
 
 				il.Emit (OpCodes.Ldarg_1);

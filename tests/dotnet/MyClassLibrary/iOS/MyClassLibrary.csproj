@@ -1,7 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0-ios</TargetFramework>
+		<NativeLib>shared</NativeLib>
+		<ApplicationId>com.bundle.mylibrary</ApplicationId>
+		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
 	</PropertyGroup>
+
+	<Target Name="CreateDir" BeforeTargets="_AppleAotCompile">
+		<MakeDir Directories="$(AppleBuildDir)" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Runtime.MonoAOTCompiler.Task" Version="8.0.0-preview.4.23213.11" />
+		<PackageReference Include="Microsoft.NET.Runtime.MonoTargets.Sdk" />
+	</ItemGroup>
+
+	<Target Name="_CustomAppleResolveReferences" BeforeTargets="_AppleResolveReferences">
+		<PropertyGroup>
+			<EnableDefaultAssembliesToBundle>false</EnableDefaultAssembliesToBundle>
+		</PropertyGroup>
+		<ItemGroup>
+			<AppleAssembliesToBundle Include="$(PublishDir)$(_AssemblyPublishDir)\**\*.dll" />
+			<AppleAssembliesToBundle Include="$(PublishDir)\**\*.dll" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="PreCustomBuildDir" BeforeTargets="_InitializeCommonProperties">
+		<ItemGroup>
+			<MonoRuntimePack Include="@(ResolvedRuntimePack)" Condition="'%(FrameworkName)' == 'Microsoft.NETCore.App'" />
+			<_ExtraLinkerArgs Include="-framework CoreImage" />
+		</ItemGroup>
+		<PropertyGroup>
+			<AppleBuildDir Condition="'$(AppleBuildDir)' == ''">$([MSBuild]::NormalizeDirectory($(OutDir)))</AppleBuildDir>
+			<MicrosoftNetCoreAppRuntimePackDir>%(MonoRuntimePack.PackageDirectory)</MicrosoftNetCoreAppRuntimePackDir>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="PostCustomBuildDir" AfterTargets="_InitializeCommonProperties">
+		<ItemGroup>
+			<_XamarinRuntimeLibraries Include="@(RuntimePackAsset -> '$(AppleBuildDir)%(Filename)%(Extension)')" Condition="'%(RuntimePackAsset.NuGetPackageId)' == 'Microsoft.iOS.Runtime.ios-arm64'" />
+			<_RuntimeLibraries Remove="@(_XamarinRuntimeLibraries)" />
+		</ItemGroup>
+	</Target>
 </Project>
 

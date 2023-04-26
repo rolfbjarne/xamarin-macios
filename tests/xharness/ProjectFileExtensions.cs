@@ -17,6 +17,43 @@ using Xamarin.Utils;
 
 namespace Xharness {
 	public static class EvolvedProjectFileExtensions {
+		public static void AppendToProperty (this XmlDocument csproj, string node, string value, string separator)
+		{
+			var propertyGroup = GetLastPropertyGroup (csproj);
+			var newNode = csproj.CreateElement (node, csproj.GetNamespace ());
+			newNode.InnerText = $"$({node}){separator}{value}";
+			propertyGroup.AppendChild (newNode);
+		}
+
+		public static void AppendExtraMtouchArgs (this XmlDocument csproj, string value)
+		{
+			csproj.AppendToProperty ("MtouchExtraArgs", value, " ");
+		}
+
+		public static void AppendMonoBundlingExtraArgs (this XmlDocument csproj, string value)
+		{
+			csproj.AppendToProperty ("MonoBundlingExtraArgs", value, " ");
+		}
+
+		static XmlElement GetLastPropertyGroup (this XmlDocument csproj)
+		{
+			// Is the last property group Condition-less? If so, return it.
+			var propertyGroups = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'PropertyGroup']").Cast<XmlElement> ();
+			if (propertyGroups.Any ()) {
+				var last = propertyGroups.Last ();
+				if (!last.HasAttribute ("Condition"))
+					return last;
+			}
+
+			// Create a new PropertyGroup, and add it just after the last PropertyGroup in the csproj.
+			var projectNode = csproj.SelectSingleNode ("//*[local-name() = 'Project']");
+			var lastPropertyGroup = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'PropertyGroup']").Cast<XmlNode> ().Last ();
+			var newPropertyGroup = csproj.CreateElement ("PropertyGroup", csproj.GetNamespace ());
+			projectNode.InsertAfter (newPropertyGroup, lastPropertyGroup);
+			projectNode.InsertBefore (csproj.CreateComment ($" This property group was created by xharness "), newPropertyGroup);
+			return newPropertyGroup;
+		}
+
 		// Evaluates a text and replaces '$(Variable)' with the property value specified in the 'properties' dictionary.
 		// Contrary to what MSBuild does, if the variable can't be found in the dictionary, it's not replaced with
 		// an empty string, instead the variable reference stays as-is.

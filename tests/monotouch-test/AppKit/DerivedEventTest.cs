@@ -43,7 +43,7 @@ namespace Xamarin.Mac.Tests {
 		public void DerivedEvents_OverwriteThrows ()
 		{
 #if RELEASE
-			var checkTrimmedAway = TestRuntime.IsLinkAll ();
+			var checkTrimmedAway = TestRuntime.IsLinkAll;
 #else
 			var checkTrimmedAway = false;
 #endif

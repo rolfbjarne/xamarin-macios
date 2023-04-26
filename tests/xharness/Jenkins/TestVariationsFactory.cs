@@ -230,8 +230,10 @@ namespace Xharness.Jenkins {
 							clone.Xml.AppendExtraMtouchArgs (bundler_arguments);
 							clone.Xml.AppendMonoBundlingExtraArgs (bundler_arguments);
 						}
-						if (!string.IsNullOrEmpty (link_mode))
-							clone.Xml.SetNode (isMac ? "LinkMode" : "MtouchLink", link_mode, task.ProjectPlatform, configuration);
+						if (!string.IsNullOrEmpty (link_mode)) {
+							clone.Xml.SetNode ("LinkMode", link_mode, task.ProjectPlatform, configuration);
+							clone.Xml.SetNode ("MtouchLink", link_mode, task.ProjectPlatform, configuration);
+						}
 						if (!string.IsNullOrEmpty (defines)) {
 							clone.Xml.AddAdditionalDefines (defines, task.ProjectPlatform, configuration);
 							if (clone.ProjectReferences != null) {

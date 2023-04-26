@@ -870,17 +870,23 @@ namespace Xamarin.Linker {
 					var createMethod = StaticRegistrar.GetBlockWrapperCreator (objcMethod, parameter);
 					if (createMethod is null) {
 						AddException (ErrorHelper.CreateWarning (App, 4174 /* Unable to locate the block to delegate conversion method for the method {0}'s parameter #{1}. */, method, Errors.MT4174, method.FullName, parameter + 1));
+						// var blockCopy = BlockLiteral.Copy (block);
 						var tmpVariable = il.Body.AddVariable (abr.System_IntPtr);
+						il.Emit (OpCodes.Call, abr.BlockLiteral_Copy);
 						il.Emit (OpCodes.Stloc, tmpVariable);
+						// var blockWrapperCreator = Runtime.GetBlockWrapperCreator ((MethodInfo) MethodBase.GetMethodFromHandle (ldtoken <method>), parameter);
 						il.Emit (OpCodes.Ldtoken, method);
-						il.Emit (OpCodes.Call, abr.MethodBase_GetMethodFromHandle);
+						il.Emit (OpCodes.Call, abr.MethodBase_GetMethodFromHandle__RuntimeMethodHandle);
 						il.Emit (OpCodes.Castclass, abr.System_Reflection_MethodInfo);
 						il.Emit (OpCodes.Ldc_I4, parameter);
 						il.Emit (OpCodes.Call, abr.Runtime_GetBlockWrapperCreator);
+						// Runtime.CreateBlockProxy (blockWrapperCreator, blockCopy)
 						il.Emit (OpCodes.Ldloc, tmpVariable);
 						il.Emit (OpCodes.Call, abr.Runtime_CreateBlockProxy);
 					} else {
 						EnsureVisible (method, createMethod);
+						// var blockCopy = BlockLiteral.Copy (block)
+						// Runtime.ReleaseBlockWhenDelegateIsCollected (blockCopy, <create method> (blockCopy))
 						il.Emit (OpCodes.Call, abr.BlockLiteral_Copy);
 						il.Emit (OpCodes.Dup);
 						il.Emit (OpCodes.Call, method.Module.ImportReference (createMethod));

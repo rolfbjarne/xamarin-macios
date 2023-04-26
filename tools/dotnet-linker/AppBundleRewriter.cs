@@ -135,6 +135,8 @@ namespace Xamarin.Linker {
 			return $"{method?.ReturnType?.FullName ?? "(null)"} {method?.DeclaringType?.FullName ?? "(null)"}::{method?.Name ?? "(null)"} ({string.Join (", ", method?.Parameters?.Select (v => v?.ParameterType?.FullName + " " + v?.Name) ?? Array.Empty<string> ())})";
 		}
 
+		/* Types */
+
 		public TypeReference System_Byte {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Byte", out var _);
@@ -146,22 +148,9 @@ namespace Xamarin.Linker {
 				return GetTypeReference (CorlibAssembly, "System.Exception", out var _);
 			}
 		}
-
-		public TypeReference System_UInt16 {
-			get {
-				return GetTypeReference (CorlibAssembly, "System.UInt16", out var _);
-			}
-		}
-
 		public TypeReference System_Int32 {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Int32", out var _);
-			}
-		}
-
-		public TypeReference System_UInt32 {
-			get {
-				return GetTypeReference (CorlibAssembly, "System.UInt32", out var _);
 			}
 		}
 
@@ -183,6 +172,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference System_RuntimeTypeHandle {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.RuntimeTypeHandle", out var _);
+			}
+		}
+
 		public TypeReference System_String {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.String", out var _);
@@ -195,15 +190,21 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public TypeReference System_Void {
+		public TypeReference System_UInt16 {
 			get {
-				return GetTypeReference (CorlibAssembly, "System.Void", out var _);
+				return GetTypeReference (CorlibAssembly, "System.UInt16", out var _);
 			}
 		}
 
-		public TypeReference System_RuntimeTypeHandle {
+		public TypeReference System_UInt32 {
 			get {
-				return GetTypeReference (CorlibAssembly, "System.RuntimeTypeHandle", out var _);
+				return GetTypeReference (CorlibAssembly, "System.UInt32", out var _);
+			}
+		}
+
+		public TypeReference System_Void {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Void", out var _);
 			}
 		}
 
@@ -213,15 +214,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public TypeReference System_Reflection_MethodBase {
-			get {
-				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodBase", out var _);
-			}
-		}
-
 		public TypeReference System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes", out var _);
+			}
+		}
+
+		public TypeReference System_Reflection_MethodBase {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodBase", out var _);
 			}
 		}
 
@@ -237,15 +238,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public TypeReference Foundation_NSObject {
-			get {
-				return GetTypeReference (PlatformAssembly, "Foundation.NSObject", out var _);
-			}
-		}
-
 		public TypeReference Foundation_NSString {
 			get {
 				return GetTypeReference (PlatformAssembly, "Foundation.NSString", out var _);
+			}
+		}
+
+		public TypeReference Foundation_NSObject {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.NSObject", out var _);
 			}
 		}
 
@@ -255,9 +256,27 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference ObjCRuntime_BlockLiteral {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", out var _);
+			}
+		}
+
 		public TypeReference ObjCRuntime_IManagedRegistrar {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.IManagedRegistrar", out var _, ensurePublic: true);
+			}
+		}
+
+		public TypeReference ObjCRuntime_NativeHandle {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeHandle", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_NativeObjectExtensions {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
 			}
 		}
 
@@ -273,23 +292,13 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public TypeReference ObjCRuntime_NativeHandle {
+		public TypeReference ObjCRuntime_RuntimeException {
 			get {
-				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeHandle", out var _);
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.RuntimeException", out var _);
 			}
 		}
 
-		public TypeReference ObjCRuntime_BlockLiteral {
-			get {
-				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", out var _);
-			}
-		}
-
-		public TypeReference ObjCRuntime_NativeObjectExtensions {
-			get {
-				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
-			}
-		}
+		/* Methods */
 
 		public MethodReference System_Object__ctor {
 			get {
@@ -359,9 +368,20 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public MethodReference MethodBase_GetMethodFromHandle {
+		public MethodReference MethodBase_GetMethodFromHandle__RuntimeMethodHandle {
 			get {
-				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "GetMethodFromHandle", (v) =>
+				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "GetMethodFromHandle", nameof (MethodBase_GetMethodFromHandle__RuntimeMethodHandle), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "RuntimeMethodHandle")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference MethodBase_GetMethodFromHandle__RuntimeMethodHandle_RuntimeTypeHandle {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Reflection_MethodBase, "GetMethodFromHandle", nameof (MethodBase_GetMethodFromHandle__RuntimeMethodHandle_RuntimeTypeHandle), (v) =>
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
@@ -762,6 +782,19 @@ namespace Xamarin.Linker {
 						&& v.Parameters [3].ParameterType.Is ("System", "Type")
 						&& !v.HasGenericParameters,
 						ensurePublic: true);
+			}
+		}
+
+		public MethodReference ProductException_ctor_Int32_bool_string {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RuntimeException, ".ctor", nameof (ProductException_ctor_Int32_bool_string), (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "Int32")
+						&& v.Parameters [0].ParameterType.Is ("System", "Boolean")
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters, ensurePublic: true);
 			}
 		}
 

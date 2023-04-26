@@ -16,6 +16,6 @@
 	</ItemGroup>
 
 	<Target Name="BuildDotNet45Assembly" BeforeTargets="PrepareForBuild;ResolvAssemblyReferences">
-		<Exec Command="make -j8 -C ../dotnet45assembly" Condition="'$(BUILD_REVISION)' != ''" />
+		<Exec Command="make -j8 -C ../dotnet45assembly" Condition="'$(BUILD_REVISION)' == ''" />
 	</Target>
 </Project>

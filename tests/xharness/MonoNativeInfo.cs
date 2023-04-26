@@ -127,9 +127,11 @@ namespace Xharness {
 			inputProject.AddAdditionalDefines (Flavor == MonoNativeFlavor.Compat ? "MONO_NATIVE_COMPAT" : "MONO_NATIVE_UNIFIED");
 			inputProject.ResolveAllPaths (TemplatePath);
 
-			var template_info_plist = inputProject.GetInfoPListInclude ().Replace ('\\', '/').Replace ("$(RootTestsDirectory)", Path.GetFullPath (HarnessConfiguration.RootDirectory));
+			var rootDirectory = Path.GetFullPath (HarnessConfiguration.RootDirectory);
+			var template_info_plist = inputProject.GetInfoPListInclude ().Replace ('\\', '/').Replace ("$(RootTestsDirectory)", rootDirectory);
 			var target_info_plist = Path.Combine (Path.GetDirectoryName (ProjectPath), "Info" + FlavorSuffix + ".plist");
 			SetInfoPListMinimumOSVersion (template_info_plist, target_info_plist);
+			target_info_plist = target_info_plist.Replace (rootDirectory, "$(RootTestsDirectory)");
 			inputProject.FixInfoPListInclude (FlavorSuffix, newName: target_info_plist);
 
 			inputProject.Save (ProjectPath, log);

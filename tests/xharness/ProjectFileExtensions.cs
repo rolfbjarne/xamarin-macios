@@ -68,7 +68,7 @@ namespace Xharness {
 				} else {
 					last = propertyGroups.Last ();
 				}
-				
+
 				if (last?.HasAttribute ("Condition") == false)
 					return last;
 			}

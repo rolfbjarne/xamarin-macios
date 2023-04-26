@@ -35,21 +35,55 @@ namespace Xharness {
 			csproj.AppendToProperty ("MonoBundlingExtraArgs", value, " ");
 		}
 
+
+		static int IndexOf (this XmlNodeList @this, XmlNode node)
+		{
+			for (var i = 0; i < @this.Count; i++) {
+				if ((object) node == (object) @this [i])
+					return i;
+			}
+			return -1;
+		}
+
 		static XmlElement GetLastPropertyGroup (this XmlDocument csproj)
 		{
 			// Is the last property group Condition-less? If so, return it.
+			// Definition of last: the last PropertyGroup before an Import node (or last in file if there are no Import nodes)
 			var propertyGroups = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'PropertyGroup']").Cast<XmlElement> ();
+			var imports = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'Import']").Cast<XmlElement> ();
 			if (propertyGroups.Any ()) {
-				var last = propertyGroups.Last ();
-				if (!last.HasAttribute ("Condition"))
+				XmlElement? last = null;
+
+				if (imports.Any ()) {
+					var firstImport = imports.First ();
+					var firstImportIndex = firstImport.ParentNode.ChildNodes.IndexOf (firstImport);
+					foreach (var pg in propertyGroups) {
+						var pgIndex = pg.ParentNode.ChildNodes.IndexOf (pg);
+						if (pgIndex < firstImportIndex) {
+							last = pg;
+						} else {
+							break;
+						}
+					}
+				} else {
+					last = propertyGroups.Last ();
+				}
+				
+				if (last?.HasAttribute ("Condition") == false)
 					return last;
 			}
 
-			// Create a new PropertyGroup, and add it just after the last PropertyGroup in the csproj.
+			// Create a new PropertyGroup, and add it either:
+			// * Just before the first Import node
+			// * If no Import node, then after the last PropertyGroup.
 			var projectNode = csproj.SelectSingleNode ("//*[local-name() = 'Project']");
-			var lastPropertyGroup = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'PropertyGroup']").Cast<XmlNode> ().Last ();
 			var newPropertyGroup = csproj.CreateElement ("PropertyGroup", csproj.GetNamespace ());
-			projectNode.InsertAfter (newPropertyGroup, lastPropertyGroup);
+			if (imports.Any ()) {
+				projectNode.InsertBefore (newPropertyGroup, imports.First ());
+			} else {
+				var lastPropertyGroup = csproj.SelectNodes ("/*[local-name() = 'Project']/*[local-name() = 'PropertyGroup']").Cast<XmlNode> ().Last ();
+				projectNode.InsertAfter (newPropertyGroup, lastPropertyGroup);
+			}
 			projectNode.InsertBefore (csproj.CreateComment ($" This property group was created by xharness "), newPropertyGroup);
 			return newPropertyGroup;
 		}

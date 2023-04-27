@@ -186,7 +186,6 @@ namespace Xharness {
 			foreach (var key in nodes_with_variables) {
 				var nodes = csproj.SelectElementNodes (key);
 				foreach (var node in nodes) {
-					interesting |= node.InnerText.Contains ("${ProjectDir}");
 					node.InnerText = node.InnerText.Replace ("${ProjectDir}", StringUtils.Quote (HarnessConfiguration.InjectRootTestsDirectory (Path.GetFullPath (Path.GetDirectoryName (project_path)))));
 				}
 			}

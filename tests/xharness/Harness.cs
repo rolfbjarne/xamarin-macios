@@ -74,6 +74,11 @@ namespace Xharness {
 					root_directory = Path.GetFullPath (root_directory).TrimEnd ('/');
 			}
 		}
+
+		public static string InjectRootTestsDirectory (string value)
+		{
+			return value.Replace (RootDirectory, "$(RootTestsDirectory)");
+		}
 	}
 
 	public class Harness : IHarness {

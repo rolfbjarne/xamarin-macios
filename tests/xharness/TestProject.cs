@@ -147,24 +147,25 @@ namespace Xharness {
 
 					var files = await ListFilesAsync (log, test_dir, processManager);
 					foreach (var file in files) {
+						var relativePath = System.IO.Path.Combine (HarnessConfiguration.RootDirectory, file).Substring (System.IO.Path.GetFullPath (test_dir).Length + 1);
 						var ext = System.IO.Path.GetExtension (file);
 						var full_path = "$(RootTestsDirectory)/" + file;
 						var windows_file = full_path.Replace ('/', '\\');
 
 						if (file.Contains (".xcasset")) {
-							doc.AddInclude ("ImageAsset", file, windows_file, true);
+							doc.AddInclude ("ImageAsset", relativePath, windows_file, true);
 							continue;
 						}
 
 						switch (ext.ToLowerInvariant ()) {
 						case ".cs":
-							doc.AddInclude ("Compile", file, windows_file, true);
+							doc.AddInclude ("Compile", relativePath, windows_file, true);
 							break;
 						case ".plist":
-							doc.AddInclude ("None", file, windows_file, true);
+							doc.AddInclude ("None", relativePath, windows_file, true);
 							break;
 						case ".storyboard":
-							doc.AddInclude ("InterfaceDefinition", file, windows_file, true);
+							doc.AddInclude ("InterfaceDefinition", relativePath, windows_file, true);
 							break;
 						case ".gitignore":
 						case ".csproj":

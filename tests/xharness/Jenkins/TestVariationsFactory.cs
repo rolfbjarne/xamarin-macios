@@ -231,8 +231,8 @@ namespace Xharness.Jenkins {
 							clone.Xml.AppendMonoBundlingExtraArgs (bundler_arguments);
 						}
 						if (!string.IsNullOrEmpty (link_mode)) {
-							clone.Xml.SetNode ("LinkMode", link_mode, task.ProjectPlatform, configuration);
-							clone.Xml.SetNode ("MtouchLink", link_mode, task.ProjectPlatform, configuration);
+							clone.Xml.SetProperty ("LinkMode", link_mode);
+							clone.Xml.SetProperty ("MtouchLink", link_mode);
 						}
 						if (!string.IsNullOrEmpty (defines)) {
 							clone.Xml.AddAdditionalDefines (defines, task.ProjectPlatform, configuration);

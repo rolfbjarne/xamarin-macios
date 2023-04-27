@@ -100,7 +100,7 @@ namespace Xamarin.MacDev.Tasks {
 			PDictionary plist;
 
 			var appManifest = AppManifest?.ItemSpec;
-			if (File.Exists (appManifest)) {
+			if (appManifest is not null && File.Exists (appManifest)) {
 				try {
 					plist = PDictionary.FromFile (appManifest)!;
 				} catch (Exception ex) {

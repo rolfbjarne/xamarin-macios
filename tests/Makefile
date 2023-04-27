@@ -346,13 +346,15 @@ verify-system-vsmac-xcode-match:
 	if [[ "$$SYSTEM_XCODE" != "$$VSMAC_XCODE" ]]; then echo "Error: the system's Xcode ($$SYSTEM_XCODE) does not match the Xcode selected in Visual Studio for Mac ($$VSMAC_XCODE). This will make tests fail in non-trivial ways, so please make sure both match the expected Xcode ($(shell dirname $(shell dirname $(XCODE_DEVELOPER_ROOT))))."; exit 1; fi
 
 package-test-libraries.zip:
-	$(Q) @$(MAKE) all -C test-libraries
-	$(Q_GEN) rm -f "$@"
-	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/test-libraries
-	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/mono-native/macOS/unified ./tests/mono-native/macOS/compat
-	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/mono-native/iOS/unified ./tests/mono-native/iOS/compat
-	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@) ./tests/bcl-test/generated ./tests/bcl-test/templates
-	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*[c|f]sproj' | zip -9r --symlinks $(abspath $@) -@
-	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*sln' | zip -9r --symlinks $(abspath $@) -@
-	$(Q_GEN) cd $(TOP) && find tests -regex 'tests/test-libraries/custom-type-assembly/.libs/.*dll' | zip -9r --symlinks $(abspath $@) -@
-	$(Q_GEN) cd $(TOP) && git ls-files -o -- 'tests/*/Info-*plist' | zip -9r --symlinks $(abspath $@) -@
+	$(Q) $(MAKE) all -C test-libraries
+	$(Q) $(MAKE) all -C test-libraries/custom-type-assembly build-assembly
+	$(Q_GEN) rm -f "$@" "$@.tmp"
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@).tmp ./tests/test-libraries
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@).tmp ./tests/mono-native/macOS/unified ./tests/mono-native/macOS/compat
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@).tmp ./tests/mono-native/iOS/unified ./tests/mono-native/iOS/compat
+	$(Q_GEN) cd $(TOP) && zip -9r --symlinks $(abspath $@).tmp ./tests/bcl-test/generated ./tests/bcl-test/templates
+	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*[c|f]sproj' | zip -9r --symlinks $(abspath $@).tmp -@
+	$(Q_GEN) cd $(TOP) && find tests -regex '.*/generated-projects/.*sln' | zip -9r --symlinks $(abspath $@).tmp -@
+	$(Q_GEN) cd $(TOP) && find tests -regex 'tests/test-libraries/custom-type-assembly/.libs/.*dll' | zip -9r --symlinks $(abspath $@).tmp -@
+	$(Q_GEN) cd $(TOP) && git ls-files -o -- 'tests/*/Info-*plist' | zip -9r --symlinks $(abspath $@).tmp -@
+	$(Q) mv "$@".tmp "$@"

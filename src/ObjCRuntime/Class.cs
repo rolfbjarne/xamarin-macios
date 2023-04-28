@@ -399,7 +399,7 @@ namespace ObjCRuntime {
 
 			var assembly = ResolveAssembly (assembly_name);
 			var module = ResolveModule (assembly, module_token);
-			return ResolveToken (module, token);
+			return ResolveToken (assembly, module, token);
 		}
 
 		internal static Type? ResolveTypeTokenReference (uint token_reference)
@@ -442,10 +442,10 @@ namespace ObjCRuntime {
 			var assembly = ResolveAssembly (assembly_name);
 			var module = ResolveModule (assembly, 0x1);
 
-			return ResolveToken (module, token | implicit_token_type);
+			return ResolveToken (assembly, module, token | implicit_token_type);
 		}
 
-		static MemberInfo? ResolveToken (Module module, uint token)
+		static MemberInfo? ResolveToken (Assembly assembly, Module? module, uint token)
 		{
 			// Finally resolve the token.
 			var token_type = token & 0xFF000000;

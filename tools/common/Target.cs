@@ -38,13 +38,15 @@ using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #error Invalid defines
 #endif
 
+#nullable enable
+
 namespace Xamarin.Bundler {
 	public partial class Target {
 		public Application App;
 		public AssemblyCollection Assemblies = new AssemblyCollection (); // The root assembly is not in this list.
 
-		public PlatformLinkContext LinkContext;
-		public LinkerOptions LinkerOptions;
+		public PlatformLinkContext? LinkContext;
+		public LinkerOptions? LinkerOptions;
 		public PlatformResolver Resolver = new PlatformResolver ();
 
 		public HashSet<string> Frameworks = new HashSet<string> ();
@@ -55,10 +57,10 @@ namespace Xamarin.Bundler {
 		// If we didn't link because the existing (cached) assemblyes are up-to-date.
 		bool cached_link = false;
 
-		Symbols dynamic_symbols;
+		Symbols? dynamic_symbols;
 
 		// Note that each 'Target' can have multiple abis: armv7+armv7s for instance.
-		public List<Abi> Abis;
+		public List<Abi> Abis = new List<Abi> ();
 
 		// If we're targetting a 32 bit arch for this target.
 		bool? is32bits;
@@ -88,9 +90,9 @@ namespace Xamarin.Bundler {
 
 		// If this is an app extension, this returns the equivalent (32/64bit) target for the container app.
 		// This may be null (it's possible to build an extension for 32+64bit, and the main app only for 64-bit, for instance.
-		public Target ContainerTarget {
+		public Target? ContainerTarget {
 			get {
-				return App.ContainerApp.Targets.FirstOrDefault ((v) => v.Is32Build == Is32Build);
+				return App.ContainerApp?.Targets.FirstOrDefault ((v) => v.Is32Build == Is32Build);
 			}
 		}
 
@@ -102,12 +104,12 @@ namespace Xamarin.Bundler {
 		}
 
 		// This will find the link context, possibly looking in container targets.
-		public PlatformLinkContext GetLinkContext ()
+		public PlatformLinkContext? GetLinkContext ()
 		{
 			if (LinkContext != null)
 				return LinkContext;
 			if (App.IsExtension && App.IsCodeShared)
-				return ContainerTarget.GetLinkContext ();
+				return ContainerTarget!.GetLinkContext ();
 			return null;
 		}
 
@@ -159,7 +161,7 @@ namespace Xamarin.Bundler {
 		{
 			if (App.AreAnyAssembliesTrimmed) {
 				foreach (Assembly assembly in Assemblies) {
-					if ((assembly.AssemblyDefinition.MainModule.Attributes & ModuleAttributes.ILOnly) == 0)
+					if ((assembly.AssemblyDefinition!.MainModule.Attributes & ModuleAttributes.ILOnly) == 0)
 						throw ErrorHelper.CreateError (2014, Errors.MT2014, assembly.AssemblyDefinition.MainModule.FileName);
 				}
 			}
@@ -173,19 +175,19 @@ namespace Xamarin.Bundler {
 
 		public void GatherFrameworks ()
 		{
-			Assembly asm = null;
+			Assembly? asm = null;
 
 			foreach (var assembly in Assemblies) {
-				if (assembly.AssemblyDefinition.Name.Name == Driver.GetProductAssembly (App)) {
+				if (assembly.AssemblyDefinition!.Name.Name == Driver.GetProductAssembly (App)) {
 					asm = assembly;
 					break;
 				}
 			}
 
-			if (asm == null)
+			if (asm is null)
 				throw ErrorHelper.CreateError (99, Errors.MX0099, $"could not find the product assembly {Driver.GetProductAssembly (App)} in the list of assemblies referenced by the executable");
 
-			AssemblyDefinition productAssembly = asm.AssemblyDefinition;
+			var productAssembly = asm.AssemblyDefinition!;
 
 			// *** make sure any change in the above lists (or new list) are also reflected in 
 			// *** Makefile so simlauncher-sgen does not miss any framework
@@ -203,8 +205,7 @@ namespace Xamarin.Bundler {
 						continue;
 					processed.Add (nspace);
 
-					Framework framework;
-					if (Driver.GetFrameworks (App).TryGetValue (nspace, out framework)) {
+					if (Driver.GetFrameworks (App).TryGetValue (nspace, out var framework)) {
 						// framework specific processing
 						switch (framework.Name) {
 #if MONOMAC && !NET
@@ -319,12 +320,12 @@ namespace Xamarin.Bundler {
 		public Symbols GetAllSymbols ()
 		{
 			CollectAllSymbols ();
-			return dynamic_symbols;
+			return dynamic_symbols!;
 		}
 
 		public void CollectAllSymbols ()
 		{
-			if (dynamic_symbols != null)
+			if (dynamic_symbols is not null)
 				return;
 
 			var dyn_msgSend_functions = new [] {
@@ -402,7 +403,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		bool IsRequiredSymbol (Symbol symbol, Assembly single_assembly = null, Abi? target_abis = null)
+		bool IsRequiredSymbol (Symbol symbol, Assembly? single_assembly = null, Abi? target_abis = null)
 		{
 			if (symbol.Ignore)
 				return false;
@@ -466,12 +467,12 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public Symbols GetRequiredSymbols (Assembly assembly = null, Abi? target_abis = null)
+		public Symbols GetRequiredSymbols (Assembly? assembly = null, Abi? target_abis = null)
 		{
 			CollectAllSymbols ();
 
 			Symbols filtered = new Symbols ();
-			foreach (var ep in dynamic_symbols) {
+			foreach (var ep in dynamic_symbols!) {
 				if (IsRequiredSymbol (ep, assembly, target_abis)) {
 					filtered.Add (ep);
 				}
@@ -480,9 +481,9 @@ namespace Xamarin.Bundler {
 		}
 
 #if MTOUCH
-		IEnumerable<CompileTask> GenerateReferencingSource (string reference_m, IEnumerable<Symbol> symbols)
+		IEnumerable<CompileTask>? GenerateReferencingSource (string reference_m, IEnumerable<Symbol> symbols)
 #else
-		internal string GenerateReferencingSource (string reference_m, IEnumerable<Symbol> symbols)
+		internal string? GenerateReferencingSource (string reference_m, IEnumerable<Symbol> symbols)
 #endif
 		{
 			if (!symbols.Any ()) {
@@ -686,7 +687,7 @@ namespace Xamarin.Bundler {
 				if (!s.IsAOTCompiled)
 					continue;
 
-				var info = s.AssemblyDefinition.Name.Name;
+				var info = s.AssemblyDefinition!.Name.Name;
 				info = EncodeAotSymbol (info);
 				assembly_externs.Append ("extern void *mono_aot_module_").Append (info).AppendLine ("_info;");
 				assembly_aot_modules.Append ("\tmono_aot_register_module (mono_aot_module_").Append (info).AppendLine ("_info);");
@@ -829,7 +830,7 @@ namespace Xamarin.Bundler {
 			}
 
 			if (app.EnableDebug)
-				sw.WriteLine ("\txamarin_gc_pump = {0};", app.DebugTrack.Value ? "TRUE" : "FALSE");
+				sw.WriteLine ("\txamarin_gc_pump = {0};", app.DebugTrack == true ? "TRUE" : "FALSE");
 			sw.WriteLine ("\txamarin_init_mono_debug = {0};", app.PackageManagedDebugSymbols ? "TRUE" : "FALSE");
 			sw.WriteLine ("\txamarin_executable_name = \"{0}\";", assembly_name);
 			if (app.XamarinRuntime == XamarinRuntime.MonoVM)
@@ -869,7 +870,7 @@ namespace Xamarin.Bundler {
 			sw.WriteLine ("\treturn rv;");
 			sw.WriteLine ("}");
 
-			string extension_main = null;
+			string? extension_main = null;
 			if (app.Platform == ApplePlatform.WatchOS && app.IsWatchExtension) {
 				// We're building a watch extension, and we have multiple scenarios, depending on the watchOS version we're executing on:
 				//
@@ -933,7 +934,7 @@ namespace Xamarin.Bundler {
 			if (s.IsFrameworkAssembly == true)
 				return false;
 
-			AssemblyDefinition ad = s.AssemblyDefinition;
+			AssemblyDefinition ad = s.AssemblyDefinition!;
 
 			foreach (ModuleDefinition md in ad.Modules)
 				foreach (TypeDefinition td in md.Types)

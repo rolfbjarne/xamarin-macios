@@ -8,6 +8,8 @@ using Mono.Cecil;
 using Xamarin.Bundler;
 using Registrar;
 
+#nullable enable
+
 namespace Xamarin.Bundler {
 	class PInvokeWrapperGenerator {
 		public Application App;
@@ -27,6 +29,14 @@ namespace Xamarin.Bundler {
 		public string SourcePath;
 
 		bool first;
+
+		public PInvokeWrapperGenerator (Application app, string sourcePath, string headerPath, StaticRegistrar registrar)
+		{
+			App = app;
+			SourcePath = sourcePath;
+			HeaderPath = headerPath;
+			Registrar = registrar;
+		}
 
 		public bool Started {
 			get {

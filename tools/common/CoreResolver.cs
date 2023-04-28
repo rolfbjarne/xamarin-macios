@@ -13,9 +13,9 @@ namespace Xamarin.Bundler {
 		internal Dictionary<string, AssemblyDefinition> cache;
 		Dictionary<string, ReaderParameters> params_cache;
 
-		public string FrameworkDirectory { get; set; }
-		public string RootDirectory { get; set; }
-		public string ArchDirectory { get; set; }
+		public string? FrameworkDirectory { get; set; }
+		public string? RootDirectory { get; set; }
+		public string? ArchDirectory { get; set; }
 
 
 		public CoreResolver ()
@@ -42,7 +42,7 @@ namespace Xamarin.Bundler {
 		public AssemblyDefinition Resolve (AssemblyNameReference name)
 		{
 			var key = name.ToString ();
-			if (!params_cache.TryGetValue (key, out ReaderParameters parameters)) {
+			if (!params_cache.TryGetValue (key, out var parameters)) {
 				parameters = new ReaderParameters { AssemblyResolver = this };
 				params_cache [key] = parameters;
 			}
@@ -61,14 +61,13 @@ namespace Xamarin.Bundler {
 			return parameters;
 		}
 
-		public virtual AssemblyDefinition Load (string fileName)
+		public virtual AssemblyDefinition? Load (string fileName)
 		{
 			if (!File.Exists (fileName))
 				return null;
 
-			AssemblyDefinition assembly;
 			var name = Path.GetFileNameWithoutExtension (fileName);
-			if (cache.TryGetValue (name, out assembly))
+			if (cache.TryGetValue (name, out var assembly))
 				return assembly;
 
 			try {
@@ -111,7 +110,7 @@ namespace Xamarin.Bundler {
 			return assembly;
 		}
 
-		protected AssemblyDefinition SearchDirectory (string name, string directory, string extension = ".dll")
+		protected AssemblyDefinition? SearchDirectory (string name, string directory, string extension = ".dll")
 		{
 			if (!Directory.Exists (directory))
 				return null;

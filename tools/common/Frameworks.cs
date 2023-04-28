@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using static Xamarin.MachO;
 
 #if MTOUCH || MMP || BUNDLER
 using Mono.Cecil;
@@ -10,14 +11,26 @@ using Registrar;
 
 using Xamarin.Utils;
 
+#nullable enable
+
 public class Framework {
 	public string Namespace;
 	public string Name; // this is the name to pass to the linker when linking. This can be an umbrella framework.
-	public string SubFramework; // if Name is an umbrella framework, this is the name of the actual sub framework.
+	public string? SubFramework; // if Name is an umbrella framework, this is the name of the actual sub framework.
 	public Version Version;
 	public Version VersionAvailableInSimulator;
 	public bool AlwaysWeakLinked;
 	public bool Unavailable;
+
+	public Framework (string @namespace, string name, string? subFramework, Version version, Version versionAvailableInSimulator, bool alwaysWeakLinked = false)
+	{
+		Namespace = @namespace;
+		Name = name;
+		SubFramework = subFramework;
+		Version = version;
+		VersionAvailableInSimulator = versionAvailableInSimulator;
+		AlwaysWeakLinked = alwaysWeakLinked;
+	}
 
 	public string LibraryPath {
 		get {
@@ -59,7 +72,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		Add (@namespace, @namespace, new Version (major_version, minor_version));
 	}
 
-	public void Add (string @namespace, int major_version, int minor_version, string subFramework = null)
+	public void Add (string @namespace, int major_version, int minor_version, string? subFramework = null)
 	{
 		Add (@namespace, @namespace, new Version (major_version, minor_version), subFramework: subFramework);
 	}
@@ -74,7 +87,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		Add (@namespace, framework, new Version (major_version, minor_version));
 	}
 
-	public void Add (string @namespace, string framework, int major_version, int minor_version, string umbrellaFramework = null)
+	public void Add (string @namespace, string framework, int major_version, int minor_version, string? umbrellaFramework = null)
 	{
 		Add (@namespace, framework, new Version (major_version, minor_version), subFramework: umbrellaFramework);
 	}
@@ -84,20 +97,20 @@ public class Frameworks : Dictionary<string, Framework> {
 		Add (@namespace, framework, new Version (major_version, minor_version, build_version));
 	}
 
-	public void Add (string @namespace, string framework, Version version, Version version_available_in_simulator = null, bool alwaysWeakLink = false, string subFramework = null)
+	public void Add (string @namespace, string framework, Version version, Version? version_available_in_simulator = null, bool alwaysWeakLink = false, string? subFramework = null)
 	{
-		var fr = new Framework () {
-			Namespace = @namespace,
-			Name = framework,
-			Version = version,
-			VersionAvailableInSimulator = version_available_in_simulator ?? version,
-			AlwaysWeakLinked = alwaysWeakLink,
-			SubFramework = subFramework,
-		};
+		var fr = new Framework (
+			@namespace,
+			framework,
+			subFramework,
+			version,
+			version_available_in_simulator ?? version,
+			alwaysWeakLink
+		);
 		base.Add (fr.Namespace, fr);
 	}
 
-	public Framework Find (string framework)
+	public Framework? Find (string framework)
 	{
 		foreach (var kvp in this)
 			if (kvp.Value.Name == framework)
@@ -107,10 +120,10 @@ public class Frameworks : Dictionary<string, Framework> {
 
 	static Version NotAvailableInSimulator = new Version (int.MaxValue, int.MaxValue);
 
-	static Frameworks mac_frameworks;
+	static Frameworks? mac_frameworks;
 	public static Frameworks MacFrameworks {
 		get {
-			if (mac_frameworks == null) {
+			if (mac_frameworks is null) {
 				mac_frameworks = new Frameworks () {
 					{ "Accelerate", 10, 0 },
 					{ "AppKit", 10, 0 },
@@ -287,10 +300,10 @@ public class Frameworks : Dictionary<string, Framework> {
 		}
 	}
 
-	static Frameworks ios_frameworks;
+	static Frameworks? ios_frameworks;
 	public static Frameworks GetiOSFrameworks (bool is_simulator_build)
 	{
-		if (ios_frameworks == null)
+		if (ios_frameworks is null)
 			ios_frameworks = CreateiOSFrameworks (is_simulator_build);
 		return ios_frameworks;
 	}
@@ -468,10 +481,10 @@ public class Frameworks : Dictionary<string, Framework> {
 			};
 	}
 
-	static Frameworks watch_frameworks;
+	static Frameworks? watch_frameworks;
 	public static Frameworks GetwatchOSFrameworks (bool is_simulator_build)
 	{
-		if (watch_frameworks == null) {
+		if (watch_frameworks is null) {
 			watch_frameworks = new Frameworks {
 				{ "Accelerate", "Accelerate", 2 },
 				// The CFNetwork framework is in the SDK, but there are no headers inside the framework, so don't enable yet.
@@ -540,10 +553,10 @@ public class Frameworks : Dictionary<string, Framework> {
 		return watch_frameworks;
 	}
 
-	static Frameworks tvos_frameworks;
+	static Frameworks? tvos_frameworks;
 	public static Frameworks TVOSFrameworks {
 		get {
-			if (tvos_frameworks == null) {
+			if (tvos_frameworks is null) {
 				tvos_frameworks = new Frameworks () {
 					{ "AVFoundation", "AVFoundation", 9 },
 					{ "AVKit", "AVKit", 9 },
@@ -638,10 +651,10 @@ public class Frameworks : Dictionary<string, Framework> {
 		}
 	}
 
-	static Frameworks catalyst_frameworks;
+	static Frameworks? catalyst_frameworks;
 	public static Frameworks GetMacCatalystFrameworks ()
 	{
-		if (catalyst_frameworks == null) {
+		if (catalyst_frameworks is null) {
 			catalyst_frameworks = CreateiOSFrameworks (false);
 			// not present in iOS but present in catalyst
 			catalyst_frameworks.Add ("CoreWlan", "CoreWLAN", 15, 0);
@@ -726,7 +739,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		case ApplePlatform.MacCatalyst:
 			return GetMacCatalystFrameworks ();
 		default:
-			return null;
+			throw ErrorHelper.CreateError (71, Errors.MX0071, platform, "this product");
 		}
 	}
 

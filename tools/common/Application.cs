@@ -28,6 +28,8 @@ using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #error Invalid defines
 #endif
 
+#nullable enable
+
 namespace Xamarin.Bundler {
 
 	public enum BuildTarget {
@@ -56,7 +58,8 @@ namespace Xamarin.Bundler {
 	}
 
 	public partial class Application {
-		public Cache Cache;
+		Cache? cache;
+		public Cache Cache { get => cache!; }
 		public string AppDirectory = ".";
 		public bool DeadStrip = true;
 		public bool EnableDebug;
@@ -64,7 +67,7 @@ namespace Xamarin.Bundler {
 		public bool DebugAll;
 		public bool UseInterpreter; // Only applicable to mobile platforms.
 		public List<string> DebugAssemblies = new List<string> ();
-		internal RuntimeOptions RuntimeOptions;
+		internal RuntimeOptions? RuntimeOptions;
 		public Optimizations Optimizations = new Optimizations ();
 		public RegistrarMode Registrar = RegistrarMode.Default;
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;
@@ -73,16 +76,16 @@ namespace Xamarin.Bundler {
 
 		// The AOT arguments are currently not used for macOS, but they could eventually be used there as well (there's no mmp option to set these yet).
 		public List<string> AotArguments = new List<string> ();
-		public List<string> AotOtherArguments = null;
+		public List<string>? AotOtherArguments = null;
 		public bool? AotFloat32 = null;
 
 		public DlsymOptions DlsymOptions;
-		public List<Tuple<string, bool>> DlsymAssemblies;
-		public List<string> CustomLinkFlags;
+		public List<Tuple<string, bool>>? DlsymAssemblies;
+		public List<string>? CustomLinkFlags;
 
-		public string CompilerPath;
+		public string? CompilerPath;
 
-		public Application ContainerApp; // For extensions, this is the containing app
+		public Application? ContainerApp; // For extensions, this is the containing app
 		public bool IsCodeShared { get; private set; }
 
 		public HashSet<string> Frameworks = new HashSet<string> ();
@@ -97,7 +100,7 @@ namespace Xamarin.Bundler {
 		// EnableMSym: only implemented for Xamarin.iOS
 		bool? enable_msym;
 		public bool EnableMSym {
-			get { return enable_msym.Value; }
+			get { return enable_msym == true; }
 			set { enable_msym = value; }
 		}
 
@@ -144,7 +147,7 @@ namespace Xamarin.Bundler {
 		public List<string> RootAssemblies = new List<string> ();
 		public List<string> References = new List<string> ();
 		public List<Application> SharedCodeApps = new List<Application> (); // List of appexes we're sharing code with.
-		public string RegistrarOutputLibrary;
+		public string? RegistrarOutputLibrary;
 
 		public BuildTarget BuildTarget;
 
@@ -154,7 +157,7 @@ namespace Xamarin.Bundler {
 
 		public XamarinRuntime XamarinRuntime;
 		public bool? UseMonoFramework;
-		public string RuntimeIdentifier; // Only used for build-time --run-registrar support
+		public string? RuntimeIdentifier; // Only used for build-time --run-registrar support
 
 		// The bitcode mode to compile to.
 		// This variable does not apply to macOS, because there's no bitcode on macOS.
@@ -241,7 +244,7 @@ namespace Xamarin.Bundler {
 
 				if (Embeddinator) {
 					return AssemblyBuildTarget.StaticObject;
-				} else if (HasFrameworks || UseMonoFramework.Value) {
+				} else if (HasFrameworks || UseMonoFramework == true) {
 					return AssemblyBuildTarget.Framework;
 				} else if (HasDynamicLibraries) {
 					return AssemblyBuildTarget.DynamicLibrary;
@@ -438,12 +441,39 @@ namespace Xamarin.Bundler {
 #if !NET
 		public static int Concurrency => Driver.Concurrency;
 #endif
-		public Version DeploymentTarget;
-		public Version SdkVersion; // for Mac Catalyst this is the iOS version
-		public Version NativeSdkVersion; // this is the same as SdkVersion, except that for Mac Catalyst it's the macOS SDK version.
+
+		Version? deploymentTarget;
+		public Version DeploymentTarget {
+			get => deploymentTarget!;
+			set => deploymentTarget = value;
+		}
+
+		// for Mac Catalyst this is the iOS version
+		Version? sdk_version;
+		public Version SdkVersion {
+			get {
+				if (sdk_version is null)
+					throw ErrorHelper.CreateError (25, Errors.MT0025, this.PlatformName);
+				return sdk_version;
+			}
+			set {
+				sdk_version = value;
+			}
+		}
+
+		// this is the same as SdkVersion, except that for Mac Catalyst it's the macOS SDK version.
+		Version? native_sdk_version;
+		public Version NativeSdkVersion {
+			get {
+				return native_sdk_version!;
+			}
+			set {
+				native_sdk_version = value;
+			}
+		}
 
 		public MonoNativeMode MonoNativeMode { get; set; }
-		List<Abi> abis;
+		List<Abi> abis = new List<Abi> ();
 		public bool IsLLVM { get { return IsArchEnabled (Abi.LLVM); } }
 
 		public bool Embeddinator { get; set; }
@@ -452,12 +482,12 @@ namespace Xamarin.Bundler {
 
 		bool? package_managed_debug_symbols;
 		public bool PackageManagedDebugSymbols {
-			get { return package_managed_debug_symbols.Value; }
+			get { return package_managed_debug_symbols == true; }
 			set { package_managed_debug_symbols = value; }
 		}
 
-		public string TlsProvider;
-		public string HttpMessageHandler;
+		public string? TlsProvider;
+		public string? HttpMessageHandler;
 		// If we're targetting a 32 bit arch.
 		bool? is32bits;
 		public bool Is32Build {
@@ -512,7 +542,7 @@ namespace Xamarin.Bundler {
 
 		public void CreateCache (string [] arguments)
 		{
-			Cache = new Cache (arguments);
+			cache = new Cache (arguments);
 		}
 
 		public bool DynamicRegistrationSupported {
@@ -574,20 +604,20 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public string ExtensionIdentifier {
+		public string? ExtensionIdentifier {
 			get {
 				if (!IsExtension)
 					return null;
 
 				var plist = Driver.FromPList (InfoPListPath);
-				var dict = plist.Get<PDictionary> ("NSExtension");
-				if (dict == null)
+				var dict = plist?.Get<PDictionary> ("NSExtension");
+				if (dict is null)
 					return null;
 				return dict.GetString ("NSExtensionPointIdentifier");
 			}
 		}
 
-		string info_plistpath;
+		string? info_plistpath;
 		public string InfoPListPath {
 			get {
 				if (info_plistpath is not null)
@@ -668,9 +698,9 @@ namespace Xamarin.Bundler {
 		public static void RemoveResource (ModuleDefinition module, string name)
 		{
 			for (int i = 0; i < module.Resources.Count; i++) {
-				EmbeddedResource embedded = module.Resources [i] as EmbeddedResource;
+				var embedded = module.Resources [i] as EmbeddedResource;
 
-				if (embedded == null || embedded.Name != name)
+				if (embedded is null || embedded.Name != name)
 					continue;
 
 				module.Resources.RemoveAt (i);
@@ -709,12 +739,12 @@ namespace Xamarin.Bundler {
 		public static void ExtractResource (ModuleDefinition module, string name, string path, bool remove)
 		{
 			for (int i = 0; i < module.Resources.Count; i++) {
-				EmbeddedResource embedded = module.Resources [i] as EmbeddedResource;
+				var embedded = module.Resources [i] as EmbeddedResource;
 
-				if (embedded == null || embedded.Name != name)
+				if (embedded is null || embedded.Name != name)
 					continue;
 
-				string dirname = Path.GetDirectoryName (path);
+				string dirname = Path.GetDirectoryName (path)!;
 				if (!Directory.Exists (dirname))
 					Directory.CreateDirectory (dirname);
 
@@ -796,7 +826,7 @@ namespace Xamarin.Bundler {
 				File.Delete (target);
 			}
 
-			var dir = Path.GetDirectoryName (target);
+			var dir = Path.GetDirectoryName (target)!;
 			if (!Directory.Exists (dir))
 				Directory.CreateDirectory (dir);
 
@@ -890,7 +920,7 @@ namespace Xamarin.Bundler {
 
 		void InitializeDeploymentTarget ()
 		{
-			if (DeploymentTarget == null)
+			if (DeploymentTarget is null)
 				DeploymentTarget = SdkVersions.GetVersion (this);
 
 			if (Platform == ApplePlatform.iOS && (HasDynamicLibraries || HasFrameworks) && DeploymentTarget.Major < 8) {
@@ -898,7 +928,7 @@ namespace Xamarin.Bundler {
 				DeploymentTarget = new Version (8, 0);
 			}
 
-			if (DeploymentTarget != null) {
+			if (DeploymentTarget is not null) {
 				if (DeploymentTarget < SdkVersions.GetMinVersion (this))
 					throw new ProductException (73, true, Errors.MT0073, ProductConstants.Version, DeploymentTarget, Xamarin.SdkVersions.GetMinVersion (this), PlatformName, ProductName);
 				if (DeploymentTarget > SdkVersions.GetVersion (this))
@@ -962,7 +992,7 @@ namespace Xamarin.Bundler {
 			var RootAssembly = RootAssemblies [0];
 			var resolvedAssemblies = new Dictionary<string, AssemblyDefinition> ();
 			var resolver = new PlatformResolver () {
-				RootDirectory = Path.GetDirectoryName (RootAssembly),
+				RootDirectory = Path.GetDirectoryName (RootAssembly)!,
 #if MMP
 				CommandLineAssemblies = RootAssemblies,
 #endif
@@ -981,7 +1011,7 @@ namespace Xamarin.Bundler {
 			ps.AssemblyResolver = resolver;
 			foreach (var reference in References) {
 				var r = resolver.Load (reference);
-				if (r == null)
+				if (r is null)
 					throw ErrorHelper.CreateError (2002, Errors.MT2002, reference);
 			}
 
@@ -994,7 +1024,7 @@ namespace Xamarin.Bundler {
 
 				try {
 					AssemblyDefinition lastAssembly = ps.AssemblyResolver.Resolve (AssemblyNameReference.Parse (rootName), new ReaderParameters ());
-					if (lastAssembly == null) {
+					if (lastAssembly is null) {
 						ErrorHelper.Warning (7, Errors.MX0007, rootName);
 						continue;
 					}
@@ -1043,8 +1073,11 @@ namespace Xamarin.Bundler {
 			return IsArchEnabled (abis, arch);
 		}
 
-		public static bool IsArchEnabled (IEnumerable<Abi> abis, Abi arch)
+		public static bool IsArchEnabled (IEnumerable<Abi>? abis, Abi arch)
 		{
+			if (abis is null)
+				return false;
+
 			foreach (var abi in abis) {
 				if ((abi & arch) != 0)
 					return true;
@@ -1054,13 +1087,10 @@ namespace Xamarin.Bundler {
 
 		public void SetDefaultAbi ()
 		{
-			if (abis == null)
-				abis = new List<Abi> ();
-
 			switch (Platform) {
 			case ApplePlatform.iOS:
 				if (abis.Count == 0) {
-					if (DeploymentTarget == null || DeploymentTarget.Major >= 11) {
+					if (DeploymentTarget is null || DeploymentTarget.Major >= 11) {
 						abis.Add (IsDeviceBuild ? Abi.ARM64 : Abi.x86_64);
 					} else {
 						abis.Add (IsDeviceBuild ? Abi.ARMv7 : Abi.i386);
@@ -1155,7 +1185,7 @@ namespace Xamarin.Bundler {
 
 		public void ClearAbi ()
 		{
-			abis = null;
+			abis.Clear ();
 		}
 
 		public void ParseAbi (string abi)
@@ -1212,7 +1242,7 @@ namespace Xamarin.Bundler {
 
 				// merge this value with any existing ARMv? already specified.
 				// this is so that things like '--armv7 --thumb' work correctly.
-				if (abis != null) {
+				if (abis is not null) {
 					for (int i = 0; i < abis.Count; i++) {
 						if ((abis [i] & Abi.ArchMask) == (value & Abi.ArchMask)) {
 							value |= abis [i];
@@ -1383,7 +1413,7 @@ namespace Xamarin.Bundler {
 			case MarshalManagedExceptionMode.Default:
 				if (Driver.IsDotNet) {
 					MarshalManagedExceptions = MarshalManagedExceptionMode.ThrowObjectiveCException;
-				} else if (EnableCoopGC.Value) {
+				} else if (EnableCoopGC == true) {
 					MarshalManagedExceptions = MarshalManagedExceptionMode.ThrowObjectiveCException;
 				} else {
 					switch (Platform) {
@@ -1404,7 +1434,7 @@ namespace Xamarin.Bundler {
 				break;
 			case MarshalManagedExceptionMode.UnwindNativeCode:
 			case MarshalManagedExceptionMode.Disable:
-				if (EnableCoopGC.Value)
+				if (EnableCoopGC == true)
 					throw ErrorHelper.CreateError (89, Errors.MT0089, "--marshal-managed-exceptions", MarshalManagedExceptions.ToString ().ToLowerInvariant ());
 				if (XamarinRuntime == XamarinRuntime.CoreCLR)
 					throw ErrorHelper.CreateError (185, Errors.MX0185 /* The option '{0}' cannot take the value '{1}' when using CoreCLR. */, "--marshal-managed-exceptions", MarshalManagedExceptions.ToString ().ToLowerInvariant ());
@@ -1418,7 +1448,7 @@ namespace Xamarin.Bundler {
 			case MarshalObjectiveCExceptionMode.Default:
 				if (Driver.IsDotNet) {
 					MarshalObjectiveCExceptions = MarshalObjectiveCExceptionMode.ThrowManagedException;
-				} else if (EnableCoopGC.Value) {
+				} else if (EnableCoopGC == true) {
 					MarshalObjectiveCExceptions = MarshalObjectiveCExceptionMode.ThrowManagedException;
 				} else {
 					switch (Platform) {
@@ -1438,7 +1468,7 @@ namespace Xamarin.Bundler {
 				break;
 			case MarshalObjectiveCExceptionMode.UnwindManagedCode:
 			case MarshalObjectiveCExceptionMode.Disable:
-				if (EnableCoopGC.Value)
+				if (EnableCoopGC == true)
 					throw ErrorHelper.CreateError (89, Errors.MT0089, "--marshal-objectivec-exceptions", MarshalObjectiveCExceptions.ToString ().ToLowerInvariant ());
 				if (XamarinRuntime == XamarinRuntime.CoreCLR)
 					throw ErrorHelper.CreateError (185, Errors.MX0185 /* The option '{0}' cannot take the value '{1}' when using CoreCLR. */, "--marshal-objectivec-exceptions", MarshalObjectiveCExceptions.ToString ().ToLowerInvariant ());
@@ -1519,7 +1549,7 @@ namespace Xamarin.Bundler {
 			return processArguments;
 		}
 
-		public void GetAotArguments (string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile, out List<string> processArguments, out List<string> aotArguments, string llvm_path = null)
+		public void GetAotArguments (string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile, out List<string> processArguments, out List<string> aotArguments, string? llvm_path = null)
 		{
 			string fname = Path.GetFileName (filename);
 			processArguments = new List<string> ();
@@ -1541,7 +1571,7 @@ namespace Xamarin.Bundler {
 
 			if (!llvm_only && !interp)
 				processArguments.Add ("-O=gsharedvt");
-			if (app.AotOtherArguments != null)
+			if (app.AotOtherArguments is not null)
 				processArguments.AddRange (app.AotOtherArguments);
 			if (app.AotFloat32.HasValue)
 				processArguments.Add (app.AotFloat32.Value ? "-O=float32" : "-O=-float32");
@@ -1667,7 +1697,7 @@ namespace Xamarin.Bundler {
 
 		public void SetDlsymOption (string asm, bool dlsym)
 		{
-			if (DlsymAssemblies == null)
+			if (DlsymAssemblies is null)
 				DlsymAssemblies = new List<Tuple<string, bool>> ();
 
 			DlsymAssemblies.Add (new Tuple<string, bool> (Path.GetFileNameWithoutExtension (asm), dlsym));
@@ -1681,7 +1711,7 @@ namespace Xamarin.Bundler {
 			if (Driver.TryParseBool (options, out dlsym)) {
 				DlsymOptions = dlsym ? DlsymOptions.All : DlsymOptions.None;
 			} else {
-				if (DlsymAssemblies == null)
+				if (DlsymAssemblies is null)
 					DlsymAssemblies = new List<Tuple<string, bool>> ();
 
 				var assemblies = options.Split (',');
@@ -1707,7 +1737,7 @@ namespace Xamarin.Bundler {
 		{
 			string asm;
 
-			if (DlsymAssemblies != null) {
+			if (DlsymAssemblies is not null) {
 				asm = Path.GetFileNameWithoutExtension (assembly);
 				foreach (var tuple in DlsymAssemblies) {
 					if (string.Equals (tuple.Item1, asm, StringComparison.Ordinal))

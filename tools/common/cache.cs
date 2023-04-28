@@ -8,6 +8,8 @@ using System.Text;
 using Xamarin.Utils;
 using Xamarin.Bundler;
 
+#nullable enable
+
 public class Cache {
 #if MMP
 	const string NAME = "mmp";
@@ -19,7 +21,7 @@ public class Cache {
 #error Wrong defines
 #endif
 
-	string cache_dir;
+	string? cache_dir;
 	bool temporary_cache;
 	string [] arguments;
 
@@ -35,7 +37,7 @@ public class Cache {
 	// see --cache=DIR
 	public string Location {
 		get {
-			if (cache_dir == null) {
+			if (cache_dir is null) {
 				do {
 					cache_dir = Path.Combine (Path.GetTempPath (), NAME + ".cache", Path.GetRandomFileName ());
 					if (File.Exists (cache_dir) || Directory.Exists (cache_dir))

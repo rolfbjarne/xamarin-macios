@@ -167,6 +167,7 @@ namespace Xamarin.Bundler {
 			for (int i = 0; i < values.Length; i++) {
 				if (!values [i].HasValue)
 					continue;
+				var value = values [i]!.Value;
 
 				// The remove-dynamic-registrar optimization is a bit if a special case on macOS:
 				// it only works in very specific circumstances, so we don't add it to valid_platforms.
@@ -187,7 +188,7 @@ namespace Xamarin.Bundler {
 				switch ((Opt) i) {
 				case Opt.StaticBlockToDelegateLookup:
 					if (app.Registrar != RegistrarMode.Static) {
-						messages.Add (ErrorHelper.CreateWarning (2003, Errors.MT2003, (values [i].Value ? "" : "-"), opt_names [i]));
+						messages.Add (ErrorHelper.CreateWarning (2003, Errors.MT2003, value ? "" : "-", opt_names [i]));
 						values [i] = false;
 						continue;
 					}
@@ -197,14 +198,14 @@ namespace Xamarin.Bundler {
 				case Opt.RegisterProtocols:
 				case Opt.RemoveDynamicRegistrar:
 					if (app.Registrar != RegistrarMode.Static) {
-						messages.Add (ErrorHelper.CreateWarning (2003, Errors.MT2003, (values [i].Value ? "" : "-"), opt_names [i]));
+						messages.Add (ErrorHelper.CreateWarning (2003, Errors.MT2003, value ? "" : "-", opt_names [i]));
 						values [i] = false;
 						continue;
 					}
 					goto default; // also requires the linker
 				default:
 					if (!app.AreAnyAssembliesTrimmed) {
-						messages.Add (ErrorHelper.CreateWarning (2003, Errors.MT2003_B, (values [i].Value ? "" : "-"), opt_names [i]));
+						messages.Add (ErrorHelper.CreateWarning (2003, Errors.MT2003_B, value ? "" : "-", opt_names [i]));
 						values [i] = false;
 					}
 					break;
@@ -380,7 +381,7 @@ namespace Xamarin.Bundler {
 					continue;
 				if (sb.Length > 0)
 					sb.Append (' ');
-				sb.Append (values [i].Value ? "+" : "-");
+				sb.Append (values [i]!.Value ? "+" : "-");
 				sb.Append (opt_names [i]);
 			}
 			if (sb.Length == 0)

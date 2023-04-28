@@ -6,30 +6,32 @@ using System.Text;
 
 using Xamarin.Bundler;
 
+#nullable enable
+
 namespace Xamarin.Utils {
 	public class CompilerFlags {
 		public Application Application { get { return Target.App; } }
 		public Target Target;
 
-		public HashSet<string> Frameworks; // if a file, "-F /path/to/X --framework X" and added to Inputs, otherwise "--framework X".
-		public HashSet<string> WeakFrameworks;
-		public HashSet<string> LinkWithLibraries; // X, added to Inputs
-		public HashSet<string> ForceLoadLibraries; // -force_load X, added to Inputs
-		public HashSet<string []> OtherFlags; // X
-		public List<string> InitialOtherFlags; // same as OtherFlags, only that they're the first argument(s) to clang (because order matters!). This is a list to preserve order (fifo).
-		public HashSet<string> Defines; // -DX
-		public HashSet<string> UnresolvedSymbols; // -u X
-		public HashSet<string> SourceFiles; // X, added to Inputs
+		public HashSet<string>? Frameworks; // if a file, "-F /path/to/X --framework X" and added to Inputs, otherwise "--framework X".
+		public HashSet<string>? WeakFrameworks;
+		public HashSet<string>? LinkWithLibraries; // X, added to Inputs
+		public HashSet<string>? ForceLoadLibraries; // -force_load X, added to Inputs
+		public HashSet<string []>? OtherFlags; // X
+		public List<string>? InitialOtherFlags; // same as OtherFlags, only that they're the first argument(s) to clang (because order matters!). This is a list to preserve order (fifo).
+		public HashSet<string>? Defines; // -DX
+		public HashSet<string>? UnresolvedSymbols; // -u X
+		public HashSet<string>? SourceFiles; // X, added to Inputs
 
 		// Here we store a list of all the file-system based inputs
 		// to the compiler. This is used when determining if the
 		// compiler needs to be called in the first place (dependency
 		// tracking).
-		public List<string> Inputs;
+		public List<string>? Inputs;
 
 		public CompilerFlags (Target target)
 		{
-			if (target == null)
+			if (target is null)
 				throw new ArgumentNullException (nameof (target));
 			this.Target = target;
 		}
@@ -214,13 +216,13 @@ namespace Xamarin.Utils {
 
 			// force_load libraries take precedence, so remove the libraries
 			// we need to force load from the list of libraries we just load.
-			if (LinkWithLibraries != null)
+			if (LinkWithLibraries is not null && ForceLoadLibraries is not null)
 				LinkWithLibraries.ExceptWith (ForceLoadLibraries);
 		}
 
 		void AddInput (string file)
 		{
-			if (Inputs == null)
+			if (Inputs is null)
 				return;
 
 			Inputs.Add (file);
@@ -345,7 +347,7 @@ namespace Xamarin.Utils {
 				any_user_framework = true;
 				AddInput (Path.Combine (fw, name));
 				args.Add ("-F");
-				args.Add (Path.GetDirectoryName (fw));
+				args.Add (Path.GetDirectoryName (fw)!);
 			}
 			args.Add (is_weak ? "-weak_framework" : "-framework");
 			args.Add (name);

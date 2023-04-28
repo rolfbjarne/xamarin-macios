@@ -5,6 +5,8 @@ using System.IO;
 
 using Mono.Cecil;
 
+#nullable enable
+
 namespace Xamarin.Bundler {
 	public enum SymbolType {
 		Function,
@@ -30,12 +32,12 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		string name;
+		string? name;
 		public string Name {
 			get {
-				if (name != null)
+				if (name is not null)
 					return name;
-				if (ObjectiveCName != null)
+				if (ObjectiveCName is not null)
 					return ObjectiveCPrefix + ObjectiveCName;
 				throw ErrorHelper.CreateError (99, Errors.MX0099, $"symbol without a name (type: {Type})");
 			}
@@ -47,7 +49,7 @@ namespace Xamarin.Bundler {
 				}
 			}
 		}
-		public string ObjectiveCName;
+		public string? ObjectiveCName;
 
 		public string Prefix {
 			get {
@@ -101,8 +103,8 @@ namespace Xamarin.Bundler {
 
 		public Symbol AddField (string name)
 		{
-			Symbol rv = Find (name);
-			if (rv == null) {
+			var rv = Find (name);
+			if (rv is null) {
 				rv = new Symbol { Name = name, Type = SymbolType.Field };
 				Add (rv);
 			}
@@ -111,8 +113,8 @@ namespace Xamarin.Bundler {
 
 		public Symbol AddFunction (string name)
 		{
-			Symbol rv = Find (name);
-			if (rv == null) {
+			var rv = Find (name);
+			if (rv is null) {
 				rv = new Symbol { Name = name, Type = SymbolType.Function };
 				Add (rv);
 			}
@@ -137,10 +139,9 @@ namespace Xamarin.Bundler {
 			return store.Values.GetEnumerator ();
 		}
 
-		public Symbol Find (string name)
+		public Symbol? Find (string name)
 		{
-			Symbol rv;
-			store.TryGetValue (name, out rv);
+			store.TryGetValue (name, out var rv);
 			return rv;
 		}
 
@@ -158,17 +159,18 @@ namespace Xamarin.Bundler {
 		public void Load (string filename, Target target)
 		{
 			using (var reader = new StreamReader (filename)) {
-				string line;
-				Symbol current = null;
-				while ((line = reader.ReadLine ()) != null) {
+				string? line;
+				Symbol? current = null;
+				while ((line = reader.ReadLine ()) is not null) {
 					if (line.Length == 0)
 						continue;
 					if (line [0] == '\t') {
+						if (current is null)
+							throw ErrorHelper.CreateError (99, Errors.MX0099, $"invalid format in symbols file {filename}");
 						var asm = line.Substring (1);
-						Assembly assembly;
-						if (!target.Assemblies.TryGetValue (Assembly.GetIdentity (asm), out assembly))
+						if (!target.Assemblies.TryGetValue (Assembly.GetIdentity (asm), out var assembly))
 							throw ErrorHelper.CreateError (99, Errors.MX0099, $"serialized assembly {asm} for symbol {current.Name}, but no such assembly loaded");
-						current.AddAssembly (assembly.AssemblyDefinition);
+						current.AddAssembly (assembly.AssemblyDefinition!);
 					} else {
 						var eq = line.IndexOf ('=');
 						var typestr = line.Substring (0, eq);

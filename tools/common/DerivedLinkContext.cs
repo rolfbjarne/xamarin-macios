@@ -13,11 +13,13 @@ using Xamarin.Bundler;
 using LinkContext = Xamarin.Bundler.DotNetLinkContext;
 #endif
 
+#nullable enable
+
 namespace Xamarin.Tuner {
 	public class DerivedLinkContext : LinkContext {
 		internal StaticRegistrar StaticRegistrar => Target.StaticRegistrar;
-		internal Target Target;
-		Symbols required_symbols;
+		internal readonly Target Target;
+		Symbols? required_symbols;
 
 		// Any errors or warnings during the link process that won't prevent linking from continuing can be stored here.
 		// This is typically used to show as many problems as possible per build (so that the user doesn't have to fix one thing, rebuild, fix another, rebuild, fix another, etc).
@@ -29,11 +31,11 @@ namespace Xamarin.Tuner {
 		List<ICustomAttributeProvider> srs_data_contract = new List<ICustomAttributeProvider> ();
 		List<ICustomAttributeProvider> xml_serialization = new List<ICustomAttributeProvider> ();
 
-		HashSet<TypeDefinition> cached_isnsobject;
+		HashSet<TypeDefinition>? cached_isnsobject;
 		// Tristate:
 		//   null = don't know, must check at runtime (can't inline)
 		//   true/false = corresponding constant value
-		Dictionary<TypeDefinition, bool?> isdirectbinding_value;
+		Dictionary<TypeDefinition, bool?>? isdirectbinding_value;
 
 		// Store interfaces the linker has linked away so that the static registrar can access them.
 		public Dictionary<TypeDefinition, List<TypeDefinition>> ProtocolImplementations { get; private set; } = new Dictionary<TypeDefinition, List<TypeDefinition>> ();
@@ -43,13 +45,22 @@ namespace Xamarin.Tuner {
 		// so we need a second dictionary
 		Dictionary<TypeDefinition, LinkedAwayTypeReference> LinkedAwayTypeMap = new Dictionary<TypeDefinition, LinkedAwayTypeReference> ();
 
+
+#if NET
+		public DerivedLinkContext (Xamarin.Linker.LinkerConfiguration configuration, Target target)
+			: base (configuration)
+		{
+			this.Target = target;
+		}
+#endif
+
 		public Application App {
 			get {
 				return Target.App;
 			}
 		}
 
-		AssemblyDefinition corlib;
+		AssemblyDefinition? corlib;
 		public AssemblyDefinition Corlib {
 			get {
 				if (corlib == null) {
@@ -61,12 +72,12 @@ namespace Xamarin.Tuner {
 				return corlib;
 			}
 		}
-		public HashSet<TypeDefinition> CachedIsNSObject {
+		public HashSet<TypeDefinition>? CachedIsNSObject {
 			get { return cached_isnsobject; }
 			set { cached_isnsobject = value; }
 		}
 
-		public Dictionary<TypeDefinition, bool?> IsDirectBindingValue {
+		public Dictionary<TypeDefinition, bool?>? IsDirectBindingValue {
 			get { return isdirectbinding_value; }
 			set { isdirectbinding_value = value; }
 		}
@@ -103,18 +114,20 @@ namespace Xamarin.Tuner {
 		}
 #endif
 
-		public Dictionary<IMetadataTokenProvider, object> GetAllCustomAttributes (string storage_name)
+		public Dictionary<IMetadataTokenProvider, object>? GetAllCustomAttributes (string storage_name)
 		{
 			return Annotations?.GetCustomAnnotations (storage_name);
 		}
 
-		public List<ICustomAttribute> GetCustomAttributes (ICustomAttributeProvider provider, string storage_name)
+		public List<ICustomAttribute>? GetCustomAttributes (ICustomAttributeProvider? provider, string storage_name)
 		{
-			var annotations = Annotations?.GetCustomAnnotations (storage_name);
-			object storage = null;
-			if (annotations?.TryGetValue (provider, out storage) != true)
+			if (provider is null)
 				return null;
-			return (List<ICustomAttribute>) storage;
+
+			var annotations = Annotations?.GetCustomAnnotations (storage_name);
+			if (annotations?.TryGetValue (provider, out var storage) != true)
+				return null;
+			return (List<ICustomAttribute>?) storage;
 		}
 
 		// Stores custom attributes in the link context, so that the attribute can be retrieved and
@@ -123,8 +136,7 @@ namespace Xamarin.Tuner {
 		{
 			var dict = Annotations.GetCustomAnnotations (storage_name);
 			List<ICustomAttribute> attribs;
-			object attribObjects;
-			if (!dict.TryGetValue (provider, out attribObjects)) {
+			if (!dict.TryGetValue (provider, out var attribObjects)) {
 				attribs = new List<ICustomAttribute> ();
 				dict [provider] = attribs;
 			} else {
@@ -136,10 +148,10 @@ namespace Xamarin.Tuner {
 			// We also need to store the constructor's DeclaringType separately, because it may
 			// be nulled out from the constructor by the linker if the attribute type itself is linked away.
 			var dummy = attribute.HasConstructorArguments;
-			attribs.Add (new AttributeStorage { Attribute = attribute, AttributeType = attribute.Constructor.DeclaringType });
+			attribs.Add (new AttributeStorage (attribute, attribute.Constructor.DeclaringType));
 		}
 
-		public List<ICustomAttribute> GetCustomAttributes (ICustomAttributeProvider provider, string @namespace, string name)
+		public List<ICustomAttribute>? GetCustomAttributes (ICustomAttributeProvider? provider, string @namespace, string name)
 		{
 			// The equivalent StoreCustomAttribute method below ignores the namespace (it's not needed so far since all attribute names we care about are unique),
 			// so we need to retrieve the attributes the same way (using the name only).
@@ -154,16 +166,14 @@ namespace Xamarin.Tuner {
 		public void StoreProtocolMethods (TypeDefinition type)
 		{
 			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
-			object value;
-			if (!attribs.TryGetValue (type, out value))
+			if (!attribs.TryGetValue (type, out var value))
 				attribs [type] = type.Methods.ToArray (); // Make a copy of the collection, since the linker may remove methods from it.
 		}
 
-		public IList<MethodDefinition> GetProtocolMethods (TypeDefinition type)
+		public IList<MethodDefinition>? GetProtocolMethods (TypeDefinition type)
 		{
 			var attribs = Annotations.GetCustomAnnotations ("ProtocolMethods");
-			object value;
-			if (attribs.TryGetValue (type, out value))
+			if (attribs.TryGetValue (type, out var value))
 				return (MethodDefinition []) value;
 			return null;
 		}
@@ -179,7 +189,7 @@ namespace Xamarin.Tuner {
 		// The Module property is null for the returned TypeDefinition (unfortunately TypeDefinition is
 		// sealed, so I can't provide a custom TypeDefinition subclass), so we need to return
 		// the module as an out parameter instead.
-		public TypeDefinition GetLinkedAwayType (TypeReference tr, out ModuleDefinition module)
+		public TypeDefinition? GetLinkedAwayType (TypeReference tr, out ModuleDefinition? module)
 		{
 			module = null;
 
@@ -223,6 +233,12 @@ namespace Xamarin.Tuner {
 			public Collection<CustomAttributeNamedArgument> Fields => Attribute.Fields;
 			public Collection<CustomAttributeNamedArgument> Properties => Attribute.Properties;
 			public Collection<CustomAttributeArgument> ConstructorArguments => Attribute.ConstructorArguments;
+
+			public AttributeStorage (CustomAttribute attribute, TypeReference attributeType)
+			{
+				Attribute = attribute;
+				AttributeType = attributeType;
+			}
 		}
 
 		class LinkedAwayTypeReference : TypeReference {

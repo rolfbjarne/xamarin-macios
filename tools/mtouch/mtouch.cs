@@ -609,9 +609,6 @@ namespace Xamarin.Bundler {
 			if (IsMlaunchAction (action))
 				return CallMlaunch (app);
 
-			if (app.SdkVersion == null)
-				throw new ProductException (25, true, Errors.MT0025, app.PlatformName);
-
 			var framework_dir = GetFrameworkDirectory (app);
 			Driver.Log ("Xamarin.iOS {0}.{1} using framework: {2}", Constants.Version, Constants.Revision, framework_dir);
 

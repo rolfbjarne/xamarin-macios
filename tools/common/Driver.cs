@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,8 @@ using Xamarin.Utils;
 using ObjCRuntime;
 
 using Mono.Linker;
+
+#nullable enable
 
 namespace Xamarin.Bundler {
 	public partial class Driver {
@@ -351,7 +354,7 @@ namespace Xamarin.Bundler {
 			Console.WriteLine (value);
 		}
 
-		public static void Log (int min_verbosity, string format, params object [] args)
+		public static void Log (int min_verbosity, string format, params object? [] args)
 		{
 			if (min_verbosity > Verbosity)
 				return;
@@ -376,7 +379,7 @@ namespace Xamarin.Bundler {
 		// We need to delay validating the target framework until we've parsed all the command line arguments,
 		// so first store it here, and then we call ValidateTargetFramework when we're done parsing the command
 		// line arguments.
-		static string target_framework;
+		static string? target_framework;
 		static void SetTargetFramework (string value)
 		{
 			target_framework = value;
@@ -511,7 +514,7 @@ namespace Xamarin.Bundler {
 
 			try {
 				if (!File.Exists (path)) {
-					Directory.CreateDirectory (Path.GetDirectoryName (path));
+					Directory.CreateDirectory (Path.GetDirectoryName (path)!);
 					File.WriteAllText (path, contents);
 					Log (3, "File '{0}' does not exist, creating it.", path);
 					return;
@@ -555,17 +558,17 @@ namespace Xamarin.Bundler {
 			return System.Reflection.Assembly.GetExecutingAssembly ().Location;
 		}
 
-		static string xcode_product_version;
-		public static string XcodeProductVersion {
+		static string? xcode_product_version;
+		public static string? XcodeProductVersion {
 			get {
 				return xcode_product_version;
 			}
 		}
 
-		static Version xcode_version;
+		static Version? xcode_version;
 		public static Version XcodeVersion {
 			get {
-				return xcode_version;
+				return xcode_version!;
 			}
 		}
 
@@ -648,13 +651,13 @@ namespace Xamarin.Bundler {
 		}
 
 		static int watch_level;
-		static Stopwatch watch;
+		static Stopwatch? watch;
 
 		public static int WatchLevel {
 			get { return watch_level; }
 			set {
 				watch_level = value;
-				if ((watch_level > 0) && (watch == null)) {
+				if ((watch_level > 0) && (watch is null)) {
 					watch = new Stopwatch ();
 					watch.Start ();
 				}
@@ -663,14 +666,14 @@ namespace Xamarin.Bundler {
 
 		public static void Watch (string msg, int level)
 		{
-			if ((watch == null) || (level > WatchLevel))
+			if ((watch is null) || (level > WatchLevel))
 				return;
 			for (int i = 0; i < level; i++)
 				Console.Write ("!");
 			Console.WriteLine ("Timestamp {0}: {1} ms", msg, watch.ElapsedMilliseconds);
 		}
 
-		internal static PDictionary FromPList (string name)
+		internal static PDictionary? FromPList (string name)
 		{
 			if (!File.Exists (name))
 				throw ErrorHelper.CreateError (24, Errors.MT0024, name);
@@ -679,7 +682,7 @@ namespace Xamarin.Bundler {
 
 		const string XcodeDefault = "/Applications/Xcode.app";
 
-		static string FindSystemXcode ()
+		static string? FindSystemXcode ()
 		{
 			var output = new StringBuilder ();
 			if (Driver.RunCommand ("xcode-select", new [] { "-p" }, output: output) != 0) {
@@ -689,12 +692,12 @@ namespace Xamarin.Bundler {
 			return output.ToString ().Trim ();
 		}
 
-		static string sdk_root;
-		static string developer_directory;
+		static string? sdk_root;
+		static string? developer_directory;
 
 		public static string DeveloperDirectory {
 			get {
-				return developer_directory;
+				return developer_directory!;
 			}
 		}
 
@@ -711,29 +714,29 @@ namespace Xamarin.Bundler {
 			return Path.Combine (PlatformsDirectory, GetPlatform (app) + ".platform");
 		}
 
-		static string local_build;
+		static string? local_build;
 		public static string WalkUpDirHierarchyLookingForLocalBuild (Application app)
 		{
-			if (local_build == null) {
-				var localPath = Path.GetDirectoryName (GetFullPath ());
+			if (local_build is null) {
+				var localPath = Path.GetDirectoryName (GetFullPath ())!;
 				while (localPath.Length > 1) {
 					if (File.Exists (Path.Combine (localPath, "Make.config"))) {
 						local_build = Path.Combine (localPath, app.LocalBuildDir, "Library", "Frameworks", app.ProductName + ".framework", "Versions", "Current");
 						return local_build;
 					}
 
-					localPath = Path.GetDirectoryName (localPath);
+					localPath = Path.GetDirectoryName (localPath)!;
 				}
 			}
-			return local_build;
+			return local_build!;
 		}
 
 		// This is the 'Current' directory of the installed framework
 		// For XI/XM installed from package it's /Library/Frameworks/Xamarin.iOS.framework/Versions/Current or /Library/Frameworks/Xamarin.Mac.framework/Versions/Current
-		static string framework_dir;
+		static string? framework_dir;
 		public static string GetFrameworkCurrentDirectory (Application app)
 		{
-			if (framework_dir == null) {
+			if (framework_dir is null) {
 				var env_framework_dir = Environment.GetEnvironmentVariable (app.FrameworkLocationVariable);
 				if (!string.IsNullOrEmpty (env_framework_dir)) {
 					framework_dir = env_framework_dir;
@@ -820,10 +823,10 @@ namespace Xamarin.Bundler {
 		// * /Library/Frameworks/Xamarin.Mac.framework/Versions/Current/SDKs/*.sdk/lib
 		// For Xamarin.iOS it can be:
 		// * /Library/Frameworks/Xamarin.iOS.framework/Versions/Current/SDKs/*.sdk/lib
-		static string mono_lib_directory;
+		static string? mono_lib_directory;
 		public static string GetMonoLibraryDirectory (Application app)
 		{
-			if (mono_lib_directory == null) {
+			if (mono_lib_directory is null) {
 #if MMP
 				if (IsUnifiedFullSystemFramework) {
 					mono_lib_directory = RunPkgConfig ("--variable=libdir");
@@ -938,7 +941,7 @@ namespace Xamarin.Bundler {
 
 		public static void ValidateXcode (Application app, bool accept_any_xcode_version, bool warn_if_not_found)
 		{
-			if (sdk_root == null) {
+			if (sdk_root is null) {
 				sdk_root = FindSystemXcode ();
 				if (sdk_root == null) {
 					// FindSystemXcode showed a warning in this case. In particular do not use 'string.IsNullOrEmpty' here,
@@ -980,10 +983,10 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (57, Errors.MT0057, sdk_root);
 			}
 
-			var plist_path = Path.Combine (Path.GetDirectoryName (DeveloperDirectory), "version.plist");
+			var plist_path = Path.Combine (Path.GetDirectoryName (DeveloperDirectory)!, "version.plist");
 
 			if (File.Exists (plist_path)) {
-				var plist = FromPList (plist_path);
+				var plist = FromPList (plist_path)!;
 				var version = plist.GetString ("CFBundleShortVersionString");
 				xcode_version = new Version (version);
 				xcode_product_version = plist.GetString ("ProductBuildVersion");
@@ -1038,7 +1041,7 @@ namespace Xamarin.Bundler {
 		static readonly Dictionary<string, string> tools = new Dictionary<string, string> ();
 		static string FindTool (Application app, string tool)
 		{
-			string path;
+			string? path;
 
 			lock (tools) {
 				if (tools.TryGetValue (tool, out path))
@@ -1046,7 +1049,7 @@ namespace Xamarin.Bundler {
 			}
 
 			path = LocateTool (app, tool);
-			static string LocateTool (Application app, string tool)
+			static string? LocateTool (Application app, string tool)
 			{
 				if (XcrunFind (app, tool, out var path))
 					return path;
@@ -1069,25 +1072,25 @@ namespace Xamarin.Bundler {
 				return null;
 			}
 
+			if (path is null)
+				throw ErrorHelper.CreateError (5307, Errors.MX5307 /* Missing '{0}' tool. Please install Xcode 'Command-Line Tools' component */, tool);
+
 			// We can end up finding the same tool multiple times.
 			// That's not a problem.
 			lock (tools)
 				tools [tool] = path;
 
-			if (path == null)
-				throw ErrorHelper.CreateError (5307, Errors.MX5307 /* Missing '{0}' tool. Please install Xcode 'Command-Line Tools' component */, tool);
-
 			return path;
 		}
 
-		static bool XcrunFind (Application app, string tool, out string path)
+		static bool XcrunFind (Application app, string tool, [NotNullWhen (true)] out string? path)
 		{
 			return XcrunFind (app, ApplePlatform.None, false, tool, out path);
 		}
 
-		static bool XcrunFind (Application app, ApplePlatform platform, bool is_simulator, string tool, out string path)
+		static bool XcrunFind (Application app, ApplePlatform platform, bool is_simulator, string tool, [NotNullWhen (true)] out string? path)
 		{
-			var env = new Dictionary<string, string> ();
+			var env = new Dictionary<string, string?> ();
 			// Unset XCODE_DEVELOPER_DIR_PATH. See https://github.com/xamarin/xamarin-macios/issues/3931.
 			env.Add ("XCODE_DEVELOPER_DIR_PATH", null);
 			// Set DEVELOPER_DIR if we have it

@@ -18,6 +18,8 @@ using Mono.Tuner;
 using Xamarin.Linker;
 using Xamarin.Tuner;
 
+#nullable enable
+
 namespace MonoTouch.Tuner {
 
 	// This class is shared between Xamarin.Mac and Xamarin.iOS
@@ -36,10 +38,10 @@ namespace MonoTouch.Tuner {
 		Profile Profile => new Profile (Configuration);
 
 		// Get the reverse mapping from assemblies to assemblies which reference them directly.
-		Dictionary<AssemblyDefinition, HashSet<AssemblyDefinition>> _reversedReferences;
+		Dictionary<AssemblyDefinition, HashSet<AssemblyDefinition>>? _reversedReferences;
 		Dictionary<AssemblyDefinition, HashSet<AssemblyDefinition>> GetReversedReferences ()
 		{
-			if (_reversedReferences != null)
+			if (_reversedReferences is not null)
 				return _reversedReferences;
 
 			_reversedReferences = new Dictionary<AssemblyDefinition, HashSet<AssemblyDefinition>> ();
@@ -63,10 +65,10 @@ namespace MonoTouch.Tuner {
 			return _reversedReferences;
 		}
 
-		Dictionary<AssemblyDefinition, bool> _transitivelyReferencesProduct;
+		Dictionary<AssemblyDefinition, bool>? _transitivelyReferencesProduct;
 		bool TransitivelyReferencesProduct (AssemblyDefinition assembly)
 		{
-			if (_transitivelyReferencesProduct != null) {
+			if (_transitivelyReferencesProduct is not null) {
 				Debug.Assert (_transitivelyReferencesProduct.ContainsKey (assembly));
 				return _transitivelyReferencesProduct.TryGetValue (assembly, out bool result) && result;
 			}

@@ -9,13 +9,18 @@ using ObjCRuntime;
 using Xamarin.Bundler;
 using Xamarin.Tuner;
 
+#nullable enable
+
 namespace Xamarin.Linker {
 
 	public static class MobileExtensions {
 
 		// Returns a string representation of the specified provider that is suitable for user-visible error/warning messages.
-		public static string AsString (this ICustomAttributeProvider provider)
+		public static string? AsString (this ICustomAttributeProvider provider)
 		{
+			if (provider is null)
+				return null;
+
 			if (provider is MemberReference member)
 				return member.DeclaringType.FullName + "." + member.Name;
 			if (provider is MethodReturnType returnType)
@@ -24,7 +29,7 @@ namespace Xamarin.Linker {
 		}
 
 		// This method will look in any stored attributes in the link context as well as the provider itself.
-		public static bool HasCustomAttribute (this ICustomAttributeProvider provider, DerivedLinkContext context, string @namespace, string name)
+		public static bool HasCustomAttribute (this ICustomAttributeProvider? provider, DerivedLinkContext? context, string @namespace, string name)
 		{
 			if (provider?.HasCustomAttribute (@namespace, name) == true)
 				return true;
@@ -32,9 +37,9 @@ namespace Xamarin.Linker {
 			return context?.GetCustomAttributes (provider, @namespace, name)?.Count > 0;
 		}
 
-		public static bool HasCustomAttribute (this ICustomAttributeProvider provider, string @namespace, string name)
+		public static bool HasCustomAttribute (this ICustomAttributeProvider? provider, string @namespace, string name)
 		{
-			if (provider == null || !provider.HasCustomAttributes)
+			if (provider is null || !provider.HasCustomAttributes)
 				return false;
 
 			foreach (CustomAttribute attribute in provider.CustomAttributes) {
@@ -45,16 +50,19 @@ namespace Xamarin.Linker {
 			return false;
 		}
 
-		static bool HasGeneratedCodeAttribute (ICustomAttributeProvider provider, DerivedLinkContext context)
+		static bool HasGeneratedCodeAttribute (ICustomAttributeProvider? provider, DerivedLinkContext context)
 		{
 			return provider.HasCustomAttribute (context, "System.Runtime.CompilerServices", "CompilerGeneratedAttribute");
 		}
 
 		// The 'provider' parameter is only used in error messages to explain where the broken attribute comes from
 		// (in particular it's not used to get the custom attributes themselves, since those may not come from this provider instance)
-		static BindingImplOptions? GetBindingImplAttribute (ICustomAttributeProvider provider, IEnumerable<ICustomAttribute> attributes)
+		static BindingImplOptions? GetBindingImplAttribute (ICustomAttributeProvider? provider, IEnumerable<ICustomAttribute>? attributes)
 		{
-			if (attributes == null)
+			if (attributes is null)
+				return null;
+
+			if (provider is null)
 				return null;
 
 			foreach (var ca in attributes) {
@@ -81,18 +89,18 @@ namespace Xamarin.Linker {
 			return null;
 		}
 
-		static BindingImplOptions? GetBindingImplAttribute (ICustomAttributeProvider provider, DerivedLinkContext context)
+		static BindingImplOptions? GetBindingImplAttribute (ICustomAttributeProvider? provider, DerivedLinkContext context)
 		{
-			if (provider != null && provider.HasCustomAttributes) {
+			if (provider is not null && provider.HasCustomAttributes) {
 				var rv = GetBindingImplAttribute (provider, provider.CustomAttributes);
-				if (rv != null)
+				if (rv is not null)
 					return rv;
 			}
 
 			return GetBindingImplAttribute (provider, context?.GetCustomAttributes (provider, Namespaces.ObjCRuntime, "BindingImplAttribute"));
 		}
 
-		public static PropertyDefinition GetPropertyByAccessor (this MethodDefinition method)
+		public static PropertyDefinition? GetPropertyByAccessor (this MethodDefinition method)
 		{
 			foreach (PropertyDefinition property in method.DeclaringType.Properties) {
 				if (property.GetMethod == method || property.SetMethod == method)

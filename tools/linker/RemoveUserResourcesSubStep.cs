@@ -11,6 +11,8 @@ using Mono.Tuner;
 using Xamarin.Bundler;
 using Xamarin.Utils;
 
+#nullable enable
+
 namespace Xamarin.Linker {
 
 	public class RemoveUserResourcesSubStep : ExceptionalSubStep {
@@ -20,8 +22,10 @@ namespace Xamarin.Linker {
 		const string Mac_Content = "__xammac_content_";
 		const string Mac_Page = "__xammac_page_";
 
-		string Content;
-		string Page;
+		string? content;
+		string Content { get => content!; }
+		string? page;
+		string Page { get => page!; }
 
 		public override SubStepTargets Targets {
 			get { return SubStepTargets.Assembly; }
@@ -41,12 +45,12 @@ namespace Xamarin.Linker {
 			case ApplePlatform.TVOS:
 			case ApplePlatform.WatchOS:
 			case ApplePlatform.MacCatalyst:
-				Content = iOS_Content;
-				Page = iOS_Page;
+				content = iOS_Content;
+				page = iOS_Page;
 				break;
 			case ApplePlatform.MacOSX:
-				Content = Mac_Content;
-				Page = Mac_Page;
+				content = Mac_Content;
+				page = Mac_Page;
 				break;
 			default:
 				Report (ErrorHelper.CreateError (71, Errors.MX0071, LinkContext.App.Platform, LinkContext.App.ProductName));
@@ -63,7 +67,7 @@ namespace Xamarin.Linker {
 			if (!module.HasResources)
 				return;
 
-			HashSet<string> libraries = null;
+			HashSet<string>? libraries = null;
 			if (assembly.HasCustomAttributes) {
 				foreach (var ca in assembly.CustomAttributes) {
 					if (!ca.AttributeType.Is ("ObjCRuntime", "LinkWithAttribute"))
@@ -113,9 +117,9 @@ namespace Xamarin.Linker {
 			return false;
 		}
 
-		static bool IsNativeLibrary (string resourceName, HashSet<string> libraries)
+		static bool IsNativeLibrary (string resourceName, HashSet<string>? libraries)
 		{
-			if (libraries == null)
+			if (libraries is null)
 				return false;
 
 			return libraries.Contains (resourceName);

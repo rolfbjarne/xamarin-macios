@@ -15,6 +15,8 @@ using MonoTouch.Tuner;
 
 using Xamarin.Bundler;
 
+#nullable enable
+
 namespace Xamarin.Linker.Steps {
 #if NET
 	public class PreserveSmartEnumConversionsHandler : ExceptionalMarkHandler
@@ -22,7 +24,7 @@ namespace Xamarin.Linker.Steps {
 	public class PreserveSmartEnumConversionsSubStep : ExceptionalSubStep
 #endif
 	{
-		Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>> cache;
+		Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>>? cache;
 		protected override string Name { get; } = "Smart Enum Conversion Preserver";
 		protected override int ErrorCode { get; } = 2200;
 
@@ -61,8 +63,8 @@ namespace Xamarin.Linker.Steps {
 #if NET
 		void Mark (Tuple<MethodDefinition, MethodDefinition> pair)
 		{
-			context.Annotations.Mark (pair.Item1);
-			context.Annotations.Mark (pair.Item2);
+			Context.Annotations.Mark (pair.Item1);
+			Context.Annotations.Mark (pair.Item2);
 		}
 #else
 		void Preserve (Tuple<MethodDefinition, MethodDefinition> pair, MethodDefinition conditionA, MethodDefinition conditionB = null)
@@ -109,8 +111,7 @@ namespace Xamarin.Linker.Steps {
 				if (!managedEnumType.IsEnum)
 					continue;
 
-				Tuple<MethodDefinition, MethodDefinition> pair;
-				if (cache != null && cache.TryGetValue (managedEnumType, out pair)) {
+				if (cache is not null && cache.TryGetValue (managedEnumType, out var pair)) {
 #if NET
 					// The pair was already marked if it was cached.
 #else
@@ -120,7 +121,7 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				// Find the Extension type
-				TypeDefinition extensionType = null;
+				TypeDefinition? extensionType = null;
 				var extensionName = managedEnumType.Name + "Extensions";
 				foreach (var type in managedEnumType.Module.Types) {
 					if (type.Namespace != managedEnumType.Namespace)
@@ -136,8 +137,8 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				// Find the GetConstant/GetValue methods
-				MethodDefinition getConstant = null;
-				MethodDefinition getValue = null;
+				MethodDefinition? getConstant = null;
+				MethodDefinition? getValue = null;
 
 				foreach (var method in extensionType.Methods) {
 					if (!method.IsStatic)
@@ -170,7 +171,7 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				pair = new Tuple<MethodDefinition, MethodDefinition> (getConstant, getValue);
-				if (cache == null)
+				if (cache is null)
 					cache = new Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>> ();
 				cache.Add (managedEnumType, pair);
 #if NET

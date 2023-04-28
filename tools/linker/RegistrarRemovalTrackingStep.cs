@@ -12,6 +12,8 @@ using Mono.Tuner;
 using Xamarin.Tuner;
 #endif
 
+#nullable enable
+
 namespace MonoTouch.Tuner {
 
 #if NET
@@ -47,7 +49,7 @@ namespace MonoTouch.Tuner {
 			base.ProcessAssembly (assembly);
 		}
 #endif
-		AssemblyDefinition PlatformAssembly;
+		AssemblyDefinition? PlatformAssembly;
 
 		bool dynamic_registration_support_required;
 

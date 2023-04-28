@@ -37,11 +37,13 @@ using Mono.Tuner;
 using Mono.Linker.Steps;
 #endif
 
+#nullable enable
+
 namespace Xamarin.Linker.Steps {
 
 	public class MarkNSObjects : ExceptionalSubStep {
 
-		static string ProductAssembly;
+		static string? ProductAssembly;
 
 		protected override string Name { get; } = "MarkNSObjects";
 		protected override int ErrorCode { get; } = 2080;
@@ -52,8 +54,8 @@ namespace Xamarin.Linker.Steps {
 
 		protected override void Process (TypeDefinition type)
 		{
-			if (ProductAssembly == null)
-				ProductAssembly = (Profile.Current as BaseProfile).ProductAssembly;
+			if (ProductAssembly is null)
+				ProductAssembly = (Profile.Current as BaseProfile)?.ProductAssembly;
 
 			bool nsobject = type.IsNSObject (LinkContext);
 			if (!nsobject && !type.IsNativeObject ())

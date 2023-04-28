@@ -78,8 +78,8 @@ namespace Xamarin.Linker.Steps {
 				return;
 
 			// The type was used, so preserve the method and field
-			context.Annotations.Mark (method);
-			context.Annotations.Mark (field);
+			Context.Annotations.Mark (method);
+			Context.Annotations.Mark (field);
 		}
 	}
 }

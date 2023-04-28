@@ -45,6 +45,9 @@ using R = ObjCRuntime.Runtime;
 using ProductException = ObjCRuntime.RuntimeException;
 #endif
 
+#nullable disable // FIXME
+#pragma warning disable CS8632
+
 #if !MTOUCH && !MMP && !BUNDLER
 // static registrar needs them but they might not be marked (e.g. if System.Console is not used)
 [assembly: Preserve (typeof (System.Action))]
@@ -106,8 +109,8 @@ namespace Registrar {
 		// this is used to check if multiple categories are registered with the same name.
 		// locking: all accesses must lock 'categories_map'.
 		Dictionary<string, TType> categories_map = new Dictionary<string, TType> ();
-		TMethod conforms_to_protocol;
-		TMethod invoke_conforms_to_protocol;
+		TMethod? conforms_to_protocol;
+		TMethod? invoke_conforms_to_protocol;
 
 		public IEnumerable<TAssembly> GetAssemblies ()
 		{
@@ -117,13 +120,13 @@ namespace Registrar {
 
 		internal class ObjCType {
 			public Registrar Registrar;
-			public RegisterAttribute RegisterAttribute;
-			public CategoryAttribute CategoryAttribute;
-			public TType Type;
-			public ObjCType BaseType;
+			public RegisterAttribute? RegisterAttribute;
+			public CategoryAttribute? CategoryAttribute;
+			public TType? Type;
+			public ObjCType? BaseType;
 			// This only contains the leaf protocols implemented by this type.
-			public ObjCType [] Protocols;
-			public string [] AdoptedProtocols;
+			public ObjCType []? Protocols;
+			public string []? AdoptedProtocols;
 			public bool IsModel;
 			// if this type represents an ObjC protocol (!= has the protocol attribute, since that can be applied to all kinds of things).
 			public bool IsProtocol;
@@ -133,21 +136,21 @@ namespace Registrar {
 #if !MTOUCH && !MMP && !BUNDLER
 			public IntPtr Handle;
 #else
-			public TType ProtocolWrapperType;
+			public TType? ProtocolWrapperType;
 #endif
 
-			public Dictionary<string, ObjCField> Fields;
-			public List<ObjCMethod> Methods;
-			public List<ObjCProperty> Properties;
+			public Dictionary<string, ObjCField>? Fields;
+			public List<ObjCMethod>? Methods;
+			public List<ObjCProperty>? Properties;
 
 			Dictionary<string, ObjCMember> Map = new Dictionary<string, ObjCMember> ();
 
-			ObjCType superType;
+			ObjCType? superType;
 
 			public bool IsCategory { get { return CategoryAttribute != null; } }
 
 #if MTOUCH || MMP || BUNDLER
-			HashSet<ObjCType> all_protocols;
+			HashSet<ObjCType>? all_protocols;
 			// This contains all protocols in the type hierarchy.
 			// Given a type T that implements a protocol with super protocols:
 			// class T : NSObject, IProtocol2 {}
@@ -156,9 +159,9 @@ namespace Registrar {
 			// [Protocol]
 			// interface IP2 : IP1 {}
 			// This property will contain both IP1 and IP2. The Protocols property only contains IP2.
-			public IEnumerable<ObjCType> AllProtocols {
+			public IEnumerable<ObjCType>? AllProtocols {
 				get {
-					if (Protocols == null || Protocols.Length == 0)
+					if (Protocols is null || Protocols.Length == 0)
 						return null;
 
 					if (all_protocols == null) {
@@ -183,13 +186,13 @@ namespace Registrar {
 				}
 			}
 
-			HashSet<ObjCType> all_protocols_in_hierarchy;
+			HashSet<ObjCType>? all_protocols_in_hierarchy;
 			public IEnumerable<ObjCType> AllProtocolsInHierarchy {
 				get {
 					if (all_protocols_in_hierarchy is null) {
 						all_protocols_in_hierarchy = new HashSet<ObjCType> ();
 						var type = this;
-						while (type is not null && (object) type != (object) type.BaseType) {
+						while (type is not null && (object) type != (object?) type.BaseType) {
 							var allProtocols = type.AllProtocols;
 							if (allProtocols is not null)
 								all_protocols_in_hierarchy.UnionWith (allProtocols);
@@ -509,9 +512,9 @@ namespace Registrar {
 
 		abstract internal class ObjCMember {
 			public Registrar Registrar;
-			public ObjCType DeclaringType;
-			public string Name;
-			public ObjCType CategoryType;
+			public ObjCType? DeclaringType;
+			public string? Name;
+			public ObjCType? CategoryType;
 			public ArgumentSemantic ArgumentSemantic = ArgumentSemantic.None;
 			public bool IsVariadic;
 			public bool IsOptional;
@@ -528,8 +531,9 @@ namespace Registrar {
 				return true;
 			}
 
-			public ObjCMember ()
+			public ObjCMember (Registrar registrar)
 			{
+				Registrar = registrar;
 			}
 
 			public ObjCMember (Registrar registrar, ObjCType declaringType)
@@ -538,8 +542,8 @@ namespace Registrar {
 				DeclaringType = declaringType;
 			}
 
-			string selector;
-			public string Selector {
+			string? selector;
+			public string? Selector {
 				get { return selector; }
 				set {
 					if (string.IsNullOrEmpty (value))
@@ -559,17 +563,17 @@ namespace Registrar {
 		}
 
 		internal class ObjCMethod : ObjCMember {
-			public readonly TMethod Method;
-			string signature;
+			public readonly TMethod? Method;
+			string? signature;
 			Trampoline trampoline;
 			bool? is_static;
 			bool? is_ctor;
-			TType [] parameters;
-			TType [] native_parameters;
-			TType return_type;
-			TType native_return_type;
+			TType []? parameters;
+			TType []? native_parameters;
+			TType? return_type;
+			TType? native_return_type;
 
-			public ObjCMethod (Registrar registrar, ObjCType declaringType, TMethod method)
+			public ObjCMethod (Registrar registrar, ObjCType declaringType, TMethod? method)
 				: base (registrar, declaringType)
 			{
 				Method = method;
@@ -583,7 +587,7 @@ namespace Registrar {
 
 			public override bool IsImplicit {
 				get {
-					if (Method != null)
+					if (Method is not null)
 						return false;
 
 					switch (trampoline) {
@@ -1027,7 +1031,7 @@ namespace Registrar {
 				get { return IsStatic; }
 			}
 
-			public ObjCProperty () : base ()
+			public ObjCProperty (Registrar registrar) : base (registrar)
 			{
 			}
 
@@ -1048,6 +1052,11 @@ namespace Registrar {
 			public string FieldType;
 			public bool IsProperty;
 			bool is_static;
+
+			public ObjCField (R registrar)
+				: base (registrar)
+			{
+			}
 
 			public override string FullName {
 				get {
@@ -1081,7 +1090,7 @@ namespace Registrar {
 		protected abstract bool ContainsPlatformReference (TAssembly assembly); // returns true if the assembly is monotouch.dll too.
 		protected abstract TType GetBaseType (TType type); // for generic parameters it returns the first specific class constraint.
 		protected abstract TType [] GetInterfaces (TType type); // may return interfaces from base classes as well. May return null if no interfaces found.
-		protected virtual TType [] GetLinkedAwayInterfaces (TType type) { return null; } // may NOT return interfaces from base classes as well. May return null if no interfaces found.
+		protected virtual TType []? GetLinkedAwayInterfaces (TType type) { return null; } // may NOT return interfaces from base classes as well. May return null if no interfaces found.
 		protected abstract TMethod GetBaseMethod (TMethod method);
 		protected abstract TType [] GetParameters (TMethod method);
 		protected abstract string GetParameterName (TMethod method, int parameter_index);
@@ -1108,7 +1117,7 @@ namespace Registrar {
 		protected abstract ConnectAttribute GetConnectAttribute (TProperty property); // Return null if no attribute is found. Do not consider inherited properties.
 		public abstract ProtocolAttribute GetProtocolAttribute (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract IEnumerable<ProtocolMemberAttribute> GetProtocolMemberAttributes (TType type); // Return null if no attributes found. Do not consider base types.
-		protected virtual Version GetSdkIntroducedVersion (TType obj, out string message) { message = null; return null; } // returns the sdk version when the type was introduced for the current platform (null if all supported versions)
+		protected virtual Version? GetSdkIntroducedVersion (TType obj, out string? message) { message = null; return null; } // returns the sdk version when the type was introduced for the current platform (null if all supported versions)
 		protected abstract Version GetSDKVersion ();
 		protected abstract TType GetProtocolAttributeWrapperType (TType type); // Return null if no attribute is found. Do not consider base types.
 		protected abstract BindAsAttribute GetBindAsAttribute (TMethod method, int parameter_index); // If parameter_index = -1 then get the attribute for the return type. Return null if no attribute is found. Must consider base method.
@@ -1172,7 +1181,7 @@ namespace Registrar {
 			return IsEnum (type, out dummy);
 		}
 
-		public BindAsAttribute GetBindAsAttribute (ObjCMethod method, int parameter_index)
+		public BindAsAttribute? GetBindAsAttribute (ObjCMethod method, int parameter_index)
 		{
 			var attrib = GetBindAsAttribute (method.Method, parameter_index);
 			if (attrib != null) {
@@ -1207,11 +1216,10 @@ namespace Registrar {
 
 		bool IsSmartEnum (TType type)
 		{
-			TMethod getConstant, getValue;
-			return IsSmartEnum (type, out getConstant, out getValue);
+			return IsSmartEnum (type, out _, out _);
 		}
 
-		public bool IsSmartEnum (TType type, out TMethod getConstantMethod, out TMethod getValueMethod)
+		public bool IsSmartEnum (TType type, out TMethod? getConstantMethod, out TMethod? getValueMethod)
 		{
 			getConstantMethod = null;
 			getValueMethod = null;
@@ -1451,9 +1459,9 @@ namespace Registrar {
 			return CreateExceptionImpl (code, false, member, message, args);
 		}
 
-		protected string GetDescriptiveMethodName (TMethod method)
+		protected string GetDescriptiveMethodName (TMethod? method)
 		{
-			if (method == null)
+			if (method is null)
 				return string.Empty;
 
 			var sb = new StringBuilder ();
@@ -1575,7 +1583,7 @@ namespace Registrar {
 			VerifyTypeInSDK (ref exceptions, property.PropertyType, propertyTypeOf: property);
 		}
 
-		void VerifyTypeInSDK (ref List<Exception> exceptions, TType type, ObjCMethod parameterIn = null, ObjCMethod returnTypeOf = null, ObjCProperty propertyTypeOf = null, TType baseTypeOf = null)
+		void VerifyTypeInSDK (ref List<Exception> exceptions, TType type, ObjCMethod? parameterIn = null, ObjCMethod? returnTypeOf = null, ObjCProperty? propertyTypeOf = null, TType? baseTypeOf = null)
 		{
 			var sdkVersion = GetSdkIntroducedVersion (type, out var message);
 			if (sdkVersion is null)
@@ -2124,7 +2132,7 @@ namespace Registrar {
 				// Special fields
 				if (is_first_nonWrapper) {
 					// static registrar
-					objcType.Add (new ObjCField () {
+					objcType.Add (new ObjCField (this) {
 						DeclaringType = objcType,
 						FieldType = "XamarinObject",// "^v", // void*
 						Name = "__monoObjectGCHandle",
@@ -2169,7 +2177,7 @@ namespace Registrar {
 								objcType.Add (objcSetter, ref exceptions);
 							}
 						} else {
-							var objcProperty = new ObjCProperty () {
+							var objcProperty = new ObjCProperty (this) {
 								Registrar = this,
 								DeclaringType = objcType,
 								Property = null,
@@ -2233,7 +2241,7 @@ namespace Registrar {
 							continue;
 						}
 
-						objcType.Add (new ObjCField () {
+						objcType.Add (new ObjCField (this) {
 							DeclaringType = objcType,
 							Name = ca.Name ?? GetPropertyName (property),
 #if !MTOUCH && !MMP && !BUNDLER
@@ -2273,8 +2281,7 @@ namespace Registrar {
 
 				Trace ("        [PROPERTY] {0} => {1}", property, ea.Selector);
 
-				var objcProperty = new ObjCProperty () {
-					Registrar = this,
+				var objcProperty = new ObjCProperty (this) {
 					DeclaringType = objcType,
 					Property = property,
 					Name = property.Name,
@@ -2528,11 +2535,11 @@ namespace Registrar {
 			}
 		}
 
-		public string ComputeSignature (TType DeclaringType, TMethod Method, ObjCMember member = null, bool isCategoryInstance = false, bool isBlockSignature = false)
+		public string ComputeSignature (TType DeclaringType, TMethod Method, ObjCMember? member = null, bool isCategoryInstance = false, bool isBlockSignature = false)
 		{
 			bool is_ctor;
 			var method = member as ObjCMethod;
-			TType return_type = null;
+			TType? return_type = null;
 
 			if (Method != null) {
 				is_ctor = IsConstructor (Method);
@@ -2553,7 +2560,7 @@ namespace Registrar {
 			return ComputeSignature (DeclaringType, is_ctor, return_type, parameters, Method, member, isCategoryInstance, isBlockSignature);
 		}
 
-		public string ComputeSignature (TType declaring_type, bool is_ctor, TType return_type, TType [] parameters, TMethod mi = null, ObjCMember member = null, bool isCategoryInstance = false, bool isBlockSignature = false)
+		public string ComputeSignature (TType declaring_type, bool is_ctor, TType return_type, TType [] parameters, TMethod? mi = null, ObjCMember? member = null, bool isCategoryInstance = false, bool isBlockSignature = false)
 		{
 			var success = true;
 			var signature = new StringBuilder ();

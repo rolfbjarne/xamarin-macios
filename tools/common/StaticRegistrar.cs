@@ -34,6 +34,9 @@ using Mono.Cecil;
 using Mono.Linker;
 using Mono.Tuner;
 
+#nullable disable // FIXME
+#pragma warning disable CS8632
+
 namespace Registrar {
 	/*
 	 * This class will automatically detect lines starting/ending with curly braces,
@@ -4893,10 +4896,10 @@ namespace Registrar {
 			{
 				return Code.GetHashCode () ^ Signature.GetHashCode ();
 			}
-			public override bool Equals (object obj)
+			public override bool Equals (object? obj)
 			{
 				var other = obj as Body;
-				if (other == null)
+				if (other is null)
 					return false;
 				return Code == other.Code && Signature == other.Signature;
 			}

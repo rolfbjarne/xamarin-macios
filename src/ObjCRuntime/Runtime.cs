@@ -2104,6 +2104,13 @@ namespace ObjCRuntime {
 			return obj.GetHandle ();
 		}
 
+		static IntPtr CopyAndAutorelease (IntPtr ptr)
+		{
+			ptr = Messaging.IntPtr_objc_msgSend (ptr, Selector.GetHandle ("copy"));
+			NSObject.DangerousAutorelease (ptr);
+			return ptr;
+		}
+
 		// Check if the input is an NSObject, and in that case retain it (and return true)
 		// This way the caller knows if it can call 'autorelease' on our input.
 		static sbyte AttemptRetainNSObject (IntPtr gchandle)

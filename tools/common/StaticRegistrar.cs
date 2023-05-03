@@ -1993,7 +1993,7 @@ namespace Registrar {
 			}
 		}
 
-		ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
+		public static ExportAttribute CreateExportAttribute (IMemberDefinition candidate)
 		{
 			bool is_variadic = false;
 			var attribute = GetExportAttribute (candidate);
@@ -5408,7 +5408,7 @@ namespace Registrar {
 			var assembly = tr.Module?.Assembly;
 			if (assembly is null) {
 				// Trimmed away
-				Driver.Log (9, $"Not registering {tr.FullName} because it was trimmed away (A).");
+				Driver.Log (9, $"Not registering {tr.FullName} because it was trimmed away.");
 				return true;
 			}
 

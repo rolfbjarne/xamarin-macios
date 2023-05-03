@@ -274,6 +274,7 @@ namespace Xamarin.Linker {
 
 				const int methodsPerLevel = 10;
 				var levels = (int) Math.Ceiling (Math.Log (trampolineInfos.Count, methodsPerLevel));
+				levels = levels == 0 ? 1 : levels;
 				GenerateLookupMethods (registrar_type, trampolineInfos, methodsPerLevel, 1, levels, 0, trampolineInfos.Count - 1, out lookupMethods);
 			}
 

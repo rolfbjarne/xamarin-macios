@@ -792,7 +792,7 @@ namespace ObjCRuntime {
 		static MethodInfo FindClosedMethodForObject (NSObject? nsobj, MethodBase method)
 		{
 			if (nsobj is null)
-				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name} (token reference: 0x{token_ref:X}). {Constants.PleaseFileBugReport}");
+				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name}. {Constants.PleaseFileBugReport}");
 
 			return FindClosedMethod (nsobj.GetType (), method);
 		}
@@ -2063,6 +2063,13 @@ namespace ObjCRuntime {
 			return obj.GetHandle ();
 		}
 
+		static IntPtr CopyAndAutorelease (IntPtr ptr)
+		{
+			ptr = Messaging.IntPtr_objc_msgSend (ptr, Selector.GetHandle ("copy"));
+			NSObject.DangerousAutorelease (ptr);
+			return ptr;
+		}
+
 		// Check if the input is an NSObject, and in that case retain it (and return true)
 		// This way the caller knows if it can call 'autorelease' on our input.
 		static sbyte AttemptRetainNSObject (IntPtr gchandle)
@@ -2195,11 +2202,14 @@ namespace ObjCRuntime {
 			return parameters [parameter].ParameterType.GetElementType ()!; // FIX NAMING
 		}
 
+#if NET
+		// This method might be called by the generated code from the managed static registrar.
 		static void TraceCaller (string message)
 		{
 			var caller = new System.Diagnostics.StackFrame (1);
 			NSLog ($"{caller?.GetMethod ()?.ToString ()}: {message}");
 		}
+#endif
 
 		static void GCCollect ()
 		{

@@ -782,7 +782,7 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Unbox_Any, type);
 					} else {
 						var ea = StaticRegistrar.CreateExportAttribute (method);
-						if (ea.ArgumentSemantic == ArgumentSemantic.Copy)
+						if (ea is not null && ea.ArgumentSemantic == ArgumentSemantic.Copy)
 							il.Emit (OpCodes.Call, abr.Runtime_CopyAndAutorelease);
 
 						il.Emit (OpCodes.Ldarg_1); // SEL

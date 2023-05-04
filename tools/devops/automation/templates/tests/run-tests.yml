@@ -307,7 +307,7 @@ steps:
 - script: |
     set -x
     mkdir -p $(Build.ArtifactStagingDirectory)/all-binlogs
-    rsync -av --prune-empty-dirs --include '*/' --include '*.binlog' --exclude '*' $(Build.SourcesDirectory)/xamarin-macios $(Build.ArtifactStagingDirectory)/all-binlogs
+    rsync -av --prune-empty-dirs --include '*/' --include '*.binlog' --exclude '*' $(System.DefaultWorkingDirectory)/xamarin-macios $(Build.ArtifactStagingDirectory)/all-binlogs
   displayName: Copy all binlogs
   continueOnError: true
   condition: succeededOrFailed()

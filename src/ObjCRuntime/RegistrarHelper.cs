@@ -95,7 +95,7 @@ namespace ObjCRuntime {
 		{
 			if (TryGetMapEntry (assemblyName, assembly, out var rv))
 				return rv;
-			throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'", assembly);
+			throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'", assemblyName);
 		}
 
 		static bool TryGetMapEntry (string assemblyName, Assembly? assembly, [NotNullWhen (true)] out MapInfo? entry)
@@ -168,7 +168,7 @@ namespace ObjCRuntime {
 				lookupWatch = new Stopwatch ();
 
 			lookupWatch.Start ();
-			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, 0x{2} = {3}, {4})", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol, symb, id);
+			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, {2}, {3})", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol, id);
 #endif
 
 			if (id == -1) {

@@ -130,7 +130,7 @@ namespace Xharness {
 			var template_info_plist = HarnessConfiguration.EvaluateRootTestsDirectory (inputProject.GetInfoPListInclude ().Replace ('\\', '/'));
 			var target_info_plist = Path.Combine (Path.GetDirectoryName (ProjectPath), "Info" + FlavorSuffix + ".plist");
 			SetInfoPListMinimumOSVersion (template_info_plist, target_info_plist);
-			target_info_plist =  HarnessConfiguration.InjectRootTestsDirectory (target_info_plist);
+			target_info_plist = HarnessConfiguration.InjectRootTestsDirectory (target_info_plist);
 			inputProject.FixInfoPListInclude (FlavorSuffix, newName: target_info_plist);
 
 			inputProject.Save (ProjectPath, log);

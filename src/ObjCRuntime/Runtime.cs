@@ -794,7 +794,7 @@ namespace ObjCRuntime {
 		static MethodInfo FindClosedMethodForObject (NSObject? nsobj, MethodBase method)
 		{
 			if (nsobj is null)
-				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name} (token reference: 0x{token_ref:X}). {Constants.PleaseFileBugReport}");
+				throw ErrorHelper.CreateError (8023, $"An instance object is required to construct a closed generic method for the open generic method: {method.DeclaringType!.FullName}.{method.Name}. {Constants.PleaseFileBugReport}");
 
 			return FindClosedMethod (nsobj.GetType (), method);
 		}

@@ -502,7 +502,7 @@ namespace ObjCRuntime {
 					Runtime.NSLog ($"ResolveToken (0x{token:X}) => Looked Up Registered Type: {type.FullName}");
 #endif
 				} else if (module is null) {
-					throw ErrorHelper.CreateError (Errors.MX8053 /* Could not resolve the module in the assembly {0}. */, assembly.FullName);
+					throw ErrorHelper.CreateError (8053, Errors.MX8053 /* Could not resolve the module in the assembly {0}. */, assembly.FullName);
 				} else {
 					type = module.ResolveType ((int) token);
 				}
@@ -512,10 +512,10 @@ namespace ObjCRuntime {
 				return type;
 			case 0x06000000: // Method
 				if (Runtime.IsManagedStaticRegistrar)
-					throw ErrorHelper.CreateError (Errors.MX8054 /* Can't resolve metadata tokens for methods when using the managed static registrar (token: 0x{0}). */, token.ToString ("x"));
+					throw ErrorHelper.CreateError (8054, Errors.MX8054 /* Can't resolve metadata tokens for methods when using the managed static registrar (token: 0x{0}). */, token.ToString ("x"));
 
 				if (module is null)
-					throw ErrorHelper.CreateError (Errors.MX8053 /* Could not resolve the module in the assembly {0}. */, assembly.FullName);
+					throw ErrorHelper.CreateError (8053, Errors.MX8053 /* Could not resolve the module in the assembly {0}. */, assembly.FullName);
 
 				var method = module.ResolveMethod ((int) token);
 #if LOG_TYPELOAD

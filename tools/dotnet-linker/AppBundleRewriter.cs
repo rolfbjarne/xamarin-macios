@@ -106,7 +106,7 @@ namespace Xamarin.Linker {
 		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate)
 		{
 			return GetMethodReference (assembly, tr, name, key, predicate, out var _);
-		})
+		}
 
 		public MethodReference GetMethodReference (AssemblyDefinition assembly, TypeReference tr, string name, string key, Func<MethodDefinition, bool>? predicate, out MethodDefinition method)
 		{

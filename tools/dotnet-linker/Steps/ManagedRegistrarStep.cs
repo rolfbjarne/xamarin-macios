@@ -20,6 +20,7 @@ using System.Globalization;
 #nullable enable
 
 namespace Xamarin.Linker {
+	// Class to contain (trampoline) info for every assembly in the app bundle
 	public class AssemblyTrampolineInfos : Dictionary<AssemblyDefinition, AssemblyTrampolineInfo> {
 		Dictionary<MethodDefinition, TrampolineInfo>? map;
 		public bool TryFindInfo (MethodDefinition method, [NotNullWhen (true)] out TrampolineInfo? info)
@@ -36,19 +37,21 @@ namespace Xamarin.Linker {
 		}
 	}
 
+	// Class to contain all the trampoline infos for an assembly
+	// Also between a type and its ID.
 	public class AssemblyTrampolineInfo : List<TrampolineInfo> {
 		Dictionary<TypeDefinition, uint> registered_type_map = new ();
 
 		public TypeDefinition? RegistrarType;
 
-		public void RegisterType (TypeDefinition td, uint index)
+		public void RegisterType (TypeDefinition td, uint id)
 		{
-			registered_type_map.Add (td, index);
+			registered_type_map.Add (td, id);
 		}
 
-		public bool TryGetRegisteredTypeIndex (TypeDefinition td, out uint index)
+		public bool TryGetRegisteredTypeIndex (TypeDefinition td, out uint id)
 		{
-			return registered_type_map.TryGetValue (td, out index);
+			return registered_type_map.TryGetValue (td, out id);
 		}
 
 		public void SetIds ()
@@ -58,6 +61,7 @@ namespace Xamarin.Linker {
 		}
 	}
 
+	// Class to contain info for each exported method, with its UCO trampoline.
 	public class TrampolineInfo {
 		public MethodDefinition Trampoline;
 		public MethodDefinition Target;
@@ -106,12 +110,9 @@ namespace Xamarin.Linker {
 			if (App.Registrar != RegistrarMode.ManagedStatic)
 				return;
 
+			// Throw any exceptions that occurred.
 			if (exceptions is null)
 				return;
-			var warnings = exceptions.Where (v => (v as ProductException)?.Error == false).ToArray ();
-			if (warnings.Length == exceptions.Count)
-				return;
-
 			if (exceptions.Count == 1)
 				throw exceptions [0];
 			throw new AggregateException (exceptions);
@@ -171,6 +172,7 @@ namespace Xamarin.Linker {
 					modified |= ProcessType (nested, infos);
 			}
 
+			// Figure out if there are any types we need to process
 			var process = false;
 
 			process |= IsNSObject (type);
@@ -183,6 +185,7 @@ namespace Xamarin.Linker {
 			if (!process)
 				return modified;
 
+			// Figure out if there are any methods we need to process
 			var methods_to_wrap = new HashSet<MethodDefinition> ();
 			if (type.HasMethods) {
 				foreach (var method in type.Methods)
@@ -195,11 +198,11 @@ namespace Xamarin.Linker {
 				}
 			}
 
+			// Create an UnmanagedCallersOnly method for each method we need to wrap
 			foreach (var method in methods_to_wrap) {
 				try {
 					CreateUnmanagedCallersMethod (method, infos);
 				} catch (Exception e) {
-					Console.WriteLine (e);
 					AddException (ErrorHelper.CreateError (99, e, "Failed process {0}: {1}", method.FullName, e.Message));
 				}
 			}
@@ -216,7 +219,7 @@ namespace Xamarin.Linker {
 			}
 
 			if (!StaticRegistrar.TryFindMethod (method, out _)) {
-				Console.WriteLine ("Could not find method {0}, so no generating trampoline.", GetMethodSignature (method));
+				AddException (ErrorHelper.CreateError (99, "Could not find method {0}, so not generating an UnmanagedCallersOnly trampoline.", GetMethodSignature (method)));
 				return;
 			}
 
@@ -292,9 +295,9 @@ namespace Xamarin.Linker {
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
 			infos.Add (new TrampolineInfo (callback, method, name));
 
-			DerivedLinkContext.Annotations.Mark (callback);
-			DerivedLinkContext.Annotations.AddPreservedMethod (method, callback);
-			DerivedLinkContext.Annotations.AddPreservedMethod (callback, method);
+			// DerivedLinkContext.Annotations.Mark (callback);
+			// DerivedLinkContext.Annotations.AddPreservedMethod (method, callback);
+			// DerivedLinkContext.Annotations.AddPreservedMethod (callback, method);
 
 			var body = callback.CreateBody (out var il);
 			var placeholderInstruction = il.Create (OpCodes.Nop);
@@ -969,7 +972,7 @@ namespace Xamarin.Linker {
 		void GenerateConversionToManaged (MethodDefinition method, ILProcessor il, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, int parameter, out TypeReference nativeCallerType)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_managed (for the dynamic registrar).
-			// It's also a mirror of the method ManagedRegistrarStep.GenerateConversionToManaged.
+			// It's also a mirror of the method StaticRegistrar.GenerateConversionToManaged.
 			// These methods must be kept in sync.
 			var managedType = outputType;
 			var nativeType = inputType;
@@ -1066,6 +1069,7 @@ namespace Xamarin.Linker {
 		void GenerateConversionToNative (MethodDefinition method, ILProcessor il, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out TypeReference nativeCallerType)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_native (for the dynamic registrar).
+			// It's also a mirror of the method StaticRegistrar.GenerateConversionToNative.
 			// These methods must be kept in sync.
 			var managedType = inputType;
 			var nativeType = outputType;

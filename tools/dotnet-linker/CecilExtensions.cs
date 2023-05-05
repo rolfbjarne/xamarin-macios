@@ -99,5 +99,12 @@ namespace Xamarin.Linker {
 			rv.Parameters.AddRange (mr.Parameters);
 			return rv;
 		}
+
+		public static GenericInstanceType CreateGenericInstanceType (this TypeReference type, params TypeReference[] genericTypeArguments)
+		{
+			var git = new GenericInstanceType (type);
+			git.GenericArguments.AddRange (genericTypeArguments);
+			return git;
+		}
 	}
 }

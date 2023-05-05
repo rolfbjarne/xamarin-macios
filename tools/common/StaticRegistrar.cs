@@ -5043,6 +5043,7 @@ namespace Registrar {
 		void GenerateConversionToNative (TypeReference inputType, TypeReference outputType, AutoIndentStringBuilder sb, string descriptiveMethodName, ref List<Exception> exceptions, ObjCMethod method, string inputName, string outputName, string managedClassExpression)
 		{
 			// This is a mirror of the native method xamarin_generate_conversion_to_native (for the dynamic registrar).
+			// It's also a mirror of the method ManagedRegistrarStep.GenerateConversionToNative.
 			// These methods must be kept in sync.
 			var managedType = inputType;
 			var nativeType = outputType;

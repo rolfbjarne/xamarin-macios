@@ -270,22 +270,22 @@ namespace Xharness.Jenkins {
 							MonoNativeHelper.AddProjectDefines (clone.Xml, mono_native_link);
 						}
 						if (test_data.EnableSGenConc)
-							clone.Xml.SetProperty ("EnableSGenConc", "true");
+							clone.Xml.SetTopLevelPropertyGroupValue ("EnableSGenConc", "true");
 						if (test_data.UseThumb) // no need to check the platform, already done at the data iterator
-							clone.Xml.SetProperty ("MtouchUseThumb", "true");
+							clone.Xml.SetNode ("MtouchUseThumb", "true", task.ProjectPlatform, configuration);
 						if (use_llvm)
-							clone.Xml.SetProperty ("MtouchUseLlvm", "true");
+							clone.Xml.SetTopLevelPropertyGroupValue ("MtouchUseLlvm", "true");
 
 						if (!debug && !isMac)
 							clone.Xml.SetMtouchUseLlvm (true, task.ProjectPlatform, configuration);
 						if (use_mono_runtime.HasValue)
-							clone.Xml.SetProperty ("UseMonoRuntime", use_mono_runtime.Value ? "true" : "false");
+							clone.Xml.SetTopLevelPropertyGroupValue ("UseMonoRuntime", use_mono_runtime.Value ? "true" : "false");
 						if (!string.IsNullOrEmpty (xammac_arch))
-							clone.Xml.SetProperty ("XamMacArch", xammac_arch);
+							clone.Xml.SetNode ("XamMacArch", xammac_arch, task.ProjectPlatform, configuration);
 						if (!string.IsNullOrEmpty (runtime_identifer))
-							clone.Xml.SetProperty ("RuntimeIdentifier", runtime_identifer);
+							clone.Xml.SetTopLevelPropertyGroupValue ("RuntimeIdentifier", runtime_identifer);
 						if (!string.IsNullOrEmpty (registrar))
-							clone.Xml.SetProperty ("Registrar", registrar);
+							clone.Xml.SetTopLevelPropertyGroupValue ("Registrar", registrar);
 						clone.Xml.Save (clone.Path);
 					});
 

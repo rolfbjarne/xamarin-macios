@@ -4655,7 +4655,7 @@ namespace Registrar {
 			return false;
 		}
 
-		string GetManagedToNSNumberFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
+		public string GetManagedToNSNumberFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
 		{
 			var typeName = managedType.FullName;
 			switch (typeName) {
@@ -4683,7 +4683,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetNSNumberToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
+		public string GetNSNumberToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
 		{
 			var typeName = managedType.FullName;
 			switch (typeName) {
@@ -4713,7 +4713,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetNSValueToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
+		public string GetNSValueToManagedFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, out string nativeType)
 		{
 			var underlyingTypeName = managedType.FullName;
 
@@ -4742,7 +4742,7 @@ namespace Registrar {
 			}
 		}
 
-		string GetManagedToNSValueFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
+		public string GetManagedToNSValueFunc (TypeReference managedType, TypeReference inputType, TypeReference outputType, string descriptiveMethodName)
 		{
 			var underlyingTypeName = managedType.FullName;
 

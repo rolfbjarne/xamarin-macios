@@ -5343,6 +5343,87 @@ namespace Registrar {
 			}
 		}
 
+		public static bool IsTrimmed (MemberReference tr, AnnotationStore annotations)
+		{
+			var assembly = tr.Module?.Assembly;
+			if (assembly is null) {
+				// Trimmed away
+				return true;
+			}
+
+			var action = annotations.GetAction (assembly);
+			switch (action) {
+			case AssemblyAction.Skip:
+			case AssemblyAction.Copy:
+			case AssemblyAction.CopyUsed:
+			case AssemblyAction.Save:
+				return false;
+			case AssemblyAction.Link:
+				break;
+			case AssemblyAction.Delete:
+				return true;
+			case AssemblyAction.AddBypassNGen:
+			case AssemblyAction.AddBypassNGenUsed:
+			default:
+				throw ErrorHelper.CreateError (99, $"Unknown linker action: {action}");
+			}
+
+			if (annotations.IsMarked (tr))
+				return false;
+			
+			if (annotations.IsMarked (tr.Resolve ()))
+				return false;
+
+			return true;
+		}
+
+		public void FilterTrimmedApi (AnnotationStore annotations)
+		{
+			var trimmedAway = Types.Where (kvp => IsTrimmed (kvp.Value.Type, annotations)).ToArray ();
+			foreach (var trimmed in trimmedAway)
+				Types.Remove (trimmed.Key);
+
+			var skippedTrimmedAway = skipped_types.Where (v => IsTrimmed (v.Skipped, annotations)).ToArray ();
+			foreach (var trimmed in skippedTrimmedAway)
+				skipped_types.Remove (trimmed);
+
+			foreach (var kvp in Types) {
+				var methods = kvp.Value.Methods;
+				if (methods is not null) {
+					for (var i = methods.Count - 1; i >= 0; i--) {
+						var method = methods [i].Method;
+						if (method is null)
+							continue;
+						if (!IsTrimmed (method, annotations))
+							continue;
+						methods.RemoveAt (i);
+					}
+				}
+				var properties = kvp.Value.Properties;
+				if (properties is not null) {
+					for (var i = properties.Count - 1; i >= 0; i--) {
+						var property = properties [i].Property;
+						if (property is null)
+							continue;
+						if (!IsTrimmed (property, annotations))
+							continue;
+						properties.RemoveAt (i);
+					}
+				}
+				var fields = kvp.Value.Fields;
+				if (fields is not null) {
+					foreach (var fieldName in fields.Keys.ToArray ()) {
+						var property = fields [fieldName].Property;
+						if (property is null)
+							continue;
+						if (!IsTrimmed (property, annotations))
+							continue;
+						fields.Remove (fieldName);
+					}
+				}
+			}
+		}
+
 		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method, string type_map_path)
 		{
 			single_assembly = assembly;

@@ -14,6 +14,8 @@ namespace Xamarin.Linker {
 		protected override string Name { get; } = "ManagedRegistrar";
 		protected override int ErrorCode { get; } = 2430;
 
+		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
+
 
 		protected override void TryProcess ()
 		{

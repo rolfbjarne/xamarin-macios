@@ -1179,7 +1179,7 @@ namespace Registrar {
 			if (!IsPropertyAccessor (method))
 				return false;
 
-			property = FindProperty (method.DeclaringType, name.Substring (4));
+			property = FindProperty (method.DeclaringType, method.Name.Substring (4));
 			return property is not null;
 		}
 

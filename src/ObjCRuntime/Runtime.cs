@@ -48,6 +48,8 @@ namespace ObjCRuntime {
 
 		internal static IntPtrEqualityComparer IntPtrEqualityComparer;
 		internal static TypeEqualityComparer TypeEqualityComparer;
+		internal static StringEqualityComparer StringEqualityComparer;
+		internal static RuntimeTypeHandleEqualityComparer RuntimeTypeHandleEqualityComparer;
 
 		internal static DynamicRegistrar Registrar;
 #pragma warning restore 8618
@@ -300,6 +302,8 @@ namespace ObjCRuntime {
 
 			IntPtrEqualityComparer = new IntPtrEqualityComparer ();
 			TypeEqualityComparer = new TypeEqualityComparer ();
+			StringEqualityComparer = new StringEqualityComparer ();
+			RuntimeTypeHandleEqualityComparer = new RuntimeTypeHandleEqualityComparer ();
 
 			Runtime.options = options;
 			delegates = new List<object> ();
@@ -2318,6 +2322,30 @@ namespace ObjCRuntime {
 		{
 			if (obj is null)
 				return 0;
+			return obj.GetHashCode ();
+		}
+	}
+
+	internal class StringEqualityComparer : IEqualityComparer<string> {
+		public bool Equals (string? x, string? y)
+		{
+			return string.Equals (x, y, StringComparison.Ordinal);
+		}
+		public int GetHashCode (string? obj)
+		{
+			if (obj is null)
+				return 0;
+			return obj.GetHashCode ();
+		}
+	}
+
+	internal class RuntimeTypeHandleEqualityComparer : IEqualityComparer<RuntimeTypeHandle> {
+		public bool Equals (RuntimeTypeHandle x, RuntimeTypeHandle y)
+		{
+			return x.Equals (y);
+		}
+		public int GetHashCode (RuntimeTypeHandle obj)
+		{
 			return obj.GetHashCode ();
 		}
 	}

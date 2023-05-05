@@ -19,44 +19,24 @@ using System.Globalization;
 #nullable enable
 
 namespace Xamarin.Linker {
+	// This type will generate the lookup code to:
+	// * Convert between types and their type IDs.
+	// * Map between a protocol interface and its wrapper type.
+	// * Find the UnmanagedCallersOnly method for a given method ID.
+	// This must be done after the linker has trimmed away any unused code,
+	// because otherwise the lookup code would reference (and thus keep)
+	// every exported type and method.
 	public class ManagedRegistrarLookupTablesStep : ConfigurationAwareStep {
 		protected override string Name { get; } = "ManagedRegistrarLookupTables";
 		protected override int ErrorCode { get; } = 2440;
 
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
 
-		protected override void TryProcess ()
-		{
-			base.TryProcess ();
-
-			if (App.Registrar != RegistrarMode.ManagedStatic)
-				return;
-
-			Configuration.Target.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
-		}
-
 		protected override void TryProcessAssembly (AssemblyDefinition assembly)
 		{
 			base.TryProcessAssembly (assembly);
 
 			if (App.Registrar != RegistrarMode.ManagedStatic)
-				return;
-
-			if (Annotations.GetAction (assembly) == AssemblyAction.Delete)
-				return;
-
-			// No SDK assemblies will have anything we need to register
-			if (Configuration.Profile.IsSdkAssembly (assembly))
-				return;
-
-			if (!assembly.MainModule.HasAssemblyReferences)
-				return;
-
-			// In fact, unless an assembly references our platform assembly, then it won't have anything we need to register
-			if (!Configuration.Profile.IsProductAssembly (assembly) && !assembly.MainModule.AssemblyReferences.Any (v => Configuration.Profile.IsProductAssembly (v.Name)))
-				return;
-
-			if (!assembly.MainModule.HasTypes)
 				return;
 
 			var annotation = DerivedLinkContext.Annotations.GetCustomAnnotation ("ManagedRegistrarStep", assembly);

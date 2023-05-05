@@ -5343,6 +5343,51 @@ namespace Registrar {
 			}
 		}
 
+		public static bool IsTrimmed (MemberReference tr, AnnotationStore annotations)
+		{
+			var assembly = tr.Module?.Assembly;
+			if (assembly is null) {
+				// Trimmed away
+				return true;
+			}
+
+			var action = annotations.GetAction (assembly);
+			switch (action) {
+			case AssemblyAction.Skip:
+			case AssemblyAction.Copy:
+			case AssemblyAction.CopyUsed:
+			case AssemblyAction.Save:
+				return false;
+			case AssemblyAction.Link:
+				break;
+			case AssemblyAction.Delete:
+				return true;
+			case AssemblyAction.AddBypassNGen:
+			case AssemblyAction.AddBypassNGenUsed:
+			default:
+				throw ErrorHelper.CreateError (99, $"Unknown linker action: {action}");
+			}
+
+			if (annotations.IsMarked (tr))
+				return false;
+			
+			if (annotations.IsMarked (tr.Resolve ()))
+				return false;
+
+			return true;
+		}
+
+		public void FilterTrimmedTypes (AnnotationStore annotations)
+		{
+			var trimmedAway = Types.Where (kvp => IsTrimmed (kvp.Value.Type, annotations)).ToArray ();
+			foreach (var trimmed in trimmedAway)
+				Types.Remove (trimmed.Key);
+
+			var skippedTrimmedAway = skipped_types.Where (v => IsTrimmed (v.Skipped, annotations)).ToArray ();
+			foreach (var trimmed in skippedTrimmedAway)
+				skipped_types.Remove (trimmed);
+		}
+
 		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method, string type_map_path)
 		{
 			single_assembly = assembly;

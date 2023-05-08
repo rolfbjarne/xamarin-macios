@@ -142,10 +142,6 @@ namespace Xamarin.Linker {
 
 			abr.SetCurrentAssembly (assembly);
 
-			if (assembly == abr.PlatformAssembly) {
-				Annotations.Mark (abr.System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes.Resolve ());
-			}
-
 			var current_trampoline_lists = new AssemblyTrampolineInfo ();
 			Configuration.AssemblyTrampolineInfos [assembly] = current_trampoline_lists;
 
@@ -201,7 +197,7 @@ namespace Xamarin.Linker {
 				try {
 					CreateUnmanagedCallersMethod (method, infos);
 				} catch (Exception e) {
-					AddException (ErrorHelper.CreateError (99, e, "Failed process {0}: {1}", method.FullName, e.Message));
+					AddException (ErrorHelper.CreateError (99, e, "Failed to create an UnmanagedCallersOnly trampoline for {0}: {1}", method.FullName, e.Message));
 				}
 			}
 
@@ -292,10 +288,6 @@ namespace Xamarin.Linker {
 			var callback = callbackType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
 			infos.Add (new TrampolineInfo (callback, method, name));
-
-			// DerivedLinkContext.Annotations.Mark (callback);
-			// DerivedLinkContext.Annotations.AddPreservedMethod (method, callback);
-			// DerivedLinkContext.Annotations.AddPreservedMethod (callback, method);
 
 			var body = callback.CreateBody (out var il);
 			var placeholderInstruction = il.Create (OpCodes.Nop);
@@ -428,7 +420,7 @@ namespace Xamarin.Linker {
 				} else if (method.ReturnType.IsValueType) {
 					il.Emit (OpCodes.Unbox_Any, method.ReturnType);
 				} else {
-					// il.Emit (OpCodes.Castclass, method.ReturnType);
+					il.Emit (OpCodes.Castclass, method.ReturnType);
 				}
 			} else if (method.IsStatic) {
 				il.Emit (OpCodes.Call, method);

@@ -77,28 +77,114 @@ parameters:
 - name: macOSName
   type: string
 
-- name: simTestsConfigurations
+# Ideally we should read/get the list of platforms from somewhere else, instead of hardcoding them here.
+# Note that this is _all_ the platforms we support (not just the enabled ones).
+- name: supportedPlatforms
   type: object
   default: [
-    'bcl',
-    'cecil',
-    'dotnettests',
-    'fsharp',
-    'framework',
-    'generator',
-    'interdependent-binding-projects',
-    'install-source',
-    'introspection',
-    'linker',
-    'mac-binding-project',
-    'mmp',
-    'mononative',
-    'monotouch',
-    'msbuild',
-    'mtouch',
-    'xammac',
-    'xcframework',
-    'xtro'
+    {
+      platform: iOS,
+      conditionVariableDotNet: "INCLUDE_DOTNET_IOS",
+      conditionVariableLegacy: "INCLUDE_IOS",
+      isDotNetPlatform: true,
+      isLegacyPlatform: true
+    },
+    {
+      platform: macOS,
+      conditionVariableDotNet: "INCLUDE_DOTNET_MACOS",
+      conditionVariableLegacy: "INCLUDE_MAC",
+      isDotNetPlatform: true,
+      isLegacyPlatform: true
+    },
+    {
+      platform: tvOS,
+      conditionVariableDotNet: "INCLUDE_DOTNET_TVOS",
+      conditionVariableLegacy: "INCLUDE_TVOS",
+      isDotNetPlatform: true,
+      isLegacyPlatform: true
+    },
+    {
+      platform: watchOS,
+      conditionVariableDotNet: "",
+      conditionVariableLegacy: "INCLUDE_WATCH",
+      isDotNetPlatform: false,
+      isLegacyPlatform: true
+    },
+    {
+      platform: MacCatalyst,
+      conditionVariableDotNet: "INCLUDE_DOTNET_MACCATALYST",
+      conditionVariableLegacy: "",
+      isDotNetPlatform: true,
+      isLegacyPlatform: false
+    },
+      platform: All,
+      conditionVariableDotNet: "All",
+      conditionVariableLegacy: "All",
+      isDotNetPlatform: true,
+      isLegacyPlatform: true
+    }
+]
+
+- name: testConfigurations
+  type: object
+  default:
+    - bcl
+      label: bcl
+      splitByPlatforms: true
+    - cecil
+      label: cecil
+      splitByPlatforms: false
+    - dotnettests
+      label: dotnettests
+      splitByPlatforms: true
+    - fsharp
+      label: fsharp
+      splitByPlatforms: false
+    - framework
+      label: framework
+      splitByPlatforms: false
+    - generator
+      label: generator
+      splitByPlatforms: false
+    - interdependent-binding-projects
+      label: interdependent-binding-projects
+      splitByPlatforms: false
+    - install-source
+      label: install-source
+      splitByPlatforms: false
+    - introspection
+      label: introspection
+      splitByPlatforms: false
+    - linker
+      label: linker
+      splitByPlatforms: false
+    - mac-binding-project
+      label: mac-binding-project
+      splitByPlatforms: false
+    - mmp
+      label: mmp
+      splitByPlatforms: false
+    - mononative
+      label: mononative
+      splitByPlatforms: false
+    - monotouch
+      label: monotouch
+      splitByPlatforms: true
+    - msbuild
+      label: msbuild
+      splitByPlatforms: false
+    - mtouch
+      label: mtouch
+      splitByPlatforms: false
+    - xammac
+      label: xammac
+      splitByPlatforms: false
+    - framework
+      label: framework
+      splitByPlatforms: false
+    - xtro
+      label: xtro
+      splitByPlatforms: false
   ]
 
 - name: deviceTestsConfigurations
@@ -302,7 +388,8 @@ stages:
     isPR: ${{ parameters.isPR }}
     repositoryAlias: ${{ parameters.repositoryAlias }}
     commit: ${{ parameters.commit }}
-    simTestsConfigurations: ${{ parameters.simTestsConfigurations }}
+    testConfigurations: ${{ parameters.testConfigurations }}
+    supportedPlatforms: ${{ parameters.supportedPlatforms }}
     testPrefix: 'simulator_'
     stageName: 'simulator_tests'
     displayName: '${{ parameters.stageDisplayNamePrefix }}Simulator tests'

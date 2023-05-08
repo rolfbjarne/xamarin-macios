@@ -65,6 +65,14 @@ parameters:
   type: string
   default: '$(MaciosUploadPrefix)'
 
+- name: testPlatform
+  type: string
+  default: ''
+
+- name: conditionVariable
+  type: string
+  default: ''
+
 steps:
 
 - template: ../common/checkout.yml
@@ -107,8 +115,14 @@ steps:
     set -x
     set -e
     cd xamarin-macios
-    ./configure --enable-xamarin
-  displayName: 'Enable Xamarin'
+    TEST_PLATFORM="${{ replace(parameters.testPlatform }}"
+    ARGS=(--enable-xamarin)
+    if test -n "$TEST_PLATFORM"; then
+      ARGS+=("--disable-all-platforms")
+      ARGS+=("--enable-$TEST_PLATFORM")
+    fi
+    ./configure "${ARGS[@]}"
+  displayName: 'Enable Xamarin and configure platforms'
   timeoutInMinutes: 1
 
 # Add the required provisioning profiles to be able to execute the tests.

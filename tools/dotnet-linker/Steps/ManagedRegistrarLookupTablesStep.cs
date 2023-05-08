@@ -102,12 +102,11 @@ namespace Xamarin.Linker {
 			}
 
 			// Add default ctor that just calls the base ctor
-			var defaultCtor = registrarType.AddMethod (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
-			defaultCtor.CreateBody (out var il);
-			il.Emit (OpCodes.Ldarg_0);
-			il.Emit (OpCodes.Call, abr.System_Object__ctor);
-			il.Emit (OpCodes.Ret);
-			DerivedLinkContext.Annotations.Mark (defaultCtor);
+			var defaultCtor = registrarType.AddDefaultConstructor (abr);
+
+			// Create an instance of the registrar type in the module constructor,
+			// and call ObjCRuntime.RegistrarHelper.Register with the instance.
+			AddLoadTypeToModuleConstructor (registrarType);
 
 			// Compute the list of types that we need to register
 			var types = GetTypesToRegister (registrarType, info);
@@ -126,6 +125,29 @@ namespace Xamarin.Linker {
 				Annotations.Mark (iface.InterfaceType);
 				Annotations.Mark (iface.InterfaceType.Resolve ());
 			}
+		}
+
+		void AddLoadTypeToModuleConstructor (TypeDefinition registrarType)
+		{
+			// Add a module constructor to initialize the callbacks
+			var moduleType = registrarType.Module.Types.SingleOrDefault (v => v.Name == "<Module>");
+			if (moduleType is null)
+				throw ErrorHelper.CreateError (99, $"No <Module> type found in {registrarType.Module.Name}");
+			var moduleConstructor = moduleType.GetTypeConstructor ();
+			MethodBody body;
+			ILProcessor il;
+			if (moduleConstructor is null) {
+				moduleConstructor = moduleType.AddMethod (".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName | MethodAttributes.Static, abr.System_Void);
+				body = moduleConstructor.CreateBody (out il);
+				il.Emit (OpCodes.Ret);
+			} else {
+				body = moduleConstructor.Body;
+				il = body.GetILProcessor ();
+			}
+			var firstInstruction = body.Instructions.First ();
+
+			il.InsertBefore (body.Instructions.First (), il.Create (OpCodes.Newobj, registrarType.GetDefaultInstanceConstructor ()));
+			il.InsertAfter (body.Instructions.First (), il.Create (OpCodes.Call, abr.RegistrarHelper_Register));
 		}
 
 		List<TypeData> GetTypesToRegister (TypeDefinition registrarType, AssemblyTrampolineInfo info)

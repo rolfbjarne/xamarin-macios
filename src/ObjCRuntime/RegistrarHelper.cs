@@ -119,6 +119,18 @@ namespace ObjCRuntime {
 			return true;
 		}
 
+		static void Register (IManagedRegistrar registrar)
+		{
+			Runtime.NSLog ($"RegistrarHelper.Register ('{assembly.GetName ().Name}', '{registrar.GetType ().AssemblyQualifiedName}')");
+
+			var assembly = registrar.GetType ().Assembly;
+			var assemblyName = assembly.GetName ().Name;
+
+			lock (assembly_map) {
+				assembly_map.Add (assemblyName, registrar);
+			}
+		}
+
 		static Assembly GetAssembly (string assemblyName)
 		{
 			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies ()) {

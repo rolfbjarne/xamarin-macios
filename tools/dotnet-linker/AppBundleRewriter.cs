@@ -605,6 +605,17 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference RegistrarHelper_Register {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_RegistrarHelper, "Register", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [1].ParameterType.Is ("ObjCRuntime", "IManagedRegistrar")
+						&& !v.HasGenericParameters);
+			}
+		}
+
 		public MethodReference IManagedRegistrar_LookupUnmanagedFunction {
 			get {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_IManagedRegistrar, "LookupUnmanagedFunction", (v) =>

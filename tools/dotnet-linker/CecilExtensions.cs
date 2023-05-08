@@ -106,5 +106,16 @@ namespace Xamarin.Linker {
 			git.GenericArguments.AddRange (genericTypeArguments);
 			return git;
 		}
+
+		public static MethodDefinition AddDefaultConstructor (this TypeDefinition type, AppBundleRewriter abr)
+		{
+			// Add default ctor that just calls the base ctor
+			var defaultCtor = type.AddMethod (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
+			defaultCtor.CreateBody (out var il);
+			il.Emit (OpCodes.Ldarg_0);
+			il.Emit (OpCodes.Call, abr.System_Object__ctor);
+			il.Emit (OpCodes.Ret);
+			return defaultCtor;
+		}
 	}
 }

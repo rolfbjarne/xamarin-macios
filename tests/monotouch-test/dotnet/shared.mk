@@ -20,6 +20,13 @@ build-msr-aot:
 	$(Q) rm -rf bin obj
 	$(Q) $(MAKE) build CONFIG=ManagedStaticRegistrar BUILD_ARGUMENTS=/p:RuntimeIdentifier=ios-arm64
 
+run-msr-aot:
+	DEVICE=--devname=00008101-000650AE3450001E launch-on-device
+
+msr-aot:
+	$(Q) $(MAKE) build-msr-aot
+	$(Q) $(MAKE) run-msr-aot
+
 registrar-tests:
 	$(EXECUTABLE) --autostart --autoexit --test MonoTouchFixtures.ObjCRuntime.RegistrarTest
 

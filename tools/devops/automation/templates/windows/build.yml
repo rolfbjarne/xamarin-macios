@@ -63,6 +63,12 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    Write-Host "Connecting to builder@$Env:MAC_AGENT_IP..."
+    ssh "builder@$Env:MAC_AGENT_IP" ls -la
+  displayName: 'Connect to Mac'
+  continueOnError: true
+
+- pwsh: |
     & dotnet --version
     & dotnet --info
     & dotnet workload list

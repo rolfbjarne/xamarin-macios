@@ -55,6 +55,14 @@ steps:
     version: 7.0.102
 
 - pwsh: |
+    Write-Host "Network Configuration:"
+    Get-NetIPConfiguration
+    Write-Host "IP Addresses:"
+    Get-NetIPAddress
+  displayName: 'Show Network Configuration'
+  continueOnError: true
+
+- pwsh: |
     & dotnet --version
     & dotnet --info
     & dotnet workload list

@@ -70,7 +70,10 @@ parameters:
   type: boolean
   default: true
 
-- name: simTestsConfigurations
+- name: testConfigurations
+  type: object
+
+- name: supportedPlatforms
   type: object
 
 - name: isPR
@@ -117,53 +120,89 @@ stages:
           uploadArtifacts: false
           enableDotnet: ${{ parameters.enableDotnet }}
 
-  - ${{ each label in parameters.simTestsConfigurations }}:
-    - job: "tests_${{ replace(label, '-', '_') }}"
-      ${{ if eq(parameters.parseLabels, true) }}:
-        condition: ne(dependencies.configure.outputs['labels.skip_all_tests'], 'True')
-      dependsOn:
-      - ${{ if eq(parameters.parseLabels, true) }}:
-        - configure
-      displayName: 'Running ${{ label}} - ${{ parameters.displayName }}' 
-      timeoutInMinutes: 1000
+  - ${{ each testConfig in parameters.testConfigurations }}:
+    - ${{ if testConfig.splitByPlatforms }}: 
+      - ${{ each platform in parameters.supportedPlatforms }}:
+        - job: "tests_${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}"
+          displayName: 'Running ${{ testConfig.label}} - ${{ parameters.displayName }} - ${{ platform.platform }}'
+          timeoutInMinutes: 1000
+          dependsOn:
+            - configure
 
-      variables:
-        # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
-        PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
-        # set the branch variable name, this is required by jenkins and we have a lot of scripts that depend on it
-        BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
-        XHARNESS_LABELS: $[ dependencies.configure.outputs['labels.xharness_labels'] ]
-        ${{ if eq(parameters.testPool, '') }}:
-          AgentPoolComputed: $(PRBuildPool)
-        ${{ else }}:
-          AgentPoolComputed: ${{ parameters.testPool }}
+          variables:
+            # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
+            PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
+            # set the branch variable name, this is required by jenkins and we have a lot of scripts that depend on it
+            BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+            XHARNESS_LABELS: $[ dependencies.configure.outputs['labels.xharness_labels'] ]
+            ${{ if eq(parameters.testPool, '') }}:
+              AgentPoolComputed: $(PRBuildPool)
+            ${{ else }}:
+              AgentPoolComputed: ${{ parameters.testPool }}
+            ${{ if and(testConfig.splitByPlatforms,eq('All', '${{ platform.conditionVariableDotNet }}')) }}:
+              ONLY_MULTI_PLATFORM_TESTS: "1"
+            ${{ else }}:
+              ONLY_MULTI_PLATFORM_TESTS: "0"
 
-      pool:
-        name: $(AgentPoolComputed)
-        demands:
-        - Agent.OS -equals Darwin
-        - macOS.Name -equals ${{ parameters.macOSName }}
-        - XcodeChannel -equals ${{ parameters.XcodeChannel }}
-        - ${{ each demand in parameters.extraBotDemands }}:
-          - demand
-        workspace:
-          clean: all
-      steps:
-      - template: build.yml
-        parameters:
-          isPR: ${{ parameters.isPR }} 
-          repositoryAlias: ${{ parameters.repositoryAlias }}
-          commit: ${{ parameters.commit }}
-          label: ${{ label }}
-          testsLabels: '${{ parameters.testsLabels }},run-${{ label }}-tests'
-          statusContext: '${{ parameters.statusContext }} - ${{ label }}'
-          useXamarinStorage: ${{ parameters.useXamarinStorage }}
-          vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
-          keyringPass: ${{ parameters.keyringPass }}
-          testPrefix: "${{ parameters.testPrefix }}${{ replace(label, '-', '_') }}"
-          makeTarget: ${{ parameters.makeTarget }}
-          gitHubToken: ${{ parameters.gitHubToken }}
-          xqaCertPass: ${{ parameters.xqaCertPass }}
+          # if (platform.conditionVariableLegacy == 'All' || platform.conditionVariableDotNet == 'All')
+          #    // include
+          # else if (testConfig.splitByPlatforms && dependencies.configure.outputs [platform.conditionVariableLegacy] != '')
+          #    // include
+          # else if (testConfig.splitByPlatforms && dependencies.configure.outputs [platform.conditionVariableDotNet] != '')
+          #    // include
+          # else
+          #    // skip
+          # endif
+          #### condition: or(
+          ####             or(
+          ####               eq('All', '${{ platform.conditionVariableLegacy}}'),
+          ####               eq('All', '${{ platform.conditionVariableDotNet}}')
+          ####               ),
+          ####             and(
+          ####               ${{ testConfig.splitByPlatforms }},
+          ####               ne(
+          ####                 '',
+          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableLegacy }}'] ]
+          ####                 )
+          ####               ),
+          ####             and(
+          ####               ${{ testConfig.splitByPlatforms }},
+          ####               ne(
+          ####                 '',
+          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableDotNet }}'] ]
+          ####                 )
+          ####               )
+          ####             )
+
+          pool:
+            name: $(AgentPoolComputed)
+            demands:
+            - Agent.OS -equals Darwin
+            - macOS.Name -equals ${{ parameters.macOSName }}
+            - XcodeChannel -equals ${{ parameters.XcodeChannel }}
+            - ${{ each demand in parameters.extraBotDemands }}:
+              - demand
+            workspace:
+              clean: all
+          steps:
+          - template: build.yml
+            parameters:
+              isPR: ${{ parameters.isPR }}
+              repositoryAlias: ${{ parameters.repositoryAlias }}
+              commit: ${{ parameters.commit }}
+              label: ${{ testConfig.label }}
+              testsLabels: '${{ parameters.testsLabels }},run-${{ testConfig.label }}-tests'
+              statusContext: '${{ parameters.statusContext }} - ${{ testConfig.label }}'
+              useXamarinStorage: ${{ parameters.useXamarinStorage }}
+              vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
+              keyringPass: ${{ parameters.keyringPass }}
+              testPrefix: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}"
+              makeTarget: ${{ parameters.makeTarget }}
+              gitHubToken: ${{ parameters.gitHubToken }}
+              xqaCertPass: ${{ parameters.xqaCertPass }}
+              testPlatform: ${{ platform.platform }}
+              conditionVariableDotNet: ${{ platform.conditionVariableDotNet }}
+              conditionVariableLegacy: ${{ platform.conditionVariableLegacy }}
 
   - job: publish_test_results
     ${{ if eq(parameters.parseLabels, true) }}:
@@ -175,15 +214,17 @@ stages:
     dependsOn: # has to wait for the tests to be done AND the data to be uploaded
     - ${{ if eq(parameters.parseLabels, true) }}:
       - configure
-    - ${{ each label in parameters.simTestsConfigurations }}:
-      - tests_${{ replace(label, '-', '_') }}
+    - ${{ each testConfig in parameters.testConfigurations }}:
+        - ${{ each platform in parameters.supportedPlatforms }}:
+          - tests_${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}
     variables:
       GIT_HASH: $[ stageDependencies.build_packages.build.outputs['fix_commit.GIT_HASH'] ]
-      ${{ each label in parameters.simTestsConfigurations }}:
-        # Define the variable FOO from the previous job
-        # Note the use of single quotes!
-        TESTS_BOT_${{ upper(replace(label, '-', '_')) }}: $[ dependencies.tests_${{ replace(label, '-', '_') }}.outputs['runTests.TESTS_BOT'] ]
-        TESTS_JOBSTATUS_${{ upper(replace(label, '-', '_')) }}: $[ dependencies.tests_${{ replace(label, '-', '_') }}.outputs['runTests.TESTS_JOBSTATUS'] ]
+      ${{ each testConfig in parameters.testConfigurations }}:
+        ${{ each platform in parameters.supportedPlatforms }}:
+          # Define the variable FOO from the previous job
+          # Note the use of single quotes!
+          TESTS_BOT_${{ upper(replace(testConfig.label, '-', '_')) }}_${{ upper(platform.platform) }}: $[ dependencies.tests_${{ replace(testConfig.label, '-', '_') }}_${{ upper(platform.platform) }}.outputs['runTests.TESTS_BOT'] ]
+          TESTS_JOBSTATUS_${{ upper(replace(testConfig.label, '-', '_')) }}_${{ upper(platform.platform) }}: $[ dependencies.tests_${{ replace(testConfig.label, '-', '_') }}_${{ upper(platform.platform) }}.outputs['runTests.TESTS_JOBSTATUS'] ]
     pool:
       vmImage: 'windows-latest'
       workspace:
@@ -194,7 +235,7 @@ stages:
         isPR: ${{ parameters.isPR }}
         repositoryAlias: ${{ parameters.repositoryAlias }}
         commit: ${{ parameters.commit }}
-        simTestsConfigurations: ${{ parameters.simTestsConfigurations }}
+        testConfigurations: ${{ parameters.testConfigurations }}
         statusContext: ${{ parameters.statusContext }}
         vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
         testPrefix: ${{ parameters.testPrefix }}

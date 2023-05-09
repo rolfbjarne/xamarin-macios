@@ -2250,4 +2250,8 @@
 	<data name="MX8054" xml:space="preserve">
 		<value>Can't resolve metadata tokens for methods when using the managed static registrar (token: 0x{0}).</value>
 	</data>
+
+	<data name="MX8055" xml:space="preserve">
+		<value>Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'.</value>
+	</data>
 </root>

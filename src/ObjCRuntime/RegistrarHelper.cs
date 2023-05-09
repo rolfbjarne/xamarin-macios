@@ -47,17 +47,22 @@ namespace ObjCRuntime {
 
 		// Ignore CS8618 for these two variables:
 		//     Non-nullable variable must contain a non-null value when exiting constructor.
-		// Because we won't use a static constructor to initialize them, instead we're using the Initialize
-		// method, which we'll call before using this class (thus it's safe to ignore this warning).
+		// Because we won't use a static constructor to initialize them, instead we're using a module initializer,
+		// it's safe to ignore this warning.
 #pragma warning disable 8618
 		static Dictionary<string, MapInfo> assembly_map;
 		static Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> wrapper_types;
+		static StringEqualityComparer StringEqualityComparer;
+		static RuntimeTypeHandleEqualityComparer RuntimeTypeHandleEqualityComparer;
 #pragma warning restore 8618
 
+		[ModuleInitializer]
 		internal static void Initialize ()
 		{
-			assembly_map = new Dictionary<string, MapInfo> (Runtime.StringEqualityComparer);
-			wrapper_types = new Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> (Runtime.RuntimeTypeHandleEqualityComparer);
+			StringEqualityComparer = new StringEqualityComparer ();
+			RuntimeTypeHandleEqualityComparer = new RuntimeTypeHandleEqualityComparer ();
+			assembly_map = new Dictionary<string, MapInfo> (StringEqualityComparer);
+			wrapper_types = new Dictionary<RuntimeTypeHandle, RuntimeTypeHandle> (RuntimeTypeHandleEqualityComparer);
 		}
 
 		static NativeHandle CreateCFArray (params string[]? values)
@@ -83,62 +88,42 @@ namespace ObjCRuntime {
 
 		static MapInfo GetMapEntry (Assembly assembly)
 		{
-			return GetMapEntry (assembly.GetName ().Name!, assembly);
+			return GetMapEntry (assembly.GetName ().Name!);
 		}
 
 		static MapInfo GetMapEntry (IntPtr assembly)
 		{
-			return GetMapEntry (Marshal.PtrToStringAuto (assembly)!, null);
+			return GetMapEntry (Marshal.PtrToStringAuto (assembly)!);
 		}
 
-		static MapInfo GetMapEntry (string assemblyName, Assembly? assembly)
+		static MapInfo GetMapEntry (string assemblyName)
 		{
-			if (TryGetMapEntry (assemblyName, assembly, out var rv))
+			if (TryGetMapEntry (assemblyName, out var rv))
 				return rv;
-			throw ErrorHelper.CreateError (99, "Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}'", assemblyName);
+			throw ErrorHelper.CreateError (8055, Errors.MX8055 /* Could not find the type 'ObjCRuntime.__Registrar__' in the assembly '{0}' */, assemblyName);
 		}
 
-		static bool TryGetMapEntry (string assemblyName, Assembly? assembly, [NotNullWhen (true)] out MapInfo? entry)
+		static bool TryGetMapEntry (string assemblyName, [NotNullWhen (true)] out MapInfo? entry)
 		{
 			entry = null;
 
 			lock (assembly_map) {
-				if (!assembly_map.TryGetValue (assemblyName, out entry)) {
-					if (assembly is null)
-						assembly = GetAssembly (assemblyName);
-					var type = assembly.GetType ("ObjCRuntime.__Registrar__", false);
-					if (type is null)
-						return false;
-
-					var registrar = (IManagedRegistrar) Activator.CreateInstance (type)!;
-					entry = new MapInfo (registrar);
-					assembly_map [assemblyName] = entry;
-				}
+				return assembly_map.TryGetValue (assemblyName, out entry);
 			}
-
-			return true;
 		}
 
 		static void Register (IManagedRegistrar registrar)
 		{
-			Runtime.NSLog ($"RegistrarHelper.Register ('{assembly.GetName ().Name}', '{registrar.GetType ().AssemblyQualifiedName}')");
-
 			var assembly = registrar.GetType ().Assembly;
-			var assemblyName = assembly.GetName ().Name;
+			var assemblyName = assembly.GetName ().Name!;
+
+#if TRACE
+			Runtime.NSLog ($"RegistrarHelper.Register ('{assemblyName}', '{registrar.GetType ().AssemblyQualifiedName}')");
+#endif
 
 			lock (assembly_map) {
-				assembly_map.Add (assemblyName, registrar);
+				assembly_map.Add (assemblyName, new MapInfo (registrar));
 			}
-		}
-
-		static Assembly GetAssembly (string assemblyName)
-		{
-			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies ()) {
-				if (assembly.GetName ().Name == assemblyName)
-					return assembly;
-			}
-
-			throw ErrorHelper.CreateError (99, "Could not find the assembly '{0}' in the current AppDomain", assemblyName);
 		}
 
 		internal static Type? FindProtocolWrapperType (Type type)
@@ -216,7 +201,7 @@ namespace ObjCRuntime {
 
 		internal static uint LookupRegisteredTypeId (Type type)
 		{
-			if (!TryGetMapEntry (type.Assembly.GetName ().Name!, null, out var entry))
+			if (!TryGetMapEntry (type.Assembly.GetName ().Name!, out var entry))
 				return Runtime.INVALID_TOKEN_REF;
 			return entry.Registrar.LookupTypeId (type.TypeHandle);
 		}

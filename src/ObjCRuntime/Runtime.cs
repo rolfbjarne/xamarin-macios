@@ -50,8 +50,6 @@ namespace ObjCRuntime {
 
 		internal static IntPtrEqualityComparer IntPtrEqualityComparer;
 		internal static TypeEqualityComparer TypeEqualityComparer;
-		internal static StringEqualityComparer StringEqualityComparer;
-		internal static RuntimeTypeHandleEqualityComparer RuntimeTypeHandleEqualityComparer;
 
 		internal static DynamicRegistrar Registrar;
 #pragma warning restore 8618
@@ -319,11 +317,6 @@ namespace ObjCRuntime {
 			if (DynamicRegistrationSupported) {
 				Registrar = new DynamicRegistrar ();
 				protocol_cache = new Dictionary<IntPtr, Dictionary<IntPtr, bool>> (IntPtrEqualityComparer);
-			}
-			if (IsManagedStaticRegistrar) {
-				StringEqualityComparer = new StringEqualityComparer ();
-				RuntimeTypeHandleEqualityComparer = new RuntimeTypeHandleEqualityComparer ();
-				RegistrarHelper.Initialize ();
 			}
 			RegisterDelegates (options);
 			Class.Initialize (options);

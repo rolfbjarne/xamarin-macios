@@ -31,6 +31,8 @@ using Foundation;
 
 using Registrar;
 
+using Xamarin.Bundler;
+
 namespace ObjCRuntime {
 	// This class contains helper methods for the managed static registrar.
 	// The managed static registrar will make it public when needed.

@@ -4283,5 +4283,14 @@ namespace Xamarin.Bundler {
                 return ResourceManager.GetString("MX8054", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the type &apos;ObjCRuntime.__Registrar__&apos; in the assembly &apos;{0}&apos;..
+        /// </summary>
+        public static string MX8055 {
+            get {
+                return ResourceManager.GetString("MX8055", resourceCulture);
+            }
+        }
     }
 }

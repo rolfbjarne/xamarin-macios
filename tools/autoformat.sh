@@ -11,20 +11,36 @@ SRC_DIR=$(pwd)
 #
 IFS=$'\n'
 cd "$SRC_DIR"
-for file in $(git ls-files -- '*.cs' ':(exclude)tests/monotouch-test/Foundation/UrlTest.cs' ':(exclude)tests/monotouch-test/AVFoundation/AVAudioFormatTest.cs'); do
-	if [[ -L "$file" ]]; then
-		echo "Skipping $file because it's a symlink"
-		continue
-	elif ! test -f "$file"; then
-		echo "Skipping $file because it doesn't exist?"
-		echo "Current directory: $PWD"
-		ls -la
-		git status
-		git show
-		continue
-	fi
-	LANG=en sed -i '' -e 's/!= null/is not null/g' -e 's/== null/is null/g' "$file"
-done
+
+echo "Current directory: $PWD"
+ls -la
+git status
+git show
+
+(
+	export LANG=en
+	for file in $(git ls-files -- '*.cs' ':(exclude)tests/monotouch-test/Foundation/UrlTest.cs' ':(exclude)tests/monotouch-test/AVFoundation/AVAudioFormatTest.cs'); do
+		if [[ -L "$file" ]]; then
+			echo "Skipping $file because it's a symlink"
+			continue
+		elif ! test -f "$file"; then
+			echo "Skipping $file because it doesn't exist?"
+			echo "Current directory: $PWD"
+			ls -la
+			git status
+			git show
+			continue
+		fi
+		if ! sed -i '' -e 's/!= null/is not null/g' -e 's/== null/is null/g' "$file"; then
+			echo "Something went wrong when processing $file"
+			echo "Current directory: $PWD"
+			ls -la
+			git status
+			git show
+			continue
+		fi
+	done
+)
 
 # Go one directory up, to avoid any global.json in xamarin-macios
 cd ..

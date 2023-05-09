@@ -114,6 +114,11 @@ namespace Xamarin.Linker {
 
 			// Report back any exceptions that occurred during the processing.
 			exceptions = this.exceptions;
+
+			// Mark some stuff we use later on.
+			abr.SetCurrentAssembly (abr.PlatformAssembly);
+			Annotations.Mark (abr.RegistrarHelper_Register.Resolve ());
+			abr.ClearCurrentAssembly ();
 		}
 
 		protected override void TryProcessAssembly (AssemblyDefinition assembly)
@@ -282,12 +287,14 @@ namespace Xamarin.Linker {
 				callbackType = new TypeDefinition (string.Empty, "__Registrar_Callbacks__", TypeAttributes.NestedPrivate | TypeAttributes.Sealed | TypeAttributes.Class);
 				callbackType.BaseType = abr.System_Object;
 				method.DeclaringType.NestedTypes.Add (callbackType);
-				DerivedLinkContext.Annotations.Mark (callbackType);
 			}
 
 			var callback = callbackType.AddMethod (name, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig, placeholderType);
 			callback.CustomAttributes.Add (CreateUnmanagedCallersAttribute (name));
 			infos.Add (new TrampolineInfo (callback, method, name));
+
+			// If the target method is marked, then we must mark the trampoline as well.
+			method.CustomAttributes.Add (CreateDynamicDependencyAttribute (callbackType, callback.Name));
 
 			var body = callback.CreateBody (out var il);
 			var placeholderInstruction = il.Create (OpCodes.Nop);
@@ -943,6 +950,14 @@ namespace Xamarin.Linker {
 			var unmanagedCallersAttribute = new CustomAttribute (abr.UnmanagedCallersOnlyAttribute_Constructor);
 			unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("EntryPoint", new CustomAttributeArgument (abr.System_String, "_" + entryPoint)));
 			return unmanagedCallersAttribute;
+		}
+
+		CustomAttribute CreateDynamicDependencyAttribute (TypeDefinition type, string member)
+		{
+			var attribute = new CustomAttribute (abr.DynamicDependencyAttribute_ctor__String_Type);
+			attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, member));
+			attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, type));
+			return attribute;
 		}
 
 		void GenerateConversionToManaged (MethodDefinition method, ILProcessor il, TypeReference inputType, TypeReference outputType, string descriptiveMethodName, int parameter, out TypeReference nativeCallerType)

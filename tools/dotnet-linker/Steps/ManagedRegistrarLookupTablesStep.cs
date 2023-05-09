@@ -144,10 +144,10 @@ namespace Xamarin.Linker {
 				body = moduleConstructor.Body;
 				il = body.GetILProcessor ();
 			}
-			var firstInstruction = body.Instructions.First ();
+			var lastInstruction = body.Instructions.Last ();
 
-			il.InsertBefore (body.Instructions.First (), il.Create (OpCodes.Newobj, registrarType.GetDefaultInstanceConstructor ()));
-			il.InsertAfter (body.Instructions.First (), il.Create (OpCodes.Call, abr.RegistrarHelper_Register));
+			il.InsertBefore (lastInstruction, il.Create (OpCodes.Newobj, registrarType.GetDefaultInstanceConstructor ()));
+			il.InsertBefore (lastInstruction, il.Create (OpCodes.Call, abr.RegistrarHelper_Register));
 		}
 
 		List<TypeData> GetTypesToRegister (TypeDefinition registrarType, AssemblyTrampolineInfo info)

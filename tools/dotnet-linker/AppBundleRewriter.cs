@@ -215,6 +215,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", out var _);
+			}
+		}
+
 		public TypeReference System_Reflection_MethodBase {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Reflection.MethodBase", out var _);
@@ -336,6 +342,18 @@ namespace Xamarin.Linker {
 						!v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 2
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference DynamicDependencyAttribute_ctor__String_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute, ".ctor", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& v.Parameters [1].ParameterType.Is ("System", "Type")
 						&& !v.HasGenericParameters);
 			}
 		}
@@ -611,7 +629,7 @@ namespace Xamarin.Linker {
 						v.IsStatic
 						&& v.HasParameters
 						&& v.Parameters.Count == 1
-						&& v.Parameters [1].ParameterType.Is ("ObjCRuntime", "IManagedRegistrar")
+						&& v.Parameters [0].ParameterType.Is ("ObjCRuntime", "IManagedRegistrar")
 						&& !v.HasGenericParameters);
 			}
 		}
@@ -626,7 +644,6 @@ namespace Xamarin.Linker {
 						&& !v.HasGenericParameters);
 			}
 		}
-
 
 		public MethodReference IManagedRegistrar_LookupType {
 			get {

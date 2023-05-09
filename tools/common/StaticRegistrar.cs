@@ -5446,7 +5446,7 @@ namespace Registrar {
 			return true;
 		}
 
-		public void FilterTrimmedTypes (AnnotationStore annotations)
+		public void FilterTrimmedApi (AnnotationStore annotations)
 		{
 			var trimmedAway = Types.Where (kvp => IsTrimmed (kvp.Value.Type, annotations)).ToArray ();
 			foreach (var trimmed in trimmedAway)
@@ -5455,6 +5455,42 @@ namespace Registrar {
 			var skippedTrimmedAway = skipped_types.Where (v => IsTrimmed (v.Skipped, annotations)).ToArray ();
 			foreach (var trimmed in skippedTrimmedAway)
 				skipped_types.Remove (trimmed);
+
+			foreach (var kvp in Types) {
+				var methods = kvp.Value.Methods;
+				if (methods is not null) {
+					for (var i = methods.Count - 1; i >= 0; i--) {
+						var method = methods [i].Method;
+						if (method is null)
+							continue;
+						if (!IsTrimmed (method, annotations))
+							continue;
+						methods.RemoveAt (i);
+					}
+				}
+				var properties = kvp.Value.Properties;
+				if (properties is not null) {
+					for (var i = properties.Count - 1; i >= 0; i--) {
+						var property = properties [i].Property;
+						if (property is null)
+							continue;
+						if (!IsTrimmed (property, annotations))
+							continue;
+						properties.RemoveAt (i);
+					}
+				}
+				var fields = kvp.Value.Fields;
+				if (fields is not null) {
+					foreach (var fieldName in fields.Keys.ToArray ()) {
+						var property = fields [fieldName].Property;
+						if (property is null)
+							continue;
+						if (!IsTrimmed (property, annotations))
+							continue;
+						fields.Remove (fieldName);
+					}
+				}
+			}
 		}
 
 		public void GenerateSingleAssembly (PlatformResolver resolver, IEnumerable<AssemblyDefinition> assemblies, string header_path, string source_path, string assembly, out string initialization_method, string type_map_path)

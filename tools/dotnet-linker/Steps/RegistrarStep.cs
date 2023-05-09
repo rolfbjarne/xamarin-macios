@@ -37,10 +37,10 @@ namespace Xamarin.Linker {
 				var header = Path.Combine (dir, "registrar.h");
 				var code = Path.Combine (dir, "registrar.mm");
 				if (app.Registrar == RegistrarMode.ManagedStatic) {
-					// Every type has been registered if we're using the managed registrar
+					// Every api has been registered if we're using the managed registrar
 					// (since we registered types before the trimmer did anything),
 					// so we need to remove those that were later trimmed away by the trimmer.
-					Configuration.Target.StaticRegistrar.FilterTrimmedTypes (Annotations);
+					Configuration.Target.StaticRegistrar.FilterTrimmedApi (Annotations);
 				}
 				Configuration.Target.StaticRegistrar.Generate (header, code, out var initialization_method, app.ClassMapPath);
 

@@ -12,33 +12,24 @@ SRC_DIR=$(pwd)
 IFS=$'\n'
 cd "$SRC_DIR"
 
-echo "Current directory: $PWD"
-ls -la
-git status
-git show
-
 (
+	set -x
 	export LANG=en
+	IFS=$'\n'
+
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		SED=(sed -i "")
+	else
+		SED=(sed -i)
+	fi
+
 	for file in $(git ls-files -- '*.cs' ':(exclude)tests/monotouch-test/Foundation/UrlTest.cs' ':(exclude)tests/monotouch-test/AVFoundation/AVAudioFormatTest.cs'); do
 		if [[ -L "$file" ]]; then
 			echo "Skipping $file because it's a symlink"
 			continue
-		elif ! test -f "$file"; then
-			echo "Skipping $file because it doesn't exist?"
-			echo "Current directory: $PWD"
-			ls -la
-			git status
-			git show
-			continue
 		fi
-		if ! sed -i '' -e 's/!= null/is not null/g' -e 's/== null/is null/g' "$file"; then
-			echo "Something went wrong when processing $file"
-			echo "Current directory: $PWD"
-			ls -la
-			git status
-			git show
-			continue
-		fi
+
+		"${SED[@]}" -e 's/!= null/is not null/g' -e 's/== null/is null/g' "$file"
 	done
 )
 

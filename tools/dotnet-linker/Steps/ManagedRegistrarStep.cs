@@ -507,20 +507,6 @@ namespace Xamarin.Linker {
 			Trace (il, $"EXCEPTION");
 			il.Emit (OpCodes.Leave, placeholderNextInstruction);
 			leaveEHInstruction = body.Instructions.Last ();
-
-			// Generate code to return null/default value/void
-			if (returnVariable is not null) {
-				var returnType = returnVariable.VariableType!;
-				if (returnType.IsValueType) {
-					// return default(<struct type>)
-					il.Emit (OpCodes.Ldloca, returnVariable);
-					il.Emit (OpCodes.Initobj, returnType);
-					il.Emit (OpCodes.Ldloc, returnVariable);
-				} else {
-					il.Emit (OpCodes.Ldnull);
-				}
-			}
-			il.Emit (OpCodes.Ret);
 		}
 
 		static string GetMethodSignature (MethodDefinition method)

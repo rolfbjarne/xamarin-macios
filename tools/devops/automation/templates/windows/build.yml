@@ -64,7 +64,7 @@ steps:
 
 - pwsh: |
     Write-Host "Connecting to builder@$Env:MAC_AGENT_IP..."
-    ssh -vvv "builder@$Env:MAC_AGENT_IP" ls -la
+    ssh -o StrictHostKeychecking=no -vvv "builder@$Env:MAC_AGENT_IP" ls -la
   displayName: 'Connect to Mac'
   continueOnError: true
   timeoutInMinutes: 10

@@ -257,6 +257,7 @@ namespace ObjCRuntime {
 			int mod_token;
 			int type_token;
 
+#if NET
 			if (Runtime.IsManagedStaticRegistrar) {
 				mod_token = unchecked((int) Runtime.INVALID_TOKEN_REF);
 				type_token = unchecked((int) RegistrarHelper.LookupRegisteredTypeId (type));
@@ -268,9 +269,12 @@ namespace ObjCRuntime {
 				if (type_token == -1)
 					return IntPtr.Zero;
 			} else {
+#endif // NET
 				mod_token = type.Module.MetadataToken;
 				type_token = type.MetadataToken & ~0x02000000 /* TokenType.TypeDef */;
+#if NET
 			}
+#endif // NET
 
 			for (int i = 0; i < map->map_count; i++) {
 				var class_map = map->map [i];
@@ -479,9 +483,16 @@ namespace ObjCRuntime {
 			switch (token & 0xFF000000) {
 			case 0x02000000: // TypeDef
 				Type type;
+#if NET
 				if (Runtime.IsManagedStaticRegistrar) {
 					type = RegistrarHelper.LookupRegisteredType (assembly, token & 0x00FFFFFF);
-				} else if (module is null) {
+#if LOG_TYPELOAD
+					Runtime.NSLog ($"ResolveToken (0x{token:X}) => Type: {type.FullName}");
+#endif
+					return type;
+				}
+#endif // NET
+				if (module is null) {
 					throw ErrorHelper.CreateError (8053, Errors.MX8053 /* Could not resolve the module in the assembly {0}. */, assembly.FullName);
 				} else {
 					type = module.ResolveType ((int) token);
@@ -610,6 +621,7 @@ namespace ObjCRuntime {
 
 			// First check if there's a full token reference to this type
 			uint token;
+#if NET
 			if (Runtime.IsManagedStaticRegistrar) {
 				var id = RegistrarHelper.LookupRegisteredTypeId (type);
 				token = GetFullTokenReference (asm_name, unchecked((int) Runtime.INVALID_TOKEN_REF), 0x2000000 /* TokenType.TypeDef */ | unchecked((int) id));
@@ -617,8 +629,11 @@ namespace ObjCRuntime {
 				Runtime.NSLog ($"GetTokenReference ({type}, {throw_exception}) id: {id} token: 0x{token.ToString ("x")}");
 #endif
 			} else {
+#endif // NET
 				token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
+#if NET
 			}
+#endif // NET
 			if (token != uint.MaxValue)
 				return token;
 

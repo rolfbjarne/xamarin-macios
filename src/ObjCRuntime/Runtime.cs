@@ -27,6 +27,10 @@ using Registrar;
 using AppKit;
 #endif
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 namespace ObjCRuntime {
 
 	public partial class Runtime {
@@ -743,10 +747,12 @@ namespace ObjCRuntime {
 			Registrar.GetMethodDescription (Class.Lookup (cls), sel, is_static != 0, desc);
 		}
 
+#if NET
 		internal static bool HasNSObject (NativeHandle ptr)
 		{
 			return TryGetNSObject (ptr, evenInFinalizerQueue: false) is not null;
 		}
+#endif
 
 		internal static sbyte HasNSObject (IntPtr ptr)
 		{
@@ -1833,11 +1839,13 @@ namespace ObjCRuntime {
 				return null;
 
 			// Check if the static registrar knows about this protocol
+#if NET
 			if (IsManagedStaticRegistrar) {
 				var rv = RegistrarHelper.FindProtocolWrapperType (type);
 				if (rv is not null)
 					return rv;
 			} else {
+#endif
 				unsafe {
 					var map = options->RegistrationMap;
 					if (map is not null) {
@@ -1849,7 +1857,9 @@ namespace ObjCRuntime {
 						}
 					}
 				}
+#if NET
 			}
+#endif
 
 			// need to look up the type from the ProtocolAttribute.
 			var a = type.GetCustomAttributes (typeof (Foundation.ProtocolAttribute), false);
@@ -2402,7 +2412,11 @@ namespace ObjCRuntime {
 
 		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
 		{
+#if NET
 			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id);
+#else
+			return IntPtr.Zero;
+#endif
 		}
 	}
 

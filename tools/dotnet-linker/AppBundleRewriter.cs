@@ -215,7 +215,7 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public TypeReference System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute {
+		public TypeReference System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute", out var _);
 			}

@@ -180,7 +180,7 @@ namespace Xamarin.Linker {
 
 			// Skip any types that are not defined in the current assembly
 			types.RemoveAll (v => v.Definition.Module.Assembly != abr.CurrentAssembly);
-			
+
 			// Skip any types that have been linked away
 			types.RemoveAll (v => IsTrimmed (v.Definition));
 

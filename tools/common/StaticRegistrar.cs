@@ -5456,7 +5456,7 @@ namespace Registrar {
 
 			if (annotations.IsMarked (tr))
 				return false;
-			
+
 			if (annotations.IsMarked (tr.Resolve ()))
 				return false;
 

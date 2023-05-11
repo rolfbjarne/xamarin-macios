@@ -270,8 +270,8 @@ namespace ObjCRuntime {
 					return IntPtr.Zero;
 			} else {
 #endif // NET
-				mod_token = type.Module.MetadataToken;
-				type_token = type.MetadataToken & ~0x02000000 /* TokenType.TypeDef */;
+			mod_token = type.Module.MetadataToken;
+			type_token = type.MetadataToken & ~0x02000000 /* TokenType.TypeDef */;
 #if NET
 			}
 #endif // NET
@@ -619,7 +619,7 @@ namespace ObjCRuntime {
 #endif
 			} else {
 #endif // NET
-				token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
+			token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
 #if NET
 			}
 #endif // NET

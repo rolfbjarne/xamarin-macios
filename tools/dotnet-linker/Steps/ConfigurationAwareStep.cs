@@ -25,7 +25,7 @@ namespace Xamarin.Linker {
 			get { return DerivedLinkContext.App; }
 		}
 
-		protected void Report (params Exception[] exceptions)
+		protected void Report (params Exception [] exceptions)
 		{
 			Report ((IList<Exception>) exceptions);
 		}
@@ -104,22 +104,22 @@ namespace Xamarin.Linker {
 			return false;
 		}
 
-		protected virtual Exception[] Fail (AssemblyDefinition assembly, Exception e)
+		protected virtual Exception [] Fail (AssemblyDefinition assembly, Exception e)
 		{
 			return CollectExceptions (e, () => ErrorHelper.CreateError (ErrorCode, Errors.MX_ConfigurationAwareStepWithAssembly, Name, assembly?.FullName, e.Message));
 		}
 
-		protected virtual Exception[] Fail (Exception e)
+		protected virtual Exception [] Fail (Exception e)
 		{
 			return CollectExceptions (e, () => ErrorHelper.CreateError (ErrorCode | 1, Errors.MX_ConfigurationAwareStep, Name, e.Message));
 		}
 
-		protected virtual Exception[] FailEnd (Exception e)
+		protected virtual Exception [] FailEnd (Exception e)
 		{
 			return CollectExceptions (e, () => ErrorHelper.CreateError (ErrorCode | 2, Errors.MX_ConfigurationAwareStep, Name, e.Message));
 		}
 
-		Exception[] CollectExceptions (Exception e, Func<ProductException> createException)
+		Exception [] CollectExceptions (Exception e, Func<ProductException> createException)
 		{
 			// Detect if we're reporting one or more ProductExceptions (and no other exceptions), and in that case
 			// report the product exceptions as top-level exceptions + the step-specific exception at the end,

@@ -618,11 +618,11 @@ namespace ObjCRuntime {
 				Runtime.NSLog ($"GetTokenReference ({type}, {throw_exception}) id: {id} token: 0x{token.ToString ("x")}");
 #endif
 #else
-				throw ErrorHelper.CreateError (99, Xamarin.Bundler.Errors.MX0099 /* Internal error */, "The managed static registrar is only available for .NET");
+			throw ErrorHelper.CreateError (99, Xamarin.Bundler.Errors.MX0099 /* Internal error */, "The managed static registrar is only available for .NET");
 #endif // NET
-			} else {
+		} else {
 				token = GetFullTokenReference (asm_name, type.Module.MetadataToken, type.MetadataToken);
-			}
+	}
 			if (token != uint.MaxValue)
 				return token;
 
@@ -630,188 +630,188 @@ namespace ObjCRuntime {
 			if (type.Module.MetadataToken != 1) {
 				if (!throw_exception)
 					return Runtime.INVALID_TOKEN_REF;
-				throw ErrorHelper.CreateError (8025, $"Failed to compute the token reference for the type '{type.AssemblyQualifiedName}' because its module's metadata token is {type.Module.MetadataToken} when expected 1.");
+				throw ErrorHelper.CreateError(8025, $"Failed to compute the token reference for the type '{type.AssemblyQualifiedName}' because its module's metadata token is {type.Module.MetadataToken} when expected 1.");
 			}
 
-			var map = Runtime.options->RegistrationMap;
+var map = Runtime.options->RegistrationMap;
 
-			// Find the assembly index in our list of registered assemblies.
-			int assembly_index = -1;
-			for (int i = 0; i < map->assembly_count; i++) {
-				var name_ptr = map->assemblies [(int) i].name;
-				if (Runtime.StringEquals (name_ptr, asm_name)) {
-					assembly_index = i;
-					break;
-				}
-			}
-			// If the assembly isn't registered, then the token must be a full token (which it isn't, because we've already checked).
-			if (assembly_index == -1) {
-				if (!throw_exception)
-					return Runtime.INVALID_TOKEN_REF;
-				throw ErrorHelper.CreateError (8025, $"Failed to compute the token reference for the type '{type.AssemblyQualifiedName}' because the assembly couldn't be found in the list of registered assemblies.");
-			}
+// Find the assembly index in our list of registered assemblies.
+int assembly_index = -1;
+for (int i = 0; i < map->assembly_count; i++) {
+	var name_ptr = map->assemblies [(int) i].name;
+	if (Runtime.StringEquals (name_ptr, asm_name)) {
+		assembly_index = i;
+		break;
+	}
+}
+// If the assembly isn't registered, then the token must be a full token (which it isn't, because we've already checked).
+if (assembly_index == -1) {
+	if (!throw_exception)
+		return Runtime.INVALID_TOKEN_REF;
+	throw ErrorHelper.CreateError (8025, $"Failed to compute the token reference for the type '{type.AssemblyQualifiedName}' because the assembly couldn't be found in the list of registered assemblies.");
+}
 
-			if (assembly_index > 127) {
-				if (!throw_exception)
-					return Runtime.INVALID_TOKEN_REF;
-				throw ErrorHelper.CreateError (8025, $"Failed to compute the token reference for the type '{type.AssemblyQualifiedName}' because the assembly index {assembly_index} is not valid (must be <= 127).");
-			}
+if (assembly_index > 127) {
+	if (!throw_exception)
+		return Runtime.INVALID_TOKEN_REF;
+	throw ErrorHelper.CreateError (8025, $"Failed to compute the token reference for the type '{type.AssemblyQualifiedName}' because the assembly index {assembly_index} is not valid (must be <= 127).");
+}
 
-			return (uint) ((type.MetadataToken << 8) + (assembly_index << 1));
+return (uint) ((type.MetadataToken << 8) + (assembly_index << 1));
 
 		}
 
 		// Look for the specified metadata token in the table of full token references.
 		static unsafe uint GetFullTokenReference (string assembly_name, int module_token, int metadata_token)
-		{
-			var map = Runtime.options->RegistrationMap;
-			for (int i = 0; i < map->full_token_reference_count; i++) {
-				var ftr = map->full_token_references [i];
-				var token = ftr.token;
-				if (token != metadata_token)
-					continue;
-				var mod_token = ftr.module_token;
-				if (unchecked((int) mod_token) != module_token)
-					continue;
-				var assembly_index = ftr.assembly_index;
-				var assembly = map->assemblies [assembly_index];
-				if (!Runtime.StringEquals (assembly.name, assembly_name))
-					continue;
+{
+	var map = Runtime.options->RegistrationMap;
+	for (int i = 0; i < map->full_token_reference_count; i++) {
+		var ftr = map->full_token_references [i];
+		var token = ftr.token;
+		if (token != metadata_token)
+			continue;
+		var mod_token = ftr.module_token;
+		if (unchecked((int) mod_token) != module_token)
+			continue;
+		var assembly_index = ftr.assembly_index;
+		var assembly = map->assemblies [assembly_index];
+		if (!Runtime.StringEquals (assembly.name, assembly_name))
+			continue;
 
-				return ((uint) i << 1) + 1;
-			}
+		return ((uint) i << 1) + 1;
+	}
 
-			return uint.MaxValue;
+	return uint.MaxValue;
+}
+
+/*
+Type must have been previously registered.
+*/
+[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
+internal static bool IsCustomType (Type type)
+{
+	bool is_custom_type;
+	var @class = GetClassHandle (type, false, out is_custom_type);
+	if (@class != IntPtr.Zero)
+		return is_custom_type;
+
+	if (Runtime.DynamicRegistrationSupported)
+		return Runtime.Registrar.IsCustomType (type);
+
+	throw ErrorHelper.CreateError (8026, $"Can't determine if {type.FullName} is a custom type when the dynamic registrar has been linked away.");
+}
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+static extern IntPtr objc_allocateClassPair (IntPtr superclass, IntPtr name, IntPtr extraBytes);
+
+internal static IntPtr objc_allocateClassPair (IntPtr superclass, string name, IntPtr extraBytes)
+{
+	using var namePtr = new TransientString (name);
+	return objc_allocateClassPair (superclass, namePtr, extraBytes);
+}
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+static extern IntPtr objc_getClass (IntPtr name);
+
+internal static IntPtr objc_getClass (string name)
+{
+	using var namePtr = new TransientString (name);
+	return objc_getClass (namePtr);
+}
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal static extern void objc_registerClassPair (IntPtr cls);
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+[return: MarshalAs (UnmanagedType.U1)]
+static extern bool class_addIvar (IntPtr cls, IntPtr name, IntPtr size, byte alignment, IntPtr types);
+
+internal static bool class_addIvar (IntPtr cls, string name, IntPtr size, byte alignment, string types)
+{
+	using var namePtr = new TransientString (name);
+	using var typesPtr = new TransientString (types);
+	return class_addIvar (cls, namePtr, size, alignment, typesPtr);
+}
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+[return: MarshalAs (UnmanagedType.U1)]
+static extern bool class_addMethod (IntPtr cls, IntPtr name, IntPtr imp, IntPtr types);
+
+internal static bool class_addMethod (IntPtr cls, IntPtr name, IntPtr imp, string types)
+{
+	using var typesPtr = new TransientString (types);
+	return class_addMethod (cls, name, imp, typesPtr);
+}
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+[return: MarshalAs (UnmanagedType.U1)]
+internal extern static bool class_addProtocol (IntPtr cls, IntPtr protocol);
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal static extern IntPtr class_getName (IntPtr cls);
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal static extern IntPtr class_getSuperclass (IntPtr cls);
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal static extern IntPtr object_getClass (IntPtr obj);
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal extern static IntPtr class_getMethodImplementation (IntPtr cls, IntPtr sel);
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal extern static IntPtr class_getInstanceVariable (IntPtr cls, IntPtr name);
+
+internal static IntPtr class_getInstanceVariable (IntPtr cls, string name)
+{
+	using var namePtr = new TransientString (name);
+	return class_getInstanceVariable (cls, namePtr);
+}
+
+[DllImport (Messaging.LIBOBJC_DYLIB)]
+internal extern static IntPtr class_getInstanceMethod (IntPtr cls, IntPtr sel);
+
+[DllImport (Messaging.LIBOBJC_DYLIB, CharSet = CharSet.Ansi)]
+[return: MarshalAs (UnmanagedType.U1)]
+extern unsafe static bool class_addProperty (IntPtr cls, IntPtr name, IntPtr* attributes, int count);
+
+internal static bool class_addProperty (IntPtr cls, string name, objc_attribute_prop [] attributes, int count)
+{
+	using var namePtr = new TransientString (name, TransientString.Encoding.Ansi);
+	var ptrs = PropertyStringsToPtrs (attributes);
+	bool retval = false;
+	unsafe {
+		fixed (IntPtr* ptrsPtr = ptrs) {
+			retval = class_addProperty (cls, namePtr, ptrsPtr, count);
 		}
+	}
+	FreeStringPtrs (ptrs);
+	return retval;
+}
 
-		/*
-		Type must have been previously registered.
-		*/
-		[BindingImpl (BindingImplOptions.Optimizable)] // To inline the Runtime.DynamicRegistrationSupported code if possible.
-		internal static bool IsCustomType (Type type)
-		{
-			bool is_custom_type;
-			var @class = GetClassHandle (type, false, out is_custom_type);
-			if (@class != IntPtr.Zero)
-				return is_custom_type;
+internal static IntPtr [] PropertyStringsToPtrs (objc_attribute_prop [] props)
+{
+	var ptrs = new IntPtr [props.Length * 2];
+	var index = 0;
+	foreach (var prop in props) {
+		ptrs [index++] = Marshal.StringToHGlobalAnsi (prop.name);
+		ptrs [index++] = Marshal.StringToHGlobalAnsi (prop.value);
+	}
+	return ptrs;
+}
 
-			if (Runtime.DynamicRegistrationSupported)
-				return Runtime.Registrar.IsCustomType (type);
+internal static void FreeStringPtrs (IntPtr [] ptrs)
+{
+	foreach (var ptr in ptrs) {
+		Marshal.FreeHGlobal (ptr);
+	}
+}
 
-			throw ErrorHelper.CreateError (8026, $"Can't determine if {type.FullName} is a custom type when the dynamic registrar has been linked away.");
-		}
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		static extern IntPtr objc_allocateClassPair (IntPtr superclass, IntPtr name, IntPtr extraBytes);
-
-		internal static IntPtr objc_allocateClassPair (IntPtr superclass, string name, IntPtr extraBytes)
-		{
-			using var namePtr = new TransientString (name);
-			return objc_allocateClassPair (superclass, namePtr, extraBytes);
-		}
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		static extern IntPtr objc_getClass (IntPtr name);
-
-		internal static IntPtr objc_getClass (string name)
-		{
-			using var namePtr = new TransientString (name);
-			return objc_getClass (namePtr);
-		}
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal static extern void objc_registerClassPair (IntPtr cls);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		[return: MarshalAs (UnmanagedType.U1)]
-		static extern bool class_addIvar (IntPtr cls, IntPtr name, IntPtr size, byte alignment, IntPtr types);
-
-		internal static bool class_addIvar (IntPtr cls, string name, IntPtr size, byte alignment, string types)
-		{
-			using var namePtr = new TransientString (name);
-			using var typesPtr = new TransientString (types);
-			return class_addIvar (cls, namePtr, size, alignment, typesPtr);
-		}
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		[return: MarshalAs (UnmanagedType.U1)]
-		static extern bool class_addMethod (IntPtr cls, IntPtr name, IntPtr imp, IntPtr types);
-
-		internal static bool class_addMethod (IntPtr cls, IntPtr name, IntPtr imp, string types)
-		{
-			using var typesPtr = new TransientString (types);
-			return class_addMethod (cls, name, imp, typesPtr);
-		}
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		[return: MarshalAs (UnmanagedType.U1)]
-		internal extern static bool class_addProtocol (IntPtr cls, IntPtr protocol);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal static extern IntPtr class_getName (IntPtr cls);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal static extern IntPtr class_getSuperclass (IntPtr cls);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal static extern IntPtr object_getClass (IntPtr obj);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal extern static IntPtr class_getMethodImplementation (IntPtr cls, IntPtr sel);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal extern static IntPtr class_getInstanceVariable (IntPtr cls, IntPtr name);
-
-		internal static IntPtr class_getInstanceVariable (IntPtr cls, string name)
-		{
-			using var namePtr = new TransientString (name);
-			return class_getInstanceVariable (cls, namePtr);
-		}
-
-		[DllImport (Messaging.LIBOBJC_DYLIB)]
-		internal extern static IntPtr class_getInstanceMethod (IntPtr cls, IntPtr sel);
-
-		[DllImport (Messaging.LIBOBJC_DYLIB, CharSet = CharSet.Ansi)]
-		[return: MarshalAs (UnmanagedType.U1)]
-		extern unsafe static bool class_addProperty (IntPtr cls, IntPtr name, IntPtr* attributes, int count);
-
-		internal static bool class_addProperty (IntPtr cls, string name, objc_attribute_prop [] attributes, int count)
-		{
-			using var namePtr = new TransientString (name, TransientString.Encoding.Ansi);
-			var ptrs = PropertyStringsToPtrs (attributes);
-			bool retval = false;
-			unsafe {
-				fixed (IntPtr* ptrsPtr = ptrs) {
-					retval = class_addProperty (cls, namePtr, ptrsPtr, count);
-				}
-			}
-			FreeStringPtrs (ptrs);
-			return retval;
-		}
-
-		internal static IntPtr [] PropertyStringsToPtrs (objc_attribute_prop [] props)
-		{
-			var ptrs = new IntPtr [props.Length * 2];
-			var index = 0;
-			foreach (var prop in props) {
-				ptrs [index++] = Marshal.StringToHGlobalAnsi (prop.name);
-				ptrs [index++] = Marshal.StringToHGlobalAnsi (prop.value);
-			}
-			return ptrs;
-		}
-
-		internal static void FreeStringPtrs (IntPtr [] ptrs)
-		{
-			foreach (var ptr in ptrs) {
-				Marshal.FreeHGlobal (ptr);
-			}
-		}
-
-		[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		internal struct objc_attribute_prop {
-			[MarshalAs (UnmanagedType.LPStr)] internal string name;
-			[MarshalAs (UnmanagedType.LPStr)] internal string value;
-		}
+[StructLayout (LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+internal struct objc_attribute_prop {
+	[MarshalAs (UnmanagedType.LPStr)] internal string name;
+	[MarshalAs (UnmanagedType.LPStr)] internal string value;
+}
 #endif // !COREBUILD
 	}
 }

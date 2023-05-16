@@ -353,10 +353,15 @@ namespace Xamarin.Linker {
 				// }
 				leaveTryInstructions.Add (il.Body.Instructions.Last ());
 
-				var git = new GenericInstanceMethod (abr.NSObject_AllocateNSObject);
-				git.GenericArguments.Add (method.DeclaringType);
+				TypeReference allocatedType = method.DeclaringType;
+				if (allocatedType.HasGenericParameters)
+					allocatedType = allocatedType.CreateGenericInstanceType (allocatedType.GenericParameters.ToArray ());
+
 				il.Append (callAllocateNSObject); // ldarg_0
-				il.Emit (OpCodes.Call, git);
+				il.Emit (OpCodes.Ldtoken, allocatedType);
+				il.Emit (OpCodes.Call, abr.NSObject_AllocateNSObject);
+				if (!method.DeclaringType.HasGenericParameters)
+					il.Emit (OpCodes.Castclass, method.DeclaringType);
 				il.Emit (OpCodes.Dup); // this is for the call to ObjCRuntime.NativeObjectExtensions::GetHandle after the call to the constructor
 			} else {
 				// instance method

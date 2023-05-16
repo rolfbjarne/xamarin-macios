@@ -455,8 +455,8 @@ namespace Xamarin.Linker {
 						Foundation_NSObject, "AllocateNSObject",
 						nameof (NSObject_AllocateNSObject),
 						isStatic: true,
-						genericParameterCount: 1,
-						System_IntPtr);
+						System_IntPtr,
+						System_RuntimeTypeHandle);
 			}
 		}
 

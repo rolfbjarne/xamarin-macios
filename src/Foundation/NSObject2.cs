@@ -231,9 +231,10 @@ namespace Foundation {
 			GC.SuppressFinalize (this);
 		}
 
-		static T AllocateNSObject<T> (IntPtr handle) where T : NSObject
+		static NSObject AllocateNSObject (IntPtr handle, RuntimeTypeHandle typeHandle)
 		{
-			var obj = (T) RuntimeHelpers.GetUninitializedObject (typeof (T));
+			var type = Type.GetTypeFromHandle (typeHandle);
+			var obj = (NSObject) RuntimeHelpers.GetUninitializedObject (type);
 			obj.handle = handle;
 			obj.flags = Flags.NativeRef;
 			return obj;

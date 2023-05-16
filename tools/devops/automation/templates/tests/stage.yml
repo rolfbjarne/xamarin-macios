@@ -214,16 +214,16 @@ stages:
     - ${{ if eq(parameters.parseLabels, true) }}:
       - configure
     - ${{ each testConfig in parameters.testConfigurations }}:
-        ${{ each platform in parameters.supportedPlatforms }}:
-          - job: "tests_{{ replace(label, '-', '_') }}_{{ platform }}"
+        - ${{ each platform in parameters.supportedPlatforms }}:
+          - job: "tests_{{ replace(testConfig.label, '-', '_') }}_{{ platform.platform }}"
     variables:
       GIT_HASH: $[ stageDependencies.build_packages.build.outputs['fix_commit.GIT_HASH'] ]
       ${{ each testConfig in parameters.testConfigurations }}:
         ${{ each platform in parameters.supportedPlatforms }}:
           # Define the variable FOO from the previous job
           # Note the use of single quotes!
-          TESTS_BOT_${{ upper(replace(label, '-', '_')) }}_${{ upper(platform) }}: $[ dependencies.tests_${{ replace(label, '-', '_') }}_${{ upper(platform) }}.outputs['runTests.TESTS_BOT'] ]
-          TESTS_JOBSTATUS_${{ upper(replace(label, '-', '_')) }}_${{ upper(platform) }}: $[ dependencies.tests_${{ replace(label, '-', '_') }}_${{ upper(platform) }}.outputs['runTests.TESTS_JOBSTATUS'] ]
+          TESTS_BOT_${{ upper(replace(label, '-', '_')) }}_${{ upper(platform) }}: $[ dependencies.tests_${{ replace(testConfig.label, '-', '_') }}_${{ upper(platform.platform) }}.outputs['runTests.TESTS_BOT'] ]
+          TESTS_JOBSTATUS_${{ upper(replace(label, '-', '_')) }}_${{ upper(platform) }}: $[ dependencies.tests_${{ replace(testConfig.label, '-', '_') }}_${{ upper(platform.platform) }}.outputs['runTests.TESTS_JOBSTATUS'] ]
     pool:
       vmImage: 'windows-latest'
       workspace:

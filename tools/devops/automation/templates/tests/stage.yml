@@ -215,7 +215,7 @@ stages:
       - configure
     - ${{ each testConfig in parameters.testConfigurations }}:
         - ${{ each platform in parameters.supportedPlatforms }}:
-          - job: "tests_{{ replace(testConfig.label, '-', '_') }}_{{ platform.platform }}"
+          - tests_${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}
     variables:
       GIT_HASH: $[ stageDependencies.build_packages.build.outputs['fix_commit.GIT_HASH'] ]
       ${{ each testConfig in parameters.testConfigurations }}:

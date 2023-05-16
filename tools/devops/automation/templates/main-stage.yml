@@ -117,6 +117,7 @@ parameters:
         isDotNetPlatform: true,
         isLegacyPlatform: false
       },
+      {
         platform: All,
         conditionVariableDotNet: "All",
         conditionVariableLegacy: "All",

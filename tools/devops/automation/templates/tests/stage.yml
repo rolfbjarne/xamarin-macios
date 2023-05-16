@@ -122,8 +122,8 @@ stages:
 
   - ${{ each testConfig in parameters.testConfigurations }}:
       ${{ each platform in parameters.supportedPlatforms }}:
-        - job: "tests_{{ replace(label, '-', '_') }}_{{ platform }}"
-          displayName: 'Running ${{ label}} - ${{ parameters.displayName }} - {{ platform.platform }}'
+        - job: "tests_${{ replace(label, '-', '_') }}_${{ platform }}"
+          displayName: 'Running ${{ label}} - ${{ parameters.displayName }} - ${{ platform.platform }}'
           timeoutInMinutes: 1000
           dependsOn:
             - configure
@@ -152,26 +152,26 @@ stages:
           # else
           #    // skip
           # endif
-          condition: or(
-                      or(
-                        eq('All', '${{ platform.conditionVariableLegacy}}'),
-                        eq('All', '${{ platform.conditionVariableDotNet}}')
-                        ),
-                      and(
-                        ${{ testConfig.splitByPlatforms }},
-                        ne(
-                          '',
-                          $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableLegacy }}'] ]
-                          )
-                        ),
-                      and(
-                        ${{ testConfig.splitByPlatforms }},
-                        ne(
-                          '',
-                          $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableDotNet }}'] ]
-                          )
-                        )
-                      )
+          #### condition: or(
+          ####             or(
+          ####               eq('All', '${{ platform.conditionVariableLegacy}}'),
+          ####               eq('All', '${{ platform.conditionVariableDotNet}}')
+          ####               ),
+          ####             and(
+          ####               ${{ testConfig.splitByPlatforms }},
+          ####               ne(
+          ####                 '',
+          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableLegacy }}'] ]
+          ####                 )
+          ####               ),
+          ####             and(
+          ####               ${{ testConfig.splitByPlatforms }},
+          ####               ne(
+          ####                 '',
+          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableDotNet }}'] ]
+          ####                 )
+          ####               )
+          ####             )
 
           pool:
             name: $(AgentPoolComputed)

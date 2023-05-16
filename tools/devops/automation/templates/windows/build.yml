@@ -29,6 +29,8 @@ steps:
 
 - pwsh: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/devops/automation/scripts/show_env.ps1
   displayName: 'Dump Environment'
+  env:
+    XMA_PASSWORD: $(XMA.Password)
 
 - task: DownloadPipelineArtifact@2
   displayName: Download artifacts
@@ -158,6 +160,20 @@ steps:
         --source "$(Build.SourcesDirectory)\xamarin-macios\tests\.nuget\packages"
   displayName: 'Build dependencies for .NET tests'
   continueOnError: true
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    & $(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe `
+      build `
+      "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\MySimpleApp\iOS\MySimpleApp.csproj" `
+      /p:ServerAddress=$Env:MAC_AGENT_IP `
+      /p:ServerUser=builder `
+      /p:ServerPassword=$Env:XMA_PASSWORD `
+      "-bl:$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/MySimpleApp/iOS/MySimpleApp.binlog"
+  displayName: 'Try to build test'
+  continueOnError: true
+  env:
+    XMA_PASSWORD: $(XMA.Password)
 
 - pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"

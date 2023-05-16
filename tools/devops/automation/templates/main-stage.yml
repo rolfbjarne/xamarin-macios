@@ -198,10 +198,6 @@ parameters:
       splitByPlatforms: false,
     },
     {
-      label: framework,
-      splitByPlatforms: false,
-    },
-    {
       label: xtro,
       splitByPlatforms: false,
     },

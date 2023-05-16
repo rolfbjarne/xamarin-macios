@@ -62,12 +62,25 @@ steps:
   displayName: 'Show Network Configuration'
   continueOnError: true
 
-- pwsh: |
-    Write-Host "Connecting to builder@$Env:MAC_AGENT_IP..."
-    ssh -o BatchMode=yes -o StrictHostKeychecking=no -vvv "builder@$Env:MAC_AGENT_IP" ls -la
-  displayName: 'Connect to Mac'
+- bash: |
+    env | sort
+    rm -f expect.txt
+    echo "spawn ssh -o StrictHostKeychecking=no -vvv builder@$Env:MAC_AGENT_IP ls -la" >> expect.txt
+    echo "expect -exact \"builder@$Env:MAC_AGENT_IP's password: \"" >> expect.txt
+    echo "send -- \"$Env:XMA_PASSWORD\r\"" >> expect.txt
+    echo "interact" >> expect.txt
+    cat expect.txt
+    expect -f expect.txt
+  displayName: 'Connect to Mac Bash'
   continueOnError: true
   timeoutInMinutes: 10
+
+# - pwsh: |
+#     Write-Host "Connecting to builder@$Env:MAC_AGENT_IP..."
+#     ssh -o BatchMode=yes -o StrictHostKeychecking=no -vvv "builder@$Env:MAC_AGENT_IP" ls -la
+#   displayName: 'Connect to Mac'
+#   continueOnError: true
+#   timeoutInMinutes: 10
 
 - pwsh: |
     & dotnet --version

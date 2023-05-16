@@ -144,36 +144,6 @@ stages:
             ${{ else }}:
               ONLY_MULTI_PLATFORM_TESTS: "0"
 
-          # if (platform.conditionVariableLegacy == 'All' || platform.conditionVariableDotNet == 'All')
-          #    // include
-          # else if (testConfig.splitByPlatforms && dependencies.configure.outputs [platform.conditionVariableLegacy] != '')
-          #    // include
-          # else if (testConfig.splitByPlatforms && dependencies.configure.outputs [platform.conditionVariableDotNet] != '')
-          #    // include
-          # else
-          #    // skip
-          # endif
-          #### condition: or(
-          ####             or(
-          ####               eq('All', '${{ platform.conditionVariableLegacy}}'),
-          ####               eq('All', '${{ platform.conditionVariableDotNet}}')
-          ####               ),
-          ####             and(
-          ####               ${{ testConfig.splitByPlatforms }},
-          ####               ne(
-          ####                 '',
-          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableLegacy }}'] ]
-          ####                 )
-          ####               ),
-          ####             and(
-          ####               ${{ testConfig.splitByPlatforms }},
-          ####               ne(
-          ####                 '',
-          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableDotNet }}'] ]
-          ####                 )
-          ####               )
-          ####             )
-
           pool:
             name: $(AgentPoolComputed)
             demands:

@@ -121,7 +121,7 @@ stages:
           enableDotnet: ${{ parameters.enableDotnet }}
 
   - ${{ each testConfig in parameters.testConfigurations }}:
-      ${{ each platform in parameters.supportedPlatforms }}:
+      - ${{ each platform in parameters.supportedPlatforms }}:
         - job: "tests_${{ replace(label, '-', '_') }}_${{ platform }}"
           displayName: 'Running ${{ label}} - ${{ parameters.displayName }} - ${{ platform.platform }}'
           timeoutInMinutes: 1000

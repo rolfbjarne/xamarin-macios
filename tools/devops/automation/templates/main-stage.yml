@@ -131,7 +131,7 @@ parameters:
   default: [
     {
       label: bcl,
-      splitByPlatforms: true,
+      splitByPlatforms: false,
     },
     {
       label: cecil,
@@ -183,7 +183,7 @@ parameters:
     },
     {
       label: monotouch,
-      splitByPlatforms: true,
+      splitByPlatforms: false,
     },
     {
       label: msbuild,

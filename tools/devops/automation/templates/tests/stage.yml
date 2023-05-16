@@ -121,6 +121,7 @@ stages:
           enableDotnet: ${{ parameters.enableDotnet }}
 
   - ${{ each testConfig in parameters.testConfigurations }}:
+    - ${{ if (testConfig.splitByPlatforms) }}:
       - ${{ each platform in parameters.supportedPlatforms }}:
         - job: "tests_${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}"
           displayName: 'Running ${{ testConfig.label}} - ${{ parameters.displayName }} - ${{ platform.platform }}'

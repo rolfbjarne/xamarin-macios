@@ -44,10 +44,10 @@ namespace Xamarin.MacDev.Tasks {
 		// This happens when executing remotely from Windows, because the MonoAotCrossCompiler item group will be empty in that case.
 		string ComputeAotCompilerPath ()
 		{
-			var projectPath = Path.GetTempFileName ();
-
-			File.Delete (projectPath);
-			projectPath += ".csproj";
+			var projectDirectory = Path.GetTempFileName ();
+			File.Delete (projectDirectory);
+			Directory.CreateDirectory (projectDirectory);
+			var projectPath = Path.Combine (projectDirectory, "FindAotCompiler.csproj");
 
 			var csproj = $@"<?xml version=""1.0"" encoding=""utf-8""?>
 <Project Sdk=""Microsoft.NET.Sdk"">
@@ -83,16 +83,16 @@ namespace Xamarin.MacDev.Tasks {
 				return ExecuteBuildAsync (dotnetPath, projectPath, environment).Result;
 			} finally {
 				if (KeepTemporaryOutput) {
-					Log.LogMessage (MessageImportance.Normal, $"Temporary project for the FindAotCompiler task: {projectPath}");
+					Log.LogMessage (MessageImportance.Normal, $"Temporary project directory for the FindAotCompiler task: {projectDirectory}");
 				} else {
-					File.Delete (projectPath);
+					Directory.Delete (projectDirectory, true);
 				}
 			}
 		}
 
 		async Threading.Task ExecuteRestoreAsync (string dotnetPath, string projectPath, Dictionary<string, string> environment)
 		{
-			var binlog = GetTempBinLog ();
+			var binlog = Path.Combine (Path.GetDirectoryName (projectPath), "restore.binlog");
 			var arguments = new List<string> ();
 
 			arguments.Add ("restore");
@@ -107,21 +107,14 @@ namespace Xamarin.MacDev.Tasks {
 			arguments.Add ("/bl:" + binlog);
 			arguments.Add (projectPath);
 
-			try {
-				await ExecuteAsync (dotnetPath, arguments, environment: environment);
-			} finally {
-				if (KeepTemporaryOutput) {
-					Log.LogMessage (MessageImportance.Normal, $"Temporary restore log for the FindAotCompiler task: {binlog}");
-				} else {
-					File.Delete (binlog);
-				}
-			}
+			await ExecuteAsync (dotnetPath, arguments, environment: environment);
 		}
 
 		async Threading.Task<string> ExecuteBuildAsync (string dotnetPath, string projectPath, Dictionary<string, string> environment)
 		{
-			var outputFile = Path.GetTempFileName ();
-			var binlog = GetTempBinLog ();
+			var projectDirectory = Path.GetDirectoryName (projectPath);
+			var outputFile = Path.Combine (projectDirectory, "output.txt");
+			var binlog = Path.Combine (projectDirectory, "build.binlog");
 			var arguments = new List<string> ();
 
 			arguments.Add ("build");
@@ -131,29 +124,9 @@ namespace Xamarin.MacDev.Tasks {
 			arguments.Add ("/bl:" + binlog);
 			arguments.Add (projectPath);
 
-			try {
-				await ExecuteAsync (dotnetPath, arguments, environment: environment);
+			await ExecuteAsync (dotnetPath, arguments, environment: environment);
 
-				return File.ReadAllText (outputFile).Trim ();
-			} finally {
-				if (KeepTemporaryOutput) {
-					Log.LogMessage (MessageImportance.Normal, $"Temporary output for the FindAotCompiler task: {outputFile}");
-					Log.LogMessage (MessageImportance.Normal, $"Temporary build log for the FindAotCompiler task: {binlog}");
-				} else {
-					File.Delete (outputFile);
-					File.Delete (binlog);
-				}
-			}
-		}
-
-		string GetTempBinLog ()
-		{
-			var binlog = Path.GetTempFileName ();
-
-			File.Delete (binlog);
-			binlog += ".binlog";
-
-			return binlog;
+			return File.ReadAllText (outputFile).Trim ();
 		}
 	}
 }

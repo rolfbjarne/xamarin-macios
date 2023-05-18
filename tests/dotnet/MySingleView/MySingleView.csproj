@@ -8,5 +8,9 @@
 		<ApplicationId>com.xamarin.mysingletitle</ApplicationId>
 		<ApplicationVersion>3.14</ApplicationVersion>
 		<CustomBeforeMicrosoftCommonTargets>$(CustomBeforeMicrosoftCommonTargets);$(MSBuildThisFileDirectory)../../common/SupportedOSPlatformVersions.targets</CustomBeforeMicrosoftCommonTargets>
+
+		<!-- <MtouchLink>Full</MtouchLink> -->
+	    <Registrar>managed-static</Registrar>
+	    <EnableAssemblyILStripping>true</EnableAssemblyILStripping>
 	</PropertyGroup>
 </Project>

@@ -1092,13 +1092,18 @@ namespace Xamarin.Linker {
 			var annotations = configuration.Context.Annotations;
 			var action = annotations.GetAction (assembly);
 			if (action == AssemblyAction.Copy) {
-				// Preserve TypeForwardedTo which would the linker sweep otherwise
-				// Note that the linker will sweep type forwarders even if the assembly isn't trimmed:
-				// https://github.com/dotnet/runtime/blob/9dd59af3aee2f403e63887afef50d98022a2e575/src/tools/illink/src/linker/Linker.Steps/SweepStep.cs#L191-L200
-				if (assembly.MainModule.HasExportedTypes) {
-					foreach (var type in assembly.MainModule.ExportedTypes) {
-						annotations.Mark (type);
+				if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("MARK_ALL_EXPORTED_TYPES"))) {
+					// Preserve TypeForwardedTo which would the linker sweep otherwise
+					// Note that the linker will sweep type forwarders even if the assembly isn't trimmed:
+					// https://github.com/dotnet/runtime/blob/9dd59af3aee2f403e63887afef50d98022a2e575/src/tools/illink/src/linker/Linker.Steps/SweepStep.cs#L191-L200
+					if (assembly.MainModule.HasExportedTypes) {
+						foreach (var type in assembly.MainModule.ExportedTypes) {
+							Console.WriteLine ($"Marking {type} because it's an exported type");
+							annotations.Mark (type);
+						}
 					}
+					// foreach (var ar in assembly.MainModule.AssemblyReferences)
+					// 	annotations.Mark (ar);
 				}
 				annotations.SetAction (assembly, AssemblyAction.Save);
 			}

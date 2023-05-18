@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-maccatalyst</TargetFramework>
     <Registrar>managed-static</Registrar>
+    <!-- <EnableAssemblyILStripping>true</EnableAssemblyILStripping> -->
+    <!-- <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier> -->
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->

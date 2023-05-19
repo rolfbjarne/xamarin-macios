@@ -478,6 +478,7 @@ xamarin_bridge_compute_properties (int inputCount, const char **inputKeys, const
 		munmap ((void *) buf, fd_len);
 }
 
+#if !defined (NATIVEAOT)
 bool
 xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
 {
@@ -511,6 +512,7 @@ xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, cons
 
 	return rv == 0;
 }
+#endif // !defined (NATIVEAOT)
 
 void
 xamarin_install_nsautoreleasepool_hooks ()
@@ -740,6 +742,7 @@ mono_reflection_type_get_type (MonoReflectionType *reftype)
 	return rv;
 }
 
+#if !defined (NATIVEAOT)
 int
 mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
 {
@@ -769,6 +772,7 @@ mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const cha
 
 	return (int) exitCode;
 }
+#endif // !defined (NATIVEAOT)
 
 MonoGHashTable *
 mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type)

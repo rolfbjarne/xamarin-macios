@@ -82,7 +82,11 @@ enum MarshalObjectiveCExceptionMode xamarin_marshal_objectivec_exception_mode = 
 enum MarshalManagedExceptionMode xamarin_marshal_managed_exception_mode = MarshalManagedExceptionModeDefault;
 enum XamarinTriState xamarin_log_exceptions = XamarinTriStateNone;
 enum XamarinLaunchMode xamarin_launch_mode = XamarinLaunchModeApp;
+#if defined(NATIVEAOT)
+bool xamarin_supports_dynamic_registration = false;
+#else
 bool xamarin_supports_dynamic_registration = true;
+#endif
 const char *xamarin_runtime_configuration_name = NULL;
 
 #if DOTNET

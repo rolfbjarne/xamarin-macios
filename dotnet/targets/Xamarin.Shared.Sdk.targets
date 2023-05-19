@@ -417,7 +417,7 @@
 			_ComputeLinkMode;
 			_ComputeFrameworkVariables;
 			_ComputeFrameworkAssemblies;
-			ComputeResolvedFilesToPublishList;
+			_ComputeResolvedFilesToPublishList;
 			_ParseBundlerArguments;
 			_ComputeVariables;
 			_CreateRuntimeConfiguration;
@@ -427,7 +427,19 @@
 			_ReadAppManifest;
 			_WriteAppManifest;
 			_ComputeLinkerFeatures;
+			_ComputeManagedAssemblyToLink;
 		</_ComputeLinkerArgumentsDependsOn>
+
+		<_ComputeResolvedFilesToPublishListDependsOn Condition="'$(_XamarinRuntime)' != 'NativeAOT'">
+			$(_ComputeResolvedFilesToPublishListDependsOn);
+			ComputeResolvedFilesToPublishList;
+		</_ComputeResolvedFilesToPublishListDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_ComputeResolvedFilesToPublishList" DependsOnTargets="$(_ComputeResolvedFilesToPublishListDependsOn)" />
+
+	<PropertyGroup Condition="'$(PublishAot)' == 'true'">
+		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
 	</PropertyGroup>
 
 	<Target Name="_ComputeLinkerFeatures">
@@ -1154,6 +1166,38 @@
 		</ItemGroup>
 	</Target>
 
+	<Target Name="_XamarinComputeIlcCompileInputs">
+		<PropertyGroup>
+			<NativeLib>static</NativeLib>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<DirectPInvoke Include="__Internal" />
+
+			<_UpdatedManagedAssemblyToLink Include="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" Condition="Exists('$(IntermediateLinkDir)%(Filename)%(Extension)')" />
+			<ManagedAssemblyToLink Remove="@(ManagedAssemblyToLink)" />
+			<ManagedAssemblyToLink Include="@(PrivateSdkAssemblies);@(_UpdatedManagedAssemblyToLink)" />
+
+			<UnmanagedEntryPointsAssembly Remove="System.Private.CoreLib" />
+			<UnmanagedEntryPointsAssembly Include="@(_UpdatedManagedAssemblyToLink->'%(Filename)')" />
+
+			<ManagedBinary Include="$(IntermediateLinkDir)$(TargetName)$(TargetExt)" />
+			<IlcCompileInput Include="@(ManagedBinary)" />
+			<IlcReference Include="@(ManagedAssemblyToLink)" Exclude="@(ManagedBinary)" />
+
+			<TrimmerRootAssembly Remove="@(TrimmerRootAssembly)" />
+
+			<IlcArg Include="--defaultrooting" />
+
+			<_NativeExecutableObjectFiles Include="$(NativeObject)" />
+			<LinkerArg Remove="@(NativeFramework->'-framework %(Identity)')" />
+			<_CustomLinkFlags Include="@(LinkerArg)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- Override the NativeAOT targets -->
+	<Target Name="LinkNative" />
+
 	<PropertyGroup>
 		<_GenerateBindingsDependsOn>
 			_ComputeBindingVariables;
@@ -1197,6 +1241,11 @@
 			_WriteAppManifest;
 			_ComputeNativeExecutableInputs;
 			_AOTCompile;
+		</_CompileNativeExecutableDependsOn>
+
+		<_CompileNativeExecutableDependsOn Condition="'$(PublishAot)' == 'true'">
+			$(_CompileNativeExecutableDependsOn);
+			IlcCompile;
 		</_CompileNativeExecutableDependsOn>
 	</PropertyGroup>
 

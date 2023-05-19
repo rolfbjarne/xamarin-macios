@@ -19,8 +19,8 @@
 #include "slinked-list.h"
 #include "xamarin/xamarin.h"
 #include "xamarin/coreclr-bridge.h"
+#include "xamarin/nativeaot-bridge.h"
 
-extern "C" void xamarin_objcruntime_runtime_nativeaotinitialize (struct InitializationOptions* options, GCHandle* exception_gchandle);
 void
 xamarin_bridge_call_runtime_initialize (struct InitializationOptions* options, GCHandle* exception_gchandle)
 {
@@ -31,6 +31,12 @@ bool
 xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
 {
 	return true;
+}
+
+int
+mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
+{
+	return __managed__Main (argc, argv);
 }
 
 #endif // NATIVEAOT

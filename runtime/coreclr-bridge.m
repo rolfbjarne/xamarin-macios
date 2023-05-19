@@ -478,6 +478,7 @@ xamarin_bridge_compute_properties (int inputCount, const char **inputKeys, const
 		munmap ((void *) buf, fd_len);
 }
 
+#if !defined (NATIVEAOT)
 bool
 xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, const char **propertyValues)
 {
@@ -511,6 +512,7 @@ xamarin_bridge_vm_initialize (int propertyCount, const char **propertyKeys, cons
 
 	return rv == 0;
 }
+#endif // !defined (NATIVEAOT)
 
 void
 xamarin_install_nsautoreleasepool_hooks ()

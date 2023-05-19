@@ -17,9 +17,13 @@
 		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
 		<CustomNativeMain>true</CustomNativeMain>
 		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_XamarinILLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
+		<EnableCodeSigning>false</EnableCodeSigning>
+		<MtouchExtraArgs>--linkskip=System.Private.CoreLib.dll --linkskip=System.Private.CoreLib</MtouchExtraArgs>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<LinkDescription Include="linker.xml" />
+		<TrimmerRootAssembly Include="System.Private.CoreLib" />
 		<CustomLinkerArg Include="-miphoneos-version-min=11.0" />
 		<CustomLinkerArg Include="-isysroot /Applications/Xcode_14.3.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk" />
 	</ItemGroup>
@@ -37,6 +41,8 @@
 
 		<ItemGroup>
 			<DirectPInvoke Include="__Internal" />
+
+			<AutoInitializedAssemblies Remove="@(AutoInitializedAssemblies)" />
 
 			<_UpdatedManagedAssemblyToLink Include="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" Condition="Exists('$(IntermediateLinkDir)%(Filename)%(Extension)')" />
 			<ManagedAssemblyToLink Remove="@(ManagedAssemblyToLink)" />

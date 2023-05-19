@@ -32,6 +32,12 @@ parameters:
   type: string
   default: HEAD
 
+- name: gitHubToken
+  type: string
+
+- name: xqaCertPass
+  type: string
+
 stages:
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}
@@ -70,6 +76,8 @@ stages:
       demands:
       - agent.os -equals Darwin
       - SSH.Enabled -equals True
+      - macOS.Architecture -equals arm64
+      - macOS.Name -equals Ventura
 
     steps:
     - template: reserve-mac.yml
@@ -77,6 +85,8 @@ stages:
         repositoryAlias: ${{ parameters.repositoryAlias }}
         commit: ${{ parameters.commit }}
         macPool: ${{ parameters.macPool }}
+        gitHubToken: ${{ parameters.gitHubToken }}
+        xqaCertPass: ${{ parameters.xqaCertPass }}
 
   - job: run_tests
     dependsOn:
@@ -97,6 +107,8 @@ stages:
       MAC_AGENT_NAME: $[ dependencies.mac_reservation.outputs['macInfo.AGENT_NAME'] ]
       MAC_AGENT_POOL: $[ dependencies.mac_reservation.outputs['macInfo.AGENT_POOL'] ]
       MAC_AGENT_IP: $[ dependencies.mac_reservation.outputs['macInfo.AGENT_IP'] ]
+      MAC_AGENT_SYSTEM_DEFAULTWORKINGDIRECTORY: $[ dependencies.mac_reservation.outputs['macInfo.AGENT_SYSTEM_DEFAULTWORKINGDIRECTORY'] ]
+      MAC_AGENT_BUILD_SOURCESDIRECTORY: $[ dependencies.mac_reservation.outputs['macInfo.AGENT_BUILD_SOURCESDIRECTORY'] ]
 
     steps:
     - template: build.yml
@@ -105,3 +117,5 @@ stages:
         commit: ${{ parameters.commit }}
         isPR: ${{ parameters.isPR }}
         statusContext: ${{ parameters.statusContext }}
+        gitHubToken: ${{ parameters.gitHubToken }}
+        xqaCertPass: ${{ parameters.xqaCertPass }}

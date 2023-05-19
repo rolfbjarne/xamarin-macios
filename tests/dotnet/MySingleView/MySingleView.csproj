@@ -17,7 +17,6 @@
 		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
 		<CustomNativeMain>true</CustomNativeMain>
 		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_XamarinILLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
-		<EnableCodeSigning>false</EnableCodeSigning>
 		<MtouchExtraArgs>--linkskip=System.Private.CoreLib.dll --linkskip=System.Private.CoreLib</MtouchExtraArgs>
 	</PropertyGroup>
 
@@ -40,6 +39,9 @@
 		</PropertyGroup>
 
 		<ItemGroup>
+			<LinkerArg Remove="-lswiftCore" />
+			<LinkerArg Remove="-lswiftFoundation" />
+			<LinkerArg Remove="-L/usr/lib/swift" />
 			<DirectPInvoke Include="__Internal" />
 
 			<AutoInitializedAssemblies Remove="@(AutoInitializedAssemblies)" />

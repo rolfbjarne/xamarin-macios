@@ -742,6 +742,7 @@ mono_reflection_type_get_type (MonoReflectionType *reftype)
 	return rv;
 }
 
+#if !defined (NATIVEAOT)
 int
 mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const char** argv)
 {
@@ -771,6 +772,7 @@ mono_jit_exec (MonoDomain * domain, MonoAssembly * assembly, int argc, const cha
 
 	return (int) exitCode;
 }
+#endif // !defined (NATIVEAOT)
 
 MonoGHashTable *
 mono_g_hash_table_new_type (GHashFunc hash_func, GEqualFunc key_equal_func, MonoGHashGCType type)

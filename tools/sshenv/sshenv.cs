@@ -15,7 +15,7 @@ class Program {
 		os.WriteOptionDescriptions (Console.Out);
 
 	}
-	static int Main (string[] args)
+	static int Main (string [] args)
 	{
 		var show_help = false;
 		var passwordEnvironmentVariable = string.Empty;
@@ -24,7 +24,7 @@ class Program {
 
 		host = "127.0.0.1";
 		username = "rolf";
-		
+
 		var os = new OptionSet {
 			{ "host=", "The host to connect to (required).", (v) => host = v },
 			{ "user=", "The user to connect as (required).", (v) => username = v },

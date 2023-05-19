@@ -312,6 +312,31 @@ namespace Xamarin.Tests {
 
 		}
 
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "MySimpleApp";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			Clean (project_path);
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["ServerAddress"] = Environment.GetEnvironmentVariable ("MAC_AGENT_IP")!;
+			properties ["ServerUser"] = "builder";
+			properties ["ServerPassword"] = Environment.GetEnvironmentVariable ("XMA_PASSWORD")!;
+			var result = DotNet.AssertBuild (project_path, properties, quiet: false, timeout: TimeSpan.FromMinutes (60));
+			AssertThatLinkerExecuted (result);
+			var infoPlistPath = GetInfoPListPath (platform, appPath);
+			Assert.That (infoPlistPath, Does.Exist, "Info.plist");
+			var infoPlist = PDictionary.FromFile (infoPlistPath)!;
+			Assert.AreEqual ("com.xamarin.mysimpleapp", infoPlist.GetString ("CFBundleIdentifier").Value, "CFBundleIdentifier");
+			Assert.AreEqual ("MySimpleApp", infoPlist.GetString ("CFBundleDisplayName").Value, "CFBundleDisplayName");
+			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleVersion").Value, "CFBundleVersion");
+			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleShortVersionString").Value, "CFBundleShortVersionString");
+		}
+
 		[Test]
 		[TestCase (ApplePlatform.iOS, "iossimulator-x86;iossimulator-x64")]
 		[TestCase (ApplePlatform.iOS, "iossimulator-x86;iossimulator-x64;iossimulator-arm64")]

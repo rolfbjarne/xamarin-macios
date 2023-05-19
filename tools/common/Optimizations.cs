@@ -266,7 +266,9 @@ namespace Xamarin.Bundler {
 				StaticBlockToDelegateLookup = true;
 
 			if (!RemoveDynamicRegistrar.HasValue) {
-				if (InlineDynamicRegistrationSupported != true) {
+				if (app.Registrar == RegistrarMode.ManagedStatic) {
+					RemoveDynamicRegistrar = true; // FIXME: requires a bit more logic to warn/error with invalid configurations
+				} else if (InlineDynamicRegistrationSupported != true) {
 					// Can't remove the dynamic registrar unless also inlining Runtime.DynamicRegistrationSupported
 					RemoveDynamicRegistrar = false;
 				} else if (StaticBlockToDelegateLookup != true) {

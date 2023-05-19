@@ -13,65 +13,33 @@
 	<!-- NativeAOT hacks -->
 
 	<PropertyGroup>
+		<MtouchLink>None</MtouchLink>
 		<IlcKeepManagedDebuggerSupport>true</IlcKeepManagedDebuggerSupport> <!-- https://github.com/dotnet/runtime/issues/86186 -->
 		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
 		<CustomNativeMain>true</CustomNativeMain>
 		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_XamarinILLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
-		<MtouchExtraArgs>--linkskip=System.Private.CoreLib.dll --linkskip=System.Private.CoreLib</MtouchExtraArgs>
+		<!-- <MtouchExtraArgs>- -linkskip=System.Private.CoreLib.dll - -linkskip=System.Private.CoreLib</MtouchExtraArgs> -->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<LinkDescription Include="linker.xml" />
-		<TrimmerRootAssembly Include="System.Private.CoreLib" />
-		<CustomLinkerArg Include="-miphoneos-version-min=11.0" />
-		<CustomLinkerArg Include="-isysroot /Applications/Xcode_14.3.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk" />
+		<!-- <LinkDescription Include="linker.xml" /> -->
+		<!-- <TrimmerRootAssembly Include="System.Private.CoreLib" /> -->
+		<!-- <CustomLinkerArg Include="-miphoneos-version-min=11.0" />
+		<CustomLinkerArg Include="-isysroot /Applications/Xcode_14.3.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk" /> -->
 	</ItemGroup>
 
-	<Target Name="_ComputeResolvedFilesToPublishList" DependsOnTargets="$(ComputeResolvedFilesToPublishList)" Condition="'$(_XamarinRuntime)' != 'NativeAOT'" />
-	<Target Name="_ComputeResolvedFilesToPublishList" Condition="'$(_XamarinRuntime)' != 'NativeAOT'" />
-
-
-	<Target Name="_XamarinILLink" Inputs="@(ManagedAssemblyToLink)" Outputs="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" DependsOnTargets="_RunILLink" />
-
-	<Target Name="_XamarinComputeIlcCompileInputs">
-		<PropertyGroup>
-			<NativeLib>static</NativeLib>
-		</PropertyGroup>
-
+	<Target Name="_XamarinComputeIlcCompileInputsBefore" BeforeTargets="_XamarinComputeIlcCompileInputs">
 		<ItemGroup>
 			<LinkerArg Remove="-lswiftCore" />
 			<LinkerArg Remove="-lswiftFoundation" />
 			<LinkerArg Remove="-L/usr/lib/swift" />
-			<DirectPInvoke Include="__Internal" />
 
-			<AutoInitializedAssemblies Remove="@(AutoInitializedAssemblies)" />
-
-			<_UpdatedManagedAssemblyToLink Include="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" Condition="Exists('$(IntermediateLinkDir)%(Filename)%(Extension)')" />
-			<ManagedAssemblyToLink Remove="@(ManagedAssemblyToLink)" />
-			<ManagedAssemblyToLink Include="@(_UpdatedManagedAssemblyToLink)" />
-
-			<UnmanagedEntryPointsAssembly Remove="System.Private.CoreLib" />
-			<UnmanagedEntryPointsAssembly Include="@(_UpdatedManagedAssemblyToLink->'%(Filename)')" />
-
-			<ManagedBinary Include="$(IntermediateLinkDir)$(TargetName)$(TargetExt)" />
-			<IlcCompileInput Include="@(ManagedBinary)" />
-			<IlcReference Include="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" Exclude="@(ManagedBinary)" />
-
-			<TrimmerRootAssembly Remove="@(TrimmerRootAssembly)" />
-			<!--<TrimmerRootAssembly Include="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" />-->
-
-			<IlcArg Condition="'$(Registrar)' == 'managed-static'" Include="--feature:ObjCRuntime.Runtime.IsManagedStaticRegistrar=true" />
-			<IlcArg Condition="'$(Registrar)' != 'managed-static'" Include="--feature:ObjCRuntime.Runtime.IsManagedStaticRegistrar=false" />
-			<IlcArg Include="--defaultrooting" />
-
-			<_NativeExecutableObjectFiles Include="$(NativeObject)" />
-			<LinkerArg Remove="@(NativeFramework->'-framework %(Identity)')" />
-			<_CustomLinkFlags Include="@(LinkerArg)" />
+			<!-- <AutoInitializedAssemblies Remove="@(AutoInitializedAssemblies)" /> -->
 		</ItemGroup>
 	</Target>
 
-	<!-- Override the NativeAOT targets -->
-	<Target Name="ComputeLinkedFilesToPublish" BeforeTargets="ComputeResolvedFilesToPublishList" DependsOnTargets="_ComputeAssembliesToCompileToNative;LinkNative" />
-	<Target Name="LinkNative" DependsOnTargets="$(LinkNativeDependsOn)" />
-
+	<Target Name="CopyNativeBinary2" BeforeTargets="CopyNativeBinary">
+		<MakeDir Directories="$(NativeOutputPath)" />
+		<Touch AlwaysCreate="true" Files="$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" />
+	</Target>
 </Project>

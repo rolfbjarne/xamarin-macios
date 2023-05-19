@@ -7,3 +7,12 @@ build:
 
 run:
 	$(DOTNET) build /bl $(MSBUILD_VERBOSITY) /t:Run
+
+reload:
+	$(MAKE) -C $(TOP)/dotnet $@
+
+nativeaot:
+	$(Q) donut publish /p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:MtouchLink=SdkOnly /p:Configuration=Release /p:PublishAotUsingRuntimePack=true /bl:$@.binlog
+
+run-nativeaot:
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:MtouchLink=SdkOnly /p:Configuration=Release /p:PublishAotUsingRuntimePack=true /bl:$@.binlog /t:Run"

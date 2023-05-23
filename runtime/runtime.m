@@ -145,6 +145,7 @@ enum InitializationFlags : int {
 	/* unused									= 0x08,*/
 	InitializationFlagsIsSimulator				= 0x10,
 	InitializationFlagsIsCoreCLR                = 0x20,
+	InitializationFlagsIsNativeAOT              = 0x40,
 };
 
 struct InitializationOptions {
@@ -1296,6 +1297,9 @@ xamarin_initialize ()
 
 #if defined (CORECLR_RUNTIME)
 	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsCoreCLR);
+#endif
+#if defined (NATIVEAOT)
+	options.flags = (enum InitializationFlags) (options.flags | InitializationFlagsIsNativeAOT);
 #endif
 
 	options.Delegates = &delegates;

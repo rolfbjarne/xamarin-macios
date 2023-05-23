@@ -109,11 +109,10 @@ namespace MonoTouchFixtures.UIKit {
 				// change state of gesture recognizer to execute callback
 				recognizer.State = UIGestureRecognizerState.Changed;
 				recognizer.State = UIGestureRecognizerState.Ended;
-			}, () => didRun);
+				return Task.CompletedTask;
+			}, callbackEvent.Task);
 
-			// blocks main thread until event is trigerred
-			callbackEvent.WaitOne (30000);
-			Assert.IsTrue (didRun, "didRun");
+			Assert.IsTrue (callbackEvent.Task.IsCompleted, "didRun");
 		}
 
 		class FinalizerNotifier {

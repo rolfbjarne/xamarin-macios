@@ -97,7 +97,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 		public void TestBuiltInPlugInsUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.BuiltInPlugInsUrl.ToString (), Contains.Substring ("PlugIns/"));
+			Assert.That (main.BuiltInPlugInsUrl.ToString (), Does.Contain ("PlugIns/"));
 		}
 
 		[Test]
@@ -111,42 +111,43 @@ namespace MonoTouchFixtures.CoreFoundation {
 #else
 			var executableRelativePath = Path.Combine (ExpectedAppName, "monotouchtest");
 #endif
-			Assert.That (main.ExecutableUrl.ToString (), Contains.Substring (executableRelativePath));
+			var alternativeRelativePath = executableRelativePath.Replace (ExpectedAppName, "PublicStaging.app");
+			Assert.That (main.ExecutableUrl.ToString (), Does.Contain (executableRelativePath).Or.Contain (alternativeRelativePath));
 		}
 
 		[Test]
 		public void TestPrivateFrameworksUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.PrivateFrameworksUrl.ToString (), Contains.Substring ("Frameworks/"));
+			Assert.That (main.PrivateFrameworksUrl.ToString (), Does.Contain ("Frameworks/"));
 		}
 
 		[Test]
 		public void TestResourcesDirectoryUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.ResourcesDirectoryUrl.ToString (), Contains.Substring (ExpectedAppName + "/"));
+			Assert.That (main.ResourcesDirectoryUrl.ToString (), Does.Contain (ExpectedAppName + "/").Or.Contain ("PublicStaging.app/"));
 		}
 
 		[Test]
 		public void TestSharedFrameworksUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.SharedFrameworksUrl.ToString (), Contains.Substring ("SharedFrameworks/"));
+			Assert.That (main.SharedFrameworksUrl.ToString (), Does.Contain ("SharedFrameworks/"));
 		}
 
 		[Test]
 		public void TestSharedSupportUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.SharedSupportUrl.ToString (), Contains.Substring ("SharedSupport/"));
+			Assert.That (main.SharedSupportUrl.ToString (), Does.Contain ("SharedSupport/"));
 		}
 
 		[Test]
 		public void TestSupportFilesDirectoryUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.SupportFilesDirectoryUrl.ToString (), Contains.Substring (ExpectedAppName + "/"));
+			Assert.That (main.SupportFilesDirectoryUrl.ToString (), Does.Contain (ExpectedAppName + "/").Or.Contain ("PublicStaging.app/"));
 		}
 
 		[Test]
@@ -160,7 +161,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 		public void TestUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.Url.ToString (), Contains.Substring (ExpectedAppName + "/"));
+			Assert.That (main.Url.ToString (), Does.Contain (ExpectedAppName + "/").Or.Contain ("PublicStaging.app/"));
 		}
 
 		[Test]

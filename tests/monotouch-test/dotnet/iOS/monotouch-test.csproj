@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+    <DefineConstants>$(DefineConstants);NATIVEAOT</DefineConstants>
   </PropertyGroup>
 
 
@@ -13,7 +14,7 @@
   <!-- NativeAOT hacks -->
 
   <PropertyGroup>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
     <IlcKeepManagedDebuggerSupport>true</IlcKeepManagedDebuggerSupport> <!-- https://github.com/dotnet/runtime/issues/86186 -->
     <EnableAssemblyILStripping>false</EnableAssemblyILStripping>
     <CustomNativeMain>true</CustomNativeMain>
@@ -31,6 +32,10 @@
   <ItemGroup>
     <!-- this empty item group is here for xharness -->
   </ItemGroup>
+
+  <PropertyGroup>
+    <MtouchLink>Full</MtouchLink>
+  </PropertyGroup>
 
   <Target Name="_XamarinComputeIlcCompileInputsBefore" BeforeTargets="_XamarinComputeIlcCompileInputs">
     <ItemGroup>

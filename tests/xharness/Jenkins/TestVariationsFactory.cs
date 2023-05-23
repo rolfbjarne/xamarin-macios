@@ -102,7 +102,7 @@ namespace Xharness.Jenkins {
 						yield return new TestData { Variation = "Release (managed static registrar, all optimizations)", BundlerArguments = "--optimize:all", Registrar = "managed-static", Debug = false, Profiling = false, LinkMode = "Full", Defines = "OPTIMIZEALL", Ignored = ignore };
 					}
 					if (test.Platform == TestPlatform.iOS && test.TestProject.IsDotNetProject)
-						yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = ignore };
+						yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = ignore, Defines = "NATIVEAOT" };
 					break;
 				case string name when name.StartsWith ("mscorlib", StringComparison.Ordinal):
 					if (supports_debug)

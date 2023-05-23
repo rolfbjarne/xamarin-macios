@@ -5,35 +5,35 @@ using Foundation;
 namespace MonoTests.System.Net.Http {
 	[Preserve (AllMembers = true)]
 	public static class NetworkResources {
-		public static readonly string MicrosoftUrl = "https://www.microsoft.com";
-		public static readonly Uri MicrosoftUri = new Uri (MicrosoftUrl);
-		public static readonly string MicrosoftHttpUrl = "http://www.microsoft.com";
-		public static readonly string XamarinUrl = "https://dotnet.microsoft.com/apps/xamarin";
-		public static readonly string XamarinHttpUrl = "http://dotnet.microsoft.com/apps/xamarin";
-		public static readonly Uri XamarinUri = new Uri (XamarinUrl);
-		public static readonly string StatsUrl = "https://api.imgur.com/2/stats";
+		public static string MicrosoftUrl => "https://www.microsoft.com";
+		public static Uri MicrosoftUri => new Uri (MicrosoftUrl);
+		public static string MicrosoftHttpUrl => "http://www.microsoft.com";
+		public static string XamarinUrl => "https://dotnet.microsoft.com/apps/xamarin";
+		public static string XamarinHttpUrl => "http://dotnet.microsoft.com/apps/xamarin";
+		public static Uri XamarinUri => new Uri (XamarinUrl);
+		public static string StatsUrl => "https://api.imgur.com/2/stats";
 
-		public static readonly string [] HttpsUrls = {
+		public static string [] HttpsUrls => new [] {
 			MicrosoftUrl,
 			XamarinUrl,
 			Httpbin.Url,
 		};
 
-		public static readonly string [] HttpUrls = {
+		public static string [] HttpUrls => new [] {
 			MicrosoftHttpUrl,
 			XamarinHttpUrl,
 			Httpbin.HttpUrl,
 		};
 
 		// Robots urls, useful when we want to get a small file
-		public static readonly string MicrosoftRobotsUrl = "https://www.microsoft.com/robots.txt";
-		public static readonly string XamarinRobotsUrl = "https://www.xamarin.com/robots.txt";
-		public static readonly string BingRobotsUrl = "http://www.bing.com/robots.txt";
-		public static readonly string XboxRobotsUrl = "https://www.xbox.com/robots.txt";
-		public static readonly string MSNRobotsUrl = "https://www.msn.com/robots.txt";
-		public static readonly string VisualStudioRobotsUrl = "https://visualstudio.microsoft.com/robots.txt";
+		public static string MicrosoftRobotsUrl => "https://www.microsoft.com/robots.txt";
+		public static string XamarinRobotsUrl => "https://www.xamarin.com/robots.txt";
+		public static string BingRobotsUrl => "http://www.bing.com/robots.txt";
+		public static string XboxRobotsUrl => "https://www.xbox.com/robots.txt";
+		public static string MSNRobotsUrl => "https://www.msn.com/robots.txt";
+		public static string VisualStudioRobotsUrl => "https://visualstudio.microsoft.com/robots.txt";
 
-		public static readonly string [] RobotsUrls = {
+		public static string [] RobotsUrls => new [] {
 			MicrosoftRobotsUrl,
 			XamarinRobotsUrl,
 			BingRobotsUrl,
@@ -43,22 +43,23 @@ namespace MonoTests.System.Net.Http {
 		};
 
 		public static class Httpbin {
-			public static readonly string Url = "https://httpbin.org";
-			public static readonly Uri Uri = new Uri ("https://httpbin.org");
-			public static readonly string DeleteUrl = "https://httpbin.org/delete";
-			public static readonly string GetUrl = "https://httpbin.org/get";
-			public static readonly string PatchUrl = "https://httpbin.org/patch";
-			public static readonly string PostUrl = "https://httpbin.org/post";
-			public static readonly string PutUrl = "https://httpbin.org/put";
-			public static readonly string CookiesUrl = $"https://httpbin.org/cookies";
-			public static readonly string HttpUrl = "http://httpbin.org";
+			public static string Url { get { global::NUnit.Framework.Assert.Ignore ("httpbin is probably down"); return string.Empty; } }
+			public static Uri Uri => new Uri ($"{Url}");
+			public static string DeleteUrl => $"{Url}/delete";
+			public static string GetUrl => $"{Url}/get";
+			public static string PatchUrl => $"{Url}/patch";
+			public static string PostUrl => $"{Url}/post";
+			public static string PutUrl => $"{Url}/put";
+			public static string CookiesUrl => $"{Url}/cookies";
+			public static string HttpUrl { get { global::NUnit.Framework.Assert.Ignore ("httpbin is probably down"); return string.Empty; } }
 
 
-			public static string GetAbsoluteRedirectUrl (int count) => $"https://httpbin.org/absolute-redirect/{count}";
-			public static string GetRedirectUrl (int count) => $"https://httpbin.org/redirect/{count}";
-			public static string GetRelativeRedirectUrl (int count) => $"https://httpbin.org/relative-redirect/{count}";
-			public static string GetStatusCodeUrl (HttpStatusCode status) => $"http://httpbin.org/status/{(int) status}";
-			public static string GetSetCookieUrl (string cookie, string value) => $"https://httpbin.org/cookies/set?{cookie}={value}";
+			public static string GetAbsoluteRedirectUrl (int count) => $"{Url}/absolute-redirect/{count}";
+			public static string GetRedirectUrl (int count) => $"{Url}/redirect/{count}";
+			public static string GetRelativeRedirectUrl (int count) => $"{Url}/relative-redirect/{count}";
+			public static string GetStatusCodeUrl (HttpStatusCode status) => $"{HttpUrl}/status/{(int) status}";
+			public static string GetSetCookieUrl (string cookie, string value) => $"{Url}/cookies/set?{cookie}={value}";
+			public static string GetBasicAuthUrl (string username, string password) => $"{Url}/basic-auth/{username}/{password}";
 
 		}
 	}

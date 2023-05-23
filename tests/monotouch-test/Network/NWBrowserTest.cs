@@ -153,6 +153,11 @@ namespace MonoTouchFixtures.Network {
 			}, () => eventsDone);
 
 			finalEvent.WaitOne (30000);
+
+			Console.WriteLine ("Error code: {0}", errorState?.ErrorCode);
+			Console.WriteLine ("Error domain: {0}", errorState?.ErrorDomain);
+			Console.WriteLine ("CFError: {0}", errorState?.CFError);
+			Assert.IsNull (errorState?.CFError, "CFError");
 			Assert.IsNull (errorState, "Error");
 			Assert.IsTrue (eventsDone, "eventDone");
 			Assert.IsTrue (listeningDone, "listeningDone");

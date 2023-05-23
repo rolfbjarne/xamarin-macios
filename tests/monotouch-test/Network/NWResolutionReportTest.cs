@@ -42,7 +42,7 @@ namespace MonoTouchFixtures.Network {
 			connectedEvent = new AutoResetEvent (false);
 			reportEvent = new AutoResetEvent (false);
 			resolutionEvent = new AutoResetEvent (false);
-			host = NetworkResources.MicrosoftUri.Host;
+			host = NetworkResources.Httpbin.Uri.Host;
 			// we create a connection which we are going to use to get the availabe
 			// interfaces, that way we can later test protperties of the NWParameters class.
 			using (var parameters = NWParameters.CreateUdp ())

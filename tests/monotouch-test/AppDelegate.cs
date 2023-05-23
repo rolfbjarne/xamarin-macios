@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
+
+using CoreFoundation;
 using Foundation;
 using UIKit;
 using MonoTouch.NUnit.UI;
@@ -44,44 +47,85 @@ public partial class AppDelegate : UIApplicationDelegate {
 		}
 	}
 
+	public static bool RunAsync (DateTime timeout, Task startTask, Task completionTask, UIImage imageToShow = null)
+	{
+		return TestRuntime.RunAsync (timeout, startTask, completionTask, imageToShow);
+	}
+
+	public static bool RunAsync (DateTime timeout, Func<Task> startTask, Func<bool> completionTask, UIImage imageToShow = null)
+	{
+		return TestRuntime.RunAsync (timeout, startTask, completionTask, imageToShow);
+	}
+
+	public static bool RunAsync (DateTime timeout, Func<Task> startTask, Task completionTask, UIImage imageToShow = null)
+	{
+		return TestRuntime.RunAsync (timeout, startTask, completionTask, imageToShow);
+	}
+
 	public static bool RunAsync (DateTime timeout, Action action, Func<bool> check_completed, UIImage imageToShow = null)
 	{
-		var vc = new AsyncController (action, imageToShow);
-		var bckp = window.RootViewController;
-		var navigation = bckp as UINavigationController;
+		return TestRuntime.RunAsync (timeout, action, check_completed, imageToShow);
+	}
+
+	public static IDisposable ShowAsyncUI (UIImage? imageToShow = null)
+	{
+		var state = new AsyncState (window);
+		state.Show (imageToShow);
+		return state;
+	}
+}
+
+class AsyncState : IDisposable {
+	UIWindow window;
+	UIViewController? initialRootViewController;
+	UINavigationController? navigation;
+
+	public AsyncState (UIWindow window)
+	{
+		this.window = window;
+	}
+
+	public void Show (UIImage imageToShow)
+	{
+		var vc = new AsyncController (imageToShow);
+		initialRootViewController = window.RootViewController;
+		navigation = window.RootViewController as UINavigationController;
+
+		// Pushing something to a navigation controller doesn't seem to work on phones
+		if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+			navigation = null;
 
 		if (navigation is not null) {
 			navigation.PushViewController (vc, false);
 		} else {
 			window.RootViewController = vc;
 		}
+	}
 
-		try {
-			do {
-				if (timeout < DateTime.Now)
-					return false;
-				NSRunLoop.Main.RunUntil (NSDate.Now.AddSeconds (0.1));
-			} while (!check_completed ());
-		} finally {
-			if (navigation is not null) {
-				navigation.PopViewController (false);
-			} else {
-				window.RootViewController = bckp;
-			}
+	public void Hide ()
+	{
+		if (initialRootViewController is null)
+			return;
+		if (navigation is not null) {
+			navigation.PopViewController (false);
+		} else {
+			window.RootViewController = initialRootViewController;
 		}
+		initialRootViewController = null; // set to null so if we're called again we know to do nothing.
+	}
 
-		return true;
+	public void Dispose ()
+	{
+		Hide ();
 	}
 }
 
 class AsyncController : UIViewController {
-	Action action;
 	UIImage imageToShow;
 	static int counter;
 
-	public AsyncController (Action action, UIImage imageToShow = null)
+	public AsyncController (UIImage imageToShow = null)
 	{
-		this.action = action;
 		this.imageToShow = imageToShow;
 		counter++;
 	}
@@ -104,7 +148,6 @@ class AsyncController : UIViewController {
 			imgView.ContentMode = UIViewContentMode.Center;
 			View.AddSubview (imgView);
 		}
-		NSTimer.CreateScheduledTimer (0.01, (v) => action ());
 	}
 }
 

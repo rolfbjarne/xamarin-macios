@@ -15,6 +15,7 @@ using Foundation;
 using UIKit;
 using NUnit.Framework;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonoTouchFixtures.UIKit {
 
@@ -93,11 +94,9 @@ namespace MonoTouchFixtures.UIKit {
 		[Test]
 		public void GenericCallbackTest ()
 		{
-			var didRun = false;
-			var callbackEvent = new AutoResetEvent (false);
+			var callbackEvent = new TaskCompletionSource<bool> ();
 			Action<UITapGestureRecognizer> callback = (UITapGestureRecognizer _) => {
-				didRun = true;
-				callbackEvent.Set ();
+				callbackEvent.TrySetResult (true);
 			};
 
 			using var recognizer = new UITapGestureRecognizer (callback);
@@ -109,11 +108,10 @@ namespace MonoTouchFixtures.UIKit {
 				// change state of gesture recognizer to execute callback
 				recognizer.State = UIGestureRecognizerState.Changed;
 				recognizer.State = UIGestureRecognizerState.Ended;
-			}, () => didRun);
+				return Task.CompletedTask;
+			}, callbackEvent.Task);
 
-			// blocks main thread until event is trigerred
-			callbackEvent.WaitOne (30000);
-			Assert.IsTrue (didRun, "didRun");
+			Assert.IsTrue (callbackEvent.Task.IsCompleted, "didRun");
 		}
 
 		class FinalizerNotifier {

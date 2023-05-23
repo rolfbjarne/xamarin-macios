@@ -32,6 +32,7 @@ namespace MonoTouchFixtures.Metal {
 				Assert.Inconclusive ("Could not get functions for the pipeline.");
 
 			function = library.CreateFunction (library.FunctionNames [0]);
+			TestRuntime.NSLog ($"Function name: {library.FunctionNames [0]}");
 			encoder = function.CreateArgumentEncoder (0);
 		}
 
@@ -50,6 +51,7 @@ namespace MonoTouchFixtures.Metal {
 		[Test]
 		public void SetBuffers ()
 		{
+			Assert.NotNull (encoder, "encoder");
 			Assert.Throws<ArgumentNullException> (() => {
 				encoder.SetBuffers (null, new nuint [0], new NSRange ());
 			}, "Null buffers should throw.");

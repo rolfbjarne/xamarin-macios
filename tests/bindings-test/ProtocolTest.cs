@@ -164,7 +164,7 @@ namespace Xamarin.BindingTests {
 			methods = protocol_copyMethodDescriptionList (protocol, true, true);
 			CleanupSignatures (methods);
 			Assert.AreEqual (4, methods.Length, "Required Instance Methods: Count");
-			Assert.That (methods, Contains.Item (new objc_method_description ("requiredInstanceMethod", "v@:")), "Required Instance Methods: requiredInstanceMethod");
+			AssertContains (methods, new objc_method_description ("requiredInstanceMethod", "v@:"), "Required Instance Methods: requiredInstanceMethod");
 			Assert.That (methods, Contains.Item (new objc_method_description ("requiredInstanceProperty", "@@:")), "Required Instance Methods: requiredInstanceProperty");
 			Assert.That (methods, Contains.Item (new objc_method_description ("setRequiredInstanceProperty:", "v@:@")), "Required Instance Methods: setRequiredInstanceProperty");
 			Assert.That (methods, Contains.Item (new objc_method_description ("requiredReadonlyProperty", "@@:")), "Required Instance Methods: requiredReadonlyProperty:");
@@ -273,6 +273,21 @@ namespace Xamarin.BindingTests {
 					new objc_property_attribute ("N", "")
 				})), "Properties: readonlyProperty");
 			}
+		}
+
+		static void AssertContains<T> (T[] array, T item, string message) where T: IEquatable<T>
+		{
+			for (var i = 0; i < array.Length; i++) {
+				var element = array [i];
+				if (element is null && item is null)
+					return;
+				if (element is null || item is null)
+					continue;
+				if (element.Equals (item))
+					return;
+			}
+
+			throw new Exception ($"Collection {array} does not contain item {item}: {message}");
 		}
 
 		[DllImport ("/usr/lib/libobjc.dylib")]
@@ -461,7 +476,11 @@ namespace Xamarin.BindingTests {
 
 			bool IEquatable<objc_method_description>.Equals (objc_method_description other)
 			{
-				return other.Name == Name && other.Types == Types;
+				var rv = other.Name == Name && other.Types == Types;
+				TestRuntime.NSLog ($"Comparing result: {rv}");
+				TestRuntime.NSLog ($"    {other}");
+				TestRuntime.NSLog ($"    {this}");
+				return rv;
 			}
 		}
 	}

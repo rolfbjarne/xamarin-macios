@@ -88,6 +88,8 @@ namespace MonoTests.System.Net.Http {
 				try {
 					HttpClient client = new HttpClient (GetHandler (handlerType));
 					response = await client.GetStringAsync ("http://doesnotexist.xamarin.com");
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -129,6 +131,8 @@ namespace MonoTests.System.Net.Http {
 					var nativeClient = new HttpClient (nativeHandler);
 					var nativeResponse = await nativeClient.GetAsync (url);
 					nativeCookieResult = nativeResponse.Headers.TryGetValues ("Set-Cookie", out nativeCookies);
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -179,6 +183,8 @@ namespace MonoTests.System.Net.Http {
 					var nativeClient = new HttpClient (nativeHandler);
 					var nativeResponse = await nativeClient.GetAsync (url);
 					nativeCookieResult = await nativeResponse.Content.ReadAsStringAsync ();
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -216,6 +222,8 @@ namespace MonoTests.System.Net.Http {
 					var nativeClient = new HttpClient (nativeHandler);
 					var nativeResponse = await nativeClient.GetAsync (url);
 					nativeCookieResult = await nativeResponse.Content.ReadAsStringAsync ();
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -263,6 +271,8 @@ namespace MonoTests.System.Net.Http {
 					// the actual cookies sent from the storage
 					nativeResponse = await nativeClient.GetAsync (NetworkResources.Httpbin.CookiesUrl);
 					nativeCookieResult = await nativeResponse.Content.ReadAsStringAsync ();
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -309,6 +319,8 @@ namespace MonoTests.System.Net.Http {
 					// the actual cookies sent from the storage
 					nativeResponse = await nativeClient.GetAsync (NetworkResources.Httpbin.CookiesUrl);
 					nativeCookieResult = await nativeResponse.Content.ReadAsStringAsync ();
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -371,6 +383,8 @@ namespace MonoTests.System.Net.Http {
 					json = await result.Content.ReadAsStringAsync ();
 					containsAuthorizarion = json.Contains ("Authorization");
 					containsHeaders = json.Contains ("headers");  // ensure we do have the headers in the response
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -463,6 +477,8 @@ namespace MonoTests.System.Net.Http {
 					var byteArray = new UTF8Encoding ().GetBytes ("username:password");
 					client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue ("Basic", Convert.ToBase64String (byteArray));
 					result = await client.GetAsync (NetworkResources.Httpbin.GetRedirectUrl (3));
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -522,6 +538,8 @@ namespace MonoTests.System.Net.Http {
 					var byteArray = new UTF8Encoding ().GetBytes ("username:password");
 					client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue ("Basic", Convert.ToBase64String (byteArray));
 					var result = await client.GetAsync (NetworkResources.Httpbin.GetRedirectUrl (3));
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -539,6 +557,8 @@ namespace MonoTests.System.Net.Http {
 					Assert.AreNotEqual (ex.InnerException.Message, "Error: TrustFailure");
 				}
 			}
+			if (ex is not null)
+				throw ex;
 		}
 
 #if NET
@@ -569,6 +589,8 @@ namespace MonoTests.System.Net.Http {
 				try {
 					var client = new HttpClient (handler);
 					result = await client.GetAsync (url);
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -608,6 +630,8 @@ namespace MonoTests.System.Net.Http {
 						if (errors == SslPolicyErrors.RemoteCertificateChainErrors && TestRuntime.IsInCI)
 							return false;
 						Assert.AreEqual (SslPolicyErrors.None, errors);
+					} catch (ResultStateException) {
+						throw;
 					} catch (Exception e) {
 						ex2 = e;
 					}
@@ -619,6 +643,8 @@ namespace MonoTests.System.Net.Http {
 				try {
 					var client = new HttpClient (handler);
 					result = await client.GetAsync (url);
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -672,8 +698,10 @@ namespace MonoTests.System.Net.Http {
 			TestRuntime.RunAsync (DateTime.Now.AddSeconds (30), async () => {
 				try {
 
-					var result = await client.GetAsync ($"https://httpbin.org/basic-auth/{validUsername}/{validPassword}");
+					var result = await client.GetAsync (NetworkResources.Httpbin.GetBasicAuthUrl (validUsername, validPassword));
 					httpStatus = result.StatusCode;
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -695,7 +723,7 @@ namespace MonoTests.System.Net.Http {
 		{
 			var username = "mandel";
 			var password = "12345678";
-			var url = $"https://httpbin.org/basic-auth/{username}/{password}";
+			var url = NetworkResources.Httpbin.GetBasicAuthUrl (username, password);
 			// perform two requests, one that will get a 200 with valid creds, one that wont and assert that
 			// the second call does get a 401
 			// create a http client to use with some creds that we do know are not valid
@@ -713,6 +741,8 @@ namespace MonoTests.System.Net.Http {
 
 					var result = await firstClient.GetAsync (url);
 					httpStatus = result.StatusCode;
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {
@@ -743,6 +773,8 @@ namespace MonoTests.System.Net.Http {
 
 					var result = await secondClient.GetAsync (url);
 					httpStatus = result.StatusCode;
+				} catch (ResultStateException) {
+					throw;
 				} catch (Exception e) {
 					ex = e;
 				} finally {

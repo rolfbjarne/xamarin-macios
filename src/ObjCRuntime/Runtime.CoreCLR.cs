@@ -145,6 +145,8 @@ namespace ObjCRuntime {
 			ObjectiveCMarshal.Initialize (beginEndCallback, isReferencedCallback, trackedObjectEnteredFinalization, UnhandledExceptionPropagationHandler);
 
 			AssemblyLoadContext.Default.Resolving += ResolvingEventHandler;
+
+			NSLog ("InitializeCoreCLRBridge () COMPLETE");
 		}
 
 		[DllImport ("__Internal")]
@@ -500,13 +502,22 @@ namespace ObjCRuntime {
 		static IntPtr GetAssemblyName (IntPtr gchandle)
 		{
 			var asm = (Assembly?) GetGCHandleTarget (gchandle);
-			return Marshal.StringToHGlobalAuto (Path.GetFileName (asm?.Location));
+			return Marshal.StringToHGlobalAuto (asm?.GetName ()?.Name);
 		}
 
 		static IntPtr GetAssemblyLocation (IntPtr gchandle)
 		{
 			var asm = (Assembly?) GetGCHandleTarget (gchandle);
-			return Marshal.StringToHGlobalAuto (asm?.Location);
+			if (asm is null)
+				return IntPtr.Zero;
+
+			string location;
+			if (IsNativeAOT) {
+				location = Path.Combine (System.AppContext.BaseDirectory, asm.GetName ().Name + ".dll");
+			} else {
+				location = asm.Location;
+			}
+			return Marshal.StringToHGlobalAuto (location);
 		}
 
 		static void SetFlagsForNSObject (IntPtr gchandle, byte flags)

@@ -15,6 +15,7 @@ using Foundation;
 using UIKit;
 using NUnit.Framework;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonoTouchFixtures.UIKit {
 
@@ -93,11 +94,9 @@ namespace MonoTouchFixtures.UIKit {
 		[Test]
 		public void GenericCallbackTest ()
 		{
-			var didRun = false;
-			var callbackEvent = new AutoResetEvent (false);
+			var callbackEvent = new TaskCompletionSource<bool> ();
 			Action<UITapGestureRecognizer> callback = (UITapGestureRecognizer _) => {
-				didRun = true;
-				callbackEvent.Set ();
+				callbackEvent.TrySetResult (true);
 			};
 
 			using var recognizer = new UITapGestureRecognizer (callback);

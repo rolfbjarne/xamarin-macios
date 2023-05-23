@@ -31,6 +31,8 @@ namespace MonoTouchFixtures.HealthKit {
 		{
 #if MONOMAC
 			TestRuntime.AssertXcodeVersion (14, 0);
+#else
+			TestRuntime.AssertXcodeVersion (11, 0);
 #endif
 
 			var store = new HKHealthStore ();

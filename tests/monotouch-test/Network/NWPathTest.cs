@@ -167,6 +167,8 @@ namespace MonoTouchFixtures.Network {
 		[Test]
 		public void EnumerateGatewayTest ()
 		{
+			TestRuntime.AssertXcodeVersion (11, 0);
+
 			var e1 = new ManualResetEvent (false);
 			var e2 = new ManualResetEvent (false);
 			var monitor = new NWPathMonitor ();

@@ -97,7 +97,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 		public void TestBuiltInPlugInsUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.BuiltInPlugInsUrl.ToString (), Contains.Substring ("PlugIns/"));
+			Assert.That (main.BuiltInPlugInsUrl.ToString (), Does.Contain ("PlugIns/"));
 		}
 
 		[Test]
@@ -119,7 +119,7 @@ namespace MonoTouchFixtures.CoreFoundation {
 		public void TestPrivateFrameworksUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.PrivateFrameworksUrl.ToString (), Contains.Substring ("Frameworks/"));
+			Assert.That (main.PrivateFrameworksUrl.ToString (), Does.Contain ("Frameworks/"));
 		}
 
 		[Test]
@@ -133,14 +133,14 @@ namespace MonoTouchFixtures.CoreFoundation {
 		public void TestSharedFrameworksUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.SharedFrameworksUrl.ToString (), Contains.Substring ("SharedFrameworks/"));
+			Assert.That (main.SharedFrameworksUrl.ToString (), Does.Contain ("SharedFrameworks/"));
 		}
 
 		[Test]
 		public void TestSharedSupportUrl ()
 		{
 			var main = CFBundle.GetMain ();
-			Assert.That (main.SharedSupportUrl.ToString (), Contains.Substring ("SharedSupport/"));
+			Assert.That (main.SharedSupportUrl.ToString (), Does.Contain ("SharedSupport/"));
 		}
 
 		[Test]

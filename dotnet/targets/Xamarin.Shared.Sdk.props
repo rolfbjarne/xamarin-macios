@@ -109,4 +109,10 @@
 	<PropertyGroup Condition="'$(MtouchUseLlvm)' == '' And '$(Configuration)' == 'Release' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS')">
 		<MtouchUseLlvm>true</MtouchUseLlvm>
 	</PropertyGroup>
+
+	<!-- Various options when using NativeAOT -->
+	<PropertyGroup Condition="'$(PublishAot)' == 'true'">
+		<!-- This works around an issue in NativeAOT: https://github.com/dotnet/runtime/issues/86186 -->
+		<IlcKeepManagedDebuggerSupport>true</IlcKeepManagedDebuggerSupport>
+	</PropertyGroup>
 </Project>

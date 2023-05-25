@@ -24,6 +24,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 	[Preserve (AllMembers = true)]
 	public class ResourcesTest {
 
+#if NATIVEAOT
+		[Ignore ("NativeAOT doesn't seem to support resource assemblies")]
+#endif
 		[Test]
 		public void Embedded ()
 		{

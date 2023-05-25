@@ -2,12 +2,55 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+    <DefineConstants>$(DefineConstants);NATIVEAOT</DefineConstants>
   </PropertyGroup>
 
+
+
+
+
+
+
+  <!-- NativeAOT hacks -->
+
+  <PropertyGroup>
+    <MtouchLink>Full</MtouchLink>
+    <IlcKeepManagedDebuggerSupport>true</IlcKeepManagedDebuggerSupport> <!-- https://github.com/dotnet/runtime/issues/86186 -->
+    <EnableAssemblyILStripping>false</EnableAssemblyILStripping>
+    <CustomNativeMain>true</CustomNativeMain>
+    <IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_XamarinILLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
+  </PropertyGroup>
+
+<!--   <ItemGroup>
+    <CustomLinkerArg Include="-miphoneos-version-min=11.0" />
+    <CustomLinkerArg Include="-isysroot /Applications/Xcode_14.3.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk" />
+  </ItemGroup>
+ -->
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->
   <Import Project="../shared.csproj" />
 
   <ItemGroup>
     <!-- this empty item group is here for xharness -->
   </ItemGroup>
+
+  <PropertyGroup>
+    <MtouchLink>Full</MtouchLink>
+  </PropertyGroup>
+
+  <Target Name="_XamarinComputeIlcCompileInputsBefore" BeforeTargets="_XamarinComputeIlcCompileInputs">
+    <ItemGroup>
+      <LinkerArg Remove="-lswiftCore" />
+      <LinkerArg Remove="-lswiftFoundation" />
+      <LinkerArg Remove="-L/usr/lib/swift" />
+      <_CustomLinkFlags Include="-framework" />
+      <_CustomLinkFlags Include="GSS" />
+
+      <!-- <AutoInitializedAssemblies Remove="@(AutoInitializedAssemblies)" /> -->
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyNativeBinary2" BeforeTargets="CopyNativeBinary">
+    <MakeDir Directories="$(NativeOutputPath)" />
+    <Touch AlwaysCreate="true" Files="$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" />
+  </Target>
 </Project>

@@ -1,6 +1,7 @@
 include ../shared.mk
 
 dev:
+	rm -rf bin obj
 	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64"
 
 llvm:
@@ -14,3 +15,10 @@ norm:
 
 run-norm:
 	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64                       /p:MtouchLink=SdkOnly /p:Configuration=Release-norm /bl:$@.binlog /t:Run"
+
+nativeaot:
+	rm -rf bin obj
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:MtouchLink=Full /p:Configuration=Release /p:PublishAotUsingRuntimePack=true /bl:$@.binlog"
+
+run-nativeaot:
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:MtouchLink=Full /p:Configuration=Release /p:PublishAotUsingRuntimePack=true /bl:$@.binlog /t:Run"

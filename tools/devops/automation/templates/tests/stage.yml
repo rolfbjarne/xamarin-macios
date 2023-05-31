@@ -184,7 +184,7 @@ stages:
           ####               )
           ####             )
 
-    #condition: ne(dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'],'')
+    # condition: ne(dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'],'')
     variables:
       # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
       PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
@@ -195,12 +195,14 @@ stages:
         AgentPoolComputed: $(PRBuildPool)
       ${{ else }}:
         AgentPoolComputed: ${{ parameters.testPool }}
-      WHATEVER1: $[variables.CONDITION_VARIABLE]
+      WHATEVER1: $[ variables.CONDITION_VARIABLE ]
       WHATEVER2: $(CONDITION_VARIABLE)
       WHATEVER3: $[ convertToJson(dependencies) ]
       WHATEVER4: $[ convertToJson(dependencies.configure) ]
-      WHATEVER5: dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]']
-      WHATEVER6: $[ dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'] ]
+      WHATEVER5: dependencies.configure.outputs["configure_platforms.$[variables.CONDITION_VARIABLE]"]
+      WHATEVER6: $[ dependencies.configure.outputs["configure_platforms.$[variables.CONDITION_VARIABLE]"] ]
+      WHATEVER7: dependencies.configure.outputs["configure_platforms.$(CONDITION_VARIABLE)"]
+      WHATEVER8: $[ dependencies.configure.outputs["configure_platforms.$(CONDITION_VARIABLE)"] ]
 
     steps:
     - template: build.yml

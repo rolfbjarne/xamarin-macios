@@ -199,10 +199,10 @@ stages:
       WHATEVER2: $(CONDITION_VARIABLE)
       WHATEVER3: $[ convertToJson(dependencies) ]
       WHATEVER4: $[ convertToJson(dependencies.configure) ]
-      #WHATEVER5: dependencies.configure.outputs["configure_platforms.$[variables.CONDITION_VARIABLE]"]
-      #WHATEVER6: $[ dependencies.configure.outputs["configure_platforms.$[variables.CONDITION_VARIABLE]"] ]
-      WHATEVER7: dependencies.configure.outputs["configure_platforms.$(CONDITION_VARIABLE)"]
-      WHATEVER8: $[ dependencies.configure.outputs["configure_platforms.$(CONDITION_VARIABLE)"] ]
+      WHATEVER5: dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]']
+      WHATEVER6: $[ dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'] ]
+      WHATEVER7: dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)']
+      WHATEVER8: $[ dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'] ]
 
     steps:
     - template: build.yml

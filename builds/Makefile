@@ -103,6 +103,15 @@ dotnet-install.sh: Makefile
 fix-maccatalyst-assembly/bin/Debug/fix-maccatalyst-assembly.exe: $(wildcard fix-maccatalyst-assembly/*.cs*) Makefile
 	$(Q) $(SYSTEM_MSBUILD) "/bl:$@.binlog" /r fix-maccatalyst-assembly/fix-maccatalyst-assembly.csproj $(MSBUILD_VERBOSITY)
 
+apply-filip-patch:
+	$(Q) $(MAKE) .stamp-apply-filip-patch-$(DOTNET_VERSION)
+
+.stamp-apply-filip-patch-$(DOTNET_VERSION):
+	$(Q) cd $(abspath $(TOP)/packages/microsoft.dotnet.ilcompiler/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/build)                 && git start && cat $(CURDIR)/85996-modified.patch | git am -p 5 --ignore-space-change
+	$(Q) cd $(abspath $(TOP)/packages/runtime.osx-x64.microsoft.dotnet.ilcompiler/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/build) && git start && cat $(CURDIR)/85996-modified.patch | git am -p 5 --ignore-space-change
+	$(Q) touch $@
+	$(Q) echo "Applied Filip's fixes"
+
 define FixMacCatalystAssembly
 $(MONO_MACCATALYST_SDK_DESTDIR)/maccat-bcl/monotouch/$(1).dll: .stamp-$(MONO_BUILD_MODE)
 
@@ -161,6 +170,7 @@ package-download/all-package-references.csproj: $(TOP)/.git/HEAD $(TOP)/.git/ind
 		/bl \
 		$(DOTNET_BUILD_VERBOSITY)
 	$(MAKE) .stamp-install-custom-dotnet-runtime-workloads
+	$(Q) make apply-filip-patch
 	$(Q) touch $@
 
 .stamp-install-t4: $(TOP)/.config/dotnet-tools.json .stamp-download-dotnet-packages

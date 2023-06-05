@@ -19,6 +19,12 @@ parameters:
   type: string
   default: '$(MaciosUploadPrefix)'
 
+- name: testConfigurations
+  type: object
+
+- name: supportedPlatforms
+  type: object
+
 steps:
 - template: checkout.yml
   parameters:
@@ -43,6 +49,17 @@ steps:
 - bash: ./xamarin-macios/tools/devops/automation/scripts/bash/configure-decisions.sh
   name: decisions
   displayName: 'Make decisions'
+
+- pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
+    $jsonPath = Join-Path -Path "$(Build.ArtifactStagingDirectory)" -ChildPath "configuration.json"
+    $testMatrix = Get-TestConfiguration
+    Write-Debug "$testMatrix"
+  name: test_matrix
+  displayName: 'Create strategy matrix'
+  env:
+    TEST_CONFIGURATIONS: ${{ parameters.testConfigurations }}
+    SUPPORTED_PLATFORMS: ${{ parameters.supportedPlatforms }}
 
 # upload config to be consumed later
 - ${{ if eq(parameters.uploadArtifacts, true) }}:

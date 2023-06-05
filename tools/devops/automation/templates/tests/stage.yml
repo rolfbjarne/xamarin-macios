@@ -119,6 +119,8 @@ stages:
           commit: ${{ parameters.commit }}
           uploadArtifacts: false
           enableDotnet: ${{ parameters.enableDotnet }}
+          testConfigurations: ${{ parameters.testConfigurations }}
+          supportedPlatforms: ${{ parameters.supportedPlatforms }}
 
   - job: "tests"
     dependsOn:
@@ -188,7 +190,7 @@ stages:
           ####               )
           ####             )
 
-    condition: ne(dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'],'')
+    # condition: ne(dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'],'')
     variables:
       # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
       PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
@@ -207,6 +209,9 @@ stages:
       WHATEVER6: $[ dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'] ]
       WHATEVER7: dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)']
       WHATEVER8: $[ dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'] ]
+      WHATEVER9: $[ convertToJson(parameters) ]
+      WHATEVER10: $[ convertToJson(parameters.testConfigurations) ]
+      WHATEVER11: $[ convertToJson(parameters.supportedPlatforms) ]
 
     steps:
     - template: build.yml

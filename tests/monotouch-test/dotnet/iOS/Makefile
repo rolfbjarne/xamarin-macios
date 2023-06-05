@@ -18,7 +18,7 @@ run-norm:
 
 nativeaot:
 	rm -rf bin obj
-	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:Configuration=Release /bl:$@.binlog"
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:Configuration=Release /bl:$@.binlog"
 
 run-nativeaot:
 	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:Configuration=Release /bl:$@.binlog /t:Run"

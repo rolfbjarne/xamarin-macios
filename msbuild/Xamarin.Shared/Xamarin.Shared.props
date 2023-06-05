@@ -317,12 +317,22 @@ Copyright (C) 2020 Microsoft. All rights reserved.
 		<BTouchToolPath Condition="'$(OS)' == 'Unix' And '$(BTouchToolPath)' == ''">$(_XamarinSdkRoot)/bin/</BTouchToolPath>
 		<BTouchToolPath Condition="'$(OS)' != 'Unix' And '$(_PlatformName)' != 'macOS' And '$(BTouchToolPath)' == ''">$(MSBuildExtensionsPath)\Xamarin\iOS\</BTouchToolPath>
 
+		<BTouchLibPath Condition="'$(OS)' == 'Unix' And '$(BTouchToolPath)' == ''">$(_XamarinSdkRoot)/bin/</BTouchLibPath>
+		<BTouchLibPath Condition="'$(OS)' != 'Unix' And '$(_PlatformName)' != 'macOS' And '$(BTouchToolPath)' == ''">$(MSBuildExtensionsPath)\Xamarin\iOS\</BTouchLibPath>
+
 		<BTouchToolExe  Condition="'$(OS)' == 'Unix' And '$(BTouchToolExe)' == ''">bgen</BTouchToolExe>
 		<BTouchToolExe  Condition="'$(OS)' != 'Unix' And '$(BTouchToolExe)' == ''">bgen.exe</BTouchToolExe>
 
 		<GeneratedSourcesDir Condition="'$(GeneratedSourcesDir)' == ''">$(IntermediateOutputPath)$(_PlatformName)</GeneratedSourcesDir>
 		<GeneratedSourcesDir Condition="'$(GeneratedSourcesDir)' != '' and !HasTrailingSlash ('$(GeneratedSourcesDir)')">$(GeneratedSourcesDir)\</GeneratedSourcesDir>
 		<_GeneratedSourcesFileList>$(GeneratedSourcesDir)sources.list</_GeneratedSourcesFileList>
+
+		<_GeneratorAttributeAssembly Condition="'$(_PlatformName)' == 'iOS'">$(BTouchLibPath)Xamarin.iOS.BindingAttributes.dll</_GeneratorAttributeAssembly>
+		<_GeneratorAttributeAssembly Condition="'$(_PlatformName)' == 'watchOS'">$(BTouchLibPath)Xamarin.WatchOS.BindingAttributes.dll</_GeneratorAttributeAssembly>
+		<_GeneratorAttributeAssembly Condition="'$(_PlatformName)' == 'tvOS'">$(BTouchLibPath)Xamarin.TVOS.BindingAttributes.dll</_GeneratorAttributeAssembly>
+		<_GeneratorAttributeAssembly Condition="'$(_PlatformName)' == 'macOS' And '$(TargetPlatformName)' == 'Modern'">$(BTouchLibPath)Xamarin.Mac-mobile.BindingAttributes.dll</_GeneratorAttributeAssembly>
+		<_GeneratorAttributeAssembly Condition="'$(_PlatformName)' == 'macOS' And '$(TargetPlatformName)' == 'Full'">$(BTouchLibPath)Xamarin.Mac-full.BindingAttributes.dll</_GeneratorAttributeAssembly>
+		<_GeneratorAttributeAssembly Condition="'$(_PlatformName)' == 'macOS' And '$(TargetPlatformName)' == 'System'">$(BTouchLibPath)Xamarin.Mac-full.BindingAttributes.dll</_GeneratorAttributeAssembly>
 
 		<ProcessEnums Condition="'$(ProcessEnums)' == ''">false</ProcessEnums>
 

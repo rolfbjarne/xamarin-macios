@@ -1621,7 +1621,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<WriteLinesToFile File="$(OutputFilePath)" Lines="@(_ComputedRemoteGeneratorProperties)" />
 	</Target>
 
-	<Target Name="_ComputeCompileApiDefinitionsInputs" DependsOnTargets="_ComputeBindingVariables">
+	<PropertyGroup>
+		<_ComputeCompileApiDefinitionsInputsDependsOn Condition="'$(UsingAppleNETSdk)' == 'true'">
+				$(_ComputeCompileApiDefinitionsInputsDependsOn);
+				_ComputeBindingVariables;
+			</_ComputeCompileApiDefinitionsInputsDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_ComputeCompileApiDefinitionsInputs" DependsOnTargets="$(_ComputeCompileApiDefinitionsInputsDependsOn)">
 		<ItemGroup>
 			<BTouchReferencePath Include="@(ReferenceCopyLocalPaths)" Condition="'%(Extension)' == '.dll'" />
 		</ItemGroup>

@@ -107,8 +107,8 @@ apply-filip-patch:
 	$(Q) $(MAKE) .stamp-apply-filip-patch-$(DOTNET_VERSION)
 
 .stamp-apply-filip-patch-$(DOTNET_VERSION):
-	$(Q) cd $(abspath $(TOP)/packages/microsoft.dotnet.ilcompiler/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/build)                 && git init . && git add . && git commit -m "Start" --author 'Temporary <temporary@example.com>' && cat $(CURDIR)/85996-modified.patch | git am -p 5 --ignore-space-change
-	$(Q) cd $(abspath $(TOP)/packages/runtime.osx-x64.microsoft.dotnet.ilcompiler/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/build) && git init . && git add . && git commit -m "Start" --author 'Temporary <temporary@example.com>' && cat $(CURDIR)/85996-modified.patch | git am -p 5 --ignore-space-change
+	$(Q) cd $(abspath $(TOP)/packages/microsoft.dotnet.ilcompiler/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/build)                 && git init . && git config user.email "temporary@example.com" && git config user.name "Temporary" && git add . && git commit -m "Start" && cat $(CURDIR)/85996-modified.patch | git am -p 5 --ignore-space-change
+	$(Q) cd $(abspath $(TOP)/packages/runtime.osx-x64.microsoft.dotnet.ilcompiler/$(BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION)/build) && git init . && git config user.email "temporary@example.com" && git config user.name "Temporary" && git add . && git commit -m "Start" && cat $(CURDIR)/85996-modified.patch | git am -p 5 --ignore-space-change
 	$(Q) touch $@
 	$(Q) echo "Applied Filip's fixes"
 

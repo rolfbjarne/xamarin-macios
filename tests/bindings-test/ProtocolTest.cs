@@ -275,7 +275,7 @@ namespace Xamarin.BindingTests {
 			}
 		}
 
-		static void AssertContains<T> (T[] array, T item, string message) where T: IEquatable<T>
+		static void AssertContains<T> (T [] array, T item, string message) where T : IEquatable<T>
 		{
 			for (var i = 0; i < array.Length; i++) {
 				var element = array [i];

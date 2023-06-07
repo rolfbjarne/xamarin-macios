@@ -1198,9 +1198,6 @@
 		</ItemGroup>
 	</Target>
 
-	<!-- Override the NativeAOT targets -->
-	<Target Name="LinkNative" />
-
 	<PropertyGroup>
 		<_GenerateBindingsDependsOn>
 			_ComputeBindingVariables;

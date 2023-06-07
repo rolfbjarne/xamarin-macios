@@ -135,11 +135,14 @@ steps:
       -t:Install
   displayName: 'Install workloads'
 
-# get and expand the needed libs for monotouch
+# get all our dependencies
 - task: DownloadPipelineArtifact@2
   displayName: Download test libraries dependencies
   inputs:
-    patterns: '**/package-test-libraries.zip'
+    patterns: |
+      **/package-test-libraries.zip
+      package-internal/**
+      not-signed-package/*.nupkg
     allowFailedBuilds: true
     path: $(Build.SourcesDirectory)/artifacts/tmp
 

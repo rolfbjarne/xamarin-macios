@@ -96,9 +96,9 @@ function New-RemoteMacInstallDirectory {
     Copy-Item -Path "$SourcesDirectory/xamarin-macios/NuGet.config" -Destination "$uploadDirectory/NuGet.config"
     Copy-Item -Path "$SourcesDirectory/xamarin-macios/global.json" -Destination "$uploadDirectory/global.json"
     Copy-Item -Path "$SourcesDirectory/xamarin-macios/tests/dotnet/Windows/install-on-mac.sh" -Destination "$uploadDirectory/install-on-mac.sh"
-    Copy-Item -Path "$ArtifactsDirectory/tmp/package-internal/WorkloadRollback/WorkloadRollback.json" -Destination "$uploadDirectory/WorkloadRollback.json"
-    Copy-Item -Path "$ArtifactsDirectory/tmp/build-configuration/configuration.json" -Destination "$uploadDirectory/configuration.json"
-    Copy-Item -Path "$ArtifactsDirectory/tmp/not-signed-package/*.nupkg" -Destination "$uploadDirectory/nupkg"
+    Copy-Item -Path "$ArtifactsDirectory/WorkloadRollback/WorkloadRollback.json" -Destination "$uploadDirectory/WorkloadRollback.json"
+    Copy-Item -Path "$ArtifactsDirectory/build-configuration/configuration.json" -Destination "$uploadDirectory/configuration.json"
+    Copy-Item -Path "$ArtifactsDirectory/not-signed-package/*.nupkg" -Destination "$uploadDirectory/nupkg"
 
     # Get-ChildItem -Path $uploadDirectory | Write-Host
     

@@ -118,21 +118,9 @@ steps:
       -t:Install
   displayName: 'Install workloads'
 
-# get all our dependencies
-- task: DownloadPipelineArtifact@2
-  displayName: Download test libraries dependencies
-  inputs:
-    patterns: |
-      **/package-test-libraries.zip
-      package-internal/**
-      not-signed-package/*.nupkg
-      build-configuration/**
-    allowFailedBuilds: true
-    path: $(Build.SourcesDirectory)/artifacts/tmp
-
 # this step replaces the test-libraries dir
 - pwsh: |
-    $zip = "$(Build.SourcesDirectory)/artifacts/tmp/${{ parameters.uploadPrefix }}package-test-libraries/package-test-libraries.zip"
+    $zip = "$(Build.SourcesDirectory)/artifacts/${{ parameters.uploadPrefix }}package-test-libraries/package-test-libraries.zip"
     $target = "$(Build.SourcesDirectory)/xamarin-macios"
     Expand-Archive -Force $zip -DestinationPath $target
     Get-ChildItem "$target" -Recurse

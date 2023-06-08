@@ -127,7 +127,7 @@ static class Program {
 		} else if (string.IsNullOrEmpty (target)) {
 			Console.Error.WriteLine ($"The --target argument is required.");
 			return 1;
-		} else if (!File.Exists (source) && !Directory.Exists (source)) {
+		} else if (!File.Exists (source) && !Directory.Exists (source)) {
 			Console.Error.WriteLine ($"The file or directory '{source}' does not exist.");
 			return 1;
 		}

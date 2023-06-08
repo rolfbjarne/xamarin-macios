@@ -138,8 +138,8 @@ steps:
 
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
-    $uploadDirectory = New-RemoteMacInstallDirectory -SourcesDirectory $(Build.SourcesDirectory) -ArtifactsDirectory $(Build.SourcesDirectory)/artifacts
-    Install-DotNetOnRemoteMac -DotNet "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe" -UploadDirectory $uploadDirectory -RemoteHost $Env:MAC_AGENT_IP -RemoteUserName builder -RemotePasswordEnvironmentVariable XMA_PASSWORD
+    $uploadDirectory = New-RemoteMacInstallDirectory -SourcesDirectory "$(Build.SourcesDirectory)" -ArtifactsDirectory "$(Build.SourcesDirectory)/artifacts"
+    Install-DotNetOnRemoteMac -DotNet "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe" -UploadDirectory "$(Build.SourcesDirectory)/artifacts/remote-mac-upload" -RemoteHost $Env:MAC_AGENT_IP -RemoteUserName builder -RemotePasswordEnvironmentVariable XMA_PASSWORD
   displayName: 'Install on Mac'
   continueOnError: true
   env:

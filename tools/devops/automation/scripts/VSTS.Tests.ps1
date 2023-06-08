@@ -191,6 +191,7 @@ Describe 'New-BuildConfiguration' {
                 "BUILD_SOURCEBRANCHNAME" = "BUILD_SOURCEBRANCHNAME"
                 "BUILD_SOURCEVERSION" = "BUILD_SOURCEVERSION"
                 "CONFIGURE_PLATFORMS_DOTNET_PLATFORMS" = "iOS tvOS"
+                "CONFIGURE_PLATFORMS_DOTNET_VERSION" = "1.2.3"
                 "CONFIGURE_PLATFORMS_INCLUDE_DOTNET_TVOS" = "true"
                 "SYSTEM_TEAMFOUNDATIONCOLLECTIONURI" = "SYSTEM_TEAMFOUNDATIONCOLLECTIONURI";
                 "SYSTEM_TEAMPROJECT" = "SYSTEM_TEAMPROJECT";
@@ -211,6 +212,7 @@ Describe 'New-BuildConfiguration' {
   ""BuildSourceBranch"": ""BUILD_SOURCEBRANCH"",
   ""BuildId"": ""BUILD_BUILDID"",
   ""DOTNET_PLATFORMS"": ""iOS tvOS"",
+  ""DOTNET_VERSION"": ""1.2.3"",
   ""INCLUDE_DOTNET_IOS"": null,
   ""INCLUDE_DOTNET_TVOS"": ""true"",
   ""Commit"": ""BUILD_SOURCEVERSION"",
@@ -237,6 +239,7 @@ Describe 'New-BuildConfiguration' {
   ""BuildSourceBranch"": ""BUILD_SOURCEBRANCH"",
   ""BuildId"": ""BUILD_BUILDID"",
   ""DOTNET_PLATFORMS"": ""iOS tvOS"",
+  ""DOTNET_VERSION"": ""1.2.3"",
   ""INCLUDE_DOTNET_IOS"": null,
   ""INCLUDE_DOTNET_TVOS"": ""true"",
   ""Commit"": ""BUILD_SOURCEVERSION"",
@@ -259,6 +262,7 @@ Describe 'Import-BuildConfiguration' {
   ""BuildSourceBranch"": ""BUILD_SOURCEBRANCH"",
   ""BuildId"": ""BUILD_BUILDID"",
   ""DOTNET_PLATFORMS"": ""iOS tvOS"",
+  ""DOTNET_VERSION"": ""1.2.3"",
   ""INCLUDE_DOTNET_IOS"": null,
   ""INCLUDE_DOTNET_TVOS"": ""true"",
   ""Commit"": ""BUILD_SOURCEVERSION"",

@@ -14,6 +14,7 @@
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.LinkNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.MergeAppBundles" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ILStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.OneToManyItems" AssemblyFile="$(_XamarinTaskAssembly)" />
 
 	<!-- Project types and how do we distinguish between them
 
@@ -1205,11 +1206,30 @@
 			<!-- Link in the output from ILC -->
 			<_NativeExecutableObjectFiles Include="$(NativeObject)" />
 
-			<!-- VERIFY: not sure what this is about -->
-			<LinkerArg Remove="@(NativeFramework->'-framework %(Identity)')" />
+		</ItemGroup>
 
-			<!-- Collect all the naive linker args ILC would have used and use them ourselves when we link -->
-			<_CustomLinkFlags Include="@(LinkerArg)" />
+		<!--
+
+			Collect all the native linker args ILC would have used and use them ourselves when we link natively.
+
+			Unfortunately there's a major difference between LinkerArgs (as used by ILC) and our _CustomLinkerFlags:
+			ILC splits on space in LinkerArg, while we quote any items in _CustomLinkerFlags.
+
+			Example:
+				<LinkerArg Include="-framework UIKit" />  => ILC will pass that as two arguments to the native compiler
+				<_CustomLinkFlags Include="-framework UIKit" /> => we'll pass that as a single argument to the native compiler (which is wrong)
+
+			So we need to convert the list of space-separated items in LinkerArg to space-preserved items in _CustomLinkFlags.
+
+			This is *suprisingly hard* to do in MSBuild... I haven't found a way except using a custom task.
+
+		-->
+		<OneToManyItems Items="@(LinkerArg)">
+			<Output ItemName="_LinkerArgsSplitBySpace" TaskParameter="OutputItems" />
+		</OneToManyItems>
+
+		<ItemGroup>
+			<_CustomLinkFlags Include="@(_LinkerArgsSplitBySpace)" />
 		</ItemGroup>
 	</Target>
 

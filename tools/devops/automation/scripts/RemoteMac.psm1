@@ -6,6 +6,10 @@ function Install-DotNetOnRemoteMac {
     param (
         [Parameter(Mandatory)]
         [string]
+        $SourcesDirectory,
+
+        [Parameter(Mandatory)]
+        [string]
         $DotNet,
 
         [Parameter(Mandatory)]

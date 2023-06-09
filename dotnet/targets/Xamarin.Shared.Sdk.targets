@@ -1188,15 +1188,13 @@
 			<_UpdatedManagedAssemblyToLink Include="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')" Condition="Exists('$(IntermediateLinkDir)%(Filename)%(Extension)')" />
 			<ManagedAssemblyToLink Remove="@(ManagedAssemblyToLink)" />
 			<ManagedAssemblyToLink Include="@(PrivateSdkAssemblies);@(_UpdatedManagedAssemblyToLink)" />
+			<ManagedBinary Include="$(IntermediateLinkDir)$(TargetName)$(TargetExt)" />
+			<IlcCompileInput Include="@(ManagedBinary)" />
+			<IlcReference Include="@(ManagedAssemblyToLink)" Exclude="@(ManagedBinary)" />
 
 			<!-- Process UnmanagedCallersOnly attributes from every assembly -->
 			<UnmanagedEntryPointsAssembly Remove="System.Private.CoreLib" />
 			<UnmanagedEntryPointsAssembly Include="@(_UpdatedManagedAssemblyToLink->'%(Filename)')" />
-
-			<!-- Give ILLink's output to ILC -->
-			<ManagedBinary Include="$(IntermediateLinkDir)$(TargetName)$(TargetExt)" />
-			<IlcCompileInput Include="@(ManagedBinary)" />
-			<IlcReference Include="@(ManagedAssemblyToLink)" Exclude="@(ManagedBinary)" />
 
 			<!-- VERIFY: not sure what this is about -->
 			<TrimmerRootAssembly Remove="@(TrimmerRootAssembly)" />

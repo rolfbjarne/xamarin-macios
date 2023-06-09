@@ -9,37 +9,4 @@
 		<ApplicationVersion>3.14</ApplicationVersion>
 		<CustomBeforeMicrosoftCommonTargets>$(CustomBeforeMicrosoftCommonTargets);$(MSBuildThisFileDirectory)../../common/SupportedOSPlatformVersions.targets</CustomBeforeMicrosoftCommonTargets>
 	</PropertyGroup>
-
-	<!-- NativeAOT hacks -->
-
-	<PropertyGroup>
-		<MtouchLink>None</MtouchLink>
-		<IlcKeepManagedDebuggerSupport>true</IlcKeepManagedDebuggerSupport> <!-- https://github.com/dotnet/runtime/issues/86186 -->
-		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
-		<CustomNativeMain>true</CustomNativeMain>
-		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_XamarinILLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
-		<!-- <MtouchExtraArgs>- -linkskip=System.Private.CoreLib.dll - -linkskip=System.Private.CoreLib</MtouchExtraArgs> -->
-	</PropertyGroup>
-
-	<ItemGroup>
-		<!-- <LinkDescription Include="linker.xml" /> -->
-		<!-- <TrimmerRootAssembly Include="System.Private.CoreLib" /> -->
-		<!-- <CustomLinkerArg Include="-miphoneos-version-min=11.0" />
-		<CustomLinkerArg Include="-isysroot /Applications/Xcode_14.3.0.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk" /> -->
-	</ItemGroup>
-
-	<Target Name="_XamarinComputeIlcCompileInputsBefore" BeforeTargets="_XamarinComputeIlcCompileInputs">
-		<ItemGroup>
-			<LinkerArg Remove="-lswiftCore" />
-			<LinkerArg Remove="-lswiftFoundation" />
-			<LinkerArg Remove="-L/usr/lib/swift" />
-
-			<!-- <AutoInitializedAssemblies Remove="@(AutoInitializedAssemblies)" /> -->
-		</ItemGroup>
-	</Target>
-
-	<Target Name="CopyNativeBinary2" BeforeTargets="CopyNativeBinary">
-		<MakeDir Directories="$(NativeOutputPath)" />
-		<Touch AlwaysCreate="true" Files="$(NativeOutputPath)$(TargetName)$(NativeBinaryExt)" />
-	</Target>
 </Project>

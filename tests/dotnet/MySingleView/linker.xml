@@ -1,7 +1,0 @@
-<linker>
-	<assembly fullname="System.Private.CoreLib">
-		<!-- <type fullname="Internal.Runtime.CompilerHelpers.ThrowHelpers" />
-		<type fullname="System.Array" />
-		<type fullname="System.Array`1" /> -->
-    </assembly>
-</linker>

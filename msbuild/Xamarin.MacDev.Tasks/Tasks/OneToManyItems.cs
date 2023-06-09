@@ -10,10 +10,10 @@ using Microsoft.Build.Utilities;
 namespace Xamarin.MacDev.Tasks {
 	public class OneToManyItems : Task {
 		[Required]
-		public ITaskItem[] Items { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] Items { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Output]
-		public ITaskItem[] OutputItems { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] OutputItems { get; set; } = Array.Empty<ITaskItem> ();
 
 		public override bool Execute ()
 		{

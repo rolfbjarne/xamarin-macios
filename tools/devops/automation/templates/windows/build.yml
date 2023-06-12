@@ -137,6 +137,30 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    Get-NetIPAddress | Write-Host
+  displayName: 'Print network info A'
+  continueOnError: true
+
+- pwsh: |
+    & ipconfig
+  displayName: 'Print network info B'
+  continueOnError: true
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    & $(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe `
+       run --project "$(Build.SourcesDirectory)\xamarin-macios\tools\sshenv\sshenv.csproj" `
+       -- `
+       --host $Env:MAC_AGENT_IP `
+       --user builder `
+       --penv XMA_PASSWORD `
+       ls -la
+  displayName: 'Check the Mac'
+  continueOnError: true
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $uploadDirectory = New-RemoteMacInstallDirectory -SourcesDirectory "$(Build.SourcesDirectory)" -ArtifactsDirectory "$(Build.SourcesDirectory)/artifacts"
     Install-DotNetOnRemoteMac -SourcesDirectory "$(Build.SourcesDirectory)" -DotNet "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe" -UploadDirectory "$(Build.SourcesDirectory)/artifacts/remote-mac-upload" -RemoteHost $Env:MAC_AGENT_IP -RemoteUserName builder -RemotePasswordEnvironmentVariable XMA_PASSWORD

@@ -1,4 +1,4 @@
-<# 
+<#
     .SYNOPSIS
         Installs .NET on a remote Mac, together with our workloads.
 #>
@@ -76,11 +76,12 @@ function Install-DotNetOnRemoteMac {
       --penv $RemotePasswordEnvironmentVariable `
       "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
 
-    return    
+    return
 }
-<# 
+
+<#
     .SYNOPSIS
-        Installs .NET on a remote Mac, together with our workloads.
+        Creates a directory of files needed to install workloads on a remote mac.
 #>
 function New-RemoteMacInstallDirectory {
     param (
@@ -105,7 +106,7 @@ function New-RemoteMacInstallDirectory {
     Copy-Item -Path "$ArtifactsDirectory/not-signed-package/*.nupkg" -Destination "$uploadDirectory/nupkg"
 
     # Get-ChildItem -Path $uploadDirectory | Write-Host
-    
+
     return $uploadDirectory
 }
 

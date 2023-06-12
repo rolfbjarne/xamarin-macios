@@ -1202,6 +1202,29 @@
 			<_NativeExecutableObjectFiles Include="$(NativeObject)" />
 		</ItemGroup>
 
+		<ItemGroup>
+			<!--
+
+				ILLink's build logic will add @(IntermediateAssembly) to
+				TrimmerRootAssembly. ILC understands TrimmerRootAssembly, and
+				will root such assemblies. The problem is that
+				TrimmerRootAssembly is documented to be just the assembly name
+				(no path/extension), but IntermediateAssembly is the relative
+				path to the assembly, and then ILC doesn't like that. So let's
+				just undo what ILLink did, and do it again the right way.
+
+				Here we first create the intersection of TrimmerRootAssembly
+				and IntermediateAssembly (so that we only add the fixed
+				versions of IntermediateAssembly to TrimmerRootAssembly if
+				it's already there in the first place), then we remove it from
+				TrimmerRootAssembly, before adding the fixed version back.
+
+			-->
+			<_TrimmerRootAssemblyButOnlyIntermediateAssembly Include="@(TrimmerRootAssembly)" Condition="'@(TrimmerRootAssembly)' == '@(IntermediateAssembly)' And '%(Identity)' != ''" />
+			<TrimmerRootAssembly Remove="@(_TrimmerRootAssemblyButOnlyIntermediateAssembly)" />
+			<TrimmerRootAssembly Include="@(_TrimmerRootAssemblyButOnlyIntermediateAssembly->'%(Filename)')" />
+		</ItemGroup>
+
 		<!--
 
 			Collect all the native linker args ILC would have used and use

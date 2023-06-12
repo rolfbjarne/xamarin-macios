@@ -74,7 +74,25 @@ function Install-DotNetOnRemoteMac {
       --host $RemoteHost `
       --user $RemoteUserName `
       --penv $RemotePasswordEnvironmentVariable `
+      ls -la "/Users/$RemoteUserName/remote_build_testing"
+
+    & $DotNet `
+      run `
+      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
+      -- `
+      --host $RemoteHost `
+      --user $RemoteUserName `
+      --penv $RemotePasswordEnvironmentVariable `
       "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+
+    & $DotNet `
+      run `
+      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
+      -- `
+      --host $RemoteHost `
+      --user $RemoteUserName `
+      --penv $RemotePasswordEnvironmentVariable `
+      ls -la "/Users/$RemoteUserName/remote_build_testing"
 
     return
 }

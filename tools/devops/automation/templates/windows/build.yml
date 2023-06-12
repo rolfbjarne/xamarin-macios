@@ -157,6 +157,7 @@ steps:
        ls -la
   displayName: 'Check the Mac'
   continueOnError: true
+  timeoutInMinutes: 5
   env:
     XMA_PASSWORD: $(XMA.Password)
 
@@ -166,6 +167,7 @@ steps:
     Install-DotNetOnRemoteMac -SourcesDirectory "$(Build.SourcesDirectory)" -DotNet "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe" -UploadDirectory "$(Build.SourcesDirectory)/artifacts/remote-mac-upload" -RemoteHost $Env:MAC_AGENT_IP -RemoteUserName builder -RemotePasswordEnvironmentVariable XMA_PASSWORD
   displayName: 'Install on Mac'
   continueOnError: true
+  timeoutInMinutes: 30
   env:
     XMA_PASSWORD: $(XMA.Password)
 
@@ -180,6 +182,7 @@ steps:
       "-bl:$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/MySimpleApp/iOS/MySimpleApp.binlog"
   displayName: 'Try to build test'
   continueOnError: true
+  timeoutInMinutes: 30
   env:
     XMA_PASSWORD: $(XMA.Password)
 

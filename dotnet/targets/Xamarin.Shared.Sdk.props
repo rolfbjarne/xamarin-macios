@@ -114,5 +114,11 @@
 	<PropertyGroup Condition="'$(PublishAot)' == 'true'">
 		<!-- This works around an issue in NativeAOT: https://github.com/dotnet/runtime/issues/86186 -->
 		<IlcKeepManagedDebuggerSupport>true</IlcKeepManagedDebuggerSupport>
+
+		<!-- Disable our own assembly IL stripping logic, because ILC does that already -->
+		<EnableAssemblyILStripping>false</EnableAssemblyILStripping>
+
+		<!-- We're using our own native main function when using NativeAOT -->
+		<CustomNativeMain>true</CustomNativeMain>
 	</PropertyGroup>
 </Project>

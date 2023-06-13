@@ -1,5 +1,102 @@
 <#
     .SYNOPSIS
+        Executes a command on a remote machine using sshenv
+#>
+
+function Invoke-SshEnvCommand {
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $SourcesDirectory,
+
+        [Parameter(Mandatory)]
+        [string]
+        $DotNet,
+
+        [Parameter(Mandatory)]
+        [string]
+        $RemoteHost,
+
+        [Parameter(Mandatory)]
+        [string]
+        $RemoteUserName,
+
+        [Parameter(Mandatory)]
+        [string]
+        $RemotePasswordEnvironmentVariable,
+
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [string[]]
+        $CommandArguments
+    )
+
+    $cmd = [System.String]::Join(" ", $CommandArguments)
+
+    & $DotNet `
+      run `
+      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
+      -- `
+      --host $RemoteHost `
+      --user $RemoteUserName `
+      --penv $RemotePasswordEnvironmentVariable `
+      $cmd
+    if ($LastExitCode -ne 0) {
+        throw [System.Exception]::new("Failed to execute sshenv command")
+    }
+}
+
+<#
+    .SYNOPSIS
+        Uploads a file or directory to a remote machine using sshenv
+#>
+function Invoke-SshEnvUpload {
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $SourcesDirectory,
+
+        [Parameter(Mandatory)]
+        [string]
+        $DotNet,
+
+        [Parameter(Mandatory)]
+        [string]
+        $RemoteHost,
+
+        [Parameter(Mandatory)]
+        [string]
+        $RemoteUserName,
+
+        [Parameter(Mandatory)]
+        [string]
+        $RemotePasswordEnvironmentVariable,
+
+        [Parameter(Mandatory)]
+        [string]
+        $Source,
+
+        [Parameter(Mandatory)]
+        [string]
+        $Target
+    )
+
+    & $DotNet `
+      run `
+      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
+      -- `
+      --host $RemoteHost `
+      --user $RemoteUserName `
+      --penv $RemotePasswordEnvironmentVariable `
+      --mode upload `
+      --source $Source `
+      --target $Target `
+    if ($LastExitCode -ne 0) {
+        throw [System.Exception]::new("Failed to execute sshenv upload")
+    }
+}
+
+<#
+    .SYNOPSIS
         Installs .NET on a remote Mac, together with our workloads.
 #>
 function Install-DotNetOnRemoteMac {
@@ -29,90 +126,17 @@ function Install-DotNetOnRemoteMac {
         $RemotePasswordEnvironmentVariable
     )
 
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable rm -rf "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
 
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      rm -rf "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvUpload  -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
 
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      ls -la "/Users/$RemoteUserName"
-
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      --mode upload `
-      --source $UploadDirectory `
-      --target "/Users/$RemoteUserName/remote_build_testing"
-
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      ls -la "/Users/$RemoteUserName/remote_build_testing"
-
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      ls -la "/Users/$RemoteUserName"
-
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      ls -la "/Users/$RemoteUserName/remote_build_testing"
-
-    return
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
 }
 
 <#

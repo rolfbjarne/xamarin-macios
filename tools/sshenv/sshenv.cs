@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Mono.Options;
 
@@ -112,11 +115,50 @@ static class Program {
 		using var client = new SshClient (Host, UserName, Password);
 		client.Connect ();
 		using var cmd = client.CreateCommand (StringUtils.FormatArguments (arguments));
-		Console.WriteLine ($"Executing command: {cmd.CommandText}");
-		var rv = cmd.Execute ();
-		Console.WriteLine (rv);
+		Console.WriteLine ($"Executing command: '{cmd.CommandText}'");
 
-		return 0;
+		var result = cmd.BeginExecute ();
+
+		ReadStream (cmd.OutputStream, Console.WriteLine, result);
+		ReadStream (cmd.ExtendedOutputStream, Console.Error.WriteLine, result);
+
+		cmd.EndExecute (result);
+
+		Console.WriteLine ($"Executed command: '{cmd.CommandText}' Exit Status: {cmd.ExitStatus}");
+		return cmd.ExitStatus;
+	}
+
+	static Task ReadStream (Stream streamToRead, Action<string> write, IAsyncResult asyncResult)
+	{
+		var tcs = new TaskCompletionSource<bool> ();
+		var readerThread = new Thread ((v) => {
+			try {
+				using var reader = new StreamReader (streamToRead, Encoding.UTF8, leaveOpen: true);
+				while (true) {
+					if (asyncResult.IsCompleted) {
+						Console.WriteLine ($"IsCompleted");
+						tcs.SetResult (true);
+						return;
+					}
+					if (reader.EndOfStream) {
+						// This isn't accurate for some reason, we may still get data.
+						Thread.Sleep (1);
+						continue;
+					}
+					var line = reader.ReadLine ();
+					if (line is null)
+						continue;
+
+					write (line);
+				}
+			} catch (Exception e) {
+				tcs.SetException (e);
+			}
+		});
+		readerThread.IsBackground = true;
+		readerThread.Start ();
+
+		return tcs.Task;
 	}
 
 	static int Upload (string source, string target)

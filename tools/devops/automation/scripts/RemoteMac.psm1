@@ -126,17 +126,17 @@ function Install-DotNetOnRemoteMac {
         $RemotePasswordEnvironmentVariable
     )
 
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable rm -rf "/Users/$RemoteUserName/remote_build_testing"
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable rm -rf "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
 
-    Invoke-SshEnvUpload  -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvUpload  -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
 
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
-    Invoke-SshEnvCommand -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
 }
 
 <#

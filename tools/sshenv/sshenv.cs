@@ -220,7 +220,7 @@ static class Program {
 			throw new Exception ($"The remote file '{target}' already exists.");
 
 		target = target.Replace ('\\', '/');
-	
+
 		var targetDirectory = Path.GetDirectoryName (target);
 		if (!client.Exists (targetDirectory)) {
 			CreateDirectory (client, targetDirectory);

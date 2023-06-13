@@ -232,16 +232,22 @@ static class Program {
 		var finfo = new FileInfo (source);
 		Console.WriteLine ($"Uploading '{source}' to '{target}' - {source.Length} bytes.");
 		using var input = new FileStream (source, FileMode.Open, FileAccess.Read, FileShare.Read);
+		var lastPrint = Stopwatch.StartNew ();
 		client.UploadFile (input, target, false, (v) => {
 			var progress = 100 * (v > 0 ? v / (double) finfo.Length : 0);
 			var elapsedSeconds = watch.Elapsed.TotalSeconds;
 			var bytesPerSecond = elapsedSeconds > 0 ? v / (double) elapsedSeconds : 0;
-			Console.WriteLine ($"    Progress: {v:N}/{finfo.Length:N} bytes uploaded ({progress:0.00}% done) = {bytesPerSecond / 1024 / 1024:0.00} MB/s");
+			lock (input) {
+				if (lastPrint.Elapsed.TotalSeconds > 1) {
+					Console.WriteLine ($"    Progress: {v:N}/{finfo.Length:N} bytes uploaded ({progress:0.00}% done) = {bytesPerSecond / 1024 / 1024:0.00} MB/s");
+					lastPrint = Stopwatch.StartNew ();
+				}
+			}
 		});
 		{
 			var elapsedSeconds = watch.Elapsed.TotalSeconds;
 			var bytesPerSecond = elapsedSeconds > 0 ? finfo.Length / (double) elapsedSeconds : 0;
-			Console.WriteLine ($"Uploading '{source}' to '{target}' is complete in {elapsedSeconds:N} seconds = {bytesPerSecond / 1024 / 1024:0.00} MB/s.");
+			Console.WriteLine ($"Uploaded '{source}' to '{target}' in {elapsedSeconds:N} seconds = {bytesPerSecond / 1024 / 1024:0.00} MB/s.");
 		}
 	}
 

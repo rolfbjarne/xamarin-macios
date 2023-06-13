@@ -190,15 +190,29 @@ static class Program {
 
 	static HashSet<string> createdDirectories = new HashSet<string> ();
 
+	static string GetRemotePath (string path)
+	{
+		return path.Replace ('\\', '/');
+	}
+
+	static string GetRemoteDirectoryName (string path)
+	{
+		var components = GetRemotePath (path).Split ('/');
+		if (components.Length < 2)
+			return string.Empty;
+		return string.Join ('/', components, 0, components.Length - 1);
+	}
+
 	static void CreateDirectory (SftpClient client, string directory)
 	{
+		directory = GetRemotePath (directory);
 		if (createdDirectories.Contains (directory))
 			return;
 
 		if (string.IsNullOrEmpty (directory))
 			return;
 
-		var parentDirectory = Path.GetDirectoryName (directory);
+		var parentDirectory = GetRemoteDirectoryName (directory);
 		if (parentDirectory != directory)
 			CreateDirectory (client, parentDirectory);
 
@@ -216,12 +230,10 @@ static class Program {
 		if (target.EndsWithDirectorySeparatorChar ())
 			target = Path.Combine (target, Path.GetFileName (source));
 
-		if (client.Exists (target))
-			throw new Exception ($"The remote file '{target}' already exists.");
-
-		target = target.Replace ('\\', '/');
-
-		var targetDirectory = Path.GetDirectoryName (target);
+		var targetSystemPath = GetRemotePath (target);
+		if (client.Exists (targetSystemPath))
+			throw new Exception ($"The remote file '{targetSystemPath}' already exists.");
+		var targetDirectory = GetRemoteDirectoryName (targetSystemPath);
 		if (!client.Exists (targetDirectory)) {
 			CreateDirectory (client, targetDirectory);
 		} else {
@@ -232,10 +244,10 @@ static class Program {
 
 		var watch = Stopwatch.StartNew ();
 		var finfo = new FileInfo (source);
-		Console.WriteLine ($"Uploading '{source}' to '{target}' - {source.Length} bytes.");
+		Console.WriteLine ($"Uploading '{source}' to '{targetSystemPath}' - {source.Length} bytes.");
 		using var input = new FileStream (source, FileMode.Open, FileAccess.Read, FileShare.Read);
 		var lastPrint = Stopwatch.StartNew ();
-		client.UploadFile (input, target, false, (v) => {
+		client.UploadFile (input, targetSystemPath, false, (v) => {
 			var progress = 100 * (v > 0 ? v / (double) finfo.Length : 0);
 			var elapsedSeconds = watch.Elapsed.TotalSeconds;
 			var bytesPerSecond = elapsedSeconds > 0 ? v / (double) elapsedSeconds : 0;
@@ -255,6 +267,8 @@ static class Program {
 
 	static void UploadDirectory (SftpClient client, string source, string target)
 	{
+		CreateDirectory (client, GetRemotePath (target));
+
 		var files = Directory.GetFiles (source);
 		foreach (var file in files) {
 			var filename = Path.GetFileName (file);

@@ -2,6 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-tvos</TargetFramework>
+    <PublishAot>true</PublishAot>
+    <_IsPublishing>true</_IsPublishing>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be processed by xharness -->

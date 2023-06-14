@@ -295,8 +295,10 @@ namespace Xharness.Jenkins {
 							clone.Xml.SetProperty ("RuntimeIdentifier", runtime_identifer);
 						if (!string.IsNullOrEmpty (registrar))
 							clone.Xml.SetProperty ("Registrar", registrar);
-						if (publishaot)
+						if (publishaot) {
 							clone.Xml.SetProperty ("PublishAot", "true");
+							clone.Xml.SetProperty ("_IsPublishing", "true"); // quack like "dotnet publish", otherwise PublishAot=true has no effect.
+						}
 						clone.Xml.Save (clone.Path);
 					});
 

@@ -8,4 +8,4 @@ run-llvm:
 
 nativeaot:
 	rm -rf bin obj
-	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=maccatalyst-x64 /p:PublishAot=true /p:Configuration=Release /bl:$@.binlog /v:diag"
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=maccatalyst-x64 /p:PublishAot=true /p:_IsPublishing=true /p:Configuration=Release /bl:$@.binlog /v:diag"

@@ -15,4 +15,4 @@ nativeaot:
 	$(Q) donut publish /p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:Configuration=Release /bl:$@.binlog
 
 run-nativeaot:
-	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:Configuration=Release /bl:$@.binlog /t:Run"
+	$(Q) $(MAKE) build BUILD_ARGUMENTS="/p:RuntimeIdentifier=ios-arm64 /p:PublishAot=true /p:_IsPublishing=true /p:Configuration=Release /bl:$@.binlog /t:Run"

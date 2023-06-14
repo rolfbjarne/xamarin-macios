@@ -44,7 +44,7 @@ function Invoke-SshEnvCommand {
       --penv $RemotePasswordEnvironmentVariable `
       @CommandArguments
     if ($LastExitCode -ne 0) {
-        throw [System.Exception]::new("Failed to execute sshenv command")
+        throw [System.Exception]::new("Failed to execute sshenv command, exit code: $LastExitCode")
     }
 }
 
@@ -137,17 +137,17 @@ function Install-DotNetOnRemoteMac {
         RemotePasswordEnvironmentVariable = $RemotePasswordEnvironmentVariable
     }
 
-    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName"
-    Invoke-SshEnvCommand @(SharedArguments) rm -rf "/Users/$RemoteUserName/remote_build_testing"
-    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand @SharedArguments ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand @SharedArguments rm -rf "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand @SharedArguments ls -la "/Users/$RemoteUserName"
 
-    Invoke-SshEnvUpload  @(SharedArguments) -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvUpload  @SharedArguments -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
 
-    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName/remote_build_testing"
-    Invoke-SshEnvCommand @(SharedArguments) "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-    Invoke-SshEnvCommand @(SharedArguments) "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName"
-    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand @SharedArguments ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand @SharedArguments "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand @SharedArguments "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand @SharedArguments ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand @SharedArguments ls -la "/Users/$RemoteUserName/remote_build_testing"
 }
 
 <#
@@ -183,3 +183,5 @@ function New-RemoteMacInstallDirectory {
 
 Export-ModuleMember -Function New-RemoteMacInstallDirectory
 Export-ModuleMember -Function Install-DotNetOnRemoteMac
+Export-ModuleMember -Function Invoke-SshEnvCommand
+Export-ModuleMember -Function Invoke-SshEnvUpload

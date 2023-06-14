@@ -32,6 +32,9 @@ function Invoke-SshEnvCommand {
 
     $cmd = [System.String]::Join(" ", $CommandArguments)
 
+    Write-Host "Command is: $cmd"
+    Write-Host "There are $($CommandArguments.Length) arguments in the command."
+
     & $DotNet `
       run `
       --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
@@ -39,7 +42,7 @@ function Invoke-SshEnvCommand {
       --host $RemoteHost `
       --user $RemoteUserName `
       --penv $RemotePasswordEnvironmentVariable `
-      $cmd
+      @CommandArguments
     if ($LastExitCode -ne 0) {
         throw [System.Exception]::new("Failed to execute sshenv command")
     }
@@ -126,17 +129,25 @@ function Install-DotNetOnRemoteMac {
         $RemotePasswordEnvironmentVariable
     )
 
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable rm -rf "/Users/$RemoteUserName/remote_build_testing"
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
+    $SharedArguments = @{
+        SourcesDirectory = $SourcesDirectory
+        DotNet = $DotNet
+        RemoteHost = $RemoteHost
+        RemoteUserName = $RemoteUserName
+        RemotePasswordEnvironmentVariable = $RemotePasswordEnvironmentVariable
+    }
 
-    Invoke-SshEnvUpload  -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand @(SharedArguments) rm -rf "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName"
 
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName"
-    Invoke-SshEnvCommand -SourcesDirectory $SourcesDirectory -DotNet $DotNet -RemoteHost $RemoteHost -RemoteUserName $RemoteUserName -RemotePasswordEnvironmentVariable $RemotePasswordEnvironmentVariable ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvUpload  @(SharedArguments) -Source $UploadDirectory -Target "/Users/$RemoteUserName/remote_build_testing"
+
+    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName/remote_build_testing"
+    Invoke-SshEnvCommand @(SharedArguments) "chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand @(SharedArguments) "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName"
+    Invoke-SshEnvCommand @(SharedArguments) ls -la "/Users/$RemoteUserName/remote_build_testing"
 }
 
 <#

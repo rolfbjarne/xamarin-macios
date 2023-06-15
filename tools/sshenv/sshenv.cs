@@ -136,7 +136,6 @@ static class Program {
 				using var reader = new StreamReader (streamToRead, Encoding.UTF8, leaveOpen: true);
 				while (true) {
 					if (asyncResult.IsCompleted) {
-						Console.WriteLine ($"IsCompleted");
 						tcs.SetResult (true);
 						return;
 					}

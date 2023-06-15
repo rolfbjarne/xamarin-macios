@@ -161,7 +161,7 @@ function Install-DotNetOnRemoteMac {
 
     Invoke-SshEnvCommand @SharedArguments -ThrowIfError $false ls -la "/Users/$RemoteUserName/remote_build_testing"
     Invoke-SshEnvCommand @SharedArguments -ThrowIfError $true  chmod +x /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh
-    Invoke-SshEnvCommand @SharedArguments -ThrowIfError $true  "/Users/$RemoteUserName/remote_build_testing/install-on-mac.sh"
+    Invoke-SshEnvCommand @SharedArguments -ThrowIfError $true  /bin/bash -eux -- /Users/$RemoteUserName/remote_build_testing/install-on-mac.sh
     Invoke-SshEnvCommand @SharedArguments -ThrowIfError $false ls -la "/Users/$RemoteUserName"
     Invoke-SshEnvCommand @SharedArguments -ThrowIfError $false ls -la "/Users/$RemoteUserName/remote_build_testing"
 }

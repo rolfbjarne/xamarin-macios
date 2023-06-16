@@ -32,7 +32,9 @@ WORKLOAD_ROLLBACK_FILE=WorkloadRollback.json
 
 echo "Hello from Mac 4"
 
-DOTNET_ARCH=$(arch)
+DOTNET_ARCH=$(arch || true)
+echo "Hello from Mac 4bis ($DOTNET_ARCH)"
+
 if [[ "$DOTNET_ARCH" != "arm64 " ]]; then
 
 	echo "Hello from Mac 5"

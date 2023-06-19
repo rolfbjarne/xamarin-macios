@@ -70,8 +70,7 @@ if ! test -f dotnet-install.sh; then
 	# --retry-all-errors: ignore the definition of insanity and retry even for errors that seem like you'd get the same result (such as 404). This isn't the real purpose, because this will also retry errors that will get a different result (such as connection failures / resets), which apparently --retry doesn't cover.
 	CURL+=(--retry 20 --retry-delay 2 --retry-all-errors)
 
-	echo "Hello from Mac 10
-"
+	echo "Hello from Mac 10"
 	if ! "${CURL[@]}" https://dot.net/v1/dotnet-install.sh --output dotnet-install.sh; then
 		echo "curl failed with exit code $?"
 		exit 1

@@ -1,0 +1,69 @@
+#!/usr/bin/env /Library/Frameworks/Mono.framework/Commands/csharp -s
+
+// arguments are: <platform> <outputPath>
+
+using System.IO;
+using System.Xml;
+
+var args = Environment.GetCommandLineArgs ();
+var expectedArgumentCount = 9;
+if (args.Length != expectedArgumentCount + 3 /* 2 default arguments (executable + script) + 'expectedArgumentCount' arguments we're interested in */) {
+	// first arg is "/Library/Frameworks/Mono.framework/Versions/4.8.0/lib/mono/4.5/csharp.exe"
+	// second arg the script itself
+	// then comes the ones we care about
+	Console.WriteLine ($"Need {expectedArgumentCount} arguments, got {args.Length - 2}");
+	Environment.Exit (1);
+	return;
+}
+
+var argumentIndex = 3;
+var platform = args [argumentIndex++];
+var version = args [argumentIndex++];
+var net7Version = args [argumentIndex++];
+var runtimeIdentifiers = args [argumentIndex++].Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+var outputPath = args [argumentIndex++];
+var windowsPlatforms = args [argumentIndex++].Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+var hasWindows = Array.IndexOf (windowsPlatforms, platform) >= 0;
+var supportedTFMs = args [argumentIndex++].Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+var currentApiVersion = args [argumentIndex++];
+var supportedApiVersions = args [argumentIndex++].Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+var platformLowerCase = platform.ToLowerInvariant ();
+var simplifiedTFMs = supportedTFMs.Select (v => v.Substring (0, v.IndexOf ('.')));
+
+var allApiVersions = new List<string> (supportedApiVersions);
+allApiVersions.Insert (0, currentApiVersion);
+allApiVersions = allApiVersions.
+					Select (v => v.Replace ('-', '_')).
+					OrderBy (v => v).
+					Reverse ().
+					ToList ();
+
+using (var writer = new StreamWriter (outputPath)) {
+	writer.WriteLine ($"<Project>");
+	writer.WriteLine ($"	<ImportGroup Condition=\" '$(TargetPlatformIdentifier)' == '{platform}' \">");
+	foreach (var tfm in allApiVersions) {
+		var tfv = tfm.Replace ("net", "");
+		tfv = tfv.Substring (0, tfv.IndexOfAny (new char [] { '-', '_' }));
+		var tpv = tfm.Substring (tfm.IndexOfAny (new char [] { '-', '_' }) + 1);
+		writer.WriteLine ($"		<Import Project=\"Sdk.props\" Sdk=\"Microsoft.{platform}.Sdk.{tfm}\" Condition=\" $([MSBuild]::VersionEquals($(TargetFrameworkVersion), '{tfv}')) And $([MSBuild]::VersionEquals($(TargetPlatformVersion), '{tpv}'))\" />");
+	}
+	if (hasWindows) {
+		writer.WriteLine ();
+		foreach (var tfm in allApiVersions) {
+			var tfv = tfm.Replace ("net", "");
+			tfv = tfv.Substring (0, tfv.IndexOfAny (new char [] { '-', '_' }));
+			var tpv = tfm.Substring (tfv.IndexOfAny (new char [] { '-', '_' }) + 1);
+			writer.WriteLine ($"		<Import Project=\"Sdk.props\" Sdk=\"Microsoft.{platform}.Windows.Sdk.Aliased.{tfm}\" Condition=\" $([MSBuild]::VersionEquals($(TargetFrameworkVersion), '{tfv}')) And $([MSBuild]::VersionEquals($(TargetPlatformVersion), '{tpv}')) And $([MSBuild]::IsOSPlatform('windows'))\" />");
+		}
+	}
+	writer.WriteLine ($"	</ImportGroup>");
+	writer.WriteLine ();
+	writer.WriteLine ($"	<ItemGroup Condition=\" '$(TargetFrameworkIdentifier)' == '.NETCoreApp' and $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '6.0')) \">");
+	writer.WriteLine ($"		<SdkSupportedTargetPlatformIdentifier Include=\"{platformLowerCase}\" DisplayName=\"{platform}\" />");
+	writer.WriteLine ($"	</ItemGroup>");
+	writer.WriteLine ($"</Project>");
+	writer.WriteLine ();
+}
+
+Environment.Exit (0);

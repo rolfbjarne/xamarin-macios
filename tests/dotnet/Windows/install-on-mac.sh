@@ -20,7 +20,7 @@ DOTNET_PLATFORMS=($(grep '"DOTNET_PLATFORMS":' configuration.json | sed -e 's/[[
 
 echo "Hello from Mac 2"
 
-DOTNET_VERSION=$(grep '"DOTNET_VERSION":' configuration.json | sed -e 's/[[:space:]]*"DOTNET_PLATFORMS": "//' -e 's/",[[:space:]]*$//')
+DOTNET_VERSION=$(grep '"DOTNET_VERSION":' configuration.json | sed -e 's/[[:space:]]*"DOTNET_VERSION": "//' -e 's/",[[:space:]]*$//')
 
 echo "Hello from Mac 3"
 

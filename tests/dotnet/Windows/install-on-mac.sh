@@ -68,7 +68,8 @@ if ! test -f dotnet-install.sh; then
 	# --retry: retry download 20 times
 	# --retry-delay: wait 2 seconds between each retry attempt
 	# --retry-all-errors: ignore the definition of insanity and retry even for errors that seem like you'd get the same result (such as 404). This isn't the real purpose, because this will also retry errors that will get a different result (such as connection failures / resets), which apparently --retry doesn't cover.
-	CURL+=(--retry 20 --retry-delay 2 --retry-all-errors)
+	#                     but --retry-all-errors is not necessarily available on the bots we're using :/
+	CURL+=(--retry 20 --retry-delay 2)
 
 	echo "Hello from Mac 10"
 	if ! "${CURL[@]}" https://dot.net/v1/dotnet-install.sh --output dotnet-install.sh; then

@@ -175,10 +175,8 @@ namespace Xharness.Jenkins {
 							// Filed as https://github.com/dotnet/sdk/issues/33414.
 							// yield return new TestData { Variation = "Release (NativeAOT)", Debug = false, PublishAot = true, Ignored = !jenkins.TestSelection.IsEnabled (TestLabel.Monotouch) || !jenkins.TestSelection.IsEnabled (PlatformLabel.MacCatalyst), Defines = "NATIVEAOT", LinkMode = "Full" };
 
-							// Pending: it seems the mac catalyst build is picking up the wrong runtime and apps crash at launch.
-							// FIXME: pending more investigation & possibly link to an issue.
-							// yield return new TestData { Variation = "Release (NativeAOT, ARM64)", Debug = false, PublishAot = true, Ignored = !jenkins.TestSelection.IsEnabled (TestLabel.Monotouch) || !jenkins.TestSelection.IsEnabled (PlatformLabel.MacCatalyst) || !mac_supports_arm64, Defines = "NATIVEAOT", RuntimeIdentifier = arm64_runtime_identifier, LinkMode = "Full" };
-							// yield return new TestData { Variation = "Release (NativeAOT, X64)", Debug = false, PublishAot = true, Ignored = !jenkins.TestSelection.IsEnabled (TestLabel.Monotouch) || !jenkins.TestSelection.IsEnabled (PlatformLabel.MacCatalyst), Defines = "NATIVEAOT", LinkMode = "Full", RuntimeIdentifier = "maccatalyst-x64" };
+							yield return new TestData { Variation = "Release (NativeAOT, ARM64)", Debug = false, PublishAot = true, Ignored = !jenkins.TestSelection.IsEnabled (TestLabel.Monotouch) || !jenkins.TestSelection.IsEnabled (PlatformLabel.MacCatalyst) || !mac_supports_arm64, Defines = "NATIVEAOT", RuntimeIdentifier = arm64_runtime_identifier, LinkMode = "Full" };
+							yield return new TestData { Variation = "Release (NativeAOT, X64)", Debug = false, PublishAot = true, Ignored = !jenkins.TestSelection.IsEnabled (TestLabel.Monotouch) || !jenkins.TestSelection.IsEnabled (PlatformLabel.MacCatalyst), Defines = "NATIVEAOT", LinkMode = "Full", RuntimeIdentifier = "maccatalyst-x64" };
 						}
 						if (test.Platform == TestPlatform.Mac) {
 							yield return new TestData { Variation = "Release", Debug = false, Ignored = !jenkins.TestSelection.IsEnabled (TestLabel.Monotouch) || !jenkins.TestSelection.IsEnabled (PlatformLabel.Mac) };

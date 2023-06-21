@@ -85,5 +85,57 @@ DEFAULT_TARGET_PLATFORM_VERSION_WATCHOS=9.1
 DEFAULT_TARGET_PLATFORM_VERSION_MACOS=13.0
 DEFAULT_TARGET_PLATFORM_VERSION_MACCATALYST=16.1
 
-# .NET 7 versions are bumped using maestro.
+# List the releases we support for each platform.
+#
+# Format: space-separated list of TargetFramework-OSVersion
+#
+# Example:
+#
+#    SUPPORTED_API_VERSIONS_IOS=net7.0-16.1 net7.0-16.4
+#
+# This means the iOS workload shipped from the current branch supports projects with:
+#    <TargetFramework>net7.0-16.1</TargetFramework>
+# and_
+#    <TargetFramework>net7.0-16.4</TargetFramework>
+# and even:
+#    <TargetFrameworks>net7.0-16.1;net7.0-16.4</TargetFrameworks>
+#
+# When shipping support for a preview Xcode, we might add entries here for a preview release into a stable release.
+#
+# Example:
+#
+#     SUPPORTED_API_VERSIONS_IOS=net8.0-17.0
+#
+# If the current branch is stable .NET 8 using Xcode 14.3 (aka iOS 16.4), this
+# would add support for trying the preview release by doing:
+#
+#     <TargetFramework>net8.0-17.0</TargetFramework>
+#     <EnablePreviewFeatures>true</EnablePreviewFeatures>
+#
 
+# First add the current branch. DO NOT TOUCH THIS. Add older branches below.
+SUPPORTED_API_VERSIONS_IOS=$(DOTNET_TFM)-$(IOS_NUGET_OS_VERSION)
+SUPPORTED_API_VERSIONS_TVOS=$(DOTNET_TFM)-$(TVOS_NUGET_OS_VERSION)
+SUPPORTED_API_VERSIONS_MACOS=$(DOTNET_TFM)-$(MACOS_NUGET_OS_VERSION)
+SUPPORTED_API_VERSIONS_MACCATALYST=$(DOTNET_TFM)-$(MACCATALYST_NUGET_OS_VERSION)
+
+# Add older branches here!
+
+# SUPPORTED_API_VERSIONS_IOS=net8.0-17.0
+# SUPPORTED_API_VERSIONS_TVOS=net8.0-17.0
+# SUPPORTED_API_VERSIONS_MACOS=net8.0-14.0
+# SUPPORTED_API_VERSIONS_MACCATALYST=net8.0-17.0
+
+# FIXME: 
+# SUPPORTED_API_VERSIONS_IOS=net7.0-16.4 net8.0-17.0
+# SUPPORTED_API_VERSIONS_TVOS=net7.0-16.4 net8.0-17.0
+# SUPPORTED_API_VERSIONS_MACOS=net7.0-13.3 net8.0-14.0
+# SUPPORTED_API_VERSIONS_MACCATALYST=net7.0-16.4 net8.0-17.0
+
+
+# FIXME: 
+
+SUPPORTED_API_VERSIONS_IOS+=net7.0-16.4
+SUPPORTED_API_VERSIONS_TVOS+=net7.0-16.4
+SUPPORTED_API_VERSIONS_MACOS+=net7.0-13.3
+SUPPORTED_API_VERSIONS_MACCATALYST+=net7.0-16.4

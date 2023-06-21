@@ -201,6 +201,28 @@ steps:
         "--logger:html;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-dotnet-tests.html" `
         "-bl:$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/Windows/run-dotnet-tests.binlog"
   displayName: 'Run .NET tests'
+  timeoutInMinutes: 30
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    $Env:ServerAddress = $Env:MAC_AGENT_IP
+    $Env:ServerUser = builder
+    $Env:ServerPassword = $Env:XMA_PASSWORD
+    Add-Content $(Build.SourcesDirectory)/xamarin-macios/tests/test.config "`nINCLUDE_MAC=`nINCLUDE_TVOS=`nINCLUDE_MACCATALYST=`n"
+    & $Env:DOTNET `
+        test `
+        "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+        --filter Category!=Windows `
+        --verbosity quiet `
+        "--results-directory:$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-remote-tests/" `
+        "--logger:console;verbosity=detailed" `
+        "--logger:trx;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-remote-dotnet-tests.trx" `
+        "--logger:html;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-remote-dotnet-tests.html" `
+        "-bl:$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/Windows/windows-remote-dotnet-tests.binlog"
+  displayName: 'Run .NET tests remotely'
+  timeoutInMinutes: 120
+  env:
+    XMA_PASSWORD: $(XMA.Password)
 
 # Archive files for the Html Report so that the report can be easily uploaded as artifacts of the build.
 - task: ArchiveFiles@1

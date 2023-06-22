@@ -96,3 +96,5 @@ echo "Hello from Mac 15"
 "$DOTNET_INSTALL_DIR"/dotnet workload install "${DOTNET_PLATFORMS[@]}" --from-rollback-file "$WORKLOAD_ROLLBACK_FILE"
 
 echo "Hello from Mac 16"
+
+find "$DOTNET_INSTALL_DIR" -type f -print0 | xargs -0 -- ls -la

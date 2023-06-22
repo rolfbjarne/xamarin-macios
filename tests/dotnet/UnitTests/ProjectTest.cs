@@ -917,6 +917,10 @@ namespace Xamarin.Tests {
 		[OneTimeSetUp]
 		public void KillEverything ()
 		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+				Console.WriteLine ("Skipped killing everything, because we're on Windows."); // FIXME: this should be done on the remote mac.
+				return;
+			}
 			ExecutionHelper.Execute ("launchctl", new [] { "remove", "com.apple.CoreSimulator.CoreSimulatorService" }, timeout: TimeSpan.FromSeconds (10));
 
 			var to_kill = new string [] { "iPhone Simulator", "iOS Simulator", "Simulator", "Simulator (Watch)", "com.apple.CoreSimulator.CoreSimulatorService", "ibtoold" };

@@ -209,7 +209,7 @@ steps:
     $Env:ServerUser = "builder"
     $Env:ServerPassword = $Env:XMA_PASSWORD
     $Env:DOTNET_IOS_RUNTIME_IDENTIFIERS = "'ios-arm iossimulator-x86 ios-arm64 iossimulator-x64 iossimulator-arm64'"
-    $Env:_DotNetRootRemoteDirectory = "/Users/builder/remote_build_testing/_build"
+    $Env:_DotNetRootRemoteDirectory = "/Users/builder/remote_build_testing/_build/"
     Add-Content $(Build.SourcesDirectory)/xamarin-macios/tests/test.config "`nINCLUDE_MAC=`nINCLUDE_TVOS=`nINCLUDE_MACCATALYST=`n"
     & $Env:DOTNET `
         test `

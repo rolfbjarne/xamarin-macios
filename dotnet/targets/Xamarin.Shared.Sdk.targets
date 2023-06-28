@@ -7,6 +7,7 @@
 		<Version Condition="'$(GenerateApplicationManifest)' == 'true' and '$(ApplicationDisplayVersion)' != ''">$(ApplicationDisplayVersion)</Version>
 	</PropertyGroup>
 
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.AOTUpdateTimestamps" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.FilterStaticFrameworks" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.FindAotCompiler" AssemblyFile="$(_XamarinTaskAssembly)" />
@@ -1048,8 +1049,19 @@
 			_DetectAppManifest;
 			_ReadAppManifest;
 			_WriteAppManifest;
+			_AOTUpdateTimestamps;
 		</_AOTCompileDependsOn>
 	</PropertyGroup>
+
+	<Target Name="_AOTUpdateTimestamps"
+			Condition="'$(_RunAotCompiler)' == 'true'">
+		<AOTUpdateTimestamps
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			Assemblies="@(_AssembliesToAOT)"
+		/>
+	</Target>
+
 	<Target Name="_AOTCompile"
 			Condition="'$(_RunAotCompiler)' == 'true'"
 			DependsOnTargets="$(_AOTCompileDependsOn)"

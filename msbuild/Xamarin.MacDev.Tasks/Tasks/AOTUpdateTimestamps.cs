@@ -137,7 +137,7 @@ namespace Xamarin.MacDev.Tasks {
 			return input.LastWriteTimeUtc <= output.LastWriteTimeUtc;
 		}
 
-		void MarkAssembly (Info[] infos, Info info)
+		void MarkAssembly (Info [] infos, Info info)
 		{
 			Log.LogMessage (MessageImportance.Low, $"MarkAssembly ({info.Assembly.ItemSpec}) Marked: {info.Marked}");
 			if (info.Marked)
@@ -155,7 +155,7 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogMessage (MessageImportance.Low, $"MarkAssembly ({info.Assembly.ItemSpec}) Marking {infos [i].Assembly.ItemSpec}");
 					MarkAssembly (infos, infos [i]);
 				} else {
-					Log.LogMessage (MessageImportance.Low, $"The assembly '{infos[i].Assembly.ItemSpec}' does not reference '{info.Assembly.ItemSpec}'. References: {string.Join (", ", infos[i].AssemblyReferences)}");
+					Log.LogMessage (MessageImportance.Low, $"The assembly '{infos [i].Assembly.ItemSpec}' does not reference '{info.Assembly.ItemSpec}'. References: {string.Join (", ", infos [i].AssemblyReferences)}");
 				}
 			}
 		}

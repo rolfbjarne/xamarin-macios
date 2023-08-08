@@ -781,6 +781,16 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference Runtime_TryGetNSObject {
+			get {
+				return GetMethodReference (PlatformAssembly,
+						ObjCRuntime_Runtime, "TryGetNSObject",
+						nameof (Runtime_HasNSObject),
+						isStatic: true,
+						System_IntPtr,
+						System_Boolean);
+			}
+		}
 		public MethodReference Runtime_GetNSObject__System_IntPtr {
 			get {
 				return GetMethodReference (PlatformAssembly,
@@ -813,19 +823,6 @@ namespace Xamarin.Linker {
 						isStatic: true,
 						genericParameterCount: 1,
 						System_IntPtr);
-			}
-		}
-
-		public MethodReference Runtime_GetINativeObject__IntPtr_Boolean_Type_Type {
-			get {
-				return GetMethodReference (PlatformAssembly,
-						ObjCRuntime_Runtime, "GetINativeObject",
-						nameof (Runtime_GetINativeObject__IntPtr_Boolean_Type_Type),
-						isStatic: true,
-						System_IntPtr,
-						System_Boolean,
-						System_Type,
-						System_Type);
 			}
 		}
 

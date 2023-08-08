@@ -893,14 +893,21 @@ namespace Xamarin.Linker {
 						// cast to the generic type to verify that the item is actually of the correct type
 						il.Emit (OpCodes.Unbox_Any, type);
 					} else {
-						var nativeObjType = StaticRegistrar.GetInstantiableType (type.Resolve (), exceptions, GetMethodSignature (method));
+						StaticRegistrar.GetInstantiableType (type.Resolve (), exceptions, GetMethodSignature (method), out var ctor);
+						EnsureVisible (method, ctor);
+						var targetType = method.Module.ImportReference (type);
+						var loadFalse = il.Create (OpCodes.Ldc_I4_0);
+						var done = il.Create (OpCodes.Nop);
+						il.Emit (OpCodes.Dup); // handle
 						il.Emit (OpCodes.Ldc_I4_0); // false
-						il.Emit (OpCodes.Ldtoken, method.Module.ImportReference (type)); // target type
-						il.Emit (OpCodes.Call, abr.Type_GetTypeFromHandle);
-						il.Emit (OpCodes.Ldtoken, method.Module.ImportReference (nativeObjType)); // implementation type
-						il.Emit (OpCodes.Call, abr.Type_GetTypeFromHandle);
-						il.Emit (OpCodes.Call, abr.Runtime_GetINativeObject__IntPtr_Boolean_Type_Type);
-						il.Emit (OpCodes.Castclass, type);
+						il.Emit (OpCodes.Call, abr.Runtime_TryGetNSObject);
+						il.Emit (OpCodes.Castclass, targetType);
+						il.Emit (OpCodes.Brfalse, loadFalse);
+						il.Emit (OpCodes.Pop);
+						il.Emit (OpCodes.Br, done);
+						il.Append (loadFalse); // false
+						il.Emit (OpCodes.Call, ctor);
+						il.Append (done);
 					}
 					nativeType = abr.System_IntPtr;
 				} else {

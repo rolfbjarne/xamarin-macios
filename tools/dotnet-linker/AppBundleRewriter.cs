@@ -126,6 +126,10 @@ namespace Xamarin.Linker {
 					md.IsPublic = true;
 					SaveAssembly (md.Module.Assembly);
 				}
+
+				// Also mark it
+				configuration.Context.Annotations.Mark (md);
+				// configuration.Context.Annotations.Mark (tuple.Item2);
 			}
 
 			method = tuple.Item1;
@@ -423,6 +427,7 @@ namespace Xamarin.Linker {
 				return GetMethodReference (CorlibAssembly,
 						System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute,
 						".ctor",
+						".ctor(String)",
 						isStatic: false,
 						System_String);
 			}
@@ -433,6 +438,7 @@ namespace Xamarin.Linker {
 				return GetMethodReference (CorlibAssembly,
 						System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute,
 						".ctor",
+						".ctor(String,Type)",
 						isStatic: false,
 						System_String,
 						System_Type);
@@ -444,6 +450,7 @@ namespace Xamarin.Linker {
 				return GetMethodReference (CorlibAssembly,
 						System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute,
 						".ctor",
+						".ctor(DynamicallyAccessedMemberTypes,Type)",
 						isStatic: false,
 						System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes,
 						System_Type);
@@ -1156,8 +1163,9 @@ namespace Xamarin.Linker {
 
 		public CustomAttribute CreateDynamicDependencyAttribute (DynamicallyAccessedMemberTypes memberTypes, TypeDefinition type)
 		{
-			var attribute = new CustomAttribute (DynamicDependencyAttribute_ctor__String_Type);
-			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, memberTypes));
+			var attribute = new CustomAttribute (DynamicDependencyAttribute_ctor__DynamicallyAccessedMemberTypes_Type);
+			// typed as 'int' because that's how the linker expects it: https://github.com/dotnet/runtime/blob/3c5ad6c677b4a3d12bc6a776d654558cca2c36a9/src/tools/illink/src/linker/Linker/DynamicDependency.cs#L97
+			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, (int) memberTypes));
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Type, type));
 			return attribute;
 		}

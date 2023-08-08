@@ -20,10 +20,13 @@ using Xamarin.Linker;
 
 namespace Mono.Tuner {
 
-	public abstract class ApplyPreserveAttributeBase : BaseSubStep {
+	public abstract class ApplyPreserveAttributeBase : ConfigurationAwareSubStep {
 
-		LinkContext? context;
 		AppBundleRewriter? abr;
+
+		protected override string Name { get => "ApplyPreserveAttribute"; }
+
+		protected override int ErrorCode { get => 2450; }
 
 		AppBundleRewriter Rewriter {
 			get => abr!;
@@ -45,8 +48,8 @@ namespace Mono.Tuner {
 
 		public override void Initialize (LinkContext context)
 		{
-			this.context = context;
-			abr = new AppBundleRewriter (LinkerConfiguration.GetInstance (context));
+			base.Initialize (context);
+			abr = new AppBundleRewriter (Configuration);
 		}
 
 		public override bool IsActiveFor (AssemblyDefinition assembly)
@@ -54,29 +57,28 @@ namespace Mono.Tuner {
 			return Annotations.GetAction (assembly) == AssemblyAction.Link;
 		}
 
-		public override void ProcessAssembly (AssemblyDefinition assembly)
+		protected override void Process (AssemblyDefinition assembly)
 		{
-			abr?.ClearCurrentAssembly ();
-			abr?.SetCurrentAssembly (assembly);
+			Console.WriteLine ($"ProcessAssembly: {assembly}");
 		}
 
-		public override void ProcessType (TypeDefinition type)
+		protected override void Process (TypeDefinition type)
 		{
 			TryApplyPreserveAttribute (type);
 		}
 
-		public override void ProcessField (FieldDefinition field)
+		protected override void Process (FieldDefinition field)
 		{
 			foreach (var attribute in GetPreserveAttributes (field))
 				Mark (field, attribute);
 		}
 
-		public override void ProcessMethod (MethodDefinition method)
+		protected override void Process (MethodDefinition method)
 		{
 			MarkMethodIfPreserved (method);
 		}
 
-		public override void ProcessProperty (PropertyDefinition property)
+		protected override void Process (PropertyDefinition property)
 		{
 			foreach (var attribute in GetPreserveAttributes (property)) {
 				MarkMethod (property.GetMethod, attribute);
@@ -84,7 +86,7 @@ namespace Mono.Tuner {
 			}
 		}
 
-		public override void ProcessEvent (EventDefinition @event)
+		protected override void Process (EventDefinition @event)
 		{
 			foreach (var attribute in GetPreserveAttributes (@event)) {
 				MarkMethod (@event.AddMethod, attribute);
@@ -234,10 +236,18 @@ namespace Mono.Tuner {
 
 		void AddDynamicDependencyAttribute (TypeDefinition type, bool allMembers)
 		{
+			if (abr is null)
+				return;
+
+			abr.ClearCurrentAssembly ();
+			abr.SetCurrentAssembly (type.Module.Assembly);
+
 			var moduleConstructor = GetModuleConstructor (type);
 			var attrib = Rewriter.CreateDynamicDependencyAttribute (allMembers ? DynamicallyAccessedMemberTypes.All : DynamicallyAccessedMemberTypes.None, type);
 			moduleConstructor.CustomAttributes.Add (attrib);
-			Console.WriteLine ($"Added dynamic dependency attribute to module constructor (allMembers: {allMembers}) for: {type}");
+			Console.WriteLine ($"Added dynamic dependency attribute to module constructor (allMembers: {allMembers}) for: {type} in {type.Module.Assembly.Name}");
+
+			abr.ClearCurrentAssembly ();
 		}
 
 		void AddDynamicDependencyAttribute (TypeDefinition onType, MethodDefinition forMethod)
@@ -257,6 +267,7 @@ namespace Mono.Tuner {
 			Console.WriteLine ($"Added dynamic dependency attribute to module constructor for: {member}");
 		}
 
+		// signature format: https://github.com/dotnet/csharpstandard/blob/standard-v6/standard/documentation-comments.md#d42-id-string-format
 		string GetSignature (IMetadataTokenProvider member, bool withType)
 		{
 			if (member is FieldDefinition fd) {
@@ -276,7 +287,7 @@ namespace Mono.Tuner {
 			if (member is TypeDefinition td)
 				return GetSignature (td);
 
-			throw new NotImplementedException ();
+			throw new NotImplementedException (member.GetType ().FullName);
 		}
 
 		string GetSignature (TypeDefinition type)
@@ -286,13 +297,13 @@ namespace Mono.Tuner {
 
 		string GetSignature (FieldDefinition field)
 		{
-			return field.Name;
+			return field.Name.Replace ('.', '#');
 		}
 
 		string GetSignature (MethodDefinition method)
 		{
 			var sb = new StringBuilder ();
-			sb.Append (method.Name);
+			sb.Append (method.Name.Replace ('.', '#'));
 			sb.Append ('(');
 			for (var i = 0; i < method.Parameters.Count; i++) {
 				if (i > 0)
@@ -317,11 +328,15 @@ namespace Mono.Tuner {
 			}
 
 			if (type is ArrayType at) {
-				throw new NotImplementedException ();
+				WriteTypeSignature (sb, at.GetElementType ());
+				sb.Append ("[]");
+				return;
 			}
 
 			if (type is PointerType pt) {
-				throw new NotImplementedException ();
+				WriteTypeSignature (sb, pt.GetElementType ());
+				sb.Append ('*');
+				return;
 			}
 
 			sb.Append (type.FullName);

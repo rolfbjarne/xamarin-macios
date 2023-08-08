@@ -3,18 +3,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 
 using Mono.Linker;
 using Mono.Linker.Steps;
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
+
+using Xamarin.Bundler;
+using Xamarin.Linker;
 
 #nullable enable
 
 namespace Mono.Tuner {
 
 	public abstract class ApplyPreserveAttributeBase : BaseSubStep {
+
+		LinkContext? context;
+		AppBundleRewriter? abr;
+
+		AppBundleRewriter Rewriter {
+			get => abr!;
+		}
 
 		// set 'removeAttribute' to true if you want the preserved attribute to be removed from the final assembly
 		protected abstract bool IsPreservedAttribute (ICustomAttributeProvider provider, CustomAttribute attribute, out bool removeAttribute);
@@ -30,9 +43,21 @@ namespace Mono.Tuner {
 			}
 		}
 
+		public override void Initialize (LinkContext context)
+		{
+			this.context = context;
+			abr = new AppBundleRewriter (LinkerConfiguration.GetInstance (context));
+		}
+
 		public override bool IsActiveFor (AssemblyDefinition assembly)
 		{
 			return Annotations.GetAction (assembly) == AssemblyAction.Link;
+		}
+
+		public override void ProcessAssembly (AssemblyDefinition assembly)
+		{
+			abr?.ClearCurrentAssembly ();
+			abr?.SetCurrentAssembly (assembly);
 		}
 
 		public override void ProcessType (TypeDefinition type)
@@ -103,6 +128,7 @@ namespace Mono.Tuner {
 			}
 
 			Annotations.AddPreservedMethod (method.DeclaringType, method);
+			AddDynamicDependencyAttribute (method.DeclaringType, method);
 		}
 
 		static bool IsConditionalAttribute (CustomAttribute? attribute)
@@ -120,6 +146,7 @@ namespace Mono.Tuner {
 		void PreserveUnconditional (IMetadataTokenProvider provider)
 		{
 			Annotations.Mark (provider);
+			AddDynamicDependencyAttribute (provider);
 
 			var member = provider as IMemberDefinition;
 			if (member is null || member.DeclaringType is null)
@@ -131,14 +158,7 @@ namespace Mono.Tuner {
 		void TryApplyPreserveAttribute (TypeDefinition type)
 		{
 			foreach (var attribute in GetPreserveAttributes (type)) {
-				Annotations.Mark (type);
-
-				if (!attribute.HasFields)
-					continue;
-
-				foreach (var named_argument in attribute.Fields)
-					if (named_argument.Name == "AllMembers" && (bool) named_argument.Argument.Value)
-						Annotations.SetPreserve (type, TypePreserve.All);
+				PreserveType (type, attribute);
 			}
 		}
 
@@ -164,6 +184,147 @@ namespace Mono.Tuner {
 			}
 
 			return attrs;
+		}
+
+		protected void PreserveType (TypeDefinition type, CustomAttribute preserveAttribute)
+		{
+			var allMembers = false;
+			if (preserveAttribute.HasFields) {
+				foreach (var named_argument in preserveAttribute.Fields)
+					if (named_argument.Name == "AllMembers" && (bool) named_argument.Argument.Value)
+						allMembers = true;
+			}
+
+			PreserveType (type, allMembers);
+		}
+
+		protected void PreserveType (TypeDefinition type, bool allMembers)
+		{
+			Annotations.Mark (type);
+			AddDynamicDependencyAttribute (type, allMembers);
+		}
+
+		MethodDefinition GetModuleConstructor (TypeDefinition type)
+		{
+			return GetModuleConstructor (type.Module);
+		}
+
+		MethodDefinition GetModuleConstructor (IMetadataTokenProvider provider)
+		{
+			if (provider is TypeDefinition td)
+				return GetModuleConstructor (td);
+			if (provider is IMemberDefinition md)
+				return GetModuleConstructor (md.DeclaringType.Module);
+			throw new NotImplementedException ();
+		}
+
+		MethodDefinition GetModuleConstructor (ModuleDefinition @module)
+		{
+			var moduleType = @module.Types.SingleOrDefault (v => v.Name == "<Module>");
+			if (moduleType is null)
+				throw ErrorHelper.CreateError (99, $"No <Module> type found in {@module.Name}");
+			var moduleConstructor = moduleType.GetTypeConstructor ();
+			if (moduleConstructor is null) {
+				moduleConstructor = moduleType.AddMethod (".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName | MethodAttributes.Static, Rewriter.System_Void);
+				moduleConstructor.CreateBody (out var il);
+				il.Emit (OpCodes.Ret);
+			}
+			return moduleConstructor;
+		}
+
+		void AddDynamicDependencyAttribute (TypeDefinition type, bool allMembers)
+		{
+			var moduleConstructor = GetModuleConstructor (type);
+			var attrib = Rewriter.CreateDynamicDependencyAttribute (allMembers ? DynamicallyAccessedMemberTypes.All : DynamicallyAccessedMemberTypes.None, type);
+			moduleConstructor.CustomAttributes.Add (attrib);
+			Console.WriteLine ($"Added dynamic dependency attribute to module constructor (allMembers: {allMembers}) for: {type}");
+		}
+
+		void AddDynamicDependencyAttribute (TypeDefinition onType, MethodDefinition forMethod)
+		{
+			var signature = GetSignature (forMethod);
+			var attrib = Rewriter.CreateDynamicDependencyAttribute (signature);
+			onType.CustomAttributes.Add (attrib);
+			Console.WriteLine ($"Added dynamic dependency attribute on {onType} for: {forMethod}");
+		}
+
+		void AddDynamicDependencyAttribute (IMetadataTokenProvider member)
+		{
+			var moduleConstructor = GetModuleConstructor (member);
+			var signature = GetSignature (member, true);
+			var attrib = Rewriter.CreateDynamicDependencyAttribute (signature);
+			moduleConstructor.CustomAttributes.Add (attrib);
+			Console.WriteLine ($"Added dynamic dependency attribute to module constructor for: {member}");
+		}
+
+		string GetSignature (IMetadataTokenProvider member, bool withType)
+		{
+			if (member is FieldDefinition fd) {
+				var signature = GetSignature (fd);
+				if (withType)
+					return GetSignature (fd.DeclaringType) + "." + signature;
+				return signature;
+			}
+
+			if (member is MethodDefinition md) {
+				var signature = GetSignature (md);
+				if (withType)
+					return GetSignature (md.DeclaringType) + "." + signature;
+				return signature;
+			}
+
+			if (member is TypeDefinition td)
+				return GetSignature (td);
+
+			throw new NotImplementedException ();
+		}
+
+		string GetSignature (TypeDefinition type)
+		{
+			return type.FullName;
+		}
+
+		string GetSignature (FieldDefinition field)
+		{
+			return field.Name;
+		}
+
+		string GetSignature (MethodDefinition method)
+		{
+			var sb = new StringBuilder ();
+			sb.Append (method.Name);
+			sb.Append ('(');
+			for (var i = 0; i < method.Parameters.Count; i++) {
+				if (i > 0)
+					sb.Append (',');
+
+				var parameterType = method.Parameters [i].ParameterType;
+				WriteTypeSignature (sb, parameterType);
+			}
+			sb.Append (')');
+
+			Console.WriteLine ($"Created signature '{sb}' for {method.FullName}");
+
+			return sb.ToString ();
+		}
+
+		void WriteTypeSignature (StringBuilder sb, TypeReference type)
+		{
+			if (type is ByReferenceType brt) {
+				WriteTypeSignature (sb, brt.GetElementType ());
+				sb.Append ('@');
+				return;
+			}
+
+			if (type is ArrayType at) {
+				throw new NotImplementedException ();
+			}
+
+			if (type is PointerType pt) {
+				throw new NotImplementedException ();
+			}
+
+			sb.Append (type.FullName);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 #if !__WATCHOS__ && !MONOMAC
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -17,10 +18,11 @@ public partial class AppDelegate : UIApplicationDelegate {
 	TouchRunner runner => Runner;
 
 #if __IOS__ && !__MACCATALYST__
+	[DynamicDependency (DynamicallyAccessedMemberTypes.All, typeof (MonoTouchFixtures.System.NativeTypes))]
 	public override bool AccessibilityPerformMagicTap ()
 	{
 		try {
-			runner.OpenWriter ("Magic Tap");
+			runner.OpenWriter ("Magic Tap 1");
 			runner.Run (runner.LoadedTest as TestSuite);
 		} finally {
 			runner.CloseWriter ();

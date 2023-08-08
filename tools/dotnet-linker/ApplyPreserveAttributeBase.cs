@@ -253,7 +253,7 @@ namespace Mono.Tuner {
 			abr.ClearCurrentAssembly ();
 			abr.SetCurrentAssembly (onType.Module.Assembly);
 
-			Console.WriteLine($"Unable to add dependency from the type {onType.FullName} to its member {forMethod.FullName}");
+			Console.WriteLine ($"Unable to add dependency from the type {onType.FullName} to its member {forMethod.FullName}");
 
 			abr.ClearCurrentAssembly ();
 		}

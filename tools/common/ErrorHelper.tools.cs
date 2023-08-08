@@ -332,7 +332,8 @@ namespace Xamarin.Bundler {
 
 			if (Verbosity > 3) {
 				Console.Error.WriteLine ("--- inner exception");
-				Console.Error.WriteLine (ie);
+				Console.Error.WriteLine (ie.Message);
+				Console.Error.WriteLine (ie.StackTrace);
 				Console.Error.WriteLine ("---");
 			} else if (Verbosity > 0 || ie is ProductException) {
 				Console.Error.WriteLine ("\t{0}", ie.Message);

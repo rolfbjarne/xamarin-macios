@@ -28,10 +28,6 @@ namespace Mono.Tuner {
 
 		protected override int ErrorCode { get => 2450; }
 
-		AppBundleRewriter Rewriter {
-			get => abr!;
-		}
-
 		// set 'removeAttribute' to true if you want the preserved attribute to be removed from the final assembly
 		protected abstract bool IsPreservedAttribute (ICustomAttributeProvider provider, CustomAttribute attribute, out bool removeAttribute);
 
@@ -49,17 +45,14 @@ namespace Mono.Tuner {
 		public override void Initialize (LinkContext context)
 		{
 			base.Initialize (context);
-			abr = new AppBundleRewriter (Configuration);
+
+			if (Configuration.Application.XamarinRuntime == XamarinRuntime.NativeAOT)
+				abr = Configuration.AppBundleRewriter;
 		}
 
 		public override bool IsActiveFor (AssemblyDefinition assembly)
 		{
 			return Annotations.GetAction (assembly) == AssemblyAction.Link;
-		}
-
-		protected override void Process (AssemblyDefinition assembly)
-		{
-			Console.WriteLine ($"ProcessAssembly: {assembly}");
 		}
 
 		protected override void Process (TypeDefinition type)
@@ -206,18 +199,20 @@ namespace Mono.Tuner {
 			AddDynamicDependencyAttribute (type, allMembers);
 		}
 
-		MethodDefinition GetModuleConstructor (TypeDefinition type)
+		ModuleDefinition GetModule (IMetadataTokenProvider provider)
 		{
-			return GetModuleConstructor (type.Module);
+			if (provider is TypeDefinition td)
+				return td.Module;
+
+			if (provider is IMemberDefinition md)
+				return md.DeclaringType.Module;
+
+			throw new NotImplementedException (provider.GetType ().FullName);
 		}
 
 		MethodDefinition GetModuleConstructor (IMetadataTokenProvider provider)
 		{
-			if (provider is TypeDefinition td)
-				return GetModuleConstructor (td);
-			if (provider is IMemberDefinition md)
-				return GetModuleConstructor (md.DeclaringType.Module);
-			throw new NotImplementedException ();
+			return GetModuleConstructor (GetModule (provider));
 		}
 
 		MethodDefinition GetModuleConstructor (ModuleDefinition @module)
@@ -227,7 +222,7 @@ namespace Mono.Tuner {
 				throw ErrorHelper.CreateError (99, $"No <Module> type found in {@module.Name}");
 			var moduleConstructor = moduleType.GetTypeConstructor ();
 			if (moduleConstructor is null) {
-				moduleConstructor = moduleType.AddMethod (".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName | MethodAttributes.Static, Rewriter.System_Void);
+				moduleConstructor = moduleType.AddMethod (".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName | MethodAttributes.Static, abr!.System_Void);
 				moduleConstructor.CreateBody (out var il);
 				il.Emit (OpCodes.Ret);
 			}
@@ -243,7 +238,7 @@ namespace Mono.Tuner {
 			abr.SetCurrentAssembly (type.Module.Assembly);
 
 			var moduleConstructor = GetModuleConstructor (type);
-			var attrib = Rewriter.CreateDynamicDependencyAttribute (allMembers ? DynamicallyAccessedMemberTypes.All : DynamicallyAccessedMemberTypes.None, type);
+			var attrib = abr.CreateDynamicDependencyAttribute (allMembers ? DynamicallyAccessedMemberTypes.All : DynamicallyAccessedMemberTypes.None, type);
 			moduleConstructor.CustomAttributes.Add (attrib);
 			Console.WriteLine ($"Added dynamic dependency attribute to module constructor (allMembers: {allMembers}) for: {type} in {type.Module.Assembly.Name}");
 
@@ -252,19 +247,38 @@ namespace Mono.Tuner {
 
 		void AddDynamicDependencyAttribute (TypeDefinition onType, MethodDefinition forMethod)
 		{
-			var signature = GetSignature (forMethod);
-			var attrib = Rewriter.CreateDynamicDependencyAttribute (signature);
-			onType.CustomAttributes.Add (attrib);
-			Console.WriteLine ($"Added dynamic dependency attribute on {onType} for: {forMethod}");
+			if (abr is null)
+				return;
+
+			abr.ClearCurrentAssembly ();
+			abr.SetCurrentAssembly (onType.Module.Assembly);
+
+			Console.WriteLine($"Unable to add dependency from the type {onType.FullName} to its member {forMethod.FullName}");
+
+			abr.ClearCurrentAssembly ();
 		}
 
-		void AddDynamicDependencyAttribute (IMetadataTokenProvider member)
+		void AddDynamicDependencyAttribute (IMetadataTokenProvider provider)
 		{
+			if (abr is null)
+				return;
+
+			var member = provider as IMemberDefinition;
+			if (member is null) {
+				Console.WriteLine ("Huh?");
+				return;
+			}
+
+			abr.ClearCurrentAssembly ();
+			abr.SetCurrentAssembly (GetModule (member).Assembly);
+
 			var moduleConstructor = GetModuleConstructor (member);
-			var signature = GetSignature (member, true);
-			var attrib = Rewriter.CreateDynamicDependencyAttribute (signature);
+			var signature = GetSignature (member, false);
+			var attrib = abr.CreateDynamicDependencyAttribute (signature, member.DeclaringType);
 			moduleConstructor.CustomAttributes.Add (attrib);
 			Console.WriteLine ($"Added dynamic dependency attribute to module constructor for: {member}");
+
+			abr.ClearCurrentAssembly ();
 		}
 
 		// signature format: https://github.com/dotnet/csharpstandard/blob/standard-v6/standard/documentation-comments.md#d42-id-string-format
@@ -292,6 +306,8 @@ namespace Mono.Tuner {
 
 		string GetSignature (TypeDefinition type)
 		{
+			if (type.IsNested)
+				return type.Name;
 			return type.FullName;
 		}
 
@@ -339,7 +355,7 @@ namespace Mono.Tuner {
 				return;
 			}
 
-			sb.Append (type.FullName);
+			sb.Append (type.FullName.Replace ('/', '.'));
 		}
 	}
 }

@@ -785,7 +785,7 @@ namespace Xamarin.Linker {
 			get {
 				return GetMethodReference (PlatformAssembly,
 						ObjCRuntime_Runtime, "TryGetNSObject",
-						nameof (Runtime_HasNSObject),
+						nameof (Runtime_TryGetNSObject),
 						isStatic: true,
 						System_IntPtr,
 						System_Boolean);

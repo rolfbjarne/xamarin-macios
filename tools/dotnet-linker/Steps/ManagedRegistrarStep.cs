@@ -906,7 +906,7 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Pop);
 						il.Emit (OpCodes.Br, done);
 						il.Append (loadFalse); // false
-						il.Emit (OpCodes.Call, method.Module.ImportReference (ctor));
+						il.Emit (OpCodes.Newobj, method.Module.ImportReference (ctor));
 						il.Append (done);
 					}
 					nativeType = abr.System_IntPtr;

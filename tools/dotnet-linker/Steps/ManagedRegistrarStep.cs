@@ -896,18 +896,27 @@ namespace Xamarin.Linker {
 						StaticRegistrar.GetInstantiableType (type.Resolve (), exceptions, GetMethodSignature (method), out var ctor);
 						EnsureVisible (method, ctor);
 						var targetType = method.Module.ImportReference (type);
-						var loadFalse = il.Create (OpCodes.Ldc_I4_0);
+						var tmpVariable = il.Body.AddVariable (abr.System_IntPtr);
+						var objectVariable = il.Body.AddVariable (targetType);
+						var loadHandle = il.Create (OpCodes.Ldloc, tmpVariable);
 						var done = il.Create (OpCodes.Nop);
-						il.Emit (OpCodes.Dup); // handle
+						il.Emit (OpCodes.Stloc, tmpVariable);
+						il.Emit (OpCodes.Ldloc, tmpVariable); // handle
 						il.Emit (OpCodes.Ldc_I4_0); // false
 						il.Emit (OpCodes.Call, abr.Runtime_TryGetNSObject);
 						il.Emit (OpCodes.Castclass, targetType);
-						il.Emit (OpCodes.Brfalse, loadFalse);
-						il.Emit (OpCodes.Pop);
+						il.Emit (OpCodes.Stloc, objectVariable);
+						il.Emit (OpCodes.Ldloc, objectVariable);
+						il.Emit (OpCodes.Brfalse, loadHandle);
 						il.Emit (OpCodes.Br, done);
-						il.Append (loadFalse); // false
+						il.Append (loadHandle);
+						if (ctor.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
+							il.Emit (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle);
+						il.Emit (OpCodes.Ldc_I4_0); // false
 						il.Emit (OpCodes.Newobj, method.Module.ImportReference (ctor));
+						il.Emit (OpCodes.Stloc, objectVariable);
 						il.Append (done);
+						il.Emit (OpCodes.Ldloc, objectVariable);
 					}
 					nativeType = abr.System_IntPtr;
 				} else {

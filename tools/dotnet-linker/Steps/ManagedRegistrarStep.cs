@@ -929,11 +929,22 @@ namespace Xamarin.Linker {
 						var loadHandle = il.Create (OpCodes.Ldloc, tmpVariable);
 						var done = il.Create (OpCodes.Nop);
 						il.Emit (OpCodes.Stloc, tmpVariable);
+						// objectVariable = null
+						il.Emit (OpCodes.Ldnull);
+						il.Emit (OpCodes.Stloc, objectVariable);
+						// if (handle == IntPtr.Zero)
+						//     goto done;
+						il.Emit (OpCodes.Ldloc, tmpVariable); // handle
+						il.Emit (OpCodes.Ldsfld, abr.System_IntPtr_Zero);
+						il.Emit (OpCodes.Beq, done);
+						// objectVariable = TryGetNSObject (handle, false) as TargetType
 						il.Emit (OpCodes.Ldloc, tmpVariable); // handle
 						il.Emit (OpCodes.Ldc_I4_0); // false
 						il.Emit (OpCodes.Call, abr.Runtime_TryGetNSObject);
 						il.Emit (OpCodes.Castclass, targetType);
 						il.Emit (OpCodes.Stloc, objectVariable);
+						// if (objectVariable is null)
+						//     objectVariable = new TargetType (handle, false)
 						il.Emit (OpCodes.Ldloc, objectVariable);
 						il.Emit (OpCodes.Brfalse, loadHandle);
 						il.Emit (OpCodes.Br, done);
@@ -943,6 +954,8 @@ namespace Xamarin.Linker {
 						il.Emit (OpCodes.Ldc_I4_0); // false
 						il.Emit (OpCodes.Newobj, method.Module.ImportReference (ctor));
 						il.Emit (OpCodes.Stloc, objectVariable);
+						// done:
+						// (load objectVariable on the stack)
 						il.Append (done);
 						il.Emit (OpCodes.Ldloc, objectVariable);
 					}

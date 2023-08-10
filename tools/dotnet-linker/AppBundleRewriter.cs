@@ -236,6 +236,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public FieldReference System_IntPtr_Zero {
+			get {
+				return GetFieldReference (CorlibAssembly, System_IntPtr, "Zero", "System.IntPtr::Zero", out var _);
+			}
+		}
+
 		public TypeReference System_Nullable_1 {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Nullable`1", out var _);
@@ -1174,6 +1180,7 @@ namespace Xamarin.Linker {
 			current_assembly = null;
 			type_map.Clear ();
 			method_map.Clear ();
+			field_map.Clear ();
 		}
 
 		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature)

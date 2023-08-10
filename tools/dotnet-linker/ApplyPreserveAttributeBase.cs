@@ -196,6 +196,8 @@ namespace Mono.Tuner {
 		protected void PreserveType (TypeDefinition type, bool allMembers)
 		{
 			Annotations.Mark (type);
+			if (allMembers)
+				Annotations.SetPreserve (type, TypePreserve.All);
 			AddDynamicDependencyAttribute (type, allMembers);
 		}
 

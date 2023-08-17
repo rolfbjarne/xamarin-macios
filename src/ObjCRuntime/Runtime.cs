@@ -556,6 +556,11 @@ namespace ObjCRuntime {
 
 		static IntPtr GetBlockWrapperCreator (IntPtr method, int parameter)
 		{
+#if NET
+			if (Runtime.IsNativeAOT)
+				throw Runtime.CreateNativeAOTNotSupportedException ();
+#endif
+
 			return AllocGCHandle (GetBlockWrapperCreator ((MethodInfo) GetGCHandleTarget (method)!, parameter));
 		}
 
@@ -999,6 +1004,11 @@ namespace ObjCRuntime {
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		static MethodInfo? GetBlockWrapperCreator (MethodInfo method, int parameter)
 		{
+#if NET
+			if (Runtime.IsNativeAOT)
+				throw Runtime.CreateNativeAOTNotSupportedException ();
+#endif
+
 			// A mirror of this method is also implemented in StaticRegistrar:FindBlockProxyCreatorMethod
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
 			MethodInfo first = method;
@@ -1090,6 +1100,34 @@ namespace ObjCRuntime {
 
 		internal static Delegate? GetDelegateForBlock (IntPtr methodPtr, Type type)
 		{
+			/*
+
+			*** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
+			   at ObjCRuntime.Runtime.GetDelegateForBlock(IntPtr, Type) + 0x10
+			   at ObjCRuntime.BlockLiteral.GetDelegateForBlock[T]() + 0x28
+			   at ObjCRuntime.Trampolines.NIDActionArity2V7.Create(IntPtr) + 0x98
+			   at monotouchtest!<BaseAddress>+0xbc82c8
+			'
+			*** First throw call stack:
+			(
+				0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
+				1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
+				2   monotouchtest                       0x000000010078d480 xamarin_unhandled_exception_handler + 0
+				3   monotouchtest                       0x000000010078d154 xamarin_process_managed_exception_gchandle + 136
+				4   monotouchtest                       0x0000000100895150 -[System_Net_Http_NSUrlSessionHandler_NSUrlSessionHandlerDelegate URLSession:task:didReceiveChallenge:completionHandler:] + 80
+				5   CFNetwork                           0x00000001aa344550 CFURLCredentialStorageCopyAllCredentials + 41992
+				6   libdispatch.dylib                   0x00000001a585e874 _dispatch_call_block_and_release + 32
+				7   libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
+				8   libdispatch.dylib                   0x00000001a5867a88 _dispatch_lane_serial_drain + 668
+				9   libdispatch.dylib                   0x00000001a586862c _dispatch_lane_invoke + 436
+				10  libdispatch.dylib                   0x00000001a5873244 _dispatch_workloop_worker_thread + 648
+				11  libsystem_pthread.dylib             0x00000001a5a0c074 _pthread_wqthread + 288
+				12  libsystem_pthread.dylib             0x00000001a5a0ad94 start_wqthread + 8
+
+
+						if (IsNativeAOT)
+							throw CreateNativeAOTNotSupportedException ();
+			*/
 			// We do not care if there is a race condition and we initialize two caches
 			// since the worst that can happen is that we end up with an extra
 			// delegate->function pointer.
@@ -1213,6 +1251,11 @@ namespace ObjCRuntime {
 
 		internal static PropertyInfo? FindPropertyInfo (MethodInfo accessor)
 		{
+#if NET
+			if (Runtime.IsNativeAOT)
+				throw Runtime.CreateNativeAOTNotSupportedException ();
+#endif
+
 			if (!accessor.IsSpecialName)
 				return null;
 
@@ -1547,6 +1590,77 @@ namespace ObjCRuntime {
 
 		static ConstructorInfo? GetIntPtrConstructor (Type type)
 		{
+			/*
+
+2023-08-17 18:07:08.742 monotouchtest[80580:5519903] *** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
+   at ObjCRuntime.Runtime.GetIntPtrConstructor(Type) + 0x10
+   at ObjCRuntime.Runtime.ConstructNSObject[T](IntPtr, Type, Runtime.MissingCtorResolution, IntPtr, RuntimeMethodHandle) + 0x3c
+   at ObjCRuntime.Runtime.GetNSObject[T](IntPtr, IntPtr, RuntimeMethodHandle, Boolean) + 0x180
+   at monotouchtest!<BaseAddress>+0x36ca48
+'
+*** First throw call stack:
+(
+	0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
+	1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
+	2   monotouchtest                       0x000000010286e0e0 xamarin_unhandled_exception_handler + 0
+	3   monotouchtest                       0x000000010286ddb4 xamarin_process_managed_exception_gchandle + 136
+	4   monotouchtest                       0x00000001028a19a0 -[AppDelegate application:didFinishLaunchingWithOptions:] + 80
+	5   UIKitCore                           0x00000001d12c31c4 -[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 296
+	6   UIKitCore                           0x00000001d12c2690 -[UIApplication _callInitializationDelegatesWithActions:forCanvas:payload:fromOriginatingProcess:] + 2820
+	7   UIKitCore                           0x00000001d12c0960 -[UIApplication _runWithMainScene:transitionContext:completion:] + 988
+	8   UIKitCore                           0x00000001d12c0494 -[_UISceneLifecycleMultiplexer completeApplicationLaunchWithFBSScene:transitionContext:] + 108
+	9   UIKitCore                           0x00000001d12bd064 _UIScenePerformActionsWithLifecycleActionMask + 112
+	10  UIKitCore                           0x00000001d12bfde0 __101-[_UISceneLifecycleMultiplexer _evalTransitionToSettings:fromSettings:forceExit:withTransitionStore:]_block_invoke + 216
+	11  UIKitCore                           0x00000001d12bfb64 -[_UISceneLifecycleMultiplexer _performBlock:withApplicationOfDeactivationReasons:fromReasons:] + 332
+	12  UIKitCore                           0x00000001d12bf0fc -[_UISceneLifecycleMultiplexer _evalTransitionToSettings:fromSettings:forceExit:withTransitionStore:] + 624
+	13  UIKitCore                           0x00000001d12bede8 -[_UISceneLifecycleMultiplexer uiScene:transitionedFromState:withTransitionContext:] + 252
+	14  UIKitCore                           0x00000001d12bd640 __186-[_UIWindowSceneFBSSceneTransitionContextDrivenLifecycleSettingsDiffAction _performActionsForUIScene:withUpdatedFBSScene:settingsDiff:fromSettings:transitionContext:lifecycleActionType:]_block_invoke + 148
+	15  UIKitCore                           0x00000001d1a06688 +[BSAnimationSettings(UIKit) tryAnimatingWithSettings:fromCurrentState:actions:completion:] + 736
+	16  UIKitCore                           0x00000001d1addb54 _UISceneSettingsDiffActionPerformChangesWithTransitionContextAndCompletion + 224
+	17  UIKitCore                           0x00000001d12bd1ec -[_UIWindowSceneFBSSceneTransitionContextDrivenLifecycleSettingsDiffAction _performActionsForUIScene:withUpdatedFBSScene:settingsDiff:fromSettings:transitionContext:lifecycleActionType:] + 316
+	18  UIKitCore                           0x00000001d151eb0c __64-[UIScene scene:didUpdateWithDiff:transitionContext:completion:]_block_invoke.240 + 556
+	19  UIKitCore                           0x00000001d12bc688 -[UIScene _emitSceneSettingsUpdateResponseForCompletion:afterSceneUpdateWork:] + 216
+	20  UIKitCore                           0x00000001d12bc4f8 -[UIScene scene:didUpdateWithDiff:transitionContext:completion:] + 244
+	21  UIKitCore                           0x00000001d12b2730 -[UIApplication workspace:didCreateScene:withTransitionContext:completion:] + 520
+	22  UIKitCore                           0x00000001d12b24b0 -[UIApplicationSceneClientAgent scene:didInitializeWithEvent:completion:] + 288
+	23  FrontBoardServices                  0x00000001b9eeb114 -[FBSScene _callOutQueue_agent_didCreateWithTransitionContext:completion:] + 372
+	24  FrontBoardServices                  0x00000001b9f0ea88 __92-[FBSWorkspaceScenesClient createSceneWithIdentity:parameters:transitionContext:completion:]_block_invoke.102 + 120
+	25  FrontBoardServices                  0x00000001b9ed9d30 -[FBSWorkspace _calloutQueue_executeCalloutFromSource:withBlock:] + 196
+	26  FrontBoardServices                  0x00000001b9f0e6bc __92-[FBSWorkspaceScenesClient createSceneWithIdentity:parameters:transitionContext:completion:]_block_invoke + 356
+	27  libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
+	28  libdispatch.dylib                   0x00000001a5863e70 _dispatch_block_invoke_direct + 264
+	29  FrontBoardServices                  0x00000001b9ed9c44 __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 48
+	30  FrontBoardServices                  0x00000001b9f290b8 -[FBSSerialQueue _targetQueue_performNextIfPossible] + 220
+	31  FrontBoardServices                  0x00000001b9ed9be4 -[FBSSerialQueue _performNextFromRunLoopSource] + 28
+	32  CoreFoundation                      0x00000001a5aee63c __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 28
+	33  CoreFoundation                      0x00000001a5aee5d0 __CFRunLoopDoSource0 + 176
+	34  CoreFoundation                      0x00000001a5aee340 __CFRunLoopDoSources0 + 244
+	35  CoreFoundation                      0x00000001a5aecf48 __CFRunLoopRun + 828
+	36  CoreFoundation                      0x00000001a5aec4b8 CFRunLoopRunSpecific + 612
+	37  HIToolbox                           0x00000001af33edf0 RunCurrentEventLoopInMode + 292
+	38  HIToolbox                           0x00000001af33ec2c ReceiveNextEventCommon + 648
+	39  HIToolbox                           0x00000001af33e984 _BlockUntilNextEventMatchingListInModeWithFilter + 76
+	40  AppKit                              0x00000001a8d1397c _DPSNextEvent + 636
+	41  AppKit                              0x00000001a8d12b18 -[NSApplication(NSEvent) _nextEventMatchingEventMask:untilDate:inMode:dequeue:] + 716
+	42  AppKit                              0x00000001a8d06f7c -[NSApplication run] + 464
+	43  AppKit                              0x00000001a8cde3cc NSApplicationMain + 880
+	44  AppKit                              0x00000001a8f36b78 +[NSWindow _savedFrameFromString:] + 0
+	45  UIKitMacHelper                      0x00000001bd163960 UINSApplicationMain + 988
+	46  UIKitCore                           0x00000001d129a8e8 UIApplicationMain + 148
+	47  monotouchtest                       0x0000000102860c3c xamarin_UIApplicationMain + 24
+	48  monotouchtest                       0x0000000103435068 fram0_Microsoft_MacCatalyst_UIKit_UIApplication__xamarin_UIApplicationMain + 88
+	49  monotouchtest                       0x00000001034350f0 fram0_Microsoft_MacCatalyst_UIKit_UIApplication__UIApplicationMain + 80
+	50  monotouchtest                       0x00000001034352b4 fram0_Microsoft_MacCatalyst_UIKit_UIApplication__Main + 212
+	51  monotouchtest                       0x0000000103a8f48c fram0_monotouchtest__Module___StartupCodeMain + 76
+	52  monotouchtest                       0x0000000102877f7c xamarin_main + 368
+	53  monotouchtest                       0x00000001028a1640 main + 64
+	54  dyld                                0x00000001a56b7f28 start + 2236
+
+
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+*/
+
 			lock (intptr_ctor_cache) {
 				if (intptr_ctor_cache.TryGetValue (type, out var rv))
 					return rv;
@@ -1592,6 +1706,42 @@ namespace ObjCRuntime {
 
 		static ConstructorInfo? GetIntPtr_BoolConstructor (Type type)
 		{
+			/*
+
+			*** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
+			   at ObjCRuntime.Runtime.GetIntPtr_BoolConstructor(Type) + 0x10
+			   at ObjCRuntime.Runtime.ConstructINativeObject[T](IntPtr, Boolean, Type, Runtime.MissingCtorResolution, IntPtr, RuntimeMethodHandle) + 0x68
+			   at ObjCRuntime.Runtime.GetINativeObject[T](IntPtr, Boolean, Type, Boolean, IntPtr, RuntimeMethodHandle) + 0x1f4
+			   at ObjCRuntime.Runtime.GetINativeObject[T](IntPtr, Boolean, Type, Boolean) + 0x24
+			   at Foundation.NSArray.UnsafeGetItem[T](NativeHandle, UIntPtr) + 0x54
+			   at Foundation.NSArray.ArrayFromHandle[T](NativeHandle) + 0x8c
+			   at Security.SecTrust.GetCertificateChain() + 0x20
+			   at System.Net.Http.NSUrlSessionHandler.ServerCertificateCustomValidationCallbackHelper.ConvertCertificates(SecTrust) + 0x50
+			   at System.Net.Http.NSUrlSessionHandler.ServerCertificateCustomValidationCallbackHelper.Invoke(HttpRequestMessage, SecTrust) + 0x28
+			   at System.Net.Http.NSUrlSessionHandler.TryInvokeServerCertificateCustomValidationCallback(HttpRequestMessage, SecTrust, Boolean&) + 0x30
+			   at System.Net.Http.NSUrlSessionHandler.NSUrlSessionHandlerDelegate.DidReceiveChallenge(NSUrlSession session, NSUrlSessionTask task, NSUrlAuthenticationChallenge challenge, Action`2 completionHandler) + 0xf4
+			   at monotouchtest!<BaseAddress>+0x85ea18
+			'
+			*** First throw call stack:
+			(
+				0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
+				1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
+				2   monotouchtest                       0x00000001006431a4 xamarin_unhandled_exception_handler + 0
+				3   monotouchtest                       0x0000000100642e78 xamarin_process_managed_exception_gchandle + 136
+				4   monotouchtest                       0x000000010074b1f0 -[System_Net_Http_NSUrlSessionHandler_NSUrlSessionHandlerDelegate URLSession:task:didReceiveChallenge:completionHandler:] + 80
+				5   CFNetwork                           0x00000001aa344550 CFURLCredentialStorageCopyAllCredentials + 41992
+				6   libdispatch.dylib                   0x00000001a585e874 _dispatch_call_block_and_release + 32
+				7   libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
+				8   libdispatch.dylib                   0x00000001a5867a88 _dispatch_lane_serial_drain + 668
+				9   libdispatch.dylib                   0x00000001a586862c _dispatch_lane_invoke + 436
+				10  libdispatch.dylib                   0x00000001a5873244 _dispatch_workloop_worker_thread + 648
+				11  libsystem_pthread.dylib             0x00000001a5a0c074 _pthread_wqthread + 288
+				12  libsystem_pthread.dylib             0x00000001a5a0ad94 start_wqthread + 8
+
+						if (IsNativeAOT)
+							throw CreateNativeAOTNotSupportedException ();
+			*/
+
 			lock (intptr_bool_ctor_cache) {
 				if (intptr_bool_ctor_cache.TryGetValue (type, out var rv))
 					return rv;
@@ -2337,6 +2487,11 @@ namespace ObjCRuntime {
 
 		internal static MethodInfo FindClosedMethod (Type closed_type, MethodBase open_method)
 		{
+#if NET
+			if (Runtime.IsNativeAOT)
+				throw Runtime.CreateNativeAOTNotSupportedException ();
+#endif
+
 			// FIXME: I think it should be handled before getting here (but it's safer here for now)
 			if (!open_method.ContainsGenericParameters)
 				return (MethodInfo) open_method;
@@ -2607,6 +2762,21 @@ namespace ObjCRuntime {
 			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id);
 #else
 			return IntPtr.Zero;
+#endif
+		}
+
+		unsafe internal static T PtrToStructureMemoryCopy<T> (IntPtr source) where T : unmanaged
+		{
+#if NET
+			T rv = default (T);
+			unsafe {
+				var size = Marshal.SizeOf<T> ();
+				T* destination = &rv;
+				Buffer.MemoryCopy ((void*) source, (void*) destination, size, size);
+			}
+			return rv;
+#else
+			return Marshal.PtrToStructure<T> (source)!;
 #endif
 		}
 	}

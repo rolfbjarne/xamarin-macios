@@ -234,7 +234,11 @@ namespace Foundation {
 			return value as NSDictionary<TKey, TValue>;
 		}
 
+#if NET
+		protected T? GetStrongDictionary<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T> (NSString key) where T : DictionaryContainer
+#else
 		protected T? GetStrongDictionary<T> (NSString key) where T : DictionaryContainer
+#endif
 		{
 			if (key is null)
 				throw new ArgumentNullException (nameof (key));

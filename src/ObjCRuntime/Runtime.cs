@@ -1213,6 +1213,9 @@ namespace ObjCRuntime {
 
 		internal static PropertyInfo? FindPropertyInfo (MethodInfo accessor)
 		{
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+
 			if (!accessor.IsSpecialName)
 				return null;
 
@@ -1406,6 +1409,9 @@ namespace ObjCRuntime {
 
 		static ConstructorInfo? GetIntPtrConstructor (Type type)
 		{
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+
 			lock (intptr_ctor_cache) {
 				if (intptr_ctor_cache.TryGetValue (type, out var rv))
 					return rv;
@@ -1451,6 +1457,9 @@ namespace ObjCRuntime {
 
 		static ConstructorInfo? GetIntPtr_BoolConstructor (Type type)
 		{
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+
 			lock (intptr_bool_ctor_cache) {
 				if (intptr_bool_ctor_cache.TryGetValue (type, out var rv))
 					return rv;
@@ -2184,6 +2193,9 @@ namespace ObjCRuntime {
 
 		internal static MethodInfo FindClosedMethod (Type closed_type, MethodBase open_method)
 		{
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+
 			// FIXME: I think it should be handled before getting here (but it's safer here for now)
 			if (!open_method.ContainsGenericParameters)
 				return (MethodInfo) open_method;

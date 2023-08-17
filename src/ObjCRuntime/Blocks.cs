@@ -492,6 +492,9 @@ namespace ObjCRuntime {
 			if (!(@delegate is Delegate))
 				throw ErrorHelper.CreateError (8016, $"Unable to convert delegate to block for the return value for the method {minfo.DeclaringType.FullName}.{minfo.Name}, because the input isn't a delegate, it's a {@delegate.GetType ().FullName}. {Constants.PleaseFileBugReport}");
 
+			if (IsNativeAOT)
+				throw Runtime.CreateNativeAOTNotSupportedException ();
+
 			Type delegateProxyType = GetDelegateProxyType (minfo, token_ref, out var baseMethod);
 			if (baseMethod is null)
 				baseMethod = minfo; // 'baseMethod' is only used in error messages, and if it's null, we just use the closest alternative we have (minfo).

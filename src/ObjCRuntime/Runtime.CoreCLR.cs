@@ -84,7 +84,7 @@ namespace ObjCRuntime {
 		static bool? track_monoobject_with_stacktraces;
 #endif
 
-		internal Exception CreateNativeAOTNotSupportedException ()
+		static internal Exception CreateNativeAOTNotSupportedException ()
 		{
 			return new System.Diagnostics.UnreachableException ("This API is not supported when using NativeAOT.");
 		}
@@ -419,7 +419,7 @@ namespace ObjCRuntime {
 			mobj.ReferenceCount = 1;
 			mobj.StructValue = WriteStructure (obj);
 
-			IntPtr rv = MarshalStructure (mobj);
+			IntPtr rv = MarshalStructure<MonoObject> (mobj);
 
 			log_coreclr ($"GetMonoObjectImpl ({obj.GetType ()}) => 0x{rv.ToString ("x")} => GCHandle=0x{handle.ToString ("x")}");
 
@@ -454,11 +454,17 @@ namespace ObjCRuntime {
 		static extern void xamarin_bridge_log_monoobject (IntPtr mono_object, string stack_trace);
 #endif
 
-		static IntPtr MarshalStructure<T> (T value) where T: struct
+		static IntPtr MarshalStructure<T> (T value) where T: unmanaged
 		{
-			var rv = Marshal.AllocHGlobal (Marshal.SizeOf<T> ());
-			StructureToPtr (value, rv);
-			return rv;
+			var size = Marshal.SizeOf<T> ();
+			var destination = Marshal.AllocHGlobal (size);
+
+			unsafe {
+				T* source = &value;
+				Buffer.MemoryCopy ((void*) source, (void*) destination, size, size);
+			}
+
+			return destination;
 		}
 
 		static void StructureToPtr (object? obj, IntPtr ptr)
@@ -491,6 +497,9 @@ namespace ObjCRuntime {
 
 			if (!obj.GetType ().IsValueType)
 				return IntPtr.Zero;
+
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
 
 			var structType = obj.GetType ();
 			// Unwrap enums
@@ -647,6 +656,9 @@ namespace ObjCRuntime {
 
 		static int SizeOf (Type type)
 		{
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+
 			if (type.IsEnum) // https://github.com/dotnet/runtime/issues/12258
 				type = Enum.GetUnderlyingType (type);
 			return Marshal.SizeOf (type);
@@ -957,6 +969,9 @@ namespace ObjCRuntime {
 
 		static object? PtrToStructure (IntPtr ptr, Type type)
 		{
+			if (IsNativeAOT)
+				throw CreateNativeAOTNotSupportedException ();
+
 			if (ptr == IntPtr.Zero)
 				return null;
 

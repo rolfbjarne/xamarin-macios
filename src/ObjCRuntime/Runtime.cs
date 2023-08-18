@@ -1096,34 +1096,34 @@ namespace ObjCRuntime {
 
 		internal static Delegate? GetDelegateForBlock (IntPtr methodPtr, Type type)
 		{
-/*
+			/*
 
-*** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
-   at ObjCRuntime.Runtime.GetDelegateForBlock(IntPtr, Type) + 0x10
-   at ObjCRuntime.BlockLiteral.GetDelegateForBlock[T]() + 0x28
-   at ObjCRuntime.Trampolines.NIDActionArity2V7.Create(IntPtr) + 0x98
-   at monotouchtest!<BaseAddress>+0xbc82c8
-'
-*** First throw call stack:
-(
-	0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
-	1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
-	2   monotouchtest                       0x000000010078d480 xamarin_unhandled_exception_handler + 0
-	3   monotouchtest                       0x000000010078d154 xamarin_process_managed_exception_gchandle + 136
-	4   monotouchtest                       0x0000000100895150 -[System_Net_Http_NSUrlSessionHandler_NSUrlSessionHandlerDelegate URLSession:task:didReceiveChallenge:completionHandler:] + 80
-	5   CFNetwork                           0x00000001aa344550 CFURLCredentialStorageCopyAllCredentials + 41992
-	6   libdispatch.dylib                   0x00000001a585e874 _dispatch_call_block_and_release + 32
-	7   libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
-	8   libdispatch.dylib                   0x00000001a5867a88 _dispatch_lane_serial_drain + 668
-	9   libdispatch.dylib                   0x00000001a586862c _dispatch_lane_invoke + 436
-	10  libdispatch.dylib                   0x00000001a5873244 _dispatch_workloop_worker_thread + 648
-	11  libsystem_pthread.dylib             0x00000001a5a0c074 _pthread_wqthread + 288
-	12  libsystem_pthread.dylib             0x00000001a5a0ad94 start_wqthread + 8
+			*** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
+			   at ObjCRuntime.Runtime.GetDelegateForBlock(IntPtr, Type) + 0x10
+			   at ObjCRuntime.BlockLiteral.GetDelegateForBlock[T]() + 0x28
+			   at ObjCRuntime.Trampolines.NIDActionArity2V7.Create(IntPtr) + 0x98
+			   at monotouchtest!<BaseAddress>+0xbc82c8
+			'
+			*** First throw call stack:
+			(
+				0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
+				1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
+				2   monotouchtest                       0x000000010078d480 xamarin_unhandled_exception_handler + 0
+				3   monotouchtest                       0x000000010078d154 xamarin_process_managed_exception_gchandle + 136
+				4   monotouchtest                       0x0000000100895150 -[System_Net_Http_NSUrlSessionHandler_NSUrlSessionHandlerDelegate URLSession:task:didReceiveChallenge:completionHandler:] + 80
+				5   CFNetwork                           0x00000001aa344550 CFURLCredentialStorageCopyAllCredentials + 41992
+				6   libdispatch.dylib                   0x00000001a585e874 _dispatch_call_block_and_release + 32
+				7   libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
+				8   libdispatch.dylib                   0x00000001a5867a88 _dispatch_lane_serial_drain + 668
+				9   libdispatch.dylib                   0x00000001a586862c _dispatch_lane_invoke + 436
+				10  libdispatch.dylib                   0x00000001a5873244 _dispatch_workloop_worker_thread + 648
+				11  libsystem_pthread.dylib             0x00000001a5a0c074 _pthread_wqthread + 288
+				12  libsystem_pthread.dylib             0x00000001a5a0ad94 start_wqthread + 8
 
 
-			if (IsNativeAOT)
-				throw CreateNativeAOTNotSupportedException ();
-*/
+						if (IsNativeAOT)
+							throw CreateNativeAOTNotSupportedException ();
+			*/
 			// We do not care if there is a race condition and we initialize two caches
 			// since the worst that can happen is that we end up with an extra
 			// delegate->function pointer.
@@ -1559,41 +1559,41 @@ namespace ObjCRuntime {
 
 		static ConstructorInfo? GetIntPtr_BoolConstructor (Type type)
 		{
-/*
+			/*
 
-*** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
-   at ObjCRuntime.Runtime.GetIntPtr_BoolConstructor(Type) + 0x10
-   at ObjCRuntime.Runtime.ConstructINativeObject[T](IntPtr, Boolean, Type, Runtime.MissingCtorResolution, IntPtr, RuntimeMethodHandle) + 0x68
-   at ObjCRuntime.Runtime.GetINativeObject[T](IntPtr, Boolean, Type, Boolean, IntPtr, RuntimeMethodHandle) + 0x1f4
-   at ObjCRuntime.Runtime.GetINativeObject[T](IntPtr, Boolean, Type, Boolean) + 0x24
-   at Foundation.NSArray.UnsafeGetItem[T](NativeHandle, UIntPtr) + 0x54
-   at Foundation.NSArray.ArrayFromHandle[T](NativeHandle) + 0x8c
-   at Security.SecTrust.GetCertificateChain() + 0x20
-   at System.Net.Http.NSUrlSessionHandler.ServerCertificateCustomValidationCallbackHelper.ConvertCertificates(SecTrust) + 0x50
-   at System.Net.Http.NSUrlSessionHandler.ServerCertificateCustomValidationCallbackHelper.Invoke(HttpRequestMessage, SecTrust) + 0x28
-   at System.Net.Http.NSUrlSessionHandler.TryInvokeServerCertificateCustomValidationCallback(HttpRequestMessage, SecTrust, Boolean&) + 0x30
-   at System.Net.Http.NSUrlSessionHandler.NSUrlSessionHandlerDelegate.DidReceiveChallenge(NSUrlSession session, NSUrlSessionTask task, NSUrlAuthenticationChallenge challenge, Action`2 completionHandler) + 0xf4
-   at monotouchtest!<BaseAddress>+0x85ea18
-'
-*** First throw call stack:
-(
-	0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
-	1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
-	2   monotouchtest                       0x00000001006431a4 xamarin_unhandled_exception_handler + 0
-	3   monotouchtest                       0x0000000100642e78 xamarin_process_managed_exception_gchandle + 136
-	4   monotouchtest                       0x000000010074b1f0 -[System_Net_Http_NSUrlSessionHandler_NSUrlSessionHandlerDelegate URLSession:task:didReceiveChallenge:completionHandler:] + 80
-	5   CFNetwork                           0x00000001aa344550 CFURLCredentialStorageCopyAllCredentials + 41992
-	6   libdispatch.dylib                   0x00000001a585e874 _dispatch_call_block_and_release + 32
-	7   libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
-	8   libdispatch.dylib                   0x00000001a5867a88 _dispatch_lane_serial_drain + 668
-	9   libdispatch.dylib                   0x00000001a586862c _dispatch_lane_invoke + 436
-	10  libdispatch.dylib                   0x00000001a5873244 _dispatch_workloop_worker_thread + 648
-	11  libsystem_pthread.dylib             0x00000001a5a0c074 _pthread_wqthread + 288
-	12  libsystem_pthread.dylib             0x00000001a5a0ad94 start_wqthread + 8
+			*** Terminating app due to uncaught exception 'System.Diagnostics.UnreachableException', reason: 'This API is not supported when using NativeAOT. (System.Diagnostics.UnreachableException)
+			   at ObjCRuntime.Runtime.GetIntPtr_BoolConstructor(Type) + 0x10
+			   at ObjCRuntime.Runtime.ConstructINativeObject[T](IntPtr, Boolean, Type, Runtime.MissingCtorResolution, IntPtr, RuntimeMethodHandle) + 0x68
+			   at ObjCRuntime.Runtime.GetINativeObject[T](IntPtr, Boolean, Type, Boolean, IntPtr, RuntimeMethodHandle) + 0x1f4
+			   at ObjCRuntime.Runtime.GetINativeObject[T](IntPtr, Boolean, Type, Boolean) + 0x24
+			   at Foundation.NSArray.UnsafeGetItem[T](NativeHandle, UIntPtr) + 0x54
+			   at Foundation.NSArray.ArrayFromHandle[T](NativeHandle) + 0x8c
+			   at Security.SecTrust.GetCertificateChain() + 0x20
+			   at System.Net.Http.NSUrlSessionHandler.ServerCertificateCustomValidationCallbackHelper.ConvertCertificates(SecTrust) + 0x50
+			   at System.Net.Http.NSUrlSessionHandler.ServerCertificateCustomValidationCallbackHelper.Invoke(HttpRequestMessage, SecTrust) + 0x28
+			   at System.Net.Http.NSUrlSessionHandler.TryInvokeServerCertificateCustomValidationCallback(HttpRequestMessage, SecTrust, Boolean&) + 0x30
+			   at System.Net.Http.NSUrlSessionHandler.NSUrlSessionHandlerDelegate.DidReceiveChallenge(NSUrlSession session, NSUrlSessionTask task, NSUrlAuthenticationChallenge challenge, Action`2 completionHandler) + 0xf4
+			   at monotouchtest!<BaseAddress>+0x85ea18
+			'
+			*** First throw call stack:
+			(
+				0   CoreFoundation                      0x00000001a5b67154 __exceptionPreprocess + 176
+				1   libobjc.A.dylib                     0x00000001a56864d4 objc_exception_throw + 60
+				2   monotouchtest                       0x00000001006431a4 xamarin_unhandled_exception_handler + 0
+				3   monotouchtest                       0x0000000100642e78 xamarin_process_managed_exception_gchandle + 136
+				4   monotouchtest                       0x000000010074b1f0 -[System_Net_Http_NSUrlSessionHandler_NSUrlSessionHandlerDelegate URLSession:task:didReceiveChallenge:completionHandler:] + 80
+				5   CFNetwork                           0x00000001aa344550 CFURLCredentialStorageCopyAllCredentials + 41992
+				6   libdispatch.dylib                   0x00000001a585e874 _dispatch_call_block_and_release + 32
+				7   libdispatch.dylib                   0x00000001a5860400 _dispatch_client_callout + 20
+				8   libdispatch.dylib                   0x00000001a5867a88 _dispatch_lane_serial_drain + 668
+				9   libdispatch.dylib                   0x00000001a586862c _dispatch_lane_invoke + 436
+				10  libdispatch.dylib                   0x00000001a5873244 _dispatch_workloop_worker_thread + 648
+				11  libsystem_pthread.dylib             0x00000001a5a0c074 _pthread_wqthread + 288
+				12  libsystem_pthread.dylib             0x00000001a5a0ad94 start_wqthread + 8
 
-			if (IsNativeAOT)
-				throw CreateNativeAOTNotSupportedException ();
-*/
+						if (IsNativeAOT)
+							throw CreateNativeAOTNotSupportedException ();
+			*/
 
 			lock (intptr_bool_ctor_cache) {
 				if (intptr_bool_ctor_cache.TryGetValue (type, out var rv))
@@ -2604,7 +2604,7 @@ namespace ObjCRuntime {
 #endif
 		}
 
-		unsafe internal static T PtrToStructureMemoryCopy<T> (IntPtr source) where T: unmanaged
+		unsafe internal static T PtrToStructureMemoryCopy<T> (IntPtr source) where T : unmanaged
 		{
 #if NET
 			T rv = default (T);

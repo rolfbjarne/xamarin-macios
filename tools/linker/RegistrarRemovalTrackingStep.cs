@@ -133,8 +133,7 @@ namespace MonoTouch.Tuner {
 						//
 						// and these overloads don't need the dynamic registrar, which means we only have
 						// to look in assemblies that aren't linked.
-						var action = Annotations.GetAction (assembly);
-						if ((action == AssemblyAction.Link || action == AssemblyAction.Save) && Optimizations.OptimizeBlockLiteralSetupBlock == true)
+						if (Annotations.GetAction (assembly) == AssemblyAction.Link && Optimizations.OptimizeBlockLiteralSetupBlock == true)
 							break;
 
 						switch (mr.Name) {

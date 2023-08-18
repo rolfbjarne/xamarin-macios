@@ -111,7 +111,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			// It's not safe to remove the dynamic registrar in monotouch-test (by design; some of the tested API makes it unsafe, and the linker correctly detects this),
 			// so the dynamic registrar will only be removed if manually requested.
 			// Also removal of the dynamic registrar is not supported in XM
-#if (OPTIMIZEALL || NATIVEAOT) && !__MACOS__
+#if (OPTIMIZEALL && !__MACOS__) || NATIVEAOT
 			var shouldBeRemoved = true;
 #else
 			var shouldBeRemoved = false;
@@ -2246,7 +2246,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 			}
 		}
 
-#if __MACOS__ && !NATIVEAOT
+#if __MACOS__
 		[Test]
 		public void CustomUserTypeWithDynamicallyLoadedAssembly ()
 		{

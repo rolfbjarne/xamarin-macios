@@ -235,6 +235,10 @@ namespace Mono.Tuner {
 				return;
 
 			// I haven't found a way to express a conditional Preserve attribute using DynamicDependencyAttribute :/
+			if (forMethod.IsBindingImplOptimizableCode (LinkContext)) {
+				// Don't warn for optimizable (generated) code: we handle these methods correctly already.
+				return;
+			}
 			ErrorHelper.Warning (2112, Errors.MX2112 /* Unable to apply the conditional [Preserve] attribute on the member {0} */, forMethod.FullName);
 		}
 

@@ -98,6 +98,7 @@ namespace Xamarin.Tests {
 		[TestCase ("tvOS")]
 		[TestCase ("macOS")]
 		[TestCase ("MacCatalyst")]
+		[Category ("AllPlatforms")]
 		public void BuildMyClassLibrary (string platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -111,6 +112,7 @@ namespace Xamarin.Tests {
 		[TestCase ("tvOS")]
 		[TestCase ("macOS")]
 		[TestCase ("MacCatalyst")]
+		[Category ("AllPlatforms")]
 		public void BuildEmbeddedResourcesTest (string platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -143,6 +145,7 @@ namespace Xamarin.Tests {
 		[TestCase ("tvOS")]
 		[TestCase ("macOS")]
 		[TestCase ("MacCatalyst")]
+		[Category ("AllPlatforms")]
 		public void BuildFSharpLibraryTest (string platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -169,6 +172,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacOSX)]
 		[TestCase (ApplePlatform.MacCatalyst)]
+		[Category ("AllPlatforms")]
 		public void BuildBindingsTest (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -200,6 +204,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacOSX)]
 		[TestCase (ApplePlatform.MacCatalyst)]
+		[Category ("AllPlatforms")]
 		public void BuildBindingsTest2 (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -230,6 +235,7 @@ namespace Xamarin.Tests {
 		[TestCase ("tvOS", "monotouch")]
 		[TestCase ("macOS", "xammac")]
 		[TestCase ("MacCatalyst", "monotouch")]
+		[Category ("AllPlatforms")]
 		public void BuildBundledResources (string platform, string prefix)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -263,6 +269,7 @@ namespace Xamarin.Tests {
 		[TestCase ("tvOS")]
 		[TestCase ("macOS")]
 		[TestCase ("MacCatalyst")]
+		[Category ("AllPlatforms")]
 		public void BuildInterdependentBindingProjects (string platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -397,6 +404,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.iOS, "ios-arm64", true, null, "Release")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", true, "PublishTrimmed=true;UseInterpreter=true")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", false)]
+		[Category ("AllPlatforms")]
 		public void IsNotMacBuild (ApplePlatform platform, string runtimeIdentifiers, bool isDeviceBuild, string? extraProperties = null, string configuration = "Debug")
 		{
 			var project = "MySimpleApp";
@@ -806,6 +814,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacCatalyst)]
 		[TestCase (ApplePlatform.MacOSX)]
+		[Category ("AllPlatforms")]
 		public void LibraryReferencingBindingLibrary (ApplePlatform platform)
 		{
 			var project = "LibraryReferencingBindingLibrary";

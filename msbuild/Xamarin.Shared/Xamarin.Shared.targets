@@ -1707,7 +1707,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_ComputeGenerationLocation">
 		<PropertyGroup>
-			<BuildBindingProjectLocally Condition="'$(BuildBindingProjectLocally)' == '' And '$(IsMacEnabled)' == 'true' And '$(BuildSessionId)' != ''">true</BuildBindingProjectLocally>
+			<BuildBindingProjectLocally Condition="'$(BuildBindingProjectLocally)' == '' And '$(UsingAppleNETSdk)' == 'true'">true</BuildBindingProjectLocally>
 			<BuildBindingProjectLocally Condition="'$(BuildBindingProjectLocally)' == ''">false</BuildBindingProjectLocally>
 			<BindingProjectBuildSessionId Condition="'$(BuildBindingProjectLocally)' != 'true'">$(BuildSessionId)</BindingProjectBuildSessionId>
 		</PropertyGroup>
@@ -1719,7 +1719,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		DependsOnTargets="$(_GenerateBindingsDependsOn)"
 		Condition="'$(IsBindingProject)' == 'true'">
 
-		<Error Condition="'$(IsMacEnabled)' != 'true' And '$(BuildBindingProjectLocally)' != 'true'" Text="The property 'BuildBindingProjectLocally' build is set to 'false', but there's no connection to a remote Mac." />
+		<Error Condition="'$(IsMacEnabled)' != 'true' And '$(BuildBindingProjectLocally)' == 'true' And '$(UsingAppleNETSdk)' != 'true'" Text="It's not supported to build binding project locally on Windows in legacy Xamarin projects. Please upgrade the project to a .NET project, or connect to a remote Mac." />
+		<Error Condition="'$(IsMacEnabled)' != 'true' And '$(BuildBindingProjectLocally)' != 'true'" Text="The property 'BuildBindingProjectLocally' build is disabled, but there's no connection to a remote Mac." />
 
 		<PropertyGroup>
 			<BTouchEmitDebugInformation>false</BTouchEmitDebugInformation>

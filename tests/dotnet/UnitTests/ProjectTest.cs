@@ -155,10 +155,10 @@ namespace Xamarin.Tests {
 			var result = DotNet.AssertBuild (project_path, verbosity);
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
-			var assemblies = FilterToAssembly (lines, assemblyName);
+			var assemblies = FilterToAssembly (lines, assemblyName).Distinct ();
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
-			Assert.That (assemblies.Distinct ().Count (), Is.EqualTo (1), "Unique assemblies");
+			Assert.That (assemblies.Count (), Is.EqualTo (1), $"Unique assemblies:\n\t{string.Join ("\n\t", assemblies)}");
 			var asm = assemblies.First ();
 			Assert.That (asm, Does.Exist, "Assembly existence");
 			// Verify that there's no resources in the assembly
@@ -307,8 +307,15 @@ namespace Xamarin.Tests {
 				Where (v => {
 					if (v.Length < 10)
 						return false;
-					if (v [0] != '/')
-						return false;
+					if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+						if (v [1] != ':') {
+							return false;
+						}
+					} else {
+						if (v [0] != '/') {
+							return false;
+						}
+					}
 					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal))
 						return false;
 					if (!(v.Contains ("/bin/", StringComparison.Ordinal) || v.Contains ("\\bin\\", StringComparison.Ordinal)))
@@ -1146,6 +1153,23 @@ namespace Xamarin.Tests {
 				Path.Combine ("BindingWithUncompressedResourceBundle.resources", "manifest"),
 			};
 
+			switch (platform) {
+			case ApplePlatform.iOS:
+			case ApplePlatform.TVOS:
+				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XStaticArTest.framework", "XStaticArTest"));
+				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XStaticObjectTest.framework", "XStaticObjectTest"));
+				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XTest.framework", "Info.plist"));
+				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XTest.framework", "XTest"));
+				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "manifest"));
+				break;
+			case ApplePlatform.MacCatalyst:
+			case ApplePlatform.MacOSX:
+				bindingResourcePackages.Add ("bindings-framework-test.resources.zip");
+				break;
+			}
+
+			DumpFiles (bindir);
+
 			foreach (var brp in bindingResourcePackages) {
 				var file = Path.Combine (bindir, brp);
 				Assert.That (file, Does.Exist, "Existence");
@@ -1283,6 +1307,14 @@ namespace Xamarin.Tests {
 			}
 		}
 
+		void DumpFiles (string dir)
+		{
+			var files = Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).ToArray ();
+			Console.WriteLine ($"DumpFiles ({dir}): {files.Length} files:");
+			foreach (var file in files)
+				Console.WriteLine ($"    {file}");
+		}
+
 		void AssertAppContents (ApplePlatform platform, string app_directory)
 		{
 			var info_plist_path = GetInfoPListPath (platform, app_directory);
@@ -1311,19 +1343,58 @@ namespace Xamarin.Tests {
 
 		IEnumerable<string> FilterToAssembly (IEnumerable<string> lines, string assemblyName)
 		{
+			var rv = FilterToAssembly2 (lines, assemblyName, false);
+			if (!rv.Any ()) {
+				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines matching {assemblyName}");
+				rv = FilterToAssembly2 (lines, assemblyName, true);
+			}
+			return rv;
+		}
+
+		IEnumerable<string> FilterToAssembly2 (IEnumerable<string> lines, string assemblyName, bool log)
+		{
 			return lines.
 				Select (v => v.Trim ()).
 				Where (v => {
-					if (v.Length < 10)
+					if (v.Length < 10) {
+						if (log)
+							Console.WriteLine ($"    1: {v}");
 						return false;
-					if (v [0] != '/' && !(char.IsAsciiLetter (v [0]) && v [1] == ':'))
+					}
+					if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+						if (v [1] != ':') {
+							if (log)
+								Console.WriteLine ($"    2a: {v}");
+							return false;
+						}
+					} else {
+						if (v [0] != '/') {
+							if (log)
+								Console.WriteLine ($"    2b: {v}");
+							return false;
+						}
+					}
+					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal)) {
+						if (log)
+							Console.WriteLine ($"    3: {v}");
 						return false;
-					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal))
+					}
+					if (!(v.Contains ("/bin/", StringComparison.Ordinal) || v.Contains ("\\bin\\", StringComparison.Ordinal))) {
+						if (log)
+							Console.WriteLine ($"    4: {v}");
 						return false;
-					if (!(v.Contains ("/bin/", StringComparison.Ordinal) || v.Contains ("\\bin\\", StringComparison.Ordinal)))
-						return false;
-					if (v.Contains ("/ref/", StringComparison.Ordinal) || v.Contains ("\\ref\\", StringComparison.Ordinal))
+					if (!(v.Contains ("/bin/", StringComparison.Ordinal) || v.Contains ("\\bin\\", StringComparison.Ordinal))) {
+						if (log)
+							Console.WriteLine ($"    5: {v}");
 						return false; // Skip reference assemblies
+					}
+					if (!File.Exists (v)) {
+						if (log)
+							Console.WriteLine ($"    6: {v}");
+						return false;
+					}
+
+					Console.WriteLine ($"    YAY 7: {v}");
 					return true;
 				});
 		}

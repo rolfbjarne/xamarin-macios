@@ -125,6 +125,11 @@ namespace Xamarin.Tests {
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
+			if (!assemblies.Any ()) {
+				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines)");
+				foreach (var line in lines)
+					Console.WriteLine ($"    {line}");
+			}
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
 			assemblies = assemblies.Distinct ();
@@ -158,6 +163,11 @@ namespace Xamarin.Tests {
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
+			if (!assemblies.Any ()) {
+				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines)");
+				foreach (var line in lines)
+					Console.WriteLine ($"    {line}");
+			}
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
 			Assert.That (assemblies.Distinct ().Count (), Is.EqualTo (1), "Unique assemblies");
@@ -249,6 +259,11 @@ namespace Xamarin.Tests {
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
+			if (!assemblies.Any ()) {
+				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines)");
+				foreach (var line in lines)
+					Console.WriteLine ($"    {line}");
+			}
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
 			Assert.That (assemblies.Distinct ().Count (), Is.EqualTo (1), "Unique assemblies");

@@ -311,7 +311,7 @@ namespace Xamarin.Tests {
 						return false;
 					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal))
 						return false;
-					if (!v.Contains ("/bin/", StringComparison.Ordinal))
+					if (!(v.Contains ("/bin/", StringComparison.Ordinal) || v.Contains ("\\bin\\", StringComparison.Ordinal)))
 						return false;
 					if (!v.Contains ($"{assemblyName}.app", StringComparison.Ordinal))
 						return false;

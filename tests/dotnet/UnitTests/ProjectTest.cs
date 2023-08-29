@@ -125,11 +125,6 @@ namespace Xamarin.Tests {
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
-			if (!assemblies.Any ()) {
-				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines)");
-				foreach (var line in lines)
-					Console.WriteLine ($"    {line}");
-			}
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
 			assemblies = assemblies.Distinct ();
@@ -163,11 +158,6 @@ namespace Xamarin.Tests {
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
-			if (!assemblies.Any ()) {
-				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines)");
-				foreach (var line in lines)
-					Console.WriteLine ($"    {line}");
-			}
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
 			Assert.That (assemblies.Distinct ().Count (), Is.EqualTo (1), "Unique assemblies");
@@ -259,11 +249,6 @@ namespace Xamarin.Tests {
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
-			if (!assemblies.Any ()) {
-				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines)");
-				foreach (var line in lines)
-					Console.WriteLine ($"    {line}");
-			}
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
 			Assert.That (assemblies.Distinct ().Count (), Is.EqualTo (1), "Unique assemblies");
@@ -920,19 +905,40 @@ namespace Xamarin.Tests {
 
 		IEnumerable<string> FilterToAssembly (IEnumerable<string> lines, string assemblyName)
 		{
+			var rv = FilterToAssembly2 (lines, assemblyName, false);
+			if (!rv.Any ()) {
+				Console.WriteLine ($"Could not find any matching lines of {lines.Count ()} lines matching {assemblyName}");
+				rv = FilterToAssembly2 (lines, assemblyName, true);
+			}
+			return rv;
+		}
+
+		IEnumerable<string> FilterToAssembly2 (IEnumerable<string> lines, string assemblyName, bool log)
+		{
 			return lines.
 				Select (v => v.Trim ()).
 				Where (v => {
-					if (v.Length < 10)
+					if (v.Length < 10) {
+						Console.WriteLine ($"    1: {line}");
 						return false;
-					if (v [0] != '/')
+					}
+					if (v [0] != '/') {
+						Console.WriteLine ($"    2: {line}");
 						return false;
-					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal))
+					}
+					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal)) {
+						Console.WriteLine ($"    3: {line}");
 						return false;
-					if (!v.Contains (Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+					}
+					if (!v.Contains (Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar, StringComparison.Ordinal)) {
+						Console.WriteLine ($"    4: {line}");
 						return false;
-					if (v.Contains (Path.DirectorySeparatorChar + "ref" + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+					}
+					if (v.Contains (Path.DirectorySeparatorChar + "ref" + Path.DirectorySeparatorChar, StringComparison.Ordinal)) {
+						Console.WriteLine ($"    5: {line}");
 						return false; // Skip reference assemblies
+					}
+					Console.WriteLine ($"    YAY 6: {line}");
 					return true;
 				});
 		}

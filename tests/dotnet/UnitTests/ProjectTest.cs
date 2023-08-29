@@ -919,26 +919,26 @@ namespace Xamarin.Tests {
 				Select (v => v.Trim ()).
 				Where (v => {
 					if (v.Length < 10) {
-						Console.WriteLine ($"    1: {line}");
+						Console.WriteLine ($"    1: {v}");
 						return false;
 					}
 					if (v [0] != '/') {
-						Console.WriteLine ($"    2: {line}");
+						Console.WriteLine ($"    2: {v}");
 						return false;
 					}
 					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal)) {
-						Console.WriteLine ($"    3: {line}");
+						Console.WriteLine ($"    3: {v}");
 						return false;
 					}
 					if (!v.Contains (Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar, StringComparison.Ordinal)) {
-						Console.WriteLine ($"    4: {line}");
+						Console.WriteLine ($"    4: {v}");
 						return false;
 					}
 					if (v.Contains (Path.DirectorySeparatorChar + "ref" + Path.DirectorySeparatorChar, StringComparison.Ordinal)) {
-						Console.WriteLine ($"    5: {line}");
+						Console.WriteLine ($"    5: {v}");
 						return false; // Skip reference assemblies
 					}
-					Console.WriteLine ($"    YAY 6: {line}");
+					Console.WriteLine ($"    YAY 6: {v}");
 					return true;
 				});
 		}

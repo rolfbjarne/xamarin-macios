@@ -289,6 +289,15 @@ namespace Xamarin.Tests {
 						return false;
 					if (v [0] != '/')
 						return false;
+					if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+						if (v [1] != ':') {
+							return false;
+						}
+					} else {
+						if (v [0] != '/') {
+							return false;
+						}
+					}
 					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal))
 						return false;
 					if (!v.Contains (Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar, StringComparison.Ordinal))
@@ -919,23 +928,36 @@ namespace Xamarin.Tests {
 				Select (v => v.Trim ()).
 				Where (v => {
 					if (v.Length < 10) {
-						Console.WriteLine ($"    1: {v}");
+						if (log)
+							Console.WriteLine ($"    1: {v}");
 						return false;
 					}
-					if (v [0] != '/') {
-						Console.WriteLine ($"    2: {v}");
-						return false;
+					if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+						if (v [1] != ':') {
+							if (log)
+								Console.WriteLine ($"    2a: {v}");
+							return false;
+						}
+					} else {
+						if (v [0] != '/') {
+							if (log)
+								Console.WriteLine ($"    2b: {v}");
+							return false;
+						}
 					}
 					if (!v.EndsWith ($"{assemblyName}.dll", StringComparison.Ordinal)) {
-						Console.WriteLine ($"    3: {v}");
+						if (log)
+							Console.WriteLine ($"    3: {v}");
 						return false;
 					}
 					if (!v.Contains (Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar, StringComparison.Ordinal)) {
-						Console.WriteLine ($"    4: {v}");
+						if (log)
+							Console.WriteLine ($"    4: {v}");
 						return false;
 					}
 					if (v.Contains (Path.DirectorySeparatorChar + "ref" + Path.DirectorySeparatorChar, StringComparison.Ordinal)) {
-						Console.WriteLine ($"    5: {v}");
+						if (log)
+							Console.WriteLine ($"    5: {v}");
 						return false; // Skip reference assemblies
 					}
 					Console.WriteLine ($"    YAY 6: {v}");

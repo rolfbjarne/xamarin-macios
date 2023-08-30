@@ -157,10 +157,10 @@ namespace Xamarin.Tests {
 			var result = DotNet.AssertBuild (project_path, verbosity);
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
-			var assemblies = FilterToAssembly (lines, assemblyName);
+			var assemblies = FilterToAssembly (lines, assemblyName).Distinct ();
 			Assert.That (assemblies, Is.Not.Empty, "Assemblies");
 			// Make sure there's no other assembly confusing our logic
-			Assert.That (assemblies.Distinct ().Count (), Is.EqualTo (1), "Unique assemblies");
+			Assert.That (assemblies.Count (), Is.EqualTo (1), $"Unique assemblies:\n\t{string.Join ("\n\t", assemblies)}");
 			var asm = assemblies.First ();
 			Assert.That (asm, Does.Exist, "Assembly existence");
 			// Verify that there's no resources in the assembly
@@ -258,7 +258,7 @@ namespace Xamarin.Tests {
 			// Verify that there's one resource in the binding assembly, and its name
 			var ad = AssemblyDefinition.ReadAssembly (asm, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
 			// Sort the resources before we assert, since we don't care about the order, and sorted order makes the asserts simpler.
-			var resources = ad.MainModule.Resources.OrderBy (v => v.Name).ToArray ();
+			var resources = ad.MainModule.Resources.OrderBy (v => v.Name).Select (v => v.Name).ToArray ();
 			var expectedResources = new string [] {
 				$"__{prefix}_content_basn3p08__with__loc.png",
 				$"__{prefix}_content_basn3p08.png",
@@ -288,8 +288,6 @@ namespace Xamarin.Tests {
 				Select (v => v.Trim ()).
 				Where (v => {
 					if (v.Length < 10)
-						return false;
-					if (v [0] != '/')
 						return false;
 					if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
 						if (v [1] != ':') {
@@ -857,6 +855,7 @@ namespace Xamarin.Tests {
 				break;
 			}
 
+			DumpFiles (bindir);
 			foreach (var brp in bindingResourcePackages) {
 				var file = Path.Combine (bindir, brp);
 				Assert.That (file, Does.Exist, "Existence");
@@ -872,6 +871,14 @@ namespace Xamarin.Tests {
 			var hasDirectoryResources = Directory.Exists (Path.Combine (bindir, "BindingWithDefaultCompileInclude.resources"));
 			if (!hasDirectoryResources && !hasCompressedResources)
 				Assert.Fail ($"Could not find either BindingWithDefaultCompileInclude.resources.zip or BindingWithDefaultCompileInclude.resources in {bindir}");
+		}
+
+		void DumpFiles (string dir)
+		{
+			var files = Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).ToArray ();
+			Console.WriteLine ($"DumpFiles ({dir}): {files.Length} files:");
+			foreach (var file in files)
+				Console.WriteLine ($"    {file}");
 		}
 
 		void AssertThatLinkerExecuted (ExecutionResult result)

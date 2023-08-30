@@ -257,12 +257,14 @@ namespace Xamarin.Tests {
 
 			// Verify that there's one resource in the binding assembly, and its name
 			var ad = AssemblyDefinition.ReadAssembly (asm, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
-			Assert.That (ad.MainModule.Resources.Count, Is.EqualTo (3), "3 resources");
 			// Sort the resources before we assert, since we don't care about the order, and sorted order makes the asserts simpler.
 			var resources = ad.MainModule.Resources.OrderBy (v => v.Name).ToArray ();
-			Assert.That (resources [0].Name, Is.EqualTo ($"__{prefix}_content_basn3p08__with__loc.png"), $"__{prefix}_content_basn3p08__with__loc.png");
-			Assert.That (resources [1].Name, Is.EqualTo ($"__{prefix}_content_basn3p08.png"), $"__{prefix}_content_basn3p08.png");
-			Assert.That (resources [2].Name, Is.EqualTo ($"__{prefix}_content_xamvideotest.mp4"), $"__{prefix}_content_xamvideotest.mp4");
+			var expectedResources = new string [] {
+				$"__{prefix}_content_basn3p08__with__loc.png",
+				$"__{prefix}_content_basn3p08.png",
+				$"__{prefix}_content_xamvideotest.mp4",
+			};
+			Assert.That (resources, Is.EqualTo (expectedResources), "Resources");
 		}
 
 		[TestCase ("iOS")]

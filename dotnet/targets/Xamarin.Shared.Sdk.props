@@ -109,4 +109,9 @@
 	<PropertyGroup Condition="'$(MtouchUseLlvm)' == '' And '$(Configuration)' == 'Release' And ('$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS')">
 		<MtouchUseLlvm>true</MtouchUseLlvm>
 	</PropertyGroup>
+
+	<!-- Compute SdkIsSimulator from the RuntimeIdentifier -->
+	<PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+		<SdkIsSimulator Condition="'$(SdkIsSimulator)' == ''">$(RuntimeIdentifier.Contains('simulator'))</SdkIsSimulator>
+	</PropertyGroup>
 </Project>

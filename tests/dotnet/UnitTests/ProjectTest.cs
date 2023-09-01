@@ -971,7 +971,13 @@ namespace Xamarin.Tests {
 							Console.WriteLine ($"    5: {v}");
 						return false; // Skip reference assemblies
 					}
-					Console.WriteLine ($"    YAY 6: {v}");
+					if (!File.Exists (v)) {
+						if (log)
+							Console.WriteLine ($"    6: {v}");
+						return false;
+					}
+
+					Console.WriteLine ($"    YAY 7: {v}");
 					return true;
 				});
 		}

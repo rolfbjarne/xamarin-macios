@@ -240,6 +240,7 @@
 			_CompileNativeExecutable;
 			_LinkNativeExecutable;
 			_ComputePublishLocation;
+			_CompileCreateDumpEntitlements;
 			_ComputeCodesignItems;
 			CopyFilesToPublishDirectory;
 			_CopyDirectoriesToBundle;
@@ -1509,6 +1510,7 @@
 			<_CreateDumpExecutable
 				Include="@(ResolvedFileToPublish)"
 				Condition=" '$(UseMonoRuntime)' == 'false' And
+				            '$(BundleCreateDump)' != 'false' And
 				            '%(ResolvedFileToPublish.Filename)' == 'createdump' And
 				            '%(ResolvedFileToPublish.Extension)' == '' And
 				            '%(ResolvedFileToPublish.AssetType)' == 'native' And
@@ -1628,16 +1630,76 @@
 		</ResolveNativeReferences>
 	</Target>
 
+	<PropertyGroup>
+		<_CompileCreateDumpEntitlementsDependsOn>
+			$(_CompileCreateDumpEntitlementsDependsOn);
+			$(_CompileEntitlementsDependsOn);
+			_ComputePublishLocation;
+			_ComputeCreateDumpEntitlementsPath
+		</_CompileCreateDumpEntitlementsDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_ComputeCreateDumpEntitlementsPath">
+		<PropertyGroup>
+			<_CompiledCreateDumpEntitlementsPath Condition="'$(_CompiledCreateDumpEntitlementsPath)' == ''">$(DeviceSpecificIntermediateOutputPath)CreateDumpEntitlements.xcent</_CompiledCreateDumpEntitlementsPath>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="_CompileCreateDumpEntitlements"
+		Condition="'$(_RequireCodeSigning)' == 'true' And @(_CreateDumpExecutable->Count()) &gt; 0"
+		DependsOnTargets="$(_CompileCreateDumpEntitlementsDependsOn)"
+		Outputs="$(_CompiledCreateDumpEntitlementsPath)">
+		<ItemGroup>
+			<!-- We need to compare the result of AnyHaveMetadataValue to 'true', because if it's empty, the return value is not a boolean, it's an empty string -->
+			<!-- https://github.com/dotnet/runtime/blob/main/eng/pipelines/common/createdump-entitlements.plist -->
+			<CreateDumpEntitlements Condition="'@(CreateDumpEntitlements->AnyHaveMetadataValue('Identity','com.apple.security.cs.allow-dyld-environment-variables'))' != 'true'" Include="com.apple.security.cs.allow-dyld-environment-variables" Type="Boolean" Value="true" />
+			<CreateDumpEntitlements Condition="'@(CreateDumpEntitlements->AnyHaveMetadataValue('Identity','com.apple.security.cs.disable-library-validation'))' != 'true'" Include="com.apple.security.cs.disable-library-validation" Type="Boolean" Value="true" />
+			<CreateDumpEntitlements Condition="'@(CreateDumpEntitlements->AnyHaveMetadataValue('Identity','com.apple.security.cs.debugger'))' != 'true'" Include="com.apple.security.cs.debugger" Type="Boolean" Value="true" />
+			<!-- The sandbox entitlement is also needed, otherwise the App Store won't accept it -->
+			<CreateDumpEntitlements Condition="'@(CreateDumpEntitlements->AnyHaveMetadataValue('Identity','com.apple.security.app-sandbox'))' != 'true'" Include="com.apple.security.app-sandbox" Type="Boolean" Value="true" />
+		</ItemGroup>
+		<CompileEntitlements
+			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			AppBundleDir="$(AppBundleDir)"
+			BundleIdentifier="$(_BundleIdentifier)"
+			CompiledEntitlements="$(_CompiledCreateDumpEntitlementsPath)"
+			CustomEntitlements="@(CreateDumpEntitlements)"
+			Debug="$(_BundlerDebug)"
+			DisableDefaultEntitlements="true"
+			DisableEntitlementsFromProvisioningProfile="true"
+			ProvisioningProfile="$(_CreateDumpProvisioningProfile)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			SdkPlatform="$(_SdkPlatform)"
+			SdkVersion="$(_SdkVersion)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			>
+
+			<Output TaskParameter="EntitlementsInSignature" PropertyName="_CompiledCreateDumpCodesignEntitlements" />
+		</CompileEntitlements>
+
+		<!-- The path to the entitlements must be resolved to the full path, because we might want to reference it from a containing project that just references this project,
+			 and in that case it becomes a bit complicated to resolve to a full path on disk when building remotely from Windows. Instead just resolve to a full path here,
+			 and use that from now on. This has to be done from a task, so that we get the full path on the mac when executed remotely from Windows. -->
+		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true' And '$(_CompiledCreateDumpCodesignEntitlements)' != ''" RelativePath="$(_CompiledCreateDumpCodesignEntitlements)">
+			<Output TaskParameter="FullPath" PropertyName="_CompiledCreateDumpCodesignEntitlements" />
+		</GetFullPath>
+
+		<ItemGroup>
+			<FileWrites Include="$(_CompiledCreateDumpCodesignEntitlements)" />
+		</ItemGroup>
+	</Target>
+
 	<Target Name="_ComputeCodesignItems"
 		Outputs="$(_CodesignItemsPath)"
 		>
-		<ItemGroup Condition="'$(_RequireCodeSigning)' == 'true'">
+		<ItemGroup Condition="'$(_RequireCodeSigning)' == 'true' And '$(BundleCreateDump)' != 'false'">
 			<!-- The 'createdump' executable must be signed. -->
 			<!-- Ref: https://github.com/xamarin/xamarin-macios/issues/13417 -->
 			<_CreateDumpExecutableToSign Include="@(_CreateDumpExecutable -> '$(_DylibPublishDir)%(RelativePath)')" KeepMetadata="false">
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
 				<CodesignDisableTimestamp Condition="'$(_BundlerDebug)' == 'true'">true</CodesignDisableTimestamp>
-				<CodesignEntitlements>$(_CompiledEntitlementsPath)</CodesignEntitlements>
+				<CodesignEntitlements>$(_CompiledCreateDumpCodesignEntitlements)</CodesignEntitlements>
 				<CodesignExtraArgs>$(CodesignExtraArgs)</CodesignExtraArgs>
 				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
 				<CodesignResourceRules>$(_PreparedResourceRules)</CodesignResourceRules>

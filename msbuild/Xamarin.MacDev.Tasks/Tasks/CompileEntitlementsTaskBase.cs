@@ -58,6 +58,10 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool Debug { get; set; }
 
+		public bool DisableEntitlementsFromProvisioningProfile { get; set; }
+
+		public bool DisableDefaultEntitlements { get; set; }
+
 		public string Entitlements { get; set; } = string.Empty;
 
 		public string ProvisioningProfile { get; set; } = string.Empty;
@@ -140,7 +144,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (string.IsNullOrEmpty (pstr.Value))
 				return (PString) pstr.Clone ();
 
-			if (profile is null) {
+			if (profile is null && !DisableEntitlementsFromProvisioningProfile) {
 				if (!warnedTeamIdentifierPrefix && pstr.Value.Contains ("$(TeamIdentifierPrefix)")) {
 					Log.LogWarning (null, null, null, Entitlements, 0, 0, 0, 0, MSBStrings.W0108);
 					warnedTeamIdentifierPrefix = true;
@@ -340,7 +344,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var entitlements = new PDictionary ();
 
-			if (profile is not null) {
+			if (profile is not null && !DisableEntitlementsFromProvisioningProfile) {
 				// start off with the settings from the provisioning profile
 				foreach (var item in profile.Entitlements) {
 					var key = item.Key!;
@@ -445,7 +449,7 @@ namespace Xamarin.MacDev.Tasks {
 			PDictionary template;
 			PDictionary compiled;
 			PDictionary archived;
-			string path;
+			string path = string.Empty;
 
 			switch (SdkPlatform) {
 			case "AppleTVSimulator":
@@ -485,12 +489,15 @@ namespace Xamarin.MacDev.Tasks {
 				}
 
 				path = Entitlements;
-			} else {
+			} else if (!DisableDefaultEntitlements) {
 				path = DefaultEntitlementsPath;
 			}
 
 			try {
-				template = PDictionary.FromFile (path)!;
+				if (!string.IsNullOrEmpty (path))
+					template = PDictionary.FromFile (path)!;
+				else
+					template = new PDictionary ();
 			} catch (Exception ex) {
 				Log.LogError (MSBStrings.E0113, path, ex.Message);
 				return false;

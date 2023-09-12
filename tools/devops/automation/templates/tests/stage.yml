@@ -135,25 +135,25 @@ stages:
       workspace:
         clean: all
     strategy:
-      matrix:
-        ${{ each testConfig in parameters.testConfigurations }}:
-          ${{ if eq(testConfig.splitByPlatforms, 'true') }}:
-            ${{ each platform in parameters.supportedPlatforms }}:
-              ${{ replace(testConfig.label, '-', '_')}}_${{ platform.platform }}:
-                LABEL: ${{ replace(testConfig.label, '-', '_') }}
-                TESTS_LABELS: "${{ parameters.testsLabels }},run-${{ replace(testConfig.label, '-', '_') }}-tests"
-                STATUS_CONTEXT: "${{ parameters.statusContext }} - ${{ replace(testConfig.label, '-', '_') }} - ${{ platform.platform }}"
-                TEST_PREFIX: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}"
-                TEST_PLATFORM: "${{ platform.platform }}"
-                CONDITION_VARIABLE: ${{ platform.conditionVariable }}
-          ${{ else }}:
-            ${{ replace(testConfig.label, '-', '_')}}:
-              LABEL: ${{ replace(testConfig.label, '-', '_') }}
-              TESTS_LABELS: "${{ parameters.testsLabels }},run-${{ replace(testConfig.label, '-', '_') }}-tests"
-              STATUS_CONTEXT: "${{ parameters.statusContext }} - ${{ replace(testConfig.label, '-', '_') }}"
-              TEST_PREFIX: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}"
-              TEST_PLATFORM: All
-              CONDITION_VARIABLE: ""
+      matrix: $[ dependencies.configure.outputs['?'] ]
+      #   ${{ each testConfig in parameters.testConfigurations }}:
+      #     ${{ if eq(testConfig.splitByPlatforms, 'true') }}:
+      #       ${{ each platform in parameters.supportedPlatforms }}:
+      #         ${{ replace(testConfig.label, '-', '_')}}_${{ platform.platform }}:
+      #           LABEL: ${{ replace(testConfig.label, '-', '_') }}
+      #           TESTS_LABELS: "${{ parameters.testsLabels }},run-${{ replace(testConfig.label, '-', '_') }}-tests"
+      #           STATUS_CONTEXT: "${{ parameters.statusContext }} - ${{ replace(testConfig.label, '-', '_') }} - ${{ platform.platform }}"
+      #           TEST_PREFIX: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}"
+      #           TEST_PLATFORM: "${{ platform.platform }}"
+      #           CONDITION_VARIABLE: ${{ platform.conditionVariable }}
+      #     ${{ else }}:
+      #       ${{ replace(testConfig.label, '-', '_')}}:
+      #         LABEL: ${{ replace(testConfig.label, '-', '_') }}
+      #         TESTS_LABELS: "${{ parameters.testsLabels }},run-${{ replace(testConfig.label, '-', '_') }}-tests"
+      #         STATUS_CONTEXT: "${{ parameters.statusContext }} - ${{ replace(testConfig.label, '-', '_') }}"
+      #         TEST_PREFIX: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}"
+      #         TEST_PLATFORM: All
+      #         CONDITION_VARIABLE: ""
 
 
           # if (platform.conditionVariableLegacy == 'All' || platform.conditionVariableDotNet == 'All')

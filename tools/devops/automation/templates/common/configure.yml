@@ -55,7 +55,7 @@ steps:
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $jsonPath = Join-Path -Path "$(Build.ArtifactStagingDirectory)" -ChildPath "configuration.json"
-    $testMatrix = Get-TestConfiguration
+    $testMatrix = Get-TestConfiguration -TestConfigurations "$Env:TEST_CONFIGURATIONS" -SupportedPlatforms "$Env:SUPPORTED_PLATFORMS"
     Write-Debug "$testMatrix"
   name: test_matrix
   displayName: 'Create strategy matrix'

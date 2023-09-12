@@ -60,8 +60,8 @@ steps:
   name: test_matrix
   displayName: 'Create strategy matrix'
   env:
-    TEST_CONFIGURATIONS: ${{ parameters.testConfigurations }}
-    SUPPORTED_PLATFORMS: ${{ parameters.supportedPlatforms }}
+    TEST_CONFIGURATIONS: ${{ convertToJson(parameters.testConfigurations) }}
+    SUPPORTED_PLATFORMS: ${{ convertToJson(parameters.supportedPlatforms) }}
 
 # upload config to be consumed later
 - ${{ if eq(parameters.uploadArtifacts, true) }}:

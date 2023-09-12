@@ -20,11 +20,11 @@ parameters:
   default: '$(MaciosUploadPrefix)'
 
 - name: testConfigurations
-  type: object
+  type: string
   default: 'none'
 
 - name: supportedPlatforms
-  type: object
+  type: string
   default: 'none'
 
 steps:

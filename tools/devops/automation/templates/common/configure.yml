@@ -20,12 +20,12 @@ parameters:
   default: '$(MaciosUploadPrefix)'
 
 - name: testConfigurations
-  type: string
-  default: 'none'
+  type: object
+  default: null
 
 - name: supportedPlatforms
-  type: string
-  default: 'none'
+  type: object
+  default: null
 
 steps:
 - template: checkout.yml

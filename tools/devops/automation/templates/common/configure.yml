@@ -21,11 +21,11 @@ parameters:
 
 - name: testConfigurations
   type: object
-  default: null
+  default: []
 
 - name: supportedPlatforms
   type: object
-  default: null
+  default: []
 
 steps:
 - template: checkout.yml

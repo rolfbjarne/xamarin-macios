@@ -57,6 +57,7 @@ steps:
     $jsonPath = Join-Path -Path "$(Build.ArtifactStagingDirectory)" -ChildPath "configuration.json"
     $testMatrix = Get-TestConfiguration -TestConfigurations "$Env:TEST_CONFIGURATIONS" -SupportedPlatforms "$Env:SUPPORTED_PLATFORMS"
     Write-Debug "$testMatrix"
+    Write-Host "##vso[task.setvariable variable=TEST_MATRIX;isOutput=true]$testMatrix"
   name: test_matrix
   displayName: 'Create strategy matrix'
   env:

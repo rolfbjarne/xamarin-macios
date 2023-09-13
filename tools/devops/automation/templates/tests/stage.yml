@@ -118,10 +118,55 @@ stages:
           testConfigurations: ${{ parameters.testConfigurations }}
           supportedPlatforms: ${{ parameters.supportedPlatforms }}
 
+  - job: "debugOutput"
+    dependsOn:
+    - configure
+    displayName: 'Debug output'
+    timeoutInMinutes: 10
+    pool:
+      name: $(AgentPoolComputed)
+      demands:
+      - Agent.OS -equals Darwin
+      - macOS.Name -equals ${{ parameters.macOSName }}
+      - XcodeChannel -equals ${{ parameters.XcodeChannel }}
+      - ${{ each demand in parameters.extraBotDemands }}:
+        - demand
+
+    variables:
+      WHATEVER1: $[ variables.CONDITION_VARIABLE ]
+      WHATEVER2: $(CONDITION_VARIABLE)
+      WHATEVER3: $[ convertToJson(dependencies) ]
+      WHATEVER4: $[ convertToJson(dependencies.configure) ]
+      WHATEVER5: dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]']
+      WHATEVER6: $[ dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'] ]
+      WHATEVER7: dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)']
+      WHATEVER8: $[ dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'] ]
+      WHATEVER9: $[ convertToJson(parameters) ]
+      WHATEVER10: $[ convertToJson(parameters.testConfigurations) ]
+      WHATEVER11: $[ convertToJson(parameters.supportedPlatforms) ]
+
+    steps:
+    - bash: |
+        env | sort
+      displayName: 'Dump env'
+      name: DumpEnv
+      env:
+        ENV_WHATEVER1: $[ variables.CONDITION_VARIABLE ]
+        ENV_WHATEVER2: $(CONDITION_VARIABLE)
+        ENV_WHATEVER3: $[ convertToJson(dependencies) ]
+        ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
+        ENV_WHATEVER5: dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]']
+        ENV_WHATEVER6: $[ dependencies.configure.outputs['configure_platforms.$[variables.CONDITION_VARIABLE]'] ]
+        ENV_WHATEVER7: dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)']
+        ENV_WHATEVER8: $[ dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'] ]
+        ENV_WHATEVER9: $[ convertToJson(parameters) ]
+        ENV_WHATEVER10: $[ convertToJson(parameters.testConfigurations) ]
+        ENV_WHATEVER11: $[ convertToJson(parameters.supportedPlatforms) ]
+
+
   - job: "tests"
     dependsOn:
-    - ${{ if eq(parameters.parseLabels, true) }}:
-      - configure
+    - configure
     displayName: 'Running tests:'
     timeoutInMinutes: 1000
     pool:
@@ -135,7 +180,7 @@ stages:
       workspace:
         clean: all
     strategy:
-      matrix: $[ dependencies.configure.outputs['?'] ]
+      matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
       #   ${{ each testConfig in parameters.testConfigurations }}:
       #     ${{ if eq(testConfig.splitByPlatforms, 'true') }}:
       #       ${{ each platform in parameters.supportedPlatforms }}:

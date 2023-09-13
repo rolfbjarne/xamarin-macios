@@ -284,7 +284,7 @@ namespace Xamarin.MacDev {
 				var rootDir = Path.GetDirectoryName (fullResourcePath);
 				if (Directory.Exists (resource)) {
 					var entries = Directory.GetFileSystemEntries (fullResourcePath, "*", SearchOption.AllDirectories);
-					var entriesWithZipName = entries.Select (v => new { Path = v, ZipName = v.Substring (rootDir.Length)});
+					var entriesWithZipName = entries.Select (v => new { Path = v, ZipName = v.Substring (rootDir.Length) });
 					foreach (var entry in entriesWithZipName) {
 						if (Directory.Exists (entry.Path)) {
 							if (entries.Where (v => v.StartsWith (entry.Path, StringComparison.Ordinal)).Count () == 1) {

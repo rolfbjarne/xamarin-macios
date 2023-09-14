@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Build.Framework;
@@ -7,69 +8,35 @@ using Microsoft.Build.Utilities;
 using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
-	public abstract class ZipTaskBase : XamarinToolTask {
+	public abstract class ZipTaskBase : XamarinTask {
 		#region Inputs
 
 		[Output]
 		[Required]
 		public ITaskItem OutputFile { get; set; }
 
-		public bool Recursive { get; set; }
-
 		[Required]
 		public ITaskItem [] Sources { get; set; }
-
-		public bool Symlinks { get; set; }
 
 		[Required]
 		public ITaskItem WorkingDirectory { get; set; }
 
 		#endregion
 
-		protected override string ToolName {
-			get { return "zip"; }
-		}
-
-		protected override string GenerateFullPathToTool ()
+		public override bool Execute ()
 		{
-			if (!string.IsNullOrEmpty (ToolPath))
-				return Path.Combine (ToolPath, ToolExe);
-
-			var path = Path.Combine ("/usr/bin", ToolExe);
-
-			return File.Exists (path) ? path : ToolExe;
-		}
-
-		protected override string GetWorkingDirectory ()
-		{
-			return WorkingDirectory.GetMetadata ("FullPath");
-		}
-
-		protected override string GenerateCommandLineCommands ()
-		{
-			var args = new CommandLineArgumentBuilder ();
-
-			if (Recursive)
-				args.Add ("-r");
-
-			if (Symlinks)
-				args.Add ("-y");
-
-			args.AddQuoted (OutputFile.GetMetadata ("FullPath"));
-
-			var root = WorkingDirectory.GetMetadata ("FullPath");
+			var zip = OutputFile.GetMetadata ("FullPath");
+			var workingDirectory = WorkingDirectory.GetMetadata ("FullPath");
+			var sources = new List<string> ();
 			for (int i = 0; i < Sources.Length; i++) {
-				var relative = PathUtils.AbsoluteToRelative (root, Sources [i].GetMetadata ("FullPath"));
-				args.AddQuoted (relative);
+				var relative = PathUtils.AbsoluteToRelative (workingDirectory, Sources [i].GetMetadata ("FullPath"));
+				sources.Add (relative);
 			}
 
-			return args.ToString ();
-		}
+			if (!CompressionHelper.TryCompress (this.Log, zip, sources, false, workingDirectory, false))
+				return false;
 
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return !Log.HasLoggedErrors;
 		}
 	}
 }

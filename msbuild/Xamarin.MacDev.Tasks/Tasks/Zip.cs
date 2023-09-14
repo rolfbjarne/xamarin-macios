@@ -21,12 +21,10 @@ namespace Xamarin.MacDev.Tasks {
 			return base.Execute ();
 		}
 
-		public override void Cancel ()
+		public void Cancel ()
 		{
 			if (ShouldExecuteRemotely ())
 				BuildConnection.CancelAsync (BuildEngine4).Wait ();
-
-			base.Cancel ();
 		}
 
 		public bool ShouldCopyToBuildServer (ITaskItem item) => false;

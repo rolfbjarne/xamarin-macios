@@ -143,8 +143,8 @@ stages:
         ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
         ENV_WHATEVER1: "Hello"
         ENV_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
-        ENV_WHATEVER5: ${{ parameters.testConfigurations }}
-        ENV_WHATEVER6: ${{ parameters.supportedPlatforms }}
+        ENV_WHATEVER5: "${{ parameters.testConfigurations }}"
+        ENV_WHATEVER6: "${{ parameters.supportedPlatforms }}"
 
   - job: "tests"
     dependsOn:

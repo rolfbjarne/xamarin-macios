@@ -128,33 +128,31 @@ stages:
       VAR_WHATEVER3: $[ convertToJson(dependencies) ]
       VAR_WHATEVER4: $[ convertToJson(dependencies.configure) ]
       VAR_WHATEVER1: "World"
+      VAR_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
     steps:
-    - bash: env | sort
+    - bash: |
+        env | sort
+        env
       displayName: 'Dump env'
       name: DumpEnv
       env:
         ENV_WHATEVER3: $[ convertToJson(dependencies) ]
         ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
         ENV_WHATEVER1: "Hello"
+        ENV_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
 
-  # - job: "tests"
-  #   dependsOn:
-  #   - configure
-  #   displayName: 'Running tests:'
-  #   timeoutInMinutes: 1000
-  #   pool:
-  #     name: $(AgentPoolComputed)
-  #     demands:
-  #     - Agent.OS -equals Darwin
-  #     - macOS.Name -equals ${{ parameters.macOSName }}
-  #     - XcodeChannel -equals ${{ parameters.XcodeChannel }}
-  #     - ${{ each demand in parameters.extraBotDemands }}:
-  #       - demand
-  #     workspace:
-  #       clean: all
-  #   strategy:
-  #     matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
-  #   steps:
-  #   - bash: env | sort
-  #     displayName: 'Dump env'
-  #     name: DumpEnv
+  - job: "tests"
+    dependsOn:
+    - configure
+    displayName: 'Running tests:'
+    timeoutInMinutes: 1000
+    pool:
+      vmImage: ubuntu-latest
+    strategy:
+      matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
+    steps:
+    - bash: |
+        env | sort
+        env
+      displayName: 'Dump env'
+      name: DumpEnv

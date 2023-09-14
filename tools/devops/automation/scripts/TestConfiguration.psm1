@@ -10,16 +10,27 @@ class TestConfiguration {
     }
 
     [string] Create() {
-        return @"
-{
-    'cecil': {
-        'myvar':'myvalue'
-    },
-    'dotnettests': {
-        'myvar': 'myvalue2'
-    }
-}
-"@
+        $rv = [ordered]@{}
+        foreach ($config in $this.testConfigurations) {
+            $label = $config.label
+            $splitByPlatforms = $config.splitByPlatforms
+
+            $vars = [ordered]@{}
+            if ($splitByPlatforms -eq "True") {
+                foreach ($platformConfig in $this.supportedPlatforms) {
+                    $platformVars = [ordered]@{}
+                    $platform = $platformConfig.platform
+                    $platformVars["PLATFORM"] = $platform
+                    $platformLabel = "$($label)_$($platform)"
+                    $rv[$platformLabel] = $platformVars
+                }
+            } else {
+                $vars["PLATFORM"] = "All"
+                $rv[$label] = $vars
+            }
+        }
+
+        return $rv | ConvertTo-Json
     }
 }
 
@@ -42,5 +53,5 @@ function Get-TestConfiguration {
     return $config.Create()
 }
 
-# export public functions, other functions are private and should not be used ouside the module.
+# export public functions, other functions are private and should not be used outside the module.
 Export-ModuleMember -Function Get-TestConfiguration

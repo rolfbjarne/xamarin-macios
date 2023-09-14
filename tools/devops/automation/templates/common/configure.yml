@@ -56,6 +56,8 @@ steps:
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $jsonPath = Join-Path -Path "$(Build.ArtifactStagingDirectory)" -ChildPath "configuration.json"
     $testMatrix = Get-TestConfiguration -TestConfigurations "$Env:TEST_CONFIGURATIONS" -SupportedPlatforms "$Env:SUPPORTED_PLATFORMS"
+    # compress the json to remove any newlines, because we can't set the variable below of the json has any newlines
+    $testMatrix = $testMatrix | ConvertFrom-Json | ConvertTo-Json -Compress
     Write-Debug "$testMatrix"
     Write-Host "##vso[task.setvariable variable=TEST_MATRIX;isOutput=true]$testMatrix"
   name: test_matrix

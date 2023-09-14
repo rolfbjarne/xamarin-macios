@@ -10,7 +10,16 @@ class TestConfiguration {
     }
 
     [string] Create() {
-        return "{'cecil':{'myvar':'myvalue'}}"
+        return @"
+{
+    'cecil': {
+        'myvar':'myvalue'
+    },
+    'dotnettests': {
+        'myvar': 'myvalue2'
+    }
+}
+"@
     }
 }
 

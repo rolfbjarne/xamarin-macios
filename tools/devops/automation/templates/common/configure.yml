@@ -54,6 +54,7 @@ steps:
 
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
+    gci env: | sort | format-table -autosize -wrap
     $jsonPath = Join-Path -Path "$(Build.ArtifactStagingDirectory)" -ChildPath "configuration.json"
     $testMatrix = Get-TestConfiguration -TestConfigurations "$Env:TEST_CONFIGURATIONS" -SupportedPlatforms "$Env:SUPPORTED_PLATFORMS"
     # compress the json to remove any newlines, because we can't set the variable below of the json has any newlines

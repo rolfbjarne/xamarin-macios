@@ -129,6 +129,8 @@ stages:
       VAR_WHATEVER4: $[ convertToJson(dependencies.configure) ]
       VAR_WHATEVER1: "World"
       VAR_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
+      VAR_WHATEVER5: ${{ parameters.testConfigurations }}
+      VAR_WHATEVER6: ${{ parameters.supportedPlatforms }}
     steps:
     - checkout: none
     - bash: |
@@ -141,6 +143,8 @@ stages:
         ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
         ENV_WHATEVER1: "Hello"
         ENV_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
+        ENV_WHATEVER5: ${{ parameters.testConfigurations }}
+        ENV_WHATEVER6: ${{ parameters.supportedPlatforms }}
 
   - job: "tests"
     dependsOn:

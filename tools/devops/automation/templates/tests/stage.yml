@@ -179,59 +179,8 @@ stages:
         - demand
       workspace:
         clean: all
-    strategy:
-      matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
-      #   ${{ each testConfig in parameters.testConfigurations }}:
-      #     ${{ if eq(testConfig.splitByPlatforms, 'true') }}:
-      #       ${{ each platform in parameters.supportedPlatforms }}:
-      #         ${{ replace(testConfig.label, '-', '_')}}_${{ platform.platform }}:
-      #           LABEL: ${{ replace(testConfig.label, '-', '_') }}
-      #           TESTS_LABELS: "${{ parameters.testsLabels }},run-${{ replace(testConfig.label, '-', '_') }}-tests"
-      #           STATUS_CONTEXT: "${{ parameters.statusContext }} - ${{ replace(testConfig.label, '-', '_') }} - ${{ platform.platform }}"
-      #           TEST_PREFIX: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}_${{ platform.platform }}"
-      #           TEST_PLATFORM: "${{ platform.platform }}"
-      #           CONDITION_VARIABLE: ${{ platform.conditionVariable }}
-      #     ${{ else }}:
-      #       ${{ replace(testConfig.label, '-', '_')}}:
-      #         LABEL: ${{ replace(testConfig.label, '-', '_') }}
-      #         TESTS_LABELS: "${{ parameters.testsLabels }},run-${{ replace(testConfig.label, '-', '_') }}-tests"
-      #         STATUS_CONTEXT: "${{ parameters.statusContext }} - ${{ replace(testConfig.label, '-', '_') }}"
-      #         TEST_PREFIX: "${{ parameters.testPrefix }}${{ replace(testConfig.label, '-', '_') }}"
-      #         TEST_PLATFORM: All
-      #         CONDITION_VARIABLE: ""
-
-
-          # if (platform.conditionVariableLegacy == 'All' || platform.conditionVariableDotNet == 'All')
-          #    // include
-          # else if (testConfig.splitByPlatforms && dependencies.configure.outputs [platform.conditionVariableLegacy] != '')
-          #    // include
-          # else if (testConfig.splitByPlatforms && dependencies.configure.outputs [platform.conditionVariableDotNet] != '')
-          #    // include
-          # else
-          #    // skip
-          # endif
-          #### condition: or(
-          ####             or(
-          ####               eq('All', '${{ platform.conditionVariableLegacy}}'),
-          ####               eq('All', '${{ platform.conditionVariableDotNet}}')
-          ####               ),
-          ####             and(
-          ####               ${{ testConfig.splitByPlatforms }},
-          ####               ne(
-          ####                 '',
-          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableLegacy }}'] ]
-          ####                 )
-          ####               ),
-          ####             and(
-          ####               ${{ testConfig.splitByPlatforms }},
-          ####               ne(
-          ####                 '',
-          ####                 $[ dependencies.configure.outputs['configure_platforms.${{ platform.conditionVariableDotNet }}'] ]
-          ####                 )
-          ####               )
-          ####             )
-
-    # condition: ne(dependencies.configure.outputs['configure_platforms.$(CONDITION_VARIABLE)'],'')
+    # strategy:
+    #   matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
     variables:
       # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
       PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
@@ -255,23 +204,27 @@ stages:
       WHATEVER11: $[ convertToJson(parameters.supportedPlatforms) ]
 
     steps:
-    - template: build.yml
-      parameters:
-        isPR: ${{ parameters.isPR }}
-        repositoryAlias: ${{ parameters.repositoryAlias }}
-        commit: ${{ parameters.commit }}
-        label: $(LABEL)
-        testsLabels: $(TESTS_LABELS)
-        statusContext: $(STATUS_CONTEXT)
-        useXamarinStorage: ${{ parameters.useXamarinStorage }}
-        vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
-        keyringPass: ${{ parameters.keyringPass }}
-        testPrefix: $(TEST_PREFIX)
-        makeTarget: ${{ parameters.makeTarget }}
-        gitHubToken: ${{ parameters.gitHubToken }}
-        xqaCertPass: ${{ parameters.xqaCertPass }}
-        testPlatform: $(TEST_PLATFORM)
-        conditionVariable: $(CONDITION_VARIABLE)
+    - bash: |
+        env | sort
+      displayName: 'Dump env'
+      name: DumpEnv
+    # - template: build.yml
+    #   parameters:
+    #     isPR: ${{ parameters.isPR }}
+    #     repositoryAlias: ${{ parameters.repositoryAlias }}
+    #     commit: ${{ parameters.commit }}
+    #     label: $(LABEL)
+    #     testsLabels: $(TESTS_LABELS)
+    #     statusContext: $(STATUS_CONTEXT)
+    #     useXamarinStorage: ${{ parameters.useXamarinStorage }}
+    #     vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
+    #     keyringPass: ${{ parameters.keyringPass }}
+    #     testPrefix: $(TEST_PREFIX)
+    #     makeTarget: ${{ parameters.makeTarget }}
+    #     gitHubToken: ${{ parameters.gitHubToken }}
+    #     xqaCertPass: ${{ parameters.xqaCertPass }}
+    #     testPlatform: $(TEST_PLATFORM)
+    #     conditionVariable: $(CONDITION_VARIABLE)
 
   - job: publish_test_results
     condition: succeededOrFailed()

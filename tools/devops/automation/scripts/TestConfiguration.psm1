@@ -47,7 +47,7 @@ function Get-TestConfiguration {
     $objSupportedPlatforms = ConvertFrom-Json -InputObject $SupportedPlatforms
 
     $config = [TestConfiguration]::new($objTestConfigurations, $objSupportedPlatforms)
-    return $config.Create()
+    return $config.Create() | ConvertTo-Json -Compress
 }
 
 # export public functions, other functions are private and should not be used ouside the module.

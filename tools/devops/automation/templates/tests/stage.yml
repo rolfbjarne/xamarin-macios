@@ -128,3 +128,25 @@ stages:
     - bash: env
       displayName: 'Dump env'
       name: DumpEnv
+
+  - job: "tests"
+    dependsOn:
+    - configure
+    displayName: 'Running tests:'
+    timeoutInMinutes: 1000
+    pool:
+      name: $(AgentPoolComputed)
+      demands:
+      - Agent.OS -equals Darwin
+      - macOS.Name -equals ${{ parameters.macOSName }}
+      - XcodeChannel -equals ${{ parameters.XcodeChannel }}
+      - ${{ each demand in parameters.extraBotDemands }}:
+        - demand
+      workspace:
+        clean: all
+    strategy:
+      matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
+    steps:
+    - bash: env
+      displayName: 'Dump env'
+      name: DumpEnv

@@ -10,24 +10,7 @@ class TestConfiguration {
     }
 
     [string] Create() {
-        return @"
-{
-    'cecil': {
-        LABEL: 'cecil',
-        TESTS_LABELS: 'cecil-tests',
-        STATUS_CONTEXT: 'cecil - all platforms',
-        TEST_PREFIX: 'cecil',
-        TEST_PLATFORM: ''
-    },
-    'dotnettests_iOS' {
-        LABEL: 'dotnettests_iOS',
-        TESTS_LABELS: 'dotnettests',
-        STATUS_CONTEXT: 'dotnettests - iOS',
-        TEST_PREFIX: 'dotnettests_iOS',
-        TEST_PLATFORM: 'iOS'
-    }
-}
-"@
+        return @"{'cecil':{'myvar':'myvalue'}}"@
     }
 }
 

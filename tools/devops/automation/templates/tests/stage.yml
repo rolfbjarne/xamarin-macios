@@ -130,6 +130,7 @@ stages:
       VAR_WHATEVER1: "World"
       VAR_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
     steps:
+    - checkout: none
     - bash: |
         env | sort
         env

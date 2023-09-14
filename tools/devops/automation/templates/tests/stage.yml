@@ -127,7 +127,6 @@ stages:
     variables:
       VAR_WHATEVER3: $[ convertToJson(dependencies) ]
       VAR_WHATEVER4: $[ convertToJson(dependencies.configure) ]
-      VAR_WHATEVER9: $[ convertToJson(parameters) ]
       VAR_WHATEVER1: "World"
     steps:
     - bash: env | sort
@@ -136,7 +135,6 @@ stages:
       env:
         ENV_WHATEVER3: $[ convertToJson(dependencies) ]
         ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
-        ENV_WHATEVER9: $[ convertToJson(parameters) ]
         ENV_WHATEVER1: "Hello"
 
   # - job: "tests"

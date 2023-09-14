@@ -125,9 +125,13 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - bash: env
+    - bash: env | sort
       displayName: 'Dump env'
       name: DumpEnv
+      env:
+        ENV_WHATEVER3: $[ convertToJson(dependencies) ]
+        ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
+        ENV_WHATEVER9: $[ convertToJson(parameters) ]
 
   - job: "tests"
     dependsOn:
@@ -147,6 +151,6 @@ stages:
     strategy:
       matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
     steps:
-    - bash: env
+    - bash: env | sort
       displayName: 'Dump env'
       name: DumpEnv

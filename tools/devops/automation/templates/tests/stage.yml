@@ -98,42 +98,33 @@ stages:
   condition: and(succeeded(), ${{ parameters.condition }})
 
   jobs:
-  - ${{ if eq(parameters.parseLabels, true) }}:
-    - job: configure
-      displayName: 'Configure build'
-      pool:
-        vmImage: windows-latest
+  - job: configure
+    displayName: 'Configure build'
+    pool:
+      vmImage: windows-latest
 
-      variables:
-        isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-        isScheduled: $[eq(variables['Build.Reason'], 'Schedule')]
-        BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+    variables:
+      isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+      isScheduled: $[eq(variables['Build.Reason'], 'Schedule')]
+      BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
 
-      steps:
-      - template: ../common/configure.yml
-        parameters: 
-          repositoryAlias: ${{ parameters.repositoryAlias }}
-          commit: ${{ parameters.commit }}
-          uploadArtifacts: false
-          testConfigurations: ${{ parameters.testConfigurations }}
-          supportedPlatforms: ${{ parameters.supportedPlatforms }}
+    steps:
+    - template: ../common/configure.yml
+      parameters: 
+        repositoryAlias: ${{ parameters.repositoryAlias }}
+        commit: ${{ parameters.commit }}
+        uploadArtifacts: false
+        testConfigurations: ${{ parameters.testConfigurations }}
+        supportedPlatforms: ${{ parameters.supportedPlatforms }}
 
-  - job: "debugOutput"
+  - job: debugOutput
     dependsOn:
     - configure
     displayName: 'Debug output'
     timeoutInMinutes: 10
     pool:
-      name: $(AgentPoolComputed)
-      demands:
-      - Agent.OS -equals Darwin
-      - macOS.Name -equals ${{ parameters.macOSName }}
-      - XcodeChannel -equals ${{ parameters.XcodeChannel }}
-      - ${{ each demand in parameters.extraBotDemands }}:
-        - demand
-
+      vmImage: ubuntu-latest
     steps:
-    - bash: |
-        env | sort
+    - bash: env
       displayName: 'Dump env'
       name: DumpEnv

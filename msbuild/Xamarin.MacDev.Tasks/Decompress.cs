@@ -231,8 +231,20 @@ namespace Xamarin.MacDev {
 			// testing the System.IO.Compression implementation locally (with the caveat that if the resource
 			// to compress has symlinks, it may not work).
 
-			if (overwrite)
-				File.Delete (zip);
+			if (overwrite) {
+				if (File.Exists (zip)) {
+					log.LogMessage (MessageImportance.Low, "Replacing zip file {0} with {1}", zip, resource);
+					File.Delete (zip);
+				} else {
+					log.LogMessage (MessageImportance.Low, "Creating zip file {0} with {1}", zip, resource);
+				}
+			} else {
+				if (File.Exists (zip)) {
+					log.LogMessage (MessageImportance.Low, "Updating zip file {0} with {1}", zip, resource);
+				} else {
+					log.LogMessage (MessageImportance.Low, "Creating new zip file {0} with {1}", zip, resource);
+				}
+			}
 
 			var zipdir = Path.GetDirectoryName (zip);
 			if (!string.IsNullOrEmpty (zipdir))
@@ -263,7 +275,7 @@ namespace Xamarin.MacDev {
 			var workingDirectory = Path.GetDirectoryName (fullPath);
 			zipArguments.Add (Path.GetFileName (fullPath));
 			var rv = XamarinTask.ExecuteAsync (log, "zip", zipArguments, workingDirectory: workingDirectory).Result;
-			log.LogMessage (MessageImportance.Low, "Created {0} from {1}: {2}", zip, resource, rv.ExitCode == 0);
+			log.LogMessage (MessageImportance.Low, "Updated {0} with {1}: {2}", zip, resource, rv.ExitCode == 0);
 			return rv.ExitCode == 0;
 		}
 
@@ -278,34 +290,30 @@ namespace Xamarin.MacDev {
 		{
 			var rv = true;
 
-			if (File.Exists (zip)) {
-				using var archive = ZipFile.Open (zip, ZipArchiveMode.Update);
-				var fullResourcePath = Path.GetFullPath (resource);
-				var rootDir = Path.GetDirectoryName (fullResourcePath);
-				if (Directory.Exists (resource)) {
-					var entries = Directory.GetFileSystemEntries (fullResourcePath, "*", SearchOption.AllDirectories);
-					var entriesWithZipName = entries.Select (v => new { Path = v, ZipName = v.Substring (rootDir.Length) });
-					foreach (var entry in entriesWithZipName) {
-						if (Directory.Exists (entry.Path)) {
-							if (entries.Where (v => v.StartsWith (entry.Path, StringComparison.Ordinal)).Count () == 1) {
-								// this is a directory with no files inside, we need to create an entry with a trailing directory separator.
-								archive.CreateEntry (entry.ZipName + zipDirectorySeparator);
-							}
-						} else {
-							WriteFileToZip (log, archive, entry.Path, entry.ZipName);
+			using var archive = ZipFile.Open (zip, File.Exists (zip) ? ZipArchiveMode.Update : ZipArchiveMode.Create);
+			var fullResourcePath = Path.GetFullPath (resource);
+			var rootDir = Path.GetDirectoryName (fullResourcePath);
+			if (Directory.Exists (resource)) {
+				var entries = Directory.GetFileSystemEntries (fullResourcePath, "*", SearchOption.AllDirectories);
+				var entriesWithZipName = entries.Select (v => new { Path = v, ZipName = v.Substring (rootDir.Length) });
+				foreach (var entry in entriesWithZipName) {
+					if (Directory.Exists (entry.Path)) {
+						if (entries.Where (v => v.StartsWith (entry.Path, StringComparison.Ordinal)).Count () == 1) {
+							// this is a directory with no files inside, we need to create an entry with a trailing directory separator.
+							archive.CreateEntry (entry.ZipName + zipDirectorySeparator);
 						}
+					} else {
+						WriteFileToZip (log, archive, entry.Path, entry.ZipName);
 					}
-				} else if (File.Exists (fullResourcePath)) {
-					var zipName = fullResourcePath.Substring (rootDir.Length);
-					WriteFileToZip (log, archive, fullResourcePath, zipName);
-				} else {
-					throw new FileNotFoundException (resource);
 				}
+			} else if (File.Exists (fullResourcePath)) {
+				var zipName = Path.GetFileName (fullResourcePath);
+				WriteFileToZip (log, archive, fullResourcePath, zipName);
 			} else {
-				ZipFile.CreateFromDirectory (resource, zip, SmallestCompressionLevel, true);
+				throw new FileNotFoundException (resource);
 			}
 
-			log.LogMessage (MessageImportance.Low, "Created {0} from {1}", zip, resource);
+			log.LogMessage (MessageImportance.Low, "Updated {0} with {1}", zip, resource);
 
 			return rv;
 		}

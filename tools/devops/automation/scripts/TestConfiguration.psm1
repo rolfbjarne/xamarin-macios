@@ -10,7 +10,7 @@ class TestConfiguration {
     }
 
     [string] Create() {
-        return @"{'cecil':{'myvar':'myvalue'}}"@
+        return "{'cecil':{'myvar':'myvalue'}}"
     }
 }
 
@@ -30,7 +30,7 @@ function Get-TestConfiguration {
     $objSupportedPlatforms = ConvertFrom-Json -InputObject $SupportedPlatforms
 
     $config = [TestConfiguration]::new($objTestConfigurations, $objSupportedPlatforms)
-    return $config.Create() | ConvertTo-Json -Compress
+    return $config.Create()
 }
 
 # export public functions, other functions are private and should not be used ouside the module.

@@ -80,38 +80,32 @@ parameters:
   default: [
     {
       platform: iOS,
-      conditionVariable: "INCLUDE_IOS",
       isDotNetPlatform: true,
       isLegacyPlatform: true
     },
     {
       platform: macOS,
-      conditionVariable: "INCLUDE_MAC",
       isDotNetPlatform: true,
       isLegacyPlatform: true
     },
     {
       platform: tvOS,
-      conditionVariable: "INCLUDE_TVOS",
       isDotNetPlatform: true,
       isLegacyPlatform: true
     },
     {
       platform: watchOS,
-      conditionVariable: "INCLUDE_WATCH",
       isDotNetPlatform: false,
       isLegacyPlatform: true
     },
     {
       platform: MacCatalyst,
-      conditionVariable: "INCLUDE_DOTNET_MACCATALYST",
       isDotNetPlatform: true,
       isLegacyPlatform: false
     },
     {
-      platform: All,
-      conditionVariableDotNet: "All",
-      conditionVariableLegacy: "All",
+      # when running platform-specific test runs, we also need a special test run that executes tests that only runs when multiple platforms are enabled
+      platform: Multiple,
       isDotNetPlatform: true,
       isLegacyPlatform: true
     }
@@ -127,10 +121,14 @@ parameters:
     {
       label: cecil,
       splitByPlatforms: "false",
+      containsDotNetTests: "true",
+      containsLegacyTests: "true",
     },
     {
       label: dotnettests,
       splitByPlatforms: "true",
+      containsDotNetTests: "true",
+      containsLegacyTests: "false",
     },
     # {
     #   label: fsharp,

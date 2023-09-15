@@ -11,11 +11,15 @@ Describe 'Get-TestConfiguration' {
 [
   {
     "label": "cecil",
-    "splitByPlatforms": "False"
+    "splitByPlatforms": "false",
+    "containsDotNetTests": true,
+    "containsLegacyTests": true,
   },
   {
     "label": "dotnettests",
-    "splitByPlatforms": "True"
+    "splitByPlatforms": "true",
+    "containsDotNetTests": true,
+    "containsLegacyTests": false,
   }
 ]
 "@
@@ -24,45 +28,43 @@ Describe 'Get-TestConfiguration' {
 [
   {
     "platform": "iOS",
-    "conditionVariable": "INCLUDE_IOS",
-    "isDotNetPlatform": "True",
-    "isLegacyPlatform": "True"
+    "isDotNetPlatform": true,
+    "isLegacyPlatform": true
   },
   {
     "platform": "macOS",
-    "conditionVariable": "INCLUDE_MAC",
-    "isDotNetPlatform": "True",
-    "isLegacyPlatform": "True"
+    "isDotNetPlatform": true,
+    "isLegacyPlatform": true
   },
   {
     "platform": "tvOS",
-    "conditionVariable": "INCLUDE_TVOS",
-    "isDotNetPlatform": "True",
-    "isLegacyPlatform": "True"
+    "isDotNetPlatform": true,
+    "isLegacyPlatform": true
   },
   {
     "platform": "watchOS",
-    "conditionVariable": "INCLUDE_WATCH",
-    "isDotNetPlatform": "False",
-    "isLegacyPlatform": "True"
+    "isDotNetPlatform": false,
+    "isLegacyPlatform": true
   },
   {
     "platform": "MacCatalyst",
-    "conditionVariable": "INCLUDE_DOTNET_MACCATALYST",
-    "isDotNetPlatform": "True",
-    "isLegacyPlatform": "False"
+    "isDotNetPlatform": true,
+    "isLegacyPlatform": false
   },
   {
-    "platform": "All",
-    "conditionVariableDotNet": "All",
-    "conditionVariableLegacy": "All",
-    "isDotNetPlatform": "True",
-    "isLegacyPlatform": "True"
+    "platform": "Multiple",
+    "isDotNetPlatform": true,
+    "isLegacyPlatform": true
   }
 ]
 "@
 
-            $config = Get-TestConfiguration -TestConfigurations $TestConfigurations -SupportedPlatforms $SupportedPlatforms
+            $config = Get-TestConfiguration `
+              -TestConfigurations $TestConfigurations `
+              -SupportedPlatforms $SupportedPlatforms `
+              -TestsLabels "extra-test-labels" `
+              -StatusContext "status-context" `
+              -TestPrefix "test-prefix"
 
             Write-Host "Test Config: $config"
         }

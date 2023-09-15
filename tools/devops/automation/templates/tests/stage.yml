@@ -116,6 +116,9 @@ stages:
         uploadArtifacts: false
         testConfigurations: ${{ parameters.testConfigurations }}
         supportedPlatforms: ${{ parameters.supportedPlatforms }}
+        testsLabels: ${{ parameters.testsLabels }}
+        statusContext: ${{ parameters.statusContext }}
+        testPrefix: ${{ parameters.testPrefix }}
 
   - job: debugOutput
     dependsOn:
@@ -125,10 +128,8 @@ stages:
     pool:
       vmImage: ubuntu-latest
     variables:
-      VAR_WHATEVER3: $[ convertToJson(dependencies) ]
-      VAR_WHATEVER4: $[ convertToJson(dependencies.configure) ]
       VAR_WHATEVER1: "World"
-      VAR_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
+      VAR_WHATEVER3: $[ convertToJson(dependencies) ]
     steps:
     - checkout: none
     - bash: |
@@ -137,15 +138,13 @@ stages:
       displayName: 'Dump env'
       name: DumpEnv
       env:
-        ENV_WHATEVER3: $[ convertToJson(dependencies) ]
-        ENV_WHATEVER4: $[ convertToJson(dependencies.configure) ]
         ENV_WHATEVER1: "Hello"
-        ENV_WHATEVER2: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
+        ENV_WHATEVER3: $[ convertToJson(dependencies) ]
 
   - job: "tests"
     dependsOn:
     - configure
-    displayName: 'Running tests:'
+    displayName: 'Test:'
     timeoutInMinutes: 1000
     pool:
       vmImage: ubuntu-latest

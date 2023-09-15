@@ -34,12 +34,16 @@ class TestConfiguration {
                     $platform = $platformConfig.platform
 
                     $runThisPlatform = $false
-                    if ($($config.containsDotNetTests) -and $($platformConfig.isDotNetPlatform)) {
+                    $containsDotNetTests = $($config.containsDotNetTests) -eq "true"
+                    $containsLegacyTests = $($config.containsLegacyTests) -eq "true"
+                    $isDotNetPlatform = $($platformConfig.isDotNetPlatform) -eq "true"
+                    $isLegacyPlatform = $($platformConfig.isLegacyPlatform) -eq "true"
+                    if ($containsDotNetTests -and $isDotNetPlatform) {
                         $runThisPlatform = $true
-                    } elseif ($($config.containsLegacyTests) -and $($platformConfig.isLegacyPlatform)) {
+                    } elseif ($containsLegacyTests -and $isLegacyPlatform) {
                         $runThisPlatform = $true
                     }
-                    Write-Host "Running $($platform): runThisPlatform=$($runThisPlatform) containsDotNetTests: $($config.containsDotNetTests) isDotNetPlatform: $($platformConfig.isDotNetPlatform) containsLegacyTests: $($config.containsLegacyTests) isLegacyPlatform: $($platformConfig.isLegacyPlatform)"
+                    Write-Host "Running $($platform): runThisPlatform=$runThisPlatform containsDotNetTests: $containsDotNetTests isDotNetPlatform: $isDotNetPlatform containsLegacyTests: $containsLegacyTests isLegacyPlatform: $isLegacyPlatform"
                     if (!$runThisPlatform) {
                         continue
                     }
@@ -50,6 +54,7 @@ class TestConfiguration {
                         $platformVars[$pair.Key] = $pair.Value
                     }
                     # set platform-specific variables
+                    $platformVars["LABEL_WITH_PLATFORM"] = "$($label)_$($platform)"
                     $platformVars["STATUS_CONTEXT"] = "$($this.statusContext) - $($label) - $($platform)"
                     $platformVars["TEST_PREFIX"] = "$($this.testPrefix)$($underscoredLabel)_$($platform)"
                     if ($platform -eq "Multiple") {
@@ -64,6 +69,7 @@ class TestConfiguration {
                 }
             } else {
                 # set non-platform specific variables
+                $vars["LABEL_WITH_PLATFORM"] = "$label"
                 $vars["STATUS_CONTEXT"] = "$($this.statusContext) - $($label)"
                 $vars["TEST_PREFIX"] = "$($this.testPrefix)$($underscoredLabel)"
                 $vars["TEST_PLATFORM"] = ""

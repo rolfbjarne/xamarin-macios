@@ -12,14 +12,14 @@ Describe 'Get-TestConfiguration' {
   {
     "label": "cecil",
     "splitByPlatforms": "false",
-    "containsDotNetTests": true,
-    "containsLegacyTests": true,
+    "containsDotNetTests": "true",
+    "containsLegacyTests": "true",
   },
   {
     "label": "dotnettests",
     "splitByPlatforms": "true",
-    "containsDotNetTests": true,
-    "containsLegacyTests": false,
+    "containsDotNetTests": "true",
+    "containsLegacyTests": "false",
   }
 ]
 "@
@@ -28,33 +28,33 @@ Describe 'Get-TestConfiguration' {
 [
   {
     "platform": "iOS",
-    "isDotNetPlatform": true,
-    "isLegacyPlatform": true
+    "isDotNetPlatform": "true",
+    "isLegacyPlatform": "true"
   },
   {
     "platform": "macOS",
-    "isDotNetPlatform": true,
-    "isLegacyPlatform": true
+    "isDotNetPlatform": "true",
+    "isLegacyPlatform": "true"
   },
   {
     "platform": "tvOS",
-    "isDotNetPlatform": true,
-    "isLegacyPlatform": true
+    "isDotNetPlatform": "true",
+    "isLegacyPlatform": "true"
   },
   {
     "platform": "watchOS",
-    "isDotNetPlatform": false,
-    "isLegacyPlatform": true
+    "isDotNetPlatform": "false",
+    "isLegacyPlatform": "true"
   },
   {
     "platform": "MacCatalyst",
-    "isDotNetPlatform": true,
-    "isLegacyPlatform": false
+    "isDotNetPlatform": "true",
+    "isLegacyPlatform": "false"
   },
   {
     "platform": "Multiple",
-    "isDotNetPlatform": true,
-    "isLegacyPlatform": true
+    "isDotNetPlatform": "true",
+    "isLegacyPlatform": "true"
   }
 ]
 "@

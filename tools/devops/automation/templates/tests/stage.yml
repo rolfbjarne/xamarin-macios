@@ -93,7 +93,7 @@ stages:
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}
   dependsOn:
-  # - build_packages
+  - build_packages
   # we need to have the pkgs built and the device sets to be ran, that is decided via the labels or type of build during the build_packages stage
   condition: and(succeeded(), ${{ parameters.condition }})
 
@@ -142,12 +142,31 @@ stages:
         ENV_WHATEVER3: $[ convertToJson(dependencies) ]
 
   - job: "tests"
+    condition: ne(dependencies.configure.outputs['labels.skip_all_tests'], 'True')
     dependsOn:
     - configure
     displayName: 'Test:'
     timeoutInMinutes: 1000
+    variables:
+       # old and ugly env var use by jenkins, we do have parts of the code that use it, contains the PR number
+       PR_ID: $[ dependencies.configure.outputs['labels.pr_number'] ]
+       # set the branch variable name, this is required by jenkins and we have a lot of scripts that depend on it
+       BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+       XHARNESS_LABELS: $[ dependencies.configure.outputs['labels.xharness_labels'] ]
+       ${{ if eq(parameters.testPool, '') }}:
+         AgentPoolComputed: $(PRBuildPool)
+       ${{ else }}:
+         AgentPoolComputed: ${{ parameters.testPool }}
     pool:
-      vmImage: ubuntu-latest
+      name: $(AgentPoolComputed)
+      demands:
+      - Agent.OS -equals Darwin
+      - macOS.Name -equals ${{ parameters.macOSName }}
+      - XcodeChannel -equals ${{ parameters.XcodeChannel }}
+      - ${{ each demand in parameters.extraBotDemands }}:
+        - demand
+      workspace:
+        clean: all
     strategy:
       matrix: $[ dependencies.configure.outputs['test_matrix.TEST_MATRIX'] ]
     steps:
@@ -156,3 +175,18 @@ stages:
         env
       displayName: 'Dump env'
       name: DumpEnv
+    - template: build.yml
+      parameters:
+        isPR: ${{ parameters.isPR }}
+        repositoryAlias: ${{ parameters.repositoryAlias }}
+        commit: ${{ parameters.commit }}
+        label: $(LABEL)
+        testsLabels: $(TESTS_LABELS)
+        statusContext: $(STATUS_CONTEXT)
+        useXamarinStorage: ${{ parameters.useXamarinStorage }}
+        vsdropsPrefix: ${{ parameters.vsdropsPrefix }}
+        keyringPass: ${{ parameters.keyringPass }}
+        testPrefix: $(TEST_PREFIX)
+        makeTarget: ${{ parameters.makeTarget }}
+        gitHubToken: ${{ parameters.gitHubToken }}
+        xqaCertPass: ${{ parameters.xqaCertPass }}

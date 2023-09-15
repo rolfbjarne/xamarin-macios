@@ -34,13 +34,13 @@ class TestConfiguration {
                     $platform = $platformConfig.platform
 
                     $runThisPlatform = $false
-                    if ($config.containsDotNetTests -and $platformConfig.isDotNetPlatform) {
+                    if ($($config.containsDotNetTests) -and $($platformConfig.isDotNetPlatform)) {
                         $runThisPlatform = $true
-                    } elseif ($config.containsLegacyTests -and $platformConfig.isLegacyPlatform) {
+                    } elseif ($($config.containsLegacyTests) -and $($platformConfig.isLegacyPlatform)) {
                         $runThisPlatform = $true
                     }
+                    Write-Host "Running $($platform): runThisPlatform=$($runThisPlatform) containsDotNetTests: $($config.containsDotNetTests) isDotNetPlatform: $($platformConfig.isDotNetPlatform) containsLegacyTests: $($config.containsLegacyTests) isLegacyPlatform: $($platformConfig.isLegacyPlatform)"
                     if (!$runThisPlatform) {
-                        Write-Host "Running $($platform): $($runThisPlatform)"
                         continue
                     }
 
@@ -70,7 +70,7 @@ class TestConfiguration {
             }
         }
 
-        Write-Host $rv
+        $rv
 
         return $rv | ConvertTo-Json
     }

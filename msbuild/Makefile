@@ -37,6 +37,7 @@ ALL_SOURCES:= \
 	$(shell git ls-files | sed 's/ /\\ /g') \
 	$(wildcard $(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/*.cs) \
 	$(wildcard $(XAMARIN_MACDEV_PATH)/Xamarin.MacDev/*.csproj) \
+	$(wildcard $(TOP)/tools/common/*.cs) \
 	Versions.ios.g.cs \
 	Versions.mac.g.cs \
 	Versions.dotnet.g.cs \

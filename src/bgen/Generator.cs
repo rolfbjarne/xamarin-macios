@@ -247,7 +247,7 @@ public partial class Generator : IMemberGatherer {
 			return PrimitiveType (mai.Type, formatted);
 
 		if (IsWrappedType (mai.Type))
-			return mai.Type.IsByRef ? "ref " + NativeHandleType : NativeHandleType;
+			return mai.Type.IsByRef ? NativeHandleType + "*" : NativeHandleType;
 
 		if (mai.Type.Namespace == "System") {
 			if (mai.Type.Name == "nint")
@@ -284,7 +284,12 @@ public partial class Generator : IMemberGatherer {
 		if (mai.Type.IsByRef && mai.Type.GetElementType ().IsValueType) {
 			Type elementType = mai.Type.GetElementType ();
 
-			return (mai.IsOut ? "out " : "ref ") + (formatted ? FormatType (null, elementType) : elementType.Name);
+			if (elementType == TypeManager.System_Boolean)
+				return "byte*";
+			else if (elementType == TypeManager.System_Char)
+				return "ushort*";
+
+			return (formatted ? FormatType (null, elementType) : elementType.Name) + "*";
 		}
 
 		// Pass "ValueType*" directly
@@ -307,7 +312,7 @@ public partial class Generator : IMemberGatherer {
 		//
 
 		if (mai.Type.IsByRef && mai.Type.GetElementType ().IsValueType == false)
-			return "ref " + NativeHandleType;
+			return NativeHandleType + "*";
 
 		if (mai.Type.IsGenericParameter)
 			return NativeHandleType;
@@ -845,7 +850,7 @@ public partial class Generator : IMemberGatherer {
 	// Returns the actual way in which the type t must be marshalled
 	// for example "UIView foo" is generated as  "foo.Handle"
 	//
-	public string MarshalParameter (MethodInfo mi, ParameterInfo pi, bool null_allowed_override, PropertyInfo propInfo = null, bool castEnum = true, bool usingBlittableNativeTypes = false, StringBuilder convs = null)
+	public string MarshalParameter (MethodInfo mi, ParameterInfo pi, bool null_allowed_override, PropertyInfo propInfo = null, bool castEnum = true, bool usingBlittableNativeTypes = true, StringBuilder convs = null)
 	{
 		if (pi.ParameterType.IsByRef && pi.ParameterType.GetElementType ().IsValueType == false) {
 			if (usingBlittableNativeTypes)
@@ -1090,11 +1095,17 @@ public partial class Generator : IMemberGatherer {
 
 			try {
 				var parameterType = ParameterGetMarshalType (new MarshalInfo (this, mi, pi), true);
-				if (parameterType == "bool" || parameterType == "out bool" || parameterType == "ref bool")
-					b.Append ("[MarshalAs (UnmanagedType.I1)] ");
-				else if (parameterType == "char" || parameterType == "out char" || parameterType == "ref char")
-					b.Append ("[MarshalAs (UnmanagedType.U2)] ");
-				b.Append (parameterType);
+				if (parameterType == "bool") {
+					b.Append ("byte");
+				} else if (parameterType == "out bool" || parameterType == "ref bool") {
+					b.Append ("byte* ");
+				} else if (parameterType == "char") {
+					b.Append ("ushort");
+				} else if (parameterType == "out char" || parameterType == "ref char") {
+					b.Append ("ushort*");
+				} else {
+					b.Append (parameterType);
+				}
 			} catch (BindingException ex) {
 				throw new BindingException (1079, ex.Error, ex, ex.Message, pi.Name.GetSafeParamName (), mi.DeclaringType, mi.Name);
 			}
@@ -1103,7 +1114,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		if (ShouldMarshalNativeExceptions (mi))
-			b.Append (", out IntPtr exception_gchandle");
+			b.Append (", IntPtr* exception_gchandle");
 
 		string entry_point;
 		if (method_name.IndexOf ("objc_msgSendSuper", StringComparison.Ordinal) != -1) {
@@ -1122,13 +1133,13 @@ public partial class Generator : IMemberGatherer {
 
 		var returnType = need_stret ? "void" : ParameterGetMarshalType (new MarshalInfo (this, mi), true);
 		if (returnType == "bool")
-			print (m, "\t\t[return: MarshalAs (UnmanagedType.I1)]");
+			returnType = "byte";
 		else if (returnType == "char")
-			print (m, "\t\t[return: MarshalAs (UnmanagedType.U2)]");
+			returnType = "ushort";
 
 		print (m, "\t\tpublic unsafe extern static {0} {1} ({3}IntPtr receiver, IntPtr selector{2});",
 			   returnType, method_name, b.ToString (),
-			   need_stret ? (aligned ? "IntPtr" : "out " + FormatTypeUsedIn ("ObjCRuntime", mi.ReturnType)) + " retval, " : "");
+			   need_stret ? (aligned ? "IntPtr" : FormatTypeUsedIn ("ObjCRuntime", mi.ReturnType)) + "* retval, " : "");
 	}
 
 	bool IsNativeEnum (Type type)
@@ -3163,10 +3174,10 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		if (ShouldMarshalNativeExceptions (mi))
-			args += ", out exception_gchandle";
+			args += ", &exception_gchandle";
 
 		if (stret) {
-			string ret_val = aligned ? "aligned_ret" : "out ret";
+			string ret_val = aligned ? "(IntPtr*) aligned_ret" : "&ret";
 			if (minfo.is_static)
 				print ("{0} ({5}, class_ptr, {3}{4});", sig, "/*unusued*/", "/*unusued*/", selector_field, args, ret_val);
 			else
@@ -3411,7 +3422,7 @@ public partial class Generator : IMemberGatherer {
 	// @convs: conversions to perform before the invocation
 	// @disposes: dispose operations to perform after the invocation
 	// @by_ref_processing
-	void GenerateTypeLowering (MethodInfo mi, bool null_allowed_override, out StringBuilder args, out StringBuilder convs, out StringBuilder disposes, out StringBuilder by_ref_processing, out StringBuilder by_ref_init, PropertyInfo propInfo = null, bool castEnum = true, bool usingBlittableNativeTypes = false)
+	void GenerateTypeLowering (MethodInfo mi, bool null_allowed_override, out StringBuilder args, out StringBuilder convs, out StringBuilder disposes, out StringBuilder by_ref_processing, out StringBuilder by_ref_init, PropertyInfo propInfo = null, bool castEnum = true, bool usingBlittableNativeTypes = true)
 	{
 		args = new StringBuilder ();
 		convs = new StringBuilder ();
@@ -3744,6 +3755,8 @@ public partial class Generator : IMemberGatherer {
 			(mi.ReturnType.IsSubclassOf (TypeManager.System_Delegate)) ||
 			(AttributeManager.HasAttribute<ProxyAttribute> (mi.ReturnParameter)) ||
 			(IsNativeEnum (mi.ReturnType)) ||
+			(mi.ReturnType == TypeManager.System_Boolean) ||
+			(mi.ReturnType == TypeManager.System_Char) ||
 			(mi.Name != "Constructor" && by_ref_processing.Length > 0 && mi.ReturnType != TypeManager.System_Void);
 
 		if (use_temp_return) {
@@ -3762,6 +3775,10 @@ public partial class Generator : IMemberGatherer {
 				var bindAsAttrib = GetBindAsAttribute (minfo.mi);
 				// tricky, e.g. when an nullable `NSNumber[]` is bound as a `float[]`, since FormatType and bindAsAttrib have not clue about the original nullability 
 				print ("{0} ret;", FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type));
+			} else if (mi.ReturnType == TypeManager.System_Boolean) {
+				print ("byte ret;");
+			} else if (mi.ReturnType == TypeManager.System_Char) {
+				print ("ushort ret;");
 			} else {
 				var isClassType = mi.ReturnType.IsClass || mi.ReturnType.IsInterface;
 				var nullableReturn = isClassType ? "?" : string.Empty;
@@ -3883,6 +3900,10 @@ public partial class Generator : IMemberGatherer {
 				indent--;
 				print ("Marshal.FreeHGlobal (ret_alloced);");
 				print ("return ret;");
+			} else if (mi.ReturnType == TypeManager.System_Boolean) {
+				print ("return ret != 0;");
+			} else if (mi.ReturnType == TypeManager.System_Char) {
+				print ("return (char) ret;");
 			} else {
 				// we can't be 100% confident that the ObjC API annotations are correct so we always null check inside generated code
 				print ("return ret!;");
@@ -5137,7 +5158,7 @@ public partial class Generator : IMemberGatherer {
 		if (include_extensions) {
 			// extension methods
 			PrintAttributes (type, preserve: true, advice: true);
-			print ("{1} static partial class {0}_Extensions {{", TypeName, class_visibility);
+			print ("{1} unsafe static partial class {0}_Extensions {{", TypeName, class_visibility);
 			indent++;
 			foreach (var mi in optionalInstanceMethods)
 				GenerateMethod (type, mi, false, null, false, false, true);
@@ -5179,7 +5200,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		PrintPreserveAttribute (type);
-		print ("internal sealed class {0}Wrapper : BaseWrapper, I{0} {{", TypeName);
+		print ("internal unsafe sealed class {0}Wrapper : BaseWrapper, I{0} {{", TypeName);
 		indent++;
 		// ctor (IntPtr, bool)
 		print ("[Preserve (Conditional = true)]");
@@ -6583,7 +6604,7 @@ public partial class Generator : IMemberGatherer {
 							print ("return {0} is not null;", mi.Name.PascalCase ());
 							--indent;
 						}
-						print ("return global::" + ns.Messaging + ".bool_objc_msgSendSuper_IntPtr (SuperHandle, " + selRespondsToSelector + ", selHandle);");
+						print ("return global::" + ns.Messaging + ".bool_objc_msgSendSuper_IntPtr (SuperHandle, " + selRespondsToSelector + ", selHandle) != 0;");
 						--indent;
 						print ("}");
 
@@ -6591,7 +6612,7 @@ public partial class Generator : IMemberGatherer {
 						// bool_objc_msgSendSuper_IntPtr: for respondsToSelector:
 						if (!send_methods.ContainsKey ("bool_objc_msgSendSuper_IntPtr")) {
 							print (m, "[DllImport (LIBOBJC_DYLIB, EntryPoint=\"objc_msgSendSuper\")]");
-							print (m, "public extern static bool bool_objc_msgSendSuper_IntPtr (IntPtr receiever, IntPtr selector, IntPtr arg1);");
+							print (m, "public extern static byte bool_objc_msgSendSuper_IntPtr (IntPtr receiever, IntPtr selector, IntPtr arg1);");
 							RegisterMethodName ("bool_objc_msgSendSuper_IntPtr");
 						}
 					}

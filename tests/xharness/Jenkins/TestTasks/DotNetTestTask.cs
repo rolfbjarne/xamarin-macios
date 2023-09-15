@@ -28,7 +28,7 @@ namespace Xharness.Jenkins.TestTasks {
 					"--logger:html;LogFileName=" + Path.GetFileName (html.FullPath)
 				};
 
-				var testCategory = Environment.GetEnvironmentVariable ("TEST_CATEGORY");
+				var testCategory = global::System.Environment.GetEnvironmentVariable ("TEST_CATEGORY");
 				if (!string.IsNullOrEmpty (testCategory)) {
 					if (!string.IsNullOrEmpty (Filter)) {
 						Filter = $"(Category={testCategory}) & ({Filter})";

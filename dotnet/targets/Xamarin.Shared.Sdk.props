@@ -111,7 +111,8 @@
 	</PropertyGroup>
 
 	<!-- Compute _SdkIsSimulator from the RuntimeIdentifier -->
-	<PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
-		<_SdkIsSimulator Condition="'$(_SdkIsSimulator)' == ''">$(RuntimeIdentifier.Contains('simulator'))</_SdkIsSimulator>
+	<PropertyGroup>
+		<_SdkIsSimulator Condition="'$(RuntimeIdentifier)' != '' And $(_SdkIsSimulator)' == ''">$(RuntimeIdentifier.Contains('simulator'))</_SdkIsSimulator>
+		<_SdkIsSimulator Condition="'$(RuntimeIdentifiers)' != '' And $(_SdkIsSimulator)' == ''">$(RuntimeIdentifiers.Contains('simulator'))</_SdkIsSimulator>
 	</PropertyGroup>
 </Project>

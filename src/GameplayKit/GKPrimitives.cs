@@ -79,9 +79,9 @@ namespace GameplayKit {
 					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
 				if (value.Length != 3)
 					throw new ArgumentOutOfRangeException (nameof (value), "The length of the Value array must be 3");
-				point1 = value[0];
-				point2 = value[1];
-				point3 = value[2];
+				point1 = value [0];
+				point2 = value [1];
+				point3 = value [2];
 			}
 		}
 	}

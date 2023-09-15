@@ -87,15 +87,12 @@ function Get-TestConfiguration {
         [string]
         $SupportedPlatforms,
 
-        [Parameter(Mandatory)]
         [string]
         $TestsLabels,
 
-        [Parameter(Mandatory)]
         [string]
         $StatusContext,
 
-        [Parameter(Mandatory)]
         [string]
         $TestPrefix
     )

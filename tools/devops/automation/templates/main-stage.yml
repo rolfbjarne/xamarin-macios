@@ -120,15 +120,15 @@ parameters:
     # },
     {
       label: cecil,
-      splitByPlatforms: "false",
-      containsDotNetTests: "true",
-      containsLegacyTests: "true",
+      splitByPlatforms: false,
+      containsDotNetTests: true,
+      containsLegacyTests: true,
     },
     {
       label: dotnettests,
-      splitByPlatforms: "true",
-      containsDotNetTests: "true",
-      containsLegacyTests: "false",
+      splitByPlatforms: true,
+      containsDotNetTests: true,
+      containsLegacyTests: false,
     },
     # {
     #   label: fsharp,

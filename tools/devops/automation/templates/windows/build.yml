@@ -165,9 +165,81 @@ steps:
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $uploadDirectory = New-RemoteMacInstallDirectory -SourcesDirectory "$(Build.SourcesDirectory)" -ArtifactsDirectory "$(Build.SourcesDirectory)/artifacts"
     Install-DotNetOnRemoteMac -SourcesDirectory "$(Build.SourcesDirectory)" -DotNet "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe" -UploadDirectory "$(Build.SourcesDirectory)/artifacts/remote-mac-upload" -RemoteHost $Env:MAC_AGENT_IP -RemoteUserName builder -RemotePasswordEnvironmentVariable XMA_PASSWORD
-  displayName: 'Install on Mac'
+  displayName: 'Install .NET on Mac'
   continueOnError: true
   timeoutInMinutes: 30
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    # maccore
+    Invoke-SshEnvUpload `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore" `
+      -Target "/Users/builder/remote_build_testing/src/maccore"
+    # xamarin-macios
+    Invoke-SshEnvUpload `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios" `
+      -Target "/Users/builder/remote_build_testing/src/xamarin-macios"
+  displayName: 'Copy source code to Mac'
+  continueOnError: true
+  timeoutInMinutes: 5
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      make /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops provision-xcode.csx
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      /Users/builder/remote_build_testing/src/maccore/tools/devops/provisionator.sh /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops/provision-xcode.csx
+  displayName: 'Install Xcode on Mac'
+  continueOnError: true
+  timeoutInMinutes: 60
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    # execute install-qa-provisioning-profiles.sh
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      /Users/builder/remote_build_testing/src/maccore/tools/install-qa-provisioning-profiles.sh -v
+  displayName: 'Install provisioning profiles on Mac'
+  continueOnError: true
+  timeoutInMinutes: 5
   env:
     XMA_PASSWORD: $(XMA.Password)
 
@@ -182,26 +254,11 @@ steps:
       /p:_DotNetRootRemoteDirectory=/Users/builder/remote_build_testing/_build `
       -v:diag `
       "-bl:/Users/builder/remote_build_testing/MySimpleApp.binlog"
-  displayName: 'Try to build test'
+  displayName: 'Try to build test on Mac'
   continueOnError: true
   timeoutInMinutes: 30
   env:
     XMA_PASSWORD: $(XMA.Password)
-
-- pwsh: |
-    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
-    & $Env:DOTNET `
-        test `
-        "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
-        --filter Category=Windows `
-        --verbosity quiet `
-        "--results-directory:$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/" `
-        "--logger:console;verbosity=detailed" `
-        "--logger:trx;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-dotnet-tests.trx" `
-        "--logger:html;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-dotnet-tests.html" `
-        "-bl:$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/Windows/run-dotnet-tests.binlog"
-  displayName: 'Run .NET tests'
-  timeoutInMinutes: 30
 
 - pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
@@ -225,6 +282,21 @@ steps:
   timeoutInMinutes: 120
   env:
     XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    & $Env:DOTNET `
+        test `
+        "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
+        --filter Category=Windows `
+        --verbosity quiet `
+        "--results-directory:$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/" `
+        "--logger:console;verbosity=detailed" `
+        "--logger:trx;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-dotnet-tests.trx" `
+        "--logger:html;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-dotnet-tests.html" `
+        "-bl:$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/Windows/run-dotnet-tests.binlog"
+  displayName: 'Run .NET tests on Windows'
+  timeoutInMinutes: 30
 
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\xamarin-macios\tools\devops\automation\scripts\MaciosCI.psd1

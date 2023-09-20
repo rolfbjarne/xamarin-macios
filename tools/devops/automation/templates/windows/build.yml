@@ -214,7 +214,7 @@ steps:
     & $Env:DOTNET `
         test `
         "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
-        --filter Category!=Windows `
+        --filter Category=RemoteWindows `
         --verbosity quiet `
         "--results-directory:$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-remote-tests/" `
         "--logger:console;verbosity=detailed" `

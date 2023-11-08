@@ -12058,7 +12058,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // NSInvalidArgumentException Reason: Don't call -[UIPresentationController init].
-	partial interface UIPresentationController : UIAppearanceContainer, UITraitEnvironment, UIContentContainer, UIFocusEnvironment {
+	partial interface UIPresentationController : UIAppearanceContainer, UITraitEnvironment, UIContentContainer, UIFocusEnvironment
+		, UITraitChangeObservable
+	{
 		[Export ("initWithPresentedViewController:presentingViewController:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (UIViewController presentedViewController, [NullAllowed] UIViewController presentingViewController);
@@ -16290,6 +16292,7 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIResponder))]
 	interface UIView : UIAppearance, UIAppearanceContainer, UIAccessibility, UIDynamicItem, NSCoding, UIAccessibilityIdentification, UITraitEnvironment, UICoordinateSpace, UIFocusItem, UIFocusItemContainer
+		, UITraitChangeObservable
 #if !TVOS
 		, UILargeContentViewerItem, UIPopoverPresentationControllerSourceItem
 #endif
@@ -17080,7 +17083,9 @@ namespace UIKit {
 	[NoWatch]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIResponder))]
-	interface UIViewController : NSCoding, UIAppearanceContainer, UIContentContainer, UITraitEnvironment, UIFocusEnvironment, NSExtensionRequestHandling {
+	interface UIViewController : NSCoding, UIAppearanceContainer, UIContentContainer, UITraitEnvironment, UIFocusEnvironment, NSExtensionRequestHandling
+		, UITraitChangeObservable
+	{
 		[DesignatedInitializer]
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
@@ -24042,7 +24047,8 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIScene))]
 	[DisableDefaultCtor]
-	interface UIWindowScene {
+	interface UIWindowScene : UITraitChangeObservable
+	{
 
 		[Export ("initWithSession:connectionOptions:")]
 		[DesignatedInitializer]

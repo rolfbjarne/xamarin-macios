@@ -12059,8 +12059,7 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // NSInvalidArgumentException Reason: Don't call -[UIPresentationController init].
 	partial interface UIPresentationController : UIAppearanceContainer, UITraitEnvironment, UIContentContainer, UIFocusEnvironment
-		, UITraitChangeObservable
-	{
+		, UITraitChangeObservable {
 		[Export ("initWithPresentedViewController:presentingViewController:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (UIViewController presentedViewController, [NullAllowed] UIViewController presentingViewController);
@@ -17084,8 +17083,7 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIResponder))]
 	interface UIViewController : NSCoding, UIAppearanceContainer, UIContentContainer, UITraitEnvironment, UIFocusEnvironment, NSExtensionRequestHandling
-		, UITraitChangeObservable
-	{
+		, UITraitChangeObservable {
 		[DesignatedInitializer]
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
@@ -24047,8 +24045,7 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIScene))]
 	[DisableDefaultCtor]
-	interface UIWindowScene : UITraitChangeObservable
-	{
+	interface UIWindowScene : UITraitChangeObservable {
 
 		[Export ("initWithSession:connectionOptions:")]
 		[DesignatedInitializer]

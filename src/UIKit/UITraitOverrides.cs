@@ -17,13 +17,13 @@ using ObjCRuntime;
 namespace UIKit {
 	public partial interface IUITraitOverrides {
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public sealed bool ContainsTrait<T> () where T: IUITraitDefinition
+		public sealed bool ContainsTrait<T> () where T : IUITraitDefinition
 		{
 			return ContainsTrait (typeof (T));
 		}
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public sealed void RemoveTrait<T> () where T: IUITraitDefinition
+		public sealed void RemoveTrait<T> () where T : IUITraitDefinition
 		{
 			RemoveTrait (typeof (T));
 		}

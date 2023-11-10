@@ -11,12 +11,14 @@ using System.Threading.Tasks;
 using Mono.Options;
 
 using Renci.SshNet;
+using Renci.SshNet.Sftp;
 
 using Xamarin.Utils;
 
 enum Mode {
 	ExecuteCommand,
 	Upload,
+	Download,
 }
 
 static class Program {
@@ -45,9 +47,9 @@ static class Program {
 			{ "host=", "The host to connect to (required).", (v) => Host = v },
 			{ "user=", "The user to connect as (required).", (v) => UserName = v },
 			{ "penv=", "The name of the environment variable with the password (required).", (v) => PasswordEnvironmentVariable = v },
-			{ "mode=", "What to do. Valid options: ExecuteCommand (default), Upload.", (v) => mode = Enum.Parse<Mode> (v, true) },
-			{ "source=", "The local source file or directory when in upload mode.", (v) => source = v },
-			{ "target=", "The remote source file or directory when in upload mode.", (v) => target = v },
+			{ "mode=", "What to do. Valid options: ExecuteCommand (default), Upload, Download.", (v) => mode = Enum.Parse<Mode> (v, true) },
+			{ "source=", "The local/remote source file or directory when in upload/download mode.", (v) => source = v },
+			{ "target=", "The remote/local source file or directory when in upload/download mode.", (v) => target = v },
 			{ "?|h|help", "Show this help", (v) => show_help = true },
 		};
 
@@ -92,6 +94,14 @@ static class Program {
 					return 1;
 				}
 				return Upload (source, target);
+			}
+			case Mode.Download: {
+				if (commandArguments.Count != 0) {
+					Console.WriteLine ($"Unexpected additional arguments: {StringUtils.FormatArguments (commandArguments)}");
+					ShowHelp ();
+					return 1;
+				}
+				return Download (source, target);
 			}
 			default:
 				Console.Error.WriteLine ($"Mode not implemented: {mode}");
@@ -158,6 +168,67 @@ static class Program {
 		readerThread.Start ();
 
 		return tcs.Task;
+	}
+
+	static int Download (string source, string target)
+	{
+		if (string.IsNullOrEmpty (source)) {
+			Console.Error.WriteLine ($"The --source argument is required.");
+			return 1;
+		} else if (string.IsNullOrEmpty (target)) {
+			Console.Error.WriteLine ($"The --target argument is required.");
+			return 1;
+		}
+
+		Console.WriteLine ($"Connecting to {UserName}@{Host}...");
+		using var client = new SftpClient (Host, UserName, Password);
+		client.Connect ();
+		if (client.Exists (source)) {
+			var sourceSystemPath = GetRemotePath (source);
+			var file = client.Get (sourceSystemPath);
+			if (file.IsDirectory) {
+				Console.Error.WriteLine ($"Source {source} is a directory - downloading a directory has not been implemented.");
+			} else {
+				DownloadFile (client, file, target);
+			}
+		} else {
+			throw new Exception ($"Source {source} does not exist on the remote machine");
+		}
+
+		return 0;
+	}
+
+	static void DownloadFile (SftpClient client, SftpFile source, string target)
+	{
+		if (target.EndsWithDirectorySeparatorChar () || Directory.Exists (target))
+			target = Path.Combine (target, Path.GetFileName (source.FullName));
+		if (File.Exists (target))
+			throw new Exception ($"The local file '{target}' already exists.");
+		var targetDir = Path.GetDirectoryName (target);
+		if (!string.IsNullOrEmpty (targetDir))
+			Directory.CreateDirectory (targetDir);
+
+		var watch = Stopwatch.StartNew ();
+		var sourceLength = source.Length;
+		Console.WriteLine ($"Downloading '{source.FullName}' to '{target}' - {sourceLength} bytes.");
+		using var output = new FileStream (target, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+		var lastPrint = Stopwatch.StartNew ();
+		client.DownloadFile (source.FullName, output, (v) => {
+			var progress = 100 * (v > 0 ? v / (double) sourceLength : 0);
+			var elapsedSeconds = watch.Elapsed.TotalSeconds;
+			var bytesPerSecond = elapsedSeconds > 0 ? v / (double) elapsedSeconds : 0;
+			lock (watch) {
+				if (lastPrint.Elapsed.TotalSeconds > 1) {
+					Console.WriteLine ($"    Progress: {v:N}/{sourceLength:N} bytes downloaded ({progress:0.00}% done) = {bytesPerSecond / 1024 / 1024:0.00} MB/s");
+					lastPrint = Stopwatch.StartNew ();
+				}
+			}
+		});
+		{
+			var elapsedSeconds = watch.Elapsed.TotalSeconds;
+			var bytesPerSecond = elapsedSeconds > 0 ? sourceLength / (double) elapsedSeconds : 0;
+			Console.WriteLine ($"Downloaded '{source}' to '{target}' in {elapsedSeconds:N} seconds = {bytesPerSecond / 1024 / 1024:0.00} MB/s.");
+		}
 	}
 
 	static int Upload (string source, string target)

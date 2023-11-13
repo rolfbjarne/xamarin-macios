@@ -13,6 +13,10 @@ set -o pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+echo "Hello from Mac 0"
+
+ls -la
+
 echo "Hello from Mac 1"
 
 # shellcheck disable=SC2207
@@ -21,6 +25,12 @@ DOTNET_PLATFORMS=($(grep '"DOTNET_PLATFORMS":' configuration.json | sed -e 's/[[
 echo "Hello from Mac 2"
 
 DOTNET_VERSION=$(grep '"DOTNET_VERSION":' configuration.json | sed -e 's/[[:space:]]*"DOTNET_VERSION": "//' -e 's/",[[:space:]]*$//')
+
+if test -z "$DOTNET_VERSION"; then
+	echo "No .NET version found"
+	cat configuration.json
+	exit 2
+fi
 
 echo "Hello from Mac 3"
 

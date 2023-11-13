@@ -129,10 +129,13 @@ static class Program {
 
 		var result = cmd.BeginExecute ();
 
-		ReadStream (cmd.OutputStream, Console.WriteLine, result);
-		ReadStream (cmd.ExtendedOutputStream, Console.Error.WriteLine, result);
+		var stdoutTask = ReadStream (cmd.OutputStream, Console.WriteLine, result);
+		var stderrTask = ReadStream (cmd.ExtendedOutputStream, Console.Error.WriteLine, result);
 
 		cmd.EndExecute (result);
+
+		stdoutTask.Wait (TimeSpan.FromSeconds (5));
+		stderrTask.Wait (TimeSpan.FromSeconds (5));
 
 		Console.WriteLine ($"Executed command: '{cmd.CommandText}' Exit Status: {cmd.ExitStatus}");
 		return cmd.ExitStatus;

@@ -211,7 +211,7 @@ steps:
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     # maccore
     Invoke-SshEnvUpload `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
       -RemoteUserName "builder"`

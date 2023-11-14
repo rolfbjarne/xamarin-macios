@@ -43,31 +43,30 @@ namespace MonoTouchFixtures.UIKit {
 			var callbackCounter = 0;
 			Exception? ex = null;
 
-			vc.RegisterForTraitChanges(new[] {
+			vc.RegisterForTraitChanges (new [] {
 					new Class (typeof (UITraitVerticalSizeClass)),
 					new Class (typeof (UITraitHorizontalSizeClass)),
-					}, (env, coll) =>
-			{
-				try {
-					Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait<UITraitHorizontalSizeClass> (), $"{msgPrefix} Horizontal A");
-					Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait (typeof (UITraitHorizontalSizeClass)), $"{msgPrefix} Horizontal B");
-					Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait (new Class (typeof (UITraitHorizontalSizeClass))), $"{msgPrefix} Horizontal C");
-					Assert.AreEqual (vertical is not null, vc.TraitOverrides.ContainsTrait<UITraitVerticalSizeClass> (), $"{msgPrefix} Vertical A");
-					Assert.AreEqual (vertical is not null, vc.TraitOverrides.ContainsTrait (typeof (UITraitVerticalSizeClass)), $"{msgPrefix} Vertical B");
-					Assert.AreEqual (vertical is not null, vc.TraitOverrides.ContainsTrait (new Class (typeof (UITraitVerticalSizeClass))), $"{msgPrefix} Vertical C");
-					if (horizontal is not null) {
-						Assert.AreEqual (horizontal.Value, vc.TraitOverrides.HorizontalSizeClass, $"{msgPrefix} Horizontal Value");
-					}
-					if (vertical is not null) {
-						Assert.AreEqual (vertical.Value, vc.TraitOverrides.VerticalSizeClass, $"{msgPrefix} Vertical Value");
-					}
-					callbackCounter++;
-					Console.WriteLine ($"Callback {env} {coll}");
-				} catch (Exception e) {
-					ex = e;
-					Console.WriteLine ($"Exception: {e}");
-				}
-			});
+					}, (env, coll) => {
+						try {
+							Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait<UITraitHorizontalSizeClass> (), $"{msgPrefix} Horizontal A");
+							Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait (typeof (UITraitHorizontalSizeClass)), $"{msgPrefix} Horizontal B");
+							Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait (new Class (typeof (UITraitHorizontalSizeClass))), $"{msgPrefix} Horizontal C");
+							Assert.AreEqual (vertical is not null, vc.TraitOverrides.ContainsTrait<UITraitVerticalSizeClass> (), $"{msgPrefix} Vertical A");
+							Assert.AreEqual (vertical is not null, vc.TraitOverrides.ContainsTrait (typeof (UITraitVerticalSizeClass)), $"{msgPrefix} Vertical B");
+							Assert.AreEqual (vertical is not null, vc.TraitOverrides.ContainsTrait (new Class (typeof (UITraitVerticalSizeClass))), $"{msgPrefix} Vertical C");
+							if (horizontal is not null) {
+								Assert.AreEqual (horizontal.Value, vc.TraitOverrides.HorizontalSizeClass, $"{msgPrefix} Horizontal Value");
+							}
+							if (vertical is not null) {
+								Assert.AreEqual (vertical.Value, vc.TraitOverrides.VerticalSizeClass, $"{msgPrefix} Vertical Value");
+							}
+							callbackCounter++;
+							Console.WriteLine ($"Callback {env} {coll}");
+						} catch (Exception e) {
+							ex = e;
+							Console.WriteLine ($"Exception: {e}");
+						}
+					});
 
 			horizontal = UIUserInterfaceSizeClass.Regular;
 			vc.TraitOverrides.HorizontalSizeClass = horizontal.Value;

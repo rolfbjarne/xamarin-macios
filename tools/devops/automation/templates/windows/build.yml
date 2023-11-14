@@ -214,7 +214,7 @@ steps:
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder"`
+      -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore" `
@@ -224,7 +224,7 @@ steps:
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder"`
+      -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios" `

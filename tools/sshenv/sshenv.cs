@@ -129,42 +129,59 @@ static class Program {
 
 		var result = cmd.BeginExecute ();
 
-		var stdoutTask = ReadStream (cmd.OutputStream, Console.WriteLine, result);
-		var stderrTask = ReadStream (cmd.ExtendedOutputStream, Console.Error.WriteLine, result);
+		var stdoutTask = ReadStream (cmd.OutputStream, Console.WriteLine, result, "stdout");
+		var stderrTask = ReadStream (cmd.ExtendedOutputStream, Console.Error.WriteLine, result, "stderr");
 
+		Console.WriteLine ($"Calling EndExecute...");
 		cmd.EndExecute (result);
+		Console.WriteLine ($"Called EndExecute...");
 
-		stdoutTask.Wait (TimeSpan.FromSeconds (5));
-		stderrTask.Wait (TimeSpan.FromSeconds (5));
+		var stdoutWaitResult = stdoutTask.Wait (TimeSpan.FromSeconds (5));
+		var stderrWaitResult = stderrTask.Wait (TimeSpan.FromSeconds (5));
+		Console.WriteLine ($"Stdout wait: {stdoutWaitResult} Stderr wait: {stderrWaitResult}");
 
 		Console.WriteLine ($"Executed command: '{cmd.CommandText}' Exit Status: {cmd.ExitStatus}");
 		return cmd.ExitStatus;
 	}
 
-	static Task ReadStream (Stream streamToRead, Action<string> write, IAsyncResult asyncResult)
+	static Task ReadStream (Stream streamToRead, Action<string> write, IAsyncResult asyncResult, string name)
 	{
 		var tcs = new TaskCompletionSource<bool> ();
 		var readerThread = new Thread ((v) => {
+			var lineCount = 0;
 			try {
 				using var reader = new StreamReader (streamToRead, Encoding.UTF8, leaveOpen: true);
 				while (true) {
-					if (asyncResult.IsCompleted) {
-						tcs.SetResult (true);
-						return;
-					}
+					/*
 					if (reader.EndOfStream) {
 						// This isn't accurate for some reason, we may still get data.
 						Thread.Sleep (1);
+						// Console.WriteLine ($"{name}: end of stream with {lineCount} lines");
 						continue;
 					}
+					*/
+					// Console.WriteLine ($"{name} Reading ({lineCount} lines read so far)...");
 					var line = reader.ReadLine ();
-					if (line is null)
+					if (line is null) {
+						// Console.WriteLine ($"{name} Reading ({lineCount} lines read so far) got null line");
+						if (asyncResult.IsCompleted) {
+							Console.WriteLine ($"{name}: completed with {lineCount} lines");
+							tcs.SetResult (true);
+							return;
+						}
+						Thread.Sleep (10);
 						continue;
+					}
+					// Console.WriteLine ($"{name} Reading ({lineCount} lines read so far) got something");
 
+					lineCount++;
 					write (line);
 				}
 			} catch (Exception e) {
+				Console.WriteLine ($"{name}: exception occurred (with {lineCount} lines): {e}");
 				tcs.SetException (e);
+			} finally {
+				Console.WriteLine ($"{name}: done with {lineCount} lines");
 			}
 		});
 		readerThread.IsBackground = true;

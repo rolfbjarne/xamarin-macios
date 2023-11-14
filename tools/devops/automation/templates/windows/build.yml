@@ -221,7 +221,7 @@ steps:
       -Target "/Users/builder/remote_build_testing/src/maccore"
     # xamarin-macios
     Invoke-SshEnvUpload `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
       -RemoteUserName "builder"`

@@ -19,6 +19,10 @@ ls -la
 
 echo "Hello from Mac 1"
 
+cat configuration.json
+
+echo "Hello from Mac 1.5"
+
 # shellcheck disable=SC2207
 DOTNET_PLATFORMS=($(grep '"DOTNET_PLATFORMS":' configuration.json | sed -e 's/[[:space:]]*"DOTNET_PLATFORMS": "//' -e 's/",[[:space:]]*$//' | tr '[:upper:]' '[:lower:]'))
 

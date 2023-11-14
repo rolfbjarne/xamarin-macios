@@ -70,6 +70,7 @@ stages:
       demands:
       - agent.os -equals Darwin
       - SSH.Enabled -equals True
+      - macOS.Architecture -equals arm64
 
     steps:
     - template: reserve-mac.yml

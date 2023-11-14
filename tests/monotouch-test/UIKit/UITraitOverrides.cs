@@ -61,10 +61,8 @@ namespace MonoTouchFixtures.UIKit {
 								Assert.AreEqual (vertical.Value, vc.TraitOverrides.VerticalSizeClass, $"{msgPrefix} Vertical Value");
 							}
 							callbackCounter++;
-							Console.WriteLine ($"Callback {env} {coll}");
 						} catch (Exception e) {
 							ex = e;
-							Console.WriteLine ($"Exception: {e}");
 						}
 					});
 

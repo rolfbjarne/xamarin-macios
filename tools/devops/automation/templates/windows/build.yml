@@ -231,7 +231,7 @@ steps:
       -Target "/Users/builder/remote_build_testing/src/xamarin-macios"
   displayName: 'Copy source code to Mac'
   continueOnError: true
-  timeoutInMinutes: 5
+  timeoutInMinutes: 30
   env:
     XMA_PASSWORD: $(XMA.Password)
 

@@ -221,10 +221,10 @@ steps:
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore.zip" `
       -Target "/Users/builder/remote_build_testing/src/maccore.zip"
     Invoke-SshEnvCommand `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder"`
+      -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/maccore.zip"
@@ -241,17 +241,17 @@ steps:
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios.zip" `
       -Target "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
     Invoke-SshEnvCommand `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder"`
+      -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
 
     # let's see what we did
     Invoke-SshEnvCommand `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
       -RemoteUserName "builder"`
@@ -259,7 +259,7 @@ steps:
       -ThrowIfError $false `
       ls -la "/Users/builder/remote_build_testing/src/"
     Invoke-SshEnvCommand `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
       -RemoteUserName "builder"`

@@ -220,7 +220,7 @@ steps:
       -ThrowIfError $true `
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore.zip" `
       -Target "/Users/builder/remote_build_testing/src/maccore.zip"
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -240,7 +240,7 @@ steps:
       -ThrowIfError $true `
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios.zip" `
       -Target "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -250,7 +250,7 @@ steps:
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
 
     # let's see what we did
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -258,7 +258,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $false `
       ls -la "/Users/builder/remote_build_testing/src/"
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -275,7 +275,7 @@ steps:
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -283,7 +283,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       make /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops provision-xcode.csx
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -301,7 +301,7 @@ steps:
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     # execute install-qa-provisioning-profiles.sh
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
@@ -375,7 +375,7 @@ steps:
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     # Zip up all the binlogs into one file
-    Invoke-SshCommand `
+    Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `

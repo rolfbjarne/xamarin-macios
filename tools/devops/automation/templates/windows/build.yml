@@ -220,6 +220,7 @@ steps:
       -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore" `
       -Target "/Users/builder/remote_build_testing/src/maccore"
     # xamarin-macios
+    Compress-Archive -Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios" -DestinationPath "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios.zip"
     Invoke-SshEnvUpload `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
@@ -227,11 +228,35 @@ steps:
       -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
-      -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios" `
-      -Target "/Users/builder/remote_build_testing/src/xamarin-macios"
+      -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios.zip" `
+      -Target "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $false `
+      ls -la "/Users/builder/remote_build_testing/src/"
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $false `
+      ls -la "/Users/builder/remote_build_testing/src/xamarin-macios"
   displayName: 'Copy source code to Mac'
   continueOnError: true
-  timeoutInMinutes: 30
+  timeoutInMinutes: 5
   env:
     XMA_PASSWORD: $(XMA.Password)
 

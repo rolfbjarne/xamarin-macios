@@ -33,7 +33,6 @@ namespace MonoTouchFixtures.UIKit {
 
 			var vc = new UIViewController ();
 			vc.View!.AddSubview (new UILabel () {
-				BackgroundColor = UIColor.SystemBackground,
 				TextAlignment = UITextAlignment.Center,
 			});
 

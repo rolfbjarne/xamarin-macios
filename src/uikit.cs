@@ -12059,11 +12059,7 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // NSInvalidArgumentException Reason: Don't call -[UIPresentationController init].
 	partial interface UIPresentationController : UIAppearanceContainer, UITraitEnvironment, UIContentContainer, UIFocusEnvironment
-#if XAMCORE_5_0
 		, UITraitChangeObservable
-#else
-		, UITraitChangeObservable2
-#endif
 		{
 		[Export ("initWithPresentedViewController:presentingViewController:")]
 		[DesignatedInitializer]
@@ -16296,11 +16292,7 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIResponder))]
 	interface UIView : UIAppearance, UIAppearanceContainer, UIAccessibility, UIDynamicItem, NSCoding, UIAccessibilityIdentification, UITraitEnvironment, UICoordinateSpace, UIFocusItem, UIFocusItemContainer
-#if XAMCORE_5_0
 		, UITraitChangeObservable
-#else
-		, UITraitChangeObservable2
-#endif
 #if !TVOS
 		, UILargeContentViewerItem, UIPopoverPresentationControllerSourceItem
 #endif
@@ -17092,11 +17084,7 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIResponder))]
 	interface UIViewController : NSCoding, UIAppearanceContainer, UIContentContainer, UITraitEnvironment, UIFocusEnvironment, NSExtensionRequestHandling
-#if XAMCORE_5_0
 		, UITraitChangeObservable
-#else
-		, UITraitChangeObservable2
-#endif
 	{
 		[DesignatedInitializer]
 		[Export ("initWithNibName:bundle:")]
@@ -24098,11 +24086,7 @@ namespace UIKit {
 	[BaseType (typeof (UIScene))]
 	[DisableDefaultCtor]
 	interface UIWindowScene :
-#if XAMCORE_5_0
 		UITraitChangeObservable
-#else
-		UITraitChangeObservable2
-#endif
 	 {
 
 		[Export ("initWithSession:connectionOptions:")]
@@ -28549,49 +28533,41 @@ namespace UIKit {
 	[Protocol]
 	interface UITraitChangeRegistration : NSCopying { }
 
-#if !XAMCORE_5_0
 	[NoWatch, TV (17, 0), iOS (17, 0), MacCatalyst (17, 0)]
 	[Protocol]
 	interface UITraitChangeObservable {
-		[Abstract]
-		[Export ("registerForTraitChanges:withHandler:")]
-		[Obsolete ("Use the 'UITraitChangeObservable2.RegisterForTraitChanges' method instead.")]
-		IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, Action<IUITraitEnvironment, UITraitCollection> handler);
-
-		[Abstract]
-		[Export ("registerForTraitChanges:withTarget:action:")]
-		[Obsolete ("Use the 'UITraitChangeObservable2.RegisterForTraitChanges' method instead.")]
-		IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, NSObject target, Selector action);
-
-		[Abstract]
-		[Export ("registerForTraitChanges:withAction:")]
-		[Obsolete ("Use the 'UITraitChangeObservable2.RegisterForTraitChanges' method instead.")]
-		IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, Selector action);
-
-		[Abstract]
-		[Export ("unregisterForTraitChanges:")]
-		void UnregisterForTraitChanges (IUITraitChangeRegistration registration);
-	}
-#endif // !XAMCORE_5_0
-
-	[NoWatch, TV (17, 0), iOS (17, 0), MacCatalyst (17, 0)]
-	[Protocol (Name = "UITraitChangeObservable")]
 #if XAMCORE_5_0
-	interface UITraitChangeObservable {
-#else
-	interface UITraitChangeObservable2 {
+		[Abstract]
 #endif
-		[Abstract]
 		[Export ("registerForTraitChanges:withHandler:")]
+#if XAMCORE_5_0
 		IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, Action<IUITraitEnvironment, UITraitCollection> handler);
+#else
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], Action<IUITraitEnvironment, UITraitCollection>)' method instead.")]
+		IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, Action<IUITraitEnvironment, UITraitCollection> handler);
+#endif
 
+#if XAMCORE_5_0
 		[Abstract]
+#endif
 		[Export ("registerForTraitChanges:withTarget:action:")]
+#if XAMCORE_5_0
 		IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, NSObject target, Selector action);
+#else
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], NSObject, Selector)' method instead.")]
+		IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, NSObject target, Selector action);
+#endif
 
+#if XAMCORE_5_0
 		[Abstract]
+#endif
 		[Export ("registerForTraitChanges:withAction:")]
+#if XAMCORE_5_0
 		IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, Selector action);
+#else
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], Selector)' method instead.")]
+		IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, Selector action);
+#endif
 
 		[Abstract]
 		[Export ("unregisterForTraitChanges:")]

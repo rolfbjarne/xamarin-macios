@@ -32,8 +32,7 @@ namespace MonoTouchFixtures.UIKit {
 		{
 			TestRuntime.AssertXcodeVersion (15, 0);
 
-			CallbackTest ((vc, callback) =>
-			{
+			CallbackTest ((vc, callback) => {
 				return vc.RegisterForTraitChanges (new [] {
 						new Class (typeof (UITraitVerticalSizeClass)),
 						new Class (typeof (UITraitHorizontalSizeClass)),
@@ -46,8 +45,7 @@ namespace MonoTouchFixtures.UIKit {
 		{
 			TestRuntime.AssertXcodeVersion (15, 0);
 
-			CallbackTest ((vc, callback) =>
-			{
+			CallbackTest ((vc, callback) => {
 				return vc.RegisterForTraitChanges (new [] {
 						typeof (UITraitVerticalSizeClass),
 						typeof (UITraitHorizontalSizeClass),
@@ -60,8 +58,7 @@ namespace MonoTouchFixtures.UIKit {
 		{
 			TestRuntime.AssertXcodeVersion (15, 0);
 
-			CallbackTest ((vc, callback) =>
-			{
+			CallbackTest ((vc, callback) => {
 				return vc.RegisterForTraitChanges (callback,
 						typeof (UITraitVerticalSizeClass),
 						typeof (UITraitHorizontalSizeClass));
@@ -73,8 +70,7 @@ namespace MonoTouchFixtures.UIKit {
 		{
 			TestRuntime.AssertXcodeVersion (15, 0);
 
-			CallbackTest ((vc, callback) =>
-			{
+			CallbackTest ((vc, callback) => {
 				// return vc.RegisterForTraitChanges<NSObject> (callback);
 				return vc.RegisterForTraitChanges<UITraitHorizontalSizeClass, UITraitVerticalSizeClass> (callback);
 			}, "Generic ");
@@ -96,8 +92,7 @@ namespace MonoTouchFixtures.UIKit {
 			var callbackCounter = 0;
 			Exception? ex = null;
 
-			Action<IUITraitEnvironment, UITraitCollection> callback = (env, coll) =>
-			{
+			Action<IUITraitEnvironment, UITraitCollection> callback = (env, coll) => {
 				try {
 					Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait<UITraitHorizontalSizeClass> (), $"{prefix}{msgPrefix} Horizontal A");
 					Assert.AreEqual (horizontal is not null, vc.TraitOverrides.ContainsTrait (typeof (UITraitHorizontalSizeClass)), $"{prefix}{msgPrefix} Horizontal B");

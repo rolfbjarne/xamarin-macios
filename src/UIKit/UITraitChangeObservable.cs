@@ -19,7 +19,7 @@ using ObjCRuntime;
 
 namespace UIKit {
 	public partial interface IUITraitChangeObservable {
-		static Class[] ToClasses (params Type[] traits)
+		static Class [] ToClasses (params Type [] traits)
 		{
 			if (traits is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (traits));
@@ -29,60 +29,60 @@ namespace UIKit {
 			return traitsClasses;
 		}
 
-		public IUITraitChangeRegistration RegisterForTraitChanges (Type[] traits, Action<IUITraitEnvironment, UITraitCollection> handler)
+		public IUITraitChangeRegistration RegisterForTraitChanges (Type [] traits, Action<IUITraitEnvironment, UITraitCollection> handler)
 		{
 			return RegisterForTraitChanges (ToClasses (traits), handler);
 		}
 
 		// Add an override with 'params', unfortunately this means reordering the parameters.
-		public unsafe IUITraitChangeRegistration RegisterForTraitChanges (Action<IUITraitEnvironment, UITraitCollection> handler, params Type[] traits)
+		public unsafe IUITraitChangeRegistration RegisterForTraitChanges (Action<IUITraitEnvironment, UITraitCollection> handler, params Type [] traits)
 		{
 			return RegisterForTraitChanges (ToClasses (traits), handler);
 		}
 
 		public unsafe IUITraitChangeRegistration RegisterForTraitChanges<T> (Action<IUITraitEnvironment, UITraitCollection> handler)
-			where T: IUITraitDefinition
+			where T : IUITraitDefinition
 		{
 			return RegisterForTraitChanges (ToClasses (typeof (T)), handler);
 		}
 
 		public unsafe IUITraitChangeRegistration RegisterForTraitChanges<T1, T2> (Action<IUITraitEnvironment, UITraitCollection> handler)
-			where T1: IUITraitDefinition
-			where T2: IUITraitDefinition
+			where T1 : IUITraitDefinition
+			where T2 : IUITraitDefinition
 		{
 			return RegisterForTraitChanges (ToClasses (typeof (T1), typeof (T2)), handler);
 		}
 
 		public unsafe IUITraitChangeRegistration RegisterForTraitChanges<T1, T2, T3> (Action<IUITraitEnvironment, UITraitCollection> handler)
-			where T1: IUITraitDefinition
-			where T2: IUITraitDefinition
-			where T3: IUITraitDefinition
+			where T1 : IUITraitDefinition
+			where T2 : IUITraitDefinition
+			where T3 : IUITraitDefinition
 		{
 			return RegisterForTraitChanges (ToClasses (typeof (T1), typeof (T2), typeof (T3)), handler);
 		}
 
 		public unsafe IUITraitChangeRegistration RegisterForTraitChanges<T1, T2, T3, T4> (Action<IUITraitEnvironment, UITraitCollection> handler)
-			where T1: IUITraitDefinition
-			where T2: IUITraitDefinition
-			where T3: IUITraitDefinition
-			where T4: IUITraitDefinition
+			where T1 : IUITraitDefinition
+			where T2 : IUITraitDefinition
+			where T3 : IUITraitDefinition
+			where T4 : IUITraitDefinition
 		{
 			return RegisterForTraitChanges (ToClasses (typeof (T1), typeof (T2), typeof (T3), typeof (T4)), handler);
 		}
 
-		public IUITraitChangeRegistration RegisterForTraitChanges (Type[] traits, NSObject target, Selector action)
+		public IUITraitChangeRegistration RegisterForTraitChanges (Type [] traits, NSObject target, Selector action)
 		{
 			return RegisterForTraitChanges (ToClasses (traits), target, action);
 		}
 
-		public IUITraitChangeRegistration RegisterForTraitChanges (Type[] traits, Selector action)
+		public IUITraitChangeRegistration RegisterForTraitChanges (Type [] traits, Selector action)
 		{
 			return RegisterForTraitChanges (ToClasses (traits), action);
 		}
 
 #if !XAMCORE_5_0
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public unsafe IUITraitChangeRegistration RegisterForTraitChanges (Class[] traits, [BlockProxy (typeof (ObjCRuntime.Trampolines.IUITraitChangeObservable_RegisterForTraitChanges_NIDAction))]global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
+		public unsafe IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, [BlockProxy (typeof (ObjCRuntime.Trampolines.IUITraitChangeObservable_RegisterForTraitChanges_NIDAction))] global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
 		{
 			global::UIKit.UIApplication.EnsureUIThread ();
 			if (traits is null)
@@ -91,15 +91,15 @@ namespace UIKit {
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
 			var nsa_traits = NSArray.FromNSObjects (traits);
 			using var block_handler = Trampolines.IUITraitChangeObservable_RegisterForTraitChanges_SDAction.CreateBlock (handler);
-			BlockLiteral *block_ptr_handler = &block_handler;
+			BlockLiteral* block_ptr_handler = &block_handler;
 			IUITraitChangeRegistration? ret;
-			ret =  Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withHandler:"), nsa_traits.Handle, (IntPtr) block_ptr_handler), false)!;
+			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withHandler:"), nsa_traits.Handle, (IntPtr) block_ptr_handler), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
 		}
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public IUITraitChangeRegistration RegisterForTraitChanges (Class[] traits, NSObject target, Selector action)
+		public IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, NSObject target, Selector action)
 		{
 			global::UIKit.UIApplication.EnsureUIThread ();
 			if (traits is null)
@@ -108,13 +108,13 @@ namespace UIKit {
 			var action__handle__ = action!.GetNonNullHandle (nameof (action));
 			var nsa_traits = NSArray.FromNSObjects (traits);
 			IUITraitChangeRegistration? ret;
-			ret =  Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withTarget:action:"), nsa_traits.Handle, target__handle__, action.Handle), false)!;
+			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withTarget:action:"), nsa_traits.Handle, target__handle__, action.Handle), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
 		}
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public IUITraitChangeRegistration RegisterForTraitChanges (Class[] traits, Selector action)
+		public IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, Selector action)
 		{
 			global::UIKit.UIApplication.EnsureUIThread ();
 			if (traits is null)
@@ -122,7 +122,7 @@ namespace UIKit {
 			var action__handle__ = action!.GetNonNullHandle (nameof (action));
 			var nsa_traits = NSArray.FromNSObjects (traits);
 			IUITraitChangeRegistration? ret;
-			ret =  Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
+			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
 		}
@@ -141,10 +141,11 @@ namespace ObjCRuntime {
 		static internal class IUITraitChangeObservable_RegisterForTraitChanges_SDAction {
 			[Preserve (Conditional = true)]
 			[UnmanagedCallersOnly]
-			internal static unsafe void Invoke (IntPtr block, NativeHandle arg1, NativeHandle arg2) {
+			internal static unsafe void Invoke (IntPtr block, NativeHandle arg1, NativeHandle arg2)
+			{
 				var del = BlockLiteral.GetTarget<global::System.Action<global::UIKit.IUITraitEnvironment, global::UIKit.UITraitCollection>> (block);
 				if (del is not null) {
-					del ( Runtime.GetINativeObject<UIKit.IUITraitEnvironment> (arg1, false)!,  Runtime.GetNSObject<UITraitCollection> (arg2)!);
+					del (Runtime.GetINativeObject<UIKit.IUITraitEnvironment> (arg1, false)!, Runtime.GetNSObject<UITraitCollection> (arg2)!);
 				}
 			}
 			internal static unsafe BlockLiteral CreateNullableBlock (global::System.Action<global::UIKit.IUITraitEnvironment, global::UIKit.UITraitCollection>? callback)
@@ -164,18 +165,18 @@ namespace ObjCRuntime {
 		internal sealed class IUITraitChangeObservable_RegisterForTraitChanges_NIDAction : TrampolineBlockBase {
 			IUITraitChangeObservable_RegisterForTraitChanges_Callback invoker;
 			[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
-			public unsafe IUITraitChangeObservable_RegisterForTraitChanges_NIDAction (BlockLiteral *block) : base (block)
+			public unsafe IUITraitChangeObservable_RegisterForTraitChanges_NIDAction (BlockLiteral* block) : base (block)
 			{
 				invoker = block->GetDelegateForBlock<IUITraitChangeObservable_RegisterForTraitChanges_Callback> ();
 			}
-			[Preserve (Conditional=true)]
+			[Preserve (Conditional = true)]
 			[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
 			public unsafe static global::System.Action<global::UIKit.IUITraitEnvironment, global::UIKit.UITraitCollection>? Create (IntPtr block)
 			{
 				if (block == IntPtr.Zero)
 					return null;
 				var del = (global::System.Action<global::UIKit.IUITraitEnvironment, global::UIKit.UITraitCollection>) GetExistingManagedDelegate (block);
-				return del ?? new IUITraitChangeObservable_RegisterForTraitChanges_NIDAction ((BlockLiteral *) block).Invoke;
+				return del ?? new IUITraitChangeObservable_RegisterForTraitChanges_NIDAction ((BlockLiteral*) block).Invoke;
 			}
 			[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
 			unsafe void Invoke (global::UIKit.IUITraitEnvironment arg1, global::UIKit.UITraitCollection arg2)
